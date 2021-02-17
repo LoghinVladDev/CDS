@@ -3,12 +3,16 @@ project(CDS)
 
 set(CMAKE_CXX_STANDARD 20)
 
-include_directories(src)
-include_directories(src/collection)
-include_directories(src/collection/ordered)
-include_directories(src/collection/unordered)
-include_directories(src/primitive)
-include_directories(src/exception)
+set(CDS_INCLUDE_DIRECTORIES
+        src
+        src/collection
+        src/collection/unordered
+        src/collection/ordered
+        src/exception
+        src/primitive
+)
+
+include_directories(${CDS_INCLUDE_DIRECTORIES})
 
 set(
         CDS_EXCEPTION
@@ -70,6 +74,10 @@ set(
         ${CDS_COLLECTION}
         ${CDS_EXTRA}
         src/std-types.h
+)
+
+set(
+        CDS_GLOBAL_HEADERS ${CDS_INCLUDE_DIRECTORIES} CACHE INTERNAL "DIRS"
 )
 
 add_executable(
