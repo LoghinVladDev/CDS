@@ -28,7 +28,7 @@ set(
         src/primitive/Pair.hpp
         src/primitive/Range.hpp
         src/primitive/String.hpp
-)
+        src/primitive/String.cpp)
 
 set(
         CDS_EXTRA
