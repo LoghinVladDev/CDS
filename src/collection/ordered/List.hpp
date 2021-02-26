@@ -39,7 +39,7 @@ public:
         return this->get( index );
     }
 
-    virtual auto remove ( const typename Collection<T>::Iterator & ) noexcept -> T = 0;
+    virtual auto remove ( const typename Collection<T>::Iterator & ) noexcept (false) -> T = 0;
     virtual auto replace( const typename Collection<T>::Iterator &, const T & ) noexcept -> void = 0;
     virtual auto insertBefore( const typename Collection<T>::Iterator &, const T & ) noexcept -> void = 0;
     virtual auto insertAfter( const typename Collection<T>::Iterator &, const T & ) noexcept -> void = 0;

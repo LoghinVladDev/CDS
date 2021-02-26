@@ -10,6 +10,8 @@ set(CDS_INCLUDE_DIRECTORIES
         src/collection/ordered
         src/exception
         src/primitive
+
+        include
 )
 
 include_directories(${CDS_INCLUDE_DIRECTORIES})
@@ -74,7 +76,7 @@ set(
         ${CDS_COLLECTION}
         ${CDS_EXTRA}
         src/std-types.h
-)
+        src/primitive/Integer.hpp src/primitive/Long.hpp src/primitive/Float.hpp src/primitive/Double.hpp src/primitive/Boolean.hpp src/primitive/PrimitiveGenerator.hpp)
 
 set(
         CDS_GLOBAL_HEADERS ${CDS_INCLUDE_DIRECTORIES} CACHE INTERNAL "DIRS"

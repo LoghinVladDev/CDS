@@ -119,8 +119,11 @@ void testPointer ();
 void testReference ();
 void testOptional ();
 void testRange ();
+void testPrimitives();
 
 int main() {
+
+    testPrimitives();
 
     testList();
     testString();
@@ -132,6 +135,20 @@ int main() {
     testRange();
 
     return 0;
+}
+
+#include <Integer>
+#include <Long>
+void testPrimitives() {
+    Integer x = 3;
+
+    std::cout << Integer::parse("1234") + 5 << '\n';
+
+    Long l = 5;
+
+    std::cout << Long::parse("231421512123252") + l << "\n";
+
+    exit(0);
 }
 
 void markTestStart (StringLiteral testName) {

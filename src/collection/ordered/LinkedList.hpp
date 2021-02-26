@@ -195,7 +195,7 @@ public:
     auto replaceNotOf ( const Collection<T> &, const T &, Size ) noexcept -> void final;
     auto replaceLastNotOf ( const Collection<T> &, const T & ) noexcept -> void final;
 
-    auto remove ( const typename Collection<T>::Iterator & ) noexcept -> T final;
+    auto remove ( const typename Collection<T>::Iterator & ) noexcept (false) -> T final;
     auto replace( const typename Collection<T>::Iterator &, const T & ) noexcept -> void final;
     auto insertBefore( const typename Collection<T>::Iterator &, const T & ) noexcept -> void final;
     auto insertAfter( const typename Collection<T>::Iterator &, const T & ) noexcept -> void final;
@@ -751,7 +751,7 @@ auto DoubleLinkedList<T>::replaceLastNotOf ( const Collection<T> & from, const T
 }
 
 template<class T>
-auto DoubleLinkedList<T>::remove ( const typename Collection<T>::Iterator & it ) noexcept -> T {
+auto DoubleLinkedList<T>::remove ( const typename Collection<T>::Iterator & it ) noexcept (false) -> T {
     if ( this->empty() )
         throw typename List<T>::ListOutOfBounds();
 
