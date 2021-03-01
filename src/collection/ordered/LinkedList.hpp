@@ -30,12 +30,12 @@ private:
         IteratorBase() noexcept = default;
         IteratorBase( const IteratorBase & ) noexcept = default;
         IteratorBase(IteratorBase && ) noexcept = default;
-        explicit IteratorBase ( Node * pNode ) : Collection<T>::Iterator() {
+        explicit IteratorBase ( Node * pNode ) noexcept : Collection<T>::Iterator() {
             this->_pNode = pNode;
         }
 
     public:
-        ~IteratorBase () override = default;
+        ~IteratorBase () noexcept override = default;
 
         constexpr inline auto equals ( const typename Collection<T>::Iterator & o ) const noexcept -> bool final { return dynamic_cast < const IteratorBase & > ( o )._pNode == this->_pNode;}
         constexpr inline auto value () const noexcept -> T& final { return this->_pNode->data; }
@@ -244,6 +244,8 @@ public:
         return this->_size == 0 && this->_pFront == nullptr && this->_pBack == nullptr;
     }
 
+#pragma clang diagnostic push
+#pragma ide diagnostic ignored "Simplify"
     auto operator == (Object const & o) const noexcept -> bool final {
         if ( this == & o ) return true;
         auto p = dynamic_cast < decltype(this) > ( & o );
@@ -255,6 +257,7 @@ public:
                 return false;
         return true;
     }
+#pragma clang diagnostic pop
 
     auto clear () noexcept -> void final;
     auto makeUnique ()  noexcept -> void final;
@@ -331,13 +334,13 @@ private:
     auto static quickSort ( Iterator, Iterator, dataTypes::_paramType ) _exceptSpec -> void; \
     auto static quickSortPartition ( Iterator, Iterator, dataTypes::_paramType ) _exceptSpec -> Iterator;
 
-    GEN_QUICKSORT_FUNCTION(ValueCompareFunction<T>, noexcept)
-    GEN_QUICKSORT_FUNCTION(ReferenceCompareFunction<T>, noexcept)
-    GEN_QUICKSORT_FUNCTION(ConstReferenceCompareFunction<T>, noexcept)
+//    GEN_QUICKSORT_FUNCTION(ValueCompareFunction<T>, noexcept)
+//    GEN_QUICKSORT_FUNCTION(ReferenceCompareFunction<T>, noexcept)
+//    GEN_QUICKSORT_FUNCTION(ConstReferenceCompareFunction<T>, noexcept)
 
-    GEN_QUICKSORT_FUNCTION(ThrowValueCompareFunction<T>, noexcept (false) )
-    GEN_QUICKSORT_FUNCTION(ThrowReferenceCompareFunction<T>, noexcept (false) )
-    GEN_QUICKSORT_FUNCTION(ThrowConstReferenceCompareFunction<T>, noexcept (false) )
+//    GEN_QUICKSORT_FUNCTION(ThrowValueCompareFunction<T>, noexcept (false) )
+//    GEN_QUICKSORT_FUNCTION(ThrowReferenceCompareFunction<T>, noexcept (false) )
+//    GEN_QUICKSORT_FUNCTION(ThrowConstReferenceCompareFunction<T>, noexcept (false) )
 
 #undef GEN_QUICKSORT_FUNCTION
 
@@ -349,13 +352,13 @@ public:
 #define GEN_SORT_FUNC(_paramType, _exceptSpec) \
     auto sort ( dataTypes::_paramType ) _exceptSpec -> void final;
 
-    GEN_SORT_FUNC(ValueCompareFunction<T>, noexcept)
-    GEN_SORT_FUNC(ReferenceCompareFunction<T>, noexcept)
-    GEN_SORT_FUNC(ConstReferenceCompareFunction <T> = [](const T & a, const T & b) noexcept -> bool { return a < b; }, noexcept)
+//    GEN_SORT_FUNC(ValueCompareFunction<T>, noexcept)
+//    GEN_SORT_FUNC(ReferenceCompareFunction<T>, noexcept)
+//    GEN_SORT_FUNC(ConstReferenceCompareFunction <T> = [](const T & a, const T & b) noexcept -> bool { return a < b; }, noexcept)
 
-    GEN_SORT_FUNC(ThrowValueCompareFunction<T>, noexcept (false) )
-    GEN_SORT_FUNC(ThrowReferenceCompareFunction<T>, noexcept (false) )
-    GEN_SORT_FUNC(ThrowConstReferenceCompareFunction<T>, noexcept (false) )
+//    GEN_SORT_FUNC(ThrowValueCompareFunction<T>, noexcept (false) )
+//    GEN_SORT_FUNC(ThrowReferenceCompareFunction<T>, noexcept (false) )
+//    GEN_SORT_FUNC(ThrowConstReferenceCompareFunction<T>, noexcept (false) )
 
 #undef GEN_SORT_FUNC
 
@@ -367,8 +370,8 @@ public:
     auto sort ( auto func ) noexcept -> void;
 
     DoubleLinkedList & operator = ( const Collection <T> & ) noexcept;
-    inline DoubleLinkedList & operator = ( const DoubleLinkedList <T> & o ) noexcept {
-        return this->operator= ( (Collection<T> const & ) ( o ));
+    inline DoubleLinkedList & operator = ( const DoubleLinkedList <T> & o ) noexcept {  // NOLINT(bugprone-unhandled-self-assignment)
+        return this->operator= ( (Collection<T> const & ) ( o )); // NOLINT(misc-unconventional-assign-operator)
     }
 };
 
@@ -943,7 +946,7 @@ DoubleLinkedList<T> & DoubleLinkedList<T>::operator =(const Collection<T> & c) n
 
 template <class T>
 auto DoubleLinkedList<T>::contains(const T & what) const noexcept -> bool {
-    for ( const auto & e : (*this) )
+    for ( const auto & e : (*this) ) // NOLINT(readability-use-anyofallof)
         if ( e == what )
             return true;
     return false;
@@ -1036,7 +1039,7 @@ auto DoubleLinkedList<T>::sub(List<T> & l, Index from, Index to) const noexcept 
     _GEN_QUICKSORT_PARTITION_FUNCTION(ThrowValueCompareFunction, _paramName, noexcept (false))   _impl\
     _GEN_QUICKSORT_PARTITION_FUNCTION(ThrowReferenceCompareFunction, _paramName, noexcept (false))   _impl\
     _GEN_QUICKSORT_PARTITION_FUNCTION(ThrowConstReferenceCompareFunction, _paramName, noexcept (false))   _impl
-
+/*
 _GEN_QUICKSORT_PARTITION_FUNCTIONS(compareFunction, {
     auto swap = [] ( T & a FORCE_COMMA T & b ) { auto aux = a; a = b; b = aux; };
 
@@ -1058,7 +1061,7 @@ _GEN_QUICKSORT_PARTITION_FUNCTIONS(compareFunction, {
         return partitionIterator;
     return previous;
 })
-
+*/
 #undef _GEN_QUICKSORT_PARTITION_FUNCTIONS
 #undef _GEN_QUICKSORT_PARTITION_FUNCTION
 
@@ -1077,7 +1080,7 @@ typename dataTypes::_paramType<T> _paramName                              \
     _GEN_QUICKSORT_FUNCTION(ThrowValueCompareFunction, _paramName, noexcept (false)) _impl \
     _GEN_QUICKSORT_FUNCTION(ThrowReferenceCompareFunction, _paramName, noexcept (false)) _impl \
     _GEN_QUICKSORT_FUNCTION(ThrowConstReferenceCompareFunction, _paramName, noexcept (false)) _impl
-
+/*
 _GEN_QUICKSORT_FUNCTIONS(compareFunction,{
     auto next = to;
     if ( next != Iterator(nullptr) ) {
@@ -1108,7 +1111,7 @@ _GEN_QUICKSORT_FUNCTIONS(compareFunction,{
         DoubleLinkedList<T>::quickSort ( partitionIterator FORCE_COMMA to FORCE_COMMA compareFunction );
     }
 } )
-
+*/
 #undef _GEN_QUICKSORT_FUNCTIONS
 #undef _GEN_QUICKSORT_FUNCTION
 
@@ -1123,7 +1126,7 @@ _GEN_QUICKSORT_FUNCTIONS(compareFunction,{
     _GEN_SORT_FUNCTION(ThrowValueCompareFunction, _paramName, _impl, noexcept (false)) \
     _GEN_SORT_FUNCTION(ThrowReferenceCompareFunction, _paramName, _impl, noexcept (false)) \
     _GEN_SORT_FUNCTION(ThrowConstReferenceCompareFunction, _paramName, _impl, noexcept (false))
-
+/*
 _GEN_SORT_FUNCTIONS(compareFunction,{
     if ( this->size() < 2 )
         return;
@@ -1135,6 +1138,7 @@ _GEN_SORT_FUNCTIONS(compareFunction,{
 
     quickSort ( this->begin() FORCE_COMMA previous FORCE_COMMA compareFunction );
 })
+*/
 
 template <class T>
 auto DoubleLinkedList<T>::sort(auto func) noexcept -> void {

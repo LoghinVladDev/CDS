@@ -121,8 +121,11 @@ void testOptional ();
 void testRange ();
 void testPrimitives();
 void testJSON();
+void testArray();
 
 int main() {
+
+    testArray();
 
     testPrimitives();
     testJSON();
@@ -137,6 +140,50 @@ int main() {
     testRange();
 
     return 0;
+}
+
+#include <Array>
+void testArray () {
+    Array<float> a = {1.2f, 5.1f, 412.3f};
+
+    std::cout << a << '\n';
+
+    a.pushBack( 4.3f );
+
+    std::cout << a << '\n';
+
+    a.pushFront( 6.12f );
+
+    std::cout << a << '\n';
+
+    a.popFront();
+
+    std::cout << a << '\n';
+
+    a.popFront();
+
+    std::cout << a << '\n';
+
+    a.popBack();
+
+    std::cout << a << '\n';
+
+    a.popBack();
+
+    std::cout << a << '\n';
+
+    a.pushFront(6.1f);
+    a.pushFront(3.1f);
+    a.pushFront(7.1f);
+
+    std::cout << a << '\n';
+
+    a.sort ( [](auto & a, auto & b){return a < b;} );
+    std::cout << a <<'\n';
+
+    std::cout << a.count([](auto & e){return e > 5.0f;}) << '\n';
+
+    exit(0);
 }
 
 #include <Integer>
