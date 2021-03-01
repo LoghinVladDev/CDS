@@ -28,12 +28,17 @@ public:
     };
 
     explicit Range(Index s, Index f) : _s(s), _f(f), _rev(s > f) { }
+    ~Range() noexcept final = default;
 
     [[nodiscard]] constexpr auto begin() const noexcept -> Iterator { return Iterator(_s, _rev); }
     [[nodiscard]] constexpr auto end() const noexcept -> Iterator { return Iterator(_f, _rev); }
 
     [[nodiscard]] auto hash() const noexcept -> Index final { return _s + _f; }
     [[nodiscard]] auto toString () const noexcept -> String final { return String("( ") + _s + " ... " + _f + " )";  }
+
+    [[nodiscard]] auto copy () const noexcept -> Range * override {
+        return new Range( * this );
+    }
 };
 
 

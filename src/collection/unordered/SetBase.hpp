@@ -72,7 +72,7 @@ protected:
 
 public:
 
-    virtual ~SetBase() noexcept { this->clear(); }
+    ~SetBase() noexcept override { this->clear(); }
 
     constexpr inline auto begin () noexcept -> Iterator { return Iterator(this->_pFront); }
     constexpr inline auto end () noexcept -> Iterator { return Iterator(nullptr); }

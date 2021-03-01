@@ -263,6 +263,12 @@ public:
     [[nodiscard]] auto hash () const noexcept -> Index {
         return this->length();
     }
+
+    [[nodiscard]] auto copy () const noexcept -> String * {
+        return new String( * this );
+    }
+
+    auto replace ( Index, Size, String const & ) noexcept -> String &;
 };
 
 class String::IteratorBase {

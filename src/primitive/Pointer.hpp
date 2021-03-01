@@ -29,7 +29,7 @@ public:
     PointerBase() noexcept = default;
     explicit PointerBase(Pointer p) noexcept : pObj(p) {}
 
-    virtual ~PointerBase() noexcept = default;
+    ~PointerBase() noexcept override = default;
 
     auto operator == (Object const & o) const noexcept -> bool final {
         if ( this == & o ) return true;

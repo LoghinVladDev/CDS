@@ -22,7 +22,7 @@ public:
     Optional(Optional const & o) noexcept {
         * this = o;
     }
-    ~Optional() noexcept = default;
+    ~Optional() noexcept final = default;
 
     Optional ( ValueConstReference v ) noexcept : pObj ( new Value( v ) ) { } // NOLINT(google-explicit-constructor)
     Optional & operator = ( ValueConstReference v ) noexcept {
@@ -79,6 +79,10 @@ public:
             oss << "none";
         oss << " |";
         return String(oss.str());
+    }
+
+    [[nodiscard]] auto copy () const noexcept -> Optional * override {
+        return new Optional( * this );
     }
 };
 

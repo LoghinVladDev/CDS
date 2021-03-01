@@ -120,10 +120,12 @@ void testReference ();
 void testOptional ();
 void testRange ();
 void testPrimitives();
+void testJSON();
 
 int main() {
 
     testPrimitives();
+    testJSON();
 
     testList();
     testString();
@@ -139,14 +141,103 @@ int main() {
 
 #include <Integer>
 #include <Long>
+#include <Float>
+#include <Boolean>
+#include <Double>
 void testPrimitives() {
-    Integer x = 3;
+//    Integer x = 3;
+//
+//    std::cout << Integer::parse("1234") + 5 << '\n';
+//
+//    Long l = 5;
+//
+//    std::cout << Long::parse("231421512123252") + l << "\n";
+//
+//    Float f = 5.54f;
+//
+//    std::cout << Float::parse("13442.2453f") + f << "\n";
+//
+//    Boolean b = false;
+//
+//    std::cout << ( Boolean::parse("true") && b ) << '\n';
+//
+//    Double d = 5.5;
+//
+//    std::cout << Double::parse("123141.1254123") + d << '\n';
+//
+//    exit(0);
+}
+#include <JSON>
+void testJSON () {
+    try {
+//        auto test = JSON::Node();
+//
+//        test.setLabel("test1");
+//        test.put(true);
+//        std::cout << test.toString() << "\n";
+//
+//        test.put(3.4);
+//        std::cout << test.toString() << "\n";
+//
+//        test.put(3.5f);
+//        std::cout << test.toString() << "\n";
+//
+////        test.put('z');
+//        test.put("test");
+//        std::cout << test.toString() << "\n";
+//
+//        test.put(3);
+//        std::cout << test.toString() << "\n";
+//
+//        test.put(5000000000000ll);
+//        std::cout << test.toString() << "\n";
+//
+//        test.put("test");
+//        std::cout << test.toString() << "\n";
 
-    std::cout << Integer::parse("1234") + 5 << '\n';
+    } catch (std::exception &e) {
+        std::cout << e.what();
+    }
 
-    Long l = 5;
+    auto array = JSON::Array();
+    array.put(2, 1);
+    std::cout << array.toString() << '\n';
+    array.put(3, 20.5f);
+    std::cout << array.toString() << '\n';
+    array.put(0, "test");
+    std::cout << array.toString() << '\n';
 
-    std::cout << Long::parse("231421512123252") + l << "\n";
+    JSON o;
+    o.put("ex1", 1);
+    o.put("ex2", 1.5);
+    o.put("ex3", 1.4f);
+    o.put("ex4", true);
+    o.put("ex5", "test2");
+    o.put("ex6", array);
+
+    JSON o2;
+
+    o2.put("sub1", array);
+    o2.put("sub2", "test3");
+
+    o.put("ex7", o2);
+
+    std::cout << o.toString() << '\n';
+    std::cout << o.getJSON("ex7").toString() << '\n';
+    std::cout << o.getArray("ex6").toString() << '\n';
+    std::cout << o.getString("ex5") << '\n';
+    std::cout << o.getFloat("ex3") << '\n';
+    std::cout << o.getArray("ex6").getString(0) << '\n';
+
+    String str = R"({"ex1" : 1, "ex2" : 1.500000, "ex3" : 1.400000, "ex4" :true, "ex5" : "test2", "ex6" : ["test", 1, 20.500000], "ex7" : {"sub1" : ["test", 1, 20.500000], "sub2" : "pana mea"}})";
+
+    auto parsed = JSON::parse(str);
+
+    std::cout << parsed.toString() << '\n';
+    std::cout << parsed.getString("ex5") << '\n';
+    std::cout << parsed.getArray("ex6").getInt(1) << '\n';
+    std::cout << parsed.getJSON("ex7").getString("sub2") << '\n';
+    std::cout << parsed.getJSON("ex7").getArray("sub1").getString(0) << '\n';
 
     exit(0);
 }

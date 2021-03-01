@@ -20,7 +20,7 @@
         constexpr _dType () noexcept = default;                             \
         constexpr _dType ( _dType const & ) noexcept = default;             \
         constexpr _dType ( _dType && ) noexcept = default;                  \
-        constexpr ~_dType () noexcept = default;                            \
+        constexpr ~_dType () noexcept override = default;                   \
                                                                             \
         constexpr _dType ( _dInternalType value ) noexcept : _dInternalName(value) {} \
                                                                             \

@@ -151,7 +151,7 @@ public:
     ) noexcept;
     DoubleLinkedList( const std::initializer_list < T > & ) noexcept;
 
-    ~DoubleLinkedList() noexcept;
+    ~DoubleLinkedList() noexcept final;
 
 private:
     inline auto beginPtr () noexcept -> Iterator * final { return new Iterator( this->_pFront ); }
@@ -895,8 +895,9 @@ DoubleLinkedList<T>::DoubleLinkedList(const DoubleLinkedList & obj) noexcept {
 
 #include <NotImplementedException.h>
 template <class T>
-DoubleLinkedList<T>::DoubleLinkedList(DoubleLinkedList &&) noexcept {
-    throw NotImplementedException();
+DoubleLinkedList<T>::DoubleLinkedList(DoubleLinkedList && l) noexcept {
+    while ( ! l.empty() )
+        this->pushBack( l.popFront() );
 }
 
 template <class T>

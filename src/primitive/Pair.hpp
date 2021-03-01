@@ -17,6 +17,7 @@ private:
 public:
     Pair() noexcept = default;
     Pair(const K & k, const V & v) noexcept : first(k), second(v) {  }
+    ~Pair () noexcept override = default;
 
     auto inline getFirst () const noexcept -> K const & { return first; }
     auto inline getSecond() const noexcept -> V const & { return second; }
@@ -50,6 +51,10 @@ public:
         std::stringstream oss;
         oss << "( k = " << first << ", v = " << second << " )";
         return String(oss.str());
+    }
+
+    [[nodiscard]] auto copy () const noexcept -> Pair * override {
+        return new Pair( * this );
     }
 };
 

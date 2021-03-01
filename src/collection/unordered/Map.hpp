@@ -55,7 +55,7 @@ public:
     virtual auto insert (EntryConstReference) noexcept -> ValueConstReference & = 0;
     virtual auto emplace (KeyConstReference, ValueConstReference) noexcept -> ValueConstReference = 0;
 
-    virtual ~Map() noexcept = default;
+    ~Map() noexcept override = default;
 private:
     auto contains ( EntryConstReference ) const noexcept -> bool { return false; }
 

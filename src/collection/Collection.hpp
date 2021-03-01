@@ -241,7 +241,7 @@ public:
         return this->toString();
     }
 
-    virtual ~Collection() noexcept = default;
+    ~Collection() noexcept override = default;
 
     friend inline auto operator << ( std::ostream & o, const Collection & c ) noexcept -> std::ostream & {
          return ( o << c.toString() );

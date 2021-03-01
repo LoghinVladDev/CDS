@@ -71,7 +71,7 @@ public:
 
     inline auto size () const noexcept -> Size final { return this->_size; }
 
-    virtual ~List () noexcept = default;
+    ~List () noexcept override = default;
 };
 
 

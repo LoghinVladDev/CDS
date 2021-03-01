@@ -17,6 +17,8 @@ public:
     }
 
     virtual auto hash () const noexcept -> Index { return 0; }
+    virtual auto copy () const noexcept -> Object * { return nullptr; }
+    virtual ~Object () noexcept = default;
 };
 
 

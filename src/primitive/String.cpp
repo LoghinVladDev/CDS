@@ -301,7 +301,7 @@ auto String::findFirst ( ElementType e ) const noexcept -> Index {
 
 auto String::findFirst ( String const & o ) const noexcept -> Index {
     for ( Index i = 0; auto c : (*this) )
-        if ( this->size() - i > o.size() && this->substr( i, i + o.size() ) == o )
+        if ( this->size() - i >= o.size() && this->substr( i, i + o.size() ) == o )
             return i;
         else
             i++;
@@ -319,7 +319,11 @@ auto String::findLast ( ElementType e ) const noexcept -> Index {
 }
 
 auto String::findLast ( String const & o ) const noexcept -> Index {
-    throw NotImplementedException();
+    Index i = this->size() - o.length();
+    for ( i; i >= 0; i-- )
+        if ( this->substr(i, i + o.length()) == o )
+            return i;
+
     return INVALID_POS;
 }
 
@@ -410,8 +414,51 @@ auto String::findNotOf (String const & s) const noexcept -> LinkedList < Index >
     return indices;
 }
 
-auto String::find (String const &) const noexcept -> LinkedList < Index > {
-    throw NotImplementedException();
+auto String::find (String const & o) const noexcept -> LinkedList < Index > {
+    Index lpsArray [this->size()];
+
+    auto computeLPSArray = [& o, &lpsArray] () {
+        Index len = 0;
+        lpsArray[0] = 0;
+
+        Index i = 1;
+        while ( i < o.size() ) {
+            if ( o._p[i] == o._p[len] ) {
+                len ++;
+                lpsArray[i] = len;
+                i ++;
+            } else {
+                if ( len != 0 )
+                    len = lpsArray[len - 1];
+                else {
+                    lpsArray[i] = 0;
+                    i ++;
+                }
+            }
+        }
+    };
+
+    computeLPSArray();
+
+    LinkedList < Index > indices;
+    Index i = 0, j = 0;
+    while ( i < o.size() ) {
+        if ( o._p[j] == this->_p[i] ) {
+            i ++; j ++;
+        }
+
+        if ( j == o.size() ) {
+            indices.pushBack(i - j);
+            j = lpsArray[j - 1];
+        } else if ( i < this->size() && this->_p[i] != o._p[j] ) {
+            if ( j != 0 )
+                j = lpsArray[j - 1];
+            else
+                i ++;
+        }
+    }
+
+    return indices;
 }
 
 auto String::ltrim ( ElementType e ) noexcept -> String & {
@@ -458,6 +505,13 @@ auto String::ljust(Size justifySize, ElementType padChar) noexcept -> String & {
         this->prepend(padChar);
 
     return * this;
+}
+
+auto String::replace(Index pos, Size len, const String & newInPlace) noexcept -> String & {
+    String left = this->substr(0, pos);
+    String right = this->substr(pos + len);
+
+    return ( * this = left + newInPlace + right );
 }
 
 #undef CONSTR_CLEAR

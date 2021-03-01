@@ -37,6 +37,7 @@ public:
 
     Reference(Reference const &) noexcept = default;
     Reference & operator = ( Reference const & ) noexcept = default;
+    ~Reference () noexcept override = default;
 
     constexpr operator T& () const noexcept { return *p; } // NOLINT(google-explicit-constructor)
     constexpr T& get () const noexcept { return *p; }
