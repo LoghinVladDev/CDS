@@ -1,24 +1,31 @@
 # customDataStructures
 
-Name self explainatory
+Name self explanatory\
 Custom Data Structures for C++. Started as practice, ended up implementing several useful features
 
 ## Functionalities and support : 
 
 ### Data Structures :
 * Concrete Generic Data Structures
-  * Double Linked Lists
+  * Double Linked List
+  * Single Linked List ( In Work )
   * Ordered, Unordered Sets
   * Hash Maps
+  * Unordered Map ( In Work )
+  * Ordered Map ( In Work )
+  * Dynamic Arrays
+  * Static Arrays ( In Work )
 * Abstract Generic Data Structures 
   * Object
   * Map
+  * MultiMap ( In Work )
   * List
   * SetBase
   * Collection
+  * BinaryTree ( Later Update )
 * Particular Case Data Structures
   * B-Tree ( Partial Support )
-* Utilitaries 
+* Utility 
   * JSON - Parsing, Data Structure
   * Range
   * Primitives
