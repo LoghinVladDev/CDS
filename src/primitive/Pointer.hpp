@@ -5,7 +5,7 @@
 #ifndef CDS_POINTER_HPP
 #define CDS_POINTER_HPP
 
-#include <Object.hpp>
+#include <CDS/Object>
 #include <sstream>
 
 template <class T>
@@ -49,9 +49,13 @@ public:
     constexpr inline auto operator -> () const noexcept -> Pointer { return pObj; }
     constexpr inline explicit operator bool () const noexcept { return isNull(); }
     constexpr inline auto get () const noexcept -> Pointer { return pObj; }
-
+#if __cpp_constexpr >= 201907
     constexpr inline virtual auto release () noexcept -> Pointer { auto p = pObj; pObj = nullptr; return p; }
     constexpr inline virtual auto reset ( Pointer p = nullptr ) noexcept -> void { auto oldP = pObj; pObj = p; delete oldP; }
+#else
+    inline virtual auto release () noexcept -> Pointer { auto p = pObj; pObj = nullptr; return p; }
+    inline virtual auto reset ( Pointer p = nullptr ) noexcept -> void { auto oldP = pObj; pObj = p; delete oldP; }
+#endif
 
     [[nodiscard]] auto toString() const noexcept -> String final {
         std::stringstream oss;

@@ -5,13 +5,13 @@
 #ifndef CDS_JSON_HPP
 #define CDS_JSON_HPP
 
-#include <Object>
-#include <Boolean>
-#include <Integer>
-#include <Float>
-#include <Double>
-#include <Long>
-#include <LinkedList>
+#include <CDS/Object>
+#include <CDS/Boolean>
+#include <CDS/Integer>
+#include <CDS/Float>
+#include <CDS/Double>
+#include <CDS/Long>
+#include <CDS/LinkedList>
 
 class JSON : public Object {
 public:

@@ -5,7 +5,7 @@
 #ifndef CDS_OPTIONAL_HPP
 #define CDS_OPTIONAL_HPP
 
-#include <Pointer.hpp>
+#include <CDS/Pointer>
 
 template <class T>
 class Optional final : public Object {

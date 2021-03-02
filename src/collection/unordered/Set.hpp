@@ -5,7 +5,7 @@
 #ifndef CDS_SET_HPP
 #define CDS_SET_HPP
 
-#include <OrderedSet.hpp>
-#include <UnorderedSet.hpp>
+#include <CDS/OrderedSet>
+#include <CDS/UnorderedSet>
 
 #endif //CDS_SET_HPP

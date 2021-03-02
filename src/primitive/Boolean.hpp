@@ -5,8 +5,14 @@
 #ifndef CDS_BOOLEAN_HPP
 #define CDS_BOOLEAN_HPP
 
-#include <Object>
-#include <PrimitiveGenerator.hpp>
+#include <CDS/Object>
+#include "./PrimitiveGenerator.hpp"
+
+#if __cpp_constepxr >= 201907
+#define __boolean_constexpr constexpr
+#else
+#define __boolean_constexpr
+#endif
 
 class Boolean : public Object {
 private:
@@ -15,7 +21,7 @@ public:
     constexpr Boolean () noexcept = default;
     constexpr Boolean ( Boolean const & ) noexcept = default;
     constexpr Boolean ( Boolean && ) noexcept = default;
-    constexpr ~Boolean() noexcept override = default;
+    __boolean_constexpr ~Boolean() noexcept override = default;
 
     constexpr Boolean ( bool v ) noexcept : v(v) { }
 
@@ -30,19 +36,19 @@ public:
         return * this;
     }
 
-    constexpr auto operator &&(Boolean const & o) const noexcept -> Boolean {
+    __boolean_constexpr auto operator &&(Boolean const & o) const noexcept -> Boolean {
         return this->v && o.v;
     }
 
-    constexpr auto operator && ( bool value ) const noexcept -> Boolean {
+    __boolean_constexpr auto operator && ( bool value ) const noexcept -> Boolean {
         return this->v && value;
     }
 
-    constexpr auto operator ||(Boolean const & o) const noexcept -> Boolean {
+    __boolean_constexpr auto operator ||(Boolean const & o) const noexcept -> Boolean {
         return this->v || o.v;
     }
 
-    constexpr auto operator || ( bool value ) const noexcept -> Boolean {
+    __boolean_constexpr auto operator || ( bool value ) const noexcept -> Boolean {
         return this->v || value;
     }
 
@@ -52,7 +58,7 @@ public:
 //    _G_OP_OBJ_CONST(Boolean, ==, bool, v, bool)
 //    _G_OP_OBJ_CONST(Boolean, !=, bool, v, bool)
 
-    constexpr auto operator ! () const noexcept -> Boolean {
+    __boolean_constexpr auto operator ! () const noexcept -> Boolean {
         return !this->v;
     }
 

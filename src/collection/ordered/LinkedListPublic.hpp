@@ -5,7 +5,7 @@
 #ifndef CDS_LINKEDLISTPUBLIC_HPP
 #define CDS_LINKEDLISTPUBLIC_HPP
 
-#include <std-types.h>
+#include "../../std-types.h"
 
 template <class T>
 class DoubleLinkedList;

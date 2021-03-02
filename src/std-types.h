@@ -51,12 +51,6 @@ namespace dataTypes {
 }
 
 namespace dataTypes {
-    template <class T>
-    struct DoubleListNode {
-        T                    data;
-        DoubleListNode<T>  * pNext       {nullptr};
-        DoubleListNode<T>  * pPrevious   {nullptr};
-    };
 
     template <class T>
     struct SingleListNode {

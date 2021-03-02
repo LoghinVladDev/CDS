@@ -4,7 +4,8 @@
 
 #ifndef CDS_OBJECT_HPP
 #define CDS_OBJECT_HPP
-#include <String.hpp>
+
+#include "./String.hpp"
 
 class Object {
 public:

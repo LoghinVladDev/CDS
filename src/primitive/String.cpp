@@ -2,7 +2,7 @@
 // Created by loghin on 24.02.2021.
 //
 
-#include <String.hpp>
+#include <CDS/String>
 
 #include <cstring>
 #define CONSTR_CLEAR() _c(0), _l(0), _p(nullptr)
@@ -199,7 +199,7 @@ auto String::clear() noexcept -> void {
     this->_l = 0;
 }
 
-#include <LinkedList.hpp>
+#include <CDS/LinkedList>
 auto String::split(ElementType token, Size splitCount) const noexcept -> LinkedList < String > {
     Index splitIndex = 0;
     if ( splitCount < 1 )
@@ -290,7 +290,8 @@ auto String::operator > ( std::string const & stdString ) const noexcept -> bool
 auto String::operator > ( StringLiteral cString ) const noexcept -> bool { return std::strcmp ( this->cStr(), cString ) > 0; }
 
 auto String::findFirst ( ElementType e ) const noexcept -> Index {
-    for ( Index i = 0; auto c : (*this) )
+    Index i = 0;
+    for ( auto c : (*this) )
         if ( c == e )
             return i;
         else
@@ -300,7 +301,8 @@ auto String::findFirst ( ElementType e ) const noexcept -> Index {
 }
 
 auto String::findFirst ( String const & o ) const noexcept -> Index {
-    for ( Index i = 0; auto c : (*this) )
+    Index i = 0;
+    for ( auto c : (*this) )
         if ( this->size() - i >= o.size() && this->substr( i, i + o.size() ) == o )
             return i;
         else
@@ -328,7 +330,8 @@ auto String::findLast ( String const & o ) const noexcept -> Index {
 }
 
 auto String::findFirstOf ( String const & o ) const noexcept -> Index {
-    for ( Index i = 0; auto e : (*this) )
+    Index i = 0;
+    for ( auto e : (*this) )
         if ( o.contains(e) )
             return i;
         else
@@ -337,7 +340,8 @@ auto String::findFirstOf ( String const & o ) const noexcept -> Index {
 }
 
 auto String::findFirstNotOf ( String const & o ) const noexcept -> Index {
-    for ( Index i = 0; auto e : (*this) )
+    Index i = 0;
+    for ( auto e : (*this) )
         if ( ! o.contains(e) )
             return i;
         else
@@ -381,7 +385,8 @@ auto String::substr(Index from, Index to) const noexcept -> String {
 auto String::find (ElementType e) const noexcept -> LinkedList < Index > {
     LinkedList < Index > indices;
 
-    for ( Index i = 0; auto c : (*this) ) {
+    Index i = 0;
+    for ( auto c : (*this) ) {
         if ( c == e )
             indices.pushBack ( i );
         i++;
@@ -393,7 +398,8 @@ auto String::find (ElementType e) const noexcept -> LinkedList < Index > {
 auto String::findOf (String const & s) const noexcept -> LinkedList < Index > {
     LinkedList < Index > indices;
 
-    for ( Index i = 0; auto c : (*this) ) {
+    Index i = 0;
+    for ( auto c : (*this) ) {
         if ( s.contains(c) )
             indices.pushBack ( i );
         i++;
@@ -405,7 +411,8 @@ auto String::findOf (String const & s) const noexcept -> LinkedList < Index > {
 auto String::findNotOf (String const & s) const noexcept -> LinkedList < Index > {
     LinkedList < Index > indices;
 
-    for ( Index i = 0; auto c : (*this) ) {
+    Index i = 0;
+    for ( auto c : (*this) ) {
         if ( ! s.contains(c) )
             indices.pushBack ( i );
         i++;

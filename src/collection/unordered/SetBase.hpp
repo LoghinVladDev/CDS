@@ -5,9 +5,12 @@
 #ifndef CDS_SETBASE_HPP
 #define CDS_SETBASE_HPP
 
-#include <Collection.hpp>
+#include <CDS/Collection>
 
-template <class T> requires UniqueIdentifiable <T>
+template <class T>
+#if defined(__cpp_concepts)
+    requires UniqueIdentifiable <T>
+#endif
 class SetBase : public Collection<T> {
 public:
     typedef T & Reference;
@@ -198,7 +201,10 @@ public:
 };
 
 #include <sstream>
-template <class T> requires UniqueIdentifiable <T>
+template <class T>
+#if defined(__cpp_concepts)
+requires UniqueIdentifiable <T>
+#endif
 auto SetBase<T>::toString() const noexcept -> String {
     if ( this->empty() )
         return String("{ }");
@@ -214,7 +220,10 @@ auto SetBase<T>::toString() const noexcept -> String {
 }
 
 
-template <class T> requires UniqueIdentifiable <T>
+template <class T>
+#if defined(__cpp_concepts)
+    requires UniqueIdentifiable <T>
+#endif
 SetBase<T>::SetBase(SetBase const & set) noexcept : _pFront(nullptr), _size(set.size()) {
     if ( set.size() == 0 )
         return;
@@ -230,12 +239,18 @@ SetBase<T>::SetBase(SetBase const & set) noexcept : _pFront(nullptr), _size(set.
 }
 
 #include <NotImplementedException.h>
-template <class T> requires UniqueIdentifiable <T>
+template <class T>
+#if defined(__cpp_concepts)
+    requires UniqueIdentifiable <T>
+#endif
 SetBase<T>::SetBase(SetBase &&) noexcept(false) {
     throw NotImplementedException();
 }
 
-template <class T> requires UniqueIdentifiable <T>
+template <class T>
+#if defined(__cpp_concepts)
+    requires UniqueIdentifiable <T>
+#endif
 auto SetBase<T>::remove( ConstReference e) noexcept -> bool {
     if ( this->empty() )
         return false;

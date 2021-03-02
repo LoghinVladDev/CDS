@@ -13,14 +13,14 @@
     constexpr auto operator _opVal ( _dType const & o ) noexcept -> _dType & { this->_dTypeVal _opVal o._dTypeVal; return * this; } \
     constexpr auto operator _opVal ( _dInternalType value ) noexcept -> _dType & { this->_dTypeVal _opVal value; return * this; }
 
-#define _G_OBJ(_dType, _dInternalType, _dInternalName, _dInternalInitValue) \
+#define _G_OBJ_CONSTEXPR(_dType, _dInternalType, _dInternalName, _dInternalInitValue) \
     private:                                                                \
         _dInternalType _dInternalName { _dInternalInitValue };              \
     public:                                                                 \
         constexpr _dType () noexcept = default;                             \
         constexpr _dType ( _dType const & ) noexcept = default;             \
         constexpr _dType ( _dType && ) noexcept = default;                  \
-        constexpr ~_dType () noexcept override = default;                   \
+        constexpr ~_dType () noexcept = default;                             \
                                                                             \
         constexpr _dType ( _dInternalType value ) noexcept : _dInternalName(value) {} \
                                                                             \

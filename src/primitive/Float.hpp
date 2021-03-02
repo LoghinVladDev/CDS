@@ -5,8 +5,14 @@
 #ifndef CDS_FLOAT_HPP
 #define CDS_FLOAT_HPP
 
-#include <Object.hpp>
-#include <PrimitiveGenerator.hpp>
+#include <CDS/Object>
+#include "./PrimitiveGenerator.hpp"
+
+#if __cpp_constepxr >= 201907
+#define __float_constexpr constexpr
+#else
+#define __float_constexpr
+#endif
 
 class Float : public Object {
 //    _G_OBJ(Float, float, v, 0.0f)
@@ -16,7 +22,7 @@ public:
     constexpr Float() noexcept = default;
     constexpr Float(Float const&)noexcept=default;
     constexpr Float(Float &&)noexcept=default;
-    constexpr~Float() noexcept override = default;
+    __float_constexpr ~Float() noexcept override = default;
     constexpr Float(float value) noexcept: v(value) {}
     constexpr Float &operator=(Float const &o) noexcept {
         if (this == &o)return *this;
@@ -27,14 +33,14 @@ public:
         this->v = value;
         return *this;
     }
-    constexpr auto operator+(Float const &o) const noexcept -> Float { return this->v + o.v; }
-    constexpr auto operator+(float value) const noexcept -> Float { return this->v + value; }
-    constexpr auto operator-(Float const &o) const noexcept -> Float { return this->v - o.v; }
-    constexpr auto operator-(float value) const noexcept -> Float { return this->v - value; }
-    constexpr auto operator*(Float const &o) const noexcept -> Float { return this->v * o.v; }
-    constexpr auto operator*(float value) const noexcept -> Float { return this->v * value; }
-    constexpr auto operator/(Float const &o) const noexcept -> Float { return this->v / o.v; }
-    constexpr auto operator/(float value) const noexcept -> Float { return this->v / value; }
+    __float_constexpr auto operator+(Float const &o) const noexcept -> Float { return this->v + o.v; }
+    __float_constexpr auto operator+(float value) const noexcept -> Float { return this->v + value; }
+    __float_constexpr auto operator-(Float const &o) const noexcept -> Float { return this->v - o.v; }
+    __float_constexpr auto operator-(float value) const noexcept -> Float { return this->v - value; }
+    __float_constexpr auto operator*(Float const &o) const noexcept -> Float { return this->v * o.v; }
+    __float_constexpr auto operator*(float value) const noexcept -> Float { return this->v * value; }
+    __float_constexpr auto operator/(Float const &o) const noexcept -> Float { return this->v / o.v; }
+    __float_constexpr auto operator/(float value) const noexcept -> Float { return this->v / value; }
 
     constexpr auto operator+=(Float const &o) noexcept -> Float & {
         this->v += o.v;

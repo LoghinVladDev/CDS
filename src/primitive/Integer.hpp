@@ -5,11 +5,130 @@
 #ifndef CDS_INTEGER_HPP
 #define CDS_INTEGER_HPP
 
-#include <Object.hpp>
-#include <PrimitiveGenerator.hpp>
+#include <CDS/Object>
+#include "./PrimitiveGenerator.hpp"
+
+#if __cpp_constepxr >= 201907
+#define __integer_constexpr constexpr
+#else
+#define __integer_constexpr
+#endif
 
 class Integer : public Object {
-    _G_OBJ(Integer, int, v, 0)
+private:
+    int v{0};
+public:
+    constexpr Integer() noexcept = default;
+    constexpr Integer(Integer const&)noexcept=default;
+    constexpr Integer(Integer &&)noexcept=default;
+
+    __integer_constexpr ~Integer () noexcept override = default;
+
+    constexpr Integer(int value) noexcept: v(value) {}
+    constexpr Integer &operator=(Integer const &o) noexcept {
+        if (this == &o)return *this;
+        this->v = o.v;
+        return *this;
+    }
+    constexpr Integer &operator=(int value) noexcept {
+        this->v = value;
+        return *this;
+    }
+
+    __integer_constexpr auto operator+(Integer const &o) const noexcept -> Integer { return this->v + o.v; }
+    __integer_constexpr auto operator+(int value) const noexcept -> Integer { return this->v + value; }
+    __integer_constexpr auto operator-(Integer const &o) const noexcept -> Integer { return this->v - o.v; }
+    __integer_constexpr auto operator-(int value) const noexcept -> Integer { return this->v - value; }
+    __integer_constexpr auto operator*(Integer const &o) const noexcept -> Integer { return this->v * o.v; }
+    __integer_constexpr auto operator*(int value) const noexcept -> Integer { return this->v * value; }
+    __integer_constexpr auto operator/(Integer const &o) const noexcept -> Integer { return this->v / o.v; }
+    __integer_constexpr auto operator/(int value) const noexcept -> Integer { return this->v / value; }
+    __integer_constexpr auto operator%(Integer const &o) const noexcept -> Integer { return this->v % o.v; }
+    __integer_constexpr auto operator%(int value) const noexcept -> Integer { return this->v % value; }
+    __integer_constexpr auto operator+=(Integer const &o) noexcept -> Integer & {
+        this->v += o.v;
+        return *this;
+    }
+    constexpr auto operator+=(int value) noexcept -> Integer & {
+        this->v += value;
+        return *this;
+    }
+    constexpr auto operator-=(Integer const &o) noexcept -> Integer & {
+        this->v -= o.v;
+        return *this;
+    }
+    constexpr auto operator-=(int value) noexcept -> Integer & {
+        this->v -= value;
+        return *this;
+    }
+    constexpr auto operator*=(Integer const &o) noexcept -> Integer & {
+        this->v *= o.v;
+        return *this;
+    }
+    constexpr auto operator*=(int value) noexcept -> Integer & {
+        this->v *= value;
+        return *this;
+    }
+    constexpr auto operator/=(Integer const &o) noexcept -> Integer & {
+        this->v /= o.v;
+        return *this;
+    }
+    constexpr auto operator/=(int value) noexcept -> Integer & {
+        this->v /= value;
+        return *this;
+    }
+    constexpr auto operator%=(Integer const &o) noexcept -> Integer & {
+        this->v %= o.v;
+        return *this;
+    }
+    constexpr auto operator%=(int value) noexcept -> Integer & {
+        this->v %= value;
+        return *this;
+    }
+    constexpr auto operator==(Integer const &o) const noexcept -> bool { return this->v == o.v; }
+    constexpr auto operator==(int value) const noexcept -> bool { return this->v == value; }
+    constexpr auto operator!=(Integer const &o) const noexcept -> bool { return this->v != o.v; }
+    constexpr auto operator!=(int value) const noexcept -> bool { return this->v != value; }
+    constexpr auto operator>(Integer const &o) const noexcept -> bool { return this->v > o.v; }
+    constexpr auto operator>(int value) const noexcept -> bool { return this->v > value; }
+    constexpr auto operator<(Integer const &o) const noexcept -> bool { return this->v < o.v; }
+    constexpr auto operator<(int value) const noexcept -> bool { return this->v < value; }
+    constexpr auto operator>=(Integer const &o) const noexcept -> bool { return this->v >= o.v; }
+    constexpr auto operator>=(int value) const noexcept -> bool { return this->v >= value; }
+    constexpr auto operator<=(Integer const &o) const noexcept -> bool { return this->v <= o.v; }
+    constexpr auto operator<=(int value) const noexcept -> bool { return this->v <= value; }
+    __integer_constexpr auto operator&(Integer const &o) const noexcept -> Integer { return this->v & o.v; }
+    __integer_constexpr auto operator&(int value) const noexcept -> Integer { return this->v & value; }
+    __integer_constexpr auto operator|(Integer const &o) const noexcept -> Integer { return this->v | o.v; }
+    __integer_constexpr auto operator|(int value) const noexcept -> Integer { return this->v | value; }
+    __integer_constexpr auto operator^(Integer const &o) const noexcept -> Integer { return this->v ^ o.v; }
+    __integer_constexpr auto operator^(int value) const noexcept -> Integer { return this->v ^ value; }
+    constexpr auto operator&(Integer const &o) noexcept -> Integer & {
+        this->v & o.v;
+        return *this;
+    }
+    constexpr auto operator&(int value) noexcept -> Integer & {
+        this->v & value;
+        return *this;
+    }
+    constexpr auto operator|(Integer const &o) noexcept -> Integer & {
+        this->v | o.v;
+        return *this;
+    }
+    constexpr auto operator|(int value) noexcept -> Integer & {
+        this->v | value;
+        return *this;
+    }
+    constexpr auto operator^(Integer const &o) noexcept -> Integer & {
+        this->v ^ o.v;
+        return *this;
+    }
+    constexpr auto operator^(int value) noexcept -> Integer & {
+        this->v ^ value;
+        return *this;
+    }
+    constexpr operator int() const noexcept { return this->v; }
+    [[nodiscard]]constexpr inline auto get() const noexcept -> int { return this->v; }
 public:
     [[nodiscard]] auto hash() const noexcept -> Index override {
         return static_cast<Index>(this->v);
