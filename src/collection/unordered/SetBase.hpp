@@ -238,7 +238,7 @@ SetBase<T>::SetBase(SetBase const & set) noexcept : _pFront(nullptr), _size(set.
     }
 }
 
-#include <NotImplementedException>
+#include <CDS/NotImplementedException>
 template <class T>
 #if defined(__cpp_concepts)
     requires UniqueIdentifiable <T>
