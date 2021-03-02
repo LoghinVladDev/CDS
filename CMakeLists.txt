@@ -76,7 +76,7 @@ set(
         ${CDS_COLLECTION}
         ${CDS_EXTRA}
         src/std-types.h
-        src/primitive/Integer.hpp src/primitive/Long.hpp src/primitive/Float.hpp src/primitive/Double.hpp src/primitive/Boolean.hpp src/primitive/PrimitiveGenerator.hpp src/collection/unordered/JSON.hpp include/CDS/JSON src/collection/ordered/Array.hpp src/collection/ordered/StaticArray.hpp include/CDS/Array include/CDS/NotImplementedException.h)
+        src/primitive/Integer.hpp src/primitive/Long.hpp src/primitive/Float.hpp src/primitive/Double.hpp src/primitive/Boolean.hpp src/primitive/PrimitiveGenerator.hpp src/collection/unordered/JSON.hpp include/CDS/JSON src/collection/ordered/Array.hpp src/collection/ordered/StaticArray.hpp include/CDS/Array include/CDS/NotImplementedException)
 
 set(
         CDS_GLOBAL_HEADERS ${CDS_INCLUDE_DIRECTORIES} CACHE INTERNAL "DIRS"
