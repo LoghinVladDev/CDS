@@ -558,116 +558,115 @@ public:
         return new Array(* this);
     }
 
-    static auto parse(String const &) noexcept -> Array;
-};
+    static auto parse ( String const & data ) noexcept -> Array {
+        Array result;
 
-auto JSON::Array::parse ( String const & data ) noexcept -> Array {
-    Array result;
+        auto pushBackUnknown = [& result]( String const & data ) noexcept -> Array & {
+            if ( data.front() == '{' )
+                result.put( result.size(), JSON::parse(data) );
+            else if ( data.front() == '[' )
+                result.put( result.size(), Array::parse(data) );
+            else if ( data.findFirst('\"') != String::INVALID_POS )
+                result.put (
+                        result.size(),
+                        String().append(data)
+                                .replace(data.findLast('\"'), data.size(), "")
+                                .replace(0, data.findFirst('\"') + 1, "")
+                );
+            else if ( data.findFirst('.') != String::INVALID_POS )
+                result.put ( result.size(), Double::parse(data).get() );
+            else if ( data.findFirst("true") != String::INVALID_POS || data.findFirst("false") != String::INVALID_POS )
+                result.put ( result.size(), data == "true" );
+            else
+                result.put ( result.size(), Long::parse(data).get() );
 
-    auto pushBackUnknown = [& result]( String const & data ) noexcept -> Array & {
-        if ( data.front() == '{' )
-            result.put( result.size(), JSON::parse(data) );
-        else if ( data.front() == '[' )
-            result.put( result.size(), Array::parse(data) );
-        else if ( data.findFirst('\"') != String::INVALID_POS )
-            result.put (
-                  result.size(),
-                  String().append(data)
-                  .replace(data.findLast('\"'), data.size(), "")
-                  .replace(0, data.findFirst('\"') + 1, "")
-            );
-        else if ( data.findFirst('.') != String::INVALID_POS )
-            result.put ( result.size(), Double::parse(data).get() );
-        else if ( data.findFirst("true") != String::INVALID_POS || data.findFirst("false") != String::INVALID_POS )
-            result.put ( result.size(), data == "true" );
-        else
-            result.put ( result.size(), Long::parse(data).get() );
+            return result;
+        };
 
-        return result;
-    };
+        String copy = data;
+        copy.replace(0, copy.findFirst('[') + 1, "");
+        copy.replace(copy.findLast(']'), copy.size(), "");
 
-    String copy = data;
-    copy.replace(0, copy.findFirst('[') + 1, "");
-    copy.replace(copy.findLast(']'), copy.size(), "");
+        while ( ! copy.empty() ) {
+            copy.ltrim(' ');
 
-    while ( ! copy.empty() ) {
-        copy.ltrim(' ');
+            int arrayBracketCount = 0, objectBracketCount = 0, segmentLength = 0;
+            String element;
 
-        int arrayBracketCount = 0, objectBracketCount = 0, segmentLength = 0;
-        String element;
+            for ( auto c : copy ) {
+                if ( arrayBracketCount == 0 && objectBracketCount == 0 && c == ',' )
+                    break;
+                else {
+                    if ( c == '{' )objectBracketCount ++;
+                    else if ( c == '}' )objectBracketCount --;
+                    else if ( c == '[' )arrayBracketCount ++;
+                    else if ( c == ']' )arrayBracketCount --;
 
-        for ( auto c : copy ) {
-            if ( arrayBracketCount == 0 && objectBracketCount == 0 && c == ',' )
-                break;
-            else {
-                if ( c == '{' )objectBracketCount ++;
-                else if ( c == '}' )objectBracketCount --;
-                else if ( c == '[' )arrayBracketCount ++;
-                else if ( c == ']' )arrayBracketCount --;
-
-                element += c;
-                segmentLength ++;
+                    element += c;
+                    segmentLength ++;
+                }
             }
+
+            copy.replace(0, segmentLength + 1, "");
+            pushBackUnknown(element);
         }
 
-        copy.replace(0, segmentLength + 1, "");
-        pushBackUnknown(element);
+        return result;
     }
+};
 
-    return result;
-}
 
-auto JSON::put ( String const & label, bool v ) noexcept -> JSON & {
+inline auto JSON::put ( String const & label, bool v ) noexcept -> JSON & {
     this->_nodes.pushBack( JSON::Node().setLabel(label).put(v) );
     return * this;
 }
 
-auto JSON::put ( String const & label, int v ) noexcept -> JSON & {
+inline auto JSON::put ( String const & label, int v ) noexcept -> JSON & {
     this->_nodes.pushBack( JSON::Node().setLabel(label).put(v) );
     return * this;
 }
 
-auto JSON::put ( String const & label, long long int v ) noexcept -> JSON & {
+inline auto JSON::put ( String const & label, long long int v ) noexcept -> JSON & {
     this->_nodes.pushBack( JSON::Node().setLabel(label).put(v) );
     return * this;
 }
 
-auto JSON::put ( String const & label, float v ) noexcept -> JSON & {
+inline auto JSON::put ( String const & label, float v ) noexcept -> JSON & {
     this->_nodes.pushBack( JSON::Node().setLabel(label).put(v) );
     return * this;
 }
 
-auto JSON::put ( String const & label, double v ) noexcept -> JSON & {
+inline auto JSON::put ( String const & label, double v ) noexcept -> JSON & {
     this->_nodes.pushBack( JSON::Node().setLabel(label).put(v) );
     return * this;
 }
 
-auto JSON::put ( String const & label, String const & v ) noexcept -> JSON & {
+inline auto JSON::put ( String const & label, String const & v ) noexcept -> JSON & {
     this->_nodes.pushBack( JSON::Node().setLabel(label).put(v) );
     return * this;
 }
 
-auto JSON::put ( String const & label, Array const & v ) noexcept -> JSON & {
+inline auto JSON::put ( String const & label, Array const & v ) noexcept -> JSON & {
     this->_nodes.pushBack( JSON::Node().setLabel(label).put(v) );
     return * this;
 }
 
-auto JSON::put ( String const & label, JSON const & v ) noexcept -> JSON & {
+inline auto JSON::put ( String const & label, JSON const & v ) noexcept -> JSON & {
     this->_nodes.pushBack( JSON::Node().setLabel(label).put(v) );
     return * this;
 }
 
-auto JSON::put ( String const & label, Object const & v ) noexcept -> JSON & {
+inline auto JSON::put ( String const & label, Object const & v ) noexcept -> JSON & {
     this->_nodes.pushBack( JSON::Node().setLabel(label).put(v) );
     return * this;
 }
 
-auto JSON::put ( String const & label, StringLiteral v ) noexcept -> JSON & {
+inline auto JSON::put ( String const & label, StringLiteral v ) noexcept -> JSON & {
     this->_nodes.pushBack( JSON::Node().setLabel(label).put(v) );
     return * this;
 }
 
-auto JSON::getBoolean ( String const & label ) const noexcept (false) -> bool {
+inline auto JSON::getBoolean ( String const & label ) const noexcept (false) -> bool {
     for ( auto & e : this->_nodes )
         if ( e.getLabel() == label )
             return e.getBoolean ();
@@ -675,7 +674,7 @@ auto JSON::getBoolean ( String const & label ) const noexcept (false) -> bool {
     throw NoData();
 }
 
-auto JSON::getInt ( String const & label ) const noexcept (false) -> int {
+inline auto JSON::getInt ( String const & label ) const noexcept (false) -> int {
     for ( auto & e : this->_nodes )
         if ( e.getLabel() == label )
             return e.getInt ();
@@ -683,7 +682,7 @@ auto JSON::getInt ( String const & label ) const noexcept (false) -> int {
     throw NoData();
 }
 
-auto JSON::getLong ( String const & label ) const noexcept (false) -> long long int {
+inline auto JSON::getLong ( String const & label ) const noexcept (false) -> long long int {
     for ( auto & e : this->_nodes )
         if ( e.getLabel() == label )
             return e.getLong ();
@@ -691,7 +690,7 @@ auto JSON::getLong ( String const & label ) const noexcept (false) -> long long 
     throw NoData();
 }
 
-auto JSON::getFloat ( String const & label ) const noexcept (false) -> float {
+inline auto JSON::getFloat ( String const & label ) const noexcept (false) -> float {
     for ( auto & e : this->_nodes )
         if ( e.getLabel() == label )
             return e.getFloat ();
@@ -699,7 +698,7 @@ auto JSON::getFloat ( String const & label ) const noexcept (false) -> float {
     throw NoData();
 }
 
-auto JSON::getDouble ( String const & label ) const noexcept (false) -> double {
+inline auto JSON::getDouble ( String const & label ) const noexcept (false) -> double {
     for ( auto & e : this->_nodes )
         if ( e.getLabel() == label )
             return e.getDouble ();
@@ -707,7 +706,7 @@ auto JSON::getDouble ( String const & label ) const noexcept (false) -> double {
     throw NoData();
 }
 
-auto JSON::getString ( String const & label ) const noexcept (false) -> String const & {
+inline auto JSON::getString ( String const & label ) const noexcept (false) -> String const & {
     for ( auto & e : this->_nodes )
         if ( e.getLabel() == label )
             return e.getString ();
@@ -715,7 +714,7 @@ auto JSON::getString ( String const & label ) const noexcept (false) -> String c
     throw NoData();
 }
 
-auto JSON::getJSON ( String const & label ) const noexcept (false) -> JSON const & {
+inline auto JSON::getJSON ( String const & label ) const noexcept (false) -> JSON const & {
     for ( auto & e : this->_nodes )
         if ( e.getLabel() == label )
             return e.getJSON ();
@@ -723,7 +722,7 @@ auto JSON::getJSON ( String const & label ) const noexcept (false) -> JSON const
     throw NoData();
 }
 
-auto JSON::getArray ( String const & label ) const noexcept (false) -> Array const & {
+inline auto JSON::getArray ( String const & label ) const noexcept (false) -> Array const & {
     for ( auto & e : this->_nodes )
         if ( e.getLabel() == label )
             return e.getArray ();
@@ -731,7 +730,7 @@ auto JSON::getArray ( String const & label ) const noexcept (false) -> Array con
     throw NoData();
 }
 
-auto JSON::getObject ( String const & label ) const noexcept (false) -> Object const & {
+inline auto JSON::getObject ( String const & label ) const noexcept (false) -> Object const & {
     for ( auto & e : this->_nodes )
         if ( e.getLabel() == label )
             return e.getObject ();
@@ -739,7 +738,7 @@ auto JSON::getObject ( String const & label ) const noexcept (false) -> Object c
     throw NoData();
 }
 
-auto JSON::getString ( String const & label ) noexcept (false) -> String & {
+inline auto JSON::getString ( String const & label ) noexcept (false) -> String & {
     for ( auto & e : this->_nodes )
         if ( e.getLabel() == label )
             return e.getString ();
@@ -747,7 +746,7 @@ auto JSON::getString ( String const & label ) noexcept (false) -> String & {
     throw NoData();
 }
 
-auto JSON::getJSON ( String const & label ) noexcept (false) -> JSON & {
+inline auto JSON::getJSON ( String const & label ) noexcept (false) -> JSON & {
     for ( auto & e : this->_nodes )
         if ( e.getLabel() == label )
             return e.getJSON ();
@@ -755,7 +754,7 @@ auto JSON::getJSON ( String const & label ) noexcept (false) -> JSON & {
     throw NoData();
 }
 
-auto JSON::getArray ( String const & label ) noexcept (false) -> Array & {
+inline auto JSON::getArray ( String const & label ) noexcept (false) -> Array & {
     for ( auto & e : this->_nodes )
         if ( e.getLabel() == label )
             return e.getArray ();
@@ -763,7 +762,7 @@ auto JSON::getArray ( String const & label ) noexcept (false) -> Array & {
     throw NoData();
 }
 
-auto JSON::getObject ( String const & label ) noexcept (false) -> Object & {
+inline auto JSON::getObject ( String const & label ) noexcept (false) -> Object & {
     for ( auto & e : this->_nodes )
         if ( e.getLabel() == label )
             return e.getObject ();
@@ -771,7 +770,7 @@ auto JSON::getObject ( String const & label ) noexcept (false) -> Object & {
     throw NoData();
 }
 
-auto JSON::parse(String const & jsonString) noexcept -> JSON {
+inline auto JSON::parse(String const & jsonString) noexcept -> JSON {
     JSON result;
 
     auto emplaceUnknown = [& result] ( String const & label, String const & data ) -> JSON & {
@@ -829,7 +828,7 @@ auto JSON::parse(String const & jsonString) noexcept -> JSON {
     return result;
 }
 
-auto JSON::Node::put ( JSON::Array const & a ) noexcept -> Node & {
+inline auto JSON::Node::put ( JSON::Array const & a ) noexcept -> Node & {
     this->clearData();
     this->_isString = false;
 
@@ -837,7 +836,7 @@ auto JSON::Node::put ( JSON::Array const & a ) noexcept -> Node & {
     return * this;
 }
 
-auto JSON::Node::getArray () const noexcept(false) -> JSON::Array const & {
+inline auto JSON::Node::getArray () const noexcept(false) -> JSON::Array const & {
     if ( this->_isString ) throw DataException();
 
     auto p = dynamic_cast < JSON::Array * > ( this->_pObject );
@@ -846,7 +845,7 @@ auto JSON::Node::getArray () const noexcept(false) -> JSON::Array const & {
     return * p;
 }
 
-auto JSON::Node::getArray () noexcept(false) -> JSON::Array & { // NOLINT(readability-make-member-function-const)
+inline auto JSON::Node::getArray () noexcept(false) -> JSON::Array & { // NOLINT(readability-make-member-function-const)
     if ( this->_isString ) throw DataException();
 
     auto p = dynamic_cast < JSON::Array * > ( this->_pObject );
