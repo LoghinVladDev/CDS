@@ -71,7 +71,7 @@ public:
 
 #if defined(__cpp_concepts)
     virtual auto sort ( const Comparator < T > & ) noexcept -> void = 0;
-    virtual auto sort ( auto ) noexcept -> void = 0;
+//    virtual auto sort ( auto ) noexcept -> void = 0;
 #else
     virtual auto sort ( bool (*) (T const &, T const &) noexcept ) noexcept -> void = 0;
 #endif
