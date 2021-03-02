@@ -6,11 +6,10 @@
 #define CDS_STRING_HPP
 
 #include <std-types.h>
-#include <string>
+#include <CDS/String>
 #include <ostream>
 
-#include <std-types.h>
-#include <LinkedListPublic.hpp>
+#include "../collection/ordered/LinkedListPublic.hpp"
 
 class String final {
 public:
@@ -283,11 +282,11 @@ public:
     IteratorBase() noexcept = delete;
     virtual ~IteratorBase() noexcept = default;
 
-    constexpr inline virtual auto next() -> IteratorBase & = 0;
+    virtual auto next() -> IteratorBase & = 0;
     [[nodiscard]] constexpr inline auto equals ( const String::IteratorBase & i ) const noexcept -> bool { return this->_s == i._s && this->_pos == i._pos; }
     [[nodiscard]] inline auto value ( ) const noexcept (false) -> ElementType & { return this->_s->get(this->_pos); }
 
-    virtual constexpr inline auto operator ++ () noexcept -> IteratorBase & { return this->next(); }
+    virtual inline auto operator ++ () noexcept -> IteratorBase & { return this->next(); }
     constexpr inline auto operator == ( const IteratorBase & o ) const noexcept -> bool { return this->equals(o); }
     constexpr inline auto operator != ( const IteratorBase & o ) const noexcept -> bool { return ! this->equals(o); }
     constexpr inline auto operator - ( const IteratorBase & o ) const noexcept -> SignedSize { return this->_pos - o._pos; }
@@ -306,11 +305,15 @@ public:
     ConstIteratorBase() noexcept = delete;
     virtual ~ConstIteratorBase() noexcept = default;
 
-    constexpr inline virtual auto next() -> ConstIteratorBase & = 0;
+    virtual auto next() -> ConstIteratorBase & = 0;
     [[nodiscard]] constexpr inline auto equals ( const String::ConstIteratorBase & i ) const noexcept -> bool { return this->_s == i._s && this->_pos == i._pos; }
     [[nodiscard]] inline auto value ( ) const noexcept -> ElementType { return this->_s->get(this->_pos); }
 
-    virtual constexpr inline auto operator ++ () noexcept -> ConstIteratorBase & { return this->next(); }
+#if __cpp_constexpr >= 201907
+    constexpr virtual inline auto operator ++ () noexcept -> ConstIteratorBase & { return this->next(); }
+#else
+    virtual inline auto operator ++ () noexcept -> ConstIteratorBase & { return this->next(); }
+#endif
     constexpr inline auto operator == ( const ConstIteratorBase & o ) const noexcept -> bool { return this->equals(o); }
     constexpr inline auto operator != ( const ConstIteratorBase & o ) const noexcept -> bool { return ! this->equals(o); }
     constexpr inline auto operator - ( const ConstIteratorBase & o ) const noexcept -> SignedSize { return this->_pos - o._pos; }

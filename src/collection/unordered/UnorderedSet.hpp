@@ -5,7 +5,7 @@
 #ifndef CDS_UNORDEREDSET_HPP
 #define CDS_UNORDEREDSET_HPP
 
-#include <SetBase.hpp>
+#include "../unordered/SetBase.hpp"
 
 template <class T>
 class UnorderedSet final : public SetBase<T>  {

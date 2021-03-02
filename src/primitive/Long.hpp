@@ -5,7 +5,13 @@
 #ifndef CDS_LONG_HPP
 #define CDS_LONG_HPP
 
-#include <Object>
+#include <CDS/Object>
+
+#if __cpp_constepxr >= 201907
+#define __long_constexpr constexpr
+#else
+#define __long_constexpr
+#endif
 
 class Long : public Object {
 //    _G_OBJ(Long, long long int, v, 0llu)
@@ -15,7 +21,7 @@ public:
     constexpr Long() noexcept = default;
     constexpr Long(Long const&)noexcept=default;
     constexpr Long(Long &&)noexcept=default;
-    constexpr~Long() noexcept override = default;
+    __long_constexpr ~Long() noexcept override = default;
     constexpr Long(long long int value) noexcept: v(value) {}
     constexpr Long &operator=(Long const &o) noexcept {
         if (this == &o)return *this;
@@ -26,16 +32,18 @@ public:
         this->v = value;
         return *this;
     }
-    constexpr auto operator+(Long const &o) const noexcept -> Long { return this->v + o.v; }
-    constexpr auto operator+(long long int value) const noexcept -> Long { return this->v + value; }
-    constexpr auto operator-(Long const &o) const noexcept -> Long { return this->v - o.v; }
-    constexpr auto operator-(long long int value) const noexcept -> Long { return this->v - value; }
-    constexpr auto operator*(Long const &o) const noexcept -> Long { return this->v * o.v; }
-    constexpr auto operator*(long long int value) const noexcept -> Long { return this->v * value; }
-    constexpr auto operator/(Long const &o) const noexcept -> Long { return this->v / o.v; }
-    constexpr auto operator/(long long int value) const noexcept -> Long { return this->v / value; }
-    constexpr auto operator%(Long const &o) const noexcept -> Long { return this->v % o.v; }
-    constexpr auto operator%(long long int value) const noexcept -> Long { return this->v % value; }
+
+    __long_constexpr auto operator+(Long const &o) const noexcept -> Long { return this->v + o.v; }
+    __long_constexpr auto operator+(long long int value) const noexcept -> Long { return this->v + value; }
+    __long_constexpr auto operator-(Long const &o) const noexcept -> Long { return this->v - o.v; }
+    __long_constexpr auto operator-(long long int value) const noexcept -> Long { return this->v - value; }
+    __long_constexpr auto operator*(Long const &o) const noexcept -> Long { return this->v * o.v; }
+    __long_constexpr auto operator*(long long int value) const noexcept -> Long { return this->v * value; }
+    __long_constexpr auto operator/(Long const &o) const noexcept -> Long { return this->v / o.v; }
+    __long_constexpr auto operator/(long long int value) const noexcept -> Long { return this->v / value; }
+    __long_constexpr auto operator%(Long const &o) const noexcept -> Long { return this->v % o.v; }
+    __long_constexpr auto operator%(long long int value) const noexcept -> Long { return this->v % value; }
+
     constexpr auto operator+=(Long const &o) noexcept -> Long & {
         this->v += o.v;
         return *this;
@@ -89,12 +97,12 @@ public:
     constexpr auto operator>=(long long int value) const noexcept -> bool { return this->v >= value; }
     constexpr auto operator<=(Long const &o) const noexcept -> bool { return this->v <= o.v; }
     constexpr auto operator<=(long long int value) const noexcept -> bool { return this->v <= value; }
-    constexpr auto operator&(Long const &o) const noexcept -> Long { return this->v & o.v; }
-    constexpr auto operator&(long long int value) const noexcept -> Long { return this->v & value; }
-    constexpr auto operator|(Long const &o) const noexcept -> Long { return this->v | o.v; }
-    constexpr auto operator|(long long int value) const noexcept -> Long { return this->v | value; }
-    constexpr auto operator^(Long const &o) const noexcept -> Long { return this->v ^ o.v; }
-    constexpr auto operator^(long long int value) const noexcept -> Long { return this->v ^ value; }
+    __long_constexpr auto operator&(Long const &o) const noexcept -> Long { return this->v & o.v; }
+    __long_constexpr auto operator&(long long int value) const noexcept -> Long { return this->v & value; }
+    __long_constexpr auto operator|(Long const &o) const noexcept -> Long { return this->v | o.v; }
+    __long_constexpr auto operator|(long long int value) const noexcept -> Long { return this->v | value; }
+    __long_constexpr auto operator^(Long const &o) const noexcept -> Long { return this->v ^ o.v; }
+    __long_constexpr auto operator^(long long int value) const noexcept -> Long { return this->v ^ value; }
     constexpr auto operator&(Long const &o) noexcept -> Long & {
         this->v & o.v;
         return *this;

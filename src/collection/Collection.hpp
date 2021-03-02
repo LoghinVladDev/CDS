@@ -19,15 +19,18 @@
 
 #include <std-types.h>
 
+#if defined(__cpp_concepts)
 template <typename T>
 concept Comparable = requires ( const T & a, const T & b ) {
     std::is_convertible < decltype(a > b), bool >::value &&
     std::is_convertible < decltype(a < b), bool >::value;
 };
+#endif
 
 #include <type_traits>
-#include <Object.hpp>
+#include <CDS/Object>
 
+#if defined(__cpp_concepts)
 template <class T>
 concept Callable = std::is_invocable<T>::value;
 
@@ -45,6 +48,7 @@ template <typename T>
 concept UniqueIdentifiable = requires ( T const & a, T const & b ) {
     UniqueIdentifiableByObject<T> || UniqueIdentifiableByOperator<T>;
 };
+#endif
 
 template <class T>
 class Comparator {
@@ -76,11 +80,19 @@ public:
     public:
         virtual ~Iterator() noexcept = default;
 
+#if __cpp_constexpr >= 201907
         constexpr inline virtual auto next (  ) noexcept -> Iterator & = 0;
         constexpr inline virtual auto equals ( const Iterator & ) const noexcept -> bool = 0;
         constexpr inline virtual auto value() const noexcept -> T& = 0;
 
         virtual constexpr inline auto operator ++ () noexcept -> Iterator & { this->next(); return * this; }
+#else
+        virtual auto next (  ) noexcept -> Iterator & = 0;
+        virtual auto equals ( const Iterator & ) const noexcept -> bool = 0;
+        virtual auto value() const noexcept -> T& = 0;
+
+        virtual auto operator ++ () noexcept -> Iterator & { this->next(); return * this; }
+#endif
         constexpr inline auto operator == ( const Iterator & o ) const noexcept -> bool { return this->equals(o ); }
         constexpr inline auto operator != ( const Iterator & o ) const noexcept -> bool { return ! this->equals(o ); }
         constexpr inline auto operator * () const noexcept -> T& { return this->value(); }
@@ -94,11 +106,19 @@ public:
     public:
         virtual ~ConstIterator() noexcept = default;
 
+#if __cpp_constexpr >= 201907
         constexpr inline virtual auto next (  ) noexcept -> ConstIterator & = 0;
         constexpr inline virtual auto equals ( const ConstIterator & ) const noexcept -> bool = 0;
         constexpr inline virtual auto value () const noexcept -> const T& = 0;
 
         virtual constexpr inline auto operator ++ () noexcept -> ConstIterator & { this->next(); return * this; }
+#else
+        virtual auto next (  ) noexcept -> ConstIterator & = 0;
+        virtual auto equals ( const ConstIterator & ) const noexcept -> bool = 0;
+        virtual auto value () const noexcept -> const T& = 0;
+
+        virtual auto operator ++ () noexcept -> ConstIterator & { this->next(); return * this; }
+#endif
         constexpr inline auto operator == ( const ConstIterator & o ) const noexcept -> bool { return this->equals(o ); }
         constexpr inline auto operator != ( const ConstIterator & o ) const noexcept -> bool { return ! this->equals(o ); }
         constexpr inline auto operator * () const noexcept -> const T& { return this->value(); }
@@ -169,15 +189,23 @@ public:
     virtual auto replaceLastNotOf ( const std::initializer_list<T> &, const T & ) noexcept -> void = 0;
 
     virtual auto back () noexcept (false) -> T & = 0;
+    virtual auto back () const noexcept (false) -> const T & = 0;
+
+#if __cpp_constexpr >= 201907
+    constexpr virtual inline auto front () const noexcept (false) -> const T & = 0;
     constexpr virtual inline auto front () noexcept (false) -> T & = 0;
 
-    virtual auto back () const noexcept (false) -> const T & = 0;
-    constexpr virtual inline auto front () const noexcept (false) -> const T & = 0;
-
     [[nodiscard]] constexpr virtual inline auto empty () const noexcept -> bool = 0;
+#else
+    virtual inline auto front () const noexcept (false) -> const T & = 0;
+    virtual inline auto front () noexcept (false) -> T & = 0;
+
+    [[nodiscard]] virtual inline auto empty () const noexcept -> bool = 0;
+#endif
+
     virtual auto clear () noexcept -> void = 0;
 
-    [[nodiscard]] virtual inline auto size () const noexcept -> Size = 0;
+    [[nodiscard]] virtual auto size () const noexcept -> Size = 0;
     virtual auto makeUnique () noexcept -> void = 0;
 
     virtual auto contains ( const T & ) const noexcept -> bool = 0;
@@ -206,6 +234,7 @@ public:
     _preParams auto _fName ( auto _paramName _paramDelim() _otherParams ) noexcept -> _retType _impl2 \
     _preParams auto _fName ( auto _paramName _paramDelim() _otherParams ) const noexcept -> _retType _impl3
 
+#if defined(__cpp_concepts)
     GEN_FUNCTION_DECLARATIONS(forEach, Action, void, , NO_PARAM_DELIM, , , ;)
     GEN_FUNCTION_DECLARATIONS(some, Predicate, bool, , PARAM_DELIM, Size, , ;)
     GEN_FUNCTION_DECLARATIONS(any, Predicate, bool, p, NO_PARAM_DELIM, , inline, { return this->some(p FORCE_COMMA 1); } )
@@ -219,6 +248,7 @@ public:
             { return ! this->any ([&p](T const & e) noexcept (false) -> bool { return !p(e); }); }
     )
     GEN_FUNCTION_DECLARATIONS(count, Predicate, Size, , NO_PARAM_DELIM, , , ;)
+#endif
 
 #undef GEN_FUNCTION_DECLARATIONS
 #undef GEN_FUNCTION_DECLARATIONS_6
@@ -259,6 +289,7 @@ public:
     template <class T> auto Collection<T>::_fName ( auto _paramName _paramDelim() _otherParams ) noexcept -> _retType _impl        \
     template <class T> auto Collection<T>::_fName ( auto _paramName _paramDelim() _otherParams ) const noexcept -> _retType _impl
 
+#if defined(__cpp_concepts)
 _GEN_FUNCTION_GROUP(forEach, Action, void, a, NO_PARAM_DELIM, , {
     auto begin = this->beginPtr();
     auto end = this->endPtr();
@@ -301,6 +332,7 @@ _GEN_FUNCTION_GROUP(count, Predicate, Size, p, NO_PARAM_DELIM, , {
 
     return trueCount;
 })
+#endif
 
 #undef _GEN_FUNCTION_GROUP
 #undef _GEN_FUNCTION_IMPLEMENTATION

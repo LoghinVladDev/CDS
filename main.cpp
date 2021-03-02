@@ -1,13 +1,13 @@
 #include <iostream>
-#include <LinkedListPublic.hpp>
-#include <String.hpp>
-#include <HashMap.hpp>
-#include <UnorderedSet.hpp>
-#include <OrderedSet.hpp>
-#include <Pointer.hpp>
-#include <Reference.hpp>
-#include <Optional.hpp>
-#include <Range.hpp>
+#include <CDS/LinkedList>
+#include <CDS/String>
+#include <CDS/HashMap>
+#include <CDS/UnorderedSet>
+#include <CDS/OrderedSet>
+#include <CDS/Pointer>
+#include <CDS/Reference>
+#include <CDS/Optional>
+#include <CDS/Range>
 
 //Whenever I have the time
 
@@ -142,7 +142,7 @@ int main() {
     return 0;
 }
 
-#include <Array>
+#include <CDS/Array>
 void testArray () {
     Array<float> a = {1.2f, 5.1f, 412.3f};
 
@@ -178,43 +178,48 @@ void testArray () {
 
     std::cout << a << '\n';
 
+#if defined(__cpp_concepts)
     a.sort ( [](auto & a, auto & b){return a < b;} );
+#endif
+
     std::cout << a <<'\n';
 
+#if defined(__cpp_concepts)
     std::cout << a.count([](auto & e){return e > 5.0f;}) << '\n';
+#endif
 
-    exit(0);
-}
-
-#include <Integer>
-#include <Long>
-#include <Float>
-#include <Boolean>
-#include <Double>
-void testPrimitives() {
-//    Integer x = 3;
-//
-//    std::cout << Integer::parse("1234") + 5 << '\n';
-//
-//    Long l = 5;
-//
-//    std::cout << Long::parse("231421512123252") + l << "\n";
-//
-//    Float f = 5.54f;
-//
-//    std::cout << Float::parse("13442.2453f") + f << "\n";
-//
-//    Boolean b = false;
-//
-//    std::cout << ( Boolean::parse("true") && b ) << '\n';
-//
-//    Double d = 5.5;
-//
-//    std::cout << Double::parse("123141.1254123") + d << '\n';
-//
 //    exit(0);
 }
-#include <JSON>
+
+#include <CDS/Integer>
+#include <CDS/Long>
+#include <CDS/Float>
+#include <CDS/Boolean>
+#include <CDS/Double>
+void testPrimitives() {
+    Integer x = 3;
+
+    std::cout << Integer::parse("1234") + 5 << '\n';
+
+    Long l = 5;
+
+    std::cout << Long::parse("231421512123252") + l << "\n";
+
+    Float f = 5.54f;
+
+    std::cout << Float::parse("13442.2453f") + f << "\n";
+
+    Boolean b = false;
+
+    std::cout << ( Boolean::parse("true") && b ) << '\n';
+
+    Double d = 5.5;
+
+    std::cout << Double::parse("123141.1254123") + d << '\n';
+
+//    exit(0);
+}
+#include <CDS/JSON>
 void testJSON () {
     try {
 //        auto test = JSON::Node();
@@ -286,7 +291,7 @@ void testJSON () {
     std::cout << parsed.getJSON("ex7").getString("sub2") << '\n';
     std::cout << parsed.getJSON("ex7").getArray("sub1").getString(0) << '\n';
 
-    exit(0);
+//    exit(0);
 }
 
 void markTestStart (StringLiteral testName) {

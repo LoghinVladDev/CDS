@@ -5,10 +5,10 @@
 #ifndef CDS_BTREE_H
 #define CDS_BTREE_H
 
-#include <Object.hpp>
-#include <Optional.hpp>
-#include <Reference.hpp>
-#include <Range.hpp>
+#include <CDS/Object>
+#include <CDS/Optional>
+#include <CDS/Reference>
+#include <CDS/Range>
 
 template <class T>
 class BTree : public Object {

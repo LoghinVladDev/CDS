@@ -5,7 +5,7 @@
 #ifndef CDS_PAIR_HPP
 #define CDS_PAIR_HPP
 
-#include <Object.hpp>
+#include <CDS/Object>
 #include <sstream>
 
 template <class K, class V>

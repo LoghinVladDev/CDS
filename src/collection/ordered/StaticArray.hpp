@@ -5,7 +5,7 @@
 #ifndef CDS_STATICARRAY_HPP
 #define CDS_STATICARRAY_HPP
 
-#include <LinkedList>
+#include <CDS/LinkedList>
 
 template <class T, Size n>
 class StaticArray final : public List <T> {

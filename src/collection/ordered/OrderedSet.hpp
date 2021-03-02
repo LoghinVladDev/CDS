@@ -4,22 +4,29 @@
 
 #ifndef CDS_ORDEREDSET_HPP
 #define CDS_ORDEREDSET_HPP
-#include <SetBase.hpp>
+#include "../unordered/SetBase.hpp"
 
 namespace dataTypes {
     template <class T>
-    requires Comparable <T>
+#if defined(__cpp_concepts)
+        requires Comparable <T>
+#endif
     class DefaultSetComparator : public Comparator<T> {
     public:
         auto inline operator () (T const & a, T const & b) const noexcept -> bool { return a < b; }
     };
 }
 
+#if defined(__cpp_concepts)
 template <class T, class C>
 concept ValidSetComparator =
         std::is_base_of < Comparator < T >, C >::value;
+#endif
 
-template <class T, class C = dataTypes::DefaultSetComparator<T>> requires ValidSetComparator <T, C>
+template <class T, class C = dataTypes::DefaultSetComparator<T>>
+#if defined(__cpp_concepts)
+    requires ValidSetComparator <T, C>
+#endif
 class OrderedSet final : public SetBase<T> {
 public:
     using Reference         = typename SetBase<T>::Reference;
@@ -79,7 +86,10 @@ public:
     auto insert ( ConstReference ) noexcept -> bool final;
 };
 
-template <class T, class C> requires ValidSetComparator <T, C>
+template <class T, class C>
+#if defined(__cpp_concepts)
+    requires ValidSetComparator <T, C>
+#endif
 auto OrderedSet<T, C>::insert( ConstReference value) noexcept -> bool {
     C comparator;
 

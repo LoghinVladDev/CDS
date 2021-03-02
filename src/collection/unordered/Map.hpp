@@ -5,13 +5,17 @@
 #ifndef CDS_MAP_HPP
 #define CDS_MAP_HPP
 
-#include <Collection.hpp>
-#include <Pair.hpp>
-#include <LinkedList.hpp>
-#include <Optional.hpp>
-#include <Reference.hpp>
+#include <CDS/Collection>
+#include <CDS/Pair>
+#include <CDS/LinkedList>
+#include <CDS/Optional>
+#include <CDS/Reference>
 
-template <class K, class V> requires UniqueIdentifiable <K>
+
+template <class K, class V>
+#if defined(__cpp_concepts)
+requires UniqueIdentifiable <K>
+#endif
 class Map : public Collection < Pair < K, V > > {
 public:
     using Key                       = K;

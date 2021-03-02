@@ -6,17 +6,25 @@
 #define CDS_LINKEDLIST_HPP
 
 #include <std-types.h>
-#include <List.hpp>
+#include <CDS/List>
 #include <initializer_list>
+#if defined(__cpp_concepts)
 #include <concepts>
+#endif
 
-#include <LinkedListPublic.hpp>
+#include "./LinkedListPublic.hpp"
 
 
 template <class T>
 class DoubleLinkedList final : public List<T> {
 private:
-    using Node = dataTypes::DoubleListNode<T>;
+    struct DoubleListNode {
+        T                    data;
+        DoubleListNode     * pNext       {nullptr};
+        DoubleListNode     * pPrevious   {nullptr};
+    };
+
+    using Node = DoubleListNode;
 
     Node * _pFront  { nullptr };
     Node * _pBack   { nullptr };
@@ -344,8 +352,13 @@ private:
 
 #undef GEN_QUICKSORT_FUNCTION
 
+#if defined(__cpp_concepts)
     auto static quickSort ( Iterator, Iterator, auto ) noexcept -> void;
     auto static quickSortPartition ( Iterator, Iterator, auto ) noexcept -> Iterator;
+#else
+    auto static quickSort ( Iterator, Iterator, bool (*) (T const &, T const &) noexcept ) noexcept -> void;
+    auto static quickSortPartition ( Iterator, Iterator, bool (*) (T const &, T const &) noexcept ) noexcept -> Iterator;
+#endif
 
 public:
 
@@ -362,12 +375,17 @@ public:
 
 #undef GEN_SORT_FUNC
 
+#if defined(__cpp_concepts)
     inline auto sort ( const Comparator < T > & c) noexcept -> void final {
         auto f = ( [&c] (T const & a, T const & b) noexcept -> bool { return c(a, b); } );
         return this->sort(f);
     }
 
     auto sort ( auto func ) noexcept -> void;
+#else
+    auto sort ( bool (*) (T const &, T const &) noexcept ) noexcept -> void;
+#endif
+
 
     DoubleLinkedList & operator = ( const Collection <T> & ) noexcept;
     inline DoubleLinkedList & operator = ( const DoubleLinkedList <T> & o ) noexcept {  // NOLINT(bugprone-unhandled-self-assignment)
@@ -388,7 +406,7 @@ DoubleLinkedList<T>::~DoubleLinkedList() noexcept {
 
 template <class T>
 auto DoubleLinkedList<T>::pushFront(const T & value) noexcept -> void {
-    auto newNode = new dataTypes::DoubleListNode<T> {value, this->_pFront, nullptr};
+    auto newNode = new DoubleListNode {value, this->_pFront, nullptr};
     if ( this->_pFront != nullptr )
         this->_pFront->pPrevious = newNode;
 
@@ -402,7 +420,7 @@ auto DoubleLinkedList<T>::pushFront(const T & value) noexcept -> void {
 
 template <class T>
 auto DoubleLinkedList<T>::pushBack(const T & value) noexcept -> void {
-    auto newNode = new dataTypes::DoubleListNode<T> {
+    auto newNode = new DoubleListNode {
         value, nullptr, this->_pBack
     };
 
@@ -419,7 +437,7 @@ auto DoubleLinkedList<T>::pushBack(const T & value) noexcept -> void {
 
 template <class T>
 auto DoubleLinkedList<T>::pushFront(T && value) noexcept -> void {
-    auto newNode = new dataTypes::DoubleListNode<T> {value, this->_pFront, nullptr};
+    auto newNode = new DoubleListNode {value, this->_pFront, nullptr};
     if ( this->_pFront != nullptr )
         this->_pFront->pPrevious = newNode;
 
@@ -433,7 +451,7 @@ auto DoubleLinkedList<T>::pushFront(T && value) noexcept -> void {
 
 template <class T>
 auto DoubleLinkedList<T>::pushBack(T && value) noexcept -> void {
-    auto newNode = new dataTypes::DoubleListNode<T> {
+    auto newNode = new DoubleListNode {
         value, nullptr, this->_pBack
     };
 
@@ -692,7 +710,8 @@ auto DoubleLinkedList<T>::removeLastNotOf( const Collection<T> & from ) noexcept
 
 template<class T>
 auto DoubleLinkedList<T>::replace ( const T & what, const T & with, Size count ) noexcept -> void {
-    for ( int replacedCount = 0; auto & e : (*this) )
+    int replacedCount = 0;
+    for ( auto & e : (*this) )
         if ( replacedCount < count ) {
             if ( e == what ) {
                 e = with;
@@ -713,7 +732,8 @@ auto DoubleLinkedList<T>::replaceLast ( const T & what, const T & with ) noexcep
 
 template<class T>
 auto DoubleLinkedList<T>::replaceOf ( const Collection<T> & from, const T & with, Size count ) noexcept -> void {
-    for ( int replacedCount = 0; auto & e : (*this) )
+    int replacedCount = 0;
+    for ( auto & e : (*this) )
         if ( replacedCount < count ) {
             if ( from.contains(e) ) {
                 e = with;
@@ -734,7 +754,8 @@ auto DoubleLinkedList<T>::replaceLastOf ( const Collection<T> & from, const T & 
 
 template<class T>
 auto DoubleLinkedList<T>::replaceNotOf ( const Collection<T> & from, const T & with, Size count ) noexcept -> void {
-    for ( int replacedCount = 0; auto & e : (*this) )
+    int replacedCount = 0;
+    for ( auto & e : (*this) )
         if ( replacedCount < count ) {
             if ( ! from.contains(e) ) {
                 e = with;
@@ -822,7 +843,7 @@ auto DoubleLinkedList<T>::insertBefore( const typename Collection<T>::Iterator &
         auto after = this->_pBack;
         auto before = this->_pBack->pPrevious;
 
-        auto node = new dataTypes::DoubleListNode<T> { what, after, before };
+        auto node = new DoubleListNode { what, after, before };
 
         before->pNext = node;
         after->pPrevious = node;
@@ -837,7 +858,7 @@ auto DoubleLinkedList<T>::insertBefore( const typename Collection<T>::Iterator &
             auto before = node->pPrevious;
             auto after = node;
 
-            auto newNode = new dataTypes::DoubleListNode<T> { what, after, before };
+            auto newNode = new DoubleListNode { what, after, before };
 
             before->pNext = newNode;
             after->pPrevious = newNode;
@@ -864,7 +885,7 @@ auto DoubleLinkedList<T>::insertAfter( const typename Collection<T>::Iterator & 
         auto after = this->_pFront->pNext;
         auto before = this->_pFront;
 
-        auto node = new dataTypes::DoubleListNode<T> { what, after, before };
+        auto node = new DoubleListNode { what, after, before };
 
         before->pNext = node;
         after->pPrevious = node;
@@ -879,7 +900,7 @@ auto DoubleLinkedList<T>::insertAfter( const typename Collection<T>::Iterator & 
             auto before = node;
             auto after = node->pNext;
 
-            auto newNode = new dataTypes::DoubleListNode<T> {what, after, before};
+            auto newNode = new DoubleListNode {what, after, before};
 
             before->pNext = newNode;
             after->pPrevious = newNode;
@@ -962,7 +983,8 @@ auto DoubleLinkedList<T>::get(Index pos) noexcept (false)  -> T & {
     if ( pos >= this->size() )
         pos = pos % this->size();
 
-    for ( auto current = 0; auto & e : (*this) ) {
+    auto current = 0;
+    for ( auto & e : (*this) ) {
         if ( current == pos )
             return e;
         current ++;
@@ -981,7 +1003,8 @@ auto DoubleLinkedList<T>::get(Index pos) const noexcept (false)  -> const T & {
     if ( pos >= this->size() )
         pos = pos % this->size();
 
-    for ( auto current = 0; auto & e : (*this) ) {
+    Index current = 0;
+    for ( auto & e : (*this) ) {
         if ( current == pos )
             return e;
         current ++;
@@ -1000,7 +1023,8 @@ auto DoubleLinkedList<T>::set(const T & value, Index pos) noexcept (false) -> T 
     if ( pos >= this->size() )
         pos = pos % this->size();
 
-    for ( auto current = 0; auto & e : (*this) ) {
+    Index current = 0;
+    for ( auto & e : (*this) ) {
         if ( current == pos ) {
             e = value;
             return e;
@@ -1141,7 +1165,11 @@ _GEN_SORT_FUNCTIONS(compareFunction,{
 */
 
 template <class T>
+#if defined(__cpp_concepts)
 auto DoubleLinkedList<T>::sort(auto func) noexcept -> void {
+#else
+auto DoubleLinkedList<T>::sort(bool (* func) (T const &, T const &) noexcept ) noexcept -> void {
+#endif
     if ( this->size() < 2 )
         return;
 
@@ -1157,7 +1185,11 @@ template <class T>
 auto DoubleLinkedList<T>::quickSort(
         DoubleLinkedList::Iterator from,
         DoubleLinkedList::Iterator to,
+#if defined(__cpp_concepts)
         auto func
+#else
+        bool (* func) (T const &, T const &) noexcept
+#endif
 ) noexcept -> void {
     auto next = to;
     if ( next != Iterator(nullptr) ) {
@@ -1193,7 +1225,11 @@ template <class T>
 auto DoubleLinkedList<T>::quickSortPartition(
         DoubleLinkedList::Iterator from,
         DoubleLinkedList::Iterator to,
+#if defined(__cpp_concepts)
         auto func
+#else
+        bool (* func) (T const &, T const &) noexcept
+#endif
 ) noexcept -> Iterator {
     auto swap = [] ( T & a , T & b ) { auto aux = a; a = b; b = aux; };
 

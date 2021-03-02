@@ -16,7 +16,7 @@ namespace dataTypes::refWrapper {
     void hiddenRef ( T && ) = delete;
 }
 
-#include <Pointer.hpp>
+#include <CDS/Pointer>
 template <class T>
 class Reference : public Object {
 public:
@@ -29,7 +29,13 @@ public:
 
     template < class V, class = decltype (
         dataTypes::refWrapper::hiddenRef<T>(std::declval<V>()),
-        std::enable_if_t < ! std::is_same < Reference, std::remove_cvref_t <V>> ::value >()
+        std::enable_if_t < ! std::is_same < Reference,
+#if __cpp_lib_remove_cvref >= 201711
+            std::remove_cvref_t <V>
+#else
+            std::remove_cv_t<std::remove_reference_t<V>>
+#endif
+        > ::value >()
     ) > constexpr Reference ( V && v ) noexcept(noexcept(dataTypes::refWrapper::hiddenRef<T>(std::forward<V>(v)))) : // NOLINT(google-explicit-constructor,bugprone-forwarding-reference-overload)
             p ( std::addressof( dataTypes::refWrapper::hiddenRef<T>(std::forward<V>(v)))) {
 

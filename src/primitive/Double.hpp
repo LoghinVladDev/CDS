@@ -5,18 +5,23 @@
 #ifndef CDS_DOUBLE_HPP
 #define CDS_DOUBLE_HPP
 
-#include <Object.hpp>
-#include <PrimitiveGenerator.hpp>
+#include <CDS/Object>
+#include "./PrimitiveGenerator.hpp"
+
+#if __cpp_constepxr >= 201907
+#define __double_constexpr constexpr
+#else
+#define __double_constexpr
+#endif
 
 class Double : public Object {
-//    _G_OBJ(Double, double, v, 0.0f)
 private:
     double v{0.0};
 public:
     constexpr Double() noexcept = default;
     constexpr Double(Double const&)noexcept=default;
     constexpr Double(Double &&)noexcept=default;
-    constexpr~Double() noexcept override = default;
+    __double_constexpr ~Double() noexcept override = default;
     constexpr Double(double value) noexcept: v(value) {}
     constexpr Double &operator=(Double const &o) noexcept {
         if (this == &o)return *this;
@@ -27,14 +32,14 @@ public:
         this->v = value;
         return *this;
     }
-    constexpr auto operator+(Double const &o) const noexcept -> Double { return this->v + o.v; }
-    constexpr auto operator+(double value) const noexcept -> Double { return this->v + value; }
-    constexpr auto operator-(Double const &o) const noexcept -> Double { return this->v - o.v; }
-    constexpr auto operator-(double value) const noexcept -> Double { return this->v - value; }
-    constexpr auto operator*(Double const &o) const noexcept -> Double { return this->v * o.v; }
-    constexpr auto operator*(double value) const noexcept -> Double { return this->v * value; }
-    constexpr auto operator/(Double const &o) const noexcept -> Double { return this->v / o.v; }
-    constexpr auto operator/(double value) const noexcept -> Double { return this->v / value; }
+    __double_constexpr auto operator+(Double const &o) const noexcept -> Double { return this->v + o.v; }
+    __double_constexpr auto operator+(double value) const noexcept -> Double { return this->v + value; }
+    __double_constexpr auto operator-(Double const &o) const noexcept -> Double { return this->v - o.v; }
+    __double_constexpr auto operator-(double value) const noexcept -> Double { return this->v - value; }
+    __double_constexpr auto operator*(Double const &o) const noexcept -> Double { return this->v * o.v; }
+    __double_constexpr auto operator*(double value) const noexcept -> Double { return this->v * value; }
+    __double_constexpr auto operator/(Double const &o) const noexcept -> Double { return this->v / o.v; }
+    __double_constexpr auto operator/(double value) const noexcept -> Double { return this->v / value; }
 
     constexpr auto operator+=(Double const &o) noexcept -> Double & {
         this->v += o.v;

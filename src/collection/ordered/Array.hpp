@@ -5,8 +5,8 @@
 #ifndef CDS_ARRAY_HPP
 #define CDS_ARRAY_HPP
 
-#include <List>
-#include <LinkedList>
+#include <CDS/List>
+#include <CDS/LinkedList>
 
 template <class T>
 class Array final : public List <T> {
@@ -298,15 +298,24 @@ public:
     auto pushBack ( Value && ) noexcept -> void final;
 
 private:
+#if defined(__cpp_concepts)
     auto static quickSort ( Iterator, Iterator, auto ) noexcept -> void;
     auto static quickSortPartition ( Iterator, Iterator, auto ) noexcept -> Iterator;
+#else
+    auto static quickSort ( Iterator, Iterator, bool (*) (T const &, T const &) noexcept ) noexcept -> void;
+    auto static quickSortPartition ( Iterator, Iterator, bool (*) (T const &, T const &) noexcept ) noexcept -> Iterator;
+#endif
 
 public:
+#if defined(__cpp_concepts)
     auto sort ( auto func ) noexcept -> void;
 
     inline auto sort ( Comparator<Value> const & c ) noexcept -> void final {
         return this->sort ( [&c] (ValueConstReference a, ValueConstReference b) noexcept -> bool { return c(a, b); } );
     }
+#else
+    auto sort ( bool (*) (T const &, T const &) noexcept ) noexcept -> void final;
+#endif
 
     Array & operator = ( Collection<Value> const & ) noexcept;
     inline Array & operator = ( Array const & o ) noexcept { return this->operator=( ( Collection<Value> const & )(o) ); } // NOLINT(bugprone-unhandled-self-assignment,misc-unconventional-assign-operator)
@@ -756,7 +765,8 @@ auto Array<T>::contains( ValueConstReference value ) const noexcept -> bool {
 
 template <class T>
 auto Array<T>::index( ValueConstReference value ) const noexcept -> Index {
-    for ( Index i = 0; auto & e : * this )
+    Index i = 0;
+    for ( auto & e : * this )
         if ( e == value )
             return i;
         else
@@ -768,7 +778,8 @@ template <class T>
 auto Array<T>::indices( ValueConstReference value ) const noexcept -> DoubleLinkedList < Index > {
     DoubleLinkedList < Index > indices;
 
-    for ( Index i = 0; auto & e : * this ) {
+    Index i = 0;
+    for ( auto & e : * this ) {
         if (e == value)
             indices.pushBack(i);
         i++;
@@ -837,7 +848,11 @@ template <class T>
 auto Array<T>::quickSortPartition(
         Iterator from,
         Iterator to,
+#if defined(__cpp_concepts)
         auto sortFunc
+#else
+        bool (* sortFunc) (T const &, T const &) noexcept
+#endif
 ) noexcept -> Iterator {
     auto swap = [] ( T & a, T & b ) { auto aux = a; a = b; b = aux; };
 
@@ -864,7 +879,11 @@ template <class T>
 auto Array<T>::quickSort(
         Iterator from,
         Iterator to,
-        auto     sortFunc
+#if defined(__cpp_concepts)
+        auto sortFunc
+#else
+        bool (* sortFunc) (T const &, T const &) noexcept
+#endif
 ) noexcept -> void {
     constexpr static auto validIterator = []( auto & it ) noexcept->bool { return it._index >= 0 && it._index < it._pArray->_size; };
 
@@ -899,7 +918,11 @@ auto Array<T>::quickSort(
 }
 
 template <class T>
+#if defined(__cpp_concepts)
 auto Array<T>::sort(auto sortFunc) noexcept -> void {
+#else
+auto Array<T>::sort(bool (* sortFunc) (T const &, T const &) noexcept) noexcept -> void {
+#endif
     if ( this->size() < 2 )
         return;
 

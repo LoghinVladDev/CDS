@@ -4,7 +4,7 @@
 #ifndef CDS_HASHMAP_HPP
 #define CDS_HASHMAP_HPP
 
-#include <Map.hpp>
+#include <CDS/Map>
 #include <sstream>
 #include <cstring>
 
@@ -32,7 +32,12 @@ public:
     using HashValue             = Index;
 
     virtual auto operator ()(ValueConstReference) const noexcept -> HashValue = 0;
+
+#if __cpp_constexpr >= 201907
     [[nodiscard]] virtual constexpr inline auto getBoundary () const noexcept -> Size { return hashBoundary; }
+#else
+    [[nodiscard]] virtual inline auto getBoundary () const noexcept -> Size { return hashBoundary; }
+#endif
 };
 
 namespace dataTypes {
@@ -51,15 +56,19 @@ namespace dataTypes {
     template <class K> using LowCollisionDefaultHashFunction = DefaultHashFunction<K, 32768>;
 }
 
+#if defined(__cpp_concepts)
 template <class H>
 concept HashCalculatorHasBoundaryFunction = requires (H hashCalculator) {
     { hashCalculator.getBoundary() };
 };
+#endif
 
 template <class K, class V, class H = dataTypes::MediumCollisionDefaultHashFunction<K>>
+#if defined(__cpp_concepts)
 requires
     UniqueIdentifiable<K> &&
     HashCalculatorHasBoundaryFunction<H>
+#endif
 class HashMap final : public Map<K, V> {
 public:
     H hashCalculator;
@@ -335,7 +344,10 @@ public:
         }
     }
 
-    template <class OH> requires HashCalculatorHasBoundaryFunction<OH>
+    template <class OH>
+#if defined(__cpp_concepts)
+    requires HashCalculatorHasBoundaryFunction<OH>
+#endif
     explicit HashMap (HashMap<K, V, OH> const & hm) noexcept : pBuckets(new HashBucket[hashCalculator.getBoundary()]) {
         for ( auto & e : hm.entries() )
             this->insert ( e );
@@ -549,7 +561,12 @@ public:
     auto remove ( KeyConstReference k ) noexcept -> bool final {
         auto & b = this->pBuckets[hashCalculator(k)];
         Entry e;
+#if defined(__cpp_concepts)
         b.forEach([&e, &k](auto & p){if (p.getFirst() == k) e = p;});
+#else
+        for ( auto & p : b )
+            if ( p.getFirst() == k ) e = p;
+#endif
         return b.removeFirst(e);
     }
 
