@@ -12,6 +12,7 @@
 #include <CDS/Double>
 #include <CDS/Long>
 #include <CDS/LinkedList>
+#include <CDS/Reference>
 
 class JSON : public Object {
 public:
@@ -304,6 +305,46 @@ public:
     JSON (JSON const &) noexcept = default;
     ~JSON () noexcept override = default;
 
+    [[nodiscard]] auto labels () const noexcept -> LinkedList < Reference < const String > > {
+        LinkedList < Reference < const String > > labelList;
+
+        for ( auto & e : this->_nodes )
+            labelList.pushBack( e.getString() );
+
+        return labelList;
+    }
+
+    [[nodiscard]] auto labels () noexcept -> LinkedList < Reference < String > > {
+        LinkedList < Reference < String > > labelList;
+
+        for ( auto & e : this->_nodes )
+            labelList.pushBack( e.getString() );
+
+        return labelList;
+    }
+
+    [[nodiscard]] auto nodes () const noexcept -> LinkedList < Reference < const Node > > {
+        LinkedList < Reference < const Node > > labelList;
+
+        for ( auto & e : this->_nodes )
+            labelList.pushBack( e );
+
+        return labelList;
+    }
+
+    [[nodiscard]] auto nodes () noexcept -> LinkedList < Reference < Node > > {
+        LinkedList < Reference < Node > > labelList;
+
+        for ( auto & e : this->_nodes )
+            labelList.pushBack( e );
+
+        return labelList;
+    }
+
+    [[nodiscard]] auto labelExists ( String const & label ) const noexcept -> bool {
+        return this->labels().contains( label );
+    }
+
     auto put ( String const &, bool ) noexcept -> JSON &;
     auto put ( String const &, int ) noexcept -> JSON &;
     auto put ( String const &, long long int ) noexcept -> JSON &;
@@ -374,8 +415,15 @@ public:
     Array (Array const &) noexcept = default;
     ~Array () noexcept override = default;
 
+    auto begin () noexcept -> LinkedList < JSON::Node >::Iterator { return this->_list.begin(); }
+    auto begin () const noexcept -> LinkedList < JSON::Node >::ConstIterator { return this->_list.begin(); }
+    auto cbegin () const noexcept -> LinkedList < JSON::Node >::ConstIterator { return this->_list.cbegin(); }
+    auto end () noexcept -> LinkedList < JSON::Node >::Iterator { return this->_list.end(); }
+    auto end () const noexcept -> LinkedList < JSON::Node >::ConstIterator { return this->_list.end(); }
+    auto cend () const noexcept -> LinkedList < JSON::Node >::ConstIterator { return this->_list.cend(); }
+
     auto put(Index i, JSON::Node const & o) noexcept -> Array & {
-        if ( i > this->_list.size() )
+        if ( i > static_cast<Index>(this->_list.size()) )
             i = this->_list.size();
 
         decltype(this->_list) front;
@@ -441,12 +489,12 @@ public:
     [[nodiscard]] inline auto size () const noexcept -> Size { return this->_list.size(); }
 
     [[nodiscard]] auto get(Index i) const noexcept(false) -> JSON::Node const & {
-        if ( i < 0 || i >= this->_list.size() ) throw OutOfBounds (i, this->_list.size());
+        if ( i < 0 || i >= static_cast<Index>(this->_list.size()) ) throw OutOfBounds (i, this->_list.size());
         return this->_list.get(i);
     }
 
     auto get(Index i) noexcept(false) -> JSON::Node & {
-        if ( i < 0 || i >= this->_list.size() ) throw OutOfBounds (i, this->_list.size());
+        if ( i < 0 || i >= static_cast<Index>(this->_list.size()) ) throw OutOfBounds (i, this->_list.size());
         return this->_list.get(i);
     }
 
@@ -510,7 +558,7 @@ public:
         return new Array(* this);
     }
 
-    static auto parse(String const & data) noexcept -> Array {
+    static auto parse ( String const & data ) noexcept -> Array {
         Array result;
 
         auto pushBackUnknown = [& result]( String const & data ) noexcept -> Array & {
@@ -566,6 +614,7 @@ public:
         return result;
     }
 };
+
 
 inline auto JSON::put ( String const & label, bool v ) noexcept -> JSON & {
     this->_nodes.pushBack( JSON::Node().setLabel(label).put(v) );

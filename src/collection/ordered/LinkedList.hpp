@@ -984,7 +984,7 @@ auto DoubleLinkedList<T>::get(Index pos) noexcept (false)  -> T & {
 
     if ( pos < 0 )
         pos += ( (-pos) / this->size() + 1 ) * this->size();
-    if ( pos >= this->size() )
+    if ( pos >= static_cast<Index>(this->size()) )
         pos = pos % this->size();
 
     auto current = 0;
@@ -1004,7 +1004,7 @@ auto DoubleLinkedList<T>::get(Index pos) const noexcept (false)  -> const T & {
 
     if ( pos < 0 )
         pos += ( this->size() / (-pos) ) * this->size();
-    if ( pos >= this->size() )
+    if ( pos >= static_cast<Index>(this->size()) )
         pos = pos % this->size();
 
     Index current = 0;
@@ -1024,7 +1024,7 @@ auto DoubleLinkedList<T>::set(const T & value, Index pos) noexcept (false) -> T 
 
     if ( pos < 0 )
         pos += ( this->size() / (-pos) ) * this->size();
-    if ( pos >= this->size() )
+    if ( pos >= static_cast<Index>(this->size()) )
         pos = pos % this->size();
 
     Index current = 0;
@@ -1045,7 +1045,7 @@ auto DoubleLinkedList<T>::sub(List<T> & l, Index from, Index to) const noexcept 
     if ( to == UINT64_MAX )
         to = this->size ();
 
-    for ( int i = from; i < to; i++ )
+    for ( Index i = from; i < to; i++ )
         l.pushBack(this->get(i));
 }
 
