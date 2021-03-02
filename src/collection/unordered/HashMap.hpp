@@ -13,14 +13,14 @@ template <> auto hash<String> (String const & o) noexcept -> Index { return o.le
 template <> auto hash<Object> (Object const & o) noexcept -> Index { return o.hash(); }
 template <> auto hash<CString> (CString const & o)noexcept -> Index { return std::strlen(o); }
 template <> auto hash<StringLiteral> (StringLiteral const & o)noexcept -> Index { return std::strlen(o); }
-template <> auto hash<uint8> (uint8 const & o)noexcept -> Index { return o; }
-template <> auto hash<uint16> (uint16 const & o)noexcept -> Index { return o; }
-template <> auto hash<uint32> (uint32 const & o)noexcept -> Index { return o; }
-template <> auto hash<uint64> (uint64 const & o)noexcept -> Index { return o; }
-template <> auto hash<sint8> (sint8 const & o)noexcept -> Index { return o; }
-template <> auto hash<sint16> (sint16 const & o)noexcept -> Index { return o; }
-template <> auto hash<sint32> (sint32 const & o)noexcept -> Index { return o; }
-template <> auto hash<sint64> (sint64 const & o)noexcept -> Index { return o; }
+template <> auto hash<CDS_uint8> (CDS_uint8 const & o)noexcept -> Index { return o; }
+template <> auto hash<CDS_uint16> (CDS_uint16 const & o)noexcept -> Index { return o; }
+template <> auto hash<CDS_uint32> (CDS_uint32 const & o)noexcept -> Index { return o; }
+template <> auto hash<CDS_uint64> (CDS_uint64 const & o)noexcept -> Index { return o; }
+template <> auto hash<CDS_sint8> (CDS_sint8 const & o)noexcept -> Index { return o; }
+template <> auto hash<CDS_sint16> (CDS_sint16 const & o)noexcept -> Index { return o; }
+template <> auto hash<CDS_sint32> (CDS_sint32 const & o)noexcept -> Index { return o; }
+template <> auto hash<CDS_sint64> (CDS_sint64 const & o)noexcept -> Index { return o; }
 
 
 template <typename K, Size hashBoundary>

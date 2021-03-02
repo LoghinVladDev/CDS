@@ -16,7 +16,7 @@
 
 class TerminalColor {
 public:
-    enum Modifier : uint32 {
+    enum Modifier : CDS_uint32 {
         RESET = FLAG(0),
 
         ENABLE_BOLD = FLAG(1),
@@ -49,7 +49,7 @@ public:
     };
 
 public:
-    typedef uint32 Flags;
+    typedef CDS_uint32 Flags;
 private:
 
     static HashMap < Modifier, int > colorMap;
@@ -60,7 +60,7 @@ public:
     constexpr TerminalColor ( TerminalColor const & ) noexcept = default;
     static auto asList ( Flags f ) noexcept -> String {
         String res;
-        FOREACH_FLAG(0, 31, uint32, i ) {
+        FOREACH_FLAG(0, 31, CDS_uint32, i ) {
             if ( colorMap.containsKey( static_cast<Modifier>(i) ) && ( f & i ) ) {
                 res.append( colorMap.get( static_cast<Modifier>(i) ) ).append(";");
             }

@@ -8,20 +8,20 @@
 typedef char * CString;
 typedef const char * StringLiteral;
 
-typedef unsigned char uint8;
-typedef unsigned short int uint16;
-typedef unsigned int uint32;
-typedef unsigned long long int uint64;
+typedef unsigned char CDS_uint8;
+typedef unsigned short int CDS_uint16;
+typedef unsigned int CDS_uint32;
+typedef unsigned long long int CDS_uint64;
 
-typedef signed char sint8;
-typedef signed short int sint16;
-typedef signed int sint32;
-typedef signed long long int sint64;
+typedef signed char CDS_sint8;
+typedef signed short int CDS_sint16;
+typedef signed int CDS_sint32;
+typedef signed long long int CDS_sint64;
 
-typedef uint8 byte;
+typedef CDS_uint8 CDS_byte;
 
-typedef uint64 Size;
-typedef sint64 SignedSize;
+typedef CDS_uint64 Size;
+typedef CDS_sint64 SignedSize;
 
 typedef SignedSize Index;
 
