@@ -104,7 +104,7 @@ auto String::operator [] (Index i) noexcept (false) -> ElementType & {
 
     if ( i < 0 )
         i += ( (-i) / this->size() + 1 ) * this->size();
-    if ( i >= this->size() )
+    if ( i >= static_cast<Index>(this->size()) )
         i = i % this->size();
 
     return this->_p[i];
@@ -116,7 +116,7 @@ auto String::operator [] (Index i) const noexcept -> ElementType {
 
     if ( i < 0 )
         i += ( (-i) / this->size() + 1 ) * this->size();
-    if ( i >= this->size() )
+    if ( i >= static_cast<Index>(this->size()) )
         i = i % this->size();
 
     return this->_p[i];
@@ -212,7 +212,7 @@ auto String::split(ElementType token, Size splitCount) const noexcept -> LinkedL
     String currentSegment;
 
     for ( auto c : (*this) ) {
-        if ( c != token || splitIndex >= splitCount - 1 )
+        if ( c != token || splitIndex >= static_cast<Index>(splitCount) - 1 )
             currentSegment += c;
         else {
             if ( currentSegment.empty() )
@@ -241,7 +241,7 @@ auto String::split(const String & delim, Size splitCount) const noexcept -> Link
     String currentSegment;
 
     for ( auto c : (*this) ) {
-        if ( ! delim.contains(c) || splitIndex >= splitCount - 1 )
+        if ( ! delim.contains(c) || splitIndex >= static_cast<Index>(splitCount) - 1 )
             currentSegment += c;
         else {
             splitIndex ++;
@@ -370,7 +370,7 @@ auto String::findLastNotOf ( String const & o ) const noexcept -> Index {
 }
 
 auto String::substr(Index from, Index to) const noexcept -> String {
-    if ( to == -1 || to > this->size() )
+    if ( to == -1 || to > static_cast<Index>(this->size()) )
         to = this->size();
     if ( from < 0 )
         from = 0;
@@ -433,7 +433,7 @@ auto String::find (String const & o) const noexcept -> LinkedList < Index > {
         lpsArray[0] = 0;
 
         Index i = 1;
-        while ( i < o.size() ) {
+        while ( i < static_cast<Index>(o.size()) ) {
             if ( o._p[i] == o._p[len] ) {
                 len ++;
                 lpsArray[i] = len;
@@ -453,15 +453,15 @@ auto String::find (String const & o) const noexcept -> LinkedList < Index > {
 
     LinkedList < Index > indices;
     Index i = 0, j = 0;
-    while ( i < o.size() ) {
+    while ( i < static_cast<Index>(o.size()) ) {
         if ( o._p[j] == this->_p[i] ) {
             i ++; j ++;
         }
 
-        if ( j == o.size() ) {
+        if ( j == static_cast<Index>(o.size()) ) {
             indices.pushBack(i - j);
             j = lpsArray[j - 1];
-        } else if ( i < this->size() && this->_p[i] != o._p[j] ) {
+        } else if ( i < static_cast<Index>(this->size()) && this->_p[i] != o._p[j] ) {
             if ( j != 0 )
                 j = lpsArray[j - 1];
             else
