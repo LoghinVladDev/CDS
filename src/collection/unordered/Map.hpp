@@ -13,7 +13,7 @@
 
 
 template <class K, class V>
-#if defined(__cpp_concepts)
+#if defined(__cpp_concepts) && !defined(_MSC_VER)
 requires UniqueIdentifiable <K>
 #endif
 class Map : public Collection < Pair < K, V > > {

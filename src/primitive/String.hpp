@@ -7,6 +7,7 @@
 
 #include <CDS/String>
 #include <ostream>
+#include <string>
 
 #include "../collection/ordered/LinkedListPublic.hpp"
 

@@ -7,7 +7,7 @@
 
 #include <CDS/List>
 #include <initializer_list>
-#if defined(__cpp_concepts)
+#if defined(__cpp_concepts) && !defined(_MSC_VER)
 #include <concepts>
 #endif
 
@@ -251,8 +251,10 @@ public:
         return this->_size == 0 && this->_pFront == nullptr && this->_pBack == nullptr;
     }
 
+#if !defined(_MSC_VER)
 #pragma clang diagnostic push
 #pragma ide diagnostic ignored "Simplify"
+#endif
     auto operator == (Object const & o) const noexcept -> bool final {
         if ( this == & o ) return true;
         auto p = dynamic_cast < decltype(this) > ( & o );
@@ -264,7 +266,10 @@ public:
                 return false;
         return true;
     }
+
+#if !defined(_MSC_VER)
 #pragma clang diagnostic pop
+#endif
 
     auto clear () noexcept -> void final;
     auto makeUnique ()  noexcept -> void final;
@@ -351,7 +356,7 @@ private:
 
 #undef GEN_QUICKSORT_FUNCTION
 
-#if defined(__cpp_concepts)
+#if defined(__cpp_concepts) && !defined(_MSC_VER)
     auto static quickSort ( Iterator, Iterator, auto ) noexcept -> void;
     auto static quickSortPartition ( Iterator, Iterator, auto ) noexcept -> Iterator;
 #else
@@ -374,7 +379,7 @@ public:
 
 #undef GEN_SORT_FUNC
 
-#if defined(__cpp_concepts)
+#if defined(__cpp_concepts) && !defined(_MSC_VER)
     inline auto sort ( const Comparator < T > & c) noexcept -> void final {
         auto f = ( [&c] (T const & a, T const & b) noexcept -> bool { return c(a, b); } );
         return this->sort(f);
@@ -1164,7 +1169,7 @@ _GEN_SORT_FUNCTIONS(compareFunction,{
 */
 
 template <class T>
-#if defined(__cpp_concepts)
+#if defined(__cpp_concepts) && !defined(_MSC_VER)
 auto DoubleLinkedList<T>::sort(auto func) noexcept -> void {
 #else
 auto DoubleLinkedList<T>::sort(bool (* func) (T const &, T const &) noexcept ) noexcept -> void {
@@ -1184,7 +1189,7 @@ template <class T>
 auto DoubleLinkedList<T>::quickSort(
         DoubleLinkedList::Iterator from,
         DoubleLinkedList::Iterator to,
-#if defined(__cpp_concepts)
+#if defined(__cpp_concepts) && !defined(_MSC_VER)
         auto func
 #else
         bool (* func) (T const &, T const &) noexcept
@@ -1224,7 +1229,7 @@ template <class T>
 auto DoubleLinkedList<T>::quickSortPartition(
         DoubleLinkedList::Iterator from,
         DoubleLinkedList::Iterator to,
-#if defined(__cpp_concepts)
+#if defined(__cpp_concepts) && !defined(_MSC_VER)
         auto func
 #else
         bool (* func) (T const &, T const &) noexcept

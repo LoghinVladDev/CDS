@@ -8,7 +8,7 @@
 
 namespace dataTypes {
     template <class T>
-#if defined(__cpp_concepts)
+#if defined(__cpp_concepts) && !defined(_MSC_VER)
         requires Comparable <T>
 #endif
     class DefaultSetComparator : public Comparator<T> {
@@ -17,14 +17,14 @@ namespace dataTypes {
     };
 }
 
-#if defined(__cpp_concepts)
+#if defined(__cpp_concepts) && !defined(_MSC_VER)
 template <class T, class C>
 concept ValidSetComparator =
         std::is_base_of < Comparator < T >, C >::value;
 #endif
 
 template <class T, class C = dataTypes::DefaultSetComparator<T>>
-#if defined(__cpp_concepts)
+#if defined(__cpp_concepts) && !defined(_MSC_VER)
     requires ValidSetComparator <T, C>
 #endif
 class OrderedSet final : public SetBase<T> {
@@ -87,7 +87,7 @@ public:
 };
 
 template <class T, class C>
-#if defined(__cpp_concepts)
+#if defined(__cpp_concepts) && !defined(_MSC_VER)
     requires ValidSetComparator <T, C>
 #endif
 auto OrderedSet<T, C>::insert( ConstReference value) noexcept -> bool {

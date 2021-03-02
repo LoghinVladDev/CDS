@@ -6,7 +6,7 @@
 #define CDS_LIST_HPP
 
 #include <CDS/Collection>
-#if defined(__cpp_concepts)
+#if defined(__cpp_concepts) && !defined(_MSC_VER)
 #include <concepts>
 #endif
 
@@ -69,7 +69,9 @@ public:
 #undef GEN_SORT_FUNC
 
 
-#if defined(__cpp_concepts)
+
+
+#if defined(__cpp_concepts) && !defined(_MSC_VER)
     virtual auto sort ( const Comparator < T > & ) noexcept -> void = 0;
     virtual auto sort ( auto ) noexcept -> void = 0;
 #else

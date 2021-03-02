@@ -422,7 +422,11 @@ auto String::findNotOf (String const & s) const noexcept -> LinkedList < Index >
 }
 
 auto String::find (String const & o) const noexcept -> LinkedList < Index > {
+#if !defined(_MSC_VER)
     Index lpsArray [this->size()];
+#else
+    auto lpsArray = new Index[this->size()];
+#endif
 
     auto computeLPSArray = [& o, &lpsArray] () {
         Index len = 0;
@@ -465,6 +469,10 @@ auto String::find (String const & o) const noexcept -> LinkedList < Index > {
         }
     }
 
+#if !defined(_MSC_VER)
+#else
+    delete [] lpsArray;
+#endif
     return indices;
 }
 

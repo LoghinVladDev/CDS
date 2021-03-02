@@ -56,7 +56,7 @@ namespace dataTypes {
     template <class K> using LowCollisionDefaultHashFunction = DefaultHashFunction<K, 32768>;
 }
 
-#if defined(__cpp_concepts)
+#if defined(__cpp_concepts) && !defined(_MSC_VER)
 template <class H>
 concept HashCalculatorHasBoundaryFunction = requires (H hashCalculator) {
     { hashCalculator.getBoundary() };
@@ -64,7 +64,7 @@ concept HashCalculatorHasBoundaryFunction = requires (H hashCalculator) {
 #endif
 
 template <class K, class V, class H = dataTypes::MediumCollisionDefaultHashFunction<K>>
-#if defined(__cpp_concepts)
+#if defined(__cpp_concepts) && !defined(_MSC_VER)
 requires
     UniqueIdentifiable<K> &&
     HashCalculatorHasBoundaryFunction<H>
@@ -345,7 +345,7 @@ public:
     }
 
     template <class OH>
-#if defined(__cpp_concepts)
+#if defined(__cpp_concepts) && !defined(_MSC_VER)
     requires HashCalculatorHasBoundaryFunction<OH>
 #endif
     explicit HashMap (HashMap<K, V, OH> const & hm) noexcept : pBuckets(new HashBucket[hashCalculator.getBoundary()]) {
@@ -561,7 +561,7 @@ public:
     auto remove ( KeyConstReference k ) noexcept -> bool final {
         auto & b = this->pBuckets[hashCalculator(k)];
         Entry e;
-#if defined(__cpp_concepts)
+#if defined(__cpp_concepts) && !defined(_MSC_VER)
         b.forEach([&e, &k](auto & p){if (p.getFirst() == k) e = p;});
 #else
         for ( auto & p : b )

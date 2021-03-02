@@ -178,13 +178,13 @@ void testArray () {
 
     std::cout << a << '\n';
 
-#if defined(__cpp_concepts)
+#if defined(__cpp_concepts) && !defined(_MSC_VER)
     a.sort ( [](auto & a, auto & b){return a < b;} );
 #endif
 
     std::cout << a <<'\n';
 
-#if defined(__cpp_concepts)
+#if defined(__cpp_concepts) && !defined(_MSC_VER)
     std::cout << a.count([](auto & e){return e > 5.0f;}) << '\n';
 #endif
 

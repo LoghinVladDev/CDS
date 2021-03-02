@@ -103,28 +103,28 @@ public:
     __integer_constexpr auto operator|(int value) const noexcept -> Integer { return this->v | value; }
     __integer_constexpr auto operator^(Integer const &o) const noexcept -> Integer { return this->v ^ o.v; }
     __integer_constexpr auto operator^(int value) const noexcept -> Integer { return this->v ^ value; }
-    constexpr auto operator&(Integer const &o) noexcept -> Integer & {
-        this->v & o.v;
+    constexpr auto operator&=(Integer const &o) noexcept -> Integer & {
+        this->v &= o.v;
         return *this;
     }
-    constexpr auto operator&(int value) noexcept -> Integer & {
-        this->v & value;
+    constexpr auto operator&=(int value) noexcept -> Integer & {
+        this->v &= value;
         return *this;
     }
-    constexpr auto operator|(Integer const &o) noexcept -> Integer & {
-        this->v | o.v;
+    constexpr auto operator|=(Integer const &o) noexcept -> Integer & {
+        this->v |= o.v;
         return *this;
     }
-    constexpr auto operator|(int value) noexcept -> Integer & {
-        this->v | value;
+    constexpr auto operator|=(int value) noexcept -> Integer & {
+        this->v |= value;
         return *this;
     }
-    constexpr auto operator^(Integer const &o) noexcept -> Integer & {
-        this->v ^ o.v;
+    constexpr auto operator^=(Integer const &o) noexcept -> Integer & {
+        this->v ^= o.v;
         return *this;
     }
-    constexpr auto operator^(int value) noexcept -> Integer & {
-        this->v ^ value;
+    constexpr auto operator^=(int value) noexcept -> Integer & {
+        this->v ^= value;
         return *this;
     }
     constexpr operator int() const noexcept { return this->v; }
