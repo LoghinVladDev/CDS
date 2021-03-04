@@ -76,7 +76,21 @@ set(
         ${CDS_COLLECTION}
         ${CDS_EXTRA}
         src/std-types.h
-        src/primitive/Integer.hpp src/primitive/Long.hpp src/primitive/Float.hpp src/primitive/Double.hpp src/primitive/Boolean.hpp src/primitive/PrimitiveGenerator.hpp src/collection/unordered/JSON.hpp include/CDS/JSON src/collection/ordered/Array.hpp src/collection/ordered/StaticArray.hpp include/CDS/Array include/CDS/NotImplementedException)
+        src/primitive/Integer.hpp
+        src/primitive/Long.hpp
+        src/primitive/Float.hpp
+        src/primitive/Double.hpp
+        src/primitive/Boolean.hpp
+        src/primitive/PrimitiveGenerator.hpp
+        src/collection/unordered/JSON.hpp
+        src/collection/ordered/Array.hpp
+        src/collection/ordered/StaticArray.hpp
+)
+
+set(
+        CDS_LIB_SRC
+        src/primitive/String.cpp
+)
 
 set(
         CDS_GLOBAL_HEADERS ${CDS_INCLUDE_DIRECTORIES} CACHE INTERNAL "DIRS"
@@ -91,3 +105,5 @@ add_executable(
 target_link_libraries(
         CDS-dummy
 )
+
+add_library( CDS ${CDS_LIB_SRC} )
