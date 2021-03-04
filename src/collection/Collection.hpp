@@ -19,7 +19,7 @@
 
 #include "../std-types.h"
 
-#if defined(__cpp_concepts)
+#if defined(__cpp_concepts) && !defined(_MSC_VER)
 template <typename T>
 concept Comparable = requires ( const T & a, const T & b ) {
     std::is_convertible < decltype(a > b), bool >::value &&
@@ -30,7 +30,7 @@ concept Comparable = requires ( const T & a, const T & b ) {
 #include <type_traits>
 #include <CDS/Object>
 
-#if defined(__cpp_concepts)
+#if defined(__cpp_concepts) && !defined(_MSC_VER)
 template <class T>
 concept Callable = std::is_invocable<T>::value;
 
@@ -234,7 +234,7 @@ public:
     _preParams auto _fName ( auto _paramName _paramDelim() _otherParams ) noexcept -> _retType _impl2 \
     _preParams auto _fName ( auto _paramName _paramDelim() _otherParams ) const noexcept -> _retType _impl3
 
-#if defined(__cpp_concepts)
+#if defined(__cpp_concepts) && !defined(_MSC_VER)
     GEN_FUNCTION_DECLARATIONS(forEach, Action, void, , NO_PARAM_DELIM, , , ;)
     GEN_FUNCTION_DECLARATIONS(some, Predicate, bool, , PARAM_DELIM, Size, , ;)
     GEN_FUNCTION_DECLARATIONS(any, Predicate, bool, p, NO_PARAM_DELIM, , inline, { return this->some(p FORCE_COMMA 1); } )
@@ -289,7 +289,7 @@ public:
     template <class T> auto Collection<T>::_fName ( auto _paramName _paramDelim() _otherParams ) noexcept -> _retType _impl        \
     template <class T> auto Collection<T>::_fName ( auto _paramName _paramDelim() _otherParams ) const noexcept -> _retType _impl
 
-#if defined(__cpp_concepts)
+#if defined(__cpp_concepts) && !defined(_MSC_VER)
 _GEN_FUNCTION_GROUP(forEach, Action, void, a, NO_PARAM_DELIM, , {
     auto begin = this->beginPtr();
     auto end = this->endPtr();

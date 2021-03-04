@@ -25,105 +25,10 @@ private:
 
 public:
 
-    class Iterator final : public IteratorBase {
-    public:
-        Iterator () noexcept = default;
-        Iterator ( Iterator const & ) noexcept = default;
-        Iterator ( Iterator && ) noexcept = default;
-        explicit Iterator ( Array * pArray, Index index ) noexcept : IteratorBase( pArray, index ) { }
-        ~Iterator () noexcept final = default;
-
-        constexpr Iterator & operator = ( Iterator const & o ) noexcept {
-            if ( this == & o ) return * this;
-
-            this->_pArray = o._pArray;
-            this->_index = o._index;
-            return * this;
-        }
-
-        constexpr auto next () noexcept -> Iterator & final { this->_index ++; return * this; }
-        constexpr auto prev () noexcept -> Iterator & { this->_index --; return * this; }
-
-        constexpr auto operator ++ () noexcept -> Iterator & { return this->next(); }
-        constexpr auto operator ++ (int) noexcept -> Iterator { auto copy = * this; this->next(); return copy; }
-        constexpr auto operator -- () noexcept -> Iterator & { return this->prev(); }
-        constexpr auto operator -- (int) noexcept -> Iterator { auto copy = * this; this->prev(); return copy; }
-    };
-
-    class ReverseIterator final : public IteratorBase {
-    public:
-        ReverseIterator () noexcept = default;
-        ReverseIterator ( ReverseIterator const & ) noexcept = default;
-        ReverseIterator ( ReverseIterator && ) noexcept = default;
-        explicit ReverseIterator ( Array * pArray, Index index ) noexcept : IteratorBase( pArray, index ) { }
-        ~ReverseIterator () noexcept final = default;
-
-        constexpr ReverseIterator & operator = ( ReverseIterator const & o ) noexcept {
-            if ( this == & o ) return * this;
-
-            this->_pArray = o._pArray;
-            this->_index = o._index;
-            return * this;
-        }
-
-        constexpr auto next () noexcept -> ReverseIterator & final { this->_index --; return * this; }
-        constexpr auto prev () noexcept -> ReverseIterator & { this->_index ++; return * this; }
-
-        constexpr auto operator ++ () noexcept -> ReverseIterator & { this->next(); return * this; }
-        constexpr auto operator ++ (int) noexcept -> ReverseIterator { auto copy = * this; this->next(); return copy; }
-        constexpr auto operator -- () noexcept -> Iterator & { return this->prev(); }
-        constexpr auto operator -- (int) noexcept -> Iterator { auto copy = * this; this->prev(); return copy; }
-    };
-
-    class ConstIterator final : public ConstIteratorBase {
-    public:
-        ConstIterator () noexcept = default;
-        ConstIterator ( ConstIterator const & ) noexcept = default;
-        ConstIterator ( ConstIterator && ) noexcept = default;
-        explicit ConstIterator ( Array const * pArray, Index index ) noexcept : ConstIteratorBase( pArray, index ) { }
-        ~ConstIterator () noexcept final = default;
-
-        constexpr ConstIterator & operator = ( ConstIterator const & o ) noexcept {
-            if ( this == & o ) return * this;
-
-            this->_pArray = o._pArray;
-            this->_index = o._index;
-            return * this;
-        }
-
-        constexpr auto next () noexcept -> ConstIterator & final { this->_index ++; return * this; }
-        constexpr auto prev () noexcept -> ConstIterator & { this->_index --; return * this; }
-
-        constexpr auto operator ++ () noexcept -> ConstIterator & { this->next(); return * this; }
-        constexpr auto operator ++ (int) noexcept -> ConstIterator { auto copy = * this; this->next(); return copy; }
-        constexpr auto operator -- () noexcept -> Iterator & { return this->prev(); }
-        constexpr auto operator -- (int) noexcept -> Iterator { auto copy = * this; this->prev(); return copy; }
-    };
-
-    class ConstReverseIterator final : public ConstIteratorBase {
-    public:
-        ConstReverseIterator () noexcept = default;
-        ConstReverseIterator ( ConstReverseIterator const & ) noexcept = default;
-        ConstReverseIterator ( ConstReverseIterator && ) noexcept = default;
-        explicit ConstReverseIterator ( Array const * pArray, Index index ) noexcept : ConstIteratorBase( pArray, index ) { }
-        ~ConstReverseIterator () noexcept final = default;
-
-        constexpr ConstReverseIterator & operator = ( ConstReverseIterator const & o ) noexcept {
-            if ( this == & o ) return * this;
-
-            this->_pArray = o._pArray;
-            this->_index = o._index;
-            return * this;
-        }
-
-        constexpr auto next () noexcept -> ConstReverseIterator & final { this->_index --; return * this; }
-        constexpr auto prev () noexcept -> ConstReverseIterator & { this->_index ++; return * this; }
-        constexpr auto operator ++ () noexcept -> ConstReverseIterator & { this->next(); return * this; }
-        constexpr auto operator ++ (int) noexcept -> ConstReverseIterator { auto copy = * this; this->next(); return copy; }
-
-        constexpr auto operator -- () noexcept -> Iterator & { return this->prev(); }
-        constexpr auto operator -- (int) noexcept -> Iterator { auto copy = * this; this->prev(); return copy; }
-    };
+    class Iterator;
+    class ReverseIterator;
+    class ConstIterator;
+    class ConstReverseIterator;
 
     Array () noexcept = default;
     Array ( Array const & ) noexcept;
@@ -228,8 +133,10 @@ public:
         return this->_size == 0;
     }
 
+#if !defined(_MSC_VER)
 #pragma clang diagnostic push
 #pragma ide diagnostic ignored "Simplify"
+#endif
     auto operator == (Object const & o) const noexcept -> bool final {
         if ( this == & o ) return true;
         auto p = dynamic_cast < decltype(this) > ( & o );
@@ -241,7 +148,10 @@ public:
                 return false;
         return true;
     }
+
+#if !defined(_MSC_VER)
 #pragma clang diagnostic pop
+#endif
 
     auto clear () noexcept -> void final;
     auto makeUnique () noexcept -> void final;
@@ -298,7 +208,7 @@ public:
     auto pushBack ( Value && ) noexcept -> void final;
 
 private:
-#if defined(__cpp_concepts)
+#if defined(__cpp_concepts) && !defined(_MSC_VER)
     auto static quickSort ( Iterator, Iterator, auto ) noexcept -> void;
     auto static quickSortPartition ( Iterator, Iterator, auto ) noexcept -> Iterator;
 #else
@@ -307,7 +217,7 @@ private:
 #endif
 
 public:
-#if defined(__cpp_concepts)
+#if defined(__cpp_concepts) && !defined(_MSC_VER)
     auto sort ( auto func ) noexcept -> void;
 
     inline auto sort ( Comparator<Value> const & c ) noexcept -> void final {
@@ -377,6 +287,110 @@ public:
     }
 
     constexpr auto value () const noexcept -> ValueConstReference final { return (* this->_pArray)[this->_index]; }
+};
+
+template <class T>
+class Array<T>::Iterator final : public IteratorBase {
+public:
+    Iterator () noexcept = default;
+    Iterator ( Iterator const & ) noexcept = default;
+    Iterator ( Iterator && ) noexcept = default;
+    explicit Iterator ( Array * pArray, Index index ) noexcept : IteratorBase( pArray, index ) { }
+    ~Iterator () noexcept final = default;
+
+    constexpr Iterator & operator = ( Iterator const & o ) noexcept {
+        if ( this == & o ) return * this;
+
+        this->_pArray = o._pArray;
+        this->_index = o._index;
+        return * this;
+    }
+
+    constexpr auto next () noexcept -> Iterator & final { this->_index ++; return * this; }
+    constexpr auto prev () noexcept -> Iterator & { this->_index --; return * this; }
+
+    constexpr auto operator ++ () noexcept -> Iterator & { return this->next(); }
+    constexpr auto operator ++ (int) noexcept -> Iterator { auto copy = * this; this->next(); return copy; }
+    constexpr auto operator -- () noexcept -> Iterator & { return this->prev(); }
+    constexpr auto operator -- (int) noexcept -> Iterator { auto copy = * this; this->prev(); return copy; }
+};
+
+template <class T>
+class Array<T>::ReverseIterator final : public IteratorBase {
+public:
+    ReverseIterator () noexcept = default;
+    ReverseIterator ( ReverseIterator const & ) noexcept = default;
+    ReverseIterator ( ReverseIterator && ) noexcept = default;
+    explicit ReverseIterator ( Array * pArray, Index index ) noexcept : IteratorBase( pArray, index ) { }
+    ~ReverseIterator () noexcept final = default;
+
+    constexpr ReverseIterator & operator = ( ReverseIterator const & o ) noexcept {
+        if ( this == & o ) return * this;
+
+        this->_pArray = o._pArray;
+        this->_index = o._index;
+        return * this;
+    }
+
+    constexpr auto next () noexcept -> ReverseIterator & final { this->_index --; return * this; }
+    constexpr auto prev () noexcept -> ReverseIterator & { this->_index ++; return * this; }
+
+    constexpr auto operator ++ () noexcept -> ReverseIterator & { this->next(); return * this; }
+    constexpr auto operator ++ (int) noexcept -> ReverseIterator { auto copy = * this; this->next(); return copy; }
+    constexpr auto operator -- () noexcept -> Iterator & { return this->prev(); }
+    constexpr auto operator -- (int) noexcept -> Iterator { auto copy = * this; this->prev(); return copy; }
+};
+
+template <class T>
+class Array<T>::ConstIterator final : public ConstIteratorBase {
+public:
+    ConstIterator () noexcept = default;
+    ConstIterator ( ConstIterator const & ) noexcept = default;
+    ConstIterator ( ConstIterator && ) noexcept = default;
+    explicit ConstIterator ( Array const * pArray, Index index ) noexcept : ConstIteratorBase( pArray, index ) { }
+    ~ConstIterator () noexcept final = default;
+
+    constexpr ConstIterator & operator = ( ConstIterator const & o ) noexcept {
+        if ( this == & o ) return * this;
+
+        this->_pArray = o._pArray;
+        this->_index = o._index;
+        return * this;
+    }
+
+    constexpr auto next () noexcept -> ConstIterator & final { this->_index ++; return * this; }
+    constexpr auto prev () noexcept -> ConstIterator & { this->_index --; return * this; }
+
+    constexpr auto operator ++ () noexcept -> ConstIterator & { this->next(); return * this; }
+    constexpr auto operator ++ (int) noexcept -> ConstIterator { auto copy = * this; this->next(); return copy; }
+    constexpr auto operator -- () noexcept -> Iterator & { return this->prev(); }
+    constexpr auto operator -- (int) noexcept -> Iterator { auto copy = * this; this->prev(); return copy; }
+};
+
+template<class T>
+class Array<T>::ConstReverseIterator final : public ConstIteratorBase {
+public:
+    ConstReverseIterator () noexcept = default;
+    ConstReverseIterator ( ConstReverseIterator const & ) noexcept = default;
+    ConstReverseIterator ( ConstReverseIterator && ) noexcept = default;
+    explicit ConstReverseIterator ( Array const * pArray, Index index ) noexcept : ConstIteratorBase( pArray, index ) { }
+    ~ConstReverseIterator () noexcept final = default;
+
+    constexpr ConstReverseIterator & operator = ( ConstReverseIterator const & o ) noexcept {
+        if ( this == & o ) return * this;
+
+        this->_pArray = o._pArray;
+        this->_index = o._index;
+        return * this;
+    }
+
+    constexpr auto next () noexcept -> ConstReverseIterator & final { this->_index --; return * this; }
+    constexpr auto prev () noexcept -> ConstReverseIterator & { this->_index ++; return * this; }
+    constexpr auto operator ++ () noexcept -> ConstReverseIterator & { this->next(); return * this; }
+    constexpr auto operator ++ (int) noexcept -> ConstReverseIterator { auto copy = * this; this->next(); return copy; }
+
+    constexpr auto operator -- () noexcept -> Iterator & { return this->prev(); }
+    constexpr auto operator -- (int) noexcept -> Iterator { auto copy = * this; this->prev(); return copy; }
 };
 
 template <class T>
@@ -848,7 +862,7 @@ template <class T>
 auto Array<T>::quickSortPartition(
         Iterator from,
         Iterator to,
-#if defined(__cpp_concepts)
+#if defined(__cpp_concepts) && !defined(_MSC_VER)
         auto sortFunc
 #else
         bool (* sortFunc) (T const &, T const &) noexcept
@@ -879,7 +893,7 @@ template <class T>
 auto Array<T>::quickSort(
         Iterator from,
         Iterator to,
-#if defined(__cpp_concepts)
+#if defined(__cpp_concepts) && !defined(_MSC_VER)
         auto sortFunc
 #else
         bool (* sortFunc) (T const &, T const &) noexcept
@@ -918,7 +932,7 @@ auto Array<T>::quickSort(
 }
 
 template <class T>
-#if defined(__cpp_concepts)
+#if defined(__cpp_concepts) && !defined(_MSC_VER)
 auto Array<T>::sort(auto sortFunc) noexcept -> void {
 #else
 auto Array<T>::sort(bool (* sortFunc) (T const &, T const &) noexcept) noexcept -> void {

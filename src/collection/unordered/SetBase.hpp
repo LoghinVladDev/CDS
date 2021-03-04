@@ -8,7 +8,7 @@
 #include <CDS/Collection>
 
 template <class T>
-#if defined(__cpp_concepts)
+#if defined(__cpp_concepts) && !defined(_MSC_VER)
     requires UniqueIdentifiable <T>
 #endif
 class SetBase : public Collection<T> {
@@ -202,7 +202,7 @@ public:
 
 #include <sstream>
 template <class T>
-#if defined(__cpp_concepts)
+#if defined(__cpp_concepts) && !defined(_MSC_VER)
 requires UniqueIdentifiable <T>
 #endif
 auto SetBase<T>::toString() const noexcept -> String {
@@ -221,7 +221,7 @@ auto SetBase<T>::toString() const noexcept -> String {
 
 
 template <class T>
-#if defined(__cpp_concepts)
+#if defined(__cpp_concepts) && !defined(_MSC_VER)
     requires UniqueIdentifiable <T>
 #endif
 SetBase<T>::SetBase(SetBase const & set) noexcept : _pFront(nullptr), _size(set.size()) {
@@ -240,7 +240,7 @@ SetBase<T>::SetBase(SetBase const & set) noexcept : _pFront(nullptr), _size(set.
 
 #include <CDS/NotImplementedException>
 template <class T>
-#if defined(__cpp_concepts)
+#if defined(__cpp_concepts) && !defined(_MSC_VER)
     requires UniqueIdentifiable <T>
 #endif
 SetBase<T>::SetBase(SetBase &&) noexcept(false) {
@@ -248,7 +248,7 @@ SetBase<T>::SetBase(SetBase &&) noexcept(false) {
 }
 
 template <class T>
-#if defined(__cpp_concepts)
+#if defined(__cpp_concepts) && !defined(_MSC_VER)
     requires UniqueIdentifiable <T>
 #endif
 auto SetBase<T>::remove( ConstReference e) noexcept -> bool {

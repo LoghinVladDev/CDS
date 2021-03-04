@@ -423,7 +423,7 @@ public:
     auto cend () const noexcept -> LinkedList < JSON::Node >::ConstIterator { return this->_list.cend(); }
 
     auto put(Index i, JSON::Node const & o) noexcept -> Array & {
-        if ( i > this->_list.size() )
+        if ( i > static_cast<Index>(this->_list.size()) )
             i = this->_list.size();
 
         decltype(this->_list) front;
@@ -489,12 +489,12 @@ public:
     [[nodiscard]] inline auto size () const noexcept -> Size { return this->_list.size(); }
 
     [[nodiscard]] auto get(Index i) const noexcept(false) -> JSON::Node const & {
-        if ( i < 0 || i >= this->_list.size() ) throw OutOfBounds (i, this->_list.size());
+        if ( i < 0 || i >= static_cast<Index>(this->_list.size()) ) throw OutOfBounds (i, this->_list.size());
         return this->_list.get(i);
     }
 
     auto get(Index i) noexcept(false) -> JSON::Node & {
-        if ( i < 0 || i >= this->_list.size() ) throw OutOfBounds (i, this->_list.size());
+        if ( i < 0 || i >= static_cast<Index>(this->_list.size()) ) throw OutOfBounds (i, this->_list.size());
         return this->_list.get(i);
     }
 
