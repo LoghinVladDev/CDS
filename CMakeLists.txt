@@ -30,7 +30,7 @@ set(
         src/primitive/Pair.hpp
         src/primitive/Range.hpp
         src/primitive/String.hpp
-        src/primitive/String.cpp)
+)
 
 set(
         CDS_EXTRA
@@ -72,9 +72,23 @@ set(
 )
 
 set(
+        CDS_FUNCTIONAL
+        src/functional/Generator.hpp
+        src/functional/GeneratorT.hpp
+)
+
+set(
+        CDS_THREADING
+        src/threading/Thread.hpp
+        src/threading/Semaphore.hpp
+        src/threading/Mutex.hpp include/CDS/Mutex)
+
+set(
         CDS_HEADERS
         ${CDS_COLLECTION}
         ${CDS_EXTRA}
+        ${CDS_FUNCTIONAL}
+        ${CDS_THREADING}
         src/std-types.h
         src/primitive/Integer.hpp
         src/primitive/Long.hpp
@@ -96,14 +110,35 @@ set(
         CDS_GLOBAL_HEADERS ${CDS_INCLUDE_DIRECTORIES} CACHE INTERNAL "DIRS"
 )
 
+
+add_library( CDS ${CDS_LIB_SRC} )
+
+if (WIN32)
+    set(
+            CDS_LIBRARIES
+            CDS
+    )
+else()
+    set(
+            CDS_LIBRARIES
+            CDS
+            pthread
+    )
+endif()
+
 add_executable(
         CDS-dummy
         main.cpp
+        ${CDS_LIB_SRC}
         ${CDS_HEADERS}
 )
 
 target_link_libraries(
         CDS-dummy
+        ${CDS_LIBRAIES}
 )
 
-add_library( CDS ${CDS_LIB_SRC} )
+if(WIN32)
+else()
+    target_link_libraries(CDS-dummy pthread)
+endif()

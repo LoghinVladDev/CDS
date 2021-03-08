@@ -111,6 +111,8 @@ TerminalColor subtestOK ( TerminalColor::Modifier::FOREGROUND_GREEN );
 TerminalColor testNOK ( TerminalColor::Modifier::FOREGROUND_RED | TerminalColor::Modifier::ENABLE_BOLD );
 
 
+
+void testThread();
 void testList ();
 void testString ();
 void testMap ();
@@ -124,6 +126,8 @@ void testJSON();
 void testArray();
 
 int main() {
+
+    testThread();
 
     testArray();
 
@@ -140,6 +144,68 @@ int main() {
     testRange();
 
     return 0;
+}
+
+#include <CDS/Thread>
+#include <CDS/Mutex>
+#include <threading/Semaphore.hpp>
+#if defined(__linux)
+#include <unistd.h>
+#endif
+void testThread () {
+    Mutex m;
+    Semaphore s(m);
+    Mutex m2;
+    Semaphore s2(m2);
+
+    float y = 0.5f;
+    Runnable x( [ &y, &s, &s2 ](){
+        int repCount = 15;
+
+        while ( repCount > 0 ) {
+//            m.lock();
+
+
+            y = y + 1.0f;
+
+            std::cout << "Thread 1 Modified y = " << y << '\n';
+            repCount --;
+
+            s.notify();
+            s2.wait();
+#if defined(__linux)
+//            usleep(1000);
+#endif
+        }
+    });
+
+    Runnable z([ &y, &s, &s2 ]() {
+        int repCount = 15;
+
+        while ( repCount > 0 ) {
+            s.wait();
+
+            y = y - .3f;
+
+            std::cout << "Thread 2 Modified y = " << y << '\n';
+            repCount --;
+
+            s2.notify();
+#if defined(__linux)
+//            usleep(1500);
+#endif
+        }
+    });
+
+    x.start();
+    z.start();
+
+    x.join();
+    z.join();
+
+    std::cout << y << '\n';
+
+    exit(0);
 }
 
 #include <CDS/Array>
