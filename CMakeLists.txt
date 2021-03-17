@@ -74,7 +74,6 @@ set(
 set(
         CDS_FUNCTIONAL
         src/functional/Generator.hpp
-        src/functional/GeneratorT.hpp
 )
 
 set(
