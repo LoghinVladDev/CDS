@@ -247,8 +247,8 @@ public:
     inline String & operator = ( ElementType e ) noexcept { return this->operator=(String().append(e)); } // NOLINT(misc-unconventional-assign-operator)
     inline String & operator = ( StringLiteral cString ) noexcept { return this->operator=(String(cString)); } // NOLINT(misc-unconventional-assign-operator)
 
-    [[nodiscard]] auto split ( ElementType, Size = UINT64_MAX ) const noexcept -> LinkedList < String >;
-    [[nodiscard]] auto split ( String const &, Size = UINT64_MAX ) const noexcept -> LinkedList < String >;
+    [[nodiscard]] auto split ( ElementType, Size = UINT32_MAX ) const noexcept -> LinkedList < String >;
+    [[nodiscard]] auto split ( String const &, Size = UINT32_MAX ) const noexcept -> LinkedList < String >;
 
     constexpr static Index INVALID_POS = -1;
 

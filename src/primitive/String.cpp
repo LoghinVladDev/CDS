@@ -203,7 +203,7 @@ auto String::clear() noexcept -> void {
 auto String::split(ElementType token, Size splitCount) const noexcept -> LinkedList < String > {
     Index splitIndex = 0;
     if ( splitCount < 1 )
-        splitCount = INT64_MAX;
+        splitCount = UINT32_MAX;
 
     LinkedList < String > segments;
     if ( this->empty() )
@@ -477,26 +477,26 @@ auto String::find (String const & o) const noexcept -> LinkedList < Index > {
 }
 
 auto String::ltrim ( ElementType e ) noexcept -> String & {
-    while ( this->front() == e && ! this->empty() )
+    while ( ! this->empty () && this->front() == e )
         * this = this->substr( 1 );
     return * this;
 }
 
 auto String::ltrim ( String const & s ) noexcept -> String & {
-    while ( s.contains( this->front() ) && ! this->empty() )
+    while ( ! this->empty () && s.contains( this->front() ) )
         * this = this->substr(1);
     return * this;
 }
 
 auto String::rtrim ( ElementType e ) noexcept -> String & {
-    while ( this->back() == e && ! this->empty() )
+    while ( ! this->empty () && this->back() == e )
         this->_p[--this->_l] = '\0';
 
     return * this;
 }
 
 auto String::rtrim ( String const & s ) noexcept -> String & {
-    while ( s.contains(this->back()) && ! this->empty() )
+    while ( ! this->empty () && s.contains(this->back()) )
         this->_p[this->_l--] = '\0';
 
     return * this;
