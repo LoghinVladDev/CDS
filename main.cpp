@@ -124,9 +124,11 @@ void testRange ();
 void testPrimitives();
 void testJSON();
 void testArray();
+void testRandom();
 
 int main() {
 
+    testRandom();
     testThread();
 
     testArray();
@@ -144,6 +146,47 @@ int main() {
     testRange();
 
     return 0;
+}
+
+#include <functional/Random.hpp>
+void testRandom () {
+//    std::random_device d;
+//    std::mt19937 tw(d());
+//    Random::Int<int, std::uniform_int_distribution<int>> dist(0, 5);
+    Random::Int dist(2, 5);
+    Random::Long distLong((CDS_sint64)INT32_MAX + 1, INT64_MAX - 1);
+    Random::Float distFloat(1.0f, 2.0f);
+    Random::Double distDouble(0.0f, 1.0f);
+
+    Random::UnsignedInt rUint;
+
+//    distFloat.seed(10);
+
+//    rUint.seed(10);
+
+    std::random_device d;
+    std::mt19937 tw(d());
+    std::uniform_int_distribution<int> di(0, 10);
+
+//    std::mt19937 ::default_seed
+//    std::mt19937 ::result_type
+
+    for ( auto i : Range(0, dist.get()) )
+        std::cout << dist() << '\n';
+
+    for ( auto i : Range(0, dist.get()) )
+        std::cout << distLong() << '\n';
+
+    for ( auto i : Range(0, dist.get()) )
+        std::cout << distFloat() << '\n';
+
+    for ( auto i : Range(0, dist.get()) )
+        std::cout << distDouble() << '\n';
+
+    for ( auto i : Range(0, dist.get()) )
+        std::cout << rUint() << '\n';
+
+    exit(0);
 }
 
 #include <CDS/Thread>
@@ -205,8 +248,9 @@ void testThread () {
 
     std::cout << y << '\n';
 
-    exit(0);
+//    exit(0);
 }
+
 
 #include <CDS/Array>
 void testArray () {

@@ -98,7 +98,7 @@ set(
         src/collection/unordered/JSON.hpp
         src/collection/ordered/Array.hpp
         src/collection/ordered/StaticArray.hpp
-)
+        src/functional/Random.hpp)
 
 set(
         CDS_LIB_SRC

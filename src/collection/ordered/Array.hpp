@@ -67,7 +67,15 @@ public:
     constexpr auto rend() const noexcept -> ConstReverseIterator { return ConstReverseIterator(this, -1); }
     constexpr auto crend() const noexcept -> ConstReverseIterator { return ConstReverseIterator(this, -1); }
 
-    auto resize ( Size ) noexcept -> void;
+private:
+    auto _resize ( Size ) noexcept -> void;
+
+public:
+    inline auto resize ( Size newSize ) noexcept -> void {
+        this->_resize(newSize);
+        this->_size = newSize;
+    }
+
     auto shrinkToSize ( Size ) noexcept -> void;
 
     auto remove ( ValueConstReference , Size ) noexcept -> bool final;
@@ -466,17 +474,17 @@ auto Array<T>::toString() const noexcept -> String {
 template <class T>
 auto Array<T>::expandWith(Size requiredSize) noexcept -> void {
     if ( this->_size + requiredSize < this->_capacity ) return;
-    return this->resize( std::max ( this->_size + requiredSize, this->_capacity * 2 ) );
+    return this->_resize(std::max(this->_size + requiredSize, this->_capacity * 2));
 }
 
 template <class T>
 auto Array<T>::shrinkToSize(Size size) noexcept -> void {
     if ( this->_capacity <= size ) return;
-    return this->resize(size);
+    return this->_resize(size);
 }
 
 template <class T>
-auto Array<T>::resize(Size size) noexcept -> void {
+auto Array<T>::_resize(Size size) noexcept -> void {
     auto newMemory = new Value * [ size ];
 
     for ( Index i = 0; i < size; i++ ) {
@@ -497,7 +505,7 @@ auto Array<T>::resize(Size size) noexcept -> void {
 
 template <class T>
 Array<T>::Array( Array const & o ) noexcept {
-    this->resize( o._size );
+    this->_resize(o._size);
     for ( Index i = 0; i < o._size; i++ )
         * this->_pData [i] = * o._pData[i];
 
@@ -531,7 +539,7 @@ Array<T>::Array(
 
 template <class T>
 Array<T>::Array ( Size size, ValueConstReference defaultValue ) noexcept {
-    this->resize(size);
+    this->_resize(size);
     this->_size = size;
     for ( Index i = 0; i < this->_size; i++ )
         * this->_pData[i] = defaultValue;
