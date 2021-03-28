@@ -128,7 +128,7 @@ void testRandom();
 
 int main() {
 
-    testRandom();
+//    testRandom();
     testThread();
 
     testArray();
@@ -192,63 +192,167 @@ void testRandom () {
 #include <CDS/Thread>
 #include <CDS/Mutex>
 #include <threading/Semaphore.hpp>
+#include <functional/Generator.hpp>
+
+class IntGenerator : public Generator<int, int> {
+    auto task(int startPoint) noexcept -> int override {
+        int i = 5;
+        while( i < 15 ) {
+            this->yield(i++);
+        }
+
+        return i;
+    }
+};
+
 #if defined(__linux)
 #include <unistd.h>
 #endif
+#include <primitive/Tuple.hpp>
+
 void testThread () {
-    Mutex m;
-    Semaphore s(m);
-    Mutex m2;
-    Semaphore s2(m2);
+    Tuple < double, int > tuple = { 3.4, 5 };
+//    std::cout << tuple_impl::get<0>(tuple) << '\n';
+//    std::cout << tuple_impl::get<1>(tuple) << '\n';
+    std::cout << tuple.get<0>() << '\n';
+    std::cout << tuple.get<1>() << '\n';
 
-    float y = 0.5f;
-    Runnable x( [ &y, &s, &s2 ](){
-        int repCount = 15;
+    Tuple < double, int > tuple2 = {3.4, 5};
 
+    Tuple tuple3 = {4, 5.4f, String("Ana are mere"), 'c'};
+
+    std::cout << (tuple == tuple2) << '\n';
+    std::cout << tuple3.size() << '\n';
+
+//    Tuple t4 = tuple3;
+//
+//    std::cout << t4.get<2>() << '\n';
+//
+    exit(0);
+
+    IntGenerator g;
+
+    std::cout << g(5) << '\n';
+
+    for ( auto o : g(5) ) {
+        std::cout << o << '\n';
+    }
+
+    class StringReader : public Generator < char, String const & > {
+    public:
+        auto task (String const & o) noexcept -> char override {
+            for ( auto c : o )
+                this->yield(c);
+            return '\0';
+        }
+    };
+
+    class Test : public Generator < String > {
+    public:
+        auto task () noexcept -> String override {
+            int rep = 10;
+            while ( rep -- ) {
+                yield(this->toString());
+            }
+
+            return this->toString();
+        }
+    };
+
+    StringReader sr;
+
+    for ( auto c : sr("Ana are mere") ) {
+        std::cout << c;
+    }
+
+    Test test;
+
+    for ( auto e : test() )
+        std::cout << e << '\n';
+
+    std::cout << test.toString() << '\n';
+
+    test.restart();
+
+    for ( auto e : test() )
+        std::cout << e << '\n';
+
+    std::cout << test.toString() << '\n';
+
+    class Rng : public Generator < float > {
+        auto task () noexcept -> float override {
+            Random::Float floatGen;
+
+            while(true)
+                yield(floatGen.get());
+
+            return floatGen.get();
+        }
+    };
+
+    Rng rng;
+
+    for ( auto x : rng() ) {
+        std::cout << x << '\n';
+    }
+
+    exit(0);
+    Semaphore s;
+    Semaphore s2;
+    Semaphore s3;
+
+    float t = 0.5f;
+    Runnable x( [ &t, &s, &s3 ](){
+        int repCount = 100000;
         while ( repCount > 0 ) {
-//            m.lock();
-
-
-            y = y + 1.0f;
-
-            std::cout << "Thread 1 Modified y = " << y << '\n';
+            t = t + 1.0f;
+            std::cout << "Thread 1 Modified y = " << t << '\n';
             repCount --;
-
             s.notify();
-            s2.wait();
-#if defined(__linux)
-//            usleep(1000);
-#endif
+            s3.wait();
         }
     });
-
-    Runnable z([ &y, &s, &s2 ]() {
-        int repCount = 15;
+    Runnable y([ &t, &s, &s2 ]() {
+        int repCount = 100000;
 
         while ( repCount > 0 ) {
             s.wait();
 
-            y = y - .3f;
+            t = t - .3f;
 
-            std::cout << "Thread 2 Modified y = " << y << '\n';
+            std::cout << "Thread 2 Modified y = " << t << '\n';
             repCount --;
 
             s2.notify();
-#if defined(__linux)
-//            usleep(1500);
-#endif
         }
     });
 
-    x.start();
+    Runnable z( [&t, &s2, &s3]() {
+        int repCount = 100000;
+
+        while ( repCount > 0 ) {
+            s2.wait();
+
+            t += .7f;
+
+            std::cout << "Thread 3 Modified y = " << t << '\n';
+            repCount--;
+
+            s3.notify();
+        }
+    });
+
     z.start();
+    x.start();
+    y.start();
 
-    x.join();
     z.join();
+    x.join();
+    y.join();
 
-    std::cout << y << '\n';
+    std::cout << t << '\n';
 
-//    exit(0);
+    exit(0);
 }
 
 

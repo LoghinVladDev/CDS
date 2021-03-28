@@ -6,37 +6,44 @@
 #define CDS_SEMAPHORE_HPP
 
 #include <CDS/Mutex>
+#include <CDS/Pointer>
 
 class Semaphore : public Object {
 private:
-    Mutex               & _lock;
+    PointerBase < Mutex > * _pBase;
     volatile CDS_uint8  _count {0};
 
 public:
-    Semaphore () noexcept = delete;
-    explicit Semaphore ( Mutex & m ) noexcept : _lock(m) {}
-    Semaphore ( Semaphore const & o ) noexcept : _lock(o._lock) {}
+    Semaphore () noexcept : _pBase(new SharedPointer < Mutex >(new Mutex())) {}
+    explicit Semaphore ( Mutex & m ) noexcept : _pBase(new ForeignPointer < Mutex >(& m)) {}
+    Semaphore ( Semaphore const & o ) noexcept : _pBase(o._pBase->copy()) { }
+
+    ~Semaphore() noexcept override {
+        delete this->_pBase;
+    }
 
     inline auto wait () noexcept -> void {
         while ( true )
-            if ( this->_lock.tryLock() ) {
+            if ( ( * this->_pBase )->tryLock() ) {
                 if ( this->_count != 0 ) {
-                    this->_lock.unlock();
+                    ( * this->_pBase )->unlock();
                     this->_count = this->_count - 1;
                     break;
                 }
-                this->_lock.unlock();
+                ( * this->_pBase )->unlock();
             }
     }
 
     inline auto notify () noexcept -> void {
-        this->_lock.lock();
+        ( * this->_pBase )->lock();
         this->_count = this->_count + 1;
-        this->_lock.unlock();
+        ( * this->_pBase )->unlock();
     }
 
     [[nodiscard]] auto toString () const noexcept -> String override {
-        return "";
+        return String()
+            .append("Semaphore{mutexBase=").append(this->_pBase->get()->toString())
+            .append(",signalCount=").append(this->_count).append("}");
     }
 };
 

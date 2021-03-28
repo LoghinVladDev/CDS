@@ -31,6 +31,8 @@ public:
 
     ~PointerBase() noexcept override = default;
 
+    auto copy () const noexcept -> PointerBase * override = 0;
+
     auto operator == (Object const & o) const noexcept -> bool final {
         if ( this == & o ) return true;
         auto p = dynamic_cast < PointerBase<T> const * > ( & o );
@@ -46,7 +48,13 @@ public:
     }
 
     constexpr inline auto isNull () const noexcept -> bool { return pObj == nullptr; }
-    constexpr inline auto operator -> () const noexcept -> Pointer { return pObj; }
+    constexpr inline auto operator -> () const noexcept (false) -> Pointer {
+        if ( pObj == nullptr )
+            throw NullPointerException();
+
+        return pObj;
+    }
+
     constexpr inline explicit operator bool () const noexcept { return isNull(); }
     constexpr inline auto get () const noexcept -> Pointer { return pObj; }
 #if __cpp_constexpr >= 201907
@@ -80,6 +88,14 @@ public:
     UniquePointer( UniquePointer const & o ) noexcept = delete;
     UniquePointer( UniquePointer & o ) noexcept : PointerBase<T>(o.release()) { }
     UniquePointer( UniquePointer && o ) noexcept : PointerBase<T>(o.release()) { }
+
+    auto copy () const noexcept -> UniquePointer * override {
+        return nullptr;
+    }
+
+//    auto copy () const noexcept -> UniquePointer * override {
+//        return new UniquePointer( * this );
+//    }
 
     inline UniquePointer & operator = ( UniquePointer && p ) noexcept {
         if ( &p == this ) return * this;
@@ -118,6 +134,10 @@ public:
     SharedPointer(SharedPointer const & p) noexcept : PointerBase<T>(p.pObj) {
         this->pControl = p.pControl;
         p.pControl->ownerCount ++;
+    }
+
+    auto copy () const noexcept -> SharedPointer * override {
+        return new SharedPointer(* this);
     }
 
     explicit SharedPointer(typename PointerBase<T>::Pointer p) noexcept : PointerBase<T>(p) {
@@ -173,6 +193,10 @@ public:
 
     ForeignPointer( ForeignPointer const & o ) noexcept : PointerBase<T>(o.pObj) {}
     ForeignPointer( ForeignPointer && o ) noexcept : PointerBase<T>(o.release()) {}
+
+    auto copy () const noexcept -> ForeignPointer * override {
+        return new ForeignPointer ( * this );
+    }
 
     inline ForeignPointer & operator = ( ForeignPointer const & p ) noexcept {
         if ( &p == this ) return * this;
