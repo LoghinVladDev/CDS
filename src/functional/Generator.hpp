@@ -8,10 +8,7 @@
 #include <CDS/Semaphore>
 #include <CDS/Thread>
 
-#if defined(WIN32)
 #include <atomic>
-#endif
-
 
 template <typename T, typename ... Args>
 class Generator: public Object {
