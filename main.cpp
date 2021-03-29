@@ -232,77 +232,77 @@ void testThread () {
 ////
 ////    exit(0);
 //
-    IntGenerator g;
+//    IntGenerator g;
+//
+//    std::cout << g(5) << '\n';
+//
+//    for ( auto o : g(5) ) {
+//        std::cout << o << '\n';
+//    }
+//
+//    class StringReader : public Generator < char, String const & > {
+//    public:
+//        auto task (String const & o) noexcept -> char override {
+//            for ( auto c : o )
+//                this->yield(c);
+//            return '\0';
+//        }
+//    };
+//
+//    class Test : public Generator < String > {
+//    public:
+//        auto task () noexcept -> String override {
+//            int rep = 10;
+//            while ( rep -- ) {
+//                yield(this->toString());
+//            }
+//
+//            return this->toString();
+//        }
+//    };
+//
+//    StringReader sr;
+//
+//    for ( auto c : sr("Ana are mere") ) {
+//        std::cout << c;
+//    }
+//
+//    Test test;
+//
+//    for ( auto e : test() )
+//        std::cout << e << '\n';
+//
+//    std::cout << "Loop End------------------------------\n";
+//
+//    std::cout << test.toString() << '\n';
+//
+//    test.restart();
+//
+//    for ( auto e : test() )
+//        std::cout << e << '\n';
+//
+//    std::cout << "Loop End------------------------------\n";
+//
+//    std::cout << test.toString() << '\n';
+//
+//    class Rng : public Generator < float > {
+//        auto task () noexcept -> float override {
+//            Random::Float floatGen;
+//
+//            while(true)
+//                yield(floatGen.get());
+//
+//            return floatGen.get();
+//        }
+//    };
+//
+//    Rng rng;
+//
+//    for ( auto x : rng() ) {
+//        std::cout << x << '\n';
+//    }
 
-    std::cout << g(5) << '\n';
-
-    for ( auto o : g(5) ) {
-        std::cout << o << '\n';
-    }
-
-    class StringReader : public Generator < char, String const & > {
-    public:
-        auto task (String const & o) noexcept -> char override {
-            for ( auto c : o )
-                this->yield(c);
-            return '\0';
-        }
-    };
-
-    class Test : public Generator < String > {
-    public:
-        auto task () noexcept -> String override {
-            int rep = 10;
-            while ( rep -- ) {
-                yield(this->toString());
-            }
-
-            return this->toString();
-        }
-    };
-
-    StringReader sr;
-
-    for ( auto c : sr("Ana are mere") ) {
-        std::cout << c;
-    }
-
-    Test test;
-
-    for ( auto e : test() )
-        std::cout << e << '\n';
-
-    std::cout << "Loop End------------------------------\n";
-
-    std::cout << test.toString() << '\n';
-
-    test.restart();
-
-    for ( auto e : test() )
-        std::cout << e << '\n';
-
-    std::cout << "Loop End------------------------------\n";
-
-    std::cout << test.toString() << '\n';
-
-    class Rng : public Generator < float > {
-        auto task () noexcept -> float override {
-            Random::Float floatGen;
-
-            while(true)
-                yield(floatGen.get());
-
-            return floatGen.get();
-        }
-    };
-
-    Rng rng;
-
-    for ( auto x : rng() ) {
-        std::cout << x << '\n';
-    }
-
-    exit(0);
+//    exit(0);
     Semaphore s;
     Semaphore s2;
     Semaphore s3;

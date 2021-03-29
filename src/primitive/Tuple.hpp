@@ -1,5 +1,8 @@
 #include <Object.hpp>
 
+template < typename L, typename ... types >
+class Tuple;
+
 namespace tuple_impl {
     template<CDS_uint32 _index, typename T>
     class Node {
@@ -7,7 +10,6 @@ namespace tuple_impl {
         T value;
 
     public:
-        Node () noexcept = default;
         explicit Node(T const &value) : value(value) {}
         explicit Node(T &&value) : value(std::move(value)) {}
 
@@ -21,7 +23,8 @@ namespace tuple_impl {
     template < CDS_uint32 _index, typename L, typename ... types >
     class TupleRecurrentBase < _index, L , types ... > : public Node<_index, L>, public TupleRecurrentBase<_index + 1, types ...> {
     public:
-        TupleRecurrentBase() noexcept : Node < _index, L > (), TupleRecurrentBase<_index + 1, types...>() { }
+//        TupleRecurrentBase() noexcept : Node < _index, L > (), TupleRecurrentBase<_index + 1, types...>() { }
+        TupleRecurrentBase( TupleRecurrentBase const & ) noexcept = default;
 
         template<typename ConstructorList, typename ... ConstructorListArgs>
         explicit TupleRecurrentBase(ConstructorList &&arg, ConstructorListArgs &&... args) noexcept :
@@ -38,12 +41,7 @@ namespace tuple_impl {
     struct typeAt<0, L, args ...> {
         using type = L;
     };
-}
 
-template < typename L, typename ... types >
-class Tuple;
-
-namespace tuple_impl {
     template < CDS_uint32 _index, typename ... args >
     auto get ( Tuple < args ... > & t ) noexcept -> typename typeAt < _index, args ... >::type {
         return static_cast < Node < _index, typename typeAt < _index, args ...>::type > & >(t).getBase();
@@ -70,18 +68,38 @@ namespace tuple_impl {
     }
 }
 
+#include <tuple>
+
 template < typename L, typename ... types >
 class Tuple : public tuple_impl::TupleRecurrentBase < 0, L, types ... > {
 public:
     template < typename ... ConstructorArgs >
-    Tuple ( ConstructorArgs && ... args ) noexcept : tuple_impl::TupleRecurrentBase<0, L, types ... >(  // NOLINT(google-explicit-constructor)
+    Tuple ( ConstructorArgs && ... args ) noexcept : tuple_impl::TupleRecurrentBase < 0, L, types ... >(  // NOLINT(google-explicit-constructor)
         std::forward < ConstructorArgs > ( args ) ...
     ) {
 
     }
+//
+//    template < typename ... ConstructorArgs >
+//    ConstructorArgs
 
-    Tuple( Tuple const & obj ) noexcept : tuple_impl::TupleRecurrentBase<0, L, types ... >() {
-        tuple_impl::tupleAssign < sizeof ... (types) > ( * this, obj );
+    template < int ... > struct seq {};
+    template < int n, int ... s > struct gens : gens < n - 1, n - 1, s ... > { };
+    template < int ... s > struct gens < 0, s ... > { using type = seq < s ... >; };
+//    template < int ... s > auto unpack ( Tuple const & obj ) noexcept {
+//        return
+//    }
+
+    template < int ... s >
+    Tuple( Tuple const & obj, seq < s ... > ) noexcept : tuple_impl::TupleRecurrentBase<0, L, types ... > (
+        tuple_impl::get<s>(obj) ...
+    ) {
+
+    }
+
+//    Tuple ( Tuple const & obj ) noexcept = default;
+    Tuple ( Tuple const & obj ) noexcept : Tuple ( obj, typename gens < sizeof ... ( types ) + 1 >::type () ) {
+
     }
 
     template < CDS_uint32 _index >
