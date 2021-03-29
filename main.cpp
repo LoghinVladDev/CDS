@@ -189,10 +189,12 @@ void testRandom () {
     exit(0);
 }
 
+//#define MUTEX_IMPLEMENTATION_WINAPI_MUTEX
 #include <CDS/Thread>
 #include <CDS/Mutex>
 #include <threading/Semaphore.hpp>
 #include <functional/Generator.hpp>
+#include <chrono>
 
 class IntGenerator : public Generator<int, int> {
     auto task(int startPoint) noexcept -> int override {
@@ -211,25 +213,25 @@ class IntGenerator : public Generator<int, int> {
 #include <primitive/Tuple.hpp>
 
 void testThread () {
-    Tuple < double, int > tuple = { 3.4, 5 };
-//    std::cout << tuple_impl::get<0>(tuple) << '\n';
-//    std::cout << tuple_impl::get<1>(tuple) << '\n';
-    std::cout << tuple.get<0>() << '\n';
-    std::cout << tuple.get<1>() << '\n';
-
-    Tuple < double, int > tuple2 = {3.4, 5};
-
-    Tuple tuple3 = {4, 5.4f, String("Ana are mere"), 'c'};
-
-    std::cout << (tuple == tuple2) << '\n';
-    std::cout << tuple3.size() << '\n';
-
-//    Tuple t4 = tuple3;
+//    Tuple < double, int > tuple = { 3.4, 5 };
+////    std::cout << tuple_impl::get<0>(tuple) << '\n';
+////    std::cout << tuple_impl::get<1>(tuple) << '\n';
+//    std::cout << tuple.get<0>() << '\n';
+//    std::cout << tuple.get<1>() << '\n';
 //
-//    std::cout << t4.get<2>() << '\n';
+//    Tuple < double, int > tuple2 = {3.4, 5};
 //
-    exit(0);
-
+//    Tuple tuple3 = {4, 5.4f, String("Ana are mere"), 'c'};
+//
+//    std::cout << (tuple == tuple2) << '\n';
+//    std::cout << tuple3.size() << '\n';
+//
+////    Tuple t4 = tuple3;
+////
+////    std::cout << t4.get<2>() << '\n';
+////
+////    exit(0);
+//
     IntGenerator g;
 
     std::cout << g(5) << '\n';
@@ -270,12 +272,16 @@ void testThread () {
     for ( auto e : test() )
         std::cout << e << '\n';
 
+    std::cout << "Loop End------------------------------\n";
+
     std::cout << test.toString() << '\n';
 
     test.restart();
 
     for ( auto e : test() )
         std::cout << e << '\n';
+
+    std::cout << "Loop End------------------------------\n";
 
     std::cout << test.toString() << '\n';
 
@@ -301,26 +307,28 @@ void testThread () {
     Semaphore s2;
     Semaphore s3;
 
+    constexpr static int repCountAll = 100000;
+
     float t = 0.5f;
     Runnable x( [ &t, &s, &s3 ](){
-        int repCount = 100000;
+        int repCount = repCountAll;
         while ( repCount > 0 ) {
             t = t + 1.0f;
-            std::cout << "Thread 1 Modified y = " << t << '\n';
+//            std::cout << "Thread 1 Modified y = " << t << '\n';
             repCount --;
             s.notify();
             s3.wait();
         }
     });
     Runnable y([ &t, &s, &s2 ]() {
-        int repCount = 100000;
+        int repCount = repCountAll;
 
         while ( repCount > 0 ) {
             s.wait();
 
             t = t - .3f;
 
-            std::cout << "Thread 2 Modified y = " << t << '\n';
+//            std::cout << "Thread 2 Modified y = " << t << '\n';
             repCount --;
 
             s2.notify();
@@ -328,19 +336,21 @@ void testThread () {
     });
 
     Runnable z( [&t, &s2, &s3]() {
-        int repCount = 100000;
+        int repCount = repCountAll;
 
         while ( repCount > 0 ) {
             s2.wait();
 
             t += .7f;
 
-            std::cout << "Thread 3 Modified y = " << t << '\n';
+//            std::cout << "Thread 3 Modified y = " << t << '\n';
             repCount--;
 
             s3.notify();
         }
     });
+
+    auto start = std::chrono::high_resolution_clock::now();
 
     z.start();
     x.start();
@@ -350,7 +360,28 @@ void testThread () {
     x.join();
     y.join();
 
-    std::cout << t << '\n';
+    auto end = std::chrono::high_resolution_clock::now();
+
+//    std::cout << t << '\n';
+    std::cout
+        << "Result : " << t << "\n"
+        << "Thread Loops : " << repCountAll << "\n"
+        << "Elapsed Time : " << (end - start).count() / std::pow(10, 9) << "\n"
+        << "Thread Impl" << Runnable([](){}).toString() << "\n"
+        << "Mutex Impl" << Mutex().toString() << "\n";
+
+//    Runnable a (
+//        [] () {
+//            int x = 500;
+//            while(x > 0) {
+//                std::cout << x << ' ';
+//                x--;
+//            }
+//        }
+//    );
+//
+//    a.start();
+//    a.join();
 
     exit(0);
 }

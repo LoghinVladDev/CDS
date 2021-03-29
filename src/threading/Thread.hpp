@@ -10,6 +10,15 @@
 
 #if defined(__linux)
 #include <pthread.h>
+#define THREAD_RETURN_TYPE void *
+#define THREAD_RETURN_OK nullptr
+#define THREAD_EXCEPT_STAT true
+#elif defined(WIN32)
+#include <windows.h>
+#define THREAD_RETURN_TYPE DWORD
+#define THREAD_RETURN_OK 0
+#define THREAD_EXCEPT_STAT false
+#else
 #endif
 
 class Thread : public Object {
@@ -23,6 +32,24 @@ private:
 
     constexpr static PrimitiveThread PRIMITIVE_NULL_HANDLE = 0llu;
     constexpr static StringLiteral IMPLEMENTATION_TYPE = "POSIX Thread (pthread)";
+
+#define MUTABLE_SPEC
+
+#elif defined(WIN32)
+    typedef struct {
+        HANDLE  handle;
+        DWORD   threadID;
+        DWORD   accessFlags;
+        LPVOID  threadSharedData;
+    } Thread_t;
+
+    typedef Thread_t * PrimitiveThread;
+
+    constexpr static PrimitiveThread PRIMITIVE_NULL_HANDLE = nullptr;
+    constexpr static StringLiteral IMPLEMENTATION_TYPE = "WINAPI Thread (windows)";
+
+#define MUTABLE_SPEC mutable
+
 #else
 #error Unsupported : Thread
 #endif
@@ -47,13 +74,13 @@ private:
         return "Undefined State";
     }
 
-    PrimitiveThread                     handle         { Thread::PRIMITIVE_NULL_HANDLE };
+    PrimitiveThread        MUTABLE_SPEC handle         { Thread::PRIMITIVE_NULL_HANDLE };
     State                               state          { Thread::State::CREATED };
     inline static ErrorCallback         pErrorCallback { nullptr };
 
     virtual auto run () noexcept -> void = 0;
 
-    static auto launcher ( void * pThreadObject ) noexcept -> void * {
+    static auto launcher ( void * pThreadObject ) noexcept -> THREAD_RETURN_TYPE {
         auto pThread = reinterpret_cast < Thread * > ( pThreadObject );
 
         try {
@@ -69,17 +96,34 @@ private:
                 std::cerr << "Exception caught in Thread runtime : " << e.what() << '\n';
         }
 
-        return nullptr;
+        return THREAD_RETURN_OK;
     }
 
 protected:
     Thread () noexcept = default;
 
 public:
-    auto start () -> void {
+    auto start () noexcept(THREAD_EXCEPT_STAT) -> void {
 
 #if defined(__linux)
         pthread_create ( & this->handle, nullptr, Thread::launcher, reinterpret_cast < void * > ( this ) );
+#elif defined(WIN32)
+        this->handle = new Thread_t;
+        memset ( this->handle, 0, sizeof ( Thread_t ) );
+
+        this->handle->handle = CreateThread (
+            nullptr,
+            0,
+            Thread::launcher,
+            this,
+            0,
+            & this->handle->threadID
+        );
+
+        if ( this->handle == PRIMITIVE_NULL_HANDLE )
+            throw std::runtime_error ("Could not start thread execution");
+
+        this->handle->accessFlags = THREAD_ALL_ACCESS;
 #else
 #error Unsupported : Thread
 #endif
@@ -90,6 +134,11 @@ public:
 
 #if defined(__linux)
         pthread_cancel ( this->handle );
+#elif defined(WIN32)
+        if ( this->handle != PRIMITIVE_NULL_HANDLE )
+            TerminateThread( this->handle->handle, 0 );
+        delete this->handle;
+        this->handle = PRIMITIVE_NULL_HANDLE;
 #else
 #error Unsupported : Thread
 #endif
@@ -102,6 +151,11 @@ public:
 
 #if defined(__linux)
         pthread_join( this->handle, nullptr );
+#elif defined(WIN32)
+        if ( this->handle != PRIMITIVE_NULL_HANDLE )
+            WaitForSingleObject( this->handle->handle, INFINITE );
+        delete this->handle;
+        this->handle = PRIMITIVE_NULL_HANDLE;
 #else
 #error Unsupported : Thread
 #endif
@@ -115,7 +169,16 @@ public:
     [[nodiscard]] auto toString() const noexcept -> String override {
         return String()
             .append("Thread { <").append(Thread::IMPLEMENTATION_TYPE).append(">; handle = ")
-            .append(static_cast<CDS_uint64>(this->handle)).append(", state = ")
+            .append(
+#if defined(__linux)
+                    static_cast<CDS_uint64>(this->handle)
+#elif defined(WIN32)
+                    static_cast<CDS_uint64>(this->handle == PRIMITIVE_NULL_HANDLE ? 0 : this->handle->threadID)
+#else
+#error Unsupported : Thread
+0
+#endif
+            ).append(", state = ")
             .append(Thread::stateToString(this->state)).append(" }");
     }
 };
@@ -138,5 +201,10 @@ public:
     Runnable () noexcept = delete;
     explicit Runnable ( ThreadFunction f ) noexcept : Thread(), function(f) {}
 };
+
+#undef THREAD_RETURN_TYPE
+#undef THREAD_RETURN_OK
+#undef THREAD_EXCEPT_STAT
+#undef MUTABLE_SPEC
 
 #endif //CDS_THREAD_H

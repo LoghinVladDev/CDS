@@ -28,6 +28,14 @@ Custom Data Structures for C++. Started as practice, ended up implementing sever
 * Utility 
   * JSON - Parsing, Data Structure
   * Range
+  * Tuple ( Partial Support )  
+  * Random  
+  * Threading
+    * Thread
+    * Semaphore
+    * Mutex
+  * Coroutines
+    * Generator Functions  
   * Primitives
     * Pointer - Unique, Shared, Foreign
     * Reference

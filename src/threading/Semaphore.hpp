@@ -40,6 +40,11 @@ public:
         ( * this->_pBase )->unlock();
     }
 
+    inline auto reset () noexcept -> void {
+        this->_count = 0;
+        (*(* this->_pBase)).reset();
+    }
+
     [[nodiscard]] auto toString () const noexcept -> String override {
         return String()
             .append("Semaphore{mutexBase=").append(this->_pBase->get()->toString())

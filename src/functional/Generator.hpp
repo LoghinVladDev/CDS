@@ -8,6 +8,11 @@
 #include <CDS/Semaphore>
 #include <CDS/Thread>
 
+#if defined(WIN32)
+#include <atomic>
+#endif
+
+
 template <typename T, typename ... Args>
 class Generator: public Object {
 private:
@@ -105,6 +110,8 @@ public:
     auto restart (Args && ... args) noexcept -> IterableObject {
         if ( ! this->_pThread.isNull() ) {
             this->_pThread->kill();
+            this->_promiseAchieved.reset();
+            this->_promiseReady.reset();
             this->_taskEnded = false;
         }
 
