@@ -248,6 +248,31 @@ public:
             { return ! this->any ([&p](T const & e) noexcept (false) -> bool { return !p(e); }); }
     )
     GEN_FUNCTION_DECLARATIONS(count, Predicate, Size, , NO_PARAM_DELIM, , , ;)
+#else
+    template < typename Action >
+    auto forEach ( Action ) noexcept (false) -> void;
+    template < typename Action >
+    auto forEach ( Action ) const noexcept (false) -> void;
+
+    template < typename Predicate >
+    auto some ( Predicate, Size ) noexcept (false) -> bool;
+    template < typename Predicate >
+    auto some ( Predicate, Size ) const noexcept (false) -> bool;
+
+    template < typename Predicate >
+    auto count ( Predicate ) noexcept (false) -> Size;
+    template < typename Predicate >
+    auto count ( Predicate ) const noexcept(false) -> Size;
+
+    template < typename Predicate >
+    inline auto any ( Predicate p ) noexcept (false) -> bool { return this->some ( p, 1 ); }
+    template < typename Predicate >
+    inline auto any ( Predicate p ) const noexcept (false) -> bool { return this->some ( p, 1 ); }
+
+    template < typename Predicate >
+    inline auto all ( Predicate p ) noexcept (false) -> bool { return ! this->any ( [&p] (T & e) noexcept -> bool { return ! p(e); } ); }
+    template < typename Predicate >
+    inline auto all ( Predicate p ) const noexcept (false) -> bool { return ! this->any ( [&p] (T const & e) noexcept -> bool { return ! p(e); } ); }
 #endif
 
 #undef GEN_FUNCTION_DECLARATIONS
@@ -332,6 +357,105 @@ _GEN_FUNCTION_GROUP(count, Predicate, Size, p, NO_PARAM_DELIM, , {
 
     return trueCount;
 })
+#else
+template < typename T >
+template < typename Action >
+auto Collection<T>::forEach ( Action a ) noexcept (false) -> void {
+    auto begin = this->beginPtr();
+    auto end = this->endPtr();
+
+    for ( auto it = begin; ! it->equals( * end ); it->next() )
+        a ( it->value() );
+
+    delete begin;
+    delete end;
+}
+
+template < typename T >
+template < typename Action >
+auto Collection<T>::forEach ( Action ) const noexcept (false) -> void {
+    auto begin = this->beginPtr();
+    auto end = this->endPtr();
+
+    for ( auto it = begin; ! it->equals( * end ); it->next() )
+        a ( it->value() );
+
+    delete begin;
+    delete end;
+}
+
+template < typename T >
+template < typename Predicate >
+auto Collection<T>::some ( Predicate, Size ) noexcept (false) -> bool {
+    Size trueCount = 0;
+
+    auto begin = this->beginPtr();
+    auto end = this->endPtr();
+
+    for ( auto it = begin; ! it->equals( * end ) && trueCount < count; it->next() )
+        if ( p ( it->value() ) )
+            trueCount ++;
+
+    delete begin;
+    delete end;
+
+    return count == trueCount;
+}
+
+template < typename T >
+template < typename Predicate >
+auto Collection<T>::some ( Predicate, Size ) const noexcept (false) -> bool {
+    Size trueCount = 0;
+
+    auto begin = this->beginPtr();
+    auto end = this->endPtr();
+
+    for ( auto it = begin; ! it->equals( * end ) && trueCount < count; it->next() )
+        if ( p ( it->value() ) )
+            trueCount ++;
+
+    delete begin;
+    delete end;
+
+    return count == trueCount;
+}
+
+template < typename T >
+template < typename Predicate >
+auto Collection<T>::count ( Predicate ) noexcept (false) -> Size {
+    Size trueCount = 0;
+
+    auto pBegin = this->beginPtr();
+    auto pEnd = this->endPtr();
+
+    for ( auto it = pBegin; ! it->equals( * pEnd ); it->next() )
+        if ( p ( it->value() ) )
+            trueCount ++;
+
+    delete pBegin;
+    delete pEnd;
+
+    return trueCount;
+}
+
+template < typename T >
+template < typename Predicate >
+auto Collection<T>::count ( Predicate ) const noexcept(false) -> Size {
+    Size trueCount = 0;
+
+    auto pBegin = this->beginPtr();
+    auto pEnd = this->endPtr();
+
+    for ( auto it = pBegin; ! it->equals( * pEnd ); it->next() )
+        if ( p ( it->value() ) )
+            trueCount ++;
+
+    delete pBegin;
+    delete pEnd;
+
+    return trueCount;
+}
+
 #endif
 
 #undef _GEN_FUNCTION_GROUP

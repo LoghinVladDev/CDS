@@ -108,7 +108,7 @@ public:
 
     }
 
-    auto reset () noexcept -> void {
+    auto reset (CTR_PARAM) noexcept -> void {
 #if defined(__linux)
         pthread_mutex_destroy( & this->handle );
         pthread_mutex_init( & this->handle, nullptr );

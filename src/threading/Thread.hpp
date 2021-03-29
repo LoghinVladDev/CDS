@@ -78,7 +78,7 @@ private:
     State                               state          { Thread::State::CREATED };
     inline static ErrorCallback         pErrorCallback { nullptr };
 
-    virtual auto run () noexcept -> void = 0;
+    virtual auto run () noexcept (false) -> void = 0;
 
     static auto launcher ( void * pThreadObject ) noexcept -> THREAD_RETURN_TYPE {
         auto pThread = reinterpret_cast < Thread * > ( pThreadObject );
@@ -193,7 +193,7 @@ public:
 private:
     ThreadFunction          function;
 
-    auto run () noexcept -> void override {
+    auto run () noexcept (false) -> void override {
         this->function();
     }
 public:

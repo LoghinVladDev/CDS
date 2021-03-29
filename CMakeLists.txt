@@ -10,6 +10,7 @@ set(CDS_INCLUDE_DIRECTORIES
         src/collection/ordered
         src/exception
         src/primitive
+        src/cdsIntern
 
         include
 )
@@ -80,7 +81,8 @@ set(
         CDS_THREADING
         src/threading/Thread.hpp
         src/threading/Semaphore.hpp
-        src/threading/Mutex.hpp include/CDS/Mutex)
+        src/threading/Mutex.hpp
+)
 
 set(
         CDS_HEADERS
@@ -94,11 +96,13 @@ set(
         src/primitive/Float.hpp
         src/primitive/Double.hpp
         src/primitive/Boolean.hpp
-        src/primitive/PrimitiveGenerator.hpp
+        src/cdsIntern/PrimitiveGenerator.hpp
         src/collection/unordered/JSON.hpp
         src/collection/ordered/Array.hpp
         src/collection/ordered/StaticArray.hpp
-        src/functional/Random.hpp include/CDS/Semaphore include/CDS/Random include/CDS/Generator src/primitive/Tuple.hpp)
+        src/functional/Random.hpp
+        src/primitive/Tuple.hpp
+)
 
 set(
         CDS_LIB_SRC
@@ -110,7 +114,7 @@ set(
 )
 
 
-add_library( CDS ${CDS_LIB_SRC} )
+add_library( CDS ${CDS_LIB_SRC} src/prepro.h src/threading/Timer.hpp)
 
 if (WIN32)
     set(
@@ -131,11 +135,24 @@ add_executable(
         ${CDS_LIB_SRC}
         ${CDS_HEADERS}
 )
-
 target_link_libraries(
         CDS-dummy
         ${CDS_LIBRAIES}
 )
+
+if(WIN32)
+    add_executable(
+            CDS-wintests
+            wTests.cpp
+            ${CDS_LIB_SRC}
+            ${CDS_HEADERS}
+    )
+
+    target_link_libraries(
+            CDS-wintests
+            ${CDS_LIBRAIES}
+    )
+endif()
 
 if(WIN32)
 else()
