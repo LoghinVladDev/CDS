@@ -189,7 +189,7 @@ void testRandom () {
     exit(0);
 }
 
-#define MUTEX_IMPLEMENTATION_WINAPI_MUTEX
+//#define MUTEX_IMPLEMENTATION_WINAPI_MUTEX
 #include <CDS/Thread>
 #include <CDS/Mutex>
 #include <threading/Semaphore.hpp>
@@ -211,8 +211,27 @@ class IntGenerator : public Generator<int, int> {
 #include <unistd.h>
 #endif
 #include <primitive/Tuple.hpp>
+#include <threading/Timer.hpp>
 
 void testThread () {
+
+    for ( auto i : Range(0, 10) ) {
+        Timer t;
+        t.setInterval(550 );
+
+        t.start( [] () { std::cout << "Test\n"; std::cout.flush(); } );
+        sleep(1);
+        t.pause();
+        sleep(2);
+        t.unpause();
+        sleep(1);
+
+        t.stop();
+
+        std::cout << "Stopped\n";
+    }
+
+    exit(0);
 //    Tuple < double, int > tuple = { 3.4, 5 };
 ////    std::cout << tuple_impl::get<0>(tuple) << '\n';
 ////    std::cout << tuple_impl::get<1>(tuple) << '\n';

@@ -18,6 +18,12 @@
 #define IN_PLACE
 #endif
 
+#elif defined(__linux)
+
+#if defined(MUTEX_IMPLEMENTATION_WINAPI_CRITICAL_SECTION) || defined(MUTEX_IMPLEMENTATION_WINAPI_MUTEX)
+#error Linux does not support WINAPI calls
+#endif
+
 #endif
 
 #if defined(__linux)

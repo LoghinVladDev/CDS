@@ -9,6 +9,7 @@
 #include <CDS/Thread>
 #include <CDS/Pointer>
 #include <CDS/Mutex>
+#include <CDS/Semaphore>
 
 #include <atomic>
 #include <chrono>
@@ -23,19 +24,16 @@ private:
     CDS_sint32               _millisCallback { TIMER_INFINITE_PERIODICITY };
 
     std::atomic < bool >     _timerPaused {true};
+    std::atomic < bool >     _timerShouldStop {false};
+
+    Semaphore                _timerFinished;
+
 
 public:
     explicit Timer () noexcept = default;
 
     ~Timer () noexcept override {
-//        this->_threadModifyLock.lock();
-
-        if ( ! this->_pThread.isNull() )
-            this->_pThread->kill();
-
-        this->_timerPaused = false;
-
-//        this->_threadModifyLock.unlock();
+        this->stop();
     }
 
     auto toString() const noexcept -> String override {
@@ -54,17 +52,19 @@ public:
         this->_timerPaused = true;
     }
 
-    auto stop () noexcept -> void {
+    auto unpause () noexcept -> void {
         this->_timerPaused = false;
+    }
 
-//        this->_threadModifyLock.lock();
-
+    auto stop () noexcept -> void {
         if ( ! this->_pThread.isNull() ) {
-            this->_pThread->kill();
-            this->_pThread.reset(nullptr);
-        }
+            this->_timerShouldStop = true;
+            this->_timerFinished.wait();
 
-//        this->_threadModifyLock.unlock();
+            this->_pThread->join();
+            this->_pThread.reset(nullptr);
+            this->_threadModifyLock.unlock();
+        }
     }
 
 #pragma clang diagnostic push
@@ -79,7 +79,7 @@ public:
                                 decltype(std::chrono::steady_clock::now()) lastStart;
                                 bool firstStart = true;
 
-                                while (true) {
+                                while (! this->_timerShouldStop) {
                                     if (this->_millisCallback == TIMER_INFINITE_PERIODICITY)
                                         continue;
 
@@ -89,7 +89,9 @@ public:
                                     if (firstStart) {
                                         firstStart = false;
                                         lastStart = std::chrono::steady_clock::now();
-                                        f();
+                                        if ( ! this->_timerShouldStop )
+                                            f();
+
                                         continue;
                                     }
 
@@ -101,8 +103,12 @@ public:
                                         continue;
 
                                     lastStart = std::chrono::steady_clock::now();
-                                    f();
+
+                                    if ( ! this->_timerShouldStop )
+                                        f();
                                 }
+
+                                this->_timerFinished.notify();
                             }
                     )
             );
