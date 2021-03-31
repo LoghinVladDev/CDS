@@ -28,7 +28,7 @@ namespace crypto {
             BITS_32768
         };
 
-    public:
+    private:
         Value _size {Value::BITS_UNDEFINED};
 
         constexpr static Size sizes[] = {2u, 3u, 4u, 8u, 16u, 32u, 64u, 128u, 256u, 384u, 512u, 1024u, 2048u, 4096u};

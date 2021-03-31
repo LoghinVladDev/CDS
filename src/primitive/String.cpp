@@ -531,3 +531,9 @@ auto String::replace(Index pos, Size len, const String & newInPlace) noexcept ->
 
 #undef CONSTR_CLEAR
 
+#include <View.hpp>
+
+auto String::view() noexcept -> View < String > {
+    return View(*this);
+}
+

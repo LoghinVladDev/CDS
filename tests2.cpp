@@ -3,16 +3,53 @@
 #include <threading/Thread.hpp>
 #include <CDS/Range>
 #include <CDS/Integer>
-//#include <crypto/primitives/Block.hpp>
+#include <crypto/primitives/Block.hpp>
 
 void testAtomic ();
 void testCrypto();
+void testView();
 
 int main () {
 
+    testView();
     testCrypto();
     testAtomic();
 
+}
+
+
+#include "primitive/View.hpp"
+void testView () {
+    String s = "Ana are mere";
+
+    constexpr static auto vowel = [](char c){return String("aeiouAEIOU").contains(c);};
+
+    s
+        .view()
+        .filter([](auto c){return vowel(c);})
+        .forEach([](auto c){std::cout << c;});
+
+    std::cout << "\n";
+
+    String s2 = "Ana are mere, dar Gigel are Bere?";
+//    String s2 = "!!#!#!%%@#@?";
+
+    s2.view()
+        .filter([](auto c){return ! vowel(c);})
+        .map([](auto c) -> char {if (c >= 'A' && c <= 'Z') return c + 32; return c;})
+        .filter([](auto c){return c <= 'm';})
+        .filter([](auto c){return ! String(" \t\n\r").contains(c);})
+        .map([](auto c) -> char {if ( c >= 'a' && c <= 'z' ) return c - 3; return c;})
+        .filter([](auto c){return c >= 'a' && c <= 'z';})
+//        .forEach([](auto c){std::cout << c;});
+        .findFirst()
+        .ifPresent([](auto c){std::cout << "str ! has letters";});
+
+//    std::cout << chr << '\n';
+//        .forEach([](auto c){
+//        std::cout << c;});
+
+    exit(0);
 }
 
 void testCrypto () {
@@ -20,11 +57,11 @@ void testCrypto () {
 //    constexpr auto & size = crypto::size::SIZE_128;
 //    std::cout << size.bytes() << '\n';
 
-//    auto block = crypto::Block < size >::fromBinary("1011110110110");
+    auto block = crypto::Block < crypto::BlockSize::Value::BITS_128 >::fromBinary("1011110110110");
 
-//    std::cout << block.toHex() << '\n';
+    std::cout << block.toHex() << '\n';
 
-//    exit(0);
+    exit(0);
 }
 
 void testAtomic () {

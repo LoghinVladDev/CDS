@@ -9,7 +9,15 @@
 #include <ostream>
 #include <string>
 
+#include <Concepts.hpp>
+
 #include "../collection/ordered/LinkedListPublic.hpp"
+
+template < typename T >
+//#if defined(__cpp_concepts)
+//    requires Iterable < T >
+//#endif
+class View;
 
 class String final {
 public:
@@ -291,14 +299,16 @@ public:
     inline auto some ( Predicate const & p, Size s ) const noexcept(false) -> bool { return s <= this->count ( p ); }
 
     template < typename Predicate >
-    auto any ( Predicate const & p, Size s ) noexcept (false) -> bool { return 1u <= this->count(p); }
+    auto any ( Predicate const & p ) noexcept (false) -> bool { return 1u <= this->count(p); }
     template < typename Predicate >
-    auto any ( Predicate const & p, Size s ) const noexcept (false) -> bool { return 1u <= this->count(p); }
+    auto any ( Predicate const & p ) const noexcept (false) -> bool { return 1u <= this->count(p); }
 
     template < typename Predicate >
-    auto all ( Predicate const & p, Size s ) noexcept (false) -> bool { return this->size() == this->count(p); }
+    auto all ( Predicate const & p ) noexcept (false) -> bool { return this->size() == this->count(p); }
     template < typename Predicate >
-    auto all ( Predicate const & p, Size s ) const noexcept (false) -> bool { return this->size() == this->count(p); }
+    auto all ( Predicate const & p ) const noexcept (false) -> bool { return this->size() == this->count(p); }
+
+    auto view () noexcept -> View < String >;
 };
 
 class String::IteratorBase {
@@ -435,7 +445,7 @@ auto String::count ( Predicate const & p ) noexcept (false) -> Size {
 template < typename Predicate >
 auto String::count ( Predicate const & p ) const noexcept (false) -> Size {
     Index count = 0;
-    for ( auto & e : * this )
+    for ( auto e : * this )
         if ( p(e) ) count++;
 
     return count;

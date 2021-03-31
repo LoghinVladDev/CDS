@@ -60,8 +60,16 @@ public:
 
     [[nodiscard]] auto toString() const noexcept -> String final {
         std::stringstream oss;
-        oss << "< " << (std::is_const<T>::value ? "const " : "") << "& of 0x" << std::hex << reinterpret_cast < typename PointerBase<T>::PointerType > ( p ) << std::dec << " : " << (*p) << " >";
+//        if ( ! std::is_function < T >::value ) {
+//            oss << "< " << (std::is_const<T>::value ? "const " : "") << "& of 0x" << std::hex
+//                << reinterpret_cast < typename PointerBase<T>::PointerType > ( p ) << std::dec << " : " << (*p) << " >";
+//        } else {
+//            oss << "< " << (std::is_const<T>::value ? "const " : "") << "& of 0x" << std::hex
+//                << reinterpret_cast < typename PointerBase<T>::PointerType > ( p ) << " >";
+//        }
 
+        oss << "< " << (std::is_const<T>::value ? "const " : "") << "& of 0x" << std::hex
+            << reinterpret_cast < typename PointerBase<T>::PointerType > ( p ) << std::dec << " : " << (*p) << " >";
         return String(oss.str());
     }
 
