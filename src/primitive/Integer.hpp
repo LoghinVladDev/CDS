@@ -14,10 +14,22 @@
 #define __integer_constexpr
 #endif
 
+#include <CDS/Random>
+
 class Integer : public Object {
 private:
     int v{0};
 public:
+    using RandomGenerator = Random::Int;
+
+    static auto random () noexcept -> Integer {
+        return RandomGenerator ().get();
+    }
+
+    static auto random (int low, int high) noexcept -> Integer {
+        return RandomGenerator (low, high).get();
+    }
+
     constexpr Integer() noexcept = default;
     constexpr Integer(Integer const&)noexcept=default;
     constexpr Integer(Integer &&)noexcept=default;
@@ -128,6 +140,12 @@ public:
         return *this;
     }
     constexpr operator int() const noexcept { return this->v; }
+
+    constexpr auto operator ++ () noexcept -> Integer & { this->v++; return * this; }
+    constexpr auto operator ++ (int) noexcept -> Integer { auto c = * this; this->v++; return c; }
+    constexpr auto operator -- () noexcept -> Integer & { this->v--; return * this; }
+    constexpr auto operator -- (int) noexcept -> Integer { auto c = * this; this->v--; return c; }
+
     [[nodiscard]]constexpr inline auto get() const noexcept -> int { return this->v; }
 public:
     [[nodiscard]] auto hash() const noexcept -> Index override {
@@ -161,6 +179,109 @@ public:
     [[nodiscard]] auto copy () const noexcept -> Integer * override {
         return new Integer( * this );
     }
+
+    class Atomic;
+};
+
+#include <CDS/Atomic>
+namespace hidden {
+    using _AtomicBaseInteger = Atomic<Integer>;
+}
+
+class Integer::Atomic : public hidden::_AtomicBaseInteger {
+public:
+    Atomic () noexcept {
+        this->set(0);
+    }
+
+    Atomic ( Atomic const & obj ) noexcept : hidden::_AtomicBaseInteger(obj) { }
+    Atomic ( Atomic && obj ) noexcept : hidden::_AtomicBaseInteger(obj) { }
+    Atomic ( Integer const & v ) noexcept : hidden::_AtomicBaseInteger(v) { }
+
+    Atomic (int v) noexcept {
+        this->set(v);
+    }
+
+    auto operator ++ () noexcept -> Atomic & {
+        this->_access.lock();
+        this->_data++;
+        this->_access.unlock();
+
+        return *this;
+    }
+
+    auto operator ++ (int) noexcept -> Atomic {
+        this->_access.lock();
+        auto copy = this->_data;
+        this->_data ++;
+        this->_access.unlock();
+
+        return copy;
+    }
+
+    auto operator -- () noexcept -> Atomic & {
+        this->_access.lock();
+        this->_data --;
+        this->_access.unlock();
+
+        return * this;
+    }
+
+    auto operator -- (int) noexcept -> Atomic {
+        this->_access.lock();
+        auto copy = this->_data;
+        this->_data --;
+        this->_access.unlock();
+
+        return copy;
+    }
+
+    Atomic & operator = (int value) noexcept {
+        this->set(Integer(value));
+        return * this;
+    }
+
+#pragma clang diagnostic push
+#pragma ide diagnostic ignored "HidingNonVirtualFunction"
+    Atomic & operator = (Integer const & obj) noexcept {
+        this->set(obj);
+        return * this;
+    }
+#pragma clang diagnostic pop
+
+    Atomic & operator = (Atomic const &) noexcept = default;
+    Atomic & operator = (Atomic &&) noexcept = default;
+
+    operator int () const noexcept {
+        return this->get().get();
+    }
+
+    [[nodiscard]] auto toString() const noexcept -> String override {
+        return String().append(this->get());
+    }
+
+    auto hash () const noexcept -> Index override {
+        return this->get().hash();
+    }
+
+#define _PREFIX_OP(_operator)                               \
+auto operator _operator (int value) noexcept -> Atomic & {  \
+    this->_access.lock();                                   \
+    this->_data _operator value;                            \
+    this->_access.unlock();                                 \
+    return * this;                                          \
+}
+
+    _PREFIX_OP(+=)
+    _PREFIX_OP(-=)
+    _PREFIX_OP(*=)
+    _PREFIX_OP(/=)
+    _PREFIX_OP(%=)
+    _PREFIX_OP(|=)
+    _PREFIX_OP(&=)
+    _PREFIX_OP(^=)
+
+#undef _PREFIX_OP
 };
 
 #undef _G_OBJ

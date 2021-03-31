@@ -18,6 +18,16 @@ class Double : public Object {
 private:
     double v{0.0};
 public:
+    using RandomGenerator = Random::Double;
+
+    static auto random () noexcept -> Double {
+        return RandomGenerator ().get();
+    }
+
+    static auto random (double low, double high) noexcept -> Double {
+        return RandomGenerator (low, high).get();
+    }
+
     constexpr Double() noexcept = default;
     constexpr Double(Double const&)noexcept=default;
     constexpr Double(Double &&)noexcept=default;
@@ -140,10 +150,74 @@ public:
     [[nodiscard]] auto copy () const noexcept -> Double * override {
         return new Double( * this );
     }
+
+    class Atomic;
+};
+
+#include <CDS/Atomic>
+namespace hidden {
+    using _AtomicBaseDouble = Atomic<Double>;
+}
+
+class Double::Atomic : public hidden::_AtomicBaseDouble {
+public:
+    Atomic () noexcept {
+        this->set(0);
+    }
+
+    Atomic ( Atomic const & obj ) noexcept : hidden::_AtomicBaseDouble(obj) { }
+    Atomic ( Atomic && obj ) noexcept : hidden::_AtomicBaseDouble(obj) { }
+    Atomic ( Double const & v ) noexcept : hidden::_AtomicBaseDouble(v) { }
+
+    Atomic (double v) noexcept {
+        this->set(v);
+    }
+
+    Atomic & operator = (double value) noexcept {
+        this->set(Double(value));
+        return * this;
+    }
+
+#pragma clang diagnostic push
+#pragma ide diagnostic ignored "HidingNonVirtualFunction"
+    Atomic & operator = (Double const & obj) noexcept {
+        this->set(obj);
+        return * this;
+    }
+#pragma clang diagnostic pop
+
+    Atomic & operator = (Atomic const &) noexcept = default;
+    Atomic & operator = (Atomic &&) noexcept = default;
+
+    operator double () const noexcept {
+        return this->get().get();
+    }
+
+    [[nodiscard]] auto toString() const noexcept -> String override {
+        return String().append(this->get());
+    }
+
+    auto hash () const noexcept -> Index override {
+        return this->get().hash();
+    }
+
+#define _PREFIX_OP(_operator)                               \
+auto operator _operator (double value) noexcept -> Atomic & {  \
+    this->_access.lock();                                   \
+    this->_data _operator value;                            \
+    this->_access.unlock();                                 \
+    return * this;                                          \
+}
+
+    _PREFIX_OP(+=)
+    _PREFIX_OP(-=)
+    _PREFIX_OP(*=)
+    _PREFIX_OP(/=)
+
+#undef _PREFIX_OP
 };
 
 #undef _G_OBJ
 #undef _G_OP_OBJ
 #undef _G_OP_OBJ_CONST
-
 #endif //CDS_DOUBLE_HPP

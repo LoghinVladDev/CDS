@@ -52,12 +52,6 @@ public:
         return this->v || value;
     }
 
-//    constexpr auto operator &&(Boolean const &o) const noexcept -> Boolean { return this->v && o.v; }
-//    constexpr auto operator &&(bool value) const noexcept -> Boolean { return this->v && value; }
-
-//    _G_OP_OBJ_CONST(Boolean, ==, bool, v, bool)
-//    _G_OP_OBJ_CONST(Boolean, !=, bool, v, bool)
-
     __boolean_constexpr auto operator ! () const noexcept -> Boolean {
         return !this->v;
     }
@@ -87,10 +81,69 @@ public:
     [[nodiscard]] auto copy () const noexcept -> Boolean * override {
         return new Boolean( * this );
     }
+
+    class Atomic;
+};
+
+#include <CDS/Atomic>
+namespace hidden {
+    using _AtomicBaseBoolean = Atomic<Boolean>;
+}
+
+class Boolean::Atomic : public hidden::_AtomicBaseBoolean {
+public:
+    Atomic () noexcept {
+        this->set(false);
+    }
+
+    Atomic ( Atomic const & obj ) noexcept : hidden::_AtomicBaseBoolean(obj) { }
+    Atomic ( Atomic && obj ) noexcept : hidden::_AtomicBaseBoolean(obj) { }
+    Atomic ( Boolean const & v ) noexcept : hidden::_AtomicBaseBoolean(v) { }
+
+    Atomic (bool v) noexcept {
+        this->set(v);
+    }
+
+    Atomic & operator = (bool value) noexcept {
+        this->set(Boolean(value));
+        return * this;
+    }
+
+#pragma clang diagnostic push
+#pragma ide diagnostic ignored "HidingNonVirtualFunction"
+    Atomic & operator = (Boolean const & obj) noexcept {
+        this->set(obj);
+        return * this;
+    }
+#pragma clang diagnostic pop
+
+    Atomic & operator = (Atomic const &) noexcept = default;
+    Atomic & operator = (Atomic &&) noexcept = default;
+
+    operator bool () const noexcept {
+        return this->get().get();
+    }
+
+    [[nodiscard]] auto toString() const noexcept -> String override {
+        return String().append(this->get());
+    }
+
+    auto hash () const noexcept -> Index override {
+        return this->get().hash();
+    }
+
+#define _PREFIX_OP(_operator)                               \
+auto operator _operator (bool value) noexcept -> Atomic & {  \
+    this->_access.lock();                                   \
+    this->_data _operator value;                            \
+    this->_access.unlock();                                 \
+    return * this;                                          \
+}
+
+#undef _PREFIX_OP
 };
 
 #undef _G_OBJ
 #undef _G_OP_OBJ
 #undef _G_OP_OBJ_CONST
-
 #endif //CDS_BOOLEAN_HPP

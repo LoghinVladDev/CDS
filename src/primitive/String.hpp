@@ -274,6 +274,31 @@ public:
     }
 
     auto replace ( Index, Size, String const & ) noexcept -> String &;
+
+    template < typename Action >
+    auto forEach ( Action const & ) noexcept (false) -> String &;
+    template < typename Action >
+    auto forEach ( Action const & ) const noexcept (false) -> String const &;
+
+    template < typename Predicate >
+    auto count ( Predicate const & ) noexcept (false) -> Size;
+    template < typename Predicate >
+    auto count ( Predicate const & ) const noexcept (false) -> Size;
+
+    template < typename Predicate >
+    inline auto some ( Predicate const & p, Size s ) noexcept (false) -> bool { return s <= this->count ( p ); }
+    template < typename Predicate >
+    inline auto some ( Predicate const & p, Size s ) const noexcept(false) -> bool { return s <= this->count ( p ); }
+
+    template < typename Predicate >
+    auto any ( Predicate const & p, Size s ) noexcept (false) -> bool { return 1u <= this->count(p); }
+    template < typename Predicate >
+    auto any ( Predicate const & p, Size s ) const noexcept (false) -> bool { return 1u <= this->count(p); }
+
+    template < typename Predicate >
+    auto all ( Predicate const & p, Size s ) noexcept (false) -> bool { return this->size() == this->count(p); }
+    template < typename Predicate >
+    auto all ( Predicate const & p, Size s ) const noexcept (false) -> bool { return this->size() == this->count(p); }
 };
 
 class String::IteratorBase {
@@ -381,5 +406,39 @@ public:
     constexpr inline auto operator ++ () noexcept -> ConstReverseIterator & final { return this->next(); }
     inline auto operator ++ (int) noexcept -> ConstReverseIterator { auto copy = * this; this->next(); return copy; }
 };
+
+template < typename Action >
+auto String::forEach ( Action const & a ) noexcept (false) -> String & {
+    for ( auto & e : * this )
+        a ( e );
+
+    return * this;
+}
+
+template < typename Action >
+auto String::forEach ( Action const & a ) const noexcept (false) -> String const & {
+    for ( auto e : * this )
+        a ( e );
+
+    return * this;
+}
+
+template < typename Predicate >
+auto String::count ( Predicate const & p ) noexcept (false) -> Size {
+    Index count = 0;
+    for ( auto & e : * this )
+        if ( p(e) ) count++;
+
+    return count;
+}
+
+template < typename Predicate >
+auto String::count ( Predicate const & p ) const noexcept (false) -> Size {
+    Index count = 0;
+    for ( auto & e : * this )
+        if ( p(e) ) count++;
+
+    return count;
+}
 
 #endif //CDS_STRING_HPP

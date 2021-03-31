@@ -213,13 +213,22 @@ class IntGenerator : public Generator<int, int> {
 #include <primitive/Tuple.hpp>
 #include <threading/Timer.hpp>
 
+auto callback (int x) -> void {
+    std::cout << x << '\n';
+}
+
+auto callbackType2 () {
+    std::cout << "B\n";
+}
+
 void testThread () {
 
     for ( auto i : Range(0, 10) ) {
         Timer t;
-        t.setInterval(550 );
+        t.setInterval(1);
 
-        t.start( [] () { std::cout << "Test\n"; std::cout.flush(); } );
+        int y = 3;
+        t.start(  [](int x){ std::cout << x << '\n'; }, 5 );
         sleep(1);
         t.pause();
         sleep(2);

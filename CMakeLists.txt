@@ -82,7 +82,11 @@ set(
         src/threading/Thread.hpp
         src/threading/Semaphore.hpp
         src/threading/Mutex.hpp
-)
+        include/CDS/Timer)
+
+set(
+        CDS_CRYPTO
+        src/crypto/primitives/Block.hpp src/crypto/primitives/BlockSize.hpp)
 
 set(
         CDS_HEADERS
@@ -90,6 +94,7 @@ set(
         ${CDS_EXTRA}
         ${CDS_FUNCTIONAL}
         ${CDS_THREADING}
+        ${CDS_CRYPTO}
         src/std-types.h
         src/primitive/Integer.hpp
         src/primitive/Long.hpp
@@ -102,7 +107,7 @@ set(
         src/collection/ordered/StaticArray.hpp
         src/functional/Random.hpp
         src/primitive/Tuple.hpp
-)
+        src/threading/Atomic.hpp)
 
 set(
         CDS_LIB_SRC
@@ -114,7 +119,7 @@ set(
 )
 
 
-add_library( CDS ${CDS_LIB_SRC} src/prepro.h src/threading/Timer.hpp)
+add_library( CDS ${CDS_LIB_SRC} src/prepro.h src/threading/Timer.hpp include/CDS/Atomic)
 
 if (WIN32)
     set(
@@ -138,6 +143,18 @@ add_executable(
 target_link_libraries(
         CDS-dummy
         ${CDS_LIBRAIES}
+)
+
+add_executable(
+        CDS-dummy2
+        tests2.cpp
+        ${CDS_LIB_SRC}
+        ${CDS_HEADERS}
+)
+
+target_link_libraries(
+        CDS-dummy2
+        ${CDS_LIBRARIES}
 )
 
 if(WIN32)

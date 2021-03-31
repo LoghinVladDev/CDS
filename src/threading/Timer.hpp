@@ -2,9 +2,11 @@
 // Created by vladl on 3/29/2021.
 //
 
-#ifndef CDS_TIMER_HPP
+#ifndef CDS_TIMER_
 #define CDS_TIMER_HPP
 
+#include <functional>
+#include <tuple>
 
 #include <CDS/Thread>
 #include <CDS/Pointer>
@@ -16,10 +18,9 @@
 
 class Timer: public Object {
 public:
-    CDS_sint32                TIMER_INFINITE_PERIODICITY = -1;
+    constexpr static CDS_sint32 TIMER_INFINITE_PERIODICITY = -1;
 
 private:
-    Mutex                    _threadModifyLock;
     UniquePointer < Thread > _pThread;
     CDS_sint32               _millisCallback { TIMER_INFINITE_PERIODICITY };
 
@@ -63,64 +64,62 @@ public:
 
             this->_pThread->join();
             this->_pThread.reset(nullptr);
-            this->_threadModifyLock.unlock();
         }
     }
 
-#pragma clang diagnostic push
-#pragma ide diagnostic ignored "EndlessLoop"
-    template <typename Function>
-    auto start (Function f) noexcept -> void {
-        this->_threadModifyLock.lock();
+    template <typename Function, typename ... Args >
+    auto start (Function const & f, Args && ... args) noexcept -> void {
         if ( this->_pThread.isNull() ) {
             this->_pThread.reset(
                     new Runnable(
-                            [this, & f]() {
-                                decltype(std::chrono::steady_clock::now()) lastStart;
-                                bool firstStart = true;
+                            [args = std::make_tuple(std::forward<Args>(args) ... ), this, & f] () mutable -> void {
+                                 return std::apply(
+                                        [this, & f](Args && ... args) -> void {
+                                            decltype(std::chrono::steady_clock::now()) lastStart;
+                                            bool firstStart = true;
 
-                                while (! this->_timerShouldStop) {
-                                    if (this->_millisCallback == TIMER_INFINITE_PERIODICITY)
-                                        continue;
+                                            while (! this->_timerShouldStop) {
+                                                if (this->_millisCallback == TIMER_INFINITE_PERIODICITY)
+                                                    continue;
 
-                                    if (this->_timerPaused)
-                                        continue;
+                                                if (this->_timerPaused)
+                                                    continue;
 
-                                    if (firstStart) {
-                                        firstStart = false;
-                                        lastStart = std::chrono::steady_clock::now();
-                                        if ( ! this->_timerShouldStop )
-                                            f();
+                                                if (firstStart) {
+                                                    firstStart = false;
+                                                    lastStart = std::chrono::steady_clock::now();
+                                                    if ( ! this->_timerShouldStop )
+                                                        f(std::forward<Args>(args) ... );
 
-                                        continue;
-                                    }
+                                                    continue;
+                                                }
 
-                                    auto elapsed = std::chrono::duration_cast<std::chrono::milliseconds>(
-                                            std::chrono::steady_clock::now() - lastStart
-                                    ).count();
+                                                auto elapsed = std::chrono::duration_cast<std::chrono::milliseconds>(
+                                                        std::chrono::steady_clock::now() - lastStart
+                                                ).count();
 
-                                    if (elapsed < this->_millisCallback)
-                                        continue;
+                                                if (elapsed < this->_millisCallback)
+                                                    continue;
 
-                                    lastStart = std::chrono::steady_clock::now();
+                                                lastStart = std::chrono::steady_clock::now();
 
-                                    if ( ! this->_timerShouldStop )
-                                        f();
-                                }
+                                                if ( ! this->_timerShouldStop )
+                                                    f( std::forward < Args > (args) ... );
+                                            }
 
-                                this->_timerFinished.notify();
+                                            this->_timerFinished.notify();
+                                        },
+                                        std::move(args)
+                                );
                             }
                     )
             );
 
             this->_pThread->start();
         }
-        this->_threadModifyLock.unlock();
 
         this->_timerPaused = false;
     }
-#pragma clang diagnostic pop
-
 };
 
-#endif //CDS_TIMER_HPP
+#endif //CDS_TIMER_

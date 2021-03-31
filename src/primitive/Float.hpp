@@ -14,11 +14,23 @@
 #define __float_constexpr
 #endif
 
+#include <CDS/Float>
+
 class Float : public Object {
 //    _G_OBJ(Float, float, v, 0.0f)
 private:
     float v{0.0f};
 public:
+    using RandomGenerator = Random::Float;
+
+    static auto random () noexcept -> Float {
+        return RandomGenerator ().get();
+    }
+
+    static auto random (float low, float high) noexcept -> Float {
+        return RandomGenerator (low, high).get();
+    }
+
     constexpr Float() noexcept = default;
     constexpr Float(Float const&)noexcept=default;
     constexpr Float(Float &&)noexcept=default;
@@ -141,10 +153,76 @@ public:
     [[nodiscard]] auto copy () const noexcept -> Float * override {
         return new Float( * this );
     }
+
+    class Atomic;
+};
+
+#include <CDS/Atomic>
+namespace hidden {
+    using _AtomicBaseFloat = Atomic<Float>;
+}
+
+class Float::Atomic : public hidden::_AtomicBaseFloat {
+public:
+    Atomic () noexcept {
+        this->set(0);
+    }
+
+    Atomic ( Atomic const & obj ) noexcept : hidden::_AtomicBaseFloat(obj) { }
+    Atomic ( Atomic && obj ) noexcept : hidden::_AtomicBaseFloat(obj) { }
+    Atomic ( Float const & v ) noexcept : hidden::_AtomicBaseFloat(v) { }
+
+    Atomic (float v) noexcept {
+        this->set(v);
+    }
+
+    Atomic & operator = (float value) noexcept {
+        this->set(Float(value));
+        return * this;
+    }
+
+#pragma clang diagnostic push
+#pragma ide diagnostic ignored "HidingNonVirtualFunction"
+    Atomic & operator = (Float const & obj) noexcept {
+        this->set(obj);
+        return * this;
+    }
+#pragma clang diagnostic pop
+
+    Atomic & operator = (Atomic const &) noexcept = default;
+    Atomic & operator = (Atomic &&) noexcept = default;
+
+    operator float () const noexcept {
+        return this->get().get();
+    }
+
+    [[nodiscard]] auto toString() const noexcept -> String override {
+        return String().append(this->get());
+    }
+
+    auto hash () const noexcept -> Index override {
+        return this->get().hash();
+    }
+
+#define _PREFIX_OP(_operator)                               \
+auto operator _operator (float value) noexcept -> Atomic & {  \
+    this->_access.lock();                                   \
+    this->_data _operator value;                            \
+    this->_access.unlock();                                 \
+    return * this;                                          \
+}
+
+    _PREFIX_OP(+=)
+    _PREFIX_OP(-=)
+    _PREFIX_OP(*=)
+    _PREFIX_OP(/=)
+
+#undef _PREFIX_OP
 };
 
 #undef _G_OBJ
 #undef _G_OP_OBJ
 #undef _G_OP_OBJ_CONST
+
 
 #endif //CDS_FLOAT_HPP
