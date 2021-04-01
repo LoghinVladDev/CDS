@@ -30,7 +30,7 @@ void testView () {
 
     std::cout << "\n";
 
-    String s2 = "Ana are mere, dar Gigel are Bere?";
+    String s2 = "ABCD";
 //    String s2 = "!!#!#!%%@#@?";
 
     auto x = s2.view()
@@ -52,6 +52,8 @@ void testView () {
         .filter(String::isLowerChar)
         .distinct()
         .sorted()
+        .map(String::upperChar)
+//        .map(String::upperChar)
         .forEach([](auto c){std::cout << c;});
 
 //    std::cout << chr << '\n';
