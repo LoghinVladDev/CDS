@@ -231,22 +231,28 @@ public:
     auto rjust (Size, ElementType = ' ') noexcept -> String &;
     auto ljust (Size, ElementType = ' ') noexcept -> String &;
 
-private:
-    constexpr auto static inline isUpper(char c) noexcept -> bool { return c >= 'A' && c <= 'Z'; }
-    constexpr auto static inline isLower(char c) noexcept -> bool { return c >= 'a' && c <= 'z'; }
-    constexpr auto static inline toLower(char c) noexcept -> char { return isUpper(c) ? c + 32 : c; }
-    constexpr auto static inline toUpper(char c) noexcept -> char { return isLower(c) ? c - 32 : c; }
+public:
+    constexpr auto static inline isUpperChar(char c) noexcept -> bool { return c >= 'A' && c <= 'Z'; }
+    constexpr auto static inline isLowerChar(char c) noexcept -> bool { return c >= 'a' && c <= 'z'; }
+    constexpr auto static inline isDigit(char c) noexcept -> bool { return c >= '0' && c <= '9'; }
+    constexpr auto static inline isLetter(char c) noexcept -> bool { return isUpperChar(c) || isLowerChar(c); }
+    constexpr auto static inline isAlpha(char c) noexcept -> bool { return isLetter(c) || isDigit(c); }
+    auto static inline isVowel(char c) noexcept -> bool { return String("aeiouAEIOU").contains(c); }
+    auto static inline isConsonant(char c) noexcept -> bool { return isLetter(c) && ! isVowel(c); }
+    constexpr auto static inline lowerChar(char c) noexcept -> char { return isUpperChar(c) ? c + 32 : c; }
+    constexpr auto static inline upperChar(char c) noexcept -> char { return isLowerChar(c) ? c - 32 : c; }
+    constexpr auto static inline toLowerChar(char & c) noexcept -> char & { c = lowerChar(c); return c; }
+    constexpr auto static inline toUpperChar(char & c) noexcept -> char & { c = upperChar(c); return c; }
 
 public:
 
 #if !defined(_MSC_VER)
-    auto inline toLower () noexcept -> String & { for ( Index i = 0; i < this->_l; i++ ) if ( isUpper(this->_p[i]) ) this->_p[i] = toLower(this->_p[i]); return * this; }
-    auto inline toUpper () noexcept -> String & { for ( Index i = 0; i < this->_l; i++ ) if ( isLower(this->_p[i]) ) this->_p[i] = toUpper(this->_p[i]); return * this; }
+    auto inline toLower () noexcept -> String & { for ( Index i = 0; i < this->_l; i++ ) this->_p[i] = lowerChar(this->_p[i]); return * this; }
+    auto inline toUpper () noexcept -> String & { for ( Index i = 0; i < this->_l; i++ ) this->_p[i] = upperChar(this->_p[i]); return * this; }
 #else
-    auto inline toLower () noexcept -> String & { for ( Size i = 0; i < this->_l; i++ ) if ( isUpper(this->_p[i]) ) this->_p[i] = toLower(this->_p[i]); return * this; }
-    auto inline toUpper () noexcept -> String & { for ( Size i = 0; i < this->_l; i++ ) if ( isLower(this->_p[i]) ) this->_p[i] = toUpper(this->_p[i]); return * this; }
+    auto inline toLower () noexcept -> String & { for ( Size i = 0; i < this->_l; i++ ) this->_p[i] = lowerChar(this->_p[i]); return * this; }
+    auto inline toUpper () noexcept -> String & { for ( Size i = 0; i < this->_l; i++ ) this->_p[i] = upperChar(this->_p[i]); return * this; }
 #endif
-
     [[nodiscard]] auto inline lower () const noexcept -> String { return String(*this).toLower(); }
     [[nodiscard]] auto inline upper () const noexcept -> String { return String(*this).toUpper(); }
 

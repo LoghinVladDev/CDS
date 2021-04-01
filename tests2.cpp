@@ -17,7 +17,6 @@ int main () {
 
 }
 
-
 #include "primitive/View.hpp"
 void testView () {
     String s = "Ana are mere";
@@ -34,16 +33,26 @@ void testView () {
     String s2 = "Ana are mere, dar Gigel are Bere?";
 //    String s2 = "!!#!#!%%@#@?";
 
-    s2.view()
+    auto x = s2.view()
         .filter([](auto c){return ! vowel(c);})
         .map([](auto c) -> char {if (c >= 'A' && c <= 'Z') return c + 32; return c;})
         .filter([](auto c){return c <= 'm';})
         .filter([](auto c){return ! String(" \t\n\r").contains(c);})
         .map([](auto c) -> char {if ( c >= 'a' && c <= 'z' ) return c - 3; return c;})
         .filter([](auto c){return c >= 'a' && c <= 'z';})
-//        .forEach([](auto c){std::cout << c;});
-        .findFirst()
-        .ifPresent([](auto c){std::cout << "str ! has letters";});
+//        .sorted()
+        .count();
+
+
+    std::cout << x <<'\n';
+
+    s2.view()
+        .map(String::lowerChar)
+        .filter(String::isConsonant)
+        .filter(String::isLowerChar)
+        .distinct()
+        .sorted()
+        .forEach([](auto c){std::cout << c;});
 
 //    std::cout << chr << '\n';
 //        .forEach([](auto c){
