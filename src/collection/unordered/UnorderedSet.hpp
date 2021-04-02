@@ -69,6 +69,8 @@ public:
     inline UnorderedSet & operator = ( UnorderedSet const & o ) noexcept { return this->operator=( (Collection<T> const &) ( o ) ); }
 
     auto insert ( ConstReference ) noexcept -> bool final;
+
+    auto view () const noexcept -> View < UnorderedSet < T > >;
 };
 
 template <class T>
@@ -80,6 +82,12 @@ auto UnorderedSet<T>::insert(ConstReference v) noexcept -> bool {
     this->_size++;
 
     return true;
+}
+
+#include <View.hpp>
+template <class T>
+auto UnorderedSet<T>::view() const noexcept -> View<UnorderedSet<T>> {
+    return View(*this);
 }
 
 #endif //CDS_UNORDEREDSET_HPP

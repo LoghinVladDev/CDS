@@ -5,6 +5,8 @@
 #ifndef CDS_RANGE_HPP
 #define CDS_RANGE_HPP
 
+template < typename T >
+class View;
 
 #include <CDS/Object>
 class Range final : public Object {
@@ -20,15 +22,23 @@ public:
 
     public:
         constexpr explicit Iterator(Index start, bool rev = false) : i(start), reversed(rev) {}
+
+        constexpr auto value () const noexcept -> Index { return this->i; }
+        constexpr auto next () noexcept -> Iterator & { reversed ? --i : ++i; return * this; }
+
         constexpr auto operator ++ () -> Iterator & { reversed ? --i : ++i; return * this; }
         constexpr auto operator ++ (int) -> Iterator { auto copy = * this; ++(*this); return copy; }
         constexpr auto operator != ( Iterator const & o ) const noexcept -> bool { return i != o.i; }
         constexpr auto operator == ( Iterator const & o ) const noexcept -> bool { return i == o.i; }
-        Index operator *() const noexcept { return i; }
+        constexpr Index operator *() const noexcept { return i; }
     };
+
+    using ConstIterator = Iterator;
 
     explicit Range(Index s, Index f) : _s(s), _f(f), _rev(s > f) { }
     explicit Range(Index f) : _s(0), _f(f), _rev(0 > f) { }
+    Range(Range const &) noexcept = default;
+    Range(Range &&) noexcept = default;
     ~Range() noexcept final = default;
 
     [[nodiscard]] constexpr auto begin() const noexcept -> Iterator { return Iterator(_s, _rev); }
@@ -40,7 +50,13 @@ public:
     [[nodiscard]] auto copy () const noexcept -> Range * override {
         return new Range( * this );
     }
+
+    auto view () const noexcept -> View < Range >;
 };
 
+#include <View.hpp>
+auto Range::view() const noexcept -> View < Range > {
+    return View(*this);
+}
 
 #endif //CDS_RANGE_HPP

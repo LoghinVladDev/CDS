@@ -303,6 +303,14 @@ public:
 
     StaticArray & operator = ( Collection<Value> const & ) noexcept;
     inline StaticArray & operator = ( StaticArray const & o ) noexcept { return this->operator=( ( Collection<Value> const & )(o) ); } // NOLINT(bugprone-unhandled-self-assignment,misc-unconventional-assign-operator)
+
+    [[nodiscard]] auto view () const noexcept -> View < StaticArray < T, n >;
 };
+
+#include <View.hpp>
+template <class T, Size n>
+auto StaticArray<T, n>::view() const noexcept -> View < StaticArray <T, n > > {
+    return View(*this);
+}
 
 #endif //CDS_STATICARRAY_HPP

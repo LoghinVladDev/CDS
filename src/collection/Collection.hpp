@@ -56,6 +56,9 @@ public:
     virtual auto operator () (const T &, const T &) const noexcept -> bool = 0;
 };
 
+template <typename T>
+class View;
+
 template <class T>
 class Collection : public Object {
 public:

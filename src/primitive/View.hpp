@@ -11,8 +11,9 @@
 
 
 #if defined(__cpp_concepts)
-#define _ITERABLE_CONSTRAINT requires Iterable < Type >
+#define _ITERABLE_CONSTRAINT requires Iterable < Type > || ConstIterable < Type >
 #define _PRINTABLE_CONSTRAINT requires HasToString < Type >
+#define _AVERAGE_ITERABLE_CONSTRAINT requires Iterable < Type > && Integral < ViewValue >
 #else
 #define _ITERABLE_CONSTRAINT
 #define _PRINTABLE_CONSTRAINT
@@ -27,12 +28,11 @@
 #include <CDS/Pair>
 
 #include <iostream>
-#include <unordered_set>
+//#include <unordered_set>
+#include <CDS/UnorderedSet>
+
 
 template < typename T >
-//#if defined(__cpp_concepts)
-//    requires Iterable < T >
-//#endif
 class View : public Object {
 public:
     using Type                  = T;
@@ -59,27 +59,23 @@ private:
         };
 
         Node         * front  {nullptr};
-//        StoredSorter * sorter {nullptr};
         View         * pView  {nullptr};
 
     public:
         Sortable() noexcept = delete;
         Sortable(Type const & obj, View * pView) noexcept :
-                //sorter(sorter == nullptr ? nullptr : new StoredSorter( * sorter))
                 pView(pView) {
             for ( auto v : obj )
                 this->push(v);
         }
 
         Sortable(Sortable const & obj) noexcept :
-//            sorter( obj.sorter == nullptr ? nullptr : new StoredSorter( * obj.sorter)) {
                 pView(obj.pView) {
             for ( auto & v : obj )
                 this->push(v);
         }
 
         Sortable(Sortable && other) noexcept :
-                //sorter (std::exchange(other.sorter, nullptr)) {
                 pView(std::exchange(other.pView, nullptr)) {
             while ( other.front != nullptr ) {
                 auto node = other.front;
@@ -96,8 +92,6 @@ private:
                 this->front = this->front->next();
                 delete node;
             }
-
-//            delete this->sorter;
         }
 
         auto push ( ViewValue & v ) noexcept -> void;
@@ -133,18 +127,20 @@ private:
         constexpr auto end () noexcept -> Iterator { return Iterator (nullptr); }
     };
 
-    Type                           * _pObject {nullptr};
+    Type                     const * _pObject {nullptr};
 
     LinkedList < Pair < StoredPredicate *, Index > >                _predicates;
     LinkedList < Pair < StoredMapper *, Index > >                   _mappers;
-    LinkedList < Pair < std::unordered_set < ViewValue >, Index > > mutable _distinctInstances;
+//    LinkedList < Pair < std::unordered_set < ViewValue >, Index > > mutable _distinctInstances;
+    LinkedList < Pair < UnorderedSet < ViewValue >, Index > > mutable _distinctInstances;
 
-//    bool                             _distinct {false};
     bool                             _sorted {false};
     Sortable                       * _pSortable {nullptr};
     StoredSorter                   * _sorter {nullptr};
 
     Index                            _instanceHolderIndex {-1};
+
+    bool                             _owner {false};
 
     auto requestSorted () noexcept -> void _ITERABLE_CONSTRAINT {
         this->_pSortable = new Sortable(*this->_pObject, this);
@@ -163,8 +159,6 @@ private:
             return (*pPair.getFirst())(tempVal);
         } ) )
             return false;
-
-//        this->_distinctInstances.forEach([& value, this](auto & distinctInstance) {
         for ( auto & distinctInstance : this->_distinctInstances ) {
             auto tempVal = value;
             auto distIndex = distinctInstance.getSecond();
@@ -179,17 +173,6 @@ private:
         }
 
         return true;
-
-//        if ( this->_distinct ) {
-//            static std::unordered_set < ViewValue > usedValues;
-//
-//            if ( usedValues.contains(value) )
-//                return false;
-//
-//            usedValues.insert(value);
-//        }
-
-//        return true;
     }
 
 public:
@@ -223,17 +206,12 @@ public:
     private:
         View                    * _pView;
 
-//        union {
-        typename Type::Iterator * regular {nullptr};
+        typename Type::ConstIterator * regular {nullptr};
         typename Sortable::Iterator * sorted {nullptr};
-//            typename Sortable::Iterator sorted;
-//        } _it;
 
         bool usingSortable {false};
     public:
         Iterator () noexcept _ITERABLE_CONSTRAINT = delete;
-//        Iterator ( Iterator const & it ) noexcept _ITERABLE_CONSTRAINT = default;
-//        Iterator ( Iterator && it ) noexcept _ITERABLE_CONSTRAINT = default;
         Iterator ( Iterator const & it ) noexcept _ITERABLE_CONSTRAINT :
                 _pView(it._pView),
                 regular(it.regular == nullptr ? nullptr : new typename Type::Iterator(*it.regular)),
@@ -250,9 +228,9 @@ public:
 
         };
 
-        Iterator (View * pView, typename Type::Iterator const & it) noexcept _ITERABLE_CONSTRAINT :
+        Iterator (View * pView, typename Type::ConstIterator const & it) noexcept _ITERABLE_CONSTRAINT :
                 _pView(pView),
-                regular(new typename Type::Iterator(it)),
+                regular(new typename Type::ConstIterator(it)),
                 sorted(nullptr),
                 usingSortable(false){
             while ( (*this->regular) != this->_pView->_pObject->end() && ! this->_pView->validate(this->value(true)) )
@@ -263,37 +241,30 @@ public:
                 _pView(pView),
                 usingSortable(true),
                 sorted(new typename Sortable::Iterator(itSortable)),
-                regular(nullptr) { // last might cause issues?
+                regular(nullptr) {
             while ( (*this->sorted) != this->_pView->_pSortable->end() && ! this->_pView->validate(this->value(true)) )
                 this->sorted->next();
         }
 
-
-//        ~Iterator () noexcept = default;
         ~Iterator () noexcept {
             delete this->sorted;
             delete this->regular;
         }
 
         [[nodiscard]] inline auto value (bool pureRequired = false) const noexcept -> typename std::remove_reference<IterableValue>::type _ITERABLE_CONSTRAINT {
-            // auto v = this->_it.next();
             auto v = this->usingSortable ? this->sorted->value() : this->regular->value();
             if ( pureRequired )
                 return v;
 
-//            this->_pView->_mappers.forEach([& v](auto * pMapper){ v = (*pMapper)(v); });
             this->_pView->_mappers.forEach([&v](auto mPair){ v = (*mPair.getFirst())(v); });
             return v;
         }
 
         [[nodiscard]] inline auto next () noexcept -> Iterator & _ITERABLE_CONSTRAINT {
-            //this->_it.next();
-//            this->usingSortable ? this->sorted->next() : this->regular->next();
             if ( this->usingSortable )
                 this->sorted->next();
             else
                 this->regular->next();
-            //while ( ! this->_pView->validate(this->value()) && this->_it != this->_pView->_pObject->end() )
             while (
                     ( this->usingSortable ?
                         (* this->sorted) != this->_pView->_pSortable->end() :
@@ -301,8 +272,6 @@ public:
                     ) &&
                     ! this->_pView->validate(this->value(true))
                 )
-//                this->_it.next();
-//                this->usingSortable ? this->sorted->next() : this->regular->next();
                 if ( this->usingSortable )
                     this->sorted->next();
                 else
@@ -311,7 +280,6 @@ public:
         }
 
         inline auto operator == ( Iterator const & obj ) const noexcept -> bool _ITERABLE_CONSTRAINT {
-//            return this->_it == obj._it && this->_pView->_pObject == obj._pView->_pObject;
             return
                 this->usingSortable ?
                     *this->sorted == *obj.sorted && this->_pView->_pSortable == obj._pView->_pSortable :
@@ -319,7 +287,6 @@ public:
         }
 
         inline auto operator != ( Iterator const & obj ) const noexcept -> bool _ITERABLE_CONSTRAINT {
-//            return this->_it != obj._it || this->_pView->_pObject != obj._pView->_pObject;
             return
                 this->usingSortable ?
                     *this->sorted != *obj.sorted || this->_pView->_pSortable != obj._pView->_pSortable :
@@ -343,12 +310,13 @@ public:
 
     View () noexcept _ITERABLE_CONSTRAINT = delete;
     View ( View const & obj ) noexcept _ITERABLE_CONSTRAINT :
-            _pObject(obj._pObject),
+            _pObject(obj._owner ? new Type(obj._pObject) : obj._pObject),
             _distinctInstances(obj._distinctInstances),
             _sorted(obj._sorted),
             _sorter(obj._sorter == nullptr ? nullptr : new StoredSorter( * obj._sorter)),
             _pSortable(obj._pSortable == nullptr ? nullptr : new Sortable(* obj._pSortable)),
-            _instanceHolderIndex(obj._instanceHolderIndex){
+            _instanceHolderIndex(obj._instanceHolderIndex),
+            _owner(obj._owner){
         obj._predicates.forEach([this](auto & pPair){this->_predicates.pushBack({new StoredPredicate(*pPair.getFirst()), pPair.getSecond()});});
         obj._mappers.forEach([this](auto & mPair){this->_mappers.pushBack({new StoredMapper(*mPair.getFirst()), mPair.getSecond()});});
     }
@@ -359,8 +327,8 @@ public:
             _sorted(std::exchange(obj._sorted, false)),
             _sorter(std::exchange(obj._sorter, nullptr)),
             _pSortable(std::exchange(obj._pSortable, nullptr)),
-            _instanceHolderIndex(obj._instanceHolderIndex + 1){
-//        while ( ! obj._predicates.empty() ) this->_predicates.pushBack( obj._predicates.popFront() );
+            _instanceHolderIndex(std::exchange(obj._instanceHolderIndex, 0) + 1),
+            _owner(std::exchange(obj._owner, false)){
         while ( ! obj._predicates.empty() ) this->_predicates.pushBack(obj._predicates.popFront());
         while ( ! obj._mappers.empty() ) this->_mappers.pushBack(obj._mappers.popFront());
     }
@@ -368,16 +336,14 @@ public:
     View & operator = ( View const & obj ) noexcept _ITERABLE_CONSTRAINT {
         if ( this == & obj ) return * this;
 
-        this->_pObject = obj._pObject;
-//        this->_distinct = obj._distinct;
+        this->_pObject = obj._owner ? new Type(obj._pObject) : obj._pObject;
         this->_distinctInstances = obj._distinctInstances;
         this->_sorted = obj._sorted;
         this->_sorter = obj._sorter == nullptr ? nullptr : new StoredSorter( * obj._sorter );
         this->_pSortable = obj._pSortable == nullptr ? nullptr : new Sortable( * obj._pSortable);
         this->_instanceHolderIndex = obj._instanceHolderIndex;
+        this->_owner = obj._owner;
 
-//        obj._predicates.forEach([this](auto * p){this->_predicates.pushBack(new StoredPredicate(*p));});
-//        obj._mappers.forEach([this](auto * m){this->_mappers.pushBack(new StoredMapper(*m));});
         obj._predicates.forEach([this](auto & pPair){this->_predicates.pushBack({new StoredPredicate(*pPair.getFirst()), pPair.getSecond()});});
         obj._mappers.forEach([this](auto & mPair){this->_mappers.pushBack({new StoredMapper(*mPair.getFirst()), mPair.getSecond()});});
 
@@ -388,21 +354,21 @@ public:
         if ( this == & obj ) return * this;
 
         this->_pObject = std::exchange(obj._pObject, false);
-//        this->_distinct = std::exchange(obj._distinct, false);
         this->_distinctInstances = std::move(obj._distinctInstances);
         this->_sorted = std::exchange(obj._sorted, false);
         this->_sorter = std::exchange(obj._sorter, nullptr);
         this->_pSortable = std::exchange(obj._pSortable, nullptr);
-        this->_instanceHolderIndex = obj._instanceHolderIndex + 1;
+        this->_instanceHolderIndex = std::exchange(obj._instanceHolderIndex, 0) + 1;
+        this->_owner = std::exchange(obj._owner, false);
 
         while ( ! obj._predicates.empty() ) this->_predicates.pushBack(obj._predicates.popFront());
         while ( ! obj._mappers.empty() ) this->_mappers.pushBack(obj._mappers.popFront());
         return * this;
     }
 
-    explicit View ( Type & obj ) noexcept _ITERABLE_CONSTRAINT : _pObject( & obj ), _instanceHolderIndex(0) {}
-    explicit View ( Type * obj ) noexcept _ITERABLE_CONSTRAINT : _pObject( obj ), _instanceHolderIndex(0) {}
-    explicit View ( Type && obj ) noexcept _ITERABLE_CONSTRAINT = delete;
+    explicit View ( Type const & obj ) noexcept _ITERABLE_CONSTRAINT : _pObject( & obj ), _instanceHolderIndex(0) {}
+    explicit View ( Type const * obj ) noexcept _ITERABLE_CONSTRAINT : _pObject( obj ), _instanceHolderIndex(0) {}
+    explicit View ( Type && obj ) noexcept _ITERABLE_CONSTRAINT : _pObject( new Type(obj) ), _instanceHolderIndex(0) {}
 
     ~View() noexcept override {
         for ( auto pPair : this->_predicates )
@@ -411,6 +377,9 @@ public:
             delete mPair.getFirst();
         delete this->_sorter;
         delete this->_pSortable;
+
+        if ( this->_owner )
+            delete this->_pObject;
     };
 
     inline auto begin () noexcept -> Iterator _ITERABLE_CONSTRAINT {
@@ -456,7 +425,6 @@ public:
 
     template < typename Mapper >
     inline auto map ( Mapper const & mapper ) && noexcept -> View _ITERABLE_CONSTRAINT {
-//        this->_mappers.pushBack(new StoredMapper (mapper));
         this->_mappers.pushBack({new StoredMapper (mapper), this->_instanceHolderIndex});
         return std::move(* this);
     }
@@ -480,8 +448,18 @@ public:
         return std::move(*this);
     }
 
+    inline auto average () noexcept -> ViewValue _AVERAGE_ITERABLE_CONSTRAINT {
+        ViewValue avg = 0;
+        Size n = 0;
+        for ( auto e : * this ) {
+            avg += e;
+            n ++;
+        }
+
+        return avg/n;
+    }
+
     auto distinct () && noexcept -> View _ITERABLE_CONSTRAINT {
-//        this->_distinct = true;
         this->_distinctInstances.pushBack({{}, this->_instanceHolderIndex});
         return std::move(* this);
     }
@@ -497,17 +475,21 @@ public:
     }
 };
 
+#include <Traits.hpp>
+
 template <typename T>
 auto View<T>::Sortable::push ( ViewValue & v ) noexcept -> void {
-//    auto & s = * this->sorter;
-
-//    auto map = [this] (ViewValue v) { this->pView->_mappers.forEach([&v](auto *m){v = (*m)(v);}); return v; };
     auto map = [this] (ViewValue v) { this->pView->_mappers.forEach([&v](auto & mPair){v = (*mPair.getFirst())(v);}); return v; };
 
     auto s = [this, &map] (ViewValue & a, ViewValue & b) -> bool {
-//        if ( this->sorter == nullptr )
-        if ( this->pView->_sorter == nullptr )
-            return map(a) < map(b);
+        if ( this->pView->_sorter == nullptr ) {
+            if constexpr ( isComparableLess <ViewValue, ViewValue>::value ) {
+                return map(a) < map(b);
+            } else {
+                return true;
+            }
+        }
+
         auto tempA = map(a);
         auto tempB = map(b);
         return (*this->pView->_sorter)(tempA, tempB);
@@ -532,5 +514,6 @@ auto View<T>::Sortable::push ( ViewValue & v ) noexcept -> void {
 
 #undef _ITERABLE_CONSTRAINT
 #undef _PRINTABLE_CONSTRAINT
+#undef _AVERAGE_ITERABLE_CONSTRAINT
 
 #endif //CDS_VIEW_HPP

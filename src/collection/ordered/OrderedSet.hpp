@@ -84,6 +84,8 @@ public:
     inline OrderedSet & operator = ( OrderedSet const & o ) noexcept { return this->operator=( (Collection<T> const &) ( o ) ); }
 
     auto insert ( ConstReference ) noexcept -> bool final;
+
+    auto view () const noexcept -> View < OrderedSet < T, C > >;
 };
 
 template <class T, class C>
@@ -125,6 +127,13 @@ auto OrderedSet<T, C>::insert( ConstReference value) noexcept -> bool {
     return true;
 }
 
-
+#include <View.hpp>
+template <class T, class C>
+#if defined(__cpp_concepts) && !defined(_MSC_VER)
+requires ValidSetComparator <T, C>
+#endif
+auto OrderedSet<T, C>::view() const noexcept -> View < OrderedSet < T, C > > {
+    return View(* this);
+}
 
 #endif //CDS_ORDEREDSET_HPP

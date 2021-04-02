@@ -30,7 +30,7 @@ Custom Data Structures for C++. Started as practice, ended up implementing sever
   * Range
   * Tuple ( Partial Support )  
   * Random  
-  * Object Views - See Note 1
+  * Object Views - Functional Programming Support
   * Threading
     * Thread
     * Semaphore

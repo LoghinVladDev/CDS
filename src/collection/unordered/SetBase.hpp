@@ -192,7 +192,7 @@ public:
         if ( p == nullptr ) return false;
 
         for ( auto itThis = this->begin(), itObj = p->begin(); itThis != this->end() && itObj != p->end(); itThis ++, itObj ++ )
-            if ( itThis.value() != itObj.value() )
+            if ( ! ( itThis.value() == itObj.value() ) )
                 return false;
         return true;
     }

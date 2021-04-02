@@ -18,6 +18,8 @@ public:
         return ( out << o.toString() );
     }
 
+    virtual inline explicit operator String () const noexcept { return this->toString(); }
+
     virtual auto hash () const noexcept -> Index { return 0; }
     virtual auto copy () const noexcept -> Object * { return nullptr; }
     virtual ~Object () noexcept = default;

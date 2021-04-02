@@ -13,7 +13,6 @@
 
 #include "./LinkedListPublic.hpp"
 
-
 template <class T>
 class DoubleLinkedList final : public List<T> {
 private:
@@ -395,6 +394,8 @@ public:
     inline DoubleLinkedList & operator = ( const DoubleLinkedList <T> & o ) noexcept {  // NOLINT(bugprone-unhandled-self-assignment)
         return this->operator= ( (Collection<T> const & ) ( o )); // NOLINT(misc-unconventional-assign-operator)
     }
+
+    auto view () const noexcept -> View < DoubleLinkedList < T > >;
 };
 
 template <class T>
@@ -1292,6 +1293,12 @@ auto DoubleLinkedList<T>::index(const T & e) const noexcept -> Index {
             current ++;
 
     return -1;
+}
+
+#include <View.hpp>
+template < typename T >
+auto DoubleLinkedList<T>::view () const noexcept -> View < DoubleLinkedList < T > > {
+    return View(*this);
 }
 
 #endif //CDS_LINKEDLIST_HPP

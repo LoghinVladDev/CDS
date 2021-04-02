@@ -10,6 +10,14 @@
 class Object;
 class String;
 
+template <typename T>
+concept Integral =
+        std::is_integral<T>::value ||
+        std::is_convertible<T, int>::value ||
+        std::is_convertible<T, long long int>::value ||
+        std::is_convertible<T, float>::value ||
+        std::is_convertible<T, double>::value;
+
 template < typename T >
 concept Iterable = requires ( T obj ) {
     { obj.begin() } -> std::same_as < typename T::Iterator >;

@@ -237,6 +237,8 @@ public:
 
     Array & operator = ( Collection<Value> const & ) noexcept;
     inline Array & operator = ( Array const & o ) noexcept { return this->operator=( ( Collection<Value> const & )(o) ); } // NOLINT(bugprone-unhandled-self-assignment,misc-unconventional-assign-operator)
+
+    auto view () const noexcept -> View < Array < T > >;
 };
 
 template <class T>
@@ -723,7 +725,7 @@ auto Array<T>::insertBefore( typename Collection<Value>::Iterator const & iterat
     Array newArray;
 
     auto it = this->begin();
-    while ( it != this->end() && it.value() != value ) {
+    while ( it != this->end() && ! (it.value() == value) ) {
         newArray.pushBack(it.value());
         it ++;
     }
@@ -743,7 +745,7 @@ auto Array<T>::insertAfter(typename Collection<Value>::Iterator const & iterator
     Array newArray;
 
     auto it = this->begin();
-    while ( it != this->end() && it.value() != value ) {
+    while ( it != this->end() && ! (it.value() == value ) ) {
         newArray.pushBack(it.value());
         it ++;
     }
@@ -949,6 +951,12 @@ auto Array<T>::sort(bool (* sortFunc) (T const &, T const &) noexcept) noexcept 
         return;
 
     Array::quickSort( this->begin(), -- this->end(), sortFunc );
+}
+#include <View.hpp>
+
+template < typename T >
+auto Array<T>::view () const noexcept -> View < Array < T > > {
+    return View(*this);
 }
 
 #endif //CDS_ARRAY_HPP

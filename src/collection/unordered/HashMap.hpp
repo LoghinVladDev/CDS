@@ -22,7 +22,6 @@ template <> auto hash<CDS_sint16> (CDS_sint16 const & o)noexcept -> Index { retu
 template <> auto hash<CDS_sint32> (CDS_sint32 const & o)noexcept -> Index { return o; }
 template <> auto hash<CDS_sint64> (CDS_sint64 const & o)noexcept -> Index { return o; }
 
-
 template <typename K, Size hashBoundary>
 class HashCalculator {
 public:
@@ -618,7 +617,19 @@ public:
         auto s = oss.str();
         return String(s.substr(0, s.length() - 2).append(" }"));
     }
+
+    auto view () const noexcept -> View < HashMap < K, V, H > >;
 };
 
+#include <View.hpp>
+template <class K, class V, class H>
+#if defined(__cpp_concepts) && !defined(_MSC_VER)
+    requires
+    UniqueIdentifiable<K> &&
+    HashCalculatorHasBoundaryFunction<H>
+#endif
+auto HashMap < K, V, H >::view() const noexcept -> View < HashMap < K, V, H > > {
+    return View(*this);
+}
 
 #endif //CDS_HASHMAP_HPP
