@@ -19,32 +19,8 @@ int main () {
 
 #include "primitive/View.hpp"
 void testView () {
-    String s = "Ana are mere";
 
-    constexpr static auto vowel = [](char c){return String("aeiouAEIOU").contains(c);};
-
-    s
-        .view()
-        .filter([](auto c){return vowel(c);})
-        .forEach([](auto c){std::cout << c;});
-
-    std::cout << "\n";
-
-    String s2 = "ABCD";
-//    String s2 = "!!#!#!%%@#@?";
-
-    auto x = s2.view()
-        .filter([](auto c){return ! vowel(c);})
-        .map([](auto c) -> char {if (c >= 'A' && c <= 'Z') return c + 32; return c;})
-        .filter([](auto c){return c <= 'm';})
-        .filter([](auto c){return ! String(" \t\n\r").contains(c);})
-        .map([](auto c) -> char {if ( c >= 'a' && c <= 'z' ) return c - 3; return c;})
-        .filter([](auto c){return c >= 'a' && c <= 'z';})
-//        .sorted()
-        .count();
-
-
-    std::cout << x <<'\n';
+    String s2 = "Ana are mere, dar are Gigel bere?";
 
     s2.view()
         .map(String::lowerChar)
@@ -53,7 +29,6 @@ void testView () {
         .distinct()
         .sorted()
         .map(String::upperChar)
-//        .map(String::upperChar)
         .forEach([](auto c){std::cout << c;});
 
 //    std::cout << chr << '\n';

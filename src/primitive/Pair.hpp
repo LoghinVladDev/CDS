@@ -49,7 +49,21 @@ public:
 
     [[nodiscard]] auto inline toString() const noexcept -> String final {
         std::stringstream oss;
-        oss << "( k = " << first << ", v = " << second << " )";
+        if constexpr ( (
+                    std::is_integral < K >::value ||
+                    std::is_same < K, StringLiteral > ::value ||
+                    std::is_same < K, String > ::value ||
+                    std::is_base_of < Object, K >::value ||
+                    std::is_same < K , std::string > ::value
+                ) && (
+                    std::is_integral < V > ::value ||
+                    std::is_same < V, StringLiteral >::value,
+                    std::is_same < V, String >::value,
+                    std::is_base_of < Object, V >::value,
+                    std::is_same < V, std::string > ::value
+                )
+        )
+            oss << "( k = " << first << ", v = " << second << " )";
         return String(oss.str());
     }
 

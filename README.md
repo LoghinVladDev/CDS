@@ -103,3 +103,12 @@ Does not print, even if logically should.
 
 Happens because views are only conceptual, and sorting
 happens at the end of the iteration. Pipelining is not staged
+
+
+Pipeline operations are, regardless of order
+pipeline creation 
+mapping
+filtering
+altering
+consuming
+pipeline destruction
