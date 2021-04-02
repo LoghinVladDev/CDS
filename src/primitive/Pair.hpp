@@ -10,7 +10,13 @@
 
 template <class K, class V>
 class Pair final : public Object {
+public:
+    using Key = K;
+    using Value = V;
+
 private:
+//    friend class View < DoubleLinkedList < Pair < K , V > > >;
+
     K first;
     V second;
 
@@ -72,6 +78,8 @@ public:
     }
 };
 
+template < typename K, typename V >
+Pair(K, V) -> Pair<K, V>;
 
 
 #endif //CDS_PAIR_HPP

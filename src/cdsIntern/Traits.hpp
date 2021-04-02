@@ -14,4 +14,48 @@ template < typename T, typename U, typename = std::void_t<> > struct isComparabl
 template < typename T, typename U > struct isComparableLess < T, U, std::void_t < decltype ( std::declval <T> () < std::declval <U> () ) > > : std::true_type {};
 template < typename T, typename U > struct isComparableLessNoexcept < T, U, std::void_t < decltype ( std::declval <T> () < std::declval <U>() ) > > : std::bool_constant < noexcept ( std::declval <T> () < std::declval <U> () ) > { };
 
+template < typename T >
+struct hasFirstGetter {
+private:
+    typedef char Yes[1];
+    typedef char No[2];
+
+    template < typename C > static Yes & test ( decltype ( & C ::getFirst ) );
+    template < typename C > static No & test(...);
+public:
+    enum { value = sizeof(test<T>(0)) == sizeof(Yes) };
+};
+
+template < typename T >
+struct hasSecondGetter {
+private:
+    typedef char Yes[1];
+    typedef char No[2];
+
+    template < typename C > static Yes & test ( decltype ( & C ::getSecond ) );
+    template < typename C > static No & test(...);
+public:
+    enum { value = sizeof(test<T>(0)) == sizeof(Yes) };
+};
+template < typename T >
+struct isPair {
+    constexpr static bool value = hasFirstGetter<T>::value && hasSecondGetter<T>::value;
+};
+
+template < class T >
+struct is_pair : public std::false_type {};
+template < class T1, class T2 >
+struct is_pair <Pair<T1, T2>> : public std::true_type {};
+//#include <Pair.hpp>
+//template < typename T >
+//struct pairFirstType {
+//private:
+//
+//};
+
+//template < typename T >
+//struct pairFirstType {
+//    typename std::conditional < isPair < T >::value,
+//};
+
 #endif //CDS_TRAITS_HPP

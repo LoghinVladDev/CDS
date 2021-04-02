@@ -24,14 +24,16 @@ void testView () {
 
     String s2 = "Ana are mere, dar are Gigel bere?";
 
-//    String("ABCDADABC").view()
-//            .map(String::lowerChar)
-//            .filter(String::isConsonant)
-//            .filter(String::isLowerChar)
-//            .distinct()
-//            .sorted()
-//            .map(String::upperChar)
-//            .forEach([](auto c){std::cout << c;});
+    String("ABCDADABC").view()
+            .map(String::lowerChar)
+            .filter(String::isConsonant)
+            .filter(String::isLowerChar)
+            .distinct()
+            .sorted()
+            .map(String::upperChar)
+            .forEach([](auto c){std::cout << c;});
+
+    std::cout << '\n';
 
     s2.view()
         .map(String::upperChar)
@@ -81,8 +83,39 @@ void testView () {
     };
 
     matrix.view()
-        .filter([](auto e){return e.any([](auto e){return e % 2 == 0;});})
-        .forEach([](auto e){std::cout << e << '\n';});
+        .filter([](auto & row){return row.any([](auto e){return e % 2 == 0;});})
+        .sorted([](auto & rowA, auto & rowB){
+            auto sumA = 0, sumB = 0;
+            rowA.forEach([&sumA](auto e){return sumA += e;});
+            rowB.forEach([&sumB](auto e){return sumB += e;});
+            return sumA > sumB;
+        })
+        .forEach([](auto & row){
+            std::cout << "Row : ";
+            row.view()
+                .map([](auto & e){return e * 2;})
+                .sorted()
+                .forEach([](auto & e){std::cout << e << ' ';});
+            std::cout << "\n";
+        });
+
+//    Range(0, 10).view().toMap<int, int>();
+
+    Pair p = {3, 4};
+
+//    std::cout << hasFirstGetter<decltype(p)>::value << '\n';
+    std::cout << is_pair<decltype(p)>::value << '\n';
+    std::cout << is_pair<int>::value << '\n';
+
+    auto m = LinkedList <Pair<int, int>> { {1, 2}, {4, 3}, {5, 6} }.view().toMap();
+
+    std::cout << m << '\n';
+
+    std::cout << Range(0, 10).view().toMap();
+
+//    auto set = Range(0, 10).view().toOrderedSet();
+
+//    std::cout << set << '\n';
 
 //    View(h)
 //        .filter([](auto e){return e.getSecond() % 2 == 1;})

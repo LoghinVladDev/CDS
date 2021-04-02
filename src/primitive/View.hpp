@@ -30,6 +30,11 @@
 #include <iostream>
 //#include <unordered_set>
 #include <CDS/UnorderedSet>
+#include <CDS/HashMap>
+#include <CDS/OrderedSet>
+#include <CDS/Array>
+
+#include <CDS/Traits>
 
 
 template < typename T >
@@ -131,7 +136,6 @@ private:
 
     LinkedList < Pair < StoredPredicate *, Index > >                _predicates;
     LinkedList < Pair < StoredMapper *, Index > >                   _mappers;
-//    LinkedList < Pair < std::unordered_set < ViewValue >, Index > > mutable _distinctInstances;
     LinkedList < Pair < UnorderedSet < ViewValue >, Index > > mutable _distinctInstances;
 
     bool                             _sorted {false};
@@ -469,6 +473,101 @@ public:
             return Queryable{e};
         return Queryable();
     }
+
+//    template < typename C = dataTypes::DefaultSetComparator < ViewValue > >
+//#if defined(__cpp_concepts) && !defined(_MSC_VER)
+//    requires ValidSetComparator < ViewValue, C >
+//#endif
+//    auto toOrderedSet () noexcept -> OrderedSet < ViewValue, C > _ITERABLE_CONSTRAINT {
+//        OrderedSet < ViewValue, C > result;
+//        for ( auto e : * this )
+//            result.insert(e);
+//
+//        return result;
+//    }
+
+//    template < typename K, typename V >
+
+//    inline auto toMap () noexcept -> typename std::enable_if < std::is_same < ViewValue, Pair < decltype(& ViewValue::getFirst), decltype (& ViewValue::getSecond) > >::value, HashMap < decltype( & ViewValue::getFirst ), decltype( & ViewValue::getSecond ) > >::type _ITERABLE_CONSTRAINT {
+//    inline auto toMap () noexcept -> typename std::enable_if < std::is_convertible < ViewValue, Pair >::value, HashMap < decltype ( & ViewValue::getFirst ), decltype ( & ViewValue::getSecond ) > >::type {
+//    inline auto toMap () noexcept -> typename std::enable_if <
+//        isPair < ViewValue > ::value,
+//        std::is_member_function_pointer < decltype ( & ViewValue::getFirst ) >::value &&
+//        std::is_member_function_pointer < decltype ( & ViewValue::getSecond ) >::value,
+//        HashMap <
+//                isPair<ViewValue>::value ?
+//                    decltype ( & ViewValue::getFirst ) :
+//                    int,
+//                isPair<ViewValue>::value ?
+//                    decltype ( & ViewValue::getSecond ) :
+//                    int
+//            std::conditional<isPair<ViewValue>::value, decltype(& ViewValue::getFirst), int>::type,
+//            std::conditional<isPair<ViewValue>::value, decltype(& ViewValue::getSecond), int>::type
+//        >
+//        auto
+//        HashMap < auto, auto >
+//    >::type {
+    inline auto toMap () noexcept {
+        if constexpr ( is_pair<ViewValue>::value ) {
+//            HashMap < decltype ( ViewValue::first ), decltype ( ViewValue::second ) > result;
+//            using Key = decltype(ViewValue().getFirst());
+//            using Value = decltype(ViewValue().getSecond());
+            HashMap <
+//                typename std::remove_reference < Key >::type,
+//                typename std::remove_reference < Value > ::type
+//                std::remove_reference < decltype ( ViewValue().getFirst() ) >::type,
+//                std::remove_reference < decltype ( ViewValue().getSecond() ) >::type
+                typename std::remove_reference < decltype ( ((ViewValue *)nullptr)->getFirst() ) >::type,
+                typename std::remove_reference < decltype ( ((ViewValue *)nullptr)->getSecond() ) >::type
+            > result;
+            for ( auto e : * this )
+//                result.emplace ( e );
+                result[e.getFirst()] = e.getSecond();
+            return result;
+        } else
+            return HashMap < int, int >();
+    }
+
+
+
+//    struct ToMapReturn {
+//        typename std::conditional<isPair<ViewValue>::value, void, HashMap < decltype ( & ViewValue::getFirst ), decltype ( & ViewValue::getSecond ) > >::type
+//        item ();
+//        typedef void type;
+//        type get (  ) {};
+//    };
+//
+
+
+//    inline auto toMap () noexcept(false) -> typename std::enable_if <
+//            ! isPair < ViewValue >::value, auto
+//    >::type {
+
+//    }
+
+    auto toArray () noexcept -> Array < ViewValue > _ITERABLE_CONSTRAINT {
+        Array < ViewValue > result;
+        for ( auto e : * this )
+            result.pushBack(e);
+        return result;
+    }
+
+    auto toList () noexcept -> LinkedList < ViewValue > _ITERABLE_CONSTRAINT {
+        LinkedList < ViewValue > result;
+        for ( auto e : * this )
+            result.pushBack(e);
+        return result;
+    }
+
+    auto toUnorderedSet () noexcept -> UnorderedSet < ViewValue > _ITERABLE_CONSTRAINT {
+        UnorderedSet < ViewValue > result;
+        for ( auto e : * this )
+            result.insert(e);
+
+        return result;
+    }
+
+    inline auto toSet () noexcept -> UnorderedSet < ViewValue > { return this->toUnorderedSet(); }
 
     [[nodiscard]] auto toString() const noexcept -> String override {
         return String("View of ").append((String)*this->_pObject);
