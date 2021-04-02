@@ -50,7 +50,42 @@ Custom Data Structures for C++. Started as practice, ended up implementing sever
       * Float
       * Double
   
-#### Note 1
+### Note 1
+
+#### Issue Fixed Since 02/04/21
+
+Original usecase : 
+
+```c++
+String("ABCDADABC").view()
+    .map(String::lowerChar)
+    .filter(String::isConsonant)
+    .filter(String::isLowerChar)
+    .distinct()
+    .sorted()
+    .map(String::upperChar)
+    .forEach([](auto c){std::cout << c;});
+
+/// prints nothing
+```
+
+Current Runtime:
+
+```c++
+String("ABCDADABC").view()
+    .map(String::lowerChar)
+    .filter(String::isConsonant)
+    .filter(String::isLowerChar)
+    .distinct()
+    .sorted()
+    .map(String::upperChar)
+    .forEach([](auto c){std::cout << c;});
+
+/// prints BCD
+```
+
+#### Original Issue
+
 In regards to Views, some use cases might not entirely work. 
 One such case is strict mapper + filter + alterer ordering
 Prior to the usage of an alterer (i.e. sorter), all mappers are applied, even ones below

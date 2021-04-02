@@ -22,14 +22,14 @@ void testView () {
 
     String s2 = "Ana are mere, dar are Gigel bere?";
 
-    s2.view()
-        .map(String::lowerChar)
-        .filter(String::isConsonant)
-        .filter(String::isLowerChar)
-        .distinct()
-        .sorted()
-        .map(String::upperChar)
-        .forEach([](auto c){std::cout << c;});
+    String("ABCDADABC").view()
+            .map(String::lowerChar)
+            .filter(String::isConsonant)
+            .filter(String::isLowerChar)
+            .distinct()
+            .sorted()
+            .map(String::upperChar)
+            .forEach([](auto c){std::cout << c;});
 
 //    std::cout << chr << '\n';
 //        .forEach([](auto c){

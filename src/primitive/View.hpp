@@ -175,7 +175,7 @@ private:
             if ( distinctInstance.getFirst().contains(tempVal) )
                 return false;
 
-            distinctInstance.getFirst().insert(value);
+            distinctInstance.getFirst().insert(tempVal);
         }
 
         return true;
