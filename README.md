@@ -1,7 +1,8 @@
 # customDataStructures
 
 Name self explanatory\
-Custom Data Structures for C++. Started as practice, ended up implementing several useful features
+Custom Data Structures for C++. Started as practice, ended up implementing several useful features\
+Intended to provide support beyond what STL can offer
 
 ## Functionalities and support : 
 
