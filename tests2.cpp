@@ -104,17 +104,30 @@ void testView () {
     Pair p = {3, 4};
 
 //    std::cout << hasFirstGetter<decltype(p)>::value << '\n';
-    std::cout << is_pair<decltype(p)>::value << '\n';
-    std::cout << is_pair<int>::value << '\n';
+    std::cout << isPair<decltype(p)>::value << '\n';
+    std::cout << isPair<int>::value << '\n';
 
     auto m = LinkedList <Pair<int, int>> { {1, 2}, {4, 3}, {5, 6} }.view().toMap();
 
     std::cout << m << '\n';
 
-    std::cout << Range(0, 10).view().toMap();
+    try {
+        std::cout << Range(0, 10).view().toMap();
+    } catch ( std::exception const & e ) {
+        std::cout << e.what() << '\n';
+    }
+
+
+//    std::cout << String("ABCDEFABCaaabccddsf").view()
+//        .filter(String::isVowel)
+//        .map(String::toLowerChar)
+//        .distinct()
+//        .sorted([](auto a, auto b){return a > b;})
+//        .toList();
+//        .count([](auto a){return a == 'a';});
 
 //    auto set = Range(0, 10).view().toOrderedSet();
-
+//
 //    std::cout << set << '\n';
 
 //    View(h)

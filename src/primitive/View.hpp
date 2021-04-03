@@ -36,6 +36,7 @@
 
 #include <CDS/Traits>
 
+#include <typeinfo>
 
 template < typename T >
 class View : public Object {
@@ -474,76 +475,32 @@ public:
         return Queryable();
     }
 
-//    template < typename C = dataTypes::DefaultSetComparator < ViewValue > >
-//#if defined(__cpp_concepts) && !defined(_MSC_VER)
-//    requires ValidSetComparator < ViewValue, C >
-//#endif
-//    auto toOrderedSet () noexcept -> OrderedSet < ViewValue, C > _ITERABLE_CONSTRAINT {
-//        OrderedSet < ViewValue, C > result;
-//        for ( auto e : * this )
-//            result.insert(e);
-//
-//        return result;
-//    }
+    class TypeUnmappable : public std::exception {
+    private:
+        String _message;
+    public:
+        TypeUnmappable() noexcept {
+            this->_message = String(typeid(ViewValue).name()).append(" cannot be mapped");
+        }
 
-//    template < typename K, typename V >
+        [[nodiscard]] auto what () const noexcept -> StringLiteral override {
+            return this->_message.cStr();
+        }
+    };
 
-//    inline auto toMap () noexcept -> typename std::enable_if < std::is_same < ViewValue, Pair < decltype(& ViewValue::getFirst), decltype (& ViewValue::getSecond) > >::value, HashMap < decltype( & ViewValue::getFirst ), decltype( & ViewValue::getSecond ) > >::type _ITERABLE_CONSTRAINT {
-//    inline auto toMap () noexcept -> typename std::enable_if < std::is_convertible < ViewValue, Pair >::value, HashMap < decltype ( & ViewValue::getFirst ), decltype ( & ViewValue::getSecond ) > >::type {
-//    inline auto toMap () noexcept -> typename std::enable_if <
-//        isPair < ViewValue > ::value,
-//        std::is_member_function_pointer < decltype ( & ViewValue::getFirst ) >::value &&
-//        std::is_member_function_pointer < decltype ( & ViewValue::getSecond ) >::value,
-//        HashMap <
-//                isPair<ViewValue>::value ?
-//                    decltype ( & ViewValue::getFirst ) :
-//                    int,
-//                isPair<ViewValue>::value ?
-//                    decltype ( & ViewValue::getSecond ) :
-//                    int
-//            std::conditional<isPair<ViewValue>::value, decltype(& ViewValue::getFirst), int>::type,
-//            std::conditional<isPair<ViewValue>::value, decltype(& ViewValue::getSecond), int>::type
-//        >
-//        auto
-//        HashMap < auto, auto >
-//    >::type {
-    inline auto toMap () noexcept {
-        if constexpr ( is_pair<ViewValue>::value ) {
-//            HashMap < decltype ( ViewValue::first ), decltype ( ViewValue::second ) > result;
-//            using Key = decltype(ViewValue().getFirst());
-//            using Value = decltype(ViewValue().getSecond());
+    inline auto toMap () noexcept (false) {
+        if constexpr ( isPair<ViewValue>::value ) {
             HashMap <
-//                typename std::remove_reference < Key >::type,
-//                typename std::remove_reference < Value > ::type
-//                std::remove_reference < decltype ( ViewValue().getFirst() ) >::type,
-//                std::remove_reference < decltype ( ViewValue().getSecond() ) >::type
-                typename std::remove_reference < decltype ( ((ViewValue *)nullptr)->getFirst() ) >::type,
-                typename std::remove_reference < decltype ( ((ViewValue *)nullptr)->getSecond() ) >::type
+                    typename std::remove_reference < decltype ( ((ViewValue *)nullptr)->getFirst() ) >::type,
+                    typename std::remove_reference < decltype ( ((ViewValue *)nullptr)->getSecond() ) >::type
             > result;
             for ( auto e : * this )
-//                result.emplace ( e );
                 result[e.getFirst()] = e.getSecond();
             return result;
         } else
+            throw TypeUnmappable();
             return HashMap < int, int >();
     }
-
-
-
-//    struct ToMapReturn {
-//        typename std::conditional<isPair<ViewValue>::value, void, HashMap < decltype ( & ViewValue::getFirst ), decltype ( & ViewValue::getSecond ) > >::type
-//        item ();
-//        typedef void type;
-//        type get (  ) {};
-//    };
-//
-
-
-//    inline auto toMap () noexcept(false) -> typename std::enable_if <
-//            ! isPair < ViewValue >::value, auto
-//    >::type {
-
-//    }
 
     auto toArray () noexcept -> Array < ViewValue > _ITERABLE_CONSTRAINT {
         Array < ViewValue > result;
