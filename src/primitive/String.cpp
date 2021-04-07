@@ -438,10 +438,11 @@ auto String::findNotOf (String const & s) const noexcept -> LinkedList < Index >
 
 auto String::find (String const & o) const noexcept -> LinkedList < Index > {
 #if !defined(_MSC_VER)
-    Index lpsArray [this->size()];
+    Index lpsArray [o.size()];
 #else
     auto lpsArray = new Index[this->size()];
 #endif
+    std::memset(lpsArray, 0, sizeof(Index) * o.size());
 
     auto computeLPSArray = [& o, &lpsArray] () {
         Index len = 0;
@@ -468,7 +469,7 @@ auto String::find (String const & o) const noexcept -> LinkedList < Index > {
 
     LinkedList < Index > indices;
     Index i = 0, j = 0;
-    while ( i < static_cast<Index>(o.size()) ) {
+    while ( i < static_cast<Index>(this->size()) ) {
         if ( o._p[j] == this->_p[i] ) {
             i ++; j ++;
         }
@@ -556,3 +557,9 @@ auto String::reversed() const noexcept -> String {
     return {this->rbegin(), this->rend()};
 }
 
+auto String::operator * (int count) const noexcept -> String {
+    String res;
+    for ( int i = 0; i < count; i ++ )
+        res += (*this);
+    return res;
+}

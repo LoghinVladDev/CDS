@@ -45,26 +45,28 @@ static Test::TerminalColor bold (Test::TerminalColor::Modifier::ENABLE_BOLD );
 #include <cstdarg>
 
 auto Test::log(const String & text) noexcept -> void {
-    std::cout << Test::TerminalColor::clear << text << '\n';
+    std::cout << Test::TerminalColor::clear << this->getDepthString() << text << '\n';
 }
 
 auto Test::log(const char * format, ...) noexcept -> void {
     va_list args;
     va_start(args, format);
     printf("\033[%sm", TerminalColor::asList(Test::TerminalColor::clear.format()).cStr());
+    printf("%s", this->getDepthString().cStr());
     vprintf(format, args);
     printf("\n");
     va_end(args);
 }
 
 auto Test::logBold(const String & text) noexcept -> void {
-    std::cout << bold << text << TerminalColor::clear << '\n';
+    std::cout << this->getDepthString() << bold << text << TerminalColor::clear << '\n';
 }
 
 auto Test::logBold(const char * format, ...) noexcept -> void {
     va_list args;
     va_start(args, format);
     printf("\033[%sm", TerminalColor::asList(bold.format()).cStr());
+    printf("%s", this->getDepthString().cStr());
     vprintf(format, args);
     printf("\033[%sm", TerminalColor::asList(Test::TerminalColor::clear.format()).cStr());
     printf("\n");
@@ -72,13 +74,14 @@ auto Test::logBold(const char * format, ...) noexcept -> void {
 }
 
 auto Test::logOK(const String & text) noexcept -> void {
-    std::cout << testOK << text << TerminalColor::clear << '\n';
+    std::cout << this->getDepthString() << testOK << text << TerminalColor::clear << '\n';
 }
 
 auto Test::logOK(const char * format, ...) noexcept -> void {
     va_list args;
     va_start(args, format);
     printf("\033[%sm", TerminalColor::asList(testOK.format()).cStr());
+    printf("%s", this->getDepthString().cStr());
     vprintf(format, args);
     printf("\033[%sm", TerminalColor::asList(Test::TerminalColor::clear.format()).cStr());
     printf("\n");
@@ -87,13 +90,14 @@ auto Test::logOK(const char * format, ...) noexcept -> void {
 
 
 auto Test::logWarning(const String & text) noexcept -> void {
-    std::cout << testWarn << text << TerminalColor::clear << '\n';
+    std::cout << this->getDepthString() << testWarn << text << TerminalColor::clear << '\n';
 }
 
 auto Test::logWarning(const char * format, ...) noexcept -> void {
     va_list args;
     va_start(args, format);
     printf("\033[%sm", TerminalColor::asList(testWarn.format()).cStr());
+    printf("%s", this->getDepthString().cStr());
     vprintf(format, args);
     printf("\033[%sm", TerminalColor::asList(Test::TerminalColor::clear.format()).cStr());
     printf("\n");
@@ -103,13 +107,14 @@ auto Test::logWarning(const char * format, ...) noexcept -> void {
 
 
 auto Test::logError(const String & text) noexcept -> void {
-    std::cout << testNOK << text << TerminalColor::clear << '\n';
+    std::cout << this->getDepthString() << testNOK << text << TerminalColor::clear << '\n';
 }
 
 auto Test::logError(const char * format, ...) noexcept -> void {
     va_list args;
     va_start(args, format);
     printf("\033[%sm", TerminalColor::asList(testNOK.format()).cStr());
+    printf("%s", this->getDepthString().cStr());
     vprintf(format, args);
     printf("\033[%sm", TerminalColor::asList(Test::TerminalColor::clear.format()).cStr());
     printf("\n");

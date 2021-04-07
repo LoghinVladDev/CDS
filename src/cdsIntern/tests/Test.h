@@ -75,8 +75,28 @@ public:
         static TerminalColor clear;
     };
 
+private:
+    Size logDepth = 0;
+
+protected:
+    [[nodiscard]] auto inline getDepthString() const noexcept -> String {
+        return String("\t") * this->logDepth;
+    }
+
 public:
     virtual auto execute () noexcept -> bool = 0;
+
+    template < typename Function >
+    auto executeSubtest ( String const & title, Function const & subtest ) noexcept -> void {
+        this->logDepth++;
+        this->logBold("-----Start of subtest '%s'-----", title.cStr());
+        this->logDepth++;
+        subtest();
+        this->logDepth--;
+        this->logBold("-----End of subtest '%s'-----", title.cStr());
+        this->logDepth--;
+    }
+
     auto logOK ( String const & ) noexcept -> void;
     auto logError (String const &) noexcept -> void;
     auto logWarning (String const &) noexcept -> void;

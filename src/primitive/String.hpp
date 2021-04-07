@@ -221,6 +221,8 @@ public:
     [[nodiscard]] inline auto operator + (float v) const noexcept -> String { return this->operator+( std::to_string(v) ); }
     [[nodiscard]] inline auto operator + (double v) const noexcept -> String { return this->operator+( std::to_string(v) ); }
 
+    [[nodiscard]] auto operator * (int) const noexcept -> String;
+
     auto ltrim ( ElementType = ' ' ) noexcept -> String &;
     auto ltrim ( String const & ) noexcept -> String &;
     auto rtrim ( ElementType = ' ' ) noexcept -> String &;

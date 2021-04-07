@@ -281,14 +281,14 @@ public:
 #undef GEN_FUNCTION_DECLARATIONS
 #undef GEN_FUNCTION_DECLARATIONS_6
 
-    virtual inline auto operator == ( const Collection & o ) const noexcept -> bool {
-        return this == & o;
-    }
-
-    virtual inline auto operator != ( const Collection & o ) const noexcept -> bool {
-        return this != &o;
-    }
-
+//    virtual inline auto operator == ( const Collection & o ) const noexcept -> bool {
+//        return this == & o;
+//    }
+//
+//    virtual inline auto operator != ( const Collection & o ) const noexcept -> bool override {
+//        return this != &o;
+//    }
+//
     virtual COLLECTION_EXPLICIT_CONVERSION operator bool () const noexcept {
         return this->size() != 0;
     }
