@@ -60,6 +60,8 @@ auto String::append (ElementType ch) noexcept -> String & {
 }
 
 auto String::append (StringLiteral cString) noexcept -> String & {
+    if ( cString == nullptr ) return * this;
+
     auto len = strlen(cString);
     this->_alloc(len);
 
@@ -160,29 +162,40 @@ String::String(std::string::iterator const & begin, std::string::iterator const 
         this->_p[this->_l++] = *it;
 }
 
-String::String(IteratorBase & begin, IteratorBase & end) noexcept : CONSTR_CLEAR() {
-    if ( end - begin <= 0 )
+#pragma clang diagnostic push
+#pragma ide diagnostic ignored "ConstantConditionsOC"
+String::String(IteratorBase const & begin, IteratorBase const & end) noexcept : CONSTR_CLEAR() {
+    bool reversed = dynamic_cast < Iterator const * > ( & begin ) == nullptr;
+    if ( ! reversed && end - begin <= 0 || reversed && begin - end <= 0)
         return;
-    this->_alloc(end - begin);
+    this->_alloc(! reversed ? end - begin : begin - end);
 
-    for ( auto & it = begin; it != end; ++it )
-        this->_p[this->_l++] = *it;
+    if ( ! reversed )
+        for ( auto it = dynamic_cast < Iterator const & > ( begin ); it != end; it.next() )
+            this->_p[this->_l++] = *it;
+    else
+        for ( auto it = dynamic_cast < ReverseIterator const & > ( begin ); it != end; it.next() )
+            this->_p[this->_l++] = *it;
+}
+#pragma clang diagnostic pop
+
+String::String(ConstIteratorBase const & begin, ConstIteratorBase const & end) noexcept : CONSTR_CLEAR() {
+    bool reversed = dynamic_cast < ConstIterator const * > ( & begin ) == nullptr;
+    if ( ! reversed && end - begin <= 0 || reversed && begin - end <= 0)
+        return;
+    this->_alloc(! reversed ? end - begin : begin - end);
+
+    if ( ! reversed )
+        for ( auto it = dynamic_cast < ConstIterator const & > ( begin ); it != end; it.next() )
+            this->_p[this->_l++] = *it;
+    else
+        for ( auto it = dynamic_cast < ConstReverseIterator const & > ( begin ); it != end; it.next() )
+            this->_p[this->_l++] = *it;
 }
 
-String::String(ConstIteratorBase & begin, ConstIteratorBase & end) noexcept : CONSTR_CLEAR() {
-    if ( end - begin <= 0 )
-        return;
-    this->_alloc(end - begin);
-
-    for ( auto & it = begin; it != end; ++it )
-        this->_p[this->_l++] = *it;
-}
-
-auto String::shrink(SignedSize size) noexcept -> void {
+auto String::resize(Size size) noexcept -> void {
     if ( this->empty() )
         return;
-    if ( size == -1 )
-        size = this->size();
 
     this->_c = size + 1;
     auto newArea = new ElementType [ this->_c ];
@@ -191,6 +204,8 @@ auto String::shrink(SignedSize size) noexcept -> void {
     delete [] this->_p;
 
     this->_p = newArea;
+    if ( this->_l >= this->_c )
+        this->_l = this->_c - 1;
 }
 
 auto String::clear() noexcept -> void {
@@ -535,5 +550,9 @@ auto String::replace(Index pos, Size len, const String & newInPlace) noexcept ->
 
 auto String::view() const noexcept -> View < String > {
     return View(*this);
+}
+
+auto String::reversed() const noexcept -> String {
+    return {this->rbegin(), this->rend()};
 }
 

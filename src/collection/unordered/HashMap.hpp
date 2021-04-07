@@ -22,47 +22,12 @@ template <> auto hash<CDS_sint16> (CDS_sint16 const & o)noexcept -> Index { retu
 template <> auto hash<CDS_sint32> (CDS_sint32 const & o)noexcept -> Index { return o; }
 template <> auto hash<CDS_sint64> (CDS_sint64 const & o)noexcept -> Index { return o; }
 
-template <typename K, Size hashBoundary>
-class HashCalculator {
-public:
-    using Value                 = K;
-    using ValueConstReference   = Value const &;
-
-    using HashValue             = Index;
-
-    virtual auto operator ()(ValueConstReference) const noexcept -> HashValue = 0;
-
-#if __cpp_constexpr >= 201907
-    [[nodiscard]] virtual constexpr inline auto getBoundary () const noexcept -> Size { return hashBoundary; }
-#else
-    [[nodiscard]] virtual inline auto getBoundary () const noexcept -> Size { return hashBoundary; }
-#endif
-};
-
-namespace dataTypes {
-    template <class K, Size hashBoundary>
-    class DefaultHashFunction : public HashCalculator<K, hashBoundary> {
-    public:
-        using AddressValue = std::size_t;
-
-        auto operator ()(typename HashCalculator<K, hashBoundary>::ValueConstReference v) const noexcept -> typename HashCalculator<K, hashBoundary>::HashValue {
-            return hash(v) % hashBoundary;
-        }
-    };
-
-    template <class K> using HighCollisionDefaultHashFunction = DefaultHashFunction<K, 256>;
-    template <class K> using MediumCollisionDefaultHashFunction = DefaultHashFunction<K, 4096>;
-    template <class K> using LowCollisionDefaultHashFunction = DefaultHashFunction<K, 32768>;
-}
 
 #if defined(__cpp_concepts) && !defined(_MSC_VER)
-template <class H>
-concept HashCalculatorHasBoundaryFunction = requires (H hashCalculator) {
-    { hashCalculator.getBoundary() };
-};
+
 #endif
 
-template <class K, class V, class H = dataTypes::MediumCollisionDefaultHashFunction<K>>
+template <class K, class V, class H>
 #if defined(__cpp_concepts) && !defined(_MSC_VER)
 requires
     UniqueIdentifiable<K> &&

@@ -30,7 +30,6 @@
 #include <iostream>
 //#include <unordered_set>
 #include <CDS/UnorderedSet>
-#include <CDS/HashMap>
 #include <CDS/OrderedSet>
 #include <CDS/Array>
 
@@ -153,7 +152,6 @@ private:
 
     auto validate ( ViewValue value ) const noexcept -> bool _ITERABLE_CONSTRAINT {
         if ( ! this->_predicates.all( [& value, this]( auto & pPair ) {
-//            return (*pPred)(value);
             auto tempVal = value;
             auto predIndex = pPair.getSecond();
             this->_mappers.forEach([& tempVal, &predIndex](auto & mPair){
@@ -488,19 +486,7 @@ public:
         }
     };
 
-    inline auto toMap () noexcept (false) {
-        if constexpr ( isPair<ViewValue>::value ) {
-            HashMap <
-                    typename std::remove_reference < decltype ( ((ViewValue *)nullptr)->getFirst() ) >::type,
-                    typename std::remove_reference < decltype ( ((ViewValue *)nullptr)->getSecond() ) >::type
-            > result;
-            for ( auto e : * this )
-                result[e.getFirst()] = e.getSecond();
-            return result;
-        } else
-            throw TypeUnmappable();
-            return HashMap < int, int >();
-    }
+    inline auto toMap () noexcept (false);
 
     auto toArray () noexcept -> Array < ViewValue > _ITERABLE_CONSTRAINT {
         Array < ViewValue > result;
@@ -566,6 +552,32 @@ auto View<T>::Sortable::push ( ViewValue & v ) noexcept -> void {
         head = head->next();
 
     head->next() = new Node ( head->next(), v );
+}
+
+
+#include <CDS/Map>
+
+template <class K, class V, class H = dataTypes::MediumCollisionDefaultHashFunction<K>>
+#if defined(__cpp_concepts) && !defined(_MSC_VER)
+requires
+UniqueIdentifiable<K> &&
+HashCalculatorHasBoundaryFunction<H>
+#endif
+class HashMap;
+
+template < typename T >
+auto View<T>::toMap () noexcept (false) {
+    if constexpr ( isPair<ViewValue>::value ) {
+        HashMap <
+                typename std::remove_reference < decltype ( ((ViewValue *)nullptr)->getFirst() ) >::type,
+                typename std::remove_reference < decltype ( ((ViewValue *)nullptr)->getSecond() ) >::type
+        > result;
+        for ( auto e : * this )
+            result[e.getFirst()] = e.getSecond();
+        return result;
+    } else
+        throw TypeUnmappable();
+    return HashMap < int, int >();
 }
 
 #undef _ITERABLE_CONSTRAINT

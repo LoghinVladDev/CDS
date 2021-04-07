@@ -119,7 +119,7 @@ set(
 )
 
 
-add_library( CDS ${CDS_LIB_SRC} src/prepro.h src/threading/Timer.hpp include/CDS/Atomic include/CDS/Traits)
+add_library( CDS ${CDS_LIB_SRC} )
 
 if (WIN32)
     set(
@@ -175,3 +175,62 @@ if(WIN32)
 else()
     target_link_libraries(CDS-dummy pthread)
 endif()
+
+set(
+        TEST_DEFAULT_SRC
+        src/cdsIntern/tests/Test.cpp
+        src/cdsIntern/tests/Test.h
+)
+
+set(
+        TEST_ALL_SRC
+)
+
+macro(testSuite)
+    set(
+            ${ARGV1}_SRC
+            src/cdsIntern/tests/${ARGV0}/${ARGV1}Test.cpp
+            src/cdsIntern/tests/${ARGV0}/${ARGV1}Test.h
+    )
+
+    set(
+            TEST_ALL_SRC
+            ${TEST_ALL_SRC}
+            ${${ARGV1}_SRC}
+    )
+
+    add_executable(Test_${ARGV1}_Only
+            ${${ARGV1}_SRC}
+            ${TEST_DEFAULT_SRC}
+            ${CDS_LIB_SRC}
+            src/cdsIntern/tests/${ARGV0}/${ARGV1}Only.cpp
+    )
+
+    target_link_libraries(
+            Test_${ARGV1}_Only
+            ${CDS_LIBRAIES}
+    )
+endmacro()
+
+testSuite(primitive Boolean)
+testSuite(primitive Double)
+testSuite(primitive Float)
+testSuite(primitive Integer)
+testSuite(primitive Long)
+testSuite(primitive Optional)
+testSuite(primitive Pair)
+testSuite(primitive Pointer)
+testSuite(primitive Reference)
+testSuite(primitive String)
+
+add_executable(
+        Test_All
+        src/cdsIntern/tests/all.cpp
+        ${TEST_ALL_SRC}
+        ${CDS_LIB_SRC}
+)
+
+target_link_libraries(
+        Test_All
+        ${CDS_LIBRAIES}
+)

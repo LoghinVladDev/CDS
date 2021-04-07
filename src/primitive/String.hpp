@@ -51,10 +51,10 @@ public:
 //    explicit String(StringLiteral, Index, Size = UINT64_MAX) noexcept;
     String(std::string const &) noexcept; // NOLINT(google-explicit-constructor)
 //    explicit String(std::string const &, Index, Size = UINT64_MAX) noexcept;
-    explicit String(Size, ElementType) noexcept;
-    explicit String(std::string::iterator const &, std::string::iterator const &) noexcept;
-    explicit String(IteratorBase &, IteratorBase &) noexcept;
-    explicit String(ConstIteratorBase &, ConstIteratorBase &) noexcept;
+    String(Size, ElementType) noexcept;
+    String(std::string::iterator const &, std::string::iterator const &) noexcept;
+    String(IteratorBase const &, IteratorBase const &) noexcept;
+    String(ConstIteratorBase const &, ConstIteratorBase const &) noexcept;
     String(std::initializer_list<ElementType> const &) noexcept;
 
     ~String() noexcept;
@@ -78,9 +78,9 @@ public:
     [[nodiscard]] constexpr inline auto maxSize() const noexcept -> Size { return this->_c; }
     [[nodiscard]] constexpr inline auto capacity() const noexcept -> Size { return this->_c; }
 
-    inline auto resize(Size s) noexcept -> void { this->_alloc( s ); }
-    inline auto reserve(Size s) noexcept -> void { this->_alloc( s ); }
-    auto shrink(SignedSize = -1) noexcept -> void;
+    auto resize(Size) noexcept -> void; //{ this->_alloc( s ); }
+    inline auto reserve(Size s) noexcept -> void { if ( s < this->_c ) return; this->resize( s ); }
+    inline auto shrink(SignedSize s = -1) noexcept -> void { if ( s == -1 ) s = this->_l; if ( s > this->_c ) return; this->resize( s ); }
 
     auto clear() noexcept -> void;
     [[nodiscard]] constexpr inline auto empty() const noexcept -> bool { return this->_l == 0; }
@@ -154,7 +154,7 @@ public:
     [[nodiscard]] inline auto toStdString () const noexcept -> std::string { return std::string(this->cStr()); }
     inline explicit operator std::string () const noexcept { return this->toStdString(); }
 
-    [[nodiscard]] constexpr auto cStr () const noexcept -> StringLiteral { return this->_p; }
+    [[nodiscard]] constexpr auto cStr () const noexcept -> StringLiteral { return this->_p == nullptr ? "" : this->_p; }
     inline explicit operator StringLiteral () const noexcept { return this->cStr(); }
 
     [[nodiscard]] constexpr auto data () noexcept -> CString  { return this->_p; }
@@ -315,6 +315,8 @@ public:
     auto all ( Predicate const & p ) const noexcept (false) -> bool { return this->size() == this->count(p); }
 
     auto view () const noexcept -> View < String >;
+
+    [[nodiscard]] auto reversed() const noexcept -> String;
 };
 
 class String::IteratorBase {
