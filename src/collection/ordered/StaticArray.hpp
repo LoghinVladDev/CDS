@@ -307,7 +307,7 @@ public:
     [[nodiscard]] auto view () const noexcept -> View < StaticArray < T, n >;
 };
 
-#include <View.hpp>
+#include <CDS/View>
 template <class T, Size n>
 auto StaticArray<T, n>::view() const noexcept -> View < StaticArray <T, n > > {
     return View(*this);

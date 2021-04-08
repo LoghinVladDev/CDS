@@ -1295,7 +1295,7 @@ auto DoubleLinkedList<T>::index(const T & e) const noexcept -> Index {
     return -1;
 }
 
-#include <View.hpp>
+#include <CDS/View>
 template < typename T >
 auto DoubleLinkedList<T>::view () const noexcept -> View < DoubleLinkedList < T > > {
     return View(*this);

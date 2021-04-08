@@ -148,7 +148,7 @@ int main() {
     return 0;
 }
 
-#include <functional/Random.hpp>
+#include <CDS/Random>
 void testRandom () {
 //    std::random_device d;
 //    std::mt19937 tw(d());
@@ -192,8 +192,8 @@ void testRandom () {
 //#define MUTEX_IMPLEMENTATION_WINAPI_MUTEX
 #include <CDS/Thread>
 #include <CDS/Mutex>
-#include <threading/Semaphore.hpp>
-#include <functional/Generator.hpp>
+#include <CDS/Semaphore>
+#include <CDS/Generator>
 #include <chrono>
 
 class IntGenerator : public Generator<int, int> {
@@ -211,7 +211,7 @@ class IntGenerator : public Generator<int, int> {
 #include <unistd.h>
 #endif
 #include <primitive/Tuple.hpp>
-#include <threading/Timer.hpp>
+#include <CDS/Timer>
 
 auto callback (int x) -> void {
     std::cout << x << '\n';

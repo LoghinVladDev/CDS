@@ -573,7 +573,7 @@ public:
     auto view () const noexcept -> View < HashMap < K, V, H > >;
 };
 
-#include <View.hpp>
+#include <CDS/View>
 template <class K, class V, class H>
 #if defined(__cpp_concepts) && !defined(_MSC_VER)
     requires

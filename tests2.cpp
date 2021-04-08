@@ -1,6 +1,6 @@
 #include <iostream>
-#include <threading/Atomic.hpp>
-#include <threading/Thread.hpp>
+#include <CDS/Atomic>
+#include <CDS/Thread>
 #include <CDS/Range>
 #include <CDS/Integer>
 #include <crypto/primitives/Block.hpp>
@@ -18,8 +18,8 @@ int main () {
 }
 
 //#include "primitive/View.hpp"
-#include <Array.hpp>
-#include <HashMap.hpp>
+#include <CDS/Array>
+#include <CDS/HashMap>
 #include <Tuple.hpp>
 void testView () {
 

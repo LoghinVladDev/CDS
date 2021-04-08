@@ -6,7 +6,7 @@
 #define CDS_OBJECT_HPP
 
 #include <prepro.h>
-#include "./String.hpp"
+#include <CDS/String>
 
 class Object {
 public:
