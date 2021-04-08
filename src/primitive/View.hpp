@@ -32,7 +32,9 @@
 //#include <unordered_set>
 #include <CDS/UnorderedSet>
 #include <CDS/OrderedSet>
-#include <CDS/Array>
+
+template <typename T>
+class Array;
 
 #include <CDS/Traits>
 
@@ -271,11 +273,11 @@ public:
                 this->regular->next();
             while (
                     ( this->usingSortable ?
-                        (* this->sorted) != this->_pView->_pSortable->end() :
-                        (* this->regular) != this->_pView->_pObject->end()
+                      (* this->sorted) != this->_pView->_pSortable->end() :
+                      (* this->regular) != this->_pView->_pObject->end()
                     ) &&
                     ! this->_pView->validate(this->value(true))
-                )
+                    )
                 if ( this->usingSortable )
                     this->sorted->next();
                 else
@@ -285,14 +287,14 @@ public:
 
         inline auto operator == ( Iterator const & obj ) const noexcept -> bool _ITERABLE_CONSTRAINT {
             return
-                this->usingSortable ?
+                    this->usingSortable ?
                     *this->sorted == *obj.sorted && this->_pView->_pSortable == obj._pView->_pSortable :
                     *this->regular == *obj.regular && this->_pView->_pObject == obj._pView->_pObject;
         }
 
         inline auto operator != ( Iterator const & obj ) const noexcept -> bool _ITERABLE_CONSTRAINT {
             return
-                this->usingSortable ?
+                    this->usingSortable ?
                     *this->sorted != *obj.sorted || this->_pView->_pSortable != obj._pView->_pSortable :
                     *this->regular != *obj.regular || this->_pView->_pObject != obj._pView->_pObject;
         }
@@ -489,12 +491,7 @@ public:
 
     inline auto toMap () noexcept (false);
 
-    auto toArray () noexcept -> Array < ViewValue > _ITERABLE_CONSTRAINT {
-        Array < ViewValue > result;
-        for ( auto e : * this )
-            result.pushBack(e);
-        return result;
-    }
+    auto toArray () noexcept -> Array < ViewValue > _ITERABLE_CONSTRAINT;
 
     auto toList () noexcept -> LinkedList < ViewValue > _ITERABLE_CONSTRAINT {
         LinkedList < ViewValue > result;
@@ -579,6 +576,15 @@ auto View<T>::toMap () noexcept (false) {
     } else
         throw TypeUnmappable();
     return HashMap < int, int >();
+}
+
+#include <CDS/Array>
+template <typename T>
+auto View<T>::toArray () noexcept -> Array < ViewValue > _ITERABLE_CONSTRAINT {
+    Array < ViewValue > result;
+    for ( auto e : * this )
+        result.pushBack(e);
+    return result;
 }
 
 #undef _ITERABLE_CONSTRAINT
