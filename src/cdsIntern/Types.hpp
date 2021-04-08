@@ -12,7 +12,7 @@ concept HashCalculatorHasBoundaryFunction = requires (H hashCalculator) {
 };
 #endif
 
-#include <std-types.h>
+#include "../../std-types.h"
 #include <CDS/Object>
 
 #include <cstring>
@@ -30,7 +30,7 @@ template <> auto hash<CDS_sint16> (CDS_sint16 const & o)noexcept -> Index { retu
 template <> auto hash<CDS_sint32> (CDS_sint32 const & o)noexcept -> Index { return o; }
 template <> auto hash<CDS_sint64> (CDS_sint64 const & o)noexcept -> Index { return o; }
 
-#include <std-types.h>
+#include "../../std-types.h"
 template <typename K, Size hashBoundary>
 class HashCalculator {
 public:
