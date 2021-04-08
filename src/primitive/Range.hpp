@@ -54,7 +54,7 @@ public:
     auto view () const noexcept -> View < Range >;
 };
 
-#include <View.hpp>
+#include <CDS/View>
 auto Range::view() const noexcept -> View < Range > {
     return View(*this);
 }

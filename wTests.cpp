@@ -4,7 +4,7 @@
 //#include <unistd.h>
 #include <windows.h>
 
-#include <threading/Timer.hpp>
+#include <CDS/Timer>
 #include <CDS/Range>
 
 int main () {

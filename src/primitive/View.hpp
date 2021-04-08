@@ -7,7 +7,7 @@
 
 #include <CDS/Object>
 #include <CDS/Collection>
-#include <Concepts.hpp>
+#include <CDS/Concepts>
 
 
 #if defined(__cpp_concepts)
@@ -518,7 +518,7 @@ public:
     }
 };
 
-#include <Traits.hpp>
+#include <CDS/Traits>
 
 template <typename T>
 auto View<T>::Sortable::push ( ViewValue & v ) noexcept -> void {

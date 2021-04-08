@@ -4,7 +4,7 @@
 
 #ifndef CDS_ORDEREDSET_HPP
 #define CDS_ORDEREDSET_HPP
-#include "../unordered/SetBase.hpp"
+#include <CDS/SetBase>
 
 namespace dataTypes {
     template <class T>
@@ -127,7 +127,7 @@ auto OrderedSet<T, C>::insert( ConstReference value) noexcept -> bool {
     return true;
 }
 
-#include <View.hpp>
+#include <CDS/View>
 template <class T, class C>
 #if defined(__cpp_concepts) && !defined(_MSC_VER)
 requires ValidSetComparator <T, C>

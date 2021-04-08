@@ -952,7 +952,7 @@ auto Array<T>::sort(bool (* sortFunc) (T const &, T const &) noexcept) noexcept 
 
     Array::quickSort( this->begin(), -- this->end(), sortFunc );
 }
-#include <View.hpp>
+#include <CDS/View>
 
 template < typename T >
 auto Array<T>::view () const noexcept -> View < Array < T > > {

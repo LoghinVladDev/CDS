@@ -5,7 +5,7 @@
 #ifndef CDS_UNORDEREDSET_HPP
 #define CDS_UNORDEREDSET_HPP
 
-#include "../unordered/SetBase.hpp"
+#include <CDS/SetBase>
 
 template <class T>
 class UnorderedSet final : public SetBase<T>  {
@@ -84,7 +84,7 @@ auto UnorderedSet<T>::insert(ConstReference v) noexcept -> bool {
     return true;
 }
 
-#include <View.hpp>
+#include <CDS/View>
 template <class T>
 auto UnorderedSet<T>::view() const noexcept -> View<UnorderedSet<T>> {
     return View(*this);

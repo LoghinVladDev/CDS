@@ -5,8 +5,8 @@
 #ifndef CDS_OBJECT_HPP
 #define CDS_OBJECT_HPP
 
-#include <prepro.h>
-#include "./String.hpp"
+#include "../prepro.h"
+#include <CDS/String>
 
 class Object {
 public:
