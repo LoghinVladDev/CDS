@@ -365,22 +365,22 @@ auto String::findFirstNotOf ( String const & o ) const noexcept -> Index {
 }
 
 auto String::findLastOf ( String const & o ) const noexcept -> Index {
-    Index i = 0;
+    Index i = this->size() - 1;
     for ( auto it = this->rbegin(); it != this->rend(); it++ )
         if ( o.contains(it.value()) )
             return i;
         else
-            i++;
+            i--;
     return INVALID_POS;
 }
 
 auto String::findLastNotOf ( String const & o ) const noexcept -> Index {
-    Index i = 0;
+    Index i = this->size() - 1;
     for ( auto it = this->rbegin(); it != this->rend(); it++ )
         if ( ! o.contains(it.value()) )
             return i;
         else
-            i++;
+            i--;
     return INVALID_POS;
 }
 

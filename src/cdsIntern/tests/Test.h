@@ -53,11 +53,15 @@ public:
         static HashMap < Modifier, int > colorMap;
         Flags f = FOREGROUND_DEFAULT | BACKGROUND_DEFAULT;
     public:
-        auto format () const noexcept -> Flags { return this->f; }
+        [[nodiscard]] auto format () const noexcept -> Flags { return this->f; }
 
         constexpr explicit TerminalColor ( Flags f ) noexcept : f(f) {}
         constexpr TerminalColor ( TerminalColor const & ) noexcept = default;
         static auto asList ( Flags f ) noexcept -> String {
+#if defined(_WIN32)
+            return "";
+#endif
+
             String res;
             FOREACH_FLAG(0, 31, CDS_uint32, i ) {
                 if ( colorMap.containsKey( static_cast<Modifier>(i) ) && ( f & i ) ) {
@@ -68,7 +72,11 @@ public:
         }
 
         friend std::ostream & operator << ( std::ostream & o, TerminalColor const & c ) {
+#if defined(_WIN32)
+            return o;
+#else
             o << "\033[" << asList(c.f) << "m";
+#endif
             return o;
         }
 

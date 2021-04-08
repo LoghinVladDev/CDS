@@ -51,7 +51,9 @@ auto Test::log(const String & text) noexcept -> void {
 auto Test::log(const char * format, ...) noexcept -> void {
     va_list args;
     va_start(args, format);
+#if !defined(_WIN32)
     printf("\033[%sm", TerminalColor::asList(Test::TerminalColor::clear.format()).cStr());
+#endif
     printf("%s", this->getDepthString().cStr());
     vprintf(format, args);
     printf("\n");
@@ -65,10 +67,14 @@ auto Test::logBold(const String & text) noexcept -> void {
 auto Test::logBold(const char * format, ...) noexcept -> void {
     va_list args;
     va_start(args, format);
+#if !defined(_WIN32)
     printf("\033[%sm", TerminalColor::asList(bold.format()).cStr());
+#endif
     printf("%s", this->getDepthString().cStr());
     vprintf(format, args);
+#if !defined(_WIN32)
     printf("\033[%sm", TerminalColor::asList(Test::TerminalColor::clear.format()).cStr());
+#endif
     printf("\n");
     va_end(args);
 }
@@ -80,10 +86,14 @@ auto Test::logOK(const String & text) noexcept -> void {
 auto Test::logOK(const char * format, ...) noexcept -> void {
     va_list args;
     va_start(args, format);
+#if !defined(_WIN32)
     printf("\033[%sm", TerminalColor::asList(testOK.format()).cStr());
+#endif
     printf("%s", this->getDepthString().cStr());
     vprintf(format, args);
+#if !defined(_WIN32)
     printf("\033[%sm", TerminalColor::asList(Test::TerminalColor::clear.format()).cStr());
+#endif
     printf("\n");
     va_end(args);
 }
@@ -96,10 +106,14 @@ auto Test::logWarning(const String & text) noexcept -> void {
 auto Test::logWarning(const char * format, ...) noexcept -> void {
     va_list args;
     va_start(args, format);
+#if !defined(_WIN32)
     printf("\033[%sm", TerminalColor::asList(testWarn.format()).cStr());
+#endif
     printf("%s", this->getDepthString().cStr());
     vprintf(format, args);
+#if !defined(_WIN32)
     printf("\033[%sm", TerminalColor::asList(Test::TerminalColor::clear.format()).cStr());
+#endif
     printf("\n");
     va_end(args);
 }
@@ -113,10 +127,14 @@ auto Test::logError(const String & text) noexcept -> void {
 auto Test::logError(const char * format, ...) noexcept -> void {
     va_list args;
     va_start(args, format);
+#if !defined(_WIN32)
     printf("\033[%sm", TerminalColor::asList(testNOK.format()).cStr());
+#endif
     printf("%s", this->getDepthString().cStr());
     vprintf(format, args);
+#if !defined(_WIN32)
     printf("\033[%sm", TerminalColor::asList(Test::TerminalColor::clear.format()).cStr());
+#endif
     printf("\n");
     va_end(args);
 }

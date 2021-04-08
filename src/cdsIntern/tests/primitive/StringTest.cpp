@@ -689,6 +689,122 @@ auto StringTest::execute() noexcept -> bool {
             this->logWarning("Find Last String error");
             allOk = false;
         }
+
+        this->log("First of 'a', 's', ' ' : %d", str.findFirstOf("as "));
+        if ( str.findFirstOf("as ") != 3 ) {
+            this->logWarning("Find First Of error");
+            allOk = false;
+        }
+
+        this->log("First of 'x', 'y' : %d", str.findFirstOf("xy"));
+        if ( str.findFirstOf("xy") != String::INVALID_POS ) {
+            this->logWarning("Find First Of error");
+            allOk = false;
+        }
+
+        this->log("First not of 'T', 'h', 'i', 's' : %d", str.findFirstNotOf("This"));
+        if ( str.findFirstNotOf("This") != 4 ) {
+            this->logWarning("Find First not Of error");
+            allOk = false;
+        }
+
+        this->log("Last of 'a', 's', ' ' : %d", str.findLastOf("as "));
+        if ( str.findLastOf("as ") != 17 ) {
+            this->logWarning("Find Last Of Error");
+            allOk = false;
+        }
+
+        this->log("First of 'x', 'y' : %d", str.findLastOf("xy"));
+        if ( str.findLastOf("xy") != String::INVALID_POS ) {
+            this->logWarning("Find Last Of error");
+            allOk = false;
+        }
+
+        this->log("Last not of 'i', 'n', 'g' : %d", str.findLastNotOf("ing"));
+        if ( str.findLastNotOf("ing") != 19 ) {
+            this->logWarning("Find Last Not Of error");
+            allOk = false;
+        }
+    });
+
+    this->executeSubtest("Substring Tests", [this, & allOk] {
+        String original = "This is a sample string";
+
+        this->log("Original String : '%s'", original.cStr());
+
+        this->log("Second Word : '%s'", original.substr(5, 7).cStr());
+        if ( original.substr(5, 7) != "is" ) {
+            this->logWarning("Substr error");
+            allOk = false;
+        }
+
+        this->log("String until first word : '%s'", original.substr(0, 4).cStr());
+        if ( original.substr(0, 4) != "This" ) {
+            this->logWarning("Substr error");
+            allOk = false;
+        }
+
+        this->log("String after second word : '%s'", original.substr(8).cStr());
+        if ( original.substr(8) != "a sample string" ) {
+            this->logWarning("Substr error");
+            allOk = false;
+        }
+
+        this->log("String until first word, invalid start index (<0) : '%s'", original.substr(-200, 4).cStr());
+        if ( original.substr(-200, 4) != "This" ) {
+            this->logWarning("Substr error");
+            allOk = false;
+        }
+
+        this->log("String after second word, invalid end index (>len) : '%s'", original.substr(8, 2000).cStr());
+        if ( original.substr(8, 2000) != "a sample string" ) {
+            this->logWarning("Substr error");
+            allOk = false;
+        }
+
+        this->log("String with indices start > end : '%s'", original.substr(4, 2).cStr());
+        if ( !original.substr(4, 2).empty() ) {
+            this->logWarning("Substr error");
+            allOk = false;
+        }
+
+        this->log("String with indices < 0 : '%s'", original.substr(-7, -3).cStr());
+        if ( !original.substr(-7, -3).empty() ) {
+            this->logWarning("Substr error");
+            allOk = false;
+        }
+
+        this->log("String with indices > length : '%s'", original.substr(100, 200).cStr());
+        if( ! original.substr(100, 200).empty() ){
+            this->logWarning("Substr error");
+            allOk = false;
+        }
+    });
+
+    this->executeSubtest("Comparison Tests", [this, &allOk]{
+        this->log("String(Test String) == String(Test String) : %s", String("Test String") == String("Test String") ? "true" : "false");
+        if ( String("Test String") != String("Test String") ) {
+            this->logWarning("String == String error");
+            allOk = false;
+        }
+
+        this->log("String(Test String) == String(Not Test String) : %s", String("Test String") == String("Not Test String") ? "true" : "false");
+        if ( String("Test String") == String("Not Test String") ) {
+            this->logWarning("String == String error");
+            allOk = false;
+        }
+
+        this->log("String(a) == 'a' (char) : %s", String("a") == 'a' ? "true" : "false");
+        if ( String("a") != 'a' ) {
+            this->logWarning("String == char error");
+            allOk = false;
+        }
+
+        this->log("String(a) == 'b' (char) : %s", String("a") == 'b' ? "true" : "false");
+        if ( String("a") == 'b' ) {
+            this->logWarning("String == char error");
+            allOk = false;
+        }
     });
 
     allOk ? this->logOK("String test OK") : this->logError("String test Not OK");

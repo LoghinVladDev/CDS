@@ -12,6 +12,9 @@ concept HashCalculatorHasBoundaryFunction = requires (H hashCalculator) {
 };
 #endif
 
+#include <std-types.h>
+#include <CDS/Object>
+
 #include <cstring>
 template <class T> static auto hash (T const &) noexcept -> Index { return 0; }
 template <> auto hash<String> (String const & o) noexcept -> Index { return o.length(); }
