@@ -24,9 +24,9 @@ int main () {
 void testView () {
 
 
-    LinkedList < int > numere = {5, 1, 2, 9, 6, 4};
-    numere.sort([](auto a, auto b){return a < b;});
-    std::cout << numere;
+//    LinkedList < int > numere = {5, 1, 2, 9, 6, 4};
+//    numere.sort([](auto a, auto b){return a < b;});
+//    std::cout << numere;
 
 
 //
@@ -41,39 +41,39 @@ void testView () {
 //    exit(0);
 
 
-    int n = 5;
-    int s = 4;
+//    int n = 5;
+//    int s = 4;
 
-    Array < Pair < Pair < int, int >, int > > edges = {
-            { {1, 3}, 1 },
-            { {2, 1}, 2 },
-            { {4, 2}, 1 },
-            { {4, 3}, 8 },
-            { {5, 3}, 5 },
-            { {5, 4}, 2 }
-    };
+//    Array < Pair < Pair < int, int >, int > > edges = {
+//            { {1, 3}, 1 },
+//            { {2, 1}, 2 },
+//            { {4, 2}, 1 },
+//            { {4, 3}, 8 },
+//            { {5, 3}, 5 },
+//            { {5, 4}, 2 }
+//    };
+//
+//    HashMap < int, LinkedList < Pair < int, int > > > neighbours;
+//    edges.forEach([&neighbours](auto p){neighbours[p.getFirst().getFirst()].pushBack({p.getFirst().getSecond(), p.getSecond()});});
 
-    HashMap < int, LinkedList < Pair < int, int > > > neighbours;
-    edges.forEach([&neighbours](auto p){neighbours[p.getFirst().getFirst()].pushBack({p.getFirst().getSecond(), p.getSecond()});});
+//    HashMap < int, int > distances;
+//    Range(1, n + 1).view().forEach([& distances](auto i){distances[i] = INT32_MAX;});
+//    distances[s] = 0;
+//    auto q = Range(1, n + 1).view().toSet();
 
-    HashMap < int, int > distances;
-    Range(1, n + 1).view().forEach([& distances](auto i){distances[i] = INT32_MAX;});
-    distances[s] = 0;
-    auto q = Range(1, n + 1).view().toSet();
-
-    while ( ! q.empty() ) {
-        int shortestDistNode = 1;
-        q.forEach([&shortestDistNode, &distances](auto i){if (distances[i] < distances[shortestDistNode]) shortestDistNode = i;});
-        q.remove(shortestDistNode);
-
-        neighbours[shortestDistNode].forEach([&distances, &shortestDistNode](auto & i){
-            int alt = i.getSecond() + distances[shortestDistNode];
-            if ( alt < distances[i.getFirst()] )
-                distances[i.getFirst()] = alt;
-        });
-    }
-
-    distances.forEach([](auto i){std::cout << i << ' ';});
+//    while ( ! q.empty() ) {
+//        int shortestDistNode = 1;
+//        q.forEach([&shortestDistNode, &distances](auto i){if (distances[i] < distances[shortestDistNode]) shortestDistNode = i;});
+//        q.remove(shortestDistNode);
+//
+//        neighbours[shortestDistNode].forEach([&distances, &shortestDistNode](auto & i){
+//            int alt = i.getSecond() + distances[shortestDistNode];
+//            if ( alt < distances[i.getFirst()] )
+//                distances[i.getFirst()] = alt;
+//        });
+//    }
+//
+//    distances.forEach([](auto i){std::cout << i << ' ';});
 
 
     String s2 = "Ana are mere, dar are Gigel bere?";

@@ -142,9 +142,9 @@ public:
     constexpr operator int() const noexcept { return this->v; }
 
     constexpr auto operator ++ () noexcept -> Integer & { this->v++; return * this; }
-    constexpr auto operator ++ (int) noexcept -> Integer { auto c = * this; this->v++; return c; }
+    __integer_constexpr auto operator ++ (int) noexcept -> Integer { auto c = * this; this->v++; return c; }
     constexpr auto operator -- () noexcept -> Integer & { this->v--; return * this; }
-    constexpr auto operator -- (int) noexcept -> Integer { auto c = * this; this->v--; return c; }
+    __integer_constexpr auto operator -- (int) noexcept -> Integer { auto c = * this; this->v--; return c; }
 
     [[nodiscard]]constexpr inline auto get() const noexcept -> int { return this->v; }
 public:

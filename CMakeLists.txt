@@ -107,7 +107,7 @@ set(
         src/collection/ordered/StaticArray.hpp
         src/functional/Random.hpp
         src/primitive/Tuple.hpp
-        src/threading/Atomic.hpp src/cdsIntern/Concepts.hpp src/cdsIntern/Traits.hpp)
+        src/threading/Atomic.hpp src/cdsIntern/Concepts.hpp src/cdsIntern/Traits.hpp src/cdsIntern/Types.hpp)
 
 set(
         CDS_LIB_SRC
@@ -184,7 +184,7 @@ set(
 
 set(
         TEST_ALL_SRC
-)
+        include/CDS/Types)
 
 macro(testSuite)
     set(

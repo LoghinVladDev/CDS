@@ -253,29 +253,29 @@ public:
     GEN_FUNCTION_DECLARATIONS(count, Predicate, Size, , NO_PARAM_DELIM, , , ;)
 #else
     template < typename Action >
-    auto forEach ( Action ) noexcept (false) -> void;
+    auto forEach ( Action const & ) noexcept (false) -> void;
     template < typename Action >
-    auto forEach ( Action ) const noexcept (false) -> void;
+    auto forEach ( Action const & ) const noexcept (false) -> void;
 
     template < typename Predicate >
-    auto some ( Predicate, Size ) noexcept (false) -> bool;
+    auto some ( Predicate const &, Size ) noexcept (false) -> bool;
     template < typename Predicate >
-    auto some ( Predicate, Size ) const noexcept (false) -> bool;
+    auto some ( Predicate const &, Size ) const noexcept (false) -> bool;
 
     template < typename Predicate >
-    auto count ( Predicate ) noexcept (false) -> Size;
+    auto count ( Predicate const & ) noexcept (false) -> Size;
     template < typename Predicate >
-    auto count ( Predicate ) const noexcept(false) -> Size;
+    auto count ( Predicate const & ) const noexcept(false) -> Size;
 
     template < typename Predicate >
-    inline auto any ( Predicate p ) noexcept (false) -> bool { return this->some ( p, 1 ); }
+    inline auto any ( Predicate const & p ) noexcept (false) -> bool { return this->some ( p, 1 ); }
     template < typename Predicate >
-    inline auto any ( Predicate p ) const noexcept (false) -> bool { return this->some ( p, 1 ); }
+    inline auto any ( Predicate const & p ) const noexcept (false) -> bool { return this->some ( p, 1 ); }
 
     template < typename Predicate >
-    inline auto all ( Predicate p ) noexcept (false) -> bool { return ! this->any ( [&p] (T & e) noexcept -> bool { return ! p(e); } ); }
+    inline auto all ( Predicate const & p ) noexcept (false) -> bool { return ! this->any ( [&p] (T & e) noexcept -> bool { return ! p(e); } ); }
     template < typename Predicate >
-    inline auto all ( Predicate p ) const noexcept (false) -> bool { return ! this->any ( [&p] (T const & e) noexcept -> bool { return ! p(e); } ); }
+    inline auto all ( Predicate const & p ) const noexcept (false) -> bool { return ! this->any ( [&p] (T const & e) noexcept -> bool { return ! p(e); } ); }
 #endif
 
 #undef GEN_FUNCTION_DECLARATIONS
@@ -363,7 +363,7 @@ _GEN_FUNCTION_GROUP(count, Predicate, Size, p, NO_PARAM_DELIM, , {
 #else
 template < typename T >
 template < typename Action >
-auto Collection<T>::forEach ( Action a ) noexcept (false) -> void {
+auto Collection<T>::forEach ( Action const & a ) noexcept (false) -> void {
     auto begin = this->beginPtr();
     auto end = this->endPtr();
 
@@ -376,7 +376,7 @@ auto Collection<T>::forEach ( Action a ) noexcept (false) -> void {
 
 template < typename T >
 template < typename Action >
-auto Collection<T>::forEach ( Action ) const noexcept (false) -> void {
+auto Collection<T>::forEach ( Action const & a ) const noexcept (false) -> void {
     auto begin = this->beginPtr();
     auto end = this->endPtr();
 
@@ -389,7 +389,7 @@ auto Collection<T>::forEach ( Action ) const noexcept (false) -> void {
 
 template < typename T >
 template < typename Predicate >
-auto Collection<T>::some ( Predicate, Size ) noexcept (false) -> bool {
+auto Collection<T>::some ( Predicate const & p, Size count ) noexcept (false) -> bool {
     Size trueCount = 0;
 
     auto begin = this->beginPtr();
@@ -407,7 +407,7 @@ auto Collection<T>::some ( Predicate, Size ) noexcept (false) -> bool {
 
 template < typename T >
 template < typename Predicate >
-auto Collection<T>::some ( Predicate, Size ) const noexcept (false) -> bool {
+auto Collection<T>::some ( Predicate const & p, Size count ) const noexcept (false) -> bool {
     Size trueCount = 0;
 
     auto begin = this->beginPtr();
@@ -425,7 +425,7 @@ auto Collection<T>::some ( Predicate, Size ) const noexcept (false) -> bool {
 
 template < typename T >
 template < typename Predicate >
-auto Collection<T>::count ( Predicate ) noexcept (false) -> Size {
+auto Collection<T>::count ( Predicate const & p ) noexcept (false) -> Size {
     Size trueCount = 0;
 
     auto pBegin = this->beginPtr();
@@ -443,7 +443,7 @@ auto Collection<T>::count ( Predicate ) noexcept (false) -> Size {
 
 template < typename T >
 template < typename Predicate >
-auto Collection<T>::count ( Predicate ) const noexcept(false) -> Size {
+auto Collection<T>::count ( Predicate const & p ) const noexcept(false) -> Size {
     Size trueCount = 0;
 
     auto pBegin = this->beginPtr();

@@ -17,6 +17,7 @@
 #else
 #define _ITERABLE_CONSTRAINT
 #define _PRINTABLE_CONSTRAINT
+#define _AVERAGE_ITERABLE_CONSTRAINT
 #endif
 
 #include <ostream>
@@ -114,7 +115,7 @@ private:
 
             }
 
-            constexpr ~Iterator () noexcept = default;
+            ~Iterator () noexcept = default;
 
             constexpr auto next () noexcept -> Iterator & { this->_pNode = this->_pNode->next(); return * this; }
             constexpr auto value () const noexcept -> ViewValue & { return this->_pNode->value(); }

@@ -47,8 +47,10 @@ struct isPair : public std::false_type {};
 template < class T1, class T2 >
 struct isPair <Pair<T1, T2>> : public std::true_type {};
 
+#if defined(__cpp_concepts)
 template < typename T >
 concept IsMappable = isPair<T>::value;
+#endif
 //#include <Pair.hpp>
 //template < typename T >
 //struct pairFirstType {

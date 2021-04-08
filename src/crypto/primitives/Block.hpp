@@ -20,7 +20,7 @@ namespace crypto {
         using byte = CDS_byte;
 
     private:
-        constexpr static BlockSize bytes = byteSize;
+        __crypto_constexpr static inline BlockSize bytes = byteSize;
 
         byte * _pData {nullptr};
         byte _paddingCharacter {'\0'};

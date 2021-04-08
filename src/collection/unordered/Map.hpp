@@ -5,6 +5,7 @@
 #ifndef CDS_MAP_HPP
 #define CDS_MAP_HPP
 
+#include <CDS/Types>
 #include <CDS/Concepts>
 #include <CDS/Collection>
 #include <CDS/Pair>

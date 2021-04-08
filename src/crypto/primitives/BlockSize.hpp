@@ -7,6 +7,12 @@
 
 #include <CDS/Object>
 
+#if __cpp_constexpr >= 201907
+#define __crypto_constexpr constexpr
+#else
+#define __crypto_constexpr
+#endif
+
 namespace crypto {
     class BlockSize : public Object {
     public:
@@ -39,7 +45,7 @@ namespace crypto {
 
         constexpr BlockSize () noexcept = default;
         constexpr BlockSize ( BlockSize const & obj ) noexcept = default;
-        constexpr BlockSize ( BlockSize && obj ) noexcept : _size(std::exchange(obj._size, Value::BITS_UNDEFINED)) {}
+        __crypto_constexpr BlockSize ( BlockSize && obj ) noexcept : _size(std::exchange(obj._size, Value::BITS_UNDEFINED)) {}
         constexpr BlockSize ( BlockSize::Value value ) noexcept : _size(value) { } // NOLINT(google-explicit-constructor)
         constexpr explicit BlockSize ( Size reqSize ) noexcept : _size(closestSize(reqSize)) {}
 
@@ -152,7 +158,7 @@ namespace crypto {
             return String().append("BlockSize of ").append(this->bytes() * 8).append(" bytes");
         }
 
-        constexpr ~BlockSize () noexcept override { }
+        __crypto_constexpr ~BlockSize () noexcept override { }
     };
 
 //    namespace size {
