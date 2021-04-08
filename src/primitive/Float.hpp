@@ -6,7 +6,7 @@
 #define CDS_FLOAT_HPP
 
 #include <CDS/Object>
-#include "./PrimitiveGenerator.hpp"
+#include "../cdsIntern/PrimitiveGenerator.hpp"
 
 #if __cpp_constepxr >= 201907
 #define __float_constexpr constexpr
