@@ -143,9 +143,9 @@ public:
     [[nodiscard]]constexpr inline auto get() const noexcept -> long long int { return this->v; }
 
     constexpr auto operator ++ () noexcept -> Long & { this->v++; return * this; }
-    constexpr auto operator ++ (int) noexcept -> Long { auto c = * this; this->v++; return c; }
+    __long_constexpr auto operator ++ (int) noexcept -> Long { auto c = * this; this->v++; return c; }
     constexpr auto operator -- () noexcept -> Long & { this->v--; return * this; }
-    constexpr auto operator -- (int) noexcept -> Long { auto c = * this; this->v--; return c; }
+    __long_constexpr auto operator -- (int) noexcept -> Long { auto c = * this; this->v--; return c; }
 
 public:
     [[nodiscard]] auto hash() const noexcept -> Index override {
