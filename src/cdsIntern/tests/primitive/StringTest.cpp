@@ -1,3 +1,5 @@
+#pragma clang diagnostic push
+#pragma ide diagnostic ignored "bugprone-macro-parentheses"
 //
 // Created by loghin on 05.04.2021.
 //
@@ -5,6 +7,7 @@
 #include "StringTest.h"
 
 #include <CDS/String>
+#include <CDS/Range>
 
 auto StringTest::execute() noexcept -> bool {
     bool allOk = true;
@@ -805,8 +808,134 @@ auto StringTest::execute() noexcept -> bool {
             this->logWarning("String == char error");
             allOk = false;
         }
+
+        constexpr CDS_uint8 comparableCount = 8;
+
+        const char * leftComparable [comparableCount] = { "abcd", "ABCD", "abc", "123", "1234", "12", "12ab", "ab12" };
+        const char * rightComparable [comparableCount] = { "abce", "ABC", "abce", "124", "1224", "13", "13ac", "ab11" };
+
+        for ( auto i : Range(comparableCount) ) {
+#define COMP_TEST(_operand, _left, _right) \
+            this->log(                      \
+                    "String (%s) " #_operand " String (%s) : %s", \
+                    String(_left).cStr(),   \
+                    String(_right).cStr(),  \
+                    String(_left) _operand String(_right) ? "true" : "false"\
+            );                             \
+                                           \
+            if ( String(_left) _operand String(_right) != std::strcmp(_left, _right) _operand 0 ) { \
+                this->logWarning("String " #_operand " compare error");                             \
+                allOk = false;\
+            }                              \
+                                           \
+            this->log(                     \
+                    "String (%s) " #_operand " StringLiteral (%s) : %s",                            \
+                    String(_left).cStr(),  \
+                    _right,                \
+                    String(_left) _operand _right ? "true" : "false"\
+            );                             \
+                                           \
+            if ( String(_left) _operand _right != std::strcmp(_left, _right) _operand 0) {          \
+                this->logWarning("String " #_operand " StringLiteral compare error");               \
+                allOk = false;\
+            }                              \
+                                           \
+            this->log(                     \
+                    "String (%s) " #_operand " std::string (%s) : %s",                            \
+                    String(_left).cStr(),  \
+                    std::string(_right).c_str() ,                \
+                    String(_left) _operand std::string(_right) ? "true" : "false"\
+            );                             \
+                                           \
+            if ( String(_left) _operand std::string(_right) != std::strcmp(_left, _right) _operand 0) {          \
+                this->logWarning("String " #_operand " std::string compare error");               \
+                allOk = false;\
+            }\
+
+            COMP_TEST(>, leftComparable[i], rightComparable[i])
+            COMP_TEST(<, leftComparable[i], rightComparable[i])
+            COMP_TEST(>=, leftComparable[i], rightComparable[i])
+            COMP_TEST(<=, leftComparable[i], rightComparable[i])
+
+#undef COMP_TEST
+        }
+    });
+
+    this->executeSubtest("Utility Functions, String Formatting", [this, & allOk] {
+         this->log("String * int ( string multiplication ) : %s * %d = %s", String("abc...").cStr(), 5, (String("abc...") * 5).cStr());
+         if ( String("abc...") * 5 != "abc...abc...abc...abc...abc..." ) {
+             this->logWarning("String Multiplication Warning");
+             allOk = false;
+         }
+
+         this->log("Left Trim of String Whitespace : '%s', trimmed : '%s'", String("   \t  \n Whitespace String  \t  ").cStr(), String("   \t  \n Whitespace String  \t  ").ltrim(" \t\n").cStr());
+         this->log("Right Trim of String Whitespace : '%s', trimmed : '%s'", String("   \t  \n Whitespace String  \t  ").cStr(), String("   \t  \n Whitespace String  \t  ").rtrim(" \t\n").cStr());
+         this->log("Trim of String Whitespace : '%s', trimmed : '%s'", String("   \t  \n Whitespace String  \t  ").cStr(), String("   \t  \n Whitespace String  \t  ").trim(" \t\n").cStr());
+
+         if ( String("   \t  \n Whitespace String  \t  ").ltrim(" \t\n") != "Whitespace String  \t  " ) {
+             this->logWarning("Ltrim Error");
+             allOk = false;
+         }
+
+         if ( String("   \t  \n Whitespace String  \t  ").rtrim(" \t\n") != "   \t  \n Whitespace String" ) {
+             this->logWarning("Rtrim Error");
+             allOk = false;
+         }
+
+         if ( String("   \t  \n Whitespace String  \t  ").trim(" \t\n") != "Whitespace String" ) {
+             this->logWarning("Trim Error");
+             allOk = false;
+         }
+
+         this->log("'Sample String' left justified by %d : '%s'", 10, String("Sample String").ljust(10).cStr());
+         this->log("'Sample String' left justified by %d : '%s'", 15, String("Sample String").ljust(15).cStr());
+         this->log("'Sample String' left justified by %d : '%s'", 30, String("Sample String").ljust(30).cStr());
+
+         this->log("'Sample String' right justified by %d : '%s'", 10, String("Sample String").rjust(10).cStr());
+         this->log("'Sample String' right justified by %d : '%s'", 15, String("Sample String").rjust(15).cStr());
+         this->log("'Sample String' right justified by %d : '%s'", 30, String("Sample String").rjust(30).cStr());
+
+         if ( String("Sample String").ljust(10).length() != std::max(String("Sample String").length(), 10llu) ) {
+             this->logWarning("Left Justify Error");
+             allOk = false;
+         }
+         if ( String("Sample String").ljust(15).length() != std::max(String("Sample String").length(), 15llu) ) {
+             this->logWarning("Left Justify Error");
+             allOk = false;
+         }
+         if ( String("Sample String").ljust(30).length() != std::max(String("Sample String").length(), 30llu) ) {
+             this->logWarning("Left Justify Error");
+             allOk = false;
+         }
+
+         if ( String("Sample String").rjust(10).length() != std::max(String("Sample String").length(), 10llu) ) {
+             this->logWarning("Right Justify Error");
+             allOk = false;
+         }
+         if ( String("Sample String").rjust(15).length() != std::max(String("Sample String").length(), 15llu) ) {
+             this->logWarning("Right Justify Error");
+             allOk = false;
+         }
+         if ( String("Sample String").rjust(30).length() != std::max(String("Sample String").length(), 30llu) ) {
+             this->logWarning("Right Justify Error");
+             allOk = false;
+         }
+
+         this->log("'%s' lowercase : '%s'", "Sample String", String("Sample String").lower().cStr());
+         this->log("'%s' uppercase : '%s'", "Sample String", String("Sample String").upper().cStr());
+
+         if ( String("Sample String").lower() != "sample string" ) {
+             this->logWarning("Lower Error");
+             allOk = false;
+         }
+         if ( String("Sample String").upper() != "SAMPLE STRING" ) {
+             this->logWarning("Upper Error");
+             allOk = false;
+         }
     });
 
     allOk ? this->logOK("String test OK") : this->logError("String test Not OK");
     return allOk;
 }
+
+#pragma clang diagnostic pop

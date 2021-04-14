@@ -227,8 +227,8 @@ public:
     auto ltrim ( String const & ) noexcept -> String &;
     auto rtrim ( ElementType = ' ' ) noexcept -> String &;
     auto rtrim ( String const & ) noexcept -> String &;
-    auto inline trim ( ElementType e = ' ' ) noexcept -> String & { return this->ltrim(e).rtrim(); }
-    auto inline trim ( String const & e ) noexcept -> String & { return this->ltrim(e).rtrim(); }
+    auto inline trim ( ElementType e = ' ' ) noexcept -> String & { return this->ltrim(e).rtrim(e); }
+    auto inline trim ( String const & e ) noexcept -> String & { return this->ltrim(e).rtrim(e); }
 
     auto rjust (Size, ElementType = ' ') noexcept -> String &;
     auto ljust (Size, ElementType = ' ') noexcept -> String &;
