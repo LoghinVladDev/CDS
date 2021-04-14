@@ -5,6 +5,7 @@
 #ifndef CDS_RANGE_HPP
 #define CDS_RANGE_HPP
 
+
 template < typename T >
 class View;
 

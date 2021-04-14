@@ -513,7 +513,7 @@ auto String::rtrim ( ElementType e ) noexcept -> String & {
 
 auto String::rtrim ( String const & s ) noexcept -> String & {
     while ( ! this->empty () && s.contains(this->back()) )
-        this->_p[this->_l--] = '\0';
+        this->_p[--this->_l] = '\0';
 
     return * this;
 }
