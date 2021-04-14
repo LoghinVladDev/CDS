@@ -5,9 +5,11 @@
 #ifndef CDS_BOOLEANTEST_H
 #define CDS_BOOLEANTEST_H
 
+#include <tests/Test.h>
 
-class BooleanTest {
-
+class BooleanTest : public Test{
+public:
+    bool execute() noexcept override;
 };
 
 

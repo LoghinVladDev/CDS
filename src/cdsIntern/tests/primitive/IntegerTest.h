@@ -5,9 +5,11 @@
 #ifndef CDS_INTEGERTEST_H
 #define CDS_INTEGERTEST_H
 
+#include <tests/Test.h>
 
-class IntegerTest {
-
+class IntegerTest : public Test{
+public:
+    bool execute() noexcept override;
 };
 
 

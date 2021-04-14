@@ -31,12 +31,13 @@ public:
     }
 
     constexpr Integer() noexcept = default;
-    constexpr Integer(Integer const&)noexcept=default;
-    constexpr Integer(Integer &&)noexcept=default;
+    constexpr Integer(Integer const&)noexcept = default;
+    constexpr Integer(Integer &&)noexcept = default;
 
     __integer_constexpr ~Integer () noexcept override = default;
 
     constexpr Integer(int value) noexcept: v(value) {}
+
     constexpr Integer &operator=(Integer const &o) noexcept {
         if (this == &o)return *this;
         this->v = o.v;
