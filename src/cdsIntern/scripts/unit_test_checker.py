@@ -139,9 +139,12 @@ class ClassBody:
 
 def digest_class_body(class_body: str) -> ClassBody:
     # print(class_body)
+    function_modifiers = ['constexpr', 'static', 'consteval', 'inline', 'noexcept', 'noexcept(false)',
+                          'noexcept(true)', 'mutable', 'final', 'override', 'const', '[[nodiscard]]', '[[noreturn]]',
+                          '[[maybe_unused]]']
 
     class_body = class_body.strip().removeprefix('{').removesuffix('}')
-    print(class_body)
+    # print(class_body)
 
     skip_c = False
 
@@ -158,7 +161,7 @@ def digest_class_body(class_body: str) -> ClassBody:
             #     i += 1
             # continue
         if class_body[i] == '(':
-            print(i)
+            # print(i)
             is_def = False
             bracket_count = 0
             first_bracket_index = -1
@@ -181,8 +184,49 @@ def digest_class_body(class_body: str) -> ClassBody:
 
                     last_bracket_index = j
 
+            current_function: ClassFunction = ClassFunction()
+
+            comment_text: str = class_body[class_body[:i].rfind('/**'): class_body[:i].rfind('*/') + 2].strip()
+            head_text: str = class_body[class_body[:i].rfind('\n'):i].strip()
+            parameter_text: str = class_body[i: i + class_body[i:].find(')')+1].strip()
+            body_text = class_body[i + class_body[i:].find(')') + 1: last_bracket_index+1].strip()
+
+            for modifier in function_modifiers:
+                if modifier in head_text:
+                    head_text = head_text.replace(modifier, '').strip()
+                    current_function.modifiers.append(modifier)
+                if modifier in parameter_text:
+                    parameter_text = parameter_text.replace(modifier, '').strip()
+                    current_function.modifiers.append(modifier)
+                if modifier in body_text:
+                    body_text = body_text.replace(modifier, '').strip()
+                    current_function.modifiers.append(modifier)
+
+
+            if '->' in body_text:
+                current_function.ret = body_text[body_text.find('->') + 2:body_text.find('{') if '{' in body_text else body_text.find(';')].strip()
+                # body_text.replace()
+            else:
+                current_function.ret = head_text[0: head_text.find(' ') if ' ' in head_text.strip() else len(head_text)].strip()
+                head_text = head_text[head_text.find(' ') + 1:]
+
+
             print('----' * 18, file=out_file)
-            print(class_body[i: last_bracket_index], file=out_file)
+            # print(comment_text, file=out_file)
+            # print(head_text, file=out_file)
+            # print(parameter_text, file=out_file)
+            # print(body_text, file=out_file)
+
+            current_function.body = body_text.strip()
+            current_function.parameters = parameter_text.strip().removesuffix(')').removeprefix('(').split(',')
+            current_function.comment = comment_text.strip()
+            current_function.head = head_text.strip()
+
+            print(current_function.comment, file=out_file)
+            print(current_function.head, file=out_file)
+            print(current_function.parameters, file=out_file)
+            print(current_function.modifiers, file=out_file)
+            print(current_function.ret, file=out_file)
 
     return body
     # return ClassBody()
