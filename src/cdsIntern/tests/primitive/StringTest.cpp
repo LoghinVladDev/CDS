@@ -934,6 +934,8 @@ auto StringTest::execute() noexcept -> bool {
          }
     });
 
+
+
     allOk ? this->logOK("String test OK") : this->logError("String test Not OK");
     return allOk;
 }

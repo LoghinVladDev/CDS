@@ -2,7 +2,7 @@
 // Created by vladl on 3/29/2021.
 //
 
-#ifndef CDS_TIMER_
+#ifndef CDS_TIMER_HPP
 #define CDS_TIMER_HPP
 
 #include <functional>

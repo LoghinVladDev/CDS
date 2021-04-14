@@ -23,10 +23,11 @@ auto IntegerTest::execute() noexcept -> bool{
 
         std::vector<int> values;
 
+        Integer random_value = Integer::random();
         for(auto i : Range(5)) {
-            Integer random_value = Integer::random();
             values.push_back((int) random_value);
             this->log("Random value assigned: %d", random_value.get());
+            random_value = Integer::random();
         }
 
         Integer random_value_from_interval = Integer::random(-239252, 23509);

@@ -23,11 +23,17 @@ public:
     using RandomGenerator = Random::Int;
 
     static auto random () noexcept -> Integer {
-        return RandomGenerator ().get();
+        static UniquePointer < RandomGenerator > pRng;
+        if (pRng.isNull()) pRng.reset(new RandomGenerator());
+
+        return pRng->get();
     }
 
     static auto random (int low, int high) noexcept -> Integer {
-        return RandomGenerator (low, high).get();
+        static UniquePointer < RandomGenerator > pRng;
+        if ( pRng.isNull() || pRng->low() != low && pRng->high() != high ) pRng.reset(new RandomGenerator(low, high));
+
+        return pRng->get();
     }
 
     constexpr Integer() noexcept = default;
