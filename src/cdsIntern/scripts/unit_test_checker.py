@@ -1,6 +1,6 @@
 from sys import argv
 
-out_file = open('output.txt', 'w')
+out_file = open('log.txt', 'w')
 
 def norm_class_name(class_name: str) -> str:
     copy = class_name
@@ -137,11 +137,11 @@ class ClassBody:
         self.__functions = value
 
 
-def digest_class_body(class_body: str) -> ClassBody:
+def digest_class_body(class_body: str, class_id: str) -> ClassBody:
     # print(class_body)
     function_modifiers = ['constexpr', 'static', 'consteval', 'inline', 'noexcept', 'noexcept(false)',
                           'noexcept(true)', 'mutable', 'final', 'override', 'const', '[[nodiscard]]', '[[noreturn]]',
-                          '[[maybe_unused]]']
+                          '[[maybe_unused]]', 'explicit', 'auto', 'virtual']
 
     class_body = class_body.strip().removeprefix('{').removesuffix('}')
     # print(class_body)
@@ -161,6 +161,8 @@ def digest_class_body(class_body: str) -> ClassBody:
             #     i += 1
             # continue
         if class_body[i] == '(':
+            if class_body[i:i+len('(false)')] == '(false)':
+                continue
             # print(i)
             is_def = False
             bracket_count = 0
@@ -169,7 +171,7 @@ def digest_class_body(class_body: str) -> ClassBody:
 
             # print(class_body[i:])
             for j in range(i, len(class_body)):
-                end_index = j
+                last_bracket_index = j
                 if bracket_count == 0 and (class_body[j] == ';' or is_def):
                     last_bracket_index = j
                     break
@@ -203,6 +205,7 @@ def digest_class_body(class_body: str) -> ClassBody:
                     current_function.modifiers.append(modifier)
 
 
+            # print(body_text, file=out_file)
             if '->' in body_text:
                 current_function.ret = body_text[body_text.find('->') + 2:body_text.find('{') if '{' in body_text else body_text.find(';')].strip()
                 # body_text.replace()
@@ -211,7 +214,6 @@ def digest_class_body(class_body: str) -> ClassBody:
                 head_text = head_text[head_text.find(' ') + 1:]
 
 
-            print('----' * 18, file=out_file)
             # print(comment_text, file=out_file)
             # print(head_text, file=out_file)
             # print(parameter_text, file=out_file)
@@ -222,11 +224,28 @@ def digest_class_body(class_body: str) -> ClassBody:
             current_function.comment = comment_text.strip()
             current_function.head = head_text.strip()
 
-            print(current_function.comment, file=out_file)
-            print(current_function.head, file=out_file)
-            print(current_function.parameters, file=out_file)
-            print(current_function.modifiers, file=out_file)
-            print(current_function.ret, file=out_file)
+            if current_function.head == current_function.ret and '~' not in current_function.head:
+                current_function.ret = ''
+                current_function.head = 'Constructor'
+
+            if '~' in current_function.head:
+                current_function.ret = ''
+                current_function.head = 'Destructor'
+
+            if '{' in current_function.head:
+                continue
+
+            print('----' * 18, file=out_file)
+
+            print(f'CLASS = {class_id}', file=out_file)
+            print(f'COMMENT = {current_function.comment}', file=out_file)
+            print(f'HEAD = {current_function.head}', file=out_file)
+            print(f'PARAMETERS = {current_function.parameters}', file=out_file)
+            print(f'MODIFIERS = {current_function.modifiers}', file=out_file)
+            print(f'RETURN = {current_function.ret}', file=out_file)
+            # print(f'BODY = {current_function.body}', file=out_file)
+
+            body.functions.append(current_function)
 
     return body
     # return ClassBody()
@@ -246,7 +265,15 @@ def run_script() -> None:
 
     for class_title, class_body in classes_in_string(file_text):
         # print(class_title)
-        digested_body = digest_class_body(class_body)
+        digested_class = digest_class_body(class_body, class_title)
+
+        for f in digested_class.functions:
+            if not f.comment:
+                print(f'Warning: Function "{f.head}" ( in {class_title} ) does not have a comment indicating a testcase')
+                print()
+            elif '@test' not in f.comment:
+                print(f'Warning: Function "{f.head}" ( in {class_title} ) does not have a test case attached in comment')
+                print()
 
     # print(file_text)
 
