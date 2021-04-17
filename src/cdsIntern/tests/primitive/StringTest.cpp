@@ -278,6 +278,58 @@ auto StringTest::execute() noexcept -> bool {
         this->log("Original String : '%s'", indexed.cStr());
         this->log("String's first char : %c", indexed.front());
         this->log("String's last char : %c", indexed.back());
+
+
+        String container = "Test String";
+
+        this->log("String '%s' contains '%s' : %s", container.cStr(), String("String").cStr(), container.contains(String("String")) ? "true" : "false");
+        this->log("String '%s' contains '%s' : %s", container.cStr(), String("Integer").cStr(), container.contains(String("Integer")) ? "true" : "false");
+        this->log("String '%s' contains '%s' : %s", container.cStr(), "String", container.contains("String") ? "true" : "false");
+        this->log("String '%s' contains '%s' : %s", container.cStr(), "Integer", container.contains("Integer") ? "true" : "false");
+        this->log("String '%s' contains '%s' : %s", container.cStr(), std::string("String").c_str(), container.contains(std::string("String")) ? "true" : "false");
+        this->log("String '%s' contains '%s' : %s", container.cStr(), std::string("Integer").c_str(), container.contains(std::string("Integer")) ? "true" : "false");
+        this->log("String '%s' contains '%c' : %s", container.cStr(), 'S', container.contains('S') ? "true" : "false");
+        this->log("String '%s' contains '%c' : %s", container.cStr(), 'x', container.contains('x') ? "true" : "false");
+
+        if ( !container.contains(String("String")) ) {
+            this->logWarning("Contains Error");
+            allOk = false;
+        }
+
+        if ( container.contains(String("Integer")) ) {
+            this->logWarning("Contains Error");
+            allOk = false;
+        }
+
+        if ( !container.contains("String") ) {
+            this->logWarning("Contains Error");
+            allOk = false;
+        }
+
+        if ( container.contains("Integer") ) {
+            this->logWarning("Contains Error");
+            allOk = false;
+        }
+
+        if ( !container.contains(std::string("String")) ) {
+            this->logWarning("Contains Error");
+            allOk = false;
+        }
+
+        if ( container.contains(std::string("Integer")) ) {
+            this->logWarning("Contains Error");
+            allOk = false;
+        }
+
+        if ( !container.contains('S') ) {
+            this->logWarning("Contains Error");
+            allOk = false;
+        }
+
+        if ( container.contains('x') ) {
+            this->logWarning("Contains Error");
+            allOk = false;
+        }
     });
 
     this->executeSubtest("Append/Prepend Tests", [this, &allOk] {
@@ -862,79 +914,446 @@ auto StringTest::execute() noexcept -> bool {
     });
 
     this->executeSubtest("Utility Functions, String Formatting", [this, & allOk] {
-         this->log("String * int ( string multiplication ) : %s * %d = %s", String("abc...").cStr(), 5, (String("abc...") * 5).cStr());
-         if ( String("abc...") * 5 != "abc...abc...abc...abc...abc..." ) {
-             this->logWarning("String Multiplication Warning");
-             allOk = false;
-         }
+        this->log("String * int ( string multiplication ) : %s * %d = %s", String("abc...").cStr(), 5,
+                  (String("abc...") * 5).cStr());
+        if (String("abc...") * 5 != "abc...abc...abc...abc...abc...") {
+            this->logWarning("String Multiplication Warning");
+            allOk = false;
+        }
 
-         this->log("Left Trim of String Whitespace : '%s', trimmed : '%s'", String("   \t  \n Whitespace String  \t  ").cStr(), String("   \t  \n Whitespace String  \t  ").ltrim(" \t\n").cStr());
-         this->log("Right Trim of String Whitespace : '%s', trimmed : '%s'", String("   \t  \n Whitespace String  \t  ").cStr(), String("   \t  \n Whitespace String  \t  ").rtrim(" \t\n").cStr());
-         this->log("Trim of String Whitespace : '%s', trimmed : '%s'", String("   \t  \n Whitespace String  \t  ").cStr(), String("   \t  \n Whitespace String  \t  ").trim(" \t\n").cStr());
+        this->log("Left Trim of String Whitespace : '%s', trimmed : '%s'",
+                  String("   \t  \n Whitespace String  \t  ").cStr(),
+                  String("   \t  \n Whitespace String  \t  ").ltrim(" \t\n").cStr());
+        this->log("Right Trim of String Whitespace : '%s', trimmed : '%s'",
+                  String("   \t  \n Whitespace String  \t  ").cStr(),
+                  String("   \t  \n Whitespace String  \t  ").rtrim(" \t\n").cStr());
+        this->log("Trim of String Whitespace : '%s', trimmed : '%s'",
+                  String("   \t  \n Whitespace String  \t  ").cStr(),
+                  String("   \t  \n Whitespace String  \t  ").trim(" \t\n").cStr());
 
-         if ( String("   \t  \n Whitespace String  \t  ").ltrim(" \t\n") != "Whitespace String  \t  " ) {
-             this->logWarning("Ltrim Error");
-             allOk = false;
-         }
+        if (String("   \t  \n Whitespace String  \t  ").ltrim(" \t\n") != "Whitespace String  \t  ") {
+            this->logWarning("Ltrim Error");
+            allOk = false;
+        }
 
-         if ( String("   \t  \n Whitespace String  \t  ").rtrim(" \t\n") != "   \t  \n Whitespace String" ) {
-             this->logWarning("Rtrim Error");
-             allOk = false;
-         }
+        if (String("   \t  \n Whitespace String  \t  ").rtrim(" \t\n") != "   \t  \n Whitespace String") {
+            this->logWarning("Rtrim Error");
+            allOk = false;
+        }
 
-         if ( String("   \t  \n Whitespace String  \t  ").trim(" \t\n") != "Whitespace String" ) {
-             this->logWarning("Trim Error");
-             allOk = false;
-         }
+        if (String("   \t  \n Whitespace String  \t  ").trim(" \t\n") != "Whitespace String") {
+            this->logWarning("Trim Error");
+            allOk = false;
+        }
 
-         this->log("'Sample String' left justified by %d : '%s'", 10, String("Sample String").ljust(10).cStr());
-         this->log("'Sample String' left justified by %d : '%s'", 15, String("Sample String").ljust(15).cStr());
-         this->log("'Sample String' left justified by %d : '%s'", 30, String("Sample String").ljust(30).cStr());
+        this->log("'Sample String' left justified by %d : '%s'", 10, String("Sample String").ljust(10).cStr());
+        this->log("'Sample String' left justified by %d : '%s'", 15, String("Sample String").ljust(15).cStr());
+        this->log("'Sample String' left justified by %d : '%s'", 30, String("Sample String").ljust(30).cStr());
 
-         this->log("'Sample String' right justified by %d : '%s'", 10, String("Sample String").rjust(10).cStr());
-         this->log("'Sample String' right justified by %d : '%s'", 15, String("Sample String").rjust(15).cStr());
-         this->log("'Sample String' right justified by %d : '%s'", 30, String("Sample String").rjust(30).cStr());
+        this->log("'Sample String' right justified by %d : '%s'", 10, String("Sample String").rjust(10).cStr());
+        this->log("'Sample String' right justified by %d : '%s'", 15, String("Sample String").rjust(15).cStr());
+        this->log("'Sample String' right justified by %d : '%s'", 30, String("Sample String").rjust(30).cStr());
 
-         if ( String("Sample String").ljust(10).length() != std::max(String("Sample String").length(), 10llu) ) {
-             this->logWarning("Left Justify Error");
-             allOk = false;
-         }
-         if ( String("Sample String").ljust(15).length() != std::max(String("Sample String").length(), 15llu) ) {
-             this->logWarning("Left Justify Error");
-             allOk = false;
-         }
-         if ( String("Sample String").ljust(30).length() != std::max(String("Sample String").length(), 30llu) ) {
-             this->logWarning("Left Justify Error");
-             allOk = false;
-         }
+        if (String("Sample String").ljust(10).length() != std::max(String("Sample String").length(), 10llu)) {
+            this->logWarning("Left Justify Error");
+            allOk = false;
+        }
+        if (String("Sample String").ljust(15).length() != std::max(String("Sample String").length(), 15llu)) {
+            this->logWarning("Left Justify Error");
+            allOk = false;
+        }
+        if (String("Sample String").ljust(30).length() != std::max(String("Sample String").length(), 30llu)) {
+            this->logWarning("Left Justify Error");
+            allOk = false;
+        }
 
-         if ( String("Sample String").rjust(10).length() != std::max(String("Sample String").length(), 10llu) ) {
-             this->logWarning("Right Justify Error");
-             allOk = false;
-         }
-         if ( String("Sample String").rjust(15).length() != std::max(String("Sample String").length(), 15llu) ) {
-             this->logWarning("Right Justify Error");
-             allOk = false;
-         }
-         if ( String("Sample String").rjust(30).length() != std::max(String("Sample String").length(), 30llu) ) {
-             this->logWarning("Right Justify Error");
-             allOk = false;
-         }
+        if (String("Sample String").rjust(10).length() != std::max(String("Sample String").length(), 10llu)) {
+            this->logWarning("Right Justify Error");
+            allOk = false;
+        }
+        if (String("Sample String").rjust(15).length() != std::max(String("Sample String").length(), 15llu)) {
+            this->logWarning("Right Justify Error");
+            allOk = false;
+        }
+        if (String("Sample String").rjust(30).length() != std::max(String("Sample String").length(), 30llu)) {
+            this->logWarning("Right Justify Error");
+            allOk = false;
+        }
 
-         this->log("'%s' lowercase : '%s'", "Sample String", String("Sample String").lower().cStr());
-         this->log("'%s' uppercase : '%s'", "Sample String", String("Sample String").upper().cStr());
+        this->log("'%s' lowercase : '%s'", "Sample String", String("Sample String").lower().cStr());
+        this->log("'%s' uppercase : '%s'", "Sample String", String("Sample String").upper().cStr());
 
-         if ( String("Sample String").lower() != "sample string" ) {
-             this->logWarning("Lower Error");
-             allOk = false;
-         }
-         if ( String("Sample String").upper() != "SAMPLE STRING" ) {
-             this->logWarning("Upper Error");
-             allOk = false;
-         }
+        if (String("Sample String").lower() != "sample string") {
+            this->logWarning("Lower Error");
+            allOk = false;
+        }
+        if (String("Sample String").upper() != "SAMPLE STRING") {
+            this->logWarning("Upper Error");
+            allOk = false;
+        }
+
+        this->log("'%c' is uppercase : '%s'", 'A', String::isUpperChar('A') ? "true" : "false");
+        this->log("'%c' is uppercase : '%s'", 'a', String::isUpperChar('a') ? "true" : "false");
+        this->log("'%c' is uppercase : '%s'", '0', String::isUpperChar('0') ? "true" : "false");
+
+        if (String::isUpperChar('A') != true) {
+            this->logWarning("isUpperChar Error");
+            allOk = false;
+        }
+
+        if (String::isUpperChar('a') != false) {
+            this->logWarning("isUpperChar Error");
+            allOk = false;
+        }
+
+        if (String::isUpperChar('0') != false) {
+            this->logWarning("isUpperChar Error");
+            allOk = false;
+        }
+
+        this->log("'%c' is lowercase : '%s'", 'A', String::isLowerChar('A') ? "true" : "false");
+        this->log("'%c' is lowercase : '%s'", 'a', String::isLowerChar('a') ? "true" : "false");
+        this->log("'%c' is lowercase : '%s'", '0', String::isLowerChar('0') ? "true" : "false");
+
+        if (String::isLowerChar('A') != false) {
+            this->logWarning("isLowerChar Error");
+            allOk = false;
+        }
+
+        if (String::isLowerChar('a') != true) {
+            this->logWarning("isLowerChar Error");
+            allOk = false;
+        }
+
+        if (String::isLowerChar('0') != false) {
+            this->logWarning("isLowerChar Error");
+            allOk = false;
+        }
+
+        this->log("'%c' is digit : '%s'", 'A', String::isDigit('A') ? "true" : "false");
+        this->log("'%c' is digit : '%s'", 'a', String::isDigit('a') ? "true" : "false");
+        this->log("'%c' is digit : '%s'", '0', String::isDigit('0') ? "true" : "false");
+
+        if (String::isDigit('A') != false) {
+            this->logWarning("isDigit Error");
+            allOk = false;
+        }
+
+        if (String::isDigit('a') != false) {
+            this->logWarning("isDigit Error");
+            allOk = false;
+        }
+
+        if (String::isDigit('0') != true) {
+            this->logWarning("isDigit Error");
+            allOk = false;
+        }
+
+        this->log("'%c' is letter : '%s'", 'A', String::isLetter('A') ? "true" : "false");
+        this->log("'%c' is letter : '%s'", 'a', String::isLetter('a') ? "true" : "false");
+        this->log("'%c' is letter : '%s'", '0', String::isLetter('0') ? "true" : "false");
+
+        if (String::isLetter('A') != true) {
+            this->logWarning("isLetter Error");
+            allOk = false;
+        }
+
+        if (String::isLetter('a') != true) {
+            this->logWarning("isLetter Error");
+            allOk = false;
+        }
+
+        if (String::isLetter('0') != false) {
+            this->logWarning("isLetter Error");
+            allOk = false;
+        }
+
+        this->log("'%c' is alpha : '%s'", 'A', String::isAlpha('A') ? "true" : "false");
+        this->log("'%c' is alpha : '%s'", 'a', String::isAlpha('a') ? "true" : "false");
+        this->log("'%c' is alpha : '%s'", '0', String::isAlpha('0') ? "true" : "false");
+        this->log("'%c' is alpha : '%s'", '-', String::isAlpha('-') ? "true" : "false");
+
+        if (String::isAlpha('A') != true) {
+            this->logWarning("isAlpha Error");
+            allOk = false;
+        }
+
+        if (String::isAlpha('a') != true) {
+            this->logWarning("isAlpha Error");
+            allOk = false;
+        }
+
+        if (String::isAlpha('0') != true) {
+            this->logWarning("isAlpha Error");
+            allOk = false;
+        }
+
+        if (String::isAlpha('-') != false) {
+            this->logWarning("isAlpha Error");
+            allOk = false;
+        }
+
+        this->log("'%c' is vowel : '%s'", 'E', String::isVowel('E') ? "true" : "false");
+        this->log("'%c' is vowel : '%s'", 'b', String::isVowel('b') ? "true" : "false");
+        this->log("'%c' is vowel : '%s'", '0', String::isVowel('0') ? "true" : "false");
+        this->log("'%c' is vowel : '%s'", '-', String::isVowel('-') ? "true" : "false");
+
+        if (!String::isVowel('E')) {
+            this->logWarning("isVowel Error");
+            allOk = false;
+        }
+
+        if (String::isVowel('b')) {
+            this->logWarning("isVowel Error");
+            allOk = false;
+        }
+
+        if (String::isVowel('0')) {
+            this->logWarning("isVowel Error");
+            allOk = false;
+        }
+
+        if (String::isVowel('-')) {
+            this->logWarning("isVowel Error");
+            allOk = false;
+        }
+        this->log("'%c' is consonant : '%s'", 'E', String::isConsonant('E') ? "true" : "false");
+        this->log("'%c' is consonant : '%s'", 'b', String::isConsonant('b') ? "true" : "false");
+        this->log("'%c' is consonant : '%s'", '0', String::isConsonant('0') ? "true" : "false");
+        this->log("'%c' is consonant : '%s'", '-', String::isConsonant('-') ? "true" : "false");
+
+        if (String::isConsonant('E')) {
+            this->logWarning("isConsonant Error");
+            allOk = false;
+        }
+
+        if (!String::isConsonant('b')) {
+            this->logWarning("isConsonant Error");
+            allOk = false;
+        }
+
+        if (String::isConsonant('0')) {
+            this->logWarning("isConsonant Error");
+            allOk = false;
+        }
+
+        if (String::isConsonant('-')) {
+            this->logWarning("isConsonant Error");
+            allOk = false;
+        }
+
+        this->log("Lower of '%c' : '%c'", 'a', String::lowerChar('a'));
+        this->log("Lower of '%c' : '%c'", 'A', String::lowerChar('A'));
+        this->log("Lower of '%c' : '%c'", '0', String::lowerChar('0'));
+        this->log("Lower of '%c' : '%c'", '-', String::lowerChar('-'));
+
+        if (String::lowerChar('a') != 'a') {
+            this->logWarning("lowerchar error");
+            allOk = false;
+        }
+
+        if (String::lowerChar('A') != 'a') {
+            this->logWarning("lowerchar error");
+            allOk = false;
+        }
+
+        if (String::lowerChar('0') != '0') {
+            this->logWarning("lowerchar error");
+            allOk = false;
+        }
+
+        if (String::lowerChar('-') != '-') {
+            this->logWarning("lowerchar error");
+            allOk = false;
+        }
+
+        this->log("Upper of '%c' : '%c'", 'a', String::upperChar('a'));
+        this->log("Upper of '%c' : '%c'", 'A', String::upperChar('A'));
+        this->log("Upper of '%c' : '%c'", '0', String::upperChar('0'));
+        this->log("Upper of '%c' : '%c'", '-', String::upperChar('-'));
+
+        if (String::upperChar('a') != 'A') {
+            this->logWarning("upperchar error");
+            allOk = false;
+        }
+
+        if (String::upperChar('A') != 'A') {
+            this->logWarning("upperchar error");
+            allOk = false;
+        }
+
+        if (String::upperChar('0') != '0') {
+            this->logWarning("upperchar error");
+            allOk = false;
+        }
+
+        if (String::upperChar('-') != '-') {
+            this->logWarning("upperchar error");
+            allOk = false;
+        }
+
+        char c;
+
+        c = 'a';
+        this->log("Lower of '%c' : '%c'", c, String::toLowerChar(c));
+        c = 'A';
+        this->log("Lower of '%c' : '%c'", c, String::toLowerChar(c));
+        c = '0';
+        this->log("Lower of '%c' : '%c'", c, String::toLowerChar(c));
+        c = '-';
+        this->log("Lower of '%c' : '%c'", c, String::toLowerChar(c));
+
+        c = 'a';
+        if (String::toLowerChar(c) != 'a') {
+            this->logWarning("toLowerChar error");
+            allOk = false;
+        }
+
+        c = 'A';
+        if (String::toLowerChar(c) != 'a') {
+            this->logWarning("toLowerChar error");
+            allOk = false;
+        }
+
+        c = '0';
+        if (String::toLowerChar(c) != '0') {
+            this->logWarning("toLowerChar error");
+            allOk = false;
+        }
+
+        c = '-';
+        if (String::toLowerChar(c) != '-') {
+            this->logWarning("toLowerChar error");
+            allOk = false;
+        }
+
+        c = 'a';
+        this->log("Upper of '%c' : '%c'", c, String::toUpperChar(c));
+        c = 'A';
+        this->log("Upper of '%c' : '%c'", c, String::toUpperChar(c));
+        c = '0';
+        this->log("Upper of '%c' : '%c'", c, String::toUpperChar(c));
+        c = '-';
+        this->log("Upper of '%c' : '%c'", c, String::toUpperChar(c));
+
+        c = 'a';
+        if (String::toUpperChar(c) != 'A') {
+            this->logWarning("toUpperChar error");
+            allOk = false;
+        }
+
+        c = 'A';
+        if (String::toUpperChar(c) != 'A') {
+            this->logWarning("toUpperChar error");
+            allOk = false;
+        }
+
+        c = '0';
+        if (String::toUpperChar(c) != '0') {
+            this->logWarning("toUpperChar error");
+            allOk = false;
+        }
+
+        c = '-';
+        if (String::toUpperChar(c) != '-') {
+            this->logWarning("toUpperChar error");
+            allOk = false;
+        }
     });
 
+    this->executeSubtest("Assignment Tests", [this, & allOk] {
+        String a = "Test String";
+        std::string b = "Test std::string";
+        StringLiteral c = "Test StringLiteral";
+        char d = 'c';
 
+        String o;
+
+        o = a;
+
+        if ( std::strcmp ( o.cStr(), "Test String" ) != 0 ) {
+            this->logWarning("Assign Error");
+            allOk = false;
+        }
+
+        o = b;
+
+        if ( std::strcmp ( o.cStr(), "Test std::string" ) != 0 ) {
+            this->logWarning("Assign Error");
+            allOk = false;
+        }
+
+        o = c;
+
+        if ( std::strcmp ( o.cStr(), "Test StringLiteral" ) != 0 ) {
+            this->logWarning("Assign Error");
+            allOk = false;
+        }
+
+        o = d;
+
+        if ( std::strcmp ( o.cStr(), "c" ) != 0 ) {
+            this->logWarning("Assign Error");
+            allOk = false;
+        }
+    });
+
+    this->executeSubtest("Split Tests", [this, &allOk] {
+        String toSplit("This is a sample string, using several separators. Will it be okay? I hope so! Time to split");
+
+        this->log("String : '%s'. Tokens after splitting by ' ,.!?' : %s. Number of tokens : %d", toSplit.cStr(), toSplit.split(" ,.!?").toString().cStr(), toSplit.split(" ,.!?").size());
+
+        if ( toSplit.split(" ,.!?").size() != 18 ) {
+            this->logWarning("Split Error");
+            allOk = false;
+        }
+
+        if ( toSplit.split(" ,.!?")[2] != "a" ) {
+            this->logWarning("Split Error");
+            allOk = false;
+        }
+
+        if ( toSplit.split(" ,.!?")[6] != "several" ) {
+            this->logWarning("Split Error");
+            allOk = false;
+        }
+
+        if ( toSplit.split(" ,.!?")[8] != "Will" ) {
+            this->logWarning("Split Error");
+            allOk = false;
+        }
+    });
+
+    this->executeSubtest("Replace Tests", [this, &allOk] {
+        String original = "Test String";
+
+        String m = original;
+        this->log("Replaced in '%s' from 2 to 5 with 'inserted value' : '%s'", original.cStr(), m.replace(2, 3, "inserted value").cStr());
+    });
+
+    this->executeSubtest("Iterable Lambda Utilities Tests", [this, &allOk] {
+        String original = "This is a sample string";
+
+        this->log("Original String : '%s'", original.cStr());
+        this->log("Vowel Count, using count : %d", original.count(String::isVowel));
+        this->log("Consonant Count, using count : %d", original.count(String::isConsonant));
+        this->log("Letter Count, using count : %d", original.count(String::isLetter));
+
+        if ( original.count(String::isVowel) != 6 ) {
+            this->logWarning("Lambda Count error");
+            allOk = false;
+        }
+
+        if ( original.count(String::isConsonant) != 13 ) {
+            this->logWarning("Lambda Count error");
+            allOk = false;
+        }
+
+        if ( original.count(String::isLetter) != 19 ) {
+            this->logWarning("Lambda Count error");
+            allOk = false;
+        }
+    });
 
     allOk ? this->logOK("String test OK") : this->logError("String test Not OK");
     return allOk;

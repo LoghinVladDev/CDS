@@ -260,12 +260,14 @@ auto String::split(const String & delim, Size splitCount) const noexcept -> Link
             currentSegment += c;
         else {
             splitIndex ++;
-            segments.pushBack ( currentSegment );
+            if ( ! currentSegment.empty() )
+                segments.pushBack ( currentSegment );
             currentSegment.clear();
         }
     }
 
-    segments.pushBack ( currentSegment );
+    if ( ! currentSegment.empty() )
+        segments.pushBack ( currentSegment );
     return segments;
 }
 

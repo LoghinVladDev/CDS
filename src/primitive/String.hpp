@@ -801,61 +801,183 @@ public:
     auto ljust (Size, ElementType = ' ') noexcept -> String &;
 
 public:
+
+    /**
+     * @test tested in primitive/StringTest/Utility Functions, String Formatting
+     */
     constexpr auto static inline isUpperChar(char c) noexcept -> bool { return c >= 'A' && c <= 'Z'; }
+
+    /**
+     * @test tested in primitive/StringTest/Utility Functions, String Formatting
+     */
     constexpr auto static inline isLowerChar(char c) noexcept -> bool { return c >= 'a' && c <= 'z'; }
+
+    /**
+     * @test tested in primitive/StringTest/Utility Functions, String Formatting
+     */
     constexpr auto static inline isDigit(char c) noexcept -> bool { return c >= '0' && c <= '9'; }
+
+    /**
+     * @test tested in primitive/StringTest/Utility Functions, String Formatting
+     */
     constexpr auto static inline isLetter(char c) noexcept -> bool { return isUpperChar(c) || isLowerChar(c); }
+
+    /**
+     * @test tested in primitive/StringTest/Utility Functions, String Formatting
+     */
     constexpr auto static inline isAlpha(char c) noexcept -> bool { return isLetter(c) || isDigit(c); }
+
+    /**
+     * @test tested in primitive/StringTest/Utility Functions, String Formatting
+     */
     auto static inline isVowel(char c) noexcept -> bool { return String("aeiouAEIOU").contains(c); }
+
+    /**
+     * @test tested in primitive/StringTest/Utility Functions, String Formatting
+     */
     auto static inline isConsonant(char c) noexcept -> bool { return isLetter(c) && ! isVowel(c); }
+
+    /**
+     * @test tested in primitive/StringTest/Utility Functions, String Formatting
+     */
     constexpr auto static inline lowerChar(char c) noexcept -> char { return isUpperChar(c) ? c + 32 : c; }
+
+    /**
+     * @test tested in primitive/StringTest/Utility Functions, String Formatting
+     */
     constexpr auto static inline upperChar(char c) noexcept -> char { return isLowerChar(c) ? c - 32 : c; }
+
+    /**
+     * @test tested in primitive/StringTest/Utility Functions, String Formatting
+     */
     constexpr auto static inline toLowerChar(char & c) noexcept -> char & { c = lowerChar(c); return c; }
+
+    /**
+     * @test tested in primitive/StringTest/Utility Functions, String Formatting
+     */
     constexpr auto static inline toUpperChar(char & c) noexcept -> char & { c = upperChar(c); return c; }
 
 public:
 
 #if !defined(_MSC_VER)
+
+    /**
+     * @test tested in primitive/StringTest/Utility Functions, String Formatting
+     */
     auto inline toLower () noexcept -> String & { for ( Index i = 0; i < this->_l; i++ ) this->_p[i] = lowerChar(this->_p[i]); return * this; }
+
+    /**
+     * @test tested in primitive/StringTest/Utility Functions, String Formatting
+     */
     auto inline toUpper () noexcept -> String & { for ( Index i = 0; i < this->_l; i++ ) this->_p[i] = upperChar(this->_p[i]); return * this; }
 #else
+
+    /**
+     * @test tested in primitive/StringTest/Utility Functions, String Formatting
+     */
     auto inline toLower () noexcept -> String & { for ( Size i = 0; i < this->_l; i++ ) this->_p[i] = lowerChar(this->_p[i]); return * this; }
+
+    /**
+     * @test tested in primitive/StringTest/Utility Functions, String Formatting
+     */
     auto inline toUpper () noexcept -> String & { for ( Size i = 0; i < this->_l; i++ ) this->_p[i] = upperChar(this->_p[i]); return * this; }
 #endif
+
+    /**
+     * @test tested in primitive/StringTest/Utility Functions, String Formatting
+     */
     [[nodiscard]] auto inline lower () const noexcept -> String { return String(*this).toLower(); }
+
+    /**
+     * @test tested in primitive/StringTest/Utility Functions, String Formatting
+     */
     [[nodiscard]] auto inline upper () const noexcept -> String { return String(*this).toUpper(); }
 
+    /**
+     * @test tested in primitive/StringTest/Assignment Tests
+     */
     String & operator = ( String const & ) noexcept;
+
+    /**
+     * @test tested in primitive/StringTest/Assignment Tests
+     */
     inline String & operator = ( std::string const & s ) noexcept { return this->operator=(String(s)); } // NOLINT(misc-unconventional-assign-operator)
+
+    /**
+     * @test tested in primitive/StringTest/Assignment Tests
+     */
     inline String & operator = ( ElementType e ) noexcept { return this->operator=(String().append(e)); } // NOLINT(misc-unconventional-assign-operator)
+
+    /**
+     * @test tested in primitive/StringTest/Assignment Tests
+     */
     inline String & operator = ( StringLiteral cString ) noexcept { return this->operator=(String(cString)); } // NOLINT(misc-unconventional-assign-operator)
 
+
+    /**
+     * @test tested in primitive/StringTest/Split Tests
+     */
     [[nodiscard]] auto split ( ElementType, Size = UINT32_MAX ) const noexcept -> LinkedList < String >;
+
+    /**
+     * @test tested in primitive/StringTest/Split Tests
+     */
     [[nodiscard]] auto split ( String const &, Size = UINT32_MAX ) const noexcept -> LinkedList < String >;
 
     constexpr static Index INVALID_POS = -1;
 
+    /**
+     * @test tested in primitive/StringTest/Content Functions Tests
+     */
     [[nodiscard]] auto inline contains ( ElementType e ) const noexcept -> bool { return this->findFirst( e ) != INVALID_POS; }
+
+    /**
+     * @test tested in primitive/StringTest/Content Functions Tests
+     */
     [[nodiscard]] auto inline contains ( String const & e ) const noexcept -> bool { return this->findFirst( e ) != INVALID_POS; }
+
+    /**
+     * @test tested in primitive/StringTest/Content Functions Tests
+     */
     [[nodiscard]] auto inline contains ( StringLiteral e ) const noexcept -> bool { return this->findFirst( String(e) ) != INVALID_POS; }
+
+    /**
+     * @test tested in primitive/StringTest/Content Functions Tests
+     */
     [[nodiscard]] auto inline contains ( std::string const & e ) const noexcept -> bool { return this->findFirst( String(e) ) != INVALID_POS; }
 
 #ifndef NDEBUG
+
+    /**
+     * @test N/A
+     */
     [[nodiscard]] auto diag() const noexcept -> String;
 #endif
 
+    /**
+     * @test N/A
+     */
     friend inline auto operator << ( std::ostream & out, String const & s ) noexcept -> std::ostream & {
         return ( out << (s._p == nullptr ? "null" : s._p) );
     }
 
+    /**
+     * @test N/A
+     */
     [[nodiscard]] auto hash () const noexcept -> Index {
         return this->length();
     }
 
+    /**
+     * @test N/A
+     */
     [[nodiscard]] auto copy () const noexcept -> String * {
         return new String( * this );
     }
 
+    /**
+     * @test tested in primitive/StringTest/Replace Tests
+     */
     auto replace ( Index, Size, String const & ) noexcept -> String &;
 
     template < typename Action >
