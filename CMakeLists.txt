@@ -11,6 +11,7 @@ set(CDS_INCLUDE_DIRECTORIES
         src/exception
         src/primitive
         src/cdsIntern
+        src/stream
 
         include
 )
@@ -89,12 +90,17 @@ set(
         src/crypto/primitives/Block.hpp src/crypto/primitives/BlockSize.hpp)
 
 set(
+        CDS_STREAM
+        src/stream/InputStream.hpp src/stream/OutputStream.hpp src/stream/Stream.hpp)
+
+set(
         CDS_HEADERS
         ${CDS_COLLECTION}
         ${CDS_EXTRA}
         ${CDS_FUNCTIONAL}
         ${CDS_THREADING}
         ${CDS_CRYPTO}
+        ${CDS_STREAM}
         src/std-types.h
         src/primitive/Integer.hpp
         src/primitive/Long.hpp
@@ -107,7 +113,7 @@ set(
         src/collection/ordered/StaticArray.hpp
         src/functional/Random.hpp
         src/primitive/Tuple.hpp
-        src/threading/Atomic.hpp src/cdsIntern/Concepts.hpp src/cdsIntern/Traits.hpp src/cdsIntern/Types.hpp)
+        src/threading/Atomic.hpp src/cdsIntern/Concepts.hpp src/cdsIntern/Traits.hpp src/cdsIntern/Types.hpp include/CDS/InputStream include/CDS/OutputStream include/CDS/Stream)
 
 set(
         CDS_LIB_SRC
