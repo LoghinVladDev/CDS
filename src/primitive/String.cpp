@@ -194,14 +194,16 @@ String::String(ConstIteratorBase const & begin, ConstIteratorBase const & end) n
 }
 
 auto String::resize(Size size) noexcept -> void {
-    if ( this->empty() )
-        return;
+//    if ( this->empty() )
+//        return;
 
     this->_c = size + 1;
     auto newArea = new ElementType [ this->_c ];
-    std::memcpy ( newArea, this->_p, this->_c );
 
-    delete [] this->_p;
+    if ( ! this->empty() ) {
+        std::memcpy(newArea, this->_p, this->_c);
+        delete[] this->_p;
+    }
 
     this->_p = newArea;
     if ( this->_l >= this->_c )

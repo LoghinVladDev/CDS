@@ -21,6 +21,7 @@ protected:
 
 public:
     class NullPointerException : public std::exception {
+    public:
         [[nodiscard]] auto what() const noexcept -> StringLiteral override {
             return "Tried de-referencing a null pointer";
         }

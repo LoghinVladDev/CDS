@@ -6,6 +6,7 @@
 #define CDS_DOUBLE_HPP
 
 #include <CDS/Object>
+#include <CDS/Random>
 #include "../cdsIntern/PrimitiveGenerator.hpp"
 
 #if __cpp_constepxr >= 201907

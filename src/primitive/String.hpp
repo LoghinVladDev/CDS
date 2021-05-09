@@ -19,6 +19,12 @@ template < typename T >
 //#endif
 class View;
 
+#define CDS_QT
+
+#if defined(CDS_QT)
+#include <QString>
+#endif
+
 class String final {
 public:
     typedef char ElementType;
@@ -92,6 +98,9 @@ public:
      */
     String(std::initializer_list<ElementType> const &) noexcept;
 
+#if defined(CDS_QT)
+    String(QString const & o) noexcept : String(o.toStdString()) {}
+#endif
 
     /**
      * @test testcase not required
@@ -328,6 +337,9 @@ public:
      */
     inline auto operator += (double v) noexcept -> String & { return this->operator+=( std::to_string(v) ); }
 
+#if defined(CDS_QT)
+    inline auto operator += (QString const & v) noexcept -> String & { return this->operator += (String(v)); }
+#endif
 
     /**
      * @test tested in primitive/StringTest/Append/Prepend Tests
@@ -393,6 +405,10 @@ public:
      * @test tested in primitive/StringTest/Append/Prepend Tests
      */
     inline auto append (double v) noexcept -> String & { return this->append( std::to_string(v) ); }
+
+#if defined(CDS_QT)
+    inline auto append (QString const & v) noexcept -> String & { return this->append(String(v)); }
+#endif
 
 
     /**
@@ -460,6 +476,10 @@ public:
      */
     inline auto prepend (double v) noexcept -> String & { return this->prepend( std::to_string(v) ); }
 
+#if defined(CDS_QT)
+    inline auto prepend (QString const & v) noexcept -> String & { return this->prepend(String(v)); }
+#endif
+
 
     /**
      * @test tested in primitive/StringTest/*
@@ -469,7 +489,13 @@ public:
     /**
      * @test tested in primitive/StringTest/Append/*
      */
-    inline explicit operator std::string () const noexcept { return this->toStdString(); }
+    inline operator std::string () const noexcept { return this->toStdString(); }
+
+#if defined(CDS_QT)
+    [[nodiscard]] inline auto toQString () const noexcept -> QString { return QString(this->cStr()); }
+
+    inline operator QString () const noexcept { return this->toQString(); }
+#endif
 
 
     /**
@@ -573,6 +599,10 @@ public:
      */
     [[nodiscard]] auto operator == ( StringLiteral ) const noexcept -> bool;
 
+#if defined(CDS_QT)
+    inline auto operator == (QString const & v) const noexcept -> bool { return * this == String(v); }
+#endif
+
 
     /**
      * @test tested in primitive/StringTest/Comparison Tests
@@ -589,6 +619,10 @@ public:
      */
     [[nodiscard]] auto operator >= ( std::string const & ) const noexcept -> bool;
 
+#if defined(CDS_QT)
+    inline auto operator >= (QString const & v) const noexcept -> bool { return * this >= String(v); }
+#endif
+
     /**
      * @test tested in primitive/StringTest/Comparison Tests
      */
@@ -599,6 +633,11 @@ public:
      * @test tested in primitive/StringTest/Comparison Tests
      */
     [[nodiscard]] auto operator <= ( String const & ) const noexcept -> bool;
+
+#if defined(CDS_QT)
+    inline auto operator <= (QString const & v) const noexcept -> bool { return * this <= String(v); }
+#endif
+
 
     /**
      * @test tested in primitive/StringTest/Comparison Tests
@@ -636,6 +675,10 @@ public:
      */
     [[nodiscard]] auto operator != ( StringLiteral ) const noexcept -> bool;
 
+#if defined(CDS_QT)
+    inline auto operator != (QString const & v) const noexcept -> bool { return * this != String(v); }
+#endif
+
 
     /**
      * @test tested in primitive/StringTest/Comparison Tests
@@ -657,6 +700,10 @@ public:
      */
     [[nodiscard]] auto operator < ( StringLiteral ) const noexcept -> bool;
 
+#if defined(CDS_QT)
+    inline auto operator < (QString const & v) const noexcept -> bool { return * this < String(v); }
+#endif
+
 
     /**
      * @test tested in primitive/StringTest/Comparison Tests
@@ -677,6 +724,10 @@ public:
      * @test tested in primitive/StringTest/Comparison Tests
      */
     [[nodiscard]] auto operator > ( StringLiteral ) const noexcept -> bool;
+
+#if defined(CDS_QT)
+    inline auto operator > (QString const & v) const noexcept -> bool { return * this > String(v); }
+#endif
 
 
     /**
@@ -748,6 +799,10 @@ public:
      * @test tested in primitive/StringTest/Append/Prepend Tests
      */
     [[nodiscard]] inline auto operator + (double v) const noexcept -> String { return this->operator+( std::to_string(v) ); }
+
+#if defined(CDS_QT)
+    inline auto operator + (QString const & v) const noexcept -> bool { return * this + String(v); }
+#endif
 
     /**
      * @test tested in primitive/StringTest/Utility Functions, String Formatting
@@ -898,6 +953,10 @@ public:
      */
     String & operator = ( String const & ) noexcept;
 
+#if defined(CDS_QT)
+    inline String & operator = (QString const & v) noexcept { return ((* this) = String(v)); }
+#endif
+
     /**
      * @test tested in primitive/StringTest/Assignment Tests
      */
@@ -945,6 +1004,10 @@ public:
      * @test tested in primitive/StringTest/Content Functions Tests
      */
     [[nodiscard]] auto inline contains ( std::string const & e ) const noexcept -> bool { return this->findFirst( String(e) ) != INVALID_POS; }
+
+#if defined(CDS_QT)
+    inline auto contains (QString const & v) const noexcept -> bool { return this->contains(String(v)); }
+#endif
 
 #ifndef NDEBUG
 

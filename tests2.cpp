@@ -40,16 +40,66 @@ void testView () {
         std::cout.flush();
     });
 
-    Sleep(5010);
+//    Sleep(5010);
 
     t.stop();
 }
 
-int main () {
+template < typename K >
+static auto hsh (K const &) -> Index { return 0; }
+template <> auto hsh < String > ( String const & s ) -> Index { return s.length(); }
+template <> auto hsh < int > ( int const & s ) -> Index { return s; }
 
-    testView();
-    testCrypto();
-    testAtomic();
+template < typename Key >
+struct Hasher {
+    auto operator () (Key const & v) const noexcept -> Index {
+        return hsh(v);
+    }
+};
+
+template < typename Key, typename Value, typename Hash = Hasher<Key> >
+class OurMap {
+private:
+    Hash h;
+
+public:
+    Size size {256};
+
+    OurMap() noexcept = default;
+
+    explicit OurMap ( Hash const & h ) noexcept {
+        this->h = h;
+    }
+
+    auto getKeyHash (Key const & k) {
+        return this->h(k) % this->size;
+    }
+};
+
+int main () {
+    OurMap < String, int > m;
+    std::cout << m.getKeyHash("Ana are mere");
+    OurMap < int, String > m2;
+    std::cout << m2.getKeyHash(294);
+    exit(0);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//    testView();
+//    testCrypto();
+//    testAtomic();
 
 }
 //
