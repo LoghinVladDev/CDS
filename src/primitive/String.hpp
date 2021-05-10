@@ -799,7 +799,7 @@ public:
     [[nodiscard]] inline auto operator + (double v) const noexcept -> String { return this->operator+( std::to_string(v) ); }
 
 #if defined(CDS_QT)
-    inline auto operator + (QString const & v) const noexcept -> bool { return * this + String(v); }
+    inline auto operator + (QString const & v) const noexcept -> String { return * this + String(v); }
 #endif
 
     /**
