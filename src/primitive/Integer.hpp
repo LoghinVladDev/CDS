@@ -15,6 +15,7 @@
 #endif
 
 #include <CDS/Random>
+#include <CDS/Pointer>
 
 class Integer : public Object {
 private:
