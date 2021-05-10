@@ -19,8 +19,6 @@ template < typename T >
 //#endif
 class View;
 
-#define CDS_QT
-
 #if defined(CDS_QT)
 #include <QString>
 #endif
