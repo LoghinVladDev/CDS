@@ -12,6 +12,7 @@
 #include <CDS/File>
 
 #if defined(WIN32)
+#include <windows.h>
 #elif defined(__linux)
 #include <sys/stat.h>
 #include <unistd.h>
@@ -56,6 +57,10 @@ public:
 
     explicit Path(String const & path = CWD) noexcept (false) {
 #if defined(WIN32)
+        if ( GetFileAttributesA ( path.cStr() ) != INVALID_FILE_ATTRIBUTES )
+            throw InvalidPath();
+
+
 #elif defined(__linux)
         struct stat64 fileStat {};
         if ( lstat64 ( path.cStr(), & fileStat ) != 0 )
