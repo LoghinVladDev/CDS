@@ -94,6 +94,12 @@ set(
         src/stream/InputStream.hpp src/stream/OutputStream.hpp src/stream/Stream.hpp src/stream/AbstractStream.hpp)
 
 set(
+        CDS_PLATFORM
+        src/platform/File.hpp
+        src/platform/Path.hpp
+)
+
+set(
         CDS_HEADERS
         ${CDS_COLLECTION}
         ${CDS_EXTRA}
@@ -101,6 +107,7 @@ set(
         ${CDS_THREADING}
         ${CDS_CRYPTO}
         ${CDS_STREAM}
+        ${CDS_PLATFORM}
         src/std-types.h
         src/primitive/Integer.hpp
         src/primitive/Long.hpp
