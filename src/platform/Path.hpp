@@ -43,6 +43,14 @@ public:
         }
     };
 
+#if defined(WIN32)
+    class WalkIncompleteWin32 : public std::exception {
+        [[nodiscard]] auto what () const noexcept -> StringLiteral override {
+            return "Walk Error : Incomplete";
+        }
+    };
+#endif
+
     constexpr static StringLiteral CWD = "."; // current working directory
 
     static auto directorySeparator () noexcept -> char {
@@ -57,9 +65,30 @@ public:
 
     explicit Path(String const & path = CWD) noexcept (false) {
 #if defined(WIN32)
-        if ( GetFileAttributesA ( path.cStr() ) != INVALID_FILE_ATTRIBUTES )
+//        if ( GetFileAttributesA ( path.cStr() ) != INVALID_FILE_ATTRIBUTES )
+//            throw InvalidPath();
+
+        constexpr static CDS_uint16 initialPathSize = 256;
+        char * resolvedPath = (char *) malloc (initialPathSize);
+
+        auto res = GetFullPathNameA(path.cStr(), initialPathSize, resolvedPath, nullptr);
+        if ( res >= initialPathSize ) {
+            free ( resolvedPath );
+            resolvedPath = (char *) malloc (res + 1);
+            if ( GetFullPathNameA ( path.cStr(), res + 1, resolvedPath, nullptr ) == 0 ) {
+                free ( resolvedPath );
+                throw InvalidPath();
+            }
+        } else if ( res == 0 )
             throw InvalidPath();
 
+        if ( GetFileAttributesA(resolvedPath) == INVALID_FILE_ATTRIBUTES ) {
+            free(resolvedPath);
+            throw InvalidPath();
+        }
+
+        this->_osPath = resolvedPath;
+        free ( resolvedPath );
 
 #elif defined(__linux)
         struct stat64 fileStat {};
@@ -155,6 +184,37 @@ inline auto Path::walk() const noexcept (false) -> LinkedList<WalkEntry> {
     currentDirEntry.root() = * this;
 
 #if defined(WIN32)
+
+    WIN32_FIND_DATA win32FindData {};
+
+    HANDLE fileHandle = FindFirstFileA ( (this->_osPath + this->directorySeparator() + "*").cStr(), & win32FindData );
+    if ( fileHandle == INVALID_HANDLE_VALUE )
+        throw WalkNotADirectory();
+
+    do {
+        if ( std::strcmp ( win32FindData.cFileName, "." ) == 0 || std::strcmp ( win32FindData.cFileName, ".." ) == 0 ) {
+            // do nothing
+        } else if ( (bool)(win32FindData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) ) {
+            currentDirEntry.directories().pushBack(win32FindData.cFileName);
+
+            auto nestedEntries = Path(this->append(win32FindData.cFileName)).walk();
+            for ( auto & e : nestedEntries )
+                entries.pushBack ( e );
+        } else {
+            currentDirEntry.files().pushBack(win32FindData.cFileName);
+        }
+    } while ( FindNextFileA ( fileHandle, & win32FindData ) != FALSE );
+
+    DWORD errorID = GetLastError();
+    if ( errorID != ERROR_NO_MORE_FILES ) {
+        FindClose(fileHandle);
+        throw WalkIncompleteWin32();
+    }
+
+    FindClose(fileHandle);
+
+    entries.pushFront(currentDirEntry);
+
 #elif defined(__linux)
 
     auto dir = opendir ( this->_osPath.cStr() );

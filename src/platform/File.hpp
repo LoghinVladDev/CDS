@@ -170,6 +170,7 @@ public:
 
     [[nodiscard]] constexpr auto isOpen () const noexcept -> bool {
 #if defined(WIN32)
+        return false;
 #elif defined(__linux)
         return this->platformDirectoryHandle != nullptr;
 #else
