@@ -27,6 +27,8 @@ private:
     friend class WalkEntry;
     explicit Path(bool noCheck) noexcept {}
 
+    static LinkedList < char > possibleDirectorySeparators;
+
 protected:
     String _osPath;
 
@@ -112,7 +114,7 @@ public:
     inline auto parent () const noexcept -> Path { return (*this) / ".."; }
     [[nodiscard]] inline auto previous () const noexcept -> Path { return this->parent(); }
 
-    inline auto nodeName () const noexcept -> String { return this->_osPath.substr(this->_osPath.findLast("/") + 1); }
+    inline auto nodeName () const noexcept -> String { return this->_osPath.substr(this->_osPath.findLast(this->directorySeparator()) + 1); }
     [[nodiscard]] inline auto currentName () const noexcept -> String { return this->nodeName(); }
 
     auto root () const noexcept -> Path {
@@ -123,7 +125,8 @@ public:
     }
 
     auto operator / (String const & f) const noexcept -> Path {
-        return Path(this->_osPath + Path::directorySeparator() + f);
+        auto delimFiltered = [& f]() -> String { String c(f); c.forEach([](auto & e){if (Path::possibleDirectorySeparators.contains(e)) e = Path::directorySeparator(); }); return c; };
+        return Path(this->_osPath + Path::directorySeparator() + delimFiltered());
     }
 
     inline auto operator + (String const & f) const noexcept -> Path { return (*this) / f; }
@@ -133,6 +136,19 @@ public:
 
     // walk
     [[nodiscard]] auto walk () const noexcept (false) -> LinkedList < WalkEntry >;
+
+    [[nodiscard]] static auto walk (Path const & path) noexcept (false) -> LinkedList < WalkEntry >;
+    [[nodiscard]] static auto walk (String const & path) noexcept (false) -> LinkedList < WalkEntry >;
+
+#if defined(WIN32)
+    class Win32RootPath;
+
+    [[nodiscard]] static auto platformDependantRoots () noexcept -> LinkedList < Win32RootPath >;
+#elif defined(__linux)
+#else
+#warning Warning : Path::rootsPlatform () Undefined
+#endif
+    [[nodiscard]] static auto roots () noexcept -> LinkedList < Path >;
 };
 
 class Path::WalkEntry : public Object {
@@ -175,7 +191,20 @@ public:
     }
 };
 
+class Path::Win32RootPath : public Object {
+public:
+    Path    path;
+    String  deviceName;
+    String  volumeName;
 
+    [[nodiscard]] auto toString() const noexcept -> String override {
+        return String("Win32RootPath {") +
+            " path = " + this->path.toString() +
+            ", deviceName = " + this->deviceName +
+            ", volumeName = " + this->volumeName +
+            " }";
+    }
+};
 
 inline auto Path::walk() const noexcept (false) -> LinkedList<WalkEntry> {
     WalkEntry currentDirEntry;
@@ -247,5 +276,86 @@ inline auto Path::walk() const noexcept (false) -> LinkedList<WalkEntry> {
 
     return entries;
 }
+
+inline auto Path::walk(const Path &path) noexcept(false) -> LinkedList< WalkEntry > { return path.walk(); }
+inline auto Path::walk(const String &path) noexcept(false) -> LinkedList< WalkEntry > { return Path(path).walk(); }
+
+[[nodiscard]] inline auto Path::roots () noexcept -> LinkedList < Path > {
+    LinkedList < Path > paths;
+#if defined(WIN32)
+   auto pDRList = Path::platformDependantRoots();
+
+   for ( auto & p : pDRList )
+       paths.pushBack(p.path);
+#elif defined(__linux)
+#else
+#warning Warning: Path::roots undefined
+#endif
+   return paths;
+}
+
+#if defined(WIN32)
+[[nodiscard]] inline auto Path::platformDependantRoots () noexcept -> LinkedList < Win32RootPath > {
+    LinkedList < Win32RootPath > rootElements;
+
+    char volumeName [MAX_PATH];
+    char deviceName [MAX_PATH];
+    char * names;
+
+    HANDLE firstVolumeHandle = FindFirstVolumeA ( volumeName, MAX_PATH );
+
+    if ( firstVolumeHandle == INVALID_HANDLE_VALUE )  return rootElements;
+
+    do {
+        if ( strstr(volumeName, "\\\\?\\") != volumeName || volumeName[strlen(volumeName) - 1] != '\\' )
+            continue;
+
+        Win32RootPath current;
+
+        char * actualName = volumeName + strlen("\\\\?\\");
+        * strrchr(actualName, '\\') = 0;
+
+        DWORD charCount = QueryDosDeviceA( actualName, deviceName, MAX_PATH );
+
+        current.deviceName = deviceName;
+        current.volumeName = actualName;
+
+        names = (char *)malloc(MAX_PATH + 1);
+        DWORD reqSize = 0;
+
+        if ( GetVolumePathNamesForVolumeNameA ( actualName, names, MAX_PATH + 1, & reqSize ) == FALSE ) {
+            free (names);
+
+//            if ( GetLastError() != ERROR_MORE_DATA )
+//                continue;
+
+            names = (char *) malloc (reqSize + 1);
+            GetVolumePathNamesForVolumeNameA ( actualName, names, reqSize + 1, nullptr );
+        }
+
+        for ( auto * p = names; p[0] != '\0'; p += strlen(p) + 1 )
+            printf("%s\n", p);
+
+        try {
+            current.path = Path(names);
+        } catch (std::exception const & e) {
+            free (names);
+            continue;
+        }
+
+        free (names);
+
+        std::cout << current.toString() << '\n';
+
+    } while ( FindNextVolumeA (firstVolumeHandle, volumeName, MAX_PATH) != FALSE );
+
+    FindVolumeClose(firstVolumeHandle);
+
+    return rootElements;
+}
+
+#endif
+
+inline LinkedList < char > Path::possibleDirectorySeparators = {'/', '\\'};
 
 #endif //CDS_PATH_H
