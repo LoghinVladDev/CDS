@@ -105,40 +105,40 @@ public:
 #endif
     }
 
-    explicit Path(StringLiteral path) noexcept : Path(String(path)) {}
+    explicit Path(StringLiteral path) noexcept(false) : Path(String(path)) {}
 
     [[nodiscard]] auto toString () const noexcept -> String override { return this->_osPath; }
     [[nodiscard]] auto copy () const noexcept -> Path * override { return new Path(* this); }
     [[nodiscard]] auto hash () const noexcept -> Index override { return this->parent().nodeName().hash(); }
 
-    inline auto parent () const noexcept -> Path { return (*this) / ".."; }
+    [[nodiscard]] inline auto parent () const noexcept(false) -> Path { return (*this) / ".."; }
     [[nodiscard]] inline auto previous () const noexcept -> Path { return this->parent(); }
 
-    inline auto nodeName () const noexcept -> String { return this->_osPath.substr(this->_osPath.findLast(this->directorySeparator()) + 1); }
+    [[nodiscard]] inline auto nodeName () const noexcept -> String { return this->_osPath.substr(this->_osPath.findLast(this->directorySeparator()) + 1); }
     [[nodiscard]] inline auto currentName () const noexcept -> String { return this->nodeName(); }
 
-    auto root () const noexcept -> Path {
+    [[nodiscard]] auto root () const noexcept -> Path {
         auto parent = this->parent();
         if ( this->_osPath == parent._osPath )
             return parent;
         return parent.root();
     }
 
-    auto operator / (String const & f) const noexcept -> Path {
+    auto operator / (String const & f) const noexcept (false) -> Path {
         auto delimFiltered = [& f]() -> String { String c(f); c.forEach([](auto & e){if (Path::possibleDirectorySeparators.contains(e)) e = Path::directorySeparator(); }); return c; };
         return Path(this->_osPath + Path::directorySeparator() + delimFiltered());
     }
 
-    inline auto operator + (String const & f) const noexcept -> Path { return (*this) / f; }
-    inline auto append (String const & f) const noexcept -> Path { return (*this) / f; }
+    inline auto operator + (String const & f) const noexcept (false) -> Path { return (*this) / f; }
+    [[nodiscard]] inline auto append (String const & f) const noexcept (false) -> Path { return (*this) / f; }
 
     class WalkEntry;
 
     // walk
-    [[nodiscard]] auto walk () const noexcept (false) -> LinkedList < WalkEntry >;
+    [[nodiscard]] auto walk (int = INT32_MAX) const noexcept (false) -> LinkedList < WalkEntry >;
 
-    [[nodiscard]] static auto walk (Path const & path) noexcept (false) -> LinkedList < WalkEntry >;
-    [[nodiscard]] static auto walk (String const & path) noexcept (false) -> LinkedList < WalkEntry >;
+    [[nodiscard]] static auto walk (Path const & path, int = INT32_MAX) noexcept (false) -> LinkedList < WalkEntry >;
+    [[nodiscard]] static auto walk (String const & path, int = INT32_MAX) noexcept (false) -> LinkedList < WalkEntry >;
 
 #if defined(WIN32)
     class Win32RootPath;
@@ -206,7 +206,10 @@ public:
     }
 };
 
-inline auto Path::walk() const noexcept (false) -> LinkedList<WalkEntry> {
+inline auto Path::walk(int depth) const noexcept (false) -> LinkedList<WalkEntry> {
+    if ( depth <= 0 )
+        return {};
+
     WalkEntry currentDirEntry;
     LinkedList < WalkEntry > entries;
 
@@ -216,9 +219,11 @@ inline auto Path::walk() const noexcept (false) -> LinkedList<WalkEntry> {
 
     WIN32_FIND_DATA win32FindData {};
 
-    HANDLE fileHandle = FindFirstFileA ( (this->_osPath + this->directorySeparator() + "*").cStr(), & win32FindData );
-    if ( fileHandle == INVALID_HANDLE_VALUE )
-        throw WalkNotADirectory();
+    HANDLE fileHandle = FindFirstFileA ( (this->_osPath + Path::directorySeparator() + "*").cStr(), & win32FindData );
+    if ( fileHandle == INVALID_HANDLE_VALUE ) {
+//        throw WalkNotADirectory();
+        return {};
+    }
 
     do {
         if ( std::strcmp ( win32FindData.cFileName, "." ) == 0 || std::strcmp ( win32FindData.cFileName, ".." ) == 0 ) {
@@ -226,7 +231,7 @@ inline auto Path::walk() const noexcept (false) -> LinkedList<WalkEntry> {
         } else if ( (bool)(win32FindData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) ) {
             currentDirEntry.directories().pushBack(win32FindData.cFileName);
 
-            auto nestedEntries = Path(this->append(win32FindData.cFileName)).walk();
+            auto nestedEntries = Path(this->append(win32FindData.cFileName)).walk(depth - 1);
             for ( auto & e : nestedEntries )
                 entries.pushBack ( e );
         } else {
@@ -277,8 +282,8 @@ inline auto Path::walk() const noexcept (false) -> LinkedList<WalkEntry> {
     return entries;
 }
 
-inline auto Path::walk(const Path &path) noexcept(false) -> LinkedList< WalkEntry > { return path.walk(); }
-inline auto Path::walk(const String &path) noexcept(false) -> LinkedList< WalkEntry > { return Path(path).walk(); }
+inline auto Path::walk(const Path &path, int depth) noexcept(false) -> LinkedList< WalkEntry > { return path.walk(depth); }
+inline auto Path::walk(const String &path, int depth) noexcept(false) -> LinkedList< WalkEntry > { return Path(path).walk(depth); }
 
 [[nodiscard]] inline auto Path::roots () noexcept -> LinkedList < Path > {
     LinkedList < Path > paths;

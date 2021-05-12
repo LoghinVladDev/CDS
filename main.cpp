@@ -4,7 +4,13 @@
 #include <CDS/Path>
 
 int main () {
-    std::cout << Path::platformDependantRoots();
+    try {
+        for (auto &o : Path().root().walk(2)) {
+            std::cout << o.toString() << '\n';
+        }
+    } catch ( std::exception const & e ) {
+        std::cout << e.what() << '\n';
+    }
 
     return 0;
 }
