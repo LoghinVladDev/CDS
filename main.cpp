@@ -2,10 +2,8 @@
 #include <cstring>
 #include <exception>
 
-#include <CDS/Path>
+#include <CDS/File>
 //#include <unistd.h>
 int main() {
-    for ( auto & e : Path().walk() ) {
-        std::cout << e.root() << " : Files = " << e.files() << ", Dirs : " << e.directories() << '\n';
-    }
+    std::cout << File::platformFileTypeFlagsToString(File::platformFileType("/")) << '\n';
 }

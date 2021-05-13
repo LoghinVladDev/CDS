@@ -54,7 +54,7 @@ public:
 #endif
     }
 
-    explicit Path(String const & path = CWD) noexcept (false) {
+    Path(String const & path = CWD) noexcept (false) {
 #if defined(WIN32)
 #elif defined(__linux)
         struct stat64 fileStat {};
@@ -69,7 +69,7 @@ public:
 #endif
     }
 
-    explicit Path(StringLiteral path) noexcept : Path(String(path)) {}
+    Path(StringLiteral path) noexcept : Path(String(path)) {}
 
     [[nodiscard]] auto toString () const noexcept -> String override { return this->_osPath; }
     [[nodiscard]] auto copy () const noexcept -> Path * override { return new Path(* this); }
