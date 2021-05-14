@@ -55,6 +55,13 @@ public:
     virtual auto pushFront ( T && ) noexcept -> void = 0;
     virtual auto pushBack ( T && ) noexcept -> void = 0;
 
+    inline auto append ( const T & v ) noexcept -> void { return this->pushBack(v); }
+    inline auto append ( T && v ) noexcept -> void { return this->pushBack(v); }
+
+    inline auto prepend ( const T & v ) noexcept -> void { return this->pushFront(v); }
+    inline auto prepend ( T && v ) noexcept -> void { return this->pushFront(v); }
+
+
 #define GEN_SORT_FUNC(_paramType, _exceptSpec) \
     virtual auto sort ( dataTypes::_paramType ) _exceptSpec -> void = 0;
 /*
