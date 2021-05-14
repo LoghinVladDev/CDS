@@ -16,8 +16,8 @@ int main() {
                       << File::platformPermissionFlagsToString(p.getSecond()) << '\n';
         });
 
-        auto file = File::LinuxDirectory("/home/loghin");
-        file.entries().forEach([](auto * d){std::cout << d->name();});
+        auto file = File::LinuxDirectory("/");
+        file.entries().forEach([](auto * d){std::cout << File::platformTypeFlagsToStringList (d->linuxFileType()) << " : " << d->name() << '\n';});
 
 
     } catch (std::exception const & e) {

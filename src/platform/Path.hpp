@@ -94,7 +94,7 @@ public:
 
 #elif defined(__linux)
         struct stat64 fileStat {};
-        if ( lstat64 ( path.cStr(), & fileStat ) != 0 )
+        if ( stat64 ( path.cStr(), & fileStat ) != 0 )
             throw InvalidPath();
 
         char resolvedPath[PATH_MAX];
@@ -259,6 +259,9 @@ inline auto Path::walk(int depth) const noexcept (false) -> LinkedList<WalkEntry
 
     auto entry = readdir64(dir);
     while ( entry != nullptr ) {
+        if ( entry->d_type == DT_LNK ) {
+            // do nothing
+        }
         if ( std::strcmp ( entry->d_name, "." ) == 0 || std::strcmp ( entry->d_name, ".." ) == 0 ) {
             // do nothing
         } else if ( entry->d_type == DT_DIR ) {

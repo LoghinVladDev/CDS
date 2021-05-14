@@ -184,7 +184,7 @@ protected:
     virtual auto reload () noexcept -> File & {
 
 #if defined(__linux)
-        lstat64(this->_path.toString().cStr(), & this->_linuxFileData);
+        stat64(this->_path.toString().cStr(), & this->_linuxFileData);
 #endif
 
         return * this;
@@ -346,7 +346,9 @@ inline auto File::platformTypeFlagsToList ( File::PlatformTypeFlags flags ) noex
 
 inline auto File::platformFileType(Path const & p) noexcept -> PlatformTypeFlags {
     struct stat64 st;
-    lstat64(p.toString().cStr(), & st);
+    if ( -1 == lstat64(p.toString().cStr(), & st) ) {
+        std::cout << "Ok?\n" << p.toString().cStr() << '\n';
+    }
 
     return File::platformFileType(& st);
 }
@@ -591,8 +593,12 @@ public:
 
         for ( auto & e : this->path().walk(1) ) {
             for ( auto & f : e.files() ) {
-                auto p = File::at(e.root() / f);
-                this->_entries.append(p->copy());
+                try {
+                    auto p = File::at(e.root() / f);
+                    this->_entries.append(p->copy());
+                } catch ( Path::InvalidPath const & ) {
+                    // do nothing, broken symbolic link
+                }
             }
             for ( auto & d : e.directories() ) {
                 auto p = File::at(e.root() / d);
@@ -778,7 +784,7 @@ public:
 
 #endif
 
-    return {nullptr};
+    return { new LinuxSymbolicLink(p) };
 }
 
 #endif //CDS_FILE_HPP
