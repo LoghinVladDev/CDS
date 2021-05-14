@@ -5,13 +5,17 @@
 #ifndef CDS_FILE_HPP
 #define CDS_FILE_HPP
 
+#warning Warning: Library Functions Unstable
+
 #include <CDS/Object>
 #include <CDS/LinkedList>
 #include <CDS/Path>
 #include <CDS/HashMap>
+#include <CDS/Pointer>
 
 #if defined(__linux)
 #include <sys/stat.h>
+#include <ctime>
 #endif
 
 class File : public Object {
@@ -173,6 +177,10 @@ protected:
         this->reload();
     }
 
+    File ( File const & o ) noexcept : _path(o._path) {
+        this->reload();
+    }
+
     virtual auto reload () noexcept -> File & {
 
 #if defined(__linux)
@@ -183,7 +191,6 @@ protected:
     }
 
 public:
-    [[nodiscard]] auto toString () const noexcept -> String override { return ""; }
 
 #if defined(__linux)
 
@@ -212,7 +219,52 @@ public:
     inline auto isLinuxSymbolicLink () const noexcept -> bool { return this->linuxFileType() & PTF_SYMBOLIC_LINK; }
     inline auto isLinuxSocket () const noexcept -> bool { return this->linuxFileType() & PTF_SOCKET; }
 
+    [[nodiscard]] auto platformInfoToString () const noexcept -> String {
+        String permissionsAsString;
+        auto grouped = File::platformPermissionsGrouped (& this->_linuxFileData);
+
+        grouped.forEach ([& permissionsAsString](auto & e){
+            permissionsAsString +=
+                    File::platformUserFlagsToString(e.getFirst()) +
+                    " : " +
+                    File::platformPermissionFlagsToStringList (e.getSecond()).toString() +
+                    ", ";
+        });
+
+        permissionsAsString.rtrim(", ");
+
+        auto _atime = String(ctime(&this->_linuxFileData.st_atime)).rtrim('\n');
+        auto _ctime = String(ctime(&this->_linuxFileData.st_ctime)).rtrim('\n');
+        auto _mtime = String(ctime(&this->_linuxFileData.st_mtime)).rtrim('\n');
+
+        return
+            String("Linux File {") +
+            " permissions = " + permissionsAsString +
+            ", size (bytes) = " + static_cast < CDS_sint64 > (this->linuxTotalSize()) +
+            ", deviceID = " + static_cast < CDS_uint64 > (this->linuxDeviceID ()) +
+            ", inode = " + static_cast < CDS_uint64 > (this->linuxINode()) +
+            ", modeFlags = " + this->linuxModeFlags () +
+            ", hardLinkCount = " + static_cast < CDS_uint64 > (this->linuxHardLinkCount ()) +
+            ", ownerUserID = " + this->linuxOwnerUserID () +
+            ", groupUserID = " + this->linuxOwnerGroupID () +
+            ", specialFileDeviceID = " + static_cast < CDS_uint64 > (this->linuxSpecialFileDeviceID ()) +
+            ", blockSize = " + static_cast < CDS_sint64 > (this->linuxBlockSize ()) +
+            ", blockCount = " + static_cast < CDS_sint64 > (this->linuxBlockCount ()) +
+            ", lastAccess = " + _atime +
+            ", lastModify = " + _mtime +
+            ", lastChange = " + _ctime +
+            " }";
+    }
+
 #endif
+
+    [[nodiscard]] auto toString () const noexcept -> String override {
+        return
+            String("File {") +
+                " path = " + this->_path.toString() +
+                ", platformInfo = " + this->platformInfoToString ()
+                + " }";
+    }
 
 #if defined(__linux)
 
@@ -248,6 +300,12 @@ public:
 
     [[nodiscard]] constexpr auto path () const noexcept -> Path const & { return this->_path; }
     [[nodiscard]] constexpr auto path () noexcept -> Path & { return this->_path; }
+
+    [[nodiscard]] inline auto name () const noexcept -> String { return this->path().nodeName(); }
+
+    [[nodiscard]] static auto at (Path const &) noexcept -> UniquePointer < File >;
+
+    [[nodiscard]] auto copy () const noexcept -> File * override = 0;
 };
 
 #if defined(__linux)
@@ -486,17 +544,113 @@ public:
             throw InvalidFileType ( PTF_REGULAR, this->linuxFileType() );
     }
 
+    [[nodiscard]] auto toString () const noexcept -> String override {
+        return
+            String("Linux Regular File {") +
+            " file = " + File::toString() +
+            " }";
+    }
+
     ~LinuxRegular () noexcept override = default;
+
+    [[nodiscard]] auto copy () const noexcept -> LinuxRegular * override {
+        return new LinuxRegular(* this);
+    }
 };
 
 class File::LinuxDirectory : public File {
+private:
+    LinkedList < File * > _entries;
+    bool                  _reloadRequired {true};
+
 public:
     explicit LinuxDirectory (Path const & path) noexcept (false) : File (path) {
         if ( ! this->isLinuxDirectory () )
             throw InvalidFileType ( PTF_DIRECTORY, this->linuxFileType() );
     }
 
-    ~LinuxDirectory () noexcept override = default;
+    [[nodiscard]] auto toString () const noexcept -> String override {
+        return
+                String("Linux Directory {") +
+                " file = " + File::toString() +
+                " }";
+    }
+
+    auto reload () noexcept -> LinuxDirectory & override {
+        if ( ! this->_reloadRequired )
+            return * this;
+        this->_reloadRequired = false;
+
+        File::reload();
+
+        if ( ! this->_entries.empty() ) {
+            for ( auto * p : this->_entries )
+                delete p;
+            this->_entries.clear();
+        }
+
+        for ( auto & e : this->path().walk(1) ) {
+            for ( auto & f : e.files() ) {
+                auto p = File::at(e.root() / f);
+                this->_entries.append(p->copy());
+            }
+            for ( auto & d : e.directories() ) {
+                auto p = File::at(e.root() / d);
+                this->_entries.append(p->copy());
+            }
+        }
+
+        return * this;
+    }
+
+    [[nodiscard]] constexpr auto entries () const noexcept -> LinkedList < File * > const & { return this->_entries; }
+    [[nodiscard]] constexpr auto entries () noexcept -> LinkedList < File * > & { this->reload(); return this->_entries; }
+
+    [[nodiscard]] auto files () const noexcept -> LinkedList < File::LinuxRegular * > {
+        LinkedList < File::LinuxRegular * > l;
+        for ( auto & e : this->entries () )
+            if ( e->isLinuxRegularFile() )
+                l.append(reinterpret_cast <File::LinuxRegular *>(e));
+
+        return l;
+    }
+
+    [[nodiscard]] auto directories () const noexcept -> LinkedList < File::LinuxDirectory * > {
+        LinkedList < File::LinuxDirectory * > l;
+        for ( auto & e : this->entries () )
+            if ( e->isLinuxDirectory() )
+                l.append(reinterpret_cast <File::LinuxDirectory *>(e));
+
+        return l;
+    }
+
+    [[nodiscard]] auto files () noexcept -> LinkedList < File::LinuxRegular * > {
+        LinkedList < File::LinuxRegular * > l;
+        for ( auto & e : this->entries () )
+            if ( e->isLinuxRegularFile() )
+                l.append(reinterpret_cast <File::LinuxRegular *>(e));
+
+        return l;
+    }
+
+    [[nodiscard]] auto directories () noexcept -> LinkedList < File::LinuxDirectory * > {
+        LinkedList < File::LinuxDirectory * > l;
+        for ( auto & e : this->entries () )
+            if ( e->isLinuxDirectory() )
+                l.append(reinterpret_cast <File::LinuxDirectory *>(e));
+
+        return l;
+    }
+
+    ~LinuxDirectory () noexcept override {
+        for ( auto * p : this->_entries )
+            delete p;
+        this->_entries.clear();
+    }
+
+    [[nodiscard]] auto copy () const noexcept -> LinuxDirectory * override {
+        return new LinuxDirectory(* this);
+    }
 };
 
 class File::LinuxCharacterDevice : public File {
@@ -507,7 +661,18 @@ public:
 #warning Warning : Linux Character Device Partial Support
     }
 
+    [[nodiscard]] auto toString () const noexcept -> String override {
+        return
+                String("Linux Character Device {") +
+                " file = " + File::toString() +
+                " }";
+    }
+
     ~LinuxCharacterDevice () noexcept override = default;
+
+    [[nodiscard]] auto copy () const noexcept -> LinuxCharacterDevice * override {
+        return new LinuxCharacterDevice(* this);
+    }
 };
 
 class File::LinuxBlockDevice : public File {
@@ -518,7 +683,18 @@ public:
 #warning Warning : Linux Block Device Partial Support
     }
 
+    [[nodiscard]] auto toString () const noexcept -> String override {
+        return
+                String("Linux Block Device {") +
+                " file = " + File::toString() +
+                " }";
+    }
+
     ~LinuxBlockDevice () noexcept override = default;
+
+    [[nodiscard]] auto copy () const noexcept -> LinuxBlockDevice * override {
+        return new LinuxBlockDevice(* this);
+    }
 };
 
 class File::LinuxFIFO : public File {
@@ -528,7 +704,18 @@ public:
             throw InvalidFileType ( PTF_FIFO, this->linuxFileType() );
     }
 
+    [[nodiscard]] auto toString () const noexcept -> String override {
+        return
+                String("Linux FIFO {") +
+                " file = " + File::toString() +
+                " }";
+    }
+
     ~LinuxFIFO () noexcept override = default;
+
+    [[nodiscard]] auto copy () const noexcept -> LinuxFIFO * override {
+        return new LinuxFIFO(* this);
+    }
 };
 
 class File::LinuxSymbolicLink : public File {
@@ -538,7 +725,18 @@ public:
             throw InvalidFileType ( PTF_SYMBOLIC_LINK, this->linuxFileType () );
     }
 
+    [[nodiscard]] auto toString () const noexcept -> String override {
+        return
+                String("Linux Symbolic Link {") +
+                " file = " + File::toString() +
+                " }";
+    }
+
     ~LinuxSymbolicLink () noexcept override = default;
+
+    [[nodiscard]] auto copy () const noexcept -> LinuxSymbolicLink * override {
+        return new LinuxSymbolicLink(* this);
+    }
 };
 
 class File::LinuxSocket : public File {
@@ -548,9 +746,39 @@ public:
             throw InvalidFileType ( PTF_SOCKET, this->linuxFileType () );
     }
 
+    [[nodiscard]] auto toString () const noexcept -> String override {
+        return
+                String("Linux Socket {") +
+                " file = " + File::toString() +
+                " }";
+    }
+
     ~LinuxSocket () noexcept override = default;
+
+    [[nodiscard]] auto copy () const noexcept -> LinuxSocket * override {
+        return new LinuxSocket(* this);
+    }
 };
 
 #endif
+
+[[nodiscard]] inline auto File::at (Path const & p) noexcept -> UniquePointer < File > {
+
+#if defined(__linux)
+
+    auto flags = File::platformFileType(p);
+
+    if ( flags & PTF_REGULAR )          return {new LinuxRegular(p)};
+    if ( flags & PTF_DIRECTORY )        return {new LinuxDirectory(p)};
+    if ( flags & PTF_CHARACTER_DEVICE ) return {new LinuxCharacterDevice(p)};
+    if ( flags & PTF_BLOCK_DEVICE )     return {new LinuxBlockDevice(p)};
+    if ( flags & PTF_FIFO )             return {new LinuxFIFO(p)};
+    if ( flags & PTF_SYMBOLIC_LINK )    return {new LinuxSymbolicLink(p)};
+    if ( flags & PTF_SOCKET )           return {new LinuxSocket(p)};
+
+#endif
+
+    return {nullptr};
+}
 
 #endif //CDS_FILE_HPP

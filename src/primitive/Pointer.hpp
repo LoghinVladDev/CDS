@@ -84,7 +84,7 @@ template <class T>
 class UniquePointer final : public PointerBase<T> {
 public:
     UniquePointer() noexcept = default;
-    explicit UniquePointer(typename PointerBase<T>::Pointer p) noexcept : PointerBase<T>(p) { }
+    UniquePointer(typename PointerBase<T>::Pointer p) noexcept : PointerBase<T>(p) { }
 
     UniquePointer( UniquePointer const & o ) noexcept = delete;
     UniquePointer( UniquePointer & o ) noexcept : PointerBase<T>(o.release()) { }
@@ -141,7 +141,7 @@ public:
         return new SharedPointer(* this);
     }
 
-    explicit SharedPointer(typename PointerBase<T>::Pointer p) noexcept : PointerBase<T>(p) {
+    SharedPointer(typename PointerBase<T>::Pointer p) noexcept : PointerBase<T>(p) {
         this->pControl = new SharedPointerControlBlock { 1ull };
     }
 
@@ -190,7 +190,7 @@ template <class T>
 class ForeignPointer final : public PointerBase<T> {
 public:
     ForeignPointer() noexcept : PointerBase<T>(nullptr) {}
-    explicit ForeignPointer(typename PointerBase<T>::Pointer p) noexcept : PointerBase<T>(p) {}
+    ForeignPointer(typename PointerBase<T>::Pointer p) noexcept : PointerBase<T>(p) {}
 
     ForeignPointer( ForeignPointer const & o ) noexcept : PointerBase<T>(o.pObj) {}
     ForeignPointer( ForeignPointer && o ) noexcept : PointerBase<T>(o.release()) {}

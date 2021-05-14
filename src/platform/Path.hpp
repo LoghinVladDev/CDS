@@ -264,7 +264,7 @@ inline auto Path::walk(int depth) const noexcept (false) -> LinkedList<WalkEntry
         } else if ( entry->d_type == DT_DIR ) {
             currentDirEntry.directories().pushBack(entry->d_name);
 
-            auto nestedEntries = Path(this->append(entry->d_name)).walk();
+            auto nestedEntries = Path(this->append(entry->d_name)).walk(depth - 1);
             for ( auto & e : nestedEntries )
                 entries.pushFront( e );
         } else {

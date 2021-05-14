@@ -16,7 +16,10 @@ int main() {
                       << File::platformPermissionFlagsToString(p.getSecond()) << '\n';
         });
 
-        File::LinuxDirectory f("/");
+        auto file = File::LinuxDirectory("/home/loghin");
+        file.entries().forEach([](auto * d){std::cout << d->name();});
+
+
     } catch (std::exception const & e) {
         std::cout << e.what() << ", path hardcoded for testing purposes\n";
     }
