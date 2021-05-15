@@ -5,7 +5,7 @@
 #ifndef CDS_FILE_HPP
 #define CDS_FILE_HPP
 
-#warning Warning: Library Functions Unstable
+//#warning Warning: Library Functions Unstable
 
 #include <CDS/Object>
 #include <CDS/LinkedList>
@@ -146,6 +146,8 @@ public:
 
 #endif
 
+    // region platform independent file flags
+
     enum TypeFlag : CDS_uint8 {
         TF_NULL_FILE            = PlatformTypeFlag::PTF_NULL_FILE,
         TF_REGULAR              = PlatformTypeFlag::PTF_REGULAR,
@@ -163,7 +165,54 @@ public:
 
     using PermissionFlags = PlatformPermissionFlags;
 
+    // endregion
+
+    // region diagnostic data types
+
+    enum DiagnosticLogLevel : CDS_uint8 {
+        DLL_NONE     = 0x00u,
+        DLL_ERROR    = 0x01u,
+        DLL_WARNING  = 0x02u,
+        DLL_INFO     = 0x03u,
+
+        DLL_ALL      = DLL_INFO
+    };
+
+    enum DiagnosticOptionFlag : CDS_uint16 {
+        DO_NO_AUTOMATIC_FIXES       = 0x0000u,
+        DO_BASIC_AUTOMATIC_FIXES    = 0x0001u,
+        DO_COMPLEX_AUTOMATIC_FIXES  = 0x0002u,
+
+        DO_BROKEN_SYMBOLIC_LINKS    = 0x0004u
+    };
+
+    using DiagnosticOptionFlags = CDS_uint16;
+
+    constexpr static auto diagnosticLogLevelToString (DiagnosticLogLevel l) noexcept -> StringLiteral {
+        switch (l) {
+            case DLL_NONE:      return "None";
+            case DLL_ERROR:     return "Error";
+            case DLL_WARNING:   return "Warning";
+            case DLL_INFO:      return "Info";
+        }
+
+        return "Undefined";
+    }
+
+    // endregions
+
 protected:
+
+    // region diagnostic variables
+
+    static std::ostream *           _diagnosticOutput;
+
+    static DiagnosticLogLevel       _diagnosticLogLevel;
+    static DiagnosticOptionFlags    _diagnosticFixesFlags;
+
+    // endregion
+
+    // region linux variables
 
 #if defined(__linux)
 
@@ -171,7 +220,15 @@ protected:
 
 #endif
 
+    // endregion
+
+    // region platform independent variables
+
     Path _path;
+
+    // endregion
+
+    // region ctor + dtor + reload
 
     explicit File ( Path const & p ) noexcept : _path(p) {
         this->reload();
@@ -191,6 +248,50 @@ protected:
     }
 
 public:
+    virtual ~File () noexcept = default;
+
+protected:
+
+    // endregion
+
+public:
+
+    // region diagnostic functions
+
+    static constexpr auto setDiagnosticLogLevel ( DiagnosticLogLevel l ) noexcept -> void {
+        File::_diagnosticLogLevel = l;
+    }
+
+    static inline auto diagnosticLogLevel () noexcept -> DiagnosticLogLevel {
+        return File::_diagnosticLogLevel;
+    }
+
+    static constexpr auto setDiagnosticOutputStream ( std::ostream & os ) noexcept -> void {
+        File::_diagnosticOutput = & os;
+    }
+
+    static auto diagnosticOutputStream () noexcept -> std::ostream & {
+        return * File::_diagnosticOutput;
+    }
+
+    static inline auto diagnosticFlags () noexcept -> DiagnosticOptionFlags {
+        return File::_diagnosticFixesFlags;
+    }
+
+    static constexpr auto setDiagnosticFlags ( DiagnosticOptionFlags f ) noexcept -> void {
+        File::_diagnosticFixesFlags;
+    }
+
+    static auto setDiagnosticFlag ( DiagnosticOptionFlag f, bool enable ) noexcept -> void {
+        if (enable)
+            File::_diagnosticFixesFlags |= f;
+        else
+            File::_diagnosticFixesFlags &= ~f;
+    }
+
+    // endregion
+
+    // region linux stat64 utility
 
 #if defined(__linux)
 
@@ -258,13 +359,9 @@ public:
 
 #endif
 
-    [[nodiscard]] auto toString () const noexcept -> String override {
-        return
-            String("File {") +
-                " path = " + this->_path.toString() +
-                ", platformInfo = " + this->platformInfoToString ()
-                + " }";
-    }
+    // endregion
+
+    // region linux File Subclasses
 
 #if defined(__linux)
 
@@ -278,6 +375,9 @@ public:
 
 #endif
 
+    // endregion
+
+    // region exceptions
     class InvalidFileType : public std::exception {
     private:
         String _message;
@@ -295,9 +395,9 @@ public:
             return this->_message.cStr();
         }
     };
+    // endregion
 
-    virtual ~File () noexcept = default;
-
+    // region utility functions
     [[nodiscard]] constexpr auto path () const noexcept -> Path const & { return this->_path; }
     [[nodiscard]] constexpr auto path () noexcept -> Path & { return this->_path; }
 
@@ -306,6 +406,16 @@ public:
     [[nodiscard]] static auto at (Path const &) noexcept -> UniquePointer < File >;
 
     [[nodiscard]] auto copy () const noexcept -> File * override = 0;
+
+    [[nodiscard]] auto toString () const noexcept -> String override {
+        return
+                String("File {") +
+                " path = " + this->_path.toString() +
+                ", platformInfo = " + this->platformInfoToString ()
+                + " }";
+    }
+
+    // endregion
 };
 
 #if defined(__linux)
@@ -537,9 +647,14 @@ inline auto File::platformPermissionsGrouped (
 
 #endif
 
+// region linux File Subclasses
+
 #if defined(__linux)
 
 class File::LinuxRegular : public File {
+private:
+    int fd;
+
 public:
     explicit LinuxRegular (Path const & path) noexcept (false) : File (path) {
         if ( ! this->isLinuxRegularFile () )
@@ -558,7 +673,21 @@ public:
     [[nodiscard]] auto copy () const noexcept -> LinuxRegular * override {
         return new LinuxRegular(* this);
     }
+
+    auto open (String const & = "rw") noexcept -> LinuxRegular & {
+//        this->fd = open(this->_osPath.toString().cStr());
+#warning File Encoding Read/Write Not Implemented
+        return * this;
+    }
+
+    auto close () noexcept -> LinuxRegular & {
+#warning Not Implemented
+        return * this;
+    }
 };
+
+#include <unistd.h>
+#include <sys/wait.h>
 
 class File::LinuxDirectory : public File {
 private:
@@ -597,7 +726,17 @@ public:
                     auto p = File::at(e.root() / f);
                     this->_entries.append(p->copy());
                 } catch ( Path::InvalidPath const & ) {
-                    // do nothing, broken symbolic link
+                    // region do nothing, broken symbolic link
+
+                    if ( static_cast < int > (DLL_WARNING) <= static_cast < int > (File::diagnosticLogLevel()) )
+                        File::diagnosticOutputStream () << "[" << File::diagnosticLogLevelToString(DLL_WARNING) << "] : Symbolic Link '" << (e.root().toString() + "/" + f ) << "' broken" << '\n';
+
+                    if ( File::_diagnosticFixesFlags & ( DO_BASIC_AUTOMATIC_FIXES | DO_BROKEN_SYMBOLIC_LINKS ) )
+                        if ( fork() == 0 )
+                            execl ("rm", "rm", (e.root().toString() + "/" + f).cStr(), NULL);
+                        else
+                            wait(nullptr);
+                    // endregion
                 }
             }
             for ( auto & d : e.directories() ) {
@@ -768,6 +907,10 @@ public:
 
 #endif
 
+//endregion
+
+// region File factory function
+
 [[nodiscard]] inline auto File::at (Path const & p) noexcept -> UniquePointer < File > {
 
 #if defined(__linux)
@@ -787,4 +930,16 @@ public:
     return { new LinuxSymbolicLink(p) };
 }
 
+// endregion
+
+// region File inline static vars
+
+#include <iostream>
+inline std::ostream *                   File::_diagnosticOutput = & std::cerr;
+inline File::DiagnosticLogLevel         File::_diagnosticLogLevel = File::DiagnosticLogLevel::DLL_ALL;
+inline File::DiagnosticOptionFlags      File::_diagnosticFixesFlags = File::DiagnosticOptionFlag::DO_NO_AUTOMATIC_FIXES;
+
+// endregion
+
 #endif //CDS_FILE_HPP
+
