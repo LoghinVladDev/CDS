@@ -122,27 +122,27 @@ set(
         src/primitive/Tuple.hpp
         src/threading/Atomic.hpp src/cdsIntern/Concepts.hpp src/cdsIntern/Traits.hpp src/cdsIntern/Types.hpp include/CDS/InputStream include/CDS/OutputStream include/CDS/Stream include/CDS/AbstractStream)
 
-set(
-        CDS_LIB_SRC
-        src/primitive/String.cpp
-)
+#set(
+#        CDS_LIB_SRC
+#        src/primitive/String.cpp
+#)
 
 set(
         CDS_GLOBAL_HEADERS ${CDS_INCLUDE_DIRECTORIES} CACHE INTERNAL "DIRS"
 )
 
 
-add_library( CDS ${CDS_LIB_SRC} )
+#add_library( CDS ${CDS_LIB_SRC} )
 
 if (WIN32)
     set(
             CDS_LIBRARIES
-            CDS
+#            CDS
     )
 else()
     set(
             CDS_LIBRARIES
-            CDS
+#            CDS
             pthread
     )
 endif()
@@ -150,18 +150,18 @@ endif()
 add_executable(
         CDS-dummy
         main.cpp
-        ${CDS_LIB_SRC}
+#        ${CDS_LIB_SRC}
         ${CDS_HEADERS}
 )
 target_link_libraries(
         CDS-dummy
-        ${CDS_LIBRAIES}
+        ${CDS_LIBRARIES}
 )
 
 add_executable(
         CDS-dummy2
         tests2.cpp
-        ${CDS_LIB_SRC}
+#        ${CDS_LIB_SRC}
         ${CDS_HEADERS}
 )
 
@@ -174,13 +174,13 @@ if(WIN32)
     add_executable(
             CDS-wintests
             wTests.cpp
-            ${CDS_LIB_SRC}
+#            ${CDS_LIB_SRC}
             ${CDS_HEADERS}
     )
 
     target_link_libraries(
             CDS-wintests
-            ${CDS_LIBRAIES}
+#            ${CDS_LIBRAIES}
     )
 endif()
 
@@ -215,13 +215,13 @@ macro(testSuite)
     add_executable(Test_${ARGV1}_Only
             ${${ARGV1}_SRC}
             ${TEST_DEFAULT_SRC}
-            ${CDS_LIB_SRC}
+#            ${CDS_LIB_SRC}
             src/cdsIntern/tests/${ARGV0}/${ARGV1}Only.cpp
     )
 
     target_link_libraries(
             Test_${ARGV1}_Only
-            ${CDS_LIBRAIES}
+            ${CDS_LIBRARIES}
     )
 endmacro()
 
@@ -242,10 +242,10 @@ add_executable(
         Test_All
         src/cdsIntern/tests/all.cpp
         ${TEST_ALL_SRC}
-        ${CDS_LIB_SRC}
+#        ${CDS_LIB_SRC}
 )
 
 target_link_libraries(
         Test_All
-        ${CDS_LIBRAIES}
+        ${CDS_LIBRARIES}
 )

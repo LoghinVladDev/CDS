@@ -105,7 +105,7 @@ public:
     /**
      * @test testcase not required
      */
-    ~String() noexcept;
+    ~String() noexcept override;
 
 
     /**
@@ -1226,5 +1226,420 @@ inline auto operator << (std::ostream & out, Object const & o) noexcept -> std::
     return (out << o.toString());
 }
 // end of weird stuff
+
+
+#include <cstring>
+#define CONSTR_CLEAR() _c(0), _l(0), _p(nullptr)
+
+inline void String::_alloc(Size size) noexcept {
+    if ( this->_l + size + 1 < this->_c )
+        return;
+
+    auto newCap = std::max ( size + this->_l, 2 * this->_c ) + 1;
+    auto newArea = new ElementType [newCap];
+
+    if ( this->_p != nullptr )
+        std::memcpy( newArea, this->_p, this->_l );
+
+    std::memset ( newArea + this->_l, 0, newCap - this->_l );
+
+    delete [] this->_p;
+
+    this->_p = newArea;
+    this->_c = newCap;
+}
+
+inline String::String(StringLiteral cString) noexcept : CONSTR_CLEAR() {
+    if ( cString == nullptr )
+        return;
+
+    auto len = strlen(cString);
+    if ( len == 0 )
+        return;
+
+    this->_alloc(len);
+
+    this->_l = len;
+    std::memcpy ( this->_p, cString, this->_l + 1 );
+}
+
+inline String::String(String const & s) noexcept : CONSTR_CLEAR() {
+    if ( s.empty() )
+        return;
+
+    this->_alloc(s._l);
+    this->_l = s._l;
+    std::memcpy ( this->_p, s._p, this->_l + 1 );
+}
+
+inline String::~String() noexcept {
+    delete [] this->_p;
+}
+
+inline auto String::append (ElementType ch) noexcept -> String & {
+    this->_alloc(1);
+
+    this->_p[this->_l++] = ch;
+    return * this;
+}
+
+inline auto String::append (StringLiteral cString) noexcept -> String & {
+    if ( cString == nullptr ) return * this;
+
+    auto len = strlen(cString);
+    this->_alloc(len);
+
+    for (int i = 0; i < len; ++i)
+        this->_p[this->_l++] = cString[i];
+
+    return * this;
+}
+
+inline auto String::append (String const & str) noexcept -> String & {
+    this->_alloc(str._l);
+
+    for ( ElementType e : str )
+        this->_p[this->_l++] = e;
+
+    return * this;
+}
+
+inline String::IteratorBase::IteratorBase(String & s, Index i) noexcept : _s ( & s ), _pos ( i ) {}
+inline String::ConstIteratorBase::ConstIteratorBase(String const & s, Index i) noexcept : _s ( & s ), _pos ( i ) {}
+inline String::Iterator::Iterator(String & s, Index i) noexcept : IteratorBase(s, i) {}
+inline String::ConstIterator::ConstIterator(const String & s, Index i) noexcept : ConstIteratorBase(s, i) {}
+inline String::ReverseIterator::ReverseIterator(String & s, Index i) noexcept : IteratorBase(s, i) {}
+inline String::ConstReverseIterator::ConstReverseIterator(const String & s, Index i) noexcept : ConstIteratorBase(s, i) {}
+
+inline auto String::begin() noexcept -> Iterator { return Iterator ( * this, 0 ); }
+inline auto String::end () noexcept -> Iterator { return Iterator ( * this, this->_l ); }
+inline auto String::begin() const noexcept -> ConstIterator { return ConstIterator ( * this, 0 ); }
+inline auto String::end() const noexcept -> ConstIterator { return ConstIterator ( * this, this->_l ); }
+inline auto String::cbegin() const noexcept -> ConstIterator { return ConstIterator ( * this, 0 ); }
+inline auto String::cend() const noexcept -> ConstIterator { return ConstIterator ( * this, this->_l ); }
+inline auto String::rbegin() noexcept -> ReverseIterator { return ReverseIterator( * this, this->_l - 1 ); }
+inline auto String::rend() noexcept -> ReverseIterator { return ReverseIterator( * this, -1 ); }
+inline auto String::rbegin() const noexcept -> ConstReverseIterator { return ConstReverseIterator( * this, this->_l - 1 ); }
+inline auto String::rend() const noexcept -> ConstReverseIterator { return ConstReverseIterator( * this, -1 ); }
+inline auto String::crbegin() const noexcept -> ConstReverseIterator { return ConstReverseIterator( * this, this->_l - 1 ); }
+inline auto String::crend() const noexcept -> ConstReverseIterator { return ConstReverseIterator( * this, -1 ); }
+
+inline auto String::operator [] (Index i) noexcept (false) -> ElementType & {
+    if ( this->empty() )
+        throw String::StringNullAccess();
+
+    if ( i < 0 )
+        i += ( (-i) / this->size() + 1 ) * this->size();
+    if ( i >= static_cast<Index>(this->size()) )
+        i = i % this->size();
+
+    return this->_p[i];
+}
+
+inline auto String::operator [] (Index i) const noexcept -> ElementType {
+    if ( this->empty() )
+        return '\0';
+
+    if ( i < 0 )
+        i += ( (-i) / this->size() + 1 ) * this->size();
+    if ( i >= static_cast<Index>(this->size()) )
+        i = i % this->size();
+
+    return this->_p[i];
+}
+
+inline String::String(const std::string & s) noexcept : CONSTR_CLEAR() {
+    if ( s.empty() )
+        return;
+
+    this->_alloc(s.size());
+
+    for ( auto e : s )
+        this->_p[this->_l++] = e;
+}
+
+inline String::String(Size count, ElementType constant) noexcept : CONSTR_CLEAR() {
+    if ( count == 0 )
+        return;
+
+    this->_alloc(count);
+    std::memset(this->_p, constant, count);
+    this->_l = count;
+}
+
+inline String::String(const std::initializer_list<ElementType> & list) noexcept : CONSTR_CLEAR() {
+    if ( list.size() == 0 )
+        return;
+
+    this->_alloc(list.size());
+    for ( auto e : list )
+        this->_p[this->_l++] = e;
+}
+
+inline String::String(std::string::iterator const & begin, std::string::iterator const & end) noexcept : CONSTR_CLEAR() {
+    if ( end - begin <= 0 )
+        return;
+
+    this->_alloc(end - begin);
+
+    for ( auto it = begin; it != end; it++ )
+        this->_p[this->_l++] = *it;
+}
+
+#pragma clang diagnostic push
+#pragma ide diagnostic ignored "ConstantConditionsOC"
+inline String::String(IteratorBase const & begin, IteratorBase const & end) noexcept : CONSTR_CLEAR() {
+    bool reversed = dynamic_cast < Iterator const * > ( & begin ) == nullptr;
+    if ( ! reversed && end - begin <= 0 || reversed && begin - end <= 0)
+        return;
+    this->_alloc(! reversed ? end - begin : begin - end);
+
+    if ( ! reversed )
+        for ( auto it = dynamic_cast < Iterator const & > ( begin ); it != end; it.next() )
+            this->_p[this->_l++] = *it;
+    else
+        for ( auto it = dynamic_cast < ReverseIterator const & > ( begin ); it != end; it.next() )
+            this->_p[this->_l++] = *it;
+}
+#pragma clang diagnostic pop
+
+inline String::String(ConstIteratorBase const & begin, ConstIteratorBase const & end) noexcept : CONSTR_CLEAR() {
+    bool reversed = dynamic_cast < ConstIterator const * > ( & begin ) == nullptr;
+    if ( ! reversed && end - begin <= 0 || reversed && begin - end <= 0)
+        return;
+    this->_alloc(! reversed ? end - begin : begin - end);
+
+    if ( ! reversed )
+        for ( auto it = dynamic_cast < ConstIterator const & > ( begin ); it != end; it.next() )
+            this->_p[this->_l++] = *it;
+    else
+        for ( auto it = dynamic_cast < ConstReverseIterator const & > ( begin ); it != end; it.next() )
+            this->_p[this->_l++] = *it;
+}
+
+inline auto String::resize(Size size) noexcept -> void {
+//    if ( this->empty() )
+//        return;
+
+    this->_c = size + 1;
+    auto newArea = new ElementType [ this->_c ];
+
+    if ( ! this->empty() ) {
+        std::memcpy(newArea, this->_p, this->_c);
+        delete[] this->_p;
+    }
+
+    this->_p = newArea;
+    if ( this->_l >= this->_c )
+        this->_l = this->_c - 1;
+}
+
+inline auto String::clear() noexcept -> void {
+    if ( this->_p != nullptr )
+        std::memset ( this->_p, 0, this->_l );
+    this->_l = 0;
+}
+
+//#include <CDS/LinkedList>
+
+inline String & String::operator= ( String const & o ) noexcept {
+    if ( this == & o )
+        return * this;
+
+    this->clear();
+
+    if ( o.empty() )
+        return * this;
+
+    this->_alloc(o.size());
+    std::memcpy ( this->_p, o._p, o._l + 1 );
+    this->_l = o._l;
+
+    return * this;
+}
+
+inline auto String::operator == ( String const & o ) const noexcept -> bool { return this->size() == o.size() && std::strcmp ( this->cStr(), o.cStr() ) == 0; }
+inline auto String::operator == ( std::string const & stdString ) const noexcept -> bool { return std::strcmp ( this->cStr(), stdString.c_str() ) == 0; }
+inline auto String::operator == ( StringLiteral cString ) const noexcept -> bool { return std::strcmp ( this->cStr(), cString ) == 0; }
+inline auto String::operator >= ( String const & o ) const noexcept -> bool { return std::strcmp ( this->cStr(), o.cStr() ) >= 0; }
+inline auto String::operator >= ( std::string const & stdString ) const noexcept -> bool { return std::strcmp ( this->cStr(), stdString.c_str() ) >= 0; }
+inline auto String::operator >= ( StringLiteral cString ) const noexcept -> bool { return std::strcmp ( this->cStr(), cString ) >= 0; }
+inline auto String::operator <= ( String const & o ) const noexcept -> bool { return std::strcmp ( this->cStr(), o.cStr() ) <= 0; }
+inline auto String::operator <= ( std::string const & stdString ) const noexcept -> bool { return std::strcmp ( this->cStr(), stdString.c_str() ) <= 0; }
+inline auto String::operator <= ( StringLiteral cString ) const noexcept -> bool { return std::strcmp ( this->cStr(), cString ) <= 0; }
+inline auto String::operator != ( String const & o ) const noexcept -> bool { return this->size() != o.size() || std::strcmp ( this->cStr(), o.cStr() ) != 0; }
+inline auto String::operator != ( std::string const & stdString ) const noexcept -> bool { return std::strcmp ( this->cStr(), stdString.c_str() ) != 0; }
+inline auto String::operator != ( StringLiteral cString ) const noexcept -> bool { return std::strcmp ( this->cStr(), cString ) != 0; }
+inline auto String::operator < ( String const & o ) const noexcept -> bool { return std::strcmp ( this->cStr(), o.cStr() ) < 0; }
+inline auto String::operator < ( std::string const & stdString ) const noexcept -> bool { return std::strcmp ( this->cStr(), stdString.c_str() ) < 0; }
+inline auto String::operator < ( StringLiteral cString ) const noexcept -> bool { return std::strcmp ( this->cStr(), cString ) < 0; }
+inline auto String::operator > ( String const & o ) const noexcept -> bool { return std::strcmp ( this->cStr(), o.cStr() ) > 0; }
+inline auto String::operator > ( std::string const & stdString ) const noexcept -> bool { return std::strcmp ( this->cStr(), stdString.c_str() ) > 0; }
+inline auto String::operator > ( StringLiteral cString ) const noexcept -> bool { return std::strcmp ( this->cStr(), cString ) > 0; }
+
+inline auto String::findFirst ( ElementType e ) const noexcept -> Index {
+    Index i = 0;
+    for ( auto c : (*this) )
+        if ( c == e )
+            return i;
+        else
+            i++;
+
+    return INVALID_POS;
+}
+
+inline auto String::findFirst ( String const & o ) const noexcept -> Index {
+    Index i = 0;
+    for ( auto c : (*this) )
+        if ( this->size() - i >= o.size() && this->substr( i, i + o.size() ) == o )
+            return i;
+        else
+            i++;
+    return INVALID_POS;
+}
+
+inline auto String::findLast ( ElementType e ) const noexcept -> Index {
+    Index i = this->size() - 1;
+    for ( auto it = this->rbegin(); it != this->rend(); it++ )
+        if ( it.value() == e )
+            return i;
+        else
+            i--;
+    return INVALID_POS;
+}
+
+inline auto String::findLast ( String const & o ) const noexcept -> Index {
+    Index i = this->size() - o.length();
+    for ( i; i >= 0; i-- )
+        if ( this->substr(i, i + o.length()) == o )
+            return i;
+
+    return INVALID_POS;
+}
+
+inline auto String::findFirstOf ( String const & o ) const noexcept -> Index {
+    Index i = 0;
+    for ( auto e : (*this) )
+        if ( o.contains(e) )
+            return i;
+        else
+            i++;
+    return INVALID_POS;
+}
+
+inline auto String::findFirstNotOf ( String const & o ) const noexcept -> Index {
+    Index i = 0;
+    for ( auto e : (*this) )
+        if ( ! o.contains(e) )
+            return i;
+        else
+            i++;
+    return INVALID_POS;
+}
+
+inline auto String::findLastOf ( String const & o ) const noexcept -> Index {
+    Index i = this->size() - 1;
+    for ( auto it = this->rbegin(); it != this->rend(); it++ )
+        if ( o.contains(it.value()) )
+            return i;
+        else
+            i--;
+    return INVALID_POS;
+}
+
+inline auto String::findLastNotOf ( String const & o ) const noexcept -> Index {
+    Index i = this->size() - 1;
+    for ( auto it = this->rbegin(); it != this->rend(); it++ )
+        if ( ! o.contains(it.value()) )
+            return i;
+        else
+            i--;
+    return INVALID_POS;
+}
+
+inline auto String::substr(Index from, Index to) const noexcept -> String {
+    if ( to == -1 || to > static_cast<Index>(this->size()) )
+        to = this->size();
+    if ( from < 0 )
+        from = 0;
+
+    String s;
+    for ( Index i = from; i < to; i++ )
+        s += this->_p[i];
+
+    return s;
+}
+
+
+inline auto String::ltrim ( ElementType e ) noexcept -> String & {
+    while ( ! this->empty () && this->front() == e )
+        * this = this->substr( 1 );
+    return * this;
+}
+
+inline auto String::ltrim ( String const & s ) noexcept -> String & {
+    while ( ! this->empty () && s.contains( this->front() ) )
+        * this = this->substr(1);
+    return * this;
+}
+
+inline auto String::rtrim ( ElementType e ) noexcept -> String & {
+    while ( ! this->empty () && this->back() == e )
+        this->_p[--this->_l] = '\0';
+
+    return * this;
+}
+
+inline auto String::rtrim ( String const & s ) noexcept -> String & {
+    while ( ! this->empty () && s.contains(this->back()) )
+        this->_p[--this->_l] = '\0';
+
+    return * this;
+}
+
+#ifndef NDEBUG
+inline auto String::diag() const noexcept -> String {
+    return String("Debug = { data = '") + this->_p + "', length = " + this->_l + ", capacity = " + this->_c + " }";
+}
+#endif
+
+inline auto String::rjust(Size justifySize, ElementType padChar) noexcept -> String & {
+    while ( this->size() < justifySize )
+        this->append(padChar);
+
+    return * this;
+}
+
+inline auto String::ljust(Size justifySize, ElementType padChar) noexcept -> String & {
+    while ( this->size() < justifySize )
+        this->prepend(padChar);
+
+    return * this;
+}
+
+inline auto String::replace(Index pos, Size len, const String & newInPlace) noexcept -> String & {
+    String left = this->substr(0, pos);
+    String right = this->substr(pos + len);
+
+    return ( * this = left + newInPlace + right );
+}
+
+inline auto String::reversed() const noexcept -> String {
+    return {this->rbegin(), this->rend()};
+}
+
+inline auto String::operator * (int count) const noexcept -> String {
+    String res;
+    for ( int i = 0; i < count; i ++ )
+        res += (*this);
+    return res;
+}
+
+#undef CONSTR_CLEAR
+
+//#include <CDS/View>
+
+#include <CDS/Types>
+template <> auto hash<String> (String const & o) noexcept -> Index { return o.length(); }
 
 #endif //CDS_STRING_HPP

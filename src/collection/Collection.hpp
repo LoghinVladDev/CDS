@@ -30,25 +30,6 @@ concept Comparable = requires ( const T & a, const T & b ) {
 #include <type_traits>
 #include <CDS/Object>
 
-#if defined(__cpp_concepts) && !defined(_MSC_VER)
-template <class T>
-concept Callable = std::is_invocable<T>::value;
-
-template <typename T>
-concept UniqueIdentifiableByObject = requires {
-    std::is_base_of < Object, T >::value;
-};
-
-template <typename T>
-concept UniqueIdentifiableByOperator = requires ( T const & a, T const & b ) {
-    a == b;
-};
-
-template <typename T>
-concept UniqueIdentifiable = requires ( T const & a, T const & b ) {
-    UniqueIdentifiableByObject<T> || UniqueIdentifiableByOperator<T>;
-};
-#endif
 
 template <class T>
 class Comparator {

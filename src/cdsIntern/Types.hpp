@@ -13,12 +13,13 @@ concept HashCalculatorHasBoundaryFunction = requires (H hashCalculator) {
 #endif
 
 #include "../std-types.h"
-#include <CDS/Object>
+class Object;
+class String;
 
 #include <cstring>
 template <class T> static auto hash (T const &) noexcept -> Index { return 0; }
-template <> auto hash<String> (String const & o) noexcept -> Index { return o.length(); }
-template <> auto hash<Object> (Object const & o) noexcept -> Index { return o.hash(); }
+template <> auto hash<String> (String const & o) noexcept -> Index;
+template <> auto hash<Object> (Object const & o) noexcept -> Index;
 template <> auto hash<CString> (CString const & o)noexcept -> Index { return std::strlen(o); }
 template <> auto hash<StringLiteral> (StringLiteral const & o)noexcept -> Index { return std::strlen(o); }
 template <> auto hash<CDS_uint8> (CDS_uint8 const & o)noexcept -> Index { return o; }
@@ -62,6 +63,9 @@ namespace dataTypes {
     template <class K> using MediumCollisionDefaultHashFunction = DefaultHashFunction<K, 4096>;
     template <class K> using LowCollisionDefaultHashFunction = DefaultHashFunction<K, 32768>;
 }
+
+
+//#include <CDS/Object>
 
 
 #endif //CDS_TYPES_HPP

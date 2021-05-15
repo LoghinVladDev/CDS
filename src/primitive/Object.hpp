@@ -30,6 +30,9 @@ public:
     virtual ~Object () noexcept = default;
 };
 
+#include <CDS/Types>
+template <> auto hash<Object> (Object const & o) noexcept -> Index { return o.hash(); }
+
 #include <CDS/String>
 
 #endif //CDS_OBJECT_HPP

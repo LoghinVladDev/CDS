@@ -556,14 +556,6 @@ auto View<T>::Sortable::push ( ViewValue & v ) noexcept -> void {
 
 #include <CDS/Map>
 
-template <class K, class V, class H = dataTypes::MediumCollisionDefaultHashFunction<K>>
-#if defined(__cpp_concepts) && !defined(_MSC_VER)
-requires
-UniqueIdentifiable<K> &&
-HashCalculatorHasBoundaryFunction<H>
-#endif
-class HashMap;
-
 template < typename T >
 auto View<T>::toMap () noexcept (false) {
     if constexpr ( isPair<ViewValue>::value ) {
@@ -586,6 +578,10 @@ auto View<T>::toArray () noexcept -> Array < ViewValue > _ITERABLE_CONSTRAINT {
     for ( auto e : * this )
         result.pushBack(e);
     return result;
+}
+
+inline auto String::view() const noexcept -> View < String > {
+    return View(*this);
 }
 
 #undef _ITERABLE_CONSTRAINT

@@ -1301,4 +1301,155 @@ auto DoubleLinkedList<T>::view () const noexcept -> View < DoubleLinkedList < T 
     return View(*this);
 }
 
+inline auto String::split(ElementType token, Size splitCount) const noexcept -> LinkedList < String > {
+    Index splitIndex = 0;
+    if ( splitCount < 1 )
+        splitCount = UINT32_MAX;
+
+    LinkedList < String > segments;
+    if ( this->empty() )
+        return segments;
+
+    String currentSegment;
+
+    for ( auto c : (*this) ) {
+        if ( c != token || splitIndex >= static_cast<Index>(splitCount) - 1 )
+            currentSegment += c;
+        else {
+            if ( currentSegment.empty() )
+                continue;
+
+            splitIndex ++;
+            segments.pushBack ( currentSegment );
+            currentSegment.clear();
+        }
+    }
+
+    if ( ! currentSegment.empty() )
+        segments.pushBack ( currentSegment );
+    return segments;
+}
+
+inline auto String::split(const String & delim, Size splitCount) const noexcept -> LinkedList < String > {
+    Index splitIndex = 0;
+    if ( splitCount < 1 )
+        splitCount = INT64_MAX;
+
+    LinkedList < String > segments;
+    if ( this->empty() )
+        return segments;
+
+    String currentSegment;
+
+    for ( auto c : (*this) ) {
+        if ( ! delim.contains(c) || splitIndex >= static_cast<Index>(splitCount) - 1 )
+            currentSegment += c;
+        else {
+            splitIndex ++;
+            if ( ! currentSegment.empty() )
+                segments.pushBack ( currentSegment );
+            currentSegment.clear();
+        }
+    }
+
+    if ( ! currentSegment.empty() )
+        segments.pushBack ( currentSegment );
+    return segments;
+}
+
+inline auto String::find (ElementType e) const noexcept -> LinkedList < Index > {
+    LinkedList < Index > indices;
+
+    Index i = 0;
+    for ( auto c : (*this) ) {
+        if ( c == e )
+            indices.pushBack ( i );
+        i++;
+    }
+
+    return indices;
+}
+
+inline auto String::findOf (String const & s) const noexcept -> LinkedList < Index > {
+    LinkedList < Index > indices;
+
+    Index i = 0;
+    for ( auto c : (*this) ) {
+        if ( s.contains(c) )
+            indices.pushBack ( i );
+        i++;
+    }
+
+    return indices;
+}
+
+inline auto String::findNotOf (String const & s) const noexcept -> LinkedList < Index > {
+    LinkedList < Index > indices;
+
+    Index i = 0;
+    for ( auto c : (*this) ) {
+        if ( ! s.contains(c) )
+            indices.pushBack ( i );
+        i++;
+    }
+
+    return indices;
+}
+
+inline auto String::find (String const & o) const noexcept -> LinkedList < Index > {
+#if !defined(_MSC_VER)
+    Index lpsArray [o.size()];
+#else
+    auto lpsArray = new Index[this->size()];
+#endif
+    std::memset(lpsArray, 0, sizeof(Index) * o.size());
+
+    auto computeLPSArray = [& o, &lpsArray] () {
+        Index len = 0;
+        lpsArray[0] = 0;
+
+        Index i = 1;
+        while ( i < static_cast<Index>(o.size()) ) {
+            if ( o._p[i] == o._p[len] ) {
+                len ++;
+                lpsArray[i] = len;
+                i ++;
+            } else {
+                if ( len != 0 )
+                    len = lpsArray[len - 1];
+                else {
+                    lpsArray[i] = 0;
+                    i ++;
+                }
+            }
+        }
+    };
+
+    computeLPSArray();
+
+    LinkedList < Index > indices;
+    Index i = 0, j = 0;
+    while ( i < static_cast<Index>(this->size()) ) {
+        if ( o._p[j] == this->_p[i] ) {
+            i ++; j ++;
+        }
+
+        if ( j == static_cast<Index>(o.size()) ) {
+            indices.pushBack(i - j);
+            j = lpsArray[j - 1];
+        } else if ( i < static_cast<Index>(this->size()) && this->_p[i] != o._p[j] ) {
+            if ( j != 0 )
+                j = lpsArray[j - 1];
+            else
+                i ++;
+        }
+    }
+
+#if !defined(_MSC_VER)
+#else
+    delete [] lpsArray;
+#endif
+    return indices;
+}
+
 #endif //CDS_LINKEDLIST_HPP

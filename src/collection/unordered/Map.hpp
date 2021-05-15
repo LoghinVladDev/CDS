@@ -7,11 +7,23 @@
 
 #include <CDS/Types>
 #include <CDS/Concepts>
+
 #include <CDS/Collection>
 #include <CDS/Pair>
-#include <CDS/LinkedList>
+//#include <CDS/LinkedList>
 #include <CDS/Optional>
 #include <CDS/Reference>
+#include <CDS/NotImplementedException>
+#include "LinkedListPublic.hpp"
+
+
+template <class K, class V, class H = dataTypes::MediumCollisionDefaultHashFunction<K>>
+#if defined(__cpp_concepts) && !defined(_MSC_VER)
+requires
+UniqueIdentifiable<K> &&
+HashCalculatorHasBoundaryFunction<H>
+#endif
+class HashMap;
 
 
 template <class K, class V>
@@ -113,6 +125,5 @@ private:
     auto replaceAllNotOf ( const std::initializer_list<Entry> & what, EntryConstReference with ) noexcept -> void {}
     auto replaceLastNotOf ( const std::initializer_list<Entry> &, EntryConstReference ) noexcept -> void {}
 };
-
 
 #endif //CDS_MAP_HPP
