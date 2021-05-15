@@ -226,7 +226,7 @@ inline auto Path::walk(int depth) const noexcept (false) -> LinkedList<WalkEntry
 
 #if defined(WIN32)
 
-    WIN32_FIND_DATA win32FindData {};
+    WIN32_FIND_DATAA win32FindData {};
 
     HANDLE fileHandle = FindFirstFileA ( (this->_osPath + Path::directorySeparator() + "*").cStr(), & win32FindData );
     if ( fileHandle == INVALID_HANDLE_VALUE ) {
