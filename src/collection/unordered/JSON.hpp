@@ -275,9 +275,6 @@ private:
         }
 
         [[nodiscard]] auto toString() const noexcept -> String override {
-//            if ( this->_label.empty() )
-//                throw LabelException();
-
             return String()
                     .append("\"").append(this->_label).append("\" : ")
                     .append(this->stringFormattedData());

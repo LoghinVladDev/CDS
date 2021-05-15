@@ -341,42 +341,20 @@ public:
 
 private:
 
-#define GEN_QUICKSORT_FUNCTION(_paramType, _exceptSpec) \
-    auto static quickSort ( Iterator, Iterator, dataTypes::_paramType ) _exceptSpec -> void; \
-    auto static quickSortPartition ( Iterator, Iterator, dataTypes::_paramType ) _exceptSpec -> Iterator;
-
-//    GEN_QUICKSORT_FUNCTION(ValueCompareFunction<T>, noexcept)
-//    GEN_QUICKSORT_FUNCTION(ReferenceCompareFunction<T>, noexcept)
-//    GEN_QUICKSORT_FUNCTION(ConstReferenceCompareFunction<T>, noexcept)
-
-//    GEN_QUICKSORT_FUNCTION(ThrowValueCompareFunction<T>, noexcept (false) )
-//    GEN_QUICKSORT_FUNCTION(ThrowReferenceCompareFunction<T>, noexcept (false) )
-//    GEN_QUICKSORT_FUNCTION(ThrowConstReferenceCompareFunction<T>, noexcept (false) )
-
-#undef GEN_QUICKSORT_FUNCTION
-
 #if defined(__cpp_concepts) && !defined(_MSC_VER)
     auto static quickSort ( Iterator, Iterator, auto ) noexcept -> void;
     auto static quickSortPartition ( Iterator, Iterator, auto ) noexcept -> Iterator;
 #else
-    auto static quickSort ( Iterator, Iterator, bool (*) (T const &, T const &) noexcept ) noexcept -> void;
-    auto static quickSortPartition ( Iterator, Iterator, bool (*) (T const &, T const &) noexcept ) noexcept -> Iterator;
+    template < typename SortFunc >
+    auto static quickSort ( Iterator, Iterator, SortFunc const & ) noexcept -> void;
+
+    template < typename SortFunc >
+    auto static quickSortPartition ( Iterator, Iterator, SortFunc const & ) noexcept -> Iterator;
+//    auto static quickSort ( Iterator, Iterator, bool (*) (T const &, T const &) noexcept ) noexcept -> void;
+//    auto static quickSortPartition ( Iterator, Iterator, bool (*) (T const &, T const &) noexcept ) noexcept -> Iterator;
 #endif
 
 public:
-
-#define GEN_SORT_FUNC(_paramType, _exceptSpec) \
-    auto sort ( dataTypes::_paramType ) _exceptSpec -> void final;
-
-//    GEN_SORT_FUNC(ValueCompareFunction<T>, noexcept)
-//    GEN_SORT_FUNC(ReferenceCompareFunction<T>, noexcept)
-//    GEN_SORT_FUNC(ConstReferenceCompareFunction <T> = [](const T & a, const T & b) noexcept -> bool { return a < b; }, noexcept)
-
-//    GEN_SORT_FUNC(ThrowValueCompareFunction<T>, noexcept (false) )
-//    GEN_SORT_FUNC(ThrowReferenceCompareFunction<T>, noexcept (false) )
-//    GEN_SORT_FUNC(ThrowConstReferenceCompareFunction<T>, noexcept (false) )
-
-#undef GEN_SORT_FUNC
 
 #if defined(__cpp_concepts) && !defined(_MSC_VER)
     inline auto sort ( const Comparator < T > & c) noexcept -> void final {
@@ -386,7 +364,9 @@ public:
 
     auto sort ( auto func ) noexcept -> void;
 #else
-    auto sort ( bool (*) (T const &, T const &) noexcept ) noexcept -> void;
+//    auto sort ( bool (*) (T const &, T const &) noexcept ) noexcept -> void;
+    template < typename SortFunc >
+    auto sort ( SortFunc const & ) noexcept -> void;
 #endif
 
 
@@ -1050,130 +1030,13 @@ auto DoubleLinkedList<T>::sub(List<T> & l, Index from, Index to) const noexcept 
         l.pushBack(this->get(i));
 }
 
-
-#define FORCE_COMMA ,
-
-#define _GEN_QUICKSORT_PARTITION_FUNCTION(_paramType, _paramName, _exceptSpec)     \
-    template <class T>              \
-    auto DoubleLinkedList<T>::quickSortPartition (                             \
-    typename DoubleLinkedList<T>::Iterator from,                               \
-    typename DoubleLinkedList<T>::Iterator to,                                 \
-    typename dataTypes::_paramType <T> _paramName                              \
-    ) _exceptSpec -> DoubleLinkedList<T>::Iterator
-
-#define _GEN_QUICKSORT_PARTITION_FUNCTIONS(_paramName, _impl)                           \
-    _GEN_QUICKSORT_PARTITION_FUNCTION(ValueCompareFunction, _paramName, noexcept) _impl \
-    _GEN_QUICKSORT_PARTITION_FUNCTION(ReferenceCompareFunction, _paramName, noexcept)   _impl\
-    _GEN_QUICKSORT_PARTITION_FUNCTION(ConstReferenceCompareFunction, _paramName, noexcept)   _impl\
-    _GEN_QUICKSORT_PARTITION_FUNCTION(ThrowValueCompareFunction, _paramName, noexcept (false))   _impl\
-    _GEN_QUICKSORT_PARTITION_FUNCTION(ThrowReferenceCompareFunction, _paramName, noexcept (false))   _impl\
-    _GEN_QUICKSORT_PARTITION_FUNCTION(ThrowConstReferenceCompareFunction, _paramName, noexcept (false))   _impl
-/*
-_GEN_QUICKSORT_PARTITION_FUNCTIONS(compareFunction, {
-    auto swap = [] ( T & a FORCE_COMMA T & b ) { auto aux = a; a = b; b = aux; };
-
-    auto pivot = to.value();
-    typename DoubleLinkedList<T>::Iterator partitionIterator(from);
-
-    decltype (partitionIterator) previous;
-
-    for ( auto it = from; it != to; it++ ) {
-        if ( compareFunction ( it.value() FORCE_COMMA pivot ) ) {
-            swap ( partitionIterator.value() FORCE_COMMA it.value() );
-            previous = partitionIterator;
-            partitionIterator.next();
-        }
-    }
-
-    swap ( partitionIterator.value() FORCE_COMMA to.value() );
-    if ( previous == Iterator(nullptr) )
-        return partitionIterator;
-    return previous;
-})
-*/
-#undef _GEN_QUICKSORT_PARTITION_FUNCTIONS
-#undef _GEN_QUICKSORT_PARTITION_FUNCTION
-
-#define _GEN_QUICKSORT_FUNCTION(_paramType, _paramName, _exceptSpec)           \
-template <class T>                \
-auto DoubleLinkedList<T>::quickSort (                                      \
-typename DoubleLinkedList<T>::Iterator from,                               \
-typename DoubleLinkedList<T>::Iterator to,                                 \
-typename dataTypes::_paramType<T> _paramName                              \
-) _exceptSpec -> void
-
-#define _GEN_QUICKSORT_FUNCTIONS(_paramName, _impl) \
-    _GEN_QUICKSORT_FUNCTION(ValueCompareFunction, _paramName, noexcept) _impl \
-    _GEN_QUICKSORT_FUNCTION(ReferenceCompareFunction, _paramName, noexcept) _impl \
-    _GEN_QUICKSORT_FUNCTION(ConstReferenceCompareFunction, _paramName, noexcept) _impl \
-    _GEN_QUICKSORT_FUNCTION(ThrowValueCompareFunction, _paramName, noexcept (false)) _impl \
-    _GEN_QUICKSORT_FUNCTION(ThrowReferenceCompareFunction, _paramName, noexcept (false)) _impl \
-    _GEN_QUICKSORT_FUNCTION(ThrowConstReferenceCompareFunction, _paramName, noexcept (false)) _impl
-/*
-_GEN_QUICKSORT_FUNCTIONS(compareFunction,{
-    auto next = to;
-    if ( next != Iterator(nullptr) ) {
-        next.next();
-        if ( from == next )
-            return;
-    }
-
-    if ( from != to && from != Iterator(nullptr) && to != Iterator(nullptr) ) {
-        auto partitionIterator = DoubleLinkedList<T>::quickSortPartition(from FORCE_COMMA to FORCE_COMMA compareFunction);
-
-        DoubleLinkedList<T>::quickSort(from FORCE_COMMA partitionIterator FORCE_COMMA compareFunction);
-
-        if ( partitionIterator == Iterator(nullptr) )
-            return;
-
-        if (partitionIterator == from) {
-            partitionIterator.next();
-            if ( partitionIterator != Iterator(nullptr) )
-                DoubleLinkedList<T>::quickSort(partitionIterator FORCE_COMMA to FORCE_COMMA compareFunction);
-            return;
-        }
-
-        partitionIterator.next();
-        if ( partitionIterator == Iterator(nullptr) )
-            return;
-        partitionIterator.next();
-        DoubleLinkedList<T>::quickSort ( partitionIterator FORCE_COMMA to FORCE_COMMA compareFunction );
-    }
-} )
-*/
-#undef _GEN_QUICKSORT_FUNCTIONS
-#undef _GEN_QUICKSORT_FUNCTION
-
-#define _GEN_SORT_FUNCTION(_paramType, _paramName, _impl, _noexceptSpec) \
-    template <class T> \
-    auto DoubleLinkedList<T>::sort( typename dataTypes::_paramType<T> _paramName ) _noexceptSpec -> void _impl
-
-#define _GEN_SORT_FUNCTIONS(_paramName, _impl) \
-    _GEN_SORT_FUNCTION(ValueCompareFunction, _paramName, _impl, noexcept) \
-    _GEN_SORT_FUNCTION(ReferenceCompareFunction, _paramName, _impl, noexcept) \
-    _GEN_SORT_FUNCTION(ConstReferenceCompareFunction, _paramName, _impl, noexcept) \
-    _GEN_SORT_FUNCTION(ThrowValueCompareFunction, _paramName, _impl, noexcept (false)) \
-    _GEN_SORT_FUNCTION(ThrowReferenceCompareFunction, _paramName, _impl, noexcept (false)) \
-    _GEN_SORT_FUNCTION(ThrowConstReferenceCompareFunction, _paramName, _impl, noexcept (false))
-/*
-_GEN_SORT_FUNCTIONS(compareFunction,{
-    if ( this->size() < 2 )
-        return;
-
-    decltype (this->begin()) current;
-    decltype (current) previous;
-    for ( current = this->begin(); current != this->end(); current ++ )
-        previous = current;
-
-    quickSort ( this->begin() FORCE_COMMA previous FORCE_COMMA compareFunction );
-})
-*/
-
 template <class T>
 #if defined(__cpp_concepts) && !defined(_MSC_VER)
 auto DoubleLinkedList<T>::sort(auto func) noexcept -> void {
 #else
-auto DoubleLinkedList<T>::sort(bool (* func) (T const &, T const &) noexcept ) noexcept -> void {
+//auto DoubleLinkedList<T>::sort(bool (* func) (T const &, T const &) noexcept ) noexcept -> void {
+template < typename SortFunc >
+auto DoubleLinkedList < T >::sort ( SortFunc const & func ) noexcept -> void {
 #endif
     if ( this->size() < 2 )
         return;
@@ -1187,13 +1050,17 @@ auto DoubleLinkedList<T>::sort(bool (* func) (T const &, T const &) noexcept ) n
 }
 
 template <class T>
+#if !(defined(__cpp_concepts) && !defined(_MSC_VER))
+template <typename SortFunc>
+#endif
 auto DoubleLinkedList<T>::quickSort(
         DoubleLinkedList::Iterator from,
         DoubleLinkedList::Iterator to,
 #if defined(__cpp_concepts) && !defined(_MSC_VER)
         auto func
 #else
-        bool (* func) (T const &, T const &) noexcept
+//        bool (* func) (T const &, T const &) noexcept
+        SortFunc const & func
 #endif
 ) noexcept -> void {
     auto next = to;
@@ -1227,13 +1094,17 @@ auto DoubleLinkedList<T>::quickSort(
 }
 
 template <class T>
+#if !(defined(__cpp_concepts) && !defined(_MSC_VER))
+template <typename SortFunc>
+#endif
 auto DoubleLinkedList<T>::quickSortPartition(
         DoubleLinkedList::Iterator from,
         DoubleLinkedList::Iterator to,
 #if defined(__cpp_concepts) && !defined(_MSC_VER)
         auto func
 #else
-        bool (* func) (T const &, T const &) noexcept
+//        bool (* func) (T const &, T const &) noexcept
+        SortFunc const & func
 #endif
 ) noexcept -> Iterator {
     auto swap = [] ( T & a , T & b ) { auto aux = a; a = b; b = aux; };
@@ -1256,13 +1127,6 @@ auto DoubleLinkedList<T>::quickSortPartition(
         return partitionIterator;
     return previous;
 }
-
-
-
-#undef _GEN_SORT_FUNCTIONS
-#undef _GEN_SORT_FUNCTION
-
-#undef FORCE_COMMA
 
 template <class T>
 DoubleLinkedList<T>::DoubleLinkedList(

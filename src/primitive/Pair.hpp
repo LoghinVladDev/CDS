@@ -15,7 +15,6 @@ public:
     using Value = V;
 
 private:
-//    friend class View < DoubleLinkedList < Pair < K , V > > >;
 
     K first;
     V second;

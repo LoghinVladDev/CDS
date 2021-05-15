@@ -16,7 +16,6 @@
 #include <CDS/Random>
 
 class Long : public Object {
-//    _G_OBJ(Long, long long int, v, 0llu)
 private:
     long long int v{0llu};
 public:

@@ -94,10 +94,6 @@ public:
         return nullptr;
     }
 
-//    auto copy () const noexcept -> UniquePointer * override {
-//        return new UniquePointer( * this );
-//    }
-
     inline UniquePointer & operator = ( UniquePointer && p ) noexcept {
         if ( &p == this ) return * this;
 

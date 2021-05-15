@@ -43,10 +43,17 @@ int main() {
 //        std::cout << e.what() << ", path hardcoded for testing purposes\n";
 //    }
 
-    Path p;
-    for ( auto & e : p.walk() ) {
-        std::cout << e.root() << "\n\t" << e.files() << "\n\t" << e.directories() << "\n\n";
-    }
+//    Path p;
+//    for ( auto & e : p.walk() ) {
+//        std::cout << e.root() << "\n\t" << e.files() << "\n\t" << e.directories() << "\n\n";
+//    }
+
+    LinkedList < int > list = {1, 3, 7, 5};
+
+    int x = 3;
+    list.sort([](int a, int b){return a > b;});
+
+    std::cout << list.toString() << '\n';
 }
 
 #include <windows.h>

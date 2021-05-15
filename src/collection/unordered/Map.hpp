@@ -10,7 +10,6 @@
 
 #include <CDS/Collection>
 #include <CDS/Pair>
-//#include <CDS/LinkedList>
 #include <CDS/Optional>
 #include <CDS/Reference>
 #include <CDS/NotImplementedException>

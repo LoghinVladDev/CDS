@@ -6,7 +6,6 @@
 #define CDS_OBJECT_HPP
 
 #include "../prepro.h"
-//#include <CDS/String>
 #include <ostream>
 
 class String;
@@ -17,13 +16,8 @@ public:
     virtual auto operator == (Object const & o) const noexcept -> bool { return this == & o; }
     virtual auto operator != (Object const & o) const noexcept -> bool { return ! ( * this == o ); }
 
-//    friend auto operator << ( std::ostream & out, const Object & o ) noexcept -> std::ostream & {
-//        return ( out << o.toString() );
-//    }
-
     friend auto operator << (std::ostream &, Object const &) noexcept -> std::ostream &;
     virtual explicit operator String () const noexcept;
-//    virtual inline explicit operator String () const noexcept { return this->toString(); }
 
     virtual auto hash () const noexcept -> Index { return 0; }
     virtual auto copy () const noexcept -> Object * { return nullptr; }

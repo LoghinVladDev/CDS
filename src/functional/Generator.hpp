@@ -155,16 +155,4 @@ public:
     }
 };
 
-/**
- * class IntGenerator : public Generator<int> {
- * public:
- *      auto task () noexcept {
- *          int i = 1;
- *          while ( true ) {
- *              this->yield(i++);
- *          }
- *      }
- * };
- */
-
 #endif //CDS_GENERATOR_HPP

@@ -61,28 +61,11 @@ public:
     inline auto prepend ( const T & v ) noexcept -> void { return this->pushFront(v); }
     inline auto prepend ( T && v ) noexcept -> void { return this->pushFront(v); }
 
-
-#define GEN_SORT_FUNC(_paramType, _exceptSpec) \
-    virtual auto sort ( dataTypes::_paramType ) _exceptSpec -> void = 0;
-/*
-    GEN_SORT_FUNC(ValueCompareFunction<T>, noexcept)
-    GEN_SORT_FUNC(ReferenceCompareFunction<T>, noexcept)
-    GEN_SORT_FUNC(ConstReferenceCompareFunction<T> = [](const T & a, const T & b) noexcept -> bool { return a < b; }, noexcept)
-
-    GEN_SORT_FUNC(ThrowValueCompareFunction<T>, noexcept (false) )
-    GEN_SORT_FUNC(ThrowReferenceCompareFunction<T>, noexcept (false) )
-    GEN_SORT_FUNC(ThrowConstReferenceCompareFunction<T>, noexcept (false) )
-*/
-#undef GEN_SORT_FUNC
-
-
-
-
 #if defined(__cpp_concepts) && !defined(_MSC_VER)
     virtual auto sort ( const Comparator < T > & ) noexcept -> void = 0;
 //    virtual auto sort ( auto ) noexcept -> void = 0;
 #else
-    virtual auto sort ( bool (*) (T const &, T const &) noexcept ) noexcept -> void = 0;
+//    virtual auto sort ( bool (*) (T const &, T const &) noexcept ) noexcept -> void = 0;
 #endif
 
     [[nodiscard]] inline auto size () const noexcept -> Size override { return this->_size; }

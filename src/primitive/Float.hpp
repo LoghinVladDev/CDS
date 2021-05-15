@@ -17,7 +17,6 @@
 #include <CDS/Float>
 
 class Float : public Object {
-//    _G_OBJ(Float, float, v, 0.0f)
 private:
     float v{0.0f};
 public:

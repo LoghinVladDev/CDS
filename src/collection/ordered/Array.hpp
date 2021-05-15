@@ -220,8 +220,13 @@ private:
     auto static quickSort ( Iterator, Iterator, auto ) noexcept -> void;
     auto static quickSortPartition ( Iterator, Iterator, auto ) noexcept -> Iterator;
 #else
-    auto static quickSort ( Iterator, Iterator, bool (*) (T const &, T const &) noexcept ) noexcept -> void;
-    auto static quickSortPartition ( Iterator, Iterator, bool (*) (T const &, T const &) noexcept ) noexcept -> Iterator;
+    template < typename SortFunc >
+    auto static quickSort ( Iterator, Iterator, SortFunc const & ) noexcept -> void;
+
+    template < typename SortFunc >
+    auto static quickSortPartition ( Iterator, Iterator, SortFunc const & ) noexcept -> Iterator;
+//    auto static quickSort ( Iterator, Iterator, bool (*) (T const &, T const &) noexcept ) noexcept -> void;
+//    auto static quickSortPartition ( Iterator, Iterator, bool (*) (T const &, T const &) noexcept ) noexcept -> Iterator;
 #endif
 
 public:
@@ -232,7 +237,10 @@ public:
         return this->sort ( [&c] (ValueConstReference a, ValueConstReference b) noexcept -> bool { return c(a, b); } );
     }
 #else
-    auto sort ( bool (*) (T const &, T const &) noexcept ) noexcept -> void final;
+//    auto sort ( bool (*) (T const &, T const &) noexcept ) noexcept -> void final;
+
+    template < typename SortFunc >
+    auto sort ( SortFunc const & ) noexcept -> void;
 #endif
 
     Array & operator = ( Collection<Value> const & ) noexcept;
@@ -869,13 +877,17 @@ Array<T> & Array<T>::operator= (Collection<T> const & c) noexcept {
 }
 
 template <class T>
+#if !(defined(__cpp_concepts) && !defined(_MSC_VER))
+template <typename SortFunc>
+#endif
 auto Array<T>::quickSortPartition(
         Iterator from,
         Iterator to,
 #if defined(__cpp_concepts) && !defined(_MSC_VER)
         auto sortFunc
 #else
-        bool (* sortFunc) (T const &, T const &) noexcept
+//        bool (* sortFunc) (T const &, T const &) noexcept
+        SortFunc const & sortFunc
 #endif
 ) noexcept -> Iterator {
     auto swap = [] ( T & a, T & b ) { auto aux = a; a = b; b = aux; };
@@ -900,13 +912,17 @@ auto Array<T>::quickSortPartition(
 }
 
 template <class T>
+#if !(defined(__cpp_concepts) && !defined(_MSC_VER))
+template <typename SortFunc>
+#endif
 auto Array<T>::quickSort(
         Iterator from,
         Iterator to,
 #if defined(__cpp_concepts) && !defined(_MSC_VER)
         auto sortFunc
 #else
-        bool (* sortFunc) (T const &, T const &) noexcept
+//        bool (* sortFunc) (T const &, T const &) noexcept
+        SortFunc const & sortFunc
 #endif
 ) noexcept -> void {
     constexpr static auto validIterator = []( auto & it ) noexcept->bool { return it._index >= 0 && it._index < it._pArray->_size; };
@@ -945,7 +961,9 @@ template <class T>
 #if defined(__cpp_concepts) && !defined(_MSC_VER)
 auto Array<T>::sort(auto sortFunc) noexcept -> void {
 #else
-auto Array<T>::sort(bool (* sortFunc) (T const &, T const &) noexcept) noexcept -> void {
+//auto Array<T>::sort(bool (* sortFunc) (T const &, T const &) noexcept) noexcept -> void {
+template < typename SortFunc >
+auto Array<T>::sort(SortFunc const & sortFunc) noexcept -> void {
 #endif
     if ( this->size() < 2 )
         return;

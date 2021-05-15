@@ -5,7 +5,6 @@
 #ifndef CDS_STRING_HPP
 #define CDS_STRING_HPP
 
-//#include <CDS/String>
 #include <ostream>
 #include <string>
 
@@ -14,9 +13,6 @@
 #include "../collection/ordered/LinkedListPublic.hpp"
 
 template < typename T >
-//#if defined(__cpp_concepts)
-//    requires Iterable < T >
-//#endif
 class View;
 
 #if defined(CDS_QT)
@@ -1636,8 +1632,6 @@ inline auto String::operator * (int count) const noexcept -> String {
 }
 
 #undef CONSTR_CLEAR
-
-//#include <CDS/View>
 
 #include <CDS/Types>
 template <> auto hash<String> (String const & o) noexcept -> Index { return o.length(); }
