@@ -27,9 +27,7 @@ bool JsonTest::execute() noexcept {
     });
 
     this->executeSubtest("theme.json (from src file's folder) tests", [&allOk, this]{
-        std::stringstream iss;
-        iss << std::ifstream(in2Path).rdbuf();
-        JSON json = JSON::parse(iss.str());
+        JSON json = JSON::load(in2Path);
 
 //        std::cout << json << '\n';
         this->log("JSON as String : '%s'", json.toString().cStr());

@@ -9,8 +9,6 @@
 #include <CDS/Object>
 #include <CDS/LinkedList>
 
-#include <CDS/File>
-
 #if defined(WIN32)
 #include <windows.h>
 #elif defined(__linux)

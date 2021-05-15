@@ -13,6 +13,7 @@
 #include <CDS/Long>
 #include <CDS/LinkedList>
 #include <CDS/Reference>
+#include <CDS/Path>
 
 class JSON : public Object {
 public:
@@ -384,6 +385,7 @@ public:
     }
 
     static auto parse(String const &) noexcept -> JSON;
+    static auto load(Path const &) noexcept -> JSON;
 
     [[nodiscard]] auto copy () const noexcept -> JSON * override {
         return new JSON(*this);
@@ -852,6 +854,14 @@ inline auto JSON::Node::getArray () noexcept(false) -> JSON::Array & { // NOLINT
     if ( p == nullptr ) throw DataException();
 
     return * p;
+}
+
+#include <fstream>
+#include <sstream>
+inline auto JSON::load(const Path & path) noexcept -> JSON {
+    std::stringstream in;
+    in << std::ifstream(path.toString().cStr()).rdbuf();
+    return JSON::parse(in.str());
 }
 
 #endif //CDS_JSON_HPP
