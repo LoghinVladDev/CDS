@@ -44,7 +44,8 @@ template < typename T >
 class View : public Object {
 public:
     using Type                  = T;
-    using IterableValue         = decltype ( ((typename Type::Iterator *)nullptr)->value() );
+//    using IterableValue         = decltype ( ((typename Type::Iterator *)nullptr)->value() ); Supresses invalid warning
+    using IterableValue         = decltype ( (reinterpret_cast<typename Type::Iterator *>(0x100))->value() );
     using StoredPredicate       = std::function < bool (IterableValue) >;
     using StoredMapper          = std::function < std::remove_reference_t<IterableValue> (IterableValue ) >;
     using StoredSorter          = std::function < bool (IterableValue, IterableValue) >;
