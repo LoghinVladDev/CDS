@@ -319,9 +319,17 @@ public:
         LinkedList < Reference < String > > labelList;
 
         for ( auto & e : this->_nodes )
-            labelList.pushBack( e.getString() );
+            labelList.pushBack( e.getLabel() );
 
         return labelList;
+    }
+
+    [[nodiscard]] inline auto keys () noexcept -> LinkedList < Reference < String > > {
+        return this->labels();
+    }
+
+    [[nodiscard]] inline auto keys () const noexcept -> LinkedList < Reference < const String > > {
+        return this->labels();
     }
 
     [[nodiscard]] auto nodes () const noexcept -> LinkedList < Reference < const Node > > {

@@ -56,6 +56,8 @@ bool JsonTest::execute() noexcept {
         this->log("Value for 'icons' : '%s'", json.getJSON("icons").toString().cStr());
 
         this->log("Value for 'icons.window-close' : '%s'", json.getJSON("icons").getString("window-close").cStr());
+
+        this->log("Keys for json : '%s'", json.labels().toString().cStr());
     });
 
     allOk ? this->logOK("Json test OK") : this->logError("String test Not OK");
