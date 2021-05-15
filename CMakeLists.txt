@@ -236,6 +236,8 @@ testSuite(primitive Pointer)
 testSuite(primitive Reference)
 testSuite(primitive String)
 
+testSuite(collection/unordered Json)
+
 add_executable(
         Test_All
         src/cdsIntern/tests/all.cpp
