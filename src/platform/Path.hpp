@@ -107,6 +107,15 @@ public:
 
     Path(StringLiteral path) noexcept(false) : Path(String(path)) {}
 
+    Path & operator = (Path const &) noexcept = default;
+    Path & operator = (String const & s) noexcept(false) {
+        return ( ( * this ) = Path( s ) );
+    }
+
+    Path & operator = (StringLiteral s) noexcept(false) {
+        return ( ( * this ) = Path( s ) );
+    }
+
     [[nodiscard]] auto toString () const noexcept -> String override { return this->_osPath; }
     [[nodiscard]] auto copy () const noexcept -> Path * override { return new Path(* this); }
     [[nodiscard]] auto hash () const noexcept -> Index override { return this->parent().nodeName().hash(); }
