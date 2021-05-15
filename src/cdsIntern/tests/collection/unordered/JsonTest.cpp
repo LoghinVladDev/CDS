@@ -36,6 +36,10 @@ bool JsonTest::execute() noexcept {
         this->log("Value for 'name' : '%s'", json.getString("name").cStr());
         this->log("Value for 'fallbackThemes' : '%s'", json.getArray("fallbackThemes").toString().cStr());
         this->log("Array Value Index 0 in Array 'fallbackThemes' : '%s'", json.getArray("fallbackThemes").getString(0).cStr());
+        this->log("Array Iteration : ");
+        for (const auto &item : json.getArray("fallbackThemes")) {
+            std::cout << "\t\t\t" << item.getString() << '\n';
+        }
 
         this->log("Value for 'mappings' : '%s'", json.getJSON("mappings").toString().cStr());
 

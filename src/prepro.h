@@ -5,4 +5,6 @@
 #ifndef CDS_PREPRO_H
 #define CDS_PREPRO_H
 
+#include "../std-types.h"
+
 #endif //CDS_PREPRO_H

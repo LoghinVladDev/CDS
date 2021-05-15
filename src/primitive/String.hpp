@@ -5,7 +5,7 @@
 #ifndef CDS_STRING_HPP
 #define CDS_STRING_HPP
 
-#include <CDS/String>
+//#include <CDS/String>
 #include <ostream>
 #include <string>
 
@@ -23,7 +23,9 @@ class View;
 #include <QString>
 #endif
 
-class String final {
+#include <CDS/Object>
+
+class String final : public Object {
 public:
     typedef char ElementType;
 
@@ -1025,15 +1027,19 @@ public:
     /**
      * @test N/A
      */
-    [[nodiscard]] auto hash () const noexcept -> Index {
+    [[nodiscard]] auto hash () const noexcept -> Index override {
         return this->length();
     }
 
     /**
      * @test N/A
      */
-    [[nodiscard]] auto copy () const noexcept -> String * {
+    [[nodiscard]] auto copy () const noexcept -> String * override {
         return new String( * this );
+    }
+
+    [[nodiscard]] auto toString () const noexcept -> String override {
+        return * this;
     }
 
     /**
@@ -1210,5 +1216,15 @@ auto String::count ( Predicate const & p ) const noexcept (false) -> Size {
 
     return count;
 }
+
+// weird stuff here
+inline Object::operator String () const noexcept {
+    return this->toString();
+}
+
+inline auto operator << (std::ostream & out, Object const & o) noexcept -> std::ostream & {
+    return (out << o.toString());
+}
+// end of weird stuff
 
 #endif //CDS_STRING_HPP
