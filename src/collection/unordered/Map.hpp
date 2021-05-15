@@ -14,7 +14,7 @@
 #include <CDS/Optional>
 #include <CDS/Reference>
 #include <CDS/NotImplementedException>
-#include "LinkedListPublic.hpp"
+#include "../ordered/LinkedListPublic.hpp"
 
 
 template <class K, class V, class H = dataTypes::MediumCollisionDefaultHashFunction<K>>
