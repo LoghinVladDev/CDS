@@ -57,10 +57,10 @@ public:
         if ( a == nullptr ) return false;
         return a->get() == this->get();
     }
-
-    inline auto operator == (T const & o) const noexcept -> bool {
-        return this->get() == o;
-    }
+//
+//    inline auto operator == (T const & o) const noexcept -> bool {
+//        return this->get() == o;
+//    }
 
     [[nodiscard]] auto toString() const noexcept -> String final {
         std::stringstream oss;
