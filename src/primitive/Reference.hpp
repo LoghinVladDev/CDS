@@ -58,6 +58,10 @@ public:
         return a->get() == this->get();
     }
 
+    inline auto operator == (T const & o) const noexcept -> bool {
+        return this->get() == o;
+    }
+
     [[nodiscard]] auto toString() const noexcept -> String final {
         std::stringstream oss;
 //        if ( ! std::is_function < T >::value ) {
