@@ -20,8 +20,8 @@ private:
     V second;
 
 public:
-    Pair() noexcept = default;
-    Pair(const K & k, const V & v) noexcept : first(k), second(v) {  }
+    Pair() noexcept(noexcept(K()) && noexcept(V())) = default;
+    Pair(const K & k, const V & v) noexcept(noexcept(K(k)) && noexcept(V(v))) : first(k), second(v) {  }
     ~Pair () noexcept override = default;
 
     auto inline getFirst () const noexcept -> K const & { return first; }

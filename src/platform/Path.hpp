@@ -63,7 +63,8 @@ public:
 #endif
     }
 
-    Path(String const & path = CWD) noexcept (false) {
+    Path() noexcept : Path(CWD) { }
+    Path(String const & path) noexcept (false) {
 #if defined(WIN32)
 //        if ( GetFileAttributesA ( path.cStr() ) != INVALID_FILE_ATTRIBUTES )
 //            throw InvalidPath();

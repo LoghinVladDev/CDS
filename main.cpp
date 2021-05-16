@@ -6,7 +6,7 @@
 #include <unistd.h>
 
 //#include <CDS/HashMap>
-//#include <CDS/HashMap>
+#include <CDS/HashMap>
 int main() {
 
 //    HashMap < String, float > m = {{"Vlad", 4.3f}, {"Andrei", 5.6f}};
@@ -43,10 +43,10 @@ int main() {
 //        std::cout << e.what() << ", path hardcoded for testing purposes\n";
 //    }
 
-//    Path p;
-//    for ( auto & e : p.walk() ) {
-//        std::cout << e.root() << "\n\t" << e.files() << "\n\t" << e.directories() << "\n\n";
-//    }
+    Path p;
+    for ( auto & e : p.walk() ) {
+        std::cout << e.root() << "\n\t" << e.files() << "\n\t" << e.directories() << "\n\n";
+    }
 
     LinkedList < int > list = {1, 3, 7, 5};
 
@@ -54,6 +54,8 @@ int main() {
     list.sort([](int a, int b){return a > b;});
 
     std::cout << list.toString() << '\n';
+
+    HashMap < int, float > map = {{1, 3.4f}, {2, 6.7f}};
 }
 
 #include <windows.h>
