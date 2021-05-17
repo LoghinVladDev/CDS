@@ -15,7 +15,6 @@ public:
     using Value = V;
 
 private:
-
     K first;
     V second;
 

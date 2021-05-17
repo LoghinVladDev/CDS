@@ -1316,4 +1316,7 @@ inline auto String::find (String const & o) const noexcept -> LinkedList < Index
     return indices;
 }
 
+template < typename T >
+DoubleLinkedList ( std::initializer_list < T > ) -> DoubleLinkedList < T >;
+
 #endif //CDS_LINKEDLIST_HPP

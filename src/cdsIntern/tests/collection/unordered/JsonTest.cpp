@@ -62,6 +62,45 @@ bool JsonTest::execute() noexcept {
         this->log("Value for 'icons.window-close' : '%s'", json.getJSON("icons").getString("window-close").cStr());
 
         this->log("Keys for json : '%s'", json.labels().toString().cStr());
+
+        this->log("Iteration for nodes");
+        for (const auto &item : json) {
+            this->log("\tNode : '%s'", item.toString().cStr());
+        }
+
+        std::cout << json.dump() << '\n';
+    });
+
+    this->executeSubtest("test3", [&allOk, this]{
+        JSON j;
+        j.put("a", 1);
+        j.put("b", true);
+        j.put("c", 1ll);
+        j.put("d", 1.0f);
+        j.put("e", 1.1);
+        j.put("f", "abcd");
+        j.put("g", String("dcef"));
+
+//        std::cout << j.dump() << '\n';
+
+        JSON::Array a;
+        JSON j1;
+        JSON j2;
+        JSON j3;
+
+        j1.put("a", 1);
+        j2.put("b", 2);
+        j3.put("c", 3);
+
+        a.put(0, j1);
+        a.put(2, j3);
+        a.put(1, j2);
+
+        a.put(3, JSON().put("b", JSON::Array().put(0, JSON().put("a", 3)).put(1, 4)).put("c", false));
+        j.put("h", a);
+
+
+        std::cout << j.dump(10) << '\n';
     });
 
     allOk ? this->logOK("Json test OK") : this->logError("String test Not OK");

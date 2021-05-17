@@ -64,8 +64,4 @@ namespace dataTypes {
     template <class K> using LowCollisionDefaultHashFunction = DefaultHashFunction<K, 32768>;
 }
 
-
-//#include <CDS/Object>
-
-
 #endif //CDS_TYPES_HPP

@@ -90,4 +90,7 @@ auto UnorderedSet<T>::view() const noexcept -> View<UnorderedSet<T>> {
     return View(*this);
 }
 
+template < typename T >
+UnorderedSet ( std::initializer_list < T > ) -> UnorderedSet < T >;
+
 #endif //CDS_UNORDEREDSET_HPP

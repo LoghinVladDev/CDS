@@ -584,4 +584,7 @@ auto HashMap < K, V, H >::view() const noexcept -> View < HashMap < K, V, H > > 
     return View(*this);
 }
 
+template < typename K, typename V >
+HashMap ( std::initializer_list < Pair < K, V > > ) -> HashMap < K, V >;
+
 #endif //CDS_HASHMAP_HPP

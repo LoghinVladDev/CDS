@@ -212,5 +212,14 @@ public:
     constexpr inline auto reset ( typename PointerBase<T>::Pointer p = nullptr ) noexcept -> void final { this->pObj = p; }
 };
 
+template < typename T >
+UniquePointer ( T * ) -> UniquePointer < T >;
+
+template < typename T >
+SharedPointer ( T * ) -> SharedPointer < T >;
+
+template < typename T >
+ForeignPointer ( T * ) -> ForeignPointer < T >;
+
 
 #endif //CDS_POINTER_HPP

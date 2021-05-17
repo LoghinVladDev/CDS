@@ -18,26 +18,9 @@
 class JSON : public Object {
 public:
     class Array;
+
 private:
     class Node : public Object {
-    private:
-        friend class JSON::Array;
-
-        String      _label;
-        bool        _isString{false};
-
-        union {
-            Object * _pObject{nullptr};
-            String * _pString;
-        };
-
-        [[nodiscard]] auto stringFormattedData () const noexcept(false) -> String {
-            if ( this->_pString == nullptr ) throw DataException();
-            if ( this->_isString ) return String().append("\"").append(* this->_pString).append("\"");
-
-            return this->_pObject->toString();
-        }
-
     public:
         class DataException : public std::exception {
         public:
@@ -53,129 +36,68 @@ private:
             }
         };
 
-        Node () noexcept = default;
-        Node (Node const & o) noexcept : _label(o._label), _isString(o._isString) {
-            if ( this->_isString )
-                this->_pString = o._pString->copy();
-            else
-                this->_pObject = o._pObject->copy();
+    private:
+        friend class JSON::Array;
+        friend class JSON;
+
+        String      _label;
+        Object *    _pObject {nullptr};
+
+        [[nodiscard]] auto stringFormattedData () const noexcept(false) -> String {
+            if ( this->_pObject == nullptr ) throw DataException ();
+            if ( dynamic_cast < String * > (this->_pObject) != nullptr )
+                return String("\"") + this->_pObject->toString() + "\"";
+            return this->_pObject->toString();
         }
 
-        ~Node () noexcept override {
-            if ( this->_isString )
-                delete this->_pString;
-            else
-                delete this->_pObject;
-        }
+    public:
+        Node() noexcept = default;
+        Node(Node const & o) noexcept : _label(o._label), _pObject(o._pObject->copy()) {}
+        ~Node() noexcept override { delete this->_pObject; }
 
         auto clearData () noexcept -> Node & {
-            if ( this->_isString && this->_pString != nullptr ) {
-                delete this->_pString;
-                this->_pString = nullptr;
-            } else if ( ! this->_isString && this->_pObject != nullptr ) {
-                delete this->_pObject;
-                this->_pObject = nullptr;
-            }
-
+            delete this->_pObject;
+            this->_pObject = nullptr;
             return * this;
         }
 
-        auto put ( Object const & o ) noexcept -> Node & {
+        auto put (Object const & obj) noexcept -> Node & {
             this->clearData();
-            this->_isString = false;
-
-            this->_pObject = o.copy();
+            this->_pObject = obj.copy();
             return * this;
         }
 
-        auto put ( bool v ) noexcept -> Node & {
-            this->clearData();
-            this->_isString = false;
-
-            this->_pObject = new Boolean ( v );
-            return * this;
-        }
-
-        auto put ( int v ) noexcept -> Node & {
-            this->clearData();
-            this->_isString = false;
-
-            this->_pObject = new Integer ( v );
-            return * this;
-        }
-
-        auto put ( long long int v ) noexcept -> Node & {
-            this->clearData();
-            this->_isString = false;
-
-            this->_pObject = new Long ( v );
-            return * this;
-        }
-
-        auto put ( float v ) noexcept -> Node & {
-            this->clearData();
-            this->_isString = false;
-
-            this->_pObject = new Float ( v );
-            return * this;
-        }
-
-        auto put ( double v ) noexcept -> Node & {
-            this->clearData();
-            this->_isString = false;
-
-            this->_pObject = new Double ( v );
-            return * this;
-        }
-
-        auto put ( String const & s ) noexcept -> Node & {
-            this->clearData();
-            this->_isString = true;
-
-            this->_pString = s.copy();
-            return * this;
-        }
-
-        auto put ( StringLiteral s ) noexcept -> Node & {
-            this->clearData();
-            this->_isString = true;
-
-            this->_pString = new String(s);
-            return * this;
-        }
-
-        auto put ( Array const & ) noexcept -> Node &;
+        inline auto put (bool v)                    noexcept -> Node & { return this->put(Boolean(v)); }
+        inline auto put (int v)                     noexcept -> Node & { return this->put(Integer(v)); }
+        inline auto put (long long v)               noexcept -> Node & { return this->put(Long(v)); }
+        inline auto put (float v)                   noexcept -> Node & { return this->put(Float(v)); }
+        inline auto put (double v)                  noexcept -> Node & { return this->put(Double(v)); }
+        inline auto put (StringLiteral v)           noexcept -> Node & { return this->put(String(v)); }
+        auto        put (JSON::Array const &)       noexcept -> Node &;
+        inline auto put (String const & v)          noexcept -> Node & { return this->put((Object &)v); }
 
         [[nodiscard]] auto getBoolean () const noexcept(false) -> bool {
-            if ( this->_isString ) throw DataException();
-
-            auto p = dynamic_cast < Boolean * > ( this->_pObject );
+            auto p = dynamic_cast < Boolean const * > (this->_pObject);
             if ( p == nullptr ) throw DataException();
-
             return p->get();
         }
 
         [[nodiscard]] auto getInt () const noexcept(false) -> int {
-            if ( this->_isString ) throw DataException();
-
-            auto p = dynamic_cast < Integer * > ( this->_pObject );
+            auto p = dynamic_cast < Integer const * > (this->_pObject);
             if ( p == nullptr ) {
-                auto pLong = dynamic_cast < Long * > ( this->_pObject );
+                auto pLong = dynamic_cast < Long const * > (this->_pObject);
                 if ( pLong == nullptr )
                     throw DataException();
-
-                return static_cast<int>(pLong->get());
+                return static_cast < int > (pLong->get());
             }
 
             return p->get();
         }
 
         [[nodiscard]] auto getLong () const noexcept(false) -> long long int {
-            if ( this->_isString ) throw DataException();
-
-            auto p = dynamic_cast < Long * > ( this->_pObject );
+            auto p = dynamic_cast < Long const * > (this->_pObject);
             if ( p == nullptr ) {
-                auto pInteger = dynamic_cast < Integer * > ( this->_pObject );
+                auto pInteger = dynamic_cast < Integer const * > ( this->_pObject );
                 if (pInteger == nullptr )
                     throw DataException();
 
@@ -186,11 +108,9 @@ private:
         }
 
         [[nodiscard]] auto getFloat () const noexcept(false) -> float {
-            if ( this->_isString ) throw DataException();
-
-            auto p = dynamic_cast < Float * > ( this->_pObject );
+            auto p = dynamic_cast < Float const * > (this->_pObject);
             if ( p == nullptr ) {
-                auto pDouble = dynamic_cast < Double * > ( this->_pObject );
+                auto pDouble = dynamic_cast < Double const * > ( this->_pObject );
                 if ( pDouble == nullptr )
                     throw DataException();
 
@@ -201,11 +121,9 @@ private:
         }
 
         [[nodiscard]] auto getDouble () const noexcept(false) -> double {
-            if ( this->_isString ) throw DataException();
-
-            auto p = dynamic_cast < Double const * > ( this->_pObject );
+            auto p = dynamic_cast < Double const * > (this->_pObject);
             if ( p == nullptr ) {
-                auto pFloat = dynamic_cast < Float * > ( this->_pObject );
+                auto pFloat = dynamic_cast < Float const * > ( this->_pObject );
                 if (pFloat == nullptr )
                     throw DataException();
 
@@ -215,77 +133,56 @@ private:
             return p->get();
         }
 
-        [[nodiscard]] auto getObject () const noexcept(false) -> Object const & {
-            if ( this->_isString ) throw DataException();
-
+        [[nodiscard]] inline auto getObject () const noexcept -> Object const & {
             return * this->_pObject;
         }
 
         [[nodiscard]] auto getJSON () const noexcept(false) -> JSON const & {
-            if ( this->_isString ) throw DataException();
-
             auto p = dynamic_cast < JSON const * > ( this->_pObject );
             if ( p == nullptr ) throw DataException();
-
             return * p;
         }
 
         [[nodiscard]] auto getString () const noexcept(false) -> String const & {
-            if ( ! this->_isString || this->_pString == nullptr ) throw DataException();
-
-            return * this->_pString;
+            auto p = dynamic_cast < String const * > ( this->_pObject );
+            if ( p == nullptr ) throw DataException();
+            return * p;
         }
 
         [[nodiscard]] auto getArray () const noexcept(false) -> JSON::Array const &;
 
-        auto getObject () noexcept(false) -> Object & { // NOLINT(readability-make-member-function-const)
-            if ( this->_isString || this->_pObject == nullptr ) throw DataException();
+        inline auto getObject () noexcept -> Object & { return * this->_pObject; }
 
-            return * this->_pObject;
-        }
-
-        auto getJSON () noexcept(false) -> JSON & { // NOLINT(readability-make-member-function-const)
-            if ( this->_isString ) throw DataException();
-
-            auto p = dynamic_cast < JSON * > ( this->_pObject );
+        auto getJSON () noexcept(false) -> JSON & {
+            auto p = dynamic_cast < JSON * > (this->_pObject);
             if ( p == nullptr ) throw DataException();
-
             return * p;
         }
 
-        auto getString () noexcept(false) -> String & { // NOLINT(readability-make-member-function-const)
-            if ( ! this->_isString || this->_pString == nullptr ) throw DataException();
-
-            return * this->_pString;
-        }
+        auto getString () noexcept(false) -> String & {
+            auto p = dynamic_cast < String * > (this->_pObject);
+            if ( p == nullptr ) throw DataException();
+            return * p;
+        };
 
         auto getArray () noexcept(false) -> JSON::Array &;
 
-        auto setLabel (String const & label) noexcept -> Node & {
-            this->_label = label;
-            return * this;
+        inline auto setLabel (String const & label) noexcept -> Node & { this->_label = label; return * this; }
+        [[nodiscard]] inline auto getLabel () const noexcept -> String const & { return this->_label; }
+        inline auto getLabel () noexcept -> String & { return this->_label; }
+
+        [[nodiscard]] auto toString () const noexcept -> String override {
+            return
+                String("\"") + this->_label + "\" : " + this->stringFormattedData();
         }
 
-        [[nodiscard]] auto getLabel () const noexcept -> String const & {
-            return this->_label;
-        }
+        [[nodiscard]] auto dumpIndented (int indent, int count) const noexcept -> String;
 
-        auto getLabel () noexcept -> String & {
-            return this->_label;
-        }
-
-        [[nodiscard]] auto toString() const noexcept -> String override {
-            return String()
-                    .append("\"").append(this->_label).append("\" : ")
-                    .append(this->stringFormattedData());
-        }
-
-        [[nodiscard]] auto copy() const noexcept -> Node * override {
-            return new Node( * this );
-        }
+        [[nodiscard]] auto copy () const noexcept -> Node * override { return new Node(*this); }
     };
 
     LinkedList < Node > _nodes;
+
 public:
     class NoData : public std::exception {
         [[nodiscard]] auto what () const noexcept -> StringLiteral override {
@@ -299,7 +196,7 @@ public:
         }
     };
 
-    JSON () noexcept = default;
+    JSON() noexcept = default;
     JSON (JSON const &) noexcept = default;
     ~JSON () noexcept override = default;
 
@@ -362,6 +259,13 @@ public:
     auto put ( String const &, Object const & ) noexcept -> JSON &;
     auto put ( String const &, StringLiteral ) noexcept -> JSON &;
 
+    auto begin () noexcept -> LinkedList < JSON::Node >::Iterator { return this->_nodes.begin(); }
+    auto begin () const noexcept -> LinkedList < JSON::Node >::ConstIterator { return this->_nodes.begin(); }
+    auto cbegin () const noexcept -> LinkedList < JSON::Node >::ConstIterator { return this->_nodes.cbegin(); }
+    auto end () noexcept -> LinkedList < JSON::Node >::Iterator { return this->_nodes.end(); }
+    auto end () const noexcept -> LinkedList < JSON::Node >::ConstIterator { return this->_nodes.end(); }
+    auto cend () const noexcept -> LinkedList < JSON::Node >::ConstIterator { return this->_nodes.cend(); }
+
     [[nodiscard]] auto getBoolean ( String const & ) const noexcept (false) -> bool;
     [[nodiscard]] auto getInt ( String const & ) const noexcept (false) -> int;
     [[nodiscard]] auto getLong ( String const & ) const noexcept (false) -> long long int;
@@ -391,19 +295,58 @@ public:
 
     static auto parse(String const &) noexcept -> JSON;
     static auto load(Path const &) noexcept -> JSON;
+    [[nodiscard]] inline auto dump(int indent = 4) const noexcept -> String {
+        return this->dumpIndented(indent, 0);
+    }
+
+private:
+    [[nodiscard]] auto dumpIndented (int indent, int count) const noexcept -> String {
+        String indentation = String(" ") * (indent * (count));
+        String futureIndentation = indentation + String(" ") * indent;
+
+        String res = "{\n";
+        for ( auto & e : this->_nodes )
+            res += futureIndentation + e.dumpIndented(indent, count + 1) + ",\n";
+
+        if ( this->_nodes.empty() )
+            return "{}";
+
+        return res.replace(res.size() - 2, 2, "\n") + indentation + "}";
+    }
+
+public:
 
     [[nodiscard]] auto copy () const noexcept -> JSON * override {
         return new JSON(*this);
     }
 };
 
-
-
 class JSON::Array : public Object {
 private:
+    friend class JSON;
     LinkedList < JSON::Node > _list;
 
+    [[nodiscard]] auto dumpIndented (int indent, int count) const noexcept -> String {
+        String indentation = String(" ") * (indent * (count));
+        String futureIndentation = indentation + String(" ") * indent;
+
+        String res = "[\n";
+        for ( auto & n : this->_list ) {
+            auto pJSON = dynamic_cast < JSON const * > ( n._pObject );
+            auto pArr = dynamic_cast < JSON::Array const * > ( n._pObject );
+
+            if ( pJSON != nullptr )
+                res += futureIndentation + pJSON->dumpIndented(indent, count + 1) + ",\n";
+            else if ( pArr != nullptr )
+                res += futureIndentation + pArr->dumpIndented(indent, count + 1) + ",\n";
+            else
+                res += futureIndentation + n.stringFormattedData() + ",\n";
+        }
+
+        return res.replace(res.size() - 2, 2, "\n") + indentation + "]";
+    }
 public:
+
     class OutOfBounds : public std::exception {
     private:
         String _message = "Data out of array bounds.";
@@ -785,10 +728,10 @@ inline auto JSON::parse(String const & jsonString) noexcept -> JSON {
         else if ( data.front() == '[' ) result.put(label, JSON::Array::parse(data));
         else if ( data.findFirst('"') != String::INVALID_POS )
             result.put(
-                label,
-                String().append(data)
-                    .replace(data.findLast('"'), data.length(), "")
-                    .replace(0, data.findFirst('"') + 1, "")
+                    label,
+                    String().append(data)
+                            .replace(data.findLast('"'), data.length(), "")
+                            .replace(0, data.findFirst('"') + 1, "")
             );
         else if ( data.findFirst('.') != String::INVALID_POS ) result.put(label, Double::parse(data));
         else if ( data.findFirst("true") != String::INVALID_POS || data.findFirst("false") != String::INVALID_POS )
@@ -837,15 +780,11 @@ inline auto JSON::parse(String const & jsonString) noexcept -> JSON {
 
 inline auto JSON::Node::put ( JSON::Array const & a ) noexcept -> Node & {
     this->clearData();
-    this->_isString = false;
-
     this->_pObject = a.copy();
     return * this;
 }
 
 inline auto JSON::Node::getArray () const noexcept(false) -> JSON::Array const & {
-    if ( this->_isString ) throw DataException();
-
     auto p = dynamic_cast < JSON::Array * > ( this->_pObject );
     if ( p == nullptr ) throw DataException();
 
@@ -853,8 +792,6 @@ inline auto JSON::Node::getArray () const noexcept(false) -> JSON::Array const &
 }
 
 inline auto JSON::Node::getArray () noexcept(false) -> JSON::Array & { // NOLINT(readability-make-member-function-const)
-    if ( this->_isString ) throw DataException();
-
     auto p = dynamic_cast < JSON::Array * > ( this->_pObject );
     if ( p == nullptr ) throw DataException();
 
@@ -867,6 +804,19 @@ inline auto JSON::load(const Path & path) noexcept -> JSON {
     std::stringstream in;
     in << std::ifstream(path.toString().cStr()).rdbuf();
     return JSON::parse(in.str());
+}
+
+inline auto JSON::Node::dumpIndented(int indent, int count) const noexcept -> String {
+    String indentation = String(" ") * (indent * count);
+
+    auto pObj = dynamic_cast < JSON const * > ( this->_pObject );
+    auto pArr = dynamic_cast < JSON::Array const * > ( this->_pObject );
+
+    if ( pObj != nullptr )
+        return String("\"") + this->_label + "\" : \n" + indentation + String() * indent + pObj->dumpIndented(indent, count);
+    if ( pArr != nullptr )
+        return String("\"") + this->_label + "\" : \n" + indentation + String() * indent + pArr->dumpIndented(indent, count);
+    return String("\"") + this->_label + "\" : " + this->stringFormattedData();
 }
 
 #endif //CDS_JSON_HPP

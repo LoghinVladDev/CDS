@@ -86,5 +86,7 @@ public:
     }
 };
 
+template < typename T >
+Optional ( T ) -> Optional < T >;
 
 #endif //CDS_OPTIONAL_HPP
