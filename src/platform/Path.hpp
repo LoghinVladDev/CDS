@@ -66,7 +66,7 @@ public:
     Path() noexcept : Path(CWD) { }
     Path(String const & path) noexcept (false) {
 #if defined(WIN32)
-//        if ( GetFileAttributesA ( path.cStr() ) != INVALID_FILE_ATTRIBUTES )
+        //        if ( GetFileAttributesA ( path.cStr() ) != INVALID_FILE_ATTRIBUTES )
 //            throw InvalidPath();
 
         constexpr static CDS_uint16 initialPathSize = 256;
@@ -119,7 +119,14 @@ public:
     [[nodiscard]] auto copy () const noexcept -> Path * override { return new Path(* this); }
     [[nodiscard]] auto hash () const noexcept -> Index override { return this->parent().nodeName().hash(); }
 
-    [[nodiscard]] inline auto parent () const noexcept(false) -> Path { return (*this) / ".."; }
+    [[nodiscard]] inline auto parent () const noexcept(false) -> Path {
+        auto parentPath = String (this->_osPath.substr(0, this->_osPath.findLast(Path::directorySeparator())));
+        if ( parentPath.empty() ) parentPath = this->root().toString();
+
+        return parentPath;
+//        return (*this) / "..";
+    }
+
     [[nodiscard]] inline auto previous () const noexcept -> Path { return this->parent(); }
 
     [[nodiscard]] inline auto nodeName () const noexcept -> String { return this->_osPath.substr(this->_osPath.findLast(this->directorySeparator()) + 1); }
@@ -300,7 +307,7 @@ inline auto Path::walk(const String &path, int depth) noexcept(false) -> LinkedL
 [[nodiscard]] inline auto Path::roots () noexcept -> LinkedList < Path > {
     LinkedList < Path > paths;
 #if defined(WIN32)
-   auto pDRList = Path::platformDependantRoots();
+    auto pDRList = Path::platformDependantRoots();
 
    for ( auto & p : pDRList )
        paths.pushBack(p.path);
@@ -308,7 +315,7 @@ inline auto Path::walk(const String &path, int depth) noexcept(false) -> LinkedL
 #else
 #warning Warning: Path::roots undefined
 #endif
-   return paths;
+    return paths;
 }
 
 #if defined(WIN32)

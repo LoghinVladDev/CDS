@@ -364,7 +364,7 @@ public:
 
     auto sort ( auto func ) noexcept -> void;
 #else
-//    auto sort ( bool (*) (T const &, T const &) noexcept ) noexcept -> void;
+    //    auto sort ( bool (*) (T const &, T const &) noexcept ) noexcept -> void;
     template < typename SortFunc >
     auto sort ( SortFunc const & ) noexcept -> void;
 #endif
@@ -375,7 +375,17 @@ public:
         return this->operator= ( (Collection<T> const & ) ( o )); // NOLINT(misc-unconventional-assign-operator)
     }
 
-    auto view () const noexcept -> View < DoubleLinkedList < T > >;
+    DoubleLinkedList & operator = ( DoubleLinkedList && o ) noexcept {
+        if ( this == & o ) return * this;
+
+        this->_pFront = std::exchange(o._pFront, nullptr);
+        this->_pBack = std::exchange(o._pBack, nullptr);
+        this->_size = std::exchange(o._size, 0);
+
+        return * this;
+    }
+
+    [[nodiscard]] auto view () const noexcept -> View < DoubleLinkedList < T > >;
 };
 
 template <class T>
@@ -406,7 +416,7 @@ auto DoubleLinkedList<T>::pushFront(const T & value) noexcept -> void {
 template <class T>
 auto DoubleLinkedList<T>::pushBack(const T & value) noexcept -> void {
     auto newNode = new DoubleListNode {
-        value, nullptr, this->_pBack
+            value, nullptr, this->_pBack
     };
 
     if ( this->_pBack != nullptr )
@@ -437,7 +447,7 @@ auto DoubleLinkedList<T>::pushFront(T && value) noexcept -> void {
 template <class T>
 auto DoubleLinkedList<T>::pushBack(T && value) noexcept -> void {
     auto newNode = new DoubleListNode {
-        value, nullptr, this->_pBack
+            value, nullptr, this->_pBack
     };
 
     if ( this->_pBack != nullptr )
@@ -1034,7 +1044,7 @@ template <class T>
 #if defined(__cpp_concepts) && !defined(_MSC_VER)
 auto DoubleLinkedList<T>::sort(auto func) noexcept -> void {
 #else
-//auto DoubleLinkedList<T>::sort(bool (* func) (T const &, T const &) noexcept ) noexcept -> void {
+    //auto DoubleLinkedList<T>::sort(bool (* func) (T const &, T const &) noexcept ) noexcept -> void {
 template < typename SortFunc >
 auto DoubleLinkedList < T >::sort ( SortFunc const & func ) noexcept -> void {
 #endif
@@ -1059,7 +1069,7 @@ auto DoubleLinkedList<T>::quickSort(
 #if defined(__cpp_concepts) && !defined(_MSC_VER)
         auto func
 #else
-//        bool (* func) (T const &, T const &) noexcept
+        //        bool (* func) (T const &, T const &) noexcept
         SortFunc const & func
 #endif
 ) noexcept -> void {
@@ -1103,7 +1113,7 @@ auto DoubleLinkedList<T>::quickSortPartition(
 #if defined(__cpp_concepts) && !defined(_MSC_VER)
         auto func
 #else
-//        bool (* func) (T const &, T const &) noexcept
+        //        bool (* func) (T const &, T const &) noexcept
         SortFunc const & func
 #endif
 ) noexcept -> Iterator {
