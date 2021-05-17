@@ -59,9 +59,15 @@ namespace dataTypes {
         }
     };
 
+#if defined(CDS_EASY_HASH_DEBUG)
+    template <class K> using HighCollisionDefaultHashFunction = DefaultHashFunction<K, 1>;
+    template <class K> using MediumCollisionDefaultHashFunction = DefaultHashFunction<K, 2>;
+    template <class K> using LowCollisionDefaultHashFunction = DefaultHashFunction<K, 3>;
+#else
     template <class K> using HighCollisionDefaultHashFunction = DefaultHashFunction<K, 256>;
     template <class K> using MediumCollisionDefaultHashFunction = DefaultHashFunction<K, 4096>;
     template <class K> using LowCollisionDefaultHashFunction = DefaultHashFunction<K, 32768>;
+#endif
 }
 
 #endif //CDS_TYPES_HPP
