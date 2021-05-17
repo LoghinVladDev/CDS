@@ -276,6 +276,7 @@ public:
 
     [[nodiscard]] auto toString () const noexcept -> String final;
 
+    auto index ( T & ) noexcept -> Index final;
     auto index ( T const & ) const noexcept -> Index final;
 
     auto get ( Index ) noexcept (false) -> T & final;
@@ -1157,7 +1158,20 @@ DoubleLinkedList<T>::DoubleLinkedList(
 }
 
 template<class T>
-auto DoubleLinkedList<T>::index(const T & e) const noexcept -> Index {
+auto DoubleLinkedList<T>::index(T const & e) const noexcept -> Index {
+    Index current = 0;
+
+    for ( auto & item : (*this) )
+        if ( item == e )
+            return current;
+        else
+            current ++;
+
+    return -1;
+}
+
+template<class T>
+auto DoubleLinkedList<T>::index(T & e) noexcept -> Index {
     Index current = 0;
 
     for ( auto & item : (*this) )

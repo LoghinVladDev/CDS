@@ -25,6 +25,7 @@ public:
     };
 
     virtual auto index ( T const & ) const noexcept -> Index = 0;
+    virtual auto index ( T & ) noexcept -> Index = 0;
 
     virtual auto get ( Index ) noexcept (false) -> T & = 0;
     virtual auto get ( Index ) const noexcept (false) -> const T & = 0;

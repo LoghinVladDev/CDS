@@ -168,6 +168,8 @@ public:
     [[nodiscard]] auto toString () const noexcept -> String final;
 
     auto index ( ValueConstReference ) const noexcept -> Index final;
+    auto index ( ValueReference ) noexcept -> Index final;
+
     auto indices ( ValueConstReference ) const noexcept -> DoubleLinkedList < Index >;
 
     auto get ( Index ) noexcept (false) -> ValueReference final;
@@ -797,6 +799,17 @@ auto Array<T>::contains( ValueConstReference value ) const noexcept -> bool {
 
 template <class T>
 auto Array<T>::index( ValueConstReference value ) const noexcept -> Index {
+    Index i = 0;
+    for ( auto & e : * this )
+        if ( e == value )
+            return i;
+        else
+            i++;
+    return -1;
+}
+
+template <class T>
+auto Array<T>::index( ValueReference value ) noexcept -> Index {
     Index i = 0;
     for ( auto & e : * this )
         if ( e == value )
