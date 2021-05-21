@@ -98,6 +98,24 @@ public:
     String(QString const & o) noexcept : String(o.toStdString()) {}
 #endif
 
+    String (CDS_uint8 v) noexcept : String(String().append(v)) { }
+    String (CDS_uint16 v) noexcept : String(String().append(v)) { }
+    String (CDS_uint32 v) noexcept : String(String().append(v)) { }
+    String (CDS_uint64 v) noexcept : String(String().append(v)) { }
+
+    String (CDS_sint8 v) noexcept : String(String().append(v)) { }
+    String (CDS_sint16 v) noexcept : String(String().append(v)) { }
+    String (CDS_sint32 v) noexcept : String(String().append(v)) { }
+    String (CDS_sint64 v) noexcept : String(String().append(v)) { }
+
+#if defined(CDS_GLM)
+    template < glm::length_t l, typename T, glm::qualifier q >
+    String ( glm::vec < l, T, q > const & v ) noexcept {
+        * this = String ("glm::vec") + static_cast < CDS_uint32 > (l) + " { " +
+                "x = " + v.x + ", y = " + v.y + ", z = " + v.z + " }";
+    }
+#endif
+
     /**
      * @test testcase not required
      */
