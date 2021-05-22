@@ -108,6 +108,17 @@ public:
     String (CDS_sint32 v) noexcept : String(String().append(v)) { }
     String (CDS_sint64 v) noexcept : String(String().append(v)) { }
 
+    String (float v) noexcept : String(String().append(v)) { }
+    String (double v) noexcept : String(String().append(v)) { }
+
+    template < typename T >
+    String (T * v) noexcept : String((std::size_t)v) { }
+
+    template < typename T >
+    String (T const * v) noexcept : String((std::size_t)v) { }
+
+//    String (std::size_t v) noexcept : String((CDS_uint64)v) {}
+
 #if defined(CDS_GLM)
     template < glm::length_t l, typename T, glm::qualifier q >
     String ( glm::vec < l, T, q > const & v ) noexcept {
