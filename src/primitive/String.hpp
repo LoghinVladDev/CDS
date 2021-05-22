@@ -113,6 +113,12 @@ public:
     String (float v) noexcept : String(String().append(v)) { }
     String (double v) noexcept : String(String().append(v)) { }
 
+#if defined(__linux)
+
+    String(std::size_t v) noexcept : String((CDS_uint64)v) {}
+
+#endif
+
     template < typename T >
     String (T * v) noexcept : String((std::size_t)v) { }
 
