@@ -125,7 +125,8 @@ public:
     }
 
     [[nodiscard]] auto toString() const noexcept -> String override {
-        return String().append(this->get());
+//        return String().append(this->get());
+        return this->get().toString();
     }
 
     auto hash () const noexcept -> Index override {
