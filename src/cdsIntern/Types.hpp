@@ -17,19 +17,22 @@ class Object;
 class String;
 
 #include <cstring>
-template <class T> static auto hash (T const &) noexcept -> Index { return 0; }
-template <> auto hash<String> (String const & o) noexcept -> Index;
-template <> auto hash<Object> (Object const & o) noexcept -> Index;
-template <> auto hash<CString> (CString const & o)noexcept -> Index { return std::strlen(o); }
-template <> auto hash<StringLiteral> (StringLiteral const & o)noexcept -> Index { return std::strlen(o); }
-template <> auto hash<CDS_uint8> (CDS_uint8 const & o)noexcept -> Index { return o; }
-template <> auto hash<CDS_uint16> (CDS_uint16 const & o)noexcept -> Index { return o; }
-template <> auto hash<CDS_uint32> (CDS_uint32 const & o)noexcept -> Index { return o; }
-template <> auto hash<CDS_uint64> (CDS_uint64 const & o)noexcept -> Index { return o; }
-template <> auto hash<CDS_sint8> (CDS_sint8 const & o)noexcept -> Index { return o; }
-template <> auto hash<CDS_sint16> (CDS_sint16 const & o)noexcept -> Index { return o; }
-template <> auto hash<CDS_sint32> (CDS_sint32 const & o)noexcept -> Index { return o; }
-template <> auto hash<CDS_sint64> (CDS_sint64 const & o)noexcept -> Index { return o; }
+
+namespace dataTypes {
+    template<class T> static auto hash(T const &) noexcept -> Index { return 0; }
+    template<> auto hash<String>(String const &o) noexcept -> Index;
+    template<> auto hash<Object>(Object const &o) noexcept -> Index;
+    template<> auto hash<CString>(CString const &o) noexcept -> Index { return std::strlen(o); }
+    template<> auto hash<StringLiteral>(StringLiteral const &o) noexcept -> Index { return std::strlen(o); }
+    template<> auto hash<CDS_uint8>(CDS_uint8 const &o) noexcept -> Index { return o; }
+    template<> auto hash<CDS_uint16>(CDS_uint16 const &o) noexcept -> Index { return o; }
+    template<> auto hash<CDS_uint32>(CDS_uint32 const &o) noexcept -> Index { return o; }
+    template<> auto hash<CDS_uint64>(CDS_uint64 const &o) noexcept -> Index { return o; }
+    template<> auto hash<CDS_sint8>(CDS_sint8 const &o) noexcept -> Index { return o; }
+    template<> auto hash<CDS_sint16>(CDS_sint16 const &o) noexcept -> Index { return o; }
+    template<> auto hash<CDS_sint32>(CDS_sint32 const &o) noexcept -> Index { return o; }
+    template<> auto hash<CDS_sint64>(CDS_sint64 const &o) noexcept -> Index { return o; }
+}
 
 template <typename K, Size hashBoundary>
 class HashCalculator {
@@ -55,7 +58,7 @@ namespace dataTypes {
         using AddressValue = std::size_t;
 
         auto operator ()(typename HashCalculator<K, hashBoundary>::ValueConstReference v) const noexcept -> typename HashCalculator<K, hashBoundary>::HashValue {
-            return hash(v) % hashBoundary;
+            return dataTypes::hash(v) % hashBoundary;
         }
     };
 

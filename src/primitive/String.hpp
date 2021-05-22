@@ -1652,6 +1652,9 @@ inline auto String::operator * (int count) const noexcept -> String {
 #undef CONSTR_CLEAR
 
 #include <CDS/Types>
-template <> auto hash<String> (String const & o) noexcept -> Index { return o.length(); }
+
+namespace dataTypes {
+    template<> auto hash<String>(String const &o) noexcept -> Index { return o.length(); }
+}
 
 #endif //CDS_STRING_HPP

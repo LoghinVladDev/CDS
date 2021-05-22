@@ -25,7 +25,10 @@ public:
 };
 
 #include <CDS/Types>
-template <> auto hash<Object> (Object const & o) noexcept -> Index { return o.hash(); }
+
+namespace dataTypes {
+    template<> auto hash<Object>(Object const &o) noexcept -> Index { return o.hash(); }
+}
 
 #include <CDS/String>
 
