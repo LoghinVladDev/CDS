@@ -338,13 +338,13 @@ auto StringTest::execute() noexcept -> bool {
         std::string stdsa = "appended std::string";
         char ca = '\\';
         StringLiteral sla = "appended string literal";
-        CDS_sint16 s16a = 12413;
-        CDS_sint32 s32a = 21415523;
-        CDS_sint64 s64a = 9142153423243612;
-        CDS_uint8 u8a = 144;
-        CDS_uint16 u16a = 35235;
-        CDS_uint32 u32a = 2999999123;
-        CDS_uint64 u64a = (CDS_uint64)INT64_MAX + 1412312;
+        sint16 s16a = 12413;
+        sint32 s32a = 21415523;
+        sint64 s64a = 9142153423243612;
+        uint8 u8a = 144;
+        uint16 u16a = 35235;
+        uint32 u32a = 2999999123;
+        uint64 u64a = (uint64)INT64_MAX + 1412312;
         float fa = 512.3532467f;
         double da = 512.3532467;
 
@@ -861,7 +861,7 @@ auto StringTest::execute() noexcept -> bool {
             allOk = false;
         }
 
-        constexpr CDS_uint8 comparableCount = 8;
+        constexpr uint8 comparableCount = 8;
 
         const char * leftComparable [comparableCount] = { "abcd", "ABCD", "abc", "123", "1234", "12", "12ab", "ab12" };
         const char * rightComparable [comparableCount] = { "abce", "ABC", "abce", "124", "1224", "13", "13ac", "ab11" };

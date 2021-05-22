@@ -4,7 +4,7 @@ template < typename L, typename ... types >
 class Tuple;
 
 namespace tuple_impl {
-    template<CDS_uint32 _index, typename T>
+    template<uint32 _index, typename T>
     class Node {
     private:
         T value;
@@ -17,10 +17,10 @@ namespace tuple_impl {
         constexpr auto getBase() noexcept -> T & { return this->value; }
     };
 
-    template < CDS_uint32 _index, typename ... types >
+    template < uint32 _index, typename ... types >
     class TupleRecurrentBase {};
 
-    template < CDS_uint32 _index, typename L, typename ... types >
+    template < uint32 _index, typename L, typename ... types >
     class TupleRecurrentBase < _index, L , types ... > : public Node<_index, L>, public TupleRecurrentBase<_index + 1, types ...> {
     public:
 //        TupleRecurrentBase() noexcept : Node < _index, L > (), TupleRecurrentBase<_index + 1, types...>() { }
@@ -32,7 +32,7 @@ namespace tuple_impl {
                 TupleRecurrentBase< _index + 1, types ... >( std::forward < ConstructorListArgs > ( args ) ...) {}
     };
 
-    template<CDS_uint32 _index, typename L, typename ... args>
+    template<uint32 _index, typename L, typename ... args>
     struct typeAt {
         using type = typename typeAt<_index - 1, args ...>::type;
     };
@@ -42,23 +42,23 @@ namespace tuple_impl {
         using type = L;
     };
 
-    template < CDS_uint32 _index, typename ... args >
+    template < uint32 _index, typename ... args >
     auto get ( Tuple < args ... > & t ) noexcept -> typename typeAt < _index, args ... >::type {
         return static_cast < Node < _index, typename typeAt < _index, args ...>::type > & >(t).getBase();
     }
 
-    template < CDS_uint32 _index, typename ... args >
+    template < uint32 _index, typename ... args >
     auto get ( Tuple < args ... > const & t ) noexcept -> typename typeAt < _index, args ... >::type {
         return static_cast < Node < _index, typename typeAt < _index, args ... >::type > const &>(t).getBase();
     }
 
-    template < CDS_uint32 _index, typename ... args >
+    template < uint32 _index, typename ... args >
     auto tupleComparison ( Tuple < args ... > const & t1, Tuple < args ... > const & t2 ) noexcept -> bool {
         if constexpr ( _index == 0 ) return get < 0 > ( t1 ) == get < 0 > ( t2 );
         else return get < _index > ( t1 ) == get < _index > ( t2 ) && tupleComparison < _index - 1 > ( t1, t2 );
     }
 
-    template < CDS_uint32 _index, typename ... args >
+    template < uint32 _index, typename ... args >
     auto tupleAssign ( Tuple < args ... > & t1, Tuple < args ... > const & t2 ) noexcept -> void {
         if constexpr ( _index == 0 ) get < 0 > ( t1 ) = get < 0 > ( t2 );
         else {
@@ -102,7 +102,7 @@ public:
 
     }
 
-    template < CDS_uint32 _index >
+    template < uint32 _index >
     auto get () noexcept -> typename tuple_impl::typeAt < _index, L, types ... >::type {
         return tuple_impl::get < _index > ( * this );
     }
@@ -115,7 +115,7 @@ public:
         return ! tuple_impl::tupleComparison < sizeof ... (types) > ( * this, obj );
     }
 
-    [[nodiscard]] auto size () const noexcept -> CDS_uint32 {
+    [[nodiscard]] auto size () const noexcept -> uint32 {
         return sizeof ... (types) + 1;
     }
 };

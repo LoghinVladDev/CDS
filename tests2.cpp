@@ -301,8 +301,8 @@ void testCrypto () {
 void testAtomic () {
     //    Integer::Atomic y;
 
-    constexpr static CDS_uint32 runCnt = 10000;
-    CDS_sint32 x = 0;
+    constexpr static uint32 runCnt = 10000;
+    sint32 x = 0;
     Integer::Atomic xAtomic = 0;
 
     Runnable a ([&x, &xAtomic](){

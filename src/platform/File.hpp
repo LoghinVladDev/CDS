@@ -26,7 +26,7 @@ public:
 // region Linux Type Declarations + Definitions
 
 //region Linux File Type Declarations + Definitions
-    enum PlatformTypeFlag : CDS_uint8 {
+    enum PlatformTypeFlag : uint8 {
         PTF_NULL_FILE           = 0x00u,
         PTF_REGULAR             = 0x01u,
         PTF_DIRECTORY           = 0x02u,
@@ -58,7 +58,7 @@ public:
         return "Undefined";
     }
 
-    using PlatformTypeFlags = CDS_uint8;
+    using PlatformTypeFlags = uint8;
 
     static auto platformTypeFlagsToString ( PlatformTypeFlags ) noexcept -> String;
     static auto platformTypeFlagsToStringList ( PlatformTypeFlags ) noexcept -> LinkedList < String >;
@@ -70,7 +70,7 @@ public:
 // endregion
 
 // region Linux Permission Flag Declarations + Definitions
-    enum PlatformPermissionFlag : CDS_uint8 {
+    enum PlatformPermissionFlag : uint8 {
         PPF_NULL        = 0x00u,
         PPF_EXECUTE     = 0x01u,
         PPF_WRITE       = 0x02u,
@@ -93,7 +93,7 @@ public:
         return "Undefined";
     }
 
-    using PlatformPermissionFlags = CDS_uint8;
+    using PlatformPermissionFlags = uint8;
 
     static auto platformPermissionFlagsToString ( PlatformPermissionFlags ) noexcept -> String;
     static auto platformPermissionFlagsToStringList ( PlatformPermissionFlags ) noexcept -> LinkedList < String >;
@@ -103,7 +103,7 @@ public:
 
 // region Linux User Flag Declarations + Definitions
 
-    enum PlatformUserFlag : CDS_uint8 {
+    enum PlatformUserFlag : uint8 {
         PUF_NO_USER             = 0x00u,
         PUF_USER                = 0x01u,
         PUF_GROUP               = 0x02u,
@@ -129,7 +129,7 @@ public:
         return "Undefined";
     }
 
-    using PlatformUserFlags = CDS_uint8;
+    using PlatformUserFlags = uint8;
 
     static auto platformUserFlagsToString ( PlatformUserFlags ) noexcept -> String;
     static auto platformUserFlagsToStringList ( PlatformUserFlags ) noexcept -> LinkedList < String >;
@@ -148,7 +148,7 @@ public:
 
     // region platform independent file flags
 
-    enum TypeFlag : CDS_uint8 {
+    enum TypeFlag : uint8 {
         TF_NULL_FILE            = PlatformTypeFlag::PTF_NULL_FILE,
         TF_REGULAR              = PlatformTypeFlag::PTF_REGULAR,
         TF_DIRECTORY            = PlatformTypeFlag::PTF_DIRECTORY
@@ -156,7 +156,7 @@ public:
 
     using TypeFlags = PlatformTypeFlags;
 
-    enum PermissionFlag : CDS_uint8 {
+    enum PermissionFlag : uint8 {
         PF_NULL      = PlatformPermissionFlag::PPF_NULL,
         PF_EXECUTE   = PlatformPermissionFlag::PPF_EXECUTE,
         PF_WRITE     = PlatformPermissionFlag::PPF_WRITE,
@@ -169,7 +169,7 @@ public:
 
     // region diagnostic data types
 
-    enum DiagnosticLogLevel : CDS_uint8 {
+    enum DiagnosticLogLevel : uint8 {
         DLL_NONE     = 0x00u,
         DLL_ERROR    = 0x01u,
         DLL_WARNING  = 0x02u,
@@ -178,7 +178,7 @@ public:
         DLL_ALL      = DLL_INFO
     };
 
-    enum DiagnosticOptionFlag : CDS_uint16 {
+    enum DiagnosticOptionFlag : uint16 {
         DO_NO_AUTOMATIC_FIXES       = 0x0000u,
         DO_BASIC_AUTOMATIC_FIXES    = 0x0001u,
         DO_COMPLEX_AUTOMATIC_FIXES  = 0x0002u,
@@ -186,7 +186,7 @@ public:
         DO_BROKEN_SYMBOLIC_LINKS    = 0x0004u
     };
 
-    using DiagnosticOptionFlags = CDS_uint16;
+    using DiagnosticOptionFlags = uint16;
 
     constexpr static auto diagnosticLogLevelToString (DiagnosticLogLevel l) noexcept -> StringLiteral {
         switch (l) {
@@ -339,19 +339,19 @@ public:
         auto _mtime = String(ctime(&this->_linuxFileData.st_mtime)).rtrim('\n');
 
         return
-            String("Linux File {") +
-            " permissions = " + permissionsAsString +
-            ", size (bytes) = " + static_cast < CDS_sint64 > (this->linuxTotalSize()) +
-            ", deviceID = " + static_cast < CDS_uint64 > (this->linuxDeviceID ()) +
-            ", inode = " + static_cast < CDS_uint64 > (this->linuxINode()) +
-            ", modeFlags = " + this->linuxModeFlags () +
-            ", hardLinkCount = " + static_cast < CDS_uint64 > (this->linuxHardLinkCount ()) +
-            ", ownerUserID = " + this->linuxOwnerUserID () +
-            ", groupUserID = " + this->linuxOwnerGroupID () +
-            ", specialFileDeviceID = " + static_cast < CDS_uint64 > (this->linuxSpecialFileDeviceID ()) +
-            ", blockSize = " + static_cast < CDS_sint64 > (this->linuxBlockSize ()) +
-            ", blockCount = " + static_cast < CDS_sint64 > (this->linuxBlockCount ()) +
-            ", lastAccess = " + _atime +
+                String("Linux File {") +
+                " permissions = " + permissionsAsString +
+                ", size (bytes) = " + static_cast < sint64 > (this->linuxTotalSize()) +
+                ", deviceID = " + static_cast < uint64 > (this->linuxDeviceID ()) +
+                ", inode = " + static_cast < uint64 > (this->linuxINode()) +
+                ", modeFlags = " + this->linuxModeFlags () +
+                ", hardLinkCount = " + static_cast < uint64 > (this->linuxHardLinkCount ()) +
+                ", ownerUserID = " + this->linuxOwnerUserID () +
+                ", groupUserID = " + this->linuxOwnerGroupID () +
+                ", specialFileDeviceID = " + static_cast < uint64 > (this->linuxSpecialFileDeviceID ()) +
+                ", blockSize = " + static_cast < sint64 > (this->linuxBlockSize ()) +
+                ", blockCount = " + static_cast < sint64 > (this->linuxBlockCount ()) +
+                ", lastAccess = " + _atime +
             ", lastModify = " + _mtime +
             ", lastChange = " + _ctime +
             " }";
@@ -427,7 +427,7 @@ public:
 inline auto File::platformTypeFlagsToString ( File::PlatformTypeFlags flags ) noexcept -> String {
     String rep = "";
 
-    for ( CDS_uint8 f = PTF_MIN_VALUE; f <= PTF_MAX_VALUE; f <<= 1u )
+    for ( uint8 f = PTF_MIN_VALUE; f <= PTF_MAX_VALUE; f <<= 1u )
         if ( f & flags )
             rep += String(File::platformFileTypeFlagToString ( static_cast < PlatformTypeFlag > (f) )) + ", ";
 
@@ -437,7 +437,7 @@ inline auto File::platformTypeFlagsToString ( File::PlatformTypeFlags flags ) no
 inline auto File::platformTypeFlagsToStringList ( File::PlatformTypeFlags flags ) noexcept -> LinkedList < String > {
     LinkedList < String > l;
 
-    for ( CDS_uint8 f = PTF_MIN_VALUE; f <= PTF_MAX_VALUE; f <<= 1u )
+    for ( uint8 f = PTF_MIN_VALUE; f <= PTF_MAX_VALUE; f <<= 1u )
         if ( f & flags )
             l.pushBack ( File::platformFileTypeFlagToString ( static_cast < File::PlatformTypeFlag > (f) ) );
 
@@ -447,7 +447,7 @@ inline auto File::platformTypeFlagsToStringList ( File::PlatformTypeFlags flags 
 inline auto File::platformTypeFlagsToList ( File::PlatformTypeFlags flags ) noexcept -> LinkedList < File::PlatformTypeFlag > {
     LinkedList < File::PlatformTypeFlag > l;
 
-    for ( CDS_uint8 f = PTF_MIN_VALUE; f <= PTF_MAX_VALUE; f <<= 1u )
+    for ( uint8 f = PTF_MIN_VALUE; f <= PTF_MAX_VALUE; f <<= 1u )
         if ( f & flags )
             l.pushBack ( static_cast < File::PlatformTypeFlag > (f) );
 
@@ -484,7 +484,7 @@ inline auto File::platformFileType(struct stat64 const * st) noexcept -> Platfor
 inline auto File::platformPermissionFlagsToString ( PlatformPermissionFlags flags ) noexcept -> String {
     String rep = "";
 
-    for ( CDS_uint8 f = PPF_MIN_VALUE; f <= PPF_MAX_VALUE; f <<= 1u )
+    for ( uint8 f = PPF_MIN_VALUE; f <= PPF_MAX_VALUE; f <<= 1u )
         if ( f & flags )
             rep += String(File::platformPermissionFlagToString ( static_cast < PlatformPermissionFlag > (f) )) + ", ";
 
@@ -494,7 +494,7 @@ inline auto File::platformPermissionFlagsToString ( PlatformPermissionFlags flag
 inline auto File::platformPermissionFlagsToStringList ( PlatformPermissionFlags flags ) noexcept -> LinkedList < String > {
     LinkedList < String > l;
 
-    for ( CDS_uint8 f = PPF_MIN_VALUE; f <= PPF_MAX_VALUE; f <<= 1u )
+    for ( uint8 f = PPF_MIN_VALUE; f <= PPF_MAX_VALUE; f <<= 1u )
         if ( f & flags )
             l.pushBack(File::platformPermissionFlagToString ( static_cast < PlatformPermissionFlag > (f) ));
 
@@ -504,7 +504,7 @@ inline auto File::platformPermissionFlagsToStringList ( PlatformPermissionFlags 
 inline auto File::platformPermissionFlagsToList ( PlatformPermissionFlags flags ) noexcept -> LinkedList < PlatformPermissionFlag > {
     LinkedList < PlatformPermissionFlag > l;
 
-    for ( CDS_uint8 f = PPF_MIN_VALUE; f <= PPF_MAX_VALUE; f <<= 1u )
+    for ( uint8 f = PPF_MIN_VALUE; f <= PPF_MAX_VALUE; f <<= 1u )
         if ( f & flags )
             l.pushBack( static_cast < PlatformPermissionFlag > (f) );
 
@@ -518,7 +518,7 @@ inline auto File::platformPermissionFlagsToList ( PlatformPermissionFlags flags 
 inline auto File::platformUserFlagsToString ( PlatformUserFlags flags ) noexcept -> String {
     String rep = "";
 
-    for ( CDS_uint8 f = PUF_MIN_VALUE; f <= PUF_MAX_VALUE; f <<= 1u )
+    for ( uint8 f = PUF_MIN_VALUE; f <= PUF_MAX_VALUE; f <<= 1u )
         if ( f & flags )
             rep += String(File::platformUserFlagToString ( static_cast < PlatformUserFlag > (f) )) + ", ";
 
@@ -528,7 +528,7 @@ inline auto File::platformUserFlagsToString ( PlatformUserFlags flags ) noexcept
 inline auto File::platformUserFlagsToStringList ( PlatformUserFlags flags ) noexcept -> LinkedList < String > {
     LinkedList < String > l;
 
-    for ( CDS_uint8 f = PUF_MIN_VALUE; f <= PUF_MAX_VALUE; f <<= 1u )
+    for ( uint8 f = PUF_MIN_VALUE; f <= PUF_MAX_VALUE; f <<= 1u )
         if ( f & flags )
             l.append(File::platformUserFlagToString ( static_cast < PlatformUserFlag > (f) ));
 
@@ -538,7 +538,7 @@ inline auto File::platformUserFlagsToStringList ( PlatformUserFlags flags ) noex
 inline auto File::platformUserFlagsToList ( PlatformUserFlags flags ) noexcept -> LinkedList < PlatformUserFlag > {
     LinkedList < PlatformUserFlag > l;
 
-    for ( CDS_uint8 f = PUF_MIN_VALUE; f <= PUF_MAX_VALUE; f <<= 1u )
+    for ( uint8 f = PUF_MIN_VALUE; f <= PUF_MAX_VALUE; f <<= 1u )
         if ( f & flags )
             l.append( static_cast < PlatformUserFlag > (f) );
 

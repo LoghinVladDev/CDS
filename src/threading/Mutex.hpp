@@ -57,7 +57,7 @@ private:
 #error Unsupported : Mutex
 #endif
 
-    enum State: CDS_uint8 {
+    enum State: uint8 {
         LOCKED = 0x01,
         UNLOCKED = 0x02
     };

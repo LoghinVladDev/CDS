@@ -17,7 +17,7 @@ namespace crypto {
 
     template < BlockSize::Value byteSize >
     class Block : public Object {
-        using byte = CDS_byte;
+        using byte = byte;
 
     private:
         __crypto_constexpr static inline BlockSize bytes = byteSize;
@@ -231,7 +231,7 @@ namespace crypto {
             throw InvalidFormat("0 or 1", "Char not 0 or 1");
 
         auto startLen = std::min((str.length() / 8), bytes.bytes()) * 8;
-        CDS_uint8 currentValue = 0u;
+        uint8 currentValue = 0u;
         Index shiftPos = 7;
         Index bytesPos = 0;
         Block result;

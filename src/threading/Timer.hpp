@@ -18,11 +18,11 @@
 
 class Timer: public Object {
 public:
-    constexpr static CDS_sint32 TIMER_INFINITE_PERIODICITY = -1;
+    constexpr static sint32 TIMER_INFINITE_PERIODICITY = -1;
 
 private:
     UniquePointer < Thread > _pThread;
-    CDS_sint32               _millisCallback { TIMER_INFINITE_PERIODICITY };
+    sint32               _millisCallback {TIMER_INFINITE_PERIODICITY };
 
     std::atomic < bool >     _timerPaused {true};
     std::atomic < bool >     _timerShouldStop {false};
@@ -45,7 +45,7 @@ public:
                 .append(", paused=").append(this->_timerPaused).append("}");
     }
 
-    auto setInterval ( CDS_sint32 periodicityMillis ) noexcept -> void {
+    auto setInterval (sint32 periodicityMillis ) noexcept -> void {
         this->_millisCallback = periodicityMillis;
     }
 

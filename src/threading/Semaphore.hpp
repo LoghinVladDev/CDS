@@ -11,7 +11,7 @@
 class Semaphore : public Object {
 private:
     PointerBase < Mutex > * _pBase;
-    volatile CDS_uint8  _count {0};
+    volatile uint8  _count {0};
 
 public:
     Semaphore () noexcept : _pBase(new SharedPointer < Mutex >(new Mutex())) {}

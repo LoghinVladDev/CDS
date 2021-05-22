@@ -29,15 +29,15 @@ private:
         ValueType       _higherBound;
 
         constexpr static auto typeName = []() noexcept -> StringLiteral {
-            if ( std::is_same<CDS_uint8, ValueType>::value ) return "uint8";
-            if ( std::is_same<CDS_uint16, ValueType>::value ) return "uint16";
-            if ( std::is_same<CDS_uint32, ValueType>::value ) return "uint32";
-            if ( std::is_same<CDS_uint64, ValueType>::value ) return "uint64";
+            if ( std::is_same<uint8, ValueType>::value ) return "uint8";
+            if ( std::is_same<uint16, ValueType>::value ) return "uint16";
+            if ( std::is_same<uint32, ValueType>::value ) return "uint32";
+            if ( std::is_same<uint64, ValueType>::value ) return "uint64";
 
-            if ( std::is_same<CDS_sint8, ValueType>::value ) return "int8";
-            if ( std::is_same<CDS_sint16, ValueType>::value ) return "int16";
-            if ( std::is_same<CDS_sint32, ValueType>::value ) return "int32";
-            if ( std::is_same<CDS_sint64, ValueType>::value ) return "int64";
+            if ( std::is_same<sint8, ValueType>::value ) return "int8";
+            if ( std::is_same<sint16, ValueType>::value ) return "int16";
+            if ( std::is_same<sint32, ValueType>::value ) return "int32";
+            if ( std::is_same<sint64, ValueType>::value ) return "int64";
 
             if ( std::is_same<int, ValueType>::value ) return "int";
             if ( std::is_same<long long, ValueType>::value ) return "long";
@@ -74,13 +74,13 @@ public:
     template <typename T, typename D, typename TE = std::mt19937, typename RD = std::random_device>
     using Generator = BaseRandom<T, D, TE, RD>;
 
-    using Int           = Generator<CDS_sint32, std::uniform_int_distribution<CDS_sint32>>;
-    using Long          = Generator<CDS_sint64, std::uniform_int_distribution<CDS_sint64>, std::mt19937_64>;
+    using Int           = Generator<sint32, std::uniform_int_distribution<sint32>>;
+    using Long          = Generator<sint64, std::uniform_int_distribution<sint64>, std::mt19937_64>;
     using Float         = Generator<float, std::uniform_real_distribution<float>>;
     using Double        = Generator<double, std::uniform_real_distribution<double>, std::mt19937_64>;
 
-    using UnsignedInt   = Generator<CDS_uint32, std::uniform_int_distribution<CDS_uint32>>;
-    using UnsignedLong  = Generator<CDS_uint64, std::uniform_int_distribution<CDS_uint64>>;
+    using UnsignedInt   = Generator<uint32, std::uniform_int_distribution<uint32>>;
+    using UnsignedLong  = Generator<uint64, std::uniform_int_distribution<uint64>>;
 };
 
 #endif //CDS_RANDOM_HPP

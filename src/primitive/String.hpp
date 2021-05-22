@@ -100,22 +100,22 @@ public:
 
     String (Object const & o) noexcept : String(o.toString()) { }
 
-    String (CDS_uint8 v) noexcept : String(String().append(v)) { }
-    String (CDS_uint16 v) noexcept : String(String().append(v)) { }
-    String (CDS_uint32 v) noexcept : String(String().append(v)) { }
-    String (CDS_uint64 v) noexcept : String(String().append(v)) { }
+    String (uint8 v) noexcept : String(String().append(v)) { }
+    String (uint16 v) noexcept : String(String().append(v)) { }
+    String (uint32 v) noexcept : String(String().append(v)) { }
+    String (uint64 v) noexcept : String(String().append(v)) { }
 
-    String (CDS_sint8 v) noexcept : String(String().append(v)) { }
-    String (CDS_sint16 v) noexcept : String(String().append(v)) { }
-    String (CDS_sint32 v) noexcept : String(String().append(v)) { }
-    String (CDS_sint64 v) noexcept : String(String().append(v)) { }
+    String (sint8 v) noexcept : String(String().append(v)) { }
+    String (sint16 v) noexcept : String(String().append(v)) { }
+    String (sint32 v) noexcept : String(String().append(v)) { }
+    String (sint64 v) noexcept : String(String().append(v)) { }
 
     String (float v) noexcept : String(String().append(v)) { }
     String (double v) noexcept : String(String().append(v)) { }
 
 #if defined(__linux)
 
-    String(std::size_t v) noexcept : String((CDS_uint64)v) {}
+    String(std::size_t v) noexcept : String((uint64)v) {}
 
 #endif
 
@@ -328,37 +328,37 @@ public:
     /**
      * @test tested in primitive/StringTest/Append/Prepend Tests
      */
-    inline auto operator += (CDS_sint16 v) noexcept -> String & { return this->operator+=(std::to_string(v) ); }
+    inline auto operator += (sint16 v) noexcept -> String & { return this->operator+=(std::to_string(v) ); }
 
     /**
      * @test tested in primitive/StringTest/Append/Prepend Tests
      */
-    inline auto operator += (CDS_sint32 v) noexcept -> String & { return this->operator+=(std::to_string(v) ); }
+    inline auto operator += (sint32 v) noexcept -> String & { return this->operator+=(std::to_string(v) ); }
 
     /**
      * @test tested in primitive/StringTest/Append/Prepend Tests
      */
-    inline auto operator += (CDS_sint64 v) noexcept -> String & { return this->operator+=(std::to_string(v) ); }
+    inline auto operator += (sint64 v) noexcept -> String & { return this->operator+=(std::to_string(v) ); }
 
     /**
      * @test tested in primitive/StringTest/Append/Prepend Tests
      */
-    inline auto operator += (CDS_uint8 v) noexcept -> String & { return this->operator+=(std::to_string(v) ); }
+    inline auto operator += (uint8 v) noexcept -> String & { return this->operator+=(std::to_string(v) ); }
 
     /**
      * @test tested in primitive/StringTest/Append/Prepend Tests
      */
-    inline auto operator += (CDS_uint16 v) noexcept -> String & { return this->operator+=(std::to_string(v) ); }
+    inline auto operator += (uint16 v) noexcept -> String & { return this->operator+=(std::to_string(v) ); }
 
     /**
      * @test tested in primitive/StringTest/Append/Prepend Tests
      */
-    inline auto operator += (CDS_uint32 v) noexcept -> String & { return this->operator+=(std::to_string(v) ); }
+    inline auto operator += (uint32 v) noexcept -> String & { return this->operator+=(std::to_string(v) ); }
 
     /**
      * @test tested in primitive/StringTest/Append/Prepend Tests
      */
-    inline auto operator += (CDS_uint64 v) noexcept -> String & { return this->operator+=(std::to_string(v) ); }
+    inline auto operator += (uint64 v) noexcept -> String & { return this->operator+=(std::to_string(v) ); }
 
     /**
      * @test tested in primitive/StringTest/Append/Prepend Tests
@@ -397,37 +397,37 @@ public:
     /**
      * @test tested in primitive/StringTest/Append/Prepend Tests
      */
-    inline auto append (CDS_sint16 v) noexcept -> String & { return this->append(std::to_string(v) ); }
+    inline auto append (sint16 v) noexcept -> String & { return this->append(std::to_string(v) ); }
 
     /**
      * @test tested in primitive/StringTest/Append/Prepend Tests
      */
-    inline auto append (CDS_sint32 v) noexcept -> String & { return this->append(std::to_string(v) ); }
+    inline auto append (sint32 v) noexcept -> String & { return this->append(std::to_string(v) ); }
 
     /**
      * @test tested in primitive/StringTest/Append/Prepend Tests
      */
-    inline auto append (CDS_sint64 v) noexcept -> String & { return this->append(std::to_string(v) ); }
+    inline auto append (sint64 v) noexcept -> String & { return this->append(std::to_string(v) ); }
 
     /**
      * @test tested in primitive/StringTest/Append/Prepend Tests
      */
-    inline auto append (CDS_uint8 v) noexcept -> String & { return this->append(std::to_string(v) ); }
+    inline auto append (uint8 v) noexcept -> String & { return this->append(std::to_string(v) ); }
 
     /**
      * @test tested in primitive/StringTest/Append/Prepend Tests
      */
-    inline auto append (CDS_uint16 v) noexcept -> String & { return this->append(std::to_string(v) ); }
+    inline auto append (uint16 v) noexcept -> String & { return this->append(std::to_string(v) ); }
 
     /**
      * @test tested in primitive/StringTest/Append/Prepend Tests
      */
-    inline auto append (CDS_uint32 v) noexcept -> String & { return this->append(std::to_string(v) ); }
+    inline auto append (uint32 v) noexcept -> String & { return this->append(std::to_string(v) ); }
 
     /**
      * @test tested in primitive/StringTest/Append/Prepend Tests
      */
-    inline auto append (CDS_uint64 v) noexcept -> String & { return this->append(std::to_string(v) ); }
+    inline auto append (uint64 v) noexcept -> String & { return this->append(std::to_string(v) ); }
 
     /**
      * @test tested in primitive/StringTest/Append/Prepend Tests
@@ -467,37 +467,37 @@ public:
     /**
      * @test tested in primitive/StringTest/Append/Prepend Tests
      */
-    inline auto prepend (CDS_sint16 v) noexcept -> String & { return this->prepend(std::to_string(v) ); }
+    inline auto prepend (sint16 v) noexcept -> String & { return this->prepend(std::to_string(v) ); }
 
     /**
      * @test tested in primitive/StringTest/Append/Prepend Tests
      */
-    inline auto prepend (CDS_sint32 v) noexcept -> String & { return this->prepend(std::to_string(v) ); }
+    inline auto prepend (sint32 v) noexcept -> String & { return this->prepend(std::to_string(v) ); }
 
     /**
      * @test tested in primitive/StringTest/Append/Prepend Tests
      */
-    inline auto prepend (CDS_sint64 v) noexcept -> String & { return this->prepend(std::to_string(v) ); }
+    inline auto prepend (sint64 v) noexcept -> String & { return this->prepend(std::to_string(v) ); }
 
     /**
      * @test tested in primitive/StringTest/Append/Prepend Tests
      */
-    inline auto prepend (CDS_uint8 v) noexcept -> String & { return this->prepend(std::to_string(v) ); }
+    inline auto prepend (uint8 v) noexcept -> String & { return this->prepend(std::to_string(v) ); }
 
     /**
      * @test tested in primitive/StringTest/Append/Prepend Tests
      */
-    inline auto prepend (CDS_uint16 v) noexcept -> String & { return this->prepend(std::to_string(v) ); }
+    inline auto prepend (uint16 v) noexcept -> String & { return this->prepend(std::to_string(v) ); }
 
     /**
      * @test tested in primitive/StringTest/Append/Prepend Tests
      */
-    inline auto prepend (CDS_uint32 v) noexcept -> String & { return this->prepend(std::to_string(v) ); }
+    inline auto prepend (uint32 v) noexcept -> String & { return this->prepend(std::to_string(v) ); }
 
     /**
      * @test tested in primitive/StringTest/Append/Prepend Tests
      */
-    inline auto prepend (CDS_uint64 v) noexcept -> String & { return this->prepend(std::to_string(v) ); }
+    inline auto prepend (uint64 v) noexcept -> String & { return this->prepend(std::to_string(v) ); }
 
     /**
      * @test tested in primitive/StringTest/Append/Prepend Tests
@@ -791,37 +791,37 @@ public:
     /**
      * @test tested in primitive/StringTest/Append/Prepend Tests
      */
-    [[nodiscard]] inline auto operator + (CDS_sint16 v) const noexcept -> String { return this->operator+(std::to_string(v) ); }
+    [[nodiscard]] inline auto operator + (sint16 v) const noexcept -> String { return this->operator+(std::to_string(v) ); }
 
     /**
      * @test tested in primitive/StringTest/Append/Prepend Tests
      */
-    [[nodiscard]] inline auto operator + (CDS_sint32 v) const noexcept -> String { return this->operator+(std::to_string(v) ); }
+    [[nodiscard]] inline auto operator + (sint32 v) const noexcept -> String { return this->operator+(std::to_string(v) ); }
 
     /**
      * @test tested in primitive/StringTest/Append/Prepend Tests
      */
-    [[nodiscard]] inline auto operator + (CDS_sint64 v) const noexcept -> String { return this->operator+(std::to_string(v) ); }
+    [[nodiscard]] inline auto operator + (sint64 v) const noexcept -> String { return this->operator+(std::to_string(v) ); }
 
     /**
      * @test tested in primitive/StringTest/Append/Prepend Tests
      */
-    [[nodiscard]] inline auto operator + (CDS_uint8 v) const noexcept -> String { return this->operator+(std::to_string(v) ); }
+    [[nodiscard]] inline auto operator + (uint8 v) const noexcept -> String { return this->operator+(std::to_string(v) ); }
 
     /**
      * @test tested in primitive/StringTest/Append/Prepend Tests
      */
-    [[nodiscard]] inline auto operator + (CDS_uint16 v) const noexcept -> String { return this->operator+(std::to_string(v) ); }
+    [[nodiscard]] inline auto operator + (uint16 v) const noexcept -> String { return this->operator+(std::to_string(v) ); }
 
     /**
      * @test tested in primitive/StringTest/Append/Prepend Tests
      */
-    [[nodiscard]] inline auto operator + (CDS_uint32 v) const noexcept -> String { return this->operator+(std::to_string(v) ); }
+    [[nodiscard]] inline auto operator + (uint32 v) const noexcept -> String { return this->operator+(std::to_string(v) ); }
 
     /**
      * @test tested in primitive/StringTest/Append/Prepend Tests
      */
-    [[nodiscard]] inline auto operator + (CDS_uint64 v) const noexcept -> String { return this->operator+(std::to_string(v) ); }
+    [[nodiscard]] inline auto operator + (uint64 v) const noexcept -> String { return this->operator+(std::to_string(v) ); }
 
     /**
      * @test tested in primitive/StringTest/Append/Prepend Tests

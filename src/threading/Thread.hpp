@@ -54,7 +54,7 @@ private:
 #error Unsupported : Thread
 #endif
 
-    enum State: CDS_uint8 {
+    enum State: uint8 {
         CREATED                 = 0x01u,
         RUNNING                 = 0x02u,
         FINISHED                = 0x04u,
@@ -171,7 +171,7 @@ public:
             .append("Thread { <").append(Thread::IMPLEMENTATION_TYPE).append(">; handle = ")
             .append(
 #if defined(__linux)
-                    static_cast<CDS_uint64>(this->handle)
+                    static_cast<uint64>(this->handle)
 #elif defined(WIN32)
                     static_cast<CDS_uint64>(this->handle == PRIMITIVE_NULL_HANDLE ? 0 : this->handle->threadID)
 #else

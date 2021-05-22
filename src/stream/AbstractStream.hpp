@@ -50,7 +50,7 @@ public:
         }
     };
 
-    enum Flag : CDS_uint8 {
+    enum Flag : uint8 {
         NONE        = 0x00,
         BINARY      = 0x01,
         APPEND      = 0x02,
@@ -60,7 +60,7 @@ public:
         OUTPUT      = 0x32
     };
 
-    using Flags = CDS_uint8;
+    using Flags = uint8;
 
 protected:
 
