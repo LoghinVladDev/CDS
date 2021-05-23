@@ -32,6 +32,21 @@ namespace dataTypes {
     template<> auto hash<sint16>(sint16 const &o) noexcept -> Index { return o; }
     template<> auto hash<sint32>(sint32 const &o) noexcept -> Index { return o; }
     template<> auto hash<sint64>(sint64 const &o) noexcept -> Index { return o; }
+    template <> auto hash<float> (float const & o) noexcept -> Index { return static_cast < uint32 > ( o * 1000.0f ); }
+    template <> auto hash<double> (double const & o) noexcept -> Index { return static_cast < uint64 > ( o * 100000.0 ); }
+
+#if defined(CDS_GLM)
+
+    template < glm::length_t l, typename T, glm::qualifier q >
+    template <> auto hash < glm::vec < l, T, q > > ( glm::vec < l, T , q > const & v ) noexcept -> Index {
+        if constexpr ( l == 1 )         return hash (v.x);
+        else if constexpr ( l == 2 )    return hash (v.x) * 100 + hash (v.y);
+        else if constexpr ( l == 3 )    return hash (v.x) * 10000 + hash (v.y) * 100 + hash(v.z);
+        else if constexpr ( l == 4 )    return hash (v.x) * 1000000 + hash (v.y) * 10000 + hash(v.z) * 100 + hash(v.w);
+        else return 0;
+    }
+
+#endif
 }
 
 template <typename K, Size hashBoundary>
