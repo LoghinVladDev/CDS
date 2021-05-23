@@ -132,10 +132,10 @@ public:
     String ( glm::vec < l, T, q > const & v ) noexcept {
         * this = String ("glm::vec") + static_cast < uint32 > (l) + " { ";
 
-        if constexpr ( l == 1 ) { * this += "x = " + v.x; }
-        if constexpr ( l == 2 ) { * this += ", y = " + v.y; }
-        if constexpr ( l == 3 ) { * this += ", z = " + v.z; }
-        if constexpr ( l == 4 ) { * this += ", w = " + v.w; }
+        if constexpr ( l == 1 ) { this->append("x = ").append(v.x); }
+        if constexpr ( l == 2 ) { this->append(", y = ").append(v.y); }
+        if constexpr ( l == 3 ) { this->append(", z = ").append(v.z); }
+        if constexpr ( l == 4 ) { this->append(", w = ").append(v.w); }
 
         * this += " }";
     }
