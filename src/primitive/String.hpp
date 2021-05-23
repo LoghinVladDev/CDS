@@ -130,8 +130,14 @@ public:
 #if defined(CDS_GLM)
     template < glm::length_t l, typename T, glm::qualifier q >
     String ( glm::vec < l, T, q > const & v ) noexcept {
-        * this = String ("glm::vec") + static_cast < CDS_uint32 > (l) + " { " +
-                "x = " + v.x + ", y = " + v.y + ", z = " + v.z + " }";
+        * this = String ("glm::vec") + static_cast < uint32 > (l) + " { ";
+
+        if constexpr ( l == 1 ) { * this += "x = " + v.x; }
+        if constexpr ( l == 2 ) { * this += ", y = " + v.y; }
+        if constexpr ( l == 3 ) { * this += ", z = " + v.z; }
+        if constexpr ( l == 4 ) { * this += ", w = " + v.w; }
+
+        * this += " }";
     }
 #endif
 
