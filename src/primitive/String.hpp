@@ -128,17 +128,16 @@ public:
 //    String (std::size_t v) noexcept : String((CDS_uint64)v) {}
 
 #if defined(CDS_GLM)
+
     template < glm::length_t l, typename T, glm::qualifier q >
-    String ( glm::vec < l, T, q > const & v ) noexcept {
-        * this = String ("glm::vec") + static_cast < uint32 > (l) + " { ";
-
-        if constexpr ( l == 1 ) { this->append("x = ").append(v.x); }
-        if constexpr ( l == 2 ) { this->append(", y = ").append(v.y); }
-        if constexpr ( l == 3 ) { this->append(", z = ").append(v.z); }
-        if constexpr ( l == 4 ) { this->append(", w = ").append(v.w); }
-
-        * this += " }";
+    auto hash ( glm::vec < l, T , q > const & v ) noexcept -> Index {
+        if constexpr ( l == 1 )         return hash (v.x);
+        else if constexpr ( l == 2 )    return hash (v.x) * 100 + hash (v.y);
+        else if constexpr ( l == 3 )    return hash (v.x) * 10000 + hash (v.y) * 100 + hash(v.z);
+        else if constexpr ( l == 4 )    return hash (v.x) * 1000000 + hash (v.y) * 10000 + hash(v.z) * 100 + hash(v.w);
+        else return 0;
     }
+
 #endif
 
     /**
