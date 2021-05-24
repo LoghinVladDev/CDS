@@ -38,7 +38,8 @@ namespace dataTypes {
 #if defined(CDS_GLM)
 
     template < glm::length_t l, typename T, glm::qualifier q >
-    template <> auto hash < glm::vec < l, T, q > > ( glm::vec < l, T , q > const & v ) noexcept -> Index {
+    template <>
+    auto hash < glm::vec < l, T, q > > ( glm::vec < l, T , q > const & v ) noexcept -> Index {
         if constexpr ( l == 1 )         return hash (v.x);
         else if constexpr ( l == 2 )    return hash (v.x) * 100 + hash (v.y);
         else if constexpr ( l == 3 )    return hash (v.x) * 10000 + hash (v.y) * 100 + hash(v.z);
