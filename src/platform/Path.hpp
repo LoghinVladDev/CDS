@@ -69,7 +69,7 @@ public:
         //        if ( GetFileAttributesA ( path.cStr() ) != INVALID_FILE_ATTRIBUTES )
 //            throw InvalidPath();
 
-        constexpr static CDS_uint16 initialPathSize = 256;
+        constexpr static uint16 initialPathSize = 256;
         char * resolvedPath = (char *) malloc (initialPathSize);
 
         auto res = GetFullPathNameA(path.cStr(), initialPathSize, resolvedPath, nullptr);
