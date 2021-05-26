@@ -21,6 +21,7 @@ template <class T>
 class Reference : public Object {
 public:
     using Pointer = T *;
+    using Value = T;
 
 private:
     Pointer p;
@@ -59,9 +60,28 @@ public:
     }
 
     [[nodiscard]] auto toString() const noexcept -> String final {
+#if defined(CDS_GLM)
+        constexpr auto isVec = [] {
+            if constexpr (
+                    std::is_same <int, Value>::type::value ||
+                    std::is_same <int, Value>::type::value ||
+                    std::is_same <int, Value>::type::value ||
+                    std::is_same <int, Value>::type::value
+            )
+                return true;
+            return false;
+        };
+#endif
+
         std::stringstream oss;
         oss << "< " << (std::is_const<T>::value ? "const " : "") << "& of 0x" << std::hex
-            << reinterpret_cast < typename PointerBase<T>::PointerType > ( p ) << std::dec << " : " << (*p) << " >";
+            << reinterpret_cast < typename PointerBase<T>::PointerType > ( p ) << std::dec << " : " <<
+#if defined(CDS_GLM)
+           isVec () ? String(*p) : (*p)
+#else
+            (*p)
+#endif
+            << " >";
         return String(oss.str());
     }
 

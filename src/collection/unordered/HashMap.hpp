@@ -568,10 +568,10 @@ public:
             oss << e.getFirst() << " : " << e.getSecond() << ", ";
 #else
             if constexpr (
-                    std::is_same < glm::vec1, Value >::value_type ||
-                    std::is_same < glm::vec2, Value >::value_type ||
-                    std::is_same < glm::vec3, Value >::value_type ||
-                    std::is_same < glm::vec4, Value >::value_type
+                    std::is_same < glm::vec1, Value >::type::value ||
+                    std::is_same < glm::vec2, Value >::type::value ||
+                    std::is_same < glm::vec3, Value >::type::value ||
+                    std::is_same < glm::vec4, Value >::type::value
             )
                 oss << e.getFirst () << " : " << String(e.getSecond ()) << ", ";
             else
