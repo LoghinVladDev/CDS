@@ -564,7 +564,19 @@ public:
         std::stringstream oss;
         oss << "{ ";
         for ( auto & e : (*this) ) {
+#if !defined(CDS_GLM)
             oss << e.getFirst() << " : " << e.getSecond() << ", ";
+#else
+            if constexpr (
+                    std::is_same < glm::vec1, Value >::type ||
+                    std::is_same < glm::vec2, Value >::type ||
+                    std::is_same < glm::vec3, Value >::type ||
+                    std::is_same < glm::vec4, Value >::type
+            )
+                oss << e.getFirst () << " : " << String(e.getSecond ()) << ", ";
+            else
+                oss << e.getFirst () << " : " << e.getSecond () << ", ";
+#endif
         }
         auto s = oss.str();
         return String(s.substr(0, s.length() - 2).append(" }"));

@@ -15,20 +15,25 @@ void testView();
 int z = 5;
 
 void testView () {
-    Tuple t1 = {3, 5, 9.3f, String("ana are mere")};
-    std::cout << t1.get<3>() << '\n';
 
-    Tuple t2 = {
-            LinkedList<int>  {1, 3, 2},
-            UnorderedSet <float > {3.4f, 5.6f},
-            HashMap<int, int> {{2, 3}, {6, 4}},
-            String("Hello")
-    };
+    String s = "Ana are mere";
 
-    t2.get<2>().values().forEach([](Reference<int> i){i.get() = i.get() * 2;});
-    std::cout << t2.get<2>().values() << '\n';
 
-    exit(0);
+
+//    Tuple t1 = {3, 5, 9.3f, String("ana are mere")};
+//    std::cout << t1.get<3>() << '\n';
+//
+//    Tuple t2 = {
+//            LinkedList<int>  {1, 3, 2},
+//            UnorderedSet <float > {3.4f, 5.6f},
+//            HashMap<int, int> {{2, 3}, {6, 4}},
+//            String("Hello")
+//    };
+//
+//    t2.get<2>().values().forEach([](Reference<int> i){i.get() = i.get() * 2;});
+//    std::cout << t2.get<2>().values() << '\n';
+//
+//    exit(0);
 
 
     Timer t;
