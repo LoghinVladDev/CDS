@@ -125,7 +125,7 @@ public:
     template < typename T >
     String (T const * v) noexcept : String((std::size_t)v) { }
 
-//    String (std::size_t v) noexcept : String((CDS_uint64)v) {}
+//    String (std::size_t v) noexcept : String((uint64)v) {}
 
 #if defined(CDS_GLM)
     template < glm::length_t l, typename T, glm::qualifier q >

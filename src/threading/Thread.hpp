@@ -173,7 +173,7 @@ public:
 #if defined(__linux)
                     static_cast<uint64>(this->handle)
 #elif defined(WIN32)
-                    static_cast<CDS_uint64>(this->handle == PRIMITIVE_NULL_HANDLE ? 0 : this->handle->threadID)
+                    static_cast<uint64>(this->handle == PRIMITIVE_NULL_HANDLE ? 0 : this->handle->threadID)
 #else
 #error Unsupported : Thread
 0
