@@ -73,7 +73,21 @@ public:
         if ( pObj == nullptr )
             oss << "null";
         else
+#if defined(CDS_GLM)
+            if constexpr (
+                    std::is_same < glm::vec1, Value >::type::value ||
+                    std::is_same < glm::vec2, Value >::type::value ||
+                    std::is_same < glm::vec3, Value >::type::value ||
+                    std::is_same < glm::vec4, Value >::type::value
+            ) {
+                oss << String(*pObj);
+            }
+            else {
+                oss << (*pObj);
+            }
+#else
             oss << (* pObj);
+#endif
         oss << " >";
 
         return String(oss.str());

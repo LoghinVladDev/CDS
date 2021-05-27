@@ -63,10 +63,10 @@ public:
 #if defined(CDS_GLM)
         constexpr auto isVec = [] {
             if constexpr (
-                    std::is_same <int, Value>::type::value ||
-                    std::is_same <int, Value>::type::value ||
-                    std::is_same <int, Value>::type::value ||
-                    std::is_same <int, Value>::type::value
+                    std::is_same <glm::vec1, Value>::type::value ||
+                    std::is_same <glm::vec2, Value>::type::value ||
+                    std::is_same <glm::vec3, Value>::type::value ||
+                    std::is_same <glm::vec4, Value>::type::value
             )
                 return true;
             return false;
