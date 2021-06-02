@@ -32,7 +32,9 @@ set(
         src/primitive/Pair.hpp
         src/primitive/Range.hpp
         src/primitive/String.hpp
-        src/primitive/View.hpp)
+        src/primitive/View.hpp
+        src/primitive/Sequence.hpp
+)
 
 set(
         CDS_EXTRA
@@ -120,7 +122,15 @@ set(
         src/collection/ordered/StaticArray.hpp
         src/functional/Random.hpp
         src/primitive/Tuple.hpp
-        src/threading/Atomic.hpp src/cdsIntern/Concepts.hpp src/cdsIntern/Traits.hpp src/cdsIntern/Types.hpp include/CDS/InputStream include/CDS/OutputStream include/CDS/Stream include/CDS/AbstractStream)
+        src/threading/Atomic.hpp
+        src/cdsIntern/Concepts.hpp
+        src/cdsIntern/Traits.hpp
+        src/cdsIntern/Types.hpp
+        include/CDS/InputStream
+        include/CDS/OutputStream
+        include/CDS/Stream
+        include/CDS/AbstractStream
+)
 
 #set(
 #        CDS_LIB_SRC

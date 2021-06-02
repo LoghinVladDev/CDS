@@ -14,6 +14,8 @@ void testView();
 #include <CDS/HashMap>
 int z = 5;
 
+#include <Sequence.hpp>
+
 void testView () {
 
     String s = "Ana are mere";
