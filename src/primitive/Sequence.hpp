@@ -8,9 +8,9 @@
 #include <CDS/Object>
 
 #if defined(__cpp_concepts)
-#define _REQUIRES_ITERABLE requires Iterable < Type > || ConstIterable < Type >
-#define _REQUIRES_PRINTABLE requires HasToString < Type >
-#define _REQUIRES_INTEGRAL_ITERABLE requires Iterable < Type > && Integral < ViewValue >
+#define _REQUIRES_ITERABLE requires Iterable < ElementType > || ConstIterable < ElementType >
+#define _REQUIRES_PRINTABLE requires HasToString < ElementType >
+#define _REQUIRES_INTEGRAL_ITERABLE requires Iterable < ElementType > && Integral < ElementType >
 #else
 #define _REQUIRES_ITERABLE
 #define _REQUIRES_PRINTABLE
@@ -56,7 +56,7 @@ public:
     auto first ( Predicate const & = [](ElementType const &) noexcept -> bool { return true; } ) const noexcept -> Optional < ElementType > _REQUIRES_ITERABLE;
 
     template < typename Predicate >
-    auto firstOr ( Predicate const & = [](ElementType const &) noexcept -> bool { return true; }, ElementType const & ) const noexcept -> ElementType _REQUIRES_ITERABLE;
+    auto firstOr ( ElementType const &, Predicate const & = [](ElementType const &) noexcept -> bool { return true; } ) const noexcept -> ElementType _REQUIRES_ITERABLE;
 
     template < typename Predicate >
     auto findLast ( Predicate const & ) const noexcept -> Optional < ElementType > _REQUIRES_ITERABLE;
@@ -65,7 +65,7 @@ public:
     auto last ( Predicate const & = [](ElementType const &) noexcept -> bool { return true; } ) const noexcept -> Optional < ElementType > _REQUIRES_ITERABLE;
 
     template < typename Predicate >
-    auto lastOr ( Predicate const & = [](ElementType const &) noexcept -> bool { return true; }, ElementType const & ) const noexcept -> ElementType _REQUIRES_ITERABLE;
+    auto lastOr ( ElementType const &, Predicate const & = [](ElementType const &) noexcept -> bool { return true; } ) const noexcept -> ElementType _REQUIRES_ITERABLE;
 
 
     auto single () const noexcept -> Optional < ElementType > _REQUIRES_ITERABLE;
@@ -100,7 +100,7 @@ public:
     auto filterTo ( Collection < ElementType > &, Predicate const & ) const noexcept -> Collection < ElementType > & _REQUIRES_ITERABLE;
 
     template < typename IndexedPredicate >
-    auto filterIndexedTo ( Collection < ElementType > &, Predicate const & ) const noexcept -> Collection < ElementType > & _REQUIRES_ITERABLE;
+    auto filterIndexedTo ( Collection < ElementType > &, IndexedPredicate const & ) const noexcept -> Collection < ElementType > & _REQUIRES_ITERABLE;
 
     template < typename NewType >
     auto filterIsDerivedFrom () && noexcept -> Sequence < NewType > _REQUIRES_ITERABLE;
@@ -112,7 +112,7 @@ public:
     auto filterNot ( Predicate const & ) && noexcept -> Sequence && _REQUIRES_ITERABLE;
 
     template < typename IndexedPredicate >
-    auto filterNotIndexed ( Predicate const & ) && noexcept -> Sequence && _REQUIRES_ITERABLE;
+    auto filterNotIndexed ( IndexedPredicate const & ) && noexcept -> Sequence && _REQUIRES_ITERABLE;
 
     template < typename Predicate >
     auto filterNotTo ( Collection < ElementType > &, Predicate const & ) const noexcept -> Collection < ElementType > & _REQUIRES_ITERABLE;
@@ -242,7 +242,7 @@ public:
     auto mapTo ( Collection < R > &, Mapper const & ) const noexcept -> Collection < R > & _REQUIRES_ITERABLE; 
 
     template < typename IndexedMapper, typename R > 
-    auto mapIndexedTo ( Collection < R > &, Mapper const & ) const noexcept -> Collection < R > & _REQUIRES_ITERABLE;
+    auto mapIndexedTo ( Collection < R > &, IndexedMapper const & ) const noexcept -> Collection < R > & _REQUIRES_ITERABLE;
 
 
     auto indexed () && noexcept -> Sequence < Pair < Index, ElementType > > && _REQUIRES_ITERABLE;
@@ -353,15 +353,15 @@ public:
     auto windowed ( ListTransformer const &, Size, Size = 1, Boolean = false ) && noexcept -> Sequence < R > && _REQUIRES_ITERABLE;
 
     template < typename R >
-    auto zip ( Sequence < R > const & ) && noexcept -> Sequence < Pair < ElementType, R > > &&;
+    auto zip ( Sequence < R > const & ) && noexcept -> Sequence < Pair < ElementType, R > > && _REQUIRES_ITERABLE;
 
     template < typename R, typename Transformer, typename V >
-    auto zip ( Sequence < R > const &, Transformer const & ) && noexcept -> Sequence < V > &&;
+    auto zip ( Sequence < R > const &, Transformer const & ) && noexcept -> Sequence < V > && _REQUIRES_ITERABLE;
 
-    auto zipWithNext () && noexcept -> Sequence < Pair < ElementType, ElementType > > &&;
+    auto zipWithNext () && noexcept -> Sequence < Pair < ElementType, ElementType > > && _REQUIRES_ITERABLE;
 
     template < typename Transformer, typename R > 
-    auto zipWithNext (Transformer const &) && noexcept -> Sequence < R > &&; 
+    auto zipWithNext (Transformer const &) && noexcept -> Sequence < R > && _REQUIRES_ITERABLE;
 };
 
 

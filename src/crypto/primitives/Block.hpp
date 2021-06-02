@@ -17,7 +17,7 @@ namespace crypto {
 
     template < BlockSize::Value byteSize >
     class Block : public Object {
-        using byte = byte;
+//        using byte = byte;
 
     private:
         __crypto_constexpr static inline BlockSize bytes = byteSize;
