@@ -17,6 +17,8 @@ int z = 5;
 #include <Sequence.hpp>
 
 void testView () {
+    UniquePointer < List < int > > p ( new LinkedList < int > {1, 2, 3, 4} );
+    std::cout << (*p) << '\n';
 
     String s = "Ana are mere";
 
@@ -84,6 +86,14 @@ public:
 };
 
 int main () {
+    Sequence s ( DoubleLinkedList<int>{1, 2, 3, 4} );
+
+    for ( auto e : s ) {
+        std::cout << e << '\n';
+    }
+
+    return 0;
+
     OurMap < String, int > m;
     std::cout << m.getKeyHash("Ana are mere");
     OurMap < int, String > m2;

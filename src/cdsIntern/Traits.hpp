@@ -25,4 +25,24 @@ concept IsMappable = isPair<T>::value;
 #endif
 
 
+template < typename T, typename U = void >
+struct isPrintable : std::false_type {};
+
+template < typename T >
+struct isPrintable <
+        T,
+        std::enable_if_t <
+                std::is_same < decltype (std::cout << std::declval<T>()), std::ostream & >::value
+        >
+> : std::true_type { };
+
+template < typename D, typename B >
+using isDerivedFrom = std::is_base_of < B, D >;
+
+template < typename B, typename D >
+using isBaseOf = std::is_base_of < B, D >;
+
+template < typename D >
+using isObjectDerived = isDerivedFrom < D, Object >;
+
 #endif //CDS_TRAITS_HPP

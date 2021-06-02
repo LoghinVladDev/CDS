@@ -43,6 +43,7 @@ class View;
 template <class T>
 class Collection : public Object {
 public:
+    using ElementType = T;
 
 protected:
     class CollectionOutOfBounds : public std::exception {

@@ -48,6 +48,11 @@ public:
         return * pObj;
     }
 
+    inline auto valueAt () const noexcept (false) -> ValueReference {
+        if ( pObj == nullptr ) throw NullPointerException();
+        return * pObj;
+    }
+
     constexpr inline auto isNull () const noexcept -> bool { return pObj == nullptr; }
     constexpr inline auto operator -> () const noexcept (false) -> Pointer {
         if ( pObj == nullptr )
