@@ -8,19 +8,13 @@
 #include <CDS/Object>
 
 #if defined(__cpp_concepts)
-#define _REQUIRES_ITERABLE requires Iterable < ElementType > || ConstIterable < ElementType >
-#define _REQUIRES_PRINTABLE requires HasToString < ElementType >
-#define _REQUIRES_INTEGRAL_ITERABLE requires Iterable < ElementType > && Integral < ElementType >
-#define _REQUIRES_ITERABLE_DEF requires Iterable < typename Sequence < T, C > ::ElementType > || ConstIterable < typename Sequence < T, C > ::ElementType >
-#define _REQUIRES_PRINTABLE_DEF requires HasToString < typename Sequence < T, C > ::ElementType >
-#define _REQUIRES_INTEGRAL_ITERABLE_DEF requires Iterable < typename Sequence < T, C > ::ElementType > && Integral < typename Sequence < T, C > ::ElementType >
+#define _REQUIRES_ITERABLE requires Iterable < C > || ConstIterable < C >
+#define _REQUIRES_PRINTABLE requires HasToString < C >
+#define _REQUIRES_INTEGRAL_ITERABLE requires Iterable < C > && Integral < C >
 #else
 #define _REQUIRES_ITERABLE
 #define _REQUIRES_PRINTABLE
 #define _REQUIRES_INTEGRAL_ITERABLE
-#define _REQUIRES_ITERABLE_DEF
-#define _REQUIRES_PRINTABLE_DEF
-#define _REQUIRES_INTEGRAL_ITERABLE_DEF
 #endif
 
 #include <CDS/Boolean>
@@ -30,20 +24,36 @@
 #include <CDS/Array>
 #include <CDS/LinkedList>
 #include <CDS/Set>
+#include <search.h>
 
-template < typename T, typename C >
+template < typename C >
 class Sequence : public Object {
 public:
-    using ElementType = T;
+//    using ElementType = T;
     using CollectionType = C;
 
 private:
+
+    using IterableValue     = decltype ( reinterpret_cast < typename C::Iterator * > (0x10)->value() );
+    using ElementType       = typename std::remove_reference < IterableValue > :: type;
+    using StoredPredicate   = std::function < bool (IterableValue) >;
+    using StoredMapper      = std::function < std::remove_reference_t < IterableValue > (IterableValue) >;
+
     /**
      * can be:
      *      Unique < Foreign > representing lack of ownership, a view created over a structure outside its scope
      *      Unique < Unique > representing ownership, a structure created by the view to iterate upon
      */
     UniquePointer < PointerBase < C > > pCollection { nullptr };
+    uint16                              chainCount  { 0 }; // used to determine order of operations
+
+// TODO
+//    When #3 Address Move Semantics Issues in regards to Collection Move Operations - is fixed
+//    LinkedList < Pair < UniquePointer < StoredPredicate >,  Index > > storedPredicates;
+//    LinkedList < Pair < UniquePointer < StoredMapper >,     Index > > storedMappers;
+
+    LinkedList < Pair < SharedPointer < StoredPredicate >,  Index > > storedPredicates;
+    LinkedList < Pair < SharedPointer < StoredMapper >,     Index > > storedMappers;
 
 public:
     class Iterator : public Object {
@@ -186,19 +196,19 @@ public:
     auto drop (Size) && noexcept -> Sequence && _REQUIRES_ITERABLE;
 
     template < typename Predicate >
-    auto dropWhile (Predicate const &, Size = UINT64_MAX) && noexcept -> Sequence && _REQUIRES_ITERABLE;
+    auto dropWhile (Predicate const &, Size = UINT64_MAX) && noexcept -> Sequence _REQUIRES_ITERABLE;
 
     auto take (Size) && noexcept -> Sequence && _REQUIRES_ITERABLE;
 
     template < typename Predicate >
-    auto takeWhile (Predicate const &, Size = UINT64_MAX) && noexcept -> Sequence && _REQUIRES_ITERABLE;
+    auto takeWhile (Predicate const &, Size = UINT64_MAX) && noexcept -> Sequence _REQUIRES_ITERABLE;
 
 
     template < typename Predicate >
     auto filter ( Predicate const & ) && noexcept -> Sequence && _REQUIRES_ITERABLE;
 
     template < typename IndexedPredicate >
-    auto filterIndexed ( IndexedPredicate const & ) && noexcept -> Sequence && _REQUIRES_ITERABLE;
+    auto filterIndexed ( IndexedPredicate const & ) && noexcept -> Sequence _REQUIRES_ITERABLE;
 
     template < typename Predicate >
     auto filterTo ( Collection < ElementType > &, Predicate const & ) const noexcept -> Collection < ElementType > & _REQUIRES_ITERABLE;
@@ -207,7 +217,7 @@ public:
     auto filterIndexedTo ( Collection < ElementType > &, IndexedPredicate const & ) const noexcept -> Collection < ElementType > & _REQUIRES_ITERABLE;
 
     template < typename NewType >
-    auto filterIsDerivedFrom () && noexcept -> Sequence < NewType, C > _REQUIRES_ITERABLE;
+    auto filterIsDerivedFrom () && noexcept -> Sequence < C > _REQUIRES_ITERABLE;
 
     template < typename NewType >
     auto filterIsDerivedFromTo ( Collection < ElementType > & ) const noexcept -> Collection < ElementType > & _REQUIRES_ITERABLE;
@@ -250,13 +260,13 @@ public:
     auto one ( Predicate const & = [](ElementType const &) { return true; } ) const noexcept -> Boolean _REQUIRES_ITERABLE;
 
     template < typename Transformer, typename K, typename V >
-    auto associate ( Transformer const & ) && noexcept -> Sequence < Pair < K, V >, C > && _REQUIRES_ITERABLE;
+    auto associate ( Transformer const & ) && noexcept -> Sequence < LinkedList < Pair < K, V > > > _REQUIRES_ITERABLE;
 
     template < typename KeyGenerator, typename K >
-    auto associateBy ( KeyGenerator const & ) && noexcept -> Sequence < Pair < K, ElementType >, C > && _REQUIRES_ITERABLE;
+    auto associateBy ( KeyGenerator const & ) && noexcept -> Sequence < LinkedList < Pair < K, ElementType > > >  _REQUIRES_ITERABLE;
 
     template < typename KeyGenerator, typename ValueMapper, typename K, typename V >
-    auto associateBy ( KeyGenerator const &, ValueMapper const & ) && noexcept -> Sequence < Pair < K, V >, C > && _REQUIRES_ITERABLE;
+    auto associateBy ( KeyGenerator const &, ValueMapper const & ) && noexcept -> Sequence < LinkedList < Pair < K, V > > > _REQUIRES_ITERABLE;
 
     template < typename KeyGenerator, typename K >
     auto associateByTo ( Map < K, ElementType > &, KeyGenerator const & ) const noexcept -> Map < K, ElementType > & _REQUIRES_ITERABLE;
@@ -268,22 +278,22 @@ public:
     auto associateTo ( Map < K, V > &, Transformer const & ) const noexcept -> Map < K, V > & _REQUIRES_ITERABLE;
 
     template < typename ValueMapper, typename V >
-    auto associateWith ( ValueMapper const & ) && noexcept -> Sequence < Pair < ElementType, V >, C > && _REQUIRES_ITERABLE;
+    auto associateWith ( ValueMapper const & ) && noexcept -> Sequence < LinkedList < Pair < ElementType, V > > >  _REQUIRES_ITERABLE;
 
     template < typename ValueMapper, typename V >
     auto associateWithTo ( Map < ElementType, V > &, ValueMapper const & ) const noexcept -> Map < ElementType , V > & _REQUIRES_ITERABLE;
 
     template < typename Comparator > 
-    auto sort ( Comparator const & = []( ElementType const & a, ElementType const & b) noexcept -> bool { return a < b; } ) && noexcept -> Sequence < ElementType, LinkedList < ElementType > > && _REQUIRES_ITERABLE;
+    auto sort ( Comparator const & = []( ElementType const & a, ElementType const & b) noexcept -> bool { return a < b; } ) && noexcept -> Sequence < LinkedList < ElementType > >  _REQUIRES_ITERABLE;
 
     template < typename Selector > 
-    auto sortedBy ( Selector const & ) && noexcept -> Sequence < ElementType, LinkedList < ElementType > > && _REQUIRES_ITERABLE;
+    auto sortedBy ( Selector const & ) && noexcept -> Sequence < LinkedList < ElementType > > _REQUIRES_ITERABLE;
 
     template < typename Selector >
-    auto sortedByDescending ( Selector const & ) && noexcept -> Sequence < ElementType, LinkedList < ElementType > > && _REQUIRES_ITERABLE;
+    auto sortedByDescending ( Selector const & ) && noexcept -> Sequence < LinkedList < ElementType > > _REQUIRES_ITERABLE;
 
     template < typename Selector, typename Comparator, typename SelectorType >
-    auto sortedByWith ( Selector const &, Comparator const & = []( SelectorType const & a, SelectorType const & b ) noexcept -> bool { return a < b; } ) && noexcept -> Sequence < ElementType, LinkedList < ElementType > > && _REQUIRES_ITERABLE;
+    auto sortedByWith ( Selector const &, Comparator const & = []( SelectorType const & a, SelectorType const & b ) noexcept -> bool { return a < b; } ) && noexcept -> Sequence < LinkedList < ElementType > >  _REQUIRES_ITERABLE;
 
     template < typename Collection > 
     auto asCollection () const noexcept -> Collection _REQUIRES_ITERABLE;
@@ -312,10 +322,10 @@ public:
 
     
     template < typename Transformer, typename TransformedType >
-    auto flatMap ( Transformer const & ) && noexcept -> Sequence < TransformedType, C > && _REQUIRES_ITERABLE;
+    auto flatMap ( Transformer const & ) && noexcept -> Sequence < LinkedList < TransformedType > > _REQUIRES_ITERABLE;
 
     template < typename IndexedTransformer, typename TransformedType >
-    auto flatMapIndexed ( IndexedTransformer const & ) && noexcept -> Sequence < TransformedType, C > && _REQUIRES_ITERABLE;
+    auto flatMapIndexed ( IndexedTransformer const & ) && noexcept -> Sequence < LinkedList < TransformedType > > _REQUIRES_ITERABLE;
 
     template < typename Transformer, typename TransformedType >
     auto flatMapTo ( Collection < TransformedType > &, Transformer const & ) const noexcept -> Collection < TransformedType > & _REQUIRES_ITERABLE;
@@ -324,10 +334,10 @@ public:
     auto flatMapIndexedTo ( Collection < TransformedType > &, IndexedTransformer const & ) const noexcept -> Collection < TransformedType > & _REQUIRES_ITERABLE;
 
     template < typename KeySelector, typename K > 
-    auto groupBy ( KeySelector const & ) && noexcept -> Sequence < Pair < K, LinkedList < ElementType > >, C > && _REQUIRES_ITERABLE;
+    auto groupBy ( KeySelector const & ) && noexcept -> Sequence < LinkedList < Pair < K, LinkedList < ElementType > > > > _REQUIRES_ITERABLE;
 
     template < typename KeySelector, typename ValueMapper, typename K, typename V >
-    auto groupBy ( KeySelector const &, ValueMapper const & ) && noexcept -> Sequence < Pair < K, LinkedList < V > >, C > && _REQUIRES_ITERABLE;
+    auto groupBy ( KeySelector const &, ValueMapper const & ) && noexcept -> Sequence < LinkedList < Pair < K, LinkedList < V > > > > _REQUIRES_ITERABLE;
 
     template < typename KeySelector, typename K, typename G > 
     auto groupByTo ( Map < K, G > &, KeySelector const & ) const noexcept -> Map < K, G > & _REQUIRES_ITERABLE; 
@@ -335,12 +345,53 @@ public:
     template < typename KeySelector, typename ValueMapper, typename K, typename G >
     auto groupByTo ( Map < K, G > &, KeySelector const &, ValueMapper const & ) const noexcept -> Map < K, G > & _REQUIRES_ITERABLE;
 
-    
-    template < typename Mapper, typename R >
-    auto map ( Mapper const & ) && noexcept -> Sequence < R, C > && _REQUIRES_ITERABLE;
+    /**
+     * Two versions of map, one for storage of mappers when keeping same type, another for switching to another data type
+     */
+
+//    template < typename Mapper >
+//    auto map ( Mapper const & ) && noexcept -> Sequence < T, C > _REQUIRES_ITERABLE;
+
+
+//    template < typename Mapper, typename R >
+//    auto map ( Mapper const & ) && noexcept -> Sequence < R, LinkedList < R > > _REQUIRES_ITERABLE;
+
+//    template < typename Mapper >
+//    auto map ( Mapper const & m ) && noexcept -> Sequence < std::enab
+
+    template <
+            typename Mapper,
+            typename std::enable_if <
+                    ! std::is_same_v <
+                            ElementType,
+                            returnOf < Mapper >
+                    >,
+                    int
+            >::type = 0
+    >
+    auto map ( Mapper const & m ) && noexcept ->
+    Sequence < LinkedList < returnOf < Mapper > > > _REQUIRES_ITERABLE;
+
+    template <
+            typename Mapper,
+            typename std::enable_if <
+                    std::is_same <
+                            ElementType,
+                            returnOf < Mapper >
+                    >::type::value,
+                    int
+            >::type = 0
+    >
+    auto map ( Mapper const & m ) && noexcept -> Sequence < C > _REQUIRES_ITERABLE;
+//
+
+//    template < typename Mapper, std::enable_if < std::is_same < std::result_of < std::declval < Mapper > () >::
+
+//    template < typename Mapper >
+//    auto map ( Mapper const & ) && noexcept -> Sequence < typename returnOf < Mapper >::type,
 
     template < typename IndexedMapper, typename R >
-    auto mapIndexed ( IndexedMapper const & ) && noexcept -> Sequence < R, C > && _REQUIRES_ITERABLE;
+    auto mapIndexed ( IndexedMapper const & ) && noexcept -> Sequence < C > && _REQUIRES_ITERABLE;
 
     template < typename Mapper, typename R >
     auto mapTo ( Collection < R > &, Mapper const & ) const noexcept -> Collection < R > & _REQUIRES_ITERABLE; 
@@ -349,9 +400,9 @@ public:
     auto mapIndexedTo ( Collection < R > &, IndexedMapper const & ) const noexcept -> Collection < R > & _REQUIRES_ITERABLE;
 
 
-    auto indexed () && noexcept -> Sequence < Pair < Index, ElementType >, C > && _REQUIRES_ITERABLE;
+    auto indexed () && noexcept -> Sequence < LinkedList < Pair < Index, ElementType > > > _REQUIRES_ITERABLE;
 
-    auto distinct () && noexcept -> Sequence < ElementType, UnorderedSet < ElementType > > && _REQUIRES_ITERABLE;
+    auto distinct () && noexcept -> Sequence < UnorderedSet < ElementType > > _REQUIRES_ITERABLE;
 
     template < typename Folder, typename R >
     auto fold ( Folder const & ) const noexcept -> R _REQUIRES_ITERABLE;
@@ -405,10 +456,10 @@ public:
     auto reduceIndexed ( IndexedAccumulator const &, AccumulatedType const & = AccumulatedType() ) const noexcept -> AccumulatedType _REQUIRES_ITERABLE; 
 
     template < typename Accumulator, typename AccumulatedType >
-    auto runningReduce ( Accumulator const &, AccumulatedType const & = AccumulatedType() ) && noexcept -> Sequence < AccumulatedType, C > _REQUIRES_ITERABLE;
+    auto runningReduce ( Accumulator const &, AccumulatedType const & = AccumulatedType() ) && noexcept -> Sequence < LinkedList < AccumulatedType > > _REQUIRES_ITERABLE;
 
     template < typename IndexedAccumulator, typename AccumulatedType >
-    auto runningReduceIndexed ( IndexedAccumulator const &, AccumulatedType const & = AccumulatedType() ) && noexcept -> Sequence < AccumulatedType, C > _REQUIRES_ITERABLE;
+    auto runningReduceIndexed ( IndexedAccumulator const &, AccumulatedType const & = AccumulatedType() ) && noexcept -> Sequence < LinkedList < AccumulatedType > > _REQUIRES_ITERABLE;
 
     template < typename Accumulator, typename AccumulatedType >
     auto fold ( AccumulatedType const &, Accumulator const & ) const noexcept -> AccumulatedType _REQUIRES_ITERABLE;
@@ -417,125 +468,142 @@ public:
     auto foldIndexed ( AccumulatedType const &, IndexedAccumulator const &, AccumulatedType const & = AccumulatedType() ) const noexcept -> AccumulatedType _REQUIRES_ITERABLE; 
 
     template < typename Accumulator, typename AccumulatedType >
-    auto runningFold ( AccumulatedType const &, Accumulator const & ) && noexcept -> Sequence < AccumulatedType, C > _REQUIRES_ITERABLE;
+    auto runningFold ( AccumulatedType const &, Accumulator const & ) && noexcept -> Sequence < LinkedList < AccumulatedType > > _REQUIRES_ITERABLE;
 
     template < typename IndexedAccumulator, typename AccumulatedType >
-    auto runningFoldIndexed ( AccumulatedType const &, IndexedAccumulator const & ) && noexcept -> Sequence < AccumulatedType, C > _REQUIRES_ITERABLE;
+    auto runningFoldIndexed ( AccumulatedType const &, IndexedAccumulator const & ) && noexcept -> Sequence < LinkedList < AccumulatedType > > _REQUIRES_ITERABLE;
 
     template < typename Accumulator, typename AccumulatedType >
-    auto scan ( AccumulatedType const &, Accumulator const & ) && noexcept -> Sequence < AccumulatedType, C > _REQUIRES_ITERABLE;
+    auto scan ( AccumulatedType const &, Accumulator const & ) && noexcept -> Sequence < LinkedList < AccumulatedType > > _REQUIRES_ITERABLE;
 
     template < typename IndexedAccumulator, typename AccumulatedType >
-    auto scanIndexed ( AccumulatedType const &, IndexedAccumulator const & ) && noexcept -> Sequence < AccumulatedType, C > _REQUIRES_ITERABLE;
+    auto scanIndexed ( AccumulatedType const &, IndexedAccumulator const & ) && noexcept -> Sequence < LinkedList < AccumulatedType > > _REQUIRES_ITERABLE;
 
     
     template < typename Selector, typename R >
     auto sumBy ( Selector const & ) const noexcept -> R _REQUIRES_ITERABLE;
 
     
-    auto chunked (Size) && noexcept -> Sequence < LinkedList < ElementType >, C > && _REQUIRES_ITERABLE;
+    auto chunked (Size) && noexcept -> Sequence < LinkedList < LinkedList < ElementType > > > _REQUIRES_ITERABLE;
 
     template < typename ListTransformer, typename R > 
-    auto chunked (Size, ListTransformer const &) && noexcept -> Sequence < R, C > && _REQUIRES_ITERABLE;
+    auto chunked (Size, ListTransformer const &) && noexcept -> Sequence < LinkedList < R > > _REQUIRES_ITERABLE;
 
 
-    auto minus ( ElementType const & ) && noexcept -> Sequence && _REQUIRES_ITERABLE;
-    auto minus ( Collection < T > const & ) && noexcept -> Sequence && _REQUIRES_ITERABLE;
-    auto minus ( Sequence const & ) && noexcept -> Sequence && _REQUIRES_ITERABLE;
+    auto minus ( ElementType const & ) && noexcept -> Sequence _REQUIRES_ITERABLE;
+    auto minus ( Collection < ElementType > const & ) && noexcept -> Sequence _REQUIRES_ITERABLE;
+    auto minus ( Sequence const & ) && noexcept -> Sequence _REQUIRES_ITERABLE;
 
-    auto plus ( ElementType const & ) && noexcept -> Sequence && _REQUIRES_ITERABLE;
-    auto plus ( Collection < T > const & ) && noexcept -> Sequence && _REQUIRES_ITERABLE;
-    auto plus ( Sequence const & ) && noexcept -> Sequence && _REQUIRES_ITERABLE;
+    auto plus ( ElementType const & ) && noexcept -> Sequence _REQUIRES_ITERABLE;
+    auto plus ( Collection < ElementType > const & ) && noexcept -> Sequence _REQUIRES_ITERABLE;
+    auto plus ( Sequence const & ) && noexcept -> Sequence _REQUIRES_ITERABLE;
 
 
     template < typename Predicate >
     auto partition ( Predicate const & ) const noexcept -> Pair < LinkedList < ElementType >, LinkedList < ElementType > > _REQUIRES_ITERABLE;
 
-    auto windowed ( Size, Size = 1, Boolean = false ) && noexcept -> Sequence < LinkedList < ElementType >, C > && _REQUIRES_ITERABLE;
+    auto windowed ( Size, Size = 1, Boolean = false ) && noexcept -> Sequence < LinkedList < LinkedList < ElementType > > >  _REQUIRES_ITERABLE;
 
     template < typename ListTransformer, typename R >
-    auto windowed ( ListTransformer const &, Size, Size = 1, Boolean = false ) && noexcept -> Sequence < R, C > && _REQUIRES_ITERABLE;
+    auto windowed ( ListTransformer const &, Size, Size = 1, Boolean = false ) && noexcept -> Sequence < LinkedList < R > >  _REQUIRES_ITERABLE;
 
-    template < typename R >
-    auto zip ( Sequence < R, C > const & ) && noexcept -> Sequence < Pair < ElementType, R >, C > && _REQUIRES_ITERABLE;
+    template < typename S >
+    auto zip ( Sequence < S > const & ) && noexcept -> Sequence < LinkedList < Pair < ElementType, typename S::ElementType > > >  _REQUIRES_ITERABLE;
 
-    template < typename R, typename Transformer, typename V >
-    auto zip ( Sequence < R, C > const &, Transformer const & ) && noexcept -> Sequence < V, C > && _REQUIRES_ITERABLE;
+    template < typename S, typename Transformer, typename V >
+    auto zip ( Sequence < S > const &, Transformer const & ) && noexcept -> Sequence < LinkedList < V > >  _REQUIRES_ITERABLE;
 
-    auto zipWithNext () && noexcept -> Sequence < Pair < ElementType, ElementType >, C > && _REQUIRES_ITERABLE;
+    auto zipWithNext () && noexcept -> Sequence < LinkedList < Pair < ElementType, ElementType > > > _REQUIRES_ITERABLE;
 
     template < typename Transformer, typename R > 
-    auto zipWithNext (Transformer const &) && noexcept -> Sequence < R, C > && _REQUIRES_ITERABLE;
+    auto zipWithNext (Transformer const &) && noexcept -> Sequence < LinkedList < R > > _REQUIRES_ITERABLE;
 };
 
 /// region Ctors Dtors Copy Move Clear
-template < typename T, typename C >
-inline Sequence < T, C > ::Sequence ( Sequence const & s ) noexcept :
-        pCollection ( new ForeignPointer ( s.pCollection.valueAt().get() ) ) {
+template < typename C >
+inline Sequence < C > ::Sequence ( Sequence const & s ) noexcept :
+        pCollection ( new ForeignPointer ( s.pCollection.valueAt().get() ) ),
+        chainCount ( s.chainCount ),
+        storedMappers ( storedMappers ),
+        storedPredicates ( storedPredicates ){
 
 }
 
-template < typename T, typename C >
-inline Sequence < T, C > ::Sequence ( Sequence && s ) noexcept :
-        pCollection ( s.pCollection.valueAt().release() ) {
+template < typename C >
+inline Sequence < C > ::Sequence ( Sequence && s ) noexcept :
+        pCollection ( new UniquePointer ( s.pCollection.valueAt().release() ) ),
+        chainCount ( std::exchange ( s.chainCount, 0 ) + 1 ),
+        storedMappers ( std::move(storedMappers) ),
+        storedPredicates ( std::move(storedPredicates) ){
 
 }
 
-template < typename T, typename C >
-inline Sequence < T, C > ::Sequence ( C const & c ) noexcept :
-        pCollection ( new ForeignPointer ( & c ) ) {
+template < typename C >
+inline Sequence < C > ::Sequence ( C const & c ) noexcept :
+        pCollection ( new ForeignPointer ( & c ) ),
+        chainCount ( 0u ) {
 
 }
 
-template < typename T, typename C >
-inline Sequence < T, C > ::Sequence ( C && c ) noexcept :
-        pCollection ( new UniquePointer ( new C (std::move(c)) ) ) {
+template < typename C >
+inline Sequence < C > ::Sequence ( C && c ) noexcept :
+        pCollection ( new UniquePointer ( new C (std::move(c)) ) ),
+        chainCount ( 0u ) {
 
 }
 
-template < typename T, typename C >
-inline auto Sequence < T, C > ::operator = ( Sequence const & s ) noexcept -> Sequence & {
+template < typename C >
+inline auto Sequence < C > ::operator = ( Sequence const & s ) noexcept -> Sequence & {
     if ( this == & s ) return * this;
 
     this->clear();
 
     this->pCollection.reset( new ForeignPointer ( s.pCollection.valueAt().valueAt() ) );
+    this->chainCount = s.chainCount;
+    this->storedMappers = s.storedMappers;
+    this->storedPredicates = s.storedPredicates;
 
     return * this;
 }
 
-template < typename T, typename C >
-inline auto Sequence < T, C > ::operator = ( Sequence && s ) noexcept -> Sequence & {
+template < typename C >
+inline auto Sequence < C > ::operator = ( Sequence && s ) noexcept -> Sequence & {
     if ( this == & s ) return * this;
 
     this->clear();
 
     this->pCollection.reset( new UniquePointer ( s.pCollection.valueAt().release() ) );
+    this->chainCount = std::exchange ( s.chainCount, 0 ) + 1;
+    this->storedMappers = std::move (s.storedMappers);
+    this->storedPredicates = std::move (s.storedPredicates);
 
     return * this;
 }
 
-template < typename T, typename C >
-inline auto Sequence < T, C > ::clear() noexcept -> void {
+template < typename C >
+inline auto Sequence < C > ::clear() noexcept -> void {
     this->pCollection.reset();
+    this->chainCount = 0;
+    this->storedMappers.clear();
+    this->storedPredicates.clear();
 }
 
 /// endregion
 
 /// region Iterator Support
 
-template < typename T, typename C >
-inline auto Sequence < T, C > ::begin() noexcept -> Iterator {
+template < typename C >
+inline auto Sequence < C > ::begin() noexcept -> Iterator {
     return Sequence::Iterator ( this, this->pCollection.valueAt().valueAt().begin() );
 }
 
-template < typename T, typename C >
-inline auto Sequence < T, C > ::end() noexcept -> Iterator {
+template < typename C >
+inline auto Sequence < C > ::end() noexcept -> Iterator {
     return Sequence::Iterator ( this, this->pCollection.valueAt().valueAt().end() );
 }
 
-template < typename T, typename C >
-inline Sequence < T, C >::Iterator::Iterator(Sequence < T, C > * pSequence, CollectionIterator const & it) noexcept :
+template < typename C >
+inline Sequence < C >::Iterator::Iterator(Sequence < C > * pSequence, CollectionIterator const & it) noexcept :
         pSeq ( pSequence ),
         it (it) {
 
@@ -543,8 +611,8 @@ inline Sequence < T, C >::Iterator::Iterator(Sequence < T, C > * pSequence, Coll
 
 #include <sstream>
 
-template < typename T, typename C >
-auto Sequence < T, C > ::Iterator::toString() const noexcept -> String {
+template < typename C >
+auto Sequence < C > ::Iterator::toString() const noexcept -> String {
     std::stringstream oss;
     oss << "Sequence::Iterator { pSequence = " << this->pSeq.toString();
 
@@ -558,8 +626,8 @@ auto Sequence < T, C > ::Iterator::toString() const noexcept -> String {
     return oss.str();
 }
 
-template < typename T, typename C >
-inline auto Sequence < T, C > ::Iterator::hash() const noexcept -> Index {
+template < typename C >
+inline auto Sequence < C > ::Iterator::hash() const noexcept -> Index {
     if constexpr( isObjectDerived < decltype ( this->it ) > ::value )
         return this->it.hash ();
     else if constexpr ( isObjectDerived < decltype ( * this->it ) > ::value )
@@ -569,13 +637,13 @@ inline auto Sequence < T, C > ::Iterator::hash() const noexcept -> Index {
 
 }
 
-template < typename T, typename C >
-inline auto Sequence < T, C > ::Iterator::copy() const noexcept -> Iterator * {
+template < typename C >
+inline auto Sequence < C > ::Iterator::copy() const noexcept -> Iterator * {
     return new Iterator (* this);
 }
 
-template < typename T, typename C >
-inline auto Sequence < T, C > ::Iterator::operator==(Object const & o) const noexcept -> bool {
+template < typename C >
+inline auto Sequence < C > ::Iterator::operator==(Object const & o) const noexcept -> bool {
     if ( this == & o ) return true;
     auto p = dynamic_cast < decltype ( this ) > ( & o );
     if ( p == nullptr ) return false;
@@ -583,69 +651,69 @@ inline auto Sequence < T, C > ::Iterator::operator==(Object const & o) const noe
     return this->equals( * p );
 }
 
-template < typename T, typename C >
-inline auto Sequence < T, C > ::Iterator::value() const noexcept -> CollectionElementType {
+template < typename C >
+inline auto Sequence < C > ::Iterator::value() const noexcept -> CollectionElementType {
     return this->it.value();
 }
 
-template < typename T, typename C >
-inline auto Sequence < T, C > ::Iterator::next() noexcept -> Iterator & {
+template < typename C >
+inline auto Sequence < C > ::Iterator::next() noexcept -> Iterator & {
     this->it.next();
     return * this;
 }
 
-template < typename T, typename C >
-inline auto Sequence < T, C > ::Iterator::equals(Iterator const & otherIt) const noexcept -> Boolean {
+template < typename C >
+inline auto Sequence < C > ::Iterator::equals(Iterator const & otherIt) const noexcept -> Boolean {
     return this->it == otherIt.it;
 }
 
-template < typename T, typename C >
-inline auto Sequence < T, C > ::Iterator::operator==(Iterator const & otherIt) const noexcept -> bool {
+template < typename C >
+inline auto Sequence < C > ::Iterator::operator==(Iterator const & otherIt) const noexcept -> bool {
     return this->equals (otherIt);
 }
 
-template < typename T, typename C >
-inline auto Sequence < T, C > ::Iterator::operator!=(Iterator const & otherIt) const noexcept -> bool {
+template < typename C >
+inline auto Sequence < C > ::Iterator::operator!=(Iterator const & otherIt) const noexcept -> bool {
     return ! this->equals (otherIt);
 }
 
-template < typename T, typename C >
-inline auto Sequence < T, C > ::Iterator::operator++() noexcept -> Iterator & {
+template < typename C >
+inline auto Sequence < C > ::Iterator::operator++() noexcept -> Iterator & {
     return this->next();
 }
 
-template < typename T, typename C >
-inline auto Sequence < T, C > ::Iterator::operator++(int) noexcept -> Iterator {
+template < typename C >
+inline auto Sequence < C > ::Iterator::operator++(int) noexcept -> Iterator {
     auto c = * this; this->next(); return c;
 }
 
-template < typename T, typename C >
-inline auto Sequence < T, C > ::Iterator::operator*() const noexcept -> CollectionElementType {
+template < typename C >
+inline auto Sequence < C > ::Iterator::operator*() const noexcept -> CollectionElementType {
     return this->value();
 }
 
-template < typename T, typename C >
-inline auto Sequence < T, C > ::begin() const noexcept -> ConstIterator {
+template < typename C >
+inline auto Sequence < C > ::begin() const noexcept -> ConstIterator {
     return Sequence::ConstIterator ( this, this->pCollection.valueAt().valueAt().cbegin() );
 }
 
-template < typename T, typename C >
-inline auto Sequence < T, C > ::end() const noexcept -> ConstIterator {
+template < typename C >
+inline auto Sequence < C > ::end() const noexcept -> ConstIterator {
     return Sequence::ConstIterator ( this, this->pCollection.valueAt().valueAt().cend() );
 }
 
-template < typename T, typename C >
-inline auto Sequence < T, C > ::cbegin() const noexcept -> ConstIterator {
+template < typename C >
+inline auto Sequence < C > ::cbegin() const noexcept -> ConstIterator {
     return Sequence::ConstIterator ( this, this->pCollection.valueAt().valueAt().cbegin() );
 }
 
-template < typename T, typename C >
-inline auto Sequence < T, C > ::cend() const noexcept -> ConstIterator {
+template < typename C >
+inline auto Sequence < C > ::cend() const noexcept -> ConstIterator {
     return Sequence::ConstIterator ( this, this->pCollection.valueAt().valueAt().cend() );
 }
 
-template < typename T, typename C >
-inline Sequence < T, C >::ConstIterator::ConstIterator(Sequence < T, C > const * pSequence, CollectionIterator const & it) noexcept :
+template < typename C >
+inline Sequence < C >::ConstIterator::ConstIterator(Sequence < C > const * pSequence, CollectionIterator const & it) noexcept :
         pSeq ( pSequence ),
         it (it) {
 
@@ -653,8 +721,8 @@ inline Sequence < T, C >::ConstIterator::ConstIterator(Sequence < T, C > const *
 
 #include <sstream>
 
-template < typename T, typename C >
-auto Sequence < T, C > ::ConstIterator::toString() const noexcept -> String {
+template < typename C >
+auto Sequence < C > ::ConstIterator::toString() const noexcept -> String {
     std::stringstream oss;
     oss << "Sequence::Iterator { pSequence = " << this->pSeq.toString();
 
@@ -668,8 +736,8 @@ auto Sequence < T, C > ::ConstIterator::toString() const noexcept -> String {
     return oss.str();
 }
 
-template < typename T, typename C >
-inline auto Sequence < T, C > ::ConstIterator::hash() const noexcept -> Index {
+template < typename C >
+inline auto Sequence < C > ::ConstIterator::hash() const noexcept -> Index {
     if constexpr( isObjectDerived < decltype ( this->it ) > ::value )
         return this->it.hash ();
     else if constexpr ( isObjectDerived < decltype ( * this->it ) > ::value )
@@ -679,13 +747,13 @@ inline auto Sequence < T, C > ::ConstIterator::hash() const noexcept -> Index {
 
 }
 
-template < typename T, typename C >
-inline auto Sequence < T, C > ::ConstIterator::copy() const noexcept -> ConstIterator * {
+template < typename C >
+inline auto Sequence < C > ::ConstIterator::copy() const noexcept -> ConstIterator * {
     return new ConstIterator (* this);
 }
 
-template < typename T, typename C >
-inline auto Sequence < T, C > ::ConstIterator::operator==(Object const & o) const noexcept -> bool {
+template < typename C >
+inline auto Sequence < C > ::ConstIterator::operator==(Object const & o) const noexcept -> bool {
     if ( this == & o ) return true;
     auto p = dynamic_cast < decltype ( this ) > ( & o );
     if ( p == nullptr ) return false;
@@ -693,44 +761,44 @@ inline auto Sequence < T, C > ::ConstIterator::operator==(Object const & o) cons
     return this->equals( * p );
 }
 
-template < typename T, typename C >
-inline auto Sequence < T, C > ::ConstIterator::value() const noexcept -> CollectionElementType {
+template < typename C >
+inline auto Sequence < C > ::ConstIterator::value() const noexcept -> CollectionElementType {
     return this->it.value();
 }
 
-template < typename T, typename C >
-inline auto Sequence < T, C > ::ConstIterator::next() noexcept -> ConstIterator & {
+template < typename C >
+inline auto Sequence < C > ::ConstIterator::next() noexcept -> ConstIterator & {
     this->it.next();
     return * this;
 }
 
-template < typename T, typename C >
-inline auto Sequence < T, C > ::ConstIterator::equals(ConstIterator const & otherIt) const noexcept -> Boolean {
+template < typename C >
+inline auto Sequence < C > ::ConstIterator::equals(ConstIterator const & otherIt) const noexcept -> Boolean {
     return this->it == otherIt.it;
 }
 
-template < typename T, typename C >
-inline auto Sequence < T, C > ::ConstIterator::operator==(ConstIterator const & otherIt) const noexcept -> bool {
+template < typename C >
+inline auto Sequence < C > ::ConstIterator::operator==(ConstIterator const & otherIt) const noexcept -> bool {
     return this->equals (otherIt);
 }
 
-template < typename T, typename C >
-inline auto Sequence < T, C > ::ConstIterator::operator!=(ConstIterator const & otherIt) const noexcept -> bool {
+template < typename C >
+inline auto Sequence < C > ::ConstIterator::operator!=(ConstIterator const & otherIt) const noexcept -> bool {
     return ! this->equals (otherIt);
 }
 
-template < typename T, typename C >
-inline auto Sequence < T, C > ::ConstIterator::operator++() noexcept -> ConstIterator & {
+template < typename C >
+inline auto Sequence < C > ::ConstIterator::operator++() noexcept -> ConstIterator & {
     return this->next();
 }
 
-template < typename T, typename C >
-inline auto Sequence < T, C > ::ConstIterator::operator++(int) noexcept -> ConstIterator {
+template < typename C >
+inline auto Sequence < C > ::ConstIterator::operator++(int) noexcept -> ConstIterator {
     auto c = * this; this->next(); return c;
 }
 
-template < typename T, typename C >
-inline auto Sequence < T, C > ::ConstIterator::operator*() const noexcept -> CollectionElementType {
+template < typename C >
+inline auto Sequence < C > ::ConstIterator::operator*() const noexcept -> CollectionElementType {
     return this->value();
 }
 
@@ -738,11 +806,13 @@ inline auto Sequence < T, C > ::ConstIterator::operator*() const noexcept -> Col
 
 /// region Object Derived Functions
 
-template < typename T, typename C >
-auto Sequence < T, C > ::toString() const noexcept -> String {
+template < typename C >
+auto Sequence < C > ::toString() const noexcept -> String {
     std::stringstream oss;
 
-    oss << "Sequence { elements = [ ";
+    oss << "Sequence { chainCount = "
+        << this->chainCount
+        << ", elements = [ ";
 
     for ( auto e : * this )
         if constexpr ( isPrintable < ElementType >::value )
@@ -754,18 +824,18 @@ auto Sequence < T, C > ::toString() const noexcept -> String {
     return s.substr(s.size() - 2).append(" ]}");
 }
 
-template < typename T, typename C >
-inline auto Sequence < T, C > ::hash() const noexcept -> Index {
+template < typename C >
+inline auto Sequence < C > ::hash() const noexcept -> Index {
     return this->pCollection.valueAt().hash();
 }
 
-template < typename T, typename C >
-inline auto Sequence < T, C > ::copy() const noexcept -> Sequence<T, C> * {
+template < typename C >
+inline auto Sequence < C > ::copy() const noexcept -> Sequence<C> * {
     return new Sequence ( * this );
 }
 
-template < typename T, typename C >
-inline auto Sequence < T, C > ::operator==(Object const & o) const noexcept -> bool {
+template < typename C >
+inline auto Sequence < C > ::operator==(Object const & o) const noexcept -> bool {
     if ( this == & o ) return true;
     auto p = dynamic_cast < decltype ( this ) > (& o);
     if ( p == nullptr ) return false;
@@ -778,36 +848,83 @@ inline auto Sequence < T, C > ::operator==(Object const & o) const noexcept -> b
 
 /// region template deduction
 
-Sequence ( String ) -> Sequence < char, String >;
+Sequence ( String ) -> Sequence < String >;
 
 template < typename T >
-Sequence ( Array < T > ) -> Sequence < T, Array < T > >;
-
-//template < typename T >
-//Sequence ( DoubleLinkedList < T > ) -> Sequence < T, DoubleLinkedList < T > >;
+Sequence ( Array < T > ) -> Sequence < Array < T > >;
 
 template < typename T >
-Sequence ( DoubleLinkedList < T > ) -> Sequence < decltype ( reinterpret_cast < typename DoubleLinkedList <T> ::Iterator * > (0x10)->value() ), DoubleLinkedList < T > >;
+Sequence ( DoubleLinkedList < T > ) -> Sequence < DoubleLinkedList < T > >;
 
 template < typename T >
-Sequence ( OrderedSet < T > ) -> Sequence < T, OrderedSet < T > >;
+Sequence ( OrderedSet < T > ) -> Sequence < OrderedSet < T > >;
 
 template < typename T >
-Sequence ( UnorderedSet < T > ) -> Sequence < T, UnorderedSet < T > >;
+Sequence ( UnorderedSet < T > ) -> Sequence < UnorderedSet < T > >;
 
 template < typename K, typename V >
-Sequence ( HashMap < K, V > ) -> Sequence < Pair < K, V >, HashMap < K, V > >;
+Sequence ( HashMap < K, V > ) -> Sequence < HashMap < K, V > >;
 
 #include <CDS/JSON>
-Sequence ( JSON ) -> Sequence < std::remove_reference < decltype ( reinterpret_cast < JSON * > ( 0x10 )->begin().value() ) > ::type , JSON >;
+Sequence ( JSON ) -> Sequence < JSON >;
 
 #include <CDS/Generator>
 template < typename T, typename ... Args >
-Sequence ( Generator < T, Args ... > ) -> Sequence < decltype ( reinterpret_cast < typename Generator < T, Args ... > ::IterableObject * > ( 0x00 )->begin().operator*() ), Generator < T, Args ... > >;
+Sequence ( Generator < T, Args ... > ) -> Sequence < Generator < T, Args ... > >;
 
 #include <CDS/Range>
-Sequence ( Range ) -> Sequence < decltype ( reinterpret_cast < Range::Iterator * > (0x10)->value() ), Range >;
+Sequence ( Range ) -> Sequence < Range >;
 
 /// endregion
+
+// region basic ownership pass functions
+
+template < typename C >
+template <
+        typename Mapper,
+        typename std::enable_if <
+                ! std::is_same_v <
+                        typename std::remove_reference < decltype ( reinterpret_cast < typename C::Iterator * > (0x10)->value() ) > :: type,
+                        returnOf < Mapper >
+                >,
+                int
+        >::type
+>
+auto Sequence < C > :: map ( Mapper const & mapper ) && noexcept ->
+Sequence < LinkedList < returnOf < Mapper > > > _REQUIRES_ITERABLE {
+    LinkedList < returnOf < Mapper > > container;
+    for ( auto e : * this )
+        container.append(mapper(e));
+
+    return std::move(Sequence < LinkedList < returnOf < Mapper > > > (std::move(container)));
+}
+
+template < typename C >
+template < typename Mapper, typename std::enable_if <
+        std::is_same <
+                typename std::remove_reference < decltype ( reinterpret_cast < typename C::Iterator * > (0x10)->value() ) > :: type,
+                returnOf < Mapper >
+        >::type::value,
+        int
+    >::type
+>
+auto Sequence < C > ::map(Mapper const & mapper) && noexcept -> Sequence < C >  _REQUIRES_ITERABLE {
+    this->storedMappers.append({ { new StoredMapper(mapper) }, this->chainCount });
+    return std::move ( * this );
+}
+
+
+//
+//template < typename T, typename C >
+//template < typename Mapper, typename R >
+//auto Sequence < T, C > ::map(Mapper const & mapper) && noexcept -> Sequence < R, LinkedList < R > > _REQUIRES_ITERABLE {
+//    LinkedList < R > container;
+//    for ( auto e : * this )
+//        container.append(mapper(e));
+//
+//    return std::move(Sequence(std::move(container)));
+//}
+
+// endregion
 
 #endif //CDS_SEQUENCE_HPP

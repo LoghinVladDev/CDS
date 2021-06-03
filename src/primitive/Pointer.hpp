@@ -8,6 +8,8 @@
 #include <CDS/Object>
 #include <sstream>
 
+#include <CDS/Traits>
+
 template <class T>
 class PointerBase : public Object {
 public:
@@ -40,7 +42,10 @@ public:
         if ( p == nullptr ) return false;
         if ( this->pObj == p->pObj ) return true;
         if ( this->pObj == nullptr || p->pObj == nullptr ) return false;
-        return (* p->pObj) == (* this->pObj);
+        if constexpr ( isComparableEquals < decltype ( * p->pObj ), decltype ( * this->pObj ) >::value )
+            return (* p->pObj) == (* this->pObj);
+        else
+            return false;
     }
 
     inline auto operator * () const noexcept (false) -> ValueReference {
@@ -88,10 +93,18 @@ public:
                 oss << String(*pObj);
             }
             else {
-                oss << (*pObj);
+                if constexpr ( isPrintable < decltype ( * pObj ) >::value ) {
+                    oss << (*pObj);
+                } else {
+                    oss << "unknown";
+                }
             }
 #else
-            oss << (* pObj);
+        if constexpr ( isPrintable < decltype ( * pObj ) >::value ) {
+            oss << (*pObj);
+        } else {
+            oss << "unknown";
+        }
 #endif
         oss << " >";
 

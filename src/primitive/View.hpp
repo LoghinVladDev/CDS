@@ -374,7 +374,7 @@ public:
 
     explicit View ( Type const & obj ) noexcept _REQUIRES_ITERABLE : _pObject(& obj ), _instanceHolderIndex(0) {}
     explicit View ( Type const * obj ) noexcept _REQUIRES_ITERABLE : _pObject(obj ), _instanceHolderIndex(0) {}
-    explicit View ( Type && obj ) noexcept _REQUIRES_ITERABLE : _pObject(new Type(obj) ), _instanceHolderIndex(0) {}
+    explicit View ( Type && obj ) noexcept _REQUIRES_ITERABLE : _pObject(new Type(obj) ), _instanceHolderIndex(0), _owner(true) {}
 
     ~View() noexcept override {
         for ( auto pPair : this->_predicates )

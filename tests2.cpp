@@ -85,10 +85,30 @@ public:
     }
 };
 
-int main () {
-    Sequence s ( DoubleLinkedList<int>{1, 2, 3, 4} );
+template < typename F >
+void test (F const & f) {
+    std::cout << std::is_same <
+            int,
+            typename functionTraits < F >::returnType
+    >::type::value;
+}
 
-    for ( auto e : s ) {
+int main () {
+//    Sequence s ( DoubleLinkedList<int>{1, 2, 3, 4} );
+
+
+//    for ( auto e : View (LinkedList<int>{1, 2, 3, 4}).map([](int e){return e * 2;}) ) {
+//        std::cout << e << '\n';
+//    }
+
+//    int x = 42;
+//    test ([& x](){return (float)x;});
+
+    for ( auto e : Sequence(DoubleLinkedList{1, 2, 3, 4}).map([](int e){return e * 2;}) ) {
+        std::cout << e << '\n';
+    }
+
+    for ( auto e : Sequence(DoubleLinkedList{1, 2, 3, 4}).map([](bool e){return bool(e * 2);}) ) {
         std::cout << e << '\n';
     }
 
