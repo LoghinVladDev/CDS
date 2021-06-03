@@ -81,8 +81,32 @@ struct functionTraits < T, std::void_t < decltype ( & T :: operator () ) > > :
 
 };
 
+template < typename T, typename = void >
+struct returnTrait;
+
+template < typename R, typename ... A >
+struct returnTrait < R (*) (A ...) > {
+    using returnType = R;
+};
+
+template < typename R, typename C, typename ... A >
+struct returnTrait < R (C::*) (A ...) > {
+    using returnType = R;
+};
+
+template < typename R, typename C, typename ... A >
+struct returnTrait < R (C::*) (A ...) const > {
+    using returnType = R;
+};
+
 template < typename T >
-using returnOf = typename functionTraits < T > :: returnType;
+struct returnTrait < T, std::void_t < decltype ( & T :: operator () ) > > :
+    public returnTrait < decltype ( & T :: operator () ) > {
+
+};
+
+template < typename T >
+using returnOf = typename returnTrait < T > :: returnType;
 
 template < typename T >
 using argumentsOf = typename functionTraits < T > :: argsType;

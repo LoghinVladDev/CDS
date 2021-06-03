@@ -88,4 +88,12 @@ namespace dataTypes {
 #endif
 }
 
+namespace dataTypes {
+    template < typename T >
+    constexpr auto unsafeAddress () noexcept -> T * { return reinterpret_cast < T * > (0x10); }
+
+    template < typename T >
+    constexpr auto unsafeConstAddress () noexcept -> T * { return reinterpret_cast < T const * > (0x10); }
+}
+
 #endif //CDS_TYPES_HPP

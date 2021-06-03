@@ -24,20 +24,22 @@
 #include <CDS/Array>
 #include <CDS/LinkedList>
 #include <CDS/Set>
-#include <search.h>
+#include <CDS/Types>
 
 template < typename C >
 class Sequence : public Object {
 public:
-//    using ElementType = T;
     using CollectionType = C;
 
 private:
 
-    using IterableValue     = decltype ( reinterpret_cast < typename C::Iterator * > (0x10)->value() );
+    using IterableValue     = decltype ( dataTypes::unsafeAddress < typename C::Iterator > ()->value() );
     using ElementType       = typename std::remove_reference < IterableValue > :: type;
     using StoredPredicate   = std::function < bool (IterableValue) >;
     using StoredMapper      = std::function < std::remove_reference_t < IterableValue > (IterableValue) >;
+
+    friend class Iterator;
+    friend class ConstIterator;
 
     /**
      * can be:
@@ -59,11 +61,14 @@ public:
     class Iterator : public Object {
     public:
         using CollectionIterator = typename CollectionType::Iterator;
-        using CollectionElementType = decltype ( reinterpret_cast < CollectionIterator * >(0x10)->value() );
+        using CollectionElementType = typename Sequence::ElementType;
 
     private:
         ForeignPointer < Sequence > pSeq;
         CollectionIterator it;
+
+        CollectionElementType precomputed;
+        auto skipFiltered () noexcept -> void;
 
     public:
         [[nodiscard]] auto toString () const noexcept -> String override;
@@ -91,7 +96,7 @@ public:
     class ConstIterator : public Object {
     public:
         using CollectionIterator = typename CollectionType::ConstIterator;
-        using CollectionElementType = decltype ( reinterpret_cast < CollectionIterator * >(0x10)->value() );
+        using CollectionElementType = typename Sequence::ElementType;
 
     private:
         ForeignPointer < const Sequence > pSeq;
@@ -205,7 +210,7 @@ public:
 
 
     template < typename Predicate >
-    auto filter ( Predicate const & ) && noexcept -> Sequence && _REQUIRES_ITERABLE;
+    auto filter ( Predicate const & ) && noexcept -> Sequence _REQUIRES_ITERABLE;
 
     template < typename IndexedPredicate >
     auto filterIndexed ( IndexedPredicate const & ) && noexcept -> Sequence _REQUIRES_ITERABLE;
@@ -349,19 +354,7 @@ public:
      * Two versions of map, one for storage of mappers when keeping same type, another for switching to another data type
      */
 
-//    template < typename Mapper >
-//    auto map ( Mapper const & ) && noexcept -> Sequence < T, C > _REQUIRES_ITERABLE;
-
-
-//    template < typename Mapper, typename R >
-//    auto map ( Mapper const & ) && noexcept -> Sequence < R, LinkedList < R > > _REQUIRES_ITERABLE;
-
-//    template < typename Mapper >
-//    auto map ( Mapper const & m ) && noexcept -> Sequence < std::enab
-
-    template <
-            typename Mapper,
-            typename std::enable_if <
+    template < typename Mapper, typename std::enable_if <
                     ! std::is_same_v <
                             ElementType,
                             returnOf < Mapper >
@@ -383,12 +376,6 @@ public:
             >::type = 0
     >
     auto map ( Mapper const & m ) && noexcept -> Sequence < C > _REQUIRES_ITERABLE;
-//
-
-//    template < typename Mapper, std::enable_if < std::is_same < std::result_of < std::declval < Mapper > () >::
-
-//    template < typename Mapper >
-//    auto map ( Mapper const & ) && noexcept -> Sequence < typename returnOf < Mapper >::type,
 
     template < typename IndexedMapper, typename R >
     auto mapIndexed ( IndexedMapper const & ) && noexcept -> Sequence < C > && _REQUIRES_ITERABLE;
@@ -524,8 +511,8 @@ template < typename C >
 inline Sequence < C > ::Sequence ( Sequence const & s ) noexcept :
         pCollection ( new ForeignPointer ( s.pCollection.valueAt().get() ) ),
         chainCount ( s.chainCount ),
-        storedMappers ( storedMappers ),
-        storedPredicates ( storedPredicates ){
+        storedMappers ( s.storedMappers ),
+        storedPredicates ( s.storedPredicates ){
 
 }
 
@@ -533,8 +520,8 @@ template < typename C >
 inline Sequence < C > ::Sequence ( Sequence && s ) noexcept :
         pCollection ( new UniquePointer ( s.pCollection.valueAt().release() ) ),
         chainCount ( std::exchange ( s.chainCount, 0 ) + 1 ),
-        storedMappers ( std::move(storedMappers) ),
-        storedPredicates ( std::move(storedPredicates) ){
+        storedMappers ( std::move ( s.storedMappers ) ),
+        storedPredicates ( std::move ( s.storedPredicates ) ){
 
 }
 
@@ -606,7 +593,43 @@ template < typename C >
 inline Sequence < C >::Iterator::Iterator(Sequence < C > * pSequence, CollectionIterator const & it) noexcept :
         pSeq ( pSequence ),
         it (it) {
+    this->skipFiltered();
+}
 
+template < typename C >
+auto Sequence < C >::Iterator::skipFiltered() noexcept -> void {
+    Boolean skip = true;
+
+    while ( skip && this->it != this->pSeq->pCollection->valueAt().end() ) {
+        this->precomputed = this->it.value();
+        skip = false;
+
+        auto currentMapperIterator = this->pSeq.valueAt().storedMappers.begin();
+        auto currentFilterIterator = this->pSeq.valueAt().storedPredicates.begin();
+
+        for ( uint32 i = 0; i < this->pSeq.valueAt().chainCount; i ++ ) {
+            if ( currentMapperIterator != this->pSeq.valueAt().storedMappers.end() && currentMapperIterator.value().getSecond() == i ) {
+                this->precomputed = ( * currentMapperIterator.value().getFirst() ) ( this->precomputed );
+                currentMapperIterator.next();
+            } else if ( currentFilterIterator != this->pSeq.valueAt().storedPredicates.end() && currentFilterIterator.value().getSecond() == i ) {
+                if ( ! (* currentFilterIterator.value().getFirst())( this->precomputed ) ) {
+                    skip = true;
+                    break;
+                }
+                currentFilterIterator.next();
+            } else if ( currentFilterIterator == this->pSeq.valueAt().storedPredicates.end() && currentMapperIterator == this->pSeq.valueAt().storedMappers.end() )
+                break;
+        }
+
+        if ( ! skip ) {
+            while (currentMapperIterator != this->pSeq.valueAt().storedMappers.end()) {
+                this->precomputed = (*currentMapperIterator.value().getFirst())(this->precomputed);
+                currentMapperIterator++;
+            }
+        }
+        else
+            this->it.next();
+    }
 }
 
 #include <sstream>
@@ -653,12 +676,16 @@ inline auto Sequence < C > ::Iterator::operator==(Object const & o) const noexce
 
 template < typename C >
 inline auto Sequence < C > ::Iterator::value() const noexcept -> CollectionElementType {
-    return this->it.value();
+//    ElementType v = this->it.value();
+//    this->pSeq->storedMappers.forEach([&v](auto p){v = (*p.getFirst())(v);});
+//    return v;
+    return this->precomputed;
 }
 
 template < typename C >
 inline auto Sequence < C > ::Iterator::next() noexcept -> Iterator & {
     this->it.next();
+    this->skipFiltered();
     return * this;
 }
 
@@ -763,7 +790,9 @@ inline auto Sequence < C > ::ConstIterator::operator==(Object const & o) const n
 
 template < typename C >
 inline auto Sequence < C > ::ConstIterator::value() const noexcept -> CollectionElementType {
-    return this->it.value();
+    ElementType v = this->it.value();
+    this->pSeq->storedMappers.forEach([&v](auto p){v = (*p.getFirst())(v);});
+    return v;
 }
 
 template < typename C >
@@ -881,17 +910,18 @@ Sequence ( Range ) -> Sequence < Range >;
 
 template < typename C >
 template <
-        typename Mapper,
-        typename std::enable_if <
-                ! std::is_same_v <
-                        typename std::remove_reference < decltype ( reinterpret_cast < typename C::Iterator * > (0x10)->value() ) > :: type,
-                        returnOf < Mapper >
-                >,
-                int
-        >::type
+    typename Mapper,
+    typename std::enable_if <
+        ! std::is_same_v <
+            typename std::remove_reference <
+                decltype ( dataTypes::unsafeAddress < typename C::Iterator > ()->value() )
+            > :: type,
+            returnOf < Mapper >
+        >,
+        int
+    >::type
 >
-auto Sequence < C > :: map ( Mapper const & mapper ) && noexcept ->
-Sequence < LinkedList < returnOf < Mapper > > > _REQUIRES_ITERABLE {
+auto Sequence < C > :: map ( Mapper const & mapper ) && noexcept -> Sequence < LinkedList < returnOf < Mapper > > > _REQUIRES_ITERABLE {
     LinkedList < returnOf < Mapper > > container;
     for ( auto e : * this )
         container.append(mapper(e));
@@ -900,10 +930,13 @@ Sequence < LinkedList < returnOf < Mapper > > > _REQUIRES_ITERABLE {
 }
 
 template < typename C >
-template < typename Mapper, typename std::enable_if <
+template < typename Mapper,
+        typename std::enable_if <
         std::is_same <
-                typename std::remove_reference < decltype ( reinterpret_cast < typename C::Iterator * > (0x10)->value() ) > :: type,
-                returnOf < Mapper >
+            typename std::remove_reference <
+                decltype ( dataTypes::unsafeAddress < typename C::Iterator > ()->value() )
+            > :: type,
+            returnOf < Mapper >
         >::type::value,
         int
     >::type
@@ -913,17 +946,12 @@ auto Sequence < C > ::map(Mapper const & mapper) && noexcept -> Sequence < C >  
     return std::move ( * this );
 }
 
-
-//
-//template < typename T, typename C >
-//template < typename Mapper, typename R >
-//auto Sequence < T, C > ::map(Mapper const & mapper) && noexcept -> Sequence < R, LinkedList < R > > _REQUIRES_ITERABLE {
-//    LinkedList < R > container;
-//    for ( auto e : * this )
-//        container.append(mapper(e));
-//
-//    return std::move(Sequence(std::move(container)));
-//}
+template < typename C >
+template < typename Predicate >
+auto Sequence < C > ::filter(Predicate const & predicate) && noexcept -> Sequence < C > _REQUIRES_ITERABLE {
+    this->storedPredicates.append({ { new StoredPredicate (predicate)}, this->chainCount });
+    return std::move ( * this );
+}
 
 // endregion
 

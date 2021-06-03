@@ -101,14 +101,18 @@ int main () {
 //        std::cout << e << '\n';
 //    }
 
-//    int x = 42;
+    int x = 42;
 //    test ([& x](){return (float)x;});
 
-    for ( auto e : Sequence(DoubleLinkedList{1, 2, 3, 4}).map([](int e){return e * 2;}) ) {
+    for ( auto e : Sequence(DoubleLinkedList{1, 2, 3, 4})
+        .filter([](auto e){return e % 2 == 0;})
+        .map([](int e){return e * 2;})
+        .filter([](auto e){ return e % 8 == 0; })
+        .map([](int e){ return bool(e / 2);})){
         std::cout << e << '\n';
     }
 
-    for ( auto e : Sequence(DoubleLinkedList{1, 2, 3, 4}).map([](bool e){return bool(e * 2);}) ) {
+    for ( auto e : Sequence(DoubleLinkedList{1, 2, 3, 4}).map([& x](int e) -> bool {return e % 2 == x % 2;})) {
         std::cout << e << '\n';
     }
 
