@@ -168,6 +168,13 @@ public:
     auto indicesOf ( ElementType const & ) const noexcept -> Array < Index > _REQUIRES_ITERABLE;
 
 
+    template < typename Action >
+    auto apply ( Action const & ) && noexcept -> Sequence _REQUIRES_ITERABLE;
+
+    template < typename Action >
+    auto also ( Action const & ) && noexcept -> Sequence _REQUIRES_ITERABLE;
+
+
     template < typename Predicate >
     auto find ( Predicate const & ) const noexcept -> Optional < ElementType > _REQUIRES_ITERABLE;
 
@@ -307,7 +314,8 @@ public:
 
     auto asArray () const noexcept -> Array < ElementType > _REQUIRES_ITERABLE;
 
-    auto asOrderedSet () const noexcept -> OrderedSet < ElementType > _REQUIRES_ITERABLE;
+    template < typename Comparator >
+    auto asOrderedSet () const noexcept -> OrderedSet < ElementType, Comparator > _REQUIRES_ITERABLE;
 
     auto asUnorderedSet () const noexcept -> UnorderedSet < ElementType > _REQUIRES_ITERABLE;
 
@@ -321,7 +329,8 @@ public:
 
     auto toArray (Array <ElementType> &) const noexcept -> Array < ElementType > & _REQUIRES_ITERABLE;
 
-    auto toOrderedSet (OrderedSet <ElementType> &) const noexcept -> OrderedSet < ElementType > & _REQUIRES_ITERABLE;
+    template < typename Comparator >
+    auto toOrderedSet (OrderedSet <ElementType, Comparator> &) const noexcept -> OrderedSet < ElementType, Comparator > & _REQUIRES_ITERABLE;
 
     auto toUnorderedSet (UnorderedSet <ElementType> &) const noexcept -> UnorderedSet < ElementType > & _REQUIRES_ITERABLE;
 
@@ -405,10 +414,10 @@ public:
     auto forEachIndexed ( IndexedAction const & ) const noexcept -> void _REQUIRES_ITERABLE;
 
     template < typename Action > 
-    auto onEach ( Action const & ) && noexcept -> Sequence && _REQUIRES_ITERABLE;
+    auto onEach ( Action const & ) && noexcept -> Sequence _REQUIRES_ITERABLE;
 
     template < typename IndexedAction >
-    auto onEachIndexed ( IndexedAction const & ) && noexcept -> Sequence && _REQUIRES_ITERABLE; 
+    auto onEachIndexed ( IndexedAction const & ) && noexcept -> Sequence _REQUIRES_ITERABLE;
 
 
     template < typename Comparator > 
@@ -951,6 +960,65 @@ template < typename Predicate >
 auto Sequence < C > ::filter(Predicate const & predicate) && noexcept -> Sequence < C > _REQUIRES_ITERABLE {
     this->storedPredicates.append({ { new StoredPredicate (predicate)}, this->chainCount });
     return std::move ( * this );
+}
+
+// endregion
+
+// region Basic Utility Functions
+
+template < typename C >
+inline auto Sequence < C > ::contains(ElementType const & e) const noexcept -> Boolean _REQUIRES_ITERABLE {
+    for ( auto v : * this )
+        if ( e == v )
+            return true;
+    return false;
+}
+
+template < typename C >
+inline auto Sequence < C > ::elementAt(Index i) const noexcept -> Optional < ElementType > _REQUIRES_ITERABLE {
+    Index at = 0;
+    for ( auto v : * this )
+        if ( at == i )
+            return { v };
+        else
+            at ++;
+
+    return { };
+}
+
+// endregion
+
+// region Terminal Operations
+
+template < typename C >
+template < typename Action >
+inline auto Sequence < C > :: forEach ( Action const & action ) const noexcept -> void _REQUIRES_ITERABLE {
+    for ( auto e : * this ) action (e);
+}
+
+// endregion
+
+// region Terminal Extender Operations
+
+template < typename C >
+template < typename Action >
+inline auto Sequence < C > :: apply ( Action const & action ) && noexcept -> Sequence < C > _REQUIRES_ITERABLE {
+    action();
+    return std::move(* this);
+}
+
+template < typename C >
+template < typename Action >
+inline auto Sequence < C > :: also ( Action const & action ) && noexcept -> Sequence < C > _REQUIRES_ITERABLE {
+    action();
+    return std::move(* this);
+}
+
+template < typename C >
+template < typename Action >
+inline auto Sequence < C > :: onEach ( Action const & action ) && noexcept -> Sequence _REQUIRES_ITERABLE {
+    for ( auto e : * this ) action (e);
+    return std::move(*this);
 }
 
 // endregion

@@ -104,17 +104,32 @@ int main () {
     int x = 42;
 //    test ([& x](){return (float)x;});
 
-    for ( auto e : Sequence(DoubleLinkedList{1, 2, 3, 4})
-        .filter([](auto e){return e % 2 == 0;})
-        .map([](int e){return e * 2;})
-        .filter([](auto e){ return e % 8 == 0; })
-        .map([](int e){ return bool(e / 2);})){
-        std::cout << e << '\n';
-    }
+//    for ( auto e : Sequence(DoubleLinkedList{1, 2, 3, 4})
+//        .filter([](auto e){return e % 2 == 0;})
+//        .map([](int e){return e * 2;})
+//        .filter([](auto e){ return e % 8 == 0; })
+//        .map([](int e){ return bool(e / 2);})){
+//        std::cout << e << '\n';
+//    }
+//
+//    for ( auto e : Sequence(DoubleLinkedList{1, 2, 3, 4}).map([& x](int e) -> bool {return e % 2 == x % 2;})) {
+//        std::cout << e << '\n';
+//    }
 
-    for ( auto e : Sequence(DoubleLinkedList{1, 2, 3, 4}).map([& x](int e) -> bool {return e % 2 == x % 2;})) {
-        std::cout << e << '\n';
-    }
+
+    Sequence(Range(15))
+        .onEach([](auto e){ std::cout << e << " "; }).also([]{std::cout << "\n";})
+        .map([](int i){return double(i) + double(i) / 3;})
+        .onEach([](auto e) {std::cout << e << " ";}).also([]{std::cout << "\n";})
+        .filter([](auto e) { return int(e) % 2 == 0; })
+        .onEach([](auto e){std::cout << e << " ";}).also([]{std::cout << '\n';})
+        .map([](double e){return String(e);})
+        .filter([](auto e){return e[1] == '.'; })
+        .onEach([](auto e){std::cout << e << ' ';}).also([]{std::cout << '\n';})
+        .map([](String const & s){return Pair<String, String>(s.split('.')[0], s.split('.')[1]);})
+        .onEach([](auto p){ std::cout << p.getFirst() << ":" << p.getSecond() << "\t"; }).also([]{std::cout << '\n';})
+        .map([](Pair<String, String> const & p){ return int(Integer::parse(p.getFirst()) + Integer::parse(p.getSecond()) / 100); })
+        .forEach([](auto i){std::cout << i << " int ";});
 
     return 0;
 

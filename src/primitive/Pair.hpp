@@ -39,7 +39,19 @@ public:
         return a->first == first && a->second == second;
     }
 
-    Pair & operator = ( const Pair & o ) noexcept {
+    auto inline operator == ( Pair const & o ) const noexcept -> bool {
+        if ( this == & o ) return true;
+
+        return this->first == o.first && this->second == o.second;
+    }
+
+    auto inline operator != ( Pair const & o ) const noexcept -> bool {
+        if ( this == & o ) return false;
+
+        return this->first != o.first || this->second != o.second;
+    }
+
+    Pair & operator = ( Pair const & o ) noexcept {
         if ( this == & o )
             return * this;
 
