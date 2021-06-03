@@ -51,7 +51,7 @@ Intended to provide support beyond what STL can offer
       * Float
       * Double
 
-Since 03/06/21: Use Sequence instead of View
+## Since 03/06/21: Use Sequence instead of View
 
 ### Note 1
 
