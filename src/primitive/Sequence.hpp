@@ -7,16 +7,6 @@
 
 #include <CDS/Object>
 
-#if defined(__cpp_concepts)
-#define _REQUIRES_ITERABLE requires Iterable < C > || ConstIterable < C >
-#define _REQUIRES_PRINTABLE requires HasToString < C >
-#define _REQUIRES_INTEGRAL_ITERABLE requires Iterable < C > && Integral < C >
-#else
-#define _REQUIRES_ITERABLE
-#define _REQUIRES_PRINTABLE
-#define _REQUIRES_INTEGRAL_ITERABLE
-#endif
-
 #include <CDS/Boolean>
 #include <CDS/Optional>
 #include <CDS/Pair>
@@ -25,6 +15,16 @@
 #include <CDS/LinkedList>
 #include <CDS/Set>
 #include <CDS/Types>
+
+#if defined(__linux) && GCC_VERSION >= 11100 && defined(__cpp_concepts)
+#define _REQUIRES_ITERABLE requires Iterable < C > || ConstIterable < C >
+#define _REQUIRES_PRINTABLE requires HasToString < C >
+#define _REQUIRES_INTEGRAL_ITERABLE requires Iterable < C > && Integral < C >
+#else
+#define _REQUIRES_ITERABLE
+#define _REQUIRES_PRINTABLE
+#define _REQUIRES_INTEGRAL_ITERABLE
+#endif
 
 template < typename C >
 class Sequence : public Object {
@@ -958,7 +958,7 @@ Sequence ( DoubleLinkedList < T > && ) -> Sequence < DoubleLinkedList < T > >;
 
 //template < typename T >
 //Sequence ( OrderedSet < T > ) -> Sequence < OrderedSet < T > >;
-
+//
 template < typename T >
 Sequence ( OrderedSet < T > & ) -> Sequence < OrderedSet < T > >;
 
@@ -994,11 +994,11 @@ template < typename K, typename V >
 Sequence ( HashMap < K, V > && ) -> Sequence < HashMap < K, V > >;
 
 #include <CDS/JSON>
-Sequence ( JSON ) -> Sequence < JSON >;
+Sequence ( JSON const & ) -> Sequence < JSON const >;
 
 #include <CDS/Generator>
 template < typename T, typename ... Args >
-Sequence ( Generator < T, Args ... > ) -> Sequence < Generator < T, Args ... > >;
+Sequence ( Generator < T, Args ... > const & ) -> Sequence < Generator < T, Args ... > const >;
 
 #include <CDS/Range>
 Sequence ( Range && ) -> Sequence < Range >;

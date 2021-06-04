@@ -30,7 +30,7 @@ bool SequenceTest::execute() noexcept {
         else siHMap[s] = 1;
     });
 
-    this->executeSubtest("Datatypes involved initialisations", [=, this]{
+    this->executeSubtest("Datatypes involved initialisations", [=, this] {
         this->log("Original Types : ");
         this->log("\tRange : '%s'", r.toString().cStr());
         this->log("\tArray<float> : '%s'", fArray.toString().cStr());
@@ -40,7 +40,7 @@ bool SequenceTest::execute() noexcept {
         this->log("\tUSet<uint> : '%s'", uintUSet.toString().cStr());
     });
 
-    this->executeSubtest("Constructors/Destructors, Copy, Move, Clear tests", [&]{
+    this->executeSubtest("Constructors/Destructors, Copy, Move, Clear tests", [&] {
         Range r3 = r;
         Range const & r2 = r;
 
@@ -65,7 +65,7 @@ bool SequenceTest::execute() noexcept {
         this->log("<List> Ctor Resolution Test : '%s'", Sequence(l1).toString().cStr());
         this->log("<List &> Ctor Resolution Test : '%s'", Sequence(l2).toString().cStr());
         this->log("<List const &> Ctor Resolution Test : '%s'", Sequence(l3).toString().cStr());
-        this->log("<List &&> Ctor Resolution Test : '%s'", Sequence(LinkedList(sList)).toString().cStr());
+        this->log("<List &&> Ctor Resolution Test : '%s'", Sequence(DoubleLinkedList(sList)).toString().cStr());
 
         HashMap<String, int > m1 = siHMap;
         HashMap<String, int > & m2 = siHMap;
