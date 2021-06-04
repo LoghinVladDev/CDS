@@ -17,7 +17,11 @@
 
 # else
 
+# if ! defined(GCC_VERSION)
+
 # define GCC_VERSION 0
+
+# endif
 
 # endif
 
