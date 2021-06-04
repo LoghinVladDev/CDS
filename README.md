@@ -50,7 +50,9 @@ Intended to provide support beyond what STL can offer
       * Boolean
       * Float
       * Double
-  
+
+## Since 03/06/21: Use Sequence instead of View
+
 ### Note 1
 
 #### Issue Fixed Since 02/04/21
