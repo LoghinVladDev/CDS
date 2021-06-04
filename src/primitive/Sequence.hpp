@@ -16,7 +16,7 @@
 #include <CDS/Set>
 #include <CDS/Types>
 
-#if defined(__linux) && GCC_VERSION >= 11100 && defined(__cpp_concepts)
+#if defined(__linux) && GCC_VERSION >= 10200 && defined(__cpp_concepts)
 #define _REQUIRES_ITERABLE requires Iterable < C > || ConstIterable < C >
 #define _REQUIRES_PRINTABLE requires HasToString < C >
 #define _REQUIRES_INTEGRAL_ITERABLE requires Iterable < C > && Integral < C >
