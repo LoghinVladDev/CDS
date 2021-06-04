@@ -329,6 +329,11 @@ public:
     /**
      * @test tested in primitive/StringTest/Append/Prepend Tests
      */
+    inline auto operator += (CString v) noexcept -> String & { return this->append( v ); }
+
+    /**
+     * @test tested in primitive/StringTest/Append/Prepend Tests
+     */
     inline auto operator += (String const & v) noexcept -> String & { return this->append( v ); }
 
     /**
@@ -394,6 +399,11 @@ public:
      * @test tested in primitive/StringTest/Append/Prepend Tests
      */
     auto append (StringLiteral) noexcept -> String &;
+
+    /**
+     * @test tested in primitive/StringTest/Append/Prepend Tests
+     */
+    auto append (CString) noexcept -> String &;
 
     /**
      * @test tested in primitive/StringTest/Append/Prepend Tests
@@ -464,6 +474,11 @@ public:
      * @test tested in primitive/StringTest/Append/Prepend Tests
      */
     inline auto prepend (StringLiteral cString) noexcept -> String & { return this->prepend(String(cString)); }
+
+    /**
+     * @test tested in primitive/StringTest/Append/Prepend Tests
+     */
+    inline auto prepend (CString cString) noexcept -> String & { return this->prepend(String(cString)); }
 
     /**
      * @test tested in primitive/StringTest/Append/Prepend Tests
@@ -793,6 +808,11 @@ public:
      * @test tested in primitive/StringTest/Append/Prepend Tests
      */
     [[nodiscard]] inline auto operator + ( StringLiteral v ) const noexcept -> String { return String(*this).append(v); }
+
+    /**
+     * @test tested in primitive/StringTest/Append/Prepend Tests
+     */
+    [[nodiscard]] inline auto operator + ( CString v ) const noexcept -> String { return String(*this).append(v); }
 
     /**
      * @test tested in primitive/StringTest/Append/Prepend Tests
@@ -1342,6 +1362,18 @@ inline auto String::append (ElementType ch) noexcept -> String & {
 }
 
 inline auto String::append (StringLiteral cString) noexcept -> String & {
+    if ( cString == nullptr ) return * this;
+
+    auto len = strlen(cString);
+    this->_alloc(len);
+
+    for (int i = 0; i < len; ++i)
+        this->_p[this->_l++] = cString[i];
+
+    return * this;
+}
+
+inline auto String::append (CString cString) noexcept -> String & {
     if ( cString == nullptr ) return * this;
 
     auto len = strlen(cString);
