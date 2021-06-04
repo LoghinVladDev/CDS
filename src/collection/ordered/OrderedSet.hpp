@@ -39,8 +39,13 @@ public:
     using ConstNodePointer  = typename SetBase<T>::ConstNodePointer;
 
     OrderedSet() noexcept = default;
-    OrderedSet(OrderedSet const & set) noexcept : SetBase<T>(set) {}
-    OrderedSet(OrderedSet && moveSet) noexcept(false) : SetBase<T>(moveSet) {}
+    OrderedSet(OrderedSet const & set) noexcept : SetBase<T>(set) {
+        for ( auto it : set )
+            this->insert(it);
+    }
+
+    OrderedSet(OrderedSet && moveSet) noexcept(false) : SetBase<T>(std::move(moveSet)) {}
+
     explicit OrderedSet (
         typename Collection<T>::Iterator const & from,
         typename Collection<T>::Iterator const & to

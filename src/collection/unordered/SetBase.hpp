@@ -70,8 +70,12 @@ protected:
     inline auto endPtr () const noexcept -> ConstIterator * final { return new ConstIterator ( nullptr ); }
 
     SetBase() noexcept = default;
-    SetBase(SetBase const &) noexcept;
-    SetBase(SetBase &&) noexcept(false);
+    SetBase(SetBase const &) noexcept {}
+    SetBase(SetBase && o) noexcept(false):
+            _pFront(std::exchange(o._pFront, nullptr)),
+            _size(std::exchange(o._size, 0ull)){
+
+    }
 
 public:
 
@@ -220,32 +224,32 @@ auto SetBase<T>::toString() const noexcept -> String {
 }
 
 
-template <class T>
-#if defined(__cpp_concepts) && !defined(_MSC_VER)
-    requires UniqueIdentifiable <T>
-#endif
-SetBase<T>::SetBase(SetBase const & set) noexcept : _pFront(nullptr), _size(set.size()) {
-    if ( set.size() == 0 )
-        return;
+//template <class T>
+//#if defined(__cpp_concepts) && !defined(_MSC_VER)
+//    requires UniqueIdentifiable <T>
+//#endif
+//SetBase<T>::SetBase(SetBase const & set) noexcept : _pFront(nullptr), _size(set.size()) {
+//    if ( set.size() == 0 )
+//        return;
+//
+//    this->_pFront = new Node { set.front(), nullptr };
+//
+//    auto end = this->_pFront;
+//
+//    for ( auto next = set.begin(), it = next.next(); it != set.end(); it ++ ) {
+//        end->pNext = new Node { next.value(), nullptr };
+//        end = end->pNext;
+//    }
+//}
 
-    this->_pFront = new Node { set.front(), nullptr };
-
-    auto end = this->_pFront;
-
-    for ( auto next = set.begin(), it = next.next(); it != set.end(); it ++ ) {
-        end->pNext = new Node { next.value(), nullptr };
-        end = end->pNext;
-    }
-}
-
-#include <CDS/NotImplementedException>
-template <class T>
-#if defined(__cpp_concepts) && !defined(_MSC_VER)
-    requires UniqueIdentifiable <T>
-#endif
-SetBase<T>::SetBase(SetBase &&) noexcept(false) {
-    throw NotImplementedException();
-}
+//#include <CDS/NotImplementedException>
+//template <class T>
+//#if defined(__cpp_concepts) && !defined(_MSC_VER)
+//    requires UniqueIdentifiable <T>
+//#endif
+//SetBase<T>::SetBase(SetBase &&) noexcept(false) {
+//    throw NotImplementedException();
+//}
 
 template <class T>
 #if defined(__cpp_concepts) && !defined(_MSC_VER)

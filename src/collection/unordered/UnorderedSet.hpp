@@ -21,8 +21,14 @@ public:
     using ConstNodePointer  = typename SetBase<T>::ConstNodePointer;
 
     UnorderedSet() noexcept = default;
-    UnorderedSet(UnorderedSet const & set) noexcept : SetBase<T>(set) {}
-    UnorderedSet(UnorderedSet && moveSet) noexcept(false) : SetBase<T>(moveSet) {}
+    UnorderedSet(UnorderedSet const & set) noexcept : SetBase<T>(set) {
+        for ( auto it : set )
+            this->insert(it);
+    }
+
+    UnorderedSet(UnorderedSet && moveSet) noexcept(false) : SetBase<T>(std::move(moveSet)) {
+
+    }
 
     explicit UnorderedSet(
         typename Collection<T>::Iterator const & from,
