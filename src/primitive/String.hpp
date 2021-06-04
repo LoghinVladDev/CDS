@@ -61,6 +61,11 @@ public:
      * @test tested in primitive/StringTest/Constructor Tests
      */
     String(StringLiteral) noexcept; // NOLINT(google-explicit-constructor)
+
+    /**
+     * @test tested in primitive/StringTest/Constructor Tests
+     */
+    String(CString) noexcept; // NOLINT(google-explicit-constructor)
 //    explicit String(StringLiteral, Index, Size = UINT64_MAX) noexcept;
 
     /**
@@ -1289,6 +1294,20 @@ inline void String::_alloc(Size size) noexcept {
 }
 
 inline String::String(StringLiteral cString) noexcept : CONSTR_CLEAR() {
+    if ( cString == nullptr )
+        return;
+
+    auto len = strlen(cString);
+    if ( len == 0 )
+        return;
+
+    this->_alloc(len);
+
+    this->_l = len;
+    std::memcpy ( this->_p, cString, this->_l + 1 );
+}
+
+inline String::String(CString cString) noexcept : CONSTR_CLEAR() {
     if ( cString == nullptr )
         return;
 
