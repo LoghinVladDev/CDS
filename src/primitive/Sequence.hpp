@@ -1094,6 +1094,30 @@ inline auto Sequence < C > ::elementAtOr(Index i, ElementType const & e) const n
     return e;
 }
 
+template < typename C >
+inline auto Sequence < C > ::indexOf(ElementType const & e) const noexcept -> Index _REQUIRES_ITERABLE {
+    Index i = 0;
+    for ( auto v : * this )
+        if ( v == e )
+            return i;
+        else
+            i++;
+
+    return -1;
+}
+
+template < typename C >
+inline auto Sequence < C > ::lastIndexOf(ElementType const & e) const noexcept -> Index _REQUIRES_ITERABLE {
+    Index i = 0, last = -1;
+    for ( auto v : * this )
+        if ( v == e )
+            last = i;
+        else
+            i++;
+
+    return last;
+}
+
 // endregion
 
 // region Terminal Operations
@@ -1138,8 +1162,6 @@ inline auto Sequence < C > :: also ( Action const & action ) && noexcept -> Sequ
 template < typename C >
 template < typename Action >
 inline auto Sequence < C > :: onEach ( Action const & action ) && noexcept -> Sequence < LinkedList < ElementType > > _REQUIRES_ITERABLE {
-//    for ( auto e : * this ) action (e);
-
     LinkedList < ElementType > container;
     for ( auto e : * this ) {
         action (e);
