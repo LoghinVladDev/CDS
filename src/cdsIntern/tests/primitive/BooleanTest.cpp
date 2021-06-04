@@ -13,8 +13,5 @@ auto BooleanTest::execute() noexcept -> bool{
         Boolean empty;
         this->log("Empty Boolean constructed: ");
     });
-
-
-
-
+    return allOk;
 }
