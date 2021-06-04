@@ -33,7 +33,8 @@ public:
 
 private:
 
-    using IterableValue     = decltype ( dataTypes::unsafeAddress < typename C::Iterator > ()->value() );
+    using ClassName         = typename std::remove_reference < C >::type;
+    using IterableValue     = decltype ( dataTypes::unsafeAddress < typename ClassName::Iterator > ()->value() );
     using ElementType       = typename std::remove_reference < IterableValue > :: type;
     using StoredPredicate   = std::function < bool (IterableValue) >;
     using StoredMapper      = std::function < std::remove_reference_t < IterableValue > (IterableValue) >;
@@ -102,6 +103,9 @@ public:
         ForeignPointer < const Sequence > pSeq;
         CollectionIterator it;
 
+        CollectionElementType precomputed;
+        auto skipFiltered () noexcept -> void;
+
     public:
         [[nodiscard]] auto toString () const noexcept -> String override;
         [[nodiscard]] auto hash () const noexcept -> Index override;
@@ -133,7 +137,8 @@ public:
     Sequence (Sequence const &) noexcept;
     Sequence (Sequence &&) noexcept;
 
-    explicit Sequence ( C const & ) noexcept;
+    explicit Sequence ( C & ) noexcept;
+//    explicit Sequence ( C const & ) noexcept;
     explicit Sequence ( C && ) noexcept;
 
     ~Sequence () noexcept override = default;
@@ -169,10 +174,10 @@ public:
 
 
     template < typename Action >
-    auto apply ( Action const & ) && noexcept -> Sequence _REQUIRES_ITERABLE;
+    auto apply ( Action const & ) && noexcept -> Sequence < LinkedList < ElementType > > _REQUIRES_ITERABLE;
 
     template < typename Action >
-    auto also ( Action const & ) && noexcept -> Sequence _REQUIRES_ITERABLE;
+    auto also ( Action const & ) && noexcept -> Sequence < LinkedList < ElementType > > _REQUIRES_ITERABLE;
 
 
     template < typename Predicate >
@@ -414,7 +419,7 @@ public:
     auto forEachIndexed ( IndexedAction const & ) const noexcept -> void _REQUIRES_ITERABLE;
 
     template < typename Action > 
-    auto onEach ( Action const & ) && noexcept -> Sequence _REQUIRES_ITERABLE;
+    auto onEach ( Action const & ) && noexcept -> Sequence < LinkedList < ElementType > > _REQUIRES_ITERABLE;
 
     template < typename IndexedAction >
     auto onEachIndexed ( IndexedAction const & ) && noexcept -> Sequence _REQUIRES_ITERABLE;
@@ -534,8 +539,15 @@ inline Sequence < C > ::Sequence ( Sequence && s ) noexcept :
 
 }
 
+//template < typename C >
+//inline Sequence < C > ::Sequence ( C const & c ) noexcept :
+//        pCollection ( new ForeignPointer ( & c ) ),
+//        chainCount ( 0u ) {
+//
+//}
+
 template < typename C >
-inline Sequence < C > ::Sequence ( C const & c ) noexcept :
+inline Sequence < C > ::Sequence ( C & c ) noexcept :
         pCollection ( new ForeignPointer ( & c ) ),
         chainCount ( 0u ) {
 
@@ -685,9 +697,6 @@ inline auto Sequence < C > ::Iterator::operator==(Object const & o) const noexce
 
 template < typename C >
 inline auto Sequence < C > ::Iterator::value() const noexcept -> CollectionElementType {
-//    ElementType v = this->it.value();
-//    this->pSeq->storedMappers.forEach([&v](auto p){v = (*p.getFirst())(v);});
-//    return v;
     return this->precomputed;
 }
 
@@ -752,7 +761,43 @@ template < typename C >
 inline Sequence < C >::ConstIterator::ConstIterator(Sequence < C > const * pSequence, CollectionIterator const & it) noexcept :
         pSeq ( pSequence ),
         it (it) {
+    this->skipFiltered();
+}
 
+template < typename C >
+auto Sequence < C >::ConstIterator::skipFiltered() noexcept -> void {
+    Boolean skip = true;
+
+    while ( skip && this->it != this->pSeq->pCollection->valueAt().cend() ) {
+        this->precomputed = this->it.value();
+        skip = false;
+
+        auto currentMapperIterator = this->pSeq.valueAt().storedMappers.begin();
+        auto currentFilterIterator = this->pSeq.valueAt().storedPredicates.begin();
+
+        for ( uint32 i = 0; i < this->pSeq.valueAt().chainCount; i ++ ) {
+            if ( currentMapperIterator != this->pSeq.valueAt().storedMappers.end() && currentMapperIterator.value().getSecond() == i ) {
+                this->precomputed = ( * currentMapperIterator.value().getFirst() ) ( this->precomputed );
+                currentMapperIterator.next();
+            } else if ( currentFilterIterator != this->pSeq.valueAt().storedPredicates.end() && currentFilterIterator.value().getSecond() == i ) {
+                if ( ! (* currentFilterIterator.value().getFirst())( this->precomputed ) ) {
+                    skip = true;
+                    break;
+                }
+                currentFilterIterator.next();
+            } else if ( currentFilterIterator == this->pSeq.valueAt().storedPredicates.end() && currentMapperIterator == this->pSeq.valueAt().storedMappers.end() )
+                break;
+        }
+
+        if ( ! skip ) {
+            while (currentMapperIterator != this->pSeq.valueAt().storedMappers.end()) {
+                this->precomputed = (*currentMapperIterator.value().getFirst())(this->precomputed);
+                currentMapperIterator++;
+            }
+        }
+        else
+            this->it.next();
+    }
 }
 
 #include <sstream>
@@ -799,14 +844,13 @@ inline auto Sequence < C > ::ConstIterator::operator==(Object const & o) const n
 
 template < typename C >
 inline auto Sequence < C > ::ConstIterator::value() const noexcept -> CollectionElementType {
-    ElementType v = this->it.value();
-    this->pSeq->storedMappers.forEach([&v](auto p){v = (*p.getFirst())(v);});
-    return v;
+    return this->precomputed;
 }
 
 template < typename C >
 inline auto Sequence < C > ::ConstIterator::next() noexcept -> ConstIterator & {
     this->it.next();
+    this->skipFiltered();
     return * this;
 }
 
@@ -859,7 +903,7 @@ auto Sequence < C > ::toString() const noexcept -> String {
             oss << "Object at 0x" << std::hex << reinterpret_cast < AddressValueType > ( & e ) << ", ";
 
     auto s = oss.str();
-    return s.substr(s.size() - 2).append(" ]}");
+    return s.replace(s.size() - 2, 2, "").append(" ]}");
 }
 
 template < typename C >
@@ -888,20 +932,66 @@ inline auto Sequence < C > ::operator==(Object const & o) const noexcept -> bool
 
 Sequence ( String ) -> Sequence < String >;
 
-template < typename T >
-Sequence ( Array < T > ) -> Sequence < Array < T > >;
+//template < typename T >
+//Sequence ( Array < T > ) -> Sequence < Array < T > >;
+
+template < typename T>
+Sequence ( Array < T > & ) -> Sequence < Array < T > >;
+
+template < typename T>
+Sequence ( Array < T > const & ) -> Sequence < Array < T > const >;
+
+template < typename T>
+Sequence ( Array < T > && ) -> Sequence < Array < T > >;
+
+//template < typename T >
+//Sequence ( DoubleLinkedList < T > ) -> Sequence < DoubleLinkedList < T > >;
 
 template < typename T >
-Sequence ( DoubleLinkedList < T > ) -> Sequence < DoubleLinkedList < T > >;
+Sequence ( DoubleLinkedList < T > & ) -> Sequence < DoubleLinkedList < T > >;
 
 template < typename T >
-Sequence ( OrderedSet < T > ) -> Sequence < OrderedSet < T > >;
+Sequence ( DoubleLinkedList < T > const & ) -> Sequence < DoubleLinkedList < T > const >;
 
 template < typename T >
-Sequence ( UnorderedSet < T > ) -> Sequence < UnorderedSet < T > >;
+Sequence ( DoubleLinkedList < T > && ) -> Sequence < DoubleLinkedList < T > >;
+
+//template < typename T >
+//Sequence ( OrderedSet < T > ) -> Sequence < OrderedSet < T > >;
+
+template < typename T >
+Sequence ( OrderedSet < T > & ) -> Sequence < OrderedSet < T > >;
+
+template < typename T >
+Sequence ( OrderedSet < T > const & ) -> Sequence < OrderedSet < T > const >;
+
+template < typename T >
+Sequence ( OrderedSet < T > && ) -> Sequence < OrderedSet < T > >;
+
+
+//template < typename T >
+//Sequence ( UnorderedSet < T > ) -> Sequence < UnorderedSet < T > >;
+
+template < typename T >
+Sequence ( UnorderedSet < T > & ) -> Sequence < UnorderedSet < T > >;
+
+template < typename T >
+Sequence ( UnorderedSet < T > const & ) -> Sequence < UnorderedSet < T > const >;
+
+template < typename T >
+Sequence ( UnorderedSet < T > && ) -> Sequence < UnorderedSet < T > >;
+
+//template < typename K, typename V >
+//Sequence ( HashMap < K, V > ) -> Sequence < HashMap < K, V > >;
 
 template < typename K, typename V >
-Sequence ( HashMap < K, V > ) -> Sequence < HashMap < K, V > >;
+Sequence ( HashMap < K, V > & ) -> Sequence < HashMap < K, V > >;
+
+template < typename K, typename V >
+Sequence ( HashMap < K, V > const & ) -> Sequence < HashMap < K, V > const >;
+
+template < typename K, typename V >
+Sequence ( HashMap < K, V > && ) -> Sequence < HashMap < K, V > >;
 
 #include <CDS/JSON>
 Sequence ( JSON ) -> Sequence < JSON >;
@@ -911,7 +1001,13 @@ template < typename T, typename ... Args >
 Sequence ( Generator < T, Args ... > ) -> Sequence < Generator < T, Args ... > >;
 
 #include <CDS/Range>
-Sequence ( Range ) -> Sequence < Range >;
+Sequence ( Range && ) -> Sequence < Range >;
+
+#include <CDS/Range>
+Sequence ( Range const & ) -> Sequence < Range const >;
+
+#include <CDS/Range>
+Sequence ( Range & ) -> Sequence < Range >;
 
 /// endregion
 
@@ -923,7 +1019,7 @@ template <
     typename std::enable_if <
         ! std::is_same_v <
             typename std::remove_reference <
-                decltype ( dataTypes::unsafeAddress < typename C::Iterator > ()->value() )
+                decltype ( dataTypes::unsafeAddress < typename std::remove_reference<C>::type::Iterator > ()->value() )
             > :: type,
             returnOf < Mapper >
         >,
@@ -943,7 +1039,7 @@ template < typename Mapper,
         typename std::enable_if <
         std::is_same <
             typename std::remove_reference <
-                decltype ( dataTypes::unsafeAddress < typename C::Iterator > ()->value() )
+                decltype ( dataTypes::unsafeAddress < typename std::remove_reference<C>::type::Iterator > ()->value() )
             > :: type,
             returnOf < Mapper >
         >::type::value,
@@ -986,6 +1082,18 @@ inline auto Sequence < C > ::elementAt(Index i) const noexcept -> Optional < Ele
     return { };
 }
 
+template < typename C >
+inline auto Sequence < C > ::elementAtOr(Index i, ElementType const & e) const noexcept -> ElementType _REQUIRES_ITERABLE {
+    Index at = 0;
+    for ( auto v : * this )
+        if ( at == i )
+            return v;
+        else
+            at ++;
+
+    return e;
+}
+
 // endregion
 
 // region Terminal Operations
@@ -993,6 +1101,7 @@ inline auto Sequence < C > ::elementAt(Index i) const noexcept -> Optional < Ele
 template < typename C >
 template < typename Action >
 inline auto Sequence < C > :: forEach ( Action const & action ) const noexcept -> void _REQUIRES_ITERABLE {
+    this->pCollection->valueAt().end();
     for ( auto e : * this ) action (e);
 }
 
@@ -1002,23 +1111,42 @@ inline auto Sequence < C > :: forEach ( Action const & action ) const noexcept -
 
 template < typename C >
 template < typename Action >
-inline auto Sequence < C > :: apply ( Action const & action ) && noexcept -> Sequence < C > _REQUIRES_ITERABLE {
+inline auto Sequence < C > :: apply ( Action const & action ) && noexcept -> Sequence < LinkedList < ElementType > > _REQUIRES_ITERABLE {
     action();
-    return std::move(* this);
+
+    LinkedList < ElementType > container;
+    for ( auto e : * this ) {
+        container.append(e);
+    }
+
+    return std::move(Sequence < LinkedList < ElementType > > (std::move(container)));
 }
 
 template < typename C >
 template < typename Action >
-inline auto Sequence < C > :: also ( Action const & action ) && noexcept -> Sequence < C > _REQUIRES_ITERABLE {
+inline auto Sequence < C > :: also ( Action const & action ) && noexcept -> Sequence < LinkedList < ElementType > > _REQUIRES_ITERABLE {
     action();
-    return std::move(* this);
+
+    LinkedList < ElementType > container;
+    for ( auto e : * this ) {
+        container.append(e);
+    }
+
+    return std::move(Sequence < LinkedList < ElementType > > (std::move(container)));
 }
 
 template < typename C >
 template < typename Action >
-inline auto Sequence < C > :: onEach ( Action const & action ) && noexcept -> Sequence _REQUIRES_ITERABLE {
-    for ( auto e : * this ) action (e);
-    return std::move(*this);
+inline auto Sequence < C > :: onEach ( Action const & action ) && noexcept -> Sequence < LinkedList < ElementType > > _REQUIRES_ITERABLE {
+//    for ( auto e : * this ) action (e);
+
+    LinkedList < ElementType > container;
+    for ( auto e : * this ) {
+        action (e);
+        container.append(e);
+    }
+
+    return std::move(Sequence < LinkedList < ElementType > > (std::move(container)));
 }
 
 // endregion

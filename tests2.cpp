@@ -131,6 +131,15 @@ int main () {
         .map([](Pair<String, String> const & p){ return int(Integer::parse(p.getFirst()) + Integer::parse(p.getSecond()) / 100); })
         .forEach([](auto i){std::cout << i << " int ";});
 
+    std::cout << '\n';
+
+    std::cout << Sequence(Range(10))
+        .map([](int e){return e * e;})
+        .onEach([](int e){std::cout << e << ' ';}).also([]{std::cout << '\n';})
+        .filter([](int e){return e % 10 >= 5;})
+        .onEach([](int e){std::cout << e << ' ';}).also([]{std::cout << '\n';})
+        .contains(16);
+
     return 0;
 
     OurMap < String, int > m;

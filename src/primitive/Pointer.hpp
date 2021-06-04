@@ -253,5 +253,8 @@ SharedPointer ( T * ) -> SharedPointer < T >;
 template < typename T >
 ForeignPointer ( T * ) -> ForeignPointer < T >;
 
+template < typename T >
+ForeignPointer ( const T * ) -> ForeignPointer < const T >;
+
 
 #endif //CDS_POINTER_HPP

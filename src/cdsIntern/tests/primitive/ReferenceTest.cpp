@@ -3,3 +3,7 @@
 //
 
 #include "ReferenceTest.h"
+
+bool ReferenceTest::execute() noexcept {
+
+}

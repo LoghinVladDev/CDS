@@ -12,6 +12,7 @@ class String;
 
 #include <type_traits>
 #include <concepts>
+#include <iostream>
 
 template <typename T>
 concept Integral =

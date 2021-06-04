@@ -5,9 +5,11 @@
 #ifndef CDS_REFERENCETEST_H
 #define CDS_REFERENCETEST_H
 
+#include <cdsIntern/tests/Test.h>
 
-class ReferenceTest {
-
+class ReferenceTest : public Test {
+public:
+    bool execute() noexcept override;
 };
 
 

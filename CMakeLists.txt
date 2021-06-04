@@ -245,6 +245,7 @@ testSuite(primitive Pair)
 testSuite(primitive Pointer)
 testSuite(primitive Reference)
 testSuite(primitive String)
+testSuite(primitive Sequence)
 
 testSuite(collection/unordered Json)
 

@@ -35,11 +35,47 @@ public:
     auto operator * () const noexcept (false) -> ValueReference { return * this->pObj; }
 
     [[nodiscard]] inline auto hasValue () const noexcept -> bool { return ! pObj.isNull(); }
+    [[nodiscard]] inline auto isEmpty () const noexcept -> bool { return ! this->hasValue(); }
+    [[nodiscard]] inline auto isPresent () const noexcept -> bool { return this->hasValue(); }
 
     inline auto value () const noexcept(false) -> ValueConstReference { return * this->pObj; }
     inline auto value () noexcept(false) -> ValueReference { return * this->pObj; }
     inline auto valueOr (ValueReference v) noexcept -> ValueReference { return this->hasValue() ? this->value() : v; }
     inline auto valueOr (ValueConstReference v) noexcept -> ValueConstReference { return this->hasValue() ? this->value() : v; }
+
+    template < typename Action >
+    inline auto ifPresent (Action const & action) const noexcept -> void {
+        if ( isPresent() ) action ( pObj.valueAt() );
+    }
+
+    template < typename Action, typename EmptyAction >
+    inline auto ifPresentOrElse ( Action const & action, EmptyAction const & onElse ) const noexcept -> void {
+        if ( isPresent() ) action ( pObj.valueAt() );
+        else onElse ();
+    }
+
+    template < typename Predicate >
+    inline auto filter ( Predicate const & predicate ) const noexcept -> Optional {
+        if ( isEmpty() ) return * this;
+        return predicate (pObj.valueAt()) ? (*this) : Optional();
+    }
+
+    template < typename Mapper >
+    inline auto map ( Mapper const & mapper ) const noexcept -> Optional < returnOf < Mapper > > {
+        if ( isEmpty() ) return Optional < returnOf < Mapper > > ();
+        return Optional < returnOf < Mapper > > (mapper(this->pObj.valueAt()));
+    }
+
+    template < typename Supplier >
+    inline auto orSupply (Supplier const & supplier) const noexcept -> Optional {
+        if ( isPresent() ) return * this;
+        return supplier();
+    }
+
+    auto orElse (T const & other) const noexcept -> T const & { return isPresent() ? this->pObj.valueAt() : other; }
+
+    template < typename Supplier >
+    auto orElseGet (Supplier const & supplier) const noexcept -> T { return isPresent() ? this->pObj.valueAt() : supplier(); }
 
     inline explicit operator bool () const noexcept { return this->hasValue(); }
 
