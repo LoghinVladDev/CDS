@@ -733,7 +733,7 @@ auto Array<T>::remove( typename Collection<Value>::Iterator const & it ) noexcep
     Array without;
 
     for (auto i = this->begin(); i != this->end(); i ++ )
-        if ( i != it )
+        if ( ! i.equals(it) )
             without.pushBack(i.value());
 
     auto v = it.value();

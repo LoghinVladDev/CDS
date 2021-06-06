@@ -41,7 +41,7 @@ public:
     auto inline operator != ( Pair const & o ) const noexcept -> bool {
         if ( this == & o ) return false;
 
-        return this->first != o.first || this->second != o.second;
+        return ! this->operator==(o);
     }
 
     auto equals ( Object const & o ) const noexcept -> bool override {
