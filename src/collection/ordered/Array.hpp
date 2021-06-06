@@ -334,6 +334,9 @@ public:
         return * this;
     }
 
+    inline auto operator == (Iterator const& o) const noexcept -> bool { return this->equals(o); }
+    inline auto operator != (Iterator const& o) const noexcept -> bool { return !this->equals(o); }
+
     constexpr auto next () noexcept -> Iterator & final { this->_index ++; return * this; }
     constexpr auto prev () noexcept -> Iterator & { this->_index --; return * this; }
 
