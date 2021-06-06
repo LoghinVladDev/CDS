@@ -643,6 +643,13 @@ public:
      */
     [[nodiscard]] auto operator == ( String const & o ) const noexcept -> bool;
 
+    [[nodiscard]] inline auto equals ( Object const & o) const noexcept -> bool final {
+        if ( this == & o ) return true;
+        auto p = dynamic_cast < decltype ( this ) > ( & o );
+        if ( p == nullptr ) return false;
+        return this->operator==(* p);
+    }
+
     /**
      * @test tested in primitive/StringTest/Comparison Tests
      */

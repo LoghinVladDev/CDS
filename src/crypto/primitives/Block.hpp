@@ -124,7 +124,7 @@ namespace crypto {
             return * this;
         }
 
-        constexpr auto operator == ( Object const & o ) const noexcept -> bool override {
+        [[nodiscard]] constexpr auto equals ( Object const & o ) const noexcept -> bool override {
             if ( this == & o ) return true;
             auto p = dynamic_cast < decltype ( this ) > ( & o );
 
@@ -188,10 +188,6 @@ namespace crypto {
                 .append("size=").append(bytes.bytes())
                 .append(",data=").append(reinterpret_cast<StringLiteral>(this->_pData))
                 .append("}");
-        }
-
-        inline operator String () const noexcept { // NOLINT(google-explicit-constructor)
-            return this->toString();
         }
 
         auto toHex () const noexcept -> String { // NOLINT(modernize-use-nodiscard)

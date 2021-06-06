@@ -56,6 +56,16 @@ public:
         return !this->v;
     }
 
+    constexpr auto operator == (Boolean const & o) const noexcept -> Boolean { return this->v == o.v; }
+
+    auto equals ( Object const & o ) const noexcept -> bool override {
+        if ( this == & o ) return true;
+        auto p = dynamic_cast < decltype (this) > ( & o );
+        if ( p == nullptr ) return false;
+
+        return this->operator==(*p);
+    }
+
     constexpr operator bool () const noexcept {
         return this->v;
     }

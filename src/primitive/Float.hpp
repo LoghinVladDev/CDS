@@ -99,6 +99,14 @@ public:
     constexpr auto operator<=(Float const &o) const noexcept -> bool { return this->v <= o.v; }
     constexpr auto operator<=(float value) const noexcept -> bool { return this->v <= value; }
 
+    auto equals ( Object const & o ) const noexcept -> bool override {
+        if ( this == & o ) return true;
+        auto p = dynamic_cast < decltype (this) > ( & o );
+        if ( p == nullptr ) return false;
+
+        return this->operator==(*p);
+    }
+
     constexpr operator float() const noexcept { return this->v; }
     [[nodiscard]]constexpr inline auto get() const noexcept -> float { return this->v; }
 

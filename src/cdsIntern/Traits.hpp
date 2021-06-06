@@ -115,4 +115,11 @@ using argumentsOf = typename functionTraits < T > :: argsType;
 template < typename T >
 using classOf = typename functionTraits < T > :: classType;
 
+# if defined (__cpp_concepts)
+
+template < typename T >
+concept PairType = isPair < T > :: value ;
+
+# endif
+
 #endif //CDS_TRAITS_HPP

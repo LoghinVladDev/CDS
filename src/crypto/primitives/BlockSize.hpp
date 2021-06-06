@@ -106,7 +106,7 @@ namespace crypto {
             return 0u;
         }
 
-        constexpr auto operator == (Object const & obj) const noexcept -> bool override {
+        [[nodiscard]] constexpr auto equals (Object const & obj) const noexcept -> bool override {
             if ( this == & obj ) return true;
             auto p = dynamic_cast < decltype ( this ) > ( & obj );
             if ( p == nullptr ) return false;

@@ -137,11 +137,11 @@ public:
     virtual auto insert ( ConstReference ) noexcept -> bool = 0;
     virtual auto insert ( T && ) noexcept -> bool = 0;
 
-    inline auto add ( ConstReference v ) noexcept -> void {
+    inline auto add ( ConstReference v ) noexcept -> void override {
         this->insert( v );
     }
 
-    inline auto add ( T && v ) noexcept -> void {
+    inline auto add ( T && v ) noexcept -> void override {
         this->insert( v );
     }
 
@@ -198,16 +198,23 @@ public:
         return this->any([&e](ConstReference x) noexcept -> bool {return x == e;});
     }
 
-    auto inline operator != (Object const & o) const noexcept -> bool final { return ! this->operator==(o); }
-    auto operator == (Object const & o) const noexcept -> bool final {
+    auto inline operator != (SetBase const & o) const noexcept -> bool { return ! this->operator==(o); }
+
+    auto operator == (SetBase const & o) const noexcept -> bool {
+        if ( this == & o ) return true;
+
+        for ( auto itThis = this->begin(), itObj = o.begin(); itThis != this->end() && itObj != o.end(); itThis ++, itObj ++ )
+            if ( ! ( itThis.value() == itObj.value() ) )
+                return false;
+        return true;
+    }
+
+    auto equals (Object const & o) const noexcept -> bool final {
         if ( & o == this ) return true;
         auto p = dynamic_cast < SetBase < T > const * > ( & o );
         if ( p == nullptr ) return false;
 
-        for ( auto itThis = this->begin(), itObj = p->begin(); itThis != this->end() && itObj != p->end(); itThis ++, itObj ++ )
-            if ( ! ( itThis.value() == itObj.value() ) )
-                return false;
-        return true;
+        return this->operator == (*p);
     }
 
     [[nodiscard]] auto toString () const noexcept -> String final;

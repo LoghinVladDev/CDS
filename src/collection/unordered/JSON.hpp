@@ -51,6 +51,19 @@ private:
         }
 
     public:
+        inline auto operator == ( Node const & o ) const noexcept -> bool {
+            if ( this == & o ) return true;
+
+            return this->_label == o._label && this->_pObject->equals(*o._pObject);
+        }
+
+        auto equals ( Object const & o ) const noexcept -> bool override {
+            if ( this == & o ) return true;
+            auto p = dynamic_cast < decltype ( this ) > (& o);
+            if ( p == nullptr ) return false;
+            return this->operator==(* p);
+        }
+
         Node() noexcept = default;
         Node(Node const & o) noexcept : _label(o._label), _pObject(o._pObject->copy()) {}
         ~Node() noexcept override { delete this->_pObject; }
@@ -199,6 +212,15 @@ public:
     JSON() noexcept = default;
     JSON (JSON const &) noexcept = default;
     ~JSON () noexcept override = default;
+
+    auto operator == (JSON const & o) const noexcept -> bool;
+
+    auto equals ( Object const & o ) const noexcept -> bool override {
+        if ( this == & o ) return true;
+        auto p = dynamic_cast < decltype ( this ) > (& o);
+        if ( p == nullptr ) return false;
+        return this->operator==(* p);
+    }
 
     [[nodiscard]] auto labels () const noexcept -> LinkedList < Reference < const String > > {
         LinkedList < Reference < const String > > labelList;
@@ -364,6 +386,19 @@ public:
     Array () noexcept = default;
     Array (Array const &) noexcept = default;
     ~Array () noexcept override = default;
+
+    inline auto operator == (Array const & o) const noexcept -> bool {
+        if ( this == & o ) return true;
+        return this->_list == o._list;
+    }
+
+    auto equals (Object const & o) const noexcept -> bool override {
+        if ( this == & o ) return true;
+        auto p = dynamic_cast < decltype ( this ) > ( & o );
+        if ( p == nullptr ) return false;
+
+        return this->operator== (*p);
+    }
 
     auto begin () noexcept -> LinkedList < JSON::Node >::Iterator { return this->_list.begin(); }
     auto begin () const noexcept -> LinkedList < JSON::Node >::ConstIterator { return this->_list.begin(); }
@@ -817,6 +852,11 @@ inline auto JSON::Node::dumpIndented(int indent, int count) const noexcept -> St
     if ( pArr != nullptr )
         return String("\"") + this->_label + "\" : \n" + indentation + String() * indent + pArr->dumpIndented(indent, count);
     return String("\"") + this->_label + "\" : " + this->stringFormattedData();
+}
+
+inline auto JSON::operator == (JSON const & o) const noexcept -> bool {
+    if ( this == & o ) return true;
+    return this->_nodes == o._nodes;
 }
 
 #endif //CDS_JSON_HPP

@@ -133,6 +133,8 @@ int main () {
 
     std::cout << a << '\n';
 
+    Sequence ( Range (10) ).associate([](int e){return Pair {e, String(e) + "test"};}).forEach([](auto e){std::cout << e << ' ';});
+
     return 0;
 
     OurMap < String, int > m;

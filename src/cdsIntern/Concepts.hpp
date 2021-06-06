@@ -83,6 +83,7 @@ template <typename T>
 concept UniqueIdentifiable = requires ( T const & a, T const & b ) {
     UniqueIdentifiableByObject<T> || UniqueIdentifiableByOperator<T>;
 };
+
 #endif
 
 #endif

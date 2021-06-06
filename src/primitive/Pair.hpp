@@ -32,13 +32,6 @@ public:
     auto inline setFirst(K const & k) noexcept -> Pair & {first = k; return * this;}
     auto inline setSecond(V const & v) noexcept -> Pair & {second = v; return * this;}
 
-    auto inline operator == (const Object & o) const noexcept -> bool final {
-        if ( this == & o ) return true;
-        auto a = dynamic_cast < Pair const * > ( & o );
-        if ( a == nullptr ) return false;
-        return a->first == first && a->second == second;
-    }
-
     auto inline operator == ( Pair const & o ) const noexcept -> bool {
         if ( this == & o ) return true;
 
@@ -49,6 +42,14 @@ public:
         if ( this == & o ) return false;
 
         return this->first != o.first || this->second != o.second;
+    }
+
+    auto equals ( Object const & o ) const noexcept -> bool override {
+        if ( this == & o ) return true;
+        auto p = dynamic_cast < decltype (this) > ( & o );
+        if ( p == nullptr ) return false;
+
+        return this->operator==(*p);
     }
 
     Pair & operator = ( Pair const & o ) noexcept {

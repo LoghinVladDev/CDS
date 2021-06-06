@@ -101,7 +101,7 @@ public:
         return String(ss.str());
     }
 
-    auto operator == ( Object const & o ) const noexcept -> bool override {
+    auto equals ( Object const & o ) const noexcept -> bool override {
         if ( this == & o ) return true;
         auto p = dynamic_cast < decltype ( this ) > ( & o );
         if ( p == nullptr ) return false;

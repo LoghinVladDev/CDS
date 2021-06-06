@@ -62,8 +62,8 @@ public:
     inline auto prepend ( T const & v ) noexcept -> void { return this->pushFront(v); }
     inline auto prepend ( T && v ) noexcept -> void { return this->pushFront(v); }
 
-    inline auto add ( T const & v ) noexcept -> void { return this->pushBack(v); }
-    inline auto add ( T && v ) noexcept -> void { return this->pushBack(v); }
+    inline auto add ( T const & v ) noexcept -> void override { return this->pushBack(v); }
+    inline auto add ( T && v ) noexcept -> void override { return this->pushBack(v); }
 
 #if defined(__cpp_concepts) && !defined(_MSC_VER)
     virtual auto sort ( const Comparator < T > & ) noexcept -> void = 0;

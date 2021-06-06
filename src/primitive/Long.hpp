@@ -141,6 +141,14 @@ public:
     constexpr operator long long int() const noexcept { return this->v; }
     [[nodiscard]]constexpr inline auto get() const noexcept -> long long int { return this->v; }
 
+    auto equals ( Object const & o ) const noexcept -> bool override {
+        if ( this == & o ) return true;
+        auto p = dynamic_cast < decltype (this) > ( & o );
+        if ( p == nullptr ) return false;
+
+        return this->operator==(*p);
+    }
+
     constexpr auto operator ++ () noexcept -> Long & { this->v++; return * this; }
     __long_constexpr auto operator ++ (int) noexcept -> Long { auto c = * this; this->v++; return c; }
     constexpr auto operator -- () noexcept -> Long & { this->v--; return * this; }

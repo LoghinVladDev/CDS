@@ -254,16 +254,22 @@ public:
 #pragma clang diagnostic push
 #pragma ide diagnostic ignored "Simplify"
 #endif
-    auto operator == (Object const & o) const noexcept -> bool final {
+    auto operator == (DoubleLinkedList const & o) const noexcept -> bool {
         if ( this == & o ) return true;
-        auto p = dynamic_cast < decltype(this) > ( & o );
-        if ( p == nullptr ) return false;
-        if ( p->size () != this->size() ) return false;
+        if ( o.size () != this->size() ) return false;
 
-        for ( auto i1 = this->begin(), i2 = p->begin(); i1 != this->end() && i2 != p->end(); i1++, i2++ )
+        for ( auto i1 = this->begin(), i2 = o.begin(); i1 != this->end() && i2 != o.end(); i1++, i2++ )
             if ( ! ( i1.value() == i2.value() ) )
                 return false;
         return true;
+    }
+
+    auto equals (Object const & o) const noexcept -> bool final {
+        if ( this == & o ) return true;
+        auto p = dynamic_cast < decltype(this) > ( & o );
+        if ( p == nullptr ) return false;
+
+        return this->operator==(* p);
     }
 
 #if !defined(_MSC_VER)

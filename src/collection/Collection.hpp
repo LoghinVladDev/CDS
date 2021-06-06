@@ -270,11 +270,7 @@ public:
         return this->size() != 0;
     }
 
-    virtual auto toString () const noexcept -> String = 0;
-
-    inline operator String () const noexcept{
-        return this->toString();
-    }
+    auto toString () const noexcept -> String override = 0;
 
     ~Collection() noexcept override = default;
 
