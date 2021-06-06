@@ -119,13 +119,10 @@ public:
         return * this;
     }
 
-#pragma clang diagnostic push
-#pragma ide diagnostic ignored "HidingNonVirtualFunction"
-    Atomic & operator = (Boolean const & obj) noexcept {
+    Atomic & operator = (Boolean const & obj) noexcept override {
         this->set(obj);
         return * this;
     }
-#pragma clang diagnostic pop
 
     Atomic & operator = (Atomic const &) noexcept = default;
     Atomic & operator = (Atomic &&) noexcept = default;

@@ -1483,8 +1483,10 @@ inline String::String(std::string::iterator const & begin, std::string::iterator
         this->_p[this->_l++] = *it;
 }
 
+#if !defined(_MSC_VER)
 #pragma clang diagnostic push
 #pragma ide diagnostic ignored "ConstantConditionsOC"
+#endif
 inline String::String(IteratorBase const & begin, IteratorBase const & end) noexcept : CONSTR_CLEAR() {
     bool reversed = dynamic_cast < Iterator const * > ( & begin ) == nullptr;
     if ( ! reversed && end - begin <= 0 || reversed && begin - end <= 0)
@@ -1498,7 +1500,9 @@ inline String::String(IteratorBase const & begin, IteratorBase const & end) noex
         for ( auto it = dynamic_cast < ReverseIterator const & > ( begin ); it != end; it.next() )
             this->_p[this->_l++] = *it;
 }
+#if !defined(_MSC_VER)
 #pragma clang diagnostic pop
+#endif
 
 inline String::String(ConstIteratorBase const & begin, ConstIteratorBase const & end) noexcept : CONSTR_CLEAR() {
     bool reversed = dynamic_cast < ConstIterator const * > ( & begin ) == nullptr;

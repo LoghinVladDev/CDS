@@ -28,7 +28,11 @@ private:
         ValueType       _lowerBound;
         ValueType       _higherBound;
 
+#if defined(_MSC_VER)
+        constexpr static auto typeName () noexcept -> StringLiteral {
+#else
         constexpr static auto typeName = []() noexcept -> StringLiteral {
+#endif
             if ( std::is_same<uint8, ValueType>::value ) return "uint8";
             if ( std::is_same<uint16, ValueType>::value ) return "uint16";
             if ( std::is_same<uint32, ValueType>::value ) return "uint32";
@@ -48,11 +52,22 @@ private:
         };
 
     public:
+#if defined(_MSC_VER)
+#pragma push_macro("max")
+#pragma push_macro("min")
+#undef max
+#undef min
+#endif
         explicit BaseRandom(ValueType lower = std::numeric_limits<T>::min(), ValueType upper = std::numeric_limits<T>::max()) noexcept :
             twisterEngine(randomDevice()),
             distribution(lower, upper),
             _lowerBound(lower),
             _higherBound(upper) { }
+
+#if defined(_MSC_VER)
+#pragma pop_macro("min")
+#pragma pop_macro("max")
+#endif
 
         auto get () noexcept -> ValueType { return this->distribution(this->twisterEngine); }
         inline auto operator () () noexcept -> ValueType { return this->get(); }

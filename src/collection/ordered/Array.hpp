@@ -494,7 +494,14 @@ auto Array<T>::toString() const noexcept -> String {
 template <class T>
 auto Array<T>::expandWith(Size requiredSize) noexcept -> void {
     if ( this->_size + requiredSize < this->_capacity ) return;
+#if defined(_MSC_VER)
+#pragma push_macro("max")
+#undef max
+#endif
     return this->_resize(std::max(this->_size + requiredSize, this->_capacity * 2));
+#if defined(_MSC_VER)
+#pragma pop_macro("max")
+#endif
 }
 
 template <class T>
