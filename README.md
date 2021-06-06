@@ -31,7 +31,8 @@ Intended to provide support beyond what STL can offer
   * Range
   * Tuple ( Partial Support )  
   * Random  
-  * Object Views - Functional Programming Support
+  * Object Views - reworked to Sequence - Functional Programming Support
+  * Parallel Sequence - Planned
   * Threading
     * Thread
     * Semaphore
