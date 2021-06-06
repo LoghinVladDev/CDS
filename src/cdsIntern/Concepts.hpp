@@ -23,6 +23,10 @@ concept Integral =
         std::is_convertible<T, double>::value;
 
 template < typename T >
+concept Pointer =
+        std::is_pointer<T>::value;
+
+template < typename T >
 concept Iterable = requires ( T obj ) {
     { obj.begin() } -> std::same_as < typename T::Iterator >;
     { obj.end() }   -> std::same_as < typename T::Iterator >;
@@ -80,6 +84,16 @@ concept UniqueIdentifiable = requires ( T const & a, T const & b ) {
     UniqueIdentifiableByObject<T> || UniqueIdentifiableByOperator<T>;
 };
 #endif
+
+#endif
+
+#if defined(__cpp_concepts)
+
+#define REQUIRES(concepts) requires concepts
+
+#else
+
+#define REQUIRES(concepts)
 
 #endif
 

@@ -116,29 +116,22 @@ int main () {
 //        std::cout << e << '\n';
 //    }
 
+    Sequence (Range(20)).drop(5).onEach([](int i){std::cout << i << ' ';}).also([]{std::cout << '\n';});
+    Sequence (Range(20)).take(5).onEach([](int i){std::cout << i << ' ';}).also([]{std::cout << '\n';});
 
-    Sequence(Range(15))
-        .onEach([](auto e){ std::cout << e << " "; }).also([]{std::cout << "\n";})
-        .map([](int i){return double(i) + double(i) / 3;})
-        .onEach([](auto e) {std::cout << e << " ";}).also([]{std::cout << "\n";})
-        .filter([](auto e) { return int(e) % 2 == 0; })
-        .onEach([](auto e){std::cout << e << " ";}).also([]{std::cout << '\n';})
-        .map([](double e){return String(e);})
-        .filter([](auto e){return e[1] == '.'; })
-        .onEach([](auto e){std::cout << e << ' ';}).also([]{std::cout << '\n';})
-        .map([](String const & s){return Pair<String, String>(s.split('.')[0], s.split('.')[1]);})
-        .onEach([](auto p){ std::cout << p.getFirst() << ":" << p.getSecond() << "\t"; }).also([]{std::cout << '\n';})
-        .map([](Pair<String, String> const & p){ return int(Integer::parse(p.getFirst()) + Integer::parse(p.getSecond()) / 100); })
-        .forEach([](auto i){std::cout << i << " int ";});
+    Sequence (Range(20)).dropWhile([](int i){return i < 7;}).onEach([](int i){std::cout << i << ' ';}).also([]{std::cout << '\n';});
+    Sequence (Range(20)).takeWhile([](int i){return i <= 15;}).onEach([](int i){std::cout << i << ' ';}).also([]{std::cout << '\n';});
 
-    std::cout << '\n';
+    Sequence (Range(20)).dropWhile([](int i){return i < 7;}, 3).onEach([](int i){std::cout << i << ' ';}).also([]{std::cout << '\n';});
+    Sequence (Range(20)).takeWhile([](int i){return i <= 15;}, 8).onEach([](int i){std::cout << i << ' ';}).also([]{std::cout << '\n';});
 
-    std::cout << Sequence(Range(10))
-        .map([](int e){return e * e;})
-        .onEach([](int e){std::cout << e << ' ';}).also([]{std::cout << '\n';})
-        .filter([](int e){return e % 10 >= 5;})
-        .onEach([](int e){std::cout << e << ' ';}).also([]{std::cout << '\n';})
-        .contains(16);
+    Sequence ( Array {1, 4, 6, 2} ).indexed().onEach([](auto e){std::cout << e << ' ';}).apply ([]{std::cout << '\n';});
+
+    Array <int>a;
+
+    Sequence (Range(20)).mapTo(a, [](auto e){return e;});
+
+    std::cout << a << '\n';
 
     return 0;
 

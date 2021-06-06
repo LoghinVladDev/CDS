@@ -527,6 +527,12 @@ public:
         return b.back().getSecond();
     }
 
+    auto insert ( Entry && p ) noexcept -> ValueConstReference final {
+        auto & b = this->pBuckets[hashCalculator(p.getFirst())];
+        b.pushBack(std::move(p));
+        return b.back().getSecond();
+    }
+
     auto emplace ( KeyConstReference k, ValueConstReference v ) noexcept -> ValueConstReference final {
         return this->insert( {k, v} );
     }

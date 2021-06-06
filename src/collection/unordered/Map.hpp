@@ -70,7 +70,16 @@ public:
     virtual auto containsKey (KeyConstReference) const noexcept -> bool = 0;
     virtual auto remove (KeyConstReference) noexcept -> bool = 0;
     virtual auto insert (EntryConstReference) noexcept -> ValueConstReference & = 0;
+    virtual auto insert (Entry &&) noexcept -> ValueConstReference & = 0;
     virtual auto emplace (KeyConstReference, ValueConstReference) noexcept -> ValueConstReference = 0;
+
+    inline auto add (EntryConstReference e) noexcept -> void {
+        this->insert(e);
+    }
+
+    inline auto add (Entry && e) noexcept -> void {
+        this->insert(e);
+    }
 
     ~Map() noexcept override = default;
 private:

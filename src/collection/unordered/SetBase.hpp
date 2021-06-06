@@ -135,6 +135,15 @@ protected:
 public:
     auto remove ( ConstReference ) noexcept -> bool;
     virtual auto insert ( ConstReference ) noexcept -> bool = 0;
+    virtual auto insert ( T && ) noexcept -> bool = 0;
+
+    inline auto add ( ConstReference v ) noexcept -> void {
+        this->insert( v );
+    }
+
+    inline auto add ( T && v ) noexcept -> void {
+        this->insert( v );
+    }
 
     auto clear () noexcept -> void final {
         while (this->_pFront != nullptr) {

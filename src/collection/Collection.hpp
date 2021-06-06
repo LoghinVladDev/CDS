@@ -48,7 +48,7 @@ public:
 protected:
     class CollectionOutOfBounds : public std::exception {
     public:
-        virtual auto what() const noexcept -> StringLiteral override {
+        [[nodiscard]] auto what() const noexcept -> StringLiteral override {
             return "Accessed Collection Iterator/Index Out of Range";
         }
     };
@@ -187,6 +187,9 @@ public:
 
     [[nodiscard]] virtual inline auto empty () const noexcept -> bool = 0;
 #endif
+
+    virtual auto add (ElementType const &) noexcept -> void = 0;
+    virtual auto add (ElementType &&) noexcept -> void = 0;
 
     virtual auto clear () noexcept -> void = 0;
 
