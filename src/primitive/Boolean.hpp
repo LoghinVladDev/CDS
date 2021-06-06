@@ -56,7 +56,7 @@ public:
         return !this->v;
     }
 
-    constexpr auto operator == (Boolean const & o) const noexcept -> Boolean { return this->v == o.v; }
+    constexpr auto operator == (Boolean const & o) const noexcept -> bool { return this->v == o.v; }
 
     auto equals ( Object const & o ) const noexcept -> bool override {
         if ( this == & o ) return true;

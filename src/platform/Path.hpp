@@ -243,6 +243,19 @@ public:
             ", volumeName = " + this->volumeName +
             " }";
     }
+
+    inline auto operator == (Win32RootPath const & o) const noexcept -> bool {
+        if ( this == & o ) return true;
+
+        return this->path == o.path && this->deviceName == o.deviceName && this->volumeName == o.volumeName;
+    }
+
+    [[nodiscard]] auto equals (Object const & o) const noexcept -> bool override {
+        if ( this == & o ) return true;
+        auto p = dynamic_cast < decltype ( this ) > ( & o );
+        if ( p == nullptr ) return false;
+        return this->operator == (*p);
+    }
 };
 #endif
 

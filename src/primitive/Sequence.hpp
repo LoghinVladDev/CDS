@@ -23,7 +23,7 @@
 #define _REQUIRES_PRINTABLE requires HasToString < C >
 #define _REQUIRES_INTEGRAL_ITERABLE requires Iterable < C > && Integral < C >
 #else
-#define REQUIRES ( Iterable < C > || ConstIterable < C > )
+#define _REQUIRES_ITERABLE
 #define _REQUIRES_PRINTABLE
 #define _REQUIRES_INTEGRAL_ITERABLE
 #endif
