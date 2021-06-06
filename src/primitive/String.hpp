@@ -541,12 +541,12 @@ public:
 
 
     /**
-     * @test tested in primitive/StringTest/*
+     * @test tested in primitive/StringTest/
      */
     [[nodiscard]] inline auto toStdString () const noexcept -> std::string { return std::string(this->cStr()); }
 
     /**
-     * @test tested in primitive/StringTest/Append/*
+     * @test tested in primitive/StringTest/Append/
      */
     inline operator std::string () const noexcept { return this->toStdString(); }
 
@@ -558,12 +558,12 @@ public:
 
 
     /**
-     * @test tested in primitive/StringTest/*
+     * @test tested in primitive/StringTest/
      */
     [[nodiscard]] constexpr auto cStr () const noexcept -> StringLiteral { return this->_p == nullptr ? "" : this->_p; }
 
     /**
-     * @test tested in primitive/StringTest/Append/*
+     * @test tested in primitive/StringTest/Append/
      */
     inline explicit operator StringLiteral () const noexcept { return this->cStr(); }
 
@@ -1607,7 +1607,7 @@ inline auto String::findLast ( ElementType e ) const noexcept -> Index {
 
 inline auto String::findLast ( String const & o ) const noexcept -> Index {
     Index i = this->size() - o.length();
-    for ( i; i >= 0; i-- )
+    for ( ; i >= 0; i-- )
         if ( this->substr(i, i + o.length()) == o )
             return i;
 

@@ -73,65 +73,65 @@ public:
     virtual auto insert (Entry &&) noexcept -> ValueConstReference & = 0;
     virtual auto emplace (KeyConstReference, ValueConstReference) noexcept -> ValueConstReference = 0;
 
-    inline auto add (EntryConstReference e) noexcept -> void {
+    inline auto add (EntryConstReference e) noexcept -> void override {
         this->insert(e);
     }
 
-    inline auto add (Entry && e) noexcept -> void {
+    inline auto add (Entry && e) noexcept -> void override {
         this->insert(e);
     }
 
     ~Map() noexcept override = default;
 private:
-    auto contains ( EntryConstReference ) const noexcept -> bool { return false; }
+    auto contains ( EntryConstReference ) const noexcept -> bool override { return false; }
 
     auto back () noexcept(false) -> EntryReference final { throw NotImplementedException(); }
     auto back () const noexcept(false) -> EntryConstReference final { throw NotImplementedException(); }
     auto front () const noexcept(false) -> EntryConstReference final { throw NotImplementedException(); }
     auto front () noexcept(false) -> EntryReference final { throw NotImplementedException(); }
 
-    auto makeUnique () noexcept -> void { }
+    auto makeUnique () noexcept -> void override { }
 
-    auto remove ( EntryConstReference, Size ) noexcept -> bool { return false; }
-    auto removeAll ( EntryConstReference o ) noexcept -> bool { return false; }
-    auto removeFirst ( EntryConstReference o ) noexcept -> bool { return false; }
-    auto removeLast ( EntryConstReference o ) noexcept -> bool { return false; }
-    auto removeOf ( const Collection<Entry> &, Size ) noexcept -> bool { return false; }
-    auto removeFirstOf ( const Collection<Entry> & o ) noexcept -> bool { return false; }
-    auto removeAllOf ( const Collection<Entry> & o ) noexcept -> bool { return false; }
-    auto removeLastOf ( const Collection<Entry> & ) noexcept -> bool { return false; }
-    auto removeNotOf ( const Collection<Entry> &, Size ) noexcept -> bool { return false; }
-    auto removeFirstNotOf ( const Collection<Entry> & o ) noexcept -> bool { return false; }
-    auto removeAllNotOf ( const Collection<Entry> & o ) noexcept -> bool { return false; }
-    auto removeLastNotOf ( const Collection<Entry> & ) noexcept -> bool { return false; }
-    auto removeOf ( const std::initializer_list<Entry> &, Size ) noexcept -> bool { return false; }
-    auto removeFirstOf ( const std::initializer_list<Entry> & o ) noexcept -> bool { return false; }
-    auto removeAllOf ( const std::initializer_list<Entry> & o ) noexcept -> bool { return false; }
-    auto removeLastOf ( const std::initializer_list<Entry> & ) noexcept -> bool { return false; }
-    auto removeNotOf ( const std::initializer_list<Entry> &, Size ) noexcept -> bool { return false; }
-    auto removeFirstNotOf ( const std::initializer_list<Entry> & o ) noexcept -> bool { return false; }
-    auto removeAllNotOf ( const std::initializer_list<Entry> & o ) noexcept -> bool { return false; }
-    auto removeLastNotOf ( const std::initializer_list<Entry> & ) noexcept -> bool { return false; }
-    auto replace ( EntryConstReference, EntryConstReference, Size ) noexcept -> void {}
-    auto replaceFirst ( EntryConstReference what, EntryConstReference with ) noexcept -> void {}
-    auto replaceAll ( EntryConstReference what, EntryConstReference with ) noexcept -> void {}
-    auto replaceLast ( EntryConstReference, EntryConstReference ) noexcept -> void {}
-    auto replaceOf ( const Collection<Entry> &, EntryConstReference, Size ) noexcept -> void {}
-    auto replaceFirstOf ( const Collection<Entry> & what, EntryConstReference with ) noexcept -> void {}
-    auto replaceAllOf ( const Collection<Entry> & what, EntryConstReference with ) noexcept -> void {}
-    auto replaceLastOf ( const Collection<Entry> &, EntryConstReference ) noexcept -> void {}
-    auto replaceNotOf ( const Collection<Entry> &, EntryConstReference, Size ) noexcept -> void {}
-    auto replaceFirstNotOf ( const Collection<Entry> & what, EntryConstReference with ) noexcept -> void {}
-    auto replaceAllNotOf ( const Collection<Entry> & what, EntryConstReference with ) noexcept -> void {}
-    auto replaceLastNotOf ( const Collection<Entry> &, EntryConstReference ) noexcept -> void {}
-    auto replaceOf ( const std::initializer_list<Entry> &, EntryConstReference, Size ) noexcept -> void {}
-    auto replaceFirstOf ( const std::initializer_list<Entry> & what, EntryConstReference with ) noexcept -> void {}
-    auto replaceAllOf ( const std::initializer_list<Entry> & what, EntryConstReference with ) noexcept -> void {}
-    auto replaceLastOf ( const std::initializer_list<Entry> &, EntryConstReference ) noexcept -> void {}
-    auto replaceNotOf ( const std::initializer_list<Entry> &, EntryConstReference, Size ) noexcept -> void {}
-    auto replaceFirstNotOf ( const std::initializer_list<Entry> & what, EntryConstReference with ) noexcept -> void {}
-    auto replaceAllNotOf ( const std::initializer_list<Entry> & what, EntryConstReference with ) noexcept -> void {}
-    auto replaceLastNotOf ( const std::initializer_list<Entry> &, EntryConstReference ) noexcept -> void {}
+    auto remove ( EntryConstReference, Size ) noexcept -> bool override { return false; }
+    auto removeAll ( EntryConstReference o ) noexcept -> bool override { return false; }
+    auto removeFirst ( EntryConstReference o ) noexcept -> bool override { return false; }
+    auto removeLast ( EntryConstReference o ) noexcept -> bool override { return false; }
+    auto removeOf ( const Collection<Entry> &, Size ) noexcept -> bool override { return false; }
+    auto removeFirstOf ( const Collection<Entry> & o ) noexcept -> bool override { return false; }
+    auto removeAllOf ( const Collection<Entry> & o ) noexcept -> bool override { return false; }
+    auto removeLastOf ( const Collection<Entry> & ) noexcept -> bool override { return false; }
+    auto removeNotOf ( const Collection<Entry> &, Size ) noexcept -> bool override { return false; }
+    auto removeFirstNotOf ( const Collection<Entry> & o ) noexcept -> bool override { return false; }
+    auto removeAllNotOf ( const Collection<Entry> & o ) noexcept -> bool override { return false; }
+    auto removeLastNotOf ( const Collection<Entry> & ) noexcept -> bool override { return false; }
+    auto removeOf ( const std::initializer_list<Entry> &, Size ) noexcept -> bool override { return false; }
+    auto removeFirstOf ( const std::initializer_list<Entry> & o ) noexcept -> bool override { return false; }
+    auto removeAllOf ( const std::initializer_list<Entry> & o ) noexcept -> bool override { return false; }
+    auto removeLastOf ( const std::initializer_list<Entry> & ) noexcept -> bool override { return false; }
+    auto removeNotOf ( const std::initializer_list<Entry> &, Size ) noexcept -> bool override { return false; }
+    auto removeFirstNotOf ( const std::initializer_list<Entry> & o ) noexcept -> bool override { return false; }
+    auto removeAllNotOf ( const std::initializer_list<Entry> & o ) noexcept -> bool override { return false; }
+    auto removeLastNotOf ( const std::initializer_list<Entry> & ) noexcept -> bool override { return false; }
+    auto replace ( EntryConstReference, EntryConstReference, Size ) noexcept -> void override {}
+    auto replaceFirst ( EntryConstReference what, EntryConstReference with ) noexcept -> void override {}
+    auto replaceAll ( EntryConstReference what, EntryConstReference with ) noexcept -> void override {}
+    auto replaceLast ( EntryConstReference, EntryConstReference ) noexcept -> void override {}
+    auto replaceOf ( const Collection<Entry> &, EntryConstReference, Size ) noexcept -> void override {}
+    auto replaceFirstOf ( const Collection<Entry> & what, EntryConstReference with ) noexcept -> void override {}
+    auto replaceAllOf ( const Collection<Entry> & what, EntryConstReference with ) noexcept -> void override {}
+    auto replaceLastOf ( const Collection<Entry> &, EntryConstReference ) noexcept -> void override {}
+    auto replaceNotOf ( const Collection<Entry> &, EntryConstReference, Size ) noexcept -> void override {}
+    auto replaceFirstNotOf ( const Collection<Entry> & what, EntryConstReference with ) noexcept -> void override {}
+    auto replaceAllNotOf ( const Collection<Entry> & what, EntryConstReference with ) noexcept -> void override {}
+    auto replaceLastNotOf ( const Collection<Entry> &, EntryConstReference ) noexcept -> void override {}
+    auto replaceOf ( const std::initializer_list<Entry> &, EntryConstReference, Size ) noexcept -> void override {}
+    auto replaceFirstOf ( const std::initializer_list<Entry> & what, EntryConstReference with ) noexcept -> void override {}
+    auto replaceAllOf ( const std::initializer_list<Entry> & what, EntryConstReference with ) noexcept -> void override {}
+    auto replaceLastOf ( const std::initializer_list<Entry> &, EntryConstReference ) noexcept -> void override {}
+    auto replaceNotOf ( const std::initializer_list<Entry> &, EntryConstReference, Size ) noexcept -> void override {}
+    auto replaceFirstNotOf ( const std::initializer_list<Entry> & what, EntryConstReference with ) noexcept -> void override {}
+    auto replaceAllNotOf ( const std::initializer_list<Entry> & what, EntryConstReference with ) noexcept -> void override {}
+    auto replaceLastNotOf ( const std::initializer_list<Entry> &, EntryConstReference ) noexcept -> void override {}
 };
 
 #endif //CDS_MAP_HPP
