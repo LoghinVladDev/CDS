@@ -1,5 +1,7 @@
+#if !defined(_MSC_VER)
 #pragma clang diagnostic push
 #pragma ide diagnostic ignored "bugprone-macro-parentheses"
+#endif
 //
 // Created by loghin on 05.04.2021.
 //
@@ -1359,4 +1361,6 @@ auto StringTest::execute() noexcept -> bool {
     return allOk;
 }
 
+#if !defined(_MSC_VER)
 #pragma clang diagnostic pop
+#endif

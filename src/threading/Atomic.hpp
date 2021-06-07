@@ -73,7 +73,7 @@ public:
         return * this;
     }
 
-    inline Atomic & operator = ( DataType const & v ) noexcept {
+    inline virtual Atomic & operator = ( DataType const & v ) noexcept {
         this->set( v );
 
         return * this;

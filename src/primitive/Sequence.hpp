@@ -2,8 +2,11 @@
 // Created by loghin on 02.06.2021.
 //
 
+#if !defined(_MSC_VER)
 #pragma clang diagnostic push
 #pragma ide diagnostic ignored "OCUnusedGlobalDeclarationInspection"
+#endif
+
 #ifndef CDS_SEQUENCE_HPP
 #define CDS_SEQUENCE_HPP
 
@@ -23,7 +26,7 @@
 #define _REQUIRES_PRINTABLE requires HasToString < C >
 #define _REQUIRES_INTEGRAL_ITERABLE requires Iterable < C > && Integral < C >
 #else
-#define REQUIRES ( Iterable < C > || ConstIterable < C > )
+#define _REQUIRES_ITERABLE
 #define _REQUIRES_PRINTABLE
 #define _REQUIRES_INTEGRAL_ITERABLE
 #endif
@@ -223,12 +226,56 @@ public:
     auto singleOr ( ElementType const &, Predicate const & ) const noexcept -> ElementType REQUIRES ( Iterable < C > || ConstIterable < C > );
 
 
-    auto drop (Size) && noexcept -> Sequence < LinkedList < ElementType > > REQUIRES ( Iterable < C > || ConstIterable < C > );
+    auto drop (Size count) && noexcept -> Sequence < LinkedList < ElementType > > REQUIRES ( Iterable < C > || ConstIterable < C > ) {
+        LinkedList < ElementType > remaining;
+
+        Index i = 0;
+        for ( auto e : * this ) {
+            if ( i < count ) {
+                i++;
+                continue;
+            }
+
+            remaining.append(e);
+        }
+
+        return std::move(Sequence < LinkedList < ElementType > > (std::move(remaining)));
+    }
 
     template < typename Predicate >
-    auto dropWhile (Predicate const &, Size = UINT64_MAX) && noexcept -> Sequence < LinkedList < ElementType > > REQUIRES ( Iterable < C > || ConstIterable < C > );
+    auto dropWhile (Predicate const & p, Size count = UINT64_MAX) && noexcept -> Sequence < LinkedList < ElementType > > REQUIRES ( Iterable < C > || ConstIterable < C > ) {
+        LinkedList < ElementType > remaining;
 
-    auto take (Size) && noexcept -> Sequence < LinkedList < ElementType > > REQUIRES ( Iterable < C > || ConstIterable < C > );
+        Index i = 0;
+
+        for ( auto e : * this ) {
+            if ( i < count && p (e) ) {
+                i ++;
+                continue;
+            }
+
+            remaining.append(e);
+        }
+
+        return std::move(Sequence < LinkedList < ElementType > > (std::move(remaining)));
+    }
+
+    auto take (Size count) && noexcept -> Sequence < LinkedList < ElementType > > REQUIRES ( Iterable < C > || ConstIterable < C > ) {
+        LinkedList < ElementType > remaining;
+
+        Index i = 0;
+
+        for ( auto e : * this ) {
+            if ( i < count ) {
+                remaining.append(e);
+                i++;
+                continue;
+            }
+            break;
+        }
+
+        return std::move ( Sequence < LinkedList < ElementType > > (std::move(remaining)) );
+    }
 
     template < typename Predicate >
     auto takeWhile (Predicate const &, Size = UINT64_MAX) && noexcept -> Sequence < LinkedList < ElementType > > REQUIRES ( Iterable < C > || ConstIterable < C > );
@@ -390,10 +437,19 @@ public:
     template <
         typename Mapper,
         typename std::enable_if <
+#if !defined(_MSC_VER)
             ! std::is_same_v <
                 ElementType,
                 returnOf < Mapper >
             >,
+#else
+            ! std::is_same_v <
+                typename std::remove_reference <
+                    decltype ( dataTypes::unsafeAddress < typename std::remove_reference<C>::type::Iterator > ()->value() )
+                > :: type,
+                returnOf < Mapper >
+            >,
+#endif
             int
         >::type = 0
     >
@@ -402,10 +458,19 @@ public:
     template <
         typename Mapper,
         typename std::enable_if <
+#if !defined(_MSC_VER)
             std::is_same <
                 ElementType,
                 returnOf < Mapper >
             >::type::value,
+#else
+            std::is_same <
+                typename std::remove_reference <
+                    decltype ( dataTypes::unsafeAddress < typename std::remove_reference<C>::type::Iterator > ()->value() )
+                > :: type,
+                returnOf < Mapper >
+            >::type::value,
+#endif
             int
         >::type = 0
     >
@@ -414,10 +479,19 @@ public:
     template <
         typename IndexedMapper,
         typename std::enable_if <
+#if !defined(_MSC_VER)
             ! std::is_same_v <
                 ElementType,
                 returnOf < IndexedMapper >
             >,
+#else
+            ! std::is_same_v <
+                typename std::remove_reference <
+                    decltype ( dataTypes::unsafeAddress < typename std::remove_reference<C>::type::Iterator > ()->value() )
+                > :: type,
+                returnOf < IndexedMapper >
+            >,
+#endif
             int
         >::type = 0
     >
@@ -426,10 +500,19 @@ public:
     template <
         typename IndexedMapper,
         typename std::enable_if <
+#if !defined(_MSC_VER)
             std::is_same <
                 ElementType,
                 returnOf < IndexedMapper >
             >::type::value,
+#else
+            std::is_same <
+                typename std::remove_reference <
+                    decltype ( dataTypes::unsafeAddress < typename std::remove_reference<C>::type::Iterator > ()->value() )
+                > :: type,
+                returnOf < IndexedMapper >
+            >::type::value,
+#endif
             int
         >::type = 0
     >
@@ -442,7 +525,14 @@ public:
     auto mapIndexedTo ( Collection < R > &, IndexedMapper const & ) const noexcept -> Collection < R > & REQUIRES ( Iterable < C > || ConstIterable < C > );
 
 
-    auto indexed () && noexcept -> Sequence < LinkedList < Pair < Index, ElementType > > > REQUIRES ( Iterable < C > || ConstIterable < C > );
+    auto indexed () && noexcept -> Sequence < LinkedList < Pair < Index, ElementType > > > REQUIRES ( Iterable < C > || ConstIterable < C > ) {
+        LinkedList < Pair < Index, ElementType > > container;
+        Index i = 0;
+        for ( auto e : * this )
+            container.add ( { i++, e } );
+
+        return std::move ( Sequence < LinkedList < Pair < Index, ElementType > > > ( std::move ( container ) ) );
+    }
 
     auto distinct () && noexcept -> Sequence < UnorderedSet < ElementType > > REQUIRES ( Iterable < C > || ConstIterable < C > );
 
@@ -465,6 +555,12 @@ public:
     template < typename IndexedAction >
     auto onEachIndexed ( IndexedAction const & ) && noexcept -> Sequence < LinkedList < ElementType > > REQUIRES ( Iterable < C > || ConstIterable < C > );
 
+#if defined(_MSC_VER)
+#pragma push_macro("min")
+#pragma push_macro("max")
+#undef min
+#undef max
+#endif
 
     template < typename Comparator > 
     auto max ( Comparator const & = [](ElementType const & a, ElementType const & b) noexcept -> bool { return a < b; } ) const noexcept -> Optional < ElementType > REQUIRES ( Iterable < C > || ConstIterable < C > );
@@ -490,6 +586,10 @@ public:
     template < typename Selector > 
     auto minByOr ( ElementType const &, Selector const & ) const noexcept -> ElementType REQUIRES ( Iterable < C > || ConstIterable < C > );
 
+#if defined(_MSC_VER)
+#pragma pop_macro("max")
+#pragma pop_macro("min")
+#endif
 
     template < typename Accumulator, typename AccumulatedType >
     auto reduce ( Accumulator const &, AccumulatedType const & = AccumulatedType() ) const noexcept -> AccumulatedType REQUIRES ( Iterable < C > || ConstIterable < C > );
@@ -1226,59 +1326,59 @@ auto Sequence < C > ::mapIndexed(IndexedMapper const & mapper) && noexcept -> Se
     return std::move ( * this );
 }
 
-template < typename C >
-auto Sequence < C > :: drop ( Size count ) && noexcept -> Sequence < LinkedList < ElementType > > REQUIRES ( Iterable < C > || ConstIterable < C > ) {
-    LinkedList < ElementType > remaining;
+//template < typename C >
+//auto Sequence < C > :: drop ( Size count ) && noexcept -> Sequence < LinkedList < ElementType > > REQUIRES ( Iterable < C > || ConstIterable < C > ) {
+//    LinkedList < ElementType > remaining;
+//
+//    Index i = 0;
+//    for ( auto e : * this ) {
+//        if ( i < count ) {
+//            i++;
+//            continue;
+//        }
+//
+//        remaining.append(e);
+//    }
+//
+//    return std::move(Sequence < LinkedList < ElementType > > (std::move(remaining)));
+//}
 
-    Index i = 0;
-    for ( auto e : * this ) {
-        if ( i < count ) {
-            i++;
-            continue;
-        }
+//template < typename C >
+//template < typename Predicate >
+//auto Sequence < C > :: dropWhile ( Predicate const & p, Size count ) && noexcept -> Sequence < LinkedList < ElementType > > REQUIRES ( Iterable < C > || ConstIterable < C > ) {
+//    LinkedList < ElementType > remaining;
+//
+//    Index i = 0;
+//
+//    for ( auto e : * this ) {
+//        if ( i < count && p (e) ) {
+//            i ++;
+//            continue;
+//        }
+//
+//        remaining.append(e);
+//    }
+//
+//    return std::move(Sequence < LinkedList < ElementType > > (std::move(remaining)));
+//}
 
-        remaining.append(e);
-    }
-
-    return std::move(Sequence < LinkedList < ElementType > > (std::move(remaining)));
-}
-
-template < typename C >
-template < typename Predicate >
-auto Sequence < C > :: dropWhile ( Predicate const & p, Size count ) && noexcept -> Sequence < LinkedList < ElementType > > REQUIRES ( Iterable < C > || ConstIterable < C > ) {
-    LinkedList < ElementType > remaining;
-
-    Index i = 0;
-
-    for ( auto e : * this ) {
-        if ( i < count && p (e) ) {
-            i ++;
-            continue;
-        }
-
-        remaining.append(e);
-    }
-
-    return std::move(Sequence < LinkedList < ElementType > > (std::move(remaining)));
-}
-
-template < typename C >
-auto Sequence < C > :: take ( Size count ) && noexcept -> Sequence < LinkedList < ElementType > > REQUIRES ( Iterable < C > || ConstIterable < C > ) {
-    LinkedList < ElementType > remaining;
-
-    Index i = 0;
-
-    for ( auto e : * this ) {
-        if ( i < count ) {
-            remaining.append(e);
-            i++;
-            continue;
-        }
-        break;
-    }
-
-    return std::move ( Sequence < LinkedList < ElementType > > (std::move(remaining)) );
-}
+//template < typename C >
+//auto Sequence < C > :: take ( Size count ) && noexcept -> Sequence < LinkedList < ElementType > > REQUIRES ( Iterable < C > || ConstIterable < C > ) {
+//    LinkedList < ElementType > remaining;
+//
+//    Index i = 0;
+//
+//    for ( auto e : * this ) {
+//        if ( i < count ) {
+//            remaining.append(e);
+//            i++;
+//            continue;
+//        }
+//        break;
+//    }
+//
+//    return std::move ( Sequence < LinkedList < ElementType > > (std::move(remaining)) );
+//}
 
 template < typename C >
 template < typename Predicate >
@@ -1299,15 +1399,15 @@ auto Sequence < C > :: takeWhile ( Predicate const & predicate, Size count ) && 
     return std::move ( Sequence < LinkedList < ElementType > > ( std::move ( remaining ) ) );
 }
 
-template < typename C >
-inline auto Sequence < C > :: indexed () && noexcept -> Sequence < LinkedList < Pair < Index, ElementType > > > REQUIRES ( Iterable < C > || ConstIterable < C > ) {
-    LinkedList < Pair < Index, ElementType > > container;
-    Index i = 0;
-    for ( auto e : * this )
-        container.add ( { i++, e } );
-
-    return std::move ( Sequence < LinkedList < Pair < Index, ElementType > > > ( std::move ( container ) ) );
-}
+//template < typename C >
+//inline auto Sequence < C > :: indexed () && noexcept -> Sequence < LinkedList < Pair < Index, ElementType > > > REQUIRES ( Iterable < C > || ConstIterable < C > ) {
+//    LinkedList < Pair < Index, ElementType > > container;
+//    Index i = 0;
+//    for ( auto e : * this )
+//        container.add ( { i++, e } );
+//
+//    return std::move ( Sequence < LinkedList < Pair < Index, ElementType > > > ( std::move ( container ) ) );
+//}
 
 template < typename C >
 template < typename NewType >
@@ -1791,4 +1891,6 @@ inline auto Sequence < C > :: onEachIndexed (IndexedAction const & indexedAction
 
 #endif //CDS_SEQUENCE_HPP
 
+#if !defined(_MSC_VER)
 #pragma clang diagnostic pop
+#endif

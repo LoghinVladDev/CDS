@@ -45,6 +45,13 @@ namespace crypto {
             std::memset(obj._pData, obj._paddingCharacter, bytes.bytes());
         }
 
+#if defined(_MSC_VER)
+#pragma push_macro("min")
+#pragma push_macro("max")
+#undef min
+#undef max
+#endif
+
         constexpr explicit Block ( byte const * pData, Size size = SIZE_MAX, byte padChar = '\0') noexcept :
                 _paddingCharacter(padChar),
                 _pData(new byte[bytes.bytes()]) {
@@ -256,6 +263,10 @@ namespace crypto {
         return result;
     }
 
+#if defined(_MSC_VER)
+#pragma pop_macro("max")
+#pragma pop_macro("min")
+#endif
 }
 
 #endif //CDS_BLOCK_HPP
