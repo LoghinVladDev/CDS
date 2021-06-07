@@ -81,13 +81,16 @@ public:
 
         std::stringstream oss;
         oss << "< " << (std::is_const<T>::value ? "const " : "") << "& of 0x" << std::hex
-            << reinterpret_cast < typename PointerBase<T>::PointerType > ( p ) << std::dec << " : " <<
+            << reinterpret_cast < typename PointerBase<T>::PointerType > ( p ) << std::dec << " : ";
             #if defined(CDS_GLM)
-            (isVec () ? String(*p) : (*p))
+        if constexpr (isVec())
+            oss << String(*p);
+        else
+            oss << (*p);
             #else
-            (*p)
+        oss << (*p);
             #endif
-            << " >";
+        oss << " >";
         return String(oss.str());
     }
 
