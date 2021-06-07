@@ -84,8 +84,12 @@ public:
         return String(oss.str());
     }
 
+
     [[nodiscard]] auto copy () const noexcept -> Pair * override {
-        return new Pair( * this );
+        if constexpr ( std::is_copy_constructible < Pair > :: type::value )
+            return new Pair( * this );
+        else
+            return nullptr;
     }
 };
 
