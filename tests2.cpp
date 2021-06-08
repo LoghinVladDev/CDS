@@ -146,6 +146,12 @@ int main () {
     Sequence ( String("Ana are mere, dar are ana pere?").split(", ?") )
         .groupBy([](String const & s){return s.length();}).onEach([](auto e){std::cout << e << ' ';}).also ([]{std::cout << '\n';});
 
+    std::cout << Sequence ( Array { 1, 2, 3, 4 } ).fold(5, [](int a, int b){ return a + b; }) << '\n';
+    std::cout << Sequence ( Array { 1, 2, 3, 4 } ).fold(2.5f, [](float a, int b){ return a + (float)b; }) << '\n';
+
+    std::cout << Sequence ( Array { 1, 2, 3, 4 } ).reduce( [](int a, int b){ return a + b; }) << '\n';
+    std::cout << Sequence ( Array { 1, 2, 3, 4 } ).reduce( [](float a, int b){ return a + (float)b; }) << '\n';
+
     return 0;
 
     OurMap < String, int > m;

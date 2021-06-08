@@ -369,7 +369,7 @@ public:
     template < typename Comparator = std::function < bool (ElementType const &, ElementType const &) > >
     auto sorted ( Comparator const & = []( ElementType const & a, ElementType const & b) noexcept -> bool { return a < b; } ) && noexcept -> Sequence < Array < ElementType > >  REQUIRES ( Iterable < C > || ConstIterable < C > );
 
-    template < typename Selector > 
+    template < typename Selector >
     auto sortedBy ( Selector const & ) && noexcept -> Sequence < Array < ElementType > > REQUIRES ( Iterable < C > || ConstIterable < C > );
 
     template < typename Selector >
@@ -378,7 +378,7 @@ public:
     template < typename Selector, typename Comparator >
     auto sortedByWith ( Selector const &, Comparator const & = []( returnOf < Selector > const & a, returnOf < Selector > const & b ) noexcept -> bool { return a < b; } ) && noexcept -> Sequence < Array < ElementType > >  REQUIRES ( Iterable < C > || ConstIterable < C > );
 
-    template < typename Collection > 
+    template < typename Collection >
     auto asCollection () const noexcept -> Collection REQUIRES ( Iterable < C > || ConstIterable < C > );
 
     auto asLinkedList () const noexcept -> LinkedList < ElementType > REQUIRES ( Iterable < C > || ConstIterable < C > );
@@ -519,9 +519,9 @@ public:
     auto mapIndexed ( IndexedMapper const & ) && noexcept -> Sequence < C > REQUIRES ( Iterable < C > || ConstIterable < C > );
 
     template < typename Mapper, typename R >
-    auto mapTo ( Collection < R > &, Mapper const & ) const noexcept -> Collection < R > & REQUIRES ( Iterable < C > || ConstIterable < C > ); 
+    auto mapTo ( Collection < R > &, Mapper const & ) const noexcept -> Collection < R > & REQUIRES ( Iterable < C > || ConstIterable < C > );
 
-    template < typename IndexedMapper, typename R > 
+    template < typename IndexedMapper, typename R >
     auto mapIndexedTo ( Collection < R > &, IndexedMapper const & ) const noexcept -> Collection < R > & REQUIRES ( Iterable < C > || ConstIterable < C > );
 
 
@@ -536,20 +536,13 @@ public:
 
     auto distinct () && noexcept -> Sequence < UnorderedSet < ElementType > > REQUIRES ( Iterable < C > || ConstIterable < C > );
 
-    template < typename Folder, typename R >
-    auto fold ( Folder const & ) const noexcept -> R REQUIRES ( Iterable < C > || ConstIterable < C > );
-
-    template < typename IndexedFolder, typename R > 
-    auto foldIndexed ( IndexedFolder const & ) const noexcept -> R REQUIRES ( Iterable < C > || ConstIterable < C > );
-
-
-    template < typename Action > 
+    template < typename Action >
     auto forEach ( Action const & ) const noexcept -> void REQUIRES ( Iterable < C > || ConstIterable < C > );
 
-    template < typename IndexedAction > 
+    template < typename IndexedAction >
     auto forEachIndexed ( IndexedAction const & ) const noexcept -> void REQUIRES ( Iterable < C > || ConstIterable < C > );
 
-    template < typename Action > 
+    template < typename Action >
     auto onEach ( Action const & ) && noexcept -> Sequence < LinkedList < ElementType > > REQUIRES ( Iterable < C > || ConstIterable < C > );
 
     template < typename IndexedAction >
@@ -562,28 +555,28 @@ public:
 #undef max
 #endif
 
-    template < typename Comparator > 
+    template < typename Comparator >
     auto max ( Comparator const & = [](ElementType const & a, ElementType const & b) noexcept -> bool { return a < b; } ) const noexcept -> Optional < ElementType > REQUIRES ( Iterable < C > || ConstIterable < C > );
 
-    template < typename Selector > 
+    template < typename Selector >
     auto maxBy ( Selector const & ) const noexcept -> Optional < ElementType > REQUIRES ( Iterable < C > || ConstIterable < C > );
 
-    template < typename Comparator > 
+    template < typename Comparator >
     auto maxOr ( ElementType const &, Comparator const & = [](ElementType const & a, ElementType const & b) noexcept -> bool { return a < b; } ) const noexcept -> ElementType REQUIRES ( Iterable < C > || ConstIterable < C > );
 
-    template < typename Selector > 
+    template < typename Selector >
     auto maxByOr ( ElementType const &, Selector const & ) const noexcept -> ElementType REQUIRES ( Iterable < C > || ConstIterable < C > );
 
-    template < typename Comparator > 
+    template < typename Comparator >
     auto min ( Comparator const & = [](ElementType const & a, ElementType const & b) noexcept -> bool { return a < b; } ) const noexcept -> Optional < ElementType > REQUIRES ( Iterable < C > || ConstIterable < C > );
 
-    template < typename Selector > 
+    template < typename Selector >
     auto minBy ( Selector const & ) const noexcept -> Optional < ElementType > REQUIRES ( Iterable < C > || ConstIterable < C > );
 
-    template < typename Comparator > 
+    template < typename Comparator >
     auto minOr ( ElementType const &, Comparator const & = [](ElementType const & a, ElementType const & b) noexcept -> bool { return a < b; } ) const noexcept -> ElementType REQUIRES ( Iterable < C > || ConstIterable < C > );
 
-    template < typename Selector > 
+    template < typename Selector >
     auto minByOr ( ElementType const &, Selector const & ) const noexcept -> ElementType REQUIRES ( Iterable < C > || ConstIterable < C > );
 
 #if defined(_MSC_VER)
@@ -592,22 +585,22 @@ public:
 #endif
 
     template < typename Accumulator, typename AccumulatedType >
-    auto reduce ( Accumulator const &, AccumulatedType const & = AccumulatedType() ) const noexcept -> AccumulatedType REQUIRES ( Iterable < C > || ConstIterable < C > );
+    auto fold ( AccumulatedType const &, Accumulator const & ) const noexcept -> AccumulatedType REQUIRES ( Iterable < C > || ConstIterable < C > );
 
     template < typename IndexedAccumulator, typename AccumulatedType >
-    auto reduceIndexed ( IndexedAccumulator const &, AccumulatedType const & = AccumulatedType() ) const noexcept -> AccumulatedType REQUIRES ( Iterable < C > || ConstIterable < C > ); 
+    auto foldIndexed ( AccumulatedType const &, IndexedAccumulator const & ) const noexcept -> AccumulatedType REQUIRES ( Iterable < C > || ConstIterable < C > );
+
+    template < typename Accumulator >
+    auto reduce ( Accumulator const & ) const noexcept -> returnOf < Accumulator > REQUIRES ( Iterable < C > || ConstIterable < C > );
+
+    template < typename IndexedAccumulator >
+    auto reduceIndexed ( IndexedAccumulator const & ) const noexcept -> returnOf < IndexedAccumulator > REQUIRES ( Iterable < C > || ConstIterable < C > );
 
     template < typename Accumulator, typename AccumulatedType >
     auto runningReduce ( Accumulator const &, AccumulatedType const & = AccumulatedType() ) && noexcept -> Sequence < LinkedList < AccumulatedType > > REQUIRES ( Iterable < C > || ConstIterable < C > );
 
     template < typename IndexedAccumulator, typename AccumulatedType >
     auto runningReduceIndexed ( IndexedAccumulator const &, AccumulatedType const & = AccumulatedType() ) && noexcept -> Sequence < LinkedList < AccumulatedType > > REQUIRES ( Iterable < C > || ConstIterable < C > );
-
-    template < typename Accumulator, typename AccumulatedType >
-    auto fold ( AccumulatedType const &, Accumulator const & ) const noexcept -> AccumulatedType REQUIRES ( Iterable < C > || ConstIterable < C > );
-
-    template < typename IndexedAccumulator, typename AccumulatedType >
-    auto foldIndexed ( AccumulatedType const &, IndexedAccumulator const &, AccumulatedType const & = AccumulatedType() ) const noexcept -> AccumulatedType REQUIRES ( Iterable < C > || ConstIterable < C > ); 
 
     template < typename Accumulator, typename AccumulatedType >
     auto runningFold ( AccumulatedType const &, Accumulator const & ) && noexcept -> Sequence < LinkedList < AccumulatedType > > REQUIRES ( Iterable < C > || ConstIterable < C > );
@@ -621,14 +614,14 @@ public:
     template < typename IndexedAccumulator, typename AccumulatedType >
     auto scanIndexed ( AccumulatedType const &, IndexedAccumulator const & ) && noexcept -> Sequence < LinkedList < AccumulatedType > > REQUIRES ( Iterable < C > || ConstIterable < C > );
 
-    
+
     template < typename Selector, typename R >
     auto sumBy ( Selector const & ) const noexcept -> R REQUIRES ( Iterable < C > || ConstIterable < C > );
 
-    
+
     auto chunked (Size) && noexcept -> Sequence < LinkedList < LinkedList < ElementType > > > REQUIRES ( Iterable < C > || ConstIterable < C > );
 
-    template < typename ListTransformer, typename R > 
+    template < typename ListTransformer, typename R >
     auto chunked (Size, ListTransformer const &) && noexcept -> Sequence < LinkedList < R > > REQUIRES ( Iterable < C > || ConstIterable < C > );
 
 
@@ -657,7 +650,7 @@ public:
 
     auto zipWithNext () && noexcept -> Sequence < LinkedList < Pair < ElementType, ElementType > > > REQUIRES ( Iterable < C > || ConstIterable < C > );
 
-    template < typename Transformer, typename R > 
+    template < typename Transformer, typename R >
     auto zipWithNext (Transformer const &) && noexcept -> Sequence < LinkedList < R > > REQUIRES ( Iterable < C > || ConstIterable < C > );
 };
 
@@ -2143,6 +2136,58 @@ inline auto Sequence < C > :: onEachIndexed (IndexedAction const & indexedAction
 }
 
 // endregion
+
+/// region Accumulator Operations
+
+template < typename C >
+template < typename Accumulator, typename AccumulatedType >
+auto Sequence < C > :: fold ( AccumulatedType const & startingValue, Accumulator const & accumulator ) const noexcept -> AccumulatedType REQUIRES ( Iterable < C > || ConstIterable < C > ) {
+    AccumulatedType result = startingValue;
+
+    for ( auto e : * this )
+        result = accumulator ( result, e );
+
+    return result;
+}
+
+template < typename C >
+template < typename IndexedAccumulator, typename AccumulatedType >
+auto Sequence < C > :: foldIndexed ( AccumulatedType const & startingValue, IndexedAccumulator const & indexedAccumulator ) const noexcept -> AccumulatedType REQUIRES ( Iterable < C > || ConstIterable < C > ) {
+    AccumulatedType result = startingValue;
+    Index i = 0;
+
+    for ( auto e : * this )
+        result = indexedAccumulator ( i++, result, e );
+
+    return result;
+}
+
+template < typename C >
+template < typename Accumulator >
+auto Sequence < C > :: reduce ( Accumulator const & accumulator ) const noexcept -> returnOf < Accumulator > REQUIRES ( Iterable < C > || ConstIterable < C > ) {
+    auto it = this->begin();
+    returnOf < Accumulator > result = it.value();
+
+    for ( it.next(); it != this->end(); ++ it )
+        result = accumulator ( result, it.value() );
+
+    return result;
+}
+
+template < typename C >
+template < typename IndexedAccumulator >
+auto Sequence < C > :: reduceIndexed ( IndexedAccumulator const & indexedAccumulator ) const noexcept -> returnOf < IndexedAccumulator > REQUIRES ( Iterable < C > || ConstIterable < C > ) {
+    auto it = this->begin();
+    returnOf < IndexedAccumulator > result = it.value();
+    Index i = 1;
+
+    for ( it.next(); it != this->end(); ++ it )
+        result = indexedAccumulator ( i ++, result, it.value() );
+
+    return result;
+}
+
+/// endregion
 
 #endif //CDS_SEQUENCE_HPP
 
