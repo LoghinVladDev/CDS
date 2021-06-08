@@ -133,7 +133,18 @@ int main () {
 
     std::cout << a << '\n';
 
-    Sequence ( Range (10) ).associate([](int e){return Pair {e, String(e) + "test"};}).forEach([](auto e){std::cout << e << ' ';});
+    Sequence ( Range (10) ).associate([](int e){return Pair {e, String(e) + "test"};}).onEach([](auto e){std::cout << e << ' ';}).also([]{std::cout << '\n';});
+
+    Sequence ( Array { Array {1, 2, 3}, Array{2 ,1 ,3}, Array{5,1, 2, 4} } )
+        .flatMap([](Array<int> e){return e;}).distinct().sorted()
+        .onEach([](auto e){std::cout << e << ' ';}).also([]{std::cout << '\n';});
+
+    Sequence ( Range(5) )
+        .flatMap ([](int e){ return Array {e, e + 5, e + 10}; })
+        .onEach([](auto e){std::cout << e << ' ';}).also ([]{std::cout << '\n';});
+
+    Sequence ( String("Ana are mere, dar are ana pere?").split(", ?") )
+        .groupBy([](String const & s){return s.length();}).onEach([](auto e){std::cout << e << ' ';}).also ([]{std::cout << '\n';});
 
     return 0;
 
@@ -142,16 +153,6 @@ int main () {
     OurMap < int, String > m2;
     std::cout << m2.getKeyHash(294);
     exit(0);
-
-
-
-
-
-
-
-
-
-
 
 
 

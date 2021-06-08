@@ -366,17 +366,17 @@ public:
     template < typename ValueMapper >
     auto associateWithTo ( Map < ElementType, returnOf < ValueMapper > > &, ValueMapper const & ) const noexcept -> Map < ElementType , returnOf < ValueMapper > > & REQUIRES ( Iterable < C > || ConstIterable < C > );
 
-    template < typename Comparator > 
-    auto sort ( Comparator const & = []( ElementType const & a, ElementType const & b) noexcept -> bool { return a < b; } ) && noexcept -> Sequence < LinkedList < ElementType > >  REQUIRES ( Iterable < C > || ConstIterable < C > );
+    template < typename Comparator = std::function < bool (ElementType const &, ElementType const &) > >
+    auto sorted ( Comparator const & = []( ElementType const & a, ElementType const & b) noexcept -> bool { return a < b; } ) && noexcept -> Sequence < Array < ElementType > >  REQUIRES ( Iterable < C > || ConstIterable < C > );
 
     template < typename Selector > 
-    auto sortedBy ( Selector const & ) && noexcept -> Sequence < LinkedList < ElementType > > REQUIRES ( Iterable < C > || ConstIterable < C > );
+    auto sortedBy ( Selector const & ) && noexcept -> Sequence < Array < ElementType > > REQUIRES ( Iterable < C > || ConstIterable < C > );
 
     template < typename Selector >
-    auto sortedByDescending ( Selector const & ) && noexcept -> Sequence < LinkedList < ElementType > > REQUIRES ( Iterable < C > || ConstIterable < C > );
+    auto sortedByDescending ( Selector const & ) && noexcept -> Sequence < Array < ElementType > > REQUIRES ( Iterable < C > || ConstIterable < C > );
 
-    template < typename Selector, typename Comparator, typename SelectorType >
-    auto sortedByWith ( Selector const &, Comparator const & = []( SelectorType const & a, SelectorType const & b ) noexcept -> bool { return a < b; } ) && noexcept -> Sequence < LinkedList < ElementType > >  REQUIRES ( Iterable < C > || ConstIterable < C > );
+    template < typename Selector, typename Comparator >
+    auto sortedByWith ( Selector const &, Comparator const & = []( returnOf < Selector > const & a, returnOf < Selector > const & b ) noexcept -> bool { return a < b; } ) && noexcept -> Sequence < Array < ElementType > >  REQUIRES ( Iterable < C > || ConstIterable < C > );
 
     template < typename Collection > 
     auto asCollection () const noexcept -> Collection REQUIRES ( Iterable < C > || ConstIterable < C > );
@@ -405,30 +405,30 @@ public:
 
     auto toUnorderedSet (UnorderedSet <ElementType> &) const noexcept -> UnorderedSet < ElementType > & REQUIRES ( Iterable < C > || ConstIterable < C > );
 
-    
-    template < typename Transformer, typename TransformedType >
-    auto flatMap ( Transformer const & ) && noexcept -> Sequence < LinkedList < TransformedType > > REQUIRES ( Iterable < C > || ConstIterable < C > );
 
-    template < typename IndexedTransformer, typename TransformedType >
-    auto flatMapIndexed ( IndexedTransformer const & ) && noexcept -> Sequence < LinkedList < TransformedType > > REQUIRES ( Iterable < C > || ConstIterable < C > );
+    template < typename Transformer >
+    auto flatMap ( Transformer const & ) && noexcept -> Sequence < LinkedList < typename std::remove_reference < decltype ( dataTypes::unsafeAddress<typename returnOf < Transformer > :: Iterator >()->value() ) > :: type > > REQUIRES ( ( Iterable < C > || ConstIterable < C > ) && ( Iterable < returnOf < Transformer > > || ConstIterable < returnOf < Transformer > > ) );
 
-    template < typename Transformer, typename TransformedType >
-    auto flatMapTo ( Collection < TransformedType > &, Transformer const & ) const noexcept -> Collection < TransformedType > & REQUIRES ( Iterable < C > || ConstIterable < C > );
+    template < typename IndexedTransformer >
+    auto flatMapIndexed ( IndexedTransformer const & ) && noexcept -> Sequence < LinkedList < typename std::remove_reference < decltype ( dataTypes::unsafeAddress<typename returnOf < IndexedTransformer > :: Iterator >()->value() ) > :: type > > REQUIRES ( ( Iterable < C > || ConstIterable < C > ) && ( Iterable < returnOf < IndexedTransformer > > || ConstIterable < returnOf < IndexedTransformer > > ) );
 
-    template < typename IndexedTransformer, typename TransformedType >
-    auto flatMapIndexedTo ( Collection < TransformedType > &, IndexedTransformer const & ) const noexcept -> Collection < TransformedType > & REQUIRES ( Iterable < C > || ConstIterable < C > );
+    template < typename Transformer >
+    auto flatMapTo ( Collection < typename std::remove_reference < decltype ( dataTypes::unsafeAddress<typename returnOf < Transformer > :: Iterator >()->value() ) > :: type > &, Transformer const & ) const noexcept -> Collection < typename std::remove_reference < decltype ( dataTypes::unsafeAddress<typename returnOf < Transformer > :: Iterator >()->value() ) > :: type > & REQUIRES ( ( Iterable < C > || ConstIterable < C > ) && ( Iterable < typename std::remove_reference < decltype ( dataTypes::unsafeAddress<typename returnOf < Transformer > :: Iterator >()->value() ) > :: type > || ConstIterable < typename std::remove_reference < decltype ( dataTypes::unsafeAddress<typename returnOf < Transformer > :: Iterator >()->value() ) > :: type > ) );
 
-    template < typename KeySelector, typename K > 
-    auto groupBy ( KeySelector const & ) && noexcept -> Sequence < LinkedList < Pair < K, LinkedList < ElementType > > > > REQUIRES ( Iterable < C > || ConstIterable < C > );
+    template < typename IndexedTransformer >
+    auto flatMapIndexedTo ( Collection < typename std::remove_reference < decltype ( dataTypes::unsafeAddress<typename returnOf < IndexedTransformer > :: Iterator >()->value() ) > :: type > &, IndexedTransformer const & ) const noexcept -> Collection < typename std::remove_reference < decltype ( dataTypes::unsafeAddress<typename returnOf < IndexedTransformer > :: Iterator >()->value() ) > :: type > & REQUIRES ( (Iterable < C > || ConstIterable < C >) && (Iterable < typename std::remove_reference < decltype ( dataTypes::unsafeAddress<typename returnOf < IndexedTransformer > :: Iterator >()->value() ) > :: type > || ConstIterable < typename std::remove_reference < decltype ( dataTypes::unsafeAddress<typename returnOf < IndexedTransformer > :: Iterator >()->value() ) > :: type >) );
 
-    template < typename KeySelector, typename ValueMapper, typename K, typename V >
-    auto groupBy ( KeySelector const &, ValueMapper const & ) && noexcept -> Sequence < LinkedList < Pair < K, LinkedList < V > > > > REQUIRES ( Iterable < C > || ConstIterable < C > );
+    template < typename KeySelector >
+    auto groupBy ( KeySelector const & ) && noexcept -> Sequence < HashMap < returnOf < KeySelector >, LinkedList < ElementType > > > REQUIRES ( Iterable < C > || ConstIterable < C > );
 
-    template < typename KeySelector, typename K, typename G > 
-    auto groupByTo ( Map < K, G > &, KeySelector const & ) const noexcept -> Map < K, G > & REQUIRES ( Iterable < C > || ConstIterable < C > ); 
+    template < typename KeySelector, typename ValueMapper >
+    auto groupBy ( KeySelector const &, ValueMapper const & ) && noexcept -> Sequence < HashMap < returnOf < KeySelector >, LinkedList < returnOf < ValueMapper > > > > REQUIRES ( Iterable < C > || ConstIterable < C > );
 
-    template < typename KeySelector, typename ValueMapper, typename K, typename G >
-    auto groupByTo ( Map < K, G > &, KeySelector const &, ValueMapper const & ) const noexcept -> Map < K, G > & REQUIRES ( Iterable < C > || ConstIterable < C > );
+    template < typename KeySelector >
+    auto groupByTo ( Map < returnOf < KeySelector >, LinkedList < ElementType > > &, KeySelector const & ) const noexcept -> Map < returnOf < KeySelector >, LinkedList < ElementType > > & REQUIRES ( Iterable < C > || ConstIterable < C > );
+
+    template < typename KeySelector, typename ValueMapper >
+    auto groupByTo ( Map < returnOf < KeySelector >, LinkedList < returnOf < ValueMapper > > > &, KeySelector const &, ValueMapper const & ) const noexcept -> Map < returnOf < KeySelector >, LinkedList < returnOf < ValueMapper > > > & REQUIRES ( Iterable < C > || ConstIterable < C > );
 
     /**
      * Two versions of map, one for storage of mappers when keeping same type, another for switching to another data type
@@ -1460,6 +1460,64 @@ inline auto Sequence < C > :: associateBy ( KeyGenerator const & keyGenerator ) 
     return std::move ( Sequence < LinkedList < Pair < returnOf < KeyGenerator >, ElementType > > > ( std::move ( container ) ) );
 }
 
+template < typename C >
+template < typename KeyGenerator, typename ValueMapper >
+inline auto Sequence < C > :: associateBy ( KeyGenerator const & keyGenerator, ValueMapper const & valueMapper ) && noexcept -> Sequence < LinkedList < Pair < returnOf < KeyGenerator >, returnOf < ValueMapper > > > > REQUIRES(Iterable < C > || ConstIterable < C >) {
+    LinkedList < Pair < returnOf < KeyGenerator >, ElementType > > container;
+    for ( auto e : * this )
+        container.add( { keyGenerator ( e ), valueMapper ( e ) } );
+
+    return std::move ( Sequence < LinkedList < Pair < returnOf < KeyGenerator >, returnOf < ValueMapper > > > > (std::move( container )) );
+}
+
+template < typename C >
+template < typename ValueMapper >
+inline auto Sequence < C > :: associateWith ( ValueMapper const & mapper ) && noexcept -> Sequence < LinkedList < Pair < ElementType, returnOf < ValueMapper > > > > REQUIRES(Iterable < C > || ConstIterable < C >) {
+    LinkedList < Pair < ElementType, returnOf < ValueMapper > > > container;
+    for ( auto e : * this )
+        container.add( { e, mapper(e) } );
+
+    return std::move ( Sequence < LinkedList < Pair < ElementType, returnOf < ValueMapper > > > > (std::move(container)) );
+}
+
+template < typename C >
+template < typename Comparator >
+inline auto Sequence < C > :: sorted ( Comparator const & comparator ) && noexcept -> Sequence < Array < ElementType > > REQUIRES ( Iterable < C > || ConstIterable < C > ) {
+    Array < ElementType > container;
+    for ( auto e: * this )
+        container.add(e);
+
+    container.shrinkToSize(container.size());
+    container.sort(comparator);
+
+    return std::move ( Sequence < Array < ElementType > > (std::move(container)) );
+}
+
+template < typename C >
+template < typename Selector >
+inline auto Sequence < C > :: sortedBy ( Selector const & selector ) && noexcept -> Sequence < Array < ElementType > > REQUIRES ( Iterable < C > || ConstIterable < C > ) {
+    return this->sorted([& selector](ElementType const & a, ElementType const & b) noexcept -> bool {return selector(a) < selector(b);});
+}
+
+template < typename C >
+template < typename Selector >
+inline auto Sequence < C > :: sortedByDescending ( Selector const & selector ) && noexcept -> Sequence < Array < ElementType > > REQUIRES ( Iterable < C > || ConstIterable < C > ) {
+    return this->sorted([& selector](ElementType const & a, ElementType const & b) noexcept -> bool {return selector(a) > selector(b);});
+}
+
+template < typename C >
+template < typename Selector, typename Comparator >
+inline auto Sequence < C > :: sortedByWith ( Selector const & selector, Comparator const & comparator ) && noexcept -> Sequence < Array < ElementType > > REQUIRES (Iterable<C> || ConstIterable<C>) {
+    return this->sorted([& selector, & comparator](ElementType const & a, ElementType const & b){ return comparator(selector(a), selector(b)); });
+}
+
+template < typename C >
+inline auto Sequence < C > :: distinct () && noexcept -> Sequence < UnorderedSet < ElementType > > REQUIRES ( Iterable < C > || ConstIterable < C > ) {
+    UnorderedSet < ElementType > container;
+    for ( auto e : * this )
+        container.add ( e );
+    return std::move ( Sequence < decltype (container) > ( std::move ( container ) ) );
+}
 
 /// endregion
 
@@ -1648,6 +1706,89 @@ inline auto Sequence < C > :: singleOr ( ElementType const & r, Predicate const 
     return r;
 }
 
+template < typename C >
+template < typename Transformer >
+auto Sequence < C > :: flatMap ( Transformer const & transformer ) && noexcept -> Sequence < LinkedList < typename std::remove_reference < decltype ( dataTypes::unsafeAddress<typename returnOf < Transformer > :: Iterator >()->value() ) >::type > > REQUIRES ( ( Iterable < C > || ConstIterable < C > ) && ( Iterable < returnOf < Transformer > > || ConstIterable < returnOf < Transformer > > ) ) {
+    LinkedList < typename std::remove_reference < decltype ( dataTypes::unsafeAddress<typename returnOf < Transformer >:: Iterator >()->value () ) > :: type > container;
+    for ( auto e : * this )
+        for ( auto const & s : transformer(e) )
+            container.add( s );
+    return std::move ( Sequence < decltype(container) > ( std::move(container) ) );
+}
+
+template < typename C >
+template < typename IndexedTransformer >
+auto Sequence < C > :: flatMapIndexed ( IndexedTransformer const & transformer ) && noexcept -> Sequence < LinkedList < typename std::remove_reference < decltype ( dataTypes::unsafeAddress<typename returnOf < IndexedTransformer > :: Iterator >()->value() ) >::type > > REQUIRES ( ( Iterable < C > || ConstIterable < C > ) && ( Iterable < returnOf < IndexedTransformer > > || ConstIterable < returnOf < IndexedTransformer > > ) ) {
+    LinkedList < typename std::remove_reference < decltype ( dataTypes::unsafeAddress<typename returnOf < IndexedTransformer >:: Iterator >()->value () ) > :: type > container;
+    Index i = 0;
+
+    for ( auto e : * this )
+        for ( auto const & s : transformer(e) )
+            container.add( i++, s );
+    return std::move ( Sequence < decltype(container) > ( std::move(container) ) );
+}
+
+template < typename C >
+template < typename KeySelector >
+auto Sequence < C > :: groupBy ( KeySelector const & keySelector ) && noexcept -> Sequence < HashMap < returnOf < KeySelector >, LinkedList < ElementType > > > REQUIRES ( Iterable < C > || ConstIterable < C > ) {
+    HashMap < returnOf < KeySelector >, LinkedList < ElementType > > container;
+
+    for ( auto e : * this ) {
+        auto k = keySelector ( e );
+        if ( container.containsKey(k) )
+            container[k].add(e);
+        else
+            container[k] = { e };
+    }
+
+    return std::move ( Sequence < decltype ( container ) > ( std::move ( container ) ) );
+}
+
+template < typename C >
+template < typename KeySelector, typename ValueMapper >
+auto Sequence < C > :: groupBy ( KeySelector const & keySelector, ValueMapper const & valueMapper ) && noexcept -> Sequence < HashMap < returnOf < KeySelector >, LinkedList < returnOf < ValueMapper > > > > REQUIRES ( Iterable < C > || ConstIterable < C > ) {
+    HashMap < returnOf < KeySelector >, LinkedList < returnOf < ValueMapper > > > container;
+
+    for ( auto e : * this ) {
+        auto k = keySelector ( e ); auto v = valueMapper ( e );
+        if ( container.containsKey( k ) )
+            container[k].add(v);
+        else
+            container[k] = {v};
+    }
+
+    return std::move ( Sequence < decltype ( container ) > ( std::move ( container ) ) );
+}
+
+template < typename C >
+template < typename KeySelector >
+auto Sequence < C > :: groupByTo ( Map < returnOf < KeySelector >, LinkedList < ElementType > > & map, KeySelector const & keySelector ) const noexcept -> Map < returnOf < KeySelector >, LinkedList < ElementType > > & REQUIRES ( Iterable < C > || ConstIterable < C > ) {
+    for ( auto e : * this ) {
+        auto k = keySelector ( e );
+        if ( map.containsKey( k ) )
+            map[k].add ( e );
+        else
+            map[k] = { e };
+    }
+
+    return map;
+}
+
+template < typename C >
+template < typename KeySelector, typename ValueMapper >
+auto Sequence < C > :: groupByTo ( Map < returnOf < KeySelector >, LinkedList < returnOf < ValueMapper > > > & map, KeySelector const & keySelector, ValueMapper const & valueMapper ) const noexcept -> Map < returnOf < KeySelector >, LinkedList < returnOf < ValueMapper > > > & REQUIRES ( Iterable < C > || ConstIterable < C > ) {
+    for ( auto e : * this ) {
+        auto k = keySelector ( e ); auto v = valueMapper ( e );
+        if ( map.containsKey( k ) )
+            map[k].add ( v );
+        else
+            map[k] = { v };
+    }
+
+    return map;
+}
+
+
 // endregion
 
 // region Terminal Operations
@@ -1831,6 +1972,120 @@ inline auto Sequence < C > :: one ( Predicate const & predicate ) const noexcept
 
     return found;
 }
+
+template < typename C >
+template < typename KeyGenerator >
+inline auto Sequence < C > :: associateByTo ( Map < returnOf < KeyGenerator >, ElementType > & m, KeyGenerator const & keyGenerator ) const noexcept -> Map < returnOf < KeyGenerator >, ElementType > & REQUIRES(Iterable < C > || ConstIterable < C >) {
+    for ( auto e : * this )
+        m.add ( { keyGenerator (e), e } );
+    return m;
+}
+
+template < typename C >
+template < typename KeyGenerator, typename ValueMapper >
+inline auto Sequence < C > :: associateByTo ( Map < returnOf < KeyGenerator >, returnOf < ValueMapper > > & m, KeyGenerator const & keyGenerator, ValueMapper const & mapper ) const noexcept -> Map < returnOf < KeyGenerator >, returnOf < ValueMapper > > & REQUIRES ( Iterable < C > || ConstIterable < C > ) {
+    for ( auto e : * this )
+        m.add ( { keyGenerator (e), mapper(e) } );
+    return m;
+}
+
+template < typename C >
+template < typename Transformer, typename K, typename V >
+inline auto Sequence < C > :: associateTo ( Map < K, V > & m, Transformer const & t ) const noexcept -> Map < K, V > & REQUIRES( Iterable < C > || ConstIterable < C > ) {
+    for ( auto e : * this )
+        m.add ( t(e) );
+    return m;
+}
+
+template < typename C >
+template < typename ValueMapper >
+inline auto Sequence < C > :: associateWithTo ( Map < ElementType, returnOf < ValueMapper > > & m, ValueMapper const & mapper ) const noexcept -> Map < ElementType, returnOf < ValueMapper > > & REQUIRES ( Iterable < C > || ConstIterable < C > ) {
+    for ( auto e : * this )
+        m.add ( { e, mapper(e) } );
+    return m;
+}
+
+template < typename C >
+template < typename Collection >
+inline auto Sequence < C > :: asCollection () const noexcept -> Collection REQUIRES(Iterable<C> || ConstIterable<C>) {
+    Collection c;
+    for ( auto e : * this )
+        c.add(e);
+    return c;
+}
+
+template < typename C >
+inline auto Sequence < C > :: asLinkedList () const noexcept -> LinkedList < ElementType > REQUIRES ( Iterable<C> || ConstIterable <C> ) {
+    return this->asCollection<LinkedList<ElementType>>();
+}
+
+template < typename C >
+inline auto Sequence < C > :: asArray () const noexcept -> Array < ElementType > REQUIRES ( Iterable<C> || ConstIterable <C> ) {
+    return this->asCollection<Array<ElementType>>();
+}
+
+template < typename C >
+template < typename Comparator >
+inline auto Sequence < C > :: asOrderedSet () const noexcept -> OrderedSet < ElementType, Comparator > REQUIRES ( Iterable<C> || ConstIterable <C> ) {
+    return this->asCollection<OrderedSet<ElementType, Comparator>>();
+}
+
+template < typename C >
+inline auto Sequence < C > ::asUnorderedSet() const noexcept -> UnorderedSet < ElementType > REQUIRES( Iterable < C > || ConstIterable < C > ) {
+    return this->asCollection<UnorderedSet<ElementType>>();
+}
+
+template < typename C >
+template < typename Collection >
+inline auto Sequence < C > :: toCollection ( Collection & c ) const noexcept -> Collection & REQUIRES(Iterable<C> || ConstIterable<C>) {
+    for ( auto e : * this )
+        c.add(e);
+    return c;
+}
+
+template < typename C >
+inline auto Sequence < C > :: toLinkedList ( LinkedList < ElementType > & l ) const noexcept -> LinkedList < ElementType > & REQUIRES ( Iterable<C> || ConstIterable <C> ) {
+    return this->toCollection<LinkedList<ElementType>>(l);
+}
+
+template < typename C >
+inline auto Sequence < C > :: toArray ( Array < ElementType > & a ) const noexcept -> Array < ElementType > & REQUIRES ( Iterable<C> || ConstIterable <C> ) {
+    return this->toCollection<Array<ElementType>>(a);
+}
+
+template < typename C >
+template < typename Comparator >
+inline auto Sequence < C > :: toOrderedSet ( OrderedSet < ElementType, Comparator > & s ) const noexcept -> OrderedSet < ElementType, Comparator > & REQUIRES ( Iterable<C> || ConstIterable <C> ) {
+    return this->toCollection<OrderedSet<ElementType, Comparator>>( s );
+}
+
+template < typename C >
+inline auto Sequence < C > ::toUnorderedSet( UnorderedSet < ElementType > & s ) const noexcept -> UnorderedSet < ElementType > & REQUIRES( Iterable < C > || ConstIterable < C > ) {
+    return this->toCollection<UnorderedSet<ElementType>>(s);
+}
+
+template < typename C >
+template < typename Transformer >
+auto Sequence < C > :: flatMapTo ( Collection < typename std::remove_reference < decltype ( dataTypes::unsafeAddress< typename returnOf < Transformer > :: Iterator >()->value() ) > :: type > & collection, Transformer const & transformer ) const noexcept -> Collection < typename std::remove_reference < decltype ( dataTypes::unsafeAddress<typename returnOf < Transformer > :: Iterator >()->value() ) > :: type > & REQUIRES ( ( Iterable < C > || ConstIterable < C > ) && ( Iterable < typename std::remove_reference < decltype ( dataTypes::unsafeAddress<typename returnOf < Transformer > :: Iterator >()->value() ) > :: type > || ConstIterable < typename std::remove_reference < decltype ( dataTypes::unsafeAddress<typename returnOf < Transformer > :: Iterator >()->value() ) > :: type > ) ) {
+    for ( auto i : * this )
+        for ( auto const & e : transformer(i) )
+            collection.add(e);
+
+    return collection;
+}
+
+template < typename C >
+template < typename IndexedTransformer >
+auto Sequence < C > :: flatMapIndexedTo ( Collection < typename std::remove_reference < decltype ( dataTypes::unsafeAddress< typename returnOf < IndexedTransformer > :: Iterator >()->value() ) > :: type > & collection, IndexedTransformer const & transformer ) const noexcept -> Collection < typename std::remove_reference < decltype ( dataTypes::unsafeAddress<typename returnOf < IndexedTransformer > :: Iterator >()->value() ) > :: type > & REQUIRES ( ( Iterable < C > || ConstIterable < C > ) && ( Iterable < typename std::remove_reference < decltype ( dataTypes::unsafeAddress<typename returnOf < IndexedTransformer > :: Iterator >()->value() ) > :: type > || ConstIterable < typename std::remove_reference < decltype ( dataTypes::unsafeAddress<typename returnOf < IndexedTransformer > :: Iterator >()->value() ) > :: type > ) ) {
+    Index j = 0;
+    for ( auto i : * this )
+        for ( auto const & e : transformer(i) )
+            collection.add(j++, e);
+
+    return collection;
+}
+
+
 // endregion
 
 // region Terminal Extender Operations
