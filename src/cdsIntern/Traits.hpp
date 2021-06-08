@@ -120,6 +120,12 @@ using classOf = typename functionTraits < T > :: classType;
 template < typename T >
 concept PairType = isPair < T > :: value ;
 
+template < typename T, typename V >
+concept LessComparable = isComparableLess < T, V > :: type :: value;
+
+template < typename T >
+concept TypeLessComparable = LessComparable < T, T >;
+
 # endif
 
 #endif //CDS_TRAITS_HPP

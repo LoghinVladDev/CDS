@@ -555,29 +555,29 @@ public:
 #undef max
 #endif
 
-    template < typename Comparator >
+    template < typename Comparator = std::function < bool (ElementType const &, ElementType const &) > >
     auto max ( Comparator const & = [](ElementType const & a, ElementType const & b) noexcept -> bool { return a < b; } ) const noexcept -> Optional < ElementType > REQUIRES ( Iterable < C > || ConstIterable < C > );
 
     template < typename Selector >
-    auto maxBy ( Selector const & ) const noexcept -> Optional < ElementType > REQUIRES ( Iterable < C > || ConstIterable < C > );
+    auto maxBy ( Selector const & ) const noexcept -> Optional < ElementType > REQUIRES ( (Iterable < C > || ConstIterable < C >) && TypeLessComparable < returnOf < Selector > > );
 
-    template < typename Comparator >
+    template < typename Comparator = std::function < bool (ElementType const &, ElementType const &) > >
     auto maxOr ( ElementType const &, Comparator const & = [](ElementType const & a, ElementType const & b) noexcept -> bool { return a < b; } ) const noexcept -> ElementType REQUIRES ( Iterable < C > || ConstIterable < C > );
 
     template < typename Selector >
-    auto maxByOr ( ElementType const &, Selector const & ) const noexcept -> ElementType REQUIRES ( Iterable < C > || ConstIterable < C > );
+    auto maxByOr ( ElementType const &, Selector const & ) const noexcept -> ElementType REQUIRES ( (Iterable < C > || ConstIterable < C >) && TypeLessComparable < returnOf < Selector > > );
 
-    template < typename Comparator >
+    template < typename Comparator = std::function < bool (ElementType const &, ElementType const &) > >
     auto min ( Comparator const & = [](ElementType const & a, ElementType const & b) noexcept -> bool { return a < b; } ) const noexcept -> Optional < ElementType > REQUIRES ( Iterable < C > || ConstIterable < C > );
 
     template < typename Selector >
-    auto minBy ( Selector const & ) const noexcept -> Optional < ElementType > REQUIRES ( Iterable < C > || ConstIterable < C > );
+    auto minBy ( Selector const & ) const noexcept -> Optional < ElementType > REQUIRES ( (Iterable < C > || ConstIterable < C >) && TypeLessComparable < returnOf < Selector > > );
 
-    template < typename Comparator >
+    template < typename Comparator = std::function < bool (ElementType const &, ElementType const &) > >
     auto minOr ( ElementType const &, Comparator const & = [](ElementType const & a, ElementType const & b) noexcept -> bool { return a < b; } ) const noexcept -> ElementType REQUIRES ( Iterable < C > || ConstIterable < C > );
 
     template < typename Selector >
-    auto minByOr ( ElementType const &, Selector const & ) const noexcept -> ElementType REQUIRES ( Iterable < C > || ConstIterable < C > );
+    auto minByOr ( ElementType const &, Selector const & ) const noexcept -> ElementType REQUIRES ( (Iterable < C > || ConstIterable < C >) && TypeLessComparable < returnOf < Selector > > );
 
 #if defined(_MSC_VER)
 #pragma pop_macro("max")
@@ -2186,6 +2186,104 @@ auto Sequence < C > :: reduceIndexed ( IndexedAccumulator const & indexedAccumul
 
     return result;
 }
+
+template < typename C >
+template < typename Comparator >
+auto Sequence < C > :: max ( Comparator const & comparator ) const noexcept -> Optional < ElementType > REQUIRES ( Iterable < C > || ConstIterable < C > ) {
+    if ( this->pCollection.valueAt().valueAt().size() == 0 ) return {  };
+
+    auto it = this->begin();
+    ElementType max = it.value();
+
+    for (it.next(); it != this->end(); ++it) {
+        auto v = it.value();
+        if ( comparator (max, v) )
+            max = v;
+    }
+
+    return {max};
+}
+
+template < typename C >
+template < typename Selector >
+auto Sequence < C > :: maxBy ( Selector const & selector ) const noexcept -> Optional < ElementType > REQUIRES ( (Iterable < C > || ConstIterable < C >) && TypeLessComparable < returnOf < Selector > > ) {
+    if ( this->pCollection.valueAt().valueAt().size() == 0 ) return { };
+
+    auto it = this->begin();
+    auto max = Pair ( selector (it.value()), it.value() );
+
+    for ( it.next(); it != this->end(); ++ it ) {
+        auto v = selector (it.value());
+        if ( max.getFirst() < v )
+            max = { v, it.value() };
+    }
+
+    return {max.getSecond()};
+}
+
+template < typename C >
+template < typename Comparator >
+auto Sequence < C > :: maxOr ( ElementType const & e, Comparator const & comparator ) const noexcept -> ElementType REQUIRES ( Iterable < C > || ConstIterable < C > ) {
+    auto v = this->max ( comparator );
+    return v.isPresent() ? v.value() : e;
+}
+
+template < typename C >
+template < typename Selector >
+auto Sequence < C > :: maxByOr ( ElementType const & e, Selector const & selector ) const noexcept -> ElementType REQUIRES ( (Iterable < C > || ConstIterable < C >) && TypeLessComparable < returnOf < Selector > > ) {
+    auto v = this->maxBy ( selector );
+    return v.isPresent() ? v.value() : e;
+}
+
+template < typename C >
+template < typename Comparator >
+auto Sequence < C > :: min ( Comparator const & comparator ) const noexcept -> Optional < ElementType > REQUIRES ( Iterable < C > || ConstIterable < C > ) {
+    if ( this->pCollection.valueAt().valueAt().size() == 0 ) return {  };
+
+    auto it = this->begin();
+    ElementType min = it.value();
+
+    for (it.next(); it != this->end(); ++it) {
+        auto v = it.value();
+        if ( comparator (v, min) )
+            min = v;
+    }
+
+    return {min};
+}
+
+template < typename C >
+template < typename Selector >
+auto Sequence < C > :: minBy ( Selector const & selector ) const noexcept -> Optional < ElementType > REQUIRES ( (Iterable < C > || ConstIterable < C >) && TypeLessComparable < returnOf < Selector > > ) {
+    if ( this->pCollection.valueAt().valueAt().size() == 0 ) return { };
+
+    auto it = this->begin();
+    auto min = Pair (selector (it.value()), it.value() );
+
+    for ( it.next(); it != this->end(); ++ it ) {
+        auto v = selector (it.value());
+        if ( v < min.getFirst() )
+            min = {v, it.value() };
+    }
+
+    return {min.getSecond()};
+}
+
+template < typename C >
+template < typename Comparator >
+auto Sequence < C > :: minOr ( ElementType const & e, Comparator const & comparator ) const noexcept -> ElementType REQUIRES ( Iterable < C > || ConstIterable < C > ) {
+    auto v = this->min ( comparator );
+    return v.isPresent() ? v.value() : e;
+}
+
+template < typename C >
+template < typename Selector >
+auto Sequence < C > :: minByOr ( ElementType const & e, Selector const & selector ) const noexcept -> ElementType REQUIRES ( (Iterable < C > || ConstIterable < C >) && TypeLessComparable < returnOf < Selector > > ) {
+    auto v = this->minBy ( selector );
+    return v.isPresent() ? v.value() : e;
+}
+
+
 
 /// endregion
 

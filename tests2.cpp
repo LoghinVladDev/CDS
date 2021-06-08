@@ -152,6 +152,15 @@ int main () {
     std::cout << Sequence ( Array { 1, 2, 3, 4 } ).reduce( [](int a, int b){ return a + b; }) << '\n';
     std::cout << Sequence ( Array { 1, 2, 3, 4 } ).reduce( [](float a, int b){ return a + (float)b; }) << '\n';
 
+    std::cout << Sequence ( Array {4, 8 ,2 ,9, 5} ).max () << '\n';
+    std::cout << Sequence ( Array {4, 8 ,2 ,9, 5} ).min () << '\n';
+    std::cout << Sequence ( Array {4, 8 ,2 ,9, 5} ).maxOr (0) << '\n';
+    std::cout << Sequence ( Array {4, 8 ,2 ,9, 5} ).minOr (0) << '\n';
+    std::cout << Sequence ( Array {4, 8 ,2 ,9, 5} ).maxBy ([](int e){return e % 3;}) << '\n';
+    std::cout << Sequence ( Array {4, 8 ,2 ,9, 5} ).minBy ([](int e){return e % 3;}) << '\n';
+    std::cout << Sequence ( Array <int> {} ).maxOr (0) << '\n';
+    std::cout << Sequence ( Array <int> {} ).minOr (0) << '\n';
+
     return 0;
 
     OurMap < String, int > m;
