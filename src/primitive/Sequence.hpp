@@ -625,22 +625,31 @@ public:
     auto chunked (Size, ListTransformer const &) && noexcept -> Sequence < LinkedList < returnOf < ListTransformer > > > REQUIRES ( Iterable < C > || ConstIterable < C > );
 
 
-    auto minus ( ElementType const & ) && noexcept -> Sequence REQUIRES ( Iterable < C > || ConstIterable < C > );
-    auto minus ( Collection < ElementType > const & ) && noexcept -> Sequence REQUIRES ( Iterable < C > || ConstIterable < C > );
-    auto minus ( Sequence const & ) && noexcept -> Sequence REQUIRES ( Iterable < C > || ConstIterable < C > );
+    auto minus ( ElementType const & ) && noexcept -> Sequence < LinkedList < ElementType > > REQUIRES ( Iterable < C > || ConstIterable < C > );
+    auto minus ( Collection < ElementType > const & ) && noexcept -> Sequence < LinkedList < ElementType > > REQUIRES ( Iterable < C > || ConstIterable < C > );
 
-    auto plus ( ElementType const & ) && noexcept -> Sequence REQUIRES ( Iterable < C > || ConstIterable < C > );
-    auto plus ( Collection < ElementType > const & ) && noexcept -> Sequence REQUIRES ( Iterable < C > || ConstIterable < C > );
-    auto plus ( Sequence const & ) && noexcept -> Sequence REQUIRES ( Iterable < C > || ConstIterable < C > );
+#define COMMA ,
+    template < typename OC >
+    auto minus ( Sequence < OC > const & ) && noexcept -> Sequence < LinkedList < typename Sequence < C > :: ElementType > > REQUIRES ( (Iterable < C > || ConstIterable < C >) && (Iterable < OC > || ConstIterable < OC >) && EqualsComparable < ElementType COMMA typename Sequence < OC > :: ElementType > );
+#undef COMMA
+
+    auto plus ( ElementType const & ) && noexcept -> Sequence < LinkedList < ElementType > > REQUIRES ( Iterable < C > || ConstIterable < C > );
+    auto plus ( Collection < ElementType > const & ) && noexcept -> Sequence < LinkedList < ElementType > > REQUIRES ( Iterable < C > || ConstIterable < C > );
+
+    template < typename OC >
+    auto plus ( Sequence < OC > const & ) && noexcept -> Sequence < LinkedList < ElementType > > REQUIRES ( (Iterable < C > || ConstIterable < C >) && (Iterable < OC > || ConstIterable < OC >) );
 
 
     template < typename Predicate >
     auto partition ( Predicate const & ) const noexcept -> Pair < LinkedList < ElementType >, LinkedList < ElementType > > REQUIRES ( Iterable < C > || ConstIterable < C > );
 
-    auto windowed ( Size, Size = 1, Boolean = false ) && noexcept -> Sequence < LinkedList < LinkedList < ElementType > > >  REQUIRES ( Iterable < C > || ConstIterable < C > );
+    template < typename IndexedPredicate >
+    auto partitionIndexed ( IndexedPredicate const & ) const noexcept -> Pair < LinkedList < ElementType >, LinkedList < ElementType > > REQUIRES ( Iterable < C > || ConstIterable < C > );
 
-    template < typename ListTransformer, typename R >
-    auto windowed ( ListTransformer const &, Size, Size = 1, Boolean = false ) && noexcept -> Sequence < LinkedList < R > >  REQUIRES ( Iterable < C > || ConstIterable < C > );
+    auto windowed ( Size, Size = 1, Boolean const & = false ) && noexcept -> Sequence < LinkedList < Array < ElementType > > >  REQUIRES ( Iterable < C > || ConstIterable < C > );
+
+    template < typename ListTransformer >
+    auto windowed ( ListTransformer const &, Size, Size = 1, Boolean const & = false ) && noexcept -> Sequence < LinkedList < returnOf < ListTransformer > > >  REQUIRES ( Iterable < C > || ConstIterable < C > );
 
     template < typename S >
     auto zip ( Sequence < S > const & ) && noexcept -> Sequence < LinkedList < Pair < ElementType, typename S::ElementType > > >  REQUIRES ( Iterable < C > || ConstIterable < C > );
@@ -1781,6 +1790,90 @@ auto Sequence < C > :: groupByTo ( Map < returnOf < KeySelector >, LinkedList < 
     return map;
 }
 
+template < typename C >
+auto Sequence < C > :: minus ( ElementType const & toRemove ) && noexcept -> Sequence < LinkedList < ElementType > > REQUIRES ( Iterable < C > || ConstIterable < C > ) {
+    LinkedList < ElementType > container;
+    Boolean found = false;
+
+    for ( auto e : * this )
+        if ( found || e != toRemove )
+            container.add( e );
+        else
+            found = true;
+
+    return std::move ( Sequence < decltype ( container ) > ( std::move ( container ) ) );
+}
+
+template < typename C >
+auto Sequence < C > :: minus ( Collection < ElementType > const & toRemove ) && noexcept -> Sequence < LinkedList < ElementType > > REQUIRES ( Iterable < C > || ConstIterable < C > ) {
+    LinkedList < ElementType > container;
+
+    for ( auto e : * this )
+        if ( ! toRemove.contains(e) )
+            container.add(e);
+
+    return std::move ( Sequence < decltype ( container ) > ( std::move ( container ) ) );
+}
+
+#define COMMA ,
+template < typename C >
+template < typename OC >
+auto Sequence < C > :: minus ( Sequence < OC > const & sequence ) && noexcept -> Sequence < LinkedList < typename Sequence < C > :: ElementType > > REQUIRES ( (Iterable < C > || ConstIterable < C >) && (Iterable < OC > || ConstIterable < OC >) && EqualsComparable < ElementType COMMA typename Sequence < OC > :: ElementType > ) {
+    LinkedList < ElementType > container;
+
+    for ( auto e : * this ) {
+        Boolean found = false;
+        for (auto v : sequence)
+            if ( v == e ) {
+                found = true;
+                break;
+            }
+
+        if ( ! found )
+            container.add( e );
+    }
+
+    return std::move ( Sequence < decltype ( container ) > ( std::move ( container ) ) );
+}
+#undef COMMA
+
+template < typename C >
+auto Sequence < C > :: plus ( ElementType const & toAdd ) && noexcept -> Sequence < LinkedList < ElementType > > REQUIRES ( Iterable < C > || ConstIterable < C > ) {
+    LinkedList < ElementType > container;
+
+    for ( auto e : * this )
+        container.add(e);
+
+    container.add(toAdd);
+
+    return std::move ( Sequence < decltype ( container ) > ( std::move ( container ) ) );
+}
+
+template < typename C >
+auto Sequence < C > :: plus ( Collection < ElementType > const & toAdd ) && noexcept -> Sequence < LinkedList < ElementType > > REQUIRES ( Iterable < C > || ConstIterable < C > ) {
+    LinkedList < ElementType > container;
+
+    for ( auto e : * this )
+        container.add(e);
+
+    toAdd.forEach([& container](auto e){container.add(e);});
+
+    return std::move ( Sequence < decltype ( container ) > ( std::move ( container ) ) );
+}
+
+template < typename C >
+template < typename OC >
+auto Sequence < C > :: plus ( Sequence < OC > const & toAdd ) && noexcept -> Sequence < LinkedList < ElementType > > REQUIRES ( (Iterable < C > || ConstIterable < C >) && (Iterable < OC > || ConstIterable < OC >) ) {
+    LinkedList < ElementType > container;
+
+    for ( auto e : * this )
+        container.add(e);
+
+    for ( auto e : toAdd )
+        container.add(e);
+
+    return std::move ( Sequence < decltype ( container ) > ( std::move ( container ) ) );
+}
 
 // endregion
 
@@ -2412,7 +2505,92 @@ auto Sequence < C > :: chunked ( Size chunkSize, ListTransformer const & listTra
     return std::move ( Sequence < decltype ( container ) > ( std::move ( container ) ) );
 }
 
+template < typename C >
+template < typename Predicate >
+auto Sequence < C > :: partition ( Predicate const & predicate ) const noexcept -> Pair < LinkedList < ElementType >, LinkedList < ElementType > > REQUIRES ( Iterable < C > || ConstIterable < C > ) {
+    Pair < LinkedList < ElementType >, LinkedList < ElementType > > partitions;
 
+    for ( auto e : * this )
+        if ( predicate (e) )
+            partitions.getFirst().add(e);
+        else
+            partitions.getSecond().add(e);
+
+    return partitions;
+}
+
+template < typename C >
+template < typename IndexedPredicate >
+auto Sequence < C > :: partitionIndexed ( IndexedPredicate const & indexedPredicate ) const noexcept -> Pair < LinkedList < ElementType >, LinkedList < ElementType > > REQUIRES ( Iterable < C > || ConstIterable < C > ) {
+    Pair < LinkedList < ElementType >, LinkedList < ElementType > > partitions;
+    Index i = 0;
+
+    for ( auto e : * this )
+        if ( indexedPredicate (i++,e) )
+            partitions.getFirst().add(e);
+        else
+            partitions.getSecond().add(e);
+
+    return partitions;
+}
+
+template < typename C >
+auto Sequence < C > :: windowed ( Size size, Size step, Boolean const & partialWindows ) && noexcept -> Sequence < LinkedList < Array < ElementType > > > REQUIRES ( Iterable < C > || ConstIterable < C > ) {
+    LinkedList < Array < ElementType > > container;
+    Array < ElementType > window;
+    auto it = this->begin();
+
+
+    for ( ; it != this->end(); ) {
+        Index i = 0;
+        window.resize(size);
+
+        for ( auto wIt = it; wIt != this->end() && i < size; ++wIt ) {
+            window[i++] = wIt.value();
+        }
+
+        if ( i == size )
+            container.add(window);
+        else if ( partialWindows ) {
+            window.resize(i);
+            container.add(window);
+        }
+
+        window.clear();
+
+        for ( i = 0; i < step && it != this->end(); i++ )
+            ++it;
+    }
+
+    return std::move ( Sequence < decltype ( container ) > ( std::move ( container ) ) );
+}
+
+template < typename C >
+template < typename ListTransformer >
+auto Sequence < C > :: windowed ( ListTransformer const & transformer, Size size, Size step, Boolean const & partialWindows ) && noexcept -> Sequence < LinkedList < returnOf < ListTransformer > > > REQUIRES ( Iterable < C > || ConstIterable < C > ) {
+    LinkedList < returnOf < ListTransformer > > container;
+    typename std::remove_cvref < decltype ( std::get < 0 > ( * dataTypes::unsafeAddress < argumentsOf < ListTransformer > > () ) ) >::type window;
+
+    auto it = this->begin();
+
+
+    for ( ; it != this->end(); ) {
+        Index i = 0;
+        for ( auto wIt = it; wIt != this->end() && i < size; ++wIt ) {
+            window.add(wIt.value());
+        }
+
+        if ( i == size || partialWindows )
+            container.add(transformer(window));
+
+        window.clear();
+
+        for ( i = 0; i < step && it != this->end(); i++ )
+            ++it;
+    }
+
+    return std::move ( Sequence < decltype ( container ) > ( std::move ( container ) ) );
+}
 
 /// endregion
 

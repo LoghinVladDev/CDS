@@ -188,6 +188,24 @@ int main () {
         })
         .onEach([](auto e){std::cout << e << ' ';}).also ([]{std::cout << '\n';});
 
+    Sequence ( Array { 1, 2, 3, 4, 1 , 2, 3, 4 } ).minus(4)
+        .onEach([](auto e){std::cout << e << ' ';}).also([]{std::cout << '\n';});
+
+    std::cout << Sequence ( String("Ana are mere, dar are ana pere?").split(", ?") )
+        .partition([](String const & s){ return s.length() % 2 == 0; }) << '\n';
+
+    auto f = [](String const & s) {};
+    decltype (std::get<0>( *((argumentsOf<decltype(f)>*) nullptr ) )) str = "abc";
+
+
+    std::cout << Sequence ( Range(1, 11) ).windowed(5, 3, true) << '\n';
+    std::cout << Sequence ( Range(1, 11) ).windowed([](Array<int> const & l){
+        float avg = 0.0f;
+        for ( auto const & e : l )
+            avg += (float)e;
+        return avg / (float)l.size();
+    }, 5, 3, true) << '\n';
+
     return 0;
 
     OurMap < String, int > m;

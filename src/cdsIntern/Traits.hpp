@@ -126,6 +126,12 @@ concept LessComparable = isComparableLess < T, V > :: type :: value;
 template < typename T >
 concept TypeLessComparable = LessComparable < T, T >;
 
+template < typename T, typename V >
+concept EqualsComparable = isComparableEquals < T, V > :: type :: value;
+
+template < typename T >
+concept TypeEqualsComparable = EqualsComparable < T, T >;
+
 # endif
 
 #endif //CDS_TRAITS_HPP
