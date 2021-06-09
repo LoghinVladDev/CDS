@@ -206,6 +206,18 @@ int main () {
         return avg / (float)l.size();
     }, 5, 3, true) << '\n';
 
+    std::cout << Sequence ( Range(1, 11) ).windowed([](List<int> const & l){
+        float avg = 0.0f;
+        l.forEach([& avg](auto e){avg+= e;});
+        return avg / (float)l.size();
+    }, 5, 3, true) << '\n';
+
+    std::cout << Sequence(Range(2)).zip(Sequence(String("Ana are mere").split(" "))).toLinkedList() << '\n';
+    std::cout << Sequence(Range(4)).zip(Sequence(String("Ana are mere").split(" ")), [](Index i, String const & s) -> String{ return String(i) + s; }).toLinkedList() << '\n';
+
+    std::cout << Sequence (Range(10)).zipWithNext().toLinkedList() << '\n';
+    std::cout << Sequence (Range(10)).zipWithNext([](int a,int b){return a + b;}).toLinkedList() << '\n';
+
     return 0;
 
     OurMap < String, int > m;
