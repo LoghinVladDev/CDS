@@ -161,6 +161,33 @@ int main () {
     std::cout << Sequence ( Array <int> {} ).maxOr (0) << '\n';
     std::cout << Sequence ( Array <int> {} ).minOr (0) << '\n';
 
+    Sequence ( Array<String>{"a", "b", "c", "d"} )
+        .runningFold(String("s"), [](String const & a, String const & b){ return a + b; })
+        .onEach([](auto e){std::cout << e << ' ';}).also([]{std::cout << '\n';});
+
+    Sequence ( Array<String>{"a", "b", "c", "d"} )
+        .runningFoldIndexed(String("s"), [](Index i, String const & a, String const & b){ return a + b + i; })
+        .onEach([](auto e){std::cout << e << ' ';}).also([]{std::cout << '\n';});
+
+    Sequence ( Array<String>{"a", "b", "c", "d"} )
+        .runningReduce([](String const & a, String const & b){ return a + b; })
+        .onEach([](auto e){std::cout << e << ' ';}).also([]{std::cout << '\n';});
+
+    Sequence ( Array<String>{"a", "b", "c", "d"} )
+        .runningReduceIndexed([](Index i, String const & a, String const & b){ return a + b + i; })
+        .onEach([](auto e){std::cout << e << ' ';}).also([]{std::cout << '\n';});
+
+    Sequence ( Array {1, 2, 3, 4, 5, 6, 7, 8, 9, 10} ).chunked(3)
+        .onEach([](auto e){std::cout << e << ' ';}).also ([]{std::cout << '\n';});
+
+    Sequence ( Array {1, 2, 3, 4, 5, 6, 7, 8, 9, 10} )
+        .chunked(3, [](List<int> const & e){
+            int sum = 0;
+            e.forEach([&sum](auto c){sum+= c;});
+            return sum;
+        })
+        .onEach([](auto e){std::cout << e << ' ';}).also ([]{std::cout << '\n';});
+
     return 0;
 
     OurMap < String, int > m;

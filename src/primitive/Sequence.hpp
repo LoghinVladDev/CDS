@@ -590,23 +590,23 @@ public:
     template < typename IndexedAccumulator, typename AccumulatedType >
     auto foldIndexed ( AccumulatedType const &, IndexedAccumulator const & ) const noexcept -> AccumulatedType REQUIRES ( Iterable < C > || ConstIterable < C > );
 
+    template < typename Accumulator, typename AccumulatedType >
+    auto runningFold ( AccumulatedType const &, Accumulator const & ) && noexcept -> Sequence < LinkedList < AccumulatedType > > REQUIRES ( Iterable < C > || ConstIterable < C > );
+
+    template < typename IndexedAccumulator, typename AccumulatedType >
+    auto runningFoldIndexed ( AccumulatedType const &, IndexedAccumulator const & ) && noexcept -> Sequence < LinkedList < AccumulatedType > > REQUIRES ( Iterable < C > || ConstIterable < C > );
+
     template < typename Accumulator >
     auto reduce ( Accumulator const & ) const noexcept -> returnOf < Accumulator > REQUIRES ( Iterable < C > || ConstIterable < C > );
 
     template < typename IndexedAccumulator >
     auto reduceIndexed ( IndexedAccumulator const & ) const noexcept -> returnOf < IndexedAccumulator > REQUIRES ( Iterable < C > || ConstIterable < C > );
 
-    template < typename Accumulator, typename AccumulatedType >
-    auto runningReduce ( Accumulator const &, AccumulatedType const & = AccumulatedType() ) && noexcept -> Sequence < LinkedList < AccumulatedType > > REQUIRES ( Iterable < C > || ConstIterable < C > );
+    template < typename Accumulator >
+    auto runningReduce ( Accumulator const & ) && noexcept -> Sequence < LinkedList < returnOf < Accumulator > > > REQUIRES ( Iterable < C > || ConstIterable < C > );
 
-    template < typename IndexedAccumulator, typename AccumulatedType >
-    auto runningReduceIndexed ( IndexedAccumulator const &, AccumulatedType const & = AccumulatedType() ) && noexcept -> Sequence < LinkedList < AccumulatedType > > REQUIRES ( Iterable < C > || ConstIterable < C > );
-
-    template < typename Accumulator, typename AccumulatedType >
-    auto runningFold ( AccumulatedType const &, Accumulator const & ) && noexcept -> Sequence < LinkedList < AccumulatedType > > REQUIRES ( Iterable < C > || ConstIterable < C > );
-
-    template < typename IndexedAccumulator, typename AccumulatedType >
-    auto runningFoldIndexed ( AccumulatedType const &, IndexedAccumulator const & ) && noexcept -> Sequence < LinkedList < AccumulatedType > > REQUIRES ( Iterable < C > || ConstIterable < C > );
+    template < typename IndexedAccumulator >
+    auto runningReduceIndexed ( IndexedAccumulator const & ) && noexcept -> Sequence < LinkedList < returnOf < IndexedAccumulator > > > REQUIRES ( Iterable < C > || ConstIterable < C > );
 
     template < typename Accumulator, typename AccumulatedType >
     auto scan ( AccumulatedType const &, Accumulator const & ) && noexcept -> Sequence < LinkedList < AccumulatedType > > REQUIRES ( Iterable < C > || ConstIterable < C > );
@@ -615,14 +615,14 @@ public:
     auto scanIndexed ( AccumulatedType const &, IndexedAccumulator const & ) && noexcept -> Sequence < LinkedList < AccumulatedType > > REQUIRES ( Iterable < C > || ConstIterable < C > );
 
 
-    template < typename Selector, typename R >
-    auto sumBy ( Selector const & ) const noexcept -> R REQUIRES ( Iterable < C > || ConstIterable < C > );
+    template < typename Selector >
+    auto sumBy ( Selector const & ) const noexcept -> returnOf < Selector > REQUIRES ( Iterable < C > || ConstIterable < C > );
 
 
-    auto chunked (Size) && noexcept -> Sequence < LinkedList < LinkedList < ElementType > > > REQUIRES ( Iterable < C > || ConstIterable < C > );
+    auto chunked (Size) && noexcept -> Sequence < LinkedList < Array < ElementType > > > REQUIRES ( Iterable < C > || ConstIterable < C > );
 
-    template < typename ListTransformer, typename R >
-    auto chunked (Size, ListTransformer const &) && noexcept -> Sequence < LinkedList < R > > REQUIRES ( Iterable < C > || ConstIterable < C > );
+    template < typename ListTransformer >
+    auto chunked (Size, ListTransformer const &) && noexcept -> Sequence < LinkedList < returnOf < ListTransformer > > > REQUIRES ( Iterable < C > || ConstIterable < C > );
 
 
     auto minus ( ElementType const & ) && noexcept -> Sequence REQUIRES ( Iterable < C > || ConstIterable < C > );
@@ -2163,6 +2163,29 @@ auto Sequence < C > :: foldIndexed ( AccumulatedType const & startingValue, Inde
 }
 
 template < typename C >
+template < typename Accumulator, typename AccumulatedType >
+auto Sequence < C > :: runningFold ( AccumulatedType const & initialValue, Accumulator const & accumulator ) && noexcept -> Sequence < LinkedList < AccumulatedType > > REQUIRES ( Iterable < C > || ConstIterable < C > ) {
+    LinkedList < AccumulatedType > results = { initialValue };
+
+    for ( auto e : * this )
+        results.add ( accumulator ( results.back(), e ) );
+
+    return std::move ( Sequence < decltype ( results ) > ( std::move ( results ) ) );
+}
+
+template < typename C >
+template < typename IndexedAccumulator, typename AccumulatedType >
+auto Sequence < C > :: runningFoldIndexed ( AccumulatedType const & initialValue, IndexedAccumulator const & indexedAccumulator ) && noexcept -> Sequence < LinkedList < AccumulatedType > > REQUIRES ( Iterable < C > || ConstIterable < C > ) {
+    LinkedList < AccumulatedType > results = { initialValue };
+    Index i = 0;
+
+    for ( auto e : * this )
+        results.add ( indexedAccumulator ( i++, results.back(), e ) );
+
+    return std::move ( Sequence < decltype ( results ) > ( std::move ( results ) ) );
+}
+
+template < typename C >
 template < typename Accumulator >
 auto Sequence < C > :: reduce ( Accumulator const & accumulator ) const noexcept -> returnOf < Accumulator > REQUIRES ( Iterable < C > || ConstIterable < C > ) {
     auto it = this->begin();
@@ -2185,6 +2208,43 @@ auto Sequence < C > :: reduceIndexed ( IndexedAccumulator const & indexedAccumul
         result = indexedAccumulator ( i ++, result, it.value() );
 
     return result;
+}
+
+template < typename C >
+template < typename Accumulator >
+auto Sequence < C > :: runningReduce ( Accumulator const & accumulator ) && noexcept -> Sequence < LinkedList < returnOf < Accumulator > > > REQUIRES ( Iterable < C > || ConstIterable < C > ) {
+    auto it = this->begin();
+    LinkedList < returnOf < Accumulator > > results = { it.value() };
+
+    for ( it.next(); it != this->end(); ++ it )
+        results.add ( accumulator ( results.back(), it.value() ) );
+
+    return std::move ( Sequence < decltype ( results ) > ( std::move ( results ) ) );
+}
+
+template < typename C >
+template < typename IndexedAccumulator >
+auto Sequence < C > :: runningReduceIndexed ( IndexedAccumulator const & indexedAccumulator ) && noexcept -> Sequence < LinkedList < returnOf < IndexedAccumulator > > > REQUIRES ( Iterable < C > || ConstIterable < C > ) {
+    auto it = this->begin();
+    Index i = 1;
+    LinkedList < returnOf < IndexedAccumulator > > results = { it.value() };
+
+    for ( it.next(); it != this->end(); ++ it )
+        results.add ( indexedAccumulator ( i++, results.back(), it.value() ) );
+
+    return std::move ( Sequence < decltype ( results ) > ( std::move ( results ) ) );
+}
+
+template < typename C >
+template < typename Accumulator, typename AccumulatedType >
+inline auto Sequence < C > :: scan ( AccumulatedType const & initialValue, Accumulator const & accumulator ) && noexcept -> Sequence < LinkedList < AccumulatedType > > REQUIRES ( Iterable < C > || ConstIterable < C > ) {
+    return this->runningFold( initialValue, accumulator );
+}
+
+template < typename C >
+template < typename IndexedAccumulator, typename AccumulatedType >
+inline auto Sequence < C > :: scanIndexed ( AccumulatedType const & initialValue, IndexedAccumulator const & indexedAccumulator ) && noexcept -> Sequence < LinkedList < AccumulatedType > > REQUIRES ( Iterable < C > || ConstIterable < C > ) {
+    return this->runningFoldIndexed ( initialValue, indexedAccumulator );
 }
 
 template < typename C >
@@ -2281,6 +2341,75 @@ template < typename Selector >
 auto Sequence < C > :: minByOr ( ElementType const & e, Selector const & selector ) const noexcept -> ElementType REQUIRES ( (Iterable < C > || ConstIterable < C >) && TypeLessComparable < returnOf < Selector > > ) {
     auto v = this->minBy ( selector );
     return v.isPresent() ? v.value() : e;
+}
+
+template < typename C >
+template < typename Selector >
+auto Sequence < C > :: sumBy ( Selector const & selector ) const noexcept -> returnOf < Selector > REQUIRES ( Iterable < C > || ConstIterable < C > ) {
+    auto it = this->begin();
+    auto sum = selector ( it.value() );
+
+    for (it.next(); it != this->end(); ++ it)
+        sum = sum + selector(it.value());
+
+    return sum;
+}
+
+/// endregion
+
+/// region Sequence Grouping Operations
+
+template < typename C >
+auto Sequence < C > :: chunked ( Size chunkSize ) && noexcept -> Sequence < LinkedList < Array < ElementType > > > REQUIRES ( Iterable < C > || ConstIterable < C > ) {
+    LinkedList < Array < ElementType > > container;
+    Array < ElementType > subContainer;
+    Index subContainerPos = 0;
+    subContainer.resize(chunkSize);
+
+    for ( auto e : * this ) {
+        subContainer[subContainerPos++] = e;
+
+        if ( subContainerPos >= chunkSize ){
+            container.add(subContainer);
+            subContainer.clear();
+            subContainer.resize(chunkSize);
+            subContainerPos = 0;
+        }
+    }
+
+    if ( ! subContainer.empty() ) {
+        subContainer.resize(subContainerPos);
+        container.add(subContainer);
+    }
+
+    return std::move ( Sequence < decltype ( container ) > ( std::move ( container ) ) );
+}
+
+template < typename C >
+template < typename ListTransformer >
+auto Sequence < C > :: chunked ( Size chunkSize, ListTransformer const & listTransformer ) && noexcept -> Sequence < LinkedList < returnOf < ListTransformer > > > REQUIRES ( Iterable < C > || ConstIterable < C > ) {
+    LinkedList < returnOf < ListTransformer > > container;
+    Array < ElementType > subContainer;
+    Index subContainerPos = 0;
+    subContainer.resize(chunkSize);
+
+    for ( auto e : * this ) {
+        subContainer[subContainerPos++] = e;
+
+        if ( subContainerPos >= chunkSize ) {
+            container.add ( listTransformer ( subContainer ) );
+            subContainer.clear();
+            subContainer.resize(chunkSize);
+            subContainerPos = 0;
+        }
+    }
+
+    if ( ! subContainer.empty() ) {
+        subContainer.resize(subContainerPos);
+        container.add ( listTransformer ( subContainer ) );
+    }
+
+    return std::move ( Sequence < decltype ( container ) > ( std::move ( container ) ) );
 }
 
 
