@@ -3505,7 +3505,7 @@ template < typename ListTransformer >
 
     if constexpr (
             std::is_abstract <
-                typename std::remove_cvref <
+                typename std::remove_cv < typename std::remove_reference <
                     decltype (
                         std::get < 0 > (
                             * dataTypes::unsafeAddress <
@@ -3515,11 +3515,11 @@ template < typename ListTransformer >
                             > ()
                         )
                     )
-                >::type
+                >::type > :: type
             > :: type :: value
     ) {
         LinkedList <
-            typename std::remove_cvref <
+            typename std::remove_cv < typename std::remove_reference <
                 decltype (
                     std::get < 0 > (
                         * dataTypes::unsafeAddress <
@@ -3529,7 +3529,7 @@ template < typename ListTransformer >
                         > ()
                     )
                 )
-            >::type::ElementType
+            >::type > :: type ::ElementType
         > window;
 
         auto it = this->begin();
@@ -3551,7 +3551,7 @@ template < typename ListTransformer >
 
         return std::move(Sequence<decltype(container)>(std::move(container)));
     } else {
-        typename std::remove_cvref<
+        typename std::remove_cv < typename std::remove_reference <
             decltype(
                 std::get<0>(
                     *dataTypes::unsafeAddress <
@@ -3561,7 +3561,7 @@ template < typename ListTransformer >
                     >()
                 )
             )
-        >::type window;
+        >::type > :: type window;
 
         auto it = this->begin();
 
