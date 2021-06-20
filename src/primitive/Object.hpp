@@ -13,8 +13,9 @@ class String;
 class Object {
 public:
     virtual auto toString () const noexcept -> String = 0;
-    virtual auto operator == (Object const & o) const noexcept -> bool { return this == & o; }
-    virtual auto operator != (Object const & o) const noexcept -> bool { return ! ( * this == o ); }
+    virtual auto equals (Object const & o) const noexcept -> bool { return this == & o; }
+//    virtual auto operator == (Object const & o) const noexcept -> bool { return this == & o; }
+//    virtual auto operator != (Object const & o) const noexcept -> bool { return ! ( * this == o ); }
 
     friend auto operator << (std::ostream &, Object const &) noexcept -> std::ostream &;
     virtual explicit operator String () const noexcept;

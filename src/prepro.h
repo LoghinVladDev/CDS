@@ -7,4 +7,23 @@
 
 #include "std-types.h"
 
+# if defined(__GNUC__) && !defined (GCC_VERSION)
+
+# if ! defined(GCC_VERSION)
+
+# define GCC_VERSION ( __GNUC__ * 10000 + __GNUC_MINOR__ * 100 + __GNUC_PATCHLEVEL__ )
+
+# endif
+
+# else
+
+# if ! defined(GCC_VERSION)
+
+# define GCC_VERSION 0
+
+# endif
+
+# endif
+
+
 #endif //CDS_PREPRO_H

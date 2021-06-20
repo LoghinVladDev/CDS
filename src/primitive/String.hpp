@@ -61,6 +61,11 @@ public:
      * @test tested in primitive/StringTest/Constructor Tests
      */
     String(StringLiteral) noexcept; // NOLINT(google-explicit-constructor)
+
+    /**
+     * @test tested in primitive/StringTest/Constructor Tests
+     */
+    String(CString) noexcept; // NOLINT(google-explicit-constructor)
 //    explicit String(StringLiteral, Index, Size = UINT64_MAX) noexcept;
 
     /**
@@ -324,6 +329,11 @@ public:
     /**
      * @test tested in primitive/StringTest/Append/Prepend Tests
      */
+    inline auto operator += (CString v) noexcept -> String & { return this->append( v ); }
+
+    /**
+     * @test tested in primitive/StringTest/Append/Prepend Tests
+     */
     inline auto operator += (String const & v) noexcept -> String & { return this->append( v ); }
 
     /**
@@ -389,6 +399,11 @@ public:
      * @test tested in primitive/StringTest/Append/Prepend Tests
      */
     auto append (StringLiteral) noexcept -> String &;
+
+    /**
+     * @test tested in primitive/StringTest/Append/Prepend Tests
+     */
+    auto append (CString) noexcept -> String &;
 
     /**
      * @test tested in primitive/StringTest/Append/Prepend Tests
@@ -463,6 +478,11 @@ public:
     /**
      * @test tested in primitive/StringTest/Append/Prepend Tests
      */
+    inline auto prepend (CString cString) noexcept -> String & { return this->prepend(String(cString)); }
+
+    /**
+     * @test tested in primitive/StringTest/Append/Prepend Tests
+     */
     inline auto prepend (String const & s) noexcept -> String & { return ( * this = s + * this ); }
 
     /**
@@ -521,12 +541,12 @@ public:
 
 
     /**
-     * @test tested in primitive/StringTest/*
+     * @test tested in primitive/StringTest/
      */
     [[nodiscard]] inline auto toStdString () const noexcept -> std::string { return std::string(this->cStr()); }
 
     /**
-     * @test tested in primitive/StringTest/Append/*
+     * @test tested in primitive/StringTest/Append/
      */
     inline operator std::string () const noexcept { return this->toStdString(); }
 
@@ -538,12 +558,12 @@ public:
 
 
     /**
-     * @test tested in primitive/StringTest/*
+     * @test tested in primitive/StringTest/
      */
     [[nodiscard]] constexpr auto cStr () const noexcept -> StringLiteral { return this->_p == nullptr ? "" : this->_p; }
 
     /**
-     * @test tested in primitive/StringTest/Append/*
+     * @test tested in primitive/StringTest/Append/
      */
     inline explicit operator StringLiteral () const noexcept { return this->cStr(); }
 
@@ -622,6 +642,13 @@ public:
      * @test tested in primitive/StringTest/Comparison Tests
      */
     [[nodiscard]] auto operator == ( String const & o ) const noexcept -> bool;
+
+    [[nodiscard]] inline auto equals ( Object const & o) const noexcept -> bool final {
+        if ( this == & o ) return true;
+        auto p = dynamic_cast < decltype ( this ) > ( & o );
+        if ( p == nullptr ) return false;
+        return this->operator==(* p);
+    }
 
     /**
      * @test tested in primitive/StringTest/Comparison Tests
@@ -788,6 +815,11 @@ public:
      * @test tested in primitive/StringTest/Append/Prepend Tests
      */
     [[nodiscard]] inline auto operator + ( StringLiteral v ) const noexcept -> String { return String(*this).append(v); }
+
+    /**
+     * @test tested in primitive/StringTest/Append/Prepend Tests
+     */
+    [[nodiscard]] inline auto operator + ( CString v ) const noexcept -> String { return String(*this).append(v); }
 
     /**
      * @test tested in primitive/StringTest/Append/Prepend Tests
@@ -1302,6 +1334,20 @@ inline String::String(StringLiteral cString) noexcept : CONSTR_CLEAR() {
     std::memcpy ( this->_p, cString, this->_l + 1 );
 }
 
+inline String::String(CString cString) noexcept : CONSTR_CLEAR() {
+    if ( cString == nullptr )
+        return;
+
+    auto len = strlen(cString);
+    if ( len == 0 )
+        return;
+
+    this->_alloc(len);
+
+    this->_l = len;
+    std::memcpy ( this->_p, cString, this->_l + 1 );
+}
+
 inline String::String(String const & s) noexcept : CONSTR_CLEAR() {
     if ( s.empty() )
         return;
@@ -1323,6 +1369,18 @@ inline auto String::append (ElementType ch) noexcept -> String & {
 }
 
 inline auto String::append (StringLiteral cString) noexcept -> String & {
+    if ( cString == nullptr ) return * this;
+
+    auto len = strlen(cString);
+    this->_alloc(len);
+
+    for (int i = 0; i < len; ++i)
+        this->_p[this->_l++] = cString[i];
+
+    return * this;
+}
+
+inline auto String::append (CString cString) noexcept -> String & {
     if ( cString == nullptr ) return * this;
 
     auto len = strlen(cString);
@@ -1425,8 +1483,10 @@ inline String::String(std::string::iterator const & begin, std::string::iterator
         this->_p[this->_l++] = *it;
 }
 
+#if !defined(_MSC_VER)
 #pragma clang diagnostic push
 #pragma ide diagnostic ignored "ConstantConditionsOC"
+#endif
 inline String::String(IteratorBase const & begin, IteratorBase const & end) noexcept : CONSTR_CLEAR() {
     bool reversed = dynamic_cast < Iterator const * > ( & begin ) == nullptr;
     if ( ! reversed && end - begin <= 0 || reversed && begin - end <= 0)
@@ -1440,7 +1500,9 @@ inline String::String(IteratorBase const & begin, IteratorBase const & end) noex
         for ( auto it = dynamic_cast < ReverseIterator const & > ( begin ); it != end; it.next() )
             this->_p[this->_l++] = *it;
 }
+#if !defined(_MSC_VER)
 #pragma clang diagnostic pop
+#endif
 
 inline String::String(ConstIteratorBase const & begin, ConstIteratorBase const & end) noexcept : CONSTR_CLEAR() {
     bool reversed = dynamic_cast < ConstIterator const * > ( & begin ) == nullptr;
@@ -1549,7 +1611,7 @@ inline auto String::findLast ( ElementType e ) const noexcept -> Index {
 
 inline auto String::findLast ( String const & o ) const noexcept -> Index {
     Index i = this->size() - o.length();
-    for ( i; i >= 0; i-- )
+    for ( ; i >= 0; i-- )
         if ( this->substr(i, i + o.length()) == o )
             return i;
 

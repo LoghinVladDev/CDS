@@ -73,7 +73,7 @@ public:
         return * this;
     }
 
-    inline Atomic & operator = ( DataType const & v ) noexcept {
+    inline virtual Atomic & operator = ( DataType const & v ) noexcept {
         this->set( v );
 
         return * this;
@@ -101,7 +101,7 @@ public:
         return String(ss.str());
     }
 
-    auto operator == ( Object const & o ) const noexcept -> bool override {
+    auto equals ( Object const & o ) const noexcept -> bool override {
         if ( this == & o ) return true;
         auto p = dynamic_cast < decltype ( this ) > ( & o );
         if ( p == nullptr ) return false;

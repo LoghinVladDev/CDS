@@ -89,6 +89,7 @@ public:
     inline OrderedSet & operator = ( OrderedSet const & o ) noexcept { return this->operator=( (Collection<T> const &) ( o ) ); }
 
     auto insert ( ConstReference ) noexcept -> bool final;
+    auto insert ( T && ) noexcept -> bool final;
 
     auto view () const noexcept -> View < OrderedSet < T, C > >;
 };
@@ -128,6 +129,46 @@ auto OrderedSet<T, C>::insert( ConstReference value) noexcept -> bool {
     }
 
     head->pNext = new Node { value, nullptr };
+    this->_size ++;
+    return true;
+}
+
+
+template <class T, class C>
+#if defined(__cpp_concepts) && !defined(_MSC_VER)
+requires ValidSetComparator <T, C>
+#endif
+auto OrderedSet<T, C>::insert( T && value) noexcept -> bool {
+    C comparator;
+
+    if ( this->empty() ) {
+        this->_pFront = new Node { std::move(value), nullptr };
+        this->_size = 1ull;
+        return true;
+    }
+
+    if ( this->_pFront->data == value ) return false;
+
+    if ( comparator ( value, this->_pFront->data ) ) {
+        this->_pFront = new Node { std::move(value), this->_pFront };
+        this->_size ++;
+        return true;
+    }
+
+    auto head = this->_pFront;
+    while ( head->pNext != nullptr ) {
+        if ( head->pNext->data == value ) return false;
+
+        if ( comparator ( value, head->pNext->data ) ){
+            head->pNext = new Node { std::move(value), head->pNext };
+            this->_size ++;
+            return true;
+        }
+
+        head = head->pNext;
+    }
+
+    head->pNext = new Node { std::move(value), nullptr };
     this->_size ++;
     return true;
 }

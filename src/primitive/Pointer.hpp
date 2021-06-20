@@ -36,14 +36,21 @@ public:
 
     auto copy () const noexcept -> PointerBase * override = 0;
 
-    auto operator == (Object const & o) const noexcept -> bool final {
+    auto equals ( Object const & o ) const noexcept -> bool final {
         if ( this == & o ) return true;
-        auto p = dynamic_cast < PointerBase<T> const * > ( & o );
+        auto p = dynamic_cast < decltype (this) > ( & o );
         if ( p == nullptr ) return false;
-        if ( this->pObj == p->pObj ) return true;
-        if ( this->pObj == nullptr || p->pObj == nullptr ) return false;
-        if constexpr ( isComparableEquals < decltype ( * p->pObj ), decltype ( * this->pObj ) >::value )
-            return (* p->pObj) == (* this->pObj);
+
+        return this->operator==(*p);
+    }
+
+    auto operator == (PointerBase const & o) const noexcept -> bool {
+        if ( this == & o ) return true;
+
+        if ( this->pObj == o.pObj ) return true;
+        if ( this->pObj == nullptr || o.pObj == nullptr ) return false;
+        if constexpr ( isComparableEquals < decltype ( * o.pObj ), decltype ( * this->pObj ) >::value )
+            return (* o.pObj) == (* this->pObj);
         else
             return false;
     }

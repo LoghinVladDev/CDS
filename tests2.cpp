@@ -116,29 +116,107 @@ int main () {
 //        std::cout << e << '\n';
 //    }
 
+    Sequence (Range(20)).drop(5).onEach([](int i){std::cout << i << ' ';}).also([]{std::cout << '\n';});
+    Sequence (Range(20)).take(5).onEach([](int i){std::cout << i << ' ';}).also([]{std::cout << '\n';});
 
-    Sequence(Range(15))
-        .onEach([](auto e){ std::cout << e << " "; }).also([]{std::cout << "\n";})
-        .map([](int i){return double(i) + double(i) / 3;})
-        .onEach([](auto e) {std::cout << e << " ";}).also([]{std::cout << "\n";})
-        .filter([](auto e) { return int(e) % 2 == 0; })
-        .onEach([](auto e){std::cout << e << " ";}).also([]{std::cout << '\n';})
-        .map([](double e){return String(e);})
-        .filter([](auto e){return e[1] == '.'; })
-        .onEach([](auto e){std::cout << e << ' ';}).also([]{std::cout << '\n';})
-        .map([](String const & s){return Pair<String, String>(s.split('.')[0], s.split('.')[1]);})
-        .onEach([](auto p){ std::cout << p.getFirst() << ":" << p.getSecond() << "\t"; }).also([]{std::cout << '\n';})
-        .map([](Pair<String, String> const & p){ return int(Integer::parse(p.getFirst()) + Integer::parse(p.getSecond()) / 100); })
-        .forEach([](auto i){std::cout << i << " int ";});
+    Sequence (Range(20)).dropWhile([](int i){return i < 7;}).onEach([](int i){std::cout << i << ' ';}).also([]{std::cout << '\n';});
+    Sequence (Range(20)).takeWhile([](int i){return i <= 15;}).onEach([](int i){std::cout << i << ' ';}).also([]{std::cout << '\n';});
 
-    std::cout << '\n';
+    Sequence (Range(20)).dropWhile([](int i){return i < 7;}, 3).onEach([](int i){std::cout << i << ' ';}).also([]{std::cout << '\n';});
+    Sequence (Range(20)).takeWhile([](int i){return i <= 15;}, 8).onEach([](int i){std::cout << i << ' ';}).also([]{std::cout << '\n';});
 
-    std::cout << Sequence(Range(10))
-        .map([](int e){return e * e;})
-        .onEach([](int e){std::cout << e << ' ';}).also([]{std::cout << '\n';})
-        .filter([](int e){return e % 10 >= 5;})
-        .onEach([](int e){std::cout << e << ' ';}).also([]{std::cout << '\n';})
-        .contains(16);
+    Sequence ( Array {1, 4, 6, 2} ).indexed().onEach([](auto e){std::cout << e << ' ';}).apply ([]{std::cout << '\n';});
+
+    Array <int>a;
+
+    Sequence (Range(20)).mapTo(a, [](auto e){return e;});
+
+    std::cout << a << '\n';
+
+    Sequence ( Range (10) ).associate([](int e){return Pair {e, String(e) + "test"};}).onEach([](auto e){std::cout << e << ' ';}).also([]{std::cout << '\n';});
+
+    Sequence ( Array { Array {1, 2, 3}, Array{2 ,1 ,3}, Array{5,1, 2, 4} } )
+        .flatMap([](Array<int> e){return e;}).distinct().sorted()
+        .onEach([](auto e){std::cout << e << ' ';}).also([]{std::cout << '\n';});
+
+    Sequence ( Range(5) )
+        .flatMap ([](int e){ return Array {e, e + 5, e + 10}; })
+        .onEach([](auto e){std::cout << e << ' ';}).also ([]{std::cout << '\n';});
+
+    Sequence ( String("Ana are mere, dar are ana pere?").split(", ?") )
+        .groupBy([](String const & s){return s.length();}).onEach([](auto e){std::cout << e << ' ';}).also ([]{std::cout << '\n';});
+
+    std::cout << Sequence ( Array { 1, 2, 3, 4 } ).fold(5, [](int a, int b){ return a + b; }) << '\n';
+    std::cout << Sequence ( Array { 1, 2, 3, 4 } ).fold(2.5f, [](float a, int b){ return a + (float)b; }) << '\n';
+
+    std::cout << Sequence ( Array { 1, 2, 3, 4 } ).reduce( [](int a, int b){ return a + b; }) << '\n';
+    std::cout << Sequence ( Array { 1, 2, 3, 4 } ).reduce( [](float a, int b){ return a + (float)b; }) << '\n';
+
+    std::cout << Sequence ( Array {4, 8 ,2 ,9, 5} ).max () << '\n';
+    std::cout << Sequence ( Array {4, 8 ,2 ,9, 5} ).min () << '\n';
+    std::cout << Sequence ( Array {4, 8 ,2 ,9, 5} ).maxOr (0) << '\n';
+    std::cout << Sequence ( Array {4, 8 ,2 ,9, 5} ).minOr (0) << '\n';
+    std::cout << Sequence ( Array {4, 8 ,2 ,9, 5} ).maxBy ([](int e){return e % 3;}) << '\n';
+    std::cout << Sequence ( Array {4, 8 ,2 ,9, 5} ).minBy ([](int e){return e % 3;}) << '\n';
+    std::cout << Sequence ( Array <int> {} ).maxOr (0) << '\n';
+    std::cout << Sequence ( Array <int> {} ).minOr (0) << '\n';
+
+    Sequence ( Array<String>{"a", "b", "c", "d"} )
+        .runningFold(String("s"), [](String const & a, String const & b){ return a + b; })
+        .onEach([](auto e){std::cout << e << ' ';}).also([]{std::cout << '\n';});
+
+    Sequence ( Array<String>{"a", "b", "c", "d"} )
+        .runningFoldIndexed(String("s"), [](Index i, String const & a, String const & b){ return a + b + i; })
+        .onEach([](auto e){std::cout << e << ' ';}).also([]{std::cout << '\n';});
+
+    Sequence ( Array<String>{"a", "b", "c", "d"} )
+        .runningReduce([](String const & a, String const & b){ return a + b; })
+        .onEach([](auto e){std::cout << e << ' ';}).also([]{std::cout << '\n';});
+
+    Sequence ( Array<String>{"a", "b", "c", "d"} )
+        .runningReduceIndexed([](Index i, String const & a, String const & b){ return a + b + i; })
+        .onEach([](auto e){std::cout << e << ' ';}).also([]{std::cout << '\n';});
+
+    Sequence ( Array {1, 2, 3, 4, 5, 6, 7, 8, 9, 10} ).chunked(3)
+        .onEach([](auto e){std::cout << e << ' ';}).also ([]{std::cout << '\n';});
+
+    Sequence ( Array {1, 2, 3, 4, 5, 6, 7, 8, 9, 10} )
+        .chunked(3, [](List<int> const & e){
+            int sum = 0;
+            e.forEach([&sum](auto c){sum+= c;});
+            return sum;
+        })
+        .onEach([](auto e){std::cout << e << ' ';}).also ([]{std::cout << '\n';});
+
+    Sequence ( Array { 1, 2, 3, 4, 1 , 2, 3, 4 } ).minus(4)
+        .onEach([](auto e){std::cout << e << ' ';}).also([]{std::cout << '\n';});
+
+    std::cout << Sequence ( String("Ana are mere, dar are ana pere?").split(", ?") )
+        .partition([](String const & s){ return s.length() % 2 == 0; }) << '\n';
+
+    auto f = [](String const & s) {};
+    decltype (std::get<0>( *((argumentsOf<decltype(f)>*) nullptr ) )) str = "abc";
+
+
+    std::cout << Sequence ( Range(1, 11) ).windowed(5, 3, true) << '\n';
+    std::cout << Sequence ( Range(1, 11) ).windowed([](Array<int> const & l){
+        float avg = 0.0f;
+        for ( auto const & e : l )
+            avg += (float)e;
+        return avg / (float)l.size();
+    }, 5, 3, true) << '\n';
+
+    std::cout << Sequence ( Range(1, 11) ).windowed([](List<int> const & l){
+        float avg = 0.0f;
+        l.forEach([& avg](auto e){avg+= e;});
+        return avg / (float)l.size();
+    }, 5, 3, true) << '\n';
+
+    std::cout << Sequence(Range(2)).zip(Sequence(String("Ana are mere").split(" "))).toLinkedList() << '\n';
+    std::cout << Sequence(Range(4)).zip(Sequence(String("Ana are mere").split(" ")), [](Index i, String const & s) -> String{ return String(i) + s; }).toLinkedList() << '\n';
+
+    std::cout << Sequence (Range(10)).zipWithNext().toLinkedList() << '\n';
+    std::cout << Sequence (Range(10)).zipWithNext([](int a,int b){return a + b;}).toLinkedList() << '\n';
 
     return 0;
 
@@ -147,16 +225,6 @@ int main () {
     OurMap < int, String > m2;
     std::cout << m2.getKeyHash(294);
     exit(0);
-
-
-
-
-
-
-
-
-
-
 
 
 

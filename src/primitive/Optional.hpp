@@ -99,11 +99,18 @@ public:
         return * this;
     }
 
-    auto operator == ( Object const & o ) const noexcept -> bool final {
-        if ( & o == this ) return true;
-        auto p = dynamic_cast < Optional < T > const * > ( & o );
+    auto equals ( Object const & o ) const noexcept -> bool override {
+        if ( this == & o ) return true;
+        auto p = dynamic_cast < decltype (this) > ( & o );
         if ( p == nullptr ) return false;
-        return this->value() == p->value();
+
+        return this->operator==(*p);
+    }
+
+    auto operator == ( Optional const & o ) const noexcept -> bool {
+        if ( & o == this ) return true;
+
+        return this->value() == o.value();
     }
 
     [[nodiscard]] auto toString() const noexcept -> String final {

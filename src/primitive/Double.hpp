@@ -98,6 +98,14 @@ public:
     constexpr auto operator<=(Double const &o) const noexcept -> bool { return this->v <= o.v; }
     constexpr auto operator<=(double value) const noexcept -> bool { return this->v <= value; }
 
+    auto equals ( Object const & o ) const noexcept -> bool override {
+        if ( this == & o ) return true;
+        auto p = dynamic_cast < decltype (this) > ( & o );
+        if ( p == nullptr ) return false;
+
+        return this->operator==(*p);
+    }
+
     constexpr operator double() const noexcept { return this->v; }
     [[nodiscard]]constexpr inline auto get() const noexcept -> double { return this->v; }
 
@@ -179,13 +187,10 @@ public:
         return * this;
     }
 
-#pragma clang diagnostic push
-#pragma ide diagnostic ignored "HidingNonVirtualFunction"
-    Atomic & operator = (Double const & obj) noexcept {
+    Atomic & operator = (Double const & obj) noexcept override {
         this->set(obj);
         return * this;
     }
-#pragma clang diagnostic pop
 
     Atomic & operator = (Atomic const &) noexcept = default;
     Atomic & operator = (Atomic &&) noexcept = default;

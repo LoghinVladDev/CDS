@@ -43,6 +43,17 @@ public:
         }
     };
 
+    inline auto operator == (Path const & o) const noexcept -> bool {
+        return this->_osPath == o._osPath;
+    }
+
+    auto equals(Object const & o) const noexcept -> bool override {
+        if ( this == & o ) return true;
+        auto p = dynamic_cast < decltype ( this ) > ( & o );
+        if ( p == nullptr ) return false;
+        return this->operator == (* p);
+    }
+
 #if defined(WIN32)
     class WalkIncompleteWin32 : public std::exception {
         [[nodiscard]] auto what () const noexcept -> StringLiteral override {
@@ -173,6 +184,18 @@ private:
     LinkedList < String > _files;
 
 public:
+    inline auto operator == (WalkEntry const & o) const noexcept -> bool {
+        return this->_root == o._root && this->_files == o._files && this->_directories == o._directories;
+    }
+
+    auto equals(Object const & o) const noexcept -> bool override {
+        if ( this == & o ) return true;
+        auto p = dynamic_cast < decltype (this) > ( & o );
+        if ( p == nullptr ) return false;
+
+        return this->operator==(* p);
+    }
+
     WalkEntry () noexcept = default;
     WalkEntry ( WalkEntry const & ) noexcept = default;
 //    WalkEntry ( WalkEntry && o ) noexcept :
@@ -219,6 +242,19 @@ public:
             ", deviceName = " + this->deviceName +
             ", volumeName = " + this->volumeName +
             " }";
+    }
+
+    inline auto operator == (Win32RootPath const & o) const noexcept -> bool {
+        if ( this == & o ) return true;
+
+        return this->path == o.path && this->deviceName == o.deviceName && this->volumeName == o.volumeName;
+    }
+
+    [[nodiscard]] auto equals (Object const & o) const noexcept -> bool override {
+        if ( this == & o ) return true;
+        auto p = dynamic_cast < decltype ( this ) > ( & o );
+        if ( p == nullptr ) return false;
+        return this->operator == (*p);
     }
 };
 #endif

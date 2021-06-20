@@ -52,11 +52,17 @@ public:
     constexpr operator T& () noexcept { return *p; } // NOLINT(google-explicit-constructor)
     constexpr T& get () noexcept(false) { return *p; }
 
-    inline auto operator == (const Object & o) const noexcept -> bool final {
+    inline auto operator == (Reference const & o) const noexcept -> bool {
         if ( this == & o ) return true;
-        auto a = dynamic_cast < Reference const * > ( & o );
-        if ( a == nullptr ) return false;
-        return a->get() == this->get();
+        return o.get() == this->get();
+    }
+
+    auto equals ( Object const & o ) const noexcept -> bool final {
+        if ( this == & o ) return true;
+        auto c = dynamic_cast < decltype (this) > ( & o );
+        if ( c == nullptr ) return false;
+
+        return this->operator==(*c);
     }
 
     [[nodiscard]] auto toString() const noexcept -> String final {
@@ -75,13 +81,16 @@ public:
 
         std::stringstream oss;
         oss << "< " << (std::is_const<T>::value ? "const " : "") << "& of 0x" << std::hex
-            << reinterpret_cast < typename PointerBase<T>::PointerType > ( p ) << std::dec << " : " <<
-            #if defined(CDS_GLM)
-            (isVec () ? String(*p) : (*p))
-            #else
-            (*p)
-            #endif
-            << " >";
+            << reinterpret_cast < typename PointerBase<T>::PointerType > ( p ) << std::dec << " : ";
+#if defined(CDS_GLM)
+        if constexpr (isVec())
+            oss << String(*p);
+        else
+            oss << (*p);
+#else
+        oss << (*p);
+#endif
+        oss << " >";
         return String(oss.str());
     }
 

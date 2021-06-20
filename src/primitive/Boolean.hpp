@@ -56,6 +56,16 @@ public:
         return !this->v;
     }
 
+    constexpr auto operator == (Boolean const & o) const noexcept -> bool { return this->v == o.v; }
+
+    auto equals ( Object const & o ) const noexcept -> bool override {
+        if ( this == & o ) return true;
+        auto p = dynamic_cast < decltype (this) > ( & o );
+        if ( p == nullptr ) return false;
+
+        return this->operator==(*p);
+    }
+
     constexpr operator bool () const noexcept {
         return this->v;
     }
@@ -109,13 +119,10 @@ public:
         return * this;
     }
 
-#pragma clang diagnostic push
-#pragma ide diagnostic ignored "HidingNonVirtualFunction"
-    Atomic & operator = (Boolean const & obj) noexcept {
+    Atomic & operator = (Boolean const & obj) noexcept override {
         this->set(obj);
         return * this;
     }
-#pragma clang diagnostic pop
 
     Atomic & operator = (Atomic const &) noexcept = default;
     Atomic & operator = (Atomic &&) noexcept = default;

@@ -272,17 +272,23 @@ public:
         inline auto operator ++ (int) noexcept -> ConstReverseIterator { auto copy = * this; this->next(); return copy; }
     };
 
-    auto operator == (Object const & o) const noexcept -> bool final {
-        if ( & o == this ) return true;
-        auto p = dynamic_cast < HashMap const * > ( & o );
-        if ( p == nullptr ) return false;
-        if ( this->size() != p->size() ) return false;
+    auto operator == (HashMap const & o) const noexcept -> bool {
+        if ( this == & o ) return true;
+        if ( this->size() != o.size() ) return false;
 
-        for ( auto b = this->begin(), bOther = p->begin(); b != this->end() && bOther != p->end(); b++, bOther++ )
+        for ( auto b = this->begin(), bOther = o.begin(); b != this->end() && bOther != o.end(); b++, bOther++ )
             if ( b.value () != bOther.value() )
                 return false;
 
         return true;
+    }
+
+    auto equals (Object const & o) const noexcept -> bool final {
+        if ( & o == this ) return true;
+        auto p = dynamic_cast < HashMap const * > ( & o );
+        if ( p == nullptr ) return false;
+
+        return this->operator==(*p);
     }
 
     inline auto getHashCalculator () const noexcept -> H const & { return hashCalculator; }
@@ -524,6 +530,12 @@ public:
     auto insert ( Entry const & p ) noexcept -> ValueConstReference final {
         auto & b = this->pBuckets[hashCalculator(p.getFirst())];
         b.pushBack(p);
+        return b.back().getSecond();
+    }
+
+    auto insert ( Entry && p ) noexcept -> ValueConstReference final {
+        auto & b = this->pBuckets[hashCalculator(p.getFirst())];
+        b.pushBack(std::move(p));
         return b.back().getSecond();
     }
 

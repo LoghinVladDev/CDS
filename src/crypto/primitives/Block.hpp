@@ -45,6 +45,13 @@ namespace crypto {
             std::memset(obj._pData, obj._paddingCharacter, bytes.bytes());
         }
 
+#if defined(_MSC_VER)
+#pragma push_macro("min")
+#pragma push_macro("max")
+#undef min
+#undef max
+#endif
+
         constexpr explicit Block ( byte const * pData, Size size = SIZE_MAX, byte padChar = '\0') noexcept :
                 _paddingCharacter(padChar),
                 _pData(new byte[bytes.bytes()]) {
@@ -124,7 +131,7 @@ namespace crypto {
             return * this;
         }
 
-        constexpr auto operator == ( Object const & o ) const noexcept -> bool override {
+        [[nodiscard]] constexpr auto equals ( Object const & o ) const noexcept -> bool override {
             if ( this == & o ) return true;
             auto p = dynamic_cast < decltype ( this ) > ( & o );
 
@@ -188,10 +195,6 @@ namespace crypto {
                 .append("size=").append(bytes.bytes())
                 .append(",data=").append(reinterpret_cast<StringLiteral>(this->_pData))
                 .append("}");
-        }
-
-        inline operator String () const noexcept { // NOLINT(google-explicit-constructor)
-            return this->toString();
         }
 
         auto toHex () const noexcept -> String { // NOLINT(modernize-use-nodiscard)
@@ -260,6 +263,10 @@ namespace crypto {
         return result;
     }
 
+#if defined(_MSC_VER)
+#pragma pop_macro("max")
+#pragma pop_macro("min")
+#endif
 }
 
 #endif //CDS_BLOCK_HPP

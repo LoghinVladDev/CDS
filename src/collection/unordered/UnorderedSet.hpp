@@ -75,6 +75,7 @@ public:
     inline UnorderedSet & operator = ( UnorderedSet const & o ) noexcept { return this->operator=( (Collection<T> const &) ( o ) ); }
 
     auto insert ( ConstReference ) noexcept -> bool final;
+    auto insert ( T && ) noexcept -> bool final;
 
     auto view () const noexcept -> View < UnorderedSet < T > >;
 };
@@ -85,6 +86,17 @@ auto UnorderedSet<T>::insert(ConstReference v) noexcept -> bool {
         return false;
 
     this->_pFront = new Node { v, this->_pFront };
+    this->_size++;
+
+    return true;
+}
+
+template <class T>
+auto UnorderedSet<T>::insert(T && v) noexcept -> bool {
+    if ( this->contains(v) )
+        return false;
+
+    this->_pFront = new Node { std::move(v), this->_pFront };
     this->_size++;
 
     return true;

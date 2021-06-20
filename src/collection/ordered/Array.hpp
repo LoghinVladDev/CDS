@@ -145,17 +145,25 @@ public:
 #pragma clang diagnostic push
 #pragma ide diagnostic ignored "Simplify"
 #endif
-    auto operator == (Object const & o) const noexcept -> bool final {
-        if ( this == & o ) return true;
-        auto p = dynamic_cast < decltype(this) > ( & o );
-        if ( p == nullptr ) return false;
-        if ( p->size() != this->size() ) return false;
 
-        for ( auto i1 = this->begin(), i2 = p->begin(); i1 != this->end() && i2 != p->end(); i1++, i2++ )
+    auto operator == (Array const & o) const noexcept -> bool {
+        if ( this == & o ) return true;
+        if ( o.size() != this->size() ) return false;
+
+        for ( auto i1 = this->begin(), i2 = o.begin(); i1 != this->end() && i2 != o.end(); i1++, i2++ )
             if ( ! ( i1.value() == i2.value() ) )
                 return false;
         return true;
     }
+
+    auto equals (Object const & o) const noexcept -> bool final {
+        if (this == &o) return true;
+        auto p = dynamic_cast < decltype(this) > ( &o );
+        if (p == nullptr) return false;
+
+        return this->operator==(*p);
+    }
+
 
 #if !defined(_MSC_VER)
 #pragma clang diagnostic pop
@@ -326,6 +334,9 @@ public:
         return * this;
     }
 
+    inline auto operator == (Iterator const& o) const noexcept -> bool { return this->equals(o); }
+    inline auto operator != (Iterator const& o) const noexcept -> bool { return !this->equals(o); }
+
     constexpr auto next () noexcept -> Iterator & final { this->_index ++; return * this; }
     constexpr auto prev () noexcept -> Iterator & { this->_index --; return * this; }
 
@@ -486,7 +497,14 @@ auto Array<T>::toString() const noexcept -> String {
 template <class T>
 auto Array<T>::expandWith(Size requiredSize) noexcept -> void {
     if ( this->_size + requiredSize < this->_capacity ) return;
+#if defined(_MSC_VER)
+#pragma push_macro("max")
+#undef max
+#endif
     return this->_resize(std::max(this->_size + requiredSize, this->_capacity * 2));
+#if defined(_MSC_VER)
+#pragma pop_macro("max")
+#endif
 }
 
 template <class T>
@@ -715,7 +733,7 @@ auto Array<T>::remove( typename Collection<Value>::Iterator const & it ) noexcep
     Array without;
 
     for (auto i = this->begin(); i != this->end(); i ++ )
-        if ( i != it )
+        if ( ! i.equals(it) )
             without.pushBack(i.value());
 
     auto v = it.value();

@@ -491,7 +491,7 @@ public:
 
     inline auto toMap () noexcept (false);
 
-    auto toArray () noexcept -> Array < ViewValue > _REQUIRES_ITERABLE;
+    auto toArray () noexcept -> Array < ViewValue >;
 
     auto toList () noexcept -> LinkedList < ViewValue > _REQUIRES_ITERABLE {
         LinkedList < ViewValue > result;
@@ -553,7 +553,7 @@ auto View<T>::Sortable::push ( ViewValue & v ) noexcept -> void {
 }
 
 
-#include <CDS/Map>
+#include <CDS/HashMap>
 
 template < typename T >
 auto View<T>::toMap () noexcept (false) {
@@ -572,7 +572,7 @@ auto View<T>::toMap () noexcept (false) {
 
 #include <CDS/Array>
 template <typename T>
-auto View<T>::toArray () noexcept -> Array < ViewValue > _REQUIRES_ITERABLE {
+auto View<T>::toArray () noexcept -> Array < ViewValue > {
     Array < ViewValue > result;
     for ( auto e : * this )
         result.pushBack(e);
