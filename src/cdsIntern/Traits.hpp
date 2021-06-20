@@ -35,6 +35,7 @@ concept IsMappable = isPair<T>::value;
 template < typename T, typename U = void >
 struct isPrintable : std::false_type {};
 
+#include <iostream>
 template < typename T >
 struct isPrintable <
         T,
