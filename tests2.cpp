@@ -3,7 +3,7 @@
 #include <CDS/Thread>
 #include <CDS/Range>
 #include <CDS/Integer>
-#include <crypto/primitives/Block.hpp>
+#include <crypto/primitives/CryptoBlock.hpp>
 
 void testAtomic ();
 void testCrypto();
@@ -94,6 +94,12 @@ void test (F const & f) {
 }
 
 int main () {
+
+    auto v = CryptoBlock <64> ::fromHex( "0123456789abcdefABCDEFa" ).split<4>();
+    Sequence(v).onEach([](auto & e){std::cout << e.toHex() << '\n'; }).also([]{std::cout << '\n';});
+
+    std::cout << "Ana are mere"_obj.split(" ") << '\n';
+    return 0;
 //    Sequence s ( DoubleLinkedList<int>{1, 2, 3, 4} );
 
 
@@ -421,12 +427,10 @@ int main () {
 
 void testCrypto () {
 
+    CryptoBlock < 128 > block;
+
 //    constexpr auto & size = crypto::size::SIZE_128;
 //    std::cout << size.bytes() << '\n';
-
-    auto block = crypto::Block < crypto::BlockSize::Value::BITS_128 >::fromBinary("1011110110110");
-
-    std::cout << block.toHex() << '\n';
 
     exit(0);
 }

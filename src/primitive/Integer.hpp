@@ -298,6 +298,10 @@ auto operator _operator (int value) noexcept -> Atomic & {  \
 #undef _PREFIX_OP
 };
 
+constexpr auto operator "" _i (unsigned long long int value) noexcept -> Integer {
+    return Integer(value);
+}
+
 #undef _G_OBJ
 #undef _G_OP_OBJ
 #undef _G_OP_OBJ_CONST

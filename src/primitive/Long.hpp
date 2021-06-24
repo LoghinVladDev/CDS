@@ -293,5 +293,12 @@ auto operator _operator (long long int value) noexcept -> Atomic & {  \
 #undef _G_OP_OBJ
 #undef _G_OP_OBJ_CONST
 
+constexpr auto operator "" _obj (unsigned long long int value) noexcept -> Long {
+    return Long(value);
+}
+
+constexpr auto operator "" _l (unsigned long long int value) noexcept -> Long {
+    return Long(value);
+}
 
 #endif //CDS_LONG_HPP

@@ -2305,8 +2305,8 @@ template < typename IndexedTransformer >
     Index i = 0;
 
     for ( auto e : * this )
-        for ( auto const & s : transformer(e) )
-            container.add( i++, s );
+        for ( auto const & s : transformer(i ++, e) )
+            container.add( s );
     return std::move ( Sequence < decltype(container) > ( std::move(container) ) );
 }
 

@@ -1736,6 +1736,14 @@ inline auto String::operator * (int count) const noexcept -> String {
     return res;
 }
 
+inline auto operator "" _obj (const char * pString, std::size_t length) noexcept -> String {
+    return String(pString);
+}
+
+inline auto operator "" _s (const char * pString, std::size_t length) noexcept -> String {
+    return String(pString);
+}
+
 #undef CONSTR_CLEAR
 
 #include <CDS/Types>

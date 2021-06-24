@@ -7,13 +7,15 @@
 
 //#include <CDS/HashMap>
 #include <CDS/HashMap>
-
+#include <CDS/Sequence>
 int main() {
 
-    UniquePointer p(new DoubleLinkedList {3, 4, 2});
-    p->sort([](auto a, auto b){return a < b;});
-    std::cout << p->toString() << '\n';
-    HashMap m = {Pair{4, 3}, Pair{3, 2}, Pair{3, 5}};
+
+//
+//    UniquePointer p(new DoubleLinkedList {3, 4, 2});
+//    p->sort([](auto a, auto b){return a < b;});
+//    std::cout << p->toString() << '\n';
+//    HashMap m = {Pair{4, 3}, Pair{3, 2}, Pair{3, 5}};
 
 //    HashMap < String, float > m = {{"Vlad", 4.3f}, {"Andrei", 5.6f}};
 //    m.view()
