@@ -173,37 +173,37 @@ public:
     [[nodiscard]] [[maybe_unused]] auto equals (Object const &) const noexcept -> bool override;
 
     [[maybe_unused]] auto contains ( ElementType const & ) const noexcept -> Boolean
-            REQUIRES ( Iterable < C > || ConstIterable < C > );
+    REQUIRES ( Iterable < C > || ConstIterable < C > );
 
     [[maybe_unused]] auto elementAt ( Index ) const noexcept -> Optional < ElementType >
-            REQUIRES ( Iterable < C > || ConstIterable < C > );
+    REQUIRES ( Iterable < C > || ConstIterable < C > );
 
     [[maybe_unused]] auto elementAtOr ( Index, ElementType const & ) const noexcept -> ElementType
-            REQUIRES ( Iterable < C > || ConstIterable < C > );
+    REQUIRES ( Iterable < C > || ConstIterable < C > );
 
 
     [[maybe_unused]] auto indexOf ( ElementType const & ) const noexcept -> Index
-            REQUIRES ( Iterable < C > || ConstIterable < C > );
+    REQUIRES ( Iterable < C > || ConstIterable < C > );
 
     [[maybe_unused]] auto lastIndexOf ( ElementType const & ) const noexcept -> Index
-            REQUIRES ( Iterable < C > || ConstIterable < C > );
+    REQUIRES ( Iterable < C > || ConstIterable < C > );
 
     [[maybe_unused]] auto indicesOf ( ElementType const & ) const noexcept -> LinkedList < Index >
-            REQUIRES ( Iterable < C > || ConstIterable < C > );
+    REQUIRES ( Iterable < C > || ConstIterable < C > );
 
 
     template < typename Action >
     [[maybe_unused]] auto apply ( Action const & ) && noexcept -> Sequence < LinkedList < ElementType > >
-            REQUIRES ( Iterable < C > || ConstIterable < C > );
+    REQUIRES ( Iterable < C > || ConstIterable < C > );
 
     template < typename Action >
     [[maybe_unused]] auto also ( Action const & ) && noexcept -> Sequence < LinkedList < ElementType > >
-            REQUIRES ( Iterable < C > || ConstIterable < C > );
+    REQUIRES ( Iterable < C > || ConstIterable < C > );
 
 
     template < typename Predicate >
     [[maybe_unused]] auto find ( Predicate const & ) const noexcept -> Optional < ElementType >
-            REQUIRES ( Iterable < C > || ConstIterable < C > );
+    REQUIRES ( Iterable < C > || ConstIterable < C > );
 
     template < typename Predicate = std::function < bool ( ElementType const & ) > >
     [[maybe_unused]] auto first (
@@ -218,7 +218,7 @@ public:
 
     template < typename Predicate >
     [[maybe_unused]] auto findLast ( Predicate const & ) const noexcept -> Optional < ElementType >
-            REQUIRES ( Iterable < C > || ConstIterable < C > );
+    REQUIRES ( Iterable < C > || ConstIterable < C > );
 
     template < typename Predicate = std::function < bool ( ElementType const & ) > >
     [[maybe_unused]] auto last (
@@ -233,22 +233,22 @@ public:
 
 
     [[maybe_unused]] auto single () const noexcept -> Optional < ElementType >
-            REQUIRES ( Iterable < C > || ConstIterable < C > );
+    REQUIRES ( Iterable < C > || ConstIterable < C > );
 
     [[maybe_unused]] auto singleOr ( ElementType const & ) const noexcept -> ElementType
-            REQUIRES ( Iterable < C > || ConstIterable < C > );
+    REQUIRES ( Iterable < C > || ConstIterable < C > );
 
     template < typename Predicate >
     [[maybe_unused]] auto single ( Predicate const & ) const noexcept -> Optional < ElementType >
-            REQUIRES ( Iterable < C > || ConstIterable < C > );
+    REQUIRES ( Iterable < C > || ConstIterable < C > );
 
     template < typename Predicate >
     [[maybe_unused]] auto singleOr ( ElementType const &, Predicate const & ) const noexcept -> ElementType
-            REQUIRES ( Iterable < C > || ConstIterable < C > );
+    REQUIRES ( Iterable < C > || ConstIterable < C > );
 
 
     [[maybe_unused]] auto drop (Size count) && noexcept -> Sequence < LinkedList < ElementType > >
-            REQUIRES ( Iterable < C > || ConstIterable < C > ) {
+    REQUIRES ( Iterable < C > || ConstIterable < C > ) {
 
         LinkedList < ElementType > remaining;
 
@@ -270,7 +270,7 @@ public:
             Predicate const & p,
             Size count          = UINT64_MAX
     ) && noexcept -> Sequence < LinkedList < ElementType > >
-            REQUIRES ( Iterable < C > || ConstIterable < C > ) {
+    REQUIRES ( Iterable < C > || ConstIterable < C > ) {
 
         LinkedList < ElementType > remaining;
 
@@ -289,7 +289,7 @@ public:
     }
 
     [[maybe_unused]] auto take (Size count) && noexcept -> Sequence < LinkedList < ElementType > >
-            REQUIRES ( Iterable < C > || ConstIterable < C > ) {
+    REQUIRES ( Iterable < C > || ConstIterable < C > ) {
 
         LinkedList < ElementType > remaining;
 
@@ -312,16 +312,16 @@ public:
             Predicate const &,
             Size                = UINT64_MAX
     ) && noexcept -> Sequence < LinkedList < ElementType > >
-            REQUIRES ( Iterable < C > || ConstIterable < C > );
+    REQUIRES ( Iterable < C > || ConstIterable < C > );
 
 
     template < typename Predicate >
     [[maybe_unused]] auto filter ( Predicate const & ) && noexcept -> Sequence
-            REQUIRES ( Iterable < C > || ConstIterable < C > );
+    REQUIRES ( Iterable < C > || ConstIterable < C > );
 
     template < typename IndexedPredicate >
     [[maybe_unused]] auto filterIndexed ( IndexedPredicate const & ) && noexcept -> Sequence
-            REQUIRES ( Iterable < C > || ConstIterable < C > );
+    REQUIRES ( Iterable < C > || ConstIterable < C > );
 
     template < typename Predicate >
     [[maybe_unused]] auto filterTo (
@@ -337,29 +337,29 @@ public:
 
     template < typename NewType >
     [[maybe_unused]] auto filterIsDerived () && noexcept -> Sequence < LinkedList < NewType > >
-            REQUIRES(
-                    (Iterable < C > || ConstIterable < C >) &&
-                    Pointer < ElementType > &&
-                    Pointer < NewType >
-            );
+    REQUIRES(
+            (Iterable < C > || ConstIterable < C >) &&
+            Pointer < ElementType > &&
+            Pointer < NewType >
+    );
 
     template < typename NewType >
     [[maybe_unused]] auto filterIsDerivedTo (
             Collection < ElementType > &
     ) const noexcept -> Collection < ElementType > &
-            REQUIRES(
-                    ( Iterable < C > || ConstIterable < C > ) &&
-                    Pointer < ElementType > &&
-                    Pointer < NewType >
-            );
+    REQUIRES(
+            ( Iterable < C > || ConstIterable < C > ) &&
+            Pointer < ElementType > &&
+            Pointer < NewType >
+    );
 
     template < typename Predicate >
     [[maybe_unused]] auto filterNot ( Predicate const & ) && noexcept -> Sequence
-            REQUIRES ( Iterable < C > || ConstIterable < C > );
+    REQUIRES ( Iterable < C > || ConstIterable < C > );
 
     template < typename IndexedPredicate >
     [[maybe_unused]] auto filterNotIndexed ( IndexedPredicate const & ) && noexcept -> Sequence
-            REQUIRES ( Iterable < C > || ConstIterable < C > );
+    REQUIRES ( Iterable < C > || ConstIterable < C > );
 
     template < typename Predicate >
     [[maybe_unused]] auto filterNotTo (
@@ -376,15 +376,15 @@ public:
 
     template < typename Predicate >
     [[maybe_unused]] auto indexOfFirst ( Predicate const & ) const noexcept -> Index
-            REQUIRES ( Iterable < C > || ConstIterable < C > );
+    REQUIRES ( Iterable < C > || ConstIterable < C > );
 
     template < typename Predicate >
     [[maybe_unused]] auto indexOfLast ( Predicate const & ) const noexcept -> Index
-            REQUIRES ( Iterable < C > || ConstIterable < C > );
+    REQUIRES ( Iterable < C > || ConstIterable < C > );
 
     template < typename Predicate >
     [[maybe_unused]] auto indicesOfAll ( Predicate const & ) const noexcept -> LinkedList < Index >
-            REQUIRES ( Iterable < C > || ConstIterable < C > );
+    REQUIRES ( Iterable < C > || ConstIterable < C > );
 
     template < typename Predicate = std::function < bool (ElementType const &) > >
     [[maybe_unused]] auto any (
@@ -393,7 +393,7 @@ public:
 
     template < typename Predicate >
     [[maybe_unused]] auto all ( Predicate const & ) const noexcept -> Boolean
-            REQUIRES ( Iterable < C > || ConstIterable < C > );
+    REQUIRES ( Iterable < C > || ConstIterable < C > );
 
     template < typename Predicate = std::function < bool ( ElementType const & ) > >
     [[maybe_unused]] auto count (
@@ -411,39 +411,39 @@ public:
     ) const noexcept -> Boolean REQUIRES ( Iterable < C > || ConstIterable < C > );
 
     template <
-        typename Transformer,
-        typename std::enable_if <
-            isPair < returnOf < Transformer > > :: value,
-            int
-        >:: type = 0
+            typename Transformer,
+            typename std::enable_if <
+                    isPair < returnOf < Transformer > > :: value,
+                    int
+            >:: type = 0
     >
     [[maybe_unused]] auto associate (
             Transformer const &
     ) && noexcept -> Sequence < LinkedList < returnOf < Transformer > > >
-            REQUIRES (
-                    ( Iterable < C > || ConstIterable < C > ) &&
-                    PairType < returnOf < Transformer > >
-            );
+    REQUIRES (
+            ( Iterable < C > || ConstIterable < C > ) &&
+            PairType < returnOf < Transformer > >
+    );
 
     template < typename KeyGenerator >
     [[maybe_unused]] auto associateBy (
             KeyGenerator const &
     ) && noexcept -> Sequence < LinkedList < Pair < returnOf < KeyGenerator >, ElementType > > >
-            REQUIRES ( Iterable < C > || ConstIterable < C > );
+    REQUIRES ( Iterable < C > || ConstIterable < C > );
 
     template < typename KeyGenerator, typename ValueMapper >
     [[maybe_unused]] auto associateBy (
             KeyGenerator    const &,
             ValueMapper     const &
     ) && noexcept -> Sequence < LinkedList < Pair < returnOf < KeyGenerator >, returnOf < ValueMapper > > > >
-            REQUIRES ( Iterable < C > || ConstIterable < C > );
+    REQUIRES ( Iterable < C > || ConstIterable < C > );
 
     template < typename KeyGenerator >
     [[maybe_unused]] auto associateByTo (
             Map < returnOf < KeyGenerator >, ElementType >        &,
             KeyGenerator                                    const &
     ) const noexcept -> Map < returnOf < KeyGenerator >, ElementType > &
-            REQUIRES ( Iterable < C > || ConstIterable < C > );
+    REQUIRES ( Iterable < C > || ConstIterable < C > );
 
     template < typename KeyGenerator, typename ValueMapper >
     [[maybe_unused]] auto associateByTo (
@@ -451,7 +451,7 @@ public:
             KeyGenerator                                                const &,
             ValueMapper                                                 const &
     ) const noexcept -> Map < returnOf < KeyGenerator >, returnOf < ValueMapper > > &
-            REQUIRES ( Iterable < C > || ConstIterable < C > );
+    REQUIRES ( Iterable < C > || ConstIterable < C > );
 
     template < typename Transformer, typename K, typename V >
     [[maybe_unused]] auto associateTo (
@@ -463,20 +463,20 @@ public:
     [[maybe_unused]] auto associateWith (
             ValueMapper const &
     ) && noexcept -> Sequence < LinkedList < Pair < ElementType, returnOf < ValueMapper > > > >
-            REQUIRES ( Iterable < C > || ConstIterable < C > );
+    REQUIRES ( Iterable < C > || ConstIterable < C > );
 
     template < typename ValueMapper >
     [[maybe_unused]] auto associateWithTo (
             Map < ElementType, returnOf < ValueMapper > > &,
             ValueMapper const &
     ) const noexcept -> Map < ElementType , returnOf < ValueMapper > > &
-            REQUIRES ( Iterable < C > || ConstIterable < C > );
+    REQUIRES ( Iterable < C > || ConstIterable < C > );
 
     template < typename Comparator = std::function < bool (ElementType const &, ElementType const &) > >
     [[maybe_unused]] auto sorted (
             Comparator const & = []( ElementType const & a, ElementType const & b) noexcept -> bool { return a < b; }
     ) && noexcept -> Sequence < Array < ElementType > >
-            REQUIRES ( Iterable < C > || ConstIterable < C > );
+    REQUIRES ( Iterable < C > || ConstIterable < C > );
 
     template < typename Selector >
     [[maybe_unused]] auto sortedBy (
@@ -495,200 +495,200 @@ public:
     [[maybe_unused]] auto sortedByWith (
             Selector const &,
             Comparator const & = []( returnOf < Selector > const & a, returnOf < Selector > const & b
-    ) noexcept -> bool { return a < b; } ) && noexcept -> Sequence < Array < ElementType > >
-            REQUIRES ( Iterable < C > || ConstIterable < C > );
+            ) noexcept -> bool { return a < b; } ) && noexcept -> Sequence < Array < ElementType > >
+    REQUIRES ( Iterable < C > || ConstIterable < C > );
 
     template < typename Collection >
     [[maybe_unused]] auto toCollection () const noexcept -> Collection
-            REQUIRES (Iterable < C > || ConstIterable < C > );
+    REQUIRES (Iterable < C > || ConstIterable < C > );
 
     [[maybe_unused]] auto toLinkedList () const noexcept -> LinkedList < ElementType >
-            REQUIRES (Iterable < C > || ConstIterable < C > );
+    REQUIRES (Iterable < C > || ConstIterable < C > );
 
     [[maybe_unused]] auto toArray () const noexcept -> Array < ElementType >
-            REQUIRES (Iterable < C > || ConstIterable < C > );
+    REQUIRES (Iterable < C > || ConstIterable < C > );
 
     template < typename Comparator >
     [[maybe_unused]] auto toOrderedSet () const noexcept -> OrderedSet < ElementType, Comparator >
-            REQUIRES (Iterable < C > || ConstIterable < C > );
+    REQUIRES (Iterable < C > || ConstIterable < C > );
 
     [[maybe_unused]] auto toUnorderedSet () const noexcept -> UnorderedSet < ElementType >
-            REQUIRES (Iterable < C > || ConstIterable < C > );
+    REQUIRES (Iterable < C > || ConstIterable < C > );
 
     // auto asHashMap  look into View::toMap
 
 
     template < typename Collection >
     [[maybe_unused]] auto toCollection (Collection &) const noexcept -> Collection &
-            REQUIRES ( Iterable < C > || ConstIterable < C > );
+    REQUIRES ( Iterable < C > || ConstIterable < C > );
 
     [[maybe_unused]] auto toLinkedList (
             LinkedList < ElementType > &
     ) const noexcept -> LinkedList < ElementType > &
-            REQUIRES ( Iterable < C > || ConstIterable < C > );
+    REQUIRES ( Iterable < C > || ConstIterable < C > );
 
     [[maybe_unused]] auto toArray (
             Array <ElementType> &
     ) const noexcept -> Array < ElementType > &
-            REQUIRES ( Iterable < C > || ConstIterable < C > );
+    REQUIRES ( Iterable < C > || ConstIterable < C > );
 
     template < typename Comparator >
     [[maybe_unused]] auto toOrderedSet (
             OrderedSet <ElementType, Comparator> &
     ) const noexcept -> OrderedSet < ElementType, Comparator > &
-            REQUIRES ( Iterable < C > || ConstIterable < C > );
+    REQUIRES ( Iterable < C > || ConstIterable < C > );
 
     [[maybe_unused]] auto toUnorderedSet (
             UnorderedSet <ElementType> &
     ) const noexcept -> UnorderedSet < ElementType > &
-            REQUIRES ( Iterable < C > || ConstIterable < C > );
+    REQUIRES ( Iterable < C > || ConstIterable < C > );
 
 
     template < typename Transformer >
     [[maybe_unused]] auto flatMap (
             Transformer const &
     ) && noexcept -> Sequence <
-                LinkedList <
+            LinkedList <
                     typename std::remove_reference <
-                        decltype (
+                            decltype (
                             dataTypes::unsafeAddress <
-                                typename returnOf < Transformer > :: Iterator
+                                    typename returnOf < Transformer > :: Iterator
                             >()->value()
-                        )
+                            )
                     > :: type
-                >
-            > REQUIRES (
-                ( Iterable < C > || ConstIterable < C > ) && (
-                        Iterable < returnOf < Transformer > > ||
-                        ConstIterable < returnOf < Transformer > >
-                )
-            );
+            >
+    > REQUIRES (
+            ( Iterable < C > || ConstIterable < C > ) && (
+                    Iterable < returnOf < Transformer > > ||
+                    ConstIterable < returnOf < Transformer > >
+            )
+    );
 
     template < typename IndexedTransformer >
     [[maybe_unused]] auto flatMapIndexed (
             IndexedTransformer const &
     ) && noexcept -> Sequence <
-                LinkedList <
+            LinkedList <
                     typename std::remove_reference <
-                        decltype (
+                            decltype (
                             dataTypes::unsafeAddress <
-                                typename returnOf < IndexedTransformer > :: Iterator
+                                    typename returnOf < IndexedTransformer > :: Iterator
                             > ()->value()
-                        )
+                            )
                     > :: type
-                >
-            > REQUIRES (
-                ( Iterable < C > || ConstIterable < C > ) && (
+            >
+    > REQUIRES (
+            ( Iterable < C > || ConstIterable < C > ) && (
                     Iterable < returnOf < IndexedTransformer > > ||
                     ConstIterable < returnOf < IndexedTransformer > >
-                )
-            );
+            )
+    );
 
     template < typename Transformer >
     [[maybe_unused]] auto flatMapTo (
             Collection <
-                typename std::remove_reference <
-                    decltype (
-                        dataTypes::unsafeAddress<
-                            typename returnOf < Transformer > :: Iterator
-                        >()->value()
-                    )
-                > :: type
+                    typename std::remove_reference <
+                            decltype (
+                            dataTypes::unsafeAddress<
+                                    typename returnOf < Transformer > :: Iterator
+                            >()->value()
+                            )
+                    > :: type
             >                     &,
             Transformer     const &
     ) const noexcept -> Collection <
-                typename std::remove_reference <
+            typename std::remove_reference <
                     decltype (
-                        dataTypes::unsafeAddress<
+                    dataTypes::unsafeAddress<
                             typename returnOf < Transformer > :: Iterator
-                        >()->value()
+                    >()->value()
                     )
-                > :: type
-            > & REQUIRES (
-                ( Iterable < C > || ConstIterable < C > ) && (
+            > :: type
+    > & REQUIRES (
+            ( Iterable < C > || ConstIterable < C > ) && (
                     Iterable <
-                        typename std::remove_reference <
-                            decltype (
-                                dataTypes::unsafeAddress <
-                                    typename returnOf < Transformer > :: Iterator
-                                >()->value()
-                            )
-                        > :: type
+                            typename std::remove_reference <
+                                    decltype (
+                                    dataTypes::unsafeAddress <
+                                            typename returnOf < Transformer > :: Iterator
+                                    >()->value()
+                                    )
+                            > :: type
                     > ||
                     ConstIterable <
-                        typename std::remove_reference <
-                            decltype (
-                                dataTypes::unsafeAddress <
-                                    typename returnOf < Transformer > :: Iterator
-                                >()->value()
-                            )
-                        > :: type
+                            typename std::remove_reference <
+                                    decltype (
+                                    dataTypes::unsafeAddress <
+                                            typename returnOf < Transformer > :: Iterator
+                                    >()->value()
+                                    )
+                            > :: type
                     >
-                )
-            );
+            )
+    );
 
     template < typename IndexedTransformer >
     [[maybe_unused]] auto flatMapIndexedTo (
             Collection <
-                typename std::remove_reference <
-                    decltype (
-                        dataTypes::unsafeAddress <
-                            typename returnOf < IndexedTransformer > :: Iterator
-                        >()->value()
-                    )
-                > :: type
+                    typename std::remove_reference <
+                            decltype (
+                            dataTypes::unsafeAddress <
+                                    typename returnOf < IndexedTransformer > :: Iterator
+                            >()->value()
+                            )
+                    > :: type
             >                        &,
             IndexedTransformer const &
     ) const noexcept -> Collection <
-                typename std::remove_reference <
+            typename std::remove_reference <
                     decltype (
-                        dataTypes::unsafeAddress <
+                    dataTypes::unsafeAddress <
                             typename returnOf < IndexedTransformer > :: Iterator
-                        >()->value()
+                    >()->value()
                     )
-                > :: type
-            > & REQUIRES (
-                (Iterable < C > || ConstIterable < C >) && (
+            > :: type
+    > & REQUIRES (
+            (Iterable < C > || ConstIterable < C >) && (
                     Iterable <
-                        typename std::remove_reference <
-                            decltype (
-                                dataTypes::unsafeAddress <
-                                    typename returnOf < IndexedTransformer > :: Iterator
-                                >()->value()
-                            )
-                        > :: type
+                            typename std::remove_reference <
+                                    decltype (
+                                    dataTypes::unsafeAddress <
+                                            typename returnOf < IndexedTransformer > :: Iterator
+                                    >()->value()
+                                    )
+                            > :: type
                     > ||
                     ConstIterable <
-                        typename std::remove_reference <
-                            decltype (
-                                dataTypes::unsafeAddress <
-                                    typename returnOf < IndexedTransformer > :: Iterator
-                                >()->value()
-                            )
-                        > :: type
+                            typename std::remove_reference <
+                                    decltype (
+                                    dataTypes::unsafeAddress <
+                                            typename returnOf < IndexedTransformer > :: Iterator
+                                    >()->value()
+                                    )
+                            > :: type
                     >
-                )
-            );
+            )
+    );
 
     template < typename KeySelector >
     [[maybe_unused]] auto groupBy (
             KeySelector const &
     ) && noexcept -> Sequence < HashMap < returnOf < KeySelector >, LinkedList < ElementType > > >
-            REQUIRES ( Iterable < C > || ConstIterable < C > );
+    REQUIRES ( Iterable < C > || ConstIterable < C > );
 
     template < typename KeySelector, typename ValueMapper >
     [[maybe_unused]] auto groupBy (
             KeySelector const &,
             ValueMapper const &
     ) && noexcept -> Sequence < HashMap < returnOf < KeySelector >, LinkedList < returnOf < ValueMapper > > > >
-            REQUIRES ( Iterable < C > || ConstIterable < C > );
+    REQUIRES ( Iterable < C > || ConstIterable < C > );
 
     template < typename KeySelector >
     [[maybe_unused]] auto groupByTo (
             Map < returnOf < KeySelector >, LinkedList < ElementType > >          &,
             KeySelector                                                     const &
     ) const noexcept -> Map < returnOf < KeySelector >, LinkedList < ElementType > > &
-            REQUIRES ( Iterable < C > || ConstIterable < C > );
+    REQUIRES ( Iterable < C > || ConstIterable < C > );
 
     template < typename KeySelector, typename ValueMapper >
     [[maybe_unused]] auto groupByTo (
@@ -696,22 +696,22 @@ public:
             KeySelector                                                                 const &,
             ValueMapper                                                                 const &
     ) const noexcept -> Map < returnOf < KeySelector >, LinkedList < returnOf < ValueMapper > > > &
-            REQUIRES ( Iterable < C > || ConstIterable < C > );
+    REQUIRES ( Iterable < C > || ConstIterable < C > );
 
     /**
      * Two versions of map, one for storage of mappers when keeping same type, another for switching to another data type
      */
 
     template <
-        typename Mapper,
-        typename std::enable_if <
+            typename Mapper,
+            typename std::enable_if <
 #if !defined(_MSC_VER)
-            ! std::is_same_v <
-                ElementType,
-                returnOf < Mapper >
-            >,
+                    ! std::is_same_v <
+                            ElementType,
+                            returnOf < Mapper >
+                    >,
 #else
-            ! std::is_same_v <
+                    ! std::is_same_v <
                 typename std::remove_reference <
                     decltype (
                         dataTypes::unsafeAddress <
@@ -722,24 +722,24 @@ public:
                 returnOf < Mapper >
             >,
 #endif
-            int
-        >::type = 0
+                    int
+            >::type = 0
     >
     [[maybe_unused]] auto map (
             Mapper const &
     ) && noexcept -> Sequence < LinkedList < returnOf < Mapper > > >
-            REQUIRES ( Iterable < C > || ConstIterable < C > );
+    REQUIRES ( Iterable < C > || ConstIterable < C > );
 
     template <
-        typename Mapper,
-        typename std::enable_if <
+            typename Mapper,
+            typename std::enable_if <
 #if !defined(_MSC_VER)
-            std::is_same <
-                ElementType,
-                returnOf < Mapper >
-            >::type::value,
+                    std::is_same <
+                            ElementType,
+                            returnOf < Mapper >
+                    >::type::value,
 #else
-            std::is_same <
+                    std::is_same <
                 typename std::remove_reference <
                     decltype (
                         dataTypes::unsafeAddress <
@@ -750,24 +750,24 @@ public:
                 returnOf < Mapper >
             >::type::value,
 #endif
-            int
-        >::type = 0
+                    int
+            >::type = 0
     >
     [[maybe_unused]] auto map (
             Mapper const &
     ) && noexcept -> Sequence < C >
-            REQUIRES ( Iterable < C > || ConstIterable < C > );
+    REQUIRES ( Iterable < C > || ConstIterable < C > );
 
     template <
-        typename IndexedMapper,
-        typename std::enable_if <
+            typename IndexedMapper,
+            typename std::enable_if <
 #if !defined(_MSC_VER)
-            ! std::is_same_v <
-                ElementType,
-                returnOf < IndexedMapper >
-            >,
+                    ! std::is_same_v <
+                            ElementType,
+                            returnOf < IndexedMapper >
+                    >,
 #else
-            ! std::is_same_v <
+                    ! std::is_same_v <
                 typename std::remove_reference <
                     decltype (
                         dataTypes::unsafeAddress <
@@ -778,24 +778,24 @@ public:
                 returnOf < IndexedMapper >
             >,
 #endif
-            int
-        >::type = 0
+                    int
+            >::type = 0
     >
     [[maybe_unused]] auto mapIndexed (
             IndexedMapper const &
     ) && noexcept -> Sequence < LinkedList < returnOf < IndexedMapper > > >
-            REQUIRES ( Iterable < C > || ConstIterable < C > );
+    REQUIRES ( Iterable < C > || ConstIterable < C > );
 
     template <
-        typename IndexedMapper,
-        typename std::enable_if <
+            typename IndexedMapper,
+            typename std::enable_if <
 #if !defined(_MSC_VER)
-            std::is_same <
-                ElementType,
-                returnOf < IndexedMapper >
-            >::type::value,
+                    std::is_same <
+                            ElementType,
+                            returnOf < IndexedMapper >
+                    >::type::value,
 #else
-            std::is_same <
+                    std::is_same <
                 typename std::remove_reference <
                     decltype (
                         dataTypes::unsafeAddress <
@@ -806,8 +806,8 @@ public:
                 returnOf < IndexedMapper >
             >::type::value,
 #endif
-            int
-        >::type = 0
+                    int
+            >::type = 0
     >
     [[maybe_unused]] auto mapIndexed (
             IndexedMapper const &
@@ -818,18 +818,18 @@ public:
             Collection < R >          &,
             Mapper              const &
     ) const noexcept -> Collection < R > &
-            REQUIRES ( Iterable < C > || ConstIterable < C > );
+    REQUIRES ( Iterable < C > || ConstIterable < C > );
 
     template < typename IndexedMapper, typename R >
     [[maybe_unused]] auto mapIndexedTo (
             Collection < R >          &,
             IndexedMapper       const &
     ) const noexcept -> Collection < R > &
-            REQUIRES ( Iterable < C > || ConstIterable < C > );
+    REQUIRES ( Iterable < C > || ConstIterable < C > );
 
 
     [[maybe_unused]] auto indexed () && noexcept -> Sequence < LinkedList < Pair < Index, ElementType > > >
-            REQUIRES ( Iterable < C > || ConstIterable < C > ) {
+    REQUIRES ( Iterable < C > || ConstIterable < C > ) {
 
         LinkedList < Pair < Index, ElementType > > container;
         Index i = 0;
@@ -840,28 +840,28 @@ public:
     }
 
     [[maybe_unused]] auto distinct () && noexcept -> Sequence < UnorderedSet < ElementType > >
-            REQUIRES ( Iterable < C > || ConstIterable < C > );
+    REQUIRES ( Iterable < C > || ConstIterable < C > );
 
     template < typename Action >
     [[maybe_unused]] auto forEach ( Action const & ) const noexcept -> void
-            REQUIRES ( Iterable < C > || ConstIterable < C > );
+    REQUIRES ( Iterable < C > || ConstIterable < C > );
 
     template < typename IndexedAction >
     [[maybe_unused]] auto forEachIndexed ( IndexedAction const & ) const noexcept -> void
-            REQUIRES ( Iterable < C > || ConstIterable < C > );
+    REQUIRES ( Iterable < C > || ConstIterable < C > );
 
     template < typename Action >
     [[maybe_unused]] auto onEach ( Action const & ) && noexcept -> Sequence < LinkedList < ElementType > >
-            REQUIRES ( Iterable < C > || ConstIterable < C > );
+    REQUIRES ( Iterable < C > || ConstIterable < C > );
 
     template < typename IndexedAction >
     [[maybe_unused]] auto onEachIndexed (
             IndexedAction const &
     ) && noexcept -> Sequence < LinkedList < ElementType > >
-            REQUIRES ( Iterable < C > || ConstIterable < C > );
+    REQUIRES ( Iterable < C > || ConstIterable < C > );
 
 #if defined(_MSC_VER)
-#pragma push_macro("min")
+    #pragma push_macro("min")
 #pragma push_macro("max")
 #undef min
 #undef max
@@ -874,10 +874,10 @@ public:
 
     template < typename Selector >
     [[maybe_unused]] auto maxBy ( Selector const & ) const noexcept -> Optional < ElementType >
-            REQUIRES (
-                (Iterable < C > || ConstIterable < C >) &&
-                TypeLessComparable < returnOf < Selector > >
-            );
+    REQUIRES (
+            (Iterable < C > || ConstIterable < C >) &&
+            TypeLessComparable < returnOf < Selector > >
+    );
 
     template < typename Comparator = std::function < bool (ElementType const &, ElementType const &) > >
     [[maybe_unused]] auto maxOr (
@@ -890,9 +890,9 @@ public:
             ElementType const &,
             Selector    const &
     ) const noexcept -> ElementType REQUIRES (
-                (Iterable < C > || ConstIterable < C >) &&
-                TypeLessComparable < returnOf < Selector > >
-            );
+            (Iterable < C > || ConstIterable < C >) &&
+            TypeLessComparable < returnOf < Selector > >
+    );
 
     template < typename Comparator = std::function < bool (ElementType const &, ElementType const &) > >
     [[maybe_unused]] auto min (
@@ -903,9 +903,9 @@ public:
     [[maybe_unused]] auto minBy (
             Selector const &
     ) const noexcept -> Optional < ElementType > REQUIRES (
-                (Iterable < C > || ConstIterable < C >) &&
-                TypeLessComparable < returnOf < Selector > >
-            );
+            (Iterable < C > || ConstIterable < C >) &&
+            TypeLessComparable < returnOf < Selector > >
+    );
 
     template < typename Comparator = std::function < bool (ElementType const &, ElementType const &) > >
     [[maybe_unused]] auto minOr (
@@ -918,12 +918,12 @@ public:
             ElementType const &,
             Selector    const &
     ) const noexcept -> ElementType REQUIRES (
-                (Iterable < C > || ConstIterable < C >) &&
-                TypeLessComparable < returnOf < Selector > >
-            );
+            (Iterable < C > || ConstIterable < C >) &&
+            TypeLessComparable < returnOf < Selector > >
+    );
 
 #if defined(_MSC_VER)
-#pragma pop_macro("max")
+    #pragma pop_macro("max")
 #pragma pop_macro("min")
 #endif
 
@@ -944,130 +944,130 @@ public:
             AccumulatedType const &,
             Accumulator     const &
     ) && noexcept -> Sequence < LinkedList < AccumulatedType > >
-            REQUIRES ( Iterable < C > || ConstIterable < C > );
+    REQUIRES ( Iterable < C > || ConstIterable < C > );
 
     template < typename IndexedAccumulator, typename AccumulatedType >
     [[maybe_unused]] auto runningFoldIndexed (
             AccumulatedType     const &,
             IndexedAccumulator  const &
     ) && noexcept -> Sequence < LinkedList < AccumulatedType > >
-            REQUIRES ( Iterable < C > || ConstIterable < C > );
+    REQUIRES ( Iterable < C > || ConstIterable < C > );
 
     template < typename Accumulator >
     [[maybe_unused]] auto reduce (
             Accumulator const &
     ) const noexcept -> returnOf < Accumulator >
-            REQUIRES ( Iterable < C > || ConstIterable < C > );
+    REQUIRES ( Iterable < C > || ConstIterable < C > );
 
     template < typename IndexedAccumulator >
     [[maybe_unused]] auto reduceIndexed (
             IndexedAccumulator const &
     ) const noexcept -> returnOf < IndexedAccumulator >
-            REQUIRES ( Iterable < C > || ConstIterable < C > );
+    REQUIRES ( Iterable < C > || ConstIterable < C > );
 
     template < typename Accumulator >
     [[maybe_unused]] auto runningReduce (
             Accumulator const &
     ) && noexcept -> Sequence < LinkedList < returnOf < Accumulator > > >
-            REQUIRES ( Iterable < C > || ConstIterable < C > );
+    REQUIRES ( Iterable < C > || ConstIterable < C > );
 
     template < typename IndexedAccumulator >
     [[maybe_unused]] auto runningReduceIndexed (
             IndexedAccumulator const &
     ) && noexcept -> Sequence < LinkedList < returnOf < IndexedAccumulator > > >
-            REQUIRES ( Iterable < C > || ConstIterable < C > );
+    REQUIRES ( Iterable < C > || ConstIterable < C > );
 
     template < typename Accumulator, typename AccumulatedType >
     [[maybe_unused]] auto scan (
             AccumulatedType const &,
             Accumulator     const &
     ) && noexcept -> Sequence < LinkedList < AccumulatedType > >
-            REQUIRES ( Iterable < C > || ConstIterable < C > );
+    REQUIRES ( Iterable < C > || ConstIterable < C > );
 
     template < typename IndexedAccumulator, typename AccumulatedType >
     [[maybe_unused]] auto scanIndexed (
             AccumulatedType     const &,
             IndexedAccumulator  const &
     ) && noexcept -> Sequence < LinkedList < AccumulatedType > >
-            REQUIRES ( Iterable < C > || ConstIterable < C > );
+    REQUIRES ( Iterable < C > || ConstIterable < C > );
 
 
     template < typename Selector >
     [[maybe_unused]] auto sumBy ( Selector const & ) const noexcept -> returnOf < Selector >
-            REQUIRES ( Iterable < C > || ConstIterable < C > );
+    REQUIRES ( Iterable < C > || ConstIterable < C > );
 
 
     [[maybe_unused]] auto chunked (Size) && noexcept -> Sequence < LinkedList < Array < ElementType > > >
-            REQUIRES ( Iterable < C > || ConstIterable < C > );
+    REQUIRES ( Iterable < C > || ConstIterable < C > );
 
     template < typename ListTransformer >
     [[maybe_unused]] auto chunked (
             Size,
             ListTransformer const &
     ) && noexcept -> Sequence < LinkedList < returnOf < ListTransformer > > >
-            REQUIRES ( Iterable < C > || ConstIterable < C > );
+    REQUIRES ( Iterable < C > || ConstIterable < C > );
 
 
     [[maybe_unused]] auto minus (
             ElementType const &
     ) && noexcept -> Sequence < LinkedList < ElementType > >
-            REQUIRES ( Iterable < C > || ConstIterable < C > );
+    REQUIRES ( Iterable < C > || ConstIterable < C > );
 
     [[maybe_unused]] auto minus (
             Collection < ElementType > const &
     ) && noexcept -> Sequence < LinkedList < ElementType > >
-            REQUIRES ( Iterable < C > || ConstIterable < C > );
+    REQUIRES ( Iterable < C > || ConstIterable < C > );
 
 #define COMMA ,
     template < typename OC >
     [[maybe_unused]] auto minus (
             Sequence < OC > const &
     ) && noexcept -> Sequence < LinkedList < typename Sequence < C > :: ElementType > >
-            REQUIRES (
-                (Iterable < C > || ConstIterable < C >) &&
-                (Iterable < OC > || ConstIterable < OC >) &&
-                EqualsComparable < ElementType COMMA typename Sequence < OC > :: ElementType >
-            );
+    REQUIRES (
+            (Iterable < C > || ConstIterable < C >) &&
+            (Iterable < OC > || ConstIterable < OC >) &&
+            EqualsComparable < ElementType COMMA typename Sequence < OC > :: ElementType >
+    );
 #undef COMMA
 
     [[maybe_unused]] auto plus (
             ElementType const &
     ) && noexcept -> Sequence < LinkedList < ElementType > >
-            REQUIRES ( Iterable < C > || ConstIterable < C > );
+    REQUIRES ( Iterable < C > || ConstIterable < C > );
 
     [[maybe_unused]] auto plus (
             Collection < ElementType > const &
     ) && noexcept -> Sequence < LinkedList < ElementType > >
-            REQUIRES ( Iterable < C > || ConstIterable < C > );
+    REQUIRES ( Iterable < C > || ConstIterable < C > );
 
     template < typename OC >
     [[maybe_unused]] auto plus (
             Sequence < OC > const &
     ) && noexcept -> Sequence < LinkedList < ElementType > >
-            REQUIRES (
-                (Iterable < C > || ConstIterable < C >) &&
-                (Iterable < OC > || ConstIterable < OC >)
-            );
+    REQUIRES (
+            (Iterable < C > || ConstIterable < C >) &&
+            (Iterable < OC > || ConstIterable < OC >)
+    );
 
 
     template < typename Predicate >
     [[maybe_unused]] auto partition (
             Predicate const &
     ) const noexcept -> Pair < LinkedList < ElementType >, LinkedList < ElementType > >
-            REQUIRES ( Iterable < C > || ConstIterable < C > );
+    REQUIRES ( Iterable < C > || ConstIterable < C > );
 
     template < typename IndexedPredicate >
     [[maybe_unused]] auto partitionIndexed (
             IndexedPredicate const &
     ) const noexcept -> Pair < LinkedList < ElementType >, LinkedList < ElementType > >
-            REQUIRES ( Iterable < C > || ConstIterable < C > );
+    REQUIRES ( Iterable < C > || ConstIterable < C > );
 
     [[maybe_unused]] auto windowed (
             Size,
             Size            = 1,
             Boolean const & = false
     ) && noexcept -> Sequence < LinkedList < Array < ElementType > > >
-            REQUIRES ( Iterable < C > || ConstIterable < C > );
+    REQUIRES ( Iterable < C > || ConstIterable < C > );
 
     template < typename ListTransformer >
     [[maybe_unused]] auto windowed (
@@ -1076,35 +1076,35 @@ public:
             Size                    = 1,
             Boolean         const & = false
     ) && noexcept -> Sequence < LinkedList < returnOf < ListTransformer > > >
-            REQUIRES ( Iterable < C > || ConstIterable < C > );
+    REQUIRES ( Iterable < C > || ConstIterable < C > );
 
     template < typename OC >
     [[maybe_unused]] auto zip (
             Sequence < OC > const &
     ) && noexcept -> Sequence < LinkedList < Pair < ElementType, typename Sequence < OC > :: ElementType > > >
-            REQUIRES (
-                (Iterable < C > || ConstIterable < C >) &&
-                (Iterable < OC > || ConstIterable < OC >)
-            );
+    REQUIRES (
+            (Iterable < C > || ConstIterable < C >) &&
+            (Iterable < OC > || ConstIterable < OC >)
+    );
 
     template < typename OC, typename Transformer >
     [[maybe_unused]] auto zip (
             Sequence < OC > const &,
             Transformer     const &
     ) && noexcept -> Sequence < LinkedList < returnOf < Transformer > > >
-            REQUIRES (
-                (Iterable < C > || ConstIterable < C >) &&
-                (Iterable < OC > || ConstIterable < OC >)
-            );
+    REQUIRES (
+            (Iterable < C > || ConstIterable < C >) &&
+            (Iterable < OC > || ConstIterable < OC >)
+    );
 
     [[maybe_unused]] auto zipWithNext () && noexcept -> Sequence < LinkedList < Pair < ElementType, ElementType > > >
-            REQUIRES ( Iterable < C > || ConstIterable < C > );
+    REQUIRES ( Iterable < C > || ConstIterable < C > );
 
     template < typename Transformer >
     [[maybe_unused]] auto zipWithNext (
             Transformer const &
     ) && noexcept -> Sequence < LinkedList < returnOf < Transformer > > >
-            REQUIRES ( Iterable < C > || ConstIterable < C > );
+    REQUIRES ( Iterable < C > || ConstIterable < C > );
 };
 
 /// region Ctors Dtors Copy Move Clear
@@ -1232,14 +1232,14 @@ auto Sequence < C >::Iterator::skipFiltered() noexcept -> void {
             if (
                     currentMapperIterator != this->pSeq.valueAt().storedMappers.end() &&
                     currentMapperIterator.value().getSecond() == i
-            ) {
+                    ) {
                 this->precomputed = ( * currentMapperIterator.value().getFirst() ) ( this->precomputed );
                 currentMapperIterator.next();
 
             } else if (
                     currentIndexedMapperIterator != this->pSeq.valueAt().storedIndexedMappers.end() &&
                     currentIndexedMapperIterator.value().getSecond() == i
-            ) {
+                    ) {
                 this->precomputed = ( * currentIndexedMapperIterator.value().getFirst() ) (
                         this->index,
                         this->precomputed
@@ -1250,7 +1250,7 @@ auto Sequence < C >::Iterator::skipFiltered() noexcept -> void {
             } else if (
                     currentFilterIterator != this->pSeq.valueAt().storedPredicates.end() &&
                     currentFilterIterator.value().getSecond() == i
-            ) {
+                    ) {
                 if ( ! (* currentFilterIterator.value().getFirst())( this->precomputed ) ) {
                     skip = true;
                     break;
@@ -1260,7 +1260,7 @@ auto Sequence < C >::Iterator::skipFiltered() noexcept -> void {
             } else if (
                     currentIndexedFilterIterator != this->pSeq.valueAt().storedIndexedPredicates.end() &&
                     currentIndexedFilterIterator.value().getSecond() == i
-            ) {
+                    ) {
                 if ( ! (* currentIndexedFilterIterator.value().getFirst()) (this->index, this->precomputed) ) {
                     skip = true;
                     break;
@@ -1272,7 +1272,7 @@ auto Sequence < C >::Iterator::skipFiltered() noexcept -> void {
                     currentMapperIterator           == this->pSeq.valueAt().storedMappers.end()         &&
                     currentIndexedMapperIterator    == this->pSeq.valueAt().storedIndexedMappers.end()  &&
                     currentIndexedFilterIterator    == this->pSeq.valueAt().storedIndexedPredicates.end()
-            )
+                    )
                 break;
         }
 
@@ -1282,13 +1282,13 @@ auto Sequence < C >::Iterator::skipFiltered() noexcept -> void {
                 if (
                         currentMapperIterator != this->pSeq.valueAt().storedMappers.end() &&
                         currentMapperIterator.value().getSecond() == i
-                ) {
+                        ) {
                     this->precomputed = (* currentMapperIterator.value().getFirst())(this->precomputed);
                     currentMapperIterator.next();
                 } else if (
                         currentIndexedMapperIterator != this->pSeq.valueAt().storedIndexedMappers.end() &&
                         currentIndexedMapperIterator.value().getSecond() == i
-                ) {
+                        ) {
                     this->precomputed = (* currentIndexedMapperIterator.value().getFirst())(
                             this->index,
                             this->precomputed
@@ -1439,14 +1439,14 @@ auto Sequence < C >::ConstIterator::skipFiltered() noexcept -> void {
             if (
                     currentMapperIterator != this->pSeq.valueAt().storedMappers.end() &&
                     currentMapperIterator.value().getSecond() == i
-            ) {
+                    ) {
                 this->precomputed = ( * currentMapperIterator.value().getFirst() ) ( this->precomputed );
                 currentMapperIterator.next();
 
             } else if (
                     currentIndexedMapperIterator != this->pSeq.valueAt().storedIndexedMappers.end() &&
                     currentIndexedMapperIterator.value().getSecond() == i
-            ) {
+                    ) {
                 this->precomputed = ( * currentIndexedMapperIterator.value().getFirst() ) (
                         this->index,
                         this->precomputed
@@ -1457,7 +1457,7 @@ auto Sequence < C >::ConstIterator::skipFiltered() noexcept -> void {
             } else if (
                     currentFilterIterator != this->pSeq.valueAt().storedPredicates.end() &&
                     currentFilterIterator.value().getSecond() == i
-            ) {
+                    ) {
                 if ( ! (* currentFilterIterator.value().getFirst())( this->precomputed ) ) {
                     skip = true;
                     break;
@@ -1467,7 +1467,7 @@ auto Sequence < C >::ConstIterator::skipFiltered() noexcept -> void {
             } else if (
                     currentIndexedFilterIterator != this->pSeq.valueAt().storedIndexedPredicates.end() &&
                     currentFilterIterator.value().getSecond() == i
-            ) {
+                    ) {
                 if ( ! (* currentIndexedFilterIterator.value().getFirst()) (this->index, this->precomputed) ) {
                     skip = true;
                     break;
@@ -1489,13 +1489,13 @@ auto Sequence < C >::ConstIterator::skipFiltered() noexcept -> void {
                 if (
                         currentMapperIterator != this->pSeq.valueAt().storedMappers.end() &&
                         currentMapperIterator.value().getSecond() == i
-                ) {
+                        ) {
                     this->precomputed = (* currentMapperIterator.value().getFirst())(this->precomputed);
                     currentMapperIterator.next();
                 } else if (
                         currentIndexedMapperIterator != this->pSeq.valueAt().storedIndexedMappers.end() &&
                         currentIndexedMapperIterator.value().getSecond() == i
-                ) {
+                        ) {
                     this->precomputed = (* currentIndexedMapperIterator.value().getFirst())(
                             this->index,
                             this->precomputed
@@ -1690,7 +1690,9 @@ Sequence ( HashMap < K, V > const & ) -> Sequence < HashMap < K, V > const >;
 template < typename K, typename V >
 Sequence ( HashMap < K, V > && ) -> Sequence < HashMap < K, V > >;
 
-#include <CDS/JSON>
+//#include <CDS/JSON>
+
+class JSON;
 Sequence ( JSON const & ) -> Sequence < JSON const >;
 
 #include <CDS/Generator>
@@ -1712,25 +1714,25 @@ Sequence ( Range & ) -> Sequence < Range >;
 
 template < typename C >
 template <
-    typename Mapper,
-    typename std::enable_if <
-        ! std::is_same_v <
-            typename std::remove_reference <
-                decltype (
-                    dataTypes::unsafeAddress <
-                        typename std::remove_reference<C>::type::Iterator
-                    > ()->value()
-                )
-            > :: type,
-            returnOf < Mapper >
-        >,
-        int
-    >::type
+        typename Mapper,
+        typename std::enable_if <
+                ! std::is_same_v <
+                        typename std::remove_reference <
+                                decltype (
+                                dataTypes::unsafeAddress <
+                                        typename std::remove_reference<C>::type::Iterator
+                                > ()->value()
+                                )
+                        > :: type,
+                        returnOf < Mapper >
+                >,
+                int
+        >::type
 >
 [[maybe_unused]] inline auto Sequence < C > :: map (
         Mapper const & mapper
 ) && noexcept -> Sequence < LinkedList < returnOf < Mapper > > >
-        REQUIRES ( Iterable < C > || ConstIterable < C > ) {
+REQUIRES ( Iterable < C > || ConstIterable < C > ) {
 
     LinkedList < returnOf < Mapper > > container;
     for ( auto e : * this )
@@ -1742,18 +1744,18 @@ template <
 template < typename C >
 template < typename Mapper,
         typename std::enable_if <
-        std::is_same <
-            typename std::remove_reference <
-                decltype (
-                    dataTypes::unsafeAddress <
-                        typename std::remove_reference<C>::type::Iterator
-                    > ()->value()
-                )
-            > :: type,
-            returnOf < Mapper >
-        >::type::value,
-        int
-    >::type
+                std::is_same <
+                        typename std::remove_reference <
+                                decltype (
+                                dataTypes::unsafeAddress <
+                                        typename std::remove_reference<C>::type::Iterator
+                                > ()->value()
+                                )
+                        > :: type,
+                        returnOf < Mapper >
+                >::type::value,
+                int
+        >::type
 >
 [[maybe_unused]] inline auto Sequence < C > ::map(
         Mapper const & mapper
@@ -1782,25 +1784,25 @@ template < typename IndexedPredicate >
 
 template < typename C >
 template <
-    typename IndexedMapper,
-    typename std::enable_if <
-        ! std::is_same_v <
-            typename std::remove_reference <
-                decltype (
-                    dataTypes::unsafeAddress <
-                        typename std::remove_reference<C>::type::Iterator
-                    > ()->value()
-                )
-            > :: type,
-            returnOf < IndexedMapper >
-        >,
-        int
-    >::type
+        typename IndexedMapper,
+        typename std::enable_if <
+                ! std::is_same_v <
+                        typename std::remove_reference <
+                                decltype (
+                                dataTypes::unsafeAddress <
+                                        typename std::remove_reference<C>::type::Iterator
+                                > ()->value()
+                                )
+                        > :: type,
+                        returnOf < IndexedMapper >
+                >,
+                int
+        >::type
 >
 [[maybe_unused]] inline auto Sequence < C > :: mapIndexed (
         IndexedMapper const & mapper
 ) && noexcept -> Sequence < LinkedList < returnOf < IndexedMapper > > >
-        REQUIRES ( Iterable < C > || ConstIterable < C > ) {
+REQUIRES ( Iterable < C > || ConstIterable < C > ) {
 
     LinkedList < returnOf < IndexedMapper > > container;
     Index i = 0;
@@ -1812,19 +1814,19 @@ template <
 
 template < typename C >
 template < typename IndexedMapper,
-    typename std::enable_if <
-        std::is_same <
-            typename std::remove_reference <
-                decltype (
-                    dataTypes::unsafeAddress <
-                        typename std::remove_reference<C>::type::Iterator
-                    > ()->value()
-                )
-            > :: type,
-            returnOf < IndexedMapper >
-        >::type::value,
-        int
-    >::type
+        typename std::enable_if <
+                std::is_same <
+                        typename std::remove_reference <
+                                decltype (
+                                dataTypes::unsafeAddress <
+                                        typename std::remove_reference<C>::type::Iterator
+                                > ()->value()
+                                )
+                        > :: type,
+                        returnOf < IndexedMapper >
+                >::type::value,
+                int
+        >::type
 >
 [[maybe_unused]] inline auto Sequence < C > ::mapIndexed(
         IndexedMapper const & mapper
@@ -1839,7 +1841,7 @@ template < typename Predicate >
         Predicate const & predicate,
         Size count
 ) && noexcept -> Sequence < LinkedList < ElementType > >
-        REQUIRES ( Iterable < C > || ConstIterable < C > ) {
+REQUIRES ( Iterable < C > || ConstIterable < C > ) {
 
     LinkedList < ElementType > remaining;
 
@@ -1860,11 +1862,11 @@ template < typename Predicate >
 template < typename C >
 template < typename NewType >
 [[maybe_unused]] inline auto Sequence < C > :: filterIsDerived () && noexcept -> Sequence < LinkedList < NewType > >
-        REQUIRES(
-            ( Iterable < C > || ConstIterable < C > ) &&
-            Pointer < ElementType > &&
-            Pointer < NewType >
-        ) {
+REQUIRES(
+        ( Iterable < C > || ConstIterable < C > ) &&
+        Pointer < ElementType > &&
+        Pointer < NewType >
+) {
 
     LinkedList < NewType > container;
     for ( auto e : * this ) {
@@ -1896,19 +1898,19 @@ template < typename IndexedPredicate >
 
 template < typename C >
 template <
-    typename Transformer,
-    typename std::enable_if <
-        isPair < returnOf < Transformer > > :: value,
-        int
-    > :: type
+        typename Transformer,
+        typename std::enable_if <
+                isPair < returnOf < Transformer > > :: value,
+                int
+        > :: type
 >
 [[maybe_unused]] inline auto Sequence < C > :: associate(
         Transformer const & transformer
 ) && noexcept -> Sequence < LinkedList < returnOf < Transformer > > >
-        REQUIRES (
-            ( Iterable < C > || ConstIterable < C > ) &&
-            PairType < returnOf < Transformer > >
-        ) {
+REQUIRES (
+        ( Iterable < C > || ConstIterable < C > ) &&
+        PairType < returnOf < Transformer > >
+) {
     LinkedList < returnOf < Transformer > > container;
     for ( auto e : * this )
         container.add ( transformer ( e ) );
@@ -1921,7 +1923,7 @@ template < typename KeyGenerator >
 [[maybe_unused]] inline auto Sequence < C > :: associateBy (
         KeyGenerator const & keyGenerator
 ) && noexcept -> Sequence < LinkedList < Pair < returnOf < KeyGenerator >, ElementType > > >
-        REQUIRES ( Iterable < C > || ConstIterable < C > ) {
+REQUIRES ( Iterable < C > || ConstIterable < C > ) {
 
     LinkedList < Pair < returnOf < KeyGenerator >, ElementType > > container;
     for ( auto e : * this )
@@ -1936,7 +1938,7 @@ template < typename KeyGenerator, typename ValueMapper >
         KeyGenerator    const & keyGenerator,
         ValueMapper     const & valueMapper
 ) && noexcept -> Sequence < LinkedList < Pair < returnOf < KeyGenerator >, returnOf < ValueMapper > > > >
-        REQUIRES(Iterable < C > || ConstIterable < C >) {
+REQUIRES(Iterable < C > || ConstIterable < C >) {
     LinkedList < Pair < returnOf < KeyGenerator >, ElementType > > container;
     for ( auto e : * this )
         container.add( { keyGenerator ( e ), valueMapper ( e ) } );
@@ -1949,7 +1951,7 @@ template < typename ValueMapper >
 [[maybe_unused]] inline auto Sequence < C > :: associateWith (
         ValueMapper const & mapper
 ) && noexcept -> Sequence < LinkedList < Pair < ElementType, returnOf < ValueMapper > > > >
-        REQUIRES(Iterable < C > || ConstIterable < C >) {
+REQUIRES(Iterable < C > || ConstIterable < C >) {
 
     LinkedList < Pair < ElementType, returnOf < ValueMapper > > > container;
     for ( auto e : * this )
@@ -2006,7 +2008,7 @@ template < typename Selector, typename Comparator >
 
 template < typename C >
 [[maybe_unused]] inline auto Sequence < C > :: distinct () && noexcept -> Sequence < UnorderedSet < ElementType > >
-        REQUIRES ( Iterable < C > || ConstIterable < C > ) {
+REQUIRES ( Iterable < C > || ConstIterable < C > ) {
 
     UnorderedSet < ElementType > container;
     for ( auto e : * this )
@@ -2178,7 +2180,7 @@ template < typename Predicate >
 
 template < typename C >
 [[maybe_unused]] inline auto Sequence < C > :: single () const noexcept -> Optional < ElementType >
-        REQUIRES ( Iterable < C > || ConstIterable < C > ) {
+REQUIRES ( Iterable < C > || ConstIterable < C > ) {
 
     if ( this->pCollection.valueAt().valueAt().size() != 1 )
         return { };
@@ -2187,7 +2189,7 @@ template < typename C >
 
 template < typename C >
 [[maybe_unused]] inline auto Sequence < C > :: singleOr (ElementType const & v) const noexcept -> ElementType
-        REQUIRES ( Iterable < C > || ConstIterable < C > ) {
+REQUIRES ( Iterable < C > || ConstIterable < C > ) {
 
     if ( this->pCollection.valueAt().valueAt().size() != 1 )
         return v;
@@ -2242,28 +2244,28 @@ template < typename Transformer >
 [[maybe_unused]] inline auto Sequence < C > :: flatMap (
         Transformer const & transformer
 ) && noexcept -> Sequence <
-            LinkedList <
+        LinkedList <
                 typename std::remove_reference <
-                    decltype (
+                        decltype (
                         dataTypes::unsafeAddress <
-                            typename returnOf < Transformer > :: Iterator
+                                typename returnOf < Transformer > :: Iterator
                         >()->value()
-                    )
+                        )
                 >::type
-            >
-        > REQUIRES (
-            ( Iterable < C > || ConstIterable < C > ) &&
-            ( Iterable < returnOf < Transformer > > || ConstIterable < returnOf < Transformer > > )
-        ) {
+        >
+> REQUIRES (
+        ( Iterable < C > || ConstIterable < C > ) &&
+        ( Iterable < returnOf < Transformer > > || ConstIterable < returnOf < Transformer > > )
+) {
 
     LinkedList <
-        typename std::remove_reference <
-            decltype (
-                dataTypes::unsafeAddress <
-                    typename returnOf < Transformer >:: Iterator
-                >()->value ()
-            )
-        > :: type
+            typename std::remove_reference <
+                    decltype (
+                    dataTypes::unsafeAddress <
+                            typename returnOf < Transformer >:: Iterator
+                    >()->value ()
+                    )
+            > :: type
     > container;
 
     for ( auto e : * this )
@@ -2277,29 +2279,29 @@ template < typename IndexedTransformer >
 [[maybe_unused]] inline auto Sequence < C > :: flatMapIndexed (
         IndexedTransformer const & transformer
 ) && noexcept -> Sequence <
-            LinkedList <
+        LinkedList <
                 typename std::remove_reference <
-                    decltype (
+                        decltype (
                         dataTypes::unsafeAddress <
-                            typename returnOf < IndexedTransformer > :: Iterator
+                                typename returnOf < IndexedTransformer > :: Iterator
                         >()->value()
-                    )
+                        )
                 >::type
-            >
-        > REQUIRES (
-            ( Iterable < C > || ConstIterable < C > ) && (
-                    Iterable < returnOf < IndexedTransformer > > ||
-                    ConstIterable < returnOf < IndexedTransformer > >
-            )
-        ) {
+        >
+> REQUIRES (
+        ( Iterable < C > || ConstIterable < C > ) && (
+                Iterable < returnOf < IndexedTransformer > > ||
+                ConstIterable < returnOf < IndexedTransformer > >
+        )
+) {
     LinkedList <
-        typename std::remove_reference <
-            decltype (
-                dataTypes::unsafeAddress <
-                    typename returnOf < IndexedTransformer >:: Iterator
-                >()->value ()
-            )
-        > :: type
+            typename std::remove_reference <
+                    decltype (
+                    dataTypes::unsafeAddress <
+                            typename returnOf < IndexedTransformer >:: Iterator
+                    >()->value ()
+                    )
+            > :: type
     > container;
 
     Index i = 0;
@@ -2315,7 +2317,7 @@ template < typename KeySelector >
 [[maybe_unused]] inline auto Sequence < C > :: groupBy (
         KeySelector const & keySelector
 ) && noexcept -> Sequence < HashMap < returnOf < KeySelector >, LinkedList < ElementType > > >
-        REQUIRES ( Iterable < C > || ConstIterable < C > ) {
+REQUIRES ( Iterable < C > || ConstIterable < C > ) {
 
     HashMap < returnOf < KeySelector >, LinkedList < ElementType > > container;
 
@@ -2336,7 +2338,7 @@ template < typename KeySelector, typename ValueMapper >
         KeySelector const & keySelector,
         ValueMapper const & valueMapper
 ) && noexcept -> Sequence < HashMap < returnOf < KeySelector >, LinkedList < returnOf < ValueMapper > > > >
-        REQUIRES ( Iterable < C > || ConstIterable < C > ) {
+REQUIRES ( Iterable < C > || ConstIterable < C > ) {
 
     HashMap < returnOf < KeySelector >, LinkedList < returnOf < ValueMapper > > > container;
 
@@ -2357,7 +2359,7 @@ template < typename KeySelector >
         Map < returnOf < KeySelector >, LinkedList < ElementType > >          & map,
         KeySelector                                                     const & keySelector
 ) const noexcept -> Map < returnOf < KeySelector >, LinkedList < ElementType > > &
-        REQUIRES ( Iterable < C > || ConstIterable < C > ) {
+REQUIRES ( Iterable < C > || ConstIterable < C > ) {
 
     for ( auto e : * this ) {
         auto k = keySelector ( e );
@@ -2377,7 +2379,7 @@ template < typename KeySelector, typename ValueMapper >
         KeySelector                                                                 const & keySelector,
         ValueMapper                                                                 const & valueMapper
 ) const noexcept -> Map < returnOf < KeySelector >, LinkedList < returnOf < ValueMapper > > > &
-        REQUIRES ( Iterable < C > || ConstIterable < C > ) {
+REQUIRES ( Iterable < C > || ConstIterable < C > ) {
 
     for ( auto e : * this ) {
         auto k = keySelector ( e ); auto v = valueMapper ( e );
@@ -2394,7 +2396,7 @@ template < typename C >
 [[maybe_unused]] inline auto Sequence < C > :: minus (
         ElementType const & toRemove
 ) && noexcept -> Sequence < LinkedList < ElementType > >
-        REQUIRES ( Iterable < C > || ConstIterable < C > ) {
+REQUIRES ( Iterable < C > || ConstIterable < C > ) {
 
     LinkedList < ElementType > container;
     Boolean found = false;
@@ -2412,7 +2414,7 @@ template < typename C >
 [[maybe_unused]] inline auto Sequence < C > :: minus (
         Collection < ElementType > const & toRemove
 ) && noexcept -> Sequence < LinkedList < ElementType > >
-        REQUIRES ( Iterable < C > || ConstIterable < C > ) {
+REQUIRES ( Iterable < C > || ConstIterable < C > ) {
 
     LinkedList < ElementType > container;
 
@@ -2429,14 +2431,14 @@ template < typename OC >
 [[maybe_unused]] inline auto Sequence < C > :: minus (
         Sequence < OC > const & sequence
 ) && noexcept -> Sequence <
-            LinkedList <
+        LinkedList <
                 typename Sequence < C > :: ElementType
-            >
-        > REQUIRES (
-            (Iterable < C > || ConstIterable < C >) &&
-            (Iterable < OC > || ConstIterable < OC >) &&
-            EqualsComparable < ElementType COMMA typename Sequence < OC > :: ElementType >
-        ) {
+        >
+> REQUIRES (
+        (Iterable < C > || ConstIterable < C >) &&
+        (Iterable < OC > || ConstIterable < OC >) &&
+        EqualsComparable < ElementType COMMA typename Sequence < OC > :: ElementType >
+) {
 
     LinkedList < ElementType > container;
 
@@ -2460,7 +2462,7 @@ template < typename C >
 [[maybe_unused]] inline auto Sequence < C > :: plus (
         ElementType const & toAdd
 ) && noexcept -> Sequence < LinkedList < ElementType > >
-        REQUIRES ( Iterable < C > || ConstIterable < C > ) {
+REQUIRES ( Iterable < C > || ConstIterable < C > ) {
 
     LinkedList < ElementType > container;
 
@@ -2476,7 +2478,7 @@ template < typename C >
 [[maybe_unused]] inline auto Sequence < C > :: plus (
         Collection < ElementType > const & toAdd
 ) && noexcept -> Sequence < LinkedList < ElementType > >
-        REQUIRES ( Iterable < C > || ConstIterable < C > ) {
+REQUIRES ( Iterable < C > || ConstIterable < C > ) {
 
     LinkedList < ElementType > container;
 
@@ -2493,10 +2495,10 @@ template < typename OC >
 [[maybe_unused]] inline auto Sequence < C > :: plus (
         Sequence < OC > const & toAdd
 ) && noexcept -> Sequence < LinkedList < ElementType > >
-        REQUIRES (
-            (Iterable < C > || ConstIterable < C >) &&
-            (Iterable < OC > || ConstIterable < OC >)
-        ) {
+REQUIRES (
+        (Iterable < C > || ConstIterable < C >) &&
+        (Iterable < OC > || ConstIterable < OC >)
+) {
 
     LinkedList < ElementType > container;
 
@@ -2536,7 +2538,7 @@ template < typename Predicate >
         Collection < ElementType >        & collection,
         Predicate                   const & predicate
 ) const noexcept -> Collection < ElementType >
-        & REQUIRES ( Iterable < C > || ConstIterable < C > ) {
+& REQUIRES ( Iterable < C > || ConstIterable < C > ) {
 
     for ( auto e : * this )
         if ( predicate(e) )
@@ -2551,7 +2553,7 @@ template < typename IndexedPredicate >
         Collection < ElementType >        & collection,
         IndexedPredicate            const & predicate
 ) const noexcept -> Collection < ElementType > &
-        REQUIRES ( Iterable < C > || ConstIterable < C > ) {
+REQUIRES ( Iterable < C > || ConstIterable < C > ) {
 
     Index i = 0;
     for ( auto e : * this )
@@ -2589,11 +2591,11 @@ template < typename NewType >
 [[maybe_unused]] inline auto Sequence < C > :: filterIsDerivedTo (
         Collection < ElementType > & collection
 ) const noexcept -> Collection < ElementType > &
-        REQUIRES (
-            ( Iterable < C > || ConstIterable < C > ) &&
-            Pointer < ElementType > &&
-            Pointer < NewType >
-        ) {
+REQUIRES (
+        ( Iterable < C > || ConstIterable < C > ) &&
+        Pointer < ElementType > &&
+        Pointer < NewType >
+) {
 
     for ( auto e : * this ) {
         auto p = dynamic_cast < NewType > (e);
@@ -2749,7 +2751,7 @@ template < typename KeyGenerator >
         Map < returnOf < KeyGenerator >, ElementType >        & m,
         KeyGenerator                                    const & keyGenerator
 ) const noexcept -> Map < returnOf < KeyGenerator >, ElementType > &
-        REQUIRES(Iterable < C > || ConstIterable < C >) {
+REQUIRES(Iterable < C > || ConstIterable < C >) {
 
     for ( auto e : * this )
         m.add ( { keyGenerator (e), e } );
@@ -2763,7 +2765,7 @@ template < typename KeyGenerator, typename ValueMapper >
         KeyGenerator                                                const & keyGenerator,
         ValueMapper                                                 const & mapper
 ) const noexcept -> Map < returnOf < KeyGenerator >, returnOf < ValueMapper > > &
-        REQUIRES ( Iterable < C > || ConstIterable < C > ) {
+REQUIRES ( Iterable < C > || ConstIterable < C > ) {
 
     for ( auto e : * this )
         m.add ( { keyGenerator (e), mapper(e) } );
@@ -2787,7 +2789,7 @@ template < typename ValueMapper >
         Map < ElementType, returnOf < ValueMapper > >         & m,
         ValueMapper                                     const & mapper
 ) const noexcept -> Map < ElementType, returnOf < ValueMapper > > &
-        REQUIRES ( Iterable < C > || ConstIterable < C > ) {
+REQUIRES ( Iterable < C > || ConstIterable < C > ) {
 
     for ( auto e : * this )
         m.add ( { e, mapper(e) } );
@@ -2797,7 +2799,7 @@ template < typename ValueMapper >
 template < typename C >
 template < typename Collection >
 [[maybe_unused]] inline auto Sequence < C > :: toCollection () const noexcept -> Collection
-        REQUIRES(Iterable<C> || ConstIterable<C>) {
+REQUIRES(Iterable<C> || ConstIterable<C>) {
 
     Collection c;
     for ( auto e : * this )
@@ -2807,14 +2809,14 @@ template < typename Collection >
 
 template < typename C >
 [[maybe_unused]] inline auto Sequence < C > :: toLinkedList () const noexcept -> LinkedList < ElementType >
-        REQUIRES (Iterable<C> || ConstIterable <C> ) {
+REQUIRES (Iterable<C> || ConstIterable <C> ) {
 
     return this->toCollection<LinkedList<ElementType>>();
 }
 
 template < typename C >
 [[maybe_unused]] inline auto Sequence < C > :: toArray () const noexcept -> Array < ElementType >
-        REQUIRES (Iterable<C> || ConstIterable <C> ) {
+REQUIRES (Iterable<C> || ConstIterable <C> ) {
 
     return this->toCollection<Array<ElementType>>();
 }
@@ -2822,14 +2824,14 @@ template < typename C >
 template < typename C >
 template < typename Comparator >
 [[maybe_unused]] inline auto Sequence < C > :: toOrderedSet () const noexcept -> OrderedSet < ElementType, Comparator >
-        REQUIRES (Iterable<C> || ConstIterable <C> ) {
+REQUIRES (Iterable<C> || ConstIterable <C> ) {
 
     return this->toCollection<OrderedSet<ElementType, Comparator>>();
 }
 
 template < typename C >
 [[maybe_unused]] inline auto Sequence < C > :: toUnorderedSet() const noexcept -> UnorderedSet < ElementType >
-        REQUIRES(Iterable < C > || ConstIterable < C > ) {
+REQUIRES(Iterable < C > || ConstIterable < C > ) {
 
     return this->toCollection<UnorderedSet<ElementType>>();
 }
@@ -2837,7 +2839,7 @@ template < typename C >
 template < typename C >
 template < typename Collection >
 [[maybe_unused]] inline auto Sequence < C > :: toCollection ( Collection & c ) const noexcept -> Collection &
-        REQUIRES(Iterable<C> || ConstIterable<C>) {
+REQUIRES(Iterable<C> || ConstIterable<C>) {
 
     for ( auto e : * this )
         c.add(e);
@@ -2863,7 +2865,7 @@ template < typename Comparator >
 [[maybe_unused]] inline auto Sequence < C > :: toOrderedSet (
         OrderedSet < ElementType, Comparator > & s
 ) const noexcept -> OrderedSet < ElementType, Comparator > &
-        REQUIRES ( Iterable<C> || ConstIterable <C> ) {
+REQUIRES ( Iterable<C> || ConstIterable <C> ) {
 
     return this->toCollection<OrderedSet<ElementType, Comparator>>( s );
 }
@@ -2879,45 +2881,45 @@ template < typename C >
 template < typename Transformer >
 [[maybe_unused]] inline auto Sequence < C > :: flatMapTo (
         Collection <
-            typename std::remove_reference <
-                decltype (
-                    dataTypes::unsafeAddress <
-                        typename returnOf < Transformer > :: Iterator
-                    >()->value()
-                )
-            > :: type
+                typename std::remove_reference <
+                        decltype (
+                        dataTypes::unsafeAddress <
+                                typename returnOf < Transformer > :: Iterator
+                        >()->value()
+                        )
+                > :: type
         >                   & collection,
         Transformer   const & transformer
 ) const noexcept -> Collection <
-            typename std::remove_reference <
+        typename std::remove_reference <
                 decltype (
-                    dataTypes::unsafeAddress <
+                dataTypes::unsafeAddress <
                         typename returnOf < Transformer > :: Iterator
-                    >()->value()
+                >()->value()
                 )
-            > :: type
-        > & REQUIRES (
-            ( Iterable < C > || ConstIterable < C > ) && (
+        > :: type
+> & REQUIRES (
+        ( Iterable < C > || ConstIterable < C > ) && (
                 Iterable <
-                    typename std::remove_reference <
-                        decltype (
-                            dataTypes::unsafeAddress <
-                                typename returnOf < Transformer > :: Iterator
-                            >()->value()
-                        )
-                    > :: type
+                        typename std::remove_reference <
+                                decltype (
+                                dataTypes::unsafeAddress <
+                                        typename returnOf < Transformer > :: Iterator
+                                >()->value()
+                                )
+                        > :: type
                 > ||
                 ConstIterable <
-                    typename std::remove_reference <
-                        decltype (
-                            dataTypes::unsafeAddress <
-                                typename returnOf < Transformer > :: Iterator
-                            >()->value()
-                        )
-                    > :: type
+                        typename std::remove_reference <
+                                decltype (
+                                dataTypes::unsafeAddress <
+                                        typename returnOf < Transformer > :: Iterator
+                                >()->value()
+                                )
+                        > :: type
                 >
-            )
-        ) {
+        )
+) {
 
     for ( auto i : * this )
         for ( auto const & e : transformer(i) )
@@ -2930,45 +2932,45 @@ template < typename C >
 template < typename IndexedTransformer >
 [[maybe_unused]] inline auto Sequence < C > :: flatMapIndexedTo (
         Collection <
-            typename std::remove_reference <
-                decltype (
-                    dataTypes::unsafeAddress <
-                        typename returnOf < IndexedTransformer > :: Iterator
-                    >()->value()
-                )
-            > :: type
+                typename std::remove_reference <
+                        decltype (
+                        dataTypes::unsafeAddress <
+                                typename returnOf < IndexedTransformer > :: Iterator
+                        >()->value()
+                        )
+                > :: type
         >                        & collection,
         IndexedTransformer const & transformer
 ) const noexcept -> Collection <
-            typename std::remove_reference <
+        typename std::remove_reference <
                 decltype (
-                    dataTypes::unsafeAddress <
+                dataTypes::unsafeAddress <
                         typename returnOf < IndexedTransformer > :: Iterator
-                    >()->value()
+                >()->value()
                 )
-            > :: type
-        > & REQUIRES (
-            ( Iterable < C > || ConstIterable < C > ) && (
+        > :: type
+> & REQUIRES (
+        ( Iterable < C > || ConstIterable < C > ) && (
                 Iterable <
-                    typename std::remove_reference <
-                        decltype (
-                            dataTypes::unsafeAddress <
-                                typename returnOf < IndexedTransformer > :: Iterator
-                            >()->value()
-                        )
-                    > :: type
+                        typename std::remove_reference <
+                                decltype (
+                                dataTypes::unsafeAddress <
+                                        typename returnOf < IndexedTransformer > :: Iterator
+                                >()->value()
+                                )
+                        > :: type
                 > ||
                 ConstIterable <
-                    typename std::remove_reference <
-                        decltype (
-                            dataTypes::unsafeAddress <
-                                typename returnOf < IndexedTransformer > :: Iterator
-                            >()->value()
-                        )
-                    > :: type
+                        typename std::remove_reference <
+                                decltype (
+                                dataTypes::unsafeAddress <
+                                        typename returnOf < IndexedTransformer > :: Iterator
+                                >()->value()
+                                )
+                        > :: type
                 >
-            )
-        ) {
+        )
+) {
 
     Index j = 0;
     for ( auto i : * this )
@@ -2988,7 +2990,7 @@ template < typename Action >
 [[maybe_unused]] inline auto Sequence < C > :: apply (
         Action const & action
 ) && noexcept -> Sequence < LinkedList < ElementType > >
-        REQUIRES ( Iterable < C > || ConstIterable < C > ) {
+REQUIRES ( Iterable < C > || ConstIterable < C > ) {
 
     action();
 
@@ -3005,7 +3007,7 @@ template < typename Action >
 [[maybe_unused]] inline auto Sequence < C > :: also (
         Action const & action
 ) && noexcept -> Sequence < LinkedList < ElementType > >
-        REQUIRES ( Iterable < C > || ConstIterable < C > ) {
+REQUIRES ( Iterable < C > || ConstIterable < C > ) {
 
     action();
 
@@ -3022,7 +3024,7 @@ template < typename Action >
 [[maybe_unused]] inline auto Sequence < C > :: onEach (
         Action const & action
 ) && noexcept -> Sequence < LinkedList < ElementType > >
-        REQUIRES ( Iterable < C > || ConstIterable < C > ) {
+REQUIRES ( Iterable < C > || ConstIterable < C > ) {
 
     LinkedList < ElementType > container;
     for ( auto e : * this ) {
@@ -3039,7 +3041,7 @@ template < typename IndexedAction >
 [[maybe_unused]] inline auto Sequence < C > :: onEachIndexed (
         IndexedAction const & indexedAction
 ) && noexcept -> Sequence < LinkedList < ElementType > >
-        REQUIRES ( Iterable < C > || ConstIterable < C > ) {
+REQUIRES ( Iterable < C > || ConstIterable < C > ) {
 
     LinkedList < ElementType > container;
     Index i = 0;
@@ -3090,7 +3092,7 @@ template < typename Accumulator, typename AccumulatedType >
         AccumulatedType const & initialValue,
         Accumulator     const & accumulator
 ) && noexcept -> Sequence < LinkedList < AccumulatedType > >
-        REQUIRES ( Iterable < C > || ConstIterable < C > ) {
+REQUIRES ( Iterable < C > || ConstIterable < C > ) {
 
     LinkedList < AccumulatedType > results = { initialValue };
 
@@ -3106,7 +3108,7 @@ template < typename IndexedAccumulator, typename AccumulatedType >
         AccumulatedType     const & initialValue,
         IndexedAccumulator  const & indexedAccumulator
 ) && noexcept -> Sequence < LinkedList < AccumulatedType > >
-        REQUIRES ( Iterable < C > || ConstIterable < C > ) {
+REQUIRES ( Iterable < C > || ConstIterable < C > ) {
 
     LinkedList < AccumulatedType > results = { initialValue };
     Index i = 0;
@@ -3122,7 +3124,7 @@ template < typename Accumulator >
 [[maybe_unused]] inline auto Sequence < C > :: reduce (
         Accumulator const & accumulator
 ) const noexcept -> returnOf < Accumulator >
-        REQUIRES ( Iterable < C > || ConstIterable < C > ) {
+REQUIRES ( Iterable < C > || ConstIterable < C > ) {
 
     auto it = this->begin();
     returnOf < Accumulator > result = it.value();
@@ -3138,7 +3140,7 @@ template < typename IndexedAccumulator >
 [[maybe_unused]] inline auto Sequence < C > :: reduceIndexed (
         IndexedAccumulator const & indexedAccumulator
 ) const noexcept -> returnOf < IndexedAccumulator >
-        REQUIRES ( Iterable < C > || ConstIterable < C > ) {
+REQUIRES ( Iterable < C > || ConstIterable < C > ) {
 
     auto it = this->begin();
     returnOf < IndexedAccumulator > result = it.value();
@@ -3155,7 +3157,7 @@ template < typename Accumulator >
 [[maybe_unused]] inline auto Sequence < C > :: runningReduce (
         Accumulator const & accumulator
 ) && noexcept -> Sequence < LinkedList < returnOf < Accumulator > > >
-        REQUIRES ( Iterable < C > || ConstIterable < C > ) {
+REQUIRES ( Iterable < C > || ConstIterable < C > ) {
 
     auto it = this->begin();
     LinkedList < returnOf < Accumulator > > results = { it.value() };
@@ -3171,7 +3173,7 @@ template < typename IndexedAccumulator >
 [[maybe_unused]] inline auto Sequence < C > :: runningReduceIndexed (
         IndexedAccumulator const & indexedAccumulator
 ) && noexcept -> Sequence < LinkedList < returnOf < IndexedAccumulator > > >
-        REQUIRES ( Iterable < C > || ConstIterable < C > ) {
+REQUIRES ( Iterable < C > || ConstIterable < C > ) {
 
     auto it = this->begin();
     Index i = 1;
@@ -3189,7 +3191,7 @@ template < typename Accumulator, typename AccumulatedType >
         AccumulatedType const & initialValue,
         Accumulator     const & accumulator
 ) && noexcept -> Sequence < LinkedList < AccumulatedType > >
-        REQUIRES ( Iterable < C > || ConstIterable < C > ) {
+REQUIRES ( Iterable < C > || ConstIterable < C > ) {
 
     return this->runningFold( initialValue, accumulator );
 }
@@ -3200,7 +3202,7 @@ template < typename IndexedAccumulator, typename AccumulatedType >
         AccumulatedType     const & initialValue,
         IndexedAccumulator  const & indexedAccumulator
 ) && noexcept -> Sequence < LinkedList < AccumulatedType > >
-        REQUIRES ( Iterable < C > || ConstIterable < C > ) {
+REQUIRES ( Iterable < C > || ConstIterable < C > ) {
 
     return this->runningFoldIndexed ( initialValue, indexedAccumulator );
 }
@@ -3229,9 +3231,9 @@ template < typename Selector >
 [[maybe_unused]] inline auto Sequence < C > :: maxBy (
         Selector const & selector
 ) const noexcept -> Optional < ElementType > REQUIRES (
-            (Iterable < C > || ConstIterable < C >) &&
-            TypeLessComparable < returnOf < Selector > >
-        ) {
+        (Iterable < C > || ConstIterable < C >) &&
+        TypeLessComparable < returnOf < Selector > >
+) {
 
     if ( this->pCollection.valueAt().valueAt().size() == 0 ) return { };
 
@@ -3263,9 +3265,9 @@ template < typename Selector >
         ElementType const & e,
         Selector    const & selector
 ) const noexcept -> ElementType REQUIRES (
-            (Iterable < C > || ConstIterable < C >) &&
-            TypeLessComparable < returnOf < Selector > >
-        ) {
+        (Iterable < C > || ConstIterable < C >) &&
+        TypeLessComparable < returnOf < Selector > >
+) {
 
     auto v = this->maxBy ( selector );
     return v.isPresent() ? v.value() : e;
@@ -3295,9 +3297,9 @@ template < typename Selector >
 [[maybe_unused]] inline auto Sequence < C > :: minBy (
         Selector const & selector
 ) const noexcept -> Optional < ElementType > REQUIRES (
-            (Iterable < C > || ConstIterable < C >) &&
-            TypeLessComparable < returnOf < Selector > >
-        ) {
+        (Iterable < C > || ConstIterable < C >) &&
+        TypeLessComparable < returnOf < Selector > >
+) {
 
     if ( this->pCollection.valueAt().valueAt().size() == 0 ) return { };
 
@@ -3329,9 +3331,9 @@ template < typename Selector >
         ElementType const & e,
         Selector    const & selector
 ) const noexcept -> ElementType REQUIRES (
-            (Iterable < C > || ConstIterable < C >) &&
-            TypeLessComparable < returnOf < Selector > >
-        ) {
+        (Iterable < C > || ConstIterable < C >) &&
+        TypeLessComparable < returnOf < Selector > >
+) {
 
     auto v = this->minBy ( selector );
     return v.isPresent() ? v.value() : e;
@@ -3359,7 +3361,7 @@ template < typename C >
 [[maybe_unused]] auto Sequence < C > :: chunked (
         Size chunkSize
 ) && noexcept -> Sequence < LinkedList < Array < ElementType > > >
-        REQUIRES ( Iterable < C > || ConstIterable < C > ) {
+REQUIRES ( Iterable < C > || ConstIterable < C > ) {
 
     LinkedList < Array < ElementType > > container;
     Array < ElementType > subContainer;
@@ -3391,7 +3393,7 @@ template < typename ListTransformer >
         Size                    chunkSize,
         ListTransformer const & listTransformer
 ) && noexcept -> Sequence < LinkedList < returnOf < ListTransformer > > >
-        REQUIRES ( Iterable < C > || ConstIterable < C > ) {
+REQUIRES ( Iterable < C > || ConstIterable < C > ) {
 
     LinkedList < returnOf < ListTransformer > > container;
     Array < ElementType > subContainer;
@@ -3422,7 +3424,7 @@ template < typename Predicate >
 [[maybe_unused]] inline auto Sequence < C > :: partition (
         Predicate const & predicate
 ) const noexcept -> Pair < LinkedList < ElementType >, LinkedList < ElementType > >
-        REQUIRES ( Iterable < C > || ConstIterable < C > ) {
+REQUIRES ( Iterable < C > || ConstIterable < C > ) {
 
     Pair < LinkedList < ElementType >, LinkedList < ElementType > > partitions;
 
@@ -3440,7 +3442,7 @@ template < typename IndexedPredicate >
 [[maybe_unused]] inline auto Sequence < C > :: partitionIndexed (
         IndexedPredicate const & indexedPredicate
 ) const noexcept -> Pair < LinkedList < ElementType >, LinkedList < ElementType > >
-        REQUIRES ( Iterable < C > || ConstIterable < C > ) {
+REQUIRES ( Iterable < C > || ConstIterable < C > ) {
 
     Pair < LinkedList < ElementType >, LinkedList < ElementType > > partitions;
     Index i = 0;
@@ -3460,7 +3462,7 @@ template < typename C >
         Size            step,
         Boolean const & partialWindows
 ) && noexcept -> Sequence < LinkedList < Array < ElementType > > >
-        REQUIRES ( Iterable < C > || ConstIterable < C > ) {
+REQUIRES ( Iterable < C > || ConstIterable < C > ) {
 
     LinkedList < Array < ElementType > > container;
     Array < ElementType > window;
@@ -3499,41 +3501,41 @@ template < typename ListTransformer >
         Size                    step,
         Boolean         const & partialWindows
 ) && noexcept -> Sequence < LinkedList < returnOf < ListTransformer > > >
-        REQUIRES ( Iterable < C > || ConstIterable < C > ) {
+REQUIRES ( Iterable < C > || ConstIterable < C > ) {
 
     LinkedList < returnOf < ListTransformer > > container;
 
     if constexpr (
             std::is_abstract <
-                typename std::remove_cv <
-                    typename std::remove_reference <
-                        decltype (
-                            std::get < 0 > (
-                                * dataTypes::unsafeAddress <
-                                    argumentsOf <
-                                        ListTransformer
-                                    >
-                                > ()
-                            )
-                        )
-                    >::type
-                > :: type
+                    typename std::remove_cv <
+                            typename std::remove_reference <
+                                    decltype (
+                                    std::get < 0 > (
+                                            * dataTypes::unsafeAddress <
+                                                    argumentsOf <
+                                                            ListTransformer
+                                                    >
+                                            > ()
+                                    )
+                                    )
+                            >::type
+                    > :: type
             > :: type :: value
-    ) {
+            ) {
         LinkedList <
-            typename std::remove_cv <
-                typename std::remove_reference <
-                    decltype (
-                        std::get < 0 > (
-                            * dataTypes::unsafeAddress <
-                                argumentsOf <
-                                    ListTransformer
-                                >
-                            > ()
-                        )
-                    )
-                >::type
-            > :: type ::ElementType
+                typename std::remove_cv <
+                        typename std::remove_reference <
+                                decltype (
+                                std::get < 0 > (
+                                        * dataTypes::unsafeAddress <
+                                                argumentsOf <
+                                                        ListTransformer
+                                                >
+                                        > ()
+                                )
+                                )
+                        >::type
+                > :: type ::ElementType
         > window;
 
         auto it = this->begin();
@@ -3556,17 +3558,17 @@ template < typename ListTransformer >
         return std::move(Sequence<decltype(container)>(std::move(container)));
     } else {
         typename std::remove_cv <
-            typename std::remove_reference <
-                decltype(
-                    std::get<0>(
-                        *dataTypes::unsafeAddress <
-                            argumentsOf <
-                                ListTransformer
-                            >
-                        >()
-                    )
-                )
-            >::type
+                typename std::remove_reference <
+                        decltype(
+                        std::get<0>(
+                                *dataTypes::unsafeAddress <
+                                        argumentsOf <
+                                                ListTransformer
+                                        >
+                                >()
+                        )
+                        )
+                >::type
         > :: type window;
 
         auto it = this->begin();
@@ -3596,10 +3598,10 @@ template < typename OC >
 [[maybe_unused]] inline auto Sequence < C > :: zip (
         Sequence < OC > const & other
 ) && noexcept -> Sequence < LinkedList < Pair < ElementType, typename Sequence < OC > :: ElementType > > >
-        REQUIRES (
-            ( Iterable < C > || ConstIterable < C > ) &&
-            ( Iterable < OC > || ConstIterable < OC > )
-        ) {
+REQUIRES (
+        ( Iterable < C > || ConstIterable < C > ) &&
+        ( Iterable < OC > || ConstIterable < OC > )
+) {
 
     auto it1 = this->begin();
     auto it2 = other.begin();
@@ -3618,10 +3620,10 @@ template < typename OC, typename Transformer >
         Sequence < OC > const & other,
         Transformer     const & transformer
 ) && noexcept -> Sequence < LinkedList < returnOf < Transformer > > >
-        REQUIRES (
-            (Iterable < C > || ConstIterable < C >) &&
-            (Iterable < OC > || ConstIterable < OC > )
-        ) {
+REQUIRES (
+        (Iterable < C > || ConstIterable < C >) &&
+        (Iterable < OC > || ConstIterable < OC > )
+) {
 
     auto it1 = this->begin();
     auto it2 = other.begin();
@@ -3638,7 +3640,7 @@ template < typename C >
 [[maybe_unused]] inline auto Sequence < C > :: zipWithNext (
 
 ) && noexcept -> Sequence < LinkedList < Pair < ElementType, ElementType > > >
-        REQUIRES ( Iterable < C > || ConstIterable < C > ) {
+REQUIRES ( Iterable < C > || ConstIterable < C > ) {
 
     LinkedList < Pair < ElementType, ElementType > > container;
 
@@ -3658,7 +3660,7 @@ template < typename Transformer >
 [[maybe_unused]] auto Sequence < C > :: zipWithNext (
         Transformer const & transformer
 ) && noexcept -> Sequence < LinkedList < returnOf < Transformer > > >
-        REQUIRES ( Iterable < C > || ConstIterable < C > ) {
+REQUIRES ( Iterable < C > || ConstIterable < C > ) {
 
     LinkedList < returnOf < Transformer > > container;
 

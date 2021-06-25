@@ -69,11 +69,11 @@ public:
 
 #include <CDS/Sequence>
 
-auto Range::sequence() noexcept -> Sequence<Range> {
+inline auto Range::sequence() noexcept -> Sequence<Range> {
     return Sequence(*this);
 }
 
-auto Range::sequence() const noexcept -> Sequence<const Range> {
+inline auto Range::sequence() const noexcept -> Sequence<const Range> {
     return Sequence(*this);
 }
 
