@@ -17,13 +17,13 @@
 #include <CDS/Types>
 
 #if defined(__linux) && GCC_VERSION >= 10200 && defined(__cpp_concepts)
-#define _REQUIRES_ITERABLE requires Iterable < C > || ConstIterable < C >
-#define _REQUIRES_PRINTABLE requires HasToString < C >
-#define _REQUIRES_INTEGRAL_ITERABLE requires Iterable < C > && Integral < C >
+//#define _REQUIRES_ITERABLE requires Iterable < C > || ConstIterable < C >
+//#define _REQUIRES_PRINTABLE requires HasToString < C >
+//#define _REQUIRES_INTEGRAL_ITERABLE requires Iterable < C > && Integral < C >
 #else
-#define _REQUIRES_ITERABLE
-#define _REQUIRES_PRINTABLE
-#define _REQUIRES_INTEGRAL_ITERABLE
+//#define _REQUIRES_ITERABLE
+//#define _REQUIRES_PRINTABLE
+//#define _REQUIRES_INTEGRAL_ITERABLE
 #endif
 
 template < typename C >

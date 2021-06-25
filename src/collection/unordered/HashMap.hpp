@@ -594,18 +594,43 @@ public:
         return String(s.substr(0, s.length() - 2).append(" }"));
     }
 
-    auto view () const noexcept -> View < HashMap < K, V, H > >;
+//    auto view () const noexcept -> View < HashMap < K, V, H > >;
+
+    auto sequence () const noexcept -> Sequence < const HashMap < K, V, H > >;
+    auto sequence () noexcept -> Sequence < HashMap < K, V, H > >;
 };
 
-#include <CDS/View>
+//#include <CDS/View>
+//template <class K, class V, class H>
+//#if defined(__cpp_concepts) && !defined(_MSC_VER)
+//    requires
+//    UniqueIdentifiable<K> &&
+//    HashCalculatorHasBoundaryFunction<H>
+//#endif
+//auto HashMap < K, V, H >::view() const noexcept -> View < HashMap < K, V, H > > {
+//    return View(*this);
+//}
+
+#include <CDS/Sequence>
+
 template <class K, class V, class H>
 #if defined(__cpp_concepts) && !defined(_MSC_VER)
-    requires
-    UniqueIdentifiable<K> &&
-    HashCalculatorHasBoundaryFunction<H>
+requires
+UniqueIdentifiable<K> &&
+HashCalculatorHasBoundaryFunction<H>
 #endif
-auto HashMap < K, V, H >::view() const noexcept -> View < HashMap < K, V, H > > {
-    return View(*this);
+auto HashMap < K, V, H >::sequence() const noexcept -> Sequence < const HashMap < K, V, H > > {
+    return Sequence(*this);
+}
+
+template <class K, class V, class H>
+#if defined(__cpp_concepts) && !defined(_MSC_VER)
+requires
+UniqueIdentifiable<K> &&
+HashCalculatorHasBoundaryFunction<H>
+#endif
+auto HashMap < K, V, H >::sequence() noexcept -> Sequence < HashMap<K, V, H>> {
+    return Sequence(*this);
 }
 
 template < typename K, typename V >

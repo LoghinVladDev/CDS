@@ -6,8 +6,11 @@
 #define CDS_RANGE_HPP
 
 
-template < typename T >
-class View;
+//template < typename T >
+//class View;
+
+template < typename C >
+class Sequence;
 
 #include <CDS/Object>
 class Range final : public Object {
@@ -54,12 +57,24 @@ public:
         return new Range( * this );
     }
 
-    auto view () const noexcept -> View < Range >;
+//    auto view () const noexcept -> View < Range >;
+    auto sequence () const noexcept -> Sequence < const Range >;
+    auto sequence () noexcept -> Sequence < Range >;
 };
 
-#include <CDS/View>
-auto Range::view() const noexcept -> View < Range > {
-    return View(*this);
+//#include <CDS/View>
+//auto Range::view() const noexcept -> View < Range > {
+//    return View(*this);
+//}
+
+#include <CDS/Sequence>
+
+auto Range::sequence() noexcept -> Sequence<Range> {
+    return Sequence(*this);
+}
+
+auto Range::sequence() const noexcept -> Sequence<const Range> {
+    return Sequence(*this);
 }
 
 #endif //CDS_RANGE_HPP

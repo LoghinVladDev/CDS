@@ -256,7 +256,9 @@ public:
     Array & operator = ( Collection<Value> const & ) noexcept;
     inline Array & operator = ( Array const & o ) noexcept { return this->operator=( ( Collection<Value> const & )(o) ); } // NOLINT(bugprone-unhandled-self-assignment,misc-unconventional-assign-operator)
 
-    auto view () const noexcept -> View < Array < T > >;
+//    auto view () const noexcept -> View < Array < T > >;
+    auto sequence () const noexcept -> Sequence < const Array < T > >;
+    auto sequence () noexcept -> Sequence < Array < T > >;
 };
 
 template <class T>
@@ -1001,11 +1003,24 @@ auto Array<T>::sort(SortFunc const & sortFunc) noexcept -> void {
 
     Array::quickSort( this->begin(), -- this->end(), sortFunc );
 }
-#include <CDS/View>
+//#include <CDS/View>
+//
+//template < typename T >
+//auto Array<T>::view () const noexcept -> View < Array < T > > {
+//    return View(*this);
+//}
+
+#include <CDS/Sequence>
 
 template < typename T >
-auto Array<T>::view () const noexcept -> View < Array < T > > {
-    return View(*this);
+auto Array < T > :: sequence () const noexcept -> Sequence < const Array < T > > {
+    return Sequence(*this);
 }
+
+template < typename T >
+auto Array < T > :: sequence () noexcept -> Sequence < Array < T > > {
+    return Sequence(*this);
+}
+
 
 #endif //CDS_ARRAY_HPP

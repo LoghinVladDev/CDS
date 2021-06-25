@@ -6,6 +6,7 @@
 #define CDS_STATICARRAY_HPP
 
 #include <CDS/LinkedList>
+#include <CDS/Array>
 
 template <class T, Size n>
 class StaticArray final : public List <T> {
@@ -132,7 +133,13 @@ public:
             typename Collection<Value>::ConstIterator const &,
             typename Collection<Value>::ConstIterator const &
     ) noexcept;
-    StaticArray( std::initializer_list <Value> const & ) noexcept;
+
+    StaticArray( std::initializer_list <Value> const & values ) noexcept {
+        Index i = 0;
+        for ( auto const & e : values )
+            this->operator[](i++) = e;
+    }
+
     explicit StaticArray( ValueConstReference ) noexcept;
 
     ~StaticArray() noexcept final;
@@ -258,7 +265,7 @@ public:
     auto sub ( List < Value > &, Index, Index ) const noexcept (false) -> void final;
 
     inline auto sub ( Index from, Index to ) const noexcept(false) -> StaticArray {
-        Array array;
+        Array < T > array;
         this->sub( array, from, to );
         return array;
     }
@@ -310,7 +317,10 @@ public:
     StaticArray & operator = ( Collection<Value> const & ) noexcept;
     inline StaticArray & operator = ( StaticArray const & o ) noexcept { return this->operator=( ( Collection<Value> const & )(o) ); } // NOLINT(bugprone-unhandled-self-assignment,misc-unconventional-assign-operator)
 
-    [[nodiscard]] auto view () const noexcept -> View < StaticArray < T, n >;
+    [[nodiscard]] auto view () const noexcept -> View < StaticArray < T, n > >;
+
+    [[nodiscard]] auto sequence () const noexcept -> Sequence < const StaticArray < T, n > >;
+    [[nodiscard]] auto sequence () noexcept -> Sequence < StaticArray < T, n > >;
 };
 
 #include <CDS/View>
@@ -318,5 +328,21 @@ template <class T, Size n>
 auto StaticArray<T, n>::view() const noexcept -> View < StaticArray <T, n > > {
     return View(*this);
 }
+
+#include <CDS/Sequence>
+
+template <class T, Size n>
+auto StaticArray<T, n>::sequence() const noexcept -> Sequence < const StaticArray <T, n > > {
+    return Sequence(*this);
+}
+
+template <class T, Size n>
+auto StaticArray<T, n>::sequence() noexcept -> Sequence < StaticArray <T, n> > {
+    return Sequence(*this);
+}
+
+template <typename T>
+StaticArray (std::initializer_list<T> l) -> StaticArray < T, l.size() >;
+
 
 #endif //CDS_STATICARRAY_HPP

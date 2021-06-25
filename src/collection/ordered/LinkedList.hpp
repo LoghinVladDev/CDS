@@ -392,7 +392,9 @@ public:
         return * this;
     }
 
-    [[nodiscard]] auto view () const noexcept -> View < DoubleLinkedList < T > >;
+//    [[nodiscard]] auto view () const noexcept -> View < DoubleLinkedList < T > >;
+    [[nodiscard]] auto sequence () const noexcept -> Sequence < const DoubleLinkedList < T > >;
+    [[nodiscard]] auto sequence () noexcept -> Sequence < DoubleLinkedList < T > >;
 };
 
 template <class T>
@@ -1189,10 +1191,22 @@ auto DoubleLinkedList<T>::index(T & e) noexcept -> Index {
     return -1;
 }
 
-#include <CDS/View>
+//#include <CDS/View>
+//template < typename T >
+//auto DoubleLinkedList<T>::view () const noexcept -> View < DoubleLinkedList < T > > {
+//    return View(*this);
+//}
+
+#include <CDS/Sequence>
+
 template < typename T >
-auto DoubleLinkedList<T>::view () const noexcept -> View < DoubleLinkedList < T > > {
-    return View(*this);
+auto DoubleLinkedList < T > :: sequence () const noexcept -> Sequence < const DoubleLinkedList < T > > {
+    return Sequence(*this);
+}
+
+template < typename T >
+auto DoubleLinkedList < T > :: sequence () noexcept -> Sequence < DoubleLinkedList < T > > {
+    return Sequence(*this);
 }
 
 inline auto String::split(ElementType token, Size splitCount) const noexcept -> LinkedList < String > {

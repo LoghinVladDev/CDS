@@ -88,14 +88,12 @@ concept UniqueIdentifiable = requires ( T const & a, T const & b ) {
 
 #endif
 
-#if defined(__cpp_concepts)
-
-#define REQUIRES(concepts) requires concepts
-
-#else
-
-#define REQUIRES(concepts)
-
+#if !defined(REQUIRES)
+    #if defined(__cpp_concepts)
+        #define REQUIRES(concepts) requires concepts
+    #else
+        #define REQUIRES(concepts)
+    #endif
 #endif
 
 #endif //CDS_CONCEPTS_HPP

@@ -77,7 +77,10 @@ public:
     auto insert ( ConstReference ) noexcept -> bool final;
     auto insert ( T && ) noexcept -> bool final;
 
-    auto view () const noexcept -> View < UnorderedSet < T > >;
+//    auto view () const noexcept -> View < UnorderedSet < T > >;
+
+    auto sequence () const noexcept -> Sequence < const UnorderedSet < T > >;
+    auto sequence () noexcept -> Sequence < UnorderedSet < T > >;
 };
 
 template <class T>
@@ -102,10 +105,22 @@ auto UnorderedSet<T>::insert(T && v) noexcept -> bool {
     return true;
 }
 
-#include <CDS/View>
+//#include <CDS/View>
+//template <class T>
+//auto UnorderedSet<T>::view() const noexcept -> View<UnorderedSet<T>> {
+//    return View(*this);
+//}
+
+#include <CDS/Sequence>
+
 template <class T>
-auto UnorderedSet<T>::view() const noexcept -> View<UnorderedSet<T>> {
-    return View(*this);
+auto UnorderedSet<T>::sequence() const noexcept -> Sequence< const UnorderedSet<T>> {
+    return Sequence(*this);
+}
+
+template <class T>
+auto UnorderedSet<T>::sequence() noexcept -> Sequence<UnorderedSet<T>> {
+    return Sequence(*this);
 }
 
 template < typename T >

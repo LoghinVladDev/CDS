@@ -40,6 +40,9 @@ public:
 template <typename T>
 class View;
 
+template < typename C >
+class Sequence;
+
 template <class T>
 class Collection : public Object {
 public:

@@ -91,7 +91,10 @@ public:
     auto insert ( ConstReference ) noexcept -> bool final;
     auto insert ( T && ) noexcept -> bool final;
 
-    auto view () const noexcept -> View < OrderedSet < T, C > >;
+//    auto view () const noexcept -> View < OrderedSet < T, C > >;
+
+    auto sequence () const noexcept -> Sequence < const OrderedSet < T, C > >;
+    auto sequence () noexcept -> Sequence < OrderedSet < T, C > >;
 };
 
 template <class T, class C>
@@ -173,13 +176,31 @@ auto OrderedSet<T, C>::insert( T && value) noexcept -> bool {
     return true;
 }
 
-#include <CDS/View>
+//#include <CDS/View>
+//template <class T, class C>
+//#if defined(__cpp_concepts) && !defined(_MSC_VER)
+//requires ValidSetComparator <T, C>
+//#endif
+//auto OrderedSet<T, C>::view() const noexcept -> View < OrderedSet < T, C > > {
+//    return View(* this);
+//}
+
+#include <CDS/Sequence>
+
 template <class T, class C>
 #if defined(__cpp_concepts) && !defined(_MSC_VER)
 requires ValidSetComparator <T, C>
 #endif
-auto OrderedSet<T, C>::view() const noexcept -> View < OrderedSet < T, C > > {
-    return View(* this);
+auto OrderedSet<T, C>::sequence() const noexcept -> Sequence < const OrderedSet < T, C > > {
+    return Sequence(* this);
+}
+
+template <class T, class C>
+#if defined(__cpp_concepts) && !defined(_MSC_VER)
+requires ValidSetComparator <T, C>
+#endif
+auto OrderedSet<T, C>::sequence() noexcept -> Sequence < OrderedSet < T, C > > {
+    return Sequence(* this);
 }
 
 #endif //CDS_ORDEREDSET_HPP
