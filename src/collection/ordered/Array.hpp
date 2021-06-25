@@ -994,7 +994,6 @@ template <class T>
 #if defined(__cpp_concepts) && !defined(_MSC_VER)
 auto Array<T>::sort(auto sortFunc) noexcept -> void {
 #else
-//auto Array<T>::sort(bool (* sortFunc) (T const &, T const &) noexcept) noexcept -> void {
 template < typename SortFunc >
 auto Array<T>::sort(SortFunc const & sortFunc) noexcept -> void {
 #endif
