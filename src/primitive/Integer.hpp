@@ -200,12 +200,17 @@ public:
     static auto parse(String const & string) noexcept -> Integer {
         if ( string.empty() ) return 0;
 
+        bool negative = false;
+
         auto it = string.begin();
         constexpr static auto isNumericChar = [] (char c) noexcept -> bool { return c >= '0' && c <= '9'; };
         constexpr static auto numericCharToInt = [] (char c) noexcept -> int { return static_cast < int > ( c ) - 48; };
 
-        while( ! isNumericChar ( it.value() ) && it != string.end() )
+        while( ! isNumericChar ( it.value() ) && it != string.end() ) {
+            if ( it.value() == '-' )
+                negative = true;
             it.next();
+        }
 
         int numericValue = 0;
 
@@ -214,7 +219,7 @@ public:
             it.next();
         }
 
-        return numericValue;
+        return negative ? (-numericValue) : numericValue;
     }
 
     [[nodiscard]] auto copy () const noexcept -> Integer * override {
