@@ -108,12 +108,19 @@ public:
     constexpr auto operator>=(long long int value) const noexcept -> bool { return this->v >= value; }
     constexpr auto operator<=(Long const &o) const noexcept -> bool { return this->v <= o.v; }
     constexpr auto operator<=(long long int value) const noexcept -> bool { return this->v <= value; }
+
     __long_constexpr auto operator&(Long const &o) const noexcept -> Long { return this->v & o.v; }
     __long_constexpr auto operator&(long long int value) const noexcept -> Long { return this->v & value; }
     __long_constexpr auto operator|(Long const &o) const noexcept -> Long { return this->v | o.v; }
     __long_constexpr auto operator|(long long int value) const noexcept -> Long { return this->v | value; }
     __long_constexpr auto operator^(Long const &o) const noexcept -> Long { return this->v ^ o.v; }
     __long_constexpr auto operator^(long long int value) const noexcept -> Long { return this->v ^ value; }
+    __long_constexpr auto operator<<(Long const &o) const noexcept -> Long { return this->v << o.v; }
+    __long_constexpr auto operator<<(long long int value) const noexcept -> Long { return this->v << value; }
+    __long_constexpr auto operator>>(Long const &o) const noexcept -> Long { return this->v >> o.v; }
+    __long_constexpr auto operator>>(long long int value) const noexcept -> Long { return this->v >> value; }
+    __long_constexpr auto operator~() const noexcept -> Long {return ~this->v;}
+
     constexpr auto operator&=(Long const &o) noexcept -> Long & {
         this->v &= o.v;
         return *this;
@@ -138,6 +145,24 @@ public:
         this->v ^= value;
         return *this;
     }
+
+    constexpr auto operator<<=(Long const &o) noexcept -> Long & {
+        this->v <<= o.v;
+        return *this;
+    }
+    constexpr auto operator<<=(long long int  value) noexcept -> Long & {
+        this->v <<= value;
+        return *this;
+    }
+    constexpr auto operator>>=(Long const &o) noexcept -> Long & {
+        this->v >>= o.v;
+        return *this;
+    }
+    constexpr auto operator>>=(long long int  value) noexcept -> Long & {
+        this->v >>= value;
+        return *this;
+    }
+
     constexpr operator long long int() const noexcept { return this->v; }
     [[nodiscard]]constexpr inline auto get() const noexcept -> long long int { return this->v; }
 
