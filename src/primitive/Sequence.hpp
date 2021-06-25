@@ -113,12 +113,7 @@ public:
 
     class ConstIterator : public Object {
     public:
-        using CollectionIterator = typename std::conditional <
-                std::is_const < CollectionType > :: type :: value,
-                typename CollectionType :: ConstIterator,
-                typename CollectionType :: Iterator
-        > :: type;
-//        using CollectionIterator = typename CollectionType::ConstIterator;
+        using CollectionIterator = typename CollectionType::ConstIterator;
         using CollectionElementType = typename Sequence::ElementType;
 
     private:
