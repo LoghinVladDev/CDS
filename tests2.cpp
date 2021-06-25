@@ -3,7 +3,6 @@
 #include <CDS/Thread>
 #include <CDS/Range>
 #include <CDS/Integer>
-#include <crypto/primitives/CryptoBlock.hpp>
 
 void testAtomic ();
 void testCrypto();
@@ -93,12 +92,35 @@ void test (F const & f) {
     >::type::value;
 }
 
+#define CDS_CRYPTO_OPENSSL
+#include <CDS/crypto/AES>
+
 int main () {
 
-    auto v = CryptoBlock <64> ::fromHex( "0123456789abcdefABCDEFa" ).split<4>();
-    Sequence(v).onEach([](auto & e){std::cout << e.toHex() << '\n'; }).also([]{std::cout << '\n';});
+//    auto k = CryptoBlock <128> ::fromHex( "0123456789abcdefABCDEFa" );
+//
+//    auto pt = CryptoBlock < 128 > :: split ("Ana are mere, dar ana are si pere, oare ana va putea sa vanda ambele tipuri de fructe? Si oare va face vreodata un profit? Vom afla in viitor"_s );
+//
+//    std::cout << "Ana are mere"_obj.split(" ") << '\n';
+////    std::cout << pt << '\n';
+//    Sequence ( pt ) .onEach([](auto & b){std::cout << b.toPlainText() << '\n';});
+//
+//    EncryptorAES < 128 > encryptorAes;
+//    encryptorAes.input() = pt.front();
+//    encryptorAes.privateKey() = k;
+//
+//    encryptorAes.encrypt();
+//
+//    std::cout << encryptorAes.output() << '\n';
+//
+//    DecryptorAES < 128 > decryptorAes;
+//    decryptorAes.input() = encryptorAes.output();
+//    decryptorAes.privateKey() = k;
+//
+//    decryptorAes.decrypt();
+//
+//    std::cout << decryptorAes.output().toPlainText() << '\n';
 
-    std::cout << "Ana are mere"_obj.split(" ") << '\n';
     return 0;
 //    Sequence s ( DoubleLinkedList<int>{1, 2, 3, 4} );
 

@@ -8,8 +8,6 @@
 #include <CDS/crypto/SignatureVerifier>
 #include <CDS/crypto/AsymmetricCryptoOperation>
 
-#define CDS_CRYPTO_OPENSSL
-
 #if defined(CDS_CRYPTO_OPENSSL)
 #include <openssl/evp.h>
 #endif

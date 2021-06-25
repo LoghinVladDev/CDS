@@ -2,7 +2,7 @@
 // Created by loghin on 24.06.2021.
 //
 
-#ifndef CDS_CRYPTOOPERATOR_
+#ifndef CDS_CRYPTOOPERATOR_HPP
 #define CDS_CRYPTOOPERATOR_HPP
 
 #include <CDS/crypto/CryptoBlock>
@@ -21,7 +21,7 @@ public:
     [[nodiscard]] constexpr auto input () noexcept -> CryptoBlock < byteSize > & { return this->_input; }
 
     [[nodiscard]] constexpr auto output () const noexcept -> CryptoBlock < byteSize > const & { return this->_output; }
-    [[nodiscard]] constexpr auto output () noexcept -> CryptoBlock < byteSize > const & { return this->_output; }
+    [[nodiscard]] constexpr auto output () noexcept -> CryptoBlock < byteSize > & { return this->_output; }
 
     virtual auto run () noexcept -> CryptoOperation & = 0;
 
@@ -34,4 +34,4 @@ public:
 };
 
 
-#endif //CDS_CRYPTOOPERATOR_
+#endif //CDS_CRYPTOOPERATOR_HPP

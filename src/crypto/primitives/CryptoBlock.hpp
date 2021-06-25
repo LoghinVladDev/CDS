@@ -2,7 +2,7 @@
 // Created by loghin on 23.06.2021.
 //
 
-#ifndef CDS_CRYPTOBLOCK_
+#ifndef CDS_CRYPTOBLOCK_HPP
 #define CDS_CRYPTOBLOCK_HPP
 
 #include <CDS/Object>
@@ -295,8 +295,45 @@ public:
 
         return std::memcmp ( this->_data, block._data, byteSize ) == 0;
     }
+
+    [[nodiscard]] auto equals (Object const & o) const noexcept -> bool override {
+        if ( this == & o ) return true;
+        auto p = dynamic_cast < decltype ( this ) > ( & o );
+        if ( p == nullptr ) return false;
+
+        return this->operator==(*p);
+    }
+
+    [[nodiscard]] auto static split ( byte const * pData, Size size, byte paddingElement = 0x00u ) noexcept -> LinkedList < CryptoBlock < byteSize > > {
+        LinkedList < CryptoBlock < byteSize > > newBlocks;
+
+        for ( Index i = 0; i < size; i += byteSize ) {
+            CryptoBlock < byteSize > newBlock (paddingElement);
+            auto minBufferSize = std::min ( byteSize, size - i );
+
+            std::memcpy ( static_cast < void * > (newBlock.data()), static_cast < void const * > ((pData + i)), minBufferSize );
+
+            if ( minBufferSize < byteSize )
+                std::memset ( static_cast < void * > ( newBlock.data() + minBufferSize ), paddingElement, byteSize - minBufferSize );
+
+            newBlocks.add(newBlock);
+        }
+
+        return newBlocks;
+    }
+
+    [[nodiscard]] inline auto static split ( String const & string, byte paddingElement = 0x00u ) noexcept -> LinkedList < CryptoBlock < byteSize > > {
+        return CryptoBlock < byteSize > :: split ( reinterpret_cast < uint8 const * > ( string.cStr() ), string.length(), paddingElement );
+    }
+
+    [[nodiscard]] inline auto toPlainText () const noexcept -> String {
+        String s;
+        s.resize(byteSize);
+        std::memcpy ( static_cast < void * > ( s.data() ), static_cast < void const * > ( this->_data ), byteSize );
+        return s;
+    }
 };
 
 #undef __crypto_block_constexpr
 
-#endif //CDS_CRYPTOBLOCK_
+#endif //CDS_CRYPTOBLOCK_HPP

@@ -100,7 +100,7 @@ set(
 set(
         CDS_CRYPTO
         src/crypto/primitives/CryptoBlock.hpp
-        src/crypto/interface/CryptoOperation.hpp src/crypto/primitives/SignatureGeneratorED25519.hpp)
+        src/crypto/interface/CryptoOperation.hpp src/crypto/primitives/SignatureGeneratorED25519.hpp src/crypto/primitives/EncryptorAES.hpp)
 
 set(
         CDS_STREAM
@@ -218,7 +218,7 @@ set(
 
 set(
         TEST_ALL_SRC
-        include/CDS/Types include/CDS/crypto/CryptoBlock include/CDS/crypto/CryptoOperation src/crypto/interface/AsymmetricCryptoOperation.hpp src/crypto/interface/SymmetricCryptoOperation.hpp src/crypto/interface/Encryptor.hpp src/crypto/interface/Decryptor.hpp src/crypto/interface/SignatureGenerator.hpp src/crypto/interface/SignatureVerifier.hpp include/CDS/crypto/SignatureVerifier src/crypto/interface/Hasher.hpp)
+        include/CDS/Types include/CDS/crypto/CryptoBlock include/CDS/crypto/CryptoOperation src/crypto/interface/AsymmetricCryptoOperation.hpp src/crypto/interface/SymmetricCryptoOperation.hpp src/crypto/interface/Encryptor.hpp src/crypto/interface/Decryptor.hpp src/crypto/interface/SignatureGenerator.hpp src/crypto/interface/SignatureVerifier.hpp include/CDS/crypto/SignatureVerifier src/crypto/interface/Hasher.hpp src/crypto/primitives/DecryptorAES.hpp)
 
 macro(testSuite)
     set(

@@ -159,7 +159,9 @@ constexpr auto operator "" _b (unsigned long long int i) noexcept -> Boolean {
     return Boolean(i != 0);
 }
 
-constexpr static const Boolean True = true;
-constexpr static const Boolean False = false;
+__boolean_constexpr const Boolean True = true;
+__boolean_constexpr const Boolean False = false;
+
+#undef __boolean_constexpr
 
 #endif //CDS_BOOLEAN_HPP

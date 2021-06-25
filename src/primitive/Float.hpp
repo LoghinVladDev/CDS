@@ -225,7 +225,7 @@ auto operator _operator (float value) noexcept -> Atomic & {  \
 #undef _PREFIX_OP
 };
 
-constexpr auto operator "" _d (long double value) noexcept -> Double {
+constexpr auto operator "" _f (long double value) noexcept -> Float {
     return Float(value);
 }
 
