@@ -76,7 +76,6 @@ public:
                 typename CollectionType :: ConstIterator,
                 typename CollectionType :: Iterator
         > :: type;
-//        using CollectionIterator = typename CollectionType::Iterator;
         using CollectionElementType = typename Sequence::ElementType;
 
     private:
@@ -1126,8 +1125,6 @@ inline Sequence < C > ::Sequence ( Sequence const & s ) noexcept :
 
 template < typename C >
 inline Sequence < C > ::Sequence ( Sequence && s ) noexcept :
-//        pCollection ( new UniquePointer ( s.pCollection.valueAt().release() ) ),
-//        pCollection (  )
         chainCount ( std::exchange ( s.chainCount, 0 ) + 1 ),
         storedMappers ( std::move ( s.storedMappers ) ),
         storedPredicates ( std::move ( s.storedPredicates ) ),
