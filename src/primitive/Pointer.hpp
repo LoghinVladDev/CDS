@@ -148,6 +148,11 @@ public:
         return * this;
     }
 
+    inline UniquePointer & operator = ( typename PointerBase < T > :: Pointer p ) noexcept {
+        this->reset(p);
+        return * this;
+    }
+
     inline UniquePointer & operator = ( decltype(nullptr) ) noexcept {
         this->reset();
         return * this;
@@ -189,6 +194,11 @@ public:
         if ( this->pControl != nullptr )
             this->pControl->ownerCount++;
 
+        return * this;
+    }
+
+    inline SharedPointer & operator = ( typename PointerBase < T > :: Pointer p ) noexcept {
+        this->reset(p);
         return * this;
     }
 
@@ -245,6 +255,11 @@ public:
         if ( &o == this ) return * this;
 
         this->reset( o.release() );
+        return * this;
+    }
+
+    inline ForeignPointer & operator = ( typename PointerBase < T > :: Pointer p ) noexcept {
+        this->reset(p);
         return * this;
     }
 

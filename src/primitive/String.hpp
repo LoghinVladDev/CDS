@@ -1296,6 +1296,13 @@ inline Object::operator String () const noexcept {
 inline auto operator << (std::ostream & out, Object const & o) noexcept -> std::ostream & {
     return (out << o.toString());
 }
+
+#include <sstream>
+inline auto Object::toString() const noexcept -> String {
+    std::stringstream oss;
+    oss << "Object at 0x" << std::hex << reinterpret_cast < AddressValueType > (this);
+    return oss.str();
+}
 // end of weird stuff
 
 
