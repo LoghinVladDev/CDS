@@ -1126,13 +1126,17 @@ inline Sequence < C > ::Sequence ( Sequence const & s ) noexcept :
 
 template < typename C >
 inline Sequence < C > ::Sequence ( Sequence && s ) noexcept :
-        pCollection ( new UniquePointer ( s.pCollection.valueAt().release() ) ),
+//        pCollection ( new UniquePointer ( s.pCollection.valueAt().release() ) ),
+//        pCollection (  )
         chainCount ( std::exchange ( s.chainCount, 0 ) + 1 ),
         storedMappers ( std::move ( s.storedMappers ) ),
         storedPredicates ( std::move ( s.storedPredicates ) ),
         storedIndexedMappers ( std::move ( s.storedIndexedMappers ) ),
-        storedIndexedPredicates ( std::move ( s.storedIndexedPredicates ) ){
-
+        storedIndexedPredicates ( std::move ( s.storedIndexedPredicates ) ) {
+    if ( dynamic_cast < UniquePointer < C > * > ( s.pCollection.get() ) != nullptr )
+        this->pCollection = new UniquePointer ( s.pCollection.valueAt().release() );
+    else
+        this->pCollection = new ForeignPointer ( s.pCollection.valueAt().get() );
 }
 
 template < typename C >
