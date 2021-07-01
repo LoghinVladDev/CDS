@@ -1238,14 +1238,14 @@ auto Sequence < C >::Iterator::skipFiltered() noexcept -> void {
             if (
                     currentMapperIterator != this->pSeq.valueAt().storedMappers.end() &&
                     currentMapperIterator.value().getSecond() == i
-                    ) {
+            ) {
                 this->precomputed = ( * currentMapperIterator.value().getFirst() ) ( this->precomputed );
                 currentMapperIterator.next();
 
             } else if (
                     currentIndexedMapperIterator != this->pSeq.valueAt().storedIndexedMappers.end() &&
                     currentIndexedMapperIterator.value().getSecond() == i
-                    ) {
+            ) {
                 this->precomputed = ( * currentIndexedMapperIterator.value().getFirst() ) (
                         this->index,
                         this->precomputed
@@ -1256,7 +1256,7 @@ auto Sequence < C >::Iterator::skipFiltered() noexcept -> void {
             } else if (
                     currentFilterIterator != this->pSeq.valueAt().storedPredicates.end() &&
                     currentFilterIterator.value().getSecond() == i
-                    ) {
+            ) {
                 if ( ! (* currentFilterIterator.value().getFirst())( this->precomputed ) ) {
                     skip = true;
                     break;
@@ -1266,7 +1266,7 @@ auto Sequence < C >::Iterator::skipFiltered() noexcept -> void {
             } else if (
                     currentIndexedFilterIterator != this->pSeq.valueAt().storedIndexedPredicates.end() &&
                     currentIndexedFilterIterator.value().getSecond() == i
-                    ) {
+            ) {
                 if ( ! (* currentIndexedFilterIterator.value().getFirst()) (this->index, this->precomputed) ) {
                     skip = true;
                     break;
@@ -1278,7 +1278,7 @@ auto Sequence < C >::Iterator::skipFiltered() noexcept -> void {
                     currentMapperIterator           == this->pSeq.valueAt().storedMappers.end()         &&
                     currentIndexedMapperIterator    == this->pSeq.valueAt().storedIndexedMappers.end()  &&
                     currentIndexedFilterIterator    == this->pSeq.valueAt().storedIndexedPredicates.end()
-                    )
+            )
                 break;
         }
 

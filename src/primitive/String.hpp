@@ -891,6 +891,14 @@ public:
      */
     auto ltrim ( String const & ) noexcept -> String &;
 
+    inline auto ltrim ( ElementType e = ' ' ) const noexcept -> String {
+        return String(*this).ltrim(e);
+    }
+
+    inline auto ltrim ( String const & e ) const noexcept -> String {
+        return String(*this).ltrim(e);
+    }
+
     /**
      * @test tested in primitive/StringTest/Utility Functions, String Formatting
      */
@@ -900,6 +908,14 @@ public:
      * @test tested in primitive/StringTest/Utility Functions, String Formatting
      */
     auto rtrim ( String const & ) noexcept -> String &;
+
+    inline auto rtrim ( ElementType e = ' ' ) const noexcept -> String {
+        return String(*this).rtrim(e);
+    }
+
+    inline auto rtrim ( String const & e ) const noexcept -> String {
+        return String(*this).rtrim(e);
+    }
 
     /**
      * @test tested in primitive/StringTest/Utility Functions, String Formatting
@@ -911,6 +927,14 @@ public:
      */
     auto inline trim ( String const & e ) noexcept -> String & { return this->ltrim(e).rtrim(e); }
 
+    inline auto trim ( ElementType e = ' ' ) const noexcept -> String {
+        return String(*this).trim(e);
+    }
+
+    inline auto trim ( String const & e ) const noexcept -> String {
+        return String(*this).trim(e);
+    }
+
     /**
      * @test tested in primitive/StringTest/Utility Functions, String Formatting
      */
@@ -921,10 +945,18 @@ public:
      */
     auto rjust (Size, ElementType = ' ') noexcept -> String &;
 
+    inline auto rjust (Size s, ElementType e = ' ') const noexcept -> String {
+        return String(*this).rjust(s, e);
+    }
+
     /**
      * @test tested in primitive/StringTest/Utility Functions, String Formatting
      */
     auto ljust (Size, ElementType = ' ') noexcept -> String &;
+
+    inline auto ljust (Size s, ElementType e = ' ') const noexcept -> String {
+        return String(*this).ljust(s, e);
+    }
 
 public:
 
@@ -1054,6 +1086,8 @@ public:
      */
     [[nodiscard]] auto split ( String const &, Size = UINT32_MAX ) const noexcept -> LinkedList < String >;
 
+    [[nodiscard]] auto splitByString ( String const &, Size = UINT32_MAX ) const noexcept -> LinkedList < String >;
+
     constexpr static Index INVALID_POS = -1;
 
     /**
@@ -1146,6 +1180,9 @@ public:
     auto view () const noexcept -> View < String >;
 
     [[nodiscard]] auto reversed() const noexcept -> String;
+
+    [[nodiscard]] auto startsWith (String const &) const noexcept -> bool;
+    [[nodiscard]] auto endsWith (String const &) const noexcept -> bool;
 };
 
 class String::IteratorBase {
@@ -1741,6 +1778,16 @@ inline auto String::operator * (int count) const noexcept -> String {
     for ( int i = 0; i < count; i ++ )
         res += (*this);
     return res;
+}
+
+inline auto String::startsWith(String const & str) const noexcept -> bool {
+    if ( str.size() > this->size() ) return false;
+    return this->substr(0, str.size()) == str;
+}
+
+inline auto String::endsWith(String const & str) const noexcept -> bool {
+    if ( str.size() > this->size() ) return false;
+    return this->substr(this->size() - str.size()) == str;
 }
 
 inline auto operator "" _obj (const char * pString, std::size_t length) noexcept -> String {

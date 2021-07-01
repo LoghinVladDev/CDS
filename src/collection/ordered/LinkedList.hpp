@@ -1209,10 +1209,10 @@ auto DoubleLinkedList < T > :: sequence () noexcept -> Sequence < DoubleLinkedLi
     return Sequence(*this);
 }
 
-inline auto String::split(ElementType token, Size splitCount) const noexcept -> LinkedList < String > {
+inline auto String::split(ElementType token, Size limit) const noexcept -> LinkedList < String > {
     Index splitIndex = 0;
-    if ( splitCount < 1 )
-        splitCount = UINT32_MAX;
+    if (limit < 1 )
+        limit = UINT32_MAX;
 
     LinkedList < String > segments;
     if ( this->empty() )
@@ -1221,7 +1221,7 @@ inline auto String::split(ElementType token, Size splitCount) const noexcept -> 
     String currentSegment;
 
     for ( auto c : (*this) ) {
-        if ( c != token || splitIndex >= static_cast<Index>(splitCount) - 1 )
+        if ( c != token || splitIndex >= static_cast<Index>(limit) - 1 )
             currentSegment += c;
         else {
             if ( currentSegment.empty() )
@@ -1238,10 +1238,10 @@ inline auto String::split(ElementType token, Size splitCount) const noexcept -> 
     return segments;
 }
 
-inline auto String::split(const String & delim, Size splitCount) const noexcept -> LinkedList < String > {
+inline auto String::split(const String & delim, Size limit) const noexcept -> LinkedList < String > {
     Index splitIndex = 0;
-    if ( splitCount < 1 )
-        splitCount = INT64_MAX;
+    if (limit < 1 )
+        limit = INT64_MAX;
 
     LinkedList < String > segments;
     if ( this->empty() )
@@ -1250,7 +1250,7 @@ inline auto String::split(const String & delim, Size splitCount) const noexcept 
     String currentSegment;
 
     for ( auto c : (*this) ) {
-        if ( ! delim.contains(c) || splitIndex >= static_cast<Index>(splitCount) - 1 )
+        if ( ! delim.contains(c) || splitIndex >= static_cast<Index>(limit) - 1 )
             currentSegment += c;
         else {
             splitIndex ++;
@@ -1263,6 +1263,18 @@ inline auto String::split(const String & delim, Size splitCount) const noexcept 
     if ( ! currentSegment.empty() )
         segments.pushBack ( currentSegment );
     return segments;
+}
+
+inline auto String::splitByString(String const & token, Size limit) const noexcept -> LinkedList < String > {
+    String copy = * this;
+    auto locations = this->find(token);
+
+    Index i = locations.size() - 1;
+    for ( auto it = locations.rbegin(); it != locations.rend(); ++it, --i )
+        if ( i + 1 < limit )
+            copy.replace(it.value(), token.length(), "\001");
+
+    return copy.split('\001');
 }
 
 inline auto String::find (ElementType e) const noexcept -> LinkedList < Index > {

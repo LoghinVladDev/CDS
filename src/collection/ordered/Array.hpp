@@ -6,7 +6,6 @@
 #define CDS_ARRAY_HPP
 
 #include <CDS/List>
-#include <CDS/LinkedList>
 
 template <class T>
 class Array final : public List <T> {
@@ -838,6 +837,8 @@ auto Array<T>::index( ValueReference value ) noexcept -> Index {
             i++;
     return -1;
 }
+
+#include <CDS/LinkedList>
 
 template <class T>
 auto Array<T>::indices( ValueConstReference value ) const noexcept -> DoubleLinkedList < Index > {

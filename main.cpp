@@ -1,15 +1,15 @@
 #include <iostream>
 //#include <cstring>
-#include <exception>
+//#include <exception>
 
-#include <CDS/Path>
-#include <unistd.h>
+//#include <CDS/Path>
+//#include <unistd.h>
 
 //#include <CDS/HashMap>
-#include <CDS/HashMap>
-#include <CDS/Sequence>
+//#include <CDS/HashMap>
+//#include <CDS/Sequence>
+#include <CDS/Array>
 int main() {
-
 
 //
 //    UniquePointer p(new DoubleLinkedList {3, 4, 2});
