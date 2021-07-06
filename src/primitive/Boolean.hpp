@@ -11,7 +11,7 @@
 #if __cpp_constepxr >= 201907
 #define __boolean_constexpr constexpr
 #else
-#define __boolean_constexpr
+#define __boolean_constexpr inline
 #endif
 
 class Boolean : public Object {

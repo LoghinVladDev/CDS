@@ -11,7 +11,7 @@
 #if __cpp_constepxr >= 201907
 #define __float_constexpr constexpr
 #else
-#define __float_constexpr
+#define __float_constexpr inline
 #endif
 
 #include <CDS/Float>

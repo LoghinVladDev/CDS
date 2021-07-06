@@ -11,7 +11,7 @@
 #if __cpp_constepxr >= 201907
 #define __integer_constexpr constexpr
 #else
-#define __integer_constexpr
+#define __integer_constexpr inline
 #endif
 
 #include <CDS/Random>

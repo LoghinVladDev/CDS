@@ -12,7 +12,7 @@
 #if __cpp_constepxr >= 201907
 #define __double_constexpr constexpr
 #else
-#define __double_constexpr
+#define __double_constexpr inline
 #endif
 
 class Double : public Object {

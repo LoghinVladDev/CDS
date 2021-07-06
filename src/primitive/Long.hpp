@@ -10,7 +10,7 @@
 #if __cpp_constepxr >= 201907
 #define __long_constexpr constexpr
 #else
-#define __long_constexpr
+#define __long_constexpr inline
 #endif
 
 #include <CDS/Random>
