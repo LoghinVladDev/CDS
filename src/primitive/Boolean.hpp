@@ -155,7 +155,7 @@ auto operator _operator (bool value) noexcept -> Atomic & {  \
 #undef _G_OP_OBJ
 #undef _G_OP_OBJ_CONST
 
-constexpr auto operator "" _b (unsigned long long int i) noexcept -> Boolean {
+__boolean_constexpr auto operator "" _b (unsigned long long int i) noexcept -> Boolean {
     return Boolean(i != 0);
 }
 
