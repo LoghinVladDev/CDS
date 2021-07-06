@@ -232,7 +232,7 @@ __double_constexpr auto operator "" _d (long double value) noexcept -> Double {
     return Double(value);
 }
 
-#undef
+#undef __double_constexpr
 
 #undef _G_OBJ
 #undef _G_OP_OBJ
