@@ -12,7 +12,7 @@
 #if __cpp_constepxr >= 201907
 #define __double_constexpr constexpr
 #else
-#define __double_constexpr
+#define __double_constexpr inline
 #endif
 
 class Double : public Object {
@@ -224,13 +224,15 @@ auto operator _operator (double value) noexcept -> Atomic & {  \
 #undef _PREFIX_OP
 };
 
-constexpr auto operator "" _obj (long double value) noexcept -> Double {
+__double_constexpr auto operator "" _obj (long double value) noexcept -> Double {
     return Double(value);
 }
 
-constexpr auto operator "" _d (long double value) noexcept -> Double {
+__double_constexpr auto operator "" _d (long double value) noexcept -> Double {
     return Double(value);
 }
+
+#undef __double_constexpr
 
 #undef _G_OBJ
 #undef _G_OP_OBJ

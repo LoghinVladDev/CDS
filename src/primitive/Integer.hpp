@@ -11,7 +11,7 @@
 #if __cpp_constepxr >= 201907
 #define __integer_constexpr constexpr
 #else
-#define __integer_constexpr
+#define __integer_constexpr inline
 #endif
 
 #include <CDS/Random>
@@ -328,9 +328,11 @@ auto operator _operator (int value) noexcept -> Atomic & {  \
 #undef _PREFIX_OP
 };
 
-constexpr auto operator "" _i (unsigned long long int value) noexcept -> Integer {
+__integer_constexpr auto operator "" _i (unsigned long long int value) noexcept -> Integer {
     return Integer(value);
 }
+
+#undef __integer_constexpr
 
 #undef _G_OBJ
 #undef _G_OP_OBJ

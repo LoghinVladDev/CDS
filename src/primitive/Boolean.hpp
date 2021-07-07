@@ -11,7 +11,7 @@
 #if __cpp_constepxr >= 201907
 #define __boolean_constexpr constexpr
 #else
-#define __boolean_constexpr
+#define __boolean_constexpr inline
 #endif
 
 class Boolean : public Object {
@@ -155,7 +155,7 @@ auto operator _operator (bool value) noexcept -> Atomic & {  \
 #undef _G_OP_OBJ
 #undef _G_OP_OBJ_CONST
 
-constexpr auto operator "" _b (unsigned long long int i) noexcept -> Boolean {
+__boolean_constexpr auto operator "" _b (unsigned long long int i) noexcept -> Boolean {
     return Boolean(i != 0);
 }
 

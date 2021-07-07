@@ -11,7 +11,7 @@
 #if __cpp_constepxr >= 201907
 #define __float_constexpr constexpr
 #else
-#define __float_constexpr
+#define __float_constexpr inline
 #endif
 
 #include <CDS/Float>
@@ -225,9 +225,11 @@ auto operator _operator (float value) noexcept -> Atomic & {  \
 #undef _PREFIX_OP
 };
 
-constexpr auto operator "" _f (long double value) noexcept -> Float {
+__float_constexpr auto operator "" _f (long double value) noexcept -> Float {
     return Float(value);
 }
+
+#undef __float_constexpr
 
 #undef _G_OBJ
 #undef _G_OP_OBJ
