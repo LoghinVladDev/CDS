@@ -183,6 +183,8 @@ public:
     constexpr inline auto crbegin () const noexcept -> ConstReverseIterator { return ConstReverseIterator (this->_pBack); }
     constexpr inline auto crend () const noexcept -> ConstReverseIterator { return ConstReverseIterator (nullptr); }
 
+    auto remove (Index) noexcept -> bool;
+
     auto remove ( const T &, Size ) noexcept -> bool final;
     auto removeLast ( const T & ) noexcept -> bool final;
 
@@ -485,6 +487,27 @@ auto DoubleLinkedList<T>::toString() const noexcept -> String {
 
     auto s = out.str();
     return String(s.substr(0, s.length() - 2).append(" ]"));
+}
+
+template < typename T >
+auto DoubleLinkedList<T>::remove(Index i) noexcept -> bool {
+    if ( i < 0 || i >= this->size() ) return false;
+    if ( i == 0 ) { this->popFront(); return false; }
+
+    auto current = this->_pFront;
+    Index currentIndex = 1;
+
+    while ( current->pNext != nullptr && currentIndex < i )
+        current = current->pNext;
+
+    auto toRemove = current->pNext;
+
+    current->pNext->pNext->pPrevious = current;
+    current->pNext = current->pNext->pNext;
+
+    delete toRemove;
+
+    return true;
 }
 
 template <class T>
