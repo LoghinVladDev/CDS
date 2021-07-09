@@ -14,6 +14,11 @@ int main () {
     std::cout << s.endsWith("test #") << '\n';
     std::cout << s.endsWith("test#") << '\n';
 
+    std::cout << s.removePrefix("this") << '\n';
+    std::cout << s.removePrefix("This") << '\n';
+    std::cout << s.removeSuffix("Test #") << '\n';
+    std::cout << s.removeSuffix("test #") << '\n';
+
 //    std::cout << Array
 //    {1,2, 3} << '\n';
 //    Range(10).sequence().onEach([](auto & e){std::cout << e << ' ';}).also([]{std::cout << '\n';});

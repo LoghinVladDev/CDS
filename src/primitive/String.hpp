@@ -1183,6 +1183,22 @@ public:
 
     [[nodiscard]] auto startsWith (String const &) const noexcept -> bool;
     [[nodiscard]] auto endsWith (String const &) const noexcept -> bool;
+
+    [[nodiscard]] inline auto removePrefix (String const & prefix) noexcept -> String & {
+        if ( this->length() < prefix.length() ) return * this;
+        if ( this->substr(0, prefix.length()) == prefix ) * this = this->substr(prefix.length());
+        return * this;
+    }
+
+    [[nodiscard]] inline auto removePrefix (String const & prefix) const noexcept -> String { return String(*this).removePrefix(prefix); }
+
+    [[nodiscard]] inline auto removeSuffix (String const & suffix) noexcept -> String & {
+        if ( this->length() < suffix.length() ) return * this;
+        if ( this->substr( this->length() - suffix.length() ) == suffix ) * this = this->substr(0, this->length() - suffix.length());
+        return * this;
+    }
+
+    [[nodiscard]] inline auto removeSuffix (String const & suffix) const noexcept -> String { return String(*this).removeSuffix(suffix); }
 };
 
 class String::IteratorBase {
