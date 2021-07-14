@@ -185,10 +185,10 @@ public:
 
     [[nodiscard]] constexpr virtual inline auto empty () const noexcept -> bool = 0;
 #else
-    virtual inline auto front () const noexcept (false) -> const T & = 0;
-    virtual inline auto front () noexcept (false) -> T & = 0;
+    virtual auto front () const noexcept (false) -> const T & = 0;
+    virtual auto front () noexcept (false) -> T & = 0;
 
-    [[nodiscard]] virtual inline auto empty () const noexcept -> bool = 0;
+    [[nodiscard]] virtual auto empty () const noexcept -> bool = 0;
 #endif
 
     virtual auto add (ElementType const &) noexcept -> void = 0;
