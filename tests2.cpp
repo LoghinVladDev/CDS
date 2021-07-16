@@ -1,7 +1,24 @@
 #include <CDS/String>
 #include <CDS/LinkedList>
+#include <Regex.hpp>
 
 int main () {
+    Regex r;
+
+    Regex::CharacterSet cs("a2-9tjqk");
+
+    std::cout << cs.toString() << '\n';
+    std::cout << cs.contains('2') << '\n';
+    std::cout << cs.contains('3') << '\n';
+    std::cout << cs.contains('9') << '\n';
+    std::cout << cs.contains('0') << '\n';
+    std::cout << cs.contains('a') << '\n';
+    std::cout << cs.contains('b') << '\n';
+    std::cout << cs.contains('i') << '\n';
+    std::cout << cs.contains('j') << '\n';
+    return 0;
+
+
     String s = "This is ## a ## sample # ## string # ## test #";
 
     std::cout << s.splitByString("##", 2).toString() << '\n';
