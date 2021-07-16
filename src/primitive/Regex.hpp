@@ -175,118 +175,64 @@ private:
 
 public:
     class CharacterSet : public Object {
-    public:
-        class Range : public Object {
-        private:
-            char _lower = 0;
-            char _upper = 0;
-
-        public:
-            Range() noexcept = default;
-            Range(Range const &) noexcept = default;
-            Range(char l, char u) noexcept : _lower(l), _upper(u) {}
-            explicit Range(char c) noexcept : Range(c, c) {}
-
-            ~Range() noexcept override = default;
-
-            [[nodiscard]] constexpr auto single () const noexcept -> bool { return this->_lower == this->_upper; }
-
-            [[nodiscard]] constexpr auto lower () const noexcept -> char { return this->_lower; }
-            [[nodiscard]] constexpr auto upper () const noexcept -> char { return this->_upper; }
-
-            constexpr auto setLower (char lower) noexcept -> void { this->_lower = lower; }
-            constexpr auto setUpper (char upper) noexcept -> void { this->_upper = upper; }
-
-            constexpr auto operator == (Range const & set) const noexcept -> bool {
-                return this->_lower == set._lower && this->_upper == set._upper;
-            }
-
-            constexpr auto operator < (Range const & range) const noexcept -> bool {
-                return this->_lower < range._lower;
-            }
-
-            [[nodiscard]] constexpr auto contains (char c) const noexcept -> bool { return this->_lower <= c && c <= this->_upper; }
-            [[nodiscard]] constexpr auto contains (Range const & r) const noexcept -> bool { return this->contains(r.lower()) && this->contains(r.upper()); }
-            [[nodiscard]] constexpr auto leftOf (Range const & r) const noexcept -> bool { return r.lower() > this->upper() + 1; }
-            [[nodiscard]] constexpr auto rightOf (Range const & r) const noexcept -> bool { return r.upper() + 1 < this->lower(); }
-
-            [[nodiscard]] inline auto toString () const noexcept -> String override {
-                return this->single() ? ""_s + this->_lower : ""_s + this->_lower + "-" + this->_upper;
-            }
-        };
-
     private:
-        mutable OrderedSet < Range > _ranges;
+        uint8 _chars[16];
 
     public:
         explicit CharacterSet(String const & str) noexcept {
-            int rangeState = -1;
+            this->clear();
+            char left; uint8 rangeState = 0;
 
-            char left;
-
-            for (auto c : str) {
-                if ( String::isAlpha(c) ) {
-                    if (rangeState == 0)
-                        this->_ranges.add(Range(left));
-                    else if (rangeState == 1) {
-                        this->_ranges.add(Range(left, c));
-                        rangeState = -1;
+            for(auto c : str) {
+                if (String::isAlpha(c)) {
+                    if ( rangeState == 1 ) {
+                        this->add(left);
+                    } else if ( rangeState == 2 ) {
+                        this->add(left, c);
+                        rangeState = 0;
                         continue;
                     }
 
-                    rangeState = 0;
+                    rangeState = 1;
                     left = c;
-                } else if ( c == '-' && rangeState == 0 ) rangeState = 1;
-                else this->_ranges.add(Range(c));
+                } else if ( c == Regex::character(SpecialCharacter::CHAR_SET_INTERVAL, Regex::globalFormat())[0] && rangeState == 1 ) rangeState = 2;
+                else this->add(c);
             }
 
-            if ( rangeState != -1 ) this->add(str.back());
+            if ( rangeState == 1 ) this->add(left);
         }
 
-        [[nodiscard]] inline auto contains (char c) const noexcept -> bool {
-            return this->_ranges.any([& c](auto & r){
-                return r.contains(c);
-            });
+        constexpr auto clear () noexcept -> void {
+            std::memset(this->_chars, 0, 16);
+        }
+
+        [[nodiscard]] constexpr auto contains (char c) const noexcept -> bool {
+            return this->_chars[c >> 3] & (1 << (c % 8));
         }
 
         static auto compile (String const & s) noexcept -> CharacterSet { return CharacterSet(s); }
 
-        inline auto add (char c) noexcept -> void {
-            this->add(Range(c));
+        constexpr auto add (char c) noexcept -> void {
+            this->_chars[c >> 3] |= (1 << (c % 8));
         }
 
-        inline auto add (char l, char u) noexcept -> void {
-            this->add(Range(l, u));
-        }
-
-        inline auto add (Range const & r) noexcept -> void {
-            this->_ranges.add(r);
-        }
-
-        inline auto shrink () const noexcept -> void {
-            char freq[255];
-            std::memset(freq, 0, 255);
-
-            this->_ranges.forEach([& freq](auto & r){std::memset(freq + r.lower(), 1, r.upper() - r.lower() + 1 );});
-            this->_ranges.clear();
-
-            Range r(1, 0);
-
-            if ( freq[0] == 1 ) r.setLower(0);
-
-            for (sint8 i = 0; i < 127; i++) {
-                if(freq[i] == 1) r.setUpper(i);
-                else {
-                    if ( r.lower() <= r.upper() )
-                        this->_ranges.add(r);
-                    r.setLower(i + 1);
-                }
-            }
+        constexpr auto add (char l, char u) noexcept -> void {
+            for ( uint8 i = l; i <= u; i++ )
+                this->add(i);
         }
 
         [[nodiscard]] inline auto toString () const noexcept -> String override {
-            this->shrink();
-            return this->_ranges.sequence().fold("["_s, [](String const & s, Range const & r){return s + r;}).append("]");
+            return Range(1, 128).sequence()
+            .filter([this](Index i){ return this->contains(i); })
+            .fold(""_s, [this](String const & s, Index i){
+                if ( this->contains(i - 1) )
+                    if ( s[(Index)s.length() - 2] == Regex::character(SpecialCharacter::CHAR_SET_INTERVAL, Regex::globalFormat())[0] )
+                        return s.removeSuffix(""_s + (char)(i-1)).append((char)i);
+                    else
+                        return s + Regex::character(SpecialCharacter::CHAR_SET_INTERVAL, Regex::globalFormat())[0] + (char)i;
+                else
+                    return s + String().append((char)i);
+            });
         }
     };
 
