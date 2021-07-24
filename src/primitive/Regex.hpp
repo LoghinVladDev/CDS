@@ -173,13 +173,27 @@ private:
         }
     } _cache;
 
-public:
+private:
     class CharacterSet : public Object {
     private:
         uint8 _chars[16];
 
     public:
-        explicit CharacterSet(String const & str) noexcept {
+        CharacterSet() noexcept = default; // NOLINT(cppcoreguidelines-pro-type-member-init)
+
+        CharacterSet(CharacterSet const & o) noexcept { // NOLINT(cppcoreguidelines-pro-type-member-init)
+            std::memcpy ( this->_chars, o._chars, 16 );
+        }
+
+        auto operator = ( CharacterSet const & obj ) noexcept -> CharacterSet & {
+            if ( this == & obj ) return * this;
+
+            std::memcpy (this->_chars, obj._chars, 16);
+
+            return * this;
+        }
+
+        explicit CharacterSet(String const & str) noexcept { // NOLINT(cppcoreguidelines-pro-type-member-init)
             this->clear();
             char left; uint8 rangeState = 0;
 
@@ -217,22 +231,26 @@ public:
         }
 
         constexpr auto add (char l, char u) noexcept -> void {
-            for ( uint8 i = l; i <= u; i++ )
+            for ( char i = l; i <= u; i++ )
                 this->add(i);
         }
 
         [[nodiscard]] inline auto toString () const noexcept -> String override {
             return Range(1, 128).sequence()
-            .filter([this](Index i){ return this->contains(i); })
-            .fold(""_s, [this](String const & s, Index i){
-                if ( this->contains(i - 1) )
-                    if ( s[(Index)s.length() - 2] == Regex::character(SpecialCharacter::CHAR_SET_INTERVAL, Regex::globalFormat())[0] )
-                        return s.removeSuffix(""_s + (char)(i-1)).append((char)i);
+                .filter([this](Index i){ return this->contains((char)i); })
+                .fold(""_s, [this](String const & s, Index i){
+                    if ( this->contains((char)i - 1) )
+                        if ( s[(Index)s.length() - 2] == Regex::character(SpecialCharacter::CHAR_SET_INTERVAL, Regex::globalFormat())[0] )
+                            return s.removeSuffix(""_s + (char)(i-1)).append((char)i);
+                        else
+                            return s + Regex::character(SpecialCharacter::CHAR_SET_INTERVAL, Regex::globalFormat())[0] + (char)i;
                     else
-                        return s + Regex::character(SpecialCharacter::CHAR_SET_INTERVAL, Regex::globalFormat())[0] + (char)i;
-                else
-                    return s + String().append((char)i);
-            });
+                        return s + String().append((char)i);
+                });
+        }
+
+        [[nodiscard]] inline auto copy () const noexcept -> CharacterSet * override {
+            return new CharacterSet(*this);
         }
     };
 
@@ -240,12 +258,175 @@ private:
 
     class CompiledPattern : public Object {
     private:
-        class Node {
+        class Node : public Object {
+        private:
+            LinkedList < Pair < CharacterSet *, Node * > > _nextStates;
+            bool _isEndState {false};
 
+            Size _minRepCount {1};
+            Size _maxRepCount {1};
+
+            Index _debugStateIndex {-1};
+
+        public:
+
+            inline auto clear () noexcept -> Node & {
+                this->_isEndState = false;
+                this->_minRepCount = 1;
+                this->_maxRepCount = 1;
+                this->_debugStateIndex = -1;
+
+                this->_nextStates.forEach([](auto & e){delete e.getFirst(); delete e.getSecond();});
+                this->_nextStates.clear();
+
+                return * this;
+            }
+
+            ~Node () noexcept override {
+                this->clear();
+            }
+
+            Node (Node const & pattern) noexcept :
+                    Object(pattern),
+                    _isEndState(pattern._isEndState),
+                    _minRepCount(pattern._minRepCount),
+                    _maxRepCount(pattern._maxRepCount),
+                    _debugStateIndex(pattern._debugStateIndex),
+                    _nextStates(
+                        pattern._nextStates.sequence()
+                            .map([](Pair <CharacterSet *, Node *> const & e){
+                                return Pair < CharacterSet *, Node * >{e.getFirst()->copy(), e.getSecond()->copy()};
+                            }).toLinkedList()
+                    ){
+
+            }
+
+            inline auto operator = (Node const & pattern) noexcept -> Node & {
+                if (this == & pattern) return * this;
+
+                this->_isEndState = pattern._isEndState;
+                this->_minRepCount = pattern._minRepCount;
+                this->_maxRepCount = pattern._maxRepCount;
+                this->_debugStateIndex = pattern._debugStateIndex;
+
+                this->_nextStates = pattern._nextStates.sequence().map([](Pair < CharacterSet *, Node *> const & e){
+                    return Pair < CharacterSet *, Node * > ( e.getFirst()->copy(), e.getSecond()->copy() );
+                }).toLinkedList();
+
+                return * this;
+            }
+
+            [[nodiscard]] constexpr auto nextStates () const noexcept -> LinkedList < Pair < CharacterSet *, Node * > > const & { return this->_nextStates; }
+            [[nodiscard]] constexpr auto nextStates () noexcept -> LinkedList < Pair < CharacterSet *, Node * > > & { return this->_nextStates; }
+
+            [[nodiscard]] constexpr auto minRepCount () const noexcept -> Size { return this->_minRepCount; }
+            [[nodiscard]] constexpr auto minRepCount () noexcept -> Size & { return this->_minRepCount; }
+
+            [[nodiscard]] constexpr auto maxRepCount () const noexcept -> Size { return this->_maxRepCount; }
+            [[nodiscard]] constexpr auto maxRepCount () noexcept -> Size & { return this->_maxRepCount; }
+
+            [[nodiscard]] constexpr auto endState () const noexcept -> bool { return this->_isEndState; }
+            [[nodiscard]] constexpr auto endState () noexcept -> bool & { return this->_isEndState; }
+
+            [[nodiscard]] constexpr auto stateIndex () const noexcept -> Index { return this->_debugStateIndex; }
+            [[nodiscard]] constexpr auto stateIndex () noexcept -> Index & { return this->_debugStateIndex; }
+
+            [[nodiscard]] inline auto repCounts () const noexcept -> Pair < Size, Size > {
+                return { this->_minRepCount, this->_maxRepCount };
+            }
+
+            constexpr auto setMinRepCount (Size repCount) noexcept -> Node & { this->_minRepCount = repCount; return * this; }
+            constexpr auto setMaxRepCount (Size repCount) noexcept -> Node & { this->_maxRepCount = repCount; return * this; }
+
+            constexpr auto setEndState (bool toggle) noexcept -> Node & { this->_isEndState = toggle; return * this; }
+            constexpr auto makeEndState () noexcept -> Node & { return this->setEndState(true); }
+            constexpr auto unmakeEndState () noexcept -> Node & { return this->setEndState(false); }
+
+            constexpr auto setStateIndex (Index index) noexcept -> Node & { this->_debugStateIndex = index; return * this; }
+
+            inline auto addState (CharacterSet const & characterSet, Node const & pattern) noexcept -> Node & {
+                return this->addState (characterSet, pattern.copy());
+            }
+
+            inline auto addState (CharacterSet const & characterSet, Node * pPattern) noexcept -> Node & {
+                this->_nextStates.add({characterSet.copy(), pPattern->copy()});
+                return * this;
+            }
+
+            [[nodiscard]] inline auto getState (char c) const noexcept -> Node const * {
+                for (auto const & e : this->_nextStates)
+                    if (e.getFirst()->contains(c))
+                        return e.getSecond();
+
+                return nullptr;
+            }
+
+            [[nodiscard]] inline auto setRepCount ( Pair < Size, Size > const & sizePair ) noexcept -> Node & {
+                return this->setMinRepCount(sizePair.getFirst()).setMaxRepCount(sizePair.getSecond());
+            }
+
+            [[nodiscard]] inline auto copy () const noexcept -> Node * override {
+                return new Node (*this);
+            }
+
+            [[nodiscard]] inline auto outgoingCharacterSet () const noexcept -> CharacterSet {
+                return this->_nextStates.sequence()
+                    .fold(CharacterSet(), [](CharacterSet const & a, Pair < CharacterSet *, Node * > const & p){
+                        CharacterSet r = a;
+
+                        for ( char c = 0; c < 127; c++ )
+                            if ( p.getFirst()->contains(c) )
+                                r.add(c);
+
+                        return r;
+                    });
+            }
+
+            [[nodiscard]] inline auto toString () const noexcept -> String override {
+                return "Regex::CompiledPattern::Node "_s +
+                    ", outgoingCharacterSet = " + this->outgoingCharacterSet() +
+                    ", outgoingNodes = " + this->_nextStates.sequence()
+                        .map([](Pair < CharacterSet *, Node *>const & p){ return p.toString(); }).toLinkedList().toString() +
+                    ", repCount = " + this->repCounts().toString() +
+                    ", isEndState = " + (this->endState() ? "true" : "false") +
+                    " }";
+            }
         };
 
-    public:
+        Node * _head {nullptr};
+        Pattern _originalPattern;
 
+    private:
+        inline auto parse () noexcept -> CompiledPattern & {
+
+            return * this;
+        }
+
+    public:
+        explicit CompiledPattern(Pattern const & pattern) noexcept :
+                _originalPattern(pattern) {
+            this->parse();
+        }
+
+        auto clear () noexcept -> CompiledPattern & {
+            this->_originalPattern.clear();
+
+            UnorderedSet < Node * > cleared;
+
+            Node * current = this->_head;
+            while (current != nullptr) {
+                for ( auto & e : current->nextStates() ) {
+                    delete e.getFirst();
+                    
+                }
+            }
+
+            return * this;
+        }
+
+        static inline auto compile (String const & pattern) noexcept -> CompiledPattern {
+            return CompiledPattern(pattern);
+        }
     };
 
     Flags  _flags  { Regex::_globalFlags };

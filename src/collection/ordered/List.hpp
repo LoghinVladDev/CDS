@@ -56,11 +56,11 @@ public:
     virtual auto pushFront ( T && ) noexcept -> void = 0;
     virtual auto pushBack ( T && ) noexcept -> void = 0;
 
-    inline auto append ( T const & v ) noexcept -> void { return this->pushBack(v); }
-    inline auto append ( T && v ) noexcept -> void { return this->pushBack(v); }
+    inline virtual auto append ( T const & v ) noexcept -> void { return this->pushBack(v); }
+    inline virtual auto append ( T && v ) noexcept -> void { return this->pushBack(v); }
 
-    inline auto prepend ( T const & v ) noexcept -> void { return this->pushFront(v); }
-    inline auto prepend ( T && v ) noexcept -> void { return this->pushFront(v); }
+    inline virtual auto prepend ( T const & v ) noexcept -> void { return this->pushFront(v); }
+    inline virtual auto prepend ( T && v ) noexcept -> void { return this->pushFront(v); }
 
     inline auto add ( T const & v ) noexcept -> void override { return this->pushBack(v); }
     inline auto add ( T && v ) noexcept -> void override { return this->pushBack(v); }

@@ -80,6 +80,8 @@ public:
         }
 
         [[nodiscard]] auto constexpr inline isOutOfRange () const noexcept -> bool { return bucketIndex < 0 || bucketIndex >= hashCalculator.getBoundary(); }
+
+        [[nodiscard]] auto copy () const noexcept -> IteratorBase * override = 0;
     };
 
     class ConstIteratorBase : public CollectionConstIterator {
@@ -113,6 +115,8 @@ public:
         }
 
         [[nodiscard]] auto constexpr inline isOutOfRange () const noexcept -> bool { return bucketIndex < 0 || bucketIndex >= hashCalculator.getBoundary(); }
+
+        [[nodiscard]] auto copy () const noexcept -> ConstIteratorBase * override = 0;
     };
 
     class Iterator : public IteratorBase {
@@ -152,6 +156,10 @@ public:
 
         inline auto operator ++ () noexcept -> Iterator & final { this->next(); return * this; }
         inline auto operator ++ (int) noexcept -> Iterator { auto copy = * this; this->next(); return copy; }
+
+        [[nodiscard]] inline auto copy () const noexcept -> Iterator * override {
+            return new Iterator ( * this );
+        }
     };
 
     class ConstIterator : public ConstIteratorBase {
@@ -191,6 +199,10 @@ public:
 
         inline auto operator ++ () noexcept -> ConstIterator & final { this->next(); return * this; }
         inline auto operator ++ (int) noexcept -> ConstIterator { auto copy = * this; this->next(); return copy; }
+
+        [[nodiscard]] inline auto copy () const noexcept -> ConstIterator * override {
+            return new ConstIterator ( * this );
+        }
     };
 
     class ReverseIterator : public IteratorBase {
@@ -231,6 +243,10 @@ public:
 
         inline auto operator ++ () noexcept -> ReverseIterator & final { this->next(); return * this; }
         inline auto operator ++ (int) noexcept -> ReverseIterator { auto copy = * this; this->next(); return copy; }
+
+        [[nodiscard]] inline auto copy () const noexcept -> ReverseIterator * override {
+            return new ReverseIterator ( * this );
+        }
     };
 
     class ConstReverseIterator : public ConstIteratorBase {
@@ -270,6 +286,10 @@ public:
 
         inline auto operator ++ () noexcept -> ConstReverseIterator & final { this->next(); return * this; }
         inline auto operator ++ (int) noexcept -> ConstReverseIterator { auto copy = * this; this->next(); return copy; }
+
+        [[nodiscard]] inline auto copy () const noexcept -> ConstReverseIterator * override {
+            return new ConstReverseIterator ( * this );
+        }
     };
 
     auto operator == (HashMap const & o) const noexcept -> bool {
@@ -283,7 +303,7 @@ public:
         return true;
     }
 
-    auto equals (Object const & o) const noexcept -> bool final {
+    [[nodiscard]] auto equals (Object const & o) const noexcept -> bool final {
         if ( & o == this ) return true;
         auto p = dynamic_cast < HashMap const * > ( & o );
         if ( p == nullptr ) return false;
@@ -319,16 +339,22 @@ public:
         CollectionIterator const & from,
         CollectionIterator const & to
     ) noexcept : pBuckets(new HashBucket[hashCalculator.getBoundary()]) {
-        for ( auto it = from; it != to; it ++ )
-            this->insert(it.value());
+        for ( auto it = UniquePointer ( from.copy () ); ! it->equals ( from ); it->next() )
+            this->insert(it->value());
+
+//        for ( auto it = from; it != to; it ++ )
+//            this->insert(it.value());
     }
 
     explicit HashMap (
         CollectionConstIterator const & from,
         CollectionConstIterator const & to
     ) noexcept : pBuckets(new HashBucket[hashCalculator.getBoundary()]) {
-        for ( auto it = from; it != to; it ++ )
-            this->insert(it.value());
+        for ( auto it = UniquePointer ( from.copy () ); ! it->equals ( from ); it->next() )
+            this->insert(it->value());
+
+//        for ( auto it = from; it != to; it ++ )
+//            this->insert(it.value());
     }
 
     ~HashMap () noexcept final {
@@ -458,14 +484,14 @@ public:
 
     auto find ( KeyConstReference k ) const noexcept -> Optional < Reference < const Value > > final {
         for ( auto & e : this->pBuckets[hashCalculator(k)] )
-            if ( e.getFirst() == k )
+            if ( Type < K > :: deepCompare ( e.getFirst(), k ) )
                 return { e.getSecond() };
         return {};
     }
 
     auto find ( KeyConstReference k ) noexcept -> Optional < Reference < Value > > final {
         for ( auto & e : this->pBuckets[hashCalculator(k)] )
-            if ( e.getFirst() == k )
+            if ( Type < K > :: deepCompare ( e.getFirst(), k ) )
                 return { e.getSecond() };
         return {};
     }
@@ -474,7 +500,7 @@ public:
         auto & b = this->pBuckets[hashCalculator(k)];
 
         for ( auto & e : b )
-            if ( e.getFirst() == k )
+            if ( Type < K > :: deepCompare ( e.getFirst(), k ) )
                 return e.getSecond();
 
         b.pushBack ( { k, Value() } );
@@ -485,7 +511,7 @@ public:
         auto & b = this->pBuckets[hashCalculator(k)];
 
         for ( auto & e : b )
-            if ( e.getFirst() == k )
+            if ( Type < K > :: deepCompare ( e.getFirst(), k ) )
                 return e.getSecond();
 
         throw typename Map<K, V>::MapPairNonExistent();
@@ -495,7 +521,7 @@ public:
         auto & b = this->pBuckets[hashCalculator(k)];
 
         for ( auto & e : b )
-            if ( e.getFirst() == k )
+            if ( Type < K > :: deepCompare ( e.getFirst(), k ) )
                 return e.getSecond();
 
         return defVal;
@@ -503,14 +529,14 @@ public:
 
     auto containsKey ( KeyConstReference k ) const noexcept -> bool final {
         for ( auto & e : (*this) )
-            if ( e.getFirst() == k )
+            if ( Type < K > :: deepCompare ( e.getFirst(), k ) )
                 return true;
         return false;
     }
 
     auto containsValue ( ValueConstReference v ) const noexcept -> bool final {
         for ( auto & e : (*this) )
-            if ( e.getSecond() == v )
+            if ( Type < V > :: deepCompare ( e.getSecond(), v ) )
                 return true;
         return false;
     }
@@ -519,7 +545,7 @@ public:
         auto & b = this->pBuckets[hashCalculator(k)];
         Entry e;
 #if defined(__cpp_concepts) && !defined(_MSC_VER)
-        b.forEach([&e, &k](auto & p){if (p.getFirst() == k) e = p;});
+        b.forEach([&e, &k](auto & p){if (Type < K > :: deepCompare ( p.getFirst(), k )) e = p;});
 #else
         for ( auto & p : b )
             if ( p.getFirst() == k ) e = p;
@@ -594,22 +620,9 @@ public:
         return String(s.substr(0, s.length() - 2).append(" }"));
     }
 
-//    auto view () const noexcept -> View < HashMap < K, V, H > >;
-
     auto sequence () const noexcept -> Sequence < const HashMap < K, V, H > >;
     auto sequence () noexcept -> Sequence < HashMap < K, V, H > >;
 };
-
-//#include <CDS/View>
-//template <class K, class V, class H>
-//#if defined(__cpp_concepts) && !defined(_MSC_VER)
-//    requires
-//    UniqueIdentifiable<K> &&
-//    HashCalculatorHasBoundaryFunction<H>
-//#endif
-//auto HashMap < K, V, H >::view() const noexcept -> View < HashMap < K, V, H > > {
-//    return View(*this);
-//}
 
 #include <CDS/Sequence>
 

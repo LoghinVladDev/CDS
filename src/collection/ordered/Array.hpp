@@ -61,10 +61,10 @@ public:
 
     constexpr auto rbegin () noexcept -> ReverseIterator { return ReverseIterator ( this, this->size () - 1 ); }
     constexpr auto rbegin () const noexcept -> ConstReverseIterator { return ConstReverseIterator ( this, this->size () - 1 ); }
-    constexpr auto crbegin () const noexcept -> ConstReverseIterator { return ConstReverseIterator ( this, this->size () - 1 ); }
+    [[maybe_unused]] constexpr auto crbegin () const noexcept -> ConstReverseIterator { return ConstReverseIterator ( this, this->size () - 1 ); }
     constexpr auto rend() noexcept -> ReverseIterator { return ReverseIterator(this, -1); }
     constexpr auto rend() const noexcept -> ConstReverseIterator { return ConstReverseIterator(this, -1); }
-    constexpr auto crend() const noexcept -> ConstReverseIterator { return ConstReverseIterator(this, -1); }
+    [[maybe_unused]] constexpr auto crend() const noexcept -> ConstReverseIterator { return ConstReverseIterator(this, -1); }
 
 private:
     auto _resize ( Size ) noexcept -> void;
@@ -150,12 +150,12 @@ public:
         if ( o.size() != this->size() ) return false;
 
         for ( auto i1 = this->begin(), i2 = o.begin(); i1 != this->end() && i2 != o.end(); i1++, i2++ )
-            if ( ! ( i1.value() == i2.value() ) )
+            if ( ! ( Type < T > :: deepCompare ( i1.value(), i2.value() ) ) )
                 return false;
         return true;
     }
 
-    auto equals (Object const & o) const noexcept -> bool final {
+    [[nodiscard]] auto equals (Object const & o) const noexcept -> bool final {
         if (this == &o) return true;
         auto p = dynamic_cast < decltype(this) > ( &o );
         if (p == nullptr) return false;
@@ -177,7 +177,7 @@ public:
     auto index ( ValueConstReference ) const noexcept -> Index final;
     auto index ( ValueReference ) noexcept -> Index final;
 
-    auto indices ( ValueConstReference ) const noexcept -> DoubleLinkedList < Index >;
+    [[maybe_unused]] auto indices ( ValueConstReference ) const noexcept -> DoubleLinkedList < Index >;
 
     auto get ( Index ) noexcept (false) -> ValueReference final;
     auto get ( Index ) const noexcept (false) -> ValueConstReference final;
@@ -185,7 +185,7 @@ public:
     auto set ( ValueConstReference, Index ) noexcept (false) -> ValueReference final;
     auto sub ( List < Value > &, Index, Index ) const noexcept (false) -> void final;
 
-    inline auto sub ( Index from, Index to ) const noexcept(false) -> Array {
+    [[maybe_unused]] inline auto sub ( Index from, Index to ) const noexcept(false) -> Array {
         Array array;
         this->sub( array, from, to );
         return array;
@@ -287,6 +287,8 @@ public:
     }
 
     constexpr auto value () const noexcept -> ValueReference final { return (* this->_pArray)[this->_index]; }
+
+    [[nodiscard]] auto copy () const noexcept -> IteratorBase * override = 0;
 };
 
 template <class T>
@@ -316,6 +318,8 @@ public:
     }
 
     constexpr auto value () const noexcept -> ValueConstReference final { return (* this->_pArray)[this->_index]; }
+
+    [[nodiscard]] auto copy () const noexcept -> ConstIteratorBase * override = 0;
 };
 
 template <class T>
@@ -345,6 +349,10 @@ public:
     constexpr auto operator ++ (int) noexcept -> Iterator { auto copy = * this; this->next(); return copy; }
     constexpr auto operator -- () noexcept -> Iterator & { return this->prev(); }
     constexpr auto operator -- (int) noexcept -> Iterator { auto copy = * this; this->prev(); return copy; }
+
+    [[nodiscard]] auto copy () const noexcept -> Iterator * override {
+        return new Iterator ( * this );
+    }
 };
 
 template <class T>
@@ -369,8 +377,12 @@ public:
 
     constexpr auto operator ++ () noexcept -> ReverseIterator & { this->next(); return * this; }
     constexpr auto operator ++ (int) noexcept -> ReverseIterator { auto copy = * this; this->next(); return copy; }
-    constexpr auto operator -- () noexcept -> Iterator & { return this->prev(); }
-    constexpr auto operator -- (int) noexcept -> Iterator { auto copy = * this; this->prev(); return copy; }
+    constexpr auto operator -- () noexcept -> ReverseIterator & { return this->prev(); }
+    constexpr auto operator -- (int) noexcept -> ReverseIterator { auto copy = * this; this->prev(); return copy; }
+
+    [[nodiscard]] auto copy () const noexcept -> ReverseIterator * override {
+        return new ReverseIterator ( * this );
+    }
 };
 
 template <class T>
@@ -395,8 +407,12 @@ public:
 
     constexpr auto operator ++ () noexcept -> ConstIterator & { this->next(); return * this; }
     constexpr auto operator ++ (int) noexcept -> ConstIterator { auto copy = * this; this->next(); return copy; }
-    constexpr auto operator -- () noexcept -> Iterator & { return this->prev(); }
-    constexpr auto operator -- (int) noexcept -> Iterator { auto copy = * this; this->prev(); return copy; }
+    constexpr auto operator -- () noexcept -> ConstIterator & { return this->prev(); }
+    constexpr auto operator -- (int) noexcept -> ConstIterator { auto copy = * this; this->prev(); return copy; }
+
+    [[nodiscard]] auto copy () const noexcept -> ConstIterator * override {
+        return new ConstIterator ( * this );
+    }
 };
 
 template<class T>
@@ -418,11 +434,15 @@ public:
 
     constexpr auto next () noexcept -> ConstReverseIterator & final { this->_index --; return * this; }
     constexpr auto prev () noexcept -> ConstReverseIterator & { this->_index ++; return * this; }
+
     constexpr auto operator ++ () noexcept -> ConstReverseIterator & { this->next(); return * this; }
     constexpr auto operator ++ (int) noexcept -> ConstReverseIterator { auto copy = * this; this->next(); return copy; }
+    constexpr auto operator -- () noexcept -> ConstReverseIterator & { return this->prev(); }
+    constexpr auto operator -- (int) noexcept -> ConstReverseIterator { auto copy = * this; this->prev(); return copy; }
 
-    constexpr auto operator -- () noexcept -> Iterator & { return this->prev(); }
-    constexpr auto operator -- (int) noexcept -> Iterator { auto copy = * this; this->prev(); return copy; }
+    [[nodiscard]] auto copy () const noexcept -> ConstReverseIterator * override {
+        return new ConstReverseIterator ( * this );
+    }
 };
 
 template <class T>
@@ -555,8 +575,13 @@ Array<T>::Array(
         typename Collection<Value>::Iterator const & from,
         typename Collection<Value>::Iterator const & to
 ) noexcept {
-    for ( auto it = from ; it != to; it ++ )
-        this->pushBack(it.value());
+    auto it = UniquePointer ( from );
+
+    for ( ; ! it->equals (to); it->next() )
+        this->pushBack( it->value() );
+
+//    for ( auto it = from ; it != to; it ++ )
+//        this->pushBack(it.value());
 }
 
 template <class T>
@@ -564,8 +589,13 @@ Array<T>::Array(
         typename Collection<Value>::ConstIterator const & from,
         typename Collection<Value>::ConstIterator const & to
 ) noexcept {
-    for ( auto it = from; it != to; it ++ )
-        this->pushBack(it.value());
+
+    auto it = UniquePointer ( from );
+
+    for ( ; ! it->equals (to); it->next() )
+        this->pushBack( it->value() );
+//    for ( auto it = from; it != to; it ++ )
+//        this->pushBack(it.value());
 }
 
 template <class T>
@@ -581,7 +611,7 @@ auto Array<T>::remove(ValueConstReference e, Size count) noexcept -> bool {
     Array without;
 
     for ( auto & it : * this )
-        if ( it == e && count > 0 )
+        if ( Type < T > :: deepCompare ( it, e ) && count > 0 )
             count--;
         else
             without.pushBack( it );
@@ -598,7 +628,7 @@ auto Array<T>::removeLast(ValueConstReference e) noexcept -> bool {
     bool removed = false;
 
     for ( auto it = this->rbegin(); it != this->rend(); it ++ )
-        if ( it.value() == e && ! removed )
+        if ( Type < T > :: deepCompare ( it.value(), e ) && ! removed )
             removed = true;
         else
             without.pushFront( it.value() );
@@ -672,7 +702,7 @@ auto Array<T>::removeLastNotOf(Collection<Value> const & elements) noexcept -> b
 template <class T>
 auto Array<T>::replace(ValueConstReference what, ValueConstReference with, Size count) noexcept -> void {
     for ( auto & e : * this )
-        if ( e == what && count > 0 ) {
+        if ( Type < T > :: deepCompare ( e, what ) && count > 0 ) {
             e = with;
             count --;
         } else if ( count == 0 )
@@ -702,7 +732,7 @@ auto Array<T>::replaceNotOf(Collection<Value> const & what, ValueConstReference 
 template <class T>
 auto Array<T>::replaceLast(ValueConstReference what, ValueConstReference with) noexcept -> void {
     for ( auto it = this->rbegin(); it != this->rend(); it ++ )
-        if ( it.value() == what ) {
+        if ( Type < T > :: deepCompare ( it.value(), what ) ) {
             it.value() = with;
             break;
         }
@@ -754,7 +784,7 @@ auto Array<T>::insertBefore( typename Collection<Value>::Iterator const & iterat
     Array newArray;
 
     auto it = this->begin();
-    while ( it != this->end() && ! (it.value() == value) ) {
+    while ( it != this->end() && ! ( Type < T > :: deepCompare ( it.value(), value )) ) {
         newArray.pushBack(it.value());
         it ++;
     }
@@ -774,7 +804,7 @@ auto Array<T>::insertAfter(typename Collection<Value>::Iterator const & iterator
     Array newArray;
 
     auto it = this->begin();
-    while ( it != this->end() && ! (it.value() == value ) ) {
+    while ( it != this->end() && ! ( Type < T > :: deepCompare ( it.value(), value ) ) ) {
         newArray.pushBack(it.value());
         it ++;
     }
@@ -811,7 +841,7 @@ auto Array<T>::makeUnique() noexcept -> void {
 template <class T>
 auto Array<T>::contains( ValueConstReference value ) const noexcept -> bool {
     for ( auto & e : * this ) // NOLINT(readability-use-anyofallof)
-        if ( e == value )
+        if ( Type < T > :: deepCompare ( e, value ) )
             return true;
     return false;
 }
@@ -820,7 +850,7 @@ template <class T>
 auto Array<T>::index( ValueConstReference value ) const noexcept -> Index {
     Index i = 0;
     for ( auto & e : * this )
-        if ( e == value )
+        if ( Type < T > :: deepCompare ( e, value ) )
             return i;
         else
             i++;
@@ -831,7 +861,7 @@ template <class T>
 auto Array<T>::index( ValueReference value ) noexcept -> Index {
     Index i = 0;
     for ( auto & e : * this )
-        if ( e == value )
+        if ( Type < T > :: deepCompare ( e, value ) )
             return i;
         else
             i++;
@@ -846,7 +876,7 @@ auto Array<T>::indices( ValueConstReference value ) const noexcept -> DoubleLink
 
     Index i = 0;
     for ( auto & e : * this ) {
-        if (e == value)
+        if ( Type < T > :: deepCompare ( e, value ) )
             indices.pushBack(i);
         i++;
     }

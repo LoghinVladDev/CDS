@@ -20,7 +20,9 @@ namespace dataTypes {
 #if defined(__cpp_concepts) && !defined(_MSC_VER)
 template <class T, class C>
 concept ValidSetComparator =
-        std::is_base_of < Comparator < T >, C >::value;
+    std::is_base_of<Comparator<T>, C>::value ||
+    std::is_invocable< C, T, T > :: type :: value;
+
 #endif
 
 template <class T, class C = dataTypes::DefaultSetComparator<T>>
@@ -110,7 +112,7 @@ auto OrderedSet<T, C>::insert( ConstReference value) noexcept -> bool {
         return true;
     }
 
-    if ( this->_pFront->data == value ) return false;
+    if ( Type < T > ::deepCompare( this->_pFront->data, value ) ) return false;
 
     if ( comparator ( value, this->_pFront->data ) ) {
         this->_pFront = new Node { value, this->_pFront };
@@ -120,7 +122,7 @@ auto OrderedSet<T, C>::insert( ConstReference value) noexcept -> bool {
 
     auto head = this->_pFront;
     while ( head->pNext != nullptr ) {
-        if ( head->pNext->data == value ) return false;
+        if ( Type < T > :: deepCompare ( head->pNext->data, value ) ) return false;
 
         if ( comparator ( value, head->pNext->data ) ){
             head->pNext = new Node { value, head->pNext };
@@ -150,7 +152,7 @@ auto OrderedSet<T, C>::insert( T && value) noexcept -> bool {
         return true;
     }
 
-    if ( this->_pFront->data == value ) return false;
+    if ( Type < T > :: deepCompare ( this->_pFront->data, value ) ) return false;
 
     if ( comparator ( value, this->_pFront->data ) ) {
         this->_pFront = new Node { std::move(value), this->_pFront };
@@ -160,7 +162,7 @@ auto OrderedSet<T, C>::insert( T && value) noexcept -> bool {
 
     auto head = this->_pFront;
     while ( head->pNext != nullptr ) {
-        if ( head->pNext->data == value ) return false;
+        if ( Type < T > :: deepCompare ( head->pNext->data, value ) ) return false;
 
         if ( comparator ( value, head->pNext->data ) ){
             head->pNext = new Node { std::move(value), head->pNext };
@@ -184,7 +186,9 @@ auto OrderedSet<T, C>::insert( T && value) noexcept -> bool {
 //auto OrderedSet<T, C>::view() const noexcept -> View < OrderedSet < T, C > > {
 //    return View(* this);
 //}
-
+#ifndef _OMIT_SEQUENCE_IMPL
+#ifndef _CDS_ORDERED_SET_SEQUENCE_IMPL // NOLINT(bugprone-reserved-identifier)
+#define _CDS_ORDERED_SET_SEQUENCE_IMPL // NOLINT(bugprone-reserved-identifier)
 #include <CDS/Sequence>
 
 template <class T, class C>
@@ -202,5 +206,7 @@ requires ValidSetComparator <T, C>
 auto OrderedSet<T, C>::sequence() noexcept -> Sequence < OrderedSet < T, C > > {
     return Sequence(* this);
 }
+#endif
+#endif
 
 #endif //CDS_ORDEREDSET_HPP

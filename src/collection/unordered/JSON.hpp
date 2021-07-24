@@ -281,12 +281,12 @@ public:
     auto put ( String const &, Object const & ) noexcept -> JSON &;
     auto put ( String const &, StringLiteral ) noexcept -> JSON &;
 
-    auto begin () noexcept -> LinkedList < JSON::Node >::Iterator { return this->_nodes.begin(); }
-    auto begin () const noexcept -> LinkedList < JSON::Node >::ConstIterator { return this->_nodes.begin(); }
-    auto cbegin () const noexcept -> LinkedList < JSON::Node >::ConstIterator { return this->_nodes.cbegin(); }
-    auto end () noexcept -> LinkedList < JSON::Node >::Iterator { return this->_nodes.end(); }
-    auto end () const noexcept -> LinkedList < JSON::Node >::ConstIterator { return this->_nodes.end(); }
-    auto cend () const noexcept -> LinkedList < JSON::Node >::ConstIterator { return this->_nodes.cend(); }
+    [[nodiscard]] auto begin () noexcept -> LinkedList < JSON::Node >::Iterator { return this->_nodes.begin(); }
+    [[nodiscard]] auto begin () const noexcept -> LinkedList < JSON::Node >::ConstIterator { return this->_nodes.begin(); }
+    [[nodiscard]] auto cbegin () const noexcept -> LinkedList < JSON::Node >::ConstIterator { return this->_nodes.cbegin(); }
+    [[nodiscard]] auto end () noexcept -> LinkedList < JSON::Node >::Iterator { return this->_nodes.end(); }
+    [[nodiscard]] auto end () const noexcept -> LinkedList < JSON::Node >::ConstIterator { return this->_nodes.end(); }
+    [[nodiscard]] auto cend () const noexcept -> LinkedList < JSON::Node >::ConstIterator { return this->_nodes.cend(); }
 
     [[nodiscard]] auto getBoolean ( String const & ) const noexcept (false) -> bool;
     [[nodiscard]] auto getInt ( String const & ) const noexcept (false) -> int;

@@ -1177,7 +1177,7 @@ public:
     template < typename Predicate >
     auto all ( Predicate const & p ) const noexcept (false) -> bool { return this->size() == this->count(p); }
 
-    auto view () const noexcept -> View < String >;
+    [[nodiscard]] auto view () const noexcept -> View < String >;
 
     [[nodiscard]] auto reversed() const noexcept -> String;
 

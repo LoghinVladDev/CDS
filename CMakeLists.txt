@@ -69,7 +69,7 @@ set(
         src/collection/ordered/LinkedList.hpp
 
         src/collection/ordered/OrderedSet.hpp
-)
+        src/collection/ordered/Queue.hpp src/collection/ordered/SingleLinkedList.hpp)
 
 set(
         CDS_COLLECTION_UNORDERED
@@ -218,7 +218,7 @@ set(
 
 set(
         TEST_ALL_SRC
-        include/CDS/Types include/CDS/crypto/CryptoBlock include/CDS/crypto/CryptoOperation src/crypto/interface/AsymmetricCryptoOperation.hpp src/crypto/interface/SymmetricCryptoOperation.hpp src/crypto/interface/Encryptor.hpp src/crypto/interface/Decryptor.hpp src/crypto/interface/SignatureGenerator.hpp src/crypto/interface/SignatureVerifier.hpp include/CDS/crypto/SignatureVerifier src/crypto/interface/Hasher.hpp src/crypto/primitives/DecryptorAES.hpp)
+        include/CDS/Types include/CDS/crypto/CryptoBlock include/CDS/crypto/CryptoOperation src/crypto/interface/AsymmetricCryptoOperation.hpp src/crypto/interface/SymmetricCryptoOperation.hpp src/crypto/interface/Encryptor.hpp src/crypto/interface/Decryptor.hpp src/crypto/interface/SignatureGenerator.hpp src/crypto/interface/SignatureVerifier.hpp include/CDS/crypto/SignatureVerifier src/crypto/interface/Hasher.hpp src/crypto/primitives/DecryptorAES.hpp src/collection/ordered/Stack.hpp src/collection/ordered/PriorityQueue.hpp)
 
 macro(testSuite)
     set(

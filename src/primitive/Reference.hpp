@@ -54,7 +54,7 @@ public:
 
     inline auto operator == (Reference const & o) const noexcept -> bool {
         if ( this == & o ) return true;
-        return o.get() == this->get();
+        return Type < T > :: deepCompare ( o.get(), this->get() );
     }
 
     auto equals ( Object const & o ) const noexcept -> bool final {

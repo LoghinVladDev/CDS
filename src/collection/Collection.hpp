@@ -30,6 +30,8 @@ concept Comparable = requires ( const T & a, const T & b ) {
 #include <type_traits>
 #include <CDS/Object>
 
+#include <CDS/Traits>
+#include <CDS/Concepts>
 
 template <class T>
 class Comparator {
@@ -60,13 +62,13 @@ protected:
 
 public:
 
-    class Iterator {
+    class Iterator : public Object {
     protected:
         Iterator() noexcept = default;
         Iterator(const Iterator &) noexcept = default;
         Iterator(Iterator &&) noexcept = default;
     public:
-        virtual ~Iterator() noexcept = default;
+        ~Iterator() noexcept override = default;
 
 #if __cpp_constexpr >= 201907
         constexpr inline virtual auto next (  ) noexcept -> Iterator & = 0;
@@ -84,15 +86,17 @@ public:
         constexpr inline auto operator == ( const Iterator & o ) const noexcept -> bool { return this->equals(o ); }
         constexpr inline auto operator != ( const Iterator & o ) const noexcept -> bool { return ! this->equals(o ); }
         constexpr inline auto operator * () const noexcept -> T& { return this->value(); }
+
+        [[nodiscard]] auto copy () const noexcept -> Iterator * override = 0;
     };
 
-    class ConstIterator {
+    class ConstIterator : public Object {
     protected:
         ConstIterator() noexcept = default;
         ConstIterator(const ConstIterator &) noexcept = default;
         ConstIterator(ConstIterator &&) noexcept = default;
     public:
-        virtual ~ConstIterator() noexcept = default;
+        ~ConstIterator() noexcept override = default;
 
 #if __cpp_constexpr >= 201907
         constexpr inline virtual auto next (  ) noexcept -> ConstIterator & = 0;
@@ -110,6 +114,8 @@ public:
         constexpr inline auto operator == ( const ConstIterator & o ) const noexcept -> bool { return this->equals(o ); }
         constexpr inline auto operator != ( const ConstIterator & o ) const noexcept -> bool { return ! this->equals(o ); }
         constexpr inline auto operator * () const noexcept -> const T& { return this->value(); }
+
+        [[nodiscard]] auto copy () const noexcept -> ConstIterator * override = 0;
     };
 protected:
     virtual auto beginPtr () noexcept -> Iterator * = 0;
@@ -201,45 +207,6 @@ public:
 
     virtual auto contains ( const T & ) const noexcept -> bool = 0;
 
-#define PARAM_DELIM() ,
-#define NO_PARAM_DELIM()
-#define FORCE_COMMA ,
-
-#define GEN_FUNCTION_DECLARATIONS(_fName, _group, _retType, _paramName, _paramDelim, _otherParams, _preParams, _impl) \
-    _preParams auto _fName ( dataTypes::Value ## _group <T> _paramName _paramDelim() _otherParams) const noexcept -> _retType  _impl  \
-    _preParams auto _fName ( dataTypes::Reference ## _group <T> _paramName _paramDelim() _otherParams) noexcept -> _retType _impl  \
-    _preParams auto _fName ( dataTypes::ConstReference ## _group <T> _paramName _paramDelim() _otherParams) const noexcept -> _retType  _impl  \
-    _preParams auto _fName ( dataTypes::ThrowValue ## _group <T> _paramName _paramDelim() _otherParams) const noexcept (false) -> _retType  _impl  \
-    _preParams auto _fName ( dataTypes::ThrowReference ## _group <T> _paramName  _paramDelim() _otherParams) noexcept (false) -> _retType _impl  \
-    _preParams auto _fName ( dataTypes::ThrowConstReference ## _group <T> _paramName _paramDelim() _otherParams) const noexcept (false) -> _retType _impl \
-    _preParams auto _fName ( auto _paramName _paramDelim() _otherParams ) noexcept -> _retType _impl                  \
-    _preParams auto _fName ( auto _paramName _paramDelim() _otherParams ) const noexcept -> _retType _impl
-
-#define GEN_FUNCTION_DECLARATIONS_6(_fName, _group, _retType, _paramName, _paramDelim, _otherParams, _preParams, _impl1, _impl2, _impl3, _impl4, _impl5, _impl6) \
-    _preParams auto _fName ( dataTypes::Value ## _group <T> _paramName _paramDelim() _otherParams) const noexcept -> _retType  _impl1  \
-    _preParams auto _fName ( dataTypes::Reference ## _group <T> _paramName _paramDelim() _otherParams) noexcept -> _retType _impl2  \
-    _preParams auto _fName ( dataTypes::ConstReference ## _group <T> _paramName _paramDelim() _otherParams) const noexcept -> _retType  _impl3  \
-    _preParams auto _fName ( dataTypes::ThrowValue ## _group <T> _paramName _paramDelim() _otherParams) const noexcept (false) -> _retType  _impl4  \
-    _preParams auto _fName ( dataTypes::ThrowReference ## _group <T> _paramName  _paramDelim() _otherParams) noexcept (false) -> _retType _impl5  \
-    _preParams auto _fName ( dataTypes::ThrowConstReference ## _group <T> _paramName _paramDelim() _otherParams) const noexcept (false) -> _retType  _impl6 \
-    _preParams auto _fName ( auto _paramName _paramDelim() _otherParams ) noexcept -> _retType _impl2 \
-    _preParams auto _fName ( auto _paramName _paramDelim() _otherParams ) const noexcept -> _retType _impl3
-
-#if defined(__cpp_concepts) && !defined(_MSC_VER)
-    GEN_FUNCTION_DECLARATIONS(forEach, Action, void, , NO_PARAM_DELIM, , , ;)
-    GEN_FUNCTION_DECLARATIONS(some, Predicate, bool, , PARAM_DELIM, Size, , ;)
-    GEN_FUNCTION_DECLARATIONS(any, Predicate, bool, p, NO_PARAM_DELIM, , inline, { return this->some(p FORCE_COMMA 1); } )
-    GEN_FUNCTION_DECLARATIONS_6(
-            all, Predicate, bool, p, NO_PARAM_DELIM, , inline,
-            { return ! this->any ([&p](T e) noexcept -> bool { return !p(e); }); },
-            { return ! this->any ([&p](T & e) noexcept -> bool { return !p(e); }); },
-            { return ! this->any ([&p](T const & e) noexcept -> bool { return !p(e); }); },
-            { return ! this->any ([&p](T e) noexcept (false) -> bool { return !p(e); }); },
-            { return ! this->any ([&p](T & e) noexcept (false) -> bool { return !p(e); }); },
-            { return ! this->any ([&p](T const & e) noexcept (false) -> bool { return !p(e); }); }
-    )
-    GEN_FUNCTION_DECLARATIONS(count, Predicate, Size, , NO_PARAM_DELIM, , , ;)
-#else
     template < typename Action >
     auto forEach ( Action const & ) noexcept (false) -> void;
     template < typename Action >
@@ -251,9 +218,10 @@ public:
     auto some ( Predicate const &, Size ) const noexcept (false) -> bool;
 
     template < typename Predicate >
-    auto count ( Predicate const & ) noexcept (false) -> Size;
+    auto count ( Predicate const & ) noexcept ( noexcept ( dataTypes::unsafeAddress < Predicate >()->operator()(std::declval < T > ()) ) ) -> Size;
+
     template < typename Predicate >
-    auto count ( Predicate const & ) const noexcept(false) -> Size;
+    auto count ( Predicate const & ) const noexcept ( noexcept ( dataTypes::unsafeAddress < Predicate >()->operator()(std::declval < T > ()) ) ) -> Size;
 
     template < typename Predicate >
     inline auto any ( Predicate const & p ) noexcept (false) -> bool { return this->some ( p, 1 ); }
@@ -264,16 +232,12 @@ public:
     inline auto all ( Predicate const & p ) noexcept (false) -> bool { return ! this->any ( [&p] (T & e) noexcept -> bool { return ! p(e); } ); }
     template < typename Predicate >
     inline auto all ( Predicate const & p ) const noexcept (false) -> bool { return ! this->any ( [&p] (T const & e) noexcept -> bool { return ! p(e); } ); }
-#endif
 
-#undef GEN_FUNCTION_DECLARATIONS
-#undef GEN_FUNCTION_DECLARATIONS_6
-
-    virtual COLLECTION_EXPLICIT_CONVERSION operator bool () const noexcept {
+    virtual COLLECTION_EXPLICIT_CONVERSION operator bool () const noexcept { // NOLINT(google-explicit-constructor)
         return this->size() != 0;
     }
 
-    auto toString () const noexcept -> String override = 0;
+    [[nodiscard]] auto toString () const noexcept -> String override = 0;
 
     ~Collection() noexcept override = default;
 
@@ -282,61 +246,6 @@ public:
     }
 };
 
-#define _GEN_FUNCTION_IMPLEMENTATION(_fName, _group, _retType, _exceptSpec, _preExceptSpec, _paramName, _paramDelim, _otherParams, _impl)                                                                                              \
-    template <class T> auto Collection<T>::_fName ( dataTypes:: _preExceptSpec ## Value ## _group <T> _paramName _paramDelim() _otherParams ) const _exceptSpec -> _retType _impl                \
-    template <class T> auto Collection<T>::_fName ( dataTypes:: _preExceptSpec ## Reference ## _group <T> _paramName _paramDelim() _otherParams ) _exceptSpec -> _retType _impl                  \
-    template <class T> auto Collection<T>::_fName ( dataTypes:: _preExceptSpec ## ConstReference ## _group <T> _paramName _paramDelim() _otherParams ) const _exceptSpec -> _retType _impl
-
-#define _GEN_FUNCTION_GROUP(_fName, _group, _retType, _paramName, _paramDelim, _otherParams, _impl)                                \
-    _GEN_FUNCTION_IMPLEMENTATION(_fName, _group, _retType, noexcept, ,_paramName, _paramDelim, _otherParams, _impl)                \
-    _GEN_FUNCTION_IMPLEMENTATION(_fName, _group, _retType, noexcept(false), Throw, _paramName, _paramDelim, _otherParams, _impl)   \
-    template <class T> auto Collection<T>::_fName ( auto _paramName _paramDelim() _otherParams ) noexcept -> _retType _impl        \
-    template <class T> auto Collection<T>::_fName ( auto _paramName _paramDelim() _otherParams ) const noexcept -> _retType _impl
-
-#if defined(__cpp_concepts) && !defined(_MSC_VER)
-_GEN_FUNCTION_GROUP(forEach, Action, void, a, NO_PARAM_DELIM, , {
-    auto begin = this->beginPtr();
-    auto end = this->endPtr();
-
-    for ( auto it = begin; ! it->equals( * end ); it->next() )
-        a ( it->value() );
-
-    delete begin;
-    delete end;
-})
-
-_GEN_FUNCTION_GROUP(some, Predicate, bool, p, PARAM_DELIM, Size count, {
-    Size trueCount = 0;
-
-    auto begin = this->beginPtr();
-    auto end = this->endPtr();
-
-    for ( auto it = begin; ! it->equals( * end ) && trueCount < count; it->next() )
-        if ( p ( it->value() ) )
-            trueCount ++;
-
-    delete begin;
-    delete end;
-
-    return count == trueCount;
-})
-
-_GEN_FUNCTION_GROUP(count, Predicate, Size, p, NO_PARAM_DELIM, , {
-    Size trueCount = 0;
-
-    auto pBegin = this->beginPtr();
-    auto pEnd = this->endPtr();
-
-    for ( auto it = pBegin; ! it->equals( * pEnd ); it->next() )
-        if ( p ( it->value() ) )
-            trueCount ++;
-
-    delete pBegin;
-    delete pEnd;
-
-    return trueCount;
-})
-#else
 template < typename T >
 template < typename Action >
 auto Collection<T>::forEach ( Action const & a ) noexcept (false) -> void {
@@ -401,7 +310,7 @@ auto Collection<T>::some ( Predicate const & p, Size count ) const noexcept (fal
 
 template < typename T >
 template < typename Predicate >
-auto Collection<T>::count ( Predicate const & p ) noexcept (false) -> Size {
+auto Collection<T>::count ( Predicate const & p ) noexcept ( noexcept ( dataTypes::unsafeAddress < Predicate >()->operator()(std::declval < T > ()) ) ) -> Size {
     Size trueCount = 0;
 
     auto pBegin = this->beginPtr();
@@ -419,7 +328,7 @@ auto Collection<T>::count ( Predicate const & p ) noexcept (false) -> Size {
 
 template < typename T >
 template < typename Predicate >
-auto Collection<T>::count ( Predicate const & p ) const noexcept(false) -> Size {
+auto Collection<T>::count ( Predicate const & p ) const noexcept ( noexcept ( dataTypes::unsafeAddress < Predicate >()->operator()(std::declval < T > ()) ) ) -> Size {
     Size trueCount = 0;
 
     auto pBegin = this->beginPtr();
@@ -434,8 +343,6 @@ auto Collection<T>::count ( Predicate const & p ) const noexcept(false) -> Size 
 
     return trueCount;
 }
-
-#endif
 
 #undef _GEN_FUNCTION_GROUP
 #undef _GEN_FUNCTION_IMPLEMENTATION

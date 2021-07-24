@@ -7,6 +7,7 @@
 
 #include <CDS/Object>
 #include <sstream>
+#include <CDS/Traits>
 
 template <class K, class V>
 class Pair final : public Object {
@@ -15,27 +16,36 @@ public:
     using Value = V;
 
 private:
-    K first;
-    V second;
+    K _first;
+    V _second;
 
 public:
     Pair() noexcept(noexcept(K()) && noexcept(V())) = default;
-    Pair(const K & k, const V & v) noexcept(noexcept(K(k)) && noexcept(V(v))) : first(k), second(v) {  }
+    Pair(const K & k, const V & v) noexcept(noexcept(K(k)) && noexcept(V(v))) : _first(k), _second(v) {  }
     ~Pair () noexcept override = default;
 
-    auto inline getFirst () const noexcept -> K const & { return first; }
-    auto inline getSecond() const noexcept -> V const & { return second; }
+    auto constexpr getFirst () const noexcept -> K const & { return _first; }
+    auto constexpr getSecond() const noexcept -> V const & { return _second; }
 
-    auto inline getFirst () noexcept -> K & { return first; }
-    auto inline getSecond() noexcept -> V & { return second; }
+    auto constexpr getFirst () noexcept -> K & { return _first; }
+    auto constexpr getSecond() noexcept -> V & { return _second; }
 
-    auto inline setFirst(K const & k) noexcept -> Pair & {first = k; return * this;}
-    auto inline setSecond(V const & v) noexcept -> Pair & {second = v; return * this;}
+    constexpr auto first () const noexcept -> K const & { return this->_first; }
+    constexpr auto first () noexcept -> K & { return this->_first; }
+
+    constexpr auto second () const noexcept -> V const & { return this->_second; }
+    constexpr auto second () noexcept -> V & { return this->_second; }
+
+    auto inline setFirst(K const & k) noexcept -> Pair & {_first = k; return * this;}
+    auto inline setSecond(V const & v) noexcept -> Pair & {_second = v; return * this;}
 
     auto inline operator == ( Pair const & o ) const noexcept -> bool {
         if ( this == & o ) return true;
 
-        return this->first == o.first && this->second == o.second;
+//        return this->_first == o._first && this->_second == o._second;
+        return
+            Type < K > :: deepCompare( this->_first, o._first ) &&
+            Type < V > :: deepCompare( this->_second, o._second );
     }
 
     auto inline operator != ( Pair const & o ) const noexcept -> bool {
@@ -56,13 +66,13 @@ public:
         if ( this == & o )
             return * this;
 
-        this->first = o.first;
-        this->second = o.second;
+        this->_first = o._first;
+        this->_second = o._second;
 
         return * this;
     }
 
-    auto inline invert () const noexcept -> Pair <V, K> { return Pair(second, first); }
+    auto inline invert () const noexcept -> Pair <V, K> { return Pair(_second, _first); }
 
     [[nodiscard]] auto inline toString() const noexcept -> String final {
         std::stringstream oss;
@@ -80,7 +90,7 @@ public:
                     std::is_same < V, std::string > ::value
                 )
         )
-            oss << "( k = " << first << ", v = " << second << " )";
+            oss << "( k = " << _first << ", v = " << _second << " )";
         return String(oss.str());
     }
 

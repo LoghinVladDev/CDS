@@ -39,6 +39,8 @@ public:
 
         constexpr inline auto operator ++ () noexcept -> Iterator & { return this->next(); }
         constexpr inline auto operator ++ (int) noexcept -> Iterator { auto copy = *this; this->_pNode = this->_pNode->pNext; return copy; }
+
+        [[nodiscard]] inline auto copy () const noexcept -> Iterator * override { return new Iterator (* this); }
     };
 
     class ConstIterator final : public Collection<T>::ConstIterator {
@@ -58,6 +60,8 @@ public:
 
         constexpr inline auto operator ++ () noexcept -> ConstIterator & { return this->next(); }
         constexpr inline auto operator ++ (int) noexcept -> ConstIterator { auto copy = *this; this->_pNode = this->_pNode->pNext; return copy; }
+
+        [[nodiscard]] inline auto copy () const noexcept -> ConstIterator * override { return new ConstIterator (* this); }
     };
 
 protected:
@@ -195,7 +199,7 @@ public:
     [[nodiscard]] constexpr inline auto size () const noexcept -> Size final { return this->_size; }
 
     inline auto contains ( ConstReference e ) const noexcept -> bool final {
-        return this->any([&e](ConstReference x) noexcept -> bool {return x == e;});
+        return this->any([&e](ConstReference x) noexcept -> bool {return Type < T > :: deepCompare ( x, e );});
     }
 
     auto inline operator != (SetBase const & o) const noexcept -> bool { return ! this->operator==(o); }
@@ -204,7 +208,7 @@ public:
         if ( this == & o ) return true;
 
         for ( auto itThis = this->begin(), itObj = o.begin(); itThis != this->end() && itObj != o.end(); itThis ++, itObj ++ )
-            if ( ! ( itThis.value() == itObj.value() ) )
+            if ( ! ( Type < T > :: deepCompare ( itThis.value(), itObj.value() ) ) )
                 return false;
         return true;
     }
@@ -276,7 +280,7 @@ auto SetBase<T>::remove( ConstReference e) noexcept -> bool {
         return false;
 
     if ( this->size() == 1 ) {
-        if ( e == this->_pFront->data ) {
+        if ( Type < T > :: deepCompare ( e, this->_pFront->data ) ) {
             delete this->_pFront;
             this->_size = 0; this->_pFront = nullptr;
             return true;
@@ -286,7 +290,7 @@ auto SetBase<T>::remove( ConstReference e) noexcept -> bool {
 
     auto head = this->_pFront;
     while ( head->pNext != nullptr ) {
-        if ( e == head->pNext->data ) {
+        if ( Type < T > :: deepCompare ( e, head->pNext->data ) ) {
             auto node = head->pNext;
             head->pNext = head->pNext->pNext;
             delete node;

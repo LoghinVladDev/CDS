@@ -7,7 +7,7 @@
 
 #include <type_traits>
 #include <utility>
-#include <CDS/Pair>
+//#include <CDS/Pair>
 #include <iostream>
 
 template < typename T, typename U, typename = std::void_t<> > struct isComparableLess : std::false_type {};
@@ -20,6 +20,12 @@ template < typename T, typename U > struct isComparableLessNoexcept < T, U, std:
 
 template < typename T, typename U > struct isComparableEquals < T, U, std::void_t < decltype ( std::declval <T> () == std::declval <U> () ) > > : std::true_type {};
 template < typename T, typename U > struct isComparableEqualsNoexcept < T, U, std::void_t < decltype ( std::declval <T> () == std::declval <U>() ) > > : std::bool_constant < noexcept ( std::declval <T> () == std::declval <U> () ) > { };
+
+template < typename T >
+constexpr bool typeHasEqualityOperator = isComparableEquals < T, T > :: type :: value;
+
+template < typename K, typename V >
+class Pair;
 
 template < class T >
 struct isPair : public std::false_type {};
@@ -52,6 +58,9 @@ using isBaseOf = std::is_base_of < B, D >;
 
 template < typename D >
 using isObjectDerived = isDerivedFrom < D, Object >;
+
+template < typename D >
+constexpr bool typeObjectDerived = isObjectDerived < D > :: type :: value;
 
 template < typename T, typename = void >
 struct functionTraits;
@@ -132,6 +141,27 @@ concept EqualsComparable = isComparableEquals < T, V > :: type :: value;
 
 template < typename T >
 concept TypeEqualsComparable = EqualsComparable < T, T >;
+
+
+template < typename T >
+struct Type {
+    static constexpr bool hasEqualityOperator = typeHasEqualityOperator < T >;
+    static constexpr bool objectDerived = typeObjectDerived < T >;
+
+    static constexpr auto deepCompare (T const & a, T const & b) noexcept -> bool {
+        if constexpr ( Type :: hasEqualityOperator ) {
+            if ( a == b )
+                return true;
+        } else if constexpr ( Type::objectDerived ) {
+            if ( a.equals (b) )
+                return true;
+        } else {
+            return & a == & b;
+        }
+
+        return false;
+    }
+};
 
 # endif
 

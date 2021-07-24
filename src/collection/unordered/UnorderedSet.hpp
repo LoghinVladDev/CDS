@@ -111,6 +111,9 @@ auto UnorderedSet<T>::insert(T && v) noexcept -> bool {
 //    return View(*this);
 //}
 
+#ifndef _OMIT_SEQUENCE_IMPL
+#ifndef _CDS_UNORDERED_SET_SEQUENCE_IMPL // NOLINT(bugprone-reserved-identifier)
+#define _CDS_UNORDERED_SET_SEQUENCE_IMPL // NOLINT(bugprone-reserved-identifier)
 #include <CDS/Sequence>
 
 template <class T>
@@ -122,6 +125,9 @@ template <class T>
 auto UnorderedSet<T>::sequence() noexcept -> Sequence<UnorderedSet<T>> {
     return Sequence(*this);
 }
+#endif
+
+#endif
 
 template < typename T >
 UnorderedSet ( std::initializer_list < T > ) -> UnorderedSet < T >;

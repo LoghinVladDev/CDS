@@ -1,21 +1,52 @@
 #include <CDS/String>
 #include <CDS/LinkedList>
 #include <Regex.hpp>
+#include <CDS/Stack>
+
+#include <CDS/Queue>
+#include <CDS/HashMap>
+#include <CDS/Set>
+
+#include <CDS/Array>
+class A : public Object {
+
+};
 
 int main () {
     Regex r;
+//
+    SingleLinkedList < int > list;
+//
+    Queue < A > queue;
+    HashMap < A, A > map;
+    UnorderedSet < A > set;
+//    OrderedSet < A > oset;
+    Array < A > arr;
 
-    Regex::CharacterSet cs("a2-9tjqk");
+    queue.count([] (auto) noexcept { return true; });
+    queue.count([] (auto) noexcept (false) { return true; });
 
-    std::cout << cs.toString() << '\n';
-    std::cout << cs.contains('2') << '\n';
-    std::cout << cs.contains('3') << '\n';
-    std::cout << cs.contains('9') << '\n';
-    std::cout << cs.contains('0') << '\n';
-    std::cout << cs.contains('a') << '\n';
-    std::cout << cs.contains('b') << '\n';
-    std::cout << cs.contains('i') << '\n';
-    std::cout << cs.contains('j') << '\n';
+    Stack < int > stack;
+    stack.push(3);
+    stack.push(4);
+    stack.push(5);
+    stack.pop();
+
+    std::cout << stack << '\n';
+
+    return 0;
+//
+//    Regex::CharacterSet cs("a2-9tjqk");
+//
+//    std::cout << cs.toString() << '\n';
+//    std::cout << cs.contains('2') << '\n';
+//    std::cout << cs.contains('3') << '\n';
+//    std::cout << cs.contains('9') << '\n';
+//    std::cout << cs.contains('0') << '\n';
+//    std::cout << cs.contains('a') << '\n';
+//    std::cout << cs.contains('b') << '\n';
+//    std::cout << cs.contains('i') << '\n';
+//    std::cout << cs.contains('j') << '\n';
     return 0;
 
 
