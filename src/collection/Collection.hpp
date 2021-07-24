@@ -207,31 +207,35 @@ public:
 
     virtual auto contains ( const T & ) const noexcept -> bool = 0;
 
+#define COMMA ,
+
     template < typename Action >
-    auto forEach ( Action const & ) noexcept (false) -> void;
+    auto forEach ( Action const & ) noexcept ( noexcept ( dataTypes::unsafeAddress < Action >()->operator()( * dataTypes::unsafeAddress < T > () ) ) ) -> void REQUIRES ( IsActionOver < Action COMMA T > );
     template < typename Action >
-    auto forEach ( Action const & ) const noexcept (false) -> void;
+    auto forEach ( Action const & ) const noexcept ( noexcept ( dataTypes::unsafeAddress < Action >()->operator()( * dataTypes::unsafeAddress < T > () ) ) ) -> void REQUIRES ( IsActionOver < Action COMMA T > );
 
     template < typename Predicate >
-    auto some ( Predicate const &, Size ) noexcept (false) -> bool;
+    auto some ( Predicate const &, Size ) noexcept ( noexcept ( dataTypes::unsafeAddress < Predicate >()->operator()( * dataTypes::unsafeAddress < T > () ) ) ) -> bool REQUIRES( IsPredicateOver < Predicate COMMA T > );
     template < typename Predicate >
-    auto some ( Predicate const &, Size ) const noexcept (false) -> bool;
+    auto some ( Predicate const &, Size ) const noexcept ( noexcept ( dataTypes::unsafeAddress < Predicate >()->operator()( * dataTypes::unsafeAddress < T > () ) ) ) -> bool REQUIRES( IsPredicateOver < Predicate COMMA T > );
 
     template < typename Predicate >
-    auto count ( Predicate const & ) noexcept ( noexcept ( dataTypes::unsafeAddress < Predicate >()->operator()(std::declval < T > ()) ) ) -> Size;
+    auto count ( Predicate const & ) noexcept ( noexcept ( dataTypes::unsafeAddress < Predicate >()->operator()( * dataTypes::unsafeAddress < T > () ) ) ) -> Size REQUIRES( IsPredicateOver < Predicate COMMA T > );
 
     template < typename Predicate >
-    auto count ( Predicate const & ) const noexcept ( noexcept ( dataTypes::unsafeAddress < Predicate >()->operator()(std::declval < T > ()) ) ) -> Size;
+    auto count ( Predicate const & ) const noexcept ( noexcept ( dataTypes::unsafeAddress < Predicate >()->operator()( * dataTypes::unsafeAddress < T > () ) ) ) -> Size REQUIRES( IsPredicateOver < Predicate COMMA T > );
 
     template < typename Predicate >
-    inline auto any ( Predicate const & p ) noexcept (false) -> bool { return this->some ( p, 1 ); }
+    inline auto any ( Predicate const & p ) noexcept ( noexcept ( dataTypes::unsafeAddress < Predicate >()->operator()( * dataTypes::unsafeAddress < T > () ) ) ) -> bool REQUIRES( IsPredicateOver < Predicate COMMA T > ) { return this->some ( p, 1 ); }
     template < typename Predicate >
-    inline auto any ( Predicate const & p ) const noexcept (false) -> bool { return this->some ( p, 1 ); }
+    inline auto any ( Predicate const & p ) const noexcept ( noexcept ( dataTypes::unsafeAddress < Predicate >()->operator()( * dataTypes::unsafeAddress < T > () ) ) ) -> bool REQUIRES( IsPredicateOver < Predicate COMMA T > ) { return this->some ( p, 1 ); }
 
     template < typename Predicate >
-    inline auto all ( Predicate const & p ) noexcept (false) -> bool { return ! this->any ( [&p] (T & e) noexcept -> bool { return ! p(e); } ); }
+    inline auto all ( Predicate const & p ) noexcept ( noexcept ( dataTypes::unsafeAddress < Predicate >()->operator()( * dataTypes::unsafeAddress < T > () ) ) ) -> bool REQUIRES( IsPredicateOver < Predicate COMMA T > ) { return ! this->any ( [&p] (T & e) noexcept -> bool { return ! p(e); } ); }
     template < typename Predicate >
-    inline auto all ( Predicate const & p ) const noexcept (false) -> bool { return ! this->any ( [&p] (T const & e) noexcept -> bool { return ! p(e); } ); }
+    inline auto all ( Predicate const & p ) const noexcept ( noexcept ( dataTypes::unsafeAddress < Predicate >()->operator()( * dataTypes::unsafeAddress < T > () ) ) ) -> bool REQUIRES( IsPredicateOver < Predicate COMMA T > ) { return ! this->any ( [&p] (T const & e) noexcept -> bool { return ! p(e); } ); }
+
+#undef COMMA
 
     virtual COLLECTION_EXPLICIT_CONVERSION operator bool () const noexcept { // NOLINT(google-explicit-constructor)
         return this->size() != 0;
@@ -246,9 +250,11 @@ public:
     }
 };
 
+#define COMMA ,
+
 template < typename T >
 template < typename Action >
-auto Collection<T>::forEach ( Action const & a ) noexcept (false) -> void {
+auto Collection<T>::forEach ( Action const & a ) noexcept ( noexcept ( dataTypes::unsafeAddress < Action >()->operator()( * dataTypes::unsafeAddress < T > () ) ) ) -> void REQUIRES( IsActionOver < Action COMMA T > ) {
     auto begin = this->beginPtr();
     auto end = this->endPtr();
 
@@ -261,7 +267,7 @@ auto Collection<T>::forEach ( Action const & a ) noexcept (false) -> void {
 
 template < typename T >
 template < typename Action >
-auto Collection<T>::forEach ( Action const & a ) const noexcept (false) -> void {
+auto Collection<T>::forEach ( Action const & a ) const noexcept ( noexcept ( dataTypes::unsafeAddress < Action >()->operator()( * dataTypes::unsafeAddress < T > () ) ) ) -> void REQUIRES( IsActionOver < Action COMMA T > ) {
     auto begin = this->beginPtr();
     auto end = this->endPtr();
 
@@ -274,7 +280,7 @@ auto Collection<T>::forEach ( Action const & a ) const noexcept (false) -> void 
 
 template < typename T >
 template < typename Predicate >
-auto Collection<T>::some ( Predicate const & p, Size count ) noexcept (false) -> bool {
+auto Collection<T>::some ( Predicate const & p, Size count ) noexcept ( noexcept ( dataTypes::unsafeAddress < Predicate >()->operator()( * dataTypes::unsafeAddress < T > () ) ) ) -> bool REQUIRES( IsPredicateOver < Predicate COMMA T > ) {
     Size trueCount = 0;
 
     auto begin = this->beginPtr();
@@ -292,7 +298,7 @@ auto Collection<T>::some ( Predicate const & p, Size count ) noexcept (false) ->
 
 template < typename T >
 template < typename Predicate >
-auto Collection<T>::some ( Predicate const & p, Size count ) const noexcept (false) -> bool {
+auto Collection<T>::some ( Predicate const & p, Size count ) const noexcept ( noexcept ( dataTypes::unsafeAddress < Predicate >()->operator()( * dataTypes::unsafeAddress < T > () ) ) ) -> bool REQUIRES( IsPredicateOver < Predicate COMMA T > ) {
     Size trueCount = 0;
 
     auto begin = this->beginPtr();
@@ -310,7 +316,7 @@ auto Collection<T>::some ( Predicate const & p, Size count ) const noexcept (fal
 
 template < typename T >
 template < typename Predicate >
-auto Collection<T>::count ( Predicate const & p ) noexcept ( noexcept ( dataTypes::unsafeAddress < Predicate >()->operator()(std::declval < T > ()) ) ) -> Size {
+auto Collection<T>::count ( Predicate const & p ) noexcept ( noexcept ( dataTypes::unsafeAddress < Predicate >()->operator()( * dataTypes::unsafeAddress < T > () ) ) ) -> Size REQUIRES( IsPredicateOver < Predicate COMMA T > ) {
     Size trueCount = 0;
 
     auto pBegin = this->beginPtr();
@@ -328,7 +334,7 @@ auto Collection<T>::count ( Predicate const & p ) noexcept ( noexcept ( dataType
 
 template < typename T >
 template < typename Predicate >
-auto Collection<T>::count ( Predicate const & p ) const noexcept ( noexcept ( dataTypes::unsafeAddress < Predicate >()->operator()(std::declval < T > ()) ) ) -> Size {
+auto Collection<T>::count ( Predicate const & p ) const noexcept ( noexcept ( dataTypes::unsafeAddress < Predicate >()->operator()( * dataTypes::unsafeAddress < T > () ) ) ) -> Size REQUIRES( IsPredicateOver < Predicate COMMA T > ) {
     Size trueCount = 0;
 
     auto pBegin = this->beginPtr();
@@ -344,11 +350,7 @@ auto Collection<T>::count ( Predicate const & p ) const noexcept ( noexcept ( da
     return trueCount;
 }
 
-#undef _GEN_FUNCTION_GROUP
-#undef _GEN_FUNCTION_IMPLEMENTATION
-#undef PARAM_DELIM
-#undef NO_PARAM_DELIM
-#undef FORCE_COMMA
+#undef COMMA
 
 
 #endif //CDS_COLLECTION_HPP

@@ -110,7 +110,7 @@ public:
     auto operator == ( Optional const & o ) const noexcept -> bool {
         if ( & o == this ) return true;
 
-        return this->value() == o.value();
+        return Type < T > :: deepCompare ( this->value(), o.value() );
     }
 
     [[nodiscard]] auto toString() const noexcept -> String final {

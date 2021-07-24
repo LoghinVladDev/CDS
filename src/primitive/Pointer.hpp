@@ -49,10 +49,12 @@ public:
 
         if ( this->pObj == o.pObj ) return true;
         if ( this->pObj == nullptr || o.pObj == nullptr ) return false;
-        if constexpr ( isComparableEquals < decltype ( * o.pObj ), decltype ( * this->pObj ) >::value )
-            return (* o.pObj) == (* this->pObj);
-        else
-            return false;
+
+        return Type < T > :: deepCompare ( * o.pObj, * this->pObj );
+//        if constexpr ( isComparableEquals < decltype ( * o.pObj ), decltype ( * this->pObj ) >::value )
+//            return (* o.pObj) == (* this->pObj);
+//        else
+//            return false;
     }
 
     inline auto operator * () const noexcept (false) -> ValueReference {

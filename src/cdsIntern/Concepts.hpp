@@ -84,6 +84,15 @@ concept UniqueIdentifiable = requires ( T const & a, T const & b ) {
     UniqueIdentifiableByObject<T> || UniqueIdentifiableByOperator<T>;
 };
 
+#include <CDS/Types>
+template < typename Predicate, typename T >
+concept IsPredicateOver =
+    std::is_invocable_r < bool, Predicate, decltype ((*dataTypes::unsafeAddress<T>())) > :: type :: value;
+
+template < typename Action, typename T >
+concept IsActionOver =
+    std::is_invocable_r < void, Action, decltype ((*dataTypes::unsafeAddress<T>())) > :: type :: value;
+
 #endif
 
 #endif
