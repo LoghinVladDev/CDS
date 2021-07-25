@@ -443,6 +443,7 @@ auto SingleLinkedList < T > :: pushBack ( T const & value ) noexcept -> void {
 
     this->_pBack->_pNext = new Node ( value, nullptr );
     this->_pBack = this->_pBack->_pNext;
+    this->_size++;
 }
 
 template < typename T >
@@ -451,6 +452,7 @@ auto SingleLinkedList < T > :: pushBack ( T && value ) noexcept -> void {
 
     this->_pBack->_pNext = new Node ( value, nullptr );
     this->_pBack = this->_pBack->_pNext;
+    this->_size++;
 }
 
 #include <sstream>

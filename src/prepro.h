@@ -25,5 +25,20 @@
 
 # endif
 
+#ifdef CDS_DEBUG
+
+#warning CDS Object Debug Enabled
+
+#ifndef debug_private
+#define debug_private public
+#endif
+
+#else
+
+#ifndef debug_private
+#define debug_private private
+#endif
+
+#endif
 
 #endif //CDS_PREPRO_H

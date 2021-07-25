@@ -8,6 +8,8 @@
 #include <CDS/Object>
 #include <CDS/HashMap>
 #include <CDS/Pointer>
+#include <CDS/Queue>
+#include <CDS/Stack>
 
 class Regex : public Object {
 public:
@@ -38,7 +40,7 @@ public:
 
     using Pattern = String;
 
-private:
+debug_private:
     enum SpecialCharacter {
         ANY,
         START,
@@ -126,7 +128,7 @@ public:
 
     };
 
-private:
+debug_private:
     inline static Format _globalFormat { Format::PYTHON_RE };
     inline static Flags  _globalFlags  { FlagBit::NONE };
 
@@ -136,7 +138,7 @@ private:
         constexpr static const Size DEFAULT_CACHE_SIZE = 0x10u;
         constexpr static const Size DEFAULT_CACHE_LIFETIME = 0xFFu;
 
-    private:
+    debug_private:
         HashMap < Pattern, Regex * >_cachedRegexObjects;
         HashMap < Regex *, Size >   _cachedObjectsLife;
 
@@ -173,9 +175,9 @@ private:
         }
     } _cache;
 
-private:
+debug_private:
     class CharacterSet : public Object {
-    private:
+    debug_private:
         uint8 _chars[16];
 
     public:
@@ -193,7 +195,7 @@ private:
             return * this;
         }
 
-        explicit CharacterSet(String const & str) noexcept { // NOLINT(cppcoreguidelines-pro-type-member-init)
+        CharacterSet(String const & str) noexcept { // NOLINT(cppcoreguidelines-pro-type-member-init)
             this->clear();
             char left; uint8 rangeState = 0;
 
@@ -254,19 +256,21 @@ private:
         }
     };
 
-private:
+debug_private:
 
     class CompiledPattern : public Object {
-    private:
+    debug_private:
         class Node : public Object {
-        private:
+        debug_private:
+            static inline Index _stateIndexSequence = 0;
+
             LinkedList < Pair < CharacterSet *, Node * > > _nextStates;
             bool _isEndState {false};
 
-            Size _minRepCount {1};
-            Size _maxRepCount {1};
+            SignedSize _minRepCount {1};
+            SignedSize _maxRepCount {1};
 
-            Index _debugStateIndex {-1};
+            Index _debugStateIndex {_stateIndexSequence++};
 
         public:
 
@@ -276,7 +280,7 @@ private:
                 this->_maxRepCount = 1;
                 this->_debugStateIndex = -1;
 
-                this->_nextStates.forEach([](auto & e){delete e.getFirst(); delete e.getSecond();});
+//                this->_nextStates.forEach([](auto & e){delete e.getFirst(); delete e.getSecond();});
                 this->_nextStates.clear();
 
                 return * this;
@@ -286,18 +290,29 @@ private:
                 this->clear();
             }
 
+            Node () noexcept = default;
+
             Node (Node const & pattern) noexcept :
                     Object(pattern),
                     _isEndState(pattern._isEndState),
                     _minRepCount(pattern._minRepCount),
                     _maxRepCount(pattern._maxRepCount),
-                    _debugStateIndex(pattern._debugStateIndex),
-                    _nextStates(
-                        pattern._nextStates.sequence()
-                            .map([](Pair <CharacterSet *, Node *> const & e){
-                                return Pair < CharacterSet *, Node * >{e.getFirst()->copy(), e.getSecond()->copy()};
-                            }).toLinkedList()
-                    ){
+                    _debugStateIndex(pattern._debugStateIndex){
+//                    _nextStates(
+//                        pattern._nextStates.sequence()
+//                            .map([](Pair <CharacterSet *, Node *> const & e){
+//                                return Pair < CharacterSet *, Node * >{e.getFirst()->copy(), e.getSecond()->copy()};
+//                            }).toLinkedList()
+//                    ){
+            }
+
+            Node (Node && pattern) noexcept :
+                    Object (pattern),
+                    _isEndState(std::exchange(pattern._isEndState, false)),
+                    _minRepCount(std::exchange(pattern._minRepCount, 1)),
+                    _maxRepCount(std::exchange(pattern._maxRepCount, 1)),
+                    _debugStateIndex(std::exchange(pattern._debugStateIndex, 0)),
+                    _nextStates( std::move ( pattern._nextStates ) ) {
 
             }
 
@@ -319,11 +334,11 @@ private:
             [[nodiscard]] constexpr auto nextStates () const noexcept -> LinkedList < Pair < CharacterSet *, Node * > > const & { return this->_nextStates; }
             [[nodiscard]] constexpr auto nextStates () noexcept -> LinkedList < Pair < CharacterSet *, Node * > > & { return this->_nextStates; }
 
-            [[nodiscard]] constexpr auto minRepCount () const noexcept -> Size { return this->_minRepCount; }
-            [[nodiscard]] constexpr auto minRepCount () noexcept -> Size & { return this->_minRepCount; }
+            [[nodiscard]] constexpr auto minRepCount () const noexcept -> SignedSize { return this->_minRepCount; }
+            [[nodiscard]] constexpr auto minRepCount () noexcept -> SignedSize & { return this->_minRepCount; }
 
-            [[nodiscard]] constexpr auto maxRepCount () const noexcept -> Size { return this->_maxRepCount; }
-            [[nodiscard]] constexpr auto maxRepCount () noexcept -> Size & { return this->_maxRepCount; }
+            [[nodiscard]] constexpr auto maxRepCount () const noexcept -> SignedSize { return this->_maxRepCount; }
+            [[nodiscard]] constexpr auto maxRepCount () noexcept -> SignedSize & { return this->_maxRepCount; }
 
             [[nodiscard]] constexpr auto endState () const noexcept -> bool { return this->_isEndState; }
             [[nodiscard]] constexpr auto endState () noexcept -> bool & { return this->_isEndState; }
@@ -331,12 +346,12 @@ private:
             [[nodiscard]] constexpr auto stateIndex () const noexcept -> Index { return this->_debugStateIndex; }
             [[nodiscard]] constexpr auto stateIndex () noexcept -> Index & { return this->_debugStateIndex; }
 
-            [[nodiscard]] inline auto repCounts () const noexcept -> Pair < Size, Size > {
+            [[nodiscard]] inline auto repCounts () const noexcept -> Pair < SignedSize, SignedSize > {
                 return { this->_minRepCount, this->_maxRepCount };
             }
 
-            constexpr auto setMinRepCount (Size repCount) noexcept -> Node & { this->_minRepCount = repCount; return * this; }
-            constexpr auto setMaxRepCount (Size repCount) noexcept -> Node & { this->_maxRepCount = repCount; return * this; }
+            constexpr auto setMinRepCount (SignedSize repCount) noexcept -> Node & { this->_minRepCount = repCount; return * this; }
+            constexpr auto setMaxRepCount (SignedSize repCount) noexcept -> Node & { this->_maxRepCount = repCount; return * this; }
 
             constexpr auto setEndState (bool toggle) noexcept -> Node & { this->_isEndState = toggle; return * this; }
             constexpr auto makeEndState () noexcept -> Node & { return this->setEndState(true); }
@@ -349,7 +364,7 @@ private:
             }
 
             inline auto addState (CharacterSet const & characterSet, Node * pPattern) noexcept -> Node & {
-                this->_nextStates.add({characterSet.copy(), pPattern->copy()});
+                this->_nextStates.add({characterSet.copy(), pPattern});
                 return * this;
             }
 
@@ -361,7 +376,7 @@ private:
                 return nullptr;
             }
 
-            [[nodiscard]] inline auto setRepCount ( Pair < Size, Size > const & sizePair ) noexcept -> Node & {
+            [[nodiscard]] inline auto setRepCount ( Pair < SignedSize, SignedSize > const & sizePair ) noexcept -> Node & {
                 return this->setMinRepCount(sizePair.getFirst()).setMaxRepCount(sizePair.getSecond());
             }
 
@@ -396,8 +411,8 @@ private:
         Node * _head {nullptr};
         Pattern _originalPattern;
 
-    private:
-        inline auto parse () noexcept -> CompiledPattern & {
+    debug_private:
+        inline auto compile () noexcept -> CompiledPattern & {
 
             return * this;
         }
@@ -405,27 +420,188 @@ private:
     public:
         explicit CompiledPattern(Pattern const & pattern) noexcept :
                 _originalPattern(pattern) {
-            this->parse();
+            this->compile();
         }
+
+        CompiledPattern() noexcept = default;
+        CompiledPattern(CompiledPattern const & obj) noexcept :
+                Object(obj),
+                _head(nullptr),
+                _originalPattern(obj._originalPattern) {
+
+            Array < Node * > originalNodes;
+            Queue < Node * > origParseQueue;
+            origParseQueue.push(obj._head);
+            originalNodes.add(obj._head);
+
+            while ( ! origParseQueue.empty() ) {
+                auto c = origParseQueue.pop();
+
+                for ( auto & p : c->nextStates() )
+                    if ( ! originalNodes.contains(p.getSecond()) ) {
+                        origParseQueue.push(p.getSecond());
+                        originalNodes.add(p.getSecond());
+                    }
+            }
+
+            auto currentNodes = originalNodes.sequence().map([](Node * a){ return a->copy (); }).toArray();
+
+            this->_head = currentNodes[0];
+
+            for ( auto & e : originalNodes ) {
+                for ( auto & p : e->nextStates() ) {
+                    currentNodes[originalNodes.index(e)]->nextStates().pushBack(
+                        {
+                            p.getFirst()->copy(),
+                            currentNodes[originalNodes.index(p.getSecond())]
+                        }
+                    );
+                }
+            }
+        }
+
 
         auto clear () noexcept -> CompiledPattern & {
             this->_originalPattern.clear();
 
-            UnorderedSet < Node * > cleared;
+            UnorderedSet < Node * > queued;
 
-            Node * current = this->_head;
-            while (current != nullptr) {
-                for ( auto & e : current->nextStates() ) {
-                    delete e.getFirst();
-                    
-                }
+            Queue < Node * > toDelete;
+
+            toDelete.push(this->_head);
+            queued.insert(this->_head);
+
+            while ( ! toDelete.empty() ) {
+                auto current = toDelete.pop();
+
+                current->nextStates().forEach([& toDelete, & queued](Pair < CharacterSet *, Node * > const & p){
+                    if ( ! queued.contains(p.getSecond()) ) {
+                        delete p.getFirst();
+
+                        toDelete.push(p.getSecond());
+                        queued.insert(p.getSecond());
+                    }
+                });
+
+                delete current;
             }
+
+            this->_head = nullptr;
 
             return * this;
         }
 
+        ~CompiledPattern() noexcept override {
+            this->clear();
+        }
+
+        [[nodiscard]] inline auto toString () const noexcept -> String override {
+            Queue < Node * > parsed;
+            Array < Node * > nodes;
+
+            parsed.push(this->_head);
+            nodes.pushBack(this->_head);
+
+            while (! parsed.empty()) {
+                auto current = parsed.pop();
+
+                current->nextStates().forEach([& parsed, & nodes](Pair < CharacterSet *, Node * > const & p){
+                    if ( ! nodes.contains( p.getSecond() ) ) {
+                        parsed.push(p.getSecond());
+                        nodes.pushBack(p.getSecond());
+                    }
+                });
+            }
+
+            return nodes.sequence().fold(""_s, [](String & s, Node * pNode){
+                return s +"Node "_s + pNode->_debugStateIndex + ", end = " + (pNode->_isEndState ? "true" : "false") + " : " + pNode->nextStates().sequence().fold(""_s, [](String & s, Pair < CharacterSet *, Node * > const & p){
+                    return s + p.getFirst()->toString() + " - " + p.getSecond()->_debugStateIndex + "{" + p.getSecond()->_minRepCount + "," + p.getSecond()->_maxRepCount + "}, ";
+                }) + "\n";
+            });
+        }
+
         static inline auto compile (String const & pattern) noexcept -> CompiledPattern {
             return CompiledPattern(pattern);
+        }
+
+        [[nodiscard]] auto match (String const & s) const noexcept -> bool {
+
+//            auto currentState = this->_head;
+
+//            for ( auto c : s ) {
+//            for ( auto it = s.begin(); it != s.end(); ++ it ) {
+//                bool endStateReached = false;
+
+//                if ( ! currentState->nextStates().any([& currentState, & it, & endStateReached]( Pair < CharacterSet *, Node * > const & state ) {
+//                    if ( state.getFirst()->contains(it.value()) ) {
+//                        currentState = state.getSecond();
+//
+//                        if ( currentState->endState() )
+//                            endStateReached = true;
+//
+//                        return true;
+//                    }
+//
+//                    return false;
+//                }) ) {
+//                    return false;
+//                }
+//
+//                if ( endStateReached ) return true;
+//            }
+//
+//            return false;
+//            bool status = false;
+//            CompiledPattern::recursiveMatch( this->_head, s, 0, status );
+//            return status;
+            HashMap < Index, Node * > attempted;
+            Stack < Pair < Node *, Index > > toVisit;
+
+            toVisit.push({this->_head, 0});
+            attempted.insert( { 0, this->_head } );
+            bool matchFound = false;
+
+            while ( ! toVisit.empty() ) {
+
+                auto current = toVisit.pop();
+
+            }
+        }
+
+    private:
+        static auto recursiveMatch (Node * current, String const & str, Index pos, bool & matchStatus) -> void { // NOLINT(misc-no-recursion)
+            if ( current->_isEndState ) {
+                matchStatus = true;
+                return;
+            }
+
+            if ( pos >= str.length() )
+                return;
+
+            if ( ! matchStatus ) {
+                for ( auto & statePair : current->nextStates() ) {
+                    auto next = statePair.getSecond();
+
+                    Size repCount = 0;
+                    Index localPos = pos;
+
+                    for ( Index i : Range (next->maxRepCount() - next->minRepCount() + 1) ) {
+                        if ( localPos < str.length() && statePair.getFirst()->contains(str[localPos]) ) {
+                            repCount++;
+                            localPos++;
+                        }
+
+                        if ( localPos >= str.length() )
+                            break;
+                    }
+
+                    if ( repCount >= next->minRepCount() && repCount <= next->maxRepCount() )
+                        CompiledPattern::recursiveMatch( next, str, localPos, matchStatus );
+
+                    if ( matchStatus )
+                        return;
+                }
+            }
         }
     };
 
@@ -498,7 +674,7 @@ public:
     [[nodiscard]] constexpr auto pattern () const noexcept -> Pattern const & { return this->_pattern; }
 
     class RegexError : public std::exception {
-    private:
+    debug_private:
         String _message;
 
     public:

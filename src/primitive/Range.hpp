@@ -41,6 +41,7 @@ public:
 
     explicit Range(Index s, Index f) : _s(s), _f(f), _rev(s > f) { }
     explicit Range(Index f) : _s(0), _f(f), _rev(0 > f) { }
+    explicit Range(Pair < Index, Index > const & p) : _s(p.getFirst()), _f(p.getSecond()), _rev(0 > p.getFirst()) { }
     Range(Range const &) noexcept = default;
     Range(Range &&) noexcept = default;
     ~Range() noexcept final = default;

@@ -345,7 +345,7 @@ public:
     constexpr auto next () noexcept -> Iterator & final { this->_index ++; return * this; }
     constexpr auto prev () noexcept -> Iterator & { this->_index --; return * this; }
 
-    constexpr auto operator ++ () noexcept -> Iterator & { return this->next(); }
+    constexpr auto operator ++ () noexcept -> Iterator & override { return this->next(); }
     constexpr auto operator ++ (int) noexcept -> Iterator { auto copy = * this; this->next(); return copy; }
     constexpr auto operator -- () noexcept -> Iterator & { return this->prev(); }
     constexpr auto operator -- (int) noexcept -> Iterator { auto copy = * this; this->prev(); return copy; }
@@ -375,7 +375,7 @@ public:
     constexpr auto next () noexcept -> ReverseIterator & final { this->_index --; return * this; }
     constexpr auto prev () noexcept -> ReverseIterator & { this->_index ++; return * this; }
 
-    constexpr auto operator ++ () noexcept -> ReverseIterator & { this->next(); return * this; }
+    constexpr auto operator ++ () noexcept -> ReverseIterator & final { this->next(); return * this; }
     constexpr auto operator ++ (int) noexcept -> ReverseIterator { auto copy = * this; this->next(); return copy; }
     constexpr auto operator -- () noexcept -> ReverseIterator & { return this->prev(); }
     constexpr auto operator -- (int) noexcept -> ReverseIterator { auto copy = * this; this->prev(); return copy; }
@@ -405,7 +405,7 @@ public:
     constexpr auto next () noexcept -> ConstIterator & final { this->_index ++; return * this; }
     constexpr auto prev () noexcept -> ConstIterator & { this->_index --; return * this; }
 
-    constexpr auto operator ++ () noexcept -> ConstIterator & { this->next(); return * this; }
+    constexpr auto operator ++ () noexcept -> ConstIterator & override { this->next(); return * this; }
     constexpr auto operator ++ (int) noexcept -> ConstIterator { auto copy = * this; this->next(); return copy; }
     constexpr auto operator -- () noexcept -> ConstIterator & { return this->prev(); }
     constexpr auto operator -- (int) noexcept -> ConstIterator { auto copy = * this; this->prev(); return copy; }

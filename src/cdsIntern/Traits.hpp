@@ -143,16 +143,20 @@ template < typename T >
 concept TypeEqualsComparable = EqualsComparable < T, T >;
 
 
+
+# endif
+
 template < typename T >
 struct Type {
     static constexpr bool hasEqualityOperator = typeHasEqualityOperator < T >;
     static constexpr bool objectDerived = typeObjectDerived < T >;
+    static constexpr bool ostreamPrintable = isPrintable < T > :: type :: value;
 
     static constexpr auto deepCompare (T const & a, T const & b) noexcept -> bool {
         if constexpr ( Type :: hasEqualityOperator ) {
             if ( a == b )
                 return true;
-        } else if constexpr ( Type::objectDerived ) {
+        } else if constexpr ( Type :: objectDerived ) {
             if ( a.equals (b) )
                 return true;
         } else {
@@ -162,7 +166,5 @@ struct Type {
         return false;
     }
 };
-
-# endif
 
 #endif //CDS_TRAITS_HPP

@@ -134,4 +134,50 @@ private:
     auto replaceLastNotOf ( const std::initializer_list<Entry> &, EntryConstReference ) noexcept -> void override {}
 };
 
+#include <sstream>
+
+template < typename K, typename V >
+    REQUIRES (UniqueIdentifiable < K >)
+class MultiMap : public Collection < Pair < K, V > > {
+    using Key                           = K;
+    using Value                         = V;
+    using KeyReference                  = Key &;
+    using ValueReference                = Value &;
+    using KeyConstReference             = Key const &;
+    using ValueConstReference           = Value const &;
+
+    class PairNonExistent : public std::exception {
+    private:
+        String _message;
+
+    public:
+        PairNonExistent() noexcept : std::exception() {
+            this->_message = "No Value for given Key";
+        }
+
+        explicit PairNonExistent(KeyConstReference key) noexcept : std::exception () {
+            std::stringstream oss;
+
+            if constexpr ( Type < KeyConstReference > :: ostreamPrintable )
+                oss << "No Value for given Key '" << key << "'";
+            else
+                oss << "No Value for given Key";
+
+            this->_message = oss.str();
+        }
+
+        [[nodiscard]] constexpr auto what () const noexcept -> StringLiteral final {
+            return this->_message.cStr();
+        }
+    };
+
+    virtual auto keys () const noexcept -> LinkedList < Reference < Key const > > = 0;
+    virtual auto values () noexcept -> LinkedList < Reference < Value > > = 0;
+    virtual auto values () const noexcept -> LinkedList < Reference < Value const > > = 0;
+    virtual auto entries () noexcept -> LinkedList < Pair < Reference < Key const >, Reference < Value > > > = 0;
+    virtual auto entries () const noexcept -> LinkedList < Pair < Reference < Key const >, Reference < Value const > > > = 0;
+
+
+};
+
 #endif //CDS_MAP_HPP

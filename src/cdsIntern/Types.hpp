@@ -88,6 +88,20 @@ namespace dataTypes {
 #endif
 }
 
+template < typename T >
+class Selector {
+public:
+    virtual auto operator () (T const &) const noexcept -> Index = 0;
+};
+
+namespace dataTypes {
+    template < typename T >
+    class DefaultSelector : public Selector < T > {
+    public:
+        auto operator () (T const & obj) const noexcept -> Index { return (Index) obj; }
+    };
+}
+
 namespace dataTypes {
     template < typename T >
     constexpr auto unsafeAddress () noexcept -> T * { return reinterpret_cast < T * > (0x10); }

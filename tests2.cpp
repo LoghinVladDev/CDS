@@ -1,3 +1,5 @@
+#define CDS_DEBUG
+
 #include <CDS/String>
 #include <CDS/LinkedList>
 #include <Regex.hpp>
@@ -8,11 +10,42 @@
 #include <CDS/Set>
 
 #include <CDS/Array>
+#include <Heap.hpp>
+#include <PriorityQueue.hpp>
 class A : public Object {
 
 };
 
 int main () {
+    using Node = Regex::CompiledPattern::Node;
+
+    Node * head = new Node;
+    Node * q1 = new Node;
+    Node * q2 = new Node;
+
+    head->addState( "a"_s, q1 );
+    q1->addState("b"_s, head);
+    head->addState("c"_s, q2);
+
+    q2->makeEndState();
+
+    Regex::CompiledPattern pat;
+    pat._head = head;
+
+    std::cout << pat << '\n';
+
+    std::cout << pat.match("abababc");
+    std::cout << pat.match("c");
+    std::cout << pat.match("abac");
+    std::cout << pat.match("acbc");
+    std::cout << pat.match("abcab");
+
+//    delete q2;
+
+//    PriorityQueue < int, std::greater<> > pq;
+
+    return 0;
+
     Regex r;
 //
     SingleLinkedList < int > list;

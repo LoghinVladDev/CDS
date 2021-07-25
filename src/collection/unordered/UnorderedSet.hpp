@@ -8,32 +8,32 @@
 #include <CDS/SetBase>
 
 template <class T>
-class UnorderedSet final : public SetBase<T>  {
+class UnorderedSet final : public Set<T>  {
 public:
 
-    using Reference         = typename SetBase<T>::Reference;
-    using ConstReference    = typename SetBase<T>::ConstReference;
-    using Pointer           = typename SetBase<T>::Pointer;
-    using ConstPointer      = typename SetBase<T>::ConstPointer;
+    using Reference         = typename Set<T>::Reference;
+    using ConstReference    = typename Set<T>::ConstReference;
+    using Pointer           = typename Set<T>::Pointer;
+    using ConstPointer      = typename Set<T>::ConstPointer;
 
-    using Node              = typename SetBase<T>::Node;
-    using NodePointer       = typename SetBase<T>::NodePointer;
-    using ConstNodePointer  = typename SetBase<T>::ConstNodePointer;
+    using Node              = typename Set<T>::Node;
+    using NodePointer       = typename Set<T>::NodePointer;
+    using ConstNodePointer  = typename Set<T>::ConstNodePointer;
 
     UnorderedSet() noexcept = default;
-    UnorderedSet(UnorderedSet const & set) noexcept : SetBase<T>(set) {
+    UnorderedSet(UnorderedSet const & set) noexcept : Set<T>(set) {
         for ( auto it : set )
             this->insert(it);
     }
 
-    UnorderedSet(UnorderedSet && moveSet) noexcept(false) : SetBase<T>(std::move(moveSet)) {
+    UnorderedSet(UnorderedSet && moveSet) noexcept(false) : Set<T>(std::move(moveSet)) {
 
     }
 
     explicit UnorderedSet(
         typename Collection<T>::Iterator const & from,
         typename Collection<T>::Iterator const & to
-    ) noexcept : SetBase<T>() {
+    ) noexcept : Set<T>() {
         for ( auto it = from; it != to; it++ )
             this->insert(it.value());
     }
@@ -41,12 +41,12 @@ public:
     explicit UnorderedSet(
         typename Collection<T>::ConstIterator const & from,
         typename Collection<T>::ConstIterator const & to
-    ) noexcept : SetBase<T>() {
+    ) noexcept : Set<T>() {
         for ( auto it = from; it != to; it++ )
             this->insert(it.value());
     }
 
-    UnorderedSet ( std::initializer_list < T > const & initializerList ) noexcept : SetBase<T>() {
+    UnorderedSet ( std::initializer_list < T > const & initializerList ) noexcept : Set<T>() {
         for ( ConstReference e : initializerList ) {
             this->insert(e);
         }

@@ -29,41 +29,41 @@ template <class T, class C = dataTypes::DefaultSetComparator<T>>
 #if defined(__cpp_concepts) && !defined(_MSC_VER)
     requires ValidSetComparator <T, C>
 #endif
-class OrderedSet final : public SetBase<T> {
+class OrderedSet final : public Set<T> {
 public:
-    using Reference         = typename SetBase<T>::Reference;
-    using ConstReference    = typename SetBase<T>::ConstReference;
-    using Pointer           = typename SetBase<T>::Pointer;
-    using ConstPointer      = typename SetBase<T>::ConstPointer;
+    using Reference         = typename Set<T>::Reference;
+    using ConstReference    = typename Set<T>::ConstReference;
+    using Pointer           = typename Set<T>::Pointer;
+    using ConstPointer      = typename Set<T>::ConstPointer;
 
-    using Node              = typename SetBase<T>::Node;
-    using NodePointer       = typename SetBase<T>::NodePointer;
-    using ConstNodePointer  = typename SetBase<T>::ConstNodePointer;
+    using Node              = typename Set<T>::Node;
+    using NodePointer       = typename Set<T>::NodePointer;
+    using ConstNodePointer  = typename Set<T>::ConstNodePointer;
 
     OrderedSet() noexcept = default;
-    OrderedSet(OrderedSet const & set) noexcept : SetBase<T>(set) {
+    OrderedSet(OrderedSet const & set) noexcept : Set<T>(set) {
         for ( auto it : set )
             this->insert(it);
     }
 
-    OrderedSet(OrderedSet && moveSet) noexcept(false) : SetBase<T>(std::move(moveSet)) {}
+    OrderedSet(OrderedSet && moveSet) noexcept(false) : Set<T>(std::move(moveSet)) {}
 
     explicit OrderedSet (
         typename Collection<T>::Iterator const & from,
         typename Collection<T>::Iterator const & to
-    ) noexcept : SetBase<T>() {
+    ) noexcept : Set<T>() {
         for ( auto it = from; it != to; it ++ )
             this->insert( it.value() );}
 
     explicit OrderedSet (
         typename Collection<T>::ConstIterator const & from,
         typename Collection<T>::ConstIterator const & to
-    ) noexcept : SetBase<T>() {
+    ) noexcept : Set<T>() {
         for ( auto it = from; it != to; it ++ )
             this->insert( it.value() );
     }
 
-    OrderedSet ( std::initializer_list < T > const & initializerList ) noexcept : SetBase<T>() {
+    OrderedSet ( std::initializer_list < T > const & initializerList ) noexcept : Set<T>() {
         for ( ConstReference e : initializerList )
             this->insert(e);
     }

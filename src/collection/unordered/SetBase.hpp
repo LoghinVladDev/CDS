@@ -11,7 +11,7 @@ template <class T>
 #if defined(__cpp_concepts) && !defined(_MSC_VER)
     requires UniqueIdentifiable <T>
 #endif
-class SetBase : public Collection<T> {
+class Set : public Collection<T> {
 public:
     typedef T & Reference;
     typedef T const & ConstReference;
@@ -37,7 +37,7 @@ public:
         constexpr inline auto value () const noexcept -> Reference final { return this->_pNode->data; }
         constexpr inline auto next () noexcept -> Iterator & final { this->_pNode = this->_pNode->pNext; return * this; }
 
-        constexpr inline auto operator ++ () noexcept -> Iterator & { return this->next(); }
+        constexpr inline auto operator ++ () noexcept -> Iterator & final { return this->next(); }
         constexpr inline auto operator ++ (int) noexcept -> Iterator { auto copy = *this; this->_pNode = this->_pNode->pNext; return copy; }
 
         [[nodiscard]] inline auto copy () const noexcept -> Iterator * override { return new Iterator (* this); }
@@ -58,7 +58,7 @@ public:
         constexpr inline auto value () const noexcept -> ConstReference final { return this->_pNode->data; }
         constexpr inline auto next () noexcept -> ConstIterator & final { this->_pNode = this->_pNode->pNext; return * this; }
 
-        constexpr inline auto operator ++ () noexcept -> ConstIterator & { return this->next(); }
+        constexpr inline auto operator ++ () noexcept -> ConstIterator & final { return this->next(); }
         constexpr inline auto operator ++ (int) noexcept -> ConstIterator { auto copy = *this; this->_pNode = this->_pNode->pNext; return copy; }
 
         [[nodiscard]] inline auto copy () const noexcept -> ConstIterator * override { return new ConstIterator (* this); }
@@ -73,9 +73,9 @@ protected:
     inline auto beginPtr () const noexcept -> ConstIterator * final { return new ConstIterator ( this->_pFront ); }
     inline auto endPtr () const noexcept -> ConstIterator * final { return new ConstIterator ( nullptr ); }
 
-    SetBase() noexcept = default;
-    SetBase(SetBase const &) noexcept {}
-    SetBase(SetBase && o) noexcept(false):
+    Set() noexcept = default;
+    Set(Set const &) noexcept {}
+    Set(Set && o) noexcept(false):
             _pFront(std::exchange(o._pFront, nullptr)),
             _size(std::exchange(o._size, 0ull)){
 
@@ -83,7 +83,7 @@ protected:
 
 public:
 
-    ~SetBase() noexcept override { this->clear(); }
+    ~Set() noexcept override { this->clear(); }
 
     constexpr inline auto begin () noexcept -> Iterator { return Iterator(this->_pFront); }
     constexpr inline auto end () noexcept -> Iterator { return Iterator(nullptr); }
@@ -202,9 +202,9 @@ public:
         return this->any([&e](ConstReference x) noexcept -> bool {return Type < T > :: deepCompare ( x, e );});
     }
 
-    auto inline operator != (SetBase const & o) const noexcept -> bool { return ! this->operator==(o); }
+    auto inline operator != (Set const & o) const noexcept -> bool { return ! this->operator==(o); }
 
-    auto operator == (SetBase const & o) const noexcept -> bool {
+    auto operator == (Set const & o) const noexcept -> bool {
         if ( this == & o ) return true;
 
         for ( auto itThis = this->begin(), itObj = o.begin(); itThis != this->end() && itObj != o.end(); itThis ++, itObj ++ )
@@ -215,7 +215,7 @@ public:
 
     auto equals (Object const & o) const noexcept -> bool final {
         if ( & o == this ) return true;
-        auto p = dynamic_cast < SetBase < T > const * > ( & o );
+        auto p = dynamic_cast < Set < T > const * > ( & o );
         if ( p == nullptr ) return false;
 
         return this->operator == (*p);
@@ -229,7 +229,7 @@ template <class T>
 #if defined(__cpp_concepts) && !defined(_MSC_VER)
 requires UniqueIdentifiable <T>
 #endif
-auto SetBase<T>::toString() const noexcept -> String {
+auto Set<T>::toString() const noexcept -> String {
     if ( this->empty() )
         return String("{ }");
 
@@ -248,7 +248,7 @@ auto SetBase<T>::toString() const noexcept -> String {
 //#if defined(__cpp_concepts) && !defined(_MSC_VER)
 //    requires UniqueIdentifiable <T>
 //#endif
-//SetBase<T>::SetBase(SetBase const & set) noexcept : _pFront(nullptr), _size(set.size()) {
+//Set<T>::Set(Set const & set) noexcept : _pFront(nullptr), _size(set.size()) {
 //    if ( set.size() == 0 )
 //        return;
 //
@@ -267,7 +267,7 @@ auto SetBase<T>::toString() const noexcept -> String {
 //#if defined(__cpp_concepts) && !defined(_MSC_VER)
 //    requires UniqueIdentifiable <T>
 //#endif
-//SetBase<T>::SetBase(SetBase &&) noexcept(false) {
+//Set<T>::Set(Set &&) noexcept(false) {
 //    throw NotImplementedException();
 //}
 
@@ -275,7 +275,7 @@ template <class T>
 #if defined(__cpp_concepts) && !defined(_MSC_VER)
     requires UniqueIdentifiable <T>
 #endif
-auto SetBase<T>::remove( ConstReference e) noexcept -> bool {
+auto Set<T>::remove( ConstReference e) noexcept -> bool {
     if ( this->empty() )
         return false;
 

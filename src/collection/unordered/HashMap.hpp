@@ -649,4 +649,10 @@ auto HashMap < K, V, H >::sequence() noexcept -> Sequence < HashMap<K, V, H>> {
 template < typename K, typename V >
 HashMap ( std::initializer_list < Pair < K, V > > ) -> HashMap < K, V >;
 
+template < typename K, typename V, typename H >
+    REQUIRES (UniqueIdentifiable < K > && HashCalculatorHasBoundaryFunction < H >)
+class MultiHashMap final : public Map < K, V > {
+
+};
+
 #endif //CDS_HASHMAP_HPP

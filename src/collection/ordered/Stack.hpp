@@ -96,7 +96,7 @@ private:
     template < typename SortFunction >
     inline auto sort ( SortFunction const & sortFunction ) noexcept -> void { return this->SingleLinkedList < T > :: sort (sortFunction); }
 
-    auto sort ( Comparator < T > const & comparator ) noexcept -> void { return this->SingleLinkedList< T > :: sort ( comparator ); }
+    auto sort ( Comparator < T > const & comparator ) noexcept -> void final { return this->SingleLinkedList< T > :: sort ( comparator ); }
 
 public:
     inline auto push ( T const & e ) noexcept -> void { return this->SingleLinkedList < T > :: pushFront (e); }
