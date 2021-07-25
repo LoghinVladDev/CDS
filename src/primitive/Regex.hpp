@@ -554,17 +554,41 @@ debug_private:
 //            bool status = false;
 //            CompiledPattern::recursiveMatch( this->_head, s, 0, status );
 //            return status;
-            HashMap < Index, Node * > attempted;
+            HashMap < Index, Array < Node * > > attempted;
             Stack < Pair < Node *, Index > > toVisit;
 
             toVisit.push({this->_head, 0});
-            attempted.insert( { 0, this->_head } );
+            attempted.insert( { 0, { this->_head } } );
+
             bool matchFound = false;
 
             while ( ! toVisit.empty() ) {
-
                 auto current = toVisit.pop();
 
+                if ( current.first()->endState() ) {
+                    matchFound = true;
+                    break;
+                }
+
+                if ( current.second() >= s.length() )
+                    break;
+
+//                if ( attempted[current.second()].contains(current.first()) )
+//                    continue;
+
+                for ( auto & p : current.getFirst()->nextStates() ) {
+                    if ( attempted[current.second()].contains(p.second()) )
+                        continue;
+
+                    auto next = p.getSecond();
+
+                    Size repCount = 0;
+                    Index localPos = current.second();
+
+                    for ( Index i : Range (next->maxRepCount() - next->minRepCount() + 1) ) {
+                        if ( localPos < s.length() && p.first()->contains(s[localPos]) )
+                    }
+                }
             }
         }
 

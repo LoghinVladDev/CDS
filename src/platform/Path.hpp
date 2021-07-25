@@ -345,9 +345,12 @@ inline auto Path::walk(const String &path, int depth) noexcept(false) -> LinkedL
 #if defined(WIN32)
     auto pDRList = Path::platformDependantRoots();
 
-   for ( auto & p : pDRList )
-       paths.pushBack(p.path);
+    for ( auto & p : pDRList )
+        paths.pushBack(p.path);
 #elif defined(__linux)
+
+    return { "/" };
+
 #else
 #warning Warning: Path::roots undefined
 #endif
