@@ -186,7 +186,7 @@ private:
 
         [[nodiscard]] auto toString () const noexcept -> String override {
             return
-                String("\"") + this->_label + "\" : " + this->stringFormattedData();
+                    String("\"") + this->_label + "\" : " + this->stringFormattedData();
         }
 
         [[nodiscard]] auto dumpIndented (int indent, int count) const noexcept -> String;
@@ -571,6 +571,7 @@ public:
         String copy = data;
         copy.replace(0, copy.findFirst('[') + 1, "");
         copy.replace(copy.findLast(']'), copy.size(), "");
+        copy = copy.trim().trim('\n').trim();
 
         while ( ! copy.empty() ) {
             copy.ltrim(' ');
@@ -789,7 +790,8 @@ inline auto JSON::parse(String const & jsonString) noexcept -> JSON {
         String data, fullData = copy.substr(copy.findFirst(':') + 1);
         int arrayBracketCount = 0, objectBracketCount = 0, segmentLength = 0;
 
-        fullData.ltrim(' ');
+        fullData = fullData.trim().trim("\n").trim();
+//        fullData.ltrim(' ');
 
         for ( auto c : fullData ) {
             if ( arrayBracketCount == 0 && objectBracketCount == 0 && c == ',' )

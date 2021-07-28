@@ -64,7 +64,7 @@ public:
     virtual auto getOr (KeyConstReference, ValueConstReference) const noexcept -> ValueConstReference = 0;
 
     virtual inline auto operator [] (KeyConstReference k) noexcept -> ValueReference { return this->get(k); }
-    virtual inline auto operator [] (KeyConstReference k) const noexcept -> ValueConstReference { return this->get(k); }
+    virtual inline auto operator [] (KeyConstReference k) const noexcept(false) -> ValueConstReference { return this->get(k); }
 
     virtual auto containsValue (ValueConstReference) const noexcept -> bool = 0;
     virtual auto containsKey (KeyConstReference) const noexcept -> bool = 0;
@@ -137,7 +137,7 @@ private:
 #include <sstream>
 
 template < typename K, typename V >
-    REQUIRES (UniqueIdentifiable < K >)
+REQUIRES (UniqueIdentifiable < K >)
 class MultiMap : public Collection < Pair < K, V > > {
     using Key                           = K;
     using Value                         = V;
