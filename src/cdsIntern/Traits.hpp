@@ -165,6 +165,15 @@ struct Type {
 
         return false;
     }
+
+    static constexpr auto streamPrint (std::ostream & ostream, T const & obj) noexcept -> std::ostream & {
+        if constexpr ( Type :: ostreamPrintable ) {
+            ostream << obj;
+        } else
+            ostream << ( & obj );
+
+        return ostream;
+    }
 };
 
 #endif //CDS_TRAITS_HPP

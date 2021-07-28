@@ -376,7 +376,7 @@ debug_private:
                 return nullptr;
             }
 
-            [[nodiscard]] inline auto setRepCount ( Pair < SignedSize, SignedSize > const & sizePair ) noexcept -> Node & {
+            inline auto setRepCount ( Pair < SignedSize, SignedSize > const & sizePair ) noexcept -> Node & {
                 return this->setMinRepCount(sizePair.getFirst()).setMaxRepCount(sizePair.getSecond());
             }
 
@@ -562,7 +562,7 @@ debug_private:
 
             bool matchFound = false;
 
-            while ( ! toVisit.empty() ) {
+            while ( ! toVisit.empty() && ! matchFound ) {
                 auto current = toVisit.pop();
 
                 if ( current.first()->endState() ) {
@@ -586,10 +586,28 @@ debug_private:
                     Index localPos = current.second();
 
                     for ( Index i : Range (next->maxRepCount() - next->minRepCount() + 1) ) {
-                        if ( localPos < s.length() && p.first()->contains(s[localPos]) )
+                        if ( localPos < s.length() && p.first()->contains(s[localPos]) ) {
+                            repCount ++;
+                            localPos ++;
+
+                            if ( localPos >= s.length() )
+                                break;
+                        }
+                    }
+
+                    if ( repCount >= next->minRepCount() && repCount <= next->maxRepCount() ) {
+//                        attempted.insert ( {localPos, next} );
+                        if ( ! attempted.containsKey(localPos) )
+                            attempted.insert ({ localPos, {next} });
+                        else
+                            attempted[localPos].add(next);
+
+                        toVisit.push({next, localPos});
                     }
                 }
             }
+
+            return matchFound;
         }
 
     private:

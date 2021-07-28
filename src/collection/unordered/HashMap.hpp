@@ -603,7 +603,8 @@ public:
         oss << "{ ";
         for ( auto & e : (*this) ) {
 #if !defined(CDS_GLM)
-            oss << e.getFirst() << " : " << e.getSecond() << ", ";
+            Type < V > :: streamPrint ( Type < K > :: streamPrint ( oss, e.getFirst() ) << " : ", e.getSecond() ) << ", ";
+//            oss << e.getFirst() << " : " << e.getSecond() << ", ";
 #else
             if constexpr (
                     std::is_same < glm::vec1, Value >::type::value ||

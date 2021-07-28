@@ -464,7 +464,8 @@ auto SingleLinkedList < T > :: toString () const noexcept -> String {
     out << "[ ";
 
     for ( auto const & e : * this )
-        out << e << ", ";
+        Type < T > ::streamPrint( out, e );
+//        out << e << ", ";
 
     auto s = out.str();
     return s.substr(0, s.length() - 2).append(" ]");
