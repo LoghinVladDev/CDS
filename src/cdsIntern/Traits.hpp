@@ -142,8 +142,6 @@ concept EqualsComparable = isComparableEquals < T, V > :: type :: value;
 template < typename T >
 concept TypeEqualsComparable = EqualsComparable < T, T >;
 
-
-
 # endif
 
 template < typename T >
@@ -151,6 +149,12 @@ struct Type {
     static constexpr bool hasEqualityOperator = typeHasEqualityOperator < T >;
     static constexpr bool objectDerived = typeObjectDerived < T >;
     static constexpr bool ostreamPrintable = isPrintable < T > :: type :: value;
+
+    template < typename Base >
+    static constexpr bool derivedFrom = isDerivedFrom < T, Base > :: type :: value;
+
+    template < typename Derived >
+    static constexpr bool baseOf = isDerivedFrom < Derived, T > :: type :: value;
 
     static constexpr auto deepCompare (T const & a, T const & b) noexcept -> bool {
         if constexpr ( Type :: hasEqualityOperator ) {
