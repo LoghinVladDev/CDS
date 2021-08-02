@@ -211,7 +211,55 @@
 //#define CDS_CRYPTO_OPENSSL
 //#include <CDS/crypto/AES>
 //
+
+#include <CDS/OrderedSet>
+#include <memory>
+
 int main () {
+
+    DoubleLinkedList a2 = {1, 2, 3, 4};
+
+    std::cout << a2.atLeast (4) << '\n';
+    std::cout << a2.atLeast (5) << '\n';
+    std::cout << a2.atLeast (3) << '\n';
+    std::cout << a2.atMost (5) << '\n';
+    std::cout << a2.atMost (4) << '\n';
+    std::cout << a2.atMost (3) << '\n';
+
+    std::cout << a2.any([](int e){return e % 2 == 0;}) << '\n';
+    std::cout << a2.any([](int e){return e > 5;}) << '\n';
+
+    std::cout << a2.atLeast (2, [](int e){return e % 2 == 0;}) << '\n';
+    std::cout << a2.atLeast (3, [](int e){return e % 2 == 0;}) << '\n';
+
+//    int * p = new int ();
+//    auto p = std::make_unique <int *> (new int (3));
+
+//    auto x = p;
+
+//    try {
+//        std::cout << (*x) << '\n';
+//        std::cout << (*p) << '\n';
+//    } catch ( std::exception const & e ) {
+//        std::cout << e.what() << '\n';
+//    }
+
+    return 0;
+
+    OrderedSet < int > a1 {1, 2, 3};
+
+    std::cout << a1 << '\n';
+    a1.remove(1);
+
+    std::cout << a1 << '\n';
+    a1.remove(2);
+
+    std::cout << a1 << '\n';
+    a1.remove(3);
+
+    std::cout << a1 << '\n';
+
+    return 0;
 //
 ////    auto k = CryptoBlock <128> ::fromHex( "0123456789abcdefABCDEFa" );
 ////
