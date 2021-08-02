@@ -505,7 +505,7 @@ auto DoubleLinkedList<T>::toString() const noexcept -> String {
     out << "[ ";
 
     for ( const auto & e : (*this) )
-        Type < T > ::streamPrint( out, e );
+        Type < T > ::streamPrint( out, e ) << ", ";
 //        out << e << ", ";
 
     auto s = out.str();

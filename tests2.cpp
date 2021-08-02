@@ -217,6 +217,34 @@
 
 int main () {
 
+    UnorderedSet < int > el = {1, 2, 3, 4};
+
+    el.remove(4);
+    std::cout << el << '\n';
+
+    el.remove(3);
+    std::cout << el << '\n';
+
+    el.remove(2);
+    std::cout << el << '\n';
+
+    el.remove(1);
+    std::cout << el << '\n';
+
+    el = {4, 3, 2, 1};
+
+    el.remove(1);
+    std::cout << el << '\n';
+
+    el.remove(2);
+    std::cout << el << '\n';
+
+    el.remove(3);
+    std::cout << el << '\n';
+
+    el.remove(4);
+    std::cout << el << '\n';
+
     DoubleLinkedList a2 = {1, 2, 3, 4};
 
     std::cout << a2.atLeast (4) << '\n';

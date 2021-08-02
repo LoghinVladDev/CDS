@@ -237,40 +237,11 @@ auto Set<T>::toString() const noexcept -> String {
     out << "{ ";
 
     for ( ConstReference e : (*this) )
-        Type < T > ::streamPrint( out, e );
-//        out << e << ", ";
+        Type < T > ::streamPrint( out, e ) << ", ";
 
     auto s = out.str();
     return String(s.substr(0, s.length() - 2).append(" }"));
 }
-
-
-//template <class T>
-//#if defined(__cpp_concepts) && !defined(_MSC_VER)
-//    requires UniqueIdentifiable <T>
-//#endif
-//Set<T>::Set(Set const & set) noexcept : _pFront(nullptr), _size(set.size()) {
-//    if ( set.size() == 0 )
-//        return;
-//
-//    this->_pFront = new Node { set.front(), nullptr };
-//
-//    auto end = this->_pFront;
-//
-//    for ( auto next = set.begin(), it = next.next(); it != set.end(); it ++ ) {
-//        end->pNext = new Node { next.value(), nullptr };
-//        end = end->pNext;
-//    }
-//}
-
-//#include <CDS/NotImplementedException>
-//template <class T>
-//#if defined(__cpp_concepts) && !defined(_MSC_VER)
-//    requires UniqueIdentifiable <T>
-//#endif
-//Set<T>::Set(Set &&) noexcept(false) {
-//    throw NotImplementedException();
-//}
 
 template <class T>
 #if defined(__cpp_concepts) && !defined(_MSC_VER)
@@ -280,14 +251,15 @@ auto Set<T>::remove( ConstReference e) noexcept -> bool {
     if ( this->empty() )
         return false;
 
-    if ( this->size() == 1 ) {
-        if ( Type < T > :: deepCompare ( e, this->_pFront->data ) ) {
-            delete this->_pFront;
-            this->_size = 0; this->_pFront = nullptr;
-            return true;
-        } else
-            return false;
-    }
+    if ( Type < T > :: deepCompare ( e, this->_pFront->data ) ) {
+        auto p = this->_pFront;
+        this->_pFront = this->_pFront->pNext;
+        this->_size --;
+
+        delete p;
+        return true;
+    } else if ( this->size() == 1 )
+        return false;
 
     auto head = this->_pFront;
     while ( head->pNext != nullptr ) {
