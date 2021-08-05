@@ -93,7 +93,7 @@ public:
     constexpr inline auto cend () const noexcept -> ConstIterator { return ConstIterator (nullptr); }
 
 protected:
-    auto inline remove ( const T & e, Size ) noexcept -> bool final { return this->remove(e); };
+    auto inline remove ( const T & e, Size ) noexcept -> bool final { return this->remove(e); }
     auto inline removeAll ( const T & o ) noexcept -> bool final { return false; }
     auto inline removeFirst ( const T & o ) noexcept -> bool final { return false; }
     auto inline removeLast ( const T & o ) noexcept -> bool final { return false; }
@@ -213,7 +213,7 @@ public:
         return true;
     }
 
-    auto equals (Object const & o) const noexcept -> bool final {
+    [[nodiscard]] auto equals (Object const & o) const noexcept -> bool final {
         if ( & o == this ) return true;
         auto p = dynamic_cast < Set < T > const * > ( & o );
         if ( p == nullptr ) return false;

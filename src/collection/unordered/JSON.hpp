@@ -226,7 +226,7 @@ public:
         LinkedList < Reference < const String > > labelList;
 
         for ( auto & e : this->_nodes )
-            labelList.pushBack( e.getString() );
+            labelList.pushBack( e.getLabel() );
 
         return labelList;
     }
