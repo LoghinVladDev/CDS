@@ -349,6 +349,8 @@ private:
     LinkedList < JSON::Node > _list;
 
     [[nodiscard]] auto dumpIndented (int indent, int count) const noexcept -> String {
+        if ( this->_list.empty() ) return "[]";
+
         String indentation = String(" ") * (indent * (count));
         String futureIndentation = indentation + String(" ") * indent;
 
