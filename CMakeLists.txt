@@ -44,7 +44,7 @@ set(
         src/primitive/String.hpp
         src/primitive/View.hpp
         src/primitive/Sequence.hpp
-        src/primitive/Regex.hpp)
+        src/primitive/Regex.hpp src/primitive/ParallelSequence.hpp)
 
 set(
         CDS_EXTRA

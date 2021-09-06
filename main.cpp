@@ -8,9 +8,40 @@
 //#include <CDS/HashMap>
 //#include <CDS/HashMap>
 //#include <CDS/Sequence>
+#define CDS_DEBUG
 #include <CDS/Array>
-int main() {
+#include "ParallelSequence.hpp"
 
+int main() {
+    ParallelSequence < LinkedList < int > > a ( {1, 2, 3} );
+
+    LinkedList < int > orig = {1, 2, 3};
+    LinkedList < int > f;
+
+    decltype (a) :: ParallelFilterContainer b;
+
+    std::function < bool (int &) > filter1 = [] (int a) -> bool { return a % 2 == 1; };
+
+    b.pOriginalList = & orig;
+    b.pNewList = & f;
+
+    b.pPredicateList = new decltype(a)::StoredPredicateList;
+    b.pMapperList = new decltype(a)::StoredMapperList ;
+    b.pIndexedPredicateList = new decltype (a) :: StoredIndexedPredicateList ;
+    b.pIndexedMapperList = new decltype (a) :: StoredIndexedMapperList ;
+
+    auto p = Pair {
+        SharedPointer ( & filter1 ),
+        (Index) 1
+    };
+
+    b.chainCount = 2;
+    b.pPredicateList->pushBack( p );
+
+    decltype(a)::filterContainer( b );
+
+
+    std::cout << f << '\n';
 //
 //    UniquePointer p(new DoubleLinkedList {3, 4, 2});
 //    p->sort([](auto a, auto b){return a < b;});

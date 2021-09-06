@@ -10,6 +10,7 @@
 
 #if defined(__linux)
 #include <pthread.h>
+#include <unistd.h>
 #define THREAD_RETURN_TYPE void *
 #define THREAD_RETURN_OK nullptr
 #define THREAD_EXCEPT_STAT true
@@ -23,6 +24,19 @@
 
 class Thread : public Object {
 public:
+    inline static auto hardwareConcurrency () noexcept -> Size {
+#if defined(WIN32)
+        SYSTEM_INFO systemInformation;
+        GetSystemInfo ( & systemInformation );
+        return static_cast < Size > ( systemInformation.dwNumberOfProcessors );
+#elif defined(__linux)
+        return static_cast < Size > ( sysconf ( _SC_NPROCESSORS_ONLN ) );
+#else
+#error Thread not supported
+#endif
+        return 0;
+    }
+
     typedef auto ( * ErrorCallback ) ( String const &, Thread *, std::exception const * ) noexcept -> void;
 
 private:
