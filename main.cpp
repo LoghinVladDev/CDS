@@ -15,7 +15,7 @@
 int main() {
     ParallelSequence < LinkedList < int > > a ( {1, 2, 3} );
 
-    LinkedList < int > orig = {1, 2, 3};
+    LinkedList < int > orig = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
     LinkedList < int > f;
 
     decltype (a) :: ParallelFilterContainer b;

@@ -85,6 +85,22 @@ public:
         return * this;
     }
 
+    inline auto operator == ( Atomic const & v ) const noexcept -> bool {
+        return this->get() == v.get();
+    }
+
+    inline auto operator == ( DataType const & v ) const noexcept -> bool {
+        return this->get() == v;
+    }
+
+    inline auto operator != ( Atomic const & v ) const noexcept -> bool {
+        return this->get() != v.get();
+    }
+
+    inline auto operator != ( DataType const & v ) const noexcept -> bool {
+        return this->get() != v;
+    }
+
     inline operator DataType () const noexcept { // NOLINT(google-explicit-constructor)
         return this->get();
     }

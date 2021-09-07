@@ -2,3 +2,5 @@
 /.idea/
 /.vs/
 /out/build/
+/.vscode/
+/.PVS-Studio/

@@ -6,6 +6,7 @@
 #define CDS_THREAD_H
 
 #include <CDS/Object>
+#include <CDS/Atomic>
 #include <iostream>
 
 #if defined(__linux)
@@ -89,7 +90,7 @@ private:
     }
 
     PrimitiveThread        MUTABLE_SPEC handle         { Thread::PRIMITIVE_NULL_HANDLE };
-    State                               state          { Thread::State::CREATED };
+    Atomic < State >                    state          { Thread::State::CREATED };
     inline static ErrorCallback         pErrorCallback { nullptr };
 
     virtual auto run () noexcept (false) -> void = 0;
@@ -177,7 +178,8 @@ public:
     }
 
     ~Thread () noexcept override {
-        this->kill();
+        if (this->state != State::FINISHED)
+            this->kill();
     }
 
     [[nodiscard]] auto toString() const noexcept -> String override {

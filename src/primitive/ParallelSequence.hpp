@@ -111,7 +111,7 @@ public:
             if ( this->_pEnd != nullptr ) return -1;
             auto i = this->_pContainer->threadIndex;
 
-            this->state().set(READY);
+            this->state().set( STANDBY );
             return i;
         }
 
@@ -256,7 +256,7 @@ auto ParallelSequence < C > ::filterContainer ( ParallelFilterContainer & contai
         bool threadFound = false;
         while (! threadFound) { // find from available threads
 
-            for ( Index threadIndex = 0; i < workers.size(); threadIndex ++ ) {
+            for ( Index threadIndex = 0; threadIndex < workers.size(); threadIndex ++ ) {
                 auto & t = workers[threadIndex];
 
                 if ( t.state() == Worker :: State :: FINISHED ) {
@@ -299,7 +299,7 @@ auto ParallelSequence < C > ::filterContainer ( ParallelFilterContainer & contai
 
     i = 0;
     for ( auto & e : finals ) {
-        if ( ! toRemove[i] )
+        if ( ! toRemove[i++] )
             container.pNewList->pushBack( e );
     }
 
