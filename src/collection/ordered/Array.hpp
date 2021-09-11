@@ -260,7 +260,7 @@ protected:
 public:
     ~IteratorBase() noexcept override = default;
 
-    constexpr inline auto equals ( typename Collection<T>::Iterator const & o ) const noexcept -> bool final {
+    __CDS_cpplang_ConstexprConditioned auto equals ( typename Collection<T>::Iterator const & o ) const noexcept -> bool final {
         if ( & o == this ) return true;
         auto p = dynamic_cast < IteratorBase const * > ( &o );
         if ( p == nullptr ) return false;
@@ -291,7 +291,7 @@ protected:
 public:
     ~ConstIteratorBase() noexcept override = default;
 
-    constexpr inline auto equals ( typename Collection<T>::ConstIterator const & o ) const noexcept -> bool final {
+    __CDS_cpplang_ConstexprConditioned auto equals ( typename Collection<T>::ConstIterator const & o ) const noexcept -> bool final {
         if ( & o == this ) return true;
         auto p = dynamic_cast < ConstIteratorBase const * > ( &o );
         if ( p == nullptr ) return false;
@@ -406,7 +406,7 @@ public:
     explicit ConstReverseIterator ( Array const * pArray, Index index ) noexcept : ConstIteratorBase( pArray, index ) { }
     ~ConstReverseIterator () noexcept final = default;
 
-    constexpr ConstReverseIterator & operator = ( ConstReverseIterator const & o ) noexcept {
+    __CDS_cpplang_NonConstConstexprMemberFunction ConstReverseIterator & operator = ( ConstReverseIterator const & o ) noexcept {
         if ( this == & o ) return * this;
 
         this->_pArray = o._pArray;
@@ -414,13 +414,13 @@ public:
         return * this;
     }
 
-    constexpr auto next () noexcept -> ConstReverseIterator & final { this->_index --; return * this; }
-    constexpr auto prev () noexcept -> ConstReverseIterator & { this->_index ++; return * this; }
+    __CDS_cpplang_NonConstConstexprMemberFunction auto next () noexcept -> ConstReverseIterator & final { this->_index --; return * this; }
+    __CDS_cpplang_NonConstConstexprMemberFunction auto prev () noexcept -> ConstReverseIterator & { this->_index ++; return * this; }
 
-    constexpr auto operator ++ () noexcept -> ConstReverseIterator & { this->next(); return * this; }
-    constexpr auto operator ++ (int) noexcept -> ConstReverseIterator { auto copy = * this; this->next(); return copy; }
-    constexpr auto operator -- () noexcept -> ConstReverseIterator & { return this->prev(); }
-    constexpr auto operator -- (int) noexcept -> ConstReverseIterator { auto copy = * this; this->prev(); return copy; }
+    __CDS_cpplang_NonConstConstexprMemberFunction auto operator ++ () noexcept -> ConstReverseIterator & { this->next(); return * this; }
+    __CDS_cpplang_NonConstConstexprMemberFunction auto operator ++ (int) noexcept -> ConstReverseIterator { auto copy = * this; this->next(); return copy; }
+    __CDS_cpplang_NonConstConstexprMemberFunction auto operator -- () noexcept -> ConstReverseIterator & { return this->prev(); }
+    __CDS_cpplang_NonConstConstexprMemberFunction auto operator -- (int) noexcept -> ConstReverseIterator { auto copy = * this; this->prev(); return copy; }
 
     __CDS_NoDiscard auto copy () const noexcept -> ConstReverseIterator * override {
         return new ConstReverseIterator ( * this );
@@ -914,7 +914,7 @@ Array<T> & Array<T>::operator= (Collection<T> const & c) noexcept {
 
 template <class T>
 template <typename SortFunc>
-auto Array<T>::quickSortPartition(
+__CDS_MaybeUnused auto Array<T>::quickSortPartition(
         Iterator from,
         Iterator to,
         SortFunc const & sortFunc
@@ -942,7 +942,7 @@ auto Array<T>::quickSortPartition(
 
 template <typename T>
 template <typename SortFunc>
-auto Array<T>::quickSort(
+__CDS_MaybeUnused auto Array<T>::quickSort(
         Iterator from,
         Iterator to,
         SortFunc const & sortFunc

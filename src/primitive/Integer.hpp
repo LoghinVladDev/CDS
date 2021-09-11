@@ -37,12 +37,12 @@ public:
 
     constexpr Integer(int value) noexcept: v(value) {} // NOLINT(google-explicit-constructor)
 
-    constexpr Integer &operator=(Integer const &o) noexcept {
+    __CDS_cpplang_NonConstConstexprMemberFunction Integer &operator=(Integer const &o) noexcept {
         if (this == &o)return *this;
         this->v = o.v;
         return *this;
     }
-    constexpr Integer &operator=(int value) noexcept {
+    __CDS_cpplang_NonConstConstexprMemberFunction Integer &operator=(int value) noexcept {
         this->v = value;
         return *this;
     }
@@ -63,47 +63,47 @@ public:
         return *this;
     }
 
-    constexpr auto operator+=(int value) noexcept -> Integer & {
+    __CDS_cpplang_NonConstConstexprMemberFunction auto operator+=(int value) noexcept -> Integer & {
         this->v += value;
         return *this;
     }
 
-    constexpr auto operator-=(Integer const &o) noexcept -> Integer & {
+    __CDS_cpplang_NonConstConstexprMemberFunction auto operator-=(Integer const &o) noexcept -> Integer & {
         this->v -= o.v;
         return *this;
     }
 
-    constexpr auto operator-=(int value) noexcept -> Integer & {
+    __CDS_cpplang_NonConstConstexprMemberFunction auto operator-=(int value) noexcept -> Integer & {
         this->v -= value;
         return *this;
     }
 
-    constexpr auto operator*=(Integer const &o) noexcept -> Integer & {
+    __CDS_cpplang_NonConstConstexprMemberFunction auto operator*=(Integer const &o) noexcept -> Integer & {
         this->v *= o.v;
         return *this;
     }
 
-    constexpr auto operator*=(int value) noexcept -> Integer & {
+    __CDS_cpplang_NonConstConstexprMemberFunction auto operator*=(int value) noexcept -> Integer & {
         this->v *= value;
         return *this;
     }
 
-    constexpr auto operator/=(Integer const &o) noexcept -> Integer & {
+    __CDS_cpplang_NonConstConstexprMemberFunction auto operator/=(Integer const &o) noexcept -> Integer & {
         this->v /= o.v;
         return *this;
     }
 
-    constexpr auto operator/=(int value) noexcept -> Integer & {
+    __CDS_cpplang_NonConstConstexprMemberFunction auto operator/=(int value) noexcept -> Integer & {
         this->v /= value;
         return *this;
     }
 
-    constexpr auto operator%=(Integer const &o) noexcept -> Integer & {
+    __CDS_cpplang_NonConstConstexprMemberFunction auto operator%=(Integer const &o) noexcept -> Integer & {
         this->v %= o.v;
         return *this;
     }
 
-    constexpr auto operator%=(int value) noexcept -> Integer & {
+    __CDS_cpplang_NonConstConstexprMemberFunction auto operator%=(int value) noexcept -> Integer & {
         this->v %= value;
         return *this;
     }
@@ -133,52 +133,52 @@ public:
     __CDS_cpplang_ConstexprDestructor auto operator>>(int value) const noexcept -> Integer { return this->v >> value; }
     __CDS_cpplang_ConstexprDestructor auto operator~() const noexcept -> Integer {return ~this->v;}
 
-    constexpr auto operator&=(Integer const &o) noexcept -> Integer & {
+    __CDS_cpplang_NonConstConstexprMemberFunction auto operator&=(Integer const &o) noexcept -> Integer & {
         this->v &= o.v;
         return *this;
     }
 
-    constexpr auto operator&=(int value) noexcept -> Integer & {
+    __CDS_cpplang_NonConstConstexprMemberFunction auto operator&=(int value) noexcept -> Integer & {
         this->v &= value;
         return *this;
     }
 
-    constexpr auto operator|=(Integer const &o) noexcept -> Integer & {
+    __CDS_cpplang_NonConstConstexprMemberFunction auto operator|=(Integer const &o) noexcept -> Integer & {
         this->v |= o.v;
         return *this;
     }
 
-    constexpr auto operator|=(int value) noexcept -> Integer & {
+    __CDS_cpplang_NonConstConstexprMemberFunction auto operator|=(int value) noexcept -> Integer & {
         this->v |= value;
         return *this;
     }
 
-    constexpr auto operator^=(Integer const &o) noexcept -> Integer & {
+    __CDS_cpplang_NonConstConstexprMemberFunction auto operator^=(Integer const &o) noexcept -> Integer & {
         this->v ^= o.v;
         return *this;
     }
 
-    constexpr auto operator^=(int value) noexcept -> Integer & {
+    __CDS_cpplang_NonConstConstexprMemberFunction auto operator^=(int value) noexcept -> Integer & {
         this->v ^= value;
         return *this;
     }
 
-    constexpr auto operator<<=(Integer const &o) noexcept -> Integer & {
+    __CDS_cpplang_NonConstConstexprMemberFunction auto operator<<=(Integer const &o) noexcept -> Integer & {
         this->v <<= o.v;
         return *this;
     }
 
-    constexpr auto operator<<=(int value) noexcept -> Integer & {
+    __CDS_cpplang_NonConstConstexprMemberFunction auto operator<<=(int value) noexcept -> Integer & {
         this->v <<= value;
         return *this;
     }
 
-    constexpr auto operator>>=(Integer const &o) noexcept -> Integer & {
+    __CDS_cpplang_NonConstConstexprMemberFunction auto operator>>=(Integer const &o) noexcept -> Integer & {
         this->v >>= o.v;
         return *this;
     }
 
-    constexpr auto operator>>=(int value) noexcept -> Integer & {
+    __CDS_cpplang_NonConstConstexprMemberFunction auto operator>>=(int value) noexcept -> Integer & {
         this->v >>= value;
         return *this;
     }
@@ -193,9 +193,9 @@ public:
         return this->operator==(*p);
     }
 
-    constexpr auto operator ++ () noexcept -> Integer & { this->v++; return * this; }
+    __CDS_cpplang_NonConstConstexprMemberFunction auto operator ++ () noexcept -> Integer & { this->v++; return * this; }
     __CDS_cpplang_ConstexprDestructor auto operator ++ (int) noexcept -> Integer { auto c = * this; this->v++; return c; }
-    constexpr auto operator -- () noexcept -> Integer & { this->v--; return * this; }
+    __CDS_cpplang_NonConstConstexprMemberFunction auto operator -- () noexcept -> Integer & { this->v--; return * this; }
     __CDS_cpplang_ConstexprDestructor auto operator -- (int) noexcept -> Integer { auto c = * this; this->v--; return c; }
 
     __CDS_NoDiscard constexpr inline auto get() const noexcept -> int { return this->v; }
@@ -214,8 +214,8 @@ public:
         bool negative = false;
 
         auto it = string.begin();
-        constexpr static auto isNumericChar = [] (char c) noexcept -> bool { return c >= '0' && c <= '9'; };
-        constexpr static auto numericCharToInt = [] (char c) noexcept -> int { return static_cast < int > ( c ) - 48; };
+        __CDS_cpplang_ConstexprLambda static auto isNumericChar = [] (char c) noexcept -> bool { return c >= '0' && c <= '9'; };
+        __CDS_cpplang_ConstexprLambda static auto numericCharToInt = [] (char c) noexcept -> int { return static_cast < int > ( c ) - 48; };
 
         while( ! isNumericChar ( it.value() ) && it != string.end() ) {
             if ( it.value() == '-' )

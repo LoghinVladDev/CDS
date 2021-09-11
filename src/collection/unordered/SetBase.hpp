@@ -35,10 +35,10 @@ public:
 
         constexpr inline auto equals ( typename Collection<T>::Iterator const & it ) const noexcept -> bool final { return dynamic_cast < Iterator const & > (it)._pNode == this->_pNode; }
         constexpr inline auto value () const noexcept -> Reference final { return this->_pNode->data; }
-        constexpr inline auto next () noexcept -> Iterator & final { this->_pNode = this->_pNode->pNext; return * this; }
+        __CDS_cpplang_NonConstConstexprMemberFunction auto next () noexcept -> Iterator & final { this->_pNode = this->_pNode->pNext; return * this; }
 
-        constexpr inline auto operator ++ () noexcept -> Iterator & final { return this->next(); }
-        constexpr inline auto operator ++ (int) noexcept -> Iterator { auto copy = *this; this->_pNode = this->_pNode->pNext; return copy; }
+        __CDS_cpplang_NonConstConstexprMemberFunction auto operator ++ () noexcept -> Iterator & final { return this->next(); }
+        __CDS_cpplang_NonConstConstexprMemberFunction auto operator ++ (int) noexcept -> Iterator { auto copy = *this; this->_pNode = this->_pNode->pNext; return copy; }
 
         __CDS_NoDiscard inline auto copy () const noexcept -> Iterator * override { return new Iterator (* this); }
     };
@@ -56,10 +56,10 @@ public:
 
         constexpr inline auto equals ( typename Collection<T>::ConstIterator const & it ) const noexcept -> bool final { return dynamic_cast < ConstIterator const & > (it)._pNode == this->_pNode; }
         constexpr inline auto value () const noexcept -> ConstReference final { return this->_pNode->data; }
-        constexpr inline auto next () noexcept -> ConstIterator & final { this->_pNode = this->_pNode->pNext; return * this; }
+        __CDS_cpplang_NonConstConstexprMemberFunction auto next () noexcept -> ConstIterator & final { this->_pNode = this->_pNode->pNext; return * this; }
 
-        constexpr inline auto operator ++ () noexcept -> ConstIterator & final { return this->next(); }
-        constexpr inline auto operator ++ (int) noexcept -> ConstIterator { auto copy = *this; this->_pNode = this->_pNode->pNext; return copy; }
+        __CDS_cpplang_NonConstConstexprMemberFunction auto operator ++ () noexcept -> ConstIterator & final { return this->next(); }
+        __CDS_cpplang_NonConstConstexprMemberFunction auto operator ++ (int) noexcept -> ConstIterator { auto copy = *this; this->_pNode = this->_pNode->pNext; return copy; }
 
         __CDS_NoDiscard inline auto copy () const noexcept -> ConstIterator * override { return new ConstIterator (* this); }
     };

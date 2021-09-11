@@ -8,6 +8,7 @@
 #include <type_traits>
 #include <utility>
 #include <iostream>
+#include "../prepro.h"
 
 #if __CDS_cpplang_core_version >= __CDS_cpplang_core_version_17
 
@@ -22,15 +23,15 @@ using BoolConstant = std :: integral_constant < bool, value >;
 #endif
 
 template < typename T, typename U, typename = std::void_t<> > struct isComparableLess : std::false_type {};
-template < typename T, typename U, typename = std::void_t<> > struct isComparableLessNoexcept : std::false_type {};
+template < typename T, typename U, typename = std::void_t<> > struct __CDS_MaybeUnused isComparableLessNoexcept : std::false_type {};
 template < typename T, typename U, typename = std::void_t<> > struct isComparableEquals : std::false_type {};
-template < typename T, typename U, typename = std::void_t<> > struct isComparableEqualsNoexcept : std::false_type {};
+template < typename T, typename U, typename = std::void_t<> > struct __CDS_MaybeUnused isComparableEqualsNoexcept : std::false_type {};
 
 template < typename T, typename U > struct isComparableLess < T, U, std::void_t < decltype ( std::declval <T> () < std::declval <U> () ) > > : std::true_type {};
-template < typename T, typename U > struct isComparableLessNoexcept < T, U, std::void_t < decltype ( std::declval <T> () < std::declval <U>() ) > > : BoolConstant < noexcept ( std::declval <T> () < std::declval <U> () ) > { };
+template < typename T, typename U > struct __CDS_MaybeUnused isComparableLessNoexcept < T, U, std::void_t < decltype ( std::declval <T> () < std::declval <U>() ) > > : BoolConstant < noexcept ( std::declval <T> () < std::declval <U> () ) > { };
 
 template < typename T, typename U > struct isComparableEquals < T, U, std::void_t < decltype ( std::declval <T> () == std::declval <U> () ) > > : std::true_type {};
-template < typename T, typename U > struct isComparableEqualsNoexcept < T, U, std::void_t < decltype ( std::declval <T> () == std::declval <U>() ) > > : BoolConstant < noexcept ( std::declval <T> () == std::declval <U> () ) > { };
+template < typename T, typename U > struct __CDS_MaybeUnused isComparableEqualsNoexcept < T, U, std::void_t < decltype ( std::declval <T> () == std::declval <U>() ) > > : BoolConstant < noexcept ( std::declval <T> () == std::declval <U> () ) > { };
 
 #if __CDS_cpplang_VariableTemplates_available == true
 
@@ -76,7 +77,7 @@ template < typename D, typename B >
 using isDerivedFrom = std::is_base_of < B, D >;
 
 template < typename B, typename D >
-using isBaseOf = std::is_base_of < B, D >;
+using isBaseOf __CDS_MaybeUnused = std::is_base_of < B, D >;
 
 template < typename D >
 using isObjectDerived = isDerivedFrom < D, Object >;
@@ -100,21 +101,21 @@ struct functionTraits;
 
 template < typename R, typename ... A >
 struct functionTraits < R (*) (A ...) > {
-    using returnType = R;
+    using returnType __CDS_MaybeUnused = R;
     using classType = void;
     using argsType = std::tuple < A... >;
 };
 
 template < typename R, typename C, typename ... A >
 struct functionTraits < R (C::*) (A ...) > {
-    using returnType = R;
+    using returnType __CDS_MaybeUnused = R;
     using classType = C;
     using argsType = std::tuple < A ... >;
 };
 
 template < typename R, typename C, typename ... A >
 struct functionTraits < R (C::*) (A ...) const > {
-    using returnType = R;
+    using returnType __CDS_MaybeUnused = R;
     using classType = C;
     using argsType = std::tuple < A ... >;
 };
@@ -156,7 +157,7 @@ template < typename T >
 using argumentsOf = typename functionTraits < T > :: argsType;
 
 template < typename T >
-using classOf = typename functionTraits < T > :: classType;
+using classOf __CDS_MaybeUnused = typename functionTraits < T > :: classType;
 
 # if defined (__cpp_concepts)
 

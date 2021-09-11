@@ -564,7 +564,7 @@ public:
      */
     inline explicit operator StringLiteral () const noexcept { return this->cStr(); }
 
-    __CDS_NoDiscard constexpr auto data () noexcept -> CString  { return this->_p; }
+    __CDS_NoDiscard __CDS_cpplang_NonConstConstexprMemberFunction auto data () noexcept -> CString  { return this->_p; }
     inline explicit operator CString () noexcept { return this->data(); }
 
     /**

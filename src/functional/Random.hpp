@@ -28,11 +28,7 @@ private:
         ValueType       _lowerBound;
         ValueType       _higherBound;
 
-#if defined(_MSC_VER)
-        constexpr static auto typeName () noexcept -> StringLiteral {
-#else
-        constexpr static auto typeName = []() noexcept -> StringLiteral {
-#endif
+        __CDS_cpplang_ConstexprConditioned static auto typeName () noexcept -> StringLiteral {
             if ( std::is_same<uint8, ValueType>::value ) return "uint8";
             if ( std::is_same<uint16, ValueType>::value ) return "uint16";
             if ( std::is_same<uint32, ValueType>::value ) return "uint32";

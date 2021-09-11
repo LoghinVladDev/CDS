@@ -24,14 +24,14 @@ private:
     public:
         class DataException : public std::exception {
         public:
-            [[nodiscard]] auto what () const noexcept -> StringLiteral override {
+            __CDS_NoDiscard auto what () const noexcept -> StringLiteral override {
                 return "Invalid JSON Data";
             }
         };
 
-        class LabelException : public std::exception {
+        class __CDS_MaybeUnused LabelException : public std::exception {
         public:
-            [[nodiscard]] auto what () const noexcept -> StringLiteral override {
+            __CDS_NoDiscard auto what () const noexcept -> StringLiteral override {
                 return "JSON Node must be labeled";
             }
         };

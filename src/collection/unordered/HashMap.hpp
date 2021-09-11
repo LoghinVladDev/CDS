@@ -140,7 +140,7 @@ public:
             return * this;
         }
 
-        constexpr auto inline equals ( const CollectionIterator & i ) const noexcept -> bool final {
+        __CDS_cpplang_ConstexprConditioned auto  equals ( const CollectionIterator & i ) const noexcept -> bool final {
             auto p = dynamic_cast < Iterator const * > ( & i );
             if ( p == nullptr ) return false;
             return this->bucketIndex == p->bucketIndex && p->it == this->it;
@@ -183,7 +183,7 @@ public:
             return * this;
         }
 
-        constexpr auto inline equals ( const CollectionConstIterator & i ) const noexcept -> bool final {
+        __CDS_cpplang_ConstexprConditioned auto equals ( const CollectionConstIterator & i ) const noexcept -> bool final {
             auto p = dynamic_cast < ConstIterator const * > ( & i );
             if ( p == nullptr ) return false;
             return this->bucketIndex == p->bucketIndex && p->it == this->it;
@@ -227,7 +227,7 @@ public:
         }
 
 
-        constexpr auto inline equals ( const CollectionIterator & i ) const noexcept -> bool final {
+        __CDS_cpplang_ConstexprConditioned auto equals ( const CollectionIterator & i ) const noexcept -> bool final {
             auto p = dynamic_cast < ReverseIterator const * > ( & i );
             if ( p == nullptr ) return false;
             return this->bucketIndex == p->bucketIndex && p->it == this->it;
@@ -270,7 +270,7 @@ public:
             return * this;
         }
 
-        constexpr auto inline equals ( const CollectionConstIterator & i ) const noexcept -> bool final {
+        __CDS_cpplang_ConstexprConditioned auto equals ( const CollectionConstIterator & i ) const noexcept -> bool final {
             auto p = dynamic_cast < ConstReverseIterator const * > ( & i );
             if ( p == nullptr ) return false;
             return this->bucketIndex == p->bucketIndex && p->it == this->it;
@@ -644,8 +644,8 @@ HashMap ( std::initializer_list < Pair < K, V > > ) -> HashMap < K, V >;
 #endif
 
 template < typename K, typename V, typename H >
-    REQUIRES (UniqueIdentifiable < K > && HashCalculatorHasBoundaryFunction < H >)
-class MultiHashMap final : public Map < K, V > {
+    __CDS_Requires (UniqueIdentifiable < K > && HashCalculatorHasBoundaryFunction < H >)
+class __CDS_MaybeUnused MultiHashMap final : public Map < K, V > {
 
 };
 

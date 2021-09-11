@@ -128,7 +128,7 @@ public:
         return this->_pBack->_data;
     }
 
-    __CDS_NoDiscard constexpr auto back () const noexcept (false) -> T const & override {
+    __CDS_NoDiscard __CDS_cpplang_ConstexprConditioned auto back () const noexcept (false) -> T const & override {
         if ( this->empty() )
             throw typename List < T > :: ListOutOfBounds ();
 
@@ -142,7 +142,7 @@ public:
         return this->_pFront->data();
     }
 
-    __CDS_NoDiscard constexpr auto front () const noexcept (false) -> T const & override {
+    __CDS_NoDiscard __CDS_cpplang_ConstexprConditioned auto front () const noexcept (false) -> T const & override {
         if ( this->empty() )
             throw typename List < T > :: ListOutOfBounds ();
 
@@ -278,7 +278,7 @@ public:
 
     inline auto operator = ( SingleLinkedList const & o ) noexcept -> SingleLinkedList & { return this->operator= ( (Collection <T> const &)o ); }// NOLINT(misc-unconventional-assign-operator,bugprone-unhandled-self-assignment)
 
-    constexpr auto operator = ( SingleLinkedList && o ) noexcept -> SingleLinkedList & {
+    __CDS_cpplang_NonConstConstexprMemberFunction auto operator = ( SingleLinkedList && o ) noexcept -> SingleLinkedList & {
         if ( this == & o ) return * this;
 
         this->_pFront = exchange( o._pFront, nullptr );
@@ -313,7 +313,7 @@ protected:
 public:
     ~IteratorBase () noexcept override = default;
 
-    __CDS_NoDiscard constexpr auto equals ( typename Collection < T > :: Iterator const & it ) const noexcept -> bool final {
+    __CDS_NoDiscard __CDS_cpplang_ConstexprConditioned auto equals ( typename Collection < T > :: Iterator const & it ) const noexcept -> bool final {
         if ( this == & it ) return true;
         auto p = dynamic_cast < decltype (this) > ( & it );
         if ( p == nullptr ) return false;
@@ -344,7 +344,7 @@ protected:
 public:
     ~ConstIteratorBase() noexcept override = default;
 
-    __CDS_NoDiscard constexpr auto equals ( typename Collection < T > :: ConstIterator const & it ) const noexcept -> bool final {
+    __CDS_NoDiscard __CDS_cpplang_ConstexprConditioned auto equals ( typename Collection < T > :: ConstIterator const & it ) const noexcept -> bool final {
         if ( this == & it ) return true;
         auto p = dynamic_cast < decltype ( this ) > ( & it );
         if ( p == nullptr ) return false;
@@ -371,14 +371,14 @@ public:
 
     ~Iterator () noexcept final = default;
 
-    constexpr auto operator = ( Iterator const & o ) noexcept -> Iterator & {
+    __CDS_cpplang_NonConstConstexprMemberFunction auto operator = ( Iterator const & o ) noexcept -> Iterator & {
         this->_pNode = o._pNode;
         return * this;
     }
 
-    constexpr auto operator ++ () noexcept -> Iterator & final { this->next(); return * this; }
+    __CDS_cpplang_NonConstConstexprMemberFunction auto operator ++ () noexcept -> Iterator & final { this->next(); return * this; }
     inline auto operator ++ (int) noexcept -> Iterator { auto copy = * this; this->next(); return copy; }
-    constexpr auto next () noexcept -> Iterator & final { this->_pNode = this->_pNode->_pNext; return * this; }
+    __CDS_cpplang_NonConstConstexprMemberFunction auto next () noexcept -> Iterator & final { this->_pNode = this->_pNode->_pNext; return * this; }
 
     __CDS_NoDiscard inline auto copy () const noexcept -> Iterator * override {
         return new Iterator ( * this );
@@ -399,14 +399,14 @@ public:
 
     ~ConstIterator() noexcept final = default;
 
-    constexpr auto operator = ( ConstIterator const & o ) noexcept -> ConstIterator & {
+    __CDS_cpplang_NonConstConstexprMemberFunction auto operator = ( ConstIterator const & o ) noexcept -> ConstIterator & {
         this->_pNode = o._pNode;
         return * this;
     }
 
-    constexpr auto operator ++ () noexcept -> ConstIterator & override { return this->next(); }
+    __CDS_cpplang_NonConstConstexprMemberFunction auto operator ++ () noexcept -> ConstIterator & override { return this->next(); }
     inline auto operator ++ (int) noexcept -> ConstIterator { auto copy = * this; this->next(); return * this; }
-    constexpr auto next () noexcept -> ConstIterator & final { this->_pNode = this->_pNode->_pNext; return * this; }
+    __CDS_cpplang_NonConstConstexprMemberFunction auto next () noexcept -> ConstIterator & final { this->_pNode = this->_pNode->_pNext; return * this; }
 
     __CDS_NoDiscard inline auto copy () const noexcept -> ConstIterator * override {
         return new ConstIterator ( * this );

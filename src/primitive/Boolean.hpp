@@ -132,7 +132,7 @@ public:
         return this->get().hash();
     }
 
-#define _PREFIX_OP(_operator)                               \
+#define _PREFIX_OP(_operator)  /* NOLINT(bugprone-reserved-identifier,bugprone-macro-parenthesis) */                              \
 auto operator _operator (bool value) noexcept -> Atomic & {  \
     this->_access.lock();                                   \
     this->_data _operator value;                            \
@@ -142,10 +142,6 @@ auto operator _operator (bool value) noexcept -> Atomic & {  \
 
 #undef _PREFIX_OP
 };
-
-#undef _G_OBJ
-#undef _G_OP_OBJ
-#undef _G_OP_OBJ_CONST
 
 __CDS_cpplang_ConstexprDestructor auto operator "" _b (unsigned long long int i) noexcept -> Boolean {
     return {i != 0};

@@ -15,7 +15,7 @@ public:
     using RandomGenerator = Random::Double;
 
     static auto random () noexcept -> Double {
-        return RandomGenerator ().get();
+        return RandomGenerator().get();
     }
 
     static auto random (double low, double high) noexcept -> Double {
@@ -28,13 +28,13 @@ public:
     __CDS_cpplang_ConstexprDestructor ~Double() noexcept override = default;
     constexpr Double(double value) noexcept: v(value) {} // NOLINT(google-explicit-constructor)
 
-    constexpr Double &operator=(Double const &o) noexcept {
+    __CDS_cpplang_NonConstConstexprMemberFunction Double &operator=(Double const &o) noexcept {
         if (this == &o)return *this;
         this->v = o.v;
         return *this;
     }
 
-    constexpr Double &operator=(double value) noexcept {
+    __CDS_cpplang_NonConstConstexprMemberFunction Double &operator=(double value) noexcept {
         this->v = value;
         return *this;
     }
@@ -48,42 +48,42 @@ public:
     __CDS_cpplang_ConstexprDestructor auto operator/(Double const &o) const noexcept -> Double { return this->v / o.v; }
     __CDS_cpplang_ConstexprDestructor auto operator/(double value) const noexcept -> Double { return this->v / value; }
 
-    constexpr auto operator+=(Double const &o) noexcept -> Double & {
+    __CDS_cpplang_NonConstConstexprMemberFunction auto operator+=(Double const &o) noexcept -> Double & {
         this->v += o.v;
         return *this;
     }
 
-    constexpr auto operator+=(double value) noexcept -> Double & {
+    __CDS_cpplang_NonConstConstexprMemberFunction auto operator+=(double value) noexcept -> Double & {
         this->v += value;
         return *this;
     }
 
-    constexpr auto operator-=(Double const &o) noexcept -> Double & {
+    __CDS_cpplang_NonConstConstexprMemberFunction auto operator-=(Double const &o) noexcept -> Double & {
         this->v -= o.v;
         return *this;
     }
 
-    constexpr auto operator-=(double value) noexcept -> Double & {
+    __CDS_cpplang_NonConstConstexprMemberFunction auto operator-=(double value) noexcept -> Double & {
         this->v -= value;
         return *this;
     }
 
-    constexpr auto operator*=(Double const &o) noexcept -> Double & {
+    __CDS_cpplang_NonConstConstexprMemberFunction auto operator*=(Double const &o) noexcept -> Double & {
         this->v *= o.v;
         return *this;
     }
 
-    constexpr auto operator*=(double value) noexcept -> Double & {
+    __CDS_cpplang_NonConstConstexprMemberFunction auto operator*=(double value) noexcept -> Double & {
         this->v *= value;
         return *this;
     }
 
-    constexpr auto operator/=(Double const &o) noexcept -> Double & {
+    __CDS_cpplang_NonConstConstexprMemberFunction auto operator/=(Double const &o) noexcept -> Double & {
         this->v /= o.v;
         return *this;
     }
 
-    constexpr auto operator/=(double value) noexcept -> Double & {
+    __CDS_cpplang_NonConstConstexprMemberFunction auto operator/=(double value) noexcept -> Double & {
         this->v /= value;
         return *this;
     }
@@ -125,8 +125,8 @@ public:
         if ( string.empty() ) return 0;
 
         auto it = string.begin();
-        constexpr static auto isNumericChar = [] (char c) noexcept -> bool { return c >= '0' && c <= '9'; };
-        constexpr static auto numericCharToInt = [] (char c) noexcept -> int { return static_cast < int > (c) - 48; };
+        __CDS_cpplang_ConstexprLambda static auto isNumericChar = [] (char c) noexcept -> bool { return c >= '0' && c <= '9'; };
+        __CDS_cpplang_ConstexprLambda static auto numericCharToInt = [] (char c) noexcept -> int { return static_cast < int > (c) - 48; };
 
         bool pastFloatingPoint = false;
 

@@ -166,7 +166,7 @@ class __CDS_MaybeUnused MultiMap : public Collection < Pair < K, V > > {
             this->_message = oss.str();
         }
 
-        [[nodiscard]] constexpr auto what () const noexcept -> StringLiteral final {
+        __CDS_NoDiscard __CDS_cpplang_VirtualConstexpr auto what () const noexcept -> StringLiteral final {
             return this->_message.cStr();
         }
     };

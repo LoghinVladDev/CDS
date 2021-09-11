@@ -64,7 +64,7 @@ public:
     }
 
     constexpr inline auto isNull () const noexcept -> bool { return pObj == nullptr; }
-    constexpr inline auto operator -> () const noexcept (false) -> Pointer {
+    __CDS_cpplang_ConstexprConditioned auto operator -> () const noexcept (false) -> Pointer {
         if ( pObj == nullptr )
             throw NullPointerException();
 

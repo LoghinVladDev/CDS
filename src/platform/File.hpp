@@ -40,7 +40,7 @@ public:
         PTF_MAX_VALUE           = PTF_SOCKET
     };
 
-    constexpr static auto platformFileTypeFlagToString (PlatformTypeFlag f) noexcept -> StringLiteral {
+    __CDS_cpplang_ConstexprConditioned static auto platformFileTypeFlagToString (PlatformTypeFlag f) noexcept -> StringLiteral {
         switch (f) {
             case PTF_NULL_FILE:         return "No Flags";
             case PTF_REGULAR:           return "Regular File";
@@ -80,7 +80,7 @@ public:
         PPF_MAX_VALUE   = PPF_READ
     };
 
-    constexpr static auto platformPermissionFlagToString ( PlatformPermissionFlag f ) noexcept -> StringLiteral {
+    __CDS_cpplang_ConstexprConditioned static auto platformPermissionFlagToString ( PlatformPermissionFlag f ) noexcept -> StringLiteral {
         switch ( f ) {
             case PPF_NULL:       return "No Permissions";
             case PPF_EXECUTE:    return "Execute";
@@ -116,7 +116,7 @@ public:
         PUF_POLICY_MATCH_ALL    = 0x20u
     };
 
-    constexpr static auto platformUserFlagToString ( PlatformUserFlag f ) noexcept -> StringLiteral {
+    __CDS_cpplang_ConstexprConditioned static auto platformUserFlagToString ( PlatformUserFlag f ) noexcept -> StringLiteral {
         switch ( f ) {
             case PUF_NO_USER:   return "No User";
             case PUF_USER:      return "Current User";
@@ -188,7 +188,7 @@ public:
 
     using DiagnosticOptionFlags = uint16;
 
-    constexpr static auto diagnosticLogLevelToString (DiagnosticLogLevel l) noexcept -> StringLiteral {
+    __CDS_cpplang_ConstexprConditioned static auto diagnosticLogLevelToString (DiagnosticLogLevel l) noexcept -> StringLiteral {
         switch (l) {
             case DLL_NONE:      return "None";
             case DLL_ERROR:     return "Error";
@@ -205,10 +205,22 @@ protected:
 
     // region diagnostic variables
 
+#if __CDS_cpplang_core_version >= __CDS_cpplang_core_version_17
+
     static std::ostream *           _diagnosticOutput;
 
     static DiagnosticLogLevel       _diagnosticLogLevel;
     static DiagnosticOptionFlags    _diagnosticFixesFlags;
+
+#else
+
+    std::ostream *           _diagnosticOutput {& std::cerr};
+
+    DiagnosticLogLevel       _diagnosticLogLevel {File::DiagnosticLogLevel::DLL_ALL};
+    DiagnosticOptionFlags    _diagnosticFixesFlags {File::DiagnosticOptionFlag::DO_NO_AUTOMATIC_FIXES};
+
+#endif
+
 
     // endregion
 
@@ -279,7 +291,7 @@ public:
     }
 
     __CDS_MaybeUnused static constexpr auto setDiagnosticFlags ( DiagnosticOptionFlags f ) noexcept -> void {
-        File::_diagnosticFixesFlags;
+        return File::_diagnosticFixesFlags;
     }
 
     __CDS_MaybeUnused static auto setDiagnosticFlag ( DiagnosticOptionFlag f, bool enable ) noexcept -> void {
@@ -339,19 +351,19 @@ public:
         auto _mtime = String(ctime(&this->_linuxFileData.st_mtime)).rtrim('\n');
 
         return
-                String("Linux File {") +
-                " permissions = " + permissionsAsString +
-                ", size (bytes) = " + static_cast < sint64 > (this->linuxTotalSize()) +
-                ", deviceID = " + static_cast < uint64 > (this->linuxDeviceID ()) +
-                ", inode = " + static_cast < uint64 > (this->linuxINode()) +
-                ", modeFlags = " + this->linuxModeFlags () +
-                ", hardLinkCount = " + static_cast < uint64 > (this->linuxHardLinkCount ()) +
-                ", ownerUserID = " + this->linuxOwnerUserID () +
-                ", groupUserID = " + this->linuxOwnerGroupID () +
-                ", specialFileDeviceID = " + static_cast < uint64 > (this->linuxSpecialFileDeviceID ()) +
-                ", blockSize = " + static_cast < sint64 > (this->linuxBlockSize ()) +
-                ", blockCount = " + static_cast < sint64 > (this->linuxBlockCount ()) +
-                ", lastAccess = " + _atime +
+            String("Linux File {") +
+            " permissions = " + permissionsAsString +
+            ", size (bytes) = " + static_cast < sint64 > (this->linuxTotalSize()) +
+            ", deviceID = " + static_cast < uint64 > (this->linuxDeviceID ()) +
+            ", inode = " + static_cast < uint64 > (this->linuxINode()) +
+            ", modeFlags = " + this->linuxModeFlags () +
+            ", hardLinkCount = " + static_cast < uint64 > (this->linuxHardLinkCount ()) +
+            ", ownerUserID = " + this->linuxOwnerUserID () +
+            ", groupUserID = " + this->linuxOwnerGroupID () +
+            ", specialFileDeviceID = " + static_cast < uint64 > (this->linuxSpecialFileDeviceID ()) +
+            ", blockSize = " + static_cast < sint64 > (this->linuxBlockSize ()) +
+            ", blockCount = " + static_cast < sint64 > (this->linuxBlockCount ()) +
+            ", lastAccess = " + _atime +
             ", lastModify = " + _mtime +
             ", lastChange = " + _ctime +
             " }";
@@ -399,7 +411,7 @@ public:
 
     // region utility functions
     __CDS_NoDiscard constexpr auto path () const noexcept -> Path const & { return this->_path; }
-    __CDS_NoDiscard constexpr auto path () noexcept -> Path & { return this->_path; }
+    __CDS_NoDiscard __CDS_cpplang_NonConstConstexprMemberFunction auto path () noexcept -> Path & { return this->_path; }
 
     __CDS_NoDiscard inline auto name () const noexcept -> String { return this->path().nodeName(); }
 
@@ -749,7 +761,7 @@ public:
     }
 
     __CDS_NoDiscard constexpr auto entries () const noexcept -> LinkedList < File * > const & { return this->_entries; }
-    __CDS_NoDiscard constexpr auto entries () noexcept -> LinkedList < File * > & { this->reload(); return this->_entries; }
+    __CDS_NoDiscard __CDS_cpplang_NonConstConstexprMemberFunction auto entries () noexcept -> LinkedList < File * > & { this->reload(); return this->_entries; }
 
     __CDS_NoDiscard auto files () const noexcept -> LinkedList < File::LinuxRegular * > {
         LinkedList < File::LinuxRegular * > l;
@@ -934,10 +946,16 @@ __CDS_NoDiscard inline auto File::at (Path const & p) noexcept -> UniquePointer 
 
 // region File inline static vars
 
+#if __CDS_cpplang_core_version >= __CDS_cpplang_core_version_17
+
 #include <iostream>
 inline std::ostream *                   File::_diagnosticOutput = & std::cerr; // NOLINT(cppcoreguidelines-interfaces-global-init)
 inline File::DiagnosticLogLevel         File::_diagnosticLogLevel = File::DiagnosticLogLevel::DLL_ALL;
 inline File::DiagnosticOptionFlags      File::_diagnosticFixesFlags = File::DiagnosticOptionFlag::DO_NO_AUTOMATIC_FIXES;
+
+#else
+
+#endif
 
 // endregion
 

@@ -27,12 +27,12 @@ public:
     constexpr Float(Float &&)noexcept=default;
     __CDS_cpplang_ConstexprDestructor ~Float() noexcept override = default;
     constexpr Float(float value) noexcept: v(value) {} // NOLINT(google-explicit-constructor)
-    constexpr Float &operator=(Float const &o) noexcept {
+    __CDS_cpplang_NonConstConstexprMemberFunction Float &operator=(Float const &o) noexcept {
         if (this == &o)return *this;
         this->v = o.v;
         return *this;
     }
-    constexpr Float &operator=(float value) noexcept {
+    __CDS_cpplang_NonConstConstexprMemberFunction Float &operator=(float value) noexcept {
         this->v = value;
         return *this;
     }
@@ -45,42 +45,42 @@ public:
     __CDS_cpplang_ConstexprDestructor auto operator/(Float const &o) const noexcept -> Float { return this->v / o.v; }
     __CDS_cpplang_ConstexprDestructor auto operator/(float value) const noexcept -> Float { return this->v / value; }
 
-    constexpr auto operator+=(Float const &o) noexcept -> Float & {
+    __CDS_cpplang_NonConstConstexprMemberFunction auto operator+=(Float const &o) noexcept -> Float & {
         this->v += o.v;
         return *this;
     }
 
-    constexpr auto operator+=(float value) noexcept -> Float & {
+    __CDS_cpplang_NonConstConstexprMemberFunction auto operator+=(float value) noexcept -> Float & {
         this->v += value;
         return *this;
     }
 
-    constexpr auto operator-=(Float const &o) noexcept -> Float & {
+    __CDS_cpplang_NonConstConstexprMemberFunction auto operator-=(Float const &o) noexcept -> Float & {
         this->v -= o.v;
         return *this;
     }
 
-    constexpr auto operator-=(float value) noexcept -> Float & {
+    __CDS_cpplang_NonConstConstexprMemberFunction auto operator-=(float value) noexcept -> Float & {
         this->v -= value;
         return *this;
     }
 
-    constexpr auto operator*=(Float const &o) noexcept -> Float & {
+    __CDS_cpplang_NonConstConstexprMemberFunction auto operator*=(Float const &o) noexcept -> Float & {
         this->v *= o.v;
         return *this;
     }
 
-    constexpr auto operator*=(float value) noexcept -> Float & {
+    __CDS_cpplang_NonConstConstexprMemberFunction auto operator*=(float value) noexcept -> Float & {
         this->v *= value;
         return *this;
     }
 
-    constexpr auto operator/=(Float const &o) noexcept -> Float & {
+    __CDS_cpplang_NonConstConstexprMemberFunction auto operator/=(Float const &o) noexcept -> Float & {
         this->v /= o.v;
         return *this;
     }
 
-    constexpr auto operator/=(float value) noexcept -> Float & {
+    __CDS_cpplang_NonConstConstexprMemberFunction auto operator/=(float value) noexcept -> Float & {
         this->v /= value;
         return *this;
     }
@@ -122,8 +122,8 @@ public:
         if ( string.empty() ) return 0;
 
         auto it = string.begin();
-        constexpr static auto isNumericChar = [] (char c) noexcept -> bool { return c >= '0' && c <= '9'; };
-        constexpr static auto numericCharToInt = [] (char c) noexcept -> int { return static_cast < int > (c) - 48; };
+        __CDS_cpplang_ConstexprLambda static auto isNumericChar = [] (char c) noexcept -> bool { return c >= '0' && c <= '9'; };
+        __CDS_cpplang_ConstexprLambda static auto numericCharToInt = [] (char c) noexcept -> int { return static_cast < int > (c) - 48; };
 
         bool pastFloatingPoint = false;
 

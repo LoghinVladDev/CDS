@@ -22,10 +22,17 @@
 
 class Path : public Object {
 private:
-    friend class WalkEntry;
     explicit Path(bool skipPathCheck __CDS_MaybeUnused) noexcept {}
 
+#if __CDS_cpplang_core_version >= __CDS_cpplang_core_version_17
+
     static LinkedList < char > possibleDirectorySeparators;
+
+#else
+
+    LinkedList < char > possibleDirectorySeparators = { '/', '\\' };
+
+#endif
 
 protected:
     String _osPath;
@@ -152,7 +159,16 @@ public:
     }
 
     auto operator / (String const & f) const noexcept (false) -> Path {
-        auto delimFiltered = [& f]() -> String { String c(f); c.forEach([](auto & e){if (Path::possibleDirectorySeparators.contains(e)) e = Path::directorySeparator(); }); return c; };
+        auto delimFiltered = [
+#if __CDS_cpplang_core_version < __CDS_cpplang_core_version_17
+                this,
+#endif
+                & f
+        ]() -> String { String c(f); c.forEach([
+#if __CDS_cpplang_core_version < __CDS_cpplang_core_version_17
+                this
+#endif
+        ](String::ElementType & e){if (Path::possibleDirectorySeparators.contains(e)) e = Path::directorySeparator(); }); return c; };
         return {this->_osPath + Path::directorySeparator() + delimFiltered()};
     }
 
@@ -208,13 +224,13 @@ public:
     }
 
     __CDS_NoDiscard __CDS_MaybeUnused constexpr auto root () const noexcept -> Path const & { return this->_root; }
-    constexpr auto root () noexcept -> Path & { return this->_root; }
+    __CDS_cpplang_NonConstConstexprMemberFunction auto root () noexcept -> Path & { return this->_root; }
 
     __CDS_NoDiscard constexpr auto directories () const noexcept -> LinkedList < String > const & { return this->_directories; }
-    constexpr auto directories () noexcept -> LinkedList < String > & { return this->_directories; }
+    __CDS_cpplang_NonConstConstexprMemberFunction auto directories () noexcept -> LinkedList < String > & { return this->_directories; }
 
     __CDS_NoDiscard constexpr auto files () const noexcept -> LinkedList < String > const & { return this->_files; }
-    constexpr auto files () noexcept -> LinkedList < String > & { return this->_files; }
+    __CDS_cpplang_NonConstConstexprMemberFunction auto files () noexcept -> LinkedList < String > & { return this->_files; }
 
     __CDS_NoDiscard auto copy() const noexcept -> WalkEntry * override {
         return new WalkEntry (* this);
@@ -354,8 +370,6 @@ __CDS_NoDiscard inline auto Path::roots () noexcept -> LinkedList < Path > {
 #warning Warning: Path::roots undefined
 
 #endif
-
-    return paths;
 }
 
 #if defined(WIN32)
@@ -421,6 +435,10 @@ __CDS_NoDiscard inline auto Path::platformDependantRoots () noexcept -> LinkedLi
 
 #endif
 
+#if __CDS_cpplang_core_version >= __CDS_cpplang_core_version_17
+
 inline LinkedList < char > Path::possibleDirectorySeparators = {'/', '\\'};
+
+#endif
 
 #endif //CDS_PATH_H

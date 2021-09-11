@@ -8,12 +8,30 @@
 #include <utility>
 #include <functional>
 
-namespace dataTypes::refWrapper {
-    template <class T>
-    constexpr T & hiddenRef ( T & t ) noexcept { return t; }
+#if __CDS_cpplang_core_version >= __CDS_cpplang_core_version_17
 
-    template <class T>
-    __CDS_MaybeUnused auto hiddenRef ( T && ) -> void = delete;
+namespace dataTypes::refWrapper {
+
+#else
+
+namespace dataTypes {
+
+namespace refWrapper {
+
+#endif
+
+    template<class T>
+    constexpr T &hiddenRef(T &t) noexcept { return t; }
+
+    template<class T>
+    __CDS_MaybeUnused auto hiddenRef(T &&) -> void = delete;
+
+#if __CDS_cpplang_core_version < __CDS_cpplang_core_version_17
+
+}
+
+#endif
+
 }
 
 #include <CDS/Pointer>

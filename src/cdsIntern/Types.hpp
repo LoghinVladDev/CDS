@@ -13,6 +13,7 @@ concept HashCalculatorHasBoundaryFunction = requires (H hashCalculator) {
 #endif
 
 #include "../std-types.h"
+#include "../prepro.h"
 class Object;
 class String;
 
@@ -27,7 +28,7 @@ namespace dataTypes {
     template<> auto hash<uint8>(uint8 const &o) noexcept -> Index { return o; }
     template<> auto hash<uint16>(uint16 const &o) noexcept -> Index { return o; }
     template<> auto hash<uint32>(uint32 const &o) noexcept -> Index { return o; }
-    template<> auto hash<uint64>(uint64 const &o) noexcept -> Index { return o; }
+    template<> auto hash<uint64>(uint64 const &o) noexcept -> Index { return static_cast < Index > ( o ); }
     template<> auto hash<sint8>(sint8 const &o) noexcept -> Index { return o; }
     template<> auto hash<sint16>(sint16 const &o) noexcept -> Index { return o; }
     template<> auto hash<sint32>(sint32 const &o) noexcept -> Index { return o; }
@@ -70,7 +71,7 @@ namespace dataTypes {
     template <class K, Size hashBoundary>
     class DefaultHashFunction : public HashCalculator<K, hashBoundary> {
     public:
-        using AddressValue = std::size_t;
+        using AddressValue __CDS_MaybeUnused = std::size_t;
 
         auto operator ()(typename HashCalculator<K, hashBoundary>::ValueConstReference v) const noexcept -> typename HashCalculator<K, hashBoundary>::HashValue {
             return dataTypes::hash(v) % hashBoundary;
@@ -96,7 +97,7 @@ public:
 
 namespace dataTypes {
     template < typename T >
-    class DefaultSelector : public Selector < T > {
+    class __CDS_MaybeUnused DefaultSelector : public Selector < T > {
     public:
         auto operator () (T const & obj) const noexcept -> Index { return (Index) obj; }
     };
@@ -107,7 +108,7 @@ namespace dataTypes {
     constexpr auto unsafeAddress () noexcept -> T * { return reinterpret_cast < T * > (0x10); }
 
     template < typename T >
-    constexpr auto unsafeConstAddress () noexcept -> T * { return reinterpret_cast < T const * > (0x10); }
+    __CDS_MaybeUnused constexpr auto unsafeConstAddress () noexcept -> T * { return reinterpret_cast < T const * > (0x10); }
 }
 
 #endif //CDS_TYPES_HPP
