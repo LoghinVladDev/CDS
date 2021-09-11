@@ -1254,9 +1254,9 @@ public:
 
     ~Iterator () noexcept final = default;
 
-    __CDS_cpplang_NonConstConstexprMemberFunction auto next () noexcept -> Iterator & final { this->_pos ++; return * this; }
+    __CDS_cpplang_VirtualConstexpr auto next () noexcept -> Iterator & final { this->_pos ++; return * this; }
 
-    __CDS_cpplang_NonConstConstexprMemberFunction auto operator ++ () noexcept -> Iterator & final { return this->next(); }
+    __CDS_cpplang_VirtualConstexpr auto operator ++ () noexcept -> Iterator & final { return this->next(); }
     inline auto operator ++ (int) noexcept -> Iterator { auto copy = * this; this->next(); return copy; }
 };
 
@@ -1268,9 +1268,9 @@ public:
 
     ~ConstIterator () noexcept final = default;
 
-    __CDS_cpplang_NonConstConstexprMemberFunction auto next () noexcept -> ConstIterator & final { this->_pos ++; return * this; }
+    __CDS_cpplang_VirtualConstexpr auto next () noexcept -> ConstIterator & final { this->_pos ++; return * this; }
 
-    __CDS_cpplang_NonConstConstexprMemberFunction auto operator ++ () noexcept -> ConstIterator & final { return this->next(); }
+    __CDS_cpplang_VirtualConstexpr auto operator ++ () noexcept -> ConstIterator & final { return this->next(); }
     inline auto operator ++ (int) noexcept -> ConstIterator { auto copy = * this; this->next(); return copy; }
 };
 
@@ -1282,9 +1282,9 @@ public:
 
     ~ReverseIterator () noexcept final = default;
 
-    __CDS_cpplang_NonConstConstexprMemberFunction auto next () noexcept -> ReverseIterator & final { this->_pos --; return * this; }
+    __CDS_cpplang_VirtualConstexpr auto next () noexcept -> ReverseIterator & final { this->_pos --; return * this; }
 
-    __CDS_cpplang_NonConstConstexprMemberFunction auto operator ++ () noexcept -> ReverseIterator & final { return this->next(); }
+    __CDS_cpplang_VirtualConstexpr auto operator ++ () noexcept -> ReverseIterator & final { return this->next(); }
     inline auto operator ++ (int) noexcept -> ReverseIterator { auto copy = * this; this->next(); return copy; }
 };
 
@@ -1296,9 +1296,9 @@ public:
 
     ~ConstReverseIterator () noexcept final = default;
 
-    __CDS_cpplang_NonConstConstexprMemberFunction auto next () noexcept -> ConstReverseIterator & final { this->_pos --; return * this; }
+    __CDS_cpplang_VirtualConstexpr auto next () noexcept -> ConstReverseIterator & final { this->_pos --; return * this; }
 
-    __CDS_cpplang_NonConstConstexprMemberFunction auto operator ++ () noexcept -> ConstReverseIterator & final { return this->next(); }
+    __CDS_cpplang_VirtualConstexpr auto operator ++ () noexcept -> ConstReverseIterator & final { return this->next(); }
     inline auto operator ++ (int) noexcept -> ConstReverseIterator { auto copy = * this; this->next(); return copy; }
 };
 

@@ -63,6 +63,17 @@
 #define __CDS_NoReturn /* NOLINT(bugprone-reserved-identifier) */
 #define __CDS_Unlikely /* NOLINT(bugprone-reserved-identifier) */
 
+
+#include <utility>
+
+/**
+ *
+ *
+ *
+ * CPP-11 Specific
+ *
+ *
+ */
 #if __CDS_cpplang_core_version >= __CDS_cpplang_core_version_11
 
 #undef __CDS_CarriesDependency
@@ -73,107 +84,23 @@
 #define __CDS_NoReturn __CDS_Attribute(noreturn) /* NOLINT(bugprone-reserved-identifier) */
 #define __CDS_MaybeUnused __CDS_OldAttribute(unused) /* NOLINT(bugprone-reserved-identifier) */
 
+#else
+
 #endif
 
-#if __CDS_cpplang_core_version >= __CDS_cpplang_core_version_14
+/**
+ *
+ *
+ *
+ * CPP-14 Specific
+ *
+ *
+ */
+#if __CDS_cpplang_core_version >= __CDS_cpplang_core_version_14 /* NOLINT(bugprone-reserved-identifier) */
 
 #undef __CDS_Deprecated
 
 #define __CDS_Deprecated __CDS_Attribute(deprecated) /* NOLINT(bugprone-reserved-identifier) */
-
-#endif
-
-#if __CDS_cpplang_core_version >= __CDS_cpplang_core_version_17
-
-#undef __CDS_Fallthrough
-#undef __CDS_MaybeUnused
-#undef __CDS_NoDiscard
-
-#define __CDS_Fallthrough __CDS_Attribute(fallthrough) /* NOLINT(bugprone-reserved-identifier) */
-#define __CDS_MaybeUnused __CDS_Attribute(maybe_unused) /* NOLINT(bugprone-reserved-identifier) */
-#define __CDS_NoDiscard __CDS_Attribute(nodiscard) /* NOLINT(bugprone-reserved-identifier) */
-
-#endif
-
-#if __CDS_cpplang_core_version >= __CDS_cpplang_core_version_20
-
-#undef __CDS_Likely
-#undef __CDS_NoUniqueAddress
-#undef __CDS_NoDiscard
-#undef __CDS_Unlikely
-
-#define __CDS_Likely __CDS_Attribute(likely) /* NOLINT(bugprone-reserved-identifier) */
-#define __CDS_NoUniqueAddress __CDS_Attribute(no_unique_address) /* NOLINT(bugprone-reserved-identifier) */
-#define __CDS_NoDiscard __CDS_Attribute(nodiscard) /* NOLINT(bugprone-reserved-identifier) */
-#define __CDS_Unlikely __CDS_Attribute(unlikely) /* NOLINT(bugprone-reserved-identifier) */
-
-#endif
-
-#if !defined(__CDS_Requires)
-#if defined(__cpp_concepts)
-
-#define __CDS_Requires(_concepts) requires _concepts /* NOLINT(bugprone-reserved-identifier) */
-
-#else
-
-#define __CDS_Requires(_concepts) /* NOLINT(bugprone-reserved-identifier) */
-
-#endif
-#endif
-
-#if __CDS_cpplang_core_version >= __CDS_cpplang_core_version_17
-
-#define __CDS_cpplang_IfConstexpr constexpr /* NOLINT(bugprone-reserved-identifier) */
-
-#else
-
-#define __CDS_cpplang_IfConstexpr /* NOLINT(bugprone-reserved-identifier) */
-
-#endif
-
-#if __CDS_cpplang_core_version >= __CDS_cpplang_core_version_17
-
-#define __CDS_cpplang_CTAD_available true /* NOLINT(bugprone-reserved-identifier) */
-
-#else
-
-#define __CDS_cpplang_CTAD_available false /* NOLINT(bugprone-reserved-identifier) */
-
-#endif
-
-#if __CDS_cpplang_core_version >= __CDS_cpplang_core_version_20
-
-#define __CDS_cpplang_ConstexprDestructor constexpr /* NOLINT(bugprone-reserved-identifier) */
-
-#else
-
-#define __CDS_cpplang_ConstexprDestructor inline /* NOLINT(bugprone-reserved-identifier) */
-
-#endif
-
-#if __CDS_cpplang_core_version >= __CDS_cpplang_core_version_20
-
-#define __CDS_cpplang_Concepts_available true /* NOLINT(bugprone-reserved-identifier) */
-
-#else
-
-#define __CDS_cpplang_Concepts_available false /* NOLINT(bugprone-reserved-identifier) */
-
-#endif
-
-#if __CDS_cpplang_core_version >= __CDS_cpplang_core_version_17
-
-#define __CDS_cpplang_ConstexprLambda constexpr /* NOLINT(bugprone-reserved-identifier) */
-
-#else
-
-#define __CDS_cpplang_ConstexprLambda /* NOLINT(bugprone-reserved-identifier) */
-
-#endif
-
-#include <utility>
-
-#if __CDS_cpplang_core_version >= __CDS_cpplang_core_version_14 /* NOLINT(bugprone-reserved-identifier) */
 
 #define __CDS_cpplang_NonConstConstexprMemberFunction constexpr /* NOLINT(bugprone-reserved-identifier) */
 #define __CDS_cpplang_ConstexprConditioned constexpr /* NOLINT(bugprone-reserved-identifier) */
@@ -181,10 +108,14 @@
 #define __CDS_cpplang_VariableTemplates_available true /* NOLINT(bugprone-reserved-identifier) */
 
 template < typename T, typename U = T >
-constexpr auto forward = std :: forward < T, U >;
+constexpr auto forward (T & value) noexcept -> T && {
+    return std :: forward (value);
+}
 
 template < typename T, typename U = T >
-constexpr auto exchange = std :: exchange < T, U >;
+constexpr auto exchange ( T & obj, U && newValue ) -> T {
+    return std :: exchange (obj, newValue);
+}
 
 #else
 
@@ -204,5 +135,83 @@ inline auto exchange ( T & obj, U && newValue ) -> T {
 }
 
 #endif
+
+/**
+ *
+ *
+ *
+ * CPP-17 Specific
+ *
+ *
+ */
+#if __CDS_cpplang_core_version >= __CDS_cpplang_core_version_17
+
+#undef __CDS_Fallthrough
+#undef __CDS_MaybeUnused
+#undef __CDS_NoDiscard
+
+#define __CDS_Fallthrough __CDS_Attribute(fallthrough) /* NOLINT(bugprone-reserved-identifier) */
+#define __CDS_MaybeUnused __CDS_Attribute(maybe_unused) /* NOLINT(bugprone-reserved-identifier) */
+#define __CDS_NoDiscard __CDS_Attribute(nodiscard) /* NOLINT(bugprone-reserved-identifier) */
+
+#define __CDS_cpplang_IfConstexpr constexpr /* NOLINT(bugprone-reserved-identifier) */
+#define __CDS_cpplang_CTAD_available true /* NOLINT(bugprone-reserved-identifier) */
+#define __CDS_cpplang_ConstexprLambda constexpr /* NOLINT(bugprone-reserved-identifier) */
+
+#else
+
+#define __CDS_cpplang_IfConstexpr /* NOLINT(bugprone-reserved-identifier) */
+#define __CDS_cpplang_CTAD_available false /* NOLINT(bugprone-reserved-identifier) */
+#define __CDS_cpplang_ConstexprLambda /* NOLINT(bugprone-reserved-identifier) */
+
+#endif
+
+/**
+ *
+ *
+ *
+ * CPP-20 Specific
+ *
+ *
+ */
+#if __CDS_cpplang_core_version >= __CDS_cpplang_core_version_20
+
+#undef __CDS_Likely
+#undef __CDS_NoUniqueAddress
+#undef __CDS_NoDiscard
+#undef __CDS_Unlikely
+
+#define __CDS_Likely __CDS_Attribute(likely) /* NOLINT(bugprone-reserved-identifier) */
+#define __CDS_NoUniqueAddress __CDS_Attribute(no_unique_address) /* NOLINT(bugprone-reserved-identifier) */
+#define __CDS_NoDiscard __CDS_Attribute(nodiscard) /* NOLINT(bugprone-reserved-identifier) */
+#define __CDS_Unlikely __CDS_Attribute(unlikely) /* NOLINT(bugprone-reserved-identifier) */
+
+#define __CDS_cpplang_ConstexprDestructor constexpr /* NOLINT(bugprone-reserved-identifier) */
+#define __CDS_cpplang_Concepts_available true /* NOLINT(bugprone-reserved-identifier) */
+#define __CDS_cpplang_VirtualConstexpr constexpr /* NOLINT(bugprone-reserved-identifier) */
+
+#else
+
+#define __CDS_cpplang_ConstexprDestructor inline /* NOLINT(bugprone-reserved-identifier) */
+#define __CDS_cpplang_VirtualConstexpr inline /* NOLINT(bugprone-reserved-identifier) */
+#define __CDS_cpplang_Concepts_available false /* NOLINT(bugprone-reserved-identifier) */
+
+#endif
+
+
+
+
+#if !defined(__CDS_Requires)
+#if defined(__cpp_concepts)
+
+#define __CDS_Requires(_concepts) requires _concepts /* NOLINT(bugprone-reserved-identifier) */
+
+#else
+
+#define __CDS_Requires(_concepts) /* NOLINT(bugprone-reserved-identifier) */
+
+#endif
+#endif
+
 
 #endif //CDS_PREPRO_H
