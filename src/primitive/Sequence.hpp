@@ -161,14 +161,14 @@ public:
 #else
 
         template < typename U = C >
-        __CDS_NoDiscard auto toString () const noexcept -> typename std :: enable_if < isPrintable < decltype ( ConstIterator :: it ) > :: value > :: type {
+        __CDS_NoDiscard auto toString () const noexcept -> typename std :: enable_if < isPrintable < decltype ( Sequence < U > :: ConstIterator :: it ) > :: value > :: type {
             std::stringstream oss;
             oss << "Sequence::Iterator { pSequence = " << this->pSeq.toString() << ", it = " << this->it << " }";
             return oss.str();
         }
 
         template < typename U = C >
-        __CDS_NoDiscard auto toString () const noexcept -> typename std :: enable_if < ! isPrintable < decltype ( ConstIterator :: it ) > :: value > :: type {
+        __CDS_NoDiscard auto toString () const noexcept -> typename std :: enable_if < ! isPrintable < decltype ( Sequence < U > :: ConstIterator :: it ) > :: value > :: type {
             std::stringstream oss;
             oss << "Sequence::Iterator { pSequence = " << this->pSeq.toString() << ", value = " << * this->it << " }";
             return oss.str();
