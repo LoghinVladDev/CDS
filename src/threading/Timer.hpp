@@ -16,13 +16,13 @@
 #include <atomic>
 #include <chrono>
 
-class Timer: public Object {
+class __CDS_MaybeUnused Timer: public Object {
 public:
     constexpr static sint32 TIMER_INFINITE_PERIODICITY = -1;
 
 private:
     UniquePointer < Thread > _pThread;
-    sint32               _millisCallback {TIMER_INFINITE_PERIODICITY };
+    sint32                   _millisCallback {TIMER_INFINITE_PERIODICITY };
 
     std::atomic < bool >     _timerPaused {true};
     std::atomic < bool >     _timerShouldStop {false};
@@ -45,15 +45,15 @@ public:
                 .append(", paused=").append(this->_timerPaused).append("}");
     }
 
-    auto setInterval (sint32 periodicityMillis ) noexcept -> void {
+    __CDS_MaybeUnused auto setInterval (sint32 periodicityMillis ) noexcept -> void {
         this->_millisCallback = periodicityMillis;
     }
 
-    auto pause () noexcept -> void {
+    __CDS_MaybeUnused auto pause () noexcept -> void {
         this->_timerPaused = true;
     }
 
-    auto unpause () noexcept -> void {
+    __CDS_MaybeUnused auto unpause () noexcept -> void {
         this->_timerPaused = false;
     }
 

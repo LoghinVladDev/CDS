@@ -41,4 +41,131 @@
 
 #endif
 
+#define __CDS_cpplang_core_version_pre_98 1 /* NOLINT(bugprone-reserved-identifier) */
+#define __CDS_cpplang_core_version_98 199711L /* NOLINT(bugprone-reserved-identifier) */
+#define __CDS_cpplang_core_version_11 201103L /* NOLINT(bugprone-reserved-identifier) */
+#define __CDS_cpplang_core_version_14 201402L /* NOLINT(bugprone-reserved-identifier) */
+#define __CDS_cpplang_core_version_17 201703L /* NOLINT(bugprone-reserved-identifier) */
+#define __CDS_cpplang_core_version_20 202002L /* NOLINT(bugprone-reserved-identifier) */
+
+#define __CDS_cpplang_core_version __cplusplus /* NOLINT(bugprone-reserved-identifier) */
+
+#define __CDS_Attribute(_attr) [[_attr]] /* NOLINT(bugprone-reserved-identifier) */
+
+#define __CDS_CarriesDependency /* NOLINT(bugprone-reserved-identifier) */
+#define __CDS_Deprecated /* NOLINT(bugprone-reserved-identifier) */
+#define __CDS_Fallthrough /* NOLINT(bugprone-reserved-identifier) */
+#define __CDS_Likely /* NOLINT(bugprone-reserved-identifier) */
+#define __CDS_MaybeUnused /* NOLINT(bugprone-reserved-identifier) */
+#define __CDS_NoUniqueAddress /* NOLINT(bugprone-reserved-identifier) */
+#define __CDS_NoDiscard /* NOLINT(bugprone-reserved-identifier) */
+#define __CDS_NoReturn /* NOLINT(bugprone-reserved-identifier) */
+#define __CDS_Unlikely /* NOLINT(bugprone-reserved-identifier) */
+
+#if __CDS_cpplang_core_version >= __CDS_cpplang_core_version_11
+
+#undef __CDS_CarriesDependency
+#undef __CDS_NoReturn
+
+#define __CDS_CarriesDependency __CDS_Attribute(carries_dependency) /* NOLINT(bugprone-reserved-identifier) */
+#define __CDS_NoReturn __CDS_Attribute(noreturn) /* NOLINT(bugprone-reserved-identifier) */
+
+#endif
+
+#if __CDS_cpplang_core_version >= __CDS_cpplang_core_version_14
+
+#undef __CDS_Deprecated
+
+#define __CDS_Deprecated __CDS_Attribute(deprecated) /* NOLINT(bugprone-reserved-identifier) */
+
+#endif
+
+#if __CDS_cpplang_core_version >= __CDS_cpplang_core_version_17
+
+#undef __CDS_Fallthrough
+#undef __CDS_MaybeUnused
+#undef __CDS_NoDiscard
+
+#define __CDS_Fallthrough __CDS_Attribute(fallthrough) /* NOLINT(bugprone-reserved-identifier) */
+#define __CDS_MaybeUnused __CDS_Attribute(maybe_unused) /* NOLINT(bugprone-reserved-identifier) */
+#define __CDS_NoDiscard __CDS_Attribute(nodiscard) /* NOLINT(bugprone-reserved-identifier) */
+
+#endif
+
+#if __CDS_cpplang_core_version >= __CDS_cpplang_core_version_20
+
+#undef __CDS_Likely
+#undef __CDS_NoUniqueAddress
+#undef __CDS_NoDiscard
+#undef __CDS_Unlikely
+
+#define __CDS_Likely __CDS_Attribute(likely) /* NOLINT(bugprone-reserved-identifier) */
+#define __CDS_NoUniqueAddress __CDS_Attribute(no_unique_address) /* NOLINT(bugprone-reserved-identifier) */
+#define __CDS_NoDiscard __CDS_Attribute(nodiscard) /* NOLINT(bugprone-reserved-identifier) */
+#define __CDS_Unlikely __CDS_Attribute(unlikely) /* NOLINT(bugprone-reserved-identifier) */
+
+#endif
+
+#if !defined(__CDS_Requires)
+#if defined(__cpp_concepts)
+
+#define __CDS_Requires(_concepts) requires _concepts /* NOLINT(bugprone-reserved-identifier) */
+
+#else
+
+#define __CDS_Requires(_concepts) /* NOLINT(bugprone-reserved-identifier) */
+
+#endif
+#endif
+
+#if __CDS_cpplang_core_version >= __CDS_cpplang_core_version_17
+
+#define __CDS_cpplang_IfConstexpr constexpr /* NOLINT(bugprone-reserved-identifier) */
+
+#else
+
+#define __CDS_cpplang_IfConstexpr /* NOLINT(bugprone-reserved-identifier) */
+
+#endif
+
+#if __CDS_cpplang_core_version >= __CDS_cpplang_core_version_17
+
+#define __CDS_cpplang_CTAD_available true /* NOLINT(bugprone-reserved-identifier) */
+
+#else
+
+#define __CDS_cpplang_CTAD_available false /* NOLINT(bugprone-reserved-identifier) */
+
+#endif
+
+#if __CDS_cpplang_core_version >= __CDS_cpplang_core_version_20
+
+#define __CDS_cpplang_ConstexprDestructor constexpr /* NOLINT(bugprone-reserved-identifier) */
+
+#else
+
+#define __CDS_cpplang_ConstexprDestructor inline /* NOLINT(bugprone-reserved-identifier) */
+
+#endif
+
+#if __CDS_cpplang_core_version >= __CDS_cpplang_core_version_20
+
+#define __CDS_cpplang_Concepts_available true /* NOLINT(bugprone-reserved-identifier) */
+
+#else
+
+#define __CDS_cpplang_Concepts_available false /* NOLINT(bugprone-reserved-identifier) */
+
+#endif
+
+#if __CDS_cpplang_core_version >= __CDS_cpplang_core_version_17
+
+#define __CDS_cpplang_ConstexprLambda constexpr /* NOLINT(bugprone-reserved-identifier) */
+
+#else
+
+#define __CDS_cpplang_ConstexprLambda /* NOLINT(bugprone-reserved-identifier) */
+
+#endif
+
 #endif //CDS_PREPRO_H

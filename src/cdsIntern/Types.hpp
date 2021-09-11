@@ -22,8 +22,8 @@ namespace dataTypes {
     template<class T> static auto hash(T const &) noexcept -> Index { return 0; }
     template<> auto hash<String>(String const &o) noexcept -> Index;
     template<> auto hash<Object>(Object const &o) noexcept -> Index;
-    template<> auto hash<CString>(CString const &o) noexcept -> Index { return std::strlen(o); }
-    template<> auto hash<StringLiteral>(StringLiteral const &o) noexcept -> Index { return std::strlen(o); }
+    template<> auto hash<CString>(CString const &o) noexcept -> Index { return static_cast < Index > ( std::strlen(o) ); }
+    template<> auto hash<StringLiteral>(StringLiteral const &o) noexcept -> Index { return static_cast < Index > ( std::strlen(o) ); }
     template<> auto hash<uint8>(uint8 const &o) noexcept -> Index { return o; }
     template<> auto hash<uint16>(uint16 const &o) noexcept -> Index { return o; }
     template<> auto hash<uint32>(uint32 const &o) noexcept -> Index { return o; }
@@ -32,8 +32,8 @@ namespace dataTypes {
     template<> auto hash<sint16>(sint16 const &o) noexcept -> Index { return o; }
     template<> auto hash<sint32>(sint32 const &o) noexcept -> Index { return o; }
     template<> auto hash<sint64>(sint64 const &o) noexcept -> Index { return o; }
-    template <> auto hash<float> (float const & o) noexcept -> Index { return static_cast < uint32 > ( o * 1000.0f ); }
-    template <> auto hash<double> (double const & o) noexcept -> Index { return static_cast < uint64 > ( o * 100000.0 ); }
+    template <> auto hash<float> (float const & o) noexcept -> Index { return static_cast < Index > ( o * 1000.0f ); }
+    template <> auto hash<double> (double const & o) noexcept -> Index { return static_cast < Index > ( o * 100000.0 ); }
 
 #if defined(CDS_GLM)
 

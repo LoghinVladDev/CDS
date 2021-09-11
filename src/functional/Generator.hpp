@@ -23,7 +23,7 @@ private:
     template < int ... > struct seq { };
 
     template < int N, int ... S >
-    struct gens : gens < N - 1, N - 1, S ... > {};
+    struct __CDS_MaybeUnused gens : gens < N - 1, N - 1, S ... > {};
 
     template < int ... S >
     struct gens < 0, S ... > { typedef seq < S ... > type; };
@@ -82,7 +82,7 @@ protected:
 
 public:
     class GeneratorTaskEnded : public std::exception {
-        [[nodiscard]] auto what() const noexcept -> StringLiteral override {
+        __CDS_NoDiscard auto what() const noexcept -> StringLiteral override {
             return "Task has Ended, attempted to acquire out of range data";
         }
     };
@@ -96,7 +96,7 @@ public:
 
         }
 
-        operator T () const noexcept {
+        operator T () const noexcept { // NOLINT(google-explicit-constructor)
             return this->pGen->ret();
         }
 

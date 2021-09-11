@@ -42,7 +42,6 @@ set(
         src/primitive/Pair.hpp
         src/primitive/Range.hpp
         src/primitive/String.hpp
-        src/primitive/View.hpp
         src/primitive/Sequence.hpp
         src/primitive/Regex.hpp src/primitive/ParallelSequence.hpp)
 
@@ -127,7 +126,6 @@ set(
         src/primitive/Float.hpp
         src/primitive/Double.hpp
         src/primitive/Boolean.hpp
-        src/cdsIntern/PrimitiveGenerator.hpp
         src/collection/unordered/JSON.hpp
         src/collection/ordered/Array.hpp
         src/collection/ordered/StaticArray.hpp
@@ -143,27 +141,13 @@ set(
         include/CDS/AbstractStream
 )
 
-#set(
-#        CDS_LIB_SRC
-#        src/primitive/String.cpp
-#)
-
-set(
-        CDS_GLOBAL_HEADERS ${CDS_INCLUDE_DIRECTORIES} CACHE INTERNAL "DIRS"
-)
-
-
-#add_library( CDS ${CDS_LIB_SRC} )
-
 if (WIN32)
     set(
             CDS_LIBRARIES
-#            CDS
     )
 else()
     set(
             CDS_LIBRARIES
-#            CDS
             pthread
     )
 endif()
@@ -171,7 +155,6 @@ endif()
 add_executable(
         CDS-dummy
         main.cpp
-#        ${CDS_LIB_SRC}
         ${CDS_HEADERS}
 )
 target_link_libraries(
@@ -182,7 +165,6 @@ target_link_libraries(
 add_executable(
         CDS-dummy2
         tests2.cpp
-#        ${CDS_LIB_SRC}
         ${CDS_HEADERS}
 )
 
@@ -195,13 +177,11 @@ if(WIN32)
     add_executable(
             CDS-wintests
             wTests.cpp
-#            ${CDS_LIB_SRC}
             ${CDS_HEADERS}
     )
 
     target_link_libraries(
             CDS-wintests
-#            ${CDS_LIBRAIES}
     )
 endif()
 
@@ -210,64 +190,78 @@ else()
     target_link_libraries(CDS-dummy pthread)
 endif()
 
-set(
-        TEST_DEFAULT_SRC
-        src/cdsIntern/tests/Test.cpp
-        src/cdsIntern/tests/Test.h
-)
+cmake_minimum_required(VERSION 3.16)
+project(CDS)
 
-set(
-        TEST_ALL_SRC
-        include/CDS/Types include/CDS/crypto/CryptoBlock include/CDS/crypto/CryptoOperation src/crypto/interface/AsymmetricCryptoOperation.hpp src/crypto/interface/SymmetricCryptoOperation.hpp src/crypto/interface/Encryptor.hpp src/crypto/interface/Decryptor.hpp src/crypto/interface/SignatureGenerator.hpp src/crypto/interface/SignatureVerifier.hpp include/CDS/crypto/SignatureVerifier src/crypto/interface/Hasher.hpp src/crypto/primitives/DecryptorAES.hpp src/collection/ordered/Stack.hpp src/collection/ordered/PriorityQueue.hpp)
+set(CMAKE_CXX_STANDARD 20)
 
-macro(testSuite)
+macro(test_suite)
     set(
-            ${ARGV1}_SRC
-            src/cdsIntern/tests/${ARGV0}/${ARGV1}Test.cpp
-            src/cdsIntern/tests/${ARGV0}/${ARGV1}Test.h
+            CPP${ARGV0}_${ARGV2}_SRC
+            src/cdsIntern/tests/cpp${ARGV0}/${ARGV1}/${ARGV2}Test.cpp
+            src/cdsIntern/tests/cpp${ARGV0}/${ARGV1}/${ARGV2}Test.h
     )
 
     set(
-            TEST_ALL_SRC
-            ${TEST_ALL_SRC}
-            ${${ARGV1}_SRC}
+            CPP${ARGV0}_TEST_ALL_SRC
+            ${CPP${ARGV0}_TEST_ALL_SRC}
+            ${CPP${ARGV0}_${ARGV2}_SRC}
     )
 
-    add_executable(Test_${ARGV1}_Only
-            ${${ARGV1}_SRC}
-            ${TEST_DEFAULT_SRC}
-#            ${CDS_LIB_SRC}
-            src/cdsIntern/tests/${ARGV0}/${ARGV1}Only.cpp
+    add_executable(
+            cpp${ARGV0}_test_${ARGV2}_only
+            ${CPP${ARGV0}_TEST_DEFAULT_SRC}
+            ${CPP${ARGV0}_${ARGV2}_SRC}
+            src/cdsIntern/tests/cpp${ARGV0}/${ARGV1}/${ARGV2}Only.cpp
     )
 
     target_link_libraries(
-            Test_${ARGV1}_Only
+            cpp${ARGV0}_test_${ARGV2}_only
             ${CDS_LIBRARIES}
     )
 endmacro()
 
-testSuite(primitive Boolean)
-testSuite(primitive Double)
-testSuite(primitive Float)
-testSuite(primitive Integer)
-testSuite(primitive Long)
-testSuite(primitive Optional)
-testSuite(primitive Pair)
-testSuite(primitive Pointer)
-testSuite(primitive Reference)
-testSuite(primitive String)
-testSuite(primitive Sequence)
+macro(test_set)
+    set(CMAKE_CXX_STANDARD ${ARGV0})
 
-testSuite(collection/unordered Json)
+    set(
+            CPP${ARGV0}_TEST_DEFAULT_SRC
+            src/cdsIntern/tests/cpp${ARGV0}/Test.cpp
+            src/cdsIntern/tests/cpp${ARGV0}/Test.h
+    )
 
-add_executable(
-        Test_All
-        src/cdsIntern/tests/all.cpp
-        ${TEST_ALL_SRC}
-#        ${CDS_LIB_SRC}
-)
+    set(
+            CPP${ARGV0}_TEST_ALL_SRC
+            ${CPP${ARGV0}_TEST_DEFAULT_SRC}
+    )
 
-target_link_libraries(
-        Test_All
-        ${CDS_LIBRARIES}
-)
+    test_suite(${ARGV0} primitive Boolean)
+    test_suite(${ARGV0} primitive Double)
+    test_suite(${ARGV0} primitive Float)
+    test_suite(${ARGV0} primitive Integer)
+    test_suite(${ARGV0} primitive Long)
+    test_suite(${ARGV0} primitive Optional)
+    test_suite(${ARGV0} primitive Pair)
+    test_suite(${ARGV0} primitive Pointer)
+    test_suite(${ARGV0} primitive Reference)
+    test_suite(${ARGV0} primitive String)
+    test_suite(${ARGV0} primitive Sequence)
+
+    test_suite(${ARGV0} collection/unordered Json)
+
+    add_executable(
+            cpp${ARGV0}_test_all
+            src/cdsIntern/tests/cpp${ARGV0}/all.cpp
+            ${CPP${ARGV0}_TEST_ALL_SRC}
+    )
+
+    target_link_libraries(
+            cpp${ARGV0}_test_all
+            ${CDS_LIBRARIES}
+    )
+endmacro()
+
+test_set(20)
+test_set(17)
+test_set(14)
+test_set(11)

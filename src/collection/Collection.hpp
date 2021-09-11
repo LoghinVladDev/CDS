@@ -22,7 +22,6 @@
 #if defined(__cpp_concepts) && !defined(_MSC_VER)
 template <typename T>
 concept Comparable = requires ( const T & a, const T & b ) {
-//    std::is_convertible < decltype(a > b), bool >::value &&
     std::is_convertible < decltype(a < b), bool >::value;
 };
 #endif
@@ -53,7 +52,7 @@ public:
 protected:
     class CollectionOutOfBounds : public std::exception {
     public:
-        [[nodiscard]] auto what() const noexcept -> StringLiteral override {
+        __CDS_NoDiscard auto what() const noexcept -> StringLiteral override {
             return "Accessed Collection Iterator/Index Out of Range";
         }
     };
@@ -87,7 +86,7 @@ public:
         constexpr inline auto operator != ( const Iterator & o ) const noexcept -> bool { return ! this->equals(o ); }
         constexpr inline auto operator * () const noexcept -> T& { return this->value(); }
 
-        [[nodiscard]] auto copy () const noexcept -> Iterator * override = 0;
+        __CDS_NoDiscard auto copy () const noexcept -> Iterator * override = 0;
     };
 
     class ConstIterator : public Object {
@@ -115,13 +114,13 @@ public:
         constexpr inline auto operator != ( const ConstIterator & o ) const noexcept -> bool { return ! this->equals(o ); }
         constexpr inline auto operator * () const noexcept -> const T& { return this->value(); }
 
-        [[nodiscard]] auto copy () const noexcept -> ConstIterator * override = 0;
+        __CDS_NoDiscard auto copy () const noexcept -> ConstIterator * override = 0;
     };
 protected:
     virtual auto beginPtr () noexcept -> Iterator * = 0;
     virtual auto endPtr () noexcept -> Iterator * = 0;
-    virtual auto beginPtr () const noexcept -> ConstIterator * = 0;
-    virtual auto endPtr () const noexcept -> ConstIterator * = 0;
+    __CDS_MaybeUnused virtual auto beginPtr () const noexcept -> ConstIterator * = 0;
+    __CDS_MaybeUnused virtual auto endPtr () const noexcept -> ConstIterator * = 0;
 
     static inline auto beginPtr ( Collection < T > & o ) noexcept -> Iterator * { return o.beginPtr(); }
     static inline auto endPtr ( Collection < T > & o ) noexcept -> Iterator * { return o.endPtr(); }
@@ -132,55 +131,55 @@ protected:
 //    virtual auto findPtr ( const T & ) const noexcept -> ConstIterator & = 0;
 
 public:
-    virtual auto remove ( const T &, Size ) noexcept -> bool = 0;
-    virtual auto inline removeAll ( const T & o ) noexcept -> bool { return this->remove( o, this->size() ); }
-    virtual auto inline removeFirst ( const T & o ) noexcept -> bool { return this->remove( o, 1 ); }
-    virtual auto removeLast ( const T & o ) noexcept -> bool = 0;
+    __CDS_MaybeUnused virtual auto remove ( const T &, Size ) noexcept -> bool = 0;
+    __CDS_MaybeUnused virtual auto inline removeAll ( const T & o ) noexcept -> bool { return this->remove( o, this->size() ); }
+    __CDS_MaybeUnused virtual auto inline removeFirst ( const T & o ) noexcept -> bool { return this->remove( o, 1 ); }
+    __CDS_MaybeUnused virtual auto removeLast ( const T & o ) noexcept -> bool = 0;
 
-    virtual auto removeOf ( const Collection &, Size ) noexcept -> bool = 0;
-    virtual auto inline removeFirstOf ( const Collection & o ) noexcept -> bool { return this->removeOf( o, 1 ); }
-    virtual auto inline removeAllOf ( const Collection & o ) noexcept -> bool { return this->removeOf ( o, this->size() ); }
-    virtual auto removeLastOf ( const Collection & ) noexcept -> bool = 0;
+    __CDS_MaybeUnused virtual auto removeOf ( const Collection &, Size ) noexcept -> bool = 0;
+    __CDS_MaybeUnused virtual auto inline removeFirstOf ( const Collection & o ) noexcept -> bool { return this->removeOf( o, 1 ); }
+    __CDS_MaybeUnused virtual auto inline removeAllOf ( const Collection & o ) noexcept -> bool { return this->removeOf ( o, this->size() ); }
+    __CDS_MaybeUnused virtual auto removeLastOf ( const Collection & ) noexcept -> bool = 0;
 
-    virtual auto removeNotOf ( const Collection &, Size ) noexcept -> bool = 0;
-    virtual auto inline removeFirstNotOf ( const Collection & o ) noexcept -> bool { return this->removeNotOf ( o, 1 ); }
-    virtual auto inline removeAllNotOf ( const Collection & o ) noexcept -> bool  { return this->removeNotOf( o, this->size() ); }
-    virtual auto removeLastNotOf ( const Collection & ) noexcept -> bool = 0;
+    __CDS_MaybeUnused virtual auto removeNotOf ( const Collection &, Size ) noexcept -> bool = 0;
+    __CDS_MaybeUnused virtual auto inline removeFirstNotOf ( const Collection & o ) noexcept -> bool { return this->removeNotOf ( o, 1 ); }
+    __CDS_MaybeUnused virtual auto inline removeAllNotOf ( const Collection & o ) noexcept -> bool  { return this->removeNotOf( o, this->size() ); }
+    __CDS_MaybeUnused virtual auto removeLastNotOf ( const Collection & ) noexcept -> bool = 0;
 
-    virtual auto removeOf ( const std::initializer_list<T> &, Size ) noexcept -> bool = 0;
-    virtual auto inline removeFirstOf ( const std::initializer_list<T> & o ) noexcept -> bool { return this->removeOf( o, 1 ); }
-    virtual auto inline removeAllOf ( const std::initializer_list<T> & o ) noexcept -> bool { return this->removeOf ( o, this->size() ); }
-    virtual auto removeLastOf ( const std::initializer_list<T> & ) noexcept -> bool = 0;
+    __CDS_MaybeUnused virtual auto removeOf ( const std::initializer_list<T> &, Size ) noexcept -> bool = 0;
+    __CDS_MaybeUnused virtual auto inline removeFirstOf ( const std::initializer_list<T> & o ) noexcept -> bool { return this->removeOf( o, 1 ); }
+    __CDS_MaybeUnused virtual auto inline removeAllOf ( const std::initializer_list<T> & o ) noexcept -> bool { return this->removeOf ( o, this->size() ); }
+    __CDS_MaybeUnused virtual auto removeLastOf ( const std::initializer_list<T> & ) noexcept -> bool = 0;
 
-    virtual auto removeNotOf ( const std::initializer_list<T> &, Size ) noexcept -> bool = 0;
-    virtual auto inline removeFirstNotOf ( const std::initializer_list<T> & o ) noexcept -> bool { return this->removeNotOf ( o, 1 ); }
-    virtual auto inline removeAllNotOf ( const std::initializer_list<T> & o ) noexcept -> bool  { return this->removeNotOf( o, this->size() ); }
-    virtual auto removeLastNotOf ( const std::initializer_list<T> & ) noexcept -> bool = 0;
+    __CDS_MaybeUnused virtual auto removeNotOf ( const std::initializer_list<T> &, Size ) noexcept -> bool = 0;
+    __CDS_MaybeUnused virtual auto inline removeFirstNotOf ( const std::initializer_list<T> & o ) noexcept -> bool { return this->removeNotOf ( o, 1 ); }
+    __CDS_MaybeUnused virtual auto inline removeAllNotOf ( const std::initializer_list<T> & o ) noexcept -> bool  { return this->removeNotOf( o, this->size() ); }
+    __CDS_MaybeUnused virtual auto removeLastNotOf ( const std::initializer_list<T> & ) noexcept -> bool = 0;
 
-    virtual auto replace ( const T &, const T &, Size ) noexcept -> void = 0;
-    virtual auto inline replaceFirst ( const T & what, const T & with ) noexcept -> void { return this->replace(what, with, 1); }
-    virtual auto inline replaceAll ( const T & what, const T & with ) noexcept -> void { return this->replace(what, with, this->size()); }
-    virtual auto replaceLast ( const T &, const T & ) noexcept -> void = 0;
+    __CDS_MaybeUnused virtual auto replace ( const T &, const T &, Size ) noexcept -> void = 0;
+    __CDS_MaybeUnused virtual auto inline replaceFirst ( const T & what, const T & with ) noexcept -> void { return this->replace(what, with, 1); }
+    __CDS_MaybeUnused virtual auto inline replaceAll ( const T & what, const T & with ) noexcept -> void { return this->replace(what, with, this->size()); }
+    __CDS_MaybeUnused virtual auto replaceLast ( const T &, const T & ) noexcept -> void = 0;
 
-    virtual auto replaceOf ( const Collection &, const T &, Size ) noexcept -> void = 0;
-    virtual auto inline replaceFirstOf ( const Collection & what, const T & with ) noexcept -> void { return this->replaceOf(what, with, 1); }
-    virtual auto inline replaceAllOf ( const Collection & what, const T & with ) noexcept -> void { return this->replaceOf(what, with, this->size()); }
-    virtual auto replaceLastOf ( const Collection &, const T & ) noexcept -> void = 0;
+    __CDS_MaybeUnused virtual auto replaceOf ( const Collection &, const T &, Size ) noexcept -> void = 0;
+    __CDS_MaybeUnused virtual auto inline replaceFirstOf ( const Collection & what, const T & with ) noexcept -> void { return this->replaceOf(what, with, 1); }
+    __CDS_MaybeUnused virtual auto inline replaceAllOf ( const Collection & what, const T & with ) noexcept -> void { return this->replaceOf(what, with, this->size()); }
+    __CDS_MaybeUnused virtual auto replaceLastOf ( const Collection &, const T & ) noexcept -> void = 0;
 
-    virtual auto replaceNotOf ( const Collection &, const T &, Size ) noexcept -> void = 0;
-    virtual auto inline replaceFirstNotOf ( const Collection & what, const T & with ) noexcept -> void { return this->replaceNotOf(what, with, 1); }
-    virtual auto inline replaceAllNotOf ( const Collection & what, const T & with ) noexcept -> void { return this->replaceNotOf(what, with, this->size()); }
-    virtual auto replaceLastNotOf ( const Collection &, const T & ) noexcept -> void = 0;
+    __CDS_MaybeUnused virtual auto replaceNotOf ( const Collection &, const T &, Size ) noexcept -> void = 0;
+    __CDS_MaybeUnused virtual auto inline replaceFirstNotOf ( const Collection & what, const T & with ) noexcept -> void { return this->replaceNotOf(what, with, 1); }
+    __CDS_MaybeUnused virtual auto inline replaceAllNotOf ( const Collection & what, const T & with ) noexcept -> void { return this->replaceNotOf(what, with, this->size()); }
+    __CDS_MaybeUnused virtual auto replaceLastNotOf ( const Collection &, const T & ) noexcept -> void = 0;
 
-    virtual auto replaceOf ( const std::initializer_list<T> &, const T &, Size ) noexcept -> void = 0;
-    virtual auto inline replaceFirstOf ( const std::initializer_list<T> & what, const T & with ) noexcept -> void { return this->replaceOf(what, with, 1); }
-    virtual auto inline replaceAllOf ( const std::initializer_list<T> & what, const T & with ) noexcept -> void { return this->replaceOf(what, with, this->size()); }
-    virtual auto replaceLastOf ( const std::initializer_list<T> &, const T & ) noexcept -> void = 0;
+    __CDS_MaybeUnused virtual auto replaceOf ( const std::initializer_list<T> &, const T &, Size ) noexcept -> void = 0;
+    __CDS_MaybeUnused virtual auto inline replaceFirstOf ( const std::initializer_list<T> & what, const T & with ) noexcept -> void { return this->replaceOf(what, with, 1); }
+    __CDS_MaybeUnused virtual auto inline replaceAllOf ( const std::initializer_list<T> & what, const T & with ) noexcept -> void { return this->replaceOf(what, with, this->size()); }
+    __CDS_MaybeUnused virtual auto replaceLastOf ( const std::initializer_list<T> &, const T & ) noexcept -> void = 0;
 
-    virtual auto replaceNotOf ( const std::initializer_list<T> &, const T &, Size ) noexcept -> void = 0;
-    virtual auto inline replaceFirstNotOf ( const std::initializer_list<T> & what, const T & with ) noexcept -> void { return this->replaceNotOf(what, with, 1); }
-    virtual auto inline replaceAllNotOf ( const std::initializer_list<T> & what, const T & with ) noexcept -> void { return this->replaceNotOf(what, with, this->size()); }
-    virtual auto replaceLastNotOf ( const std::initializer_list<T> &, const T & ) noexcept -> void = 0;
+    __CDS_MaybeUnused virtual auto replaceNotOf ( const std::initializer_list<T> &, const T &, Size ) noexcept -> void = 0;
+    __CDS_MaybeUnused virtual auto inline replaceFirstNotOf ( const std::initializer_list<T> & what, const T & with ) noexcept -> void { return this->replaceNotOf(what, with, 1); }
+    __CDS_MaybeUnused virtual auto inline replaceAllNotOf ( const std::initializer_list<T> & what, const T & with ) noexcept -> void { return this->replaceNotOf(what, with, this->size()); }
+    __CDS_MaybeUnused virtual auto replaceLastNotOf ( const std::initializer_list<T> &, const T & ) noexcept -> void = 0;
 
     virtual auto back () noexcept (false) -> T & = 0;
     virtual auto back () const noexcept (false) -> const T & = 0;
@@ -189,12 +188,12 @@ public:
     constexpr virtual inline auto front () const noexcept (false) -> const T & = 0;
     constexpr virtual inline auto front () noexcept (false) -> T & = 0;
 
-    [[nodiscard]] constexpr virtual inline auto empty () const noexcept -> bool = 0;
+    __CDS_NoDiscard __CDS_MaybeUnused constexpr virtual inline auto empty () const noexcept -> bool = 0;
 #else
     virtual auto front () const noexcept (false) -> const T & = 0;
     virtual auto front () noexcept (false) -> T & = 0;
 
-    [[nodiscard]] virtual auto empty () const noexcept -> bool = 0;
+    __CDS_NoDiscard __CDS_MaybeUnused virtual auto empty () const noexcept -> bool = 0;
 #endif
 
     virtual auto add (ElementType const &) noexcept -> void = 0;
@@ -202,83 +201,83 @@ public:
 
     virtual auto clear () noexcept -> void = 0;
 
-    [[nodiscard]] virtual auto size () const noexcept -> Size = 0;
-    virtual auto makeUnique () noexcept -> void = 0;
+    __CDS_MaybeUnused __CDS_NoDiscard virtual auto size () const noexcept -> Size = 0;
+    __CDS_MaybeUnused virtual auto makeUnique () noexcept -> void = 0;
 
     virtual auto contains ( const T & ) const noexcept -> bool = 0;
 
 #define COMMA ,
 
     template < typename Action >
-    auto forEach ( Action const & ) noexcept ( noexcept ( dataTypes::unsafeAddress < Action >()->operator()( * dataTypes::unsafeAddress < T > () ) ) ) -> void REQUIRES ( IsActionOver < Action COMMA T > );
+    __CDS_MaybeUnused auto forEach ( Action const & ) noexcept ( noexcept ( dataTypes::unsafeAddress < Action >()->operator()( * dataTypes::unsafeAddress < T > () ) ) ) -> void REQUIRES ( IsActionOver < Action COMMA T > );
     template < typename Action >
-    auto forEach ( Action const & ) const noexcept ( noexcept ( dataTypes::unsafeAddress < Action >()->operator()( * dataTypes::unsafeAddress < T > () ) ) ) -> void REQUIRES ( IsActionOver < Action COMMA T > );
+    __CDS_MaybeUnused auto forEach ( Action const & ) const noexcept ( noexcept ( dataTypes::unsafeAddress < Action >()->operator()( * dataTypes::unsafeAddress < T > () ) ) ) -> void REQUIRES ( IsActionOver < Action COMMA T > );
 
     template < typename Predicate = std::function < bool ( ElementType const & ) > >
-    inline auto some ( Size count, Predicate const & predicate = []( ElementType const & ) noexcept -> bool { return true; } ) noexcept ( noexcept ( dataTypes::unsafeAddress < Predicate >()->operator()( * dataTypes::unsafeAddress < T > () ) ) ) -> bool REQUIRES( IsPredicateOver < Predicate COMMA T > ) {
+    __CDS_MaybeUnused inline auto some ( Size count, Predicate const & predicate = []( ElementType const & ) noexcept -> bool { return true; } ) noexcept ( noexcept ( dataTypes::unsafeAddress < Predicate >()->operator()( * dataTypes::unsafeAddress < T > () ) ) ) -> bool REQUIRES( IsPredicateOver < Predicate COMMA T > ) {
         return this->count(predicate) == count;
     }
 
     template < typename Predicate = std::function < bool ( ElementType const & ) > >
-    inline auto some ( Size count, Predicate const & predicate = []( ElementType const & ) noexcept -> bool { return true; } ) const noexcept ( noexcept ( dataTypes::unsafeAddress < Predicate >()->operator()( * dataTypes::unsafeAddress < T > () ) ) ) -> bool REQUIRES( IsPredicateOver < Predicate COMMA T > ) {
+    __CDS_MaybeUnused inline auto some ( Size count, Predicate const & predicate = []( ElementType const & ) noexcept -> bool { return true; } ) const noexcept ( noexcept ( dataTypes::unsafeAddress < Predicate >()->operator()( * dataTypes::unsafeAddress < T > () ) ) ) -> bool REQUIRES( IsPredicateOver < Predicate COMMA T > ) {
         return this->count(predicate) == count;
     }
 
     template < typename Predicate = std::function < bool ( ElementType const & ) > >
-    inline auto atLeast ( Size count, Predicate const & predicate = []( ElementType const & ) noexcept -> bool { return true; } ) noexcept ( noexcept ( dataTypes::unsafeAddress < Predicate >()->operator()( * dataTypes::unsafeAddress < T > () ) ) ) -> bool REQUIRES( IsPredicateOver < Predicate COMMA T > ) {
+    __CDS_MaybeUnused inline auto atLeast ( Size count, Predicate const & predicate = []( ElementType const & ) noexcept -> bool { return true; } ) noexcept ( noexcept ( dataTypes::unsafeAddress < Predicate >()->operator()( * dataTypes::unsafeAddress < T > () ) ) ) -> bool REQUIRES( IsPredicateOver < Predicate COMMA T > ) {
         return this->count(predicate) >= count;
     }
 
     template < typename Predicate = std::function < bool ( ElementType const & ) > >
-    inline auto atLeast ( Size count, Predicate const & predicate = []( ElementType const & ) noexcept -> bool { return true; } ) const noexcept ( noexcept ( dataTypes::unsafeAddress < Predicate >()->operator()( * dataTypes::unsafeAddress < T > () ) ) ) -> bool REQUIRES( IsPredicateOver < Predicate COMMA T > ) {
+    __CDS_MaybeUnused inline auto atLeast ( Size count, Predicate const & predicate = []( ElementType const & ) noexcept -> bool { return true; } ) const noexcept ( noexcept ( dataTypes::unsafeAddress < Predicate >()->operator()( * dataTypes::unsafeAddress < T > () ) ) ) -> bool REQUIRES( IsPredicateOver < Predicate COMMA T > ) {
         return this->count(predicate) >= count;
     }
 
     template < typename Predicate = std::function < bool ( ElementType const & ) > >
-    inline auto atMost ( Size count, Predicate const & predicate = []( ElementType const & ) noexcept -> bool { return true; } ) noexcept ( noexcept ( dataTypes::unsafeAddress < Predicate >()->operator()( * dataTypes::unsafeAddress < T > () ) ) ) -> bool REQUIRES( IsPredicateOver < Predicate COMMA T > ) {
+    __CDS_MaybeUnused inline auto atMost ( Size count, Predicate const & predicate = []( ElementType const & ) noexcept -> bool { return true; } ) noexcept ( noexcept ( dataTypes::unsafeAddress < Predicate >()->operator()( * dataTypes::unsafeAddress < T > () ) ) ) -> bool REQUIRES( IsPredicateOver < Predicate COMMA T > ) {
         return this->count(predicate) <= count;
     }
 
     template < typename Predicate = std::function < bool ( ElementType const & ) > >
-    inline auto atMost ( Size count, Predicate const & predicate = []( ElementType const & ) noexcept -> bool { return true; } ) const noexcept ( noexcept ( dataTypes::unsafeAddress < Predicate >()->operator()( * dataTypes::unsafeAddress < T > () ) ) ) -> bool REQUIRES( IsPredicateOver < Predicate COMMA T > ) {
+    __CDS_MaybeUnused inline auto atMost ( Size count, Predicate const & predicate = []( ElementType const & ) noexcept -> bool { return true; } ) const noexcept ( noexcept ( dataTypes::unsafeAddress < Predicate >()->operator()( * dataTypes::unsafeAddress < T > () ) ) ) -> bool REQUIRES( IsPredicateOver < Predicate COMMA T > ) {
         return this->count(predicate) <= count;
     }
 
     template < typename Predicate = std::function < bool ( ElementType const & ) > >
-    inline auto moreThan ( Size count, Predicate const & predicate = []( ElementType const & ) noexcept -> bool { return true; } ) noexcept ( noexcept ( dataTypes::unsafeAddress < Predicate >()->operator()( * dataTypes::unsafeAddress < T > () ) ) ) -> bool REQUIRES( IsPredicateOver < Predicate COMMA T > ) {
+    __CDS_MaybeUnused inline auto moreThan ( Size count, Predicate const & predicate = []( ElementType const & ) noexcept -> bool { return true; } ) noexcept ( noexcept ( dataTypes::unsafeAddress < Predicate >()->operator()( * dataTypes::unsafeAddress < T > () ) ) ) -> bool REQUIRES( IsPredicateOver < Predicate COMMA T > ) {
         return this->atLeast ( count, predicate );
     }
 
     template < typename Predicate = std::function < bool ( ElementType const & ) > >
-    inline auto moreThan ( Size count, Predicate const & predicate = []( ElementType const & ) noexcept -> bool { return true; } ) const noexcept ( noexcept ( dataTypes::unsafeAddress < Predicate >()->operator()( * dataTypes::unsafeAddress < T > () ) ) ) -> bool REQUIRES( IsPredicateOver < Predicate COMMA T > ) {
+    __CDS_MaybeUnused inline auto moreThan ( Size count, Predicate const & predicate = []( ElementType const & ) noexcept -> bool { return true; } ) const noexcept ( noexcept ( dataTypes::unsafeAddress < Predicate >()->operator()( * dataTypes::unsafeAddress < T > () ) ) ) -> bool REQUIRES( IsPredicateOver < Predicate COMMA T > ) {
         return this->atLeast ( count, predicate );
     }
 
     template < typename Predicate = std::function < bool ( ElementType const & ) > >
-    inline auto lessThan ( Size count, Predicate const & predicate = []( ElementType const & ) noexcept -> bool { return true; } ) noexcept ( noexcept ( dataTypes::unsafeAddress < Predicate >()->operator()( * dataTypes::unsafeAddress < T > () ) ) ) -> bool REQUIRES( IsPredicateOver < Predicate COMMA T > ) {
+    __CDS_MaybeUnused inline auto lessThan ( Size count, Predicate const & predicate = []( ElementType const & ) noexcept -> bool { return true; } ) noexcept ( noexcept ( dataTypes::unsafeAddress < Predicate >()->operator()( * dataTypes::unsafeAddress < T > () ) ) ) -> bool REQUIRES( IsPredicateOver < Predicate COMMA T > ) {
         return this->lessThan ( count, predicate );
     }
 
     template < typename Predicate = std::function < bool ( ElementType const & ) > >
-    inline auto lessThan ( Size count, Predicate const & predicate = []( ElementType const & ) noexcept -> bool { return true; } ) const noexcept ( noexcept ( dataTypes::unsafeAddress < Predicate >()->operator()( * dataTypes::unsafeAddress < T > () ) ) ) -> bool REQUIRES( IsPredicateOver < Predicate COMMA T > ) {
+    __CDS_MaybeUnused inline auto lessThan ( Size count, Predicate const & predicate = []( ElementType const & ) noexcept -> bool { return true; } ) const noexcept ( noexcept ( dataTypes::unsafeAddress < Predicate >()->operator()( * dataTypes::unsafeAddress < T > () ) ) ) -> bool REQUIRES( IsPredicateOver < Predicate COMMA T > ) {
         return this->lessThan ( count, predicate );
     }
 
     template < typename Predicate = std::function < bool ( ElementType const & ) > >
-    auto count ( Predicate const & = []( ElementType const & ) noexcept -> bool { return true; } ) noexcept ( noexcept ( dataTypes::unsafeAddress < Predicate >()->operator()( * dataTypes::unsafeAddress < T > () ) ) ) -> Size REQUIRES( IsPredicateOver < Predicate COMMA T > );
+    __CDS_MaybeUnused auto count ( Predicate const & = []( ElementType const & ) noexcept -> bool { return true; } ) noexcept ( noexcept ( dataTypes::unsafeAddress < Predicate >()->operator()( * dataTypes::unsafeAddress < T > () ) ) ) -> Size REQUIRES( IsPredicateOver < Predicate COMMA T > );
 
     template < typename Predicate = std::function < bool ( ElementType const & ) > >
-    auto count ( Predicate const & = []( ElementType const & ) noexcept -> bool { return true; } ) const noexcept ( noexcept ( dataTypes::unsafeAddress < Predicate >()->operator()( * dataTypes::unsafeAddress < T > () ) ) ) -> Size REQUIRES( IsPredicateOver < Predicate COMMA T > );
+    __CDS_MaybeUnused auto count ( Predicate const & = []( ElementType const & ) noexcept -> bool { return true; } ) const noexcept ( noexcept ( dataTypes::unsafeAddress < Predicate >()->operator()( * dataTypes::unsafeAddress < T > () ) ) ) -> Size REQUIRES( IsPredicateOver < Predicate COMMA T > );
 
     template < typename Predicate >
-    inline auto any ( Predicate const & p ) noexcept ( noexcept ( dataTypes::unsafeAddress < Predicate >()->operator()( * dataTypes::unsafeAddress < T > () ) ) ) -> bool REQUIRES( IsPredicateOver < Predicate COMMA T > ) { return this->atLeast ( 1, p ); }
+    __CDS_MaybeUnused inline auto any ( Predicate const & p ) noexcept ( noexcept ( dataTypes::unsafeAddress < Predicate >()->operator()( * dataTypes::unsafeAddress < T > () ) ) ) -> bool REQUIRES( IsPredicateOver < Predicate COMMA T > ) { return this->atLeast ( 1, p ); }
     template < typename Predicate >
-    inline auto any ( Predicate const & p ) const noexcept ( noexcept ( dataTypes::unsafeAddress < Predicate >()->operator()( * dataTypes::unsafeAddress < T > () ) ) ) -> bool REQUIRES( IsPredicateOver < Predicate COMMA T > ) { return this->atLeast ( 1, p ); }
+    __CDS_MaybeUnused inline auto any ( Predicate const & p ) const noexcept ( noexcept ( dataTypes::unsafeAddress < Predicate >()->operator()( * dataTypes::unsafeAddress < T > () ) ) ) -> bool REQUIRES( IsPredicateOver < Predicate COMMA T > ) { return this->atLeast ( 1, p ); }
 
     template < typename Predicate >
-    inline auto all ( Predicate const & p ) noexcept ( noexcept ( dataTypes::unsafeAddress < Predicate >()->operator()( * dataTypes::unsafeAddress < T > () ) ) ) -> bool REQUIRES( IsPredicateOver < Predicate COMMA T > ) { return ! this->any ( [&p] (T & e) noexcept -> bool { return ! p(e); } ); }
+    __CDS_MaybeUnused inline auto all ( Predicate const & p ) noexcept ( noexcept ( dataTypes::unsafeAddress < Predicate >()->operator()( * dataTypes::unsafeAddress < T > () ) ) ) -> bool REQUIRES( IsPredicateOver < Predicate COMMA T > ) { return ! this->any ( [&p] (T & e) noexcept -> bool { return ! p(e); } ); }
     template < typename Predicate >
-    inline auto all ( Predicate const & p ) const noexcept ( noexcept ( dataTypes::unsafeAddress < Predicate >()->operator()( * dataTypes::unsafeAddress < T > () ) ) ) -> bool REQUIRES( IsPredicateOver < Predicate COMMA T > ) { return ! this->any ( [&p] (T const & e) noexcept -> bool { return ! p(e); } ); }
+    __CDS_MaybeUnused inline auto all ( Predicate const & p ) const noexcept ( noexcept ( dataTypes::unsafeAddress < Predicate >()->operator()( * dataTypes::unsafeAddress < T > () ) ) ) -> bool REQUIRES( IsPredicateOver < Predicate COMMA T > ) { return ! this->any ( [&p] (T const & e) noexcept -> bool { return ! p(e); } ); }
 
 #undef COMMA
 
@@ -286,7 +285,7 @@ public:
         return this->size() != 0;
     }
 
-    [[nodiscard]] auto toString () const noexcept -> String override = 0;
+    __CDS_NoDiscard auto toString () const noexcept -> String override = 0;
 
     ~Collection() noexcept override = default;
 

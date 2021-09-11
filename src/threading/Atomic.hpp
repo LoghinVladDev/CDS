@@ -105,7 +105,7 @@ public:
         return this->get();
     }
 
-    [[nodiscard]] auto toString () const noexcept -> String override {
+    __CDS_NoDiscard auto toString () const noexcept -> String override {
         std::stringstream ss;
 
         ss
@@ -114,10 +114,10 @@ public:
             << ", accessLock" << this->_access.toString().cStr()
             << "}";
 
-        return String(ss.str());
+        return ss.str();
     }
 
-    auto equals ( Object const & o ) const noexcept -> bool override {
+    __CDS_NoDiscard auto equals ( Object const & o ) const noexcept -> bool override {
         if ( this == & o ) return true;
         auto p = dynamic_cast < decltype ( this ) > ( & o );
         if ( p == nullptr ) return false;

@@ -11,7 +11,7 @@ namespace dataTypes {
 #if defined(__cpp_concepts) && !defined(_MSC_VER)
         requires Comparable <T>
 #endif
-    class DefaultSetComparator : public Comparator<T> {
+    class __CDS_MaybeUnused DefaultSetComparator : public Comparator<T> {
     public:
         auto inline operator () (T const & a, T const & b) const noexcept -> bool { return a < b; }
     };
@@ -31,14 +31,14 @@ template <class T, class C = dataTypes::DefaultSetComparator<T>>
 #endif
 class OrderedSet final : public Set<T> {
 public:
-    using Reference         = typename Set<T>::Reference;
-    using ConstReference    = typename Set<T>::ConstReference;
-    using Pointer           = typename Set<T>::Pointer;
-    using ConstPointer      = typename Set<T>::ConstPointer;
+    using Reference                             = typename Set<T>::Reference;
+    using ConstReference                        = typename Set<T>::ConstReference;
+    using Pointer                               = typename Set<T>::Pointer;
+    using ConstPointer      __CDS_MaybeUnused   = typename Set<T>::ConstPointer;
 
-    using Node              = typename Set<T>::Node;
-    using NodePointer       = typename Set<T>::NodePointer;
-    using ConstNodePointer  = typename Set<T>::ConstNodePointer;
+    using Node              __CDS_MaybeUnused   = typename Set<T>::Node;
+    using NodePointer       __CDS_MaybeUnused   = typename Set<T>::NodePointer;
+    using ConstNodePointer  __CDS_MaybeUnused   = typename Set<T>::ConstNodePointer;
 
     OrderedSet() noexcept = default;
     OrderedSet(OrderedSet const & set) noexcept : Set<T>(set) {
@@ -52,15 +52,16 @@ public:
         typename Collection<T>::Iterator const & from,
         typename Collection<T>::Iterator const & to
     ) noexcept : Set<T>() {
-        for ( auto it = from; it != to; it ++ )
-            this->insert( it.value() );}
+        for (auto it = UniquePointer<decltype(&from)>(from.copy()); !it->equals(to); it->next())
+            this->insert(it->value());
+    }
 
     explicit OrderedSet (
         typename Collection<T>::ConstIterator const & from,
         typename Collection<T>::ConstIterator const & to
     ) noexcept : Set<T>() {
-        for ( auto it = from; it != to; it ++ )
-            this->insert( it.value() );
+        for ( auto it = UniquePointer < decltype ( & from ) > ( from.copy() ); ! it->equals (to); it->next() )
+            this->insert( it->value() );
     }
 
     OrderedSet ( std::initializer_list < T > const & initializerList ) noexcept : Set<T>() {
@@ -88,12 +89,10 @@ public:
         return * this;
     }
 
-    inline OrderedSet & operator = ( OrderedSet const & o ) noexcept { return this->operator=( (Collection<T> const &) ( o ) ); }
+    inline OrderedSet & operator = ( OrderedSet const & o ) noexcept { return this->operator=( (Collection<T> const &) ( o ) ); } // NOLINT(misc-unconventional-assign-operator)
 
     auto insert ( ConstReference ) noexcept -> bool final;
     auto insert ( T && ) noexcept -> bool final;
-
-//    auto view () const noexcept -> View < OrderedSet < T, C > >;
 
     auto sequence () const noexcept -> Sequence < const OrderedSet < T, C > >;
     auto sequence () noexcept -> Sequence < OrderedSet < T, C > >;
@@ -112,7 +111,7 @@ auto OrderedSet<T, C>::insert( ConstReference value) noexcept -> bool {
         return true;
     }
 
-    if ( Type < T > ::deepCompare( this->_pFront->data, value ) ) return false;
+    if ( Type < T > ::compare( this->_pFront->data, value ) ) return false;
 
     if ( comparator ( value, this->_pFront->data ) ) {
         this->_pFront = new Node { value, this->_pFront };
@@ -122,7 +121,7 @@ auto OrderedSet<T, C>::insert( ConstReference value) noexcept -> bool {
 
     auto head = this->_pFront;
     while ( head->pNext != nullptr ) {
-        if ( Type < T > :: deepCompare ( head->pNext->data, value ) ) return false;
+        if ( Type < T > :: compare ( head->pNext->data, value ) ) return false;
 
         if ( comparator ( value, head->pNext->data ) ){
             head->pNext = new Node { value, head->pNext };
@@ -152,7 +151,7 @@ auto OrderedSet<T, C>::insert( T && value) noexcept -> bool {
         return true;
     }
 
-    if ( Type < T > :: deepCompare ( this->_pFront->data, value ) ) return false;
+    if ( Type < T > :: compare ( this->_pFront->data, value ) ) return false;
 
     if ( comparator ( value, this->_pFront->data ) ) {
         this->_pFront = new Node { std::move(value), this->_pFront };
@@ -162,7 +161,7 @@ auto OrderedSet<T, C>::insert( T && value) noexcept -> bool {
 
     auto head = this->_pFront;
     while ( head->pNext != nullptr ) {
-        if ( Type < T > :: deepCompare ( head->pNext->data, value ) ) return false;
+        if ( Type < T > :: compare ( head->pNext->data, value ) ) return false;
 
         if ( comparator ( value, head->pNext->data ) ){
             head->pNext = new Node { std::move(value), head->pNext };
@@ -178,14 +177,6 @@ auto OrderedSet<T, C>::insert( T && value) noexcept -> bool {
     return true;
 }
 
-//#include <CDS/View>
-//template <class T, class C>
-//#if defined(__cpp_concepts) && !defined(_MSC_VER)
-//requires ValidSetComparator <T, C>
-//#endif
-//auto OrderedSet<T, C>::view() const noexcept -> View < OrderedSet < T, C > > {
-//    return View(* this);
-//}
 #ifndef _OMIT_SEQUENCE_IMPL
 #ifndef _CDS_ORDERED_SET_SEQUENCE_IMPL // NOLINT(bugprone-reserved-identifier)
 #define _CDS_ORDERED_SET_SEQUENCE_IMPL // NOLINT(bugprone-reserved-identifier)
@@ -196,7 +187,7 @@ template <class T, class C>
 requires ValidSetComparator <T, C>
 #endif
 auto OrderedSet<T, C>::sequence() const noexcept -> Sequence < const OrderedSet < T, C > > {
-    return Sequence(* this);
+    return Sequence < typename std :: remove_reference < decltype (*this) > :: type > (*this);
 }
 
 template <class T, class C>
@@ -204,7 +195,7 @@ template <class T, class C>
 requires ValidSetComparator <T, C>
 #endif
 auto OrderedSet<T, C>::sequence() noexcept -> Sequence < OrderedSet < T, C > > {
-    return Sequence(* this);
+    return Sequence < typename std :: remove_reference < decltype (*this) > :: type > (*this);
 }
 #endif
 #endif

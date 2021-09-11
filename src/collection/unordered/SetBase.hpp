@@ -40,7 +40,7 @@ public:
         constexpr inline auto operator ++ () noexcept -> Iterator & final { return this->next(); }
         constexpr inline auto operator ++ (int) noexcept -> Iterator { auto copy = *this; this->_pNode = this->_pNode->pNext; return copy; }
 
-        [[nodiscard]] inline auto copy () const noexcept -> Iterator * override { return new Iterator (* this); }
+        __CDS_NoDiscard inline auto copy () const noexcept -> Iterator * override { return new Iterator (* this); }
     };
 
     class ConstIterator final : public Collection<T>::ConstIterator {
@@ -61,7 +61,7 @@ public:
         constexpr inline auto operator ++ () noexcept -> ConstIterator & final { return this->next(); }
         constexpr inline auto operator ++ (int) noexcept -> ConstIterator { auto copy = *this; this->_pNode = this->_pNode->pNext; return copy; }
 
-        [[nodiscard]] inline auto copy () const noexcept -> ConstIterator * override { return new ConstIterator (* this); }
+        __CDS_NoDiscard inline auto copy () const noexcept -> ConstIterator * override { return new ConstIterator (* this); }
     };
 
 protected:
@@ -195,11 +195,11 @@ public:
         return this->_pFront->data;
     }
 
-    [[nodiscard]] constexpr inline auto empty () const noexcept -> bool final { return this->size() == 0; }
-    [[nodiscard]] constexpr inline auto size () const noexcept -> Size final { return this->_size; }
+    __CDS_NoDiscard constexpr inline auto empty () const noexcept -> bool final { return this->size() == 0; }
+    __CDS_NoDiscard constexpr inline auto size () const noexcept -> Size final { return this->_size; }
 
     inline auto contains ( ConstReference e ) const noexcept -> bool final {
-        return this->any([&e](ConstReference x) noexcept -> bool {return Type < T > :: deepCompare ( x, e );});
+        return this->any([&e](ConstReference x) noexcept -> bool {return Type < T > :: compare ( x, e );});
     }
 
     auto inline operator != (Set const & o) const noexcept -> bool { return ! this->operator==(o); }
@@ -208,12 +208,12 @@ public:
         if ( this == & o ) return true;
 
         for ( auto itThis = this->begin(), itObj = o.begin(); itThis != this->end() && itObj != o.end(); itThis ++, itObj ++ )
-            if ( ! ( Type < T > :: deepCompare ( itThis.value(), itObj.value() ) ) )
+            if ( ! ( Type < T > :: compare ( itThis.value(), itObj.value() ) ) )
                 return false;
         return true;
     }
 
-    [[nodiscard]] auto equals (Object const & o) const noexcept -> bool final {
+    __CDS_NoDiscard auto equals (Object const & o) const noexcept -> bool final {
         if ( & o == this ) return true;
         auto p = dynamic_cast < Set < T > const * > ( & o );
         if ( p == nullptr ) return false;
@@ -221,7 +221,7 @@ public:
         return this->operator == (*p);
     }
 
-    [[nodiscard]] auto toString () const noexcept -> String final;
+    __CDS_NoDiscard auto toString () const noexcept -> String final;
 };
 
 #include <sstream>
@@ -231,7 +231,7 @@ requires UniqueIdentifiable <T>
 #endif
 auto Set<T>::toString() const noexcept -> String {
     if ( this->empty() )
-        return String("{ }");
+        return {"{ }"};
 
     std::stringstream out;
     out << "{ ";
@@ -240,7 +240,7 @@ auto Set<T>::toString() const noexcept -> String {
         Type < T > ::streamPrint( out, e ) << ", ";
 
     auto s = out.str();
-    return String(s.substr(0, s.length() - 2).append(" }"));
+    return {s.substr(0, s.length() - 2).append(" }")};
 }
 
 template <class T>
@@ -251,7 +251,7 @@ auto Set<T>::remove( ConstReference e) noexcept -> bool {
     if ( this->empty() )
         return false;
 
-    if ( Type < T > :: deepCompare ( e, this->_pFront->data ) ) {
+    if ( Type < T > :: compare ( e, this->_pFront->data ) ) {
         auto p = this->_pFront;
         this->_pFront = this->_pFront->pNext;
         this->_size --;
@@ -263,7 +263,7 @@ auto Set<T>::remove( ConstReference e) noexcept -> bool {
 
     auto head = this->_pFront;
     while ( head->pNext != nullptr ) {
-        if ( Type < T > :: deepCompare ( e, head->pNext->data ) ) {
+        if ( Type < T > :: compare ( e, head->pNext->data ) ) {
             auto node = head->pNext;
             head->pNext = head->pNext->pNext;
             delete node;

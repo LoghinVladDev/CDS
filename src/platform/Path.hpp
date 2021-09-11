@@ -23,7 +23,7 @@
 class Path : public Object {
 private:
     friend class WalkEntry;
-    explicit Path(bool noCheck) noexcept {}
+    explicit Path(bool skipPathCheck __CDS_MaybeUnused) noexcept {}
 
     static LinkedList < char > possibleDirectorySeparators;
 
@@ -32,13 +32,13 @@ protected:
 
 public:
     class InvalidPath : public std::exception {
-        [[nodiscard]] auto what() const noexcept -> StringLiteral override {
+        __CDS_NoDiscard auto what() const noexcept -> StringLiteral override {
             return "Invalid Path Given";
         }
     };
 
     class WalkNotADirectory : public std::exception {
-        [[nodiscard]] auto what () const noexcept -> StringLiteral override {
+        __CDS_NoDiscard auto what () const noexcept -> StringLiteral override {
             return "Walk Error : Path given does not refer to a directory";
         }
     };
@@ -47,7 +47,7 @@ public:
         return this->_osPath == o._osPath;
     }
 
-    auto equals(Object const & o) const noexcept -> bool override {
+    __CDS_NoDiscard auto equals(Object const & o) const noexcept -> bool override {
         if ( this == & o ) return true;
         auto p = dynamic_cast < decltype ( this ) > ( & o );
         if ( p == nullptr ) return false;
@@ -56,7 +56,7 @@ public:
 
 #if defined(WIN32)
     class WalkIncompleteWin32 : public std::exception {
-        [[nodiscard]] auto what () const noexcept -> StringLiteral override {
+        __CDS_NoDiscard auto what () const noexcept -> StringLiteral override {
             return "Walk Error : Incomplete";
         }
     };
@@ -75,10 +75,8 @@ public:
     }
 
     Path() noexcept : Path(CWD) { }
-    Path(String const & path) noexcept (false) {
+    Path(String const & path) noexcept (false) { // NOLINT(google-explicit-constructor)
 #if defined(WIN32)
-        //        if ( GetFileAttributesA ( path.cStr() ) != INVALID_FILE_ATTRIBUTES )
-//            throw InvalidPath();
 
         constexpr static uint16 initialPathSize = 256;
         char * resolvedPath = (char *) malloc (initialPathSize);
@@ -103,6 +101,7 @@ public:
         free ( resolvedPath );
 
 #elif defined(__linux)
+
         struct stat64 fileStat {};
         if ( stat64 ( path.cStr(), & fileStat ) != 0 )
             throw InvalidPath();
@@ -110,12 +109,15 @@ public:
         char resolvedPath[PATH_MAX];
         realpath(path.cStr(), resolvedPath);
         this->_osPath = resolvedPath;
+
 #else
+
 #warning Warning : Path::Path(String) Unsupported
+
 #endif
     }
 
-    Path(StringLiteral path) noexcept(false) : Path(String(path)) {}
+    Path(StringLiteral path) noexcept(false) : Path(String(path)) {} // NOLINT(google-explicit-constructor)
 
     Path & operator = (Path const &) noexcept = default;
     Path & operator = (String const & s) noexcept(false) {
@@ -126,24 +128,23 @@ public:
         return ( ( * this ) = Path( s ) );
     }
 
-    [[nodiscard]] auto toString () const noexcept -> String override { return this->_osPath; }
-    [[nodiscard]] auto copy () const noexcept -> Path * override { return new Path(* this); }
-    [[nodiscard]] auto hash () const noexcept -> Index override { return this->parent().nodeName().hash(); }
+    __CDS_NoDiscard auto toString () const noexcept -> String override { return this->_osPath; }
+    __CDS_NoDiscard auto copy () const noexcept -> Path * override { return new Path(* this); }
+    __CDS_NoDiscard auto hash () const noexcept -> Index override { return this->parent().nodeName().hash(); }
 
-    [[nodiscard]] inline auto parent () const noexcept(false) -> Path {
+    __CDS_NoDiscard inline auto parent () const noexcept(false) -> Path { // NOLINT(misc-no-recursion)
         auto parentPath = String (this->_osPath.substr(0, this->_osPath.findLast(Path::directorySeparator())));
         if ( parentPath.empty() ) parentPath = this->root().toString();
 
         return parentPath;
-//        return (*this) / "..";
     }
 
-    [[nodiscard]] inline auto previous () const noexcept -> Path { return this->parent(); }
+    __CDS_NoDiscard __CDS_MaybeUnused inline auto previous () const noexcept -> Path { return this->parent(); }
 
-    [[nodiscard]] inline auto nodeName () const noexcept -> String { return this->_osPath.substr(this->_osPath.findLast(this->directorySeparator()) + 1); }
-    [[nodiscard]] inline auto currentName () const noexcept -> String { return this->nodeName(); }
+    __CDS_NoDiscard inline auto nodeName () const noexcept -> String { return this->_osPath.substr(this->_osPath.findLast(Path::directorySeparator()) + 1); }
+    __CDS_NoDiscard __CDS_MaybeUnused inline auto currentName () const noexcept -> String { return this->nodeName(); }
 
-    [[nodiscard]] auto root () const noexcept -> Path {
+    __CDS_NoDiscard auto root () const noexcept -> Path { // NOLINT(misc-no-recursion)
         auto parent = this->parent();
         if ( this->_osPath == parent._osPath )
             return parent;
@@ -152,29 +153,28 @@ public:
 
     auto operator / (String const & f) const noexcept (false) -> Path {
         auto delimFiltered = [& f]() -> String { String c(f); c.forEach([](auto & e){if (Path::possibleDirectorySeparators.contains(e)) e = Path::directorySeparator(); }); return c; };
-        return Path(this->_osPath + Path::directorySeparator() + delimFiltered());
+        return {this->_osPath + Path::directorySeparator() + delimFiltered()};
     }
 
     inline auto operator + (String const & f) const noexcept (false) -> Path { return (*this) / f; }
-    [[nodiscard]] inline auto append (String const & f) const noexcept (false) -> Path { return (*this) / f; }
+    __CDS_NoDiscard inline auto append (String const & f) const noexcept (false) -> Path { return (*this) / f; }
 
     class WalkEntry;
 
-    // walk
-    [[nodiscard]] auto walk (int = INT32_MAX) const noexcept (false) -> LinkedList < WalkEntry >;
+    __CDS_NoDiscard auto walk (int = INT32_MAX) const noexcept (false) -> LinkedList < WalkEntry >;
 
-    [[nodiscard]] static auto walk (Path const & path, int = INT32_MAX) noexcept (false) -> LinkedList < WalkEntry >;
-    [[nodiscard]] static auto walk (String const & path, int = INT32_MAX) noexcept (false) -> LinkedList < WalkEntry >;
+    __CDS_NoDiscard static auto walk (Path const & path, int = INT32_MAX) noexcept (false) -> LinkedList < WalkEntry >;
+    __CDS_NoDiscard static auto walk (String const & path, int = INT32_MAX) noexcept (false) -> LinkedList < WalkEntry >;
 
 #if defined(WIN32)
     class Win32RootPath;
 
-    [[nodiscard]] static auto platformDependantRoots () noexcept -> LinkedList < Win32RootPath >;
+    __CDS_NoDiscard static auto platformDependantRoots () noexcept -> LinkedList < Win32RootPath >;
 #elif defined(__linux)
 #else
-#warning Warning : Path::rootsPlatform () Undefined
+#warning Warning : Path::platformDependantRoots () Undefined
 #endif
-    [[nodiscard]] static auto roots () noexcept -> LinkedList < Path >;
+    __CDS_NoDiscard static auto roots () noexcept -> LinkedList < Path >;
 };
 
 class Path::WalkEntry : public Object {
@@ -188,7 +188,7 @@ public:
         return this->_root == o._root && this->_files == o._files && this->_directories == o._directories;
     }
 
-    auto equals(Object const & o) const noexcept -> bool override {
+    __CDS_NoDiscard auto equals(Object const & o) const noexcept -> bool override {
         if ( this == & o ) return true;
         auto p = dynamic_cast < decltype (this) > ( & o );
         if ( p == nullptr ) return false;
@@ -198,12 +198,8 @@ public:
 
     WalkEntry () noexcept = default;
     WalkEntry ( WalkEntry const & ) noexcept = default;
-//    WalkEntry ( WalkEntry && o ) noexcept :
-//            _root(std::move(o._root)),
-//            _directories(std::move(o._directories)),
-//            _files(std::move(o._files)){ }
 
-    [[nodiscard]] auto toString() const noexcept -> String override {
+    __CDS_NoDiscard auto toString() const noexcept -> String override {
         return String("WalkEntry {") +
                " root = " + this->_root.toString() +
                ", directories = " + this->_directories.toString() +
@@ -211,16 +207,16 @@ public:
                "}";
     }
 
-    [[nodiscard]] constexpr auto root () const noexcept -> Path const & { return this->_root; }
+    __CDS_NoDiscard __CDS_MaybeUnused constexpr auto root () const noexcept -> Path const & { return this->_root; }
     constexpr auto root () noexcept -> Path & { return this->_root; }
 
-    [[nodiscard]] constexpr auto directories () const noexcept -> LinkedList < String > const & { return this->_directories; }
+    __CDS_NoDiscard constexpr auto directories () const noexcept -> LinkedList < String > const & { return this->_directories; }
     constexpr auto directories () noexcept -> LinkedList < String > & { return this->_directories; }
 
-    [[nodiscard]] constexpr auto files () const noexcept -> LinkedList < String > const & { return this->_files; }
+    __CDS_NoDiscard constexpr auto files () const noexcept -> LinkedList < String > const & { return this->_files; }
     constexpr auto files () noexcept -> LinkedList < String > & { return this->_files; }
 
-    [[nodiscard]] auto copy() const noexcept -> WalkEntry * override {
+    __CDS_NoDiscard auto copy() const noexcept -> WalkEntry * override {
         return new WalkEntry (* this);
     }
 
@@ -236,7 +232,7 @@ public:
     String  deviceName;
     String  volumeName;
 
-    [[nodiscard]] auto toString() const noexcept -> String override {
+    __CDS_NoDiscard auto toString() const noexcept -> String override {
         return String("Win32RootPath {") +
             " path = " + this->path.toString() +
             ", deviceName = " + this->deviceName +
@@ -250,7 +246,7 @@ public:
         return this->path == o.path && this->deviceName == o.deviceName && this->volumeName == o.volumeName;
     }
 
-    [[nodiscard]] auto equals (Object const & o) const noexcept -> bool override {
+    __CDS_NoDiscard auto equals (Object const & o) const noexcept -> bool override {
         if ( this == & o ) return true;
         auto p = dynamic_cast < decltype ( this ) > ( & o );
         if ( p == nullptr ) return false;
@@ -259,7 +255,7 @@ public:
 };
 #endif
 
-inline auto Path::walk(int depth) const noexcept (false) -> LinkedList<WalkEntry> {
+inline auto Path::walk(int depth) const noexcept (false) -> LinkedList<WalkEntry> { // NOLINT(misc-no-recursion)
     if ( depth <= 0 )
         return {};
 
@@ -331,7 +327,9 @@ inline auto Path::walk(int depth) const noexcept (false) -> LinkedList<WalkEntry
     entries.pushBack(currentDirEntry);
 
 #else
+
 #warning Warning : Path::walk Unsupported
+
 #endif
 
     return entries;
@@ -340,7 +338,7 @@ inline auto Path::walk(int depth) const noexcept (false) -> LinkedList<WalkEntry
 inline auto Path::walk(const Path &path, int depth) noexcept(false) -> LinkedList< WalkEntry > { return path.walk(depth); }
 inline auto Path::walk(const String &path, int depth) noexcept(false) -> LinkedList< WalkEntry > { return Path(path).walk(depth); }
 
-[[nodiscard]] inline auto Path::roots () noexcept -> LinkedList < Path > {
+__CDS_NoDiscard inline auto Path::roots () noexcept -> LinkedList < Path > {
     LinkedList < Path > paths;
 #if defined(WIN32)
     auto pDRList = Path::platformDependantRoots();
@@ -352,13 +350,17 @@ inline auto Path::walk(const String &path, int depth) noexcept(false) -> LinkedL
     return { "/" };
 
 #else
+
 #warning Warning: Path::roots undefined
+
 #endif
+
     return paths;
 }
 
 #if defined(WIN32)
-[[nodiscard]] inline auto Path::platformDependantRoots () noexcept -> LinkedList < Win32RootPath > {
+
+__CDS_NoDiscard inline auto Path::platformDependantRoots () noexcept -> LinkedList < Win32RootPath > {
     LinkedList < Win32RootPath > rootElements;
 
     char volumeName [MAX_PATH];

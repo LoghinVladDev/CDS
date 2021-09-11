@@ -7,14 +7,18 @@
 
 #include "../../std-types.h"
 
-template <class T>
+template < typename T >
 class DoubleLinkedList;
 
-#ifndef LLIST_FORCE_SLIST
-template <class T>
-using LinkedList = DoubleLinkedList<T>;
-#else
+template < typename T >
+class SingleLinkedList;
 
+#ifndef LLIST_FORCE_SLIST
+template < typename T >
+using LinkedList = DoubleLinkedList < T >;
+#else
+template < typename T >
+using LinkedList = SingleLinkedList < T >;
 #endif
 
 

@@ -12,9 +12,6 @@
 
 #include "../collection/ordered/LinkedListPublic.hpp"
 
-template < typename T >
-class View;
-
 #if defined(CDS_QT)
 #include <QString>
 #endif
@@ -26,7 +23,7 @@ public:
     typedef char ElementType;
 
     class StringNullAccess : public std::exception {
-        [[nodiscard]] const char * what() const noexcept override {
+        __CDS_NoDiscard const char * what() const noexcept override {
             return "Null Access Exception : Requested Reference to Element at Index 0 for Empty String.";
         }
     };
@@ -103,32 +100,32 @@ public:
     String(QString const & o) noexcept : String(o.toStdString()) {}
 #endif
 
-    String (Object const & o) noexcept : String(o.toString()) { }
+    String (Object const & o) noexcept : String(o.toString()) { } // NOLINT(google-explicit-constructor)
 
-    String (uint8 v) noexcept : String(String().append(v)) { }
-    String (uint16 v) noexcept : String(String().append(v)) { }
-    String (uint32 v) noexcept : String(String().append(v)) { }
-    String (uint64 v) noexcept : String(String().append(v)) { }
+    String (uint8 v) noexcept : String(String().append(v)) { } // NOLINT(google-explicit-constructor)
+    String (uint16 v) noexcept : String(String().append(v)) { } // NOLINT(google-explicit-constructor)
+    String (uint32 v) noexcept : String(String().append(v)) { } // NOLINT(google-explicit-constructor)
+    String (uint64 v) noexcept : String(String().append(v)) { } // NOLINT(google-explicit-constructor)
 
-    String (sint8 v) noexcept : String(String().append(v)) { }
-    String (sint16 v) noexcept : String(String().append(v)) { }
-    String (sint32 v) noexcept : String(String().append(v)) { }
-    String (sint64 v) noexcept : String(String().append(v)) { }
+    String (sint8 v) noexcept : String(String().append(v)) { } // NOLINT(google-explicit-constructor)
+    String (sint16 v) noexcept : String(String().append(v)) { } // NOLINT(google-explicit-constructor)
+    String (sint32 v) noexcept : String(String().append(v)) { } // NOLINT(google-explicit-constructor)
+    String (sint64 v) noexcept : String(String().append(v)) { } // NOLINT(google-explicit-constructor)
 
-    String (float v) noexcept : String(String().append(v)) { }
-    String (double v) noexcept : String(String().append(v)) { }
+    String (float v) noexcept : String(String().append(v)) { } // NOLINT(google-explicit-constructor)
+    String (double v) noexcept : String(String().append(v)) { } // NOLINT(google-explicit-constructor)
 
 #if defined(__linux)
 
-    String(std::size_t v) noexcept : String((uint64)v) {}
+    String(std::size_t v) noexcept : String((uint64)v) {} // NOLINT(google-explicit-constructor)
 
 #endif
 
     template < typename T >
-    String (T * v) noexcept : String((std::size_t)v) { }
+    String (T * v) noexcept : String((std::size_t)v) { } // NOLINT(google-explicit-constructor)
 
     template < typename T >
-    String (T const * v) noexcept : String((std::size_t)v) { }
+    String (T const * v) noexcept : String((std::size_t)v) { } // NOLINT(google-explicit-constructor)
 
 //    String (std::size_t v) noexcept : String((uint64)v) {}
 
@@ -155,32 +152,32 @@ public:
     /**
      * @test tested in primitive/StringTest/Iterator Tests
      */
-    [[nodiscard]] auto begin() noexcept -> Iterator;
+    __CDS_NoDiscard auto begin() noexcept -> Iterator;
 
     /**
      * @test tested in primitive/StringTest/Iterator Tests
      */
-    [[nodiscard]] auto end () noexcept -> Iterator;
+    __CDS_NoDiscard auto end () noexcept -> Iterator;
 
     /**
      * @test tested in primitive/StringTest/Iterator Tests
      */
-    [[nodiscard]] auto begin() const noexcept -> ConstIterator;
+    __CDS_NoDiscard auto begin() const noexcept -> ConstIterator;
 
     /**
      * @test tested in primitive/StringTest/Iterator Tests
      */
-    [[nodiscard]] auto end() const noexcept -> ConstIterator;
+    __CDS_NoDiscard auto end() const noexcept -> ConstIterator;
 
     /**
      * @test tested in primitive/StringTest/Iterator Tests
      */
-    [[nodiscard]] auto cbegin() const noexcept -> ConstIterator;
+    __CDS_NoDiscard auto cbegin() const noexcept -> ConstIterator;
 
     /**
      * @test tested in primitive/StringTest/Iterator Tests
      */
-    [[nodiscard]] auto cend() const noexcept -> ConstIterator;
+    __CDS_NoDiscard auto cend() const noexcept -> ConstIterator;
 
     /**
      * @test tested in primitive/StringTest/Iterator Tests
@@ -190,53 +187,53 @@ public:
     /**
      * @test tested in primitive/StringTest/Iterator Tests
      */
-    [[nodiscard]] auto rbegin() noexcept -> ReverseIterator;
+    __CDS_NoDiscard auto rbegin() noexcept -> ReverseIterator;
 
     /**
      * @test tested in primitive/StringTest/Iterator Tests
      */
-    [[nodiscard]] auto rend() noexcept -> ReverseIterator;
+    __CDS_NoDiscard auto rend() noexcept -> ReverseIterator;
 
     /**
      * @test tested in primitive/StringTest/Iterator Tests
      */
-    [[nodiscard]] auto rbegin() const noexcept -> ConstReverseIterator;
+    __CDS_NoDiscard auto rbegin() const noexcept -> ConstReverseIterator;
 
     /**
      * @test tested in primitive/StringTest/Iterator Tests
      */
-    [[nodiscard]] auto rend() const noexcept -> ConstReverseIterator;
+    __CDS_NoDiscard auto rend() const noexcept -> ConstReverseIterator;
 
     /**
      * @test tested in primitive/StringTest/Iterator Tests
      */
-    [[nodiscard]] auto crbegin() const noexcept -> ConstReverseIterator;
+    __CDS_NoDiscard auto crbegin() const noexcept -> ConstReverseIterator;
 
     /**
      * @test tested in primitive/StringTest/Iterator Tests
      */
-    [[nodiscard]] auto crend() const noexcept -> ConstReverseIterator;
+    __CDS_NoDiscard auto crend() const noexcept -> ConstReverseIterator;
 
 
     /**
      * @test tested in primitive/StringTest/Property Tests
      */
-    [[nodiscard]] constexpr inline auto size() const noexcept -> Size { return this->_l; }
+    __CDS_NoDiscard constexpr inline auto size() const noexcept -> Size { return this->_l; }
 
     /**
      * @test tested in primitive/StringTest/Property Tests
      */
-    [[nodiscard]] constexpr inline auto length() const noexcept -> Size { return this->_l; }
+    __CDS_NoDiscard constexpr inline auto length() const noexcept -> Size { return this->_l; }
 
     /**
      * @test tested in primitive/StringTest/Property Tests
      */
-    [[nodiscard]] constexpr inline auto maxSize() const noexcept -> Size { return this->_c; }
+    __CDS_NoDiscard __CDS_MaybeUnused constexpr inline auto maxSize() const noexcept -> Size { return this->_c; }
 
     /**
      * @test tested in primitive/StringTest/Property Tests
      */
-    [[nodiscard]] constexpr inline auto capacity() const noexcept -> Size { return this->_c; }
+    __CDS_NoDiscard constexpr inline auto capacity() const noexcept -> Size { return this->_c; }
 
 
     /**
@@ -252,7 +249,7 @@ public:
     /**
      * @test tested in primitive/StringTest/Memory Tests
      */
-    inline auto shrink(SignedSize s = -1) noexcept -> void { if ( s == -1 ) s = this->_l; if ( s > this->_c ) return; this->resize( s ); }
+    inline auto shrink(SignedSize s = -1) noexcept -> void { if ( s == -1 ) s = static_cast < SignedSize > ( this->_l ); if ( s > this->_c ) return; this->resize( s ); }
 
     /**
      * @test tested in primitive/StringTest/Content Functions Tests
@@ -262,7 +259,7 @@ public:
     /**
      * @test tested in primitive/StringTest/Content Functions Tests
      */
-    [[nodiscard]] constexpr inline auto empty() const noexcept -> bool { return this->_l == 0; }
+    __CDS_NoDiscard constexpr inline auto empty() const noexcept -> bool { return this->_l == 0; }
 
 
     /**
@@ -273,18 +270,18 @@ public:
     /**
      * @test tested in primitive/StringTest/Content Functions Tests
      */
-    [[nodiscard]] auto operator [] (Index) const noexcept -> ElementType;
+    __CDS_NoDiscard auto operator [] (Index) const noexcept -> ElementType;
 
 
     /**
      * @test If operator [] has a test, function is tested
      */
-    inline auto at (Index i) noexcept (false) -> ElementType & { return this->operator[](i); }
+    __CDS_MaybeUnused inline auto at (Index i) noexcept (false) -> ElementType & { return this->operator[](i); }
 
     /**
      * @test If operator [] has a test, function is tested
      */
-    [[nodiscard]] inline auto at (Index i) const noexcept -> ElementType { return this->operator[](i); }
+    __CDS_NoDiscard __CDS_MaybeUnused inline auto at (Index i) const noexcept -> ElementType { return this->operator[](i); }
 
     /**
      * @test If operator [] has a test, function is tested
@@ -294,7 +291,7 @@ public:
     /**
      * @test If operator [] has a test, function is tested
      */
-    [[nodiscard]] inline auto get (Index i) const noexcept -> ElementType { return this->operator[](i); }
+    __CDS_NoDiscard inline auto get (Index i) const noexcept -> ElementType { return this->operator[](i); }
 
     /**
      * @test If operator [] has a test, function is tested
@@ -304,17 +301,17 @@ public:
     /**
      * @test If operator [] has a test, function is tested
      */
-    inline auto back () noexcept (false) -> ElementType & { return this->operator[](this->_l - 1); }
+    inline auto back () noexcept (false) -> ElementType & { return this->operator[](static_cast < Index > (this->_l) - 1); }
 
     /**
      * @test If operator [] has a test, function is tested
      */
-    [[nodiscard]] constexpr inline auto front() const noexcept -> ElementType { return this->empty() ? '\0' : this->_p[0]; }
+    __CDS_NoDiscard constexpr inline auto front() const noexcept -> ElementType { return this->empty() ? '\0' : this->_p[0]; }
 
     /**
      * @test If operator [] has a test, function is tested
      */
-    [[nodiscard]] constexpr inline auto back() const noexcept -> ElementType { return this->empty() ? '\0' : this->_p[this->_l - 1]; }
+    __CDS_NoDiscard constexpr inline auto back() const noexcept -> ElementType { return this->empty() ? '\0' : this->_p[this->_l - 1]; }
 
     /**
      * @test tested in primitive/StringTest/Append/Prepend Tests
@@ -543,15 +540,15 @@ public:
     /**
      * @test tested in primitive/StringTest/
      */
-    [[nodiscard]] inline auto toStdString () const noexcept -> std::string { return std::string(this->cStr()); }
+    __CDS_NoDiscard inline auto toStdString () const noexcept -> std::string { return this->cStr(); }
 
     /**
      * @test tested in primitive/StringTest/Append/
      */
-    inline operator std::string () const noexcept { return this->toStdString(); }
+    inline operator std::string () const noexcept { return this->toStdString(); } // NOLINT(google-explicit-constructor)
 
 #if defined(CDS_QT)
-    [[nodiscard]] inline auto toQString () const noexcept -> QString { return QString(this->cStr()); }
+    __CDS_NoDiscard inline auto toQString () const noexcept -> QString { return QString(this->cStr()); }
 
     inline operator QString () const noexcept { return this->toQString(); }
 #endif
@@ -560,90 +557,90 @@ public:
     /**
      * @test tested in primitive/StringTest/
      */
-    [[nodiscard]] constexpr auto cStr () const noexcept -> StringLiteral { return this->_p == nullptr ? "" : this->_p; }
+    __CDS_NoDiscard constexpr auto cStr () const noexcept -> StringLiteral { return this->_p == nullptr ? "" : this->_p; }
 
     /**
      * @test tested in primitive/StringTest/Append/
      */
     inline explicit operator StringLiteral () const noexcept { return this->cStr(); }
 
-    [[nodiscard]] constexpr auto data () noexcept -> CString  { return this->_p; }
+    __CDS_NoDiscard constexpr auto data () noexcept -> CString  { return this->_p; }
     inline explicit operator CString () noexcept { return this->data(); }
 
     /**
      * @test tested in primitive/StringTest/Find Tests
      */
-    [[nodiscard]] auto find (ElementType) const noexcept -> LinkedList < Index >;
+    __CDS_NoDiscard auto find (ElementType) const noexcept -> LinkedList < Index >;
 
     /**
      * @test tested in primitive/StringTest/Find Tests
      */
-    [[nodiscard]] auto find (String const &) const noexcept -> LinkedList < Index >;
+    __CDS_NoDiscard auto find (String const &) const noexcept -> LinkedList < Index >;
 
     /**
      * @test tested in primitive/StringTest/Find Tests
      */
-    [[nodiscard]] auto findOf (String const &) const noexcept -> LinkedList < Index >;
+    __CDS_NoDiscard auto findOf (String const &) const noexcept -> LinkedList < Index >;
 
     /**
      * @test tested in primitive/StringTest/Find Tests
      */
-    [[nodiscard]] auto findNotOf (String const &) const noexcept -> LinkedList < Index >;
+    __CDS_NoDiscard auto findNotOf (String const &) const noexcept -> LinkedList < Index >;
 
 
     /**
      * @test tested in primitive/StringTest/Find Tests
      */
-    [[nodiscard]] auto findFirst ( ElementType ) const noexcept -> Index;
+    __CDS_NoDiscard auto findFirst ( ElementType ) const noexcept -> Index;
 
     /**
      * @test tested in primitive/StringTest/Find Tests
      */
-    [[nodiscard]] auto findFirst ( String const & ) const noexcept -> Index;
+    __CDS_NoDiscard auto findFirst ( String const & ) const noexcept -> Index;
 
     /**
      * @test tested in primitive/StringTest/Find Tests
      */
-    [[nodiscard]] auto findLast ( ElementType ) const noexcept -> Index;
+    __CDS_NoDiscard auto findLast ( ElementType ) const noexcept -> Index;
 
     /**
      * @test tested in primitive/StringTest/Find Tests
      */
-    [[nodiscard]] auto findLast ( String const & ) const noexcept -> Index;
+    __CDS_NoDiscard auto findLast ( String const & ) const noexcept -> Index;
 
     /**
      * @test tested in primitive/StringTest/Find Tests
      */
-    [[nodiscard]] auto findFirstOf ( String const & ) const noexcept -> Index;
+    __CDS_NoDiscard auto findFirstOf ( String const & ) const noexcept -> Index;
 
     /**
      * @test tested in primitive/StringTest/Find Tests
      */
-    [[nodiscard]] auto findFirstNotOf ( String const & ) const noexcept -> Index;
+    __CDS_NoDiscard auto findFirstNotOf ( String const & ) const noexcept -> Index;
 
     /**
      * @test tested in primitive/StringTest/Find Tests
      */
-    [[nodiscard]] auto findLastOf ( String const & ) const noexcept -> Index;
+    __CDS_NoDiscard auto findLastOf ( String const & ) const noexcept -> Index;
 
     /**
      * @test tested in primitive/StringTest/Find Tests
      */
-    [[nodiscard]] auto findLastNotOf ( String const & ) const noexcept -> Index;
+    __CDS_NoDiscard auto findLastNotOf ( String const & ) const noexcept -> Index;
 
 
     /**
      * @test tested in primitive/StringTest/Substring Tests
      */
-    [[nodiscard]] auto substr ( Index, Index = -1 ) const noexcept -> String;
+    __CDS_NoDiscard auto substr ( Index, Index = -1 ) const noexcept -> String;
 
 
     /**
      * @test tested in primitive/StringTest/Comparison Tests
      */
-    [[nodiscard]] auto operator == ( String const & o ) const noexcept -> bool;
+    __CDS_NoDiscard auto operator == ( String const & o ) const noexcept -> bool;
 
-    [[nodiscard]] inline auto equals ( Object const & o) const noexcept -> bool final {
+    __CDS_NoDiscard inline auto equals ( Object const & o) const noexcept -> bool final {
         if ( this == & o ) return true;
         auto p = dynamic_cast < decltype ( this ) > ( & o );
         if ( p == nullptr ) return false;
@@ -653,17 +650,17 @@ public:
     /**
      * @test tested in primitive/StringTest/Comparison Tests
      */
-    [[nodiscard]] constexpr inline auto operator == ( ElementType e ) const noexcept -> bool { return this->size() == 1 && this->_p[0] == e; }
+    __CDS_NoDiscard constexpr inline auto operator == ( ElementType e ) const noexcept -> bool { return this->size() == 1 && this->_p[0] == e; }
 
     /**
      * @test tested in primitive/StringTest/Comparison Tests
      */
-    [[nodiscard]] auto operator == ( std::string const & ) const noexcept -> bool;
+    __CDS_NoDiscard auto operator == ( std::string const & ) const noexcept -> bool;
 
     /**
      * @test tested in primitive/StringTest/Comparison Tests
      */
-    [[nodiscard]] auto operator == ( StringLiteral ) const noexcept -> bool;
+    __CDS_NoDiscard auto operator == ( StringLiteral ) const noexcept -> bool;
 
 #if defined(CDS_QT)
     inline auto operator == (QString const & v) const noexcept -> bool { return * this == String(v); }
@@ -673,17 +670,17 @@ public:
     /**
      * @test tested in primitive/StringTest/Comparison Tests
      */
-    [[nodiscard]] auto operator >= ( String const & ) const noexcept -> bool;
+    __CDS_NoDiscard auto operator >= ( String const & ) const noexcept -> bool;
 
     /**
      * @test tested in primitive/StringTest/Comparison Tests
      */
-    [[nodiscard]] constexpr inline auto operator >= ( ElementType e ) const noexcept -> bool { return this->size() == 1 && this->_p[0] >= e; }
+    __CDS_NoDiscard constexpr inline auto operator >= ( ElementType e ) const noexcept -> bool { return this->size() == 1 && this->_p[0] >= e; }
 
     /**
      * @test tested in primitive/StringTest/Comparison Tests
      */
-    [[nodiscard]] auto operator >= ( std::string const & ) const noexcept -> bool;
+    __CDS_NoDiscard auto operator >= ( std::string const & ) const noexcept -> bool;
 
 #if defined(CDS_QT)
     inline auto operator >= (QString const & v) const noexcept -> bool { return * this >= String(v); }
@@ -692,13 +689,13 @@ public:
     /**
      * @test tested in primitive/StringTest/Comparison Tests
      */
-    [[nodiscard]] auto operator >= ( StringLiteral ) const noexcept -> bool;
+    __CDS_NoDiscard auto operator >= ( StringLiteral ) const noexcept -> bool;
 
 
     /**
      * @test tested in primitive/StringTest/Comparison Tests
      */
-    [[nodiscard]] auto operator <= ( String const & ) const noexcept -> bool;
+    __CDS_NoDiscard auto operator <= ( String const & ) const noexcept -> bool;
 
 #if defined(CDS_QT)
     inline auto operator <= (QString const & v) const noexcept -> bool { return * this <= String(v); }
@@ -708,38 +705,38 @@ public:
     /**
      * @test tested in primitive/StringTest/Comparison Tests
      */
-    [[nodiscard]] constexpr inline auto operator <= ( ElementType e ) const noexcept -> bool { return this->size() == 1 && this->_p[0] <= e; }
+    __CDS_NoDiscard constexpr inline auto operator <= ( ElementType e ) const noexcept -> bool { return this->size() == 1 && this->_p[0] <= e; }
 
     /**
      * @test tested in primitive/StringTest/Comparison Tests
      */
-    [[nodiscard]] auto operator <= ( std::string const & ) const noexcept -> bool;
+    __CDS_NoDiscard auto operator <= ( std::string const & ) const noexcept -> bool;
 
     /**
      * @test tested in primitive/StringTest/Comparison Tests
      */
-    [[nodiscard]] auto operator <= ( StringLiteral ) const noexcept -> bool;
+    __CDS_NoDiscard auto operator <= ( StringLiteral ) const noexcept -> bool;
 
 
     /**
      * @test tested in primitive/StringTest/Comparison Tests
      */
-    [[nodiscard]] auto operator != ( String const & ) const noexcept -> bool;
+    __CDS_NoDiscard auto operator != ( String const & ) const noexcept -> bool;
 
     /**
      * @test tested in primitive/StringTest/Comparison Tests
      */
-    [[nodiscard]] constexpr inline auto operator != ( ElementType e ) const noexcept -> bool { return this->size() != 1 || this->_p[0] != e; }
+    __CDS_NoDiscard constexpr inline auto operator != ( ElementType e ) const noexcept -> bool { return this->size() != 1 || this->_p[0] != e; }
 
     /**
      * @test tested in primitive/StringTest/Comparison Tests
      */
-    [[nodiscard]] auto operator != ( std::string const & ) const noexcept -> bool;
+    __CDS_NoDiscard auto operator != ( std::string const & ) const noexcept -> bool;
 
     /**
      * @test tested in primitive/StringTest/Comparison Tests
      */
-    [[nodiscard]] auto operator != ( StringLiteral ) const noexcept -> bool;
+    __CDS_NoDiscard auto operator != ( StringLiteral ) const noexcept -> bool;
 
 #if defined(CDS_QT)
     inline auto operator != (QString const & v) const noexcept -> bool { return * this != String(v); }
@@ -749,22 +746,22 @@ public:
     /**
      * @test tested in primitive/StringTest/Comparison Tests
      */
-    [[nodiscard]] auto operator < ( String const & ) const noexcept -> bool;
+    __CDS_NoDiscard auto operator < ( String const & ) const noexcept -> bool;
 
     /**
      * @test tested in primitive/StringTest/Comparison Tests
      */
-    [[nodiscard]] constexpr inline auto operator < ( ElementType e ) const noexcept -> bool { return this->size() == 1 && this->_p[0] < e; }
+    __CDS_NoDiscard constexpr inline auto operator < ( ElementType e ) const noexcept -> bool { return this->size() == 1 && this->_p[0] < e; }
 
     /**
      * @test tested in primitive/StringTest/Comparison Tests
      */
-    [[nodiscard]] auto operator < ( std::string const & ) const noexcept -> bool;
+    __CDS_NoDiscard auto operator < ( std::string const & ) const noexcept -> bool;
 
     /**
      * @test tested in primitive/StringTest/Comparison Tests
      */
-    [[nodiscard]] auto operator < ( StringLiteral ) const noexcept -> bool;
+    __CDS_NoDiscard auto operator < ( StringLiteral ) const noexcept -> bool;
 
 #if defined(CDS_QT)
     inline auto operator < (QString const & v) const noexcept -> bool { return * this < String(v); }
@@ -774,22 +771,22 @@ public:
     /**
      * @test tested in primitive/StringTest/Comparison Tests
      */
-    [[nodiscard]] auto operator > ( String const & ) const noexcept -> bool;
+    __CDS_NoDiscard auto operator > ( String const & ) const noexcept -> bool;
 
     /**
      * @test tested in primitive/StringTest/Comparison Tests
      */
-    [[nodiscard]] constexpr inline auto operator > ( ElementType e ) const noexcept -> bool { return this->size() == 1 && this->_p[0] > e; }
+    __CDS_NoDiscard constexpr inline auto operator > ( ElementType e ) const noexcept -> bool { return this->size() == 1 && this->_p[0] > e; }
 
     /**
      * @test tested in primitive/StringTest/Comparison Tests
      */
-    [[nodiscard]] auto operator > ( std::string const & ) const noexcept -> bool;
+    __CDS_NoDiscard auto operator > ( std::string const & ) const noexcept -> bool;
 
     /**
      * @test tested in primitive/StringTest/Comparison Tests
      */
-    [[nodiscard]] auto operator > ( StringLiteral ) const noexcept -> bool;
+    __CDS_NoDiscard auto operator > ( StringLiteral ) const noexcept -> bool;
 
 #if defined(CDS_QT)
     inline auto operator > (QString const & v) const noexcept -> bool { return * this > String(v); }
@@ -799,27 +796,27 @@ public:
     /**
      * @test tested in primitive/StringTest/Append/Prepend Tests
      */
-    [[nodiscard]] inline auto operator + ( String const & v ) const noexcept -> String { return String(*this).append(v); }
+    __CDS_NoDiscard inline auto operator + ( String const & v ) const noexcept -> String { return String(*this).append(v); }
 
     /**
      * @test tested in primitive/StringTest/Append/Prepend Tests
      */
-    [[nodiscard]] inline auto operator + ( ElementType v ) const noexcept -> String { return String(*this).append(v); }
+    __CDS_NoDiscard inline auto operator + ( ElementType v ) const noexcept -> String { return String(*this).append(v); }
 
     /**
      * @test tested in primitive/StringTest/Append/Prepend Tests
      */
-    [[nodiscard]] inline auto operator + ( std::string const & v ) const noexcept -> String { return String(*this).append(v); }
+    __CDS_NoDiscard inline auto operator + ( std::string const & v ) const noexcept -> String { return String(*this).append(v); }
 
     /**
      * @test tested in primitive/StringTest/Append/Prepend Tests
      */
-    [[nodiscard]] inline auto operator + ( StringLiteral v ) const noexcept -> String { return String(*this).append(v); }
+    __CDS_NoDiscard inline auto operator + ( StringLiteral v ) const noexcept -> String { return String(*this).append(v); }
 
     /**
      * @test tested in primitive/StringTest/Append/Prepend Tests
      */
-    [[nodiscard]] inline auto operator + ( CString v ) const noexcept -> String { return String(*this).append(v); }
+    __CDS_NoDiscard inline auto operator + ( CString v ) const noexcept -> String { return String(*this).append(v); }
 
     /**
      * @test tested in primitive/StringTest/Append/Prepend Tests
@@ -829,47 +826,47 @@ public:
     /**
      * @test tested in primitive/StringTest/Append/Prepend Tests
      */
-    [[nodiscard]] inline auto operator + (sint16 v) const noexcept -> String { return this->operator+(std::to_string(v) ); }
+    __CDS_NoDiscard inline auto operator + (sint16 v) const noexcept -> String { return this->operator+(std::to_string(v) ); }
 
     /**
      * @test tested in primitive/StringTest/Append/Prepend Tests
      */
-    [[nodiscard]] inline auto operator + (sint32 v) const noexcept -> String { return this->operator+(std::to_string(v) ); }
+    __CDS_NoDiscard inline auto operator + (sint32 v) const noexcept -> String { return this->operator+(std::to_string(v) ); }
 
     /**
      * @test tested in primitive/StringTest/Append/Prepend Tests
      */
-    [[nodiscard]] inline auto operator + (sint64 v) const noexcept -> String { return this->operator+(std::to_string(v) ); }
+    __CDS_NoDiscard inline auto operator + (sint64 v) const noexcept -> String { return this->operator+(std::to_string(v) ); }
 
     /**
      * @test tested in primitive/StringTest/Append/Prepend Tests
      */
-    [[nodiscard]] inline auto operator + (uint8 v) const noexcept -> String { return this->operator+(std::to_string(v) ); }
+    __CDS_NoDiscard inline auto operator + (uint8 v) const noexcept -> String { return this->operator+(std::to_string(v) ); }
 
     /**
      * @test tested in primitive/StringTest/Append/Prepend Tests
      */
-    [[nodiscard]] inline auto operator + (uint16 v) const noexcept -> String { return this->operator+(std::to_string(v) ); }
+    __CDS_NoDiscard inline auto operator + (uint16 v) const noexcept -> String { return this->operator+(std::to_string(v) ); }
 
     /**
      * @test tested in primitive/StringTest/Append/Prepend Tests
      */
-    [[nodiscard]] inline auto operator + (uint32 v) const noexcept -> String { return this->operator+(std::to_string(v) ); }
+    __CDS_NoDiscard inline auto operator + (uint32 v) const noexcept -> String { return this->operator+(std::to_string(v) ); }
 
     /**
      * @test tested in primitive/StringTest/Append/Prepend Tests
      */
-    [[nodiscard]] inline auto operator + (uint64 v) const noexcept -> String { return this->operator+(std::to_string(v) ); }
+    __CDS_NoDiscard inline auto operator + (uint64 v) const noexcept -> String { return this->operator+(std::to_string(v) ); }
 
     /**
      * @test tested in primitive/StringTest/Append/Prepend Tests
      */
-    [[nodiscard]] inline auto operator + (float v) const noexcept -> String { return this->operator+( std::to_string(v) ); }
+    __CDS_NoDiscard inline auto operator + (float v) const noexcept -> String { return this->operator+( std::to_string(v) ); }
 
     /**
      * @test tested in primitive/StringTest/Append/Prepend Tests
      */
-    [[nodiscard]] inline auto operator + (double v) const noexcept -> String { return this->operator+( std::to_string(v) ); }
+    __CDS_NoDiscard inline auto operator + (double v) const noexcept -> String { return this->operator+( std::to_string(v) ); }
 
 #if defined(CDS_QT)
     inline auto operator + (QString const & v) const noexcept -> String { return * this + String(v); }
@@ -878,7 +875,7 @@ public:
     /**
      * @test tested in primitive/StringTest/Utility Functions, String Formatting
      */
-    [[nodiscard]] auto operator * (int) const noexcept -> String;
+    __CDS_NoDiscard auto operator * (int) const noexcept -> String;
 
 
     /**
@@ -891,11 +888,11 @@ public:
      */
     auto ltrim ( String const & ) noexcept -> String &;
 
-    inline auto ltrim ( ElementType e = ' ' ) const noexcept -> String {
+    __CDS_NoDiscard __CDS_MaybeUnused inline auto ltrim ( ElementType e = ' ' ) const noexcept -> String {
         return String(*this).ltrim(e);
     }
 
-    inline auto ltrim ( String const & e ) const noexcept -> String {
+    __CDS_NoDiscard __CDS_MaybeUnused inline auto ltrim ( String const & e ) const noexcept -> String {
         return String(*this).ltrim(e);
     }
 
@@ -909,11 +906,11 @@ public:
      */
     auto rtrim ( String const & ) noexcept -> String &;
 
-    inline auto rtrim ( ElementType e = ' ' ) const noexcept -> String {
+    __CDS_NoDiscard __CDS_MaybeUnused inline auto rtrim ( ElementType e = ' ' ) const noexcept -> String {
         return String(*this).rtrim(e);
     }
 
-    inline auto rtrim ( String const & e ) const noexcept -> String {
+    __CDS_NoDiscard __CDS_MaybeUnused inline auto rtrim ( String const & e ) const noexcept -> String {
         return String(*this).rtrim(e);
     }
 
@@ -927,11 +924,11 @@ public:
      */
     auto inline trim ( String const & e ) noexcept -> String & { return this->ltrim(e).rtrim(e); }
 
-    inline auto trim ( ElementType e = ' ' ) const noexcept -> String {
+    __CDS_NoDiscard __CDS_MaybeUnused inline auto trim ( ElementType e = ' ' ) const noexcept -> String {
         return String(*this).trim(e);
     }
 
-    inline auto trim ( String const & e ) const noexcept -> String {
+    __CDS_NoDiscard __CDS_MaybeUnused inline auto trim ( String const & e ) const noexcept -> String {
         return String(*this).trim(e);
     }
 
@@ -945,7 +942,7 @@ public:
      */
     auto rjust (Size, ElementType = ' ') noexcept -> String &;
 
-    inline auto rjust (Size s, ElementType e = ' ') const noexcept -> String {
+    __CDS_NoDiscard __CDS_MaybeUnused inline auto rjust (Size s, ElementType e = ' ') const noexcept -> String {
         return String(*this).rjust(s, e);
     }
 
@@ -954,7 +951,7 @@ public:
      */
     auto ljust (Size, ElementType = ' ') noexcept -> String &;
 
-    inline auto ljust (Size s, ElementType e = ' ') const noexcept -> String {
+    __CDS_NoDiscard __CDS_MaybeUnused inline auto ljust (Size s, ElementType e = ' ') const noexcept -> String {
         return String(*this).ljust(s, e);
     }
 
@@ -998,12 +995,12 @@ public:
     /**
      * @test tested in primitive/StringTest/Utility Functions, String Formatting
      */
-    constexpr auto static inline lowerChar(char c) noexcept -> char { return isUpperChar(c) ? c + 32 : c; }
+    constexpr auto static inline lowerChar(char c) noexcept -> char { return isUpperChar(c) ? static_cast < ElementType > ( c + 32 ) : c; }
 
     /**
      * @test tested in primitive/StringTest/Utility Functions, String Formatting
      */
-    constexpr auto static inline upperChar(char c) noexcept -> char { return isLowerChar(c) ? c - 32 : c; }
+    constexpr auto static inline upperChar(char c) noexcept -> char { return isLowerChar(c) ? static_cast < ElementType > ( c - 32 ) : c; }
 
     /**
      * @test tested in primitive/StringTest/Utility Functions, String Formatting
@@ -1044,12 +1041,12 @@ public:
     /**
      * @test tested in primitive/StringTest/Utility Functions, String Formatting
      */
-    [[nodiscard]] auto inline lower () const noexcept -> String { return String(*this).toLower(); }
+    __CDS_NoDiscard auto inline lower () const noexcept -> String { return String(*this).toLower(); }
 
     /**
      * @test tested in primitive/StringTest/Utility Functions, String Formatting
      */
-    [[nodiscard]] auto inline upper () const noexcept -> String { return String(*this).toUpper(); }
+    __CDS_NoDiscard auto inline upper () const noexcept -> String { return String(*this).toUpper(); }
 
     /**
      * @test tested in primitive/StringTest/Assignment Tests
@@ -1079,36 +1076,36 @@ public:
     /**
      * @test tested in primitive/StringTest/Split Tests
      */
-    [[nodiscard]] auto split ( ElementType, Size = UINT32_MAX ) const noexcept -> LinkedList < String >;
+    __CDS_NoDiscard auto split ( ElementType, Size = UINT32_MAX ) const noexcept -> LinkedList < String >;
 
     /**
      * @test tested in primitive/StringTest/Split Tests
      */
-    [[nodiscard]] auto split ( String const &, Size = UINT32_MAX ) const noexcept -> LinkedList < String >;
+    __CDS_NoDiscard auto split ( String const &, Size = UINT32_MAX ) const noexcept -> LinkedList < String >;
 
-    [[nodiscard]] auto splitByString ( String const &, Size = UINT32_MAX ) const noexcept -> LinkedList < String >;
+    __CDS_NoDiscard __CDS_MaybeUnused auto splitByString ( String const &, Size = UINT32_MAX ) const noexcept -> LinkedList < String >;
 
     constexpr static Index INVALID_POS = -1;
 
     /**
      * @test tested in primitive/StringTest/Content Functions Tests
      */
-    [[nodiscard]] auto inline contains ( ElementType e ) const noexcept -> bool { return this->findFirst( e ) != INVALID_POS; }
+    __CDS_NoDiscard auto inline contains ( ElementType e ) const noexcept -> bool { return this->findFirst( e ) != INVALID_POS; }
 
     /**
      * @test tested in primitive/StringTest/Content Functions Tests
      */
-    [[nodiscard]] auto inline contains ( String const & e ) const noexcept -> bool { return this->findFirst( e ) != INVALID_POS; }
+    __CDS_NoDiscard auto inline contains ( String const & e ) const noexcept -> bool { return this->findFirst( e ) != INVALID_POS; }
 
     /**
      * @test tested in primitive/StringTest/Content Functions Tests
      */
-    [[nodiscard]] auto inline contains ( StringLiteral e ) const noexcept -> bool { return this->findFirst( String(e) ) != INVALID_POS; }
+    __CDS_NoDiscard auto inline contains ( StringLiteral e ) const noexcept -> bool { return this->findFirst( String(e) ) != INVALID_POS; }
 
     /**
      * @test tested in primitive/StringTest/Content Functions Tests
      */
-    [[nodiscard]] auto inline contains ( std::string const & e ) const noexcept -> bool { return this->findFirst( String(e) ) != INVALID_POS; }
+    __CDS_NoDiscard auto inline contains ( std::string const & e ) const noexcept -> bool { return this->findFirst( String(e) ) != INVALID_POS; }
 
 #if defined(CDS_QT)
     inline auto contains (QString const & v) const noexcept -> bool { return this->contains(String(v)); }
@@ -1119,7 +1116,7 @@ public:
     /**
      * @test N/A
      */
-    [[nodiscard]] auto diag() const noexcept -> String;
+    __CDS_NoDiscard auto diag() const noexcept -> String;
 #endif
 
     /**
@@ -1132,18 +1129,18 @@ public:
     /**
      * @test N/A
      */
-    [[nodiscard]] auto hash () const noexcept -> Index override {
-        return this->length();
+    __CDS_NoDiscard auto hash () const noexcept -> Index override {
+        return static_cast < Index > ( this->length() );
     }
 
     /**
      * @test N/A
      */
-    [[nodiscard]] auto copy () const noexcept -> String * override {
+    __CDS_NoDiscard auto copy () const noexcept -> String * override {
         return new String( * this );
     }
 
-    [[nodiscard]] auto toString () const noexcept -> String override {
+    __CDS_NoDiscard auto toString () const noexcept -> String override {
         return * this;
     }
 
@@ -1153,52 +1150,50 @@ public:
     auto replace ( Index, Size, String const & ) noexcept -> String &;
 
     template < typename Action >
-    auto forEach ( Action const & ) noexcept (false) -> String &;
+    __CDS_MaybeUnused auto forEach ( Action const & ) noexcept (false) -> String &;
     template < typename Action >
-    auto forEach ( Action const & ) const noexcept (false) -> String const &;
+    __CDS_MaybeUnused auto forEach ( Action const & ) const noexcept (false) -> String const &;
 
     template < typename Predicate >
-    auto count ( Predicate const & ) noexcept (false) -> Size;
+    __CDS_MaybeUnused auto count ( Predicate const & ) noexcept (false) -> Size;
     template < typename Predicate >
-    auto count ( Predicate const & ) const noexcept (false) -> Size;
+    __CDS_MaybeUnused auto count ( Predicate const & ) const noexcept (false) -> Size;
 
     template < typename Predicate >
-    inline auto some ( Predicate const & p, Size s ) noexcept (false) -> bool { return s <= this->count ( p ); }
+    __CDS_MaybeUnused inline auto some ( Predicate const & p, Size s ) noexcept (false) -> bool { return s <= this->count ( p ); }
     template < typename Predicate >
-    inline auto some ( Predicate const & p, Size s ) const noexcept(false) -> bool { return s <= this->count ( p ); }
-
-    template < typename Predicate >
-    auto any ( Predicate const & p ) noexcept (false) -> bool { return 1u <= this->count(p); }
-    template < typename Predicate >
-    auto any ( Predicate const & p ) const noexcept (false) -> bool { return 1u <= this->count(p); }
+    __CDS_MaybeUnused inline auto some ( Predicate const & p, Size s ) const noexcept(false) -> bool { return s <= this->count ( p ); }
 
     template < typename Predicate >
-    auto all ( Predicate const & p ) noexcept (false) -> bool { return this->size() == this->count(p); }
+    __CDS_MaybeUnused auto any ( Predicate const & p ) noexcept (false) -> bool { return 1u <= this->count(p); }
     template < typename Predicate >
-    auto all ( Predicate const & p ) const noexcept (false) -> bool { return this->size() == this->count(p); }
+    __CDS_MaybeUnused auto any ( Predicate const & p ) const noexcept (false) -> bool { return 1u <= this->count(p); }
 
-    [[nodiscard]] auto view () const noexcept -> View < String >;
+    template < typename Predicate >
+    __CDS_MaybeUnused auto all ( Predicate const & p ) noexcept (false) -> bool { return this->size() == this->count(p); }
+    template < typename Predicate >
+    __CDS_MaybeUnused auto all ( Predicate const & p ) const noexcept (false) -> bool { return this->size() == this->count(p); }
 
-    [[nodiscard]] auto reversed() const noexcept -> String;
+    __CDS_NoDiscard auto reversed() const noexcept -> String;
 
-    [[nodiscard]] auto startsWith (String const &) const noexcept -> bool;
-    [[nodiscard]] auto endsWith (String const &) const noexcept -> bool;
+    __CDS_NoDiscard __CDS_MaybeUnused auto startsWith (String const &) const noexcept -> bool;
+    __CDS_NoDiscard __CDS_MaybeUnused auto endsWith (String const &) const noexcept -> bool;
 
-    [[nodiscard]] inline auto removePrefix (String const & prefix) noexcept -> String & {
+    __CDS_NoDiscard inline auto removePrefix (String const & prefix) noexcept -> String & {
         if ( this->length() < prefix.length() ) return * this;
-        if ( this->substr(0, prefix.length()) == prefix ) * this = this->substr(prefix.length());
+        if ( this->substr(0, static_cast < Index > ( prefix.length() )) == prefix ) * this = this->substr(static_cast < Index > ( prefix.length() ));
         return * this;
     }
 
-    [[nodiscard]] inline auto removePrefix (String const & prefix) const noexcept -> String { return String(*this).removePrefix(prefix); }
+    __CDS_NoDiscard __CDS_MaybeUnused inline auto removePrefix (String const & prefix) const noexcept -> String { return String(*this).removePrefix(prefix); }
 
-    [[nodiscard]] inline auto removeSuffix (String const & suffix) noexcept -> String & {
+    __CDS_NoDiscard inline auto removeSuffix (String const & suffix) noexcept -> String & {
         if ( this->length() < suffix.length() ) return * this;
-        if ( this->substr( this->length() - suffix.length() ) == suffix ) * this = this->substr(0, this->length() - suffix.length());
+        if ( this->substr( static_cast < Index > ( this->length() ) - static_cast < Index > ( suffix.length() ) ) == suffix ) * this = this->substr(0, static_cast < Index > ( this->length() ) - static_cast < Index > ( suffix.length() ));
         return * this;
     }
 
-    [[nodiscard]] inline auto removeSuffix (String const & suffix) const noexcept -> String { return String(*this).removeSuffix(suffix); }
+    __CDS_NoDiscard inline auto removeSuffix (String const & suffix) const noexcept -> String { return String(*this).removeSuffix(suffix); }
 };
 
 class String::IteratorBase {
@@ -1214,8 +1209,8 @@ public:
     virtual ~IteratorBase() noexcept = default;
 
     virtual auto next() -> IteratorBase & = 0;
-    [[nodiscard]] constexpr inline auto equals ( const String::IteratorBase & i ) const noexcept -> bool { return this->_s == i._s && this->_pos == i._pos; }
-    [[nodiscard]] inline auto value ( ) const noexcept (false) -> ElementType & { return this->_s->get(this->_pos); }
+    __CDS_NoDiscard constexpr inline auto equals ( const String::IteratorBase & i ) const noexcept -> bool { return this->_s == i._s && this->_pos == i._pos; }
+    __CDS_NoDiscard inline auto value ( ) const noexcept (false) -> ElementType & { return this->_s->get(this->_pos); }
 
     virtual inline auto operator ++ () noexcept -> IteratorBase & { return this->next(); }
     constexpr inline auto operator == ( const IteratorBase & o ) const noexcept -> bool { return this->equals(o); }
@@ -1237,8 +1232,8 @@ public:
     virtual ~ConstIteratorBase() noexcept = default;
 
     virtual auto next() -> ConstIteratorBase & = 0;
-    [[nodiscard]] constexpr inline auto equals ( const String::ConstIteratorBase & i ) const noexcept -> bool { return this->_s == i._s && this->_pos == i._pos; }
-    [[nodiscard]] inline auto value ( ) const noexcept -> ElementType { return this->_s->get(this->_pos); }
+    __CDS_NoDiscard constexpr inline auto equals ( const String::ConstIteratorBase & i ) const noexcept -> bool { return this->_s == i._s && this->_pos == i._pos; }
+    __CDS_NoDiscard inline auto value ( ) const noexcept -> ElementType { return this->_s->get(this->_pos); }
 
 #if __cpp_constexpr >= 201907
     constexpr virtual inline auto operator ++ () noexcept -> ConstIteratorBase & { return this->next(); }
@@ -1469,16 +1464,16 @@ inline String::ReverseIterator::ReverseIterator(String & s, Index i) noexcept : 
 inline String::ConstReverseIterator::ConstReverseIterator(const String & s, Index i) noexcept : ConstIteratorBase(s, i) {}
 
 inline auto String::begin() noexcept -> Iterator { return Iterator ( * this, 0 ); }
-inline auto String::end () noexcept -> Iterator { return Iterator ( * this, this->_l ); }
+inline auto String::end () noexcept -> Iterator { return Iterator ( * this, static_cast < Index > ( this->_l ) ); }
 inline auto String::begin() const noexcept -> ConstIterator { return ConstIterator ( * this, 0 ); }
-inline auto String::end() const noexcept -> ConstIterator { return ConstIterator ( * this, this->_l ); }
+inline auto String::end() const noexcept -> ConstIterator { return ConstIterator ( * this, static_cast < Index > ( this->_l ) ); }
 inline auto String::cbegin() const noexcept -> ConstIterator { return ConstIterator ( * this, 0 ); }
-inline auto String::cend() const noexcept -> ConstIterator { return ConstIterator ( * this, this->_l ); }
-inline auto String::rbegin() noexcept -> ReverseIterator { return ReverseIterator( * this, this->_l - 1 ); }
+inline auto String::cend() const noexcept -> ConstIterator { return ConstIterator ( * this, static_cast < Index > ( this->_l ) ); }
+inline auto String::rbegin() noexcept -> ReverseIterator { return ReverseIterator( * this, static_cast < Index > ( this->_l ) - 1 ); }
 inline auto String::rend() noexcept -> ReverseIterator { return ReverseIterator( * this, -1 ); }
-inline auto String::rbegin() const noexcept -> ConstReverseIterator { return ConstReverseIterator( * this, this->_l - 1 ); }
+inline auto String::rbegin() const noexcept -> ConstReverseIterator { return ConstReverseIterator( * this, static_cast < Index > ( this->_l ) - 1 ); }
 inline auto String::rend() const noexcept -> ConstReverseIterator { return ConstReverseIterator( * this, -1 ); }
-inline auto String::crbegin() const noexcept -> ConstReverseIterator { return ConstReverseIterator( * this, this->_l - 1 ); }
+inline auto String::crbegin() const noexcept -> ConstReverseIterator { return ConstReverseIterator( * this, static_cast < Index > ( this->_l ) - 1 ); }
 inline auto String::crend() const noexcept -> ConstReverseIterator { return ConstReverseIterator( * this, -1 ); }
 
 inline auto String::operator [] (Index i) noexcept (false) -> ElementType & {
@@ -1486,9 +1481,9 @@ inline auto String::operator [] (Index i) noexcept (false) -> ElementType & {
         throw String::StringNullAccess();
 
     if ( i < 0 )
-        i += ( (-i) / this->size() + 1 ) * this->size();
+        i += ( (-i) / static_cast < Index > ( this->size() ) + 1 ) * static_cast < Index > ( this->size() );
     if ( i >= static_cast<Index>(this->size()) )
-        i = i % this->size();
+        i = static_cast < Index > ( i ) % static_cast < Index > ( this->size() );
 
     return this->_p[i];
 }
@@ -1498,9 +1493,9 @@ inline auto String::operator [] (Index i) const noexcept -> ElementType {
         return '\0';
 
     if ( i < 0 )
-        i += ( (-i) / this->size() + 1 ) * this->size();
+        i += ( (-i) / static_cast < Index > ( this->size() ) + 1 ) * static_cast < Index > ( this->size() );
     if ( i >= static_cast<Index>(this->size()) )
-        i = i % this->size();
+        i = i % static_cast < Index > ( this->size() );
 
     return this->_p[i];
 }
@@ -1579,9 +1574,6 @@ inline String::String(ConstIteratorBase const & begin, ConstIteratorBase const &
 }
 
 inline auto String::resize(Size size) noexcept -> void {
-//    if ( this->empty() )
-//        return;
-
     this->_c = size + 1;
     auto newArea = new ElementType [ this->_c ];
 
@@ -1600,8 +1592,6 @@ inline auto String::clear() noexcept -> void {
         std::memset ( this->_p, 0, this->_l );
     this->_l = 0;
 }
-
-//#include <CDS/LinkedList>
 
 inline String & String::operator= ( String const & o ) noexcept {
     if ( this == & o )
@@ -1651,16 +1641,19 @@ inline auto String::findFirst ( ElementType e ) const noexcept -> Index {
 
 inline auto String::findFirst ( String const & o ) const noexcept -> Index {
     Index i = 0;
-    for ( auto c : (*this) )
-        if ( this->size() - i >= o.size() && this->substr( i, i + o.size() ) == o )
+    for ( auto c : * this ) {
+        (void)c;
+
+        if (this->size() - i >= o.size() && this->substr(i, i + static_cast < Index > ( o.size())) == o)
             return i;
         else
             i++;
+    }
     return INVALID_POS;
 }
 
 inline auto String::findLast ( ElementType e ) const noexcept -> Index {
-    Index i = this->size() - 1;
+    auto i = static_cast < Index > ( this->size() ) - 1;
     for ( auto it = this->rbegin(); it != this->rend(); it++ )
         if ( it.value() == e )
             return i;
@@ -1670,9 +1663,9 @@ inline auto String::findLast ( ElementType e ) const noexcept -> Index {
 }
 
 inline auto String::findLast ( String const & o ) const noexcept -> Index {
-    Index i = this->size() - o.length();
+    auto i = static_cast < Index > ( this->size() ) - static_cast < Index > ( o.length() );
     for ( ; i >= 0; i-- )
-        if ( this->substr(i, i + o.length()) == o )
+        if ( this->substr(i, i + static_cast < Index > ( o.length() )) == o )
             return i;
 
     return INVALID_POS;
@@ -1699,7 +1692,7 @@ inline auto String::findFirstNotOf ( String const & o ) const noexcept -> Index 
 }
 
 inline auto String::findLastOf ( String const & o ) const noexcept -> Index {
-    Index i = this->size() - 1;
+    auto i = static_cast < Index > (this->size()) - 1;
     for ( auto it = this->rbegin(); it != this->rend(); it++ )
         if ( o.contains(it.value()) )
             return i;
@@ -1709,7 +1702,7 @@ inline auto String::findLastOf ( String const & o ) const noexcept -> Index {
 }
 
 inline auto String::findLastNotOf ( String const & o ) const noexcept -> Index {
-    Index i = this->size() - 1;
+    auto i = static_cast < Index > (this->size()) - 1;
     for ( auto it = this->rbegin(); it != this->rend(); it++ )
         if ( ! o.contains(it.value()) )
             return i;
@@ -1720,7 +1713,7 @@ inline auto String::findLastNotOf ( String const & o ) const noexcept -> Index {
 
 inline auto String::substr(Index from, Index to) const noexcept -> String {
     if ( to == -1 || to > static_cast<Index>(this->size()) )
-        to = this->size();
+        to = static_cast < Index > (this->size());
     if ( from < 0 )
         from = 0;
 
@@ -1780,7 +1773,7 @@ inline auto String::ljust(Size justifySize, ElementType padChar) noexcept -> Str
 
 inline auto String::replace(Index pos, Size len, const String & newInPlace) noexcept -> String & {
     String left = this->substr(0, pos);
-    String right = this->substr(pos + len);
+    String right = this->substr(pos + static_cast < Index > ( len ));
 
     return ( * this = left + newInPlace + right );
 }
@@ -1796,22 +1789,22 @@ inline auto String::operator * (int count) const noexcept -> String {
     return res;
 }
 
-inline auto String::startsWith(String const & str) const noexcept -> bool {
+__CDS_MaybeUnused inline auto String::startsWith(String const & str) const noexcept -> bool {
     if ( str.size() > this->size() ) return false;
-    return this->substr(0, str.size()) == str;
+    return this->substr(0, static_cast < Index > ( str.size() )) == str;
 }
 
-inline auto String::endsWith(String const & str) const noexcept -> bool {
+__CDS_MaybeUnused inline auto String::endsWith(String const & str) const noexcept -> bool {
     if ( str.size() > this->size() ) return false;
-    return this->substr(this->size() - str.size()) == str;
+    return this->substr(static_cast < Index > ( this->size() ) - static_cast < Index > ( str.size() )) == str;
 }
 
-inline auto operator "" _obj (const char * pString, std::size_t length) noexcept -> String {
-    return String(pString);
+inline auto operator "" _obj (const char * pString, std::size_t length __CDS_MaybeUnused ) noexcept -> String {
+    return pString;
 }
 
-inline auto operator "" _s (const char * pString, std::size_t length) noexcept -> String {
-    return String(pString);
+inline auto operator "" _s (const char * pString, std::size_t length __CDS_MaybeUnused ) noexcept -> String {
+    return pString;
 }
 
 #undef CONSTR_CLEAR
@@ -1819,7 +1812,7 @@ inline auto operator "" _s (const char * pString, std::size_t length) noexcept -
 #include <CDS/Types>
 
 namespace dataTypes {
-    template<> auto hash<String>(String const &o) noexcept -> Index { return o.length(); }
+    template<> auto hash<String>(String const &o) noexcept -> Index { return static_cast < Index > ( o.length() ); }
 }
 
 #endif //CDS_STRING_HPP

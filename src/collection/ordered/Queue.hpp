@@ -94,14 +94,11 @@ private:
     inline auto prepend ( T const & e ) noexcept -> void override { return this->SingleLinkedList < T > :: prepend (e); }
     inline auto prepend ( T && e ) noexcept -> void override { return this->SingleLinkedList < T > :: prepend (e); }
 
-    template < typename SortFunction >
-    inline auto sort ( SortFunction const & sortFunction ) noexcept -> void { return this->SingleLinkedList < T > :: sort (sortFunction); }
-
     auto sort ( Comparator < T > const & comparator ) noexcept -> void final { return this->SingleLinkedList< T > :: sort ( comparator ); }
 
 public:
     inline auto push ( T const & e ) noexcept -> void { return this->SingleLinkedList < T > :: pushBack (e); }
-    inline auto push ( T && e ) noexcept -> void { return this->SingleLinkedList < T > :: pushBack (e); }
+    __CDS_MaybeUnused inline auto push ( T && e ) noexcept -> void { return this->SingleLinkedList < T > :: pushBack (e); }
 
     inline auto pop () noexcept (false) -> T { return this->popFront(); }
 };

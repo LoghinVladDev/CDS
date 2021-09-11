@@ -317,18 +317,9 @@ public:
     StaticArray & operator = ( Collection<Value> const & ) noexcept;
     inline StaticArray & operator = ( StaticArray const & o ) noexcept { return this->operator=( ( Collection<Value> const & )(o) ); } // NOLINT(bugprone-unhandled-self-assignment,misc-unconventional-assign-operator)
 
-    [[nodiscard]] auto view () const noexcept -> View < StaticArray < T, n > >;
-
     [[nodiscard]] auto sequence () const noexcept -> Sequence < const StaticArray < T, n > >;
     [[nodiscard]] auto sequence () noexcept -> Sequence < StaticArray < T, n > >;
 };
-
-#include <CDS/View>
-template <class T, Size n>
-auto StaticArray<T, n>::view() const noexcept -> View < StaticArray <T, n > > {
-    return View(*this);
-}
-
 #include <CDS/Sequence>
 
 template <class T, Size n>

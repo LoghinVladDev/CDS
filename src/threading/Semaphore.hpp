@@ -15,7 +15,7 @@ private:
 
 public:
     Semaphore () noexcept : _pBase(new SharedPointer < Mutex >(new Mutex())) {}
-    explicit Semaphore ( Mutex & m ) noexcept : _pBase(new ForeignPointer < Mutex >(& m)) {}
+    __CDS_MaybeUnused explicit Semaphore ( Mutex & m ) noexcept : _pBase(new ForeignPointer < Mutex >(& m)) {}
     Semaphore ( Semaphore const & o ) noexcept : _pBase(o._pBase->copy()) { }
 
     ~Semaphore() noexcept override {
@@ -45,7 +45,7 @@ public:
         (*(* this->_pBase)).reset();
     }
 
-    [[nodiscard]] auto toString () const noexcept -> String override {
+    __CDS_NoDiscard auto toString () const noexcept -> String override {
         return String()
             .append("Semaphore{mutexBase=").append(this->_pBase->get()->toString())
             .append(",signalCount=").append(this->_count).append("}");

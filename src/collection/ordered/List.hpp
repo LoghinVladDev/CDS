@@ -6,9 +6,7 @@
 #define CDS_LIST_HPP
 
 #include <CDS/Collection>
-#if defined(__cpp_concepts) && !defined(_MSC_VER)
-#include <concepts>
-#endif
+#include <CDS/Concepts>
 
 template <class T>
 class List : public Collection <T> {
@@ -19,7 +17,7 @@ protected:
 public:
     class ListOutOfBounds: public Collection <T>::CollectionOutOfBounds {
     public:
-        [[nodiscard]] auto what () const noexcept -> StringLiteral override {
+        __CDS_NoDiscard auto what () const noexcept -> StringLiteral override {
             return "List Access Out of Bounds";
         }
     };
@@ -32,7 +30,7 @@ public:
 
     virtual auto set ( const T &, Index ) noexcept (false) -> T & = 0;
 
-    virtual auto sub ( List &, Index, Index = UINT64_MAX ) const noexcept (false) -> void = 0;
+    __CDS_MaybeUnused virtual auto sub ( List &, Index, Index = UINT64_MAX ) const noexcept (false) -> void = 0; // NOLINT(google-default-arguments)
 
     inline auto operator [] ( const Index & index ) noexcept -> T & {
         return this->get( index );
@@ -44,11 +42,11 @@ public:
 
     virtual auto remove ( const typename Collection<T>::Iterator & ) noexcept (false) -> T = 0;
     virtual auto replace( const typename Collection<T>::Iterator &, const T & ) noexcept -> void = 0;
-    virtual auto insertBefore( const typename Collection<T>::Iterator &, const T & ) noexcept -> void = 0;
-    virtual auto insertAfter( const typename Collection<T>::Iterator &, const T & ) noexcept -> void = 0;
+    __CDS_MaybeUnused virtual auto insertBefore( const typename Collection<T>::Iterator &, const T & ) noexcept -> void = 0;
+    __CDS_MaybeUnused virtual auto insertAfter( const typename Collection<T>::Iterator &, const T & ) noexcept -> void = 0;
 
-    virtual auto popFront ( ) noexcept (false) -> T = 0;
-    virtual auto popBack ( ) noexcept (false) -> T = 0;
+    __CDS_MaybeUnused virtual auto popFront ( ) noexcept (false) -> T = 0;
+    __CDS_MaybeUnused virtual auto popBack ( ) noexcept (false) -> T = 0;
 
     virtual auto pushFront ( const T & ) noexcept -> void = 0;
     virtual auto pushBack ( const T & ) noexcept -> void = 0;
@@ -65,14 +63,9 @@ public:
     inline auto add ( T const & v ) noexcept -> void override { return this->pushBack(v); }
     inline auto add ( T && v ) noexcept -> void override { return this->pushBack(v); }
 
-#if defined(__cpp_concepts) && !defined(_MSC_VER)
-    virtual auto sort ( const Comparator < T > & ) noexcept -> void = 0;
-//    virtual auto sort ( auto ) noexcept -> void = 0;
-#else
-//    virtual auto sort ( bool (*) (T const &, T const &) noexcept ) noexcept -> void = 0;
-#endif
+    __CDS_MaybeUnused virtual auto sort ( const Comparator < T > & ) noexcept -> void = 0;
 
-    [[nodiscard]] inline auto size () const noexcept -> Size override { return this->_size; }
+    __CDS_NoDiscard inline auto size () const noexcept -> Size override { return this->_size; }
 
     ~List () noexcept override = default;
 };

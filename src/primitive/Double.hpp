@@ -7,13 +7,6 @@
 
 #include <CDS/Object>
 #include <CDS/Random>
-#include "../cdsIntern/PrimitiveGenerator.hpp"
-
-#if __cpp_constepxr >= 201907
-#define __double_constexpr constexpr
-#else
-#define __double_constexpr inline
-#endif
 
 class Double : public Object {
 private:
@@ -32,54 +25,64 @@ public:
     constexpr Double() noexcept = default;
     constexpr Double(Double const&)noexcept=default;
     constexpr Double(Double &&)noexcept=default;
-    __double_constexpr ~Double() noexcept override = default;
-    constexpr Double(double value) noexcept: v(value) {}
+    __CDS_cpplang_ConstexprDestructor ~Double() noexcept override = default;
+    constexpr Double(double value) noexcept: v(value) {} // NOLINT(google-explicit-constructor)
+
     constexpr Double &operator=(Double const &o) noexcept {
         if (this == &o)return *this;
         this->v = o.v;
         return *this;
     }
+
     constexpr Double &operator=(double value) noexcept {
         this->v = value;
         return *this;
     }
-    __double_constexpr auto operator+(Double const &o) const noexcept -> Double { return this->v + o.v; }
-    __double_constexpr auto operator+(double value) const noexcept -> Double { return this->v + value; }
-    __double_constexpr auto operator-(Double const &o) const noexcept -> Double { return this->v - o.v; }
-    __double_constexpr auto operator-(double value) const noexcept -> Double { return this->v - value; }
-    __double_constexpr auto operator*(Double const &o) const noexcept -> Double { return this->v * o.v; }
-    __double_constexpr auto operator*(double value) const noexcept -> Double { return this->v * value; }
-    __double_constexpr auto operator/(Double const &o) const noexcept -> Double { return this->v / o.v; }
-    __double_constexpr auto operator/(double value) const noexcept -> Double { return this->v / value; }
+
+    __CDS_cpplang_ConstexprDestructor auto operator+(Double const &o) const noexcept -> Double { return this->v + o.v; }
+    __CDS_cpplang_ConstexprDestructor auto operator+(double value) const noexcept -> Double { return this->v + value; }
+    __CDS_cpplang_ConstexprDestructor auto operator-(Double const &o) const noexcept -> Double { return this->v - o.v; }
+    __CDS_cpplang_ConstexprDestructor auto operator-(double value) const noexcept -> Double { return this->v - value; }
+    __CDS_cpplang_ConstexprDestructor auto operator*(Double const &o) const noexcept -> Double { return this->v * o.v; }
+    __CDS_cpplang_ConstexprDestructor auto operator*(double value) const noexcept -> Double { return this->v * value; }
+    __CDS_cpplang_ConstexprDestructor auto operator/(Double const &o) const noexcept -> Double { return this->v / o.v; }
+    __CDS_cpplang_ConstexprDestructor auto operator/(double value) const noexcept -> Double { return this->v / value; }
 
     constexpr auto operator+=(Double const &o) noexcept -> Double & {
         this->v += o.v;
         return *this;
     }
+
     constexpr auto operator+=(double value) noexcept -> Double & {
         this->v += value;
         return *this;
     }
+
     constexpr auto operator-=(Double const &o) noexcept -> Double & {
         this->v -= o.v;
         return *this;
     }
+
     constexpr auto operator-=(double value) noexcept -> Double & {
         this->v -= value;
         return *this;
     }
+
     constexpr auto operator*=(Double const &o) noexcept -> Double & {
         this->v *= o.v;
         return *this;
     }
+
     constexpr auto operator*=(double value) noexcept -> Double & {
         this->v *= value;
         return *this;
     }
+
     constexpr auto operator/=(Double const &o) noexcept -> Double & {
         this->v /= o.v;
         return *this;
     }
+
     constexpr auto operator/=(double value) noexcept -> Double & {
         this->v /= value;
         return *this;
@@ -98,7 +101,7 @@ public:
     constexpr auto operator<=(Double const &o) const noexcept -> bool { return this->v <= o.v; }
     constexpr auto operator<=(double value) const noexcept -> bool { return this->v <= value; }
 
-    auto equals ( Object const & o ) const noexcept -> bool override {
+    __CDS_NoDiscard auto equals ( Object const & o ) const noexcept -> bool override {
         if ( this == & o ) return true;
         auto p = dynamic_cast < decltype (this) > ( & o );
         if ( p == nullptr ) return false;
@@ -106,15 +109,15 @@ public:
         return this->operator==(*p);
     }
 
-    constexpr operator double() const noexcept { return this->v; }
-    [[nodiscard]]constexpr inline auto get() const noexcept -> double { return this->v; }
+    constexpr operator double() const noexcept { return this->v; } // NOLINT(google-explicit-constructor)
+    __CDS_NoDiscard constexpr inline auto get() const noexcept -> double { return this->v; }
 
 public:
-    [[nodiscard]] auto hash() const noexcept -> Index override {
+    __CDS_NoDiscard auto hash() const noexcept -> Index override {
         return static_cast<Index>(this->v * 10000.0);
     }
 
-    [[nodiscard]] auto toString() const noexcept -> String override {
+    __CDS_NoDiscard auto toString() const noexcept -> String override {
         return String().append(this->v);
     }
 
@@ -156,7 +159,7 @@ public:
         return static_cast<double> (whole) + ( static_cast<double>(frac) / static_cast<double>(div) );
     }
 
-    [[nodiscard]] auto copy () const noexcept -> Double * override {
+    __CDS_NoDiscard auto copy () const noexcept -> Double * override {
         return new Double( * this );
     }
 
@@ -165,20 +168,20 @@ public:
 
 #include <CDS/Atomic>
 namespace hidden {
-    using _AtomicBaseDouble = Atomic<Double>;
+    using _AtomicBaseDouble = Atomic<Double>; // NOLINT(bugprone-reserved-identifier)
 }
 
-class Double::Atomic : public hidden::_AtomicBaseDouble {
+class Double::Atomic : public hidden::_AtomicBaseDouble { // NOLINT(bugprone-reserved-identifier)
 public:
     Atomic () noexcept {
         this->set(0);
     }
 
-    Atomic ( Atomic const & obj ) noexcept : hidden::_AtomicBaseDouble(obj) { }
-    Atomic ( Atomic && obj ) noexcept : hidden::_AtomicBaseDouble(obj) { }
-    Atomic ( Double const & v ) noexcept : hidden::_AtomicBaseDouble(v) { }
+    Atomic ( Atomic const & obj ) noexcept : hidden::_AtomicBaseDouble(obj) { } // NOLINT(modernize-use-equals-default)
+    Atomic ( Atomic && obj ) noexcept : hidden::_AtomicBaseDouble(obj) { } // NOLINT(performance-move-constructor-init)
+    Atomic ( Double const & v ) noexcept : hidden::_AtomicBaseDouble(v) { } // NOLINT(google-explicit-constructor)
 
-    Atomic (double v) noexcept {
+    Atomic (double v) noexcept { // NOLINT(google-explicit-constructor)
         this->set(v);
     }
 
@@ -195,12 +198,11 @@ public:
     Atomic & operator = (Atomic const &) noexcept = default;
     Atomic & operator = (Atomic &&) noexcept = default;
 
-    operator double () const noexcept {
+    operator double () const noexcept { // NOLINT(google-explicit-constructor)
         return this->get().get();
     }
 
-    [[nodiscard]] auto toString() const noexcept -> String override {
-//        return String().append(this->get());
+    __CDS_NoDiscard auto toString() const noexcept -> String override {
         return this->get().toString();
     }
 
@@ -224,17 +226,12 @@ auto operator _operator (double value) noexcept -> Atomic & {  \
 #undef _PREFIX_OP
 };
 
-__double_constexpr auto operator "" _obj (long double value) noexcept -> Double {
-    return Double(value);
+__CDS_cpplang_ConstexprDestructor auto operator "" _obj (long double value) noexcept -> Double {
+    return static_cast < double > ( value );
 }
 
-__double_constexpr auto operator "" _d (long double value) noexcept -> Double {
-    return Double(value);
+__CDS_cpplang_ConstexprDestructor auto operator "" _d (long double value) noexcept -> Double {
+    return static_cast < double > ( value );
 }
 
-#undef __double_constexpr
-
-#undef _G_OBJ
-#undef _G_OP_OBJ
-#undef _G_OP_OBJ_CONST
 #endif //CDS_DOUBLE_HPP

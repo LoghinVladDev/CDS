@@ -6,13 +6,6 @@
 #define CDS_BOOLEAN_HPP
 
 #include <CDS/Object>
-#include "../cdsIntern/PrimitiveGenerator.hpp"
-
-#if __cpp_constepxr >= 201907
-#define __boolean_constexpr constexpr
-#else
-#define __boolean_constexpr inline
-#endif
 
 class Boolean : public Object {
 private:
@@ -21,9 +14,9 @@ public:
     constexpr Boolean () noexcept = default;
     constexpr Boolean ( Boolean const & ) noexcept = default;
     constexpr Boolean ( Boolean && ) noexcept = default;
-    __boolean_constexpr ~Boolean() noexcept override = default;
+    __CDS_cpplang_ConstexprDestructor ~Boolean() noexcept override { } /* NOLINT(modernize-use-equals-default) */ /* causes destructor to be created after the True/False constexpr variables (cpp20) */
 
-    constexpr Boolean ( bool v ) noexcept : v(v) { }
+    constexpr Boolean ( bool v ) noexcept : v(v) { } // NOLINT(google-explicit-constructor)
 
     constexpr Boolean & operator = ( Boolean const & o ) noexcept {
         if ( this == & o ) return * this;
@@ -36,29 +29,29 @@ public:
         return * this;
     }
 
-    __boolean_constexpr auto operator &&(Boolean const & o) const noexcept -> Boolean {
+    __CDS_cpplang_ConstexprDestructor auto operator &&(Boolean const & o) const noexcept -> Boolean {
         return this->v && o.v;
     }
 
-    __boolean_constexpr auto operator && ( bool value ) const noexcept -> Boolean {
+    __CDS_cpplang_ConstexprDestructor auto operator && ( bool value ) const noexcept -> Boolean {
         return this->v && value;
     }
 
-    __boolean_constexpr auto operator ||(Boolean const & o) const noexcept -> Boolean {
+    __CDS_cpplang_ConstexprDestructor auto operator ||(Boolean const & o) const noexcept -> Boolean {
         return this->v || o.v;
     }
 
-    __boolean_constexpr auto operator || ( bool value ) const noexcept -> Boolean {
+    __CDS_cpplang_ConstexprDestructor auto operator || ( bool value ) const noexcept -> Boolean {
         return this->v || value;
     }
 
-    __boolean_constexpr auto operator ! () const noexcept -> Boolean {
+    __CDS_cpplang_ConstexprDestructor auto operator ! () const noexcept -> Boolean {
         return !this->v;
     }
 
     constexpr auto operator == (Boolean const & o) const noexcept -> bool { return this->v == o.v; }
 
-    auto equals ( Object const & o ) const noexcept -> bool override {
+    __CDS_NoDiscard auto equals ( Object const & o ) const noexcept -> bool override {
         if ( this == & o ) return true;
         auto p = dynamic_cast < decltype (this) > ( & o );
         if ( p == nullptr ) return false;
@@ -66,19 +59,19 @@ public:
         return this->operator==(*p);
     }
 
-    constexpr operator bool () const noexcept {
+    constexpr operator bool () const noexcept { // NOLINT(google-explicit-constructor)
         return this->v;
     }
 
-    [[nodiscard]] constexpr inline auto get () const noexcept -> bool {
+    __CDS_NoDiscard constexpr inline auto get () const noexcept -> bool {
         return this->v;
     }
 
-    [[nodiscard]] auto hash () const noexcept -> Index override {
+    __CDS_NoDiscard auto hash () const noexcept -> Index override {
         return static_cast < Index > (this->v);
     }
 
-    [[nodiscard]] auto toString () const noexcept -> String override {
+    __CDS_NoDiscard auto toString () const noexcept -> String override {
         return String().append(this->v ? "true" : "false");
     }
 
@@ -88,7 +81,7 @@ public:
         return string == "true";
     }
 
-    [[nodiscard]] auto copy () const noexcept -> Boolean * override {
+    __CDS_NoDiscard auto copy () const noexcept -> Boolean * override {
         return new Boolean( * this );
     }
 
@@ -97,20 +90,20 @@ public:
 
 #include <CDS/Atomic>
 namespace hidden {
-    using _AtomicBaseBoolean = Atomic<Boolean>;
+    using _AtomicBaseBoolean = Atomic<Boolean>; // NOLINT(bugprone-reserved-identifier)
 }
 
-class Boolean::Atomic : public hidden::_AtomicBaseBoolean {
+class Boolean::Atomic : public hidden::_AtomicBaseBoolean { // NOLINT(bugprone-reserved-identifier)
 public:
     Atomic () noexcept {
         this->set(false);
     }
 
-    Atomic ( Atomic const & obj ) noexcept : hidden::_AtomicBaseBoolean(obj) { }
-    Atomic ( Atomic && obj ) noexcept : hidden::_AtomicBaseBoolean(obj) { }
-    Atomic ( Boolean const & v ) noexcept : hidden::_AtomicBaseBoolean(v) { }
+    Atomic ( Atomic const & obj ) noexcept : hidden::_AtomicBaseBoolean(obj) { } // NOLINT(modernize-use-equals-default)
+    Atomic ( Atomic && obj ) noexcept : hidden::_AtomicBaseBoolean(obj) { } // NOLINT(performance-move-constructor-init)
+    Atomic ( Boolean const & v ) noexcept : hidden::_AtomicBaseBoolean(v) { } // NOLINT(google-explicit-constructor)
 
-    Atomic (bool v) noexcept {
+    Atomic (bool v) noexcept { // NOLINT(google-explicit-constructor)
         this->set(v);
     }
 
@@ -127,12 +120,11 @@ public:
     Atomic & operator = (Atomic const &) noexcept = default;
     Atomic & operator = (Atomic &&) noexcept = default;
 
-    operator bool () const noexcept {
+    operator bool () const noexcept { // NOLINT(google-explicit-constructor)
         return this->get().get();
     }
 
-    [[nodiscard]] auto toString() const noexcept -> String override {
-//        return String().append(this->get());
+    __CDS_NoDiscard auto toString() const noexcept -> String override {
         return this->get().toString();
     }
 
@@ -155,12 +147,21 @@ auto operator _operator (bool value) noexcept -> Atomic & {  \
 #undef _G_OP_OBJ
 #undef _G_OP_OBJ_CONST
 
-__boolean_constexpr auto operator "" _b (unsigned long long int i) noexcept -> Boolean {
-    return Boolean(i != 0);
+__CDS_cpplang_ConstexprDestructor auto operator "" _b (unsigned long long int i) noexcept -> Boolean {
+    return {i != 0};
 }
 
-__boolean_constexpr const Boolean True = true;
-__boolean_constexpr const Boolean False = false;
+#if __CDS_cpplang_core_version >= __CDS_cpplang_core_version_17
+
+__CDS_cpplang_ConstexprDestructor const Boolean True = true;
+__CDS_cpplang_ConstexprDestructor const Boolean False = false;
+
+#else
+
+#define True true
+#define False false
+
+#endif
 
 #undef __boolean_constexpr
 

@@ -76,7 +76,7 @@ private:
 
         inline auto seed ( typename TwisterEngine::result_type seed ) noexcept -> void { this->twisterEngine.seed(seed); }
 
-        [[nodiscard]] auto toString () const noexcept -> String override {
+        __CDS_NoDiscard auto toString () const noexcept -> String override {
             return String()
                 .append("RandomGenerator{")
                 .append("type = ").append(typeName())
@@ -89,13 +89,13 @@ public:
     template <typename T, typename D, typename TE = std::mt19937, typename RD = std::random_device>
     using Generator = BaseRandom<T, D, TE, RD>;
 
-    using Int           = Generator<sint32, std::uniform_int_distribution<sint32>>;
-    using Long          = Generator<sint64, std::uniform_int_distribution<sint64>, std::mt19937_64>;
-    using Float         = Generator<float, std::uniform_real_distribution<float>>;
-    using Double        = Generator<double, std::uniform_real_distribution<double>, std::mt19937_64>;
+    using Int                               = Generator<sint32, std::uniform_int_distribution<sint32>>;
+    using Long                              = Generator<sint64, std::uniform_int_distribution<sint64>, std::mt19937_64>;
+    using Float                             = Generator<float, std::uniform_real_distribution<float>>;
+    using Double                            = Generator<double, std::uniform_real_distribution<double>, std::mt19937_64>;
 
-    using UnsignedInt   = Generator<uint32, std::uniform_int_distribution<uint32>>;
-    using UnsignedLong  = Generator<uint64, std::uniform_int_distribution<uint64>>;
+    using UnsignedInt     __CDS_MaybeUnused = Generator<uint32, std::uniform_int_distribution<uint32>>;
+    using UnsignedLong    __CDS_MaybeUnused = Generator<uint64, std::uniform_int_distribution<uint64>>;
 };
 
 #endif //CDS_RANDOM_HPP

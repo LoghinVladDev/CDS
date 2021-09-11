@@ -46,12 +46,12 @@ public:
 
     class MapPairNonExistent : public std::exception {
     public:
-        [[nodiscard]] auto what() const noexcept -> StringLiteral final {
+        __CDS_NoDiscard auto what() const noexcept -> StringLiteral final {
             return "Map Entry for given Key does not exist";
         }
     };
 
-    virtual auto keys () const noexcept -> LinkedList < Reference < const Key > > = 0;
+    __CDS_MaybeUnused virtual auto keys () const noexcept -> LinkedList < Reference < const Key > > = 0;
     virtual auto values () noexcept -> LinkedList < Reference < Value > > = 0;
     virtual auto values () const noexcept -> LinkedList < Reference < const Value > > = 0;
     virtual auto entries () noexcept -> LinkedList < Pair < Reference < const Key >, Reference < Value > > > = 0;
@@ -61,17 +61,17 @@ public:
     virtual auto find (KeyConstReference) noexcept -> Optional < Reference < Value > > = 0;
     virtual auto get (KeyConstReference) noexcept -> ValueReference = 0;
     virtual auto get (KeyConstReference) const noexcept(false) -> ValueConstReference = 0;
-    virtual auto getOr (KeyConstReference, ValueConstReference) const noexcept -> ValueConstReference = 0;
+    __CDS_MaybeUnused virtual auto getOr (KeyConstReference, ValueConstReference) const noexcept -> ValueConstReference = 0;
 
     virtual inline auto operator [] (KeyConstReference k) noexcept -> ValueReference { return this->get(k); }
     virtual inline auto operator [] (KeyConstReference k) const noexcept(false) -> ValueConstReference { return this->get(k); }
 
-    virtual auto containsValue (ValueConstReference) const noexcept -> bool = 0;
+    __CDS_MaybeUnused virtual auto containsValue (ValueConstReference) const noexcept -> bool = 0;
     virtual auto containsKey (KeyConstReference) const noexcept -> bool = 0;
     virtual auto remove (KeyConstReference) noexcept -> bool = 0;
     virtual auto insert (EntryConstReference) noexcept -> ValueConstReference & = 0;
     virtual auto insert (Entry &&) noexcept -> ValueConstReference & = 0;
-    virtual auto emplace (KeyConstReference, ValueConstReference) noexcept -> ValueConstReference = 0;
+    __CDS_MaybeUnused virtual auto emplace (KeyConstReference, ValueConstReference) noexcept -> ValueConstReference = 0;
 
     inline auto add (EntryConstReference e) noexcept -> void override {
         this->insert(e);
@@ -138,15 +138,15 @@ private:
 
 template < typename K, typename V >
 REQUIRES (UniqueIdentifiable < K >)
-class MultiMap : public Collection < Pair < K, V > > {
-    using Key                           = K;
-    using Value                         = V;
-    using KeyReference                  = Key &;
-    using ValueReference                = Value &;
-    using KeyConstReference             = Key const &;
-    using ValueConstReference           = Value const &;
+class __CDS_MaybeUnused MultiMap : public Collection < Pair < K, V > > {
+    using Key                                   = K;
+    using Value                                 = V;
+    using KeyReference        __CDS_MaybeUnused = Key &;
+    using ValueReference      __CDS_MaybeUnused = Value &;
+    using KeyConstReference                     = Key const &;
+    using ValueConstReference __CDS_MaybeUnused = Value const &;
 
-    class PairNonExistent : public std::exception {
+    class __CDS_MaybeUnused PairNonExistent : public std::exception {
     private:
         String _message;
 
@@ -158,7 +158,7 @@ class MultiMap : public Collection < Pair < K, V > > {
         explicit PairNonExistent(KeyConstReference key) noexcept : std::exception () {
             std::stringstream oss;
 
-            if constexpr ( Type < KeyConstReference > :: ostreamPrintable )
+            if __CDS_cpplang_IfConstexpr ( Type < KeyConstReference > :: ostreamPrintable )
                 oss << "No Value for given Key '" << key << "'";
             else
                 oss << "No Value for given Key";
@@ -171,13 +171,11 @@ class MultiMap : public Collection < Pair < K, V > > {
         }
     };
 
-    virtual auto keys () const noexcept -> LinkedList < Reference < Key const > > = 0;
+    __CDS_MaybeUnused virtual auto keys () const noexcept -> LinkedList < Reference < Key const > > = 0;
     virtual auto values () noexcept -> LinkedList < Reference < Value > > = 0;
     virtual auto values () const noexcept -> LinkedList < Reference < Value const > > = 0;
     virtual auto entries () noexcept -> LinkedList < Pair < Reference < Key const >, Reference < Value > > > = 0;
     virtual auto entries () const noexcept -> LinkedList < Pair < Reference < Key const >, Reference < Value const > > > = 0;
-
-
 };
 
 #endif //CDS_MAP_HPP

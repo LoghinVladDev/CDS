@@ -61,10 +61,10 @@ public:
 
     constexpr auto rbegin () noexcept -> ReverseIterator { return ReverseIterator ( this, this->size () - 1 ); }
     constexpr auto rbegin () const noexcept -> ConstReverseIterator { return ConstReverseIterator ( this, this->size () - 1 ); }
-    [[maybe_unused]] constexpr auto crbegin () const noexcept -> ConstReverseIterator { return ConstReverseIterator ( this, this->size () - 1 ); }
+    __CDS_MaybeUnused constexpr auto crbegin () const noexcept -> ConstReverseIterator { return ConstReverseIterator ( this, this->size () - 1 ); }
     constexpr auto rend() noexcept -> ReverseIterator { return ReverseIterator(this, -1); }
     constexpr auto rend() const noexcept -> ConstReverseIterator { return ConstReverseIterator(this, -1); }
-    [[maybe_unused]] constexpr auto crend() const noexcept -> ConstReverseIterator { return ConstReverseIterator(this, -1); }
+    __CDS_MaybeUnused constexpr auto crend() const noexcept -> ConstReverseIterator { return ConstReverseIterator(this, -1); }
 
 private:
     auto _resize ( Size ) noexcept -> void;
@@ -136,26 +136,21 @@ public:
         return * this->_pData[0];
     }
 
-    [[nodiscard]] constexpr auto empty () const noexcept -> bool final {
+    __CDS_NoDiscard constexpr auto empty () const noexcept -> bool final {
         return this->_size == 0;
     }
-
-#if !defined(_MSC_VER)
-#pragma clang diagnostic push
-#pragma ide diagnostic ignored "Simplify"
-#endif
 
     auto operator == (Array const & o) const noexcept -> bool {
         if ( this == & o ) return true;
         if ( o.size() != this->size() ) return false;
 
         for ( auto i1 = this->begin(), i2 = o.begin(); i1 != this->end() && i2 != o.end(); i1++, i2++ )
-            if ( ! ( Type < T > :: deepCompare ( i1.value(), i2.value() ) ) )
+            if ( ! ( Type < T > :: compare ( i1.value(), i2.value() ) ) )
                 return false;
         return true;
     }
 
-    [[nodiscard]] auto equals (Object const & o) const noexcept -> bool final {
+    __CDS_NoDiscard auto equals (Object const & o) const noexcept -> bool final {
         if (this == &o) return true;
         auto p = dynamic_cast < decltype(this) > ( &o );
         if (p == nullptr) return false;
@@ -163,21 +158,16 @@ public:
         return this->operator==(*p);
     }
 
-
-#if !defined(_MSC_VER)
-#pragma clang diagnostic pop
-#endif
-
     auto clear () noexcept -> void final;
     auto makeUnique () noexcept -> void final;
     auto contains ( ValueConstReference ) const noexcept -> bool final;
 
-    [[nodiscard]] auto toString () const noexcept -> String final;
+    __CDS_NoDiscard auto toString () const noexcept -> String final;
 
     auto index ( ValueConstReference ) const noexcept -> Index final;
     auto index ( ValueReference ) noexcept -> Index final;
 
-    [[maybe_unused]] auto indices ( ValueConstReference ) const noexcept -> DoubleLinkedList < Index >;
+    __CDS_MaybeUnused auto indices ( ValueConstReference ) const noexcept -> DoubleLinkedList < Index >;
 
     auto get ( Index ) noexcept (false) -> ValueReference final;
     auto get ( Index ) const noexcept (false) -> ValueConstReference final;
@@ -185,7 +175,7 @@ public:
     auto set ( ValueConstReference, Index ) noexcept (false) -> ValueReference final;
     auto sub ( List < Value > &, Index, Index ) const noexcept (false) -> void final;
 
-    [[maybe_unused]] inline auto sub ( Index from, Index to ) const noexcept(false) -> Array {
+    __CDS_MaybeUnused inline auto sub ( Index from, Index to ) const noexcept(false) -> Array {
         Array array;
         this->sub( array, from, to );
         return array;
@@ -225,37 +215,29 @@ public:
     auto pushBack ( Value && ) noexcept -> void final;
 
 private:
-#if defined(__cpp_concepts) && !defined(_MSC_VER)
-    auto static quickSort ( Iterator, Iterator, auto ) noexcept -> void;
-    auto static quickSortPartition ( Iterator, Iterator, auto ) noexcept -> Iterator;
-#else
+
+#pragma clang diagnostic push
+#pragma ide diagnostic ignored "NotImplementedFunctions"
+
     template < typename SortFunc >
     auto static quickSort ( Iterator, Iterator, SortFunc const & ) noexcept -> void;
 
     template < typename SortFunc >
     auto static quickSortPartition ( Iterator, Iterator, SortFunc const & ) noexcept -> Iterator;
-//    auto static quickSort ( Iterator, Iterator, bool (*) (T const &, T const &) noexcept ) noexcept -> void;
-//    auto static quickSortPartition ( Iterator, Iterator, bool (*) (T const &, T const &) noexcept ) noexcept -> Iterator;
-#endif
+
+#pragma clang diagnostic pop
 
 public:
-#if defined(__cpp_concepts) && !defined(_MSC_VER)
-    auto sort ( auto func ) noexcept -> void;
-
-    inline auto sort ( Comparator<Value> const & c ) noexcept -> void final {
-        return this->sort ( [&c] (ValueConstReference a, ValueConstReference b) noexcept -> bool { return c(a, b); } );
-    }
-#else
-//    auto sort ( bool (*) (T const &, T const &) noexcept ) noexcept -> void final;
-
     template < typename SortFunc >
     auto sort ( SortFunc const & ) noexcept -> void;
-#endif
 
-    Array & operator = ( Collection<Value> const & ) noexcept;
+    inline auto sort ( Comparator < Value > const & c ) noexcept -> void final {
+        return this->sort ( [&c] (ValueConstReference a, ValueConstReference b) noexcept -> bool { return c(a, b); } );
+    }
+
+    Array & operator = ( Collection < Value > const & ) noexcept;
     inline Array & operator = ( Array const & o ) noexcept { return this->operator=( ( Collection<Value> const & )(o) ); } // NOLINT(bugprone-unhandled-self-assignment,misc-unconventional-assign-operator)
 
-//    auto view () const noexcept -> View < Array < T > >;
     auto sequence () const noexcept -> Sequence < const Array < T > >;
     auto sequence () noexcept -> Sequence < Array < T > >;
 };
@@ -288,7 +270,7 @@ public:
 
     constexpr auto value () const noexcept -> ValueReference final { return (* this->_pArray)[this->_index]; }
 
-    [[nodiscard]] auto copy () const noexcept -> IteratorBase * override = 0;
+    __CDS_NoDiscard auto copy () const noexcept -> IteratorBase * override = 0;
 };
 
 template <class T>
@@ -319,7 +301,7 @@ public:
 
     constexpr auto value () const noexcept -> ValueConstReference final { return (* this->_pArray)[this->_index]; }
 
-    [[nodiscard]] auto copy () const noexcept -> ConstIteratorBase * override = 0;
+    __CDS_NoDiscard auto copy () const noexcept -> ConstIteratorBase * override = 0;
 };
 
 template <class T>
@@ -380,7 +362,7 @@ public:
     constexpr auto operator -- () noexcept -> ReverseIterator & { return this->prev(); }
     constexpr auto operator -- (int) noexcept -> ReverseIterator { auto copy = * this; this->prev(); return copy; }
 
-    [[nodiscard]] auto copy () const noexcept -> ReverseIterator * override {
+    __CDS_NoDiscard auto copy () const noexcept -> ReverseIterator * override {
         return new ReverseIterator ( * this );
     }
 };
@@ -410,7 +392,7 @@ public:
     constexpr auto operator -- () noexcept -> ConstIterator & { return this->prev(); }
     constexpr auto operator -- (int) noexcept -> ConstIterator { auto copy = * this; this->prev(); return copy; }
 
-    [[nodiscard]] auto copy () const noexcept -> ConstIterator * override {
+    __CDS_NoDiscard auto copy () const noexcept -> ConstIterator * override {
         return new ConstIterator ( * this );
     }
 };
@@ -440,7 +422,7 @@ public:
     constexpr auto operator -- () noexcept -> ConstReverseIterator & { return this->prev(); }
     constexpr auto operator -- (int) noexcept -> ConstReverseIterator { auto copy = * this; this->prev(); return copy; }
 
-    [[nodiscard]] auto copy () const noexcept -> ConstReverseIterator * override {
+    __CDS_NoDiscard auto copy () const noexcept -> ConstReverseIterator * override {
         return new ConstReverseIterator ( * this );
     }
 };
@@ -503,17 +485,16 @@ auto Array<T>::pushBack(Value && moveValue) noexcept -> void {
 template <class T>
 auto Array<T>::toString() const noexcept -> String {
     if ( this->empty() )
-        return String ("[ ]");
+        return {"[ ]"};
 
     std::stringstream out;
     out << "[ ";
 
     for ( const auto & e : (*this) )
-        Type < T > ::streamPrint( out, e ) << ", ";
-//        out << e << ", ";
+        Type < T > :: streamPrint( out, e ) << ", ";
 
     auto s = out.str();
-    return String(s.substr(0, s.length() - 2).append(" ]"));
+    return s.substr(0, s.length() - 2).append(" ]");
 }
 
 template <class T>
@@ -547,7 +528,7 @@ auto Array<T>::_resize(Size size) noexcept -> void {
     }
 
     if ( this->_capacity > size )
-        for ( Index i = size; i < this->_capacity; i ++ )
+        for ( auto i = static_cast < Index > ( size ); i < this->_capacity; i ++ )
             delete this->_pData[i];
 
     delete [] this->_pData;
@@ -576,13 +557,8 @@ Array<T>::Array(
         typename Collection<Value>::Iterator const & from,
         typename Collection<Value>::Iterator const & to
 ) noexcept {
-    auto it = UniquePointer ( from );
-
-    for ( ; ! it->equals (to); it->next() )
+    for ( auto it = UniquePointer < decltype ( & from ) > ( from.copy() ); ! it->equals (to); it->next() )
         this->pushBack( it->value() );
-
-//    for ( auto it = from ; it != to; it ++ )
-//        this->pushBack(it.value());
 }
 
 template <class T>
@@ -590,13 +566,8 @@ Array<T>::Array(
         typename Collection<Value>::ConstIterator const & from,
         typename Collection<Value>::ConstIterator const & to
 ) noexcept {
-
-    auto it = UniquePointer ( from );
-
-    for ( ; ! it->equals (to); it->next() )
+    for ( auto it = UniquePointer < decltype ( & from ) > ( from.copy() ); ! it->equals (to); it->next() )
         this->pushBack( it->value() );
-//    for ( auto it = from; it != to; it ++ )
-//        this->pushBack(it.value());
 }
 
 template <class T>
@@ -612,7 +583,7 @@ auto Array<T>::remove(ValueConstReference e, Size count) noexcept -> bool {
     Array without;
 
     for ( auto & it : * this )
-        if ( Type < T > :: deepCompare ( it, e ) && count > 0 )
+        if ( Type < T > :: compare ( it, e ) && count > 0 )
             count--;
         else
             without.pushBack( it );
@@ -629,7 +600,7 @@ auto Array<T>::removeLast(ValueConstReference e) noexcept -> bool {
     bool removed = false;
 
     for ( auto it = this->rbegin(); it != this->rend(); it ++ )
-        if ( Type < T > :: deepCompare ( it.value(), e ) && ! removed )
+        if ( Type < T > :: compare ( it.value(), e ) && ! removed )
             removed = true;
         else
             without.pushFront( it.value() );
@@ -703,7 +674,7 @@ auto Array<T>::removeLastNotOf(Collection<Value> const & elements) noexcept -> b
 template <class T>
 auto Array<T>::replace(ValueConstReference what, ValueConstReference with, Size count) noexcept -> void {
     for ( auto & e : * this )
-        if ( Type < T > :: deepCompare ( e, what ) && count > 0 ) {
+        if ( Type < T > :: compare ( e, what ) && count > 0 ) {
             e = with;
             count --;
         } else if ( count == 0 )
@@ -733,7 +704,7 @@ auto Array<T>::replaceNotOf(Collection<Value> const & what, ValueConstReference 
 template <class T>
 auto Array<T>::replaceLast(ValueConstReference what, ValueConstReference with) noexcept -> void {
     for ( auto it = this->rbegin(); it != this->rend(); it ++ )
-        if ( Type < T > :: deepCompare ( it.value(), what ) ) {
+        if ( Type < T > :: compare ( it.value(), what ) ) {
             it.value() = with;
             break;
         }
@@ -785,7 +756,7 @@ auto Array<T>::insertBefore( typename Collection<Value>::Iterator const & iterat
     Array newArray;
 
     auto it = this->begin();
-    while ( it != this->end() && ! ( Type < T > :: deepCompare ( it.value(), value )) ) {
+    while ( it != this->end() && ! ( Type < T > :: compare ( it.value(), value )) ) {
         newArray.pushBack(it.value());
         it ++;
     }
@@ -805,7 +776,7 @@ auto Array<T>::insertAfter(typename Collection<Value>::Iterator const & iterator
     Array newArray;
 
     auto it = this->begin();
-    while ( it != this->end() && ! ( Type < T > :: deepCompare ( it.value(), value ) ) ) {
+    while ( it != this->end() && ! ( Type < T > :: compare ( it.value(), value ) ) ) {
         newArray.pushBack(it.value());
         it ++;
     }
@@ -842,7 +813,7 @@ auto Array<T>::makeUnique() noexcept -> void {
 template <class T>
 auto Array<T>::contains( ValueConstReference value ) const noexcept -> bool {
     for ( auto & e : * this ) // NOLINT(readability-use-anyofallof)
-        if ( Type < T > :: deepCompare ( e, value ) )
+        if ( Type < T > :: compare ( e, value ) )
             return true;
     return false;
 }
@@ -851,7 +822,7 @@ template <class T>
 auto Array<T>::index( ValueConstReference value ) const noexcept -> Index {
     Index i = 0;
     for ( auto & e : * this )
-        if ( Type < T > :: deepCompare ( e, value ) )
+        if ( Type < T > :: compare ( e, value ) )
             return i;
         else
             i++;
@@ -862,7 +833,7 @@ template <class T>
 auto Array<T>::index( ValueReference value ) noexcept -> Index {
     Index i = 0;
     for ( auto & e : * this )
-        if ( Type < T > :: deepCompare ( e, value ) )
+        if ( Type < T > :: compare ( e, value ) )
             return i;
         else
             i++;
@@ -872,12 +843,12 @@ auto Array<T>::index( ValueReference value ) noexcept -> Index {
 #include <CDS/LinkedList>
 
 template <class T>
-auto Array<T>::indices( ValueConstReference value ) const noexcept -> DoubleLinkedList < Index > {
+__CDS_MaybeUnused auto Array<T>::indices( ValueConstReference value ) const noexcept -> DoubleLinkedList < Index > {
     DoubleLinkedList < Index > indices;
 
     Index i = 0;
     for ( auto & e : * this ) {
-        if ( Type < T > :: deepCompare ( e, value ) )
+        if ( Type < T > :: compare ( e, value ) )
             indices.pushBack(i);
         i++;
     }
@@ -942,20 +913,13 @@ Array<T> & Array<T>::operator= (Collection<T> const & c) noexcept {
 }
 
 template <class T>
-#if !(defined(__cpp_concepts) && !defined(_MSC_VER))
 template <typename SortFunc>
-#endif
 auto Array<T>::quickSortPartition(
         Iterator from,
         Iterator to,
-#if defined(__cpp_concepts) && !defined(_MSC_VER)
-        auto sortFunc
-#else
-//        bool (* sortFunc) (T const &, T const &) noexcept
         SortFunc const & sortFunc
-#endif
 ) noexcept -> Iterator {
-    auto swap = [] ( T & a, T & b ) { auto aux = a; a = b; b = aux; };
+    __CDS_cpplang_ConstexprLambda static auto swap = [] ( T & a, T & b ) { auto aux = a; a = b; b = aux; };
 
     auto pivot = to.value();
     Iterator partitionIterator ( from );
@@ -976,21 +940,14 @@ auto Array<T>::quickSortPartition(
     return previous;
 }
 
-template <class T>
-#if !(defined(__cpp_concepts) && !defined(_MSC_VER))
+template <typename T>
 template <typename SortFunc>
-#endif
 auto Array<T>::quickSort(
         Iterator from,
         Iterator to,
-#if defined(__cpp_concepts) && !defined(_MSC_VER)
-        auto sortFunc
-#else
-//        bool (* sortFunc) (T const &, T const &) noexcept
         SortFunc const & sortFunc
-#endif
 ) noexcept -> void {
-    constexpr static auto validIterator = []( auto & it ) noexcept->bool { return it._index >= 0 && it._index < it._pArray->_size; };
+    __CDS_cpplang_ConstexprLambda static auto validIterator = []( auto & it ) noexcept->bool { return it._index >= 0 && it._index < it._pArray->_size; };
 
     auto next = to;
     if ( next._index < next._pArray->_size ) {
@@ -1023,35 +980,24 @@ auto Array<T>::quickSort(
 }
 
 template <class T>
-#if defined(__cpp_concepts) && !defined(_MSC_VER)
-auto Array<T>::sort(auto sortFunc) noexcept -> void {
-#else
 template < typename SortFunc >
 auto Array<T>::sort(SortFunc const & sortFunc) noexcept -> void {
-#endif
     if ( this->size() < 2 )
         return;
 
     Array::quickSort( this->begin(), -- this->end(), sortFunc );
 }
-//#include <CDS/View>
-//
-//template < typename T >
-//auto Array<T>::view () const noexcept -> View < Array < T > > {
-//    return View(*this);
-//}
 
 #include <CDS/Sequence>
 
 template < typename T >
 auto Array < T > :: sequence () const noexcept -> Sequence < const Array < T > > {
-    return Sequence(*this);
+    return Sequence < typename std :: remove_reference < decltype (*this) > :: type > (*this);
 }
 
 template < typename T >
 auto Array < T > :: sequence () noexcept -> Sequence < Array < T > > {
-    return Sequence(*this);
+    return Sequence < typename std :: remove_reference < decltype (*this) > :: type > (*this);
 }
-
 
 #endif //CDS_ARRAY_HPP

@@ -7,8 +7,19 @@
 
 #include <type_traits>
 #include <utility>
-//#include <CDS/Pair>
 #include <iostream>
+
+#if __CDS_cpplang_core_version >= __CDS_cpplang_core_version_17
+
+template < bool value >
+using BoolConstant = std :: bool_constant < value >;
+
+#else
+
+template < bool value >
+using BoolConstant = std :: integral_constant < bool, value >;
+
+#endif
 
 template < typename T, typename U, typename = std::void_t<> > struct isComparableLess : std::false_type {};
 template < typename T, typename U, typename = std::void_t<> > struct isComparableLessNoexcept : std::false_type {};
@@ -16,10 +27,10 @@ template < typename T, typename U, typename = std::void_t<> > struct isComparabl
 template < typename T, typename U, typename = std::void_t<> > struct isComparableEqualsNoexcept : std::false_type {};
 
 template < typename T, typename U > struct isComparableLess < T, U, std::void_t < decltype ( std::declval <T> () < std::declval <U> () ) > > : std::true_type {};
-template < typename T, typename U > struct isComparableLessNoexcept < T, U, std::void_t < decltype ( std::declval <T> () < std::declval <U>() ) > > : std::bool_constant < noexcept ( std::declval <T> () < std::declval <U> () ) > { };
+template < typename T, typename U > struct isComparableLessNoexcept < T, U, std::void_t < decltype ( std::declval <T> () < std::declval <U>() ) > > : BoolConstant < noexcept ( std::declval <T> () < std::declval <U> () ) > { };
 
 template < typename T, typename U > struct isComparableEquals < T, U, std::void_t < decltype ( std::declval <T> () == std::declval <U> () ) > > : std::true_type {};
-template < typename T, typename U > struct isComparableEqualsNoexcept < T, U, std::void_t < decltype ( std::declval <T> () == std::declval <U>() ) > > : std::bool_constant < noexcept ( std::declval <T> () == std::declval <U> () ) > { };
+template < typename T, typename U > struct isComparableEqualsNoexcept < T, U, std::void_t < decltype ( std::declval <T> () == std::declval <U>() ) > > : BoolConstant < noexcept ( std::declval <T> () == std::declval <U> () ) > { };
 
 template < typename T >
 constexpr bool typeHasEqualityOperator = isComparableEquals < T, T > :: type :: value;
@@ -156,22 +167,23 @@ struct Type {
     template < typename Derived >
     static constexpr bool baseOf = isDerivedFrom < Derived, T > :: type :: value;
 
-    static constexpr auto deepCompare (T const & a, T const & b) noexcept -> bool {
-        if constexpr ( Type :: hasEqualityOperator ) {
-            if ( a == b )
-                return true;
-        } else if constexpr ( Type :: objectDerived ) {
-            if ( a.equals (b) )
-                return true;
-        } else {
-            return & a == & b;
-        }
+    template < typename U = T >
+    static constexpr auto compare (T const & a, T const & b, int = 0) noexcept -> typename std :: enable_if < Type < U > :: hasEqualityOperator, bool > :: type {
+        return a == b;
+    }
 
-        return false;
+    template < typename U = T >
+    static inline auto compare (T const & a, T const & b, float = 0.0f) noexcept -> typename std :: enable_if < ! Type < U > :: hasEqualityOperator && Type < U > :: objectDerived, bool > :: type {
+        return a.equals(b);
+    }
+
+    template < typename U = T >
+    static constexpr auto compare (T const & a, T const & b) noexcept -> typename std :: enable_if < ! Type < U > :: hasEqualityOperator && ! Type < U > :: objectDerived, bool > :: type {
+        return & a == & b;
     }
 
     static constexpr auto streamPrint (std::ostream & ostream, T const & obj) noexcept -> std::ostream & {
-        if constexpr ( Type :: ostreamPrintable ) {
+        if __CDS_cpplang_IfConstexpr ( Type :: ostreamPrintable ) {
             ostream << obj;
         } else
             ostream << ( & obj );

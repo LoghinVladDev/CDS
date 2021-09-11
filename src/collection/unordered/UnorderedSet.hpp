@@ -11,14 +11,14 @@ template <class T>
 class UnorderedSet final : public Set<T>  {
 public:
 
-    using Reference         = typename Set<T>::Reference;
-    using ConstReference    = typename Set<T>::ConstReference;
-    using Pointer           = typename Set<T>::Pointer;
-    using ConstPointer      = typename Set<T>::ConstPointer;
+    using Reference                             = typename Set<T>::Reference;
+    using ConstReference                        = typename Set<T>::ConstReference;
+    using Pointer                               = typename Set<T>::Pointer;
+    using ConstPointer     __CDS_MaybeUnused    = typename Set<T>::ConstPointer;
 
-    using Node              = typename Set<T>::Node;
-    using NodePointer       = typename Set<T>::NodePointer;
-    using ConstNodePointer  = typename Set<T>::ConstNodePointer;
+    using Node                                  = typename Set<T>::Node;
+    using NodePointer      __CDS_MaybeUnused    = typename Set<T>::NodePointer;
+    using ConstNodePointer __CDS_MaybeUnused    = typename Set<T>::ConstNodePointer;
 
     UnorderedSet() noexcept = default;
     UnorderedSet(UnorderedSet const & set) noexcept : Set<T>(set) {
@@ -34,16 +34,16 @@ public:
         typename Collection<T>::Iterator const & from,
         typename Collection<T>::Iterator const & to
     ) noexcept : Set<T>() {
-        for ( auto it = from; it != to; it++ )
-            this->insert(it.value());
+        for ( auto it = UniquePointer < decltype ( & from ) > ( from.copy() ); ! it->equals (to); it->next() )
+            this->insert( it->value() );
     }
 
     explicit UnorderedSet(
         typename Collection<T>::ConstIterator const & from,
         typename Collection<T>::ConstIterator const & to
     ) noexcept : Set<T>() {
-        for ( auto it = from; it != to; it++ )
-            this->insert(it.value());
+        for ( auto it = UniquePointer < decltype ( & from ) > ( from.copy() ); ! it->equals (to); it->next() )
+            this->insert( it->value() );
     }
 
     UnorderedSet ( std::initializer_list < T > const & initializerList ) noexcept : Set<T>() {
@@ -72,12 +72,10 @@ public:
         return * this;
     }
 
-    inline UnorderedSet & operator = ( UnorderedSet const & o ) noexcept { return this->operator=( (Collection<T> const &) ( o ) ); }
+    inline UnorderedSet & operator = ( UnorderedSet const & o ) noexcept { return this->operator=( (Collection<T> const &) ( o ) ); } // NOLINT(misc-unconventional-assign-operator)
 
     auto insert ( ConstReference ) noexcept -> bool final;
     auto insert ( T && ) noexcept -> bool final;
-
-//    auto view () const noexcept -> View < UnorderedSet < T > >;
 
     auto sequence () const noexcept -> Sequence < const UnorderedSet < T > >;
     auto sequence () noexcept -> Sequence < UnorderedSet < T > >;
@@ -105,12 +103,6 @@ auto UnorderedSet<T>::insert(T && v) noexcept -> bool {
     return true;
 }
 
-//#include <CDS/View>
-//template <class T>
-//auto UnorderedSet<T>::view() const noexcept -> View<UnorderedSet<T>> {
-//    return View(*this);
-//}
-
 #ifndef _OMIT_SEQUENCE_IMPL
 #ifndef _CDS_UNORDERED_SET_SEQUENCE_IMPL // NOLINT(bugprone-reserved-identifier)
 #define _CDS_UNORDERED_SET_SEQUENCE_IMPL // NOLINT(bugprone-reserved-identifier)
@@ -118,18 +110,22 @@ auto UnorderedSet<T>::insert(T && v) noexcept -> bool {
 
 template <class T>
 auto UnorderedSet<T>::sequence() const noexcept -> Sequence< const UnorderedSet<T>> {
-    return Sequence(*this);
+    return Sequence < typename std :: remove_reference < decltype (*this) > :: type > (*this);
 }
 
 template <class T>
 auto UnorderedSet<T>::sequence() noexcept -> Sequence<UnorderedSet<T>> {
-    return Sequence(*this);
+    return Sequence < typename std :: remove_reference < decltype (*this) > :: type > (*this);
 }
 #endif
 
 #endif
 
+#if __CDS_cpplang_CTAD_available == true
+
 template < typename T >
 UnorderedSet ( std::initializer_list < T > ) -> UnorderedSet < T >;
+
+#endif
 
 #endif //CDS_UNORDEREDSET_HPP

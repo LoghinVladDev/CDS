@@ -34,8 +34,8 @@ public:
         return static_cast < Size > ( sysconf ( _SC_NPROCESSORS_ONLN ) );
 #else
 #error Thread not supported
-#endif
         return 0;
+#endif
     }
 
     typedef auto ( * ErrorCallback ) ( String const &, Thread *, std::exception const * ) noexcept -> void;
@@ -74,7 +74,7 @@ private:
         RUNNING                 = 0x02u,
         FINISHED                = 0x04u,
         KILLED                  = 0x08u,
-        EXCEPTION_TERMINATED    = 0x16u
+        EXCEPTION_TERMINATED    = 0x10u
     };
 
     constexpr static auto stateToString ( State s ) noexcept -> StringLiteral {
@@ -178,11 +178,17 @@ public:
     }
 
     ~Thread () noexcept override {
-        if (this->state != State::FINISHED)
+        auto stateValue = this->state.get();
+
+        if (
+            stateValue != Thread::State::FINISHED &&
+            stateValue != Thread::State::KILLED &&
+            stateValue != Thread::State::EXCEPTION_TERMINATED
+        )
             this->kill();
     }
 
-    [[nodiscard]] auto toString() const noexcept -> String override {
+    __CDS_NoDiscard auto toString() const noexcept -> String override {
         return String()
             .append("Thread { <").append(Thread::IMPLEMENTATION_TYPE).append(">; handle = ")
             .append(

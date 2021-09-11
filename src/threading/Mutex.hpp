@@ -207,7 +207,7 @@ public:
 
     }
 
-    auto toString() const noexcept -> String override {
+    __CDS_NoDiscard auto toString() const noexcept -> String override {
         return String()
             .append("Mutex { <").append(Mutex::IMPLEMENTATION_TYPE).append(">; state = ")
             .append(Mutex::stateToString(this->state)).append(" }");

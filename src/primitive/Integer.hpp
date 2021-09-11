@@ -6,14 +6,6 @@
 #define CDS_INTEGER_HPP
 
 #include <CDS/Object>
-#include "../cdsIntern/PrimitiveGenerator.hpp"
-
-#if __cpp_constepxr >= 201907
-#define __integer_constexpr constexpr
-#else
-#define __integer_constexpr inline
-#endif
-
 #include <CDS/Random>
 #include <CDS/Pointer>
 
@@ -41,9 +33,9 @@ public:
     constexpr Integer(Integer const&)noexcept = default;
     constexpr Integer(Integer &&)noexcept = default;
 
-    __integer_constexpr ~Integer () noexcept override = default;
+    __CDS_cpplang_ConstexprDestructor ~Integer () noexcept override = default;
 
-    constexpr Integer(int value) noexcept: v(value) {}
+    constexpr Integer(int value) noexcept: v(value) {} // NOLINT(google-explicit-constructor)
 
     constexpr Integer &operator=(Integer const &o) noexcept {
         if (this == &o)return *this;
@@ -55,57 +47,67 @@ public:
         return *this;
     }
 
-    __integer_constexpr auto operator+(Integer const &o) const noexcept -> Integer { return this->v + o.v; }
-    __integer_constexpr auto operator+(int value) const noexcept -> Integer { return this->v + value; }
-    __integer_constexpr auto operator-(Integer const &o) const noexcept -> Integer { return this->v - o.v; }
-    __integer_constexpr auto operator-(int value) const noexcept -> Integer { return this->v - value; }
-    __integer_constexpr auto operator*(Integer const &o) const noexcept -> Integer { return this->v * o.v; }
-    __integer_constexpr auto operator*(int value) const noexcept -> Integer { return this->v * value; }
-    __integer_constexpr auto operator/(Integer const &o) const noexcept -> Integer { return this->v / o.v; }
-    __integer_constexpr auto operator/(int value) const noexcept -> Integer { return this->v / value; }
-    __integer_constexpr auto operator%(Integer const &o) const noexcept -> Integer { return this->v % o.v; }
-    __integer_constexpr auto operator%(int value) const noexcept -> Integer { return this->v % value; }
+    __CDS_cpplang_ConstexprDestructor auto operator+(Integer const &o) const noexcept -> Integer { return this->v + o.v; }
+    __CDS_cpplang_ConstexprDestructor auto operator+(int value) const noexcept -> Integer { return this->v + value; }
+    __CDS_cpplang_ConstexprDestructor auto operator-(Integer const &o) const noexcept -> Integer { return this->v - o.v; }
+    __CDS_cpplang_ConstexprDestructor auto operator-(int value) const noexcept -> Integer { return this->v - value; }
+    __CDS_cpplang_ConstexprDestructor auto operator*(Integer const &o) const noexcept -> Integer { return this->v * o.v; }
+    __CDS_cpplang_ConstexprDestructor auto operator*(int value) const noexcept -> Integer { return this->v * value; }
+    __CDS_cpplang_ConstexprDestructor auto operator/(Integer const &o) const noexcept -> Integer { return this->v / o.v; }
+    __CDS_cpplang_ConstexprDestructor auto operator/(int value) const noexcept -> Integer { return this->v / value; }
+    __CDS_cpplang_ConstexprDestructor auto operator%(Integer const &o) const noexcept -> Integer { return this->v % o.v; }
+    __CDS_cpplang_ConstexprDestructor auto operator%(int value) const noexcept -> Integer { return this->v % value; }
 
-    __integer_constexpr auto operator+=(Integer const &o) noexcept -> Integer & {
+    __CDS_cpplang_ConstexprDestructor auto operator+=(Integer const &o) noexcept -> Integer & {
         this->v += o.v;
         return *this;
     }
+
     constexpr auto operator+=(int value) noexcept -> Integer & {
         this->v += value;
         return *this;
     }
+
     constexpr auto operator-=(Integer const &o) noexcept -> Integer & {
         this->v -= o.v;
         return *this;
     }
+
     constexpr auto operator-=(int value) noexcept -> Integer & {
         this->v -= value;
         return *this;
     }
+
     constexpr auto operator*=(Integer const &o) noexcept -> Integer & {
         this->v *= o.v;
         return *this;
     }
+
     constexpr auto operator*=(int value) noexcept -> Integer & {
         this->v *= value;
         return *this;
     }
+
     constexpr auto operator/=(Integer const &o) noexcept -> Integer & {
         this->v /= o.v;
         return *this;
     }
+
     constexpr auto operator/=(int value) noexcept -> Integer & {
         this->v /= value;
         return *this;
     }
+
     constexpr auto operator%=(Integer const &o) noexcept -> Integer & {
         this->v %= o.v;
         return *this;
     }
+
     constexpr auto operator%=(int value) noexcept -> Integer & {
         this->v %= value;
         return *this;
     }
+
     constexpr auto operator==(Integer const &o) const noexcept -> bool { return this->v == o.v; }
     constexpr auto operator==(int value) const noexcept -> bool { return this->v == value; }
     constexpr auto operator!=(Integer const &o) const noexcept -> bool { return this->v != o.v; }
@@ -119,62 +121,71 @@ public:
     constexpr auto operator<=(Integer const &o) const noexcept -> bool { return this->v <= o.v; }
     constexpr auto operator<=(int value) const noexcept -> bool { return this->v <= value; }
 
-    __integer_constexpr auto operator&(Integer const &o) const noexcept -> Integer { return this->v & o.v; }
-    __integer_constexpr auto operator&(int value) const noexcept -> Integer { return this->v & value; }
-    __integer_constexpr auto operator|(Integer const &o) const noexcept -> Integer { return this->v | o.v; }
-    __integer_constexpr auto operator|(int value) const noexcept -> Integer { return this->v | value; }
-    __integer_constexpr auto operator^(Integer const &o) const noexcept -> Integer { return this->v ^ o.v; }
-    __integer_constexpr auto operator^(int value) const noexcept -> Integer { return this->v ^ value; }
-    __integer_constexpr auto operator<<(Integer const &o) const noexcept -> Integer { return this->v << o.v; }
-    __integer_constexpr auto operator<<(int value) const noexcept -> Integer { return this->v << value; }
-    __integer_constexpr auto operator>>(Integer const &o) const noexcept -> Integer { return this->v >> o.v; }
-    __integer_constexpr auto operator>>(int value) const noexcept -> Integer { return this->v >> value; }
-    __integer_constexpr auto operator~() const noexcept -> Integer {return ~this->v;}
+    __CDS_cpplang_ConstexprDestructor auto operator&(Integer const &o) const noexcept -> Integer { return this->v & o.v; }
+    __CDS_cpplang_ConstexprDestructor auto operator&(int value) const noexcept -> Integer { return this->v & value; }
+    __CDS_cpplang_ConstexprDestructor auto operator|(Integer const &o) const noexcept -> Integer { return this->v | o.v; }
+    __CDS_cpplang_ConstexprDestructor auto operator|(int value) const noexcept -> Integer { return this->v | value; }
+    __CDS_cpplang_ConstexprDestructor auto operator^(Integer const &o) const noexcept -> Integer { return this->v ^ o.v; }
+    __CDS_cpplang_ConstexprDestructor auto operator^(int value) const noexcept -> Integer { return this->v ^ value; }
+    __CDS_cpplang_ConstexprDestructor auto operator<<(Integer const &o) const noexcept -> Integer { return this->v << o.v; }
+    __CDS_cpplang_ConstexprDestructor auto operator<<(int value) const noexcept -> Integer { return this->v << value; }
+    __CDS_cpplang_ConstexprDestructor auto operator>>(Integer const &o) const noexcept -> Integer { return this->v >> o.v; }
+    __CDS_cpplang_ConstexprDestructor auto operator>>(int value) const noexcept -> Integer { return this->v >> value; }
+    __CDS_cpplang_ConstexprDestructor auto operator~() const noexcept -> Integer {return ~this->v;}
 
     constexpr auto operator&=(Integer const &o) noexcept -> Integer & {
         this->v &= o.v;
         return *this;
     }
+
     constexpr auto operator&=(int value) noexcept -> Integer & {
         this->v &= value;
         return *this;
     }
+
     constexpr auto operator|=(Integer const &o) noexcept -> Integer & {
         this->v |= o.v;
         return *this;
     }
+
     constexpr auto operator|=(int value) noexcept -> Integer & {
         this->v |= value;
         return *this;
     }
+
     constexpr auto operator^=(Integer const &o) noexcept -> Integer & {
         this->v ^= o.v;
         return *this;
     }
+
     constexpr auto operator^=(int value) noexcept -> Integer & {
         this->v ^= value;
         return *this;
     }
+
     constexpr auto operator<<=(Integer const &o) noexcept -> Integer & {
         this->v <<= o.v;
         return *this;
     }
+
     constexpr auto operator<<=(int value) noexcept -> Integer & {
         this->v <<= value;
         return *this;
     }
+
     constexpr auto operator>>=(Integer const &o) noexcept -> Integer & {
         this->v >>= o.v;
         return *this;
     }
+
     constexpr auto operator>>=(int value) noexcept -> Integer & {
         this->v >>= value;
         return *this;
     }
 
-    constexpr operator int() const noexcept { return this->v; }
+    constexpr operator int() const noexcept { return this->v; } // NOLINT(google-explicit-constructor)
 
-    auto equals ( Object const & o ) const noexcept -> bool override {
+    __CDS_NoDiscard auto equals ( Object const & o ) const noexcept -> bool override {
         if ( this == & o ) return true;
         auto p = dynamic_cast < decltype (this) > ( & o );
         if ( p == nullptr ) return false;
@@ -183,17 +194,17 @@ public:
     }
 
     constexpr auto operator ++ () noexcept -> Integer & { this->v++; return * this; }
-    __integer_constexpr auto operator ++ (int) noexcept -> Integer { auto c = * this; this->v++; return c; }
+    __CDS_cpplang_ConstexprDestructor auto operator ++ (int) noexcept -> Integer { auto c = * this; this->v++; return c; }
     constexpr auto operator -- () noexcept -> Integer & { this->v--; return * this; }
-    __integer_constexpr auto operator -- (int) noexcept -> Integer { auto c = * this; this->v--; return c; }
+    __CDS_cpplang_ConstexprDestructor auto operator -- (int) noexcept -> Integer { auto c = * this; this->v--; return c; }
 
-    [[nodiscard]]constexpr inline auto get() const noexcept -> int { return this->v; }
+    __CDS_NoDiscard constexpr inline auto get() const noexcept -> int { return this->v; }
 public:
-    [[nodiscard]] auto hash() const noexcept -> Index override {
+    __CDS_NoDiscard auto hash() const noexcept -> Index override {
         return static_cast<Index>(this->v);
     }
 
-    [[nodiscard]] auto toString() const noexcept -> String override {
+    __CDS_NoDiscard auto toString() const noexcept -> String override {
         return String().append(this->v);
     }
 
@@ -222,7 +233,7 @@ public:
         return negative ? (-numericValue) : numericValue;
     }
 
-    [[nodiscard]] auto copy () const noexcept -> Integer * override {
+    __CDS_NoDiscard auto copy () const noexcept -> Integer * override {
         return new Integer( * this );
     }
 
@@ -231,20 +242,20 @@ public:
 
 #include <CDS/Atomic>
 namespace hidden {
-    using _AtomicBaseInteger = Atomic<Integer>;
+    using _AtomicBaseInteger = Atomic<Integer>; // NOLINT(bugprone-reserved-identifier)
 }
 
-class Integer::Atomic : public hidden::_AtomicBaseInteger {
+class Integer::Atomic : public hidden::_AtomicBaseInteger { // NOLINT(bugprone-reserved-identifier)
 public:
     Atomic () noexcept {
         this->set(0);
     }
 
-    Atomic ( Atomic const & obj ) noexcept : hidden::_AtomicBaseInteger(obj) { }
-    Atomic ( Atomic && obj ) noexcept : hidden::_AtomicBaseInteger(obj) { }
-    Atomic ( Integer const & v ) noexcept : hidden::_AtomicBaseInteger(v) { }
+    Atomic ( Atomic const & obj ) noexcept : hidden::_AtomicBaseInteger(obj) { } // NOLINT(modernize-use-equals-default)
+    Atomic ( Atomic && obj ) noexcept : hidden::_AtomicBaseInteger(obj) { } // NOLINT(performance-move-constructor-init)
+    Atomic ( Integer const & v ) noexcept : hidden::_AtomicBaseInteger(v) { } // NOLINT(google-explicit-constructor)
 
-    Atomic (int v) noexcept {
+    Atomic (int v) noexcept { // NOLINT(google-explicit-constructor)
         this->set(v);
     }
 
@@ -295,12 +306,11 @@ public:
     Atomic & operator = (Atomic const &) noexcept = default;
     Atomic & operator = (Atomic &&) noexcept = default;
 
-    operator int () const noexcept {
+    operator int () const noexcept { // NOLINT(google-explicit-constructor)
         return this->get().get();
     }
 
-    [[nodiscard]] auto toString() const noexcept -> String override {
-//        return String().append(this->get());
+    __CDS_NoDiscard auto toString() const noexcept -> String override {
         return this->get().toString();
     }
 
@@ -326,16 +336,11 @@ auto operator _operator (int value) noexcept -> Atomic & {  \
     _PREFIX_OP(^=)
 
 #undef _PREFIX_OP
+
 };
 
-__integer_constexpr auto operator "" _i (unsigned long long int value) noexcept -> Integer {
-    return Integer(value);
+__CDS_cpplang_ConstexprDestructor auto operator "" _i (unsigned long long int value) noexcept -> Integer {
+    return static_cast < int > (value);
 }
-
-#undef __integer_constexpr
-
-#undef _G_OBJ
-#undef _G_OP_OBJ
-#undef _G_OP_OBJ_CONST
 
 #endif //CDS_INTEGER_HPP

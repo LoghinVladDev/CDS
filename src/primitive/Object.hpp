@@ -12,16 +12,14 @@ class String;
 
 class Object {
 public:
-    virtual auto toString () const noexcept -> String;
-    virtual auto equals (Object const & o) const noexcept -> bool { return this == & o; }
-//    virtual auto operator == (Object const & o) const noexcept -> bool { return this == & o; }
-//    virtual auto operator != (Object const & o) const noexcept -> bool { return ! ( * this == o ); }
+    __CDS_NoDiscard virtual auto toString () const noexcept -> String;
+    __CDS_NoDiscard virtual auto equals (Object const & o) const noexcept -> bool { return this == & o; }
 
     friend auto operator << (std::ostream &, Object const &) noexcept -> std::ostream &;
     virtual explicit operator String () const noexcept;
 
-    virtual auto hash () const noexcept -> Index { return 0; }
-    virtual auto copy () const noexcept -> Object * { return nullptr; }
+    __CDS_NoDiscard virtual auto hash () const noexcept -> Index { return 0; }
+    __CDS_NoDiscard virtual auto copy () const noexcept -> Object * { return nullptr; }
     virtual ~Object () noexcept = default;
 };
 

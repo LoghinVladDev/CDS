@@ -8,12 +8,6 @@
 #include <sstream>
 #include <cstring>
 
-
-
-#if defined(__cpp_concepts) && !defined(_MSC_VER)
-
-#endif
-
 template <class K, class V, class H>
 #if defined(__cpp_concepts) && !defined(_MSC_VER)
 requires
@@ -24,28 +18,28 @@ class HashMap final : public Map<K, V> {
 public:
     H hashCalculator;
 
-    using Key                           = typename Map<K, V>::Key;
-    using Value                         = typename Map<K, V>::Value;
-    using KeyReference                  = typename Map<K, V>::KeyReference;
-    using ValueReference                = typename Map<K, V>::ValueReference;
-    using KeyConstReference             = typename Map<K, V>::KeyConstReference;
-    using ValueConstReference           = typename Map<K, V>::ValueConstReference;
-    using Entry                         = typename Map<K, V>::Entry;
-    using EntryReference                = typename Map<K, V>::EntryReference;
-    using EntryConstReference           = typename Map<K, V>::EntryConstReference;
+    using Key                                       = typename Map<K, V>::Key;
+    using Value                                     = typename Map<K, V>::Value;
+    using KeyReference            __CDS_MaybeUnused = typename Map<K, V>::KeyReference;
+    using ValueReference                            = typename Map<K, V>::ValueReference;
+    using KeyConstReference                         = typename Map<K, V>::KeyConstReference;
+    using ValueConstReference                       = typename Map<K, V>::ValueConstReference;
+    using Entry                                     = typename Map<K, V>::Entry;
+    using EntryReference                            = typename Map<K, V>::EntryReference;
+    using EntryConstReference                       = typename Map<K, V>::EntryConstReference;
 
-    using EntryReferenceList            = typename Map<K, V>::EntryReferenceList;
-    using EntryConstReferenceList       = typename Map<K, V>::EntryConstReferenceList;
+    using EntryReferenceList      __CDS_MaybeUnused = typename Map<K, V>::EntryReferenceList;
+    using EntryConstReferenceList __CDS_MaybeUnused = typename Map<K, V>::EntryConstReferenceList;
 
-    using CollectionIterator            = typename Collection<Entry>::Iterator;
-    using CollectionConstIterator       = typename Collection<Entry>::ConstIterator;
+    using CollectionIterator                        = typename Collection<Entry>::Iterator;
+    using CollectionConstIterator                   = typename Collection<Entry>::ConstIterator;
 
 private:
-    using HashBucket                    = LinkedList < Entry >;
-    using BucketIterator                = typename HashBucket::Iterator;
-    using BucketConstIterator           = typename HashBucket::ConstIterator;
-    using BucketReverseIterator         = typename HashBucket::ReverseIterator;
-    using BucketConstReverseIterator    = typename HashBucket::ConstReverseIterator;
+    using HashBucket                                = LinkedList < Entry >;
+    using BucketIterator                            = typename HashBucket::Iterator;
+    using BucketConstIterator                       = typename HashBucket::ConstIterator;
+    using BucketReverseIterator                     = typename HashBucket::ReverseIterator;
+    using BucketConstReverseIterator                = typename HashBucket::ConstReverseIterator;
 
     HashBucket * pBuckets;
 public:
@@ -79,9 +73,9 @@ public:
             return * this;
         }
 
-        [[nodiscard]] auto constexpr inline isOutOfRange () const noexcept -> bool { return bucketIndex < 0 || bucketIndex >= hashCalculator.getBoundary(); }
+        __CDS_NoDiscard auto constexpr inline isOutOfRange () const noexcept -> bool { return bucketIndex < 0 || bucketIndex >= hashCalculator.getBoundary(); }
 
-        [[nodiscard]] auto copy () const noexcept -> IteratorBase * override = 0;
+        __CDS_NoDiscard auto copy () const noexcept -> IteratorBase * override = 0;
     };
 
     class ConstIteratorBase : public CollectionConstIterator {
@@ -114,9 +108,9 @@ public:
             return * this;
         }
 
-        [[nodiscard]] auto constexpr inline isOutOfRange () const noexcept -> bool { return bucketIndex < 0 || bucketIndex >= hashCalculator.getBoundary(); }
+        __CDS_NoDiscard auto constexpr inline isOutOfRange () const noexcept -> bool { return bucketIndex < 0 || bucketIndex >= hashCalculator.getBoundary(); }
 
-        [[nodiscard]] auto copy () const noexcept -> ConstIteratorBase * override = 0;
+        __CDS_NoDiscard auto copy () const noexcept -> ConstIteratorBase * override = 0;
     };
 
     class Iterator : public IteratorBase {
@@ -157,7 +151,7 @@ public:
         inline auto operator ++ () noexcept -> Iterator & final { this->next(); return * this; }
         inline auto operator ++ (int) noexcept -> Iterator { auto copy = * this; this->next(); return copy; }
 
-        [[nodiscard]] inline auto copy () const noexcept -> Iterator * override {
+        __CDS_NoDiscard inline auto copy () const noexcept -> Iterator * override {
             return new Iterator ( * this );
         }
     };
@@ -200,7 +194,7 @@ public:
         inline auto operator ++ () noexcept -> ConstIterator & final { this->next(); return * this; }
         inline auto operator ++ (int) noexcept -> ConstIterator { auto copy = * this; this->next(); return copy; }
 
-        [[nodiscard]] inline auto copy () const noexcept -> ConstIterator * override {
+        __CDS_NoDiscard inline auto copy () const noexcept -> ConstIterator * override {
             return new ConstIterator ( * this );
         }
     };
@@ -244,7 +238,7 @@ public:
         inline auto operator ++ () noexcept -> ReverseIterator & final { this->next(); return * this; }
         inline auto operator ++ (int) noexcept -> ReverseIterator { auto copy = * this; this->next(); return copy; }
 
-        [[nodiscard]] inline auto copy () const noexcept -> ReverseIterator * override {
+        __CDS_NoDiscard inline auto copy () const noexcept -> ReverseIterator * override {
             return new ReverseIterator ( * this );
         }
     };
@@ -287,7 +281,7 @@ public:
         inline auto operator ++ () noexcept -> ConstReverseIterator & final { this->next(); return * this; }
         inline auto operator ++ (int) noexcept -> ConstReverseIterator { auto copy = * this; this->next(); return copy; }
 
-        [[nodiscard]] inline auto copy () const noexcept -> ConstReverseIterator * override {
+        __CDS_NoDiscard inline auto copy () const noexcept -> ConstReverseIterator * override {
             return new ConstReverseIterator ( * this );
         }
     };
@@ -303,7 +297,7 @@ public:
         return true;
     }
 
-    [[nodiscard]] auto equals (Object const & o) const noexcept -> bool final {
+    __CDS_NoDiscard auto equals (Object const & o) const noexcept -> bool final {
         if ( & o == this ) return true;
         auto p = dynamic_cast < HashMap const * > ( & o );
         if ( p == nullptr ) return false;
@@ -339,22 +333,16 @@ public:
         CollectionIterator const & from,
         CollectionIterator const & to
     ) noexcept : pBuckets(new HashBucket[hashCalculator.getBoundary()]) {
-        for ( auto it = UniquePointer ( from.copy () ); ! it->equals ( from ); it->next() )
+        for ( auto it = UniquePointer < decltype ( & from ) > ( from.copy () ); ! it->equals ( from ); it->next() )
             this->insert(it->value());
-
-//        for ( auto it = from; it != to; it ++ )
-//            this->insert(it.value());
     }
 
     explicit HashMap (
         CollectionConstIterator const & from,
         CollectionConstIterator const & to
     ) noexcept : pBuckets(new HashBucket[hashCalculator.getBoundary()]) {
-        for ( auto it = UniquePointer ( from.copy () ); ! it->equals ( from ); it->next() )
+        for ( auto it = UniquePointer < decltype ( & from ) > ( from.copy () ); ! it->equals ( from ); it->next() )
             this->insert(it->value());
-
-//        for ( auto it = from; it != to; it ++ )
-//            this->insert(it.value());
     }
 
     ~HashMap () noexcept final {
@@ -419,6 +407,7 @@ public:
             return rend();
         return ReverseIterator(this->pBuckets[i].rbegin(), this->pBuckets, i);
     }
+
     constexpr inline auto rbegin () const noexcept -> ConstReverseIterator {
         Index i = hashCalculator.getBoundary();
         while ( i >= 0 && this->pBuckets[i].empty() )
@@ -427,7 +416,8 @@ public:
             return rend();
         return ConstReverseIterator (this->pBuckets[i].rbegin(), this->pBuckets, i);
     }
-    constexpr inline auto crbegin () const noexcept -> ConstReverseIterator {
+
+    __CDS_MaybeUnused constexpr inline auto crbegin () const noexcept -> ConstReverseIterator {
         Index i = hashCalculator.getBoundary();
         while ( i >= 0 && this->pBuckets[i].empty() )
             i--;
@@ -484,14 +474,14 @@ public:
 
     auto find ( KeyConstReference k ) const noexcept -> Optional < Reference < const Value > > final {
         for ( auto & e : this->pBuckets[hashCalculator(k)] )
-            if ( Type < K > :: deepCompare ( e.getFirst(), k ) )
+            if ( Type < K > :: compare ( e.getFirst(), k ) )
                 return { e.getSecond() };
         return {};
     }
 
     auto find ( KeyConstReference k ) noexcept -> Optional < Reference < Value > > final {
         for ( auto & e : this->pBuckets[hashCalculator(k)] )
-            if ( Type < K > :: deepCompare ( e.getFirst(), k ) )
+            if ( Type < K > :: compare ( e.getFirst(), k ) )
                 return { e.getSecond() };
         return {};
     }
@@ -500,7 +490,7 @@ public:
         auto & b = this->pBuckets[hashCalculator(k)];
 
         for ( auto & e : b )
-            if ( Type < K > :: deepCompare ( e.getFirst(), k ) )
+            if ( Type < K > :: compare ( e.getFirst(), k ) )
                 return e.getSecond();
 
         b.pushBack ( { k, Value() } );
@@ -511,7 +501,7 @@ public:
         auto & b = this->pBuckets[hashCalculator(k)];
 
         for ( auto & e : b )
-            if ( Type < K > :: deepCompare ( e.getFirst(), k ) )
+            if ( Type < K > :: compare ( e.getFirst(), k ) )
                 return e.getSecond();
 
         throw typename Map<K, V>::MapPairNonExistent();
@@ -521,7 +511,7 @@ public:
         auto & b = this->pBuckets[hashCalculator(k)];
 
         for ( auto & e : b )
-            if ( Type < K > :: deepCompare ( e.getFirst(), k ) )
+            if ( Type < K > :: compare ( e.getFirst(), k ) )
                 return e.getSecond();
 
         return defVal;
@@ -529,14 +519,14 @@ public:
 
     auto containsKey ( KeyConstReference k ) const noexcept -> bool final {
         for ( auto & e : (*this) )
-            if ( Type < K > :: deepCompare ( e.getFirst(), k ) )
+            if ( Type < K > :: compare ( e.getFirst(), k ) )
                 return true;
         return false;
     }
 
     auto containsValue ( ValueConstReference v ) const noexcept -> bool final {
         for ( auto & e : (*this) )
-            if ( Type < V > :: deepCompare ( e.getSecond(), v ) )
+            if ( Type < V > :: compare ( e.getSecond(), v ) )
                 return true;
         return false;
     }
@@ -545,7 +535,7 @@ public:
         auto & b = this->pBuckets[hashCalculator(k)];
         Entry e;
 #if defined(__cpp_concepts) && !defined(_MSC_VER)
-        b.forEach([&e, &k](auto & p){if (Type < K > :: deepCompare ( p.getFirst(), k )) e = p;});
+        b.forEach([&e, &k](auto & p){if (Type < K > :: compare ( p.getFirst(), k )) e = p;});
 #else
         for ( auto & p : b )
             if ( p.getFirst() == k ) e = p;
@@ -574,7 +564,7 @@ public:
             this->pBuckets[i].clear();
     }
 
-    [[nodiscard]] auto size () const noexcept -> Size final {
+    __CDS_NoDiscard auto size () const noexcept -> Size final {
         Size total = 0ull;
         for ( Index i = 0; i < hashCalculator.getBoundary(); i++ )
             total += this->pBuckets[i].size();
@@ -592,19 +582,18 @@ public:
         return * this;
     }
 
-    [[nodiscard]] inline auto empty() const noexcept -> bool final {
+    __CDS_NoDiscard inline auto empty() const noexcept -> bool final {
         return this->size() == 0;
     }
 
-    [[nodiscard]] auto toString() const noexcept -> String {
+    __CDS_NoDiscard auto toString() const noexcept -> String {
         if ( this->empty() )
-            return String("{ }");
+            return {"{ }"};
         std::stringstream oss;
         oss << "{ ";
         for ( auto & e : (*this) ) {
 #if !defined(CDS_GLM)
             Type < V > :: streamPrint ( Type < K > :: streamPrint ( oss, e.getFirst() ) << " : ", e.getSecond() ) << ", ";
-//            oss << e.getFirst() << " : " << e.getSecond() << ", ";
 #else
             if constexpr (
                     std::is_same < glm::vec1, Value >::type::value ||
@@ -618,7 +607,7 @@ public:
 #endif
         }
         auto s = oss.str();
-        return String(s.substr(0, s.length() - 2).append(" }"));
+        return {s.substr(0, s.length() - 2).append(" }")};
     }
 
     auto sequence () const noexcept -> Sequence < const HashMap < K, V, H > >;
@@ -634,7 +623,7 @@ UniqueIdentifiable<K> &&
 HashCalculatorHasBoundaryFunction<H>
 #endif
 auto HashMap < K, V, H >::sequence() const noexcept -> Sequence < const HashMap < K, V, H > > {
-    return Sequence(*this);
+    return Sequence < typename std :: remove_reference < decltype (*this) > :: type > (*this);
 }
 
 template <class K, class V, class H>
@@ -644,11 +633,15 @@ UniqueIdentifiable<K> &&
 HashCalculatorHasBoundaryFunction<H>
 #endif
 auto HashMap < K, V, H >::sequence() noexcept -> Sequence < HashMap<K, V, H>> {
-    return Sequence(*this);
+    return Sequence < typename std :: remove_reference < decltype (*this) > :: type > (*this);
 }
+
+#if __CDS_cpplang_CTAD_available == true
 
 template < typename K, typename V >
 HashMap ( std::initializer_list < Pair < K, V > > ) -> HashMap < K, V >;
+
+#endif
 
 template < typename K, typename V, typename H >
     REQUIRES (UniqueIdentifiable < K > && HashCalculatorHasBoundaryFunction < H >)

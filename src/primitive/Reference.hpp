@@ -13,7 +13,7 @@ namespace dataTypes::refWrapper {
     constexpr T & hiddenRef ( T & t ) noexcept { return t; }
 
     template <class T>
-    void hiddenRef ( T && ) = delete;
+    __CDS_MaybeUnused auto hiddenRef ( T && ) -> void = delete;
 }
 
 #include <CDS/Pointer>
@@ -54,10 +54,10 @@ public:
 
     inline auto operator == (Reference const & o) const noexcept -> bool {
         if ( this == & o ) return true;
-        return Type < T > :: deepCompare ( o.get(), this->get() );
+        return Type < T > :: compare ( o.get(), this->get() );
     }
 
-    auto equals ( Object const & o ) const noexcept -> bool final {
+    __CDS_NoDiscard auto equals ( Object const & o ) const noexcept -> bool final {
         if ( this == & o ) return true;
         auto c = dynamic_cast < decltype (this) > ( & o );
         if ( c == nullptr ) return false;
@@ -65,7 +65,7 @@ public:
         return this->operator==(*c);
     }
 
-    [[nodiscard]] auto toString() const noexcept -> String final {
+    __CDS_NoDiscard auto toString() const noexcept -> String final {
 #if defined(CDS_GLM)
         constexpr auto isVec = [] {
             if constexpr (
@@ -91,17 +91,27 @@ public:
         oss << (*p);
 #endif
         oss << " >";
-        return String(oss.str());
+        return oss.str();
     }
+
+#if __CDS_cpplang_core_version >= __CDS_cpplang_core_version_17
 
     template <class...ArgTypes>
     constexpr std::invoke_result_t<T&, ArgTypes...> operator () (ArgTypes&&... args) const {
         return std::invoke(get(), std::forward<ArgTypes>(args)...);
     }
+
+#else
+
+#endif
+
 };
+
+#if __CDS_cpplang_CTAD_available == true
 
 template <class T>
 Reference(T&) -> Reference<T>;
 
+#endif
 
 #endif //CDS_REFERENCE_HPP

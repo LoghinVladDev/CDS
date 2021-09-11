@@ -8,7 +8,7 @@
 #include <CDS/crypto/CryptoBlock>
 
 template < Size byteSize >
-class CryptoOperation : public Object {
+class __CDS_MaybeUnused CryptoOperation : public Object {
 protected:
     CryptoBlock < byteSize > _input;
     CryptoBlock < byteSize > _output;
@@ -17,15 +17,15 @@ protected:
     ~CryptoOperation() noexcept override = default;
 
 public:
-    [[nodiscard]] constexpr auto input () const noexcept -> CryptoBlock < byteSize > const & { return this->_input; }
-    [[nodiscard]] constexpr auto input () noexcept -> CryptoBlock < byteSize > & { return this->_input; }
+    __CDS_NoDiscard constexpr auto input () const noexcept -> CryptoBlock < byteSize > const & { return this->_input; }
+    __CDS_NoDiscard constexpr auto input () noexcept -> CryptoBlock < byteSize > & { return this->_input; }
 
-    [[nodiscard]] constexpr auto output () const noexcept -> CryptoBlock < byteSize > const & { return this->_output; }
-    [[nodiscard]] constexpr auto output () noexcept -> CryptoBlock < byteSize > & { return this->_output; }
+    __CDS_NoDiscard constexpr auto output () const noexcept -> CryptoBlock < byteSize > const & { return this->_output; }
+    __CDS_NoDiscard constexpr auto output () noexcept -> CryptoBlock < byteSize > & { return this->_output; }
 
-    virtual auto run () noexcept -> CryptoOperation & = 0;
+    __CDS_MaybeUnused virtual auto run () noexcept -> CryptoOperation & = 0;
 
-    [[nodiscard]] auto toString () const noexcept -> String override {
+    __CDS_NoDiscard auto toString () const noexcept -> String override {
         return "CryptoBlock "_s +
             "{ input = " + this->_input.toString() +
             ", output = " + this->_output.toString() +

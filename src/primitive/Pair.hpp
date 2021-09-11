@@ -12,8 +12,8 @@
 template <class K, class V>
 class Pair final : public Object {
 public:
-    using Key = K;
-    using Value = V;
+    using Key __CDS_MaybeUnused = K;
+    using Value                 = V;
 
 private:
     K _first;
@@ -36,16 +36,14 @@ public:
     constexpr auto second () const noexcept -> V const & { return this->_second; }
     constexpr auto second () noexcept -> V & { return this->_second; }
 
-    auto inline setFirst(K const & k) noexcept -> Pair & {_first = k; return * this;}
-    auto inline setSecond(V const & v) noexcept -> Pair & {_second = v; return * this;}
+    __CDS_MaybeUnused auto inline setFirst(K const & k) noexcept -> Pair & {_first = k; return * this;}
+    __CDS_MaybeUnused auto inline setSecond(V const & v) noexcept -> Pair & {_second = v; return * this;}
 
     auto inline operator == ( Pair const & o ) const noexcept -> bool {
         if ( this == & o ) return true;
-
-//        return this->_first == o._first && this->_second == o._second;
         return
-            Type < K > :: deepCompare( this->_first, o._first ) &&
-            Type < V > :: deepCompare( this->_second, o._second );
+            Type < K > :: compare( this->_first, o._first ) &&
+            Type < V > :: compare( this->_second, o._second );
     }
 
     auto inline operator != ( Pair const & o ) const noexcept -> bool {
@@ -54,7 +52,7 @@ public:
         return ! this->operator==(o);
     }
 
-    auto equals ( Object const & o ) const noexcept -> bool override {
+    __CDS_NoDiscard auto equals ( Object const & o ) const noexcept -> bool override {
         if ( this == & o ) return true;
         auto p = dynamic_cast < decltype (this) > ( & o );
         if ( p == nullptr ) return false;
@@ -72,11 +70,11 @@ public:
         return * this;
     }
 
-    auto inline invert () const noexcept -> Pair <V, K> { return Pair(_second, _first); }
+    __CDS_MaybeUnused auto inline invert () const noexcept -> Pair <V, K> { return Pair(_second, _first); }
 
-    [[nodiscard]] auto inline toString() const noexcept -> String final {
+    __CDS_NoDiscard auto inline toString() const noexcept -> String final {
         std::stringstream oss;
-        if constexpr ( (
+        if __CDS_cpplang_IfConstexpr ( (
                     std::is_integral < K >::value               ||
                     std::is_same < K, StringLiteral > ::value   ||
                     std::is_same < K, String > ::value          ||
@@ -91,20 +89,23 @@ public:
                 )
         )
             oss << "( k = " << _first << ", v = " << _second << " )";
-        return String(oss.str());
+        return {oss.str()};
     }
 
 
-    [[nodiscard]] auto copy () const noexcept -> Pair * override {
-        if constexpr ( std::is_copy_constructible < Pair > :: type::value )
+    __CDS_NoDiscard auto copy () const noexcept -> Pair * override {
+        if __CDS_cpplang_IfConstexpr ( std::is_copy_constructible < Pair > :: type::value )
             return new Pair( * this );
         else
             return nullptr;
     }
 };
 
+#if __CDS_cpplang_CTAD_available == true
+
 template < typename K, typename V >
 Pair(K, V) -> Pair<K, V>;
 
+#endif
 
 #endif //CDS_PAIR_HPP

@@ -34,28 +34,28 @@ public:
     auto operator -> () noexcept -> UniquePointer<T> & { return this->pObj; }
     auto operator * () const noexcept (false) -> ValueReference { return * this->pObj; }
 
-    [[nodiscard]] inline auto hasValue () const noexcept -> bool { return ! pObj.isNull(); }
-    [[nodiscard]] inline auto isEmpty () const noexcept -> bool { return ! this->hasValue(); }
-    [[nodiscard]] inline auto isPresent () const noexcept -> bool { return this->hasValue(); }
+    __CDS_NoDiscard inline auto hasValue () const noexcept -> bool { return ! pObj.isNull(); }
+    __CDS_NoDiscard inline auto isEmpty () const noexcept -> bool { return ! this->hasValue(); }
+    __CDS_NoDiscard inline auto isPresent () const noexcept -> bool { return this->hasValue(); }
 
     inline auto value () const noexcept(false) -> ValueConstReference { return * this->pObj; }
     inline auto value () noexcept(false) -> ValueReference { return * this->pObj; }
-    inline auto valueOr (ValueReference v) noexcept -> ValueReference { return this->hasValue() ? this->value() : v; }
-    inline auto valueOr (ValueConstReference v) noexcept -> ValueConstReference { return this->hasValue() ? this->value() : v; }
+    __CDS_MaybeUnused inline auto valueOr (ValueReference v) noexcept -> ValueReference { return this->hasValue() ? this->value() : v; }
+    __CDS_MaybeUnused inline auto valueOr (ValueConstReference v) noexcept -> ValueConstReference { return this->hasValue() ? this->value() : v; }
 
     template < typename Action >
-    inline auto ifPresent (Action const & action) const noexcept -> void {
+    __CDS_MaybeUnused inline auto ifPresent (Action const & action) const noexcept -> void {
         if ( isPresent() ) action ( pObj.valueAt() );
     }
 
     template < typename Action, typename EmptyAction >
-    inline auto ifPresentOrElse ( Action const & action, EmptyAction const & onElse ) const noexcept -> void {
+    __CDS_MaybeUnused inline auto ifPresentOrElse ( Action const & action, EmptyAction const & onElse ) const noexcept -> void {
         if ( isPresent() ) action ( pObj.valueAt() );
         else onElse ();
     }
 
     template < typename Predicate >
-    inline auto filter ( Predicate const & predicate ) const noexcept -> Optional {
+    __CDS_MaybeUnused inline auto filter ( Predicate const & predicate ) const noexcept -> Optional {
         if ( isEmpty() ) return * this;
         return predicate (pObj.valueAt()) ? (*this) : Optional();
     }
@@ -67,15 +67,15 @@ public:
     }
 
     template < typename Supplier >
-    inline auto orSupply (Supplier const & supplier) const noexcept -> Optional {
+    __CDS_MaybeUnused inline auto orSupply (Supplier const & supplier) const noexcept -> Optional {
         if ( isPresent() ) return * this;
         return supplier();
     }
 
-    auto orElse (T const & other) const noexcept -> T const & { return isPresent() ? this->pObj.valueAt() : other; }
+    __CDS_MaybeUnused auto orElse (T const & other) const noexcept -> T const & { return isPresent() ? this->pObj.valueAt() : other; }
 
     template < typename Supplier >
-    auto orElseGet (Supplier const & supplier) const noexcept -> T { return isPresent() ? this->pObj.valueAt() : supplier(); }
+    __CDS_MaybeUnused auto orElseGet (Supplier const & supplier) const noexcept -> T { return isPresent() ? this->pObj.valueAt() : supplier(); }
 
     inline explicit operator bool () const noexcept { return this->hasValue(); }
 
@@ -99,7 +99,7 @@ public:
         return * this;
     }
 
-    auto equals ( Object const & o ) const noexcept -> bool override {
+    __CDS_NoDiscard auto equals ( Object const & o ) const noexcept -> bool override {
         if ( this == & o ) return true;
         auto p = dynamic_cast < decltype (this) > ( & o );
         if ( p == nullptr ) return false;
@@ -110,10 +110,10 @@ public:
     auto operator == ( Optional const & o ) const noexcept -> bool {
         if ( & o == this ) return true;
 
-        return Type < T > :: deepCompare ( this->value(), o.value() );
+        return Type < T > :: compare ( this->value(), o.value() );
     }
 
-    [[nodiscard]] auto toString() const noexcept -> String final {
+    __CDS_NoDiscard auto toString() const noexcept -> String final {
         std::stringstream oss;
         oss << "| ";
         if ( this->hasValue() )
@@ -121,15 +121,19 @@ public:
         else
             oss << "none";
         oss << " |";
-        return String(oss.str());
+        return {oss.str()};
     }
 
-    [[nodiscard]] auto copy () const noexcept -> Optional * override {
+    __CDS_NoDiscard auto copy () const noexcept -> Optional * override {
         return new Optional( * this );
     }
 };
 
+#if __CDS_cpplang_CTAD_available
+
 template < typename T >
 Optional ( T ) -> Optional < T >;
+
+#endif
 
 #endif //CDS_OPTIONAL_HPP

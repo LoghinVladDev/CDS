@@ -25,7 +25,7 @@ public:
 
 // region Linux Type Declarations + Definitions
 
-//region Linux File Type Declarations + Definitions
+// region Linux File Type Declarations + Definitions
     enum PlatformTypeFlag : uint8 {
         PTF_NULL_FILE           = 0x00u,
         PTF_REGULAR             = 0x01u,
@@ -61,8 +61,8 @@ public:
     using PlatformTypeFlags = uint8;
 
     static auto platformTypeFlagsToString ( PlatformTypeFlags ) noexcept -> String;
-    static auto platformTypeFlagsToStringList ( PlatformTypeFlags ) noexcept -> LinkedList < String >;
-    static auto platformTypeFlagsToList ( PlatformTypeFlags ) noexcept -> LinkedList < PlatformTypeFlag >;
+    __CDS_MaybeUnused static auto platformTypeFlagsToStringList ( PlatformTypeFlags ) noexcept -> LinkedList < String >;
+    __CDS_MaybeUnused static auto platformTypeFlagsToList ( PlatformTypeFlags ) noexcept -> LinkedList < PlatformTypeFlag >;
 
     static auto platformFileType(struct stat64 const *) noexcept -> PlatformTypeFlags;
     static auto platformFileType(Path const &) noexcept -> PlatformTypeFlags;
@@ -95,9 +95,9 @@ public:
 
     using PlatformPermissionFlags = uint8;
 
-    static auto platformPermissionFlagsToString ( PlatformPermissionFlags ) noexcept -> String;
+    __CDS_MaybeUnused static auto platformPermissionFlagsToString ( PlatformPermissionFlags ) noexcept -> String;
     static auto platformPermissionFlagsToStringList ( PlatformPermissionFlags ) noexcept -> LinkedList < String >;
-    static auto platformPermissionFlagsToList ( PlatformPermissionFlags ) noexcept -> LinkedList < PlatformPermissionFlag >;
+    __CDS_MaybeUnused static auto platformPermissionFlagsToList ( PlatformPermissionFlags ) noexcept -> LinkedList < PlatformPermissionFlag >;
 
 // endregion
 
@@ -132,13 +132,13 @@ public:
     using PlatformUserFlags = uint8;
 
     static auto platformUserFlagsToString ( PlatformUserFlags ) noexcept -> String;
-    static auto platformUserFlagsToStringList ( PlatformUserFlags ) noexcept -> LinkedList < String >;
-    static auto platformUserFlagsToList ( PlatformUserFlags ) noexcept -> LinkedList < PlatformUserFlag >;
+    __CDS_MaybeUnused static auto platformUserFlagsToStringList ( PlatformUserFlags ) noexcept -> LinkedList < String >;
+    __CDS_MaybeUnused static auto platformUserFlagsToList ( PlatformUserFlags ) noexcept -> LinkedList < PlatformUserFlag >;
 
 // endregion
 
-    static auto platformPermissions ( Path const &, PlatformUserFlags = PUF_USER | PUF_POLICY_MATCH_ONE ) noexcept -> PlatformPermissionFlags;
-    static auto platformPermissionsGrouped ( Path const & ) noexcept -> HashMap < PlatformUserFlag, PlatformPermissionFlags >;
+    __CDS_MaybeUnused static auto platformPermissions ( Path const &, PlatformUserFlags = PUF_USER | PUF_POLICY_MATCH_ONE ) noexcept -> PlatformPermissionFlags;
+    __CDS_MaybeUnused static auto platformPermissionsGrouped ( Path const & ) noexcept -> HashMap < PlatformUserFlag, PlatformPermissionFlags >;
     static auto platformPermissions ( struct stat64 const *, PlatformUserFlags = PUF_USER | PUF_POLICY_MATCH_ONE ) noexcept -> PlatformPermissionFlags;
     static auto platformPermissionsGrouped ( struct stat64 const * ) noexcept -> HashMap < PlatformUserFlag, PlatformPermissionFlags >;
 
@@ -154,7 +154,7 @@ public:
         TF_DIRECTORY            = PlatformTypeFlag::PTF_DIRECTORY
     };
 
-    using TypeFlags = PlatformTypeFlags;
+    using TypeFlags __CDS_MaybeUnused = PlatformTypeFlags;
 
     enum PermissionFlag : uint8 {
         PF_NULL      = PlatformPermissionFlag::PPF_NULL,
@@ -163,7 +163,7 @@ public:
         PF_READ      = PlatformPermissionFlag::PPF_READ
     };
 
-    using PermissionFlags = PlatformPermissionFlags;
+    using PermissionFlags __CDS_MaybeUnused = PlatformPermissionFlags;
 
     // endregion
 
@@ -230,11 +230,11 @@ protected:
 
     // region ctor + dtor + reload
 
-    explicit File ( Path const & p ) noexcept : _path(p) {
+    explicit File ( Path const & p ) noexcept : _path(p) { // NOLINT(cppcoreguidelines-pro-type-member-init)
         this->reload();
     }
 
-    File ( File const & o ) noexcept : _path(o._path) {
+    File ( File const & o ) noexcept : _path(o._path) { // NOLINT(cppcoreguidelines-pro-type-member-init)
         this->reload();
     }
 
@@ -248,7 +248,7 @@ protected:
     }
 
 public:
-    virtual ~File () noexcept = default;
+    ~File () noexcept override = default;
 
 protected:
 
@@ -258,7 +258,7 @@ public:
 
     // region diagnostic functions
 
-    static constexpr auto setDiagnosticLogLevel ( DiagnosticLogLevel l ) noexcept -> void {
+    __CDS_MaybeUnused static constexpr auto setDiagnosticLogLevel ( DiagnosticLogLevel l ) noexcept -> void {
         File::_diagnosticLogLevel = l;
     }
 
@@ -266,7 +266,7 @@ public:
         return File::_diagnosticLogLevel;
     }
 
-    static constexpr auto setDiagnosticOutputStream ( std::ostream & os ) noexcept -> void {
+    __CDS_MaybeUnused static constexpr auto setDiagnosticOutputStream ( std::ostream & os ) noexcept -> void {
         File::_diagnosticOutput = & os;
     }
 
@@ -274,15 +274,15 @@ public:
         return * File::_diagnosticOutput;
     }
 
-    static inline auto diagnosticFlags () noexcept -> DiagnosticOptionFlags {
+    __CDS_MaybeUnused static inline auto diagnosticFlags () noexcept -> DiagnosticOptionFlags {
         return File::_diagnosticFixesFlags;
     }
 
-    static constexpr auto setDiagnosticFlags ( DiagnosticOptionFlags f ) noexcept -> void {
+    __CDS_MaybeUnused static constexpr auto setDiagnosticFlags ( DiagnosticOptionFlags f ) noexcept -> void {
         File::_diagnosticFixesFlags;
     }
 
-    static auto setDiagnosticFlag ( DiagnosticOptionFlag f, bool enable ) noexcept -> void {
+    __CDS_MaybeUnused static auto setDiagnosticFlag ( DiagnosticOptionFlag f, bool enable ) noexcept -> void {
         if (enable)
             File::_diagnosticFixesFlags |= f;
         else
@@ -295,32 +295,32 @@ public:
 
 #if defined(__linux)
 
-    constexpr auto linuxFileInformation () const noexcept -> struct stat64 const & { return this->_linuxFileData; }
-    constexpr auto linuxDeviceID () const noexcept -> __dev_t { return this->_linuxFileData.st_dev; }
-    constexpr auto linuxINode () const noexcept -> __ino64_t { return this->_linuxFileData.st_ino; }
-    inline auto linuxFileType () const noexcept -> PlatformTypeFlags { return File::platformFileType(& this->_linuxFileData); }
-    inline auto linuxPermissions () const noexcept -> PlatformPermissionFlags { return File::platformPermissions(& this->_linuxFileData); }
-    constexpr auto linuxModeFlags () const noexcept -> __mode_t { return this->_linuxFileData.st_mode; }
-    constexpr auto linuxHardLinkCount () const noexcept -> __nlink_t { return this->_linuxFileData.st_nlink; }
-    constexpr auto linuxOwnerUserID () const noexcept -> __uid_t { return this->_linuxFileData.st_uid; }
-    constexpr auto linuxOwnerGroupID () const noexcept -> __gid_t { return this->_linuxFileData.st_gid; }
-    constexpr auto linuxSpecialFileDeviceID () const noexcept -> __dev_t { return this->_linuxFileData.st_rdev; }
-    constexpr auto linuxTotalSize () const noexcept -> __off_t { return this->_linuxFileData.st_size; }
-    constexpr auto linuxBlockSize () const noexcept -> __blksize_t { return this->_linuxFileData.st_blksize; }
-    constexpr auto linuxBlockCount () const noexcept -> __blkcnt64_t { return this->_linuxFileData.st_blocks; }
-    constexpr auto linuxLastAccess () const noexcept -> struct timespec const & { return this->_linuxFileData.st_atim; };
-    constexpr auto linuxLastModification () const noexcept -> struct timespec const & { return this->_linuxFileData.st_mtim; };
-    constexpr auto linuxLastStatusChange () const noexcept -> struct timespec const & { return this->_linuxFileData.st_ctim; };
+    __CDS_NoDiscard __CDS_MaybeUnused constexpr auto linuxFileInformation () const noexcept -> struct stat64 const & { return this->_linuxFileData; }
+    __CDS_NoDiscard __CDS_MaybeUnused constexpr auto linuxDeviceID () const noexcept -> __dev_t { return this->_linuxFileData.st_dev; }
+    __CDS_NoDiscard __CDS_MaybeUnused constexpr auto linuxINode () const noexcept -> __ino64_t { return this->_linuxFileData.st_ino; }
+    __CDS_NoDiscard __CDS_MaybeUnused inline auto linuxFileType () const noexcept -> PlatformTypeFlags { return File::platformFileType(& this->_linuxFileData); }
+    __CDS_NoDiscard __CDS_MaybeUnused inline auto linuxPermissions () const noexcept -> PlatformPermissionFlags { return File::platformPermissions(& this->_linuxFileData); }
+    __CDS_NoDiscard __CDS_MaybeUnused constexpr auto linuxModeFlags () const noexcept -> __mode_t { return this->_linuxFileData.st_mode; }
+    __CDS_NoDiscard __CDS_MaybeUnused constexpr auto linuxHardLinkCount () const noexcept -> __nlink_t { return this->_linuxFileData.st_nlink; }
+    __CDS_NoDiscard __CDS_MaybeUnused constexpr auto linuxOwnerUserID () const noexcept -> __uid_t { return this->_linuxFileData.st_uid; }
+    __CDS_NoDiscard __CDS_MaybeUnused constexpr auto linuxOwnerGroupID () const noexcept -> __gid_t { return this->_linuxFileData.st_gid; }
+    __CDS_NoDiscard __CDS_MaybeUnused constexpr auto linuxSpecialFileDeviceID () const noexcept -> __dev_t { return this->_linuxFileData.st_rdev; }
+    __CDS_NoDiscard __CDS_MaybeUnused constexpr auto linuxTotalSize () const noexcept -> __off_t { return this->_linuxFileData.st_size; }
+    __CDS_NoDiscard __CDS_MaybeUnused constexpr auto linuxBlockSize () const noexcept -> __blksize_t { return this->_linuxFileData.st_blksize; }
+    __CDS_NoDiscard __CDS_MaybeUnused constexpr auto linuxBlockCount () const noexcept -> __blkcnt64_t { return this->_linuxFileData.st_blocks; }
+    __CDS_NoDiscard __CDS_MaybeUnused constexpr auto linuxLastAccess () const noexcept -> struct timespec const & { return this->_linuxFileData.st_atim; };
+    __CDS_NoDiscard __CDS_MaybeUnused constexpr auto linuxLastModification () const noexcept -> struct timespec const & { return this->_linuxFileData.st_mtim; };
+    __CDS_NoDiscard __CDS_MaybeUnused constexpr auto linuxLastStatusChange () const noexcept -> struct timespec const & { return this->_linuxFileData.st_ctim; };
 
-    inline auto isLinuxRegularFile () const noexcept -> bool { return this->linuxFileType() & PTF_REGULAR;  }
-    inline auto isLinuxDirectory () const noexcept -> bool { return this->linuxFileType() & PTF_DIRECTORY; }
-    inline auto isLinuxCharacterDevice () const noexcept -> bool { return this->linuxFileType() & PTF_CHARACTER_DEVICE; }
-    inline auto isLinuxBlockDevice () const noexcept -> bool { return this->linuxFileType() & PTF_BLOCK_DEVICE; }
-    inline auto isLinuxFIFO () const noexcept -> bool { return this->linuxFileType() & PTF_FIFO; }
-    inline auto isLinuxSymbolicLink () const noexcept -> bool { return this->linuxFileType() & PTF_SYMBOLIC_LINK; }
-    inline auto isLinuxSocket () const noexcept -> bool { return this->linuxFileType() & PTF_SOCKET; }
+    __CDS_NoDiscard __CDS_MaybeUnused inline auto isLinuxRegularFile () const noexcept -> bool { return this->linuxFileType() & PTF_REGULAR;  }
+    __CDS_NoDiscard __CDS_MaybeUnused inline auto isLinuxDirectory () const noexcept -> bool { return this->linuxFileType() & PTF_DIRECTORY; }
+    __CDS_NoDiscard __CDS_MaybeUnused inline auto isLinuxCharacterDevice () const noexcept -> bool { return this->linuxFileType() & PTF_CHARACTER_DEVICE; }
+    __CDS_NoDiscard __CDS_MaybeUnused inline auto isLinuxBlockDevice () const noexcept -> bool { return this->linuxFileType() & PTF_BLOCK_DEVICE; }
+    __CDS_NoDiscard __CDS_MaybeUnused inline auto isLinuxFIFO () const noexcept -> bool { return this->linuxFileType() & PTF_FIFO; }
+    __CDS_NoDiscard __CDS_MaybeUnused inline auto isLinuxSymbolicLink () const noexcept -> bool { return this->linuxFileType() & PTF_SYMBOLIC_LINK; }
+    __CDS_NoDiscard __CDS_MaybeUnused inline auto isLinuxSocket () const noexcept -> bool { return this->linuxFileType() & PTF_SOCKET; }
 
-    [[nodiscard]] auto platformInfoToString () const noexcept -> String {
+    __CDS_NoDiscard auto platformInfoToString () const noexcept -> String {
         String permissionsAsString;
         auto grouped = File::platformPermissionsGrouped (& this->_linuxFileData);
 
@@ -391,23 +391,23 @@ public:
                     File::platformTypeFlagsToString(actual);
         }
 
-        [[nodiscard]] auto what () const noexcept -> StringLiteral override {
+        __CDS_NoDiscard auto what () const noexcept -> StringLiteral override {
             return this->_message.cStr();
         }
     };
     // endregion
 
     // region utility functions
-    [[nodiscard]] constexpr auto path () const noexcept -> Path const & { return this->_path; }
-    [[nodiscard]] constexpr auto path () noexcept -> Path & { return this->_path; }
+    __CDS_NoDiscard constexpr auto path () const noexcept -> Path const & { return this->_path; }
+    __CDS_NoDiscard constexpr auto path () noexcept -> Path & { return this->_path; }
 
-    [[nodiscard]] inline auto name () const noexcept -> String { return this->path().nodeName(); }
+    __CDS_NoDiscard inline auto name () const noexcept -> String { return this->path().nodeName(); }
 
-    [[nodiscard]] static auto at (Path const &) noexcept -> UniquePointer < File >;
+    __CDS_NoDiscard static auto at (Path const &) noexcept -> UniquePointer < File >;
 
-    [[nodiscard]] auto copy () const noexcept -> File * override = 0;
+    __CDS_NoDiscard auto copy () const noexcept -> File * override = 0;
 
-    [[nodiscard]] auto toString () const noexcept -> String override {
+    __CDS_NoDiscard auto toString () const noexcept -> String override {
         return
                 String("File {") +
                 " path = " + this->_path.toString() +
@@ -434,7 +434,7 @@ inline auto File::platformTypeFlagsToString ( File::PlatformTypeFlags flags ) no
     return rep.rtrim(", ");
 }
 
-inline auto File::platformTypeFlagsToStringList ( File::PlatformTypeFlags flags ) noexcept -> LinkedList < String > {
+__CDS_MaybeUnused inline auto File::platformTypeFlagsToStringList ( File::PlatformTypeFlags flags ) noexcept -> LinkedList < String > {
     LinkedList < String > l;
 
     for ( uint8 f = PTF_MIN_VALUE; f <= PTF_MAX_VALUE; f <<= 1u )
@@ -444,7 +444,7 @@ inline auto File::platformTypeFlagsToStringList ( File::PlatformTypeFlags flags 
     return l;
 }
 
-inline auto File::platformTypeFlagsToList ( File::PlatformTypeFlags flags ) noexcept -> LinkedList < File::PlatformTypeFlag > {
+__CDS_MaybeUnused inline auto File::platformTypeFlagsToList ( File::PlatformTypeFlags flags ) noexcept -> LinkedList < File::PlatformTypeFlag > {
     LinkedList < File::PlatformTypeFlag > l;
 
     for ( uint8 f = PTF_MIN_VALUE; f <= PTF_MAX_VALUE; f <<= 1u )
@@ -455,7 +455,7 @@ inline auto File::platformTypeFlagsToList ( File::PlatformTypeFlags flags ) noex
 }
 
 inline auto File::platformFileType(Path const & p) noexcept -> PlatformTypeFlags {
-    struct stat64 st;
+    struct stat64 st; // NOLINT(cppcoreguidelines-pro-type-member-init)
     if ( -1 == lstat64(p.toString().cStr(), & st) ) {
         std::cout << "Ok?\n" << p.toString().cStr() << '\n';
     }
@@ -481,7 +481,7 @@ inline auto File::platformFileType(struct stat64 const * st) noexcept -> Platfor
 
 // region Linux Platform Permission Flags Impl.
 
-inline auto File::platformPermissionFlagsToString ( PlatformPermissionFlags flags ) noexcept -> String {
+__CDS_MaybeUnused inline auto File::platformPermissionFlagsToString ( PlatformPermissionFlags flags ) noexcept -> String {
     String rep = "";
 
     for ( uint8 f = PPF_MIN_VALUE; f <= PPF_MAX_VALUE; f <<= 1u )
@@ -501,7 +501,7 @@ inline auto File::platformPermissionFlagsToStringList ( PlatformPermissionFlags 
     return l;
 }
 
-inline auto File::platformPermissionFlagsToList ( PlatformPermissionFlags flags ) noexcept -> LinkedList < PlatformPermissionFlag > {
+__CDS_MaybeUnused inline auto File::platformPermissionFlagsToList ( PlatformPermissionFlags flags ) noexcept -> LinkedList < PlatformPermissionFlag > {
     LinkedList < PlatformPermissionFlag > l;
 
     for ( uint8 f = PPF_MIN_VALUE; f <= PPF_MAX_VALUE; f <<= 1u )
@@ -525,7 +525,7 @@ inline auto File::platformUserFlagsToString ( PlatformUserFlags flags ) noexcept
     return rep.rtrim(", ");
 }
 
-inline auto File::platformUserFlagsToStringList ( PlatformUserFlags flags ) noexcept -> LinkedList < String > {
+__CDS_MaybeUnused inline auto File::platformUserFlagsToStringList ( PlatformUserFlags flags ) noexcept -> LinkedList < String > {
     LinkedList < String > l;
 
     for ( uint8 f = PUF_MIN_VALUE; f <= PUF_MAX_VALUE; f <<= 1u )
@@ -535,7 +535,7 @@ inline auto File::platformUserFlagsToStringList ( PlatformUserFlags flags ) noex
     return l;
 }
 
-inline auto File::platformUserFlagsToList ( PlatformUserFlags flags ) noexcept -> LinkedList < PlatformUserFlag > {
+__CDS_MaybeUnused inline auto File::platformUserFlagsToList ( PlatformUserFlags flags ) noexcept -> LinkedList < PlatformUserFlag > {
     LinkedList < PlatformUserFlag > l;
 
     for ( uint8 f = PUF_MIN_VALUE; f <= PUF_MAX_VALUE; f <<= 1u )
@@ -549,14 +549,14 @@ inline auto File::platformUserFlagsToList ( PlatformUserFlags flags ) noexcept -
 
 // region Linux Platform Permissions Impl.
 
-inline auto File::platformPermissions ( Path const & path, PlatformUserFlags flags ) noexcept -> PlatformPermissionFlags {
-    struct stat64 st;
+__CDS_MaybeUnused inline auto File::platformPermissions ( Path const & path, PlatformUserFlags flags ) noexcept -> PlatformPermissionFlags {
+    struct stat64 st; // NOLINT(cppcoreguidelines-pro-type-member-init)
     lstat64 ( path.toString().cStr(), & st );
     return File::platformPermissions ( &st, flags );
 }
 
-inline auto File::platformPermissionsGrouped ( Path const & path ) noexcept -> HashMap < PlatformUserFlag, PlatformPermissionFlags > {
-    struct stat64 st;
+__CDS_MaybeUnused inline auto File::platformPermissionsGrouped ( Path const & path ) noexcept -> HashMap < PlatformUserFlag, PlatformPermissionFlags > {
+    struct stat64 st; // NOLINT(cppcoreguidelines-pro-type-member-init)
     lstat64 ( path.toString().cStr(), & st );
     return File::platformPermissionsGrouped ( & st );
 }
@@ -653,15 +653,15 @@ inline auto File::platformPermissionsGrouped (
 
 class File::LinuxRegular : public File {
 private:
-    int fd;
+    __CDS_MaybeUnused int fd;
 
 public:
-    explicit LinuxRegular (Path const & path) noexcept (false) : File (path) {
+    explicit LinuxRegular (Path const & path) noexcept (false) : File (path) { // NOLINT(cppcoreguidelines-pro-type-member-init)
         if ( ! this->isLinuxRegularFile () )
             throw InvalidFileType ( PTF_REGULAR, this->linuxFileType() );
     }
 
-    [[nodiscard]] auto toString () const noexcept -> String override {
+    __CDS_NoDiscard auto toString () const noexcept -> String override {
         return
             String("Linux Regular File {") +
             " file = " + File::toString() +
@@ -670,17 +670,16 @@ public:
 
     ~LinuxRegular () noexcept override = default;
 
-    [[nodiscard]] auto copy () const noexcept -> LinuxRegular * override {
+    __CDS_NoDiscard auto copy () const noexcept -> LinuxRegular * override {
         return new LinuxRegular(* this);
     }
 
-    auto open (String const & = "rw") noexcept -> LinuxRegular & {
-//        this->fd = open(this->_osPath.toString().cStr());
+    __CDS_NoDiscard __CDS_MaybeUnused auto open (String const & = "rw") noexcept -> LinuxRegular & {
 #warning File Encoding Read/Write Not Implemented
         return * this;
     }
 
-    auto close () noexcept -> LinuxRegular & {
+    __CDS_MaybeUnused auto close () noexcept -> LinuxRegular & {
 #warning Not Implemented
         return * this;
     }
@@ -700,7 +699,7 @@ public:
             throw InvalidFileType ( PTF_DIRECTORY, this->linuxFileType() );
     }
 
-    [[nodiscard]] auto toString () const noexcept -> String override {
+    __CDS_NoDiscard auto toString () const noexcept -> String override {
         return
                 String("Linux Directory {") +
                 " file = " + File::toString() +
@@ -731,11 +730,12 @@ public:
                     if ( static_cast < int > (DLL_WARNING) <= static_cast < int > (File::diagnosticLogLevel()) )
                         File::diagnosticOutputStream () << "[" << File::diagnosticLogLevelToString(DLL_WARNING) << "] : Symbolic Link '" << (e.root().toString() + "/" + f ) << "' broken" << '\n';
 
-                    if ( File::_diagnosticFixesFlags & ( DO_BASIC_AUTOMATIC_FIXES | DO_BROKEN_SYMBOLIC_LINKS ) )
-                        if ( fork() == 0 )
-                            execl ("rm", "rm", (e.root().toString() + "/" + f).cStr(), NULL);
+                    if ( File::_diagnosticFixesFlags & ( DO_BASIC_AUTOMATIC_FIXES | DO_BROKEN_SYMBOLIC_LINKS ) ) {
+                        if (fork() == 0)
+                            execl("rm", "rm", (e.root().toString() + "/" + f).cStr(), NULL);
                         else
                             wait(nullptr);
+                    }
                     // endregion
                 }
             }
@@ -748,10 +748,10 @@ public:
         return * this;
     }
 
-    [[nodiscard]] constexpr auto entries () const noexcept -> LinkedList < File * > const & { return this->_entries; }
-    [[nodiscard]] constexpr auto entries () noexcept -> LinkedList < File * > & { this->reload(); return this->_entries; }
+    __CDS_NoDiscard constexpr auto entries () const noexcept -> LinkedList < File * > const & { return this->_entries; }
+    __CDS_NoDiscard constexpr auto entries () noexcept -> LinkedList < File * > & { this->reload(); return this->_entries; }
 
-    [[nodiscard]] auto files () const noexcept -> LinkedList < File::LinuxRegular * > {
+    __CDS_NoDiscard auto files () const noexcept -> LinkedList < File::LinuxRegular * > {
         LinkedList < File::LinuxRegular * > l;
         for ( auto & e : this->entries () )
             if ( e->isLinuxRegularFile() )
@@ -760,7 +760,7 @@ public:
         return l;
     }
 
-    [[nodiscard]] auto directories () const noexcept -> LinkedList < File::LinuxDirectory * > {
+    __CDS_NoDiscard auto directories () const noexcept -> LinkedList < File::LinuxDirectory * > {
         LinkedList < File::LinuxDirectory * > l;
         for ( auto & e : this->entries () )
             if ( e->isLinuxDirectory() )
@@ -769,7 +769,7 @@ public:
         return l;
     }
 
-    [[nodiscard]] auto files () noexcept -> LinkedList < File::LinuxRegular * > {
+    __CDS_NoDiscard auto files () noexcept -> LinkedList < File::LinuxRegular * > {
         LinkedList < File::LinuxRegular * > l;
         for ( auto & e : this->entries () )
             if ( e->isLinuxRegularFile() )
@@ -778,7 +778,7 @@ public:
         return l;
     }
 
-    [[nodiscard]] auto directories () noexcept -> LinkedList < File::LinuxDirectory * > {
+    __CDS_NoDiscard auto directories () noexcept -> LinkedList < File::LinuxDirectory * > {
         LinkedList < File::LinuxDirectory * > l;
         for ( auto & e : this->entries () )
             if ( e->isLinuxDirectory() )
@@ -793,7 +793,7 @@ public:
         this->_entries.clear();
     }
 
-    [[nodiscard]] auto copy () const noexcept -> LinuxDirectory * override {
+    __CDS_NoDiscard auto copy () const noexcept -> LinuxDirectory * override {
         return new LinuxDirectory(* this);
     }
 };
@@ -806,7 +806,7 @@ public:
 #warning Warning : Linux Character Device Partial Support
     }
 
-    [[nodiscard]] auto toString () const noexcept -> String override {
+    __CDS_NoDiscard auto toString () const noexcept -> String override {
         return
                 String("Linux Character Device {") +
                 " file = " + File::toString() +
@@ -815,7 +815,7 @@ public:
 
     ~LinuxCharacterDevice () noexcept override = default;
 
-    [[nodiscard]] auto copy () const noexcept -> LinuxCharacterDevice * override {
+    __CDS_NoDiscard auto copy () const noexcept -> LinuxCharacterDevice * override {
         return new LinuxCharacterDevice(* this);
     }
 };
@@ -828,7 +828,7 @@ public:
 #warning Warning : Linux Block Device Partial Support
     }
 
-    [[nodiscard]] auto toString () const noexcept -> String override {
+    __CDS_NoDiscard auto toString () const noexcept -> String override {
         return
                 String("Linux Block Device {") +
                 " file = " + File::toString() +
@@ -837,7 +837,7 @@ public:
 
     ~LinuxBlockDevice () noexcept override = default;
 
-    [[nodiscard]] auto copy () const noexcept -> LinuxBlockDevice * override {
+    __CDS_NoDiscard auto copy () const noexcept -> LinuxBlockDevice * override {
         return new LinuxBlockDevice(* this);
     }
 };
@@ -849,7 +849,7 @@ public:
             throw InvalidFileType ( PTF_FIFO, this->linuxFileType() );
     }
 
-    [[nodiscard]] auto toString () const noexcept -> String override {
+    __CDS_NoDiscard auto toString () const noexcept -> String override {
         return
                 String("Linux FIFO {") +
                 " file = " + File::toString() +
@@ -858,7 +858,7 @@ public:
 
     ~LinuxFIFO () noexcept override = default;
 
-    [[nodiscard]] auto copy () const noexcept -> LinuxFIFO * override {
+    __CDS_NoDiscard auto copy () const noexcept -> LinuxFIFO * override {
         return new LinuxFIFO(* this);
     }
 };
@@ -870,7 +870,7 @@ public:
             throw InvalidFileType ( PTF_SYMBOLIC_LINK, this->linuxFileType () );
     }
 
-    [[nodiscard]] auto toString () const noexcept -> String override {
+    __CDS_NoDiscard auto toString () const noexcept -> String override {
         return
                 String("Linux Symbolic Link {") +
                 " file = " + File::toString() +
@@ -879,7 +879,7 @@ public:
 
     ~LinuxSymbolicLink () noexcept override = default;
 
-    [[nodiscard]] auto copy () const noexcept -> LinuxSymbolicLink * override {
+    __CDS_NoDiscard auto copy () const noexcept -> LinuxSymbolicLink * override {
         return new LinuxSymbolicLink(* this);
     }
 };
@@ -891,7 +891,7 @@ public:
             throw InvalidFileType ( PTF_SOCKET, this->linuxFileType () );
     }
 
-    [[nodiscard]] auto toString () const noexcept -> String override {
+    __CDS_NoDiscard auto toString () const noexcept -> String override {
         return
                 String("Linux Socket {") +
                 " file = " + File::toString() +
@@ -900,7 +900,7 @@ public:
 
     ~LinuxSocket () noexcept override = default;
 
-    [[nodiscard]] auto copy () const noexcept -> LinuxSocket * override {
+    __CDS_NoDiscard auto copy () const noexcept -> LinuxSocket * override {
         return new LinuxSocket(* this);
     }
 };
@@ -911,7 +911,7 @@ public:
 
 // region File factory function
 
-[[nodiscard]] inline auto File::at (Path const & p) noexcept -> UniquePointer < File > {
+__CDS_NoDiscard inline auto File::at (Path const & p) noexcept -> UniquePointer < File > {
 
 #if defined(__linux)
 
@@ -935,7 +935,7 @@ public:
 // region File inline static vars
 
 #include <iostream>
-inline std::ostream *                   File::_diagnosticOutput = & std::cerr;
+inline std::ostream *                   File::_diagnosticOutput = & std::cerr; // NOLINT(cppcoreguidelines-interfaces-global-init)
 inline File::DiagnosticLogLevel         File::_diagnosticLogLevel = File::DiagnosticLogLevel::DLL_ALL;
 inline File::DiagnosticOptionFlags      File::_diagnosticFixesFlags = File::DiagnosticOptionFlag::DO_NO_AUTOMATIC_FIXES;
 

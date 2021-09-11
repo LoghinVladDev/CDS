@@ -121,47 +121,47 @@ public:
     inline auto replaceNotOf ( std::initializer_list<T> const & list, T const & with, Size count ) noexcept -> void override { return this->replaceNotOf( SingleLinkedList<T> (list), with, count ); }
     inline auto replaceLastNotOf ( std::initializer_list<T> const & list, T const & with ) noexcept -> void override { return this->replaceLastNotOf( SingleLinkedList<T> (list), with ); }
 
-    [[nodiscard]] constexpr auto back () noexcept (false) -> T & override {
+    __CDS_NoDiscard constexpr auto back () noexcept (false) -> T & override {
         if ( this->empty() )
             throw typename List < T > :: ListOutOfBounds ();
 
         return this->_pBack->_data;
     }
 
-    [[nodiscard]] constexpr auto back () const noexcept (false) -> T const & override {
+    __CDS_NoDiscard constexpr auto back () const noexcept (false) -> T const & override {
         if ( this->empty() )
             throw typename List < T > :: ListOutOfBounds ();
 
         return this->_pBack->_data;
     }
 
-    [[nodiscard]] constexpr auto front () noexcept (false) -> T & override {
+    __CDS_NoDiscard constexpr auto front () noexcept (false) -> T & override {
         if ( this->empty() )
             throw typename List < T > :: ListOutOfBounds ();
 
         return this->_pFront->data();
     }
 
-    [[nodiscard]] constexpr auto front () const noexcept (false) -> T const & override {
+    __CDS_NoDiscard constexpr auto front () const noexcept (false) -> T const & override {
         if ( this->empty() )
             throw typename List < T > :: ListOutOfBounds ();
 
         return this->_pFront->data();
     }
 
-    [[nodiscard]] constexpr auto empty () const noexcept -> bool final {
+    __CDS_NoDiscard constexpr auto empty () const noexcept -> bool final {
         return this->_size == 0 && this->_pFront == nullptr;
     }
 
-    [[nodiscard]] auto operator == (SingleLinkedList const & o) const noexcept -> bool {
+    __CDS_NoDiscard auto operator == (SingleLinkedList const & o) const noexcept -> bool {
         if ( this == & o ) return true;
         if ( this->size() != o.size() ) return false;
 
         for ( auto i1 = this->begin(), i2 = o.begin(); i1 != this->end() && i2 != o.end(); ++ i1, ++ i2 )
-            if constexpr ( Type < T > :: hasEqualityOperator ) {
+            if __CDS_cpplang_IfConstexpr ( Type < T > :: hasEqualityOperator ) {
                 if ( !(i1.value() == i2.value()) )
                     return false;
-            } else if constexpr ( Type < T > :: objectDerived ) {
+            } else if __CDS_cpplang_IfConstexpr ( Type < T > :: objectDerived ) {
                 if ( ! i1.value().equals (i2.value()) )
                     return false;
             } else
@@ -170,7 +170,7 @@ public:
         return true;
     }
 
-    [[nodiscard]] auto equals ( Object const & o ) const noexcept -> bool final {
+    __CDS_NoDiscard auto equals ( Object const & o ) const noexcept -> bool final {
         if ( this == & o ) return true;
         auto p = dynamic_cast < decltype (this) > (& o);
         if ( p == nullptr ) return false;
@@ -182,7 +182,7 @@ public:
     auto makeUnique () noexcept -> void override;
     auto contains ( T const & ) const noexcept -> bool final;
 
-    [[nodiscard]] auto toString () const noexcept -> String final;
+    __CDS_NoDiscard auto toString () const noexcept -> String final;
 
     auto index ( T & ) noexcept -> Index override;
     auto index ( T const & ) const noexcept -> Index override;
@@ -194,7 +194,7 @@ public:
 
     auto sub ( List < T > &, Index, Index ) const noexcept(false) -> void override;
 
-    virtual auto sub (Index from, Index to) const noexcept (false) -> SingleLinkedList < T > {
+    __CDS_MaybeUnused virtual auto sub (Index from, Index to) const noexcept (false) -> SingleLinkedList < T > {
         SingleLinkedList < T > list;
         this->sub( list, from, to );
         return list;
@@ -255,11 +255,16 @@ public:
 
 private:
 
+#pragma clang diagnostic push
+#pragma ide diagnostic ignored "NotImplementedFunctions"
+
     template < typename SortFunction >
     auto static quickSort ( Iterator, Iterator, SortFunction const & ) noexcept -> void;
 
     template < typename SortFunction >
     auto static quickSortPartition ( Iterator, Iterator, SortFunction const & ) noexcept -> Iterator;
+
+#pragma clang diagnostic pop
 
 public:
     template < typename SortFunction >
@@ -283,11 +288,11 @@ public:
         return * this;
     }
 
-    [[nodiscard]] auto sequence () const noexcept -> Sequence < SingleLinkedList < T > const >;
-    [[nodiscard]] auto sequence () noexcept -> Sequence < SingleLinkedList < T > >;
+    __CDS_NoDiscard auto sequence () const noexcept -> Sequence < SingleLinkedList < T > const >;
+    __CDS_NoDiscard auto sequence () noexcept -> Sequence < SingleLinkedList < T > >;
 
-    [[nodiscard]] auto copy () const noexcept -> SingleLinkedList < T > * override { return new SingleLinkedList (* this); }
-    [[nodiscard]] auto hash () const noexcept -> Index override { return this->size(); }
+    __CDS_NoDiscard auto copy () const noexcept -> SingleLinkedList < T > * override { return new SingleLinkedList (* this); }
+    __CDS_NoDiscard auto hash () const noexcept -> Index override { return this->size(); }
 };
 
 template < typename T >
@@ -308,7 +313,7 @@ protected:
 public:
     ~IteratorBase () noexcept override = default;
 
-    [[nodiscard]] constexpr auto equals ( typename Collection < T > :: Iterator const & it ) const noexcept -> bool final {
+    __CDS_NoDiscard constexpr auto equals ( typename Collection < T > :: Iterator const & it ) const noexcept -> bool final {
         if ( this == & it ) return true;
         auto p = dynamic_cast < decltype (this) > ( & it );
         if ( p == nullptr ) return false;
@@ -316,9 +321,9 @@ public:
         return this->_pNode == p->_pNode;
     }
 
-    [[nodiscard]] constexpr auto value () const noexcept -> T & final { return this->_pNode->_data; }
+    __CDS_NoDiscard constexpr auto value () const noexcept -> T & final { return this->_pNode->_data; }
 
-    [[nodiscard]] auto copy () const noexcept -> IteratorBase * override = 0;
+    __CDS_NoDiscard auto copy () const noexcept -> IteratorBase * override = 0;
 };
 
 template < typename T >
@@ -339,7 +344,7 @@ protected:
 public:
     ~ConstIteratorBase() noexcept override = default;
 
-    [[nodiscard]] constexpr auto equals ( typename Collection < T > :: ConstIterator const & it ) const noexcept -> bool final {
+    __CDS_NoDiscard constexpr auto equals ( typename Collection < T > :: ConstIterator const & it ) const noexcept -> bool final {
         if ( this == & it ) return true;
         auto p = dynamic_cast < decltype ( this ) > ( & it );
         if ( p == nullptr ) return false;
@@ -347,9 +352,9 @@ public:
         return this->_pNode == p->_pNode;
     }
 
-    [[nodiscard]] constexpr auto value () const noexcept -> T const & final { return this->_pNode->_data; }
+    __CDS_NoDiscard constexpr auto value () const noexcept -> T const & final { return this->_pNode->_data; }
 
-    [[nodiscard]] auto copy () const noexcept -> ConstIteratorBase * override = 0;
+    __CDS_NoDiscard auto copy () const noexcept -> ConstIteratorBase * override = 0;
 };
 
 template < typename T >
@@ -375,7 +380,7 @@ public:
     inline auto operator ++ (int) noexcept -> Iterator { auto copy = * this; this->next(); return copy; }
     constexpr auto next () noexcept -> Iterator & final { this->_pNode = this->_pNode->_pNext; return * this; }
 
-    [[nodiscard]] inline auto copy () const noexcept -> Iterator * override {
+    __CDS_NoDiscard inline auto copy () const noexcept -> Iterator * override {
         return new Iterator ( * this );
     }
 };
@@ -403,7 +408,7 @@ public:
     inline auto operator ++ (int) noexcept -> ConstIterator { auto copy = * this; this->next(); return * this; }
     constexpr auto next () noexcept -> ConstIterator & final { this->_pNode = this->_pNode->_pNext; return * this; }
 
-    [[nodiscard]] inline auto copy () const noexcept -> ConstIterator * override {
+    __CDS_NoDiscard inline auto copy () const noexcept -> ConstIterator * override {
         return new ConstIterator ( * this );
     }
 };
@@ -458,14 +463,13 @@ auto SingleLinkedList < T > :: pushBack ( T && value ) noexcept -> void {
 #include <sstream>
 template < typename T >
 auto SingleLinkedList < T > :: toString () const noexcept -> String {
-    if ( this->empty() ) return String ("[ ]");
+    if ( this->empty() ) return {"[ ]"};
 
     std::stringstream out;
     out << "[ ";
 
     for ( auto const & e : * this )
         Type < T > ::streamPrint( out, e ) << ", ";
-//        out << e << ", ";
 
     auto s = out.str();
     return s.substr(0, s.length() - 2).append(" ]");
@@ -905,9 +909,7 @@ SingleLinkedList < T > :: SingleLinkedList (
         typename Collection < T > :: Iterator const & from,
         typename Collection < T > :: Iterator const & to
 ) noexcept {
-    auto it = UniquePointer ( from.copy() );
-
-    for ( ; ! it->equals(to); it->next() )
+    for ( auto it = UniquePointer < decltype ( & from ) > ( from.copy() ) ; ! it->equals(to); it->next() )
         this->pushBack(it->value());
 }
 
@@ -916,10 +918,8 @@ SingleLinkedList < T > :: SingleLinkedList (
         typename Collection < T > :: ConstIterator const & from,
         typename Collection < T > :: ConstIterator const & to
 ) noexcept {
-    auto it = UniquePointer ( from.copy() );
-
-    for ( ; ! it->equals ( to ); it -> next() )
-        this->pushBack( it->value() );
+    for ( auto it = UniquePointer < decltype ( & from ) > ( from.copy() ) ; ! it->equals(to); it->next() )
+        this->pushBack(it->value());
 }
 
 template < typename T >
@@ -998,15 +998,8 @@ auto SingleLinkedList < T > :: makeUnique() noexcept -> void {
 template < typename T >
 auto SingleLinkedList < T > :: contains ( T const & element ) const noexcept -> bool {
     for ( auto const & i : * this )
-        if constexpr ( Type < T > :: hasEqualityOperator ) {
-            if (i == element) return true;
-        } else if constexpr ( Type < T > :: objectDerived ) {
-            if (i.equals(element)) return true;
-        } else {
-            if (&i == &element) return true;
-        }
-//        if ( i == element )
-//            return true;
+        if ( Type < T > :: compare ( i, element ) )
+            return true;
     return false;
 }
 
@@ -1124,7 +1117,7 @@ auto SingleLinkedList < T > :: sort ( SortFunction const & function ) noexcept -
 
 template < typename T >
 template < typename SortFunction >
-auto SingleLinkedList < T > :: quickSort (
+__CDS_MaybeUnused auto SingleLinkedList < T > :: quickSort (
     Iterator from,
     Iterator to,
     SortFunction const & f
@@ -1160,7 +1153,7 @@ auto SingleLinkedList < T > :: quickSort (
 
 template < typename T >
 template < typename SortFunction >
-auto SingleLinkedList < T > ::quickSortPartition(
+__CDS_MaybeUnused auto SingleLinkedList < T > ::quickSortPartition(
         Iterator from,
         Iterator to,
         SortFunction const & f
@@ -1193,7 +1186,7 @@ auto SingleLinkedList < T > :: operator = ( Collection < T > const & collection 
 
     this->clear();
 
-    for ( auto it = UniquePointer ( Collection < T > :: beginPtr(collection) ), end = UniquePointer ( Collection < T > :: endPtr(collection) ); ! it->equals ( * end ); it->next() )
+    for ( auto it = UniquePointer < decltype ( & Collection < T > :: beginPtr ) > ( Collection < T > :: beginPtr(collection) ), end = UniquePointer < decltype ( & Collection < T > :: endPtr ) > ( Collection < T > :: endPtr(collection) ); ! it->equals ( * end ); it->next() )
         this->pushBack( it->value() );
 
     return * this;
@@ -1203,12 +1196,12 @@ auto SingleLinkedList < T > :: operator = ( Collection < T > const & collection 
 
 template < typename T >
 auto SingleLinkedList < T > :: sequence () const noexcept -> Sequence < const SingleLinkedList < T > > {
-    return Sequence(*this);
+    return Sequence < typename std :: remove_reference < decltype (*this) > :: type > (*this);
 }
 
 template < typename T >
 auto SingleLinkedList < T > :: sequence () noexcept -> Sequence < SingleLinkedList < T > > {
-    return Sequence(*this);
+    return Sequence < typename std :: remove_reference < decltype (*this) > :: type > (*this);
 }
 
 #endif //CDS_SINGLELINKEDLIST_HPP

@@ -5,10 +5,6 @@
 #ifndef CDS_RANGE_HPP
 #define CDS_RANGE_HPP
 
-
-//template < typename T >
-//class View;
-
 template < typename C >
 class Sequence;
 
@@ -27,7 +23,7 @@ public:
     public:
         constexpr explicit Iterator(Index start, bool rev = false) : i(start), reversed(rev) {}
 
-        constexpr auto value () const noexcept -> Index { return this->i; }
+        __CDS_NoDiscard constexpr auto value () const noexcept -> Index { return this->i; }
         constexpr auto next () noexcept -> Iterator & { reversed ? --i : ++i; return * this; }
 
         constexpr auto operator ++ () -> Iterator & { reversed ? --i : ++i; return * this; }
@@ -46,36 +42,30 @@ public:
     Range(Range &&) noexcept = default;
     ~Range() noexcept final = default;
 
-    [[nodiscard]] constexpr auto begin() const noexcept -> Iterator { return Iterator(_s, _rev); }
-    [[nodiscard]] constexpr auto end() const noexcept -> Iterator { return Iterator(_f, _rev); }
-    [[nodiscard]] constexpr auto cbegin() const noexcept -> Iterator { return this->begin(); }
-    [[nodiscard]] constexpr auto cend() const noexcept -> Iterator { return this->end(); }
+    __CDS_NoDiscard constexpr auto begin() const noexcept -> Iterator { return Iterator(_s, _rev); }
+    __CDS_NoDiscard constexpr auto end() const noexcept -> Iterator { return Iterator(_f, _rev); }
+    __CDS_NoDiscard constexpr auto cbegin() const noexcept -> Iterator { return this->begin(); }
+    __CDS_NoDiscard constexpr auto cend() const noexcept -> Iterator { return this->end(); }
 
-    [[nodiscard]] auto hash() const noexcept -> Index final { return _s + _f; }
-    [[nodiscard]] auto toString () const noexcept -> String final { return String("( ") + _s + " ... " + _f + " )";  }
+    __CDS_NoDiscard auto hash() const noexcept -> Index final { return _s + _f; }
+    __CDS_NoDiscard auto toString () const noexcept -> String final { return String("( ") + _s + " ... " + _f + " )";  }
 
-    [[nodiscard]] auto copy () const noexcept -> Range * override {
+    __CDS_NoDiscard auto copy () const noexcept -> Range * override {
         return new Range( * this );
     }
 
-//    auto view () const noexcept -> View < Range >;
-    auto sequence () const noexcept -> Sequence < const Range >;
-    auto sequence () noexcept -> Sequence < Range >;
+    __CDS_NoDiscard auto sequence () const noexcept -> Sequence < const Range >;
+    __CDS_NoDiscard auto sequence () noexcept -> Sequence < Range >;
 };
-
-//#include <CDS/View>
-//auto Range::view() const noexcept -> View < Range > {
-//    return View(*this);
-//}
 
 #include <CDS/Sequence>
 
 inline auto Range::sequence() noexcept -> Sequence<Range> {
-    return Sequence(*this);
+    return Sequence < typename std :: remove_reference < decltype (*this) > :: type > (*this);
 }
 
 inline auto Range::sequence() const noexcept -> Sequence<const Range> {
-    return Sequence(*this);
+    return Sequence < typename std :: remove_reference < decltype (*this) > :: type > (*this);
 }
 
 #endif //CDS_RANGE_HPP

@@ -1,0 +1,22 @@
+{
+  "id": "defaultThemeDark",
+  "name": "Dark Theme",
+  "fallbackThemes": ["defaultThemeLight"],
+  "mappings": {
+    "menu-bar":         "widget/menu-bar.css",
+
+    "button":           "inputs/button.css",
+    "combo":            "inputs/combo.css",
+
+    "splitter":         "splitter/splitter.css",
+    "splitter-left":    "splitter/left.css",
+
+    "list":             "list/list.css",
+
+    "widget":           "widget/widget.css",
+    "lower-widget":     "widget/lower.css"
+  },
+  "icons" : {
+    "window-close":     "icons/window_close.png"
+  }
+}
