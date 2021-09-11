@@ -26,10 +26,10 @@ private:
 
         }
 
-        constexpr auto next () noexcept -> Node * & { return this->_pNext; }
+        __CDS_cpplang_NonConstConstexprMemberFunction auto next () noexcept -> Node * & { return this->_pNext; }
         constexpr auto next () const noexcept -> Node const * & { return this->_pNext; }
 
-        constexpr auto data () noexcept -> T & { return this->_data; }
+        __CDS_cpplang_NonConstConstexprMemberFunction auto data () noexcept -> T & { return this->_data; }
         constexpr auto data () const noexcept -> T const & { return this->_data; }
     };
 
@@ -50,9 +50,9 @@ public:
     
     SingleLinkedList ( SingleLinkedList && obj ) noexcept :
             List < T > ( obj ),
-            _pFront ( std::exchange( obj._pFront, nullptr ) ),
-            _pBack ( std::exchange( obj._pBack, nullptr ) ) {
-        this->_size = std::exchange( obj._size, 0 );
+            _pFront ( exchange( obj._pFront, nullptr ) ),
+            _pBack ( exchange( obj._pBack, nullptr ) ) {
+        this->_size = exchange( obj._size, 0 );
     }
 
     SingleLinkedList (
@@ -121,7 +121,7 @@ public:
     inline auto replaceNotOf ( std::initializer_list<T> const & list, T const & with, Size count ) noexcept -> void override { return this->replaceNotOf( SingleLinkedList<T> (list), with, count ); }
     inline auto replaceLastNotOf ( std::initializer_list<T> const & list, T const & with ) noexcept -> void override { return this->replaceLastNotOf( SingleLinkedList<T> (list), with ); }
 
-    __CDS_NoDiscard constexpr auto back () noexcept (false) -> T & override {
+    __CDS_NoDiscard __CDS_cpplang_NonConstConstexprMemberFunction auto back () noexcept (false) -> T & override {
         if ( this->empty() )
             throw typename List < T > :: ListOutOfBounds ();
 
@@ -135,7 +135,7 @@ public:
         return this->_pBack->_data;
     }
 
-    __CDS_NoDiscard constexpr auto front () noexcept (false) -> T & override {
+    __CDS_NoDiscard __CDS_cpplang_NonConstConstexprMemberFunction auto front () noexcept (false) -> T & override {
         if ( this->empty() )
             throw typename List < T > :: ListOutOfBounds ();
 
@@ -281,9 +281,9 @@ public:
     constexpr auto operator = ( SingleLinkedList && o ) noexcept -> SingleLinkedList & {
         if ( this == & o ) return * this;
 
-        this->_pFront = std::exchange( o._pFront, nullptr );
-        this->_pBack = std::exchange( o._pBack, nullptr );
-        this->_size = std::exchange( o._size, 0 );
+        this->_pFront = exchange( o._pFront, nullptr );
+        this->_pBack = exchange( o._pBack, nullptr );
+        this->_size = exchange( o._size, 0 );
 
         return * this;
     }

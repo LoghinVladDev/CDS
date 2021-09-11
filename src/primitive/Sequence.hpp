@@ -31,10 +31,10 @@ public:
 
 private:
     using StoredPredicate           = std::function < bool (IterableValue) >;
-    using StoredMapper              = std::function < std::remove_reference_t < IterableValue > (IterableValue) >;
+    using StoredMapper              = std::function < typename std::remove_reference < IterableValue > :: type (IterableValue) >;
 
     using StoredIndexedPredicate    = std::function < bool (Index, IterableValue) >;
-    using StoredIndexedMapper       = std::function < std::remove_reference_t < IterableValue > (Index, IterableValue) >;
+    using StoredIndexedMapper       = std::function < typename std::remove_reference < IterableValue > :: type (Index, IterableValue) >;
 
     friend class Iterator;
     friend class ConstIterator;
@@ -1190,7 +1190,7 @@ inline Sequence < C > ::Sequence ( Sequence const & s ) noexcept :
 
 template < typename C >
 inline Sequence < C > ::Sequence ( Sequence && s ) noexcept :
-        chainCount ( std::exchange ( s.chainCount, 0 ) + 1 ),
+        chainCount ( exchange ( s.chainCount, 0 ) + 1 ),
         storedMappers ( std::move ( s.storedMappers ) ),
         storedPredicates ( std::move ( s.storedPredicates ) ),
         storedIndexedMappers ( std::move ( s.storedIndexedMappers ) ),
@@ -1240,7 +1240,7 @@ inline auto Sequence < C > ::operator = ( Sequence && s ) noexcept -> Sequence &
     this->clear();
 
     this->pCollection.reset( new UniquePointer < decltype ( s.pCollection.valueAt().get() ) > ( s.pCollection.valueAt().release() ) );
-    this->chainCount                = std::exchange ( s.chainCount, 0 ) + 1;
+    this->chainCount                = exchange ( s.chainCount, 0 ) + 1;
 
     this->storedMappers             = std::move (s.storedMappers);
     this->storedPredicates          = std::move (s.storedPredicates);
@@ -2580,7 +2580,7 @@ __CDS_Requires ( Iterable < C > || ConstIterable < C > ) {
     for ( auto e : * this )
         container.add(e);
 
-    toAdd.forEach([& container](auto e){container.add(e);});
+    toAdd.forEach([& container](ElementType & e){container.add(e);});
 
     return std::move ( Sequence < decltype ( container ) > ( std::move ( container ) ) );
 }

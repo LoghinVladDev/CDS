@@ -372,7 +372,7 @@ private:
     inline auto endPtr () const noexcept -> ConstIterator * final { return new ConstIterator(this->pBuckets[hashCalculator.getBoundary() - 1].cend(), this->pBuckets, hashCalculator.getBoundary() - 1 ); }
 
 public:
-    constexpr inline auto begin () noexcept -> Iterator {
+    __CDS_cpplang_NonConstConstexprMemberFunction auto begin () noexcept -> Iterator {
         Index i = 0;
         while ( i < hashCalculator.getBoundary() && this->pBuckets[i].empty() )
             i++;
@@ -381,7 +381,7 @@ public:
         return Iterator( this->pBuckets[i].begin(), this->pBuckets, i );
     }
 
-    constexpr inline auto begin () const noexcept -> ConstIterator {
+    __CDS_cpplang_ConstexprConditioned auto begin () const noexcept -> ConstIterator {
         Index i = 0;
         while ( i < hashCalculator.getBoundary() && this->pBuckets[i].empty() )
             i++;
@@ -390,7 +390,7 @@ public:
         return ConstIterator( this->pBuckets[i].cbegin(), this->pBuckets, i );
     }
 
-    constexpr inline auto cbegin () const noexcept -> ConstIterator {
+    __CDS_cpplang_ConstexprConditioned auto cbegin () const noexcept -> ConstIterator {
         Index i = 0;
         while ( i < hashCalculator.getBoundary() && this->pBuckets[i].empty() )
             i++;
@@ -399,7 +399,7 @@ public:
         return ConstIterator (this->pBuckets[i].cbegin(), this->pBuckets, i);
     }
 
-    constexpr inline auto rbegin () noexcept -> ReverseIterator {
+    __CDS_cpplang_NonConstConstexprMemberFunction auto rbegin () noexcept -> ReverseIterator {
         Index i = hashCalculator.getBoundary();
         while ( i >= 0 && this->pBuckets[i].empty() )
             i--;
@@ -408,7 +408,7 @@ public:
         return ReverseIterator(this->pBuckets[i].rbegin(), this->pBuckets, i);
     }
 
-    constexpr inline auto rbegin () const noexcept -> ConstReverseIterator {
+    __CDS_cpplang_ConstexprConditioned auto rbegin () const noexcept -> ConstReverseIterator {
         Index i = hashCalculator.getBoundary();
         while ( i >= 0 && this->pBuckets[i].empty() )
             i--;
@@ -417,7 +417,7 @@ public:
         return ConstReverseIterator (this->pBuckets[i].rbegin(), this->pBuckets, i);
     }
 
-    __CDS_MaybeUnused constexpr inline auto crbegin () const noexcept -> ConstReverseIterator {
+    __CDS_MaybeUnused __CDS_cpplang_ConstexprConditioned auto crbegin () const noexcept -> ConstReverseIterator {
         Index i = hashCalculator.getBoundary();
         while ( i >= 0 && this->pBuckets[i].empty() )
             i--;
@@ -426,17 +426,17 @@ public:
         return ConstReverseIterator (this->pBuckets[i].rbegin(), this->pBuckets, i);
     }
 
-    constexpr inline auto end () noexcept -> Iterator { return Iterator(this->pBuckets[hashCalculator.getBoundary() - 1].end(), this->pBuckets, hashCalculator.getBoundary() - 1); }
+    __CDS_cpplang_NonConstConstexprMemberFunction auto end () noexcept -> Iterator { return Iterator(this->pBuckets[hashCalculator.getBoundary() - 1].end(), this->pBuckets, hashCalculator.getBoundary() - 1); }
     constexpr inline auto end () const noexcept -> ConstIterator { return ConstIterator (this->pBuckets[hashCalculator.getBoundary() - 1].cend(), this->pBuckets, hashCalculator.getBoundary() - 1 ); }
     constexpr inline auto cend () const noexcept -> ConstIterator { return ConstIterator (this->pBuckets[hashCalculator.getBoundary() - 1].cend(), this->pBuckets, hashCalculator.getBoundary() - 1 ); }
-    constexpr inline auto rend () noexcept -> ReverseIterator { return ReverseIterator(this->pBuckets[0].rend(), this->pBuckets, 0); }
+    __CDS_cpplang_NonConstConstexprMemberFunction auto rend () noexcept -> ReverseIterator { return ReverseIterator(this->pBuckets[0].rend(), this->pBuckets, 0); }
     constexpr inline auto rend () const noexcept -> ConstReverseIterator { return ConstReverseIterator (this->pBuckets[0].crend(), this->pBuckets, 0 ); }
     constexpr inline auto crend () const noexcept -> ConstReverseIterator { return ConstReverseIterator (this->pBuckets[0].crend(), this->pBuckets, 0 ); }
 
     auto keys () const noexcept -> LinkedList < Reference < const Key > > final {
         LinkedList < Reference < const Key > > keys;
         for ( auto & e : ( *this ) )
-            keys.pushBack ( e.getFirst() );
+            keys.pushBack ( Reference < const Key > ( e.getFirst() ) );
         return keys;
     }
 

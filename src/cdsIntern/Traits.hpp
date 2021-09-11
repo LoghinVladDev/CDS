@@ -32,8 +32,19 @@ template < typename T, typename U > struct isComparableLessNoexcept < T, U, std:
 template < typename T, typename U > struct isComparableEquals < T, U, std::void_t < decltype ( std::declval <T> () == std::declval <U> () ) > > : std::true_type {};
 template < typename T, typename U > struct isComparableEqualsNoexcept < T, U, std::void_t < decltype ( std::declval <T> () == std::declval <U>() ) > > : BoolConstant < noexcept ( std::declval <T> () == std::declval <U> () ) > { };
 
+#if __CDS_cpplang_VariableTemplates_available == true
+
 template < typename T >
 constexpr bool typeHasEqualityOperator = isComparableEquals < T, T > :: type :: value;
+
+#else
+
+template < typename T >
+constexpr auto typeHasEqualityOperator () noexcept -> bool {
+    return isComparableEquals < T, T > :: type :: value;
+}
+
+#endif
 
 template < typename K, typename V >
 class Pair;
@@ -56,9 +67,9 @@ struct isPrintable : std::false_type {};
 template < typename T >
 struct isPrintable <
         T,
-        std::enable_if_t <
+        typename std::enable_if <
                 std::is_same < decltype (std::cout << std::declval<T>()), std::ostream & >::value
-        >
+        > :: type
 > : std::true_type { };
 
 template < typename D, typename B >
@@ -70,8 +81,19 @@ using isBaseOf = std::is_base_of < B, D >;
 template < typename D >
 using isObjectDerived = isDerivedFrom < D, Object >;
 
+#if __CDS_cpplang_VariableTemplates_available == true
+
 template < typename D >
 constexpr bool typeObjectDerived = isObjectDerived < D > :: type :: value;
+
+#else
+
+template < typename D >
+constexpr auto typeObjectDerived () noexcept -> bool {
+    return isObjectDerived < D > :: type :: value;
+}
+
+#endif
 
 template < typename T, typename = void >
 struct functionTraits;
@@ -157,15 +179,42 @@ concept TypeEqualsComparable = EqualsComparable < T, T >;
 
 template < typename T >
 struct Type {
+
+#if __CDS_cpplang_VariableTemplates_available == true
+
     static constexpr bool hasEqualityOperator = typeHasEqualityOperator < T >;
     static constexpr bool objectDerived = typeObjectDerived < T >;
+
+#else
+
+    static constexpr bool hasEqualityOperator = typeHasEqualityOperator < T > ();
+    static constexpr bool objectDerived = typeObjectDerived < T > ();
+
+#endif
+
     static constexpr bool ostreamPrintable = isPrintable < T > :: type :: value;
+
+#if __CDS_cpplang_VariableTemplates_available == true
 
     template < typename Base >
     static constexpr bool derivedFrom = isDerivedFrom < T, Base > :: type :: value;
 
     template < typename Derived >
     static constexpr bool baseOf = isDerivedFrom < Derived, T > :: type :: value;
+
+#else
+
+    template < typename Base >
+    static constexpr auto derivedFrom () noexcept -> bool {
+        return isDerivedFrom < T, Base > :: type :: value;
+    }
+
+    template < typename Derived >
+    static constexpr auto baseOf () noexcept -> bool {
+        return isDerivedFrom < Derived, T > :: type :: value;
+    }
+
+#endif
 
     template < typename U = T >
     static constexpr auto compare (T const & a, T const & b, int = 0) noexcept -> typename std :: enable_if < Type < U > :: hasEqualityOperator, bool > :: type {
@@ -182,7 +231,7 @@ struct Type {
         return & a == & b;
     }
 
-    static constexpr auto streamPrint (std::ostream & ostream, T const & obj) noexcept -> std::ostream & {
+    static __CDS_cpplang_ConstexprConditioned auto streamPrint (std::ostream & ostream, T const & obj) noexcept -> std::ostream & {
         if __CDS_cpplang_IfConstexpr ( Type :: ostreamPrintable ) {
             ostream << obj;
         } else

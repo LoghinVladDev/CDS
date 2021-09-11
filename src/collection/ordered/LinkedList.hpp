@@ -16,10 +16,19 @@
 template <class T>
 class DoubleLinkedList final : public List<T> {
 private:
-    struct DoubleListNode {
+    struct DoubleListNode { // NOLINT(cppcoreguidelines-pro-type-member-init)
         T                    data;
+
         DoubleListNode     * pNext       {nullptr};
         DoubleListNode     * pPrevious   {nullptr};
+
+#if __CDS_cpplang_StructBracesInitialization_available == false
+
+        DoubleListNode ( T && data, DoubleListNode * pNext, DoubleListNode * pPrev ) noexcept : data(std::move(data)), pNext(pNext), pPrevious(pPrev) { }
+        DoubleListNode ( T const & data, DoubleListNode * pNext, DoubleListNode * pPrev ) noexcept : data(data), pNext(pNext), pPrevious(pPrev) { }
+
+#endif
+
     };
 
     using Node = DoubleListNode;
@@ -90,11 +99,11 @@ public:
             return * this;
         }
 
-        constexpr inline auto operator ++ () noexcept -> Iterator & final { this->next(); return * this; }
+        __CDS_cpplang_NonConstConstexprMemberFunction auto operator ++ () noexcept -> Iterator & final { this->next(); return * this; }
 
         inline auto operator ++ (int) noexcept -> Iterator { auto copy = * this; this->next(); return copy; }
         explicit Iterator( Node * pNode ) : IteratorBase ( pNode ) { }
-        constexpr inline auto next () noexcept -> Iterator & final { this->_pNode = this->_pNode->pNext; return * this; }
+        __CDS_cpplang_NonConstConstexprMemberFunction auto next () noexcept -> Iterator & final { this->_pNode = this->_pNode->pNext; return * this; }
         ~Iterator() noexcept final = default;
 
         __CDS_NoDiscard inline auto copy () const noexcept -> Iterator * override {
@@ -113,11 +122,11 @@ public:
             return * this;
         }
 
-        constexpr inline auto operator ++ () noexcept -> ReverseIterator & override { this->next(); return * this; }
+        __CDS_cpplang_NonConstConstexprMemberFunction auto operator ++ () noexcept -> ReverseIterator & override { this->next(); return * this; }
 
         inline auto operator ++ (int) noexcept -> ReverseIterator { auto copy = * this; this->next(); return copy; }
         explicit ReverseIterator ( Node * pNode ) : IteratorBase( pNode ) { }
-        constexpr inline auto next () noexcept -> ReverseIterator & final { this->_pNode = this->_pNode->pPrevious; return * this; }
+        __CDS_cpplang_NonConstConstexprMemberFunction auto next () noexcept -> ReverseIterator & final { this->_pNode = this->_pNode->pPrevious; return * this; }
         ~ReverseIterator() noexcept final = default;
 
         __CDS_NoDiscard inline auto copy () const noexcept -> ReverseIterator * override {
@@ -136,11 +145,11 @@ public:
             return * this;
         }
 
-        constexpr inline auto operator ++ () noexcept -> ConstIterator & override { this->next(); return * this; }
+        __CDS_cpplang_NonConstConstexprMemberFunction auto operator ++ () noexcept -> ConstIterator & override { this->next(); return * this; }
 
         inline auto operator ++ (int) noexcept -> ConstIterator { auto copy = * this; this->next(); return copy; }
         explicit ConstIterator ( const Node * pNode ) : ConstIteratorBase( pNode ) { }
-        constexpr inline auto next () noexcept -> ConstIterator & final { this->_pNode = this->_pNode->pNext; return * this; }
+        __CDS_cpplang_NonConstConstexprMemberFunction auto next () noexcept -> ConstIterator & final { this->_pNode = this->_pNode->pNext; return * this; }
         ~ConstIterator() noexcept final = default;
 
         __CDS_NoDiscard inline auto copy () const noexcept -> ConstIterator * override {
@@ -159,11 +168,11 @@ public:
             return * this;
         }
 
-        constexpr inline auto operator ++ () noexcept -> ConstReverseIterator & override { this->next(); return * this; }
+        __CDS_cpplang_NonConstConstexprMemberFunction auto operator ++ () noexcept -> ConstReverseIterator & override { this->next(); return * this; }
 
         inline auto operator ++ (int) noexcept -> ConstReverseIterator { auto copy = * this; this->next(); return copy; }
         explicit ConstReverseIterator ( const Node * pNode ) : ConstIteratorBase( pNode ) { }
-        constexpr inline auto next () noexcept -> ConstReverseIterator & final { this->_pNode = this->_pNode->pPrevious; return * this; }
+        __CDS_cpplang_NonConstConstexprMemberFunction auto next () noexcept -> ConstReverseIterator & final { this->_pNode = this->_pNode->pPrevious; return * this; }
         ~ConstReverseIterator() noexcept final = default;
 
         __CDS_NoDiscard inline auto copy () const noexcept -> ConstReverseIterator * override {
@@ -197,19 +206,19 @@ private:
 //    auto findPtr ( const T & ) const noexcept -> ConstIterator & final {return this->front();}
 
 public:
-    __CDS_NoDiscard constexpr inline auto begin () noexcept -> Iterator { return Iterator(this->_pFront); }
-    __CDS_NoDiscard constexpr inline auto end () noexcept -> Iterator { return Iterator(nullptr); }
-    __CDS_NoDiscard constexpr inline auto begin () const noexcept -> ConstIterator { return ConstIterator (this->_pFront); }
-    __CDS_NoDiscard constexpr inline auto end () const noexcept -> ConstIterator { return ConstIterator (nullptr); }
-    __CDS_NoDiscard constexpr inline auto cbegin () const noexcept -> ConstIterator { return ConstIterator (this->_pFront); }
-    __CDS_NoDiscard constexpr inline auto cend () const noexcept -> ConstIterator { return ConstIterator (nullptr); }
+    __CDS_NoDiscard __CDS_cpplang_NonConstConstexprMemberFunction auto begin () noexcept -> Iterator { return Iterator(this->_pFront); }
+    __CDS_NoDiscard __CDS_cpplang_NonConstConstexprMemberFunction auto end () noexcept -> Iterator { return Iterator(nullptr); }
+    __CDS_NoDiscard constexpr auto begin () const noexcept -> ConstIterator { return ConstIterator (this->_pFront); }
+    __CDS_NoDiscard constexpr auto end () const noexcept -> ConstIterator { return ConstIterator (nullptr); }
+    __CDS_NoDiscard constexpr auto cbegin () const noexcept -> ConstIterator { return ConstIterator (this->_pFront); }
+    __CDS_NoDiscard constexpr auto cend () const noexcept -> ConstIterator { return ConstIterator (nullptr); }
 
-    __CDS_NoDiscard constexpr inline auto rbegin () noexcept -> ReverseIterator { return ReverseIterator(this->_pBack); }
-    __CDS_NoDiscard constexpr inline auto rend () noexcept -> ReverseIterator { return ReverseIterator(nullptr); }
-    __CDS_NoDiscard constexpr inline auto rbegin () const noexcept -> ConstReverseIterator { return ConstReverseIterator (this->_pBack); }
-    __CDS_NoDiscard constexpr inline auto rend () const noexcept -> ConstReverseIterator { return ConstReverseIterator (nullptr); }
-    __CDS_NoDiscard constexpr inline auto crbegin () const noexcept -> ConstReverseIterator { return ConstReverseIterator (this->_pBack); }
-    __CDS_NoDiscard constexpr inline auto crend () const noexcept -> ConstReverseIterator { return ConstReverseIterator (nullptr); }
+    __CDS_NoDiscard __CDS_cpplang_NonConstConstexprMemberFunction auto rbegin () noexcept -> ReverseIterator { return ReverseIterator(this->_pBack); }
+    __CDS_NoDiscard __CDS_cpplang_NonConstConstexprMemberFunction auto rend () noexcept -> ReverseIterator { return ReverseIterator(nullptr); }
+    __CDS_NoDiscard constexpr auto rbegin () const noexcept -> ConstReverseIterator { return ConstReverseIterator (this->_pBack); }
+    __CDS_NoDiscard constexpr auto rend () const noexcept -> ConstReverseIterator { return ConstReverseIterator (nullptr); }
+    __CDS_NoDiscard constexpr auto crbegin () const noexcept -> ConstReverseIterator { return ConstReverseIterator (this->_pBack); }
+    __CDS_NoDiscard constexpr auto crend () const noexcept -> ConstReverseIterator { return ConstReverseIterator (nullptr); }
 
     auto remove (Index) noexcept -> bool;
 
@@ -248,28 +257,28 @@ public:
     inline auto replaceNotOf ( const std::initializer_list<T> & list, const T & with, Size count ) noexcept -> void final { return this->replaceNotOf( DoubleLinkedList<T> (list), with, count ); }
     inline auto replaceLastNotOf ( const std::initializer_list<T> & list, const T & with ) noexcept -> void final { return this->replaceLastNotOf( DoubleLinkedList<T> (list), with ); }
 
-    constexpr inline auto back () noexcept (false) -> T & final {
+    __CDS_cpplang_NonConstConstexprMemberFunction auto back () noexcept (false) -> T & final {
         if ( this->empty() )
             throw typename List<T>::ListOutOfBounds();
 
         return this->_pBack->data;
     }
 
-    constexpr inline auto front () noexcept (false) -> T & final {
+    __CDS_cpplang_NonConstConstexprMemberFunction auto front () noexcept (false) -> T & final {
         if ( this->empty() )
             throw typename List<T>::ListOutOfBounds();
 
         return this->_pFront->data;
     }
 
-    __CDS_NoDiscard constexpr inline auto back () const noexcept (false) -> const T & final {
+    __CDS_NoDiscard __CDS_cpplang_ConstexprConditioned auto back () const noexcept (false) -> const T & final {
         if ( this->empty() )
             throw typename List<T>::ListOutOfBounds();
 
         return this->_pBack->data;
     }
 
-    __CDS_NoDiscard constexpr inline auto front () const noexcept (false) -> const T & final {
+    __CDS_NoDiscard __CDS_cpplang_ConstexprConditioned auto front () const noexcept (false) -> const T & final {
         if ( this->empty() )
             throw typename List<T>::ListOutOfBounds();
 
@@ -400,15 +409,15 @@ public:
     DoubleLinkedList & operator = ( DoubleLinkedList && o ) noexcept {
         if ( this == & o ) return * this;
 
-        this->_pFront = std::exchange(o._pFront, nullptr);
-        this->_pBack = std::exchange(o._pBack, nullptr);
-        this->_size = std::exchange(o._size, 0);
+        this->_pFront = exchange(o._pFront, nullptr);
+        this->_pBack = exchange(o._pBack, nullptr);
+        this->_size = exchange(o._size, 0);
 
         return * this;
     }
 
-    [[nodiscard]] auto sequence () const noexcept -> Sequence < const DoubleLinkedList < T > >;
-    [[nodiscard]] auto sequence () noexcept -> Sequence < DoubleLinkedList < T > >;
+    __CDS_NoDiscard auto sequence () const noexcept -> Sequence < const DoubleLinkedList < T > >;
+    __CDS_NoDiscard auto sequence () noexcept -> Sequence < DoubleLinkedList < T > >;
 };
 
 template <class T>
@@ -424,7 +433,20 @@ DoubleLinkedList<T>::~DoubleLinkedList() noexcept {
 
 template <class T>
 auto DoubleLinkedList<T>::pushFront(const T & value) noexcept -> void {
+
+#if __CDS_cpplang_StructBracesInitialization_available == true
+
     auto newNode = new DoubleListNode {value, this->_pFront, nullptr};
+
+#else
+
+    auto newNode = new DoubleListNode(value, this->_pFront, nullptr);
+//    newNode->data = value;
+//    newNode->pNext = this->_pFront;
+//    newNode->pPrevious = nullptr;
+
+#endif
+
     if ( this->_pFront != nullptr )
         this->_pFront->pPrevious = newNode;
 
@@ -438,9 +460,19 @@ auto DoubleLinkedList<T>::pushFront(const T & value) noexcept -> void {
 
 template <class T>
 auto DoubleLinkedList<T>::pushBack(const T & value) noexcept -> void {
-    auto newNode = new DoubleListNode {
-            value, nullptr, this->_pBack
-    };
+
+#if __CDS_cpplang_StructBracesInitialization_available == true
+
+    auto newNode = new DoubleListNode { value, nullptr, this->_pBack };
+
+#else
+
+    auto newNode = new DoubleListNode(value, nullptr, this->_pBack);
+//    newNode->data = value;
+//    newNode->pNext = nullptr;
+//    newNode->pPrevious = this->_pBack;
+
+#endif
 
     if ( this->_pBack != nullptr )
         this->_pBack->pNext = newNode;
@@ -455,7 +487,20 @@ auto DoubleLinkedList<T>::pushBack(const T & value) noexcept -> void {
 
 template <class T>
 auto DoubleLinkedList<T>::pushFront(T && value) noexcept -> void {
+
+#if __CDS_cpplang_StructBracesInitialization_available == true
+
     auto newNode = new DoubleListNode {value, this->_pFront, nullptr};
+
+#else
+
+    auto newNode = new DoubleListNode(value, this->_pFront, nullptr);
+//    newNode->data = value;
+//    newNode->pNext = this->_pFront;
+//    newNode->pPrevious = nullptr;
+
+#endif
+
     if ( this->_pFront != nullptr )
         this->_pFront->pPrevious = newNode;
 
@@ -469,9 +514,19 @@ auto DoubleLinkedList<T>::pushFront(T && value) noexcept -> void {
 
 template <class T>
 auto DoubleLinkedList<T>::pushBack(T && value) noexcept -> void {
-    auto newNode = new DoubleListNode {
-            value, nullptr, this->_pBack
-    };
+
+#if __CDS_cpplang_StructBracesInitialization_available == true
+
+    auto newNode = new DoubleListNode { value, nullptr, this->_pBack };
+
+#else
+
+    auto newNode = new DoubleListNode(value, nullptr, this->_pBack);
+//    newNode->data = value;
+//    newNode->pNext = nullptr;
+//    newNode->pPrevious = this->_pBack;
+
+#endif
 
     if ( this->_pBack != nullptr )
         this->_pBack->pNext = newNode;
@@ -885,7 +940,18 @@ auto DoubleLinkedList<T>::insertBefore( const typename Collection<T>::Iterator &
         auto after = this->_pBack;
         auto before = this->_pBack->pPrevious;
 
+#if __CDS_cpplang_StructBracesInitialization_available == true
+
         auto node = new DoubleListNode { what, after, before };
+
+#else
+
+        auto node = new DoubleListNode(what, after, before);
+//        node->data = what;
+//        node->pNext = after;
+//        node->pPrevious = before;
+
+#endif
 
         before->pNext = node;
         after->pPrevious = node;
@@ -900,7 +966,18 @@ auto DoubleLinkedList<T>::insertBefore( const typename Collection<T>::Iterator &
             auto before = node->pPrevious;
             auto after = node;
 
+#if __CDS_cpplang_StructBracesInitialization_available == true
+
             auto newNode = new DoubleListNode { what, after, before };
+
+#else
+
+            auto newNode = new DoubleListNode(what, after, before);
+//            newNode->data = what;
+//            newNode->pNext = after;
+//            newNode->pPrevious = before;
+
+#endif
 
             before->pNext = newNode;
             after->pPrevious = newNode;
@@ -927,7 +1004,18 @@ auto DoubleLinkedList<T>::insertAfter( const typename Collection<T>::Iterator & 
         auto after = this->_pFront->pNext;
         auto before = this->_pFront;
 
+#if __CDS_cpplang_StructBracesInitialization_available == true
+
         auto node = new DoubleListNode { what, after, before };
+
+#else
+
+        auto node = new DoubleListNode( what, after, before );
+//        node->data = what;
+//        node->pNext = after;
+//        node->pPrevious = before;
+
+#endif
 
         before->pNext = node;
         after->pPrevious = node;
@@ -942,7 +1030,18 @@ auto DoubleLinkedList<T>::insertAfter( const typename Collection<T>::Iterator & 
             auto before = node;
             auto after = node->pNext;
 
-            auto newNode = new DoubleListNode {what, after, before};
+#if __CDS_cpplang_StructBracesInitialization_available == true
+
+            auto newNode = new DoubleListNode { what, after, before };
+
+#else
+
+            auto newNode = new DoubleListNode( what, after, before );
+//            newNode->data = what;
+//            newNode->pNext = after;
+//            newNode->pPrevious = before;
+
+#endif
 
             before->pNext = newNode;
             after->pPrevious = newNode;
@@ -962,9 +1061,9 @@ DoubleLinkedList<T>::DoubleLinkedList(const DoubleLinkedList & obj) noexcept {
 #include <CDS/NotImplementedException>
 template <class T>
 DoubleLinkedList<T>::DoubleLinkedList(DoubleLinkedList && l) noexcept :
-        _pFront(std::exchange(l._pFront, nullptr)),
-        _pBack(std::exchange(l._pBack, nullptr)){
-    this->_size = std::exchange(l._size, 0);
+        _pFront(exchange(l._pFront, nullptr)),
+        _pBack(exchange(l._pBack, nullptr)){
+    this->_size = exchange(l._size, 0);
 }
 
 template <class T>
@@ -1090,7 +1189,7 @@ auto DoubleLinkedList<T>::sub(List<T> & l, Index from, Index to) const noexcept 
 
 template <class T>
 template < typename SortFunc >
-auto DoubleLinkedList < T >::sort ( SortFunc const & func ) noexcept -> void {
+__CDS_MaybeUnused auto DoubleLinkedList < T >::sort ( SortFunc const & func ) noexcept -> void {
     if ( this->size() < 2 )
         return;
 
@@ -1210,12 +1309,6 @@ auto DoubleLinkedList<T>::index(T & e) noexcept -> Index {
 
     return -1;
 }
-
-//#include <CDS/View>
-//template < typename T >
-//auto DoubleLinkedList<T>::view () const noexcept -> View < DoubleLinkedList < T > > {
-//    return View(*this);
-//}
 
 #include <CDS/Sequence>
 

@@ -76,8 +76,8 @@ protected:
     Set() noexcept = default;
     Set(Set const &) noexcept {}
     Set(Set && o) noexcept(false):
-            _pFront(std::exchange(o._pFront, nullptr)),
-            _size(std::exchange(o._size, 0ull)){
+            _pFront(exchange(o._pFront, nullptr)),
+            _size(exchange(o._size, 0ull)){
 
     }
 
@@ -85,10 +85,10 @@ public:
 
     ~Set() noexcept override { this->clear(); }
 
-    constexpr inline auto begin () noexcept -> Iterator { return Iterator(this->_pFront); }
-    constexpr inline auto end () noexcept -> Iterator { return Iterator(nullptr); }
+    __CDS_cpplang_NonConstConstexprMemberFunction auto begin () noexcept -> Iterator { return Iterator(this->_pFront); }
+    __CDS_cpplang_NonConstConstexprMemberFunction auto end () noexcept -> Iterator { return Iterator(nullptr); }
     constexpr inline auto begin () const noexcept -> ConstIterator { return ConstIterator (this->_pFront); }
-    constexpr inline auto end () const noexcept -> ConstIterator { return ConstIterator (nullptr); }
+    constexpr auto end () const noexcept -> ConstIterator { return ConstIterator (nullptr); }
     constexpr inline auto cbegin () const noexcept -> ConstIterator { return ConstIterator (this->_pFront); }
     constexpr inline auto cend () const noexcept -> ConstIterator { return ConstIterator (nullptr); }
 

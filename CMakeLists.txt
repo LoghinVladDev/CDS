@@ -43,7 +43,15 @@ set(
         src/primitive/Range.hpp
         src/primitive/String.hpp
         src/primitive/Sequence.hpp
-        src/primitive/Regex.hpp src/primitive/ParallelSequence.hpp)
+        src/primitive/Regex.hpp
+        src/primitive/ParallelSequence.hpp
+        src/primitive/Integer.hpp
+        src/primitive/Long.hpp
+        src/primitive/Float.hpp
+        src/primitive/Double.hpp
+        src/primitive/Boolean.hpp
+        src/primitive/Tuple.hpp
+)
 
 set(
         CDS_EXTRA
@@ -68,13 +76,18 @@ set(
         src/collection/ordered/LinkedList.hpp
 
         src/collection/ordered/OrderedSet.hpp
-        src/collection/ordered/Queue.hpp src/collection/ordered/SingleLinkedList.hpp)
+        src/collection/ordered/Queue.hpp
+        src/collection/ordered/SingleLinkedList.hpp
+        src/collection/ordered/Array.hpp
+        src/collection/ordered/StaticArray.hpp
+)
 
 set(
         CDS_COLLECTION_UNORDERED
 
         src/collection/unordered/UnorderedSet.hpp
         src/collection/unordered/HashMap.hpp
+        src/collection/unordered/JSON.hpp
 )
 
 set(
@@ -87,6 +100,7 @@ set(
 set(
         CDS_FUNCTIONAL
         src/functional/Generator.hpp
+        src/functional/Random.hpp
 )
 
 set(
@@ -94,16 +108,24 @@ set(
         src/threading/Thread.hpp
         src/threading/Semaphore.hpp
         src/threading/Mutex.hpp
-        include/CDS/Timer)
+        src/threading/Atomic.hpp
+)
 
 set(
         CDS_CRYPTO
         src/crypto/primitives/CryptoBlock.hpp
-        src/crypto/interface/CryptoOperation.hpp src/crypto/primitives/SignatureGeneratorED25519.hpp src/crypto/primitives/EncryptorAES.hpp)
+        src/crypto/interface/CryptoOperation.hpp
+        src/crypto/primitives/SignatureGeneratorED25519.hpp
+        src/crypto/primitives/EncryptorAES.hpp
+)
 
 set(
         CDS_STREAM
-        src/stream/InputStream.hpp src/stream/OutputStream.hpp src/stream/Stream.hpp src/stream/AbstractStream.hpp)
+        src/stream/InputStream.hpp
+        src/stream/OutputStream.hpp
+        src/stream/Stream.hpp
+        src/stream/AbstractStream.hpp
+)
 
 set(
         CDS_PLATFORM
@@ -121,24 +143,9 @@ set(
         ${CDS_STREAM}
         ${CDS_PLATFORM}
         src/std-types.h
-        src/primitive/Integer.hpp
-        src/primitive/Long.hpp
-        src/primitive/Float.hpp
-        src/primitive/Double.hpp
-        src/primitive/Boolean.hpp
-        src/collection/unordered/JSON.hpp
-        src/collection/ordered/Array.hpp
-        src/collection/ordered/StaticArray.hpp
-        src/functional/Random.hpp
-        src/primitive/Tuple.hpp
-        src/threading/Atomic.hpp
         src/cdsIntern/Concepts.hpp
         src/cdsIntern/Traits.hpp
         src/cdsIntern/Types.hpp
-        include/CDS/InputStream
-        include/CDS/OutputStream
-        include/CDS/Stream
-        include/CDS/AbstractStream
 )
 
 if (WIN32)

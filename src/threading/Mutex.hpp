@@ -62,7 +62,7 @@ private:
         UNLOCKED = 0x02
     };
 
-    constexpr static auto stateToString ( State s ) noexcept -> StringLiteral {
+    __CDS_cpplang_ConstexprConditioned static auto stateToString ( State s ) noexcept -> StringLiteral {
         switch (s) {
             case LOCKED:    return "Locked";
             case UNLOCKED:  return "Unlocked";

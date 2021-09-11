@@ -52,17 +52,17 @@ private:
     inline auto endPtr () const noexcept -> ConstIterator * final { return new ConstIterator( this, this->size() ); }
 
 public:
-    constexpr auto begin () noexcept -> Iterator { return Iterator ( this, 0 ); }
+    __CDS_cpplang_NonConstConstexprMemberFunction auto begin () noexcept -> Iterator { return Iterator ( this, 0 ); }
     constexpr auto begin () const noexcept -> ConstIterator { return ConstIterator ( this, 0 ); }
     constexpr auto cbegin () const noexcept -> ConstIterator { return ConstIterator ( this, 0 ); }
-    constexpr auto end () noexcept -> Iterator { return Iterator ( this, this->size() ); }
+    __CDS_cpplang_NonConstConstexprMemberFunction auto end () noexcept -> Iterator { return Iterator ( this, this->size() ); }
     constexpr auto end () const noexcept -> ConstIterator { return ConstIterator ( this, this->size() ); }
     constexpr auto cend () const noexcept -> ConstIterator { return ConstIterator ( this, this->size() ); }
 
-    constexpr auto rbegin () noexcept -> ReverseIterator { return ReverseIterator ( this, this->size () - 1 ); }
+    __CDS_cpplang_NonConstConstexprMemberFunction auto rbegin () noexcept -> ReverseIterator { return ReverseIterator ( this, this->size () - 1 ); }
     constexpr auto rbegin () const noexcept -> ConstReverseIterator { return ConstReverseIterator ( this, this->size () - 1 ); }
     __CDS_MaybeUnused constexpr auto crbegin () const noexcept -> ConstReverseIterator { return ConstReverseIterator ( this, this->size () - 1 ); }
-    constexpr auto rend() noexcept -> ReverseIterator { return ReverseIterator(this, -1); }
+    __CDS_cpplang_NonConstConstexprMemberFunction auto rend() noexcept -> ReverseIterator { return ReverseIterator(this, -1); }
     constexpr auto rend() const noexcept -> ConstReverseIterator { return ConstReverseIterator(this, -1); }
     __CDS_MaybeUnused constexpr auto crend() const noexcept -> ConstReverseIterator { return ConstReverseIterator(this, -1); }
 
@@ -108,28 +108,28 @@ public:
     inline virtual auto replaceNotOf ( std::initializer_list<Value> const & list, ValueConstReference with, Size count ) noexcept -> void final { return this->replaceNotOf( Array (list), with, count ); }
     inline virtual auto replaceLastNotOf ( std::initializer_list<Value> const & list, ValueConstReference with ) noexcept -> void final { return this->replaceLastNotOf( Array (list), with ); }
 
-    constexpr auto back () noexcept (false) -> ValueReference final {
+    __CDS_cpplang_NonConstConstexprMemberFunction auto back () noexcept (false) -> ValueReference final {
         if ( this->empty() )
             throw typename List<Value>::ListOutOfBounds();
 
         return * this->_pData[this->_size - 1];
     }
 
-    constexpr auto front () noexcept (false) -> ValueReference final {
+    __CDS_cpplang_NonConstConstexprMemberFunction auto front () noexcept (false) -> ValueReference final {
         if ( this->empty() )
             throw typename List<Value>::ListOutOfBounds();
 
         return * this->_pData[0];
     }
 
-    constexpr auto back () const noexcept (false) -> ValueConstReference final {
+    __CDS_cpplang_ConstexprConditioned auto back () const noexcept (false) -> ValueConstReference final {
         if ( this->empty() )
             throw typename List<Value>::ListOutOfBounds();
 
         return * this->_pData[this->_size - 1];
     }
 
-    constexpr auto front () const noexcept (false) -> ValueConstReference final {
+    __CDS_cpplang_ConstexprConditioned auto front () const noexcept (false) -> ValueConstReference final {
         if ( this->empty() )
             throw typename List<Value>::ListOutOfBounds();
 
@@ -313,7 +313,7 @@ public:
     explicit Iterator ( Array * pArray, Index index ) noexcept : IteratorBase( pArray, index ) { }
     ~Iterator () noexcept final = default;
 
-    constexpr Iterator & operator = ( Iterator const & o ) noexcept {
+    __CDS_cpplang_NonConstConstexprMemberFunction Iterator & operator = ( Iterator const & o ) noexcept {
         if ( this == & o ) return * this;
 
         this->_pArray = o._pArray;
@@ -324,15 +324,15 @@ public:
     inline auto operator == (Iterator const& o) const noexcept -> bool { return this->equals(o); }
     inline auto operator != (Iterator const& o) const noexcept -> bool { return !this->equals(o); }
 
-    constexpr auto next () noexcept -> Iterator & final { this->_index ++; return * this; }
-    constexpr auto prev () noexcept -> Iterator & { this->_index --; return * this; }
+    __CDS_cpplang_NonConstConstexprMemberFunction auto next () noexcept -> Iterator & final { this->_index ++; return * this; }
+    __CDS_cpplang_NonConstConstexprMemberFunction auto prev () noexcept -> Iterator & { this->_index --; return * this; }
 
-    constexpr auto operator ++ () noexcept -> Iterator & override { return this->next(); }
-    constexpr auto operator ++ (int) noexcept -> Iterator { auto copy = * this; this->next(); return copy; }
-    constexpr auto operator -- () noexcept -> Iterator & { return this->prev(); }
-    constexpr auto operator -- (int) noexcept -> Iterator { auto copy = * this; this->prev(); return copy; }
+    __CDS_cpplang_NonConstConstexprMemberFunction auto operator ++ () noexcept -> Iterator & override { return this->next(); }
+    __CDS_cpplang_NonConstConstexprMemberFunction auto operator ++ (int) noexcept -> Iterator { auto copy = * this; this->next(); return copy; }
+    __CDS_cpplang_NonConstConstexprMemberFunction auto operator -- () noexcept -> Iterator & { return this->prev(); }
+    __CDS_cpplang_NonConstConstexprMemberFunction auto operator -- (int) noexcept -> Iterator { auto copy = * this; this->prev(); return copy; }
 
-    [[nodiscard]] auto copy () const noexcept -> Iterator * override {
+    __CDS_NoDiscard auto copy () const noexcept -> Iterator * override {
         return new Iterator ( * this );
     }
 };
@@ -346,7 +346,7 @@ public:
     explicit ReverseIterator ( Array * pArray, Index index ) noexcept : IteratorBase( pArray, index ) { }
     ~ReverseIterator () noexcept final = default;
 
-    constexpr ReverseIterator & operator = ( ReverseIterator const & o ) noexcept {
+    __CDS_cpplang_NonConstConstexprMemberFunction ReverseIterator & operator = ( ReverseIterator const & o ) noexcept {
         if ( this == & o ) return * this;
 
         this->_pArray = o._pArray;
@@ -354,13 +354,13 @@ public:
         return * this;
     }
 
-    constexpr auto next () noexcept -> ReverseIterator & final { this->_index --; return * this; }
-    constexpr auto prev () noexcept -> ReverseIterator & { this->_index ++; return * this; }
+    __CDS_cpplang_NonConstConstexprMemberFunction auto next () noexcept -> ReverseIterator & final { this->_index --; return * this; }
+    __CDS_cpplang_NonConstConstexprMemberFunction auto prev () noexcept -> ReverseIterator & { this->_index ++; return * this; }
 
-    constexpr auto operator ++ () noexcept -> ReverseIterator & final { this->next(); return * this; }
-    constexpr auto operator ++ (int) noexcept -> ReverseIterator { auto copy = * this; this->next(); return copy; }
-    constexpr auto operator -- () noexcept -> ReverseIterator & { return this->prev(); }
-    constexpr auto operator -- (int) noexcept -> ReverseIterator { auto copy = * this; this->prev(); return copy; }
+    __CDS_cpplang_NonConstConstexprMemberFunction auto operator ++ () noexcept -> ReverseIterator & final { this->next(); return * this; }
+    __CDS_cpplang_NonConstConstexprMemberFunction auto operator ++ (int) noexcept -> ReverseIterator { auto copy = * this; this->next(); return copy; }
+    __CDS_cpplang_NonConstConstexprMemberFunction auto operator -- () noexcept -> ReverseIterator & { return this->prev(); }
+    __CDS_cpplang_NonConstConstexprMemberFunction auto operator -- (int) noexcept -> ReverseIterator { auto copy = * this; this->prev(); return copy; }
 
     __CDS_NoDiscard auto copy () const noexcept -> ReverseIterator * override {
         return new ReverseIterator ( * this );
@@ -376,7 +376,7 @@ public:
     explicit ConstIterator ( Array const * pArray, Index index ) noexcept : ConstIteratorBase( pArray, index ) { }
     ~ConstIterator () noexcept final = default;
 
-    constexpr ConstIterator & operator = ( ConstIterator const & o ) noexcept {
+    __CDS_cpplang_NonConstConstexprMemberFunction ConstIterator & operator = ( ConstIterator const & o ) noexcept {
         if ( this == & o ) return * this;
 
         this->_pArray = o._pArray;
@@ -384,13 +384,13 @@ public:
         return * this;
     }
 
-    constexpr auto next () noexcept -> ConstIterator & final { this->_index ++; return * this; }
-    constexpr auto prev () noexcept -> ConstIterator & { this->_index --; return * this; }
+    __CDS_cpplang_NonConstConstexprMemberFunction auto next () noexcept -> ConstIterator & final { this->_index ++; return * this; }
+    __CDS_cpplang_NonConstConstexprMemberFunction auto prev () noexcept -> ConstIterator & { this->_index --; return * this; }
 
-    constexpr auto operator ++ () noexcept -> ConstIterator & override { this->next(); return * this; }
-    constexpr auto operator ++ (int) noexcept -> ConstIterator { auto copy = * this; this->next(); return copy; }
-    constexpr auto operator -- () noexcept -> ConstIterator & { return this->prev(); }
-    constexpr auto operator -- (int) noexcept -> ConstIterator { auto copy = * this; this->prev(); return copy; }
+    __CDS_cpplang_NonConstConstexprMemberFunction auto operator ++ () noexcept -> ConstIterator & override { this->next(); return * this; }
+    __CDS_cpplang_NonConstConstexprMemberFunction auto operator ++ (int) noexcept -> ConstIterator { auto copy = * this; this->next(); return copy; }
+    __CDS_cpplang_NonConstConstexprMemberFunction auto operator -- () noexcept -> ConstIterator & { return this->prev(); }
+    __CDS_cpplang_NonConstConstexprMemberFunction auto operator -- (int) noexcept -> ConstIterator { auto copy = * this; this->prev(); return copy; }
 
     __CDS_NoDiscard auto copy () const noexcept -> ConstIterator * override {
         return new ConstIterator ( * this );
@@ -547,9 +547,9 @@ Array<T>::Array( Array const & o ) noexcept {
 
 template <class T>
 Array<T>::Array( Array && moveObj ) noexcept {
-    this->_pData = std::exchange(moveObj._pData, nullptr);
-    this->_size = std::exchange(moveObj._size, 0);
-    this->_capacity = std::exchange(moveObj._capacity, 0);
+    this->_pData = exchange(moveObj._pData, nullptr);
+    this->_size = exchange(moveObj._size, 0);
+    this->_capacity = exchange(moveObj._capacity, 0);
 }
 
 template <class T>
@@ -882,9 +882,9 @@ auto Array<T>::set( ValueConstReference v, Index i ) noexcept (false) -> ValueRe
 
 template <class T>
 auto Array<T>::sub( List<Value> & container, Index from, Index to ) const noexcept(false) -> void {
-    auto swap = [] ( auto & a, auto & b ) { auto aux = a; a = b; b = aux; };
+//    auto swap = [] ( auto & a, auto & b ) { auto aux = a; a = b; b = aux; };
     if ( from > to )
-        swap ( from, to );
+        std::swap ( from, to );
 
     if ( from < 0 ) from = 0;
     if ( to >= this->_capacity ) to = this->_capacity;
@@ -947,7 +947,7 @@ auto Array<T>::quickSort(
         Iterator to,
         SortFunc const & sortFunc
 ) noexcept -> void {
-    __CDS_cpplang_ConstexprLambda static auto validIterator = []( auto & it ) noexcept->bool { return it._index >= 0 && it._index < it._pArray->_size; };
+    __CDS_cpplang_ConstexprLambda static auto validIterator = []( Iterator & it ) noexcept->bool { return it._index >= 0 && it._index < it._pArray->_size; };
 
     auto next = to;
     if ( next._index < next._pArray->_size ) {

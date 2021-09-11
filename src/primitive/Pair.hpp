@@ -27,14 +27,14 @@ public:
     auto constexpr getFirst () const noexcept -> K const & { return _first; }
     auto constexpr getSecond() const noexcept -> V const & { return _second; }
 
-    auto constexpr getFirst () noexcept -> K & { return _first; }
-    auto constexpr getSecond() noexcept -> V & { return _second; }
+    auto __CDS_cpplang_NonConstConstexprMemberFunction getFirst () noexcept -> K & { return _first; }
+    auto __CDS_cpplang_NonConstConstexprMemberFunction getSecond() noexcept -> V & { return _second; }
 
     constexpr auto first () const noexcept -> K const & { return this->_first; }
-    constexpr auto first () noexcept -> K & { return this->_first; }
+    __CDS_cpplang_NonConstConstexprMemberFunction auto first () noexcept -> K & { return this->_first; }
 
     constexpr auto second () const noexcept -> V const & { return this->_second; }
-    constexpr auto second () noexcept -> V & { return this->_second; }
+    __CDS_cpplang_NonConstConstexprMemberFunction auto second () noexcept -> V & { return this->_second; }
 
     __CDS_MaybeUnused auto inline setFirst(K const & k) noexcept -> Pair & {_first = k; return * this;}
     __CDS_MaybeUnused auto inline setSecond(V const & v) noexcept -> Pair & {_second = v; return * this;}

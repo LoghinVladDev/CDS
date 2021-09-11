@@ -194,6 +194,11 @@ class SharedPointer final : public PointerBase<T> {
 private:
     struct SharedPointerControlBlock {
         Size ownerCount {0ull};
+
+#if __CDS_cpplang_StructBracesInitialization_available == false
+        explicit SharedPointerControlBlock(Size ownerCount) noexcept : ownerCount(ownerCount) {}
+#endif
+
     };
 
     SharedPointerControlBlock * pControl { nullptr };
@@ -291,7 +296,7 @@ public:
         return * this;
     }
 
-    constexpr inline auto reset ( typename PointerBase<T>::Pointer p = nullptr ) noexcept -> void final { this->pObj = p; }
+    __CDS_cpplang_NonConstConstexprMemberFunction auto reset ( typename PointerBase<T>::Pointer p = nullptr ) noexcept -> void final { this->pObj = p; }
 };
 
 #if __CDS_cpplang_CTAD_available

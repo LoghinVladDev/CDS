@@ -24,10 +24,10 @@ public:
         constexpr explicit Iterator(Index start, bool rev = false) : i(start), reversed(rev) {}
 
         __CDS_NoDiscard constexpr auto value () const noexcept -> Index { return this->i; }
-        constexpr auto next () noexcept -> Iterator & { reversed ? --i : ++i; return * this; }
+        __CDS_cpplang_NonConstConstexprMemberFunction auto next () noexcept -> Iterator & { reversed ? --i : ++i; return * this; }
 
-        constexpr auto operator ++ () -> Iterator & { reversed ? --i : ++i; return * this; }
-        constexpr auto operator ++ (int) -> Iterator { auto copy = * this; ++(*this); return copy; }
+        __CDS_cpplang_NonConstConstexprMemberFunction auto operator ++ () -> Iterator & { reversed ? --i : ++i; return * this; }
+        __CDS_cpplang_NonConstConstexprMemberFunction auto operator ++ (int) -> Iterator { auto copy = * this; ++(*this); return copy; }
         constexpr auto operator != ( Iterator const & o ) const noexcept -> bool { return i != o.i; }
         constexpr auto operator == ( Iterator const & o ) const noexcept -> bool { return i == o.i; }
         constexpr Index operator *() const noexcept { return i; }

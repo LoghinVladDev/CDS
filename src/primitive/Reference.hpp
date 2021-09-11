@@ -30,13 +30,13 @@ public:
 
     template < class V, class = decltype (
     dataTypes::refWrapper::hiddenRef<T>(std::declval<V>()),
-            std::enable_if_t < ! std::is_same < Reference,
+            std::enable_if < ! std::is_same < Reference,
 #if __cpp_lib_remove_cvref >= 201711
                     std::remove_cvref_t <V>
 #else
-                    std::remove_cv_t<std::remove_reference_t<V>>
+                    typename std::remove_cv< typename std::remove_reference<V> :: type > :: type
 #endif
-            > ::value >()
+            > ::value > ()
     ) > constexpr Reference ( V && v ) noexcept(noexcept(dataTypes::refWrapper::hiddenRef<T>(std::forward<V>(v)))) : // NOLINT(google-explicit-constructor,bugprone-forwarding-reference-overload)
             p ( std::addressof( dataTypes::refWrapper::hiddenRef<T>(std::forward<V>(v)))) {
 
@@ -49,8 +49,8 @@ public:
     constexpr operator T& () const noexcept { return *p; } // NOLINT(google-explicit-constructor)
     constexpr T& get () const noexcept { return *p; }
 
-    constexpr operator T& () noexcept { return *p; } // NOLINT(google-explicit-constructor)
-    constexpr T& get () noexcept(false) { return *p; }
+    __CDS_cpplang_NonConstConstexprMemberFunction operator T& () noexcept { return *p; } // NOLINT(google-explicit-constructor)
+    __CDS_cpplang_NonConstConstexprMemberFunction T& get () noexcept(false) { return *p; }
 
     inline auto operator == (Reference const & o) const noexcept -> bool {
         if ( this == & o ) return true;

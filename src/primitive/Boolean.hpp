@@ -18,13 +18,13 @@ public:
 
     constexpr Boolean ( bool v ) noexcept : v(v) { } // NOLINT(google-explicit-constructor)
 
-    constexpr Boolean & operator = ( Boolean const & o ) noexcept {
+    __CDS_cpplang_NonConstConstexprMemberFunction Boolean & operator = ( Boolean const & o ) noexcept {
         if ( this == & o ) return * this;
         this->v = o.v;
         return * this;
     }
 
-    constexpr Boolean & operator = ( bool value ) noexcept {
+    __CDS_cpplang_NonConstConstexprMemberFunction Boolean & operator = ( bool value ) noexcept {
         this->v = value;
         return * this;
     }

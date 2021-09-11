@@ -10,6 +10,12 @@
 
 template <class T>
 class List : public Collection <T> {
+private:
+    auto beginPtr () noexcept -> typename Collection < T > :: Iterator * override = 0;
+    auto endPtr () noexcept -> typename Collection < T > :: Iterator * override = 0;
+    __CDS_MaybeUnused auto beginPtr () const noexcept -> typename Collection < T > :: ConstIterator * override = 0;
+    __CDS_MaybeUnused auto endPtr () const noexcept -> typename Collection < T > :: ConstIterator * override = 0;
+
 protected:
     Size _size { 0ull };
 

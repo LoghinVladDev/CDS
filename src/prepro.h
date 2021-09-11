@@ -51,6 +51,7 @@
 #define __CDS_cpplang_core_version __cplusplus /* NOLINT(bugprone-reserved-identifier) */
 
 #define __CDS_Attribute(_attr) [[_attr]] /* NOLINT(bugprone-reserved-identifier) */
+#define __CDS_OldAttribute(_attr) __attribute__((_attr)) /* NOLINT(bugprone-reserved-identifier) */
 
 #define __CDS_CarriesDependency /* NOLINT(bugprone-reserved-identifier) */
 #define __CDS_Deprecated /* NOLINT(bugprone-reserved-identifier) */
@@ -66,9 +67,11 @@
 
 #undef __CDS_CarriesDependency
 #undef __CDS_NoReturn
+#undef __CDS_MaybeUnused
 
 #define __CDS_CarriesDependency __CDS_Attribute(carries_dependency) /* NOLINT(bugprone-reserved-identifier) */
 #define __CDS_NoReturn __CDS_Attribute(noreturn) /* NOLINT(bugprone-reserved-identifier) */
+#define __CDS_MaybeUnused __CDS_OldAttribute(unused) /* NOLINT(bugprone-reserved-identifier) */
 
 #endif
 
@@ -165,6 +168,40 @@
 #else
 
 #define __CDS_cpplang_ConstexprLambda /* NOLINT(bugprone-reserved-identifier) */
+
+#endif
+
+#include <utility>
+
+#if __CDS_cpplang_core_version >= __CDS_cpplang_core_version_14 /* NOLINT(bugprone-reserved-identifier) */
+
+#define __CDS_cpplang_NonConstConstexprMemberFunction constexpr /* NOLINT(bugprone-reserved-identifier) */
+#define __CDS_cpplang_ConstexprConditioned constexpr /* NOLINT(bugprone-reserved-identifier) */
+#define __CDS_cpplang_StructBracesInitialization_available true /* NOLINT(bugprone-reserved-identifier) */
+#define __CDS_cpplang_VariableTemplates_available true /* NOLINT(bugprone-reserved-identifier) */
+
+template < typename T, typename U = T >
+constexpr auto forward = std :: forward < T, U >;
+
+template < typename T, typename U = T >
+constexpr auto exchange = std :: exchange < T, U >;
+
+#else
+
+#define __CDS_cpplang_NonConstConstexprMemberFunction inline /* NOLINT(bugprone-reserved-identifier) */
+#define __CDS_cpplang_ConstexprConditioned inline /* NOLINT(bugprone-reserved-identifier) */
+#define __CDS_cpplang_StructBracesInitialization_available false /* NOLINT(bugprone-reserved-identifier) */
+#define __CDS_cpplang_VariableTemplates_available false /* NOLINT(bugprone-reserved-identifier) */
+
+template < typename T >
+constexpr auto forward ( typename std :: remove_reference < T > :: type & value ) noexcept -> T && { return static_cast < T && > ( value ); }
+
+template < typename T, typename U = T >
+inline auto exchange ( T & obj, U && newValue ) -> T {
+    T oldValue = std :: move ( obj );
+    obj = std :: forward < U > ( std :: forward < U > ( newValue ) );
+    return oldValue;
+}
 
 #endif
 
