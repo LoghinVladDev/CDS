@@ -1,7 +1,3 @@
-#if !defined(_MSC_VER)
-#pragma clang diagnostic push
-#pragma ide diagnostic ignored "bugprone-macro-parentheses"
-#endif
 //
 // Created by loghin on 05.04.2021.
 //
@@ -10,6 +6,7 @@
 
 #include <CDS/String>
 #include <CDS/Range>
+#include <CDS/Integer>
 
 auto StringTest::execute() noexcept -> bool {
     bool allOk = true;
@@ -143,6 +140,61 @@ auto StringTest::execute() noexcept -> bool {
             allOk = false;
         }
 
+        String fromObject = Integer::parse ("1234");
+        this->log("String constructed from CDS/Object. Intended : '%s', Result : '%s'. Diag : %s", "1234", fromObject.cStr(), fromObject.diag().cStr());
+
+        if ( std::strcmp ( fromObject.cStr(), "1234" ) != 0 ) {
+            this->logWarning("String from CDS/Object construction Error");
+            allOk = false;
+        }
+
+#define __FROM_RAW_CONSTRUCT(_typename, _initval) /* NOLINT(bugprone-reserved-identifier) */ { \
+        String fromRaw ## _typename = (_typename) (_initval);                                  \
+                                                                                               \
+        this->log("String constructed from %s. Intended : '%s', Result : '%s'. Diag : '%s'", # _typename, # _initval, fromRaw ## _typename.cStr(), fromRaw ## _typename.diag().cStr()); \
+                                                                                               \
+        if( std::strcmp ( fromRaw ## _typename.cStr(), # _initval ) != 0 ) {                          \
+            this->logWarning("String from raw %s construction error", # _typename);            \
+            allOk = false;\
+        }\
+}
+
+        __FROM_RAW_CONSTRUCT(uint8, 12);
+        __FROM_RAW_CONSTRUCT(uint16, 3200);
+        __FROM_RAW_CONSTRUCT(uint32, 428583);
+        __FROM_RAW_CONSTRUCT(uint64, 24294967295);
+
+        __FROM_RAW_CONSTRUCT(sint8, -17);
+        __FROM_RAW_CONSTRUCT(sint16, -1400);
+        __FROM_RAW_CONSTRUCT(sint32, -320000);
+        __FROM_RAW_CONSTRUCT(sint64, -12147483647);
+
+        __FROM_RAW_CONSTRUCT(float, 3200.000000);
+        __FROM_RAW_CONSTRUCT(float, -3200.000000);
+        __FROM_RAW_CONSTRUCT(double, 95232.000000);
+        __FROM_RAW_CONSTRUCT(double, -3200.000000);
+
+        String fromRawSizeT = (std::size_t) (1234);
+
+        this->log("String constructed from std::size_t. Intended : '%d', Result : '%s'. Diag : '%s'", 1234, fromRawSizeT.cStr(), fromRawSizeT.diag().cStr());
+        if ( std::strcmp ( fromRawSizeT.cStr(), "1234" ) != 0 ) {
+            this->logWarning("String from raw std::size_t construction error");
+            allOk = false;
+        }
+
+        String fromAddress = dataTypes::unsafeAddress<int>();
+
+        this->log("String constructed from raw address. Intended : '%d', Result : '%s'. Diag : '%s'", 16, fromAddress.cStr(), fromAddress.diag().cStr());
+        if ( std::strcmp ( fromAddress.cStr(), "16" ) != 0 ) {
+            this->logWarning("String from raw address construction error");
+        }
+
+        String fromConstAddress = dataTypes::unsafeConstAddress<const int>();
+
+        this->log("String constructed from raw const address. Intended : '%d', Result : '%s'. Diag : '%s'", 16, fromConstAddress.cStr(), fromConstAddress.diag().cStr());
+        if ( std::strcmp ( fromConstAddress.cStr(), "16" ) != 0 ) {
+            this->logWarning("String from raw const address construction error");
+        }
     });
 
     this->executeSubtest("Iterator Tests", [this, & allOk] {
@@ -1365,7 +1417,3 @@ auto StringTest::execute() noexcept -> bool {
     allOk ? this->logOK("String test OK") : this->logError("String test Not OK");
     return allOk;
 }
-
-#if !defined(_MSC_VER)
-#pragma clang diagnostic pop
-#endif
