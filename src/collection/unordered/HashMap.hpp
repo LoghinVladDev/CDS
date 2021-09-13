@@ -146,7 +146,7 @@ public:
             return this->bucketIndex == p->bucketIndex && p->it == this->it;
         }
 
-        constexpr inline auto value () const noexcept -> EntryReference final { return this->it.value(); }
+        __CDS_NoDiscard __CDS_cpplang_ConstexprOverride auto value () const noexcept -> EntryReference final { return this->it.value(); }
 
         inline auto operator ++ () noexcept -> Iterator & final { this->next(); return * this; }
         inline auto operator ++ (int) noexcept -> Iterator { auto copy = * this; this->next(); return copy; }
@@ -189,7 +189,7 @@ public:
             return this->bucketIndex == p->bucketIndex && p->it == this->it;
         }
 
-        constexpr inline auto value () const noexcept -> EntryConstReference final { return this->it.value(); }
+        __CDS_NoDiscard __CDS_cpplang_ConstexprOverride auto value () const noexcept -> EntryConstReference final { return this->it.value(); }
 
         inline auto operator ++ () noexcept -> ConstIterator & final { this->next(); return * this; }
         inline auto operator ++ (int) noexcept -> ConstIterator { auto copy = * this; this->next(); return copy; }

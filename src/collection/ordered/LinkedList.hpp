@@ -54,8 +54,8 @@ private:
 
         auto operator ++ () noexcept -> IteratorBase & override = 0;
 
-        __CDS_NoDiscard constexpr inline auto equals ( const typename Collection<T>::Iterator & o ) const noexcept -> bool final { return dynamic_cast < const IteratorBase & > ( o )._pNode == this->_pNode;}
-        __CDS_NoDiscard constexpr inline auto value () const noexcept -> T& final { return this->_pNode->data; }
+        __CDS_NoDiscard __CDS_cpplang_ConstexprOverride auto equals ( const typename Collection<T>::Iterator & o ) const noexcept -> bool final { return dynamic_cast < const IteratorBase & > ( o )._pNode == this->_pNode;}
+        __CDS_NoDiscard __CDS_cpplang_ConstexprOverride auto value () const noexcept -> T& final { return this->_pNode->data; }
 
         __CDS_NoDiscard auto copy () const noexcept -> IteratorBase * override = 0;
 
@@ -78,8 +78,8 @@ private:
 
         auto operator ++ () noexcept -> ConstIteratorBase & override = 0;
 
-        __CDS_NoDiscard constexpr inline auto equals ( const typename Collection<T>::ConstIterator & o ) const noexcept -> bool final { return this->_pNode == dynamic_cast < const ConstIteratorBase & > ( o )._pNode; }
-        __CDS_NoDiscard constexpr inline auto value () const noexcept -> const T& final { return this->_pNode->data; }
+        __CDS_NoDiscard __CDS_cpplang_ConstexprOverride auto equals ( const typename Collection<T>::ConstIterator & o ) const noexcept -> bool final { return this->_pNode == dynamic_cast < const ConstIteratorBase & > ( o )._pNode; }
+        __CDS_NoDiscard __CDS_cpplang_ConstexprOverride auto value () const noexcept -> const T& final { return this->_pNode->data; }
 
         __CDS_NoDiscard auto copy () const noexcept -> ConstIteratorBase * override = 0;
 
@@ -285,7 +285,7 @@ public:
         return this->_pFront->data;
     }
 
-    __CDS_NoDiscard constexpr inline auto empty () const noexcept -> bool final {
+    __CDS_NoDiscard __CDS_cpplang_ConstexprOverride auto empty () const noexcept -> bool final {
         return this->_size == 0 && this->_pFront == nullptr && this->_pBack == nullptr;
     }
 

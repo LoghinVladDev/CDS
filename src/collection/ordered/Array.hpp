@@ -552,6 +552,7 @@ Array<T>::Array( Array && moveObj ) noexcept {
     this->_capacity = exchange(moveObj._capacity, 0);
 }
 
+#include <CDS/Pointer>
 template <class T>
 Array<T>::Array(
         typename Collection<Value>::Iterator const & from,

@@ -65,7 +65,8 @@ concept Printable = requires (T t) {
     { std::cout << t } -> std::same_as < std::ostream & >;
 };
 
-#if defined(__cpp_concepts) && !defined(_MSC_VER)
+#if defined(__cpp_concepts)
+
 template <class T>
 concept Callable = std::is_invocable<T>::value;
 

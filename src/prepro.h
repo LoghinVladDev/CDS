@@ -27,7 +27,9 @@
 
 #ifdef CDS_DEBUG
 
+#if ! defined(_MSC_VER)
 #warning CDS Object Debug Enabled
+#endif
 
 #ifndef debug_private
 #define debug_private public
@@ -107,6 +109,8 @@
 #define __CDS_cpplang_StructBracesInitialization_available true /* NOLINT(bugprone-reserved-identifier) */
 #define __CDS_cpplang_VariableTemplates_available true /* NOLINT(bugprone-reserved-identifier) */
 
+#define __CDS_cpplang_ConstexprOverride constexpr
+
 template < typename T, typename U = T >
 constexpr auto forward (T & value) noexcept -> T && {
     return std :: forward (value);
@@ -123,6 +127,8 @@ constexpr auto exchange ( T & obj, U && newValue ) -> T {
 #define __CDS_cpplang_ConstexprConditioned inline /* NOLINT(bugprone-reserved-identifier) */
 #define __CDS_cpplang_StructBracesInitialization_available false /* NOLINT(bugprone-reserved-identifier) */
 #define __CDS_cpplang_VariableTemplates_available false /* NOLINT(bugprone-reserved-identifier) */
+
+#define __CDS_cpplang_ConstexprOverride inline
 
 template < typename T >
 constexpr auto forward ( typename std :: remove_reference < T > :: type & value ) noexcept -> T && { return static_cast < T && > ( value ); }

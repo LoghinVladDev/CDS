@@ -1412,6 +1412,36 @@ auto StringTest::execute() noexcept -> bool {
             this->logWarning("Lambda Count error");
             allOk = false;
         }
+
+        {
+            String toApplyTo = "Test String";
+            int sum = 0;
+
+            toApplyTo.forEach([& sum](auto e) { sum += e; });
+
+            this->log("forEach used over string '%s' to sum character values. Resulted : '%d', Expected : '%d'",
+                      toApplyTo.cStr(), sum, 1079);
+
+            if (sum != 1079) {
+                this->logWarning("forEach error");
+                allOk = false;
+            }
+        }
+
+        {
+            const String toApplyTo = "Test String";
+            int sum = 0;
+
+            toApplyTo.forEach([& sum](auto e) { sum += e; });
+
+            this->log("forEach used over string '%s' to sum character values. Resulted : '%d', Expected : '%d'",
+                      toApplyTo.cStr(), sum, 1079);
+
+            if (sum != 1079) {
+                this->logWarning("forEach error");
+                allOk = false;
+            }
+        }
     });
 
     allOk ? this->logOK("String test OK") : this->logError("String test Not OK");

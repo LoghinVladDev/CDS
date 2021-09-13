@@ -778,7 +778,7 @@ public:
                             returnOf < Mapper >
                     >::type::value,
 #else
-                    ! std::is_same_v <
+                    ! std::is_same <
                 typename std::remove_reference <
                     decltype (
                         dataTypes::unsafeAddress <
@@ -787,7 +787,7 @@ public:
                     )
                 > :: type,
                 returnOf < Mapper >
-            >,
+            > :: type :: value,
 #endif
                     int
             >::type = 0
@@ -834,7 +834,7 @@ public:
                             returnOf < IndexedMapper >
                     >::type::value,
 #else
-                    ! std::is_same_v <
+                    ! std::is_same <
                 typename std::remove_reference <
                     decltype (
                         dataTypes::unsafeAddress <
@@ -843,7 +843,7 @@ public:
                     )
                 > :: type,
                 returnOf < IndexedMapper >
-            >,
+            > :: type :: value,
 #endif
                     int
             >::type = 0
@@ -3302,6 +3302,13 @@ __CDS_Requires ( Iterable < C > || ConstIterable < C > ) {
     return this->runningFoldIndexed ( initialValue, indexedAccumulator );
 }
 
+#if defined(_MSC_VER)
+
+#pragma push_macro ("max")
+#undef max
+
+#endif
+
 template < typename C >
 template < typename Comparator >
 __CDS_MaybeUnused inline auto Sequence < C > :: max (
@@ -3367,6 +3374,19 @@ __CDS_MaybeUnused inline auto Sequence < C > :: maxByOr (
     auto v = this->maxBy ( selector );
     return v.isPresent() ? v.value() : e;
 }
+
+#if defined(_MSC_VER)
+
+#pragma pop_macro ("max")
+
+#endif
+
+#if defined(_MSC_VER)
+
+#pragma push_macro ("min")
+#undef min
+
+#endif
 
 template < typename C >
 template < typename Comparator >
@@ -3447,6 +3467,12 @@ __CDS_MaybeUnused inline auto Sequence < C > :: sumBy (
 
     return sum;
 }
+
+#if defined(_MSC_VER)
+
+#pragma pop_macro ("min")
+
+#endif
 
 /// endregion
 

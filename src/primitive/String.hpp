@@ -3045,6 +3045,18 @@ public:
      */
     auto replace ( Index, Size, String const & ) noexcept -> String &;
 
+    /**
+     * @brief Function used to apply a function over each of the elements in the String iteratively
+     *
+     * @tparam Action = Callable type with void return type ( preferably ) and one input parameter representing an iterable element ( ElementType or ElementType ref or ElementType cref )
+     * @param a : Action cref = Constant Reference to the Callable to supply the element to
+     *
+     * @throws Action's exceptions
+     *
+     * @returns String ref = Reference to the object after the iteration
+     *
+     * @test Tested in
+     */
     template < typename Action >
     __CDS_MaybeUnused auto forEach ( Action const & ) noexcept (false) -> String &;
     template < typename Action >

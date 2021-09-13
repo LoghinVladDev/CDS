@@ -379,6 +379,9 @@ int main () {
     std::cout << Sequence(Array{1, 2, 3, 4}).reduce([](int a, int b) { return a + b; }) << '\n';
     std::cout << Sequence(Array{1, 2, 3, 4}).reduce([](float a, int b) { return a + (float) b; }) << '\n';
 
+#undef min
+#undef max
+
     std::cout << Sequence(Array{4, 8, 2, 9, 5}).max() << '\n';
     std::cout << Sequence(Array{4, 8, 2, 9, 5}).min() << '\n';
     std::cout << Sequence(Array{4, 8, 2, 9, 5}).maxOr(0) << '\n';

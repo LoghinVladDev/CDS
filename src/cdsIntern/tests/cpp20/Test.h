@@ -10,6 +10,16 @@
 #define FLAG(i) 1u << i ## u
 #define FOREACH_FLAG(_min, _max, _dt, _v) for ( _dt _v = FLAG(_min); _v != FLAG(_max); _v = _v << 1 )
 
+#if defined(WIN32)
+#undef FOREGROUND_RED
+#undef FOREGROUND_GREEN
+#undef FOREGROUND_BLUE
+
+#undef BACKGROUND_RED
+#undef BACKGROUND_GREEN
+#undef BACKGROUND_BLUE
+#endif
+
 class Test {
 public:
     class TerminalColor {

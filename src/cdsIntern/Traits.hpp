@@ -232,13 +232,14 @@ struct Type {
         return & a == & b;
     }
 
-    static __CDS_cpplang_ConstexprConditioned auto streamPrint (std::ostream & ostream, T const & obj) noexcept -> std::ostream & {
-        if __CDS_cpplang_IfConstexpr ( Type :: ostreamPrintable ) {
-            ostream << obj;
-        } else
-            ostream << ( & obj );
+    template < typename U = T >
+    static constexpr auto streamPrint(std::ostream & ostream, T const & obj) noexcept -> typename std :: enable_if < Type < U > :: ostreamPrintable, std :: ostream & > :: type {
+        return (ostream << obj);
+    }
 
-        return ostream;
+    template < typename U = T >
+    static constexpr auto streamPrint(std::ostream & ostream, T const & obj) noexcept -> typename std :: enable_if < !Type < U > :: ostreamPrintable, std :: ostream & > :: type {
+        return (ostream << &obj);
     }
 };
 

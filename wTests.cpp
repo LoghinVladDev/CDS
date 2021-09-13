@@ -1,31 +1,16 @@
-#include <CDS/LinkedList>
 #include <iostream>
 
-//#include <unistd.h>
-#include <windows.h>
+int maxColor (int n, int c, int E[][100], int colours[]) {
 
-#include <CDS/Timer>
-#include <CDS/Range>
+}
 
 int main () {
-    try {
-        for ( auto i : Range (0, 500) ) {
-            Timer t;
+    int E[100][100];
+    int colours[100];
 
-            t.setInterval(20);
-            t.start([]() { std::cout << "Period\n"; });
+    ///
 
-
-            Sleep(100);
-//            sleep(1);
-
-            t.stop();
-
-            std::cout << "Stop\n";
-        }
-    } catch ( std::exception const & e ) {
-        std::cout << e.what() << '\n';
-    }
+    std::cout << maxColor(100, 5, E, colours) << '\n';
 
     return 0;
 }
