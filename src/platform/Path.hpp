@@ -363,13 +363,14 @@ __CDS_NoDiscard inline auto Path::roots () noexcept -> LinkedList < Path > {
         paths.pushBack(p.path);
 #elif defined(__linux)
 
-    return { "/" };
+   paths = {"/"};
 
 #else
 
 #warning Warning: Path::roots undefined
 
 #endif
+    return paths;
 }
 
 #if defined(WIN32)
