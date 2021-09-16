@@ -6,6 +6,7 @@
 #define CDS_UNORDEREDSET_HPP
 
 #include <CDS/SetBase>
+#include <CDS/Pointer>
 
 template <class T>
 class UnorderedSet final : public Set<T>  {

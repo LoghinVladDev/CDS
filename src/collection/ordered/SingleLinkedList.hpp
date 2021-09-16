@@ -506,7 +506,7 @@ auto SingleLinkedList < T > :: remove ( T const & what, Size count ) noexcept ->
     auto nextNode = [& current] () noexcept { current = current->next(); };
 
     while ( current != nullptr && count > 0 ) {
-        if ( Type < T > :: deepCompare ( current->data(), what ) ) {
+        if ( Type < T > :: compare ( current->data(), what ) ) {
             auto after = current->next();
 
             if ( previous == nullptr )
@@ -539,11 +539,11 @@ auto SingleLinkedList < T > :: remove ( T const & what, Size count ) noexcept ->
 template < typename T >
 auto SingleLinkedList < T > :: removeLast ( T const & what ) noexcept -> bool {
     auto current = this->_pFront;
-    decltype (current) previous = Type < T > :: deepCompare ( current->data(), what ) ? current : nullptr;
+    decltype (current) previous = Type < T > :: compare ( current->data(), what ) ? current : nullptr;
 
     auto nextNode = [& current] () noexcept  { current = current->next(); };
 
-    if ( Type < T > :: deepCompare ( this->_pFront->_data, what ) ) {
+    if ( Type < T > :: compare ( this->_pFront->_data, what ) ) {
         auto p = this->_pFront;
 
         this->_pFront = this->_pFront->next();
@@ -556,7 +556,7 @@ auto SingleLinkedList < T > :: removeLast ( T const & what ) noexcept -> bool {
     }
 
     while ( current->_pNext != nullptr ) {
-        if ( Type < T > :: deepCompare ( current->next()->data(), what ) ) previous = current;
+        if ( Type < T > :: compare ( current->next()->data(), what ) ) previous = current;
         nextNode();
     }
 
@@ -736,7 +736,7 @@ auto SingleLinkedList < T > :: replace ( T const & what, T const & with, Size co
 
     for ( auto & e : (*this) )
         if ( replacedCount < count ) {
-            if ( Type < T > :: deepCompare ( e, what ) ) {
+            if ( Type < T > :: compare ( e, what ) ) {
                 e = with;
                 replacedCount ++;
             }
@@ -750,7 +750,7 @@ auto SingleLinkedList < T > :: replaceLast ( T const & what, T const & with ) no
     decltype ( current ) lastOccurrence = nullptr;
 
     while ( current != nullptr ) {
-        if ( Type < T > :: deepCompare ( current->data(), what ) )
+        if ( Type < T > :: compare ( current->data(), what ) )
             lastOccurrence = current;
         current = current->next();
     }
@@ -1008,7 +1008,7 @@ auto SingleLinkedList < T > :: index ( T const & element ) const noexcept -> Ind
     Index current = 0;
 
     for ( auto & item : (*this) )
-        if ( Type < T > :: deepCompare ( item, element ) )
+        if ( Type < T > :: compare ( item, element ) )
             return current;
         else
             current ++;
@@ -1021,7 +1021,7 @@ auto SingleLinkedList < T > :: index ( T & element ) noexcept -> Index {
     Index current = 0;
 
     for ( auto & item : (*this) )
-        if ( Type < T > :: deepCompare ( item, element ) )
+        if ( Type < T > :: compare ( item, element ) )
             return current;
         else
             current ++;
@@ -1186,8 +1186,7 @@ auto SingleLinkedList < T > :: operator = ( Collection < T > const & collection 
 
     this->clear();
 
-    for ( auto it = UniquePointer < decltype ( & Collection < T > :: beginPtr ) > ( Collection < T > :: beginPtr(collection) ), end = UniquePointer < decltype ( & Collection < T > :: endPtr ) > ( Collection < T > :: endPtr(collection) ); ! it->equals ( * end ); it->next() )
-        this->pushBack( it->value() );
+    collection.forEach([this](auto const & e){this->pushBack(e);});
 
     return * this;
 }
