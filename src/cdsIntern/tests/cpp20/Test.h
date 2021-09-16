@@ -24,6 +24,8 @@ class Test {
 public:
     class TerminalColor {
     public:
+        __CDS_WarningSuppression_UseScopedEnum_SuppressEnable
+
         enum Modifier : uint32 {
             RESET = FLAG(0),
 
@@ -54,7 +56,9 @@ public:
             BACKGROUND_CYAN = FLAG(29),
             BACKGROUND_WHITE = FLAG(30),
             BACKGROUND_DEFAULT = FLAG(31),
-        };
+        }; 
+        
+        __CDS_WarningSuppression_UseScopedEnum_SuppressDisable
 
     public:
         typedef uint32 Flags;

@@ -1,16 +1,27 @@
 #include <iostream>
+#include <list>
 
-int maxColor (int n, int c, int E[][100], int colours[]) {
+struct Test {
+    int x;
 
+    void modifyX () {
+        this->x = 5;
+    }
+};
+
+void modifyXFromTest (Test * pThis) {
+    pThis->x = 5;
+}
+
+void modifyX (int & x) {
+    x = 5;
 }
 
 int main () {
-    int E[100][100];
-    int colours[100];
+    Test t;
 
-    ///
-
-    std::cout << maxColor(100, 5, E, colours) << '\n';
-
-    return 0;
+//    modifyXFromTest(& t);
+    modifyX(t.x);
+//0x62fe1c, 0x62fe1c
+    std::cout << t.x << '\n';
 }

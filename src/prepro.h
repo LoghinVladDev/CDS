@@ -220,4 +220,7 @@ inline auto exchange ( T & obj, U && newValue ) -> T {
 #endif
 
 
+#include "cdsIntern/Warnings.hpp"
+
+
 #endif //CDS_PREPRO_H

@@ -3294,7 +3294,12 @@ inline String::String(StringLiteral cString) noexcept : CONSTR_CLEAR() {
     this->_alloc(len);
 
     this->_l = len;
+
+    __CDS_WarningSuppression_ArgumentPossibleUnexpectedValue_SuppressEnable
+
     std::memcpy ( this->_p, cString, this->_l + 1 );
+
+    __CDS_WarningSuppression_ArgumentPossibleUnexpectedValue_SuppressDisable
 }
 
 inline String::String(CString cString) noexcept : CONSTR_CLEAR() {
@@ -3308,7 +3313,12 @@ inline String::String(CString cString) noexcept : CONSTR_CLEAR() {
     this->_alloc(len);
 
     this->_l = len;
+
+    __CDS_WarningSuppression_ArgumentPossibleUnexpectedValue_SuppressEnable
+
     std::memcpy ( this->_p, cString, this->_l + 1 );
+
+    __CDS_WarningSuppression_ArgumentPossibleUnexpectedValue_SuppressDisable
 }
 
 inline String::String(String const & s) noexcept : CONSTR_CLEAR() {
@@ -3317,7 +3327,12 @@ inline String::String(String const & s) noexcept : CONSTR_CLEAR() {
 
     this->_alloc(s._l);
     this->_l = s._l;
+
+    __CDS_WarningSuppression_ArgumentPossibleUnexpectedValue_SuppressEnable
+
     std::memcpy ( this->_p, s._p, this->_l + 1 );
+
+    __CDS_WarningSuppression_ArgumentPossibleUnexpectedValue_SuppressDisable
 }
 
 inline String::~String() noexcept {
@@ -3423,7 +3438,13 @@ inline String::String(Size count, ElementType constant) noexcept : CONSTR_CLEAR(
         return;
 
     this->_alloc(count);
-    std::memset(this->_p, constant, count);
+
+    __CDS_WarningSuppression_ArgumentPossibleUnexpectedValue_SuppressEnable
+
+    std::memset(this->_p, constant, count); 
+
+    __CDS_WarningSuppression_ArgumentPossibleUnexpectedValue_SuppressDisable
+
     this->_l = count;
 }
 

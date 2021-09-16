@@ -57,15 +57,15 @@ private:
 #error Unsupported : Mutex
 #endif
 
-    enum State: uint8 {
+    enum class State: uint8 {
         LOCKED = 0x01,
         UNLOCKED = 0x02
     };
 
     __CDS_cpplang_ConstexprConditioned static auto stateToString ( State s ) noexcept -> StringLiteral {
         switch (s) {
-            case LOCKED:    return "Locked";
-            case UNLOCKED:  return "Unlocked";
+            case State::LOCKED:    return "Locked";
+            case State::UNLOCKED:  return "Unlocked";
         }
 
         return "Undefined State";
@@ -82,7 +82,7 @@ public:
 #define CTR_PARAM
 #endif
 
-    Mutex (CTR_PARAM) noexcept : state(UNLOCKED) { // NOLINT(cppcoreguidelines-pro-type-member-init)
+    Mutex (CTR_PARAM) noexcept : state(State::UNLOCKED) { // NOLINT(cppcoreguidelines-pro-type-member-init)
 
 #if defined(__linux)
         pthread_mutex_init( & this->handle, nullptr );
@@ -157,7 +157,7 @@ public:
 #error Unsupported : Mutex
 #endif
 
-        this->state = LOCKED;
+        this->state = State::LOCKED;
 
     }
 
@@ -165,17 +165,17 @@ public:
 
 #if defined(__linux)
         auto lockSuccess = pthread_mutex_trylock(& this->handle ) == 0;
-        if ( lockSuccess ) this->state = LOCKED;
+        if ( lockSuccess ) this->state = State::LOCKED;
         return lockSuccess;
 #elif defined(WIN32)
 #if defined(MUTEX_IMPLEMENTATION_WINAPI_CRITICAL_SECTION)
         auto lockSuccess = TryEnterCriticalSection( & this->handle ) != 0;
-        if ( lockSuccess ) this->state = LOCKED;
+        if ( lockSuccess ) this->state = State::LOCKED;
         return lockSuccess;
 #elif defined(MUTEX_IMPLEMENTATION_WINAPI_MUTEX)
         auto lockStatus = WaitForSingleObject( this->handle.handle, 0 );
         if ( lockStatus == WAIT_OBJECT_0 ) {
-            this->state = LOCKED;
+            this->state = State::LOCKED;
             return true;
         } else if ( lockStatus == WAIT_ABANDONED )
             throw std::runtime_error("Mutex Abandoned");
@@ -203,7 +203,7 @@ public:
 #error Unsupported : Mutex
 #endif
 
-        this->state = UNLOCKED;
+        this->state = State::UNLOCKED;
 
     }
 

@@ -1,0 +1,20 @@
+{
+    "name": "Warnings.hpp",
+    "dirpath": "output",
+    "platforms": [
+        {
+            "name": "MSVC",
+            "type": 1
+        }
+    ],
+    "warnings": [
+        {
+            "Name": "ArgumentPossibleUnexpectedValues",
+            "MSVC": 6387
+        },
+        {
+            "Name": "UseScopedEnum",
+            "MSVC": 26812
+        }
+    ]
+}

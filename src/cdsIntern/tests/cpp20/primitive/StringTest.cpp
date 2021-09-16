@@ -1,3 +1,7 @@
+#if !defined(_MSC_VER)
+#pragma clang diagnostic push
+#pragma ide diagnostic ignored "bugprone-macro-parentheses"
+#endif
 //
 // Created by loghin on 05.04.2021.
 //
@@ -7,6 +11,12 @@
 #include <CDS/String>
 #include <CDS/Range>
 #include <CDS/Integer>
+
+#if defined(_MSC_VER)
+#undef min
+#undef max
+#endif
+
 
 auto StringTest::execute() noexcept -> bool {
     bool allOk = true;
@@ -398,7 +408,7 @@ auto StringTest::execute() noexcept -> bool {
         uint8 u8a = 144;
         uint16 u16a = 35235;
         uint32 u32a = 2999999123;
-        uint64 u64a = (uint64)INT64_MAX + 1412312;
+        uint64 u64a = 9223372036854775807LLU - 125123LLU;
         float fa = 512.3532467f;
         double da = 512.3532467;
 
@@ -458,8 +468,8 @@ auto StringTest::execute() noexcept -> bool {
         if ( operated + u32a != "test string,2999999123" ) {
             this->logWarning("String + String Error");
             allOk = false;
-        }
-        if ( operated + u64a != "test string,9223372036856188119" ) {
+        }                                    
+        if ( operated + u64a != "test string,9223372036854650684" ) {
             this->logWarning("String + String Error");
             allOk = false;
         }
@@ -544,7 +554,7 @@ auto StringTest::execute() noexcept -> bool {
             allOk = false;
         }
         operated = original;
-        if ( (operated += u64a) != "test string,9223372036856188119" ) {
+        if ( (operated += u64a) != "test string,9223372036854650684" ) {
             this->logWarning("String += String Error");
             allOk = false;
         }
@@ -630,7 +640,7 @@ auto StringTest::execute() noexcept -> bool {
             allOk = false;
         }
         operated = original;
-        if ( (operated.append(u64a)) != "test string,9223372036856188119" ) {
+        if ( (operated.append(u64a)) != "test string,9223372036854650684" ) {
             this->logWarning("String append String Error");
             allOk = false;
         }
@@ -716,7 +726,7 @@ auto StringTest::execute() noexcept -> bool {
             allOk = false;
         }
         operated = original;
-        if ( (operated.prepend(u64a)) != "9223372036856188119test string," ) {
+        if ( (operated.prepend(u64a)) != "9223372036854650684test string," ) {
             this->logWarning("String prepend String Error");
             allOk = false;
         }
@@ -1447,3 +1457,7 @@ auto StringTest::execute() noexcept -> bool {
     allOk ? this->logOK("String test OK") : this->logError("String test Not OK");
     return allOk;
 }
+
+#if !defined(_MSC_VER)
+#pragma clang diagnostic pop
+#endif
