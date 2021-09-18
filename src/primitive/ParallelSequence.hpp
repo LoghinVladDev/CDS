@@ -287,7 +287,7 @@ public:
             StoredIndexedMapperList * pIndexedMapperList = nullptr;
 
             uint32 chainCount = 0u;
-            uint32 threadIndex;
+            uint32 threadIndex = 0u;
         };
 
         WorkerDataContainer const * _pContainer = nullptr;
@@ -451,13 +451,23 @@ auto ParallelSequence < C > ::filterContainer ( ParallelFilterContainer & contai
             for ( Index threadIndex = 0; threadIndex < workers.size(); threadIndex ++ ) {
                 auto & t = workers[threadIndex];
 
+                __CDS_WarningSuppression_UseScopedEnum_SuppressEnable
+
                 if ( t.state() == Worker :: State :: FINISHED ) {
+
+                __CDS_WarningSuppression_UseScopedEnum_SuppressDisable
+
                     auto iToRemove = t.getResult();
                     if ( iToRemove != -1 )
                     toRemove[ iToRemove ] = true;
                 }
 
+                __CDS_WarningSuppression_UseScopedEnum_SuppressEnable
+
                 if ( t.state() == Worker :: State :: STANDBY ) {
+
+                __CDS_WarningSuppression_UseScopedEnum_SuppressDisable
+
                     containers[threadIndex] = {
                         .pPredicateList = container.pPredicateList,
                         .pMapperList = container.pMapperList,

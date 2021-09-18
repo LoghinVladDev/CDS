@@ -77,6 +77,8 @@ private:
         EXCEPTION_TERMINATED    = 0x10u
     };
 
+    __CDS_WarningSuppression_UseScopedEnum_SuppressEnable
+
     constexpr static auto stateToString ( State s ) noexcept -> StringLiteral {
         switch ( s ) {
             case State::CREATED:                return "Not Started";
@@ -88,6 +90,8 @@ private:
 
         return "Undefined State";
     }
+
+    __CDS_WarningSuppression_UseScopedEnum_SuppressDisable
 
     PrimitiveThread        MUTABLE_SPEC handle         { Thread::PRIMITIVE_NULL_HANDLE };
     Atomic < State >                    state          { Thread::State::CREATED };
@@ -151,7 +155,13 @@ public:
         pthread_cancel ( this->handle );
 #elif defined(WIN32)
         if ( this->handle != PRIMITIVE_NULL_HANDLE )
+
+            __CDS_WarningSuppression_ThreadForceTermination_SuppressEnable
+
             TerminateThread( this->handle->handle, 0 );
+
+            __CDS_WarningSuppression_ThreadForceTermination_SuppressDisable
+
         delete this->handle;
         this->handle = PRIMITIVE_NULL_HANDLE;
 #else

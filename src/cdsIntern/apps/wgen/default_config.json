@@ -9,12 +9,24 @@
     ],
     "warnings": [
         {
-            "Name": "ArgumentPossibleUnexpectedValues",
+            "Name": "ArgumentPossibleUnexpectedValue",
             "MSVC": 6387
         },
         {
             "Name": "UseScopedEnum",
             "MSVC": 26812
+        },
+        {
+            "Name": "DelegateCtorSuppressUninitializedMembers",
+            "MSVC": 26495
+        },
+        {
+            "Name": "ArithmeticOverflow",
+            "MSVC": 26451
+        },
+        {
+            "Name": "ThreadForceTermination",
+            "MSVC": 6258
         }
     ]
 }

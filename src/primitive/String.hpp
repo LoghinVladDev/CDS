@@ -229,7 +229,10 @@ public:
      * @test tested in MSK
      */
     String(QString const & o) noexcept : String(o.toStdString()) {}
+
 #endif
+
+    __CDS_WarningSuppression_DelegateCtorSuppressUninitializedMembers_SuppressEnable
 
     /**
      * @brief Constructor which initializes String from a CDS/Object's String representation
@@ -394,6 +397,8 @@ public:
     String (T const * v) noexcept : String((std::size_t)v) { } // NOLINT(google-explicit-constructor)
 
 //    String (std::size_t v) noexcept : String((uint64)v) {}
+
+    __CDS_WarningSuppression_DelegateCtorSuppressUninitializedMembers_SuppressDisable
 
 #if defined(CDS_GLM)
 
@@ -3260,7 +3265,6 @@ inline auto Object::toString() const noexcept -> String {
     return oss.str();
 }
 // end of weird stuff
-
 
 #include <cstring>
 #define CONSTR_CLEAR() _c(0), _l(0), _p(nullptr)

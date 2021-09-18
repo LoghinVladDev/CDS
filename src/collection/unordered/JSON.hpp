@@ -788,7 +788,8 @@ inline auto JSON::parse(String const & jsonString) noexcept -> JSON { // NOLINT(
     while ( ! copy.empty() ) {
         String label = copy.substr(0, copy.findFirst(':'));
 
-        label.replace(0, label.findFirst('"') + 1, "").replace(label.findLast('"'), label.size(), "");
+        label.replace(0, label.findFirst('"') + 1, "");
+        label.replace(label.findLast('"'), label.size(), "");
 
         String data, fullData = copy.substr(copy.findFirst(':') + 1);
         int arrayBracketCount = 0, objectBracketCount = 0, segmentLength = 0;

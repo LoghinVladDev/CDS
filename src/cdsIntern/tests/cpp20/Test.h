@@ -24,8 +24,6 @@ class Test {
 public:
     class TerminalColor {
     public:
-        __CDS_WarningSuppression_UseScopedEnum_SuppressEnable
-
         enum Modifier : uint32 {
             RESET = FLAG(0),
 
@@ -57,8 +55,6 @@ public:
             BACKGROUND_WHITE = FLAG(30),
             BACKGROUND_DEFAULT = FLAG(31),
         }; 
-        
-        __CDS_WarningSuppression_UseScopedEnum_SuppressDisable
 
     public:
         typedef uint32 Flags;
@@ -75,12 +71,19 @@ public:
 #if defined(_WIN32)
             return "";
 #endif
+            
 
             String res;
             FOREACH_FLAG(0, 31, uint32, i ) {
+
+                __CDS_WarningSuppression_UseScopedEnum_SuppressEnable
+
                 if ( colorMap.containsKey( static_cast<Modifier>(i) ) && ( f & i ) ) {
                     res.append( colorMap.get( static_cast<Modifier>(i) ) ).append(";");
                 }
+
+                __CDS_WarningSuppression_UseScopedEnum_SuppressDisable
+
             }
             return res.rtrim(';');
         }

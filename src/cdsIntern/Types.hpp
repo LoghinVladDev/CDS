@@ -33,7 +33,13 @@ namespace dataTypes {
     template<> auto hash<sint16>(sint16 const &o) noexcept -> Index { return o; }
     template<> auto hash<sint32>(sint32 const &o) noexcept -> Index { return o; }
     template<> auto hash<sint64>(sint64 const &o) noexcept -> Index { return o; }
-    template <> auto hash<float> (float const & o) noexcept -> Index { return static_cast < Index > ( o * 1000.0f ); }
+
+    __CDS_WarningSuppression_ArithmeticOverflow_SuppressEnable
+
+    template <> auto hash<float> (float const & o) noexcept -> Index { return static_cast < Index> ( o * 1000.0f ); }
+
+    __CDS_WarningSuppression_ArithmeticOverflow_SuppressDisable
+
     template <> auto hash<double> (double const & o) noexcept -> Index { return static_cast < Index > ( o * 100000.0 ); }
 
 #if defined(CDS_GLM)

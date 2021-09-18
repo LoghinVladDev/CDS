@@ -20,7 +20,8 @@ private:
     V _second;
 
 public:
-    Pair() noexcept(noexcept(K()) && noexcept(V())) = default;
+    template < typename K1 = K, typename V1 = V, typename = typename std :: enable_if < std :: is_default_constructible < K1 > :: type :: value && std :: is_default_constructible < V1 > :: type :: value, int > :: type >
+    Pair () noexcept(noexcept(K()) && noexcept(noexcept(V()))) : _first(), _second() {}
     Pair(const K & k, const V & v) noexcept(noexcept(K(k)) && noexcept(V(v))) : _first(k), _second(v) {  }
     ~Pair () noexcept override = default;
 

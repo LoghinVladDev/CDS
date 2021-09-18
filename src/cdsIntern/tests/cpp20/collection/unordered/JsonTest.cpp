@@ -5,6 +5,7 @@
 #include "JsonTest.h"
 
 #include <CDS/JSON>
+#include <CDS/Path>
 #include <fstream>
 #include <sstream>
 
@@ -12,10 +13,18 @@ bool JsonTest::execute() noexcept {
     bool allOk = true;
     this->logBold("Starting of test Json...");
 
-    constexpr static StringLiteral in1Path = "../src/cdsIntern/tests/cpp20/collection/unordered/settings.json";
-    constexpr static StringLiteral in2Path = "../src/cdsIntern/tests/cpp20/collection/unordered/theme.json";
+//    constexpr static StringLiteral in1Path = "../src/cdsIntern/tests/cpp20/collection/unordered/settings.json";
+//    constexpr static StringLiteral in2Path = "../src/cdsIntern/tests/cpp20/collection/unordered/theme.json";
 
-    this->executeSubtest("settings.json (from src file's folder) tests", [&allOk, this]{
+    String in1 = Path(__FILE__).parent() / "settings.json";
+    String in2 = Path(__FILE__).parent() / "theme.json";
+
+    StringLiteral in1Path = in1.cStr();
+    StringLiteral in2Path = in2.cStr();
+
+    //constexpr static StringLiteral inPath = __FILE__
+
+    this->executeSubtest("settings.json (from src file's folder) tests", [in1Path, in2Path, &allOk, this]{
         std::stringstream iss;
         iss << std::ifstream(in1Path).rdbuf();
         JSON json = JSON::parse(iss.str());
@@ -26,7 +35,7 @@ bool JsonTest::execute() noexcept {
         this->log("Value for 'theme' : '%s'", json.getString("theme").cStr());
     });
 
-    this->executeSubtest("theme.json (from src file's folder) tests", [&allOk, this]{
+    this->executeSubtest("theme.json (from src file's folder) tests", [in1Path, in2Path, &allOk, this]{
         JSON json = JSON::load(in2Path);
 
 //        std::cout << json << '\n';
@@ -71,7 +80,7 @@ bool JsonTest::execute() noexcept {
         std::cout << json.dump() << '\n';
     });
 
-    this->executeSubtest("test3", [&allOk, this]{
+    this->executeSubtest("test3", [in1Path, in2Path, &allOk, this]{
         JSON j;
         j.put("a", 1);
         j.put("b", true);

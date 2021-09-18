@@ -255,8 +255,10 @@ public:
 
 private:
 
+#if defined(__JETBRAINS_IDE__)
 #pragma clang diagnostic push
 #pragma ide diagnostic ignored "NotImplementedFunctions"
+#endif
 
     template < typename SortFunction >
     auto static quickSort ( Iterator, Iterator, SortFunction const & ) noexcept -> void;
@@ -264,7 +266,9 @@ private:
     template < typename SortFunction >
     auto static quickSortPartition ( Iterator, Iterator, SortFunction const & ) noexcept -> Iterator;
 
+#if defined(__JETBRAINS_IDE__)
 #pragma clang diagnostic pop
+#endif 
 
 public:
     template < typename SortFunction >
@@ -1186,7 +1190,7 @@ auto SingleLinkedList < T > :: operator = ( Collection < T > const & collection 
 
     this->clear();
 
-    collection.forEach([this](auto const & e){this->pushBack(e);});
+    collection.forEach([this](T const & e){this->pushBack(e);});
 
     return * this;
 }

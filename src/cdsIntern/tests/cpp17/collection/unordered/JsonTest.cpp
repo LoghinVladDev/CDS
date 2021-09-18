@@ -5,7 +5,7 @@
 #include "JsonTest.h"
 
 #include <CDS/JSON>
-"JSON.hpp"
+#include <CDS/Path>
 #include <fstream>
 #include <sstream>
 
@@ -13,24 +13,32 @@ bool JsonTest::execute() noexcept {
     bool allOk = true;
     this->logBold("Starting of test Json...");
 
-    constexpr static StringLiteral in1Path = "../src/cdsIntern/tests/collection/unordered/settings.json";
-    constexpr static StringLiteral in2Path = "../src/cdsIntern/tests/collection/unordered/theme.json";
+    //    constexpr static StringLiteral in1Path = "../src/cdsIntern/tests/cpp20/collection/unordered/settings.json";
+    //    constexpr static StringLiteral in2Path = "../src/cdsIntern/tests/cpp20/collection/unordered/theme.json";
 
-    this->executeSubtest("settings.json (from src file's folder) tests", [&allOk, this]{
+    String in1 = Path(__FILE__).parent() / "settings.json";
+    String in2 = Path(__FILE__).parent() / "theme.json";
+
+    StringLiteral in1Path = in1.cStr();
+    StringLiteral in2Path = in2.cStr();
+
+    //constexpr static StringLiteral inPath = __FILE__
+
+    this->executeSubtest("settings.json (from src file's folder) tests", [in1Path, in2Path, &allOk, this] {
         std::stringstream iss;
         iss << std::ifstream(in1Path).rdbuf();
         JSON json = JSON::parse(iss.str());
 
-//        std::cout << json << '\n';
+        //        std::cout << json << '\n';
         this->log("JSON as String : '%s'", json.toString().cStr());
 
         this->log("Value for 'theme' : '%s'", json.getString("theme").cStr());
-    });
+        });
 
-    this->executeSubtest("theme.json (from src file's folder) tests", [&allOk, this]{
+    this->executeSubtest("theme.json (from src file's folder) tests", [in1Path, in2Path, &allOk, this] {
         JSON json = JSON::load(in2Path);
 
-//        std::cout << json << '\n';
+        //        std::cout << json << '\n';
         this->log("JSON as String : '%s'", json.toString().cStr());
 
         this->log("Value for 'id' : '%s'", json.getString("id").cStr());
@@ -38,7 +46,7 @@ bool JsonTest::execute() noexcept {
         this->log("Value for 'fallbackThemes' : '%s'", json.getArray("fallbackThemes").toString().cStr());
         this->log("Array Value Index 0 in Array 'fallbackThemes' : '%s'", json.getArray("fallbackThemes").getString(0).cStr());
         this->log("Array Iteration : ");
-        for (const auto &item : json.getArray("fallbackThemes")) {
+        for (const auto& item : json.getArray("fallbackThemes")) {
             std::cout << "\t\t\t" << item.getString() << '\n';
         }
 
@@ -65,14 +73,14 @@ bool JsonTest::execute() noexcept {
         this->log("Keys for json : '%s'", json.labels().toString().cStr());
 
         this->log("Iteration for nodes");
-        for (const auto &item : json) {
+        for (const auto& item : json) {
             this->log("\tNode : '%s'", item.toString().cStr());
         }
 
         std::cout << json.dump() << '\n';
-    });
+        });
 
-    this->executeSubtest("test3", [&allOk, this]{
+    this->executeSubtest("test3", [in1Path, in2Path, &allOk, this] {
         JSON j;
         j.put("a", 1);
         j.put("b", true);
@@ -82,7 +90,7 @@ bool JsonTest::execute() noexcept {
         j.put("f", "abcd");
         j.put("g", String("dcef"));
 
-//        std::cout << j.dump() << '\n';
+        //        std::cout << j.dump() << '\n';
 
         JSON::Array a;
         JSON j1;
@@ -102,7 +110,7 @@ bool JsonTest::execute() noexcept {
 
 
         std::cout << j.dump(10) << '\n';
-    });
+        });
 
     allOk ? this->logOK("Json test OK") : this->logError("String test Not OK");
     return allOk;

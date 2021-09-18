@@ -216,8 +216,10 @@ public:
 
 private:
 
+#if defined(__JETBRAINS_IDE__)
 #pragma clang diagnostic push
 #pragma ide diagnostic ignored "NotImplementedFunctions"
+#endif
 
     template < typename SortFunc >
     auto static quickSort ( Iterator, Iterator, SortFunc const & ) noexcept -> void;
@@ -225,7 +227,9 @@ private:
     template < typename SortFunc >
     auto static quickSortPartition ( Iterator, Iterator, SortFunc const & ) noexcept -> Iterator;
 
+#if defined(__JETBRAINS_IDE__)
 #pragma clang diagnostic pop
+#endif
 
 public:
     template < typename SortFunc >

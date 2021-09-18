@@ -192,7 +192,7 @@ def execute_step_platform_platform_independent_macros(config: dict, out_file) ->
 
     out_file.writelines(_ + "\n" for _ in [
         "#define __CDS_WarningSuppression_Platform_SuppressEnable(_platform, _warning)"
-        " __CDS_WarningSuppression _ ## _platform ## _ ## _warning ## _SuppressEnable",
+        " __CDS_WarningSuppression_ ## _platform ## _ ## _warning ## _SuppressEnable",
         "#define __CDS_WarningSuppression_Platform_SuppressDisable(_platform, _warning)"
         " __CDS_WarningSuppression_ ## _platform ## _ ## _warning ## _SuppressDisable",
         ""

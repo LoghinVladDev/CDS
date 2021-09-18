@@ -74,9 +74,15 @@ public:
 
             String res;
             FOREACH_FLAG(0, 31, uint32, i ) {
+
+                __CDS_WarningSuppression_UseScopedEnum_SuppressEnable
+
                 if ( colorMap.containsKey( static_cast<Modifier>(i) ) && ( f & i ) ) {
                     res.append( colorMap.get( static_cast<Modifier>(i) ) ).append(";");
                 }
+
+                __CDS_WarningSuppression_UseScopedEnum_SuppressDisable
+
             }
             return res.rtrim(';');
         }

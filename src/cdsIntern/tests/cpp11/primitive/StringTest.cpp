@@ -1427,7 +1427,7 @@ auto StringTest::execute() noexcept -> bool {
             String toApplyTo = "Test String";
             int sum = 0;
 
-            toApplyTo.forEach([&sum](auto e) { sum += e; });
+            toApplyTo.forEach([&sum](char e) { sum += e; });
 
             this->log("forEach used over string '%s' to sum character values. Resulted : '%d', Expected : '%d'",
                 toApplyTo.cStr(), sum, 1079);
@@ -1442,7 +1442,7 @@ auto StringTest::execute() noexcept -> bool {
             const String toApplyTo = "Test String";
             int sum = 0;
 
-            toApplyTo.forEach([&sum](auto e) { sum += e; });
+            toApplyTo.forEach([&sum](char e) { sum += e; });
 
             this->log("forEach used over string '%s' to sum character values. Resulted : '%d', Expected : '%d'",
                 toApplyTo.cStr(), sum, 1079);
