@@ -271,6 +271,36 @@ public:
     template < typename KeySelector >
     __CDS_MaybeUnused auto groupByTo ( Map < returnOf < KeySelector >, LinkedList < ElementType > > &, KeySelector const & ) const noexcept -> Map < returnOf < KeySelector >, LinkedList < ElementType > > & __CDS_Requires( Iterable < C > || ConstIterable < C > );
 
+    template < typename KeySelector, typename ValueMapper >
+    __CDS_MaybeUnused auto groupByTo ( Map < returnOf < KeySelector >, returnOf < ValueMapper > > &, KeySelector const &, ValueMapper const & ) const noexcept -> Map < returnOf < KeySelector >, returnOf < ElementType > > & __CDS_Requires( Iterable < C > || ConstIterable < C > );
+
+    template < typename Mapper, typename std :: enable_if < ! std :: is_same < typename std :: remove_reference < decltype ( dataTypes :: unsafeAddress < typename std :: remove_reference < C > :: type :: Iterator > () -> value () ) > :: type, returnOf < Mapper > > :: type :: value, int > :: type = 0 >
+    __CDS_MaybeUnused auto map ( Mapper const & ) && noexcept -> Sequence < LinkedList < returnOf < Mapper > > > __CDS_Requires( Iterable < C > || ConstIterable < C > );
+
+    template < typename Mapper, typename std :: enable_if < std :: is_same < typename std :: remove_reference < decltype ( dataTypes :: unsafeAddress < typename std :: remove_reference < C > :: type :: Iterator > () -> value () ) > :: type, returnOf < Mapper > > :: type :: value, int > :: type = 0 >
+    __CDS_MaybeUnused auto map ( Mapper const & ) && noexcept -> Sequence < C > __CDS_Requires ( Iterable < C > || ConstIterable < C > );
+
+    template < typename IndexedMapper, typename std :: enable_if < ! std :: is_same < typename std :: remove_reference < decltype ( dataTypes ::unsafeAddress < typename std :: remove_reference < C > :: type :: Iterator > () -> value () ) > :: type, returnOf < IndexedMapper > > :: type :: value, int > :: type = 0 >
+    __CDS_MaybeUnused auto mapIndexed ( IndexedMapper const & ) && noexcept -> Sequence < LinkedList < returnOf < IndexedMapper > > > __CDS_Requires( Iterable < C > || ConstIterable < C > );
+
+    template < typename IndexedMapper, typename std :: enable_if < std :: is_same < typename std :: remove_reference < decltype ( dataTypes :: unsafeAddress < typename std :: remove_reference < C > :: type :: Iterator > () -> value () ) > :: type, returnOf < IndexedMapper > > :: type :: value, int > :: type = 0 >
+    __CDS_MaybeUnused auto mapIndexed ( IndexedMapper const & ) && noexcept -> Sequence < C > __CDS_Requires ( Iterable < C > || ConstIterable < C > );
+
+    template < typename Mapper, typename R >
+    __CDS_MaybeUnused auto mapTo ( Collection < R > &, Mapper const & ) const noexcept -> Collection < R > & __CDS_Requires( Iterable < C > || ConstIterable < C > );
+
+    template < typename IndexedMapper, typename R >
+    __CDS_MaybeUnused auto mapIndexedTo ( Collection < R > &, IndexedMapper const & ) const noexcept -> Collection < R > & __CDS_Requires( Iterable < C > || ConstIterable < C > );
+
+    __CDS_MaybeUnused auto indexed () && noexcept -> Sequence < LinkedList < Pair < Index, ElementType > > > __CDS_Requires( Iterable < C > || ConstIterable < C > );
+
+    __CDS_MaybeUnused auto distinct () && noexcept -> Sequence < UnorderedSet < ElementType > > __CDS_Requires( Iterable < C > || ConstIterable < C > );
+
+    template < typename Action >
+    __CDS_MaybeUnused auto forEach ( Action const & ) const noexcept -> void __CDS_Requires( Iterable < C > || ConstIterable < C > );
+
+
+
     class Worker : public Thread {
     public:
         enum State {

@@ -241,6 +241,9 @@ struct Type {
     static constexpr auto streamPrint(std::ostream & ostream, T const & obj) noexcept -> typename std :: enable_if < !Type < U > :: ostreamPrintable, std :: ostream & > :: type {
         return (ostream << &obj);
     }
+
+    constexpr static auto unsafeAddress () noexcept -> T * { return reinterpret_cast < T * > (0x10); }
+    constexpr static auto unsafeReference () noexcept -> T & { return * Type :: unsafeAddress(); }
 };
 
 #endif //CDS_TRAITS_HPP

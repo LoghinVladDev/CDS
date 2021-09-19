@@ -1323,7 +1323,28 @@ auto StringTest::execute() noexcept -> bool {
             this->logWarning("toUpperChar error");
             allOk = false;
         }
-        });
+
+        String endsString = "Test String";
+        if ( endsString.startsWith("test") ) {
+            this->logWarning("startsWith error");
+            allOk = false;
+        }
+
+        if ( ! endsString.startsWith("Test") ) {
+            this->logWarning("startsWith error");
+            allOk = false;
+        }
+
+        if ( endsString.endsWith("string") ) {
+            this->logWarning("endsWith error");
+            allOk = false;
+        }
+
+        if ( ! endsString.endsWith("String") ) {
+            this->logWarning("endsWith error");
+            allOk = false;
+        }
+    });
 
     this->executeSubtest("Assignment Tests", [this, &allOk] {
         String a = "Test String";
@@ -1427,7 +1448,7 @@ auto StringTest::execute() noexcept -> bool {
             String toApplyTo = "Test String";
             int sum = 0;
 
-            toApplyTo.forEach([&sum](char e) { sum += e; });
+            toApplyTo.forEach([&sum](char & e) { sum += e; });
 
             this->log("forEach used over string '%s' to sum character values. Resulted : '%d', Expected : '%d'",
                 toApplyTo.cStr(), sum, 1079);
@@ -1451,6 +1472,16 @@ auto StringTest::execute() noexcept -> bool {
                 this->logWarning("forEach error");
                 allOk = false;
             }
+        }
+
+        {
+            String test = "test";
+            test.forEach([](char & e) {e -= 32;});
+            std::cout << test << '\n';
+
+            auto action = [](char & e) {e -32;};
+            using Action = decltype(action);
+            std::cout << std :: is_lvalue_reference < decltype ( std :: get < 0 > ( std :: declval < typename functionTraits < Action > :: argsType > () ) ) > :: type :: value << '\n';
         }
         });
 

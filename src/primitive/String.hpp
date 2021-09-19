@@ -17,6 +17,7 @@
 #endif
 
 #include <CDS/Object>
+#include <CDS/Traits>
 
 /**
  * @class String, represents a String object, ascii encoded
@@ -3051,172 +3052,861 @@ public:
     auto replace ( Index, Size, String const & ) noexcept -> String &;
 
     /**
-     * @brief Function used to apply a function over each of the elements in the String iteratively
+     * @brief Function used to apply a function over each of the elements in the String iteratively. Requires mutable String, enables modification of elements
      *
      * @tparam Action = Callable type with void return type ( preferably ) and one input parameter representing an iterable element ( ElementType or ElementType ref or ElementType cref )
      * @param a : Action cref = Constant Reference to the Callable to supply the element to
      *
-     * @throws Action's exceptions
+     * @throws Action's exceptions, if any. If none, is exception safe
      *
      * @returns String ref = Reference to the object after the iteration
      *
-     * @test Tested in
+     * @test Tested in primitive/StringTest/ForEach Tests
      */
     template < typename Action >
-    __CDS_MaybeUnused auto forEach ( Action const & ) noexcept (false) -> String &;
+    __CDS_MaybeUnused auto forEach ( Action const & ) noexcept ( noexcept ( ( * dataTypes :: unsafeAddress < Action > () ) ( Type < char > :: unsafeReference() ) ) ) -> String &;
+
+    /**
+     * @brief Function used to apply a function over each of the elements in the String iteratively. Is const, requiring Action over immutable element ( no char & )
+     *
+     * @tparam Action = Callable type with void return type ( preferably ) and one input parameter representing an iterable element ( ElementType or ElementType ref or ElementType cref )
+     * @param a : Action cref = Constant Reference to the Callable to supply the element to
+     *
+     * @throws Action's exceptions, if any. If none, is exception safe
+     *
+     * @returns String ref = Reference to the object after the iteration
+     *
+     * @test Tested in primitive/StringTest/ForEach Tests
+     */
     template < typename Action >
-    __CDS_MaybeUnused auto forEach ( Action const & ) const noexcept (false) -> String const &;
+    __CDS_MaybeUnused auto forEach ( Action const & ) const noexcept ( noexcept ( ( * dataTypes :: unsafeAddress < Action > () ) ( Type < const char > :: unsafeReference() ) ) ) -> String const &;
 
+    /**
+     * @brief Function used to count number of elements that validate a certain Predicate. Requires mutable String, as Predicate given can change elements in String
+     *
+     * @tparam Predicate = boolean return Callable with one parameter of ElementType, used to validate a property of an element
+     *
+     * @param p : Predicate cref = Constant Reference to a Predicate - static function, Lambda, std::function or any callable type object
+     *
+     * @throws Predicate's exception, if any. If none, is exception safe
+     *
+     * @return Size = number of elements validating given predicate
+     *
+     * @test Tested in primitive/StringTest/ForEach tests
+     */
     template < typename Predicate >
-    __CDS_MaybeUnused auto count ( Predicate const & ) noexcept (false) -> Size;
-    template < typename Predicate >
-    __CDS_MaybeUnused auto count ( Predicate const & ) const noexcept (false) -> Size;
+    __CDS_MaybeUnused auto count ( Predicate const & ) noexcept ( noexcept ( ( * dataTypes :: unsafeAddress < Predicate > () ) ( Type < char > :: unsafeReference() ) ) ) -> Size;
 
+    /**
+     * @brief Function used to count number of elements that validate a certain Predicate. Requires Predicate that does not modify elements ( char & ), due to it being applied over immutable String
+     *
+     * @tparam Predicate = boolean return Callable with one parameter of ElementType, used to validate a property of an element
+     *
+     * @param p : Predicate cref = Constant Reference to a Predicate - static function, Lambda, std::function or any callable type object
+     *
+     * @throws Predicate's exception, if any. If none, is exception safe
+     *
+     * @return Size = number of elements validating given predicate
+     *
+     * @test Tested in primitive/StringTest/ForEach tests
+     */
     template < typename Predicate >
-    __CDS_MaybeUnused inline auto some ( Predicate const & p, Size s ) noexcept (false) -> bool { return s <= this->count ( p ); }
-    template < typename Predicate >
-    __CDS_MaybeUnused inline auto some ( Predicate const & p, Size s ) const noexcept(false) -> bool { return s <= this->count ( p ); }
+    __CDS_MaybeUnused auto count ( Predicate const & ) const noexcept ( noexcept ( ( * dataTypes :: unsafeAddress < Predicate > () ) ( Type < const char > :: unsafeReference() ) ) ) -> Size;
 
+    /**
+     * @brief Function used to verify if a given number of elements validate a certain Predicate. Requires mutable String, as Predicate given can change elements in String
+     *
+     * @tparam Predicate = boolean return Callable with one parameter of ElementType, used to validate a property of an element
+     *
+     * @param p : Predicate cref = Constant Reference to a Predicate - static function, Lambda, std::function or any callable type object
+     *
+     * @throws Predicate's exception, if any. If none, is exception safe
+     *
+     * @return bool = true if required count to validate <= count that validate, false otherwise
+     *
+     * @test Tested in primitive/StringTest/ForEach tests
+     */
     template < typename Predicate >
-    __CDS_MaybeUnused auto any ( Predicate const & p ) noexcept (false) -> bool { return 1u <= this->count(p); }
-    template < typename Predicate >
-    __CDS_MaybeUnused auto any ( Predicate const & p ) const noexcept (false) -> bool { return 1u <= this->count(p); }
+    __CDS_MaybeUnused inline auto some ( Predicate const & p, Size s ) noexcept ( noexcept ( ( * dataTypes :: unsafeAddress < Predicate > () ) ( Type < char > :: unsafeReference() ) ) ) -> bool { return s <= this->count ( p ); }
 
-    template < typename Predicate >
-    __CDS_MaybeUnused auto all ( Predicate const & p ) noexcept (false) -> bool { return this->size() == this->count(p); }
-    template < typename Predicate >
-    __CDS_MaybeUnused auto all ( Predicate const & p ) const noexcept (false) -> bool { return this->size() == this->count(p); }
+    /**
+     * @brief Function used to verify if a given number of elements validate a certain Predicate. Requires Predicate that does not modify elements ( char & ), due to it being applied over immutable String
+     *
+     * @tparam Predicate = boolean return Callable with one parameter of ElementType, used to validate a property of an element
+     *
+     * @param p : Predicate cref = Constant Reference to a Predicate - static function, Lambda, std::function or any callable type object
+     *
+     * @throws Predicate's exception, if any. If none, is exception safe
+     *
+     * @return bool = true if required count to validate <= count that validate, false otherwise
+     *
+     * @test Tested in primitive/StringTest/ForEach tests
+     */
+     template < typename Predicate >
+    __CDS_MaybeUnused inline auto some ( Predicate const & p, Size s ) const noexcept( noexcept ( ( * dataTypes :: unsafeAddress < Predicate > () ) ( Type < const char > :: unsafeReference() ) ) ) -> bool { return s <= this->count ( p ); }
 
+    /**
+     * @brief Function used to verify if any element validates a certain Predicate. Requires mutable String, as Predicate given can change elements in String
+     *
+     * @tparam Predicate = boolean return Callable with one parameter of ElementType, used to validate a property of an element
+     *
+     * @param p : Predicate cref = Constant Reference to a Predicate - static function, Lambda, std::function or any callable type object
+     *
+     * @throws Predicate's exception, if any. If none, is exception safe
+     *
+     * @return bool = true if at least one element validates given Predicate, false otherwise
+     *
+     * @test Tested in primitive/StringTest/ForEach tests
+     */
+    template < typename Predicate >
+    __CDS_MaybeUnused auto any ( Predicate const & p ) noexcept ( noexcept ( ( * dataTypes :: unsafeAddress < Predicate > () ) ( Type < char > :: unsafeReference() ) ) ) -> bool { return 1u <= this->count(p); }
+
+    /**
+     * @brief Function used to verify if any element validates a certain Predicate. Requires Predicate that does not modify elements ( char & ), due to it being applied over immutable String
+     *
+     * @tparam Predicate = boolean return Callable with one parameter of ElementType, used to validate a property of an element
+     *
+     * @param p : Predicate cref = Constant Reference to a Predicate - static function, Lambda, std::function or any callable type object
+     *
+     * @throws Predicate's exception, if any. If none, is exception safe
+     *
+     * @return bool = true if at least one element validates given Predicate, false otherwise
+     *
+     * @test Tested in primitive/StringTest/ForEach tests
+     */
+    template < typename Predicate >
+    __CDS_MaybeUnused auto any ( Predicate const & p ) const noexcept ( noexcept ( ( * dataTypes :: unsafeAddress < Predicate > () ) ( Type < const char > :: unsafeReference() ) ) ) -> bool { return 1u <= this->count(p); }
+
+    /**
+     * @brief Function used to verify if all the elements validate a certain Predicate. Requires mutable String, as Predicate given can change elements in String
+     *
+     * @tparam Predicate = boolean return Callable with one parameter of ElementType, used to validate a property of an element
+     *
+     * @param p : Predicate cref = Constant Reference to a Predicate - static function, Lambda, std::function or any callable type object
+     *
+     * @throws Predicate's exception, if any. If none, is exception safe
+     *
+     * @return bool = true if all elements validate given Predicate, false otherwise
+     *
+     * @test Tested in primitive/StringTest/ForEach tests
+     */
+    template < typename Predicate >
+    __CDS_MaybeUnused auto all ( Predicate const & p ) noexcept ( noexcept ( ( * dataTypes :: unsafeAddress < Predicate > () ) ( Type < char > :: unsafeReference() ) ) ) -> bool { return this->size() == this->count(p); }
+
+    /**
+     * @brief Function used to verify if all the elements validate a certain Predicate. Requires Predicate that does not modify elements ( char & ), due to it being applied over immutable String
+     *
+     * @tparam Predicate = boolean return Callable with one parameter of ElementType, used to validate a property of an element
+     *
+     * @param p : Predicate cref = Constant Reference to a Predicate - static function, Lambda, std::function or any callable type object
+     *
+     * @throws Predicate's exception, if any. If none, is exception safe
+     *
+     * @return bool = true if all elements validate given Predicate, false otherwise
+     *
+     * @test Tested in primitive/StringTest/ForEach tests
+     */
+    template < typename Predicate >
+    __CDS_MaybeUnused auto all ( Predicate const & p ) const noexcept ( noexcept ( ( * dataTypes :: unsafeAddress < Predicate > () ) ( Type < const char > :: unsafeReference() ) ) ) -> bool { return this->size() == this->count(p); }
+
+    /**
+     * @brief Function obtains a String that contains the contents of the caller in reverse order
+     *
+     * @exceptsafe
+     *
+     * @return String = new String with reversed contents
+     *
+     * @test Tested in primitive/StringTest/Constructor Tests
+     */
     __CDS_NoDiscard auto reversed() const noexcept -> String;
 
+    /**
+     * @brief Function checks whether a String starts with a given String
+     *
+     * @param str : String cref = Constant Reference to a String to check if it is at the beginning of the caller String
+     *
+     * @exceptsafe
+     *
+     * @return bool = true if String starts with given parameter, false otherwise
+     *
+     * @test Tested in primitive/StringTest/Utility Tests
+     */
     __CDS_NoDiscard __CDS_MaybeUnused auto startsWith (String const &) const noexcept -> bool;
+
+    /**
+     * @brief Function checks whether a String ends with a given String
+     *
+     * @param str : String cref = Constant Reference to a String to check if it is at the end of the caller String
+     *
+     * @exceptsafe
+     *
+     * @return bool = true if String ends with given parameter, false otherwise
+     *
+     * @test Tested in primitive/StringTest/Utility Tests
+     */
     __CDS_NoDiscard __CDS_MaybeUnused auto endsWith (String const &) const noexcept -> bool;
 
+    /**
+     * @brief Function used to remove a String's prefix. Used over mutable Strings, removing it from the caller String
+     *
+     * @param prefix : String cref = Constant Reference to the String containing the prefix to remove
+     *
+     * @exceptsafe
+     *
+     * @return String ref = Reference to the modified String
+     *
+     * @test Tested in primitive/StringTest/Utility Functions
+     */
     __CDS_NoDiscard inline auto removePrefix (String const & prefix) noexcept -> String & {
         if ( this->length() < prefix.length() ) return * this;
         if ( this->substr(0, static_cast < Index > ( prefix.length() )) == prefix ) * this = this->substr(static_cast < Index > ( prefix.length() ));
         return * this;
     }
 
+    /**
+     * @brief Function used to obtain a String without the requested prefix
+     *
+     * @param prefix : String cref = Constant Reference to the String containing the prefix to remove
+     *
+     * @return String = New String without the requested prefix
+     *
+     * @test Tested in primitive/StringTest/Utility Functions
+     */
     __CDS_NoDiscard __CDS_MaybeUnused inline auto removePrefix (String const & prefix) const noexcept -> String { return String(*this).removePrefix(prefix); }
 
+    /**
+     * @brief Function used to remove a String's suffix. Used over mutable Strings, removing it from the caller String
+     *
+     * @param suffix : String cref = Constant Reference to the String containing the suffix to remove
+     *
+     * @exceptsafe
+     *
+     * @return String ref = Reference to the modified String
+     *
+     * @test Tested in primitive/StringTest/Utility Functions
+     */
     __CDS_NoDiscard inline auto removeSuffix (String const & suffix) noexcept -> String & {
         if ( this->length() < suffix.length() ) return * this;
         if ( this->substr( static_cast < Index > ( this->length() ) - static_cast < Index > ( suffix.length() ) ) == suffix ) * this = this->substr(0, static_cast < Index > ( this->length() ) - static_cast < Index > ( suffix.length() ));
         return * this;
     }
 
+    /**
+     * @brief Function used to obtain a String without the requested suffix
+     *
+     * @param prefix : String cref = Constant Reference to the String containing the suffix to remove
+     *
+     * @return String = New String without the requested suffix
+     *
+     * @test Tested in primitive/StringTest/Utility Functions
+     */
     __CDS_NoDiscard inline auto removeSuffix (String const & suffix) const noexcept -> String { return String(*this).removeSuffix(suffix); }
 };
 
 class String::IteratorBase {
 protected:
-    mutable String * _s {nullptr};
+
+    /**
+     * @brief Address to the String, mutable as to allow const functions with modifications over address location
+     */
+    String mutable * _s {nullptr};
+
+    /**
+     * @brief Position in the String
+     */
     Index _pos          {0ull};
 
+    /**
+     * @brief Base Constructor, from a given String and Index in String
+     *
+     * @param s : String ref = Reference to a String object
+     * @param i : Index = index to a String's position
+     *
+     * @exceptsafe
+     *
+     * @test Tested in primitive/StringTest/Iterable Tests
+     */
     explicit IteratorBase ( String &, Index ) noexcept;
+
+    /**
+     * @brief Copy Constructor
+     *
+     * @param s : String :: IteratorBase cref = Constant Reference to a String IteratorBase derived object
+     *
+     * @exceptsafe
+     *
+     * @test Tested in primitive/StringTest/Iterable Tests
+     */
     IteratorBase ( String::IteratorBase const & ) = default;
 
 public:
+
+    /**
+     * @brief Default Constructor, deleted as it needs to be created over Iterator
+     *
+     * @exceptsafe
+     *
+     * @test Tested in primitive/StringTest/Iterable Tests
+     */
     IteratorBase() noexcept = delete;
+
+    /**
+     * @brief Destructor
+     *
+     * @exceptsafe
+     *
+     * @test Tested in primitive/StringTest/Iterable Tests
+     */
     virtual ~IteratorBase() noexcept = default;
 
+    /**
+     * @brief Function used to shift the iterator to next element
+     *
+     * @exceptsafe
+     *
+     * @returns IteratorBase ref = Reference to the modified Object
+     *
+     * @test Tested in primitive/StringTest/Iterable Tests
+     */
     virtual auto next() -> IteratorBase & = 0;
+
+    /**
+     * @brief Function used to compare Iterator values
+     *
+     * @param i : String::IteratorBase cref = Constant Reference to a String IteratorBase derived object
+     *
+     * @exceptsafe
+     *
+     * @returns bool = true if Iterators are equal, false otherwise
+     *
+     * @test Tested in primitive/StringTest/Iterable Tests
+     */
     __CDS_NoDiscard constexpr inline auto equals ( const String::IteratorBase & i ) const noexcept -> bool { return this->_s == i._s && this->_pos == i._pos; }
+
+    /**
+     * @brief Function used to obtain value at Iterator Position
+     *
+     * @exceptsafe
+     *
+     * @returns ElementType ref = Reference to the element at Iterator Position
+     *
+     * @test Tested in primitive/StringTest/Iterable Tests
+     */
     __CDS_NoDiscard inline auto value ( ) const noexcept (false) -> ElementType & { return this->_s->get(this->_pos); }
 
+    /**
+     * @brief Function used to shift the iterator to next element
+     *
+     * @exceptsafe
+     *
+     * @returns IteratorBase ref = Reference to the modified Object
+     *
+     * @test Tested in primitive/StringTest/Iterable Tests
+     */
     virtual inline auto operator ++ () noexcept -> IteratorBase & { return this->next(); }
+
+    /**
+     * @brief Function used to compare Iterator values
+     *
+     * @param o : String::IteratorBase cref = Constant Reference to a String IteratorBase derived object
+     *
+     * @exceptsafe
+     *
+     * @returns bool = true if Iterators are equal, false otherwise
+     *
+     * @test Tested in primitive/StringTest/Iterable Tests
+     */
     constexpr inline auto operator == ( const IteratorBase & o ) const noexcept -> bool { return this->equals(o); }
+
+    /**
+     * @brief Function used to compare Iterator values
+     *
+     * @param i : String::IteratorBase cref = Constant Reference to a String IteratorBase derived object
+     *
+     * @exceptsafe
+     *
+     * @returns bool = true if Iterators are not equal, false otherwise
+     *
+     * @test Tested in primitive/StringTest/Iterable Tests
+     */
     constexpr inline auto operator != ( const IteratorBase & o ) const noexcept -> bool { return ! this->equals(o); }
+
+    /**
+     * @brief Function used to obtain difference size between two iterator positions
+     *
+     * @param i : String::IteratorBase cref = Constant Reference to a String IteratorBase derived object
+     *
+     * @exceptsafe
+     *
+     * @returns SignedSize = difference between the left and right Iterators, in positions
+     *
+     * @test Tested in primitive/StringTest/Iterable Tests
+     */
     constexpr inline auto operator - ( const IteratorBase & o ) const noexcept -> SignedSize { return this->_pos - o._pos; }
+
+    /**
+     * @brief Function used to obtain value at Iterator Position
+     *
+     * @exceptsafe
+     *
+     * @returns ElementType ref = Reference to the element at Iterator Position
+     *
+     * @test Tested in primitive/StringTest/Iterable Tests
+     */
     inline auto operator * ( ) const noexcept -> ElementType & { return this->value(); }
 };
 
 class String::ConstIteratorBase {
 protected:
+
+    /**
+     * @brief Address to the String
+     */
     const String *   _s {nullptr};
+
+    /**
+     * @brief Position in the String
+     */
     Index _pos          {0ull};
 
+    /**
+     * @brief Base Constructor, from a given String and Index in String
+     *
+     * @param s : String cref = Constant Reference to a String object
+     * @param i : Index = index to a String's position
+     *
+     * @exceptsafe
+     *
+     * @test Tested in primitive/StringTest/Iterable Tests
+     */
     explicit ConstIteratorBase ( String const &, Index ) noexcept;
+
+    /**
+     * @brief Copy Constructor
+     *
+     * @param s : String :: ConstIteratorBase cref = Constant Reference to a String ConstIteratorBase derived object
+     *
+     * @exceptsafe
+     *
+     * @test Tested in primitive/StringTest/Iterable Tests
+     */
     ConstIteratorBase ( String::ConstIteratorBase const & ) = default;
 
 public:
+
+    /**
+     * @brief Default Constructor, deleted as it needs to be created over Iterator
+     *
+     * @exceptsafe
+     *
+     * @test Tested in primitive/StringTest/Iterable Tests
+     */
     ConstIteratorBase() noexcept = delete;
+
+    /**
+     * @brief Destructor
+     *
+     * @exceptsafe
+     *
+     * @test Tested in primitive/StringTest/Iterable Tests
+     */
     virtual ~ConstIteratorBase() noexcept = default;
 
+    /**
+     * @brief Function used to shift the iterator to next element
+     *
+     * @exceptsafe
+     *
+     * @returns ConstIteratorBase ref = Reference to the modified Object
+     *
+     * @test Tested in primitive/StringTest/Iterable Tests
+     */
     virtual auto next() -> ConstIteratorBase & = 0;
+
+    /**
+     * @brief Function used to compare Iterator values
+     *
+     * @param i : String::ConstIteratorBase cref = Constant Reference to a String ConstIteratorBase derived object
+     *
+     * @exceptsafe
+     *
+     * @returns bool = true if Iterators are equal, false otherwise
+     *
+     * @test Tested in primitive/StringTest/Iterable Tests
+     */
     __CDS_NoDiscard constexpr inline auto equals ( const String::ConstIteratorBase & i ) const noexcept -> bool { return this->_s == i._s && this->_pos == i._pos; }
+
+    /**
+     * @brief Function used to obtain value at Iterator Position
+     *
+     * @exceptsafe
+     *
+     * @returns ElementType = Copy of the element at Iterator Position
+     *
+     * @test Tested in primitive/StringTest/Iterable Tests
+     */
     __CDS_NoDiscard inline auto value ( ) const noexcept -> ElementType { return this->_s->get(this->_pos); }
 
-#if __cpp_constexpr >= 201907
-    constexpr virtual inline auto operator ++ () noexcept -> ConstIteratorBase & { return this->next(); }
-#else
+    /**
+     * @brief Function used to shift the iterator to next element
+     *
+     * @exceptsafe
+     *
+     * @returns ConstIteratorBase ref = Reference to the modified Object
+     *
+     * @test Tested in primitive/StringTest/Iterable Tests
+     */
     virtual inline auto operator ++ () noexcept -> ConstIteratorBase & { return this->next(); }
-#endif
+
+    /**
+     * @brief Function used to compare Iterator values
+     *
+     * @param o : String::ConstIteratorBase cref = Constant Reference to a String ConstIteratorBase derived object
+     *
+     * @exceptsafe
+     *
+     * @returns bool = true if Iterators are equal, false otherwise
+     *
+     * @test Tested in primitive/StringTest/Iterable Tests
+     */
     constexpr inline auto operator == ( const ConstIteratorBase & o ) const noexcept -> bool { return this->equals(o); }
+
+    /**
+     * @brief Function used to compare Iterator values
+     *
+     * @param i : String::ConstIteratorBase cref = Constant Reference to a String ConstIteratorBase derived object
+     *
+     * @exceptsafe
+     *
+     * @returns bool = true if Iterators are not equal, false otherwise
+     *
+     * @test Tested in primitive/StringTest/Iterable Tests
+     */
     constexpr inline auto operator != ( const ConstIteratorBase & o ) const noexcept -> bool { return ! this->equals(o); }
+
+    /**
+     * @brief Function used to obtain difference size between two iterator positions
+     *
+     * @param i : String::ConstIteratorBase cref = Constant Reference to a String ConstIteratorBase derived object
+     *
+     * @exceptsafe
+     *
+     * @returns SignedSize = difference between the left and right Iterators, in positions
+     *
+     * @test Tested in primitive/StringTest/Iterable Tests
+     */
     constexpr inline auto operator - ( const ConstIteratorBase & o ) const noexcept -> SignedSize { return this->_pos - o._pos; }
+
+    /**
+     * @brief Function used to obtain value at Iterator Position
+     *
+     * @exceptsafe
+     *
+     * @returns ElementType = Copy of the element at Iterator Position
+     *
+     * @test Tested in primitive/StringTest/Iterable Tests
+     */
     inline auto operator * ( ) const noexcept -> ElementType { return this->value(); }
 };
 
 class String::Iterator final : public IteratorBase {
 public:
+
+    /**
+     * @brief Default constructor, deleted
+     */
     Iterator () noexcept = delete;
+
+    /**
+     * @brief Base Constructor, from a given String and Index in String
+     *
+     * @param s : String ref = Reference to a String object
+     * @param i : Index = index to a String's position
+     *
+     * @exceptsafe
+     *
+     * @test Tested in primitive/StringTest/Iterable Tests
+     */
     explicit Iterator ( String &, Index ) noexcept;
+
+    /**
+     * @brief Copy Constructor
+     *
+     * @param s : String :: Iterator cref = Constant Reference to a String Iterator derived object
+     *
+     * @exceptsafe
+     *
+     * @test Tested in primitive/StringTest/Iterable Tests
+     */
     Iterator ( String::Iterator const & ) noexcept = default;
 
+    /**
+     * @brief Destructor
+     *
+     * @exceptsafe
+     *
+     * @test Tested in primitive/StringTest/Iterable Tests
+     */
     ~Iterator () noexcept final = default;
 
+    /**
+     * @brief Function used to shift the iterator to next element
+     *
+     * @exceptsafe
+     *
+     * @returns Iterator ref = Reference to the modified Object
+     *
+     * @test Tested in primitive/StringTest/Iterable Tests
+     */
     __CDS_cpplang_VirtualConstexpr auto next () noexcept -> Iterator & final { this->_pos ++; return * this; }
 
+    /**
+     * @brief Function used to shift the iterator to next element
+     *
+     * @exceptsafe
+     *
+     * @returns Iterator ref = Reference to the modified Object
+     *
+     * @test Tested in primitive/StringTest/Iterable Tests
+     */
     __CDS_cpplang_VirtualConstexpr auto operator ++ () noexcept -> Iterator & final { return this->next(); }
+
+    /**
+     * @brief Function used to shift the iterator to next element into a new Iterator element
+     *
+     * @exceptsafe
+     *
+     * @returns Iterator ref = New Iterator shifted based to original
+     *
+     * @test Tested in primitive/StringTest/Iterable Tests
+     */
     inline auto operator ++ (int) noexcept -> Iterator { auto copy = * this; this->next(); return copy; }
 };
 
 class String::ConstIterator final : public ConstIteratorBase {
 public:
+
+    /**
+     * @brief Default constructor, deleted
+     */
     ConstIterator () noexcept = delete;
+
+    /**
+     * @brief Base Constructor, from a given String and Index in String
+     *
+     * @param s : String ref = Reference to a String object
+     * @param i : Index = index to a String's position
+     *
+     * @exceptsafe
+     *
+     * @test Tested in primitive/StringTest/Iterable Tests
+     */
     explicit ConstIterator ( String const &, Index ) noexcept;
+
+    /**
+     * @brief Copy Constructor
+     *
+     * @param s : String :: Iterator cref = Constant Reference to a String Iterator derived object
+     *
+     * @exceptsafe
+     *
+     * @test Tested in primitive/StringTest/Iterable Tests
+     */
     ConstIterator ( String::ConstIterator const & ) noexcept = default;
 
+    /**
+     * @brief Destructor
+     *
+     * @exceptsafe
+     *
+     * @test Tested in primitive/StringTest/Iterable Tests
+     */
     ~ConstIterator () noexcept final = default;
 
+    /**
+     * @brief Function used to shift the iterator to next element
+     *
+     * @exceptsafe
+     *
+     * @returns Iterator ref = Reference to the modified Object
+     *
+     * @test Tested in primitive/StringTest/Iterable Tests
+     */
     __CDS_cpplang_VirtualConstexpr auto next () noexcept -> ConstIterator & final { this->_pos ++; return * this; }
 
+    /**
+     * @brief Function used to shift the iterator to next element
+     *
+     * @exceptsafe
+     *
+     * @returns Iterator ref = Reference to the modified Object
+     *
+     * @test Tested in primitive/StringTest/Iterable Tests
+     */
     __CDS_cpplang_VirtualConstexpr auto operator ++ () noexcept -> ConstIterator & final { return this->next(); }
+
+    /**
+     * @brief Function used to shift the iterator to next element into a new Iterator element
+     *
+     * @exceptsafe
+     *
+     * @returns Iterator ref = New Iterator shifted based to original
+     *
+     * @test Tested in primitive/StringTest/Iterable Tests
+     */
     inline auto operator ++ (int) noexcept -> ConstIterator { auto copy = * this; this->next(); return copy; }
 };
 
 class String::ReverseIterator final : public IteratorBase {
 public:
+
+    /**
+     * @brief Default constructor, deleted
+     */
     ReverseIterator () noexcept = delete;
+
+    /**
+     * @brief Base Constructor, from a given String and Index in String
+     *
+     * @param s : String ref = Reference to a String object
+     * @param i : Index = index to a String's position
+     *
+     * @exceptsafe
+     *
+     * @test Tested in primitive/StringTest/Iterable Tests
+     */
     explicit ReverseIterator ( String &, Index ) noexcept;
+
+    /**
+     * @brief Copy Constructor
+     *
+     * @param s : String :: Iterator cref = Constant Reference to a String Iterator derived object
+     *
+     * @exceptsafe
+     *
+     * @test Tested in primitive/StringTest/Iterable Tests
+     */
     ReverseIterator ( String::ReverseIterator const & ) noexcept = default;
 
+    /**
+     * @brief Destructor
+     *
+     * @exceptsafe
+     *
+     * @test Tested in primitive/StringTest/Iterable Tests
+     */
     ~ReverseIterator () noexcept final = default;
 
+    /**
+     * @brief Function used to shift the iterator to next element
+     *
+     * @exceptsafe
+     *
+     * @returns Iterator ref = Reference to the modified Object
+     *
+     * @test Tested in primitive/StringTest/Iterable Tests
+     */
     __CDS_cpplang_VirtualConstexpr auto next () noexcept -> ReverseIterator & final { this->_pos --; return * this; }
 
+    /**
+     * @brief Function used to shift the iterator to next element
+     *
+     * @exceptsafe
+     *
+     * @returns Iterator ref = Reference to the modified Object
+     *
+     * @test Tested in primitive/StringTest/Iterable Tests
+     */
     __CDS_cpplang_VirtualConstexpr auto operator ++ () noexcept -> ReverseIterator & final { return this->next(); }
+
+    /**
+     * @brief Function used to shift the iterator to next element into a new Iterator element
+     *
+     * @exceptsafe
+     *
+     * @returns Iterator ref = New Iterator shifted based to original
+     *
+     * @test Tested in primitive/StringTest/Iterable Tests
+     */
     inline auto operator ++ (int) noexcept -> ReverseIterator { auto copy = * this; this->next(); return copy; }
 };
 
 class String::ConstReverseIterator final : public ConstIteratorBase {
 public:
+
+    /**
+     * @brief Default constructor, deleted
+     */
     ConstReverseIterator () noexcept = delete;
+
+    /**
+     * @brief Base Constructor, from a given String and Index in String
+     *
+     * @param s : String ref = Reference to a String object
+     * @param i : Index = index to a String's position
+     *
+     * @exceptsafe
+     *
+     * @test Tested in primitive/StringTest/Iterable Tests
+     */
     explicit ConstReverseIterator ( String const &, Index ) noexcept;
+
+    /**
+     * @brief Copy Constructor
+     *
+     * @param s : String :: Iterator cref = Constant Reference to a String Iterator derived object
+     *
+     * @exceptsafe
+     *
+     * @test Tested in primitive/StringTest/Iterable Tests
+     */
     ConstReverseIterator ( String::ConstReverseIterator const & ) noexcept = default;
 
+    /**
+     * @brief Destructor
+     *
+     * @exceptsafe
+     *
+     * @test Tested in primitive/StringTest/Iterable Tests
+     */
     ~ConstReverseIterator () noexcept final = default;
 
+    /**
+     * @brief Function used to shift the iterator to next element
+     *
+     * @exceptsafe
+     *
+     * @returns Iterator ref = Reference to the modified Object
+     *
+     * @test Tested in primitive/StringTest/Iterable Tests
+     */
     __CDS_cpplang_VirtualConstexpr auto next () noexcept -> ConstReverseIterator & final { this->_pos --; return * this; }
 
+    /**
+     * @brief Function used to shift the iterator to next element
+     *
+     * @exceptsafe
+     *
+     * @returns Iterator ref = Reference to the modified Object
+     *
+     * @test Tested in primitive/StringTest/Iterable Tests
+     */
     __CDS_cpplang_VirtualConstexpr auto operator ++ () noexcept -> ConstReverseIterator & final { return this->next(); }
+
+    /**
+     * @brief Function used to shift the iterator to next element into a new Iterator element
+     *
+     * @exceptsafe
+     *
+     * @returns Iterator ref = New Iterator shifted based to original
+     *
+     * @test Tested in primitive/StringTest/Iterable Tests
+     */
     inline auto operator ++ (int) noexcept -> ConstReverseIterator { auto copy = * this; this->next(); return copy; }
 };
 
 template < typename Action >
-auto String::forEach ( Action const & a ) noexcept (false) -> String & {
+auto String::forEach ( Action const & a ) noexcept ( noexcept ( ( * dataTypes :: unsafeAddress < Action > () ) ( Type < char > :: unsafeReference() ) ) ) -> String & {
     for ( auto & e : * this )
         a ( e );
 
@@ -3224,7 +3914,7 @@ auto String::forEach ( Action const & a ) noexcept (false) -> String & {
 }
 
 template < typename Action >
-auto String::forEach ( Action const & a ) const noexcept (false) -> String const & {
+auto String::forEach ( Action const & a ) const noexcept ( noexcept ( ( * dataTypes :: unsafeAddress < Action > () ) ( Type < const char > :: unsafeReference () ) ) ) -> String const & {
     for ( auto e : * this )
         a ( e );
 
@@ -3232,7 +3922,7 @@ auto String::forEach ( Action const & a ) const noexcept (false) -> String const
 }
 
 template < typename Predicate >
-auto String::count ( Predicate const & p ) noexcept (false) -> Size {
+auto String::count ( Predicate const & p ) noexcept ( noexcept ( ( * dataTypes :: unsafeAddress < Predicate > () ) ( Type < char > :: unsafeReference() ) ) ) -> Size {
     Index count = 0;
     for ( auto & e : * this )
         if ( p(e) ) count++;
@@ -3241,7 +3931,7 @@ auto String::count ( Predicate const & p ) noexcept (false) -> Size {
 }
 
 template < typename Predicate >
-auto String::count ( Predicate const & p ) const noexcept (false) -> Size {
+auto String::count ( Predicate const & p ) const noexcept ( noexcept ( ( * dataTypes :: unsafeAddress < Predicate > () ) ( Type < const char > :: unsafeReference() ) ) ) -> Size {
     Index count = 0;
     for ( auto e : * this )
         if ( p(e) ) count++;
