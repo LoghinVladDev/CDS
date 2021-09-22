@@ -127,7 +127,8 @@ def execute_step_platform_platform_dependant_macros(config: dict, out_file) -> N
             template[1]["macroIdentifier"]["start"],
             "",
             "",
-            f"#define __CDS_WarningSuppression_{template[0]}_SuppressEnable({template[1]['parameters']}) \\"
+            f"#define __CDS_WarningSuppression_{template[0]}_SuppressEnable({template[1]['parameters']}) "
+            f"/* NOLINT(bugprone-reserved-identifier) */ \\ "
         ])
 
         enable_list = [s for s in template[1]["enable"]]
@@ -138,7 +139,8 @@ def execute_step_platform_platform_dependant_macros(config: dict, out_file) -> N
         out_file.writelines(_ + "\n" for _ in enable_list)
         out_file.writelines("\n")
         out_file.writelines(_ + "\n" for _ in [
-            f"#define __CDS_WarningSuppression_{template[0]}_SuppressDisable({template[1]['parameters']}) \\"
+            f"#define __CDS_WarningSuppression_{template[0]}_SuppressDisable({template[1]['parameters']}) "
+            f"/* NOLINT(bugprone-reserved-identifier) */ \\ "
         ])
 
         disable_list = [s for s in template[1]["disable"]]
@@ -159,8 +161,10 @@ def execute_step_platform_platform_dependant_macros(config: dict, out_file) -> N
 
         out_file.writelines(_ + "\n" for _ in [
             "",
-            f"#define __CDS_WarningSuppression_{template[0]}_SuppressEnable({template[1]['parameters']})",
-            f"#define __CDS_WarningSuppression_{template[0]}_SuppressDisable({template[1]['parameters']})",
+            f"#define __CDS_WarningSuppression_{template[0]}_SuppressEnable({template[1]['parameters']}) "
+            f"/* NOLINT(bugprone-reserved-identifier) */",
+            f"#define __CDS_WarningSuppression_{template[0]}_SuppressDisable({template[1]['parameters']}) "
+            f"/* NOLINT(bugprone-reserved-identifier) */",
             "",
             ""
         ])
@@ -192,9 +196,11 @@ def execute_step_platform_platform_independent_macros(config: dict, out_file) ->
 
     out_file.writelines(_ + "\n" for _ in [
         "#define __CDS_WarningSuppression_Platform_SuppressEnable(_platform, _warning)"
-        " __CDS_WarningSuppression_ ## _platform ## _ ## _warning ## _SuppressEnable",
+        " __CDS_WarningSuppression_ ## _platform ## _ ## _warning ## _SuppressEnable "
+        "/* NOLINT(bugprone-reserved-identifier) */",
         "#define __CDS_WarningSuppression_Platform_SuppressDisable(_platform, _warning)"
-        " __CDS_WarningSuppression_ ## _platform ## _ ## _warning ## _SuppressDisable",
+        " __CDS_WarningSuppression_ ## _platform ## _ ## _warning ## _SuppressDisable "
+        "/* NOLINT(bugprone-reserved-identifier) */",
         ""
     ])
 
@@ -219,22 +225,25 @@ def execute_step_platform_platform_dependent_configured_rules(config: dict, out_
                 out_file.writelines(_ + "\n" for _ in [
                     "#define __CDS_WarningSuppression_" + platform["name"] + "_" + warning["Name"] + "_SuppressEnable"
                     " __CDS_WarningSuppression_" + platform["name"] + "_SuppressEnable(" +
-                    str(warning[platform["name"]]) + ")",
+                    str(warning[platform["name"]]) + ") /* NOLINT(bugprone-reserved-identifier) */",
                     "#define __CDS_WarningSuppression_" + platform["name"] + "_" + warning["Name"] + "_SuppressDisable"
                     " __CDS_WarningSuppression_" + platform["name"] + "_SuppressDisable(" +
-                    str(warning[platform["name"]]) + ")",
+                    str(warning[platform["name"]]) + ") /* NOLINT(bugprone-reserved-identifier) */",
                     ""
                 ])
             else:
                 out_file.writelines(_ + "\n" for _ in [
-                    "#define __CDS_WarningSuppression_" + platform["name"] + "_" + warning["Name"] + "_SuppressEnable",
-                    "#define __CDS_WarningSuppression_" + platform["name"] + "_" + warning["Name"] + "_SuppressDisable",
+                    "#define __CDS_WarningSuppression_" + platform["name"] + "_" + warning["Name"] + "_SuppressEnable "
+                    "/* NOLINT(bugprone-reserved-identifier) */",
+                    "#define __CDS_WarningSuppression_" + platform["name"] + "_" + warning["Name"] + "_SuppressDisable "
+                    "/* NOLINT(bugprone-reserved-identifier) */",
                     ""
                 ])
 
                 # print(config)
 
-    out_file.writelines("\n#define __CDS_WarningSuppression_SuppressEnable(_warning) \\\n")
+    out_file.writelines("\n#define __CDS_WarningSuppression_SuppressEnable(_warning)"
+                        " /* NOLINT(bugprone-reserved-identifier) */ \\\n")
     for i in range(len(config['platforms'])):
         out_file.writelines(f"\t__CDS_WarningSuppression_Platform_SuppressEnable({config['platforms'][i]['name']}"
                             f", _warning)")
@@ -242,7 +251,8 @@ def execute_step_platform_platform_dependent_configured_rules(config: dict, out_
             out_file.writelines('\\')
         out_file.writelines('\n')
 
-    out_file.writelines("\n#define __CDS_WarningSuppression_SuppressDisable(_warning) \\\n")
+    out_file.writelines("\n#define __CDS_WarningSuppression_SuppressDisable(_warning) "
+                        "/* NOLINT(bugprone-reserved-identifier) */ \\\n")
     for i in range(len(config['platforms'])):
         out_file.writelines(f"\t__CDS_WarningSuppression_Platform_SuppressDisable({config['platforms'][i]['name']}"
                             f", _warning)")
@@ -266,9 +276,12 @@ def execute_step_platform_platform_independent_configured_rules(config: dict, ou
     for warning in config['warnings']:
         out_file.writelines(_ + '\n' for _ in [
             f"#define __CDS_WarningSuppression_{warning['Name']}_SuppressEnable"
-            f" __CDS_WarningSuppression_SuppressEnable({warning['Name']})",
+            f" __CDS_WarningSuppression_SuppressEnable({warning['Name']}) "
+            f"/* NOLINT(bugprone-reserved-identifier) */"
+            f"",
             f"#define __CDS_WarningSuppression_{warning['Name']}_SuppressDisable"
-            f" __CDS_WarningSuppression_SuppressDisable({warning['Name']})",
+            f" __CDS_WarningSuppression_SuppressDisable({warning['Name']}) "
+            f"/* NOLINT(bugprone-reserved-identifier) */",
             ""
         ])
 

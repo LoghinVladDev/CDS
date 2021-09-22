@@ -20,7 +20,6 @@
 
 auto StringTest::execute() noexcept -> bool {
     bool allOk = true;
-    this->logBold("Start of test String....");
 
     this->executeSubtest("Constructor Tests", [this, &allOk] {
         String empty;
@@ -1476,16 +1475,11 @@ auto StringTest::execute() noexcept -> bool {
 
         {
             String test = "test";
-            test.forEach([](char & e) {e -= 32;});
-            std::cout << test << '\n';
 
             auto action = [](char & e) {e -32;};
             using Action = decltype(action);
-            std::cout << std :: is_lvalue_reference < decltype ( std :: get < 0 > ( std :: declval < typename functionTraits < Action > :: argsType > () ) ) > :: type :: value << '\n';
         }
         });
-
-    allOk ? this->logOK("String test OK") : this->logError("String test Not OK");
     return allOk;
 }
 

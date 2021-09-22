@@ -223,8 +223,12 @@ auto operator _operator (float value) noexcept -> Atomic & {  \
 #undef _PREFIX_OP
 };
 
+#if defined(CDS_FLOAT_POSTFIX)
+
 __CDS_cpplang_ConstexprDestructor auto operator "" _f (long double value) noexcept -> Float {
     return static_cast < float > ( value );
 }
+
+#endif
 
 #endif //CDS_FLOAT_HPP

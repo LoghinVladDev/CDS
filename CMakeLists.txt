@@ -167,7 +167,7 @@ add_executable(
         CDS-dummy
         main.cpp
         ${CDS_HEADERS}
-)
+        src/functional/Time.hpp src/cdsIntern/Utility.hpp include/CDS/Utility src/cdsIntern/compiler/Compiler.hpp src/cdsIntern/Platform.hpp include/CDS/Compiler include/CDS/Platform src/cdsIntern/compiler/GNUC.hpp include/CDS/Warnings)
 target_link_libraries(
         CDS-dummy
         ${CDS_LIBRARIES}

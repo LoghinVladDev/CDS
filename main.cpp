@@ -11,6 +11,7 @@
 #define CDS_DEBUG
 #include <CDS/Array>
 #include "ParallelSequence.hpp"
+#include <functional/Time.hpp>
 
 int main() {
     ParallelSequence < LinkedList < int > > a ( {1, 2, 3} );

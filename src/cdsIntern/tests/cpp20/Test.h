@@ -6,6 +6,8 @@
 #define CDS_TEST_H
 
 #include <CDS/HashMap>
+#include <chrono>
+#include <cmath>
 
 #define FLAG(i) 1u << i ## u
 #define FOREACH_FLAG(_min, _max, _dt, _v) for ( _dt _v = FLAG(_min); _v != FLAG(_max); _v = _v << 1 )
@@ -54,7 +56,7 @@ public:
             BACKGROUND_CYAN = FLAG(29),
             BACKGROUND_WHITE = FLAG(30),
             BACKGROUND_DEFAULT = FLAG(31),
-        }; 
+        };
 
     public:
         typedef uint32 Flags;
@@ -71,7 +73,6 @@ public:
 #if defined(_WIN32)
             return "";
 #endif
-            
 
             String res;
             FOREACH_FLAG(0, 31, uint32, i ) {
@@ -110,6 +111,40 @@ protected:
 
 public:
     virtual auto execute () noexcept -> bool = 0;
+    auto start (String const & testName) noexcept -> void {
+        auto start = std::chrono::high_resolution_clock::now();
+
+        this->logBold("Start of test '%s', on platform : '%s', compiler : '%s', version : '%s', cpp standard : '%s'",
+            testName.cStr(),
+            __CDS_platform_name,
+            __CDS_compiler_name,
+            __CDS_compilerVersionString(),
+            __CDS_cpplang_core_version_name
+        );
+
+        this->execute() ?
+            this->logOK("'%s' test OK, on platform : '%s', compiler : '%s', version : '%s', cpp standard : '%s'",
+                testName.cStr(),
+                __CDS_platform_name,
+                __CDS_compiler_name,
+                __CDS_compilerVersionString(),
+                __CDS_cpplang_core_version_name
+            ):
+            this->logError("'%s' test Not OK, on platform : '%s', on compiler : '%s', version : '%s', cpp standard : '%s'",
+                testName.cStr(),
+                __CDS_platform_name,
+                __CDS_compiler_name,
+                __CDS_compilerVersionString(),
+                __CDS_cpplang_core_version_name
+            );
+
+        auto end = std::chrono::high_resolution_clock::now();
+
+        auto diff = std::chrono::duration_cast < std::chrono::nanoseconds > ( (end - start) );
+
+        double power = std::pow(10, 9);
+        std::cout << "Test Lasted " << diff.count() << " nanoseconds ( " << static_cast < double > (diff.count()) / power << " seconds )" << '\n';
+    }
 
     template < typename Function >
     auto executeSubtest ( String const & title, Function const & subtest ) noexcept -> void {

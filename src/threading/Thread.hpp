@@ -38,7 +38,7 @@ public:
 #endif
     }
 
-    typedef auto ( * ErrorCallback ) ( String const &, Thread *, std::exception const * ) noexcept -> void;
+    using ErrorCallback = auto ( * ) ( String const &, Thread *, std::exception const * ) __CDS_cpplang_FunctionAliasNoexcept -> void;
 
 private:
 
@@ -79,7 +79,7 @@ private:
 
     __CDS_WarningSuppression_UseScopedEnum_SuppressEnable
 
-    constexpr static auto stateToString ( State s ) noexcept -> StringLiteral {
+    __CDS_cpplang_ConstexprConditioned static auto stateToString ( State s ) noexcept -> StringLiteral {
         switch ( s ) {
             case State::CREATED:                return "Not Started";
             case State::RUNNING:                return "Running";
@@ -95,7 +95,16 @@ private:
 
     PrimitiveThread        MUTABLE_SPEC handle         { Thread::PRIMITIVE_NULL_HANDLE };
     Atomic < State >                    state          { Thread::State::CREATED };
+
+#if __CDS_cpplang_InlineStaticVariable_available == true
+
     inline static ErrorCallback         pErrorCallback { nullptr };
+
+#else
+
+    ErrorCallback                       pErrorCallback { nullptr };
+
+#endif
 
     virtual auto run () noexcept (false) -> void = 0;
 
@@ -109,8 +118,18 @@ private:
         } catch ( std::exception const & e ) {
             pThread->state = State::EXCEPTION_TERMINATED;
 
+#if __CDS_cpplang_InlineStaticVariable_available == true
+
             if ( Thread::pErrorCallback != nullptr )
                 Thread::pErrorCallback( "Exception caught in Thread runtime", pThread, & e );
+
+#else
+
+            if ( pThread->pErrorCallback != nullptr )
+                pThread->pErrorCallback( "Exception caught in Thread runtime", pThread, & e );
+
+#endif
+
             else
                 std::cerr << "Exception caught in Thread runtime : " << e.what() << '\n';
         }

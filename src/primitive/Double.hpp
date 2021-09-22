@@ -226,6 +226,8 @@ auto operator _operator (double value) noexcept -> Atomic & {  \
 #undef _PREFIX_OP
 };
 
+#if defined(CDS_DOUBLE_POSTFIX)
+
 __CDS_cpplang_ConstexprDestructor auto operator "" _obj (long double value) noexcept -> Double {
     return static_cast < double > ( value );
 }
@@ -233,5 +235,7 @@ __CDS_cpplang_ConstexprDestructor auto operator "" _obj (long double value) noex
 __CDS_cpplang_ConstexprDestructor auto operator "" _d (long double value) noexcept -> Double {
     return static_cast < double > ( value );
 }
+
+#endif
 
 #endif //CDS_DOUBLE_HPP

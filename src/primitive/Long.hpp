@@ -331,6 +331,8 @@ auto operator _operator (long long int value) noexcept -> Atomic & {  \
 
 };
 
+#if defined(CDS_LONG_PREFIX)
+
 __CDS_cpplang_ConstexprDestructor auto operator "" _obj (unsigned long long int value) noexcept -> Long {
     return static_cast < long long int > ( value );
 }
@@ -338,5 +340,7 @@ __CDS_cpplang_ConstexprDestructor auto operator "" _obj (unsigned long long int 
 __CDS_cpplang_ConstexprDestructor auto operator "" _l (unsigned long long int value) noexcept -> Long {
     return static_cast < long long int > ( value );
 }
+
+#endif
 
 #endif //CDS_LONG_HPP

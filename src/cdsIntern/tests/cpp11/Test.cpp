@@ -43,12 +43,18 @@ static Test::TerminalColor bold (Test::TerminalColor::Modifier::ENABLE_BOLD );
 #include <iostream>
 #include <cstdio>
 #include <cstdarg>
+#include <CDS/Mutex>
+
+static Mutex printLock;
 
 auto Test::log(const String & text) noexcept -> void {
+    printLock.lock();
     std::cout << Test::TerminalColor::clear << this->getDepthString() << text << '\n';
+    printLock.unlock();
 }
 
 auto Test::log(const char * format, ...) noexcept -> void {
+    printLock.lock();
     va_list args;
     va_start(args, format);
 #if !defined(_WIN32)
@@ -58,13 +64,17 @@ auto Test::log(const char * format, ...) noexcept -> void {
     vprintf(format, args);
     printf("\n");
     va_end(args);
+    printLock.unlock();
 }
 
 auto Test::logBold(const String & text) noexcept -> void {
+    printLock.lock();
     std::cout << this->getDepthString() << bold << text << TerminalColor::clear << '\n';
+    printLock.unlock();
 }
 
 auto Test::logBold(const char * format, ...) noexcept -> void {
+    printLock.lock();
     va_list args;
     va_start(args, format);
 #if !defined(_WIN32)
@@ -77,13 +87,17 @@ auto Test::logBold(const char * format, ...) noexcept -> void {
 #endif
     printf("\n");
     va_end(args);
+    printLock.unlock();
 }
 
 auto Test::logOK(const String & text) noexcept -> void {
+    printLock.lock();
     std::cout << this->getDepthString() << testOK << text << TerminalColor::clear << '\n';
+    printLock.unlock();
 }
 
 auto Test::logOK(const char * format, ...) noexcept -> void {
+    printLock.lock();
     va_list args;
     va_start(args, format);
 #if !defined(_WIN32)
@@ -96,14 +110,18 @@ auto Test::logOK(const char * format, ...) noexcept -> void {
 #endif
     printf("\n");
     va_end(args);
+    printLock.unlock();
 }
 
 
 auto Test::logWarning(const String & text) noexcept -> void {
+    printLock.lock();
     std::cout << this->getDepthString() << testWarn << text << TerminalColor::clear << '\n';
+    printLock.unlock();
 }
 
 auto Test::logWarning(const char * format, ...) noexcept -> void {
+    printLock.lock();
     va_list args;
     va_start(args, format);
 #if !defined(_WIN32)
@@ -116,15 +134,19 @@ auto Test::logWarning(const char * format, ...) noexcept -> void {
 #endif
     printf("\n");
     va_end(args);
+    printLock.unlock();
 }
 
 
 
 auto Test::logError(const String & text) noexcept -> void {
+    printLock.lock();
     std::cout << this->getDepthString() << testNOK << text << TerminalColor::clear << '\n';
+    printLock.unlock();
 }
 
 auto Test::logError(const char * format, ...) noexcept -> void {
+    printLock.lock();
     va_list args;
     va_start(args, format);
 #if !defined(_WIN32)
@@ -137,4 +159,5 @@ auto Test::logError(const char * format, ...) noexcept -> void {
 #endif
     printf("\n");
     va_end(args);
+    printLock.unlock();
 }

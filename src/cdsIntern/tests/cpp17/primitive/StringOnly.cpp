@@ -5,6 +5,6 @@
 #include <cdsIntern/tests/cpp20/primitive/StringTest.h>
 
 int main () {
-    StringTest().execute();
+    StringTest().start("String Test");
     return 0;
 }

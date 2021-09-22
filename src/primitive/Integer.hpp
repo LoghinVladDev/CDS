@@ -339,8 +339,12 @@ auto operator _operator (int value) noexcept -> Atomic & {  \
 
 };
 
+#if defined(CDS_INTEGER_POSTFIX)
+
 __CDS_cpplang_ConstexprDestructor auto operator "" _i (unsigned long long int value) noexcept -> Integer {
     return static_cast < int > (value);
 }
+
+#endif
 
 #endif //CDS_INTEGER_HPP
