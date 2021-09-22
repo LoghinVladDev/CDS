@@ -206,75 +206,75 @@ public:
 #define COMMA ,
 
     template < typename Action >
-    __CDS_MaybeUnused auto forEach ( Action const & ) noexcept ( noexcept ( dataTypes::unsafeAddress < Action >()->operator()( * dataTypes::unsafeAddress < T > () ) ) ) -> void __CDS_Requires ( IsActionOver < Action COMMA T > );
+    __CDS_MaybeUnused auto forEach ( Action const & ) noexcept ( noexcept ( ( * dataTypes :: unsafeAddress < Action > () ) ( Type < ElementType > :: unsafeReference() ) ) ) -> void __CDS_Requires ( IsActionOver < Action COMMA T > );
     template < typename Action >
-    __CDS_MaybeUnused auto forEach ( Action const & ) const noexcept ( noexcept ( dataTypes::unsafeAddress < Action >()->operator()( * dataTypes::unsafeAddress < T > () ) ) ) -> void __CDS_Requires ( IsActionOver < Action COMMA T > );
+    __CDS_MaybeUnused auto forEach ( Action const & ) const noexcept ( noexcept ( ( * dataTypes :: unsafeAddress < Action > () ) ( Type < ElementType const > :: unsafeReference() ) ) ) -> void __CDS_Requires ( IsActionOver < Action COMMA T > );
 
     template < typename Predicate = std::function < bool ( ElementType const & ) > >
-    __CDS_MaybeUnused inline auto some ( Size count, Predicate const & predicate = []( ElementType const & ) noexcept -> bool { return true; } ) noexcept ( noexcept ( dataTypes::unsafeAddress < Predicate >()->operator()( * dataTypes::unsafeAddress < T > () ) ) ) -> bool __CDS_Requires( IsPredicateOver < Predicate COMMA T > ) {
+    __CDS_MaybeUnused inline auto some ( Size count, Predicate const & predicate = []( ElementType const & ) noexcept -> bool { return true; } ) noexcept ( noexcept ( ( * dataTypes :: unsafeAddress < Predicate > () ) ( Type < ElementType > :: unsafeReference() ) ) ) -> bool __CDS_Requires( IsPredicateOver < Predicate COMMA T > ) {
         return this->count(predicate) == count;
     }
 
     template < typename Predicate = std::function < bool ( ElementType const & ) > >
-    __CDS_MaybeUnused inline auto some ( Size count, Predicate const & predicate = []( ElementType const & ) noexcept -> bool { return true; } ) const noexcept ( noexcept ( dataTypes::unsafeAddress < Predicate >()->operator()( * dataTypes::unsafeAddress < T > () ) ) ) -> bool __CDS_Requires( IsPredicateOver < Predicate COMMA T > ) {
+    __CDS_MaybeUnused inline auto some ( Size count, Predicate const & predicate = []( ElementType const & ) noexcept -> bool { return true; } ) const noexcept ( noexcept ( ( * dataTypes :: unsafeAddress < Predicate > () ) ( Type < ElementType const > :: unsafeReference() ) ) ) -> bool __CDS_Requires( IsPredicateOver < Predicate COMMA T > ) {
         return this->count(predicate) == count;
     }
 
     template < typename Predicate = std::function < bool ( ElementType const & ) > >
-    __CDS_MaybeUnused inline auto atLeast ( Size count, Predicate const & predicate = []( ElementType const & ) noexcept -> bool { return true; } ) noexcept ( noexcept ( dataTypes::unsafeAddress < Predicate >()->operator()( * dataTypes::unsafeAddress < T > () ) ) ) -> bool __CDS_Requires( IsPredicateOver < Predicate COMMA T > ) {
+    __CDS_MaybeUnused inline auto atLeast ( Size count, Predicate const & predicate = []( ElementType const & ) noexcept -> bool { return true; } ) noexcept ( noexcept ( ( * dataTypes :: unsafeAddress < Predicate > () ) ( Type < ElementType > :: unsafeReference() ) ) ) -> bool __CDS_Requires( IsPredicateOver < Predicate COMMA T > ) {
         return this->count(predicate) >= count;
     }
 
     template < typename Predicate = std::function < bool ( ElementType const & ) > >
-    __CDS_MaybeUnused inline auto atLeast ( Size count, Predicate const & predicate = []( ElementType const & ) noexcept -> bool { return true; } ) const noexcept ( noexcept ( dataTypes::unsafeAddress < Predicate >()->operator()( * dataTypes::unsafeAddress < T > () ) ) ) -> bool __CDS_Requires( IsPredicateOver < Predicate COMMA T > ) {
+    __CDS_MaybeUnused inline auto atLeast ( Size count, Predicate const & predicate = []( ElementType const & ) noexcept -> bool { return true; } ) const noexcept ( noexcept ( ( * dataTypes :: unsafeAddress < Predicate > () ) ( Type < ElementType const > :: unsafeReference() ) ) ) -> bool __CDS_Requires( IsPredicateOver < Predicate COMMA T > ) {
         return this->count(predicate) >= count;
     }
 
     template < typename Predicate = std::function < bool ( ElementType const & ) > >
-    __CDS_MaybeUnused inline auto atMost ( Size count, Predicate const & predicate = []( ElementType const & ) noexcept -> bool { return true; } ) noexcept ( noexcept ( dataTypes::unsafeAddress < Predicate >()->operator()( * dataTypes::unsafeAddress < T > () ) ) ) -> bool __CDS_Requires( IsPredicateOver < Predicate COMMA T > ) {
+    __CDS_MaybeUnused inline auto atMost ( Size count, Predicate const & predicate = []( ElementType const & ) noexcept -> bool { return true; } ) noexcept ( noexcept ( ( * dataTypes :: unsafeAddress < Predicate > () ) ( Type < ElementType > :: unsafeReference() ) ) ) -> bool __CDS_Requires( IsPredicateOver < Predicate COMMA T > ) {
         return this->count(predicate) <= count;
     }
 
     template < typename Predicate = std::function < bool ( ElementType const & ) > >
-    __CDS_MaybeUnused inline auto atMost ( Size count, Predicate const & predicate = []( ElementType const & ) noexcept -> bool { return true; } ) const noexcept ( noexcept ( dataTypes::unsafeAddress < Predicate >()->operator()( * dataTypes::unsafeAddress < T > () ) ) ) -> bool __CDS_Requires( IsPredicateOver < Predicate COMMA T > ) {
+    __CDS_MaybeUnused inline auto atMost ( Size count, Predicate const & predicate = []( ElementType const & ) noexcept -> bool { return true; } ) const noexcept ( noexcept ( ( * dataTypes :: unsafeAddress < Predicate > () ) ( Type < ElementType const > :: unsafeReference() ) ) ) -> bool __CDS_Requires( IsPredicateOver < Predicate COMMA T > ) {
         return this->count(predicate) <= count;
     }
 
     template < typename Predicate = std::function < bool ( ElementType const & ) > >
-    __CDS_MaybeUnused inline auto moreThan ( Size count, Predicate const & predicate = []( ElementType const & ) noexcept -> bool { return true; } ) noexcept ( noexcept ( dataTypes::unsafeAddress < Predicate >()->operator()( * dataTypes::unsafeAddress < T > () ) ) ) -> bool __CDS_Requires( IsPredicateOver < Predicate COMMA T > ) {
+    __CDS_MaybeUnused inline auto moreThan ( Size count, Predicate const & predicate = []( ElementType const & ) noexcept -> bool { return true; } ) noexcept ( noexcept ( ( * dataTypes :: unsafeAddress < Predicate > () ) ( Type < ElementType > :: unsafeReference() ) ) ) -> bool __CDS_Requires( IsPredicateOver < Predicate COMMA T > ) {
         return this->atLeast ( count, predicate );
     }
 
     template < typename Predicate = std::function < bool ( ElementType const & ) > >
-    __CDS_MaybeUnused inline auto moreThan ( Size count, Predicate const & predicate = []( ElementType const & ) noexcept -> bool { return true; } ) const noexcept ( noexcept ( dataTypes::unsafeAddress < Predicate >()->operator()( * dataTypes::unsafeAddress < T > () ) ) ) -> bool __CDS_Requires( IsPredicateOver < Predicate COMMA T > ) {
+    __CDS_MaybeUnused inline auto moreThan ( Size count, Predicate const & predicate = []( ElementType const & ) noexcept -> bool { return true; } ) const noexcept ( noexcept ( ( * dataTypes :: unsafeAddress < Predicate > () ) ( Type < ElementType const > :: unsafeReference() ) ) ) -> bool __CDS_Requires( IsPredicateOver < Predicate COMMA T > ) {
         return this->atLeast ( count, predicate );
     }
 
     template < typename Predicate = std::function < bool ( ElementType const & ) > >
-    __CDS_MaybeUnused inline auto lessThan ( Size count, Predicate const & predicate = []( ElementType const & ) noexcept -> bool { return true; } ) noexcept ( noexcept ( dataTypes::unsafeAddress < Predicate >()->operator()( * dataTypes::unsafeAddress < T > () ) ) ) -> bool __CDS_Requires( IsPredicateOver < Predicate COMMA T > ) {
+    __CDS_MaybeUnused inline auto lessThan ( Size count, Predicate const & predicate = []( ElementType const & ) noexcept -> bool { return true; } ) noexcept ( noexcept ( ( * dataTypes :: unsafeAddress < Predicate > () ) ( Type < ElementType > :: unsafeReference() ) ) ) -> bool __CDS_Requires( IsPredicateOver < Predicate COMMA T > ) {
         return this->lessThan ( count, predicate );
     }
 
     template < typename Predicate = std::function < bool ( ElementType const & ) > >
-    __CDS_MaybeUnused inline auto lessThan ( Size count, Predicate const & predicate = []( ElementType const & ) noexcept -> bool { return true; } ) const noexcept ( noexcept ( dataTypes::unsafeAddress < Predicate >()->operator()( * dataTypes::unsafeAddress < T > () ) ) ) -> bool __CDS_Requires( IsPredicateOver < Predicate COMMA T > ) {
+    __CDS_MaybeUnused inline auto lessThan ( Size count, Predicate const & predicate = []( ElementType const & ) noexcept -> bool { return true; } ) const noexcept ( noexcept ( ( * dataTypes :: unsafeAddress < Predicate > () ) ( Type < ElementType const > :: unsafeReference() ) ) ) -> bool __CDS_Requires( IsPredicateOver < Predicate COMMA T > ) {
         return this->lessThan ( count, predicate );
     }
 
     template < typename Predicate = std::function < bool ( ElementType const & ) > >
-    __CDS_MaybeUnused auto count ( Predicate const & = []( ElementType const & ) noexcept -> bool { return true; } ) noexcept ( noexcept ( dataTypes::unsafeAddress < Predicate >()->operator()( * dataTypes::unsafeAddress < T > () ) ) ) -> Size __CDS_Requires( IsPredicateOver < Predicate COMMA T > );
+    __CDS_MaybeUnused auto count ( Predicate const & = []( ElementType const & ) noexcept -> bool { return true; } ) noexcept ( noexcept ( ( * dataTypes :: unsafeAddress < Predicate > () ) ( Type < ElementType > :: unsafeReference() ) ) ) -> Size __CDS_Requires( IsPredicateOver < Predicate COMMA T > );
 
     template < typename Predicate = std::function < bool ( ElementType const & ) > >
-    __CDS_MaybeUnused auto count ( Predicate const & = []( ElementType const & ) noexcept -> bool { return true; } ) const noexcept ( noexcept ( dataTypes::unsafeAddress < Predicate >()->operator()( * dataTypes::unsafeAddress < T > () ) ) ) -> Size __CDS_Requires( IsPredicateOver < Predicate COMMA T > );
+    __CDS_MaybeUnused auto count ( Predicate const & = []( ElementType const & ) noexcept -> bool { return true; } ) const noexcept ( noexcept ( ( * dataTypes :: unsafeAddress < Predicate > () ) ( Type < ElementType const > :: unsafeReference() ) ) ) -> Size __CDS_Requires( IsPredicateOver < Predicate COMMA T > );
 
     template < typename Predicate >
-    __CDS_MaybeUnused inline auto any ( Predicate const & p ) noexcept ( noexcept ( dataTypes::unsafeAddress < Predicate >()->operator()( * dataTypes::unsafeAddress < T > () ) ) ) -> bool __CDS_Requires( IsPredicateOver < Predicate COMMA T > ) { return this->atLeast ( 1, p ); }
+    __CDS_MaybeUnused inline auto any ( Predicate const & p ) noexcept ( noexcept ( ( * dataTypes :: unsafeAddress < Predicate > () ) ( Type < ElementType > :: unsafeReference() ) ) ) -> bool __CDS_Requires( IsPredicateOver < Predicate COMMA T > ) { return this->atLeast ( 1, p ); }
     template < typename Predicate >
-    __CDS_MaybeUnused inline auto any ( Predicate const & p ) const noexcept ( noexcept ( dataTypes::unsafeAddress < Predicate >()->operator()( * dataTypes::unsafeAddress < T > () ) ) ) -> bool __CDS_Requires( IsPredicateOver < Predicate COMMA T > ) { return this->atLeast ( 1, p ); }
+    __CDS_MaybeUnused inline auto any ( Predicate const & p ) const noexcept ( noexcept ( ( * dataTypes :: unsafeAddress < Predicate > () ) ( Type < ElementType const > :: unsafeReference() ) ) ) -> bool __CDS_Requires( IsPredicateOver < Predicate COMMA T > ) { return this->atLeast ( 1, p ); }
 
     template < typename Predicate >
-    __CDS_MaybeUnused inline auto all ( Predicate const & p ) noexcept ( noexcept ( dataTypes::unsafeAddress < Predicate >()->operator()( * dataTypes::unsafeAddress < T > () ) ) ) -> bool __CDS_Requires( IsPredicateOver < Predicate COMMA T > ) { return ! this->any ( [&p] (T & e) noexcept -> bool { return ! p(e); } ); }
+    __CDS_MaybeUnused inline auto all ( Predicate const & p ) noexcept ( noexcept ( ( * dataTypes :: unsafeAddress < Predicate > () ) ( Type < ElementType > :: unsafeReference() ) ) ) -> bool __CDS_Requires( IsPredicateOver < Predicate COMMA T > ) { return ! this->any ( [&p] (T & e) noexcept -> bool { return ! p(e); } ); }
     template < typename Predicate >
-    __CDS_MaybeUnused inline auto all ( Predicate const & p ) const noexcept ( noexcept ( dataTypes::unsafeAddress < Predicate >()->operator()( * dataTypes::unsafeAddress < T > () ) ) ) -> bool __CDS_Requires( IsPredicateOver < Predicate COMMA T > ) { return ! this->any ( [&p] (T const & e) noexcept -> bool { return ! p(e); } ); }
+    __CDS_MaybeUnused inline auto all ( Predicate const & p ) const noexcept ( noexcept ( ( * dataTypes :: unsafeAddress < Predicate > () ) ( Type < ElementType const > :: unsafeReference() ) ) ) -> bool __CDS_Requires( IsPredicateOver < Predicate COMMA T > ) { return ! this->any ( [&p] (T const & e) noexcept -> bool { return ! p(e); } ); }
 
 #undef COMMA
 
@@ -295,7 +295,7 @@ public:
 
 template < typename T >
 template < typename Action >
-auto Collection<T>::forEach ( Action const & a ) noexcept ( noexcept ( dataTypes::unsafeAddress < Action >()->operator()( * dataTypes::unsafeAddress < T > () ) ) ) -> void __CDS_Requires( IsActionOver < Action COMMA T > ) {
+auto Collection<T>::forEach ( Action const & a ) noexcept ( noexcept ( ( * dataTypes :: unsafeAddress < Action > () ) ( Type < ElementType > :: unsafeReference() ) ) ) -> void __CDS_Requires( IsActionOver < Action COMMA T > ) {
     auto begin = this->beginPtr();
     auto end = this->endPtr();
 
@@ -308,7 +308,7 @@ auto Collection<T>::forEach ( Action const & a ) noexcept ( noexcept ( dataTypes
 
 template < typename T >
 template < typename Action >
-auto Collection<T>::forEach ( Action const & a ) const noexcept ( noexcept ( dataTypes::unsafeAddress < Action >()->operator()( * dataTypes::unsafeAddress < T > () ) ) ) -> void __CDS_Requires( IsActionOver < Action COMMA T > ) {
+auto Collection<T>::forEach ( Action const & a ) const noexcept ( noexcept ( ( * dataTypes :: unsafeAddress < Action > () ) ( Type < ElementType const > :: unsafeReference() ) ) ) -> void __CDS_Requires( IsActionOver < Action COMMA T > ) {
     auto begin = this->beginPtr();
     auto end = this->endPtr();
 
@@ -321,7 +321,7 @@ auto Collection<T>::forEach ( Action const & a ) const noexcept ( noexcept ( dat
 
 template < typename T >
 template < typename Predicate >
-auto Collection<T>::count ( Predicate const & p ) noexcept ( noexcept ( dataTypes::unsafeAddress < Predicate >()->operator()( * dataTypes::unsafeAddress < T > () ) ) ) -> Size __CDS_Requires( IsPredicateOver < Predicate COMMA T > ) {
+auto Collection<T>::count ( Predicate const & p ) noexcept ( noexcept ( ( * dataTypes :: unsafeAddress < Predicate > () ) ( Type < ElementType > :: unsafeReference() ) ) ) -> Size __CDS_Requires( IsPredicateOver < Predicate COMMA T > ) {
     Size trueCount = 0;
 
     auto pBegin = this->beginPtr();
@@ -339,7 +339,7 @@ auto Collection<T>::count ( Predicate const & p ) noexcept ( noexcept ( dataType
 
 template < typename T >
 template < typename Predicate >
-auto Collection<T>::count ( Predicate const & p ) const noexcept ( noexcept ( dataTypes::unsafeAddress < Predicate >()->operator()( * dataTypes::unsafeAddress < T > () ) ) ) -> Size __CDS_Requires( IsPredicateOver < Predicate COMMA T > ) {
+auto Collection<T>::count ( Predicate const & p ) const noexcept ( noexcept ( ( * dataTypes :: unsafeAddress < Predicate > () ) ( Type < ElementType const > :: unsafeReference() ) ) ) -> Size __CDS_Requires( IsPredicateOver < Predicate COMMA T > ) {
     Size trueCount = 0;
 
     auto pBegin = this->beginPtr();

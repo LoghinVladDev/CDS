@@ -9,6 +9,8 @@
 
 /**
  * @class Object Derived container for a Boolean Value
+ *
+ * @test Test in primitive/BooleanTest
  */
 class Boolean : public Object {
 private:
@@ -276,7 +278,7 @@ public:
      *
      * @test Tested in primitive/BooleanTest/any
      */
-    __CDS_NoDiscard constexpr inline auto get () const noexcept -> bool {
+    __CDS_NoDiscard constexpr auto get () const noexcept -> bool {
         return this->v;
     }
 
@@ -302,7 +304,7 @@ public:
      *
      * @test Tested in primitive/BooleanTest
      */
-    __CDS_NoDiscard inline auto toString () const noexcept -> String override {
+    __CDS_NoDiscard __CDS_cpplang_ConstexprDestructor auto toString () const noexcept -> String override {
         return String().append(this->v ? "true" : "false");
     }
 
@@ -311,13 +313,15 @@ public:
      *
      * @param string : String cref = String object containing representation
      *
+     * @static
+     *
      * @exceptsafe
      *
      * @return Boolean = value obtained from String
      *
      * @test Tested in primitive/BooleanTest/Operator Tests
      */
-    inline static auto parse(String const & string) noexcept -> Boolean {
+    __CDS_cpplang_ConstexprDestructor static auto parse(String const & string) noexcept -> Boolean {
         if ( string.empty() ) return false;
 
         return string == "true";
@@ -352,44 +356,195 @@ namespace hidden {
 
 class Boolean::Atomic : public hidden::_AtomicBaseBoolean { // NOLINT(bugprone-reserved-identifier)
 public:
+
+    /**
+     * @brief Default Constructor for Wrapper Type - Atomic < Boolean > - encapsulating a Boolean variable
+     *
+     * @exceptsafe
+     * @threadsafe
+     *
+     * @test Tested in primitive/BooleanTest/Boolean::Atomic Tests
+     */
     inline Atomic () noexcept {
         this->set(false);
     }
 
-    inline Atomic ( Atomic const & obj ) noexcept : hidden::_AtomicBaseBoolean(obj) { } /* NOLINT(modernize-use-equals-default) */
-    inline Atomic ( Atomic && obj ) noexcept : hidden::_AtomicBaseBoolean(obj) { } // NOLINT(performance-move-constructor-init)
+    /**
+     * @brief Copy Constructor for Atomic < Boolean > type
+     *
+     * @param obj : Atomic cref = Constant Reference to an Atomic < Boolean > Object
+     *
+     * @exceptsafe
+     * @threadsafe
+     *
+     * @test Tested in primitive/BooleanTest/Boolean::Atomic Tests
+     */
+    inline Atomic ( Atomic const & obj ) noexcept : hidden::_AtomicBaseBoolean(obj) { } /* NOLINT(modernize-use-equals-default,google-explicit-constructor) */
+
+    /**
+     * @brief Move Constructor using an Atomic < Boolean > type value
+     *
+     * @param obj : Atomic mref = Move Reference ( rvalue ) to an Atomic < Boolean > Object
+     *
+     * @exceptsafe
+     * @threadsafe
+     *
+     * @test Tested in primitive/BooleanTest/Boolean::Atomic Tests
+     */
+    inline Atomic ( Atomic && obj ) noexcept : hidden::_AtomicBaseBoolean(obj) { } // NOLINT(performance-move-constructor-init,google-explicit-constructor)
+
+    /**
+     * @brief Constructor from Boolean Object
+     *
+     * @param v : Boolean cref = Constant Reference to a Boolean Object
+     *
+     * @exceptsafe
+     * @threadsafe
+     *
+     * @test Tested in primitive/BooleanTest/Boolean::Atomic Tests
+     */
     inline Atomic ( Boolean const & v ) noexcept : hidden::_AtomicBaseBoolean(v) { } // NOLINT(google-explicit-constructor)
+
+    /**
+     * @brief Constructor from Boolean Object
+     *
+     * @param v : Boolean mref = Move Reference ( rvalue ) to a Boolean Object
+     *
+     * @exceptsafe
+     * @threadsafe
+     *
+     * @test Tested in primitive/BooleanTest/Boolean::Atomic Tests
+     */
     inline Atomic ( Boolean && v ) noexcept : hidden::_AtomicBaseBoolean(v) { } // NOLINT(google-explicit-constructor)
 
+    /**
+     * @brief Constructor from bool literal
+     *
+     * @param v : bool = value to assign
+     *
+     * @exceptsafe
+     * @threadsafe
+     *
+     * @test Tested in primitive/BooleanTest/Boolean::Atomic Tests
+     */
     inline Atomic (bool v) noexcept { // NOLINT(google-explicit-constructor)
         this->set(v);
     }
 
+    /**
+     * @brief Assignment Operator
+     *
+     * @param value : bool = value to assign
+     *
+     * @exceptsafe
+     * @threadsafe
+     *
+     * @returns Atomic & = Reference to the modified Object
+     *
+     * @test Tested in primitive/BooleanTest/Boolean::Atomic Tests
+     */
     inline auto operator = (bool value) noexcept -> Atomic & {
         this->set(Boolean(value));
         return * this;
     }
 
+    /**
+     * @brief Assignment Operator
+     *
+     * @param obj : Boolean cref = Constant Reference to the Object to acquire the value to assign from
+     *
+     * @exceptsafe
+     * @threadsafe
+     *
+     * @returns Atomic & = Reference to the modified Object
+     *
+     * @test Tested in primitive/BooleanTest/Boolean::Atomic Tests
+     */
     inline auto operator = (Boolean const & obj) noexcept -> Atomic & override {
         this->set(obj);
         return * this;
     }
 
+    /**
+     * @brief Assignment Operator
+     *
+     * @param obj : Atomic < Boolean > cref = Constant Reference to the Object to acquire the value to assign from
+     *
+     * @exceptsafe
+     * @threadsafe
+     *
+     * @returns Atomic & = Reference to the modified Object
+     *
+     * @test Tested in primitive/BooleanTest/Boolean::Atomic Tests
+     */
     inline auto operator = (Atomic const &) noexcept -> Atomic & = default;
+
+    /**
+     * @brief Move Assignment Operator
+     *
+     * @param obj : Atomic < Boolean > mref = Move Reference to the Object to move the value to assign from
+     *
+     * @exceptsafe
+     * @threadsafe
+     *
+     * @returns Atomic & = Reference to the modified Object
+     *
+     * @test Tested in primitive/BooleanTest/Boolean::Atomic Tests
+     */
     inline auto operator = (Atomic &&) noexcept -> Atomic & = default;
 
+    /**
+     * @brief Conversion Specification to contained type
+     *
+     * @exceptsafe
+     * @threadsafe
+     *
+     * @returns Boolean = new Boolean object containing same contained value
+     *
+     * @test Tested in primitive/BooleanTest/Boolean::Atomic Tests
+     */
     inline operator Boolean () const noexcept { // NOLINT(google-explicit-constructor)
         return this->get();
     }
 
+    /**
+     * @brief Conversion Specification to bool literal type
+     *
+     * @exceptsafe
+     * @threadsafe
+     *
+     * @returns bool = contained value
+     *
+     * @test Tested in primitive/BooleanTest/Boolean::Atomic Tests
+     */
     inline operator bool () const noexcept { // NOLINT(google-explicit-constructor)
         return this->get().get();
     }
 
+    /**
+     * @brief toString Function
+     *
+     * @exceptsafe
+     * @threadsafe
+     *
+     * @returns String = Object string representation
+     *
+     * @test Tested in primitive/BooleanTest/Boolean::Atomic Tests
+     */
     __CDS_NoDiscard inline auto toString() const noexcept -> String override {
         return this->get().toString();
     }
 
+    /**
+     * @brief Hash Function
+     *
+     * @exceptsafe
+     * @threadsafe
+     *
+     * @returns Index = Hash Value of Object
+     *
+     * @test Tested in primitive/BooleanTest/Boolean::Atomic Tests
+     */
     inline auto hash () const noexcept -> Index override {
         return this->get().hash();
     }
@@ -397,6 +552,15 @@ public:
 
 #if defined(CDS_BOOLEAN_POSTFIX)
 
+/**
+ * @brief Transformation postfix literal
+ *
+ * @exceptsafe
+ *
+ * @returns Boolean = new Boolean object containing requested value
+ *
+ * @test Tested in primitive/BooleanTest
+ */
 __CDS_cpplang_ConstexprDestructor auto operator "" _b (unsigned long long int i) noexcept -> Boolean {
     return {i != 0};
 }
@@ -405,12 +569,26 @@ __CDS_cpplang_ConstexprDestructor auto operator "" _b (unsigned long long int i)
 
 #if __CDS_cpplang_core_version >= __CDS_cpplang_core_version_17
 
+/**
+ * Boolean Constant describing True Value
+ */
 __CDS_cpplang_ConstexprDestructor const Boolean True = true;
+
+/**
+ * Boolean Constant describing False Value
+ */
 __CDS_cpplang_ConstexprDestructor const Boolean False = false;
 
 #else
 
+/**
+ * Boolean Constant describing True Value
+ */
 #define True true
+
+/**
+ * Boolean Constant describing False Value
+ */
 #define False false
 
 #endif

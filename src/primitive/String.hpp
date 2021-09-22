@@ -875,7 +875,7 @@ public:
      *
      * @test tested in primitive/StringTest/Constructor Tests
      */
-    String(IteratorBase const & begin, IteratorBase const & end) noexcept : CONSTR_CLEAR() {
+    __CDS_cpplang_ConstexprDestructor String(IteratorBase const & begin, IteratorBase const & end) noexcept : CONSTR_CLEAR() {
         bool reversed = dynamic_cast < Iterator const * > ( & begin ) == nullptr;
         if ( ! reversed && end - begin <= 0 || reversed && begin - end <= 0)
             return;
@@ -899,7 +899,7 @@ public:
      *
      * @test tested in primitive/StringTest/Constructor Tests
      */
-    String(ConstIteratorBase const & begin, ConstIteratorBase const & end) noexcept : CONSTR_CLEAR() {
+    __CDS_cpplang_ConstexprDestructor String(ConstIteratorBase const & begin, ConstIteratorBase const & end) noexcept : CONSTR_CLEAR() {
         bool reversed = dynamic_cast < ConstIterator const * > ( & begin ) == nullptr;
         if ( ! reversed && end - begin <= 0 || reversed && begin - end <= 0)
             return;

@@ -4,7 +4,7 @@
 #include <cdsIntern/tests/cpp20/primitive/IntegerTest.h>
 
 int main () {
-    IntegerTest().execute();
+    IntegerTest().start("Integer Test");
     return 0;
 }
 
