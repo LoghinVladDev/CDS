@@ -5,9 +5,11 @@
 #ifndef CDS_LONGTEST_H
 #define CDS_LONGTEST_H
 
+#include <cdsIntern/tests/cpp11/Test.h>
 
-class LongTest {
-
+class LongTest : public Test{
+public:
+    bool execute() noexcept override;
 };
 
 

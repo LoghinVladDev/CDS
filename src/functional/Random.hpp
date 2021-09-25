@@ -67,6 +67,7 @@ private:
 
         auto get () noexcept -> ValueType { return this->distribution(this->twisterEngine); }
         inline auto operator () () noexcept -> ValueType { return this->get(); }
+        inline explicit operator ValueType () noexcept { return this->get(); } // NOLINT(google-explicit-constructor)
         constexpr auto low () const noexcept -> ValueType { return this->_lowerBound; }
         constexpr auto high () const noexcept -> ValueType { return this->_higherBound; }
 

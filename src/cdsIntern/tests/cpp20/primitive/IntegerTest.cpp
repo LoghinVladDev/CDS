@@ -6,6 +6,7 @@
 
 #include "primitive/Integer.hpp"
 #include <CDS/Range>
+#include <CDS/Thread>
 
 auto IntegerTest::execute() noexcept -> bool{
 
@@ -177,7 +178,14 @@ auto IntegerTest::execute() noexcept -> bool{
 
 #undef ALGEBRAIC_OP_TEST
 
+        try {
+            int x = 5;
+            Integer y;
 
+            x / y;
+        } catch ( Exception const & e ) {
+            this->log("Caught %s, intended", e.toString().cStr());
+        }
 
     });
 
@@ -379,7 +387,7 @@ auto IntegerTest::execute() noexcept -> bool{
                 this->log("Thread 'syncTestThread', ID: %d ended", th);
             };
 
-            Array < SharedPointer < Runnable < decltype (syncTestThread) > > > threads {
+            Array < SharedPointer < Thread > > threads {
                 new Runnable < decltype (syncTestThread) > ( syncTestThread ),
                 new Runnable < decltype (syncTestThread) > ( syncTestThread ),
                 new Runnable < decltype (syncTestThread) > ( syncTestThread ),
@@ -417,10 +425,10 @@ auto IntegerTest::execute() noexcept -> bool{
                 new Runnable < decltype (syncTestThread) > ( syncTestThread ),
             };
 
-            threads.forEach([](PointerBase < Runnable < decltype (syncTestThread) > > & thread ){
+            threads.forEach([](PointerBase < Thread > & thread ){
                thread->start();
             });
-            threads.forEach([](PointerBase < Runnable < decltype (syncTestThread) > > & thread ){
+            threads.forEach([](PointerBase < Thread > & thread ){
                thread->join();
             });
 
@@ -428,7 +436,139 @@ auto IntegerTest::execute() noexcept -> bool{
                 this->logWarning("Thread Sync Error");
                 allOk = false;
             }
+
+            index = 0;
+
+            auto numbers = Array < Integer :: Atomic >();
+            numbers.resize( Integer::random(30, 100) );
+
+            Mutex distLock;
+            HashMap < Boolean, Integer > dist;
+
+            auto opFunction = [&] {
+                Integer::RandomGenerator generator(10, 50);
+                Integer::RandomGenerator rIn(0, (int)numbers.size() - 1);
+                int threadIndex = index ++;
+
+                for ( auto & e : numbers )
+                    for (auto _ : Range(generator.get()))
+                        e = generator.get();
+
+                for ( auto & e : numbers ) {
+                    for (auto _: Range(generator.get()))
+                        e = numbers[(int)rIn];
+
+                    for (auto _: Range(generator.get()))
+                        e = numbers[(int)rIn];
+                }
+
+                for (auto _: Range(generator.get()))
+                    numbers[(int)rIn] ++;
+                for (auto _: Range(generator.get()))
+                    -- numbers[(int)rIn];
+                for (auto _: Range(generator.get()))
+                    numbers[(int)rIn] --;
+                for (auto _: Range(generator.get()))
+                    ++ numbers[(int)rIn];
+
+                for (auto _: Range(generator.get()))
+                    if ( numbers[(int)rIn] == numbers[(int)rIn] ) {
+                        distLock.lock();
+                        dist[true]++;
+                        distLock.unlock();
+                    } else if ( numbers[(int)rIn] == numbers[(int)rIn].get() ){
+                        distLock.lock();
+                        dist[true] ++;
+                        distLock.unlock();
+                    } else if ( numbers[(int)rIn].get() == numbers[(int)rIn] ){
+                        distLock.lock();
+                        dist[true] ++;
+                        distLock.unlock();
+                    } else if ( numbers[(int)rIn] != numbers[(int)rIn] ) {
+                        distLock.lock();
+                        dist[false]++;
+                        distLock.unlock();
+                    } else if ( numbers[(int)rIn] != numbers[(int)rIn].get() ){
+                        distLock.lock();
+                        dist[false] ++;
+                        distLock.unlock();
+                    } else if ( numbers[(int)rIn].get() != numbers[(int)rIn] ){
+                        distLock.lock();
+                        dist[false] ++;
+                        distLock.unlock();
+                    }
+
+                for ( auto _ : Range( (int)generator ) ) {
+                    numbers[(int)rIn] = numbers[(int)rIn] + numbers[(int)rIn];
+                    numbers[(int)rIn] = numbers[(int)rIn] - numbers[(int)rIn];
+                    numbers[(int)rIn] = numbers[(int)rIn] * numbers[(int)rIn];
+
+                    try {
+                        numbers[(int) rIn] = numbers[(int) rIn] / numbers[(int) rIn];
+                    } catch ( ArithmeticException const & e ) {
+                        this->log("Caught %s, intended", e.toString().cStr());
+                    }
+
+                    try {
+                        numbers[(int) rIn] = numbers[(int) rIn] % numbers[(int) rIn];
+                    } catch ( std :: exception const & t ) {
+                        this->log("Caught %s, intended", t.what());
+                    }
+
+                    numbers[(int)rIn] = numbers[(int)rIn] & numbers[(int)rIn];
+                    numbers[(int)rIn] = numbers[(int)rIn] | numbers[(int)rIn];
+                    numbers[(int)rIn] = numbers[(int)rIn] ^ numbers[(int)rIn];
+                    numbers[(int)rIn] = numbers[(int)rIn] >> numbers[(int)rIn];
+                    numbers[(int)rIn] = numbers[(int)rIn] << numbers[(int)rIn];
+
+                    numbers[(int)rIn] += numbers[(int)rIn];
+                    numbers[(int)rIn] -= numbers[(int)rIn];
+                    numbers[(int)rIn] *= numbers[(int)rIn];
+
+                    try {
+                        numbers[(int) rIn] /= numbers[(int) rIn];
+                    } catch ( ArithmeticException const & ) {
+
+                    }
+
+                    try {
+                        numbers[(int) rIn] %= numbers[(int) rIn];
+                    } catch ( Exception const & ) {
+
+                    }
+
+                    numbers[(int)rIn] &= numbers[(int)rIn];
+                    numbers[(int)rIn] >>= numbers[(int)rIn];
+                    numbers[(int)rIn] <<= numbers[(int)rIn];
+
+                    bool v1 = numbers[(int)rIn] <= numbers[(int)rIn];
+                    v1 = numbers[(int)rIn] >= numbers[(int)rIn];
+                    v1 = numbers[(int)rIn] > numbers[(int)rIn];
+                    v1 = numbers[(int)rIn] < numbers[(int)rIn];
+                    v1 = numbers[(int)rIn] == numbers[(int)rIn];
+                    v1 = numbers[(int)rIn] != numbers[(int)rIn];
+                }
+            };
+
+            Array < SharedPointer < Thread > > opThreads;
+            for ( auto _ : Range((Index)Thread::hardwareConcurrency() * 8) )
+                opThreads.add( new Runnable < decltype (opFunction) > (opFunction) );
+
+            opThreads.forEach([](PointerBase < Thread > & thread ){
+                thread->start();
+            });
+            opThreads.forEach([](PointerBase < Thread > & thread ){
+                thread->join();
+            });
+
+            this->log("Equality Distribution : %s", dist.toString().cStr());
+            this->log("Numbers : %s", numbers.sequence()
+                    .map([](Integer::Atomic const & o){return (Integer)o;})
+                    .toLinkedList().toString().cStr()
+            );
         });
+
+        Exception e;
     });
 
     return allOk;

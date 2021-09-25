@@ -347,14 +347,14 @@ public:
 };
 
 #include <CDS/Atomic>
-namespace hidden {
+namespace __CDS_HiddenUtility { // NOLINT(bugprone-reserved-identifier)
     /**
      * @brief Wrapper name used to avoid naming conflicts
      */
     using _AtomicBaseBoolean = Atomic<Boolean>; // NOLINT(bugprone-reserved-identifier)
 }
 
-class Boolean::Atomic : public hidden::_AtomicBaseBoolean { // NOLINT(bugprone-reserved-identifier)
+class Boolean::Atomic : public __CDS_HiddenUtility::_AtomicBaseBoolean { // NOLINT(bugprone-reserved-identifier)
 public:
 
     /**
@@ -379,7 +379,7 @@ public:
      *
      * @test Tested in primitive/BooleanTest/Boolean::Atomic Tests
      */
-    inline Atomic ( Atomic const & obj ) noexcept : hidden::_AtomicBaseBoolean(obj) { } /* NOLINT(modernize-use-equals-default,google-explicit-constructor) */
+    inline Atomic ( Atomic const & obj ) noexcept : __CDS_HiddenUtility::_AtomicBaseBoolean(obj) { } /* NOLINT(modernize-use-equals-default,google-explicit-constructor) */
 
     /**
      * @brief Move Constructor using an Atomic < Boolean > type value
@@ -391,7 +391,7 @@ public:
      *
      * @test Tested in primitive/BooleanTest/Boolean::Atomic Tests
      */
-    inline Atomic ( Atomic && obj ) noexcept : hidden::_AtomicBaseBoolean(obj) { } // NOLINT(performance-move-constructor-init,google-explicit-constructor)
+    inline Atomic ( Atomic && obj ) noexcept : __CDS_HiddenUtility::_AtomicBaseBoolean(obj) { } // NOLINT(performance-move-constructor-init,google-explicit-constructor)
 
     /**
      * @brief Constructor from Boolean Object
@@ -403,7 +403,7 @@ public:
      *
      * @test Tested in primitive/BooleanTest/Boolean::Atomic Tests
      */
-    inline Atomic ( Boolean const & v ) noexcept : hidden::_AtomicBaseBoolean(v) { } // NOLINT(google-explicit-constructor)
+    inline Atomic ( Boolean const & v ) noexcept : __CDS_HiddenUtility::_AtomicBaseBoolean(v) { } // NOLINT(google-explicit-constructor)
 
     /**
      * @brief Constructor from Boolean Object
@@ -415,7 +415,7 @@ public:
      *
      * @test Tested in primitive/BooleanTest/Boolean::Atomic Tests
      */
-    inline Atomic ( Boolean && v ) noexcept : hidden::_AtomicBaseBoolean(v) { } // NOLINT(google-explicit-constructor)
+    inline Atomic ( Boolean && v ) noexcept : __CDS_HiddenUtility::_AtomicBaseBoolean(v) { } // NOLINT(google-explicit-constructor)
 
     /**
      * @brief Constructor from bool literal

@@ -18,7 +18,7 @@
 
 #include <CDS/Object>
 #include <CDS/Traits>
-#include <CDS/Utility>
+#include <CDS/Conversion>
 
 #include <cstring>
 #define CONSTR_CLEAR() _c(0), _l(0), _p(nullptr)

@@ -167,7 +167,7 @@ add_executable(
         CDS-dummy
         main.cpp
         ${CDS_HEADERS}
-        src/functional/Time.hpp src/cdsIntern/Utility.hpp include/CDS/Utility src/cdsIntern/compiler/Compiler.hpp src/cdsIntern/Platform.hpp include/CDS/Compiler include/CDS/Platform src/cdsIntern/compiler/GNUC.hpp include/CDS/Warnings)
+        src/functional/Time.hpp src/cdsIntern/Utility.hpp include/CDS/Utility src/cdsIntern/compiler/Compiler.hpp src/cdsIntern/Platform.hpp include/CDS/Compiler include/CDS/Platform src/cdsIntern/compiler/GNUC.hpp include/CDS/Warnings src/cdsIntern/Exception.hpp include/CDS/Exception src/cdsIntern/Conversion.hpp include/CDS/Conversion src/cdsIntern/Limits.hpp include/CDS/Limits)
 target_link_libraries(
         CDS-dummy
         ${CDS_LIBRARIES}
@@ -272,7 +272,7 @@ macro(test_set)
     )
 endmacro()
 
-test_set(20)
 test_set(17)
 test_set(14)
 test_set(11)
+test_set(20)

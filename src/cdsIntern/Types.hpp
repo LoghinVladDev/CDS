@@ -14,6 +14,7 @@ concept HashCalculatorHasBoundaryFunction = requires (H hashCalculator) {
 
 #include "../std-types.h"
 #include "../prepro.h"
+
 class Object;
 class String;
 
