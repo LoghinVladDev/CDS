@@ -1,0 +1,21 @@
+//
+// Created by vladl on 9/25/2021.
+//
+
+#ifndef CDS_MINGW_H
+#define CDS_MINGW_H
+
+#if defined(__MINGW64__) && !defined(GCC_VERSION)
+
+#define GCC_VERSION ( __MINGW64_VERSION_MAJOR * 10000 + __MINGW64_VERSION_MINOR * 100 + __MINGW64_VERSION_BUGFIX )
+
+#undef __CDS_compiler_name
+#undef __CDS_compiler_version
+
+#define __CDS_compiler_name "MinGW-w64"
+#define __CDS_compiler_version GCC_VERSION
+
+
+#endif
+
+#endif //CDS_MINGW_H

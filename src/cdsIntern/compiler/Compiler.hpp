@@ -10,12 +10,6 @@
 #define __CDS_compiler_name "Undefined" /* NOLINT(bugprone-reserved-identifier) */
 #define __CDS_compiler_version 0 /* NOLINT(bugprone-reserved-identifier) */
 
-#if defined(__GNUC__)
-
-#include "GNUC.hpp"
-
-#endif
-
 static inline auto __CDS_compilerVersionString() noexcept -> StringLiteral { /* NOLINT(bugprone-reserved-identifier) */
     static char buffer[9] = {
         __CDS_compiler_version / 10000 % 100 / 10 + '0',
@@ -230,6 +224,20 @@ inline auto exchange ( T & obj, U && newValue ) -> T {
 #define __CDS_Requires(_concepts) /* NOLINT(bugprone-reserved-identifier) */
 
 #endif
+#endif
+
+
+
+#if defined(__GNUC__) && ! defined(__MINGW64__)
+
+#include "GNUC.hpp"
+
+#endif
+
+#if defined(__MINGW64__)
+
+#include "MinGW.hpp"
+
 #endif
 
 

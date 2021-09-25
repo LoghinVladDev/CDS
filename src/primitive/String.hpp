@@ -73,7 +73,7 @@ private:
      *
      * @test Does not require testing
      */
-    __CDS_cpplang_ConstexprConditioned void _alloc(Size size) noexcept {
+    __CDS_cpplang_ConstexprDynamicAllocation void _alloc(Size size) noexcept {
         if (this->_l + size + 1 < this->_c)
             return;
 
@@ -1364,7 +1364,7 @@ public:
      *
      * @test tested in primitive/StringTest/Memory Tests
      */
-    __CDS_cpplang_ConstexprConditioned auto reserve(Size s) noexcept -> void { if ( s < this->_c ) return; this->resize( s ); }
+    __CDS_cpplang_ConstexprDynamicAllocation auto reserve(Size s) noexcept -> void { if ( s < this->_c ) return; this->resize( s ); }
 
     /**
      * @brief Function used to shrink the String's capacity, but not capable of enlarging it, if given size is greater than capacity
@@ -1376,7 +1376,7 @@ public:
      *
      * @test tested in primitive/StringTest/Memory Tests
      */
-    __CDS_cpplang_ConstexprConditioned auto shrink(SignedSize s = -1) noexcept -> void { if ( s == -1 ) s = static_cast < SignedSize > ( this->_l ); if ( s > this->_c ) return; this->resize( s ); }
+    __CDS_cpplang_ConstexprDynamicAllocation auto shrink(SignedSize s = -1) noexcept -> void { if ( s == -1 ) s = static_cast < SignedSize > ( this->_l ); if ( s > this->_c ) return; this->resize( s ); }
 
     /**
      * @brief Function used to clear the contents of the String
@@ -1556,7 +1556,7 @@ public:
      *
      * @test tested in primitive/StringTest/Append/Prepend Tests
      */
-    __CDS_cpplang_ConstexprConditioned auto operator += (ElementType v) noexcept -> String & { return this->append( v ); }
+    __CDS_cpplang_ConstexprDynamicAllocation auto operator += (ElementType v) noexcept -> String & { return this->append( v ); }
 
     /**
      * @brief Accumulate operator used to append a StringLiteral to the String
@@ -1569,7 +1569,7 @@ public:
      *
      * @test tested in primitive/StringTest/Append/Prepend Tests
      */
-    __CDS_cpplang_ConstexprConditioned auto operator += (StringLiteral v) noexcept -> String & { return this->append( v ); }
+    __CDS_cpplang_ConstexprDynamicAllocation auto operator += (StringLiteral v) noexcept -> String & { return this->append( v ); }
 
     /**
      * @brief Accumulate operator used to append a CString to the String
@@ -1582,7 +1582,7 @@ public:
      *
      * @test tested in primitive/StringTest/Append/Prepend Tests
      */
-    __CDS_cpplang_ConstexprConditioned auto operator += (CString v) noexcept -> String & { return this->append( v ); }
+    __CDS_cpplang_ConstexprDynamicAllocation auto operator += (CString v) noexcept -> String & { return this->append( v ); }
 
     /**
      * @brief Accumulate operator used to append a String to the String
@@ -1595,7 +1595,7 @@ public:
      *
      * @test tested in primitive/StringTest/Append/Prepend Tests
      */
-    __CDS_cpplang_ConstexprConditioned auto operator += (String const & v) noexcept -> String & { return this->append( v ); }
+    __CDS_cpplang_ConstexprDynamicAllocation auto operator += (String const & v) noexcept -> String & { return this->append( v ); }
 
     /**
      * @brief Accumulate operator used to append a std::string to the String
@@ -1621,7 +1621,7 @@ public:
      *
      * @test tested in primitive/StringTest/Append/Prepend Tests
      */
-    __CDS_cpplang_ConstexprConditioned auto operator += (sint16 v) noexcept -> String & { return this->append(v); }
+    __CDS_cpplang_ConstexprDynamicAllocation auto operator += (sint16 v) noexcept -> String & { return this->append(v); }
 
     /**
      * @brief Accumulate operator used to append a sint32 to the String
@@ -1634,7 +1634,7 @@ public:
      *
      * @test tested in primitive/StringTest/Append/Prepend Tests
      */
-    __CDS_cpplang_ConstexprConditioned auto operator += (sint32 v) noexcept -> String & { return this->append(v); }
+    __CDS_cpplang_ConstexprDynamicAllocation auto operator += (sint32 v) noexcept -> String & { return this->append(v); }
 
     /**
      * @brief Accumulate operator used to append a sint64 to the String
@@ -1647,7 +1647,7 @@ public:
      *
      * @test tested in primitive/StringTest/Append/Prepend Tests
      */
-    __CDS_cpplang_ConstexprConditioned auto operator += (sint64 v) noexcept -> String & { return this->append(v); }
+    __CDS_cpplang_ConstexprDynamicAllocation auto operator += (sint64 v) noexcept -> String & { return this->append(v); }
 
     /**
      * @brief Accumulate operator used to append a uint8 to the String
@@ -1660,7 +1660,7 @@ public:
      *
      * @test tested in primitive/StringTest/Append/Prepend Tests
      */
-    __CDS_cpplang_ConstexprConditioned auto operator += (uint8 v) noexcept -> String & { return this->append(v); }
+    __CDS_cpplang_ConstexprDynamicAllocation auto operator += (uint8 v) noexcept -> String & { return this->append(v); }
 
     /**
      * @brief Accumulate operator used to append a uint16 to the String
@@ -1673,7 +1673,7 @@ public:
      *
      * @test tested in primitive/StringTest/Append/Prepend Tests
      */
-    __CDS_cpplang_ConstexprConditioned auto operator += (uint16 v) noexcept -> String & { return this->append(v); }
+    __CDS_cpplang_ConstexprDynamicAllocation auto operator += (uint16 v) noexcept -> String & { return this->append(v); }
 
     /**
      * @brief Accumulate operator used to append a uint32 to the String
@@ -1686,7 +1686,7 @@ public:
      *
      * @test tested in primitive/StringTest/Append/Prepend Tests
      */
-    __CDS_cpplang_ConstexprConditioned auto operator += (uint32 v) noexcept -> String & { return this->append(v); }
+    __CDS_cpplang_ConstexprDynamicAllocation auto operator += (uint32 v) noexcept -> String & { return this->append(v); }
 
     /**
      * @brief Accumulate operator used to append a uint64 to the String
@@ -1699,7 +1699,7 @@ public:
      *
      * @test tested in primitive/StringTest/Append/Prepend Tests
      */
-    __CDS_cpplang_ConstexprConditioned auto operator += (uint64 v) noexcept -> String & { return this->append(v); }
+    __CDS_cpplang_ConstexprDynamicAllocation auto operator += (uint64 v) noexcept -> String & { return this->append(v); }
 
     /**
      * @brief Accumulate operator used to append a float to the String
@@ -1755,7 +1755,7 @@ public:
      *
      * @test tested in primitive/StringTest/Append/Prepend Tests
      */
-    __CDS_cpplang_ConstexprConditioned auto append (ElementType v) noexcept -> String & {
+    __CDS_cpplang_ConstexprDynamicAllocation auto append (ElementType v) noexcept -> String & {
         this->_alloc(1);
 
         this->_p[this->_l++] = v;
@@ -1773,7 +1773,7 @@ public:
      *
      * @test tested in primitive/StringTest/Append/Prepend Tests
      */
-    __CDS_cpplang_ConstexprConditioned auto append (StringLiteral cString) noexcept -> String & {
+    __CDS_cpplang_ConstexprDynamicAllocation auto append (StringLiteral cString) noexcept -> String & {
         if ( cString == nullptr ) return * this;
 
         auto len = strlen( cString );
@@ -1796,7 +1796,7 @@ public:
      *
      * @test tested in primitive/StringTest/Append/Prepend Tests
      */
-    __CDS_cpplang_ConstexprConditioned auto append (CString cString) noexcept -> String & {
+    __CDS_cpplang_ConstexprDynamicAllocation auto append (CString cString) noexcept -> String & {
         if ( cString == nullptr ) return * this;
 
         auto len = strlen(cString);
@@ -1819,7 +1819,7 @@ public:
      *
      * @test tested in primitive/StringTest/Append/Prepend Tests
      */
-    __CDS_cpplang_ConstexprConditioned auto append (String const & str) noexcept -> String & {
+    __CDS_cpplang_ConstexprDynamicAllocation auto append (String const & str) noexcept -> String & {
         if ( str.empty() ) return * this;
 
         this->_alloc(str._l);
@@ -1854,7 +1854,7 @@ public:
      *
      * @test tested in primitive/StringTest/Append/Prepend Tests
      */
-    __CDS_cpplang_ConstexprConditioned auto append (sint16 v) noexcept -> String & {
+    __CDS_cpplang_ConstexprDynamicAllocation auto append (sint16 v) noexcept -> String & {
         bool const negative = v < 0;
         uint16 const uValue = negative ? static_cast < uint16 > (~ v) + 1u : v;
         auto const length = Conversion :: toCharBase10Length( uValue );
@@ -1879,7 +1879,7 @@ public:
      *
      * @test tested in primitive/StringTest/Append/Prepend Tests
      */
-    __CDS_cpplang_ConstexprConditioned auto append (sint32 v) noexcept -> String & {
+    __CDS_cpplang_ConstexprDynamicAllocation auto append (sint32 v) noexcept -> String & {
         bool const negative = v < 0;
         uint32 const uValue = negative ? static_cast < uint32 > (~ v) + 1u : v;
         auto const length = Conversion :: toCharBase10Length( uValue );
@@ -1904,7 +1904,7 @@ public:
      *
      * @test tested in primitive/StringTest/Append/Prepend Tests
      */
-    __CDS_cpplang_ConstexprConditioned auto append (sint64 v) noexcept -> String & {
+    __CDS_cpplang_ConstexprDynamicAllocation auto append (sint64 v) noexcept -> String & {
         bool const negative = v < 0;
         uint64 const uValue = negative ? static_cast < uint64 > (~ v) + 1u : v;
         auto const length = Conversion :: toCharBase10Length( uValue );
@@ -1929,7 +1929,7 @@ public:
      *
      * @test tested in primitive/StringTest/Append/Prepend Tests
      */
-    __CDS_cpplang_ConstexprConditioned auto append (uint8 v) noexcept -> String & {
+    __CDS_cpplang_ConstexprDynamicAllocation auto append (uint8 v) noexcept -> String & {
         uint32 const length = Conversion::toCharBase10Length(v);
         this->_alloc(length);
 
@@ -1949,7 +1949,7 @@ public:
      *
      * @test tested in primitive/StringTest/Append/Prepend Tests
      */
-    __CDS_cpplang_ConstexprConditioned auto append (uint16 v) noexcept -> String & {
+    __CDS_cpplang_ConstexprDynamicAllocation auto append (uint16 v) noexcept -> String & {
         uint32 const length = Conversion::toCharBase10Length(v);
         this->_alloc(length);
 
@@ -1969,7 +1969,7 @@ public:
      *
      * @test tested in primitive/StringTest/Append/Prepend Tests
      */
-    __CDS_cpplang_ConstexprConditioned auto append (uint32 v) noexcept -> String & {
+    __CDS_cpplang_ConstexprDynamicAllocation auto append (uint32 v) noexcept -> String & {
         uint32 const length = Conversion::toCharBase10Length(v);
         this->_alloc(length);
 
@@ -1989,7 +1989,7 @@ public:
      *
      * @test tested in primitive/StringTest/Append/Prepend Tests
      */
-    __CDS_cpplang_ConstexprConditioned auto append (uint64 v) noexcept -> String & {
+    __CDS_cpplang_ConstexprDynamicAllocation auto append (uint64 v) noexcept -> String & {
         uint32 const length = Conversion::toCharBase10Length(v);
         this->_alloc(length);
 
@@ -2454,7 +2454,7 @@ public:
      *
      * @test tested in primitive/StringTest/Find Tests
      */
-    __CDS_NoDiscard __CDS_cpplang_ConstexprConditioned auto findLast ( String const & o ) const noexcept -> Index {
+    __CDS_NoDiscard __CDS_cpplang_ConstexprDynamicAllocation auto findLast ( String const & o ) const noexcept -> Index {
         auto i = static_cast < Index > ( this->size() ) - static_cast < Index > ( o.length() );
         for ( ; i >= 0; i-- )
             if ( this->substr(i, i + static_cast < Index > ( o.length() )) == o )
@@ -3270,7 +3270,7 @@ public:
      *
      * @test tested in primitive/StringTest/Utility Functions, String Formatting
      */
-    __CDS_cpplang_ConstexprConditioned auto ltrim ( ElementType e = ' ' ) noexcept -> String & {
+    __CDS_cpplang_ConstexprDynamicAllocation auto ltrim ( ElementType e = ' ' ) noexcept -> String & {
         while ( ! this->empty () && this->front() == e )
             * this = this->substr( 1 );
         return * this;
@@ -3287,7 +3287,7 @@ public:
      *
      * @test tested in primitive/StringTest/Utility Functions, String Formatting
      */
-    __CDS_cpplang_ConstexprConditioned auto ltrim ( String const & s ) noexcept -> String & {
+    __CDS_cpplang_ConstexprDynamicAllocation auto ltrim ( String const & s ) noexcept -> String & {
         while ( ! this->empty () && s.contains( this->front() ) )
             * this = this->substr(1);
         return * this;
@@ -3400,7 +3400,7 @@ public:
      *
      * @test tested in primitive/StringTest/Utility Functions, String Formatting
      */
-    __CDS_cpplang_ConstexprConditioned auto trim ( ElementType e = ' ' ) noexcept -> String & { return this->ltrim(e).rtrim(e); }
+    __CDS_cpplang_ConstexprDynamicAllocation auto trim ( ElementType e = ' ' ) noexcept -> String & { return this->ltrim(e).rtrim(e); }
 
     /**
      * @brief Function used to trim the occurrences of given String [s] from the left and right of the String
@@ -3413,7 +3413,7 @@ public:
      *
      * @test tested in primitive/StringTest/Utility Functions, String Formatting
      */
-    __CDS_cpplang_ConstexprConditioned auto trim ( String const & e ) noexcept -> String & { return this->ltrim(e).rtrim(e); }
+    __CDS_cpplang_ConstexprDynamicAllocation auto trim ( String const & e ) noexcept -> String & { return this->ltrim(e).rtrim(e); }
 
     /**
      * @brief Function used to trim the occurrences of given element [e] from the left and right of the String into a new String
@@ -3461,7 +3461,7 @@ public:
      *
      * @test tested in primitive/StringTest/Utility Functions, String Formatting
      */
-    __CDS_cpplang_ConstexprConditioned auto rjust (Size justifySize, ElementType padChar = ' ') noexcept -> String & {
+    __CDS_cpplang_ConstexprDynamicAllocation auto rjust (Size justifySize, ElementType padChar = ' ') noexcept -> String & {
         while ( this->size() < justifySize )
             this->append(padChar);
 
@@ -3502,7 +3502,7 @@ public:
      *
      * @test tested in primitive/StringTest/Utility Functions, String Formatting
      */
-    __CDS_cpplang_ConstexprConditioned auto ljust (Size justifySize, ElementType padChar = ' ') noexcept -> String & {
+    __CDS_cpplang_ConstexprDynamicAllocation auto ljust (Size justifySize, ElementType padChar = ' ') noexcept -> String & {
         while ( this->size() < justifySize )
             this->prepend(padChar);
 
@@ -3768,7 +3768,7 @@ public:
      *
      * @test tested in primitive/StringTest/Assignment Tests
      */
-    __CDS_cpplang_ConstexprConditioned auto operator = ( String const & o ) noexcept -> String & {
+    __CDS_cpplang_ConstexprDynamicAllocation auto operator = ( String const & o ) noexcept -> String & {
         if ( this == & o )
             return * this;
 
@@ -4259,7 +4259,7 @@ public:
      *
      * @test Tested in primitive/StringTest/Utility Tests
      */
-    __CDS_NoDiscard __CDS_MaybeUnused __CDS_cpplang_ConstexprConditioned auto startsWith (String const & str) const noexcept -> bool {
+    __CDS_NoDiscard __CDS_MaybeUnused __CDS_cpplang_ConstexprDynamicAllocation auto startsWith (String const & str) const noexcept -> bool {
         if ( str.size() > this->size() ) return false;
         return this->substr(0, static_cast < Index > ( str.size() )) == str;
     }
@@ -4275,7 +4275,7 @@ public:
      *
      * @test Tested in primitive/StringTest/Utility Tests
      */
-    __CDS_NoDiscard __CDS_MaybeUnused __CDS_cpplang_ConstexprConditioned auto endsWith (String const & str) const noexcept -> bool {
+    __CDS_NoDiscard __CDS_MaybeUnused __CDS_cpplang_ConstexprDynamicAllocation auto endsWith (String const & str) const noexcept -> bool {
         if ( str.size() > this->size() ) return false;
         return this->substr(static_cast < Index > ( this->size() ) - static_cast < Index > ( str.size() )) == str;
     }
@@ -4291,7 +4291,7 @@ public:
      *
      * @test Tested in primitive/StringTest/Utility Functions
      */
-    __CDS_NoDiscard __CDS_cpplang_ConstexprConditioned auto removePrefix (String const & prefix) noexcept -> String & {
+    __CDS_NoDiscard __CDS_cpplang_ConstexprDynamicAllocation auto removePrefix (String const & prefix) noexcept -> String & {
         if ( this->length() < prefix.length() ) return * this;
         if ( this->substr(0, static_cast < Index > ( prefix.length() )) == prefix ) * this = this->substr(static_cast < Index > ( prefix.length() ));
         return * this;
@@ -4319,7 +4319,7 @@ public:
      *
      * @test Tested in primitive/StringTest/Utility Functions
      */
-    __CDS_NoDiscard __CDS_cpplang_ConstexprConditioned auto removeSuffix (String const & suffix) noexcept -> String & {
+    __CDS_NoDiscard __CDS_cpplang_ConstexprDynamicAllocation auto removeSuffix (String const & suffix) noexcept -> String & {
         if ( this->length() < suffix.length() ) return * this;
         if ( this->substr( static_cast < Index > ( this->length() ) - static_cast < Index > ( suffix.length() ) ) == suffix ) * this = this->substr(0, static_cast < Index > ( this->length() ) - static_cast < Index > ( suffix.length() ));
         return * this;

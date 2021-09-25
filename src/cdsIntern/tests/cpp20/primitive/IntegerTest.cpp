@@ -563,7 +563,7 @@ auto IntegerTest::execute() noexcept -> bool{
 
             this->log("Equality Distribution : %s", dist.toString().cStr());
             this->log("Numbers : %s", numbers.sequence()
-                    .map([](Integer::Atomic const & o){return (Integer)o;})
+                    .map([](Integer::Atomic const & o){return o.get();})
                     .toLinkedList().toString().cStr()
             );
         });
