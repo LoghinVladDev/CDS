@@ -1386,8 +1386,15 @@ public:
      * @test tested in primitive/StringTest/Content Functions Tests
      */
     __CDS_cpplang_ConstexprConditioned auto clear() noexcept -> void {
-        if ( this->_p != nullptr )
-            std::memset ( this->_p, 0, this->_l );
+        if ( this->_p != nullptr ) {
+
+            __CDS_WarningSuppression_StringOperationOverflow_SuppressEnable
+
+            std::memset(this->_p, 0, this->_l);
+
+            __CDS_WarningSuppression_StringOperationOverflow_SuppressDisable
+
+        }
         this->_l = 0;
     }
 
@@ -3971,6 +3978,10 @@ public:
     __CDS_NoDiscard __CDS_cpplang_ConstexprDestructor auto diag() const noexcept -> String {
         return String("Debug = { data = '") + this->_p + "', length = " + this->_l + ", capacity = " + this->_c + " }";
     }
+
+#else
+
+    __CDS_NoDiscard __CDS_cpplang_ConstexprDestructor auto diag() const noexcept -> String { return ""; }
 
 #endif
 

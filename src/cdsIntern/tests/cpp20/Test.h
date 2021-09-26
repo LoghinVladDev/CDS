@@ -8,6 +8,7 @@
 #include <CDS/HashMap>
 #include <chrono>
 #include <cmath>
+#include <CDS/Compiler>
 
 #define FLAG(i) 1u << i ## u
 #define FOREACH_FLAG(_min, _max, _dt, _v) for ( _dt _v = FLAG(_min); _v != FLAG(_max); _v = _v << 1 )

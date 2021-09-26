@@ -5,6 +5,10 @@
         {
             "name": "MSVC",
             "type": 1
+        },
+        {
+            "name": "GCC",
+            "type": 2
         }
     ],
     "warnings": [
@@ -27,6 +31,10 @@
         {
             "Name": "ThreadForceTermination",
             "MSVC": 6258
+        },
+        {
+            "Name": "StringOperationOverflow",
+            "GCC": "-Wstringop-overflow"
         }
     ]
 }

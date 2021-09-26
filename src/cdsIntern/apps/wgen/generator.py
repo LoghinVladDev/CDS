@@ -15,6 +15,19 @@ platform_dependent_templates = [
         ], "disable": [
             "__pragma(warning(pop))"
         ]
+    }),
+    ("GCC", {
+        "macroIdentifier": {"start": "#if defined(__GNUC__)", "mid": "#else // if defined(__GCC__)",
+                            "end": "#endif // if defined(__GNUC__)"},
+        "parameters": "_warningName",
+        "pre": "#define __CDS_WarningSuppression_GCC_CreatePragma(_text) #_text",
+        "enable": [
+            "_Pragma(\"GCC diagnostic push\")",
+            "_Pragma(__CDS_WarningSuppression_GCC_CreatePragma(GCC diagnostic ignored #_warningName))"
+        ],
+        "disable": [
+            "_Pragma(\"GCC diagnostic pop\")"
+        ]
     })
 ]
 
@@ -123,12 +136,14 @@ def execute_step_platform_platform_dependant_macros(config: dict, out_file) -> N
 
     for template in platform_dependent_templates:
         log(f"Applying Template for '{template[0]}'")
+
         out_file.writelines(_ + "\n" for _ in [
             template[1]["macroIdentifier"]["start"],
             "",
+            template[1]["pre"] if 'pre' in template[1].keys() else "",
             "",
             f"#define __CDS_WarningSuppression_{template[0]}_SuppressEnable({template[1]['parameters']}) "
-            f"/* NOLINT(bugprone-reserved-identifier) */ \\ "
+            f"/* NOLINT(bugprone-reserved-identifier) */ \\"
         ])
 
         enable_list = [s for s in template[1]["enable"]]
@@ -140,7 +155,7 @@ def execute_step_platform_platform_dependant_macros(config: dict, out_file) -> N
         out_file.writelines("\n")
         out_file.writelines(_ + "\n" for _ in [
             f"#define __CDS_WarningSuppression_{template[0]}_SuppressDisable({template[1]['parameters']}) "
-            f"/* NOLINT(bugprone-reserved-identifier) */ \\ "
+            f"/* NOLINT(bugprone-reserved-identifier) */ \\"
         ])
 
         disable_list = [s for s in template[1]["disable"]]

@@ -3,7 +3,7 @@
 //
 // Generated for CDS through Warning Suppression Generator Tool
 // Author: Loghin Vlad-Andrei - github.com/LoghinVladDev
-// Generation Date: 22/09/21 - 12:16:09
+// Generation Date: 26/09/21 - 05:17:42
 // CDS Version - 0.0.2
 // Licenced under Project Licence - https://github.com/LoghinVladDev/CDS/blob/master/LICENSE
 //
@@ -22,6 +22,7 @@
 #if defined(_MSC_VER)
 
 
+
 #define __CDS_WarningSuppression_MSVC_SuppressEnable(_warningName) /* NOLINT(bugprone-reserved-identifier) */ \
 __pragma(warning(push)) \
 __pragma(warning(disable:_warningName))
@@ -38,6 +39,27 @@ __pragma(warning(pop))
 
 
 #endif // if defined(_MSC_VER)
+
+#if defined(__GNUC__)
+
+#define __CDS_WarningSuppression_GCC_CreatePragma(_text) #_text
+
+#define __CDS_WarningSuppression_GCC_SuppressEnable(_warningName) /* NOLINT(bugprone-reserved-identifier) */ \
+_Pragma("GCC diagnostic push") \
+_Pragma(__CDS_WarningSuppression_GCC_CreatePragma(GCC diagnostic ignored #_warningName))
+
+#define __CDS_WarningSuppression_GCC_SuppressDisable(_warningName) /* NOLINT(bugprone-reserved-identifier) */ \
+_Pragma("GCC diagnostic pop")
+
+
+#else // if defined(__GCC__)
+
+
+#define __CDS_WarningSuppression_GCC_SuppressEnable(_warningName) /* NOLINT(bugprone-reserved-identifier) */
+#define __CDS_WarningSuppression_GCC_SuppressDisable(_warningName) /* NOLINT(bugprone-reserved-identifier) */
+
+
+#endif // if defined(__GNUC__)
 
 //// End of Platform Dependent Macros
 
@@ -67,12 +89,35 @@ __pragma(warning(pop))
 #define __CDS_WarningSuppression_MSVC_ThreadForceTermination_SuppressEnable __CDS_WarningSuppression_MSVC_SuppressEnable(6258) /* NOLINT(bugprone-reserved-identifier) */
 #define __CDS_WarningSuppression_MSVC_ThreadForceTermination_SuppressDisable __CDS_WarningSuppression_MSVC_SuppressDisable(6258) /* NOLINT(bugprone-reserved-identifier) */
 
+#define __CDS_WarningSuppression_MSVC_StringOperationOverflow_SuppressEnable /* NOLINT(bugprone-reserved-identifier) */
+#define __CDS_WarningSuppression_MSVC_StringOperationOverflow_SuppressDisable /* NOLINT(bugprone-reserved-identifier) */
+
+#define __CDS_WarningSuppression_GCC_ArgumentPossibleUnexpectedValue_SuppressEnable /* NOLINT(bugprone-reserved-identifier) */
+#define __CDS_WarningSuppression_GCC_ArgumentPossibleUnexpectedValue_SuppressDisable /* NOLINT(bugprone-reserved-identifier) */
+
+#define __CDS_WarningSuppression_GCC_UseScopedEnum_SuppressEnable /* NOLINT(bugprone-reserved-identifier) */
+#define __CDS_WarningSuppression_GCC_UseScopedEnum_SuppressDisable /* NOLINT(bugprone-reserved-identifier) */
+
+#define __CDS_WarningSuppression_GCC_DelegateCtorSuppressUninitializedMembers_SuppressEnable /* NOLINT(bugprone-reserved-identifier) */
+#define __CDS_WarningSuppression_GCC_DelegateCtorSuppressUninitializedMembers_SuppressDisable /* NOLINT(bugprone-reserved-identifier) */
+
+#define __CDS_WarningSuppression_GCC_ArithmeticOverflow_SuppressEnable /* NOLINT(bugprone-reserved-identifier) */
+#define __CDS_WarningSuppression_GCC_ArithmeticOverflow_SuppressDisable /* NOLINT(bugprone-reserved-identifier) */
+
+#define __CDS_WarningSuppression_GCC_ThreadForceTermination_SuppressEnable /* NOLINT(bugprone-reserved-identifier) */
+#define __CDS_WarningSuppression_GCC_ThreadForceTermination_SuppressDisable /* NOLINT(bugprone-reserved-identifier) */
+
+#define __CDS_WarningSuppression_GCC_StringOperationOverflow_SuppressEnable __CDS_WarningSuppression_GCC_SuppressEnable(-Wstringop-overflow) /* NOLINT(bugprone-reserved-identifier) */
+#define __CDS_WarningSuppression_GCC_StringOperationOverflow_SuppressDisable __CDS_WarningSuppression_GCC_SuppressDisable(-Wstringop-overflow) /* NOLINT(bugprone-reserved-identifier) */
+
 
 #define __CDS_WarningSuppression_SuppressEnable(_warning) /* NOLINT(bugprone-reserved-identifier) */ \
-	__CDS_WarningSuppression_Platform_SuppressEnable(MSVC, _warning)
+	__CDS_WarningSuppression_Platform_SuppressEnable(MSVC, _warning)\
+	__CDS_WarningSuppression_Platform_SuppressEnable(GCC, _warning)
 
 #define __CDS_WarningSuppression_SuppressDisable(_warning) /* NOLINT(bugprone-reserved-identifier) */ \
-	__CDS_WarningSuppression_Platform_SuppressDisable(MSVC, _warning)
+	__CDS_WarningSuppression_Platform_SuppressDisable(MSVC, _warning)\
+	__CDS_WarningSuppression_Platform_SuppressDisable(GCC, _warning)
 
 //// End of Platform Dependent Config Macros
 
@@ -93,6 +138,9 @@ __pragma(warning(pop))
 
 #define __CDS_WarningSuppression_ThreadForceTermination_SuppressEnable __CDS_WarningSuppression_SuppressEnable(ThreadForceTermination) /* NOLINT(bugprone-reserved-identifier) */
 #define __CDS_WarningSuppression_ThreadForceTermination_SuppressDisable __CDS_WarningSuppression_SuppressDisable(ThreadForceTermination) /* NOLINT(bugprone-reserved-identifier) */
+
+#define __CDS_WarningSuppression_StringOperationOverflow_SuppressEnable __CDS_WarningSuppression_SuppressEnable(StringOperationOverflow) /* NOLINT(bugprone-reserved-identifier) */
+#define __CDS_WarningSuppression_StringOperationOverflow_SuppressDisable __CDS_WarningSuppression_SuppressDisable(StringOperationOverflow) /* NOLINT(bugprone-reserved-identifier) */
 
 //// End of Platform Dependent Config Macros
 

@@ -10,22 +10,6 @@
 #define __CDS_compiler_name "Undefined" /* NOLINT(bugprone-reserved-identifier) */
 #define __CDS_compiler_version 0 /* NOLINT(bugprone-reserved-identifier) */
 
-static inline auto __CDS_compilerVersionString() noexcept -> StringLiteral { /* NOLINT(bugprone-reserved-identifier) */
-    static char buffer[9] = {
-        __CDS_compiler_version / 10000 % 100 / 10 + '0',
-        __CDS_compiler_version / 10000 % 100 % 10 + '0',
-        '.',
-        __CDS_compiler_version / 100 % 100 / 10 + '0',
-        __CDS_compiler_version / 100 % 100 % 10 + '0',
-        '.',
-        __CDS_compiler_version % 100 / 10 + '0',
-        __CDS_compiler_version % 100 % 10 + '0',
-        '\0'
-    };
-
-    return buffer;
-}
-
 #define __CDS_cpplang_core_version_name "cpp-xx (unknown)" /* NOLINT(bugprone-reserved-identifier) */
 
 
@@ -240,5 +224,20 @@ inline auto exchange ( T & obj, U && newValue ) -> T {
 
 #endif
 
+static inline auto __CDS_compilerVersionString() noexcept -> StringLiteral { /* NOLINT(bugprone-reserved-identifier) */
+    static char buffer[9] = {
+            __CDS_compiler_version / 10000 % 100 / 10 + '0',
+            __CDS_compiler_version / 10000 % 100 % 10 + '0',
+            '.',
+            __CDS_compiler_version / 100 % 100 / 10 + '0',
+            __CDS_compiler_version / 100 % 100 % 10 + '0',
+            '.',
+            __CDS_compiler_version % 100 / 10 + '0',
+            __CDS_compiler_version % 100 % 10 + '0',
+            '\0'
+    };
+
+    return buffer;
+}
 
 #endif //CDS_COMPILER_HPP

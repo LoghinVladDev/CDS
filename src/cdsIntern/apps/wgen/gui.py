@@ -4,7 +4,7 @@ import os
 
 from sys import argv as program_arguments
 
-from typing import Union, Any
+from typing import Union, Any, List, Dict
 
 from PyQt6.QtCore import QSize
 from PyQt6.QtCore import Qt
@@ -88,14 +88,14 @@ class Platform:
         return f"""Platform ( name = {self.platform_name}, warning_type = '{str(self.warning_type)}' )"""
 
 
-def all_platform_warning_types() -> list[Platform.WarningType]:
+def all_platform_warning_types() -> List[Platform.WarningType]:
     return [
         Platform.WarningType(Platform.WarningType.INTEGER),
         Platform.WarningType(Platform.WarningType.COMMENT)
     ]
 
 
-def base_platforms() -> list[Platform]:
+def base_platforms() -> List[Platform]:
     return [
         Platform(Platform.WarningType.INTEGER, 'MSVC')
     ]
@@ -104,7 +104,7 @@ def base_platforms() -> list[Platform]:
 class PlatformWindow(QWidget):
     closed = QSignal()
 
-    def __init__(self, parent: QWidget = None, platforms: list[Platform] = None):
+    def __init__(self, parent: QWidget = None, platforms: List[Platform] = None):
         super(QWidget, self).__init__(parent)
 
         self.__platforms = platforms.copy()
@@ -246,7 +246,7 @@ class PlatformWindow(QWidget):
         self.apply_button.setEnabled(self.apply_possible())
 
     def apply_possible(self) -> bool:
-        found: list[str] = []
+        found: List[str] = []
 
         if len(self.platforms) != len(self.__platforms_to_save):
             return True
@@ -290,7 +290,7 @@ class PlatformWindow(QWidget):
         self.closed.emit()
 
     @property
-    def platforms(self) -> list[Platform]:
+    def platforms(self) -> List[Platform]:
         return self.__platforms
 
 
@@ -319,10 +319,10 @@ class GeneratorWindow(QWidget):
         self.__warnings_table: QTableWidget = QTableWidget(self)
         self.__edit_platforms_button: QPushButton = QPushButton("""Edit Platforms...""", self)
 
-        self.__warnings: list[dict[str, str]] = []
-        self.__header_list: list[str] = []
+        self.__warnings: List[Dict[str, str]] = []
+        self.__header_list: List[str] = []
 
-        self.__platforms: list[Platform] = base_platforms().copy()
+        self.__platforms: List[Platform] = base_platforms().copy()
 
         self.__force_disabled: bool = False
 
@@ -383,7 +383,7 @@ class GeneratorWindow(QWidget):
         self.__warning_updates_disabled = value
 
     @property
-    def platforms(self) -> list[Platform]:
+    def platforms(self) -> List[Platform]:
         return self.__platforms
 
     @property
@@ -437,11 +437,11 @@ class GeneratorWindow(QWidget):
         return self.__warnings_table
 
     @property
-    def header_list(self) -> list[str]:
+    def header_list(self) -> List[str]:
         return self.__header_list
 
     @property
-    def warnings(self) -> list[dict[str, str]]:
+    def warnings(self) -> List[Dict[str, str]]:
         return self.__warnings
 
     def enable_use_configuration(self) -> None:
@@ -510,7 +510,7 @@ class GeneratorWindow(QWidget):
         self.warnings.clear()
 
         for i in range(len(config['warnings'])):
-            item: dict[str, str] = {'Name': config['warnings'][i]['Name']}
+            item: Dict[str, str] = {'Name': config['warnings'][i]['Name']}
 
             for platform in self.platforms:
                 if platform.platform_name in config['warnings'][i].keys():
@@ -538,7 +538,7 @@ class GeneratorWindow(QWidget):
             self.__loaded_configuration_path = ''
             pass
 
-    def save_to_file(self, configuration: Union[dict[str, Any], None], out_file_path: str) -> None:
+    def save_to_file(self, configuration: Union[Dict[str, Any], None], out_file_path: str) -> None:
         if configuration is None:
             return
 
@@ -556,7 +556,7 @@ class GeneratorWindow(QWidget):
             QMessageBox.critical(self, 'Failure', 'Unexpected Error Occurred',
                                  QMessageBox.StandardButton.Ok, QMessageBox.StandardButton.Ok)
 
-    def save_configuration(self, configuration: Union[dict[str, Any], None]) -> None:
+    def save_configuration(self, configuration: Union[Dict[str, Any], None]) -> None:
         self.save_to_file(configuration, QFileDialog.getSaveFileName(self, "Save Configuration",
                                                                      str(pathlib.Path(__file__).parent.resolve()),
                                                                      "CDS Configuration (*.json);;All Files (*)")[0])
@@ -617,7 +617,7 @@ class GeneratorWindow(QWidget):
     def force_disabled(self, value: bool) -> None:
         self.__force_disabled = value
 
-    def save_platforms_window_data(self, new_platforms: list[Platform]) -> None:
+    def save_platforms_window_data(self, new_platforms: List[Platform]) -> None:
         change_detected = self.change_detected(new_platforms)
 
         self.__platforms = new_platforms
@@ -627,8 +627,8 @@ class GeneratorWindow(QWidget):
         if change_detected:
             self.check_for_save_update()
 
-    def change_detected(self, new_platforms: list[Platform]) -> bool:
-        names: list[str] = [i.platform_name for i in self.platforms]
+    def change_detected(self, new_platforms: List[Platform]) -> bool:
+        names: List[str] = [i.platform_name for i in self.platforms]
         for i in new_platforms:
             if not names:
                 return True
@@ -642,7 +642,7 @@ class GeneratorWindow(QWidget):
         return len(names) != 0
 
     def update_platform_headers(self, bypass_save_enable=False) -> None:
-        self.__header_list: list[str] = ['', 'Name']
+        self.__header_list: List[str] = ['', 'Name']
         for platform in self.platforms:
             self.header_list.append(platform.platform_name)
 
@@ -794,7 +794,7 @@ class GeneratorWindow(QWidget):
 
         generate_button.clicked.connect(lambda: self.generate())
 
-    def get_current_configuration(self) -> Union[dict[str, Any], None]:
+    def get_current_configuration(self) -> Union[Dict[str, Any], None]:
         if len(self.header_name_input.text()) == 0:
             QMessageBox.critical(self, "Input Data Error", "Header Name cannot be Empty!",
                                  QMessageBox.StandardButton.Ok, QMessageBox.StandardButton.Ok)
@@ -832,8 +832,8 @@ class GeneratorWindow(QWidget):
 
             return None
 
-        type_violations: dict[str, ([str], str)] = {}
-        final_values: list[dict[str, Union[str, int]]] = []
+        type_violations: Dict[str, ([str], str)] = {}
+        final_values: List[Dict[str, Union[str, int]]] = []
 
         for platform in self.platforms:
             for i in range(len(self.warnings)):
@@ -884,7 +884,7 @@ class GeneratorWindow(QWidget):
 
         return self.get_current_configuration_from_values(final_values)
 
-    def get_current_configuration_from_values(self, values: list[dict[str, Union[str, int]]]):
+    def get_current_configuration_from_values(self, values: List[Dict[str, Union[str, int]]]):
         return {
             'name': self.header_name_input.text(),
             'dirpath': self.header_output_path_input.text(),
@@ -928,7 +928,7 @@ class GeneratorWindow(QWidget):
         self.configuration_save_button.setEnabled(update)
 
 
-def main(argv: list[str]) -> None:
+def main(argv: List[str]) -> None:
     application: QApplication = QApplication(argv)
 
     window: GeneratorWindow = GeneratorWindow()
