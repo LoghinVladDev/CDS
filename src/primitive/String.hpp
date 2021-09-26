@@ -159,7 +159,7 @@ private:
          *
          * @test Tested in primitive/StringTest/Iterable Tests
          */
-        __CDS_cpplang_VirtualConstexpr virtual auto next() -> IteratorBase & = 0;
+        __CDS_cpplang_ConstexprPureAbstract virtual auto next() -> IteratorBase & = 0;
 
         /**
          * @brief Function used to compare Iterator values
@@ -315,7 +315,7 @@ private:
          *
          * @test Tested in primitive/StringTest/Iterable Tests
          */
-        __CDS_cpplang_VirtualConstexpr virtual auto next() -> ConstIteratorBase & = 0;
+        __CDS_cpplang_ConstexprPureAbstract virtual auto next() -> ConstIteratorBase & = 0;
 
         /**
          * @brief Function used to compare Iterator values

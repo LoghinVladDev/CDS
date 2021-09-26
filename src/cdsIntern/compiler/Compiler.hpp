@@ -212,6 +212,10 @@ inline auto exchange ( T & obj, U && newValue ) -> T {
 
 
 
+#define __CDS_cpplang_ConstexprPureAbstract __CDS_cpplang_VirtualConstexpr /* NOLINT(bugprone-reserved-identifier) */
+
+
+
 #if defined(__GNUC__) && ! defined(__MINGW64__) && ! defined(__clang__)
 
 #include "gcc.hpp"

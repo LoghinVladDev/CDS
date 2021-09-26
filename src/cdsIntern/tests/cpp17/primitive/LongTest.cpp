@@ -563,7 +563,7 @@ auto LongTest::execute() noexcept -> bool{
 
             this->log("Equality Distribution : %s", dist.toString().cStr());
             this->log("Numbers : %s", numbers.sequence()
-                    .map([](Long::Atomic const & o){return (Long)o;})
+                    .map([](Long::Atomic const & o){return o.get();})
                     .toLinkedList().toString().cStr()
             );
         });
