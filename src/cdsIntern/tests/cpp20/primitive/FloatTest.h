@@ -5,9 +5,11 @@
 #ifndef CDS_FLOATTEST_H
 #define CDS_FLOATTEST_H
 
+#include "../Test.h"
 
-class FloatTest {
-
+class FloatTest : public Test {
+public:
+    bool execute() noexcept override;
 };
 
 

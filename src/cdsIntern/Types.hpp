@@ -19,29 +19,30 @@ class Object;
 class String;
 
 #include <cstring>
+#include <string>
 
 namespace dataTypes {
-    template<class T> static auto hash(T const &) noexcept -> Index { return 0; }
+    template<class T> constexpr static auto hash(T const &) noexcept -> Index { return 0; }
     template<> auto hash<String>(String const &o) noexcept -> Index;
     template<> auto hash<Object>(Object const &o) noexcept -> Index;
-    template<> auto hash<CString>(CString const &o) noexcept -> Index { return static_cast < Index > ( std::strlen(o) ); }
-    template<> auto hash<StringLiteral>(StringLiteral const &o) noexcept -> Index { return static_cast < Index > ( std::strlen(o) ); }
-    template<> auto hash<uint8>(uint8 const &o) noexcept -> Index { return o; }
-    template<> auto hash<uint16>(uint16 const &o) noexcept -> Index { return o; }
-    template<> auto hash<uint32>(uint32 const &o) noexcept -> Index { return o; }
-    template<> auto hash<uint64>(uint64 const &o) noexcept -> Index { return static_cast < Index > ( o ); }
-    template<> auto hash<sint8>(sint8 const &o) noexcept -> Index { return o; }
-    template<> auto hash<sint16>(sint16 const &o) noexcept -> Index { return o; }
-    template<> auto hash<sint32>(sint32 const &o) noexcept -> Index { return o; }
-    template<> auto hash<sint64>(sint64 const &o) noexcept -> Index { return o; }
+    template<> __CDS_cpplang_IfConstexpr auto hash<CString>(CString const &o) noexcept -> Index { return static_cast < Index > ( std::char_traits<char>::length(o) ); }
+    template<> __CDS_cpplang_IfConstexpr auto hash<StringLiteral>(StringLiteral const &o) noexcept -> Index { return static_cast < Index > ( std::char_traits<char>::length(o) ); }
+    template<> constexpr auto hash<uint8>(uint8 const &o) noexcept -> Index { return o; }
+    template<> constexpr auto hash<uint16>(uint16 const &o) noexcept -> Index { return o; }
+    template<> constexpr auto hash<uint32>(uint32 const &o) noexcept -> Index { return o; }
+    template<> constexpr auto hash<uint64>(uint64 const &o) noexcept -> Index { return static_cast < Index > ( o ); }
+    template<> constexpr auto hash<sint8>(sint8 const &o) noexcept -> Index { return o; }
+    template<> constexpr auto hash<sint16>(sint16 const &o) noexcept -> Index { return o; }
+    template<> constexpr auto hash<sint32>(sint32 const &o) noexcept -> Index { return o; }
+    template<> constexpr auto hash<sint64>(sint64 const &o) noexcept -> Index { return o; }
 
     __CDS_WarningSuppression_ArithmeticOverflow_SuppressEnable
 
-    template <> auto hash<float> (float const & o) noexcept -> Index { return static_cast < Index> ( o * 1000.0f ); }
+    template <> constexpr auto hash<float> (float const & o) noexcept -> Index { return static_cast < Index> ( o * 1000.0f ); }
 
     __CDS_WarningSuppression_ArithmeticOverflow_SuppressDisable
 
-    template <> auto hash<double> (double const & o) noexcept -> Index { return static_cast < Index > ( o * 100000.0 ); }
+    template <> constexpr auto hash<double> (double const & o) noexcept -> Index { return static_cast < Index > ( o * 100000.0 ); }
 
 #if defined(CDS_GLM)
 

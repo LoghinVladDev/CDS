@@ -128,6 +128,9 @@ public:
     explicit constexpr Integer(uint32 value) noexcept: v(static_cast < int > ( value )) {}
     explicit constexpr Integer(uint64 value) noexcept: v(static_cast < int > ( value )) {}
 
+    explicit constexpr Integer(float value) noexcept: v(static_cast < int > ( value )) {}
+    explicit constexpr Integer(double value) noexcept: v(static_cast < int > ( value )) {}
+
     /**
      * @brief Assignment Operator
      *
@@ -1100,7 +1103,7 @@ public:
      * @test Not Applicable
      */
     __CDS_NoDiscard __CDS_cpplang_VirtualConstexpr auto hash() const noexcept -> Index override {
-        return static_cast<Index>(this->v);
+        return dataTypes::hash(this->v);
     }
 
     /**
@@ -1113,7 +1116,7 @@ public:
      * @test Tested in primitive/IntegerTest
      */
     __CDS_NoDiscard auto toString() const noexcept -> String override {
-        return String().append(this->v);
+        return String(this->v); // NOLINT(modernize-return-braced-init-list)
     }
 
     /**
