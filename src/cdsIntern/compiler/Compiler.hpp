@@ -212,15 +212,21 @@ inline auto exchange ( T & obj, U && newValue ) -> T {
 
 
 
-#if defined(__GNUC__) && ! defined(__MINGW64__)
+#if defined(__GNUC__) && ! defined(__MINGW64__) && ! defined(__clang__)
 
-#include "GNUC.hpp"
+#include "gcc.hpp"
 
 #endif
 
 #if defined(__MINGW64__)
 
 #include "MinGW.hpp"
+
+#endif
+
+#if defined(__clang__)
+
+#include "clang.hpp"
 
 #endif
 

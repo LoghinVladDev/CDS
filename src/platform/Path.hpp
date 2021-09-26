@@ -114,7 +114,13 @@ public:
             throw InvalidPath();
 
         char resolvedPath[PATH_MAX];
+
+        __CDS_WarningSuppression_UnusedResult_SuppressEnable
+
         realpath(path.cStr(), resolvedPath);
+
+        __CDS_WarningSuppression_UnusedResult_SuppressDisable
+
         this->_osPath = resolvedPath;
 
 #else

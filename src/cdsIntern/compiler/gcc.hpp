@@ -2,10 +2,10 @@
 // Created by loghin on 22/09/2021.
 //
 
-#ifndef CDS_GNUC_HPP
-#define CDS_GNUC_HPP
+#ifndef CDS_GCC_HPP
+#define CDS_GCC_HPP
 
-#if defined(__GNUC__) && !defined (GCC_VERSION)
+#if defined(__GNUC__) && !defined (GCC_VERSION) && !defined(__clang__)
 
 #define GCC_VERSION ( __GNUC__ * 10000 + __GNUC_MINOR__ * 100 + __GNUC_PATCHLEVEL__ )
 
@@ -16,4 +16,4 @@
 
 #endif
 
-#endif //CDS_GNUC_HPP
+#endif //CDS_GCC_HPP

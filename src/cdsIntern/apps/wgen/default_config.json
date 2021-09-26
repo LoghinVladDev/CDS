@@ -35,6 +35,10 @@
         {
             "Name": "StringOperationOverflow",
             "GCC": "-Wstringop-overflow"
+        },
+        {
+            "Name": "UnusedResult",
+            "GCC": "-Wunused-result"
         }
     ]
 }

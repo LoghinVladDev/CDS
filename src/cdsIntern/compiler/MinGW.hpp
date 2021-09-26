@@ -12,8 +12,8 @@
 #undef __CDS_compiler_name
 #undef __CDS_compiler_version
 
-#define __CDS_compiler_name "MinGW-w64"
-#define __CDS_compiler_version GCC_VERSION
+#define __CDS_compiler_name "MinGW-w64" /* NOLINT(bugprone-reserved-identifier) */
+#define __CDS_compiler_version GCC_VERSION /* NOLINT(bugprone-reserved-identifier) */
 
 
 #endif

@@ -10,7 +10,7 @@
 
 int main () {
     auto test = [] ( Test & test, String const & name ) {
-        test.start(name);
+        return test.start(name);
     };
 
     Array < Pair < SharedPointer < Test >, String > > tests = {
@@ -21,7 +21,8 @@ int main () {
             Pair < SharedPointer < Test >, String > { new JsonTest (),  "JsonTest" }
     };
 
-    tests.forEach([& test](Pair < SharedPointer< Test >, String > & t){
-        test(* t.first(), t.second());
-    });
+    for ( auto & t : tests ) {
+        if ( ! test ( * t.first(), t.second() ) )
+            break;
+    }
 }

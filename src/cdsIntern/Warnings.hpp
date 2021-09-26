@@ -3,7 +3,7 @@
 //
 // Generated for CDS through Warning Suppression Generator Tool
 // Author: Loghin Vlad-Andrei - github.com/LoghinVladDev
-// Generation Date: 26/09/21 - 05:17:42
+// Generation Date: 26/09/21 - 05:44:10
 // CDS Version - 0.0.2
 // Licenced under Project Licence - https://github.com/LoghinVladDev/CDS/blob/master/LICENSE
 //
@@ -40,7 +40,7 @@ __pragma(warning(pop))
 
 #endif // if defined(_MSC_VER)
 
-#if defined(__GNUC__)
+#if defined(__GNUC__) && !defined(__clang__)
 
 #define __CDS_WarningSuppression_GCC_CreatePragma(_text) #_text
 
@@ -92,6 +92,9 @@ _Pragma("GCC diagnostic pop")
 #define __CDS_WarningSuppression_MSVC_StringOperationOverflow_SuppressEnable /* NOLINT(bugprone-reserved-identifier) */
 #define __CDS_WarningSuppression_MSVC_StringOperationOverflow_SuppressDisable /* NOLINT(bugprone-reserved-identifier) */
 
+#define __CDS_WarningSuppression_MSVC_UnusedResult_SuppressEnable /* NOLINT(bugprone-reserved-identifier) */
+#define __CDS_WarningSuppression_MSVC_UnusedResult_SuppressDisable /* NOLINT(bugprone-reserved-identifier) */
+
 #define __CDS_WarningSuppression_GCC_ArgumentPossibleUnexpectedValue_SuppressEnable /* NOLINT(bugprone-reserved-identifier) */
 #define __CDS_WarningSuppression_GCC_ArgumentPossibleUnexpectedValue_SuppressDisable /* NOLINT(bugprone-reserved-identifier) */
 
@@ -109,6 +112,9 @@ _Pragma("GCC diagnostic pop")
 
 #define __CDS_WarningSuppression_GCC_StringOperationOverflow_SuppressEnable __CDS_WarningSuppression_GCC_SuppressEnable(-Wstringop-overflow) /* NOLINT(bugprone-reserved-identifier) */
 #define __CDS_WarningSuppression_GCC_StringOperationOverflow_SuppressDisable __CDS_WarningSuppression_GCC_SuppressDisable(-Wstringop-overflow) /* NOLINT(bugprone-reserved-identifier) */
+
+#define __CDS_WarningSuppression_GCC_UnusedResult_SuppressEnable __CDS_WarningSuppression_GCC_SuppressEnable(-Wunused-result) /* NOLINT(bugprone-reserved-identifier) */
+#define __CDS_WarningSuppression_GCC_UnusedResult_SuppressDisable __CDS_WarningSuppression_GCC_SuppressDisable(-Wunused-result) /* NOLINT(bugprone-reserved-identifier) */
 
 
 #define __CDS_WarningSuppression_SuppressEnable(_warning) /* NOLINT(bugprone-reserved-identifier) */ \
@@ -141,6 +147,9 @@ _Pragma("GCC diagnostic pop")
 
 #define __CDS_WarningSuppression_StringOperationOverflow_SuppressEnable __CDS_WarningSuppression_SuppressEnable(StringOperationOverflow) /* NOLINT(bugprone-reserved-identifier) */
 #define __CDS_WarningSuppression_StringOperationOverflow_SuppressDisable __CDS_WarningSuppression_SuppressDisable(StringOperationOverflow) /* NOLINT(bugprone-reserved-identifier) */
+
+#define __CDS_WarningSuppression_UnusedResult_SuppressEnable __CDS_WarningSuppression_SuppressEnable(UnusedResult) /* NOLINT(bugprone-reserved-identifier) */
+#define __CDS_WarningSuppression_UnusedResult_SuppressDisable __CDS_WarningSuppression_SuppressDisable(UnusedResult) /* NOLINT(bugprone-reserved-identifier) */
 
 //// End of Platform Dependent Config Macros
 

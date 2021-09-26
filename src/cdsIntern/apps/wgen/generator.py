@@ -17,7 +17,8 @@ platform_dependent_templates = [
         ]
     }),
     ("GCC", {
-        "macroIdentifier": {"start": "#if defined(__GNUC__)", "mid": "#else // if defined(__GCC__)",
+        "macroIdentifier": {"start": "#if defined(__GNUC__) && !defined(__clang__)",
+                            "mid": "#else // if defined(__GCC__)",
                             "end": "#endif // if defined(__GNUC__)"},
         "parameters": "_warningName",
         "pre": "#define __CDS_WarningSuppression_GCC_CreatePragma(_text) #_text",
