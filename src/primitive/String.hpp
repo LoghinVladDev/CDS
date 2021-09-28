@@ -12,6 +12,10 @@
 
 #include "../collection/ordered/LinkedListPublic.hpp"
 
+#include <cstdarg>
+
+#include <CDS/Options>
+
 #if defined(CDS_QT)
 #include <QString>
 #endif
@@ -47,6 +51,20 @@ public:
          */
         __CDS_NoDiscard __CDS_cpplang_VirtualConstexpr auto what() const noexcept -> StringLiteral override {
             return "Null Access Exception : Requested Reference to Element at Index 0 for Empty String.";
+        }
+    };
+
+    class FormatException : public std::exception {
+
+        /**
+         * @brief Function used to obtain the Exception's message
+         *
+         * @exceptsafe
+         *
+         * @return StringLiteral = Message as C String Literal
+         */
+        __CDS_NoDiscard __CDS_cpplang_VirtualConstexpr auto what() const noexcept -> StringLiteral override {
+            return "Format Exception";
         }
     };
 private:
@@ -3861,6 +3879,8 @@ public:
      */
     __CDS_NoDiscard auto split ( ElementType, Size = UINT32_MAX ) const noexcept -> LinkedList < String >;
 
+    __CDS_NoDiscard auto lines () const noexcept -> LinkedList < String >;
+
     /**
      * @brief Function used to split string by tokens given in a String, in an optional given number of tokens
      *
@@ -4346,6 +4366,43 @@ public:
      * @test Tested in primitive/StringTest/Utility Functions
      */
     __CDS_NoDiscard __CDS_cpplang_ConstexprDestructor auto removeSuffix (String const & suffix) const noexcept -> String { return String(*this).removeSuffix(suffix); }
+
+    __CDS_NoDiscard inline auto static format (StringLiteral format, ...) noexcept (false) -> String {
+        va_list args;
+        va_start (args, format);
+
+        int currentSize = __CDS_StringFormat_StartSize;
+
+        while(currentSize <= __CDS_StringFormat_MaxSize) {
+            char * buffer = new char[currentSize];
+
+            int returnValue = std::vsnprintf ( buffer, currentSize, format, args );
+            if ( returnValue >= 0 && returnValue < currentSize ) {
+                String s(buffer, returnValue);
+                delete [] buffer;
+                va_end (args);
+
+                return s;
+            }
+
+            va_end(args);
+            va_start(args, format);
+            delete [] buffer;
+            currentSize *= __CDS_StringFormat_SizeMultiplier;
+        }
+
+        va_end (args);
+        throw FormatException();
+    }
+
+    __CDS_NoDiscard inline auto static f ( StringLiteral format, ... ) noexcept (false) -> String {
+        va_list args;
+        va_start (args, format);
+
+        return String::format(format, args);
+
+        va_end (args);
+    }
 };
 
 // weird stuff here

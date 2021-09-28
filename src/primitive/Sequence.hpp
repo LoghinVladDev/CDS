@@ -3798,4 +3798,13 @@ __CDS_Requires ( Iterable < C > || ConstIterable < C > ) {
 
 /// endregion
 
+inline auto Range::sequence() noexcept -> Sequence<Range> {
+    return Sequence < typename std :: remove_reference < decltype (*this) > :: type > (*this);
+}
+
+inline auto Range::sequence() const noexcept -> Sequence<const Range> {
+    return Sequence < typename std :: remove_reference < decltype (*this) > :: type > (*this);
+}
+
+
 #endif //CDS_SEQUENCE_HPP

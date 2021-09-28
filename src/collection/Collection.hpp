@@ -18,6 +18,7 @@
 #endif
 
 #include "../std-types.h"
+#include <CDS/Pointer>
 
 #if defined(__cpp_concepts) && !defined(_MSC_VER)
 template <typename T>
@@ -45,6 +46,11 @@ template <class T>
 class Collection : public Object {
 public:
     using ElementType = T;
+    using ElementRef = T &;
+    using ElementMRef = T &&;
+    using ElementCRef = T const &;
+    using ElementPtr = T *;
+    using ElementCPtr = T const *;
 
 protected:
     class CollectionOutOfBounds : public std::exception {
@@ -59,54 +65,48 @@ protected:
 public:
 
     class Iterator : public Object {
+        friend class Collection < T >;
+
     protected:
         Iterator() noexcept = default;
         Iterator(const Iterator &) noexcept = default;
         Iterator(Iterator &&) noexcept = default;
+
+        virtual auto of ( Collection const * ) const noexcept -> bool = 0;
     public:
         ~Iterator() noexcept override = default;
 
-#if __cpp_constexpr >= 201907
-        constexpr inline virtual auto next (  ) noexcept -> Iterator & = 0;
-        constexpr inline virtual auto equals ( const Iterator & ) const noexcept -> bool = 0;
-        constexpr inline virtual auto value() const noexcept -> T& = 0;
+        __CDS_cpplang_ConstexprPureAbstract virtual auto next (  ) noexcept -> Iterator & = 0;
+        __CDS_cpplang_ConstexprPureAbstract virtual auto equals ( const Iterator & ) const noexcept -> bool = 0;
+        __CDS_cpplang_ConstexprPureAbstract virtual auto value() const noexcept -> T& = 0;
 
-        virtual constexpr inline auto operator ++ () noexcept -> Iterator & { this->next(); return * this; }
-#else
-        virtual auto next (  ) noexcept -> Iterator & = 0;
-        virtual auto equals ( const Iterator & ) const noexcept -> bool = 0;
-        virtual auto value() const noexcept -> T& = 0;
+        __CDS_cpplang_VirtualConstexpr virtual auto operator ++ () noexcept -> Iterator & { this->next(); return * this; }
 
-        virtual auto operator ++ () noexcept -> Iterator & { this->next(); return * this; }
-#endif
-        constexpr inline auto operator == ( const Iterator & o ) const noexcept -> bool { return this->equals(o ); }
-        constexpr inline auto operator != ( const Iterator & o ) const noexcept -> bool { return ! this->equals(o ); }
-        constexpr inline auto operator * () const noexcept -> T& { return this->value(); }
+        constexpr auto operator == ( const Iterator & o ) const noexcept -> bool { return this->equals(o ); }
+        constexpr auto operator != ( const Iterator & o ) const noexcept -> bool { return ! this->equals(o ); }
+        constexpr auto operator * () const noexcept -> T& { return this->value(); }
 
         __CDS_NoDiscard auto copy () const noexcept -> Iterator * override = 0;
     };
 
     class ConstIterator : public Object {
+        friend class Collection < T >;
+
     protected:
         ConstIterator() noexcept = default;
         ConstIterator(const ConstIterator &) noexcept = default;
         ConstIterator(ConstIterator &&) noexcept = default;
+
+        virtual auto of ( Collection const * ) const noexcept -> bool = 0;
     public:
         ~ConstIterator() noexcept override = default;
 
-#if __cpp_constexpr >= 201907
-        constexpr inline virtual auto next (  ) noexcept -> ConstIterator & = 0;
-        constexpr inline virtual auto equals ( const ConstIterator & ) const noexcept -> bool = 0;
-        constexpr inline virtual auto value () const noexcept -> const T& = 0;
+        __CDS_cpplang_ConstexprPureAbstract virtual auto next (  ) noexcept -> ConstIterator & = 0;
+        __CDS_cpplang_ConstexprPureAbstract virtual auto equals ( const ConstIterator & ) const noexcept -> bool = 0;
+        __CDS_cpplang_ConstexprPureAbstract virtual auto value () const noexcept -> const T& = 0;
 
-        virtual constexpr inline auto operator ++ () noexcept -> ConstIterator & { this->next(); return * this; }
-#else
-        virtual auto next (  ) noexcept -> ConstIterator & = 0;
-        virtual auto equals ( const ConstIterator & ) const noexcept -> bool = 0;
-        virtual auto value () const noexcept -> const T& = 0;
+        __CDS_cpplang_VirtualConstexpr virtual auto operator ++ () noexcept -> ConstIterator & { this->next(); return * this; }
 
-        virtual auto operator ++ () noexcept -> ConstIterator & { this->next(); return * this; }
-#endif
         constexpr inline auto operator == ( const ConstIterator & o ) const noexcept -> bool { return this->equals(o ); }
         constexpr inline auto operator != ( const ConstIterator & o ) const noexcept -> bool { return ! this->equals(o ); }
         constexpr inline auto operator * () const noexcept -> const T& { return this->value(); }
@@ -123,6 +123,14 @@ protected:
     static inline auto endPtr ( Collection < T > & o ) noexcept -> Iterator * { return o.endPtr(); }
     static inline auto beginPtr ( const Collection < T > & o ) noexcept -> ConstIterator * { return o.beginPtr(); }
     static inline auto endPtr ( const Collection < T > & o ) noexcept -> ConstIterator * { return o.endPtr(); }
+
+    static inline auto iteratorIsOf ( Iterator const & it, Collection < T > const & collection ) noexcept -> bool {
+        return it.of(& collection);
+    }
+
+    static inline auto iteratorIsOf ( ConstIterator const & it, Collection < T > const & collection ) noexcept -> bool {
+        return it.of(& collection);
+    }
 
 //    virtual auto findPtr ( T & ) noexcept -> Iterator & = 0;
 //    virtual auto findPtr ( const T & ) const noexcept -> ConstIterator & = 0;
@@ -153,30 +161,604 @@ public:
     __CDS_MaybeUnused virtual auto inline removeAllNotOf ( const std::initializer_list<T> & o ) noexcept -> bool  { return this->removeNotOf( o, this->size() ); }
     __CDS_MaybeUnused virtual auto removeLastNotOf ( const std::initializer_list<T> & ) noexcept -> bool = 0;
 
-    __CDS_MaybeUnused virtual auto replace ( const T &, const T &, Size ) noexcept -> void = 0;
-    __CDS_MaybeUnused virtual auto inline replaceFirst ( const T & what, const T & with ) noexcept -> void { return this->replace(what, with, 1); }
-    __CDS_MaybeUnused virtual auto inline replaceAll ( const T & what, const T & with ) noexcept -> void { return this->replace(what, with, this->size()); }
-    __CDS_MaybeUnused virtual auto replaceLast ( const T &, const T & ) noexcept -> void = 0;
+    template < typename V = T, typename std :: enable_if < Type < V > :: copyAssignable, int > :: type = 0 >
+    __CDS_MaybeUnused auto replace ( ElementCRef what, ElementCRef with, Size count ) noexcept -> Size {
+        Size replaceCount = 0;
 
-    __CDS_MaybeUnused virtual auto replaceOf ( const Collection &, const T &, Size ) noexcept -> void = 0;
-    __CDS_MaybeUnused virtual auto inline replaceFirstOf ( const Collection & what, const T & with ) noexcept -> void { return this->replaceOf(what, with, 1); }
-    __CDS_MaybeUnused virtual auto inline replaceAllOf ( const Collection & what, const T & with ) noexcept -> void { return this->replaceOf(what, with, this->size()); }
-    __CDS_MaybeUnused virtual auto replaceLastOf ( const Collection &, const T & ) noexcept -> void = 0;
+        for (
+                auto
+                        it = UniquePointer < Iterator > ( this->beginPtr() ),
+                        end = UniquePointer < Iterator > ( this->endPtr() );
+                * it != * end;
+                it->next()
+        ) {
+            if ( replaceCount < count ) {
+                if ( Type < T > :: compare ( it->value(), what ) ) {
+                    it->value() = with;
+                    ++ replaceCount;
+                }
+            } else
+                return count;
+        }
 
-    __CDS_MaybeUnused virtual auto replaceNotOf ( const Collection &, const T &, Size ) noexcept -> void = 0;
-    __CDS_MaybeUnused virtual auto inline replaceFirstNotOf ( const Collection & what, const T & with ) noexcept -> void { return this->replaceNotOf(what, with, 1); }
-    __CDS_MaybeUnused virtual auto inline replaceAllNotOf ( const Collection & what, const T & with ) noexcept -> void { return this->replaceNotOf(what, with, this->size()); }
-    __CDS_MaybeUnused virtual auto replaceLastNotOf ( const Collection &, const T & ) noexcept -> void = 0;
+        return replaceCount;
+    }
 
-    __CDS_MaybeUnused virtual auto replaceOf ( const std::initializer_list<T> &, const T &, Size ) noexcept -> void = 0;
-    __CDS_MaybeUnused virtual auto inline replaceFirstOf ( const std::initializer_list<T> & what, const T & with ) noexcept -> void { return this->replaceOf(what, with, 1); }
-    __CDS_MaybeUnused virtual auto inline replaceAllOf ( const std::initializer_list<T> & what, const T & with ) noexcept -> void { return this->replaceOf(what, with, this->size()); }
-    __CDS_MaybeUnused virtual auto replaceLastOf ( const std::initializer_list<T> &, const T & ) noexcept -> void = 0;
+    template < typename V = T, typename std :: enable_if < Type < V > :: copyAssignable, int > :: type = 0 >
+    __CDS_MaybeUnused auto inline replaceFirst ( ElementCRef what, ElementCRef with ) noexcept -> bool {
+        for (
+                auto
+                        it = UniquePointer < Iterator > ( this->beginPtr() ),
+                        end = UniquePointer < Iterator > ( this->endPtr() );
+                * it != * end;
+                it->next()
+        )
+            if ( Type < T > :: compare ( it->value(), what ) ) {
+                it->value() = with;
+                return true;
+            }
 
-    __CDS_MaybeUnused virtual auto replaceNotOf ( const std::initializer_list<T> &, const T &, Size ) noexcept -> void = 0;
-    __CDS_MaybeUnused virtual auto inline replaceFirstNotOf ( const std::initializer_list<T> & what, const T & with ) noexcept -> void { return this->replaceNotOf(what, with, 1); }
-    __CDS_MaybeUnused virtual auto inline replaceAllNotOf ( const std::initializer_list<T> & what, const T & with ) noexcept -> void { return this->replaceNotOf(what, with, this->size()); }
-    __CDS_MaybeUnused virtual auto replaceLastNotOf ( const std::initializer_list<T> &, const T & ) noexcept -> void = 0;
+        return false;
+    }
+
+    template < typename V = T, typename std :: enable_if < Type < V > :: moveAssignable, int > :: type = 0 >
+    __CDS_MaybeUnused auto inline replaceFirst ( ElementCRef what, ElementMRef with ) noexcept -> bool {
+        for (
+                auto
+                        it = UniquePointer < Iterator > ( this->beginPtr() ),
+                        end = UniquePointer < Iterator > ( this->endPtr() );
+                * it != * end;
+                it->next()
+        )
+            if ( Type < T > :: compare ( it->value(), what ) ) {
+                it->value() = with;
+                return true;
+            }
+
+        return false;
+    }
+
+    template < typename V = T, typename std :: enable_if < Type < V > :: copyAssignable, int > :: type = 0 >
+    __CDS_MaybeUnused auto inline replaceAll ( ElementCRef what, ElementCRef with ) noexcept -> Size {
+        Size replacedCount = 0;
+
+        for (
+                auto
+                        it = UniquePointer < Iterator > ( this->beginPtr() ),
+                        end = UniquePointer < Iterator > ( this->endPtr() );
+                * it != * end;
+                it->next()
+        )
+            if ( Type < T > :: compare ( it->value(), what ) ) {
+                it->value() = with;
+                ++ replacedCount;
+            }
+
+        return replacedCount;
+    }
+
+    template < typename V = T, typename std :: enable_if < Type < V > :: copyAssignable, int > :: type = 0 >
+    __CDS_MaybeUnused auto replaceLast ( ElementCRef what, ElementCRef with ) noexcept -> bool {
+        UniquePointer < Iterator > lastEncountered;
+
+        for (
+                auto
+                        it = UniquePointer < Iterator > ( this->beginPtr() ),
+                        end = UniquePointer < Iterator > ( this->endPtr() );
+                * it != * end;
+                it->next()
+        )
+            if ( Type < T > :: compare ( it->value(), what ) )
+                lastEncountered.reset(it->copy());
+
+        if ( ! lastEncountered.isNull() )
+            lastEncountered->value() = with;
+
+        return ! lastEncountered.isNull();
+    }
+
+    template < typename V = T, typename std :: enable_if < Type < V > :: moveAssignable, int > :: type = 0 >
+    __CDS_MaybeUnused auto replaceLast ( ElementCRef what, ElementMRef with ) noexcept -> bool {
+        UniquePointer < Iterator > lastEncountered;
+
+        for (
+                auto
+                        it = UniquePointer < Iterator > ( this->beginPtr() ),
+                        end = UniquePointer < Iterator > ( this->endPtr() );
+                * it != * end;
+                it->next()
+        )
+            if ( Type < T > :: compare ( it->value(), what ) )
+                lastEncountered.reset(it->copy());
+
+        if ( ! lastEncountered.isNull() )
+            lastEncountered->value() = with;
+
+        return ! lastEncountered.isNull();
+    }
+
+    template < typename V = T, typename std :: enable_if < Type < V > :: copyAssignable, int > :: type = 0 >
+    __CDS_MaybeUnused auto replaceOf ( Collection const & of, ElementCRef with, Size count ) noexcept -> Size {
+        Size replacedCount = 0;
+        for (
+                auto
+                        it = UniquePointer < Iterator > ( this->beginPtr() ),
+                        end = UniquePointer < Iterator > ( this->endPtr() );
+                * it != * end;
+                it->next()
+        )
+            if ( replacedCount < count ) {
+                if ( of.contains( it->value() ) ) {
+                    it->value() = with;
+                    ++ replacedCount;
+                }
+            } else
+                return count;
+
+        return replacedCount;
+    }
+
+    template < typename V = T, typename std :: enable_if < Type < V > :: copyAssignable, int > :: type = 0 >
+    __CDS_MaybeUnused auto inline replaceFirstOf ( Collection const & of, ElementCRef with ) noexcept -> bool {
+        for (
+                auto
+                        it = UniquePointer < Iterator > ( this->beginPtr() ),
+                        end = UniquePointer < Iterator > ( this->endPtr() );
+                * it != * end;
+                it->next()
+        )
+            if ( of.contains( it->value() ) ) {
+                it->value() = with;
+                return true;
+            }
+
+        return false;
+    }
+
+    template < typename V = T, typename std :: enable_if < Type < V > :: moveAssignable, int > :: type = 0 >
+    __CDS_MaybeUnused auto inline replaceFirstOf ( Collection const & of, ElementMRef with ) noexcept -> bool {
+        for (
+                auto
+                        it = UniquePointer < Iterator > ( this->beginPtr() ),
+                        end = UniquePointer < Iterator > ( this->endPtr() );
+                * it != * end;
+                it->next()
+        )
+            if ( of.contains( it->value() ) ) {
+                it->value() = with;
+                return true;
+            }
+
+        return false;
+    }
+
+    template < typename V = T, typename std :: enable_if < Type < V > :: copyAssignable, int > :: type = 0 >
+    __CDS_MaybeUnused auto inline replaceAllOf ( Collection const & of, ElementCRef with ) noexcept -> Size {
+        Size replacedCount = 0;
+
+        for (
+                auto
+                        it = UniquePointer < Iterator > ( this->beginPtr() ),
+                        end = UniquePointer < Iterator > ( this->endPtr() );
+                * it != * end;
+                it->next()
+        )
+            if ( of.contains( it->value() ) ) {
+                it->value() = with;
+                ++ replacedCount;
+            }
+
+        return replacedCount;
+    }
+
+    template < typename V = T, typename std :: enable_if < Type < V > :: copyAssignable, int > :: type = 0 >
+    __CDS_MaybeUnused auto replaceLastOf ( Collection const & of, ElementCRef with ) noexcept -> bool {
+        UniquePointer < Iterator > lastOccurred;
+
+        for (
+                auto
+                        it = UniquePointer < Iterator > ( this->beginPtr() ),
+                        end = UniquePointer < Iterator > ( this->endPtr() );
+                * it != * end;
+                it->next()
+        )
+            if ( of.contains( it->value() ) )
+                lastOccurred.reset(it->copy());
+
+        if ( ! lastOccurred.isNull() )
+            lastOccurred->value() = with;
+
+        return ! lastOccurred.isNull();
+    }
+
+    template < typename V = T, typename std :: enable_if < Type < V > :: moveAssignable, int > :: type = 0 >
+    __CDS_MaybeUnused auto replaceLastOf ( Collection const & of, ElementCRef with ) noexcept -> bool {
+        UniquePointer < Iterator > lastOccurred;
+
+        for (
+                auto
+                        it = UniquePointer < Iterator > ( this->beginPtr() ),
+                        end = UniquePointer < Iterator > ( this->endPtr() );
+                * it != * end;
+                it->next()
+        )
+            if ( of.contains( it->value() ) )
+                lastOccurred.reset(it->copy());
+
+        if ( ! lastOccurred.isNull() )
+            lastOccurred->value() = with;
+
+        return ! lastOccurred.isNull();
+    }
+
+    template < typename V = T, typename std :: enable_if < Type < V > :: copyAssignable, int > :: type = 0 >
+    __CDS_MaybeUnused auto replaceNotOf ( Collection const & of, ElementCRef with, Size count ) noexcept -> Size {
+        Size replacedCount = 0;
+
+        for (
+                auto
+                        it = UniquePointer < Iterator > ( this->beginPtr() ),
+                        end = UniquePointer < Iterator > ( this->endPtr() );
+                * it != * end;
+                it->next()
+        )
+            if ( replacedCount < count ) {
+                if ( ! of.contains( it->value() ) ) {
+                    it->value() = with;
+                    ++ replacedCount;
+                }
+            } else
+                return count;
+
+        return replacedCount;
+    }
+
+    template < typename V = T, typename std :: enable_if < Type < V > :: copyAssignable, int > :: type = 0 >
+    __CDS_MaybeUnused auto inline replaceFirstNotOf ( Collection const & of, ElementCRef with ) noexcept -> bool {
+        for (
+                auto
+                        it = UniquePointer < Iterator > ( this->beginPtr() ),
+                        end = UniquePointer < Iterator > ( this->endPtr() );
+                * it != * end;
+                it->next()
+        )
+            if ( ! of.contains( it->value() ) ) {
+                it->value() = with;
+                return true;
+            }
+
+        return false;
+    }
+
+    template < typename V = T, typename std :: enable_if < Type < V > :: moveAssignable, int > :: type = 0 >
+    __CDS_MaybeUnused auto inline replaceFirstNotOf ( Collection const & of, ElementMRef with ) noexcept -> bool {
+        for (
+                auto
+                        it = UniquePointer < Iterator > ( this->beginPtr() ),
+                        end = UniquePointer < Iterator > ( this->endPtr() );
+                * it != * end;
+                it->next()
+        )
+            if ( ! of.contains( it->value() ) ) {
+                it->value() = with;
+                return true;
+            }
+
+        return false;
+    }
+
+    template < typename V = T, typename std :: enable_if < Type < V > :: copyAssignable, int > :: type = 0 >
+    __CDS_MaybeUnused auto inline replaceAllNotOf ( Collection const & of, ElementCRef with ) noexcept -> Size {
+        Size replacedCount = 0;
+
+        for (
+                auto
+                        it = UniquePointer < Iterator > ( this->beginPtr() ),
+                        end = UniquePointer < Iterator > ( this->endPtr() );
+                * it != * end;
+                it->next()
+        )
+            if ( ! of.contains( it->value() ) ) {
+                it->value() = with;
+                ++ replacedCount;
+            }
+
+        return replacedCount;
+    }
+
+    template < typename V = T, typename std :: enable_if < Type < V > :: copyAssignable, int > :: type = 0 >
+    __CDS_MaybeUnused auto replaceLastNotOf ( Collection const & of, ElementCRef with ) noexcept -> bool {
+        UniquePointer < Iterator > lastOccurred;
+
+        for (
+                auto
+                        it = UniquePointer < Iterator > ( this->beginPtr() ),
+                        end = UniquePointer < Iterator > ( this->endPtr() );
+                * it != * end;
+                it->next()
+        )
+            if ( ! of.contains( it->value() ) )
+                lastOccurred.reset(it->copy());
+
+        if ( ! lastOccurred.isNull() )
+            lastOccurred->value() = with;
+
+        return ! lastOccurred.isNull();
+    }
+
+    template < typename V = T, typename std :: enable_if < Type < V > :: moveAssignable, int > :: type = 0 >
+    __CDS_MaybeUnused auto replaceLastNotOf ( Collection const & of, ElementMRef with ) noexcept -> bool {
+        UniquePointer < Iterator > lastOccurred;
+
+        for (
+                auto
+                        it = UniquePointer < Iterator > ( this->beginPtr() ),
+                        end = UniquePointer < Iterator > ( this->endPtr() );
+                * it != * end;
+                it->next()
+        )
+            if ( ! of.contains( it->value() ) )
+                lastOccurred.reset(it->copy());
+
+        if ( ! lastOccurred.isNull() )
+            lastOccurred->value() = with;
+
+        return ! lastOccurred.isNull();
+    }
+
+protected:
+
+    static auto iListContains ( std :: initializer_list < T > const & list, ElementCRef what ) noexcept -> bool {
+        for ( auto & e : list )
+            if ( Type < T > :: compare (e, what) )
+                return true;
+
+        return false;
+    }
+
+    virtual auto allocInsertGetPtr () noexcept -> ElementPtr = 0;
+
+public:
+
+    template < typename V = T, typename std :: enable_if < Type < V > :: copyAssignable, int > :: type = 0 >
+    __CDS_MaybeUnused auto replaceOf ( std::initializer_list<T> const & of, ElementCRef with, Size count ) noexcept -> Size {
+        Size replacedCount = 0;
+
+        for (
+                auto
+                        it = UniquePointer < Iterator > ( this->beginPtr() ),
+                        end = UniquePointer < Iterator > ( this->endPtr() );
+                * it != * end;
+                it->next()
+        )
+            if ( replacedCount < count ) {
+                if ( Collection < T > :: iListContains ( of, it->value() ) ) {
+                    it->value() = with;
+                    ++ replacedCount;
+                }
+            } else
+                return count;
+
+        return replacedCount;
+    }
+
+    template < typename V = T, typename std :: enable_if < Type < V > :: copyAssignable, int > :: type = 0 >
+    __CDS_MaybeUnused auto inline replaceFirstOf ( std::initializer_list<T> const & of, ElementCRef with ) noexcept -> bool {
+        for (
+                auto
+                        it = UniquePointer < Iterator > ( this->beginPtr() ),
+                        end = UniquePointer < Iterator > ( this->endPtr() );
+                * it != * end;
+                it->next()
+        )
+            if ( Collection < T > :: iListContains ( of, it->value() ) ) {
+                it->value() = with;
+                return true;
+            }
+
+        return false;
+    }
+
+    template < typename V = T, typename std :: enable_if < Type < V > :: moveAssignable, int > :: type = 0 >
+    __CDS_MaybeUnused auto inline replaceFirstOf ( std::initializer_list<T> const & of, ElementMRef with ) noexcept -> bool {
+        for (
+                auto
+                        it = UniquePointer < Iterator > ( this->beginPtr() ),
+                        end = UniquePointer < Iterator > ( this->endPtr() );
+                * it != * end;
+                it->next()
+        )
+            if ( Collection < T > :: iListContains ( of, it->value() ) ) {
+                it->value() = with;
+                return true;
+            }
+
+        return false;
+    }
+
+    template < typename V = T, typename std :: enable_if < Type < V > :: copyAssignable, int > :: type = 0 >
+    __CDS_MaybeUnused auto inline replaceAllOf ( std::initializer_list<T> const & of, ElementCRef with ) noexcept -> bool {
+        Size replacedCount = 0;
+
+        for (
+                auto
+                        it = UniquePointer < Iterator > ( this->beginPtr() ),
+                        end = UniquePointer < Iterator > ( this->endPtr() );
+                * it != * end;
+                it->next()
+        )
+            if ( Collection < T > :: iListContains ( of, it->value() ) ) {
+                it->value() = with;
+                ++ replacedCount;
+            }
+
+        return replacedCount;
+    }
+
+    template < typename V = T, typename std :: enable_if < Type < V > :: copyAssignable, int > :: type = 0 >
+    __CDS_MaybeUnused auto replaceLastOf ( std::initializer_list<T> const & of, ElementCRef with ) noexcept -> bool {
+        UniquePointer < Iterator > lastOccurred;
+
+        for (
+                auto
+                        it = UniquePointer < Iterator > ( this->beginPtr() ),
+                        end = UniquePointer < Iterator > ( this->endPtr() );
+                * it != * end;
+                it->next()
+                )
+            if ( Collection < T > ::iListContains( of, it->value() ) )
+                lastOccurred.reset(it->copy());
+
+        if ( ! lastOccurred.isNull() )
+            lastOccurred->value() = with;
+
+        return ! lastOccurred.isNull();
+    }
+
+    template < typename V = T, typename std :: enable_if < Type < V > :: moveAssignable, int > :: type = 0 >
+    __CDS_MaybeUnused auto replaceLastOf ( std::initializer_list<T> const & of, ElementMRef with ) noexcept -> bool {
+        UniquePointer < Iterator > lastOccurred;
+
+        for (
+                auto
+                        it = UniquePointer < Iterator > ( this->beginPtr() ),
+                        end = UniquePointer < Iterator > ( this->endPtr() );
+                * it != * end;
+                it->next()
+                )
+            if ( Collection < T > ::iListContains( of, it->value() ) )
+                lastOccurred.reset(it->copy());
+
+        if ( ! lastOccurred.isNull() )
+            lastOccurred->value() = with;
+
+        return ! lastOccurred.isNull();
+    }
+
+    template < typename V = T, typename std :: enable_if < Type < V > :: copyAssignable, int > :: type = 0 >
+    __CDS_MaybeUnused auto replaceNotOf ( std::initializer_list<T> const & of, ElementCRef with, Size count ) noexcept -> Size {
+        Size replacedCount = 0;
+
+        for (
+                auto
+                        it = UniquePointer < Iterator > ( this->beginPtr() ),
+                        end = UniquePointer < Iterator > ( this->endPtr() );
+                * it != * end;
+                it->next()
+                )
+            if ( replacedCount < count ) {
+                if ( ! Collection < T > :: iListContains ( of, it->value() ) ) {
+                    it->value() = with;
+                    ++ replacedCount;
+                }
+            } else
+                return count;
+
+        return replacedCount;
+    }
+
+    template < typename V = T, typename std :: enable_if < Type < V > :: copyAssignable, int > :: type = 0 >
+    __CDS_MaybeUnused auto inline replaceFirstNotOf ( std::initializer_list<T> const & of, ElementCRef with ) noexcept -> bool {
+        for (
+                auto
+                        it = UniquePointer < Iterator > ( this->beginPtr() ),
+                        end = UniquePointer < Iterator > ( this->endPtr() );
+                * it != * end;
+                it->next()
+                )
+            if ( ! Collection < T > :: iListContains ( of, it->value() ) ) {
+                it->value() = with;
+                return true;
+            }
+
+        return false;
+    }
+
+    template < typename V = T, typename std :: enable_if < Type < V > :: moveAssignable, int > :: type = 0 >
+    __CDS_MaybeUnused auto inline replaceFirstNotOf ( std::initializer_list<T> const & of, ElementMRef with ) noexcept -> bool {
+        for (
+                auto
+                        it = UniquePointer < Iterator > ( this->beginPtr() ),
+                        end = UniquePointer < Iterator > ( this->endPtr() );
+                * it != * end;
+                it->next()
+                )
+            if ( ! Collection < T > :: iListContains ( of, it->value() ) ) {
+                it->value() = with;
+                return true;
+            }
+
+        return false;
+    }
+
+    template < typename V = T, typename std :: enable_if < Type < V > :: copyAssignable, int > :: type = 0 >
+    __CDS_MaybeUnused auto inline replaceAllNotOf ( std::initializer_list<T> const & of, ElementCRef with ) noexcept -> bool {
+        Size replacedCount = 0;
+
+        for (
+                auto
+                        it = UniquePointer < Iterator > ( this->beginPtr() ),
+                        end = UniquePointer < Iterator > ( this->endPtr() );
+                * it != * end;
+                it->next()
+                )
+            if ( ! Collection < T > :: iListContains ( of, it->value() ) ) {
+                it->value() = with;
+                ++ replacedCount;
+            }
+
+        return replacedCount;
+    }
+
+    template < typename V = T, typename std :: enable_if < Type < V > :: copyAssignable, int > :: type = 0 >
+    __CDS_MaybeUnused auto replaceLastNotOf ( std::initializer_list<T> const & of, ElementCRef with ) noexcept -> bool {
+        UniquePointer < Iterator > lastOccurred;
+
+        for (
+                auto
+                        it = UniquePointer < Iterator > ( this->beginPtr() ),
+                        end = UniquePointer < Iterator > ( this->endPtr() );
+                * it != * end;
+                it->next()
+                )
+            if ( ! Collection < T > ::iListContains( of, it->value() ) )
+                lastOccurred.reset(it->copy());
+
+        if ( ! lastOccurred.isNull() )
+            lastOccurred->value() = with;
+
+        return ! lastOccurred.isNull();
+    }
+
+    template < typename V = T, typename std :: enable_if < Type < V > :: moveAssignable, int > :: type = 0 >
+    __CDS_MaybeUnused auto replaceLastNotOf ( std::initializer_list<T> const & of, ElementMRef with ) noexcept -> bool {
+        UniquePointer < Iterator > lastOccurred;
+
+        for (
+                auto
+                        it = UniquePointer < Iterator > ( this->beginPtr() ),
+                        end = UniquePointer < Iterator > ( this->endPtr() );
+                * it != * end;
+                it->next()
+                )
+            if ( ! Collection < T > ::iListContains( of, it->value() ) )
+                lastOccurred.reset(it->copy());
+
+        if ( ! lastOccurred.isNull() )
+            lastOccurred->value() = with;
+
+        return ! lastOccurred.isNull();
+    }
+
+    template < typename V = T, typename std :: enable_if < Type < V > :: copyAssignable, int > :: type = 0 >
+    __CDS_MaybeUnused auto replace ( Iterator const & iterator, ElementCRef value ) noexcept -> bool {
+        if ( iterator.of ( this ) ) {
+            iterator.value() = value;
+            return true;
+        }
+
+        return false;
+    }
 
     virtual auto back () noexcept (false) -> T & = 0;
     virtual auto back () const noexcept (false) -> const T & = 0;
@@ -193,8 +775,15 @@ public:
     __CDS_NoDiscard __CDS_MaybeUnused virtual auto empty () const noexcept -> bool = 0;
 #endif
 
-    virtual auto add (ElementType const &) noexcept -> void = 0;
-    virtual auto add (ElementType &&) noexcept -> void = 0;
+    template < typename V = T, typename std :: enable_if < Type < V > :: copyAssignable, int > :: type = 0 >
+    inline auto add (ElementCRef element) noexcept -> void {
+        * this->allocInsertGetPtr() = element;
+    }
+
+    template < typename V = T, typename std :: enable_if < Type < V > :: moveAssignable, int > :: type = 0 >
+    inline auto add (ElementMRef element) noexcept -> void {
+        * this->allocInsertGetPtr() = element;
+    }
 
     virtual auto clear () noexcept -> void = 0;
 

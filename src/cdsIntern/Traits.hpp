@@ -186,6 +186,13 @@ struct Type {
     static constexpr bool hasEqualityOperator = typeHasEqualityOperator < T >;
     static constexpr bool objectDerived = typeObjectDerived < T >;
 
+    static constexpr bool defaultConstructible = std :: is_default_constructible < T > :: type :: value;
+    static constexpr bool copyConstructible = std :: is_copy_constructible < T > :: type :: value;
+    static constexpr bool moveConstructible = std :: is_move_constructible < T > :: type :: value;
+
+    static constexpr bool copyAssignable = std :: is_copy_assignable < T > :: type :: value;
+    static constexpr bool moveAssignable = std :: is_move_assignable < T > :: type :: value;
+
 #else
 
     static constexpr bool hasEqualityOperator = typeHasEqualityOperator < T > ();

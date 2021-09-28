@@ -1,6 +1,17 @@
-#include <CDS/Compiler>
 #include <iostream>
+#include <list>
+
+
+#include <CDS/LinkedList>
+#include <CDS/Pointer>
+#include <CDS/Array>
+
 
 int main () {
-    std::cout << GCC_VERSION << '\n';
+//    LinkedList < int > list;
+    Array < UniquePointer < int > > pointers;
+
+    pointers.add(new int(3));
+
+    std::cout << pointers << '\n';
 }

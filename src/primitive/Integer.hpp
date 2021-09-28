@@ -9,6 +9,7 @@
 #include <CDS/Random>
 #include <CDS/Pointer>
 #include <CDS/Utility>
+#include <CDS/Range>
 
 /**
  * @class Object Derived container for an Integer Value
@@ -23,6 +24,13 @@ private:
      */
     int v{0};
 public:
+    __CDS_NoDiscard __CDS_cpplang_ConstexprDestructor auto rangeTo (Integer const & value) const noexcept -> Range {
+        return Range(this->v, value.v);
+    }
+
+    __CDS_NoDiscard __CDS_cpplang_ConstexprDestructor auto rangeTo (int value) const noexcept -> Range {
+        return Range(this->v, value);
+    }
 
     /**
      * @brief Alias for Pseudo-Random Number Generator Type
@@ -1165,6 +1173,50 @@ public:
      * @brief Thread Safe, Atomic container for Integer Type
      */
     class Atomic;
+
+    __CDS_NoDiscard __CDS_MaybeUnused __CDS_cpplang_ConstexprDestructor auto coerceAtLeast ( Integer const & minimumValue ) const noexcept -> Integer {
+        return minimumValue > * this ? minimumValue : * this;
+    }
+
+    __CDS_NoDiscard __CDS_MaybeUnused __CDS_cpplang_ConstexprDestructor auto coerceAtMost ( Integer const & maximumValue ) const noexcept -> Integer {
+        return maximumValue < * this ? maximumValue : * this;
+    }
+
+    __CDS_NoDiscard __CDS_MaybeUnused __CDS_cpplang_ConstexprDestructor auto coerceAtLeast ( int minimumValue ) const noexcept -> Integer {
+        return minimumValue > * this ? minimumValue : this->v;
+    }
+
+    __CDS_NoDiscard __CDS_MaybeUnused __CDS_cpplang_ConstexprDestructor auto coerceAtMost ( int maximumValue ) const noexcept -> Integer {
+        return maximumValue < * this ? maximumValue : this->v;
+    }
+
+    __CDS_NoDiscard __CDS_MaybeUnused __CDS_cpplang_ConstexprDestructor auto coerceIn ( Integer const & minimumValue, Integer const & maximumValue ) const noexcept -> Integer {
+        if ( minimumValue > * this ) return minimumValue;
+        if ( maximumValue < * this ) return maximumValue;
+        return * this;
+    }
+
+    __CDS_NoDiscard __CDS_MaybeUnused __CDS_cpplang_ConstexprDestructor auto coerceIn ( Integer const & minimumValue, int maximumValue ) const noexcept -> Integer {
+        if ( minimumValue > * this ) return minimumValue;
+        if ( maximumValue < * this ) return maximumValue;
+        return * this;
+    }
+
+    __CDS_NoDiscard __CDS_MaybeUnused __CDS_cpplang_ConstexprDestructor auto coerceIn ( int minimumValue, Integer const & maximumValue ) const noexcept -> Integer {
+        if ( minimumValue > * this ) return minimumValue;
+        if ( maximumValue < * this ) return maximumValue;
+        return * this;
+    }
+
+    __CDS_NoDiscard __CDS_MaybeUnused __CDS_cpplang_ConstexprDestructor auto coerceIn ( int minimumValue, int maximumValue ) const noexcept -> Integer {
+        if ( minimumValue > * this ) return minimumValue;
+        if ( maximumValue < * this ) return maximumValue;
+        return * this;
+    }
+
+    __CDS_NoDiscard __CDS_MaybeUnused constexpr auto isDigit () const noexcept -> bool { return this->v < 10 && this->v >= 0; }
+
+    __CDS_NoDiscard __CDS_MaybeUnused constexpr auto digitToChar () const noexcept (false) -> char { if ( ! this->isDigit() ) throw IllegalArgumentException(); return static_cast < char > ( this->v ) + '0'; } // NOLINT(cppcoreguidelines-narrowing-conversions)
 };
 
 #include <CDS/Atomic>
@@ -1817,6 +1869,7 @@ public:
         return this->get().operator~();
     }
 };
+
 #pragma clang diagnostic pop
 
 #if defined(CDS_INTEGER_POSTFIX)

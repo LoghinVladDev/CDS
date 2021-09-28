@@ -29,6 +29,14 @@ private:
     CType v{0};
 public:
 
+    __CDS_NoDiscard __CDS_cpplang_ConstexprDestructor auto rangeTo (Long const & value) const noexcept -> Range {
+        return Range(this->v, value.v);
+    }
+
+    __CDS_NoDiscard __CDS_cpplang_ConstexprDestructor auto rangeTo (sint64 value) const noexcept -> Range {
+        return Range(this->v, value);
+    }
+
     /**
      * @brief Alias for Pseudo-Random Number Generator Type
      */

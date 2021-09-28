@@ -18,4 +18,36 @@
 
 #endif
 
+#define __CDS_StringFormat_StartSize 128
+#define __CDS_StringFormat_SizeMultiplier 4
+#define __CDS_StringFormat_MaxSize INT32_MAX
+
+#if defined(__CDS_StringFormat_SizeMultiplier_Fast)
+
+#undef __CDS_StringFormat_SizeMultiplier
+#define __CDS_StringFormat_SizeMultiplier 8
+
+#endif
+
+#if defined(__CDS_StringFormat_SizeMultiplier_VeryFast)
+
+#undef __CDS_StringFormat_SizeMultiplier
+#define __CDS_StringFormat_SizeMultiplier 16
+
+#endif
+
+#if defined(__CDS_StringFormat_StartSize_Large)
+
+#undef __CDS_StringFormat_StartSize
+#define __CDS_StringFormat_StartSize 2048
+
+#endif
+
+#if defined(__CDS_StringFormat_StartSize_VeryLarge)
+
+#undef __CDS_StringFormat_StartSize
+#define __CDS_StringFormat_StartSize 32768
+
+#endif
+
 #endif //CDS_OPTIONS_HPP
