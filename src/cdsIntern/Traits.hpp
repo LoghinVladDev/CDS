@@ -33,19 +33,10 @@ template < typename T, typename U > struct __CDS_MaybeUnused isComparableLessNoe
 template < typename T, typename U > struct isComparableEquals < T, U, std::void_t < decltype ( std::declval <T> () == std::declval <U> () ) > > : std::true_type {};
 template < typename T, typename U > struct __CDS_MaybeUnused isComparableEqualsNoexcept < T, U, std::void_t < decltype ( std::declval <T> () == std::declval <U>() ) > > : BoolConstant < noexcept ( std::declval <T> () == std::declval <U> () ) > { };
 
-#if __CDS_cpplang_VariableTemplates_available == true
-
-template < typename T >
-constexpr bool typeHasEqualityOperator = isComparableEquals < T, T > :: type :: value;
-
-#else
-
 template < typename T >
 constexpr auto typeHasEqualityOperator () noexcept -> bool {
     return isComparableEquals < T, T > :: type :: value;
 }
-
-#endif
 
 template < typename K, typename V >
 class Pair;
@@ -59,7 +50,6 @@ struct isPair <Pair<T1, T2>> : public std::true_type {};
 template < typename T >
 concept IsMappable = isPair<T>::value;
 #endif
-
 
 template < typename T, typename U = void >
 struct isPrintable : std::false_type {};
@@ -82,19 +72,10 @@ using isBaseOf __CDS_MaybeUnused = std::is_base_of < B, D >;
 template < typename D >
 using isObjectDerived = isDerivedFrom < D, Object >;
 
-#if __CDS_cpplang_VariableTemplates_available == true
-
-template < typename D >
-constexpr bool typeObjectDerived = isObjectDerived < D > :: type :: value;
-
-#else
-
 template < typename D >
 constexpr auto typeObjectDerived () noexcept -> bool {
     return isObjectDerived < D > :: type :: value;
 }
-
-#endif
 
 template < typename T, typename = void >
 struct functionTraits;

@@ -63,7 +63,7 @@ public:
             if ( isOutOfRange() )
                 return * this;
             this->bucketIndex ++;
-            while ( this->pBuckets[this->bucketIndex].empty() && ! isOutOfRange() )
+            while ( ! isOutOfRange() && this->pBuckets[this->bucketIndex].empty() )
                 this->bucketIndex++;
             return * this;
         }
@@ -72,7 +72,7 @@ public:
             if ( isOutOfRange() )
                 return * this;
             this->bucketIndex --;
-            while ( this->pBuckets[this->bucketIndex].empty() && ! isOutOfRange() )
+            while ( ! isOutOfRange() && this->pBuckets[this->bucketIndex].empty() )
                 this->bucketIndex --;
             return * this;
         }
@@ -98,7 +98,7 @@ public:
             if ( isOutOfRange() )
                 return * this;
             this->bucketIndex ++;
-            while ( this->pBuckets[this->bucketIndex].empty() && ! isOutOfRange() )
+            while ( ! this->isOutOfRange() && this->pBuckets[this->bucketIndex].empty() )
                 this->bucketIndex++;
             return * this;
         }
@@ -107,7 +107,7 @@ public:
             if ( isOutOfRange() )
                 return * this;
             this->bucketIndex --;
-            while ( this->pBuckets[this->bucketIndex].empty() && ! isOutOfRange() )
+            while ( ! this->isOutOfRange() && this->pBuckets[this->bucketIndex].empty() )
                 this->bucketIndex--;
             return * this;
         }
@@ -444,7 +444,7 @@ public:
         return keys;
     }
 
-    auto values () noexcept -> LinkedList < Reference < Value > > {
+    auto values () noexcept -> LinkedList < Reference < Value > > override {
         LinkedList < Reference < Value > > values;
         for ( auto & e : (*this) )
             values.pushBack ( e.getSecond() );
@@ -592,7 +592,7 @@ public:
         return this->size() == 0;
     }
 
-    __CDS_NoDiscard auto toString() const noexcept -> String {
+    __CDS_NoDiscard auto toString() const noexcept -> String override {
         if ( this->empty() )
             return {"{ }"};
         std::stringstream oss;
