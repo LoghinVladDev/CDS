@@ -1360,11 +1360,12 @@ public:
      * @test tested in primitive/StringTest/Memory Tests
      */
     __CDS_cpplang_ConstexprDynamicAllocation auto resize(Size size) noexcept -> void {
+        auto toCopy = std :: min ( this->_c, size + 1 );
         this->_c = size + 1;
         auto newArea = new ElementType [ this->_c ];
 
         if ( ! this->empty() ) {
-            std::memcpy(newArea, this->_p, this->_c);
+            std::memcpy(newArea, this->_p, toCopy);
             delete[] this->_p;
         }
 
@@ -1801,7 +1802,7 @@ public:
     __CDS_cpplang_ConstexprDynamicAllocation auto append (StringLiteral cString) noexcept -> String & {
         if ( cString == nullptr ) return * this;
 
-        auto len = strlen( cString );
+        auto len = std::char_traits<char>::length( cString );
         this->_alloc(len);
 
         std::memcpy ( this->_p + this->_l, cString, len );
