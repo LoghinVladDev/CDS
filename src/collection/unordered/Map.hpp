@@ -32,14 +32,21 @@ requires UniqueIdentifiable <K>
 class Map : public Collection < Pair < K, V > > {
 public:
     using Key                       = K;
-    using Value                     = V;
     using KeyReference              = Key &;
-    using ValueReference            = Value &;
     using KeyConstReference         = Key const &;
+    using KeyMoveReference          = Key &&;
+
+    using Value                     = V;
+    using ValueReference            = Value &;
     using ValueConstReference       = Value const &;
+    using ValueMoveReference        = Value &&;
+
     using Entry                     = Pair < Key, Value >;
-    using EntryReference            = Pair < Key, Value > &;
-    using EntryConstReference       = Pair < Key, Value > const &;
+    using EntryReference            = Entry &;
+    using EntryConstReference       = Entry const &;
+    using EntryMoveReference        = Entry &&;
+    using EntryPointer              = Entry *;
+    using EntryPointerReference     = EntryPointer &;
 
     using EntryReferenceList        = LinkedList < Reference < Entry > >;
     using EntryConstReferenceList   = LinkedList < EntryConstReference >;
@@ -68,27 +75,39 @@ public:
 
     __CDS_MaybeUnused virtual auto containsValue (ValueConstReference) const noexcept -> bool = 0;
     virtual auto containsKey (KeyConstReference) const noexcept -> bool = 0;
+
     virtual auto remove (KeyConstReference) noexcept -> bool = 0;
-    virtual auto insert (EntryConstReference) noexcept -> ValueConstReference & = 0;
-    virtual auto insert (Entry &&) noexcept -> ValueConstReference & = 0;
+
+    auto allocInsertGetPtr (EntryConstReference) noexcept -> EntryPointerReference override = 0;
+
+    template < typename U = Entry, typename std :: enable_if < Type < U > :: copyConstructible, int > :: type = 0 >
+    auto insert (EntryConstReference entry) noexcept -> ValueConstReference {
+        return ( (this->allocInsertGetPtr(entry)) = new Entry(entry) )->second();
+    }
+
+    template < typename U = Entry, typename std :: enable_if < Type < U > :: moveConstructible, int > :: type = 0 >
+    auto insert (EntryMoveReference entry) noexcept -> ValueConstReference {
+        return ( ( this->allocInsertGetPtr(entry)) = new Entry(entry) )->second();
+    }
+
     __CDS_MaybeUnused virtual auto emplace (KeyConstReference, ValueConstReference) noexcept -> ValueConstReference = 0;
 
-    inline auto add (EntryConstReference e) noexcept -> void override {
-        this->insert(e);
-    }
+//    inline auto add (EntryConstReference e) noexcept -> void override {
+//        this->insert(e);
+//    }
 
-    inline auto add (Entry && e) noexcept -> void override {
-        this->insert(e);
-    }
+//    inline auto add (Entry && e) noexcept -> void override {
+//        this->insert(e);
+//    }
 
     ~Map() noexcept override = default;
-private:
-    auto contains ( EntryConstReference ) const noexcept -> bool override { return false; }
 
-    auto back () noexcept(false) -> EntryReference final { throw NotImplementedException(); }
-    auto back () const noexcept(false) -> EntryConstReference final { throw NotImplementedException(); }
-    auto front () const noexcept(false) -> EntryConstReference final { throw NotImplementedException(); }
-    auto front () noexcept(false) -> EntryReference final { throw NotImplementedException(); }
+//    inline auto contains ( EntryConstReference entry ) const noexcept -> bool override {
+//        if ( ! this->containsKey( entry ) ) return false;
+//        this->containsValue()
+//    }
+
+private:
 
     auto makeUnique () noexcept -> void override { }
 
@@ -112,26 +131,6 @@ private:
     auto removeFirstNotOf ( const std::initializer_list<Entry> & o ) noexcept -> bool override { return false; }
     auto removeAllNotOf ( const std::initializer_list<Entry> & o ) noexcept -> bool override { return false; }
     auto removeLastNotOf ( const std::initializer_list<Entry> & ) noexcept -> bool override { return false; }
-    auto replace ( EntryConstReference, EntryConstReference, Size ) noexcept -> void override {}
-    auto replaceFirst ( EntryConstReference what, EntryConstReference with ) noexcept -> void override {}
-    auto replaceAll ( EntryConstReference what, EntryConstReference with ) noexcept -> void override {}
-    auto replaceLast ( EntryConstReference, EntryConstReference ) noexcept -> void override {}
-    auto replaceOf ( const Collection<Entry> &, EntryConstReference, Size ) noexcept -> void override {}
-    auto replaceFirstOf ( const Collection<Entry> & what, EntryConstReference with ) noexcept -> void override {}
-    auto replaceAllOf ( const Collection<Entry> & what, EntryConstReference with ) noexcept -> void override {}
-    auto replaceLastOf ( const Collection<Entry> &, EntryConstReference ) noexcept -> void override {}
-    auto replaceNotOf ( const Collection<Entry> &, EntryConstReference, Size ) noexcept -> void override {}
-    auto replaceFirstNotOf ( const Collection<Entry> & what, EntryConstReference with ) noexcept -> void override {}
-    auto replaceAllNotOf ( const Collection<Entry> & what, EntryConstReference with ) noexcept -> void override {}
-    auto replaceLastNotOf ( const Collection<Entry> &, EntryConstReference ) noexcept -> void override {}
-    auto replaceOf ( const std::initializer_list<Entry> &, EntryConstReference, Size ) noexcept -> void override {}
-    auto replaceFirstOf ( const std::initializer_list<Entry> & what, EntryConstReference with ) noexcept -> void override {}
-    auto replaceAllOf ( const std::initializer_list<Entry> & what, EntryConstReference with ) noexcept -> void override {}
-    auto replaceLastOf ( const std::initializer_list<Entry> &, EntryConstReference ) noexcept -> void override {}
-    auto replaceNotOf ( const std::initializer_list<Entry> &, EntryConstReference, Size ) noexcept -> void override {}
-    auto replaceFirstNotOf ( const std::initializer_list<Entry> & what, EntryConstReference with ) noexcept -> void override {}
-    auto replaceAllNotOf ( const std::initializer_list<Entry> & what, EntryConstReference with ) noexcept -> void override {}
-    auto replaceLastNotOf ( const std::initializer_list<Entry> &, EntryConstReference ) noexcept -> void override {}
 };
 
 #include <sstream>

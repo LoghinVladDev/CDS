@@ -20,10 +20,37 @@ private:
     V _second;
 
 public:
-    template < typename K1 = K, typename V1 = V, typename = typename std :: enable_if < std :: is_default_constructible < K1 > :: type :: value && std :: is_default_constructible < V1 > :: type :: value, int > :: type >
-    Pair () noexcept(noexcept(K()) && noexcept(noexcept(V()))) : _first(), _second() {}
-    Pair(const K & k, const V & v) noexcept(noexcept(K(k)) && noexcept(V(v))) : _first(k), _second(v) {  }
-    ~Pair () noexcept override = default;
+//    template < typename K1 = K, typename V1 = V, typename = typename std :: enable_if < std :: is_default_constructible < K1 > :: type :: value && std :: is_default_constructible < V1 > :: type :: value, int > :: type >
+//    Pair () noexcept(noexcept(K()) && noexcept(noexcept(V()))) : _first(), _second() {}
+//    Pair(const K & k, const V & v) noexcept(noexcept(K(k)) && noexcept(V(v))) : _first(k), _second(v) {  }
+//    Pair(Pair const & obj) noexcept {
+//        this->_first = obj._first;
+//        this->_second = obj._second;
+//    }
+//
+//    Pair(Pair &&) noexcept = default;
+//    ~Pair () noexcept override = default;
+
+    template < typename K1 = K, typename V1 = V, typename std :: enable_if < Type < K1 > :: defaultConstructible && Type < V1 > :: defaultConstructible, int > :: type = 0 >
+    Pair () noexcept(noexcept(K()) && noexcept(V())) : _first(), _second() {}
+
+    template < typename K1 = K, typename V1 = V, typename std :: enable_if < Type < K1 > :: copyConstructible && Type < V1 > :: copyConstructible, int > :: type = 0 >
+    Pair ( Pair const & obj ) noexcept(noexcept(K(obj._first)) && noexcept(V(obj._second))) : _first(obj._first), _second(obj._second) { } // NOLINT(google-explicit-constructor)
+
+    template < typename K1 = K, typename V1 = V, typename std :: enable_if < Type < K1 > :: moveConstructible && Type < V1 > :: moveConstructible, int > :: type = 0 >
+    Pair ( Pair && obj ) noexcept(noexcept(K(std::move(obj._first))) && noexcept(V(std::move(obj._second)))) : _first(std::move(obj._first)), _second(std::move(obj._second)) { } // NOLINT(google-explicit-constructor)
+
+    template < typename K1 = K, typename V1 = V, typename std :: enable_if < Type < K1 > :: copyConstructible && Type < V1 > :: copyConstructible, int > :: type = 0 >
+    Pair ( K const & first, V const & second ) noexcept(noexcept(K(first)) && noexcept(V(second))) : _first(first), _second(second) { }
+
+    template < typename K1 = K, typename V1 = V, typename std :: enable_if < Type < K1 > :: copyConstructible && Type < V1 > :: moveConstructible, int > :: type = 0 >
+    Pair ( K const & first, V && second ) noexcept(noexcept(K(first)) && noexcept(V(std::move(second)))) : _first(first), _second(std::move(second)) { }
+
+    template < typename K1 = K, typename V1 = V, typename std :: enable_if < Type < K1 > :: moveConstructible && Type < V1 > :: copyConstructible, int > :: type = 0 >
+    Pair ( K && first, V const & second ) noexcept(noexcept(K(std::move(first))) && noexcept(V(second))) : _first(std::move(first)), _second(second) { }
+
+    template < typename K1 = K, typename V1 = V, typename std :: enable_if < Type < K1 > :: moveConstructible && Type < V1 > :: moveConstructible, int > :: type = 0 >
+    Pair ( K && first, V && second ) noexcept(noexcept(K(std::move(first))) && noexcept(V(std::move(second)))) : _first(std::move(first)), _second(std::move(second)) { }
 
     auto constexpr getFirst () const noexcept -> K const & { return _first; }
     auto constexpr getSecond() const noexcept -> V const & { return _second; }
@@ -106,6 +133,12 @@ public:
 
 template < typename K, typename V >
 Pair(K, V) -> Pair<K, V>;
+template < typename K, typename V >
+Pair(K const &, V) -> Pair<K const, V>;
+template < typename K, typename V >
+Pair(K, V const &) -> Pair<K, V const>;
+template < typename K, typename V >
+Pair(K const &, V const &) -> Pair <K const, V const>;
 
 #endif
 

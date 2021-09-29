@@ -13,12 +13,24 @@ template <class T>
 #endif
 class Set : public Collection<T> {
 public:
-    typedef T & Reference;
-    typedef T const & ConstReference;
-    typedef T * Pointer;
-    typedef T const * ConstPointer;
+//    typedef T & Reference;
+//    typedef T const & ConstReference;
+//    typedef T * Pointer;
+//    typedef T const * ConstPointer;
+    using ElementType = typename Collection < T > :: ElementType;
+    using ElementRef = typename Collection < T > :: ElementRef;
+    using ElementCRef = typename Collection < T > :: ElementCRef;
+    using ElementMRef = typename Collection < T > :: ElementMRef;
+    using ElementPtr = typename Collection < T > :: ElementPtr;
+    using ElementPtrRef = typename Collection < T > :: ElementPtrRef;
+    using ElementCPtr = typename Collection < T > :: ElementCPtr;
 
-    using Node = dataTypes::SingleListNode<T>;
+    struct Node {
+        T       * data;
+        Node    * pNext {nullptr};
+    };
+
+//    using Node = dataTypes::SingleListNode<T>;
     typedef Node * NodePointer;
     typedef Node const * ConstNodePointer;
 
@@ -27,14 +39,14 @@ public:
         mutable NodePointer _pNode { nullptr };
 
     public:
-        Iterator () noexcept = default;
+        Iterator () noexcept = delete;
         Iterator ( Iterator const & ) noexcept = default;
         Iterator ( Iterator && ) noexcept = default;
-        explicit Iterator ( NodePointer pNode ) : Collection<T>::Iterator(), _pNode(pNode) {  }
+        explicit Iterator ( NodePointer pNode, Set < T > * pSet ) : Collection<T>::Iterator(pSet), _pNode(pNode) {  }
         ~Iterator () noexcept final = default;
 
         constexpr inline auto equals ( typename Collection<T>::Iterator const & it ) const noexcept -> bool final { return dynamic_cast < Iterator const & > (it)._pNode == this->_pNode; }
-        constexpr inline auto value () const noexcept -> Reference final { return this->_pNode->data; }
+        constexpr inline auto value () const noexcept -> ElementRef final { return * this->_pNode->data; }
         __CDS_cpplang_NonConstConstexprMemberFunction auto next () noexcept -> Iterator & final { this->_pNode = this->_pNode->pNext; return * this; }
 
         __CDS_cpplang_NonConstConstexprMemberFunction auto operator ++ () noexcept -> Iterator & final { return this->next(); }
@@ -51,11 +63,11 @@ public:
         ConstIterator () noexcept = default;
         ConstIterator ( ConstIterator const & ) noexcept = default;
         ConstIterator ( ConstIterator && ) noexcept = default;
-        explicit ConstIterator ( ConstNodePointer pNode ) : Collection<T>::ConstIterator(), _pNode(pNode) {  }
+        explicit ConstIterator ( ConstNodePointer pNode, Set < T > const * pSet ) : Collection<T>::ConstIterator(pSet), _pNode(pNode) {  }
         ~ConstIterator () noexcept final = default;
 
         constexpr inline auto equals ( typename Collection<T>::ConstIterator const & it ) const noexcept -> bool final { return dynamic_cast < ConstIterator const & > (it)._pNode == this->_pNode; }
-        constexpr inline auto value () const noexcept -> ConstReference final { return this->_pNode->data; }
+        constexpr inline auto value () const noexcept -> ElementCRef final { return * this->_pNode->data; }
         __CDS_cpplang_NonConstConstexprMemberFunction auto next () noexcept -> ConstIterator & final { this->_pNode = this->_pNode->pNext; return * this; }
 
         __CDS_cpplang_NonConstConstexprMemberFunction auto operator ++ () noexcept -> ConstIterator & final { return this->next(); }
@@ -68,10 +80,10 @@ protected:
     NodePointer _pFront {nullptr};
     Size        _size   {0ull};
 
-    inline auto beginPtr () noexcept -> Iterator * final { return new Iterator ( this->_pFront ); }
-    inline auto endPtr () noexcept -> Iterator * final { return new Iterator ( nullptr ); }
-    inline auto beginPtr () const noexcept -> ConstIterator * final { return new ConstIterator ( this->_pFront ); }
-    inline auto endPtr () const noexcept -> ConstIterator * final { return new ConstIterator ( nullptr ); }
+    inline auto beginPtr () noexcept -> Iterator * final { return new Iterator ( this->_pFront, this ); }
+    inline auto endPtr () noexcept -> Iterator * final { return new Iterator ( nullptr, this ); }
+    inline auto beginPtr () const noexcept -> ConstIterator * final { return new ConstIterator ( this->_pFront, this ); }
+    inline auto endPtr () const noexcept -> ConstIterator * final { return new ConstIterator ( nullptr, this ); }
 
     Set() noexcept = default;
     Set(Set const &) noexcept {}
@@ -85,12 +97,12 @@ public:
 
     ~Set() noexcept override { this->clear(); }
 
-    __CDS_cpplang_NonConstConstexprMemberFunction auto begin () noexcept -> Iterator { return Iterator(this->_pFront); }
-    __CDS_cpplang_NonConstConstexprMemberFunction auto end () noexcept -> Iterator { return Iterator(nullptr); }
-    constexpr inline auto begin () const noexcept -> ConstIterator { return ConstIterator (this->_pFront); }
-    constexpr auto end () const noexcept -> ConstIterator { return ConstIterator (nullptr); }
-    constexpr inline auto cbegin () const noexcept -> ConstIterator { return ConstIterator (this->_pFront); }
-    constexpr inline auto cend () const noexcept -> ConstIterator { return ConstIterator (nullptr); }
+    __CDS_cpplang_NonConstConstexprMemberFunction auto begin () noexcept -> Iterator { return Iterator(this->_pFront, this); }
+    __CDS_cpplang_NonConstConstexprMemberFunction auto end () noexcept -> Iterator { return Iterator(nullptr, this); }
+    constexpr inline auto begin () const noexcept -> ConstIterator { return ConstIterator (this->_pFront, this); }
+    constexpr auto end () const noexcept -> ConstIterator { return ConstIterator (nullptr, this); }
+    constexpr inline auto cbegin () const noexcept -> ConstIterator { return ConstIterator (this->_pFront, this); }
+    constexpr inline auto cend () const noexcept -> ConstIterator { return ConstIterator (nullptr, this); }
 
 protected:
     auto inline remove ( const T & e, Size ) noexcept -> bool final { return this->remove(e); }
@@ -113,94 +125,41 @@ protected:
     auto inline removeFirstNotOf ( const std::initializer_list<T> & o ) noexcept -> bool final { return false; }
     auto inline removeAllNotOf ( const std::initializer_list<T> & o ) noexcept -> bool final { return false; }
     auto inline removeLastNotOf ( const std::initializer_list<T> & ) noexcept -> bool final { return false; }
-    auto inline replace ( const T &, const T &, Size ) noexcept -> void final { }
-    auto inline replaceFirst ( const T & what, const T & with ) noexcept -> void final { }
-    auto inline replaceAll ( const T & what, const T & with ) noexcept -> void final { }
-    auto inline replaceLast ( const T &, const T & ) noexcept -> void final { }
-    auto inline replaceOf ( const Collection <T> &, const T &, Size ) noexcept -> void final { }
-    auto inline replaceFirstOf ( const Collection <T> & what, const T & with ) noexcept -> void final { }
-    auto inline replaceAllOf ( const Collection <T> & what, const T & with ) noexcept -> void final { }
-    auto inline replaceLastOf ( const Collection <T> &, const T & ) noexcept -> void final { }
-    auto inline replaceNotOf ( const Collection <T> &, const T &, Size ) noexcept -> void final { }
-    auto inline replaceFirstNotOf ( const Collection <T> & what, const T & with ) noexcept -> void final { }
-    auto inline replaceAllNotOf ( const Collection <T> & what, const T & with ) noexcept -> void final { }
-    auto inline replaceLastNotOf ( const Collection <T> &, const T & ) noexcept -> void final { }
-    auto inline replaceOf ( const std::initializer_list<T> &, const T &, Size ) noexcept -> void final { }
-    auto inline replaceFirstOf ( const std::initializer_list<T> & what, const T & with ) noexcept -> void final { }
-    auto inline replaceAllOf ( const std::initializer_list<T> & what, const T & with ) noexcept -> void final { }
-    auto inline replaceLastOf ( const std::initializer_list<T> &, const T & ) noexcept -> void final { }
-    auto inline replaceNotOf ( const std::initializer_list<T> &, const T &, Size ) noexcept -> void final { }
-    auto inline replaceFirstNotOf ( const std::initializer_list<T> & what, const T & with ) noexcept -> void final { }
-    auto inline replaceAllNotOf ( const std::initializer_list<T> & what, const T & with ) noexcept -> void final { }
-    auto inline replaceLastNotOf ( const std::initializer_list<T> &, const T & ) noexcept -> void final { }
 
     auto makeUnique () noexcept -> void final { }
 
 public:
-    auto remove ( ConstReference ) noexcept -> bool;
-    virtual auto insert ( ConstReference ) noexcept -> bool = 0;
-    virtual auto insert ( T && ) noexcept -> bool = 0;
-
-    inline auto add ( ConstReference v ) noexcept -> void override {
-        this->insert( v );
+    auto remove ( ElementCRef ) noexcept -> bool;
+    inline auto insert ( ElementCRef e ) noexcept -> void {
+        return this->add(e);
     }
 
-    inline auto add ( T && v ) noexcept -> void override {
-        this->insert( v );
+    inline auto insert ( ElementMRef e ) noexcept -> void {
+        return this->add(e);
     }
+
+//    inline auto add ( ConstReference v ) noexcept -> void override {
+//        this->insert( v );
+//    }
+
+//    inline auto add ( T && v ) noexcept -> void override {
+//        this->insert( v );
+//    }
 
     auto clear () noexcept -> void final {
         while (this->_pFront != nullptr) {
             auto current = this->_pFront;
             this->_pFront = this->_pFront->pNext;
+
+            delete current->data;
             delete current;
         }
 
         this->_size = 0;
     }
 
-    auto back () noexcept (false) -> Reference final {
-        if ( this->empty() )
-            throw typename Collection<T>::CollectionOutOfBounds();
-
-        auto head = this->_pFront;
-        while ( head->pNext != nullptr )
-            head = head->pNext;
-
-        return head->data;
-    }
-
-    auto back () const noexcept(false) -> ConstReference final {
-        if ( this->empty() )
-            throw typename Collection<T>::CollectionOutOfBounds();
-
-        auto head = this->_pFront;
-        while ( head->pNext != nullptr )
-            head = head->pNext;
-
-        return head->data;
-    }
-
-    auto front() noexcept (false) -> Reference final {
-        if ( this->empty() )
-            throw typename Collection<T>::CollectionOutOfBounds();
-
-        return this->_pFront->data;
-    }
-
-    auto front() const noexcept(false) -> ConstReference final {
-        if ( this->empty() )
-            throw typename Collection<T>::CollectionOutOfBounds();
-
-        return this->_pFront->data;
-    }
-
     __CDS_NoDiscard constexpr inline auto empty () const noexcept -> bool final { return this->size() == 0; }
     __CDS_NoDiscard constexpr inline auto size () const noexcept -> Size final { return this->_size; }
-
-    inline auto contains ( ConstReference e ) const noexcept -> bool final {
-        return this->any([&e](ConstReference x) noexcept -> bool {return Type < T > :: compare ( x, e );});
-    }
 
     auto inline operator != (Set const & o) const noexcept -> bool { return ! this->operator==(o); }
 
@@ -236,7 +195,7 @@ auto Set<T>::toString() const noexcept -> String {
     std::stringstream out;
     out << "{ ";
 
-    for ( ConstReference e : (*this) )
+    for ( ElementCRef e : (*this) )
         Type < T > ::streamPrint( out, e ) << ", ";
 
     auto s = out.str();
@@ -247,15 +206,16 @@ template <class T>
 #if defined(__cpp_concepts) && !defined(_MSC_VER)
     requires UniqueIdentifiable <T>
 #endif
-auto Set<T>::remove( ConstReference e) noexcept -> bool {
+auto Set<T>::remove( ElementCRef e) noexcept -> bool {
     if ( this->empty() )
         return false;
 
-    if ( Type < T > :: compare ( e, this->_pFront->data ) ) {
+    if ( Type < T > :: compare ( e, * this->_pFront->data ) ) {
         auto p = this->_pFront;
         this->_pFront = this->_pFront->pNext;
-        this->_size --;
+        -- this->_size;
 
+        delete p->data;
         delete p;
         return true;
     } else if ( this->size() == 1 )
@@ -263,11 +223,14 @@ auto Set<T>::remove( ConstReference e) noexcept -> bool {
 
     auto head = this->_pFront;
     while ( head->pNext != nullptr ) {
-        if ( Type < T > :: compare ( e, head->pNext->data ) ) {
+        if ( Type < T > :: compare ( e, * head->pNext->data ) ) {
             auto node = head->pNext;
             head->pNext = head->pNext->pNext;
+
+            delete node->data;
             delete node;
-            this->_size --;
+
+            -- this->_size;
             return true;
         }
 

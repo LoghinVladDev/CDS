@@ -31,10 +31,18 @@ template <class T, class C = dataTypes::DefaultSetComparator<T>>
 #endif
 class OrderedSet final : public Set<T> {
 public:
-    using Reference                             = typename Set<T>::Reference;
-    using ConstReference                        = typename Set<T>::ConstReference;
-    using Pointer                               = typename Set<T>::Pointer;
-    using ConstPointer      __CDS_MaybeUnused   = typename Set<T>::ConstPointer;
+//    using Reference                             = typename Set<T>::Reference;
+//    using ConstReference                        = typename Set<T>::ConstReference;
+//    using Pointer                               = typename Set<T>::Pointer;
+//    using ConstPointer      __CDS_MaybeUnused   = typename Set<T>::ConstPointer;
+
+    using ElementType                           = typename Set<T>::ElementType;
+    using ElementRef                            = typename Set<T>::ElementRef;
+    using ElementCRef                           = typename Set<T>::ElementCRef;
+    using ElementMRef                           = typename Set<T>::ElementMRef;
+    using ElementPtr                            = typename Set<T>::ElementPtr;
+    using ElementPtrRef                            = typename Set<T>::ElementPtrRef;
+    using ElementCPtr                           = typename Set<T>::ElementCPtr;
 
     using Node              __CDS_MaybeUnused   = typename Set<T>::Node;
     using NodePointer       __CDS_MaybeUnused   = typename Set<T>::NodePointer;
@@ -65,11 +73,14 @@ public:
     }
 
     OrderedSet ( std::initializer_list < T > const & initializerList ) noexcept : Set<T>() {
-        for ( ConstReference e : initializerList )
+        for ( ElementCRef e : initializerList )
             this->insert(e);
     }
 
     ~OrderedSet() noexcept final = default;
+
+private:
+    auto allocInsertGetPtr ( ElementCRef ) noexcept -> ElementPtrRef override;
 
 public:
     OrderedSet & operator = ( Collection < T > const & c ) noexcept {
@@ -91,91 +102,61 @@ public:
 
     inline OrderedSet & operator = ( OrderedSet const & o ) noexcept { return this->operator=( (Collection<T> const &) ( o ) ); } // NOLINT(misc-unconventional-assign-operator)
 
-    auto insert ( ConstReference ) noexcept -> bool final;
-    auto insert ( T && ) noexcept -> bool final;
-
     auto sequence () const noexcept -> Sequence < const OrderedSet < T, C > >;
     auto sequence () noexcept -> Sequence < OrderedSet < T, C > >;
 };
 
-template <class T, class C>
-#if defined(__cpp_concepts) && !defined(_MSC_VER)
-    requires ValidSetComparator <T, C>
-#endif
-auto OrderedSet<T, C>::insert( ConstReference value) noexcept -> bool {
+
+#define COMMA ,
+template <class T, class C> __CDS_Requires(ValidSetComparator <T COMMA C>)
+auto OrderedSet <T, C> ::allocInsertGetPtr(ElementCRef e) noexcept -> ElementPtrRef {
     C comparator;
 
     if ( this->empty() ) {
-        this->_pFront = new Node { value, nullptr };
+        this->_pFront = new Node;
+        this->_pFront->data = nullptr;
         this->_size = 1ull;
-        return true;
+        return this->_pFront->data;
     }
 
-    if ( Type < T > ::compare( this->_pFront->data, value ) ) return false;
+    if ( Type < T > :: compare( * this->_pFront->data, e ) ) return this->_pFront->data;
 
-    if ( comparator ( value, this->_pFront->data ) ) {
-        this->_pFront = new Node { value, this->_pFront };
-        this->_size ++;
-        return true;
+    if ( comparator ( e, * this->_pFront->data ) ) {
+        auto p = new Node;
+        p->pNext = this->_pFront;
+        p->data = nullptr;
+        this->_pFront = p;
+
+        ++ this->_size;
+        return this->_pFront->data;
     }
 
     auto head = this->_pFront;
     while ( head->pNext != nullptr ) {
-        if ( Type < T > :: compare ( head->pNext->data, value ) ) return false;
+        if ( Type < T > :: compare ( * head->pNext->data, e ) ) return head->pNext->data;
 
-        if ( comparator ( value, head->pNext->data ) ){
-            head->pNext = new Node { value, head->pNext };
-            this->_size ++;
-            return true;
+        if ( comparator ( e, * head->pNext->data ) ){
+            auto p = new Node;
+            p->data = nullptr;
+            p->pNext = head->pNext;
+            head->pNext = p;
+//            head->pNext = new Node { value, head->pNext };
+            ++ this->_size;
+            return head->pNext->data;
         }
 
         head = head->pNext;
     }
 
-    head->pNext = new Node { value, nullptr };
-    this->_size ++;
-    return true;
+//    head->pNext = new Node { value, nullptr };
+    auto p = new Node;
+    p->pNext = nullptr;
+    p->data = nullptr;
+    head->pNext = p;
+    ++ this->_size;
+    return head->pNext->data;
 }
-
-
-template <class T, class C>
-#if defined(__cpp_concepts) && !defined(_MSC_VER)
-requires ValidSetComparator <T, C>
-#endif
-auto OrderedSet<T, C>::insert( T && value) noexcept -> bool {
-    C comparator;
-
-    if ( this->empty() ) {
-        this->_pFront = new Node { std::move(value), nullptr };
-        this->_size = 1ull;
-        return true;
-    }
-
-    if ( Type < T > :: compare ( this->_pFront->data, value ) ) return false;
-
-    if ( comparator ( value, this->_pFront->data ) ) {
-        this->_pFront = new Node { std::move(value), this->_pFront };
-        this->_size ++;
-        return true;
-    }
-
-    auto head = this->_pFront;
-    while ( head->pNext != nullptr ) {
-        if ( Type < T > :: compare ( head->pNext->data, value ) ) return false;
-
-        if ( comparator ( value, head->pNext->data ) ){
-            head->pNext = new Node { std::move(value), head->pNext };
-            this->_size ++;
-            return true;
-        }
-
-        head = head->pNext;
-    }
-
-    head->pNext = new Node { std::move(value), nullptr };
-    this->_size ++;
-    return true;
-}
+#undef COMMA
 
 #ifndef _OMIT_SEQUENCE_IMPL
 #ifndef _CDS_ORDERED_SET_SEQUENCE_IMPL // NOLINT(bugprone-reserved-identifier)

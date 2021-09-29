@@ -18,6 +18,7 @@ private:
     using ElementCRef = typename List < T > :: ElementCRef;
     using ElementMRef = typename List < T > :: ElementMRef;
     using ElementPtr = typename List < T > :: ElementPtr;
+    using ElementPtrRef = typename List < T > :: ElementPtrRef;
     using ElementCPtr = typename List < T > :: ElementCPtr;
 
     class IteratorBase;
@@ -35,10 +36,12 @@ public:
     Array () noexcept = default;
     Array ( Array const & ) noexcept;
     Array ( Array && ) noexcept;
+
     Array (
         typename Collection<ElementType>::Iterator const &,
         typename Collection<ElementType>::Iterator const &
     ) noexcept;
+
     Array (
         typename Collection<ElementType>::ConstIterator const &,
         typename Collection<ElementType>::ConstIterator const &
@@ -142,9 +145,9 @@ public:
         return * this->_pData[0];
     }
 
-    __CDS_NoDiscard constexpr auto empty () const noexcept -> bool final {
-        return this->_size == 0;
-    }
+//    __CDS_NoDiscard constexpr auto empty () const noexcept -> bool final {
+//        return this->_size == 0;
+//    }
 
     auto operator == (Array const & o) const noexcept -> bool {
         if ( this == & o ) return true;
@@ -224,10 +227,15 @@ public:
 
 private:
 
-    auto allocFrontGetPtr () noexcept -> ElementPtr override;
-    auto allocBackGetPtr () noexcept -> ElementPtr override;
-    inline auto allocInsertGetPtr () noexcept -> ElementPtr override {
+    auto allocFrontGetPtr () noexcept -> ElementPtrRef override;
+    auto allocBackGetPtr () noexcept -> ElementPtrRef override;
+    inline auto allocInsertGetPtr (ElementCRef e __CDS_MaybeUnused) noexcept -> ElementPtrRef override {
         return this->allocBackGetPtr();
+//        return ( this->allocBackGetPtr() = new ElementType );
+//        auto p = new ElementType;
+//        auto & t = this->allocBackGetPtr();
+//        t = p;
+//        return p;
     }
 
 public:
@@ -274,20 +282,16 @@ template <class T>
 class Array<T>::IteratorBase : public Collection<T>::Iterator {
 protected:
     friend class Array;
-    Array mutable * _pArray { nullptr };
     Index mutable   _index  { 0ull };
+    Array         * _pArray { nullptr };
 
-    IteratorBase() noexcept = default;
+//    IteratorBase() noexcept = default;
     IteratorBase( IteratorBase const & ) noexcept = default;
     IteratorBase( IteratorBase && ) noexcept = default;
     explicit IteratorBase( Array * pArray, Index index ) noexcept :
-            Collection<T>::Iterator(),
-            _pArray(pArray),
-            _index(index) { }
-
-    constexpr auto of ( Collection < T > const * pCollection ) const noexcept -> bool override {
-        return this->_pArray == pCollection;
-    }
+            Collection<T>::Iterator( pArray ),
+            _index(index),
+            _pArray(pArray) { }
 
 public:
     ~IteratorBase() noexcept override = default;
@@ -309,20 +313,16 @@ template <class T>
 class Array<T>::ConstIteratorBase : public Collection<T>::ConstIterator {
 protected:
     friend class Array;
-    Array const * _pArray { nullptr };
     Index mutable _index  { 0ull };
+    Array const * _pArray { nullptr };
 
-    ConstIteratorBase() noexcept = default;
+//    ConstIteratorBase() noexcept = default;
     ConstIteratorBase( ConstIteratorBase const & ) noexcept = default;
     ConstIteratorBase( ConstIteratorBase && ) noexcept = default;
     explicit ConstIteratorBase (Array const * pArray, Index index) noexcept :
-            Collection<T>::ConstIterator(),
-            _pArray(pArray),
-            _index(index) { }
-
-    constexpr auto of ( Collection < T > const * pCollection ) const noexcept -> bool override {
-        return this->_pArray == pCollection;
-    }
+            Collection<T>::ConstIterator(pArray),
+            _index(index),
+            _pArray(pArray) { }
 
 public:
     ~ConstIteratorBase() noexcept override = default;
@@ -343,7 +343,7 @@ public:
 template <class T>
 class Array<T>::Iterator final : public IteratorBase {
 public:
-    Iterator () noexcept = default;
+//    Iterator () noexcept = default;
     Iterator ( Iterator const & ) noexcept = default;
     Iterator ( Iterator && ) noexcept = default;
     explicit Iterator ( Array * pArray, Index index ) noexcept : IteratorBase( pArray, index ) { }
@@ -376,7 +376,7 @@ public:
 template <class T>
 class Array<T>::ReverseIterator final : public IteratorBase {
 public:
-    ReverseIterator () noexcept = default;
+//    ReverseIterator () noexcept = default;
     ReverseIterator ( ReverseIterator const & ) noexcept = default;
     ReverseIterator ( ReverseIterator && ) noexcept = default;
     explicit ReverseIterator ( Array * pArray, Index index ) noexcept : IteratorBase( pArray, index ) { }
@@ -406,7 +406,7 @@ public:
 template <class T>
 class Array<T>::ConstIterator final : public ConstIteratorBase {
 public:
-    ConstIterator () noexcept = default;
+//    ConstIterator () noexcept = default;
     ConstIterator ( ConstIterator const & ) noexcept = default;
     ConstIterator ( ConstIterator && ) noexcept = default;
     explicit ConstIterator ( Array const * pArray, Index index ) noexcept : ConstIteratorBase( pArray, index ) { }
@@ -436,7 +436,7 @@ public:
 template<class T>
 class Array<T>::ConstReverseIterator final : public ConstIteratorBase {
 public:
-    ConstReverseIterator () noexcept = default;
+//    ConstReverseIterator () noexcept = default;
     ConstReverseIterator ( ConstReverseIterator const & ) noexcept = default;
     ConstReverseIterator ( ConstReverseIterator && ) noexcept = default;
     explicit ConstReverseIterator ( Array const * pArray, Index index ) noexcept : ConstIteratorBase( pArray, index ) { }
@@ -506,24 +506,44 @@ Array<T>::~Array() noexcept {
 //}
 
 template < typename T >
-auto Array < T > :: allocFrontGetPtr () noexcept -> ElementPtr {
-    this->expandWith(1);
+auto Array < T > :: allocFrontGetPtr () noexcept -> ElementPtrRef {
+//    this->expandWith(1);
+//    if ( this->_size == this->_capacity ) {
+//        auto newSize = this->_capacity + 1;
+//        T ** pTempBuffer = new T * [newSize];
+//        std::memcpy (  )
+//    }
 
-    T ** partBuffer = new T * [this->_size];
-    std::memcpy ( partBuffer, this->_pData, this->_size * sizeof ( T * ) );
-    std::memcpy ( this->_pData + 1, partBuffer, this->_size * sizeof ( T * ) );
-    delete [] partBuffer;
+    auto newSize = this->_capacity + 1;
+    T ** partBuffer = new T * [newSize];
+    std::memcpy ( partBuffer + 1, this->_pData, newSize * sizeof ( T * ) );
+//    std::memcpy ( this->_pData + 1, partBuffer, this->_size * sizeof ( T * ) );
+//    delete [] partBuffer;
+
+
+    delete [] this->_pData;
+    this->_pData = partBuffer;
 
     ++ this->_size;
+    this->_capacity = newSize;
 
-    return this->_pData[0];
+    return (this->_pData[0] = nullptr);
 }
 
 template < typename T >
-auto Array < T > :: allocBackGetPtr () noexcept -> ElementPtr {
-    this->expandWith(1);
+auto Array < T > :: allocBackGetPtr () noexcept -> ElementPtrRef {
+//    this->expandWith(1);
 
-    return this->_pData[this->_size ++];
+    auto newSize = this->_capacity + 1;
+    T ** newBuf = new T * [newSize];
+    std::memcpy ( newBuf, this->_pData, this->_size * sizeof(T *) );
+    std::memcpy ( newBuf + this->_size + 1, this->_pData + this->_size, ( this->_capacity - this->_size ) * sizeof(T *) );
+    this->_capacity = newSize;
+    delete [] this->_pData;
+    this->_pData = newBuf;
+
+    return (this->_pData[this->_size ++] = nullptr);
+//    return this->_pData[this->_size ++];
 }
 
 //template <class T>
@@ -916,6 +936,7 @@ auto Array<T>::removeLastNotOf(std::initializer_list<ElementType> const & elemen
 //        }
 //}
 
+#include <CDS/Utility>
 template <class T>
 auto Array<T>::remove( typename Collection<ElementType>::Iterator const & it ) noexcept (false) -> ElementType {
 //    if ( this->empty() )
@@ -1173,8 +1194,7 @@ __CDS_MaybeUnused auto Array<T>::quickSortPartition(
 
     auto pivot = to.value();
     Iterator partitionIterator ( from );
-    Iterator previous;
-    previous._index = -1;
+    Iterator previous (nullptr, -1);
 
     for ( auto it = from; it != to; it++ ) {
         if ( sortFunc ( it.value(), pivot ) ) {

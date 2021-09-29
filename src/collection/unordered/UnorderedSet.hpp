@@ -12,14 +12,17 @@ template <class T>
 class UnorderedSet final : public Set<T>  {
 public:
 
-    using Reference                             = typename Set<T>::Reference;
-    using ConstReference                        = typename Set<T>::ConstReference;
-    using Pointer                               = typename Set<T>::Pointer;
-    using ConstPointer     __CDS_MaybeUnused    = typename Set<T>::ConstPointer;
+    using ElementType                           = typename Set<T>::ElementType;
+    using ElementRef                            = typename Set<T>::ElementRef;
+    using ElementCRef                           = typename Set<T>::ElementCRef;
+    using ElementMRef                           = typename Set<T>::ElementMRef;
+    using ElementPtr                            = typename Set<T>::ElementPtr;
+    using ElementPtrRef                            = typename Set<T>::ElementPtrRef;
+    using ElementCPtr                           = typename Set<T>::ElementCPtr;
 
-    using Node                                  = typename Set<T>::Node;
-    using NodePointer      __CDS_MaybeUnused    = typename Set<T>::NodePointer;
-    using ConstNodePointer __CDS_MaybeUnused    = typename Set<T>::ConstNodePointer;
+    using Node              __CDS_MaybeUnused   = typename Set<T>::Node;
+    using NodePointer       __CDS_MaybeUnused   = typename Set<T>::NodePointer;
+    using ConstNodePointer  __CDS_MaybeUnused   = typename Set<T>::ConstNodePointer;
 
     UnorderedSet() noexcept = default;
     UnorderedSet(UnorderedSet const & set) noexcept : Set<T>(set) {
@@ -48,7 +51,7 @@ public:
     }
 
     UnorderedSet ( std::initializer_list < T > const & initializerList ) noexcept : Set<T>() {
-        for ( ConstReference e : initializerList ) {
+        for ( ElementCRef e : initializerList ) {
             this->insert(e);
         }
     }
@@ -75,34 +78,25 @@ public:
 
     inline UnorderedSet & operator = ( UnorderedSet const & o ) noexcept { return this->operator=( (Collection<T> const &) ( o ) ); } // NOLINT(misc-unconventional-assign-operator)
 
-    auto insert ( ConstReference ) noexcept -> bool final;
-    auto insert ( T && ) noexcept -> bool final;
-
     auto sequence () const noexcept -> Sequence < const UnorderedSet < T > >;
     auto sequence () noexcept -> Sequence < UnorderedSet < T > >;
+
+    auto allocInsertGetPtr ( ElementCRef e __CDS_MaybeUnused ) noexcept -> ElementPtrRef {
+        auto head = this->_pFront;
+        while ( head != nullptr ) {
+            if (Type<ElementType>::compare(* head->data, e))
+                return head->data;
+            head = head->pNext;
+        }
+
+        auto p = new Node;
+        p->pNext = this->_pFront;
+        p->data = nullptr;
+        ++ this->_size;
+        return this->_pFront->data;
+    }
 };
 
-template <class T>
-auto UnorderedSet<T>::insert(ConstReference v) noexcept -> bool {
-    if ( this->contains(v) )
-        return false;
-
-    this->_pFront = new Node { v, this->_pFront };
-    this->_size++;
-
-    return true;
-}
-
-template <class T>
-auto UnorderedSet<T>::insert(T && v) noexcept -> bool {
-    if ( this->contains(v) )
-        return false;
-
-    this->_pFront = new Node { std::move(v), this->_pFront };
-    this->_size++;
-
-    return true;
-}
 
 #ifndef _OMIT_SEQUENCE_IMPL
 #ifndef _CDS_UNORDERED_SET_SEQUENCE_IMPL // NOLINT(bugprone-reserved-identifier)

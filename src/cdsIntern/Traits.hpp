@@ -249,7 +249,8 @@ struct Type {
         return (ostream << &obj);
     }
 
-    constexpr static auto unsafeAddress () noexcept -> T * { return reinterpret_cast < T * > (0x10); }
+    template < typename V = typename std :: remove_reference < T > :: type >
+    constexpr static auto unsafeAddress () noexcept -> V * { return reinterpret_cast < V * > (0x10); }
     constexpr static auto unsafeReference () noexcept -> T & { return * Type :: unsafeAddress(); }
 };
 

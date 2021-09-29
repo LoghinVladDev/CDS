@@ -29,14 +29,14 @@ typedef Size AddressValueType;
 
 #ifdef __cplusplus
 
-namespace dataTypes {
+//namespace dataTypes {
 
-    template <class T>
-    struct SingleListNode {
-        T                    data;
-        SingleListNode<T>  * pNext       {nullptr};
-    };
-}
+//    template <class T>
+//    struct SingleListNode {
+//        T                    data;
+//        SingleListNode<T>  * pNext       {nullptr};
+//    };
+//}
 
 #endif
 
