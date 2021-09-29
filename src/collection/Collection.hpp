@@ -85,7 +85,7 @@ public:
         Iterator() noexcept = delete;
         ~Iterator() noexcept override = default;
 
-        inline auto operator = (Iterator const & obj) noexcept -> Iterator & {
+        inline auto operator = (Iterator const & obj) noexcept -> Iterator & { // NOLINT(bugprone-unhandled-self-assignment)
             this->pBaseCollection = obj.pBaseCollection;
             return * this;
         }
@@ -113,7 +113,7 @@ public:
         ConstIterator(const ConstIterator &) noexcept = default;
         ConstIterator(ConstIterator &&) noexcept = default;
 
-        ConstIterator(Collection const * pBase) noexcept : pBaseCollection(pBase) { }
+        explicit ConstIterator(Collection const * pBase) noexcept : pBaseCollection(pBase) { }
 
         constexpr auto of ( Collection const * pCollection ) const noexcept -> bool {
             return this->pBaseCollection == pCollection;
@@ -123,7 +123,7 @@ public:
         ConstIterator() noexcept = delete;
         ~ConstIterator() noexcept override = default;
 
-        inline auto operator = (ConstIterator const & obj) noexcept -> ConstIterator & {
+        inline auto operator = (ConstIterator const & obj) noexcept -> ConstIterator & { // NOLINT(bugprone-unhandled-self-assignment)
             this->pBaseCollection = obj.pBaseCollection;
             return * this;
         }
@@ -146,16 +146,16 @@ protected:
     __CDS_MaybeUnused virtual auto beginPtr () const noexcept -> ConstIterator * = 0;
     __CDS_MaybeUnused virtual auto endPtr () const noexcept -> ConstIterator * = 0;
 
-    static inline auto beginPtr ( Collection < T > & o ) noexcept -> Iterator * { return o.beginPtr(); }
-    static inline auto endPtr ( Collection < T > & o ) noexcept -> Iterator * { return o.endPtr(); }
-    static inline auto beginPtr ( const Collection < T > & o ) noexcept -> ConstIterator * { return o.beginPtr(); }
-    static inline auto endPtr ( const Collection < T > & o ) noexcept -> ConstIterator * { return o.endPtr(); }
+    __CDS_MaybeUnused static inline auto beginPtr ( Collection < T > & o ) noexcept -> Iterator * { return o.beginPtr(); }
+    __CDS_MaybeUnused static inline auto endPtr ( Collection < T > & o ) noexcept -> Iterator * { return o.endPtr(); }
+    __CDS_MaybeUnused static inline auto beginPtr ( const Collection < T > & o ) noexcept -> ConstIterator * { return o.beginPtr(); }
+    __CDS_MaybeUnused static inline auto endPtr ( const Collection < T > & o ) noexcept -> ConstIterator * { return o.endPtr(); }
 
     static inline auto iteratorIsOf ( Iterator const & it, Collection < T > const & collection ) noexcept -> bool {
         return it.of(& collection);
     }
 
-    static inline auto iteratorIsOf ( ConstIterator const & it, Collection < T > const & collection ) noexcept -> bool {
+    __CDS_MaybeUnused static inline auto iteratorIsOf ( ConstIterator const & it, Collection < T > const & collection ) noexcept -> bool {
         return it.of(& collection);
     }
 
@@ -207,10 +207,6 @@ public:
         auto & p = this->allocInsertGetPtr(element);
         if ( p == nullptr )
             p = new ElementType(element);
-//        this->allocInsertGetPtr(element);
-//        if ( p != nullptr )
-//            * p = element;
-//        * this->allocInsertGetPtr(element) = element;
     }
 
     template < typename V = T, typename std :: enable_if < Type < V > :: moveConstructible, int > :: type = 0 >
@@ -218,10 +214,6 @@ public:
         auto & p = this->allocInsertGetPtr(element);
         if ( p == nullptr )
             p = new ElementType(element);
-//        * this->allocInsertGetPtr(element) = element;
-//        auto p = this->allocInsertGetPtr(element);
-//        if ( p != nullptr )
-//            * p = element;
     }
 
     virtual auto clear () noexcept -> void = 0;
@@ -230,7 +222,7 @@ public:
     __CDS_MaybeUnused virtual auto makeUnique () noexcept -> void = 0;
 
     virtual auto contains ( ElementCRef e ) const noexcept -> bool {
-        for ( auto i = UniquePointer ( this->beginPtr() ), end = UniquePointer ( this->endPtr() ); ! i->equals(* end); i->next() )
+        for ( auto i = UniquePointer < ConstIterator > ( this->beginPtr() ), end = UniquePointer < ConstIterator > ( this->endPtr() ); ! i->equals(* end); i->next() )
             if ( Type < ElementCRef > ::compare ( i->value (), e ) )
                 return true;
         return false;

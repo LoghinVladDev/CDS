@@ -92,20 +92,7 @@ public:
 
     __CDS_MaybeUnused virtual auto emplace (KeyConstReference, ValueConstReference) noexcept -> ValueConstReference = 0;
 
-//    inline auto add (EntryConstReference e) noexcept -> void override {
-//        this->insert(e);
-//    }
-
-//    inline auto add (Entry && e) noexcept -> void override {
-//        this->insert(e);
-//    }
-
     ~Map() noexcept override = default;
-
-//    inline auto contains ( EntryConstReference entry ) const noexcept -> bool override {
-//        if ( ! this->containsKey( entry ) ) return false;
-//        this->containsValue()
-//    }
 
 private:
 

@@ -13,12 +13,12 @@ class UnorderedSet final : public Set<T>  {
 public:
 
     using ElementType                           = typename Set<T>::ElementType;
-    using ElementRef                            = typename Set<T>::ElementRef;
+    using ElementRef        __CDS_MaybeUnused   = typename Set<T>::ElementRef;
     using ElementCRef                           = typename Set<T>::ElementCRef;
-    using ElementMRef                           = typename Set<T>::ElementMRef;
-    using ElementPtr                            = typename Set<T>::ElementPtr;
-    using ElementPtrRef                            = typename Set<T>::ElementPtrRef;
-    using ElementCPtr                           = typename Set<T>::ElementCPtr;
+    using ElementMRef       __CDS_MaybeUnused   = typename Set<T>::ElementMRef;
+    using ElementPtr        __CDS_MaybeUnused   = typename Set<T>::ElementPtr;
+    using ElementPtrRef                         = typename Set<T>::ElementPtrRef;
+    using ElementCPtr       __CDS_MaybeUnused   = typename Set<T>::ElementCPtr;
 
     using Node              __CDS_MaybeUnused   = typename Set<T>::Node;
     using NodePointer       __CDS_MaybeUnused   = typename Set<T>::NodePointer;

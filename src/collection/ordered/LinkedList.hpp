@@ -24,8 +24,9 @@ private:
 
 #if __CDS_cpplang_StructBracesInitialization_available == false
 
-        DoubleListNode ( T && data, DoubleListNode * pNext, DoubleListNode * pPrev ) noexcept : data(std::move(data)), pNext(pNext), pPrevious(pPrev) { }
-        DoubleListNode ( T const & data, DoubleListNode * pNext, DoubleListNode * pPrev ) noexcept : data(data), pNext(pNext), pPrevious(pPrev) { }
+        DoubleListNode () noexcept = default;
+        __CDS_MaybeUnused DoubleListNode ( T && data, DoubleListNode * pNext, DoubleListNode * pPrev ) noexcept : data(std::move(data)), pNext(pNext), pPrevious(pPrev) { }
+        __CDS_MaybeUnused DoubleListNode ( T const & data, DoubleListNode * pNext, DoubleListNode * pPrev ) noexcept : data(data), pNext(pNext), pPrevious(pPrev) { }
 
 #endif
 
@@ -42,7 +43,6 @@ private:
     protected:
         mutable Node * _pNode { nullptr };
 
-//        IteratorBase() noexcept = default;
         IteratorBase( const IteratorBase & ) noexcept = default;
         IteratorBase(IteratorBase && ) noexcept = default;
         explicit IteratorBase ( Node * pNode, DoubleLinkedList < T > const * pList ) noexcept :
@@ -67,9 +67,7 @@ private:
     class ConstIteratorBase : public Collection<T>::ConstIterator {
     protected:
         const Node * _pNode { nullptr };
-//        DoubleLinkedList < T > const * _pList { nullptr };
 
-//        ConstIteratorBase() noexcept = default;
         ConstIteratorBase( const ConstIteratorBase & ) noexcept = default;
         ConstIteratorBase(ConstIteratorBase && ) noexcept = default;
         explicit ConstIteratorBase ( const Node * pNode, DoubleLinkedList < T > const * pList ) :
@@ -93,17 +91,17 @@ private:
 
 public:
 
-    using ElementType = typename List < T > :: ElementType;
-    using ElementRef = typename List < T > :: ElementRef;
-    using ElementCRef = typename List < T > :: ElementCRef;
-    using ElementMRef = typename List < T > :: ElementMRef;
-    using ElementPtr = typename List < T > :: ElementPtr;
-    using ElementPtrRef = typename List < T > :: ElementPtrRef;
-    using ElementCPtr = typename List < T > :: ElementCPtr;
+    using ElementType                   = typename List < T > :: ElementType;
+    using ElementRef __CDS_MaybeUnused  = typename List < T > :: ElementRef;
+    using ElementCRef                   = typename List < T > :: ElementCRef;
+    using ElementMRef __CDS_MaybeUnused = typename List < T > :: ElementMRef;
+    using ElementPtr                    = typename List < T > :: ElementPtr;
+    using ElementPtrRef                 = typename List < T > :: ElementPtrRef;
+    using ElementCPtr                   = typename List < T > :: ElementCPtr;
 
     class Iterator final : public IteratorBase{
     public:
-//        Iterator() noexcept = default;
+
         Iterator( const Iterator & ) noexcept = default;
         Iterator( Iterator && ) noexcept = default;
 
@@ -128,7 +126,7 @@ public:
 
     class ReverseIterator final : public IteratorBase {
     public:
-//        ReverseIterator() noexcept = default;
+
         ReverseIterator( const ReverseIterator & ) noexcept = default;
         ReverseIterator( ReverseIterator && ) noexcept = default;
 
@@ -152,7 +150,7 @@ public:
 
     class ConstIterator final : public ConstIteratorBase {
     public:
-//        ConstIterator() noexcept = default;
+
         ConstIterator( const ConstIterator & ) noexcept = default;
         ConstIterator( ConstIterator && ) noexcept = default;
 
@@ -176,7 +174,7 @@ public:
 
     class ConstReverseIterator final : public ConstIteratorBase {
     public:
-//        ConstReverseIterator() noexcept = default;
+
         ConstReverseIterator( const ConstReverseIterator & ) noexcept = default;
         ConstReverseIterator( ConstReverseIterator && ) noexcept = default;
 
@@ -249,31 +247,13 @@ public:
     auto removeNotOf ( Collection<T> const &, Size ) noexcept -> bool final;
     auto removeLastNotOf ( Collection<T> const & ) noexcept -> bool final;
 
-//    auto replace ( const T &, const T &, Size ) noexcept -> void final;
-//    auto replaceLast ( const T &, const T & ) noexcept -> void final;
-
-//    auto replaceOf ( const Collection<T> &, const T &, Size ) noexcept -> void final;
-//    auto replaceLastOf ( const Collection<T> &, const T & ) noexcept -> void final;
-
-//    auto replaceNotOf ( const Collection<T> &, const T &, Size ) noexcept -> void final;
-//    auto replaceLastNotOf ( const Collection<T> &, const T & ) noexcept -> void final;
-
     auto remove ( typename Collection<T>::Iterator const & ) noexcept (false) -> T final;
-//    auto replace( const typename Collection<T>::Iterator &, const T & ) noexcept -> void final;
-//    auto insertBefore( const typename Collection<T>::Iterator &, const T & ) noexcept -> void final;
-//    auto insertAfter( const typename Collection<T>::Iterator &, const T & ) noexcept -> void final;
 
     inline auto removeOf ( const std::initializer_list<T> & list, Size count ) noexcept -> bool final { return this->removeOf ( DoubleLinkedList <T> (list), count ); }
     inline auto removeLastOf ( const std::initializer_list<T> & list ) noexcept -> bool final { return this->removeLastOf ( DoubleLinkedList<T> (list) ); }
 
     inline auto removeNotOf ( const std::initializer_list<T> & list, Size count ) noexcept -> bool final { return this->removeNotOf( DoubleLinkedList<T> (list), count ); }
     inline auto removeLastNotOf ( const std::initializer_list<T> & list ) noexcept -> bool final { return this->removeLastNotOf( DoubleLinkedList<T> (list) ); }
-
-//    inline auto replaceOf ( const std::initializer_list<T> & list, const T & with, Size count ) noexcept -> void final { return this->replaceOf( DoubleLinkedList<T> (list), with, count ); }
-//    inline auto replaceLastOf ( const std::initializer_list<T> & list, const T & with ) noexcept -> void final { return this->replaceLastOf( DoubleLinkedList<T> (list), with ); }
-
-//    inline auto replaceNotOf ( const std::initializer_list<T> & list, const T & with, Size count ) noexcept -> void final { return this->replaceNotOf( DoubleLinkedList<T> (list), with, count ); }
-//    inline auto replaceLastNotOf ( const std::initializer_list<T> & list, const T & with ) noexcept -> void final { return this->replaceLastNotOf( DoubleLinkedList<T> (list), with ); }
 
     __CDS_cpplang_NonConstConstexprMemberFunction auto back () noexcept (false) -> T & final {
         if ( this->empty() )
@@ -303,10 +283,6 @@ public:
         return * this->_pFront->data;
     }
 
-//    __CDS_NoDiscard __CDS_cpplang_ConstexprOverride auto empty () const noexcept -> bool final {
-//        return this->_size == 0 && this->_pFront == nullptr && this->_pBack == nullptr;
-//    }
-
     auto operator == (DoubleLinkedList const & o) const noexcept -> bool {
         if ( this == & o ) return true;
         if ( o.size () != this->size() ) return false;
@@ -333,17 +309,6 @@ public:
 
     auto index ( T & ) noexcept -> Index final;
     auto index ( T const & ) const noexcept -> Index final;
-
-//    auto get ( Index ) noexcept (false) -> T & final;
-//    auto get ( Index ) const noexcept (false) -> const T & final;
-
-//    auto set ( const T &, Index ) noexcept (false) -> T & final;
-//    auto sub ( List <T> &, Index, Index ) const noexcept (false) -> void final;
-//    __CDS_NoDiscard __CDS_MaybeUnused inline auto sub ( Index from, Index to ) const noexcept (false) -> DoubleLinkedList < T > {
-//        DoubleLinkedList < T > list;
-//        this->sub ( list, from, to );
-//        return list;
-//    }
 
     auto popFront ( ) noexcept (false) -> T final {
         if ( this->empty () )
@@ -412,16 +377,6 @@ private:
     auto pAt (Index) noexcept (false) -> ElementPtr override;
     auto pAt (Index) const noexcept (false) -> ElementCPtr override;
 
-public:
-
-//    auto pushFront ( const T & ) noexcept -> void final;
-//    auto pushBack ( const T & ) noexcept -> void final;
-
-//    auto pushFront ( T && ) noexcept -> void final;
-//    auto pushBack ( T && ) noexcept -> void final;
-
-private:
-
 #if defined(__JETBRAINS_IDE__)
 #pragma clang diagnostic push
 #pragma ide diagnostic ignored "NotImplementedFunctions"
@@ -478,63 +433,9 @@ DoubleLinkedList<T>::~DoubleLinkedList() noexcept {
     this->clear();
 }
 
-//template <class T>
-//auto DoubleLinkedList<T>::pushFront(const T & value) noexcept -> void {
-//
-//#if __CDS_cpplang_StructBracesInitialization_available == true
-//
-//    auto newNode = new DoubleListNode {value, this->_pFront, nullptr};
-//
-//#else
-//
-//    auto newNode = new DoubleListNode(value, this->_pFront, nullptr);
-////    newNode->data = value;
-////    newNode->pNext = this->_pFront;
-////    newNode->pPrevious = nullptr;
-//
-//#endif
-//
-//    if ( this->_pFront != nullptr )
-//        this->_pFront->pPrevious = newNode;
-//
-//    this->_pFront = newNode;
-//
-//    if ( this->_pBack == nullptr )
-//        this->_pBack = newNode;
-//
-//    this->_size ++;
-//}
-
-//template <class T>
-//auto DoubleLinkedList<T>::pushBack(const T & value) noexcept -> void {
-//
-//#if __CDS_cpplang_StructBracesInitialization_available == true
-//
-//    auto newNode = new DoubleListNode { value, nullptr, this->_pBack };
-//
-//#else
-//
-//    auto newNode = new DoubleListNode(value, nullptr, this->_pBack);
-////    newNode->data = value;
-////    newNode->pNext = nullptr;
-////    newNode->pPrevious = this->_pBack;
-//
-//#endif
-//
-//    if ( this->_pBack != nullptr )
-//        this->_pBack->pNext = newNode;
-//
-//    this->_pBack = newNode;
-//
-//    if ( this->_pFront == nullptr )
-//        this->_pFront = newNode;
-//
-//    this->_size ++;
-//}
-
 template < typename T >
 auto DoubleLinkedList < T > ::allocBackGetPtr() noexcept -> ElementPtrRef {
-    auto newNode = new DoubleListNode ();
+    auto newNode = new DoubleListNode;
     newNode->pNext = nullptr;
     newNode->pPrevious = this->_pBack;
     newNode->data = nullptr;
@@ -554,7 +455,7 @@ auto DoubleLinkedList < T > ::allocBackGetPtr() noexcept -> ElementPtrRef {
 
 template < typename T >
 auto DoubleLinkedList < T > ::allocFrontGetPtr() noexcept -> ElementPtrRef {
-    auto newNode = new DoubleListNode ();
+    auto newNode = new DoubleListNode;
     newNode->pNext = this->_pFront;
     newNode->pPrevious = nullptr;
     newNode->data = nullptr;
@@ -571,48 +472,6 @@ auto DoubleLinkedList < T > ::allocFrontGetPtr() noexcept -> ElementPtrRef {
 
     return newNode->data;
 }
-//
-//template <class T>
-//auto DoubleLinkedList<T>::pushFront(T && value) noexcept -> void {
-
-//
-//    if ( this->_pFront != nullptr )
-//        this->_pFront->pPrevious = newNode;
-//
-//    this->_pFront = newNode;
-//
-//    if ( this->_pBack == nullptr )
-//        this->_pBack = newNode;
-//
-//    this->_size ++;
-//}
-//
-//template <class T>
-//auto DoubleLinkedList<T>::pushBack(T && value) noexcept -> void {
-//
-//#if __CDS_cpplang_StructBracesInitialization_available == true
-//
-//    auto newNode = new DoubleListNode { value, nullptr, this->_pBack };
-//
-//#else
-//
-//    auto newNode = new DoubleListNode(value, nullptr, this->_pBack);
-////    newNode->data = value;
-////    newNode->pNext = nullptr;
-////    newNode->pPrevious = this->_pBack;
-//
-//#endif
-//
-//    if ( this->_pBack != nullptr )
-//        this->_pBack->pNext = newNode;
-//
-//    this->_pBack = newNode;
-//
-//    if ( this->_pFront == nullptr )
-//        this->_pFront = newNode;
-//
-//    this->_size ++;
-//}
 
 #include <sstream>
 #include <typeinfo>
@@ -892,72 +751,6 @@ auto DoubleLinkedList<T>::removeLastNotOf( Collection<T> const & from ) noexcept
     return false;
 }
 
-//template<class T>
-//auto DoubleLinkedList<T>::replace ( const T & what, const T & with, Size count ) noexcept -> void {
-//    int replacedCount = 0;
-//    for ( auto & e : (*this) )
-//        if ( replacedCount < count ) {
-//            if ( Type < T > :: compare ( e, what ) ) {
-//                e = with;
-//                replacedCount ++;
-//            }
-//        } else
-//            return;
-//}
-
-//template<class T>
-//auto DoubleLinkedList<T>::replaceLast ( const T & what, const T & with ) noexcept -> void {
-//    for ( auto it = this->rbegin(); it != this->rend(); it++ )
-//        if ( Type < T > :: compare ( it.value(), what ) ) {
-//            it.value () = with;
-//            return;
-//        }
-//}
-//
-//template<class T>
-//auto DoubleLinkedList<T>::replaceOf ( const Collection<T> & from, const T & with, Size count ) noexcept -> void {
-//    int replacedCount = 0;
-//    for ( auto & e : (*this) )
-//        if ( replacedCount < count ) {
-//            if ( from.contains(e) ) {
-//                e = with;
-//                replacedCount ++;
-//            }
-//        } else
-//            return;
-//}
-//
-//template<class T>
-//auto DoubleLinkedList<T>::replaceLastOf ( const Collection<T> & from, const T & with ) noexcept -> void {
-//    for ( auto it = this->rbegin(); it != this->rend(); it++ )
-//        if ( from.contains( it.value() ) ) {
-//            it.value () = with;
-//            return;
-//        }
-//}
-//
-//template<class T>
-//auto DoubleLinkedList<T>::replaceNotOf ( const Collection<T> & from, const T & with, Size count ) noexcept -> void {
-//    int replacedCount = 0;
-//    for ( auto & e : (*this) )
-//        if ( replacedCount < count ) {
-//            if ( ! from.contains(e) ) {
-//                e = with;
-//                replacedCount ++;
-//            }
-//        } else
-//            return;
-//}
-//
-//template<class T>
-//auto DoubleLinkedList<T>::replaceLastNotOf ( const Collection<T> & from, const T & with ) noexcept -> void {
-//    for ( auto it = this->rbegin(); it != this->rend(); it++ )
-//        if ( ! from.contains( it.value() ) ) {
-//            it.value () = with;
-//            return;
-//        }
-//}
-
 template<class T>
 auto DoubleLinkedList<T>::remove ( const typename Collection<T>::Iterator & it ) noexcept (false) -> T {
     if ( this->empty() )
@@ -1013,144 +806,6 @@ auto DoubleLinkedList<T>::remove ( const typename Collection<T>::Iterator & it )
 
     throw std::runtime_error("Wrong List Iterator");
 }
-
-//template<class T>
-//auto DoubleLinkedList<T>::replace( const typename Collection<T>::Iterator & where, const T & with ) noexcept -> void {
-//    where.value() = with;
-//}
-
-//template<class T>
-//auto DoubleLinkedList<T>::insertBefore( const typename Collection<T>::Iterator & where, const T & what ) noexcept -> void {
-//    if ( this->empty() || this->begin() == where ) {
-//        this->pushFront(what);
-//        return;
-//    }
-//
-//    if ( this->end() == where ) {
-//        this->pushBack(what);
-//        return;
-//    }
-//
-//    if ( Iterator(this->_pBack, this) == where ) {
-//        auto after = this->_pBack;
-//        auto before = this->_pBack->pPrevious;
-//
-//#if __CDS_cpplang_StructBracesInitialization_available == true
-//
-//        auto node = new DoubleListNode { what, after, before };
-//
-//#else
-//
-//        auto node = new DoubleListNode(what, after, before);
-//        node->data = what;
-//        node->pNext = after;
-//        node->pPrevious = before;
-//
-//#endif
-//
-//        before->pNext = node;
-//        after->pPrevious = node;
-//
-//        this->_size ++;
-//
-//        return;
-//    }
-//
-//    for( auto node = this->_pFront->pNext; node != this->_pBack; node = node->pNext )
-//        if ( Iterator(node, this) == where ) {
-//            auto before = node->pPrevious;
-//            auto after = node;
-//
-//#if __CDS_cpplang_StructBracesInitialization_available == true
-//
-//            auto newNode = new DoubleListNode { what, after, before };
-//
-//#else
-//
-//            auto newNode = new DoubleListNode(what, after, before);
-//            newNode->data = what;
-//            newNode->pNext = after;
-//            newNode->pPrevious = before;
-//
-//#endif
-//
-//            before->pNext = newNode;
-//            after->pPrevious = newNode;
-//
-//            this->_size ++;
-//
-//            return;
-//        }
-//}
-//
-//template <class T>
-//auto DoubleLinkedList<T>::insertAfter( const typename Collection<T>::Iterator & where, const T & what ) noexcept -> void {
-//    if ( this->empty() ) {
-//        this->pushFront(what);
-//        return;
-//    }
-//
-//    if ( this->end() == where ) {
-//        this->pushBack(what);
-//        return;
-//    }
-//
-//    if ( Iterator(this->_pBack, this) == where ) {
-//        this->pushBack( what );
-//        return;
-//    }
-//
-//    if ( where == this->begin() ) {
-//        auto after = this->_pFront->pNext;
-//        auto before = this->_pFront;
-//
-//#if __CDS_cpplang_StructBracesInitialization_available == true
-//
-//        auto node = new DoubleListNode { what, after, before };
-//
-//#else
-//
-//        auto node = new DoubleListNode( what, after, before );
-//        node->data = what;
-//        node->pNext = after;
-//        node->pPrevious = before;
-//
-//#endif
-//
-//        before->pNext = node;
-//        after->pPrevious = node;
-//
-//        this->_size ++;
-//
-//        return;
-//    }
-//
-//    for( auto node = this->_pFront->pNext; node != this->_pBack; node ++ )
-//        if ( Iterator(node, this) == where ) {
-//            auto before = node;
-//            auto after = node->pNext;
-//
-//#if __CDS_cpplang_StructBracesInitialization_available == true
-//
-//            auto newNode = new DoubleListNode { what, after, before };
-//
-//#else
-//
-//            auto newNode = new DoubleListNode( what, after, before );
-//            newNode->data = what;
-//            newNode->pNext = after;
-//            newNode->pPrevious = before;
-//
-//#endif
-//
-//            before->pNext = newNode;
-//            after->pPrevious = newNode;
-//
-//            this->_size ++;
-//
-//            return;
-//        }
-//}
 
 template <class T>
 DoubleLinkedList<T>::DoubleLinkedList(const DoubleLinkedList & obj) noexcept {
@@ -1217,26 +872,6 @@ auto DoubleLinkedList<T>::contains(const T & what) const noexcept -> bool {
     return false;
 }
 
-//template <class T>
-//auto DoubleLinkedList<T>::get(Index pos) noexcept (false)  -> T & {
-//    if ( this->size() == 0 )
-//        return this->front();
-//
-//    if ( pos < 0 )
-//        pos += ( (-pos) / this->size() + 1 ) * this->size();
-//    if ( pos >= static_cast<Index>(this->size()) )
-//        pos = pos % this->size();
-//
-//    auto current = 0;
-//    for ( auto & e : (*this) ) {
-//        if ( current == pos )
-//            return e;
-//        current ++;
-//    }
-//
-//    return this->front();
-//}
-
 #include <CDS/Utility>
 template < typename T >
 auto DoubleLinkedList < T > :: pAt ( Index pos ) noexcept (false) -> ElementPtr {
@@ -1278,59 +913,6 @@ auto DoubleLinkedList < T > :: pAt ( Index pos ) const noexcept (false) -> Eleme
 
     return nullptr;
 }
-
-//
-//template <class T>
-//auto DoubleLinkedList<T>::get(Index pos) const noexcept (false)  -> const T & {
-//    if ( this->size() == 0 )
-//        return this->front();
-//
-//    if ( pos < 0 )
-//        pos += ( this->size() / (-pos) ) * this->size();
-//    if ( pos >= static_cast<Index>(this->size()) )
-//        pos = pos % this->size();
-//
-//    Index current = 0;
-//    for ( auto & e : (*this) ) {
-//        if ( current == pos )
-//            return e;
-//        current ++;
-//    }
-//
-//    return this->front();
-//}
-//
-//template <class T>
-//auto DoubleLinkedList<T>::set(const T & value, Index pos) noexcept (false) -> T & {
-//    if ( this->size() == 0 )
-//        return this->front();
-//
-//    if ( pos < 0 )
-//        pos += ( this->size() / (-pos) ) * this->size();
-//    if ( pos >= static_cast<Index>(this->size()) )
-//        pos = pos % this->size();
-//
-//    Index current = 0;
-//    for ( auto & e : (*this) ) {
-//        if ( current == pos ) {
-//            e = value;
-//            return e;
-//        }
-//        current ++;
-//    }
-//    return this->_pFront->data;
-//}
-
-//template <class T>
-//auto DoubleLinkedList<T>::sub(List<T> & l, Index from, Index to) const noexcept (false) -> void {
-//    l.clear();
-//
-//    if ( to == UINT64_MAX )
-//        to = this->size ();
-//
-//    for ( Index i = from; i < to; i++ )
-//        l.pushBack(this->get(i));
-//}
 
 template <class T>
 template < typename SortFunc >
@@ -1495,7 +1077,7 @@ inline auto String::split(ElementType token, Size limit) const noexcept -> Linke
     return segments;
 }
 
-inline auto String::lines() const noexcept -> LinkedList < String >{
+__CDS_MaybeUnused inline auto String::lines() const noexcept -> LinkedList < String >{
     return this->split("\n\r");
 }
 

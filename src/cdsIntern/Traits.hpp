@@ -179,26 +179,44 @@ concept TypeEqualsComparable = EqualsComparable < T, T >;
 # endif
 
 template < typename T >
+constexpr auto typeDefaultConstructible () noexcept -> bool {
+    return std :: is_default_constructible < T > :: type :: value;
+}
+
+template < typename T >
+constexpr auto typeCopyConstructible () noexcept -> bool {
+    return std :: is_copy_constructible < T > :: type :: value;
+}
+
+template < typename T >
+constexpr auto typeMoveConstructible () noexcept -> bool {
+    return std :: is_move_constructible < T > :: type :: value;
+}
+
+template < typename T >
+constexpr auto typeCopyAssignable () noexcept -> bool {
+    return std :: is_copy_assignable< T > :: type :: value;
+}
+
+template < typename T >
+constexpr auto typeMoveAssignable () noexcept -> bool {
+    return std :: is_move_assignable < T > :: type :: value;
+}
+
+template < typename T >
 struct Type {
 
-#if __CDS_cpplang_VariableTemplates_available == true
 
-    static constexpr bool hasEqualityOperator = typeHasEqualityOperator < T >;
-    static constexpr bool objectDerived = typeObjectDerived < T >;
+    static constexpr bool defaultConstructible = typeDefaultConstructible < T> ();
+    static constexpr bool copyConstructible = typeCopyConstructible < T > ();
+    static constexpr bool moveConstructible = typeMoveConstructible< T > ();
 
-    static constexpr bool defaultConstructible = std :: is_default_constructible < T > :: type :: value;
-    static constexpr bool copyConstructible = std :: is_copy_constructible < T > :: type :: value;
-    static constexpr bool moveConstructible = std :: is_move_constructible < T > :: type :: value;
-
-    static constexpr bool copyAssignable = std :: is_copy_assignable < T > :: type :: value;
-    static constexpr bool moveAssignable = std :: is_move_assignable < T > :: type :: value;
-
-#else
+    static constexpr bool copyAssignable = typeCopyAssignable< T > ();
+    static constexpr bool moveAssignable = typeMoveAssignable< T > ();
 
     static constexpr bool hasEqualityOperator = typeHasEqualityOperator < T > ();
     static constexpr bool objectDerived = typeObjectDerived < T > ();
 
-#endif
 
     static constexpr bool ostreamPrintable = isPrintable < T > :: type :: value;
 

@@ -31,18 +31,14 @@ template <class T, class C = dataTypes::DefaultSetComparator<T>>
 #endif
 class OrderedSet final : public Set<T> {
 public:
-//    using Reference                             = typename Set<T>::Reference;
-//    using ConstReference                        = typename Set<T>::ConstReference;
-//    using Pointer                               = typename Set<T>::Pointer;
-//    using ConstPointer      __CDS_MaybeUnused   = typename Set<T>::ConstPointer;
 
     using ElementType                           = typename Set<T>::ElementType;
-    using ElementRef                            = typename Set<T>::ElementRef;
+    using ElementRef        __CDS_MaybeUnused   = typename Set<T>::ElementRef;
     using ElementCRef                           = typename Set<T>::ElementCRef;
-    using ElementMRef                           = typename Set<T>::ElementMRef;
-    using ElementPtr                            = typename Set<T>::ElementPtr;
-    using ElementPtrRef                            = typename Set<T>::ElementPtrRef;
-    using ElementCPtr                           = typename Set<T>::ElementCPtr;
+    using ElementMRef       __CDS_MaybeUnused   = typename Set<T>::ElementMRef;
+    using ElementPtr        __CDS_MaybeUnused   = typename Set<T>::ElementPtr;
+    using ElementPtrRef                         = typename Set<T>::ElementPtrRef;
+    using ElementCPtr       __CDS_MaybeUnused   = typename Set<T>::ElementCPtr;
 
     using Node              __CDS_MaybeUnused   = typename Set<T>::Node;
     using NodePointer       __CDS_MaybeUnused   = typename Set<T>::NodePointer;
@@ -140,7 +136,6 @@ auto OrderedSet <T, C> ::allocInsertGetPtr(ElementCRef e) noexcept -> ElementPtr
             p->data = nullptr;
             p->pNext = head->pNext;
             head->pNext = p;
-//            head->pNext = new Node { value, head->pNext };
             ++ this->_size;
             return head->pNext->data;
         }
@@ -148,7 +143,6 @@ auto OrderedSet <T, C> ::allocInsertGetPtr(ElementCRef e) noexcept -> ElementPtr
         head = head->pNext;
     }
 
-//    head->pNext = new Node { value, nullptr };
     auto p = new Node;
     p->pNext = nullptr;
     p->data = nullptr;

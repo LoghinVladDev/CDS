@@ -102,7 +102,7 @@ public:
         return this->_message == p->_message;
     }
 
-    __CDS_NoDiscard constexpr auto message () const noexcept -> StringLiteral {
+    __CDS_NoDiscard __CDS_MaybeUnused constexpr auto message () const noexcept -> StringLiteral {
         return this->_message.cStr();
     }
 };

@@ -39,7 +39,7 @@ public:
 
     constexpr explicit Range(Index s, Index f) : _s(s), _f(f), _rev(s > f) { }
     constexpr explicit Range(Index f) : _s(0), _f(f), _rev(0 > f) { }
-    constexpr explicit Range(Pair < Index, Index > const & p) : _s(p.getFirst()), _f(p.getSecond()), _rev(0 > p.getFirst()) { }
+    __CDS_cpplang_NonConstConstexprMemberFunction explicit Range(Pair < Index, Index > const & p) : _s(p.first()), _f(p.second()), _rev(0 > p.second()) { }
     constexpr Range(Range const &) noexcept = default;
     constexpr Range(Range &&) noexcept = default;
     __CDS_cpplang_ConstexprDestructor ~Range() noexcept final = default;
@@ -60,14 +60,5 @@ public:
     __CDS_NoDiscard auto sequence () noexcept -> Sequence < Range >;
 };
 
-//#include <CDS/Sequence>
-//
-//inline auto Range::sequence() noexcept -> Sequence<Range> {
-//    return Sequence < typename std :: remove_reference < decltype (*this) > :: type > (*this);
-//}
-//
-//inline auto Range::sequence() const noexcept -> Sequence<const Range> {
-//    return Sequence < typename std :: remove_reference < decltype (*this) > :: type > (*this);
-//}
 
 #endif //CDS_RANGE_HPP

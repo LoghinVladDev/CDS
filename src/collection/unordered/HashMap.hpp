@@ -18,19 +18,19 @@ public:
     using Key                                       = typename Map<K, V>::Key;
     using KeyReference            __CDS_MaybeUnused = typename Map<K, V>::KeyReference;
     using KeyConstReference                         = typename Map<K, V>::KeyConstReference;
-    using KeyMoveReference                          = typename Map<K, V>::KeyMoveReference;
+    using KeyMoveReference        __CDS_MaybeUnused = typename Map<K, V>::KeyMoveReference;
 
     using Value                                     = typename Map<K, V>::Value;
     using ValueReference                            = typename Map<K, V>::ValueReference;
     using ValueConstReference                       = typename Map<K, V>::ValueConstReference;
-    using ValueMoveReference                        = typename Map<K, V>::ValueMoveReference;
+    using ValueMoveReference      __CDS_MaybeUnused = typename Map<K, V>::ValueMoveReference;
 
     using Entry                                     = typename Map<K, V>::Entry;
     using EntryReference                            = typename Map<K, V>::EntryReference;
     using EntryConstReference                       = typename Map<K, V>::EntryConstReference;
-    using EntryMoveReference                        = typename Map<K, V>::EntryMoveReference;
-    using EntryPointer                              = typename Map<K, V>::EntryPointer;
-    using EntryPointerReference                              = typename Map<K, V>::EntryPointerReference ;
+    using EntryMoveReference      __CDS_MaybeUnused = typename Map<K, V>::EntryMoveReference;
+    using EntryPointer            __CDS_MaybeUnused = typename Map<K, V>::EntryPointer;
+    using EntryPointerReference                     = typename Map<K, V>::EntryPointerReference ;
 
     using EntryReferenceList      __CDS_MaybeUnused = typename Map<K, V>::EntryReferenceList;
     using EntryConstReferenceList __CDS_MaybeUnused = typename Map<K, V>::EntryConstReferenceList;
@@ -50,7 +50,6 @@ public:
     class IteratorBase : public CollectionIterator {
     protected:
         HashMap < K, V, H > * pMap {nullptr};
-//        H hashCalculator;
         Index bucketIndex {0};
         HashBucket * pBuckets { nullptr };
 
@@ -86,7 +85,6 @@ public:
     class ConstIteratorBase : public CollectionConstIterator {
     protected:
         HashMap < K, V, H > const * pMap {nullptr};
-//        H hashCalculator;
         Index bucketIndex {0};
         HashBucket * pBuckets { nullptr };
 
@@ -524,10 +522,6 @@ public:
     }
 
     auto containsKey ( KeyConstReference k ) const noexcept -> bool final {
-//        for ( auto & e : (*this) )
-//            if ( Type < K > :: compare ( e.getFirst(), k ) )
-//                return true;
-//        return false;
         for ( EntryConstReference e : this->pBuckets[hashCalculator(k)] )
             if ( Type < K > :: compare ( e.first(), k ) )
                 return true;
@@ -566,18 +560,6 @@ public:
     auto allocInsertGetPtr (EntryConstReference entry) noexcept -> EntryPointerReference override {
         return this->pBuckets[hashCalculator(entry.first())].allocBackGetPtr();
     }
-
-//    auto insert ( Entry const & p ) noexcept -> ValueConstReference final {
-//        auto & b = this->pBuckets[hashCalculator(p.getFirst())];
-//        b.pushBack(p);
-//        return b.back().getSecond();
-//    }
-
-//    auto insert ( Entry && p ) noexcept -> ValueConstReference final {
-//        auto & b = this->pBuckets[hashCalculator(p.getFirst())];
-//        b.pushBack(std::move(p));
-//        return b.back().getSecond();
-//    }
 
     auto emplace ( KeyConstReference k, ValueConstReference v ) noexcept -> ValueConstReference final {
         return this->insert( {k, v} );

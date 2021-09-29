@@ -21,13 +21,13 @@ protected:
 
     List () noexcept = default;
 
-    using ElementType = typename Collection < T > :: ElementType;
-    using ElementRef = typename Collection < T > :: ElementRef;
-    using ElementCRef = typename Collection < T > :: ElementCRef;
-    using ElementMRef = typename Collection < T > :: ElementMRef;
-    using ElementPtr = typename Collection < T > :: ElementPtr;
-    using ElementPtrRef = ElementPtr &;
-    using ElementCPtr = typename Collection < T > :: ElementCPtr;
+    using ElementType   = typename Collection < T > :: ElementType;
+    using ElementRef    = typename Collection < T > :: ElementRef;
+    using ElementCRef   = typename Collection < T > :: ElementCRef;
+    using ElementMRef   = typename Collection < T > :: ElementMRef;
+    using ElementPtr    = typename Collection < T > :: ElementPtr;
+    using ElementPtrRef = typename Collection < T > :: ElementPtrRef;
+    using ElementCPtr   = typename Collection < T > :: ElementCPtr;
 
     using Iterator = typename Collection < T > :: Iterator;
 public:
@@ -43,7 +43,7 @@ public:
 
 protected:
     virtual auto pAt ( Index ) noexcept (false) -> ElementPtr = 0;
-    virtual auto pAt ( Index ) const noexcept (false) -> ElementCPtr = 0;
+    __CDS_MaybeUnused virtual auto pAt ( Index ) const noexcept (false) -> ElementCPtr = 0;
 
 public:
 
@@ -67,7 +67,6 @@ public:
 
     template < typename ListType, typename V = T, typename std :: enable_if < Type < V > :: copyAssignable && isDerivedFrom < ListType, List < T > > :: value, int > :: type = 0 >
     __CDS_MaybeUnused auto sub ( Index, Index = UINT64_MAX ) const noexcept (false) -> ListType;
-//    __CDS_MaybeUnused virtual auto sub ( List &, Index, Index = UINT64_MAX ) const noexcept (false) -> void = 0; // NOLINT(google-default-arguments)
 
     inline auto operator [] ( Index index ) noexcept -> T & {
         return this->get( index );
@@ -78,9 +77,6 @@ public:
     }
 
     virtual auto remove ( const typename Collection<T>::Iterator & ) noexcept (false) -> T = 0;
-//    virtual auto replace( const typename Collection<T>::Iterator &, const T & ) noexcept -> void = 0;
-//    __CDS_MaybeUnused virtual auto insertBefore( const typename Collection<T>::Iterator &, const T & ) noexcept -> void = 0;
-//    __CDS_MaybeUnused virtual auto insertAfter( const typename Collection<T>::Iterator &, const T & ) noexcept -> void = 0;
 
     __CDS_MaybeUnused virtual auto popFront ( ) noexcept (false) -> T = 0;
     __CDS_MaybeUnused virtual auto popBack ( ) noexcept (false) -> T = 0;
@@ -94,38 +90,22 @@ public:
 
     template < typename V = T, typename std :: enable_if < Type < V > :: copyConstructible, int > :: type = 0 >
     inline auto pushFront ( ElementCRef value ) noexcept -> ElementRef {
-//        auto p = this->allocFrontGetPtr();
-//        * p = value;
-//        return * p;
-
         return * (this->allocFrontGetPtr() = new ElementType ( value ));
     }
 
     template < typename V = T, typename std :: enable_if < Type < V > :: copyConstructible, int > :: type = 0 >
     inline auto pushBack ( ElementCRef value ) noexcept -> ElementRef {
-//        auto p = this->allocBackGetPtr();
-//        * p = value;
-//        return * p;
-//        return * (this->allocBackGetPtr() = new ElementType ( value ));
-        auto & p = this->allocBackGetPtr();
-        p = new ElementType(value);
-        return * p;
+        return * (this->allocBackGetPtr() = new ElementType ( value ));
     }
 
     template < typename V = T, typename std :: enable_if < Type < V > :: moveConstructible, int > :: type = 0 >
     inline auto pushFront ( ElementMRef value ) noexcept -> ElementRef {
-//        auto p = this->allocFrontGetPtr();
-//        * p = value;
-//        return * p;
-
         return * (this->allocFrontGetPtr() = new ElementType ( value ));
     }
 
     template < typename V = T, typename std :: enable_if < Type < V > :: moveConstructible, int > :: type = 0 >
     inline auto pushBack ( ElementMRef value ) noexcept -> ElementRef {
         return * (this->allocBackGetPtr() = new ElementType ( value ));
-//        auto p = this->allocBackGetPtr();
-//        * p = value;
     }
 
     template < typename V = T, typename std :: enable_if < Type < V > :: copyConstructible, int > :: type = 0 >
@@ -140,13 +120,6 @@ public:
 
     template < typename V = T, typename std :: enable_if < Type < V > :: moveConstructible, int > :: type = 0 >
     inline auto prepend ( ElementMRef v ) noexcept -> void { this->pushFront(v); }
-
-//
-//    template < typename V = T, typename std :: enable_if < Type < V > :: copyAssignable, int > :: type = 0 >
-//    inline auto add ( T const & v ) noexcept -> void override { this->pushBack(v); }
-//
-//    template < typename V = T, typename std :: enable_if < Type < V > :: moveAssignable, int > :: type = 0 >
-//    inline auto add ( T && v ) noexcept -> void override { this->pushBack(v); }
 
     __CDS_MaybeUnused virtual auto sort ( const Comparator < T > & ) noexcept -> void = 0;
 
@@ -742,8 +715,8 @@ public:
     virtual auto back () noexcept (false) -> T & = 0;
     virtual auto back () const noexcept (false) -> const T & = 0;
 
-    constexpr virtual inline auto front () const noexcept (false) -> const T & = 0;
-    constexpr virtual inline auto front () noexcept (false) -> T & = 0;
+    constexpr virtual auto front () const noexcept (false) -> const T & = 0;
+    __CDS_cpplang_NonConstConstexprMemberFunction virtual auto front () noexcept (false) -> T & = 0;
 
     __CDS_NoDiscard __CDS_MaybeUnused __CDS_cpplang_VirtualConstexpr auto empty () const noexcept -> bool override {
         return this->_size == 0;
@@ -752,7 +725,7 @@ public:
 
 template < typename T >
 template < typename ListType, typename V, typename std :: enable_if < Type < V > :: copyAssignable && isDerivedFrom < ListType, List < T > > :: value, int > :: type >
-auto List < T > :: sub ( Index from, Index to ) const noexcept(false) -> ListType {
+__CDS_MaybeUnused auto List < T > :: sub ( Index from, Index to ) const noexcept(false) -> ListType {
     ListType list;
 
     if ( from > to ) std :: swap ( from, to );

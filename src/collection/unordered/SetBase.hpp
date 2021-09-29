@@ -13,24 +13,19 @@ template <class T>
 #endif
 class Set : public Collection<T> {
 public:
-//    typedef T & Reference;
-//    typedef T const & ConstReference;
-//    typedef T * Pointer;
-//    typedef T const * ConstPointer;
-    using ElementType = typename Collection < T > :: ElementType;
-    using ElementRef = typename Collection < T > :: ElementRef;
-    using ElementCRef = typename Collection < T > :: ElementCRef;
-    using ElementMRef = typename Collection < T > :: ElementMRef;
-    using ElementPtr = typename Collection < T > :: ElementPtr;
+    using ElementType   = typename Collection < T > :: ElementType;
+    using ElementRef    = typename Collection < T > :: ElementRef;
+    using ElementCRef   = typename Collection < T > :: ElementCRef;
+    using ElementMRef   = typename Collection < T > :: ElementMRef;
+    using ElementPtr    = typename Collection < T > :: ElementPtr;
     using ElementPtrRef = typename Collection < T > :: ElementPtrRef;
-    using ElementCPtr = typename Collection < T > :: ElementCPtr;
+    using ElementCPtr   = typename Collection < T > :: ElementCPtr;
 
     struct Node {
         T       * data;
         Node    * pNext {nullptr};
     };
 
-//    using Node = dataTypes::SingleListNode<T>;
     typedef Node * NodePointer;
     typedef Node const * ConstNodePointer;
 
@@ -137,14 +132,6 @@ public:
     inline auto insert ( ElementMRef e ) noexcept -> void {
         return this->add(e);
     }
-
-//    inline auto add ( ConstReference v ) noexcept -> void override {
-//        this->insert( v );
-//    }
-
-//    inline auto add ( T && v ) noexcept -> void override {
-//        this->insert( v );
-//    }
 
     auto clear () noexcept -> void final {
         while (this->_pFront != nullptr) {

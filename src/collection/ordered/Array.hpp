@@ -13,18 +13,18 @@ private:
     T ** _pData     {nullptr };
     Size _capacity  { 0ull };
 
-    using ElementType = typename List < T > :: ElementType;
-    using ElementRef = typename List < T > :: ElementRef;
-    using ElementCRef = typename List < T > :: ElementCRef;
-    using ElementMRef = typename List < T > :: ElementMRef;
-    using ElementPtr = typename List < T > :: ElementPtr;
-    using ElementPtrRef = typename List < T > :: ElementPtrRef;
-    using ElementCPtr = typename List < T > :: ElementCPtr;
+    using ElementType                   = typename List < T > :: ElementType;
+    using ElementRef                    = typename List < T > :: ElementRef;
+    using ElementCRef                   = typename List < T > :: ElementCRef;
+    using ElementMRef __CDS_MaybeUnused = typename List < T > :: ElementMRef;
+    using ElementPtr                    = typename List < T > :: ElementPtr;
+    using ElementPtrRef                 = typename List < T > :: ElementPtrRef;
+    using ElementCPtr                   = typename List < T > :: ElementCPtr;
 
     class IteratorBase;
     class ConstIteratorBase;
 
-    auto expandWith ( Size ) noexcept -> void;
+    __CDS_MaybeUnused auto expandWith ( Size ) noexcept -> void;
 
 public:
 
@@ -94,28 +94,12 @@ public:
     auto removeNotOf ( Collection<ElementType> const &, Size ) noexcept -> bool final;
     auto removeLastNotOf ( Collection<ElementType> const & ) noexcept -> bool final;
 
-//    auto replace ( ValueConstReference, ValueConstReference, Size ) noexcept -> void final;
-//    auto replaceLast ( ValueConstReference, ValueConstReference ) noexcept -> void final;
-
-//    auto replaceOf ( Collection<Value> const &, ValueConstReference , Size ) noexcept -> void final;
-//    auto replaceLastOf ( Collection<Value> const &, ValueConstReference ) noexcept -> void final;
-//    auto replaceNotOf ( Collection<Value> const &, ValueConstReference , Size ) noexcept -> void final;
-//    auto replaceLastNotOf ( Collection<Value> const &, ValueConstReference ) noexcept -> void final;
-
     auto remove ( typename Collection<ElementType>::Iterator const & ) noexcept(false) -> ElementType final;
-//    auto replace ( typename Collection<ElementType>::Iterator const &, ElementCRef ) noexcept -> void final;
-//    auto insertBefore ( typename Collection<ElementType>::Iterator const &, ElementCRef ) noexcept -> void final;
-//    auto insertAfter ( typename Collection<ElementType>::Iterator const &, ElementCRef ) noexcept -> void final;
 
     inline auto removeOf ( std::initializer_list<ElementType> const &, Size ) noexcept -> bool final;
     inline auto removeLastOf ( std::initializer_list<ElementType> const & ) noexcept -> bool final;
     inline auto removeNotOf ( std::initializer_list<ElementType> const &, Size ) noexcept -> bool final;
     inline auto removeLastNotOf ( std::initializer_list<ElementType> const & ) noexcept -> bool final;
-
-//    inline virtual auto replaceOf ( std::initializer_list<Value> const & list, ValueConstReference with, Size count ) noexcept -> void final { return this->replaceOf( Array (list), with, count ); }
-//    inline virtual auto replaceLastOf ( std::initializer_list<Value> const & list, ValueConstReference with ) noexcept -> void final { return this->replaceLastOf( Array (list), with ); }
-//    inline virtual auto replaceNotOf ( std::initializer_list<Value> const & list, ValueConstReference with, Size count ) noexcept -> void final { return this->replaceNotOf( Array (list), with, count ); }
-//    inline virtual auto replaceLastNotOf ( std::initializer_list<Value> const & list, ValueConstReference with ) noexcept -> void final { return this->replaceLastNotOf( Array (list), with ); }
 
     __CDS_cpplang_NonConstConstexprMemberFunction auto back () noexcept (false) -> ElementRef final {
         if ( this->empty() )
@@ -139,15 +123,11 @@ public:
     }
 
     __CDS_cpplang_ConstexprConditioned auto front () const noexcept (false) -> ElementCRef final {
-        if ( this->empty() )
+        if (this->empty())
             throw typename List<ElementType>::ListOutOfBounds();
 
-        return * this->_pData[0];
+        return *this->_pData[0];
     }
-
-//    __CDS_NoDiscard constexpr auto empty () const noexcept -> bool final {
-//        return this->_size == 0;
-//    }
 
     auto operator == (Array const & o) const noexcept -> bool {
         if ( this == & o ) return true;
@@ -178,25 +158,11 @@ public:
 
     __CDS_MaybeUnused auto indices ( ElementCRef ) const noexcept -> DoubleLinkedList < Index >;
 
-//    auto get ( Index ) noexcept (false) -> ElementRef final;
-//    auto get ( Index ) const noexcept (false) -> ElementCRef final;
-//
-//    auto set ( ElementCRef, Index ) noexcept (false) -> ElementRef final;
-//    auto set ( ElementMRef, Index ) noexcept (false) -> ElementRef final;
-
 private:
     auto pAt (Index) noexcept (false) -> ElementPtr override;
     auto pAt (Index) const noexcept (false) -> ElementCPtr override;
 
 public:
-
-//    auto sub ( List < ElementType > &, Index, Index ) const noexcept (false) -> void final;
-
-//    __CDS_MaybeUnused inline auto sub ( Index from, Index to ) const noexcept(false) -> Array {
-//        Array array;
-//        this->sub( array, from, to );
-//        return array;
-//    }
 
     auto popFront () noexcept (false) -> ElementType final {
         if ( this->empty() )
@@ -231,22 +197,7 @@ private:
     auto allocBackGetPtr () noexcept -> ElementPtrRef override;
     inline auto allocInsertGetPtr (ElementCRef e __CDS_MaybeUnused) noexcept -> ElementPtrRef override {
         return this->allocBackGetPtr();
-//        return ( this->allocBackGetPtr() = new ElementType );
-//        auto p = new ElementType;
-//        auto & t = this->allocBackGetPtr();
-//        t = p;
-//        return p;
     }
-
-public:
-
-//    auto pushFront ( ElementCRef ) noexcept -> void final;
-//    auto pushBack ( ElementCRef ) noexcept -> void final;
-
-//    auto pushFront ( ElementMRef ) noexcept -> void final;
-//    auto pushBack ( ElementMRef ) noexcept -> void final;
-
-private:
 
 #if defined(__JETBRAINS_IDE__)
 #pragma clang diagnostic push
@@ -285,7 +236,6 @@ protected:
     Index mutable   _index  { 0ull };
     Array         * _pArray { nullptr };
 
-//    IteratorBase() noexcept = default;
     IteratorBase( IteratorBase const & ) noexcept = default;
     IteratorBase( IteratorBase && ) noexcept = default;
     explicit IteratorBase( Array * pArray, Index index ) noexcept :
@@ -316,7 +266,6 @@ protected:
     Index mutable _index  { 0ull };
     Array const * _pArray { nullptr };
 
-//    ConstIteratorBase() noexcept = default;
     ConstIteratorBase( ConstIteratorBase const & ) noexcept = default;
     ConstIteratorBase( ConstIteratorBase && ) noexcept = default;
     explicit ConstIteratorBase (Array const * pArray, Index index) noexcept :
@@ -343,7 +292,6 @@ public:
 template <class T>
 class Array<T>::Iterator final : public IteratorBase {
 public:
-//    Iterator () noexcept = default;
     Iterator ( Iterator const & ) noexcept = default;
     Iterator ( Iterator && ) noexcept = default;
     explicit Iterator ( Array * pArray, Index index ) noexcept : IteratorBase( pArray, index ) { }
@@ -376,7 +324,6 @@ public:
 template <class T>
 class Array<T>::ReverseIterator final : public IteratorBase {
 public:
-//    ReverseIterator () noexcept = default;
     ReverseIterator ( ReverseIterator const & ) noexcept = default;
     ReverseIterator ( ReverseIterator && ) noexcept = default;
     explicit ReverseIterator ( Array * pArray, Index index ) noexcept : IteratorBase( pArray, index ) { }
@@ -406,7 +353,6 @@ public:
 template <class T>
 class Array<T>::ConstIterator final : public ConstIteratorBase {
 public:
-//    ConstIterator () noexcept = default;
     ConstIterator ( ConstIterator const & ) noexcept = default;
     ConstIterator ( ConstIterator && ) noexcept = default;
     explicit ConstIterator ( Array const * pArray, Index index ) noexcept : ConstIteratorBase( pArray, index ) { }
@@ -436,7 +382,6 @@ public:
 template<class T>
 class Array<T>::ConstReverseIterator final : public ConstIteratorBase {
 public:
-//    ConstReverseIterator () noexcept = default;
     ConstReverseIterator ( ConstReverseIterator const & ) noexcept = default;
     ConstReverseIterator ( ConstReverseIterator && ) noexcept = default;
     explicit ConstReverseIterator ( Array const * pArray, Index index ) noexcept : ConstIteratorBase( pArray, index ) { }
@@ -477,49 +422,11 @@ Array<T>::~Array() noexcept {
     delete [] this->_pData;
 }
 
-//template <class T>
-//auto Array<T>::pushFront( ElementCRef value ) noexcept -> void {
-//    this->expandWith( 1 );
-//
-//    auto p = this->_pData[this->_size];
-//    * p = value;
-//
-//    for ( Index i = this->_size; i >= 1; i-- )
-//        this->_pData[i] = this->_pData[i - 1];
-//
-//    this->_pData[0] = p;
-//    this->_size++;
-//}
-
-//template <class T>
-//auto Array<T>::pushFront( ElementMRef moveValue ) noexcept -> void {
-//    this->expandWith( 1 );
-//
-//    auto p = this->_pData[this->_size];
-//    * p = std::move(moveValue);
-//
-//    for ( Index i = this->_size; i >= 1; i-- )
-//        this->_pData[i] = this->_pData[i - 1];
-//
-//    this->_pData[0] = p;
-//    this->_size++;
-//}
-
 template < typename T >
 auto Array < T > :: allocFrontGetPtr () noexcept -> ElementPtrRef {
-//    this->expandWith(1);
-//    if ( this->_size == this->_capacity ) {
-//        auto newSize = this->_capacity + 1;
-//        T ** pTempBuffer = new T * [newSize];
-//        std::memcpy (  )
-//    }
-
     auto newSize = this->_capacity + 1;
     T ** partBuffer = new T * [newSize];
-    std::memcpy ( partBuffer + 1, this->_pData, newSize * sizeof ( T * ) );
-//    std::memcpy ( this->_pData + 1, partBuffer, this->_size * sizeof ( T * ) );
-//    delete [] partBuffer;
-
+    std::memcpy ( partBuffer + 1, this->_pData, this->_capacity * sizeof ( T * ) );
 
     delete [] this->_pData;
     this->_pData = partBuffer;
@@ -532,8 +439,6 @@ auto Array < T > :: allocFrontGetPtr () noexcept -> ElementPtrRef {
 
 template < typename T >
 auto Array < T > :: allocBackGetPtr () noexcept -> ElementPtrRef {
-//    this->expandWith(1);
-
     auto newSize = this->_capacity + 1;
     T ** newBuf = new T * [newSize];
     std::memcpy ( newBuf, this->_pData, this->_size * sizeof(T *) );
@@ -543,22 +448,7 @@ auto Array < T > :: allocBackGetPtr () noexcept -> ElementPtrRef {
     this->_pData = newBuf;
 
     return (this->_pData[this->_size ++] = nullptr);
-//    return this->_pData[this->_size ++];
 }
-
-//template <class T>
-//auto Array<T>::pushBack(ElementCRef value) noexcept -> void {
-//    this->expandWith( 1 );
-//
-//    * this->_pData[this->_size ++] = value;
-//}
-//
-//template <class T>
-//auto Array<T>::pushBack(ElementMRef moveValue) noexcept -> void {
-//    this->expandWith( 1 );
-//
-//    * this->_pData[this->_size ++] = std::move(moveValue);
-//}
 
 template <class T>
 auto Array<T>::toString() const noexcept -> String {
@@ -576,7 +466,7 @@ auto Array<T>::toString() const noexcept -> String {
 }
 
 template <class T>
-auto Array<T>::expandWith(Size requiredSize) noexcept -> void {
+__CDS_MaybeUnused auto Array<T>::expandWith(Size requiredSize) noexcept -> void {
     if ( this->_size + requiredSize < this->_capacity ) return;
 #if defined(_MSC_VER)
 #pragma push_macro("max")
@@ -681,17 +571,6 @@ auto Array<T>::remove(ElementCRef e, Size count) noexcept -> bool {
 #include <CDS/Range>
 template <class T>
 auto Array<T>::removeLast(ElementCRef e) noexcept -> bool {
-//    Array without;
-//    bool removed = false;
-
-//    for ( auto it = this->rbegin(); it != this->rend(); it ++ )
-//        if ( Type < T > :: compare ( it.value(), e ) && ! removed )
-//            removed = true;
-//        else
-//            without.pushFront( it.value() );
-
-//    * this = without;
-//    return removed;
     Index at = -1;
     for ( Index i = this->size() - 1; i >= 0; -- i )
         if ( Type < T > :: compare ( * this->_pData[i], e ) ) {
@@ -879,81 +758,9 @@ auto Array<T>::removeLastNotOf(std::initializer_list<ElementType> const & elemen
     return true;
 }
 
-//template <class T>
-//auto Array<T>::replace(ValueConstReference what, ValueConstReference with, Size count) noexcept -> void {
-//    for ( auto & e : * this )
-//        if ( Type < T > :: compare ( e, what ) && count > 0 ) {
-//            e = with;
-//            count --;
-//        } else if ( count == 0 )
-//            break;
-//}
-
-//template <class T>
-//auto Array<T>::replaceOf(Collection<Value> const & what, ValueConstReference with, Size count) noexcept -> void {
-//    for ( auto & e : * this )
-//        if ( what.contains(e) && count > 0 ) {
-//            e = with;
-//            count --;
-//        } else if ( count == 0 )
-//            break;
-//}
-//
-//template <class T>
-//auto Array<T>::replaceNotOf(Collection<Value> const & what, ValueConstReference with, Size count) noexcept -> void {
-//    for ( auto & e : * this )
-//        if ( ! what.contains(e) && count > 0 ) {
-//            e = with;
-//            count --;
-//        } else if ( count == 0 )
-//            break;
-//}
-
-//template <class T>
-//auto Array<T>::replaceLast(ValueConstReference what, ValueConstReference with) noexcept -> void {
-//    for ( auto it = this->rbegin(); it != this->rend(); it ++ )
-//        if ( Type < T > :: compare ( it.value(), what ) ) {
-//            it.value() = with;
-//            break;
-//        }
-//}
-
-//template <class T>
-//auto Array<T>::replaceLastOf(Collection<Value> const & what, ValueConstReference with) noexcept -> void {
-//    for ( auto it = this->rbegin(); it != this->rend(); it ++ )
-//        if ( what.contains(it.value())  ) {
-//            it.value() = with;
-//            break;
-//        }
-//}
-//
-//template <class T>
-//auto Array<T>::replaceLastNotOf(Collection<Value> const & what, ValueConstReference with) noexcept -> void {
-//    for ( auto it = this->rbegin(); it != this->rend(); it ++ )
-//        if ( ! what.contains(it.value())  ) {
-//            it.value() = with;
-//            break;
-//        }
-//}
-
 #include <CDS/Utility>
 template <class T>
 auto Array<T>::remove( typename Collection<ElementType>::Iterator const & it ) noexcept (false) -> ElementType {
-//    if ( this->empty() )
-//        throw typename List<ElementType>::ListOutOfBounds();
-//
-//    Array without;
-//
-//    for (auto i = this->begin(); i != this->end(); i ++ )
-//        if ( ! i.equals(it) )
-//            without.pushBack(i.value());
-//
-//    auto v = it.value();
-//
-//    * this = without;
-//
-//    return v;
-
     if ( ! Collection < T > :: iteratorIsOf (it, *this) )
         throw IllegalArgumentException("Iterator given is not of this collection");
 
@@ -974,54 +781,6 @@ auto Array<T>::remove( typename Collection<ElementType>::Iterator const & it ) n
     return retVal;
 }
 
-//template <class T>
-//auto Array<T>::replace ( typename Collection<ElementType>::Iterator const & iterator, ElementCRef value ) noexcept -> void {
-//    iterator.value() = value;
-//}
-
-//template <class T>
-//auto Array<T>::insertBefore( typename Collection<ElementType>::Iterator const & iterator, ElementCRef value) noexcept -> void {
-//    Array newArray;
-//
-//    auto it = this->begin();
-//    while ( it != this->end() && ! ( Type < T > :: compare ( it.value(), value )) ) {
-//        newArray.pushBack(it.value());
-//        it ++;
-//    }
-//
-//    newArray.pushBack( value );
-//
-//    while ( it != this->end() ) {
-//        newArray.pushBack(it.value());
-//        it ++;
-//    }
-//
-//    * this = newArray;
-//}
-//
-//template <class T>
-//auto Array<T>::insertAfter(typename Collection<ElementType>::Iterator const & iterator, ElementCRef value) noexcept -> void {
-//    Array newArray;
-//
-//    auto it = this->begin();
-//    while ( it != this->end() && ! ( Type < T > :: compare ( it.value(), value ) ) ) {
-//        newArray.pushBack(it.value());
-//        it ++;
-//    }
-//
-//    newArray.pushBack(it.value());
-//    it ++;
-//
-//    newArray.pushBack( value );
-//
-//    while ( it != this->end() ) {
-//        newArray.pushBack(it.value());
-//        it ++;
-//    }
-//
-//    * this = newArray;
-//}
-
 template <class T>
 auto Array<T>::clear() noexcept -> void {
     this->_size = 0;
@@ -1029,7 +788,6 @@ auto Array<T>::clear() noexcept -> void {
 
 template <class T>
 auto Array<T>::makeUnique() noexcept -> void {
-//    Array newArray;
     T ** pNewData = new T * [this->size()];
     Size l = 0;
 
@@ -1118,53 +876,6 @@ auto Array < T > :: pAt ( Index i ) const noexcept (false) -> ElementCPtr {
 
     return this->_pData[i];
 }
-
-//template <class T>
-//auto Array<T>::get(Index i) noexcept (false) -> ElementRef {
-//    if ( i < 0 || this->_capacity <= i )
-//        throw typename List<ElementType>::ListOutOfBounds();
-//
-//    return * this->_pData[i];
-//}
-//
-//template <class T>
-//auto Array<T>::get(Index i) const noexcept (false) -> ElementCRef {
-//    if ( i < 0 || this->_capacity <= i )
-//        throw typename List<ElementType>::ListOutOfBounds();
-//
-//    return * this->_pData[i];
-//}
-//
-//template <class T>
-//auto Array<T>::set( ElementCRef v, Index i ) noexcept (false) -> ElementRef {
-//    if ( i < 0 || this->_capacity <= i )
-//        throw typename List<ElementType>::ListOutOfBounds();
-//
-//    return ( * this->_pData[i] = v );
-//}
-//
-//template <class T>
-//auto Array<T>::set( ElementMRef v, Index i ) noexcept (false) -> ElementRef {
-//    if ( i < 0 || this->_capacity <= i )
-//        throw typename List<ElementType>::ListOutOfBounds();
-//
-//    return ( * this->_pData[i] = v );
-//}
-
-//template <class T>
-//auto Array<T>::sub( List<ElementType> & container, Index from, Index to ) const noexcept(false) -> void {
-//    auto swap = [] ( auto & a, auto & b ) { auto aux = a; a = b; b = aux; };
-//    if ( from > to )
-//        std::swap ( from, to );
-//
-//    if ( from < 0 ) from = 0;
-//    if ( to >= this->_capacity ) to = this->_capacity;
-//
-//    container.clear();
-//
-//    for ( Index i = from; i < to; i++ )
-//        container.pushBack( * this->_pData[i] );
-//}
 
 template <class T>
 Array<T> & Array<T>::operator= (Collection<ElementType> const & c) noexcept {
