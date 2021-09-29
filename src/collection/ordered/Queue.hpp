@@ -47,35 +47,18 @@ private:
     inline auto index ( T const & e ) const noexcept -> Index override { return this->SingleLinkedList < T > :: index (e); }
     inline auto index ( T & e ) noexcept -> Index override { return this->SingleLinkedList < T > :: index (e); }
 
-    inline auto get ( Index i ) const noexcept(false) -> T const & override { return this->SingleLinkedList < T > :: get (i); }
-    inline auto get ( Index i ) noexcept(false) -> T & override { return this->SingleLinkedList < T > :: get (i); }
-
-    inline auto set ( T const & e, Index i ) noexcept(false) -> T & override { return this->SingleLinkedList < T > :: set (e, i); }
-
-    inline auto sub ( Index from, Index to ) const noexcept (false) -> SingleLinkedList < T > override {
-        return this->SingleLinkedList < T > :: sub (from, to);
-    }
-
-    inline auto sub ( List < T > & list, Index from, Index to ) const noexcept(false) -> void final {
-        return this->SingleLinkedList < T > :: sub (list, from, to);
-    }
-
     inline auto popBack () noexcept (false) -> T override { return this->SingleLinkedList < T > :: popBack(); }
     inline auto popFront () noexcept (false) -> T override { return this->SingleLinkedList < T > :: popFront(); }
-
-    inline auto pushFront ( T const & e ) noexcept -> void override { return this->SingleLinkedList < T > :: pushFront (e); }
-    inline auto pushFront ( T && e ) noexcept -> void override { return this->SingleLinkedList < T > :: pushFront (e); }
-    inline auto pushBack ( T const & e ) noexcept -> void override { return this->SingleLinkedList < T > :: pushBack (e); }
-    inline auto pushBack ( T && e ) noexcept -> void override { return this->SingleLinkedList < T > :: pushBack (e); }
-
-    inline auto prepend ( T const & e ) noexcept -> void override { return this->SingleLinkedList < T > :: prepend (e); }
-    inline auto prepend ( T && e ) noexcept -> void override { return this->SingleLinkedList < T > :: prepend (e); }
 
     auto sort ( Comparator < T > const & comparator ) noexcept -> void final { return this->SingleLinkedList< T > :: sort ( comparator ); }
 
 public:
-    inline auto push ( T const & e ) noexcept -> void { return this->SingleLinkedList < T > :: pushBack (e); }
-    __CDS_MaybeUnused inline auto push ( T && e ) noexcept -> void { return this->SingleLinkedList < T > :: pushBack (e); }
+
+    template < typename V = T, typename std :: enable_if < Type < V > :: copyConstructible, int > :: type = 0 >
+    inline auto push ( T const & e ) noexcept -> T& { return this->SingleLinkedList < T > :: pushBack (e); }
+
+    template < typename V = T, typename std :: enable_if < Type < V > :: moveConstructible, int > :: type = 0 >
+    __CDS_MaybeUnused inline auto push ( T && e ) noexcept -> T& { return this->SingleLinkedList < T > :: pushBack (e); }
 
     inline auto pop () noexcept (false) -> T { return this->popFront(); }
 };

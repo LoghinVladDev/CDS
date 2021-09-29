@@ -11,8 +11,10 @@ template < typename T >
 class SingleLinkedList : public List < T > {
 private:
     struct Node {
-        T       _data;
+        T     * _data  {nullptr};
         Node  * _pNext {nullptr};
+
+        Node () noexcept = default;
 
         Node (T const & data, Node * pNext) noexcept :
                 _data(data),
@@ -29,14 +31,22 @@ private:
         __CDS_cpplang_NonConstConstexprMemberFunction auto next () noexcept -> Node * & { return this->_pNext; }
         constexpr auto next () const noexcept -> Node const * & { return this->_pNext; }
 
-        __CDS_cpplang_NonConstConstexprMemberFunction auto data () noexcept -> T & { return this->_data; }
-        constexpr auto data () const noexcept -> T const & { return this->_data; }
+        __CDS_cpplang_NonConstConstexprMemberFunction auto data () noexcept -> T * & { return this->_data; }
+        constexpr auto data () const noexcept -> T const * & { return this->_data; }
     };
 
     Node * _pFront {nullptr};
     Node * _pBack {nullptr};
 
 public:
+
+    using ElementType                   = typename List < T > :: ElementType;
+    using ElementRef __CDS_MaybeUnused  = typename List < T > :: ElementRef;
+    using ElementCRef                   = typename List < T > :: ElementCRef;
+    using ElementMRef __CDS_MaybeUnused = typename List < T > :: ElementMRef;
+    using ElementPtr                    = typename List < T > :: ElementPtr;
+    using ElementPtrRef                 = typename List < T > :: ElementPtrRef;
+    using ElementCPtr                   = typename List < T > :: ElementCPtr;
 
     class IteratorBase;
     class ConstIteratorBase;
@@ -95,19 +105,7 @@ public:
     auto removeNotOf ( Collection<T> const &, Size ) noexcept -> bool override;
     auto removeLastNotOf ( Collection<T> const & ) noexcept -> bool override;
 
-    auto replace ( T const &, T const &, Size ) noexcept -> void override;
-    auto replaceLast ( T const &, T const & ) noexcept -> void override;
-
-    auto replaceOf ( Collection<T> const &, T const &, Size ) noexcept -> void override;
-    auto replaceLastOf ( Collection<T> const &, T const & ) noexcept -> void override;
-
-    auto replaceNotOf ( Collection<T> const &, T const &, Size ) noexcept -> void override;
-    auto replaceLastNotOf ( Collection<T> const &, T const & ) noexcept -> void override;
-
     auto remove ( typename Collection<T>::Iterator const & ) noexcept (false) -> T override;
-    auto replace( typename Collection<T>::Iterator const &, T const & ) noexcept -> void override;
-    auto insertBefore( typename Collection<T>::Iterator const &, T const & ) noexcept -> void override;
-    auto insertAfter( typename Collection<T>::Iterator const &, T const & ) noexcept -> void override;
 
     inline auto removeOf ( std::initializer_list<T> const & list, Size count ) noexcept -> bool override { return this->removeOf ( SingleLinkedList <T> (list), count ); }
     inline auto removeLastOf ( std::initializer_list<T> const & list ) noexcept -> bool override { return this->removeLastOf ( SingleLinkedList<T> (list) ); }
@@ -115,42 +113,32 @@ public:
     inline auto removeNotOf ( std::initializer_list<T> const & list, Size count ) noexcept -> bool override { return this->removeNotOf( SingleLinkedList<T> (list), count ); }
     inline auto removeLastNotOf ( std::initializer_list<T> const & list ) noexcept -> bool override { return this->removeLastNotOf( SingleLinkedList<T> (list) ); }
 
-    inline auto replaceOf ( std::initializer_list<T> const & list, T const & with, Size count ) noexcept -> void override { return this->replaceOf( SingleLinkedList<T> (list), with, count ); }
-    inline auto replaceLastOf ( std::initializer_list<T> const & list, T const & with ) noexcept -> void override { return this->replaceLastOf( SingleLinkedList<T> (list), with ); }
-
-    inline auto replaceNotOf ( std::initializer_list<T> const & list, T const & with, Size count ) noexcept -> void override { return this->replaceNotOf( SingleLinkedList<T> (list), with, count ); }
-    inline auto replaceLastNotOf ( std::initializer_list<T> const & list, T const & with ) noexcept -> void override { return this->replaceLastNotOf( SingleLinkedList<T> (list), with ); }
-
     __CDS_NoDiscard __CDS_cpplang_NonConstConstexprMemberFunction auto back () noexcept (false) -> T & override {
         if ( this->empty() )
             throw typename List < T > :: ListOutOfBounds ();
 
-        return this->_pBack->_data;
+        return * this->_pBack->data();
     }
 
     __CDS_NoDiscard __CDS_cpplang_ConstexprConditioned auto back () const noexcept (false) -> T const & override {
         if ( this->empty() )
             throw typename List < T > :: ListOutOfBounds ();
 
-        return this->_pBack->_data;
+        return * this->_pBack->data();
     }
 
     __CDS_NoDiscard __CDS_cpplang_NonConstConstexprMemberFunction auto front () noexcept (false) -> T & override {
         if ( this->empty() )
             throw typename List < T > :: ListOutOfBounds ();
 
-        return this->_pFront->data();
+        return * this->_pFront->data();
     }
 
     __CDS_NoDiscard __CDS_cpplang_ConstexprConditioned auto front () const noexcept (false) -> T const & override {
         if ( this->empty() )
             throw typename List < T > :: ListOutOfBounds ();
 
-        return this->_pFront->data();
-    }
-
-    __CDS_NoDiscard constexpr auto empty () const noexcept -> bool final {
-        return this->_size == 0 && this->_pFront == nullptr;
+        return * this->_pFront->data();
     }
 
     __CDS_NoDiscard auto operator == (SingleLinkedList const & o) const noexcept -> bool {
@@ -187,33 +175,21 @@ public:
     auto index ( T & ) noexcept -> Index override;
     auto index ( T const & ) const noexcept -> Index override;
 
-    auto get ( Index ) noexcept (false) -> T & override;
-    auto get ( Index ) const noexcept (false) -> T const & override;
-
-    auto set ( T const &, Index ) noexcept (false) -> T & override;
-
-    auto sub ( List < T > &, Index, Index ) const noexcept(false) -> void override;
-
-    __CDS_MaybeUnused virtual auto sub (Index from, Index to) const noexcept (false) -> SingleLinkedList < T > {
-        SingleLinkedList < T > list;
-        this->sub( list, from, to );
-        return list;
-    }
-
     auto popFront () noexcept (false) -> T override {
         if ( this->empty() )
             throw typename List < T > :: ListOutOfBounds ();
 
-        this->_size --;
+        -- this->_size;
 
         auto node = this->_pFront;
-        auto value = node->_data;
+        auto value = * node->_data;
 
         if ( this->size() == 0 )
             this->_pFront = this->_pBack = nullptr;
         else
             this->_pFront = this->_pFront->_pNext;
 
+        delete node->data();
         delete node;
         return value;
     }
@@ -223,8 +199,9 @@ public:
             throw typename List < T > :: ListOutOfBounds ();
 
         if ( this->size() == 1 ) {
-            auto v = this->_pFront->_data;
+            auto v = * this->_pFront->_data;
 
+            delete this->_pFront->data();
             delete this->_pFront;
 
             this->_pFront = this->_pBack = nullptr;
@@ -238,22 +215,28 @@ public:
         while ( p->_pNext->_pNext != nullptr )
             p = p->_pNext;
 
-        auto v = this->_pBack->_data;
+        auto v = * this->_pBack->_data;
 
         p->_pNext = nullptr;
 
+        delete this->_pBack->data();
         delete this->_pBack;
         this->_pBack = p;
 
         return v;
     }
 
-    auto pushBack ( T const & ) noexcept -> void override;
-    auto pushBack ( T && ) noexcept -> void override;
-    auto pushFront ( T const & ) noexcept -> void override;
-    auto pushFront ( T && ) noexcept -> void override;
-
 private:
+
+    auto allocFrontGetPtr () noexcept -> ElementPtrRef override;
+    auto allocBackGetPtr () noexcept -> ElementPtrRef override;
+
+    inline auto allocInsertGetPtr (ElementCRef e __CDS_MaybeUnused) noexcept -> ElementPtrRef override {
+        return this->allocBackGetPtr();
+    }
+
+    auto pAt (Index) noexcept (false) -> ElementPtr override;
+    auto pAt (Index) const noexcept (false) -> ElementCPtr override;
 
 #if defined(__JETBRAINS_IDE__)
 #pragma clang diagnostic push
@@ -304,17 +287,17 @@ class SingleLinkedList < T > :: IteratorBase : public Collection < T > :: Iterat
 protected:
     mutable Node * _pNode {nullptr};
 
-    IteratorBase () noexcept = default;
     IteratorBase ( IteratorBase const & ) noexcept = default;
     IteratorBase ( IteratorBase && ) noexcept = default;
 
-    explicit IteratorBase ( Node * pNode ) noexcept :
-            Collection < T > :: Iterator (),
+    explicit IteratorBase ( Node * pNode, SingleLinkedList < T > * pList ) noexcept :
+            Collection < T > :: Iterator (pList),
             _pNode (pNode) {
 
     }
 
 public:
+    IteratorBase () noexcept = delete;
     ~IteratorBase () noexcept override = default;
 
     __CDS_NoDiscard __CDS_cpplang_ConstexprConditioned auto equals ( typename Collection < T > :: Iterator const & it ) const noexcept -> bool final {
@@ -325,7 +308,7 @@ public:
         return this->_pNode == p->_pNode;
     }
 
-    __CDS_NoDiscard constexpr auto value () const noexcept -> T & final { return this->_pNode->_data; }
+    __CDS_NoDiscard constexpr auto value () const noexcept -> T & final { return * this->_pNode->_data; }
 
     __CDS_NoDiscard auto copy () const noexcept -> IteratorBase * override = 0;
 };
@@ -335,17 +318,17 @@ class SingleLinkedList < T > :: ConstIteratorBase : public Collection < T > :: C
 protected:
     Node const * _pNode {nullptr};
 
-    ConstIteratorBase() noexcept = default;
     ConstIteratorBase( ConstIteratorBase const & ) noexcept = default;
     ConstIteratorBase( ConstIteratorBase && ) noexcept = default;
 
-    explicit ConstIteratorBase ( Node const * pNode ) noexcept :
-            Collection<T>::ConstIterator(),
+    explicit ConstIteratorBase ( Node const * pNode, SingleLinkedList < T > const * pList ) noexcept :
+            Collection<T>::ConstIterator(pList),
             _pNode(pNode) {
 
     }
 
 public:
+    ConstIteratorBase() noexcept = delete;
     ~ConstIteratorBase() noexcept override = default;
 
     __CDS_NoDiscard __CDS_cpplang_ConstexprConditioned auto equals ( typename Collection < T > :: ConstIterator const & it ) const noexcept -> bool final {
@@ -356,7 +339,7 @@ public:
         return this->_pNode == p->_pNode;
     }
 
-    __CDS_NoDiscard constexpr auto value () const noexcept -> T const & final { return this->_pNode->_data; }
+    __CDS_NoDiscard constexpr auto value () const noexcept -> T const & final { return * this->_pNode->_data; }
 
     __CDS_NoDiscard auto copy () const noexcept -> ConstIteratorBase * override = 0;
 };
@@ -364,12 +347,12 @@ public:
 template < typename T >
 class SingleLinkedList < T > :: Iterator final : public SingleLinkedList < T > :: IteratorBase {
 public:
-    Iterator () noexcept = default;
+    Iterator () noexcept = delete;
     Iterator ( Iterator const & ) noexcept = default;
     Iterator ( Iterator && ) noexcept = default;
 
-    explicit Iterator (Node * pNode) noexcept :
-            SingleLinkedList<T>::IteratorBase(pNode) {
+    explicit Iterator (Node * pNode, SingleLinkedList < T > * pList) noexcept :
+            SingleLinkedList<T>::IteratorBase(pNode, pList) {
 
     }
 
@@ -396,8 +379,8 @@ public:
     ConstIterator ( ConstIterator const & ) noexcept = default;
     ConstIterator ( ConstIterator && ) noexcept = default;
 
-    explicit ConstIterator ( Node const * pNode ) noexcept :
-            SingleLinkedList<T>::ConstIteratorBase (pNode) {
+    explicit ConstIterator ( Node const * pNode, SingleLinkedList < T > const * pList ) noexcept :
+            SingleLinkedList<T>::ConstIteratorBase (pNode, pList) {
 
     }
 
@@ -426,42 +409,6 @@ SingleLinkedList < T > :: SingleLinkedList ( std::initializer_list < T > const &
 template < typename T >
 SingleLinkedList < T > :: ~SingleLinkedList() noexcept {
     this->clear();
-}
-
-template < typename T >
-auto SingleLinkedList < T > :: pushFront ( T const & value ) noexcept -> void {
-    this->_pFront = new Node ( value, this->_pFront );
-
-    this->_size ++;
-    if ( this->size() == 1 )
-        this->_pBack = this->_pFront;
-}
-
-template < typename T >
-auto SingleLinkedList < T > :: pushFront ( T && value ) noexcept -> void {
-    this->_pFront = new Node ( value, this->_pFront );
-
-    this->_size ++;
-    if ( this->size() == 1 )
-        this->_pBack = this->_pFront;
-}
-
-template < typename T >
-auto SingleLinkedList < T > :: pushBack ( T const & value ) noexcept -> void {
-    if ( this->empty() ) return this->pushFront( value );
-
-    this->_pBack->_pNext = new Node ( value, nullptr );
-    this->_pBack = this->_pBack->_pNext;
-    this->_size++;
-}
-
-template < typename T >
-auto SingleLinkedList < T > :: pushBack ( T && value ) noexcept -> void {
-    if ( this->empty() ) return this->pushFront(value);
-
-    this->_pBack->_pNext = new Node ( value, nullptr );
-    this->_pBack = this->_pBack->_pNext;
-    this->_size++;
 }
 
 #include <sstream>
@@ -496,6 +443,7 @@ auto SingleLinkedList < T > :: remove ( Index i ) noexcept -> bool {
 
     current->next() = current->next()->next();
 
+    delete toRemove->data();
     delete toRemove;
     return true;
 }
@@ -510,7 +458,7 @@ auto SingleLinkedList < T > :: remove ( T const & what, Size count ) noexcept ->
     auto nextNode = [& current] () noexcept { current = current->next(); };
 
     while ( current != nullptr && count > 0 ) {
-        if ( Type < T > :: compare ( current->data(), what ) ) {
+        if ( Type < T > :: compare ( * current->data(), what ) ) {
             auto after = current->next();
 
             if ( previous == nullptr )
@@ -527,6 +475,8 @@ auto SingleLinkedList < T > :: remove ( T const & what, Size count ) noexcept ->
             this->_size --;
 
             nextNode();
+
+            delete toRemove->data();
             delete toRemove;
 
             removalDone = true;
@@ -543,14 +493,16 @@ auto SingleLinkedList < T > :: remove ( T const & what, Size count ) noexcept ->
 template < typename T >
 auto SingleLinkedList < T > :: removeLast ( T const & what ) noexcept -> bool {
     auto current = this->_pFront;
-    decltype (current) previous = Type < T > :: compare ( current->data(), what ) ? current : nullptr;
+    decltype (current) previous = Type < T > :: compare ( * current->data(), what ) ? current : nullptr;
 
     auto nextNode = [& current] () noexcept  { current = current->next(); };
 
-    if ( Type < T > :: compare ( this->_pFront->_data, what ) ) {
+    if ( Type < T > :: compare ( * this->_pFront->data(), what ) ) {
         auto p = this->_pFront;
 
         this->_pFront = this->_pFront->next();
+
+        delete p->data();
         delete p;
         this->_size --;
 
@@ -560,7 +512,7 @@ auto SingleLinkedList < T > :: removeLast ( T const & what ) noexcept -> bool {
     }
 
     while ( current->_pNext != nullptr ) {
-        if ( Type < T > :: compare ( current->next()->data(), what ) ) previous = current;
+        if ( Type < T > :: compare ( * current->next()->data(), what ) ) previous = current;
         nextNode();
     }
 
@@ -569,6 +521,7 @@ auto SingleLinkedList < T > :: removeLast ( T const & what ) noexcept -> bool {
 
         auto p = previous->next();
         previous->next () = previous -> next () -> next ();
+        delete p->data();
         delete p;
         this->_size --;
 
@@ -588,7 +541,7 @@ auto SingleLinkedList < T > :: removeOf ( Collection < T > const & from, Size co
     auto nextNode = [& current] () noexcept { current = current->next(); };
 
     while ( current != nullptr && count > 0 ) {
-        if ( from.contains( current->data() ) ) {
+        if ( from.contains( * current->data() ) ) {
             auto after = current->next();
 
             if ( previous == nullptr )
@@ -605,6 +558,8 @@ auto SingleLinkedList < T > :: removeOf ( Collection < T > const & from, Size co
             this->_size --;
 
             nextNode();
+
+            delete toRemove->data();
             delete toRemove;
 
             removalDone = true;
@@ -621,16 +576,19 @@ auto SingleLinkedList < T > :: removeOf ( Collection < T > const & from, Size co
 template < typename T >
 auto SingleLinkedList < T > :: removeLastOf ( Collection < T > const & from ) noexcept -> bool {
     auto current = this->_pFront;
-    decltype (current) previous = from.contains(current->data()) ? current : nullptr;
+    decltype (current) previous = from.contains(* current->data()) ? current : nullptr;
 
     auto nextNode = [& current] () noexcept  { current = current->next(); };
 
-    if ( from.contains(this->_pFront->data()) ) {
+    if ( from.contains(* this->_pFront->data()) ) {
         auto p = this->_pFront;
 
         this->_pFront = this->_pFront->next();
+
+        delete p->data();
         delete p;
-        this->_size --;
+
+        -- this->_size;
 
         if ( this->size() == 0 ) this->_pBack = nullptr;
 
@@ -638,7 +596,7 @@ auto SingleLinkedList < T > :: removeLastOf ( Collection < T > const & from ) no
     }
 
     while ( current->_pNext != nullptr ) {
-        if ( from.contains( current->next()->data( )) ) previous = current;
+        if ( from.contains( * current->next()->data( )) ) previous = current;
         nextNode();
     }
 
@@ -647,6 +605,7 @@ auto SingleLinkedList < T > :: removeLastOf ( Collection < T > const & from ) no
 
         auto p = previous->next();
         previous->next () = previous -> next () -> next ();
+        delete p->data();
         delete p;
         this->_size --;
 
@@ -666,7 +625,7 @@ auto SingleLinkedList < T > :: removeNotOf ( Collection < T > const & from, Size
     auto nextNode = [& current] () noexcept { current = current->next(); };
 
     while ( current != nullptr && count > 0 ) {
-        if ( ! from.contains( current->data() ) ) {
+        if ( ! from.contains( * current->data() ) ) {
             auto after = current->next();
 
             if ( previous == nullptr )
@@ -679,10 +638,12 @@ auto SingleLinkedList < T > :: removeNotOf ( Collection < T > const & from, Size
 
             auto toRemove = current;
 
-            count --;
-            this->_size --;
+            -- count;
+            -- this->_size;
 
             nextNode();
+
+            delete toRemove->data();
             delete toRemove;
 
             removalDone = true;
@@ -699,16 +660,17 @@ auto SingleLinkedList < T > :: removeNotOf ( Collection < T > const & from, Size
 template < typename T >
 auto SingleLinkedList < T > :: removeLastNotOf ( Collection < T > const & from ) noexcept -> bool {
     auto current = this->_pFront;
-    decltype (current) previous = ! from.contains(current->data()) ? current : nullptr;
+    decltype (current) previous = ! from.contains(* current->data()) ? current : nullptr;
 
     auto nextNode = [& current] () noexcept  { current = current->next(); };
 
-    if ( ! from.contains(this->_pFront->data()) ) {
+    if ( ! from.contains(* this->_pFront->data()) ) {
         auto p = this->_pFront;
 
         this->_pFront = this->_pFront->next();
+        delete p->data();
         delete p;
-        this->_size --;
+        --this->_size;
 
         if ( this->size() == 0 ) this->_pBack = nullptr;
 
@@ -716,7 +678,7 @@ auto SingleLinkedList < T > :: removeLastNotOf ( Collection < T > const & from )
     }
 
     while ( current->_pNext != nullptr ) {
-        if ( ! from.contains( current->next()->data( )) ) previous = current;
+        if ( ! from.contains( * current->next()->data( )) ) previous = current;
         nextNode();
     }
 
@@ -725,6 +687,7 @@ auto SingleLinkedList < T > :: removeLastNotOf ( Collection < T > const & from )
 
         auto p = previous->next();
         previous->next () = previous -> next () -> next ();
+        delete p->data();
         delete p;
         this->_size --;
 
@@ -732,93 +695,6 @@ auto SingleLinkedList < T > :: removeLastNotOf ( Collection < T > const & from )
     }
 
     return false;
-}
-
-template < typename T >
-auto SingleLinkedList < T > :: replace ( T const & what, T const & with, Size count ) noexcept -> void {
-    int replacedCount = 0;
-
-    for ( auto & e : (*this) )
-        if ( replacedCount < count ) {
-            if ( Type < T > :: compare ( e, what ) ) {
-                e = with;
-                replacedCount ++;
-            }
-        } else
-            return;
-}
-
-template < typename T >
-auto SingleLinkedList < T > :: replaceLast ( T const & what, T const & with ) noexcept -> void {
-    auto current = this->_pFront;
-    decltype ( current ) lastOccurrence = nullptr;
-
-    while ( current != nullptr ) {
-        if ( Type < T > :: compare ( current->data(), what ) )
-            lastOccurrence = current;
-        current = current->next();
-    }
-
-    if ( lastOccurrence != nullptr )
-        lastOccurrence->data() = with;
-}
-
-template < typename T >
-auto SingleLinkedList < T > :: replaceOf ( Collection < T > const & from, T const & with, Size count ) noexcept -> void {
-    int replaceCount = 0;
-
-    for ( auto & e : * this )
-        if ( replaceCount < count ) {
-            if (from.contains(e)) {
-                e = with;
-                replaceCount++;
-            }
-        } else
-            return;
-}
-
-template < typename T >
-auto SingleLinkedList < T > :: replaceLastOf ( Collection < T > const & from, T const & with ) noexcept -> void {
-    auto current = this->_pFront;
-    decltype ( current ) lastOccurrence = nullptr;
-
-    while ( current != nullptr ) {
-        if ( from.contains ( current->data() ) )
-            lastOccurrence = current;
-        current = current->next();
-    }
-
-    if ( lastOccurrence != nullptr )
-        lastOccurrence->data() = with;
-}
-
-template < typename T >
-auto SingleLinkedList < T > :: replaceNotOf ( Collection < T > const & from, T const & with, Size count ) noexcept -> void {
-    int replaceCount = 0;
-
-    for ( auto & e : * this )
-        if ( replaceCount < count ) {
-            if ( ! from.contains(e)) {
-                e = with;
-                replaceCount++;
-            }
-        } else
-            return;
-}
-
-template < typename T >
-auto SingleLinkedList < T > :: replaceLastNotOf ( Collection < T > const & from, T const & with ) noexcept -> void {
-    auto current = this->_pFront;
-    decltype ( current ) lastOccurrence = nullptr;
-
-    while ( current != nullptr ) {
-        if ( ! from.contains ( current->data() ) )
-            lastOccurrence = current;
-        current = current->next();
-    }
-
-    if ( lastOccurrence != nullptr )
-        lastOccurrence->data() = with;
 }
 
 template < typename T >
@@ -830,16 +706,17 @@ auto SingleLinkedList < T > :: remove ( typename Collection < T > :: Iterator co
         return this->popFront();
 
 
-    if ( Iterator ( this->_pBack ) == it )
+    if ( Iterator ( this->_pBack, this ) == it )
         return this->popBack();
 
     for ( auto node = this->_pFront; node->next() != this->_pBack; node = node->next() ) {
-        if ( Iterator ( node->next() ) == it ) {
+        if ( Iterator ( node->next(), this ) == it ) {
             auto p = node->next();
             node->next() = node->next()->next();
 
-            auto retVal = p->data();
-            this->_size--;
+            auto retVal = * p->data();
+            -- this->_size;
+            delete p->data();
             delete p;
 
             return retVal;
@@ -847,60 +724,6 @@ auto SingleLinkedList < T > :: remove ( typename Collection < T > :: Iterator co
     }
 
     throw std::runtime_error("Wrong List Iterator");
-}
-
-template < typename T >
-auto SingleLinkedList < T > :: replace ( typename Collection < T > :: Iterator const & where, T const & with ) noexcept -> void {
-    where.value() = with;
-}
-
-template < typename T >
-auto SingleLinkedList < T > :: insertBefore ( typename Collection < T > :: Iterator const & where, T const & what ) noexcept -> void {
-    if ( this->empty() || this->begin() == where )
-        return this->pushFront( what );
-
-    if ( this->end() == where )
-        return this->pushBack( what );
-
-    for ( auto node = this->_pFront; node != this->_pBack->next(); node = node->next() )
-        if ( Iterator ( node->_pNext ) == where ) {
-            auto before = node;
-            auto after = node->next();
-
-            before->next() = new Node ( what, after );
-
-            this->_size ++;
-
-            return;
-        }
-}
-
-template < typename T >
-auto SingleLinkedList < T > :: insertAfter(typename Collection<T>::Iterator const & where, T const & what) noexcept -> void {
-    if ( this->empty() ) return this->pushFront(what);
-
-    if ( this->begin() == where ) {
-        this->_pFront->next() = new Node (what, this->_pFront->next()->next());
-        this->_size ++;
-
-        return;
-    }
-
-    if ( Iterator (this->_pBack) == where )
-        return this->pushBack(what);
-
-    for ( auto node = this->_pFront->next(); node->next() != nullptr; node = node->next() ) {
-        if ( Iterator ( node ) == where ) {
-            auto before = node;
-            auto after = node->next();
-
-            before->next() = new Node (what, after);
-
-            this->_size ++;
-
-            return;
-        }
-    }
 }
 
 template < typename T >
@@ -928,52 +751,52 @@ SingleLinkedList < T > :: SingleLinkedList (
 
 template < typename T >
 auto SingleLinkedList < T > :: beginPtr () noexcept -> Iterator * {
-    return new Iterator ( this->_pFront );
+    return new Iterator ( this->_pFront, this );
 }
 
 template < typename T >
 auto SingleLinkedList < T > :: endPtr () noexcept -> Iterator * {
-    return new Iterator ( nullptr );
+    return new Iterator ( nullptr, this );
 }
 
 template < typename T >
 auto SingleLinkedList < T > :: beginPtr () const noexcept -> ConstIterator * {
-    return new ConstIterator ( this->_pFront );
+    return new ConstIterator ( this->_pFront, this );
 }
 
 template < typename T >
 auto SingleLinkedList < T > :: endPtr () const noexcept -> ConstIterator * {
-    return new ConstIterator ( nullptr );
+    return new ConstIterator ( nullptr, this );
 }
 
 template < typename T >
 auto SingleLinkedList < T > :: begin () noexcept -> Iterator {
-    return Iterator ( this->_pFront );
+    return Iterator ( this->_pFront, this );
 }
 
 template < typename T >
 auto SingleLinkedList < T > :: end () noexcept -> Iterator {
-    return Iterator ( nullptr );
+    return Iterator ( nullptr, this );
 }
 
 template < typename T >
 auto SingleLinkedList < T > :: begin () const noexcept -> ConstIterator {
-    return ConstIterator ( this->_pFront );
+    return ConstIterator ( this->_pFront, this );
 }
 
 template < typename T >
 auto SingleLinkedList < T > :: end () const noexcept -> ConstIterator {
-    return ConstIterator ( nullptr );
+    return ConstIterator ( nullptr, this );
 }
 
 template < typename T >
 auto SingleLinkedList < T > :: cbegin () const noexcept -> ConstIterator {
-    return ConstIterator ( this->_pFront );
+    return ConstIterator ( this->_pFront, this );
 }
 
 template < typename T >
 auto SingleLinkedList < T > :: cend () const noexcept -> ConstIterator {
-    return ConstIterator ( nullptr );
+    return ConstIterator ( nullptr, this );
 }
 
 template < typename T >
@@ -984,6 +807,7 @@ auto SingleLinkedList < T > :: clear () noexcept -> void {
     while ( this->_pFront != nullptr ) {
         auto p = this->_pFront;
         this->_pFront = this->_pFront->next();
+        delete p->data();
         delete p;
     }
 }
@@ -1015,7 +839,7 @@ auto SingleLinkedList < T > :: index ( T const & element ) const noexcept -> Ind
         if ( Type < T > :: compare ( item, element ) )
             return current;
         else
-            current ++;
+            ++ current;
 
     return INVALID_POS;
 }
@@ -1028,81 +852,9 @@ auto SingleLinkedList < T > :: index ( T & element ) noexcept -> Index {
         if ( Type < T > :: compare ( item, element ) )
             return current;
         else
-            current ++;
+            ++ current;
 
     return INVALID_POS;
-}
-
-template < typename T >
-auto SingleLinkedList < T > :: get ( Index index ) noexcept (false) -> T & {
-    if ( this->size() == 0 )
-        return this->front();
-
-    if ( index < 0 )
-        index += ( (-index) / this->size() + 1 ) * this->size();
-    if ( index >= static_cast<Index>(this->size()) )
-        index = index % this->size();
-
-    auto current = 0;
-    for ( auto & e : (*this) ) {
-        if ( current == index )
-            return e;
-        current ++;
-    }
-
-    return this->front();
-}
-
-template < typename T >
-auto SingleLinkedList < T > :: get ( Index index ) const noexcept (false) -> T const & {
-    if ( this->size() == 0 )
-        return this->front();
-
-    if ( index < 0 )
-        index += ( (-index) / this->size() + 1 ) * this->size();
-    if ( index >= static_cast<Index>(this->size()) )
-        index = index % this->size();
-
-    auto current = 0;
-    for ( auto & e : (*this) ) {
-        if ( current == index )
-            return e;
-        current ++;
-    }
-
-    return this->front();
-}
-
-template < typename T >
-auto SingleLinkedList < T > :: set ( T const & element, Index at ) noexcept (false) -> T & {
-    if ( this->size() == 0 )
-        return this->front();
-
-    if ( at < 0 )
-        at += ( this->size() / (-at) ) * this->size();
-    if ( at >= static_cast<Index>(this->size()) )
-        at = at % this->size();
-
-    Index current = 0;
-    for ( auto & e : (*this) ) {
-        if ( current == at ) {
-            e = element;
-            return e;
-        }
-        current ++;
-    }
-    return this->_pFront->data();
-}
-
-template < typename T >
-auto SingleLinkedList < T > :: sub ( List < T > & list, Index from, Index to ) const noexcept (false) -> void {
-    list.clear();
-
-    if ( to == UINT64_MAX )
-        to = this->size ();
-
-    for ( Index i = from; i < to; i++ )
-        list.pushBack(this->get(i));
 }
 
 template < typename T >
@@ -1110,8 +862,8 @@ template < typename SortFunction >
 auto SingleLinkedList < T > :: sort ( SortFunction const & function ) noexcept -> void {
     if ( this->size() < 2 ) return;
 
-    decltype (this->begin()) current;
-    decltype (current) previous;
+    Iterator current(nullptr, nullptr);
+    Iterator previous(nullptr, nullptr);
 
     for ( current = this->begin(); current != this->end (); ++ current )
         previous = current;
@@ -1126,29 +878,29 @@ __CDS_MaybeUnused auto SingleLinkedList < T > :: quickSort (
     Iterator to,
     SortFunction const & f
 ) noexcept -> void {auto next = to;
-    if ( next != Iterator(nullptr) ) {
+    if ( next != Iterator(nullptr, nullptr) ) {
         next.next();
         if ( from == next )
             return;
     }
 
-    if ( from != to && from != Iterator(nullptr) && to != Iterator(nullptr) ) {
+    if ( from != to && from != Iterator(nullptr, nullptr) && to != Iterator(nullptr, nullptr) ) {
         auto partitionIterator = SingleLinkedList<T >::quickSortPartition(from , to , f);
 
         SingleLinkedList<T >::quickSort(from , partitionIterator , f);
 
-        if ( partitionIterator == Iterator(nullptr) )
+        if ( partitionIterator == Iterator(nullptr, nullptr) )
             return;
 
         if (partitionIterator == from) {
             partitionIterator.next();
-            if ( partitionIterator != Iterator(nullptr) )
+            if ( partitionIterator != Iterator(nullptr, nullptr) )
                 SingleLinkedList<T >::quickSort(partitionIterator , to , f);
             return;
         }
 
         partitionIterator.next();
-        if ( partitionIterator == Iterator(nullptr) )
+        if ( partitionIterator == Iterator(nullptr, nullptr) )
             return;
         partitionIterator.next();
         SingleLinkedList<T >::quickSort ( partitionIterator , to , f );
@@ -1167,7 +919,7 @@ __CDS_MaybeUnused auto SingleLinkedList < T > ::quickSortPartition(
     auto pivot = to.value();
     typename SingleLinkedList <T >::Iterator partitionIterator(from);
 
-    decltype (partitionIterator) previous;
+    Iterator previous (nullptr, nullptr);
 
     for ( auto it = from; it != to; it++ ) {
         if ( f ( it.value() , pivot ) ) {
@@ -1178,7 +930,7 @@ __CDS_MaybeUnused auto SingleLinkedList < T > ::quickSortPartition(
     }
 
     swap ( partitionIterator.value() , to.value() );
-    if ( previous == Iterator(nullptr) )
+    if ( previous == Iterator(nullptr, nullptr) )
         return partitionIterator;
     return previous;
 }
@@ -1195,6 +947,35 @@ auto SingleLinkedList < T > :: operator = ( Collection < T > const & collection 
     return * this;
 }
 
+template < typename T >
+auto SingleLinkedList < T > ::allocFrontGetPtr() noexcept -> ElementPtrRef {
+    auto p = new Node;
+    p->data() = nullptr;
+    p->next() = this->_pFront;
+
+    this->_pFront = p;
+
+    ++ this->_size;
+    if ( this->size() == 1 )
+        this->_pBack = this->_pFront;
+
+    return this->_pFront->data();
+}
+
+template < typename T >
+auto SingleLinkedList < T > ::allocBackGetPtr() noexcept -> ElementPtrRef {
+    if ( this->empty() ) return this->allocBackGetPtr();
+
+    this->_pBack->next() = new Node;
+    this->_pBack->next()->data() = nullptr;
+    this->_pBack->next()->next() = nullptr;
+
+    this->_pBack = this->_pBack->_pNext;
+    ++ this->_size;
+
+    return this->_pBack->data();
+}
+
 #include <CDS/Sequence>
 
 template < typename T >
@@ -1206,5 +987,101 @@ template < typename T >
 auto SingleLinkedList < T > :: sequence () noexcept -> Sequence < SingleLinkedList < T > > {
     return Sequence < typename std :: remove_reference < decltype (*this) > :: type > (*this);
 }
+
+template < typename T >
+auto SingleLinkedList < T > :: pAt (Index index) noexcept(false) -> ElementPtr {
+    if ( this->size() == 0 )
+        throw OutOfBoundsException(index, 0);
+
+    if ( index < 0 )
+        index += ( (-index) / this->size() + 1 ) * this->size();
+    if ( index >= static_cast<Index>(this->size()) )
+        index = index % this->size();
+
+    auto current = 0;
+    for ( auto & e : (*this) ) {
+        if ( current == index )
+            return & e;
+        current ++;
+    }
+
+    return nullptr;
+}
+
+template < typename T >
+auto SingleLinkedList < T > :: pAt (Index index) const noexcept(false) -> ElementCPtr {
+    if ( this->size() == 0 )
+        throw OutOfBoundsException(index, 0);
+
+    if ( index < 0 )
+        index += ( (-index) / this->size() + 1 ) * this->size();
+    if ( index >= static_cast<Index>(this->size()) )
+        index = index % this->size();
+
+    auto current = 0;
+    for ( auto & e : (*this) ) {
+        if ( current == index )
+            return & e;
+        current ++;
+    }
+
+    return nullptr;
+}
+
+//}
+
+//template < typename T >
+//auto SingleLinkedList < T > :: pushFront ( T const & value ) noexcept -> void {
+//    this->_pFront = new Node ( value, this->_pFront );
+//
+//    this->_size ++;
+//    if ( this->size() == 1 )
+//        this->_pBack = this->_pFront;
+//}
+//
+//template < typename T >
+//auto SingleLinkedList < T > :: pushFront ( T && value ) noexcept -> void {
+//    this->_pFront = new Node ( value, this->_pFront );
+//
+//    this->_size ++;
+//    if ( this->size() == 1 )
+//        this->_pBack = this->_pFront;
+//}
+//
+//template < typename T >
+//auto SingleLinkedList < T > :: pushBack ( T const & value ) noexcept -> void {
+//    if ( this->empty() ) return this->pushFront( value );
+//
+//    this->_pBack->_pNext = new Node ( value, nullptr );
+//    this->_pBack = this->_pBack->_pNext;
+//    this->_size++;
+//}
+//
+//template < typename T >
+//auto SingleLinkedList < T > :: pushBack ( T && value ) noexcept -> void {
+//    if ( this->empty() ) return this->pushFront(value);
+//
+//    this->_pBack->_pNext = new Node ( value, nullptr );
+//    this->_pBack = this->_pBack->_pNext;
+//    this->_size++;
+//template < typename T >
+//auto SingleLinkedList < T > :: get ( Index index ) noexcept (false) -> T & {
+//    if ( this->size() == 0 )
+//        return this->front();
+//
+//    if ( index < 0 )
+//        index += ( (-index) / this->size() + 1 ) * this->size();
+//    if ( index >= static_cast<Index>(this->size()) )
+//        index = index % this->size();
+//
+//    auto current = 0;
+//    for ( auto & e : (*this) ) {
+//        if ( current == index )
+//            return e;
+//        current ++;
+//    }
+//
+//    return this->front();
+//}
 
 #endif //CDS_SINGLELINKEDLIST_HPP
