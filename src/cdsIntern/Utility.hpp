@@ -6,7 +6,7 @@
 #define CDS_UTILITY_HPP
 
 #include <type_traits>
-#include <prepro.h>
+#include "../prepro.h"
 #include <CDS/Conversion>
 #include <CDS/Exception>
 #include <CDS/Limits>
