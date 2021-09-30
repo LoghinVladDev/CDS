@@ -21,10 +21,12 @@
 #include <CDS/Pointer>
 
 #if defined(__cpp_concepts) && !defined(_MSC_VER)
+
 template <typename T>
 concept Comparable = requires ( const T & a, const T & b ) {
     std::is_convertible < decltype(a < b), bool >::value;
 };
+
 #endif
 
 #include <type_traits>

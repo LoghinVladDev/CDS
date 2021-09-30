@@ -160,6 +160,11 @@ concept TypeEqualsComparable = EqualsComparable < T, T >;
 # endif
 
 template < typename T >
+constexpr auto typeFundamental () noexcept -> bool {
+    return std :: is_fundamental < T > :: type :: value || std :: is_enum < T > :: type :: value;
+}
+
+template < typename T >
 constexpr auto typeDefaultConstructible () noexcept -> bool {
     return std :: is_default_constructible < T > :: type :: value;
 }
@@ -200,6 +205,8 @@ struct Type {
 
 
     static constexpr bool ostreamPrintable = isPrintable < T > :: type :: value;
+
+    static constexpr bool fundamental = typeFundamental < T >();
 
 #if __CDS_cpplang_VariableTemplates_available == true
 

@@ -1825,7 +1825,7 @@ public:
     __CDS_cpplang_ConstexprDynamicAllocation auto append (CString cString) noexcept -> String & {
         if ( cString == nullptr ) return * this;
 
-        auto len = strlen(cString);
+        auto len = std::char_traits<char>::length(cString);
         this->_alloc(len);
 
         std::memcpy ( this->_p + this->_l, cString, len );

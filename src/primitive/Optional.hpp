@@ -18,88 +18,89 @@ private:
     UniquePointer<T> pObj;
 
 public:
-    Optional() noexcept = default;
-    Optional(Optional const & o) noexcept {
+    constexpr Optional() noexcept = default;
+    __CDS_cpplang_NonConstConstexprMemberFunction Optional(Optional const & o) noexcept {
         * this = o;
     }
-    ~Optional() noexcept final = default;
+    __CDS_cpplang_ConstexprDestructor ~Optional() noexcept final = default;
 
-    Optional ( ValueConstReference v ) noexcept : pObj ( new Value( v ) ) { } // NOLINT(google-explicit-constructor)
-    Optional & operator = ( ValueConstReference v ) noexcept {
+    __CDS_cpplang_ConstexprDynamicAllocation Optional ( ValueConstReference v ) noexcept : pObj ( new Value( v ) ) { } // NOLINT(google-explicit-constructor)
+    __CDS_cpplang_ConstexprDynamicAllocation Optional & operator = ( ValueConstReference v ) noexcept {
         this->pObj.reset(new Value ( v ));
         return * this;
     }
 
-    auto operator -> () const noexcept -> UniquePointer<T> const & { return this->pObj; }
-    auto operator -> () noexcept -> UniquePointer<T> & { return this->pObj; }
-    auto operator * () const noexcept (false) -> ValueReference { return * this->pObj; }
+    constexpr auto operator -> () const noexcept -> UniquePointer<T> const & { return this->pObj; }
+    __CDS_cpplang_NonConstConstexprMemberFunction auto operator -> () noexcept -> UniquePointer<T> & { return this->pObj; }
+    constexpr auto operator * () const noexcept (false) -> ValueReference { return * this->pObj; }
 
-    __CDS_NoDiscard inline auto hasValue () const noexcept -> bool { return ! pObj.isNull(); }
-    __CDS_NoDiscard inline auto isEmpty () const noexcept -> bool { return ! this->hasValue(); }
-    __CDS_NoDiscard inline auto isPresent () const noexcept -> bool { return this->hasValue(); }
+    __CDS_NoDiscard constexpr auto hasValue () const noexcept -> bool { return ! this->pObj.isNull(); }
+    __CDS_NoDiscard constexpr auto isEmpty () const noexcept -> bool { return ! this->hasValue(); }
+    __CDS_NoDiscard constexpr auto isPresent () const noexcept -> bool { return this->hasValue(); }
 
-    inline auto value () const noexcept(false) -> ValueConstReference { return * this->pObj; }
-    inline auto value () noexcept(false) -> ValueReference { return * this->pObj; }
-    __CDS_MaybeUnused inline auto valueOr (ValueReference v) noexcept -> ValueReference { return this->hasValue() ? this->value() : v; }
-    __CDS_MaybeUnused inline auto valueOr (ValueConstReference v) noexcept -> ValueConstReference { return this->hasValue() ? this->value() : v; }
+    constexpr auto value () const noexcept(false) -> ValueReference { return * this->pObj; }
+
+    __CDS_MaybeUnused constexpr auto valueOr (ValueReference v) const noexcept -> ValueReference { return this->hasValue() ? this->value() : v; }
+    __CDS_MaybeUnused constexpr auto valueOr (ValueConstReference v) const noexcept -> ValueConstReference { return this->hasValue() ? this->value() : v; }
 
     template < typename Action >
-    __CDS_MaybeUnused inline auto ifPresent (Action const & action) const noexcept -> void {
-        if ( isPresent() ) action ( pObj.valueAt() );
+    __CDS_MaybeUnused __CDS_cpplang_ConstexprNonLiteralReturn auto ifPresent (Action const & action) const noexcept -> void {
+        if ( this->isPresent() ) action ( this->pObj.valueAt() );
     }
 
     template < typename Action, typename EmptyAction >
-    __CDS_MaybeUnused inline auto ifPresentOrElse ( Action const & action, EmptyAction const & onElse ) const noexcept -> void {
-        if ( isPresent() ) action ( pObj.valueAt() );
+    __CDS_MaybeUnused __CDS_cpplang_ConstexprNonLiteralReturn auto ifPresentOrElse ( Action const & action, EmptyAction const & onElse ) const noexcept -> void {
+        if ( this->isPresent() ) action ( this->pObj.valueAt() );
         else onElse ();
     }
 
     template < typename Predicate >
-    __CDS_MaybeUnused inline auto filter ( Predicate const & predicate ) const noexcept -> Optional {
-        if ( isEmpty() ) return * this;
-        return predicate (pObj.valueAt()) ? (*this) : Optional();
+    __CDS_MaybeUnused __CDS_cpplang_ConstexprConditioned auto filter ( Predicate const & predicate ) const noexcept -> Optional {
+        if ( this->isEmpty() ) return * this;
+        return predicate (this->pObj.valueAt()) ? (*this) : Optional();
     }
 
     template < typename Mapper >
-    inline auto map ( Mapper const & mapper ) const noexcept -> Optional < returnOf < Mapper > > {
-        if ( isEmpty() ) return Optional < returnOf < Mapper > > ();
+    __CDS_cpplang_ConstexprDestructor auto map ( Mapper const & mapper ) const noexcept -> Optional < returnOf < Mapper > > {
+        if ( this->isEmpty() ) return Optional < returnOf < Mapper > > ();
         return Optional < returnOf < Mapper > > (mapper(this->pObj.valueAt()));
     }
 
     template < typename Supplier >
-    __CDS_MaybeUnused inline auto orSupply (Supplier const & supplier) const noexcept -> Optional {
-        if ( isPresent() ) return * this;
+    __CDS_MaybeUnused __CDS_cpplang_ConstexprDestructor auto orSupply (Supplier const & supplier) const noexcept -> Optional {
+        if ( this->isPresent() ) return * this;
         return supplier();
     }
 
-    __CDS_MaybeUnused auto orElse (T const & other) const noexcept -> T const & { return isPresent() ? this->pObj.valueAt() : other; }
+    __CDS_MaybeUnused constexpr auto orElse (ValueConstReference other) const noexcept -> ValueConstReference { return this->isPresent() ? this->pObj.valueAt() : other; }
+    __CDS_MaybeUnused constexpr auto orElse (ValueReference other) const noexcept -> ValueReference { return this->isPresent() ? this->pObj.valueAt() : other; }
 
     template < typename Supplier >
-    __CDS_MaybeUnused auto orElseGet (Supplier const & supplier) const noexcept -> T { return isPresent() ? this->pObj.valueAt() : supplier(); }
+    __CDS_MaybeUnused constexpr auto orElseGet (Supplier const & supplier) const noexcept -> T { return this->isPresent() ? this->pObj.valueAt() : supplier(); }
 
-    inline explicit operator bool () const noexcept { return this->hasValue(); }
+    constexpr explicit operator bool () const noexcept { return this->hasValue(); }
 
-    inline auto clear () noexcept -> Optional & {
+    __CDS_cpplang_NonConstConstexprMemberFunction auto clear () noexcept -> Optional & {
         this->pObj.reset();
         return * this;
     }
 
-    Optional & operator = (Optional const & o) noexcept {
+    __CDS_cpplang_NonConstConstexprMemberFunction auto operator = (Optional const & o) noexcept -> Optional & {
         if ( this == & o )
             return * this;
 
         if ( ! o.hasValue() ) {
             if ( hasValue() )
-                pObj.reset();
+                this->pObj.reset();
             return * this;
         }
 
-        pObj.reset( new Value ( * o.pObj ) );
+        this->pObj.reset( new Value ( * o.pObj ) );
 
         return * this;
     }
 
-    __CDS_NoDiscard auto equals ( Object const & o ) const noexcept -> bool override {
+    __CDS_NoDiscard __CDS_cpplang_VirtualConstexpr auto equals ( Object const & o ) const noexcept -> bool override {
         if ( this == & o ) return true;
         auto p = dynamic_cast < decltype (this) > ( & o );
         if ( p == nullptr ) return false;
@@ -107,13 +108,11 @@ public:
         return this->operator==(*p);
     }
 
-    auto operator == ( Optional const & o ) const noexcept -> bool {
-        if ( & o == this ) return true;
-
-        return Type < T > :: compare ( this->value(), o.value() );
+    constexpr auto operator == ( Optional const & o ) const noexcept -> bool {
+        return this == & o || Type < T > :: compare ( this->value(), o.value() );
     }
 
-    __CDS_NoDiscard auto toString() const noexcept -> String final {
+    __CDS_NoDiscard inline auto toString() const noexcept -> String final {
         std::stringstream oss;
         oss << "| ";
         if ( this->hasValue() )
@@ -124,7 +123,7 @@ public:
         return {oss.str()};
     }
 
-    __CDS_NoDiscard auto copy () const noexcept -> Optional * override {
+    __CDS_NoDiscard __CDS_cpplang_ConstexprDynamicAllocation auto copy () const noexcept -> Optional * override {
         return new Optional( * this );
     }
 };

@@ -24,7 +24,7 @@ namespace refWrapper {
     constexpr T &hiddenRef(T &t) noexcept { return t; }
 
     template<class T>
-    __CDS_MaybeUnused auto hiddenRef(T &&) -> void = delete;
+    __CDS_MaybeUnused constexpr auto hiddenRef(T &&) -> void = delete;
 
 #if __CDS_cpplang_core_version < __CDS_cpplang_core_version_17
 
@@ -60,9 +60,9 @@ public:
 
     }
 
-    Reference(Reference const &) noexcept = default;
-    Reference & operator = ( Reference const & ) noexcept = default;
-    ~Reference () noexcept override = default;
+    constexpr Reference(Reference const &) noexcept = default;
+    __CDS_cpplang_NonConstConstexprMemberFunction Reference & operator = ( Reference const & ) noexcept = default;
+    __CDS_cpplang_ConstexprDestructor ~Reference () noexcept override = default;
 
     constexpr operator T& () const noexcept { return *p; } // NOLINT(google-explicit-constructor)
     constexpr T& get () const noexcept { return *p; }
@@ -70,12 +70,11 @@ public:
     __CDS_cpplang_NonConstConstexprMemberFunction operator T& () noexcept { return *p; } // NOLINT(google-explicit-constructor)
     __CDS_cpplang_NonConstConstexprMemberFunction T& get () noexcept(false) { return *p; }
 
-    inline auto operator == (Reference const & o) const noexcept -> bool {
-        if ( this == & o ) return true;
-        return Type < T > :: compare ( o.get(), this->get() );
+    constexpr auto operator == (Reference const & o) const noexcept -> bool {
+        return this == & o || Type < T > :: compare ( o.get(), this->get() );
     }
 
-    __CDS_NoDiscard auto equals ( Object const & o ) const noexcept -> bool final {
+    __CDS_NoDiscard __CDS_cpplang_VirtualConstexpr auto equals ( Object const & o ) const noexcept -> bool final {
         if ( this == & o ) return true;
         auto c = dynamic_cast < decltype (this) > ( & o );
         if ( c == nullptr ) return false;
@@ -83,32 +82,11 @@ public:
         return this->operator==(*c);
     }
 
-    __CDS_NoDiscard auto toString() const noexcept -> String final {
-#if defined(CDS_GLM)
-        constexpr auto isVec = [] {
-            if constexpr (
-                    std::is_same <glm::vec1, Value>::type::value ||
-                    std::is_same <glm::vec2, Value>::type::value ||
-                    std::is_same <glm::vec3, Value>::type::value ||
-                    std::is_same <glm::vec4, Value>::type::value
-            )
-                return true;
-            return false;
-        };
-#endif
-
+    __CDS_NoDiscard inline auto toString() const noexcept -> String final {
         std::stringstream oss;
-        oss << "< " << (std::is_const<T>::value ? "const " : "") << "& of 0x" << std::hex
-            << reinterpret_cast < typename PointerBase<T>::PointerType > ( p ) << std::dec << " : ";
-#if defined(CDS_GLM)
-        if constexpr (isVec())
-            oss << String(*p);
-        else
-            oss << (*p);
-#else
-        oss << (*p);
-#endif
-        oss << " >";
+
+        Type < T > :: streamPrint ( oss << "< " << (std::is_const<T>::value ? "const " : "") << "& of 0x" << std::hex
+            << reinterpret_cast < typename PointerBase<T>::PointerType > ( p ) << std::dec << " : " , *p ) << " >";
         return oss.str();
     }
 

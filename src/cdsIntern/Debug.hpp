@@ -29,6 +29,10 @@
 #define debug_private private
 #endif
 
+#ifdef CDS_PTR_DEBUG
+#undef CDS_PTR_DEBUG
+#endif
+
 #endif
 
 #endif //CDS_DEBUG_HPP

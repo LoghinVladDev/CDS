@@ -497,7 +497,7 @@ public:
             if ( Type < K > :: compare ( e.getFirst(), k ) )
                 return e.getSecond();
 
-        b.pushBack ( { k, Value() } );
+        b.pushBack ( Pair<Key, Value>{ k, Value() } );
         return b.back().getSecond();
     }
 

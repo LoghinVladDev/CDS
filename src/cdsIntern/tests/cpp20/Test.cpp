@@ -6,6 +6,8 @@
 
 Test::TerminalColor Test::TerminalColor::clear(DISABLE_INVERSE_COLOR | DISABLE_UNDERLINE | DISABLE_BOLD | RESET );
 
+Pair < Test :: TerminalColor :: Modifier, int > p;
+
 HashMap < Test::TerminalColor::Modifier, int > Test::TerminalColor::colorMap = {
         {RESET, 0},
         {ENABLE_BOLD, 1},

@@ -78,6 +78,7 @@
 
 #define __CDS_Deprecated __CDS_Attribute(deprecated) /* NOLINT(bugprone-reserved-identifier) */
 
+#define __CDS_cpplang_ConstexprNonLiteralReturn constexpr /* NOLINT(bugprone-reserved-identifier) */
 #define __CDS_cpplang_NonConstConstexprMemberFunction constexpr /* NOLINT(bugprone-reserved-identifier) */
 #define __CDS_cpplang_ConstexprConditioned constexpr /* NOLINT(bugprone-reserved-identifier) */
 #define __CDS_cpplang_StructBracesInitialization_available true /* NOLINT(bugprone-reserved-identifier) */
@@ -101,6 +102,7 @@ constexpr auto exchange ( T & obj, U && newValue ) -> T {
 
 #else
 
+#define __CDS_cpplang_ConstexprNonLiteralReturn inline /* NOLINT(bugprone-reserved-identifier) */
 #define __CDS_cpplang_NonConstConstexprMemberFunction inline /* NOLINT(bugprone-reserved-identifier) */
 #define __CDS_cpplang_ConstexprConditioned inline /* NOLINT(bugprone-reserved-identifier) */
 #define __CDS_cpplang_StructBracesInitialization_available false /* NOLINT(bugprone-reserved-identifier) */

@@ -9,6 +9,7 @@
 #include <sstream>
 
 #include <CDS/Traits>
+#include <CDS/Utility>
 
 template <class T>
 class PointerBase : public Object {
@@ -22,21 +23,15 @@ protected:
     mutable Pointer pObj {nullptr};
 
 public:
-    class NullPointerException : public std::exception {
-    public:
-        __CDS_NoDiscard auto what() const noexcept -> StringLiteral override {
-            return "Tried de-referencing a null pointer";
-        }
-    };
 
-    PointerBase() noexcept = default;
-    explicit PointerBase(Pointer p) noexcept : pObj(p) {}
+    constexpr PointerBase() noexcept = default;
+    explicit constexpr PointerBase(Pointer p) noexcept : pObj(p) {}
 
-    ~PointerBase() noexcept override = default;
+    __CDS_cpplang_ConstexprDestructor ~PointerBase() noexcept override = default;
 
-    auto copy () const noexcept -> PointerBase * override = 0;
+    __CDS_cpplang_ConstexprPureAbstract auto copy () const noexcept -> PointerBase * override = 0;
 
-    auto equals ( Object const & o ) const noexcept -> bool final {
+    __CDS_cpplang_VirtualConstexpr auto equals ( Object const & o ) const noexcept -> bool final {
         if ( this == & o ) return true;
         auto p = dynamic_cast < decltype (this) > ( & o );
         if ( p == nullptr ) return false;
@@ -44,7 +39,7 @@ public:
         return this->operator==(*p);
     }
 
-    auto operator == (PointerBase const & o) const noexcept -> bool {
+    __CDS_cpplang_ConstexprConditioned auto operator == (PointerBase const & o) const noexcept -> bool {
         if ( this == & o ) return true;
 
         if ( this->pObj == o.pObj ) return true;
@@ -53,75 +48,33 @@ public:
         return Type < T > :: compare ( * o.pObj, * this->pObj );
     }
 
-    inline auto operator * () const noexcept (false) -> ValueReference {
-        if ( pObj == nullptr ) throw NullPointerException();
-        return * pObj;
+    __CDS_cpplang_ConstexprConditioned auto operator * () const noexcept (false) -> ValueReference {
+        if ( this->pObj == nullptr ) throw NullPointerException();
+        return * this->pObj;
     }
 
-    inline auto valueAt () const noexcept (false) -> ValueReference {
-        if ( pObj == nullptr ) throw NullPointerException();
-        return * pObj;
+    __CDS_cpplang_ConstexprConditioned auto valueAt () const noexcept (false) -> ValueReference {
+        if ( this->pObj == nullptr ) throw NullPointerException();
+        return * this->pObj;
     }
 
-    constexpr inline auto isNull () const noexcept -> bool { return pObj == nullptr; }
+    constexpr  auto isNull () const noexcept -> bool { return this->pObj == nullptr; }
     __CDS_cpplang_ConstexprConditioned auto operator -> () const noexcept (false) -> Pointer {
-        if ( pObj == nullptr )
+        if ( this->pObj == nullptr )
             throw NullPointerException();
 
-        return pObj;
+        return this->pObj;
     }
 
-    constexpr inline explicit operator bool () const noexcept { return isNull(); }
-    constexpr inline auto get () const noexcept -> Pointer { return pObj; }
-#if __cpp_constexpr >= 201907
-    constexpr inline virtual auto release () noexcept -> Pointer { auto p = pObj; pObj = nullptr; return p; }
-    constexpr inline virtual auto reset ( Pointer p = nullptr ) noexcept -> void { auto oldP = pObj; pObj = p; delete oldP; } // NOLINT(google-default-arguments)
-#else
-    inline virtual auto release () noexcept -> Pointer { auto p = pObj; pObj = nullptr; return p; }
-    inline virtual auto reset ( Pointer p = nullptr ) noexcept -> void { auto oldP = pObj; pObj = p; delete oldP; } // NOLINT(google-default-arguments)
-#endif
+    constexpr explicit operator bool () const noexcept { return ! this->isNull(); }
+    constexpr auto get () const noexcept -> Pointer { return this->pObj; }
 
-#if __CDS_cpplang_core_version >= __CDS_cpplang_core_version_17
+    __CDS_cpplang_VirtualConstexpr virtual auto release () noexcept -> Pointer { auto p = this->pObj; this->pObj = nullptr; return p; }
+    __CDS_cpplang_VirtualConstexpr virtual auto reset ( Pointer p = nullptr ) noexcept -> void { auto oldP = this->pObj; this->pObj = p; delete oldP; } // NOLINT(google-default-arguments)
 
-    __CDS_NoDiscard auto toString() const noexcept -> String final {
-        std::stringstream oss;
-
-        oss << "< 0x" << std::hex << reinterpret_cast < PointerType > ( pObj ) << std::dec << " : ";
-        if ( pObj == nullptr )
-            oss << "null";
-        else
-    #if defined(CDS_GLM)
-            if constexpr (
-                    std::is_same < glm::vec1, Value >::type::value ||
-                    std::is_same < glm::vec2, Value >::type::value ||
-                    std::is_same < glm::vec3, Value >::type::value ||
-                    std::is_same < glm::vec4, Value >::type::value
-            ) {
-                oss << String(*pObj);
-            }
-            else {
-                if constexpr ( isPrintable < decltype ( * pObj ) >::value ) {
-                    oss << (*pObj);
-                } else {
-                    oss << "unknown";
-                }
-            }
-    #else
-        if __CDS_cpplang_IfConstexpr ( isPrintable < decltype ( * pObj ) >::value ) {
-            oss << (*pObj);
-        } else {
-            oss << "unknown";
-        }
-    #endif
-
-        oss << " >"; // NOLINT(readability-misleading-indentation)
-
-        return {oss.str()};
-    }
-#else
-
+private:
     template < typename U = T >
-    __CDS_NoDiscard auto toString() const noexcept -> typename std::enable_if < Type < U > :: ostreamPrintable, String > :: type {
+    __CDS_NoDiscard inline auto ptrStringRep() const noexcept -> typename std::enable_if < Type < U > :: ostreamPrintable, String > :: type {
         std::stringstream oss;
 
         oss << "< 0x" << std::hex << reinterpret_cast < PointerType > ( pObj ) << std::dec << " : ";
@@ -133,7 +86,7 @@ public:
     }
 
     template < typename U = T >
-    __CDS_NoDiscard auto toString() const noexcept -> typename std::enable_if < ! Type < U > :: ostreamPrintable, String > :: type {
+    __CDS_NoDiscard inline auto ptrStringRep() const noexcept -> typename std::enable_if < ! Type < U > :: ostreamPrintable, String > :: type {
         std::stringstream oss;
 
         oss << "< 0x" << std::hex << reinterpret_cast < PointerType > ( pObj ) << std::dec << " : ";
@@ -144,59 +97,73 @@ public:
         return oss.str();
     }
 
-#endif
+public:
+    __CDS_NoDiscard inline auto toString () const noexcept -> String override {
+        return this->ptrStringRep();
+    }
 };
 
 template <class T>
 class UniquePointer final : public PointerBase<T> {
 public:
-    UniquePointer() noexcept = default;
-    UniquePointer(typename PointerBase<T>::Pointer p) noexcept : PointerBase<T>(p) { } // NOLINT(google-explicit-constructor)
+    constexpr UniquePointer() noexcept = default;
+    constexpr UniquePointer( typename PointerBase<T>::Pointer p ) noexcept : PointerBase<T>(p) { } // NOLINT(google-explicit-constructor)
 
-    UniquePointer( UniquePointer const & o ) noexcept = delete;
-    UniquePointer( UniquePointer & o ) noexcept : PointerBase<T>(o.release()) { }
-    UniquePointer( UniquePointer && o ) noexcept : PointerBase<T>(o.release()) { }
+    constexpr UniquePointer( UniquePointer const & o ) noexcept = delete;
+    __CDS_cpplang_VirtualConstexpr UniquePointer( UniquePointer & o ) noexcept : PointerBase<T>(o.release()) { }
+    __CDS_cpplang_VirtualConstexpr UniquePointer( UniquePointer && o ) noexcept : PointerBase<T>(o.release()) { }
 
-    auto copy () const noexcept -> UniquePointer * override {
+    __CDS_cpplang_VirtualConstexpr auto copy () const noexcept -> UniquePointer * override {
         return nullptr;
     }
 
-    inline UniquePointer & operator = ( UniquePointer && p ) noexcept {
+    __CDS_cpplang_NonConstConstexprMemberFunction auto operator = ( UniquePointer && p ) noexcept -> UniquePointer & {
         if ( &p == this ) return * this;
 
         this->reset(p.release());
         return * this;
     }
 
-    inline UniquePointer & operator = ( UniquePointer & p ) noexcept { // NOLINT(misc-unconventional-assign-operator)
+    __CDS_cpplang_NonConstConstexprMemberFunction auto operator = ( UniquePointer & p ) noexcept -> UniquePointer & { // NOLINT(misc-unconventional-assign-operator)
         if ( &p == this ) return * this;
 
         this->reset(p.release());
-
         return * this;
     }
 
-    inline UniquePointer & operator = ( typename PointerBase < T > :: Pointer p ) noexcept {
+    __CDS_cpplang_NonConstConstexprMemberFunction auto operator = ( typename PointerBase < T > :: Pointer p ) noexcept -> UniquePointer & {
         this->reset(p);
         return * this;
     }
 
-    inline UniquePointer & operator = ( decltype(nullptr) ) noexcept {
+    __CDS_cpplang_NonConstConstexprMemberFunction auto operator = ( decltype(nullptr) ) noexcept -> UniquePointer & {
         this->reset();
         return * this;
     }
 
-    ~UniquePointer() noexcept final { this->reset(); }
+    __CDS_cpplang_ConstexprDestructor ~UniquePointer() noexcept final { this->reset(); }
 };
 
 template <class T>
 class SharedPointer final : public PointerBase<T> {
 private:
     struct SharedPointerControlBlock {
-        Size ownerCount {0ull};
+        int ownerCount {1};
+
+#if defined CDS_PTR_DEBUG
+
+        constexpr SharedPointerControlBlock() noexcept : ownerCount(1) {
+            std::cout << "Created Shared Pointer Control Block : 0x" << std::hex << reinterpret_cast < AddressValueType > (this) << '\n' << std :: dec;
+        }
+
+        __CDS_cpplang_ConstexprDestructor ~SharedPointerControlBlock () noexcept {
+            std::cout << "Destroyed Shared Pointer Control Block : 0x" << std::hex << reinterpret_cast < AddressValueType > (this) << '\n' << std :: dec;
+        }
+
+#endif
 
 #if __CDS_cpplang_StructBracesInitialization_available == false
-        explicit SharedPointerControlBlock(Size ownerCount) noexcept : ownerCount(ownerCount) {}
+        constexpr explicit SharedPointerControlBlock(int ownerCount = 1) noexcept : ownerCount(ownerCount) {}
 #endif
 
     };
@@ -204,54 +171,55 @@ private:
     SharedPointerControlBlock * pControl { nullptr };
 
 public:
-    SharedPointer() noexcept = default;
-    SharedPointer(SharedPointer const & p) noexcept : PointerBase<T>(p.pObj) {
-        this->pControl = p.pControl;
-        p.pControl->ownerCount ++;
+    constexpr SharedPointer() noexcept = default;
+    inline SharedPointer(SharedPointer const & p) noexcept :
+            PointerBase<T>(p.pObj),
+            pControl(p.pControl) {
+
+        ++ p.pControl->ownerCount;
     }
 
-    auto copy () const noexcept -> SharedPointer * override {
+    __CDS_cpplang_VirtualConstexpr auto copy () const noexcept -> SharedPointer * override {
         return new SharedPointer(* this);
     }
 
-    SharedPointer(typename PointerBase<T>::Pointer p) noexcept : PointerBase<T>(p) { // NOLINT(google-explicit-constructor)
-        this->pControl = new SharedPointerControlBlock { 1ull };
+    __CDS_cpplang_ConstexprDynamicAllocation SharedPointer(typename PointerBase<T>::Pointer p) noexcept : // NOLINT(google-explicit-constructor)
+            PointerBase<T>(p),
+            pControl(new SharedPointerControlBlock){
+
     }
 
-    SharedPointer & operator = ( SharedPointer const & o ) noexcept {
+    __CDS_cpplang_ConstexprDynamicAllocation auto operator = ( SharedPointer const & o ) noexcept -> SharedPointer & {
         if ( this == & o )
             return * this;
 
-        this->pObj = o.pObj;
-        this->pControl = o.pControl;
-        if ( this->pControl != nullptr )
-            this->pControl->ownerCount++;
-
+        this->reset( o );
         return * this;
     }
 
-    inline SharedPointer & operator = ( typename PointerBase < T > :: Pointer p ) noexcept {
+    __CDS_cpplang_ConstexprDynamicAllocation auto operator = ( typename PointerBase < T > :: Pointer p ) noexcept -> SharedPointer & {
         this->reset(p);
         return * this;
     }
 
-    ~SharedPointer() noexcept final {
+    __CDS_cpplang_ConstexprDestructor ~SharedPointer() noexcept final {
         this->reset();
     }
 
-    auto release () noexcept -> typename PointerBase<T>::Pointer final {
+    __CDS_cpplang_ConstexprDynamicAllocation auto release () noexcept -> typename PointerBase<T>::Pointer final {
         auto p = this->pObj;
         this->reset();
         return p;
     }
 
-    auto reset ( typename PointerBase<T>::Pointer p = nullptr ) noexcept -> void final {
+    __CDS_cpplang_ConstexprDynamicAllocation auto reset ( typename PointerBase<T>::Pointer p = nullptr ) noexcept -> void final {
+        if ( this->pObj == p ) return;
+
         auto pVal = this->pObj;
         this->pObj = p;
 
         if ( this->pControl != nullptr ) {
-            this->pControl->ownerCount --;
-            if ( this->pControl->ownerCount == 0 ) {
+            if ( -- this->pControl->ownerCount == 0 ) {
                 delete this->pControl;
                 delete pVal;
             }
@@ -260,38 +228,159 @@ public:
         }
 
         if ( this->pObj != nullptr )
-            this->pControl = new SharedPointerControlBlock { 1ull };
+            this->pControl = new SharedPointerControlBlock;
+    }
+
+    __CDS_cpplang_ConstexprDynamicAllocation auto reset ( SharedPointer const & p ) noexcept -> void {
+        if ( this->pControl == p.pControl ) return;
+
+        auto oldAddress = this->pObj;
+        this->pObj = p.pObj;
+
+        if ( this->pControl != nullptr ) {
+            if ( -- this->pControl->ownerCount == 0 ) {
+                delete this->pControl;
+                delete oldAddress;
+            }
+
+            this->pControl = nullptr;
+        }
+
+        if ( p.pControl != nullptr ) {
+            this->pControl = p.pControl;
+            ++ this->pControl->ownerCount;
+        }
+    }
+};
+
+#include <CDS/Mutex>
+template <class T>
+class __CDS_MaybeUnused AtomicSharedPointer final : public PointerBase<T> {
+private:
+    struct SharedPointerControlBlock {
+        int ownerCount = 1u;
+        Mutex lock;
+
+        SharedPointerControlBlock() noexcept = default;
+    };
+
+    SharedPointerControlBlock * pControl { nullptr };
+
+public:
+    constexpr AtomicSharedPointer() noexcept = default;
+    inline AtomicSharedPointer(AtomicSharedPointer const & p) noexcept :
+            PointerBase<T>(p.pObj),
+            pControl(p.pControl) {
+
+        p.pControl->lock.lock();
+        ++ p.pControl->ownerCount;
+        p.pControl->lock.unlock();
+    }
+
+    inline auto copy () const noexcept -> AtomicSharedPointer * override {
+        return new AtomicSharedPointer(* this);
+    }
+
+    inline AtomicSharedPointer(typename PointerBase<T>::Pointer p) noexcept : // NOLINT(google-explicit-constructor)
+            PointerBase<T>(p),
+            pControl(new SharedPointerControlBlock){
+
+    }
+
+    inline auto operator = ( AtomicSharedPointer const & o ) noexcept -> AtomicSharedPointer & {
+        if ( this == & o )
+            return * this;
+
+        this->reset( o );
+        return * this;
+    }
+
+    inline auto operator = ( typename PointerBase < T > :: Pointer p ) noexcept -> AtomicSharedPointer & {
+        this->reset(p);
+        return * this;
+    }
+
+    inline ~AtomicSharedPointer() noexcept final {
+        this->reset();
+    }
+
+    inline auto release () noexcept -> typename PointerBase<T>::Pointer final {
+        auto p = this->pObj;
+        this->reset();
+        return p;
+    }
+
+    inline auto reset ( typename PointerBase<T>::Pointer p = nullptr ) noexcept -> void final {
+        if ( this->pObj == p ) return;
+
+        auto pVal = this->pObj;
+        this->pObj = p;
+
+        if ( this->pControl != nullptr ) {
+            if ( this->pControl->ownerCount == 1 ) {
+                delete this->pControl;
+                delete pVal;
+            }
+
+            this->pControl = nullptr;
+        }
+
+        if ( this->pObj != nullptr )
+            this->pControl = new SharedPointerControlBlock;
+    }
+
+    inline auto reset ( AtomicSharedPointer const & p ) noexcept -> void final {
+        if ( this->pControl == p.pControl ) return;
+
+        auto oldAddress = this->pObj;
+        this->pObj = p;
+
+        if ( this->pControl != nullptr ) {
+            if ( this->pControl->ownerCount == 1 ) {
+                delete this->pControl;
+                delete oldAddress;
+            }
+
+            this->pControl = nullptr;
+        }
+
+        if ( p.pControl != nullptr ) {
+            this->pControl = p.pControl;
+            p.pControl->lock.lock();
+            ++ this->pControl->ownerCount;
+            p.pControl->lock.unlock();
+        }
     }
 };
 
 template <class T>
 class ForeignPointer final : public PointerBase<T> {
 public:
-    ForeignPointer() noexcept : PointerBase<T>(nullptr) {}
-    ForeignPointer(typename PointerBase<T>::Pointer p) noexcept : PointerBase<T>(p) {} // NOLINT(google-explicit-constructor)
+    constexpr ForeignPointer() noexcept : PointerBase<T>(nullptr) {}
+    constexpr ForeignPointer(typename PointerBase<T>::Pointer p) noexcept : PointerBase<T>(p) {} // NOLINT(google-explicit-constructor)
 
-    ForeignPointer( ForeignPointer const & o ) noexcept : PointerBase<T>(o.pObj) {}
-    ForeignPointer( ForeignPointer && o ) noexcept : PointerBase<T>(o.release()) {}
+    constexpr ForeignPointer( ForeignPointer const & o ) noexcept : PointerBase<T>(o.pObj) {}
+    constexpr ForeignPointer( ForeignPointer && o ) noexcept : PointerBase<T>(o.release()) {}
 
-    auto copy () const noexcept -> ForeignPointer * override {
+    __CDS_cpplang_VirtualConstexpr auto copy () const noexcept -> ForeignPointer * override {
         return new ForeignPointer ( * this );
     }
 
-    inline ForeignPointer & operator = ( ForeignPointer const & p ) noexcept {
+    __CDS_cpplang_NonConstConstexprMemberFunction auto operator = ( ForeignPointer const & p ) noexcept -> ForeignPointer & {
         if ( &p == this ) return * this;
 
         this->reset( p.pObj );
         return * this;
     }
 
-    inline ForeignPointer & operator = ( ForeignPointer && o ) noexcept {
+    __CDS_cpplang_NonConstConstexprMemberFunction auto operator = ( ForeignPointer && o ) noexcept -> ForeignPointer & {
         if ( &o == this ) return * this;
 
         this->reset( o.release() );
         return * this;
     }
 
-    inline ForeignPointer & operator = ( typename PointerBase < T > :: Pointer p ) noexcept {
+    __CDS_cpplang_NonConstConstexprMemberFunction auto operator = ( typename PointerBase < T > :: Pointer p ) noexcept -> ForeignPointer & {
         this->reset(p);
         return * this;
     }
