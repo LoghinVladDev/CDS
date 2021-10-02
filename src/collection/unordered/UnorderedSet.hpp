@@ -92,6 +92,7 @@ public:
         auto p = new Node;
         p->pNext = this->_pFront;
         p->data = nullptr;
+        this->_pFront = p;
         ++ this->_size;
         return this->_pFront->data;
     }

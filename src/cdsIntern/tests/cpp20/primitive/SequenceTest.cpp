@@ -12,7 +12,8 @@
 #include <CDS/OrderedSet>
 #include <CDS/UnorderedSet>
 
-#include <Sequence.hpp>
+#include <CDS/Sequence>
+#include <CDS/Integer>
 
 bool SequenceTest::execute() noexcept {
     bool ok = true;
@@ -93,6 +94,24 @@ bool SequenceTest::execute() noexcept {
         this->log("<UnorderedSet &> Ctor Resolution Test : '%s'", Sequence(u2).toString().cStr());
         this->log("<UnorderedSet const &> Ctor Resolution Test : '%s'", Sequence(u3).toString().cStr());
         this->log("<UnorderedSet &&> Ctor Resolution Test : '%s'", Sequence(UnorderedSet(uintUSet)).toString().cStr());
+    });
+
+    this->executeSubtest("Basic Functional Properties", [& ok, this]{
+        auto zeroToTen = Range(0, 10).sequence();
+
+        this->log("Zero To Ten.all(isEven) : %s", zeroToTen.all(Integer::isEven) ? "true" : "false");
+
+        if ( zeroToTen.all(Integer::isEven) ) {
+            ok = false;
+            this->logWarning(".all Error");
+        }
+
+//        Range(0, 10).sequence().map([](Index const & v){return v * 2;});
+//        auto evens = zeroToTen.map([](Index const & v) -> Index {return v * 2;});
+        auto evens = Range(0, 10).sequence().map([](Index i){return i * 2;})
+                .map([](Index i){return i * 4;}).map([](Index i){return i / 2.0f;});
+        std::cout << zeroToTen.toArray() << '\n';
+        std::cout << evens.toArray() << '\n';
     });
 
     return ok;

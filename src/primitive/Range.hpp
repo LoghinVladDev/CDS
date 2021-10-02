@@ -60,8 +60,10 @@ public:
         return new Range( * this );
     }
 
-    __CDS_NoDiscard auto sequence () const noexcept -> Sequence < const Range >;
-    __CDS_NoDiscard auto sequence () noexcept -> Sequence < Range >;
+    __CDS_NoDiscard auto sequence () & noexcept -> Sequence < Range >;
+    __CDS_NoDiscard auto sequence () && noexcept -> Sequence < Range >;
+    __CDS_NoDiscard auto sequence () const & noexcept -> Sequence < const Range >;
+    __CDS_NoDiscard auto sequence () const && noexcept -> Sequence < const Range >;
 };
 
 

@@ -191,7 +191,12 @@ constexpr auto typeMoveAssignable () noexcept -> bool {
 
 template < typename T >
 struct Type {
+    using BaseType = T;
 
+    using WithoutReference = Type < typename std :: remove_reference < T > :: type >;
+    using WithoutConst = Type < typename std :: remove_const < T > :: type >;
+
+    using WithoutConstReference = typename Type < T > :: WithoutConst :: WithoutReference;
 
     static constexpr bool defaultConstructible = typeDefaultConstructible < T> ();
     static constexpr bool copyConstructible = typeCopyConstructible < T > ();
