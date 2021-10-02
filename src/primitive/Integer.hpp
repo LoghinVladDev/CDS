@@ -1883,4 +1883,6 @@ __CDS_cpplang_ConstexprDestructor auto operator "" _i (unsigned long long int va
 
 #endif
 
+using Int = Integer;
+
 #endif //CDS_INTEGER_HPP

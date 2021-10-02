@@ -90,7 +90,9 @@ public:
         return ( ( this->allocInsertGetPtr(entry)) = new Entry(entry) )->second();
     }
 
-    __CDS_MaybeUnused virtual auto emplace (KeyConstReference, ValueConstReference) noexcept -> ValueConstReference = 0;
+    auto emplace ( KeyConstReference k, ValueConstReference v ) noexcept -> ValueConstReference {
+        return this->insert( {k, v} );
+    }
 
     ~Map() noexcept override = default;
 

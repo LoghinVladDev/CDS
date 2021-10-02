@@ -104,7 +104,6 @@ struct functionTraits < R (C::*) (A ...) const > {
 template < typename T >
 struct functionTraits < T, std::void_t < decltype ( & T :: operator () ) > > :
     public functionTraits < decltype ( & T :: operator () ) > {
-
 };
 
 template < typename T, typename = void >
@@ -263,6 +262,20 @@ struct Type {
     template < typename V = typename std :: remove_reference < T > :: type >
     constexpr static auto unsafeAddress () noexcept -> V * { return reinterpret_cast < V * > (0x10); }
     constexpr static auto unsafeReference () noexcept -> T & { return * Type :: unsafeAddress(); }
+};
+
+template < typename T, typename = void >
+struct pairTrait {
+    using FirstType = void;
+    using SecondType = void;
+    using Type = Pair < FirstType, SecondType >;
+};
+
+template < typename T >
+struct pairTrait < T > {
+    using FirstType = typename std :: enable_if < isPair < T > :: type :: value, typename std::remove_reference < decltype ( Type < T > :: unsafeAddress() -> first() ) > :: type > :: type;
+    using SecondType = typename std :: enable_if < isPair < T > :: type :: value, typename std::remove_reference < decltype ( Type < T > :: unsafeAddress() -> second() ) > :: type > :: type;
+    using Type = Pair < FirstType, SecondType >;
 };
 
 #endif //CDS_TRAITS_HPP

@@ -97,21 +97,89 @@ bool SequenceTest::execute() noexcept {
     });
 
     this->executeSubtest("Basic Functional Properties", [& ok, this]{
-        auto zeroToTen = Range(0, 10).sequence();
+        auto allTest = [&] {
 
-        this->log("Zero To Ten.all(isEven) : %s", zeroToTen.all(Integer::isEven) ? "true" : "false");
+            auto zeroToTen = Range(0, 10).sequence();
 
-        if ( zeroToTen.all(Integer::isEven) ) {
+            this->log("Zero To Ten.all(isEven) : %s", zeroToTen.all(Integer::isEven) ? "true" : "false");
+
+            if (zeroToTen.all(Integer::isEven)) {
+                ok = false;
+                this->logWarning(".all Error");
+            }
+
+            auto evens = zeroToTen.map([](Index const &v) -> Index { return v * 2; });
+            this->log("Evens.all(isEven) : %s", evens.all(Integer::isEven) ? "true" : "false");
+
+            if (!evens.all(Integer::isEven)) {
+                ok = false;
+                this->logWarning(".all Error");
+            }
+
+            auto empty = LinkedList<Int>().sequence();
+            this->log("EmptyList.all(isEven) : %s", empty.all(Integer::isEven) ? "true" : "false");
+
+            if (!empty.all(Integer::isEven)) {
+                ok = false;
+                this->logWarning(".all error");
+            }
+
+            log("zeroToTen : %s", zeroToTen.toArray().toString().cStr() );
+            log("evens : %s", evens.toArray().toString().cStr() );
+            log("empty : %s", empty.toArray().toString().cStr() );
+        };
+
+        auto anyTest = [&]{
+            auto zeroToTen = Range(0, 10).sequence();
+
+            log("zeroToTen.any(isEven) : %s", zeroToTen.any(Int::isEven).toString().cStr());
+
+            if ( ! zeroToTen.any(Int::isEven) ) {
+                ok = false;
+                logWarning(".any error");
+            }
+
+            auto odds = zeroToTen.map([](int v){return v * 2 + 1;});
+
+            log("odds.any(isEven) : %s", odds.any(Int::isEven).toString().cStr());
+
+            if ( odds.any(Int::isEven) ) {
+                ok = false;
+                logWarning(".any error");
+            }
+
+            auto emptyList = LinkedList<Int>().sequence();
+
+            log("emptyList.any(isEven) : %s", emptyList.any(Int::isEven).toString().cStr());
+
+            if ( emptyList.any(Int::isEven) ) {
+                ok = false;
+                logWarning(".any error");
+            }
+
+            log("zeroToTen : %s", zeroToTen.toArray().toString().cStr());
+            log("odds : %s", odds.toArray().toString().cStr());
+            log("empty : %s", emptyList.toArray().toString().cStr());
+        };
+
+        allTest();
+        anyTest();
+    });
+
+    this->executeSubtest("Mapping Functionalities", [&]{
+        auto names = LinkedList < String > { "Grace Hopper", "Jacob Bernoulli", "Johann Bernoulli" }.sequence();
+        log("byLastName : %s", names.associate ( [](String const & fullName) { return Pair { fullName.split(" ")[1], fullName.split(" ")[0] }; } ).toHashMap().toString().cStr() );
+
+        if (
+                names.associate ( [](String const & fullName) { return Pair { fullName.split(" ")[1], fullName.split(" ")[0] }; } ).toHashMap() !=
+                HashMap < String, String > {
+                        { "Hopper", "Grace" },
+                        { "Bernoulli", "Johann" }
+                }
+        ) {
             ok = false;
-            this->logWarning(".all Error");
+            logWarning(".associate error");
         }
-
-//        Range(0, 10).sequence().map([](Index const & v){return v * 2;});
-//        auto evens = zeroToTen.map([](Index const & v) -> Index {return v * 2;});
-        auto evens = Range(0, 10).sequence().map([](Index i){return i * 2;})
-                .map([](Index i){return i * 4;}).map([](Index i){return i / 2.0f;});
-        std::cout << zeroToTen.toArray() << '\n';
-        std::cout << evens.toArray() << '\n';
     });
 
     return ok;

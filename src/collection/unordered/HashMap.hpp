@@ -558,11 +558,15 @@ public:
     }
 
     auto allocInsertGetPtr (EntryConstReference entry) noexcept -> EntryPointerReference override {
-        return this->pBuckets[hashCalculator(entry.first())].allocBackGetPtr();
-    }
+        auto pFront = this->pBuckets[hashCalculator(entry.first())]._pFront;
+        while ( pFront != nullptr ) {
+            if ( Type < K > :: compare ( pFront->data->first(), entry.first() ) )
+                return pFront->data;
 
-    auto emplace ( KeyConstReference k, ValueConstReference v ) noexcept -> ValueConstReference final {
-        return this->insert( {k, v} );
+            pFront = pFront->pNext;
+        }
+
+        return this->pBuckets[hashCalculator(entry.first())].allocBackGetPtr();
     }
 
     auto clear () noexcept -> void final {

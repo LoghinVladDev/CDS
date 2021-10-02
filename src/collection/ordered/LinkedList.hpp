@@ -418,8 +418,10 @@ public:
         return * this;
     }
 
-    __CDS_NoDiscard auto sequence () const noexcept -> Sequence < const DoubleLinkedList < T > >;
-    __CDS_NoDiscard auto sequence () noexcept -> Sequence < DoubleLinkedList < T > >;
+    __CDS_NoDiscard auto sequence () const & noexcept -> Sequence < const DoubleLinkedList < T > >;
+    __CDS_NoDiscard auto sequence () & noexcept -> Sequence < DoubleLinkedList < T > >;
+    __CDS_NoDiscard auto sequence () const && noexcept -> Sequence < const DoubleLinkedList < T > >;
+    __CDS_NoDiscard auto sequence () && noexcept -> Sequence < DoubleLinkedList < T > >;
 };
 
 template <class T>
@@ -1039,13 +1041,23 @@ auto DoubleLinkedList<T>::index(T & e) noexcept -> Index {
 #include <CDS/Sequence>
 
 template < typename T >
-auto DoubleLinkedList < T > :: sequence () const noexcept -> Sequence < const DoubleLinkedList < T > > {
+auto DoubleLinkedList < T > :: sequence () const & noexcept -> Sequence < const DoubleLinkedList < T > > {
     return Sequence < typename std :: remove_reference < decltype (*this) > :: type > (*this);
 }
 
 template < typename T >
-auto DoubleLinkedList < T > :: sequence () noexcept -> Sequence < DoubleLinkedList < T > > {
+auto DoubleLinkedList < T > :: sequence () & noexcept -> Sequence < DoubleLinkedList < T > > {
     return Sequence < typename std :: remove_reference < decltype (*this) > :: type > (*this);
+}
+
+template < typename T >
+auto DoubleLinkedList < T > :: sequence () const && noexcept -> Sequence < const DoubleLinkedList < T > > {
+    return Sequence < typename std :: remove_reference < decltype (*this) > :: type > (std::move(*this));
+}
+
+template < typename T >
+auto DoubleLinkedList < T > :: sequence () && noexcept -> Sequence < DoubleLinkedList < T > > {
+    return Sequence < typename std :: remove_reference < decltype (*this) > :: type > (std::move(*this));
 }
 
 inline auto String::split(ElementType token, Size limit) const noexcept -> LinkedList < String > {

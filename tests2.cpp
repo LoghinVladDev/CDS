@@ -27,7 +27,19 @@ struct A : public Object {
     }
 };
 
+#include "src/primitive/SequencePrivate.hpp"
+#include <CDS/LinkedList>
+
 int main () {
+    auto f = []() -> int {return 0;};
+
+    std::cout <<
+              ! __CDS_Sequence :: mapToSameType < decltype(f), LinkedList < int > > () << '\n';
+
+    Pair p2 = {2,3};
+
+
+
     SharedPointer p (new A());
 
     auto f = [p] {
