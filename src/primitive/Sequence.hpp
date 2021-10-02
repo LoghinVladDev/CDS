@@ -69,7 +69,7 @@ public:
         ForeignPointer < Sequence > pSeq;
         CollectionIterator it;
 
-        CollectionElementType precomputed;
+        UniquePointer < CollectionElementType > precomputed;
         auto skipFiltered () noexcept -> void;
 
         Index index {0};
@@ -143,7 +143,7 @@ public:
         ForeignPointer < const Sequence > pSeq;
         CollectionIterator it;
 
-        CollectionElementType precomputed;
+        UniquePointer < CollectionElementType > precomputed;
         auto skipFiltered () noexcept -> void;
 
         Index index {0};
@@ -498,11 +498,24 @@ public:
     ) && noexcept -> Sequence < LinkedList < Pair < returnOf < KeyGenerator >, ElementType > > >
     __CDS_Requires ( Iterable < C > || ConstIterable < C > );
 
+    template < typename KeyGenerator >
+    __CDS_MaybeUnused auto associateBy (
+            KeyGenerator const &
+    ) & noexcept -> Sequence < LinkedList < Pair < returnOf < KeyGenerator >, ElementType > > >
+    __CDS_Requires ( Iterable < C > || ConstIterable < C > );
+
     template < typename KeyGenerator, typename ValueMapper >
     __CDS_MaybeUnused auto associateBy (
             KeyGenerator    const &,
             ValueMapper     const &
     ) && noexcept -> Sequence < LinkedList < Pair < returnOf < KeyGenerator >, returnOf < ValueMapper > > > >
+    __CDS_Requires ( Iterable < C > || ConstIterable < C > );
+
+    template < typename KeyGenerator, typename ValueMapper >
+    __CDS_MaybeUnused auto associateBy (
+            KeyGenerator    const &,
+            ValueMapper     const &
+    ) & noexcept -> Sequence < LinkedList < Pair < returnOf < KeyGenerator >, returnOf < ValueMapper > > > >
     __CDS_Requires ( Iterable < C > || ConstIterable < C > );
 
     template < typename KeyGenerator >
@@ -1320,7 +1333,7 @@ auto Sequence < C >::Iterator::skipFiltered() noexcept -> void {
     Boolean skip = true;
 
     while ( skip && this->it != this->pSeq->pCollection->valueAt().end() ) {
-        this->precomputed = this->it.value();
+        this->precomputed = new CollectionElementType ( this->it.value() );
         skip = false;
 
         auto currentMapperIterator = this->pSeq.valueAt().storedMappers.begin();
@@ -1335,16 +1348,16 @@ auto Sequence < C >::Iterator::skipFiltered() noexcept -> void {
                     currentMapperIterator != this->pSeq.valueAt().storedMappers.end() &&
                     currentMapperIterator.value().getSecond() == i
             ) {
-                this->precomputed = ( * currentMapperIterator.value().getFirst() ) ( this->precomputed );
+                * this->precomputed = ( * currentMapperIterator.value().getFirst() ) ( * this->precomputed );
                 currentMapperIterator.next();
 
             } else if (
                     currentIndexedMapperIterator != this->pSeq.valueAt().storedIndexedMappers.end() &&
                     currentIndexedMapperIterator.value().getSecond() == i
             ) {
-                this->precomputed = ( * currentIndexedMapperIterator.value().getFirst() ) (
+                * this->precomputed = ( * currentIndexedMapperIterator.value().getFirst() ) (
                         this->index,
-                        this->precomputed
+                        * this->precomputed
                 );
 
                 currentIndexedMapperIterator.next();
@@ -1353,7 +1366,7 @@ auto Sequence < C >::Iterator::skipFiltered() noexcept -> void {
                     currentFilterIterator != this->pSeq.valueAt().storedPredicates.end() &&
                     currentFilterIterator.value().getSecond() == i
             ) {
-                if ( ! (* currentFilterIterator.value().getFirst())( this->precomputed ) ) {
+                if ( ! (* currentFilterIterator.value().getFirst())( * this->precomputed ) ) {
                     skip = true;
                     break;
                 }
@@ -1363,7 +1376,7 @@ auto Sequence < C >::Iterator::skipFiltered() noexcept -> void {
                     currentIndexedFilterIterator != this->pSeq.valueAt().storedIndexedPredicates.end() &&
                     currentIndexedFilterIterator.value().getSecond() == i
             ) {
-                if ( ! (* currentIndexedFilterIterator.value().getFirst()) (this->index, this->precomputed) ) {
+                if ( ! (* currentIndexedFilterIterator.value().getFirst()) (this->index, * this->precomputed) ) {
                     skip = true;
                     break;
                 }
@@ -1385,15 +1398,15 @@ auto Sequence < C >::Iterator::skipFiltered() noexcept -> void {
                         currentMapperIterator != this->pSeq.valueAt().storedMappers.end() &&
                         currentMapperIterator.value().getSecond() == i
                         ) {
-                    this->precomputed = (* currentMapperIterator.value().getFirst())(this->precomputed);
+                    * this->precomputed = (* currentMapperIterator.value().getFirst())(* this->precomputed);
                     currentMapperIterator.next();
                 } else if (
                         currentIndexedMapperIterator != this->pSeq.valueAt().storedIndexedMappers.end() &&
                         currentIndexedMapperIterator.value().getSecond() == i
                         ) {
-                    this->precomputed = (* currentIndexedMapperIterator.value().getFirst())(
+                    * this->precomputed = (* currentIndexedMapperIterator.value().getFirst())(
                             this->index,
-                            this->precomputed
+                            * this->precomputed
                     );
                     currentIndexedMapperIterator.next();
                 }
@@ -1444,7 +1457,7 @@ inline auto Sequence < C > ::Iterator::hash() const noexcept -> Index {
 
 template < typename C >
 inline auto Sequence < C > ::Iterator::copy() const noexcept -> Iterator * {
-    return new Iterator (* this);
+    return nullptr;
 }
 
 template < typename C >
@@ -1458,7 +1471,7 @@ inline auto Sequence < C > ::Iterator::equals(Object const & o) const noexcept -
 
 template < typename C >
 inline auto Sequence < C > ::Iterator::value() const noexcept -> CollectionElementType {
-    return this->precomputed;
+    return * this->precomputed;
 }
 
 template < typename C >
@@ -1533,7 +1546,7 @@ auto Sequence < C >::ConstIterator::skipFiltered() noexcept -> void {
     Boolean skip = true;
 
     while ( skip && this->it != this->pSeq->pCollection->valueAt().cend() ) {
-        this->precomputed = this->it.value();
+        this->precomputed = new CollectionElementType ( this->it.value() );
         skip = false;
 
         auto currentMapperIterator = this->pSeq.valueAt().storedMappers.begin();
@@ -1548,16 +1561,16 @@ auto Sequence < C >::ConstIterator::skipFiltered() noexcept -> void {
                     currentMapperIterator != this->pSeq.valueAt().storedMappers.end() &&
                     currentMapperIterator.value().getSecond() == i
                     ) {
-                this->precomputed = ( * currentMapperIterator.value().getFirst() ) ( this->precomputed );
+                * this->precomputed = ( * currentMapperIterator.value().getFirst() ) ( * this->precomputed );
                 currentMapperIterator.next();
 
             } else if (
                     currentIndexedMapperIterator != this->pSeq.valueAt().storedIndexedMappers.end() &&
                     currentIndexedMapperIterator.value().getSecond() == i
                     ) {
-                this->precomputed = ( * currentIndexedMapperIterator.value().getFirst() ) (
+                * this->precomputed = ( * currentIndexedMapperIterator.value().getFirst() ) (
                         this->index,
-                        this->precomputed
+                        * this->precomputed
                 );
 
                 currentIndexedMapperIterator.next();
@@ -1566,7 +1579,7 @@ auto Sequence < C >::ConstIterator::skipFiltered() noexcept -> void {
                     currentFilterIterator != this->pSeq.valueAt().storedPredicates.end() &&
                     currentFilterIterator.value().getSecond() == i
                     ) {
-                if ( ! (* currentFilterIterator.value().getFirst())( this->precomputed ) ) {
+                if ( ! (* currentFilterIterator.value().getFirst())( * this->precomputed ) ) {
                     skip = true;
                     break;
                 }
@@ -1576,7 +1589,7 @@ auto Sequence < C >::ConstIterator::skipFiltered() noexcept -> void {
                     currentIndexedFilterIterator != this->pSeq.valueAt().storedIndexedPredicates.end() &&
                     currentFilterIterator.value().getSecond() == i
                     ) {
-                if ( ! (* currentIndexedFilterIterator.value().getFirst()) (this->index, this->precomputed) ) {
+                if ( ! (* currentIndexedFilterIterator.value().getFirst()) (this->index, * this->precomputed) ) {
                     skip = true;
                     break;
                 }
@@ -1598,15 +1611,15 @@ auto Sequence < C >::ConstIterator::skipFiltered() noexcept -> void {
                         currentMapperIterator != this->pSeq.valueAt().storedMappers.end() &&
                         currentMapperIterator.value().getSecond() == i
                         ) {
-                    this->precomputed = (* currentMapperIterator.value().getFirst())(this->precomputed);
+                    * this->precomputed = (* currentMapperIterator.value().getFirst())( * this->precomputed);
                     currentMapperIterator.next();
                 } else if (
                         currentIndexedMapperIterator != this->pSeq.valueAt().storedIndexedMappers.end() &&
                         currentIndexedMapperIterator.value().getSecond() == i
                         ) {
-                    this->precomputed = (* currentIndexedMapperIterator.value().getFirst())(
+                    * this->precomputed = (* currentIndexedMapperIterator.value().getFirst())(
                             this->index,
-                            this->precomputed
+                            * this->precomputed
                     );
                     currentIndexedMapperIterator.next();
                 }
@@ -1663,7 +1676,7 @@ inline auto Sequence < C > ::ConstIterator::hash() const noexcept -> Index {
 
 template < typename C >
 inline auto Sequence < C > ::ConstIterator::copy() const noexcept -> ConstIterator * {
-    return new ConstIterator (* this);
+    return nullptr;
 }
 
 template < typename C >
@@ -1677,7 +1690,7 @@ inline auto Sequence < C > ::ConstIterator::equals(Object const & o) const noexc
 
 template < typename C >
 inline auto Sequence < C > ::ConstIterator::value() const noexcept -> CollectionElementType {
-    return this->precomputed;
+    return * this->precomputed;
 }
 
 template < typename C >
@@ -2062,13 +2075,41 @@ __CDS_Requires ( Iterable < C > || ConstIterable < C > ) {
 }
 
 template < typename C >
+template < typename KeyGenerator >
+__CDS_MaybeUnused inline auto Sequence < C > :: associateBy (
+        KeyGenerator const & keyGenerator
+) & noexcept -> Sequence < LinkedList < Pair < returnOf < KeyGenerator >, ElementType > > >
+__CDS_Requires ( Iterable < C > || ConstIterable < C > ) {
+
+    LinkedList < Pair < returnOf < KeyGenerator >, ElementType > > container;
+    for ( auto e : * this )
+        container.add ( { keyGenerator ( e ), e } );
+
+    return std::move ( Sequence < decltype ( container ) > ( std::move ( container ) ) );
+}
+
+template < typename C >
 template < typename KeyGenerator, typename ValueMapper >
 __CDS_MaybeUnused inline auto Sequence < C > :: associateBy (
         KeyGenerator    const & keyGenerator,
         ValueMapper     const & valueMapper
 ) && noexcept -> Sequence < LinkedList < Pair < returnOf < KeyGenerator >, returnOf < ValueMapper > > > >
 __CDS_Requires(Iterable < C > || ConstIterable < C >) {
-    LinkedList < Pair < returnOf < KeyGenerator >, ElementType > > container;
+    LinkedList < Pair < returnOf < KeyGenerator >, returnOf < ValueMapper > > > container;
+    for ( auto e : * this )
+        container.add( { keyGenerator ( e ), valueMapper ( e ) } );
+
+    return std::move ( Sequence < decltype ( container ) > (std::move( container )) );
+}
+
+template < typename C >
+template < typename KeyGenerator, typename ValueMapper >
+__CDS_MaybeUnused inline auto Sequence < C > :: associateBy (
+        KeyGenerator    const & keyGenerator,
+        ValueMapper     const & valueMapper
+) & noexcept -> Sequence < LinkedList < Pair < returnOf < KeyGenerator >, returnOf < ValueMapper > > > >
+__CDS_Requires(Iterable < C > || ConstIterable < C >) {
+    LinkedList < Pair < returnOf < KeyGenerator >, returnOf < ValueMapper > > > container;
     for ( auto e : * this )
         container.add( { keyGenerator ( e ), valueMapper ( e ) } );
 
@@ -2885,7 +2926,7 @@ __CDS_MaybeUnused inline auto Sequence < C > :: associateByTo (
 __CDS_Requires(Iterable < C > || ConstIterable < C >) {
 
     for ( auto e : * this )
-        m.add ( { keyGenerator (e), e } );
+        m [ keyGenerator (e) ] = e;
     return m;
 }
 
@@ -2899,7 +2940,7 @@ __CDS_MaybeUnused inline auto Sequence < C > :: associateByTo (
 __CDS_Requires ( Iterable < C > || ConstIterable < C > ) {
 
     for ( auto e : * this )
-        m.add ( { keyGenerator (e), mapper(e) } );
+        m [ keyGenerator (e) ] = mapper(e);
     return m;
 }
 

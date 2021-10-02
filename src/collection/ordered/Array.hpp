@@ -225,8 +225,10 @@ public:
     Array & operator = ( Collection < ElementType > const & ) noexcept;
     inline Array & operator = ( Array const & o ) noexcept { return this->operator=( ( Collection<ElementType> const & )(o) ); } // NOLINT(bugprone-unhandled-self-assignment,misc-unconventional-assign-operator)
 
-    auto sequence () const noexcept -> Sequence < const Array < T > >;
-    auto sequence () noexcept -> Sequence < Array < T > >;
+    auto sequence () const & noexcept -> Sequence < const Array < T > >;
+    auto sequence () & noexcept -> Sequence < Array < T > >;
+    auto sequence () const && noexcept -> Sequence < const Array < T > >;
+    auto sequence () && noexcept -> Sequence < Array < T > >;
 };
 
 template <class T>
@@ -972,13 +974,30 @@ auto Array<T>::sort(SortFunc const & sortFunc) noexcept -> void {
 #include <CDS/Sequence>
 
 template < typename T >
-auto Array < T > :: sequence () const noexcept -> Sequence < const Array < T > > {
+auto Array < T > :: sequence () const & noexcept -> Sequence < const Array < T > > {
     return Sequence < typename std :: remove_reference < decltype (*this) > :: type > (*this);
 }
 
 template < typename T >
-auto Array < T > :: sequence () noexcept -> Sequence < Array < T > > {
+auto Array < T > :: sequence () & noexcept -> Sequence < Array < T > > {
     return Sequence < typename std :: remove_reference < decltype (*this) > :: type > (*this);
 }
+
+template < typename T >
+auto Array < T > :: sequence () const && noexcept -> Sequence < const Array < T > > {
+    return Sequence < typename std :: remove_reference < decltype (*this) > :: type > (std::move(*this));
+}
+
+template < typename T >
+auto Array < T > :: sequence () && noexcept -> Sequence < Array < T > > {
+    return Sequence < typename std :: remove_reference < decltype (*this) > :: type > (std::move(*this));
+}
+
+#if __CDS_cpplang_CTAD_available == true
+
+template < typename T >
+Array ( std::initializer_list < T > ) -> Array < T >;
+
+#endif
 
 #endif //CDS_ARRAY_HPP

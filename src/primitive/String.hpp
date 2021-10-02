@@ -762,6 +762,13 @@ public:
         __CDS_WarningSuppression_ArgumentPossibleUnexpectedValue_SuppressDisable
     }
 
+    constexpr String (String && s) noexcept :
+            _p(std::exchange(s._p, nullptr)),
+            _l(std::exchange(s._l, 0)),
+            _c(std::exchange(s._c, 0)){
+
+    }
+
     /**
      * @brief Constructor with given String Literal
      *

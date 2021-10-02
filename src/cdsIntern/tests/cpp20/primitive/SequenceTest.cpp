@@ -5,10 +5,7 @@
 #include "SequenceTest.h"
 
 #include <CDS/Range>
-#include <CDS/Array>
-#include <CDS/LinkedList>
 #include <CDS/HashMap>
-#include <CDS/JSON>
 #include <CDS/OrderedSet>
 #include <CDS/UnorderedSet>
 
@@ -167,19 +164,175 @@ bool SequenceTest::execute() noexcept {
     });
 
     this->executeSubtest("Mapping Functionalities", [&]{
-        auto names = LinkedList < String > { "Grace Hopper", "Jacob Bernoulli", "Johann Bernoulli" }.sequence();
-        log("byLastName : %s", names.associate ( [](String const & fullName) { return Pair { fullName.split(" ")[1], fullName.split(" ")[0] }; } ).toHashMap().toString().cStr() );
+        auto associateTest = [&] {
+            auto names = LinkedList<String>{"Grace Hopper", "Jacob Bernoulli", "Johann Bernoulli"}.sequence();
+            log("byLastName : %s", names.associate([](String const &fullName) {
+                return Pair{fullName.split(" ")[1], fullName.split(" ")[0]};
+            }).toHashMap().toString().cStr());
 
-        if (
-                names.associate ( [](String const & fullName) { return Pair { fullName.split(" ")[1], fullName.split(" ")[0] }; } ).toHashMap() !=
-                HashMap < String, String > {
-                        { "Hopper", "Grace" },
-                        { "Bernoulli", "Johann" }
+            if (
+                    names.associate([](String const &fullName) {
+                        return Pair{fullName.split(" ")[1], fullName.split(" ")[0]};
+                    }).toHashMap() !=
+                    HashMap<String, String>{
+                            {"Hopper",    "Grace"},
+                            {"Bernoulli", "Johann"}
+                    }
+            ) {
+                ok = false;
+                logWarning(".associate error");
+            }
+        };
+
+        auto associateByTest = [&] {
+            class Person : public Object {
+            public:
+                String firstName;
+                String lastName;
+
+                Person() noexcept = default;
+                __CDS_MaybeUnused Person(Person const &) noexcept = default;
+                Person(String firstName, String lastName) : firstName(std::move(firstName)), lastName(std::move(lastName)) { }
+
+                __CDS_NoDiscard auto toString () const noexcept -> String override {
+                    return this->firstName + " " + this->lastName;
                 }
-        ) {
-            ok = false;
-            logWarning(".associate error");
-        }
+
+                __CDS_NoDiscard auto equals (Object const & o) const noexcept -> bool override {
+                    if ( this == & o ) return true;
+                    auto p = dynamic_cast < decltype ( this ) > ( & o );
+                    if ( p == nullptr ) return false;
+
+                    return this->firstName == p->firstName && this->lastName == p->lastName;
+                }
+            };
+
+            auto scientists = Array < Person > {
+                Person("Grace", "Hopper"),
+                Person("Jacob", "Bernoulli"),
+                Person("Johann", "Bernoulli")
+            }.sequence();
+
+            log("scientists : %s", scientists.toArray().toString().cStr());
+
+            auto byLastName = scientists.associateBy ([](Person const & p){ return p.lastName; });
+
+            log("byLastName : %s", byLastName.toHashMap().toString().cStr());
+
+            if (
+                    byLastName.toHashMap() !=
+                    HashMap < String, Person > {
+                            { "Hopper", Person("Grace", "Hopper") },
+                            { "Bernoulli", Person("Johann", "Bernoulli") }
+                    }
+            ) {
+                ok = false;
+                logWarning(".associateBy error");
+            }
+
+            auto byLastNameWithFirst = scientists.associateBy (
+                    [](Person const & p){ return p.lastName; },
+                    [](Person const & p){ return p.firstName; }
+            );
+
+            log("byLastNameWithFirst : %s", byLastNameWithFirst.toHashMap().toString().cStr());
+
+            if (
+                    byLastNameWithFirst.toHashMap() !=
+                    HashMap < String, String > {
+                            { "Hopper", "Grace" }, {"Bernoulli", "Johann"}
+                    }
+            ) {
+                ok = false;
+                logWarning(".associateBy error");
+            }
+        };
+
+        auto associateByToTest = [&]{
+            class Person : public Object {
+            public:
+                String firstName;
+                String lastName;
+
+                Person() noexcept = default;
+                __CDS_MaybeUnused Person(Person const &) noexcept = default;
+                Person(String firstName, String lastName) : firstName(std::move(firstName)), lastName(std::move(lastName)) { }
+
+                __CDS_NoDiscard auto toString () const noexcept -> String override {
+                    return this->firstName + " " + this->lastName;
+                }
+
+                __CDS_NoDiscard auto equals (Object const & o) const noexcept -> bool override {
+                    if ( this == & o ) return true;
+                    auto p = dynamic_cast < decltype ( this ) > ( & o );
+                    if ( p == nullptr ) return false;
+
+                    return this->firstName == p->firstName && this->lastName == p->lastName;
+                }
+            };
+
+            auto scientists = Array {
+                Person ("Grace", "Hopper"),
+                Person ( "Jacob", "Bernoulli" ),
+                Person ( "Johann", "Bernoulli" )
+            }.sequence();
+
+            log("scientists : %s", scientists.toArray().toString().cStr());
+
+            auto byLastName = HashMap < String, Person > ();
+            log("byLastName.empty() : %s", byLastName.empty() ? "true" : "false");
+
+            if ( ! byLastName.empty() ) {
+                ok = false;
+                logWarning("in associateByTo, map error");
+            }
+
+            scientists.associateByTo ( byLastName, []( Person const & p ){ return p.lastName; } );
+
+            log("byLastName.empty() : %s, byLastName : %s", byLastName.empty() ? "true" : "false", byLastName.toString().cStr());
+
+            if ( byLastName.empty() ||
+                byLastName != HashMap < String, Person >{
+                        {"Hopper", Person("Grace", "Hopper")},
+                        {"Bernoulli", Person("Johann", "Bernoulli")}
+                }
+            ) {
+                ok = false;
+                logWarning("associateByTo error");
+            }
+
+            auto byLastNameWithFirst = HashMap < String, String >();
+
+            log("byLastNameWithFirst.empty() : %s", byLastNameWithFirst.empty() ? "true" : "false");
+
+            if ( ! byLastNameWithFirst.empty() ) {
+                ok = false;
+                logWarning("map error, associateByTo");
+            }
+
+            scientists.associateByTo (
+                    byLastNameWithFirst,
+                    [](Person const & p){ return p.lastName; },
+                    [](Person const & p){ return p.firstName; }
+            );
+
+            log("byLastNameWithFirst.empty() : %s, contents : %s", byLastNameWithFirst.empty() ? "true" : "false", byLastNameWithFirst.toString().cStr());
+
+            if ( byLastNameWithFirst.empty() ||
+                byLastNameWithFirst !=
+                HashMap < String, String > {
+                        {"Hopper", "Grace"},
+                        {"Bernoulli", "Johann"}
+                }
+            ) {
+                ok = false;
+                logWarning("associateByTo error");
+            }
+        };
+
+        associateTest();
+        associateByTest();
+        associateByToTest();
     });
 
     return ok;
