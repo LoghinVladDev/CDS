@@ -16,6 +16,9 @@
 
 #include <CDS/Options>
 
+template < typename C >
+class Sequence;
+
 #if defined(CDS_QT)
 #include <QString>
 #endif
@@ -4411,6 +4414,11 @@ public:
 
         va_end (args);
     }
+
+    __CDS_NoDiscard auto sequence () const & noexcept -> Sequence < const String >;
+    __CDS_NoDiscard auto sequence () & noexcept -> Sequence < String >;
+    __CDS_NoDiscard auto sequence () const && noexcept -> Sequence < const String >;
+    __CDS_NoDiscard auto sequence () && noexcept -> Sequence < String >;
 };
 
 // weird stuff here

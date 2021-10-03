@@ -15,6 +15,7 @@
 #include <CDS/LinkedList>
 #include <CDS/Set>
 #include <CDS/Types>
+#include <CDS/Double>
 
 #include "SequencePrivate.hpp"
 
@@ -543,6 +544,12 @@ public:
     __CDS_MaybeUnused auto associateWith (
             ValueMapper const &
     ) && noexcept -> Sequence < LinkedList < Pair < ElementType, returnOf < ValueMapper > > > >
+    __CDS_Requires ( Iterable < C > || ConstIterable < C > );
+
+    template < typename ValueMapper >
+    __CDS_MaybeUnused auto associateWith (
+            ValueMapper const &
+    ) & noexcept -> Sequence < LinkedList < Pair < ElementType, returnOf < ValueMapper > > > >
     __CDS_Requires ( Iterable < C > || ConstIterable < C > );
 
     template < typename ValueMapper >
@@ -1107,8 +1114,22 @@ public:
     __CDS_MaybeUnused auto sumBy ( Selector const & ) const noexcept -> returnOf < Selector >
     __CDS_Requires ( Iterable < C > || ConstIterable < C > );
 
+    template < typename U = C, typename std :: enable_if < __CDS_Sequence :: IsArithmetic < typename __CDS_Sequence::ContainedType < U > ::Type > :: Value, int > :: type = 0 >
+    __CDS_NoDiscard __CDS_MaybeUnused auto average () const noexcept -> Double __CDS_Requires ( Iterable < C > || ConstIterable < C > ) {
+        double average = 0.0; int eCount = 0;
+        for ( auto e : * this ) {
+            ++ eCount;
+            average += static_cast < double > ( e );
+        }
+
+        return average / static_cast < double > ( eCount );
+    }
+
 
     __CDS_MaybeUnused auto chunked (Size) && noexcept -> Sequence < LinkedList < Array < ElementType > > >
+    __CDS_Requires ( Iterable < C > || ConstIterable < C > );
+
+    __CDS_MaybeUnused auto chunked (Size) & noexcept -> Sequence < LinkedList < Array < ElementType > > >
     __CDS_Requires ( Iterable < C > || ConstIterable < C > );
 
     template < typename ListTransformer >
@@ -1116,6 +1137,13 @@ public:
             Size,
             ListTransformer const &
     ) && noexcept -> Sequence < LinkedList < returnOf < ListTransformer > > >
+    __CDS_Requires ( Iterable < C > || ConstIterable < C > );
+
+    template < typename ListTransformer >
+    __CDS_MaybeUnused auto chunked (
+            Size,
+            ListTransformer const &
+    ) & noexcept -> Sequence < LinkedList < returnOf < ListTransformer > > >
     __CDS_Requires ( Iterable < C > || ConstIterable < C > );
 
 
@@ -2131,6 +2159,20 @@ __CDS_Requires(Iterable < C > || ConstIterable < C >) {
 }
 
 template < typename C >
+template < typename ValueMapper >
+__CDS_MaybeUnused inline auto Sequence < C > :: associateWith (
+        ValueMapper const & mapper
+) & noexcept -> Sequence < LinkedList < Pair < ElementType, returnOf < ValueMapper > > > >
+__CDS_Requires(Iterable < C > || ConstIterable < C >) {
+
+    LinkedList < Pair < ElementType, returnOf < ValueMapper > > > container;
+    for ( auto e : * this )
+        container.add( { e, mapper(e) } );
+
+    return std::move ( Sequence < decltype ( container ) > (std::move(container)) );
+}
+
+template < typename C >
 template < typename Comparator >
 __CDS_MaybeUnused inline auto Sequence < C > :: sorted (
         Comparator const & comparator
@@ -2950,8 +2992,11 @@ __CDS_MaybeUnused inline auto Sequence < C > :: associateTo (
         Map < K, V >        & m,
         Transformer   const & t
 ) const noexcept -> Map < K, V > & __CDS_Requires( Iterable < C > || ConstIterable < C > ) {
-    for ( auto e : * this )
-        m.add ( t(e) );
+    for ( auto e : * this ) {
+        auto p = t(e);
+        m[p.first()] = p.second();
+    }
+
     return m;
 }
 
@@ -2964,7 +3009,7 @@ __CDS_MaybeUnused inline auto Sequence < C > :: associateWithTo (
 __CDS_Requires ( Iterable < C > || ConstIterable < C > ) {
 
     for ( auto e : * this )
-        m.add ( { e, mapper(e) } );
+        m[e] = mapper(e);
     return m;
 }
 
@@ -3599,6 +3644,36 @@ __CDS_Requires ( Iterable < C > || ConstIterable < C > ) {
 }
 
 template < typename C >
+__CDS_MaybeUnused auto Sequence < C > :: chunked (
+        Size chunkSize
+) & noexcept -> Sequence < LinkedList < Array < ElementType > > >
+__CDS_Requires ( Iterable < C > || ConstIterable < C > ) {
+
+    LinkedList < Array < ElementType > > container;
+    Array < ElementType > subContainer;
+    Index subContainerPos = 0;
+    subContainer.resize(chunkSize);
+
+    for ( auto e : * this ) {
+        subContainer[subContainerPos++] = e;
+
+        if ( subContainerPos >= chunkSize ){
+            container.add(subContainer);
+            subContainer.clear();
+            subContainer.resize(chunkSize);
+            subContainerPos = 0;
+        }
+    }
+
+    if ( ! subContainer.empty() ) {
+        subContainer.resize(subContainerPos);
+        container.add(subContainer);
+    }
+
+    return std::move ( Sequence < decltype ( container ) > ( std::move ( container ) ) );
+}
+
+template < typename C >
 template < typename ListTransformer >
 __CDS_MaybeUnused auto Sequence < C > :: chunked (
         Size                    chunkSize,
@@ -3623,6 +3698,38 @@ __CDS_Requires ( Iterable < C > || ConstIterable < C > ) {
     }
 
     if ( ! subContainer.empty() ) {
+        subContainer.resize(subContainerPos);
+        container.add ( listTransformer ( subContainer ) );
+    }
+
+    return std::move ( Sequence < decltype ( container ) > ( std::move ( container ) ) );
+}
+
+template < typename C >
+template < typename ListTransformer >
+__CDS_MaybeUnused auto Sequence < C > :: chunked (
+        Size                    chunkSize,
+        ListTransformer const & listTransformer
+) & noexcept -> Sequence < LinkedList < returnOf < ListTransformer > > >
+__CDS_Requires ( Iterable < C > || ConstIterable < C > ) {
+
+    LinkedList < returnOf < ListTransformer > > container;
+    Array < ElementType > subContainer;
+    Index subContainerPos = 0;
+    subContainer.resize(chunkSize);
+
+    for ( auto e : * this ) {
+        subContainer[subContainerPos++] = e;
+
+        if ( subContainerPos >= chunkSize ) {
+            container.add ( listTransformer ( subContainer ) );
+            subContainer.clear();
+            subContainer.resize(chunkSize);
+            subContainerPos = 0;
+        }
+    }
+
+    if ( ! subContainer.empty() && subContainerPos > 0 ) {
         subContainer.resize(subContainerPos);
         container.add ( listTransformer ( subContainer ) );
     }
@@ -3901,6 +4008,22 @@ inline auto Range::sequence() && noexcept -> Sequence < Range > {
 }
 
 inline auto Range::sequence() const && noexcept -> Sequence < const Range > {
+    return Sequence < typename std :: remove_reference < decltype (* this) > :: type > (std::move(* this));
+}
+
+inline auto String::sequence () const & noexcept -> Sequence < const String > {
+    return Sequence < typename std :: remove_reference < decltype (*this) > :: type > (*this);
+}
+
+inline auto String::sequence () & noexcept -> Sequence < String > {
+    return Sequence < typename std :: remove_reference < decltype (*this) > :: type > (*this);
+}
+
+inline auto String::sequence () const && noexcept -> Sequence < const String > {
+    return Sequence < typename std :: remove_reference < decltype (* this) > :: type > (std::move(* this));
+}
+
+inline auto String::sequence () && noexcept -> Sequence < String > {
     return Sequence < typename std :: remove_reference < decltype (* this) > :: type > (std::move(* this));
 }
 

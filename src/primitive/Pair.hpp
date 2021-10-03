@@ -56,7 +56,7 @@ public:
     constexpr Pair ( K first, V && second ) noexcept(noexcept(V(std::move(second)))) : _first(first), _second(std::move(second)) { }
 
     template < typename K1 = K, typename V1 = V, typename std :: enable_if < ! Type < K1 > :: fundamental && Type < V1 > :: fundamental && Type < K1 > :: copyConstructible, int > :: type = 0 >
-    constexpr Pair ( K const & first, V second ) noexcept(noexcept(K(second))) : _first(first), _second(second) { }
+    constexpr Pair ( K const & first, V second ) noexcept(noexcept(K(first))) : _first(first), _second(second) { }
 
     template < typename K1 = K, typename V1 = V, typename std :: enable_if < ! Type < K1 > :: fundamental && Type < K1 > :: copyConstructible && ! Type < V1 > :: fundamental && Type < V1 > :: moveConstructible, int > :: type = 0 >
     constexpr Pair ( K const & first, V && second ) noexcept(noexcept(K(first)) && noexcept(V(std::move(second)))) : _first(first), _second(std::move(second)) { }

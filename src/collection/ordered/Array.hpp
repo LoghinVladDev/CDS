@@ -139,6 +139,9 @@ public:
         return true;
     }
 
+    inline auto operator != (Array const & o) const noexcept -> bool {
+        return ! ( * this == o );
+    }
     __CDS_NoDiscard auto equals (Object const & o) const noexcept -> bool final {
         if (this == &o) return true;
         auto p = dynamic_cast < decltype(this) > ( &o );

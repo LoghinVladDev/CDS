@@ -18,9 +18,7 @@ template <typename T>
 concept Integral =
         std::is_integral<T>::value ||
         std::is_convertible<T, int>::value ||
-        std::is_convertible<T, long long int>::value ||
-        std::is_convertible<T, float>::value ||
-        std::is_convertible<T, double>::value;
+        std::is_convertible<T, long long int>::value;
 
 template < typename T >
 concept Pointer =
