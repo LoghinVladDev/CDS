@@ -3697,7 +3697,7 @@ __CDS_Requires ( Iterable < C > || ConstIterable < C > ) {
         }
     }
 
-    if ( ! subContainer.empty() ) {
+    if ( ! subContainer.empty() && subContainerPos > 0 ) {
         subContainer.resize(subContainerPos);
         container.add ( listTransformer ( subContainer ) );
     }
