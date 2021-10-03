@@ -46,6 +46,26 @@ struct isPair : public std::false_type {};
 template < class T1, class T2 >
 struct isPair <Pair<T1, T2>> : public std::true_type {};
 
+template < typename T >
+class UniquePointer;
+template < typename T >
+class SharedPointer;
+template < typename T >
+class AtomicSharedPointer;
+template < typename T >
+class ForeignPointer;
+
+template < typename T >
+struct isSmartPointer : public std :: false_type {};
+template < typename T >
+struct isSmartPointer < UniquePointer < T > > : public std :: true_type {};
+template < typename T >
+struct isSmartPointer < SharedPointer < T > > : public std :: true_type {};
+template < typename T >
+struct isSmartPointer < AtomicSharedPointer < T > > : public std :: true_type {};
+template < typename T >
+struct isSmartPointer < ForeignPointer < T > > : public std :: true_type {};
+
 #if defined(__cpp_concepts)
 template < typename T >
 concept IsMappable = isPair<T>::value;
@@ -215,7 +235,12 @@ struct Type {
 
     static constexpr bool ostreamPrintable = isPrintable < T > :: type :: value;
 
-    static constexpr bool fundamental = typeFundamental < T >();
+    static constexpr bool isFundamental = typeFundamental < T >();
+    static constexpr bool isPointer = std :: is_pointer < T > :: type :: value || isSmartPointer < T > :: type :: value;
+    static constexpr bool isReference = std :: is_reference < T > :: type :: value;
+    static constexpr bool isLvalue = std :: is_lvalue_reference < T > :: type :: value;
+    static constexpr bool isRvalue = std :: is_rvalue_reference < T > :: type :: value;
+    static constexpr bool isConst = std :: is_const < T > :: type :: value;
 
 #if __CDS_cpplang_VariableTemplates_available == true
 

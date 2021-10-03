@@ -96,6 +96,124 @@ bool SequenceTest::execute() noexcept {
         this->log("<UnorderedSet &&> Ctor Resolution Test : '%s'", Sequence(UnorderedSet(uintUSet)).toString().cStr());
     });
 
+    this->executeSubtest("Iterative Properties", [& ok, this]{
+        auto elementAtTest = [&] {
+            bool e1Thrown = false, e2Thrown = false;
+
+            auto list = Array<int>{1, 2, 3}.sequence();
+
+            log("list : %s", list.toArray().toString().cStr());
+            log("elementAt(0) : %d", list.elementAt(0).value());
+            log("elementAt(2) : %d", list.elementAt(2).value());
+
+            try {
+                log("elementAt(3) : %d", list.elementAt(3).value());
+            } catch (Exception const &) {
+                log("elementAt(3) returned empty Optional<int>");
+                e1Thrown = true;
+            }
+
+            auto emptyList = Array<int>().sequence();
+
+            log("emptyList : %s", emptyList.toArray().toString().cStr());
+
+            try {
+                log("elementAt(0) : %d", emptyList.elementAt(0).value());
+            } catch (Exception const &) {
+                log("elementAt(0) returned empty Optional <int>");
+                e2Thrown = true;
+            }
+
+            if (
+                    list.elementAt(0).value() != 1 ||
+                    list.elementAt(2).value() != 3 ||
+                    ! e1Thrown ||
+                    ! e2Thrown
+            ) {
+                ok = false;
+                log("elementAt error");
+            }
+        };
+
+        auto elementAtOrElseTest = [&] {
+            auto list = Array < int > {1, 2, 3}.sequence();
+
+            log("list : %s", list.toArray().toString().cStr());
+            log("elementAtOr(0, 42) : %d", list.elementAtOr(0, 42));
+            log("elementAtOr(2, 42) : %d", list.elementAtOr(2, 42));
+            log("elementAtOr(3, 42) : %d", list.elementAtOr(3, 42));
+
+            auto emptyList = Array<int>().sequence();
+
+            log("emptyList : %s", emptyList.toArray().toString().cStr());
+            log("elementAtOr(0, 84) : %d", emptyList.elementAtOr(0, 82));
+
+            if (
+                    list.elementAtOr(0, 42) != 1 ||
+                    list.elementAtOr(2, 42) != 3 ||
+                    list.elementAtOr(3, 42) != 42 ||
+                    emptyList.elementAtOr(0, 84) != 84
+            ) {
+                ok = false;
+                log("elementAtOr error");
+            }
+        };
+
+        auto elementAtOrNullTest = [&] {
+            auto list = Array < int * > { new int(1), new int(2), new int(3) }.sequence();
+
+            log("list : %s", list.toArray().toString().cStr());
+            log("list.elementAtOrNull(0) : %d", * list.elementAtOrNull(0));
+            log("list.elementAtOrNull(2) : %d", * list.elementAtOrNull(2));
+
+            auto p = list.elementAtOrNull(3);
+            if ( p == nullptr )
+                log("list.elementAtOrNull(3) : nullptr");
+
+            auto emptyList = Array<int *>().sequence();
+
+            log("emptyList : %s", emptyList.toArray().toString().cStr());
+            p = emptyList.elementAtOrNull(0);
+
+            log("emptyList : %s", emptyList.toArray().toString().cStr());
+            if ( p == nullptr )
+                log("emptyList.elementAtOrNull(0) : nullptr");
+
+
+//            auto listUP1 = Array < UniquePointer < int > >();
+//            listUP1.pushBack(new int(1));
+//            listUP1.pushBack(new int(2));
+//            listUP1.pushBack(new int(3));
+//
+//            auto listUP = listUP1.sequence();
+//
+//            log("listUP : %s", list.toArray().toString().cStr());
+//            log("listUP.elementAtOrNull(0) : %d", * list.elementAtOrNull(0));
+//            log("listUP.elementAtOrNull(2) : %d", * list.elementAtOrNull(2));
+//
+//            auto pUP = listUP.elementAtOrNull(3);
+//            if ( pUP == nullptr )
+//                log("listUP.elementAtOrNull(3) : nullptr");
+//
+//            auto emptyList = Array<int *>().sequence();
+//
+//            log("emptyList : %s", emptyList.toArray().toString().cStr());
+//            p = emptyList.elementAtOrNull(0);
+//
+//            log("emptyList : %s", emptyList.toArray().toString().cStr());
+//            if ( p == nullptr )
+//                log("emptyList.elementAtOrNull(0) : nullptr");
+
+
+
+            list.forEach([](int * e){delete e;});
+        };
+
+        elementAtTest();
+        elementAtOrElseTest();
+        elementAtOrNullTest ();
+    });
+
     this->executeSubtest("Basic Functional Properties", [& ok, this]{
         auto allTest = [&] {
 
@@ -676,11 +794,11 @@ bool SequenceTest::execute() noexcept {
             }
 
             auto codonTable = HashMap < String, String> {
-            { "ATT", "Isoleucine" },
-            { "CAA", "Glutamine" },
-            { "CGC", "Arginine" },
-            { "GGC", "Glycine" }
-        };
+                { "ATT", "Isoleucine" },
+                { "CAA", "Glutamine" },
+                { "CGC", "Arginine" },
+                { "GGC", "Glycine" }
+            };
 
             auto dnaFragment = "ATTCGCGGCCGCCAA"_s.sequence();
             auto proteins = dnaFragment.chunked(3, [&](Array<char> const &charList) {
@@ -700,7 +818,19 @@ bool SequenceTest::execute() noexcept {
             log("chars : %s", chars.toArray().toString().cStr());
             log("chars.drop(23) : %s", chars.drop(23).toArray().toString().cStr() );
             log("chars.dropLast(23) : %s", chars.dropLast(23).toArray().toString().cStr() );
-            log("chars.dropLastWhile(it < 'x') : %s", chars.dropWhile([](char c){return c < 'x';}).toArray().toString().cStr() );
+            log("chars.dropWhile(it < 'x') : %s", chars.dropWhile([](char c){return c < 'x';}).toArray().toString().cStr() );
+            log("chars.dropWhile(it > 'c') : %s", chars.dropLastWhile([](char c){return c > 'c';}).toArray().toString().cStr() );
+
+            if (
+                    chars.toArray() != Array < char > {'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'} ||
+                    chars.drop(23).toArray() != Array < char > { 'x', 'y', 'z' } ||
+                    chars.dropLast(23).toArray() != Array < char > { 'a', 'b', 'c' } ||
+                    chars.dropWhile([](char c){return c < 'x';}).toArray() != Array < char > { 'x', 'y', 'z' } ||
+                    chars.dropLastWhile([](char c){return c > 'c';}).toArray() != Array < char > { 'a', 'b', 'c' }
+            ) {
+                ok = false;
+                logWarning("drop error");
+            }
         };
 
         chunkedTest();

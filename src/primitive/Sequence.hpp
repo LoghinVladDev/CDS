@@ -246,6 +246,9 @@ public:
     __CDS_MaybeUnused auto elementAtOr ( Index, ElementType const & ) const noexcept -> ElementType
     __CDS_Requires ( Iterable < C > || ConstIterable < C > );
 
+    template < typename T = ElementType, typename std :: enable_if < Type < T > :: isPointer, int > :: type = 0 >
+    __CDS_MaybeUnused auto elementAtOrNull ( Index ) const noexcept -> ElementType __CDS_Requires (Iterable < C > || ConstIterable < C > );
+
 
     __CDS_MaybeUnused auto indexOf ( ElementType const & ) const noexcept -> Index
     __CDS_Requires ( Iterable < C > || ConstIterable < C > );
@@ -421,6 +424,60 @@ public:
             }
 
             remaining.append(e);
+        }
+
+        return std::move(Sequence < LinkedList < ElementType > > (std::move(remaining)));
+    }
+
+    template < typename Predicate >
+    __CDS_MaybeUnused auto dropLastWhile (
+            Predicate const & p,
+            Size count          = UINT64_MAX
+    ) && noexcept -> Sequence < LinkedList < ElementType > >
+    __CDS_Requires ( Iterable < C > || ConstIterable < C > ) {
+
+        LinkedList < ElementType > all;
+        LinkedList < ElementType > remaining;
+
+        for ( auto e : * this )
+            all.append(e);
+
+        Index i = 0;
+
+        for ( auto it = all.rbegin(); it != all.rend(); ++ it ) {
+            if ( i < count && p (it.value()) ) {
+                i ++;
+                continue;
+            }
+
+            remaining.pushFront(it.value());
+        }
+
+        return std::move(Sequence < LinkedList < ElementType > > (std::move(remaining)));
+    }
+
+    template < typename Predicate >
+    __CDS_MaybeUnused auto dropLastWhile (
+            Predicate const & p,
+            Size count          = UINT64_MAX
+    ) & noexcept -> Sequence < LinkedList < ElementType > >
+    __CDS_Requires ( Iterable < C > || ConstIterable < C > ) {
+
+        LinkedList < ElementType > all;
+        LinkedList < ElementType > remaining;
+
+        for ( auto e : * this )
+            all.append(e);
+
+        Index i = 0;
+
+        for ( auto it = all.rbegin(); it != all.rend(); ++ it ) {
+            if ( i < count && p (it.value()) ) {
+                i ++;
+                continue;
+            }
+
+            remaining.pushFront(it.value());
         }
 
         return std::move(Sequence < LinkedList < ElementType > > (std::move(remaining)));
@@ -2388,6 +2445,20 @@ __CDS_MaybeUnused inline auto Sequence < C > ::elementAtOr(
 
     return e;
 }
+
+template < typename C >
+template < typename T, typename std :: enable_if < Type < T > :: isPointer, int > :: type >
+__CDS_MaybeUnused inline auto Sequence < C > :: elementAtOrNull ( Index i ) const noexcept -> ElementType __CDS_Requires (Iterable < C > || ConstIterable < C > ) {
+    Index at = 0;
+    for ( auto v : * this )
+        if ( at == i )
+            return v;
+        else
+            at ++;
+
+    return nullptr;
+}
+
 
 template < typename C >
 __CDS_MaybeUnused inline auto Sequence < C > ::indexOf(

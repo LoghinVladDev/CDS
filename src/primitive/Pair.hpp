@@ -20,16 +20,16 @@ private:
     V _second;
 
 public:
-    template < typename K1 = K, typename V1 = V, typename std :: enable_if < Type < K1 > :: fundamental && Type < V1 > :: fundamental, int > :: type = 0 >
+    template < typename K1 = K, typename V1 = V, typename std :: enable_if < Type < K1 > :: isFundamental && Type < V1 > :: isFundamental, int > :: type = 0 >
     constexpr Pair () noexcept : _first(), _second() { }
 
-    template < typename K1 = K, typename V1 = V, typename std :: enable_if < Type < K1 > :: defaultConstructible && Type < V1 > :: defaultConstructible && ! Type < K1 > :: fundamental && ! Type < V1 > :: fundamental, int > :: type = 0 >
+    template < typename K1 = K, typename V1 = V, typename std :: enable_if < Type < K1 > :: defaultConstructible && Type < V1 > :: defaultConstructible && ! Type < K1 > :: isFundamental && ! Type < V1 > :: isFundamental, int > :: type = 0 >
     constexpr Pair () noexcept(noexcept(K()) && noexcept(V())) : _first(), _second() {}
 
-    template < typename K1 = K, typename V1 = V, typename std :: enable_if < Type < K1 > :: fundamental && ! Type < V1 > :: fundamental && Type < V1 > :: defaultConstructible, int > :: type = 0 >
+    template < typename K1 = K, typename V1 = V, typename std :: enable_if < Type < K1 > :: isFundamental && ! Type < V1 > :: isFundamental && Type < V1 > :: defaultConstructible, int > :: type = 0 >
     constexpr Pair () noexcept(noexcept(V())) : _first(), _second() {}
 
-    template < typename K1 = K, typename V1 = V, typename std :: enable_if < Type < V1 > :: fundamental && ! Type < K1 > :: fundamental && Type < K1 > :: defaultConstructible, int > :: type = 0 >
+    template < typename K1 = K, typename V1 = V, typename std :: enable_if < Type < V1 > :: isFundamental && ! Type < K1 > :: isFundamental && Type < K1 > :: defaultConstructible, int > :: type = 0 >
     constexpr Pair () noexcept(noexcept(K())) : _first(), _second() {}
 
 
@@ -40,31 +40,31 @@ public:
     constexpr Pair ( Pair && obj ) noexcept(noexcept(K(std::move(obj._first))) && noexcept(V(std::move(obj._second)))) : _first(std::move(obj._first)), _second(std::move(obj._second)) { } // NOLINT(google-explicit-constructor)
 
 
-    template < typename K1 = K, typename V1 = V, typename std :: enable_if < Type < K1 > :: fundamental && Type < V1 > :: fundamental, int > :: type = 0 >
+    template < typename K1 = K, typename V1 = V, typename std :: enable_if < Type < K1 > :: isFundamental && Type < V1 > :: isFundamental, int > :: type = 0 >
     constexpr Pair ( K first, V second ) noexcept : _first(first), _second(second) { }
 
-    template < typename K1 = K, typename V1 = V, typename std :: enable_if < Type < K1 > :: copyConstructible && Type < V1 > :: copyConstructible && ! Type < K1 > :: fundamental && ! Type < V1 > :: fundamental, int > :: type = 0 >
+    template < typename K1 = K, typename V1 = V, typename std :: enable_if < Type < K1 > :: copyConstructible && Type < V1 > :: copyConstructible && ! Type < K1 > :: isFundamental && ! Type < V1 > :: isFundamental, int > :: type = 0 >
     constexpr Pair ( K const & first, V const & second ) noexcept(noexcept(K(first)) && noexcept(V(second))) : _first(first), _second(second) { }
 
-    template < typename K1 = K, typename V1 = V, typename std :: enable_if < Type < K1 > :: moveConstructible && Type < V1 > :: moveConstructible && ! Type < K1 > :: fundamental && ! Type < V1 > :: fundamental, int > :: type = 0 >
+    template < typename K1 = K, typename V1 = V, typename std :: enable_if < Type < K1 > :: moveConstructible && Type < V1 > :: moveConstructible && ! Type < K1 > :: isFundamental && ! Type < V1 > :: isFundamental, int > :: type = 0 >
     constexpr Pair ( K && first, V && second ) noexcept(noexcept(K(std::move(first))) && noexcept(V(std::move(second)))) : _first(std::move(first)), _second(std::move(second)) { }
 
-    template < typename K1 = K, typename V1 = V, typename std :: enable_if < Type < K1 > :: fundamental && ! Type < V1 > :: fundamental && Type < V1 > :: copyConstructible, int > :: type = 0 >
+    template < typename K1 = K, typename V1 = V, typename std :: enable_if < Type < K1 > :: isFundamental && ! Type < V1 > :: isFundamental && Type < V1 > :: copyConstructible, int > :: type = 0 >
     constexpr Pair ( K first, V const & second ) noexcept(noexcept(V(second))) : _first(first), _second(second) { }
 
-    template < typename K1 = K, typename V1 = V, typename std :: enable_if < Type < K1 > :: fundamental && ! Type < V1 > :: fundamental && Type < V1 > :: moveConstructible, int > :: type = 0 >
+    template < typename K1 = K, typename V1 = V, typename std :: enable_if < Type < K1 > :: isFundamental && ! Type < V1 > :: isFundamental && Type < V1 > :: moveConstructible, int > :: type = 0 >
     constexpr Pair ( K first, V && second ) noexcept(noexcept(V(std::move(second)))) : _first(first), _second(std::move(second)) { }
 
-    template < typename K1 = K, typename V1 = V, typename std :: enable_if < ! Type < K1 > :: fundamental && Type < V1 > :: fundamental && Type < K1 > :: copyConstructible, int > :: type = 0 >
+    template < typename K1 = K, typename V1 = V, typename std :: enable_if < ! Type < K1 > :: isFundamental && Type < V1 > :: isFundamental && Type < K1 > :: copyConstructible, int > :: type = 0 >
     constexpr Pair ( K const & first, V second ) noexcept(noexcept(K(first))) : _first(first), _second(second) { }
 
-    template < typename K1 = K, typename V1 = V, typename std :: enable_if < ! Type < K1 > :: fundamental && Type < K1 > :: copyConstructible && ! Type < V1 > :: fundamental && Type < V1 > :: moveConstructible, int > :: type = 0 >
+    template < typename K1 = K, typename V1 = V, typename std :: enable_if < ! Type < K1 > :: isFundamental && Type < K1 > :: copyConstructible && ! Type < V1 > :: isFundamental && Type < V1 > :: moveConstructible, int > :: type = 0 >
     constexpr Pair ( K const & first, V && second ) noexcept(noexcept(K(first)) && noexcept(V(std::move(second)))) : _first(first), _second(std::move(second)) { }
 
-    template < typename K1 = K, typename V1 = V, typename std :: enable_if < ! Type < K1 > :: fundamental && Type < K1 > :: moveConstructible && Type < V1 > :: fundamental, int > :: type = 0 >
+    template < typename K1 = K, typename V1 = V, typename std :: enable_if < ! Type < K1 > :: isFundamental && Type < K1 > :: moveConstructible && Type < V1 > :: isFundamental, int > :: type = 0 >
     constexpr Pair ( K && first, V second ) noexcept(noexcept(K(std::move(first)))) : _first(std::move(first)), _second(second) { }
 
-    template < typename K1 = K, typename V1 = V, typename std :: enable_if < ! Type < K1 > :: fundamental && Type < K1 > :: moveConstructible && ! Type < V1 > :: fundamental && Type < V1 > :: copyConstructible, int > :: type = 0 >
+    template < typename K1 = K, typename V1 = V, typename std :: enable_if < ! Type < K1 > :: isFundamental && Type < K1 > :: moveConstructible && ! Type < V1 > :: isFundamental && Type < V1 > :: copyConstructible, int > :: type = 0 >
     constexpr Pair ( K && first, V const & second ) noexcept(noexcept(K(std::move(first))) && noexcept(V(second))) : _first(std::move(first)), _second(second) { }
 
 
@@ -143,13 +143,13 @@ public:
 template < typename K, typename V >
 Pair(K, V) -> Pair<K, V>;
 
-//template < typename K, typename V, typename std :: enable_if < ! Type < K > :: fundamental && ! Type < V > :: fundamental, int > = 0 >
+//template < typename K, typename V, typename std :: enable_if < ! Type < K > :: isFundamental && ! Type < V > :: isFundamental, int > = 0 >
 //Pair(K const &, V) -> Pair<K const, V>;
 //
-//template < typename K, typename V, typename std :: enable_if < ! Type < K > :: fundamental && ! Type < V > :: fundamental, int > = 0 >
+//template < typename K, typename V, typename std :: enable_if < ! Type < K > :: isFundamental && ! Type < V > :: isFundamental, int > = 0 >
 //Pair(K, V const &) -> Pair<K, V const>;
 //
-//template < typename K, typename V, typename std :: enable_if < ! Type < K > :: fundamental && ! Type < V > :: fundamental, int > = 0 >
+//template < typename K, typename V, typename std :: enable_if < ! Type < K > :: isFundamental && ! Type < V > :: isFundamental, int > = 0 >
 //Pair(K const &, V const &) -> Pair <K const, V const>;
 
 #endif
