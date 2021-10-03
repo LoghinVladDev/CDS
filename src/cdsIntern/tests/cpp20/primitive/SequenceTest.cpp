@@ -162,8 +162,66 @@ bool SequenceTest::execute() noexcept {
             log("empty : %s", emptyList.toArray().toString().cStr());
         };
 
+        auto containsTest = [&]{
+            log("contents : %s", Array<int>{1, 2, 3, 4, 5}.sequence().toArray().toString().cStr());
+            log("contains 3 : %s", Array<int>{1, 2, 3, 4, 5}.sequence().contains(3).toString().cStr());
+            log("contains 6 : %s", Array<int>{1, 2, 3, 4, 5}.sequence().contains(6).toString().cStr());
+
+            if ( ! Array<int>{1, 2, 3, 4, 5}.sequence().contains(3) ) {
+                ok = false;
+                logWarning("contains error");
+            }
+
+            auto oneToFive = Range(1, 6).sequence();
+
+            if ( oneToFive.contains(6) ) {
+                ok = false;
+                logWarning("contains error");
+            }
+        };
+
+        auto countTest = [&] {
+            auto zeroToTen = Range(0, 10).sequence();
+
+            log("zeroToTen : %s", zeroToTen.toArray().toString().cStr());
+            log("zeroToTen count : %d", zeroToTen.count().get());
+            log("zeroToTen isEven count : %d", zeroToTen.count(Int::isEven).get());
+            log("zeroToTen isOdd count : %d", zeroToTen.count(Int::isOdd).get());
+
+            if (
+                    zeroToTen.count() != 10 ||
+                    zeroToTen.count(Int::isEven) != 5 ||
+                    zeroToTen.count(Int::isOdd) != 5
+            ) {
+                ok = false;
+                logWarning("count error");
+            }
+        };
+
+        auto distinctTest = [&] {
+            auto list = Array < char > {'a', 'A', 'b', 'B', 'A', 'a'}.sequence();
+
+            log("list : %s", list.toArray().toString().cStr());
+            log("list.distinct(): %s", list.distinct().toArray().toString().cStr());
+            log("list.distinctBy(String::upperChar): %s", list.distinctBy(String::upperChar).toArray().toString().cStr());
+
+            if ( list.distinct().toArray() != Array < char > { 'B', 'b', 'A', 'a' } ) {
+                ok = false;
+                logWarning("distinct error");
+            }
+
+            if ( list.distinctBy(String::upperChar).toArray() != Array < char > { 'b', 'a' } ) {
+                ok = false;
+                logWarning("distinct error");
+            }
+
+        };
+
         allTest();
         anyTest();
+        containsTest();
+        countTest();
+        distinctTest();
     });
 
     this->executeSubtest("Mapping Association Functionalities", [&]{
@@ -600,40 +658,53 @@ bool SequenceTest::execute() noexcept {
     });
 
     this->executeSubtest("Transformational Utilities", [&]{
-        auto words = "one two three four five six seven eight nine ten"_s.split(' ').sequence();
-        log("words : %s", words.toArray().toString().cStr());
+        auto chunkedTest = [&] {
+            auto words = "one two three four five six seven eight nine ten"_s.split(' ').sequence();
+            log("words : %s", words.toArray().toString().cStr());
 
-        auto chunks = words.chunked(3);
-        log("chunks : %s", chunks.toArray().toString().cStr());
+            auto chunks = words.chunked(3);
+            log("chunks : %s", chunks.toArray().toString().cStr());
 
-        if ( chunks.toLinkedList() != LinkedList < Array < String > > {
-                {"one", "two", "three"},
-                {"four", "five", "six"},
-                {"seven", "eight", "nine"},
-                {"ten"}
-        } ) {
-            ok =false;
-            logWarning("chunked error");
-        }
+            if (chunks.toLinkedList() != LinkedList<Array<String> >{
+                    {"one",   "two",   "three"},
+                    {"four",  "five",  "six"},
+                    {"seven", "eight", "nine"},
+                    {"ten"}
+            }) {
+                ok = false;
+                logWarning("chunked error");
+            }
 
-        auto codonTable = HashMap <String, String> {
+            auto codonTable = HashMap < String, String> {
             { "ATT", "Isoleucine" },
             { "CAA", "Glutamine" },
             { "CGC", "Arginine" },
             { "GGC", "Glycine" }
         };
 
-        auto dnaFragment = "ATTCGCGGCCGCCAA"_s.sequence();
-        auto proteins = dnaFragment.chunked(3, [&](Array<char> const & charList){
-            String s;
-            for ( auto e : charList ) s += e;
+            auto dnaFragment = "ATTCGCGGCCGCCAA"_s.sequence();
+            auto proteins = dnaFragment.chunked(3, [&](Array<char> const &charList) {
+                String s;
+                for (auto e: charList) s += e;
 
-            if ( codonTable.containsKey(s) )
-                return codonTable[s];
-            return "Unknown Codon"_s;
-        });
+                if (codonTable.containsKey(s))
+                    return codonTable[s];
+                return "Unknown Codon"_s;
+            });
 
-        log("proteins : %s", proteins.toArray().toString().cStr());
+            log("proteins : %s", proteins.toArray().toString().cStr());
+        };
+
+        auto dropTest = [&]{
+            auto chars = Range('a', 'z' + 1).sequence().map([](Index i)->char{return i;}).toArray().sequence();
+            log("chars : %s", chars.toArray().toString().cStr());
+            log("chars.drop(23) : %s", chars.drop(23).toArray().toString().cStr() );
+            log("chars.dropLast(23) : %s", chars.dropLast(23).toArray().toString().cStr() );
+            log("chars.dropLastWhile(it < 'x') : %s", chars.dropWhile([](char c){return c < 'x';}).toArray().toString().cStr() );
+        };
+
+        chunkedTest();
+        dropTest();
     });
 
     return ok;

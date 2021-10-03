@@ -6,48 +6,16 @@
 //#include <CDS/Pointer>
 //#include <CDS/Array>
 
-#define CDS_DEBUG
-#define CDS_PTR_DEBUG
+#include <CDS/String>
+#include <CDS/Traits>
+#include <CDS/Integer>
 
-#include <CDS/Pair>
-#include <CDS/Range>
-#include <CDS/Reference>
-
-struct A : public Object {
-    A () {
-        std::cout << "ctor\n";
-    }
-
-    ~A () {
-        std::cout << "dtor\n";
-    }
-
-    String toString() const noexcept override {
-        return "A Object";
-    }
-};
-
-#include "src/primitive/SequencePrivate.hpp"
-#include <CDS/LinkedList>
 
 int main () {
-    auto f = []() -> int {return 0;};
 
-    std::cout <<
-              ! __CDS_Sequence :: mapToSameType < decltype(f), LinkedList < int > > () << '\n';
+//    returnOf < decltype ( String::upperChar ) > c;
+//    returnOf < decltype ( Int::isOdd ) > b;
 
-    Pair p2 = {2,3};
-
-
-
-    SharedPointer p (new A());
-
-    auto f = [p] {
-        return p.copy();
-    };
-
-    auto x = f();
-    delete x;
 
 //    constexpr Pair p = {1, 5};
 //

@@ -330,11 +330,84 @@ public:
         return std::move(Sequence < LinkedList < ElementType > > (std::move(remaining)));
     }
 
+    __CDS_MaybeUnused auto drop (Size count) & noexcept -> Sequence < LinkedList < ElementType > >
+    __CDS_Requires ( Iterable < C > || ConstIterable < C > ) {
+
+        LinkedList < ElementType > remaining;
+
+        Index i = 0;
+        for ( auto e : * this ) {
+            if ( i < count ) {
+                i++;
+                continue;
+            }
+
+            remaining.append(e);
+        }
+
+        return std::move(Sequence < LinkedList < ElementType > > (std::move(remaining)));
+    }
+
+    __CDS_MaybeUnused auto dropLast (Size count) && noexcept -> Sequence < LinkedList < ElementType > >
+    __CDS_Requires ( Iterable < C > || ConstIterable < C > ) {
+
+        LinkedList < ElementType > remaining;
+        auto currentSize = this->pCollection.valueAt().valueAt().size();
+
+        for ( auto e : * this ) {
+            if ( currentSize > count ) {
+                currentSize --;
+                remaining.append(e);
+            }
+        }
+
+        return std::move(Sequence < LinkedList < ElementType > > (std::move(remaining)));
+    }
+
+    __CDS_MaybeUnused auto dropLast (Size count) & noexcept -> Sequence < LinkedList < ElementType > >
+    __CDS_Requires ( Iterable < C > || ConstIterable < C > ) {
+
+        LinkedList < ElementType > remaining;
+        auto currentSize = this->pCollection.valueAt().valueAt().size();
+
+        for ( auto e : * this ) {
+            if ( currentSize > count ) {
+                currentSize --;
+                remaining.append(e);
+            }
+        }
+
+        return std::move(Sequence < LinkedList < ElementType > > (std::move(remaining)));
+    }
+
     template < typename Predicate >
     __CDS_MaybeUnused auto dropWhile (
             Predicate const & p,
             Size count          = UINT64_MAX
     ) && noexcept -> Sequence < LinkedList < ElementType > >
+    __CDS_Requires ( Iterable < C > || ConstIterable < C > ) {
+
+        LinkedList < ElementType > remaining;
+
+        Index i = 0;
+
+        for ( auto e : * this ) {
+            if ( i < count && p (e) ) {
+                i ++;
+                continue;
+            }
+
+            remaining.append(e);
+        }
+
+        return std::move(Sequence < LinkedList < ElementType > > (std::move(remaining)));
+    }
+
+    template < typename Predicate >
+    __CDS_MaybeUnused auto dropWhile (
+            Predicate const & p,
+            Size count          = UINT64_MAX
+    ) & noexcept -> Sequence < LinkedList < ElementType > >
     __CDS_Requires ( Iterable < C > || ConstIterable < C > ) {
 
         LinkedList < ElementType > remaining;
@@ -463,7 +536,7 @@ public:
     template < typename Predicate = std::function < bool ( ElementType const & ) > >
     __CDS_MaybeUnused auto count (
             Predicate const & = [](ElementType const &) { return true; }
-    ) const noexcept -> Size __CDS_Requires ( Iterable < C > || ConstIterable < C > );
+    ) const noexcept -> Int __CDS_Requires ( Iterable < C > || ConstIterable < C > );
 
     template < typename Predicate = std::function < bool ( ElementType const & ) > >
     __CDS_MaybeUnused auto none (
@@ -958,6 +1031,17 @@ public:
     }
 
     __CDS_MaybeUnused auto distinct () && noexcept -> Sequence < UnorderedSet < ElementType > >
+    __CDS_Requires ( Iterable < C > || ConstIterable < C > );
+
+    __CDS_MaybeUnused auto distinct () & noexcept -> Sequence < UnorderedSet < ElementType > >
+    __CDS_Requires ( Iterable < C > || ConstIterable < C > );
+
+    template < typename Selector >
+    __CDS_MaybeUnused auto distinctBy (Selector const &) && noexcept -> Sequence < UnorderedSet < ElementType > >
+    __CDS_Requires ( Iterable < C > || ConstIterable < C > );
+
+    template < typename Selector >
+    __CDS_MaybeUnused auto distinctBy (Selector const &) & noexcept -> Sequence < UnorderedSet < ElementType > >
     __CDS_Requires ( Iterable < C > || ConstIterable < C > );
 
     template < typename Action >
@@ -2228,6 +2312,40 @@ __CDS_Requires ( Iterable < C > || ConstIterable < C > ) {
     return std::move ( Sequence < decltype (container) > ( std::move ( container ) ) );
 }
 
+template < typename C >
+__CDS_MaybeUnused inline auto Sequence < C > :: distinct () & noexcept -> Sequence < UnorderedSet < ElementType > >
+__CDS_Requires ( Iterable < C > || ConstIterable < C > ) {
+
+    UnorderedSet < ElementType > container;
+    for ( auto e : * this )
+        container.add ( e );
+    return std::move ( Sequence < decltype (container) > ( std::move ( container ) ) );
+}
+
+template < typename C >
+template < typename Selector >
+__CDS_MaybeUnused inline auto Sequence < C > :: distinctBy (Selector const & selector) && noexcept -> Sequence < UnorderedSet < ElementType > >
+__CDS_Requires ( Iterable < C > || ConstIterable < C > ) {
+
+    UnorderedSet < ElementType > container;
+    for ( auto e : * this )
+        if ( ! this->contains(selector(e)) )
+            container.add ( e );
+    return std::move ( Sequence < decltype (container) > ( std::move ( container ) ) );
+}
+
+template < typename C >
+template < typename Selector >
+__CDS_MaybeUnused inline auto Sequence < C > :: distinctBy (Selector const & selector) & noexcept -> Sequence < UnorderedSet < ElementType > >
+__CDS_Requires ( Iterable < C > || ConstIterable < C > ) {
+
+    UnorderedSet < ElementType > container;
+    for ( auto e : * this )
+        if ( ! container.any([&](ElementType const & cE){ return Type < ElementType > :: compare ( selector(cE), selector(e) ); }) )
+            container.add ( e );
+    return std::move ( Sequence < decltype (container) > ( std::move ( container ) ) );
+}
+
 /// endregion
 
 // region Basic Utility Functions
@@ -2921,8 +3039,8 @@ template < typename C >
 template < typename Predicate >
 __CDS_MaybeUnused inline auto Sequence < C > :: count (
         Predicate const & predicate
-) const noexcept -> Size __CDS_Requires ( Iterable < C > || ConstIterable < C > ) {
-    Size count = 0;
+) const noexcept -> Int __CDS_Requires ( Iterable < C > || ConstIterable < C > ) {
+    Int count = 0;
     for ( auto e : * this )
         if ( predicate ( e ) )
             count ++;

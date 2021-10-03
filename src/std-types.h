@@ -27,17 +27,4 @@ typedef SignedSize Index;
 
 typedef Size AddressValueType;
 
-#ifdef __cplusplus
-
-//namespace dataTypes {
-
-//    template <class T>
-//    struct SingleListNode {
-//        T                    data;
-//        SingleListNode<T>  * pNext       {nullptr};
-//    };
-//}
-
-#endif
-
 #endif //CDS_STD_TYPES_H
