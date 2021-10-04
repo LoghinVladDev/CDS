@@ -14,6 +14,7 @@
 #include <CDS/Long>
 #include <CDS/Float>
 #include <CDS/Double>
+#include <utility>
 
 bool SequenceTest::execute() noexcept {
     bool ok = true;
@@ -179,39 +180,13 @@ bool SequenceTest::execute() noexcept {
             if ( p == nullptr )
                 log("emptyList.elementAtOrNull(0) : nullptr");
 
-
-//            auto listUP1 = Array < UniquePointer < int > >();
-//            listUP1.pushBack(new int(1));
-//            listUP1.pushBack(new int(2));
-//            listUP1.pushBack(new int(3));
-//
-//            auto listUP = listUP1.sequence();
-//
-//            log("listUP : %s", list.toArray().toString().cStr());
-//            log("listUP.elementAtOrNull(0) : %d", * list.elementAtOrNull(0));
-//            log("listUP.elementAtOrNull(2) : %d", * list.elementAtOrNull(2));
-//
-//            auto pUP = listUP.elementAtOrNull(3);
-//            if ( pUP == nullptr )
-//                log("listUP.elementAtOrNull(3) : nullptr");
-//
-//            auto emptyList = Array<int *>().sequence();
-//
-//            log("emptyList : %s", emptyList.toArray().toString().cStr());
-//            p = emptyList.elementAtOrNull(0);
-//
-//            log("emptyList : %s", emptyList.toArray().toString().cStr());
-//            if ( p == nullptr )
-//                log("emptyList.elementAtOrNull(0) : nullptr");
-
-
-
             list.forEach([](int * e){delete e;});
         };
 
         elementAtTest();
         elementAtOrElseTest();
         elementAtOrNullTest ();
+
     });
 
     this->executeSubtest("Basic Functional Properties", [& ok, this]{
@@ -833,8 +808,314 @@ bool SequenceTest::execute() noexcept {
             }
         };
 
+        auto filterTest = [&] {
+            auto numbers = Array < Int > { 1, 2 ,3 ,4 , 5, 6, 7 }.sequence();
+            auto evenNumbers = numbers.filter(Int::isEven);
+            auto notMultipleOf3 = numbers.filterNot ( [](Int const & v){ return v % 3 == 0; } );
+
+            log ( "numbers : %s", numbers.toArray().toString().cStr() );
+            log ( "evenNumbers : %s", evenNumbers.toArray().toString().cStr() );
+            log ( "notMultipleOfThree : %s", notMultipleOf3.toArray().toString().cStr() );
+
+            if (
+                    numbers.toArray() != Array < Int > { 1, 2, 3, 4, 5, 6, 7 } ||
+                    evenNumbers.toArray() != Array < Int > { 2, 4, 6 } ||
+                    notMultipleOf3.toArray() != Array < Int > { 1, 2, 4, 5, 7 }
+            ) {
+                ok = false;
+                logWarning("filter, filterNot error");
+            }
+        };
+
+        auto filterIndexedTest = [&] {
+            auto numbers = Array < Int > { 0, 1, 2, 5, 4, 8, 6 }.sequence();
+            auto numbersOnSameIndexAsValue = numbers.filterIndexed ([](Index i, Int const & number){ return number == (int)i; });
+
+            log ( "numbers : %s", numbers.toArray().toString().cStr() );
+            log ( "numbersOnSameIndexAsValue : %s", numbersOnSameIndexAsValue.toArray().toString().cStr() );
+
+            if (
+                    numbers.toArray() != Array < Int > { 0, 1, 2, 5, 4, 8, 6 } ||
+                    numbersOnSameIndexAsValue.toArray() != Array < Int > {0, 1, 2, 4, 6}
+            ) {
+                ok = false;
+                logWarning("filterIndexed error");
+            }
+        };
+
+        auto filterIndexedToTest = [&] {
+            auto numbers = Array < Int > { 0, 1, 2, 3, 4 ,8, 6 }.sequence();
+            auto numbersOnSameIndexAsValue = Array < Int > ();
+
+            log("numbers : %s", numbers.toArray().toString().cStr());
+            log("numbersOnSameIndexAsValue : %s", numbersOnSameIndexAsValue.toString().cStr());
+
+            if ( ! numbersOnSameIndexAsValue.empty() ) {
+                ok = false;
+                logWarning("array error, from filterIndexedTo error");
+            }
+
+            numbers.filterIndexedTo (numbersOnSameIndexAsValue, [](Index i, Int const & e){ return (int)i == e; });
+
+            log("numbersOnSameIndexAsValue : %s", numbersOnSameIndexAsValue.toString().cStr());
+
+            if (
+                    numbersOnSameIndexAsValue != Array < Int > { 0, 1, 2, 3, 4, 6 }
+            ) {
+                ok = false;
+                logWarning("filterIndexedTo error");
+            }
+        };
+
+        auto filterIsInstanceTest = [&]{
+            class Animal : public Object {
+            public:
+                String name;
+
+                Animal () noexcept = default;
+                Animal (Animal const &) noexcept = default;
+                Animal (String name) noexcept : name(std::move(name)) { }
+
+                String toString () const noexcept override { return name; }
+                bool equals(Object const & o) const noexcept override {
+                    if ( this == & o ) return true;
+                    auto p = dynamic_cast < decltype ( this ) > ( & o );
+                    if ( p == nullptr ) return false;
+
+                    return name == p->name;
+                }
+            };
+
+            class Dog : public Animal {
+            public:
+                Dog() noexcept = default;
+                Dog(Dog const &) noexcept = default;
+                Dog(String name) noexcept : Animal(std::move(name)) { }
+            };
+
+            class Cat : public Animal {
+            public:
+                Cat() noexcept = default;
+                Cat(Cat const &) noexcept = default;
+                Cat(String name) noexcept : Animal(std::move(name)) { }
+            };
+
+            auto animals = Array < Animal * > { new Cat("Scratchy"), new Dog("Poochie") }.sequence();
+            auto cats = animals.filterIsDerived < Cat * >();
+
+            log("animals : %s", animals.toArray().toString().cStr());
+            log("cats (animals.filter<Cat *>) : %s", cats.toArray().toString().cStr());
+
+            if ( cats.toArray() != 1 || cats.toArray()[0]->name != "Scratchy" ) {
+                ok = false;
+                logWarning("filterIsDerived error");
+            }
+
+            animals.forEach([](auto * p){ delete p; });
+
+            auto animalsSP = Array < SharedPointer < Animal > > { new Cat("Scratchy"), new Dog("Poochie") }.sequence();
+            auto catsSP = animalsSP.filterIsDerived < Cat * > ();
+
+            log ( "animals : %s", animalsSP.toArray().toString().cStr() );
+            log ( "cats (animals.filter<Cat *>) : %s", catsSP.toArray().toString().cStr() );
+
+            if ( cats.toArray() != Array < SharedPointer < Animal > > { new Cat("Scratchy") } ) {
+                ok = false;
+                logWarning("filterIsDerived error");
+            }
+        };
+
+        auto filterIsInstanceToTest = [&] {
+            class Animal : public Object {
+            public:
+                String name;
+
+                Animal () noexcept = default;
+                Animal (Animal const &) noexcept = default;
+                Animal (String name) noexcept : name(std::move(name)) { }
+
+                String toString () const noexcept override { return name; }
+                bool equals(Object const & o) const noexcept override {
+                    if ( this == & o ) return true;
+                    auto p = dynamic_cast < decltype ( this ) > ( & o );
+                    if ( p == nullptr ) return false;
+
+                    return name == p->name;
+                }
+            };
+
+            class Dog : public Animal {
+            public:
+                Dog() noexcept = default;
+                Dog(Dog const &) noexcept = default;
+                Dog(String name) noexcept : Animal(std::move(name)) { }
+            };
+
+            class Cat : public Animal {
+            public:
+                Cat() noexcept = default;
+                Cat(Cat const &) noexcept = default;
+                Cat(String name) noexcept : Animal(std::move(name)) { }
+            };
+
+            auto animals = Array < Animal * > { new Cat("Scratchy"), new Dog("Poochie") }.sequence();
+            auto cats = Array < Cat * > ();
+
+            log("animals : %s", animals.toArray().toString().cStr());
+            log("cats : %s", cats.toString().cStr());
+
+            if ( ! cats.empty() ) {
+                ok = false;
+                logWarning("array error, filterIsDerivedTo");
+            }
+
+            animals.filterIsDerivedTo < Cat * > ( cats );
+
+            log ("cats : %s", cats.toString().cStr());
+
+            if ( cats.empty() || cats[0]->name != "Scratchy" ) {
+                ok = false;
+                logWarning("filterIsDerivedTo Error");
+            }
+
+            animals.forEach([](auto * p){ delete p; });
+
+
+            auto animalsSP = Array < SharedPointer < Animal > > { new Cat("Scratchy"), new Dog("Poochie") }.sequence();
+            auto catsSP = Array < ForeignPointer < Cat > > ();
+
+            log("animals : %s", animalsSP.toArray().toString().cStr());
+            log("cats : %s", catsSP.toString().cStr());
+
+            if ( ! catsSP.empty() ) {
+                ok = false;
+                logWarning("array error, filterIsDerivedTo");
+            }
+
+            animalsSP.filterIsDerivedTo < Cat * > ( catsSP );
+
+            log ("cats : %s", catsSP.toString().cStr());
+
+            if ( catsSP != Array < SharedPointer < Cat > > { new Cat("Scratchy") } ) {
+                ok = false;
+                logWarning("filterIsDerivedTo error");
+            }
+        };
+
+        auto filterNotNullTest = [&] {
+            auto numbers = Array < Int * > { new Int(1), new Int(2), nullptr, new Int(4) }.sequence();
+            auto notNullNumbers = numbers.filterNotNull();
+
+            log("numbers : %s", numbers.toArray().toString().cStr());
+            log("notNullNumbers : %s", notNullNumbers.toArray().toString().cStr());
+
+            if (
+                    notNullNumbers.toArray().size() != 3
+            ) {
+                ok = false;
+                logWarning("filterNotNull error");
+            }
+
+            numbers.forEach([](auto * p){ delete p; });
+
+            auto numbersSP = Array < SharedPointer < Int > > { new Int(1), new Int(2), nullptr, new Int(4) }.sequence();
+            auto notNullNumbersSP = numbers.filterNotNull();
+
+            log("numbers : %s", numbersSP.toArray().toString().cStr());
+            log("notNullNumbers : %s", notNullNumbersSP.toArray().toString().cStr());
+
+            if (
+                    notNullNumbersSP.toArray() != Array < SharedPointer < Int > > { new Int(1), new Int(2), new Int(4) }
+            ) {
+                ok = false;
+                logWarning("filterNotNull error");
+            }
+        };
+
+        auto filterNotNullToTest = [&] {
+            auto numbers = Array < Int * > { new Int (1), new Int(2), nullptr, new Int(4) }.sequence();
+            auto nonNullNumbers = Array < Int * >();
+
+            log("numbers : %s", numbers.toArray().toString().cStr());
+            log("nonNullNumbers : %s", nonNullNumbers.toString().cStr());
+
+            if ( ! nonNullNumbers.empty() ) {
+                ok = false;
+                logWarning("array error, filterNotNullTo");
+            }
+
+            numbers.filterNotNullTo(nonNullNumbers);
+
+            log("nonNullNumbers : %s", nonNullNumbers.toString().cStr());
+
+            if ( nonNullNumbers.size() != 3 ) {
+                ok = false;
+                logWarning("filterNotNullTo error");
+            }
+
+            numbers.forEach([](auto * p){ delete p; });
+
+
+            auto numbersSP = Array < SharedPointer < Int > > { new Int (1), new Int(2), nullptr, new Int(4) }.sequence();
+            auto nonNullNumbersSP = Array < ForeignPointer < Int > >();
+
+            log("numbers : %s", numbersSP.toArray().toString().cStr());
+            log("nonNullNumbers : %s", nonNullNumbersSP.toString().cStr());
+
+            if ( ! nonNullNumbersSP.empty() ) {
+                ok = false;
+                logWarning("array error, filterNotNullTo");
+            }
+
+            numbersSP.filterNotNullTo(nonNullNumbersSP);
+
+            log("nonNullNumbers : %s", nonNullNumbersSP.toString().cStr());
+
+            if ( nonNullNumbersSP != Array < SharedPointer < Int > > { new Int(1), new Int(2), new Int(4) } ) {
+                ok = false;
+                logWarning("filterNotNullTo error");
+            }
+        };
+
+        auto filterNotToTest = [&] {
+            auto numbers = Array < Int > { 1, 2, 3, 4, 5, 6 , 7 }.sequence();
+            auto evenNumbers = Array < Int >();
+            auto notMultipleOf3 = Array < Int >();
+
+            log ( "numbers : %s", numbers.toArray().toString().cStr() );
+            log ( "evenNumbers : %s", evenNumbers.toString().cStr() );
+            log ( "notMultipleOf3 : %s", notMultipleOf3.toString().cStr() );
+
+            if ( ! evenNumbers.empty () || ! notMultipleOf3.empty() ) {
+                ok = false;
+                logWarning("array error, filterNotTo Test");
+            }
+
+            numbers.filterTo ( evenNumbers, Int::isEven );
+            numbers.filterNotTo ( notMultipleOf3, [](Int const & i){ return i % 3 == 0; } );
+
+            log ( "evenNumbers : %s", evenNumbers.toString().cStr() );
+            log ( "notMultipleOf3 : %s", notMultipleOf3.toString().cStr() );
+
+            if (
+                    evenNumbers != Array < Int > { 2, 4 ,6 } ||
+                    notMultipleOf3 != Array < Int > { 1, 2, 4, 5, 7 }
+            ) {
+                ok = false;
+                logWarning("filterTo, filterNotTo error");
+            }
+        };
+
         chunkedTest();
         dropTest();
+        filterTest();
+        filterIndexedTest();
+        filterIndexedToTest();
+        filterIsInstanceTest();
+        filterIsInstanceToTest();
+        filterNotNullTest();
+        filterNotNullToTest();
+        filterNotToTest();
     });
 
     return ok;

@@ -219,8 +219,13 @@ struct Type {
 
     using WithoutReference = Type < typename std :: remove_reference < T > :: type >;
     using WithoutConst = Type < typename std :: remove_const < T > :: type >;
+    using WithoutPointer = Type < typename std :: remove_pointer < T > :: type >;
+    using WithoutModifiers = typename Type < T > :: WithoutReference :: WithoutPointer :: WithoutConst;
 
-    using WithoutConstReference = typename Type < T > :: WithoutConst :: WithoutReference;
+    using AsUniquePointer = UniquePointer < typename Type < T > :: WithoutReference :: WithoutPointer :: BaseType >;
+    using AsForeignPointer = ForeignPointer < typename Type < T > :: WithoutReference :: WithoutPointer :: BaseType >;
+    using AsSharedPointer = SharedPointer < typename Type < T > :: WithoutReference :: WithoutPointer :: BaseType >;
+    using AsAtomicSharedPointer = AtomicSharedPointer < typename Type < T > :: WithoutReference :: WithoutPointer :: BaseType >;
 
     static constexpr bool defaultConstructible = typeDefaultConstructible < T> ();
     static constexpr bool copyConstructible = typeCopyConstructible < T > ();
@@ -236,7 +241,9 @@ struct Type {
     static constexpr bool ostreamPrintable = isPrintable < T > :: type :: value;
 
     static constexpr bool isFundamental = typeFundamental < T >();
-    static constexpr bool isPointer = std :: is_pointer < T > :: type :: value || isSmartPointer < T > :: type :: value;
+    static constexpr bool isBasicPointer = std :: is_pointer < T > :: type :: value;
+    static constexpr bool isSmartPointer = :: isSmartPointer < T > :: type :: value;
+    static constexpr bool isPointer = isBasicPointer || isSmartPointer;
     static constexpr bool isReference = std :: is_reference < T > :: type :: value;
     static constexpr bool isLvalue = std :: is_lvalue_reference < T > :: type :: value;
     static constexpr bool isRvalue = std :: is_rvalue_reference < T > :: type :: value;

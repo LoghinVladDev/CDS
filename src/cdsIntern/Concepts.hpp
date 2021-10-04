@@ -10,6 +10,7 @@
 class Object;
 class String;
 
+#include <CDS/Traits>
 #include <type_traits>
 #include <concepts>
 #include <iostream>
@@ -22,7 +23,8 @@ concept Integral =
 
 template < typename T >
 concept Pointer =
-        std::is_pointer<T>::value;
+        Type < T > :: isPointer;
+//        std::is_pointer<T>::value;
 
 template < typename T >
 concept Iterable = requires ( T obj ) {

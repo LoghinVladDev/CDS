@@ -514,8 +514,16 @@ public:
     __CDS_MaybeUnused auto filter ( Predicate const & ) && noexcept -> Sequence
     __CDS_Requires ( Iterable < C > || ConstIterable < C > );
 
+    template < typename Predicate >
+    __CDS_MaybeUnused auto filter ( Predicate const & ) & noexcept -> Sequence
+    __CDS_Requires ( Iterable < C > || ConstIterable < C > );
+
     template < typename IndexedPredicate >
     __CDS_MaybeUnused auto filterIndexed ( IndexedPredicate const & ) && noexcept -> Sequence
+    __CDS_Requires ( Iterable < C > || ConstIterable < C > );
+
+    template < typename IndexedPredicate >
+    __CDS_MaybeUnused auto filterIndexed ( IndexedPredicate const & ) & noexcept -> Sequence
     __CDS_Requires ( Iterable < C > || ConstIterable < C > );
 
     template < typename Predicate >
@@ -530,7 +538,7 @@ public:
             IndexedPredicate            const &
     ) const noexcept -> Collection < ElementType > & __CDS_Requires ( Iterable < C > || ConstIterable < C > );
 
-    template < typename NewType >
+    template < typename NewType, typename OT = ElementType, typename NT = NewType, typename std :: enable_if < Type < OT > :: isBasicPointer, int > :: type = 0 >
     __CDS_MaybeUnused auto filterIsDerived () && noexcept -> Sequence < LinkedList < NewType > >
     __CDS_Requires(
             (Iterable < C > || ConstIterable < C >) &&
@@ -538,22 +546,81 @@ public:
             Pointer < NewType >
     );
 
-    template < typename NewType >
-    __CDS_MaybeUnused auto filterIsDerivedTo (
-            Collection < ElementType > &
-    ) const noexcept -> Collection < ElementType > &
+    template < typename NewType, typename OT = ElementType, typename NT = NewType, typename std :: enable_if < Type < OT > :: isBasicPointer, int > :: type = 0 >
+    __CDS_MaybeUnused auto filterIsDerived () & noexcept -> Sequence < LinkedList < NewType > >
     __CDS_Requires(
+            (Iterable < C > || ConstIterable < C >) &&
+            Pointer < ElementType > &&
+            Pointer < NewType >
+    );
+
+    template < typename NewType, typename OT = ElementType, typename NT = NewType, typename std :: enable_if < Type < OT > :: isSmartPointer, int > :: type = 0 >
+    __CDS_MaybeUnused auto filterIsDerived () && noexcept -> Sequence < LinkedList < typename Type < NT > :: AsForeignPointer > >
+    __CDS_Requires(
+            (Iterable < C > || ConstIterable < C >) &&
+            Pointer < OT > &&
+            Pointer < NT >
+    );
+
+    template < typename NewType, typename OT = ElementType, typename NT = NewType, typename std :: enable_if < Type < OT > :: isSmartPointer, int > :: type = 0 >
+    __CDS_MaybeUnused auto filterIsDerived () & noexcept -> Sequence < LinkedList < typename Type < NT > :: AsForeignPointer > >
+    __CDS_Requires(
+            (Iterable < C > || ConstIterable < C >) &&
+            Pointer < OT > &&
+            Pointer < NT >
+    );
+
+    template < typename NewType, typename CT = NewType, typename OT = ElementType, typename std :: enable_if < Type < OT > :: isBasicPointer, int > :: type = 0 >
+    __CDS_MaybeUnused auto filterIsDerivedTo (
+            Collection < CT > &
+    ) const noexcept -> Collection < CT > &
+    __CDS_Requires (
             ( Iterable < C > || ConstIterable < C > ) &&
             Pointer < ElementType > &&
             Pointer < NewType >
     );
 
+    template < typename NewType, typename CT, typename OT = ElementType, typename std :: enable_if < Type < OT > :: isSmartPointer, int > :: type = 0 >
+    __CDS_MaybeUnused auto filterIsDerivedTo (
+            Collection < CT > &
+    ) const noexcept -> Collection < CT > &
+    __CDS_Requires (
+            ( Iterable < C > || ConstIterable < C > ) &&
+            Pointer < ElementType > &&
+            Pointer < NewType >
+    );
+
+    template < typename T = ElementType, typename std :: enable_if < Type < T > :: isBasicPointer, int > :: type = 0 >
+    __CDS_MaybeUnused auto filterNotNull () & noexcept -> Sequence < LinkedList < T > > __CDS_Requires( ( Iterable < C > || ConstIterable < C > ) && Pointer < T > );
+
+    template < typename T = ElementType, typename std :: enable_if < Type < T > :: isBasicPointer, int > :: type = 0 >
+    __CDS_MaybeUnused auto filterNotNull () && noexcept -> Sequence < LinkedList < T > > __CDS_Requires( ( Iterable < C > || ConstIterable < C > ) && Pointer < T > );
+
+    template < typename T = ElementType, typename std :: enable_if < Type < T > :: isSmartPointer, int > :: type = 0 >
+    __CDS_MaybeUnused auto filterNotNull () & noexcept -> Sequence < LinkedList < T > > __CDS_Requires( ( Iterable < C > || ConstIterable < C > ) && Pointer < T > );
+
+    template < typename T = ElementType, typename std :: enable_if < Type < T > :: isSmartPointer, int > :: type = 0 >
+    __CDS_MaybeUnused auto filterNotNull () && noexcept -> Sequence < LinkedList < T > > __CDS_Requires( ( Iterable < C > || ConstIterable < C > ) && Pointer < T > );
+
+    template < typename T = ElementType, typename std :: enable_if < Type < T > :: isBasicPointer, int > :: type = 0 >
+    __CDS_MaybeUnused auto filterNotNullTo (Collection < T > &) const noexcept -> Collection < T > & __CDS_Requires( ( Iterable < C > || ConstIterable < C > ) && Pointer < T > );
+    template < typename T = ElementType, typename std :: enable_if < Type < T > :: isSmartPointer, int > :: type = 0 >
+    __CDS_MaybeUnused auto filterNotNullTo (Collection < T > &) const noexcept -> Collection < T > & __CDS_Requires( ( Iterable < C > || ConstIterable < C > ) && Pointer < T > );
+
     template < typename Predicate >
     __CDS_MaybeUnused auto filterNot ( Predicate const & ) && noexcept -> Sequence
     __CDS_Requires ( Iterable < C > || ConstIterable < C > );
 
+    template < typename Predicate >
+    __CDS_MaybeUnused auto filterNot ( Predicate const & ) & noexcept -> Sequence
+    __CDS_Requires ( Iterable < C > || ConstIterable < C > );
+
     template < typename IndexedPredicate >
     __CDS_MaybeUnused auto filterNotIndexed ( IndexedPredicate const & ) && noexcept -> Sequence
+    __CDS_Requires ( Iterable < C > || ConstIterable < C > );
+
+    template < typename IndexedPredicate >
+    __CDS_MaybeUnused auto filterNotIndexed ( IndexedPredicate const & ) & noexcept -> Sequence
     __CDS_Requires ( Iterable < C > || ConstIterable < C > );
 
     template < typename Predicate >
@@ -1756,7 +1823,7 @@ auto Sequence < C >::ConstIterator::skipFiltered() noexcept -> void {
 
             } else if (
                     currentIndexedFilterIterator != this->pSeq.valueAt().storedIndexedPredicates.end() &&
-                    currentFilterIterator.value().getSecond() == i
+                    currentIndexedFilterIterator.value().getSecond() == i
                     ) {
                 if ( ! (* currentIndexedFilterIterator.value().getFirst()) (this->index, * this->precomputed) ) {
                     skip = true;
@@ -2075,12 +2142,34 @@ __CDS_MaybeUnused inline auto Sequence < C > ::filter(
 }
 
 template < typename C >
+template < typename Predicate >
+__CDS_MaybeUnused inline auto Sequence < C > ::filter(
+        Predicate const & predicate
+) & noexcept -> Sequence < C > __CDS_Requires ( Iterable < C > || ConstIterable < C > ) {
+    Sequence < C > copy (* this );
+
+    copy.storedPredicates.append({ { new StoredPredicate (predicate)}, this->chainCount });
+    return std::move (copy);
+}
+
+template < typename C >
 template < typename IndexedPredicate >
 __CDS_MaybeUnused inline auto Sequence < C > :: filterIndexed (
         IndexedPredicate const & indexedPredicate
 ) && noexcept -> Sequence < C > __CDS_Requires ( Iterable < C > || ConstIterable < C > ) {
     this->storedIndexedPredicates.append({ { new StoredIndexedPredicate (indexedPredicate)}, this->chainCount });
     return std::move ( * this );
+}
+
+template < typename C >
+template < typename IndexedPredicate >
+__CDS_MaybeUnused inline auto Sequence < C > :: filterIndexed (
+        IndexedPredicate const & indexedPredicate
+) & noexcept -> Sequence < C > __CDS_Requires ( Iterable < C > || ConstIterable < C > ) {
+    Sequence < C > copy (* this);
+
+    copy.storedIndexedPredicates.append({ { new StoredIndexedPredicate (indexedPredicate)}, this->chainCount });
+    return std::move ( copy );
 }
 
 template < typename C >
@@ -2161,8 +2250,65 @@ __CDS_Requires ( Iterable < C > || ConstIterable < C > ) {
 }
 
 template < typename C >
-template < typename NewType >
+template < typename NewType, typename OT, typename NT, typename std :: enable_if < Type < OT > :: isSmartPointer, int > :: type >
+__CDS_MaybeUnused inline auto Sequence < C > :: filterIsDerived () && noexcept -> Sequence < LinkedList < typename Type < NT > :: AsForeignPointer > >
+__CDS_Requires(
+        ( Iterable < C > || ConstIterable < C > ) &&
+        Pointer < OT > &&
+        Pointer < NT >
+) {
+
+    LinkedList < typename Type < NT > :: AsForeignPointer > container;
+    for ( auto e : * this ) {
+        auto p = dynamic_cast < NT > (e.get());
+        if ( p != nullptr )
+            container.add( typename Type < NT > :: AsForeignPointer ( p ) );
+    }
+
+    return std::move ( Sequence < LinkedList < typename Type < NT > :: AsForeignPointer > > ( std::move ( container ) ) );
+}
+
+template < typename C >
+template < typename NewType, typename OT, typename NT, typename std :: enable_if < Type < OT > :: isSmartPointer, int > :: type >
+__CDS_MaybeUnused inline auto Sequence < C > :: filterIsDerived () & noexcept -> Sequence < LinkedList < typename Type < NT > :: AsForeignPointer > >
+__CDS_Requires(
+        ( Iterable < C > || ConstIterable < C > ) &&
+        Pointer < OT > &&
+        Pointer < NT >
+) {
+
+    LinkedList < typename Type < NT > :: AsForeignPointer > container;
+    for ( auto e : * this ) {
+        auto p = dynamic_cast < NT > (e.get());
+        if ( p != nullptr )
+            container.add( typename Type < NT > :: AsForeignPointer ( p ) );
+    }
+
+    return std::move ( Sequence < LinkedList < typename Type < NT > :: AsForeignPointer > > ( std::move ( container ) ) );
+}
+
+template < typename C >
+template < typename NewType, typename OT, typename NT, typename std :: enable_if < Type < OT > :: isBasicPointer, int > :: type >
 __CDS_MaybeUnused inline auto Sequence < C > :: filterIsDerived () && noexcept -> Sequence < LinkedList < NewType > >
+__CDS_Requires(
+        ( Iterable < C > || ConstIterable < C > ) &&
+        Pointer < ElementType > &&
+        Pointer < NewType >
+) {
+
+    LinkedList < NewType > container;
+    for ( auto e : * this ) {
+        auto p = dynamic_cast < NewType > (e);
+        if ( p != nullptr )
+            container.add(p);
+    }
+
+    return std::move ( Sequence < LinkedList < NewType > > ( std::move ( container ) ) );
+}
+
+template < typename C >
+template < typename NewType, typename OT, typename NT, typename std :: enable_if < Type < OT > :: isBasicPointer, int > :: type >
+__CDS_MaybeUnused inline auto Sequence < C > :: filterIsDerived () & noexcept -> Sequence < LinkedList < NewType > >
 __CDS_Requires(
         ( Iterable < C > || ConstIterable < C > ) &&
         Pointer < ElementType > &&
@@ -2188,10 +2334,28 @@ __CDS_MaybeUnused inline auto Sequence < C > :: filterNot (
 }
 
 template < typename C >
+template < typename Predicate >
+__CDS_MaybeUnused inline auto Sequence < C > :: filterNot (
+        Predicate const & predicate
+) & noexcept -> Sequence __CDS_Requires( Iterable < C > || ConstIterable < C > ) {
+    return this->filter( [& predicate] (ElementType e) noexcept -> bool { return ! predicate(e); } );
+}
+
+template < typename C >
 template < typename IndexedPredicate >
 __CDS_MaybeUnused inline auto Sequence < C > :: filterNotIndexed(
         IndexedPredicate const & indexedPredicate
 ) && noexcept -> Sequence __CDS_Requires( Iterable < C > || ConstIterable < C > ) {
+    return this->filterIndexed( [& indexedPredicate] (Index index, ElementType e) noexcept -> bool {
+        return ! indexedPredicate ( index, e );
+    });
+}
+
+template < typename C >
+template < typename IndexedPredicate >
+__CDS_MaybeUnused inline auto Sequence < C > :: filterNotIndexed(
+        IndexedPredicate const & indexedPredicate
+) & noexcept -> Sequence __CDS_Requires( Iterable < C > || ConstIterable < C > ) {
     return this->filterIndexed( [& indexedPredicate] (Index index, ElementType e) noexcept -> bool {
         return ! indexedPredicate ( index, e );
     });
@@ -2990,10 +3154,10 @@ __CDS_MaybeUnused inline auto Sequence < C > :: mapIndexedTo (
 }
 
 template < typename C >
-template < typename NewType >
+template < typename NewType, typename CT, typename OT, typename std :: enable_if < Type < OT > :: isBasicPointer, int > :: type >
 __CDS_MaybeUnused inline auto Sequence < C > :: filterIsDerivedTo (
-        Collection < ElementType > & collection
-) const noexcept -> Collection < ElementType > &
+        Collection < CT > & collection
+) const noexcept -> Collection < CT > &
 __CDS_Requires (
         ( Iterable < C > || ConstIterable < C > ) &&
         Pointer < ElementType > &&
@@ -3004,6 +3168,70 @@ __CDS_Requires (
         auto p = dynamic_cast < NewType > (e);
         if ( p != nullptr )
             collection.add(p);
+    }
+
+    return collection;
+}
+
+template < typename C >
+template < typename T, typename std :: enable_if < Type < T > :: isBasicPointer, int > :: type >
+__CDS_MaybeUnused inline auto Sequence < C > :: filterNotNull () & noexcept -> Sequence < LinkedList < T > > __CDS_Requires( ( Iterable < C > || ConstIterable < C > ) && Pointer < T > ) {
+    LinkedList < T > container;
+    for ( auto e : * this )
+        if ( e != nullptr )
+            container.add( e );
+
+    return std::move ( Sequence < LinkedList < T > > ( std::move ( container ) ) );
+}
+
+template < typename C >
+template < typename T, typename std :: enable_if < Type < T > :: isBasicPointer, int > :: type >
+__CDS_MaybeUnused inline auto Sequence < C > :: filterNotNull () && noexcept -> Sequence < LinkedList < T > > __CDS_Requires( ( Iterable < C > || ConstIterable < C > ) && Pointer < T > ) {
+    LinkedList < T > container;
+    for ( auto e : * this )
+        if ( e != nullptr )
+            container.add( e );
+
+    return std::move ( Sequence < LinkedList < T > > ( std::move ( container ) ) );
+}
+
+template < typename C >
+template < typename T, typename std :: enable_if < Type < T > :: isSmartPointer, int > :: type >
+__CDS_MaybeUnused inline auto Sequence < C > :: filterNotNull () & noexcept -> Sequence < LinkedList < T > > __CDS_Requires( ( Iterable < C > || ConstIterable < C > ) && Pointer < T > ) {
+    LinkedList < T > container;
+    for ( auto e : * this )
+        if ( ! e.isNull() )
+            container.add( e );
+
+    return std::move ( Sequence < LinkedList < T > > ( std::move ( container ) ) );
+}
+
+template < typename C >
+template < typename T, typename std :: enable_if < Type < T > :: isSmartPointer, int > :: type >
+__CDS_MaybeUnused inline auto Sequence < C > :: filterNotNull () && noexcept -> Sequence < LinkedList < T > > __CDS_Requires( ( Iterable < C > || ConstIterable < C > ) && Pointer < T > ) {
+    LinkedList < T > container;
+    for ( auto e : * this )
+        if ( ! e.isNull() )
+            container.add( e );
+
+    return std::move ( Sequence < LinkedList < T > > ( std::move ( container ) ) );
+}
+
+template < typename C >
+template < typename NewType, typename CT, typename OT, typename std :: enable_if < Type < OT > :: isSmartPointer, int > :: type >
+__CDS_MaybeUnused inline auto Sequence < C > :: filterIsDerivedTo (
+        Collection < CT > & collection
+) const noexcept -> Collection < CT > &
+__CDS_Requires (
+        ( Iterable < C > || ConstIterable < C > ) &&
+        Pointer < ElementType > &&
+        Pointer < NewType >
+) {
+
+    for ( auto e : * this ) {
+        auto p = dynamic_cast < NewType > (e.get());
+        if ( p != nullptr )
+            collection.add(CT(p));
     }
 
     return collection;
@@ -3035,6 +3263,27 @@ __CDS_MaybeUnused inline auto Sequence < C > :: filterNotIndexedTo (
 
     return collection;
 }
+
+template < typename C >
+template < typename T, typename std :: enable_if < Type < T > :: isBasicPointer, int > :: type >
+__CDS_MaybeUnused auto Sequence < C > :: filterNotNullTo (Collection < T > & collection) const noexcept -> Collection < T > & __CDS_Requires( ( Iterable < C > || ConstIterable < C > ) && Pointer < T > ) {
+    for ( auto e : * this )
+        if ( e != nullptr )
+            collection.add(e);
+
+    return collection;
+}
+
+template < typename C >
+template < typename T, typename std :: enable_if < Type < T > :: isSmartPointer, int > :: type >
+__CDS_MaybeUnused auto Sequence < C > :: filterNotNullTo (Collection < T > & collection) const noexcept -> Collection < T > & __CDS_Requires( ( Iterable < C > || ConstIterable < C > ) && Pointer < T > ) {
+    for ( auto e : * this )
+        if ( ! e.isNull() )
+            collection.add(T(e.get()));
+
+    return collection;
+}
+
 
 template < typename C >
 template < typename Predicate >
