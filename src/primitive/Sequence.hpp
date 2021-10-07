@@ -19,6 +19,7 @@
 
 #include "SequencePrivate.hpp"
 
+
 template < typename C >
 class Sequence : public Object {
 public:
@@ -894,17 +895,19 @@ public:
     template < typename Transformer >
     __CDS_MaybeUnused auto flatMap (
             Transformer const &
-    ) && noexcept -> Sequence <
-            LinkedList <
-                    typename std::remove_reference <
-                            decltype (
-                            dataTypes::unsafeAddress <
-                                    typename returnOf < Transformer > :: Iterator
-                            >()->value()
-                            )
-                    > :: type
-            >
-    > __CDS_Requires (
+    ) && noexcept -> Sequence < LinkedList < typename __CDS_Sequence :: FlatMapDeductedType < Transformer > :: Type > >
+    __CDS_Requires (
+            ( Iterable < C > || ConstIterable < C > ) && (
+                    Iterable < returnOf < Transformer > > ||
+                    ConstIterable < returnOf < Transformer > >
+            )
+    );
+
+    template < typename Transformer >
+    __CDS_MaybeUnused auto flatMap (
+            Transformer const &
+    ) & noexcept -> Sequence < LinkedList < typename __CDS_Sequence :: FlatMapDeductedType < Transformer > :: Type > >
+    __CDS_Requires (
             ( Iterable < C > || ConstIterable < C > ) && (
                     Iterable < returnOf < Transformer > > ||
                     ConstIterable < returnOf < Transformer > >
@@ -914,17 +917,17 @@ public:
     template < typename IndexedTransformer >
     __CDS_MaybeUnused auto flatMapIndexed (
             IndexedTransformer const &
-    ) && noexcept -> Sequence <
-            LinkedList <
-                    typename std::remove_reference <
-                            decltype (
-                            dataTypes::unsafeAddress <
-                                    typename returnOf < IndexedTransformer > :: Iterator
-                            > ()->value()
-                            )
-                    > :: type
-            >
-    > __CDS_Requires (
+    ) && noexcept -> Sequence < LinkedList < typename __CDS_Sequence :: FlatMapDeductedType < IndexedTransformer > :: Type > > __CDS_Requires (
+            ( Iterable < C > || ConstIterable < C > ) && (
+                    Iterable < returnOf < IndexedTransformer > > ||
+                    ConstIterable < returnOf < IndexedTransformer > >
+            )
+    );
+
+    template < typename IndexedTransformer >
+    __CDS_MaybeUnused auto flatMapIndexed (
+            IndexedTransformer const &
+    ) & noexcept -> Sequence < LinkedList < typename __CDS_Sequence :: FlatMapDeductedType < IndexedTransformer > :: Type > > __CDS_Requires (
             ( Iterable < C > || ConstIterable < C > ) && (
                     Iterable < returnOf < IndexedTransformer > > ||
                     ConstIterable < returnOf < IndexedTransformer > >
@@ -933,87 +936,23 @@ public:
 
     template < typename Transformer >
     __CDS_MaybeUnused auto flatMapTo (
-            Collection <
-                    typename std::remove_reference <
-                            decltype (
-                            dataTypes::unsafeAddress<
-                                    typename returnOf < Transformer > :: Iterator
-                            >()->value()
-                            )
-                    > :: type
-            >                     &,
+            Collection < typename __CDS_Sequence :: FlatMapDeductedType < Transformer > :: Type > &,
             Transformer     const &
-    ) const noexcept -> Collection <
-            typename std::remove_reference <
-                    decltype (
-                    dataTypes::unsafeAddress<
-                            typename returnOf < Transformer > :: Iterator
-                    >()->value()
-                    )
-            > :: type
-    > & __CDS_Requires (
+    ) const noexcept -> Collection < typename __CDS_Sequence :: FlatMapDeductedType < Transformer > :: Type > & __CDS_Requires (
             ( Iterable < C > || ConstIterable < C > ) && (
-                    Iterable <
-                            typename std::remove_reference <
-                                    decltype (
-                                    dataTypes::unsafeAddress <
-                                            typename returnOf < Transformer > :: Iterator
-                                    >()->value()
-                                    )
-                            > :: type
-                    > ||
-                    ConstIterable <
-                            typename std::remove_reference <
-                                    decltype (
-                                    dataTypes::unsafeAddress <
-                                            typename returnOf < Transformer > :: Iterator
-                                    >()->value()
-                                    )
-                            > :: type
-                    >
+                    Iterable < returnOf < Transformer > > ||
+                    ConstIterable < returnOf < Transformer > >
             )
     );
 
     template < typename IndexedTransformer >
     __CDS_MaybeUnused auto flatMapIndexedTo (
-            Collection <
-                    typename std::remove_reference <
-                            decltype (
-                            dataTypes::unsafeAddress <
-                                    typename returnOf < IndexedTransformer > :: Iterator
-                            >()->value()
-                            )
-                    > :: type
-            >                        &,
+            Collection < typename __CDS_Sequence :: FlatMapDeductedType < IndexedTransformer > :: Type > &,
             IndexedTransformer const &
-    ) const noexcept -> Collection <
-            typename std::remove_reference <
-                    decltype (
-                    dataTypes::unsafeAddress <
-                            typename returnOf < IndexedTransformer > :: Iterator
-                    >()->value()
-                    )
-            > :: type
-    > & __CDS_Requires (
+    ) const noexcept -> Collection < typename __CDS_Sequence :: FlatMapDeductedType < IndexedTransformer > :: Type > & __CDS_Requires (
             (Iterable < C > || ConstIterable < C >) && (
-                    Iterable <
-                            typename std::remove_reference <
-                                    decltype (
-                                    dataTypes::unsafeAddress <
-                                            typename returnOf < IndexedTransformer > :: Iterator
-                                    >()->value()
-                                    )
-                            > :: type
-                    > ||
-                    ConstIterable <
-                            typename std::remove_reference <
-                                    decltype (
-                                    dataTypes::unsafeAddress <
-                                            typename returnOf < IndexedTransformer > :: Iterator
-                                    >()->value()
-                                    )
-                            > :: type
-                    >
+                    Iterable < returnOf < IndexedTransformer > > ||
+                    ConstIterable < returnOf < IndexedTransformer > >
             )
     );
 
@@ -2808,30 +2747,31 @@ template < typename C >
 template < typename Transformer >
 __CDS_MaybeUnused inline auto Sequence < C > :: flatMap (
         Transformer const & transformer
-) && noexcept -> Sequence <
-        LinkedList <
-                typename std::remove_reference <
-                        decltype (
-                        dataTypes::unsafeAddress <
-                                typename returnOf < Transformer > :: Iterator
-                        >()->value()
-                        )
-                >::type
-        >
-> __CDS_Requires (
+) && noexcept -> Sequence < LinkedList < typename __CDS_Sequence :: FlatMapDeductedType < Transformer > :: Type > >
+__CDS_Requires (
         ( Iterable < C > || ConstIterable < C > ) &&
         ( Iterable < returnOf < Transformer > > || ConstIterable < returnOf < Transformer > > )
 ) {
 
-    LinkedList <
-            typename std::remove_reference <
-                    decltype (
-                    dataTypes::unsafeAddress <
-                            typename returnOf < Transformer >:: Iterator
-                    >()->value ()
-                    )
-            > :: type
-    > container;
+    LinkedList < typename __CDS_Sequence :: FlatMapDeductedType < Transformer > :: Type > container;
+
+    for ( auto e : * this )
+        for ( auto const & s : transformer(e) )
+            container.add( s );
+    return std::move ( Sequence < decltype(container) > ( std::move(container) ) );
+}
+
+template < typename C >
+template < typename Transformer >
+__CDS_MaybeUnused inline auto Sequence < C > :: flatMap (
+        Transformer const & transformer
+) & noexcept -> Sequence < LinkedList < typename __CDS_Sequence :: FlatMapDeductedType < Transformer > :: Type > >
+__CDS_Requires (
+        ( Iterable < C > || ConstIterable < C > ) &&
+        ( Iterable < returnOf < Transformer > > || ConstIterable < returnOf < Transformer > > )
+) {
+
+    LinkedList < typename __CDS_Sequence :: FlatMapDeductedType < Transformer > :: Type > container;
 
     for ( auto e : * this )
         for ( auto const & s : transformer(e) )
@@ -2843,31 +2783,33 @@ template < typename C >
 template < typename IndexedTransformer >
 __CDS_MaybeUnused inline auto Sequence < C > :: flatMapIndexed (
         IndexedTransformer const & transformer
-) && noexcept -> Sequence <
-        LinkedList <
-                typename std::remove_reference <
-                        decltype (
-                        dataTypes::unsafeAddress <
-                                typename returnOf < IndexedTransformer > :: Iterator
-                        >()->value()
-                        )
-                >::type
-        >
-> __CDS_Requires (
+) && noexcept -> Sequence < LinkedList < typename __CDS_Sequence :: FlatMapDeductedType < IndexedTransformer > :: Type > > __CDS_Requires (
         ( Iterable < C > || ConstIterable < C > ) && (
                 Iterable < returnOf < IndexedTransformer > > ||
                 ConstIterable < returnOf < IndexedTransformer > >
         )
 ) {
-    LinkedList <
-            typename std::remove_reference <
-                    decltype (
-                    dataTypes::unsafeAddress <
-                            typename returnOf < IndexedTransformer >:: Iterator
-                    >()->value ()
-                    )
-            > :: type
-    > container;
+    LinkedList < typename __CDS_Sequence :: FlatMapDeductedType < IndexedTransformer > :: Type > container;
+
+    Index i = 0;
+
+    for ( auto e : * this )
+        for ( auto const & s : transformer(i ++, e) )
+            container.add( s );
+    return std::move ( Sequence < decltype(container) > ( std::move(container) ) );
+}
+
+template < typename C >
+template < typename IndexedTransformer >
+__CDS_MaybeUnused inline auto Sequence < C > :: flatMapIndexed (
+        IndexedTransformer const & transformer
+) & noexcept -> Sequence < LinkedList < typename __CDS_Sequence :: FlatMapDeductedType < IndexedTransformer > :: Type > > __CDS_Requires (
+        ( Iterable < C > || ConstIterable < C > ) && (
+                Iterable < returnOf < IndexedTransformer > > ||
+                ConstIterable < returnOf < IndexedTransformer > >
+        )
+) {
+    LinkedList < typename __CDS_Sequence :: FlatMapDeductedType < IndexedTransformer > :: Type > container;
 
     Index i = 0;
 
@@ -3548,44 +3490,12 @@ __CDS_MaybeUnused inline auto Sequence < C > ::toUnorderedSet(
 template < typename C >
 template < typename Transformer >
 __CDS_MaybeUnused inline auto Sequence < C > :: flatMapTo (
-        Collection <
-                typename std::remove_reference <
-                        decltype (
-                        dataTypes::unsafeAddress <
-                                typename returnOf < Transformer > :: Iterator
-                        >()->value()
-                        )
-                > :: type
-        >                   & collection,
+        Collection < typename __CDS_Sequence :: FlatMapDeductedType < Transformer > :: Type > & collection,
         Transformer   const & transformer
-) const noexcept -> Collection <
-        typename std::remove_reference <
-                decltype (
-                dataTypes::unsafeAddress <
-                        typename returnOf < Transformer > :: Iterator
-                >()->value()
-                )
-        > :: type
-> & __CDS_Requires (
+) const noexcept -> Collection < typename __CDS_Sequence :: FlatMapDeductedType < Transformer > :: Type > & __CDS_Requires (
         ( Iterable < C > || ConstIterable < C > ) && (
-                Iterable <
-                        typename std::remove_reference <
-                                decltype (
-                                dataTypes::unsafeAddress <
-                                        typename returnOf < Transformer > :: Iterator
-                                >()->value()
-                                )
-                        > :: type
-                > ||
-                ConstIterable <
-                        typename std::remove_reference <
-                                decltype (
-                                dataTypes::unsafeAddress <
-                                        typename returnOf < Transformer > :: Iterator
-                                >()->value()
-                                )
-                        > :: type
-                >
+                Iterable < returnOf < Transformer > > ||
+                ConstIterable < returnOf < Transformer > >
         )
 ) {
 
@@ -3599,51 +3509,19 @@ __CDS_MaybeUnused inline auto Sequence < C > :: flatMapTo (
 template < typename C >
 template < typename IndexedTransformer >
 __CDS_MaybeUnused inline auto Sequence < C > :: flatMapIndexedTo (
-        Collection <
-                typename std::remove_reference <
-                        decltype (
-                        dataTypes::unsafeAddress <
-                                typename returnOf < IndexedTransformer > :: Iterator
-                        >()->value()
-                        )
-                > :: type
-        >                        & collection,
+        Collection < typename __CDS_Sequence :: FlatMapDeductedType < IndexedTransformer > :: Type > & collection,
         IndexedTransformer const & transformer
-) const noexcept -> Collection <
-        typename std::remove_reference <
-                decltype (
-                dataTypes::unsafeAddress <
-                        typename returnOf < IndexedTransformer > :: Iterator
-                >()->value()
-                )
-        > :: type
-> & __CDS_Requires (
+) const noexcept -> Collection < typename __CDS_Sequence :: FlatMapDeductedType < IndexedTransformer > :: Type > & __CDS_Requires (
         ( Iterable < C > || ConstIterable < C > ) && (
-                Iterable <
-                        typename std::remove_reference <
-                                decltype (
-                                dataTypes::unsafeAddress <
-                                        typename returnOf < IndexedTransformer > :: Iterator
-                                >()->value()
-                                )
-                        > :: type
-                > ||
-                ConstIterable <
-                        typename std::remove_reference <
-                                decltype (
-                                dataTypes::unsafeAddress <
-                                        typename returnOf < IndexedTransformer > :: Iterator
-                                >()->value()
-                                )
-                        > :: type
-                >
+                Iterable < returnOf < IndexedTransformer > > ||
+                ConstIterable < returnOf < IndexedTransformer > >
         )
 ) {
 
     Index j = 0;
     for ( auto i : * this )
-        for ( auto const & e : transformer(i) )
-            collection.add(j++, e);
+        for ( auto const & e : transformer(j++, i) )
+            collection.add(e);
 
     return collection;
 }

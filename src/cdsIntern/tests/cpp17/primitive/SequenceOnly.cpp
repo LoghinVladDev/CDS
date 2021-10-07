@@ -5,5 +5,5 @@
 #include "SequenceTest.h"
 
 int main () {
-    SequenceTest().execute();
+    (void)SequenceTest().start("Sequence Test");
 }

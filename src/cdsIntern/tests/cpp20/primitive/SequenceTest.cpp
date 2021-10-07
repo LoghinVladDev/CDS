@@ -183,10 +183,63 @@ bool SequenceTest::execute() noexcept {
             list.forEach([](int * e){delete e;});
         };
 
+        auto findTest = [&] {
+            auto numbers = Array < Int > { 1, 2, 3, 4, 5, 6, 7 }.sequence();
+            auto firstOdd = numbers.find( Int::isOdd );
+            auto lastEven = numbers.findLast( Int::isEven );
+            auto firstNegative = numbers.find( [](Int const & a) { return a < 0; } );
+
+            log( "numbers : %s", numbers.toArray().toString().cStr() );
+            log( "firstOdd : %s", firstOdd.toString().cStr() );
+            log( "lastEven : %s", lastEven.toString().cStr() );
+            log( "firstNegative : %s", firstNegative.toString().cStr() );
+
+            if ( firstOdd.value() != 1 || lastEven.value() != 6 || firstNegative.hasValue() ) {
+                ok = false;
+                logWarning("find error");
+            }
+        };
+
+        auto firstTest = [&] {
+            auto numbers = Array < Int > { 1, 2, 3, 4, 5 }.sequence();
+            auto first = numbers.first();
+            auto firstEven = numbers.first(Int::isEven);
+            auto firstNegative = numbers.first([](Int const & n){ return n < 0; });
+
+            log( "numbers : %s", numbers.toArray().toString().cStr() );
+            log( "first : %s", first.toString().cStr() );
+            log( "firstEven : %s", firstEven.toString().cStr() );
+            log( "firstNegative : %s", firstNegative.toString().cStr() );
+
+            if ( first.value () != 1 || firstEven.value() != 2 || firstNegative.hasValue() ) {
+                ok = false;
+                logWarning("first error");
+            }
+        };
+
+        auto firstOrTest = [&] {
+            auto numbers = Array < Int > { 1, 2, 3, 4, 5 }.sequence();
+            auto first = numbers.firstOr(15);
+            auto firstEven = numbers.firstOr(15,Int::isEven);
+            auto firstNegative = numbers.firstOr(15,[](Int const & n){ return n < 0; });
+
+            log( "numbers : %s", numbers.toArray().toString().cStr() );
+            log( "first : %s", first.toString().cStr() );
+            log( "firstEven : %s", firstEven.toString().cStr() );
+            log( "firstNegative : %s", firstNegative.toString().cStr() );
+
+            if ( first != 1 || firstEven != 2 || firstNegative != 15 ) {
+                ok = false;
+                logWarning("first error");
+            }
+        };
+
         elementAtTest();
         elementAtOrElseTest();
         elementAtOrNullTest ();
-
+        findTest();
+        firstTest();
+        firstOrTest();
     });
 
     this->executeSubtest("Basic Functional Properties", [& ok, this]{
@@ -1106,6 +1159,76 @@ bool SequenceTest::execute() noexcept {
             }
         };
 
+        auto flatMapTest = [&] {
+            auto numberStrings = Array < String > { "123", "45", "172", "14156" }.sequence();
+
+            auto digits = numberStrings.flatMap ( [] ( String const & s ) { return s.sequence().toArray(); } );
+
+            log("numberStrings : %s", numberStrings.toArray().toString().cStr());
+            log("digits : %s", digits.toArray().toString().cStr());
+
+            if ( digits.toArray() != String("1234517214156").sequence().toArray() ) {
+                ok = false;
+                logWarning("flatMap error");
+            }
+        };
+
+        auto flatMapToTest = [&] {
+            auto numberStrings = Array < String > { "123", "45", "172", "14156" }.sequence();
+
+            auto digits = Array < char > ();
+
+            numberStrings.flatMapTo ( digits, [] ( String const & s ) { return s.sequence().toArray(); } );
+
+            log("numberStrings : %s", numberStrings.toArray().toString().cStr());
+            log("digits : %s", digits.toString().cStr());
+
+            if ( digits != String("1234517214156").sequence().toArray() ) {
+                ok = false;
+                logWarning("flatMap error");
+            }
+        };
+
+        auto flatMapIndexedTest = [&] {
+            auto data = Array < String > { "Abcd", "efgh", "Klmn" }.sequence();
+            auto selected = data.map( [](String const & s){ return s.any(String::isUpperChar); } ).toArray();
+            auto result = data.flatMapIndexed( [&](Index index, String const & s) {
+                if ( selected[index] )
+                    return s.sequence().toArray();
+                return Array < char > ();
+            } );
+
+            log ( "data : %s", data.toArray().toString().cStr() );
+            log ( "selected : %s", selected.toString().cStr() );
+            log ( "result : %s", result.toArray().toString().cStr() );
+
+            if ( result.toArray () != "AbcdKlmn"_s.sequence().toArray() ) {
+                ok = false;
+                logWarning("flatMapIndexed error");
+            }
+        };
+
+        auto flatMapIndexedToTest = [&] {
+            auto data = Array < String > { "Abcd", "efgh", "Klmn" }.sequence();
+            auto selected = data.map( [](String const & s){ return s.any(String::isUpperChar); } ).toArray();
+            auto result = Array < char > ();
+
+            data.flatMapIndexedTo( result, [&](Index index, String const & s) {
+                if ( selected[index] )
+                    return s.sequence().toArray();
+                return Array < char > ();
+            } );
+
+            log ( "data : %s", data.toArray().toString().cStr() );
+            log ( "selected : %s", selected.toString().cStr() );
+            log ( "result : %s", result.toString().cStr() );
+
+            if ( result != "AbcdKlmn"_s.sequence().toArray() ) {
+                ok = false;
+                logWarning("flatMapIndexed error");
+            }
+        };
+
         chunkedTest();
         dropTest();
         filterTest();
@@ -1116,6 +1239,10 @@ bool SequenceTest::execute() noexcept {
         filterNotNullTest();
         filterNotNullToTest();
         filterNotToTest();
+        flatMapTest();
+        flatMapToTest();
+        flatMapIndexedTest();
+        flatMapIndexedToTest();
     });
 
     return ok;

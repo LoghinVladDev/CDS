@@ -54,6 +54,17 @@ namespace __CDS_Sequence { // NOLINT(bugprone-reserved-identifier)
         > :: type :: value;
     }
 
+    template < typename TransformerType >
+    struct FlatMapDeductedType {
+        using Type = typename std :: remove_reference <
+            decltype (
+                Type <
+                    typename returnOf < TransformerType > :: Iterator
+                > :: unsafeAddress () -> value ()
+            )
+        > :: type;
+    };
+
     template < typename C >
     constexpr auto containedTypeIsPair () noexcept -> bool {
         return isPair <
@@ -66,6 +77,11 @@ namespace __CDS_Sequence { // NOLINT(bugprone-reserved-identifier)
             > :: type
         > :: type :: value;
     }
+
+//    template < typename C >
+//    constexpr auto flattable () noexcept -> bool {
+//
+//    }
 
     template < typename C >
     struct ContainedTypeAsPair : pairTrait <
