@@ -134,11 +134,6 @@ struct returnTrait < R (*) (A ...) > {
     using returnType = R;
 };
 
-template < typename R, typename ... A >
-struct returnTrait < R (*) (A ...) noexcept > {
-    using returnType = R;
-};
-
 template < typename R, typename C, typename ... A >
 struct returnTrait < R (C::*) (A ...) > {
     using returnType = R;

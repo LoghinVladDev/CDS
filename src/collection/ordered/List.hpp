@@ -715,8 +715,8 @@ public:
     virtual auto back () noexcept (false) -> T & = 0;
     virtual auto back () const noexcept (false) -> const T & = 0;
 
-    constexpr virtual auto front () const noexcept (false) -> const T & = 0;
-    __CDS_cpplang_NonConstConstexprMemberFunction virtual auto front () noexcept (false) -> T & = 0;
+    __CDS_cpplang_ConstexprPureAbstract virtual auto front () const noexcept (false) -> const T & = 0;
+    __CDS_cpplang_ConstexprPureAbstract virtual auto front () noexcept (false) -> T & = 0;
 
     __CDS_NoDiscard __CDS_MaybeUnused __CDS_cpplang_VirtualConstexpr auto empty () const noexcept -> bool override {
         return this->_size == 0;

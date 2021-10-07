@@ -552,7 +552,7 @@ public:
         b.forEach([&e, &k](auto & p){if (Type < K > :: compare ( p.getFirst(), k )) e = p;});
 #else
         for ( auto & p : b )
-            if ( p.getFirst() == k ) e = p;
+            if ( Type < Key > :: compare ( p.getFirst(), k ) ) e = p;
 #endif
         return b.removeFirst(e);
     }
