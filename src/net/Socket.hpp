@@ -350,15 +350,11 @@ private:
                 finalAddress = std :: move(addressBits.front());
         } else {
             if( ! addressBits.empty() && addressBits.size() <= 2 && addressBits[0].count ('.') == 3 ) {
-                finalAddress = std::move(String::f("::FFFF:%s:%s",
-                    (
-                        Int::parse(addressBits[0].split ('.')[0]) << 2 |
-                        Int::parse(addressBits[0].split ('.')[1])
-                    ).toString(16).cStr(),
-                    (
-                        Int::parse(addressBits[0].split ('.')[2]) << 2 |
-                        Int::parse(addressBits[0].split ('.')[3])
-                    ).toString(16).cStr()
+                finalAddress = std::move(String::f("::FFFF:%s%s:%s%s",
+                    Int::parse(addressBits[0].split ('.')[0]).toString(16).ljust(2, '0').cStr(),
+                    Int::parse(addressBits[0].split ('.')[1]).toString(16).ljust(2, '0').cStr(),
+                    Int::parse(addressBits[0].split ('.')[2]).toString(16).ljust(2, '0').cStr(),
+                    Int::parse(addressBits[0].split ('.')[3]).toString(16).ljust(2, '0').cStr()
                 ));
 
                 if ( addressBits.size() == 2 )

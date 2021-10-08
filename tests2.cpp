@@ -17,7 +17,7 @@ public:
 };
 
 int main () {
-    Socket s(Socket::ProtocolVersion::IPV4);
+    Socket s;
 
     s.connect (Socket::LOCALHOST, 34000);
 

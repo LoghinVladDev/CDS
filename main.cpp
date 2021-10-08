@@ -2,7 +2,7 @@
 #include <CDS/Thread>
 
 int main () {
-    ServerSocket serverSocket(34000, Socket::ProtocolVersion::INTERNET_PROTOCOL_VERSION_4);
+    ServerSocket serverSocket(34000);
     Array < SharedPointer < Thread > > threads;
 
     while(true) {
