@@ -171,9 +171,10 @@ public:
     }
 
     inline explicit Socket ( String const & address, uint16 port, ProtocolVersion protocolVersion = ProtocolVersion::AUTO ) noexcept (false) :
-            _protocolVersion(protocolVersion) {
+            _protocolVersion(protocolVersion),
+            _port(port) {
 
-        this->open().connect( this->extractAddress ( address ), port );
+        this->open().connect( this->extractAddress ( address ) );
     }
 
     inline auto connect ( String const & address ) noexcept (false) -> Socket & {
@@ -374,7 +375,9 @@ private:
             } else {
                 finalAddress = addressBits
                         .sequence()
-                        .fold(addressBits.size() < 8 ? ":" : ""_s, [](String const & s, String const & p){ return s + ":" + p; });
+                        .fold(addressBits.size() < 8 ? ":" : ""_s, [](String const & s, String const & p){
+                            return s + ":" + p;
+                        });
             }
         }
 
