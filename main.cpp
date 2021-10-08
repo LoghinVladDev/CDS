@@ -1,17 +1,23 @@
 #include <CDS/Socket>
 #include <CDS/Thread>
 
+#pragma clang diagnostic push
+#pragma ide diagnostic ignored "EndlessLoop"
 int main () {
     ServerSocket serverSocket(34000);
+
     Array < SharedPointer < Thread > > threads;
 
     while(true) {
         threads.pushBack (
-            new Runnable ([socket = std::move(serverSocket.accept())] mutable {
+            new Runnable ([socket = std::move(serverSocket.accept())] () mutable {
+
                 socket.writeInt(socket.readInt() + 1);
+
                 auto buffer = socket.readString();
-                buffer.forEach([](char & e){++e;});
+                buffer.forEach([](char & character){++character;});
                 socket.writeString(buffer);
+
                 socket.close();
             })
         );
@@ -279,3 +285,4 @@ int main () {
 ////
 ////    return 0;
 ////}
+#pragma clang diagnostic pop

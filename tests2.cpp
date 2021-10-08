@@ -4,37 +4,24 @@
 #include <CDS/Socket>
 #include <CDS/Integer>
 
-int v = 014;
-
-struct A {
-public:
-    A() {std::cout << "C\n";}
-    void f() {}
-    ~A() {std::cout << "D\n";}
-
-};
 
 int main () {
-    Socket s;
+    Socket socket(Socket::LOCALHOST, 34000);
 
-    s.connect (Socket::LOCALHOST, 34000);
+    socket.writeInt ( 5);
+    int value = socket.readInt();
 
-    s.writeInt (5);
-
-    int v = s.readInt();
     String buffer(70000, 'b');
-    s.writeString (buffer);
+    socket.writeString ( buffer);
 
-    buffer = std::move(s.readString());
+    buffer = socket.readString();
 
     if ( ! buffer.all([](auto c) { return c == 'c'; }) )
         std::cout << "nok";
 
-    std::cout << buffer << '\n';
+    std::cout << buffer << "\n" << value << '\n';
 
-    std::cout << v << '\n';
-
-    s.close();
+    socket.close();
 
     return 0;
 }

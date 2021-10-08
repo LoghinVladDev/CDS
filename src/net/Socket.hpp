@@ -170,6 +170,12 @@ public:
         this->open().connect( this->extractAddress (  address ) );
     }
 
+    inline explicit Socket ( String const & address, uint16 port, ProtocolVersion protocolVersion = ProtocolVersion::AUTO ) noexcept (false) :
+            _protocolVersion(protocolVersion) {
+
+        this->open().connect( this->extractAddress ( address ), port );
+    }
+
     inline auto connect ( String const & address ) noexcept (false) -> Socket & {
         return this->connect( this->extractAddress(  address ) );
     }
