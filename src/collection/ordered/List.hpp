@@ -66,7 +66,7 @@ public:
     }
 
     template < typename ListType, typename V = T, typename std :: enable_if < Type < V > :: copyAssignable && isDerivedFrom < ListType, List < T > > :: value, int > :: type = 0 >
-    __CDS_MaybeUnused auto sub ( Index, Index = UINT64_MAX ) const noexcept (false) -> ListType;
+    __CDS_MaybeUnused auto sub ( Index, Index = Limits::S64_MAX ) const noexcept (false) -> ListType;
 
     inline auto operator [] ( Index index ) noexcept -> T & {
         return this->get( index );
@@ -736,6 +736,7 @@ __CDS_MaybeUnused auto List < T > :: sub ( Index from, Index to ) const noexcept
     this->forEach([&](ElementCRef element) noexcept -> void {
         if ( i >= from && i < to )
             list.add ( element );
+        ++ i;
     });
 
     return list;

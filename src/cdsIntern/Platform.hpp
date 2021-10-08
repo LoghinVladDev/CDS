@@ -5,19 +5,23 @@
 #ifndef CDS_PLATFORM_HPP
 #define CDS_PLATFORM_HPP
 
-#define __CDS_platform_name "Undefined" /* NOLINT(bugprone-reserved-identifier) */
+#define __CDS_Platform "Undefined" /* NOLINT(bugprone-reserved-identifier) */
 
 #if defined(_WIN32)
 
-#undef __CDS_platform_name
-#define __CDS_platform_name "Microsoft Windows"
+#define __CDS_Platform_Microsoft_Windows "Microsoft Windows" /* NOLINT(bugprone-reserved-identifier) */
+
+#undef __CDS_Platform
+#define __CDS_Platform __CDS_Platform_Microsoft_Windows
 
 #endif
 
 #if defined(linux)
 
-#undef __CDS_platform_name
-#define __CDS_platform_name "Linux" /* NOLINT(bugprone-reserved-identifier) */
+#define __CDS_Platform_Linux "Linux" /* NOLINT(bugprone-reserved-identifier) */
+
+#undef __CDS_Platform
+#define __CDS_Platform __CDS_Platform_Linux /* NOLINT(bugprone-reserved-identifier) */
 
 #endif
 

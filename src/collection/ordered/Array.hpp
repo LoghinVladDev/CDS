@@ -52,6 +52,8 @@ public:
 
     explicit Array( Size, ElementCRef = ElementType () ) noexcept;
 
+    Array ( Collection < T > const & ) noexcept;
+
     ~Array () noexcept final;
 
 private:
@@ -544,6 +546,11 @@ Array<T>::Array(
         this->pushBack( it->value() );
 }
 
+template < typename T >
+Array < T > :: Array ( Collection < T > const & collection ) noexcept {
+    collection.forEach([this](T const & e){this->add(e);});
+}
+
 template <class T>
 Array<T>::Array ( Size size, ElementCRef defaultValue ) noexcept {
     this->_resize(size);
@@ -570,6 +577,7 @@ auto Array<T>::remove(ElementCRef e, Size count) noexcept -> bool {
     this->_capacity = this->size();
     this->_size = l;
     delete [] this->_pData;
+    this->_pData = newBuf;
     return removed;
 }
 

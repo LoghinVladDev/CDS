@@ -208,6 +208,15 @@ constexpr auto typeMoveAssignable () noexcept -> bool {
     return std :: is_move_assignable < T > :: type :: value;
 }
 
+template < typename T, typename = void >
+struct isFunction : public std :: false_type { };
+
+template < typename T >
+struct isFunction < T > : public std :: true_type {
+private:
+    using dummy = returnOf < T >;
+};
+
 template < typename T >
 struct Type {
     using BaseType = T;
@@ -236,6 +245,7 @@ struct Type {
     static constexpr bool ostreamPrintable = isPrintable < T > :: type :: value;
 
     static constexpr bool isFundamental = typeFundamental < T >();
+    static constexpr bool isIntegral = std::is_integral < T > :: type :: value;
     static constexpr bool isBasicPointer = std :: is_pointer < T > :: type :: value;
     static constexpr bool isSmartPointer = :: isSmartPointer < T > :: type :: value;
     static constexpr bool isPointer = isBasicPointer || isSmartPointer;

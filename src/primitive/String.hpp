@@ -3820,6 +3820,30 @@ public:
         return * this;
     }
 
+    /**
+     * @brief Move Operator
+     *
+     * @param o : String mref = Move Reference to a String to copy data from
+     *
+     * @exceptsafe
+     *
+     * @returns String ref = Reference to the modified Object
+     *
+     * @test tested in primitive/StringTest/Assignment Tests
+     */
+    __CDS_cpplang_ConstexprDynamicAllocation auto operator = ( String && o ) noexcept -> String & {
+        if ( this == & o )
+            return * this;
+
+        this->clear();
+
+        this->_p = exchange( o._p, nullptr );
+        this->_l = exchange( o._l, 0u );
+        this->_c = exchange( o._c, 0u );
+
+        return * this;
+    }
+
 #if defined(CDS_QT)
 
     /**
@@ -4144,7 +4168,7 @@ public:
      *
      * @test Tested in primitive/StringTest/ForEach tests
      */
-    template < typename Predicate >
+    template < typename Predicate, typename std :: enable_if < std :: is_function < Predicate > :: type :: value , int > = 0 >
     __CDS_MaybeUnused __CDS_cpplang_ConstexprConditioned auto count ( Predicate const & p ) noexcept ( noexcept ( ( * dataTypes :: unsafeAddress < Predicate > () ) ( Type < char > :: unsafeReference() ) ) ) -> Size {
         Size count = 0;
         for ( Index i = 0; i < this->_l; ++ i )
@@ -4167,12 +4191,21 @@ public:
      *
      * @test Tested in primitive/StringTest/ForEach tests
      */
-    template < typename Predicate >
+    template < typename Predicate, typename std :: enable_if < std :: is_function < Predicate > :: type :: value , int > = 0  >
     __CDS_MaybeUnused __CDS_cpplang_ConstexprConditioned auto count ( Predicate const & p ) const noexcept ( noexcept ( ( * dataTypes :: unsafeAddress < Predicate > () ) ( Type < const char > :: unsafeReference() ) ) ) -> Size {
         Size count = 0;
         for ( Index i = 0; i < this->_l; ++ i )
             if ( p ( this->_p[i] ) )
                 count ++;
+
+        return count;
+    }
+
+    __CDS_MaybeUnused __CDS_NoDiscard __CDS_cpplang_ConstexprConditioned auto count ( ElementType element ) const noexcept -> Size {
+        Size count = 0;
+        for ( Index i = 0; i < this->_l; ++ i )
+            if ( this->_p [i] == element )
+                ++ count;
 
         return count;
     }
@@ -4410,9 +4443,28 @@ public:
         va_list args;
         va_start (args, format);
 
-        return String::format(format, args);
+        int currentSize = __CDS_StringFormat_StartSize;
+
+        while(currentSize <= __CDS_StringFormat_MaxSize) {
+            char * buffer = new char[currentSize];
+
+            int returnValue = std::vsnprintf ( buffer, currentSize, format, args );
+            if ( returnValue >= 0 && returnValue < currentSize ) {
+                String s(buffer, returnValue);
+                delete [] buffer;
+                va_end (args);
+
+                return s;
+            }
+
+            va_end(args);
+            va_start(args, format);
+            delete [] buffer;
+            currentSize *= __CDS_StringFormat_SizeMultiplier;
+        }
 
         va_end (args);
+        throw FormatException();
     }
 
     __CDS_NoDiscard auto sequence () const & noexcept -> Sequence < const String >;

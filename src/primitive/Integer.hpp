@@ -1123,8 +1123,25 @@ public:
      *
      * @test Tested in primitive/IntegerTest
      */
-    __CDS_NoDiscard auto toString() const noexcept -> String override {
+    __CDS_NoDiscard __CDS_cpplang_ConstexprDestructor auto toString() const noexcept -> String override {
         return String(this->v); // NOLINT(modernize-return-braced-init-list)
+    }
+
+    __CDS_NoDiscard __CDS_cpplang_ConstexprDestructor auto toString(int base) const noexcept -> String {
+        auto c = this->v;
+        String rep;
+
+        __CDS_cpplang_ConstexprLambda auto baseDigitToString = [](int value) noexcept -> char {
+            if ( value < 10 ) return (char) (value + '0');
+            return (char) (value + 'a' - 10);
+        };
+
+        while ( c > 0 ) {
+            rep += baseDigitToString(c % base);
+            c /= base;
+        }
+
+        return std :: move ( (rep + (this->v < 0 ? "-" : "")).reversed() );
     }
 
     /**
@@ -1140,25 +1157,46 @@ public:
      *
      * @test Tested in primitive/IntegerTest/Utility
      */
-    static auto parse(String const & string) noexcept -> Integer {
+    static auto parse(String const & string, int base = 10) noexcept -> Integer {
         if ( string.empty() ) return 0;
 
         bool negative = false;
 
         auto it = string.begin();
         __CDS_cpplang_ConstexprLambda static auto isNumericChar = [] (char c) noexcept -> bool { return c >= '0' && c <= '9'; };
-        __CDS_cpplang_ConstexprLambda static auto numericCharToInt = [] (char c) noexcept -> int { return static_cast < int > ( c ) - 48; };
+        __CDS_cpplang_ConstexprLambda static auto numericCharToInt = [] (char c) noexcept -> int {
+            return static_cast < int > ( c ) - 48;
+        };
 
-        while( ! isNumericChar ( it.value() ) && it != string.end() ) {
+        __CDS_cpplang_ConstexprLambda static auto isBaseNumericChar = [](int base, char c) noexcept -> bool {
+            if ( base < 10 )
+                return c >= '0' && c < (char)('0' + base);
+
+            return c >= '0' && c <= '9' || (c >= 'A' && c < 'A' + (base - 10) || c >= 'a' && c < 'a' + (base - 10));
+        };
+
+        __CDS_cpplang_ConstexprLambda static auto baseNumericCharToInt = [](char c) noexcept -> int {
+            if ( c >= '0' && c <= '9' ) return static_cast < int > ( c ) - '0';
+            if ( c >= 'A' && c <= 'Z' ) return static_cast < int > ( c ) - 'A' + 10;
+            if ( c >= 'a' && c <= 'z' ) return static_cast < int > ( c ) - 'a' + 10;
+        };
+
+        while( ( base == 10 && ! isNumericChar ( it.value() ) || ! isBaseNumericChar(base, it.value()) ) && it != string.end() ) {
             if ( it.value() == '-' )
                 negative = true;
             it.next();
         }
 
+        if ( base == 16 ) {
+            auto copy = it;
+            if ( copy.value() == '0' && copy.next().value() == 'x' )
+                it = copy.next();
+        }
+
         int numericValue = 0;
 
-        while ( isNumericChar ( it.value() ) && it != string.end() ) {
-            numericValue = numericValue * 10 + numericCharToInt ( it.value() );
+        while ( ( base == 10 && isNumericChar ( it.value() ) || isBaseNumericChar(base, it.value() ) ) && it != string.end() ) {
+            numericValue = numericValue * base + ((base == 10) ? numericCharToInt ( it.value() ) : baseNumericCharToInt(it.value()));
             it.next();
         }
 
