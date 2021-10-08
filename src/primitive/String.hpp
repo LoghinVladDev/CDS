@@ -4168,7 +4168,7 @@ public:
      *
      * @test Tested in primitive/StringTest/ForEach tests
      */
-    template < typename Predicate, typename std :: enable_if < std :: is_function < Predicate > :: type :: value , int > = 0 >
+    template < typename Predicate, typename P = Predicate, typename std :: enable_if < Type < P > :: isCallable, int > :: type = 0 >
     __CDS_MaybeUnused __CDS_cpplang_ConstexprConditioned auto count ( Predicate const & p ) noexcept ( noexcept ( ( * dataTypes :: unsafeAddress < Predicate > () ) ( Type < char > :: unsafeReference() ) ) ) -> Size {
         Size count = 0;
         for ( Index i = 0; i < this->_l; ++ i )
@@ -4191,7 +4191,7 @@ public:
      *
      * @test Tested in primitive/StringTest/ForEach tests
      */
-    template < typename Predicate, typename std :: enable_if < std :: is_function < Predicate > :: type :: value , int > = 0  >
+    template < typename Predicate, typename P = Predicate, typename std :: enable_if < Type < P > :: isCallable, int > :: type = 0  >
     __CDS_MaybeUnused __CDS_cpplang_ConstexprConditioned auto count ( Predicate const & p ) const noexcept ( noexcept ( ( * dataTypes :: unsafeAddress < Predicate > () ) ( Type < const char > :: unsafeReference() ) ) ) -> Size {
         Size count = 0;
         for ( Index i = 0; i < this->_l; ++ i )
@@ -4471,6 +4471,8 @@ public:
     __CDS_NoDiscard auto sequence () & noexcept -> Sequence < String >;
     __CDS_NoDiscard auto sequence () const && noexcept -> Sequence < const String >;
     __CDS_NoDiscard auto sequence () && noexcept -> Sequence < String >;
+
+    friend class Socket;
 };
 
 // weird stuff here

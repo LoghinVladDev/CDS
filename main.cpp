@@ -9,6 +9,9 @@ int main () {
         threads.pushBack (
             new Runnable ([socket = std::move(serverSocket.accept())] mutable {
                 socket.writeInt(socket.readInt() + 1);
+                auto buffer = socket.readString();
+                buffer.forEach([](char & e){++e;});
+                socket.writeString(buffer);
                 socket.close();
             })
         );

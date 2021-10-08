@@ -208,13 +208,93 @@ constexpr auto typeMoveAssignable () noexcept -> bool {
     return std :: is_move_assignable < T > :: type :: value;
 }
 
-template < typename T, typename = void >
-struct isFunction : public std :: false_type { };
+template<typename T, typename U = void>
+struct isCallableType
+{
+    static bool const constexpr value = std::conditional_t<
+            std::is_class<std::remove_reference_t<T>>::value,
+            isCallableType<std::remove_reference_t<T>, int>, std::false_type>::value;
+};
 
-template < typename T >
-struct isFunction < T > : public std :: true_type {
+template<typename T, typename U, typename ...Args>
+struct isCallableType<T(Args...), U> : std::true_type {};
+template<typename T, typename U, typename ...Args>
+struct isCallableType<T(*)(Args...), U> : std::true_type {};
+template<typename T, typename U, typename ...Args>
+struct isCallableType<T(&)(Args...), U> : std::true_type {};
+template<typename T, typename U, typename ...Args>
+struct isCallableType<T(Args......), U> : std::true_type {};
+template<typename T, typename U, typename ...Args>
+struct isCallableType<T(*)(Args......), U> : std::true_type {};
+template<typename T, typename U, typename ...Args>
+struct isCallableType<T(&)(Args......), U> : std::true_type {};
+template<typename T, typename U, typename ...Args>
+struct isCallableType<T(Args...)const, U> : std::true_type {};
+template<typename T, typename U, typename ...Args>
+struct isCallableType<T(Args...)volatile, U> : std::true_type {};
+template<typename T, typename U, typename ...Args>
+struct isCallableType<T(Args...)const volatile, U> : std::true_type {};
+template<typename T, typename U, typename ...Args>
+struct isCallableType<T(Args......)const, U> : std::true_type {};
+template<typename T, typename U, typename ...Args>
+struct isCallableType<T(Args......)volatile, U> : std::true_type{};
+template<typename T, typename U, typename ...Args>
+struct isCallableType<T(Args......)const volatile, U> : std::true_type {};
+template<typename T, typename U, typename ...Args>
+struct isCallableType<T(Args...)&, U> : std::true_type {};
+template<typename T, typename U, typename ...Args>
+struct isCallableType<T(Args...)const&, U> : std::true_type{};
+template<typename T, typename U, typename ...Args>
+struct isCallableType<T(Args...)volatile&, U> : std::true_type{};
+template<typename T, typename U, typename ...Args>
+struct isCallableType<T(Args...)const volatile&, U> : std::true_type{};
+template<typename T, typename U, typename ...Args>
+struct isCallableType<T(Args......)&, U> : std::true_type {};
+template<typename T, typename U, typename ...Args>
+struct isCallableType<T(Args......)const&, U> : std::true_type{};
+template<typename T, typename U, typename ...Args>
+struct isCallableType<T(Args......)volatile&, U> : std::true_type{};
+template<typename T, typename U, typename ...Args>
+struct isCallableType<T(Args......)const volatile&, U> : std::true_type{};
+template<typename T, typename U, typename ...Args>
+struct isCallableType<T(Args...)&&, U> : std::true_type{};
+template<typename T, typename U, typename ...Args>
+struct isCallableType<T(Args...)const&&, U> : std::true_type{};
+template<typename T, typename U, typename ...Args>
+struct isCallableType<T(Args...)volatile&&, U> : std::true_type{};
+template<typename T, typename U, typename ...Args>
+struct isCallableType<T(Args...)const volatile&&, U> : std::true_type{};
+template<typename T, typename U, typename ...Args>
+struct isCallableType<T(Args......)&&, U> : std::true_type{};
+template<typename T, typename U, typename ...Args>
+struct isCallableType<T(Args......)const&&, U> : std::true_type{};
+template<typename T, typename U, typename ...Args>
+struct isCallableType<T(Args......)volatile&&, U> : std::true_type{};
+template<typename T, typename U, typename ...Args>
+struct isCallableType<T(Args......)const volatile&&, U> : std::true_type{};
+
+template<typename T>
+struct isCallableType<T, int>
+{
 private:
-    using dummy = returnOf < T >;
+    using YesType = char(&)[1];
+    using NoType = char(&)[2];
+
+    struct Fallback { void operator()(); };
+
+    struct Derived : T, Fallback {};
+
+    template<typename U, U>
+    struct Check;
+
+    template<typename>
+    static YesType Test(...);
+
+    template<typename C>
+    static NoType Test(Check<void (Fallback::*)(), &C::operator()>*);
+
+public:
+    static bool const constexpr value = sizeof(Test<Derived>(0)) == sizeof(YesType);
 };
 
 template < typename T >
@@ -253,6 +333,8 @@ struct Type {
     static constexpr bool isLvalue = std :: is_lvalue_reference < T > :: type :: value;
     static constexpr bool isRvalue = std :: is_rvalue_reference < T > :: type :: value;
     static constexpr bool isConst = std :: is_const < T > :: type :: value;
+
+    static constexpr bool isCallable = isCallableType < T > :: value;
 
 #if __CDS_cpplang_VariableTemplates_available == true
 

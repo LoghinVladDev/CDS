@@ -143,9 +143,15 @@ public:
 
                 throw SocketException ( "Unable to open Socket on IPV4" );
 
+#else
+
+#error Socket::open Unimplemented
+
 #endif
 
         }
+
+        return * this;
     }
 
     inline explicit Socket ( ProtocolVersion protocolVersion = ProtocolVersion::AUTO ) noexcept (false) :
@@ -703,21 +709,19 @@ public:
         return this->writeUInt64 (value);
     }
 
-    __CDS_MaybeUnused inline auto writeString ( String string ) noexcept (false) -> Socket & {
+    __CDS_MaybeUnused inline auto writeString ( String const & string ) noexcept (false) -> Socket & {
         auto packetCount = string.size() / this->_packetSize;
         if ( string.size() % this->_packetSize != 0 )
             ++ packetCount;
 
-        string.resize ( this->_packetSize * packetCount );
-
-        this->writeSize ( packetCount );
+        this->writeSize ( string.size() );
 
         Size offset = 0U;
 
         for ( Size i = 0; i < packetCount; ++ i ) {
             this->writeBytes (
                 reinterpret_cast < byte const * > ( string.cStr() ) + offset,
-                this->_packetSize
+                std::min ( this->_packetSize, string.size() - offset)
             );
 
             offset += this->_packetSize;
@@ -790,21 +794,27 @@ public:
     }
 
     __CDS_NoDiscard __CDS_MaybeUnused auto readString () noexcept (false) -> String {
-        Size packetCount = this->readSize(), offset = 0U;
+        Size originalSize = this->readSize(), offset = 0U;
+        Size packetCount = originalSize / this->_packetSize;
+
+        if ( originalSize % this->_packetSize != 0 )
+            ++ packetCount;
+
         String buffer;
-        buffer.resize(packetCount * this->_packetSize);
+        buffer.resize(originalSize);
+        buffer._l = originalSize;
 
         for ( Size i = 0; i < packetCount; ++ i ) {
             this->readBytes (
                 reinterpret_cast < byte * > (buffer.data()) + offset,
-                this->_packetSize
+                std::min(this->_packetSize, originalSize - offset)
             );
+
+            offset += this->_packetSize;
 
             if ( (i + 1) % this->_packetSyncCount == 0 ) {
                 this->writeInt(1);
             }
-
-            offset += this->_packetSize;
         }
 
         return std :: move ( buffer );
