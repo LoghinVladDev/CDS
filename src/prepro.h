@@ -7,6 +7,10 @@
 
 #include "std-types.h"
 
+#if defined(_WIN32)
+#include <winsock2.h>
+#endif
+
 #include <CDS/Options>
 #include <CDS/Compiler>
 #include <CDS/Platform>

@@ -155,6 +155,7 @@ set(
 if (WIN32)
     set(
             CDS_LIBRARIES
+            ws2_32
     )
 else()
     set(

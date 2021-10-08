@@ -14,6 +14,19 @@
 #undef __CDS_Platform
 #define __CDS_Platform __CDS_Platform_Microsoft_Windows
 
+#define __CDS_Platform_Microsoft_Windows_Version_Win7 _WIN32_WINNT_WIN7
+#define __CDS_Platform_Microsoft_Windows_Version_Win8 _WIN32_WINNT_WIN8
+#define __CDS_Platform_Microsoft_Windows_Version_Win8_1 _WIN32_WINNT_WINBLUE
+#define __CDS_Platform_Microsoft_Windows_Version_Win10 _WIN32_WINNT_WIN10
+#define __CDS_Platform_Microsoft_Windows_Version_Win11 _WIN32_WINNT_WIN11
+
+#if !defined(__CDS_Platform_Version)
+#define __CDS_Platform_Version __CDS_Platform_Microsoft_Windows_Version_Win7
+#endif
+
+#undef _WIN32_WINNT
+#define _WIN32_WINNT __CDS_Platform_Version
+
 #endif
 
 #if defined(linux)

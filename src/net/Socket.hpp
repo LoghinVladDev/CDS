@@ -5,11 +5,7 @@
 #ifndef CDS_SOCKET_HPP
 #define CDS_SOCKET_HPP
 
-#include <CDS/Object>
-#include <CDS/Exception>
-#include <CDS/Pair>
-#include <CDS/LinkedList>
-#include <CDS/Utility>
+#include <CDS/Platform>
 
 #if defined(__CDS_Platform_Linux)
 
@@ -18,11 +14,24 @@
 #include <netinet/in.h>
 #include <arpa/inet.h>
 
+#elif defined(__CDS_Platform_Microsoft_Windows)
+
+#include <cstdio>
+#include <winsock2.h>
+#include <windows.h>
+#include <ws2tcpip.h>
+
 #else
 
-#error "Unimplemented : Socket Header"
+#error Not Implemented : CDS Socket Header
 
 #endif
+
+#include <CDS/Object>
+#include <CDS/Exception>
+#include <CDS/Pair>
+#include <CDS/LinkedList>
+#include <CDS/Utility>
 
 class SocketException : public Exception {
 public:
@@ -51,7 +60,7 @@ public:
         AUTO = INTERNET_PROTOCOL_NONE_SPECIFIED,
         IPV4 = INTERNET_PROTOCOL_VERSION_4,
         IPV6 = INTERNET_PROTOCOL_VERSION_6,
-        FORCE_IPV6 = INTERNET_PROTOCOL_VERSION_6_FORCED
+        FORCE_IPV6 __CDS_MaybeUnused = INTERNET_PROTOCOL_VERSION_6_FORCED
     };
 
 private:
@@ -69,9 +78,37 @@ private:
 
     PlatformSocket _platformSocket { Socket::UNIX_INVALID_PLATFORM_SOCKET };
 
+#elif defined(__CDS_Platform_Microsoft_Windows)
+
+    using PlatformSocket = SOCKET;
+
+    constexpr static PlatformSocket WIN32_INVALID_PLATFORM_SOCKET = INVALID_SOCKET;
+    constexpr static int WIN32_SOCKET_FUNCTION_ERROR = SOCKET_ERROR;
+    constexpr static int WIN32_SOCKET_DISCONNECT = 0;
+
+    constexpr static Size PLATFORM_DEFAULT_PACKET_SIZE = 1024U;
+    constexpr static Size PLATFORM_DEFAULT_CLIENT_QUEUE_SIZE = 256U;
+    constexpr static Size PLATFORM_DEFAULT_PACKET_SYNC_COUNT = 4U;
+
+    struct Win32WSAContainerType {
+    public:
+        WSADATA windowsSocketsApplicationLibraryData {};
+
+        inline Win32WSAContainerType () noexcept (false) {
+            if ( WSAStartup ( MAKEWORD(2, 2), & this->windowsSocketsApplicationLibraryData ) != 0 )
+                throw SocketException ( "Win32 Exception : WinSock2 Failed to Load" );
+        }
+
+        inline ~Win32WSAContainerType () noexcept {
+            WSACleanup();
+        }
+    };
+
+    PlatformSocket _platformSocket { Socket::WIN32_INVALID_PLATFORM_SOCKET };
+
 #else
 
-#error "Unimplemented : Object-Socket"
+#error Object-Socket Not Implemented
 
 #endif
 
@@ -97,9 +134,13 @@ public:
 
         return this->_platformSocket != Socket::UNIX_INVALID_PLATFORM_SOCKET;
 
+#elif defined(__CDS_Platform_Microsoft_Windows)
+
+        return this->_platformSocket != Socket::WIN32_INVALID_PLATFORM_SOCKET;
+
 #else
 
-#error "Unimplemented : Socket::isOpen()"
+#error Socket::isOpen Not Implemented
 
 #endif
 
@@ -107,6 +148,13 @@ public:
 
 
     inline auto open () noexcept (false) -> Socket & {
+
+#if defined(__CDS_Platform_Microsoft_Windows)
+
+        static Win32WSAContainerType container;
+
+#endif
+
         if ( this->isOpen() ) return * this;
 
         switch ( this->_protocolVersion ) {
@@ -115,22 +163,33 @@ public:
             case ProtocolVersion::INTERNET_PROTOCOL_VERSION_6:
             case ProtocolVersion::INTERNET_PROTOCOL_VERSION_6_FORCED:
 
-#if defined(__CDS_Platform_Linux)
-
                 if ( this->_protocolVersion == ProtocolVersion::AUTO )
                     this->_protocolVersion = ProtocolVersion::INTERNET_PROTOCOL_VERSION_6;
 
-                this->_platformSocket = socket( AF_INET6, SOCK_STREAM, IPPROTO_TCP);
+#if defined(__CDS_Platform_Linux)
+
+                this->_platformSocket = :: socket( AF_INET6, SOCK_STREAM, IPPROTO_TCP);
 
                 if ( this->_platformSocket != Socket::UNIX_SOCKET_FUNCTION_ERROR )
                     return * this;
+
+#elif defined(__CDS_Platform_Microsoft_Windows)
+
+                this->_platformSocket = :: socket ( AF_INET6, SOCK_STREAM, IPPROTO_TCP );
+
+                if ( this->_platformSocket != Socket::WIN32_INVALID_PLATFORM_SOCKET )
+                    return * this;
+
+#else
+
+#error Socket::open Not Implemented
+
+#endif
 
                 if ( this->_protocolVersion == ProtocolVersion::INTERNET_PROTOCOL_VERSION_6_FORCED )
                     throw SocketException ( "Unable to open Socket on IPV6" );
 
                 this->close();
-
-#endif
 
             case ProtocolVersion::INTERNET_PROTOCOL_VERSION_4:
 
@@ -141,13 +200,20 @@ public:
                 if ( this->_platformSocket != Socket::UNIX_SOCKET_FUNCTION_ERROR )
                     return * this;
 
-                throw SocketException ( "Unable to open Socket on IPV4" );
+#elif defined(__CDS_Platform_Microsoft_Windows)
+
+                this->_platformSocket = :: socket ( AF_INET, SOCK_STREAM, IPPROTO_TCP );
+
+                if ( this->_platformSocket != Socket::WIN32_INVALID_PLATFORM_SOCKET )
+                    return * this;
 
 #else
 
 #error Socket::open Unimplemented
 
 #endif
+
+                throw SocketException ( "Unable to open Socket on IPV4" );
 
         }
 
@@ -235,6 +301,58 @@ private:
                 );
 
                 if ( retVal == Socket::UNIX_SOCKET_FUNCTION_ERROR )
+                    throw SocketException("Unable to connect to address through IPV4");
+
+                break;
+            }
+        }
+
+#elif defined(__CDS_Platform_Microsoft_Windows)
+
+        switch ( this->_protocolVersion ) {
+            case ProtocolVersion::INTERNET_PROTOCOL_NONE_SPECIFIED:
+            case ProtocolVersion::INTERNET_PROTOCOL_VERSION_6:
+            case ProtocolVersion::INTERNET_PROTOCOL_VERSION_6_FORCED: {
+
+                sockaddr_in6 ipv6AddressData {};
+
+                int retVal = inet_pton(AF_INET6, pack.first().cStr(), & ipv6AddressData.sin6_addr);
+                if ( retVal == 0 ) throw SocketException("IPV6 Address Format Error : "_s + pack.first());
+                if ( retVal == 1 ) {
+                    ipv6AddressData.sin6_port = htons(pack.second());
+                    ipv6AddressData.sin6_family = AF_INET6;
+
+                    retVal = ::connect(
+                            this->_platformSocket,
+                            reinterpret_cast < sockaddr * > (& ipv6AddressData),
+                            sizeof ( ipv6AddressData )
+                    );
+
+                    if ( retVal == 0 )
+                        break;
+                }
+
+                if ( this->_protocolVersion == Socket::ProtocolVersion::INTERNET_PROTOCOL_VERSION_6_FORCED )
+                    throw SocketException("Unable to connect to address through IPV6");
+
+                this->_protocolVersion = ProtocolVersion::INTERNET_PROTOCOL_VERSION_4;
+                this->close().open().connect(pack.first(), pack.second());
+
+            } case ProtocolVersion::INTERNET_PROTOCOL_VERSION_4: {
+
+                sockaddr_in ipv4AddressData{};
+
+                ipv4AddressData.sin_addr.s_addr = inet_addr ( pack.first ().cStr () );
+                ipv4AddressData.sin_port = htons ( pack.second () );
+                ipv4AddressData.sin_family = AF_INET;
+
+                int retVal = :: connect (
+                        this->_platformSocket,
+                        reinterpret_cast < sockaddr * > ( & ipv4AddressData ),
+                        sizeof ( ipv4AddressData )
+                );
+
+                if ( retVal < 0 )
                     throw SocketException("Unable to connect to address through IPV4");
 
                 break;
@@ -397,6 +515,12 @@ public:
         if ( retVal == Socket::UNIX_SOCKET_FUNCTION_ERROR )
             throw SocketException("Socket Close Exception");
 
+#elif defined(__CDS_Platform_Microsoft_Windows)
+
+        auto retVal = :: closesocket ( this->_platformSocket );
+        if ( retVal == Socket::WIN32_SOCKET_FUNCTION_ERROR )
+            throw SocketException ("Socket Close Exception");
+
 #else
 
 #error Socket::close Unimplemented
@@ -490,6 +614,87 @@ public:
             }
         }
 
+#elif defined(__CDS_Platform_Microsoft_Windows)
+
+        switch ( this->_protocolVersion ) {
+            case ProtocolVersion::INTERNET_PROTOCOL_NONE_SPECIFIED:
+            case ProtocolVersion::INTERNET_PROTOCOL_VERSION_6:
+            case ProtocolVersion::INTERNET_PROTOCOL_VERSION_6_FORCED: {
+
+                int flag = 0x01;
+                int retVal = :: setsockopt (
+                        this->_platformSocket,
+                        SOL_SOCKET,
+                        SO_REUSEADDR,
+                        reinterpret_cast < char * > (& flag),
+                        sizeof ( flag )
+                );
+
+                if ( retVal == Socket::WIN32_SOCKET_FUNCTION_ERROR ) {
+                    if ( this->_protocolVersion == Socket::ProtocolVersion::INTERNET_PROTOCOL_VERSION_6_FORCED )
+                        throw SocketException("Bind Exception on IPV6 : SetSocketOption Error");
+
+                    this->_protocolVersion = Socket::ProtocolVersion::INTERNET_PROTOCOL_VERSION_4;
+                    return this->close().open().bind();
+                }
+
+                sockaddr_in6 ipv6AddressInfo {};
+
+                ipv6AddressInfo.sin6_family = AF_INET6;
+                ipv6AddressInfo.sin6_addr = in6addr_any;
+                ipv6AddressInfo.sin6_port = htons(this->_port);
+
+                retVal = :: bind (
+                        this->_platformSocket,
+                        reinterpret_cast < sockaddr * > ( & ipv6AddressInfo ),
+                        sizeof ( ipv6AddressInfo )
+                );
+
+                if ( retVal == Socket::WIN32_SOCKET_FUNCTION_ERROR ) {
+                    if ( this->_protocolVersion == Socket::ProtocolVersion::INTERNET_PROTOCOL_VERSION_6_FORCED )
+                        throw SocketException("Bind Exception on IPV6");
+
+                    this->_protocolVersion = Socket::ProtocolVersion::INTERNET_PROTOCOL_VERSION_4;
+                    return this->close().open().bind();
+                }
+
+                return * this;
+
+            } case ProtocolVersion::INTERNET_PROTOCOL_VERSION_4: {
+
+                int flag = 0x01;
+                int retVal = :: setsockopt (
+                        this->_platformSocket,
+                        SOL_SOCKET,
+                        SO_REUSEADDR,
+                        reinterpret_cast < char * > ( & flag ),
+                        sizeof ( flag )
+                );
+
+                if ( retVal == Socket::WIN32_SOCKET_FUNCTION_ERROR )
+                    throw SocketException("Bind Exception on IPV4 : SetSocketOption Error");
+
+                sockaddr_in ipv6AddressInfo {};
+
+                ipv6AddressInfo.sin_family = AF_INET;
+                ipv6AddressInfo.sin_addr.s_addr = htonl(INADDR_ANY);
+                ipv6AddressInfo.sin_port = htons(this->_port);
+
+                retVal = :: bind (
+                        this->_platformSocket,
+                        reinterpret_cast < sockaddr * > ( & ipv6AddressInfo ),
+                        sizeof ( ipv6AddressInfo )
+                );
+
+                if ( retVal == Socket::WIN32_SOCKET_FUNCTION_ERROR )
+                    throw SocketException("Bind Exception on IPV4");
+
+                return * this;
+            }
+        }
+
+        return * this;
+
 #else
 
 #error Socket::bind Unimplemented
@@ -504,6 +709,20 @@ public:
 #if defined(__CDS_Platform_Linux)
 
         if ( Socket::UNIX_SOCKET_FUNCTION_ERROR == :: listen ( this->_platformSocket, queueSize ) ) {
+            if ( this->_protocolVersion == Socket::ProtocolVersion::INTERNET_PROTOCOL_VERSION_6_FORCED )
+                throw SocketException("Listen Exception on IPV6");
+            if ( this->_protocolVersion == Socket::ProtocolVersion::INTERNET_PROTOCOL_VERSION_4 )
+                throw SocketException("Listen Exception on IPV4");
+
+            this->_protocolVersion = Socket::ProtocolVersion::INTERNET_PROTOCOL_VERSION_4;
+            return this->close().open().bind (this->_port).listen (queueSize);
+        }
+
+        return * this;
+
+#elif defined(__CDS_Platform_Microsoft_Windows)
+
+        if ( Socket::WIN32_SOCKET_FUNCTION_ERROR == :: listen ( this->_platformSocket, queueSize ) ) {
             if ( this->_protocolVersion == Socket::ProtocolVersion::INTERNET_PROTOCOL_VERSION_6_FORCED )
                 throw SocketException("Listen Exception on IPV6");
             if ( this->_protocolVersion == Socket::ProtocolVersion::INTERNET_PROTOCOL_VERSION_4 )
@@ -575,6 +794,56 @@ private:
 
     LastAddressContainer * pLastAddressObtainedContainer { nullptr };
 
+#elif defined(__CDS_Platform_Microsoft_Windows)
+
+    struct LastAddressContainer {
+    public:
+        sockaddr * pLastSocketAddress { nullptr };
+        socklen_t lastSocketAddressSize { 0 };
+        ProtocolVersion lastProtocolType { ProtocolVersion::INTERNET_PROTOCOL_NONE_SPECIFIED };
+
+        inline LastAddressContainer() noexcept = default;
+
+        inline ~LastAddressContainer() noexcept {
+            delete this->pLastSocketAddress;
+        }
+
+        inline auto specifyType ( ProtocolVersion protocolVersion ) noexcept -> void {
+            switch ( protocolVersion ) {
+                case ProtocolVersion::INTERNET_PROTOCOL_NONE_SPECIFIED:
+                case ProtocolVersion::INTERNET_PROTOCOL_VERSION_6:
+                case ProtocolVersion::INTERNET_PROTOCOL_VERSION_6_FORCED:
+                    if ( this->lastProtocolType == ProtocolVersion::IPV6 )
+                        return;
+
+                case ProtocolVersion::INTERNET_PROTOCOL_VERSION_4:
+                    if ( this->lastProtocolType == ProtocolVersion::IPV4 )
+                        return;
+            }
+
+            if ( this->pLastSocketAddress != nullptr )
+                delete exchange(this->pLastSocketAddress, nullptr);
+
+            switch ( protocolVersion ) {
+                case ProtocolVersion::INTERNET_PROTOCOL_NONE_SPECIFIED:
+                case ProtocolVersion::INTERNET_PROTOCOL_VERSION_6:
+                case ProtocolVersion::INTERNET_PROTOCOL_VERSION_6_FORCED:
+                    this->pLastSocketAddress = reinterpret_cast < sockaddr * > (new sockaddr_in6);
+                    this->lastSocketAddressSize = sizeof ( sockaddr_in6 );
+                    this->lastProtocolType = ProtocolVersion::IPV6;
+
+                    return;
+                case ProtocolVersion::INTERNET_PROTOCOL_VERSION_4:
+
+                    this->pLastSocketAddress = reinterpret_cast < sockaddr * > (new sockaddr_in);
+                    this->lastSocketAddressSize = sizeof ( sockaddr_in );
+                    this->lastProtocolType = ProtocolVersion::IPV4;
+            }
+        }
+    };
+
+    LastAddressContainer * pLastAddressObtainedContainer { nullptr };
+
 #else
 
 #error Socket::LastAddressContainer Unimplemented
@@ -592,13 +861,30 @@ public:
         if ( this->pLastAddressObtainedContainer == nullptr )
             this->pLastAddressObtainedContainer = & lastAddressContainer;
 
-        int retVal = :: accept (
+        PlatformSocket retVal = :: accept (
             this->_platformSocket,
             lastAddressContainer.pLastSocketAddress,
             & lastAddressContainer.lastSocketAddressSize
         );
 
         if ( retVal == Socket::UNIX_SOCKET_FUNCTION_ERROR )
+            throw SocketException( "Accept Exception." );
+
+#elif defined(__CDS_Platform_Microsoft_Windows)
+
+        static LastAddressContainer lastAddressContainer;
+        lastAddressContainer.specifyType (this->_protocolVersion);
+
+        if ( this->pLastAddressObtainedContainer == nullptr )
+            this->pLastAddressObtainedContainer = & lastAddressContainer;
+
+        PlatformSocket retVal = :: accept (
+                this->_platformSocket,
+                lastAddressContainer.pLastSocketAddress,
+                & lastAddressContainer.lastSocketAddressSize
+        );
+
+        if ( retVal == Socket::WIN32_SOCKET_FUNCTION_ERROR )
             throw SocketException( "Accept Exception." );
 
 #else
@@ -611,7 +897,7 @@ public:
 
         if ( this->_synchronizeSettingsAtConnectionStartup ) {
 
-            int acknowledge = 0;
+            int acknowledge;
 
             try {
                 clientSocket.writeSize ( this->_packetSize );
@@ -643,6 +929,17 @@ public:
 
         return * this;
 
+#elif defined(__CDS_Platform_Microsoft_Windows)
+
+        auto written = :: send ( this->_platformSocket, reinterpret_cast < char const * > ( pBuffer ), static_cast < int > ( count ), 0u );
+
+        if ( written < 0 )
+            throw SocketException("Socket writeBytes Exception");
+        if ( written != count )
+            throw SocketException(String::f("Unable to completely write message : intended : %d, sent : %d", count, written) );
+
+        return * this;
+
 #else
 
 #error Socket::writeBytes Unimplemented
@@ -661,6 +958,21 @@ public:
             throw SocketException("Socket readBytes Exception");
 
         if ( Socket::UNIX_SOCKET_READ_DISCONNECT == read )
+            throw SocketDisconnect();
+
+        if ( read != intendedForRead )
+            throw SocketException ("Read Bytes count Different from Intended Count");
+
+        return * this;
+
+#elif defined(__CDS_Platform_Microsoft_Windows)
+
+        auto read = :: recv ( this->_platformSocket, reinterpret_cast < char * > (pBuffer), static_cast < int > ( intendedForRead ), 0 );
+
+        if ( Socket::WIN32_SOCKET_FUNCTION_ERROR == read )
+            throw SocketException("Socket readBytes Exception");
+
+        if ( Socket::WIN32_SOCKET_DISCONNECT == read )
             throw SocketDisconnect();
 
         if ( read != intendedForRead )
@@ -847,6 +1159,11 @@ public:
             "{ platformSocket = " + this->_platformSocket +
             ", platform = " + __CDS_Platform +
 
+#elif defined(__CDS_Platform_Microsoft_Windows)
+
+            "{ platformSocket = " + this->_platformSocket +
+            ", platform = " + __CDS_Platform +
+
 #else
 
 #warning Socket::toString Missing Platform Specific Settings
@@ -869,6 +1186,10 @@ public:
 
         return dataTypes::hash<int> ( this->_platformSocket );
 
+#elif defined(__CDS_Platform_Microsoft_Windows)
+
+        return dataTypes::hash<Size> ( reinterpret_cast < Size >( this->_platformSocket ) );
+
 #else
 
 #error Socket::hash Unimplemented
@@ -881,6 +1202,10 @@ public:
 #if defined (__CDS_Platform_Linux)
 
         return new Socket(dup(this->_platformSocket));
+
+#elif defined(__CDS_Platform_Microsoft_Windows)
+
+        return new Socket(this->_platformSocket);
 
 #else
 
@@ -896,6 +1221,10 @@ public:
         if ( p == nullptr ) return false;
 
 #if defined(__CDS_Platform_Linux)
+
+        return this->_platformSocket == p->_platformSocket;
+
+#elif defined(__CDS_Platform_Microsoft_Windows)
 
         return this->_platformSocket == p->_platformSocket;
 
@@ -915,6 +1244,10 @@ public:
 #if defined(__CDS_Platform_Linux)
 
             _platformSocket(dup(socket._platformSocket)),
+
+#elif defined(__CDS_Platform_Microsoft_Windows)
+
+            _platformSocket(socket._platformSocket),
 
 #else
 
@@ -939,6 +1272,10 @@ public:
 
             this->_platformSocket = dup(socket._platformSocket);
 
+#elif defined(__CDS_Platform_Microsoft_Windows)
+
+            this->_platformSocket = socket._platformSocket;
+
 #else
 
 #error Socket::CopyOperator Undefined
@@ -960,6 +1297,10 @@ public:
 #if defined(__CDS_Platform_Linux)
 
             _platformSocket(exchange(socket._platformSocket, Socket::UNIX_INVALID_PLATFORM_SOCKET)),
+
+#elif defined(__CDS_Platform_Microsoft_Windows)
+
+            _platformSocket(exchange(socket._platformSocket, Socket::WIN32_INVALID_PLATFORM_SOCKET)),
 
 #else
 
@@ -983,6 +1324,10 @@ public:
 #if defined(__CDS_Platform_Linux)
 
         this->_platformSocket = exchange(socket._platformSocket, Socket::UNIX_INVALID_PLATFORM_SOCKET);
+
+#elif defined(__CDS_Platform_Microsoft_Windows)
+
+        this->_platformSocket = exchange(socket._platformSocket, Socket::WIN32_INVALID_PLATFORM_SOCKET);
 
 #else
 
