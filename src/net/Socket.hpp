@@ -39,6 +39,8 @@ class Socket : public Object {
 
 public:
 
+    constexpr static StringLiteral LOCALHOST = "127.0.0.1";
+
     enum class ProtocolVersion {
         INTERNET_PROTOCOL_NONE_SPECIFIED = 0x00,
 
@@ -125,6 +127,8 @@ public:
 
                 if ( this->_protocolVersion == ProtocolVersion::INTERNET_PROTOCOL_VERSION_6_FORCED )
                     throw SocketException ( "Unable to open Socket on IPV6" );
+
+                this->close();
 
 #endif
 
@@ -239,8 +243,8 @@ private:
 
                 this->writeInt(1);
 
-            } catch ( Exception const & ) {
-                throw SocketException ( "Synchronization of settings at connect initialization not acknowledged" );
+            } catch ( Exception const & e ) {
+                throw SocketException ( "Synchronization of settings at connect initialization not acknowledged : "_s + e );
             }
 
         }
@@ -373,6 +377,9 @@ public:
 
     inline auto close () noexcept (false) -> Socket & {
 
+        if ( ! this->isOpen() )
+            return * this;
+
 #if defined(__CDS_Platform_Linux)
 
         auto retVal = ::close ( exchange ( this->_platformSocket, Socket::UNIX_INVALID_PLATFORM_SOCKET ) );
@@ -455,7 +462,7 @@ public:
 
                 sockaddr_in ipv6AddressInfo {};
 
-                ipv6AddressInfo.sin_family = AF_INET6;
+                ipv6AddressInfo.sin_family = AF_INET;
                 ipv6AddressInfo.sin_addr.s_addr = htonl(INADDR_ANY);
                 ipv6AddressInfo.sin_port = htons(this->_port);
 
@@ -589,25 +596,27 @@ public:
 
 #endif
 
+        auto clientSocket = Socket(retVal);
+
         if ( this->_synchronizeSettingsAtConnectionStartup ) {
 
             int acknowledge = 0;
 
             try {
-                this->writeSize ( this->_packetSize );
-                this->writeSize ( this->_packetSyncCount );
+                clientSocket.writeSize ( this->_packetSize );
+                clientSocket.writeSize ( this->_packetSyncCount );
 
-                acknowledge = this->readInt ();
-            } catch ( Exception const & ) {
-                acknowledge = 0;
+                acknowledge = clientSocket.readInt ();
+            } catch ( Exception const & e ) {
+                throw SocketException("Synchronization of settings at connect initialization not acknowledged : "_s + e);
             }
 
             if ( acknowledge != 1 )
-                throw SocketException("Synchronization of settings at connect initialization not acknowledged");
+                throw SocketException("Synchronization of settings at connect initialization not acknowledged : Client Response Not OK");
 
         }
 
-        return Socket(retVal);
+        return std::move(clientSocket);
     }
 
     __CDS_MaybeUnused inline auto writeBytes ( byte const * pBuffer, Size count ) noexcept (false) -> Socket & {
@@ -803,6 +812,183 @@ public:
         }
 
         return std :: move ( buffer );
+    }
+
+    __CDS_NoDiscard constexpr static auto protocolVersionToString (ProtocolVersion protocolVersion) noexcept -> StringLiteral {
+        switch ( protocolVersion ) {
+            case ProtocolVersion::INTERNET_PROTOCOL_NONE_SPECIFIED:     return "Protocol Version Automatic Detection";
+            case ProtocolVersion::INTERNET_PROTOCOL_VERSION_4:          return "Internet Protocol Version 4 (IPV4, Preferred)";
+            case ProtocolVersion::INTERNET_PROTOCOL_VERSION_6:          return "Internet Protocol Version 6 (IPV6, Preferred)";
+            case ProtocolVersion::INTERNET_PROTOCOL_VERSION_6_FORCED:   return "Internet Protocol Version 6 (IPV6, Forced)";
+            default:                                                    return "Unknown Protocol Version Handler";
+        }
+    }
+
+    __CDS_NoDiscard __CDS_cpplang_ConstexprDestructor auto toString () const noexcept -> String override {
+        return "Socket "_s +
+
+#if defined(__CDS_Platform_Linux)
+
+            "{ platformSocket = " + this->_platformSocket +
+            ", platform = " + __CDS_Platform +
+
+#else
+
+#warning Socket::toString Missing Platform Specific Settings
+
+#endif
+
+            ", internetProtocolVersion = " + Socket::protocolVersionToString (this->_protocolVersion) +
+            ", usedPort = " + this->_port +
+            ", settings " +
+            "{ packetSize = " + this->_packetSize +
+            ", packetSyncCountLargeData = " + this->_packetSyncCount +
+            ", syncAtConnectOrAccept = " + (this->_synchronizeSettingsAtConnectionStartup ? "true" : "false") +
+            " }" +
+            " }";
+    }
+
+    __CDS_NoDiscard __CDS_cpplang_ConstexprOverride auto hash() const noexcept -> Index override {
+
+#if defined (__CDS_Platform_Linux)
+
+        return dataTypes::hash<int> ( this->_platformSocket );
+
+#else
+
+#error Socket::hash Unimplemented
+
+#endif
+    }
+
+    __CDS_NoDiscard inline auto copy () const noexcept -> Socket * override {
+
+#if defined (__CDS_Platform_Linux)
+
+        return new Socket(dup(this->_platformSocket));
+
+#else
+
+#error Socket::copy Unimplemented
+
+#endif
+
+    }
+
+    __CDS_NoDiscard auto equals(Object const & o) const noexcept -> bool override {
+        if ( this == & o ) return true;
+        auto p = dynamic_cast < decltype (this) > ( & o );
+        if ( p == nullptr ) return false;
+
+#if defined(__CDS_Platform_Linux)
+
+        return this->_platformSocket == p->_platformSocket;
+
+#else
+
+#error Socket::equals Unimplemented
+
+#endif
+    }
+
+    inline ~Socket () noexcept override {
+        this->close();
+    }
+
+    Socket(Socket const & socket) noexcept :
+
+#if defined(__CDS_Platform_Linux)
+
+            _platformSocket(dup(socket._platformSocket)),
+
+#else
+
+#error Socket::CopyConstructor Undefined
+
+#endif
+
+            _port(socket._port),
+            _packetSize(socket._packetSize),
+            _protocolVersion(socket._protocolVersion),
+            _packetSyncCount(socket._packetSyncCount),
+            _synchronizeSettingsAtConnectionStartup(socket._synchronizeSettingsAtConnectionStartup) {
+
+    }
+
+    auto operator = (Socket const & socket) noexcept -> Socket & {
+        if ( & socket == this ) return * this;
+
+        this->close();
+
+#if defined(__CDS_Platform_Linux)
+
+            this->_platformSocket = dup(socket._platformSocket);
+
+#else
+
+#error Socket::CopyOperator Undefined
+
+#endif
+
+            this->_port = socket._port;
+            this->_packetSize = socket._packetSize;
+            this->_protocolVersion = socket._protocolVersion;
+            this->_packetSyncCount = socket._packetSyncCount;
+            this->_synchronizeSettingsAtConnectionStartup = socket._synchronizeSettingsAtConnectionStartup;
+
+            return * this;
+    }
+
+
+    Socket(Socket && socket) noexcept :
+
+#if defined(__CDS_Platform_Linux)
+
+            _platformSocket(exchange(socket._platformSocket, Socket::UNIX_INVALID_PLATFORM_SOCKET)),
+
+#else
+
+#error Socket::MoveConstructor Undefined
+
+#endif
+
+            _port(exchange(socket._port, Socket::DEFAULT_PORT)),
+            _packetSize(exchange(socket._packetSize, Socket::DEFAULT_PACKET_SIZE)),
+            _protocolVersion(exchange(socket._protocolVersion, Socket::ProtocolVersion::AUTO)),
+            _packetSyncCount(exchange(socket._packetSyncCount, Socket::DEFAULT_PACKET_SYNC_COUNT)),
+            _synchronizeSettingsAtConnectionStartup(exchange(socket._synchronizeSettingsAtConnectionStartup, true)) {
+
+    }
+
+    auto operator = (Socket && socket) noexcept -> Socket & {
+        if ( & socket == this ) return * this;
+
+        this->close();
+
+#if defined(__CDS_Platform_Linux)
+
+        this->_platformSocket = exchange(socket._platformSocket, Socket::UNIX_INVALID_PLATFORM_SOCKET);
+
+#else
+
+#error Socket::MoveOperator Undefined
+
+#endif
+
+        this->_port = exchange(socket._port, Socket::DEFAULT_PORT);
+        this->_packetSize = exchange(socket._packetSize, Socket::DEFAULT_PACKET_SIZE);
+        this->_protocolVersion = exchange(socket._protocolVersion, Socket::ProtocolVersion::AUTO);
+        this->_packetSyncCount = exchange(socket._packetSyncCount, Socket::DEFAULT_PACKET_SYNC_COUNT);
+        this->_synchronizeSettingsAtConnectionStartup = exchange(socket._synchronizeSettingsAtConnectionStartup, true);
+
+        return * this;
+    }
+};
+
+class ServerSocket : public Socket {
+public:
+    explicit ServerSocket ( uint16 port, ProtocolVersion protocolVersion = Socket::ProtocolVersion::AUTO ) noexcept (false) : Socket(protocolVersion) {
+        this->bind (port).listen ();
     }
 };
 

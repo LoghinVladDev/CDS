@@ -1,7 +1,20 @@
 #include <CDS/Socket>
+#include <CDS/Thread>
 
 int main () {
+    ServerSocket serverSocket(34000, Socket::ProtocolVersion::INTERNET_PROTOCOL_VERSION_4);
+    Array < SharedPointer < Thread > > threads;
 
+    while(true) {
+        threads.pushBack (
+            new Runnable ([socket = std::move(serverSocket.accept())] mutable {
+                socket.writeInt(socket.readInt() + 1);
+                socket.close();
+            })
+        );
+
+        threads.back()->start();
+    }
 }
 
 

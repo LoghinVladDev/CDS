@@ -1179,6 +1179,8 @@ public:
             if ( c >= '0' && c <= '9' ) return static_cast < int > ( c ) - '0';
             if ( c >= 'A' && c <= 'Z' ) return static_cast < int > ( c ) - 'A' + 10;
             if ( c >= 'a' && c <= 'z' ) return static_cast < int > ( c ) - 'a' + 10;
+
+            return static_cast<int>(c);
         };
 
         while( ( base == 10 && ! isNumericChar ( it.value() ) || ! isBaseNumericChar(base, it.value()) ) && it != string.end() ) {
