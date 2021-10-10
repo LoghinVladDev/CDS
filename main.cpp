@@ -81,7 +81,7 @@
 #pragma clang diagnostic push
 #pragma ide diagnostic ignored "EndlessLoop"
 int main () {
-    ServerSocket serverSocket(34000, Socket::ProtocolVersion::IPV4);
+    ServerSocket serverSocket(34000, Socket::ProtocolVersion::FORCE_IPV6);
 
     Array < SharedPointer < Thread > > threads;
 
