@@ -177,6 +177,9 @@ public:
                 if ( this->_platformSocket != Socket::UNIX_SOCKET_FUNCTION_ERROR )
                     return * this;
 
+                if ( this->_protocolVersion == ProtocolVersion::INTERNET_PROTOCOL_VERSION_6_FORCED )
+                    throw SocketException ( "Unable to open Socket on IPV6");
+
 #elif defined(__CDS_Platform_Microsoft_Windows)
 
                 this->_platformSocket = :: socket ( AF_INET6, SOCK_STREAM, IPPROTO_TCP );
@@ -184,14 +187,14 @@ public:
                 if ( this->_platformSocket != Socket::WIN32_INVALID_PLATFORM_SOCKET )
                     return * this;
 
+                if ( this->_protocolVersion == ProtocolVersion::INTERNET_PROTOCOL_VERSION_6_FORCED )
+                    throw SocketException ( "Unable to open Socket on IPV6, WSALastError : "_s + WSAGetLastError() );
+
 #else
 
 #error Socket::open Not Implemented
 
 #endif
-
-                if ( this->_protocolVersion == ProtocolVersion::INTERNET_PROTOCOL_VERSION_6_FORCED )
-                    throw SocketException ( "Unable to open Socket on IPV6, WSALastError : "_s + WSAGetLastError() );
 
                 this->close();
 
@@ -204,6 +207,8 @@ public:
                 if ( this->_platformSocket != Socket::UNIX_SOCKET_FUNCTION_ERROR )
                     return * this;
 
+                throw SocketException ( "Unable to open Socket on IPV4" );
+
 #elif defined(__CDS_Platform_Microsoft_Windows)
 
                 this->_platformSocket = :: socket ( AF_INET, SOCK_STREAM, 0 );
@@ -211,13 +216,13 @@ public:
                 if ( this->_platformSocket != Socket::WIN32_INVALID_PLATFORM_SOCKET )
                     return * this;
 
+                throw SocketException ( "Unable to open Socket on IPV4, WSALastError : "_s + WSAGetLastError() );
+
 #else
 
 #error Socket::open Unimplemented
 
 #endif
-
-                throw SocketException ( "Unable to open Socket on IPV4, WSALastError : "_s + WSAGetLastError() );
 
         }
 
@@ -708,6 +713,8 @@ public:
 #error Socket::bind Unimplemented
 
 #endif
+
+        return * this;
 
     }
 
