@@ -78,6 +78,8 @@ private:
 
     PlatformSocket _platformSocket { Socket::UNIX_INVALID_PLATFORM_SOCKET };
 
+    constexpr static bool socketDuplicateExceptSpec = true;
+
 #elif defined(__CDS_Platform_Microsoft_Windows)
 
     using PlatformSocket = SOCKET;
@@ -90,13 +92,15 @@ private:
     constexpr static Size PLATFORM_DEFAULT_CLIENT_QUEUE_SIZE = 256U;
     constexpr static Size PLATFORM_DEFAULT_PACKET_SYNC_COUNT = 4U;
 
+    constexpr static bool socketDuplicateExceptSpec = false;
+
     struct Win32WSAContainerType {
     public:
         WSADATA windowsSocketsApplicationLibraryData {};
 
         inline Win32WSAContainerType () noexcept (false) {
             if ( WSAStartup ( MAKEWORD(2, 2), & this->windowsSocketsApplicationLibraryData ) != 0 )
-                throw SocketException ( "Win32 Exception : WinSock2 Failed to Load" );
+                throw SocketException ( "Win32 Exception : WinSock2 Failed to Load, WSALastError : "_s + WSAGetLastError() );
         }
 
         inline ~Win32WSAContainerType () noexcept {
@@ -187,7 +191,7 @@ public:
 #endif
 
                 if ( this->_protocolVersion == ProtocolVersion::INTERNET_PROTOCOL_VERSION_6_FORCED )
-                    throw SocketException ( "Unable to open Socket on IPV6" );
+                    throw SocketException ( "Unable to open Socket on IPV6, WSALastError : "_s + WSAGetLastError() );
 
                 this->close();
 
@@ -202,7 +206,7 @@ public:
 
 #elif defined(__CDS_Platform_Microsoft_Windows)
 
-                this->_platformSocket = :: socket ( AF_INET, SOCK_STREAM, IPPROTO_TCP );
+                this->_platformSocket = :: socket ( AF_INET, SOCK_STREAM, 0 );
 
                 if ( this->_platformSocket != Socket::WIN32_INVALID_PLATFORM_SOCKET )
                     return * this;
@@ -213,7 +217,7 @@ public:
 
 #endif
 
-                throw SocketException ( "Unable to open Socket on IPV4" );
+                throw SocketException ( "Unable to open Socket on IPV4, WSALastError : "_s + WSAGetLastError() );
 
         }
 
@@ -333,7 +337,7 @@ private:
                 }
 
                 if ( this->_protocolVersion == Socket::ProtocolVersion::INTERNET_PROTOCOL_VERSION_6_FORCED )
-                    throw SocketException("Unable to connect to address through IPV6");
+                    throw SocketException("Unable to connect to address through IPV6. WSALastError : "_s + WSAGetLastError());
 
                 this->_protocolVersion = ProtocolVersion::INTERNET_PROTOCOL_VERSION_4;
                 this->close().open().connect(pack.first(), pack.second());
@@ -353,7 +357,7 @@ private:
                 );
 
                 if ( retVal < 0 )
-                    throw SocketException("Unable to connect to address through IPV4");
+                    throw SocketException("Unable to connect to address through IPV4. WSALastError : "_s + WSAGetLastError());
 
                 break;
             }
@@ -515,11 +519,15 @@ public:
         if ( retVal == Socket::UNIX_SOCKET_FUNCTION_ERROR )
             throw SocketException("Socket Close Exception");
 
+        this->_platformSocket = Socket::UNIX_INVALID_PLATFORM_SOCKET;
+
 #elif defined(__CDS_Platform_Microsoft_Windows)
 
         auto retVal = :: closesocket ( this->_platformSocket );
-        if ( retVal == Socket::WIN32_SOCKET_FUNCTION_ERROR )
+        if ( retVal != 0 )
             throw SocketException ("Socket Close Exception");
+
+        this->_platformSocket = Socket::WIN32_INVALID_PLATFORM_SOCKET;
 
 #else
 
@@ -595,16 +603,16 @@ public:
                 if ( retVal == Socket::UNIX_SOCKET_FUNCTION_ERROR )
                     throw SocketException("Bind Exception on IPV4 : SetSocketOption Error");
 
-                sockaddr_in ipv6AddressInfo {};
+                sockaddr_in ipv4AddressInfo {};
 
-                ipv6AddressInfo.sin_family = AF_INET;
-                ipv6AddressInfo.sin_addr.s_addr = htonl(INADDR_ANY);
-                ipv6AddressInfo.sin_port = htons(this->_port);
+                ipv4AddressInfo.sin_family = AF_INET;
+                ipv4AddressInfo.sin_addr.s_addr = htonl(INADDR_ANY);
+                ipv4AddressInfo.sin_port = htons(this->_port);
 
                 retVal = :: bind (
                         this->_platformSocket,
-                        reinterpret_cast < sockaddr * > ( & ipv6AddressInfo ),
-                        sizeof ( ipv6AddressInfo )
+                        reinterpret_cast < sockaddr * > ( & ipv4AddressInfo ),
+                        sizeof ( ipv4AddressInfo )
                 );
 
                 if ( retVal == Socket::UNIX_SOCKET_FUNCTION_ERROR )
@@ -632,7 +640,7 @@ public:
 
                 if ( retVal == Socket::WIN32_SOCKET_FUNCTION_ERROR ) {
                     if ( this->_protocolVersion == Socket::ProtocolVersion::INTERNET_PROTOCOL_VERSION_6_FORCED )
-                        throw SocketException("Bind Exception on IPV6 : SetSocketOption Error");
+                        throw SocketException("Bind Exception on IPV6 : SetSocketOption Error. WSALastError : "_s + WSAGetLastError());
 
                     this->_protocolVersion = Socket::ProtocolVersion::INTERNET_PROTOCOL_VERSION_4;
                     return this->close().open().bind();
@@ -652,7 +660,7 @@ public:
 
                 if ( retVal == Socket::WIN32_SOCKET_FUNCTION_ERROR ) {
                     if ( this->_protocolVersion == Socket::ProtocolVersion::INTERNET_PROTOCOL_VERSION_6_FORCED )
-                        throw SocketException("Bind Exception on IPV6");
+                        throw SocketException("Bind Exception on IPV6. WSALastError : "_s + WSAGetLastError());
 
                     this->_protocolVersion = Socket::ProtocolVersion::INTERNET_PROTOCOL_VERSION_4;
                     return this->close().open().bind();
@@ -672,22 +680,22 @@ public:
                 );
 
                 if ( retVal == Socket::WIN32_SOCKET_FUNCTION_ERROR )
-                    throw SocketException("Bind Exception on IPV4 : SetSocketOption Error");
+                    throw SocketException("Bind Exception on IPV4 : SetSocketOption Error. WSALastError : "_s + WSAGetLastError());
 
-                sockaddr_in ipv6AddressInfo {};
+                sockaddr_in ipv4AddressInfo {};
 
-                ipv6AddressInfo.sin_family = AF_INET;
-                ipv6AddressInfo.sin_addr.s_addr = htonl(INADDR_ANY);
-                ipv6AddressInfo.sin_port = htons(this->_port);
+                ipv4AddressInfo.sin_family = AF_INET;
+                ipv4AddressInfo.sin_addr.s_addr = htonl(INADDR_ANY);
+                ipv4AddressInfo.sin_port = htons(this->_port);
 
                 retVal = :: bind (
                         this->_platformSocket,
-                        reinterpret_cast < sockaddr * > ( & ipv6AddressInfo ),
-                        sizeof ( ipv6AddressInfo )
+                        reinterpret_cast < sockaddr * > ( & ipv4AddressInfo ),
+                        sizeof ( ipv4AddressInfo )
                 );
 
                 if ( retVal == Socket::WIN32_SOCKET_FUNCTION_ERROR )
-                    throw SocketException("Bind Exception on IPV4");
+                    throw SocketException("Bind Exception on IPV4. WSALastError : "_s + WSAGetLastError());
 
                 return * this;
             }
@@ -724,9 +732,9 @@ public:
 
         if ( Socket::WIN32_SOCKET_FUNCTION_ERROR == :: listen ( this->_platformSocket, queueSize ) ) {
             if ( this->_protocolVersion == Socket::ProtocolVersion::INTERNET_PROTOCOL_VERSION_6_FORCED )
-                throw SocketException("Listen Exception on IPV6");
+                throw SocketException("Listen Exception on IPV6. WSALastError : "_s + WSAGetLastError());
             if ( this->_protocolVersion == Socket::ProtocolVersion::INTERNET_PROTOCOL_VERSION_4 )
-                throw SocketException("Listen Exception on IPV4");
+                throw SocketException("Listen Exception on IPV4. WSALastError : "_s + WSAGetLastError());
 
             this->_protocolVersion = Socket::ProtocolVersion::INTERNET_PROTOCOL_VERSION_4;
             return this->close().open().bind (this->_port).listen (queueSize);
@@ -867,7 +875,7 @@ public:
             & lastAddressContainer.lastSocketAddressSize
         );
 
-        if ( retVal == Socket::UNIX_SOCKET_FUNCTION_ERROR )
+        if ( retVal == Socket::UNIX_INVALID_PLATFORM_SOCKET )
             throw SocketException( "Accept Exception." );
 
 #elif defined(__CDS_Platform_Microsoft_Windows)
@@ -884,8 +892,8 @@ public:
                 & lastAddressContainer.lastSocketAddressSize
         );
 
-        if ( retVal == Socket::WIN32_SOCKET_FUNCTION_ERROR )
-            throw SocketException( "Accept Exception." );
+        if ( retVal == Socket::WIN32_INVALID_PLATFORM_SOCKET )
+            throw SocketException( "Accept Exception. WSALastError : "_s + WSAGetLastError() );
 
 #else
 
@@ -1205,7 +1213,26 @@ public:
 
 #elif defined(__CDS_Platform_Microsoft_Windows)
 
-        return new Socket(this->_platformSocket);
+        WSAPROTOCOL_INFO wsaProtocolInfo;
+
+        if ( 0 != WSADuplicateSocket(this->_platformSocket, GetCurrentProcessId(), & wsaProtocolInfo) ) {
+            return nullptr;
+        }
+
+        PlatformSocket platformSocket = WSASocket(
+                wsaProtocolInfo.iAddressFamily,
+                wsaProtocolInfo.iSocketType,
+                wsaProtocolInfo.iProtocol,
+                & wsaProtocolInfo,
+                0,
+                0
+        );
+
+        if ( this->_platformSocket == Socket::WIN32_INVALID_PLATFORM_SOCKET ) {
+            return nullptr;
+        }
+
+        return new Socket(platformSocket);
 
 #else
 
@@ -1239,7 +1266,7 @@ public:
         this->close();
     }
 
-    Socket(Socket const & socket) noexcept :
+    Socket(Socket const & socket) noexcept (Socket::socketDuplicateExceptSpec) :
 
 #if defined(__CDS_Platform_Linux)
 
@@ -1247,7 +1274,8 @@ public:
 
 #elif defined(__CDS_Platform_Microsoft_Windows)
 
-            _platformSocket(socket._platformSocket),
+//            moved to ctor body due to structure instantiation creation
+//            _platformSocket(WSADuplicateSocket(socket._platformSocket, GetCurrentProcessId(), & wsaProtocolInfo)),
 
 #else
 
@@ -1261,9 +1289,33 @@ public:
             _packetSyncCount(socket._packetSyncCount),
             _synchronizeSettingsAtConnectionStartup(socket._synchronizeSettingsAtConnectionStartup) {
 
+#if defined(__CDS_Platform_Microsoft_Windows)
+
+        WSAPROTOCOL_INFO wsaProtocolInfo;
+        int retVal;
+
+        if ( 0 != ( retVal = WSADuplicateSocket(socket._platformSocket, GetCurrentProcessId(), & wsaProtocolInfo) ) ) {
+            throw SocketException( "Socket Copy Failure. WSADuplicateSocket : "_s + retVal );
+        }
+
+        this->_platformSocket = WSASocket(
+            wsaProtocolInfo.iAddressFamily,
+            wsaProtocolInfo.iSocketType,
+            wsaProtocolInfo.iProtocol,
+            & wsaProtocolInfo,
+            0,
+            0
+        );
+
+        if ( this->_platformSocket == Socket::WIN32_INVALID_PLATFORM_SOCKET ) {
+            throw SocketException ( "Socket Creation Failure at Socket Copy. WSALastError : "_s + WSAGetLastError() );
+        }
+
+#endif
+
     }
 
-    auto operator = (Socket const & socket) noexcept -> Socket & {
+    auto operator = (Socket const & socket) noexcept (Socket::socketDuplicateExceptSpec) -> Socket & {
         if ( & socket == this ) return * this;
 
         this->close();
@@ -1274,7 +1326,25 @@ public:
 
 #elif defined(__CDS_Platform_Microsoft_Windows)
 
-            this->_platformSocket = socket._platformSocket;
+        WSAPROTOCOL_INFO wsaProtocolInfo;
+        int retVal;
+
+        if ( 0 != ( retVal = WSADuplicateSocket(socket._platformSocket, GetCurrentProcessId(), & wsaProtocolInfo) ) ) {
+            throw SocketException( "Socket Copy Failure. WSADuplicateSocket : "_s + retVal );
+        }
+
+        this->_platformSocket = WSASocket(
+            wsaProtocolInfo.iAddressFamily,
+            wsaProtocolInfo.iSocketType,
+            wsaProtocolInfo.iProtocol,
+            & wsaProtocolInfo,
+            0,
+            0
+        );
+
+        if ( this->_platformSocket == Socket::WIN32_INVALID_PLATFORM_SOCKET ) {
+            throw SocketException ( "Socket Creation Failure at Socket Copy. WSALastError : "_s + WSAGetLastError() );
+        }
 
 #else
 
