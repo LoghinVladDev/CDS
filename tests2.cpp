@@ -77,9 +77,11 @@
 #include <CDS/Socket>
 #include <CDS/Integer>
 
+#include <variant>
 
 int main () {
-    Socket socket(Socket::LOCALHOST, 34000, Socket::ProtocolVersion::FORCE_IPV6);
+
+    Socket socket(Socket::LOCALHOST, 34000, Socket::ProtocolVersion::IPV4);
 
     socket.writeInt ( 5);
     int value = socket.readInt();

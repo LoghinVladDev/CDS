@@ -51,4 +51,13 @@ public:
     __CDS_MaybeUnused explicit OutOfBoundsException ( Index requested, Index capacity ) noexcept : Exception ( String::format("Out of Bounds Exception : Requested : %lld, Capacity : %lld", requested, capacity) ) { }
 };
 
+class TypeException : public Exception {
+public:
+    TypeException () noexcept : Exception ( "Type Cast Exception" ) { }
+
+    template < typename T, typename V >
+    TypeException () noexcept : Exception ( String::f("Type Cast Exception. Cannot convert '%s' to '%s'", Type < T > :: name(), Type < V > :: name()) ) { }
+    explicit TypeException (String const & message) noexcept : Exception ("Type Cast Exception : "_s + message) { }
+};
+
 #endif //CDS_UTILITY_HPP

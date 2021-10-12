@@ -3,7 +3,7 @@
 //
 // Generated for CDS through Warning Suppression Generator Tool
 // Author: Loghin Vlad-Andrei - github.com/LoghinVladDev
-// Generation Date: 26/09/21 - 05:44:10
+// Generation Date: 13/10/21 - 02:16:19
 // CDS Version - 0.0.2
 // Licenced under Project Licence - https://github.com/LoghinVladDev/CDS/blob/master/LICENSE
 //
@@ -95,6 +95,9 @@ _Pragma("GCC diagnostic pop")
 #define __CDS_WarningSuppression_MSVC_UnusedResult_SuppressEnable /* NOLINT(bugprone-reserved-identifier) */
 #define __CDS_WarningSuppression_MSVC_UnusedResult_SuppressDisable /* NOLINT(bugprone-reserved-identifier) */
 
+#define __CDS_WarningSuppression_MSVC_UnsafeDeleteVoidPtr_SuppressEnable /* NOLINT(bugprone-reserved-identifier) */
+#define __CDS_WarningSuppression_MSVC_UnsafeDeleteVoidPtr_SuppressDisable /* NOLINT(bugprone-reserved-identifier) */
+
 #define __CDS_WarningSuppression_GCC_ArgumentPossibleUnexpectedValue_SuppressEnable /* NOLINT(bugprone-reserved-identifier) */
 #define __CDS_WarningSuppression_GCC_ArgumentPossibleUnexpectedValue_SuppressDisable /* NOLINT(bugprone-reserved-identifier) */
 
@@ -115,6 +118,9 @@ _Pragma("GCC diagnostic pop")
 
 #define __CDS_WarningSuppression_GCC_UnusedResult_SuppressEnable __CDS_WarningSuppression_GCC_SuppressEnable(-Wunused-result) /* NOLINT(bugprone-reserved-identifier) */
 #define __CDS_WarningSuppression_GCC_UnusedResult_SuppressDisable __CDS_WarningSuppression_GCC_SuppressDisable(-Wunused-result) /* NOLINT(bugprone-reserved-identifier) */
+
+#define __CDS_WarningSuppression_GCC_UnsafeDeleteVoidPtr_SuppressEnable __CDS_WarningSuppression_GCC_SuppressEnable(-Wdelete-incomplete) /* NOLINT(bugprone-reserved-identifier) */
+#define __CDS_WarningSuppression_GCC_UnsafeDeleteVoidPtr_SuppressDisable __CDS_WarningSuppression_GCC_SuppressDisable(-Wdelete-incomplete) /* NOLINT(bugprone-reserved-identifier) */
 
 
 #define __CDS_WarningSuppression_SuppressEnable(_warning) /* NOLINT(bugprone-reserved-identifier) */ \
@@ -150,6 +156,9 @@ _Pragma("GCC diagnostic pop")
 
 #define __CDS_WarningSuppression_UnusedResult_SuppressEnable __CDS_WarningSuppression_SuppressEnable(UnusedResult) /* NOLINT(bugprone-reserved-identifier) */
 #define __CDS_WarningSuppression_UnusedResult_SuppressDisable __CDS_WarningSuppression_SuppressDisable(UnusedResult) /* NOLINT(bugprone-reserved-identifier) */
+
+#define __CDS_WarningSuppression_UnsafeDeleteVoidPtr_SuppressEnable __CDS_WarningSuppression_SuppressEnable(UnsafeDeleteVoidPtr) /* NOLINT(bugprone-reserved-identifier) */
+#define __CDS_WarningSuppression_UnsafeDeleteVoidPtr_SuppressDisable __CDS_WarningSuppression_SuppressDisable(UnsafeDeleteVoidPtr) /* NOLINT(bugprone-reserved-identifier) */
 
 //// End of Platform Dependent Config Macros
 

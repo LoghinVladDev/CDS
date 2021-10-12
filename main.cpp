@@ -77,11 +77,97 @@
 
 #include <CDS/Socket>
 #include <CDS/Thread>
+#include "Union.hpp"
 
 #pragma clang diagnostic push
 #pragma ide diagnostic ignored "EndlessLoop"
 int main () {
-    ServerSocket serverSocket(34000, Socket::ProtocolVersion::FORCE_IPV6);
+//    Union < int, float, double, short > u;
+////
+//Union < int, float > :: indexOf < float > ();
+//    int iof = u.indexOf<char>();
+//    std::cout << iof << '\n';
+//
+//    u.indexOf<int>();
+//
+//    std::cout << Utility::Detail::UnionImpl::IndexOfTypeInPack<int, int, float>::index() << '\n';
+//    std::cout << Utility::Detail::UnionImpl::IndexOfTypeInPack<float, int, float>::index() << '\n';
+//    std::cout << Utility::Detail::UnionImpl::IndexOfTypeInPack<char, int, float>::index() << '\n';
+
+    auto testFunc = [](int x) -> Union < String, float >{
+        if ( x % 2 == 0 ) return String::f ( "'%d' is even", x );
+        return (float)x / 2.0f;
+    };
+
+    try {
+
+        auto callRes1 = testFunc(18);
+        std::cout << callRes1 << '\n';
+        std::cout << callRes1.get < String > () << '\n';
+        std::cout.flush();
+        std::cout << callRes1.get < float > () << '\n';
+
+    } catch ( Exception const & e ) {
+        std :: cerr << e << '\n';
+    }
+
+    return 0;
+    std :: cout << "\n\n";
+
+    try {
+
+        auto callRes1 = testFunc(19);
+        std::cout << callRes1 << '\n';
+        std::cout << callRes1.get < float > () << '\n';
+        std::cout << callRes1.get < String > () << '\n';
+
+    } catch ( Exception const & e ) {
+        std :: cerr << e << '\n';
+    }
+
+    return 0;
+
+    Union < int, float > a = 3;
+    Union < int, float > b = 4.3f;
+
+    try {
+        std::cout << a.get<int>() << '\n';
+        std::cout << a << '\n';
+
+        a = 3.4f;
+
+        std::cout << a.get<float>() << '\n';
+        std::cout << a << '\n';
+
+        std::cout << a.get<int>() << '\n';
+        std::cout << a << '\n';
+    } catch ( TypeException const & e ) {
+        std::cout << e << '\n';
+    }
+
+    try {
+        std::cout << b.get<float>() << '\n';
+        std::cout << b << '\n';
+        std::cout << b.get<int>() << '\n';
+        std::cout << b << '\n';
+    } catch ( TypeException const & e ) {
+        std::cout << e << '\n';
+    }
+
+//    int v=  5;
+//    int z = v;
+
+    return 0;
+//
+//    iof = u.indexOf < int >();
+
+//    v = 5.4f;
+
+//    if ( u.isActive <float>() ) {
+//
+//    }
+
+    ServerSocket serverSocket(34000, Socket::ProtocolVersion::IPV4);
 
     Array < SharedPointer < Thread > > threads;
 

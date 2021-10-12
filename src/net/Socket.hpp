@@ -225,7 +225,7 @@ private:
 
 
     Size            _port               { Socket::DEFAULT_PORT };
-    ProtocolVersion _protocolVersion    { Socket::ProtocolVersion::AUTO };
+    ProtocolVersion _protocolVersion    { Socket::ProtocolVersion::IPV4 };
 
 public:
 
@@ -326,7 +326,7 @@ public:
         return * this;
     }
 
-    inline explicit Socket ( ProtocolVersion protocolVersion = ProtocolVersion::AUTO ) noexcept (false) :
+    inline explicit Socket ( ProtocolVersion protocolVersion = ProtocolVersion::IPV4 ) noexcept (false) :
             _protocolVersion( protocolVersion) {
 
         this->open();
@@ -336,13 +336,13 @@ public:
 
     }
 
-    inline explicit Socket ( String const & address, ProtocolVersion protocolVersion = ProtocolVersion::AUTO ) noexcept (false) :
+    inline explicit Socket ( String const & address, ProtocolVersion protocolVersion = ProtocolVersion::IPV4 ) noexcept (false) :
             _protocolVersion(protocolVersion) {
 
         this->open().connect( this->extractAddress (  address ) );
     }
 
-    inline explicit Socket ( String const & address, uint16 port, ProtocolVersion protocolVersion = ProtocolVersion::AUTO ) noexcept (false) :
+    inline explicit Socket ( String const & address, uint16 port, ProtocolVersion protocolVersion = ProtocolVersion::IPV4 ) noexcept (false) :
             _protocolVersion(protocolVersion),
             _port(port) {
 

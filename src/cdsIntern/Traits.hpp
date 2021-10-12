@@ -297,6 +297,40 @@ public:
     static bool const constexpr value = sizeof(Test<Derived>(0)) == sizeof(YesType);
 };
 
+
+
+namespace Utility {
+
+    template<typename T>
+    struct TypeParseTraits {
+        constexpr static StringLiteral name = "Undefined";
+    };
+
+}
+
+#define __CDS_RegisterParseType(_type) /* NOLINT(bugprone-reserved-identifier) */ \
+namespace Utility {                                                               \
+    template <>                                       \
+    struct TypeParseTraits < _type > {     \
+        constexpr static StringLiteral name = # _type; \
+    }; \
+}
+
+__CDS_RegisterParseType(sint8)
+__CDS_RegisterParseType(sint16)
+__CDS_RegisterParseType(sint32)
+__CDS_RegisterParseType(sint64)
+
+__CDS_RegisterParseType(uint8)
+__CDS_RegisterParseType(uint16)
+__CDS_RegisterParseType(uint32)
+__CDS_RegisterParseType(uint64)
+
+__CDS_RegisterParseType(void)
+__CDS_RegisterParseType(bool)
+__CDS_RegisterParseType(float)
+__CDS_RegisterParseType(double)
+
 template < typename T >
 struct Type {
     using BaseType = T;
@@ -386,6 +420,8 @@ struct Type {
     template < typename V = typename std :: remove_reference < T > :: type >
     constexpr static auto unsafeAddress () noexcept -> V * { return reinterpret_cast < V * > (0x10); }
     constexpr static auto unsafeReference () noexcept -> T & { return * Type :: unsafeAddress(); }
+
+    constexpr static auto name () noexcept -> StringLiteral { return Utility :: TypeParseTraits < T > :: name; }
 };
 
 template < typename T, typename = void >
@@ -401,5 +437,7 @@ struct pairTrait < T > {
     using SecondType = typename std :: enable_if < isPair < T > :: type :: value, typename std::remove_reference < decltype ( Type < T > :: unsafeAddress() -> second() ) > :: type > :: type;
     using Type = Pair < FirstType, SecondType >;
 };
+
+
 
 #endif //CDS_TRAITS_HPP
