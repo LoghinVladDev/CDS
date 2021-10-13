@@ -161,4 +161,6 @@ public:
     auto popFront () noexcept (false) -> T override;
 };
 
+__CDS_RegisterParseTypeTemplateT(Heap)
+
 #endif //CDS_HEAP_HPP

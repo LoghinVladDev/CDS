@@ -63,4 +63,6 @@ public:
     inline auto pop () noexcept (false) -> T { return this->popFront(); }
 };
 
+__CDS_RegisterParseTypeTemplateT(Queue)
+
 #endif //CDS_QUEUE_HPP

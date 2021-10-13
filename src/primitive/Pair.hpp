@@ -154,4 +154,11 @@ Pair(K, V) -> Pair<K, V>;
 
 #endif
 
+namespace Utility {
+    template<typename K, typename V>
+    struct TypeParseTraits<Pair<K, V>> {
+        constexpr static StringLiteral name = "Pair";
+    };
+}
+
 #endif //CDS_PAIR_HPP

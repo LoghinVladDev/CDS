@@ -258,4 +258,7 @@ public:
 #undef THREAD_EXCEPT_STAT
 #undef MUTABLE_SPEC
 
+__CDS_RegisterParseType(Thread)
+__CDS_RegisterParseTypeTemplateT(Runnable)
+
 #endif //CDS_THREAD_H

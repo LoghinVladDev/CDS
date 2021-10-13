@@ -335,5 +335,6 @@ auto StaticArray<T, n>::sequence() noexcept -> Sequence < StaticArray <T, n> > {
 template <typename T>
 StaticArray (std::initializer_list<T> l) -> StaticArray < T, l.size() >;
 
+__CDS_RegisterParseTypeTemplateT(StaticArray)
 
 #endif //CDS_STATICARRAY_HPP

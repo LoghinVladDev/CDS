@@ -386,5 +386,6 @@ auto Collection<T>::count ( Predicate const & p ) const noexcept ( noexcept ( ( 
 
 #undef COMMA
 
+__CDS_RegisterParseTypeTemplateT(Collection)
 
 #endif //CDS_COLLECTION_HPP

@@ -593,4 +593,8 @@ __CDS_cpplang_ConstexprDestructor const Boolean False = false;
 
 #endif
 
+
+__CDS_RegisterParseType(Boolean)
+
+
 #endif //CDS_BOOLEAN_HPP

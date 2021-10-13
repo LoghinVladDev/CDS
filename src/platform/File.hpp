@@ -959,5 +959,7 @@ inline File::DiagnosticOptionFlags      File::_diagnosticFixesFlags = File::Diag
 
 // endregion
 
+__CDS_RegisterParseType(File)
+
 #endif //CDS_FILE_HPP
 

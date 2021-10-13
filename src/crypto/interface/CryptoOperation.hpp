@@ -33,5 +33,12 @@ public:
     }
 };
 
+namespace Utility {
+    template<Size byteSize>
+    struct TypeParseTraits<CryptoOperation<byteSize>> {
+        constexpr static StringLiteral name = "CryptoOperation";
+    };
+}
+
 
 #endif //CDS_CRYPTOOPERATOR_HPP

@@ -117,7 +117,7 @@ public:
 
         this->logBold("Start of test '%s', on platform : '%s', compiler : '%s', version : '%s', cpp standard : '%s'",
                       testName.cStr(),
-                      __CDS_platform_name,
+                      __CDS_Platform,
                       __CDS_compiler_name,
                       __CDS_compilerVersionString(),
                       __CDS_cpplang_core_version_name
@@ -128,14 +128,14 @@ public:
         ok ?
         this->logOK("'%s' test OK, on platform : '%s', compiler : '%s', version : '%s', cpp standard : '%s'",
                     testName.cStr(),
-                    __CDS_platform_name,
+                    __CDS_Platform,
                     __CDS_compiler_name,
                     __CDS_compilerVersionString(),
                     __CDS_cpplang_core_version_name
         ):
         this->logError("'%s' test Not OK, on platform : '%s', on compiler : '%s', version : '%s', cpp standard : '%s'",
                        testName.cStr(),
-                       __CDS_platform_name,
+                       __CDS_Platform,
                        __CDS_compiler_name,
                        __CDS_compilerVersionString(),
                        __CDS_cpplang_core_version_name

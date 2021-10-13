@@ -24,11 +24,11 @@ private:
      */
     int v{0};
 public:
-    __CDS_NoDiscard __CDS_cpplang_ConstexprDestructor auto rangeTo (Integer const & value) const noexcept -> Range {
+    __CDS_NoDiscard __CDS_MaybeUnused __CDS_cpplang_ConstexprDestructor auto rangeTo (Integer const & value) const noexcept -> Range {
         return Range(this->v, value.v);
     }
 
-    __CDS_NoDiscard __CDS_cpplang_ConstexprDestructor auto rangeTo (int value) const noexcept -> Range {
+    __CDS_NoDiscard __CDS_MaybeUnused __CDS_cpplang_ConstexprDestructor auto rangeTo (int value) const noexcept -> Range {
         return Range(this->v, value);
     }
 
@@ -1924,5 +1924,7 @@ __CDS_cpplang_ConstexprDestructor auto operator "" _i (unsigned long long int va
 #endif
 
 using Int = Integer;
+
+__CDS_RegisterParseType(Integer)
 
 #endif //CDS_INTEGER_HPP

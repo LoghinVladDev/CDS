@@ -572,4 +572,7 @@ __CDS_cpplang_ConstexprDestructor auto operator "" _d (long double value) noexce
 
 #endif
 
+__CDS_RegisterParseType(Double)
+
+
 #endif //CDS_DOUBLE_HPP

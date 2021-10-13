@@ -52,5 +52,7 @@ public:
     }
 };
 
+__CDS_RegisterParseType(Semaphore)
+
 
 #endif //CDS_SEMAPHORE_HPP

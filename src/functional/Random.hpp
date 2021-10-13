@@ -95,4 +95,21 @@ public:
     using UnsignedLong    __CDS_MaybeUnused = Generator<uint64, std::uniform_int_distribution<uint64>>;
 };
 
+__CDS_RegisterParseType(Random)
+
+
+namespace Utility {
+    template<typename T, typename D, typename TE, typename RD>
+    struct TypeParseTraits<Random::Generator<T, D, TE, RD>> {
+        constexpr static StringLiteral name = "Random::Generator";
+    };
+}
+
+__CDS_RegisterParseType(Random::Int)
+__CDS_RegisterParseType(Random::Long)
+__CDS_RegisterParseType(Random::Float)
+__CDS_RegisterParseType(Random::Double)
+__CDS_RegisterParseType(Random::UnsignedInt)
+__CDS_RegisterParseType(Random::UnsignedLong)
+
 #endif //CDS_RANDOM_HPP

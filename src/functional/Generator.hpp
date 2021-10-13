@@ -155,4 +155,11 @@ public:
     }
 };
 
+namespace Utility {
+    template<typename T, typename ... Args>
+    struct TypeParseTraits<Generator<T, Args ... >> {
+        constexpr static StringLiteral name = "Generator";
+    };
+}
+
 #endif //CDS_GENERATOR_HPP

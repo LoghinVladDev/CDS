@@ -15,4 +15,11 @@ public:
     inline auto verify () noexcept -> SignatureVerifier & { return this->run(); }
 };
 
+namespace Utility {
+    template<Size byteSize>
+    struct TypeParseTraits<SignatureVerifier<byteSize>> {
+        constexpr static StringLiteral name = "SignatureVerifier";
+    };
+}
+
 #endif //CDS_SIGNATUREVERIFIER_HPP

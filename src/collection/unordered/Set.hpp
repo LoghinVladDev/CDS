@@ -48,4 +48,5 @@ auto OrderedSet<T, C>::sequence() noexcept -> Sequence < OrderedSet < T, C > > {
 #undef _OMIT_SEQUENCE_IMPL
 #endif
 
+
 #endif //CDS_SET_HPP

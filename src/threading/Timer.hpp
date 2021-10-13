@@ -122,4 +122,6 @@ public:
     }
 };
 
-#endif //CDS_TIMER_
+__CDS_RegisterParseType(Timer)
+
+#endif //CDS_TIMER_HPP

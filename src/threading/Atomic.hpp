@@ -126,4 +126,6 @@ public:
     }
 };
 
+__CDS_RegisterParseTypeTemplateT(Atomic)
+
 #endif //CDS_ATOMIC_HPP

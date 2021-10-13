@@ -14,4 +14,12 @@ public:
     inline auto hash () noexcept -> Hasher & { return this->run(); }
 };
 
+
+namespace Utility {
+    template<Size byteSize>
+    struct TypeParseTraits<Hasher<byteSize>> {
+        constexpr static StringLiteral name = "Hasher";
+    };
+}
+
 #endif //CDS_HASHER_HPP

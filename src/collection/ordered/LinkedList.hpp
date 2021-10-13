@@ -294,7 +294,7 @@ public:
     }
 
     inline auto operator != (DoubleLinkedList const & o) const noexcept -> bool {
-        return ! ( * this == o );
+        return ! this->operator==(o) ;
     }
 
     __CDS_NoDiscard auto equals (Object const & o) const noexcept -> bool final {
@@ -1240,5 +1240,6 @@ DoubleLinkedList ( std::initializer_list < T > ) -> DoubleLinkedList < T >;
 
 #include "SingleLinkedList.hpp"
 
+__CDS_RegisterParseTypeTemplateT(DoubleLinkedList)
 
 #endif //CDS_LINKEDLIST_HPP

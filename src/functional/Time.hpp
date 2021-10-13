@@ -20,4 +20,7 @@ class Duration {
 
 };
 
+__CDS_RegisterParseType(DateTime)
+__CDS_RegisterParseType(Duration)
+
 #endif //CDS_TIME_HPP

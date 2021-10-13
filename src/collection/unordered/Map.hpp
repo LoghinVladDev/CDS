@@ -25,10 +25,7 @@ HashCalculatorHasBoundaryFunction<H>
 class HashMap;
 
 
-template <class K, class V>
-#if defined(__cpp_concepts) && !defined(_MSC_VER)
-requires UniqueIdentifiable <K>
-#endif
+template <class K, class V> __CDS_Requires( UniqueIdentifiable <K> )
 class Map : public Collection < Pair < K, V > > {
 public:
     using Key                       = K;
@@ -90,7 +87,7 @@ public:
         return ( ( this->allocInsertGetPtr(entry)) = new Entry(entry) )->second();
     }
 
-    auto emplace ( KeyConstReference k, ValueConstReference v ) noexcept -> ValueConstReference {
+    __CDS_MaybeUnused inline auto emplace ( KeyConstReference k, ValueConstReference v ) noexcept -> ValueConstReference {
         return this->insert( {k, v} );
     }
 
@@ -165,5 +162,13 @@ class __CDS_MaybeUnused MultiMap : public Collection < Pair < K, V > > {
     virtual auto entries () noexcept -> LinkedList < Pair < Reference < Key const >, Reference < Value > > > = 0;
     virtual auto entries () const noexcept -> LinkedList < Pair < Reference < Key const >, Reference < Value const > > > = 0;
 };
+
+namespace Utility {
+    template <class K, class V> __CDS_Requires( UniqueIdentifiable <K> )
+    struct TypeParseTraits<Map< K, V> > {
+        constexpr static StringLiteral name = "Map";
+    };
+}
+
 
 #endif //CDS_MAP_HPP

@@ -659,4 +659,20 @@ class __CDS_MaybeUnused MultiHashMap final : public Map < K, V > {
 
 };
 
+namespace Utility {
+    template <class K, class V, class H> __CDS_Requires (
+            UniqueIdentifiable< K > &&
+            HashCalculatorHasBoundaryFunction< H >
+    ) struct TypeParseTraits<HashMap < K, V, H >> {
+        constexpr static StringLiteral name = "HashMap";
+    };
+
+    template <class K, class V, class H> __CDS_Requires (
+            UniqueIdentifiable< K > &&
+            HashCalculatorHasBoundaryFunction< H >
+    ) struct TypeParseTraits<MultiHashMap < K, V, H >> {
+        constexpr static StringLiteral name = "MultiHashMap";
+    };
+}
+
 #endif //CDS_HASHMAP_HPP

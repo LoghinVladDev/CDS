@@ -742,4 +742,6 @@ __CDS_MaybeUnused auto List < T > :: sub ( Index from, Index to ) const noexcept
     return list;
 }
 
+__CDS_RegisterParseTypeTemplateT(List)
+
 #endif //CDS_LIST_HPP

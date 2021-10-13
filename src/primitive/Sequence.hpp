@@ -4343,4 +4343,6 @@ inline auto String::sequence () && noexcept -> Sequence < String > {
     return Sequence < typename std :: remove_reference < decltype (* this) > :: type > (std::move(* this));
 }
 
+__CDS_RegisterParseTypeTemplateT(Sequence)
+
 #endif //CDS_SEQUENCE_HPP

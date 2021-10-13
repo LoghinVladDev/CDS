@@ -24,4 +24,11 @@ public:
     [[nodiscard]] constexpr auto IV () noexcept -> IVType & { return this->_IV; }
 };
 
+namespace Utility {
+    template<Size byteSize>
+    struct TypeParseTraits<Decryptor<byteSize>> {
+        constexpr static StringLiteral name = "Decryptor";
+    };
+}
+
 #endif //CDS_DECRYPTOR_HPP

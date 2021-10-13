@@ -135,4 +135,6 @@ Optional ( T ) -> Optional < T >;
 
 #endif
 
+__CDS_RegisterParseTypeTemplateT(Optional)
+
 #endif //CDS_OPTIONAL_HPP

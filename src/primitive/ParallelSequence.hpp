@@ -537,4 +537,6 @@ auto ParallelSequence < C > ::filterContainer ( ParallelFilterContainer & contai
 
 }
 
+__CDS_RegisterParseTypeTemplateT(ParallelSequence)
+
 #endif //CDS_PARALLELSEQUENCE_HPP

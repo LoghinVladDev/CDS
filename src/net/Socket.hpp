@@ -1524,4 +1524,7 @@ public:
     }
 };
 
+__CDS_RegisterParseType(Socket)
+__CDS_RegisterParseType(ServerSocket)
+
 #endif //CDS_SOCKET_HPP

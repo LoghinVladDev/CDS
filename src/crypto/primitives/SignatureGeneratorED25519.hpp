@@ -25,4 +25,14 @@ class __CDS_MaybeUnused SignatureGeneratorED25519 : public AsymmetricCryptoOpera
     }
 };
 
+
+
+namespace Utility {
+    template<Size byteSize>
+    struct TypeParseTraits<SignatureGeneratorED25519<byteSize>> {
+        constexpr static StringLiteral name = "SignatureGeneratorED25519";
+    };
+}
+
+
 #endif //CDS_SIGNATUREGENERATORED25519_HPP

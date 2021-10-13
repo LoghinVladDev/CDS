@@ -21,4 +21,11 @@ public:
 
 };
 
+namespace Utility {
+    template<Size byteSize>
+    struct TypeParseTraits<SymmetricCryptoOperation<byteSize>> {
+        constexpr static StringLiteral name = "SymmetricCryptoOperation";
+    };
+}
+
 #endif //CDS_SYMMETRICCRYPTOOPERATION_HPP

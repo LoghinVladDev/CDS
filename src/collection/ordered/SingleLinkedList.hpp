@@ -146,14 +146,8 @@ public:
         if ( this->size() != o.size() ) return false;
 
         for ( auto i1 = this->begin(), i2 = o.begin(); i1 != this->end() && i2 != o.end(); ++ i1, ++ i2 )
-            if __CDS_cpplang_IfConstexpr ( Type < T > :: hasEqualityOperator ) {
-                if ( !(i1.value() == i2.value()) )
-                    return false;
-            } else if __CDS_cpplang_IfConstexpr ( Type < T > :: objectDerived ) {
-                if ( ! i1.value().equals (i2.value()) )
-                    return false;
-            } else
-                return i1 == i2;
+            if ( ! Type < T > :: compare ( i1.value(), i2.value() ) )
+                return false;
 
         return true;
     }
@@ -1083,5 +1077,7 @@ auto SingleLinkedList < T > :: pAt (Index index) const noexcept(false) -> Elemen
 //
 //    return this->front();
 //}
+
+__CDS_RegisterParseTypeTemplateT(SingleLinkedList)
 
 #endif //CDS_SINGLELINKEDLIST_HPP

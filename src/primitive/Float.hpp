@@ -568,4 +568,6 @@ __CDS_cpplang_ConstexprDestructor auto operator "" _f (long double value) noexce
 
 #endif
 
+__CDS_RegisterParseType(Float)
+
 #endif //CDS_FLOAT_HPP

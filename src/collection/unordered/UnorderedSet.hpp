@@ -124,4 +124,6 @@ UnorderedSet ( std::initializer_list < T > ) -> UnorderedSet < T >;
 
 #endif
 
+__CDS_RegisterParseTypeTemplateT(UnorderedSet)
+
 #endif //CDS_UNORDEREDSET_HPP

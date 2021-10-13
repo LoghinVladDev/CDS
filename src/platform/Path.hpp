@@ -14,7 +14,7 @@
 #elif defined(__linux)
 #include <sys/stat.h>
 #include <unistd.h>
-#include <linux/limits.h>
+#include <climits>
 #include <dirent.h>
 #else
 #warning Warning : Path-lib Unsupported
@@ -198,6 +198,8 @@ public:
 #endif
     __CDS_NoDiscard static auto roots () noexcept -> LinkedList < Path >;
 };
+
+template <> struct isCallableType <Path::WalkEntry> : std :: false_type{};
 
 class Path::WalkEntry : public Object {
 private:
@@ -447,5 +449,8 @@ __CDS_NoDiscard inline auto Path::platformDependantRoots () noexcept -> LinkedLi
 inline LinkedList < char > Path::possibleDirectorySeparators = {'/', '\\'};
 
 #endif
+
+__CDS_RegisterParseType(Path)
+
 
 #endif //CDS_PATH_H

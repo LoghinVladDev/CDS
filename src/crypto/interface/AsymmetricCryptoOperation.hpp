@@ -25,4 +25,11 @@ public:
 
 };
 
+namespace Utility {
+    template<Size byteSize>
+    struct TypeParseTraits<AsymmetricCryptoOperation<byteSize>> {
+        constexpr static StringLiteral name = "AsymmetricCryptoOperation";
+    };
+}
+
 #endif //CDS_ASYMMETRICCRYPTOOPERATION_HPP

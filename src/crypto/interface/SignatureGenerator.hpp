@@ -14,5 +14,11 @@ public:
     inline auto sign () noexcept -> SignatureGenerator & { return this->run(); }
 };
 
+namespace Utility {
+    template<Size byteSize>
+    struct TypeParseTraits<SignatureGenerator<byteSize>> {
+        constexpr static StringLiteral name = "SignatureGenerator";
+    };
+}
 
 #endif //CDS_SIGNATUREGENERATOR_HPP

@@ -864,4 +864,8 @@ inline auto JSON::operator == (JSON const & o) const noexcept -> bool {
     return this->_nodes == o._nodes;
 }
 
+__CDS_RegisterParseType(JSON)
+__CDS_RegisterParseType(JSON::Array)
+__CDS_RegisterParseType(JSON::Node)
+
 #endif //CDS_JSON_HPP

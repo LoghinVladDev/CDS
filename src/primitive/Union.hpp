@@ -19,31 +19,6 @@ namespace Utility { // NOLINT(modernize-concat-nested-namespaces)
 
             using NoneType = void;
 
-            template < sint32 _holder, uint32 _index, typename ... NoRemainingTypePack >
-            class UnionRecurrentBase {};
-
-            template < sint32 _holder, uint32 _index, typename ExtractedType, typename ... RemainingTypes >
-            class UnionRecurrentBase < _holder, _index, ExtractedType, RemainingTypes ... > :
-                    public UnionRecurrentBase < _holder, _index + 1, RemainingTypes ... > {
-
-                constexpr static sint32 index = _index;
-            public:
-//                using Type = ExtractedType;
-
-                template < typename Type, typename std :: enable_if < std :: is_same < Type, ExtractedType > :: value, int > :: type = 0 >
-                constexpr static auto isActive () noexcept -> bool { return _holder == _index; }
-
-                template < typename Type, typename std :: enable_if < ! std :: is_same < Type, ExtractedType > :: value, int > :: type = 0 >
-                constexpr static auto isActive () noexcept -> bool { return false; }
-
-//                template < typename Type, typename std :: enable_if < isActive < Type > (), int > :: type = 0 >
-//                constexpr auto get () noexcept -> Type &;
-
-//                template < typename Type, typename std :: enable_if < ! isActive < Type > (), int > :: type = 0 >
-//                constexpr auto get () noexcept -> NoneType;
-
-            };
-
             template < sint32 pos, typename T, typename ... Rest >
             struct IndexOfTypeInPackImpl {
                 constexpr static auto index () noexcept -> sint32 {
@@ -84,16 +59,6 @@ namespace Utility { // NOLINT(modernize-concat-nested-namespaces)
 
             template < sint32 index, typename Head, typename ... Rest >
             using TypeAtIndexInPack = TypeAtIndexInPackImpl < 0, index, Head, Rest ... >;
-
-            template < sint32 _holder, uint32 _index, typename ExtractedType, typename ... RemainingTypes >
-            struct TypeAt {
-                using Type = typename TypeAt < _holder, _index - 1, RemainingTypes ... > :: type;
-            };
-
-            template < typename FirstType, typename ... Types >
-            struct TypeAt < -1, 0, FirstType, Types ... > {
-                using Type = FirstType;
-            };
 
             template < typename Type, typename ... List >
             struct PackContains : std :: false_type {};
@@ -422,7 +387,7 @@ public:
 
 private:
     template < typename T, typename std :: enable_if < std :: is_same < T, void > :: value, int > :: type = 0 >
-    constexpr static auto buildSafeDereferenceWrapper ( T * addr ) noexcept -> int  { return 0; }
+    constexpr static auto buildSafeDereferenceWrapper ( T * addr __CDS_MaybeUnused ) noexcept -> int  { return 0; }
 
     template < typename T, typename std :: enable_if < ! std :: is_same < T, void > :: value, int > :: type = 0 >
     constexpr static auto buildSafeDereferenceWrapper ( T * addr ) noexcept -> T & { return * addr; }
@@ -482,5 +447,14 @@ public:
 };
 
 __CDS_WarningSuppression_UnsafeDeleteVoidPtr_SuppressDisable
+
+namespace Utility {
+    template< typename FirstType, typename ... RemainingTypes >
+    struct TypeParseTraits < Union < FirstType, RemainingTypes ... > > {
+        constexpr static StringLiteral name = "Union";
+    };
+}
+
+
 
 #endif //CDS_UNION_HPP

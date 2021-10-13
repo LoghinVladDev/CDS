@@ -19,6 +19,8 @@ public:
     explicit ArithmeticException ( String const & message ) noexcept : Exception ( String("Arithmetic Exception : ") + message ) { }
 };
 
+__CDS_RegisterParseType(ArithmeticException)
+
 class DivideByZeroException : public ArithmeticException {
 public:
     DivideByZeroException () noexcept : ArithmeticException ("Divide By Zero Exception") { }
@@ -26,6 +28,8 @@ public:
     DivideByZeroException ( DivideByZeroException && ) noexcept = default;
     __CDS_MaybeUnused explicit DivideByZeroException ( String const & message ) noexcept : ArithmeticException ( String("Divide By Zero Exception : ") + message ) { }
 };
+
+__CDS_RegisterParseType(DivideByZeroException)
 
 class IllegalArgumentException : public Exception {
 public:
@@ -35,12 +39,16 @@ public:
     __CDS_MaybeUnused explicit IllegalArgumentException ( String const & message ) noexcept : Exception ( String("Illegal Argument Exception : ") + message ) { }
 };
 
+__CDS_RegisterParseType(IllegalArgumentException)
+
 class NullPointerException : public Exception {
 public:
     NullPointerException () noexcept : Exception ("Tried De-Referencing a null valued Pointer") { }
     NullPointerException ( NullPointerException const & ) noexcept = default;
     NullPointerException ( NullPointerException && ) noexcept = default;
 };
+
+__CDS_RegisterParseType(NullPointerException)
 
 class OutOfBoundsException : public Exception {
 public:
@@ -51,6 +59,8 @@ public:
     __CDS_MaybeUnused explicit OutOfBoundsException ( Index requested, Index capacity ) noexcept : Exception ( String::format("Out of Bounds Exception : Requested : %lld, Capacity : %lld", requested, capacity) ) { }
 };
 
+__CDS_RegisterParseType(OutOfBoundsException)
+
 class TypeException : public Exception {
 public:
     TypeException () noexcept : Exception ( "Type Cast Exception" ) { }
@@ -59,5 +69,7 @@ public:
     TypeException () noexcept : Exception ( String::f("Type Cast Exception. Cannot convert '%s' to '%s'", Type < T > :: name(), Type < V > :: name()) ) { }
     explicit TypeException (String const & message) noexcept : Exception ("Type Cast Exception : "_s + message) { }
 };
+
+__CDS_RegisterParseType(TypeException)
 
 #endif //CDS_UTILITY_HPP

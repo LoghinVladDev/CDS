@@ -227,4 +227,6 @@ auto Set<T>::remove( ElementCRef e) noexcept -> bool {
     return false;
 }
 
+__CDS_RegisterParseTypeTemplateT(Set)
+
 #endif //CDS_SETBASE_HPP

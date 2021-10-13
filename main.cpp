@@ -77,11 +77,51 @@
 
 #include <CDS/Socket>
 #include <CDS/Thread>
-#include "Union.hpp"
+#include <CDS/Union>
+#include <CDS/HashMap>
 
 #pragma clang diagnostic push
 #pragma ide diagnostic ignored "EndlessLoop"
 int main () {
+    int branch = 0;
+
+    auto testFunc2 = [& branch]() -> Union <
+        String,
+        Pair < Float, Integer >,
+        Array < int >,
+        double,
+        UniquePointer < float >,
+        Union < Integer, Boolean, String >,
+        HashMap < String, Size >
+    > {
+        static Random::Int choiceGenerator(0, 7);
+
+        switch ( choiceGenerator() % 7 ) {
+            case 0: branch = 0; return "Crazy Python Shit in C++"_s; /// works
+            case 1: branch = 1; return Pair < Float, Int > { 3.4f, 2 }; /// works
+            case 2: branch = 2; return Array { 1, 2, 3, 4, 5, 6 }; /// works
+            case 3: branch = 3; return 3.14;  /// works
+            case 4: branch = 4; return UniquePointer(new float(5.4f)); /// works
+            case 5:
+                switch ( choiceGenerator() % 3 ) {
+                    case 0: branch = 5; return Union <Int, Boolean, String > (Integer(0)); /// works
+                    case 1: branch = 6; return Union <Int, Boolean, String > (Boolean()); /// works
+                    case 2: branch = 7; return Union <Int, Boolean, String > (String::f("Wtf: %d", choiceGenerator.get())); /// works
+                } /// works
+            case 6:
+                branch = 8; return "Ana are mere, dar merele o au pe Ana?"_s.split(", ?")
+                    .sequence().associateWith ([](String const & str){return str.length();})
+                    .toHashMap(); /// works
+        }
+    };
+S
+    for ( int i = 0; i < 100; ++ i ) {
+        auto o = testFunc2();
+        std::cout << o << '\n';
+    }
+    return 0;
+
+
 //    Union < int, float, double, short > u;
 ////
 //Union < int, float > :: indexOf < float > ();

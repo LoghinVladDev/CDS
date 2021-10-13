@@ -211,10 +211,15 @@ constexpr auto typeMoveAssignable () noexcept -> bool {
 template<typename T, typename U = void>
 struct isCallableType
 {
-    static bool const constexpr value = std::conditional_t<
-            std::is_class<std::remove_reference_t<T>>::value,
-            isCallableType<std::remove_reference_t<T>, int>, std::false_type>::value;
+    static bool const constexpr value = std::conditional<
+            std::is_class<typename std::remove_reference<T> :: type>::value,
+            isCallableType<typename std::remove_reference<T> :: type, int>,
+            std::false_type
+        >::type::value;
 };
+
+template <> struct isCallableType <String> : std :: false_type{};
+template <> struct isCallableType <Object> : std :: false_type{};
 
 template<typename T, typename U, typename ...Args>
 struct isCallableType<T(Args...), U> : std::true_type {};
@@ -223,11 +228,11 @@ struct isCallableType<T(*)(Args...), U> : std::true_type {};
 template<typename T, typename U, typename ...Args>
 struct isCallableType<T(&)(Args...), U> : std::true_type {};
 template<typename T, typename U, typename ...Args>
-struct isCallableType<T(Args......), U> : std::true_type {};
+struct isCallableType<T(Args...,...), U> : std::true_type {};
 template<typename T, typename U, typename ...Args>
-struct isCallableType<T(*)(Args......), U> : std::true_type {};
+struct isCallableType<T(*)(Args...,...), U> : std::true_type {};
 template<typename T, typename U, typename ...Args>
-struct isCallableType<T(&)(Args......), U> : std::true_type {};
+struct isCallableType<T(&)(Args...,...), U> : std::true_type {};
 template<typename T, typename U, typename ...Args>
 struct isCallableType<T(Args...)const, U> : std::true_type {};
 template<typename T, typename U, typename ...Args>
@@ -235,11 +240,11 @@ struct isCallableType<T(Args...)volatile, U> : std::true_type {};
 template<typename T, typename U, typename ...Args>
 struct isCallableType<T(Args...)const volatile, U> : std::true_type {};
 template<typename T, typename U, typename ...Args>
-struct isCallableType<T(Args......)const, U> : std::true_type {};
+struct isCallableType<T(Args...,...)const, U> : std::true_type {};
 template<typename T, typename U, typename ...Args>
-struct isCallableType<T(Args......)volatile, U> : std::true_type{};
+struct isCallableType<T(Args...,...)volatile, U> : std::true_type{};
 template<typename T, typename U, typename ...Args>
-struct isCallableType<T(Args......)const volatile, U> : std::true_type {};
+struct isCallableType<T(Args...,...)const volatile, U> : std::true_type {};
 template<typename T, typename U, typename ...Args>
 struct isCallableType<T(Args...)&, U> : std::true_type {};
 template<typename T, typename U, typename ...Args>
@@ -249,13 +254,13 @@ struct isCallableType<T(Args...)volatile&, U> : std::true_type{};
 template<typename T, typename U, typename ...Args>
 struct isCallableType<T(Args...)const volatile&, U> : std::true_type{};
 template<typename T, typename U, typename ...Args>
-struct isCallableType<T(Args......)&, U> : std::true_type {};
+struct isCallableType<T(Args...,...)&, U> : std::true_type {};
 template<typename T, typename U, typename ...Args>
-struct isCallableType<T(Args......)const&, U> : std::true_type{};
+struct isCallableType<T(Args...,...)const&, U> : std::true_type{};
 template<typename T, typename U, typename ...Args>
-struct isCallableType<T(Args......)volatile&, U> : std::true_type{};
+struct isCallableType<T(Args...,...)volatile&, U> : std::true_type{};
 template<typename T, typename U, typename ...Args>
-struct isCallableType<T(Args......)const volatile&, U> : std::true_type{};
+struct isCallableType<T(Args...,...)const volatile&, U> : std::true_type{};
 template<typename T, typename U, typename ...Args>
 struct isCallableType<T(Args...)&&, U> : std::true_type{};
 template<typename T, typename U, typename ...Args>
@@ -265,13 +270,13 @@ struct isCallableType<T(Args...)volatile&&, U> : std::true_type{};
 template<typename T, typename U, typename ...Args>
 struct isCallableType<T(Args...)const volatile&&, U> : std::true_type{};
 template<typename T, typename U, typename ...Args>
-struct isCallableType<T(Args......)&&, U> : std::true_type{};
+struct isCallableType<T(Args...,...)&&, U> : std::true_type{};
 template<typename T, typename U, typename ...Args>
-struct isCallableType<T(Args......)const&&, U> : std::true_type{};
+struct isCallableType<T(Args...,...)const&&, U> : std::true_type{};
 template<typename T, typename U, typename ...Args>
-struct isCallableType<T(Args......)volatile&&, U> : std::true_type{};
+struct isCallableType<T(Args...,...)volatile&&, U> : std::true_type{};
 template<typename T, typename U, typename ...Args>
-struct isCallableType<T(Args......)const volatile&&, U> : std::true_type{};
+struct isCallableType<T(Args...,...)const volatile&&, U> : std::true_type{};
 
 template<typename T>
 struct isCallableType<T, int>
@@ -316,6 +321,14 @@ namespace Utility {                                                             
     }; \
 }
 
+#define __CDS_RegisterParseTypeTemplateT(_type) /* NOLINT(bugprone-reserved-identifier) */  \
+namespace Utility {                             \
+    template < typename T >                     \
+    struct TypeParseTraits < _type < T > > {    \
+        constexpr static StringLiteral name = # _type;                                            \
+    };\
+}
+
 __CDS_RegisterParseType(sint8)
 __CDS_RegisterParseType(sint16)
 __CDS_RegisterParseType(sint32)
@@ -338,12 +351,12 @@ struct Type {
     using WithoutReference = Type < typename std :: remove_reference < T > :: type >;
     using WithoutConst = Type < typename std :: remove_const < T > :: type >;
     using WithoutPointer = Type < typename std :: remove_pointer < T > :: type >;
-    using WithoutModifiers = typename Type < T > :: WithoutReference :: WithoutPointer :: WithoutConst;
+    using WithoutModifiers __CDS_MaybeUnused = typename Type < T > :: WithoutReference :: WithoutPointer :: WithoutConst;
 
-    using AsUniquePointer = UniquePointer < typename Type < T > :: WithoutReference :: WithoutPointer :: BaseType >;
+    using AsUniquePointer __CDS_MaybeUnused = UniquePointer < typename Type < T > :: WithoutReference :: WithoutPointer :: BaseType >;
     using AsForeignPointer = ForeignPointer < typename Type < T > :: WithoutReference :: WithoutPointer :: BaseType >;
-    using AsSharedPointer = SharedPointer < typename Type < T > :: WithoutReference :: WithoutPointer :: BaseType >;
-    using AsAtomicSharedPointer = AtomicSharedPointer < typename Type < T > :: WithoutReference :: WithoutPointer :: BaseType >;
+    using AsSharedPointer __CDS_MaybeUnused = SharedPointer < typename Type < T > :: WithoutReference :: WithoutPointer :: BaseType >;
+    using AsAtomicSharedPointer __CDS_MaybeUnused = AtomicSharedPointer < typename Type < T > :: WithoutReference :: WithoutPointer :: BaseType >;
 
     static constexpr bool defaultConstructible = typeDefaultConstructible < T> ();
     static constexpr bool copyConstructible = typeCopyConstructible < T > ();
@@ -359,16 +372,16 @@ struct Type {
     static constexpr bool ostreamPrintable = isPrintable < T > :: type :: value;
 
     static constexpr bool isFundamental = typeFundamental < T >();
-    static constexpr bool isIntegral = std::is_integral < T > :: type :: value;
+    __CDS_MaybeUnused static constexpr bool isIntegral = std::is_integral < T > :: type :: value;
     static constexpr bool isBasicPointer = std :: is_pointer < T > :: type :: value;
     static constexpr bool isSmartPointer = :: isSmartPointer < T > :: type :: value;
     static constexpr bool isPointer = isBasicPointer || isSmartPointer;
-    static constexpr bool isReference = std :: is_reference < T > :: type :: value;
-    static constexpr bool isLvalue = std :: is_lvalue_reference < T > :: type :: value;
-    static constexpr bool isRvalue = std :: is_rvalue_reference < T > :: type :: value;
-    static constexpr bool isConst = std :: is_const < T > :: type :: value;
+    __CDS_MaybeUnused static constexpr bool isReference = std :: is_reference < T > :: type :: value;
+    __CDS_MaybeUnused static constexpr bool isLvalue = std :: is_lvalue_reference < T > :: type :: value;
+    __CDS_MaybeUnused static constexpr bool isRvalue = std :: is_rvalue_reference < T > :: type :: value;
+    __CDS_MaybeUnused static constexpr bool isConst = std :: is_const < T > :: type :: value;
 
-    static constexpr bool isCallable = isCallableType < T > :: value;
+    static constexpr bool isCallable = isCallableType < T > :: value || std::is_function < T > :: value;
 
 #if __CDS_cpplang_VariableTemplates_available == true
 
@@ -438,6 +451,12 @@ struct pairTrait < T > {
     using Type = Pair < FirstType, SecondType >;
 };
 
+namespace Utility {
+    template<typename T>
+    struct TypeParseTraits<Type<T>> {
+        constexpr static StringLiteral name = "Type Metaclass";
+    };
+}
 
 
 #endif //CDS_TRAITS_HPP

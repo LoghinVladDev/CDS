@@ -105,4 +105,6 @@ public:
     inline auto pop () noexcept (false) -> T { return this->popFront(); }
 };
 
+__CDS_RegisterParseTypeTemplateT(Stack)
+
 #endif //CDS_STACK_HPP

@@ -29,11 +29,11 @@ private:
     CType v{0};
 public:
 
-    __CDS_NoDiscard __CDS_cpplang_ConstexprDestructor auto rangeTo (Long const & value) const noexcept -> Range {
+    __CDS_NoDiscard __CDS_MaybeUnused __CDS_cpplang_ConstexprDestructor auto rangeTo (Long const & value) const noexcept -> Range {
         return Range(this->v, value.v);
     }
 
-    __CDS_NoDiscard __CDS_cpplang_ConstexprDestructor auto rangeTo (sint64 value) const noexcept -> Range {
+    __CDS_NoDiscard __CDS_MaybeUnused __CDS_cpplang_ConstexprDestructor auto rangeTo (sint64 value) const noexcept -> Range {
         return Range(this->v, value);
     }
 
@@ -1845,5 +1845,7 @@ __CDS_cpplang_ConstexprDestructor auto operator "" _l (unsigned long long int va
 }
 
 #endif
+
+__CDS_RegisterParseType(Long)
 
 #endif //CDS_LONG_HPP

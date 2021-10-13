@@ -150,7 +150,17 @@ auto OrderedSet <T, C> ::allocInsertGetPtr(ElementCRef e) noexcept -> ElementPtr
     ++ this->_size;
     return head->pNext->data;
 }
+
+namespace Utility {
+    template<typename T, typename C> __CDS_Requires(ValidSetComparator <T COMMA C>)
+    struct TypeParseTraits<OrderedSet<T, C>> {
+        constexpr static StringLiteral name = "OrderedSet";
+    };
+}
+
 #undef COMMA
+
+
 
 #ifndef _OMIT_SEQUENCE_IMPL
 #ifndef _CDS_ORDERED_SET_SEQUENCE_IMPL // NOLINT(bugprone-reserved-identifier)

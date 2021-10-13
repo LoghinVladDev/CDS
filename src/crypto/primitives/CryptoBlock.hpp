@@ -336,4 +336,12 @@ public:
 
 #undef __crypto_block_constexpr
 
+
+namespace Utility {
+    template<Size byteSize>
+    struct TypeParseTraits<CryptoBlock<byteSize>> {
+        constexpr static StringLiteral name = "CryptoBlock";
+    };
+}
+
 #endif //CDS_CRYPTOBLOCK_HPP

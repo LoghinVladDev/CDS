@@ -110,4 +110,6 @@ Reference(T&) -> Reference<T>;
 
 #endif
 
+__CDS_RegisterParseTypeTemplateT(Reference)
+
 #endif //CDS_REFERENCE_HPP

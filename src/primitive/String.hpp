@@ -3914,7 +3914,7 @@ public:
      */
     __CDS_NoDiscard auto split ( ElementType, Size = UINT32_MAX ) const noexcept -> LinkedList < String >;
 
-    __CDS_NoDiscard auto lines () const noexcept -> LinkedList < String >;
+    __CDS_NoDiscard __CDS_MaybeUnused auto lines () const noexcept -> LinkedList < String >;
 
     /**
      * @brief Function used to split string by tokens given in a String, in an optional given number of tokens
@@ -4518,5 +4518,8 @@ __CDS_cpplang_ConstexprDestructor auto operator "" _s (const char * pString, std
 namespace dataTypes {
     template<> auto hash<String>(String const &o) noexcept -> Index { return static_cast < Index > ( o.length() ); }
 }
+
+__CDS_RegisterParseType(String)
+__CDS_RegisterParseType(Object)
 
 #endif //CDS_STRING_HPP

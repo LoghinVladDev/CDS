@@ -66,5 +66,6 @@ public:
     __CDS_NoDiscard auto sequence () const && noexcept -> Sequence < const Range >;
 };
 
+__CDS_RegisterParseType(Range)
 
 #endif //CDS_RANGE_HPP

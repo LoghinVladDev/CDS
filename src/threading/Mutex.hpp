@@ -219,5 +219,6 @@ public:
 #undef MUTEX_IMPLEMENTATION_WINAPI_CRITICAL_SECTION
 #endif
 
+__CDS_RegisterParseType(Mutex)
 
 #endif //CDS_MUTEX_HPP

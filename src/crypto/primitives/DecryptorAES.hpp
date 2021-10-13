@@ -71,5 +71,11 @@ protected:
     }
 };
 
+namespace Utility {
+    template<Size byteSize>
+    struct TypeParseTraits<DecryptorAES<byteSize>> {
+        constexpr static StringLiteral name = "DecryptorAES";
+    };
+}
 
 #endif //CDS_DECRYPTORAES_HPP

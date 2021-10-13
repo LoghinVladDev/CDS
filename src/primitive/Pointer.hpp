@@ -404,5 +404,10 @@ ForeignPointer ( const T * ) -> ForeignPointer < const T >;
 
 #endif
 
+__CDS_RegisterParseTypeTemplateT(PointerBase)
+__CDS_RegisterParseTypeTemplateT(UniquePointer)
+__CDS_RegisterParseTypeTemplateT(SharedPointer)
+__CDS_RegisterParseTypeTemplateT(AtomicSharedPointer)
+__CDS_RegisterParseTypeTemplateT(ForeignPointer)
 
 #endif //CDS_POINTER_HPP

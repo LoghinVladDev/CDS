@@ -23,4 +23,6 @@ public:
 
 };
 
+__CDS_RegisterParseType(Request)
+
 #endif //CDS_REQUEST_HPP
