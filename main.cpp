@@ -114,7 +114,7 @@ int main () {
                     .toHashMap(); /// works
         }
     };
-S
+
     for ( int i = 0; i < 100; ++ i ) {
         auto o = testFunc2();
         std::cout << o << '\n';
