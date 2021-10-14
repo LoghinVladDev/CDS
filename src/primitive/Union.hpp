@@ -138,7 +138,7 @@ private:
 
 public:
 
-    Union () noexcept = delete;
+    Union () noexcept = default;
 
     __CDS_MaybeUnused inline Union ( Union && value ) noexcept :
             pInstance(std::exchange(value.pInstance, nullptr)),

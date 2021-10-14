@@ -348,6 +348,8 @@ template < typename T >
 struct Type {
     using BaseType = T;
 
+#if defined(__CDS_Type_FormMetaTypes)
+
     using WithoutReference = Type < typename std :: remove_reference < T > :: type >;
     using WithoutConst = Type < typename std :: remove_const < T > :: type >;
     using WithoutPointer = Type < typename std :: remove_pointer < T > :: type >;
@@ -357,6 +359,8 @@ struct Type {
     using AsForeignPointer = ForeignPointer < typename Type < T > :: WithoutReference :: WithoutPointer :: BaseType >;
     using AsSharedPointer __CDS_MaybeUnused = SharedPointer < typename Type < T > :: WithoutReference :: WithoutPointer :: BaseType >;
     using AsAtomicSharedPointer __CDS_MaybeUnused = AtomicSharedPointer < typename Type < T > :: WithoutReference :: WithoutPointer :: BaseType >;
+
+#endif
 
     static constexpr bool defaultConstructible = typeDefaultConstructible < T> ();
     static constexpr bool copyConstructible = typeCopyConstructible < T > ();
@@ -458,5 +462,19 @@ namespace Utility {
     };
 }
 
+template < typename T >
+struct TypeExtensions {
+    using BaseType = T;
+
+    using WithoutReference = TypeExtensions < typename std :: remove_reference < T > :: type >;
+    using WithoutConst = TypeExtensions < typename std :: remove_const < T > :: type >;
+    using WithoutPointer = TypeExtensions < typename std :: remove_pointer < T > :: type >;
+    using WithoutModifiers __CDS_MaybeUnused = typename TypeExtensions < T > :: WithoutReference :: WithoutPointer :: WithoutConst;
+
+    using AsUniquePointer __CDS_MaybeUnused = UniquePointer < typename TypeExtensions < T > :: WithoutReference :: WithoutPointer :: BaseType >;
+    using AsForeignPointer = ForeignPointer < typename TypeExtensions < T > :: WithoutReference :: WithoutPointer :: BaseType >;
+    using AsSharedPointer __CDS_MaybeUnused = SharedPointer < typename TypeExtensions < T > :: WithoutReference :: WithoutPointer :: BaseType >;
+    using AsAtomicSharedPointer __CDS_MaybeUnused = AtomicSharedPointer < typename TypeExtensions < T > :: WithoutReference :: WithoutPointer :: BaseType >;
+};
 
 #endif //CDS_TRAITS_HPP

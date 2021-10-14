@@ -556,7 +556,7 @@ public:
     );
 
     template < typename NewType, typename OT = ElementType, typename NT = NewType, typename std :: enable_if < Type < OT > :: isSmartPointer, int > :: type = 0 >
-    __CDS_MaybeUnused auto filterIsDerived () && noexcept -> Sequence < LinkedList < typename Type < NT > :: AsForeignPointer > >
+    __CDS_MaybeUnused auto filterIsDerived () && noexcept -> Sequence < LinkedList < typename TypeExtensions < NT > :: AsForeignPointer > >
     __CDS_Requires(
             (Iterable < C > || ConstIterable < C >) &&
             Pointer < OT > &&
@@ -564,7 +564,7 @@ public:
     );
 
     template < typename NewType, typename OT = ElementType, typename NT = NewType, typename std :: enable_if < Type < OT > :: isSmartPointer, int > :: type = 0 >
-    __CDS_MaybeUnused auto filterIsDerived () & noexcept -> Sequence < LinkedList < typename Type < NT > :: AsForeignPointer > >
+    __CDS_MaybeUnused auto filterIsDerived () & noexcept -> Sequence < LinkedList < typename TypeExtensions < NT > :: AsForeignPointer > >
     __CDS_Requires(
             (Iterable < C > || ConstIterable < C >) &&
             Pointer < OT > &&
@@ -2190,40 +2190,40 @@ __CDS_Requires ( Iterable < C > || ConstIterable < C > ) {
 
 template < typename C >
 template < typename NewType, typename OT, typename NT, typename std :: enable_if < Type < OT > :: isSmartPointer, int > :: type >
-__CDS_MaybeUnused inline auto Sequence < C > :: filterIsDerived () && noexcept -> Sequence < LinkedList < typename Type < NT > :: AsForeignPointer > >
+__CDS_MaybeUnused inline auto Sequence < C > :: filterIsDerived () && noexcept -> Sequence < LinkedList < typename TypeExtensions < NT > :: AsForeignPointer > >
 __CDS_Requires(
         ( Iterable < C > || ConstIterable < C > ) &&
         Pointer < OT > &&
         Pointer < NT >
 ) {
 
-    LinkedList < typename Type < NT > :: AsForeignPointer > container;
+    LinkedList < typename TypeExtensions < NT > :: AsForeignPointer > container;
     for ( auto e : * this ) {
         auto p = dynamic_cast < NT > (e.get());
         if ( p != nullptr )
-            container.add( typename Type < NT > :: AsForeignPointer ( p ) );
+            container.add( typename TypeExtensions < NT > :: AsForeignPointer ( p ) );
     }
 
-    return std::move ( Sequence < LinkedList < typename Type < NT > :: AsForeignPointer > > ( std::move ( container ) ) );
+    return std::move ( Sequence < LinkedList < typename TypeExtensions < NT > :: AsForeignPointer > > ( std::move ( container ) ) );
 }
 
 template < typename C >
 template < typename NewType, typename OT, typename NT, typename std :: enable_if < Type < OT > :: isSmartPointer, int > :: type >
-__CDS_MaybeUnused inline auto Sequence < C > :: filterIsDerived () & noexcept -> Sequence < LinkedList < typename Type < NT > :: AsForeignPointer > >
+__CDS_MaybeUnused inline auto Sequence < C > :: filterIsDerived () & noexcept -> Sequence < LinkedList < typename TypeExtensions < NT > :: AsForeignPointer > >
 __CDS_Requires(
         ( Iterable < C > || ConstIterable < C > ) &&
         Pointer < OT > &&
         Pointer < NT >
 ) {
 
-    LinkedList < typename Type < NT > :: AsForeignPointer > container;
+    LinkedList < typename TypeExtensions < NT > :: AsForeignPointer > container;
     for ( auto e : * this ) {
         auto p = dynamic_cast < NT > (e.get());
         if ( p != nullptr )
-            container.add( typename Type < NT > :: AsForeignPointer ( p ) );
+            container.add( typename TypeExtensions < NT > :: AsForeignPointer ( p ) );
     }
 
-    return std::move ( Sequence < LinkedList < typename Type < NT > :: AsForeignPointer > > ( std::move ( container ) ) );
+    return std::move ( Sequence < LinkedList < typename TypeExtensions < NT > :: AsForeignPointer > > ( std::move ( container ) ) );
 }
 
 template < typename C >
