@@ -83,6 +83,15 @@
 #pragma clang diagnostic push
 #pragma ide diagnostic ignored "EndlessLoop"
 int main () {
+    Array < int > array = {1, 2, 3 , 4, 5};
+    array.removeAllOf (Array{2, 3});
+
+
+
+    std::cout << array << '\n';
+
+    return 0;
+
     int branch = 0;
 
     auto testFunc2 = [& branch]() -> Union <
