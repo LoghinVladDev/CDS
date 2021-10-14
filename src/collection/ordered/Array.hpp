@@ -517,7 +517,7 @@ template <class T>
 auto Array<T>::_resize(Size size) noexcept -> void {
     auto newMemory = new ElementType * [ size ];
 
-    for ( auto i = this->_size - 1; i >= size; -- i )
+    for ( auto i = static_cast < SignedSize > ( this->_size ) - 1; i >= static_cast < SignedSize > ( size ); -- i )
         delete this->_pData[i];
 
     std :: memcpy ( newMemory, this->_pData, sizeof ( T * ) * this->_size );
@@ -533,8 +533,8 @@ Array<T>::Array( Array const & o ) noexcept :
         _capacity( o.size() ){
 
     this->_size = o.size();
-    for ( auto i = 0; i < o.size; ++ i )
-        this->_pData[i] = new T(o._pData[i]);
+    for ( auto i = 0; i < o.size(); ++ i )
+        this->_pData[i] = new T(*o._pData[i]);
 }
 
 template <class T>
