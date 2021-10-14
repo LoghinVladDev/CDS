@@ -435,8 +435,7 @@ auto Array < T > :: allocFrontGetPtr () noexcept -> ElementPtrRef {
     T ** partBuffer = new T * [newSize];
     std::memcpy ( partBuffer + 1, this->_pData, this->_capacity * sizeof ( T * ) );
 
-    delete [] this->_pData;
-    this->_pData = partBuffer;
+    delete [] exchange ( this->_pData, partBuffer );
 
     ++ this->_size;
     this->_capacity = newSize;
@@ -451,8 +450,7 @@ auto Array < T > :: allocBackGetPtr () noexcept -> ElementPtrRef {
     std::memcpy ( newBuf, this->_pData, this->_size * sizeof(T *) );
     std::memcpy ( newBuf + this->_size + 1, this->_pData + this->_size, ( this->_capacity - this->_size ) * sizeof(T *) );
     this->_capacity = newSize;
-    delete [] this->_pData;
-    this->_pData = newBuf;
+    delete [] exchange ( this->_pData, newBuf );
 
     return (this->_pData[this->_size ++] = nullptr);
 }
@@ -506,8 +504,7 @@ auto Array<T>::_resize(Size size) noexcept -> void {
         for ( auto i = static_cast < Index > ( size ); i < this->_capacity; i ++ )
             delete this->_pData[i];
 
-    delete [] this->_pData;
-    this->_pData = newMemory;
+    delete [] exchange ( this->_pData, newMemory );
     this->_capacity = size;
 }
 
@@ -576,8 +573,7 @@ auto Array<T>::remove(ElementCRef e, Size count) noexcept -> bool {
 
     this->_capacity = this->size();
     this->_size = l;
-    delete [] this->_pData;
-    this->_pData = newBuf;
+    delete [] exchange ( this->_pData, newBuf );
     return removed;
 }
 
@@ -600,6 +596,7 @@ auto Array<T>::removeLast(ElementCRef e) noexcept -> bool {
     std::memcpy ( pNewBuf + at, this->_pData + at + 1, (this->size() - at - 1) * sizeof(T *) );
     -- this->_size;
     this->_capacity = this->size();
+    delete [] exchange ( this->_pData, pNewBuf );
     return true;
 }
 
@@ -620,7 +617,7 @@ auto Array<T>::removeOf(Collection<ElementType> const & elements, Size count) no
 
     this->_capacity = this->size();
     this->_size = l;
-    delete [] this->_pData;
+    delete [] exchange ( this->_pData, newBuf );
     return removed;
 }
 
@@ -641,7 +638,7 @@ auto Array<T>::removeOf(std::initializer_list<ElementType> const & elements, Siz
 
     this->_capacity = this->size();
     this->_size = l;
-    delete [] this->_pData;
+    delete [] exchange ( this->_pData, newBuf );
     return removed;
 }
 
@@ -662,7 +659,7 @@ auto Array<T>::removeNotOf(Collection<ElementType> const & elements, Size count)
 
     this->_capacity = this->size();
     this->_size = l;
-    delete [] this->_pData;
+    delete [] exchange ( this->_pData, newBuf );
     return removed;
 }
 
@@ -683,7 +680,7 @@ auto Array<T>::removeNotOf(std::initializer_list<ElementType> const & elements, 
 
     this->_capacity = this->size();
     this->_size = l;
-    delete [] this->_pData;
+    delete [] exchange ( this->_pData, newBuf );
     return removed;
 }
 
@@ -704,6 +701,7 @@ auto Array<T>::removeLastOf(Collection<ElementType> const & elements) noexcept -
     std::memcpy ( pNewBuf, this->_pData, at * sizeof ( T * ) );
     std::memcpy ( pNewBuf + at, this->_pData + at + 1, (this->size() - at - 1) * sizeof(T *) );
     -- this->_size;
+    delete [] exchange ( this->_pData, pNewBuf );
     this->_capacity = this->size();
     return true;
 }
@@ -724,6 +722,7 @@ auto Array<T>::removeLastOf(std::initializer_list<ElementType> const & elements)
     T ** pNewBuf = new T * [ this->size() - 1 ];
     std::memcpy ( pNewBuf, this->_pData, at * sizeof ( T * ) );
     std::memcpy ( pNewBuf + at, this->_pData + at + 1, (this->size() - at - 1) * sizeof(T *) );
+    delete [] exchange ( this->_pData, pNewBuf );
     -- this->_size;
     this->_capacity = this->size();
     return true;
@@ -745,6 +744,7 @@ auto Array<T>::removeLastNotOf(Collection<ElementType> const & elements) noexcep
     T ** pNewBuf = new T * [ this->size() - 1 ];
     std::memcpy ( pNewBuf, this->_pData, at * sizeof ( T * ) );
     std::memcpy ( pNewBuf + at, this->_pData + at + 1, (this->size() - at - 1) * sizeof(T *) );
+    delete [] exchange ( this->_pData, pNewBuf );
     -- this->_size;
     this->_capacity = this->size();
     return true;
@@ -766,6 +766,7 @@ auto Array<T>::removeLastNotOf(std::initializer_list<ElementType> const & elemen
     T ** pNewBuf = new T * [ this->size() - 1 ];
     std::memcpy ( pNewBuf, this->_pData, at * sizeof ( T * ) );
     std::memcpy ( pNewBuf + at, this->_pData + at + 1, (this->size() - at - 1) * sizeof(T *) );
+    delete [] exchange ( this->_pData, pNewBuf );
     -- this->_size;
     this->_capacity = this->size();
     return true;
@@ -789,6 +790,7 @@ auto Array<T>::remove( typename Collection<ElementType>::Iterator const & it ) n
     T ** pNewBuf = new T * [ this->size() - 1 ];
     std::memcpy ( pNewBuf, this->_pData, at * sizeof ( T * ) );
     std::memcpy ( pNewBuf + at, this->_pData + at + 1, (this->size() - at - 1) * sizeof(T *) );
+    delete [] exchange ( this->_pData, pNewBuf );
     -- this->_size;
     this->_capacity = this->size();
     return retVal;
@@ -802,7 +804,8 @@ auto Array<T>::clear() noexcept -> void {
 template <class T>
 auto Array<T>::makeUnique() noexcept -> void {
     T ** pNewData = new T * [this->size()];
-    Size l = 0;
+    T ** pDiscardData = new T * [this->size()];
+    Size l = 0, dLen = 0;
 
     static auto newArrContains = [](T ** p, Size l, ElementCRef e) noexcept -> bool {
         for ( Index i = 0; i < l; ++ i )
@@ -815,11 +818,14 @@ auto Array<T>::makeUnique() noexcept -> void {
         if ( ! newArrContains(pNewData, l, * this->_pData[i]) )
             pNewData[l ++] = this->_pData[i];
         else
-            delete this->_pData[i];
+            pDiscardData[dLen ++] = this->_pData[i];
+
+    std :: memcpy ( pNewData + l, pDiscardData, dLen );
+    delete [] pDiscardData;
 
     this->_capacity = this->size();
     this->_size = l;
-    this->_pData = pNewData;
+    delete [] exchange ( this->_pData, pNewData );
 }
 
 template <class T>
