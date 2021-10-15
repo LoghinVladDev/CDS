@@ -308,10 +308,10 @@ debug_private:
 
             Node (Node && pattern) noexcept :
                     Object (pattern),
-                    _isEndState(std::exchange(pattern._isEndState, false)),
-                    _minRepCount(std::exchange(pattern._minRepCount, 1)),
-                    _maxRepCount(std::exchange(pattern._maxRepCount, 1)),
-                    _debugStateIndex(std::exchange(pattern._debugStateIndex, 0)),
+                    _isEndState(Utility::exchange(pattern._isEndState, false)),
+                    _minRepCount(Utility::exchange(pattern._minRepCount, 1)),
+                    _maxRepCount(Utility::exchange(pattern._maxRepCount, 1)),
+                    _debugStateIndex(Utility::exchange(pattern._debugStateIndex, 0)),
                     _nextStates( std::move ( pattern._nextStates ) ) {
 
             }

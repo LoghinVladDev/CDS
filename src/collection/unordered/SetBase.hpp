@@ -83,8 +83,8 @@ protected:
     Set() noexcept = default;
     Set(Set const &) noexcept {}
     Set(Set && o) noexcept(false):
-            _pFront(exchange(o._pFront, nullptr)),
-            _size(exchange(o._size, 0ull)){
+            _pFront(Utility::exchange(o._pFront, nullptr)),
+            _size(Utility::exchange(o._size, 0ull)){
 
     }
 

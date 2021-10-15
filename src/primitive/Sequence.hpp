@@ -1409,7 +1409,7 @@ inline Sequence < C > ::Sequence ( Sequence const & s ) noexcept :
 
 template < typename C >
 inline Sequence < C > ::Sequence ( Sequence && s ) noexcept :
-        chainCount ( exchange ( s.chainCount, 0 ) + 1 ),
+        chainCount ( Utility::exchange ( s.chainCount, 0 ) + 1 ),
         storedMappers ( std::move ( s.storedMappers ) ),
         storedPredicates ( std::move ( s.storedPredicates ) ),
         storedIndexedMappers ( std::move ( s.storedIndexedMappers ) ),
@@ -1459,7 +1459,7 @@ inline auto Sequence < C > ::operator = ( Sequence && s ) noexcept -> Sequence &
     this->clear();
 
     this->pCollection.reset( new UniquePointer < decltype ( s.pCollection.valueAt().get() ) > ( s.pCollection.valueAt().release() ) );
-    this->chainCount                = exchange ( s.chainCount, 0 ) + 1;
+    this->chainCount                = Utility::exchange ( s.chainCount, 0 ) + 1;
 
     this->storedMappers             = std::move (s.storedMappers);
     this->storedPredicates          = std::move (s.storedPredicates);

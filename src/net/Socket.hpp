@@ -617,7 +617,7 @@ public:
 
 #if defined(__CDS_Platform_Linux)
 
-        auto retVal = ::close ( exchange ( this->_platformSocket, Socket::UNIX_INVALID_PLATFORM_SOCKET ) );
+        auto retVal = ::close ( Utility::exchange ( this->_platformSocket, Socket::UNIX_INVALID_PLATFORM_SOCKET ) );
         if ( retVal == Socket::UNIX_SOCKET_FUNCTION_ERROR )
             throw SocketException("Socket Close Exception");
 
@@ -882,7 +882,7 @@ private:
             }
 
             if ( this->pLastSocketAddress != nullptr )
-                delete exchange(this->pLastSocketAddress, nullptr);
+                delete Utility::exchange(this->pLastSocketAddress, nullptr);
 
             switch ( protocolVersion ) {
                 case ProtocolVersion::INTERNET_PROTOCOL_NONE_SPECIFIED:
@@ -932,7 +932,7 @@ private:
             }
 
             if ( this->pLastSocketAddress != nullptr )
-                delete exchange(this->pLastSocketAddress, nullptr);
+                delete Utility::exchange(this->pLastSocketAddress, nullptr);
 
             switch ( protocolVersion ) {
                 case ProtocolVersion::INTERNET_PROTOCOL_NONE_SPECIFIED:
@@ -1026,7 +1026,7 @@ public:
         return std::move(clientSocket);
     }
 
-    __CDS_MaybeUnused inline auto writeBytes ( byte const * pBuffer, Size count ) noexcept (false) -> Socket & {
+    __CDS_MaybeUnused inline auto writeBytes ( Byte const * pBuffer, Size count ) noexcept (false) -> Socket & {
 
 #if defined(__CDS_Platform_Linux)
 
@@ -1058,7 +1058,7 @@ public:
 
     }
 
-    __CDS_MaybeUnused inline auto readBytes ( byte * pBuffer, Size intendedForRead ) noexcept (false) -> Socket & {
+    __CDS_MaybeUnused inline auto readBytes ( Byte * pBuffer, Size intendedForRead ) noexcept (false) -> Socket & {
 
 #if defined(__CDS_Platform_Linux)
 
@@ -1100,35 +1100,35 @@ public:
 
 
     __CDS_MaybeUnused inline auto writeInt8 ( sint8 value ) noexcept (false) -> Socket & {
-        return this->writeBytes( reinterpret_cast < byte const * > ( & value ), sizeof (value) );
+        return this->writeBytes( reinterpret_cast < Byte const * > ( & value ), sizeof (value) );
     }
 
     __CDS_MaybeUnused inline auto writeInt16 ( sint16 value ) noexcept (false) -> Socket & {
-        return this->writeBytes( reinterpret_cast < byte const * > ( & value ), sizeof (value) );
+        return this->writeBytes( reinterpret_cast < Byte const * > ( & value ), sizeof (value) );
     }
 
     __CDS_MaybeUnused inline auto writeInt32 ( sint32 value ) noexcept (false) -> Socket & {
-        return this->writeBytes( reinterpret_cast < byte const * > ( & value ), sizeof (value) );
+        return this->writeBytes( reinterpret_cast < Byte const * > ( & value ), sizeof (value) );
     }
 
     __CDS_MaybeUnused inline auto writeInt64 ( sint64 value ) noexcept (false) -> Socket & {
-        return this->writeBytes( reinterpret_cast < byte const * > ( & value ), sizeof (value) );
+        return this->writeBytes( reinterpret_cast < Byte const * > ( & value ), sizeof (value) );
     }
 
     __CDS_MaybeUnused inline auto writeUInt8 ( uint8 value ) noexcept (false) -> Socket & {
-        return this->writeBytes( reinterpret_cast < byte const * > ( & value ), sizeof (value) );
+        return this->writeBytes( reinterpret_cast < Byte const * > ( & value ), sizeof (value) );
     }
 
     __CDS_MaybeUnused inline auto writeUInt16 ( uint16 value ) noexcept (false) -> Socket & {
-        return this->writeBytes( reinterpret_cast < byte const * > ( & value ), sizeof (value) );
+        return this->writeBytes( reinterpret_cast < Byte const * > ( & value ), sizeof (value) );
     }
 
     __CDS_MaybeUnused inline auto writeUInt32 ( uint32 value ) noexcept (false) -> Socket & {
-        return this->writeBytes( reinterpret_cast < byte const * > ( & value ), sizeof (value) );
+        return this->writeBytes( reinterpret_cast < Byte const * > ( & value ), sizeof (value) );
     }
 
     __CDS_MaybeUnused inline auto writeUInt64 ( uint64 value ) noexcept (false) -> Socket & {
-        return this->writeBytes( reinterpret_cast < byte const * > ( & value ), sizeof (value) );
+        return this->writeBytes( reinterpret_cast < Byte const * > ( & value ), sizeof (value) );
     }
 
 
@@ -1151,7 +1151,7 @@ public:
 
         for ( Size i = 0; i < packetCount; ++ i ) {
             this->writeBytes (
-                reinterpret_cast < byte const * > ( string.cStr() ) + offset,
+                reinterpret_cast < Byte const * > ( string.cStr() ) + offset,
                 std::min ( this->_packetSize, string.size() - offset)
             );
 
@@ -1169,49 +1169,49 @@ public:
 
     __CDS_NoDiscard __CDS_MaybeUnused auto readInt8 () noexcept(false) -> sint8 {
         sint8 value;
-        this->readBytes(reinterpret_cast < byte * > ( & value ), sizeof(value));
+        this->readBytes(reinterpret_cast < Byte * > ( & value ), sizeof(value));
         return value;
     }
 
     __CDS_NoDiscard __CDS_MaybeUnused auto readInt16 () noexcept(false) -> sint16 {
         sint16 value;
-        this->readBytes(reinterpret_cast < byte * > ( & value ), sizeof(value));
+        this->readBytes(reinterpret_cast < Byte * > ( & value ), sizeof(value));
         return value;
     }
 
     __CDS_NoDiscard __CDS_MaybeUnused auto readInt32 () noexcept(false) -> sint32 {
         sint32 value;
-        this->readBytes(reinterpret_cast < byte * > ( & value ), sizeof(value));
+        this->readBytes(reinterpret_cast < Byte * > ( & value ), sizeof(value));
         return value;
     }
 
     __CDS_NoDiscard __CDS_MaybeUnused auto readInt64 () noexcept(false) -> sint64 {
         sint64 value;
-        this->readBytes(reinterpret_cast < byte * > ( & value ), sizeof(value));
+        this->readBytes(reinterpret_cast < Byte * > ( & value ), sizeof(value));
         return value;
     }
 
     __CDS_NoDiscard __CDS_MaybeUnused auto readUInt8 () noexcept(false) -> uint8 {
         uint8 value;
-        this->readBytes(reinterpret_cast < byte * > ( & value ), sizeof(value));
+        this->readBytes(reinterpret_cast < Byte * > ( & value ), sizeof(value));
         return value;
     }
 
     __CDS_NoDiscard __CDS_MaybeUnused auto readUInt16 () noexcept(false) -> uint16 {
         uint16 value;
-        this->readBytes(reinterpret_cast < byte * > ( & value ), sizeof(value));
+        this->readBytes(reinterpret_cast < Byte * > ( & value ), sizeof(value));
         return value;
     }
 
     __CDS_NoDiscard __CDS_MaybeUnused auto readUInt32 () noexcept(false) -> uint32 {
         uint32 value;
-        this->readBytes(reinterpret_cast < byte * > ( & value ), sizeof(value));
+        this->readBytes(reinterpret_cast < Byte * > ( & value ), sizeof(value));
         return value;
     }
 
     __CDS_NoDiscard __CDS_MaybeUnused auto readUInt64 () noexcept(false) -> uint64 {
         uint64 value;
-        this->readBytes(reinterpret_cast < byte * > ( & value ), sizeof(value));
+        this->readBytes(reinterpret_cast < Byte * > ( & value ), sizeof(value));
         return value;
     }
 
@@ -1237,7 +1237,7 @@ public:
 
         for ( Size i = 0; i < packetCount; ++ i ) {
             this->readBytes (
-                reinterpret_cast < byte * > (buffer.data()) + offset,
+                reinterpret_cast < Byte * > (buffer.data()) + offset,
                 std::min(this->_packetSize, originalSize - offset)
             );
 
@@ -1468,11 +1468,11 @@ public:
 
 #if defined(__CDS_Platform_Linux)
 
-            _platformSocket(exchange(socket._platformSocket, Socket::UNIX_INVALID_PLATFORM_SOCKET)),
+            _platformSocket(Utility::exchange(socket._platformSocket, Socket::UNIX_INVALID_PLATFORM_SOCKET)),
 
 #elif defined(__CDS_Platform_Microsoft_Windows)
 
-            _platformSocket(exchange(socket._platformSocket, Socket::WIN32_INVALID_PLATFORM_SOCKET)),
+            _platformSocket(Utility::exchange(socket._platformSocket, Socket::WIN32_INVALID_PLATFORM_SOCKET)),
 
 #else
 
@@ -1480,11 +1480,11 @@ public:
 
 #endif
 
-            _port(exchange(socket._port, Socket::DEFAULT_PORT)),
-            _packetSize(exchange(socket._packetSize, Socket::DEFAULT_PACKET_SIZE)),
-            _protocolVersion(exchange(socket._protocolVersion, Socket::ProtocolVersion::AUTO)),
-            _packetSyncCount(exchange(socket._packetSyncCount, Socket::DEFAULT_PACKET_SYNC_COUNT)),
-            _synchronizeSettingsAtConnectionStartup(exchange(socket._synchronizeSettingsAtConnectionStartup, true)) {
+            _port(Utility::exchange(socket._port, Socket::DEFAULT_PORT)),
+            _packetSize(Utility::exchange(socket._packetSize, Socket::DEFAULT_PACKET_SIZE)),
+            _protocolVersion(Utility::exchange(socket._protocolVersion, Socket::ProtocolVersion::AUTO)),
+            _packetSyncCount(Utility::exchange(socket._packetSyncCount, Socket::DEFAULT_PACKET_SYNC_COUNT)),
+            _synchronizeSettingsAtConnectionStartup(Utility::exchange(socket._synchronizeSettingsAtConnectionStartup, true)) {
 
     }
 
@@ -1495,11 +1495,11 @@ public:
 
 #if defined(__CDS_Platform_Linux)
 
-        this->_platformSocket = exchange(socket._platformSocket, Socket::UNIX_INVALID_PLATFORM_SOCKET);
+        this->_platformSocket = Utility::exchange(socket._platformSocket, Socket::UNIX_INVALID_PLATFORM_SOCKET);
 
 #elif defined(__CDS_Platform_Microsoft_Windows)
 
-        this->_platformSocket = exchange(socket._platformSocket, Socket::WIN32_INVALID_PLATFORM_SOCKET);
+        this->_platformSocket = Utility::exchange(socket._platformSocket, Socket::WIN32_INVALID_PLATFORM_SOCKET);
 
 #else
 
@@ -1507,11 +1507,11 @@ public:
 
 #endif
 
-        this->_port = exchange(socket._port, Socket::DEFAULT_PORT);
-        this->_packetSize = exchange(socket._packetSize, Socket::DEFAULT_PACKET_SIZE);
-        this->_protocolVersion = exchange(socket._protocolVersion, Socket::ProtocolVersion::AUTO);
-        this->_packetSyncCount = exchange(socket._packetSyncCount, Socket::DEFAULT_PACKET_SYNC_COUNT);
-        this->_synchronizeSettingsAtConnectionStartup = exchange(socket._synchronizeSettingsAtConnectionStartup, true);
+        this->_port = Utility::exchange(socket._port, Socket::DEFAULT_PORT);
+        this->_packetSize = Utility::exchange(socket._packetSize, Socket::DEFAULT_PACKET_SIZE);
+        this->_protocolVersion = Utility::exchange(socket._protocolVersion, Socket::ProtocolVersion::AUTO);
+        this->_packetSyncCount = Utility::exchange(socket._packetSyncCount, Socket::DEFAULT_PACKET_SYNC_COUNT);
+        this->_synchronizeSettingsAtConnectionStartup = Utility::exchange(socket._synchronizeSettingsAtConnectionStartup, true);
 
         return * this;
     }

@@ -186,7 +186,7 @@ public:
             throw typename List<ElementType>::ListOutOfBounds();
 
         auto retVal = * this->_pData[0];
-        delete exchange(this->_pData[0], nullptr);
+        delete Utility::exchange(this->_pData[0], nullptr);
 
         for ( Index i = 0; i < this->size() - 1; i ++ )
             this->_pData[i] = this->_pData[i + 1];
@@ -201,7 +201,7 @@ public:
             throw typename List<ElementType>::ListOutOfBounds();
 
         auto v = * this->_pData[--this->_size];
-        delete exchange(this->_pData[this->_size], nullptr);
+        delete Utility::exchange(this->_pData[this->_size], nullptr);
 
         return v;
     }
@@ -435,14 +435,14 @@ Array<T>::Array( std::initializer_list < ElementType > const & initializerList )
 template <class T>
 Array<T>::~Array() noexcept {
     for ( Index i = 0; i < this->_capacity; i++ )
-        delete exchange(this->_pData[i], nullptr);
-    delete [] exchange(this->_pData, nullptr);
+        delete Utility::exchange(this->_pData[i], nullptr);
+    delete [] Utility::exchange(this->_pData, nullptr);
 }
 
 template < typename T >
 auto Array < T > :: allocFrontGetPtr () noexcept -> ElementPtrRef {
     if ( this->_size < this->_capacity ) {
-        delete exchange(this->_pData[ this->_size ++ ], nullptr);
+        delete Utility::exchange(this->_pData[ this->_size ++ ], nullptr);
         for ( Index i = this->_size - 1; i > 0; -- i )
             this->_pData[i] = this->_pData[i - 1];
 
@@ -457,7 +457,7 @@ auto Array < T > :: allocFrontGetPtr () noexcept -> ElementPtrRef {
     this->_capacity = newSize;
     this->_size ++;
 
-    delete [] exchange ( this->_pData, newBuf );
+    delete [] Utility::exchange ( this->_pData, newBuf );
 
     return (this->_pData[0] = nullptr);
 }
@@ -474,7 +474,7 @@ auto Array < T > :: allocBackGetPtr () noexcept -> ElementPtrRef {
     std::memset ( newBuf + this->_size, 0, ( newSize - this->_size ) * sizeof (T*) );
 
     this->_capacity = newSize;
-    delete [] exchange ( this->_pData, newBuf );
+    delete [] Utility::exchange ( this->_pData, newBuf );
 
     return (this->_pData[this->_size ++] = nullptr);
 }
@@ -518,12 +518,12 @@ auto Array<T>::_resize(Size size) noexcept -> void {
     auto newMemory = new ElementType * [ size ];
 
     for ( auto i = static_cast < SignedSize > ( this->_size ) - 1; i >= static_cast < SignedSize > ( size ); -- i )
-        delete exchange(this->_pData[i], nullptr);
+        delete Utility::exchange(this->_pData[i], nullptr);
 
     std :: memcpy ( newMemory, this->_pData, sizeof ( T * ) * this->_size );
     std :: memset ( newMemory + this->_size, 0, sizeof ( T * ) * (size - this->_size) );
 
-    delete [] exchange ( this->_pData, newMemory );
+    delete [] Utility::exchange ( this->_pData, newMemory );
     this->_capacity = size;
 }
 
@@ -539,9 +539,9 @@ Array<T>::Array( Array const & o ) noexcept :
 
 template <class T>
 Array<T>::Array( Array && moveObj ) noexcept {
-    this->_pData = exchange(moveObj._pData, nullptr);
-    this->_size = exchange(moveObj._size, 0);
-    this->_capacity = exchange(moveObj._capacity, 0);
+    this->_pData = Utility::exchange(moveObj._pData, nullptr);
+    this->_size = Utility::exchange(moveObj._size, 0);
+    this->_capacity = Utility::exchange(moveObj._capacity, 0);
 }
 
 #include <CDS/Pointer>
@@ -591,14 +591,14 @@ auto Array<T>::remove(ElementCRef e, Size count) noexcept -> bool {
         } else {
             removed = true;
             ++ c;
-            delete exchange(this->_pData[i], nullptr);
+            delete Utility::exchange(this->_pData[i], nullptr);
         }
 
     this->_capacity = this->size();
     this->_size = l;
 
     memset ( newBuf + l, 0, (this->_capacity - l) * sizeof(T *) );
-    delete [] exchange ( this->_pData, newBuf );
+    delete [] Utility::exchange ( this->_pData, newBuf );
 
     return removed;
 }
@@ -615,14 +615,14 @@ auto Array<T>::removeLast(ElementCRef e) noexcept -> bool {
 
     if ( at == -1 ) return false;
 
-    delete exchange(this->_pData[at], nullptr);
+    delete Utility::exchange(this->_pData[at], nullptr);
 
     T ** pNewBuf = new T * [ this->size() - 1 ];
     std::memcpy ( pNewBuf, this->_pData, at * sizeof ( T * ) );
     std::memcpy ( pNewBuf + at, this->_pData + at + 1, (this->size() - at - 1) * sizeof(T *) );
 
     this->_capacity = -- this->_size;
-    delete [] exchange ( this->_pData, pNewBuf );
+    delete [] Utility::exchange ( this->_pData, pNewBuf );
     return true;
 }
 
@@ -639,14 +639,14 @@ auto Array<T>::removeOf(Collection<ElementType> const & elements, Size count) no
         } else {
             removed = true;
             ++ c;
-            delete exchange(this->_pData[i], nullptr);
+            delete Utility::exchange(this->_pData[i], nullptr);
         }
 
     this->_capacity = this->size();
     this->_size = l;
 
     std::memset ( newBuf + l, 0, (this->_capacity - this->_size) * sizeof ( T * ) );
-    delete [] exchange ( this->_pData, newBuf );
+    delete [] Utility::exchange ( this->_pData, newBuf );
 
     return removed;
 }
@@ -663,14 +663,14 @@ auto Array<T>::removeOf(std::initializer_list<ElementType> const & elements, Siz
         } else {
             removed = true;
             ++ c;
-            delete exchange(this->_pData[i], nullptr);
+            delete Utility::exchange(this->_pData[i], nullptr);
         }
 
     this->_capacity = this->size();
     this->_size = l;
 
     std::memset ( newBuf + l, 0, (this->_capacity - this->_size) * sizeof ( T * ) );
-    delete [] exchange ( this->_pData, newBuf );
+    delete [] Utility::exchange ( this->_pData, newBuf );
 
     return removed;
 }
@@ -687,13 +687,13 @@ auto Array<T>::removeNotOf(Collection<ElementType> const & elements, Size count)
         } else {
             removed = true;
             ++ c;
-            delete exchange(this->_pData[i], nullptr);
+            delete Utility::exchange(this->_pData[i], nullptr);
         }
 
     this->_capacity = this->size();
     this->_size = l;
     std::memset ( newBuf + l, 0, (this->_capacity - this->_size) * sizeof ( T * ) );
-    delete [] exchange ( this->_pData, newBuf );
+    delete [] Utility::exchange ( this->_pData, newBuf );
     return removed;
 }
 
@@ -709,13 +709,13 @@ auto Array<T>::removeNotOf(std::initializer_list<ElementType> const & elements, 
         } else {
             removed = true;
             ++ c;
-            delete exchange(this->_pData[i], nullptr);
+            delete Utility::exchange(this->_pData[i], nullptr);
         }
 
     this->_capacity = this->size();
     this->_size = l;
     std::memset ( newBuf + l, 0, (this->_capacity - this->_size) * sizeof ( T * ) );
-    delete [] exchange ( this->_pData, newBuf );
+    delete [] Utility::exchange ( this->_pData, newBuf );
     return removed;
 }
 
@@ -730,12 +730,12 @@ auto Array<T>::removeLastOf(Collection<ElementType> const & elements) noexcept -
 
     if ( at == -1 ) return false;
 
-    delete exchange(this->_pData[at], nullptr);
+    delete Utility::exchange(this->_pData[at], nullptr);
 
     T ** pNewBuf = new T * [ this->size() - 1 ];
     std::memcpy ( pNewBuf, this->_pData, at * sizeof ( T * ) );
     std::memcpy ( pNewBuf + at, this->_pData + at + 1, (this->size() - at - 1) * sizeof(T *) );
-    delete [] exchange ( this->_pData, pNewBuf );
+    delete [] Utility::exchange ( this->_pData, pNewBuf );
     this->_capacity = -- this->_size;
     return true;
 }
@@ -751,12 +751,12 @@ auto Array<T>::removeLastOf(std::initializer_list<ElementType> const & elements)
 
     if ( at == -1 ) return false;
 
-    delete exchange(this->_pData[at], nullptr);
+    delete Utility::exchange(this->_pData[at], nullptr);
 
     T ** pNewBuf = new T * [ this->size() - 1 ];
     std::memcpy ( pNewBuf, this->_pData, at * sizeof ( T * ) );
     std::memcpy ( pNewBuf + at, this->_pData + at + 1, (this->size() - at - 1) * sizeof(T *) );
-    delete [] exchange ( this->_pData, pNewBuf );
+    delete [] Utility::exchange ( this->_pData, pNewBuf );
     this->_capacity = -- this->_size;
     return true;
 }
@@ -772,12 +772,12 @@ auto Array<T>::removeLastNotOf(Collection<ElementType> const & elements) noexcep
 
     if ( at == -1 ) return false;
 
-    delete exchange(this->_pData[at], nullptr);
+    delete Utility::exchange(this->_pData[at], nullptr);
 
     T ** pNewBuf = new T * [ this->size() - 1 ];
     std::memcpy ( pNewBuf, this->_pData, at * sizeof ( T * ) );
     std::memcpy ( pNewBuf + at, this->_pData + at + 1, (this->size() - at - 1) * sizeof(T *) );
-    delete [] exchange ( this->_pData, pNewBuf );
+    delete [] Utility::exchange ( this->_pData, pNewBuf );
     this->_capacity = -- this->_size;
     return true;
 }
@@ -793,12 +793,12 @@ auto Array<T>::removeLastNotOf(std::initializer_list<ElementType> const & elemen
 
     if ( at == -1 ) return false;
 
-    delete exchange(this->_pData[at], nullptr);
+    delete Utility::exchange(this->_pData[at], nullptr);
 
     T ** pNewBuf = new T * [ this->size() - 1 ];
     std::memcpy ( pNewBuf, this->_pData, at * sizeof ( T * ) );
     std::memcpy ( pNewBuf + at, this->_pData + at + 1, (this->size() - at - 1) * sizeof(T *) );
-    delete [] exchange ( this->_pData, pNewBuf );
+    delete [] Utility::exchange ( this->_pData, pNewBuf );
     this->_capacity = -- this->_size;
     return true;
 }
@@ -816,19 +816,19 @@ auto Array<T>::remove( typename Collection<ElementType>::Iterator const & it ) n
 
 
     T retVal = * this->_pData[at];
-    delete exchange(this->_pData[at], nullptr);
+    delete Utility::exchange(this->_pData[at], nullptr);
 
     T ** pNewBuf = new T * [ this->size() - 1 ];
     std::memcpy ( pNewBuf, this->_pData, at * sizeof ( T * ) );
     std::memcpy ( pNewBuf + at, this->_pData + at + 1, (this->size() - at - 1) * sizeof(T *) );
-    delete [] exchange ( this->_pData, pNewBuf );
+    delete [] Utility::exchange ( this->_pData, pNewBuf );
     this->_capacity = -- this->_size;
     return retVal;
 }
 
 template <class T>
 auto Array<T>::clear() noexcept -> void {
-    for ( Index i = 0; i < this->_size; ++ i ) delete exchange ( this->_pData[i], nullptr );
+    for ( Index i = 0; i < this->_size; ++ i ) delete Utility::exchange ( this->_pData[i], nullptr );
     this->_size = 0;
 }
 
@@ -848,14 +848,14 @@ auto Array<T>::makeUnique() noexcept -> void {
         if ( ! newArrContains(pNewData, l, * this->_pData[i]) )
             pNewData[l ++] = this->_pData[i];
         else
-            delete exchange(this->_pData[i], nullptr);
+            delete Utility::exchange(this->_pData[i], nullptr);
 
     std :: memset ( pNewData + l, 0, (this->size() - l) * sizeof(T *) );
 
     this->_capacity = this->size();
     this->_size = l;
 
-    delete [] exchange ( this->_pData, pNewData );
+    delete [] Utility::exchange ( this->_pData, pNewData );
 }
 
 template <class T>

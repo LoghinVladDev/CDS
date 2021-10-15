@@ -766,9 +766,9 @@ public:
     }
 
     __CDS_cpplang_ConstexprConditioned String (String && s) noexcept :
-            _p(exchange(s._p, nullptr)),
-            _l(exchange(s._l, 0)),
-            _c(exchange(s._c, 0)){
+            _p(Utility::exchange(s._p, nullptr)),
+            _l(Utility::exchange(s._l, 0)),
+            _c(Utility::exchange(s._c, 0)){
 
     }
 
@@ -3837,9 +3837,9 @@ public:
 
         this->clear();
 
-        this->_p = exchange( o._p, nullptr );
-        this->_l = exchange( o._l, 0u );
-        this->_c = exchange( o._c, 0u );
+        this->_p = Utility::exchange( o._p, nullptr );
+        this->_l = Utility::exchange( o._l, 0u );
+        this->_c = Utility::exchange( o._c, 0u );
 
         return * this;
     }

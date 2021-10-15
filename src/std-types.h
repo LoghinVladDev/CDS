@@ -18,7 +18,7 @@ typedef signed short int sint16;
 typedef signed int sint32;
 typedef signed long long int sint64;
 
-typedef uint8 byte;
+typedef uint8 Byte;
 
 typedef uint64 Size;
 typedef sint64 SignedSize;

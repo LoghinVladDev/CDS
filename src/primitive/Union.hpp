@@ -141,8 +141,8 @@ public:
     Union () noexcept = default;
 
     __CDS_MaybeUnused inline Union ( Union && value ) noexcept :
-            pInstance(std::exchange(value.pInstance, nullptr)),
-            _activeTypeIndex(std::exchange(value._activeTypeIndex, -1)) {
+            pInstance(Utility::exchange(value.pInstance, nullptr)),
+            _activeTypeIndex(Utility::exchange(value._activeTypeIndex, -1)) {
 
     }
 
@@ -290,8 +290,8 @@ public:
 
         UNION_DELETE36
 
-        this->pInstance = std :: exchange ( value.pInstance, nullptr );
-        this->_activeTypeIndex = std :: exchange ( value._activeTypeIndex, -1 );
+        this->pInstance = Utility :: exchange ( value.pInstance, nullptr );
+        this->_activeTypeIndex = Utility :: exchange ( value._activeTypeIndex, -1 );
 
         return * this;
     }

@@ -60,9 +60,9 @@ public:
     
     SingleLinkedList ( SingleLinkedList && obj ) noexcept :
             List < T > ( obj ),
-            _pFront ( exchange( obj._pFront, nullptr ) ),
-            _pBack ( exchange( obj._pBack, nullptr ) ) {
-        this->_size = exchange( obj._size, 0 );
+            _pFront ( Utility::exchange( obj._pFront, nullptr ) ),
+            _pBack ( Utility::exchange( obj._pBack, nullptr ) ) {
+        this->_size = Utility::exchange( obj._size, 0 );
     }
 
     SingleLinkedList (
@@ -262,9 +262,9 @@ public:
     __CDS_cpplang_NonConstConstexprMemberFunction auto operator = ( SingleLinkedList && o ) noexcept -> SingleLinkedList & {
         if ( this == & o ) return * this;
 
-        this->_pFront = exchange( o._pFront, nullptr );
-        this->_pBack = exchange( o._pBack, nullptr );
-        this->_size = exchange( o._size, 0 );
+        this->_pFront = Utility::exchange( o._pFront, nullptr );
+        this->_pBack = Utility::exchange( o._pBack, nullptr );
+        this->_size = Utility::exchange( o._size, 0 );
 
         return * this;
     }

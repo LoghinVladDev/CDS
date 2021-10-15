@@ -87,14 +87,18 @@
 
 #define __CDS_cpplang_ConstexprOverride constexpr /* NOLINT(bugprone-reserved-identifier) */
 
-template < typename T, typename U = T >
-constexpr auto forward (T & value) noexcept -> T && {
-    return std :: forward (value);
-}
+namespace Utility {
 
-template < typename T, typename U = T >
-constexpr auto exchange ( T & obj, U && newValue ) -> T {
-    return std :: exchange (obj, newValue);
+    template<typename T, typename U = T>
+    constexpr auto forward(T &value) noexcept -> T && {
+        return std::forward(value);
+    }
+
+    template<typename T, typename U = T>
+    constexpr auto exchange(T &obj, U &&newValue) -> T {
+        return std::exchange(obj, newValue);
+    }
+
 }
 
 #undef __CDS_cpplang_core_version_name
@@ -111,14 +115,20 @@ constexpr auto exchange ( T & obj, U && newValue ) -> T {
 
 #define __CDS_cpplang_ConstexprOverride inline /* NOLINT(bugprone-reserved-identifier) */
 
-template < typename T >
-constexpr auto forward ( typename std :: remove_reference < T > :: type & value ) noexcept -> T && { return static_cast < T && > ( value ); }
+namespace Utility {
 
-template < typename T, typename U = T >
-inline auto exchange ( T & obj, U && newValue ) -> T {
-    T oldValue = std :: move ( obj );
-    obj = std :: forward < U > ( std :: forward < U > ( newValue ) );
-    return oldValue;
+    template < typename T >
+    constexpr auto forward ( typename std :: remove_reference < T > :: type & value ) noexcept -> T && {
+        return static_cast < T && > ( value );
+    }
+
+    template < typename T, typename U = T >
+    inline auto exchange ( T & obj, U && newValue ) -> T {
+        T oldValue = std :: move ( obj );
+        obj = std :: forward < U > ( std :: forward < U > ( newValue ) );
+        return oldValue;
+    }
+
 }
 
 #endif

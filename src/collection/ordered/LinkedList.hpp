@@ -415,9 +415,9 @@ public:
     DoubleLinkedList & operator = ( DoubleLinkedList && o ) noexcept {
         if ( this == & o ) return * this;
 
-        this->_pFront = exchange(o._pFront, nullptr);
-        this->_pBack = exchange(o._pBack, nullptr);
-        this->_size = exchange(o._size, 0);
+        this->_pFront = Utility::exchange(o._pFront, nullptr);
+        this->_pBack = Utility::exchange(o._pBack, nullptr);
+        this->_size = Utility::exchange(o._size, 0);
 
         return * this;
     }
@@ -822,9 +822,9 @@ DoubleLinkedList<T>::DoubleLinkedList(const DoubleLinkedList & obj) noexcept {
 #include <CDS/NotImplementedException>
 template <class T>
 DoubleLinkedList<T>::DoubleLinkedList(DoubleLinkedList && l) noexcept :
-        _pFront(exchange(l._pFront, nullptr)),
-        _pBack(exchange(l._pBack, nullptr)){
-    this->_size = exchange(l._size, 0);
+        _pFront(Utility::exchange(l._pFront, nullptr)),
+        _pBack(Utility::exchange(l._pBack, nullptr)){
+    this->_size = Utility::exchange(l._size, 0);
 }
 
 template <class T>
