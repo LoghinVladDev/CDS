@@ -48,13 +48,20 @@ public:
 
     explicit constexpr Float(double value) noexcept: v(static_cast < float > (value)) {}
 
-    __CDS_cpplang_NonConstConstexprMemberFunction Float &operator=(Float const &o) noexcept {
+    __CDS_cpplang_NonConstConstexprMemberFunction auto operator=(Float const &o) noexcept -> Float & {
         if (this == &o)return *this;
         this->v = o.v;
         return *this;
     }
-    __CDS_cpplang_NonConstConstexprMemberFunction Float &operator=(float value) noexcept {
+
+    __CDS_cpplang_NonConstConstexprMemberFunction auto operator=(float value) noexcept -> Float & {
         this->v = value;
+        return *this;
+    }
+
+    __CDS_cpplang_NonConstConstexprMemberFunction auto operator=(Float && value) noexcept -> Float & {
+        if (this == & value) return *this;
+        this->v = Utility :: exchange ( value.v, 0.0f );
         return *this;
     }
 

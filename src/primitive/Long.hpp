@@ -180,6 +180,12 @@ public:
         return *this;
     }
 
+    __CDS_cpplang_NonConstConstexprMemberFunction auto operator=(Long && value) noexcept -> Long & {
+        if (this == & value) return *this;
+        this->v = Utility :: exchange ( value.v, 0ll );
+        return *this;
+    }
+
     /**
      * @brief Sum Operator
      *

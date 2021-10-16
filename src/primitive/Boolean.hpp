@@ -90,9 +90,15 @@ public:
      *
      * @test Tested in primitive/BooleanTest/Operator Tests
      */
-    __CDS_cpplang_NonConstConstexprMemberFunction Boolean & operator = ( Boolean const & o ) noexcept {
+    __CDS_cpplang_NonConstConstexprMemberFunction auto operator = ( Boolean const & o ) noexcept -> Boolean & {
         if ( this == & o ) return * this;
         this->v = o.v;
+        return * this;
+    }
+
+    __CDS_cpplang_NonConstConstexprMemberFunction auto operator = ( Boolean && o ) noexcept -> Boolean & {
+        if ( this == & o ) return * this;
+        this->v = Utility :: exchange ( o.v, false );
         return * this;
     }
 

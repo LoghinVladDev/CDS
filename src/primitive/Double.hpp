@@ -49,13 +49,20 @@ public:
 
     explicit constexpr Double(float value) noexcept: v(static_cast < double > (value)) {}
 
-    __CDS_cpplang_NonConstConstexprMemberFunction Double &operator=(Double const &o) noexcept {
+    __CDS_cpplang_NonConstConstexprMemberFunction auto operator=(Double const &o) noexcept -> Double & {
         if (this == &o)return *this;
         this->v = o.v;
         return *this;
     }
-    __CDS_cpplang_NonConstConstexprMemberFunction Double &operator=(double value) noexcept {
+
+    __CDS_cpplang_NonConstConstexprMemberFunction auto operator=(double value) noexcept -> Double & {
         this->v = value;
+        return *this;
+    }
+
+    __CDS_cpplang_NonConstConstexprMemberFunction auto operator=(Double && value) noexcept -> Double & {
+        if (this == & value) return *this;
+        this->v = Utility :: exchange ( value.v, 0.0 );
         return *this;
     }
 

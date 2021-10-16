@@ -172,6 +172,12 @@ public:
         return *this;
     }
 
+    __CDS_cpplang_NonConstConstexprMemberFunction auto operator=(Integer && value) noexcept -> Integer & {
+        if (this == & value) return *this;
+        this->v = Utility :: exchange ( value.v, 0 );
+        return *this;
+    }
+
     /**
      * @brief Sum Operator
      *
