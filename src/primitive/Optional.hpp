@@ -22,10 +22,16 @@ public:
     __CDS_cpplang_NonConstConstexprMemberFunction Optional(Optional const & o) noexcept {
         * this = o;
     }
+
+    __CDS_cpplang_NonConstConstexprMemberFunction Optional(Optional && optional) noexcept :
+            pObj ( std :: move ( optional.pObj ) ){
+
+    }
+
     __CDS_cpplang_ConstexprDestructor ~Optional() noexcept final = default;
 
     __CDS_cpplang_ConstexprDynamicAllocation Optional ( ValueConstReference v ) noexcept : pObj ( new Value( v ) ) { } // NOLINT(google-explicit-constructor)
-    __CDS_cpplang_ConstexprDynamicAllocation Optional & operator = ( ValueConstReference v ) noexcept {
+    __CDS_cpplang_ConstexprDynamicAllocation auto operator = ( ValueConstReference v ) noexcept -> Optional & {
         this->pObj.reset(new Value ( v ));
         return * this;
     }
@@ -97,6 +103,13 @@ public:
 
         this->pObj.reset( new Value ( * o.pObj ) );
 
+        return * this;
+    }
+
+    __CDS_cpplang_NonConstConstexprMemberFunction auto operator = (Optional && optional) noexcept -> Optional & {
+        if ( this == & optional ) return * this;
+
+        this->pObj = std :: move ( optional.pObj );
         return * this;
     }
 
