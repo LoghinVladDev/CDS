@@ -321,7 +321,7 @@ public:
 
     inline HashMap ( HashMap && hashMap ) noexcept :
             hashCalculator ( std :: move ( hashMap.hashCalculator ) ),
-            pBuckets ( Utility :: exchange ( hashMap.pBuckets, nullptr ) ) {
+            pBuckets ( Utility :: exchange ( hashMap.pBuckets, new HashBucket[hashCalculator.getBoundary()] ) ) {
 
     }
 
@@ -600,8 +600,8 @@ public:
 
         delete [] this->pBuckets;
 
-        this->pBuckets = Utility::exchange ( hashMap.pBuckets, nullptr );
         this->hashCalculator = std :: move ( hashMap.hashCalculator );
+        this->pBuckets = Utility::exchange ( hashMap.pBuckets, new HashBucket[hashMap.hashCalculator.getBoundary()] );
 
         return * this;
     }
