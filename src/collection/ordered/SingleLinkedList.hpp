@@ -262,6 +262,7 @@ public:
     __CDS_cpplang_NonConstConstexprMemberFunction auto operator = ( SingleLinkedList && o ) noexcept -> SingleLinkedList & {
         if ( this == & o ) return * this;
 
+        this->clear();
         this->_pFront = Utility::exchange( o._pFront, nullptr );
         this->_pBack = Utility::exchange( o._pBack, nullptr );
         this->_size = Utility::exchange( o._size, 0 );

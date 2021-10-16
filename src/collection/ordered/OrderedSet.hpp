@@ -100,6 +100,8 @@ public:
     inline auto operator = ( OrderedSet && set ) noexcept -> OrderedSet & {
         if ( this == & set ) return * this;
 
+        this->clear();
+
         this->_pFront = Utility :: exchange ( set._pFront, nullptr );
         this->_size = Utility :: exchange ( set._size, 0 );
 

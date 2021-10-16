@@ -415,6 +415,7 @@ public:
     DoubleLinkedList & operator = ( DoubleLinkedList && o ) noexcept {
         if ( this == & o ) return * this;
 
+        this->clear();
         this->_pFront = Utility::exchange(o._pFront, nullptr);
         this->_pBack = Utility::exchange(o._pBack, nullptr);
         this->_size = Utility::exchange(o._size, 0);

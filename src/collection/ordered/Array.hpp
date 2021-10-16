@@ -243,6 +243,10 @@ public:
     inline auto operator = ( Array && array ) noexcept -> Array & {
         if ( this == & array ) return * this;
 
+        for ( Index i = 0; i < this->_size; ++ i )
+            delete this->_pData[i];
+        delete [] this->_pData;
+
         this->_pData = Utility :: exchange ( array._pData, nullptr );
         this->_capacity = Utility :: exchange ( array._capacity, 0 );
         this->_size = Utility :: exchange ( array._size, 0 );
