@@ -59,7 +59,7 @@ public:
     SingleLinkedList ( SingleLinkedList const & ) noexcept;
     
     SingleLinkedList ( SingleLinkedList && obj ) noexcept :
-            List < T > ( obj ),
+            List < T > ( std :: forward ( obj ) ),
             _pFront ( Utility::exchange( obj._pFront, nullptr ) ),
             _pBack ( Utility::exchange( obj._pBack, nullptr ) ) {
         this->_size = Utility::exchange( obj._size, 0 );

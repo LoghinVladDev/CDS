@@ -96,7 +96,15 @@ public:
         return * this;
     }
 
-    inline OrderedSet & operator = ( OrderedSet const & o ) noexcept { return this->operator=( (Collection<T> const &) ( o ) ); } // NOLINT(misc-unconventional-assign-operator)
+    inline auto operator = ( OrderedSet const & o ) noexcept -> OrderedSet & { return this->operator=( (Collection<T> const &) ( o ) ); } // NOLINT(misc-unconventional-assign-operator)
+    inline auto operator = ( OrderedSet && set ) noexcept -> OrderedSet & {
+        if ( this == & set ) return * this;
+
+        this->_pFront = Utility :: exchange ( set._pFront, nullptr );
+        this->_size = Utility :: exchange ( set._size, 0 );
+
+        return * this;
+    }
 
     auto sequence () const noexcept -> Sequence < const OrderedSet < T, C > >;
     auto sequence () noexcept -> Sequence < OrderedSet < T, C > >;

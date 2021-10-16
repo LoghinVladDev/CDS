@@ -319,10 +319,13 @@ public:
         }
     }
 
-    template <class OH>
-#if defined(__cpp_concepts) && !defined(_MSC_VER)
-    requires HashCalculatorHasBoundaryFunction<OH>
-#endif
+    inline HashMap ( HashMap && hashMap ) noexcept :
+            hashCalculator ( std :: move ( hashMap.hashCalculator ) ),
+            pBuckets ( Utility :: exchange ( hashMap.pBuckets, nullptr ) ) {
+
+    }
+
+    template <class OH> __CDS_Requires ( requires HashCalculatorHasBoundaryFunction<OH> )
     explicit HashMap (HashMap<K, V, OH> const & hm) noexcept : pBuckets(new HashBucket[hashCalculator.getBoundary()]) {
         for ( auto & e : hm.entries() )
             this->insert ( e );
@@ -581,13 +584,22 @@ public:
         return total;
     }
 
-    HashMap & operator = ( HashMap const & o ) noexcept {
+    inline auto operator = ( HashMap const & o ) noexcept -> HashMap & {
         if ( this == & o )
             return * this;
 
         this->clear();
         for ( auto & e : o )
             this->insert(e);
+
+        return * this;
+    }
+
+    inline auto operator = ( HashMap && hashMap ) noexcept -> HashMap & {
+        if ( this == & hashMap ) return * this;
+
+        this->pBuckets = Utility::exchange ( hashMap.pBuckets, nullptr );
+        this->hashCalculator = std :: move ( hashMap.hashCalculator );
 
         return * this;
     }

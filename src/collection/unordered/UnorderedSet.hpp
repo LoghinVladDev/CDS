@@ -76,7 +76,15 @@ public:
         return * this;
     }
 
-    inline UnorderedSet & operator = ( UnorderedSet const & o ) noexcept { return this->operator=( (Collection<T> const &) ( o ) ); } // NOLINT(misc-unconventional-assign-operator)
+    inline auto operator = ( UnorderedSet const & o ) noexcept -> UnorderedSet & { return this->operator=( (Collection<T> const &) ( o ) ); } // NOLINT(misc-unconventional-assign-operator)
+    inline auto operator = ( UnorderedSet && set ) noexcept -> UnorderedSet & {
+        if ( this == & set ) return * this;
+
+        this->_pFront = Utility :: exchange ( set._pFront, nullptr );
+        this->_size = Utility :: exchange ( set._size, 0 );
+
+        return * this;
+    }
 
     auto sequence () const noexcept -> Sequence < const UnorderedSet < T > >;
     auto sequence () noexcept -> Sequence < UnorderedSet < T > >;

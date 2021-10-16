@@ -358,6 +358,11 @@ public:
 #undef UNION_DELETE4
 #undef UNION_DELETE36
 
+    template < typename T >
+    operator T () noexcept {
+        return this->template get<T>();
+    }
+
     template < typename T, typename std :: enable_if < Utility :: Detail :: UnionImpl :: PackContains < T, FirstType, RemainingTypes ... > :: value, int > :: type = 0 >
     inline auto get () noexcept (false) -> T & {
         auto typeNames = Union :: typesAsString();

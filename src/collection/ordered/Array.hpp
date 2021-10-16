@@ -237,8 +237,18 @@ public:
         return this->sort ( [&c] (ElementCRef a, ElementCRef b) noexcept -> bool { return c(a, b); } );
     }
 
-    Array & operator = ( Collection < ElementType > const & ) noexcept;
-    inline Array & operator = ( Array const & o ) noexcept { return this->operator=( ( Collection<ElementType> const & )(o) ); } // NOLINT(bugprone-unhandled-self-assignment,misc-unconventional-assign-operator)
+    auto operator = ( Collection < ElementType > const & ) noexcept -> Array &;
+    inline auto operator = ( Array const & o ) noexcept -> Array & { return this->operator=( ( Collection<ElementType> const & )(o) ); } // NOLINT(bugprone-unhandled-self-assignment,misc-unconventional-assign-operator)
+
+    inline auto operator = ( Array && array ) noexcept -> Array & {
+        if ( this == & array ) return * this;
+
+        this->_pData = Utility :: exchange ( array._pData, nullptr );
+        this->_capacity = Utility :: exchange ( array._capacity, 0 );
+        this->_size = Utility :: exchange ( array._size, 0 );
+
+        return * this;
+    }
 
     auto sequence () const & noexcept -> Sequence < const Array < T > >;
     auto sequence () & noexcept -> Sequence < Array < T > >;

@@ -211,7 +211,24 @@ public:
 
     JSON() noexcept = default;
     JSON (JSON const &) noexcept = default;
+    JSON (JSON &&) noexcept;
     ~JSON () noexcept override = default;
+
+    inline auto operator = ( JSON const & json ) noexcept -> JSON & {
+        if ( this == & json ) return * this;
+
+        this->_nodes = json._nodes;
+
+        return * this;
+    }
+
+    inline auto operator = ( JSON && json ) noexcept -> JSON & {
+        if ( this == & json ) return * this;
+
+        this->_nodes = std :: move ( json._nodes );
+
+        return * this;
+    }
 
     auto operator == (JSON const & o) const noexcept -> bool;
 
@@ -389,6 +406,27 @@ public:
     Array () noexcept = default;
     Array (Array const &) noexcept = default;
     ~Array () noexcept override = default;
+
+    inline Array ( Array && array ) noexcept :
+            _list ( std :: move ( array._list ) ) {
+
+    }
+
+    inline auto operator = ( Array const & array ) noexcept -> Array & {
+        if ( this == & array ) return * this;
+
+        this->_list = array._list;
+
+        return * this;
+    }
+
+    inline auto operator = ( Array && array ) noexcept -> Array & {
+        if ( this == & array ) return * this;
+
+        this->_list = std :: move ( array._list );
+
+        return * this;
+    }
 
     inline auto operator == (Array const & o) const noexcept -> bool {
         if ( this == & o ) return true;
@@ -862,6 +900,10 @@ inline auto JSON::Node::dumpIndented(int indent, int count) const noexcept -> St
 inline auto JSON::operator == (JSON const & o) const noexcept -> bool {
     if ( this == & o ) return true;
     return this->_nodes == o._nodes;
+}
+
+inline JSON::JSON(JSON && json) noexcept {
+    this->_nodes = std :: move ( json._nodes );
 }
 
 __CDS_RegisterParseType(JSON)
