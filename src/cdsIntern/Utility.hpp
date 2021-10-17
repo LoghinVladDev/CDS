@@ -78,7 +78,6 @@ public:
 
     template < typename K >
     explicit KeyException ( K const & key ) noexcept : Exception ( String :: f ( "Key Exception : Key '%s' is invalid for Object", String(key).cStr() ) ) { }
-    explicit KeyException ( String const & message ) noexcept : Exception ( "Key Exception : "_s + message ) { }
 };
 
 #endif //CDS_UTILITY_HPP
