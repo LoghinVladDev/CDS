@@ -375,6 +375,8 @@ struct Type {
 
     static constexpr bool ostreamPrintable = isPrintable < T > :: type :: value;
 
+    static constexpr bool equalsComparable = isComparableEquals < T, T > :: type :: value;
+
     static constexpr bool isFundamental = typeFundamental < T >();
     __CDS_MaybeUnused static constexpr bool isIntegral = std::is_integral < T > :: type :: value;
     static constexpr bool isBasicPointer = std :: is_pointer < T > :: type :: value;

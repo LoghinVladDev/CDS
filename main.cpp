@@ -113,13 +113,38 @@
 
 Union < int, String > f ( int x ) {
     if ( x % 2 == 0 ) return String::f("Numarul %d este impar", x);
-    return x;
+    return x % 2;
 }
 
 int main () {
 
-    String s = f(12);
-    std :: cout << s << '\n';
+    std :: cout << (f(12) == f(13)) << '\n';
+    std :: cout << (f(13) == f(13)) << '\n';
+    std :: cout << (f(12) == f(12)) << '\n';
+    std :: cout << (f(12) == f(14)) << '\n';
+    std :: cout << (f(13) == f(11)) << '\n';
+    std :: cout << (f(13) == f(12)) << '\n';
+    std :: cout << (f(12) == f(13)) << '\n';
 
 
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

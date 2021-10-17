@@ -284,6 +284,47 @@ public:
 
 #endif
 
+#define UNION_COMPARE(_i) \
+    if ( this->_activeTypeIndex == _i ) { \
+        if constexpr ( ! std :: is_same < typename Utility :: Detail :: UnionImpl :: TypeAtIndexInPack < _i, FirstType, RemainingTypes ... > :: type, void > :: value  ) { \
+            if constexpr ( Type < typename Utility :: Detail :: UnionImpl :: TypeAtIndexInPack < _i, FirstType, RemainingTypes ... > :: type > :: equalsComparable )              \
+                return * reinterpret_cast < typename Utility :: Detail :: UnionImpl :: TypeAtIndexInPack < _i, FirstType, RemainingTypes ... > :: type * > ( this->pInstance ) == * reinterpret_cast < typename Utility :: Detail :: UnionImpl :: TypeAtIndexInPack < _i, FirstType, RemainingTypes ... > :: type * > ( obj.pInstance ); \
+        }            \
+        return this->pInstance == obj.pInstance;\
+    }
+
+#define UNION_COMPARE2(_i) \
+    else UNION_COMPARE((_i)) \
+    else UNION_COMPARE((_i) + 1 )
+
+#define UNION_COMPARE4(_i) \
+    UNION_COMPARE2(_i) \
+    UNION_COMPARE2((_i) + 2)
+
+    template < typename std :: enable_if < sizeof ... (RemainingTypes) <= 36, int > :: type = 0 >
+    __CDS_NoDiscard inline auto operator == ( Union const & obj ) const noexcept -> bool {
+        if ( this == & obj ) return true;
+        if ( this->_activeTypeIndex != obj._activeTypeIndex ) return false;
+        if ( this->_activeTypeIndex == -1 ) return true;
+
+        UNION_COMPARE(0)
+        UNION_COMPARE4(1)
+        UNION_COMPARE4(5)
+        UNION_COMPARE4(9)
+        UNION_COMPARE4(13)
+        UNION_COMPARE4(17)
+        UNION_COMPARE4(21)
+        UNION_COMPARE4(25)
+        UNION_COMPARE4(29)
+        UNION_COMPARE4(33)
+
+        return false;
+    }
+
+#undef UNION_COMPARE4
+#undef UNION_COMPARE2
+#undef UNION_COMPARE
+
     template < typename std :: enable_if < sizeof ... (RemainingTypes) <= 36, int > :: type = 0 >
     __CDS_MaybeUnused inline auto operator = ( Union && value ) noexcept -> Union & {
         if ( this == & value ) return * this;
@@ -358,6 +399,14 @@ public:
 #undef UNION_DELETE4
 #undef UNION_DELETE36
 
+    __CDS_NoDiscard inline auto equals ( Object const & object ) const noexcept -> bool override {
+        if ( this == & object ) return true;
+        auto p = dynamic_cast < decltype ( this ) > ( & object );
+        if ( p == nullptr ) return false;
+
+        return this->operator == ( * p );
+    }
+
     template < typename T >
     operator T () noexcept {
         return this->template get<T>();
@@ -371,13 +420,6 @@ public:
         if ( this->_activeTypeIndex == -1 ) throw TypeException (
                 "No Assigned Value to Union, no Active Type"
             );
-//        if ( typeIndex == -1 ) throw TypeException (
-//                String::f(
-//                    "Type '%s' is not defined as part of this Union Type, with types : '%s'",
-//                    Type < T > :: name(),
-//                    typeNames.cStr()
-//                )
-//            );
 
         if ( this->_activeTypeIndex != typeIndex ) throw TypeException (
                 String :: f (
