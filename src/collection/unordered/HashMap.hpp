@@ -13,7 +13,7 @@ template <class K, class V, class H> __CDS_Requires (
         HashCalculatorHasBoundaryFunction< H >
 ) class HashMap final : public Map<K, V> {
 public:
-    H hashCalculator;
+    __CDS_NoUniqueAddress H hashCalculator;
 
     using Key                                       = typename Map<K, V>::Key;
     using KeyReference            __CDS_MaybeUnused = typename Map<K, V>::KeyReference;
