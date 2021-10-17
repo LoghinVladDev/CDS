@@ -432,6 +432,26 @@ public:
         return * reinterpret_cast < T * > ( this->pInstance );
     }
 
+    template < typename T, typename std :: enable_if < Utility :: Detail :: UnionImpl :: PackContains < T, FirstType, RemainingTypes ... > :: value, int > :: type = 0 >
+    inline auto get () const noexcept (false) -> T const & {
+        auto typeNames = Union :: typesAsString();
+        constexpr auto typeIndex = Utility :: Detail :: UnionImpl :: IndexOfTypeInPack < T, FirstType, RemainingTypes ... > :: index();
+
+        if ( this->_activeTypeIndex == -1 ) throw TypeException (
+                "No Assigned Value to Union, no Active Type"
+            );
+
+        if ( this->_activeTypeIndex != typeIndex ) throw TypeException (
+                String :: f (
+                    "Type '%s' is the current type, cannot convert to '%s'",
+                    typeNames.split(",")[this->_activeTypeIndex].trim().cStr(),
+                    Type < T > :: name()
+                )
+            );
+
+        return * reinterpret_cast < T * > ( this->pInstance );
+    }
+
 private:
     template < typename T, typename std :: enable_if < std :: is_same < T, void > :: value, int > :: type = 0 >
     constexpr static auto buildSafeDereferenceWrapper ( T * addr __CDS_MaybeUnused ) noexcept -> int  { return 0; }
