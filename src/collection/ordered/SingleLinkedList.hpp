@@ -251,7 +251,7 @@ public:
     template < typename SortFunction >
     auto sort ( SortFunction const & f ) noexcept -> void;
 
-    auto sort ( Comparator < T > const & comparator ) noexcept -> void override {
+    auto sort ( Comparator < T > const & comparator ) noexcept -> void {
         return this->sort([& comparator](T const & a, T const & b) noexcept -> bool { return comparator (a, b); });
     }
 

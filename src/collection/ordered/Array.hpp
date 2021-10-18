@@ -219,10 +219,10 @@ private:
 #pragma ide diagnostic ignored "NotImplementedFunctions"
 #endif
 
-    template < typename SortFunc >
+    template < typename SortFunc, typename std :: enable_if < Type < T > :: copyAssignable, int > :: type = 0 >
     auto static quickSort ( Iterator, Iterator, SortFunc const & ) noexcept -> void;
 
-    template < typename SortFunc >
+    template < typename SortFunc, typename std :: enable_if < Type < T > :: copyAssignable, int > :: type = 0 >
     auto static quickSortPartition ( Iterator, Iterator, SortFunc const & ) noexcept -> Iterator;
 
 #if defined(__JETBRAINS_IDE__)
@@ -230,10 +230,11 @@ private:
 #endif
 
 public:
-    template < typename SortFunc >
+    template < typename SortFunc, typename std :: enable_if < Type < T > :: copyAssignable, int > :: type = 0 >
     auto sort ( SortFunc const & ) noexcept -> void;
 
-    inline auto sort ( Comparator < ElementType > const & c ) noexcept -> void final {
+    template < typename SortFunc, typename std :: enable_if < Type < T > :: copyAssignable, int > :: type = 0 >
+    inline auto sort ( Comparator < ElementType > const & c ) noexcept -> void {
         return this->sort ( [&c] (ElementCRef a, ElementCRef b) noexcept -> bool { return c(a, b); } );
     }
 
@@ -963,7 +964,7 @@ Array<T> & Array<T>::operator= (Collection<ElementType> const & c) noexcept {
 }
 
 template <class T>
-template <typename SortFunc>
+template < typename SortFunc, typename std :: enable_if < Type < T > :: copyAssignable, int > :: type >
 __CDS_MaybeUnused auto Array<T>::quickSortPartition(
         Iterator from,
         Iterator to,
@@ -990,7 +991,7 @@ __CDS_MaybeUnused auto Array<T>::quickSortPartition(
 }
 
 template <typename T>
-template <typename SortFunc>
+template < typename SortFunc, typename std :: enable_if < Type < T > :: copyAssignable, int > :: type >
 __CDS_MaybeUnused auto Array<T>::quickSort(
         Iterator from,
         Iterator to,
@@ -1029,7 +1030,7 @@ __CDS_MaybeUnused auto Array<T>::quickSort(
 }
 
 template <class T>
-template < typename SortFunc >
+template < typename SortFunc, typename std :: enable_if < Type < T > :: copyAssignable, int > :: type >
 auto Array<T>::sort(SortFunc const & sortFunc) noexcept -> void {
     if ( this->size() < 2 )
         return;

@@ -121,7 +121,7 @@ public:
     template < typename V = T, typename std :: enable_if < Type < V > :: moveConstructible, int > :: type = 0 >
     inline auto prepend ( ElementMRef v ) noexcept -> void { this->pushFront(v); }
 
-    __CDS_MaybeUnused virtual auto sort ( const Comparator < T > & ) noexcept -> void = 0;
+//    __CDS_MaybeUnused virtual auto sort ( const Comparator < T > & ) noexcept -> void = 0;
 
     __CDS_NoDiscard inline auto size () const noexcept -> Size override { return this->_size; }
 
