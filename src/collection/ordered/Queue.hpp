@@ -50,7 +50,7 @@ private:
     inline auto popBack () noexcept (false) -> T override { return this->SingleLinkedList < T > :: popBack(); }
     inline auto popFront () noexcept (false) -> T override { return this->SingleLinkedList < T > :: popFront(); }
 
-    auto sort ( Comparator < T > const & comparator ) noexcept -> void final { return this->SingleLinkedList< T > :: sort ( comparator ); }
+    auto sort ( Comparator < T > const & comparator ) noexcept -> void { return this->SingleLinkedList< T > :: sort ( comparator ); }
 
 public:
 
