@@ -398,7 +398,7 @@ private:
 
 public:
 
-    inline auto sort ( Comparator < T > const & c) noexcept -> void final {
+    inline auto sort ( Comparator < T > const & c) noexcept -> void {
         auto f = ( [&c] (T const & a, T const & b) noexcept -> bool { return c(a, b); } );
         return this->sort(f);
     }
