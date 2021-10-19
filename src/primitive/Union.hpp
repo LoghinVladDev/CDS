@@ -140,12 +140,6 @@ public:
 
     Union () noexcept = default;
 
-    __CDS_MaybeUnused inline Union ( Union && value ) noexcept :
-            pInstance(Utility::exchange(value.pInstance, nullptr)),
-            _activeTypeIndex(Utility::exchange(value._activeTypeIndex, -1)) {
-
-    }
-
     template < typename T, typename std :: enable_if < Utility :: Detail :: UnionImpl :: PackContains < T, FirstType, RemainingTypes ... > :: value && Type < T > :: isFundamental, int > :: type = 0 >
     inline Union ( T value ) noexcept : // NOLINT(google-explicit-constructor)
             pInstance ( new T (value) ),
@@ -215,20 +209,23 @@ public:
         * this = value;
     }
 
-    template < typename std :: enable_if < sizeof ... (RemainingTypes) <= 36, int > :: type = 0 >
     inline auto operator = ( Union const & value ) noexcept (false) -> Union & {
         if ( this == & value ) return * this;
 
         UNION_DELETE36
 
 #define UNION_COPY(_i) \
-    if ( this->_activeTypeIndex == _i ) { \
-        using Type ## _i = typename Utility :: Detail :: UnionImpl :: TypeAtIndexInPack < _i, FirstType, RemainingTypes ... > :: type;\
-        if constexpr ( Type < Type ## _i > :: copyConstructible ) {                                                                 \
-            this->pInstance = new Type ## _i ( * reinterpret_cast < Type ## _i const * > ( value.pInstance ) );                          \
+    if ( value._activeTypeIndex == _i ) { \
+        using Type ## _i = typename Utility :: Detail :: UnionImpl :: TypeAtIndexInPack < _i, FirstType, RemainingTypes ... > :: type; \
+        if constexpr ( std :: is_same < Type ## _i, void > :: value ) {                                                                \
+            throw TypeException ( String::f("Type '%s' is not copyable", Utility :: TypeParseTraits < Type ## _i > :: name) );  \
+        } else if constexpr ( Type < Type ## _i > :: copyConstructible ) {                                                                 \
+            this->pInstance = new Type ## _i ( * reinterpret_cast < Type ## _i const * > ( value.pInstance ) );                        \
+            this->_activeTypeIndex = _i; \
         } else if constexpr ( Type < Type ## _i > :: copyAssignable ) {                                                             \
             this->pInstance = new Type ## _i;                                                                                       \
-            * reinterpret_cast < Type ## _i * > ( this->pInstance ) = * reinterpret_cast < Type ## _i const * > ( value.pInstance );\
+            * reinterpret_cast < Type ## _i * > ( this->pInstance ) = * reinterpret_cast < Type ## _i const * > ( value.pInstance );   \
+            this->_activeTypeIndex = _i; \
         } else         \
             throw TypeException ( String::f("Type '%s' is not copyable", Utility :: TypeParseTraits < Type ## _i > :: name) ); \
     }
@@ -325,7 +322,6 @@ public:
 #undef UNION_COMPARE2
 #undef UNION_COMPARE
 
-    template < typename std :: enable_if < sizeof ... (RemainingTypes) <= 36, int > :: type = 0 >
     __CDS_MaybeUnused inline auto operator = ( Union && value ) noexcept -> Union & {
         if ( this == & value ) return * this;
 
@@ -511,6 +507,12 @@ public:
 #undef TYPE_AS_STRING2
 #undef TYPE_AS_STRING4
 #undef TYPE_AS_STRING36
+
+    __CDS_MaybeUnused inline Union ( Union && value ) noexcept :
+            pInstance(Utility::exchange(value.pInstance, nullptr)),
+            _activeTypeIndex(Utility::exchange(value._activeTypeIndex, -1)) {
+
+    }
 };
 
 __CDS_WarningSuppression_UnsafeDeleteVoidPtr_SuppressDisable

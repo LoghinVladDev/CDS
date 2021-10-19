@@ -126,6 +126,13 @@ int main () {
     std :: cout << (f(13) == f(12)) << '\n';
     std :: cout << (f(12) == f(13)) << '\n';
 
+    auto e = f(12);
+    auto b = f(13);
+
+    e = b;
+
+    std::cout << e << '\n';
+    std::cout << (e = f(14)) << '\n';
 
 }
 

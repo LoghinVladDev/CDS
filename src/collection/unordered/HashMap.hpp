@@ -337,16 +337,16 @@ public:
     }
 
     explicit HashMap (
-        CollectionIterator const & from,
-        CollectionIterator const & to
+            CollectionIterator const & from,
+            CollectionIterator const & to
     ) noexcept : pBuckets(new HashBucket[hashCalculator.getBoundary()]) {
         for ( auto it = UniquePointer < decltype ( & from ) > ( from.copy () ); ! it->equals ( from ); it->next() )
             this->insert(it->value());
     }
 
     explicit HashMap (
-        CollectionConstIterator const & from,
-        CollectionConstIterator const & to
+            CollectionConstIterator const & from,
+            CollectionConstIterator const & to
     ) noexcept : pBuckets(new HashBucket[hashCalculator.getBoundary()]) {
         for ( auto it = UniquePointer < decltype ( & from ) > ( from.copy () ); ! it->equals ( from ); it->next() )
             this->insert(it->value());
@@ -543,21 +543,19 @@ public:
             if (
                     Type < K > :: compare ( e.first(), entry.first() ) &&
                     Type < V > :: compare ( e.second(), entry.second() )
-            )
+                    )
                 return true;
         return false;
     }
 
     auto remove ( KeyConstReference k ) noexcept -> bool final {
-        auto & b = this->pBuckets[hashCalculator(k)];
-        Entry e;
-#if defined(__cpp_concepts) && !defined(_MSC_VER)
-        b.forEach([&e, &k](auto & p){if (Type < K > :: compare ( p.getFirst(), k )) e = p;});
-#else
-        for ( auto & p : b )
-            if ( Type < Key > :: compare ( p.getFirst(), k ) ) e = p;
-#endif
-        return b.removeFirst(e);
+        auto & b = this->pBuckets [ this->hashCalculator(k) ];
+
+        for ( auto & e : b )
+            if ( Type < Key > :: compare ( e.first(), k ) )
+                return b.removeFirst ( e );
+
+        return false;
     }
 
     auto allocInsertGetPtr (EntryConstReference entry) noexcept -> EntryPointerReference override {
@@ -668,7 +666,7 @@ HashMap ( std::initializer_list < Pair < K, V > > ) -> HashMap < K, V >;
 #endif
 
 template < typename K, typename V, typename H >
-    __CDS_Requires (UniqueIdentifiable < K > && HashCalculatorHasBoundaryFunction < H >)
+__CDS_Requires (UniqueIdentifiable < K > && HashCalculatorHasBoundaryFunction < H >)
 class __CDS_MaybeUnused MultiHashMap final : public Map < K, V > {
 
 };
