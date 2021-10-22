@@ -448,6 +448,11 @@ public:
         return * reinterpret_cast < T * > ( this->pInstance );
     }
 
+    template < typename T >
+    __CDS_NoDiscard inline auto isType () const noexcept -> bool {
+        return Utility :: Detail :: UnionImpl :: IndexOfTypeInPack < T, FirstType, RemainingTypes ... > :: index () == this->_activeTypeIndex;
+    }
+
 private:
     template < typename T, typename std :: enable_if < std :: is_same < T, void > :: value, int > :: type = 0 >
     constexpr static auto buildSafeDereferenceWrapper ( T * addr __CDS_MaybeUnused ) noexcept -> int  { return 0; }

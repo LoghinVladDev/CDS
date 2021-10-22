@@ -1,27 +1,27 @@
 ///*
-#include <CDS/Integer>
-#include <fstream>
-//1 ≤ p ≤ n ≤ 100.000
-//1 ≤ m ≤ 250.000
-//cele m distanțe citite vor fi mai mici decât 20.000
-int main () {
-    int n = 100000;
-    int m = 250000;
-
-    std::ofstream outFile ("dijkstra2.in");
-
-    outFile << n << ' ' << m << ' ' << Int::random(1, n) << '\n';
-
-    while ( m -- ) {
-        int i = Int::random(1, n), j = Int::random(1, n);
-
-        while ( i == j ) {
-            i = Int::random(1, n);
-            j = Int::random(1, n);
-        }
-
-        outFile << i << ' ' << j << ' ' << Int::random(1, 20000) << '\n';
-    }
+//#include <CDS/Integer>
+//#include <fstream>
+////1 ≤ p ≤ n ≤ 100.000
+////1 ≤ m ≤ 250.000
+////cele m distanțe citite vor fi mai mici decât 20.000
+//int main () {
+//    int n = 100000;
+//    int m = 250000;
+//
+//    std::ofstream outFile ("dijkstra2.in");
+//
+//    outFile << n << ' ' << m << ' ' << Int::random(1, n) << '\n';
+//
+//    while ( m -- ) {
+//        int i = Int::random(1, n), j = Int::random(1, n);
+//
+//        while ( i == j ) {
+//            i = Int::random(1, n);
+//            j = Int::random(1, n);
+//        }
+//
+//        outFile << i << ' ' << j << ' ' << Int::random(1, 20000) << '\n';
+//    }
 }
 //
 //
@@ -126,3 +126,8 @@ int main () {
 //
 //    return 0;
 //}
+
+
+int main () {
+
+}

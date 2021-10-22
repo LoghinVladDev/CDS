@@ -105,7 +105,7 @@
 ////    std :: cout << diff.count() << '\n';
 //
 //}
-
+//
 #include <CDS/Utility>
 #include <CDS/LinkedList>
 #include <CDS/String>
@@ -134,12 +134,12 @@ int main () {
     std::cout << e << '\n';
     std::cout << (e = f(14)) << '\n';
 
+    std::cout << f(12).isType< int >() << '\n';
+    std::cout << f(12).isType< String >() << '\n';
+
+    std::cout << f(13).isType< int >() << '\n';
+    std::cout << f(13).isType< String >() << '\n';
 }
-
-
-
-
-
 
 
 
