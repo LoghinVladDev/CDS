@@ -110,6 +110,7 @@
 #include <CDS/LinkedList>
 #include <CDS/String>
 #include <CDS/Union>
+#include <CDS/Queue>
 
 Union < int, String > f ( int x ) {
     if ( x % 2 == 0 ) return String::f("Numarul %d este impar", x);
@@ -139,6 +140,18 @@ int main () {
 
     std::cout << f(13).isType< int >() << '\n';
     std::cout << f(13).isType< String >() << '\n';
+
+    Queue < int > q;
+
+    q.push(3);
+    q.push(4);
+    q.push(5);
+    q.push(6);
+    q.push(7);
+
+    while ( ! q.empty() ) {
+        std::cout << q.pop() << '\n';
+    }
 }
 
 

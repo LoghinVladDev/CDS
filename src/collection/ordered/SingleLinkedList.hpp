@@ -959,7 +959,7 @@ auto SingleLinkedList < T > ::allocFrontGetPtr() noexcept -> ElementPtrRef {
 
 template < typename T >
 auto SingleLinkedList < T > ::allocBackGetPtr() noexcept -> ElementPtrRef {
-    if ( this->empty() ) return this->allocBackGetPtr();
+    if ( this->empty() ) return this->allocFrontGetPtr();
 
     this->_pBack->next() = new Node;
     this->_pBack->next()->data() = nullptr;
