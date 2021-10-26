@@ -29,7 +29,7 @@ template <class T, class C = dataTypes::DefaultSetComparator<T>>
 #if defined(__cpp_concepts) && !defined(_MSC_VER)
     requires ValidSetComparator <T, C>
 #endif
-class OrderedSet final : public Set<T> {
+class OrderedSet : public Set<T> {
 public:
 
     using ElementType                           = typename Set<T>::ElementType;
@@ -73,7 +73,7 @@ public:
             this->insert(e);
     }
 
-    ~OrderedSet() noexcept final = default;
+    ~OrderedSet() noexcept override = default;
 
 private:
     auto allocInsertGetPtr ( ElementCRef ) noexcept -> ElementPtrRef override;

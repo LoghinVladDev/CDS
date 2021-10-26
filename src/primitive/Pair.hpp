@@ -10,7 +10,7 @@
 #include <CDS/Traits>
 
 template <class K, class V>
-class Pair final : public Object {
+class Pair : public Object {
 public:
     using Key __CDS_MaybeUnused = K;
     using Value                 = V;

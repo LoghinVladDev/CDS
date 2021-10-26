@@ -344,6 +344,8 @@ __CDS_RegisterParseType(bool)
 __CDS_RegisterParseType(float)
 __CDS_RegisterParseType(double)
 
+__CDS_WarningSuppression_FunctionTypeTraits_SuppressEnable
+
 template < typename T >
 struct Type {
     using BaseType = T;
@@ -443,6 +445,8 @@ struct Type {
 
     constexpr static auto name () noexcept -> StringLiteral { return Utility :: TypeParseTraits < T > :: name; }
 };
+
+__CDS_WarningSuppression_FunctionTypeTraits_SuppressDisable
 
 template < typename T, typename = void >
 struct pairTrait {

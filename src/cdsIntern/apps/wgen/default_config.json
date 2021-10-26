@@ -43,6 +43,10 @@
         {
             "Name": "UnsafeDeleteVoidPtr",
             "GCC": "-Wdelete-incomplete"
+        },
+        {
+            "Name": "FunctionTypeTraits",
+            "MSVC": 4180
         }
     ]
 }

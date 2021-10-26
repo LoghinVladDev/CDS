@@ -14,7 +14,7 @@
 #include <CDS/Traits>
 
 template <class T>
-class DoubleLinkedList final : public List<T> {
+class DoubleLinkedList : public List<T> {
 private:
     struct DoubleListNode { // NOLINT(cppcoreguidelines-pro-type-member-init)
         T                  * data        {nullptr};
@@ -99,7 +99,7 @@ public:
     using ElementPtrRef                 = typename List < T > :: ElementPtrRef;
     using ElementCPtr                   = typename List < T > :: ElementCPtr;
 
-    class Iterator final : public IteratorBase{
+    class Iterator : public IteratorBase{
     public:
 
         Iterator( Iterator const & ) noexcept = default;
@@ -117,14 +117,14 @@ public:
         __CDS_OptimalInline auto operator ++ (int) noexcept -> Iterator { auto copy = * this; this->next(); return copy; }
         explicit Iterator( Node * pNode, DoubleLinkedList < T > const * pList ) : IteratorBase ( pNode, pList ) { }
         __CDS_cpplang_NonConstConstexprMemberFunction auto next () noexcept -> Iterator & final { this->_pNode = this->_pNode->pNext; return * this; }
-        ~Iterator() noexcept final = default;
+        ~Iterator() noexcept override = default;
 
         __CDS_NoDiscard __CDS_OptimalInline auto copy () const noexcept -> Iterator * override {
             return new Iterator ( * this );
         }
     };
 
-    class ReverseIterator final : public IteratorBase {
+    class ReverseIterator : public IteratorBase {
     public:
 
         ReverseIterator( ReverseIterator const & ) noexcept = default;
@@ -141,14 +141,14 @@ public:
         __CDS_OptimalInline auto operator ++ (int) noexcept -> ReverseIterator { auto copy = * this; this->next(); return copy; }
         explicit ReverseIterator ( Node * pNode, DoubleLinkedList < T > const * pList ) : IteratorBase( pNode, pList ) { }
         __CDS_cpplang_NonConstConstexprMemberFunction auto next () noexcept -> ReverseIterator & final { this->_pNode = this->_pNode->pPrevious; return * this; }
-        ~ReverseIterator() noexcept final = default;
+        ~ReverseIterator() noexcept override = default;
 
         __CDS_NoDiscard __CDS_OptimalInline auto copy () const noexcept -> ReverseIterator * override {
             return new ReverseIterator ( * this );
         }
     };
 
-    class ConstIterator final : public ConstIteratorBase {
+    class ConstIterator : public ConstIteratorBase {
     public:
 
         ConstIterator( ConstIterator const & ) noexcept = default;
@@ -165,14 +165,14 @@ public:
         __CDS_OptimalInline auto operator ++ (int) noexcept -> ConstIterator { auto copy = * this; this->next(); return copy; }
         explicit ConstIterator ( Node const * pNode, DoubleLinkedList < T > const * pList ) : ConstIteratorBase( pNode, pList ) { }
         __CDS_cpplang_NonConstConstexprMemberFunction auto next () noexcept -> ConstIterator & final { this->_pNode = this->_pNode->pNext; return * this; }
-        ~ConstIterator() noexcept final = default;
+        ~ConstIterator() noexcept override = default;
 
         __CDS_NoDiscard __CDS_OptimalInline auto copy () const noexcept -> ConstIterator * override {
             return new ConstIterator ( * this );
         }
     };
 
-    class ConstReverseIterator final : public ConstIteratorBase {
+    class ConstReverseIterator : public ConstIteratorBase {
     public:
 
         ConstReverseIterator( ConstReverseIterator const & ) noexcept = default;
@@ -189,7 +189,7 @@ public:
         __CDS_OptimalInline auto operator ++ (int) noexcept -> ConstReverseIterator { auto copy = * this; this->next(); return copy; }
         explicit ConstReverseIterator ( Node const * pNode, DoubleLinkedList < T > const * pList ) : ConstIteratorBase( pNode, pList ) { }
         __CDS_cpplang_NonConstConstexprMemberFunction auto next () noexcept -> ConstReverseIterator & final { this->_pNode = this->_pNode->pPrevious; return * this; }
-        ~ConstReverseIterator() noexcept final = default;
+        ~ConstReverseIterator() noexcept override = default;
 
         __CDS_NoDiscard __CDS_OptimalInline auto copy () const noexcept -> ConstReverseIterator * override {
             return new ConstReverseIterator ( * this );
@@ -210,7 +210,7 @@ public:
     ) noexcept;
     DoubleLinkedList( const std::initializer_list < T > & ) noexcept;
 
-    ~DoubleLinkedList() noexcept final;
+    ~DoubleLinkedList() noexcept override;
 
 private:
     __CDS_NoDiscard __CDS_OptimalInline auto beginPtr () noexcept -> Iterator * final { return new Iterator( this->_pFront, this ); }

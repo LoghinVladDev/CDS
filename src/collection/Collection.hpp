@@ -98,9 +98,9 @@ public:
 
         __CDS_cpplang_VirtualConstexpr virtual auto operator ++ () noexcept -> Iterator & { this->next(); return * this; }
 
-        constexpr auto operator == ( const Iterator & o ) const noexcept -> bool { return this->equals(o ); }
-        constexpr auto operator != ( const Iterator & o ) const noexcept -> bool { return ! this->equals(o ); }
-        constexpr auto operator * () const noexcept -> T& { return this->value(); }
+        __CDS_OptimalInline auto operator == ( const Iterator & o ) const noexcept -> bool { return this->equals(o ); }
+        __CDS_OptimalInline auto operator != ( const Iterator & o ) const noexcept -> bool { return ! this->equals(o ); }
+        __CDS_OptimalInline auto operator * () const noexcept -> T& { return this->value(); }
 
         __CDS_NoDiscard auto copy () const noexcept -> Iterator * override = 0;
     };

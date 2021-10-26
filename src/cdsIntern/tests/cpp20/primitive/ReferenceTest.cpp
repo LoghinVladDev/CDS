@@ -5,5 +5,5 @@
 #include "ReferenceTest.h"
 
 bool ReferenceTest::execute() noexcept {
-
+	return false;
 }

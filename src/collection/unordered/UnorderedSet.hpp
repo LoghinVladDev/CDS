@@ -9,7 +9,7 @@
 #include <CDS/Pointer>
 
 template <class T>
-class UnorderedSet final : public Set<T>  {
+class UnorderedSet : public Set<T>  {
 public:
 
     using ElementType                           = typename Set<T>::ElementType;
@@ -56,7 +56,7 @@ public:
         }
     }
 
-    ~UnorderedSet() noexcept final = default;
+    ~UnorderedSet() noexcept override = default;
 
 public:
     UnorderedSet & operator = ( Collection <T> const & c ) noexcept {

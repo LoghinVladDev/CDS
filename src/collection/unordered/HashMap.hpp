@@ -11,7 +11,7 @@
 template <class K, class V, class H> __CDS_Requires (
         UniqueIdentifiable< K > &&
         HashCalculatorHasBoundaryFunction< H >
-) class HashMap final : public Map<K, V> {
+) class HashMap : public Map<K, V> {
 public:
     __CDS_NoUniqueAddress H hashCalculator;
 
@@ -352,7 +352,7 @@ public:
             this->insert(it->value());
     }
 
-    ~HashMap () noexcept final {
+    ~HashMap () noexcept override {
         delete [] this->pBuckets;
     }
 

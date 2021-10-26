@@ -244,8 +244,10 @@ namespace __CDS_HiddenUtility {
     using _AtomicBaseDouble = Atomic<Double>; // NOLINT(bugprone-reserved-identifier)
 }
 
+#if !defined(_MSC_VER)
 #pragma clang diagnostic push
 #pragma ide diagnostic ignored "HidingNonVirtualFunction"
+#endif
 class Double::Atomic : public __CDS_HiddenUtility::_AtomicBaseDouble { // NOLINT(bugprone-reserved-identifier)
 public:
     Atomic () noexcept {
@@ -566,6 +568,10 @@ public:
         return * this;
     }
 };
+
+#if !defined(_MSC_VER)
+#pragma clang diagnostic pop
+#endif
 
 #if defined(CDS_DOUBLE_POSTFIX)
 

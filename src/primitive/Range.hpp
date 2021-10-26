@@ -11,13 +11,13 @@ class Sequence;
 #include <CDS/Object>
 #include <CDS/Pair>
 
-class Range final : public Object {
+class Range : public Object {
 private:
     Index _s;
     Index _f;
     bool  _rev;
 public:
-    class Iterator final {
+    class Iterator {
     private:
         Index i;
         bool  reversed;
@@ -46,7 +46,7 @@ public:
 
     constexpr Range(Range const &) noexcept = default;
     constexpr Range(Range &&) noexcept = default;
-    __CDS_cpplang_ConstexprDestructor ~Range() noexcept final = default;
+    __CDS_cpplang_ConstexprDestructor ~Range() noexcept override = default;
 
     __CDS_NoDiscard constexpr auto begin() const noexcept -> Iterator { return Iterator(_s, _rev); }
     __CDS_NoDiscard constexpr auto end() const noexcept -> Iterator { return Iterator(_f, _rev); }

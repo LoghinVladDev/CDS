@@ -1196,8 +1196,11 @@ namespace __CDS_HiddenUtility { // NOLINT(bugprone-reserved-identifier)
     using _AtomicBaseLong = Atomic<Long>; // NOLINT(bugprone-reserved-identifier)
 }
 
+#if !defined(_MSC_VER)
 #pragma clang diagnostic push
 #pragma ide diagnostic ignored "HidingNonVirtualFunction"
+#endif
+
 class Long::Atomic : public __CDS_HiddenUtility::_AtomicBaseLong { // NOLINT(bugprone-reserved-identifier)
 public:
 
@@ -1842,7 +1845,10 @@ public:
     }
 
 };
+
+#if !defined(_MSC_VER)
 #pragma clang diagnostic pop
+#endif
 
 #if defined(CDS_INTEGER_POSTFIX)
 

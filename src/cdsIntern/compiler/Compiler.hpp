@@ -209,9 +209,9 @@ namespace Utility {
 
 #endif
 
-
+//// UNCOMMENT last condition if compiling MSVC c++latest
 #if !defined(__CDS_Requires)
-#if defined(__cpp_concepts)
+#if defined(__cpp_concepts) && __CDS_cpplang_core_version >= __CDS_cpplang_core_version_20 //  && !defined(_MSC_VER) // to remove once MS pulls their head out of their arse
 
 #define __CDS_Requires(_concepts) requires _concepts /* NOLINT(bugprone-reserved-identifier) */
 
@@ -225,7 +225,8 @@ namespace Utility {
 
 
 #define __CDS_cpplang_ConstexprPureAbstract __CDS_cpplang_VirtualConstexpr /* NOLINT(bugprone-reserved-identifier) */
-
+#define __CDS_cpplang_ConstexprSTLIteratorOp __CDS_cpplang_ConstexprConditioned
+#define __CDS_cpplang_NestedInheritedOverride override
 
 
 #if defined(__GNUC__) && ! defined(__MINGW64__) && ! defined(__clang__)

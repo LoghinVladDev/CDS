@@ -8,7 +8,7 @@
 #include <CDS/List>
 
 template <class T>
-class Array final : public List <T> {
+class Array : public List <T> {
 private:
     T ** _pData     {nullptr };
     Size _capacity  { 0ull };
@@ -54,7 +54,7 @@ public:
 
     explicit Array ( Collection < T > const & ) noexcept;
 
-    ~Array () noexcept final;
+    ~Array () noexcept override;
 
 private:
     __CDS_OptimalInline auto beginPtr () noexcept -> Iterator * final { return new Iterator( this, 0 ); }
@@ -323,12 +323,12 @@ public:
 };
 
 template <class T>
-class Array<T>::Iterator final : public IteratorBase {
+class Array<T>::Iterator : public IteratorBase {
 public:
     Iterator ( Iterator const & ) noexcept = default;
     Iterator ( Iterator && ) noexcept = default;
     explicit Iterator ( Array * pArray, Index index ) noexcept : IteratorBase( pArray, index ) { }
-    ~Iterator () noexcept final = default;
+    ~Iterator () noexcept override = default;
 
     __CDS_cpplang_NonConstConstexprMemberFunction Iterator & operator = ( Iterator const & o ) noexcept {
         if ( this == & o ) return * this;
@@ -355,12 +355,12 @@ public:
 };
 
 template <class T>
-class Array<T>::ReverseIterator final : public IteratorBase {
+class Array<T>::ReverseIterator : public IteratorBase {
 public:
     ReverseIterator ( ReverseIterator const & ) noexcept = default;
     ReverseIterator ( ReverseIterator && ) noexcept = default;
     explicit ReverseIterator ( Array * pArray, Index index ) noexcept : IteratorBase( pArray, index ) { }
-    ~ReverseIterator () noexcept final = default;
+    ~ReverseIterator () noexcept override = default;
 
     __CDS_cpplang_NonConstConstexprMemberFunction ReverseIterator & operator = ( ReverseIterator const & o ) noexcept {
         if ( this == & o ) return * this;
@@ -384,12 +384,12 @@ public:
 };
 
 template <class T>
-class Array<T>::ConstIterator final : public ConstIteratorBase {
+class Array<T>::ConstIterator : public ConstIteratorBase {
 public:
     ConstIterator ( ConstIterator const & ) noexcept = default;
     ConstIterator ( ConstIterator && ) noexcept = default;
     explicit ConstIterator ( Array const * pArray, Index index ) noexcept : ConstIteratorBase( pArray, index ) { }
-    ~ConstIterator () noexcept final = default;
+    ~ConstIterator () noexcept override = default;
 
     __CDS_cpplang_NonConstConstexprMemberFunction ConstIterator & operator = ( ConstIterator const & o ) noexcept {
         if ( this == & o ) return * this;
@@ -413,12 +413,12 @@ public:
 };
 
 template<class T>
-class Array<T>::ConstReverseIterator final : public ConstIteratorBase {
+class Array<T>::ConstReverseIterator : public ConstIteratorBase {
 public:
     ConstReverseIterator ( ConstReverseIterator const & ) noexcept = default;
     ConstReverseIterator ( ConstReverseIterator && ) noexcept = default;
     explicit ConstReverseIterator ( Array const * pArray, Index index ) noexcept : ConstIteratorBase( pArray, index ) { }
-    ~ConstReverseIterator () noexcept final = default;
+    ~ConstReverseIterator () noexcept override = default;
 
     __CDS_cpplang_NonConstConstexprMemberFunction ConstReverseIterator & operator = ( ConstReverseIterator const & o ) noexcept {
         if ( this == & o ) return * this;
@@ -478,6 +478,15 @@ auto Array < T > :: allocFrontGetPtr () noexcept -> ElementPtrRef {
     return (this->_pData[0] = nullptr);
 }
 
+#if defined(_MSC_VER)
+
+#pragma push_macro("min")
+#pragma push_macro("max")
+#undef min
+#undef max
+
+#endif
+
 template < typename T >
 auto Array < T > :: allocBackGetPtr () noexcept -> ElementPtrRef {
     if ( this->_size < this->_capacity )
@@ -494,6 +503,13 @@ auto Array < T > :: allocBackGetPtr () noexcept -> ElementPtrRef {
 
     return (this->_pData[this->_size ++] = nullptr);
 }
+
+#if defined(_MSC_VER)
+
+#pragma pop_macro("max")
+#pragma pop_macro("min")
+
+#endif
 
 template <class T>
 auto Array<T>::toString() const noexcept -> String {
@@ -529,6 +545,15 @@ auto Array<T>::shrinkToSize(Size size) noexcept -> void {
     return this->_resize(size);
 }
 
+#if defined(_MSC_VER)
+
+#pragma push_macro("min")
+#pragma push_macro("max")
+#undef min
+#undef max
+
+#endif
+
 template <class T>
 auto Array<T>::_resize(Size size) noexcept -> void {
     auto newMemory = new ElementType * [ size ];
@@ -544,6 +569,13 @@ auto Array<T>::_resize(Size size) noexcept -> void {
     delete [] Utility::exchange ( this->_pData, newMemory );
     this->_capacity = size;
 }
+
+#if defined(_MSC_VER)
+
+#pragma pop_macro("max")
+#pragma pop_macro("min")
+
+#endif
 
 template <class T>
 Array<T>::Array( Array const & o ) noexcept :

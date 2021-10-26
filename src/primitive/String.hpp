@@ -30,10 +30,11 @@ class Sequence;
 #include <cstring>
 #define CONSTR_CLEAR() _c(0), _l(0), _p(nullptr)
 
+
 /**
  * @class String, represents a String object, ascii encoded
  */
-class String final : public Object {
+class String : public Object {
 public:
     /**
      * @brief Represents an element in the string, char by default, done for future feature compatibility ( widechar support )
@@ -87,6 +88,15 @@ private:
      */
     Size _c    {0ull};
 
+#if defined(_MSC_VER)
+
+#pragma push_macro("min")
+#pragma push_macro("max")
+#undef min
+#undef max
+
+#endif
+
     /**
      * @brief Private Function used to allocate more bytes to the String Object, keeping its' original contents
      *
@@ -111,6 +121,13 @@ private:
         this->_p = newArea;
         this->_c = newCap;
     }
+
+#if defined(_MSC_VER)
+
+#pragma pop_macro("max")
+#pragma pop_macro("min")
+
+#endif
 
     /**
      * @class String::IteratorBase, Base of String Iterators, containing common functions
@@ -772,6 +789,15 @@ public:
 
     }
 
+#if defined(_MSC_VER)
+
+#pragma push_macro("min")
+#pragma push_macro("max")
+#undef min
+#undef max
+
+#endif
+
     /**
      * @brief Constructor with given String Literal
      *
@@ -800,6 +826,7 @@ public:
 
         __CDS_WarningSuppression_ArgumentPossibleUnexpectedValue_SuppressDisable
     }
+
     /**
      * @brief Constructor with given C String value ( char * )
      *
@@ -828,6 +855,13 @@ public:
 
         __CDS_WarningSuppression_ArgumentPossibleUnexpectedValue_SuppressDisable
     }
+
+#if defined(_MSC_VER)
+
+#pragma pop_macro("max")
+#pragma pop_macro("min")
+
+#endif
 
     /**
      * @brief Constructor with given std::string
@@ -1359,6 +1393,14 @@ public:
      */
     __CDS_NoDiscard constexpr auto capacity() const noexcept -> Size { return this->_c; }
 
+#if defined(_MSC_VER)
+
+#pragma push_macro("min")
+#pragma push_macro("max")
+#undef min
+#undef max
+
+#endif
 
     /**
      * @brief Function used to resize the String to a given size
@@ -1383,6 +1425,13 @@ public:
         if ( this->_l >= this->_c )
             this->_l = this->_c - 1;
     }
+
+#if defined(_MSC_VER)
+
+#pragma pop_macro("max")
+#pragma pop_macro("min")
+
+#endif
 
     /**
      * @brief Function used to enlarge the String's capacity to a required size, but not capable of shrinking it, if it is bigger

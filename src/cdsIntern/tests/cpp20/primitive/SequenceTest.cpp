@@ -16,6 +16,15 @@
 #include <CDS/Double>
 #include <utility>
 
+#if defined(_MSC_VER)
+
+#pragma push_macro("min")
+#pragma push_macro("max")
+#undef min
+#undef max
+
+#endif
+
 bool SequenceTest::execute() noexcept {
     bool ok = true;
     this->log("Start of test Sequence ... ");
@@ -1336,13 +1345,13 @@ bool SequenceTest::execute() noexcept {
 
                 Person() noexcept = default;
                 __CDS_MaybeUnused Person(Person const &) noexcept = default;
-                Person(String firstName, String lastName) : firstName(std::move(firstName)), lastName(std::move(lastName)) { }
+                Person(String firstName, String lastName) noexcept : firstName(std::move(firstName)), lastName(std::move(lastName)) { }
 
-                __CDS_NoDiscard auto toString () const noexcept -> String override {
+                __CDS_NoDiscard auto toString () const noexcept -> String __CDS_cpplang_NestedInheritedOverride {
                     return this->firstName + " " + this->lastName;
                 }
 
-                __CDS_NoDiscard auto equals (Object const & o) const noexcept -> bool override {
+                __CDS_NoDiscard auto equals (Object const & o) const noexcept -> bool __CDS_cpplang_NestedInheritedOverride {
                     if ( this == & o ) return true;
                     auto p = dynamic_cast < decltype ( this ) > ( & o );
                     if ( p == nullptr ) return false;
@@ -1352,9 +1361,9 @@ bool SequenceTest::execute() noexcept {
             };
 
             auto scientists = Array < Person > {
-                Person("Grace", "Hopper"),
-                Person("Jacob", "Bernoulli"),
-                Person("Johann", "Bernoulli")
+                Person(String("Grace"), String("Hopper")),
+                Person(String("Jacob"), String("Bernoulli")),
+                Person(String("Johann"), String("Bernoulli"))
             }.sequence();
 
             log("scientists : %s", scientists.toArray().toString().cStr());
@@ -1402,11 +1411,11 @@ bool SequenceTest::execute() noexcept {
                 __CDS_MaybeUnused Person(Person const &) noexcept = default;
                 Person(String firstName, String lastName) : firstName(std::move(firstName)), lastName(std::move(lastName)) { }
 
-                __CDS_NoDiscard auto toString () const noexcept -> String override {
+                __CDS_NoDiscard auto toString () const noexcept -> String __CDS_cpplang_NestedInheritedOverride {
                     return this->firstName + " " + this->lastName;
                 }
 
-                __CDS_NoDiscard auto equals (Object const & o) const noexcept -> bool override {
+                __CDS_NoDiscard auto equals (Object const & o) const noexcept -> bool __CDS_cpplang_NestedInheritedOverride {
                     if ( this == & o ) return true;
                     auto p = dynamic_cast < decltype ( this ) > ( & o );
                     if ( p == nullptr ) return false;
@@ -1415,7 +1424,7 @@ bool SequenceTest::execute() noexcept {
                 }
             };
 
-            auto scientists = Array {
+            auto scientists = Array < Person > {
                 Person ("Grace", "Hopper"),
                 Person ( "Jacob", "Bernoulli" ),
                 Person ( "Johann", "Bernoulli" )
@@ -1484,11 +1493,11 @@ bool SequenceTest::execute() noexcept {
                 __CDS_MaybeUnused Person(Person const &) noexcept = default;
                 Person(String firstName, String lastName) : firstName(std::move(firstName)), lastName(std::move(lastName)) { }
 
-                __CDS_NoDiscard auto toString () const noexcept -> String override {
+                __CDS_NoDiscard auto toString () const noexcept -> String __CDS_cpplang_NestedInheritedOverride {
                     return this->firstName + " " + this->lastName;
                 }
 
-                __CDS_NoDiscard auto equals (Object const & o) const noexcept -> bool override {
+                __CDS_NoDiscard auto equals (Object const & o) const noexcept -> bool __CDS_cpplang_NestedInheritedOverride {
                     if ( this == & o ) return true;
                     auto p = dynamic_cast < decltype ( this ) > ( & o );
                     if ( p == nullptr ) return false;
@@ -1556,11 +1565,11 @@ bool SequenceTest::execute() noexcept {
                 __CDS_MaybeUnused Person(Person const &) noexcept = default;
                 Person(String firstName, String lastName) : firstName(std::move(firstName)), lastName(std::move(lastName)) { }
 
-                __CDS_NoDiscard auto toString () const noexcept -> String override {
+                __CDS_NoDiscard auto toString () const noexcept -> String __CDS_cpplang_NestedInheritedOverride {
                     return this->firstName + " " + this->lastName;
                 }
 
-                __CDS_NoDiscard auto equals (Object const & o) const noexcept -> bool override {
+                __CDS_NoDiscard auto equals (Object const & o) const noexcept -> bool __CDS_cpplang_NestedInheritedOverride {
                     if ( this == & o ) return true;
                     auto p = dynamic_cast < decltype ( this ) > ( & o );
                     if ( p == nullptr ) return false;
@@ -2506,3 +2515,10 @@ bool SequenceTest::execute() noexcept {
 
     return ok;
 }
+
+#if defined(_MSC_VER)
+
+#pragma pop_macro("max")
+#pragma pop_macro("min")
+
+#endif

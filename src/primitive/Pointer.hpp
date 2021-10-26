@@ -145,7 +145,7 @@ public:
 };
 
 template <class T>
-class SharedPointer final : public PointerBase<T> {
+class SharedPointer : public PointerBase<T> {
 private:
     struct SharedPointerControlBlock {
         int ownerCount {1};
@@ -202,7 +202,7 @@ public:
         return * this;
     }
 
-    __CDS_cpplang_ConstexprDestructor ~SharedPointer() noexcept final {
+    __CDS_cpplang_ConstexprDestructor ~SharedPointer() noexcept override {
         this->reset();
     }
 
@@ -354,7 +354,7 @@ public:
 };
 
 template <class T>
-class ForeignPointer final : public PointerBase<T> {
+class ForeignPointer : public PointerBase<T> {
 public:
     constexpr ForeignPointer() noexcept : PointerBase<T>(nullptr) {}
     constexpr ForeignPointer(typename PointerBase<T>::Pointer p) noexcept : PointerBase<T>(p) {} // NOLINT(google-explicit-constructor)

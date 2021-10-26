@@ -748,6 +748,16 @@ public:
                     return this->close().open().bind();
                 }
 
+                flag = 0x00;
+
+                retVal = :: setsockopt (
+                    this->_platformSocket,
+                    SOL_SOCKET,
+                    IPV6_V6ONLY,
+                    reinterpret_cast < char * > ( & flag ),
+                    sizeof ( flag )
+                );
+
                 sockaddr_in6 ipv6AddressInfo {};
 
                 ipv6AddressInfo.sin6_family = AF_INET6;
