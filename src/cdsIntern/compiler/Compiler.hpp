@@ -246,6 +246,12 @@ namespace Utility {
 
 #endif
 
+#if defined(_MSC_VER)
+
+#include "MSVC.hpp"
+
+#endif
+
 static inline auto __CDS_compilerVersionString() noexcept -> StringLiteral { /* NOLINT(bugprone-reserved-identifier) */
     static char buffer[9] = {
             __CDS_compiler_version / 10000 % 100 / 10 + '0',

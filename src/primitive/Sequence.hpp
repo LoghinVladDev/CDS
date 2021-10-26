@@ -1503,7 +1503,7 @@ public:
     ) & noexcept -> Sequence < LinkedList < AccumulatedType > >
     __CDS_Requires ( Iterable < C > || ConstIterable < C > );
 
-    template < typename E = ElementType, std :: enable_if < Type < E > :: isNumeric, int > :: type = 0 >
+    template < typename E = ElementType, typename std :: enable_if < Type < E > :: isNumeric, int > :: type = 0 >
     __CDS_NoDiscard __CDS_MaybeUnused auto sum () const noexcept -> ElementType {
         ElementType sum = 0;
         for ( auto e : * this )
@@ -1512,7 +1512,7 @@ public:
         return sum;
     }
 
-    template < typename E = ElementType, std :: enable_if < ! Type < E > :: isNumeric && Type < E > :: defaultConstructible, int > :: type = 0 >
+    template < typename E = ElementType, typename std :: enable_if < ! Type < E > :: isNumeric && Type < E > :: defaultConstructible, int > :: type = 0 >
     __CDS_NoDiscard __CDS_MaybeUnused auto sum () const noexcept -> ElementType {
         ElementType sum;
         for ( auto e : * this )
