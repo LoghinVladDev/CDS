@@ -106,14 +106,14 @@ namespace Utility {
 
 #else
 
-#define __CDS_cpplang_ConstexprNonLiteralReturn inline /* NOLINT(bugprone-reserved-identifier) */
-#define __CDS_cpplang_NonConstConstexprMemberFunction inline /* NOLINT(bugprone-reserved-identifier) */
-#define __CDS_cpplang_ConstexprConditioned inline /* NOLINT(bugprone-reserved-identifier) */
+#define __CDS_cpplang_ConstexprNonLiteralReturn __CDS_OptimalInline /* NOLINT(bugprone-reserved-identifier) */
+#define __CDS_cpplang_NonConstConstexprMemberFunction __CDS_OptionalInline /* NOLINT(bugprone-reserved-identifier) */
+#define __CDS_cpplang_ConstexprConditioned __CDS_OptionalInline /* NOLINT(bugprone-reserved-identifier) */
 #define __CDS_cpplang_StructBracesInitialization_available false /* NOLINT(bugprone-reserved-identifier) */
 #define __CDS_cpplang_VariableTemplates_available false /* NOLINT(bugprone-reserved-identifier) */
 #define __CDS_cpplang_FunctionAliasNoexcept /* NOLINT(bugprone-reserved-identifier) */
 
-#define __CDS_cpplang_ConstexprOverride inline /* NOLINT(bugprone-reserved-identifier) */
+#define __CDS_cpplang_ConstexprOverride __CDS_OptionalInline /* NOLINT(bugprone-reserved-identifier) */
 
 namespace Utility {
 
@@ -200,9 +200,9 @@ namespace Utility {
 
 #else
 
-#define __CDS_cpplang_ConstexprDynamicAllocation inline /* NOLINT(bugprone-reserved-identifier) */
-#define __CDS_cpplang_ConstexprDestructor inline /* NOLINT(bugprone-reserved-identifier) */
-#define __CDS_cpplang_VirtualConstexpr inline /* NOLINT(bugprone-reserved-identifier) */
+#define __CDS_cpplang_ConstexprDynamicAllocation __CDS_OptionalInline /* NOLINT(bugprone-reserved-identifier) */
+#define __CDS_cpplang_ConstexprDestructor __CDS_OptimalInline /* NOLINT(bugprone-reserved-identifier) */
+#define __CDS_cpplang_VirtualConstexpr __CDS_OptionalInline /* NOLINT(bugprone-reserved-identifier) */
 #define __CDS_cpplang_Concepts_available false /* NOLINT(bugprone-reserved-identifier) */
 
 #define __CDS_cpplang_ThreeWayComparison_Available false /* NOLINT(bugprone-reserved-identifier) */

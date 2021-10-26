@@ -51,7 +51,7 @@ private:
         }
 
     public:
-        inline auto operator == ( Node const & o ) const noexcept -> bool {
+        __CDS_OptimalInline auto operator == ( Node const & o ) const noexcept -> bool {
             if ( this == & o ) return true;
 
             return this->_label == o._label && this->_pObject->equals(*o._pObject);
@@ -80,14 +80,14 @@ private:
             return * this;
         }
 
-        inline auto put (bool v)                    noexcept -> Node & { return this->put(Boolean(v)); }
-        inline auto put (int v)                     noexcept -> Node & { return this->put(Integer(v)); }
-        inline auto put (long long v)               noexcept -> Node & { return this->put(Long(v)); }
-        inline auto put (float v)                   noexcept -> Node & { return this->put(Float(v)); }
-        inline auto put (double v)                  noexcept -> Node & { return this->put(Double(v)); }
-        inline auto put (StringLiteral v)           noexcept -> Node & { return this->put(String(v)); }
+        __CDS_OptimalInline auto put (bool v)                    noexcept -> Node & { return this->put(Boolean(v)); }
+        __CDS_OptimalInline auto put (int v)                     noexcept -> Node & { return this->put(Integer(v)); }
+        __CDS_OptimalInline auto put (long long v)               noexcept -> Node & { return this->put(Long(v)); }
+        __CDS_OptimalInline auto put (float v)                   noexcept -> Node & { return this->put(Float(v)); }
+        __CDS_OptimalInline auto put (double v)                  noexcept -> Node & { return this->put(Double(v)); }
+        __CDS_OptimalInline auto put (StringLiteral v)           noexcept -> Node & { return this->put(String(v)); }
         auto        put (JSON::Array const &)       noexcept -> Node &;
-        inline auto put (String const & v)          noexcept -> Node & { return this->put((Object &)v); }
+        __CDS_OptimalInline auto put (String const & v)          noexcept -> Node & { return this->put((Object &)v); }
 
         __CDS_NoDiscard auto getBoolean () const noexcept(false) -> bool {
             auto p = dynamic_cast < Boolean const * > (this->_pObject);
@@ -146,7 +146,7 @@ private:
             return p->get();
         }
 
-        __CDS_NoDiscard inline auto getObject () const noexcept -> Object const & {
+        __CDS_NoDiscard __CDS_OptimalInline auto getObject () const noexcept -> Object const & {
             return * this->_pObject;
         }
 
@@ -164,7 +164,7 @@ private:
 
         __CDS_NoDiscard auto getArray () const noexcept(false) -> JSON::Array const &;
 
-        inline auto getObject () noexcept -> Object & { return * this->_pObject; }
+        __CDS_OptimalInline auto getObject () noexcept -> Object & { return * this->_pObject; }
 
         auto getJSON () noexcept(false) -> JSON & {
             auto p = dynamic_cast < JSON * > (this->_pObject);
@@ -180,9 +180,9 @@ private:
 
         auto getArray () noexcept(false) -> JSON::Array &;
 
-        inline auto setLabel (String const & label) noexcept -> Node & { this->_label = label; return * this; }
-        __CDS_NoDiscard __CDS_MaybeUnused inline auto getLabel () const noexcept -> String const & { return this->_label; }
-        inline auto getLabel () noexcept -> String & { return this->_label; }
+        __CDS_OptimalInline auto setLabel (String const & label) noexcept -> Node & { this->_label = label; return * this; }
+        __CDS_NoDiscard __CDS_MaybeUnused constexpr auto getLabel () const noexcept -> String const & { return this->_label; }
+        __CDS_cpplang_NonConstConstexprMemberFunction auto getLabel () noexcept -> String & { return this->_label; }
 
         __CDS_NoDiscard auto toString () const noexcept -> String override {
             return
@@ -214,7 +214,7 @@ public:
     JSON (JSON &&) noexcept;
     ~JSON () noexcept override = default;
 
-    inline auto operator = ( JSON const & json ) noexcept -> JSON & {
+    __CDS_OptimalInline auto operator = ( JSON const & json ) noexcept -> JSON & {
         if ( this == & json ) return * this;
 
         this->_nodes = json._nodes;
@@ -222,7 +222,7 @@ public:
         return * this;
     }
 
-    inline auto operator = ( JSON && json ) noexcept -> JSON & {
+    __CDS_OptimalInline auto operator = ( JSON && json ) noexcept -> JSON & {
         if ( this == & json ) return * this;
 
         this->_nodes = std :: move ( json._nodes );
@@ -257,11 +257,11 @@ public:
         return labelList;
     }
 
-    __CDS_NoDiscard __CDS_MaybeUnused inline auto keys () noexcept -> LinkedList < Reference < String > > {
+    __CDS_NoDiscard __CDS_MaybeUnused __CDS_OptimalInline auto keys () noexcept -> LinkedList < Reference < String > > {
         return this->labels();
     }
 
-    __CDS_NoDiscard __CDS_MaybeUnused inline auto keys () const noexcept -> LinkedList < Reference < const String > > {
+    __CDS_NoDiscard __CDS_MaybeUnused __CDS_OptimalInline auto keys () const noexcept -> LinkedList < Reference < const String > > {
         return this->labels();
     }
 
@@ -334,7 +334,7 @@ public:
 
     static auto parse(String const &) noexcept -> JSON;
     static auto load(Path const &) noexcept -> JSON;
-    __CDS_NoDiscard inline auto dump(int indent = 4) const noexcept -> String {
+    __CDS_NoDiscard __CDS_OptimalInline auto dump(int indent = 4) const noexcept -> String {
         return this->dumpIndented(indent, 0);
     }
 
@@ -407,12 +407,12 @@ public:
     Array (Array const &) noexcept = default;
     ~Array () noexcept override = default;
 
-    inline Array ( Array && array ) noexcept :
+    __CDS_OptimalInline Array ( Array && array ) noexcept :
             _list ( std :: move ( array._list ) ) {
 
     }
 
-    inline auto operator = ( Array const & array ) noexcept -> Array & {
+    __CDS_OptimalInline auto operator = ( Array const & array ) noexcept -> Array & {
         if ( this == & array ) return * this;
 
         this->_list = array._list;
@@ -420,7 +420,7 @@ public:
         return * this;
     }
 
-    inline auto operator = ( Array && array ) noexcept -> Array & {
+    __CDS_OptimalInline auto operator = ( Array && array ) noexcept -> Array & {
         if ( this == & array ) return * this;
 
         this->_list = std :: move ( array._list );
@@ -428,7 +428,7 @@ public:
         return * this;
     }
 
-    inline auto operator == (Array const & o) const noexcept -> bool {
+    __CDS_OptimalInline auto operator == (Array const & o) const noexcept -> bool {
         if ( this == & o ) return true;
         return this->_list == o._list;
     }
@@ -511,8 +511,8 @@ public:
         return * this;
     }
 
-    __CDS_NoDiscard __CDS_MaybeUnused inline auto length () const noexcept -> Size { return this->_list.size(); }
-    __CDS_NoDiscard __CDS_MaybeUnused inline auto size () const noexcept -> Size { return this->_list.size(); }
+    __CDS_NoDiscard __CDS_MaybeUnused __CDS_OptimalInline auto length () const noexcept -> Size { return this->_list.size(); }
+    __CDS_NoDiscard __CDS_MaybeUnused __CDS_OptimalInline auto size () const noexcept -> Size { return this->_list.size(); }
 
     __CDS_NoDiscard __CDS_MaybeUnused auto get(Index i) const noexcept(false) -> JSON::Node const & {
         if ( i < 0 || i >= static_cast<Index>(this->_list.size()) ) throw OutOfBounds (i, static_cast < Index > (this->_list.size()));

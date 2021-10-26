@@ -50,7 +50,7 @@ public:
         }
     };
 
-    inline auto operator == (Path const & o) const noexcept -> bool {
+    __CDS_OptimalInline auto operator == (Path const & o) const noexcept -> bool {
         return this->_osPath == o._osPath;
     }
 
@@ -145,17 +145,17 @@ public:
     __CDS_NoDiscard auto copy () const noexcept -> Path * override { return new Path(* this); }
     __CDS_NoDiscard auto hash () const noexcept -> Index override { return this->parent().nodeName().hash(); }
 
-    __CDS_NoDiscard inline auto parent () const noexcept(false) -> Path { // NOLINT(misc-no-recursion)
+    __CDS_NoDiscard __CDS_OptimalInline auto parent () const noexcept(false) -> Path { // NOLINT(misc-no-recursion)
         auto parentPath = String (this->_osPath.substr(0, this->_osPath.findLast(Path::directorySeparator())));
         if ( parentPath.empty() ) parentPath = this->root().toString();
 
         return parentPath;
     }
 
-    __CDS_NoDiscard __CDS_MaybeUnused inline auto previous () const noexcept -> Path { return this->parent(); }
+    __CDS_NoDiscard __CDS_MaybeUnused __CDS_OptimalInline auto previous () const noexcept -> Path { return this->parent(); }
 
-    __CDS_NoDiscard inline auto nodeName () const noexcept -> String { return this->_osPath.substr(this->_osPath.findLast(Path::directorySeparator()) + 1); }
-    __CDS_NoDiscard __CDS_MaybeUnused inline auto currentName () const noexcept -> String { return this->nodeName(); }
+    __CDS_NoDiscard __CDS_OptimalInline auto nodeName () const noexcept -> String { return this->_osPath.substr(this->_osPath.findLast(Path::directorySeparator()) + 1); }
+    __CDS_NoDiscard __CDS_MaybeUnused __CDS_OptimalInline auto currentName () const noexcept -> String { return this->nodeName(); }
 
     __CDS_NoDiscard auto root () const noexcept -> Path { // NOLINT(misc-no-recursion)
         auto parent = this->parent();
@@ -178,8 +178,8 @@ public:
         return {this->_osPath + Path::directorySeparator() + delimFiltered()};
     }
 
-    inline auto operator + (String const & f) const noexcept (false) -> Path { return (*this) / f; }
-    __CDS_NoDiscard inline auto append (String const & f) const noexcept (false) -> Path { return (*this) / f; }
+    __CDS_OptimalInline auto operator + (String const & f) const noexcept (false) -> Path { return (*this) / f; }
+    __CDS_NoDiscard __CDS_OptimalInline auto append (String const & f) const noexcept (false) -> Path { return (*this) / f; }
 
     class WalkEntry;
 
@@ -208,7 +208,7 @@ private:
     LinkedList < String > _files;
 
 public:
-    inline auto operator == (WalkEntry const & o) const noexcept -> bool {
+    __CDS_OptimalInline auto operator == (WalkEntry const & o) const noexcept -> bool {
         return this->_root == o._root && this->_files == o._files && this->_directories == o._directories;
     }
 
@@ -264,7 +264,7 @@ public:
             " }";
     }
 
-    inline auto operator == (Win32RootPath const & o) const noexcept -> bool {
+    __CDS_OptimalInline auto operator == (Win32RootPath const & o) const noexcept -> bool {
         if ( this == & o ) return true;
 
         return this->path == o.path && this->deviceName == o.deviceName && this->volumeName == o.volumeName;

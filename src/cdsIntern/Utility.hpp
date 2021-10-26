@@ -80,4 +80,6 @@ public:
     explicit KeyException ( K const & key ) noexcept : Exception ( String :: f ( "Key Exception : Key '%s' is invalid for Object", String(key).cStr() ) ) { }
 };
 
+__CDS_RegisterParseType(KeyException)
+
 #endif //CDS_UTILITY_HPP

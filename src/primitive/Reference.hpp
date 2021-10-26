@@ -82,7 +82,7 @@ public:
         return this->operator==(*c);
     }
 
-    __CDS_NoDiscard inline auto toString() const noexcept -> String final {
+    __CDS_NoDiscard __CDS_OptionalInline auto toString() const noexcept -> String final {
         std::stringstream oss;
 
         Type < T > :: streamPrint ( oss << "< " << (std::is_const<T>::value ? "const " : "") << "& of 0x" << std::hex

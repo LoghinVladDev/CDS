@@ -141,21 +141,21 @@ public:
     Union () noexcept = default;
 
     template < typename T, typename std :: enable_if < Utility :: Detail :: UnionImpl :: PackContains < T, FirstType, RemainingTypes ... > :: value && Type < T > :: isFundamental, int > :: type = 0 >
-    inline Union ( T value ) noexcept : // NOLINT(google-explicit-constructor)
+    __CDS_OptimalInline Union ( T value ) noexcept : // NOLINT(google-explicit-constructor)
             pInstance ( new T (value) ),
             _activeTypeIndex ( Utility :: Detail :: UnionImpl :: IndexOfTypeInPack < T, FirstType, RemainingTypes ... > :: index() ) {
 
     }
 
     template < typename T, typename std :: enable_if < Utility :: Detail :: UnionImpl :: PackContains < T, FirstType, RemainingTypes ... > :: value && ! Type < T > :: isFundamental && Type < T > :: copyConstructible, int > :: type = 0 >
-    inline Union ( T const & value ) noexcept :  // NOLINT(google-explicit-constructor)
+    __CDS_OptimalInline Union ( T const & value ) noexcept :  // NOLINT(google-explicit-constructor)
             pInstance ( new T (value) ),
             _activeTypeIndex ( Utility :: Detail :: UnionImpl :: IndexOfTypeInPack < T, FirstType, RemainingTypes ... > :: index() ) {
 
     }
 
     template < typename T, typename std :: enable_if < Utility :: Detail :: UnionImpl :: PackContains < T, FirstType, RemainingTypes ... > :: value && ! Type < T > :: isFundamental && ! Type < T > :: copyConstructible && Type < T > :: defaultConstructible && Type < T > :: copyAssignable, int > :: type = 0 >
-    inline Union ( T const & value ) noexcept :  // NOLINT(google-explicit-constructor)
+    __CDS_OptimalInline Union ( T const & value ) noexcept :  // NOLINT(google-explicit-constructor)
             pInstance ( new T ),
             _activeTypeIndex ( Utility :: Detail :: UnionImpl :: IndexOfTypeInPack < T, FirstType, RemainingTypes ... > :: index() ) {
 
@@ -163,14 +163,14 @@ public:
     }
 
     template < typename T, typename std :: enable_if < Utility :: Detail :: UnionImpl :: PackContains < T, FirstType, RemainingTypes ... > :: value && ! Type < T > :: isFundamental && Type < T > :: moveConstructible, int > :: type = 0 >
-    __CDS_MaybeUnused inline Union ( T && value ) noexcept :  // NOLINT(google-explicit-constructor, bugprone-forwarding-reference-overload)
+    __CDS_MaybeUnused __CDS_OptimalInline Union ( T && value ) noexcept :  // NOLINT(google-explicit-constructor, bugprone-forwarding-reference-overload)
             pInstance ( new T ( std :: forward < T > ( value ) ) ),
             _activeTypeIndex ( Utility :: Detail :: UnionImpl :: IndexOfTypeInPack < T, FirstType, RemainingTypes ... > :: index() ) {
 
     }
 
     template < typename T, typename std :: enable_if < Utility :: Detail :: UnionImpl :: PackContains < T, FirstType, RemainingTypes ... > :: value && ! Type < T > :: isFundamental && ! Type < T > :: moveConstructible && Type < T > :: defaultConstructible && Type < T > :: moveAssignable, int > :: type = 0 >
-    __CDS_MaybeUnused inline Union ( T && value ) noexcept :  // NOLINT(google-explicit-constructor, bugprone-forwarding-reference-overload)
+    __CDS_MaybeUnused __CDS_OptimalInline Union ( T && value ) noexcept :  // NOLINT(google-explicit-constructor, bugprone-forwarding-reference-overload)
             pInstance ( new T ),
             _activeTypeIndex ( Utility :: Detail :: UnionImpl :: IndexOfTypeInPack < T, FirstType, RemainingTypes ... > :: index() ) {
 
@@ -205,11 +205,11 @@ public:
 
 #if __CDS_cpplang_core_version >= __CDS_cpplang_core_version_17
 
-    inline Union (Union const & value) noexcept (false) { // NOLINT(google-explicit-constructor)
+    __CDS_OptimalInline Union (Union const & value) noexcept (false) { // NOLINT(google-explicit-constructor)
         * this = value;
     }
 
-    inline auto operator = ( Union const & value ) noexcept (false) -> Union & {
+    __CDS_OptionalInline auto operator = ( Union const & value ) noexcept (false) -> Union & {
         if ( this == & value ) return * this;
 
         UNION_DELETE36
@@ -276,8 +276,8 @@ public:
 
 #else
 
-    inline Union (Union const &) noexcept = delete;
-    inline auto operator = (Union const &) noexcept -> Union & = delete;
+    __CDS_OptimalInline Union (Union const &) noexcept = delete;
+    __CDS_OptimalInline auto operator = (Union const &) noexcept -> Union & = delete;
 
 #endif
 
@@ -299,7 +299,7 @@ public:
     UNION_COMPARE2((_i) + 2)
 
     template < typename std :: enable_if < sizeof ... (RemainingTypes) <= 36, int > :: type = 0 >
-    __CDS_NoDiscard inline auto operator == ( Union const & obj ) const noexcept -> bool {
+    __CDS_NoDiscard __CDS_OptionalInline auto operator == ( Union const & obj ) const noexcept -> bool {
         if ( this == & obj ) return true;
         if ( this->_activeTypeIndex != obj._activeTypeIndex ) return false;
         if ( this->_activeTypeIndex == -1 ) return true;
@@ -322,7 +322,7 @@ public:
 #undef UNION_COMPARE2
 #undef UNION_COMPARE
 
-    __CDS_MaybeUnused inline auto operator = ( Union && value ) noexcept -> Union & {
+    __CDS_MaybeUnused __CDS_OptionalInline auto operator = ( Union && value ) noexcept -> Union & {
         if ( this == & value ) return * this;
 
         UNION_DELETE36
@@ -334,7 +334,7 @@ public:
     }
 
     template < typename T, typename std :: enable_if < Utility :: Detail :: UnionImpl :: PackContains < T, FirstType, RemainingTypes ... > :: value && Type < T > :: isFundamental && sizeof ... (RemainingTypes) <= 36, int > :: type = 0 >
-    inline auto operator = ( T value ) noexcept -> Union & {
+    __CDS_OptionalInline auto operator = ( T value ) noexcept -> Union & {
 
         UNION_DELETE36
 
@@ -345,7 +345,7 @@ public:
     }
 
     template < typename T, typename std :: enable_if < Utility :: Detail :: UnionImpl :: PackContains < T, FirstType, RemainingTypes ... > :: value && ! Type < T > :: isFundamental && Type < T > :: copyConstructible, int > :: type = 0 >
-    inline auto operator = ( T const & value ) noexcept -> Union & {
+    __CDS_OptionalInline auto operator = ( T const & value ) noexcept -> Union & {
 
         UNION_DELETE36
 
@@ -356,7 +356,7 @@ public:
     }
 
     template < typename T, typename std :: enable_if < Utility :: Detail :: UnionImpl :: PackContains < T, FirstType, RemainingTypes ... > :: value && ! Type < T > :: isFundamental && ! Type < T > :: copyConstructible && Type < T > :: defaultConstructible && Type < T > :: copyAssignable, int > :: type = 0 >
-    inline auto operator = ( T const & value ) noexcept -> Union & {
+    __CDS_OptionalInline auto operator = ( T const & value ) noexcept -> Union & {
 
         UNION_DELETE36
 
@@ -368,7 +368,7 @@ public:
     }
 
     template < typename T, typename std :: enable_if < Utility :: Detail :: UnionImpl :: PackContains < T, FirstType, RemainingTypes ... > :: value && ! Type < T > :: isFundamental && Type < T > :: moveConstructible, int > :: type = 0 >
-    __CDS_MaybeUnused inline auto operator = ( T && value ) noexcept -> Union & {
+    __CDS_MaybeUnused __CDS_OptionalInline auto operator = ( T && value ) noexcept -> Union & {
 
         UNION_DELETE36
 
@@ -379,7 +379,7 @@ public:
     }
 
     template < typename T, typename std :: enable_if < Utility :: Detail :: UnionImpl :: PackContains < T, FirstType, RemainingTypes ... > :: value && ! Type < T > :: isFundamental && ! Type < T > :: moveConstructible && Type < T > :: defaultConstructible && Type < T > :: moveAssignable, int > :: type = 0 >
-    __CDS_MaybeUnused inline auto operator = ( T && value ) noexcept -> Union & {
+    __CDS_MaybeUnused __CDS_OptionalInline auto operator = ( T && value ) noexcept -> Union & {
 
         UNION_DELETE36
 
@@ -395,7 +395,7 @@ public:
 #undef UNION_DELETE4
 #undef UNION_DELETE36
 
-    __CDS_NoDiscard inline auto equals ( Object const & object ) const noexcept -> bool override {
+    __CDS_NoDiscard __CDS_OptimalInline auto equals ( Object const & object ) const noexcept -> bool override {
         if ( this == & object ) return true;
         auto p = dynamic_cast < decltype ( this ) > ( & object );
         if ( p == nullptr ) return false;
@@ -409,7 +409,7 @@ public:
     }
 
     template < typename T, typename std :: enable_if < Utility :: Detail :: UnionImpl :: PackContains < T, FirstType, RemainingTypes ... > :: value, int > :: type = 0 >
-    inline auto get () noexcept (false) -> T & {
+    __CDS_OptionalInline auto get () noexcept (false) -> T & {
         auto typeNames = Union :: typesAsString();
         constexpr auto typeIndex = Utility :: Detail :: UnionImpl :: IndexOfTypeInPack < T, FirstType, RemainingTypes ... > :: index();
 
@@ -429,7 +429,7 @@ public:
     }
 
     template < typename T, typename std :: enable_if < Utility :: Detail :: UnionImpl :: PackContains < T, FirstType, RemainingTypes ... > :: value, int > :: type = 0 >
-    inline auto get () const noexcept (false) -> T const & {
+    __CDS_OptionalInline auto get () const noexcept (false) -> T const & {
         auto typeNames = Union :: typesAsString();
         constexpr auto typeIndex = Utility :: Detail :: UnionImpl :: IndexOfTypeInPack < T, FirstType, RemainingTypes ... > :: index();
 
@@ -449,7 +449,7 @@ public:
     }
 
     template < typename T >
-    __CDS_NoDiscard inline auto isType () const noexcept -> bool {
+    __CDS_NoDiscard __CDS_OptimalInline auto isType () const noexcept -> bool {
         return Utility :: Detail :: UnionImpl :: IndexOfTypeInPack < T, FirstType, RemainingTypes ... > :: index () == this->_activeTypeIndex;
     }
 
@@ -492,7 +492,7 @@ public:
     TYPE_AS_STRING4(29, _typename, _valueAsString)\
     TYPE_AS_STRING4(33, _typename, _valueAsString)
 
-    __CDS_NoDiscard inline auto toString () const noexcept -> String override {
+    __CDS_NoDiscard __CDS_OptionalInline auto toString () const noexcept -> String override {
         if ( sizeof ... (RemainingTypes) >= 36 ) return "Union { <unable to determine type data due to hardcoded limit> };";
 
         StringLiteral activeTypeName = nullptr; String valAsStr;
@@ -513,7 +513,7 @@ public:
 #undef TYPE_AS_STRING4
 #undef TYPE_AS_STRING36
 
-    __CDS_MaybeUnused inline Union ( Union && value ) noexcept :
+    __CDS_MaybeUnused __CDS_OptimalInline Union ( Union && value ) noexcept :
             pInstance(Utility::exchange(value.pInstance, nullptr)),
             _activeTypeIndex(Utility::exchange(value._activeTypeIndex, -1)) {
 

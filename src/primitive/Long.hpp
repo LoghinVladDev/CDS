@@ -1114,7 +1114,7 @@ public:
      *
      * @test Tested in primitive/LongTest
      */
-    __CDS_NoDiscard constexpr inline auto get() const noexcept -> CType { return this->v; }
+    __CDS_NoDiscard constexpr auto get() const noexcept -> CType { return this->v; }
 public:
 
     /**
@@ -1286,151 +1286,151 @@ public:
         return this->get();
     }
 
-    __CDS_NoDiscard inline auto operator == ( Atomic const & o ) const noexcept -> bool {
+    __CDS_NoDiscard __CDS_OptimalInline auto operator == ( Atomic const & o ) const noexcept -> bool {
         return this->get() == o.get();
     }
 
-    __CDS_NoDiscard inline auto operator != ( Atomic const & o ) const noexcept -> bool {
+    __CDS_NoDiscard __CDS_OptimalInline auto operator != ( Atomic const & o ) const noexcept -> bool {
         return this->get() != o.get();
     }
 
-    __CDS_NoDiscard inline auto operator == ( Long const & o ) const noexcept -> bool {
+    __CDS_NoDiscard __CDS_OptimalInline auto operator == ( Long const & o ) const noexcept -> bool {
         return this->get() == o;
     }
 
-    __CDS_NoDiscard inline auto operator != ( Long const & o ) const noexcept -> bool {
+    __CDS_NoDiscard __CDS_OptimalInline auto operator != ( Long const & o ) const noexcept -> bool {
         return this->get() != o;
     }
 
-    __CDS_NoDiscard inline auto operator == ( CType o ) const noexcept -> bool {
+    __CDS_NoDiscard __CDS_OptimalInline auto operator == ( CType o ) const noexcept -> bool {
         return this->get() == o;
     }
 
-    __CDS_NoDiscard inline auto operator != ( CType o ) const noexcept -> bool {
+    __CDS_NoDiscard __CDS_OptimalInline auto operator != ( CType o ) const noexcept -> bool {
         return this->get() != o;
     }
 
-    __CDS_NoDiscard inline auto operator > ( Atomic const & o ) const noexcept -> bool {
+    __CDS_NoDiscard __CDS_OptimalInline auto operator > ( Atomic const & o ) const noexcept -> bool {
         return this->get() > o.get();
     }
 
-    __CDS_NoDiscard inline auto operator < ( Atomic const & o ) const noexcept -> bool {
+    __CDS_NoDiscard __CDS_OptimalInline auto operator < ( Atomic const & o ) const noexcept -> bool {
         return this->get() < o.get();
     }
 
-    __CDS_NoDiscard inline auto operator > ( Long const & o ) const noexcept -> bool {
+    __CDS_NoDiscard __CDS_OptimalInline auto operator > ( Long const & o ) const noexcept -> bool {
         return this->get() > o;
     }
 
-    __CDS_NoDiscard inline auto operator < ( Long const & o ) const noexcept -> bool {
+    __CDS_NoDiscard __CDS_OptimalInline auto operator < ( Long const & o ) const noexcept -> bool {
         return this->get() < o;
     }
 
-    __CDS_NoDiscard inline auto operator > ( CType o ) const noexcept -> bool {
+    __CDS_NoDiscard __CDS_OptimalInline auto operator > ( CType o ) const noexcept -> bool {
         return this->get() > o;
     }
 
-    __CDS_NoDiscard inline auto operator < ( CType o ) const noexcept -> bool {
+    __CDS_NoDiscard __CDS_OptimalInline auto operator < ( CType o ) const noexcept -> bool {
         return this->get() < o;
     }
 
-    __CDS_NoDiscard inline auto operator >= ( Atomic const & o ) const noexcept -> bool {
+    __CDS_NoDiscard __CDS_OptimalInline auto operator >= ( Atomic const & o ) const noexcept -> bool {
         return this->get() >= o.get();
     }
 
-    __CDS_NoDiscard inline auto operator <= ( Atomic const & o ) const noexcept -> bool {
+    __CDS_NoDiscard __CDS_OptimalInline auto operator <= ( Atomic const & o ) const noexcept -> bool {
         return this->get() <= o.get();
     }
 
-    __CDS_NoDiscard inline auto operator >= ( Long const & o ) const noexcept -> bool {
+    __CDS_NoDiscard __CDS_OptimalInline auto operator >= ( Long const & o ) const noexcept -> bool {
         return this->get() >= o;
     }
 
-    __CDS_NoDiscard inline auto operator <= ( Long const & o ) const noexcept -> bool {
+    __CDS_NoDiscard __CDS_OptimalInline auto operator <= ( Long const & o ) const noexcept -> bool {
         return this->get() <= o;
     }
 
-    __CDS_NoDiscard inline auto operator >= ( CType o ) const noexcept -> bool {
+    __CDS_NoDiscard __CDS_OptimalInline auto operator >= ( CType o ) const noexcept -> bool {
         return this->get() >= o;
     }
 
-    __CDS_NoDiscard inline auto operator <= ( CType o ) const noexcept -> bool {
+    __CDS_NoDiscard __CDS_OptimalInline auto operator <= ( CType o ) const noexcept -> bool {
         return this->get() <= o;
     }
 
-    __CDS_NoDiscard friend inline auto operator == (CType value, Atomic const & o) noexcept -> bool {
+    __CDS_NoDiscard friend __CDS_OptimalInline auto operator == (CType value, Atomic const & o) noexcept -> bool {
         return value == o.get();
     }
 
-    __CDS_NoDiscard friend inline auto operator == (Long const & value, Atomic const & o) noexcept -> bool {
+    __CDS_NoDiscard friend __CDS_OptimalInline auto operator == (Long const & value, Atomic const & o) noexcept -> bool {
         return value == o.get();
     }
 
-    __CDS_NoDiscard friend inline auto operator != (CType value, Atomic const & o) noexcept -> bool {
+    __CDS_NoDiscard friend __CDS_OptimalInline auto operator != (CType value, Atomic const & o) noexcept -> bool {
         return value != o.get();
     }
 
-    __CDS_NoDiscard friend inline auto operator != (Long const & value, Atomic const & o) noexcept -> bool {
+    __CDS_NoDiscard friend __CDS_OptimalInline auto operator != (Long const & value, Atomic const & o) noexcept -> bool {
         return value != o.get();
     }
 
-    __CDS_NoDiscard friend inline auto operator >= (CType value, Atomic const & o) noexcept -> bool {
+    __CDS_NoDiscard friend __CDS_OptimalInline auto operator >= (CType value, Atomic const & o) noexcept -> bool {
         return value >= o.get();
     }
 
-    __CDS_NoDiscard friend inline auto operator >= (Long const & value, Atomic const & o) noexcept -> bool {
+    __CDS_NoDiscard friend __CDS_OptimalInline auto operator >= (Long const & value, Atomic const & o) noexcept -> bool {
         return value >= o.get();
     }
 
-    __CDS_NoDiscard friend inline auto operator <= (CType value, Atomic const & o) noexcept -> bool {
+    __CDS_NoDiscard friend __CDS_OptimalInline auto operator <= (CType value, Atomic const & o) noexcept -> bool {
         return value <= o.get();
     }
 
-    __CDS_NoDiscard friend inline auto operator <= (Long const & value, Atomic const & o) noexcept -> bool {
+    __CDS_NoDiscard friend __CDS_OptimalInline auto operator <= (Long const & value, Atomic const & o) noexcept -> bool {
         return value <= o.get();
     }
 
-    __CDS_NoDiscard friend inline auto operator > (CType value, Atomic const & o) noexcept -> bool {
+    __CDS_NoDiscard friend __CDS_OptimalInline auto operator > (CType value, Atomic const & o) noexcept -> bool {
         return value > o.get();
     }
 
-    __CDS_NoDiscard friend inline auto operator > (Long const & value, Atomic const & o) noexcept -> bool {
+    __CDS_NoDiscard friend __CDS_OptimalInline auto operator > (Long const & value, Atomic const & o) noexcept -> bool {
         return value > o.get();
     }
 
-    __CDS_NoDiscard friend inline auto operator < (CType value, Atomic const & o) noexcept -> bool {
+    __CDS_NoDiscard friend __CDS_OptimalInline auto operator < (CType value, Atomic const & o) noexcept -> bool {
         return value < o.get();
     }
 
-    __CDS_NoDiscard friend inline auto operator < (Long const & value, Atomic const & o) noexcept -> bool {
+    __CDS_NoDiscard friend __CDS_OptimalInline auto operator < (Long const & value, Atomic const & o) noexcept -> bool {
         return value < o.get();
     }
 
-    __CDS_NoDiscard inline auto operator + ( Atomic const & o ) const noexcept -> Long { return this->get() + o.get(); }
-    __CDS_NoDiscard inline auto operator + ( Long const & o ) const noexcept -> Long { return this->get() + o; }
-    __CDS_NoDiscard inline auto operator + ( CType value ) const noexcept -> Long { return this->get() + value; }
+    __CDS_NoDiscard __CDS_OptimalInline auto operator + ( Atomic const & o ) const noexcept -> Long { return this->get() + o.get(); }
+    __CDS_NoDiscard __CDS_OptimalInline auto operator + ( Long const & o ) const noexcept -> Long { return this->get() + o; }
+    __CDS_NoDiscard __CDS_OptimalInline auto operator + ( CType value ) const noexcept -> Long { return this->get() + value; }
 
-    __CDS_NoDiscard friend inline auto operator + ( Long const & value, Atomic const & o ) noexcept -> Long { return value + o.get(); }
-    __CDS_NoDiscard friend inline auto operator + ( CType value, Atomic const & o ) noexcept -> Long { return value + o.get(); }
-
-
-    __CDS_NoDiscard inline auto operator - ( Atomic const & o ) const noexcept -> Long { return this->get() - o.get(); }
-    __CDS_NoDiscard inline auto operator - ( Long const & o ) const noexcept -> Long { return this->get() - o; }
-    __CDS_NoDiscard inline auto operator - ( CType value ) const noexcept -> Long { return this->get() - value; }
-
-    __CDS_NoDiscard friend inline auto operator - ( Long const & value, Atomic const & o ) noexcept -> Long { return value - o.get(); }
-    __CDS_NoDiscard friend inline auto operator - ( CType value, Atomic const & o ) noexcept -> Long { return value - o.get(); }
+    __CDS_NoDiscard friend __CDS_OptimalInline auto operator + ( Long const & value, Atomic const & o ) noexcept -> Long { return value + o.get(); }
+    __CDS_NoDiscard friend __CDS_OptimalInline auto operator + ( CType value, Atomic const & o ) noexcept -> Long { return value + o.get(); }
 
 
-    __CDS_NoDiscard inline auto operator * ( Atomic const & o ) const noexcept -> Long { return this->get() * o.get(); }
-    __CDS_NoDiscard inline auto operator * ( Long const & o ) const noexcept -> Long { return this->get() * o; }
-    __CDS_NoDiscard inline auto operator * ( CType value ) const noexcept -> Long { return this->get() * value; }
+    __CDS_NoDiscard __CDS_OptimalInline auto operator - ( Atomic const & o ) const noexcept -> Long { return this->get() - o.get(); }
+    __CDS_NoDiscard __CDS_OptimalInline auto operator - ( Long const & o ) const noexcept -> Long { return this->get() - o; }
+    __CDS_NoDiscard __CDS_OptimalInline auto operator - ( CType value ) const noexcept -> Long { return this->get() - value; }
 
-    __CDS_NoDiscard friend inline auto operator * ( Long const & value, Atomic const & o ) noexcept -> Long { return value * o.get(); }
-    __CDS_NoDiscard friend inline auto operator * ( CType value, Atomic const & o ) noexcept -> Long { return value * o.get(); }
+    __CDS_NoDiscard friend __CDS_OptimalInline auto operator - ( Long const & value, Atomic const & o ) noexcept -> Long { return value - o.get(); }
+    __CDS_NoDiscard friend __CDS_OptimalInline auto operator - ( CType value, Atomic const & o ) noexcept -> Long { return value - o.get(); }
 
 
-    __CDS_NoDiscard inline auto operator / ( Atomic const & o ) const noexcept (false) -> Long {
+    __CDS_NoDiscard __CDS_OptimalInline auto operator * ( Atomic const & o ) const noexcept -> Long { return this->get() * o.get(); }
+    __CDS_NoDiscard __CDS_OptimalInline auto operator * ( Long const & o ) const noexcept -> Long { return this->get() * o; }
+    __CDS_NoDiscard __CDS_OptimalInline auto operator * ( CType value ) const noexcept -> Long { return this->get() * value; }
+
+    __CDS_NoDiscard friend __CDS_OptimalInline auto operator * ( Long const & value, Atomic const & o ) noexcept -> Long { return value * o.get(); }
+    __CDS_NoDiscard friend __CDS_OptimalInline auto operator * ( CType value, Atomic const & o ) noexcept -> Long { return value * o.get(); }
+
+
+    __CDS_NoDiscard __CDS_OptimalInline auto operator / ( Atomic const & o ) const noexcept (false) -> Long {
         CType rValue = o.get(), lValue = this->get();
         if ( rValue == 0 ) throw DivideByZeroException();
         if ( rValue == Limits::S64_MIN || lValue == Limits::S64_MIN ) throw ArithmeticException ("Division by Limits::S64_MIN is undefined behaviour");
@@ -1438,7 +1438,7 @@ public:
         return lValue / rValue;
     }
 
-    __CDS_NoDiscard inline auto operator / ( Long const & o ) const noexcept (false) -> Long {
+    __CDS_NoDiscard __CDS_OptimalInline auto operator / ( Long const & o ) const noexcept (false) -> Long {
         CType lValue = this->get();
 
         if ( o == (sint64)0 ) throw DivideByZeroException();
@@ -1447,7 +1447,7 @@ public:
         return lValue / o;
     }
 
-    __CDS_NoDiscard inline auto operator / ( CType value ) const noexcept (false) -> Long {
+    __CDS_NoDiscard __CDS_OptimalInline auto operator / ( CType value ) const noexcept (false) -> Long {
         auto lValue = this->get();
 
         if ( value == 0 ) throw DivideByZeroException();
@@ -1456,14 +1456,14 @@ public:
         return lValue / value;
     }
 
-    __CDS_NoDiscard friend inline auto operator / ( Long const & value, Atomic const & o ) noexcept (false) -> Long {
+    __CDS_NoDiscard friend __CDS_OptimalInline auto operator / ( Long const & value, Atomic const & o ) noexcept (false) -> Long {
         CType rVal = o.get();
         if ( rVal == 0 ) throw DivideByZeroException();
         if ( rVal == Limits::S64_MIN || value == Limits::S64_MIN ) throw ArithmeticException ("Division by Limits::S64_MIN is undefined behaviour");
 
         return value / rVal;
     }
-    __CDS_NoDiscard friend inline auto operator / ( CType value, Atomic const & o ) noexcept (false) -> Long {
+    __CDS_NoDiscard friend __CDS_OptimalInline auto operator / ( CType value, Atomic const & o ) noexcept (false) -> Long {
         CType rVal = o.get();
         if ( rVal == 0 ) throw DivideByZeroException();
         if ( rVal == Limits::S64_MIN || value == Limits::S64_MIN ) throw ArithmeticException ("Division by Limits::S64_MIN is undefined behaviour");
@@ -1472,7 +1472,7 @@ public:
     }
 
 
-    __CDS_NoDiscard inline auto operator % ( Atomic const & o ) const noexcept (false) -> Long {
+    __CDS_NoDiscard __CDS_OptimalInline auto operator % ( Atomic const & o ) const noexcept (false) -> Long {
         CType rValue = o.get(), lValue = this->get();
         if (rValue == 0 ) throw DivideByZeroException();
         if (rValue == Limits::S64_MIN || lValue == Limits::S64_MIN ) throw ArithmeticException ("Modulo by Limits::S64_MIN is undefined behaviour");
@@ -1480,7 +1480,7 @@ public:
         return lValue % rValue;
     }
 
-    __CDS_NoDiscard inline auto operator % ( Long const & o ) const noexcept (false) -> Long {
+    __CDS_NoDiscard __CDS_OptimalInline auto operator % ( Long const & o ) const noexcept (false) -> Long {
         CType lValue = this->get();
         if ( o == (sint64)0 ) throw DivideByZeroException();
         if ( o == Limits::S64_MIN || lValue == Limits::S64_MIN ) throw ArithmeticException ("Modulo by Limits::S64_MIN is undefined behaviour");
@@ -1488,7 +1488,7 @@ public:
         return lValue % o;
     }
 
-    __CDS_NoDiscard inline auto operator % ( CType rValue ) const noexcept (false) -> Long {
+    __CDS_NoDiscard __CDS_OptimalInline auto operator % ( CType rValue ) const noexcept (false) -> Long {
         CType lValue = this->get();
         if (rValue == 0 ) throw DivideByZeroException();
         if (rValue == Limits::S64_MIN || lValue == Limits::S64_MIN ) throw ArithmeticException ("Modulo by Limits::S64_MIN is undefined behaviour");
@@ -1496,14 +1496,14 @@ public:
         return lValue % rValue;
     }
 
-    __CDS_NoDiscard friend inline auto operator % ( Long const & value, Atomic const & o ) noexcept (false) -> Long {
+    __CDS_NoDiscard friend __CDS_OptimalInline auto operator % ( Long const & value, Atomic const & o ) noexcept (false) -> Long {
         CType rVal = o.get();
         if ( rVal == 0 ) throw DivideByZeroException();
         if ( rVal == Limits::S64_MIN || value == Limits::S64_MIN ) throw ArithmeticException ("Modulo by Limits::S64_MIN is undefined behaviour");
 
         return value % rVal;
     }
-    __CDS_NoDiscard friend inline auto operator % ( CType value, Atomic const & o ) noexcept (false) -> Long {
+    __CDS_NoDiscard friend __CDS_OptimalInline auto operator % ( CType value, Atomic const & o ) noexcept (false) -> Long {
         CType rVal = o.get();
         if ( rVal == 0 ) throw DivideByZeroException();
         if ( rVal == Limits::S64_MIN || value == Limits::S64_MIN ) throw ArithmeticException ("Modulo by Limits::S64_MIN is undefined behaviour");
@@ -1512,71 +1512,71 @@ public:
     }
 
 
-    __CDS_NoDiscard inline auto operator & ( Atomic const & o ) const noexcept -> Long { return this->get() & o.get(); }
-    __CDS_NoDiscard inline auto operator & ( Long const & o ) const noexcept -> Long { return this->get() & o; }
-    __CDS_NoDiscard inline auto operator & ( CType value ) const noexcept -> Long { return this->get() & value; }
+    __CDS_NoDiscard __CDS_OptimalInline auto operator & ( Atomic const & o ) const noexcept -> Long { return this->get() & o.get(); }
+    __CDS_NoDiscard __CDS_OptimalInline auto operator & ( Long const & o ) const noexcept -> Long { return this->get() & o; }
+    __CDS_NoDiscard __CDS_OptimalInline auto operator & ( CType value ) const noexcept -> Long { return this->get() & value; }
 
-    __CDS_NoDiscard friend inline auto operator & ( Long const & value, Atomic const & o ) noexcept -> Long { return value & o.get(); }
-    __CDS_NoDiscard friend inline auto operator & ( CType value, Atomic const & o ) noexcept -> Long { return value & o.get(); }
-
-
-    __CDS_NoDiscard inline auto operator | ( Atomic const & o ) const noexcept -> Long { return this->get() | o.get(); }
-    __CDS_NoDiscard inline auto operator | ( Long const & o ) const noexcept -> Long { return this->get() | o; }
-    __CDS_NoDiscard inline auto operator | ( CType value ) const noexcept -> Long { return this->get() | value; }
-
-    __CDS_NoDiscard friend inline auto operator | ( Long const & value, Atomic const & o ) noexcept -> Long { return value | o.get(); }
-    __CDS_NoDiscard friend inline auto operator | ( CType value, Atomic const & o ) noexcept -> Long { return value | o.get(); }
+    __CDS_NoDiscard friend __CDS_OptimalInline auto operator & ( Long const & value, Atomic const & o ) noexcept -> Long { return value & o.get(); }
+    __CDS_NoDiscard friend __CDS_OptimalInline auto operator & ( CType value, Atomic const & o ) noexcept -> Long { return value & o.get(); }
 
 
-    __CDS_NoDiscard inline auto operator ^ ( Atomic const & o ) const noexcept -> Long { return this->get() ^ o.get(); }
-    __CDS_NoDiscard inline auto operator ^ ( Long const & o ) const noexcept -> Long { return this->get() ^ o; }
-    __CDS_NoDiscard inline auto operator ^ ( CType value ) const noexcept -> Long { return this->get() ^ value; }
+    __CDS_NoDiscard __CDS_OptimalInline auto operator | ( Atomic const & o ) const noexcept -> Long { return this->get() | o.get(); }
+    __CDS_NoDiscard __CDS_OptimalInline auto operator | ( Long const & o ) const noexcept -> Long { return this->get() | o; }
+    __CDS_NoDiscard __CDS_OptimalInline auto operator | ( CType value ) const noexcept -> Long { return this->get() | value; }
 
-    __CDS_NoDiscard friend inline auto operator ^ ( Long const & value, Atomic const & o ) noexcept -> Long { return value ^ o.get(); }
-    __CDS_NoDiscard friend inline auto operator ^ ( CType value, Atomic const & o ) noexcept -> Long { return value ^ o.get(); }
-
-
-    __CDS_NoDiscard inline auto operator << ( Atomic const & o ) const noexcept -> Long { return this->get() << o.get(); }
-    __CDS_NoDiscard inline auto operator << ( Long const & o ) const noexcept -> Long { return this->get() << o; }
-    __CDS_NoDiscard inline auto operator << ( CType value ) const noexcept -> Long { return this->get() << value; }
-
-    __CDS_NoDiscard friend inline auto operator << ( Long const & value, Atomic const & o ) noexcept -> Long { return value << o.get(); }
-    __CDS_NoDiscard friend inline auto operator << ( CType value, Atomic const & o ) noexcept -> Long { return value << o.get(); }
+    __CDS_NoDiscard friend __CDS_OptimalInline auto operator | ( Long const & value, Atomic const & o ) noexcept -> Long { return value | o.get(); }
+    __CDS_NoDiscard friend __CDS_OptimalInline auto operator | ( CType value, Atomic const & o ) noexcept -> Long { return value | o.get(); }
 
 
-    __CDS_NoDiscard inline auto operator >> ( Atomic const & o ) const noexcept -> Long { return this->get() >> o.get(); }
-    __CDS_NoDiscard inline auto operator >> ( Long const & o ) const noexcept -> Long { return this->get() >> o; }
-    __CDS_NoDiscard inline auto operator >> ( CType value ) const noexcept -> Long { return this->get() >> value; }
+    __CDS_NoDiscard __CDS_OptimalInline auto operator ^ ( Atomic const & o ) const noexcept -> Long { return this->get() ^ o.get(); }
+    __CDS_NoDiscard __CDS_OptimalInline auto operator ^ ( Long const & o ) const noexcept -> Long { return this->get() ^ o; }
+    __CDS_NoDiscard __CDS_OptimalInline auto operator ^ ( CType value ) const noexcept -> Long { return this->get() ^ value; }
 
-    __CDS_NoDiscard friend inline auto operator >> ( Long const & value, Atomic const & o ) noexcept -> Long { return value >> o.get(); }
-    __CDS_NoDiscard friend inline auto operator >> ( CType value, Atomic const & o ) noexcept -> Long { return value >> o.get(); }
+    __CDS_NoDiscard friend __CDS_OptimalInline auto operator ^ ( Long const & value, Atomic const & o ) noexcept -> Long { return value ^ o.get(); }
+    __CDS_NoDiscard friend __CDS_OptimalInline auto operator ^ ( CType value, Atomic const & o ) noexcept -> Long { return value ^ o.get(); }
 
-    __CDS_NoDiscard inline auto hash () const noexcept -> Index override {
+
+    __CDS_NoDiscard __CDS_OptimalInline auto operator << ( Atomic const & o ) const noexcept -> Long { return this->get() << o.get(); }
+    __CDS_NoDiscard __CDS_OptimalInline auto operator << ( Long const & o ) const noexcept -> Long { return this->get() << o; }
+    __CDS_NoDiscard __CDS_OptimalInline auto operator << ( CType value ) const noexcept -> Long { return this->get() << value; }
+
+    __CDS_NoDiscard friend __CDS_OptimalInline auto operator << ( Long const & value, Atomic const & o ) noexcept -> Long { return value << o.get(); }
+    __CDS_NoDiscard friend __CDS_OptimalInline auto operator << ( CType value, Atomic const & o ) noexcept -> Long { return value << o.get(); }
+
+
+    __CDS_NoDiscard __CDS_OptimalInline auto operator >> ( Atomic const & o ) const noexcept -> Long { return this->get() >> o.get(); }
+    __CDS_NoDiscard __CDS_OptimalInline auto operator >> ( Long const & o ) const noexcept -> Long { return this->get() >> o; }
+    __CDS_NoDiscard __CDS_OptimalInline auto operator >> ( CType value ) const noexcept -> Long { return this->get() >> value; }
+
+    __CDS_NoDiscard friend __CDS_OptimalInline auto operator >> ( Long const & value, Atomic const & o ) noexcept -> Long { return value >> o.get(); }
+    __CDS_NoDiscard friend __CDS_OptimalInline auto operator >> ( CType value, Atomic const & o ) noexcept -> Long { return value >> o.get(); }
+
+    __CDS_NoDiscard __CDS_OptimalInline auto hash () const noexcept -> Index override {
         return this->get().hash();
     }
 
-    inline auto operator += (CType value) noexcept -> Atomic & {
+    __CDS_OptionalInline auto operator += (CType value) noexcept -> Atomic & {
         this->_access.lock();
         this->_data += value;
         this->_access.unlock();
         return * this;
     }
 
-    inline auto operator -= (CType value) noexcept -> Atomic & {
+    __CDS_OptionalInline auto operator -= (CType value) noexcept -> Atomic & {
         this->_access.lock();
         this->_data -= value;
         this->_access.unlock();
         return * this;
     }
 
-    inline auto operator *= (CType value) noexcept -> Atomic & {
+    __CDS_OptionalInline auto operator *= (CType value) noexcept -> Atomic & {
         this->_access.lock();
         this->_data *= value;
         this->_access.unlock();
         return * this;
     }
 
-    inline auto operator /= (CType value) noexcept (false) -> Atomic & {
+    __CDS_OptionalInline auto operator /= (CType value) noexcept (false) -> Atomic & {
         if ( value == 0 ) throw DivideByZeroException();
         if ( value == Limits::S64_MIN ) throw ArithmeticException ("Division by Limits::S64_MIN is undefined behaviour");
 
@@ -1592,7 +1592,7 @@ public:
         return * this;
     }
 
-    inline auto operator %= (CType value) noexcept (false) -> Atomic & {
+    __CDS_OptionalInline auto operator %= (CType value) noexcept (false) -> Atomic & {
         if ( value == 0 ) throw DivideByZeroException();
         if ( value == Limits::S64_MIN ) throw ArithmeticException ("Division by Limits::S64_MIN is undefined behaviour");
 
@@ -1608,63 +1608,63 @@ public:
         return * this;
     }
 
-    inline auto operator &= (CType value) noexcept -> Atomic & {
+    __CDS_OptionalInline auto operator &= (CType value) noexcept -> Atomic & {
         this->_access.lock();
         this->_data &= value;
         this->_access.unlock();
         return * this;
     }
 
-    inline auto operator |= (CType value) noexcept -> Atomic & {
+    __CDS_OptionalInline auto operator |= (CType value) noexcept -> Atomic & {
         this->_access.lock();
         this->_data |= value;
         this->_access.unlock();
         return * this;
     }
 
-    inline auto operator ^= (CType value) noexcept -> Atomic & {
+    __CDS_OptionalInline auto operator ^= (CType value) noexcept -> Atomic & {
         this->_access.lock();
         this->_data ^= value;
         this->_access.unlock();
         return * this;
     }
 
-    inline auto operator >>= (CType value) noexcept -> Atomic & {
+    __CDS_OptionalInline auto operator >>= (CType value) noexcept -> Atomic & {
         this->_access.lock();
         this->_data >>= value;
         this->_access.unlock();
         return * this;
     }
 
-    inline auto operator <<= (CType value) noexcept -> Atomic & {
+    __CDS_OptionalInline auto operator <<= (CType value) noexcept -> Atomic & {
         this->_access.lock();
         this->_data <<= value;
         this->_access.unlock();
         return * this;
     }
 
-    inline auto operator += (Long const & value) noexcept -> Atomic & {
+    __CDS_OptionalInline auto operator += (Long const & value) noexcept -> Atomic & {
         this->_access.lock();
         this->_data += value;
         this->_access.unlock();
         return * this;
     }
 
-    inline auto operator -= (Long const & value) noexcept -> Atomic & {
+    __CDS_OptionalInline auto operator -= (Long const & value) noexcept -> Atomic & {
         this->_access.lock();
         this->_data -= value;
         this->_access.unlock();
         return * this;
     }
 
-    inline auto operator *= (Long const & value) noexcept -> Atomic & {
+    __CDS_OptionalInline auto operator *= (Long const & value) noexcept -> Atomic & {
         this->_access.lock();
         this->_data *= value;
         this->_access.unlock();
         return * this;
     }
 
-    inline auto operator /= (Long const & value) noexcept (false) -> Atomic & {
+    __CDS_OptionalInline auto operator /= (Long const & value) noexcept (false) -> Atomic & {
         if ( value == (sint64)0 ) throw DivideByZeroException();
         if ( value == Limits::S64_MIN ) throw ArithmeticException ("Division by Limits::S64_MIN is undefined behaviour");
 
@@ -1680,7 +1680,7 @@ public:
         return * this;
     }
 
-    inline auto operator %= (Long const & value) noexcept (false) -> Atomic & {
+    __CDS_OptionalInline auto operator %= (Long const & value) noexcept (false) -> Atomic & {
         if ( value == (sint64)0 ) throw DivideByZeroException();
 
         if ( this->_data == Limits::S64_MIN ) {
@@ -1696,42 +1696,42 @@ public:
         return * this;
     }
 
-    inline auto operator &= (Long const & value) noexcept -> Atomic & {
+    __CDS_OptionalInline auto operator &= (Long const & value) noexcept -> Atomic & {
         this->_access.lock();
         this->_data &= value;
         this->_access.unlock();
         return * this;
     }
 
-    inline auto operator |= (Long const & value) noexcept -> Atomic & {
+    __CDS_OptionalInline auto operator |= (Long const & value) noexcept -> Atomic & {
         this->_access.lock();
         this->_data |= value;
         this->_access.unlock();
         return * this;
     }
 
-    inline auto operator ^= (Long const & value) noexcept -> Atomic & {
+    __CDS_OptionalInline auto operator ^= (Long const & value) noexcept -> Atomic & {
         this->_access.lock();
         this->_data ^= value;
         this->_access.unlock();
         return * this;
     }
 
-    inline auto operator >>= (Long const & value) noexcept -> Atomic & {
+    __CDS_OptionalInline auto operator >>= (Long const & value) noexcept -> Atomic & {
         this->_access.lock();
         this->_data >>= value;
         this->_access.unlock();
         return * this;
     }
 
-    inline auto operator <<= (Long const & value) noexcept -> Atomic & {
+    __CDS_OptionalInline auto operator <<= (Long const & value) noexcept -> Atomic & {
         this->_access.lock();
         this->_data <<= value;
         this->_access.unlock();
         return * this;
     }
 
-    inline auto operator += (Atomic const & value) noexcept -> Atomic & {
+    __CDS_OptionalInline auto operator += (Atomic const & value) noexcept -> Atomic & {
         auto rValue = value.get();
 
         this->_access.lock();
@@ -1740,7 +1740,7 @@ public:
         return * this;
     }
 
-    inline auto operator -= (Atomic const & value) noexcept -> Atomic & {
+    __CDS_OptionalInline auto operator -= (Atomic const & value) noexcept -> Atomic & {
         auto rValue = value.get();
 
         this->_access.lock();
@@ -1749,7 +1749,7 @@ public:
         return * this;
     }
 
-    inline auto operator *= (Atomic const & value) noexcept -> Atomic & {
+    __CDS_OptionalInline auto operator *= (Atomic const & value) noexcept -> Atomic & {
         auto rValue = value.get();
 
         this->_access.lock();
@@ -1758,7 +1758,7 @@ public:
         return * this;
     }
 
-    inline auto operator /= (Atomic const & value) noexcept (false) -> Atomic & {
+    __CDS_OptionalInline auto operator /= (Atomic const & value) noexcept (false) -> Atomic & {
         auto rValue = value.get();
         if ( rValue == (sint64)0 ) throw DivideByZeroException();
         if ( rValue == Limits::S64_MIN ) throw ArithmeticException ("Division by Limits::S64_MIN is undefined behaviour");
@@ -1775,7 +1775,7 @@ public:
         return * this;
     }
 
-    inline auto operator %= (Atomic const & value) noexcept (false) -> Atomic & {
+    __CDS_OptionalInline auto operator %= (Atomic const & value) noexcept (false) -> Atomic & {
         auto rValue = value.get();
         if ( rValue == (sint64)0 ) throw DivideByZeroException();
         if ( rValue == Limits::S64_MIN ) throw ArithmeticException ("Modulo by Limits::S64_MIN is undefined behaviour");
@@ -1792,7 +1792,7 @@ public:
         return * this;
     }
 
-    inline auto operator &= (Atomic const & value) noexcept -> Atomic & {
+    __CDS_OptionalInline auto operator &= (Atomic const & value) noexcept -> Atomic & {
         auto rValue = value.get();
 
         this->_access.lock();
@@ -1801,7 +1801,7 @@ public:
         return * this;
     }
 
-    inline auto operator |= (Atomic const & value) noexcept -> Atomic & {
+    __CDS_OptionalInline auto operator |= (Atomic const & value) noexcept -> Atomic & {
         auto rValue = value.get();
 
         this->_access.lock();
@@ -1810,7 +1810,7 @@ public:
         return * this;
     }
 
-    inline auto operator ^= (Atomic const & value) noexcept -> Atomic & {
+    __CDS_OptionalInline auto operator ^= (Atomic const & value) noexcept -> Atomic & {
         auto rValue = value.get();
 
         this->_access.lock();
@@ -1819,7 +1819,7 @@ public:
         return * this;
     }
 
-    inline auto operator >>= (Atomic const & value) noexcept -> Atomic & {
+    __CDS_OptionalInline auto operator >>= (Atomic const & value) noexcept -> Atomic & {
         auto rValue = value.get();
 
         this->_access.lock();
@@ -1828,7 +1828,7 @@ public:
         return * this;
     }
 
-    inline auto operator <<= (Atomic const & value) noexcept -> Atomic & {
+    __CDS_OptionalInline auto operator <<= (Atomic const & value) noexcept -> Atomic & {
         auto rValue = value.get();
 
         this->_access.lock();
@@ -1837,7 +1837,7 @@ public:
         return * this;
     }
 
-    __CDS_NoDiscard inline auto operator ~ () const noexcept -> Long {
+    __CDS_NoDiscard __CDS_OptionalInline auto operator ~ () const noexcept -> Long {
         return this->get().operator~();
     }
 

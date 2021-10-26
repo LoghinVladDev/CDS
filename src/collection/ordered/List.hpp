@@ -16,12 +16,13 @@ private:
     __CDS_MaybeUnused auto beginPtr () const noexcept -> typename Collection < T > :: ConstIterator * override = 0;
     __CDS_MaybeUnused auto endPtr () const noexcept -> typename Collection < T > :: ConstIterator * override = 0;
 
+public:
+    using ElementType   = typename Collection < T > :: ElementType;
+
 protected:
     Size _size { 0ull };
 
     List () noexcept = default;
-
-    using ElementType   = typename Collection < T > :: ElementType;
     using ElementRef    = typename Collection < T > :: ElementRef;
     using ElementCRef   = typename Collection < T > :: ElementCRef;
     using ElementMRef   = typename Collection < T > :: ElementMRef;
@@ -47,32 +48,32 @@ protected:
 
 public:
 
-    inline auto get ( Index index ) noexcept (false) -> ElementRef {
+    __CDS_OptimalInline auto get ( Index index ) noexcept (false) -> ElementRef {
         return * this->pAt ( index );
     }
 
-    inline auto get ( Index index ) const noexcept -> ElementCRef {
+    __CDS_OptimalInline auto get ( Index index ) const noexcept -> ElementCRef {
         return * this->pAt ( index );
     };
 
     template < typename V = T, typename std :: enable_if < Type < V > :: copyAssignable, int > :: type = 0 >
-    inline auto set ( ElementCRef e, Index index ) noexcept (false) -> T & {
+    __CDS_OptimalInline auto set ( ElementCRef e, Index index ) noexcept (false) -> T & {
         * this->pAt(index) = e;
     }
 
     template < typename V = T, typename std :: enable_if < Type < V > :: moveAssignable, int > :: type = 0 >
-    inline auto set ( ElementMRef e, Index index ) noexcept (false) -> T & {
+    __CDS_OptimalInline auto set ( ElementMRef e, Index index ) noexcept (false) -> T & {
         * this->pAt(index) = e;
     }
 
     template < typename ListType, typename V = T, typename std :: enable_if < Type < V > :: copyAssignable && isDerivedFrom < ListType, List < T > > :: value, int > :: type = 0 >
     __CDS_MaybeUnused auto sub ( Index, Index = Limits::S64_MAX ) const noexcept (false) -> ListType;
 
-    inline auto operator [] ( Index index ) noexcept -> T & {
+    __CDS_OptimalInline auto operator [] ( Index index ) noexcept -> T & {
         return this->get( index );
     }
 
-    inline auto operator [] ( const Index & index ) const noexcept -> const T & {
+    __CDS_OptimalInline auto operator [] ( const Index & index ) const noexcept -> const T & {
         return this->get( index );
     }
 
@@ -89,41 +90,41 @@ protected:
 public:
 
     template < typename V = T, typename std :: enable_if < Type < V > :: copyConstructible, int > :: type = 0 >
-    inline auto pushFront ( ElementCRef value ) noexcept -> ElementRef {
+    __CDS_OptimalInline auto pushFront ( ElementCRef value ) noexcept -> ElementRef {
         return * (this->allocFrontGetPtr() = new ElementType ( value ));
     }
 
     template < typename V = T, typename std :: enable_if < Type < V > :: copyConstructible, int > :: type = 0 >
-    inline auto pushBack ( ElementCRef value ) noexcept -> ElementRef {
+    __CDS_OptimalInline auto pushBack ( ElementCRef value ) noexcept -> ElementRef {
         return * (this->allocBackGetPtr() = new ElementType ( value ));
     }
 
     template < typename V = T, typename std :: enable_if < Type < V > :: moveConstructible, int > :: type = 0 >
-    inline auto pushFront ( ElementMRef value ) noexcept -> ElementRef {
+    __CDS_OptimalInline auto pushFront ( ElementMRef value ) noexcept -> ElementRef {
         return * (this->allocFrontGetPtr() = new ElementType ( value ));
     }
 
     template < typename V = T, typename std :: enable_if < Type < V > :: moveConstructible, int > :: type = 0 >
-    inline auto pushBack ( ElementMRef value ) noexcept -> ElementRef {
+    __CDS_OptimalInline auto pushBack ( ElementMRef value ) noexcept -> ElementRef {
         return * (this->allocBackGetPtr() = new ElementType ( value ));
     }
 
     template < typename V = T, typename std :: enable_if < Type < V > :: copyConstructible, int > :: type = 0 >
-    inline auto append ( ElementCRef v ) noexcept -> void { this->pushBack(v); }
+    __CDS_OptimalInline auto append ( ElementCRef v ) noexcept -> void { this->pushBack(v); }
 
     template < typename V = T, typename std :: enable_if < Type < V > :: moveConstructible, int > :: type = 0 >
-    inline auto append ( ElementMRef v ) noexcept -> void { this->pushBack(v); }
+    __CDS_OptimalInline auto append ( ElementMRef v ) noexcept -> void { this->pushBack(v); }
 
 
     template < typename V = T, typename std :: enable_if < Type < V > :: copyConstructible, int > :: type = 0 >
-    inline auto prepend ( ElementCRef v ) noexcept -> void { this->pushFront(v); }
+    __CDS_OptimalInline auto prepend ( ElementCRef v ) noexcept -> void { this->pushFront(v); }
 
     template < typename V = T, typename std :: enable_if < Type < V > :: moveConstructible, int > :: type = 0 >
-    inline auto prepend ( ElementMRef v ) noexcept -> void { this->pushFront(v); }
+    __CDS_OptimalInline auto prepend ( ElementMRef v ) noexcept -> void { this->pushFront(v); }
 
 //    __CDS_MaybeUnused virtual auto sort ( const Comparator < T > & ) noexcept -> void = 0;
 
-    __CDS_NoDiscard inline auto size () const noexcept -> Size override { return this->_size; }
+    __CDS_NoDiscard __CDS_OptimalInline auto size () const noexcept -> Size override { return this->_size; }
 
     ~List () noexcept override = default;
 
@@ -151,7 +152,7 @@ public:
     }
 
     template < typename V = T, typename std :: enable_if < Type < V > :: copyAssignable, int > :: type = 0 >
-    __CDS_MaybeUnused auto inline replaceFirst ( ElementCRef what, ElementCRef with ) noexcept -> bool {
+    __CDS_MaybeUnused auto __CDS_OptionalInline replaceFirst ( ElementCRef what, ElementCRef with ) noexcept -> bool {
         for (
                 auto
                         it = UniquePointer < Iterator > ( this->beginPtr() ),
@@ -168,7 +169,7 @@ public:
     }
 
     template < typename V = T, typename std :: enable_if < Type < V > :: moveAssignable, int > :: type = 0 >
-    __CDS_MaybeUnused auto inline replaceFirst ( ElementCRef what, ElementMRef with ) noexcept -> bool {
+    __CDS_MaybeUnused auto __CDS_OptionalInline replaceFirst ( ElementCRef what, ElementMRef with ) noexcept -> bool {
         for (
                 auto
                         it = UniquePointer < Iterator > ( this->beginPtr() ),
@@ -185,7 +186,7 @@ public:
     }
 
     template < typename V = T, typename std :: enable_if < Type < V > :: copyAssignable, int > :: type = 0 >
-    __CDS_MaybeUnused auto inline replaceAll ( ElementCRef what, ElementCRef with ) noexcept -> Size {
+    __CDS_MaybeUnused auto __CDS_OptionalInline replaceAll ( ElementCRef what, ElementCRef with ) noexcept -> Size {
         Size replacedCount = 0;
 
         for (
@@ -265,7 +266,7 @@ public:
     }
 
     template < typename V = T, typename std :: enable_if < Type < V > :: copyAssignable, int > :: type = 0 >
-    __CDS_MaybeUnused auto inline replaceFirstOf ( Collection < T > const & of, ElementCRef with ) noexcept -> bool {
+    __CDS_MaybeUnused auto __CDS_OptionalInline replaceFirstOf ( Collection < T > const & of, ElementCRef with ) noexcept -> bool {
         for (
                 auto
                         it = UniquePointer < Iterator > ( this->beginPtr() ),
@@ -282,7 +283,7 @@ public:
     }
 
     template < typename V = T, typename std :: enable_if < Type < V > :: moveAssignable, int > :: type = 0 >
-    __CDS_MaybeUnused auto inline replaceFirstOf ( Collection < T > const & of, ElementMRef with ) noexcept -> bool {
+    __CDS_MaybeUnused auto __CDS_OptionalInline replaceFirstOf ( Collection < T > const & of, ElementMRef with ) noexcept -> bool {
         for (
                 auto
                         it = UniquePointer < Iterator > ( this->beginPtr() ),
@@ -299,7 +300,7 @@ public:
     }
 
     template < typename V = T, typename std :: enable_if < Type < V > :: copyAssignable, int > :: type = 0 >
-    __CDS_MaybeUnused auto inline replaceAllOf ( Collection < T > const & of, ElementCRef with ) noexcept -> Size {
+    __CDS_MaybeUnused auto __CDS_OptionalInline replaceAllOf ( Collection < T > const & of, ElementCRef with ) noexcept -> Size {
         Size replacedCount = 0;
 
         for (
@@ -380,7 +381,7 @@ public:
     }
 
     template < typename V = T, typename std :: enable_if < Type < V > :: copyAssignable, int > :: type = 0 >
-    __CDS_MaybeUnused auto inline replaceFirstNotOf ( Collection < T > const & of, ElementCRef with ) noexcept -> bool {
+    __CDS_MaybeUnused auto __CDS_OptionalInline replaceFirstNotOf ( Collection < T > const & of, ElementCRef with ) noexcept -> bool {
         for (
                 auto
                         it = UniquePointer < Iterator > ( this->beginPtr() ),
@@ -397,7 +398,7 @@ public:
     }
 
     template < typename V = T, typename std :: enable_if < Type < V > :: moveAssignable, int > :: type = 0 >
-    __CDS_MaybeUnused auto inline replaceFirstNotOf ( Collection < T > const & of, ElementMRef with ) noexcept -> bool {
+    __CDS_MaybeUnused auto __CDS_OptionalInline replaceFirstNotOf ( Collection < T > const & of, ElementMRef with ) noexcept -> bool {
         for (
                 auto
                         it = UniquePointer < Iterator > ( this->beginPtr() ),
@@ -414,7 +415,7 @@ public:
     }
 
     template < typename V = T, typename std :: enable_if < Type < V > :: copyAssignable, int > :: type = 0 >
-    __CDS_MaybeUnused auto inline replaceAllNotOf ( Collection < T > const & of, ElementCRef with ) noexcept -> Size {
+    __CDS_MaybeUnused auto __CDS_OptionalInline replaceAllNotOf ( Collection < T > const & of, ElementCRef with ) noexcept -> Size {
         Size replacedCount = 0;
 
         for (
@@ -495,7 +496,7 @@ public:
     }
 
     template < typename V = T, typename std :: enable_if < Type < V > :: copyAssignable, int > :: type = 0 >
-    __CDS_MaybeUnused auto inline replaceFirstOf ( std::initializer_list<T> const & of, ElementCRef with ) noexcept -> bool {
+    __CDS_MaybeUnused auto __CDS_OptionalInline replaceFirstOf ( std::initializer_list<T> const & of, ElementCRef with ) noexcept -> bool {
         for (
                 auto
                         it = UniquePointer < Iterator > ( this->beginPtr() ),
@@ -512,7 +513,7 @@ public:
     }
 
     template < typename V = T, typename std :: enable_if < Type < V > :: moveAssignable, int > :: type = 0 >
-    __CDS_MaybeUnused auto inline replaceFirstOf ( std::initializer_list<T> const & of, ElementMRef with ) noexcept -> bool {
+    __CDS_MaybeUnused auto __CDS_OptionalInline replaceFirstOf ( std::initializer_list<T> const & of, ElementMRef with ) noexcept -> bool {
         for (
                 auto
                         it = UniquePointer < Iterator > ( this->beginPtr() ),
@@ -529,7 +530,7 @@ public:
     }
 
     template < typename V = T, typename std :: enable_if < Type < V > :: copyAssignable, int > :: type = 0 >
-    __CDS_MaybeUnused auto inline replaceAllOf ( std::initializer_list<T> const & of, ElementCRef with ) noexcept -> bool {
+    __CDS_MaybeUnused auto __CDS_OptionalInline replaceAllOf ( std::initializer_list<T> const & of, ElementCRef with ) noexcept -> bool {
         Size replacedCount = 0;
 
         for (
@@ -610,7 +611,7 @@ public:
     }
 
     template < typename V = T, typename std :: enable_if < Type < V > :: copyAssignable, int > :: type = 0 >
-    __CDS_MaybeUnused auto inline replaceFirstNotOf ( std::initializer_list<T> const & of, ElementCRef with ) noexcept -> bool {
+    __CDS_MaybeUnused auto __CDS_OptionalInline replaceFirstNotOf ( std::initializer_list<T> const & of, ElementCRef with ) noexcept -> bool {
         for (
                 auto
                         it = UniquePointer < Iterator > ( this->beginPtr() ),
@@ -627,7 +628,7 @@ public:
     }
 
     template < typename V = T, typename std :: enable_if < Type < V > :: moveAssignable, int > :: type = 0 >
-    __CDS_MaybeUnused auto inline replaceFirstNotOf ( std::initializer_list<T> const & of, ElementMRef with ) noexcept -> bool {
+    __CDS_MaybeUnused auto __CDS_OptionalInline replaceFirstNotOf ( std::initializer_list<T> const & of, ElementMRef with ) noexcept -> bool {
         for (
                 auto
                         it = UniquePointer < Iterator > ( this->beginPtr() ),
@@ -644,7 +645,7 @@ public:
     }
 
     template < typename V = T, typename std :: enable_if < Type < V > :: copyAssignable, int > :: type = 0 >
-    __CDS_MaybeUnused auto inline replaceAllNotOf ( std::initializer_list<T> const & of, ElementCRef with ) noexcept -> bool {
+    __CDS_MaybeUnused auto __CDS_OptionalInline replaceAllNotOf ( std::initializer_list<T> const & of, ElementCRef with ) noexcept -> bool {
         Size replacedCount = 0;
 
         for (

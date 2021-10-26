@@ -379,6 +379,7 @@ struct Type {
 
     static constexpr bool isFundamental = typeFundamental < T >();
     __CDS_MaybeUnused static constexpr bool isIntegral = std::is_integral < T > :: type :: value;
+    static constexpr bool isNumeric = std :: is_arithmetic < T > :: type :: value;
     static constexpr bool isBasicPointer = std :: is_pointer < T > :: type :: value;
     static constexpr bool isSmartPointer = :: isSmartPointer < T > :: type :: value;
     static constexpr bool isPointer = isBasicPointer || isSmartPointer;
@@ -417,7 +418,7 @@ struct Type {
     }
 
     template < typename U = T >
-    static inline auto compare (T const & a, T const & b, float = 0.0f) noexcept -> typename std :: enable_if < ! Type < U > :: hasEqualityOperator && Type < U > :: objectDerived, bool > :: type {
+    static __CDS_OptimalInline auto compare (T const & a, T const & b, float = 0.0f) noexcept -> typename std :: enable_if < ! Type < U > :: hasEqualityOperator && Type < U > :: objectDerived, bool > :: type {
         return a.equals(b);
     }
 

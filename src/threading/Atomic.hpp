@@ -37,7 +37,7 @@ public:
         this->set(v);
     }
 
-    inline auto get () const noexcept -> T {
+    __CDS_OptimalInline auto get () const noexcept -> T {
         this->_access.lock();
         auto v = this->_data;
         this->_access.unlock();
@@ -45,13 +45,13 @@ public:
         return v;
     }
 
-    inline auto set ( DataType const & v ) noexcept -> void {
+    __CDS_OptimalInline auto set ( DataType const & v ) noexcept -> void {
         this->_access.lock();
         this->_data = v;
         this->_access.unlock();
     }
 
-    inline Atomic & operator = ( Atomic const & obj ) noexcept {
+    __CDS_OptimalInline Atomic & operator = ( Atomic const & obj ) noexcept {
         if ( this == & obj ) return * this;
 
         this->set( obj.get() );
@@ -73,35 +73,35 @@ public:
         return * this;
     }
 
-    inline virtual Atomic & operator = ( DataType const & v ) noexcept {
+    __CDS_OptimalInline virtual Atomic & operator = ( DataType const & v ) noexcept {
         this->set( v );
 
         return * this;
     }
 
-    inline Atomic & operator = ( DataType && v ) noexcept {
+    __CDS_OptimalInline Atomic & operator = ( DataType && v ) noexcept {
         this->set ( std::move ( v ) );
 
         return * this;
     }
 
-    inline auto operator == ( Atomic const & v ) const noexcept -> bool {
+    __CDS_OptimalInline auto operator == ( Atomic const & v ) const noexcept -> bool {
         return this->get() == v.get();
     }
 
-    inline auto operator == ( DataType const & v ) const noexcept -> bool {
+    __CDS_OptimalInline auto operator == ( DataType const & v ) const noexcept -> bool {
         return this->get() == v;
     }
 
-    inline auto operator != ( Atomic const & v ) const noexcept -> bool {
+    __CDS_OptimalInline auto operator != ( Atomic const & v ) const noexcept -> bool {
         return this->get() != v.get();
     }
 
-    inline auto operator != ( DataType const & v ) const noexcept -> bool {
+    __CDS_OptimalInline auto operator != ( DataType const & v ) const noexcept -> bool {
         return this->get() != v;
     }
 
-    inline operator DataType () const noexcept { // NOLINT(google-explicit-constructor)
+    __CDS_OptimalInline operator DataType () const noexcept { // NOLINT(google-explicit-constructor)
         return this->get();
     }
 

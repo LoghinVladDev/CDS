@@ -68,11 +68,7 @@ public:
 
     virtual auto operator ()(ValueConstReference) const noexcept -> HashValue = 0;
 
-#if __cpp_constexpr >= 201907
-    [[nodiscard]] virtual constexpr inline auto getBoundary () const noexcept -> Size { return hashBoundary; }
-#else
-    [[nodiscard]] virtual inline auto getBoundary () const noexcept -> Size { return hashBoundary; }
-#endif
+    __CDS_NoDiscard virtual __CDS_cpplang_VirtualConstexpr auto getBoundary () const noexcept -> Size { return hashBoundary; }
 };
 
 namespace dataTypes {

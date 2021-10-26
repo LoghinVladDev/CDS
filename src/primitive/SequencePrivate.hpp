@@ -40,6 +40,16 @@ namespace __CDS_Sequence { // NOLINT(bugprone-reserved-identifier)
         > :: type;
     };
 
+    template < typename C >
+    constexpr auto isFlattable () noexcept -> bool {
+        return std :: is_same < C, Sequence < typename ContainedType < C > :: Type > > :: value;
+    }
+
+    template < typename C >
+    struct FlattenType {
+        using Type = typename ContainedType < typename ContainedType < C > :: Type > :: Type;
+    };
+
     template < typename MapperType, typename C >
     constexpr auto mapToSameType () noexcept -> bool {
         return std :: is_same <

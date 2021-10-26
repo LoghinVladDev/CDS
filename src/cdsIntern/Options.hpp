@@ -50,4 +50,29 @@
 
 #endif
 
+#if ! defined(__CDS_InlineFunctions_None) && ! defined(__CDS_InlineFunctions_Optimal) && ! defined(__CDS_InlineFunctions_Aggressive)
+
+#define __CDS_InlineFunctions_Aggressive
+
+#endif
+
+
+#if defined(__CDS_InlineFunctions_None)
+
+#define __CDS_OptimalInline
+#define __CDS_OptionalInline
+
+#elif defined(__CDS_InlineFunctions_Optimal)
+
+#define __CDS_OptimalInline inline
+#define __CDS_OptionalInline
+
+#elif defined(__CDS_InlineFunctions_Aggressive)
+
+#define __CDS_OptimalInline inline
+#define __CDS_OptionalInline inline
+
+#endif
+
+
 #endif //CDS_OPTIONS_HPP

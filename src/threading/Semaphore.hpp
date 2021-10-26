@@ -22,7 +22,7 @@ public:
         delete this->_pBase;
     }
 
-    inline auto wait () noexcept -> void {
+    __CDS_OptionalInline auto wait () noexcept -> void {
         while ( true )
             if ( ( * this->_pBase )->tryLock() ) {
                 if ( this->_count != 0 ) {
@@ -34,13 +34,13 @@ public:
             }
     }
 
-    inline auto notify () noexcept -> void {
+    __CDS_OptionalInline auto notify () noexcept -> void {
         ( * this->_pBase )->lock();
         this->_count = this->_count + 1;
         ( * this->_pBase )->unlock();
     }
 
-    inline auto reset () noexcept -> void {
+    __CDS_OptionalInline auto reset () noexcept -> void {
         this->_count = 0;
         (*(* this->_pBase)).reset();
     }

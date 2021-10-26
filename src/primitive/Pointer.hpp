@@ -74,7 +74,7 @@ public:
 
 private:
     template < typename U = T >
-    __CDS_NoDiscard inline auto ptrStringRep() const noexcept -> typename std::enable_if < Type < U > :: ostreamPrintable, String > :: type {
+    __CDS_NoDiscard __CDS_OptionalInline auto ptrStringRep() const noexcept -> typename std::enable_if < Type < U > :: ostreamPrintable, String > :: type {
         std::stringstream oss;
 
         oss << "< 0x" << std::hex << reinterpret_cast < PointerType > ( pObj ) << std::dec << " : ";
@@ -86,7 +86,7 @@ private:
     }
 
     template < typename U = T >
-    __CDS_NoDiscard inline auto ptrStringRep() const noexcept -> typename std::enable_if < ! Type < U > :: ostreamPrintable, String > :: type {
+    __CDS_NoDiscard __CDS_OptionalInline auto ptrStringRep() const noexcept -> typename std::enable_if < ! Type < U > :: ostreamPrintable, String > :: type {
         std::stringstream oss;
 
         oss << "< 0x" << std::hex << reinterpret_cast < PointerType > ( pObj ) << std::dec << " : ";
@@ -98,7 +98,7 @@ private:
     }
 
 public:
-    __CDS_NoDiscard inline auto toString () const noexcept -> String override {
+    __CDS_NoDiscard __CDS_OptimalInline auto toString () const noexcept -> String override {
         return this->ptrStringRep();
     }
 };
@@ -172,7 +172,7 @@ private:
 
 public:
     constexpr SharedPointer() noexcept = default;
-    inline SharedPointer(SharedPointer const & p) noexcept :
+    __CDS_OptimalInline SharedPointer(SharedPointer const & p) noexcept :
             PointerBase<T>(p.pObj),
             pControl(p.pControl) {
 
@@ -268,7 +268,7 @@ private:
 
 public:
     constexpr AtomicSharedPointer() noexcept = default;
-    inline AtomicSharedPointer(AtomicSharedPointer const & p) noexcept :
+    __CDS_OptimalInline AtomicSharedPointer(AtomicSharedPointer const & p) noexcept :
             PointerBase<T>(p.pObj),
             pControl(p.pControl) {
 
@@ -277,17 +277,17 @@ public:
         p.pControl->lock.unlock();
     }
 
-    inline auto copy () const noexcept -> AtomicSharedPointer * override {
+    __CDS_OptimalInline auto copy () const noexcept -> AtomicSharedPointer * override {
         return new AtomicSharedPointer(* this);
     }
 
-    inline AtomicSharedPointer(typename PointerBase<T>::Pointer p) noexcept : // NOLINT(google-explicit-constructor)
+    __CDS_OptimalInline AtomicSharedPointer(typename PointerBase<T>::Pointer p) noexcept : // NOLINT(google-explicit-constructor)
             PointerBase<T>(p),
             pControl(new SharedPointerControlBlock){
 
     }
 
-    inline auto operator = ( AtomicSharedPointer const & o ) noexcept -> AtomicSharedPointer & {
+    __CDS_OptimalInline auto operator = ( AtomicSharedPointer const & o ) noexcept -> AtomicSharedPointer & {
         if ( this == & o )
             return * this;
 
@@ -295,22 +295,22 @@ public:
         return * this;
     }
 
-    inline auto operator = ( typename PointerBase < T > :: Pointer p ) noexcept -> AtomicSharedPointer & {
+    __CDS_OptimalInline auto operator = ( typename PointerBase < T > :: Pointer p ) noexcept -> AtomicSharedPointer & {
         this->reset(p);
         return * this;
     }
 
-    inline ~AtomicSharedPointer() noexcept final {
+    __CDS_OptimalInline ~AtomicSharedPointer() noexcept final {
         this->reset();
     }
 
-    inline auto release () noexcept -> typename PointerBase<T>::Pointer final {
+    __CDS_OptimalInline auto release () noexcept -> typename PointerBase<T>::Pointer final {
         auto p = this->pObj;
         this->reset();
         return p;
     }
 
-    inline auto reset ( typename PointerBase<T>::Pointer p = nullptr ) noexcept -> void final {
+    __CDS_OptionalInline auto reset ( typename PointerBase<T>::Pointer p = nullptr ) noexcept -> void final {
         if ( this->pObj == p ) return;
 
         auto pVal = this->pObj;
@@ -329,7 +329,7 @@ public:
             this->pControl = new SharedPointerControlBlock;
     }
 
-    inline auto reset ( AtomicSharedPointer const & p ) noexcept -> void final {
+    __CDS_OptionalInline auto reset ( AtomicSharedPointer const & p ) noexcept -> void final {
         if ( this->pControl == p.pControl ) return;
 
         auto oldAddress = this->pObj;

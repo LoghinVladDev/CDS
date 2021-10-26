@@ -40,14 +40,14 @@ public:
         explicit Iterator ( NodePointer pNode, Set < T > * pSet ) : Collection<T>::Iterator(pSet), _pNode(pNode) {  }
         ~Iterator () noexcept final = default;
 
-        constexpr inline auto equals ( typename Collection<T>::Iterator const & it ) const noexcept -> bool final { return dynamic_cast < Iterator const & > (it)._pNode == this->_pNode; }
-        constexpr inline auto value () const noexcept -> ElementRef final { return * this->_pNode->data; }
+        __CDS_OptimalInline auto equals ( typename Collection<T>::Iterator const & it ) const noexcept -> bool final { return dynamic_cast < Iterator const & > (it)._pNode == this->_pNode; }
+        constexpr auto value () const noexcept -> ElementRef final { return * this->_pNode->data; }
         __CDS_cpplang_NonConstConstexprMemberFunction auto next () noexcept -> Iterator & final { this->_pNode = this->_pNode->pNext; return * this; }
 
         __CDS_cpplang_NonConstConstexprMemberFunction auto operator ++ () noexcept -> Iterator & final { return this->next(); }
         __CDS_cpplang_NonConstConstexprMemberFunction auto operator ++ (int) noexcept -> Iterator { auto copy = *this; this->_pNode = this->_pNode->pNext; return copy; }
 
-        __CDS_NoDiscard inline auto copy () const noexcept -> Iterator * override { return new Iterator (* this); }
+        __CDS_NoDiscard __CDS_OptimalInline auto copy () const noexcept -> Iterator * override { return new Iterator (* this); }
     };
 
     class ConstIterator final : public Collection<T>::ConstIterator {
@@ -61,24 +61,24 @@ public:
         explicit ConstIterator ( ConstNodePointer pNode, Set < T > const * pSet ) : Collection<T>::ConstIterator(pSet), _pNode(pNode) {  }
         ~ConstIterator () noexcept final = default;
 
-        constexpr inline auto equals ( typename Collection<T>::ConstIterator const & it ) const noexcept -> bool final { return dynamic_cast < ConstIterator const & > (it)._pNode == this->_pNode; }
-        constexpr inline auto value () const noexcept -> ElementCRef final { return * this->_pNode->data; }
+        __CDS_OptimalInline auto equals ( typename Collection<T>::ConstIterator const & it ) const noexcept -> bool final { return dynamic_cast < ConstIterator const & > (it)._pNode == this->_pNode; }
+        constexpr auto value () const noexcept -> ElementCRef final { return * this->_pNode->data; }
         __CDS_cpplang_NonConstConstexprMemberFunction auto next () noexcept -> ConstIterator & final { this->_pNode = this->_pNode->pNext; return * this; }
 
         __CDS_cpplang_NonConstConstexprMemberFunction auto operator ++ () noexcept -> ConstIterator & final { return this->next(); }
         __CDS_cpplang_NonConstConstexprMemberFunction auto operator ++ (int) noexcept -> ConstIterator { auto copy = *this; this->_pNode = this->_pNode->pNext; return copy; }
 
-        __CDS_NoDiscard inline auto copy () const noexcept -> ConstIterator * override { return new ConstIterator (* this); }
+        __CDS_NoDiscard __CDS_OptimalInline auto copy () const noexcept -> ConstIterator * override { return new ConstIterator (* this); }
     };
 
 protected:
     NodePointer _pFront {nullptr};
     Size        _size   {0ull};
 
-    inline auto beginPtr () noexcept -> Iterator * final { return new Iterator ( this->_pFront, this ); }
-    inline auto endPtr () noexcept -> Iterator * final { return new Iterator ( nullptr, this ); }
-    inline auto beginPtr () const noexcept -> ConstIterator * final { return new ConstIterator ( this->_pFront, this ); }
-    inline auto endPtr () const noexcept -> ConstIterator * final { return new ConstIterator ( nullptr, this ); }
+    __CDS_OptimalInline auto beginPtr () noexcept -> Iterator * final { return new Iterator ( this->_pFront, this ); }
+    __CDS_OptimalInline auto endPtr () noexcept -> Iterator * final { return new Iterator ( nullptr, this ); }
+    __CDS_OptimalInline auto beginPtr () const noexcept -> ConstIterator * final { return new ConstIterator ( this->_pFront, this ); }
+    __CDS_OptimalInline auto endPtr () const noexcept -> ConstIterator * final { return new ConstIterator ( nullptr, this ); }
 
     Set() noexcept = default;
     Set(Set const &) noexcept {}
@@ -94,42 +94,42 @@ public:
 
     __CDS_cpplang_NonConstConstexprMemberFunction auto begin () noexcept -> Iterator { return Iterator(this->_pFront, this); }
     __CDS_cpplang_NonConstConstexprMemberFunction auto end () noexcept -> Iterator { return Iterator(nullptr, this); }
-    constexpr inline auto begin () const noexcept -> ConstIterator { return ConstIterator (this->_pFront, this); }
-    constexpr auto end () const noexcept -> ConstIterator { return ConstIterator (nullptr, this); }
-    constexpr inline auto cbegin () const noexcept -> ConstIterator { return ConstIterator (this->_pFront, this); }
-    constexpr inline auto cend () const noexcept -> ConstIterator { return ConstIterator (nullptr, this); }
+    __CDS_OptimalInline auto begin () const noexcept -> ConstIterator { return ConstIterator (this->_pFront, this); }
+    __CDS_OptimalInline auto end () const noexcept -> ConstIterator { return ConstIterator (nullptr, this); }
+    __CDS_OptimalInline auto cbegin () const noexcept -> ConstIterator { return ConstIterator (this->_pFront, this); }
+    __CDS_OptimalInline auto cend () const noexcept -> ConstIterator { return ConstIterator (nullptr, this); }
 
 protected:
-    auto inline remove ( const T & e, Size ) noexcept -> bool final { return this->remove(e); }
-    auto inline removeAll ( const T & o ) noexcept -> bool final { return false; }
-    auto inline removeFirst ( const T & o ) noexcept -> bool final { return false; }
-    auto inline removeLast ( const T & o ) noexcept -> bool final { return false; }
-    auto inline removeOf ( const Collection<T> &, Size ) noexcept -> bool final { return false; }
-    auto inline removeFirstOf ( const Collection<T> & o ) noexcept -> bool final { return false; }
-    auto inline removeAllOf ( const Collection<T> & o ) noexcept -> bool final { return false; }
-    auto inline removeLastOf ( const Collection<T> & ) noexcept -> bool final { return false; }
-    auto inline removeNotOf ( const Collection<T> &, Size ) noexcept -> bool final { return false; }
-    auto inline removeFirstNotOf ( const Collection<T> & o ) noexcept -> bool final { return false; }
-    auto inline removeAllNotOf ( const Collection<T> & o ) noexcept -> bool final { return false; }
-    auto inline removeLastNotOf ( const Collection<T> & ) noexcept -> bool final { return false; }
-    auto inline removeOf ( const std::initializer_list<T> &, Size ) noexcept -> bool final { return false; }
-    auto inline removeFirstOf ( const std::initializer_list<T> & o ) noexcept -> bool final { return false; }
-    auto inline removeAllOf ( const std::initializer_list<T> & o ) noexcept -> bool final { return false; }
-    auto inline removeLastOf ( const std::initializer_list<T> & ) noexcept -> bool final { return false; }
-    auto inline removeNotOf ( const std::initializer_list<T> &, Size ) noexcept -> bool final { return false; }
-    auto inline removeFirstNotOf ( const std::initializer_list<T> & o ) noexcept -> bool final { return false; }
-    auto inline removeAllNotOf ( const std::initializer_list<T> & o ) noexcept -> bool final { return false; }
-    auto inline removeLastNotOf ( const std::initializer_list<T> & ) noexcept -> bool final { return false; }
+    auto __CDS_OptimalInline remove ( const T & e, Size ) noexcept -> bool final { return this->remove(e); }
+    auto __CDS_OptimalInline removeAll ( const T & o ) noexcept -> bool final { return false; }
+    auto __CDS_OptimalInline removeFirst ( const T & o ) noexcept -> bool final { return false; }
+    auto __CDS_OptimalInline removeLast ( const T & o ) noexcept -> bool final { return false; }
+    auto __CDS_OptimalInline removeOf ( const Collection<T> &, Size ) noexcept -> bool final { return false; }
+    auto __CDS_OptimalInline removeFirstOf ( const Collection<T> & o ) noexcept -> bool final { return false; }
+    auto __CDS_OptimalInline removeAllOf ( const Collection<T> & o ) noexcept -> bool final { return false; }
+    auto __CDS_OptimalInline removeLastOf ( const Collection<T> & ) noexcept -> bool final { return false; }
+    auto __CDS_OptimalInline removeNotOf ( const Collection<T> &, Size ) noexcept -> bool final { return false; }
+    auto __CDS_OptimalInline removeFirstNotOf ( const Collection<T> & o ) noexcept -> bool final { return false; }
+    auto __CDS_OptimalInline removeAllNotOf ( const Collection<T> & o ) noexcept -> bool final { return false; }
+    auto __CDS_OptimalInline removeLastNotOf ( const Collection<T> & ) noexcept -> bool final { return false; }
+    auto __CDS_OptimalInline removeOf ( const std::initializer_list<T> &, Size ) noexcept -> bool final { return false; }
+    auto __CDS_OptimalInline removeFirstOf ( const std::initializer_list<T> & o ) noexcept -> bool final { return false; }
+    auto __CDS_OptimalInline removeAllOf ( const std::initializer_list<T> & o ) noexcept -> bool final { return false; }
+    auto __CDS_OptimalInline removeLastOf ( const std::initializer_list<T> & ) noexcept -> bool final { return false; }
+    auto __CDS_OptimalInline removeNotOf ( const std::initializer_list<T> &, Size ) noexcept -> bool final { return false; }
+    auto __CDS_OptimalInline removeFirstNotOf ( const std::initializer_list<T> & o ) noexcept -> bool final { return false; }
+    auto __CDS_OptimalInline removeAllNotOf ( const std::initializer_list<T> & o ) noexcept -> bool final { return false; }
+    auto __CDS_OptimalInline removeLastNotOf ( const std::initializer_list<T> & ) noexcept -> bool final { return false; }
 
     auto makeUnique () noexcept -> void final { }
 
 public:
     auto remove ( ElementCRef ) noexcept -> bool;
-    inline auto insert ( ElementCRef e ) noexcept -> void {
+    __CDS_OptimalInline auto insert ( ElementCRef e ) noexcept -> void {
         return this->add(e);
     }
 
-    inline auto insert ( ElementMRef e ) noexcept -> void {
+    __CDS_OptimalInline auto insert ( ElementMRef e ) noexcept -> void {
         return this->add(e);
     }
 
@@ -145,10 +145,10 @@ public:
         this->_size = 0;
     }
 
-    __CDS_NoDiscard constexpr inline auto empty () const noexcept -> bool final { return this->size() == 0; }
-    __CDS_NoDiscard constexpr inline auto size () const noexcept -> Size final { return this->_size; }
+    __CDS_NoDiscard constexpr auto empty () const noexcept -> bool final { return this->size() == 0; }
+    __CDS_NoDiscard constexpr auto size () const noexcept -> Size final { return this->_size; }
 
-    auto inline operator != (Set const & o) const noexcept -> bool { return ! this->operator==(o); }
+    auto __CDS_OptimalInline operator != (Set const & o) const noexcept -> bool { return ! this->operator==(o); }
 
     auto operator == (Set const & o) const noexcept -> bool {
         if ( this == & o ) return true;

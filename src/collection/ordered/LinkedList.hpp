@@ -102,10 +102,10 @@ public:
     class Iterator final : public IteratorBase{
     public:
 
-        Iterator( const Iterator & ) noexcept = default;
+        Iterator( Iterator const & ) noexcept = default;
         Iterator( Iterator && ) noexcept = default;
 
-        inline Iterator & operator = ( const Iterator & o ) noexcept {
+        __CDS_OptimalInline auto operator = ( Iterator const & o ) noexcept -> Iterator & {
             this->Collection<T>::Iterator::operator=(o);
 
             this->_pNode = o._pNode;
@@ -114,12 +114,12 @@ public:
 
         __CDS_cpplang_NonConstConstexprMemberFunction auto operator ++ () noexcept -> Iterator & final { this->next(); return * this; }
 
-        inline auto operator ++ (int) noexcept -> Iterator { auto copy = * this; this->next(); return copy; }
+        __CDS_OptimalInline auto operator ++ (int) noexcept -> Iterator { auto copy = * this; this->next(); return copy; }
         explicit Iterator( Node * pNode, DoubleLinkedList < T > const * pList ) : IteratorBase ( pNode, pList ) { }
         __CDS_cpplang_NonConstConstexprMemberFunction auto next () noexcept -> Iterator & final { this->_pNode = this->_pNode->pNext; return * this; }
         ~Iterator() noexcept final = default;
 
-        __CDS_NoDiscard inline auto copy () const noexcept -> Iterator * override {
+        __CDS_NoDiscard __CDS_OptimalInline auto copy () const noexcept -> Iterator * override {
             return new Iterator ( * this );
         }
     };
@@ -127,10 +127,10 @@ public:
     class ReverseIterator final : public IteratorBase {
     public:
 
-        ReverseIterator( const ReverseIterator & ) noexcept = default;
+        ReverseIterator( ReverseIterator const & ) noexcept = default;
         ReverseIterator( ReverseIterator && ) noexcept = default;
 
-        inline ReverseIterator & operator = ( const ReverseIterator & o ) noexcept {
+        __CDS_OptimalInline auto operator = ( ReverseIterator const & o ) noexcept -> ReverseIterator & {
             this->Collection<T>::Iterator::operator=(o);
             this->_pNode = o._pNode;
             return * this;
@@ -138,12 +138,12 @@ public:
 
         __CDS_cpplang_NonConstConstexprMemberFunction auto operator ++ () noexcept -> ReverseIterator & override { this->next(); return * this; }
 
-        inline auto operator ++ (int) noexcept -> ReverseIterator { auto copy = * this; this->next(); return copy; }
+        __CDS_OptimalInline auto operator ++ (int) noexcept -> ReverseIterator { auto copy = * this; this->next(); return copy; }
         explicit ReverseIterator ( Node * pNode, DoubleLinkedList < T > const * pList ) : IteratorBase( pNode, pList ) { }
         __CDS_cpplang_NonConstConstexprMemberFunction auto next () noexcept -> ReverseIterator & final { this->_pNode = this->_pNode->pPrevious; return * this; }
         ~ReverseIterator() noexcept final = default;
 
-        __CDS_NoDiscard inline auto copy () const noexcept -> ReverseIterator * override {
+        __CDS_NoDiscard __CDS_OptimalInline auto copy () const noexcept -> ReverseIterator * override {
             return new ReverseIterator ( * this );
         }
     };
@@ -151,10 +151,10 @@ public:
     class ConstIterator final : public ConstIteratorBase {
     public:
 
-        ConstIterator( const ConstIterator & ) noexcept = default;
+        ConstIterator( ConstIterator const & ) noexcept = default;
         ConstIterator( ConstIterator && ) noexcept = default;
 
-        inline ConstIterator & operator = ( const ConstIterator & o ) noexcept {
+        __CDS_OptimalInline auto operator = ( ConstIterator const & o ) noexcept -> ConstIterator & {
             this->Collection<T>::ConstIterator::operator=(o);
             this->_pNode = o._pNode;
             return * this;
@@ -162,12 +162,12 @@ public:
 
         __CDS_cpplang_NonConstConstexprMemberFunction auto operator ++ () noexcept -> ConstIterator & override { this->next(); return * this; }
 
-        inline auto operator ++ (int) noexcept -> ConstIterator { auto copy = * this; this->next(); return copy; }
+        __CDS_OptimalInline auto operator ++ (int) noexcept -> ConstIterator { auto copy = * this; this->next(); return copy; }
         explicit ConstIterator ( Node const * pNode, DoubleLinkedList < T > const * pList ) : ConstIteratorBase( pNode, pList ) { }
         __CDS_cpplang_NonConstConstexprMemberFunction auto next () noexcept -> ConstIterator & final { this->_pNode = this->_pNode->pNext; return * this; }
         ~ConstIterator() noexcept final = default;
 
-        __CDS_NoDiscard inline auto copy () const noexcept -> ConstIterator * override {
+        __CDS_NoDiscard __CDS_OptimalInline auto copy () const noexcept -> ConstIterator * override {
             return new ConstIterator ( * this );
         }
     };
@@ -175,10 +175,10 @@ public:
     class ConstReverseIterator final : public ConstIteratorBase {
     public:
 
-        ConstReverseIterator( const ConstReverseIterator & ) noexcept = default;
+        ConstReverseIterator( ConstReverseIterator const & ) noexcept = default;
         ConstReverseIterator( ConstReverseIterator && ) noexcept = default;
 
-        inline ConstReverseIterator & operator = ( const ConstReverseIterator & o ) noexcept {
+        __CDS_OptimalInline auto operator = ( ConstReverseIterator const & o ) noexcept -> ConstReverseIterator & {
             this->Collection<T>::ConstIterator::operator=(o);
             this->_pNode = o._pNode;
             return * this;
@@ -186,12 +186,12 @@ public:
 
         __CDS_cpplang_NonConstConstexprMemberFunction auto operator ++ () noexcept -> ConstReverseIterator & override { this->next(); return * this; }
 
-        inline auto operator ++ (int) noexcept -> ConstReverseIterator { auto copy = * this; this->next(); return copy; }
+        __CDS_OptimalInline auto operator ++ (int) noexcept -> ConstReverseIterator { auto copy = * this; this->next(); return copy; }
         explicit ConstReverseIterator ( Node const * pNode, DoubleLinkedList < T > const * pList ) : ConstIteratorBase( pNode, pList ) { }
         __CDS_cpplang_NonConstConstexprMemberFunction auto next () noexcept -> ConstReverseIterator & final { this->_pNode = this->_pNode->pPrevious; return * this; }
         ~ConstReverseIterator() noexcept final = default;
 
-        __CDS_NoDiscard inline auto copy () const noexcept -> ConstReverseIterator * override {
+        __CDS_NoDiscard __CDS_OptimalInline auto copy () const noexcept -> ConstReverseIterator * override {
             return new ConstReverseIterator ( * this );
         }
     };
@@ -213,10 +213,10 @@ public:
     ~DoubleLinkedList() noexcept final;
 
 private:
-    __CDS_NoDiscard inline auto beginPtr () noexcept -> Iterator * final { return new Iterator( this->_pFront, this ); }
-    __CDS_NoDiscard inline auto endPtr () noexcept -> Iterator * final { return new Iterator(nullptr, this ); }
-    __CDS_NoDiscard inline auto beginPtr () const noexcept -> ConstIterator * final  { return new ConstIterator( this->_pFront, this ); }
-    __CDS_NoDiscard inline auto endPtr () const noexcept -> ConstIterator * final { return new ConstIterator(nullptr, this ); }
+    __CDS_NoDiscard __CDS_OptimalInline auto beginPtr () noexcept -> Iterator * final { return new Iterator( this->_pFront, this ); }
+    __CDS_NoDiscard __CDS_OptimalInline auto endPtr () noexcept -> Iterator * final { return new Iterator(nullptr, this ); }
+    __CDS_NoDiscard __CDS_OptimalInline auto beginPtr () const noexcept -> ConstIterator * final  { return new ConstIterator( this->_pFront, this ); }
+    __CDS_NoDiscard __CDS_OptimalInline auto endPtr () const noexcept -> ConstIterator * final { return new ConstIterator(nullptr, this ); }
 
 //    auto findPtr ( T & ) noexcept -> Iterator & final {return this->front();}
 //    auto findPtr ( const T & ) const noexcept -> ConstIterator & final {return this->front();}
@@ -249,11 +249,11 @@ public:
 
     auto remove ( typename Collection<T>::Iterator const & ) noexcept (false) -> T final;
 
-    inline auto removeOf ( const std::initializer_list<T> & list, Size count ) noexcept -> bool final { return this->removeOf ( DoubleLinkedList <T> (list), count ); }
-    inline auto removeLastOf ( const std::initializer_list<T> & list ) noexcept -> bool final { return this->removeLastOf ( DoubleLinkedList<T> (list) ); }
+    __CDS_OptimalInline auto removeOf ( const std::initializer_list<T> & list, Size count ) noexcept -> bool final { return this->removeOf ( DoubleLinkedList <T> (list), count ); }
+    __CDS_OptimalInline auto removeLastOf ( const std::initializer_list<T> & list ) noexcept -> bool final { return this->removeLastOf ( DoubleLinkedList<T> (list) ); }
 
-    inline auto removeNotOf ( const std::initializer_list<T> & list, Size count ) noexcept -> bool final { return this->removeNotOf( DoubleLinkedList<T> (list), count ); }
-    inline auto removeLastNotOf ( const std::initializer_list<T> & list ) noexcept -> bool final { return this->removeLastNotOf( DoubleLinkedList<T> (list) ); }
+    __CDS_OptimalInline auto removeNotOf ( const std::initializer_list<T> & list, Size count ) noexcept -> bool final { return this->removeNotOf( DoubleLinkedList<T> (list), count ); }
+    __CDS_OptimalInline auto removeLastNotOf ( const std::initializer_list<T> & list ) noexcept -> bool final { return this->removeLastNotOf( DoubleLinkedList<T> (list) ); }
 
     __CDS_cpplang_NonConstConstexprMemberFunction auto back () noexcept (false) -> T & final {
         if ( this->empty() )
@@ -293,7 +293,7 @@ public:
         return true;
     }
 
-    inline auto operator != (DoubleLinkedList const & o) const noexcept -> bool {
+    __CDS_OptimalInline auto operator != (DoubleLinkedList const & o) const noexcept -> bool {
         return ! this->operator==(o) ;
     }
 
@@ -374,7 +374,7 @@ private:
     auto allocFrontGetPtr () noexcept -> ElementPtrRef override;
     auto allocBackGetPtr () noexcept -> ElementPtrRef override;
 
-    inline auto allocInsertGetPtr (ElementCRef e __CDS_MaybeUnused) noexcept -> ElementPtrRef override {
+    __CDS_OptimalInline auto allocInsertGetPtr (ElementCRef e __CDS_MaybeUnused) noexcept -> ElementPtrRef override {
         return this->allocBackGetPtr();
     }
 
@@ -398,7 +398,7 @@ private:
 
 public:
 
-    inline auto sort ( Comparator < T > const & c) noexcept -> void {
+    __CDS_OptimalInline auto sort ( Comparator < T > const & c) noexcept -> void {
         auto f = ( [&c] (T const & a, T const & b) noexcept -> bool { return c(a, b); } );
         return this->sort(f);
     }
@@ -407,8 +407,8 @@ public:
     auto sort ( SortFunc const & ) noexcept -> void;
 
 
-    DoubleLinkedList & operator = ( const Collection <T> & ) noexcept;
-    inline DoubleLinkedList & operator = ( const DoubleLinkedList <T> & o ) noexcept {  // NOLINT(bugprone-unhandled-self-assignment)
+    auto operator = ( Collection <T> const & ) noexcept -> DoubleLinkedList &;
+    __CDS_OptimalInline auto operator = ( DoubleLinkedList <T> const & o ) noexcept -> DoubleLinkedList & {  // NOLINT(bugprone-unhandled-self-assignment)
         return this->operator= ( (Collection<T> const & ) ( o )); // NOLINT(misc-unconventional-assign-operator)
     }
 
@@ -854,7 +854,7 @@ auto DoubleLinkedList<T>::makeUnique() noexcept -> void {
 }
 
 template <class T>
-DoubleLinkedList<T> & DoubleLinkedList<T>::operator =(const Collection<T> & c) noexcept {
+auto DoubleLinkedList<T>::operator =(const Collection<T> & c) noexcept -> DoubleLinkedList<T> & {
     if ( this == & c )
         return * this;
 

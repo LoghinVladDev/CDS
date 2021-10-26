@@ -50,7 +50,7 @@ public:
 
     class MapPairNonExistent : public std::exception {
     public:
-        __CDS_NoDiscard auto what() const noexcept -> StringLiteral final {
+        __CDS_NoDiscard __CDS_cpplang_ConstexprOverride auto what() const noexcept -> StringLiteral final {
             return "Map Entry for given Key does not exist";
         }
     };
@@ -67,8 +67,8 @@ public:
     virtual auto get (KeyConstReference) const noexcept(false) -> ValueConstReference = 0;
     __CDS_MaybeUnused virtual auto getOr (KeyConstReference, ValueConstReference) const noexcept -> ValueConstReference = 0;
 
-    virtual inline auto operator [] (KeyConstReference k) noexcept -> ValueReference { return this->get(k); }
-    virtual inline auto operator [] (KeyConstReference k) const noexcept(false) -> ValueConstReference { return this->get(k); }
+    virtual __CDS_OptimalInline auto operator [] (KeyConstReference k) noexcept -> ValueReference { return this->get(k); }
+    virtual __CDS_OptimalInline auto operator [] (KeyConstReference k) const noexcept(false) -> ValueConstReference { return this->get(k); }
 
     __CDS_MaybeUnused virtual auto containsValue (ValueConstReference) const noexcept -> bool = 0;
     virtual auto containsKey (KeyConstReference) const noexcept -> bool = 0;
@@ -78,16 +78,16 @@ public:
     auto allocInsertGetPtr (EntryConstReference) noexcept -> EntryPointerReference override = 0;
 
     template < typename U = Entry, typename std :: enable_if < Type < U > :: copyConstructible, int > :: type = 0 >
-    auto insert (EntryConstReference entry) noexcept -> ValueConstReference {
+    __CDS_OptimalInline auto insert (EntryConstReference entry) noexcept -> ValueConstReference {
         return ( (this->allocInsertGetPtr(entry)) = new Entry(entry) )->second();
     }
 
     template < typename U = Entry, typename std :: enable_if < Type < U > :: moveConstructible, int > :: type = 0 >
-    auto insert (EntryMoveReference entry) noexcept -> ValueConstReference {
+    __CDS_OptimalInline auto insert (EntryMoveReference entry) noexcept -> ValueConstReference {
         return ( ( this->allocInsertGetPtr(entry)) = new Entry(entry) )->second();
     }
 
-    __CDS_MaybeUnused inline auto emplace ( KeyConstReference k, ValueConstReference v ) noexcept -> ValueConstReference {
+    __CDS_MaybeUnused __CDS_OptimalInline auto emplace ( KeyConstReference k, ValueConstReference v ) noexcept -> ValueConstReference {
         return this->insert( {k, v} );
     }
 

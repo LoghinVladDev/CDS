@@ -125,7 +125,7 @@ public:
         return this == & o || Type < T > :: compare ( this->value(), o.value() );
     }
 
-    __CDS_NoDiscard inline auto toString() const noexcept -> String final {
+    __CDS_NoDiscard __CDS_OptionalInline auto toString() const noexcept -> String final {
         std::stringstream oss;
         oss << "| ";
         if ( this->hasValue() )

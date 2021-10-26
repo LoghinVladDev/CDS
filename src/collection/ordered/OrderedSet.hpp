@@ -13,7 +13,7 @@ namespace dataTypes {
 #endif
     class __CDS_MaybeUnused DefaultSetComparator : public Comparator<T> {
     public:
-        auto inline operator () (T const & a, T const & b) const noexcept -> bool { return a < b; }
+        auto __CDS_OptimalInline operator () (T const & a, T const & b) const noexcept -> bool { return a < b; }
     };
 }
 
@@ -96,8 +96,8 @@ public:
         return * this;
     }
 
-    inline auto operator = ( OrderedSet const & o ) noexcept -> OrderedSet & { return this->operator=( (Collection<T> const &) ( o ) ); } // NOLINT(misc-unconventional-assign-operator)
-    inline auto operator = ( OrderedSet && set ) noexcept -> OrderedSet & {
+    __CDS_OptimalInline auto operator = ( OrderedSet const & o ) noexcept -> OrderedSet & { return this->operator=( (Collection<T> const &) ( o ) ); } // NOLINT(misc-unconventional-assign-operator)
+    __CDS_OptimalInline auto operator = ( OrderedSet && set ) noexcept -> OrderedSet & {
         if ( this == & set ) return * this;
 
         this->clear();

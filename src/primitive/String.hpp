@@ -838,7 +838,7 @@ public:
      *
      * @test tested in primitive/StringTest/Constructor Tests
      */
-    inline String(std::string const & s) noexcept : CONSTR_CLEAR() { // NOLINT(google-explicit-constructor)
+    __CDS_OptionalInline String(std::string const & s) noexcept : CONSTR_CLEAR() { // NOLINT(google-explicit-constructor)
         if ( s.empty() )
             return;
 
@@ -985,7 +985,7 @@ public:
      *
      * @test tested in primitive/StringTest/Constructor Tests
      */
-    inline String (Object const & o) noexcept : String(o.toString()) { } // NOLINT(google-explicit-constructor)
+    __CDS_OptimalInline String (Object const & o) noexcept : String(o.toString()) { } // NOLINT(google-explicit-constructor)
 
     /**
      * @brief Constructor which initializes String from a raw uint8 value
@@ -1084,7 +1084,7 @@ public:
      *
      * @test tested in primitive/StringTest/Constructor Tests
      */
-    inline String (float v) noexcept : String(String().append(v)) { } // NOLINT(google-explicit-constructor)
+    __CDS_OptimalInline String (float v) noexcept : String(String().append(v)) { } // NOLINT(google-explicit-constructor)
 
     /**
      * @brief Constructor which initializes String from a raw double value
@@ -1095,7 +1095,7 @@ public:
      *
      * @test tested in primitive/StringTest/Constructor Tests
      */
-    inline String (double v) noexcept : String(String().append(v)) { } // NOLINT(google-explicit-constructor)
+    __CDS_OptimalInline String (double v) noexcept : String(String().append(v)) { } // NOLINT(google-explicit-constructor)
 
 #if defined(__linux)
 
@@ -1156,7 +1156,7 @@ public:
      * @test tested in LoghinVladDev/c-eng
      */
     template < glm::length_t l, typename T, glm::qualifier q >
-    inline String ( glm::vec < l, T, q > const & v ) noexcept {
+    __CDS_OptionalInline String ( glm::vec < l, T, q > const & v ) noexcept {
         * this = String ("glm::vec") + static_cast < uint32 > (l) + " { ";
 
         if constexpr ( l == 1 ) { this->append("x = ").append(v.x); }
@@ -1644,7 +1644,7 @@ public:
      *
      * @test tested in primitive/StringTest/Append/Prepend Tests
      */
-    inline auto operator += (std::string const & v) noexcept -> String & { return this->append( v ); }
+    __CDS_OptimalInline auto operator += (std::string const & v) noexcept -> String & { return this->append( v ); }
 
     /**
      * @brief Accumulate operator used to append a sint16 to the String
@@ -1748,7 +1748,7 @@ public:
      *
      * @test tested in primitive/StringTest/Append/Prepend Tests
      */
-    inline auto operator += (float v) noexcept -> String & { return this->operator+=( std::to_string(v) ); }
+    __CDS_OptimalInline auto operator += (float v) noexcept -> String & { return this->operator+=( std::to_string(v) ); }
 
     /**
      * @brief Accumulate operator used to append a double to the String
@@ -1761,7 +1761,7 @@ public:
      *
      * @test tested in primitive/StringTest/Append/Prepend Tests
      */
-    inline auto operator += (double v) noexcept -> String & { return this->operator+=( std::to_string(v) ); }
+    __CDS_OptimalInline auto operator += (double v) noexcept -> String & { return this->operator+=( std::to_string(v) ); }
 
 #if defined(CDS_QT)
 
@@ -1776,7 +1776,7 @@ public:
      *
      * @test tested in MSK
      */
-    inline auto operator += (QString const & v) noexcept -> String & { return this->operator += (String(v)); }
+    __CDS_OptimalInline auto operator += (QString const & v) noexcept -> String & { return this->operator += (String(v)); }
 
 #endif
 
@@ -1877,7 +1877,7 @@ public:
      *
      * @test tested in primitive/StringTest/Append/Prepend Tests
      */
-    inline auto append (std::string const & s) noexcept -> String & { return this->append(s.c_str()); }
+    __CDS_OptimalInline auto append (std::string const & s) noexcept -> String & { return this->append(s.c_str()); }
 
     /**
      * @brief Append Function used to append a sint16 to the String
@@ -2045,7 +2045,7 @@ public:
      *
      * @test tested in primitive/StringTest/Append/Prepend Tests
      */
-    inline auto append (float v) noexcept -> String & { return this->append( std::to_string(v) ); }
+    __CDS_OptimalInline auto append (float v) noexcept -> String & { return this->append( std::to_string(v) ); }
 
     /**
      * @brief Append Function used to append a double to the String
@@ -2058,7 +2058,7 @@ public:
      *
      * @test tested in primitive/StringTest/Append/Prepend Tests
      */
-    inline auto append (double v) noexcept -> String & { return this->append( std::to_string(v) ); }
+    __CDS_OptimalInline auto append (double v) noexcept -> String & { return this->append( std::to_string(v) ); }
 
 #if defined(CDS_QT)
 
@@ -2073,7 +2073,7 @@ public:
      *
      * @test tested in MSK
      */
-    inline auto append (QString const & v) noexcept -> String & { return this->append(String(v)); }
+    __CDS_OptimalInline auto append (QString const & v) noexcept -> String & { return this->append(String(v)); }
 
 #endif
 
@@ -2141,7 +2141,7 @@ public:
      *
      * @test tested in primitive/StringTest/Append/Prepend Tests
      */
-    inline auto prepend (std::string const & s) noexcept -> String & { return this->prepend(s.c_str()); }
+    __CDS_OptimalInline auto prepend (std::string const & s) noexcept -> String & { return this->prepend(s.c_str()); }
 
     /**
      * @brief Prepend Function used to prepend a sint16 to the String
@@ -2245,7 +2245,7 @@ public:
      *
      * @test tested in primitive/StringTest/Append/Prepend Tests
      */
-    inline auto prepend (float v) noexcept -> String & { return this->prepend( std::to_string(v) ); }
+    __CDS_OptimalInline auto prepend (float v) noexcept -> String & { return this->prepend( std::to_string(v) ); }
 
     /**
      * @brief Prepend Function used to prepend a double to the String
@@ -2258,7 +2258,7 @@ public:
      *
      * @test tested in primitive/StringTest/Append/Prepend Tests
      */
-    inline auto prepend (double v) noexcept -> String & { return this->prepend( std::to_string(v) ); }
+    __CDS_OptimalInline auto prepend (double v) noexcept -> String & { return this->prepend( std::to_string(v) ); }
 
 #if defined(CDS_QT)
 
@@ -2274,7 +2274,7 @@ public:
      * @test tested in MSK
      */
 
-    inline auto prepend (QString const & v) noexcept -> String & { return this->prepend(String(v)); }
+    __CDS_OptimalInline auto prepend (QString const & v) noexcept -> String & { return this->prepend(String(v)); }
 
 #endif
 
@@ -2287,7 +2287,7 @@ public:
      *
      * @test tested in primitive/StringTest
      */
-    __CDS_NoDiscard inline auto toStdString () const noexcept -> std::string { return this->cStr(); }
+    __CDS_NoDiscard __CDS_OptimalInline auto toStdString () const noexcept -> std::string { return this->cStr(); }
 
     /**
      * @brief Cast Specification used to obtain a std::string from this string
@@ -2298,7 +2298,7 @@ public:
      *
      * @test tested in primitive/StringTest
      */
-    inline operator std::string () const noexcept { return this->toStdString(); } // NOLINT(google-explicit-constructor)
+    __CDS_OptimalInline operator std::string () const noexcept { return this->toStdString(); } // NOLINT(google-explicit-constructor)
 
 #if defined(CDS_QT)
 
@@ -2311,7 +2311,7 @@ public:
      *
      * @test tested in MSK
      */
-    __CDS_NoDiscard inline auto toQString () const noexcept -> QString { return QString(this->cStr()); }
+    __CDS_NoDiscard __CDS_OptimalInline auto toQString () const noexcept -> QString { return QString(this->cStr()); }
 
     /**
      * @brief Cast Specification used to obtain a QString from this string
@@ -2322,7 +2322,7 @@ public:
      *
      * @test tested in MSK
      */
-    inline operator QString () const noexcept { return this->toQString(); }
+    __CDS_OptimalInline operator QString () const noexcept { return this->toQString(); }
 
 #endif
 
@@ -2681,7 +2681,7 @@ public:
      *
      * @test tested in primitive/StringTest/Comparison Tests
      */
-    inline auto operator == (QString const & v) const noexcept -> bool { return * this == String(v); }
+    __CDS_OptimalInline auto operator == (QString const & v) const noexcept -> bool { return * this == String(v); }
 
 #endif
 
@@ -2746,7 +2746,7 @@ public:
      *
      * @test tested in MSK
      */
-    inline auto operator >= (QString const & v) const noexcept -> bool { return * this >= String(v); }
+    __CDS_OptimalInline auto operator >= (QString const & v) const noexcept -> bool { return * this >= String(v); }
 #endif
 
     /**
@@ -2802,7 +2802,7 @@ public:
      *
      * @test tested in primitive/StringTest/Comparison Tests
      */
-    inline auto operator <= (QString const & v) const noexcept -> bool { return * this <= String(v); }
+    __CDS_OptimalInline auto operator <= (QString const & v) const noexcept -> bool { return * this <= String(v); }
 #endif
 
 
@@ -2927,7 +2927,7 @@ public:
      *
      * @test tested in primitive/StringTest/Comparison Tests
      */
-    inline auto operator != (QString const & v) const noexcept -> bool { return * this != String(v); }
+    __CDS_OptimalInline auto operator != (QString const & v) const noexcept -> bool { return * this != String(v); }
 
 #endif
 
@@ -2996,7 +2996,7 @@ public:
      *
      * @test tested in MSK
      */
-    inline auto operator < (QString const & v) const noexcept -> bool { return * this < String(v); }
+    __CDS_OptimalInline auto operator < (QString const & v) const noexcept -> bool { return * this < String(v); }
 #endif
 
 
@@ -3073,7 +3073,7 @@ public:
      *
      * @test tested in MSK
      */
-    inline auto operator > (QString const & v) const noexcept -> bool { return * this > String(v); }
+    __CDS_OptimalInline auto operator > (QString const & v) const noexcept -> bool { return * this > String(v); }
 
 #endif
 
@@ -3115,7 +3115,7 @@ public:
      *
      * @test tested in primitive/StringTest/Append/Prepend Tests
      */
-    __CDS_NoDiscard inline auto operator + ( std::string const & v ) const noexcept -> String { return String(*this).append(v); }
+    __CDS_NoDiscard __CDS_OptimalInline auto operator + ( std::string const & v ) const noexcept -> String { return String(*this).append(v); }
 
     /**
      * @brief Append Function used to append a StringLiteral to the String
@@ -3245,7 +3245,7 @@ public:
      *
      * @test tested in primitive/StringTest/Append/Prepend Tests
      */
-    __CDS_NoDiscard inline auto operator + (float v) const noexcept -> String { return this->operator+( std::to_string(v) ); }
+    __CDS_NoDiscard __CDS_OptimalInline auto operator + (float v) const noexcept -> String { return this->operator+( std::to_string(v) ); }
 
     /**
      * @brief Append Function used to append a double to the String
@@ -3258,7 +3258,7 @@ public:
      *
      * @test tested in primitive/StringTest/Append/Prepend Tests
      */
-    __CDS_NoDiscard inline auto operator + (double v) const noexcept -> String { return this->operator+( std::to_string(v) ); }
+    __CDS_NoDiscard __CDS_OptimalInline auto operator + (double v) const noexcept -> String { return this->operator+( std::to_string(v) ); }
 
 #if defined(CDS_QT)
 
@@ -3273,7 +3273,7 @@ public:
      *
      * @test tested in MSK
      */
-    inline auto operator + (QString const & v) const noexcept -> String { return * this + String(v); }
+    __CDS_OptimalInline auto operator + (QString const & v) const noexcept -> String { return * this + String(v); }
 #endif
 
     /**
@@ -3857,7 +3857,7 @@ public:
      *
      * @test tested in primitive/StringTest/Assignment Tests
      */
-    inline String & operator = (QString const & v) noexcept { return ((* this) = String(v)); }
+    __CDS_OptimalInline String & operator = (QString const & v) noexcept { return ((* this) = String(v)); }
 #endif
 
     /**
@@ -3871,7 +3871,7 @@ public:
      *
      * @test tested in primitive/StringTest/Assignment Tests
      */
-    inline auto operator = ( std::string const & s ) noexcept -> String & { return this->operator=(String(s)); } // NOLINT(misc-unconventional-assign-operator)
+    __CDS_OptimalInline auto operator = ( std::string const & s ) noexcept -> String & { return this->operator=(String(s)); } // NOLINT(misc-unconventional-assign-operator)
 
     /**
      * @brief Copy Operator
@@ -4001,7 +4001,7 @@ public:
      *
      * @test tested in primitive/StringTest/Content Functions Tests
      */
-    __CDS_NoDiscard auto inline contains ( std::string const & e ) const noexcept -> bool { return this->findFirst( String(e) ) != INVALID_POS; }
+    __CDS_NoDiscard auto __CDS_OptimalInline contains ( std::string const & e ) const noexcept -> bool { return this->findFirst( String(e) ) != INVALID_POS; }
 
 #if defined(CDS_QT)
 
@@ -4016,7 +4016,7 @@ public:
      *
      * @test tested in primitive/StringTest/Content Functions Tests
      */
-    inline auto contains (QString const & v) const noexcept -> bool { return this->contains(String(v)); }
+    __CDS_OptimalInline auto contains (QString const & v) const noexcept -> bool { return this->contains(String(v)); }
 #endif
 
 #ifndef NDEBUG
@@ -4052,7 +4052,7 @@ public:
      *
      * @test Not Applicable
      */
-    friend inline auto operator << ( std::ostream & out, String const & s ) noexcept -> std::ostream & {
+    friend __CDS_OptionalInline auto operator << ( std::ostream & out, String const & s ) noexcept -> std::ostream & {
         return ( out << (s._p == nullptr ? "null" : s._p) );
     }
 
@@ -4411,7 +4411,7 @@ public:
      */
     __CDS_NoDiscard __CDS_cpplang_ConstexprDestructor auto removeSuffix (String const & suffix) const noexcept -> String { return String(*this).removeSuffix(suffix); }
 
-    __CDS_NoDiscard inline auto static format (StringLiteral format, ...) noexcept (false) -> String {
+    __CDS_NoDiscard __CDS_OptionalInline auto static format (StringLiteral format, ...) noexcept (false) -> String {
         va_list args;
         va_start (args, format);
 
@@ -4439,7 +4439,7 @@ public:
         throw FormatException();
     }
 
-    __CDS_NoDiscard inline auto static f ( StringLiteral format, ... ) noexcept (false) -> String {
+    __CDS_NoDiscard __CDS_OptionalInline auto static f ( StringLiteral format, ... ) noexcept (false) -> String {
         va_list args;
         va_start (args, format);
 
@@ -4501,11 +4501,11 @@ inline auto String::operator > ( std::string const & stdString ) const noexcept 
 
 #if defined(CDS_STRING_POSTFIX)
 
-__CDS_cpplang_ConstexprDestructor auto operator "" _obj (const char * pString, std::size_t length __CDS_MaybeUnused ) noexcept -> String {
+inline auto operator "" _obj (const char * pString, std::size_t length __CDS_MaybeUnused ) noexcept -> String {
     return pString;
 }
 
-__CDS_cpplang_ConstexprDestructor auto operator "" _s (const char * pString, std::size_t length __CDS_MaybeUnused ) noexcept -> String {
+inline auto operator "" _s (const char * pString, std::size_t length __CDS_MaybeUnused ) noexcept -> String {
     return pString;
 }
 

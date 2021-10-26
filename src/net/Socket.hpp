@@ -35,13 +35,13 @@
 
 class SocketException : public Exception {
 public:
-    inline explicit SocketException(String const & message) noexcept : Exception(message) { }
-    inline SocketException () noexcept : SocketException ("Unspecified Socket Exception") { }
+    __CDS_OptimalInline explicit SocketException(String const & message) noexcept : Exception(message) { }
+    __CDS_OptimalInline SocketException () noexcept : SocketException ("Unspecified Socket Exception") { }
 };
 
 class SocketDisconnect : public SocketException {
 public:
-    inline SocketDisconnect () noexcept : SocketException ("Socket Disconnected") { }
+    __CDS_OptimalInline SocketDisconnect () noexcept : SocketException ("Socket Disconnected") { }
 };
 
 class Socket : public Object {
@@ -98,16 +98,16 @@ private:
     public:
         WSADATA windowsSocketsApplicationLibraryData {};
 
-        inline Win32WSAContainerType () noexcept (false) {
+        __CDS_OptimalInline Win32WSAContainerType () noexcept (false) {
             if ( WSAStartup ( MAKEWORD(2, 2), & this->windowsSocketsApplicationLibraryData ) != 0 )
                 throw SocketException ( "Win32 Exception : WinSock2 Failed to Load, WSALastError : "_s + WSAGetLastError() );
         }
 
-        inline ~Win32WSAContainerType () noexcept {
+        __CDS_OptimalInline ~Win32WSAContainerType () noexcept {
             WSACleanup();
         }
 
-        inline static auto lastWSAError () noexcept -> StringLiteral {
+        __CDS_OptionalInline static auto lastWSAError () noexcept -> StringLiteral {
             switch (WSAGetLastError()) {
                 case WSAEINTR:                  return "WSAEINTR";
                 case WSAEBADF:                  return "WSAEBADF";
@@ -248,7 +248,7 @@ public:
     }
 
 
-    inline auto open () noexcept (false) -> Socket & {
+    __CDS_OptionalInline auto open () noexcept (false) -> Socket & {
 
 #if defined(__CDS_Platform_Microsoft_Windows)
 
@@ -326,7 +326,7 @@ public:
         return * this;
     }
 
-    inline explicit Socket ( ProtocolVersion protocolVersion = ProtocolVersion::IPV4 ) noexcept (false) :
+    __CDS_OptimalInline explicit Socket ( ProtocolVersion protocolVersion = ProtocolVersion::IPV4 ) noexcept (false) :
             _protocolVersion( protocolVersion) {
 
         this->open();
@@ -336,30 +336,30 @@ public:
 
     }
 
-    inline explicit Socket ( String const & address, ProtocolVersion protocolVersion = ProtocolVersion::IPV4 ) noexcept (false) :
+    __CDS_OptimalInline explicit Socket ( String const & address, ProtocolVersion protocolVersion = ProtocolVersion::IPV4 ) noexcept (false) :
             _protocolVersion(protocolVersion) {
 
         this->open().connect( this->extractAddress (  address ) );
     }
 
-    inline explicit Socket ( String const & address, uint16 port, ProtocolVersion protocolVersion = ProtocolVersion::IPV4 ) noexcept (false) :
+    __CDS_OptimalInline explicit Socket ( String const & address, uint16 port, ProtocolVersion protocolVersion = ProtocolVersion::IPV4 ) noexcept (false) :
             _protocolVersion(protocolVersion),
             _port(port) {
 
         this->open().connect( this->extractAddress ( address ) );
     }
 
-    inline auto connect ( String const & address ) noexcept (false) -> Socket & {
+    __CDS_OptimalInline auto connect ( String const & address ) noexcept (false) -> Socket & {
         return this->connect( this->extractAddress(  address ) );
     }
 
-    inline auto connect ( String const & address, uint16 port ) noexcept (false) -> Socket & { // NOLINT(misc-no-recursion)
+    __CDS_OptimalInline auto connect ( String const & address, uint16 port ) noexcept (false) -> Socket & { // NOLINT(misc-no-recursion)
         this->_port = port;
         return this->connect( Pair < String, uint16 > ( std::move(this->extractAddress(address).first()), port ) );
     }
 
 private:
-    inline auto connect ( Pair < String, uint16 > const & pack ) noexcept(false) -> Socket & { // NOLINT(misc-no-recursion)
+    __CDS_OptionalInline auto connect ( Pair < String, uint16 > const & pack ) noexcept(false) -> Socket & { // NOLINT(misc-no-recursion)
 
 #if defined(__CDS_Platform_Linux)
 
@@ -490,7 +490,7 @@ private:
     }
 
 private:
-    inline static auto convertIPV4ToIPV6(List < String > const & addressSegments) noexcept(false) -> String {
+    __CDS_OptionalInline static auto convertIPV4ToIPV6(List < String > const & addressSegments) noexcept(false) -> String {
         auto addressBits = Array < String > ( addressSegments );
         auto isBigEndian = []{ return htonl(47) == 47; };
 
@@ -563,7 +563,7 @@ private:
         throw IllegalArgumentException("IPV6 Address Conversion failed : "_s + addressBits.toString() + ", unknown format");
     }
 
-    inline auto extractAddress ( String const & address ) noexcept(false) -> Pair < String, uint16 > {
+    __CDS_OptionalInline auto extractAddress ( String const & address ) noexcept(false) -> Pair < String, uint16 > {
         auto addressBits = address.split(':');
         String finalAddress;
         uint16 port = this->_port;
@@ -610,7 +610,7 @@ private:
 
 public:
 
-    inline auto close () noexcept (false) -> Socket & {
+    __CDS_OptimalInline auto close () noexcept (false) -> Socket & {
 
         if ( ! this->isOpen() )
             return * this;
@@ -640,7 +640,7 @@ public:
         return * this;
     }
 
-    inline auto bind ( uint16 port = 0 ) noexcept (false) -> Socket & {
+    __CDS_OptionalInline auto bind ( uint16 port = 0 ) noexcept (false) -> Socket & {
 
         if ( port != 0 )
             this->_port = port;
@@ -813,7 +813,7 @@ public:
 
     }
 
-    inline auto listen ( int queueSize = 0 ) noexcept (false) -> Socket & { // NOLINT(misc-no-recursion)
+    __CDS_OptionalInline auto listen ( int queueSize = 0 ) noexcept (false) -> Socket & { // NOLINT(misc-no-recursion)
         if ( queueSize == 0 ) queueSize = Socket::DEFAULT_CLIENT_QUEUE_SIZE;
 
 #if defined(__CDS_Platform_Linux)
@@ -862,13 +862,13 @@ private:
         socklen_t lastSocketAddressSize { 0 };
         ProtocolVersion lastProtocolType { ProtocolVersion::INTERNET_PROTOCOL_NONE_SPECIFIED };
 
-        inline LastAddressContainer() noexcept = default;
+        __CDS_OptimalInline LastAddressContainer() noexcept = default;
 
-        inline ~LastAddressContainer() noexcept {
+        __CDS_OptimalInline ~LastAddressContainer() noexcept {
             delete this->pLastSocketAddress;
         }
 
-        inline auto specifyType ( ProtocolVersion protocolVersion ) noexcept -> void {
+        __CDS_OptionalInline auto specifyType ( ProtocolVersion protocolVersion ) noexcept -> void {
             switch ( protocolVersion ) {
                 case ProtocolVersion::INTERNET_PROTOCOL_NONE_SPECIFIED:
                 case ProtocolVersion::INTERNET_PROTOCOL_VERSION_6:
@@ -912,13 +912,13 @@ private:
         socklen_t lastSocketAddressSize { 0 };
         ProtocolVersion lastProtocolType { ProtocolVersion::INTERNET_PROTOCOL_NONE_SPECIFIED };
 
-        inline LastAddressContainer() noexcept = default;
+        __CDS_OptimalInline LastAddressContainer() noexcept = default;
 
-        inline ~LastAddressContainer() noexcept {
+        __CDS_OptimalInline ~LastAddressContainer() noexcept {
             delete this->pLastSocketAddress;
         }
 
-        inline auto specifyType ( ProtocolVersion protocolVersion ) noexcept -> void {
+        __CDS_OptionalInline auto specifyType ( ProtocolVersion protocolVersion ) noexcept -> void {
             switch ( protocolVersion ) {
                 case ProtocolVersion::INTERNET_PROTOCOL_NONE_SPECIFIED:
                 case ProtocolVersion::INTERNET_PROTOCOL_VERSION_6:
@@ -961,7 +961,7 @@ private:
 #endif
 
 public:
-    inline auto accept () noexcept (false) -> Socket {
+    __CDS_OptionalInline auto accept () noexcept (false) -> Socket {
 
 #if defined(__CDS_Platform_Linux)
 
@@ -1026,7 +1026,7 @@ public:
         return std::move(clientSocket);
     }
 
-    __CDS_MaybeUnused inline auto writeBytes ( Byte const * pBuffer, Size count ) noexcept (false) -> Socket & {
+    __CDS_MaybeUnused __CDS_OptimalInline auto writeBytes ( Byte const * pBuffer, Size count ) noexcept (false) -> Socket & {
 
 #if defined(__CDS_Platform_Linux)
 
@@ -1058,7 +1058,7 @@ public:
 
     }
 
-    __CDS_MaybeUnused inline auto readBytes ( Byte * pBuffer, Size intendedForRead ) noexcept (false) -> Socket & {
+    __CDS_MaybeUnused __CDS_OptimalInline auto readBytes ( Byte * pBuffer, Size intendedForRead ) noexcept (false) -> Socket & {
 
 #if defined(__CDS_Platform_Linux)
 
@@ -1099,48 +1099,48 @@ public:
     }
 
 
-    __CDS_MaybeUnused inline auto writeInt8 ( sint8 value ) noexcept (false) -> Socket & {
+    __CDS_MaybeUnused __CDS_OptimalInline auto writeInt8 ( sint8 value ) noexcept (false) -> Socket & {
         return this->writeBytes( reinterpret_cast < Byte const * > ( & value ), sizeof (value) );
     }
 
-    __CDS_MaybeUnused inline auto writeInt16 ( sint16 value ) noexcept (false) -> Socket & {
+    __CDS_MaybeUnused __CDS_OptimalInline auto writeInt16 ( sint16 value ) noexcept (false) -> Socket & {
         return this->writeBytes( reinterpret_cast < Byte const * > ( & value ), sizeof (value) );
     }
 
-    __CDS_MaybeUnused inline auto writeInt32 ( sint32 value ) noexcept (false) -> Socket & {
+    __CDS_MaybeUnused __CDS_OptimalInline auto writeInt32 ( sint32 value ) noexcept (false) -> Socket & {
         return this->writeBytes( reinterpret_cast < Byte const * > ( & value ), sizeof (value) );
     }
 
-    __CDS_MaybeUnused inline auto writeInt64 ( sint64 value ) noexcept (false) -> Socket & {
+    __CDS_MaybeUnused __CDS_OptimalInline auto writeInt64 ( sint64 value ) noexcept (false) -> Socket & {
         return this->writeBytes( reinterpret_cast < Byte const * > ( & value ), sizeof (value) );
     }
 
-    __CDS_MaybeUnused inline auto writeUInt8 ( uint8 value ) noexcept (false) -> Socket & {
+    __CDS_MaybeUnused __CDS_OptimalInline auto writeUInt8 ( uint8 value ) noexcept (false) -> Socket & {
         return this->writeBytes( reinterpret_cast < Byte const * > ( & value ), sizeof (value) );
     }
 
-    __CDS_MaybeUnused inline auto writeUInt16 ( uint16 value ) noexcept (false) -> Socket & {
+    __CDS_MaybeUnused __CDS_OptimalInline auto writeUInt16 ( uint16 value ) noexcept (false) -> Socket & {
         return this->writeBytes( reinterpret_cast < Byte const * > ( & value ), sizeof (value) );
     }
 
-    __CDS_MaybeUnused inline auto writeUInt32 ( uint32 value ) noexcept (false) -> Socket & {
+    __CDS_MaybeUnused __CDS_OptimalInline auto writeUInt32 ( uint32 value ) noexcept (false) -> Socket & {
         return this->writeBytes( reinterpret_cast < Byte const * > ( & value ), sizeof (value) );
     }
 
-    __CDS_MaybeUnused inline auto writeUInt64 ( uint64 value ) noexcept (false) -> Socket & {
+    __CDS_MaybeUnused __CDS_OptimalInline auto writeUInt64 ( uint64 value ) noexcept (false) -> Socket & {
         return this->writeBytes( reinterpret_cast < Byte const * > ( & value ), sizeof (value) );
     }
 
 
-    __CDS_MaybeUnused inline auto writeInt ( int value ) noexcept (false) -> Socket & {
+    __CDS_MaybeUnused __CDS_OptimalInline auto writeInt ( int value ) noexcept (false) -> Socket & {
         return this->writeInt32( value );
     }
 
-    __CDS_MaybeUnused inline auto writeSize ( Size value ) noexcept (false) -> Socket & {
+    __CDS_MaybeUnused __CDS_OptimalInline auto writeSize ( Size value ) noexcept (false) -> Socket & {
         return this->writeUInt64 (value);
     }
 
-    __CDS_MaybeUnused inline auto writeString ( String const & string ) noexcept (false) -> Socket & {
+    __CDS_MaybeUnused __CDS_OptionalInline auto writeString ( String const & string ) noexcept (false) -> Socket & {
         auto packetCount = string.size() / this->_packetSize;
         if ( string.size() % this->_packetSize != 0 )
             ++ packetCount;
@@ -1167,64 +1167,64 @@ public:
     }
 
 
-    __CDS_NoDiscard __CDS_MaybeUnused auto readInt8 () noexcept(false) -> sint8 {
+    __CDS_NoDiscard __CDS_MaybeUnused __CDS_OptimalInline auto readInt8 () noexcept(false) -> sint8 {
         sint8 value;
         this->readBytes(reinterpret_cast < Byte * > ( & value ), sizeof(value));
         return value;
     }
 
-    __CDS_NoDiscard __CDS_MaybeUnused auto readInt16 () noexcept(false) -> sint16 {
+    __CDS_NoDiscard __CDS_MaybeUnused __CDS_OptimalInline auto readInt16 () noexcept(false) -> sint16 {
         sint16 value;
         this->readBytes(reinterpret_cast < Byte * > ( & value ), sizeof(value));
         return value;
     }
 
-    __CDS_NoDiscard __CDS_MaybeUnused auto readInt32 () noexcept(false) -> sint32 {
+    __CDS_NoDiscard __CDS_MaybeUnused __CDS_OptimalInline auto readInt32 () noexcept(false) -> sint32 {
         sint32 value;
         this->readBytes(reinterpret_cast < Byte * > ( & value ), sizeof(value));
         return value;
     }
 
-    __CDS_NoDiscard __CDS_MaybeUnused auto readInt64 () noexcept(false) -> sint64 {
+    __CDS_NoDiscard __CDS_MaybeUnused __CDS_OptimalInline auto readInt64 () noexcept(false) -> sint64 {
         sint64 value;
         this->readBytes(reinterpret_cast < Byte * > ( & value ), sizeof(value));
         return value;
     }
 
-    __CDS_NoDiscard __CDS_MaybeUnused auto readUInt8 () noexcept(false) -> uint8 {
+    __CDS_NoDiscard __CDS_MaybeUnused __CDS_OptimalInline auto readUInt8 () noexcept(false) -> uint8 {
         uint8 value;
         this->readBytes(reinterpret_cast < Byte * > ( & value ), sizeof(value));
         return value;
     }
 
-    __CDS_NoDiscard __CDS_MaybeUnused auto readUInt16 () noexcept(false) -> uint16 {
+    __CDS_NoDiscard __CDS_MaybeUnused __CDS_OptimalInline auto readUInt16 () noexcept(false) -> uint16 {
         uint16 value;
         this->readBytes(reinterpret_cast < Byte * > ( & value ), sizeof(value));
         return value;
     }
 
-    __CDS_NoDiscard __CDS_MaybeUnused auto readUInt32 () noexcept(false) -> uint32 {
+    __CDS_NoDiscard __CDS_MaybeUnused __CDS_OptimalInline auto readUInt32 () noexcept(false) -> uint32 {
         uint32 value;
         this->readBytes(reinterpret_cast < Byte * > ( & value ), sizeof(value));
         return value;
     }
 
-    __CDS_NoDiscard __CDS_MaybeUnused auto readUInt64 () noexcept(false) -> uint64 {
+    __CDS_NoDiscard __CDS_MaybeUnused __CDS_OptimalInline auto readUInt64 () noexcept(false) -> uint64 {
         uint64 value;
         this->readBytes(reinterpret_cast < Byte * > ( & value ), sizeof(value));
         return value;
     }
 
 
-    __CDS_NoDiscard __CDS_MaybeUnused auto readInt () noexcept (false) -> int {
+    __CDS_NoDiscard __CDS_MaybeUnused __CDS_OptimalInline auto readInt () noexcept (false) -> int {
         return this->readInt32();
     }
 
-    __CDS_NoDiscard __CDS_MaybeUnused auto readSize () noexcept (false) -> Size {
+    __CDS_NoDiscard __CDS_MaybeUnused __CDS_OptimalInline auto readSize () noexcept (false) -> Size {
         return this->readUInt64();
     }
 
-    __CDS_NoDiscard __CDS_MaybeUnused auto readString () noexcept (false) -> String {
+    __CDS_NoDiscard __CDS_MaybeUnused __CDS_OptionalInline auto readString () noexcept (false) -> String {
         Size originalSize = this->readSize(), offset = 0U;
         Size packetCount = originalSize / this->_packetSize;
 
@@ -1307,7 +1307,7 @@ public:
 #endif
     }
 
-    __CDS_NoDiscard inline auto copy () const noexcept -> Socket * override {
+    __CDS_NoDiscard __CDS_OptionalInline auto copy () const noexcept -> Socket * override {
 
 #if defined (__CDS_Platform_Linux)
 
@@ -1364,7 +1364,7 @@ public:
 #endif
     }
 
-    inline ~Socket () noexcept override {
+    __CDS_OptimalInline ~Socket () noexcept override {
         this->close();
     }
 

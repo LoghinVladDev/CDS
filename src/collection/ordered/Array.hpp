@@ -57,10 +57,10 @@ public:
     ~Array () noexcept final;
 
 private:
-    inline auto beginPtr () noexcept -> Iterator * final { return new Iterator( this, 0 ); }
-    inline auto endPtr () noexcept -> Iterator * final { return new Iterator(this, this->size()); }
-    inline auto beginPtr () const noexcept -> ConstIterator * final { return new ConstIterator( this, 0 ); }
-    inline auto endPtr () const noexcept -> ConstIterator * final { return new ConstIterator( this, this->size() ); }
+    __CDS_OptimalInline auto beginPtr () noexcept -> Iterator * final { return new Iterator( this, 0 ); }
+    __CDS_OptimalInline auto endPtr () noexcept -> Iterator * final { return new Iterator(this, this->size()); }
+    __CDS_OptimalInline auto beginPtr () const noexcept -> ConstIterator * final { return new ConstIterator( this, 0 ); }
+    __CDS_OptimalInline auto endPtr () const noexcept -> ConstIterator * final { return new ConstIterator( this, this->size() ); }
 
 public:
     __CDS_cpplang_NonConstConstexprMemberFunction auto begin () noexcept -> Iterator { return Iterator ( this, 0 ); }
@@ -83,7 +83,7 @@ private:
 public:
 
     template < typename std :: enable_if < Type < T > :: defaultConstructible, int > :: type = 0 >
-    inline auto resize ( Size newSize ) noexcept -> void {
+    __CDS_OptionalInline auto resize ( Size newSize ) noexcept -> void {
         this->_resize(newSize);
         for ( auto i = this->_size; i < newSize; ++ i )
             this->_pData[i] = new T();
@@ -91,7 +91,7 @@ public:
     }
 
     template < typename std :: enable_if < Type < T > :: copyConstructible, int > :: type >
-    inline auto resize ( Size newSize, ElementCRef value ) noexcept -> void {
+    __CDS_OptionalInline auto resize ( Size newSize, ElementCRef value ) noexcept -> void {
         this->_resize(newSize);
         for ( auto i = this->_size; i < newSize; ++ i )
             this->_pData[i] = new T(value);
@@ -110,10 +110,10 @@ public:
 
     auto remove ( typename Collection<ElementType>::Iterator const & ) noexcept(false) -> ElementType final;
 
-    inline auto removeOf ( std::initializer_list<ElementType> const &, Size ) noexcept -> bool final;
-    inline auto removeLastOf ( std::initializer_list<ElementType> const & ) noexcept -> bool final;
-    inline auto removeNotOf ( std::initializer_list<ElementType> const &, Size ) noexcept -> bool final;
-    inline auto removeLastNotOf ( std::initializer_list<ElementType> const & ) noexcept -> bool final;
+    auto removeOf ( std::initializer_list<ElementType> const &, Size ) noexcept -> bool final;
+    auto removeLastOf ( std::initializer_list<ElementType> const & ) noexcept -> bool final;
+    auto removeNotOf ( std::initializer_list<ElementType> const &, Size ) noexcept -> bool final;
+    auto removeLastNotOf ( std::initializer_list<ElementType> const & ) noexcept -> bool final;
 
     __CDS_cpplang_NonConstConstexprMemberFunction auto back () noexcept (false) -> ElementRef final {
         if ( this->empty() )
@@ -153,9 +153,10 @@ public:
         return true;
     }
 
-    inline auto operator != (Array const & o) const noexcept -> bool {
-        return this->operator==(o);
+    __CDS_OptimalInline auto operator != (Array const & o) const noexcept -> bool {
+        return ! this->operator==(o);
     }
+
     __CDS_NoDiscard auto equals (Object const & o) const noexcept -> bool final {
         if (this == &o) return true;
         auto p = dynamic_cast < decltype(this) > ( &o );
@@ -210,7 +211,7 @@ private:
 
     auto allocFrontGetPtr () noexcept -> ElementPtrRef override;
     auto allocBackGetPtr () noexcept -> ElementPtrRef override;
-    inline auto allocInsertGetPtr (ElementCRef e __CDS_MaybeUnused) noexcept -> ElementPtrRef override {
+    __CDS_OptimalInline auto allocInsertGetPtr (ElementCRef e __CDS_MaybeUnused) noexcept -> ElementPtrRef override {
         return this->allocBackGetPtr();
     }
 
@@ -234,14 +235,14 @@ public:
     auto sort ( SortFunc const & ) noexcept -> void;
 
     template < typename SortFunc, typename U = T, typename std :: enable_if < Type < U > :: copyAssignable, int > :: type = 0 >
-    inline auto sort ( Comparator < ElementType > const & c ) noexcept -> void {
+    __CDS_OptimalInline auto sort ( Comparator < ElementType > const & c ) noexcept -> void {
         return this->sort ( [&c] (ElementCRef a, ElementCRef b) noexcept -> bool { return c(a, b); } );
     }
 
     auto operator = ( Collection < ElementType > const & ) noexcept -> Array &;
-    inline auto operator = ( Array const & o ) noexcept -> Array & { return this->operator=( ( Collection<ElementType> const & )(o) ); } // NOLINT(bugprone-unhandled-self-assignment,misc-unconventional-assign-operator)
+    __CDS_OptimalInline auto operator = ( Array const & o ) noexcept -> Array & { return this->operator=( ( Collection<ElementType> const & )(o) ); } // NOLINT(bugprone-unhandled-self-assignment,misc-unconventional-assign-operator)
 
-    inline auto operator = ( Array && array ) noexcept -> Array & {
+    __CDS_OptionalInline auto operator = ( Array && array ) noexcept -> Array & {
         if ( this == & array ) return * this;
 
         for ( Index i = 0; i < this->_size; ++ i )
@@ -337,8 +338,8 @@ public:
         return * this;
     }
 
-    inline auto operator == (Iterator const& o) const noexcept -> bool { return this->equals(o); }
-    inline auto operator != (Iterator const& o) const noexcept -> bool { return !this->equals(o); }
+    __CDS_OptimalInline auto operator == (Iterator const& o) const noexcept -> bool { return this->equals(o); }
+    __CDS_OptimalInline auto operator != (Iterator const& o) const noexcept -> bool { return !this->equals(o); }
 
     __CDS_cpplang_NonConstConstexprMemberFunction auto next () noexcept -> Iterator & final { this->_index ++; return * this; }
     __CDS_cpplang_NonConstConstexprMemberFunction auto prev () noexcept -> Iterator & { this->_index --; return * this; }
@@ -535,8 +536,10 @@ auto Array<T>::_resize(Size size) noexcept -> void {
     for ( auto i = static_cast < SignedSize > ( this->_size ) - 1; i >= static_cast < SignedSize > ( size ); -- i )
         delete Utility::exchange(this->_pData[i], nullptr);
 
-    std :: memcpy ( newMemory, this->_pData, sizeof ( T * ) * this->_size );
-    std :: memset ( newMemory + this->_size, 0, sizeof ( T * ) * (size - this->_size) );
+    std :: memcpy ( newMemory, this->_pData, sizeof ( T * ) * ( std :: min ( this->_size, size ) ) );
+
+    if ( size > this->_size )
+        std :: memset ( newMemory + this->_size, 0, sizeof ( T * ) * ( size - this->_size ) );
 
     delete [] Utility::exchange ( this->_pData, newMemory );
     this->_capacity = size;

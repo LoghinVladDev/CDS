@@ -82,8 +82,8 @@ public:
     constexpr auto second () const noexcept -> V const & { return this->_second; }
     __CDS_cpplang_NonConstConstexprMemberFunction auto second () noexcept -> V & { return this->_second; }
 
-    __CDS_MaybeUnused auto inline setFirst(K const & k) noexcept -> Pair & {_first = k; return * this;}
-    __CDS_MaybeUnused auto inline setSecond(V const & v) noexcept -> Pair & {_second = v; return * this;}
+    __CDS_MaybeUnused auto __CDS_OptimalInline setFirst(K const & k) noexcept -> Pair & {_first = k; return * this;}
+    __CDS_MaybeUnused auto __CDS_OptimalInline setSecond(V const & v) noexcept -> Pair & {_second = v; return * this;}
 
     constexpr auto operator == ( Pair const & o ) const noexcept -> bool {
         return this == & o || (Type<K>::compare(this->_first, o._first) && Type<V>::compare(this->_second, o._second));
@@ -125,7 +125,7 @@ public:
 
     __CDS_MaybeUnused __CDS_cpplang_ConstexprDestructor auto invert () const noexcept -> Pair <V, K> { return Pair(_second, _first); }
 
-    __CDS_NoDiscard inline auto toString() const noexcept -> String final {
+    __CDS_NoDiscard __CDS_OptionalInline auto toString() const noexcept -> String final {
         std::stringstream oss;
 
         Type < V > :: streamPrint ( ( Type < K > :: streamPrint ( ( oss << "( k = " ), this->first() ) << ", v = " ), this->second() ) << " )";
@@ -142,15 +142,6 @@ public:
 
 template < typename K, typename V >
 Pair(K, V) -> Pair<K, V>;
-
-//template < typename K, typename V, typename std :: enable_if < ! Type < K > :: isFundamental && ! Type < V > :: isFundamental, int > = 0 >
-//Pair(K const &, V) -> Pair<K const, V>;
-//
-//template < typename K, typename V, typename std :: enable_if < ! Type < K > :: isFundamental && ! Type < V > :: isFundamental, int > = 0 >
-//Pair(K, V const &) -> Pair<K, V const>;
-//
-//template < typename K, typename V, typename std :: enable_if < ! Type < K > :: isFundamental && ! Type < V > :: isFundamental, int > = 0 >
-//Pair(K const &, V const &) -> Pair <K const, V const>;
 
 #endif
 

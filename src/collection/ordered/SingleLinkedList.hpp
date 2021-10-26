@@ -107,11 +107,11 @@ public:
 
     auto remove ( typename Collection<T>::Iterator const & ) noexcept (false) -> T override;
 
-    inline auto removeOf ( std::initializer_list<T> const & list, Size count ) noexcept -> bool override { return this->removeOf ( SingleLinkedList <T> (list), count ); }
-    inline auto removeLastOf ( std::initializer_list<T> const & list ) noexcept -> bool override { return this->removeLastOf ( SingleLinkedList<T> (list) ); }
+    __CDS_OptimalInline auto removeOf ( std::initializer_list<T> const & list, Size count ) noexcept -> bool override { return this->removeOf ( SingleLinkedList <T> (list), count ); }
+    __CDS_OptimalInline auto removeLastOf ( std::initializer_list<T> const & list ) noexcept -> bool override { return this->removeLastOf ( SingleLinkedList<T> (list) ); }
 
-    inline auto removeNotOf ( std::initializer_list<T> const & list, Size count ) noexcept -> bool override { return this->removeNotOf( SingleLinkedList<T> (list), count ); }
-    inline auto removeLastNotOf ( std::initializer_list<T> const & list ) noexcept -> bool override { return this->removeLastNotOf( SingleLinkedList<T> (list) ); }
+    __CDS_OptimalInline auto removeNotOf ( std::initializer_list<T> const & list, Size count ) noexcept -> bool override { return this->removeNotOf( SingleLinkedList<T> (list), count ); }
+    __CDS_OptimalInline auto removeLastNotOf ( std::initializer_list<T> const & list ) noexcept -> bool override { return this->removeLastNotOf( SingleLinkedList<T> (list) ); }
 
     __CDS_NoDiscard __CDS_cpplang_NonConstConstexprMemberFunction auto back () noexcept (false) -> T & override {
         if ( this->empty() )
@@ -225,7 +225,7 @@ private:
     auto allocFrontGetPtr () noexcept -> ElementPtrRef override;
     auto allocBackGetPtr () noexcept -> ElementPtrRef override;
 
-    inline auto allocInsertGetPtr (ElementCRef e __CDS_MaybeUnused) noexcept -> ElementPtrRef override {
+    __CDS_OptimalInline auto allocInsertGetPtr (ElementCRef e __CDS_MaybeUnused) noexcept -> ElementPtrRef override {
         return this->allocBackGetPtr();
     }
 
@@ -257,7 +257,7 @@ public:
 
     auto operator = ( Collection < T > const & ) noexcept -> SingleLinkedList &;
 
-    inline auto operator = ( SingleLinkedList const & o ) noexcept -> SingleLinkedList & { return this->operator= ( (Collection <T> const &)o ); }// NOLINT(misc-unconventional-assign-operator,bugprone-unhandled-self-assignment)
+    __CDS_OptimalInline auto operator = ( SingleLinkedList const & o ) noexcept -> SingleLinkedList & { return this->operator= ( (Collection <T> const &)o ); }// NOLINT(misc-unconventional-assign-operator,bugprone-unhandled-self-assignment)
 
     __CDS_cpplang_NonConstConstexprMemberFunction auto operator = ( SingleLinkedList && o ) noexcept -> SingleLinkedList & {
         if ( this == & o ) return * this;
@@ -359,10 +359,10 @@ public:
     }
 
     __CDS_cpplang_NonConstConstexprMemberFunction auto operator ++ () noexcept -> Iterator & final { this->next(); return * this; }
-    inline auto operator ++ (int) noexcept -> Iterator { auto copy = * this; this->next(); return copy; }
+    __CDS_OptimalInline auto operator ++ (int) noexcept -> Iterator { auto copy = * this; this->next(); return copy; }
     __CDS_cpplang_NonConstConstexprMemberFunction auto next () noexcept -> Iterator & final { this->_pNode = this->_pNode->_pNext; return * this; }
 
-    __CDS_NoDiscard inline auto copy () const noexcept -> Iterator * override {
+    __CDS_NoDiscard __CDS_OptimalInline auto copy () const noexcept -> Iterator * override {
         return new Iterator ( * this );
     }
 };
@@ -387,10 +387,10 @@ public:
     }
 
     __CDS_cpplang_NonConstConstexprMemberFunction auto operator ++ () noexcept -> ConstIterator & override { return this->next(); }
-    inline auto operator ++ (int) noexcept -> ConstIterator { auto copy = * this; this->next(); return * this; }
+    __CDS_OptimalInline auto operator ++ (int) noexcept -> ConstIterator { auto copy = * this; this->next(); return * this; }
     __CDS_cpplang_NonConstConstexprMemberFunction auto next () noexcept -> ConstIterator & final { this->_pNode = this->_pNode->_pNext; return * this; }
 
-    __CDS_NoDiscard inline auto copy () const noexcept -> ConstIterator * override {
+    __CDS_NoDiscard __CDS_OptimalInline auto copy () const noexcept -> ConstIterator * override {
         return new ConstIterator ( * this );
     }
 };

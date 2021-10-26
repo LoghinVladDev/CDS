@@ -76,8 +76,8 @@ public:
         return * this;
     }
 
-    inline auto operator = ( UnorderedSet const & o ) noexcept -> UnorderedSet & { return this->operator=( (Collection<T> const &) ( o ) ); } // NOLINT(misc-unconventional-assign-operator)
-    inline auto operator = ( UnorderedSet && set ) noexcept -> UnorderedSet & {
+    __CDS_OptimalInline auto operator = ( UnorderedSet const & o ) noexcept -> UnorderedSet & { return this->operator=( (Collection<T> const &) ( o ) ); } // NOLINT(misc-unconventional-assign-operator)
+    __CDS_OptimalInline auto operator = ( UnorderedSet && set ) noexcept -> UnorderedSet & {
         if ( this == & set ) return * this;
 
         this->clear();

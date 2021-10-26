@@ -342,7 +342,7 @@ public:
      *
      * @test Does not Apply
      */
-    __CDS_NoDiscard inline auto copy () const noexcept -> Boolean * override {
+    __CDS_NoDiscard __CDS_OptimalInline auto copy () const noexcept -> Boolean * override {
         return new Boolean( * this );
     }
 
@@ -371,7 +371,7 @@ public:
      *
      * @test Tested in primitive/BooleanTest/Boolean::Atomic Tests
      */
-    inline Atomic () noexcept {
+    __CDS_OptimalInline Atomic () noexcept {
         this->set(false);
     }
 
@@ -385,7 +385,7 @@ public:
      *
      * @test Tested in primitive/BooleanTest/Boolean::Atomic Tests
      */
-    inline Atomic ( Atomic const & obj ) noexcept : __CDS_HiddenUtility::_AtomicBaseBoolean(obj) { } /* NOLINT(modernize-use-equals-default,google-explicit-constructor) */
+    __CDS_OptimalInline Atomic ( Atomic const & obj ) noexcept : __CDS_HiddenUtility::_AtomicBaseBoolean(obj) { } /* NOLINT(modernize-use-equals-default,google-explicit-constructor) */
 
     /**
      * @brief Move Constructor using an Atomic < Boolean > type value
@@ -397,7 +397,7 @@ public:
      *
      * @test Tested in primitive/BooleanTest/Boolean::Atomic Tests
      */
-    inline Atomic ( Atomic && obj ) noexcept : __CDS_HiddenUtility::_AtomicBaseBoolean(obj) { } // NOLINT(performance-move-constructor-init,google-explicit-constructor)
+    __CDS_OptimalInline Atomic ( Atomic && obj ) noexcept : __CDS_HiddenUtility::_AtomicBaseBoolean(obj) { } // NOLINT(performance-move-constructor-init,google-explicit-constructor)
 
     /**
      * @brief Constructor from Boolean Object
@@ -409,7 +409,7 @@ public:
      *
      * @test Tested in primitive/BooleanTest/Boolean::Atomic Tests
      */
-    inline Atomic ( Boolean const & v ) noexcept : __CDS_HiddenUtility::_AtomicBaseBoolean(v) { } // NOLINT(google-explicit-constructor)
+    __CDS_OptimalInline Atomic ( Boolean const & v ) noexcept : __CDS_HiddenUtility::_AtomicBaseBoolean(v) { } // NOLINT(google-explicit-constructor)
 
     /**
      * @brief Constructor from Boolean Object
@@ -421,7 +421,7 @@ public:
      *
      * @test Tested in primitive/BooleanTest/Boolean::Atomic Tests
      */
-    inline Atomic ( Boolean && v ) noexcept : __CDS_HiddenUtility::_AtomicBaseBoolean(v) { } // NOLINT(google-explicit-constructor)
+    __CDS_OptimalInline Atomic ( Boolean && v ) noexcept : __CDS_HiddenUtility::_AtomicBaseBoolean(v) { } // NOLINT(google-explicit-constructor)
 
     /**
      * @brief Constructor from bool literal
@@ -433,7 +433,7 @@ public:
      *
      * @test Tested in primitive/BooleanTest/Boolean::Atomic Tests
      */
-    inline Atomic (bool v) noexcept { // NOLINT(google-explicit-constructor)
+    __CDS_OptimalInline Atomic (bool v) noexcept { // NOLINT(google-explicit-constructor)
         this->set(v);
     }
 
@@ -449,7 +449,7 @@ public:
      *
      * @test Tested in primitive/BooleanTest/Boolean::Atomic Tests
      */
-    inline auto operator = (bool value) noexcept -> Atomic & {
+    __CDS_OptimalInline auto operator = (bool value) noexcept -> Atomic & {
         this->set(Boolean(value));
         return * this;
     }
@@ -466,7 +466,7 @@ public:
      *
      * @test Tested in primitive/BooleanTest/Boolean::Atomic Tests
      */
-    inline auto operator = (Boolean const & obj) noexcept -> Atomic & override {
+    __CDS_OptimalInline auto operator = (Boolean const & obj) noexcept -> Atomic & override {
         this->set(obj);
         return * this;
     }
@@ -483,7 +483,7 @@ public:
      *
      * @test Tested in primitive/BooleanTest/Boolean::Atomic Tests
      */
-    inline auto operator = (Atomic const &) noexcept -> Atomic & = default;
+    __CDS_OptimalInline auto operator = (Atomic const &) noexcept -> Atomic & = default;
 
     /**
      * @brief Move Assignment Operator
@@ -497,7 +497,7 @@ public:
      *
      * @test Tested in primitive/BooleanTest/Boolean::Atomic Tests
      */
-    inline auto operator = (Atomic &&) noexcept -> Atomic & = default;
+    __CDS_OptimalInline auto operator = (Atomic &&) noexcept -> Atomic & = default;
 
     /**
      * @brief Conversion Specification to contained type
@@ -509,7 +509,7 @@ public:
      *
      * @test Tested in primitive/BooleanTest/Boolean::Atomic Tests
      */
-    inline operator Boolean () const noexcept { // NOLINT(google-explicit-constructor)
+    __CDS_OptimalInline operator Boolean () const noexcept { // NOLINT(google-explicit-constructor)
         return this->get();
     }
 
@@ -523,7 +523,7 @@ public:
      *
      * @test Tested in primitive/BooleanTest/Boolean::Atomic Tests
      */
-    inline operator bool () const noexcept { // NOLINT(google-explicit-constructor)
+    __CDS_OptimalInline operator bool () const noexcept { // NOLINT(google-explicit-constructor)
         return this->get().get();
     }
 
@@ -537,7 +537,7 @@ public:
      *
      * @test Tested in primitive/BooleanTest/Boolean::Atomic Tests
      */
-    __CDS_NoDiscard inline auto toString() const noexcept -> String override {
+    __CDS_NoDiscard __CDS_OptimalInline auto toString() const noexcept -> String override {
         return this->get().toString();
     }
 
@@ -551,7 +551,7 @@ public:
      *
      * @test Tested in primitive/BooleanTest/Boolean::Atomic Tests
      */
-    inline auto hash () const noexcept -> Index override {
+    __CDS_OptimalInline auto hash () const noexcept -> Index override {
         return this->get().hash();
     }
 };
