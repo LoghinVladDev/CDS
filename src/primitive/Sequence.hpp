@@ -5016,18 +5016,18 @@ __CDS_Requires ( Iterable < C > || ConstIterable < C > ) {
                     typename std::remove_cv <
                             typename std::remove_reference <
                                     decltype (
-                                    std::get < 0 > (
-                                            * dataTypes::unsafeAddress <
-                                                    argumentsOf <
-                                                            ListTransformer
-                                                    >
-                                            > ()
-                                    )
+                                            std::get < 0 > (
+                                                    * dataTypes::unsafeAddress <
+                                                            argumentsOf <
+                                                                    ListTransformer
+                                                            >
+                                                    > ()
+                                            )
                                     )
                             >::type
                     > :: type
             > :: type :: value
-            ) {
+    ) {
         LinkedList <
                 typename std::remove_cv <
                         typename std::remove_reference <
@@ -5066,13 +5066,13 @@ __CDS_Requires ( Iterable < C > || ConstIterable < C > ) {
         typename std::remove_cv <
                 typename std::remove_reference <
                         decltype(
-                        std::get<0>(
-                                *dataTypes::unsafeAddress <
-                                        argumentsOf <
-                                                ListTransformer
-                                        >
-                                >()
-                        )
+                                std::get<0>(
+                                        *dataTypes::unsafeAddress <
+                                                argumentsOf <
+                                                        ListTransformer
+                                                >
+                                        >()
+                                )
                         )
                 >::type
         > :: type window;
@@ -5116,18 +5116,18 @@ __CDS_Requires ( Iterable < C > || ConstIterable < C > ) {
                     typename std::remove_cv <
                             typename std::remove_reference <
                                     decltype (
-                                    std::get < 0 > (
-                                            * dataTypes::unsafeAddress <
-                                                    argumentsOf <
-                                                            ListTransformer
-                                                    >
-                                            > ()
-                                    )
+                                            std::get < 0 > (
+                                                    * dataTypes::unsafeAddress <
+                                                            argumentsOf <
+                                                                    ListTransformer
+                                                            >
+                                                    > ()
+                                            )
                                     )
                             >::type
                     > :: type
             > :: type :: value
-            ) {
+    ) {
         LinkedList <
                 typename std::remove_cv <
                         typename std::remove_reference <
@@ -5166,13 +5166,13 @@ __CDS_Requires ( Iterable < C > || ConstIterable < C > ) {
         typename std::remove_cv <
                 typename std::remove_reference <
                         decltype(
-                        std::get<0>(
-                                *dataTypes::unsafeAddress <
-                                        argumentsOf <
-                                                ListTransformer
-                                        >
-                                >()
-                        )
+                                std::get<0>(
+                                        *dataTypes::unsafeAddress <
+                                                argumentsOf <
+                                                        ListTransformer
+                                                >
+                                        >()
+                                )
                         )
                 >::type
         > :: type window;

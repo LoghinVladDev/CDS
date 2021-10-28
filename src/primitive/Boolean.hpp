@@ -567,7 +567,7 @@ public:
  *
  * @test Tested in primitive/BooleanTest
  */
-__CDS_cpplang_ConstexprDestructor auto operator "" _b (unsigned long long int i) noexcept -> Boolean {
+__CDS_cpplang_ConstexprPostfixLiteral auto operator "" _b (unsigned long long int i) noexcept -> Boolean {
     return {i != 0};
 }
 

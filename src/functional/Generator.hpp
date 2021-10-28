@@ -28,6 +28,7 @@ private:
     template < int ... S >
     struct gens < 0, S ... > { typedef seq < S ... > type; };
 
+public:
     class Iterator {
     private:
         Generator mutable * pGen {nullptr};
@@ -42,6 +43,8 @@ private:
             return pGen->ret();
         }
 
+        auto value () const noexcept(false) -> T { return this->get(); }
+
         auto next () noexcept -> Iterator & {
             if ( pGen->_taskEnded )
                 pGen = nullptr;
@@ -55,6 +58,10 @@ private:
         auto operator != (Iterator const & o) const noexcept -> bool { return this->pGen != o.pGen; }
     };
 
+
+    using ConstIterator = Iterator;
+
+private:
     auto ret () noexcept -> T {
         decltype(this->_promiseObject) copy;
 
@@ -102,6 +109,8 @@ public:
 
         auto begin () noexcept -> Generator::Iterator { return Generator::Iterator(this->pGen); }
         auto end () noexcept -> Generator::Iterator { return Generator::Iterator(nullptr); }
+        auto cbegin () noexcept -> Generator::ConstIterator { return Generator::Iterator(this->pGen); }
+        auto cend () noexcept -> Generator::ConstIterator { return Generator::Iterator(nullptr); }
     };
 
     auto restart (Args && ... args) noexcept -> IterableObject {

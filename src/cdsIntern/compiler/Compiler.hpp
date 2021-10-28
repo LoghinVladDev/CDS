@@ -195,6 +195,8 @@ namespace Utility {
 
 #define __CDS_cpplang_ThreeWayComparison_Available true /* NOLINT(bugprone-reserved-identifier) */
 
+#define __CDS_cpplang_ConstexprPostfixLiteral constexpr /* NOLINT(bugprone-reserved-identifier) */
+
 #undef __CDS_cpplang_core_version_name
 #define __CDS_cpplang_core_version_name "cpp-20" /* NOLINT(bugprone-reserved-identifier) */
 
@@ -206,6 +208,8 @@ namespace Utility {
 #define __CDS_cpplang_Concepts_available false /* NOLINT(bugprone-reserved-identifier) */
 
 #define __CDS_cpplang_ThreeWayComparison_Available false /* NOLINT(bugprone-reserved-identifier) */
+
+#define __CDS_cpplang_ConstexprPostfixLiteral inline /* NOLINT(bugprone-reserved-identifier) */
 
 #endif
 
@@ -225,8 +229,8 @@ namespace Utility {
 
 
 #define __CDS_cpplang_ConstexprPureAbstract __CDS_cpplang_VirtualConstexpr /* NOLINT(bugprone-reserved-identifier) */
-#define __CDS_cpplang_ConstexprSTLIteratorOp __CDS_cpplang_ConstexprConditioned
-#define __CDS_cpplang_NestedInheritedOverride override
+#define __CDS_cpplang_ConstexprSTLIteratorOp __CDS_cpplang_ConstexprConditioned /* NOLINT(bugprone-reserved-identifier) */
+#define __CDS_cpplang_NestedInheritedOverride override /* NOLINT(bugprone-reserved-identifier) */
 
 
 #if defined(__GNUC__) && ! defined(__MINGW64__) && ! defined(__clang__)

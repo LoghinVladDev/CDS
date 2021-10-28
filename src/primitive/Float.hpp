@@ -575,7 +575,7 @@ public:
 
 #if defined(CDS_FLOAT_POSTFIX)
 
-__CDS_cpplang_ConstexprDestructor auto operator "" _f (long double value) noexcept -> Float {
+__CDS_cpplang_ConstexprPostfixLiteral auto operator "" _f (long double value) noexcept -> Float {
     return static_cast < float > ( value );
 }
 

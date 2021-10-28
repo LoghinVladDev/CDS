@@ -1271,7 +1271,7 @@ public:
         }
     }
 
-    __CDS_NoDiscard __CDS_cpplang_ConstexprDestructor auto toString () const noexcept -> String override {
+    __CDS_NoDiscard __CDS_OptimalInline auto toString () const noexcept -> String override {
         return "Socket "_s +
 
 #if defined(__CDS_Platform_Linux)

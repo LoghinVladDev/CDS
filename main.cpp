@@ -105,66 +105,133 @@
 ////    std :: cout << diff.count() << '\n';
 //
 //}
+////
+//#include <CDS/Utility>
+//#include <CDS/LinkedList>
+//#include <CDS/String>
+//#include <CDS/Union>
+//#include <CDS/Queue>
 //
-#include <CDS/Utility>
-#include <CDS/LinkedList>
-#include <CDS/String>
-#include <CDS/Union>
-#include <CDS/Queue>
+//Union < int, String > f ( int x ) {
+//    if ( x % 2 == 0 ) return String::f("Numarul %d este impar", x);
+//    return x % 2;
+//}
+//
+//int main () {
+//
+//    std :: cout << (f(12) == f(13)) << '\n';
+//    std :: cout << (f(13) == f(13)) << '\n';
+//    std :: cout << (f(12) == f(12)) << '\n';
+//    std :: cout << (f(12) == f(14)) << '\n';
+//    std :: cout << (f(13) == f(11)) << '\n';
+//    std :: cout << (f(13) == f(12)) << '\n';
+//    std :: cout << (f(12) == f(13)) << '\n';
+//
+//    auto e = f(12);
+//    auto b = f(13);
+//
+//    e = b;
+//
+//    std::cout << e << '\n';
+//    std::cout << (e = f(14)) << '\n';
+//
+//    std::cout << f(12).isType< int >() << '\n';
+//    std::cout << f(12).isType< String >() << '\n';
+//
+//    std::cout << f(13).isType< int >() << '\n';
+//    std::cout << f(13).isType< String >() << '\n';
+//
+//    Queue < int > q;
+//
+//    q.push(3);
+//    q.push(4);
+//    q.push(5);
+//    q.push(6);
+//    q.push(7);
+//
+//    while ( ! q.empty() ) {
+//        std::cout << q.pop() << '\n';
+//    }
+//}
+//
+//
+//
+//int main () {
+//
+//}
+//
+//
 
-Union < int, String > f ( int x ) {
-    if ( x % 2 == 0 ) return String::f("Numarul %d este impar", x);
-    return x % 2;
-}
+#include "functional/Generator2.hpp"
+//#include <CDS/Generator>
+#include <CDS/Sequence>
+
+//#include <CDS/Socket>
+//#include <CDS/Thread>
+//#include <CDS/HashMap>
 
 int main () {
+    class : public Generator < int > {
+        auto task () noexcept -> int override {
+            int x = 0;
+            while ( x < 9 ) {
+                yield ( x ++ );
+            }
 
-    std :: cout << (f(12) == f(13)) << '\n';
-    std :: cout << (f(13) == f(13)) << '\n';
-    std :: cout << (f(12) == f(12)) << '\n';
-    std :: cout << (f(12) == f(14)) << '\n';
-    std :: cout << (f(13) == f(11)) << '\n';
-    std :: cout << (f(13) == f(12)) << '\n';
-    std :: cout << (f(12) == f(13)) << '\n';
+            return x;
+        }
+    } f;
 
-    auto e = f(12);
-    auto b = f(13);
+    int v;
 
-    e = b;
+    v = f(); std :: cout << v << '\n';
+    v = f(); std :: cout << v << '\n';
+    v = f(); std :: cout << v << '\n';
+    v = f(); std :: cout << v << '\n';
+    v = f(); std :: cout << v << '\n';
+    v = f(); std :: cout << v << '\n';
+    v = f(); std :: cout << v << '\n';
+    v = f(); std :: cout << v << '\n';
+    v = f(); std :: cout << v << '\n';
+    v = f(); std :: cout << v << '\n';
+    v = f(); std :: cout << v << '\n';
+    v = f(); std :: cout << v << '\n';
+    v = f(); std :: cout << v << '\n';
+    v = f(); std :: cout << v << '\n';
+    v = f(); std :: cout << v << '\n';
+    v = f(); std :: cout << v << '\n';
+    v = f(); std :: cout << v << '\n';
 
-    std::cout << e << '\n';
-    std::cout << (e = f(14)) << '\n';
+//    for ( auto i : Range (100) )
+//        std :: cout << f () << '\n';
 
-    std::cout << f(12).isType< int >() << '\n';
-    std::cout << f(12).isType< String >() << '\n';
+//    ServerSocket serverSocket(34000, Socket::ProtocolVersion::IPV6);
+//    Array < SharedPointer < Thread > > threads;
 
-    std::cout << f(13).isType< int >() << '\n';
-    std::cout << f(13).isType< String >() << '\n';
-
-    Queue < int > q;
-
-    q.push(3);
-    q.push(4);
-    q.push(5);
-    q.push(6);
-    q.push(7);
-
-    while ( ! q.empty() ) {
-        std::cout << q.pop() << '\n';
-    }
+//    Range r(0, 15);
+//    auto seq = r.sequence().map([](Index i){return 2 * i;});
+//    auto seq3 = seq.map ([](Index i){ return i * 3; });
+//
+//    std :: cout << seq.toArray() << '\n';
+//    std :: cout << seq3.toArray() << '\n';
+//
+//    seq.toHashMap ();
+//    seq.map ( [](Index i){ return Pair { (int)i, (int)i }; } ).toHashMap();
+//
+//    auto seq2 = Range(0, 15).sequence();
+//
+////    while ( true ) {
+////        threads.add ( new Runnable (
+////            [socket = serverSocket.accept()] () mutable {
+////                socket.writeString ( "Hello Coaie ce faci?" );
+////                int read = socket.readInt();
+////
+////                socket.close();
+////            }
+////        ) );
+////
+////        threads.back()->start();
+////    }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 

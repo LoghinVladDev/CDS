@@ -1928,7 +1928,7 @@ public:
 
 #if defined(CDS_INTEGER_POSTFIX)
 
-__CDS_cpplang_ConstexprDestructor auto operator "" _i (unsigned long long int value) noexcept -> Integer {
+__CDS_cpplang_ConstexprPostfixLiteral auto operator "" _i (unsigned long long int value) noexcept -> Integer {
     return static_cast < int > (value);
 }
 

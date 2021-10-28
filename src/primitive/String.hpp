@@ -4550,11 +4550,11 @@ inline auto String::operator > ( std::string const & stdString ) const noexcept 
 
 #if defined(CDS_STRING_POSTFIX)
 
-inline auto operator "" _obj (const char * pString, std::size_t length __CDS_MaybeUnused ) noexcept -> String {
+__CDS_cpplang_ConstexprPostfixLiteral auto operator "" _obj (const char * pString, std::size_t length __CDS_MaybeUnused ) noexcept -> String {
     return pString;
 }
 
-inline auto operator "" _s (const char * pString, std::size_t length __CDS_MaybeUnused ) noexcept -> String {
+__CDS_cpplang_ConstexprPostfixLiteral auto operator "" _s (const char * pString, std::size_t length __CDS_MaybeUnused ) noexcept -> String {
     return pString;
 }
 
