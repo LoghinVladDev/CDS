@@ -4,3 +4,7 @@
 
 #include <cdsIntern/tests/cpp20/primitive/StringTest.h>
 
+int main () {
+    StringTest().start("StringTest");
+    return 0;
+}

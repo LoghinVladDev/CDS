@@ -46,6 +46,8 @@ public:
     NullPointerException () noexcept : Exception ("Tried De-Referencing a null valued Pointer") { }
     NullPointerException ( NullPointerException const & ) noexcept = default;
     NullPointerException ( NullPointerException && ) noexcept = default;
+    __CDS_OptimalInline explicit NullPointerException ( String const & message ) noexcept : Exception ( "Tried De-Referencing a null valued Pointer : "_s + message ) {}
+    __CDS_OptimalInline explicit NullPointerException ( StringLiteral message ) noexcept : NullPointerException ( String(message) ) {}
 };
 
 __CDS_RegisterParseType(NullPointerException)

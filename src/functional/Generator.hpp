@@ -1,5 +1,5 @@
 //
-// Created by loghin on 07.03.2021.
+// Created by loghin on 27.10.2021.
 //
 
 #ifndef CDS_GENERATOR_HPP
@@ -7,168 +7,283 @@
 
 #include <CDS/Semaphore>
 #include <CDS/Thread>
+#include <CDS/Boolean>
 
-#include <atomic>
+template < typename C >
+class Sequence;
 
-template <typename T, typename ... Args>
-class Generator: public Object {
+template < typename T, typename ... Args >
+class Generator : public Object {
 private:
-    T                           _promiseObject;
-    Semaphore                   _promiseReady;
-    Semaphore                   _promiseAchieved;
-    UniquePointer < Thread >    _pThread;
+    UniquePointer < T > pYieldedValue {nullptr};
+    UniquePointer < T > pToReturnValue {nullptr};
+    UniquePointer < Thread > pTaskThread {nullptr};
 
-    std::atomic<bool>           _taskEnded {false};
+    Semaphore promiseObjectReady;
+    Semaphore promiseObjectUsed;
+    Boolean::Atomic firstCall {true};
+    Boolean::Atomic lastCall {false};
+    Boolean::Atomic running {false};
+    Boolean::Atomic trap {false};
 
-    template < int ... > struct seq { };
-
-    template < int N, int ... S >
-    struct __CDS_MaybeUnused gens : gens < N - 1, N - 1, S ... > {};
-
-    template < int ... S >
-    struct gens < 0, S ... > { typedef seq < S ... > type; };
-
-public:
-    class Iterator {
-    private:
-        Generator mutable * pGen {nullptr};
-
-    public:
-        explicit Iterator ( Generator * pGen ) noexcept : pGen(pGen) {}
-
-        auto get () const noexcept (false) -> T {
-            if ( pGen == nullptr )
-                throw GeneratorTaskEnded ();
-
-            return pGen->ret();
-        }
-
-        auto value () const noexcept(false) -> T { return this->get(); }
-
-        auto next () noexcept -> Iterator & {
-            if ( pGen->_taskEnded )
-                pGen = nullptr;
-            return * this;
-        }
-
-        auto operator ++ () noexcept -> Iterator & { return this->next(); }
-        auto operator ++ (int) noexcept -> Iterator { auto copy = * this; this->next(); return copy; }
-        auto operator * () const noexcept -> T { return this->get(); }
-        auto operator == (Iterator const & o) const noexcept -> bool { return this->pGen == o.pGen; }
-        auto operator != (Iterator const & o) const noexcept -> bool { return this->pGen != o.pGen; }
-    };
-
-
-    using ConstIterator = Iterator;
-
-private:
-    auto ret () noexcept -> T {
-        decltype(this->_promiseObject) copy;
-
-        if ( ! this->_taskEnded ) {
-            this->_promiseReady.wait();
-            copy = this->_promiseObject;
-            this->_promiseAchieved.notify();
-        } else {
-            copy = this->_promiseObject;
-        }
-
-        return copy;
-    }
+//    UniquePointer < std :: tuple < Args ... > > pArguments {nullptr};
 
 protected:
-    auto yield(T const & obj, bool stop = false) noexcept -> void {
-        if ( stop )
-            this->_taskEnded = true;
-        this->_promiseObject = obj;
-        this->_promiseReady.notify();
-        this->_promiseAchieved.wait();
+    virtual auto task ( Args ... ) noexcept -> T = 0;
+
+    template < typename V = T, typename std :: enable_if < Type < V > :: copyConstructible, int > :: type = 0 >
+    __CDS_OptimalInline auto yield ( T const & value ) noexcept ( noexcept ( T ( value ) ) ) -> void {
+        return this->yield ( value, false );
     }
 
-    virtual auto task (Args ... ) noexcept -> T = 0;
+    template < typename V = T, typename std :: enable_if < Type < V > :: moveConstructible, int > :: type = 0 >
+    __CDS_OptimalInline auto yield ( T && value ) noexcept ( noexcept ( T ( std :: forward < T > ( value ) ) ) ) -> void {
+        return this->yield ( std :: forward < T > ( value ), false );
+    }
 
-public:
-    class GeneratorTaskEnded : public std::exception {
-        __CDS_NoDiscard auto what() const noexcept -> StringLiteral override {
-            return "Task has Ended, attempted to acquire out of range data";
-        }
-    };
+    template < typename V = T, typename std :: enable_if < ! Type < V > :: copyConstructible && Type < V > :: defaultConstructible && Type < V > :: copyAssignable, int > :: type = 0 >
+    __CDS_OptimalInline auto yield ( T const & value ) noexcept ( noexcept ( T ( value ) ) ) -> void {
+        return this->yield ( value, false );
+    }
 
-    class IterableObject {
-    private:
-        Generator * pGen {nullptr};
+    template < typename V = T, typename std :: enable_if < ! Type < V > :: moveConstructible && Type < V > :: defaultConstructible && Type < V > :: moveAssignable, int > :: type = 0 >
+    __CDS_OptimalInline auto yield ( T && value ) noexcept ( noexcept ( T ( std :: forward < T > ( value ) ) ) ) -> void {
+        return this->yield ( std :: forward < T > ( value ), false );
+    }
 
-    public:
-        explicit IterableObject(Generator * pGen) noexcept : pGen(pGen) {
+private:
+    template < typename V = T, typename std :: enable_if < Type < V > :: copyConstructible, int > :: type = 0 >
+    auto yield ( T const & value, bool isFinal ) noexcept ( noexcept ( T ( value ) ) ) -> void {
+        while ( this->trap );
 
-        }
+        if ( ! this->firstCall )
+            this->promiseObjectUsed.wait();
+        else
+            this->firstCall = false;
 
-        operator T () const noexcept { // NOLINT(google-explicit-constructor)
-            return this->pGen->ret();
-        }
+        this->pYieldedValue = new T (value);
 
-        auto begin () noexcept -> Generator::Iterator { return Generator::Iterator(this->pGen); }
-        auto end () noexcept -> Generator::Iterator { return Generator::Iterator(nullptr); }
-        auto cbegin () noexcept -> Generator::ConstIterator { return Generator::Iterator(this->pGen); }
-        auto cend () noexcept -> Generator::ConstIterator { return Generator::Iterator(nullptr); }
-    };
+        if ( isFinal )
+            this->lastCall = true;
 
-    auto restart (Args && ... args) noexcept -> IterableObject {
-        if ( ! this->_pThread.isNull() ) {
-            this->_pThread->kill();
-            this->_promiseAchieved.reset();
-            this->_promiseReady.reset();
-            this->_taskEnded = false;
-        }
+        this->promiseObjectReady.notify();
+    }
 
-        this->_pThread.reset(
-            new Runnable (
-                [ args = std::make_tuple(std::forward<Args>(args) ... ), this ] () mutable {
-                    return std::apply([this](Args && ... args){
-                        this->yield(this->task( std::forward<Args>(args) ... ), true);
-                    }, std::move(args));
+    template < typename V = T, typename std :: enable_if < Type < V > :: moveConstructible, int > :: type = 0 >
+    auto yield ( T && value, bool isFinal ) noexcept ( noexcept ( T ( std :: forward < T > ( value ) ) ) ) -> void {
+        while ( this->trap );
+
+        if ( ! this->firstCall )
+            this->promiseObjectUsed.wait();
+        else
+            this->firstCall = false;
+
+        this->pYieldedValue = new T ( std :: forward < T > (value) );
+
+        if ( isFinal )
+            this->lastCall = true;
+
+        this->promiseObjectReady.notify();
+    }
+
+    template < typename V = T, typename std :: enable_if < ! Type < V > :: copyConstructible && Type < V > :: defaultConstructible && Type < V > :: copyAssignable, int > :: type = 0 >
+    auto yield ( T const & value, bool isFinal ) noexcept ( noexcept ( T ( value ) ) ) -> void {
+        while ( this->trap );
+
+        if ( ! this->firstCall )
+            this->promiseObjectUsed.wait();
+        else
+            this->firstCall = false;
+
+        this->pYieldedValue = new T;
+        * this->pYieldedValue = value;
+
+        if ( isFinal )
+            this->lastCall = true;
+
+        this->promiseObjectReady.notify();
+    }
+
+    template < typename V = T, typename std :: enable_if < ! Type < V > :: moveConstructible && Type < V > :: defaultConstructible && Type < V > :: moveAssignable, int > :: type = 0 >
+    auto yield ( T && value, bool isFinal ) noexcept ( noexcept ( T ( std :: forward < T > ( value ) ) ) ) -> void {
+        while ( this->trap );
+
+        if ( ! this->firstCall )
+            this->promiseObjectUsed.wait();
+        else
+            this->firstCall = false;
+
+        this->pYieldedValue = new T;
+        * this->pYieldedValue = std :: forward < T > ( value );
+
+        if ( isFinal )
+            this->lastCall = true;
+
+        this->promiseObjectReady.notify();
+    }
+
+private:
+    auto singleCallReturnValue () noexcept (false) -> T * {
+        this->promiseObjectReady.wait();
+        this->pToReturnValue = this->pYieldedValue;
+
+        if ( ! this->lastCall )
+            this->promiseObjectUsed.notify();
+        else
+            this->running = false;
+
+        return this->pToReturnValue.get();
+    }
+
+    auto restart ( Args && ... args ) noexcept -> void {
+        this->firstCall = true;
+        this->lastCall = false;
+        this->promiseObjectUsed.reset();
+        this->promiseObjectReady.reset();
+
+        this->pTaskThread = new Runnable (
+                [&] {
+                    this->yield ( this->task ( std :: forward < Args > ( args ) ... ), true );
                 }
-            )
         );
 
-        this->_pThread->start();
-
-        return IterableObject(this);
+        this->pTaskThread->start();
+        this->running = true;
     }
 
-    auto operator () (Args && ... args ) noexcept (false) -> IterableObject {
-        if ( this->_taskEnded == true )
-            throw GeneratorTaskEnded();
+public:
+    class IterableGenerator : public Object {
+    public:
+        class Iterator {
+        private:
+            T mutable * pData { nullptr };
+            Generator * pGen { nullptr };
 
-        if ( this->_pThread.isNull() )
-            this->restart ( std::forward < Args > ( args ) ... );
+        public:
+            explicit Iterator ( Generator * gen, bool ignore = false ) noexcept :
+                    pGen(gen),
+                    pData(nullptr) {
 
-        return IterableObject(this);
+                if ( ! ignore )
+                    this->pData = this->pGen->singleCallReturnValue();
+            }
+
+            operator T & () const noexcept {
+                return this->value();
+            }
+
+            auto value () const noexcept -> T & { return * this->pData; }
+            auto next () noexcept -> Iterator & {
+                if ( this->pGen->running )
+                    this->pData = this->pGen->singleCallReturnValue();
+                else
+                    this->pData = nullptr;
+
+                return * this;
+            }
+
+            inline auto operator * () const noexcept -> T & { return * this->pData; }
+            inline auto operator ++ () noexcept -> Iterator & { return this->next(); }
+            inline auto operator ++ (int) const noexcept -> Iterator { auto copy = * this; this->next(); return copy; }
+            inline auto operator == (Iterator const & it) const noexcept -> bool { return this->equals(it); }
+            inline auto operator != (Iterator const & it) const noexcept -> bool { return ! this->equals(it); }
+
+            auto equals ( Iterator const & it ) const noexcept -> bool { return this->pData == it.pData; }
+        };
+
+    private:
+        Generator * pGen { nullptr };
+
+    public:
+
+        operator T & () const noexcept {
+            return * this->pGen->singleCallReturnValue();
+        }
+
+        using ConstIterator = Iterator;
+
+        inline explicit IterableGenerator( Generator * pGen ) noexcept :
+                pGen ( pGen ) {
+
+        }
+
+        auto begin () noexcept -> Iterator { return Iterator ( this->pGen); }
+        auto end () noexcept -> Iterator { return Iterator ( this->pGen, true ); }
+
+        __CDS_NoDiscard auto cbegin () const noexcept -> ConstIterator { return ConstIterator ( this->pGen ); }
+        __CDS_NoDiscard auto cend () const noexcept -> ConstIterator { return ConstIterator ( this->pGen, true ); }
+
+        __CDS_NoDiscard auto sequence () const & noexcept -> Sequence < IterableGenerator >;// { return Sequence < IterableGenerator > ( *this ); }
+        auto sequence () & noexcept -> Sequence < IterableGenerator >;// { return Sequence < IterableGenerator > ( *this ); }
+        __CDS_NoDiscard auto sequence () const && noexcept -> Sequence < IterableGenerator >;// { return Sequence < IterableGenerator > ( std::move(*this) ); }
+        auto sequence () && noexcept -> Sequence < IterableGenerator >;// { return Sequence < IterableGenerator > ( std::move(*this) ); }
+    };
+
+private:
+    friend class IterableGenerator;
+    friend class IterableGenerator::Iterator;
+
+public:
+
+    auto operator () ( Args && ... args ) noexcept -> IterableGenerator {
+        if ( ! this->running ) {
+            if ( ! this->pTaskThread.isNull() ) {
+                this->pTaskThread->join();
+                this->pTaskThread.reset();
+            }
+
+            this->restart ( std::forward<Args>(args) ...);
+        }
+
+        return IterableGenerator ( this );
     }
 
-    ~Generator() noexcept override {
-        this->_pThread->kill();
-    }
+    ~Generator () noexcept override {
+        if ( ! this->pTaskThread.isNull() ) {
+            this->trap = true;
+            this->promiseObjectReady.wait();
+            this->promiseObjectUsed.notify();
+            this->promiseObjectReady.wait();
 
-    auto toString() const noexcept -> String override {
-        return String()
-            .append("Generator{isRunning=")
-            .append(!(bool)this->_taskEnded)
-            .append(",thread=")
-            .append(this->_pThread->toString())
-            .append(",promiseReadySem=")
-            .append(this->_promiseReady.toString())
-            .append(",promiseAchievedSem=")
-            .append(this->_promiseAchieved.toString())
-            .append("}");
+            this->pTaskThread->kill();
+        }
     }
 };
 
+#include <CDS/Pair>
 namespace Utility {
-    template<typename T, typename ... Args>
-    struct TypeParseTraits<Generator<T, Args ... >> {
-        constexpr static StringLiteral name = "Generator";
+    class FibonacciGenerator : public Generator < int > {
+        __CDS_NoReturn auto task () noexcept -> int override {
+            Pair < int, int > terms = { 0, 1 };
+
+            while ( true ) {
+                yield ( terms.first() );
+                terms = { terms.second(), terms.first() + terms.second() };
+            }
+        }
     };
+}
+
+#include <CDS/Sequence>
+
+template < typename T, typename ... Args >
+auto Generator < T, Args ... > :: IterableGenerator :: sequence () const & noexcept -> Sequence < IterableGenerator > {
+    return Sequence < IterableGenerator > ( *this );
+}
+
+template < typename T, typename ... Args >
+auto Generator < T, Args ... > :: IterableGenerator :: sequence () & noexcept -> Sequence < IterableGenerator > {
+    return Sequence < IterableGenerator > ( *this );
+}
+
+template < typename T, typename ... Args >
+auto Generator < T, Args ... > :: IterableGenerator :: sequence () const && noexcept -> Sequence < IterableGenerator > {
+    return Sequence < IterableGenerator > ( std::move(*this) );
+}
+
+template < typename T, typename ... Args >
+auto Generator < T, Args ... > :: IterableGenerator :: sequence () && noexcept -> Sequence < IterableGenerator > {
+    return Sequence < IterableGenerator > ( std::move(*this) );
 }
 
 #endif //CDS_GENERATOR_HPP

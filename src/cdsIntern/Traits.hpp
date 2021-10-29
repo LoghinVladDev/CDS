@@ -102,23 +102,46 @@ struct functionTraits;
 
 template < typename R, typename ... A >
 struct functionTraits < R (*) (A ...) > {
-    using returnType __CDS_MaybeUnused = R;
-    using classType = void;
-    using argsType = std::tuple < A... >;
+    using returnType __CDS_Deprecated __CDS_MaybeUnused = R;
+    using classType __CDS_Deprecated = void;
+    using argsType __CDS_Deprecated = std::tuple < A... >;
+
+    using ReturnType = R;
+    using ClassType = void;
+    using ArgsType = std :: tuple < A ... >;
 };
 
 template < typename R, typename C, typename ... A >
 struct functionTraits < R (C::*) (A ...) > {
-    using returnType __CDS_MaybeUnused = R;
-    using classType = C;
-    using argsType = std::tuple < A ... >;
+    using returnType __CDS_Deprecated __CDS_MaybeUnused = R;
+    using classType __CDS_Deprecated = C;
+    using argsType __CDS_Deprecated = std::tuple < A ... >;
+
+    using ReturnType = R;
+    using ClassType = C;
+    using ArgsType = std :: tuple < A ... >;
 };
 
 template < typename R, typename C, typename ... A >
 struct functionTraits < R (C::*) (A ...) const > {
-    using returnType __CDS_MaybeUnused = R;
-    using classType = C;
-    using argsType = std::tuple < A ... >;
+    using returnType __CDS_Deprecated __CDS_MaybeUnused = R;
+    using classType __CDS_Deprecated = C;
+    using argsType __CDS_Deprecated = std::tuple < A ... >;
+
+    using ReturnType = R;
+    using ClassType = C;
+    using ArgsType = std :: tuple < A ... >;
+};
+
+template < typename R, typename ... A >
+struct functionTraits < R ( A ... ) > {
+    using returnType __CDS_Deprecated __CDS_MaybeUnused = R;
+    using classType __CDS_Deprecated = void;
+    using argsType __CDS_Deprecated = std::tuple < A ... >;
+
+    using ReturnType = R;
+    using ClassType = void;
+    using ArgsType = std :: tuple < A ... >;
 };
 
 template < typename T >
@@ -302,7 +325,8 @@ public:
     static bool const constexpr value = sizeof(Test<Derived>(0)) == sizeof(YesType);
 };
 
-
+template < bool expression >
+using EnableIf = typename std :: enable_if < expression, int > :: type;
 
 namespace Utility {
 
@@ -343,6 +367,22 @@ __CDS_RegisterParseType(void)
 __CDS_RegisterParseType(bool)
 __CDS_RegisterParseType(float)
 __CDS_RegisterParseType(double)
+
+template < typename T, typename = void >
+struct isStaticFunctionType {
+    constexpr static bool value = false;
+};
+
+template < typename T, typename = void >
+struct isCallableObjectType : public std :: false_type {};
+
+template < typename T >
+struct isCallableObjectType < T, std :: void_t < decltype ( & T :: operator () ) > > : std :: true_type {};
+
+template < typename T >
+struct isStaticFunctionType < T > {
+    constexpr static bool value = std :: is_function < T > :: value && ! isCallableObjectType < T > :: value;
+};
 
 __CDS_WarningSuppression_FunctionTypeTraits_SuppressEnable
 
@@ -391,6 +431,8 @@ struct Type {
     __CDS_MaybeUnused static constexpr bool isConst = std :: is_const < T > :: type :: value;
 
     static constexpr bool isCallable = isCallableType < T > :: value || std::is_function < T > :: value;
+    static constexpr bool isCallableObject = isCallableObjectType < T > :: value;
+    static constexpr bool isFunction = isStaticFunctionType < T > :: value;
 
 #if __CDS_cpplang_VariableTemplates_available == true
 

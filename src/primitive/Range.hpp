@@ -17,6 +17,8 @@ private:
     Index _f;
     bool  _rev;
 public:
+    using ElementType = Index;
+
     class Iterator {
     private:
         Index i;

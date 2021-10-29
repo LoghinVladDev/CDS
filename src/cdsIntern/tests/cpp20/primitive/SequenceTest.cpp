@@ -2,6 +2,7 @@
 // Created by loghin on 04.06.2021.
 //
 
+#define CDS_DEBUG
 #include "SequenceTest.h"
 
 #include <CDS/Range>
@@ -893,7 +894,9 @@ bool SequenceTest::execute() noexcept {
                 this->logWarning(".all Error");
             }
 
-            auto evens = zeroToTen.map([](Index const &v) -> Index { return v * 2; });
+            auto evens = zeroToTen.map([](Index v) -> Index {
+                return v * 2;
+            });
             this->log("Evens.all(isEven) : %s", evens.all(Integer::isEven) ? "true" : "false");
 
             if (!evens.all(Integer::isEven)) {
@@ -2247,7 +2250,12 @@ bool SequenceTest::execute() noexcept {
 
         auto mapTest = [&]{
             auto numbers = Array < int > { 1, 2, 3 }.sequence();
-            auto squares = numbers.map([](int v){return v * v;});
+            auto squares = numbers.map([](int v){
+
+                return v * v;
+            });
+
+            std :: cout << (*squares.storedMappers.front().first())(1) << '\n';
 
             log("numbers : %s", numbers.toArray().toString().cStr());
             log("squares : %s", squares.toArray().toString().cStr());

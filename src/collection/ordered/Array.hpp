@@ -13,7 +13,10 @@ private:
     T ** _pData     {nullptr };
     Size _capacity  { 0ull };
 
+public:
     using ElementType                   = typename List < T > :: ElementType;
+
+private:
     using ElementRef                    = typename List < T > :: ElementRef;
     using ElementCRef                   = typename List < T > :: ElementCRef;
     using ElementMRef __CDS_MaybeUnused = typename List < T > :: ElementMRef;
