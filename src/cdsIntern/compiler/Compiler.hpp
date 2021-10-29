@@ -193,7 +193,7 @@ namespace Utility {
 #define __CDS_cpplang_Concepts_available true /* NOLINT(bugprone-reserved-identifier) */
 #define __CDS_cpplang_VirtualConstexpr constexpr /* NOLINT(bugprone-reserved-identifier) */
 
-#define __CDS_cpplang_ThreeWayComparison_Available true /* NOLINT(bugprone-reserved-identifier) */
+#define __CDS_cpplang_ThreeWayComparison_available true /* NOLINT(bugprone-reserved-identifier) */
 
 #define __CDS_cpplang_ConstexprPostfixLiteral constexpr /* NOLINT(bugprone-reserved-identifier) */
 
@@ -207,23 +207,10 @@ namespace Utility {
 #define __CDS_cpplang_VirtualConstexpr __CDS_OptionalInline /* NOLINT(bugprone-reserved-identifier) */
 #define __CDS_cpplang_Concepts_available false /* NOLINT(bugprone-reserved-identifier) */
 
-#define __CDS_cpplang_ThreeWayComparison_Available false /* NOLINT(bugprone-reserved-identifier) */
+#define __CDS_cpplang_ThreeWayComparison_available false /* NOLINT(bugprone-reserved-identifier) */
 
 #define __CDS_cpplang_ConstexprPostfixLiteral inline /* NOLINT(bugprone-reserved-identifier) */
 
-#endif
-
-//// UNCOMMENT last condition if compiling MSVC c++latest
-#if !defined(__CDS_Requires)
-#if defined(__cpp_concepts) && __CDS_cpplang_core_version >= __CDS_cpplang_core_version_20 //  && !defined(_MSC_VER) // to remove once MS pulls their head out of their arse
-
-#define __CDS_Requires(_concepts) requires _concepts /* NOLINT(bugprone-reserved-identifier) */
-
-#else
-
-#define __CDS_Requires(_concepts) /* NOLINT(bugprone-reserved-identifier) */
-
-#endif
 #endif
 
 
@@ -272,5 +259,18 @@ static inline auto __CDS_compilerVersionString() noexcept -> StringLiteral { /* 
 
     return buffer;
 }
+
+//// UNCOMMENT last condition if compiling MSVC c++latest
+#if !defined(__CDS_Requires)
+#if __CDS_cpplang_Concepts_available //  && !defined(_MSC_VER) // to remove once MS pulls their head out of their arse
+
+#define __CDS_Requires(_concepts) requires _concepts /* NOLINT(bugprone-reserved-identifier) */
+
+#else
+
+#define __CDS_Requires(_concepts) /* NOLINT(bugprone-reserved-identifier) */
+
+#endif
+#endif
 
 #endif //CDS_COMPILER_HPP

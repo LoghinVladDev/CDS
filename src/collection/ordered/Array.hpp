@@ -120,28 +120,28 @@ public:
 
     __CDS_cpplang_NonConstConstexprMemberFunction auto back () noexcept (false) -> ElementRef final {
         if ( this->empty() )
-            throw typename List<ElementType>::ListOutOfBounds();
+            throw OutOfBoundsException("Array is Empty");;
 
         return * this->_pData[this->_size - 1];
     }
 
     __CDS_cpplang_NonConstConstexprMemberFunction auto front () noexcept (false) -> ElementRef final {
         if ( this->empty() )
-            throw typename List<ElementType>::ListOutOfBounds();
+            throw OutOfBoundsException("Array is Empty");;
 
         return * this->_pData[0];
     }
 
     __CDS_cpplang_ConstexprConditioned auto back () const noexcept (false) -> ElementCRef final {
         if ( this->empty() )
-            throw typename List<ElementType>::ListOutOfBounds();
+            throw OutOfBoundsException("Array is Empty");;
 
         return * this->_pData[this->_size - 1];
     }
 
     __CDS_cpplang_ConstexprConditioned auto front () const noexcept (false) -> ElementCRef final {
         if (this->empty())
-            throw typename List<ElementType>::ListOutOfBounds();
+            throw OutOfBoundsException("Array is Empty");;
 
         return *this->_pData[0];
     }
@@ -187,7 +187,7 @@ public:
 
     auto popFront () noexcept (false) -> ElementType final {
         if ( this->empty() )
-            throw typename List<ElementType>::ListOutOfBounds();
+            throw OutOfBoundsException("Array is Empty");
 
         auto retVal = * this->_pData[0];
         delete Utility::exchange(this->_pData[0], nullptr);
@@ -202,7 +202,7 @@ public:
 
     auto popBack () noexcept (false) -> ElementType final {
         if ( this->empty() )
-            throw typename List<ElementType>::ListOutOfBounds();
+            throw OutOfBoundsException("Array is Empty");;
 
         auto v = * this->_pData[--this->_size];
         delete Utility::exchange(this->_pData[this->_size], nullptr);

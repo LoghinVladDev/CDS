@@ -159,7 +159,7 @@ public:
     constexpr auto operator<=(double value) const noexcept -> bool { return this->v <= value; }
     constexpr friend auto operator<=(double value, Double const & o) noexcept -> bool { return value <= o.v; }
 
-#if __CDS_cpplang_ThreeWayComparison_Available == true
+#if __CDS_cpplang_ThreeWayComparison_available == true
 
     constexpr auto operator <=> ( Double const & o ) const noexcept -> std :: partial_ordering { return this->v <=> o.v; }
     constexpr auto operator <=> ( double value ) const noexcept -> std :: partial_ordering { return this->v <=> value; }

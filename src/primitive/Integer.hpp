@@ -696,7 +696,7 @@ public:
 
     constexpr friend auto operator <= (int value, Integer const & o) noexcept -> bool { return value <= o.v; }
 
-#if __CDS_cpplang_ThreeWayComparison_Available == true
+#if __CDS_cpplang_ThreeWayComparison_available == true
 
     constexpr auto operator <=> (Integer const & o) const noexcept -> std::strong_ordering { return this->v <=> o.v; }
 

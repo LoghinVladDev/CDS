@@ -6,6 +6,7 @@
 #define CDS_EXCEPTION_HPP
 
 #include <CDS/String>
+#include <utility>
 
 class Exception : public Object, public std :: exception {
 private:
@@ -40,17 +41,10 @@ public:
 
     inline ~Exception () override = default;
 
-    __CDS_MaybeUnused inline explicit Exception ( String const & message ) noexcept :
+    __CDS_MaybeUnused inline explicit Exception ( String message ) noexcept :
             Object (),
             std :: exception (),
-            _message ( message ) {
-
-    }
-
-    inline explicit Exception ( String && message ) noexcept :
-            Object (),
-            std :: exception (),
-            _message ( message ) {
+            _message ( std :: move ( message ) ) {
 
     }
 

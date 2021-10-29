@@ -12,6 +12,9 @@
 
 #if __CDS_cpplang_core_version >= __CDS_cpplang_core_version_17
 
+template < bool expression, typename T = int >
+using EnableIf = typename std :: enable_if < expression, T > :: type;
+
 template < bool value >
 using BoolConstant = std :: bool_constant < value >;
 
@@ -78,9 +81,7 @@ struct isPrintable : std::false_type {};
 template < typename T >
 struct isPrintable <
         T,
-        typename std::enable_if <
-                std::is_same < decltype (std::cout << std::declval<T>()), std::ostream & >::value
-        > :: type
+        typename std :: enable_if < std::is_same < decltype (std::cout << std::declval<T>()), std::ostream & >::value > :: type
 > : std::true_type { };
 
 template < typename D, typename B >
@@ -325,9 +326,6 @@ public:
     static bool const constexpr value = sizeof(Test<Derived>(0)) == sizeof(YesType);
 };
 
-template < bool expression >
-using EnableIf = typename std :: enable_if < expression, int > :: type;
-
 namespace Utility {
 
     template<typename T>
@@ -456,36 +454,37 @@ struct Type {
 
 #endif
 
-    template < typename U = T >
-    static constexpr auto compare (T const & a, T const & b, int = 0) noexcept -> typename std :: enable_if < Type < U > :: hasEqualityOperator, bool > :: type {
+    template < typename U = T, EnableIf < Type < U > :: hasEqualityOperator > = 0 >
+    constexpr static auto compare (T const & a, T const & b, int = 0) noexcept -> bool {
         return a == b;
     }
 
-    template < typename U = T >
-    static __CDS_OptimalInline auto compare (T const & a, T const & b, float = 0.0f) noexcept -> typename std :: enable_if < ! Type < U > :: hasEqualityOperator && Type < U > :: objectDerived, bool > :: type {
+    template < typename U = T, EnableIf < ! Type < U > :: hasEqualityOperator && Type < U > :: objectDerived > = 0 >
+    __CDS_cpplang_VirtualConstexpr static auto compare (T const & a, T const & b, float = 0.0f) noexcept -> bool {
         return a.equals(b);
     }
 
-    template < typename U = T >
-    static constexpr auto compare (T const & a, T const & b) noexcept -> typename std :: enable_if < ! Type < U > :: hasEqualityOperator && ! Type < U > :: objectDerived, bool > :: type {
+    template < typename U = T, EnableIf < ! Type < U > :: hasEqualityOperator && ! Type < U > :: objectDerived > = 0 >
+    constexpr static auto compare (T const & a, T const & b) noexcept -> bool {
         return & a == & b;
     }
 
-    template < typename U = T >
-    static constexpr auto streamPrint(std::ostream & ostream, T const & obj) noexcept -> typename std :: enable_if < Type < U > :: ostreamPrintable, std :: ostream & > :: type {
+    template < typename U = T, EnableIf < Type < U > :: ostreamPrintable > = 0 >
+    static constexpr auto streamPrint(std::ostream & ostream, T const & obj) noexcept -> std :: ostream & {
         return (ostream << obj);
     }
 
-    template < typename U = T >
-    static constexpr auto streamPrint(std::ostream & ostream, T const & obj) noexcept -> typename std :: enable_if < !Type < U > :: ostreamPrintable, std :: ostream & > :: type {
-        return (ostream << &obj);
+    template < typename U = T, EnableIf < ! Type < U > :: ostreamPrintable > = 0 >
+    static constexpr auto streamPrint(std::ostream & ostream, T const & obj) noexcept -> std :: ostream & {
+        return (ostream << ( & obj ) );
     }
 
     template < typename V = typename std :: remove_reference < T > :: type >
     constexpr static auto unsafeAddress () noexcept -> V * { return reinterpret_cast < V * > (0x10); }
     constexpr static auto unsafeReference () noexcept -> T & { return * Type :: unsafeAddress(); }
 
-    constexpr static auto name () noexcept -> StringLiteral { return Utility :: TypeParseTraits < T > :: name; }
+    template < typename U = T >
+    constexpr static auto name () noexcept -> StringLiteral { return Utility :: TypeParseTraits < U > :: name; }
 };
 
 __CDS_WarningSuppression_FunctionTypeTraits_SuppressDisable
@@ -499,8 +498,8 @@ struct pairTrait {
 
 template < typename T >
 struct pairTrait < T > {
-    using FirstType = typename std :: enable_if < isPair < T > :: type :: value, typename std::remove_reference < decltype ( Type < T > :: unsafeAddress() -> first() ) > :: type > :: type;
-    using SecondType = typename std :: enable_if < isPair < T > :: type :: value, typename std::remove_reference < decltype ( Type < T > :: unsafeAddress() -> second() ) > :: type > :: type;
+    using FirstType = EnableIf < isPair < T > :: type :: value, typename std::remove_reference < decltype ( Type < T > :: unsafeAddress() -> first() ) > :: type >;
+    using SecondType = EnableIf < isPair < T > :: type :: value, typename std::remove_reference < decltype ( Type < T > :: unsafeAddress() -> second() ) > :: type >;
     using Type = Pair < FirstType, SecondType >;
 };
 

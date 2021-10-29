@@ -158,7 +158,7 @@ public:
     constexpr auto operator<=(float value) const noexcept -> bool { return this->v <= value; }
     constexpr friend auto operator<=(float value, Float const & o) noexcept -> bool { return value <= o.v; }
 
-#if __CDS_cpplang_ThreeWayComparison_Available == true
+#if __CDS_cpplang_ThreeWayComparison_available == true
 
     constexpr auto operator <=> ( Float const & o ) const noexcept -> std :: partial_ordering { return this->v <=> o.v; }
     constexpr auto operator <=> ( float value ) const noexcept -> std :: partial_ordering { return this->v <=> value; }

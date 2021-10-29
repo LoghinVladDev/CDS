@@ -44,7 +44,7 @@ public:
 
     /**
      * @brief Function used to obtain a random Long value from a Pseudo-Random Number Generator created at first call
-     *  that ranges values in [Limits::S64_MIN, INT64_MAX]
+     *  that ranges values in [limits::S64_MIN, INT64_MAX]
      *
      * @static
      *
@@ -276,7 +276,7 @@ public:
      * @param o : Long cref = Constant Reference to an Long Object to divide caller Object with
      *
      * @throws DivideByZeroException if right hand operator is 0
-     * @throws ArithmeticException if right hand operator is Limits::S64_MIN due to it being undefined behaviour ( if compiler is not C2 compliant )
+     * @throws ArithmeticException if right hand operator is limits::S64_MIN due to it being undefined behaviour ( if compiler is not C2 compliant )
      *
      * @returns Long = new Object containing division of operands
      *
@@ -284,14 +284,14 @@ public:
      */
     __CDS_cpplang_ConstexprDestructor auto operator/(Long const &o) const noexcept (false) -> Long {
         if ( o.v == 0 ) throw DivideByZeroException();
-        if ( o.v == Limits::S64_MIN || this->v == Limits::S64_MIN ) throw ArithmeticException ("Division by Limits::S64_MIN is undefined behaviour");
+        if (o.v == limits::S64_MIN || this->v == limits::S64_MIN ) throw ArithmeticException ("Division by limits::S64_MIN is undefined behaviour");
 
         return this->v / o.v;
     }
 
     friend auto operator / (CType value, Long const & o) noexcept (false) -> Long {
         if ( o.v == 0 ) throw DivideByZeroException();
-        if ( o.v == Limits::S64_MIN || value == Limits::S64_MIN ) throw ArithmeticException ("Division by Limits::S64_MIN is undefined behaviour");
+        if (o.v == limits::S64_MIN || value == limits::S64_MIN ) throw ArithmeticException ("Division by limits::S64_MIN is undefined behaviour");
 
         return value / o.v;
     }
@@ -302,7 +302,7 @@ public:
      * @param value : CType = int value to divide caller Object with
      *
      * @throws DivideByZeroException if right hand operator is 0
-     * @throws ArithmeticException if right hand operator is Limits::S64_MIN due to it being undefined behaviour ( if compiler is not C2 compliant )
+     * @throws ArithmeticException if right hand operator is limits::S64_MIN due to it being undefined behaviour ( if compiler is not C2 compliant )
      *
      * @returns Long = new Object containing division of operands
      *
@@ -310,7 +310,7 @@ public:
      */
     __CDS_cpplang_ConstexprDestructor auto operator / (CType value) const noexcept (false) -> Long {
         if ( value == 0 ) throw DivideByZeroException();
-        if ( value == Limits::S64_MIN || this->v == Limits::S64_MIN ) throw ArithmeticException ("Division by Limits::S64_MIN is undefined behaviour");
+        if (value == limits::S64_MIN || this->v == limits::S64_MIN ) throw ArithmeticException ("Division by limits::S64_MIN is undefined behaviour");
 
         return this->v / value;
     }
@@ -321,7 +321,7 @@ public:
      * @param o : Long cref = Constant Reference to an Long Object to obtain remainder from caller Object
      *
      * @throws DivideByZeroException if right hand operator is 0
-     * @throws ArithmeticException if right hand operator is Limits::S64_MIN due to it being undefined behaviour ( if compiler is not C2 compliant )
+     * @throws ArithmeticException if right hand operator is limits::S64_MIN due to it being undefined behaviour ( if compiler is not C2 compliant )
      *
      * @returns Long = new Object containing remainder of division of operands
      *
@@ -329,7 +329,7 @@ public:
      */
     __CDS_cpplang_ConstexprDestructor auto operator % (Long const &o) const noexcept (false) -> Long {
         if ( o.v == 0 ) throw DivideByZeroException();
-        if ( o.v == Limits::S64_MIN || this->v == Limits::S64_MIN ) throw ArithmeticException ("Modulo by Limits::S64_MIN is undefined behaviour");
+        if (o.v == limits::S64_MIN || this->v == limits::S64_MIN ) throw ArithmeticException ("Modulo by limits::S64_MIN is undefined behaviour");
 
         return this->v % o.v;
     }
@@ -340,7 +340,7 @@ public:
      * @param value : CType = int value to obtain remainder from caller Object
      *
      * @throws DivideByZeroException if right hand operator is 0
-     * @throws ArithmeticException if right hand operator is Limits::S64_MIN due to it being undefined behaviour ( if compiler is not C2 compliant )
+     * @throws ArithmeticException if right hand operator is limits::S64_MIN due to it being undefined behaviour ( if compiler is not C2 compliant )
      *
      * @returns Long = new Object containing remainder of division of operands
      *
@@ -348,14 +348,14 @@ public:
      */
     __CDS_cpplang_ConstexprDestructor auto operator % (CType value) const noexcept (false) -> Long {
         if ( value == 0 ) throw DivideByZeroException();
-        if ( value == Limits::S64_MIN || this->v == Limits::S64_MIN ) throw ArithmeticException ("Modulo by Limits::S64_MIN is undefined behaviour");
+        if (value == limits::S64_MIN || this->v == limits::S64_MIN ) throw ArithmeticException ("Modulo by limits::S64_MIN is undefined behaviour");
 
         return this->v % value;
     }
 
     __CDS_cpplang_ConstexprDestructor friend auto operator % (CType value, Long const & o) noexcept (false) -> Long {
         if ( o.v == 0 ) throw DivideByZeroException();
-        if ( o.v == Limits::S64_MIN || value == Limits::S64_MIN ) throw ArithmeticException ("Modulo by Limits::S64_MIN is undefined behaviour");
+        if (o.v == limits::S64_MIN || value == limits::S64_MIN ) throw ArithmeticException ("Modulo by limits::S64_MIN is undefined behaviour");
 
         return value % o.v;
     }
@@ -462,7 +462,7 @@ public:
      * @param o : Long cref = Constant Reference to Long Object to divide with left, caller object
      *
      * @throws DivideByZeroException if right hand operator is 0
-     * @throws ArithmeticException if right hand operator is Limits::S64_MIN due to it being undefined behaviour ( if compiler is not C2 compliant )
+     * @throws ArithmeticException if right hand operator is limits::S64_MIN due to it being undefined behaviour ( if compiler is not C2 compliant )
      *
      * @returns Long ref = Reference to modified object
      *
@@ -470,7 +470,7 @@ public:
      */
     __CDS_cpplang_NonConstConstexprMemberFunction auto operator/=(Long const &o) noexcept (false) -> Long & {
         if ( o.v == 0 ) throw DivideByZeroException();
-        if ( o.v == Limits::S64_MIN || this->v == Limits::S64_MIN ) throw ArithmeticException ("Division by Limits::S64_MIN is undefined behaviour");
+        if (o.v == limits::S64_MIN || this->v == limits::S64_MIN ) throw ArithmeticException ("Division by limits::S64_MIN is undefined behaviour");
 
         this->v /= o.v;
         return *this;
@@ -482,7 +482,7 @@ public:
      * @param value : CType = value to divide with left, caller object
      *
      * @throws DivideByZeroException if right hand operator is 0
-     * @throws ArithmeticException if right hand operator is Limits::S64_MIN due to it being undefined behaviour ( if compiler is not C2 compliant )
+     * @throws ArithmeticException if right hand operator is limits::S64_MIN due to it being undefined behaviour ( if compiler is not C2 compliant )
      *
      * @returns Long ref = Reference to modified object
      *
@@ -490,7 +490,7 @@ public:
      */
     __CDS_cpplang_NonConstConstexprMemberFunction auto operator/=(CType value) noexcept (false) -> Long & {
         if ( value == 0 ) throw DivideByZeroException();
-        if ( value == Limits::S64_MIN || this->v == Limits::S64_MIN ) throw ArithmeticException ("Division by Limits::S64_MIN is undefined behaviour");
+        if (value == limits::S64_MIN || this->v == limits::S64_MIN ) throw ArithmeticException ("Division by limits::S64_MIN is undefined behaviour");
 
         this->v /= value;
         return *this;
@@ -502,7 +502,7 @@ public:
      * @param o : Long cref = Constant Reference to Long Object to apply modulo with left, caller object
      *
      * @throws DivideByZeroException if right hand operator is 0
-     * @throws ArithmeticException if right hand operator is Limits::S64_MIN due to it being undefined behaviour ( if compiler is not C2 compliant )
+     * @throws ArithmeticException if right hand operator is limits::S64_MIN due to it being undefined behaviour ( if compiler is not C2 compliant )
      *
      * @returns Long ref = Reference to modified object
      *
@@ -510,7 +510,7 @@ public:
      */
     __CDS_cpplang_NonConstConstexprMemberFunction auto operator%=(Long const &o) noexcept (false) -> Long & {
         if ( o.v == 0 ) throw DivideByZeroException();
-        if ( o.v == Limits::S64_MIN || this->v == Limits::S64_MIN ) throw ArithmeticException ("Modulo by Limits::S64_MIN is undefined behaviour");
+        if (o.v == limits::S64_MIN || this->v == limits::S64_MIN ) throw ArithmeticException ("Modulo by limits::S64_MIN is undefined behaviour");
 
         this->v %= o.v;
         return *this;
@@ -522,7 +522,7 @@ public:
      * @param value : CType = value to apply modulo with left, caller object
      *
      * @throws DivideByZeroException if right hand operator is 0
-     * @throws ArithmeticException if right hand operator is Limits::S64_MIN due to it being undefined behaviour ( if compiler is not C2 compliant )
+     * @throws ArithmeticException if right hand operator is limits::S64_MIN due to it being undefined behaviour ( if compiler is not C2 compliant )
      *
      * @returns Long ref = Reference to modified object
      *
@@ -530,7 +530,7 @@ public:
      */
     __CDS_cpplang_NonConstConstexprMemberFunction auto operator%=(CType value) noexcept (false) -> Long & {
         if ( value == 0 ) throw DivideByZeroException();
-        if ( value == Limits::S64_MIN || this->v == Limits::S64_MIN ) throw ArithmeticException ("Modulo by Limits::S64_MIN is undefined behaviour");
+        if (value == limits::S64_MIN || this->v == limits::S64_MIN ) throw ArithmeticException ("Modulo by limits::S64_MIN is undefined behaviour");
 
         this->v %= value;
         return *this;
@@ -704,7 +704,7 @@ public:
 
     constexpr friend auto operator <= (CType value, Long const & o) noexcept -> bool { return value <= o.v; }
 
-#if __CDS_cpplang_ThreeWayComparison_Available == true
+#if __CDS_cpplang_ThreeWayComparison_available == true
 
     constexpr auto operator <=> (Long const & o) const noexcept -> std::strong_ordering { return this->v <=> o.v; }
 
@@ -1436,7 +1436,7 @@ public:
     __CDS_NoDiscard __CDS_OptimalInline auto operator / ( Atomic const & o ) const noexcept (false) -> Long {
         CType rValue = o.get(), lValue = this->get();
         if ( rValue == 0 ) throw DivideByZeroException();
-        if ( rValue == Limits::S64_MIN || lValue == Limits::S64_MIN ) throw ArithmeticException ("Division by Limits::S64_MIN is undefined behaviour");
+        if (rValue == limits::S64_MIN || lValue == limits::S64_MIN ) throw ArithmeticException ("Division by limits::S64_MIN is undefined behaviour");
 
         return lValue / rValue;
     }
@@ -1445,7 +1445,7 @@ public:
         CType lValue = this->get();
 
         if ( o == (sint64)0 ) throw DivideByZeroException();
-        if ( o == Limits::S64_MIN || lValue == Limits::S64_MIN ) throw ArithmeticException ("Division by Limits::S64_MIN is undefined behaviour");
+        if (o == limits::S64_MIN || lValue == limits::S64_MIN ) throw ArithmeticException ("Division by limits::S64_MIN is undefined behaviour");
 
         return lValue / o;
     }
@@ -1454,7 +1454,7 @@ public:
         auto lValue = this->get();
 
         if ( value == 0 ) throw DivideByZeroException();
-        if ( value == Limits::S64_MIN || lValue == Limits::S64_MIN ) throw ArithmeticException ("Division by Limits::S64_MIN is undefined behaviour");
+        if (value == limits::S64_MIN || lValue == limits::S64_MIN ) throw ArithmeticException ("Division by limits::S64_MIN is undefined behaviour");
 
         return lValue / value;
     }
@@ -1462,14 +1462,14 @@ public:
     __CDS_NoDiscard friend __CDS_OptimalInline auto operator / ( Long const & value, Atomic const & o ) noexcept (false) -> Long {
         CType rVal = o.get();
         if ( rVal == 0 ) throw DivideByZeroException();
-        if ( rVal == Limits::S64_MIN || value == Limits::S64_MIN ) throw ArithmeticException ("Division by Limits::S64_MIN is undefined behaviour");
+        if (rVal == limits::S64_MIN || value == limits::S64_MIN ) throw ArithmeticException ("Division by limits::S64_MIN is undefined behaviour");
 
         return value / rVal;
     }
     __CDS_NoDiscard friend __CDS_OptimalInline auto operator / ( CType value, Atomic const & o ) noexcept (false) -> Long {
         CType rVal = o.get();
         if ( rVal == 0 ) throw DivideByZeroException();
-        if ( rVal == Limits::S64_MIN || value == Limits::S64_MIN ) throw ArithmeticException ("Division by Limits::S64_MIN is undefined behaviour");
+        if (rVal == limits::S64_MIN || value == limits::S64_MIN ) throw ArithmeticException ("Division by limits::S64_MIN is undefined behaviour");
 
         return value / rVal;
     }
@@ -1478,7 +1478,7 @@ public:
     __CDS_NoDiscard __CDS_OptimalInline auto operator % ( Atomic const & o ) const noexcept (false) -> Long {
         CType rValue = o.get(), lValue = this->get();
         if (rValue == 0 ) throw DivideByZeroException();
-        if (rValue == Limits::S64_MIN || lValue == Limits::S64_MIN ) throw ArithmeticException ("Modulo by Limits::S64_MIN is undefined behaviour");
+        if (rValue == limits::S64_MIN || lValue == limits::S64_MIN ) throw ArithmeticException ("Modulo by limits::S64_MIN is undefined behaviour");
 
         return lValue % rValue;
     }
@@ -1486,7 +1486,7 @@ public:
     __CDS_NoDiscard __CDS_OptimalInline auto operator % ( Long const & o ) const noexcept (false) -> Long {
         CType lValue = this->get();
         if ( o == (sint64)0 ) throw DivideByZeroException();
-        if ( o == Limits::S64_MIN || lValue == Limits::S64_MIN ) throw ArithmeticException ("Modulo by Limits::S64_MIN is undefined behaviour");
+        if (o == limits::S64_MIN || lValue == limits::S64_MIN ) throw ArithmeticException ("Modulo by limits::S64_MIN is undefined behaviour");
 
         return lValue % o;
     }
@@ -1494,7 +1494,7 @@ public:
     __CDS_NoDiscard __CDS_OptimalInline auto operator % ( CType rValue ) const noexcept (false) -> Long {
         CType lValue = this->get();
         if (rValue == 0 ) throw DivideByZeroException();
-        if (rValue == Limits::S64_MIN || lValue == Limits::S64_MIN ) throw ArithmeticException ("Modulo by Limits::S64_MIN is undefined behaviour");
+        if (rValue == limits::S64_MIN || lValue == limits::S64_MIN ) throw ArithmeticException ("Modulo by limits::S64_MIN is undefined behaviour");
 
         return lValue % rValue;
     }
@@ -1502,14 +1502,14 @@ public:
     __CDS_NoDiscard friend __CDS_OptimalInline auto operator % ( Long const & value, Atomic const & o ) noexcept (false) -> Long {
         CType rVal = o.get();
         if ( rVal == 0 ) throw DivideByZeroException();
-        if ( rVal == Limits::S64_MIN || value == Limits::S64_MIN ) throw ArithmeticException ("Modulo by Limits::S64_MIN is undefined behaviour");
+        if (rVal == limits::S64_MIN || value == limits::S64_MIN ) throw ArithmeticException ("Modulo by limits::S64_MIN is undefined behaviour");
 
         return value % rVal;
     }
     __CDS_NoDiscard friend __CDS_OptimalInline auto operator % ( CType value, Atomic const & o ) noexcept (false) -> Long {
         CType rVal = o.get();
         if ( rVal == 0 ) throw DivideByZeroException();
-        if ( rVal == Limits::S64_MIN || value == Limits::S64_MIN ) throw ArithmeticException ("Modulo by Limits::S64_MIN is undefined behaviour");
+        if (rVal == limits::S64_MIN || value == limits::S64_MIN ) throw ArithmeticException ("Modulo by limits::S64_MIN is undefined behaviour");
 
         return value % rVal;
     }
@@ -1581,13 +1581,13 @@ public:
 
     __CDS_OptionalInline auto operator /= (CType value) noexcept (false) -> Atomic & {
         if ( value == 0 ) throw DivideByZeroException();
-        if ( value == Limits::S64_MIN ) throw ArithmeticException ("Division by Limits::S64_MIN is undefined behaviour");
+        if (value == limits::S64_MIN ) throw ArithmeticException ("Division by limits::S64_MIN is undefined behaviour");
 
         this->_access.lock();
 
-        if ( this->_data == Limits::S64_MIN ) {
+        if (this->_data == limits::S64_MIN ) {
             this->_access.unlock();
-            throw ArithmeticException ("Division by Limits::S64_MIN is undefined behaviour");
+            throw ArithmeticException ("Division by limits::S64_MIN is undefined behaviour");
         }
 
         this->_data /= value;
@@ -1597,13 +1597,13 @@ public:
 
     __CDS_OptionalInline auto operator %= (CType value) noexcept (false) -> Atomic & {
         if ( value == 0 ) throw DivideByZeroException();
-        if ( value == Limits::S64_MIN ) throw ArithmeticException ("Division by Limits::S64_MIN is undefined behaviour");
+        if (value == limits::S64_MIN ) throw ArithmeticException ("Division by limits::S64_MIN is undefined behaviour");
 
         this->_access.lock();
 
-        if ( this->_data == Limits::S64_MIN ) {
+        if (this->_data == limits::S64_MIN ) {
             this->_access.unlock();
-            throw ArithmeticException ("Division by Limits::S64_MIN is undefined behaviour");
+            throw ArithmeticException ("Division by limits::S64_MIN is undefined behaviour");
         }
 
         this->_data %= value;
@@ -1669,13 +1669,13 @@ public:
 
     __CDS_OptionalInline auto operator /= (Long const & value) noexcept (false) -> Atomic & {
         if ( value == (sint64)0 ) throw DivideByZeroException();
-        if ( value == Limits::S64_MIN ) throw ArithmeticException ("Division by Limits::S64_MIN is undefined behaviour");
+        if (value == limits::S64_MIN ) throw ArithmeticException ("Division by limits::S64_MIN is undefined behaviour");
 
         this->_access.lock();
 
-        if ( this->_data == Limits::S64_MIN ) {
+        if (this->_data == limits::S64_MIN ) {
             this->_access.unlock();
-            throw ArithmeticException ("Division by Limits::S64_MIN is undefined behaviour");
+            throw ArithmeticException ("Division by limits::S64_MIN is undefined behaviour");
         }
 
         this->_data /= value;
@@ -1686,12 +1686,12 @@ public:
     __CDS_OptionalInline auto operator %= (Long const & value) noexcept (false) -> Atomic & {
         if ( value == (sint64)0 ) throw DivideByZeroException();
 
-        if ( this->_data == Limits::S64_MIN ) {
+        if (this->_data == limits::S64_MIN ) {
             this->_access.unlock();
-            throw ArithmeticException ("Division by Limits::S64_MIN is undefined behaviour");
+            throw ArithmeticException ("Division by limits::S64_MIN is undefined behaviour");
         }
 
-        if ( value == Limits::S64_MIN ) throw ArithmeticException ("Modulo by Limits::S64_MIN is undefined behaviour");
+        if (value == limits::S64_MIN ) throw ArithmeticException ("Modulo by limits::S64_MIN is undefined behaviour");
 
         this->_access.lock();
         this->_data %= value;
@@ -1764,13 +1764,13 @@ public:
     __CDS_OptionalInline auto operator /= (Atomic const & value) noexcept (false) -> Atomic & {
         auto rValue = value.get();
         if ( rValue == (sint64)0 ) throw DivideByZeroException();
-        if ( rValue == Limits::S64_MIN ) throw ArithmeticException ("Division by Limits::S64_MIN is undefined behaviour");
+        if (rValue == limits::S64_MIN ) throw ArithmeticException ("Division by limits::S64_MIN is undefined behaviour");
 
         this->_access.lock();
 
-        if ( this->_data == Limits::S64_MIN ) {
+        if (this->_data == limits::S64_MIN ) {
             this->_access.unlock();
-            throw ArithmeticException ("Division by Limits::S64_MIN is undefined behaviour");
+            throw ArithmeticException ("Division by limits::S64_MIN is undefined behaviour");
         }
 
         this->_data /= rValue;
@@ -1781,13 +1781,13 @@ public:
     __CDS_OptionalInline auto operator %= (Atomic const & value) noexcept (false) -> Atomic & {
         auto rValue = value.get();
         if ( rValue == (sint64)0 ) throw DivideByZeroException();
-        if ( rValue == Limits::S64_MIN ) throw ArithmeticException ("Modulo by Limits::S64_MIN is undefined behaviour");
+        if (rValue == limits::S64_MIN ) throw ArithmeticException ("Modulo by limits::S64_MIN is undefined behaviour");
 
         this->_access.lock();
 
-        if ( this->_data == Limits::S64_MIN ) {
+        if (this->_data == limits::S64_MIN ) {
             this->_access.unlock();
-            throw ArithmeticException ("Division by Limits::S64_MIN is undefined behaviour");
+            throw ArithmeticException ("Division by limits::S64_MIN is undefined behaviour");
         }
 
         this->_data %= rValue;

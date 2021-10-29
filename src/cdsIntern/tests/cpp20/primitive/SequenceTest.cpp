@@ -540,7 +540,9 @@ bool SequenceTest::execute() noexcept {
 
             log("strings : %s", strings.toArray().toString().cStr());
             log("strings.min : %s", strings.minBy([](String const & s){return s.length();}).value().cStr());
-            log("emptyList.min : %s", Array<String>{}.sequence().minBy([](String const & s){return s.length();}).toString().cStr());
+            log("emptyList.min : %s", Array<String>{}.sequence().minBy([](String const & s){
+                return s.length();
+            }).toString().cStr());
 
             if (
                     strings.minBy([](String const & s){return s.length();}).value() != "o" ||
@@ -574,7 +576,7 @@ bool SequenceTest::execute() noexcept {
 
             log("strings : %s", strings.toArray().toString().cStr());
             log("strings.min : %d", strings.minOf([](String const & s){return s.length();}).value());
-            log("emptyList.min : %d", Array<String>{}.sequence().minOf([](String const & s){return s.length();}).toString().cStr());
+            log("emptyList.min : %s", Array<String>{}.sequence().minOf([](String const & s){return s.length();}).toString().cStr());
 
             if (
                     strings.minOf([](String const & s){return s.length();}).value() != 1 ||

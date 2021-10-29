@@ -7,7 +7,7 @@
 
 #include <CDS/Types>
 
-namespace Limits {
+namespace limits {
     constexpr uint8 U8_MAX      = 0xFFu;
     constexpr uint16 U16_MAX    = 0xFFFFu;
     constexpr uint32 U32_MAX    = 0xFFFFFFFFlu;
@@ -26,7 +26,7 @@ namespace Limits {
     constexpr sint8 S8_MIN      = - 0x80;
     constexpr sint16 S16_MIN    = - 0x8000;
     constexpr sint32 S32_MIN    = - 0x80000000l;
-    constexpr sint64 S64_MIN    = - 0x8000000000000000ll;
+    constexpr sint64 S64_MIN    = - S64_MAX - 1;
 }
 
 #endif //CDS_LIMITS_HPP

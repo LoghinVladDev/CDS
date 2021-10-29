@@ -10,10 +10,10 @@ namespace Conversion {
     /**
      * @brief Implementation 'borrowed' from gcc11 charconv.h to add constexpr functionality
      */
-    template<typename Type>
+    template < typename Type >
     __CDS_cpplang_ConstexprConditioned static auto toCharBase10(char * buffer, uint32 length, Type value) noexcept -> void { // NOLINT(bugprone-reserved-identifier)
-        static_assert(std::is_integral<Type>::value, "implementation bug");
-        static_assert(std::is_unsigned<Type>::value, "implementation bug");
+        static_assert ( std :: is_integral < Type > :: value, "implementation bug" );
+        static_assert ( std :: is_unsigned < Type > :: value, "implementation bug" );
 
         constexpr char digits[201] =
                 "0001020304050607080910111213141516171819"

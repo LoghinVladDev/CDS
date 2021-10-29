@@ -79,7 +79,7 @@ public:
     KeyException () noexcept : Exception ( "Key Exception" ) { }
 
     template < typename K >
-    explicit KeyException ( K const & key ) noexcept : Exception ( String :: f ( "Key Exception : Key '%s' is invalid for Object", String(key).cStr() ) ) { }
+    __CDS_MaybeUnused explicit KeyException ( K const & key ) noexcept : Exception ( String :: f ( "Key Exception : Key '%s' is invalid for Object", String(key).cStr() ) ) { }
 };
 
 __CDS_RegisterParseType(KeyException)

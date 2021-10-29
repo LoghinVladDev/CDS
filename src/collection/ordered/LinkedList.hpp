@@ -257,28 +257,28 @@ public:
 
     __CDS_cpplang_NonConstConstexprMemberFunction auto back () noexcept (false) -> T & final {
         if ( this->empty() )
-            throw typename List<T>::ListOutOfBounds();
+            throw OutOfBoundsException("List is Empty");
 
         return * this->_pBack->data;
     }
 
     __CDS_cpplang_NonConstConstexprMemberFunction auto front () noexcept (false) -> T & final {
         if ( this->empty() )
-            throw typename List<T>::ListOutOfBounds();
+            throw OutOfBoundsException("List is Empty");
 
         return * this->_pFront->data;
     }
 
     __CDS_NoDiscard __CDS_cpplang_ConstexprConditioned auto back () const noexcept (false) -> const T & final {
         if ( this->empty() )
-            throw typename List<T>::ListOutOfBounds();
+            throw OutOfBoundsException("List is Empty");
 
         return * this->_pBack->data;
     }
 
     __CDS_NoDiscard __CDS_cpplang_ConstexprConditioned auto front () const noexcept (false) -> const T & final {
         if ( this->empty() )
-            throw typename List<T>::ListOutOfBounds();
+            throw OutOfBoundsException("List is Empty");
 
         return * this->_pFront->data;
     }
@@ -316,7 +316,7 @@ public:
 
     auto popFront ( ) noexcept (false) -> T final {
         if ( this->empty () )
-            throw typename List<T>::ListOutOfBounds();
+            throw OutOfBoundsException("List is Empty");
 
         this->_size --;
 
@@ -342,7 +342,7 @@ public:
 
     auto popBack ( ) noexcept (false) -> T final {
         if ( this->empty () )
-            throw typename List<T>::ListOutOfBounds();
+            throw OutOfBoundsException("List is Empty");
 
         this->_size --;
 
@@ -761,7 +761,7 @@ auto DoubleLinkedList<T>::removeLastNotOf( Collection<T> const & from ) noexcept
 template<class T>
 auto DoubleLinkedList<T>::remove ( const typename Collection<T>::Iterator & it ) noexcept (false) -> T {
     if ( this->empty() )
-        throw typename List<T>::ListOutOfBounds();
+        throw OutOfBoundsException("List is Empty");
 
     if ( this->begin() == it ) {
         auto node = this->_pFront;
