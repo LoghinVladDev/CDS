@@ -128,6 +128,7 @@ public:
                 index (otherIt.index){
 
         }
+
         Iterator (Iterator &&) noexcept = default;
         Iterator (Sequence *, CollectionIterator const &) noexcept;
         ~Iterator () noexcept override = default;
@@ -2135,13 +2136,13 @@ auto Sequence < C >::ConstIterator::skipFiltered() noexcept -> void {
                 if (
                         currentMapperIterator != this->pSeq.valueAt().storedMappers.end() &&
                         currentMapperIterator.value().getSecond() == i
-                        ) {
+                ) {
                     * this->precomputed = (* currentMapperIterator.value().getFirst())( * this->precomputed);
                     currentMapperIterator.next();
                 } else if (
                         currentIndexedMapperIterator != this->pSeq.valueAt().storedIndexedMappers.end() &&
                         currentIndexedMapperIterator.value().getSecond() == i
-                        ) {
+                ) {
                     * this->precomputed = (* currentIndexedMapperIterator.value().getFirst())(
                             this->index,
                             * this->precomputed
@@ -2575,11 +2576,7 @@ __CDS_Requires ( Iterable < C > || ConstIterable < C > ) {
 template < typename C >
 template < typename NewType, typename OT, typename NT, typename std :: enable_if < Type < OT > :: isSmartPointer, int > :: type >
 __CDS_MaybeUnused __CDS_OptionalInline auto Sequence < C > :: filterIsDerived () && noexcept -> Sequence < LinkedList < typename TypeExtensions < NT > :: AsForeignPointer > >
-__CDS_Requires(
-        ( Iterable < C > || ConstIterable < C > ) &&
-        Pointer < OT > &&
-        Pointer < NT >
-) {
+__CDS_Requires ( ( Iterable < C > || ConstIterable < C > ) && Pointer < OT > && Pointer < NT > ) {
 
     LinkedList < typename TypeExtensions < NT > :: AsForeignPointer > container;
     for ( auto e : * this ) {
@@ -2594,11 +2591,7 @@ __CDS_Requires(
 template < typename C >
 template < typename NewType, typename OT, typename NT, typename std :: enable_if < Type < OT > :: isSmartPointer, int > :: type >
 __CDS_MaybeUnused __CDS_OptionalInline auto Sequence < C > :: filterIsDerived () & noexcept -> Sequence < LinkedList < typename TypeExtensions < NT > :: AsForeignPointer > >
-__CDS_Requires(
-        ( Iterable < C > || ConstIterable < C > ) &&
-        Pointer < OT > &&
-        Pointer < NT >
-) {
+__CDS_Requires ( ( Iterable < C > || ConstIterable < C > ) && Pointer < OT > && Pointer < NT > ) {
 
     LinkedList < typename TypeExtensions < NT > :: AsForeignPointer > container;
     for ( auto e : * this ) {
@@ -2613,11 +2606,7 @@ __CDS_Requires(
 template < typename C >
 template < typename NewType, typename OT, typename NT, typename std :: enable_if < Type < OT > :: isBasicPointer, int > :: type >
 __CDS_MaybeUnused __CDS_OptionalInline auto Sequence < C > :: filterIsDerived () && noexcept -> Sequence < LinkedList < NewType > >
-__CDS_Requires(
-        ( Iterable < C > || ConstIterable < C > ) &&
-        Pointer < ElementType > &&
-        Pointer < NewType >
-) {
+__CDS_Requires ( ( Iterable < C > || ConstIterable < C > ) && Pointer < ElementType > && Pointer < NewType > ) {
 
     LinkedList < NewType > container;
     for ( auto e : * this ) {
@@ -2632,11 +2621,7 @@ __CDS_Requires(
 template < typename C >
 template < typename NewType, typename OT, typename NT, typename std :: enable_if < Type < OT > :: isBasicPointer, int > :: type >
 __CDS_MaybeUnused __CDS_OptionalInline auto Sequence < C > :: filterIsDerived () & noexcept -> Sequence < LinkedList < NewType > >
-__CDS_Requires(
-        ( Iterable < C > || ConstIterable < C > ) &&
-        Pointer < ElementType > &&
-        Pointer < NewType >
-) {
+__CDS_Requires( ( Iterable < C > || ConstIterable < C > ) && Pointer < ElementType > && Pointer < NewType > ) {
 
     LinkedList < NewType > container;
     for ( auto e : * this ) {
@@ -2689,10 +2674,7 @@ template < typename Transformer, typename std::enable_if < isPair < returnOf < T
 __CDS_MaybeUnused __CDS_OptionalInline auto Sequence < C > :: associate(
         Transformer const & transformer
 ) && noexcept -> Sequence < LinkedList < returnOf < Transformer > > >
-__CDS_Requires (
-        ( Iterable < C > || ConstIterable < C > ) &&
-        PairType < returnOf < Transformer > >
-) {
+__CDS_Requires ( ( Iterable < C > || ConstIterable < C > ) && PairType < returnOf < Transformer > > ) {
     LinkedList < returnOf < Transformer > > container;
     for ( auto e : * this )
         container.add ( transformer ( e ) );
@@ -2705,10 +2687,7 @@ template < typename Transformer, typename std::enable_if < isPair < returnOf < T
 __CDS_MaybeUnused __CDS_OptionalInline auto Sequence < C > :: associate(
         Transformer const & transformer
 ) & noexcept -> Sequence < LinkedList < returnOf < Transformer > > >
-__CDS_Requires (
-        ( Iterable < C > || ConstIterable < C > ) &&
-        PairType < returnOf < Transformer > >
-) {
+__CDS_Requires ( ( Iterable < C > || ConstIterable < C > ) && PairType < returnOf < Transformer > > ) {
     LinkedList < returnOf < Transformer > > container;
     for ( auto e : * this )
         container.add ( transformer ( e ) );
@@ -3752,11 +3731,7 @@ template < typename NewType, typename CT, typename OT, typename std :: enable_if
 __CDS_MaybeUnused __CDS_OptionalInline auto Sequence < C > :: filterIsDerivedTo (
         Collection < CT > & collection
 ) const noexcept -> Collection < CT > &
-__CDS_Requires (
-        ( Iterable < C > || ConstIterable < C > ) &&
-        Pointer < ElementType > &&
-        Pointer < NewType >
-) {
+__CDS_Requires ( ( Iterable < C > || ConstIterable < C > ) && Pointer < ElementType > && Pointer < NewType > ) {
 
     for ( auto e : * this ) {
         auto p = dynamic_cast < NewType > (e.get());
@@ -4546,8 +4521,7 @@ template < typename Selector >
 __CDS_MaybeUnused __CDS_OptionalInline auto Sequence < C > :: maxBy (
         Selector const & selector
 ) const noexcept -> Optional < ElementType > __CDS_Requires (
-        (Iterable < C > || ConstIterable < C >) &&
-        TypeLessComparable < returnOf < Selector > >
+        (Iterable < C > || ConstIterable < C >) && TypeLessComparable < returnOf < Selector > >
 ) {
 
     if ( this->pCollection.valueAt().valueAt().size() == 0 ) return { };
@@ -4569,8 +4543,7 @@ template < typename Selector >
 __CDS_MaybeUnused __CDS_OptionalInline auto Sequence < C > :: maxOf (
         Selector const & selector
 ) const noexcept -> Optional < returnOf < Selector > > __CDS_Requires (
-        (Iterable < C > || ConstIterable < C >) &&
-        TypeLessComparable < returnOf < Selector > >
+        (Iterable < C > || ConstIterable < C >) && TypeLessComparable < returnOf < Selector > >
 ) {
 
     if ( this->pCollection.valueAt().valueAt().size() == 0 ) return { };
@@ -4603,8 +4576,7 @@ __CDS_MaybeUnused __CDS_OptimalInline auto Sequence < C > :: maxByOr (
         ElementType const & e,
         Selector    const & selector
 ) const noexcept -> ElementType __CDS_Requires (
-        (Iterable < C > || ConstIterable < C >) &&
-        TypeLessComparable < returnOf < Selector > >
+        (Iterable < C > || ConstIterable < C >) && TypeLessComparable < returnOf < Selector > >
 ) {
 
     auto v = this->maxBy ( selector );
@@ -4617,8 +4589,7 @@ __CDS_MaybeUnused __CDS_OptimalInline auto Sequence < C > :: maxOfOr (
         returnOf < Selector >   const & e,
         Selector                const & selector
 ) const noexcept -> returnOf < Selector > __CDS_Requires (
-        (Iterable < C > || ConstIterable < C >) &&
-        TypeLessComparable < returnOf < Selector > >
+        (Iterable < C > || ConstIterable < C >) && TypeLessComparable < returnOf < Selector > >
 ) {
 
     auto v = this->maxOf ( selector );
@@ -4662,8 +4633,7 @@ template < typename Selector >
 __CDS_MaybeUnused __CDS_OptionalInline auto Sequence < C > :: minBy (
         Selector const & selector
 ) const noexcept -> Optional < ElementType > __CDS_Requires (
-        (Iterable < C > || ConstIterable < C >) &&
-        TypeLessComparable < returnOf < Selector > >
+        (Iterable < C > || ConstIterable < C >) && TypeLessComparable < returnOf < Selector > >
 ) {
 
     if ( this->pCollection.valueAt().valueAt().size() == 0 ) return { };
@@ -4685,8 +4655,7 @@ template < typename Selector >
 __CDS_MaybeUnused __CDS_OptionalInline auto Sequence < C > :: minOf (
         Selector const & selector
 ) const noexcept -> Optional < returnOf < Selector > > __CDS_Requires (
-        (Iterable < C > || ConstIterable < C >) &&
-        TypeLessComparable < returnOf < Selector > >
+        (Iterable < C > || ConstIterable < C >) && TypeLessComparable < returnOf < Selector > >
 ) {
 
     if ( this->pCollection.valueAt().valueAt().size() == 0 ) return { };
@@ -4719,8 +4688,7 @@ __CDS_MaybeUnused __CDS_OptimalInline auto Sequence < C > :: minByOr (
         ElementType const & e,
         Selector    const & selector
 ) const noexcept -> ElementType __CDS_Requires (
-        (Iterable < C > || ConstIterable < C >) &&
-        TypeLessComparable < returnOf < Selector > >
+        (Iterable < C > || ConstIterable < C >) && TypeLessComparable < returnOf < Selector > >
 ) {
 
     auto v = this->minBy ( selector );
@@ -4733,8 +4701,7 @@ __CDS_MaybeUnused __CDS_OptimalInline auto Sequence < C > :: minOfOr (
         returnOf < Selector >   const & e,
         Selector                const & selector
 ) const noexcept -> returnOf < Selector > __CDS_Requires (
-        (Iterable < C > || ConstIterable < C >) &&
-        TypeLessComparable < returnOf < Selector > >
+        (Iterable < C > || ConstIterable < C >) && TypeLessComparable < returnOf < Selector > >
 ) {
 
     auto v = this->minOf ( selector );
@@ -5012,92 +4979,26 @@ __CDS_Requires ( Iterable < C > || ConstIterable < C > ) {
 
     LinkedList < returnOf < ListTransformer > > container;
 
-    if __CDS_cpplang_IfConstexpr (
-            std::is_abstract <
-                    typename std::remove_cv <
-                            typename std::remove_reference <
-                                    decltype (
-                                            std::get < 0 > (
-                                                    * dataTypes::unsafeAddress <
-                                                            argumentsOf <
-                                                                    ListTransformer
-                                                            >
-                                                    > ()
-                                            )
-                                    )
-                            >::type
-                    > :: type
-            > :: type :: value
-    ) {
-        LinkedList <
-                typename std::remove_cv <
-                        typename std::remove_reference <
-                                decltype (
-                                std::get < 0 > (
-                                        * dataTypes::unsafeAddress <
-                                                argumentsOf <
-                                                        ListTransformer
-                                                >
-                                        > ()
-                                )
-                                )
-                        >::type
-                > :: type ::ElementType
-        > window;
+    __CDS_Sequence :: Windowed :: type < ListTransformer > window;
 
-        auto it = this->begin();
+    auto it = this->begin();
 
-        for (; it != this->end();) {
-            Index i = 0;
-            for (auto wIt = it; wIt != this->end() && i < size; ++wIt) {
-                window.add(wIt.value());
-            }
-
-            if (i == size || partialWindows)
-                container.add(transformer(window));
-
-            window.clear();
-
-            for (i = 0; i < step && it != this->end(); i++)
-                ++it;
+    for (; it != this->end();) {
+        Index i = 0;
+        for (auto wIt = it; wIt != this->end() && i < size; ++wIt) {
+            window.add(wIt.value());
         }
 
-        return std::move(Sequence<decltype(container)>(std::move(container)));
-    } else {
-        typename std::remove_cv <
-                typename std::remove_reference <
-                        decltype(
-                                std::get<0>(
-                                        *dataTypes::unsafeAddress <
-                                                argumentsOf <
-                                                        ListTransformer
-                                                >
-                                        >()
-                                )
-                        )
-                >::type
-        > :: type window;
+        if (i == size || partialWindows)
+            container.add(transformer(window));
 
-        auto it = this->begin();
+        window.clear();
 
-
-        for (; it != this->end();) {
-            Index i = 0;
-            for (auto wIt = it; wIt != this->end() && i < size; ++wIt) {
-                window.add(wIt.value());
-            }
-
-            if (i == size || partialWindows)
-                container.add(transformer(window));
-
-            window.clear();
-
-            for (i = 0; i < step && it != this->end(); i++)
-                ++it;
-        }
-
-        return std::move(Sequence<decltype(container)>(std::move(container)));
+        for (i = 0; i < step && it != this->end(); i++)
+            ++it;
     }
+
+    return std::move(Sequence<decltype(container)>(std::move(container)));
 }
 
 template < typename C >
@@ -5112,92 +5013,26 @@ __CDS_Requires ( Iterable < C > || ConstIterable < C > ) {
 
     LinkedList < returnOf < ListTransformer > > container;
 
-    if __CDS_cpplang_IfConstexpr (
-            std::is_abstract <
-                    typename std::remove_cv <
-                            typename std::remove_reference <
-                                    decltype (
-                                            std::get < 0 > (
-                                                    * dataTypes::unsafeAddress <
-                                                            argumentsOf <
-                                                                    ListTransformer
-                                                            >
-                                                    > ()
-                                            )
-                                    )
-                            >::type
-                    > :: type
-            > :: type :: value
-    ) {
-        LinkedList <
-                typename std::remove_cv <
-                        typename std::remove_reference <
-                                decltype (
-                                std::get < 0 > (
-                                        * dataTypes::unsafeAddress <
-                                                argumentsOf <
-                                                        ListTransformer
-                                                >
-                                        > ()
-                                )
-                                )
-                        >::type
-                > :: type ::ElementType
-        > window;
+    __CDS_Sequence :: Windowed :: type < ListTransformer > window;
 
-        auto it = this->begin();
+    auto it = this->begin();
 
-        for (; it != this->end();) {
-            Index i = 0;
-            for (auto wIt = it; wIt != this->end() && i < size; ++wIt) {
-                window.add(wIt.value());
-            }
-
-            if (i == size || partialWindows)
-                container.add(transformer(window));
-
-            window.clear();
-
-            for (i = 0; i < step && it != this->end(); i++)
-                ++it;
+    for (; it != this->end();) {
+        Index i = 0;
+        for (auto wIt = it; wIt != this->end() && i < size; ++wIt) {
+            window.add(wIt.value());
         }
 
-        return std::move(Sequence<decltype(container)>(std::move(container)));
-    } else {
-        typename std::remove_cv <
-                typename std::remove_reference <
-                        decltype(
-                                std::get<0>(
-                                        *dataTypes::unsafeAddress <
-                                                argumentsOf <
-                                                        ListTransformer
-                                                >
-                                        >()
-                                )
-                        )
-                >::type
-        > :: type window;
+        if (i == size || partialWindows)
+            container.add(transformer(window));
 
-        auto it = this->begin();
+        window.clear();
 
-
-        for (; it != this->end();) {
-            Index i = 0;
-            for (auto wIt = it; wIt != this->end() && i < size; ++wIt) {
-                window.add(wIt.value());
-            }
-
-            if (i == size || partialWindows)
-                container.add(transformer(window));
-
-            window.clear();
-
-            for (i = 0; i < step && it != this->end(); i++)
-                ++it;
-        }
-
-        return std::move(Sequence<decltype(container)>(std::move(container)));
+        for (i = 0; i < step && it != this->end(); i++)
+            ++it;
     }
+
+    return std::move(Sequence<decltype(container)>(std::move(container)));
 }
 
 template < typename C >
@@ -5206,8 +5041,7 @@ __CDS_MaybeUnused __CDS_OptionalInline auto Sequence < C > :: zip (
         Sequence < OC > const & other
 ) && noexcept -> Sequence < LinkedList < Pair < ElementType, typename Sequence < OC > :: ElementType > > >
 __CDS_Requires (
-        ( Iterable < C > || ConstIterable < C > ) &&
-        ( Iterable < OC > || ConstIterable < OC > )
+        ( Iterable < C > || ConstIterable < C > ) && ( Iterable < OC > || ConstIterable < OC > )
 ) {
 
     auto it1 = this->begin();
@@ -5227,8 +5061,7 @@ __CDS_MaybeUnused __CDS_OptionalInline auto Sequence < C > :: zip (
         Sequence < OC > const & other
 ) & noexcept -> Sequence < LinkedList < Pair < ElementType, typename Sequence < OC > :: ElementType > > >
 __CDS_Requires (
-        ( Iterable < C > || ConstIterable < C > ) &&
-        ( Iterable < OC > || ConstIterable < OC > )
+        ( Iterable < C > || ConstIterable < C > ) && ( Iterable < OC > || ConstIterable < OC > )
 ) {
 
     auto it1 = this->begin();
@@ -5249,8 +5082,7 @@ __CDS_MaybeUnused __CDS_OptionalInline auto Sequence < C > :: zip (
         Transformer     const & transformer
 ) && noexcept -> Sequence < LinkedList < returnOf < Transformer > > >
 __CDS_Requires (
-        (Iterable < C > || ConstIterable < C >) &&
-        (Iterable < OC > || ConstIterable < OC > )
+        (Iterable < C > || ConstIterable < C >) && (Iterable < OC > || ConstIterable < OC > )
 ) {
 
     auto it1 = this->begin();
@@ -5271,8 +5103,7 @@ __CDS_MaybeUnused __CDS_OptionalInline auto Sequence < C > :: zip (
         Transformer     const & transformer
 ) & noexcept -> Sequence < LinkedList < returnOf < Transformer > > >
 __CDS_Requires (
-        (Iterable < C > || ConstIterable < C >) &&
-        (Iterable < OC > || ConstIterable < OC > )
+        (Iterable < C > || ConstIterable < C >) && (Iterable < OC > || ConstIterable < OC > )
 ) {
 
     auto it1 = this->begin();

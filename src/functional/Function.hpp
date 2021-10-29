@@ -131,13 +131,13 @@ public:
         this->pCallableObject = this->pManager->creator ( function.pCallableObject );
     }
 
-    __CDS_OptimalInline Function ( Function && function ) noexcept :
+    constexpr Function ( Function && function ) noexcept :
             pCallableObject ( Utility :: exchange ( function.pCallableObject, nullptr ) ),
             pManager ( Utility :: exchange ( function.pManager, nullptr ) ) {
 
     }
 
-    __CDS_OptimalInline auto operator = ( Function && function ) noexcept -> Function & {
+    constexpr auto operator = ( Function && function ) noexcept -> Function & {
         if ( this == & function ) return * this;
         if ( this->pCallableObject == function.pCallableObject ) return * this;
 

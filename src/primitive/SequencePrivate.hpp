@@ -105,6 +105,68 @@ namespace __CDS_Sequence { // NOLINT(bugprone-reserved-identifier)
 
     };
 
+    struct Windowed {
+
+        template < typename Transformer >
+        constexpr static auto isAbstract () noexcept -> bool {
+            return std::is_abstract <
+                typename std::remove_cv <
+                    typename std::remove_reference <
+                        decltype (
+                            std::get < 0 > (
+                                * dataTypes::unsafeAddress <
+                                    argumentsOf <
+                                        Transformer
+                                    >
+                                > ()
+                            )
+                        )
+                    > :: type
+                > :: type
+            > :: type :: value;
+        }
+
+        template < typename Transformer >
+        using typeIfAbstract = LinkedList <
+            typename std::remove_cv <
+                typename std::remove_reference <
+                    decltype (
+                        std::get < 0 > (
+                            * dataTypes::unsafeAddress <
+                                argumentsOf <
+                                    Transformer
+                                >
+                            > ()
+                        )
+                    )
+                >::type
+            > :: type ::ElementType
+        >;
+
+        template < typename Transformer >
+        using typeIfNotAbstract = typename std::remove_cv <
+            typename std::remove_reference <
+                decltype(
+                    std::get<0>(
+                        *dataTypes::unsafeAddress <
+                            argumentsOf <
+                                Transformer
+                            >
+                        >()
+                    )
+                )
+            > :: type
+        > :: type;
+
+        template < typename ListTransformer >
+        using type =
+            typename std :: conditional <
+                isAbstract < ListTransformer > (),
+                typeIfAbstract < ListTransformer >,
+                typeIfNotAbstract < ListTransformer >
+            > :: type;
+    };
+
 }
 
 #endif //CDS_SEQUENCEPRIVATE_H
