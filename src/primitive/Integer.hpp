@@ -1264,7 +1264,9 @@ public:
 
     __CDS_NoDiscard __CDS_MaybeUnused __CDS_cpplang_ConstexprConditioned auto digitToChar () const noexcept (false) -> char { if ( ! this->isDigit() ) throw IllegalArgumentException(); return static_cast < char > ( this->v ) + '0'; } // NOLINT(cppcoreguidelines-narrowing-conversions)
 
-    __CDS_NoDiscard __CDS_MaybeUnused constexpr auto static isEven (int value) noexcept -> bool { return value % 2 == 0; }
+    __CDS_NoDiscard __CDS_MaybeUnused constexpr auto static isEven (int value) noexcept -> bool {
+        return value % 2 == 0;
+    }
     __CDS_NoDiscard __CDS_MaybeUnused constexpr auto static isOdd (int value) noexcept -> bool { return value % 2 == 1; }
 };
 

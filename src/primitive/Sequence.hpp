@@ -16,6 +16,7 @@
 #include <CDS/Set>
 #include <CDS/Types>
 #include <CDS/Double>
+#include <CDS/Function>
 
 #include "SequencePrivate.hpp"
 
@@ -34,11 +35,11 @@ public:
     using ElementType               = typename std::remove_reference < IterableValue > :: type;
 
 private:
-    using StoredPredicate           = std::function < bool (IterableValue) >;
-    using StoredMapper              = std::function < typename std::remove_reference < IterableValue > :: type (IterableValue) >;
+    using StoredPredicate           = Function < bool (IterableValue) >;
+    using StoredMapper              = Function < typename std::remove_reference < IterableValue > :: type (IterableValue) >;
 
-    using StoredIndexedPredicate    = std::function < bool (Index, IterableValue) >;
-    using StoredIndexedMapper       = std::function < typename std::remove_reference < IterableValue > :: type (Index, IterableValue) >;
+    using StoredIndexedPredicate    = Function < bool (Index, IterableValue) >;
+    using StoredIndexedMapper       = Function < typename std::remove_reference < IterableValue > :: type (Index, IterableValue) >;
 
     friend class Iterator;
     friend class ConstIterator;
@@ -288,12 +289,12 @@ public:
     __CDS_MaybeUnused auto find ( Predicate const & ) const noexcept -> Optional < ElementType >
     __CDS_Requires ( Iterable < C > || ConstIterable < C > );
 
-    template < typename Predicate = std::function < bool ( ElementType const & ) > >
+    template < typename Predicate = Function < bool ( ElementType const & ) > >
     __CDS_MaybeUnused auto first (
             Predicate const & = [](ElementType const &) noexcept -> bool { return true; }
     ) const noexcept -> Optional < ElementType > __CDS_Requires ( Iterable < C > || ConstIterable < C > );
 
-    template < typename Predicate = std::function < bool ( ElementType const & ) > >
+    template < typename Predicate = Function < bool ( ElementType const & ) > >
     __CDS_MaybeUnused auto firstOr (
             ElementType const &,
             Predicate   const & = [] ( ElementType const & ) noexcept -> bool { return true; }
@@ -303,12 +304,12 @@ public:
     __CDS_MaybeUnused auto findLast ( Predicate const & ) const noexcept -> Optional < ElementType >
     __CDS_Requires ( Iterable < C > || ConstIterable < C > );
 
-    template < typename Predicate = std::function < bool ( ElementType const & ) > >
+    template < typename Predicate = Function < bool ( ElementType const & ) > >
     __CDS_MaybeUnused auto last (
             Predicate const & = [] ( ElementType const & ) noexcept -> bool { return true; }
     ) const noexcept -> Optional < ElementType > __CDS_Requires ( Iterable < C > || ConstIterable < C > );
 
-    template < typename Predicate = std::function < bool ( ElementType const & ) > >
+    template < typename Predicate = Function < bool ( ElementType const & ) > >
     __CDS_MaybeUnused auto lastOr (
             ElementType const &,
             Predicate   const & = [](ElementType const &) noexcept -> bool { return true; }
@@ -770,7 +771,7 @@ public:
     __CDS_MaybeUnused auto indicesOfAll ( Predicate const & ) const noexcept -> LinkedList < Index >
     __CDS_Requires ( Iterable < C > || ConstIterable < C > );
 
-    template < typename Predicate = std::function < bool (ElementType const &) > >
+    template < typename Predicate = Function < bool (ElementType const &) > >
     __CDS_MaybeUnused auto any (
             Predicate const & = [](ElementType const & ) { return true; }
     ) const noexcept -> Boolean __CDS_Requires ( Iterable < C > || ConstIterable < C > );
@@ -779,17 +780,17 @@ public:
     __CDS_MaybeUnused auto all ( Predicate const & ) const noexcept -> Boolean
     __CDS_Requires ( Iterable < C > || ConstIterable < C > );
 
-    template < typename Predicate = std::function < bool ( ElementType const & ) > >
+    template < typename Predicate = Function < bool ( ElementType const & ) > >
     __CDS_MaybeUnused auto count (
             Predicate const & = [](ElementType const &) { return true; }
     ) const noexcept -> Int __CDS_Requires ( Iterable < C > || ConstIterable < C > );
 
-    template < typename Predicate = std::function < bool ( ElementType const & ) > >
+    template < typename Predicate = Function < bool ( ElementType const & ) > >
     __CDS_MaybeUnused auto none (
             Predicate const & = [](ElementType const &) { return true; }
     ) const noexcept -> Boolean __CDS_Requires ( Iterable < C > || ConstIterable < C > );
 
-    template < typename Predicate = std::function < bool ( ElementType const & ) > >
+    template < typename Predicate = Function < bool ( ElementType const & ) > >
     __CDS_MaybeUnused auto one (
             Predicate const & = [](ElementType const &) { return true; }
     ) const noexcept -> Boolean __CDS_Requires ( Iterable < C > || ConstIterable < C > );
@@ -878,13 +879,13 @@ public:
     ) const noexcept -> Map < ElementType , returnOf < ValueMapper > > &
     __CDS_Requires ( Iterable < C > || ConstIterable < C > );
 
-    template < typename Comparator = std::function < bool (ElementType const &, ElementType const &) > >
+    template < typename Comparator = Function < bool (ElementType const &, ElementType const &) > >
     __CDS_MaybeUnused auto sorted (
             Comparator const & = []( ElementType const & a, ElementType const & b) noexcept -> bool { return a < b; }
     ) && noexcept -> Sequence < Array < ElementType > >
     __CDS_Requires ( Iterable < C > || ConstIterable < C > );
 
-    template < typename Comparator = std::function < bool (ElementType const &, ElementType const &) > >
+    template < typename Comparator = Function < bool (ElementType const &, ElementType const &) > >
     __CDS_MaybeUnused auto sorted (
             Comparator const & = []( ElementType const & a, ElementType const & b) noexcept -> bool { return a < b; }
     ) & noexcept -> Sequence < Array < ElementType > >
@@ -912,7 +913,7 @@ public:
 
     template <
             typename Selector,
-            typename Comparator = std::function < bool ( ElementType const &, ElementType const & ) >
+            typename Comparator = Function < bool ( ElementType const &, ElementType const & ) >
     >
     __CDS_MaybeUnused auto sortedByWith (
             Selector const &,
@@ -922,7 +923,7 @@ public:
 
     template <
             typename Selector,
-            typename Comparator = std::function < bool ( ElementType const &, ElementType const & ) >
+            typename Comparator = Function < bool ( ElementType const &, ElementType const & ) >
     >
     __CDS_MaybeUnused auto sortedByWith (
             Selector const &,
@@ -1307,7 +1308,7 @@ public:
 #undef max
 #endif
 
-    template < typename Comparator = std::function < bool (ElementType const &, ElementType const &) > >
+    template < typename Comparator = Function < bool (ElementType const &, ElementType const &) > >
     __CDS_MaybeUnused auto max (
             Comparator const & = [](ElementType const & a, ElementType const & b) noexcept -> bool { return a < b; }
     ) const noexcept -> Optional < ElementType > __CDS_Requires ( Iterable < C > || ConstIterable < C > );
@@ -1326,7 +1327,7 @@ public:
             TypeLessComparable < returnOf < Selector > >
     );
 
-    template < typename Comparator = std::function < bool (ElementType const &, ElementType const &) > >
+    template < typename Comparator = Function < bool (ElementType const &, ElementType const &) > >
     __CDS_MaybeUnused auto maxOr (
             ElementType const &,
             Comparator  const & = [](ElementType const & a, ElementType const & b) noexcept -> bool { return a < b; }
@@ -1350,7 +1351,7 @@ public:
             TypeLessComparable < returnOf < Selector > >
     );
 
-    template < typename Comparator = std::function < bool (ElementType const &, ElementType const &) > >
+    template < typename Comparator = Function < bool (ElementType const &, ElementType const &) > >
     __CDS_MaybeUnused auto min (
             Comparator const & = [](ElementType const & a, ElementType const & b) noexcept -> bool { return a < b; }
     ) const noexcept -> Optional < ElementType > __CDS_Requires ( Iterable < C > || ConstIterable < C > );
@@ -1370,7 +1371,7 @@ public:
             TypeLessComparable < returnOf < Selector > >
     );
 
-    template < typename Comparator = std::function < bool (ElementType const &, ElementType const &) > >
+    template < typename Comparator = Function < bool (ElementType const &, ElementType const &) > >
     __CDS_MaybeUnused auto minOr (
             ElementType const &,
             Comparator  const & = [](ElementType const & a, ElementType const & b) noexcept -> bool { return a < b; }

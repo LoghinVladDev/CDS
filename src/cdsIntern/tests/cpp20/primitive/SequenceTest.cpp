@@ -1873,7 +1873,9 @@ bool SequenceTest::execute() noexcept {
         auto filterTest = [&] {
             auto numbers = Array < Int > { 1, 2 ,3 ,4 , 5, 6, 7 }.sequence();
             auto evenNumbers = numbers.filter(Int::isEven);
-            auto notMultipleOf3 = numbers.filterNot ( [](Int const & v){ return v % 3 == 0; } );
+            auto notMultipleOf3 = numbers.filterNot ( [](Int const & v){
+                return v % 3 == 0;
+            } );
 
             log ( "numbers : %s", numbers.toArray().toString().cStr() );
             log ( "evenNumbers : %s", evenNumbers.toArray().toString().cStr() );
@@ -2255,7 +2257,7 @@ bool SequenceTest::execute() noexcept {
                 return v * v;
             });
 
-            std :: cout << (*squares.storedMappers.front().first())(1) << '\n';
+//            std :: cout << (*squares.storedMappers.front().first())(1) << '\n';
 
             log("numbers : %s", numbers.toArray().toString().cStr());
             log("squares : %s", squares.toArray().toString().cStr());
@@ -2382,7 +2384,7 @@ bool SequenceTest::execute() noexcept {
                 ok = false;
             }
         };
-        
+
         auto windowedTest = [&] {
             auto numbers = Range(0, 15).sequence();
 
@@ -2427,7 +2429,7 @@ bool SequenceTest::execute() noexcept {
 
             ///todo : check windowed!
         };
-        
+
         auto withIndexTest = [&] {
             auto numbers = Array<int> {2, 4, 6, 8}.sequence();
             auto withIndices = numbers.indexed();
@@ -2440,7 +2442,7 @@ bool SequenceTest::execute() noexcept {
                 ok = false;
             }
         };
-        
+
         auto zipTest = [&] {
             auto sequenceA = Range('a', 'z' + 1).sequence().map([](Index v){return (char)v;});
             auto sequenceB = Range(4).sequence().map([](Index v){ return (int)(v * 2 + 1); });
@@ -2465,7 +2467,7 @@ bool SequenceTest::execute() noexcept {
                 ok = false;
             }
         };
-        
+
         auto zipWithNextTest = [&] {
             auto letters = Range('a', 'f' + 1).sequence().map([](Index v){return (char)v;});
             auto pairs = letters.zipWithNext();
@@ -2486,7 +2488,7 @@ bool SequenceTest::execute() noexcept {
                 ok = false;
             }
         };
-        
+
 
         chunkedTest();
         dropTest();
