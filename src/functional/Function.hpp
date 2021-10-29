@@ -131,8 +131,23 @@ public:
         this->pCallableObject = this->pManager->creator ( function.pCallableObject );
     }
 
-    __CDS_OptimalInline Function ( Function && function ) noexcept = delete;
-    auto operator = ( Function && ) noexcept = delete;
+    __CDS_OptimalInline Function ( Function && function ) noexcept :
+            pCallableObject ( Utility :: exchange ( function.pCallableObject, nullptr ) ),
+            pManager ( Utility :: exchange ( function.pManager, nullptr ) ) {
+
+    }
+
+    __CDS_OptimalInline auto operator = ( Function && function ) noexcept -> Function & {
+        if ( this == & function ) return * this;
+        if ( this->pCallableObject == function.pCallableObject ) return * this;
+
+        if ( this->pManager != nullptr ) this->pManager->deleter ( this->pCallableObject );
+
+        this->pCallableObject = Utility :: exchange ( function.pCallableObject, nullptr );
+        this->pManager = Utility :: exchange ( function.pManager, nullptr );
+
+        return * this;
+    }
 
     template < typename Functor, EnableIf < Type < Functor > :: isCallableObject > = 0 >
     __CDS_OptimalInline auto operator = ( Functor const & functor ) noexcept -> Function & {

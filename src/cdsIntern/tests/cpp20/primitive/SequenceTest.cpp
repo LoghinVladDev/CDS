@@ -1,8 +1,6 @@
 //
 // Created by loghin on 04.06.2021.
 //
-
-#define CDS_DEBUG
 #include "SequenceTest.h"
 
 #include <CDS/Range>
