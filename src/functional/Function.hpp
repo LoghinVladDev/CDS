@@ -128,7 +128,9 @@ public:
 
     __CDS_OptimalInline Function ( Function const & function ) noexcept {
         this->pManager = function.pManager;
-        this->pCallableObject = this->pManager->creator ( function.pCallableObject );
+
+        if ( this->pManager != nullptr )
+            this->pCallableObject = this->pManager->creator ( function.pCallableObject );
     }
 
     constexpr Function ( Function && function ) noexcept :
@@ -175,7 +177,9 @@ public:
         if ( this->pManager != nullptr ) this->pManager->deleter ( this->pCallableObject );
 
         this->pManager = function.pManager;
-        this->pCallableObject = this->pManager->creator ( function.pCallableObject );
+
+        if ( this->pManager != nullptr )
+            this->pCallableObject = this->pManager->creator ( function.pCallableObject );
 
         return * this;
     }
