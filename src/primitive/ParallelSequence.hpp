@@ -15,6 +15,7 @@
 #include <CDS/LinkedList>
 #include <CDS/Set>
 #include <CDS/Types>
+#include <CDS/Function>
 
 #include <CDS/Thread>
 
@@ -31,11 +32,11 @@ public:
     using ElementType                   = typename std::remove_reference < IterableValue > :: type;
 
 debug_private:
-    using StoredPredicate               = std::function < bool (IterableValue) >;
-    using StoredMapper                  = std::function < std::remove_reference_t < IterableValue > ( IterableValue ) >;
+    using StoredPredicate               = Function < bool (IterableValue) >;
+    using StoredMapper                  = Function < std::remove_reference_t < IterableValue > ( IterableValue ) >;
 
-    using StoredIndexedPredicate        = std::function < bool (Index, IterableValue) >;
-    using StoredIndexedMapper           = std::function < std::remove_reference_t < IterableValue > ( Index, IterableValue ) >;
+    using StoredIndexedPredicate        = Function < bool (Index, IterableValue) >;
+    using StoredIndexedMapper           = Function < std::remove_reference_t < IterableValue > ( Index, IterableValue ) >;
 
     using StoredPredicateList           = LinkedList < Pair < SharedPointer < StoredPredicate >, Index > >;
     using StoredMapperList              = LinkedList < Pair < SharedPointer < StoredMapper >, Index > >;

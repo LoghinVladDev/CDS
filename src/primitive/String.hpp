@@ -4209,7 +4209,7 @@ public:
      *
      * @tparam Predicate = boolean return Callable with one parameter of ElementType, used to validate a property of an element
      *
-     * @param p : Predicate cref = Constant Reference to a Predicate - static function, Lambda, std::function or any callable type object
+     * @param p : Predicate cref = Constant Reference to a Predicate - static function, Lambda, Function or any callable type object
      *
      * @throws Predicate's exception, if any. If none, is exception safe
      *
@@ -4232,7 +4232,7 @@ public:
      *
      * @tparam Predicate = boolean return Callable with one parameter of ElementType, used to validate a property of an element
      *
-     * @param p : Predicate cref = Constant Reference to a Predicate - static function, Lambda, std::function or any callable type object
+     * @param p : Predicate cref = Constant Reference to a Predicate - static function, Lambda, Function or any callable type object
      *
      * @throws Predicate's exception, if any. If none, is exception safe
      *
@@ -4264,7 +4264,7 @@ public:
      *
      * @tparam Predicate = boolean return Callable with one parameter of ElementType, used to validate a property of an element
      *
-     * @param p : Predicate cref = Constant Reference to a Predicate - static function, Lambda, std::function or any callable type object
+     * @param p : Predicate cref = Constant Reference to a Predicate - static function, Lambda, Function or any callable type object
      *
      * @throws Predicate's exception, if any. If none, is exception safe
      *
@@ -4280,7 +4280,7 @@ public:
      *
      * @tparam Predicate = boolean return Callable with one parameter of ElementType, used to validate a property of an element
      *
-     * @param p : Predicate cref = Constant Reference to a Predicate - static function, Lambda, std::function or any callable type object
+     * @param p : Predicate cref = Constant Reference to a Predicate - static function, Lambda, Function or any callable type object
      *
      * @throws Predicate's exception, if any. If none, is exception safe
      *
@@ -4296,7 +4296,7 @@ public:
      *
      * @tparam Predicate = boolean return Callable with one parameter of ElementType, used to validate a property of an element
      *
-     * @param p : Predicate cref = Constant Reference to a Predicate - static function, Lambda, std::function or any callable type object
+     * @param p : Predicate cref = Constant Reference to a Predicate - static function, Lambda, Function or any callable type object
      *
      * @throws Predicate's exception, if any. If none, is exception safe
      *
@@ -4312,7 +4312,7 @@ public:
      *
      * @tparam Predicate = boolean return Callable with one parameter of ElementType, used to validate a property of an element
      *
-     * @param p : Predicate cref = Constant Reference to a Predicate - static function, Lambda, std::function or any callable type object
+     * @param p : Predicate cref = Constant Reference to a Predicate - static function, Lambda, Function or any callable type object
      *
      * @throws Predicate's exception, if any. If none, is exception safe
      *
@@ -4328,7 +4328,7 @@ public:
      *
      * @tparam Predicate = boolean return Callable with one parameter of ElementType, used to validate a property of an element
      *
-     * @param p : Predicate cref = Constant Reference to a Predicate - static function, Lambda, std::function or any callable type object
+     * @param p : Predicate cref = Constant Reference to a Predicate - static function, Lambda, Function or any callable type object
      *
      * @throws Predicate's exception, if any. If none, is exception safe
      *
@@ -4344,7 +4344,7 @@ public:
      *
      * @tparam Predicate = boolean return Callable with one parameter of ElementType, used to validate a property of an element
      *
-     * @param p : Predicate cref = Constant Reference to a Predicate - static function, Lambda, std::function or any callable type object
+     * @param p : Predicate cref = Constant Reference to a Predicate - static function, Lambda, Function or any callable type object
      *
      * @throws Predicate's exception, if any. If none, is exception safe
      *
