@@ -11,14 +11,13 @@
 template < typename ReturnType, typename ... ArgumentTypes >
 class Async;
 
-template < typename ReturnType, typename ... ArgumentTypes >
-class Async < ReturnType ( ArgumentTypes ... ) >;
-
 template < typename T >
 class AsyncResult : public Object {
 private:
     UniquePointer < T > result;
     SharedPointer < Semaphore > asyncSemaphore { nullptr };
+
+    AsyncResult() noexcept = default;
 
     explicit AsyncResult ( SharedPointer < Semaphore > && semaphore ) noexcept :
             asyncSemaphore ( std :: forward < SharedPointer < Semaphore > > ( semaphore ) ) {
@@ -35,7 +34,7 @@ private:
     friend class Async;
 
 public:
-    auto get () noexcept -> T & {
+    auto get () noexcept -> T {
         this->asyncSemaphore->wait();
         return * this->result;
     }
@@ -53,14 +52,17 @@ public:
 
     }
 
-    inline auto operator () ( ArgumentTypes ... arguments ) const noexcept -> AsyncResult < ReturnType > {
-        AsyncResult < ReturnType > result;
+    inline auto operator () ( ArgumentTypes ... arguments ) noexcept -> AsyncResult < ReturnType > {
+        AsyncResult < ReturnType > result ( new Semaphore () );
 
-        this->pThread = new Runnable ([& result] {
-
+        this->pThread = new Runnable ([& result, this, params = std :: make_tuple ( std :: forward < ArgumentTypes > ( arguments ) ... )] {
+            result.result = new ReturnType ( std :: apply ( this->function, params ) );
+            result.asyncSemaphore->notify();
         });
 
         this->pThread->start();
+
+        return result;
     }
 };
 
