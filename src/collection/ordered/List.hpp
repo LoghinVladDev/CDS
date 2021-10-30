@@ -8,7 +8,7 @@
 #include <CDS/Collection>
 #include <CDS/Concepts>
 
-template <class T>
+template < typename T >
 class List : public Collection <T> {
 private:
     auto beginPtr () noexcept -> typename Collection < T > :: Iterator * override = 0;
@@ -23,15 +23,16 @@ protected:
     Size _size { 0ull };
 
     List () noexcept = default;
-    using ElementRef            = typename Collection < T > :: ElementRef;
-    using ElementCRef           = typename Collection < T > :: ElementCRef;
-    using ElementMRef           = typename Collection < T > :: ElementMRef;
-    using ElementPtr            = typename Collection < T > :: ElementPtr;
-    using ElementPtrRef         = typename Collection < T > :: ElementPtrRef;
-    using ElementCPtr           = typename Collection < T > :: ElementCPtr;
-    using InitializerList       = typename Collection < T > :: InitializerList;
+    using ElementRef                = typename Collection < T > :: ElementRef;
+    using ElementCRef               = typename Collection < T > :: ElementCRef;
+    using ElementMRef               = typename Collection < T > :: ElementMRef;
+    using ElementPtr                = typename Collection < T > :: ElementPtr;
+    using ElementPtrRef             = typename Collection < T > :: ElementPtrRef;
+    using ElementCPtr               = typename Collection < T > :: ElementCPtr;
+    using InitializerList           = typename Collection < T > :: InitializerList;
 
-    using CollectionIterator    = typename Collection < T > :: Iterator;
+    using CollectionIterator        = typename Collection < T > :: Iterator;
+    using ConstCollectionIterator   = typename Collection < T > :: ConstIterator;
 
 public:
     virtual auto index ( ElementCRef ) const noexcept -> Index = 0;
@@ -72,7 +73,7 @@ public:
         return this->get( index );
     }
 
-    auto virtual remove ( CollectionIterator const & ) noexcept (false) -> ElementType = 0;
+    virtual auto remove ( CollectionIterator const & ) noexcept (false) -> ElementType = 0;
 
     __CDS_MaybeUnused virtual auto popFront ( ) noexcept (false) -> ElementType = 0;
     __CDS_MaybeUnused virtual auto popBack ( ) noexcept (false) -> ElementType = 0;
@@ -125,7 +126,7 @@ public:
         return this->pushFront ( std :: forward < ElementType > ( v ) );
     }
 
-    __CDS_NoDiscard __CDS_cpplang_VirtualConstexpr auto size () const noexcept -> Size override {
+    __CDS_NoDiscard __CDS_cpplang_ConstexprOverride auto size () const noexcept -> Size override {
         return this->_size;
     }
 
@@ -864,7 +865,7 @@ public:
     __CDS_cpplang_ConstexprPureAbstract virtual auto front () const noexcept (false) -> ElementCRef = 0;
     __CDS_cpplang_ConstexprPureAbstract virtual auto front () noexcept (false) -> ElementRef = 0;
 
-    __CDS_NoDiscard __CDS_MaybeUnused __CDS_cpplang_VirtualConstexpr auto empty () const noexcept -> bool override {
+    __CDS_NoDiscard __CDS_MaybeUnused __CDS_cpplang_ConstexprOverride auto empty () const noexcept -> bool override {
         return this->_size == 0;
     }
 };

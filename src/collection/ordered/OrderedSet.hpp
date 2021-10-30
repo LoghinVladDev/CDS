@@ -7,17 +7,15 @@
 #include <CDS/SetBase>
 
 namespace dataTypes {
-    template <class T>
-#if defined(__cpp_concepts) && !defined(_MSC_VER)
-        requires Comparable <T>
-#endif
+    template <class T> __CDS_Requires( Comparable <T> )
     class __CDS_MaybeUnused DefaultSetComparator : public Comparator<T> {
     public:
-        auto __CDS_OptimalInline operator () (T const & a, T const & b) const noexcept -> bool { return a < b; }
+        __CDS_OptimalInline auto operator () (T const & a, T const & b) const noexcept -> bool { return a < b; }
     };
 }
 
-#if defined(__cpp_concepts) && !defined(_MSC_VER)
+#if __CDS_cpplang_Concepts_available
+
 template <class T, class C>
 concept ValidSetComparator =
     std::is_base_of<Comparator<T>, C>::value ||
@@ -25,12 +23,13 @@ concept ValidSetComparator =
 
 #endif
 
-template <class T, class C = dataTypes::DefaultSetComparator<T>>
-#if defined(__cpp_concepts) && !defined(_MSC_VER)
-    requires ValidSetComparator <T, C>
-#endif
+#define COMMA ,
+
+template <class T, class C = dataTypes::DefaultSetComparator<T>> __CDS_Requires ( ValidSetComparator <T COMMA C> )
 class OrderedSet : public Set<T> {
 public:
+
+#undef COMMA
 
     using ElementType                           = typename Set<T>::ElementType;
     using ElementRef        __CDS_MaybeUnused   = typename Set<T>::ElementRef;
@@ -44,31 +43,46 @@ public:
     using NodePointer       __CDS_MaybeUnused   = typename Set<T>::NodePointer;
     using ConstNodePointer  __CDS_MaybeUnused   = typename Set<T>::ConstNodePointer;
 
-    OrderedSet() noexcept = default;
-    OrderedSet(OrderedSet const & set) noexcept : Set<T>(set) {
+    using CollectionIterator                    = typename Set<T>::CollectionIterator;
+    using ConstCollectionIterator               = typename Set<T>::ConstCollectionIterator;
+    using InitializerList                       = typename Set<T>::InitializerList;
+
+    constexpr OrderedSet() noexcept = default;
+    __CDS_OptimalInline OrderedSet(OrderedSet const & set) noexcept :
+            Set<T>(set) {
+
         for ( auto it : set )
             this->insert(it);
     }
 
-    OrderedSet(OrderedSet && moveSet) noexcept(false) : Set<T>(std::move(moveSet)) {}
+    constexpr OrderedSet(OrderedSet && moveSet) noexcept :
+            Set<T>(std::forward < Set < T > > ( moveSet )) {
 
-    explicit OrderedSet (
-        typename Collection<T>::Iterator const & from,
-        typename Collection<T>::Iterator const & to
-    ) noexcept : Set<T>() {
+    }
+
+    __CDS_OptionalInline explicit OrderedSet (
+        CollectionIterator const & from,
+        CollectionIterator const & to
+    ) noexcept :
+            Set<T>() {
+
         for (auto it = UniquePointer<decltype(&from)>(from.copy()); !it->equals(to); it->next())
             this->insert(it->value());
     }
 
-    explicit OrderedSet (
-        typename Collection<T>::ConstIterator const & from,
-        typename Collection<T>::ConstIterator const & to
-    ) noexcept : Set<T>() {
+    __CDS_OptionalInline explicit OrderedSet (
+        ConstCollectionIterator const & from,
+        ConstCollectionIterator const & to
+    ) noexcept :
+            Set<T>() {
+
         for ( auto it = UniquePointer < decltype ( & from ) > ( from.copy() ); ! it->equals (to); it->next() )
             this->insert( it->value() );
     }
 
-    OrderedSet ( std::initializer_list < T > const & initializerList ) noexcept : Set<T>() {
+    __CDS_OptimalInline OrderedSet ( InitializerList initializerList ) noexcept : // NOLINT(google-explicit-constructor)
+            Set<T>() {
+
         for ( ElementCRef e : initializerList )
             this->insert(e);
     }
@@ -79,7 +93,7 @@ private:
     auto allocInsertGetPtr ( ElementCRef ) noexcept -> ElementPtrRef override;
 
 public:
-    OrderedSet & operator = ( Collection < T > const & c ) noexcept {
+    auto operator = ( Collection < T > const & c ) noexcept -> OrderedSet & {
         if ( this == & c )
             return * this;
 
@@ -96,7 +110,10 @@ public:
         return * this;
     }
 
-    __CDS_OptimalInline auto operator = ( OrderedSet const & o ) noexcept -> OrderedSet & { return this->operator=( (Collection<T> const &) ( o ) ); } // NOLINT(misc-unconventional-assign-operator)
+    __CDS_OptimalInline auto operator = ( OrderedSet const & o ) noexcept -> OrderedSet & {
+        return this->operator =( (Collection<T> const &) ( o ) ); // NOLINT(misc-unconventional-assign-operator)
+    }
+
     __CDS_OptimalInline auto operator = ( OrderedSet && set ) noexcept -> OrderedSet & {
         if ( this == & set ) return * this;
 
@@ -108,8 +125,10 @@ public:
         return * this;
     }
 
-    auto sequence () const noexcept -> Sequence < const OrderedSet < T, C > >;
-    auto sequence () noexcept -> Sequence < OrderedSet < T, C > >;
+    auto sequence () const && noexcept -> Sequence < OrderedSet < T, C > const >;
+    auto sequence () && noexcept -> Sequence < OrderedSet < T, C > >;
+    auto sequence () const & noexcept -> Sequence < OrderedSet < T, C > const >;
+    auto sequence () & noexcept -> Sequence < OrderedSet < T, C > >;
 };
 
 
@@ -181,7 +200,7 @@ template <class T, class C>
 #if defined(__cpp_concepts) && !defined(_MSC_VER)
 requires ValidSetComparator <T, C>
 #endif
-auto OrderedSet<T, C>::sequence() const noexcept -> Sequence < const OrderedSet < T, C > > {
+auto OrderedSet<T, C>::sequence() const & noexcept -> Sequence < OrderedSet < T, C > const > {
     return Sequence < typename std :: remove_reference < decltype (*this) > :: type > (*this);
 }
 
@@ -189,8 +208,24 @@ template <class T, class C>
 #if defined(__cpp_concepts) && !defined(_MSC_VER)
 requires ValidSetComparator <T, C>
 #endif
-auto OrderedSet<T, C>::sequence() noexcept -> Sequence < OrderedSet < T, C > > {
+auto OrderedSet<T, C>::sequence() & noexcept -> Sequence < OrderedSet < T, C > > {
     return Sequence < typename std :: remove_reference < decltype (*this) > :: type > (*this);
+}
+
+template <class T, class C>
+#if defined(__cpp_concepts) && !defined(_MSC_VER)
+requires ValidSetComparator <T, C>
+#endif
+auto OrderedSet<T, C>::sequence() const && noexcept -> Sequence < OrderedSet < T, C > const > {
+    return Sequence < typename std :: remove_reference < decltype (*this) > :: type > (std::move(*this));
+}
+
+template <class T, class C>
+#if defined(__cpp_concepts) && !defined(_MSC_VER)
+requires ValidSetComparator <T, C>
+#endif
+auto OrderedSet<T, C>::sequence() && noexcept -> Sequence < OrderedSet < T, C > > {
+    return Sequence < typename std :: remove_reference < decltype (*this) > :: type > (std::move(*this));
 }
 #endif
 #endif

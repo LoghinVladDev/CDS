@@ -5,7 +5,7 @@
 #ifndef CDS_CONCEPTS_HPP
 #define CDS_CONCEPTS_HPP
 
-#if defined(__cpp_concepts)
+#if __CDS_cpplang_Concepts_available
 
 class Object;
 class String;
@@ -65,8 +65,6 @@ concept Printable = requires (T t) {
     { std::cout << t } -> std::same_as < std::ostream & >;
 };
 
-#if defined(__cpp_concepts)
-
 template <class T>
 concept Callable = std::is_invocable<T>::value;
 
@@ -94,16 +92,6 @@ template < typename Action, typename T >
 concept IsActionOver =
     std::is_invocable_r < void, Action, decltype ((*dataTypes::unsafeAddress<T>())) > :: type :: value;
 
-#endif
-
-#endif
-
-#if !defined(REQUIRES)
-    #if defined(__cpp_concepts)
-        #define REQUIRES(concepts) requires concepts
-    #else
-        #define REQUIRES(concepts)
-    #endif
 #endif
 
 #endif //CDS_CONCEPTS_HPP

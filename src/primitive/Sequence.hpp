@@ -28,18 +28,18 @@ public:
 
 private:
 
-    using ClassName                 = typename std::remove_reference < C >::type;
-    using IterableValue             = decltype ( dataTypes::unsafeAddress < typename ClassName::Iterator > ()->value() );
+    using ClassName                 = RemoveReference < C >;
+    using IterableValue             = decltype ( Type < typename ClassName::Iterator > :: unsafeAddress ()->value() );
 
 public:
-    using ElementType               = typename std::remove_reference < IterableValue > :: type;
+    using ElementType               = RemoveReference < IterableValue >;
 
 private:
     using StoredPredicate           = Function < bool (IterableValue) >;
-    using StoredMapper              = Function < typename std::remove_reference < IterableValue > :: type (IterableValue) >;
+    using StoredMapper              = Function < RemoveReference < IterableValue > (IterableValue) >;
 
     using StoredIndexedPredicate    = Function < bool (Index, IterableValue) >;
-    using StoredIndexedMapper       = Function < typename std::remove_reference < IterableValue > :: type (Index, IterableValue) >;
+    using StoredIndexedMapper       = Function < RemoveReference < IterableValue > (Index, IterableValue) >;
 
     friend class Iterator;
     friend class ConstIterator;
@@ -61,21 +61,22 @@ private:
 public:
     class Iterator : public Object {
     public:
-        using CollectionIterator = typename std::conditional <
-                std::is_const < CollectionType > :: type :: value,
+        using CollectionIterator = TypeIf <
+                Type < CollectionType > :: isConst,
                 typename CollectionType :: ConstIterator,
                 typename CollectionType :: Iterator
-        > :: type;
+        >;
+
         using CollectionElementType = typename Sequence::ElementType;
 
     private:
         ForeignPointer < Sequence > pSeq;
         CollectionIterator it;
+        Index index {0};
 
         UniquePointer < CollectionElementType > precomputed;
-        auto skipFiltered () noexcept -> void;
 
-        Index index {0};
+        auto skipFiltered () noexcept -> void;
 
     public:
 
@@ -86,32 +87,32 @@ public:
 
 #else
 
-        template < typename U = C >
-        __CDS_NoDiscard auto toString () const noexcept -> typename std :: enable_if < isPrintable < decltype ( Sequence < U > :: Iterator :: it ) > :: value > :: type {
+        template < typename U = C, EnableIf < isPrintable < decltype ( Sequence < U > :: Iterator :: it ) > :: value > = 0 >
+        __CDS_NoDiscard auto toString () const noexcept -> String {
             std::stringstream oss;
             oss << "Sequence::Iterator { pSequence = " << this->pSeq.toString() << ", it = " << this->it << " }";
             return oss.str();
         }
 
-        template < typename U = C >
-        __CDS_NoDiscard auto toString () const noexcept -> typename std :: enable_if < ! isPrintable < decltype ( Sequence < U > :: Iterator :: it ) > :: value > :: type {
+        template < typename U = C, EnableIf < ! isPrintable < decltype ( Sequence < U > :: Iterator :: it ) > :: value > = 0 >
+        __CDS_NoDiscard auto toString () const noexcept -> String {
             std::stringstream oss;
             oss << "Sequence::Iterator { pSequence = " << this->pSeq.toString() << ", value = " << * this->it << " }";
             return oss.str();
         }
 
-        template < typename U = C >
-        __CDS_NoDiscard auto hash () const noexcept -> typename std :: enable_if < Type < decltype ( Sequence < U > :: Iterator :: it ) > :: objectDerived, Index > :: type {
+        template < typename U = C, EnableIf < Type < decltype ( Sequence < U > :: Iterator :: it ) > :: objectDerived > = 0 >
+        __CDS_NoDiscard auto hash () const noexcept -> Index {
             return this->it.hash();
         }
 
-        template < typename U = C >
-        __CDS_NoDiscard auto hash () const noexcept -> typename std :: enable_if < ! Type < decltype ( Sequence < U > :: Iterator :: it ) > :: objectDerived && Type < decltype ( dataTypes::unsafeAddress < & Sequence < U > :: Iterator :: it > () -> operator *() ) > :: objectDerived, Index > :: type {
+        template < typename U = C, EnableIf < ! Type < decltype ( Sequence < U > :: Iterator :: it ) > :: objectDerived && Type < decltype ( dataTypes::unsafeAddress < & Sequence < U > :: Iterator :: it > () -> operator *() ) > :: objectDerived > = 0 >
+        __CDS_NoDiscard auto hash () const noexcept -> Index {
             return (* this->it).hash();
         }
 
-        template < typename U = C >
-        __CDS_NoDiscard auto hash () const noexcept -> typename std :: enable_if < ! Type < decltype ( Sequence < U > :: Iterator :: it ) > :: objectDerived && ! Type < decltype ( dataTypes::unsafeAddress < & Sequence < U > :: Iterator :: it > () -> operator *() ) > :: objectDerived, Index > :: type {
+        template < typename U = C, EnableIf < ! Type < decltype ( Sequence < U > :: Iterator :: it ) > :: objectDerived && ! Type < decltype ( dataTypes::unsafeAddress < & Sequence < U > :: Iterator :: it > () -> operator *() ) > :: objectDerived > = 0 >
+        __CDS_NoDiscard auto hash () const noexcept -> Index {
             return 0;
         }
 
@@ -121,7 +122,7 @@ public:
         __CDS_NoDiscard auto equals (Object const &) const noexcept -> bool override;
 
         Iterator () noexcept = delete;
-        Iterator (Iterator const & otherIt) noexcept :
+        __CDS_OptimalInline Iterator (Iterator const & otherIt) noexcept :
                 pSeq ( otherIt.pSeq ),
                 it (otherIt.it),
                 precomputed ( new CollectionElementType ( * otherIt.precomputed ) ),
@@ -129,7 +130,7 @@ public:
 
         }
 
-        Iterator (Iterator &&) noexcept = default;
+        __CDS_OptimalInline Iterator (Iterator &&) noexcept = default;
         Iterator (Sequence *, CollectionIterator const &) noexcept;
         ~Iterator () noexcept override = default;
 
@@ -150,13 +151,13 @@ public:
         using CollectionElementType = typename Sequence::ElementType;
 
     private:
-        ForeignPointer < const Sequence > pSeq;
+        ForeignPointer < Sequence const > pSeq;
         CollectionIterator it;
+        Index index {0};
 
         UniquePointer < CollectionElementType > precomputed;
-        auto skipFiltered () noexcept -> void;
 
-        Index index {0};
+        auto skipFiltered () noexcept -> void;
 
     public:
 
@@ -167,32 +168,32 @@ public:
 
 #else
 
-        template < typename U = C >
-        __CDS_NoDiscard auto toString () const noexcept -> typename std :: enable_if < isPrintable < decltype ( Sequence < U > :: ConstIterator :: it ) > :: value > :: type {
+        template < typename U = C, EnableIf < isPrintable < decltype ( Sequence < U > :: ConstIterator :: it ) > :: value > = 0 >
+        __CDS_NoDiscard auto toString () const noexcept -> String {
             std::stringstream oss;
             oss << "Sequence::Iterator { pSequence = " << this->pSeq.toString() << ", it = " << this->it << " }";
             return oss.str();
         }
 
-        template < typename U = C >
-        __CDS_NoDiscard auto toString () const noexcept -> typename std :: enable_if < ! isPrintable < decltype ( Sequence < U > :: ConstIterator :: it ) > :: value > :: type {
+        template < typename U = C, EnableIf < ! isPrintable < decltype ( Sequence < U > :: ConstIterator :: it ) > :: value > = 0 >
+        __CDS_NoDiscard auto toString () const noexcept -> String {
             std::stringstream oss;
             oss << "Sequence::Iterator { pSequence = " << this->pSeq.toString() << ", value = " << * this->it << " }";
             return oss.str();
         }
 
-        template < typename U = C >
-        __CDS_NoDiscard auto hash () const noexcept -> typename std :: enable_if < Type < decltype ( Sequence < U > :: ConstIterator :: it ) > :: objectDerived, Index > :: type {
+        template < typename U = C, EnableIf < Type < decltype ( Sequence < U > :: ConstIterator :: it ) > :: objectDerived > = 0 >
+        __CDS_NoDiscard auto hash () const noexcept -> Index {
             return this->it.hash();
         }
 
-        template < typename U = C >
-        __CDS_NoDiscard auto hash () const noexcept -> typename std :: enable_if < ! Type < decltype ( Sequence < U > :: ConstIterator :: it ) > :: objectDerived && Type < decltype ( dataTypes::unsafeAddress < & Sequence < U > :: ConstIterator :: it > () -> operator *() ) > :: objectDerived, Index > :: type {
+        template < typename U = C, EnableIf < ! Type < decltype ( Sequence < U > :: ConstIterator :: it ) > :: objectDerived && Type < decltype ( dataTypes::unsafeAddress < & Sequence < U > :: ConstIterator :: it > () -> operator *() ) > :: objectDerived > = 0 >
+        __CDS_NoDiscard auto hash () const noexcept -> Index {
             return (* this->it).hash();
         }
 
-        template < typename U = C >
-        __CDS_NoDiscard auto hash () const noexcept -> typename std :: enable_if < ! Type < decltype ( Sequence < U > :: ConstIterator :: it ) > :: objectDerived && ! Type < decltype ( dataTypes::unsafeAddress < & Sequence < U > :: ConstIterator :: it > () -> operator *() ) > :: objectDerived, Index > :: type {
+        template < typename U = C, EnableIf < ! Type < decltype ( Sequence < U > :: ConstIterator :: it ) > :: objectDerived && ! Type < decltype ( dataTypes::unsafeAddress < & Sequence < U > :: ConstIterator :: it > () -> operator *() ) > :: objectDerived > = 0 >
+        __CDS_NoDiscard auto hash () const noexcept -> Index {
             return 0;
         }
 #endif
@@ -255,7 +256,7 @@ public:
     __CDS_MaybeUnused auto elementAtOr ( Index, ElementType const & ) const noexcept -> ElementType
     __CDS_Requires ( Iterable < C > || ConstIterable < C > );
 
-    template < typename T = ElementType, typename std :: enable_if < Type < T > :: isPointer, int > :: type = 0 >
+    template < typename T = ElementType, EnableIf < Type < T > :: isPointer > = 0 >
     __CDS_MaybeUnused auto elementAtOrNull ( Index ) const noexcept -> ElementType __CDS_Requires (Iterable < C > || ConstIterable < C > );
 
 
@@ -662,7 +663,7 @@ public:
             IndexedPredicate            const &
     ) const noexcept -> Collection < ElementType > & __CDS_Requires ( Iterable < C > || ConstIterable < C > );
 
-    template < typename NewType, typename OT = ElementType, typename NT = NewType, typename std :: enable_if < Type < OT > :: isBasicPointer, int > :: type = 0 >
+    template < typename NewType, typename OT = ElementType, typename NT = NewType, EnableIf < Type < OT > :: isBasicPointer > = 0 >
     __CDS_MaybeUnused auto filterIsDerived () && noexcept -> Sequence < LinkedList < NewType > >
     __CDS_Requires(
             (Iterable < C > || ConstIterable < C >) &&
@@ -670,7 +671,7 @@ public:
             Pointer < NewType >
     );
 
-    template < typename NewType, typename OT = ElementType, typename NT = NewType, typename std :: enable_if < Type < OT > :: isBasicPointer, int > :: type = 0 >
+    template < typename NewType, typename OT = ElementType, typename NT = NewType, EnableIf < Type < OT > :: isBasicPointer > = 0 >
     __CDS_MaybeUnused auto filterIsDerived () & noexcept -> Sequence < LinkedList < NewType > >
     __CDS_Requires(
             (Iterable < C > || ConstIterable < C >) &&
@@ -678,7 +679,7 @@ public:
             Pointer < NewType >
     );
 
-    template < typename NewType, typename OT = ElementType, typename NT = NewType, typename std :: enable_if < Type < OT > :: isSmartPointer, int > :: type = 0 >
+    template < typename NewType, typename OT = ElementType, typename NT = NewType, EnableIf < Type < OT > :: isSmartPointer > = 0 >
     __CDS_MaybeUnused auto filterIsDerived () && noexcept -> Sequence < LinkedList < typename TypeExtensions < NT > :: AsForeignPointer > >
     __CDS_Requires(
             (Iterable < C > || ConstIterable < C >) &&
@@ -686,7 +687,7 @@ public:
             Pointer < NT >
     );
 
-    template < typename NewType, typename OT = ElementType, typename NT = NewType, typename std :: enable_if < Type < OT > :: isSmartPointer, int > :: type = 0 >
+    template < typename NewType, typename OT = ElementType, typename NT = NewType, EnableIf < Type < OT > :: isSmartPointer > = 0 >
     __CDS_MaybeUnused auto filterIsDerived () & noexcept -> Sequence < LinkedList < typename TypeExtensions < NT > :: AsForeignPointer > >
     __CDS_Requires(
             (Iterable < C > || ConstIterable < C >) &&
@@ -694,7 +695,7 @@ public:
             Pointer < NT >
     );
 
-    template < typename NewType, typename CT = NewType, typename OT = ElementType, typename std :: enable_if < Type < OT > :: isBasicPointer, int > :: type = 0 >
+    template < typename NewType, typename CT = NewType, typename OT = ElementType, EnableIf < Type < OT > :: isBasicPointer > = 0 >
     __CDS_MaybeUnused auto filterIsDerivedTo (
             Collection < CT > &
     ) const noexcept -> Collection < CT > &
@@ -704,7 +705,7 @@ public:
             Pointer < NewType >
     );
 
-    template < typename NewType, typename CT, typename OT = ElementType, typename std :: enable_if < Type < OT > :: isSmartPointer, int > :: type = 0 >
+    template < typename NewType, typename CT, typename OT = ElementType, EnableIf < Type < OT > :: isSmartPointer > = 0 >
     __CDS_MaybeUnused auto filterIsDerivedTo (
             Collection < CT > &
     ) const noexcept -> Collection < CT > &
@@ -714,21 +715,21 @@ public:
             Pointer < NewType >
     );
 
-    template < typename T = ElementType, typename std :: enable_if < Type < T > :: isBasicPointer, int > :: type = 0 >
+    template < typename T = ElementType, EnableIf < Type < T > :: isBasicPointer > = 0 >
     __CDS_MaybeUnused auto filterNotNull () & noexcept -> Sequence < LinkedList < T > > __CDS_Requires( ( Iterable < C > || ConstIterable < C > ) && Pointer < T > );
 
-    template < typename T = ElementType, typename std :: enable_if < Type < T > :: isBasicPointer, int > :: type = 0 >
+    template < typename T = ElementType, EnableIf < Type < T > :: isBasicPointer > = 0 >
     __CDS_MaybeUnused auto filterNotNull () && noexcept -> Sequence < LinkedList < T > > __CDS_Requires( ( Iterable < C > || ConstIterable < C > ) && Pointer < T > );
 
-    template < typename T = ElementType, typename std :: enable_if < Type < T > :: isSmartPointer, int > :: type = 0 >
+    template < typename T = ElementType, EnableIf < Type < T > :: isSmartPointer > = 0 >
     __CDS_MaybeUnused auto filterNotNull () & noexcept -> Sequence < LinkedList < T > > __CDS_Requires( ( Iterable < C > || ConstIterable < C > ) && Pointer < T > );
 
-    template < typename T = ElementType, typename std :: enable_if < Type < T > :: isSmartPointer, int > :: type = 0 >
+    template < typename T = ElementType, EnableIf < Type < T > :: isSmartPointer > = 0 >
     __CDS_MaybeUnused auto filterNotNull () && noexcept -> Sequence < LinkedList < T > > __CDS_Requires( ( Iterable < C > || ConstIterable < C > ) && Pointer < T > );
 
-    template < typename T = ElementType, typename std :: enable_if < Type < T > :: isBasicPointer, int > :: type = 0 >
+    template < typename T = ElementType, EnableIf < Type < T > :: isBasicPointer > = 0 >
     __CDS_MaybeUnused auto filterNotNullTo (Collection < T > &) const noexcept -> Collection < T > & __CDS_Requires( ( Iterable < C > || ConstIterable < C > ) && Pointer < T > );
-    template < typename T = ElementType, typename std :: enable_if < Type < T > :: isSmartPointer, int > :: type = 0 >
+    template < typename T = ElementType, EnableIf < Type < T > :: isSmartPointer > = 0 >
     __CDS_MaybeUnused auto filterNotNullTo (Collection < T > &) const noexcept -> Collection < T > & __CDS_Requires( ( Iterable < C > || ConstIterable < C > ) && Pointer < T > );
 
     template < typename Predicate >
@@ -796,7 +797,7 @@ public:
             Predicate const & = [](ElementType const &) { return true; }
     ) const noexcept -> Boolean __CDS_Requires ( Iterable < C > || ConstIterable < C > );
 
-    template < typename Transformer, typename std::enable_if < isPair < returnOf < Transformer > > :: value, int > :: type = 0 >
+    template < typename Transformer, EnableIf < isPair < returnOf < Transformer > > :: value > = 0 >
     __CDS_MaybeUnused auto associate (
             Transformer const &
     ) && noexcept -> Sequence < LinkedList < returnOf < Transformer > > >
@@ -805,7 +806,7 @@ public:
             PairType < returnOf < Transformer > >
     );
 
-    template < typename Transformer, typename std::enable_if < isPair < returnOf < Transformer > > :: value, int > :: type = 0 >
+    template < typename Transformer, EnableIf < isPair < returnOf < Transformer > > :: value > = 0 >
     __CDS_MaybeUnused auto associate (
             Transformer const &
     ) & noexcept -> Sequence < LinkedList < returnOf < Transformer > > >
@@ -949,7 +950,7 @@ public:
     __CDS_MaybeUnused auto toUnorderedSet () const noexcept -> UnorderedSet < ElementType >
     __CDS_Requires (Iterable < C > || ConstIterable < C > );
 
-    template < typename U = C, typename std :: enable_if < __CDS_Sequence::containedTypeIsPair < U > (), int > :: type = 0 >
+    template < typename U = C, EnableIf < __CDS_Sequence::containedTypeIsPair < U > () > = 0 >
     __CDS_MaybeUnused auto toHashMap () const noexcept -> HashMap <
             typename __CDS_Sequence::ContainedTypeAsPair < U > ::FirstType,
             typename __CDS_Sequence::ContainedTypeAsPair < U > ::SecondType
@@ -968,7 +969,7 @@ public:
         return map;
     }
 
-    template < typename U = C, typename std :: enable_if < __CDS_Sequence :: containedTypeIsPair < U > (), int > :: type = 0 >
+    template < typename U = C, EnableIf < __CDS_Sequence :: containedTypeIsPair < U > () > = 0 >
     __CDS_MaybeUnused auto unzip () const noexcept -> Pair <
             LinkedList < typename __CDS_Sequence :: ContainedTypeAsPair < U > :: FirstType >,
             LinkedList < typename __CDS_Sequence :: ContainedTypeAsPair < U > :: SecondType >
@@ -1024,7 +1025,7 @@ public:
     ) const noexcept -> UnorderedSet < ElementType > &
     __CDS_Requires ( Iterable < C > || ConstIterable < C > );
 
-    template < typename U = C, typename std :: enable_if < __CDS_Sequence::containedTypeIsPair < U > (), int > :: type = 0 >
+    template < typename U = C, EnableIf < __CDS_Sequence::containedTypeIsPair < U > () > = 0 >
     __CDS_MaybeUnused auto toMap (
             Map <
                     typename __CDS_Sequence::ContainedTypeAsPair < U > ::FirstType,
@@ -1043,7 +1044,7 @@ public:
         return map;
     }
 
-    template < typename U = C, typename std :: enable_if < __CDS_Sequence::containedTypeIsPair < U > (), int > :: type = 0 >
+    template < typename U = C, EnableIf < __CDS_Sequence::containedTypeIsPair < U > () > = 0 >
     __CDS_MaybeUnused auto toHashMap (
             HashMap <
                     typename __CDS_Sequence::ContainedTypeAsPair < U > ::FirstType,
@@ -1065,7 +1066,7 @@ public:
     template < typename Transformer >
     __CDS_MaybeUnused auto flatMap (
             Transformer const &
-    ) && noexcept -> Sequence < LinkedList < typename __CDS_Sequence :: FlatMapDeductedType < Transformer > :: Type > >
+    ) && noexcept -> Sequence < LinkedList < __CDS_Sequence :: FlatMapDeducedType < Transformer > > >
     __CDS_Requires (
             ( Iterable < C > || ConstIterable < C > ) && (
                     Iterable < returnOf < Transformer > > ||
@@ -1076,7 +1077,7 @@ public:
     template < typename Transformer >
     __CDS_MaybeUnused auto flatMap (
             Transformer const &
-    ) & noexcept -> Sequence < LinkedList < typename __CDS_Sequence :: FlatMapDeductedType < Transformer > :: Type > >
+    ) & noexcept -> Sequence < LinkedList < __CDS_Sequence :: FlatMapDeducedType < Transformer > > >
     __CDS_Requires (
             ( Iterable < C > || ConstIterable < C > ) && (
                     Iterable < returnOf < Transformer > > ||
@@ -1087,7 +1088,7 @@ public:
     template < typename IndexedTransformer >
     __CDS_MaybeUnused auto flatMapIndexed (
             IndexedTransformer const &
-    ) && noexcept -> Sequence < LinkedList < typename __CDS_Sequence :: FlatMapDeductedType < IndexedTransformer > :: Type > > __CDS_Requires (
+    ) && noexcept -> Sequence < LinkedList < __CDS_Sequence :: FlatMapDeducedType < IndexedTransformer > > > __CDS_Requires (
             ( Iterable < C > || ConstIterable < C > ) && (
                     Iterable < returnOf < IndexedTransformer > > ||
                     ConstIterable < returnOf < IndexedTransformer > >
@@ -1097,7 +1098,7 @@ public:
     template < typename IndexedTransformer >
     __CDS_MaybeUnused auto flatMapIndexed (
             IndexedTransformer const &
-    ) & noexcept -> Sequence < LinkedList < typename __CDS_Sequence :: FlatMapDeductedType < IndexedTransformer > :: Type > > __CDS_Requires (
+    ) & noexcept -> Sequence < LinkedList < __CDS_Sequence :: FlatMapDeducedType < IndexedTransformer > > > __CDS_Requires (
             ( Iterable < C > || ConstIterable < C > ) && (
                     Iterable < returnOf < IndexedTransformer > > ||
                     ConstIterable < returnOf < IndexedTransformer > >
@@ -1106,9 +1107,9 @@ public:
 
     template < typename Transformer >
     __CDS_MaybeUnused auto flatMapTo (
-            Collection < typename __CDS_Sequence :: FlatMapDeductedType < Transformer > :: Type > &,
+            Collection < __CDS_Sequence :: FlatMapDeducedType < Transformer > > &,
             Transformer     const &
-    ) const noexcept -> Collection < typename __CDS_Sequence :: FlatMapDeductedType < Transformer > :: Type > & __CDS_Requires (
+    ) const noexcept -> Collection < __CDS_Sequence :: FlatMapDeducedType < Transformer > > & __CDS_Requires (
             ( Iterable < C > || ConstIterable < C > ) && (
                     Iterable < returnOf < Transformer > > ||
                     ConstIterable < returnOf < Transformer > >
@@ -1117,9 +1118,9 @@ public:
 
     template < typename IndexedTransformer >
     __CDS_MaybeUnused auto flatMapIndexedTo (
-            Collection < typename __CDS_Sequence :: FlatMapDeductedType < IndexedTransformer > :: Type > &,
+            Collection < __CDS_Sequence :: FlatMapDeducedType < IndexedTransformer > > &,
             IndexedTransformer const &
-    ) const noexcept -> Collection < typename __CDS_Sequence :: FlatMapDeductedType < IndexedTransformer > :: Type > & __CDS_Requires (
+    ) const noexcept -> Collection < __CDS_Sequence :: FlatMapDeducedType < IndexedTransformer > > & __CDS_Requires (
             (Iterable < C > || ConstIterable < C >) && (
                     Iterable < returnOf < IndexedTransformer > > ||
                     ConstIterable < returnOf < IndexedTransformer > >
@@ -1176,49 +1177,49 @@ public:
      * Two versions of map, one for storage of mappers when keeping same type, another for switching to another data type
      */
 
-    template < typename Mapper, typename std::enable_if < ! __CDS_Sequence :: mapToSameType < Mapper, C > (), int >::type = 0 >
+    template < typename Mapper, EnableIf < ! __CDS_Sequence :: mapToSameType < Mapper, C > () > = 0 >
     __CDS_MaybeUnused auto map (
             Mapper const &
     ) && noexcept -> Sequence < LinkedList < returnOf < Mapper > > >
     __CDS_Requires ( Iterable < C > || ConstIterable < C > );
 
-    template < typename Mapper, typename std::enable_if < __CDS_Sequence :: mapToSameType < Mapper, C > (), int >::type = 0 >
+    template < typename Mapper, EnableIf < __CDS_Sequence :: mapToSameType < Mapper, C > () > = 0 >
     __CDS_MaybeUnused auto map (
             Mapper const &
     ) && noexcept -> Sequence < C >
     __CDS_Requires ( Iterable < C > || ConstIterable < C > );
 
-    template < typename Mapper, typename std::enable_if < ! __CDS_Sequence :: mapToSameType < Mapper, C > (), int >::type = 0 >
+    template < typename Mapper, EnableIf < ! __CDS_Sequence :: mapToSameType < Mapper, C > () > = 0 >
     __CDS_MaybeUnused auto map (
             Mapper const &
     ) & noexcept -> Sequence < LinkedList < returnOf < Mapper > > >
     __CDS_Requires ( Iterable < C > || ConstIterable < C > );
 
-    template < typename Mapper, typename std::enable_if < __CDS_Sequence :: mapToSameType < Mapper, C > (), int >::type = 0 >
+    template < typename Mapper, EnableIf < __CDS_Sequence :: mapToSameType < Mapper, C > () > = 0 >
     __CDS_MaybeUnused auto map (
             Mapper const &
     ) & noexcept -> Sequence < C >
     __CDS_Requires ( Iterable < C > || ConstIterable < C > );
 
 
-    template < typename IndexedMapper, typename std::enable_if < ! __CDS_Sequence :: mapToSameType < IndexedMapper, C > (), int > ::type = 0 >
+    template < typename IndexedMapper, EnableIf < ! __CDS_Sequence :: mapToSameType < IndexedMapper, C > () > = 0 >
     __CDS_MaybeUnused auto mapIndexed (
             IndexedMapper const &
     ) && noexcept -> Sequence < LinkedList < returnOf < IndexedMapper > > >
     __CDS_Requires ( Iterable < C > || ConstIterable < C > );
 
-    template < typename IndexedMapper, typename std::enable_if < ! __CDS_Sequence :: mapToSameType < IndexedMapper, C > (), int > ::type = 0 >
+    template < typename IndexedMapper, EnableIf < ! __CDS_Sequence :: mapToSameType < IndexedMapper, C > () > = 0 >
     __CDS_MaybeUnused auto mapIndexed (
             IndexedMapper const &
     ) & noexcept -> Sequence < LinkedList < returnOf < IndexedMapper > > >
     __CDS_Requires ( Iterable < C > || ConstIterable < C > );
 
-    template < typename IndexedMapper, typename std::enable_if < __CDS_Sequence :: mapToSameType < IndexedMapper, C > (), int > ::type = 0 >
+    template < typename IndexedMapper, EnableIf < __CDS_Sequence :: mapToSameType < IndexedMapper, C > () > = 0 >
     __CDS_MaybeUnused auto mapIndexed (
             IndexedMapper const &
     ) && noexcept -> Sequence < C > __CDS_Requires ( Iterable < C > || ConstIterable < C > );
 
-    template < typename IndexedMapper, typename std::enable_if < __CDS_Sequence :: mapToSameType < IndexedMapper, C > (), int > ::type = 0 >
+    template < typename IndexedMapper, EnableIf < __CDS_Sequence :: mapToSameType < IndexedMapper, C > () > = 0 >
     __CDS_MaybeUnused auto mapIndexed (
             IndexedMapper const &
     ) & noexcept -> Sequence < C > __CDS_Requires ( Iterable < C > || ConstIterable < C > );
@@ -1505,7 +1506,7 @@ public:
     ) & noexcept -> Sequence < LinkedList < AccumulatedType > >
     __CDS_Requires ( Iterable < C > || ConstIterable < C > );
 
-    template < typename E = ElementType, typename std :: enable_if < Type < E > :: isNumeric, int > :: type = 0 >
+    template < typename E = ElementType, EnableIf < Type < E > :: isNumeric > = 0 >
     __CDS_NoDiscard __CDS_MaybeUnused auto sum () const noexcept -> ElementType {
         ElementType sum = 0;
         for ( auto e : * this )
@@ -1514,7 +1515,7 @@ public:
         return sum;
     }
 
-    template < typename E = ElementType, typename std :: enable_if < ! Type < E > :: isNumeric && Type < E > :: defaultConstructible, int > :: type = 0 >
+    template < typename E = ElementType, EnableIf < ! Type < E > :: isNumeric && Type < E > :: defaultConstructible > = 0 >
     __CDS_NoDiscard __CDS_MaybeUnused auto sum () const noexcept -> ElementType {
         ElementType sum;
         for ( auto e : * this )
@@ -1527,7 +1528,7 @@ public:
     __CDS_MaybeUnused auto sumBy ( Selector const & ) const noexcept -> returnOf < Selector >
     __CDS_Requires ( Iterable < C > || ConstIterable < C > );
 
-    template < typename U = C, typename std :: enable_if < __CDS_Sequence :: IsArithmetic < typename __CDS_Sequence::ContainedType < U > ::Type > :: Value, int > :: type = 0 >
+    template < typename U = C, EnableIf < __CDS_Sequence :: IsArithmetic < typename __CDS_Sequence::ContainedType < U > ::Type > :: Value > = 0 >
     __CDS_NoDiscard __CDS_MaybeUnused auto average () const noexcept -> Double __CDS_Requires ( Iterable < C > || ConstIterable < C > ) {
         double average = 0.0; int eCount = 0;
         for ( auto e : * this ) {
@@ -2306,13 +2307,13 @@ __CDS_OptimalInline auto Sequence < C > ::equals(Object const & o) const noexcep
 
 Sequence ( String ) -> Sequence < String >;
 
-template < typename T>
+template < typename T >
 Sequence ( Array < T > & ) -> Sequence < Array < T > >;
 
-template < typename T>
+template < typename T >
 Sequence ( Array < T > const & ) -> Sequence < Array < T > const >;
 
-template < typename T>
+template < typename T >
 Sequence ( Array < T > && ) -> Sequence < Array < T > >;
 
 template < typename T >
@@ -2376,7 +2377,7 @@ Sequence ( Range & ) -> Sequence < Range >;
 /// region Sequence Transformer/Ownership Pass Functions
 
 template < typename C >
-template < typename Mapper, typename std::enable_if < ! __CDS_Sequence :: mapToSameType < Mapper, C > (), int >::type >
+template < typename Mapper, EnableIf < ! __CDS_Sequence :: mapToSameType < Mapper, C > () > >
 __CDS_MaybeUnused __CDS_OptionalInline auto Sequence < C > :: map (
         Mapper const & mapper
 ) && noexcept -> Sequence < LinkedList < returnOf < Mapper > > >
@@ -2404,7 +2405,7 @@ auto Sequence < C > :: shuffled () const noexcept -> Sequence < Array < ElementT
 }
 
 template < typename C >
-template < typename Mapper, typename std::enable_if < __CDS_Sequence :: mapToSameType < Mapper, C > (), int >::type >
+template < typename Mapper, EnableIf < __CDS_Sequence :: mapToSameType < Mapper, C > () > >
 __CDS_MaybeUnused __CDS_OptimalInline auto Sequence < C > :: map(
         Mapper const & mapper
 ) && noexcept -> Sequence < C > __CDS_Requires ( Iterable < C > || ConstIterable < C > ) {
@@ -2413,7 +2414,7 @@ __CDS_MaybeUnused __CDS_OptimalInline auto Sequence < C > :: map(
 }
 
 template < typename C >
-template < typename Mapper, typename std::enable_if < ! __CDS_Sequence :: mapToSameType < Mapper, C > (), int >::type >
+template < typename Mapper, EnableIf < ! __CDS_Sequence :: mapToSameType < Mapper, C > () > >
 __CDS_MaybeUnused __CDS_OptionalInline auto Sequence < C > :: map (
         Mapper const & mapper
 ) & noexcept -> Sequence < LinkedList < returnOf < Mapper > > >
@@ -2426,7 +2427,7 @@ __CDS_Requires ( Iterable < C > || ConstIterable < C > ) {
 }
 
 template < typename C >
-template < typename Mapper, typename std::enable_if < __CDS_Sequence :: mapToSameType < Mapper, C > (), int >::type >
+template < typename Mapper, EnableIf < __CDS_Sequence :: mapToSameType < Mapper, C > () > >
 __CDS_MaybeUnused __CDS_OptimalInline auto Sequence < C > ::map(
         Mapper const & mapper
 ) & noexcept -> Sequence < C > __CDS_Requires ( Iterable < C > || ConstIterable < C > ) {
@@ -2477,7 +2478,7 @@ __CDS_MaybeUnused __CDS_OptionalInline auto Sequence < C > :: filterIndexed (
 }
 
 template < typename C >
-template < typename IndexedMapper, typename std::enable_if < ! __CDS_Sequence :: mapToSameType < IndexedMapper, C > (), int > ::type >
+template < typename IndexedMapper, EnableIf < ! __CDS_Sequence :: mapToSameType < IndexedMapper, C > () > >
 __CDS_MaybeUnused __CDS_OptionalInline auto Sequence < C > :: mapIndexed (
         IndexedMapper const & mapper
 ) && noexcept -> Sequence < LinkedList < returnOf < IndexedMapper > > >
@@ -2492,7 +2493,7 @@ __CDS_Requires ( Iterable < C > || ConstIterable < C > ) {
 }
 
 template < typename C >
-template < typename IndexedMapper, typename std::enable_if < ! __CDS_Sequence :: mapToSameType < IndexedMapper, C > (), int > ::type >
+template < typename IndexedMapper, EnableIf < ! __CDS_Sequence :: mapToSameType < IndexedMapper, C > () > >
 __CDS_MaybeUnused __CDS_OptionalInline auto Sequence < C > :: mapIndexed (
         IndexedMapper const & mapper
 ) & noexcept -> Sequence < LinkedList < returnOf < IndexedMapper > > >
@@ -2507,7 +2508,7 @@ __CDS_Requires ( Iterable < C > || ConstIterable < C > ) {
 }
 
 template < typename C >
-template < typename IndexedMapper, typename std::enable_if < __CDS_Sequence :: mapToSameType < IndexedMapper, C > (), int > ::type >
+template < typename IndexedMapper, EnableIf < __CDS_Sequence :: mapToSameType < IndexedMapper, C > () > >
 __CDS_MaybeUnused __CDS_OptimalInline auto Sequence < C > ::mapIndexed(
         IndexedMapper const & mapper
 ) && noexcept -> Sequence < C > __CDS_Requires ( Iterable < C > || ConstIterable < C > ) {
@@ -2516,7 +2517,7 @@ __CDS_MaybeUnused __CDS_OptimalInline auto Sequence < C > ::mapIndexed(
 }
 
 template < typename C >
-template < typename IndexedMapper, typename std::enable_if < __CDS_Sequence :: mapToSameType < IndexedMapper, C > (), int > ::type >
+template < typename IndexedMapper, EnableIf < __CDS_Sequence :: mapToSameType < IndexedMapper, C > () > >
 __CDS_MaybeUnused __CDS_OptimalInline auto Sequence < C > ::mapIndexed(
         IndexedMapper const & mapper
 ) & noexcept -> Sequence < C > __CDS_Requires ( Iterable < C > || ConstIterable < C > ) {
@@ -2574,7 +2575,7 @@ __CDS_Requires ( Iterable < C > || ConstIterable < C > ) {
 }
 
 template < typename C >
-template < typename NewType, typename OT, typename NT, typename std :: enable_if < Type < OT > :: isSmartPointer, int > :: type >
+template < typename NewType, typename OT, typename NT, EnableIf < Type < OT > :: isSmartPointer > >
 __CDS_MaybeUnused __CDS_OptionalInline auto Sequence < C > :: filterIsDerived () && noexcept -> Sequence < LinkedList < typename TypeExtensions < NT > :: AsForeignPointer > >
 __CDS_Requires ( ( Iterable < C > || ConstIterable < C > ) && Pointer < OT > && Pointer < NT > ) {
 
@@ -2589,7 +2590,7 @@ __CDS_Requires ( ( Iterable < C > || ConstIterable < C > ) && Pointer < OT > && 
 }
 
 template < typename C >
-template < typename NewType, typename OT, typename NT, typename std :: enable_if < Type < OT > :: isSmartPointer, int > :: type >
+template < typename NewType, typename OT, typename NT, EnableIf < Type < OT > :: isSmartPointer > >
 __CDS_MaybeUnused __CDS_OptionalInline auto Sequence < C > :: filterIsDerived () & noexcept -> Sequence < LinkedList < typename TypeExtensions < NT > :: AsForeignPointer > >
 __CDS_Requires ( ( Iterable < C > || ConstIterable < C > ) && Pointer < OT > && Pointer < NT > ) {
 
@@ -2604,7 +2605,7 @@ __CDS_Requires ( ( Iterable < C > || ConstIterable < C > ) && Pointer < OT > && 
 }
 
 template < typename C >
-template < typename NewType, typename OT, typename NT, typename std :: enable_if < Type < OT > :: isBasicPointer, int > :: type >
+template < typename NewType, typename OT, typename NT, EnableIf < Type < OT > :: isBasicPointer > >
 __CDS_MaybeUnused __CDS_OptionalInline auto Sequence < C > :: filterIsDerived () && noexcept -> Sequence < LinkedList < NewType > >
 __CDS_Requires ( ( Iterable < C > || ConstIterable < C > ) && Pointer < ElementType > && Pointer < NewType > ) {
 
@@ -2619,7 +2620,7 @@ __CDS_Requires ( ( Iterable < C > || ConstIterable < C > ) && Pointer < ElementT
 }
 
 template < typename C >
-template < typename NewType, typename OT, typename NT, typename std :: enable_if < Type < OT > :: isBasicPointer, int > :: type >
+template < typename NewType, typename OT, typename NT, EnableIf < Type < OT > :: isBasicPointer > >
 __CDS_MaybeUnused __CDS_OptionalInline auto Sequence < C > :: filterIsDerived () & noexcept -> Sequence < LinkedList < NewType > >
 __CDS_Requires( ( Iterable < C > || ConstIterable < C > ) && Pointer < ElementType > && Pointer < NewType > ) {
 
@@ -2670,7 +2671,7 @@ __CDS_MaybeUnused __CDS_OptimalInline auto Sequence < C > :: filterNotIndexed(
 }
 
 template < typename C >
-template < typename Transformer, typename std::enable_if < isPair < returnOf < Transformer > > :: value, int > :: type >
+template < typename Transformer, EnableIf < isPair < returnOf < Transformer > > :: value > >
 __CDS_MaybeUnused __CDS_OptionalInline auto Sequence < C > :: associate(
         Transformer const & transformer
 ) && noexcept -> Sequence < LinkedList < returnOf < Transformer > > >
@@ -2683,7 +2684,7 @@ __CDS_Requires ( ( Iterable < C > || ConstIterable < C > ) && PairType < returnO
 }
 
 template < typename C >
-template < typename Transformer, typename std::enable_if < isPair < returnOf < Transformer > > :: value, int > :: type >
+template < typename Transformer, EnableIf < isPair < returnOf < Transformer > > :: value > >
 __CDS_MaybeUnused __CDS_OptionalInline auto Sequence < C > :: associate(
         Transformer const & transformer
 ) & noexcept -> Sequence < LinkedList < returnOf < Transformer > > >
@@ -2959,7 +2960,7 @@ __CDS_MaybeUnused __CDS_OptionalInline auto Sequence < C > ::elementAtOr(
 }
 
 template < typename C >
-template < typename T, typename std :: enable_if < Type < T > :: isPointer, int > :: type >
+template < typename T, EnableIf < Type < T > :: isPointer > >
 __CDS_MaybeUnused __CDS_OptionalInline auto Sequence < C > :: elementAtOrNull ( Index i ) const noexcept -> ElementType __CDS_Requires (Iterable < C > || ConstIterable < C > ) {
     Index at = 0;
     for ( auto v : * this )
@@ -3156,13 +3157,13 @@ template < typename C >
 template < typename Transformer >
 __CDS_MaybeUnused __CDS_OptionalInline auto Sequence < C > :: flatMap (
         Transformer const & transformer
-) && noexcept -> Sequence < LinkedList < typename __CDS_Sequence :: FlatMapDeductedType < Transformer > :: Type > >
+) && noexcept -> Sequence < LinkedList < __CDS_Sequence :: FlatMapDeducedType < Transformer > > >
 __CDS_Requires (
         ( Iterable < C > || ConstIterable < C > ) &&
         ( Iterable < returnOf < Transformer > > || ConstIterable < returnOf < Transformer > > )
 ) {
 
-    LinkedList < typename __CDS_Sequence :: FlatMapDeductedType < Transformer > :: Type > container;
+    LinkedList < __CDS_Sequence :: FlatMapDeducedType < Transformer > > container;
 
     for ( auto e : * this )
         for ( auto const & s : transformer(e) )
@@ -3174,13 +3175,13 @@ template < typename C >
 template < typename Transformer >
 __CDS_MaybeUnused __CDS_OptionalInline auto Sequence < C > :: flatMap (
         Transformer const & transformer
-) & noexcept -> Sequence < LinkedList < typename __CDS_Sequence :: FlatMapDeductedType < Transformer > :: Type > >
+) & noexcept -> Sequence < LinkedList < __CDS_Sequence :: FlatMapDeducedType < Transformer > > >
 __CDS_Requires (
         ( Iterable < C > || ConstIterable < C > ) &&
         ( Iterable < returnOf < Transformer > > || ConstIterable < returnOf < Transformer > > )
 ) {
 
-    LinkedList < typename __CDS_Sequence :: FlatMapDeductedType < Transformer > :: Type > container;
+    LinkedList < __CDS_Sequence :: FlatMapDeducedType < Transformer > > container;
 
     for ( auto e : * this )
         for ( auto const & s : transformer(e) )
@@ -3192,13 +3193,13 @@ template < typename C >
 template < typename IndexedTransformer >
 __CDS_MaybeUnused __CDS_OptionalInline auto Sequence < C > :: flatMapIndexed (
         IndexedTransformer const & transformer
-) && noexcept -> Sequence < LinkedList < typename __CDS_Sequence :: FlatMapDeductedType < IndexedTransformer > :: Type > > __CDS_Requires (
+) && noexcept -> Sequence < LinkedList < __CDS_Sequence :: FlatMapDeducedType < IndexedTransformer > > > __CDS_Requires (
         ( Iterable < C > || ConstIterable < C > ) && (
                 Iterable < returnOf < IndexedTransformer > > ||
                 ConstIterable < returnOf < IndexedTransformer > >
         )
 ) {
-    LinkedList < typename __CDS_Sequence :: FlatMapDeductedType < IndexedTransformer > :: Type > container;
+    LinkedList < __CDS_Sequence :: FlatMapDeducedType < IndexedTransformer > > container;
 
     Index i = 0;
 
@@ -3212,13 +3213,13 @@ template < typename C >
 template < typename IndexedTransformer >
 __CDS_MaybeUnused __CDS_OptionalInline auto Sequence < C > :: flatMapIndexed (
         IndexedTransformer const & transformer
-) & noexcept -> Sequence < LinkedList < typename __CDS_Sequence :: FlatMapDeductedType < IndexedTransformer > :: Type > > __CDS_Requires (
+) & noexcept -> Sequence < LinkedList < __CDS_Sequence :: FlatMapDeducedType < IndexedTransformer > > > __CDS_Requires (
         ( Iterable < C > || ConstIterable < C > ) && (
                 Iterable < returnOf < IndexedTransformer > > ||
                 ConstIterable < returnOf < IndexedTransformer > >
         )
 ) {
-    LinkedList < typename __CDS_Sequence :: FlatMapDeductedType < IndexedTransformer > :: Type > container;
+    LinkedList < __CDS_Sequence :: FlatMapDeducedType < IndexedTransformer > > container;
 
     Index i = 0;
 
@@ -3663,7 +3664,7 @@ __CDS_MaybeUnused __CDS_OptionalInline auto Sequence < C > :: mapIndexedTo (
 }
 
 template < typename C >
-template < typename NewType, typename CT, typename OT, typename std :: enable_if < Type < OT > :: isBasicPointer, int > :: type >
+template < typename NewType, typename CT, typename OT, EnableIf < Type < OT > :: isBasicPointer > >
 __CDS_MaybeUnused __CDS_OptionalInline auto Sequence < C > :: filterIsDerivedTo (
         Collection < CT > & collection
 ) const noexcept -> Collection < CT > &
@@ -3683,7 +3684,7 @@ __CDS_Requires (
 }
 
 template < typename C >
-template < typename T, typename std :: enable_if < Type < T > :: isBasicPointer, int > :: type >
+template < typename T, EnableIf < Type < T > :: isBasicPointer > >
 __CDS_MaybeUnused __CDS_OptionalInline auto Sequence < C > :: filterNotNull () & noexcept -> Sequence < LinkedList < T > > __CDS_Requires( ( Iterable < C > || ConstIterable < C > ) && Pointer < T > ) {
     LinkedList < T > container;
     for ( auto e : * this )
@@ -3694,7 +3695,7 @@ __CDS_MaybeUnused __CDS_OptionalInline auto Sequence < C > :: filterNotNull () &
 }
 
 template < typename C >
-template < typename T, typename std :: enable_if < Type < T > :: isBasicPointer, int > :: type >
+template < typename T, EnableIf < Type < T > :: isBasicPointer > >
 __CDS_MaybeUnused __CDS_OptionalInline auto Sequence < C > :: filterNotNull () && noexcept -> Sequence < LinkedList < T > > __CDS_Requires( ( Iterable < C > || ConstIterable < C > ) && Pointer < T > ) {
     LinkedList < T > container;
     for ( auto e : * this )
@@ -3705,7 +3706,7 @@ __CDS_MaybeUnused __CDS_OptionalInline auto Sequence < C > :: filterNotNull () &
 }
 
 template < typename C >
-template < typename T, typename std :: enable_if < Type < T > :: isSmartPointer, int > :: type >
+template < typename T, EnableIf < Type < T > :: isSmartPointer > >
 __CDS_MaybeUnused __CDS_OptionalInline auto Sequence < C > :: filterNotNull () & noexcept -> Sequence < LinkedList < T > > __CDS_Requires( ( Iterable < C > || ConstIterable < C > ) && Pointer < T > ) {
     LinkedList < T > container;
     for ( auto e : * this )
@@ -3716,7 +3717,7 @@ __CDS_MaybeUnused __CDS_OptionalInline auto Sequence < C > :: filterNotNull () &
 }
 
 template < typename C >
-template < typename T, typename std :: enable_if < Type < T > :: isSmartPointer, int > :: type >
+template < typename T, EnableIf < Type < T > :: isSmartPointer > >
 __CDS_MaybeUnused __CDS_OptionalInline auto Sequence < C > :: filterNotNull () && noexcept -> Sequence < LinkedList < T > > __CDS_Requires( ( Iterable < C > || ConstIterable < C > ) && Pointer < T > ) {
     LinkedList < T > container;
     for ( auto e : * this )
@@ -3727,7 +3728,7 @@ __CDS_MaybeUnused __CDS_OptionalInline auto Sequence < C > :: filterNotNull () &
 }
 
 template < typename C >
-template < typename NewType, typename CT, typename OT, typename std :: enable_if < Type < OT > :: isSmartPointer, int > :: type >
+template < typename NewType, typename CT, typename OT, EnableIf < Type < OT > :: isSmartPointer > >
 __CDS_MaybeUnused __CDS_OptionalInline auto Sequence < C > :: filterIsDerivedTo (
         Collection < CT > & collection
 ) const noexcept -> Collection < CT > &
@@ -3770,7 +3771,7 @@ __CDS_MaybeUnused __CDS_OptionalInline auto Sequence < C > :: filterNotIndexedTo
 }
 
 template < typename C >
-template < typename T, typename std :: enable_if < Type < T > :: isBasicPointer, int > :: type >
+template < typename T, EnableIf < Type < T > :: isBasicPointer > >
 __CDS_MaybeUnused auto Sequence < C > :: filterNotNullTo (Collection < T > & collection) const noexcept -> Collection < T > & __CDS_Requires( ( Iterable < C > || ConstIterable < C > ) && Pointer < T > ) {
     for ( auto e : * this )
         if ( e != nullptr )
@@ -3780,7 +3781,7 @@ __CDS_MaybeUnused auto Sequence < C > :: filterNotNullTo (Collection < T > & col
 }
 
 template < typename C >
-template < typename T, typename std :: enable_if < Type < T > :: isSmartPointer, int > :: type >
+template < typename T, EnableIf < Type < T > :: isSmartPointer > >
 __CDS_MaybeUnused auto Sequence < C > :: filterNotNullTo (Collection < T > & collection) const noexcept -> Collection < T > & __CDS_Requires( ( Iterable < C > || ConstIterable < C > ) && Pointer < T > ) {
     for ( auto e : * this )
         if ( ! e.isNull() )
@@ -4053,9 +4054,9 @@ __CDS_MaybeUnused __CDS_OptimalInline auto Sequence < C > ::toUnorderedSet(
 template < typename C >
 template < typename Transformer >
 __CDS_MaybeUnused __CDS_OptionalInline auto Sequence < C > :: flatMapTo (
-        Collection < typename __CDS_Sequence :: FlatMapDeductedType < Transformer > :: Type > & collection,
+        Collection < __CDS_Sequence :: FlatMapDeducedType < Transformer > > & collection,
         Transformer   const & transformer
-) const noexcept -> Collection < typename __CDS_Sequence :: FlatMapDeductedType < Transformer > :: Type > & __CDS_Requires (
+) const noexcept -> Collection < __CDS_Sequence :: FlatMapDeducedType < Transformer > > & __CDS_Requires (
         ( Iterable < C > || ConstIterable < C > ) && (
                 Iterable < returnOf < Transformer > > ||
                 ConstIterable < returnOf < Transformer > >
@@ -4072,9 +4073,9 @@ __CDS_MaybeUnused __CDS_OptionalInline auto Sequence < C > :: flatMapTo (
 template < typename C >
 template < typename IndexedTransformer >
 __CDS_MaybeUnused __CDS_OptionalInline auto Sequence < C > :: flatMapIndexedTo (
-        Collection < typename __CDS_Sequence :: FlatMapDeductedType < IndexedTransformer > :: Type > & collection,
+        Collection < __CDS_Sequence :: FlatMapDeducedType < IndexedTransformer > > & collection,
         IndexedTransformer const & transformer
-) const noexcept -> Collection < typename __CDS_Sequence :: FlatMapDeductedType < IndexedTransformer > :: Type > & __CDS_Requires (
+) const noexcept -> Collection < __CDS_Sequence :: FlatMapDeducedType < IndexedTransformer > > & __CDS_Requires (
         ( Iterable < C > || ConstIterable < C > ) && (
                 Iterable < returnOf < IndexedTransformer > > ||
                 ConstIterable < returnOf < IndexedTransformer > >

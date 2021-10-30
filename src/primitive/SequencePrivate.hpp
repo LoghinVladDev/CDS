@@ -65,7 +65,7 @@ namespace __CDS_Sequence { // NOLINT(bugprone-reserved-identifier)
     }
 
     template < typename TransformerType >
-    struct FlatMapDeductedType {
+    struct FlatMapDeducted {
         using Type = typename std :: remove_reference <
             decltype (
                 Type <
@@ -74,6 +74,9 @@ namespace __CDS_Sequence { // NOLINT(bugprone-reserved-identifier)
             )
         > :: type;
     };
+
+    template < typename TransformerType >
+    using FlatMapDeducedType = typename FlatMapDeducted < TransformerType > :: Type;
 
     template < typename C >
     constexpr auto containedTypeIsPair () noexcept -> bool {

@@ -16,12 +16,10 @@
 #include "../ordered/LinkedListPublic.hpp"
 
 
-template <class K, class V, class H = dataTypes::MediumCollisionDefaultHashFunction<K>>
-#if defined(__cpp_concepts) && !defined(_MSC_VER)
-requires
-UniqueIdentifiable<K> &&
-HashCalculatorHasBoundaryFunction<H>
-#endif
+template <class K, class V, class H = dataTypes::MediumCollisionDefaultHashFunction<K>> __CDS_Requires (
+    UniqueIdentifiable<K> &&
+    HashCalculatorHasBoundaryFunction<H>
+)
 class HashMap;
 
 
@@ -48,12 +46,9 @@ public:
     using EntryReferenceList        = LinkedList < Reference < Entry > >;
     using EntryConstReferenceList   = LinkedList < EntryConstReference >;
 
-    class MapPairNonExistent : public std::exception {
-    public:
-        __CDS_NoDiscard __CDS_cpplang_ConstexprOverride auto what() const noexcept -> StringLiteral final {
-            return "Map Entry for given Key does not exist";
-        }
-    };
+    using CollectionIterator        = typename Collection < Entry > :: Iterator;
+    using ConstCollectionIterator   = typename Collection < Entry > :: ConstIterator;
+    using InitializerList           = typename Collection < Entry > :: InitializerList;
 
     __CDS_MaybeUnused virtual auto keys () const noexcept -> LinkedList < Reference < const Key > > = 0;
     virtual auto values () noexcept -> LinkedList < Reference < Value > > = 0;
@@ -77,13 +72,13 @@ public:
 
     auto allocInsertGetPtr (EntryConstReference) noexcept -> EntryPointerReference override = 0;
 
-    template < typename U = Entry, typename std :: enable_if < Type < U > :: copyConstructible, int > :: type = 0 >
-    __CDS_OptimalInline auto insert (EntryConstReference entry) noexcept -> ValueConstReference {
+    template < typename U = Entry, EnableIf < Type < U > :: copyConstructible > = 0 >
+    __CDS_OptimalInline auto insert (EntryConstReference entry) noexcept -> ValueReference {
         return ( (this->allocInsertGetPtr(entry)) = new Entry(entry) )->second();
     }
 
-    template < typename U = Entry, typename std :: enable_if < Type < U > :: moveConstructible, int > :: type = 0 >
-    __CDS_OptimalInline auto insert (EntryMoveReference entry) noexcept -> ValueConstReference {
+    template < typename U = Entry, EnableIf < Type < U > :: moveConstructible > = 0 >
+    __CDS_OptimalInline auto insert (EntryMoveReference entry) noexcept -> ValueReference {
         return ( ( this->allocInsertGetPtr(entry)) = new Entry(entry) )->second();
     }
 
@@ -91,7 +86,7 @@ public:
         return this->insert( {k, v} );
     }
 
-    ~Map() noexcept override = default;
+    __CDS_cpplang_ConstexprDestructor ~Map() noexcept override = default;
 
 private:
 
@@ -121,8 +116,7 @@ private:
 
 #include <sstream>
 
-template < typename K, typename V >
-REQUIRES (UniqueIdentifiable < K >)
+template < typename K, typename V > __CDS_Requires( UniqueIdentifiable < K > )
 class __CDS_MaybeUnused MultiMap : public Collection < Pair < K, V > > {
     using Key                                   = K;
     using Value                                 = V;
@@ -130,31 +124,6 @@ class __CDS_MaybeUnused MultiMap : public Collection < Pair < K, V > > {
     using ValueReference      __CDS_MaybeUnused = Value &;
     using KeyConstReference                     = Key const &;
     using ValueConstReference __CDS_MaybeUnused = Value const &;
-
-    class __CDS_MaybeUnused PairNonExistent : public std::exception {
-    private:
-        String _message;
-
-    public:
-        PairNonExistent() noexcept : std::exception() {
-            this->_message = "No Value for given Key";
-        }
-
-        explicit PairNonExistent(KeyConstReference key) noexcept : std::exception () {
-            std::stringstream oss;
-
-            if __CDS_cpplang_IfConstexpr ( Type < KeyConstReference > :: ostreamPrintable )
-                oss << "No Value for given Key '" << key << "'";
-            else
-                oss << "No Value for given Key";
-
-            this->_message = oss.str();
-        }
-
-        __CDS_NoDiscard __CDS_cpplang_VirtualConstexpr auto what () const noexcept -> StringLiteral final {
-            return this->_message.cStr();
-        }
-    };
 
     __CDS_MaybeUnused virtual auto keys () const noexcept -> LinkedList < Reference < Key const > > = 0;
     virtual auto values () noexcept -> LinkedList < Reference < Value > > = 0;

@@ -10,10 +10,6 @@
 #include <CDS/Utility>
 #include <CDS/Traits>
 
-namespace Utility {
-    class UndefinedClass;
-}
-
 template < typename ReturnType, typename ... ArgumentTypes >
 class Function : public Object {};
 

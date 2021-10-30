@@ -7,68 +7,121 @@
 
 #include <CDS/Collection>
 
-template <class T>
-#if defined(__cpp_concepts) && !defined(_MSC_VER)
-    requires UniqueIdentifiable <T>
-#endif
-class Set : public Collection<T> {
+template < typename T> __CDS_Requires ( UniqueIdentifiable <T> )
+class Set : public Collection < T > {
 public:
     using ElementType   = typename Collection < T > :: ElementType;
-    using ElementRef    = typename Collection < T > :: ElementRef;
-    using ElementCRef   = typename Collection < T > :: ElementCRef;
-    using ElementMRef   = typename Collection < T > :: ElementMRef;
-    using ElementPtr    = typename Collection < T > :: ElementPtr;
-    using ElementPtrRef = typename Collection < T > :: ElementPtrRef;
-    using ElementCPtr   = typename Collection < T > :: ElementCPtr;
+
+protected:
+    using ElementRef                = typename Collection < T > :: ElementRef;
+    using ElementCRef               = typename Collection < T > :: ElementCRef;
+    using ElementMRef               = typename Collection < T > :: ElementMRef;
+    using ElementPtr                = typename Collection < T > :: ElementPtr;
+    using ElementPtrRef             = typename Collection < T > :: ElementPtrRef;
+    using ElementCPtr               = typename Collection < T > :: ElementCPtr;
+
+protected:
+    using CollectionIterator        = typename Collection < T > :: Iterator;
+    using ConstCollectionIterator   = typename Collection < T > :: ConstIterator;
+    using InitializerList           = typename Collection < T > :: InitializerList;
 
     struct Node {
         T       * data;
         Node    * pNext {nullptr};
     };
 
-    typedef Node * NodePointer;
-    typedef Node const * ConstNodePointer;
+    using NodePointer       = Node *;
+    using ConstNodePointer  = Node const *;
 
-    class Iterator final : public Collection<T>::Iterator {
+public:
+
+    class Iterator : public Collection < T > :: Iterator {
     private:
-        mutable NodePointer _pNode { nullptr };
+        NodePointer mutable _pNode { nullptr };
 
     public:
-        Iterator () noexcept = delete;
-        Iterator ( Iterator const & ) noexcept = default;
-        Iterator ( Iterator && ) noexcept = default;
-        explicit Iterator ( NodePointer pNode, Set < T > * pSet ) : Collection<T>::Iterator(pSet), _pNode(pNode) {  }
-        ~Iterator () noexcept final = default;
+        constexpr Iterator () noexcept = delete;
+        constexpr Iterator ( Iterator const & ) noexcept = default;
+        constexpr Iterator ( Iterator && ) noexcept = default;
 
-        __CDS_OptimalInline auto equals ( typename Collection<T>::Iterator const & it ) const noexcept -> bool final { return dynamic_cast < Iterator const & > (it)._pNode == this->_pNode; }
-        constexpr auto value () const noexcept -> ElementRef final { return * this->_pNode->data; }
-        __CDS_cpplang_NonConstConstexprMemberFunction auto next () noexcept -> Iterator & final { this->_pNode = this->_pNode->pNext; return * this; }
+        constexpr explicit Iterator ( NodePointer pNode, Set < T > * pSet ) noexcept :
+                Collection<T>::Iterator(pSet),
+                _pNode(pNode) {
 
-        __CDS_cpplang_NonConstConstexprMemberFunction auto operator ++ () noexcept -> Iterator & final { return this->next(); }
-        __CDS_cpplang_NonConstConstexprMemberFunction auto operator ++ (int) noexcept -> Iterator { auto copy = *this; this->_pNode = this->_pNode->pNext; return copy; }
+        }
 
-        __CDS_NoDiscard __CDS_OptimalInline auto copy () const noexcept -> Iterator * override { return new Iterator (* this); }
+        __CDS_cpplang_ConstexprDestructor ~Iterator () noexcept override = default;
+
+        __CDS_cpplang_ConstexprOverride auto equals ( CollectionIterator const & it ) const noexcept -> bool final {
+            return dynamic_cast < Iterator const & > (it)._pNode == this->_pNode;
+        }
+
+        __CDS_cpplang_ConstexprOverride auto value () const noexcept -> ElementRef final {
+            return * this->_pNode->data;
+        }
+
+        __CDS_cpplang_NonConstConstexprMemberFunction auto next () noexcept -> Iterator & final {
+            this->_pNode = this->_pNode->pNext; return * this;
+        }
+
+        __CDS_cpplang_NonConstConstexprMemberFunction auto operator ++ () noexcept -> Iterator & final {
+            return this->next();
+        }
+
+        __CDS_cpplang_ConstexprDestructor auto operator ++ (int) noexcept -> Iterator {
+            auto copy = *this;
+            this->_pNode = this->_pNode->pNext;
+            return copy;
+        }
+
+        __CDS_NoDiscard __CDS_OptimalInline auto copy () const noexcept -> Iterator * override {
+            return new Iterator (* this);
+        }
     };
 
-    class ConstIterator final : public Collection<T>::ConstIterator {
+    class ConstIterator : public Collection<T>::ConstIterator {
     private:
         ConstNodePointer _pNode { nullptr };
 
     public:
-        ConstIterator () noexcept = default;
-        ConstIterator ( ConstIterator const & ) noexcept = default;
-        ConstIterator ( ConstIterator && ) noexcept = default;
-        explicit ConstIterator ( ConstNodePointer pNode, Set < T > const * pSet ) : Collection<T>::ConstIterator(pSet), _pNode(pNode) {  }
-        ~ConstIterator () noexcept final = default;
+        constexpr ConstIterator () noexcept = default;
+        constexpr ConstIterator ( ConstIterator const & ) noexcept = default;
+        constexpr ConstIterator ( ConstIterator && ) noexcept = default;
 
-        __CDS_OptimalInline auto equals ( typename Collection<T>::ConstIterator const & it ) const noexcept -> bool final { return dynamic_cast < ConstIterator const & > (it)._pNode == this->_pNode; }
-        constexpr auto value () const noexcept -> ElementCRef final { return * this->_pNode->data; }
-        __CDS_cpplang_NonConstConstexprMemberFunction auto next () noexcept -> ConstIterator & final { this->_pNode = this->_pNode->pNext; return * this; }
+        constexpr explicit ConstIterator ( ConstNodePointer pNode, Set < T > const * pSet ) noexcept :
+                Collection<T>::ConstIterator(pSet),
+                _pNode(pNode) {
 
-        __CDS_cpplang_NonConstConstexprMemberFunction auto operator ++ () noexcept -> ConstIterator & final { return this->next(); }
-        __CDS_cpplang_NonConstConstexprMemberFunction auto operator ++ (int) noexcept -> ConstIterator { auto copy = *this; this->_pNode = this->_pNode->pNext; return copy; }
+        }
 
-        __CDS_NoDiscard __CDS_OptimalInline auto copy () const noexcept -> ConstIterator * override { return new ConstIterator (* this); }
+        __CDS_cpplang_ConstexprDestructor ~ConstIterator () noexcept override = default;
+
+        __CDS_cpplang_ConstexprOverride auto equals ( ConstCollectionIterator const & it ) const noexcept -> bool final {
+            return dynamic_cast < ConstIterator const & > (it)._pNode == this->_pNode;
+        }
+
+        __CDS_cpplang_ConstexprOverride auto value () const noexcept -> ElementCRef final {
+            return * this->_pNode->data;
+        }
+
+        __CDS_cpplang_NonConstConstexprMemberFunction auto next () noexcept -> ConstIterator & final {
+            this->_pNode = this->_pNode->pNext;
+            return * this;
+        }
+
+        __CDS_cpplang_NonConstConstexprMemberFunction auto operator ++ () noexcept -> ConstIterator & final {
+            return this->next();
+        }
+
+        __CDS_cpplang_ConstexprDestructor auto operator ++ (int) noexcept -> ConstIterator {
+            auto copy = *this;
+            this->_pNode = this->_pNode->pNext;
+            return copy;
+        }
+
+        __CDS_NoDiscard __CDS_OptimalInline auto copy () const noexcept -> ConstIterator * override {
+            return new ConstIterator (* this);
+        }
     };
 
 protected:
@@ -80,9 +133,10 @@ protected:
     __CDS_OptimalInline auto beginPtr () const noexcept -> ConstIterator * final { return new ConstIterator ( this->_pFront, this ); }
     __CDS_OptimalInline auto endPtr () const noexcept -> ConstIterator * final { return new ConstIterator ( nullptr, this ); }
 
-    Set() noexcept = default;
-    Set(Set const &) noexcept {}
-    Set(Set && o) noexcept(false):
+    constexpr Set() noexcept = default;
+    constexpr Set(Set const &) noexcept {}
+
+    constexpr Set(Set && o) noexcept:
             _pFront(Utility::exchange(o._pFront, nullptr)),
             _size(Utility::exchange(o._size, 0ull)){
 
@@ -145,8 +199,13 @@ public:
         this->_size = 0;
     }
 
-    __CDS_NoDiscard constexpr auto empty () const noexcept -> bool final { return this->size() == 0; }
-    __CDS_NoDiscard constexpr auto size () const noexcept -> Size final { return this->_size; }
+    __CDS_NoDiscard __CDS_cpplang_ConstexprOverride auto empty () const noexcept -> bool final {
+        return this->size() == 0;
+    }
+
+    __CDS_NoDiscard __CDS_cpplang_ConstexprOverride auto size () const noexcept -> Size final {
+        return this->_size;
+    }
 
     auto __CDS_OptimalInline operator != (Set const & o) const noexcept -> bool { return ! this->operator==(o); }
 
@@ -159,7 +218,7 @@ public:
         return true;
     }
 
-    __CDS_NoDiscard auto equals (Object const & o) const noexcept -> bool final {
+    __CDS_NoDiscard __CDS_OptimalInline auto equals (Object const & o) const noexcept -> bool final {
         if ( & o == this ) return true;
         auto p = dynamic_cast < Set < T > const * > ( & o );
         if ( p == nullptr ) return false;
@@ -171,10 +230,7 @@ public:
 };
 
 #include <sstream>
-template <class T>
-#if defined(__cpp_concepts) && !defined(_MSC_VER)
-requires UniqueIdentifiable <T>
-#endif
+template < typename T > __CDS_Requires( UniqueIdentifiable <T> )
 auto Set<T>::toString() const noexcept -> String {
     if ( this->empty() )
         return {"{ }"};
@@ -189,11 +245,8 @@ auto Set<T>::toString() const noexcept -> String {
     return {s.substr(0, s.length() - 2).append(" }")};
 }
 
-template <class T>
-#if defined(__cpp_concepts) && !defined(_MSC_VER)
-    requires UniqueIdentifiable <T>
-#endif
-auto Set<T>::remove( ElementCRef e) noexcept -> bool {
+template < typename T > __CDS_Requires( UniqueIdentifiable <T> )
+auto Set<T>::remove( ElementCRef e ) noexcept -> bool {
     if ( this->empty() )
         return false;
 

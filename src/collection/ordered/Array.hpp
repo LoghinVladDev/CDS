@@ -7,7 +7,7 @@
 
 #include <CDS/List>
 
-template <class T>
+template < typename T >
 class Array : public List <T> {
 private:
     T ** _pData     {nullptr };
@@ -23,6 +23,11 @@ private:
     using ElementPtr                    = typename List < T > :: ElementPtr;
     using ElementPtrRef                 = typename List < T > :: ElementPtrRef;
     using ElementCPtr                   = typename List < T > :: ElementCPtr;
+
+    using CollectionIterator            = typename List < T > :: CollectionIterator;
+    using ConstCollectionIterator       = typename List < T > :: ConstCollectionIterator;
+
+    using InitializerList               = typename List < T > :: InitializerList;
 
     class IteratorBase;
     class ConstIteratorBase;
@@ -41,19 +46,23 @@ public:
     Array ( Array && ) noexcept;
 
     Array (
-        typename Collection<ElementType>::Iterator const &,
-        typename Collection<ElementType>::Iterator const &
+        CollectionIterator const &,
+        CollectionIterator const &
     ) noexcept;
 
     Array (
-        typename Collection<ElementType>::ConstIterator const &,
-        typename Collection<ElementType>::ConstIterator const &
+        ConstCollectionIterator const &,
+        ConstCollectionIterator const &
     ) noexcept;
 
-    template < typename V = T, typename std :: enable_if < Type < V > :: copyAssignable, int > :: type = 0 >
-    Array( std::initializer_list <ElementType> const & ) noexcept;
+    template < typename V = T, EnableIf < Type < V > :: copyConstructible > = 0 >
+    Array( InitializerList ) noexcept; // NOLINT(google-explicit-constructor)
 
-    explicit Array( Size, ElementCRef = ElementType () ) noexcept;
+    template < typename V = T, EnableIf < Type < V > :: defaultConstructible > = 0 >
+    explicit Array( Size ) noexcept;
+
+    template < typename V = T, EnableIf < Type < V > :: copyConstructible > = 0 >
+    explicit Array( Size, ElementCRef ) noexcept;
 
     explicit Array ( Collection < T > const & ) noexcept;
 
@@ -85,7 +94,7 @@ private:
 
 public:
 
-    template < typename std :: enable_if < Type < T > :: defaultConstructible, int > :: type = 0 >
+    template < typename V = T, EnableIf < Type < V > :: defaultConstructible > = 0 >
     __CDS_OptionalInline auto resize ( Size newSize ) noexcept -> void {
         this->_resize(newSize);
         for ( auto i = this->_size; i < newSize; ++ i )
@@ -93,7 +102,7 @@ public:
         this->_size = newSize;
     }
 
-    template < typename std :: enable_if < Type < T > :: copyConstructible, int > :: type >
+    template < EnableIf < Type < T > :: copyConstructible > = 0 >
     __CDS_OptionalInline auto resize ( Size newSize, ElementCRef value ) noexcept -> void {
         this->_resize(newSize);
         for ( auto i = this->_size; i < newSize; ++ i )
@@ -106,42 +115,42 @@ public:
     auto remove ( ElementCRef , Size ) noexcept -> bool final;
     auto removeLast ( ElementCRef ) noexcept -> bool final;
 
-    auto removeOf ( Collection <ElementType> const &, Size ) noexcept -> bool final;
-    auto removeLastOf ( Collection<ElementType> const & ) noexcept -> bool final;
-    auto removeNotOf ( Collection<ElementType> const &, Size ) noexcept -> bool final;
-    auto removeLastNotOf ( Collection<ElementType> const & ) noexcept -> bool final;
+    auto removeOf ( Collection < ElementType > const &, Size ) noexcept -> bool final;
+    auto removeLastOf ( Collection < ElementType > const & ) noexcept -> bool final;
+    auto removeNotOf ( Collection < ElementType > const &, Size ) noexcept -> bool final;
+    auto removeLastNotOf ( Collection < ElementType > const & ) noexcept -> bool final;
 
-    auto remove ( typename Collection<ElementType>::Iterator const & ) noexcept(false) -> ElementType final;
+    auto remove ( CollectionIterator const & ) noexcept(false) -> ElementType final;
 
-    auto removeOf ( std::initializer_list<ElementType> const &, Size ) noexcept -> bool final;
-    auto removeLastOf ( std::initializer_list<ElementType> const & ) noexcept -> bool final;
-    auto removeNotOf ( std::initializer_list<ElementType> const &, Size ) noexcept -> bool final;
-    auto removeLastNotOf ( std::initializer_list<ElementType> const & ) noexcept -> bool final;
+    auto removeOf ( InitializerList, Size ) noexcept -> bool final;
+    auto removeLastOf ( InitializerList ) noexcept -> bool final;
+    auto removeNotOf ( InitializerList, Size ) noexcept -> bool final;
+    auto removeLastNotOf ( InitializerList ) noexcept -> bool final;
 
     __CDS_cpplang_NonConstConstexprMemberFunction auto back () noexcept (false) -> ElementRef final {
         if ( this->empty() )
-            throw OutOfBoundsException("Array is Empty");;
+            throw OutOfBoundsException("Array is Empty");
 
         return * this->_pData[this->_size - 1];
     }
 
     __CDS_cpplang_NonConstConstexprMemberFunction auto front () noexcept (false) -> ElementRef final {
         if ( this->empty() )
-            throw OutOfBoundsException("Array is Empty");;
+            throw OutOfBoundsException("Array is Empty");
 
         return * this->_pData[0];
     }
 
     __CDS_cpplang_ConstexprConditioned auto back () const noexcept (false) -> ElementCRef final {
         if ( this->empty() )
-            throw OutOfBoundsException("Array is Empty");;
+            throw OutOfBoundsException("Array is Empty");
 
         return * this->_pData[this->_size - 1];
     }
 
     __CDS_cpplang_ConstexprConditioned auto front () const noexcept (false) -> ElementCRef final {
         if (this->empty())
-            throw OutOfBoundsException("Array is Empty");;
+            throw OutOfBoundsException("Array is Empty");
 
         return *this->_pData[0];
     }
@@ -202,7 +211,7 @@ public:
 
     auto popBack () noexcept (false) -> ElementType final {
         if ( this->empty() )
-            throw OutOfBoundsException("Array is Empty");;
+            throw OutOfBoundsException("Array is Empty");
 
         auto v = * this->_pData[--this->_size];
         delete Utility::exchange(this->_pData[this->_size], nullptr);
@@ -223,10 +232,10 @@ private:
 #pragma ide diagnostic ignored "NotImplementedFunctions"
 #endif
 
-    template < typename SortFunc, typename U = T, typename std :: enable_if < Type < U > :: copyAssignable, int > :: type = 0 >
+    template < typename SortFunc, typename U = T, EnableIf < Type < U > :: copyAssignable > = 0 >
     auto static quickSort ( Iterator, Iterator, SortFunc const & ) noexcept -> void;
 
-    template < typename SortFunc, typename U = T, typename std :: enable_if < Type < U > :: copyAssignable, int > :: type = 0 >
+    template < typename SortFunc, typename U = T, EnableIf < Type < U > :: copyAssignable > = 0 >
     auto static quickSortPartition ( Iterator, Iterator, SortFunc const & ) noexcept -> Iterator;
 
 #if defined(__JETBRAINS_IDE__)
@@ -234,16 +243,20 @@ private:
 #endif
 
 public:
-    template < typename SortFunc, typename U = T, typename std :: enable_if < Type < U > :: copyAssignable, int > :: type = 0 >
+    template < typename SortFunc, typename U = T, EnableIf < Type < U > :: copyAssignable > = 0 >
     auto sort ( SortFunc const & ) noexcept -> void;
 
-    template < typename SortFunc, typename U = T, typename std :: enable_if < Type < U > :: copyAssignable, int > :: type = 0 >
+    template < typename U = T, EnableIf < Type < U > :: copyAssignable > = 0 >
     __CDS_OptimalInline auto sort ( Comparator < ElementType > const & c ) noexcept -> void {
+
         return this->sort ( [&c] (ElementCRef a, ElementCRef b) noexcept -> bool { return c(a, b); } );
     }
 
     auto operator = ( Collection < ElementType > const & ) noexcept -> Array &;
-    __CDS_OptimalInline auto operator = ( Array const & o ) noexcept -> Array & { return this->operator=( ( Collection<ElementType> const & )(o) ); } // NOLINT(bugprone-unhandled-self-assignment,misc-unconventional-assign-operator)
+
+    __CDS_OptimalInline auto operator = ( Array const & o ) noexcept -> Array & { // NOLINT(bugprone-unhandled-self-assignment)
+        return this->operator=( ( Collection<ElementType> const & )(o) );  // NOLINT(misc-unconventional-assign-operator)
+    }
 
     __CDS_OptionalInline auto operator = ( Array && array ) noexcept -> Array & {
         if ( this == & array ) return * this;
@@ -259,30 +272,32 @@ public:
         return * this;
     }
 
-    auto sequence () const & noexcept -> Sequence < const Array < T > >;
+    auto sequence () const & noexcept -> Sequence < Array < T > const >;
     auto sequence () & noexcept -> Sequence < Array < T > >;
-    auto sequence () const && noexcept -> Sequence < const Array < T > >;
+    auto sequence () const && noexcept -> Sequence < Array < T > const >;
     auto sequence () && noexcept -> Sequence < Array < T > >;
 };
 
-template <class T>
-class Array<T>::IteratorBase : public Collection<T>::Iterator {
+template < typename T >
+class Array < T > :: IteratorBase : public Collection < T > :: Iterator {
 protected:
     friend class Array;
     Index mutable   _index  { 0ull };
     Array         * _pArray { nullptr };
 
-    IteratorBase( IteratorBase const & ) noexcept = default;
-    IteratorBase( IteratorBase && ) noexcept = default;
-    explicit IteratorBase( Array * pArray, Index index ) noexcept :
-            Collection<T>::Iterator( pArray ),
+    constexpr IteratorBase( IteratorBase const & ) noexcept = default;
+    constexpr IteratorBase( IteratorBase && ) noexcept = default;
+    explicit constexpr IteratorBase( Array * pArray, Index index ) noexcept :
+            Collection < T > :: Iterator( pArray ),
             _index(index),
-            _pArray(pArray) { }
+            _pArray(pArray) {
+
+    }
 
 public:
-    ~IteratorBase() noexcept override = default;
+    __CDS_cpplang_ConstexprDestructor ~IteratorBase() noexcept override = default;
 
-    __CDS_cpplang_ConstexprConditioned auto equals ( typename Collection<T>::Iterator const & o ) const noexcept -> bool final {
+    __CDS_cpplang_ConstexprOverride auto equals ( CollectionIterator const & o ) const noexcept -> bool final {
         if ( & o == this ) return true;
         auto p = dynamic_cast < IteratorBase const * > ( &o );
         if ( p == nullptr ) return false;
@@ -290,29 +305,33 @@ public:
         return p->_pArray == this->_pArray && p->_index == this->_index;
     }
 
-    constexpr auto value () const noexcept -> ElementRef final { return (* this->_pArray)[this->_index]; }
+    __CDS_cpplang_ConstexprOverride auto value () const noexcept -> ElementRef final {
+        return (* this->_pArray)[this->_index];
+    }
 
     __CDS_NoDiscard auto copy () const noexcept -> IteratorBase * override = 0;
 };
 
-template <class T>
-class Array<T>::ConstIteratorBase : public Collection<T>::ConstIterator {
+template < typename T >
+class Array < T > :: ConstIteratorBase : public Collection < T > :: ConstIterator {
 protected:
     friend class Array;
     Index mutable _index  { 0ull };
     Array const * _pArray { nullptr };
 
-    ConstIteratorBase( ConstIteratorBase const & ) noexcept = default;
-    ConstIteratorBase( ConstIteratorBase && ) noexcept = default;
-    explicit ConstIteratorBase (Array const * pArray, Index index) noexcept :
-            Collection<T>::ConstIterator(pArray),
+    constexpr ConstIteratorBase( ConstIteratorBase const & ) noexcept = default;
+    constexpr ConstIteratorBase( ConstIteratorBase && ) noexcept = default;
+    constexpr explicit ConstIteratorBase (Array const * pArray, Index index) noexcept :
+            Collection < T > :: ConstIterator ( pArray ),
             _index(index),
-            _pArray(pArray) { }
+            _pArray(pArray) {
+
+    }
 
 public:
-    ~ConstIteratorBase() noexcept override = default;
+    __CDS_cpplang_ConstexprDestructor ~ConstIteratorBase() noexcept override = default;
 
-    __CDS_cpplang_ConstexprConditioned auto equals ( typename Collection<T>::ConstIterator const & o ) const noexcept -> bool final {
+    __CDS_cpplang_ConstexprOverride auto equals ( ConstCollectionIterator const & o ) const noexcept -> bool final {
         if ( & o == this ) return true;
         auto p = dynamic_cast < ConstIteratorBase const * > ( &o );
         if ( p == nullptr ) return false;
@@ -320,20 +339,28 @@ public:
         return p->_pArray == this->_pArray && p->_index == this->_index;
     }
 
-    constexpr auto value () const noexcept -> ElementCRef final { return (* this->_pArray)[this->_index]; }
+    __CDS_cpplang_ConstexprOverride auto value () const noexcept -> ElementCRef final {
+        return (* this->_pArray)[this->_index];
+    }
 
     __CDS_NoDiscard auto copy () const noexcept -> ConstIteratorBase * override = 0;
 };
 
-template <class T>
-class Array<T>::Iterator : public IteratorBase {
+template < typename T >
+class Array < T > :: Iterator : public IteratorBase {
 public:
-    Iterator ( Iterator const & ) noexcept = default;
-    Iterator ( Iterator && ) noexcept = default;
-    explicit Iterator ( Array * pArray, Index index ) noexcept : IteratorBase( pArray, index ) { }
-    ~Iterator () noexcept override = default;
 
-    __CDS_cpplang_NonConstConstexprMemberFunction Iterator & operator = ( Iterator const & o ) noexcept {
+    constexpr Iterator ( Iterator const & ) noexcept = default;
+    constexpr Iterator ( Iterator && ) noexcept = default;
+
+    constexpr explicit Iterator ( Array * pArray, Index index ) noexcept :
+            IteratorBase( pArray, index ) {
+
+    }
+
+    __CDS_cpplang_ConstexprDestructor ~Iterator () noexcept override = default;
+
+    __CDS_cpplang_NonConstConstexprMemberFunction auto operator = ( Iterator const & o ) noexcept -> Iterator & {
         if ( this == & o ) return * this;
 
         this->_pArray = o._pArray;
@@ -341,31 +368,64 @@ public:
         return * this;
     }
 
-    __CDS_OptimalInline auto operator == (Iterator const& o) const noexcept -> bool { return this->equals(o); }
-    __CDS_OptimalInline auto operator != (Iterator const& o) const noexcept -> bool { return !this->equals(o); }
+    __CDS_cpplang_ConstexprOverride auto operator == (Iterator const & o) const noexcept -> bool {
+        return this->equals(o);
+    }
 
-    __CDS_cpplang_NonConstConstexprMemberFunction auto next () noexcept -> Iterator & final { this->_index ++; return * this; }
-    __CDS_cpplang_NonConstConstexprMemberFunction auto prev () noexcept -> Iterator & { this->_index --; return * this; }
+    __CDS_cpplang_ConstexprOverride auto operator != (Iterator const & o) const noexcept -> bool {
+        return !this->equals(o);
+    }
 
-    __CDS_cpplang_NonConstConstexprMemberFunction auto operator ++ () noexcept -> Iterator & override { return this->next(); }
-    __CDS_cpplang_NonConstConstexprMemberFunction auto operator ++ (int) noexcept -> Iterator { auto copy = * this; this->next(); return copy; }
-    __CDS_cpplang_NonConstConstexprMemberFunction auto operator -- () noexcept -> Iterator & { return this->prev(); }
-    __CDS_cpplang_NonConstConstexprMemberFunction auto operator -- (int) noexcept -> Iterator { auto copy = * this; this->prev(); return copy; }
+    __CDS_cpplang_NonConstConstexprMemberFunction auto next () noexcept -> Iterator & final {
+        this->_index ++;
+        return * this;
+    }
 
-    __CDS_NoDiscard auto copy () const noexcept -> Iterator * override {
+    __CDS_cpplang_NonConstConstexprMemberFunction auto prev () noexcept -> Iterator & {
+        this->_index --;
+        return * this;
+    }
+
+    __CDS_cpplang_NonConstConstexprMemberFunction auto operator ++ () noexcept -> Iterator & override {
+        return this->next();
+    }
+
+    __CDS_cpplang_ConstexprDestructor auto operator ++ (int) noexcept -> Iterator {
+        auto copy = * this;
+        this->next();
+        return copy;
+    }
+
+    __CDS_cpplang_NonConstConstexprMemberFunction auto operator -- () noexcept -> Iterator & {
+        return this->prev();
+    }
+
+    __CDS_cpplang_ConstexprDestructor auto operator -- (int) noexcept -> Iterator {
+        auto copy = * this;
+        this->prev();
+        return copy;
+    }
+
+    __CDS_NoDiscard __CDS_OptimalInline auto copy () const noexcept -> Iterator * override {
         return new Iterator ( * this );
     }
 };
 
-template <class T>
-class Array<T>::ReverseIterator : public IteratorBase {
+template < typename T >
+class Array < T > :: ReverseIterator : public IteratorBase {
 public:
-    ReverseIterator ( ReverseIterator const & ) noexcept = default;
-    ReverseIterator ( ReverseIterator && ) noexcept = default;
-    explicit ReverseIterator ( Array * pArray, Index index ) noexcept : IteratorBase( pArray, index ) { }
-    ~ReverseIterator () noexcept override = default;
 
-    __CDS_cpplang_NonConstConstexprMemberFunction ReverseIterator & operator = ( ReverseIterator const & o ) noexcept {
+    constexpr ReverseIterator ( ReverseIterator const & ) noexcept = default;
+    constexpr ReverseIterator ( ReverseIterator && ) noexcept = default;
+
+    constexpr explicit ReverseIterator ( Array * pArray, Index index ) noexcept :
+            IteratorBase( pArray, index ) {
+
+    }
+
+    __CDS_cpplang_ConstexprDestructor ~ReverseIterator () noexcept override = default;
+
+    __CDS_cpplang_NonConstConstexprMemberFunction auto operator = ( ReverseIterator const & o ) noexcept -> ReverseIterator & {
         if ( this == & o ) return * this;
 
         this->_pArray = o._pArray;
@@ -373,28 +433,56 @@ public:
         return * this;
     }
 
-    __CDS_cpplang_NonConstConstexprMemberFunction auto next () noexcept -> ReverseIterator & final { this->_index --; return * this; }
-    __CDS_cpplang_NonConstConstexprMemberFunction auto prev () noexcept -> ReverseIterator & { this->_index ++; return * this; }
+    __CDS_cpplang_NonConstConstexprMemberFunction auto next () noexcept -> ReverseIterator & final {
+        this->_index --;
+        return * this;
+    }
 
-    __CDS_cpplang_NonConstConstexprMemberFunction auto operator ++ () noexcept -> ReverseIterator & final { this->next(); return * this; }
-    __CDS_cpplang_NonConstConstexprMemberFunction auto operator ++ (int) noexcept -> ReverseIterator { auto copy = * this; this->next(); return copy; }
-    __CDS_cpplang_NonConstConstexprMemberFunction auto operator -- () noexcept -> ReverseIterator & { return this->prev(); }
-    __CDS_cpplang_NonConstConstexprMemberFunction auto operator -- (int) noexcept -> ReverseIterator { auto copy = * this; this->prev(); return copy; }
+    __CDS_cpplang_NonConstConstexprMemberFunction auto prev () noexcept -> ReverseIterator & {
+        this->_index ++;
+        return * this;
+    }
 
-    __CDS_NoDiscard auto copy () const noexcept -> ReverseIterator * override {
+    __CDS_cpplang_NonConstConstexprMemberFunction auto operator ++ () noexcept -> ReverseIterator & final {
+        return this->next();
+    }
+
+    __CDS_cpplang_ConstexprDestructor auto operator ++ (int) noexcept -> ReverseIterator {
+        auto copy = * this;
+        this->next();
+        return copy;
+    }
+
+    __CDS_cpplang_NonConstConstexprMemberFunction auto operator -- () noexcept -> ReverseIterator & {
+        return this->prev();
+    }
+
+    __CDS_cpplang_ConstexprDestructor auto operator -- (int) noexcept -> ReverseIterator {
+        auto copy = * this;
+        this->prev();
+        return copy;
+    }
+
+    __CDS_NoDiscard __CDS_OptimalInline auto copy () const noexcept -> ReverseIterator * override {
         return new ReverseIterator ( * this );
     }
 };
 
-template <class T>
-class Array<T>::ConstIterator : public ConstIteratorBase {
+template < typename T >
+class Array < T > :: ConstIterator : public ConstIteratorBase {
 public:
-    ConstIterator ( ConstIterator const & ) noexcept = default;
-    ConstIterator ( ConstIterator && ) noexcept = default;
-    explicit ConstIterator ( Array const * pArray, Index index ) noexcept : ConstIteratorBase( pArray, index ) { }
-    ~ConstIterator () noexcept override = default;
 
-    __CDS_cpplang_NonConstConstexprMemberFunction ConstIterator & operator = ( ConstIterator const & o ) noexcept {
+    constexpr ConstIterator ( ConstIterator const & ) noexcept = default;
+    constexpr ConstIterator ( ConstIterator && ) noexcept = default;
+
+    constexpr explicit ConstIterator ( Array const * pArray, Index index ) noexcept :
+            ConstIteratorBase( pArray, index ) {
+
+    }
+
+    __CDS_cpplang_ConstexprDestructor ~ConstIterator () noexcept override = default;
+
+    __CDS_cpplang_NonConstConstexprMemberFunction auto operator = ( ConstIterator const & o ) noexcept -> ConstIterator & {
         if ( this == & o ) return * this;
 
         this->_pArray = o._pArray;
@@ -402,28 +490,55 @@ public:
         return * this;
     }
 
-    __CDS_cpplang_NonConstConstexprMemberFunction auto next () noexcept -> ConstIterator & final { this->_index ++; return * this; }
-    __CDS_cpplang_NonConstConstexprMemberFunction auto prev () noexcept -> ConstIterator & { this->_index --; return * this; }
+    __CDS_cpplang_NonConstConstexprMemberFunction auto next () noexcept -> ConstIterator & final {
+        this->_index ++;
+        return * this;
+    }
 
-    __CDS_cpplang_NonConstConstexprMemberFunction auto operator ++ () noexcept -> ConstIterator & override { this->next(); return * this; }
-    __CDS_cpplang_NonConstConstexprMemberFunction auto operator ++ (int) noexcept -> ConstIterator { auto copy = * this; this->next(); return copy; }
-    __CDS_cpplang_NonConstConstexprMemberFunction auto operator -- () noexcept -> ConstIterator & { return this->prev(); }
-    __CDS_cpplang_NonConstConstexprMemberFunction auto operator -- (int) noexcept -> ConstIterator { auto copy = * this; this->prev(); return copy; }
+    __CDS_cpplang_NonConstConstexprMemberFunction auto prev () noexcept -> ConstIterator & {
+        this->_index --;
+        return * this;
+    }
 
-    __CDS_NoDiscard auto copy () const noexcept -> ConstIterator * override {
+    __CDS_cpplang_NonConstConstexprMemberFunction auto operator ++ () noexcept -> ConstIterator & override {
+        return this->next();
+    }
+
+    __CDS_cpplang_ConstexprDestructor auto operator ++ (int) noexcept -> ConstIterator {
+        auto copy = * this;
+        this->next();
+        return copy;
+    }
+
+    __CDS_cpplang_NonConstConstexprMemberFunction auto operator -- () noexcept -> ConstIterator & {
+        return this->prev();
+    }
+
+    __CDS_cpplang_ConstexprDestructor auto operator -- (int) noexcept -> ConstIterator {
+        auto copy = * this;
+        this->prev();
+        return copy;
+    }
+
+    __CDS_NoDiscard __CDS_OptimalInline auto copy () const noexcept -> ConstIterator * override {
         return new ConstIterator ( * this );
     }
 };
 
-template<class T>
-class Array<T>::ConstReverseIterator : public ConstIteratorBase {
+template < typename T >
+class Array < T > :: ConstReverseIterator : public ConstIteratorBase {
 public:
-    ConstReverseIterator ( ConstReverseIterator const & ) noexcept = default;
-    ConstReverseIterator ( ConstReverseIterator && ) noexcept = default;
-    explicit ConstReverseIterator ( Array const * pArray, Index index ) noexcept : ConstIteratorBase( pArray, index ) { }
-    ~ConstReverseIterator () noexcept override = default;
+    constexpr ConstReverseIterator ( ConstReverseIterator const & ) noexcept = default;
+    constexpr ConstReverseIterator ( ConstReverseIterator && ) noexcept = default;
 
-    __CDS_cpplang_NonConstConstexprMemberFunction ConstReverseIterator & operator = ( ConstReverseIterator const & o ) noexcept {
+    constexpr explicit ConstReverseIterator ( Array const * pArray, Index index ) noexcept :
+            ConstIteratorBase( pArray, index ) {
+
+    }
+
+    __CDS_cpplang_ConstexprDestructor ~ConstReverseIterator () noexcept override = default;
+
+    __CDS_cpplang_NonConstConstexprMemberFunction auto operator = ( ConstReverseIterator const & o ) noexcept -> ConstReverseIterator & {
         if ( this == & o ) return * this;
 
         this->_pArray = o._pArray;
@@ -431,22 +546,44 @@ public:
         return * this;
     }
 
-    __CDS_cpplang_NonConstConstexprMemberFunction auto next () noexcept -> ConstReverseIterator & final { this->_index --; return * this; }
-    __CDS_cpplang_NonConstConstexprMemberFunction auto prev () noexcept -> ConstReverseIterator & { this->_index ++; return * this; }
+    __CDS_cpplang_NonConstConstexprMemberFunction auto next () noexcept -> ConstReverseIterator & final {
+        this->_index --;
+        return * this;
+    }
 
-    __CDS_cpplang_NonConstConstexprMemberFunction auto operator ++ () noexcept -> ConstReverseIterator & { this->next(); return * this; }
-    __CDS_cpplang_NonConstConstexprMemberFunction auto operator ++ (int) noexcept -> ConstReverseIterator { auto copy = * this; this->next(); return copy; }
-    __CDS_cpplang_NonConstConstexprMemberFunction auto operator -- () noexcept -> ConstReverseIterator & { return this->prev(); }
-    __CDS_cpplang_NonConstConstexprMemberFunction auto operator -- (int) noexcept -> ConstReverseIterator { auto copy = * this; this->prev(); return copy; }
+    __CDS_cpplang_NonConstConstexprMemberFunction auto prev () noexcept -> ConstReverseIterator & {
+        this->_index ++;
+        return * this;
+    }
 
-    __CDS_NoDiscard auto copy () const noexcept -> ConstReverseIterator * override {
+    __CDS_cpplang_NonConstConstexprMemberFunction auto operator ++ () noexcept -> ConstReverseIterator & {
+        return this->next();
+    }
+
+    __CDS_cpplang_ConstexprDestructor auto operator ++ (int) noexcept -> ConstReverseIterator {
+        auto copy = * this;
+        this->next();
+        return copy;
+    }
+
+    __CDS_cpplang_NonConstConstexprMemberFunction auto operator -- () noexcept -> ConstReverseIterator & {
+        return this->prev();
+    }
+
+    __CDS_cpplang_ConstexprDestructor auto operator -- (int) noexcept -> ConstReverseIterator {
+        auto copy = * this;
+        this->prev();
+        return copy;
+    }
+
+    __CDS_NoDiscard __CDS_OptimalInline auto copy () const noexcept -> ConstReverseIterator * override {
         return new ConstReverseIterator ( * this );
     }
 };
 
 template < typename T >
-template < typename V, typename std :: enable_if < Type < V > :: copyAssignable, int > :: type >
-Array<T>::Array( std::initializer_list < ElementType > const & initializerList ) noexcept {
+template < typename V, EnableIf < Type < V > :: copyConstructible > >
+Array<T>::Array( InitializerList initializerList ) noexcept {
     for ( auto & e : initializerList )
         this->pushBack( e );
 }
@@ -460,6 +597,7 @@ Array<T>::~Array() noexcept {
 
 template < typename T >
 auto Array < T > :: allocFrontGetPtr () noexcept -> ElementPtrRef {
+
     if ( this->_size < this->_capacity ) {
         delete Utility::exchange(this->_pData[ this->_size ++ ], nullptr);
         for ( Index i = this->_size - 1; i > 0; -- i )
@@ -492,6 +630,7 @@ auto Array < T > :: allocFrontGetPtr () noexcept -> ElementPtrRef {
 
 template < typename T >
 auto Array < T > :: allocBackGetPtr () noexcept -> ElementPtrRef {
+
     if ( this->_size < this->_capacity )
         return (this->_pData[ this->_size ++ ] = nullptr);
 
@@ -514,7 +653,7 @@ auto Array < T > :: allocBackGetPtr () noexcept -> ElementPtrRef {
 
 #endif
 
-template <class T>
+template < typename T >
 auto Array<T>::toString() const noexcept -> String {
     if ( this->empty() )
         return {"[ ]"};
@@ -529,22 +668,26 @@ auto Array<T>::toString() const noexcept -> String {
     return s.substr(0, s.length() - 2).append(" ]");
 }
 
-template <class T>
-__CDS_MaybeUnused auto Array<T>::expandWith(Size requiredSize) noexcept -> void {
-    if ( this->_size + requiredSize < this->_capacity ) return;
 #if defined(_MSC_VER)
 #pragma push_macro("max")
 #undef max
 #endif
+
+template < typename T >
+__CDS_MaybeUnused auto Array<T>::expandWith(Size requiredSize) noexcept -> void {
+    if ( this->_size + requiredSize < this->_capacity ) return;
+
     return this->_resize(std::max(this->_size + requiredSize, this->_capacity * 2));
+}
+
 #if defined(_MSC_VER)
 #pragma pop_macro("max")
 #endif
-}
 
-template <class T>
+template < typename T >
 auto Array<T>::shrinkToSize(Size size) noexcept -> void {
     if ( this->_capacity <= size ) return;
+
     return this->_resize(size);
 }
 
@@ -557,7 +700,7 @@ auto Array<T>::shrinkToSize(Size size) noexcept -> void {
 
 #endif
 
-template <class T>
+template < typename T >
 auto Array<T>::_resize(Size size) noexcept -> void {
     auto newMemory = new ElementType * [ size ];
 
@@ -580,7 +723,7 @@ auto Array<T>::_resize(Size size) noexcept -> void {
 
 #endif
 
-template <class T>
+template < typename T >
 Array<T>::Array( Array const & o ) noexcept :
         _pData( new T * [o.size()] ),
         _capacity( o.size() ){
@@ -590,7 +733,7 @@ Array<T>::Array( Array const & o ) noexcept :
         this->_pData[i] = new T(*o._pData[i]);
 }
 
-template <class T>
+template < typename T >
 Array<T>::Array( Array && moveObj ) noexcept {
     this->_pData = Utility::exchange(moveObj._pData, nullptr);
     this->_size = Utility::exchange(moveObj._size, 0);
@@ -598,19 +741,19 @@ Array<T>::Array( Array && moveObj ) noexcept {
 }
 
 #include <CDS/Pointer>
-template <class T>
+template < typename T >
 Array<T>::Array(
-        typename Collection<ElementType>::Iterator const & from,
-        typename Collection<ElementType>::Iterator const & to
+        CollectionIterator const & from,
+        CollectionIterator const & to
 ) noexcept {
     for ( auto it = UniquePointer < decltype ( & from ) > ( from.copy() ); ! it->equals (to); it->next() )
         this->pushBack( it->value() );
 }
 
-template <class T>
+template < typename T >
 Array<T>::Array(
-        typename Collection<ElementType>::ConstIterator const & from,
-        typename Collection<ElementType>::ConstIterator const & to
+        ConstCollectionIterator const & from,
+        ConstCollectionIterator const & to
 ) noexcept {
     for ( auto it = UniquePointer < decltype ( & from ) > ( from.copy() ); ! it->equals (to); it->next() )
         this->pushBack( it->value() );
@@ -621,17 +764,29 @@ Array < T > :: Array ( Collection < T > const & collection ) noexcept {
     collection.forEach([this](T const & e){this->pushBack(e);});
 }
 
-template <class T>
+template < typename T >
+template < typename V, EnableIf < Type < V > :: defaultConstructible > >
+Array < T > :: Array ( Size size ) noexcept :
+        _pData ( new T * [size] ),
+        _capacity ( size ) {
+
+    this->_size = size;
+    for ( Index i = 0; i < this->_size; ++ i )
+        this->_pData [i] = new T;
+}
+
+template < typename T >
+template < typename V, EnableIf < Type < V > :: copyConstructible > >
 Array<T>::Array ( Size size, ElementCRef defaultValue ) noexcept :
         _pData(new T * [size]),
         _capacity(size){
 
     this->_size = size;
-    for ( Index i = 0; i < this->_size; i++ )
+    for ( Index i = 0; i < this->_size; ++ i )
         this->_pData[i] = new T ( defaultValue );
 }
 
-template <class T>
+template < typename T >
 auto Array<T>::remove(ElementCRef e, Size count) noexcept -> bool {
     bool removed = false;
 
@@ -657,7 +812,7 @@ auto Array<T>::remove(ElementCRef e, Size count) noexcept -> bool {
 }
 
 #include <CDS/Range>
-template <class T>
+template < typename T >
 auto Array<T>::removeLast(ElementCRef e) noexcept -> bool {
     Index at = -1;
     for ( Index i = this->size() - 1; i >= 0; -- i )
@@ -679,7 +834,7 @@ auto Array<T>::removeLast(ElementCRef e) noexcept -> bool {
     return true;
 }
 
-template <class T>
+template < typename T >
 auto Array<T>::removeOf(Collection<ElementType> const & elements, Size count) noexcept -> bool {
     bool removed = false;
 
@@ -704,8 +859,8 @@ auto Array<T>::removeOf(Collection<ElementType> const & elements, Size count) no
     return removed;
 }
 
-template <class T>
-auto Array<T>::removeOf(std::initializer_list<ElementType> const & elements, Size count) noexcept -> bool {
+template < typename T >
+auto Array<T>::removeOf ( InitializerList elements, Size count ) noexcept -> bool {
     bool removed = false;
 
     T ** newBuf = new T * [this->size()];
@@ -728,8 +883,8 @@ auto Array<T>::removeOf(std::initializer_list<ElementType> const & elements, Siz
     return removed;
 }
 
-template <class T>
-auto Array<T>::removeNotOf(Collection<ElementType> const & elements, Size count) noexcept -> bool {
+template < typename T >
+auto Array<T>::removeNotOf( Collection<ElementType> const & elements, Size count) noexcept -> bool {
     bool removed = false;
 
     T ** newBuf = new T * [this->size()];
@@ -750,8 +905,8 @@ auto Array<T>::removeNotOf(Collection<ElementType> const & elements, Size count)
     return removed;
 }
 
-template <class T>
-auto Array<T>::removeNotOf(std::initializer_list<ElementType> const & elements, Size count) noexcept -> bool {
+template < typename T >
+auto Array<T>::removeNotOf( InitializerList elements, Size count ) noexcept -> bool {
     bool removed = false;
 
     T ** newBuf = new T * [this->size()];
@@ -772,7 +927,7 @@ auto Array<T>::removeNotOf(std::initializer_list<ElementType> const & elements, 
     return removed;
 }
 
-template <class T>
+template < typename T >
 auto Array<T>::removeLastOf(Collection<ElementType> const & elements) noexcept -> bool {
     Index at = -1;
     for ( Index i = this->size() - 1; i >= 0; -- i )
@@ -793,8 +948,8 @@ auto Array<T>::removeLastOf(Collection<ElementType> const & elements) noexcept -
     return true;
 }
 
-template <class T>
-auto Array<T>::removeLastOf(std::initializer_list<ElementType> const & elements) noexcept -> bool {
+template < typename T >
+auto Array<T>::removeLastOf( InitializerList elements ) noexcept -> bool {
     Index at = -1;
     for ( Index i = this->size() - 1; i >= 0; -- i )
         if ( Collection<T>::iListContains( elements, * this->_pData[i] ) ) {
@@ -814,8 +969,8 @@ auto Array<T>::removeLastOf(std::initializer_list<ElementType> const & elements)
     return true;
 }
 
-template <class T>
-auto Array<T>::removeLastNotOf(Collection<ElementType> const & elements) noexcept -> bool {
+template < typename T >
+auto Array<T>::removeLastNotOf( Collection < ElementType > const & elements ) noexcept -> bool {
     Index at = -1;
     for ( Index i = this->size() - 1; i >= 0; -- i )
         if ( ! elements.contains( * this->_pData[i] ) ) {
@@ -835,8 +990,8 @@ auto Array<T>::removeLastNotOf(Collection<ElementType> const & elements) noexcep
     return true;
 }
 
-template <class T>
-auto Array<T>::removeLastNotOf(std::initializer_list<ElementType> const & elements) noexcept -> bool {
+template < typename T >
+auto Array<T>::removeLastNotOf( InitializerList elements) noexcept -> bool {
     Index at = -1;
     for ( Index i = this->size() - 1; i >= 0; -- i )
         if ( ! Collection < T > ::iListContains( elements, * this->_pData[i] ) ) {
@@ -857,8 +1012,8 @@ auto Array<T>::removeLastNotOf(std::initializer_list<ElementType> const & elemen
 }
 
 #include <CDS/Utility>
-template <class T>
-auto Array<T>::remove( typename Collection<ElementType>::Iterator const & it ) noexcept (false) -> ElementType {
+template < typename T >
+auto Array<T>::remove( CollectionIterator const & it ) noexcept (false) -> ElementType {
     if ( ! Collection < T > :: iteratorIsOf (it, *this) )
         throw IllegalArgumentException("Iterator given is not of this collection");
 
@@ -879,14 +1034,15 @@ auto Array<T>::remove( typename Collection<ElementType>::Iterator const & it ) n
     return retVal;
 }
 
-template <class T>
+template < typename T >
 auto Array<T>::clear() noexcept -> void {
-    for ( Index i = 0; i < this->_size; ++ i ) delete Utility::exchange ( this->_pData[i], nullptr );
+    for ( Index i = 0; i < this->_size; ++ i )
+        delete Utility::exchange ( this->_pData[i], nullptr );
     this->_size = 0;
 }
 
-template <class T>
-auto Array<T>::makeUnique() noexcept -> void {
+template < typename T >
+auto Array<T> :: makeUnique() noexcept -> void {
     T ** pNewData = new T * [this->size()];
     Size l = 0;
 
@@ -911,7 +1067,7 @@ auto Array<T>::makeUnique() noexcept -> void {
     delete [] Utility::exchange ( this->_pData, pNewData );
 }
 
-template <class T>
+template < typename T >
 auto Array<T>::contains( ElementCRef value ) const noexcept -> bool {
     for ( auto & e : * this ) // NOLINT(readability-use-anyofallof)
         if ( Type < T > :: compare ( e, value ) )
@@ -919,7 +1075,7 @@ auto Array<T>::contains( ElementCRef value ) const noexcept -> bool {
     return false;
 }
 
-template <class T>
+template < typename T >
 auto Array<T>::index( ElementCRef value ) const noexcept -> Index {
     Index i = 0;
     for ( auto & e : * this )
@@ -930,7 +1086,7 @@ auto Array<T>::index( ElementCRef value ) const noexcept -> Index {
     return -1;
 }
 
-template <class T>
+template < typename T >
 auto Array<T>::index( ElementRef value ) noexcept -> Index {
     Index i = 0;
     for ( auto & e : * this )
@@ -943,7 +1099,7 @@ auto Array<T>::index( ElementRef value ) noexcept -> Index {
 
 #include <CDS/LinkedList>
 
-template <class T>
+template < typename T >
 __CDS_MaybeUnused auto Array<T>::indices( ElementCRef value ) const noexcept -> DoubleLinkedList < Index > {
     DoubleLinkedList < Index > indices;
 
@@ -984,7 +1140,7 @@ auto Array < T > :: pAt ( Index i ) const noexcept (false) -> ElementCPtr {
     return this->_pData[i];
 }
 
-template <class T>
+template < typename T >
 Array<T> & Array<T>::operator= (Collection<ElementType> const & c) noexcept {
     if ( this == & c ) return * this;
 
@@ -1001,8 +1157,8 @@ Array<T> & Array<T>::operator= (Collection<ElementType> const & c) noexcept {
     return * this;
 }
 
-template <class T>
-template < typename SortFunc, typename U, typename std :: enable_if < Type < U > :: copyAssignable, int > :: type >
+template < typename T >
+template < typename SortFunc, typename U, EnableIf < Type < U > :: copyAssignable > >
 __CDS_MaybeUnused auto Array<T>::quickSortPartition(
         Iterator from,
         Iterator to,
@@ -1028,8 +1184,8 @@ __CDS_MaybeUnused auto Array<T>::quickSortPartition(
     return previous;
 }
 
-template <typename T>
-template < typename SortFunc, typename U, typename std :: enable_if < Type < U > :: copyAssignable, int > :: type >
+template < typename T >
+template < typename SortFunc, typename U, EnableIf < Type < U > :: copyAssignable > >
 __CDS_MaybeUnused auto Array<T>::quickSort(
         Iterator from,
         Iterator to,
@@ -1067,8 +1223,8 @@ __CDS_MaybeUnused auto Array<T>::quickSort(
     }
 }
 
-template <class T>
-template < typename SortFunc, typename U, typename std :: enable_if < Type < U > :: copyAssignable, int > :: type >
+template < typename T >
+template < typename SortFunc, typename U, EnableIf < Type < U > :: copyAssignable > >
 auto Array<T>::sort(SortFunc const & sortFunc) noexcept -> void {
     if ( this->size() < 2 )
         return;
@@ -1079,7 +1235,7 @@ auto Array<T>::sort(SortFunc const & sortFunc) noexcept -> void {
 #include <CDS/Sequence>
 
 template < typename T >
-auto Array < T > :: sequence () const & noexcept -> Sequence < const Array < T > > {
+auto Array < T > :: sequence () const & noexcept -> Sequence < Array < T > const > {
     return Sequence < typename std :: remove_reference < decltype (*this) > :: type > (*this);
 }
 
@@ -1089,7 +1245,7 @@ auto Array < T > :: sequence () & noexcept -> Sequence < Array < T > > {
 }
 
 template < typename T >
-auto Array < T > :: sequence () const && noexcept -> Sequence < const Array < T > > {
+auto Array < T > :: sequence () const && noexcept -> Sequence < Array < T > const > {
     return Sequence < typename std :: remove_reference < decltype (*this) > :: type > (std::move(*this));
 }
 

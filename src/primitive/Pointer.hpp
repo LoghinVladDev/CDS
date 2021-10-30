@@ -20,7 +20,7 @@ public:
     using Pointer               = T *;
 
 protected:
-    mutable Pointer pObj {nullptr};
+    Pointer mutable pObj {nullptr};
 
 public:
 
@@ -58,7 +58,7 @@ public:
         return * this->pObj;
     }
 
-    constexpr  auto isNull () const noexcept -> bool { return this->pObj == nullptr; }
+    constexpr auto isNull () const noexcept -> bool { return this->pObj == nullptr; }
     __CDS_cpplang_ConstexprConditioned auto operator -> () const noexcept (false) -> Pointer {
         if ( this->pObj == nullptr )
             throw NullPointerException();

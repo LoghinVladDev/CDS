@@ -21,21 +21,6 @@ public:
 
 private:
     class Node : public Object {
-    public:
-        class DataException : public std::exception {
-        public:
-            __CDS_NoDiscard auto what () const noexcept -> StringLiteral override {
-                return "Invalid JSON Data";
-            }
-        };
-
-        class __CDS_MaybeUnused LabelException : public std::exception {
-        public:
-            __CDS_NoDiscard auto what () const noexcept -> StringLiteral override {
-                return "JSON Node must be labeled";
-            }
-        };
-
     private:
         friend class JSON::Array;
         friend class JSON;
@@ -43,8 +28,8 @@ private:
         String      _label;
         Object *    _pObject {nullptr};
 
-        [[nodiscard]] auto stringFormattedData () const noexcept(false) -> String {
-            if ( this->_pObject == nullptr ) throw DataException ();
+        __CDS_NoDiscard auto stringFormattedData () const noexcept(false) -> String {
+            if ( this->_pObject == nullptr ) throw NullPointerException ();
             if ( dynamic_cast < String * > (this->_pObject) != nullptr )
                 return String("\"") + this->_pObject->toString() + "\"";
             return this->_pObject->toString();
@@ -86,12 +71,12 @@ private:
         __CDS_OptimalInline auto put (float v)                   noexcept -> Node & { return this->put(Float(v)); }
         __CDS_OptimalInline auto put (double v)                  noexcept -> Node & { return this->put(Double(v)); }
         __CDS_OptimalInline auto put (StringLiteral v)           noexcept -> Node & { return this->put(String(v)); }
-        auto        put (JSON::Array const &)       noexcept -> Node &;
+                            auto put (JSON::Array const &)       noexcept -> Node &;
         __CDS_OptimalInline auto put (String const & v)          noexcept -> Node & { return this->put((Object &)v); }
 
         __CDS_NoDiscard auto getBoolean () const noexcept(false) -> bool {
             auto p = dynamic_cast < Boolean const * > (this->_pObject);
-            if ( p == nullptr ) throw DataException();
+            if ( p == nullptr ) throw TypeException(Boolean());
             return p->get();
         }
 
@@ -100,7 +85,7 @@ private:
             if ( p == nullptr ) {
                 auto pLong = dynamic_cast < Long const * > (this->_pObject);
                 if ( pLong == nullptr )
-                    throw DataException();
+                    throw TypeException(Int());
                 return static_cast < int > (pLong->get());
             }
 
@@ -112,7 +97,7 @@ private:
             if ( p == nullptr ) {
                 auto pInteger = dynamic_cast < Integer const * > ( this->_pObject );
                 if (pInteger == nullptr )
-                    throw DataException();
+                    throw TypeException(Long());
 
                 return static_cast<long long int>(pInteger->get());
             }
@@ -125,7 +110,7 @@ private:
             if ( p == nullptr ) {
                 auto pDouble = dynamic_cast < Double const * > ( this->_pObject );
                 if ( pDouble == nullptr )
-                    throw DataException();
+                    throw TypeException(Float());
 
                 return static_cast<float>(pDouble->get());
             }
@@ -138,7 +123,7 @@ private:
             if ( p == nullptr ) {
                 auto pFloat = dynamic_cast < Float const * > ( this->_pObject );
                 if (pFloat == nullptr )
-                    throw DataException();
+                    throw TypeException(Double());
 
                 return static_cast<double>(pFloat->get());
             }
@@ -152,13 +137,13 @@ private:
 
         __CDS_NoDiscard auto getJSON () const noexcept(false) -> JSON const & {
             auto p = dynamic_cast < JSON const * > ( this->_pObject );
-            if ( p == nullptr ) throw DataException();
+            if ( p == nullptr ) throw TypeException(JSON());
             return * p;
         }
 
         __CDS_NoDiscard auto getString () const noexcept(false) -> String const & {
             auto p = dynamic_cast < String const * > ( this->_pObject );
-            if ( p == nullptr ) throw DataException();
+            if ( p == nullptr ) throw TypeException(String());
             return * p;
         }
 
@@ -168,13 +153,13 @@ private:
 
         auto getJSON () noexcept(false) -> JSON & {
             auto p = dynamic_cast < JSON * > (this->_pObject);
-            if ( p == nullptr ) throw DataException();
+            if ( p == nullptr ) throw TypeException(JSON());
             return * p;
         }
 
         auto getString () noexcept(false) -> String & {
             auto p = dynamic_cast < String * > (this->_pObject);
-            if ( p == nullptr ) throw DataException();
+            if ( p == nullptr ) throw TypeException(String());
             return * p;
         };
 
@@ -197,18 +182,6 @@ private:
     LinkedList < Node > _nodes;
 
 public:
-    class NoData : public std::exception {
-        __CDS_NoDiscard auto what () const noexcept -> StringLiteral override {
-            return "No data for Input Label";
-        }
-    };
-
-    class __CDS_MaybeUnused InvalidString : public std::exception {
-        __CDS_NoDiscard auto what () const noexcept -> StringLiteral override {
-            return "Invalid Parse String";
-        }
-    };
-
     JSON() noexcept = default;
     JSON (JSON const &) noexcept = default;
     JSON (JSON &&) noexcept;
@@ -388,21 +361,6 @@ private:
     }
 
 public:
-
-    class OutOfBounds : public std::exception {
-    private:
-        String _message = "Data out of array bounds.";
-    public:
-        OutOfBounds () noexcept = default;
-        explicit OutOfBounds (Index trigger, Index limit) noexcept {
-            this->_message += String().append(" Accessed ").append(trigger).append(". Length : ").append(limit);
-        }
-
-        __CDS_NoDiscard auto what () const noexcept -> StringLiteral override {
-            return this->_message.cStr();
-        }
-    };
-
     Array () noexcept = default;
     Array (Array const &) noexcept = default;
     ~Array () noexcept override = default;
@@ -515,12 +473,14 @@ public:
     __CDS_NoDiscard __CDS_MaybeUnused __CDS_OptimalInline auto size () const noexcept -> Size { return this->_list.size(); }
 
     __CDS_NoDiscard __CDS_MaybeUnused auto get(Index i) const noexcept(false) -> JSON::Node const & {
-        if ( i < 0 || i >= static_cast<Index>(this->_list.size()) ) throw OutOfBounds (i, static_cast < Index > (this->_list.size()));
+        if ( i < 0 || i >= static_cast<Index>(this->_list.size()) )
+            throw OutOfBoundsException (i, static_cast < Index > (this->_list.size()));
         return this->_list.get(i);
     }
 
     __CDS_NoDiscard __CDS_MaybeUnused auto get(Index i) noexcept(false) -> JSON::Node & {
-        if ( i < 0 || i >= static_cast<Index>(this->_list.size()) ) throw OutOfBounds (i, static_cast < Index > (this->_list.size()));
+        if ( i < 0 || i >= static_cast<Index>(this->_list.size()) )
+            throw OutOfBoundsException (i, static_cast < Index > (this->_list.size()));
         return this->_list.get(i);
     }
 
@@ -698,7 +658,7 @@ inline auto JSON::getBoolean ( String const & label ) const noexcept (false) -> 
         if ( e.getLabel() == label )
             return e.getBoolean ();
 
-    throw NoData();
+    throw KeyException(label);
 }
 
 inline auto JSON::getInt ( String const & label ) const noexcept (false) -> int {
@@ -706,7 +666,7 @@ inline auto JSON::getInt ( String const & label ) const noexcept (false) -> int 
         if ( e.getLabel() == label )
             return e.getInt ();
 
-    throw NoData();
+    throw KeyException(label);
 }
 
 inline auto JSON::getLong ( String const & label ) const noexcept (false) -> long long int {
@@ -714,7 +674,7 @@ inline auto JSON::getLong ( String const & label ) const noexcept (false) -> lon
         if ( e.getLabel() == label )
             return e.getLong ();
 
-    throw NoData();
+    throw KeyException(label);
 }
 
 inline auto JSON::getFloat ( String const & label ) const noexcept (false) -> float {
@@ -722,7 +682,7 @@ inline auto JSON::getFloat ( String const & label ) const noexcept (false) -> fl
         if ( e.getLabel() == label )
             return e.getFloat ();
 
-    throw NoData();
+    throw KeyException(label);
 }
 
 inline auto JSON::getDouble ( String const & label ) const noexcept (false) -> double {
@@ -730,7 +690,7 @@ inline auto JSON::getDouble ( String const & label ) const noexcept (false) -> d
         if ( e.getLabel() == label )
             return e.getDouble ();
 
-    throw NoData();
+    throw KeyException(label);
 }
 
 inline auto JSON::getString ( String const & label ) const noexcept (false) -> String const & {
@@ -738,7 +698,7 @@ inline auto JSON::getString ( String const & label ) const noexcept (false) -> S
         if ( e.getLabel() == label )
             return e.getString ();
 
-    throw NoData();
+    throw KeyException(label);
 }
 
 inline auto JSON::getJSON ( String const & label ) const noexcept (false) -> JSON const & {
@@ -746,7 +706,7 @@ inline auto JSON::getJSON ( String const & label ) const noexcept (false) -> JSO
         if ( e.getLabel() == label )
             return e.getJSON ();
 
-    throw NoData();
+    throw KeyException(label);
 }
 
 inline auto JSON::getArray ( String const & label ) const noexcept (false) -> Array const & {
@@ -754,7 +714,7 @@ inline auto JSON::getArray ( String const & label ) const noexcept (false) -> Ar
         if ( e.getLabel() == label )
             return e.getArray ();
 
-    throw NoData();
+    throw KeyException(label);
 }
 
 inline auto JSON::getObject ( String const & label ) const noexcept (false) -> Object const & {
@@ -762,7 +722,7 @@ inline auto JSON::getObject ( String const & label ) const noexcept (false) -> O
         if ( e.getLabel() == label )
             return e.getObject ();
 
-    throw NoData();
+    throw KeyException(label);
 }
 
 inline auto JSON::getString ( String const & label ) noexcept (false) -> String & {
@@ -770,7 +730,7 @@ inline auto JSON::getString ( String const & label ) noexcept (false) -> String 
         if ( e.getLabel() == label )
             return e.getString ();
 
-    throw NoData();
+    throw KeyException(label);
 }
 
 inline auto JSON::getJSON ( String const & label ) noexcept (false) -> JSON & {
@@ -778,7 +738,7 @@ inline auto JSON::getJSON ( String const & label ) noexcept (false) -> JSON & {
         if ( e.getLabel() == label )
             return e.getJSON ();
 
-    throw NoData();
+    throw KeyException(label);
 }
 
 inline auto JSON::getArray ( String const & label ) noexcept (false) -> Array & {
@@ -786,7 +746,7 @@ inline auto JSON::getArray ( String const & label ) noexcept (false) -> Array & 
         if ( e.getLabel() == label )
             return e.getArray ();
 
-    throw NoData();
+    throw KeyException(label);
 }
 
 inline auto JSON::getObject ( String const & label ) noexcept (false) -> Object & {
@@ -794,7 +754,7 @@ inline auto JSON::getObject ( String const & label ) noexcept (false) -> Object 
         if ( e.getLabel() == label )
             return e.getObject ();
 
-    throw NoData();
+    throw KeyException(label);
 }
 
 inline auto JSON::parse(String const & jsonString) noexcept -> JSON { // NOLINT(misc-no-recursion)
@@ -864,14 +824,16 @@ inline auto JSON::Node::put ( JSON::Array const & a ) noexcept -> Node & {
 
 inline auto JSON::Node::getArray () const noexcept(false) -> JSON::Array const & {
     auto p = dynamic_cast < JSON::Array * > ( this->_pObject );
-    if ( p == nullptr ) throw DataException();
+    if ( p == nullptr )
+        throw TypeException(Array());
 
     return * p;
 }
 
 inline auto JSON::Node::getArray () noexcept(false) -> JSON::Array & { // NOLINT(readability-make-member-function-const)
     auto p = dynamic_cast < JSON::Array * > ( this->_pObject );
-    if ( p == nullptr ) throw DataException();
+    if ( p == nullptr )
+        throw TypeException(Array());
 
     return * p;
 }

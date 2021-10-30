@@ -20,51 +20,51 @@ private:
     V _second;
 
 public:
-    template < typename K1 = K, typename V1 = V, typename std :: enable_if < Type < K1 > :: isFundamental && Type < V1 > :: isFundamental, int > :: type = 0 >
+    template < typename K1 = K, typename V1 = V, EnableIf < Type < K1 > :: isFundamental && Type < V1 > :: isFundamental > = 0 >
     constexpr Pair () noexcept : _first(), _second() { }
 
-    template < typename K1 = K, typename V1 = V, typename std :: enable_if < Type < K1 > :: defaultConstructible && Type < V1 > :: defaultConstructible && ! Type < K1 > :: isFundamental && ! Type < V1 > :: isFundamental, int > :: type = 0 >
+    template < typename K1 = K, typename V1 = V, EnableIf < Type < K1 > :: defaultConstructible && Type < V1 > :: defaultConstructible && ! Type < K1 > :: isFundamental && ! Type < V1 > :: isFundamental > = 0 >
     constexpr Pair () noexcept(noexcept(K()) && noexcept(V())) : _first(), _second() {}
 
-    template < typename K1 = K, typename V1 = V, typename std :: enable_if < Type < K1 > :: isFundamental && ! Type < V1 > :: isFundamental && Type < V1 > :: defaultConstructible, int > :: type = 0 >
+    template < typename K1 = K, typename V1 = V, EnableIf < Type < K1 > :: isFundamental && ! Type < V1 > :: isFundamental && Type < V1 > :: defaultConstructible > = 0 >
     constexpr Pair () noexcept(noexcept(V())) : _first(), _second() {}
 
-    template < typename K1 = K, typename V1 = V, typename std :: enable_if < Type < V1 > :: isFundamental && ! Type < K1 > :: isFundamental && Type < K1 > :: defaultConstructible, int > :: type = 0 >
+    template < typename K1 = K, typename V1 = V, EnableIf < Type < V1 > :: isFundamental && ! Type < K1 > :: isFundamental && Type < K1 > :: defaultConstructible > = 0 >
     constexpr Pair () noexcept(noexcept(K())) : _first(), _second() {}
 
 
-    template < typename K1 = K, typename V1 = V, typename std :: enable_if < Type < K1 > :: copyConstructible && Type < V1 > :: copyConstructible, int > :: type = 0 >
+    template < typename K1 = K, typename V1 = V, EnableIf < Type < K1 > :: copyConstructible && Type < V1 > :: copyConstructible > = 0 >
     constexpr Pair ( Pair const & obj ) noexcept(noexcept(K(obj._first)) && noexcept(V(obj._second))) : _first(obj._first), _second(obj._second) { } // NOLINT(google-explicit-constructor)
 
-    template < typename K1 = K, typename V1 = V, typename std :: enable_if < Type < K1 > :: moveConstructible && Type < V1 > :: moveConstructible, int > :: type = 0 >
+    template < typename K1 = K, typename V1 = V, EnableIf < Type < K1 > :: moveConstructible && Type < V1 > :: moveConstructible > = 0 >
     constexpr Pair ( Pair && obj ) noexcept(noexcept(K(std::move(obj._first))) && noexcept(V(std::move(obj._second)))) : _first(std::move(obj._first)), _second(std::move(obj._second)) { } // NOLINT(google-explicit-constructor)
 
 
-    template < typename K1 = K, typename V1 = V, typename std :: enable_if < Type < K1 > :: isFundamental && Type < V1 > :: isFundamental, int > :: type = 0 >
+    template < typename K1 = K, typename V1 = V, EnableIf < Type < K1 > :: isFundamental && Type < V1 > :: isFundamental > = 0 >
     constexpr Pair ( K first, V second ) noexcept : _first(first), _second(second) { }
 
-    template < typename K1 = K, typename V1 = V, typename std :: enable_if < Type < K1 > :: copyConstructible && Type < V1 > :: copyConstructible && ! Type < K1 > :: isFundamental && ! Type < V1 > :: isFundamental, int > :: type = 0 >
+    template < typename K1 = K, typename V1 = V, EnableIf < Type < K1 > :: copyConstructible && Type < V1 > :: copyConstructible && ! Type < K1 > :: isFundamental && ! Type < V1 > :: isFundamental > = 0 >
     constexpr Pair ( K const & first, V const & second ) noexcept(noexcept(K(first)) && noexcept(V(second))) : _first(first), _second(second) { }
 
-    template < typename K1 = K, typename V1 = V, typename std :: enable_if < Type < K1 > :: moveConstructible && Type < V1 > :: moveConstructible && ! Type < K1 > :: isFundamental && ! Type < V1 > :: isFundamental, int > :: type = 0 >
+    template < typename K1 = K, typename V1 = V, EnableIf < Type < K1 > :: moveConstructible && Type < V1 > :: moveConstructible && ! Type < K1 > :: isFundamental && ! Type < V1 > :: isFundamental > = 0 >
     constexpr Pair ( K && first, V && second ) noexcept(noexcept(K(std::move(first))) && noexcept(V(std::move(second)))) : _first(std::move(first)), _second(std::move(second)) { }
 
-    template < typename K1 = K, typename V1 = V, typename std :: enable_if < Type < K1 > :: isFundamental && ! Type < V1 > :: isFundamental && Type < V1 > :: copyConstructible, int > :: type = 0 >
+    template < typename K1 = K, typename V1 = V, EnableIf < Type < K1 > :: isFundamental && ! Type < V1 > :: isFundamental && Type < V1 > :: copyConstructible > = 0 >
     constexpr Pair ( K first, V const & second ) noexcept(noexcept(V(second))) : _first(first), _second(second) { }
 
-    template < typename K1 = K, typename V1 = V, typename std :: enable_if < Type < K1 > :: isFundamental && ! Type < V1 > :: isFundamental && Type < V1 > :: moveConstructible, int > :: type = 0 >
+    template < typename K1 = K, typename V1 = V, EnableIf < Type < K1 > :: isFundamental && ! Type < V1 > :: isFundamental && Type < V1 > :: moveConstructible > = 0 >
     constexpr Pair ( K first, V && second ) noexcept(noexcept(V(std::move(second)))) : _first(first), _second(std::move(second)) { }
 
-    template < typename K1 = K, typename V1 = V, typename std :: enable_if < ! Type < K1 > :: isFundamental && Type < V1 > :: isFundamental && Type < K1 > :: copyConstructible, int > :: type = 0 >
+    template < typename K1 = K, typename V1 = V, EnableIf < ! Type < K1 > :: isFundamental && Type < V1 > :: isFundamental && Type < K1 > :: copyConstructible > = 0 >
     constexpr Pair ( K const & first, V second ) noexcept(noexcept(K(first))) : _first(first), _second(second) { }
 
-    template < typename K1 = K, typename V1 = V, typename std :: enable_if < ! Type < K1 > :: isFundamental && Type < K1 > :: copyConstructible && ! Type < V1 > :: isFundamental && Type < V1 > :: moveConstructible, int > :: type = 0 >
+    template < typename K1 = K, typename V1 = V, EnableIf < ! Type < K1 > :: isFundamental && Type < K1 > :: copyConstructible && ! Type < V1 > :: isFundamental && Type < V1 > :: moveConstructible > = 0 >
     constexpr Pair ( K const & first, V && second ) noexcept(noexcept(K(first)) && noexcept(V(std::move(second)))) : _first(first), _second(std::move(second)) { }
 
-    template < typename K1 = K, typename V1 = V, typename std :: enable_if < ! Type < K1 > :: isFundamental && Type < K1 > :: moveConstructible && Type < V1 > :: isFundamental, int > :: type = 0 >
+    template < typename K1 = K, typename V1 = V, EnableIf < ! Type < K1 > :: isFundamental && Type < K1 > :: moveConstructible && Type < V1 > :: isFundamental > = 0 >
     constexpr Pair ( K && first, V second ) noexcept(noexcept(K(std::move(first)))) : _first(std::move(first)), _second(second) { }
 
-    template < typename K1 = K, typename V1 = V, typename std :: enable_if < ! Type < K1 > :: isFundamental && Type < K1 > :: moveConstructible && ! Type < V1 > :: isFundamental && Type < V1 > :: copyConstructible, int > :: type = 0 >
+    template < typename K1 = K, typename V1 = V, EnableIf < ! Type < K1 > :: isFundamental && Type < K1 > :: moveConstructible && ! Type < V1 > :: isFundamental && Type < V1 > :: copyConstructible > = 0 >
     constexpr Pair ( K && first, V const & second ) noexcept(noexcept(K(std::move(first))) && noexcept(V(second))) : _first(std::move(first)), _second(second) { }
 
 
@@ -101,7 +101,7 @@ public:
         return this->operator==(*p);
     }
 
-    template < typename K1 = K, typename V1 = V, typename std :: enable_if < Type < K1 > :: copyAssignable && Type < V1 > :: copyAssignable, int > :: type = 0 >
+    template < typename K1 = K, typename V1 = V, EnableIf < Type < K1 > :: copyAssignable && Type < V1 > :: copyAssignable > = 0 >
     __CDS_cpplang_NonConstConstexprMemberFunction auto operator = ( Pair const & o ) noexcept -> Pair & {
         if ( this == & o )
             return * this;
@@ -112,7 +112,7 @@ public:
         return * this;
     }
 
-    template < typename K1 = K, typename V1 = V, typename std :: enable_if < Type < K1 > :: moveAssignable && Type < V1 > :: moveAssignable, int > :: type = 0 >
+    template < typename K1 = K, typename V1 = V, EnableIf < Type < K1 > :: moveAssignable && Type < V1 > :: moveAssignable > = 0 >
     __CDS_cpplang_NonConstConstexprMemberFunction auto operator = ( Pair && o ) noexcept -> Pair & {
         if ( this == & o )
             return * this;

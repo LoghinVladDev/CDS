@@ -36,7 +36,7 @@ concept Comparable = requires ( T const & a, T const & b ) {
 #include <CDS/Traits>
 #include <CDS/Concepts>
 
-template <class T>
+template < typename T >
 class Comparator {
 public:
     virtual auto operator () (T const &, T const &) const noexcept -> bool = 0;
@@ -45,7 +45,7 @@ public:
 template < typename C >
 class Sequence;
 
-template <class T>
+template < typename T >
 class Collection : public Object {
 public:
     using ElementType = T;
@@ -127,7 +127,7 @@ public:
         }
 
         __CDS_cpplang_ConstexprPureAbstract virtual auto next ( ) noexcept -> ConstIterator & = 0;
-        __CDS_cpplang_ConstexprPureAbstract virtual auto equals ( const ConstIterator & ) const noexcept -> bool = 0;
+        __CDS_cpplang_ConstexprPureAbstract virtual auto equals ( ConstIterator const & ) const noexcept -> bool = 0;
         __CDS_cpplang_ConstexprPureAbstract virtual auto value ( ) const noexcept -> ElementCRef = 0;
 
         __CDS_cpplang_VirtualConstexpr virtual auto operator ++ () noexcept -> ConstIterator & { return this->next(); }
