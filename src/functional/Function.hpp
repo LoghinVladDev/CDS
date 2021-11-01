@@ -75,7 +75,13 @@ private:
             ) );
         }
 
+#if __CDS_cpplang_core_version >= __CDS_cpplang_core_version_17
         constexpr static Manager manager = { invoke, copy, clear };
+#else
+        constexpr static Manager manager () {
+            return {invoke, copy, clear};
+        }
+#endif
     };
 
     template < typename RequestedReturnType, typename ... RequestedArgumentTypes >
@@ -98,7 +104,13 @@ private:
             /// do nothing
         }
 
-        constexpr static Manager manager { invoke, copy, clear };
+#if __CDS_cpplang_core_version >= __CDS_cpplang_core_version_17
+        constexpr static Manager manager = { invoke, copy, clear };
+#else
+        constexpr static Manager manager () {
+            return {invoke, copy, clear};
+        }
+#endif
     };
 
     GenericFunctionAddress      pCallableObject { nullptr };
@@ -106,14 +118,23 @@ private:
 
     template < typename Functor, EnableIf < Type < Functor > :: isCallableObject > = 0 >
     __CDS_OptimalInline auto initHandler ( Functor const & functor ) noexcept -> void {
+
+#if __CDS_cpplang_core_version >= __CDS_cpplang_core_version_17
         this->pManager = & FunctorHandler < ReturnType ( ArgumentTypes ... ), Functor > :: manager;
+#else
+        this->pManager = Memory :: instance().create < Manager > ( FunctorHandler < ReturnType ( ArgumentTypes ... ), Functor > :: manager() );
+#endif
 
         this->pCallableObject = this->pManager->creator ( reinterpret_cast < GenericConstFunctorAddress > ( & functor ) );
     }
 
     template < typename RequestedReturnType, typename ... RequestedArgumentTypes >
     __CDS_OptimalInline auto initHandler ( RequestedReturnType ( * requestedStaticFunction ) ( RequestedArgumentTypes ... ) ) noexcept -> void {
-        this->pManager = & SubstitutingStaticHandler < RequestedReturnType ( RequestedArgumentTypes ... ) > :: manager;
+#if __CDS_cpplang_core_version >= __CDS_cpplang_core_version_17
+        this->pManager = & SubstitutingStaticHandler< RequestedReturnType ( RequestedArgumentTypes ... ) > :: manager;
+#else
+        this->pManager = Memory :: instance().create < Manager > ( SubstitutingStaticHandler < RequestedReturnType ( RequestedArgumentTypes ... ) > :: manager() );
+#endif
 
         this->pCallableObject = this->pManager->creator ( reinterpret_cast < GenericFunctorAddress > ( requestedStaticFunction ) );
     }
@@ -123,7 +144,7 @@ public:
     constexpr Function () noexcept = default;
 
     template < typename RequestedReturnType, typename ... RequestedArgumentTypes >
-    constexpr Function ( RequestedReturnType (* requestedStaticFunction ) ( RequestedArgumentTypes ... ) ) noexcept { // NOLINT(google-explicit-constructor)
+    __CDS_cpplang_ConstexprConstructorNonEmptyBody Function ( RequestedReturnType (* requestedStaticFunction ) ( RequestedArgumentTypes ... ) ) noexcept { // NOLINT(google-explicit-constructor)
         this->initHandler( requestedStaticFunction );
     }
 
@@ -133,7 +154,12 @@ public:
     }
 
     __CDS_OptimalInline Function ( Function const & function ) noexcept {
+
+#if __CDS_cpplang_core_version >= __CDS_cpplang_core_version_17
         this->pManager = function.pManager;
+#else
+        this->pManager = Memory :: instance().create < Manager > ( * function.pManager );
+#endif
 
         if ( this->pManager != nullptr )
             this->pCallableObject = this->pManager->creator ( function.pCallableObject );
@@ -145,11 +171,17 @@ public:
 
     }
 
-    constexpr auto operator = ( Function && function ) noexcept -> Function & {
+    __CDS_cpplang_NonConstConstexprMemberFunction auto operator = ( Function && function ) noexcept -> Function & {
         if ( this == & function ) return * this;
         if ( this->pCallableObject == function.pCallableObject ) return * this;
 
-        if ( this->pManager != nullptr ) this->pManager->deleter ( this->pCallableObject );
+        if ( this->pManager != nullptr ) {
+            this->pManager->deleter(this->pCallableObject);
+#if __CDS_cpplang_core_version >= __CDS_cpplang_core_version_17
+#else
+            Memory :: instance().destroy ( this->pManager );
+#endif
+        }
 
         this->pCallableObject = Utility :: exchange ( function.pCallableObject, nullptr );
         this->pManager = Utility :: exchange ( function.pManager, nullptr );
@@ -160,7 +192,14 @@ public:
     template < typename Functor, EnableIf < Type < Functor > :: isCallableObject > = 0 >
     __CDS_OptimalInline auto operator = ( Functor const & functor ) noexcept -> Function & {
         if ( this->pCallableObject == reinterpret_cast < GenericConstFunctorAddress > ( & functor ) ) return * this;
-        if ( this->pManager != nullptr ) this->pManager->deleter ( this->pCallableObject );
+
+        if ( this->pManager != nullptr ) {
+            this->pManager->deleter(this->pCallableObject);
+#if __CDS_cpplang_core_version >= __CDS_cpplang_core_version_17
+#else
+            Memory :: instance().destroy ( this->pManager );
+#endif
+        }
 
         this->initHandler ( functor );
 
@@ -168,9 +207,16 @@ public:
     }
 
     template < typename RequestedReturnType, typename ... RequestedArgumentTypes >
-    constexpr auto operator = ( RequestedReturnType (* requestedStaticFunction ) ( RequestedArgumentTypes ... ) ) noexcept -> Function & {
+    __CDS_cpplang_NonConstConstexprMemberFunction auto operator = ( RequestedReturnType (* requestedStaticFunction ) ( RequestedArgumentTypes ... ) ) noexcept -> Function & {
         if ( this->pCallableObject == reinterpret_cast < GenericFunctorAddress > ( requestedStaticFunction ) ) return * this;
-        if ( this->pManager != nullptr ) this->pManager->deleter ( this->pCallableObject );
+
+        if ( this->pManager != nullptr ) {
+            this->pManager->deleter(this->pCallableObject);
+#if __CDS_cpplang_core_version >= __CDS_cpplang_core_version_17
+#else
+            Memory :: instance().destroy ( this->pManager );
+#endif
+        }
 
         this->initHandler ( requestedStaticFunction );
         return * this;
@@ -180,9 +226,19 @@ public:
         if ( this == & function ) return * this;
         if ( this->pCallableObject == function.pCallableObject ) return * this;
 
-        if ( this->pManager != nullptr ) this->pManager->deleter ( this->pCallableObject );
+        if ( this->pManager != nullptr ) {
+            this->pManager->deleter(this->pCallableObject);
+#if __CDS_cpplang_core_version >= __CDS_cpplang_core_version_17
+#else
+            Memory :: instance().destroy ( this->pManager );
+#endif
+        }
 
+#if __CDS_cpplang_core_version >= __CDS_cpplang_core_version_17
         this->pManager = function.pManager;
+#else
+        this->pManager = Memory :: instance().create < Manager > ( * function.pManager );
+#endif
 
         if ( this->pManager != nullptr )
             this->pCallableObject = this->pManager->creator ( function.pCallableObject );
@@ -198,8 +254,13 @@ public:
     }
 
     __CDS_OptimalInline ~Function() noexcept override {
-        if ( this->pManager != nullptr )
-            this->pManager->deleter ( this->pCallableObject );
+        if ( this->pManager != nullptr ) {
+            this->pManager->deleter(this->pCallableObject);
+#if __CDS_cpplang_core_version >= __CDS_cpplang_core_version_17
+#else
+            Memory :: instance().destroy ( this->pManager );
+#endif
+        }
     }
 };
 
