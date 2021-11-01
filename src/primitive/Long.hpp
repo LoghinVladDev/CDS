@@ -11,6 +11,7 @@
 #include <CDS/Utility>
 #include <CDS/Limits>
 #include <CDS/Integer>
+#include <CDS/Memory>
 
 /**
  * @class Object Derived container for a Boolean Value
@@ -56,7 +57,7 @@ public:
      */
     static auto random () noexcept -> Long {
         static UniquePointer < RandomGenerator > pRng;
-        if (pRng.isNull()) pRng.reset(new RandomGenerator());
+        if (pRng.isNull()) pRng.reset(Memory :: instance ().create < RandomGenerator > ());
 
         return pRng->get();
     }
@@ -78,7 +79,7 @@ public:
      */
     static auto random (CType low, CType high) noexcept -> Long {
         static UniquePointer < RandomGenerator > pRng;
-        if ( pRng.isNull() || pRng->low() != low && pRng->high() != high ) pRng.reset(new RandomGenerator(low, high));
+        if ( pRng.isNull() || pRng->low() != low && pRng->high() != high ) pRng.reset(Memory :: instance ().create < RandomGenerator > (low, high));
 
         return pRng->get();
     }
@@ -1182,7 +1183,7 @@ public:
     }
 
     __CDS_NoDiscard auto copy () const noexcept -> Long * override {
-        return new Long( * this );
+        return Memory :: instance ().create < Long > ( * this );
     }
 
     /**

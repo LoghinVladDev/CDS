@@ -8,6 +8,7 @@
 #include <CDS/Object>
 #include <sstream>
 #include <CDS/Traits>
+#include <CDS/Memory>
 
 template <class K, class V>
 class Pair : public Object {
@@ -134,7 +135,7 @@ public:
 
 
     __CDS_NoDiscard __CDS_cpplang_VirtualConstexpr auto copy () const noexcept -> Pair * override {
-        return new Pair( * this );
+        return Memory :: instance ().create < Pair > ( * this );
     }
 };
 

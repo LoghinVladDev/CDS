@@ -12,6 +12,7 @@
 #include "./LinkedListPublic.hpp"
 
 #include <CDS/Traits>
+#include <CDS/Memory>
 
 template < typename T >
 class DoubleLinkedList : public List < T > {
@@ -151,7 +152,7 @@ public:
         __CDS_cpplang_ConstexprDestructor ~Iterator() noexcept override = default;
 
         __CDS_NoDiscard __CDS_OptimalInline auto copy () const noexcept -> Iterator * override {
-            return new Iterator ( * this );
+            return Memory :: instance().create < Iterator > ( * this );
         }
     };
 
@@ -190,7 +191,7 @@ public:
         __CDS_cpplang_ConstexprDestructor ~ReverseIterator() noexcept override = default;
 
         __CDS_NoDiscard __CDS_OptimalInline auto copy () const noexcept -> ReverseIterator * override {
-            return new ReverseIterator ( * this );
+            return Memory :: instance().create < ReverseIterator > ( * this );
         }
     };
 
@@ -229,7 +230,7 @@ public:
         __CDS_cpplang_ConstexprDestructor ~ConstIterator() noexcept override = default;
 
         __CDS_NoDiscard __CDS_OptimalInline auto copy () const noexcept -> ConstIterator * override {
-            return new ConstIterator ( * this );
+            return Memory :: instance().create < ConstIterator > ( * this );
         }
     };
 
@@ -268,14 +269,14 @@ public:
         __CDS_cpplang_ConstexprDestructor ~ConstReverseIterator() noexcept override = default;
 
         __CDS_NoDiscard __CDS_OptimalInline auto copy () const noexcept -> ConstReverseIterator * override {
-            return new ConstReverseIterator ( * this );
+            return Memory :: instance().create < ConstReverseIterator > ( * this );
         }
     };
 
     constexpr DoubleLinkedList( ) noexcept = default;
     DoubleLinkedList( const DoubleLinkedList & ) noexcept;
 
-    constexpr DoubleLinkedList( DoubleLinkedList && list ) noexcept:
+    __CDS_cpplang_ConstexprConstructorNonEmptyBody DoubleLinkedList( DoubleLinkedList && list ) noexcept:
             _pFront(Utility::exchange(list._pFront, nullptr)),
             _pBack(Utility::exchange(list._pBack, nullptr)){
 
@@ -297,10 +298,10 @@ public:
     ~DoubleLinkedList() noexcept override;
 
 private:
-    __CDS_NoDiscard __CDS_OptimalInline auto beginPtr () noexcept -> Iterator * final { return new Iterator( this->_pFront, this ); }
-    __CDS_NoDiscard __CDS_OptimalInline auto endPtr () noexcept -> Iterator * final { return new Iterator(nullptr, this ); }
-    __CDS_NoDiscard __CDS_OptimalInline auto beginPtr () const noexcept -> ConstIterator * final  { return new ConstIterator( this->_pFront, this ); }
-    __CDS_NoDiscard __CDS_OptimalInline auto endPtr () const noexcept -> ConstIterator * final { return new ConstIterator(nullptr, this ); }
+    __CDS_NoDiscard __CDS_OptimalInline auto beginPtr () noexcept -> Iterator * final { return Memory :: instance().create < Iterator > ( this->_pFront, this ); }
+    __CDS_NoDiscard __CDS_OptimalInline auto endPtr () noexcept -> Iterator * final { return Memory :: instance().create < Iterator > (nullptr, this ); }
+    __CDS_NoDiscard __CDS_OptimalInline auto beginPtr () const noexcept -> ConstIterator * final  { return Memory :: instance().create < ConstIterator > ( this->_pFront, this ); }
+    __CDS_NoDiscard __CDS_OptimalInline auto endPtr () const noexcept -> ConstIterator * final { return Memory :: instance().create < ConstIterator > (nullptr, this ); }
 
 public:
     __CDS_NoDiscard __CDS_cpplang_NonConstConstexprMemberFunction auto begin () noexcept -> Iterator { return Iterator(this->_pFront, this); }
@@ -417,15 +418,15 @@ public:
         if ( this->size() == 0 ) {
             this->_pFront = this->_pBack = nullptr;
 
-            delete node->data;
-            delete node;
+            Memory :: instance().destroy ( node->data );
+            Memory :: instance().destroy ( node );
 
             return value;
         }
 
         this->_pFront = this->_pFront->pNext;
-        delete node->data;
-        delete node;
+        Memory :: instance().destroy ( node->data );
+        Memory :: instance().destroy ( node );
         this->_pFront->pPrevious = nullptr;
 
         return value;
@@ -442,14 +443,14 @@ public:
 
         if ( this->size() == 0 ) {
             this->_pBack = this->_pFront = nullptr;
-            delete node->data;
-            delete node;
+            Memory :: instance().destroy ( node->data );
+            Memory :: instance().destroy ( node );
             return value;
         }
 
         this->_pBack = this->_pBack->pPrevious;
-        delete node->data;
-        delete node;
+        Memory :: instance().destroy ( node->data );
+        Memory :: instance().destroy ( node );
         this->_pBack->pNext = nullptr;
 
         return value;
@@ -534,7 +535,7 @@ DoubleLinkedList<T>::~DoubleLinkedList() noexcept {
 
 template < typename T >
 auto DoubleLinkedList < T > ::allocBackGetPtr() noexcept -> ElementPtrRef {
-    auto newNode = new Node;
+    auto newNode = Memory::instance().create < Node > ();
     newNode->pNext = nullptr;
     newNode->pPrevious = this->_pBack;
     newNode->data = nullptr;
@@ -554,7 +555,7 @@ auto DoubleLinkedList < T > ::allocBackGetPtr() noexcept -> ElementPtrRef {
 
 template < typename T >
 auto DoubleLinkedList < T > ::allocFrontGetPtr() noexcept -> ElementPtrRef {
-    auto newNode = new Node;
+    auto newNode = Memory :: instance().create < Node > ();
     newNode->pNext = this->_pFront;
     newNode->pPrevious = nullptr;
     newNode->data = nullptr;
@@ -607,8 +608,8 @@ auto DoubleLinkedList<T>::remove(Index i) noexcept -> bool {
     current->pNext->pNext->pPrevious = current;
     current->pNext = current->pNext->pNext;
 
-    delete toRemove->data;
-    delete toRemove;
+    Memory :: instance().destroy ( toRemove->data );
+    Memory :: instance().destroy ( toRemove );
 
     return true;
 }
@@ -643,8 +644,8 @@ auto DoubleLinkedList<T>::remove(ElementCRef what, Size count) noexcept -> bool 
 
             -- this->_size;
 
-            delete toRemove->data;
-            delete toRemove;
+            Memory :: instance().destroy ( toRemove->data );
+            Memory :: instance().destroy ( toRemove );
 
             removalDone = true;
             continue;
@@ -682,8 +683,8 @@ auto DoubleLinkedList<T>::removeLast(ElementCRef what ) noexcept -> bool {
 
             -- this->_size;
 
-            delete toRemove->data;
-            delete toRemove;
+            Memory :: instance().destroy ( toRemove->data );
+            Memory :: instance().destroy ( toRemove );
             return true;
         }
 
@@ -722,8 +723,8 @@ auto DoubleLinkedList<T>::removeOf ( Collection<T> const & from, Size count ) no
 
             -- this->_size;
 
-            delete toRemove->data;
-            delete toRemove;
+            Memory :: instance().destroy ( toRemove->data );
+            Memory :: instance().destroy ( toRemove );
 
             removalDone = true;
             continue;
@@ -761,8 +762,8 @@ auto DoubleLinkedList<T>::removeLastOf ( Collection<T> const & from ) noexcept -
 
             -- this->_size;
 
-            delete toRemove->data;
-            delete toRemove;
+            Memory :: instance().destroy ( toRemove->data );
+            Memory :: instance().destroy ( toRemove );
             return true;
         }
 
@@ -801,8 +802,8 @@ auto DoubleLinkedList<T>::removeNotOf ( Collection<T> const & from, Size count )
 
             -- this->_size;
 
-            delete toRemove->data;
-            delete toRemove;
+            Memory :: instance().destroy ( toRemove->data );
+            Memory :: instance().destroy ( toRemove );
 
             removalDone = true;
             continue;
@@ -839,8 +840,8 @@ auto DoubleLinkedList<T>::removeLastNotOf( Collection<T> const & from ) noexcept
             nextNode();
 
             -- this->_size;
-            delete toRemove->data;
-            delete toRemove;
+            Memory :: instance().destroy ( toRemove->data );
+            Memory :: instance().destroy ( toRemove );
             return true;
         }
 
@@ -865,8 +866,8 @@ auto DoubleLinkedList<T>::remove ( CollectionIterator const & it ) noexcept (fal
             this->_pBack = this->_pFront;
 
         -- this->_size;
-        delete node->data;
-        delete node;
+        Memory :: instance().destroy ( node->data );
+        Memory :: instance().destroy ( node );
         return retVal;
     }
 
@@ -880,8 +881,8 @@ auto DoubleLinkedList<T>::remove ( CollectionIterator const & it ) noexcept (fal
             this->_pFront = this->_pBack;
 
         -- this->_size;
-        delete node->data;
-        delete node;
+        Memory :: instance().destroy ( node->data );
+        Memory :: instance().destroy ( node );
         return retVal;
     }
 
@@ -896,8 +897,8 @@ auto DoubleLinkedList<T>::remove ( CollectionIterator const & it ) noexcept (fal
             auto retVal = * node->data;
             -- this->_size;
 
-            delete node->data;
-            delete node;
+            Memory :: instance().destroy ( node->data );
+            Memory :: instance().destroy ( node );
 
             return retVal;
         }
@@ -918,8 +919,8 @@ auto DoubleLinkedList<T>::clear() noexcept -> void {
         auto current = this->_pFront;
         this->_pFront = this->_pFront->pNext;
 
-        delete current->data;
-        delete current;
+        Memory :: instance().destroy (current->data);
+        Memory :: instance().destroy (current);
     }
     this->_pBack = nullptr;
 
@@ -950,8 +951,8 @@ auto DoubleLinkedList<T>::operator =(Collection <T> const & c) noexcept -> Doubl
     for ( auto it = pBegin; ! it->equals( * pEnd ); it->next() )
         this->pushBack ( it->value() );
 
-    delete pBegin;
-    delete pEnd;
+    Memory :: instance().destroy ( pBegin );
+    Memory :: instance().destroy ( pEnd );
     return * this;
 }
 
@@ -1264,7 +1265,7 @@ inline auto String::find (String const & o) const noexcept -> LinkedList < Index
 #if !defined(_MSC_VER)
     Index lpsArray [o.size()];
 #else
-    auto lpsArray = new Index[this->size()];
+    auto lpsArray = Memory :: instance().createArray < Index > (this->size());
 #endif
     std::memset(lpsArray, 0, sizeof(Index) * o.size());
 
@@ -1311,7 +1312,7 @@ inline auto String::find (String const & o) const noexcept -> LinkedList < Index
 
 #if !defined(_MSC_VER)
 #else
-    delete [] lpsArray;
+    Memory :: instance().destroyArray ( lpsArray );
 #endif
     return indices;
 }

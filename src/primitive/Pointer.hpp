@@ -10,6 +10,7 @@
 
 #include <CDS/Traits>
 #include <CDS/Utility>
+#include <CDS/Memory>
 
 template <class T>
 class PointerBase : public Object {
@@ -70,7 +71,7 @@ public:
     constexpr auto get () const noexcept -> Pointer { return this->pObj; }
 
     __CDS_cpplang_VirtualConstexpr virtual auto release () noexcept -> Pointer { auto p = this->pObj; this->pObj = nullptr; return p; }
-    __CDS_cpplang_VirtualConstexpr virtual auto reset ( Pointer p = nullptr ) noexcept -> void { auto oldP = this->pObj; this->pObj = p; delete oldP; } // NOLINT(google-default-arguments)
+    __CDS_cpplang_VirtualConstexpr virtual auto reset ( Pointer p = nullptr ) noexcept -> void { auto oldP = this->pObj; this->pObj = p; Memory::instance().destroy ( oldP ); } // NOLINT(google-default-arguments)
 
 private:
     template < typename U = T >
@@ -180,12 +181,12 @@ public:
     }
 
     __CDS_cpplang_VirtualConstexpr auto copy () const noexcept -> SharedPointer * override {
-        return new SharedPointer(* this);
+        return Memory :: instance().create < SharedPointer > (* this);
     }
 
     __CDS_cpplang_ConstexprDynamicAllocation SharedPointer(typename PointerBase<T>::Pointer p) noexcept : // NOLINT(google-explicit-constructor)
             PointerBase<T>(p),
-            pControl(new SharedPointerControlBlock){
+            pControl(Memory :: instance().create < SharedPointerControlBlock > ()){
 
     }
 
@@ -220,15 +221,15 @@ public:
 
         if ( this->pControl != nullptr ) {
             if ( -- this->pControl->ownerCount == 0 ) {
-                delete this->pControl;
-                delete pVal;
+                Memory :: instance().destroy ( this->pControl );
+                Memory :: instance().destroy ( pVal );
             }
 
             this->pControl = nullptr;
         }
 
         if ( this->pObj != nullptr )
-            this->pControl = new SharedPointerControlBlock;
+            this->pControl = Memory :: instance () .create < SharedPointerControlBlock > ();
     }
 
     __CDS_cpplang_ConstexprDynamicAllocation auto reset ( SharedPointer const & p ) noexcept -> void {
@@ -239,8 +240,8 @@ public:
 
         if ( this->pControl != nullptr ) {
             if ( -- this->pControl->ownerCount == 0 ) {
-                delete this->pControl;
-                delete oldAddress;
+                Memory :: instance().destroy ( this->pControl );
+                Memory :: instance().destroy ( oldAddress );
             }
 
             this->pControl = nullptr;
@@ -278,12 +279,12 @@ public:
     }
 
     __CDS_OptimalInline auto copy () const noexcept -> AtomicSharedPointer * override {
-        return new AtomicSharedPointer(* this);
+        return Memory :: instance().create < AtomicSharedPointer >(* this);
     }
 
     __CDS_OptimalInline AtomicSharedPointer(typename PointerBase<T>::Pointer p) noexcept : // NOLINT(google-explicit-constructor)
             PointerBase<T>(p),
-            pControl(new SharedPointerControlBlock){
+            pControl(Memory :: instance().create < SharedPointerControlBlock > ()){
 
     }
 
@@ -318,15 +319,15 @@ public:
 
         if ( this->pControl != nullptr ) {
             if ( this->pControl->ownerCount == 1 ) {
-                delete this->pControl;
-                delete pVal;
+                Memory::instance().destroy ( this->pControl );
+                Memory::instance().destroy ( pVal );
             }
 
             this->pControl = nullptr;
         }
 
         if ( this->pObj != nullptr )
-            this->pControl = new SharedPointerControlBlock;
+            this->pControl = Memory :: instance().create < SharedPointerControlBlock > ();
     }
 
     __CDS_OptionalInline auto reset ( AtomicSharedPointer const & p ) noexcept -> void final {
@@ -337,8 +338,8 @@ public:
 
         if ( this->pControl != nullptr ) {
             if ( this->pControl->ownerCount == 1 ) {
-                delete this->pControl;
-                delete oldAddress;
+                Memory::instance().destroy ( this->pControl );
+                Memory::instance().destroy ( oldAddress );
             }
 
             this->pControl = nullptr;
@@ -363,7 +364,7 @@ public:
     constexpr ForeignPointer( ForeignPointer && o ) noexcept : PointerBase<T>(o.release()) {}
 
     __CDS_cpplang_VirtualConstexpr auto copy () const noexcept -> ForeignPointer * override {
-        return new ForeignPointer ( * this );
+        return Memory :: instance().create < ForeignPointer > ( * this );
     }
 
     __CDS_cpplang_NonConstConstexprMemberFunction auto operator = ( ForeignPointer const & p ) noexcept -> ForeignPointer & {

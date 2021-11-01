@@ -104,8 +104,8 @@ public:
         for ( auto it = pBegin; ! it->equals(*pEnd); it->next() )
             this->insert( it->value() );
 
-        delete pBegin;
-        delete pEnd;
+        Memory :: instance().destroy ( pBegin );
+        Memory :: instance().destroy ( pEnd );
 
         return * this;
     }
@@ -138,7 +138,7 @@ auto OrderedSet <T, C> ::allocInsertGetPtr(ElementCRef e) noexcept -> ElementPtr
     C comparator;
 
     if ( this->empty() ) {
-        this->_pFront = new Node;
+        this->_pFront = Memory :: instance().create < Node > ();
         this->_pFront->data = nullptr;
         this->_size = 1ull;
         return this->_pFront->data;
@@ -147,7 +147,7 @@ auto OrderedSet <T, C> ::allocInsertGetPtr(ElementCRef e) noexcept -> ElementPtr
     if ( Type < T > :: compare( * this->_pFront->data, e ) ) return this->_pFront->data;
 
     if ( comparator ( e, * this->_pFront->data ) ) {
-        auto p = new Node;
+        auto p = Memory :: instance().create < Node > ();
         p->pNext = this->_pFront;
         p->data = nullptr;
         this->_pFront = p;
@@ -161,7 +161,7 @@ auto OrderedSet <T, C> ::allocInsertGetPtr(ElementCRef e) noexcept -> ElementPtr
         if ( Type < T > :: compare ( * head->pNext->data, e ) ) return head->pNext->data;
 
         if ( comparator ( e, * head->pNext->data ) ){
-            auto p = new Node;
+            auto p = Memory :: instance().create < Node > ();
             p->data = nullptr;
             p->pNext = head->pNext;
             head->pNext = p;
@@ -172,7 +172,7 @@ auto OrderedSet <T, C> ::allocInsertGetPtr(ElementCRef e) noexcept -> ElementPtr
         head = head->pNext;
     }
 
-    auto p = new Node;
+    auto p = Memory :: instance().create < Node > ();
     p->pNext = nullptr;
     p->data = nullptr;
     head->pNext = p;

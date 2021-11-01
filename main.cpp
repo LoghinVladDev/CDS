@@ -1,47 +1,47 @@
-#include <CDS/Function>
-#include <CDS/Pointer>
-#include <CDS/LinkedList>
+//#include <CDS/Function>
+//#include <CDS/Pointer>
+//#include <CDS/LinkedList>
+//#include <CDS/Array>
+//#include <CDS/Memory>
+//
+//template < typename F >
+//auto i ( F const & f ) {
+//    return Function < bool ( Integer const & ) > ( f );
+//}
+//
+//template < typename T, EnableIf < std :: is_same < T, int > :: value > = 0 >
+//auto f ( T var ){
+//
+//}
+
+
+//#include <CDS/Async>
 #include <CDS/Array>
+#include <CDS/allocators/LeakDetectionAllocator>
+#include <iostream>
 
-template < typename F >
-auto i ( F const & f ) {
-    return Function < bool ( Integer const & ) > ( f );
-}
-
-template < typename T, EnableIf < std :: is_same < T, int > :: value > = 0 >
-auto f ( T var ){
-
-}
-
-
-#include <CDS/Async>
+class A {
+public:
+    A() noexcept { std :: cout << "Create\n"; }
+    ~A() noexcept { std :: cout << "Delete\n"; }
+};
 
 int main () {
-//    Async async < int (int) > ( Function < int (int) > ( [](int v){return v * 2;} ) );
-//    auto retVal = async(4);
 
-//    Array < int > list;
+    delete Memory::instance().replaceAllocator(new Memory::LeakDetectionAllocator());
 
-//    std :: cout << i (Int::isEven)(5) << '\n';
+//
+//    Boolean b{false};
+//    b.copy();
+//
+//    try {
+//        Memory::instance().create<A>();
+//    } catch ( Exception const & e ) {
+//        std::cout << e.toString() << '\n';
+//    }
+//    A * a = new A[10];
+//    delete [] a;
 
-    Function f2 = [](int a) {
-        for ( auto i : Range(100) ) {
-            std :: cout << i << '\n';
-        }
-
-        return 10;
-    };
-
-//    std :: cout << f2(3) << '\n';
-
-    Async < int ( int ) > async ( f2 );
-    auto retVal = async(4);
-
-    for ( auto i : Range(150) ) {
-        std :: cout << "Main : " << i << '\n';
-    }
-
-    std :: cout << "Await\n";
-
-    std :: cout << retVal.get();
+//    A * pArray = Memory::instance().createArray < A > (10);
+//    Memory::instance().destroyArray ( pArray );
 }

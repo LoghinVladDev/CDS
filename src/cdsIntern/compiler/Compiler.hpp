@@ -76,14 +76,15 @@
 
 #undef __CDS_Deprecated
 
-#define __CDS_Deprecated __CDS_Attribute(deprecated) /* NOLINT(bugprone-reserved-identifier) */
+#define __CDS_Deprecated __CDS_OldAttribute(deprecated) /* NOLINT(bugprone-reserved-identifier) */
 
 #define __CDS_cpplang_ConstexprNonLiteralReturn constexpr /* NOLINT(bugprone-reserved-identifier) */
 #define __CDS_cpplang_NonConstConstexprMemberFunction constexpr /* NOLINT(bugprone-reserved-identifier) */
 #define __CDS_cpplang_ConstexprConditioned constexpr /* NOLINT(bugprone-reserved-identifier) */
 #define __CDS_cpplang_StructBracesInitialization_available true /* NOLINT(bugprone-reserved-identifier) */
 #define __CDS_cpplang_VariableTemplates_available true /* NOLINT(bugprone-reserved-identifier) */
-#define __CDS_cpplang_FunctionAliasNoexcept noexcept /* NOLINT(bugprone-reserved-identifier) */
+
+#define __CDS_cpplang_ConstexprConstructorNonEmptyBody constexpr /* NOLINT(bugprone-reserved-identifier) */
 
 #define __CDS_cpplang_ConstexprOverride constexpr /* NOLINT(bugprone-reserved-identifier) */
 
@@ -111,7 +112,8 @@ namespace Utility {
 #define __CDS_cpplang_ConstexprConditioned __CDS_OptionalInline /* NOLINT(bugprone-reserved-identifier) */
 #define __CDS_cpplang_StructBracesInitialization_available false /* NOLINT(bugprone-reserved-identifier) */
 #define __CDS_cpplang_VariableTemplates_available false /* NOLINT(bugprone-reserved-identifier) */
-#define __CDS_cpplang_FunctionAliasNoexcept /* NOLINT(bugprone-reserved-identifier) */
+
+#define __CDS_cpplang_ConstexprConstructorNonEmptyBody __CDS_OptimalInline /* NOLINT(bugprone-reserved-identifier) */
 
 #define __CDS_cpplang_ConstexprOverride __CDS_OptionalInline /* NOLINT(bugprone-reserved-identifier) */
 
@@ -146,7 +148,9 @@ namespace Utility {
 #undef __CDS_Fallthrough
 #undef __CDS_MaybeUnused
 #undef __CDS_NoDiscard
+#undef __CDS_Deprecated
 
+#define __CDS_Deprecated __CDS_Attribute(deprecated) /* NOLINT(bugprone-reserved-identifier) */
 #define __CDS_Fallthrough __CDS_Attribute(fallthrough) /* NOLINT(bugprone-reserved-identifier) */
 #define __CDS_MaybeUnused __CDS_Attribute(maybe_unused) /* NOLINT(bugprone-reserved-identifier) */
 #define __CDS_NoDiscard __CDS_Attribute(nodiscard) /* NOLINT(bugprone-reserved-identifier) */
@@ -155,6 +159,8 @@ namespace Utility {
 #define __CDS_cpplang_CTAD_available true /* NOLINT(bugprone-reserved-identifier) */
 #define __CDS_cpplang_ConstexprLambda constexpr /* NOLINT(bugprone-reserved-identifier) */
 #define __CDS_cpplang_InlineStaticVariable_available true /* NOLINT(bugprone-reserved-identifier) */
+
+#define __CDS_cpplang_FunctionAliasNoexcept(_exceptSpec) noexcept(_exceptSpec) /* NOLINT(bugprone-reserved-identifier) */
 
 #undef __CDS_cpplang_core_version_name
 #define __CDS_cpplang_core_version_name "cpp-17" /* NOLINT(bugprone-reserved-identifier) */
@@ -165,6 +171,8 @@ namespace Utility {
 #define __CDS_cpplang_CTAD_available false /* NOLINT(bugprone-reserved-identifier) */
 #define __CDS_cpplang_ConstexprLambda /* NOLINT(bugprone-reserved-identifier) */
 #define __CDS_cpplang_InlineStaticVariable_available false /* NOLINT(bugprone-reserved-identifier) */
+
+#define __CDS_cpplang_FunctionAliasNoexcept(_exceptSpec) /* NOLINT(bugprone-reserved-identifier) */
 
 #endif
 

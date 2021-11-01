@@ -503,17 +503,21 @@ auto LongTest::execute() noexcept -> bool{
                     numbers[(sint64)rIn] = numbers[(sint64)rIn] - numbers[(sint64)rIn];
                     numbers[(sint64)rIn] = numbers[(sint64)rIn] * numbers[(sint64)rIn];
 
+                    distLock.lock();
                     try {
                         numbers[(sint64) rIn] = numbers[(sint64) rIn] / numbers[(sint64) rIn];
                     } catch ( ArithmeticException const & e ) {
                         this->log("Caught %s, sint64ended", e.toString().cStr());
                     }
+                    distLock.unlock();
 
+                    distLock.lock();
                     try {
                         numbers[(sint64) rIn] = numbers[(sint64) rIn] % numbers[(sint64) rIn];
                     } catch ( std :: exception const & t ) {
                         this->log("Caught %s, sint64ended", t.what());
                     }
+                    distLock.unlock();
 
                     numbers[(sint64)rIn] = numbers[(sint64)rIn] & numbers[(sint64)rIn];
                     numbers[(sint64)rIn] = numbers[(sint64)rIn] | numbers[(sint64)rIn];
@@ -525,17 +529,21 @@ auto LongTest::execute() noexcept -> bool{
                     numbers[(sint64)rIn] -= numbers[(sint64)rIn];
                     numbers[(sint64)rIn] *= numbers[(sint64)rIn];
 
+                    distLock.lock();
                     try {
                         numbers[(sint64) rIn] /= numbers[(sint64) rIn];
                     } catch ( ArithmeticException const & ) {
 
                     }
+                    distLock.unlock();
 
+                    distLock.lock();
                     try {
                         numbers[(sint64) rIn] %= numbers[(sint64) rIn];
                     } catch ( Exception const & ) {
 
                     }
+                    distLock.unlock();
 
                     numbers[(sint64)rIn] &= numbers[(sint64)rIn];
                     numbers[(sint64)rIn] >>= numbers[(sint64)rIn];

@@ -7,6 +7,7 @@
 
 #include <CDS/Pointer>
 #include <CDS/Semaphore>
+#include <CDS/Memory>
 
 template < typename ReturnType, typename ... ArgumentTypes >
 class Async;
@@ -53,10 +54,10 @@ public:
     }
 
     inline auto operator () ( ArgumentTypes ... arguments ) noexcept -> AsyncResult < ReturnType > {
-        AsyncResult < ReturnType > result ( new Semaphore () );
+        AsyncResult < ReturnType > result ( Memory :: instance().create < Semaphore > () );
 
-        this->pThread = new Runnable ([& result, this, params = std :: make_tuple ( std :: forward < ArgumentTypes > ( arguments ) ... )] {
-            result.result = new ReturnType ( std :: apply ( this->function, params ) );
+        this->pThread = Memory :: instance().create < Runnable > ([& result, this, params = std :: make_tuple ( std :: forward < ArgumentTypes > ( arguments ) ... )] {
+            result.result = Memory :: instance().create < ReturnType > ( std :: apply ( this->function, params ) );
             result.asyncSemaphore->notify();
         });
 

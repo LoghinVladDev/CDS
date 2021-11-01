@@ -14,6 +14,7 @@
 #include <CDS/LinkedList>
 #include <CDS/Reference>
 #include <CDS/Path>
+#include <CDS/Memory>
 
 class JSON : public Object {
 public:
@@ -51,10 +52,10 @@ private:
 
         Node() noexcept = default;
         Node(Node const & o) noexcept : _label(o._label), _pObject(o._pObject->copy()) {}
-        ~Node() noexcept override { delete this->_pObject; }
+        ~Node() noexcept override { Memory :: instance().destroy ( this->_pObject ); }
 
         auto clearData () noexcept -> Node & {
-            delete this->_pObject;
+            Memory :: instance().destroy ( this->_pObject );
             this->_pObject = nullptr;
             return * this;
         }
@@ -176,7 +177,7 @@ private:
 
         __CDS_NoDiscard auto dumpIndented (int indent, int count) const noexcept -> String;
 
-        __CDS_NoDiscard auto copy () const noexcept -> Node * override { return new Node(*this); }
+        __CDS_NoDiscard auto copy () const noexcept -> Node * override { return Memory::instance().create < Node > (*this); }
     };
 
     LinkedList < Node > _nodes;
@@ -329,7 +330,7 @@ private:
 public:
 
     __CDS_NoDiscard auto copy () const noexcept -> JSON * override {
-        return new JSON(*this);
+        return Memory :: instance().create < JSON > (*this);
     }
 };
 
@@ -541,7 +542,7 @@ public:
     }
 
     __CDS_NoDiscard auto copy() const noexcept -> Array * override {
-        return new Array(* this);
+        return Memory :: instance().create < Array >(* this);
     }
 
     static auto parse ( String const & data ) noexcept -> Array { // NOLINT(misc-no-recursion)

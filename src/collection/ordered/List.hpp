@@ -7,6 +7,7 @@
 
 #include <CDS/Collection>
 #include <CDS/Concepts>
+#include <CDS/Memory>
 
 template < typename T >
 class List : public Collection <T> {
@@ -87,22 +88,38 @@ public:
 
     template < typename V = T, EnableIf < Type < V > :: copyConstructible > = 0 >
     __CDS_OptimalInline auto pushFront ( ElementCRef value ) noexcept -> ElementRef {
-        return * (this->allocFrontGetPtr() = new ElementType ( value ));
+        __CDS_Collection_OperationalLock
+        auto pVal = (this->allocFrontGetPtr() = Memory :: instance().create < ElementType > ( value ));
+        __CDS_Collection_OperationalUnlock
+
+        return * pVal;
     }
 
     template < typename V = T, EnableIf < Type < V > :: copyConstructible > = 0 >
     __CDS_OptimalInline auto pushBack ( ElementCRef value ) noexcept -> ElementRef {
-        return * (this->allocBackGetPtr() = new ElementType ( value ));
+        __CDS_Collection_OperationalLock
+        auto pVal = (this->allocBackGetPtr() = Memory :: instance().create < ElementType > ( value ));
+        __CDS_Collection_OperationalUnlock
+
+        return * pVal;
     }
 
     template < typename V = T, EnableIf < Type < V > :: moveConstructible > = 0 >
     __CDS_OptimalInline auto pushFront ( ElementMRef value ) noexcept -> ElementRef {
-        return * (this->allocFrontGetPtr() = new ElementType ( std :: forward < ElementType > ( value ) ));
+        __CDS_Collection_OperationalLock
+        auto pVal = (this->allocFrontGetPtr() = Memory :: instance().create < ElementType > ( std :: forward < ElementType > ( value ) ));
+        __CDS_Collection_OperationalUnlock
+
+        return * pVal;
     }
 
     template < typename V = T, EnableIf < Type < V > :: moveConstructible > = 0 >
     __CDS_OptimalInline auto pushBack ( ElementMRef value ) noexcept -> ElementRef {
-        return * (this->allocBackGetPtr() = new ElementType ( std :: forward < ElementType > ( value ) ));
+        __CDS_Collection_OperationalLock
+        auto pVal = (this->allocBackGetPtr() = Memory :: instance().create < ElementType > ( std :: forward < ElementType > ( value ) ));
+        __CDS_Collection_OperationalUnlock
+
+        return * pVal;
     }
 
     template < typename V = T, EnableIf< Type < V > :: copyConstructible > = 0 >

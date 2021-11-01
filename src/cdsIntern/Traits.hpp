@@ -10,19 +10,22 @@
 #include <iostream>
 #include "../prepro.h"
 
-#if __CDS_cpplang_core_version >= __CDS_cpplang_core_version_17
-
 template < bool expression, typename T = int >
 using EnableIf = typename std :: enable_if < expression, T > :: type;
-
-template < bool value >
-using BoolConstant = std :: bool_constant < value >;
 
 template < typename T >
 using RemoveReference = typename std :: remove_reference < T > :: type;
 
+template < typename T >
+using RemoveConst = typename std :: remove_const < T > :: type;
+
 template < bool condition, typename TrueType, typename FalseType >
 using TypeIf = typename std :: conditional < condition, TrueType, FalseType > :: type;
+
+#if __CDS_cpplang_core_version >= __CDS_cpplang_core_version_17
+
+template < bool value >
+using BoolConstant = std :: bool_constant < value >;
 
 #else
 

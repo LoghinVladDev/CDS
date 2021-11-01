@@ -9,6 +9,7 @@
 #include <CDS/Random>
 #include <CDS/Pointer>
 #include <CDS/Utility>
+#include <CDS/Memory>
 
 class Float : public Object {
 private:
@@ -18,14 +19,14 @@ public:
 
     static auto random () noexcept -> Float {
         static UniquePointer < RandomGenerator > pRng;
-        if ( pRng.isNull() ) pRng.reset( new RandomGenerator() );
+        if ( pRng.isNull() ) pRng.reset( Memory :: instance () .create < RandomGenerator > () );
 
         return pRng->get();
     }
 
     static auto random (float low, float high) noexcept -> Float {
         static UniquePointer < RandomGenerator > pRng;
-        if ( pRng.isNull() || pRng->low() != low && pRng->high() != high ) pRng.reset( new RandomGenerator(low, high) );
+        if ( pRng.isNull() || pRng->low() != low && pRng->high() != high ) pRng.reset( Memory :: instance () .create < RandomGenerator > (low, high) );
 
         return pRng->get();
     }
@@ -231,8 +232,8 @@ public:
         return negative ? -value : value;
     }
 
-    [[nodiscard]] auto copy () const noexcept -> Float * override {
-        return new Float( * this );
+    __CDS_NoDiscard auto copy () const noexcept -> Float * override {
+        return Memory :: instance() .create < Float > ( * this );
     }
 
     class Atomic;

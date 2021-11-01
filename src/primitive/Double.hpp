@@ -9,6 +9,7 @@
 #include <CDS/Random>
 #include <CDS/Pointer>
 #include <CDS/Utility>
+#include <CDS/Memory>
 
 class Double : public Object {
 private:
@@ -19,14 +20,14 @@ public:
 
     static auto random () noexcept -> Double {
         static UniquePointer < RandomGenerator > pRng;
-        if ( pRng.isNull() ) pRng.reset( new RandomGenerator() );
+        if ( pRng.isNull() ) pRng.reset( Memory::instance ().create < RandomGenerator > () );
 
         return pRng->get();
     }
 
     static auto random (double low, double high) noexcept -> Double {
         static UniquePointer < RandomGenerator > pRng;
-        if ( pRng.isNull() || pRng->low() != low && pRng->high() != high ) pRng.reset( new RandomGenerator(low, high) );
+        if ( pRng.isNull() || pRng->low() != low && pRng->high() != high ) pRng.reset( Memory::instance().create < RandomGenerator >(low, high) );
 
         return pRng->get();
     }
@@ -232,8 +233,8 @@ public:
         return negative ? -value : value;
     }
 
-    [[nodiscard]] auto copy () const noexcept -> Double * override {
-        return new Double( * this );
+    __CDS_NoDiscard auto copy () const noexcept -> Double * override {
+        return Memory::instance().create < Double >( * this );
     }
 
     class Atomic;

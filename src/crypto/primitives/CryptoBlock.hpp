@@ -7,12 +7,6 @@
 
 #include <CDS/Object>
 
-#if __cpp_constepxr >= 201907
-#define __crypto_block_constexpr constexpr
-#else
-#define __crypto_block_constexpr inline
-#endif
-
 template < Size byteSize >
 class CryptoBlock : public Object {
 private:
@@ -30,11 +24,11 @@ public:
     }
 
     template < Size otherSize, Size minSize = std::min ( otherSize, byteSize ) >
-    constexpr CryptoBlock ( CryptoBlock < otherSize > const & block ) noexcept : _paddingElement(block.paddingElement()) {
+    constexpr explicit CryptoBlock ( CryptoBlock < otherSize > const & block ) noexcept : _paddingElement(block.paddingElement()) {
         this->setData(block);
     }
 
-    __crypto_block_constexpr ~CryptoBlock() noexcept override = default;
+    __CDS_cpplang_ConstexprDestructor ~CryptoBlock() noexcept override = default;
 
     constexpr explicit CryptoBlock ( byte const * pData, Size size = UINT64_MAX, byte paddingElement = 0x00u ) noexcept : _paddingElement(paddingElement) {
         this->setData( pData, size );
@@ -45,11 +39,11 @@ public:
         return * this;
     }
 
-    [[nodiscard]] constexpr auto paddingElement () const noexcept -> byte { return this->_paddingElement; }
-    [[nodiscard]] constexpr auto paddingElement () noexcept -> byte & { return this->_paddingElement; }
+    __CDS_NoDiscard constexpr auto paddingElement () const noexcept -> byte { return this->_paddingElement; }
+    __CDS_NoDiscard constexpr auto paddingElement () noexcept -> byte & { return this->_paddingElement; }
 
-    [[nodiscard]] constexpr auto data () const noexcept -> byte const * { return this->_data; }
-    [[nodiscard]] constexpr auto data () noexcept -> byte * { return this->_data; }
+    __CDS_NoDiscard constexpr auto data () const noexcept -> byte const * { return this->_data; }
+    __CDS_NoDiscard constexpr auto data () noexcept -> byte * { return this->_data; }
 
     constexpr auto operator = ( CryptoBlock const & block ) noexcept -> CryptoBlock & {
         if ( this == & block ) return * this;
@@ -65,7 +59,7 @@ public:
 
         this->_paddingElement = block._paddingElement;
 
-        return this->setData( block );
+        return this->setData( block );  // NOLINT(misc-unconventional-assign-operator)
     }
 
     constexpr auto setData ( CryptoBlock const & block ) noexcept -> CryptoBlock & {
@@ -96,7 +90,7 @@ public:
         return * this;
     }
 
-    __crypto_block_constexpr auto operator ^ ( CryptoBlock const & other ) const noexcept -> CryptoBlock {
+    __CDS_cpplang_ConstexprDestructor auto operator ^ ( CryptoBlock const & other ) const noexcept -> CryptoBlock {
         CryptoBlock result;
 
         for ( Size i = 0; i < byteSize; ++ i )
@@ -105,7 +99,7 @@ public:
         return result;
     }
 
-    __crypto_block_constexpr auto operator & ( CryptoBlock const & other ) const noexcept -> CryptoBlock {
+    __CDS_cpplang_ConstexprDestructor auto operator & ( CryptoBlock const & other ) const noexcept -> CryptoBlock {
         CryptoBlock result;
 
         for ( Size i = 0; i < byteSize; ++ i )
@@ -114,7 +108,7 @@ public:
         return result;
     }
 
-    __crypto_block_constexpr auto operator | ( CryptoBlock const & other ) const noexcept -> CryptoBlock {
+    __CDS_cpplang_ConstexprDestructor auto operator | ( CryptoBlock const & other ) const noexcept -> CryptoBlock {
         CryptoBlock result;
 
         for ( Size i = 0; i < byteSize; ++ i )
@@ -124,7 +118,7 @@ public:
     }
 
     template < Size otherSize, Size minSize = std::min ( byteSize, otherSize ) >
-    __crypto_block_constexpr auto operator ^ ( CryptoBlock < otherSize > const & other ) const noexcept -> CryptoBlock < minSize > {
+    __CDS_cpplang_ConstexprDestructor auto operator ^ ( CryptoBlock < otherSize > const & other ) const noexcept -> CryptoBlock < minSize > {
         CryptoBlock < minSize > result;
 
         for ( Size i = 0; i < minSize; ++ i )
@@ -134,7 +128,7 @@ public:
     }
 
     template < Size otherSize, Size minSize = std::min ( byteSize, otherSize ) >
-    __crypto_block_constexpr auto operator & ( CryptoBlock < otherSize > const & other ) const noexcept -> CryptoBlock < minSize > {
+    __CDS_cpplang_ConstexprDestructor auto operator & ( CryptoBlock < otherSize > const & other ) const noexcept -> CryptoBlock < minSize > {
         CryptoBlock < minSize > result;
 
         for ( Size i = 0; i < minSize; ++ i )
@@ -144,7 +138,7 @@ public:
     }
 
     template < Size otherSize, Size minSize = std::min ( byteSize, otherSize ) >
-    __crypto_block_constexpr auto operator | ( CryptoBlock < otherSize > const & other ) const noexcept -> CryptoBlock < minSize > {
+    __CDS_cpplang_ConstexprDestructor auto operator | ( CryptoBlock < otherSize > const & other ) const noexcept -> CryptoBlock < minSize > {
         CryptoBlock < minSize > result;
 
         for ( Size i = 0; i < minSize; ++ i )
@@ -153,18 +147,18 @@ public:
         return result;
     }
 
-    __crypto_block_constexpr auto operator ^= ( CryptoBlock const & other ) noexcept -> CryptoBlock & { return ( * this = (* this) ^ other ); }
-    __crypto_block_constexpr auto operator &= ( CryptoBlock const & other ) noexcept -> CryptoBlock & { return ( * this = (* this) & other ); }
-    __crypto_block_constexpr auto operator |= ( CryptoBlock const & other ) noexcept -> CryptoBlock & { return ( * this = (* this) | other ); }
+    __CDS_cpplang_ConstexprDestructor auto operator ^= ( CryptoBlock const & other ) noexcept -> CryptoBlock & { return ( * this = (* this) ^ other ); }
+    __CDS_cpplang_ConstexprDestructor auto operator &= ( CryptoBlock const & other ) noexcept -> CryptoBlock & { return ( * this = (* this) & other ); }
+    __CDS_cpplang_ConstexprDestructor auto operator |= ( CryptoBlock const & other ) noexcept -> CryptoBlock & { return ( * this = (* this) | other ); }
 
     template < Size otherSize, Size minSize = std::min ( byteSize, otherSize ) >
-    __crypto_block_constexpr auto operator ^= ( CryptoBlock < otherSize > const & other ) const noexcept -> CryptoBlock < minSize > { return ( * this = (* this) ^ other ); }
+    __CDS_cpplang_ConstexprDestructor auto operator ^= ( CryptoBlock < otherSize > const & other ) const noexcept -> CryptoBlock < minSize > { return ( * this = (* this) ^ other ); }
 
     template < Size otherSize, Size minSize = std::min ( byteSize, otherSize ) >
-    __crypto_block_constexpr auto operator &= ( CryptoBlock < otherSize > const & other ) const noexcept -> CryptoBlock < minSize > { return ( * this = (* this) & other ); }
+    __CDS_cpplang_ConstexprDestructor auto operator &= ( CryptoBlock < otherSize > const & other ) const noexcept -> CryptoBlock < minSize > { return ( * this = (* this) & other ); }
 
     template < Size otherSize, Size minSize = std::min ( byteSize, otherSize ) >
-    __crypto_block_constexpr auto operator |= ( CryptoBlock < otherSize > const & other ) const noexcept -> CryptoBlock < minSize > { return ( * this = (* this) | other ); }
+    __CDS_cpplang_ConstexprDestructor auto operator |= ( CryptoBlock < otherSize > const & other ) const noexcept -> CryptoBlock < minSize > { return ( * this = (* this) | other ); }
 
     constexpr auto operator [] (Index index) const noexcept -> byte {
         if ( index < 0 )
@@ -181,7 +175,7 @@ public:
     }
 
     template < Size otherSize, Size totalSize = byteSize + otherSize >
-    __crypto_block_constexpr auto operator + ( CryptoBlock < otherSize > const & other ) const noexcept -> CryptoBlock < totalSize > {
+    __CDS_cpplang_ConstexprDestructor auto operator + ( CryptoBlock < otherSize > const & other ) const noexcept -> CryptoBlock < totalSize > {
         CryptoBlock < totalSize > newBlock (this->_paddingElement);
 
         std::memcpy ( static_cast < void * > (newBlock.data()), static_cast < void const * > (this->data()), byteSize );
@@ -215,7 +209,7 @@ private:
     }
 
 public:
-    [[nodiscard]] auto toString () const noexcept -> String override {
+    __CDS_NoDiscard auto toString () const noexcept -> String override {
         return String("CryptoBlock ") +
             "{ size = " + byteSize +
             ", data = " + CryptoBlock::bytesToHex(this->data()) +
@@ -223,12 +217,12 @@ public:
             " }";
     }
 
-    [[nodiscard]] inline auto toHex () const noexcept -> String {
+    __CDS_NoDiscard inline auto toHex () const noexcept -> String {
         return CryptoBlock::bytesToHex(this->_data);
     }
 
     template < Size newSize >
-    [[nodiscard]] auto split ( byte paddingElement = 0x00u ) const noexcept -> LinkedList < CryptoBlock < newSize > > {
+    __CDS_NoDiscard auto split ( byte paddingElement = 0x00u ) const noexcept -> LinkedList < CryptoBlock < newSize > > {
         LinkedList < CryptoBlock < newSize > > newBlocks;
 
         for ( Index i = 0; i < byteSize; i += newSize ) {
@@ -251,10 +245,10 @@ public:
     public:
         explicit InvalidHexFormat(char c) { this->_message = String("Invalid Hex Format, character encountered : ") + c; }
 
-        [[nodiscard]] auto what() const noexcept -> StringLiteral override { return this->_message.cStr(); }
+        __CDS_NoDiscard auto what() const noexcept -> StringLiteral override { return this->_message.cStr(); }
     };
 
-    [[nodiscard]] auto static fromHex ( String const & hexString, byte paddingElement = 0x00u ) noexcept(false) -> CryptoBlock {
+    __CDS_NoDiscard auto static fromHex ( String const & hexString, byte paddingElement = 0x00u ) noexcept(false) -> CryptoBlock {
         CryptoBlock block;
 
         static auto hexToByte = [](char c) noexcept(false) -> byte {
@@ -296,7 +290,7 @@ public:
         return std::memcmp ( this->_data, block._data, byteSize ) == 0;
     }
 
-    [[nodiscard]] auto equals (Object const & o) const noexcept -> bool override {
+    __CDS_NoDiscard auto equals (Object const & o) const noexcept -> bool override {
         if ( this == & o ) return true;
         auto p = dynamic_cast < decltype ( this ) > ( & o );
         if ( p == nullptr ) return false;
@@ -304,7 +298,7 @@ public:
         return this->operator==(*p);
     }
 
-    [[nodiscard]] auto static split ( byte const * pData, Size size, byte paddingElement = 0x00u ) noexcept -> LinkedList < CryptoBlock < byteSize > > {
+    __CDS_NoDiscard auto static split ( byte const * pData, Size size, byte paddingElement = 0x00u ) noexcept -> LinkedList < CryptoBlock < byteSize > > {
         LinkedList < CryptoBlock < byteSize > > newBlocks;
 
         for ( Index i = 0; i < size; i += byteSize ) {
@@ -322,19 +316,17 @@ public:
         return newBlocks;
     }
 
-    [[nodiscard]] inline auto static split ( String const & string, byte paddingElement = 0x00u ) noexcept -> LinkedList < CryptoBlock < byteSize > > {
+    __CDS_NoDiscard inline auto static split ( String const & string, byte paddingElement = 0x00u ) noexcept -> LinkedList < CryptoBlock < byteSize > > {
         return CryptoBlock < byteSize > :: split ( reinterpret_cast < uint8 const * > ( string.cStr() ), string.length(), paddingElement );
     }
 
-    [[nodiscard]] inline auto toPlainText () const noexcept -> String {
+    __CDS_NoDiscard inline auto toPlainText () const noexcept -> String {
         String s;
         s.resize(byteSize);
         std::memcpy ( static_cast < void * > ( s.data() ), static_cast < void const * > ( this->_data ), byteSize );
         return s;
     }
 };
-
-#undef __crypto_block_constexpr
 
 
 namespace Utility {

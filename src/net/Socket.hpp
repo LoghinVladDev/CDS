@@ -32,6 +32,7 @@
 #include <CDS/Pair>
 #include <CDS/LinkedList>
 #include <CDS/Utility>
+#include <CDS/Memory>
 
 class SocketException : public Exception {
 public:
@@ -875,7 +876,7 @@ private:
         __CDS_OptimalInline LastAddressContainer() noexcept = default;
 
         __CDS_OptimalInline ~LastAddressContainer() noexcept {
-            delete this->pLastSocketAddress;
+            Memory :: instance().destroy ( this->pLastSocketAddress );
         }
 
         __CDS_OptionalInline auto specifyType ( ProtocolVersion protocolVersion ) noexcept -> void {
@@ -892,20 +893,20 @@ private:
             }
 
             if ( this->pLastSocketAddress != nullptr )
-                delete Utility::exchange(this->pLastSocketAddress, nullptr);
+                Memory :: instance().destroy ( Utility::exchange(this->pLastSocketAddress, nullptr) );
 
             switch ( protocolVersion ) {
                 case ProtocolVersion::INTERNET_PROTOCOL_NONE_SPECIFIED:
                 case ProtocolVersion::INTERNET_PROTOCOL_VERSION_6:
                 case ProtocolVersion::INTERNET_PROTOCOL_VERSION_6_FORCED:
-                    this->pLastSocketAddress = reinterpret_cast < sockaddr * > (new sockaddr_in6);
+                    this->pLastSocketAddress = reinterpret_cast < sockaddr * > (Memory :: instance().create < sockaddr_in6 > ());
                     this->lastSocketAddressSize = sizeof ( sockaddr_in6 );
                     this->lastProtocolType = ProtocolVersion::IPV6;
 
                     return;
                 case ProtocolVersion::INTERNET_PROTOCOL_VERSION_4:
 
-                    this->pLastSocketAddress = reinterpret_cast < sockaddr * > (new sockaddr_in);
+                    this->pLastSocketAddress = reinterpret_cast < sockaddr * > (Memory :: instance().create < sockaddr_in > ());
                     this->lastSocketAddressSize = sizeof ( sockaddr_in );
                     this->lastProtocolType = ProtocolVersion::IPV4;
             }
@@ -925,7 +926,7 @@ private:
         __CDS_OptimalInline LastAddressContainer() noexcept = default;
 
         __CDS_OptimalInline ~LastAddressContainer() noexcept {
-            delete this->pLastSocketAddress;
+            Memory :: instance().destroy ( this->pLastSocketAddress );
         }
 
         __CDS_OptionalInline auto specifyType ( ProtocolVersion protocolVersion ) noexcept -> void {
@@ -942,20 +943,20 @@ private:
             }
 
             if ( this->pLastSocketAddress != nullptr )
-                delete Utility::exchange(this->pLastSocketAddress, nullptr);
+                Memory :: instance().destroy ( Utility::exchange(this->pLastSocketAddress, nullptr) );
 
             switch ( protocolVersion ) {
                 case ProtocolVersion::INTERNET_PROTOCOL_NONE_SPECIFIED:
                 case ProtocolVersion::INTERNET_PROTOCOL_VERSION_6:
                 case ProtocolVersion::INTERNET_PROTOCOL_VERSION_6_FORCED:
-                    this->pLastSocketAddress = reinterpret_cast < sockaddr * > (new sockaddr_in6);
+                    this->pLastSocketAddress = reinterpret_cast < sockaddr * > (Memory :: instance().create < sockaddr_in6 >);
                     this->lastSocketAddressSize = sizeof ( sockaddr_in6 );
                     this->lastProtocolType = ProtocolVersion::IPV6;
 
                     return;
                 case ProtocolVersion::INTERNET_PROTOCOL_VERSION_4:
 
-                    this->pLastSocketAddress = reinterpret_cast < sockaddr * > (new sockaddr_in);
+                    this->pLastSocketAddress = reinterpret_cast < sockaddr * > (Memory :: instance().create < sockaddr_in >);
                     this->lastSocketAddressSize = sizeof ( sockaddr_in );
                     this->lastProtocolType = ProtocolVersion::IPV4;
             }
@@ -1321,7 +1322,7 @@ public:
 
 #if defined (__CDS_Platform_Linux)
 
-        return new Socket(dup(this->_platformSocket));
+        return Memory :: instance().create < Socket > (dup(this->_platformSocket));
 
 #elif defined(__CDS_Platform_Microsoft_Windows)
 
@@ -1344,7 +1345,7 @@ public:
             return nullptr;
         }
 
-        return new Socket(platformSocket);
+        return Memory :: instance().create < Socket > (platformSocket);
 
 #else
 

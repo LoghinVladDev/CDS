@@ -12,6 +12,7 @@
 #include <CDS/Pointer>
 #include <CDS/Mutex>
 #include <CDS/Semaphore>
+#include <CDS/Memory>
 
 #include <atomic>
 #include <chrono>
@@ -71,7 +72,7 @@ public:
     auto start (Function const & f, Args && ... args) noexcept -> void {
         if ( this->_pThread.isNull() ) {
             this->_pThread.reset(
-                    new Runnable(
+                    Memory :: instance().create < Runnable > (
                             [args = std::make_tuple(std::forward<Args>(args) ... ), this, & f] () mutable -> void {
                                  return std::apply(
                                         [this, & f](Args && ... args) -> void {

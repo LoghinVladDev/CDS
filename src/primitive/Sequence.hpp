@@ -17,6 +17,7 @@
 #include <CDS/Types>
 #include <CDS/Double>
 #include <CDS/Function>
+#include <CDS/Memory>
 
 #include "SequencePrivate.hpp"
 
@@ -125,7 +126,7 @@ public:
         __CDS_OptimalInline Iterator (Iterator const & otherIt) noexcept :
                 pSeq ( otherIt.pSeq ),
                 it (otherIt.it),
-                precomputed ( new CollectionElementType ( * otherIt.precomputed ) ),
+                precomputed ( Memory::instance () .create < CollectionElementType > ( * otherIt.precomputed ) ),
                 index (otherIt.index){
 
         }
@@ -1750,7 +1751,7 @@ public:
 /// region Ctors Dtors Copy Move Clear
 template < typename C >
 __CDS_OptimalInline Sequence < C > ::Sequence ( Sequence const & s ) noexcept :
-        pCollection ( new ForeignPointer < typename std :: remove_reference < decltype (s.pCollection.valueAt().valueAt() ) > :: type > ( s.pCollection.valueAt().get() ) ),
+        pCollection ( Memory::instance().create < ForeignPointer < typename std :: remove_reference < decltype (s.pCollection.valueAt().valueAt() ) > :: type > > ( s.pCollection.valueAt().get() ) ),
         chainCount ( s.chainCount ),
         storedMappers ( s.storedMappers ),
         storedPredicates ( s.storedPredicates ),
@@ -1767,21 +1768,21 @@ __CDS_OptionalInline Sequence < C > ::Sequence ( Sequence && s ) noexcept :
         storedIndexedMappers ( std::move ( s.storedIndexedMappers ) ),
         storedIndexedPredicates ( std::move ( s.storedIndexedPredicates ) ) {
     if ( dynamic_cast < UniquePointer < C > * > ( s.pCollection.get() ) != nullptr )
-        this->pCollection = new UniquePointer < typename std :: remove_reference < decltype ( s.pCollection.valueAt().valueAt() ) > :: type > ( s.pCollection.valueAt().release() );
+        this->pCollection = Memory :: instance().create < UniquePointer < typename std :: remove_reference < decltype ( s.pCollection.valueAt().valueAt() ) > :: type > > ( s.pCollection.valueAt().release() );
     else
-        this->pCollection = new ForeignPointer < typename std :: remove_reference < decltype ( s.pCollection.valueAt().valueAt() ) > :: type > ( s.pCollection.valueAt().get() );
+        this->pCollection = Memory :: instance().create < ForeignPointer < typename std :: remove_reference < decltype ( s.pCollection.valueAt().valueAt() ) > :: type > > ( s.pCollection.valueAt().get() );
 }
 
 template < typename C >
 __CDS_OptimalInline Sequence < C > ::Sequence ( C & c ) noexcept :
-        pCollection ( new ForeignPointer < typename std :: remove_reference < decltype ( c ) > :: type > ( & c ) ),
+        pCollection ( Memory :: instance().create < ForeignPointer < typename std :: remove_reference < decltype ( c ) > :: type > > ( & c ) ),
         chainCount ( 0u ) {
 
 }
 
 template < typename C >
 __CDS_OptimalInline Sequence < C > ::Sequence ( C && c ) noexcept :
-        pCollection ( new UniquePointer < typename std :: remove_reference < decltype ( c ) > :: type > ( new C (std::move(c)) ) ),
+        pCollection ( Memory :: instance().create < UniquePointer < typename std :: remove_reference < decltype ( c ) > :: type > > ( Memory :: instance().create < C > (std::move(c)) ) ),
         chainCount ( 0u ) {
 
 }
@@ -1792,7 +1793,7 @@ __CDS_OptionalInline auto Sequence < C > ::operator = ( Sequence const & s ) noe
 
     this->clear();
 
-    this->pCollection.reset( new ForeignPointer < decltype ( s.pCollection.valueAt().get() ) > ( s.pCollection.valueAt().valueAt() ) );
+    this->pCollection.reset( Memory :: instance().create < ForeignPointer < decltype ( s.pCollection.valueAt().get() ) > > ( s.pCollection.valueAt().valueAt() ) );
     this->chainCount                = s.chainCount;
 
     this->storedMappers             = s.storedMappers;
@@ -1810,7 +1811,7 @@ __CDS_OptionalInline auto Sequence < C > ::operator = ( Sequence && s ) noexcept
 
     this->clear();
 
-    this->pCollection.reset( new UniquePointer < decltype ( s.pCollection.valueAt().get() ) > ( s.pCollection.valueAt().release() ) );
+    this->pCollection.reset( Memory :: instance().create < UniquePointer < decltype ( s.pCollection.valueAt().get() ) > > ( s.pCollection.valueAt().release() ) );
     this->chainCount                = Utility::exchange ( s.chainCount, 0 ) + 1;
 
     this->storedMappers             = std::move (s.storedMappers);
@@ -1860,7 +1861,7 @@ auto Sequence < C >::Iterator::skipFiltered() noexcept -> void {
     Boolean skip = true;
 
     while ( skip && this->it != this->pSeq->pCollection->valueAt().end() ) {
-        this->precomputed = new CollectionElementType ( this->it.value() );
+        this->precomputed = Memory :: instance().create < CollectionElementType > ( this->it.value() );
         skip = false;
 
         auto currentMapperIterator = this->pSeq.valueAt().storedMappers.begin();
@@ -2073,7 +2074,7 @@ auto Sequence < C >::ConstIterator::skipFiltered() noexcept -> void {
     Boolean skip = true;
 
     while ( skip && this->it != this->pSeq->pCollection->valueAt().cend() ) {
-        this->precomputed = new CollectionElementType ( this->it.value() );
+        this->precomputed = Memory :: instance().create < CollectionElementType > ( this->it.value() );
         skip = false;
 
         auto currentMapperIterator = this->pSeq.valueAt().storedMappers.begin();
@@ -2286,7 +2287,7 @@ __CDS_OptimalInline auto Sequence < C > ::hash() const noexcept -> Index {
 
 template < typename C >
 __CDS_OptimalInline auto Sequence < C > ::copy() const noexcept -> Sequence<C> * {
-    return new Sequence ( * this );
+    return Memory :: instance().create < Sequence > ( * this );
 }
 
 template < typename C >
@@ -2396,10 +2397,10 @@ auto Sequence < C > :: shuffled () const noexcept -> Sequence < Array < ElementT
     for ( auto e : * this )
         container.add( e );
 
-    auto rIndex = Random::Int(0, container.size() - 1);
+//    auto rIndex = Random::Int(0, container.size() - 1);
 
     for ( auto _ : Range(Int::random(container.size(), container.size() * 2), Int::random(container.size() * 3, container.size() * 10)) )
-        std :: swap ( container[rIndex()], container[rIndex()] );
+        std :: swap ( container[Int::random(0, container.size() - 1)], container[Int::random(0, container.size() - 1)] );
 
     return std :: move ( Sequence < Array < ElementType > > ( std :: move ( container ) ) );
 }
@@ -2409,7 +2410,7 @@ template < typename Mapper, EnableIf < __CDS_Sequence :: mapToSameType < Mapper,
 __CDS_MaybeUnused __CDS_OptimalInline auto Sequence < C > :: map(
         Mapper const & mapper
 ) && noexcept -> Sequence < C > __CDS_Requires ( Iterable < C > || ConstIterable < C > ) {
-    this->storedMappers.append({ { new StoredMapper(mapper) }, this->chainCount });
+    this->storedMappers.append({ { Memory :: instance().create < StoredMapper > (mapper) }, this->chainCount });
     return std::move ( * this );
 }
 
@@ -2433,7 +2434,7 @@ __CDS_MaybeUnused __CDS_OptimalInline auto Sequence < C > ::map(
 ) & noexcept -> Sequence < C > __CDS_Requires ( Iterable < C > || ConstIterable < C > ) {
     Sequence < C > copy ( *this );
 
-    copy.storedMappers.append({ { new StoredMapper(mapper) }, this->chainCount });
+    copy.storedMappers.append({ { Memory :: instance().create < StoredMapper >(mapper) }, this->chainCount });
     return std::move(copy);
 }
 
@@ -2442,7 +2443,7 @@ template < typename Predicate >
 __CDS_MaybeUnused __CDS_OptimalInline auto Sequence < C > ::filter(
         Predicate const & predicate
 ) && noexcept -> Sequence < C > __CDS_Requires ( Iterable < C > || ConstIterable < C > ) {
-    this->storedPredicates.append({ { new StoredPredicate (predicate)}, this->chainCount });
+    this->storedPredicates.append({ { Memory :: instance().create < StoredPredicate > (predicate)}, this->chainCount });
     return std::move ( * this );
 }
 
@@ -2453,7 +2454,7 @@ __CDS_MaybeUnused __CDS_OptimalInline auto Sequence < C > ::filter(
 ) & noexcept -> Sequence < C > __CDS_Requires ( Iterable < C > || ConstIterable < C > ) {
     Sequence < C > copy (* this );
 
-    copy.storedPredicates.append({ { new StoredPredicate (predicate)}, this->chainCount });
+    copy.storedPredicates.append({ { Memory :: instance ().create < StoredPredicate > (predicate)}, this->chainCount });
     return std::move (copy);
 }
 
@@ -2462,7 +2463,7 @@ template < typename IndexedPredicate >
 __CDS_MaybeUnused __CDS_OptimalInline auto Sequence < C > :: filterIndexed (
         IndexedPredicate const & indexedPredicate
 ) && noexcept -> Sequence < C > __CDS_Requires ( Iterable < C > || ConstIterable < C > ) {
-    this->storedIndexedPredicates.append({ { new StoredIndexedPredicate (indexedPredicate)}, this->chainCount });
+    this->storedIndexedPredicates.append({ { Memory :: instance().create < StoredIndexedPredicate > (indexedPredicate)}, this->chainCount });
     return std::move ( * this );
 }
 
@@ -2473,7 +2474,7 @@ __CDS_MaybeUnused __CDS_OptionalInline auto Sequence < C > :: filterIndexed (
 ) & noexcept -> Sequence < C > __CDS_Requires ( Iterable < C > || ConstIterable < C > ) {
     Sequence < C > copy (* this);
 
-    copy.storedIndexedPredicates.append({ { new StoredIndexedPredicate (indexedPredicate)}, this->chainCount });
+    copy.storedIndexedPredicates.append({ { Memory :: instance().create < StoredIndexedPredicate > (indexedPredicate)}, this->chainCount });
     return std::move ( copy );
 }
 
@@ -2512,7 +2513,7 @@ template < typename IndexedMapper, EnableIf < __CDS_Sequence :: mapToSameType < 
 __CDS_MaybeUnused __CDS_OptimalInline auto Sequence < C > ::mapIndexed(
         IndexedMapper const & mapper
 ) && noexcept -> Sequence < C > __CDS_Requires ( Iterable < C > || ConstIterable < C > ) {
-    this->storedIndexedMappers.append({ { new StoredIndexedMapper(mapper) }, this->chainCount });
+    this->storedIndexedMappers.append({ { Memory :: instance().create < StoredIndexedMapper >(mapper) }, this->chainCount });
     return std::move ( * this );
 }
 
@@ -2522,7 +2523,7 @@ __CDS_MaybeUnused __CDS_OptimalInline auto Sequence < C > ::mapIndexed(
         IndexedMapper const & mapper
 ) & noexcept -> Sequence < C > __CDS_Requires ( Iterable < C > || ConstIterable < C > ) {
     Sequence < C > newSequence (* this);
-    newSequence.storedIndexedMappers.append({ { new StoredIndexedMapper(mapper) }, this->chainCount });
+    newSequence.storedIndexedMappers.append({ { Memory::instance().create < StoredIndexedMapper >(mapper) }, this->chainCount });
     return std::move ( newSequence );
 }
 

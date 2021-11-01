@@ -6,6 +6,7 @@
 #define CDS_ARRAY_HPP
 
 #include <CDS/List>
+#include <CDS/Memory>
 
 template < typename T >
 class Array : public List <T> {
@@ -69,10 +70,10 @@ public:
     ~Array () noexcept override;
 
 private:
-    __CDS_OptimalInline auto beginPtr () noexcept -> Iterator * final { return new Iterator( this, 0 ); }
-    __CDS_OptimalInline auto endPtr () noexcept -> Iterator * final { return new Iterator(this, this->size()); }
-    __CDS_OptimalInline auto beginPtr () const noexcept -> ConstIterator * final { return new ConstIterator( this, 0 ); }
-    __CDS_OptimalInline auto endPtr () const noexcept -> ConstIterator * final { return new ConstIterator( this, this->size() ); }
+    __CDS_OptimalInline auto beginPtr () noexcept -> Iterator * final { return Memory :: instance ().create < Iterator > ( this, 0 ); }
+    __CDS_OptimalInline auto endPtr () noexcept -> Iterator * final { return Memory :: instance ().create < Iterator > (this, this->size()); }
+    __CDS_OptimalInline auto beginPtr () const noexcept -> ConstIterator * final { return Memory :: instance ().create < ConstIterator >( this, 0 ); }
+    __CDS_OptimalInline auto endPtr () const noexcept -> ConstIterator * final { return Memory :: instance ().create < ConstIterator >( this, this->size() ); }
 
 public:
     __CDS_cpplang_NonConstConstexprMemberFunction auto begin () noexcept -> Iterator { return Iterator ( this, 0 ); }
@@ -98,7 +99,7 @@ public:
     __CDS_OptionalInline auto resize ( Size newSize ) noexcept -> void {
         this->_resize(newSize);
         for ( auto i = this->_size; i < newSize; ++ i )
-            this->_pData[i] = new T();
+            this->_pData[i] = Memory :: instance ().create < T > ();
         this->_size = newSize;
     }
 
@@ -106,7 +107,7 @@ public:
     __CDS_OptionalInline auto resize ( Size newSize, ElementCRef value ) noexcept -> void {
         this->_resize(newSize);
         for ( auto i = this->_size; i < newSize; ++ i )
-            this->_pData[i] = new T(value);
+            this->_pData[i] = Memory :: instance ().create < T > (value);
         this->_size = newSize;
     }
 
@@ -199,7 +200,7 @@ public:
             throw OutOfBoundsException("Array is Empty");
 
         auto retVal = * this->_pData[0];
-        delete Utility::exchange(this->_pData[0], nullptr);
+        Memory :: instance().destroy ( Utility::exchange(this->_pData[0], nullptr) );
 
         for ( Index i = 0; i < this->size() - 1; i ++ )
             this->_pData[i] = this->_pData[i + 1];
@@ -214,7 +215,7 @@ public:
             throw OutOfBoundsException("Array is Empty");
 
         auto v = * this->_pData[--this->_size];
-        delete Utility::exchange(this->_pData[this->_size], nullptr);
+        Memory :: instance().destroy ( Utility::exchange(this->_pData[this->_size], nullptr) );
 
         return v;
     }
@@ -262,8 +263,8 @@ public:
         if ( this == & array ) return * this;
 
         for ( Index i = 0; i < this->_size; ++ i )
-            delete this->_pData[i];
-        delete [] this->_pData;
+            Memory :: instance().destroy ( this->_pData[i] );
+        Memory :: instance().destroyArray ( this->_pData );
 
         this->_pData = Utility :: exchange ( array._pData, nullptr );
         this->_capacity = Utility :: exchange ( array._capacity, 0 );
@@ -407,7 +408,7 @@ public:
     }
 
     __CDS_NoDiscard __CDS_OptimalInline auto copy () const noexcept -> Iterator * override {
-        return new Iterator ( * this );
+        return Memory::instance().create< Iterator > ( * this );
     }
 };
 
@@ -464,7 +465,7 @@ public:
     }
 
     __CDS_NoDiscard __CDS_OptimalInline auto copy () const noexcept -> ReverseIterator * override {
-        return new ReverseIterator ( * this );
+        return Memory::instance().create < ReverseIterator > ( * this );
     }
 };
 
@@ -521,7 +522,7 @@ public:
     }
 
     __CDS_NoDiscard __CDS_OptimalInline auto copy () const noexcept -> ConstIterator * override {
-        return new ConstIterator ( * this );
+        return Memory::instance().create < ConstIterator > ( * this );
     }
 };
 
@@ -577,7 +578,7 @@ public:
     }
 
     __CDS_NoDiscard __CDS_OptimalInline auto copy () const noexcept -> ConstReverseIterator * override {
-        return new ConstReverseIterator ( * this );
+        return Memory::instance().create < ConstReverseIterator > ( * this );
     }
 };
 
@@ -591,15 +592,15 @@ Array<T>::Array( InitializerList initializerList ) noexcept {
 template <class T>
 Array<T>::~Array() noexcept {
     for ( Index i = 0; i < this->_capacity; i++ )
-        delete Utility::exchange(this->_pData[i], nullptr);
-    delete [] Utility::exchange(this->_pData, nullptr);
+        Memory :: instance ().destroy ( Utility::exchange(this->_pData[i], nullptr) );
+    Memory :: instance().destroyArray ( Utility::exchange(this->_pData, nullptr) );
 }
 
 template < typename T >
 auto Array < T > :: allocFrontGetPtr () noexcept -> ElementPtrRef {
 
     if ( this->_size < this->_capacity ) {
-        delete Utility::exchange(this->_pData[ this->_size ++ ], nullptr);
+        Memory :: instance().destroy ( Utility::exchange(this->_pData[ this->_size ++ ], nullptr) );
         for ( Index i = this->_size - 1; i > 0; -- i )
             this->_pData[i] = this->_pData[i - 1];
 
@@ -607,14 +608,14 @@ auto Array < T > :: allocFrontGetPtr () noexcept -> ElementPtrRef {
     }
 
     auto newSize = this->_capacity * 2;
-    auto newBuf = new T * [ newSize ];
+    auto newBuf = Memory :: instance().createArray < T * > ( newSize );
     std::memcpy ( newBuf + 1, this->_pData, this->_size * sizeof ( T * ) );
     std::memset ( newBuf + 1 + this->_size, 0, (newSize - this->_size - 1) * sizeof(T *) );
 
     this->_capacity = newSize;
     this->_size ++;
 
-    delete [] Utility::exchange ( this->_pData, newBuf );
+    Memory :: instance().destroyArray ( Utility::exchange ( this->_pData, newBuf ) );
 
     return (this->_pData[0] = nullptr);
 }
@@ -635,13 +636,13 @@ auto Array < T > :: allocBackGetPtr () noexcept -> ElementPtrRef {
         return (this->_pData[ this->_size ++ ] = nullptr);
 
     auto newSize = std :: max ( this->_capacity * 2, this->_size + 1 );
-    T ** newBuf = new T * [newSize];
+    T ** newBuf = Memory :: instance ().createArray < T * > (newSize);
 
     std::memcpy ( newBuf, this->_pData, this->_size * sizeof(T *) );
     std::memset ( newBuf + this->_size, 0, ( newSize - this->_size ) * sizeof (T*) );
 
     this->_capacity = newSize;
-    delete [] Utility::exchange ( this->_pData, newBuf );
+    Memory :: instance ().destroyArray ( Utility::exchange ( this->_pData, newBuf ) );
 
     return (this->_pData[this->_size ++] = nullptr);
 }
@@ -702,17 +703,17 @@ auto Array<T>::shrinkToSize(Size size) noexcept -> void {
 
 template < typename T >
 auto Array<T>::_resize(Size size) noexcept -> void {
-    auto newMemory = new ElementType * [ size ];
+    auto newMemory = Memory :: instance().createArray < ElementType * > ( size );
 
     for ( auto i = static_cast < SignedSize > ( this->_size ) - 1; i >= static_cast < SignedSize > ( size ); -- i )
-        delete Utility::exchange(this->_pData[i], nullptr);
+        Memory :: instance ().destroy (Utility::exchange(this->_pData[i], nullptr));
 
     std :: memcpy ( newMemory, this->_pData, sizeof ( T * ) * ( std :: min ( this->_size, size ) ) );
 
     if ( size > this->_size )
         std :: memset ( newMemory + this->_size, 0, sizeof ( T * ) * ( size - this->_size ) );
 
-    delete [] Utility::exchange ( this->_pData, newMemory );
+    Memory :: instance().destroyArray ( Utility::exchange ( this->_pData, newMemory ) );
     this->_capacity = size;
 }
 
@@ -725,12 +726,12 @@ auto Array<T>::_resize(Size size) noexcept -> void {
 
 template < typename T >
 Array<T>::Array( Array const & o ) noexcept :
-        _pData( new T * [o.size()] ),
+        _pData( Memory :: instance ().createArray < T * > (o.size()) ),
         _capacity( o.size() ){
 
     this->_size = o.size();
     for ( auto i = 0; i < o.size(); ++ i )
-        this->_pData[i] = new T(*o._pData[i]);
+        this->_pData[i] = Memory :: instance ().create < T > (*o._pData[i]);
 }
 
 template < typename T >
@@ -767,30 +768,30 @@ Array < T > :: Array ( Collection < T > const & collection ) noexcept {
 template < typename T >
 template < typename V, EnableIf < Type < V > :: defaultConstructible > >
 Array < T > :: Array ( Size size ) noexcept :
-        _pData ( new T * [size] ),
+        _pData ( Memory :: instance ().createArray <  T * > (size) ),
         _capacity ( size ) {
 
     this->_size = size;
     for ( Index i = 0; i < this->_size; ++ i )
-        this->_pData [i] = new T;
+        this->_pData [i] = Memory :: instance ().create < T > ();
 }
 
 template < typename T >
 template < typename V, EnableIf < Type < V > :: copyConstructible > >
 Array<T>::Array ( Size size, ElementCRef defaultValue ) noexcept :
-        _pData(new T * [size]),
+        _pData(Memory :: instance ().createArray < T * > (size)),
         _capacity(size){
 
     this->_size = size;
     for ( Index i = 0; i < this->_size; ++ i )
-        this->_pData[i] = new T ( defaultValue );
+        this->_pData[i] = Memory :: instance().create < T > ( defaultValue );
 }
 
 template < typename T >
 auto Array<T>::remove(ElementCRef e, Size count) noexcept -> bool {
     bool removed = false;
 
-    T ** newBuf = new T * [this->size()];
+    T ** newBuf = Memory :: instance().createArray < T * > (this->size());
 
     Index i = 0, l = 0, c = 0;
     for (; i < this->size() && c < count; i++)
@@ -799,14 +800,14 @@ auto Array<T>::remove(ElementCRef e, Size count) noexcept -> bool {
         } else {
             removed = true;
             ++ c;
-            delete Utility::exchange(this->_pData[i], nullptr);
+            Memory :: instance().destroy ( Utility::exchange(this->_pData[i], nullptr) );
         }
 
     this->_capacity = this->size();
     this->_size = l;
 
     memset ( newBuf + l, 0, (this->_capacity - l) * sizeof(T *) );
-    delete [] Utility::exchange ( this->_pData, newBuf );
+    Memory :: instance().destroyArray ( Utility::exchange ( this->_pData, newBuf ) );
 
     return removed;
 }
@@ -823,14 +824,14 @@ auto Array<T>::removeLast(ElementCRef e) noexcept -> bool {
 
     if ( at == -1 ) return false;
 
-    delete Utility::exchange(this->_pData[at], nullptr);
+    Memory :: instance().destroy ( Utility::exchange(this->_pData[at], nullptr) );
 
-    T ** pNewBuf = new T * [ this->size() - 1 ];
+    T ** pNewBuf = Memory::instance().createArray < T * > ( this->size() - 1 );
     std::memcpy ( pNewBuf, this->_pData, at * sizeof ( T * ) );
     std::memcpy ( pNewBuf + at, this->_pData + at + 1, (this->size() - at - 1) * sizeof(T *) );
 
     this->_capacity = -- this->_size;
-    delete [] Utility::exchange ( this->_pData, pNewBuf );
+    Memory :: instance().destroyArray ( Utility::exchange ( this->_pData, pNewBuf ) );
     return true;
 }
 
@@ -838,7 +839,7 @@ template < typename T >
 auto Array<T>::removeOf(Collection<ElementType> const & elements, Size count) noexcept -> bool {
     bool removed = false;
 
-    T ** newBuf = new T * [this->size()];
+    T ** newBuf = Memory :: instance ().createArray < T * > (this->size());
 
     Index i = 0, l = 0, c = 0;
     for (; i < this->size() && c < count; i++)
@@ -847,14 +848,14 @@ auto Array<T>::removeOf(Collection<ElementType> const & elements, Size count) no
         } else {
             removed = true;
             ++ c;
-            delete Utility::exchange(this->_pData[i], nullptr);
+            Memory :: instance().destroy ( Utility::exchange(this->_pData[i], nullptr) );
         }
 
     this->_capacity = this->size();
     this->_size = l;
 
     std::memset ( newBuf + l, 0, (this->_capacity - this->_size) * sizeof ( T * ) );
-    delete [] Utility::exchange ( this->_pData, newBuf );
+    Memory :: instance().destroyArray ( Utility::exchange ( this->_pData, newBuf ) );
 
     return removed;
 }
@@ -863,7 +864,7 @@ template < typename T >
 auto Array<T>::removeOf ( InitializerList elements, Size count ) noexcept -> bool {
     bool removed = false;
 
-    T ** newBuf = new T * [this->size()];
+    T ** newBuf = Memory :: instance().createArray < T * > ( this->size() );
     Index i = 0, l = 0, c = 0;
     for (; i < this->size() && c < count; i++)
         if ( ! Collection < T > :: iListContains ( elements, * this->_pData[i] ) ) {
@@ -871,14 +872,14 @@ auto Array<T>::removeOf ( InitializerList elements, Size count ) noexcept -> boo
         } else {
             removed = true;
             ++ c;
-            delete Utility::exchange(this->_pData[i], nullptr);
+            Memory :: instance ().destroy ( Utility::exchange(this->_pData[i], nullptr) );
         }
 
     this->_capacity = this->size();
     this->_size = l;
 
     std::memset ( newBuf + l, 0, (this->_capacity - this->_size) * sizeof ( T * ) );
-    delete [] Utility::exchange ( this->_pData, newBuf );
+    Memory :: instance().destroyArray ( Utility::exchange ( this->_pData, newBuf ) );
 
     return removed;
 }
@@ -887,7 +888,7 @@ template < typename T >
 auto Array<T>::removeNotOf( Collection<ElementType> const & elements, Size count) noexcept -> bool {
     bool removed = false;
 
-    T ** newBuf = new T * [this->size()];
+    T ** newBuf = Memory :: instance().createArray < T * > (this->size());
     Index i = 0, l = 0, c = 0;
     for (; i < this->size() && c < count; i++)
         if ( elements.contains ( * this->_pData[i] ) ) {
@@ -895,13 +896,13 @@ auto Array<T>::removeNotOf( Collection<ElementType> const & elements, Size count
         } else {
             removed = true;
             ++ c;
-            delete Utility::exchange(this->_pData[i], nullptr);
+            Memory :: instance ().destroy ( Utility::exchange(this->_pData[i], nullptr) );
         }
 
     this->_capacity = this->size();
     this->_size = l;
     std::memset ( newBuf + l, 0, (this->_capacity - this->_size) * sizeof ( T * ) );
-    delete [] Utility::exchange ( this->_pData, newBuf );
+    Memory :: instance ().destroyArray ( Utility::exchange ( this->_pData, newBuf ) );
     return removed;
 }
 
@@ -909,7 +910,7 @@ template < typename T >
 auto Array<T>::removeNotOf( InitializerList elements, Size count ) noexcept -> bool {
     bool removed = false;
 
-    T ** newBuf = new T * [this->size()];
+    T ** newBuf = Memory :: instance().createArray < T * > ( this->size() );
     Index i = 0, l = 0, c = 0;
     for (; i < this->size() && c < count; i++)
         if ( Collection < T > :: iListContains( elements, * this->_pData[i] ) ) {
@@ -917,13 +918,13 @@ auto Array<T>::removeNotOf( InitializerList elements, Size count ) noexcept -> b
         } else {
             removed = true;
             ++ c;
-            delete Utility::exchange(this->_pData[i], nullptr);
+            Memory :: instance ().destroy ( Utility::exchange(this->_pData[i], nullptr) );
         }
 
     this->_capacity = this->size();
     this->_size = l;
     std::memset ( newBuf + l, 0, (this->_capacity - this->_size) * sizeof ( T * ) );
-    delete [] Utility::exchange ( this->_pData, newBuf );
+    Memory :: instance ().destroyArray ( Utility::exchange ( this->_pData, newBuf ) );
     return removed;
 }
 
@@ -938,12 +939,12 @@ auto Array<T>::removeLastOf(Collection<ElementType> const & elements) noexcept -
 
     if ( at == -1 ) return false;
 
-    delete Utility::exchange(this->_pData[at], nullptr);
+    Memory :: instance().destroy ( Utility::exchange(this->_pData[at], nullptr) );
 
-    T ** pNewBuf = new T * [ this->size() - 1 ];
+    T ** pNewBuf = Memory :: instance ().createArray < T * > ( this->size() - 1 );
     std::memcpy ( pNewBuf, this->_pData, at * sizeof ( T * ) );
     std::memcpy ( pNewBuf + at, this->_pData + at + 1, (this->size() - at - 1) * sizeof(T *) );
-    delete [] Utility::exchange ( this->_pData, pNewBuf );
+    Memory :: instance().destroyArray ( Utility::exchange ( this->_pData, pNewBuf ) );
     this->_capacity = -- this->_size;
     return true;
 }
@@ -959,12 +960,12 @@ auto Array<T>::removeLastOf( InitializerList elements ) noexcept -> bool {
 
     if ( at == -1 ) return false;
 
-    delete Utility::exchange(this->_pData[at], nullptr);
+    Memory :: instance().destroy ( Utility::exchange(this->_pData[at], nullptr) );
 
-    T ** pNewBuf = new T * [ this->size() - 1 ];
+    T ** pNewBuf = Memory :: instance().createArray < T * > ( this->size() - 1 );
     std::memcpy ( pNewBuf, this->_pData, at * sizeof ( T * ) );
     std::memcpy ( pNewBuf + at, this->_pData + at + 1, (this->size() - at - 1) * sizeof(T *) );
-    delete [] Utility::exchange ( this->_pData, pNewBuf );
+    Memory :: instance().destroyArray ( Utility::exchange ( this->_pData, pNewBuf ) );
     this->_capacity = -- this->_size;
     return true;
 }
@@ -980,12 +981,12 @@ auto Array<T>::removeLastNotOf( Collection < ElementType > const & elements ) no
 
     if ( at == -1 ) return false;
 
-    delete Utility::exchange(this->_pData[at], nullptr);
+    Memory :: instance().destroy ( Utility::exchange(this->_pData[at], nullptr) );
 
-    T ** pNewBuf = new T * [ this->size() - 1 ];
+    T ** pNewBuf = Memory :: instance(). createArray < T * > ( this->size() - 1 );
     std::memcpy ( pNewBuf, this->_pData, at * sizeof ( T * ) );
     std::memcpy ( pNewBuf + at, this->_pData + at + 1, (this->size() - at - 1) * sizeof(T *) );
-    delete [] Utility::exchange ( this->_pData, pNewBuf );
+    Memory :: instance().destroyArray ( Utility::exchange ( this->_pData, pNewBuf ) );
     this->_capacity = -- this->_size;
     return true;
 }
@@ -1001,12 +1002,12 @@ auto Array<T>::removeLastNotOf( InitializerList elements) noexcept -> bool {
 
     if ( at == -1 ) return false;
 
-    delete Utility::exchange(this->_pData[at], nullptr);
+    Memory :: instance ().destroy ( Utility::exchange(this->_pData[at], nullptr) );
 
-    T ** pNewBuf = new T * [ this->size() - 1 ];
+    T ** pNewBuf = Memory :: instance().createArray < T * > ( this->size() - 1 );
     std::memcpy ( pNewBuf, this->_pData, at * sizeof ( T * ) );
     std::memcpy ( pNewBuf + at, this->_pData + at + 1, (this->size() - at - 1) * sizeof(T *) );
-    delete [] Utility::exchange ( this->_pData, pNewBuf );
+    Memory :: instance().destroyArray ( Utility::exchange ( this->_pData, pNewBuf ) );
     this->_capacity = -- this->_size;
     return true;
 }
@@ -1024,12 +1025,12 @@ auto Array<T>::remove( CollectionIterator const & it ) noexcept (false) -> Eleme
 
 
     T retVal = * this->_pData[at];
-    delete Utility::exchange(this->_pData[at], nullptr);
+    Memory :: instance().destroy ( Utility::exchange(this->_pData[at], nullptr) );
 
-    T ** pNewBuf = new T * [ this->size() - 1 ];
+    T ** pNewBuf = Memory :: instance().createArray < T * > ( this->size() - 1 );
     std::memcpy ( pNewBuf, this->_pData, at * sizeof ( T * ) );
     std::memcpy ( pNewBuf + at, this->_pData + at + 1, (this->size() - at - 1) * sizeof(T *) );
-    delete [] Utility::exchange ( this->_pData, pNewBuf );
+    Memory :: instance().destroyArray( Utility::exchange ( this->_pData, pNewBuf ) );
     this->_capacity = -- this->_size;
     return retVal;
 }
@@ -1037,13 +1038,13 @@ auto Array<T>::remove( CollectionIterator const & it ) noexcept (false) -> Eleme
 template < typename T >
 auto Array<T>::clear() noexcept -> void {
     for ( Index i = 0; i < this->_size; ++ i )
-        delete Utility::exchange ( this->_pData[i], nullptr );
+        Memory :: instance().destroy ( Utility::exchange ( this->_pData[i], nullptr ) );
     this->_size = 0;
 }
 
 template < typename T >
 auto Array<T> :: makeUnique() noexcept -> void {
-    T ** pNewData = new T * [this->size()];
+    T ** pNewData = Memory :: instance().createArray < T * > (this->size());
     Size l = 0;
 
     static auto newArrContains = [](T ** p, Size l, ElementCRef e) noexcept -> bool {
@@ -1057,14 +1058,14 @@ auto Array<T> :: makeUnique() noexcept -> void {
         if ( ! newArrContains(pNewData, l, * this->_pData[i]) )
             pNewData[l ++] = this->_pData[i];
         else
-            delete Utility::exchange(this->_pData[i], nullptr);
+            Memory :: instance().destroy ( Utility::exchange(this->_pData[i], nullptr) );
 
     std :: memset ( pNewData + l, 0, (this->size() - l) * sizeof(T *) );
 
     this->_capacity = this->size();
     this->_size = l;
 
-    delete [] Utility::exchange ( this->_pData, pNewData );
+    Memory :: instance().destroyArray( Utility::exchange ( this->_pData, pNewData ) );
 }
 
 template < typename T >
@@ -1152,8 +1153,8 @@ Array<T> & Array<T>::operator= (Collection<ElementType> const & c) noexcept {
     for ( auto it = pBegin; ! it->equals( * pEnd ); it->next() )
         this->pushBack ( it->value() );
 
-    delete pBegin;
-    delete pEnd;
+    Memory :: instance().destroy ( pBegin );
+    Memory :: instance().destroy ( pEnd );
     return * this;
 }
 

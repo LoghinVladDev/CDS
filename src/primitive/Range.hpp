@@ -10,6 +10,7 @@ class Sequence;
 
 #include <CDS/Object>
 #include <CDS/Pair>
+#include <CDS/Memory>
 
 class Range : public Object {
 private:
@@ -56,10 +57,10 @@ public:
     __CDS_NoDiscard constexpr auto cend() const noexcept -> Iterator { return this->end(); }
 
     __CDS_NoDiscard __CDS_cpplang_VirtualConstexpr auto hash() const noexcept -> Index final { return _s + _f; }
-    __CDS_NoDiscard __CDS_cpplang_ConstexprDestructor auto toString () const noexcept -> String final { return String("( ") + _s + " ... " + _f + " )";  }
+    __CDS_NoDiscard __CDS_OptimalInline auto toString () const noexcept -> String final { return String("( ") + _s + " ... " + _f + " )";  }
 
-    __CDS_NoDiscard __CDS_cpplang_VirtualConstexpr auto copy () const noexcept -> Range * override {
-        return new Range( * this );
+    __CDS_NoDiscard __CDS_OptimalInline auto copy () const noexcept -> Range * override {
+        return Memory :: instance().create < Range > ( * this );
     }
 
     __CDS_NoDiscard auto sequence () & noexcept -> Sequence < Range >;

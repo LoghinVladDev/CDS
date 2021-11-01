@@ -1,14 +1,17 @@
 //
 // Created by loghin on 05.04.2021.
 //
+#define __CDS_ThreadSafeObjects true
 
 #include "IntegerTest.h"
 
 #include "primitive/Integer.hpp"
 #include <CDS/Range>
 #include <CDS/Thread>
+#include <CDS/allocators/LeakDetectionAllocator>
 
 auto IntegerTest::execute() noexcept -> bool{
+    delete Memory::instance().replaceAllocator( new Memory::LeakDetectionAllocator() );
 
     bool allOk = true;
 
@@ -503,17 +506,21 @@ auto IntegerTest::execute() noexcept -> bool{
                     numbers[(int)rIn] = numbers[(int)rIn] - numbers[(int)rIn];
                     numbers[(int)rIn] = numbers[(int)rIn] * numbers[(int)rIn];
 
+                    distLock.lock();
                     try {
                         numbers[(int) rIn] = numbers[(int) rIn] / numbers[(int) rIn];
                     } catch ( ArithmeticException const & e ) {
                         this->log("Caught %s, intended", e.toString().cStr());
                     }
+                    distLock.unlock();
 
+                    distLock.lock();
                     try {
                         numbers[(int) rIn] = numbers[(int) rIn] % numbers[(int) rIn];
                     } catch ( std :: exception const & t ) {
                         this->log("Caught %s, intended", t.what());
                     }
+                    distLock.unlock();
 
                     numbers[(int)rIn] = numbers[(int)rIn] & numbers[(int)rIn];
                     numbers[(int)rIn] = numbers[(int)rIn] | numbers[(int)rIn];
@@ -525,17 +532,21 @@ auto IntegerTest::execute() noexcept -> bool{
                     numbers[(int)rIn] -= numbers[(int)rIn];
                     numbers[(int)rIn] *= numbers[(int)rIn];
 
+                    distLock.lock();
                     try {
                         numbers[(int) rIn] /= numbers[(int) rIn];
                     } catch ( ArithmeticException const & ) {
 
                     }
+                    distLock.unlock();
 
+                    distLock.lock();
                     try {
                         numbers[(int) rIn] %= numbers[(int) rIn];
                     } catch ( Exception const & ) {
 
                     }
+                    distLock.unlock();
 
                     numbers[(int)rIn] &= numbers[(int)rIn];
                     numbers[(int)rIn] >>= numbers[(int)rIn];

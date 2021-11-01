@@ -10,6 +10,7 @@
 
 #include <CDS/UnorderedSet>
 #include <CDS/OrderedSet>
+#include <CDS/Concepts>
 
 #include <CDS/Sequence>
 
@@ -35,42 +36,36 @@ auto UnorderedSet<T>::sequence() && noexcept -> Sequence<UnorderedSet<T>> {
 }
 #endif
 
+#define COMMA ,
+
 #ifndef _CDS_ORDERED_SET_SEQUENCE_IMPL
 #define _CDS_ORDERED_SET_SEQUENCE_IMPL // NOLINT(bugprone-reserved-identifier)
-template <class T, class C>
-#if defined(__cpp_concepts) && !defined(_MSC_VER)
-requires ValidSetComparator <T, C>
-#endif
+
+template <class T, class C> __CDS_Requires ( ValidSetComparator <T COMMA C> )
 auto OrderedSet<T, C>::sequence() const & noexcept -> Sequence < OrderedSet < T, C > const > {
     return Sequence < typename std :: remove_reference < decltype (*this) > :: type > (*this);
 }
 
-template <class T, class C>
-#if defined(__cpp_concepts) && !defined(_MSC_VER)
-requires ValidSetComparator <T, C>
-#endif
+template <class T, class C> __CDS_Requires ( ValidSetComparator <T COMMA C> )
 auto OrderedSet<T, C>::sequence() & noexcept -> Sequence < OrderedSet < T, C > > {
     return Sequence < typename std :: remove_reference < decltype (*this) > :: type > (*this);
 }
-template <class T, class C>
-#if defined(__cpp_concepts) && !defined(_MSC_VER)
-requires ValidSetComparator <T, C>
-#endif
+
+template <class T, class C> __CDS_Requires ( ValidSetComparator <T COMMA C> )
 auto OrderedSet<T, C>::sequence() const && noexcept -> Sequence < OrderedSet < T, C > const > {
     return Sequence < typename std :: remove_reference < decltype (*this) > :: type > (std::move(*this));
 }
 
-template <class T, class C>
-#if defined(__cpp_concepts) && !defined(_MSC_VER)
-requires ValidSetComparator <T, C>
-#endif
+template <class T, class C> __CDS_Requires ( ValidSetComparator <T COMMA C> )
 auto OrderedSet<T, C>::sequence() && noexcept -> Sequence < OrderedSet < T, C > > {
     return Sequence < typename std :: remove_reference < decltype (*this) > :: type > (std::move(*this));
 }
+
+#undef COMMA
+
 #endif
 
 #undef _OMIT_SEQUENCE_IMPL
 #endif
-
 
 #endif //CDS_SET_HPP

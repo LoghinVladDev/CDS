@@ -12,7 +12,6 @@
 #include <CDS/Pair>
 #include <CDS/Optional>
 #include <CDS/Reference>
-#include <CDS/NotImplementedException>
 #include "../ordered/LinkedListPublic.hpp"
 
 

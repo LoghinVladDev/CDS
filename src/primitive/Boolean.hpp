@@ -6,6 +6,7 @@
 #define CDS_BOOLEAN_HPP
 
 #include <CDS/Object>
+#include <CDS/Memory>
 
 /**
  * @class Object Derived container for a Boolean Value
@@ -310,7 +311,7 @@ public:
      *
      * @test Tested in primitive/BooleanTest
      */
-    __CDS_NoDiscard __CDS_cpplang_ConstexprDestructor auto toString () const noexcept -> String override {
+    __CDS_NoDiscard __CDS_OptimalInline auto toString () const noexcept -> String override {
         return String().append(this->v ? "true" : "false");
     }
 
@@ -343,7 +344,7 @@ public:
      * @test Does not Apply
      */
     __CDS_NoDiscard __CDS_OptimalInline auto copy () const noexcept -> Boolean * override {
-        return new Boolean( * this );
+        return Memory::instance().create < Boolean > ( * this );
     }
 
     /**

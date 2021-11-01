@@ -10,16 +10,16 @@
 
 class Semaphore : public Object {
 private:
-    PointerBase < Mutex > * _pBase;
-    volatile uint8  _count {0};
+    PointerBase < Mutex > * volatile _pBase;
+    uint8                   volatile _count {0};
 
 public:
-    Semaphore () noexcept : _pBase(new SharedPointer < Mutex >(new Mutex())) {}
-    __CDS_MaybeUnused explicit Semaphore ( Mutex & m ) noexcept : _pBase(new ForeignPointer < Mutex >(& m)) {}
+    Semaphore () noexcept : _pBase(Memory :: instance().create < SharedPointer < Mutex > > (Memory :: instance().create < Mutex >())) {}
+    __CDS_MaybeUnused explicit Semaphore ( Mutex & m ) noexcept : _pBase(Memory :: instance().create < ForeignPointer < Mutex > >(& m)) {}
     Semaphore ( Semaphore const & o ) noexcept : _pBase(o._pBase->copy()) { }
 
     ~Semaphore() noexcept override {
-        delete this->_pBase;
+        Memory :: instance().destroy ( this->_pBase );
     }
 
     __CDS_OptionalInline auto wait () noexcept -> void {

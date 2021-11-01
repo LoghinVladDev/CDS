@@ -17,6 +17,8 @@ public:
     ArithmeticException ( ArithmeticException const & ) noexcept = default;
     ArithmeticException ( ArithmeticException && ) noexcept = default;
     explicit ArithmeticException ( String const & message ) noexcept : Exception ( String("Arithmetic Exception : ") + message ) { }
+
+    ~ArithmeticException() noexcept override = default;
 };
 
 __CDS_RegisterParseType(ArithmeticException)
@@ -27,6 +29,8 @@ public:
     DivideByZeroException ( DivideByZeroException const & ) noexcept = default;
     DivideByZeroException ( DivideByZeroException && ) noexcept = default;
     __CDS_MaybeUnused explicit DivideByZeroException ( String const & message ) noexcept : ArithmeticException ( String("Divide By Zero Exception : ") + message ) { }
+
+    ~DivideByZeroException() noexcept override = default;
 };
 
 __CDS_RegisterParseType(DivideByZeroException)
@@ -37,6 +41,8 @@ public:
     IllegalArgumentException ( IllegalArgumentException const & ) noexcept = default;
     IllegalArgumentException ( IllegalArgumentException && ) noexcept = default;
     __CDS_MaybeUnused explicit IllegalArgumentException ( String const & message ) noexcept : Exception ( String("Illegal Argument Exception : ") + message ) { }
+
+    ~IllegalArgumentException() noexcept override = default;
 };
 
 __CDS_RegisterParseType(IllegalArgumentException)
@@ -48,6 +54,8 @@ public:
     NullPointerException ( NullPointerException && ) noexcept = default;
     __CDS_OptimalInline explicit NullPointerException ( String const & message ) noexcept : Exception ( "Tried De-Referencing a null valued Pointer : "_s + message ) {}
     __CDS_OptimalInline explicit NullPointerException ( StringLiteral message ) noexcept : NullPointerException ( String(message) ) {}
+
+    ~NullPointerException() noexcept override = default;
 };
 
 __CDS_RegisterParseType(NullPointerException)
@@ -59,6 +67,8 @@ public:
     OutOfBoundsException ( OutOfBoundsException && ) noexcept = default;
     __CDS_MaybeUnused explicit OutOfBoundsException ( String const & message ) noexcept : Exception ( String("Out of Bounds Exception : ") + message ) { }
     __CDS_MaybeUnused explicit OutOfBoundsException ( Index requested, Index capacity ) noexcept : Exception ( String::format("Out of Bounds Exception : Requested : %lld, Capacity : %lld", requested, capacity) ) { }
+
+    ~OutOfBoundsException() noexcept override = default;
 };
 
 __CDS_RegisterParseType(OutOfBoundsException)
@@ -72,6 +82,8 @@ public:
     template < typename T >
     explicit TypeException ( T const & _ __CDS_MaybeUnused ) noexcept : Exception ( String::f("Type Cast Exception. Conversion to '%s' not possible", Type < T > :: name()) ) { }
     explicit TypeException (String const & message) noexcept : Exception ("Type Cast Exception : "_s + message) { }
+
+    ~TypeException() noexcept override = default;
 };
 
 __CDS_RegisterParseType(TypeException)
@@ -82,8 +94,17 @@ public:
 
     template < typename K >
     __CDS_MaybeUnused explicit KeyException ( K const & key ) noexcept : Exception ( String :: f ( "Key Exception : Key '%s' is invalid for Object", String(key).cStr() ) ) { }
+
+    ~KeyException() noexcept override = default;
 };
 
 __CDS_RegisterParseType(KeyException)
+
+class NotImplementedException : public Exception {
+public:
+    NotImplementedException () noexcept : Exception ( "Not Implemented" ) { }
+
+    ~NotImplementedException() noexcept override = default;
+};
 
 #endif //CDS_UTILITY_HPP

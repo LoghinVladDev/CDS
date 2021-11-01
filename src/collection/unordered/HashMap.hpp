@@ -192,7 +192,7 @@ public:
         }
 
         __CDS_NoDiscard __CDS_OptimalInline auto copy () const noexcept -> Iterator * override {
-            return new Iterator ( * this );
+            return Memory :: instance().create < Iterator > ( * this );
         }
     };
 
@@ -250,7 +250,7 @@ public:
         }
 
         __CDS_NoDiscard __CDS_OptimalInline auto copy () const noexcept -> ConstIterator * override {
-            return new ConstIterator ( * this );
+            return Memory :: instance().create < ConstIterator > ( * this );
         }
     };
 
@@ -309,7 +309,7 @@ public:
         }
 
         __CDS_NoDiscard __CDS_OptimalInline auto copy () const noexcept -> ReverseIterator * override {
-            return new ReverseIterator ( * this );
+            return Memory :: instance().create < ReverseIterator > ( * this );
         }
     };
 
@@ -366,7 +366,7 @@ public:
         }
 
         __CDS_NoDiscard __CDS_OptimalInline auto copy () const noexcept -> ConstReverseIterator * override {
-            return new ConstReverseIterator ( * this );
+            return Memory :: instance().create < ConstReverseIterator > ( * this );
         }
     };
 
@@ -394,12 +394,12 @@ public:
     }
 
     HashMap () noexcept :
-            pBuckets(new HashBucket[hashCalculator.getBoundary()]) {
+            pBuckets(Memory::instance().createArray < HashBucket > (hashCalculator.getBoundary()) ) {
 
     }
 
     HashMap (HashMap const & hm) noexcept :
-            pBuckets(new HashBucket[hm.getHashCalculator().getBoundary()]){
+            pBuckets(Memory::instance().createArray < HashBucket > (hm.getHashCalculator().getBoundary()) ){
 
         this->hashCalculator = hm.hashCalculator;
         for ( Index i = 0; i < hm.getHashCalculator().getBoundary(); i++ ) {
@@ -409,13 +409,13 @@ public:
 
     __CDS_OptimalInline HashMap ( HashMap && hashMap ) noexcept :
             hashCalculator ( std :: move ( hashMap.hashCalculator ) ),
-            pBuckets ( Utility :: exchange ( hashMap.pBuckets, new HashBucket[hashCalculator.getBoundary()] ) ) {
+            pBuckets ( Utility :: exchange ( hashMap.pBuckets, Memory :: instance().createArray < HashBucket > (hashCalculator.getBoundary()) ) ) {
 
     }
 
     template < class OH > __CDS_Requires ( HashCalculatorHasBoundaryFunction <OH> )
     explicit HashMap (HashMap<K, V, OH> const & hm) noexcept :
-            pBuckets(new HashBucket[hashCalculator.getBoundary()]) {
+            pBuckets(Memory :: instance().createArray < HashBucket > (hashCalculator.getBoundary())) {
 
         this->hashCalculator = hm.hashCalculator;
         for ( auto & e : hm.entries() )
@@ -423,7 +423,7 @@ public:
     }
 
     __CDS_OptionalInline HashMap ( InitializerList list ) noexcept :
-            pBuckets(new HashBucket[hashCalculator.getBoundary()]) {
+            pBuckets(Memory :: instance().createArray < HashBucket > (hashCalculator.getBoundary())) {
 
         for ( auto & e : list )
             this->insert( e );
@@ -433,7 +433,7 @@ public:
             CollectionIterator const & from,
             CollectionIterator const & to
     ) noexcept :
-            pBuckets(new HashBucket[hashCalculator.getBoundary()]) {
+            pBuckets(Memory :: instance().createArray < HashBucket > (hashCalculator.getBoundary())) {
 
         for ( auto it = UniquePointer < decltype ( & from ) > ( from.copy () ); ! it->equals ( from ); it->next() )
             this->insert(it->value());
@@ -443,14 +443,14 @@ public:
             ConstCollectionIterator const & from,
             ConstCollectionIterator const & to
     ) noexcept :
-            pBuckets(new HashBucket[hashCalculator.getBoundary()]) {
+            pBuckets(Memory :: instance().createArray < HashBucket > (hashCalculator.getBoundary())) {
 
         for ( auto it = UniquePointer < decltype ( & from ) > ( from.copy () ); ! it->equals ( from ); it->next() )
             this->insert(it->value());
     }
 
     ~HashMap () noexcept override {
-        delete [] this->pBuckets;
+        Memory :: instance().destroyArray ( this->pBuckets );
     }
 
 private:
@@ -460,7 +460,7 @@ private:
             i++;
         if ( i >= hashCalculator.getBoundary() )
             return this->endPtr();
-        return new Iterator( this->pBuckets[i].begin(), this->pBuckets, i, this );
+        return Memory::instance().create < Iterator > ( this->pBuckets[i].begin(), this->pBuckets, i, this );
     }
 
     __CDS_OptionalInline auto beginPtr () const noexcept -> ConstIterator * final  {
@@ -469,11 +469,11 @@ private:
             i++;
         if ( i >= hashCalculator.getBoundary() )
             return this->endPtr();
-        return new ConstIterator( this->pBuckets[i].cbegin(), this->pBuckets, i, this );
+        return Memory::instance().create < ConstIterator > ( this->pBuckets[i].cbegin(), this->pBuckets, i, this );
     }
 
-    __CDS_OptimalInline auto endPtr () noexcept -> Iterator * final { return new Iterator( this->pBuckets[hashCalculator.getBoundary() - 1].end(), this->pBuckets, hashCalculator.getBoundary() - 1, this ); }
-    __CDS_OptimalInline auto endPtr () const noexcept -> ConstIterator * final { return new ConstIterator(this->pBuckets[hashCalculator.getBoundary() - 1].cend(), this->pBuckets, hashCalculator.getBoundary() - 1, this ); }
+    __CDS_OptimalInline auto endPtr () noexcept -> Iterator * final { return Memory :: instance().create < Iterator > ( this->pBuckets[hashCalculator.getBoundary() - 1].end(), this->pBuckets, hashCalculator.getBoundary() - 1, this ); }
+    __CDS_OptimalInline auto endPtr () const noexcept -> ConstIterator * final { return Memory :: instance().create < ConstIterator > (this->pBuckets[hashCalculator.getBoundary() - 1].cend(), this->pBuckets, hashCalculator.getBoundary() - 1, this ); }
 
 public:
     __CDS_cpplang_NonConstConstexprMemberFunction auto begin () noexcept -> Iterator {
@@ -693,10 +693,10 @@ public:
     __CDS_OptimalInline auto operator = ( HashMap && hashMap ) noexcept -> HashMap & {
         if ( this == & hashMap ) return * this;
 
-        delete [] this->pBuckets;
+        Memory :: instance().destroyArray ( this->pBuckets );
 
         this->hashCalculator = std :: move ( hashMap.hashCalculator );
-        this->pBuckets = Utility::exchange ( hashMap.pBuckets, new HashBucket[hashMap.hashCalculator.getBoundary()] );
+        this->pBuckets = Utility::exchange ( hashMap.pBuckets, Memory :: instance().createArray < HashBucket > ( hashMap.hashCalculator.getBoundary() ) );
 
         return * this;
     }

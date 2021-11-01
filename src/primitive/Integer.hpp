@@ -10,6 +10,7 @@
 #include <CDS/Pointer>
 #include <CDS/Utility>
 #include <CDS/Range>
+#include <CDS/Memory>
 
 /**
  * @class Object Derived container for an Integer Value
@@ -51,7 +52,7 @@ public:
      */
     static auto random () noexcept -> Integer {
         static UniquePointer < RandomGenerator > pRng;
-        if (pRng.isNull()) pRng.reset(new RandomGenerator());
+        if (pRng.isNull()) pRng.reset(Memory :: instance() .create < RandomGenerator > ());
 
         return pRng->get();
     }
@@ -73,7 +74,7 @@ public:
      */
     static auto random (int low, int high) noexcept -> Integer {
         static UniquePointer < RandomGenerator > pRng;
-        if ( pRng.isNull() || pRng->low() != low && pRng->high() != high ) pRng.reset(new RandomGenerator(low, high));
+        if ( pRng.isNull() || pRng->low() != low && pRng->high() != high ) pRng.reset(Memory :: instance() .create < RandomGenerator > (low, high));
 
         return pRng->get();
     }
@@ -1129,11 +1130,11 @@ public:
      *
      * @test Tested in primitive/IntegerTest
      */
-    __CDS_NoDiscard __CDS_cpplang_ConstexprDestructor auto toString() const noexcept -> String override {
+    __CDS_NoDiscard __CDS_OptimalInline auto toString() const noexcept -> String override {
         return String(this->v); // NOLINT(modernize-return-braced-init-list)
     }
 
-    __CDS_NoDiscard __CDS_cpplang_ConstexprDestructor auto toString(int base) const noexcept -> String {
+    __CDS_NoDiscard __CDS_OptimalInline auto toString(int base) const noexcept -> String {
         auto c = this->v;
         String rep;
 
@@ -1212,7 +1213,7 @@ public:
     }
 
     __CDS_NoDiscard auto copy () const noexcept -> Integer * override {
-        return new Integer( * this );
+        return Memory :: instance().create < Integer > ( * this );
     }
 
     /**

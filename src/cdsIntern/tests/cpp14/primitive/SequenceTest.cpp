@@ -234,12 +234,644 @@ bool SequenceTest::execute() noexcept {
             }
         };
 
+        auto lastTest = [&] {
+            auto numbers = Array < Int > { 1, 2, 3, 4, 5 }.sequence();
+            auto last = numbers.last();
+            auto lastEven = numbers.last(Int::isEven);
+            auto lastNegative = numbers.last([](Int const & n){ return n < 0; });
+
+            log( "numbers : %s", numbers.toArray().toString().cStr() );
+            log( "last : %s", last.toString().cStr() );
+            log( "lastEven : %s", lastEven.toString().cStr() );
+            log( "lastNegative : %s", lastNegative.toString().cStr() );
+
+            if ( last.value () != 5 || lastEven.value() != 4 || lastNegative.hasValue() ) {
+                ok = false;
+                logWarning("last error");
+            }
+        };
+
+        auto lastOrTest = [&] {
+            auto numbers = Array < Int > { 1, 2, 3, 4, 5 }.sequence();
+            auto last = numbers.lastOr(15);
+            auto lastEven = numbers.lastOr(15,Int::isEven);
+            auto lastNegative = numbers.lastOr(15,[](Int const & n){ return n < 0; });
+
+            log( "numbers : %s", numbers.toArray().toString().cStr() );
+            log( "last : %s", last.toString().cStr() );
+            log( "lastEven : %s", lastEven.toString().cStr() );
+            log( "lastNegative : %s", lastNegative.toString().cStr() );
+
+            if ( last != 5 || lastEven != 4 || lastNegative != 15 ) {
+                ok = false;
+                logWarning("last error");
+            }
+        };
+
+        auto maxTest = [&]{
+            auto numbers = Array < int > { 1, 2, 3, 4, 5, 4,  3, 2, 1 }.sequence();
+
+            log("numbers : %s", numbers.toArray().toString().cStr());
+            log("numbers.max : %d", numbers.max().value());
+            log("emptyList.max : %s", Array<int>{}.sequence().max().toString().cStr());
+
+            if ( numbers.max().value() != 5 || Array<int>{}.sequence().max().hasValue() ) {
+                logWarning("max error");
+                ok = false;
+            }
+
+            auto strings = "Ana are mere, dar merele o au pe Ana?"_s.split(", ?").sequence();
+
+            log("strings : %s", strings.toArray().toString().cStr());
+            log("strings.max : %s", strings.max().value().cStr());
+
+            if ( strings.max().value() != "pe" ) {
+                logWarning("max error");
+                ok = false;
+            }
+
+            auto pairs = Array < Pair < int, int > > {
+                    {2, 3},
+                    {1, 6},
+                    {4, 2}
+            }.sequence();
+
+            log("pairs : %s", pairs.toArray().toString().cStr());
+            log("pairs.max : %s", pairs.max([](Pair<int, int> const & a, Pair<int, int> const &b){ return a.first() + a.second() < b.first() + b.second(); }).value().toString().cStr());
+
+            if (
+                    pairs.max([](Pair<int, int> const & a, Pair<int, int> const &b){ return a.first() + a.second() < b.first() + b.second(); }).value()
+                    !=
+                    Pair < int, int > { 1, 6 }
+                    ) {
+                logWarning("max error");
+                ok = false;
+            }
+        };
+
+        auto maxByTest = [&]{
+            auto strings = "Ana are mere, dar merele o au pe Ana?"_s.split(", ?").sequence();
+
+            log("strings : %s", strings.toArray().toString().cStr());
+            log("strings.max : %s", strings.maxBy([](String const & s){return s.length();}).value().cStr());
+            log("emptyList.max : %s", Array<String>{}.sequence().maxBy([](String const & s){return s.length();}).toString().cStr());
+
+            if (
+                    strings.maxBy([](String const & s){return s.length();}).value() != "merele" ||
+                    Array<String>{}.sequence().maxBy([](String const & s){return s.length();}).hasValue()
+                    ) {
+                logWarning("maxby error");
+                ok = false;
+            }
+
+            auto pairs = Array < Pair < int, int > > {
+                    {2, 3},
+                    {1, 6},
+                    {4, 2}
+            }.sequence();
+
+            log("pairs : %s", pairs.toArray().toString().cStr());
+            log("pairs.max : %s", pairs.maxBy([](Pair<int, int> const & a){ return a.first() + a.second(); }).value().toString().cStr());
+
+            if (
+                    pairs.maxBy([](Pair<int, int> const & a){ return a.first() + a.second(); }).value()
+                    !=
+                    Pair < int, int > { 1, 6 }
+                    ) {
+                logWarning("maxby error");
+                ok = false;
+            }
+        };
+
+        auto maxOfTest = [&]{
+            auto strings = "Ana are mere, dar merele o au pe Ana?"_s.split(", ?").sequence();
+
+            log("strings : %s", strings.toArray().toString().cStr());
+            log("strings.max : %d", strings.maxOf([](String const & s){return s.length();}).value());
+            log("emptyList.max : %d", Array<String>{}.sequence().maxOf([](String const & s){return s.length();}).toString().cStr());
+
+            if (
+                    strings.maxOf([](String const & s){return s.length();}).value() != 6 ||
+                    Array<String>{}.sequence().maxOf([](String const & s){return s.length();}).hasValue()
+                    ) {
+                logWarning("maxof error");
+                ok = false;
+            }
+
+            auto pairs = Array < Pair < int, int > > {
+                    {2, 3},
+                    {1, 6},
+                    {4, 2}
+            }.sequence();
+
+            log("pairs : %s", pairs.toArray().toString().cStr());
+            log("pairs.max : %d", pairs.maxOf([](Pair<int, int> const & a){ return a.first() + a.second(); }).value());
+
+            if (
+                    pairs.maxOf([](Pair<int, int> const & a){ return a.first() + a.second(); }).value()
+                    !=
+                    7
+                    ) {
+                logWarning("maxof error");
+                ok = false;
+            }
+        };
+
+        auto maxOrTest = [&]{
+            auto numbers = Array < int > { 1, 2, 3, 4, 5, 4,  3, 2, 1 }.sequence();
+
+            log("numbers : %s", numbers.toArray().toString().cStr());
+            log("numbers.max : %d", numbers.maxOr(15));
+            log("emptyList.max : %d", Array<int>{}.sequence().maxOr(15));
+
+            if ( numbers.maxOr(15) != 5 || Array<int>{}.sequence().maxOr(15) != 15 ) {
+                logWarning("maxOr error");
+                ok = false;
+            }
+
+            auto strings = "Ana are mere, dar merele o au pe Ana?"_s.split(", ?").sequence();
+
+            log("strings : %s", strings.toArray().toString().cStr());
+            log("strings.max : %s", strings.maxOr("no-max").cStr());
+
+            if ( strings.maxOr("no-max") != "pe" ) {
+                logWarning("maxOr error");
+                ok = false;
+            }
+
+            auto pairs = Array < Pair < int, int > > {
+                    {2, 3},
+                    {1, 6},
+                    {4, 2}
+            }.sequence();
+
+            log("pairs : %s", pairs.toArray().toString().cStr());
+            log("pairs.max : %s", pairs.maxOr(Pair<int,int>{9, 9}, [](Pair<int, int> const & a, Pair<int, int> const &b){ return a.first() + a.second() < b.first() + b.second(); }).toString().cStr());
+
+            if (
+                    pairs.maxOr(Pair<int,int>{9,9},[](Pair<int, int> const & a, Pair<int, int> const &b){ return a.first() + a.second() < b.first() + b.second(); })
+                    !=
+                    Pair < int, int > { 1, 6 }
+                    ) {
+                logWarning("maxOr error");
+                ok = false;
+            }
+        };
+
+        auto maxByOrTest = [&]{
+            auto strings = "Ana are mere, dar merele o au pe Ana?"_s.split(", ?").sequence();
+
+            log("strings : %s", strings.toArray().toString().cStr());
+            log("strings.max : %s", strings.maxByOr("no-max", [](String const & s){return s.length();}).cStr());
+            log("emptyList.max : %s", Array<String>{}.sequence().maxByOr("no-max", [](String const & s){return s.length();}).cStr());
+
+            if (
+                    strings.maxByOr("no-max",[](String const & s){return s.length();}) != "merele" ||
+                    Array<String>{}.sequence().maxByOr("no-max", [](String const & s){return s.length();}) != "no-max"
+                    ) {
+                logWarning("maxbyor error");
+                ok = false;
+            }
+
+            auto pairs = Array < Pair < int, int > > {
+                    {2, 3},
+                    {1, 6},
+                    {4, 2}
+            }.sequence();
+
+            log("pairs : %s", pairs.toArray().toString().cStr());
+            log("pairs.max : %s", pairs.maxByOr(Pair<int,int>{0,0},[](Pair<int, int> const & a){ return a.first() + a.second(); }).toString().cStr());
+
+            if (
+                    pairs.maxByOr(Pair<int,int>{0,0},[](Pair<int, int> const & a){ return a.first() + a.second(); })
+                    !=
+                    Pair < int, int > { 1, 6 }
+                    ) {
+                logWarning("maxbyor error");
+                ok = false;
+            }
+        };
+
+        auto maxOfOrTest = [&]{
+            auto strings = "Ana are mere, dar merele o au pe Ana?"_s.split(", ?").sequence();
+
+            log("strings : %s", strings.toArray().toString().cStr());
+            log("strings.max : %d", strings.maxOfOr(0,[](String const & s){return s.length();}));
+            log("emptyList.max : %d", Array<String>{}.sequence().maxOfOr(0, [](String const & s){return s.length();}));
+
+            if (
+                    strings.maxOfOr(0, [](String const & s){return s.length();}) != 6 ||
+                    Array<String>{}.sequence().maxOfOr(0, [](String const & s){return s.length();}) != 0
+                    ) {
+                logWarning("maxofor error");
+                ok = false;
+            }
+
+            auto pairs = Array < Pair < int, int > > {
+                    {2, 3},
+                    {1, 6},
+                    {4, 2}
+            }.sequence();
+
+            log("pairs : %s", pairs.toArray().toString().cStr());
+            log("pairs.max : %d", pairs.maxOfOr(0,[](Pair<int, int> const & a){ return a.first() + a.second(); }));
+
+            if (
+                    pairs.maxOfOr(0,[](Pair<int, int> const & a){ return a.first() + a.second(); })
+                    !=
+                    7
+                    ) {
+                logWarning("maxofor error");
+                ok = false;
+            }
+        };
+
+        auto minTest = [&]{
+            auto numbers = Array < int > { 1, 2, 3, 4, 5, 4,  3, 2, 1 }.sequence();
+
+            log("numbers : %s", numbers.toArray().toString().cStr());
+            log("numbers.min : %d", numbers.min().value());
+            log("emptyList.min : %s", Array<int>{}.sequence().min().toString().cStr());
+
+            if ( numbers.min().value() != 1 || Array<int>{}.sequence().min().hasValue() ) {
+                logWarning("max error");
+                ok = false;
+            }
+
+            auto strings = "Ana are mere, dar merele o au pe Ana?"_s.split(", ?").sequence();
+
+            log("strings : %s", strings.toArray().toString().cStr());
+            log("strings.min : %s", strings.min().value().cStr());
+
+            if ( strings.min().value() != "Ana" ) {
+                logWarning("min error");
+                ok = false;
+            }
+
+            auto pairs = Array < Pair < int, int > > {
+                    {2, 3},
+                    {1, 6},
+                    {4, 2}
+            }.sequence();
+
+            log("pairs : %s", pairs.toArray().toString().cStr());
+            log("pairs.min : %s", pairs.min([](Pair<int, int> const & a, Pair<int, int> const &b){ return a.first() + a.second() < b.first() + b.second(); }).value().toString().cStr());
+
+            if (
+                    pairs.min([](Pair<int, int> const & a, Pair<int, int> const &b){ return a.first() + a.second() < b.first() + b.second(); }).value()
+                    !=
+                    Pair < int, int > { 2, 3 }
+                    ) {
+                logWarning("min error");
+                ok = false;
+            }
+        };
+
+        auto minByTest = [&]{
+            auto strings = "Ana are mere, dar merele o au pe Ana?"_s.split(", ?").sequence();
+
+            log("strings : %s", strings.toArray().toString().cStr());
+            log("strings.min : %s", strings.minBy([](String const & s){return s.length();}).value().cStr());
+            log("emptyList.min : %s", Array<String>{}.sequence().minBy([](String const & s){
+                return s.length();
+            }).toString().cStr());
+
+            if (
+                    strings.minBy([](String const & s){return s.length();}).value() != "o" ||
+                    Array<String>{}.sequence().minBy([](String const & s){return s.length();}).hasValue()
+                    ) {
+                logWarning("minby error");
+                ok = false;
+            }
+
+            auto pairs = Array < Pair < int, int > > {
+                    {2, 3},
+                    {1, 6},
+                    {4, 2}
+            }.sequence();
+
+            log("pairs : %s", pairs.toArray().toString().cStr());
+            log("pairs.min : %s", pairs.minBy([](Pair<int, int> const & a){ return a.first() + a.second(); }).value().toString().cStr());
+
+            if (
+                    pairs.minBy([](Pair<int, int> const & a){ return a.first() + a.second(); }).value()
+                    !=
+                    Pair < int, int > { 2, 3 }
+                    ) {
+                logWarning("minby error");
+                ok = false;
+            }
+        };
+
+        auto minOfTest = [&]{
+            auto strings = "Ana are mere, dar merele o au pe Ana?"_s.split(", ?").sequence();
+
+            log("strings : %s", strings.toArray().toString().cStr());
+            log("strings.min : %d", strings.minOf([](String const & s){return s.length();}).value());
+            log("emptyList.min : %s", Array<String>{}.sequence().minOf([](String const & s){return s.length();}).toString().cStr());
+
+            if (
+                    strings.minOf([](String const & s){return s.length();}).value() != 1 ||
+                    Array<String>{}.sequence().minOf([](String const & s){return s.length();}).hasValue()
+                    ) {
+                logWarning("minof error");
+                ok = false;
+            }
+
+            auto pairs = Array < Pair < int, int > > {
+                    {2, 3},
+                    {1, 6},
+                    {4, 2}
+            }.sequence();
+
+            log("pairs : %s", pairs.toArray().toString().cStr());
+            log("pairs.min : %d", pairs.minOf([](Pair<int, int> const & a){ return a.first() + a.second(); }).value());
+
+            if (
+                    pairs.minOf([](Pair<int, int> const & a){ return a.first() + a.second(); }).value()
+                    !=
+                    5
+                    ) {
+                logWarning("minof error");
+                ok = false;
+            }
+        };
+
+        auto minOrTest = [&]{
+            auto numbers = Array < int > { 1, 2, 3, 4, 5, 4,  3, 2, 1 }.sequence();
+
+            log("numbers : %s", numbers.toArray().toString().cStr());
+            log("numbers.min : %d", numbers.minOr(15));
+            log("emptyList.min : %d", Array<int>{}.sequence().minOr(15));
+
+            if ( numbers.minOr(15) != 1 || Array<int>{}.sequence().minOr(15) != 15 ) {
+                logWarning("minOr error");
+                ok = false;
+            }
+
+            auto strings = "Ana are mere, dar merele o au pe Ana?"_s.split(", ?").sequence();
+
+            log("strings : %s", strings.toArray().toString().cStr());
+            log("strings.min : %s", strings.minOr("no-min").cStr());
+
+            if ( strings.minOr("no-min") != "Ana" ) {
+                logWarning("minOr error");
+                ok = false;
+            }
+
+            auto pairs = Array < Pair < int, int > > {
+                    {2, 3},
+                    {1, 6},
+                    {4, 2}
+            }.sequence();
+
+            log("pairs : %s", pairs.toArray().toString().cStr());
+            log("pairs.min : %s", pairs.minOr(Pair<int,int>{9, 9}, [](Pair<int, int> const & a, Pair<int, int> const &b){ return a.first() + a.second() < b.first() + b.second(); }).toString().cStr());
+
+            if (
+                    pairs.minOr(Pair<int,int>{9,9},[](Pair<int, int> const & a, Pair<int, int> const &b){ return a.first() + a.second() < b.first() + b.second(); })
+                    !=
+                    Pair < int, int > { 2, 3 }
+                    ) {
+                logWarning("minOr error");
+                ok = false;
+            }
+        };
+
+        auto minByOrTest = [&]{
+            auto strings = "Ana are mere, dar merele o au pe Ana?"_s.split(", ?").sequence();
+
+            log("strings : %s", strings.toArray().toString().cStr());
+            log("strings.min : %s", strings.minByOr("no-min", [](String const & s){return s.length();}).cStr());
+            log("emptyList.min : %s", Array<String>{}.sequence().minByOr("no-min", [](String const & s){return s.length();}).cStr());
+
+            if (
+                    strings.minByOr("no-min",[](String const & s){return s.length();}) != "o" ||
+                    Array<String>{}.sequence().minByOr("no-min", [](String const & s){return s.length();}) != "no-min"
+                    ) {
+                logWarning("minbyor error");
+                ok = false;
+            }
+
+            auto pairs = Array < Pair < int, int > > {
+                    {2, 3},
+                    {1, 6},
+                    {4, 2}
+            }.sequence();
+
+            log("pairs : %s", pairs.toArray().toString().cStr());
+            log("pairs.min : %s", pairs.minByOr(Pair<int,int>{0,0},[](Pair<int, int> const & a){ return a.first() + a.second(); }).toString().cStr());
+
+            if (
+                    pairs.minByOr(Pair<int,int>{0,0},[](Pair<int, int> const & a){ return a.first() + a.second(); })
+                    !=
+                    Pair < int, int > { 2, 3 }
+                    ) {
+                logWarning("minbyor error");
+                ok = false;
+            }
+        };
+
+        auto minOfOrTest = [&]{
+            auto strings = "Ana are mere, dar merele o au pe Ana?"_s.split(", ?").sequence();
+
+            log("strings : %s", strings.toArray().toString().cStr());
+            log("strings.min : %d", strings.minOfOr(0,[](String const & s){return s.length();}));
+            log("emptyList.min : %d", Array<String>{}.sequence().minOfOr(0, [](String const & s){return s.length();}));
+
+            if (
+                    strings.minOfOr(0, [](String const & s){return s.length();}) != 1 ||
+                    Array<String>{}.sequence().minOfOr(0, [](String const & s){return s.length();}) != 0
+                    ) {
+                logWarning("minofor error");
+                ok = false;
+            }
+
+            auto pairs = Array < Pair < int, int > > {
+                    {2, 3},
+                    {1, 6},
+                    {4, 2}
+            }.sequence();
+
+            log("pairs : %s", pairs.toArray().toString().cStr());
+            log("pairs.min : %d", pairs.minOfOr(0,[](Pair<int, int> const & a){ return a.first() + a.second(); }));
+
+            if (
+                    pairs.minOfOr(0,[](Pair<int, int> const & a){ return a.first() + a.second(); })
+                    !=
+                    5
+                    ) {
+                logWarning("minofor error");
+                ok = false;
+            }
+        };
+
+        auto minusTest = [&]{
+            auto numbers = Array < int > {1, 2, 3, 4, 5, 6, 7 ,8, 9}.sequence();
+
+            log("numbers : %s", numbers.toArray().toString().cStr());
+            log("numbers minus 7 : %s", numbers.minus(7).toArray().toString().cStr());
+            log("numbers minus {2, 4} : %s", numbers.minus(Array<int>{2, 4}).toArray().toString().cStr());
+            log("numbers minus numbers.even : %s", numbers.minus(numbers.filter(Int::isEven)).toArray().toString().cStr());
+
+            if (
+                    numbers.minus(7).toArray() != Array <int> { 1, 2, 3, 4, 5, 6, 8, 9} ||
+                    numbers.minus(Array<int>{2, 4}).toArray() != Array < int > {1, 3, 5, 6, 7, 8, 9} ||
+                    numbers.minus(numbers.filter(Int::isEven)).toArray() != Array < int > {1, 3, 5, 7, 9}
+                    ) {
+                logWarning("minus error");
+                ok = false;
+            }
+        };
+
+        auto plusTest = [&]{
+            auto numbers = Array <int> {1, 2, 3, 4, 5}.sequence();
+
+            log("numbers : %s", numbers.toArray().toString().cStr());
+            log("numbers plus 7 : %s", numbers.plus(7).toArray().toString().cStr());
+            log("numbers plus {2, 4, 8} : %s", numbers.plus(Array<int>{2, 4, 8}).toString().cStr());
+            log("numbers plus 15..20 : %s", numbers.plus(Range(15, 20).sequence()).toArray().toString().cStr());
+
+            if (
+                    numbers.plus(7).toArray() != Array <int> { 1, 2,  3, 4, 5, 7 } ||
+                    numbers.plus(Array<int>{2, 4, 8}).toArray() != Array<int>{1, 2, 3, 4, 5, 2, 4, 8} ||
+                    numbers.plus(Range(15, 20).sequence()).toArray() !=  Array <int> {1, 2, 3, 4, 5, 15, 16, 17, 18, 19}
+                    ) {
+                logWarning("plus error");
+                ok = false;
+            }
+        };
+
+        auto noneTest = [&]{
+            auto emptyList = Array<int>{}.sequence();
+            auto nonEmptyList = Array<int>{1, 2, 3}.sequence();
+
+            log("emptyList : %s", emptyList.toArray().toString().cStr());
+            log("nonEmptyList : %s", nonEmptyList.toArray().toString().cStr());
+            log("emptyList.none : %s", emptyList.none().toString().cStr());
+            log("nonEmptyList.none : %s", nonEmptyList.none().toString().cStr());
+
+            if ( ! emptyList.none() || nonEmptyList.none() ) {
+                logWarning("none error");
+                ok = false;
+            }
+
+            auto zeroToTen = Range(0, 10).sequence();
+            log( "zeroToTen.none isEven : %s", zeroToTen.none(Int::isEven).toString().cStr() );
+            log( "zeroToTen.map to uneven . none isEven : %s", zeroToTen.map([](int v){return v * 2 + 1;}).none(Int::isEven).toString().cStr() );
+            log( "emptyList.none isEven : %s", Array<int>{}.sequence().none(Int::isEven).toString().cStr() );
+
+            if (
+                    zeroToTen.none(Int::isEven) ||
+                    ! zeroToTen.map([](int v){return v * 2 + 1;}).none(Int::isEven) ||
+                    ! Array<int>{}.sequence().none(Int::isEven)
+                    ) {
+                logWarning("none error");
+                ok = false;
+            }
+        };
+
+        auto singleTest = [&] {
+            log("{1}.single() : %s", Array<int>{1}.sequence().single().toString().cStr());
+            log("{}.single() : %s", Array<int>{}.sequence().single().toString().cStr());
+            log("{1, 2}.single() : %s", Array<int>{1, 2}.sequence().single().toString().cStr());
+            log("{1, 2, 3}.single(isEven) : %s", Array<int>{1, 2, 3}.sequence().single(Int::isEven).toString().cStr());
+            log("{}.single(isEven) : %s", Array<int>{}.sequence().single(Int::isEven).toString().cStr());
+            log("{1, 2, 3, 4, 5}.single(isEven) : %s", Array<int>{1, 2, 3, 4, 5}.sequence().single(Int::isEven).toString().cStr());
+
+            if (
+                    ! Array<int>{1}.sequence().single().hasValue() ||
+                    Array<int>{}.sequence().single().hasValue() ||
+                    Array<int>{1, 2}.sequence().single().hasValue() ||
+                    ! Array<int>{1, 2, 3}.sequence().single(Int::isEven).hasValue() ||
+                    Array<int>{}.sequence().single(Int::isEven).hasValue() ||
+                    Array<int>{1, 2, 3, 4, 5}.sequence().single(Int::isEven).hasValue()
+                    ) {
+                logWarning("Single error");
+                ok = false;
+            }
+        };
+
+        auto singleOrTest = [&] {
+            log("{1}.singleOr() : %d", Array<int>{1}.sequence().singleOr(15));
+            log("{}.singleOr() : %d", Array<int>{}.sequence().singleOr(15));
+            log("{1, 2}.singleOr() : %d", Array<int>{1, 2}.sequence().singleOr(15));
+            log("{1, 2, 3}.singleOr(isEven) : %d", Array<int>{1, 2, 3}.sequence().singleOr(15,Int::isEven));
+            log("{}.singleOr(isEven) : %d", Array<int>{}.sequence().singleOr(15, Int::isEven));
+            log("{1, 2, 3, 4, 5}.singleOr(isEven) : %d", Array<int>{1, 2, 3, 4, 5}.sequence().singleOr(15, Int::isEven));
+
+            if (
+                    Array<int>{1}.sequence().singleOr(15) == 15 ||
+                    Array<int>{}.sequence().singleOr(15) != 15 ||
+                    Array<int>{1, 2}.sequence().singleOr(15) != 15 ||
+                    Array<int>{1, 2, 3}.sequence().singleOr(15, Int::isEven) == 15 ||
+                    Array<int>{}.sequence().singleOr(15, Int::isEven) != 15 ||
+                    Array<int>{1, 2, 3, 4, 5}.sequence().singleOr(15, Int::isEven) != 15
+                    ) {
+                logWarning("SingleOr error");
+                ok = false;
+            }
+        };
+
+        auto sumTest = [&] {
+            auto numbers = Array < int > { 1, 2, 3, 4, 5 }.sequence();
+            auto sum = numbers.sum();
+
+            log( "numbers : %s", numbers.toArray().toString().cStr() );
+            log( "sum : %d", sum );
+
+            if ( sum != 15 ) {
+                logWarning("sum error");
+                ok = false;
+            }
+        };
+
+        auto sumByTest = [&] {
+            auto strings = Array < String > { "aaaa", "bb", "ccc", "d" }.sequence();
+            auto sum = strings.sumBy([](String const & s){return s.length();});
+
+            log ( "strings : %s", strings.toArray().toString().cStr() );
+            log ( "sum : %d", sum );
+
+            if ( sum != 10 ) {
+                logWarning("sumBy error");
+                ok = false;
+            }
+        };
+
         elementAtTest();
         elementAtOrElseTest();
         elementAtOrNullTest ();
         findTest();
         firstTest();
         firstOrTest();
+        lastTest();
+        lastOrTest();
+
+        maxTest();
+        maxByTest();
+        maxOfTest();
+        maxOrTest();
+        maxByOrTest();
+        maxOfOrTest();
+
+        minTest();
+        minByTest();
+        minOfTest();
+        minOrTest();
+        minByOrTest();
+        minOfOrTest();
+
+        minusTest();
+        plusTest();
+
+        noneTest();
+
+        singleTest();
+        singleOrTest();
+
+        sumTest();
+        sumByTest();
     });
 
     this->executeSubtest("Basic Functional Properties", [& ok, this]{
@@ -254,7 +886,9 @@ bool SequenceTest::execute() noexcept {
                 this->logWarning(".all Error");
             }
 
-            auto evens = zeroToTen.map([](Index const &v) -> Index { return v * 2; });
+            auto evens = zeroToTen.map([](Index v) -> Index {
+                return v * 2;
+            });
             this->log("Evens.all(isEven) : %s", evens.all(Integer::isEven) ? "true" : "false");
 
             if (!evens.all(Integer::isEven)) {
@@ -363,18 +997,325 @@ bool SequenceTest::execute() noexcept {
 
         };
 
+        auto foldTest = [&]{
+            auto numbers = Array < int > {1, 2, 3, 4, 5, 6}.sequence();
+            auto strings = Array < String > {"a", "b", "c", "d" }.sequence();
+
+            log ("numbers : %s", numbers.toArray().toString().cStr() );
+            log ("strings : %s", strings.toArray().toString().cStr() );
+
+            log ("numbers.fold : %d", numbers.fold(0, [](int s, int n){return s + n;}));
+            log ("numbers.fold(start 5) : %d", numbers.fold(5, [](int s, int n){ return s + n; }));
+
+            log ("strings.fold : %s", strings.fold(""_s, [](String const & s, String const & t){ return s + t; }).cStr());
+            log ("strings.fold(start 'xyz' : %s", strings.fold("xyz"_s, [](String const & s, String const & t){ return s + t; }).cStr());
+
+            if (
+                    numbers.fold(0, [](int s, int n){return s + n;}) != 21 ||
+                    numbers.fold(5, [](int s, int n){ return s + n; }) != 26 ||
+                    strings.fold(""_s, [](String const & s, String const & t){ return s + t; }) != "abcd" ||
+                    strings.fold("xyz"_s, [](String const & s, String const & t){ return s + t; }) != "xyzabcd"
+                    ) {
+                logWarning("fold error");
+                ok = false;
+            }
+
+        };
+
+        auto foldIndexedTest = [&]{
+            auto numbers = Array < int > {1, 2, 3, 4, 5, 6}.sequence();
+            auto strings = Array < String > {"a", "b", "c", "d" }.sequence();
+
+            log ("numbers : %s", numbers.toArray().toString().cStr() );
+            log ("strings : %s", strings.toArray().toString().cStr() );
+
+            log ("numbers.fold : %d", numbers.foldIndexed(0, [](Index i, int s, int n){if ( i % 2 == 0 ) return s + n; return s;}));
+            log ("numbers.fold(start 5) : %d", numbers.foldIndexed(5, [](Index i, int s, int n){if ( i % 2 == 0 ) return s + n; return s;}));
+
+            log ("strings.fold : %s", strings.foldIndexed(""_s, [](Index i, String const & s, String const & t){ if ( i % 2 == 1 ) return s + t; return s; }).cStr());
+            log ("strings.fold(start 'xyz' : %s", strings.foldIndexed("xyz"_s, [](Index i, String const & s, String const & t){ if ( i % 2 == 1 ) return s + t; return s; }).cStr());
+
+            if (
+                    numbers.foldIndexed(0, [](Index i, int s, int n){if ( i % 2 == 0 ) return s + n; return s;}) != 9 ||
+                    numbers.foldIndexed(5, [](Index i, int s, int n){if ( i % 2 == 0 ) return s + n; return s;}) != 14 ||
+                    strings.foldIndexed(""_s, [](Index i, String const & s, String const & t){ if ( i % 2 == 1 ) return s + t; return s; }) != "bd" ||
+                    strings.foldIndexed("xyz"_s, [](Index i, String const & s, String const & t){ if ( i % 2 == 1 ) return s + t; return s; }) != "xyzbd"
+                    ) {
+                logWarning("fold error");
+                ok = false;
+            }
+
+        };
+
+        auto forEachTest = [&]{
+            auto sum = 0;
+            auto numbers = Array < int > { 1, 2, 3, 4, 5 }.sequence();
+
+            log ( "numbers : %s", numbers.toArray().toString().cStr() );
+            log ( "sum : %d", sum );
+
+            numbers.forEach([&](int number){ sum += number; });
+
+            log ( "sum : %d", sum );
+
+            if ( sum != 15 ) {
+                logWarning("For Each error");
+                ok = false;
+            }
+        };
+
+        auto forEachIndexedTest = [&]{
+            auto sum = 0;
+            auto numbers = Array < int > { 1, 2, 3, 4, 5 }.sequence();
+
+            log ( "numbers : %s", numbers.toArray().toString().cStr() );
+            log ( "sum : %d", sum );
+
+            numbers.forEachIndexed([&](Index i, int number){ if ( i % 2 == 0 ) sum += number; });
+
+            log ( "sum : %d", sum );
+
+            if ( sum != 9 ) {
+                logWarning("For Each error");
+                ok = false;
+            }
+        };
+
+        auto indexOfTest = [&]{
+            auto numbers = Array < int > { 1, 2, 3, 4 ,5 }.sequence();
+
+            log("numbers : %s", numbers.toArray().toString().cStr());
+            log("index of 4 : %d", numbers.indexOf(4));
+            log("index of 6 : %d", numbers.indexOf(6));
+
+            if ( numbers.indexOf(4) != 3 || numbers.indexOf(6) != -1 ) {
+                logWarning("indexOf error");
+                ok = false;
+            }
+        };
+
+        auto indexOfFirstTest = [&]{
+            auto numbers = Array < int > { 1, 2, 3, 4 ,5 }.sequence();
+
+            log("numbers : %s", numbers.toArray().toString().cStr());
+            log("index of first even : %d", numbers.indexOfFirst(Int::isEven));
+            log("index of first > 10 : %d", numbers.indexOfFirst([](int v){return v > 10;}));
+
+            if ( numbers.indexOfFirst(Int::isEven) != 1 || numbers.indexOfFirst([](int v){return v> 10;}) != -1 ) {
+                logWarning("indexOfFirst error");
+                ok = false;
+            }
+        };
+
+        auto indexOfLastTest = [&] {
+            auto numbers = Array < int > { 1, 2, 3, 4 ,5 }.sequence();
+
+            log("numbers : %s", numbers.toArray().toString().cStr());
+            log("index of last even : %d", numbers.indexOfLast(Int::isEven));
+            log("index of last > 10 : %d", numbers.indexOfLast([](int v){return v > 10;}));
+
+            if ( numbers.indexOfLast(Int::isEven) != 3 || numbers.indexOfLast([](int v){return v> 10;}) != -1 ) {
+                logWarning("indexOfLast error");
+                ok = false;
+            }
+        };
+
+        auto onEachTest = [&]{
+            auto sum = 0;
+            auto numbers = Array < int > { 1, 2, 3, 4, 5 }.sequence();
+
+            log ( "numbers : %s", numbers.toArray().toString().cStr() );
+            log ( "sum : %d", sum );
+
+            numbers.onEach([&](int number){ sum += number; }).also([]{});
+
+            log ( "sum : %d", sum );
+
+            if ( sum != 15 ) {
+                logWarning("For Each error");
+                ok = false;
+            }
+        };
+
+        auto onEachIndexedTest = [&]{
+            auto sum = 0;
+            auto numbers = Array < int > { 1, 2, 3, 4, 5 }.sequence();
+
+            log ( "numbers : %s", numbers.toArray().toString().cStr() );
+            log ( "sum : %d", sum );
+
+            numbers.onEachIndexed([&](Index i, int number){ if ( i % 2 == 0 ) sum += number; }).also([]{});
+
+            log ( "sum : %d", sum );
+
+            if ( sum != 9 ) {
+                logWarning("For Each error");
+                ok = false;
+            }
+        };
+
+        auto reduceTest = [&]{
+            auto strings = Array<String>{"a", "b", "c", "d"}.sequence();
+
+            log ( "strings : %s", strings.toArray().toString().cStr() );
+            log ( "strings.reduce : %s", strings.reduce([](String const & s, String const & t){ return s + t; }).cStr());
+            log ( "strings.reduceIndexed : %s", strings.reduceIndexed([](Index i, String const & s, String const & t){ return s + t + i; }).cStr());
+
+            if (
+                    strings.reduce([](String const & s, String const & t){ return s + t; }) != "abcd" ||
+                    strings.reduceIndexed([](Index i, String const & s, String const & t){ return s + t + i; }) != "ab1c2d3"
+                    ) {
+                logWarning("reduce error");
+                ok = false;
+            }
+
+            ok = false;
+            try {
+                log("empty.reduce : %d", Array<int>{}.sequence().reduce([](int _, int _1) { return 0; }));
+            } catch ( OutOfBoundsException const & e ) {
+                log("Exception expected : %s", e.toString().cStr());
+                ok = true;
+            }
+
+            ok = false;
+            try {
+                log("empty.reduce : %d", Array<int>{}.sequence().reduceIndexed([](Index i, int _, int _1) { return 0; }));
+            } catch ( OutOfBoundsException const & e ) {
+                log("Exception expected : %s", e.toString().cStr());
+                ok = true;
+            }
+        };
+
+        auto runningFoldTest = [&] {
+            auto strings = Array < String > {"a", "b", "c", "d"}.sequence();
+
+            log ("strings : %s", strings.toArray().toString().cStr());
+            log ("strings.runningFold : %s", strings.runningFold("s"_s, [](String const & s, String const & t){ return s + t; }).toArray().toString().cStr());
+            log ("strings.runningFoldIndexed : %s", strings.runningFoldIndexed("s"_s, [](Index i, String const & s, String const & t){ return s + t + i; }).toArray().toString().cStr());
+
+            if (
+                    strings.runningFold("s"_s, [](String const & s, String const & t){ return s + t; }).toArray() != Array < String > { "s", "sa", "sab", "sabc", "sabcd" } ||
+                    strings.runningFoldIndexed("s"_s, [](Index i, String const & s, String const & t){ return s + t + i; }).toArray() != Array < String > { "s", "sa0", "sa0b1", "sa0b1c2", "sa0b1c2d3" } ||
+                    Array < String > {}.sequence().runningFold("s"_s, [](String const &, String const &){ return "x"; }).toArray () != Array < String > { "s" }
+                    ) {
+                logWarning("runningFold error");
+                ok = false;
+            }
+        };
+
+        auto runningReduceTest = [&] {
+            auto strings = Array < String >{"a", "b", "c", "d"}.sequence();
+
+            log ("strings : %s", strings.toArray().toString().cStr());
+            log ("strings.runningReduce : %s", strings.runningReduce([](String const & s, String const & t){return s + t;}).toArray().toString().cStr());
+            log ("strings.runningReduceIndexed : %s", strings.runningReduceIndexed([](Index i, String const & s, String const & t){ return s + t + i; }).toArray().toString().cStr());
+            log ("emptyList.runningReduce : %s", Array <String> {}.sequence().runningReduce([](String const &, String const &){return "X"_s;}).toArray().toString().cStr());
+
+            if (
+                    strings.runningReduce([](String const & s, String const & t){return s + t;}).toArray() != Array < String > { "a", "ab", "abc", "abcd" } ||
+                    strings.runningReduceIndexed([](Index i, String const & s, String const & t){ return s + t + i; }).toArray() != Array < String > { "a", "ab1", "ab1c2", "ab1c2d3" } ||
+                    ! Array <String> {}.sequence().runningReduce([](String const &, String const &){return "X"_s;}).toArray().empty()
+                    ) {
+                logWarning("runningReduce error");
+                ok = false;
+            }
+        };
+
+        auto shuffledTest = [&]{
+            auto numbers = Array < int > {1, 2, 3, 4, 5}.sequence();
+
+            log("numbers : %s", numbers.toArray().toString().cStr());
+            log("numbers.shuffled : %s", numbers.shuffled().toArray().toString().cStr());
+            log("numbers.shuffled : %s", numbers.shuffled().toArray().toString().cStr());
+            log("numbers.shuffled : %s", numbers.shuffled().toArray().toString().cStr());
+            log("numbers.shuffled : %s", numbers.shuffled().toArray().toString().cStr());
+        };
+
+        auto sortedTest = [&] {
+            auto numbers = Array < int > { 2, 1, 5, 4, 3 }.sequence();
+
+            log ( "numbers : %s", numbers.toArray().toString().cStr() );
+            log ( "numbers.sorted : %s", numbers.sorted().toArray().toString().cStr() );
+
+            if ( numbers.sorted().zipWithNext().any([](Pair<int,int>const &p){return p.first() > p.second();}) ){
+                logWarning("sorted error");
+                ok = false;
+            }
+        };
+
+        auto sortedByTest = [&] {
+            auto list = Array < String > { "aaa", "cc", "bbbb" }.sequence();
+            auto sorted = list.sortedBy ([](String const & s){return s.length();});
+
+            log ( "list : %s", list.toArray().toString().cStr() );
+            log ( "sorted : %s", sorted.toArray().toString().cStr() );
+
+            if ( sorted.zipWithNext().any([](Pair <String,String> const & p){ return p.first().length() > p.second().length(); }) ) {
+                logWarning("sortedBy error");
+                ok = false;
+            }
+        };
+
+        auto sortedByDescendingTest = [&] {
+            auto list = Array < String > { "aaa", "cc", "bbbb" }.sequence();
+            auto sorted = list.sortedByDescending ([](String const & s){return s.length();});
+
+            log ( "list : %s", list.toArray().toString().cStr() );
+            log ( "sorted : %s", sorted.toArray().toString().cStr() );
+
+            if ( sorted.zipWithNext().any([](Pair <String,String> const & p){ return p.first().length() < p.second().length(); }) ) {
+                logWarning("sortedByDescending error");
+                ok = false;
+            }
+        };
+
+        auto sortedDescendingTest = [&] {
+            auto list = Array < int > { 5, 1, 2, 4, 3 }.sequence ();
+            auto sorted = list.sorted([](int a, int b){return a > b;});
+
+            log ( "list : %s", list.toArray().toString().cStr() );
+            log ( "sortedDesc : %s", sorted.toArray().toString().cStr() );
+
+            if ( sorted.zipWithNext().any([](Pair<int,int>const &p){return p.first() < p.second();}) ){
+                logWarning("sortedDescending error");
+                ok = false;
+            }
+        };
+
+
         allTest();
         anyTest();
         containsTest();
         countTest();
         distinctTest();
+        foldTest ();
+        foldIndexedTest ();
+        forEachTest();
+        forEachIndexedTest();
+        indexOfTest();
+        indexOfFirstTest();
+        indexOfLastTest();
+
+        onEachTest();
+        onEachIndexedTest();
+
+        reduceTest ();
+        runningFoldTest();
+        runningReduceTest();
+
+        shuffledTest();
+
+        sortedTest();
+        sortedByTest();
+        sortedByDescendingTest();
+        sortedDescendingTest();
     });
 
     this->executeSubtest("Mapping Association Functionalities", [&]{
         auto associateTest = [&] {
             auto names = LinkedList<String>{"Grace Hopper", "Jacob Bernoulli", "Johann Bernoulli"}.sequence();
             log("byLastName : %s", names.associate([](String const &fullName) {
-                return Pair<String ,String>{fullName.split(" ")[1], fullName.split(" ")[0]};
+                return Pair<String, String >{fullName.split(" ")[1], fullName.split(" ")[0]};
             }).toHashMap().toString().cStr());
 
             if (
@@ -399,13 +1340,13 @@ bool SequenceTest::execute() noexcept {
 
                 Person() noexcept = default;
                 __CDS_MaybeUnused Person(Person const &) noexcept = default;
-                Person(String firstName, String lastName) : firstName(std::move(firstName)), lastName(std::move(lastName)) { }
+                Person(String firstName, String lastName) noexcept : firstName(std::move(firstName)), lastName(std::move(lastName)) { }
 
-                __CDS_NoDiscard auto toString () const noexcept -> String override {
+                __CDS_NoDiscard auto toString () const noexcept -> String __CDS_cpplang_NestedInheritedOverride {
                     return this->firstName + " " + this->lastName;
                 }
 
-                __CDS_NoDiscard auto equals (Object const & o) const noexcept -> bool override {
+                __CDS_NoDiscard auto equals (Object const & o) const noexcept -> bool __CDS_cpplang_NestedInheritedOverride {
                     if ( this == & o ) return true;
                     auto p = dynamic_cast < decltype ( this ) > ( & o );
                     if ( p == nullptr ) return false;
@@ -415,9 +1356,9 @@ bool SequenceTest::execute() noexcept {
             };
 
             auto scientists = Array < Person > {
-                    Person("Grace", "Hopper"),
-                    Person("Jacob", "Bernoulli"),
-                    Person("Johann", "Bernoulli")
+                    Person(String("Grace"), String("Hopper")),
+                    Person(String("Jacob"), String("Bernoulli")),
+                    Person(String("Johann"), String("Bernoulli"))
             }.sequence();
 
             log("scientists : %s", scientists.toArray().toString().cStr());
@@ -465,11 +1406,11 @@ bool SequenceTest::execute() noexcept {
                 __CDS_MaybeUnused Person(Person const &) noexcept = default;
                 Person(String firstName, String lastName) : firstName(std::move(firstName)), lastName(std::move(lastName)) { }
 
-                __CDS_NoDiscard auto toString () const noexcept -> String override {
+                __CDS_NoDiscard auto toString () const noexcept -> String __CDS_cpplang_NestedInheritedOverride {
                     return this->firstName + " " + this->lastName;
                 }
 
-                __CDS_NoDiscard auto equals (Object const & o) const noexcept -> bool override {
+                __CDS_NoDiscard auto equals (Object const & o) const noexcept -> bool __CDS_cpplang_NestedInheritedOverride {
                     if ( this == & o ) return true;
                     auto p = dynamic_cast < decltype ( this ) > ( & o );
                     if ( p == nullptr ) return false;
@@ -547,11 +1488,11 @@ bool SequenceTest::execute() noexcept {
                 __CDS_MaybeUnused Person(Person const &) noexcept = default;
                 Person(String firstName, String lastName) : firstName(std::move(firstName)), lastName(std::move(lastName)) { }
 
-                __CDS_NoDiscard auto toString () const noexcept -> String override {
+                __CDS_NoDiscard auto toString () const noexcept -> String __CDS_cpplang_NestedInheritedOverride {
                     return this->firstName + " " + this->lastName;
                 }
 
-                __CDS_NoDiscard auto equals (Object const & o) const noexcept -> bool override {
+                __CDS_NoDiscard auto equals (Object const & o) const noexcept -> bool __CDS_cpplang_NestedInheritedOverride {
                     if ( this == & o ) return true;
                     auto p = dynamic_cast < decltype ( this ) > ( & o );
                     if ( p == nullptr ) return false;
@@ -572,7 +1513,7 @@ bool SequenceTest::execute() noexcept {
                 logWarning("map error, from associateTo");
             }
 
-            scientists.associateTo(byLastName, [](Person const & p){ return Pair <String ,String> { p.lastName, p.firstName }; });
+            scientists.associateTo(byLastName, [](Person const & p){ return Pair<String, String> { p.lastName, p.firstName }; });
 
             log("byLastName.empty() : %s, contents : %s", byLastName.empty() ? "true" : "false", byLastName.toString().cStr() );
 
@@ -619,11 +1560,11 @@ bool SequenceTest::execute() noexcept {
                 __CDS_MaybeUnused Person(Person const &) noexcept = default;
                 Person(String firstName, String lastName) : firstName(std::move(firstName)), lastName(std::move(lastName)) { }
 
-                __CDS_NoDiscard auto toString () const noexcept -> String override {
+                __CDS_NoDiscard auto toString () const noexcept -> String __CDS_cpplang_NestedInheritedOverride {
                     return this->firstName + " " + this->lastName;
                 }
 
-                __CDS_NoDiscard auto equals (Object const & o) const noexcept -> bool override {
+                __CDS_NoDiscard auto equals (Object const & o) const noexcept -> bool __CDS_cpplang_NestedInheritedOverride {
                     if ( this == & o ) return true;
                     auto p = dynamic_cast < decltype ( this ) > ( & o );
                     if ( p == nullptr ) return false;
@@ -660,12 +1601,72 @@ bool SequenceTest::execute() noexcept {
             }
         };
 
+        auto groupByTest = [&] {
+            auto words = Array < String > { "a", "abc", "ab", "def", "abcd" }.sequence();
+            auto byLength = words.groupBy ( [](String const & s) { return s.length(); } );
+
+            log ( "words : %s", words.toArray().toString().cStr() );
+            log ( "byLength.keys() : %s", byLength.toHashMap().keys().toString().cStr() );
+            log ( "byLength.values() : %s", byLength.toHashMap().values().toString().cStr() );
+
+            auto nameToTeam = Array < Pair < String, String > > {
+                    { "Alice", "Marketing" },
+                    { "Bob", "Sales" },
+                    { "Carol", "Marketing" }
+            }.sequence();
+
+            auto namesByTeam = nameToTeam.groupBy (
+                    [](Pair<String, String> const & p){ return p.second(); },
+                    [](Pair<String, String> const & p){ return p.first(); }
+            );
+
+            log ( "nameToTeam : %s", nameToTeam.toArray().toString().cStr() );
+            log ( "namesByTeam : %s", namesByTeam.toHashMap().toString().cStr() );
+        };
+
+        auto groupByToTest = [&]{
+            auto words = Array < String > { "a", "abc", "ab", "def", "abcd" }.sequence();
+            auto byLength = HashMap < Size, LinkedList < String > >();
+
+            log ( "words : %s", words.toArray().toString().cStr() );
+            log ( "byLength.keys() : %s", byLength.keys().toString().cStr() );
+            log ( "byLength.values() : %s", byLength.values().toString().cStr() );
+
+            words.groupByTo ( byLength, [](String const & s){ return s.length(); } );
+
+            log ( "byLength.keys() : %s", byLength.keys().toString().cStr() );
+            log ( "byLength.values() : %s", byLength.values().toString().cStr() );
+
+
+            auto nameToTeam = Array < Pair < String, String > > {
+                    { "Alice", "Marketing" },
+                    { "Bob", "Sales" },
+                    { "Carol", "Marketing" }
+            }.sequence();
+
+            auto namesByTeam = HashMap < String, LinkedList < String > >();
+
+            log ( "nameToTeam : %s", nameToTeam.toArray().toString().cStr() );
+            log ( "namesByTeam : %s", namesByTeam.toString().cStr() );
+
+            nameToTeam.groupByTo (
+                    namesByTeam,
+                    [](Pair<String, String> const & p){ return p.second(); },
+                    [](Pair<String, String> const & p){ return p.first(); }
+            );
+
+            log ( "namesByTeam : %s", namesByTeam.toString().cStr() );
+        };
+
         associateTest();
         associateByTest();
         associateByToTest();
         associateToTest();
         associateWithTest();
         associateWithToTest();
+
+        groupByTest();
+        groupByToTest();
     });
 
     this->executeSubtest("Mathematical Utilities", [&]{
@@ -864,7 +1865,9 @@ bool SequenceTest::execute() noexcept {
         auto filterTest = [&] {
             auto numbers = Array < Int > { 1, 2 ,3 ,4 , 5, 6, 7 }.sequence();
             auto evenNumbers = numbers.filter(Int::isEven);
-            auto notMultipleOf3 = numbers.filterNot ( [](Int const & v){ return v % 3 == 0; } );
+            auto notMultipleOf3 = numbers.filterNot ( [](Int const & v){
+                return v % 3 == 0;
+            } );
 
             log ( "numbers : %s", numbers.toArray().toString().cStr() );
             log ( "evenNumbers : %s", evenNumbers.toArray().toString().cStr() );
@@ -1229,6 +2232,256 @@ bool SequenceTest::execute() noexcept {
             }
         };
 
+        auto flattenTest = [&]{
+//            Array < Array < int > > {
+//                    { 1, 2, 3 },
+//                    { 4, 5, 6 },
+//                    { 7, 8, 9 }
+//            }.sequence().map( []( Array < int > const & a ){ return a.sequence(); } )
+
+//            delayed for later release
+        };
+
+        auto mapTest = [&]{
+            auto numbers = Array < int > { 1, 2, 3 }.sequence();
+            auto squares = numbers.map([](int v){
+
+                return v * v;
+            });
+
+//            std :: cout << (*squares.storedMappers.front().first())(1) << '\n';
+
+            log("numbers : %s", numbers.toArray().toString().cStr());
+            log("squares : %s", squares.toArray().toString().cStr());
+
+            if ( squares.toArray() != Array <int> {1, 4, 9} ) {
+                logWarning("map error");
+                ok = false;
+            }
+        };
+
+        auto mapIndexedTest = [&]{
+            auto numbers = Array < int > { 1, 2, 3, 4, 5 }.sequence();
+            auto squares = numbers.mapIndexed([](Index i, int v){if ( i % 2 == 0 ) return v * v; return v/2;});
+
+            log("numbers : %s", numbers.toArray().toString().cStr());
+            log("squares : %s", squares.toArray().toString().cStr());
+
+            if ( squares.toArray() != Array <int> {1, 1, 9, 2, 25} ) {
+                logWarning("mapIndexed error");
+                ok = false;
+            }
+        };
+
+        auto mapToTest = [&]{
+            auto numbers = Array < int > { 1, 2, 3 }.sequence();
+            auto squares = Array < int > ();
+
+            log("numbers : %s", numbers.toArray().toString().cStr());
+            log("squares : %s", squares.toString().cStr());
+
+            numbers.mapTo ( squares, [](int v){ return v * v; } );
+
+            log("squares : %s", squares.toString().cStr());
+
+            if ( squares != Array <int> {1, 4, 9} ) {
+                logWarning("map error");
+                ok = false;
+            }
+        };
+
+        auto mapIndexedToTest = [&]{
+            auto numbers = Array < int > { 1, 2, 3, 4, 5 }.sequence();
+            auto squares = Array < int > ();
+
+            log("numbers : %s", numbers.toArray().toString().cStr());
+            log("squares : %s", squares.toString().cStr());
+
+            numbers.mapIndexedTo(squares, [](Index i, int v){if ( i % 2 == 0 ) return v * v; return v/2;});
+
+            log("squares : %s", squares.toString().cStr());
+
+            if ( squares != Array <int> {1, 1, 9, 2, 25} ) {
+                logWarning("mapIndexed error");
+                ok = false;
+            }
+        };
+
+        auto partitionTest = [&]{
+            auto numbers = Array < int > { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15 }.sequence();
+            auto partitions = numbers.partition([](int v){return v % 2 == 0;});
+
+            log ("numbers : %s", numbers.toArray().toString().cStr());
+            log ("even : %s", partitions.first().toString().cStr());
+            log ("odd : %s", partitions.second().toString().cStr());
+
+            if (
+                    partitions.first().any(Int::isOdd) ||
+                    partitions.second().any(Int::isEven)
+                    ) {
+                logWarning("Partition error");
+                ok = false;
+            }
+        };
+
+        auto partitionIndexedTest = [&]{
+            auto numbers = Array < int > { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15 }.sequence();
+            auto partitions = numbers.partitionIndexed([](Index i, int v){return (i + v) % 2 == 0;});
+
+            log ("numbers : %s", numbers.toArray().toString().cStr());
+            log ("even : %s", partitions.first().toString().cStr());
+            log ("odd : %s", partitions.second().toString().cStr());
+
+            if (
+                    ! partitions.first().empty() ||
+                    partitions.second().empty()
+                    ) {
+                logWarning("PartitionIndexed error");
+                ok = false;
+            }
+        };
+
+        auto takeTest = [&] {
+            auto chars = Range('a', 'z' + 1).sequence().map([](Index i){return (char)i;});
+
+            log ( "chars : %s", chars.toArray().toString().cStr() );
+            log ( "chars.take(3) : %s", chars.take(3).toArray().toString().cStr() );
+            log ( "chars.takeWhile(e<'f') : %s", chars.takeWhile([](char c){return c < 'f';}).toArray().toString().cStr() );
+            log ( "chars.takeLast(2) : %s", chars.takeLast(2).toArray().toString().cStr() );
+            log ( "chars.takeLastWhile(it > 'w') : %s", chars.takeLastWhile([](char c){return c > 'w';}).toArray().toString().cStr() );
+
+            if (
+                    chars.take(3).toArray() != Array <char> { 'a', 'b', 'c' } ||
+                    chars.takeWhile([](char c){return c < 'f';}).toArray() != Array <char> {'a','b','c','d','e'} ||
+                    chars.takeLast(2).toArray() != Array < char > {'y', 'z'} ||
+                    chars.takeLastWhile([](char c){return c > 'w';}).toArray() != Array < char > {'x', 'y', 'z'}
+                    ) {
+                logWarning("take error");
+                ok = false;
+            }
+        };
+
+        auto unzipTest = [&] {
+            auto result = Range(0, 10).sequence().map([](Index i){return Pair<int, int>{(int)i, (int)i * 2};});
+            auto unzipped = result.unzip();
+
+            log("original : %s", result.toArray().toString().cStr());
+            log("unzipped : %s", unzipped.toString().cStr());
+
+            if (
+                    unzipped.first() != LinkedList < int > { 0, 1, 2, 3, 4, 5 ,6 ,7 ,8, 9 } ||
+                    unzipped.second() != LinkedList < int > { 0, 2, 4, 6, 8, 10, 12, 14, 16, 18 }
+                    ) {
+                logWarning("unzip error");
+                ok = false;
+            }
+        };
+
+        auto windowedTest = [&] {
+            auto numbers = Range(0, 15).sequence();
+
+            auto windows = numbers.windowed(5, 1);
+            auto moreSparseWindows = numbers.windowed(5, 3);
+            auto fullWindows = numbers.take(10).windowed(5, 3);
+            auto partialWindows = numbers.take(10).windowed(5, 3, true);
+
+            log("numbers : %s", numbers.toArray().toString().cStr());
+            log("windows : %s", windows.toArray().toString().cStr());
+            log("moreSparseWindows : %s", moreSparseWindows.toArray().toString().cStr());
+            log("fullWindows : %s", fullWindows.toArray().toString().cStr());
+            log("partialWindows : %s", partialWindows.toArray().toString().cStr());
+
+            if (
+                    windows.toArray() != Array < Array < int > > { { 0, 1, 2, 3, 4 }, { 1, 2, 3, 4, 5 }, { 2, 3, 4, 5, 6 }, { 3, 4, 5, 6, 7 }, { 4, 5, 6, 7, 8 }, { 5, 6, 7, 8, 9 }, { 6, 7, 8, 9, 10 }, { 7, 8, 9, 10, 11 }, { 8, 9, 10, 11, 12 }, { 9, 10, 11, 12, 13 }, { 10, 11, 12, 13, 14 } } ||
+                    moreSparseWindows.toArray() != Array < Array < int > > { {0, 1, 2, 3, 4}, { 3, 4, 5, 6 ,7 }, { 6, 7, 8, 9, 10 }, {9, 10, 11, 12, 13} } ||
+                    fullWindows.toArray() != Array < Array < int > > { {0, 1, 2, 3, 4}, {3, 4, 5, 6, 7} } ||
+                    partialWindows.toArray() != Array < Array < int > > { { 0, 1, 2, 3, 4 }, {3, 4, 5, 6, 7}, {6, 7, 8, 9}, {9} }
+                    ) {
+                logWarning("windowed error");
+                ok = false;
+            }
+
+            auto dataPoints = Array < int > { 10, 15, 18, 25, 19, 21, 14, 8, 5 }.sequence();
+
+            auto averaged = dataPoints.windowed( [](List < int > const & window){
+                double sum = 0;
+                window.forEach([&](int e){sum += e;});
+                return sum / window.size();
+            }, 4, 1, true );
+
+            auto averagedNoPartials = dataPoints.windowed( [](List < int > const & window){
+                double sum = 0;
+                window.forEach([&](int e){sum += e;});
+                return sum / window.size();
+            }, 4, 1 );
+
+            log("dataPoints : %s", dataPoints.toArray().toString().cStr());
+            log("averaged : %s", averaged.toArray().toString().cStr());
+            log("averagedNoPartials : %s", averagedNoPartials.toArray().toString().cStr());
+
+            ///todo : check windowed!
+        };
+
+        auto withIndexTest = [&] {
+            auto numbers = Array<int> {2, 4, 6, 8}.sequence();
+            auto withIndices = numbers.indexed();
+
+            log("numbers : %s", numbers.toArray().toString().cStr());
+            log("indexed : %s", withIndices.toArray().toString().cStr());
+
+            if ( withIndices.toArray() != Array<Pair<Index, int>> { {0, 2}, {1, 4}, {2, 6}, {3, 8} } ) {
+                logWarning("indexed error");
+                ok = false;
+            }
+        };
+
+        auto zipTest = [&] {
+            auto sequenceA = Range('a', 'z' + 1).sequence().map([](Index v){return (char)v;});
+            auto sequenceB = Range(4).sequence().map([](Index v){ return (int)(v * 2 + 1); });
+
+            auto zipped = sequenceA.zip(sequenceB);
+
+            log("sequenceA : %s", sequenceA.toArray().toString().cStr());
+            log("sequenceB : %s", sequenceB.toArray().toString().cStr());
+            log("zipped : %s", zipped.toArray().toString().cStr());
+
+            if ( zipped.toArray() != Array < Pair < char,int> > {{'a', 1}, {'b', 3}, {'c', 5}, {'d', 7}} ) {
+                logWarning("zipped error");
+                ok = false;
+            }
+
+            auto result = sequenceA.zip(sequenceB, [](char a, int b){ return String::f("%c/%d", a, b); });
+
+            log("result : %s", result.toArray().toString().cStr());
+
+            if ( result.toArray() != Array < String > { "a/1", "b/3", "c/5", "d/7" } ) {
+                logWarning("zipped error");
+                ok = false;
+            }
+        };
+
+        auto zipWithNextTest = [&] {
+            auto letters = Range('a', 'f' + 1).sequence().map([](Index v){return (char)v;});
+            auto pairs = letters.zipWithNext();
+
+            auto values = Array < int > { 1, 4, 9, 16, 25, 36 }.sequence();
+            auto deltas = values.zipWithNext([](int a, int b){ return b - a; });
+
+            log("letters : %s", letters.toArray().toString().cStr());
+            log("pairs : %s", pairs.toArray().toString().cStr());
+            log("values : %s", values.toArray().toString().cStr());
+            log("deltas : %s", deltas.toArray().toString().cStr());
+
+            if (
+                    pairs.toArray() != Array<Pair<char, char>>{{'a', 'b'}, {'b','c'}, {'c','d'}, {'d','e'}, {'e','f'}} ||
+                    deltas.toArray() != Array<int > { 3, 5, 7, 9, 11 }
+                    ) {
+                logWarning("zipWithNext error");
+                ok = false;
+            }
+        };
+
+
         chunkedTest();
         dropTest();
         filterTest();
@@ -1243,7 +2496,31 @@ bool SequenceTest::execute() noexcept {
         flatMapToTest();
         flatMapIndexedTest();
         flatMapIndexedToTest();
+        flattenTest ();
+
+        mapTest ();
+        mapIndexedTest();
+        mapToTest();
+        mapIndexedToTest();
+
+        partitionTest();
+        partitionIndexedTest();
+
+        takeTest();
+
+        unzipTest();
+        windowedTest();
+        withIndexTest();
+        zipTest();
+        zipWithNextTest();
     });
 
     return ok;
 }
+
+#if defined(_MSC_VER)
+
+#pragma pop_macro("max")
+#pragma pop_macro("min")
+
+#endif

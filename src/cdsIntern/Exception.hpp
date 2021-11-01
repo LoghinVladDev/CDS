@@ -6,6 +6,7 @@
 #define CDS_EXCEPTION_HPP
 
 #include <CDS/String>
+#include <CDS/Memory>
 #include <utility>
 
 class Exception : public Object, public std :: exception {
@@ -76,7 +77,7 @@ public:
 
     }
 
-    __CDS_NoDiscard __CDS_cpplang_ConstexprDestructor auto toString () const noexcept -> String override {
+    __CDS_NoDiscard __CDS_OptimalInline auto toString () const noexcept -> String override {
         return this->_message;
     }
 
@@ -85,7 +86,7 @@ public:
     }
 
     __CDS_NoDiscard auto copy () const noexcept -> Exception * override {
-        return new Exception ( * this );
+        return Memory::instance().create < Exception > ( * this );
     }
 
     __CDS_NoDiscard __CDS_cpplang_VirtualConstexpr auto equals ( Object const & o ) const noexcept -> bool override {

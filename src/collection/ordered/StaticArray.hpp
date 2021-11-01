@@ -7,6 +7,7 @@
 
 #include <CDS/LinkedList>
 #include <CDS/Array>
+#include <CDS/Memory>
 
 template <class T, Size n>
 class StaticArray final : public List <T> {
@@ -145,10 +146,10 @@ public:
     ~StaticArray() noexcept final;
 
 private:
-    inline auto beginPtr () noexcept -> Iterator * final { return new Iterator( this, 0 ); }
-    inline auto endPtr () noexcept -> Iterator * final { return new Iterator(this, this->size()); }
-    inline auto beginPtr () const noexcept -> ConstIterator * final { return new ConstIterator( this, 0 ); }
-    inline auto endPtr () const noexcept -> ConstIterator * final { return new ConstIterator( this, this->size()); }
+    inline auto beginPtr () noexcept -> Iterator * final { return Memory :: instance().create < Iterator > ( this, 0 ); }
+    inline auto endPtr () noexcept -> Iterator * final { return Memory :: instance().create < Iterator > (this, this->size()); }
+    inline auto beginPtr () const noexcept -> ConstIterator * final { return Memory :: instance().create < ConstIterator > ( this, 0 ); }
+    inline auto endPtr () const noexcept -> ConstIterator * final { return Memory :: instance().create < ConstIterator > ( this, this->size()); }
 
 public:
     constexpr auto begin () noexcept -> Iterator { return Iterator ( this, 0 ); }

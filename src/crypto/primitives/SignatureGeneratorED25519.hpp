@@ -14,7 +14,7 @@
 
 template < Size byteSize >
 class __CDS_MaybeUnused SignatureGeneratorED25519 : public AsymmetricCryptoOperation < byteSize >, public SignatureVerifier < byteSize > {
-    auto run () override -> SignatureGeneratorED25519 & override {
+    auto run () noexcept -> SignatureGeneratorED25519 & override {
 
 #if defined(CDS_CRYPTO_OPENSSL)
 

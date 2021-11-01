@@ -7,6 +7,7 @@
 
 #include <CDS/Object>
 #include <CDS/Atomic>
+#include <CDS/Memory>
 #include <iostream>
 
 #if defined(__linux)
@@ -38,7 +39,7 @@ public:
 #endif
     }
 
-    using ErrorCallback = auto ( * ) ( String const &, Thread *, std::exception const * ) __CDS_cpplang_FunctionAliasNoexcept -> void;
+    using ErrorCallback = auto ( * ) ( String const &, Thread *, std::exception const * ) __CDS_cpplang_FunctionAliasNoexcept(false) -> void;
 
 private:
 
@@ -146,7 +147,7 @@ public:
 #if defined(__linux)
         pthread_create ( & this->handle, nullptr, Thread::launcher, reinterpret_cast < void * > ( this ) );
 #elif defined(WIN32)
-        this->handle = new Thread_t;
+        this->handle = Memory :: instance().create < Thread_t > ();
         memset ( this->handle, 0, sizeof ( Thread_t ) );
 
         this->handle->handle = CreateThread (
@@ -181,7 +182,7 @@ public:
 
             __CDS_WarningSuppression_ThreadForceTermination_SuppressDisable
 
-        delete this->handle;
+        Memory :: instance().destroy ( this->handle );
         this->handle = PRIMITIVE_NULL_HANDLE;
 #else
 #error Unsupported : Thread
@@ -198,7 +199,7 @@ public:
 #elif defined(WIN32)
         if ( this->handle != PRIMITIVE_NULL_HANDLE )
             WaitForSingleObject( this->handle->handle, INFINITE );
-        delete this->handle;
+        Memory :: instance().destroy ( this->handle );
         this->handle = PRIMITIVE_NULL_HANDLE;
 #else
 #error Unsupported : Thread

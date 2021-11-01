@@ -6,6 +6,7 @@
 #define CDS_SETBASE_HPP
 
 #include <CDS/Collection>
+#include <CDS/Memory>
 
 template < typename T> __CDS_Requires ( UniqueIdentifiable <T> )
 class Set : public Collection < T > {
@@ -75,7 +76,7 @@ public:
         }
 
         __CDS_NoDiscard __CDS_OptimalInline auto copy () const noexcept -> Iterator * override {
-            return new Iterator (* this);
+            return Memory::instance().create < Iterator > (* this);
         }
     };
 
@@ -120,7 +121,7 @@ public:
         }
 
         __CDS_NoDiscard __CDS_OptimalInline auto copy () const noexcept -> ConstIterator * override {
-            return new ConstIterator (* this);
+            return Memory :: instance().create < ConstIterator > (* this);
         }
     };
 
@@ -128,10 +129,10 @@ protected:
     NodePointer _pFront {nullptr};
     Size        _size   {0ull};
 
-    __CDS_OptimalInline auto beginPtr () noexcept -> Iterator * final { return new Iterator ( this->_pFront, this ); }
-    __CDS_OptimalInline auto endPtr () noexcept -> Iterator * final { return new Iterator ( nullptr, this ); }
-    __CDS_OptimalInline auto beginPtr () const noexcept -> ConstIterator * final { return new ConstIterator ( this->_pFront, this ); }
-    __CDS_OptimalInline auto endPtr () const noexcept -> ConstIterator * final { return new ConstIterator ( nullptr, this ); }
+    __CDS_OptimalInline auto beginPtr () noexcept -> Iterator * final { return Memory :: instance().create < Iterator > ( this->_pFront, this ); }
+    __CDS_OptimalInline auto endPtr () noexcept -> Iterator * final { return Memory :: instance().create < Iterator > ( nullptr, this ); }
+    __CDS_OptimalInline auto beginPtr () const noexcept -> ConstIterator * final { return Memory :: instance().create < ConstIterator > ( this->_pFront, this ); }
+    __CDS_OptimalInline auto endPtr () const noexcept -> ConstIterator * final { return Memory :: instance().create < ConstIterator > ( nullptr, this ); }
 
     constexpr Set() noexcept = default;
     constexpr Set(Set const &) noexcept {}
@@ -192,8 +193,8 @@ public:
             auto current = this->_pFront;
             this->_pFront = this->_pFront->pNext;
 
-            delete current->data;
-            delete current;
+            Memory :: instance().destroy ( current->data );
+            Memory :: instance().destroy ( current );
         }
 
         this->_size = 0;
@@ -255,8 +256,8 @@ auto Set<T>::remove( ElementCRef e ) noexcept -> bool {
         this->_pFront = this->_pFront->pNext;
         -- this->_size;
 
-        delete p->data;
-        delete p;
+        Memory::instance().destroy ( p->data );
+        Memory::instance().destroy ( p );
         return true;
     } else if ( this->size() == 1 )
         return false;
@@ -267,8 +268,8 @@ auto Set<T>::remove( ElementCRef e ) noexcept -> bool {
             auto node = head->pNext;
             head->pNext = head->pNext->pNext;
 
-            delete node->data;
-            delete node;
+            Memory::instance().destroy ( node->data );
+            Memory::instance().destroy ( node );
 
             -- this->_size;
             return true;

@@ -84,8 +84,8 @@ public:
         for ( auto it = pBegin; ! it->equals(*pEnd); it->next() )
             this->insert( it->value() );
 
-        delete pBegin;
-        delete pEnd;
+        Memory :: instance().destroy ( pBegin );
+        Memory :: instance().destroy ( pEnd );
 
         return * this;
     }
@@ -118,7 +118,7 @@ public:
             head = head->pNext;
         }
 
-        auto p = new Node;
+        auto p = Memory :: instance().create < Node > ();
         p->pNext = this->_pFront;
         p->data = nullptr;
         this->_pFront = p;

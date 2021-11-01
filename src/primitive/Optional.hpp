@@ -6,6 +6,7 @@
 #define CDS_OPTIONAL_HPP
 
 #include <CDS/Pointer>
+#include <CDS/Memory>
 
 template <class T>
 class Optional final : public Object {
@@ -30,9 +31,9 @@ public:
 
     __CDS_cpplang_ConstexprDestructor ~Optional() noexcept final = default;
 
-    __CDS_cpplang_ConstexprDynamicAllocation Optional ( ValueConstReference v ) noexcept : pObj ( new Value( v ) ) { } // NOLINT(google-explicit-constructor)
+    __CDS_cpplang_ConstexprDynamicAllocation Optional ( ValueConstReference v ) noexcept : pObj ( Memory :: instance().create < Value > ( v ) ) { } // NOLINT(google-explicit-constructor)
     __CDS_cpplang_ConstexprDynamicAllocation auto operator = ( ValueConstReference v ) noexcept -> Optional & {
-        this->pObj.reset(new Value ( v ));
+        this->pObj.reset( Memory :: instance().create < Value > ( v ));
         return * this;
     }
 
@@ -101,7 +102,7 @@ public:
             return * this;
         }
 
-        this->pObj.reset( new Value ( * o.pObj ) );
+        this->pObj.reset( Memory :: instance ().create < Value > ( * o.pObj ) );
 
         return * this;
     }
@@ -137,7 +138,7 @@ public:
     }
 
     __CDS_NoDiscard __CDS_cpplang_ConstexprDynamicAllocation auto copy () const noexcept -> Optional * override {
-        return new Optional( * this );
+        return Memory :: instance().create < Optional >( * this );
     }
 };
 

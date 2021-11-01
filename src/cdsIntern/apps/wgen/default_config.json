@@ -47,6 +47,10 @@
         {
             "Name": "FunctionTypeTraits",
             "MSVC": 4180
+        },
+        {
+            "Name": "DeducedNoexceptTermination",
+            "GCC": "-Wterminate"
         }
     ]
 }

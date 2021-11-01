@@ -8,6 +8,7 @@
 #include <CDS/Semaphore>
 #include <CDS/Thread>
 #include <CDS/Boolean>
+#include <CDS/Memory>
 
 template < typename C >
 class Sequence;
@@ -61,7 +62,7 @@ private:
         else
             this->firstCall = false;
 
-        this->pYieldedValue = new T (value);
+        this->pYieldedValue = Memory :: instance().create < T > (value);
 
         if ( isFinal )
             this->lastCall = true;
@@ -78,7 +79,7 @@ private:
         else
             this->firstCall = false;
 
-        this->pYieldedValue = new T ( std :: forward < T > (value) );
+        this->pYieldedValue = Memory :: instance().create < T > ( std :: forward < T > (value) );
 
         if ( isFinal )
             this->lastCall = true;
@@ -95,7 +96,7 @@ private:
         else
             this->firstCall = false;
 
-        this->pYieldedValue = new T;
+        this->pYieldedValue = Memory :: instance().create < T > ();
         * this->pYieldedValue = value;
 
         if ( isFinal )
@@ -113,7 +114,7 @@ private:
         else
             this->firstCall = false;
 
-        this->pYieldedValue = new T;
+        this->pYieldedValue = Memory :: instance().create < T > ();
         * this->pYieldedValue = std :: forward < T > ( value );
 
         if ( isFinal )
@@ -141,7 +142,7 @@ private:
         this->promiseObjectUsed.reset();
         this->promiseObjectReady.reset();
 
-        this->pTaskThread = new Runnable (
+        this->pTaskThread = Memory :: instance().create < Runnable > (
                 [&] {
                     this->yield ( this->task ( std :: forward < Args > ( args ) ... ), true );
                 }

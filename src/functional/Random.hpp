@@ -65,7 +65,10 @@ private:
 #pragma pop_macro("max")
 #endif
 
-        auto get () noexcept -> ValueType { return this->distribution(this->twisterEngine); }
+        auto get () noexcept -> ValueType {
+            return this->distribution(this->twisterEngine);
+        }
+
         __CDS_OptimalInline auto operator () () noexcept -> ValueType { return this->get(); }
         __CDS_OptimalInline explicit operator ValueType () noexcept { return this->get(); } // NOLINT(google-explicit-constructor)
         constexpr auto low () const noexcept -> ValueType { return this->_lowerBound; }

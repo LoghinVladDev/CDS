@@ -20,8 +20,8 @@ protected:
 public:
     inline auto encrypt () noexcept -> Encryptor & { return this->run(); }
 
-    [[nodiscard]] constexpr auto IV () const noexcept -> IVType const & { return this->_IV; }
-    [[nodiscard]] constexpr auto IV () noexcept -> IVType & { return this->_IV; }
+    __CDS_NoDiscard constexpr auto IV () const noexcept -> IVType const & { return this->_IV; }
+    __CDS_NoDiscard constexpr auto IV () noexcept -> IVType & { return this->_IV; }
 };
 
 namespace Utility {

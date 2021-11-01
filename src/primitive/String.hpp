@@ -26,6 +26,7 @@ class Sequence;
 #include <CDS/Object>
 #include <CDS/Traits>
 #include <CDS/Conversion>
+#include <CDS/Memory>
 
 #include <cstring>
 #define CONSTR_CLEAR() _c(0), _l(0), _p(nullptr)
@@ -109,14 +110,14 @@ private:
             return;
 
         auto newCap = std::max(size + this->_l, 2 * this->_c) + 1;
-        auto newArea = new ElementType[newCap];
+        auto newArea = Memory :: instance().createArray < ElementType > (newCap);
 
         if (this->_p != nullptr)
             std::memcpy(newArea, this->_p, this->_l);
 
         std::memset(newArea + this->_l, 0, newCap - this->_l);
 
-        delete[] this->_p;
+        Memory :: instance().destroyArray ( this->_p );
 
         this->_p = newArea;
         this->_c = newCap;
@@ -1030,7 +1031,7 @@ public:
      *
      * @test tested in primitive/StringTest/Constructor Tests
      */
-    __CDS_cpplang_ConstexprDestructor String (uint8 v) noexcept : String(String().append(v)) { } // NOLINT(google-explicit-constructor)
+    __CDS_OptimalInline String (uint8 v) noexcept : String(String().append(v)) { } // NOLINT(google-explicit-constructor)
 
     /**
      * @brief Constructor which initializes String from a raw uint16 value
@@ -1041,7 +1042,7 @@ public:
      *
      * @test tested in primitive/StringTest/Constructor Tests
      */
-    __CDS_cpplang_ConstexprDestructor String (uint16 v) noexcept : String(String().append(v)) { } // NOLINT(google-explicit-constructor)
+    __CDS_OptimalInline String (uint16 v) noexcept : String(String().append(v)) { } // NOLINT(google-explicit-constructor)
 
     /**
      * @brief Constructor which initializes String from a raw uint32 value
@@ -1052,7 +1053,7 @@ public:
      *
      * @test tested in primitive/StringTest/Constructor Tests
      */
-    __CDS_cpplang_ConstexprDestructor String (uint32 v) noexcept : String(String().append(v)) { } // NOLINT(google-explicit-constructor)
+    __CDS_OptimalInline String (uint32 v) noexcept : String(String().append(v)) { } // NOLINT(google-explicit-constructor)
 
     /**
      * @brief Constructor which initializes String from a raw uint64 value
@@ -1063,7 +1064,7 @@ public:
      *
      * @test tested in primitive/StringTest/Constructor Tests
      */
-    __CDS_cpplang_ConstexprDestructor String (uint64 v) noexcept : String(String().append(v)) { } // NOLINT(google-explicit-constructor)
+    __CDS_OptimalInline String (uint64 v) noexcept : String(String().append(v)) { } // NOLINT(google-explicit-constructor)
 
     /**
      * @brief Constructor which initializes String from a raw sint8 value
@@ -1074,7 +1075,7 @@ public:
      *
      * @test tested in primitive/StringTest/Constructor Tests
      */
-    __CDS_cpplang_ConstexprDestructor String (sint8 v) noexcept : String(String().append(v)) { } // NOLINT(google-explicit-constructor)
+    __CDS_OptimalInline String (sint8 v) noexcept : String(String().append(v)) { } // NOLINT(google-explicit-constructor)
 
     /**
      * @brief Constructor which initializes String from a raw sint16 value
@@ -1085,7 +1086,7 @@ public:
      *
      * @test tested in primitive/StringTest/Constructor Tests
      */
-    __CDS_cpplang_ConstexprDestructor String (sint16 v) noexcept : String(String().append(v)) { } // NOLINT(google-explicit-constructor)
+    __CDS_OptimalInline String (sint16 v) noexcept : String(String().append(v)) { } // NOLINT(google-explicit-constructor)
 
     /**
      * @brief Constructor which initializes String from a raw sint32 value
@@ -1096,7 +1097,7 @@ public:
      *
      * @test tested in primitive/StringTest/Constructor Tests
      */
-    __CDS_cpplang_ConstexprDestructor String (sint32 v) noexcept : String(String().append(v)) { } // NOLINT(google-explicit-constructor)
+    __CDS_OptimalInline String (sint32 v) noexcept : String(String().append(v)) { } // NOLINT(google-explicit-constructor)
 
     /**
      * @brief Constructor which initializes String from a raw sint64 value
@@ -1107,7 +1108,7 @@ public:
      *
      * @test tested in primitive/StringTest/Constructor Tests
      */
-    __CDS_cpplang_ConstexprDestructor String (sint64 v) noexcept : String(String().append(v)) { } // NOLINT(google-explicit-constructor)
+    __CDS_OptimalInline String (sint64 v) noexcept : String(String().append(v)) { } // NOLINT(google-explicit-constructor)
 
     /**
      * @brief Constructor which initializes String from a raw float value
@@ -1142,7 +1143,7 @@ public:
      *
      * @test tested in primitive/StringTest/Constructor Tests
      */
-    __CDS_cpplang_ConstexprDestructor String(std::size_t v) noexcept : String((uint64)v) {} // NOLINT(google-explicit-constructor)
+    __CDS_OptimalInline String(std::size_t v) noexcept : String((uint64)v) {} // NOLINT(google-explicit-constructor)
 
 #endif
 
@@ -1210,8 +1211,8 @@ public:
      *
      * @test testcase not required
      */
-    __CDS_cpplang_ConstexprDestructor ~String() noexcept override {
-        delete [] this->_p;
+    __CDS_OptimalInline ~String() noexcept override {
+        Memory :: instance().destroyArray ( this->_p );
     }
 
 
@@ -1411,14 +1412,14 @@ public:
      *
      * @test tested in primitive/StringTest/Memory Tests
      */
-    __CDS_cpplang_ConstexprDynamicAllocation auto resize(Size size) noexcept -> void {
+    __CDS_OptimalInline auto resize(Size size) noexcept -> void {
         auto toCopy = std :: min ( this->_c, size + 1 );
         this->_c = size + 1;
-        auto newArea = new ElementType [ this->_c ];
+        auto newArea = Memory :: instance().createArray < ElementType > ( this->_c );
 
         if ( ! this->empty() ) {
             std::memcpy(newArea, this->_p, toCopy);
-            delete[] this->_p;
+            Memory :: instance().destroyArray ( this->_p );
         }
 
         this->_p = newArea;
@@ -2138,7 +2139,7 @@ public:
      *
      * @test tested in primitive/StringTest/Append/Prepend Tests
      */
-    __CDS_cpplang_ConstexprDestructor auto prepend (ElementType e) noexcept -> String & { return this->prepend(String().append(e)); }
+    __CDS_OptimalInline auto prepend (ElementType e) noexcept -> String & { return this->prepend(String().append(e)); }
 
     /**
      * @brief Prepend Function used to prepend a StringLiteral to the String
@@ -2151,7 +2152,7 @@ public:
      *
      * @test tested in primitive/StringTest/Append/Prepend Tests
      */
-    __CDS_cpplang_ConstexprDestructor auto prepend (StringLiteral cString) noexcept -> String & { return this->prepend(String(cString)); }
+    __CDS_OptimalInline auto prepend (StringLiteral cString) noexcept -> String & { return this->prepend(String(cString)); }
 
     /**
      * @brief Prepend Function used to prepend a CString to the String
@@ -2164,7 +2165,7 @@ public:
      *
      * @test tested in primitive/StringTest/Append/Prepend Tests
      */
-    __CDS_cpplang_ConstexprDestructor auto prepend (CString cString) noexcept -> String & { return this->prepend(String(cString)); }
+    __CDS_OptimalInline auto prepend (CString cString) noexcept -> String & { return this->prepend(String(cString)); }
 
     /**
      * @brief Prepend Function used to prepend a String to the String
@@ -2177,7 +2178,7 @@ public:
      *
      * @test tested in primitive/StringTest/Append/Prepend Tests
      */
-    __CDS_cpplang_ConstexprDestructor auto prepend (String const & s) noexcept -> String & { return * this = (String(* this) = s).append(* this); }
+    __CDS_OptimalInline auto prepend (String const & s) noexcept -> String & { return * this = (String(* this) = s).append(* this); }
 
     /**
      * @brief Prepend Function used to prepend a std::string to the String
@@ -2203,7 +2204,7 @@ public:
      *
      * @test tested in primitive/StringTest/Append/Prepend Tests
      */
-    __CDS_cpplang_ConstexprDestructor auto prepend (sint16 v) noexcept -> String & { return this->prepend(String(v)); }
+    __CDS_OptimalInline auto prepend (sint16 v) noexcept -> String & { return this->prepend(String(v)); }
 
     /**
      * @brief Prepend Function used to prepend a sint32 to the String
@@ -2216,7 +2217,7 @@ public:
      *
      * @test tested in primitive/StringTest/Append/Prepend Tests
      */
-    __CDS_cpplang_ConstexprDestructor auto prepend (sint32 v) noexcept -> String & { return this->prepend(String(v)); }
+    __CDS_OptimalInline auto prepend (sint32 v) noexcept -> String & { return this->prepend(String(v)); }
 
     /**
      * @brief Prepend Function used to prepend a sint64 to the String
@@ -2229,7 +2230,7 @@ public:
      *
      * @test tested in primitive/StringTest/Append/Prepend Tests
      */
-    __CDS_cpplang_ConstexprDestructor auto prepend (sint64 v) noexcept -> String & { return this->prepend(String(v)); }
+    __CDS_OptimalInline auto prepend (sint64 v) noexcept -> String & { return this->prepend(String(v)); }
 
     /**
      * @brief Prepend Function used to prepend a uint8 to the String
@@ -2242,7 +2243,7 @@ public:
      *
      * @test tested in primitive/StringTest/Append/Prepend Tests
      */
-    __CDS_cpplang_ConstexprDestructor auto prepend (uint8 v) noexcept -> String & { return this->prepend(String(v)); }
+    __CDS_OptimalInline auto prepend (uint8 v) noexcept -> String & { return this->prepend(String(v)); }
 
     /**
      * @brief Prepend Function used to prepend a uint16 to the String
@@ -2255,7 +2256,7 @@ public:
      *
      * @test tested in primitive/StringTest/Append/Prepend Tests
      */
-    __CDS_cpplang_ConstexprDestructor auto prepend (uint16 v) noexcept -> String & { return this->prepend(String(v)); }
+    __CDS_OptimalInline auto prepend (uint16 v) noexcept -> String & { return this->prepend(String(v)); }
 
     /**
      * @brief Prepend Function used to prepend a uint32 to the String
@@ -2268,7 +2269,7 @@ public:
      *
      * @test tested in primitive/StringTest/Append/Prepend Tests
      */
-    __CDS_cpplang_ConstexprDestructor auto prepend (uint32 v) noexcept -> String & { return this->prepend(String(v)); }
+    __CDS_OptimalInline auto prepend (uint32 v) noexcept -> String & { return this->prepend(String(v)); }
 
     /**
      * @brief Prepend Function used to prepend a uint64 to the String
@@ -2281,7 +2282,7 @@ public:
      *
      * @test tested in primitive/StringTest/Append/Prepend Tests
      */
-    __CDS_cpplang_ConstexprDestructor auto prepend (uint64 v) noexcept -> String & { return this->prepend(String(v)); }
+    __CDS_OptimalInline auto prepend (uint64 v) noexcept -> String & { return this->prepend(String(v)); }
 
     /**
      * @brief Prepend Function used to prepend a float to the String
@@ -2632,7 +2633,7 @@ public:
      *
      * @test tested in primitive/StringTest/Substring Tests
      */
-    __CDS_NoDiscard __CDS_cpplang_VirtualConstexpr auto substr ( Index from, Index to = -1 ) const noexcept -> String {
+    __CDS_NoDiscard __CDS_OptimalInline auto substr ( Index from, Index to = -1 ) const noexcept -> String {
         if ( to == -1 || to > static_cast<Index>(this->size()) )
             to = static_cast < Index > (this->size());
         if ( from < 0 )
@@ -3138,7 +3139,7 @@ public:
      *
      * @test tested in primitive/StringTest/Append/Prepend Tests
      */
-    __CDS_NoDiscard __CDS_cpplang_ConstexprDestructor auto operator + ( String const & v ) const noexcept -> String { return String(*this).append(v); }
+    __CDS_NoDiscard __CDS_OptimalInline auto operator + ( String const & v ) const noexcept -> String { return String(*this).append(v); }
 
     /**
      * @brief Append Function used to append an ElementType to the String
@@ -3151,7 +3152,7 @@ public:
      *
      * @test tested in primitive/StringTest/Append/Prepend Tests
      */
-    __CDS_NoDiscard __CDS_cpplang_ConstexprDestructor auto operator + ( ElementType v ) const noexcept -> String { return String(*this).append(v); }
+    __CDS_NoDiscard __CDS_OptimalInline auto operator + ( ElementType v ) const noexcept -> String { return String(*this).append(v); }
 
     /**
      * @brief Append Function used to append a std::string to the String
@@ -3177,7 +3178,7 @@ public:
      *
      * @test tested in primitive/StringTest/Append/Prepend Tests
      */
-    __CDS_NoDiscard __CDS_cpplang_ConstexprDestructor auto operator + ( StringLiteral v ) const noexcept -> String { return String(*this).append(v); }
+    __CDS_NoDiscard __CDS_OptimalInline auto operator + ( StringLiteral v ) const noexcept -> String { return String(*this).append(v); }
 
     /**
      * @brief Append Function used to append a CString to the String
@@ -3190,7 +3191,7 @@ public:
      *
      * @test tested in primitive/StringTest/Append/Prepend Tests
      */
-    __CDS_NoDiscard __CDS_cpplang_ConstexprDestructor auto operator + ( CString v ) const noexcept -> String { return String(*this).append(v); }
+    __CDS_NoDiscard __CDS_OptimalInline auto operator + ( CString v ) const noexcept -> String { return String(*this).append(v); }
 
     /**
      * @brief Append Function used to append a sint16 to the String
@@ -3203,7 +3204,7 @@ public:
      *
      * @test tested in primitive/StringTest/Append/Prepend Tests
      */
-    __CDS_NoDiscard __CDS_cpplang_ConstexprDestructor auto operator + (sint16 v) const noexcept -> String { return String(*this).append(v); }
+    __CDS_NoDiscard __CDS_OptimalInline auto operator + (sint16 v) const noexcept -> String { return String(*this).append(v); }
 
     /**
      * @brief Append Function used to append a sint32 to the String
@@ -3216,7 +3217,7 @@ public:
      *
      * @test tested in primitive/StringTest/Append/Prepend Tests
      */
-    __CDS_NoDiscard __CDS_cpplang_ConstexprDestructor auto operator + (sint32 v) const noexcept -> String { return String(*this).append(v); }
+    __CDS_NoDiscard __CDS_OptimalInline auto operator + (sint32 v) const noexcept -> String { return String(*this).append(v); }
 
     /**
      * @brief Append Function used to append a sint64 to the String
@@ -3229,7 +3230,7 @@ public:
      *
      * @test tested in primitive/StringTest/Append/Prepend Tests
      */
-    __CDS_NoDiscard __CDS_cpplang_ConstexprDestructor auto operator + (sint64 v) const noexcept -> String { return String(*this).append(v); }
+    __CDS_NoDiscard __CDS_OptimalInline auto operator + (sint64 v) const noexcept -> String { return String(*this).append(v); }
 
     /**
      * @brief Append Function used to append a uint8 to the String
@@ -3242,7 +3243,7 @@ public:
      *
      * @test tested in primitive/StringTest/Append/Prepend Tests
      */
-    __CDS_NoDiscard __CDS_cpplang_ConstexprDestructor auto operator + (uint8 v) const noexcept -> String { return String(*this).append(v); }
+    __CDS_NoDiscard __CDS_OptimalInline auto operator + (uint8 v) const noexcept -> String { return String(*this).append(v); }
 
     /**
      * @brief Append Function used to append a uint16 to the String
@@ -3255,7 +3256,7 @@ public:
      *
      * @test tested in primitive/StringTest/Append/Prepend Tests
      */
-    __CDS_NoDiscard __CDS_cpplang_ConstexprDestructor auto operator + (uint16 v) const noexcept -> String { return String(*this).append(v); }
+    __CDS_NoDiscard __CDS_OptimalInline auto operator + (uint16 v) const noexcept -> String { return String(*this).append(v); }
 
     /**
      * @brief Append Function used to append a uint32 to the String
@@ -3268,7 +3269,7 @@ public:
      *
      * @test tested in primitive/StringTest/Append/Prepend Tests
      */
-    __CDS_NoDiscard __CDS_cpplang_ConstexprDestructor auto operator + (uint32 v) const noexcept -> String { return String(*this).append(v); }
+    __CDS_NoDiscard __CDS_OptimalInline auto operator + (uint32 v) const noexcept -> String { return String(*this).append(v); }
 
     /**
      * @brief Append Function used to append a uint64 to the String
@@ -3281,7 +3282,7 @@ public:
      *
      * @test tested in primitive/StringTest/Append/Prepend Tests
      */
-    __CDS_NoDiscard __CDS_cpplang_ConstexprDestructor auto operator + (uint64 v) const noexcept -> String { return String(*this).append(v); }
+    __CDS_NoDiscard __CDS_OptimalInline auto operator + (uint64 v) const noexcept -> String { return String(*this).append(v); }
 
     /**
      * @brief Append Function used to append a float to the String
@@ -3336,7 +3337,7 @@ public:
      *
      * @test tested in primitive/StringTest/Utility Functions, String Formatting
      */
-    __CDS_NoDiscard __CDS_cpplang_ConstexprDestructor auto operator * (int count) const noexcept -> String {
+    __CDS_NoDiscard __CDS_OptimalInline auto operator * (int count) const noexcept -> String {
         String res;
         for ( int i = 0; i < count; i ++ )
             res += (*this);
@@ -3389,7 +3390,7 @@ public:
      *
      * @test tested in primitive/StringTest/Utility Functions, String Formatting
      */
-    __CDS_NoDiscard __CDS_MaybeUnused __CDS_cpplang_ConstexprDestructor auto ltrim ( ElementType e = ' ' ) const noexcept -> String {
+    __CDS_NoDiscard __CDS_MaybeUnused __CDS_OptimalInline auto ltrim ( ElementType e = ' ' ) const noexcept -> String {
         return String(*this).ltrim(e);
     }
 
@@ -3404,7 +3405,7 @@ public:
      *
      * @test tested in primitive/StringTest/Utility Functions, String Formatting
      */
-    __CDS_NoDiscard __CDS_MaybeUnused __CDS_cpplang_ConstexprDestructor auto ltrim ( String const & e ) const noexcept -> String {
+    __CDS_NoDiscard __CDS_MaybeUnused __CDS_OptimalInline auto ltrim ( String const & e ) const noexcept -> String {
         return String(*this).ltrim(e);
     }
 
@@ -3455,7 +3456,7 @@ public:
      *
      * @test tested in primitive/StringTest/Utility Functions, String Formatting
      */
-    __CDS_NoDiscard __CDS_MaybeUnused __CDS_cpplang_ConstexprDestructor auto rtrim ( ElementType e = ' ' ) const noexcept -> String {
+    __CDS_NoDiscard __CDS_MaybeUnused __CDS_OptimalInline auto rtrim ( ElementType e = ' ' ) const noexcept -> String {
         return String(*this).rtrim(e);
     }
 
@@ -3470,7 +3471,7 @@ public:
      *
      * @test tested in primitive/StringTest/Utility Functions, String Formatting
      */
-    __CDS_NoDiscard __CDS_MaybeUnused __CDS_cpplang_ConstexprDestructor auto rtrim ( String const & e ) const noexcept -> String {
+    __CDS_NoDiscard __CDS_MaybeUnused __CDS_OptimalInline auto rtrim ( String const & e ) const noexcept -> String {
         return String(*this).rtrim(e);
     }
 
@@ -3511,7 +3512,7 @@ public:
      *
      * @test tested in primitive/StringTest/Utility Functions, String Formatting
      */
-    __CDS_NoDiscard __CDS_MaybeUnused __CDS_cpplang_ConstexprDestructor auto trim ( ElementType e = ' ' ) const noexcept -> String {
+    __CDS_NoDiscard __CDS_MaybeUnused __CDS_OptimalInline auto trim ( ElementType e = ' ' ) const noexcept -> String {
         return String(*this).trim(e);
     }
 
@@ -3527,7 +3528,7 @@ public:
      * @test tested in primitive/StringTest/Utility Functions, String Formatting
      */
 
-    __CDS_NoDiscard __CDS_MaybeUnused __CDS_cpplang_ConstexprDestructor auto trim ( String const & e ) const noexcept -> String {
+    __CDS_NoDiscard __CDS_MaybeUnused __CDS_OptimalInline auto trim ( String const & e ) const noexcept -> String {
         return String(*this).trim(e);
     }
 
@@ -3568,7 +3569,7 @@ public:
      *
      * @test tested in primitive/StringTest/Utility Functions, String Formatting
      */
-    __CDS_NoDiscard __CDS_MaybeUnused __CDS_cpplang_ConstexprDestructor auto rjust (Size s, ElementType e = ' ') const noexcept -> String {
+    __CDS_NoDiscard __CDS_MaybeUnused __CDS_OptimalInline auto rjust (Size s, ElementType e = ' ') const noexcept -> String {
         return String(*this).rjust(s, e);
     }
 
@@ -3609,7 +3610,7 @@ public:
      *
      * @test tested in primitive/StringTest/Utility Functions, String Formatting
      */
-    __CDS_NoDiscard __CDS_MaybeUnused __CDS_cpplang_ConstexprDestructor auto ljust (Size s, ElementType e = ' ') const noexcept -> String {
+    __CDS_NoDiscard __CDS_MaybeUnused __CDS_OptimalInline auto ljust (Size s, ElementType e = ' ') const noexcept -> String {
         return String(*this).ljust(s, e);
     }
 
@@ -3697,7 +3698,7 @@ public:
      *
      * @test tested in primitive/StringTest/Utility Functions, String Formatting
      */
-    __CDS_cpplang_ConstexprDestructor auto static isVowel(char c) noexcept -> bool { return String("aeiouAEIOU").contains(c); }
+    __CDS_OptimalInline auto static isVowel(char c) noexcept -> bool { return String("aeiouAEIOU").contains(c); }
 
     /**
      * @brief Function used to check whether character is a consonant
@@ -3829,7 +3830,7 @@ public:
      *
      * @test tested in primitive/StringTest/Utility Functions, String Formatting
      */
-    __CDS_NoDiscard __CDS_cpplang_ConstexprDestructor auto lower () const noexcept -> String { return String(*this).toLower(); }
+    __CDS_NoDiscard __CDS_OptimalInline auto lower () const noexcept -> String { return String(*this).toLower(); }
 
     /**
      * @brief Function used to convert characters of a String to their upper values ( if are lower ) and return it
@@ -3840,7 +3841,7 @@ public:
      *
      * @test tested in primitive/StringTest/Utility Functions, String Formatting
      */
-    __CDS_NoDiscard __CDS_cpplang_ConstexprDestructor auto upper () const noexcept -> String { return String(*this).toUpper(); }
+    __CDS_NoDiscard __CDS_OptimalInline auto upper () const noexcept -> String { return String(*this).toUpper(); }
 
     /**
      * @brief Copy Operator
@@ -3884,7 +3885,7 @@ public:
         if ( this == & o )
             return * this;
 
-        this->clear();
+        Memory :: instance().destroyArray ( this->_p );
 
         this->_p = Utility::exchange( o._p, nullptr );
         this->_l = Utility::exchange( o._l, 0u );
@@ -3933,7 +3934,7 @@ public:
      *
      * @test tested in primitive/StringTest/Assignment Tests
      */
-    __CDS_cpplang_ConstexprDestructor auto operator = ( ElementType e ) noexcept -> String & { return this->operator=(String().append(e)); } // NOLINT(misc-unconventional-assign-operator)
+    __CDS_OptimalInline auto operator = ( ElementType e ) noexcept -> String & { return this->operator=(String().append(e)); } // NOLINT(misc-unconventional-assign-operator)
 
     /**
      * @brief Copy Operator
@@ -3946,7 +3947,7 @@ public:
      *
      * @test tested in primitive/StringTest/Assignment Tests
      */
-    __CDS_cpplang_ConstexprDestructor auto operator = ( StringLiteral cString ) noexcept -> String & { return this->operator=(String(cString)); } // NOLINT(misc-unconventional-assign-operator)
+    __CDS_OptimalInline auto operator = ( StringLiteral cString ) noexcept -> String & { return this->operator=(String(cString)); } // NOLINT(misc-unconventional-assign-operator)
 
 
     /**
@@ -4037,7 +4038,7 @@ public:
      *
      * @test tested in primitive/StringTest/Content Functions Tests
      */
-    __CDS_NoDiscard __CDS_cpplang_ConstexprDestructor auto contains ( StringLiteral e ) const noexcept -> bool { return this->findFirst( String(e) ) != INVALID_POS; }
+    __CDS_NoDiscard __CDS_OptimalInline auto contains ( StringLiteral e ) const noexcept -> bool { return this->findFirst( String(e) ) != INVALID_POS; }
 
     /**
      * @brief Function used to check whether String contains given std::string
@@ -4050,7 +4051,7 @@ public:
      *
      * @test tested in primitive/StringTest/Content Functions Tests
      */
-    __CDS_NoDiscard auto __CDS_OptimalInline contains ( std::string const & e ) const noexcept -> bool { return this->findFirst( String(e) ) != INVALID_POS; }
+    __CDS_NoDiscard __CDS_OptimalInline auto contains ( std::string const & e ) const noexcept -> bool { return this->findFirst( String(e) ) != INVALID_POS; }
 
 #if defined(CDS_QT)
 
@@ -4079,7 +4080,7 @@ public:
      *
      * @test Not Applicable
      */
-    __CDS_NoDiscard __CDS_cpplang_ConstexprDestructor auto diag() const noexcept -> String {
+    __CDS_NoDiscard __CDS_OptimalInline auto diag() const noexcept -> String {
         return String("Debug = { data = '") + this->_p + "', length = " + this->_l + ", capacity = " + this->_c + " }";
     }
 
@@ -4127,8 +4128,8 @@ public:
      *
      * @test Not Applicable
      */
-    __CDS_NoDiscard __CDS_cpplang_VirtualConstexpr auto copy () const noexcept -> String * override {
-        return new String( * this );
+    __CDS_NoDiscard __CDS_OptimalInline auto copy () const noexcept -> String * override {
+        return Memory :: instance().create < String > ( * this );
     }
 
     /**
@@ -4140,7 +4141,7 @@ public:
      *
      * @test Not Applicable
      */
-    __CDS_NoDiscard __CDS_cpplang_VirtualConstexpr auto toString () const noexcept -> String override {
+    __CDS_NoDiscard __CDS_OptimalInline auto toString () const noexcept -> String override {
         return * this;
     }
 
@@ -4157,7 +4158,7 @@ public:
      *
      * @test tested in primitive/StringTest/Replace Tests
      */
-    __CDS_cpplang_ConstexprDestructor auto replace ( Index pos, Size len, String const & newInPlace ) noexcept -> String & {
+    __CDS_OptimalInline auto replace ( Index pos, Size len, String const & newInPlace ) noexcept -> String & {
         String left = this->substr(0, pos);
         String right = this->substr(pos + static_cast < Index > ( len ));
 
@@ -4364,7 +4365,7 @@ public:
      *
      * @test Tested in primitive/StringTest/Constructor Tests
      */
-    __CDS_NoDiscard __CDS_cpplang_ConstexprDestructor auto reversed() const noexcept -> String {
+    __CDS_NoDiscard __CDS_OptimalInline auto reversed() const noexcept -> String {
         String a;
         a._alloc(this->_l);
         for (Index i = static_cast < Index > (this->_l) - 1; i >= 0; -- i)
@@ -4430,7 +4431,7 @@ public:
      *
      * @test Tested in primitive/StringTest/Utility Functions
      */
-    __CDS_NoDiscard __CDS_MaybeUnused __CDS_cpplang_ConstexprDestructor auto removePrefix (String const & prefix) const noexcept -> String { return String(*this).removePrefix(prefix); }
+    __CDS_NoDiscard __CDS_MaybeUnused __CDS_OptimalInline auto removePrefix (String const & prefix) const noexcept -> String { return String(*this).removePrefix(prefix); }
 
     /**
      * @brief Function used to remove a String's suffix. Used over mutable Strings, removing it from the caller String
@@ -4458,7 +4459,7 @@ public:
      *
      * @test Tested in primitive/StringTest/Utility Functions
      */
-    __CDS_NoDiscard __CDS_cpplang_ConstexprDestructor auto removeSuffix (String const & suffix) const noexcept -> String { return String(*this).removeSuffix(suffix); }
+    __CDS_NoDiscard __CDS_OptimalInline auto removeSuffix (String const & suffix) const noexcept -> String { return String(*this).removeSuffix(suffix); }
 
     __CDS_NoDiscard __CDS_OptionalInline auto static format (StringLiteral format, ...) noexcept (false) -> String {
         va_list args;
@@ -4467,12 +4468,12 @@ public:
         int currentSize = __CDS_StringFormat_StartSize;
 
         while(currentSize <= __CDS_StringFormat_MaxSize) {
-            char * buffer = new char[currentSize];
+            char * buffer = Memory :: instance ().createArray < char > (currentSize);
 
             int returnValue = std::vsnprintf ( buffer, currentSize, format, args );
             if ( returnValue >= 0 && returnValue < currentSize ) {
                 String s(buffer, returnValue);
-                delete [] buffer;
+                Memory :: instance().destroyArray ( buffer );
                 va_end (args);
 
                 return s;
@@ -4480,7 +4481,7 @@ public:
 
             va_end(args);
             va_start(args, format);
-            delete [] buffer;
+            Memory :: instance ().destroyArray ( buffer );
             currentSize *= __CDS_StringFormat_SizeMultiplier;
         }
 
@@ -4495,12 +4496,12 @@ public:
         int currentSize = __CDS_StringFormat_StartSize;
 
         while(currentSize <= __CDS_StringFormat_MaxSize) {
-            char * buffer = new char[currentSize];
+            char * buffer = Memory :: instance().createArray < char > (currentSize);
 
             int returnValue = std::vsnprintf ( buffer, currentSize, format, args );
             if ( returnValue >= 0 && returnValue < currentSize ) {
                 String s(buffer, returnValue);
-                delete [] buffer;
+                Memory :: instance().destroyArray ( buffer );
                 va_end (args);
 
                 return s;
@@ -4508,7 +4509,7 @@ public:
 
             va_end(args);
             va_start(args, format);
-            delete [] buffer;
+            Memory :: instance().destroyArray( buffer );
             currentSize *= __CDS_StringFormat_SizeMultiplier;
         }
 
@@ -4550,11 +4551,11 @@ inline auto String::operator > ( std::string const & stdString ) const noexcept 
 
 #if defined(CDS_STRING_POSTFIX)
 
-__CDS_cpplang_ConstexprPostfixLiteral auto operator "" _obj (const char * pString, std::size_t length __CDS_MaybeUnused ) noexcept -> String {
+inline auto operator "" _obj (const char * pString, std::size_t length __CDS_MaybeUnused ) noexcept -> String {
     return pString;
 }
 
-__CDS_cpplang_ConstexprPostfixLiteral auto operator "" _s (const char * pString, std::size_t length __CDS_MaybeUnused ) noexcept -> String {
+inline auto operator "" _s (const char * pString, std::size_t length __CDS_MaybeUnused ) noexcept -> String {
     return pString;
 }
 

@@ -12,6 +12,7 @@
 #include <CDS/Path>
 #include <CDS/HashMap>
 #include <CDS/Pointer>
+#include <CDS/Memory>
 
 #if defined(__linux)
 #include <sys/stat.h>
@@ -683,7 +684,7 @@ public:
     ~LinuxRegular () noexcept override = default;
 
     __CDS_NoDiscard auto copy () const noexcept -> LinuxRegular * override {
-        return new LinuxRegular(* this);
+        return Memory :: instance().create < LinuxRegular > (* this);
     }
 
     __CDS_NoDiscard __CDS_MaybeUnused auto open (String const & = "rw") noexcept -> LinuxRegular & {
@@ -727,7 +728,7 @@ public:
 
         if ( ! this->_entries.empty() ) {
             for ( auto * p : this->_entries )
-                delete p;
+                Memory :: instance().destroy ( p );
             this->_entries.clear();
         }
 
@@ -801,12 +802,12 @@ public:
 
     ~LinuxDirectory () noexcept override {
         for ( auto * p : this->_entries )
-            delete p;
+            Memory :: instance().destroy ( p );
         this->_entries.clear();
     }
 
     __CDS_NoDiscard auto copy () const noexcept -> LinuxDirectory * override {
-        return new LinuxDirectory(* this);
+        return Memory :: instance().create < LinuxDirectory >(* this);
     }
 };
 
@@ -828,7 +829,7 @@ public:
     ~LinuxCharacterDevice () noexcept override = default;
 
     __CDS_NoDiscard auto copy () const noexcept -> LinuxCharacterDevice * override {
-        return new LinuxCharacterDevice(* this);
+        return Memory :: instance().create < LinuxCharacterDevice > (* this);
     }
 };
 
@@ -850,7 +851,7 @@ public:
     ~LinuxBlockDevice () noexcept override = default;
 
     __CDS_NoDiscard auto copy () const noexcept -> LinuxBlockDevice * override {
-        return new LinuxBlockDevice(* this);
+        return Memory :: instance().create < LinuxBlockDevice > (* this);
     }
 };
 
@@ -871,7 +872,7 @@ public:
     ~LinuxFIFO () noexcept override = default;
 
     __CDS_NoDiscard auto copy () const noexcept -> LinuxFIFO * override {
-        return new LinuxFIFO(* this);
+        return Memory :: instance().create < LinuxFIFO > (* this);
     }
 };
 
@@ -892,7 +893,7 @@ public:
     ~LinuxSymbolicLink () noexcept override = default;
 
     __CDS_NoDiscard auto copy () const noexcept -> LinuxSymbolicLink * override {
-        return new LinuxSymbolicLink(* this);
+        return Memory :: instance().create < LinuxSymbolicLink > (* this);
     }
 };
 
@@ -913,7 +914,7 @@ public:
     ~LinuxSocket () noexcept override = default;
 
     __CDS_NoDiscard auto copy () const noexcept -> LinuxSocket * override {
-        return new LinuxSocket(* this);
+        return Memory :: instance().create < LinuxSocket > (* this);
     }
 };
 
@@ -929,17 +930,17 @@ __CDS_NoDiscard inline auto File::at (Path const & p) noexcept -> UniquePointer 
 
     auto flags = File::platformFileType(p);
 
-    if ( flags & PTF_REGULAR )          return {new LinuxRegular(p)};
-    if ( flags & PTF_DIRECTORY )        return {new LinuxDirectory(p)};
-    if ( flags & PTF_CHARACTER_DEVICE ) return {new LinuxCharacterDevice(p)};
-    if ( flags & PTF_BLOCK_DEVICE )     return {new LinuxBlockDevice(p)};
-    if ( flags & PTF_FIFO )             return {new LinuxFIFO(p)};
-    if ( flags & PTF_SYMBOLIC_LINK )    return {new LinuxSymbolicLink(p)};
-    if ( flags & PTF_SOCKET )           return {new LinuxSocket(p)};
+    if ( flags & PTF_REGULAR )          return {Memory :: instance().create < LinuxRegular > (p)};
+    if ( flags & PTF_DIRECTORY )        return {Memory :: instance().create < LinuxDirectory > (p)};
+    if ( flags & PTF_CHARACTER_DEVICE ) return {Memory :: instance().create < LinuxCharacterDevice > (p)};
+    if ( flags & PTF_BLOCK_DEVICE )     return {Memory :: instance().create < LinuxBlockDevice > (p)};
+    if ( flags & PTF_FIFO )             return {Memory :: instance().create < LinuxFIFO > (p)};
+    if ( flags & PTF_SYMBOLIC_LINK )    return {Memory :: instance().create < LinuxSymbolicLink > (p)};
+    if ( flags & PTF_SOCKET )           return {Memory :: instance().create < LinuxSocket > (p)};
 
 #endif
 
-    return { new LinuxSymbolicLink(p) };
+    return { Memory :: instance().create < LinuxSymbolicLink > (p) };
 }
 
 // endregion

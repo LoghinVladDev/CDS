@@ -7,6 +7,7 @@
 
 #include <CDS/Object>
 #include <CDS/Warnings>
+#include <CDS/Memory>
 
 __CDS_WarningSuppression_UnsafeDeleteVoidPtr_SuppressEnable
 
@@ -142,21 +143,21 @@ public:
 
     template < typename T, typename std :: enable_if < Utility :: Detail :: UnionImpl :: PackContains < T, FirstType, RemainingTypes ... > :: value && Type < T > :: isFundamental, int > :: type = 0 >
     __CDS_OptimalInline Union ( T value ) noexcept : // NOLINT(google-explicit-constructor)
-            pInstance ( new T (value) ),
+            pInstance ( Memory::instance().create < T > (value) ),
             _activeTypeIndex ( Utility :: Detail :: UnionImpl :: IndexOfTypeInPack < T, FirstType, RemainingTypes ... > :: index() ) {
 
     }
 
     template < typename T, typename std :: enable_if < Utility :: Detail :: UnionImpl :: PackContains < T, FirstType, RemainingTypes ... > :: value && ! Type < T > :: isFundamental && Type < T > :: copyConstructible, int > :: type = 0 >
     __CDS_OptimalInline Union ( T const & value ) noexcept :  // NOLINT(google-explicit-constructor)
-            pInstance ( new T (value) ),
+            pInstance ( Memory::instance().create < T > (value) ),
             _activeTypeIndex ( Utility :: Detail :: UnionImpl :: IndexOfTypeInPack < T, FirstType, RemainingTypes ... > :: index() ) {
 
     }
 
     template < typename T, typename std :: enable_if < Utility :: Detail :: UnionImpl :: PackContains < T, FirstType, RemainingTypes ... > :: value && ! Type < T > :: isFundamental && ! Type < T > :: copyConstructible && Type < T > :: defaultConstructible && Type < T > :: copyAssignable, int > :: type = 0 >
     __CDS_OptimalInline Union ( T const & value ) noexcept :  // NOLINT(google-explicit-constructor)
-            pInstance ( new T ),
+            pInstance ( Memory::instance().create < T > () ),
             _activeTypeIndex ( Utility :: Detail :: UnionImpl :: IndexOfTypeInPack < T, FirstType, RemainingTypes ... > :: index() ) {
 
         * reinterpret_cast < T * > ( this->pInstance ) = value;
@@ -164,14 +165,14 @@ public:
 
     template < typename T, typename std :: enable_if < Utility :: Detail :: UnionImpl :: PackContains < T, FirstType, RemainingTypes ... > :: value && ! Type < T > :: isFundamental && Type < T > :: moveConstructible, int > :: type = 0 >
     __CDS_MaybeUnused __CDS_OptimalInline Union ( T && value ) noexcept :  // NOLINT(google-explicit-constructor, bugprone-forwarding-reference-overload)
-            pInstance ( new T ( std :: forward < T > ( value ) ) ),
+            pInstance ( Memory :: instance().create < T > ( std :: forward < T > ( value ) ) ),
             _activeTypeIndex ( Utility :: Detail :: UnionImpl :: IndexOfTypeInPack < T, FirstType, RemainingTypes ... > :: index() ) {
 
     }
 
     template < typename T, typename std :: enable_if < Utility :: Detail :: UnionImpl :: PackContains < T, FirstType, RemainingTypes ... > :: value && ! Type < T > :: isFundamental && ! Type < T > :: moveConstructible && Type < T > :: defaultConstructible && Type < T > :: moveAssignable, int > :: type = 0 >
     __CDS_MaybeUnused __CDS_OptimalInline Union ( T && value ) noexcept :  // NOLINT(google-explicit-constructor, bugprone-forwarding-reference-overload)
-            pInstance ( new T ),
+            pInstance ( Memory :: instance().create < T > () ),
             _activeTypeIndex ( Utility :: Detail :: UnionImpl :: IndexOfTypeInPack < T, FirstType, RemainingTypes ... > :: index() ) {
 
         * reinterpret_cast < T * > ( this->pInstance ) = std :: forward < T > ( value );
@@ -180,7 +181,7 @@ public:
 
 #define UNION_DELETE(_i) \
         if ( this->_activeTypeIndex == _i ) \
-            delete reinterpret_cast < typename Utility :: Detail :: UnionImpl :: TypeAtIndexInPack < _i, FirstType, RemainingTypes ... > :: type * > ( this->pInstance );
+            Memory :: instance().destroy ( reinterpret_cast < typename Utility :: Detail :: UnionImpl :: TypeAtIndexInPack < _i, FirstType, RemainingTypes ... > :: type * > ( this->pInstance ) );
 
 #define UNION_DELETE2(_i) \
         else UNION_DELETE(_i) \
@@ -220,10 +221,10 @@ public:
         if constexpr ( std :: is_same < Type ## _i, void > :: value ) {                                                                \
             throw TypeException ( String::f("Type '%s' is not copyable", Utility :: TypeParseTraits < Type ## _i > :: name) );  \
         } else if constexpr ( Type < Type ## _i > :: copyConstructible ) {                                                                 \
-            this->pInstance = new Type ## _i ( * reinterpret_cast < Type ## _i const * > ( value.pInstance ) );                        \
+            this->pInstance = Memory :: instance().create < Type ## _i > ( * reinterpret_cast < Type ## _i const * > ( value.pInstance ) );                        \
             this->_activeTypeIndex = _i; \
         } else if constexpr ( Type < Type ## _i > :: copyAssignable ) {                                                             \
-            this->pInstance = new Type ## _i;                                                                                       \
+            this->pInstance = Memory :: instance().create < Type ## _i > ();                                                                                       \
             * reinterpret_cast < Type ## _i * > ( this->pInstance ) = * reinterpret_cast < Type ## _i const * > ( value.pInstance );   \
             this->_activeTypeIndex = _i; \
         } else         \
@@ -338,7 +339,7 @@ public:
 
         UNION_DELETE36
 
-        this->pInstance = new T (value);
+        this->pInstance = Memory :: instance().create < T > (value);
         this->_activeTypeIndex = Utility :: Detail :: UnionImpl :: IndexOfTypeInPack < T, FirstType, RemainingTypes ... > :: index();
 
         return * this;
@@ -349,7 +350,7 @@ public:
 
         UNION_DELETE36
 
-        this->pInstance = new T (value);
+        this->pInstance = Memory :: instance().create < T > (value);
         this->_activeTypeIndex = Utility :: Detail :: UnionImpl :: IndexOfTypeInPack < T, FirstType, RemainingTypes ... > :: index();
 
         return * this;
@@ -360,7 +361,7 @@ public:
 
         UNION_DELETE36
 
-        this->pInstance = new T;
+        this->pInstance = Memory :: instance().create < T > ();
         this->_activeTypeIndex = Utility :: Detail :: UnionImpl :: IndexOfTypeInPack < T, FirstType, RemainingTypes ... > :: index();
         * reinterpret_cast < T * > ( this->pInstance ) = value;
 
@@ -372,7 +373,7 @@ public:
 
         UNION_DELETE36
 
-        this->pInstance = new T ( std :: forward < T > ( value ) );
+        this->pInstance = Memory :: create < T > ( std :: forward < T > ( value ) );
         this->_activeTypeIndex = Utility :: Detail :: UnionImpl :: IndexOfTypeInPack < T, FirstType, RemainingTypes ... > :: index();
 
         return * this;
@@ -383,7 +384,7 @@ public:
 
         UNION_DELETE36
 
-        this->pInstance = new T;
+        this->pInstance = Memory :: instance().create < T > ();
         this->_activeTypeIndex = Utility :: Detail :: UnionImpl :: IndexOfTypeInPack < T, FirstType, RemainingTypes ... > :: index();
         * reinterpret_cast < T * > ( this->pInstance ) = std :: forward < T > ( value );
 

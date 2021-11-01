@@ -20,6 +20,20 @@
 #include "../std-types.h"
 #include <CDS/Pointer>
 #include <CDS/Function>
+#include <CDS/Traits>
+
+#if defined(__CDS_ThreadSafeObjects)
+
+#include <CDS/Mutex>
+#define __CDS_Collection_OperationalLock this->multithreadingProtection.lock(); /* NOLINT(bugprone-reserved-identifier) */
+#define __CDS_Collection_OperationalUnlock this->multithreadingProtection.unlock(); /* NOLINT(bugprone-reserved-identifier) */
+
+#else
+
+#define __CDS_Collection_OperationalLock /* NOLINT(bugprone-reserved-identifier) */
+#define __CDS_Collection_OperationalUnlock /* NOLINT(bugprone-reserved-identifier) */
+
+#endif
 
 #if __CDS_cpplang_Concepts_available == true
 
@@ -158,6 +172,10 @@ protected:
         return it.of(& collection);
     }
 
+#if defined(__CDS_ThreadSafeObjects)
+        Mutex mutable multithreadingProtection;
+#endif
+
 public:
     __CDS_MaybeUnused virtual auto remove ( ElementCRef, Size ) noexcept -> bool = 0;
     __CDS_MaybeUnused __CDS_OptimalInline virtual auto removeAll ( ElementCRef o ) noexcept -> bool { return this->remove( o, this->size() ); }
@@ -200,16 +218,28 @@ public:
 
     template < typename V = T, EnableIf < Type < V > :: copyConstructible > = 0 >
     __CDS_OptimalInline auto add (ElementCRef element) noexcept -> void {
+
+        __CDS_Collection_OperationalLock
+
         auto & p = this->allocInsertGetPtr(element);
         if ( p == nullptr )
-            p = new ElementType(element);
+            p = Memory :: instance().create < ElementType > (element);
+
+        __CDS_Collection_OperationalUnlock
+
     }
 
     template < typename V = T, EnableIf < Type < V > :: moveConstructible > = 0 >
     __CDS_OptimalInline auto add (ElementMRef element) noexcept -> void {
+
+        __CDS_Collection_OperationalLock
+
         auto & p = this->allocInsertGetPtr(element);
         if ( p == nullptr )
-            p = new ElementType(element);
+            p = Memory :: instance().create < ElementType > (element);
+
+        __CDS_Collection_OperationalUnlock
+
     }
 
     virtual auto clear () noexcept -> void = 0;
@@ -218,6 +248,9 @@ public:
     __CDS_MaybeUnused virtual auto makeUnique () noexcept -> void = 0;
 
     __CDS_OptionalInline virtual auto contains ( ElementCRef e ) const noexcept -> bool {
+
+        __CDS_Collection_OperationalLock
+
         for (
                 auto
                     i = UniquePointer < ConstIterator > ( this->beginPtr() ),
@@ -225,8 +258,14 @@ public:
                 ! i->equals(* end);
                 i->next()
         )
-            if ( Type < ElementType > :: compare ( i->value (), e ) )
+            if ( Type < ElementType > :: compare ( i->value (), e ) ) {
+
+                __CDS_Collection_OperationalUnlock
                 return true;
+
+            }
+
+        __CDS_Collection_OperationalUnlock
         return false;
     }
 
@@ -418,6 +457,8 @@ auto Collection<T>::forEach (
 ) noexcept ( noexcept ( ( * Type < Action > :: unsafeAddress() ) ( Type < ElementType > :: unsafeReference() ) ) )
         -> void __CDS_Requires( IsActionOver < Action COMMA T > ) {
 
+    __CDS_Collection_OperationalLock
+
     for (
         auto
             it = UniquePointer < Collection :: Iterator > ( this->beginPtr() ),
@@ -426,6 +467,9 @@ auto Collection<T>::forEach (
         it->next()
     )
         a ( it->value() );
+
+    __CDS_Collection_OperationalUnlock
+
 }
 
 template < typename T >
@@ -435,6 +479,8 @@ auto Collection<T>::forEach (
 ) const noexcept ( noexcept ( ( * Type < Action > :: unsafeAddress () ) ( Type < ElementType const > :: unsafeReference() ) ) )
         -> void __CDS_Requires( IsActionOver < Action COMMA T > ) {
 
+    __CDS_Collection_OperationalLock
+
     for (
         auto
             it = UniquePointer < Collection :: ConstIterator > ( this->beginPtr() ),
@@ -443,6 +489,9 @@ auto Collection<T>::forEach (
         it->next()
     )
         a ( it->value() );
+
+    __CDS_Collection_OperationalUnlock
+
 }
 
 template < typename T >
@@ -454,6 +503,8 @@ auto Collection<T>::count (
 
     Size trueCount = 0;
 
+    __CDS_Collection_OperationalLock
+
     for (
         auto
             it = UniquePointer < Collection :: Iterator > ( this->beginPtr() ),
@@ -463,6 +514,8 @@ auto Collection<T>::count (
     )
         if ( p ( it->value() ) )
             trueCount ++;
+
+    __CDS_Collection_OperationalUnlock
 
     return trueCount;
 }
@@ -476,6 +529,8 @@ auto Collection<T>::count (
 
     Size trueCount = 0;
 
+    __CDS_Collection_OperationalLock
+
     for (
         auto
             it = UniquePointer < Collection :: ConstIterator > ( this->beginPtr() ),
@@ -485,6 +540,8 @@ auto Collection<T>::count (
     )
         if ( p ( it->value() ) )
             trueCount ++;
+
+    __CDS_Collection_OperationalUnlock
 
     return trueCount;
 }

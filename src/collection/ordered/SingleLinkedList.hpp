@@ -52,8 +52,8 @@ public:
 
     constexpr SingleLinkedList ( ) noexcept = default;
     SingleLinkedList ( SingleLinkedList const & ) noexcept;
-    
-    constexpr SingleLinkedList ( SingleLinkedList && obj ) noexcept :
+
+    __CDS_cpplang_ConstexprConstructorNonEmptyBody SingleLinkedList ( SingleLinkedList && obj ) noexcept :
             List < T > ( std :: forward ( obj ) ),
             _pFront ( Utility::exchange( obj._pFront, nullptr ) ),
             _pBack ( Utility::exchange( obj._pBack, nullptr ) ) {
@@ -189,8 +189,8 @@ public:
         else
             this->_pFront = this->_pFront->_pNext;
 
-        delete node->data();
-        delete node;
+        Memory::instance().destroy ( node->data() );
+        Memory::instance().destroy ( node );
         return value;
     }
 
@@ -201,8 +201,8 @@ public:
         if ( this->size() == 1 ) {
             auto v = * this->_pFront->_data;
 
-            delete this->_pFront->data();
-            delete this->_pFront;
+            Memory::instance().destroy ( this->_pFront->data() );
+            Memory::instance().destroy ( this->_pFront );
 
             this->_pFront = this->_pBack = nullptr;
             this->_size = 0;
@@ -219,8 +219,8 @@ public:
 
         p->_pNext = nullptr;
 
-        delete this->_pBack->data();
-        delete this->_pBack;
+        Memory :: instance().destroy ( this->_pBack->data() );
+        Memory :: instance().destroy ( this->_pBack );
         this->_pBack = p;
 
         return v;
@@ -257,7 +257,7 @@ public:
     template < typename SortFunction >
     auto sort ( SortFunction const & f ) noexcept -> void;
 
-    auto sort ( Comparator < T > const & comparator ) noexcept -> void {
+    __CDS_MaybeUnused auto sort ( Comparator < T > const & comparator ) noexcept -> void {
         return this->sort([& comparator](T const & a, T const & b) noexcept -> bool { return comparator (a, b); });
     }
 
@@ -284,7 +284,7 @@ public:
     __CDS_NoDiscard auto sequence () && noexcept -> Sequence < SingleLinkedList < T > >;
 
     __CDS_NoDiscard __CDS_OptimalInline auto copy () const noexcept -> SingleLinkedList < T > * override {
-        return new SingleLinkedList (* this);
+        return Memory :: instance().create < SingleLinkedList > (* this);
     }
 
     __CDS_NoDiscard __CDS_cpplang_ConstexprOverride auto hash () const noexcept -> Index override {
@@ -393,7 +393,7 @@ public:
     }
 
     __CDS_NoDiscard __CDS_OptimalInline auto copy () const noexcept -> Iterator * override {
-        return new Iterator ( * this );
+        return Memory :: instance().create < Iterator > ( * this );
     }
 };
 
@@ -432,7 +432,7 @@ public:
     }
 
     __CDS_NoDiscard __CDS_OptimalInline auto copy () const noexcept -> ConstIterator * override {
-        return new ConstIterator ( * this );
+        return Memory :: instance().create < ConstIterator > ( * this );
     }
 };
 
@@ -479,8 +479,8 @@ auto SingleLinkedList < T > :: remove ( Index i ) noexcept -> bool {
 
     current->next() = current->next()->next();
 
-    delete toRemove->data();
-    delete toRemove;
+    Memory :: instance().destroy ( toRemove->data() );
+    Memory :: instance().destroy ( toRemove );
     return true;
 }
 
@@ -512,8 +512,8 @@ auto SingleLinkedList < T > :: remove ( ElementCRef what, Size count ) noexcept 
 
             nextNode();
 
-            delete toRemove->data();
-            delete toRemove;
+            Memory::instance().destroy ( toRemove->data() );
+            Memory::instance().destroy ( toRemove );
 
             removalDone = true;
             continue;
@@ -538,8 +538,8 @@ auto SingleLinkedList < T > :: removeLast ( ElementCRef what ) noexcept -> bool 
 
         this->_pFront = this->_pFront->next();
 
-        delete p->data();
-        delete p;
+        Memory :: instance().destroy ( p->data() );
+        Memory :: instance().destroy ( p );
         this->_size --;
 
         if ( this->size() == 0 ) this->_pBack = nullptr;
@@ -557,8 +557,8 @@ auto SingleLinkedList < T > :: removeLast ( ElementCRef what ) noexcept -> bool 
 
         auto p = previous->next();
         previous->next () = previous -> next () -> next ();
-        delete p->data();
-        delete p;
+        Memory :: instance().destroy ( p->data() );
+        Memory :: instance().destroy ( p );
         this->_size --;
 
         return true;
@@ -595,8 +595,8 @@ auto SingleLinkedList < T > :: removeOf ( Collection < T > const & from, Size co
 
             nextNode();
 
-            delete toRemove->data();
-            delete toRemove;
+            Memory :: instance().destroy ( toRemove->data() );
+            Memory :: instance().destroy ( toRemove );
 
             removalDone = true;
             continue;
@@ -621,8 +621,8 @@ auto SingleLinkedList < T > :: removeLastOf ( Collection < T > const & from ) no
 
         this->_pFront = this->_pFront->next();
 
-        delete p->data();
-        delete p;
+        Memory :: instance().destroy ( p->data() );
+        Memory :: instance().destroy ( p );
 
         -- this->_size;
 
@@ -641,8 +641,8 @@ auto SingleLinkedList < T > :: removeLastOf ( Collection < T > const & from ) no
 
         auto p = previous->next();
         previous->next () = previous -> next () -> next ();
-        delete p->data();
-        delete p;
+        Memory :: instance().destroy ( p->data() );
+        Memory :: instance().destroy ( p );
         this->_size --;
 
         return true;
@@ -679,8 +679,8 @@ auto SingleLinkedList < T > :: removeNotOf ( Collection < T > const & from, Size
 
             nextNode();
 
-            delete toRemove->data();
-            delete toRemove;
+            Memory :: instance().destroy ( toRemove->data() );
+            Memory :: instance().destroy ( toRemove );
 
             removalDone = true;
             continue;
@@ -704,8 +704,8 @@ auto SingleLinkedList < T > :: removeLastNotOf ( Collection < T > const & from )
         auto p = this->_pFront;
 
         this->_pFront = this->_pFront->next();
-        delete p->data();
-        delete p;
+        Memory::instance().destroy ( p->data() );
+        Memory::instance().destroy ( p );
         --this->_size;
 
         if ( this->size() == 0 ) this->_pBack = nullptr;
@@ -723,8 +723,8 @@ auto SingleLinkedList < T > :: removeLastNotOf ( Collection < T > const & from )
 
         auto p = previous->next();
         previous->next () = previous -> next () -> next ();
-        delete p->data();
-        delete p;
+        Memory :: instance().destroy ( p->data() );
+        Memory :: instance().destroy ( p );
         this->_size --;
 
         return true;
@@ -752,8 +752,8 @@ auto SingleLinkedList < T > :: remove ( CollectionIterator const & it ) noexcept
 
             auto retVal = * p->data();
             -- this->_size;
-            delete p->data();
-            delete p;
+            Memory :: instance().destroy ( p->data() );
+            Memory :: instance().destroy ( p );
 
             return retVal;
         }
@@ -787,22 +787,22 @@ SingleLinkedList < T > :: SingleLinkedList (
 
 template < typename T >
 auto SingleLinkedList < T > :: beginPtr () noexcept -> Iterator * {
-    return new Iterator ( this->_pFront, this );
+    return Memory :: instance().create < Iterator > ( this->_pFront, this );
 }
 
 template < typename T >
 auto SingleLinkedList < T > :: endPtr () noexcept -> Iterator * {
-    return new Iterator ( nullptr, this );
+    return Memory :: instance().create < Iterator > ( nullptr, this );
 }
 
 template < typename T >
 auto SingleLinkedList < T > :: beginPtr () const noexcept -> ConstIterator * {
-    return new ConstIterator ( this->_pFront, this );
+    return Memory :: instance().create < ConstIterator > ( this->_pFront, this );
 }
 
 template < typename T >
 auto SingleLinkedList < T > :: endPtr () const noexcept -> ConstIterator * {
-    return new ConstIterator ( nullptr, this );
+    return Memory :: instance().create < ConstIterator > ( nullptr, this );
 }
 
 template < typename T >
@@ -843,8 +843,8 @@ auto SingleLinkedList < T > :: clear () noexcept -> void {
     while ( this->_pFront != nullptr ) {
         auto p = this->_pFront;
         this->_pFront = this->_pFront->next();
-        delete p->data();
-        delete p;
+        Memory :: instance().destroy ( p->data() );
+        Memory :: instance().destroy ( p );
     }
 }
 
@@ -985,7 +985,7 @@ auto SingleLinkedList < T > :: operator = ( Collection < T > const & collection 
 
 template < typename T >
 auto SingleLinkedList < T > ::allocFrontGetPtr() noexcept -> ElementPtrRef {
-    auto p = new Node;
+    auto p = Memory :: instance ().create < Node > ();
     p->data() = nullptr;
     p->next() = this->_pFront;
 
@@ -1002,7 +1002,7 @@ template < typename T >
 auto SingleLinkedList < T > ::allocBackGetPtr() noexcept -> ElementPtrRef {
     if ( this->empty() ) return this->allocFrontGetPtr();
 
-    this->_pBack->next() = new Node;
+    this->_pBack->next() = Memory :: instance().create < Node > ();
     this->_pBack->next()->data() = nullptr;
     this->_pBack->next()->next() = nullptr;
 

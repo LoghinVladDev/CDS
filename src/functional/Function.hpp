@@ -27,9 +27,19 @@ private:
     using GenericFunctorAddress = void *;
     using GenericConstFunctorAddress = void const *;
 
+#if __CDS_cpplang_core_version >= __CDS_cpplang_core_version_17
+
     using Invoker = auto (*) ( GenericFunctorAddress, ArgumentTypes && ... ) noexcept ( false ) -> ReturnType;
     using Creator = auto (*) ( GenericConstFunctorAddress ) noexcept -> GenericFunctorAddress;
     using Deleter = auto (*) ( GenericFunctorAddress ) noexcept -> void;
+
+#else
+
+    using Invoker = ReturnType (*) ( GenericFunctorAddress, ArgumentTypes && ... );
+    using Creator = GenericFunctorAddress (*) (GenericConstFunctorAddress);
+    using Deleter = void (*) (GenericFunctorAddress);
+
+#endif
 
     struct Manager {
         Invoker invoker;
@@ -193,6 +203,8 @@ public:
     }
 };
 
+#if __CDS_cpplang_core_version >= __CDS_cpplang_core_version_17
+
 template < typename ReturnType, typename ... ArgumentTypes >
 class Function < ReturnType ( ArgumentTypes ... ) noexcept > : public Object {
 private:
@@ -353,6 +365,8 @@ public:
             this->pManager->deleter ( this->pCallableObject );
     }
 };
+
+#endif
 
 
 #if __CDS_cpplang_CTAD_available == true

@@ -8,6 +8,7 @@
 
 #include <CDS/Object>
 #include <CDS/LinkedList>
+#include <CDS/Memory>
 
 #if defined(WIN32)
 #include <windows.h>
@@ -142,7 +143,7 @@ public:
     }
 
     __CDS_NoDiscard auto toString () const noexcept -> String override { return this->_osPath; }
-    __CDS_NoDiscard auto copy () const noexcept -> Path * override { return new Path(* this); }
+    __CDS_NoDiscard auto copy () const noexcept -> Path * override { return Memory :: instance().create < Path > (* this); }
     __CDS_NoDiscard auto hash () const noexcept -> Index override { return this->parent().nodeName().hash(); }
 
     __CDS_NoDiscard __CDS_OptimalInline auto parent () const noexcept(false) -> Path { // NOLINT(misc-no-recursion)
@@ -241,10 +242,10 @@ public:
     __CDS_cpplang_NonConstConstexprMemberFunction auto files () noexcept -> LinkedList < String > & { return this->_files; }
 
     __CDS_NoDiscard auto copy() const noexcept -> WalkEntry * override {
-        return new WalkEntry (* this);
+        return Memory :: instance().create < WalkEntry > (* this);
     }
 
-    [[nodiscard]] auto hash () const noexcept -> Index override {
+    __CDS_NoDiscard auto hash () const noexcept -> Index override {
         return this->_root.hash() + this->_directories.hash() + this->_files.hash();
     }
 };
