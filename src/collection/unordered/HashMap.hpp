@@ -143,7 +143,7 @@ public:
         BucketIterator it;
 
     public:
-        constexpr Iterator() noexcept = default;
+        constexpr Iterator() noexcept = delete;
         constexpr Iterator(Iterator const &) noexcept = default;
         constexpr Iterator(Iterator &&) noexcept = default;
 
@@ -171,7 +171,7 @@ public:
             return * this;
         }
 
-        __CDS_cpplang_ConstexprOverride auto equals ( CollectionIterator const & i ) const noexcept -> bool final {
+        __CDS_cpplang_DynamicCastConstexpr auto equals ( CollectionIterator const & i ) const noexcept -> bool final {
             auto p = dynamic_cast < Iterator const * > ( & i );
             if ( p == nullptr ) return false;
             return this->bucketIndex == p->bucketIndex && p->it == this->it;
@@ -201,7 +201,7 @@ public:
         BucketConstIterator it;
 
     public:
-        constexpr ConstIterator() noexcept = default;
+        constexpr ConstIterator() noexcept = delete;
         constexpr ConstIterator(ConstIterator const &) noexcept = default;
         constexpr ConstIterator(ConstIterator &&) noexcept = default;
 
@@ -229,7 +229,7 @@ public:
             return * this;
         }
 
-        __CDS_cpplang_ConstexprOverride auto equals ( ConstCollectionIterator const & i ) const noexcept -> bool final {
+        __CDS_cpplang_DynamicCastConstexpr auto equals ( ConstCollectionIterator const & i ) const noexcept -> bool final {
             auto p = dynamic_cast < ConstIterator const * > ( & i );
             if ( p == nullptr ) return false;
             return this->bucketIndex == p->bucketIndex && p->it == this->it;
@@ -288,7 +288,7 @@ public:
         }
 
 
-        __CDS_cpplang_ConstexprConditioned auto equals ( CollectionIterator const & i ) const noexcept -> bool final {
+        __CDS_cpplang_DynamicCastConstexpr auto equals ( CollectionIterator const & i ) const noexcept -> bool final {
             auto p = dynamic_cast < ReverseIterator const * > ( & i );
             if ( p == nullptr ) return false;
             return this->bucketIndex == p->bucketIndex && p->it == this->it;
@@ -346,7 +346,7 @@ public:
             return * this;
         }
 
-        __CDS_cpplang_ConstexprConditioned auto equals ( ConstCollectionIterator const & i ) const noexcept -> bool final {
+        __CDS_cpplang_DynamicCastConstexpr auto equals ( ConstCollectionIterator const & i ) const noexcept -> bool final {
             auto p = dynamic_cast < ConstReverseIterator const * > ( & i );
             if ( p == nullptr ) return false;
             return this->bucketIndex == p->bucketIndex && p->it == this->it;

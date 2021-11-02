@@ -50,6 +50,7 @@
         },
         {
             "Name": "DeducedNoexceptTermination",
+            "MSVC": 4297,
             "GCC": "-Wterminate"
         }
     ]

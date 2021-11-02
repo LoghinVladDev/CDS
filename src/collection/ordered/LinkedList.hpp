@@ -52,7 +52,7 @@ private:
 
 private:
 
-    class IteratorBase : public Collection < T > :: Iterator {
+    class IteratorBase : public CollectionIterator {
     protected:
         Node mutable * _pNode { nullptr };
 
@@ -60,12 +60,17 @@ private:
         constexpr IteratorBase( IteratorBase && ) noexcept = default;
 
         constexpr explicit IteratorBase ( Node * pNode, DoubleLinkedList < T > const * pList ) noexcept :
-                Collection<T>::Iterator( (Collection < T > *) pList ),
+                CollectionIterator ( (Collection < T > *) pList ),
                 _pNode(pNode) {
 
         }
 
     public:
+        __CDS_cpplang_NonConstConstexprMemberFunction auto operator = ( IteratorBase const & it ) noexcept -> IteratorBase & {
+            this->CollectionIterator :: operator = (it);
+            return *this;
+        }
+
         __CDS_cpplang_ConstexprDestructor ~IteratorBase () noexcept override = default;
 
         __CDS_cpplang_ConstexprPureAbstract auto operator ++ () noexcept -> IteratorBase & override = 0;
@@ -83,7 +88,7 @@ private:
         __CDS_cpplang_ConstexprPureAbstract auto next () noexcept -> IteratorBase & override = 0;
     };
 
-    class ConstIteratorBase : public Collection < T > :: ConstIterator {
+    class ConstIteratorBase : public ConstCollectionIterator {
     protected:
         Node const * _pNode { nullptr };
 
@@ -91,12 +96,17 @@ private:
         constexpr ConstIteratorBase( ConstIteratorBase && ) noexcept = default;
 
         constexpr explicit ConstIteratorBase ( Node const * pNode, DoubleLinkedList < T > const * pList ) :
-                Collection<T>::ConstIterator( ( Collection < T > const * ) pList),
+                ConstCollectionIterator ( ( Collection < T > const * ) pList),
                 _pNode (pNode) {
 
         }
 
     public:
+        __CDS_cpplang_NonConstConstexprMemberFunction auto operator = ( ConstIteratorBase const & it ) noexcept -> ConstIteratorBase & {
+            this->ConstCollectionIterator :: operator = ( it );
+            return * this;
+        }
+
         __CDS_cpplang_ConstexprDestructor ~ConstIteratorBase () override = default;
 
         __CDS_cpplang_ConstexprPureAbstract auto operator ++ () noexcept -> ConstIteratorBase & override = 0;
@@ -123,7 +133,7 @@ public:
         constexpr Iterator( Iterator && ) noexcept = default;
 
         __CDS_cpplang_NonConstConstexprMemberFunction auto operator = ( Iterator const & o ) noexcept -> Iterator & {
-            this->Collection<T>::Iterator::operator=(o);
+            this->IteratorBase::operator=(o);
 
             this->_pNode = o._pNode;
             return * this;
@@ -163,7 +173,7 @@ public:
         constexpr ReverseIterator( ReverseIterator && ) noexcept = default;
 
         __CDS_cpplang_NonConstConstexprMemberFunction auto operator = ( ReverseIterator const & o ) noexcept -> ReverseIterator & {
-            this->Collection<T>::Iterator::operator=(o);
+            this->IteratorBase::operator=(o);
             this->_pNode = o._pNode;
             return * this;
         }
@@ -202,7 +212,7 @@ public:
         constexpr ConstIterator( ConstIterator && ) noexcept = default;
 
         __CDS_cpplang_NonConstConstexprMemberFunction auto operator = ( ConstIterator const & o ) noexcept -> ConstIterator & {
-            this->Collection<T>::ConstIterator::operator=(o);
+            this->ConstIteratorBase::operator=(o);
             this->_pNode = o._pNode;
             return * this;
         }
@@ -241,7 +251,7 @@ public:
         constexpr ConstReverseIterator( ConstReverseIterator && ) noexcept = default;
 
         __CDS_cpplang_NonConstConstexprMemberFunction auto operator = ( ConstReverseIterator const & o ) noexcept -> ConstReverseIterator & {
-            this->Collection<T>::ConstIterator::operator=(o);
+            this->ConstIteratorBase::operator=(o);
             this->_pNode = o._pNode;
             return * this;
         }

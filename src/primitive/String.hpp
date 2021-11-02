@@ -446,7 +446,7 @@ public:
     /**
      * @class String::Iterator, forward iterator over a mutable String object
      */
-    class Iterator final : public String::IteratorBase {
+    class Iterator : public String::IteratorBase {
     public:
 
         /**
@@ -484,7 +484,7 @@ public:
          *
          * @test Tested in primitive/StringTest/Iterable Tests
          */
-        __CDS_cpplang_ConstexprDestructor ~Iterator () noexcept final = default;
+        __CDS_cpplang_ConstexprDestructor ~Iterator () noexcept override = default;
 
         /**
          * @brief Function used to shift the iterator to next element
@@ -523,7 +523,7 @@ public:
     /**
      * @class String::ConstIterator, forward iterator over an immutable String object
      */
-    class ConstIterator final : public ConstIteratorBase {
+    class ConstIterator : public ConstIteratorBase {
     public:
 
         /**
@@ -561,7 +561,7 @@ public:
          *
          * @test Tested in primitive/StringTest/Iterable Tests
          */
-        __CDS_cpplang_ConstexprDestructor ~ConstIterator () noexcept final = default;
+        __CDS_cpplang_ConstexprDestructor ~ConstIterator () noexcept override = default;
 
         /**
          * @brief Function used to shift the iterator to next element
@@ -600,7 +600,7 @@ public:
     /**
      * @class String::Iterator, backwards iterator over a mutable String object
      */
-    class ReverseIterator final : public IteratorBase {
+    class ReverseIterator : public IteratorBase {
     public:
 
         /**
@@ -638,7 +638,7 @@ public:
          *
          * @test Tested in primitive/StringTest/Iterable Tests
          */
-        __CDS_cpplang_ConstexprDestructor ~ReverseIterator () noexcept final = default;
+        __CDS_cpplang_ConstexprDestructor ~ReverseIterator () noexcept override = default;
 
         /**
          * @brief Function used to shift the iterator to next element
@@ -677,7 +677,7 @@ public:
     /**
      * @class String::Iterator, backwards iterator over an immutable String object
      */
-    class ConstReverseIterator final : public ConstIteratorBase {
+    class ConstReverseIterator : public ConstIteratorBase {
     public:
 
         /**
@@ -715,7 +715,7 @@ public:
          *
          * @test Tested in primitive/StringTest/Iterable Tests
          */
-        __CDS_cpplang_ConstexprDestructor ~ConstReverseIterator () noexcept final = default;
+        __CDS_cpplang_ConstexprDestructor ~ConstReverseIterator () noexcept override = default;
 
         /**
          * @brief Function used to shift the iterator to next element
@@ -918,7 +918,7 @@ public:
      *
      * @test tested in primitive/StringTest/Constructor Tests
      */
-    __CDS_cpplang_ConstexprConditioned String(std::string::iterator const & begin, std::string::iterator const & end) noexcept : CONSTR_CLEAR() {
+    __CDS_cpplang_ConstexprSTLIteratorOp String(std::string::iterator const & begin, std::string::iterator const & end) noexcept : CONSTR_CLEAR() {
         if ( end - begin <= 0 )
             return;
 
@@ -4086,7 +4086,7 @@ public:
 
 #else
 
-    __CDS_NoDiscard __CDS_cpplang_ConstexprDestructor auto diag() const noexcept -> String { return ""; }
+    __CDS_NoDiscard __CDS_OptimalInline auto diag() const noexcept -> String { return ""; }
 
 #endif
 

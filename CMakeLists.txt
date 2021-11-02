@@ -6,7 +6,7 @@ set(CMAKE_CXX_STANDARD 20)
 if (WIN32)
     if (CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
         set(GCC_COMPILE_OPTIONS "-Wa,-mbig-obj")
-        set(GCC_COMPILE_DEBUG_OPTIONS "${GCC_COMPILE_OPTIONS};-O0")
+        set(GCC_COMPILE_DEBUG_OPTIONS "${GCC_COMPILE_OPTIONS};-Os")
         set(GCC_COMPILE_RELEASE_OPTIONS "${GCC_COMPILE_OPTIONS};-O3")
         add_compile_options("$<$<CONFIG:Debug>:${GCC_COMPILE_DEBUG_OPTIONS}>")
         add_compile_options("$<$<CONFIG:Release>:${GCC_COMPILE_RELEASE_OPTIONS}>")
@@ -31,11 +31,6 @@ set(CDS_INCLUDE_DIRECTORIES
 )
 
 include_directories(${CDS_INCLUDE_DIRECTORIES})
-
-set(
-        CDS_EXCEPTION
-        src/exception/NotImplementedException.h
-)
 
 set(
         CDS_PRIMITIVE
@@ -65,7 +60,6 @@ set(
 set(
         CDS_COLLECTION_INTERFACE
         ${CDS_PRIMITIVE}
-        ${CDS_EXCEPTION}
         src/collection/Collection.hpp
         src/collection/ordered/List.hpp
         src/collection/unordered/Set.hpp
@@ -168,7 +162,8 @@ add_executable(
         CDS-dummy
         main.cpp
         ${CDS_HEADERS}
-        src/functional/Time.hpp src/cdsIntern/Utility.hpp include/CDS/Utility src/cdsIntern/compiler/Compiler.hpp src/cdsIntern/Platform.hpp include/CDS/Compiler include/CDS/Platform src/cdsIntern/compiler/gcc.hpp include/CDS/Warnings src/cdsIntern/Exception.hpp include/CDS/Exception src/cdsIntern/Conversion.hpp include/CDS/Conversion src/cdsIntern/Limits.hpp include/CDS/Limits src/cdsIntern/compiler/clang.hpp src/cdsIntern/Debug.hpp include/CDS/Debug include/CDS/Options src/cdsIntern/Options.hpp src/primitive/StringParser.hpp include/CDS/StringParser src/net/Request.hpp src/primitive/Union.hpp)
+)
+
 target_link_libraries(
         CDS-dummy
         ${CDS_LIBRARIES}

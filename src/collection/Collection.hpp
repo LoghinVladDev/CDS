@@ -84,6 +84,7 @@ public:
         Collection < T > * pBaseCollection {nullptr};
 
     protected:
+        constexpr Iterator() noexcept = default;
         constexpr Iterator(Iterator const &) noexcept = default;
         constexpr Iterator(Iterator &&) noexcept = default;
 
@@ -94,7 +95,6 @@ public:
         }
 
     public:
-        constexpr Iterator() noexcept = delete;
         __CDS_cpplang_ConstexprDestructor ~Iterator() noexcept override = default;
 
         __CDS_cpplang_NonConstConstexprMemberFunction auto operator = (Iterator const & obj) noexcept -> Iterator & { // NOLINT(bugprone-unhandled-self-assignment)
@@ -122,6 +122,7 @@ public:
         Collection < T > const * pBaseCollection {nullptr};
 
     protected:
+        constexpr ConstIterator() noexcept = default;
         constexpr ConstIterator(ConstIterator const &) noexcept = default;
         constexpr ConstIterator(ConstIterator &&) noexcept = default;
 
@@ -132,7 +133,6 @@ public:
         }
 
     public:
-        constexpr ConstIterator() noexcept = delete;
         __CDS_cpplang_ConstexprDestructor ~ConstIterator() noexcept override = default;
 
         __CDS_cpplang_NonConstConstexprMemberFunction auto operator = (ConstIterator const & obj) noexcept -> ConstIterator & { // NOLINT(bugprone-unhandled-self-assignment)

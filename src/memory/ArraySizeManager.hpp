@@ -15,9 +15,22 @@
 
 #include <pthread.h>
 
+#elif defined(__CDS_Platform_Microsoft_Windows)
+
+#include <windows.h>
+
 #endif
 
-namespace Utility {
+#if defined(_MSC_VER)
+
+#pragma push_macro("min")
+#pragma push_macro("max")
+#undef min
+#undef max
+
+#endif
+
+namespace Utility { // NOLINT(modernize-concat-nested-namespaces) c++ 14 and lower do not support namespace concatenation
 
     namespace MemoryImpl {
 
@@ -49,14 +62,28 @@ namespace Utility {
             } pSizeDistribution[__CDS_Memory_ArrayManagerCacheRange];
 
 #if defined(__CDS_Platform_Linux)
+
             pthread_mutex_t opLock;
+
+#elif defined(__CDS_Platform_Microsoft_Windows)
+
+            CRITICAL_SECTION criticalSection;
+
 #endif
 
         public:
-            ArraySizeManager() noexcept { // NOLINT(cppcoreguidelines-pro-type-member-init)
+            ArraySizeManager() noexcept { // NOLINT(cppcoreguidelines-pro-type-member-init,modernize-use-equals-default)
+
 #if defined(__CDS_Platform_Linux)
+
                 pthread_mutex_init( & this->opLock, nullptr );
+
+#elif defined(__CDS_Platform_Microsoft_Windows)
+
+                InitializeCriticalSection( & this->criticalSection );
+
 #endif
+
             }
 
             inline auto save ( Byte * pAddress, Size size ) noexcept -> Byte * {
@@ -65,6 +92,8 @@ namespace Utility {
 
 #if defined(__CDS_Platform_Linux)
                 pthread_mutex_lock ( & this->opLock );
+#elif defined(__CDS_Platform_Microsoft_Windows)
+                EnterCriticalSection ( & this->criticalSection );
 #endif
 
                 if ( partition.size >= partition.capacity )
@@ -74,6 +103,8 @@ namespace Utility {
 
 #if defined(__CDS_Platform_Linux)
                 pthread_mutex_unlock ( & this->opLock );
+#elif defined(__CDS_Platform_Microsoft_Windows)
+                LeaveCriticalSection( & this->criticalSection );
 #endif
 
                 return pAddress;
@@ -87,6 +118,8 @@ namespace Utility {
 
 #if defined(__CDS_Platform_Linux)
                 pthread_mutex_lock ( & this->opLock );
+#elif defined(__CDS_Platform_Microsoft_Windows)
+                EnterCriticalSection ( & this->criticalSection );
 #endif
 
                 Size arraySize = 0;
@@ -102,6 +135,8 @@ namespace Utility {
 
 #if defined(__CDS_Platform_Linux)
                 pthread_mutex_unlock ( & this->opLock );
+#elif defined(__CDS_Platform_Microsoft_Windows)
+                LeaveCriticalSection( & this->criticalSection );
 #endif
 
                 return arraySize;
@@ -126,6 +161,17 @@ namespace Utility {
             ~ArraySizeManager() noexcept {
                 for ( auto & p : this->pSizeDistribution )
                     delete [] p.partition;
+
+#if defined(__CDS_Platform_Linux)
+
+                pthread_mutex_destroy( & this->opLock );
+
+#elif defined(__CDS_Platform_Microsoft_Windows)
+
+                DeleteCriticalSection( & this->criticalSection );
+
+#endif
+
             }
 
         };
@@ -133,5 +179,12 @@ namespace Utility {
     }
 
 }
+
+#if defined(_MSC_VER)
+
+#pragma pop_macro("max")
+#pragma pop_macro("min")
+
+#endif
 
 #endif //CDS_ARRAYSIZEMANAGER_H

@@ -99,6 +99,9 @@ public:
     };
 
     class DefaultHeapAllocator : public Allocator  {
+    public:
+        DefaultHeapAllocator() noexcept = default;
+
         inline auto allocate ( Size size ) noexcept -> void * override {
             return malloc ( size );
         }
@@ -114,7 +117,7 @@ private:
     Allocator * pAllocator { new DefaultHeapAllocator };
     Utility::MemoryImpl::ArraySizeManager sizeManager;
 
-    Memory () noexcept = default;
+    Memory () noexcept { } // NOLINT(modernize-use-equals-default) Windows cannot identify noexcept composite in default
 
 public:
     static auto instance () noexcept -> Memory &;

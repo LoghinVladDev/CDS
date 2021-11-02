@@ -226,6 +226,7 @@ namespace Utility {
 #define __CDS_cpplang_ConstexprPureAbstract __CDS_cpplang_VirtualConstexpr /* NOLINT(bugprone-reserved-identifier) */
 #define __CDS_cpplang_ConstexprSTLIteratorOp __CDS_cpplang_ConstexprConditioned /* NOLINT(bugprone-reserved-identifier) */
 #define __CDS_cpplang_NestedInheritedOverride override /* NOLINT(bugprone-reserved-identifier) */
+#define __CDS_cpplang_DynamicCastConstexpr constexpr /* NOLINT(bugprone-reserved-identifier) */
 
 
 #if defined(__GNUC__) && ! defined(__MINGW64__) && ! defined(__clang__)

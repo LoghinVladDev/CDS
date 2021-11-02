@@ -27,8 +27,7 @@ public:
 };
 
 int main () {
-
-    delete Memory::instance().replaceAllocator(new Memory::LeakDetectionAllocator());
+//    delete Memory::instance().replaceAllocator(new Memory::LeakDetectionAllocator());
 
 //
 //    Boolean b{false};
