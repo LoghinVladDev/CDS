@@ -174,6 +174,7 @@ public:
         __CDS_cpplang_DynamicCastConstexpr auto equals ( CollectionIterator const & i ) const noexcept -> bool final {
             auto p = dynamic_cast < Iterator const * > ( & i );
             if ( p == nullptr ) return false;
+            
             return this->bucketIndex == p->bucketIndex && p->it == this->it;
         }
 

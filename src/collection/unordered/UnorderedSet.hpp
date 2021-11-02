@@ -110,7 +110,7 @@ public:
     auto sequence () const && noexcept -> Sequence < UnorderedSet < T > const >;
     auto sequence () && noexcept -> Sequence < UnorderedSet < T > >;
 
-    auto allocInsertGetPtr ( ElementCRef e __CDS_MaybeUnused ) noexcept -> ElementPtrRef {
+    auto allocInsertGetPtr ( ElementCRef e __CDS_MaybeUnused ) noexcept -> ElementPtrRef override {
         auto head = this->_pFront;
         while ( head != nullptr ) {
             if (Type<ElementType>::compare(* head->data, e))

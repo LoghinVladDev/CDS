@@ -84,6 +84,7 @@
 #define __CDS_cpplang_StructBracesInitialization_available true /* NOLINT(bugprone-reserved-identifier) */
 #define __CDS_cpplang_VariableTemplates_available true /* NOLINT(bugprone-reserved-identifier) */
 
+#define __CDS_cpplang_DynamicCastConstexpr constexpr /* NOLINT(bugprone-reserved-identifier) */
 #define __CDS_cpplang_ConstexprConstructorNonEmptyBody constexpr /* NOLINT(bugprone-reserved-identifier) */
 
 #define __CDS_cpplang_ConstexprOverride constexpr /* NOLINT(bugprone-reserved-identifier) */
@@ -113,6 +114,7 @@ namespace Utility {
 #define __CDS_cpplang_StructBracesInitialization_available false /* NOLINT(bugprone-reserved-identifier) */
 #define __CDS_cpplang_VariableTemplates_available false /* NOLINT(bugprone-reserved-identifier) */
 
+#define __CDS_cpplang_DynamicCastConstexpr __CDS_OptimalInline /* NOLINT(bugprone-reserved-identifier) */
 #define __CDS_cpplang_ConstexprConstructorNonEmptyBody __CDS_OptimalInline /* NOLINT(bugprone-reserved-identifier) */
 
 #define __CDS_cpplang_ConstexprOverride __CDS_OptionalInline /* NOLINT(bugprone-reserved-identifier) */
@@ -226,7 +228,6 @@ namespace Utility {
 #define __CDS_cpplang_ConstexprPureAbstract __CDS_cpplang_VirtualConstexpr /* NOLINT(bugprone-reserved-identifier) */
 #define __CDS_cpplang_ConstexprSTLIteratorOp __CDS_cpplang_ConstexprConditioned /* NOLINT(bugprone-reserved-identifier) */
 #define __CDS_cpplang_NestedInheritedOverride override /* NOLINT(bugprone-reserved-identifier) */
-#define __CDS_cpplang_DynamicCastConstexpr constexpr /* NOLINT(bugprone-reserved-identifier) */
 
 
 #if defined(__GNUC__) && ! defined(__MINGW64__) && ! defined(__clang__)

@@ -20,7 +20,7 @@
 #else
 
 #undef __CDS_cpplang_FunctionAliasNoexcept
-#define __CDS_cpplang_FunctionAliasNoexcept
+#define __CDS_cpplang_FunctionAliasNoexcept(_exceptspec) /* NOLINT(bugprone-reserved-identifier) */
 
 #endif
 

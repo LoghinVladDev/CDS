@@ -1031,7 +1031,7 @@ public:
             Map <
                     typename __CDS_Sequence::ContainedTypeAsPair < U > ::FirstType,
                     typename __CDS_Sequence::ContainedTypeAsPair < U > ::SecondType
-            > &
+            > & map
     ) const noexcept -> Map <
             typename __CDS_Sequence::ContainedTypeAsPair < U > ::FirstType,
             typename __CDS_Sequence::ContainedTypeAsPair < U > ::SecondType
@@ -1050,7 +1050,7 @@ public:
             HashMap <
                     typename __CDS_Sequence::ContainedTypeAsPair < U > ::FirstType,
                     typename __CDS_Sequence::ContainedTypeAsPair < U > ::SecondType
-            > &
+            > & map
     ) const noexcept -> HashMap <
             typename __CDS_Sequence::ContainedTypeAsPair < U > ::FirstType,
             typename __CDS_Sequence::ContainedTypeAsPair < U > ::SecondType
