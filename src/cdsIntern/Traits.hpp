@@ -28,6 +28,7 @@ using RemoveModifiers = RemoveReference < RemovePointer < RemoveConst < T > > >;
 template < typename T, typename V >
 using IsSame = typename std :: is_same < T, V > :: type :: value;
 
+
 template < bool condition, typename TrueType, typename FalseType >
 using TypeIf = typename std :: conditional < condition, TrueType, FalseType > :: type;
 
@@ -45,6 +46,8 @@ using BoolConstant = std :: integral_constant < bool, value >;
 
 template < typename T, typename U, typename = std::void_t<> > struct isComparableLess : std::false_type {};
 template < typename T, typename U, typename = std::void_t<> > struct __CDS_MaybeUnused isComparableLessNoexcept : std::false_type {};
+template < typename T, typename U, typename = std::void_t<> > struct isComparableGreater : std::false_type {};
+template < typename T, typename U, typename = std::void_t<> > struct __CDS_MaybeUnused isComparableGreaterNoexcept : std::false_type {};
 template < typename T, typename U, typename = std::void_t<> > struct isComparableEquals : std::false_type {};
 template < typename T, typename U, typename = std::void_t<> > struct __CDS_MaybeUnused isComparableEqualsNoexcept : std::false_type {};
 
@@ -53,6 +56,9 @@ template < typename T, typename U > struct __CDS_MaybeUnused isComparableLessNoe
 
 template < typename T, typename U > struct isComparableEquals < T, U, std::void_t < decltype ( std::declval <T> () == std::declval <U> () ) > > : std::true_type {};
 template < typename T, typename U > struct __CDS_MaybeUnused isComparableEqualsNoexcept < T, U, std::void_t < decltype ( std::declval <T> () == std::declval <U>() ) > > : BoolConstant < noexcept ( std::declval <T> () == std::declval <U> () ) > { };
+
+template < typename T, typename U > struct isComparableGreater < T, U, std::void_t < decltype ( std::declval <T> () > std::declval <U> () ) > > : std::true_type {};
+template < typename T, typename U > struct __CDS_MaybeUnused isComparableGreaterNoexcept < T, U, std::void_t < decltype ( std::declval <T> () > std::declval <U>() ) > > : BoolConstant < noexcept ( std::declval <T> () > std::declval <U> () ) > { };
 
 template < typename T >
 constexpr auto typeHasEqualityOperator () noexcept -> bool {
@@ -86,11 +92,6 @@ template < typename T >
 struct isSmartPointer < AtomicSharedPointer < T > > : public std :: true_type {};
 template < typename T >
 struct isSmartPointer < ForeignPointer < T > > : public std :: true_type {};
-
-#if defined(__cpp_concepts)
-template < typename T >
-concept IsMappable = isPair<T>::value;
-#endif
 
 template < typename T, typename U = void >
 struct isPrintable : std::false_type {};
@@ -163,62 +164,63 @@ struct functionTraits < R ( A ... ) > {
     using ArgsType = std :: tuple < A ... >;
 };
 
+template < typename R, typename ... A >
+struct functionTraits < R (*) (A ...) noexcept > {
+    using returnType __CDS_Deprecated __CDS_MaybeUnused = R;
+    using classType __CDS_Deprecated = void;
+    using argsType __CDS_Deprecated = std::tuple < A... >;
+
+    using ReturnType = R;
+    using ClassType = void;
+    using ArgsType = std :: tuple < A ... >;
+};
+
+template < typename R, typename C, typename ... A >
+struct functionTraits < R (C::*) (A ...) noexcept > {
+    using returnType __CDS_Deprecated __CDS_MaybeUnused = R;
+    using classType __CDS_Deprecated = C;
+    using argsType __CDS_Deprecated = std::tuple < A ... >;
+
+    using ReturnType = R;
+    using ClassType = C;
+    using ArgsType = std :: tuple < A ... >;
+};
+
+template < typename R, typename C, typename ... A >
+struct functionTraits < R (C::*) (A ...) const noexcept > {
+    using returnType __CDS_Deprecated __CDS_MaybeUnused = R;
+    using classType __CDS_Deprecated = C;
+    using argsType __CDS_Deprecated = std::tuple < A ... >;
+
+    using ReturnType = R;
+    using ClassType = C;
+    using ArgsType = std :: tuple < A ... >;
+};
+
+template < typename R, typename ... A >
+struct functionTraits < R ( A ... ) noexcept > {
+    using returnType __CDS_Deprecated __CDS_MaybeUnused = R;
+    using classType __CDS_Deprecated = void;
+    using argsType __CDS_Deprecated = std::tuple < A ... >;
+
+    using ReturnType = R;
+    using ClassType = void;
+    using ArgsType = std :: tuple < A ... >;
+};
+
 template < typename T >
 struct functionTraits < T, std::void_t < decltype ( & T :: operator () ) > > :
     public functionTraits < decltype ( & T :: operator () ) > {
 };
 
-template < typename T, typename = void >
-struct returnTrait;
-
-template < typename R, typename ... A >
-struct returnTrait < R (*) (A ...) > {
-    using returnType = R;
-};
-
-template < typename R, typename C, typename ... A >
-struct returnTrait < R (C::*) (A ...) > {
-    using returnType = R;
-};
-
-template < typename R, typename C, typename ... A >
-struct returnTrait < R (C::*) (A ...) const > {
-    using returnType = R;
-};
+template < typename T >
+using returnOf = typename functionTraits < T > :: ReturnType;
 
 template < typename T >
-struct returnTrait < T, std::void_t < decltype ( & T :: operator () ) > > :
-    public returnTrait < decltype ( & T :: operator () ) > {
-
-};
+using argumentsOf = typename functionTraits < T > :: ArgsType;
 
 template < typename T >
-using returnOf = typename returnTrait < T > :: returnType;
-
-template < typename T >
-using argumentsOf = typename functionTraits < T > :: argsType;
-
-template < typename T >
-using classOf __CDS_MaybeUnused = typename functionTraits < T > :: classType;
-
-# if defined (__cpp_concepts)
-
-template < typename T >
-concept PairType = isPair < T > :: value ;
-
-template < typename T, typename V >
-concept LessComparable = isComparableLess < T, V > :: type :: value;
-
-template < typename T >
-concept TypeLessComparable = LessComparable < T, T >;
-
-template < typename T, typename V >
-concept EqualsComparable = isComparableEquals < T, V > :: type :: value;
-
-template < typename T >
-concept TypeEqualsComparable = EqualsComparable < T, T >;
-
-# endif
+using classOf __CDS_MaybeUnused = typename functionTraits < T > :: ClassType;
 
 template < typename T >
 constexpr auto typeFundamental () noexcept -> bool {

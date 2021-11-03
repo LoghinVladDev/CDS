@@ -21,10 +21,12 @@ concept Integral =
         std::is_convertible<T, int>::value ||
         std::is_convertible<T, long long int>::value;
 
+template < typename T, typename R >
+concept ConvertibleTo = std :: is_convertible < T, R > :: value;
+
 template < typename T >
 concept Pointer =
         Type < T > :: isPointer;
-//        std::is_pointer<T>::value;
 
 template < typename T >
 concept Iterable = requires ( T obj ) {
@@ -49,6 +51,18 @@ concept ConstReverseIterable = requires ( T obj ) {
     { obj.rbegin() } -> std::same_as < typename T::ConstReverseIterator >;
     { obj.rend() }   -> std::same_as < typename T::ConstReverseIterator >;
 };
+
+template < typename T >
+concept ForwardIterable = Iterable < T > || ConstIterable < T >;
+
+template < typename T >
+concept BackwardIterable = ReverseIterable < T > || ConstReverseIterable < T >;
+
+template < typename T >
+concept AnyIterable = ForwardIterable < T > || BackwardIterable < T >;
+
+template < typename T >
+concept BidirectionalIterable = ForwardIterable < T > && BackwardIterable < T >;
 
 template < typename T >
 concept ObjectDerived =
@@ -78,19 +92,157 @@ concept UniqueIdentifiableByOperator = requires ( T const & a, T const & b ) {
     a == b;
 };
 
+template < typename T >
+concept Summable = requires ( T const & a, T const & b ) {
+    a + b;
+};
+
 template <typename T>
 concept UniqueIdentifiable = requires ( T const & a, T const & b ) {
     UniqueIdentifiableByObject<T> || UniqueIdentifiableByOperator<T>;
 };
 
 #include <CDS/Types>
+
+
+template < typename T >
+concept PairType =
+        isPair < T > :: value ;
+
+template < typename T, typename V >
+concept LessComparable =
+        isComparableLess < T, V > :: type :: value;
+
+template < typename T, typename V >
+concept GreaterComparable =
+        isComparableGreater < T, V > :: type :: value;
+
+template < typename T >
+concept TypeLessComparable =
+        LessComparable < T, T >;
+
+template < typename T >
+concept TypeGreaterComparable =
+        GreaterComparable < T, T >;
+
+template < typename T, typename V >
+concept EqualsComparable =
+        isComparableEquals < T, V > :: type :: value;
+
+template < typename T >
+concept TypeEqualsComparable =
+        EqualsComparable < T, T >;
+
+template < typename D, typename B >
+concept DerivedFrom =
+        isDerivedFrom < D, B > :: type :: value;
+
+
+template < typename FunctionType, typename ReturnType, typename ... ArgumentTypes >
+concept FunctionOver =
+        std :: is_invocable_r < ReturnType, FunctionType, ArgumentTypes ... > :: type :: value;
+
 template < typename Predicate, typename T >
-concept IsPredicateOver =
-    std::is_invocable_r < bool, Predicate, decltype ((*dataTypes::unsafeAddress<T>())) > :: type :: value;
+concept PredicateOver =
+        FunctionOver < Predicate, bool, T >;
+
+template < typename Predicate, typename T, typename CT = RemoveModifiers < T > >
+concept PredicateOverImmutable =
+        PredicateOver < Predicate, CT > ||
+        PredicateOver < Predicate, CT const & >;
+
+template < typename Predicate, typename T, typename CT = RemoveModifiers < T > >
+concept PredicateOverMutable =
+        PredicateOverImmutable < Predicate, CT, CT >    ||
+        PredicateOver < Predicate, CT & >               ||
+        PredicateOver < Predicate, CT && >;
+
+template < typename Predicate, typename T >
+concept IndexedPredicateOver = FunctionOver < Predicate, bool, Index, T >;
+
+template < typename Predicate, typename T, typename CT = RemoveModifiers < T > >
+concept IndexedPredicateOverImmutable =
+        IndexedPredicateOver < Predicate, CT > ||
+        IndexedPredicateOver < Predicate, CT const & >;
+
+template < typename Predicate, typename T, typename CT = RemoveModifiers < T > >
+concept IndexedPredicateOverMutable =
+        IndexedPredicateOverImmutable < Predicate, CT, CT >    ||
+        IndexedPredicateOver < Predicate, CT & >               ||
+        IndexedPredicateOver < Predicate, CT && >;
+
+template < typename Predicate >
+concept EmptyPredicate = FunctionOver < Predicate, bool >;
 
 template < typename Action, typename T >
-concept IsActionOver =
-    std::is_invocable_r < void, Action, decltype ((*dataTypes::unsafeAddress<T>())) > :: type :: value;
+concept ActionOver = FunctionOver < Action, void, T >;
+
+template < typename Action, typename T, typename CT = RemoveModifiers < T > >
+concept ActionOverImmutable =
+        ActionOver < Action, CT > ||
+        ActionOver < Action, CT const & >;
+
+template < typename Action, typename T, typename CT = RemoveModifiers < T > >
+concept ActionOverMutable =
+        ActionOverImmutable < Action, CT, CT >    ||
+        ActionOver < Action, CT & >               ||
+        ActionOver < Action, CT && >;
+
+template < typename Action, typename T >
+concept IndexedActionOver = FunctionOver < Action, void, Index, T >;
+
+template < typename Action, typename T, typename CT = RemoveModifiers < T > >
+concept IndexedActionOverImmutable =
+        IndexedActionOver < Action, CT > ||
+        IndexedActionOver < Action, CT const & >;
+
+template < typename Action, typename T, typename CT = RemoveModifiers < T > >
+concept IndexedActionOverMutable =
+        IndexedActionOverImmutable < Action, CT, CT >    ||
+        IndexedActionOver < Action, CT & >               ||
+        IndexedActionOver < Action, CT && >;
+
+template < typename Action >
+concept EmptyAction =
+        FunctionOver < Action, void >;
+
+
+template < typename Transformer, typename ... ArgumentTypes >
+concept TransformerOver =
+        FunctionOver < Transformer, returnOf < Transformer >, ArgumentTypes ... >;
+
+template < typename Mapper, typename ... ArgumentTypes >
+concept MapperFor =
+        TransformerOver < Mapper, ArgumentTypes ... >;
+
+template < typename Comparator, typename ElementType >
+concept ComparatorFor =
+        FunctionOver < Comparator, bool, ElementType, ElementType >;
+
+template < typename Selector, typename ElementType >
+concept AscendingSelectorFor =
+        FunctionOver < Selector, returnOf < Selector >, ElementType > &&
+        TypeLessComparable < returnOf < Selector > >;
+
+template < typename Selector, typename ElementType >
+concept DescendingSelectorFor =
+        FunctionOver < Selector, returnOf < Selector >, ElementType > &&
+        TypeGreaterComparable < returnOf < Selector > >;
+
+template < typename Selector, typename ElementType >
+concept SelectorFor =
+        FunctionOver < Selector, returnOf < Selector >, ElementType > && (
+            TypeLessComparable < returnOf < Selector > > ||
+            TypeGreaterComparable < returnOf < Selector > >
+        );
+
+template < typename Accumulator, typename T >
+concept AccumulatorFor =
+        FunctionOver < Accumulator, returnOf < Accumulator >, returnOf < Accumulator >, T >;
+
+template < typename Accumulator, typename T >
+concept IndexedAccumulatorFor =
+        FunctionOver < Accumulator, returnOf < Accumulator >, Index, returnOf < Accumulator >, T >;
 
 #endif
 

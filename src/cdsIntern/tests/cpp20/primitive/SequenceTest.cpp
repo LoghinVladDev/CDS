@@ -1135,7 +1135,7 @@ bool SequenceTest::execute() noexcept {
             log ( "numbers : %s", numbers.toArray().toString().cStr() );
             log ( "sum : %d", sum );
 
-            numbers.onEach([&](int number){ sum += number; }).also([]{});
+            numbers.onEach([&](int number){ sum += number; }).also([]()->void{});
 
             log ( "sum : %d", sum );
 
@@ -1838,9 +1838,10 @@ bool SequenceTest::execute() noexcept {
             };
 
             auto dnaFragment = "ATTCGCGGCCGCCAA"_s.sequence();
-            auto proteins = dnaFragment.chunked(3, [&](Array<char> const &charList) {
+            auto proteins = dnaFragment.chunked(3, [&](List<char> const &charList) {
                 String s;
-                for (auto e: charList) s += e;
+                charList.forEach([&](auto const & e){ s+= e; });
+//                for (auto e: charList) s += e;
 
                 if (codonTable.containsKey(s))
                     return codonTable[s];

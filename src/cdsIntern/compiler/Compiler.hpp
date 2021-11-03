@@ -274,11 +274,11 @@ static inline auto __CDS_compilerVersionString() noexcept -> StringLiteral { /* 
 #if !defined(__CDS_Requires)
 #if __CDS_cpplang_Concepts_available //  && !defined(_MSC_VER) // to remove once MS pulls their head out of their arse
 
-#define __CDS_Requires(_concepts) requires _concepts /* NOLINT(bugprone-reserved-identifier) */
+#define __CDS_Requires(...) requires __VA_ARGS__ /* NOLINT(bugprone-reserved-identifier) */
 
 #else
 
-#define __CDS_Requires(_concepts) /* NOLINT(bugprone-reserved-identifier) */
+#define __CDS_Requires(...) /* NOLINT(bugprone-reserved-identifier) */
 
 #endif
 #endif
