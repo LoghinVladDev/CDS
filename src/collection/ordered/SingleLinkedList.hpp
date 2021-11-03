@@ -54,7 +54,7 @@ public:
     SingleLinkedList ( SingleLinkedList const & ) noexcept;
 
     __CDS_cpplang_ConstexprConstructorNonEmptyBody SingleLinkedList ( SingleLinkedList && obj ) noexcept :
-            List < T > ( std :: forward ( obj ) ),
+            List < T > ( std :: forward < List < T > > ( obj ) ),
             _pFront ( Utility::exchange( obj._pFront, nullptr ) ),
             _pBack ( Utility::exchange( obj._pBack, nullptr ) ) {
 
@@ -736,7 +736,7 @@ auto SingleLinkedList < T > :: removeLastNotOf ( Collection < T > const & from )
 template < typename T >
 auto SingleLinkedList < T > :: remove ( CollectionIterator const & it ) noexcept (false) -> T {
     if ( this->empty() )
-        throw typename List < T > :: ListOutOfBounds ();
+        throw OutOfBoundsException("List is Empty");
 
     if ( this->begin() == it )
         return this->popFront();

@@ -24,11 +24,16 @@ public:
             return new (pRawMemory) T ( std :: forward < ArgumentTypes > ( arguments ) ... );
         }
 
-        template < typename T >
+        template < typename T, EnableIf < ! std :: is_same < RemoveModifiers < T >, void > :: value > = 0 >
         inline static auto destroy ( T * pObject ) noexcept (false) -> void * {
             if ( pObject != nullptr )
                 pObject->~T();
             return reinterpret_cast < void * > ( const_cast < RemoveConst < T > * > ( pObject ) );
+        }
+
+        template < typename T, EnableIf < std :: is_same < RemoveModifiers < T >, void > :: value > = 0 >
+        inline static auto destroy ( T * pObject ) noexcept (false) -> void * {
+            return nullptr;
         }
     };
 

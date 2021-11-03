@@ -373,7 +373,7 @@ public:
 
         UNION_DELETE36
 
-        this->pInstance = Memory :: create < T > ( std :: forward < T > ( value ) );
+        this->pInstance = Memory :: instance(). create < T > ( std :: forward < T > ( value ) );
         this->_activeTypeIndex = Utility :: Detail :: UnionImpl :: IndexOfTypeInPack < T, FirstType, RemainingTypes ... > :: index();
 
         return * this;
