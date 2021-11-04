@@ -25,9 +25,10 @@ using RemovePointer = typename std :: remove_pointer < T > :: type;
 template < typename T >
 using RemoveModifiers = RemoveReference < RemovePointer < RemoveConst < T > > >;
 
-template < typename T, typename V >
-using IsSame = typename std :: is_same < T, V > :: type :: value;
-
+template < typename T, typename U >
+constexpr static auto isSame () noexcept -> bool {
+    return std :: is_same < T, U > :: type :: value;
+}
 
 template < bool condition, typename TrueType, typename FalseType >
 using TypeIf = typename std :: conditional < condition, TrueType, FalseType > :: type;

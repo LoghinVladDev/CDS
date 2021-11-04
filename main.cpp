@@ -27,6 +27,12 @@ public:
 };
 
 int main () {
+    Array {1, 2, 3}.forEach([](auto & v) { v = 2 * v; });
+    Array {1, 2, 3}.forEach([](auto v) { v = 2 * v; });
+//    Array {1, 2, 3}.forEach([](auto const & v) { v; });
+    Array const a = { 1, 2, 3 };
+
+    a.forEach([](int v){});
 //    delete Memory::instance().replaceAllocator(new Memory::LeakDetectionAllocator());
 
 //

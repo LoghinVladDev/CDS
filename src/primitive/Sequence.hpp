@@ -340,7 +340,7 @@ public:
 
     template < typename Action >
     __CDS_MaybeUnused auto apply ( Action const & action ) && noexcept -> Sequence < LinkedList < ElementType > >
-    __CDS_Requires ( ForwardIterable < C > && ActionOver < Action, Sequence && > ) {
+    __CDS_Requires ( ForwardIterable < C > && ActionOver < Action, Sequence > ) {
 
         action(* this);
         LinkedList < ElementType > container;
@@ -367,7 +367,7 @@ public:
 
     template < typename Action >
     __CDS_MaybeUnused auto apply ( Action const & action ) & noexcept -> Sequence < LinkedList < ElementType > >
-    __CDS_Requires ( ForwardIterable < C > && ActionOver < Action, Sequence & > ) {
+    __CDS_Requires ( ForwardIterable < C > && ActionOver < Action, Sequence > ) {
 
         Sequence copy(* this);
         action(copy);
@@ -397,7 +397,7 @@ public:
     __CDS_MaybeUnused auto first (
             Predicate const & predicate = [](ElementType const &) noexcept -> bool { return true; }
     ) const noexcept -> Optional < ElementType >
-    __CDS_Requires ( ForwardIterable < C > && PredicateOver < Predicate, ElementType const & > ) {
+    __CDS_Requires ( ForwardIterable < C > && PredicateOver < Predicate, ElementType > ) {
 
         for ( auto e : * this )
             if ( predicate ( e ) )
@@ -417,7 +417,7 @@ public:
             ElementType const & replacement,
             Predicate   const & predicate = [] ( ElementType const & ) noexcept -> bool { return true; }
     ) const noexcept -> ElementType
-    __CDS_Requires ( ForwardIterable < C > && PredicateOver < Predicate, ElementType const & > ) {
+    __CDS_Requires ( ForwardIterable < C > && PredicateOver < Predicate, ElementType > ) {
 
         for ( auto v : * this )
             if ( predicate (v) )
@@ -429,7 +429,7 @@ public:
     __CDS_MaybeUnused auto last (
             Predicate const & predicate = [] ( ElementType const & predicate ) noexcept -> bool { return true; }
     ) const noexcept -> Optional < ElementType >
-    __CDS_Requires ( ForwardIterable < C > && PredicateOver < Predicate, ElementType const & > ) {
+    __CDS_Requires ( ForwardIterable < C > && PredicateOver < Predicate, ElementType > ) {
 
         ElementType v;
         Boolean found = false;
@@ -446,7 +446,7 @@ public:
 
     template < typename Predicate >
     __CDS_MaybeUnused __CDS_OptimalInline auto findLast ( Predicate const & predicate ) const noexcept -> Optional < ElementType >
-    __CDS_Requires ( ForwardIterable < C > && PredicateOver < Predicate, ElementType const & > ) {
+    __CDS_Requires ( ForwardIterable < C > && PredicateOver < Predicate, ElementType > ) {
 
         return this->last(predicate);
     }
@@ -456,7 +456,7 @@ public:
             ElementType const & replacement,
             Predicate   const & predicate = [](ElementType const &) noexcept -> bool { return true; }
     ) const noexcept -> ElementType
-    __CDS_Requires ( ForwardIterable < C > && PredicateOver < Predicate, ElementType const & > ) {
+    __CDS_Requires ( ForwardIterable < C > && PredicateOver < Predicate, ElementType > ) {
 
         ElementType v;
         Boolean found = false;
@@ -490,7 +490,7 @@ public:
 
     template < typename Predicate >
     __CDS_MaybeUnused auto single ( Predicate const & predicate ) const noexcept -> Optional < ElementType >
-    __CDS_Requires ( ForwardIterable < C > && PredicateOver < Predicate, ElementType const & > ) {
+    __CDS_Requires ( ForwardIterable < C > && PredicateOver < Predicate, ElementType > ) {
 
         ElementType v;
         Boolean found = false;
@@ -510,7 +510,7 @@ public:
 
     template < typename Predicate >
     __CDS_MaybeUnused auto singleOr ( ElementType const & replacement, Predicate const & predicate ) const noexcept -> ElementType
-    __CDS_Requires ( ForwardIterable < C > && PredicateOver < Predicate, ElementType const & > ) {
+    __CDS_Requires ( ForwardIterable < C > && PredicateOver < Predicate, ElementType > ) {
 
         ElementType v;
         Boolean found = false;
@@ -602,7 +602,7 @@ public:
             Predicate const & p,
             Size count          = UINT64_MAX
     ) && noexcept -> Sequence < LinkedList < ElementType > >
-    __CDS_Requires ( ForwardIterable < C > && PredicateOver < Predicate, ElementType const & > ) {
+    __CDS_Requires ( ForwardIterable < C > && PredicateOver < Predicate, ElementType > ) {
 
         LinkedList < ElementType > remaining;
 
@@ -625,7 +625,7 @@ public:
             Predicate const & p,
             Size count          = UINT64_MAX
     ) & noexcept -> Sequence < LinkedList < ElementType > >
-    __CDS_Requires ( ForwardIterable < C > && PredicateOver < Predicate, ElementType const & > ) {
+    __CDS_Requires ( ForwardIterable < C > && PredicateOver < Predicate, ElementType > ) {
 
         LinkedList < ElementType > remaining;
 
@@ -648,7 +648,7 @@ public:
             Predicate const & p,
             Size count          = UINT64_MAX
     ) && noexcept -> Sequence < LinkedList < ElementType > >
-    __CDS_Requires ( ForwardIterable < C > && PredicateOver < Predicate, ElementType const & > ) {
+    __CDS_Requires ( ForwardIterable < C > && PredicateOver < Predicate, ElementType > ) {
 
         LinkedList < ElementType > all;
         LinkedList < ElementType > remaining;
@@ -675,7 +675,7 @@ public:
             Predicate const & p,
             Size count          = UINT64_MAX
     ) & noexcept -> Sequence < LinkedList < ElementType > >
-    __CDS_Requires ( ForwardIterable < C > && PredicateOver < Predicate, ElementType const & > ) {
+    __CDS_Requires ( ForwardIterable < C > && PredicateOver < Predicate, ElementType > ) {
 
         LinkedList < ElementType > all;
         LinkedList < ElementType > remaining;
@@ -776,7 +776,7 @@ public:
             Predicate const & predicate,
             Size              count     = UINT64_MAX
     ) && noexcept -> Sequence < LinkedList < ElementType > >
-    __CDS_Requires ( ForwardIterable < C > && PredicateOver < Predicate, ElementType const & > ) {
+    __CDS_Requires ( ForwardIterable < C > && PredicateOver < Predicate, ElementType > ) {
 
         LinkedList < ElementType > remaining;
         Index i = 0;
@@ -799,7 +799,7 @@ public:
             Predicate const & predicate,
             Size              count     = UINT64_MAX
     ) & noexcept -> Sequence < LinkedList < ElementType > >
-    __CDS_Requires ( ForwardIterable < C > && PredicateOver < Predicate, ElementType const & > ) {
+    __CDS_Requires ( ForwardIterable < C > && PredicateOver < Predicate, ElementType > ) {
 
         LinkedList < ElementType > remaining;
         Index i = 0;
@@ -821,7 +821,7 @@ public:
             Predicate const & p,
             Size count          = UINT64_MAX
     ) && noexcept -> Sequence < LinkedList < ElementType > >
-    __CDS_Requires ( ForwardIterable < C > && PredicateOver < Predicate, ElementType const & > ) {
+    __CDS_Requires ( ForwardIterable < C > && PredicateOver < Predicate, ElementType > ) {
 
         LinkedList < ElementType > container;
 
@@ -843,7 +843,7 @@ public:
             Predicate const & p,
             Size count          = UINT64_MAX
     ) & noexcept -> Sequence < LinkedList < ElementType > >
-    __CDS_Requires ( ForwardIterable < C > && PredicateOver < Predicate, ElementType const & > ) {
+    __CDS_Requires ( ForwardIterable < C > && PredicateOver < Predicate, ElementType > ) {
 
         LinkedList < ElementType > container;
 
@@ -863,7 +863,7 @@ public:
 
     template < typename Predicate >
     __CDS_MaybeUnused __CDS_OptimalInline auto filter ( Predicate const & predicate ) && noexcept -> Sequence
-    __CDS_Requires ( ForwardIterable < C > && PredicateOver < Predicate, ElementType const & > ) {
+    __CDS_Requires ( ForwardIterable < C > && PredicateOver < Predicate, ElementType > ) {
 
         this->storedPredicates.append({ { Memory :: instance().create < StoredPredicate > (predicate)}, this->chainCount });
         return std::move ( * this );
@@ -871,7 +871,7 @@ public:
 
     template < typename Predicate >
     __CDS_MaybeUnused auto filter ( Predicate const & predicate ) & noexcept -> Sequence
-    __CDS_Requires ( ForwardIterable < C > && PredicateOver < Predicate, ElementType const & > ) {
+    __CDS_Requires ( ForwardIterable < C > && PredicateOver < Predicate, ElementType > ) {
 
         Sequence < C > copy (* this );
         copy.storedPredicates.append({ { Memory :: instance ().create < StoredPredicate > (predicate)}, this->chainCount });
@@ -880,7 +880,7 @@ public:
 
     template < typename IndexedPredicate >
     __CDS_MaybeUnused auto filterIndexed ( IndexedPredicate const & indexedPredicate ) && noexcept -> Sequence
-    __CDS_Requires ( ForwardIterable < C > && IndexedPredicateOver < IndexedPredicate, ElementType const & > ) {
+    __CDS_Requires ( ForwardIterable < C > && IndexedPredicateOver < IndexedPredicate, ElementType > ) {
 
         this->storedIndexedPredicates.append({ { Memory :: instance().create < StoredIndexedPredicate > (indexedPredicate)}, this->chainCount });
         return std::move ( * this );
@@ -888,7 +888,7 @@ public:
 
     template < typename IndexedPredicate >
     __CDS_MaybeUnused auto filterIndexed ( IndexedPredicate const & indexedPredicate ) & noexcept -> Sequence
-    __CDS_Requires ( ForwardIterable < C > && IndexedPredicateOver < IndexedPredicate, ElementType const & > ) {
+    __CDS_Requires ( ForwardIterable < C > && IndexedPredicateOver < IndexedPredicate, ElementType > ) {
 
         Sequence < C > copy (* this);
         copy.storedIndexedPredicates.append({ { Memory :: instance().create < StoredIndexedPredicate > (indexedPredicate)}, this->chainCount });
@@ -900,7 +900,7 @@ public:
             Collection < ElementType >        & collection,
             Predicate                   const & predicate
     ) const noexcept -> Collection < ElementType > &
-    __CDS_Requires ( ForwardIterable < C > && PredicateOver < Predicate, ElementType const & > ) {
+    __CDS_Requires ( ForwardIterable < C > && PredicateOver < Predicate, ElementType > ) {
 
         for ( auto e : * this )
             if ( predicate(e) )
@@ -914,7 +914,7 @@ public:
             Collection < ElementType >        & collection,
             IndexedPredicate            const & predicate
     ) const noexcept -> Collection < ElementType > &
-    __CDS_Requires ( ForwardIterable < C > && IndexedPredicateOver < IndexedPredicate, ElementType const & > ) {
+    __CDS_Requires ( ForwardIterable < C > && IndexedPredicateOver < IndexedPredicate, ElementType > ) {
 
         Index i = 0;
         for ( auto e : * this )
@@ -1112,21 +1112,21 @@ public:
 
     template < typename Predicate >
     __CDS_MaybeUnused __CDS_OptimalInline auto filterNot ( Predicate const & predicate ) && noexcept -> Sequence
-    __CDS_Requires ( ForwardIterable < C > && PredicateOver < Predicate, ElementType const & > ) {
+    __CDS_Requires ( ForwardIterable < C > && PredicateOver < Predicate, ElementType > ) {
 
         return this->filter( [& predicate] (ElementType e) noexcept -> bool { return ! predicate(e); } );
     }
 
     template < typename Predicate >
     __CDS_MaybeUnused __CDS_OptimalInline auto filterNot ( Predicate const & predicate ) & noexcept -> Sequence
-    __CDS_Requires ( ForwardIterable < C > && PredicateOver < Predicate, ElementType const & > ) {
+    __CDS_Requires ( ForwardIterable < C > && PredicateOver < Predicate, ElementType > ) {
 
         return this->filter( [& predicate] (ElementType e) noexcept -> bool { return ! predicate(e); } );
     }
 
     template < typename IndexedPredicate >
     __CDS_MaybeUnused __CDS_OptimalInline auto filterNotIndexed ( IndexedPredicate const & indexedPredicate ) && noexcept -> Sequence
-    __CDS_Requires ( ForwardIterable < C > && IndexedPredicateOver < IndexedPredicate, ElementType const & > ) {
+    __CDS_Requires ( ForwardIterable < C > && IndexedPredicateOver < IndexedPredicate, ElementType > ) {
 
         return this->filterIndexed( [& indexedPredicate] (Index index, ElementType e) noexcept -> bool {
             return ! indexedPredicate ( index, e );
@@ -1135,7 +1135,7 @@ public:
 
     template < typename IndexedPredicate >
     __CDS_MaybeUnused __CDS_OptimalInline auto filterNotIndexed ( IndexedPredicate const & indexedPredicate ) & noexcept -> Sequence
-    __CDS_Requires ( ForwardIterable < C > && IndexedPredicateOver < IndexedPredicate, ElementType const & > ) {
+    __CDS_Requires ( ForwardIterable < C > && IndexedPredicateOver < IndexedPredicate, ElementType > ) {
 
         return this->filterIndexed( [& indexedPredicate] (Index index, ElementType e) noexcept -> bool {
             return ! indexedPredicate ( index, e );
@@ -1147,7 +1147,7 @@ public:
             Collection < ElementType >        & collection,
             Predicate                   const & predicate
     ) const noexcept -> Collection < ElementType > &
-    __CDS_Requires ( ForwardIterable < C > && PredicateOver < Predicate, ElementType const & > ) {
+    __CDS_Requires ( ForwardIterable < C > && PredicateOver < Predicate, ElementType > ) {
 
         for ( auto e : * this )
             if ( ! predicate ( e ) )
@@ -1161,7 +1161,7 @@ public:
             Collection < ElementType >        & collection,
             IndexedPredicate            const & indexedPredicate
     ) const noexcept -> Collection < ElementType > &
-    __CDS_Requires ( ForwardIterable < C > && IndexedPredicateOver < IndexedPredicate, ElementType const & > ) {
+    __CDS_Requires ( ForwardIterable < C > && IndexedPredicateOver < IndexedPredicate, ElementType > ) {
         Index i = 0;
         for ( auto e : * this )
             if ( ! indexedPredicate ( i++, e ) )
@@ -1173,7 +1173,7 @@ public:
 
     template < typename Predicate >
     __CDS_MaybeUnused auto indexOfFirst ( Predicate const & predicate ) const noexcept -> Index
-    __CDS_Requires ( ForwardIterable < C > && PredicateOver < Predicate, ElementType const & > ) {
+    __CDS_Requires ( ForwardIterable < C > && PredicateOver < Predicate, ElementType > ) {
 
         Index i = 0;
         for ( auto e : * this ) {
@@ -1187,7 +1187,7 @@ public:
 
     template < typename Predicate >
     __CDS_MaybeUnused auto indexOfLast ( Predicate const & predicate ) const noexcept -> Index
-    __CDS_Requires ( ForwardIterable < C > && PredicateOver < Predicate, ElementType const & > ) {
+    __CDS_Requires ( ForwardIterable < C > && PredicateOver < Predicate, ElementType > ) {
 
         Index i = 0;
         Index l = -1;
@@ -1202,7 +1202,7 @@ public:
 
     template < typename Predicate >
     __CDS_MaybeUnused auto indicesOfAll ( Predicate const & predicate ) const noexcept -> LinkedList < Index >
-    __CDS_Requires ( ForwardIterable < C > && PredicateOver < Predicate, ElementType const & > ) {
+    __CDS_Requires ( ForwardIterable < C > && PredicateOver < Predicate, ElementType > ) {
 
         Index i = 0;
         LinkedList < Index > indices;
@@ -1219,7 +1219,7 @@ public:
     __CDS_MaybeUnused auto any (
             Predicate const & predicate = []( ElementType const & ) noexcept -> bool { return true; }
     ) const noexcept -> Boolean
-    __CDS_Requires ( ForwardIterable < C > && PredicateOver < Predicate, ElementType const & > ) {
+    __CDS_Requires ( ForwardIterable < C > && PredicateOver < Predicate, ElementType > ) {
 
         for ( auto e : * this )
             if ( predicate ( e ) )
@@ -1229,7 +1229,7 @@ public:
 
     template < typename Predicate >
     __CDS_MaybeUnused auto all ( Predicate const & predicate ) const noexcept -> Boolean
-    __CDS_Requires ( ForwardIterable < C > && PredicateOver < Predicate, ElementType const & > ) {
+    __CDS_Requires ( ForwardIterable < C > && PredicateOver < Predicate, ElementType > ) {
 
         for ( auto e : * this )
             if ( ! predicate ( e ) )
@@ -1242,7 +1242,7 @@ public:
     __CDS_MaybeUnused auto count (
             Predicate const & predicate = [](ElementType const &) noexcept -> bool { return true; }
     ) const noexcept -> Int
-    __CDS_Requires ( ForwardIterable < C > && PredicateOver < Predicate, ElementType const & > ) {
+    __CDS_Requires ( ForwardIterable < C > && PredicateOver < Predicate, ElementType > ) {
 
         Int count = 0;
         for ( auto e : * this )
@@ -1256,7 +1256,7 @@ public:
     __CDS_MaybeUnused auto none (
             Predicate const & predicate = [](ElementType const &) noexcept -> bool { return true; }
     ) const noexcept -> Boolean
-    __CDS_Requires ( ForwardIterable < C > && PredicateOver < Predicate, ElementType const & > ) {
+    __CDS_Requires ( ForwardIterable < C > && PredicateOver < Predicate, ElementType > ) {
 
         for ( auto e : * this )
             if ( predicate ( e ) )
@@ -1268,7 +1268,7 @@ public:
     __CDS_MaybeUnused auto one (
             Predicate const & predicate = [](ElementType const &) noexcept -> bool { return true; }
     ) const noexcept -> Boolean
-    __CDS_Requires ( ForwardIterable < C > && PredicateOver < Predicate, ElementType const & > ) {
+    __CDS_Requires ( ForwardIterable < C > && PredicateOver < Predicate, ElementType > ) {
 
         Boolean found = false;
 
@@ -1290,7 +1290,7 @@ public:
     __CDS_Requires (
             ForwardIterable < C > &&
             PairType < returnOf < Transformer > > &&
-            TransformerOver < Transformer, ElementType const & >
+            TransformerOver < Transformer, ElementType >
     ) {
 
         LinkedList < returnOf < Transformer > > container;
@@ -1307,7 +1307,7 @@ public:
     __CDS_Requires (
             ForwardIterable < C > &&
             PairType < returnOf < Transformer > > &&
-            TransformerOver < Transformer, ElementType const & >
+            TransformerOver < Transformer, ElementType >
     ) {
 
         LinkedList < returnOf < Transformer > > container;
@@ -1323,7 +1323,7 @@ public:
     ) && noexcept -> Sequence < LinkedList < Pair < returnOf < KeyGenerator >, ElementType > > >
     __CDS_Requires (
             ForwardIterable < C > &&
-            FunctionOver < KeyGenerator, returnOf < KeyGenerator >, ElementType const & >
+            FunctionOver < KeyGenerator, returnOf < KeyGenerator >, ElementType >
     ) {
 
         LinkedList < Pair < returnOf < KeyGenerator >, ElementType > > container;
@@ -1339,7 +1339,7 @@ public:
     ) & noexcept -> Sequence < LinkedList < Pair < returnOf < KeyGenerator >, ElementType > > >
     __CDS_Requires (
             ForwardIterable < C > &&
-            FunctionOver < KeyGenerator, returnOf < KeyGenerator >, ElementType const & >
+            FunctionOver < KeyGenerator, returnOf < KeyGenerator >, ElementType >
     ) {
 
         LinkedList < Pair < returnOf < KeyGenerator >, ElementType > > container;
@@ -1356,8 +1356,8 @@ public:
     ) && noexcept -> Sequence < LinkedList < Pair < returnOf < KeyGenerator >, returnOf < ValueMapper > > > >
     __CDS_Requires (
             ForwardIterable < C > &&
-            FunctionOver < KeyGenerator, returnOf < KeyGenerator >, ElementType const & > &&
-            FunctionOver < ValueMapper, returnOf < ValueMapper >, ElementType const & >
+            FunctionOver < KeyGenerator, returnOf < KeyGenerator >, ElementType > &&
+            FunctionOver < ValueMapper, returnOf < ValueMapper >, ElementType >
     ) {
 
         LinkedList < Pair < returnOf < KeyGenerator >, returnOf < ValueMapper > > > container;
@@ -1374,8 +1374,8 @@ public:
     ) & noexcept -> Sequence < LinkedList < Pair < returnOf < KeyGenerator >, returnOf < ValueMapper > > > >
     __CDS_Requires (
             ForwardIterable < C > &&
-            FunctionOver < KeyGenerator, returnOf < KeyGenerator >, ElementType const & > &&
-            FunctionOver < ValueMapper, returnOf < ValueMapper >, ElementType const & >
+            FunctionOver < KeyGenerator, returnOf < KeyGenerator >, ElementType > &&
+            FunctionOver < ValueMapper, returnOf < ValueMapper >, ElementType >
     ) {
 
         LinkedList < Pair < returnOf < KeyGenerator >, returnOf < ValueMapper > > > container;
@@ -1392,7 +1392,7 @@ public:
     ) const noexcept -> Map < returnOf < KeyGenerator >, ElementType > &
     __CDS_Requires (
             ForwardIterable < C > &&
-            FunctionOver < KeyGenerator, returnOf < KeyGenerator >, ElementType const & >
+            FunctionOver < KeyGenerator, returnOf < KeyGenerator >, ElementType >
     ) {
 
         for ( auto e : * this )
@@ -1408,8 +1408,8 @@ public:
     ) const noexcept -> Map < returnOf < KeyGenerator >, returnOf < ValueMapper > > &
     __CDS_Requires (
             ForwardIterable < C > &&
-            FunctionOver < KeyGenerator, returnOf < KeyGenerator >, ElementType const & > &&
-            FunctionOver < ValueMapper, returnOf < ValueMapper >, ElementType const & >
+            FunctionOver < KeyGenerator, returnOf < KeyGenerator >, ElementType > &&
+            FunctionOver < ValueMapper, returnOf < ValueMapper >, ElementType >
     ) {
 
         for ( auto e : * this )
@@ -1425,7 +1425,7 @@ public:
     __CDS_Requires (
             ForwardIterable < C > &&
             PairType < returnOf < Transformer > > &&
-            TransformerOver < Transformer, ElementType const & >
+            TransformerOver < Transformer, ElementType >
     ) {
 
         for ( auto e : * this ) {
@@ -1442,7 +1442,7 @@ public:
     ) && noexcept -> Sequence < LinkedList < Pair < ElementType, returnOf < ValueMapper > > > >
     __CDS_Requires (
             ForwardIterable < C > &&
-            FunctionOver < ValueMapper, returnOf < ValueMapper >, ElementType const & >
+            FunctionOver < ValueMapper, returnOf < ValueMapper >, ElementType >
     ) {
 
         LinkedList < Pair < ElementType, returnOf < ValueMapper > > > container;
@@ -1458,7 +1458,7 @@ public:
     ) & noexcept -> Sequence < LinkedList < Pair < ElementType, returnOf < ValueMapper > > > >
     __CDS_Requires (
             ForwardIterable < C > &&
-            FunctionOver < ValueMapper, returnOf < ValueMapper >, ElementType const & >
+            FunctionOver < ValueMapper, returnOf < ValueMapper >, ElementType >
     ) {
 
         LinkedList < Pair < ElementType, returnOf < ValueMapper > > > container;
@@ -1475,7 +1475,7 @@ public:
     ) const noexcept -> Map < ElementType , returnOf < ValueMapper > > &
     __CDS_Requires (
             ForwardIterable < C > &&
-            FunctionOver < ValueMapper, returnOf < ValueMapper >, ElementType const & >
+            FunctionOver < ValueMapper, returnOf < ValueMapper >, ElementType >
     ) {
 
         for ( auto e : * this )
@@ -1487,7 +1487,7 @@ public:
     __CDS_MaybeUnused auto sorted (
             Comparator const & comparator = []( ElementType const & a, ElementType const & b) noexcept -> bool { return a < b; }
     ) && noexcept -> Sequence < Array < ElementType > >
-    __CDS_Requires ( ForwardIterable < C > && ComparatorFor < Comparator, ElementType const & > ) {
+    __CDS_Requires ( ForwardIterable < C > && ComparatorFor < Comparator, ElementType > ) {
 
         Array < ElementType > container;
         for ( auto e: * this )
@@ -1503,7 +1503,7 @@ public:
     __CDS_MaybeUnused auto sorted (
             Comparator const & comparator = []( ElementType const & a, ElementType const & b) noexcept -> bool { return a < b; }
     ) & noexcept -> Sequence < Array < ElementType > >
-    __CDS_Requires ( ForwardIterable < C > && ComparatorFor < Comparator, ElementType const & > ) {
+    __CDS_Requires ( ForwardIterable < C > && ComparatorFor < Comparator, ElementType > ) {
 
         Array < ElementType > container;
         for ( auto e: * this )
@@ -1519,7 +1519,7 @@ public:
     __CDS_MaybeUnused __CDS_OptimalInline auto sortedBy (
             Selector const & selector
     ) && noexcept -> Sequence < Array < ElementType > >
-    __CDS_Requires ( ForwardIterable < C > && AscendingSelectorFor < Selector, ElementType const & > ) {
+    __CDS_Requires ( ForwardIterable < C > && AscendingSelectorFor < Selector, ElementType > ) {
 
         return this->sorted([& selector](ElementType const & a, ElementType const & b) noexcept -> bool {
             return selector(a) < selector(b);
@@ -1530,7 +1530,7 @@ public:
     __CDS_MaybeUnused __CDS_OptimalInline auto sortedBy (
             Selector const & selector
     ) & noexcept -> Sequence < Array < ElementType > >
-    __CDS_Requires ( ForwardIterable < C > && AscendingSelectorFor < Selector, ElementType const & > ) {
+    __CDS_Requires ( ForwardIterable < C > && AscendingSelectorFor < Selector, ElementType > ) {
 
         return this->sorted([& selector](ElementType const & a, ElementType const & b) noexcept -> bool {
             return selector(a) < selector(b);
@@ -1541,7 +1541,7 @@ public:
     __CDS_MaybeUnused __CDS_OptimalInline auto sortedByDescending (
             Selector const & selector
     ) && noexcept -> Sequence < Array < ElementType > >
-    __CDS_Requires ( ForwardIterable < C > && DescendingSelectorFor < Selector, ElementType const & > ) {
+    __CDS_Requires ( ForwardIterable < C > && DescendingSelectorFor < Selector, ElementType > ) {
 
         return this->sorted([& selector](ElementType const & a, ElementType const & b) noexcept -> bool {
             return selector(a) > selector(b);
@@ -1552,7 +1552,7 @@ public:
     __CDS_MaybeUnused __CDS_OptimalInline auto sortedByDescending (
             Selector const & selector
     ) & noexcept -> Sequence < Array < ElementType > >
-    __CDS_Requires ( ForwardIterable < C > && DescendingSelectorFor < Selector, ElementType const & > ) {
+    __CDS_Requires ( ForwardIterable < C > && DescendingSelectorFor < Selector, ElementType > ) {
 
         return this->sorted([& selector](ElementType const & a, ElementType const & b) noexcept -> bool {
             return selector(a) > selector(b);
@@ -1572,7 +1572,7 @@ public:
     ) && noexcept -> Sequence < Array < ElementType > >
     __CDS_Requires (
             ForwardIterable < C > &&
-            SelectorFor < Selector, ElementType const & > &&
+            SelectorFor < Selector, ElementType > &&
             ComparatorFor < Comparator, returnOf < Selector > >
     ) {
 
@@ -1594,7 +1594,7 @@ public:
     ) & noexcept -> Sequence < Array < ElementType > >
     __CDS_Requires (
             ForwardIterable < C > &&
-            SelectorFor < Selector, ElementType const & > &&
+            SelectorFor < Selector, ElementType > &&
             ComparatorFor < Comparator, returnOf < Selector > >
     ) {
 
@@ -1783,7 +1783,7 @@ public:
     __CDS_Requires (
             ForwardIterable < C > &&
             ForwardIterable < returnOf < Transformer > > &&
-            TransformerOver < Transformer, ElementType const & >
+            TransformerOver < Transformer, ElementType >
     ) {
 
         LinkedList < __CDS_Sequence :: FlatMapDeducedType < Transformer > > container;
@@ -1801,7 +1801,7 @@ public:
     __CDS_Requires (
             ForwardIterable < C > &&
             ForwardIterable < returnOf < Transformer > > &&
-            TransformerOver < Transformer, ElementType const & >
+            TransformerOver < Transformer, ElementType >
     ) {
 
         LinkedList < __CDS_Sequence :: FlatMapDeducedType < Transformer > > container;
@@ -1818,7 +1818,7 @@ public:
     ) && noexcept -> Sequence < LinkedList < __CDS_Sequence :: FlatMapDeducedType < IndexedTransformer > > > __CDS_Requires (
             ForwardIterable < C > &&
             ForwardIterable < returnOf < IndexedTransformer > > &&
-            TransformerOver < IndexedTransformer, Index, ElementType const & >
+            TransformerOver < IndexedTransformer, Index, ElementType >
     ) {
 
         LinkedList < __CDS_Sequence :: FlatMapDeducedType < IndexedTransformer > > container;
@@ -1836,7 +1836,7 @@ public:
     ) & noexcept -> Sequence < LinkedList < __CDS_Sequence :: FlatMapDeducedType < IndexedTransformer > > > __CDS_Requires (
             ForwardIterable < C > &&
             ForwardIterable < returnOf < IndexedTransformer > > &&
-            TransformerOver < IndexedTransformer, Index, ElementType const & >
+            TransformerOver < IndexedTransformer, Index, ElementType >
     ) {
 
         LinkedList < __CDS_Sequence :: FlatMapDeducedType < IndexedTransformer > > container;
@@ -1855,7 +1855,7 @@ public:
     ) const noexcept -> Collection < __CDS_Sequence :: FlatMapDeducedType < Transformer > > & __CDS_Requires (
             ForwardIterable < C > &&
             ForwardIterable < returnOf < Transformer > > &&
-            TransformerOver < Transformer, ElementType const & >
+            TransformerOver < Transformer, ElementType >
     ) {
 
         for ( auto i : * this )
@@ -1872,7 +1872,7 @@ public:
     ) const noexcept -> Collection < __CDS_Sequence :: FlatMapDeducedType < IndexedTransformer > > & __CDS_Requires (
             ForwardIterable < C > &&
             ForwardIterable < returnOf < IndexedTransformer > > &&
-            TransformerOver < IndexedTransformer, Index, ElementType const & >
+            TransformerOver < IndexedTransformer, Index, ElementType >
     ) {
 
         Index j = 0;
@@ -1889,7 +1889,7 @@ public:
     ) && noexcept -> Sequence < HashMap < returnOf < KeySelector >, LinkedList < ElementType > > >
     __CDS_Requires (
             ForwardIterable < C > &&
-            FunctionOver < KeySelector, returnOf < KeySelector >, ElementType const & >
+            FunctionOver < KeySelector, returnOf < KeySelector >, ElementType >
     ) {
 
         HashMap < returnOf < KeySelector >, LinkedList < ElementType > > container;
@@ -1911,7 +1911,7 @@ public:
     ) & noexcept -> Sequence < HashMap < returnOf < KeySelector >, LinkedList < ElementType > > >
     __CDS_Requires (
             ForwardIterable < C > &&
-            FunctionOver < KeySelector, returnOf < KeySelector >, ElementType const & >
+            FunctionOver < KeySelector, returnOf < KeySelector >, ElementType >
     ) {
 
         HashMap < returnOf < KeySelector >, LinkedList < ElementType > > container;
@@ -1934,8 +1934,8 @@ public:
     ) && noexcept -> Sequence < HashMap < returnOf < KeySelector >, LinkedList < returnOf < ValueMapper > > > >
     __CDS_Requires (
             ForwardIterable < C > &&
-            FunctionOver < KeySelector, returnOf < KeySelector >, ElementType const & > &&
-            FunctionOver < ValueMapper, returnOf < ValueMapper >, ElementType const & >
+            FunctionOver < KeySelector, returnOf < KeySelector >, ElementType > &&
+            FunctionOver < ValueMapper, returnOf < ValueMapper >, ElementType >
     ) {
 
         HashMap < returnOf < KeySelector >, LinkedList < returnOf < ValueMapper > > > container;
@@ -1958,8 +1958,8 @@ public:
     ) & noexcept -> Sequence < HashMap < returnOf < KeySelector >, LinkedList < returnOf < ValueMapper > > > >
     __CDS_Requires (
             ForwardIterable < C > &&
-            FunctionOver < KeySelector, returnOf < KeySelector >, ElementType const & > &&
-            FunctionOver < ValueMapper, returnOf < ValueMapper >, ElementType const & >
+            FunctionOver < KeySelector, returnOf < KeySelector >, ElementType > &&
+            FunctionOver < ValueMapper, returnOf < ValueMapper >, ElementType >
     ) {
 
         HashMap < returnOf < KeySelector >, LinkedList < returnOf < ValueMapper > > > container;
@@ -1982,7 +1982,7 @@ public:
     ) const noexcept -> Map < returnOf < KeySelector >, LinkedList < ElementType > > &
     __CDS_Requires (
             ForwardIterable < C > &&
-            FunctionOver < KeySelector, returnOf < KeySelector >, ElementType const & >
+            FunctionOver < KeySelector, returnOf < KeySelector >, ElementType >
     ) {
 
         for ( auto e : * this ) {
@@ -2004,8 +2004,8 @@ public:
     ) const noexcept -> Map < returnOf < KeySelector >, LinkedList < returnOf < ValueMapper > > > &
     __CDS_Requires (
             ForwardIterable < C > &&
-            FunctionOver < KeySelector, returnOf < KeySelector >, ElementType const & > &&
-            FunctionOver < ValueMapper, returnOf < ValueMapper >, ElementType const & >
+            FunctionOver < KeySelector, returnOf < KeySelector >, ElementType > &&
+            FunctionOver < ValueMapper, returnOf < ValueMapper >, ElementType >
     ) {
 
         for ( auto e : * this ) {
@@ -2032,7 +2032,7 @@ public:
     __CDS_MaybeUnused auto map (
             Mapper const & mapper
     ) && noexcept -> Sequence < LinkedList < returnOf < Mapper > > >
-    __CDS_Requires ( ForwardIterable < C > && MapperFor < Mapper, ElementType const & > ) {
+    __CDS_Requires ( ForwardIterable < C > && MapperFor < Mapper, ElementType > ) {
 
         LinkedList < returnOf < Mapper > > container;
         for ( auto e : * this )
@@ -2045,7 +2045,7 @@ public:
     __CDS_MaybeUnused __CDS_OptimalInline auto map (
             Mapper const & mapper
     ) && noexcept -> Sequence < C >
-    __CDS_Requires ( ForwardIterable < C > && MapperFor < Mapper, ElementType const & > ) {
+    __CDS_Requires ( ForwardIterable < C > && MapperFor < Mapper, ElementType > ) {
 
         this->storedMappers.append({ { Memory :: instance().create < StoredMapper > (mapper) }, this->chainCount });
         return std::move ( * this );
@@ -2055,7 +2055,7 @@ public:
     __CDS_MaybeUnused auto map (
             Mapper const & mapper
     ) & noexcept -> Sequence < LinkedList < returnOf < Mapper > > >
-    __CDS_Requires ( ForwardIterable < C > && MapperFor < Mapper, ElementType const & > ) {
+    __CDS_Requires ( ForwardIterable < C > && MapperFor < Mapper, ElementType > ) {
 
         LinkedList < returnOf < Mapper > > container;
         for ( auto e : * this )
@@ -2068,7 +2068,7 @@ public:
     __CDS_MaybeUnused auto map (
             Mapper const & mapper
     ) & noexcept -> Sequence < C >
-    __CDS_Requires ( ForwardIterable < C > && MapperFor < Mapper, ElementType const & > ) {
+    __CDS_Requires ( ForwardIterable < C > && MapperFor < Mapper, ElementType > ) {
 
         Sequence < C > copy ( *this );
         copy.storedMappers.append({ { Memory :: instance().create < StoredMapper >(mapper) }, this->chainCount });
@@ -2080,7 +2080,7 @@ public:
     __CDS_MaybeUnused auto mapIndexed (
             IndexedMapper const & indexedMapper
     ) && noexcept -> Sequence < LinkedList < returnOf < IndexedMapper > > >
-    __CDS_Requires ( ForwardIterable < C > && MapperFor < IndexedMapper, Index, ElementType const & > ) {
+    __CDS_Requires ( ForwardIterable < C > && MapperFor < IndexedMapper, Index, ElementType > ) {
 
         LinkedList < returnOf < IndexedMapper > > container;
         Index i = 0;
@@ -2094,7 +2094,7 @@ public:
     __CDS_MaybeUnused auto mapIndexed (
             IndexedMapper const & mapper
     ) & noexcept -> Sequence < LinkedList < returnOf < IndexedMapper > > >
-    __CDS_Requires ( ForwardIterable < C > && MapperFor < IndexedMapper, Index, ElementType const & > ) {
+    __CDS_Requires ( ForwardIterable < C > && MapperFor < IndexedMapper, Index, ElementType > ) {
 
         LinkedList < returnOf < IndexedMapper > > container;
         Index i = 0;
@@ -2108,7 +2108,7 @@ public:
     __CDS_MaybeUnused auto mapIndexed (
             IndexedMapper const & mapper
     ) && noexcept -> Sequence < C >
-    __CDS_Requires ( ForwardIterable < C > && MapperFor < IndexedMapper, Index, ElementType const & > ) {
+    __CDS_Requires ( ForwardIterable < C > && MapperFor < IndexedMapper, Index, ElementType > ) {
 
         this->storedIndexedMappers.append({ { Memory :: instance().create < StoredIndexedMapper >(mapper) }, this->chainCount });
         return std::move ( * this );
@@ -2118,7 +2118,7 @@ public:
     __CDS_MaybeUnused auto mapIndexed (
             IndexedMapper const & mapper
     ) & noexcept -> Sequence < C >
-    __CDS_Requires ( ForwardIterable < C > && MapperFor < IndexedMapper, Index, ElementType const & > ) {
+    __CDS_Requires ( ForwardIterable < C > && MapperFor < IndexedMapper, Index, ElementType > ) {
 
         Sequence < C > newSequence (* this);
         newSequence.storedIndexedMappers.append({ { Memory::instance().create < StoredIndexedMapper >(mapper) }, this->chainCount });
@@ -2132,7 +2132,7 @@ public:
     ) const noexcept -> Collection < R > &
     __CDS_Requires (
             ForwardIterable < C > &&
-            MapperFor < Mapper, ElementType const & > &&
+            MapperFor < Mapper, ElementType > &&
             ConvertibleTo < returnOf < Mapper >, R >
     ) {
 
@@ -2148,7 +2148,7 @@ public:
     ) const noexcept -> Collection < R > &
     __CDS_Requires (
             ForwardIterable < C > &&
-            MapperFor < IndexedMapper, Index, ElementType const & > &&
+            MapperFor < IndexedMapper, Index, ElementType > &&
             ConvertibleTo < returnOf < IndexedMapper >, R >
     ) {
 
@@ -2202,7 +2202,7 @@ public:
 
     template < typename Selector >
     __CDS_MaybeUnused auto distinctBy (Selector const & selector) && noexcept -> Sequence < UnorderedSet < ElementType > >
-    __CDS_Requires ( ForwardIterable < C > && TransformerOver < Selector, ElementType const & > ) {
+    __CDS_Requires ( ForwardIterable < C > && TransformerOver < Selector, ElementType > ) {
 
         UnorderedSet < ElementType > container;
         for ( auto e : * this )
@@ -2213,7 +2213,7 @@ public:
 
     template < typename Selector >
     __CDS_MaybeUnused auto distinctBy (Selector const & selector) & noexcept -> Sequence < UnorderedSet < ElementType > >
-    __CDS_Requires ( ForwardIterable < C > && TransformerOver < Selector, ElementType const & > ) {
+    __CDS_Requires ( ForwardIterable < C > && TransformerOver < Selector, ElementType > ) {
 
         UnorderedSet < ElementType > container;
         for ( auto e : * this )
@@ -2224,7 +2224,7 @@ public:
 
     template < typename Action >
     __CDS_MaybeUnused auto forEach ( Action const & action ) const noexcept -> void
-    __CDS_Requires ( ForwardIterable < C > && ActionOver < Action, ElementType const & > ) {
+    __CDS_Requires ( ForwardIterable < C > && ActionOver < Action, ElementType > ) {
 
         for ( auto e : * this )
             action (e);
@@ -2232,7 +2232,7 @@ public:
 
     template < typename IndexedAction >
     __CDS_MaybeUnused auto forEachIndexed ( IndexedAction const & indexedAction ) const noexcept -> void
-    __CDS_Requires ( ForwardIterable < C > && IndexedActionOver < IndexedAction, ElementType const & > ) {
+    __CDS_Requires ( ForwardIterable < C > && IndexedActionOver < IndexedAction, ElementType > ) {
 
         Index i = 0;
         for ( auto e : * this )
@@ -2241,7 +2241,7 @@ public:
 
     template < typename Action >
     __CDS_MaybeUnused auto onEach ( Action const & action ) && noexcept -> Sequence < LinkedList < ElementType > >
-    __CDS_Requires ( ForwardIterable < C > && ActionOver < Action, ElementType & > ) {
+    __CDS_Requires ( ForwardIterable < C > && ActionOver < Action, ElementType > ) {
 
         LinkedList < ElementType > container;
         for ( auto e : * this ) {
@@ -2256,7 +2256,7 @@ public:
     __CDS_MaybeUnused auto onEachIndexed (
             IndexedAction const & indexedAction
     ) && noexcept -> Sequence < LinkedList < ElementType > >
-    __CDS_Requires ( ForwardIterable < C > && IndexedActionOver < IndexedAction, ElementType & > ) {
+    __CDS_Requires ( ForwardIterable < C > && IndexedActionOver < IndexedAction, ElementType > ) {
 
         LinkedList < ElementType > container;
         Index i = 0;
@@ -2270,7 +2270,7 @@ public:
 
     template < typename Action >
     __CDS_MaybeUnused auto onEach ( Action const & action ) & noexcept -> Sequence < LinkedList < ElementType > >
-    __CDS_Requires ( ForwardIterable < C > && ActionOver < Action, ElementType & > ) {
+    __CDS_Requires ( ForwardIterable < C > && ActionOver < Action, ElementType > ) {
 
         Sequence copy (*this);
 
@@ -2287,7 +2287,7 @@ public:
     __CDS_MaybeUnused auto onEachIndexed (
             IndexedAction const & indexedAction
     ) & noexcept -> Sequence < LinkedList < ElementType > >
-    __CDS_Requires ( ForwardIterable < C > && IndexedActionOver < IndexedAction, ElementType & > ) {
+    __CDS_Requires ( ForwardIterable < C > && IndexedActionOver < IndexedAction, ElementType > ) {
 
         Sequence copy (*this);
 
@@ -2312,7 +2312,7 @@ public:
     __CDS_MaybeUnused auto max (
             Comparator const & comparator = [](ElementType const & a, ElementType const & b) noexcept -> bool { return a < b; }
     ) const noexcept -> Optional < ElementType >
-    __CDS_Requires ( ForwardIterable < C > && ComparatorFor < Comparator, ElementType const & > ) {
+    __CDS_Requires ( ForwardIterable < C > && ComparatorFor < Comparator, ElementType > ) {
 
         if ( this->pCollection.valueAt().valueAt().size() == 0 ) return {  };
 
@@ -2332,7 +2332,7 @@ public:
     __CDS_MaybeUnused auto maxBy ( Selector const & selector ) const noexcept -> Optional < ElementType >
     __CDS_Requires (
             ForwardIterable < C > &&
-            AscendingSelectorFor < Selector, ElementType const & >
+            AscendingSelectorFor < Selector, ElementType >
     ) {
 
         if ( this->pCollection.valueAt().valueAt().size() == 0 ) return { };
@@ -2353,7 +2353,7 @@ public:
     __CDS_MaybeUnused auto maxOf ( Selector const & selector ) const noexcept -> Optional < returnOf < Selector > >
     __CDS_Requires (
             ForwardIterable < C > &&
-            AscendingSelectorFor < Selector, ElementType const & >
+            AscendingSelectorFor < Selector, ElementType >
     ) {
 
         if ( this->pCollection.valueAt().valueAt().size() == 0 ) return { };
@@ -2375,7 +2375,7 @@ public:
             ElementType const & e,
             Comparator  const & comparator = [](ElementType const & a, ElementType const & b) noexcept -> bool { return a < b; }
     ) const noexcept -> ElementType
-    __CDS_Requires ( ForwardIterable < C > && ComparatorFor < Comparator, ElementType const & > ) {
+    __CDS_Requires ( ForwardIterable < C > && ComparatorFor < Comparator, ElementType > ) {
 
         auto v = this->max ( comparator );
         return v.isPresent() ? v.value() : e;
@@ -2387,7 +2387,7 @@ public:
             Selector    const & selector
     ) const noexcept -> ElementType __CDS_Requires (
             ForwardIterable < C > &&
-            AscendingSelectorFor < Selector, ElementType const & >
+            AscendingSelectorFor < Selector, ElementType >
     ) {
 
         auto v = this->maxBy ( selector );
@@ -2400,7 +2400,7 @@ public:
             Selector                const & selector
     ) const noexcept -> returnOf < Selector > __CDS_Requires (
             ForwardIterable < C > &&
-            AscendingSelectorFor < Selector, ElementType const & >
+            AscendingSelectorFor < Selector, ElementType >
     ) {
 
         auto v = this->maxOf ( selector );
@@ -2411,7 +2411,7 @@ public:
     __CDS_MaybeUnused auto min (
             Comparator const & comparator = [](ElementType const & a, ElementType const & b) noexcept -> bool { return a < b; }
     ) const noexcept -> Optional < ElementType >
-    __CDS_Requires ( ForwardIterable < C > && ComparatorFor < Comparator, ElementType const & > )  {
+    __CDS_Requires ( ForwardIterable < C > && ComparatorFor < Comparator, ElementType > )  {
 
         if ( this->pCollection.valueAt().valueAt().size() == 0 ) return {  };
 
@@ -2432,7 +2432,7 @@ public:
             Selector const & selector
     ) const noexcept -> Optional < ElementType > __CDS_Requires (
             ForwardIterable < C > &&
-            AscendingSelectorFor < Selector, ElementType const & >
+            AscendingSelectorFor < Selector, ElementType >
     ) {
 
         if ( this->pCollection.valueAt().valueAt().size() == 0 ) return { };
@@ -2453,7 +2453,7 @@ public:
     __CDS_MaybeUnused auto minOf ( Selector const & selector ) const noexcept -> Optional < returnOf < Selector > >
     __CDS_Requires (
             ForwardIterable < C > &&
-            AscendingSelectorFor < Selector, ElementType const & >
+            AscendingSelectorFor < Selector, ElementType >
     ) {
 
         if ( this->pCollection.valueAt().valueAt().size() == 0 ) return { };
@@ -2475,7 +2475,7 @@ public:
             ElementType const & e,
             Comparator  const & comparator = [](ElementType const & a, ElementType const & b) noexcept -> bool { return a < b; }
     ) const noexcept -> ElementType
-    __CDS_Requires ( ForwardIterable < C > && ComparatorFor < Comparator, ElementType const & > ) {
+    __CDS_Requires ( ForwardIterable < C > && ComparatorFor < Comparator, ElementType > ) {
 
         auto v = this->min ( comparator );
         return v.isPresent() ? v.value() : e;
@@ -2488,7 +2488,7 @@ public:
     ) const noexcept -> ElementType
     __CDS_Requires (
             ForwardIterable < C > &&
-            AscendingSelectorFor < Selector, ElementType const & >
+            AscendingSelectorFor < Selector, ElementType >
     ) {
 
         auto v = this->minBy ( selector );
@@ -2502,7 +2502,7 @@ public:
     ) const noexcept -> returnOf < Selector >
     __CDS_Requires (
             ForwardIterable < C > &&
-            AscendingSelectorFor < Selector, ElementType const & >
+            AscendingSelectorFor < Selector, ElementType >
     ) {
 
         auto v = this->minOf ( selector );
@@ -2521,7 +2521,7 @@ public:
     ) const noexcept -> AccumulatedType
     __CDS_Requires (
             ForwardIterable < C > &&
-            AccumulatorFor < Accumulator, ElementType const & >
+            AccumulatorFor < Accumulator, ElementType >
     ) {
 
         AccumulatedType result = startingValue;
@@ -2539,7 +2539,7 @@ public:
     ) const noexcept -> AccumulatedType
     __CDS_Requires (
             ForwardIterable < C > &&
-            IndexedAccumulatorFor < IndexedAccumulator, ElementType const & >
+            IndexedAccumulatorFor < IndexedAccumulator, ElementType >
     ) {
         AccumulatedType result = startingValue;
         Index i = 0;
@@ -2557,7 +2557,7 @@ public:
     ) && noexcept -> Sequence < LinkedList < AccumulatedType > >
     __CDS_Requires (
             ForwardIterable < C > &&
-            AccumulatorFor < Accumulator, ElementType const & >
+            AccumulatorFor < Accumulator, ElementType >
     ) {
 
         LinkedList < AccumulatedType > results = { initialValue };
@@ -2575,7 +2575,7 @@ public:
     ) && noexcept -> Sequence < LinkedList < AccumulatedType > >
     __CDS_Requires (
             ForwardIterable < C > &&
-            IndexedAccumulatorFor < IndexedAccumulator, ElementType const & >
+            IndexedAccumulatorFor < IndexedAccumulator, ElementType >
     ) {
 
         LinkedList < AccumulatedType > results = { initialValue };
@@ -2594,7 +2594,7 @@ public:
     ) & noexcept -> Sequence < LinkedList < AccumulatedType > >
     __CDS_Requires (
             ForwardIterable < C > &&
-            AccumulatorFor < Accumulator, ElementType const & >
+            AccumulatorFor < Accumulator, ElementType >
     ) {
 
         LinkedList < AccumulatedType > results = { initialValue };
@@ -2612,7 +2612,7 @@ public:
     ) & noexcept -> Sequence < LinkedList < AccumulatedType > >
     __CDS_Requires (
             ForwardIterable < C > &&
-            IndexedAccumulatorFor < IndexedAccumulator, ElementType const & >
+            IndexedAccumulatorFor < IndexedAccumulator, ElementType >
     ) {
 
         LinkedList < AccumulatedType > results = { initialValue };
@@ -2630,7 +2630,7 @@ public:
     ) const noexcept (false) -> returnOf < Accumulator >
     __CDS_Requires (
             ForwardIterable < C > &&
-            AccumulatorFor < Accumulator, ElementType const & > &&
+            AccumulatorFor < Accumulator, ElementType > &&
             ConvertibleTo < ElementType, returnOf < Accumulator > >
     ) {
 
@@ -2652,7 +2652,7 @@ public:
     ) const noexcept (false) -> returnOf < IndexedAccumulator >
     __CDS_Requires (
             ForwardIterable < C > &&
-            IndexedAccumulatorFor < IndexedAccumulator, ElementType const & > &&
+            IndexedAccumulatorFor < IndexedAccumulator, ElementType > &&
             ConvertibleTo < ElementType, returnOf < IndexedAccumulator > >
     ) {
 
@@ -2675,7 +2675,7 @@ public:
     ) && noexcept -> Sequence < LinkedList < returnOf < Accumulator > > >
     __CDS_Requires (
             ForwardIterable < C > &&
-            AccumulatorFor < Accumulator, ElementType const & > &&
+            AccumulatorFor < Accumulator, ElementType > &&
             ConvertibleTo < ElementType, returnOf < Accumulator > >
     ) {
 
@@ -2698,7 +2698,7 @@ public:
     ) && noexcept -> Sequence < LinkedList < returnOf < IndexedAccumulator > > >
     __CDS_Requires (
             ForwardIterable < C > &&
-            IndexedAccumulatorFor < IndexedAccumulator, ElementType const & > &&
+            IndexedAccumulatorFor < IndexedAccumulator, ElementType > &&
             ConvertibleTo < ElementType, returnOf < IndexedAccumulator > >
     ) {
 
@@ -2724,7 +2724,7 @@ public:
     ) & noexcept -> Sequence < LinkedList < returnOf < Accumulator > > >
     __CDS_Requires (
             ForwardIterable < C > &&
-            AccumulatorFor < Accumulator, ElementType const & > &&
+            AccumulatorFor < Accumulator, ElementType > &&
             ConvertibleTo < ElementType, returnOf < Accumulator > >
     ) {
 
@@ -2747,7 +2747,7 @@ public:
     ) & noexcept -> Sequence < LinkedList < returnOf < IndexedAccumulator > > >
     __CDS_Requires (
             ForwardIterable < C > &&
-            IndexedAccumulatorFor < IndexedAccumulator, ElementType const & > &&
+            IndexedAccumulatorFor < IndexedAccumulator, ElementType > &&
             ConvertibleTo < ElementType, returnOf < IndexedAccumulator > >
     ) {
 
@@ -2773,7 +2773,7 @@ public:
     ) && noexcept -> Sequence < LinkedList < AccumulatedType > >
     __CDS_Requires (
             ForwardIterable < C > &&
-            AccumulatorFor < Accumulator, ElementType const & >
+            AccumulatorFor < Accumulator, ElementType >
     ) {
 
         return this->runningFold( initialValue, accumulator );
@@ -2786,7 +2786,7 @@ public:
     ) & noexcept -> Sequence < LinkedList < AccumulatedType > >
     __CDS_Requires (
             ForwardIterable < C > &&
-            AccumulatorFor < Accumulator, ElementType const & >
+            AccumulatorFor < Accumulator, ElementType >
     ) {
 
         return this->runningFold( initialValue, accumulator );
@@ -2799,7 +2799,7 @@ public:
     ) && noexcept -> Sequence < LinkedList < AccumulatedType > >
     __CDS_Requires (
             ForwardIterable < C > &&
-            IndexedAccumulatorFor < IndexedAccumulator, ElementType const & >
+            IndexedAccumulatorFor < IndexedAccumulator, ElementType >
     ) {
 
         return this->runningFoldIndexed ( initialValue, indexedAccumulator );
@@ -2812,7 +2812,7 @@ public:
     ) & noexcept -> Sequence < LinkedList < AccumulatedType > >
     __CDS_Requires (
             ForwardIterable < C > &&
-            IndexedAccumulatorFor < IndexedAccumulator, ElementType const & >
+            IndexedAccumulatorFor < IndexedAccumulator, ElementType >
     ) {
 
         return this->runningFoldIndexed ( initialValue, indexedAccumulator );
@@ -2843,7 +2843,7 @@ public:
     __CDS_MaybeUnused auto sumBy ( Selector const & selector ) const noexcept -> returnOf < Selector >
     __CDS_Requires (
             ForwardIterable < C > &&
-            MapperFor < Selector, ElementType const & > &&
+            MapperFor < Selector, ElementType > &&
             Summable < ElementType >
     ) {
 
@@ -2928,7 +2928,7 @@ public:
             Size                    chunkSize,
             ListTransformer const & listTransformer
     ) && noexcept -> Sequence < LinkedList < returnOf < ListTransformer > > >
-    __CDS_Requires ( ForwardIterable < C > && TransformerOver < ListTransformer, List < ElementType > const & > ) {
+    __CDS_Requires ( ForwardIterable < C > && TransformerOver < ListTransformer, List < ElementType > > ) {
 
         LinkedList < returnOf < ListTransformer > > container;
         Array < ElementType > subContainer;
@@ -2959,7 +2959,7 @@ public:
             Size                    chunkSize,
             ListTransformer const & listTransformer
     ) & noexcept -> Sequence < LinkedList < returnOf < ListTransformer > > >
-    __CDS_Requires ( ForwardIterable < C > && TransformerOver < ListTransformer, List < ElementType > const & > ) {
+    __CDS_Requires ( ForwardIterable < C > && TransformerOver < ListTransformer, List < ElementType > > ) {
 
         LinkedList < returnOf < ListTransformer > > container;
         Array < ElementType > subContainer;
@@ -3199,7 +3199,7 @@ public:
     __CDS_MaybeUnused auto partition (
             Predicate const & predicate
     ) const noexcept -> Pair < LinkedList < ElementType >, LinkedList < ElementType > >
-    __CDS_Requires ( ForwardIterable < C > && PredicateOver < Predicate, ElementType const & > ) {
+    __CDS_Requires ( ForwardIterable < C > && PredicateOver < Predicate, ElementType > ) {
 
         Pair < LinkedList < ElementType >, LinkedList < ElementType > > partitions;
 
@@ -3216,7 +3216,7 @@ public:
     __CDS_MaybeUnused auto partitionIndexed (
             IndexedPredicate const & indexedPredicate
     ) const noexcept -> Pair < LinkedList < ElementType >, LinkedList < ElementType > >
-    __CDS_Requires ( ForwardIterable < C > && IndexedPredicateOver < IndexedPredicate, ElementType const & > )  {
+    __CDS_Requires ( ForwardIterable < C > && IndexedPredicateOver < IndexedPredicate, ElementType > )  {
 
         Pair < LinkedList < ElementType >, LinkedList < ElementType > > partitions;
         Index i = 0;
@@ -3309,7 +3309,7 @@ public:
             Size                    step            = 1,
             Boolean         const & partialWindows  = false
     ) && noexcept -> Sequence < LinkedList < returnOf < ListTransformer > > >
-    __CDS_Requires ( ForwardIterable < C > && TransformerOver < ListTransformer, List < ElementType > const & > )  {
+    __CDS_Requires ( ForwardIterable < C > && TransformerOver < ListTransformer, List < ElementType > > )  {
 
         LinkedList < returnOf < ListTransformer > > container;
         __CDS_Sequence :: Windowed :: type < ListTransformer > window;
@@ -3339,7 +3339,7 @@ public:
             Size                    step            = 1,
             Boolean         const & partialWindows  = false
     ) & noexcept -> Sequence < LinkedList < returnOf < ListTransformer > > >
-    __CDS_Requires ( ForwardIterable < C > && TransformerOver < ListTransformer, List < ElementType > const & > ) {
+    __CDS_Requires ( ForwardIterable < C > && TransformerOver < ListTransformer, List < ElementType > > ) {
 
         LinkedList < returnOf < ListTransformer > > container;
         __CDS_Sequence :: Windowed :: type < ListTransformer > window;
@@ -3404,7 +3404,7 @@ public:
     __CDS_Requires (
             ForwardIterable < C > &&
             ForwardIterable < OC > &&
-            TransformerOver < Transformer, ElementType const &, typename OC :: ElementType const & >
+            TransformerOver < Transformer, ElementType, typename OC :: ElementType >
     ) {
 
         auto it1 = this->begin();
@@ -3426,7 +3426,7 @@ public:
     __CDS_Requires (
             ForwardIterable < C > &&
             ForwardIterable < OC > &&
-            TransformerOver < Transformer, ElementType const &, typename OC :: ElementType const & >
+            TransformerOver < Transformer, ElementType, typename OC :: ElementType >
     ) {
 
         auto it1 = this->begin();
@@ -3461,7 +3461,7 @@ public:
     __CDS_MaybeUnused auto zipWithNext (
             Transformer const & transformer
     ) && noexcept -> Sequence < LinkedList < returnOf < Transformer > > >
-    __CDS_Requires ( ForwardIterable < C > && TransformerOver < Transformer, ElementType const &, ElementType const & > ) {
+    __CDS_Requires ( ForwardIterable < C > && TransformerOver < Transformer, ElementType, ElementType > ) {
 
         LinkedList < returnOf < Transformer > > container;
 
@@ -3496,7 +3496,7 @@ public:
     __CDS_MaybeUnused auto zipWithNext (
             Transformer const & transformer
     ) & noexcept -> Sequence < LinkedList < returnOf < Transformer > > >
-    __CDS_Requires ( ForwardIterable < C > && TransformerOver < Transformer, ElementType const &, ElementType const & > ) {
+    __CDS_Requires ( ForwardIterable < C > && TransformerOver < Transformer, ElementType, ElementType > ) {
 
         LinkedList < returnOf < Transformer > > container;
 

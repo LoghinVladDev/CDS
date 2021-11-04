@@ -173,7 +173,7 @@ protected:
     }
 
 #if defined(__CDS_ThreadSafeObjects)
-        Mutex mutable multithreadingProtection;
+    Mutex mutable multithreadingProtection;
 #endif
 
 public:
@@ -253,11 +253,11 @@ public:
 
         for (
                 auto
-                    i = UniquePointer < ConstIterator > ( this->beginPtr() ),
-                    end = UniquePointer < ConstIterator > ( this->endPtr() );
+                        i = UniquePointer < ConstIterator > ( this->beginPtr() ),
+                        end = UniquePointer < ConstIterator > ( this->endPtr() );
                 ! i->equals(* end);
                 i->next()
-        )
+                )
             if ( Type < ElementType > :: compare ( i->value (), e ) ) {
 
                 __CDS_Collection_OperationalUnlock
@@ -271,22 +271,52 @@ public:
 
     template < typename Action >
     __CDS_MaybeUnused auto forEach (
-            Action const &
+            Action const & action
     ) noexcept ( noexcept ( ( * Type < Action > :: unsafeAddress () ) ( Type < ElementType > :: unsafeReference() ) ) )
-            -> void __CDS_Requires ( ActionOverMutable < Action, T > );
+            -> void __CDS_Requires ( ActionOver < Action, T > ) {
+
+        __CDS_Collection_OperationalLock
+
+        for (
+                auto
+                        it = UniquePointer < Collection :: Iterator > ( this->beginPtr() ),
+                        end = UniquePointer < Collection :: Iterator > ( this->endPtr() );
+                ! it->equals( * end );
+                it->next()
+                )
+            action ( it->value() );
+
+        __CDS_Collection_OperationalUnlock
+
+    }
 
     template < typename Action >
     __CDS_MaybeUnused auto forEach (
-            Action const &
+            Action const & action
     ) const noexcept ( noexcept ( ( * Type < Action > :: unsafeAddress () ) ( Type < ElementType const > :: unsafeReference() ) ) )
-            -> void __CDS_Requires ( ActionOverImmutable < Action, T > );
+            -> void __CDS_Requires ( ActionOver < Action, T > ) {
+
+        __CDS_Collection_OperationalLock
+
+        for (
+            auto
+                it = UniquePointer < Collection :: ConstIterator > ( this->beginPtr() ),
+                end = UniquePointer < Collection :: ConstIterator > ( this->endPtr() );
+            ! it->equals( * end );
+            it->next()
+        )
+            action ( it->value() );
+
+        __CDS_Collection_OperationalUnlock
+
+    }
 
     template < typename Predicate = Function < bool ( ElementCRef ) > >
     __CDS_MaybeUnused __CDS_OptimalInline auto some (
             Size                count,
             Predicate   const & predicate = []( ElementCRef ) noexcept -> bool { return true; }
     ) noexcept ( noexcept ( ( * Type < Predicate > :: unsafeAddress () ) ( Type < ElementType > :: unsafeReference() ) ) )
-            -> bool __CDS_Requires( PredicateOverMutable < Predicate, T > ) {
+            -> bool __CDS_Requires( PredicateOver < Predicate, T > ) {
 
         return this->count(predicate) == count;
     }
@@ -296,7 +326,7 @@ public:
             Size                count,
             Predicate   const & predicate = []( ElementCRef ) noexcept -> bool { return true; }
     ) const noexcept ( noexcept ( ( * Type < Predicate > :: unsafeAddress () ) ( Type < ElementType const > :: unsafeReference() ) ) )
-            -> bool __CDS_Requires( PredicateOverImmutable < Predicate, T > ) {
+            -> bool __CDS_Requires( PredicateOver < Predicate, T > ) {
 
         return this->count(predicate) == count;
     }
@@ -306,7 +336,7 @@ public:
             Size                count,
             Predicate   const & predicate = []( ElementCRef ) noexcept -> bool { return true; }
     ) noexcept ( noexcept ( ( * Type < Predicate > :: unsafeAddress () ) ( Type < ElementType > :: unsafeReference() ) ) )
-            -> bool __CDS_Requires( PredicateOverMutable < Predicate, T > ) {
+            -> bool __CDS_Requires( PredicateOver < Predicate, T > ) {
 
         return this->count(predicate) >= count;
     }
@@ -316,7 +346,7 @@ public:
             Size                count,
             Predicate   const & predicate = []( ElementCRef ) noexcept -> bool { return true; }
     ) const noexcept ( noexcept ( ( * Type < Predicate > :: unsafeAddress () ) ( Type < ElementType const > :: unsafeReference() ) ) )
-            -> bool __CDS_Requires( PredicateOverImmutable < Predicate, T > ) {
+            -> bool __CDS_Requires( PredicateOver < Predicate, T > ) {
 
         return this->count(predicate) >= count;
     }
@@ -326,7 +356,7 @@ public:
             Size                count,
             Predicate   const & predicate = []( ElementCRef ) noexcept -> bool { return true; }
     ) noexcept ( noexcept ( ( * Type < Predicate > :: unsafeAddress () ) ( Type < ElementType > :: unsafeReference() ) ) )
-            -> bool __CDS_Requires( PredicateOverMutable < Predicate, T > ) {
+            -> bool __CDS_Requires( PredicateOver < Predicate, T > ) {
 
         return this->count(predicate) <= count;
     }
@@ -336,7 +366,7 @@ public:
             Size count,
             Predicate const & predicate = []( ElementCRef ) noexcept -> bool { return true; }
     ) const noexcept ( noexcept ( ( * Type < Predicate > :: unsafeAddress () ) ( Type < ElementType const > :: unsafeReference() ) ) )
-            -> bool __CDS_Requires( PredicateOverImmutable < Predicate, T > ) {
+            -> bool __CDS_Requires( PredicateOver < Predicate, T > ) {
 
         return this->count(predicate) <= count;
     }
@@ -346,7 +376,7 @@ public:
             Size                count,
             Predicate   const & predicate = []( ElementCRef ) noexcept -> bool { return true; }
     ) noexcept ( noexcept ( ( * Type < Predicate > :: unsafeAddress () ) ( Type < ElementType > :: unsafeReference() ) ) )
-            -> bool __CDS_Requires( PredicateOverMutable < Predicate, T > ) {
+            -> bool __CDS_Requires( PredicateOver < Predicate, T > ) {
 
         return this->atLeast ( count, predicate );
     }
@@ -356,7 +386,7 @@ public:
             Size                count,
             Predicate   const & predicate = []( ElementCRef ) noexcept -> bool { return true; }
     ) const noexcept ( noexcept ( ( * Type < Predicate > :: unsafeAddress () ) ( Type < ElementType const > :: unsafeReference() ) ) )
-            -> bool __CDS_Requires( PredicateOverImmutable < Predicate, T > ) {
+            -> bool __CDS_Requires( PredicateOver < Predicate, T > ) {
 
         return this->atLeast ( count, predicate );
     }
@@ -366,7 +396,7 @@ public:
             Size                count,
             Predicate   const & predicate = []( ElementCRef ) noexcept -> bool { return true; }
     ) noexcept ( noexcept ( ( * Type < Predicate > :: unsafeAddress () ) ( Type < ElementType > :: unsafeReference() ) ) )
-            -> bool __CDS_Requires( PredicateOverMutable < Predicate, T > ) {
+            -> bool __CDS_Requires( PredicateOver < Predicate, T > ) {
 
         return this->lessThan ( count, predicate );
     }
@@ -376,28 +406,66 @@ public:
             Size                count,
             Predicate   const & predicate = []( ElementCRef ) noexcept -> bool { return true; }
     ) const noexcept ( noexcept ( ( * Type < Predicate > :: unsafeAddress () ) ( Type < ElementType const > :: unsafeReference() ) ) )
-            -> bool __CDS_Requires( PredicateOverImmutable < Predicate, T > ) {
+            -> bool __CDS_Requires( PredicateOver < Predicate, T > ) {
 
         return this->lessThan ( count, predicate );
     }
 
     template < typename Predicate = Function < bool ( ElementCRef ) > >
     __CDS_MaybeUnused auto count (
-            Predicate const & = []( ElementCRef ) noexcept -> bool { return true; }
+            Predicate const & predicate = []( ElementCRef ) noexcept -> bool { return true; }
     ) noexcept ( noexcept ( ( * Type < Predicate > :: unsafeAddress () ) ( Type < ElementType > :: unsafeReference() ) ) )
-            -> Size __CDS_Requires( PredicateOverMutable < Predicate, T > );
+            -> Size __CDS_Requires( PredicateOver < Predicate, T > )  {
+
+        Size trueCount = 0;
+
+        __CDS_Collection_OperationalLock
+
+        for (
+            auto
+                it = UniquePointer < Collection :: Iterator > ( this->beginPtr() ),
+                end = UniquePointer < Collection :: Iterator > ( this->endPtr() );
+            ! it->equals( * end );
+            it->next()
+        )
+            if ( predicate ( it->value() ) )
+                trueCount ++;
+
+        __CDS_Collection_OperationalUnlock
+
+        return trueCount;
+    }
 
     template < typename Predicate = Function < bool ( ElementCRef ) > >
     __CDS_MaybeUnused auto count (
-            Predicate const & = []( ElementCRef ) noexcept -> bool { return true; }
+            Predicate const & predicate = []( ElementCRef ) noexcept -> bool { return true; }
     ) const noexcept ( noexcept ( ( * Type < Predicate > :: unsafeAddress () ) ( Type < ElementType const > :: unsafeReference() ) ) )
-            -> Size __CDS_Requires( PredicateOverImmutable < Predicate, T > );
+            -> Size __CDS_Requires( PredicateOver < Predicate, T > ) {
+
+        Size trueCount = 0;
+
+        __CDS_Collection_OperationalLock
+
+        for (
+            auto
+                it = UniquePointer < Collection :: ConstIterator > ( this->beginPtr() ),
+                end = UniquePointer < Collection :: ConstIterator > ( this->endPtr() );
+            ! it->equals( * end );
+            it->next()
+        )
+            if ( predicate ( it->value() ) )
+                trueCount ++;
+
+        __CDS_Collection_OperationalUnlock
+
+        return trueCount;
+    }
 
     template < typename Predicate = Function < bool ( ElementCRef ) > >
     __CDS_MaybeUnused __CDS_OptimalInline auto any (
             Predicate const & p = []( ElementCRef ) noexcept -> bool { return true; }
     ) noexcept ( noexcept ( ( * Type < Predicate > :: unsafeAddress () ) ( Type < ElementType > :: unsafeReference() ) ) )
-            -> bool __CDS_Requires( PredicateOverMutable < Predicate, T > ) {
+            -> bool __CDS_Requires( PredicateOver < Predicate, T > ) {
 
         return this->atLeast ( 1, p );
     }
@@ -406,7 +474,7 @@ public:
     __CDS_MaybeUnused __CDS_OptimalInline auto any (
             Predicate const & p = []( ElementCRef ) noexcept -> bool { return true; }
     ) const noexcept ( noexcept ( ( * Type < Predicate > :: unsafeAddress () ) ( Type < ElementType const > :: unsafeReference() ) ) )
-            -> bool __CDS_Requires( PredicateOverImmutable < Predicate, T > ) {
+            -> bool __CDS_Requires( PredicateOver < Predicate, T > ) {
 
         return this->atLeast ( 1, p );
     }
@@ -415,7 +483,7 @@ public:
     __CDS_MaybeUnused __CDS_OptimalInline auto all (
             Predicate const & p
     ) noexcept ( noexcept ( ( * Type < Predicate > :: unsafeAddress () ) ( Type < ElementType > :: unsafeReference() ) ) )
-            -> bool __CDS_Requires( PredicateOverMutable < Predicate, T > ) {
+            -> bool __CDS_Requires( PredicateOver < Predicate, T > ) {
 
         return ! this->any ( [&p] (T & e) noexcept -> bool { return ! p(e); } );
     }
@@ -424,7 +492,7 @@ public:
     __CDS_MaybeUnused __CDS_OptimalInline auto all (
             Predicate const & p
     ) const noexcept ( noexcept ( ( * Type < Predicate > :: unsafeAddress () ) ( Type < ElementType const > :: unsafeReference() ) ) )
-            -> bool __CDS_Requires( PredicateOverImmutable < Predicate, T > ) {
+            -> bool __CDS_Requires( PredicateOver < Predicate, T > ) {
 
         return ! this->any ( [&p] ( ElementCRef e) noexcept -> bool { return ! p(e); } );
     }
@@ -438,107 +506,11 @@ public:
     __CDS_cpplang_ConstexprDestructor ~Collection() noexcept override = default;
 
     __CDS_OptimalInline friend auto operator << ( std::ostream & o, const Collection & c ) noexcept -> std::ostream & {
-         return ( o << c.toString() );
+        return ( o << c.toString() );
     }
 
     __CDS_NoDiscard __CDS_MaybeUnused __CDS_cpplang_ConstexprPureAbstract virtual auto empty () const noexcept -> bool = 0;
 };
-
-template < typename T >
-template < typename Action >
-auto Collection<T>::forEach (
-        Action const & a
-) noexcept ( noexcept ( ( * Type < Action > :: unsafeAddress() ) ( Type < ElementType > :: unsafeReference() ) ) )
-        -> void __CDS_Requires( ActionOverMutable < Action, T > ) {
-
-    __CDS_Collection_OperationalLock
-
-    for (
-        auto
-            it = UniquePointer < Collection :: Iterator > ( this->beginPtr() ),
-            end = UniquePointer < Collection :: Iterator > ( this->endPtr() );
-        ! it->equals( * end );
-        it->next()
-    )
-        a ( it->value() );
-
-    __CDS_Collection_OperationalUnlock
-
-}
-
-template < typename T >
-template < typename Action >
-auto Collection<T>::forEach (
-        Action const & a
-) const noexcept ( noexcept ( ( * Type < Action > :: unsafeAddress () ) ( Type < ElementType const > :: unsafeReference() ) ) )
-        -> void __CDS_Requires( ActionOverImmutable < Action, T > ) {
-
-    __CDS_Collection_OperationalLock
-
-    for (
-        auto
-            it = UniquePointer < Collection :: ConstIterator > ( this->beginPtr() ),
-            end = UniquePointer < Collection :: ConstIterator > ( this->endPtr() );
-        ! it->equals( * end );
-        it->next()
-    )
-        a ( it->value() );
-
-    __CDS_Collection_OperationalUnlock
-
-}
-
-template < typename T >
-template < typename Predicate >
-auto Collection<T>::count (
-        Predicate const & p
-) noexcept ( noexcept ( ( * Type < Predicate > :: unsafeAddress () ) ( Type < ElementType > :: unsafeReference() ) ) )
-        -> Size __CDS_Requires( PredicateOverMutable < Predicate, T > ) {
-
-    Size trueCount = 0;
-
-    __CDS_Collection_OperationalLock
-
-    for (
-        auto
-            it = UniquePointer < Collection :: Iterator > ( this->beginPtr() ),
-            end = UniquePointer < Collection :: Iterator > ( this->endPtr() );
-        ! it->equals( * end );
-        it->next()
-    )
-        if ( p ( it->value() ) )
-            trueCount ++;
-
-    __CDS_Collection_OperationalUnlock
-
-    return trueCount;
-}
-
-template < typename T >
-template < typename Predicate >
-auto Collection<T>::count (
-        Predicate const & p
-) const noexcept ( noexcept ( ( * Type < Predicate > :: unsafeAddress () ) ( Type < ElementType const > :: unsafeReference() ) ) )
-        -> Size __CDS_Requires( PredicateOverImmutable < Predicate, T > ) {
-
-    Size trueCount = 0;
-
-    __CDS_Collection_OperationalLock
-
-    for (
-        auto
-            it = UniquePointer < Collection :: ConstIterator > ( this->beginPtr() ),
-            end = UniquePointer < Collection :: ConstIterator > ( this->endPtr() );
-        ! it->equals( * end );
-        it->next()
-    )
-        if ( p ( it->value() ) )
-            trueCount ++;
-
-    __CDS_Collection_OperationalUnlock
-
-    return trueCount;
-}
 
 __CDS_RegisterParseTypeTemplateT(Collection)
 

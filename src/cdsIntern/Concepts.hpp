@@ -140,87 +140,24 @@ concept DerivedFrom =
 
 template < typename FunctionType, typename ReturnType, typename ... ArgumentTypes >
 concept FunctionOver =
-        std :: is_invocable_r < ReturnType, FunctionType, ArgumentTypes ... > :: type :: value;
+        std :: is_invocable_r < ReturnType, FunctionType, decltype ((*dataTypes::unsafeAddress< ArgumentTypes >())) ... > :: type :: value;
 
 template < typename Predicate, typename T >
 concept PredicateOver =
         FunctionOver < Predicate, bool, T >;
 
-template < typename Predicate, typename T, typename CT = RemoveModifiers < T > >
-concept PredicateOverImmutable =
-        PredicateOver < Predicate, CT >             ||
-        PredicateOver < Predicate, CT const & >     ||
-        PredicateOver < Predicate, CT const * >     ||
-        PredicateOver < Predicate, CT const * const >;
-
-template < typename Predicate, typename T, typename CT = RemoveModifiers < T > >
-concept PredicateOverMutable =
-        PredicateOverImmutable < Predicate, CT, CT >    ||
-        PredicateOver < Predicate, CT & >               ||
-        PredicateOver < Predicate, CT && >              ||
-        PredicateOver < Predicate, CT * >               ||
-        PredicateOver < Predicate, CT * const >         ||
-        PredicateOver < Predicate, CT * & >;
-
 template < typename Predicate, typename T >
 concept IndexedPredicateOver = FunctionOver < Predicate, bool, Index, T >;
-
-template < typename Predicate, typename T, typename CT = RemoveModifiers < T > >
-concept IndexedPredicateOverImmutable =
-        IndexedPredicateOver < Predicate, CT >              ||
-        IndexedPredicateOver < Predicate, CT const & >      ||
-        IndexedPredicateOver < Predicate, CT const * >      ||
-        IndexedPredicateOver < Predicate, CT const * const * >;
-
-template < typename Predicate, typename T, typename CT = RemoveModifiers < T > >
-concept IndexedPredicateOverMutable =
-        IndexedPredicateOverImmutable < Predicate, CT, CT >     ||
-        IndexedPredicateOver < Predicate, CT & >                ||
-        IndexedPredicateOver < Predicate, CT && >               ||
-        IndexedPredicateOver < Predicate, CT * >                ||
-        IndexedPredicateOver < Predicate, CT * const >          ||
-        IndexedPredicateOver < Predicate, CT * & >;
 
 template < typename Predicate >
 concept EmptyPredicate = FunctionOver < Predicate, bool >;
 
 template < typename Action, typename T >
-concept ActionOver = FunctionOver < Action, void, T >;
-
-template < typename Action, typename T, typename CT = RemoveModifiers < T > >
-concept ActionOverImmutable =
-        ActionOver < Action, CT >           ||
-        ActionOver < Action, CT const & >   ||
-        ActionOver < Action, CT const * >   ||
-        ActionOver < Action, CT const * const >;
-
-template < typename Action, typename T, typename CT = RemoveModifiers < T > >
-concept ActionOverMutable =
-        ActionOverImmutable < Action, CT, CT >    ||
-        ActionOver < Action, CT & >               ||
-        ActionOver < Action, CT && >              ||
-        ActionOver < Action, CT * >               ||
-        ActionOver < Action, CT * const >         ||
-        ActionOver < Action, CT * & >;
+concept ActionOver =
+        FunctionOver < Action, void, T >;
 
 template < typename Action, typename T >
 concept IndexedActionOver = FunctionOver < Action, void, Index, T >;
-
-template < typename Action, typename T, typename CT = RemoveModifiers < T > >
-concept IndexedActionOverImmutable =
-        IndexedActionOver < Action, CT >            ||
-        IndexedActionOver < Action, CT const & >    ||
-        IndexedActionOver < Action, CT const * >    ||
-        IndexedActionOver < Action, CT const * const >;
-
-template < typename Action, typename T, typename CT = RemoveModifiers < T > >
-concept IndexedActionOverMutable =
-        IndexedActionOverImmutable < Action, CT, CT >    ||
-        IndexedActionOver < Action, CT & >               ||
-        IndexedActionOver < Action, CT && >              ||
-        IndexedActionOver < Action, CT * >               ||
-        IndexedActionOver < Action, CT * const >         ||
-        IndexedActionOver < Action, CT * & >;
 
 template < typename Action >
 concept EmptyAction =
@@ -263,6 +200,7 @@ concept AccumulatorFor =
 template < typename Accumulator, typename T >
 concept IndexedAccumulatorFor =
         FunctionOver < Accumulator, returnOf < Accumulator >, Index, returnOf < Accumulator >, T >;
+
 
 #endif
 
