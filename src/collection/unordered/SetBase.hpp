@@ -82,8 +82,7 @@ protected:
 
         auto equals ( DelegateIterator const & it ) const noexcept -> bool override {
             if ( this == & it ) return true;
-            auto p = dynamic_cast < decltype ( this ) > ( & it );
-            if ( p == nullptr ) return false;
+            auto p = reinterpret_cast < decltype ( this ) > ( & it );
 
             return this->_pNode == p->_pNode;
         }
@@ -120,10 +119,9 @@ protected:
 
         auto equals ( DelegateConstIterator const & it ) const noexcept -> bool override {
             if ( this == & it ) return true;
-            auto p = dynamic_cast < decltype ( this ) > ( & it );
-            if ( p == nullptr ) return false;
+            auto p = reinterpret_cast < decltype ( this ) > ( & it );
 
-            return this->_pNode == this->_pNode;
+            return this->_pNode == p->_pNode;
         }
 
         auto copy () const noexcept -> SetDelegateConstIterator * override {

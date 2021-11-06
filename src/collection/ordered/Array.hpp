@@ -243,8 +243,7 @@ private:
 
         auto equals ( DelegateIterator const & it ) const noexcept -> bool override {
             if ( this == & it ) return true;
-            auto p = dynamic_cast < decltype ( this ) > ( & it );
-            if ( p == nullptr ) return false;
+            auto p = reinterpret_cast < decltype ( this ) > ( & it );
 
             return this->_pArray == p->_pArray && this->_index == p->_index;
         }
@@ -296,8 +295,7 @@ private:
 
         auto equals ( DelegateConstIterator const & it ) const noexcept -> bool override {
             if ( this == & it ) return true;
-            auto p = dynamic_cast < decltype ( this ) > ( & it );
-            if ( p == nullptr ) return false;
+            auto p = reinterpret_cast < decltype ( this ) > ( & it );
 
             return this->_pArray == p->_pArray && this->_index == p->_index;
         }

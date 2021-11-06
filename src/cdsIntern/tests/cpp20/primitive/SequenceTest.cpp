@@ -13,6 +13,7 @@
 #include <CDS/Long>
 #include <CDS/Float>
 #include <CDS/Double>
+#include <CDS/allocators/LeakDetectionAllocator>
 #include <utility>
 
 #if defined(_MSC_VER)
@@ -25,6 +26,7 @@
 #endif
 
 bool SequenceTest::execute() noexcept {
+//    delete Memory::instance().replaceAllocator ( new Memory::LeakDetectionAllocator () );
     bool ok = true;
     this->log("Start of test Sequence ... ");
 
