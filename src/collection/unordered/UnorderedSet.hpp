@@ -24,9 +24,18 @@ public:
     using NodePointer       __CDS_MaybeUnused   = typename Set<T>::NodePointer;
     using ConstNodePointer  __CDS_MaybeUnused   = typename Set<T>::ConstNodePointer;
 
-    using CollectionIterator                    = typename Set<T>::CollectionIterator;
-    using ConstCollectionIterator               = typename Set<T>::ConstCollectionIterator;
+//    using CollectionIterator                    = typename Set<T>::CollectionIterator;
+//    using ConstCollectionIterator               = typename Set<T>::ConstCollectionIterator;
     using InitializerList                       = typename Set<T>::InitializerList;
+
+    using Iterator                  = typename Collection < T > :: Iterator;
+    using ConstIterator             = typename Collection < T > :: ConstIterator;
+
+    using ReverseIterator           = typename Collection < T > :: ReverseIterator;
+    using ConstReverseIterator      = typename Collection < T > :: ConstReverseIterator;
+
+    using DelegateIterator          = typename Collection < T > :: DelegateIterator;
+    using DelegateConstIterator     = typename Collection < T > :: DelegateConstIterator;
 
     constexpr UnorderedSet() noexcept = default;
 
@@ -43,23 +52,23 @@ public:
     }
 
     __CDS_OptionalInline explicit UnorderedSet(
-        CollectionIterator const & from,
-        CollectionIterator const & to
+        Iterator from,
+        Iterator to
     ) noexcept :
             Set<T>() {
 
-        for ( auto it = UniquePointer < decltype ( & from ) > ( from.copy() ); ! it->equals (to); it->next() )
-            this->insert( it->value() );
+        for ( auto it = from; it != to; ++ it )
+            this->insert ( * it );
     }
 
     __CDS_OptionalInline explicit UnorderedSet(
-        ConstCollectionIterator const & from,
-        ConstCollectionIterator const & to
+        ConstIterator from,
+        ConstIterator to
     ) noexcept :
             Set<T>() {
 
-        for ( auto it = UniquePointer < decltype ( & from ) > ( from.copy() ); ! it->equals (to); it->next() )
-            this->insert( it->value() );
+        for ( auto it = from; it != to; ++ it )
+            this->insert ( * it );
     }
 
     __CDS_OptimalInline UnorderedSet ( InitializerList initializerList ) noexcept : // NOLINT(google-explicit-constructor)

@@ -33,9 +33,9 @@ namespace __CDS_Sequence { // NOLINT(bugprone-reserved-identifier)
     struct ContainedType {
         using Type = typename std :: remove_reference <
             decltype (
-                Type <
+                * ( * Type <
                         typename std :: remove_reference < C > :: type :: Iterator
-                > :: unsafeAddress () -> value ()
+                > :: unsafeAddress () )
             )
         > :: type;
     };
@@ -55,9 +55,9 @@ namespace __CDS_Sequence { // NOLINT(bugprone-reserved-identifier)
         return std :: is_same <
             typename std :: remove_reference <
                 decltype (
-                    Type <
+                    * Type <
                             typename std :: remove_reference < C > :: type :: Iterator
-                    > :: unsafeAddress () -> value ()
+                    > :: unsafeAddress ()
                 )
             > :: type,
             returnOf < MapperType >
@@ -68,9 +68,9 @@ namespace __CDS_Sequence { // NOLINT(bugprone-reserved-identifier)
     struct FlatMapDeducted {
         using Type = typename std :: remove_reference <
             decltype (
-                Type <
+                * ( * Type <
                     typename returnOf < TransformerType > :: Iterator
-                > :: unsafeAddress () -> value ()
+                > :: unsafeAddress () )
             )
         > :: type;
     };
@@ -83,9 +83,9 @@ namespace __CDS_Sequence { // NOLINT(bugprone-reserved-identifier)
         return isPair <
             typename std :: remove_reference <
                 decltype (
-                    Type <
+                    * ( * Type <
                         typename std :: remove_reference < C > :: type :: Iterator
-                    > :: unsafeAddress () -> value ()
+                    > :: unsafeAddress () )
                 )
             > :: type
         > :: type :: value;
@@ -100,9 +100,9 @@ namespace __CDS_Sequence { // NOLINT(bugprone-reserved-identifier)
     struct ContainedTypeAsPair : pairTrait <
         typename std :: remove_reference <
             decltype (
-                Type <
+                * ( * Type <
                     typename std :: remove_reference < C > :: type :: Iterator
-                > :: unsafeAddress () -> value ()
+                > :: unsafeAddress () )
             )
         > :: type > {
 

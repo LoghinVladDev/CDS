@@ -1,23 +1,6 @@
-//#include <CDS/Function>
-//#include <CDS/Pointer>
-//#include <CDS/LinkedList>
-//#include <CDS/Array>
-//#include <CDS/Memory>
-//
-//template < typename F >
-//auto i ( F const & f ) {
-//    return Function < bool ( Integer const & ) > ( f );
-//}
-//
-//template < typename T, EnableIf < std :: is_same < T, int > :: value > = 0 >
-//auto f ( T var ){
-//
-//}
 
-
-//#include <CDS/Async>
 #include <CDS/Array>
-#include <CDS/allocators/LeakDetectionAllocator>
+#include <CDS/HashMap>
 #include <iostream>
 
 class A {
@@ -27,26 +10,34 @@ public:
 };
 
 int main () {
-    Array {1, 2, 3}.forEach([](auto & v) { v = 2 * v; });
-    Array {1, 2, 3}.forEach([](auto v) { v = 2 * v; });
-//    Array {1, 2, 3}.forEach([](auto const & v) { v; });
-    Array const a = { 1, 2, 3 };
 
-    a.forEach([](int v){});
-//    delete Memory::instance().replaceAllocator(new Memory::LeakDetectionAllocator());
+    Array < int > a = { 1, 2, 3 };
 
-//
-//    Boolean b{false};
-//    b.copy();
-//
-//    try {
-//        Memory::instance().create<A>();
-//    } catch ( Exception const & e ) {
-//        std::cout << e.toString() << '\n';
-//    }
-//    A * a = new A[10];
-//    delete [] a;
+    std :: cout << a [1] << '\n';
 
-//    A * pArray = Memory::instance().createArray < A > (10);
-//    Memory::instance().destroyArray ( pArray );
+    for ( auto & e : a )
+        std :: cout << e << '\n';
+
+    LinkedList < int > ll = { 1, 2, 3, 4, 5 };
+
+    for ( auto & e : ll )
+        std :: cout << e << '\n';
+
+    OrderedSet < int > os = { 1, 2, 3, 1, 2, 3 };
+    UnorderedSet < int > us = { 1, 2, 3, 1, 2, 3 };
+
+    for ( auto & e : os )
+        std :: cout << e << '\n';
+    for ( auto & e : us )
+        std :: cout << e << '\n';
+
+    HashMap <int, int> const hm = { { 1, 2 }, { 3, 4 }, { 5, 6 } };
+
+    for ( auto & p : hm )
+        std :: cout << p << '\n';
+
+    for ( auto it = hm.rbegin(); it != hm.rend(); ++ it )
+        std :: cout << * it << '\n';
+
+    return 0;
 }

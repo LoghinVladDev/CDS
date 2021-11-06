@@ -30,7 +30,7 @@ public:
 private:
 
     using ClassName                 = RemoveReference < C >;
-    using IterableValue             = decltype ( Type < typename ClassName::Iterator > :: unsafeAddress ()->value() );
+    using IterableValue             = decltype ( * ( * ( Type < typename ClassName::Iterator > :: unsafeAddress () ) ) );
 
 public:
     using ElementType               = RemoveReference < IterableValue >;
@@ -686,12 +686,12 @@ public:
         Index i = 0;
 
         for ( auto it = all.rbegin(); it != all.rend(); ++ it ) {
-            if ( i < count && p (it.value()) ) {
+            if ( i < count && p (* it) ) {
                 i ++;
                 continue;
             }
 
-            remaining.pushFront(it.value());
+            remaining.pushFront(* it);
         }
 
         return std::move(Sequence < LinkedList < ElementType > > (std::move(remaining)));
@@ -854,8 +854,8 @@ public:
 
         Index i = 0;
         for ( auto it = container.rbegin(); it != container.rend(); ++ it )
-            if ( i < count && p ( it.value() ) )
-                remaining.pushFront ( it.value() );
+            if ( i < count && p ( * it ) )
+                remaining.pushFront ( * it );
 
         return std::move(Sequence < LinkedList < ElementType > > (std::move(remaining)));
     }
@@ -3684,7 +3684,7 @@ auto Sequence < C >::Iterator::skipFiltered() noexcept -> void {
     Boolean skip = true;
 
     while ( skip && this->it != this->pSeq->pCollection->valueAt().end() ) {
-        this->precomputed = Memory :: instance().create < CollectionElementType > ( this->it.value() );
+        this->precomputed = Memory :: instance().create < CollectionElementType > ( * this->it );
         skip = false;
 
         auto currentMapperIterator = this->pSeq.valueAt().storedMappers.begin();
@@ -3697,41 +3697,43 @@ auto Sequence < C >::Iterator::skipFiltered() noexcept -> void {
 
             if (
                     currentMapperIterator != this->pSeq.valueAt().storedMappers.end() &&
-                    currentMapperIterator.value().getSecond() == i
+                    ( * currentMapperIterator ).getSecond() == i
             ) {
-                * this->precomputed = ( * currentMapperIterator.value().getFirst() ) ( * this->precomputed );
-                currentMapperIterator.next();
+                * this->precomputed = ( * ( * currentMapperIterator ).getFirst() ) ( * this->precomputed );
+                ++ currentMapperIterator;
 
             } else if (
                     currentIndexedMapperIterator != this->pSeq.valueAt().storedIndexedMappers.end() &&
-                    currentIndexedMapperIterator.value().getSecond() == i
+                    ( * currentIndexedMapperIterator ).getSecond() == i
             ) {
-                * this->precomputed = ( * currentIndexedMapperIterator.value().getFirst() ) (
+                * this->precomputed = ( * ( * currentIndexedMapperIterator ).getFirst() ) (
                         this->index,
                         * this->precomputed
                 );
 
-                currentIndexedMapperIterator.next();
+                ++ currentIndexedMapperIterator;
 
             } else if (
                     currentFilterIterator != this->pSeq.valueAt().storedPredicates.end() &&
-                    currentFilterIterator.value().getSecond() == i
+                    ( * currentFilterIterator ).getSecond() == i
             ) {
-                if ( ! (* currentFilterIterator.value().getFirst())( * this->precomputed ) ) {
+                if ( ! (* ( * currentFilterIterator ).getFirst())( * this->precomputed ) ) {
                     skip = true;
                     break;
                 }
-                currentFilterIterator.next();
+
+                ++ currentFilterIterator;
 
             } else if (
                     currentIndexedFilterIterator != this->pSeq.valueAt().storedIndexedPredicates.end() &&
-                    currentIndexedFilterIterator.value().getSecond() == i
+                    ( * currentIndexedFilterIterator ).getSecond() == i
             ) {
-                if ( ! (* currentIndexedFilterIterator.value().getFirst()) (this->index, * this->precomputed) ) {
+                if ( ! ( * ( * currentIndexedFilterIterator).getFirst()) (this->index, * this->precomputed) ) {
                     skip = true;
                     break;
                 }
-                currentIndexedFilterIterator.next();
+
+                ++ currentIndexedFilterIterator;
 
             } else if (
                     currentFilterIterator           == this->pSeq.valueAt().storedPredicates.end()      &&
@@ -3747,25 +3749,26 @@ auto Sequence < C >::Iterator::skipFiltered() noexcept -> void {
             for ( Index i = 0; i < this->pSeq.valueAt().chainCount; i++ ) {
                 if (
                         currentMapperIterator != this->pSeq.valueAt().storedMappers.end() &&
-                        currentMapperIterator.value().getSecond() == i
-                        ) {
-                    * this->precomputed = (* currentMapperIterator.value().getFirst())(* this->precomputed);
-                    currentMapperIterator.next();
+                        ( * currentMapperIterator ).getSecond() == i
+                ) {
+                    * this->precomputed = ( * ( * currentMapperIterator ).getFirst())(* this->precomputed);
+                    ++ currentMapperIterator;
                 } else if (
                         currentIndexedMapperIterator != this->pSeq.valueAt().storedIndexedMappers.end() &&
-                        currentIndexedMapperIterator.value().getSecond() == i
-                        ) {
-                    * this->precomputed = (* currentIndexedMapperIterator.value().getFirst())(
+                        ( * currentIndexedMapperIterator ).getSecond() == i
+                ) {
+                    * this->precomputed = (* ( * currentIndexedMapperIterator ).getFirst())(
                             this->index,
                             * this->precomputed
                     );
-                    currentIndexedMapperIterator.next();
+
+                    ++ currentIndexedMapperIterator;
                 }
             }
 
         }
         else {
-            this->it.next();
+            ++ this->it;
         }
 
         this->index ++;
@@ -3827,7 +3830,7 @@ __CDS_OptimalInline auto Sequence < C > ::Iterator::value() const noexcept -> Co
 
 template < typename C >
 __CDS_OptimalInline auto Sequence < C > ::Iterator::next() noexcept -> Iterator & {
-    this->it.next();
+    ++ this->it;
     this->skipFiltered();
     return * this;
 }
@@ -3897,7 +3900,7 @@ auto Sequence < C >::ConstIterator::skipFiltered() noexcept -> void {
     Boolean skip = true;
 
     while ( skip && this->it != this->pSeq->pCollection->valueAt().cend() ) {
-        this->precomputed = Memory :: instance().create < CollectionElementType > ( this->it.value() );
+        this->precomputed = Memory :: instance().create < CollectionElementType > ( * this->it );
         skip = false;
 
         auto currentMapperIterator = this->pSeq.valueAt().storedMappers.begin();
@@ -3910,41 +3913,43 @@ auto Sequence < C >::ConstIterator::skipFiltered() noexcept -> void {
 
             if (
                     currentMapperIterator != this->pSeq.valueAt().storedMappers.end() &&
-                    currentMapperIterator.value().getSecond() == i
-                    ) {
-                * this->precomputed = ( * currentMapperIterator.value().getFirst() ) ( * this->precomputed );
-                currentMapperIterator.next();
+                    ( * currentMapperIterator ).getSecond() == i
+            ) {
+                * this->precomputed = ( * ( * currentMapperIterator ).getFirst() ) ( * this->precomputed );
+                ++ currentMapperIterator;
 
             } else if (
                     currentIndexedMapperIterator != this->pSeq.valueAt().storedIndexedMappers.end() &&
-                    currentIndexedMapperIterator.value().getSecond() == i
-                    ) {
-                * this->precomputed = ( * currentIndexedMapperIterator.value().getFirst() ) (
+                    ( * currentIndexedMapperIterator ).getSecond() == i
+            ) {
+                * this->precomputed = ( * ( * currentIndexedMapperIterator ).getFirst() ) (
                         this->index,
                         * this->precomputed
                 );
 
-                currentIndexedMapperIterator.next();
+                ++ currentIndexedMapperIterator;
 
             } else if (
                     currentFilterIterator != this->pSeq.valueAt().storedPredicates.end() &&
-                    currentFilterIterator.value().getSecond() == i
-                    ) {
-                if ( ! (* currentFilterIterator.value().getFirst())( * this->precomputed ) ) {
+                    ( * currentFilterIterator ).getSecond() == i
+            ) {
+                if ( ! ( * ( * currentFilterIterator ).getFirst())( * this->precomputed ) ) {
                     skip = true;
                     break;
                 }
-                currentFilterIterator.next();
+
+                ++ currentFilterIterator;
 
             } else if (
                     currentIndexedFilterIterator != this->pSeq.valueAt().storedIndexedPredicates.end() &&
-                    currentIndexedFilterIterator.value().getSecond() == i
-                    ) {
-                if ( ! (* currentIndexedFilterIterator.value().getFirst()) (this->index, * this->precomputed) ) {
+                    ( * currentIndexedFilterIterator ).getSecond() == i
+            ) {
+                if ( ! (* ( * currentIndexedFilterIterator ).getFirst()) (this->index, * this->precomputed) ) {
                     skip = true;
                     break;
                 }
-                currentIndexedFilterIterator.next();
+
+                ++ currentIndexedFilterIterator;
 
             } else if (
                     currentFilterIterator           == this->pSeq.valueAt().storedPredicates.end()      &&
@@ -3960,25 +3965,26 @@ auto Sequence < C >::ConstIterator::skipFiltered() noexcept -> void {
             for ( Index i = 0; i < this->pSeq.valueAt().chainCount; i++ ) {
                 if (
                         currentMapperIterator != this->pSeq.valueAt().storedMappers.end() &&
-                        currentMapperIterator.value().getSecond() == i
+                        ( * currentMapperIterator ).getSecond() == i
                 ) {
-                    * this->precomputed = (* currentMapperIterator.value().getFirst())( * this->precomputed);
-                    currentMapperIterator.next();
+                    * this->precomputed = ( * ( * currentMapperIterator ).getFirst())( * this->precomputed);
+                    ++ currentMapperIterator;
                 } else if (
                         currentIndexedMapperIterator != this->pSeq.valueAt().storedIndexedMappers.end() &&
-                        currentIndexedMapperIterator.value().getSecond() == i
+                        ( * currentIndexedMapperIterator ).getSecond() == i
                 ) {
-                    * this->precomputed = (* currentIndexedMapperIterator.value().getFirst())(
+                    * this->precomputed = ( * ( * currentIndexedMapperIterator ).getFirst())(
                             this->index,
                             * this->precomputed
                     );
-                    currentIndexedMapperIterator.next();
+
+                    ++ currentIndexedMapperIterator;
                 }
             }
 
         }
         else {
-            this->it.next();
+            ++ this->it;
         }
 
         this->index ++;
@@ -4046,7 +4052,7 @@ __CDS_OptimalInline auto Sequence < C > ::ConstIterator::value() const noexcept 
 
 template < typename C >
 __CDS_OptimalInline auto Sequence < C > ::ConstIterator::next() noexcept -> ConstIterator & {
-    this->it.next();
+    ++ this->it;
     this->skipFiltered();
     return * this;
 }

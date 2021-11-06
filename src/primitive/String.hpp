@@ -40,7 +40,7 @@ public:
     /**
      * @brief Represents an element in the string, char by default, done for future feature compatibility ( widechar support )
      */
-    typedef char ElementType;
+    using ElementType = char;
 
     /**
      * @class Exception thrown when accessing any index of a null String Object

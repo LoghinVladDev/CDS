@@ -103,6 +103,7 @@ __CDS_RegisterParseType(KeyException)
 class NotImplementedException : public Exception {
 public:
     NotImplementedException () noexcept : Exception ( "Not Implemented" ) { }
+    explicit NotImplementedException ( String const & message ) noexcept : Exception ( "Not Implemented : "_s + message ) { }
 
     ~NotImplementedException() noexcept override = default;
 };

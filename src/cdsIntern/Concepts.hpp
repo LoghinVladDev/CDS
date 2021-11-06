@@ -70,9 +70,9 @@ concept ObjectDerived =
 
 template < typename T >
 concept HasToString =
-ObjectDerived < T >                         ||
-    std::is_same < T, String >::value       ||
-    std::is_same < T, const String >::value;
+        ObjectDerived < T >                         ||
+        std::is_same < T, String >::value           ||
+        std::is_same < T, const String >::value;
 
 template < typename T >
 concept Printable = requires (T t) {

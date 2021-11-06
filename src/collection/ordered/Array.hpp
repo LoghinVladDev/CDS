@@ -25,35 +25,35 @@ private:
     using ElementPtrRef                 = typename List < T > :: ElementPtrRef;
     using ElementCPtr                   = typename List < T > :: ElementCPtr;
 
-    using CollectionIterator            = typename List < T > :: CollectionIterator;
-    using ConstCollectionIterator       = typename List < T > :: ConstCollectionIterator;
+public:
+    using Iterator                      = typename List < T > :: Iterator;
+    using ConstIterator                 = typename List < T > :: ConstIterator;
+
+    using ReverseIterator               = typename List < T > :: ReverseIterator;
+    using ConstReverseIterator          = typename List < T > :: ConstReverseIterator;
+
+private:
+    using DelegateIterator              = typename List < T > :: DelegateIterator;
+    using DelegateConstIterator         = typename List < T > :: DelegateConstIterator;
 
     using InitializerList               = typename List < T > :: InitializerList;
-
-    class IteratorBase;
-    class ConstIteratorBase;
 
     __CDS_MaybeUnused auto expandWith ( Size ) noexcept -> void;
 
 public:
-
-    class Iterator;
-    class ReverseIterator;
-    class ConstIterator;
-    class ConstReverseIterator;
 
     Array () noexcept = default;
     Array ( Array const & ) noexcept;
     Array ( Array && ) noexcept;
 
     Array (
-        CollectionIterator const &,
-        CollectionIterator const &
+        Iterator,
+        Iterator
     ) noexcept;
 
     Array (
-        ConstCollectionIterator const &,
-        ConstCollectionIterator const &
+        ConstIterator,
+        ConstIterator
     ) noexcept;
 
     template < typename V = T, EnableIf < Type < V > :: copyConstructible > = 0 >
@@ -68,27 +68,6 @@ public:
     explicit Array ( Collection < T > const & ) noexcept;
 
     ~Array () noexcept override;
-
-private:
-    __CDS_OptimalInline auto beginPtr () noexcept -> Iterator * final { return Memory :: instance ().create < Iterator > ( this, 0 ); }
-    __CDS_OptimalInline auto endPtr () noexcept -> Iterator * final { return Memory :: instance ().create < Iterator > (this, this->size()); }
-    __CDS_OptimalInline auto beginPtr () const noexcept -> ConstIterator * final { return Memory :: instance ().create < ConstIterator >( this, 0 ); }
-    __CDS_OptimalInline auto endPtr () const noexcept -> ConstIterator * final { return Memory :: instance ().create < ConstIterator >( this, this->size() ); }
-
-public:
-    __CDS_cpplang_NonConstConstexprMemberFunction auto begin () noexcept -> Iterator { return Iterator ( this, 0 ); }
-    constexpr auto begin () const noexcept -> ConstIterator { return ConstIterator ( this, 0 ); }
-    constexpr auto cbegin () const noexcept -> ConstIterator { return ConstIterator ( this, 0 ); }
-    __CDS_cpplang_NonConstConstexprMemberFunction auto end () noexcept -> Iterator { return Iterator ( this, this->size() ); }
-    constexpr auto end () const noexcept -> ConstIterator { return ConstIterator ( this, this->size() ); }
-    constexpr auto cend () const noexcept -> ConstIterator { return ConstIterator ( this, this->size() ); }
-
-    __CDS_cpplang_NonConstConstexprMemberFunction auto rbegin () noexcept -> ReverseIterator { return ReverseIterator ( this, this->size () - 1 ); }
-    constexpr auto rbegin () const noexcept -> ConstReverseIterator { return ConstReverseIterator ( this, this->size () - 1 ); }
-    __CDS_MaybeUnused constexpr auto crbegin () const noexcept -> ConstReverseIterator { return ConstReverseIterator ( this, this->size () - 1 ); }
-    __CDS_cpplang_NonConstConstexprMemberFunction auto rend() noexcept -> ReverseIterator { return ReverseIterator(this, -1); }
-    constexpr auto rend() const noexcept -> ConstReverseIterator { return ConstReverseIterator(this, -1); }
-    __CDS_MaybeUnused constexpr auto crend() const noexcept -> ConstReverseIterator { return ConstReverseIterator(this, -1); }
 
 private:
     auto _resize ( Size ) noexcept -> void;
@@ -121,7 +100,7 @@ public:
     auto removeNotOf ( Collection < ElementType > const &, Size ) noexcept -> bool final;
     auto removeLastNotOf ( Collection < ElementType > const & ) noexcept -> bool final;
 
-    auto remove ( CollectionIterator const & ) noexcept(false) -> ElementType final;
+    auto remove ( Iterator const & ) noexcept(false) -> ElementType final;
 
     auto removeOf ( InitializerList, Size ) noexcept -> bool final;
     auto removeLastOf ( InitializerList ) noexcept -> bool final;
@@ -161,7 +140,7 @@ public:
         if ( o.size() != this->size() ) return false;
 
         for ( auto i1 = this->begin(), i2 = o.begin(); i1 != this->end() && i2 != o.end(); i1++, i2++ )
-            if ( ! ( Type < T > :: compare ( i1.value(), i2.value() ) ) )
+            if ( ! ( Type < T > :: compare ( * i1, * i2 ) ) )
                 return false;
         return true;
     }
@@ -222,6 +201,140 @@ public:
 
 private:
 
+    class ArrayDelegateIterator : public DelegateIterator {
+    private:
+        ForeignPointer < Array >    _pArray;
+        Index                       _index;
+        bool                        _forward;
+
+    public:
+        ArrayDelegateIterator ( Array * pArray, Index index, bool forward ) noexcept :
+                DelegateIterator (),
+                _pArray ( pArray ),
+                _index ( index ),
+                _forward ( forward ) {
+
+        }
+
+        ArrayDelegateIterator ( ArrayDelegateIterator const & ) noexcept = default;
+        ArrayDelegateIterator ( ArrayDelegateIterator && ) noexcept = default;
+
+        ~ArrayDelegateIterator() noexcept override = default;
+
+        __CDS_NoDiscard auto isValid () const noexcept -> bool override {
+            return
+                ! this->_pArray.isNull() &&
+                this->_index >= 0 && this->_index < this->_pArray->size();
+        }
+
+        auto next () noexcept -> ArrayDelegateIterator & override {
+            (void) ( this->_forward ? ( ++ this->_index ) : ( -- this->_index ) );
+            return * this;
+        }
+
+        auto previous () noexcept -> ArrayDelegateIterator & override {
+            (void) ( this->_forward ? ( -- this->_index ) : ( ++ this->_index ) );
+            return * this;
+        }
+
+        auto value () const noexcept -> ElementRef override {
+            return * this->_pArray->_pData[ this->_index ];
+        }
+
+        auto equals ( DelegateIterator const & it ) const noexcept -> bool override {
+            if ( this == & it ) return true;
+            auto p = dynamic_cast < decltype ( this ) > ( & it );
+            if ( p == nullptr ) return false;
+
+            return this->_pArray == p->_pArray && this->_index == p->_index;
+        }
+
+        auto copy () const noexcept -> ArrayDelegateIterator * override {
+            return Memory :: instance () . create < ArrayDelegateIterator > ( * this );
+        }
+    };
+
+    class ArrayDelegateConstIterator : public DelegateConstIterator {
+    private:
+        ForeignPointer < Array const >  _pArray;
+        Index                           _index;
+        bool                            _forward;
+
+    public:
+        ArrayDelegateConstIterator ( Array const * pArray, Index index, bool forward ) noexcept :
+                DelegateConstIterator (),
+                _pArray ( pArray ),
+                _index ( index ),
+                _forward ( forward ) {
+
+        }
+
+        ArrayDelegateConstIterator ( ArrayDelegateConstIterator const & ) noexcept = default;
+        ArrayDelegateConstIterator ( ArrayDelegateConstIterator && ) noexcept = default;
+
+        ~ArrayDelegateConstIterator() noexcept override = default;
+
+        __CDS_NoDiscard auto isValid () const noexcept -> bool override {
+            return
+                    ! this->_pArray.isNull() &&
+                    this->_index >= 0 && this->_index < this->_pArray->size();
+        }
+
+        auto next () noexcept -> ArrayDelegateConstIterator & override {
+            (void) ( this->_forward ? ( ++ this->_index ) : ( -- this->_index ) );
+            return * this;
+        }
+
+        auto previous () noexcept -> ArrayDelegateConstIterator & override {
+            (void) ( this->_forward ? ( -- this->_index ) : ( ++ this->_index ) );
+            return * this;
+        }
+
+        auto value () const noexcept -> ElementCRef override {
+            return * this->_pArray->_pData[ this->_index ];
+        }
+
+        auto equals ( DelegateConstIterator const & it ) const noexcept -> bool override {
+            if ( this == & it ) return true;
+            auto p = dynamic_cast < decltype ( this ) > ( & it );
+            if ( p == nullptr ) return false;
+
+            return this->_pArray == p->_pArray && this->_index == p->_index;
+        }
+
+        auto copy () const noexcept -> ArrayDelegateConstIterator * override {
+            return Memory :: instance () . create < ArrayDelegateConstIterator > ( * this );
+        }
+    };
+
+    using DelegateIteratorRequestType = typename Collection < T > :: DelegateIteratorRequestType;
+
+    auto delegateIterator ( DelegateIteratorRequestType requestType ) noexcept -> UniquePointer < DelegateIterator > override {
+        switch ( requestType ) {
+            case DelegateIteratorRequestType :: FORWARD_BEGIN:
+                return Memory :: instance () . create < ArrayDelegateIterator > ( this, 0, true );
+            case DelegateIteratorRequestType :: FORWARD_END:
+                return Memory :: instance () . create < ArrayDelegateIterator > ( this, this->size(), true );
+            case DelegateIteratorRequestType :: BACKWARD_BEGIN:
+                return Memory :: instance () . create < ArrayDelegateIterator > ( this, this->size() - 1, false );
+            case DelegateIteratorRequestType :: BACKWARD_END:
+                return Memory :: instance () . create < ArrayDelegateIterator > ( this, -1, false );
+        }
+    }
+
+    auto delegateConstIterator ( DelegateIteratorRequestType requestType ) const noexcept -> UniquePointer < DelegateConstIterator > override {
+        switch ( requestType ) {
+            case DelegateIteratorRequestType :: FORWARD_BEGIN:
+                return Memory :: instance () . create < ArrayDelegateConstIterator > ( this, 0, true );
+            case DelegateIteratorRequestType :: FORWARD_END:
+                return Memory :: instance () . create < ArrayDelegateConstIterator > ( this, this->size(), true );
+            case DelegateIteratorRequestType :: BACKWARD_BEGIN:
+                return Memory :: instance () . create < ArrayDelegateConstIterator > ( this, this->size() - 1, false );
+            case DelegateIteratorRequestType :: BACKWARD_END:
+                return Memory :: instance () . create < ArrayDelegateConstIterator > ( this, -1, false );
+        }
+    }
+
     auto allocFrontGetPtr () noexcept -> ElementPtrRef override;
     auto allocBackGetPtr () noexcept -> ElementPtrRef override;
     __CDS_OptimalInline auto allocInsertGetPtr (ElementCRef e __CDS_MaybeUnused) noexcept -> ElementPtrRef override {
@@ -277,309 +390,6 @@ public:
     auto sequence () & noexcept -> Sequence < Array < T > >;
     auto sequence () const && noexcept -> Sequence < Array < T > const >;
     auto sequence () && noexcept -> Sequence < Array < T > >;
-};
-
-template < typename T >
-class Array < T > :: IteratorBase : public Collection < T > :: Iterator {
-protected:
-    friend class Array;
-    Index mutable   _index  { 0ull };
-    Array         * _pArray { nullptr };
-
-    constexpr IteratorBase( IteratorBase const & ) noexcept = default;
-    constexpr IteratorBase( IteratorBase && ) noexcept = default;
-    explicit constexpr IteratorBase( Array * pArray, Index index ) noexcept :
-            Collection < T > :: Iterator( pArray ),
-            _index(index),
-            _pArray(pArray) {
-
-    }
-
-public:
-    __CDS_cpplang_ConstexprDestructor ~IteratorBase() noexcept override = default;
-
-    __CDS_cpplang_ConstexprOverride auto equals ( CollectionIterator const & o ) const noexcept -> bool final {
-        if ( & o == this ) return true;
-        auto p = dynamic_cast < IteratorBase const * > ( &o );
-        if ( p == nullptr ) return false;
-
-        return p->_pArray == this->_pArray && p->_index == this->_index;
-    }
-
-    __CDS_cpplang_ConstexprOverride auto value () const noexcept -> ElementRef final {
-        return (* this->_pArray)[this->_index];
-    }
-
-    __CDS_NoDiscard auto copy () const noexcept -> IteratorBase * override = 0;
-};
-
-template < typename T >
-class Array < T > :: ConstIteratorBase : public Collection < T > :: ConstIterator {
-protected:
-    friend class Array;
-    Index mutable _index  { 0ull };
-    Array const * _pArray { nullptr };
-
-    constexpr ConstIteratorBase( ConstIteratorBase const & ) noexcept = default;
-    constexpr ConstIteratorBase( ConstIteratorBase && ) noexcept = default;
-    constexpr explicit ConstIteratorBase (Array const * pArray, Index index) noexcept :
-            Collection < T > :: ConstIterator ( pArray ),
-            _index(index),
-            _pArray(pArray) {
-
-    }
-
-public:
-    __CDS_cpplang_ConstexprDestructor ~ConstIteratorBase() noexcept override = default;
-
-    __CDS_cpplang_ConstexprOverride auto equals ( ConstCollectionIterator const & o ) const noexcept -> bool final {
-        if ( & o == this ) return true;
-        auto p = dynamic_cast < ConstIteratorBase const * > ( &o );
-        if ( p == nullptr ) return false;
-
-        return p->_pArray == this->_pArray && p->_index == this->_index;
-    }
-
-    __CDS_cpplang_ConstexprOverride auto value () const noexcept -> ElementCRef final {
-        return (* this->_pArray)[this->_index];
-    }
-
-    __CDS_NoDiscard auto copy () const noexcept -> ConstIteratorBase * override = 0;
-};
-
-template < typename T >
-class Array < T > :: Iterator : public IteratorBase {
-public:
-
-    constexpr Iterator ( Iterator const & ) noexcept = default;
-    constexpr Iterator ( Iterator && ) noexcept = default;
-
-    constexpr explicit Iterator ( Array * pArray, Index index ) noexcept :
-            IteratorBase( pArray, index ) {
-
-    }
-
-    __CDS_cpplang_ConstexprDestructor ~Iterator () noexcept override = default;
-
-    __CDS_cpplang_NonConstConstexprMemberFunction auto operator = ( Iterator const & o ) noexcept -> Iterator & {
-        if ( this == & o ) return * this;
-
-        this->_pArray = o._pArray;
-        this->_index = o._index;
-        return * this;
-    }
-
-    __CDS_cpplang_ConstexprOverride auto operator == (Iterator const & o) const noexcept -> bool {
-        return this->equals(o);
-    }
-
-    __CDS_cpplang_ConstexprOverride auto operator != (Iterator const & o) const noexcept -> bool {
-        return !this->equals(o);
-    }
-
-    __CDS_cpplang_NonConstConstexprMemberFunction auto next () noexcept -> Iterator & final {
-        this->_index ++;
-        return * this;
-    }
-
-    __CDS_cpplang_NonConstConstexprMemberFunction auto prev () noexcept -> Iterator & {
-        this->_index --;
-        return * this;
-    }
-
-    __CDS_cpplang_NonConstConstexprMemberFunction auto operator ++ () noexcept -> Iterator & override {
-        return this->next();
-    }
-
-    __CDS_cpplang_ConstexprDestructor auto operator ++ (int) noexcept -> Iterator {
-        auto copy = * this;
-        this->next();
-        return copy;
-    }
-
-    __CDS_cpplang_NonConstConstexprMemberFunction auto operator -- () noexcept -> Iterator & {
-        return this->prev();
-    }
-
-    __CDS_cpplang_ConstexprDestructor auto operator -- (int) noexcept -> Iterator {
-        auto copy = * this;
-        this->prev();
-        return copy;
-    }
-
-    __CDS_NoDiscard __CDS_OptimalInline auto copy () const noexcept -> Iterator * override {
-        return Memory::instance().create< Iterator > ( * this );
-    }
-};
-
-template < typename T >
-class Array < T > :: ReverseIterator : public IteratorBase {
-public:
-
-    constexpr ReverseIterator ( ReverseIterator const & ) noexcept = default;
-    constexpr ReverseIterator ( ReverseIterator && ) noexcept = default;
-
-    constexpr explicit ReverseIterator ( Array * pArray, Index index ) noexcept :
-            IteratorBase( pArray, index ) {
-
-    }
-
-    __CDS_cpplang_ConstexprDestructor ~ReverseIterator () noexcept override = default;
-
-    __CDS_cpplang_NonConstConstexprMemberFunction auto operator = ( ReverseIterator const & o ) noexcept -> ReverseIterator & {
-        if ( this == & o ) return * this;
-
-        this->_pArray = o._pArray;
-        this->_index = o._index;
-        return * this;
-    }
-
-    __CDS_cpplang_NonConstConstexprMemberFunction auto next () noexcept -> ReverseIterator & final {
-        this->_index --;
-        return * this;
-    }
-
-    __CDS_cpplang_NonConstConstexprMemberFunction auto prev () noexcept -> ReverseIterator & {
-        this->_index ++;
-        return * this;
-    }
-
-    __CDS_cpplang_NonConstConstexprMemberFunction auto operator ++ () noexcept -> ReverseIterator & final {
-        return this->next();
-    }
-
-    __CDS_cpplang_ConstexprDestructor auto operator ++ (int) noexcept -> ReverseIterator {
-        auto copy = * this;
-        this->next();
-        return copy;
-    }
-
-    __CDS_cpplang_NonConstConstexprMemberFunction auto operator -- () noexcept -> ReverseIterator & {
-        return this->prev();
-    }
-
-    __CDS_cpplang_ConstexprDestructor auto operator -- (int) noexcept -> ReverseIterator {
-        auto copy = * this;
-        this->prev();
-        return copy;
-    }
-
-    __CDS_NoDiscard __CDS_OptimalInline auto copy () const noexcept -> ReverseIterator * override {
-        return Memory::instance().create < ReverseIterator > ( * this );
-    }
-};
-
-template < typename T >
-class Array < T > :: ConstIterator : public ConstIteratorBase {
-public:
-
-    constexpr ConstIterator ( ConstIterator const & ) noexcept = default;
-    constexpr ConstIterator ( ConstIterator && ) noexcept = default;
-
-    constexpr explicit ConstIterator ( Array const * pArray, Index index ) noexcept :
-            ConstIteratorBase( pArray, index ) {
-
-    }
-
-    __CDS_cpplang_ConstexprDestructor ~ConstIterator () noexcept override = default;
-
-    __CDS_cpplang_NonConstConstexprMemberFunction auto operator = ( ConstIterator const & o ) noexcept -> ConstIterator & {
-        if ( this == & o ) return * this;
-
-        this->_pArray = o._pArray;
-        this->_index = o._index;
-        return * this;
-    }
-
-    __CDS_cpplang_NonConstConstexprMemberFunction auto next () noexcept -> ConstIterator & final {
-        this->_index ++;
-        return * this;
-    }
-
-    __CDS_cpplang_NonConstConstexprMemberFunction auto prev () noexcept -> ConstIterator & {
-        this->_index --;
-        return * this;
-    }
-
-    __CDS_cpplang_NonConstConstexprMemberFunction auto operator ++ () noexcept -> ConstIterator & override {
-        return this->next();
-    }
-
-    __CDS_cpplang_ConstexprDestructor auto operator ++ (int) noexcept -> ConstIterator {
-        auto copy = * this;
-        this->next();
-        return copy;
-    }
-
-    __CDS_cpplang_NonConstConstexprMemberFunction auto operator -- () noexcept -> ConstIterator & {
-        return this->prev();
-    }
-
-    __CDS_cpplang_ConstexprDestructor auto operator -- (int) noexcept -> ConstIterator {
-        auto copy = * this;
-        this->prev();
-        return copy;
-    }
-
-    __CDS_NoDiscard __CDS_OptimalInline auto copy () const noexcept -> ConstIterator * override {
-        return Memory::instance().create < ConstIterator > ( * this );
-    }
-};
-
-template < typename T >
-class Array < T > :: ConstReverseIterator : public ConstIteratorBase {
-public:
-    constexpr ConstReverseIterator ( ConstReverseIterator const & ) noexcept = default;
-    constexpr ConstReverseIterator ( ConstReverseIterator && ) noexcept = default;
-
-    constexpr explicit ConstReverseIterator ( Array const * pArray, Index index ) noexcept :
-            ConstIteratorBase( pArray, index ) {
-
-    }
-
-    __CDS_cpplang_ConstexprDestructor ~ConstReverseIterator () noexcept override = default;
-
-    __CDS_cpplang_NonConstConstexprMemberFunction auto operator = ( ConstReverseIterator const & o ) noexcept -> ConstReverseIterator & {
-        if ( this == & o ) return * this;
-
-        this->_pArray = o._pArray;
-        this->_index = o._index;
-        return * this;
-    }
-
-    __CDS_cpplang_NonConstConstexprMemberFunction auto next () noexcept -> ConstReverseIterator & final {
-        this->_index --;
-        return * this;
-    }
-
-    __CDS_cpplang_NonConstConstexprMemberFunction auto prev () noexcept -> ConstReverseIterator & {
-        this->_index ++;
-        return * this;
-    }
-
-    __CDS_cpplang_NonConstConstexprMemberFunction auto operator ++ () noexcept -> ConstReverseIterator & {
-        return this->next();
-    }
-
-    __CDS_cpplang_ConstexprDestructor auto operator ++ (int) noexcept -> ConstReverseIterator {
-        auto copy = * this;
-        this->next();
-        return copy;
-    }
-
-    __CDS_cpplang_NonConstConstexprMemberFunction auto operator -- () noexcept -> ConstReverseIterator & {
-        return this->prev();
-    }
-
-    __CDS_cpplang_ConstexprDestructor auto operator -- (int) noexcept -> ConstReverseIterator {
-        auto copy = * this;
-        this->prev();
-        return copy;
-    }
-
-    __CDS_NoDiscard __CDS_OptimalInline auto copy () const noexcept -> ConstReverseIterator * override {
-        return Memory::instance().create < ConstReverseIterator > ( * this );
-    }
 };
 
 template < typename T >
@@ -744,20 +554,20 @@ Array<T>::Array( Array && moveObj ) noexcept {
 #include <CDS/Pointer>
 template < typename T >
 Array<T>::Array(
-        CollectionIterator const & from,
-        CollectionIterator const & to
+        Iterator from,
+        Iterator to
 ) noexcept {
-    for ( auto it = UniquePointer < decltype ( & from ) > ( from.copy() ); ! it->equals (to); it->next() )
-        this->pushBack( it->value() );
+    for ( auto it = from; it != to; ++ it )
+        this->pushBack( * it );
 }
 
 template < typename T >
 Array<T>::Array(
-        ConstCollectionIterator const & from,
-        ConstCollectionIterator const & to
+        ConstIterator from,
+        ConstIterator to
 ) noexcept {
-    for ( auto it = UniquePointer < decltype ( & from ) > ( from.copy() ); ! it->equals (to); it->next() )
-        this->pushBack( it->value() );
+    for ( auto it = from; it != to; ++ it )
+        this->pushBack( * it );
 }
 
 template < typename T >
@@ -1014,25 +824,26 @@ auto Array<T>::removeLastNotOf( InitializerList elements) noexcept -> bool {
 
 #include <CDS/Utility>
 template < typename T >
-auto Array<T>::remove( CollectionIterator const & it ) noexcept (false) -> ElementType {
-    if ( ! Collection < T > :: iteratorIsOf (it, *this) )
-        throw IllegalArgumentException("Iterator given is not of this collection");
-
-    Index at = reinterpret_cast < Iterator const * > ( & it )->_index;
-
-    if ( at < 0 || at >= this->size() )
-        throw OutOfBoundsException(at, this->size());
-
-
-    T retVal = * this->_pData[at];
-    Memory :: instance().destroy ( Utility::exchange(this->_pData[at], nullptr) );
-
-    T ** pNewBuf = Memory :: instance().createArray < T * > ( this->size() - 1 );
-    std::memcpy ( pNewBuf, this->_pData, at * sizeof ( T * ) );
-    std::memcpy ( pNewBuf + at, this->_pData + at + 1, (this->size() - at - 1) * sizeof(T *) );
-    Memory :: instance().destroyArray( Utility::exchange ( this->_pData, pNewBuf ) );
-    this->_capacity = -- this->_size;
-    return retVal;
+auto Array<T>::remove( Iterator const & it ) noexcept (false) -> ElementType {
+//    if ( ! Collection < T > :: iteratorIsOf (it, *this) )
+//        throw IllegalArgumentException("Iterator given is not of this collection");
+//
+//    Index at = reinterpret_cast < Iterator const * > ( & it )->_index;
+//
+//    if ( at < 0 || at >= this->size() )
+//        throw OutOfBoundsException(at, this->size());
+//
+//
+//    T retVal = * this->_pData[at];
+//    Memory :: instance().destroy ( Utility::exchange(this->_pData[at], nullptr) );
+//
+//    T ** pNewBuf = Memory :: instance().createArray < T * > ( this->size() - 1 );
+//    std::memcpy ( pNewBuf, this->_pData, at * sizeof ( T * ) );
+//    std::memcpy ( pNewBuf + at, this->_pData + at + 1, (this->size() - at - 1) * sizeof(T *) );
+//    Memory :: instance().destroyArray( Utility::exchange ( this->_pData, pNewBuf ) );
+//    this->_capacity = -- this->_size;
+//    return retVal;
+//    return ElementType ();
 }
 
 template < typename T >
@@ -1167,20 +978,20 @@ __CDS_MaybeUnused auto Array<T>::quickSortPartition(
 ) noexcept -> Iterator {
     __CDS_cpplang_ConstexprLambda static auto swap = [] ( T & a, T & b ) { auto aux = a; a = b; b = aux; };
 
-    auto pivot = to.value();
-    Iterator partitionIterator ( from );
-    Iterator previous (nullptr, -1);
+    auto pivot = * to;
+    Iterator partitionIterator = from;
+    Iterator previous;
 
     for ( auto it = from; it != to; it++ ) {
-        if ( sortFunc ( it.value(), pivot ) ) {
-            swap ( partitionIterator.value(), it.value() );
+        if ( sortFunc ( * it, pivot ) ) {
+            swap ( * partitionIterator, * it );
             previous = partitionIterator;
-            partitionIterator.next();
+            ++ partitionIterator;
         }
     }
 
-    swap ( partitionIterator.value(), to.value() );
-    if ( previous._index == -1 )
+    swap ( * partitionIterator, * to );
+    if ( ! previous.isValid() )
         return partitionIterator;
     return previous;
 }
@@ -1192,34 +1003,32 @@ __CDS_MaybeUnused auto Array<T>::quickSort(
         Iterator to,
         SortFunc const & sortFunc
 ) noexcept -> void {
-    __CDS_cpplang_ConstexprLambda static auto validIterator = []( Iterator & it ) noexcept->bool { return it._index >= 0 && it._index < it._pArray->_size; };
-
     auto next = to;
-    if ( next._index < next._pArray->_size ) {
-        next.next();
+    if ( next.isValid() ) {
+        ++ next;
         if ( from == next )
             return;
     }
 
-    if ( from != to && validIterator(from) && validIterator(to) ) {
+    if ( from != to && from.isValid() && to.isValid() ) {
         auto partitionIterator = Array::quickSortPartition(from, to, sortFunc);
 
         Array::quickSort(from, partitionIterator, sortFunc);
 
-        if ( ! validIterator(partitionIterator) )
+        if ( ! partitionIterator.isValid() )
             return;
 
         if ( partitionIterator == from ) {
-            partitionIterator.next();
-            if ( validIterator ( partitionIterator ) )
+            ++ partitionIterator;
+            if ( partitionIterator.isValid() )
                 Array::quickSort(partitionIterator, to, sortFunc);
             return;
         }
 
-        partitionIterator.next();
-        if ( ! validIterator(partitionIterator) )
+        ++ partitionIterator;
+        if ( ! partitionIterator.isValid() )
             return;
-        partitionIterator.next();
+        ++ partitionIterator;
         Array::quickSort( partitionIterator, to, sortFunc );
     }
 }

@@ -28,8 +28,18 @@ private:
     using ElementCPtr                   = typename List < T > :: ElementCPtr;
 
     using InitializerList               = typename List < T > :: InitializerList;
-    using CollectionIterator            = typename List < T > :: CollectionIterator;
-    using ConstCollectionIterator       = typename List < T > :: ConstCollectionIterator;
+
+public:
+    using Iterator                      = typename List < T > :: Iterator;
+    using ConstIterator                 = typename List < T > :: ConstIterator;
+
+    using ReverseIterator               = typename List < T > :: ReverseIterator;
+    using ConstReverseIterator          = typename List < T > :: ConstReverseIterator;
+
+private:
+    using DelegateIterator              = typename List < T > :: DelegateIterator;
+    using DelegateConstIterator         = typename List < T > :: DelegateConstIterator;
+
 
     struct Node { // NOLINT(cppcoreguidelines-pro-type-member-init)
         ElementType * data        {nullptr};
@@ -50,239 +60,125 @@ private:
     Node * _pFront  { nullptr };
     Node * _pBack   { nullptr };
 
-private:
-
-    class IteratorBase : public CollectionIterator {
-    protected:
-        Node mutable * _pNode { nullptr };
-
-        constexpr IteratorBase( IteratorBase const & ) noexcept = default;
-        constexpr IteratorBase( IteratorBase && ) noexcept = default;
-
-        constexpr explicit IteratorBase ( Node * pNode, DoubleLinkedList < T > const * pList ) noexcept :
-                CollectionIterator ( (Collection < T > *) pList ),
-                _pNode(pNode) {
-
-        }
+    class DoubleLinkedListDelegateIterator : public DelegateIterator {
+    private:
+        ForeignPointer < DoubleLinkedList::Node >   _pNode;
+        bool                                        _forward;
 
     public:
-        __CDS_cpplang_NonConstConstexprMemberFunction auto operator = ( IteratorBase const & it ) noexcept -> IteratorBase & {
-            this->CollectionIterator :: operator = (it);
-            return *this;
-        }
-
-        __CDS_cpplang_ConstexprDestructor ~IteratorBase () noexcept override = default;
-
-        __CDS_cpplang_ConstexprPureAbstract auto operator ++ () noexcept -> IteratorBase & override = 0;
-
-        __CDS_NoDiscard __CDS_cpplang_ConstexprOverride auto equals ( CollectionIterator const & o ) const noexcept -> bool final {
-            return dynamic_cast < const IteratorBase & > ( o )._pNode == this->_pNode;
-        }
-
-        __CDS_NoDiscard __CDS_cpplang_ConstexprOverride auto value () const noexcept -> ElementRef final {
-            return * this->_pNode->data;
-        }
-
-        __CDS_NoDiscard auto copy () const noexcept -> IteratorBase * override = 0;
-
-        __CDS_cpplang_ConstexprPureAbstract auto next () noexcept -> IteratorBase & override = 0;
-    };
-
-    class ConstIteratorBase : public ConstCollectionIterator {
-    protected:
-        Node const * _pNode { nullptr };
-
-        constexpr ConstIteratorBase( ConstIteratorBase const & ) noexcept = default;
-        constexpr ConstIteratorBase( ConstIteratorBase && ) noexcept = default;
-
-        constexpr explicit ConstIteratorBase ( Node const * pNode, DoubleLinkedList < T > const * pList ) :
-                ConstCollectionIterator ( ( Collection < T > const * ) pList),
-                _pNode (pNode) {
+        DoubleLinkedListDelegateIterator ( DoubleLinkedList::Node * pNode, bool forward ) noexcept :
+                DelegateIterator (),
+                _pNode ( pNode ),
+                _forward ( forward ) {
 
         }
 
-    public:
-        __CDS_cpplang_NonConstConstexprMemberFunction auto operator = ( ConstIteratorBase const & it ) noexcept -> ConstIteratorBase & {
-            this->ConstCollectionIterator :: operator = ( it );
+        DoubleLinkedListDelegateIterator ( DoubleLinkedListDelegateIterator const & ) noexcept = default;
+        DoubleLinkedListDelegateIterator ( DoubleLinkedListDelegateIterator && ) noexcept = default;
+
+        ~DoubleLinkedListDelegateIterator () noexcept override = default;
+
+        auto next () noexcept -> DoubleLinkedListDelegateIterator & override {
+            (void) ( this->_forward ? ( this->_pNode = this->_pNode->pNext ) : ( this->_pNode = this->_pNode->pPrevious ) );
             return * this;
         }
 
-        __CDS_cpplang_ConstexprDestructor ~ConstIteratorBase () override = default;
-
-        __CDS_cpplang_ConstexprPureAbstract auto operator ++ () noexcept -> ConstIteratorBase & override = 0;
-
-        __CDS_NoDiscard __CDS_cpplang_ConstexprOverride auto equals ( ConstCollectionIterator const & o ) const noexcept -> bool final {
-            return this->_pNode == dynamic_cast < const ConstIteratorBase & > ( o )._pNode;
+        auto previous () noexcept -> DoubleLinkedListDelegateIterator & override {
+            (void) ( this->_forward ? ( this->_pNode = this->_pNode->pPrevious ) : ( this->_pNode = this->_pNode->pNext ) );
+            return * this;
         }
 
-        __CDS_NoDiscard __CDS_cpplang_ConstexprOverride auto value () const noexcept -> ElementCRef final {
+        auto value () const noexcept -> ElementRef override {
             return * this->_pNode->data;
         }
 
-        __CDS_NoDiscard auto copy () const noexcept -> ConstIteratorBase * override = 0;
+        auto equals ( DelegateIterator const & it ) const noexcept -> bool override {
+            if ( this == & it ) return true;
+            auto p = dynamic_cast < decltype ( this ) > ( & it );
+            if ( p == nullptr ) return false;
 
-        __CDS_cpplang_ConstexprPureAbstract auto next () noexcept -> ConstIteratorBase & override = 0;
+            return this->_pNode == p->_pNode;
+        }
+
+        auto copy () const noexcept -> DoubleLinkedListDelegateIterator * override {
+            return Memory :: instance() . create < DoubleLinkedListDelegateIterator > ( * this );
+        }
     };
+
+    class DoubleLinkedListConstDelegateIterator : public DelegateConstIterator {
+    private:
+        ForeignPointer < DoubleLinkedList::Node const > _pNode;
+        bool                                            _forward;
+
+    public:
+        DoubleLinkedListConstDelegateIterator ( DoubleLinkedList::Node const * pNode, bool forward ) noexcept :
+                DelegateConstIterator (),
+                _pNode ( pNode ),
+                _forward ( forward ) {
+
+        }
+
+        DoubleLinkedListConstDelegateIterator ( DoubleLinkedListConstDelegateIterator const & ) noexcept = default;
+        DoubleLinkedListConstDelegateIterator ( DoubleLinkedListConstDelegateIterator && ) noexcept = default;
+
+        ~DoubleLinkedListConstDelegateIterator () noexcept override = default;
+
+        auto next () noexcept -> DoubleLinkedListConstDelegateIterator & override {
+            (void) ( this->_forward ? ( this->_pNode = this->_pNode->pNext ) : ( this->_pNode = this->_pNode->pPrevious ) );
+            return * this;
+        }
+
+        auto previous () noexcept -> DoubleLinkedListConstDelegateIterator & override {
+            (void) ( this->_forward ? ( this->_pNode = this->_pNode->pPrevious ) : ( this->_pNode = this->_pNode->pNext ) );
+            return * this;
+        }
+
+        auto value () const noexcept -> ElementCRef override {
+            return * this->_pNode->data;
+        }
+
+        auto equals ( DelegateConstIterator const & it ) const noexcept -> bool override {
+            if ( this == & it ) return true;
+            auto p = dynamic_cast < decltype ( this ) > ( & it );
+            if ( p == nullptr ) return false;
+
+            return this->_pNode == p->_pNode;
+        }
+
+        auto copy () const noexcept -> DoubleLinkedListConstDelegateIterator * override {
+            return Memory :: instance() . create < DoubleLinkedListConstDelegateIterator > ( * this );
+        }
+    };
+
+    using DelegateIteratorRequestType = typename Collection < T > :: DelegateIteratorRequestType;
+
+    auto delegateIterator ( DelegateIteratorRequestType requestType ) noexcept -> UniquePointer < DelegateIterator > override {
+        switch ( requestType ) {
+            case DelegateIteratorRequestType :: FORWARD_BEGIN:
+                return Memory :: instance () . create < DoubleLinkedListDelegateIterator > ( this->_pFront, true );
+            case DelegateIteratorRequestType :: FORWARD_END:
+                return Memory :: instance () . create < DoubleLinkedListDelegateIterator > ( nullptr, true );
+            case DelegateIteratorRequestType :: BACKWARD_BEGIN:
+                return Memory :: instance () . create < DoubleLinkedListDelegateIterator > ( this->_pBack, false );
+            case DelegateIteratorRequestType :: BACKWARD_END:
+                return Memory :: instance () . create < DoubleLinkedListDelegateIterator > ( nullptr, false );
+        }
+    }
+
+    auto delegateConstIterator ( DelegateIteratorRequestType requestType ) const noexcept -> UniquePointer < DelegateConstIterator > override {
+        switch ( requestType ) {
+            case DelegateIteratorRequestType :: FORWARD_BEGIN:
+                return Memory :: instance () . create < DoubleLinkedListConstDelegateIterator > ( this->_pFront, true );
+            case DelegateIteratorRequestType :: FORWARD_END:
+                return Memory :: instance () . create < DoubleLinkedListConstDelegateIterator > ( nullptr, true );
+            case DelegateIteratorRequestType :: BACKWARD_BEGIN:
+                return Memory :: instance () . create < DoubleLinkedListConstDelegateIterator > ( this->_pBack, false );
+            case DelegateIteratorRequestType :: BACKWARD_END:
+                return Memory :: instance () . create < DoubleLinkedListConstDelegateIterator > ( nullptr, false );
+        }
+    }
 
 public:
-
-    class Iterator : public IteratorBase{
-    public:
-
-        constexpr Iterator( Iterator const & ) noexcept = default;
-        constexpr Iterator( Iterator && ) noexcept = default;
-
-        __CDS_cpplang_NonConstConstexprMemberFunction auto operator = ( Iterator const & o ) noexcept -> Iterator & {
-            this->IteratorBase::operator=(o);
-
-            this->_pNode = o._pNode;
-            return * this;
-        }
-
-        __CDS_cpplang_NonConstConstexprMemberFunction auto operator ++ () noexcept -> Iterator & final {
-            return this->next();
-        }
-
-        __CDS_cpplang_ConstexprDestructor auto operator ++ (int) noexcept -> Iterator {
-            auto copy = * this;
-            this->next();
-            return copy;
-        }
-
-        constexpr explicit Iterator( Node * pNode, DoubleLinkedList < T > const * pList ) noexcept :
-                IteratorBase ( pNode, pList ) {
-
-        }
-
-        __CDS_cpplang_NonConstConstexprMemberFunction auto next () noexcept -> Iterator & final {
-            this->_pNode = this->_pNode->pNext;
-            return * this;
-        }
-
-        __CDS_cpplang_ConstexprDestructor ~Iterator() noexcept override = default;
-
-        __CDS_NoDiscard __CDS_OptimalInline auto copy () const noexcept -> Iterator * override {
-            return Memory :: instance().create < Iterator > ( * this );
-        }
-    };
-
-    class ReverseIterator : public IteratorBase {
-    public:
-
-        constexpr ReverseIterator( ReverseIterator const & ) noexcept = default;
-        constexpr ReverseIterator( ReverseIterator && ) noexcept = default;
-
-        __CDS_cpplang_NonConstConstexprMemberFunction auto operator = ( ReverseIterator const & o ) noexcept -> ReverseIterator & {
-            this->IteratorBase::operator=(o);
-            this->_pNode = o._pNode;
-            return * this;
-        }
-
-        __CDS_cpplang_NonConstConstexprMemberFunction auto operator ++ () noexcept -> ReverseIterator & override {
-            return this->next();
-        }
-
-        __CDS_cpplang_ConstexprDestructor auto operator ++ (int) noexcept -> ReverseIterator {
-            auto copy = * this;
-            this->next();
-            return copy;
-        }
-
-        constexpr explicit ReverseIterator ( Node * pNode, DoubleLinkedList < T > const * pList ) noexcept :
-                IteratorBase( pNode, pList ) {
-
-        }
-
-        __CDS_cpplang_NonConstConstexprMemberFunction auto next () noexcept -> ReverseIterator & final {
-            this->_pNode = this->_pNode->pPrevious;
-            return * this;
-        }
-
-        __CDS_cpplang_ConstexprDestructor ~ReverseIterator() noexcept override = default;
-
-        __CDS_NoDiscard __CDS_OptimalInline auto copy () const noexcept -> ReverseIterator * override {
-            return Memory :: instance().create < ReverseIterator > ( * this );
-        }
-    };
-
-    class ConstIterator : public ConstIteratorBase {
-    public:
-
-        constexpr ConstIterator( ConstIterator const & ) noexcept = default;
-        constexpr ConstIterator( ConstIterator && ) noexcept = default;
-
-        __CDS_cpplang_NonConstConstexprMemberFunction auto operator = ( ConstIterator const & o ) noexcept -> ConstIterator & {
-            this->ConstIteratorBase::operator=(o);
-            this->_pNode = o._pNode;
-            return * this;
-        }
-
-        __CDS_cpplang_NonConstConstexprMemberFunction auto operator ++ () noexcept -> ConstIterator & override {
-            return this->next();
-        }
-
-        __CDS_cpplang_NonConstConstexprMemberFunction auto operator ++ (int) noexcept -> ConstIterator {
-            auto copy = * this;
-            this->next();
-            return copy;
-        }
-
-        constexpr explicit ConstIterator ( Node const * pNode, DoubleLinkedList < T > const * pList ) noexcept :
-                ConstIteratorBase( pNode, pList ) {
-
-        }
-
-        __CDS_cpplang_NonConstConstexprMemberFunction auto next () noexcept -> ConstIterator & final {
-            this->_pNode = this->_pNode->pNext;
-            return * this;
-        }
-
-        __CDS_cpplang_ConstexprDestructor ~ConstIterator() noexcept override = default;
-
-        __CDS_NoDiscard __CDS_OptimalInline auto copy () const noexcept -> ConstIterator * override {
-            return Memory :: instance().create < ConstIterator > ( * this );
-        }
-    };
-
-    class ConstReverseIterator : public ConstIteratorBase {
-    public:
-
-        constexpr ConstReverseIterator( ConstReverseIterator const & ) noexcept = default;
-        constexpr ConstReverseIterator( ConstReverseIterator && ) noexcept = default;
-
-        __CDS_cpplang_NonConstConstexprMemberFunction auto operator = ( ConstReverseIterator const & o ) noexcept -> ConstReverseIterator & {
-            this->ConstIteratorBase::operator=(o);
-            this->_pNode = o._pNode;
-            return * this;
-        }
-
-        __CDS_cpplang_NonConstConstexprMemberFunction auto operator ++ () noexcept -> ConstReverseIterator & override {
-            return this->next();
-        }
-
-        __CDS_cpplang_ConstexprDestructor auto operator ++ (int) noexcept -> ConstReverseIterator {
-            auto copy = * this;
-            this->next();
-            return copy;
-        }
-
-        constexpr explicit ConstReverseIterator ( Node const * pNode, DoubleLinkedList < T > const * pList ) noexcept :
-                ConstIteratorBase( pNode, pList ) {
-
-        }
-
-        __CDS_cpplang_NonConstConstexprMemberFunction auto next () noexcept -> ConstReverseIterator & final {
-            this->_pNode = this->_pNode->pPrevious;
-            return * this;
-        }
-
-        __CDS_cpplang_ConstexprDestructor ~ConstReverseIterator() noexcept override = default;
-
-        __CDS_NoDiscard __CDS_OptimalInline auto copy () const noexcept -> ConstReverseIterator * override {
-            return Memory :: instance().create < ConstReverseIterator > ( * this );
-        }
-    };
-
     constexpr DoubleLinkedList( ) noexcept = default;
     DoubleLinkedList( const DoubleLinkedList & ) noexcept;
 
@@ -294,40 +190,20 @@ public:
     }
 
     DoubleLinkedList(
-            CollectionIterator const &,
-            CollectionIterator const &
+            Iterator,
+            Iterator
     ) noexcept;
 
     DoubleLinkedList(
-            ConstCollectionIterator const &,
-            ConstCollectionIterator const &
+            ConstIterator,
+            ConstIterator
     ) noexcept;
 
     DoubleLinkedList( InitializerList ) noexcept; // NOLINT(google-explicit-constructor)
 
     ~DoubleLinkedList() noexcept override;
 
-private:
-    __CDS_NoDiscard __CDS_OptimalInline auto beginPtr () noexcept -> Iterator * final { return Memory :: instance().create < Iterator > ( this->_pFront, this ); }
-    __CDS_NoDiscard __CDS_OptimalInline auto endPtr () noexcept -> Iterator * final { return Memory :: instance().create < Iterator > (nullptr, this ); }
-    __CDS_NoDiscard __CDS_OptimalInline auto beginPtr () const noexcept -> ConstIterator * final  { return Memory :: instance().create < ConstIterator > ( this->_pFront, this ); }
-    __CDS_NoDiscard __CDS_OptimalInline auto endPtr () const noexcept -> ConstIterator * final { return Memory :: instance().create < ConstIterator > (nullptr, this ); }
-
 public:
-    __CDS_NoDiscard __CDS_cpplang_NonConstConstexprMemberFunction auto begin () noexcept -> Iterator { return Iterator(this->_pFront, this); }
-    __CDS_NoDiscard __CDS_cpplang_NonConstConstexprMemberFunction auto end () noexcept -> Iterator { return Iterator(nullptr, this); }
-    __CDS_NoDiscard constexpr auto begin () const noexcept -> ConstIterator { return ConstIterator (this->_pFront, this); }
-    __CDS_NoDiscard constexpr auto end () const noexcept -> ConstIterator { return ConstIterator (nullptr, this); }
-    __CDS_NoDiscard constexpr auto cbegin () const noexcept -> ConstIterator { return ConstIterator (this->_pFront, this); }
-    __CDS_NoDiscard constexpr auto cend () const noexcept -> ConstIterator { return ConstIterator (nullptr, this); }
-
-    __CDS_NoDiscard __CDS_cpplang_NonConstConstexprMemberFunction auto rbegin () noexcept -> ReverseIterator { return ReverseIterator(this->_pBack, this); }
-    __CDS_NoDiscard __CDS_cpplang_NonConstConstexprMemberFunction auto rend () noexcept -> ReverseIterator { return ReverseIterator(nullptr, this); }
-    __CDS_NoDiscard constexpr auto rbegin () const noexcept -> ConstReverseIterator { return ConstReverseIterator (this->_pBack, this); }
-    __CDS_NoDiscard constexpr auto rend () const noexcept -> ConstReverseIterator { return ConstReverseIterator (nullptr, this); }
-    __CDS_NoDiscard constexpr auto crbegin () const noexcept -> ConstReverseIterator { return ConstReverseIterator (this->_pBack, this); }
-    __CDS_NoDiscard constexpr auto crend () const noexcept -> ConstReverseIterator { return ConstReverseIterator (nullptr, this); }
-
     auto remove (Index) noexcept -> bool;
 
     auto remove ( ElementCRef, Size ) noexcept -> bool final;
@@ -339,7 +215,7 @@ public:
     auto removeNotOf ( Collection<T> const &, Size ) noexcept -> bool final;
     auto removeLastNotOf ( Collection<T> const & ) noexcept -> bool final;
 
-    auto remove ( CollectionIterator const & ) noexcept (false) -> T final;
+    auto remove ( Iterator const & ) noexcept (false) -> T final;
 
     __CDS_OptimalInline auto removeOf ( InitializerList list, Size count ) noexcept -> bool final {
         return this->removeOf ( DoubleLinkedList <T> (list), count );
@@ -390,7 +266,7 @@ public:
         if ( o.size () != this->size() ) return false;
 
         for ( auto i1 = this->begin(), i2 = o.begin(); i1 != this->end() && i2 != o.end(); i1++, i2++ )
-            if ( ! ( Type < T > :: compare ( i1.value(), i2.value() ) ) )
+            if ( ! ( Type < T > :: compare ( * i1, * i2 ) ) )
                 return false;
         return true;
     }
@@ -862,57 +738,57 @@ auto DoubleLinkedList<T>::removeLastNotOf( Collection<T> const & from ) noexcept
 }
 
 template < typename T >
-auto DoubleLinkedList<T>::remove ( CollectionIterator const & it ) noexcept (false) -> T {
+auto DoubleLinkedList<T>::remove ( Iterator const & it ) noexcept (false) -> T {
     if ( this->empty() )
         throw OutOfBoundsException("List is Empty");
-
-    if ( this->begin() == it ) {
-        auto node = this->_pFront;
-        auto retVal = * node->data;
-        this->_pFront = node->pNext;
-        this->_pFront->pPrevious = nullptr;
-
-        if ( this->size() == 1 )
-            this->_pBack = this->_pFront;
-
-        -- this->_size;
-        Memory :: instance().destroy ( node->data );
-        Memory :: instance().destroy ( node );
-        return retVal;
-    }
-
-    if ( Iterator(this->_pBack, this) == it ) {
-        auto node = this->_pBack;
-        auto retVal = * node->data;
-        this->_pBack = node->pPrevious;
-        this->_pBack->pNext = nullptr;
-
-        if ( this->size() == 1 )
-            this->_pFront = this->_pBack;
-
-        -- this->_size;
-        Memory :: instance().destroy ( node->data );
-        Memory :: instance().destroy ( node );
-        return retVal;
-    }
-
-    for ( auto node = this->_pFront->pNext; node != this->_pBack; node = node->pNext ) {
-        if ( Iterator ( node, this ) == it ) {
-            auto before = node->pPrevious;
-            auto next = node->pNext;
-
-            before->pNext = next;
-            next->pPrevious = before;
-
-            auto retVal = * node->data;
-            -- this->_size;
-
-            Memory :: instance().destroy ( node->data );
-            Memory :: instance().destroy ( node );
-
-            return retVal;
-        }
-    }
+//
+//    if ( this->begin() == it ) {
+//        auto node = this->_pFront;
+//        auto retVal = * node->data;
+//        this->_pFront = node->pNext;
+//        this->_pFront->pPrevious = nullptr;
+//
+//        if ( this->size() == 1 )
+//            this->_pBack = this->_pFront;
+//
+//        -- this->_size;
+//        Memory :: instance().destroy ( node->data );
+//        Memory :: instance().destroy ( node );
+//        return retVal;
+//    }
+//
+//    if ( Iterator(this->_pBack, this) == it ) {
+//        auto node = this->_pBack;
+//        auto retVal = * node->data;
+//        this->_pBack = node->pPrevious;
+//        this->_pBack->pNext = nullptr;
+//
+//        if ( this->size() == 1 )
+//            this->_pFront = this->_pBack;
+//
+//        -- this->_size;
+//        Memory :: instance().destroy ( node->data );
+//        Memory :: instance().destroy ( node );
+//        return retVal;
+//    }
+//
+//    for ( auto node = this->_pFront->pNext; node != this->_pBack; node = node->pNext ) {
+//        if ( Iterator ( node, this ) == it ) {
+//            auto before = node->pPrevious;
+//            auto next = node->pNext;
+//
+//            before->pNext = next;
+//            next->pPrevious = before;
+//
+//            auto retVal = * node->data;
+//            -- this->_size;
+//
+//            Memory :: instance().destroy ( node->data );
+//            Memory :: instance().destroy ( node );
+//
+//            return retVal;
+//        }
+//    }
 
     throw IllegalArgumentException ("Wrong List Iterator");
 }
@@ -954,15 +830,9 @@ auto DoubleLinkedList<T>::operator =(Collection <T> const & c) noexcept -> Doubl
         return * this;
 
     this->clear();
+    for ( auto & e : c )
+        this->pushBack( e );
 
-    auto pBegin = Collection<T>::beginPtr(c);
-    auto pEnd = Collection<T>::endPtr(c);
-
-    for ( auto it = pBegin; ! it->equals( * pEnd ); it->next() )
-        this->pushBack ( it->value() );
-
-    Memory :: instance().destroy ( pBegin );
-    Memory :: instance().destroy ( pEnd );
     return * this;
 }
 
@@ -1096,20 +966,20 @@ auto DoubleLinkedList<T>::quickSortPartition(
 
 template < typename T >
 DoubleLinkedList<T>::DoubleLinkedList(
-        CollectionIterator const & from,
-        CollectionIterator const & to
+        Iterator from,
+        Iterator to
 ) noexcept {
-    for ( auto it = UniquePointer < decltype ( & from ) > ( from.copy() ); ! it->equals (to); it->next() )
-        this->pushBack( it->value() );
+    for ( auto it = from; it != to; ++ it )
+        this->pushBack( * it );
 }
 
 template < typename T >
 DoubleLinkedList<T>::DoubleLinkedList(
-        ConstCollectionIterator const & from,
-        ConstCollectionIterator const & to
+        ConstIterator from,
+        ConstIterator to
 ) noexcept {
-    for ( auto it = UniquePointer < decltype ( & from ) > ( from.copy() ); ! it->equals (to); it->next() )
-        this->pushBack( it->value() );
+    for ( auto it = from; it != to; ++ it )
+        this->pushBack( * it );
 }
 
 template < typename T >
@@ -1227,9 +1097,9 @@ __CDS_MaybeUnused inline auto String::splitByString(String const & token, Size l
     auto i = static_cast < Index > (locations.size()) - 1;
     for ( auto it = locations.rbegin(); it != locations.rend(); ++it, --i )
         if ( i + 1 < limit )
-            copy.replace(it.value(), token.length(), "\001");
+            copy.replace(* it, token.length(), "\x01");
 
-    return copy.split('\001');
+    return copy.split('\x01');
 }
 
 inline auto String::find (ElementType e) const noexcept -> LinkedList < Index > {

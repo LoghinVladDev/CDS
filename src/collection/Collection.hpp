@@ -75,101 +75,385 @@ protected:
 
     constexpr Collection() noexcept = default;
 
-public:
-
-    class Iterator : public Object {
-        friend class Collection < T >;
-
-    private:
-        Collection < T > * pBaseCollection {nullptr};
-
+    class DelegateIterator : public Object {
     protected:
-        constexpr Iterator() noexcept = default;
-        constexpr Iterator(Iterator const &) noexcept = default;
-        constexpr Iterator(Iterator &&) noexcept = default;
-
-        constexpr explicit Iterator ( Collection < T > * pBase ) noexcept : pBaseCollection(pBase) { }
-
-        constexpr auto of ( Collection const * pCollection ) const noexcept -> bool {
-            return this->pBaseCollection == pCollection;
-        }
+        DelegateIterator () noexcept = default;
 
     public:
-        __CDS_cpplang_ConstexprDestructor ~Iterator() noexcept override = default;
-
-        __CDS_cpplang_NonConstConstexprMemberFunction auto operator = (Iterator const & obj) noexcept -> Iterator & { // NOLINT(bugprone-unhandled-self-assignment)
-            this->pBaseCollection = obj.pBaseCollection;
+        virtual auto next () noexcept -> DelegateIterator & = 0;
+        virtual auto previous () noexcept -> DelegateIterator & {
             return * this;
         }
 
-        __CDS_cpplang_ConstexprPureAbstract virtual auto next () noexcept -> Iterator & = 0;
-        __CDS_cpplang_ConstexprPureAbstract virtual auto equals ( const Iterator & ) const noexcept -> bool = 0;
-        __CDS_cpplang_ConstexprPureAbstract virtual auto value () const noexcept -> T& = 0;
+        virtual auto value () const noexcept -> ElementRef = 0;
+        virtual auto equals ( DelegateIterator const & ) const noexcept -> bool = 0;
 
-        __CDS_cpplang_VirtualConstexpr virtual auto operator ++ () noexcept -> Iterator & { return this->next(); }
+        __CDS_NoDiscard virtual auto isValid () const noexcept -> bool {
+            return true;
+        }
 
-        __CDS_cpplang_VirtualConstexpr auto operator == ( Iterator const & o ) const noexcept -> bool { return this->equals( o ); }
-        __CDS_cpplang_VirtualConstexpr auto operator != ( Iterator const & o ) const noexcept -> bool { return ! this->equals( o ); }
-        __CDS_cpplang_VirtualConstexpr auto operator * () const noexcept -> T& { return this->value(); }
+        auto copy () const noexcept -> DelegateIterator * override = 0;
 
-        __CDS_NoDiscard auto copy () const noexcept -> Iterator * override = 0;
+        ~DelegateIterator () noexcept override = default;
     };
 
-    class ConstIterator : public Object {
-        friend class Collection < T >;
-
-    private:
-        Collection < T > const * pBaseCollection {nullptr};
-
+    class DelegateConstIterator : public Object {
     protected:
-        constexpr ConstIterator() noexcept = default;
-        constexpr ConstIterator(ConstIterator const &) noexcept = default;
-        constexpr ConstIterator(ConstIterator &&) noexcept = default;
-
-        constexpr explicit ConstIterator(Collection const * pBase) noexcept : pBaseCollection(pBase) { }
-
-        constexpr auto of ( Collection const * pCollection ) const noexcept -> bool {
-            return this->pBaseCollection == pCollection;
-        }
+        DelegateConstIterator () noexcept = default;
 
     public:
-        __CDS_cpplang_ConstexprDestructor ~ConstIterator() noexcept override = default;
-
-        __CDS_cpplang_NonConstConstexprMemberFunction auto operator = (ConstIterator const & obj) noexcept -> ConstIterator & { // NOLINT(bugprone-unhandled-self-assignment)
-            this->pBaseCollection = obj.pBaseCollection;
+        virtual auto next () noexcept -> DelegateConstIterator & = 0;
+        virtual auto previous () noexcept -> DelegateConstIterator & {
             return * this;
         }
 
-        __CDS_cpplang_ConstexprPureAbstract virtual auto next ( ) noexcept -> ConstIterator & = 0;
-        __CDS_cpplang_ConstexprPureAbstract virtual auto equals ( ConstIterator const & ) const noexcept -> bool = 0;
-        __CDS_cpplang_ConstexprPureAbstract virtual auto value ( ) const noexcept -> ElementCRef = 0;
+        virtual auto value () const noexcept -> ElementCRef = 0;
+        virtual auto equals ( DelegateConstIterator const & ) const noexcept -> bool = 0;
 
-        __CDS_cpplang_VirtualConstexpr virtual auto operator ++ () noexcept -> ConstIterator & { return this->next(); }
+        __CDS_NoDiscard virtual auto isValid () const noexcept -> bool {
+            return true;
+        }
 
-        __CDS_cpplang_VirtualConstexpr auto operator == ( ConstIterator const & o ) const noexcept -> bool { return this->equals(o ); }
-        __CDS_cpplang_VirtualConstexpr auto operator != ( ConstIterator const & o ) const noexcept -> bool { return ! this->equals(o ); }
-        __CDS_cpplang_VirtualConstexpr auto operator * () const noexcept -> ElementCRef { return this->value(); }
+        auto copy () const noexcept -> DelegateConstIterator * override = 0;
 
-        __CDS_NoDiscard auto copy () const noexcept -> ConstIterator * override = 0;
+        ~DelegateConstIterator () noexcept override = default;
+    };
+
+    class AbstractIterator : public Object {
+    protected:
+        ForeignPointer < Collection const > pCollection { nullptr };
+
+        AbstractIterator () noexcept = default;
+        AbstractIterator ( AbstractIterator const & it ) noexcept :
+                pCollection ( it.pCollection ) {
+
+        }
+
+        AbstractIterator ( AbstractIterator && ) noexcept = default;
+
+    public:
+        auto operator = ( AbstractIterator const & it ) noexcept -> AbstractIterator & = default;
+        auto operator = ( AbstractIterator && ) noexcept -> AbstractIterator & = default;
+        ~AbstractIterator() noexcept override = default;
+
+        explicit AbstractIterator ( Collection const * pCollection ) noexcept :
+                pCollection ( pCollection ) {
+
+        }
+
+        __CDS_NoDiscard auto of ( Collection const * pOtherCollection ) const noexcept -> bool {
+            return this->pCollection->get() == pOtherCollection;
+        }
+    };
+
+public:
+
+    class Iterator : public AbstractIterator {
+    private:
+        UniquePointer < DelegateIterator > pDelegate { nullptr };
+
+    public:
+        Iterator () noexcept = default;
+        Iterator ( Iterator && it ) noexcept = default;
+
+        Iterator ( Iterator const & it ) noexcept :
+                AbstractIterator ( it ),
+                pDelegate ( it.pDelegate->copy() ) {
+
+        }
+
+        explicit Iterator ( Collection const * pCollection, UniquePointer < DelegateIterator > && pMoveDelegate ) noexcept :
+                AbstractIterator ( pCollection ),
+                pDelegate ( std :: forward < UniquePointer < DelegateIterator > > ( pMoveDelegate ) ) {
+
+        }
+
+        ~Iterator () noexcept override = default;
+
+        auto operator = ( Iterator const & it ) noexcept -> Iterator & {
+            if ( this == & it ) return * this;
+
+            this->pDelegate = it.pDelegate->copy();
+            this->pCollection = it.pCollection;
+            return * this;
+        }
+
+        auto operator = ( Iterator && it ) noexcept -> Iterator & = default;
+
+        auto operator ++ () noexcept -> Iterator & {
+            this->pDelegate->next();
+            return * this;
+        }
+
+        auto operator ++ (int) noexcept -> Iterator {
+            auto copy (*this);
+            this->pDelegate->next();
+            return copy;
+        }
+
+        auto operator -- () noexcept -> Iterator & {
+            this->pDelegate->previous();
+            return * this;
+        }
+
+        auto operator -- (int) noexcept -> Iterator {
+            auto copy (*this);
+            this->pDelegate->previous();
+            return copy;
+        }
+
+        __CDS_NoDiscard auto isValid () const noexcept -> bool {
+            return ! this->pDelegate.isNull() && this->pDelegate->isValid();
+        }
+
+        auto operator == ( Iterator const & it ) const noexcept -> bool {
+            if ( this == & it ) return true;
+            return this->pCollection == it.pCollection && this->pDelegate->equals( * it.pDelegate );
+        }
+
+        auto operator != ( Iterator const & it ) const noexcept -> bool {
+            if ( this == & it ) return false;
+            return this->pCollection != it.pCollection || ! this->pDelegate->equals ( * it.pDelegate );
+        }
+
+        auto operator * () const noexcept -> ElementRef {
+            return this->pDelegate->value();
+        }
+    };
+
+    class ConstIterator : public AbstractIterator {
+    private:
+        UniquePointer < DelegateConstIterator > pDelegate { nullptr };
+
+    public:
+        ConstIterator () noexcept = default;
+        ConstIterator ( ConstIterator && it ) noexcept = default;
+
+        ConstIterator ( ConstIterator const & it ) noexcept :
+                AbstractIterator ( it ),
+                pDelegate ( it.pDelegate->copy() ) {
+
+        }
+
+        explicit ConstIterator ( Collection const * pCollection, UniquePointer < DelegateConstIterator > && pMoveDelegate ) noexcept :
+                AbstractIterator ( pCollection ),
+                pDelegate ( std :: forward < UniquePointer < DelegateConstIterator > > ( pMoveDelegate ) ) {
+
+        }
+
+        ~ConstIterator () noexcept override = default;
+
+        auto operator = ( ConstIterator const & it ) noexcept -> ConstIterator & {
+            if ( this == & it ) return * this;
+
+            this->pDelegate = it.pDelegate->copy();
+            this->pCollection = it.pCollection;
+            return * this;
+        }
+
+        auto operator = ( ConstIterator && it ) noexcept -> ConstIterator & = default;
+
+        auto operator ++ () noexcept -> ConstIterator & {
+            this->pDelegate->next();
+            return * this;
+        }
+
+        auto operator ++ (int) noexcept -> ConstIterator {
+            auto copy (*this);
+            this->pDelegate->next();
+            return copy;
+        }
+
+        auto operator -- () noexcept -> ConstIterator & {
+            this->pDelegate->previous();
+            return * this;
+        }
+
+        auto operator -- (int) noexcept -> ConstIterator {
+            auto copy (*this);
+            this->pDelegate->previous();
+            return copy;
+        }
+
+        __CDS_NoDiscard auto isValid () const noexcept -> bool {
+            return ! this->pDelegate.isNull() && this->pDelegate->isValid();
+        }
+
+        auto operator == ( ConstIterator const & it ) const noexcept -> bool {
+            if ( this == & it ) return true;
+            return this->pCollection == it.pCollection && this->pDelegate->equals( * it.pDelegate );
+        }
+
+        auto operator != ( ConstIterator const & it ) const noexcept -> bool {
+            if ( this == & it ) return false;
+            return this->pCollection != it.pCollection || ! this->pDelegate->equals ( * it.pDelegate );
+        }
+
+        auto operator * () const noexcept -> ElementCRef {
+            return this->pDelegate->value();
+        }
+    };
+
+    class ReverseIterator : public AbstractIterator {
+    private:
+        UniquePointer < DelegateIterator > pDelegate { nullptr };
+
+    public:
+        ReverseIterator () noexcept = default;
+        ReverseIterator ( ReverseIterator && it ) noexcept = default;
+
+        ReverseIterator ( ReverseIterator const & it ) noexcept :
+                AbstractIterator ( it ),
+                pDelegate ( it.pDelegate->copy() ) {
+
+        }
+
+        explicit ReverseIterator ( Collection const * pCollection, UniquePointer < DelegateIterator > && pMoveDelegate ) noexcept :
+                AbstractIterator ( pCollection ),
+                pDelegate ( std :: forward < UniquePointer < DelegateIterator > > ( pMoveDelegate ) ){
+
+        }
+
+        ~ReverseIterator () noexcept override = default;
+
+        auto operator = ( ReverseIterator const & it ) noexcept -> ReverseIterator & {
+            if ( this == & it ) return * this;
+
+            this->pDelegate = it.pDelegate->copy();
+            this->pCollection = it.pCollection;
+            return * this;
+        }
+
+        auto operator = ( ReverseIterator && it ) noexcept -> ReverseIterator & = default;
+
+        auto operator ++ () noexcept -> ReverseIterator & {
+            this->pDelegate->next();
+            return * this;
+        }
+
+        auto operator ++ (int) noexcept -> ReverseIterator {
+            auto copy (*this);
+            this->pDelegate->next();
+            return copy;
+        }
+
+        auto operator -- () noexcept -> ReverseIterator & {
+            this->pDelegate->previous();
+            return * this;
+        }
+
+        auto operator -- (int) noexcept -> ReverseIterator {
+            auto copy (*this);
+            this->pDelegate->previous();
+            return copy;
+        }
+
+        __CDS_NoDiscard auto isValid () const noexcept -> bool {
+            return ! this->pDelegate.isNull() && this->pDelegate->isValid();
+        }
+
+        auto operator == ( ReverseIterator const & it ) const noexcept -> bool {
+            if ( this == & it ) return true;
+            return this->pCollection == it.pCollection && this->pDelegate->equals( * it.pDelegate );
+        }
+
+        auto operator != ( ReverseIterator const & it ) const noexcept -> bool {
+            if ( this == & it ) return false;
+            return this->pCollection != it.pCollection || ! this->pDelegate->equals ( * it.pDelegate );
+        }
+
+        auto operator * () const noexcept -> ElementRef {
+            return this->pDelegate->value();
+        }
+    };
+
+    class ConstReverseIterator : public AbstractIterator {
+    private:
+        UniquePointer < DelegateConstIterator > pDelegate { nullptr };
+
+    public:
+        ConstReverseIterator () noexcept = default;
+        ConstReverseIterator ( ConstReverseIterator && it ) noexcept = default;
+
+        ConstReverseIterator ( ConstReverseIterator const & it ) noexcept :
+                AbstractIterator ( it ),
+                pDelegate ( it.pDelegate->copy() ) {
+
+        }
+
+        explicit ConstReverseIterator ( Collection const * pCollection, UniquePointer < DelegateConstIterator > && pMoveDelegate ) noexcept :
+                AbstractIterator ( pCollection ),
+                pDelegate ( std :: forward < UniquePointer < DelegateConstIterator > > ( pMoveDelegate ) ){
+
+        }
+
+        ~ConstReverseIterator () noexcept override = default;
+
+        auto operator = ( ConstReverseIterator const & it ) noexcept -> ConstReverseIterator & {
+            if ( this == & it ) return * this;
+
+            this->pDelegate = it.pDelegate->copy();
+            this->pCollection = it.pCollection;
+            return * this;
+        }
+
+        auto operator = ( ConstReverseIterator && it ) noexcept -> ConstReverseIterator & = default;
+
+        auto operator ++ () noexcept -> ConstReverseIterator & {
+            this->pDelegate->next();
+            return * this;
+        }
+
+        auto operator ++ (int) noexcept -> ConstReverseIterator {
+            auto copy (*this);
+            this->pDelegate->next();
+            return copy;
+        }
+
+        auto operator -- () noexcept -> ConstReverseIterator & {
+            this->pDelegate->previous();
+            return * this;
+        }
+
+        auto operator -- (int) noexcept -> ConstReverseIterator {
+            auto copy (*this);
+            this->pDelegate->previous();
+            return copy;
+        }
+
+        __CDS_NoDiscard auto isValid () const noexcept -> bool {
+            return ! this->pDelegate.isNull() && this->pDelegate->isValid();
+        }
+
+        auto operator == ( ConstReverseIterator const & it ) const noexcept -> bool {
+            if ( this == & it ) return true;
+            return this->pCollection == it.pCollection && this->pDelegate->equals( * it.pDelegate );
+        }
+
+        auto operator != ( ConstReverseIterator const & it ) const noexcept -> bool {
+            if ( this == & it ) return false;
+            return this->pCollection != it.pCollection || ! this->pDelegate->equals ( * it.pDelegate );
+        }
+
+        auto operator * () const noexcept -> ElementCRef {
+            return this->pDelegate->value();
+        }
     };
 
 protected:
-    virtual auto beginPtr () noexcept -> Iterator * = 0;
-    virtual auto endPtr () noexcept -> Iterator * = 0;
-    __CDS_MaybeUnused virtual auto beginPtr () const noexcept -> ConstIterator * = 0;
-    __CDS_MaybeUnused virtual auto endPtr () const noexcept -> ConstIterator * = 0;
+    enum class DelegateIteratorRequestType {
+        FORWARD_BEGIN,
+        FORWARD_END,
+        BACKWARD_BEGIN,
+        BACKWARD_END
+    };
 
-    __CDS_MaybeUnused __CDS_OptimalInline static auto beginPtr ( Collection & o ) noexcept -> Iterator * { return o.beginPtr(); }
-    __CDS_MaybeUnused __CDS_OptimalInline static auto endPtr ( Collection & o ) noexcept -> Iterator * { return o.endPtr(); }
-    __CDS_MaybeUnused __CDS_OptimalInline static auto beginPtr ( Collection const & o ) noexcept -> ConstIterator * { return o.beginPtr(); }
-    __CDS_MaybeUnused __CDS_OptimalInline static auto endPtr ( Collection const & o ) noexcept -> ConstIterator * { return o.endPtr(); }
-
-    __CDS_OptimalInline static auto iteratorIsOf ( Iterator const & it, Collection const & collection ) noexcept -> bool {
-        return it.of(& collection);
+    virtual auto delegateIterator ( DelegateIteratorRequestType ) noexcept -> UniquePointer < DelegateIterator > {
+        return nullptr;
     }
 
-    __CDS_MaybeUnused __CDS_OptimalInline static auto iteratorIsOf ( ConstIterator const & it, Collection const & collection ) noexcept -> bool {
-        return it.of(& collection);
+    virtual auto delegateConstIterator ( DelegateIteratorRequestType ) const noexcept -> UniquePointer < DelegateConstIterator > {
+        return nullptr;
     }
 
 #if defined(__CDS_ThreadSafeObjects)
@@ -177,6 +461,86 @@ protected:
 #endif
 
 public:
+    __CDS_NoDiscard __CDS_MaybeUnused __CDS_OptimalInline auto begin () noexcept (false) -> Iterator {
+        auto pDelegate = this->delegateIterator( DelegateIteratorRequestType :: FORWARD_BEGIN );
+        if ( pDelegate.isNull() )
+            throw NotImplementedException ( "Iterator" );
+
+        return Iterator ( this, std :: move ( pDelegate ) );
+    }
+
+    __CDS_NoDiscard __CDS_MaybeUnused __CDS_OptimalInline auto end () noexcept (false) -> Iterator {
+        auto pDelegate = this->delegateIterator( DelegateIteratorRequestType :: FORWARD_END );
+        if ( pDelegate.isNull() )
+            throw NotImplementedException ( "Iterator" );
+
+        return Iterator ( this, std :: move ( pDelegate ) );
+    }
+
+    __CDS_NoDiscard __CDS_MaybeUnused __CDS_OptimalInline auto cbegin () const noexcept (false) -> ConstIterator {
+        auto pDelegate = this->delegateConstIterator( DelegateIteratorRequestType :: FORWARD_BEGIN );
+        if ( pDelegate.isNull() )
+            throw NotImplementedException ( "ConstIterator" );
+
+        return ConstIterator ( this, std :: move ( pDelegate ) );
+    }
+
+    __CDS_NoDiscard __CDS_MaybeUnused __CDS_OptimalInline auto cend () const noexcept (false) -> ConstIterator {
+        auto pDelegate = this->delegateConstIterator( DelegateIteratorRequestType :: FORWARD_END );
+        if ( pDelegate.isNull() )
+            throw NotImplementedException ( "ConstIterator" );
+
+        return ConstIterator ( this, std :: move ( pDelegate ) );
+    }
+
+    __CDS_NoDiscard __CDS_MaybeUnused __CDS_OptimalInline auto begin () const noexcept (false) -> ConstIterator {
+        return this->cbegin();
+    }
+
+    __CDS_NoDiscard __CDS_MaybeUnused __CDS_OptimalInline auto end () const noexcept (false) -> ConstIterator {
+        return this->cend();
+    }
+
+    __CDS_NoDiscard __CDS_MaybeUnused __CDS_OptimalInline auto rbegin () noexcept (false) -> ReverseIterator {
+        auto pDelegate = this->delegateIterator( DelegateIteratorRequestType :: BACKWARD_BEGIN );
+        if ( pDelegate.isNull() )
+            throw NotImplementedException ( "ReverseIterator" );
+
+        return ReverseIterator ( this, std :: move ( pDelegate ) );
+    }
+
+    __CDS_NoDiscard __CDS_MaybeUnused __CDS_OptimalInline auto rend () noexcept (false) -> ReverseIterator {
+        auto pDelegate = this->delegateIterator( DelegateIteratorRequestType :: BACKWARD_END );
+        if ( pDelegate.isNull() )
+            throw NotImplementedException ( "ReverseIterator" );
+
+        return ReverseIterator ( this, std :: move ( pDelegate ) );
+    }
+
+    __CDS_NoDiscard __CDS_MaybeUnused __CDS_OptimalInline auto crbegin () const noexcept (false) -> ConstReverseIterator {
+        auto pDelegate = this->delegateConstIterator( DelegateIteratorRequestType :: BACKWARD_BEGIN );
+        if ( pDelegate.isNull() )
+            throw NotImplementedException ( "ConstReverseIterator" );
+
+        return ConstReverseIterator ( this, std :: move ( pDelegate ) );
+    }
+
+    __CDS_NoDiscard __CDS_MaybeUnused __CDS_OptimalInline auto crend () const noexcept (false) -> ConstReverseIterator {
+        auto pDelegate = this->delegateConstIterator( DelegateIteratorRequestType :: BACKWARD_END );
+        if ( pDelegate.isNull() )
+            throw NotImplementedException ( "ConstReverseIterator" );
+
+        return ConstReverseIterator ( this, std :: move ( pDelegate ) );
+    }
+
+    __CDS_NoDiscard __CDS_MaybeUnused __CDS_OptimalInline auto rbegin () const noexcept (false) -> ConstReverseIterator {
+        return this->crbegin();
+    }
+
+    __CDS_NoDiscard __CDS_MaybeUnused __CDS_OptimalInline auto rend () const noexcept (false) -> ConstReverseIterator {
+        return this->crend();
+    }
+
     __CDS_MaybeUnused virtual auto remove ( ElementCRef, Size ) noexcept -> bool = 0;
     __CDS_MaybeUnused __CDS_OptimalInline virtual auto removeAll ( ElementCRef o ) noexcept -> bool { return this->remove( o, this->size() ); }
     __CDS_MaybeUnused __CDS_OptimalInline virtual auto removeFirst ( ElementCRef o ) noexcept -> bool { return this->remove( o, 1 ); }
@@ -251,14 +615,8 @@ public:
 
         __CDS_Collection_OperationalLock
 
-        for (
-                auto
-                        i = UniquePointer < ConstIterator > ( this->beginPtr() ),
-                        end = UniquePointer < ConstIterator > ( this->endPtr() );
-                ! i->equals(* end);
-                i->next()
-                )
-            if ( Type < ElementType > :: compare ( i->value (), e ) ) {
+        for ( auto const & i : * this )
+            if ( Type < ElementType > :: compare ( i, e ) ) {
 
                 __CDS_Collection_OperationalUnlock
                 return true;
@@ -277,14 +635,8 @@ public:
 
         __CDS_Collection_OperationalLock
 
-        for (
-                auto
-                        it = UniquePointer < Collection :: Iterator > ( this->beginPtr() ),
-                        end = UniquePointer < Collection :: Iterator > ( this->endPtr() );
-                ! it->equals( * end );
-                it->next()
-                )
-            action ( it->value() );
+        for ( auto & it : * this )
+            action ( it );
 
         __CDS_Collection_OperationalUnlock
 
@@ -298,14 +650,8 @@ public:
 
         __CDS_Collection_OperationalLock
 
-        for (
-            auto
-                it = UniquePointer < Collection :: ConstIterator > ( this->beginPtr() ),
-                end = UniquePointer < Collection :: ConstIterator > ( this->endPtr() );
-            ! it->equals( * end );
-            it->next()
-        )
-            action ( it->value() );
+        for ( auto const & it : * this )
+            action ( it );
 
         __CDS_Collection_OperationalUnlock
 
@@ -421,14 +767,8 @@ public:
 
         __CDS_Collection_OperationalLock
 
-        for (
-            auto
-                it = UniquePointer < Collection :: Iterator > ( this->beginPtr() ),
-                end = UniquePointer < Collection :: Iterator > ( this->endPtr() );
-            ! it->equals( * end );
-            it->next()
-        )
-            if ( predicate ( it->value() ) )
+        for ( auto & it : * this )
+            if ( predicate ( it ) )
                 trueCount ++;
 
         __CDS_Collection_OperationalUnlock
@@ -446,14 +786,8 @@ public:
 
         __CDS_Collection_OperationalLock
 
-        for (
-            auto
-                it = UniquePointer < Collection :: ConstIterator > ( this->beginPtr() ),
-                end = UniquePointer < Collection :: ConstIterator > ( this->endPtr() );
-            ! it->equals( * end );
-            it->next()
-        )
-            if ( predicate ( it->value() ) )
+        for ( auto const & it : * this )
+            if ( predicate ( it ) )
                 trueCount ++;
 
         __CDS_Collection_OperationalUnlock

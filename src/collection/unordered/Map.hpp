@@ -45,10 +45,20 @@ public:
     using EntryReferenceList        = LinkedList < Reference < Entry > >;
     using EntryConstReferenceList   = LinkedList < EntryConstReference >;
 
-    using CollectionIterator        = typename Collection < Entry > :: Iterator;
-    using ConstCollectionIterator   = typename Collection < Entry > :: ConstIterator;
     using InitializerList           = typename Collection < Entry > :: InitializerList;
 
+public:
+    using Iterator                  = typename Collection < Entry > :: Iterator;
+    using ConstIterator             = typename Collection < Entry > :: ConstIterator;
+
+    using ReverseIterator           = typename Collection < Entry > :: ReverseIterator;
+    using ConstReverseIterator      = typename Collection < Entry > :: ConstReverseIterator;
+
+protected:
+    using DelegateIterator          = typename Collection < Entry > :: DelegateIterator;
+    using DelegateConstIterator     = typename Collection < Entry > :: DelegateConstIterator;
+
+public:
     __CDS_MaybeUnused virtual auto keys () const noexcept -> LinkedList < Reference < const Key > > = 0;
     virtual auto values () noexcept -> LinkedList < Reference < Value > > = 0;
     virtual auto values () const noexcept -> LinkedList < Reference < const Value > > = 0;

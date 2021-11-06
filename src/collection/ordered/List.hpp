@@ -11,12 +11,6 @@
 
 template < typename T >
 class List : public Collection <T> {
-private:
-    auto beginPtr () noexcept -> typename Collection < T > :: Iterator * override = 0;
-    auto endPtr () noexcept -> typename Collection < T > :: Iterator * override = 0;
-    __CDS_MaybeUnused auto beginPtr () const noexcept -> typename Collection < T > :: ConstIterator * override = 0;
-    __CDS_MaybeUnused auto endPtr () const noexcept -> typename Collection < T > :: ConstIterator * override = 0;
-
 public:
     using ElementType   = typename Collection < T > :: ElementType;
 
@@ -32,8 +26,14 @@ protected:
     using ElementCPtr               = typename Collection < T > :: ElementCPtr;
     using InitializerList           = typename Collection < T > :: InitializerList;
 
-    using CollectionIterator        = typename Collection < T > :: Iterator;
-    using ConstCollectionIterator   = typename Collection < T > :: ConstIterator;
+    using Iterator                  = typename Collection < T > :: Iterator;
+    using ConstIterator             = typename Collection < T > :: ConstIterator;
+
+    using ReverseIterator           = typename Collection < T > :: ReverseIterator;
+    using ConstReverseIterator      = typename Collection < T > :: ConstReverseIterator;
+
+    using DelegateIterator          = typename Collection < T > :: DelegateIterator;
+    using DelegateConstIterator     = typename Collection < T > :: DelegateConstIterator;
 
 public:
     virtual auto index ( ElementCRef ) const noexcept -> Index = 0;
@@ -74,7 +74,7 @@ public:
         return this->get( index );
     }
 
-    virtual auto remove ( CollectionIterator const & ) noexcept (false) -> ElementType = 0;
+    virtual auto remove ( Iterator const & ) noexcept (false) -> ElementType = 0;
 
     __CDS_MaybeUnused virtual auto popFront ( ) noexcept (false) -> ElementType = 0;
     __CDS_MaybeUnused virtual auto popBack ( ) noexcept (false) -> ElementType = 0;
@@ -158,16 +158,10 @@ public:
 
         Size replaceCount = 0;
 
-        for (
-            auto
-                it = UniquePointer < CollectionIterator > ( this->beginPtr() ),
-                end = UniquePointer < CollectionIterator > ( this->endPtr() );
-            * it != * end;
-            it->next()
-        )
+        for ( auto & e : * this )
             if ( replaceCount < count ) {
-                if ( Type < T > :: compare ( it->value(), what ) ) {
-                    it->value() = with;
+                if ( Type < T > :: compare ( e, what ) ) {
+                    e = with;
                     ++ replaceCount;
                 }
             } else
@@ -182,15 +176,9 @@ public:
             ElementCRef with
     ) noexcept -> bool {
 
-        for (
-            auto
-                it = UniquePointer < CollectionIterator > ( this->beginPtr() ),
-                end = UniquePointer < CollectionIterator > ( this->endPtr() );
-            * it != * end;
-            it->next()
-        )
-            if ( Type < T > :: compare ( it->value(), what ) ) {
-                it->value() = with;
+        for ( auto & e : * this )
+            if ( Type < T > :: compare ( e, what ) ) {
+                e = with;
                 return true;
             }
 
@@ -203,15 +191,9 @@ public:
             ElementMRef with
     ) noexcept -> bool {
 
-        for (
-            auto
-                it = UniquePointer < CollectionIterator > ( this->beginPtr() ),
-                end = UniquePointer < CollectionIterator > ( this->endPtr() );
-            * it != * end;
-            it->next()
-        )
-            if ( Type < T > :: compare ( it->value(), what ) ) {
-                it->value() = std :: forward < ElementType > ( with );
+        for ( auto & e : * this )
+            if ( Type < T > :: compare ( e, what ) ) {
+                e = std :: forward < ElementType > ( with );
                 return true;
             }
 
@@ -226,15 +208,9 @@ public:
 
         Size replacedCount = 0;
 
-        for (
-            auto
-                it = UniquePointer < CollectionIterator > ( this->beginPtr() ),
-                end = UniquePointer < CollectionIterator > ( this->endPtr() );
-            * it != * end;
-            it->next()
-        )
-            if ( Type < T > :: compare ( it->value(), what ) ) {
-                it->value() = with;
+        for ( auto & e : * this )
+            if ( Type < T > :: compare ( e, what ) ) {
+                e = with;
                 ++ replacedCount;
             }
 
@@ -247,20 +223,14 @@ public:
             ElementCRef with
     ) noexcept -> bool {
 
-        UniquePointer < CollectionIterator > lastEncountered;
+        ForeignPointer < ElementType > lastEncountered;
 
-        for (
-            auto
-                it = UniquePointer < CollectionIterator > ( this->beginPtr() ),
-                end = UniquePointer < CollectionIterator > ( this->endPtr() );
-            * it != * end;
-            it->next()
-        )
-            if ( Type < T > :: compare ( it->value(), what ) )
-                lastEncountered.reset(it->copy());
+        for ( auto & e : * this )
+            if ( Type < T > :: compare ( e, what ) )
+                lastEncountered = & e;
 
         if ( ! lastEncountered.isNull() )
-            lastEncountered->value() = with;
+            * lastEncountered = with;
 
         return ! lastEncountered.isNull();
     }
@@ -271,20 +241,14 @@ public:
             ElementMRef with
     ) noexcept -> bool {
 
-        UniquePointer < CollectionIterator > lastEncountered;
+        ForeignPointer < ElementType > lastEncountered;
 
-        for (
-            auto
-                it = UniquePointer < CollectionIterator > ( this->beginPtr() ),
-                end = UniquePointer < CollectionIterator > ( this->endPtr() );
-            * it != * end;
-            it->next()
-        )
-            if ( Type < T > :: compare ( it->value(), what ) )
-                lastEncountered.reset(it->copy());
+        for ( auto & e : * this )
+            if ( Type < T > :: compare ( e, what ) )
+                lastEncountered = & e;
 
         if ( ! lastEncountered.isNull() )
-            lastEncountered->value() = std :: forward < ElementType > ( with );
+            * lastEncountered = std :: forward < ElementType > ( with );
 
         return ! lastEncountered.isNull();
     }
@@ -297,16 +261,10 @@ public:
     ) noexcept -> Size {
 
         Size replacedCount = 0;
-        for (
-            auto
-                it = UniquePointer < CollectionIterator > ( this->beginPtr() ),
-                end = UniquePointer < CollectionIterator > ( this->endPtr() );
-            * it != * end;
-            it->next()
-        )
+        for ( auto & e : * this )
             if ( replacedCount < count ) {
-                if ( of.contains( it->value() ) ) {
-                    it->value() = with;
+                if ( of.contains( e ) ) {
+                    e = with;
                     ++ replacedCount;
                 }
             } else
@@ -321,15 +279,9 @@ public:
             ElementCRef with
     ) noexcept -> bool {
 
-        for (
-            auto
-                it = UniquePointer < CollectionIterator > ( this->beginPtr() ),
-                end = UniquePointer < CollectionIterator > ( this->endPtr() );
-            * it != * end;
-            it->next()
-        )
-            if ( of.contains( it->value() ) ) {
-                it->value() = with;
+        for ( auto & e : * this )
+            if ( of.contains( e ) ) {
+                e = with;
                 return true;
             }
 
@@ -342,15 +294,9 @@ public:
             ElementMRef with
     ) noexcept -> bool {
 
-        for (
-            auto
-                it = UniquePointer < CollectionIterator > ( this->beginPtr() ),
-                end = UniquePointer < CollectionIterator > ( this->endPtr() );
-            * it != * end;
-            it->next()
-        )
-            if ( of.contains( it->value() ) ) {
-                it->value() = std :: forward < ElementType > ( with );
+        for ( auto & e : * this )
+            if ( of.contains( e ) ) {
+                e = std :: forward < ElementType > ( with );
                 return true;
             }
 
@@ -365,15 +311,9 @@ public:
 
         Size replacedCount = 0;
 
-        for (
-            auto
-                it = UniquePointer < CollectionIterator > ( this->beginPtr() ),
-                end = UniquePointer < CollectionIterator > ( this->endPtr() );
-            * it != * end;
-            it->next()
-        )
-            if ( of.contains( it->value() ) ) {
-                it->value() = with;
+        for ( auto & e : * this )
+            if ( of.contains( e ) ) {
+                e = with;
                 ++ replacedCount;
             }
 
@@ -386,20 +326,14 @@ public:
             ElementCRef with
     ) noexcept -> bool {
 
-        UniquePointer < CollectionIterator > lastOccurred;
+        ForeignPointer < ElementType > lastOccurred;
 
-        for (
-            auto
-                it = UniquePointer < CollectionIterator > ( this->beginPtr() ),
-                end = UniquePointer < CollectionIterator > ( this->endPtr() );
-            * it != * end;
-            it->next()
-        )
-            if ( of.contains( it->value() ) )
-                lastOccurred.reset(it->copy());
+        for ( auto & e : * this )
+            if ( of.contains( e ) )
+                lastOccurred = & e ;
 
         if ( ! lastOccurred.isNull() )
-            lastOccurred->value() = with;
+            * lastOccurred = with;
 
         return ! lastOccurred.isNull();
     }
@@ -410,20 +344,14 @@ public:
             ElementMRef with
     ) noexcept -> bool {
 
-        UniquePointer < CollectionIterator > lastOccurred;
+        ForeignPointer < Iterator > lastOccurred;
 
-        for (
-            auto
-                it = UniquePointer < CollectionIterator > ( this->beginPtr() ),
-                end = UniquePointer < CollectionIterator > ( this->endPtr() );
-            * it != * end;
-            it->next()
-        )
-            if ( of.contains( it->value() ) )
-                lastOccurred.reset(it->copy());
+        for ( auto & e : * this )
+            if ( of.contains( e ) )
+                lastOccurred = & e;
 
         if ( ! lastOccurred.isNull() )
-            lastOccurred->value() = std :: forward < ElementType > ( with );
+            * lastOccurred = std :: forward < ElementType > ( with );
 
         return ! lastOccurred.isNull();
     }
@@ -437,16 +365,10 @@ public:
 
         Size replacedCount = 0;
 
-        for (
-            auto
-                it = UniquePointer < CollectionIterator > ( this->beginPtr() ),
-                end = UniquePointer < CollectionIterator > ( this->endPtr() );
-            * it != * end;
-            it->next()
-        )
+        for ( auto & e : * this )
             if ( replacedCount < count ) {
-                if ( ! of.contains( it->value() ) ) {
-                    it->value() = with;
+                if ( ! of.contains( e ) ) {
+                    e = with;
                     ++ replacedCount;
                 }
             } else
@@ -461,15 +383,9 @@ public:
             ElementCRef with
     ) noexcept -> bool {
 
-        for (
-            auto
-                it = UniquePointer < CollectionIterator > ( this->beginPtr() ),
-                end = UniquePointer < CollectionIterator > ( this->endPtr() );
-            * it != * end;
-            it->next()
-        )
-            if ( ! of.contains( it->value() ) ) {
-                it->value() = with;
+        for ( auto & e : * this )
+            if ( ! of.contains( e ) ) {
+                e = with;
                 return true;
             }
 
@@ -482,15 +398,9 @@ public:
             ElementMRef with
     ) noexcept -> bool {
 
-        for (
-            auto
-                it = UniquePointer < CollectionIterator > ( this->beginPtr() ),
-                end = UniquePointer < CollectionIterator > ( this->endPtr() );
-            * it != * end;
-            it->next()
-        )
-            if ( ! of.contains( it->value() ) ) {
-                it->value() = std :: forward < ElementType > ( with );
+        for ( auto & e : * this )
+            if ( ! of.contains( e ) ) {
+                e = std :: forward < ElementType > ( with );
                 return true;
             }
 
@@ -505,15 +415,9 @@ public:
 
         Size replacedCount = 0;
 
-        for (
-            auto
-                it = UniquePointer < CollectionIterator > ( this->beginPtr() ),
-                end = UniquePointer < CollectionIterator > ( this->endPtr() );
-            * it != * end;
-            it->next()
-        )
-            if ( ! of.contains( it->value() ) ) {
-                it->value() = with;
+        for ( auto & e : * this )
+            if ( ! of.contains( e ) ) {
+                e = with;
                 ++ replacedCount;
             }
 
@@ -526,20 +430,14 @@ public:
             ElementCRef with
     ) noexcept -> bool {
 
-        UniquePointer < CollectionIterator > lastOccurred;
+        ForeignPointer < ElementType > lastOccurred;
 
-        for (
-            auto
-                it = UniquePointer < CollectionIterator > ( this->beginPtr() ),
-                end = UniquePointer < CollectionIterator > ( this->endPtr() );
-            * it != * end;
-            it->next()
-        )
-            if ( ! of.contains( it->value() ) )
-                lastOccurred.reset(it->copy());
+        for ( auto & e : * this )
+            if ( ! of.contains( e ) )
+                lastOccurred = & e;
 
         if ( ! lastOccurred.isNull() )
-            lastOccurred->value() = with;
+            * lastOccurred = with;
 
         return ! lastOccurred.isNull();
     }
@@ -550,20 +448,14 @@ public:
             ElementMRef with
     ) noexcept -> bool {
 
-        UniquePointer < CollectionIterator > lastOccurred;
+        ForeignPointer < ElementType > lastOccurred;
 
-        for (
-            auto
-                it = UniquePointer < CollectionIterator > ( this->beginPtr() ),
-                end = UniquePointer < CollectionIterator > ( this->endPtr() );
-            * it != * end;
-            it->next()
-        )
-            if ( ! of.contains( it->value() ) )
-                lastOccurred.reset(it->copy());
+        for ( auto & e : * this )
+            if ( ! of.contains( e ) )
+                lastOccurred = & e;
 
         if ( ! lastOccurred.isNull() )
-            lastOccurred->value() = std :: forward < ElementType > ( with );
+            * lastOccurred = std :: forward < ElementType > ( with );
 
         return ! lastOccurred.isNull();
     }
@@ -577,16 +469,10 @@ public:
 
         Size replacedCount = 0;
 
-        for (
-            auto
-                it = UniquePointer < CollectionIterator > ( this->beginPtr() ),
-                end = UniquePointer < CollectionIterator > ( this->endPtr() );
-            * it != * end;
-            it->next()
-        )
+        for ( auto & e : * this )
             if ( replacedCount < count ) {
-                if ( Collection < T > :: iListContains ( of, it->value() ) ) {
-                    it->value() = with;
+                if ( Collection < T > :: iListContains ( of, e ) ) {
+                    e = with;
                     ++ replacedCount;
                 }
             } else
@@ -601,15 +487,9 @@ public:
             ElementCRef with
     ) noexcept -> bool {
 
-        for (
-            auto
-                it = UniquePointer < CollectionIterator > ( this->beginPtr() ),
-                end = UniquePointer < CollectionIterator > ( this->endPtr() );
-            * it != * end;
-            it->next()
-        )
-            if ( Collection < T > :: iListContains ( of, it->value() ) ) {
-                it->value() = with;
+        for ( auto & e : * this )
+            if ( Collection < T > :: iListContains ( of, e ) ) {
+                e = with;
                 return true;
             }
 
@@ -622,15 +502,9 @@ public:
             ElementMRef with
     ) noexcept -> bool {
 
-        for (
-            auto
-                it = UniquePointer < CollectionIterator > ( this->beginPtr() ),
-                end = UniquePointer < CollectionIterator > ( this->endPtr() );
-            * it != * end;
-            it->next()
-        )
-            if ( Collection < T > :: iListContains ( of, it->value() ) ) {
-                it->value() = std :: forward < ElementType > ( with );
+        for ( auto & e : * this )
+            if ( Collection < T > :: iListContains ( of, e ) ) {
+                e = std :: forward < ElementType > ( with );
                 return true;
             }
 
@@ -645,15 +519,9 @@ public:
 
         Size replacedCount = 0;
 
-        for (
-            auto
-                it = UniquePointer < CollectionIterator > ( this->beginPtr() ),
-                end = UniquePointer < CollectionIterator > ( this->endPtr() );
-            * it != * end;
-            it->next()
-        )
-            if ( Collection < T > :: iListContains ( of, it->value() ) ) {
-                it->value() = with;
+        for ( auto & e : * this )
+            if ( Collection < T > :: iListContains ( of, e ) ) {
+                e = with;
                 ++ replacedCount;
             }
 
@@ -666,20 +534,14 @@ public:
             ElementCRef with
     ) noexcept -> bool {
 
-        UniquePointer < CollectionIterator > lastOccurred;
+        ForeignPointer < ElementType > lastOccurred;
 
-        for (
-            auto
-                it = UniquePointer < CollectionIterator > ( this->beginPtr() ),
-                end = UniquePointer < CollectionIterator > ( this->endPtr() );
-            * it != * end;
-            it->next()
-        )
-            if ( Collection < T > ::iListContains( of, it->value() ) )
-                lastOccurred.reset(it->copy());
+        for ( auto & e : * this )
+            if ( Collection < T > ::iListContains( of, e ) )
+                lastOccurred = & e;
 
         if ( ! lastOccurred.isNull() )
-            lastOccurred->value() = with;
+            * lastOccurred = with;
 
         return ! lastOccurred.isNull();
     }
@@ -690,20 +552,14 @@ public:
             ElementMRef with
     ) noexcept -> bool {
 
-        UniquePointer < CollectionIterator > lastOccurred;
+        ForeignPointer < ElementType > lastOccurred;
 
-        for (
-            auto
-                it = UniquePointer < CollectionIterator > ( this->beginPtr() ),
-                end = UniquePointer < CollectionIterator > ( this->endPtr() );
-            * it != * end;
-            it->next()
-        )
-            if ( Collection < T > ::iListContains( of, it->value() ) )
-                lastOccurred.reset(it->copy());
+        for ( auto & e : * this )
+            if ( Collection < T > ::iListContains( of, e ) )
+                lastOccurred = & e;
 
         if ( ! lastOccurred.isNull() )
-            lastOccurred->value() = std :: forward < ElementType > ( with );
+            * lastOccurred = std :: forward < ElementType > ( with );
 
         return ! lastOccurred.isNull();
     }
@@ -717,16 +573,10 @@ public:
 
         Size replacedCount = 0;
 
-        for (
-            auto
-                it = UniquePointer < CollectionIterator > ( this->beginPtr() ),
-                end = UniquePointer < CollectionIterator > ( this->endPtr() );
-            * it != * end;
-            it->next()
-        )
+        for ( auto & e : * this )
             if ( replacedCount < count ) {
-                if ( ! Collection < T > :: iListContains ( of, it->value() ) ) {
-                    it->value() = with;
+                if ( ! Collection < T > :: iListContains ( of, e ) ) {
+                    e = with;
                     ++ replacedCount;
                 }
             } else
@@ -741,15 +591,9 @@ public:
             ElementCRef with
     ) noexcept -> bool {
 
-        for (
-            auto
-                it = UniquePointer < CollectionIterator > ( this->beginPtr() ),
-                end = UniquePointer < CollectionIterator > ( this->endPtr() );
-            * it != * end;
-            it->next()
-        )
-            if ( ! Collection < T > :: iListContains ( of, it->value() ) ) {
-                it->value() = with;
+        for ( auto & e : * this )
+            if ( ! Collection < T > :: iListContains ( of, e ) ) {
+                e = with;
                 return true;
             }
 
@@ -762,15 +606,9 @@ public:
             ElementMRef with
     ) noexcept -> bool {
 
-        for (
-            auto
-                it = UniquePointer < CollectionIterator > ( this->beginPtr() ),
-                end = UniquePointer < CollectionIterator > ( this->endPtr() );
-            * it != * end;
-            it->next()
-        )
-            if ( ! Collection < T > :: iListContains ( of, it->value() ) ) {
-                it->value() = std :: forward < ElementType > ( with );
+        for ( auto & e : * this )
+            if ( ! Collection < T > :: iListContains ( of, e ) ) {
+                e = std :: forward < ElementType > ( with );
                 return true;
             }
 
@@ -785,15 +623,9 @@ public:
 
         Size replacedCount = 0;
 
-        for (
-            auto
-                it = UniquePointer < CollectionIterator > ( this->beginPtr() ),
-                end = UniquePointer < CollectionIterator > ( this->endPtr() );
-            * it != * end;
-            it->next()
-        )
-            if ( ! Collection < T > :: iListContains ( of, it->value() ) ) {
-                it->value() = with;
+        for ( auto & e : * this )
+            if ( ! Collection < T > :: iListContains ( of, e ) ) {
+                e = with;
                 ++ replacedCount;
             }
 
@@ -806,20 +638,14 @@ public:
             ElementCRef with
     ) noexcept -> bool {
 
-        UniquePointer < CollectionIterator > lastOccurred;
+        ForeignPointer < ElementType > lastOccurred;
 
-        for (
-            auto
-                it = UniquePointer < CollectionIterator > ( this->beginPtr() ),
-                end = UniquePointer < CollectionIterator > ( this->endPtr() );
-            * it != * end;
-            it->next()
-        )
-            if ( ! Collection < T > ::iListContains( of, it->value() ) )
-                lastOccurred.reset(it->copy());
+        for ( auto & e : * this )
+            if ( ! Collection < T > ::iListContains( of, e ) )
+                lastOccurred = & e;
 
         if ( ! lastOccurred.isNull() )
-            lastOccurred->value() = with;
+            * lastOccurred = with;
 
         return ! lastOccurred.isNull();
     }
@@ -830,27 +656,21 @@ public:
             ElementMRef with
     ) noexcept -> bool {
 
-        UniquePointer < CollectionIterator > lastOccurred;
+        ForeignPointer < ElementType > lastOccurred;
 
-        for (
-            auto
-                it = UniquePointer < CollectionIterator > ( this->beginPtr() ),
-                end = UniquePointer < CollectionIterator > ( this->endPtr() );
-            * it != * end;
-            it->next()
-        )
-            if ( ! Collection < T > ::iListContains( of, it->value() ) )
-                lastOccurred.reset(it->copy());
+        for ( auto & e : * this )
+            if ( ! Collection < T > ::iListContains( of, e ) )
+                lastOccurred = & e;
 
         if ( ! lastOccurred.isNull() )
-            lastOccurred->value() = std :: forward < ElementType > ( with );
+            * lastOccurred = std :: forward < ElementType > ( with );
 
         return ! lastOccurred.isNull();
     }
 
     template < typename V = T, EnableIf < Type < V > :: copyAssignable > = 0 >
     __CDS_MaybeUnused __CDS_OptimalInline auto replace (
-            CollectionIterator const & iterator,
+            Iterator const & iterator,
             ElementCRef value
     ) noexcept -> bool {
 
@@ -864,7 +684,7 @@ public:
 
     template < typename V = T, EnableIf < Type < V > :: moveAssignable > = 0 >
     __CDS_MaybeUnused __CDS_OptimalInline auto replace (
-            CollectionIterator const & iterator,
+            Iterator const & iterator,
             ElementMRef value
     ) noexcept -> bool {
 

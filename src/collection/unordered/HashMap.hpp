@@ -35,348 +35,325 @@ public:
     using EntryReferenceList      __CDS_MaybeUnused = typename Map<K, V>::EntryReferenceList;
     using EntryConstReferenceList __CDS_MaybeUnused = typename Map<K, V>::EntryConstReferenceList;
 
-    using CollectionIterator                        = typename Map<K, V>::CollectionIterator;
-    using ConstCollectionIterator                   = typename Map<K, V>::ConstCollectionIterator;
     using InitializerList                           = typename Map<K, V>::InitializerList;
+
+    using Iterator                                  = typename Map<K, V>::Iterator;
+    using ConstIterator                             = typename Map<K, V>::ConstIterator;
+    using ReverseIterator                           = typename Map<K, V>::ReverseIterator;
+    using ConstReverseIterator                      = typename Map<K, V>::ConstReverseIterator;
+
+    using DelegateIterator                          = typename Map<K, V>::DelegateIterator;
+    using DelegateConstIterator                     = typename Map<K, V>::DelegateConstIterator;
 
 private:
     using HashBucket                                = LinkedList < Entry >;
-    using BucketIterator                            = typename HashBucket::Iterator;
-    using BucketConstIterator                       = typename HashBucket::ConstIterator;
-    using BucketReverseIterator                     = typename HashBucket::ReverseIterator;
-    using BucketConstReverseIterator                = typename HashBucket::ConstReverseIterator;
+
 
     HashBucket * pBuckets {nullptr};
+
+    class HashMapDelegateForwardIterator : public DelegateIterator {
+    private:
+        ForeignPointer < HashMap >      _pMap;
+        Index                           _bucketIndex;
+        typename HashBucket :: Iterator _bucketIterator;
+
+        auto skipEmptyBuckets () noexcept -> void {
+            while (
+                    this->_bucketIndex < this->_pMap->hashCalculator.getBoundary() &&
+                    this->_pMap->pBuckets[ this->_bucketIndex ].empty ()
+            )
+                ++ this->_bucketIndex;
+
+            if ( this->_bucketIndex < this->_pMap->hashCalculator.getBoundary() )
+                this->_bucketIterator = this->_pMap->pBuckets[ this->_bucketIndex ].begin();
+            else
+                this->_bucketIterator = this->_pMap->pBuckets[ this->_pMap->hashCalculator.getBoundary() - 1 ].end();
+        }
+
+    public:
+        explicit HashMapDelegateForwardIterator ( HashMap * pMap, bool begin ) noexcept :
+                DelegateIterator (),
+                _pMap ( pMap ),
+                _bucketIndex (begin ? 0 : this->_pMap->hashCalculator.getBoundary()) {
+
+            this->skipEmptyBuckets();
+        }
+
+        HashMapDelegateForwardIterator ( HashMapDelegateForwardIterator const & ) noexcept = default;
+        HashMapDelegateForwardIterator ( HashMapDelegateForwardIterator && ) noexcept = default;
+
+        ~HashMapDelegateForwardIterator () noexcept override = default;
+
+        auto next () noexcept -> HashMapDelegateForwardIterator & override {
+            if ( this->_bucketIndex >= this->_pMap->hashCalculator.getBoundary() )
+                return * this;
+
+            ++ this->_bucketIterator;
+
+            if ( this->_bucketIterator == this->_pMap->pBuckets[ this->_bucketIndex ].end() ) {
+                ++ this->_bucketIndex;
+                this->skipEmptyBuckets();
+            }
+
+            return * this;
+        }
+
+        auto value () const noexcept -> EntryReference override {
+            return * this->_bucketIterator;
+        }
+
+        auto equals ( DelegateIterator const & it ) const noexcept -> bool override {
+            if ( this == & it ) return true;
+            auto p = dynamic_cast < decltype ( this ) > ( & it );
+            if ( p == nullptr ) return false;
+
+            return
+                    this->_pMap == p->_pMap &&
+                    this->_bucketIndex == p->_bucketIndex &&
+                    this->_bucketIterator == p->_bucketIterator;
+        }
+
+        auto copy () const noexcept -> HashMapDelegateForwardIterator * override {
+            return Memory :: instance ().create < HashMapDelegateForwardIterator > ( * this );
+        }
+    };
+
+    class HashMapDelegateForwardConstIterator : public DelegateConstIterator {
+    private:
+        ForeignPointer < HashMap const >        _pMap;
+        Index                                   _bucketIndex;
+        typename HashBucket :: ConstIterator    _bucketIterator;
+
+        auto skipEmptyBuckets () noexcept -> void {
+            while (
+                    this->_bucketIndex < this->_pMap->hashCalculator.getBoundary() &&
+                    this->_pMap->pBuckets[ this->_bucketIndex ].empty ()
+            )
+                ++ this->_bucketIndex;
+
+            if ( this->_bucketIndex < this->_pMap->hashCalculator.getBoundary() )
+                this->_bucketIterator = this->_pMap->pBuckets[ this->_bucketIndex ].cbegin();
+            else
+                this->_bucketIterator = this->_pMap->pBuckets[ this->_pMap->hashCalculator.getBoundary() - 1 ].cend();
+        }
+
+    public:
+        explicit HashMapDelegateForwardConstIterator ( HashMap const * pMap, bool begin ) noexcept :
+                DelegateConstIterator (),
+                _pMap ( pMap ),
+                _bucketIndex (begin ? 0 : this->_pMap->hashCalculator.getBoundary()) {
+
+            this->skipEmptyBuckets();
+        }
+
+        HashMapDelegateForwardConstIterator ( HashMapDelegateForwardConstIterator const & ) noexcept = default;
+        HashMapDelegateForwardConstIterator ( HashMapDelegateForwardConstIterator && ) noexcept = default;
+
+        ~HashMapDelegateForwardConstIterator () noexcept override = default;
+
+        auto next () noexcept -> HashMapDelegateForwardConstIterator & override {
+            if ( this->_bucketIndex >= this->_pMap->hashCalculator.getBoundary() )
+                return * this;
+
+            ++ this->_bucketIterator;
+
+            if ( this->_bucketIterator == this->_pMap->pBuckets[ this->_bucketIndex ].cend() ) {
+                ++ this->_bucketIndex;
+                this->skipEmptyBuckets();
+            }
+
+            return * this;
+        }
+
+        auto value () const noexcept -> EntryConstReference override {
+            return * this->_bucketIterator;
+        }
+
+        auto equals ( DelegateConstIterator const & it ) const noexcept -> bool override {
+            if ( this == & it ) return true;
+            auto p = dynamic_cast < decltype ( this ) > ( & it );
+            if ( p == nullptr ) return false;
+
+            return
+                    this->_pMap == p->_pMap &&
+                    this->_bucketIndex == p->_bucketIndex &&
+                    this->_bucketIterator == p->_bucketIterator;
+        }
+
+        auto copy () const noexcept -> HashMapDelegateForwardConstIterator * override {
+            return Memory :: instance ().create < HashMapDelegateForwardConstIterator > ( * this );
+        }
+    };
+
+    class HashMapDelegateBackwardIterator : public DelegateIterator {
+    private:
+        ForeignPointer < HashMap >              _pMap;
+        Index                                   _bucketIndex;
+        typename HashBucket :: ReverseIterator  _bucketIterator;
+
+        auto skipEmptyBuckets () noexcept -> void {
+            while (
+                    this->_bucketIndex > -1 &&
+                    this->_pMap->pBuckets[ this->_bucketIndex ].empty ()
+            )
+                -- this->_bucketIndex;
+
+            if ( this->_bucketIndex > - 1 )
+                this->_bucketIterator = this->_pMap->pBuckets[ this->_bucketIndex ].rbegin();
+            else
+                this->_bucketIterator = this->_pMap->pBuckets[ 0 ].rend();
+        }
+
+    public:
+        explicit HashMapDelegateBackwardIterator ( HashMap * pMap, bool begin ) noexcept :
+                DelegateIterator (),
+                _pMap ( pMap ),
+                _bucketIndex ( begin ? this->_pMap->hashCalculator.getBoundary() - 1 : -1 ) {
+
+            this->skipEmptyBuckets();
+        }
+
+        HashMapDelegateBackwardIterator ( HashMapDelegateBackwardIterator const & ) noexcept = default;
+        HashMapDelegateBackwardIterator ( HashMapDelegateBackwardIterator && ) noexcept = default;
+
+        ~HashMapDelegateBackwardIterator () noexcept override = default;
+
+        auto next () noexcept -> HashMapDelegateBackwardIterator & override {
+            if ( this->_bucketIndex < 0 )
+                return * this;
+
+            ++ this->_bucketIterator;
+
+            if ( this->_bucketIterator == this->_pMap->pBuckets[ this->_bucketIndex ].rend() ) {
+                -- this->_bucketIndex;
+                this->skipEmptyBuckets();
+            }
+
+            return * this;
+        }
+
+        auto value () const noexcept -> EntryReference override {
+            return * this->_bucketIterator;
+        }
+
+        auto equals ( DelegateIterator const & it ) const noexcept -> bool override {
+            if ( this == & it ) return true;
+            auto p = dynamic_cast < decltype ( this ) > ( & it );
+            if ( p == nullptr ) return false;
+
+            return
+                    this->_pMap == p->_pMap &&
+                    this->_bucketIndex == p->_bucketIndex &&
+                    this->_bucketIterator == p->_bucketIterator;
+        }
+
+        auto copy () const noexcept -> HashMapDelegateBackwardIterator * override {
+            return Memory :: instance ().create < HashMapDelegateBackwardIterator > ( * this );
+        }
+    };
+
+    class HashMapDelegateBackwardConstIterator : public DelegateConstIterator {
+    private:
+        ForeignPointer < HashMap const >            _pMap;
+        Index                                       _bucketIndex;
+        typename HashBucket :: ConstReverseIterator _bucketIterator;
+
+        auto skipEmptyBuckets () noexcept -> void {
+            while (
+                    this->_bucketIndex > -1 &&
+                    this->_pMap->pBuckets[ this->_bucketIndex ].empty ()
+            )
+                -- this->_bucketIndex;
+
+            if ( this->_bucketIndex > - 1 )
+                this->_bucketIterator = this->_pMap->pBuckets[ this->_bucketIndex ].crbegin();
+            else
+                this->_bucketIterator = this->_pMap->pBuckets[ 0 ].crend();
+        }
+
+    public:
+        explicit HashMapDelegateBackwardConstIterator ( HashMap const * pMap, bool begin ) noexcept :
+                DelegateConstIterator (),
+                _pMap ( pMap ),
+                _bucketIndex ( begin ? this->_pMap->hashCalculator.getBoundary() - 1 : -1 ) {
+
+            this->skipEmptyBuckets();
+        }
+
+        HashMapDelegateBackwardConstIterator ( HashMapDelegateBackwardConstIterator const & ) noexcept = default;
+        HashMapDelegateBackwardConstIterator ( HashMapDelegateBackwardConstIterator && ) noexcept = default;
+
+        ~HashMapDelegateBackwardConstIterator () noexcept override = default;
+
+        auto next () noexcept -> HashMapDelegateBackwardConstIterator & override {
+            if ( this->_bucketIndex < 0 )
+                return * this;
+
+            ++ this->_bucketIterator;
+
+            if ( this->_bucketIterator == this->_pMap->pBuckets[ this->_bucketIndex ].crend() ) {
+                -- this->_bucketIndex;
+                this->skipEmptyBuckets();
+            }
+
+            return * this;
+        }
+
+        auto value () const noexcept -> EntryConstReference override {
+            return * this->_bucketIterator;
+        }
+
+        auto equals ( DelegateConstIterator const & it ) const noexcept -> bool override {
+            if ( this == & it ) return true;
+            auto p = dynamic_cast < decltype ( this ) > ( & it );
+            if ( p == nullptr ) return false;
+
+            return
+                    this->_pMap == p->_pMap &&
+                    this->_bucketIndex == p->_bucketIndex &&
+                    this->_bucketIterator == p->_bucketIterator;
+        }
+
+        auto copy () const noexcept -> HashMapDelegateBackwardConstIterator * override {
+            return Memory :: instance ().create < HashMapDelegateBackwardConstIterator > ( * this );
+        }
+    };
+
+    using DelegateIteratorRequestType = typename Collection < Entry > :: DelegateIteratorRequestType;
+
+    auto delegateIterator ( DelegateIteratorRequestType requestType ) noexcept -> UniquePointer < DelegateIterator > override {
+        switch ( requestType ) {
+            case DelegateIteratorRequestType :: FORWARD_BEGIN:
+                return Memory :: instance () . create < HashMapDelegateForwardIterator > ( this, true );
+            case DelegateIteratorRequestType :: FORWARD_END:
+                return Memory :: instance () . create < HashMapDelegateForwardIterator > ( this, false );
+            case DelegateIteratorRequestType :: BACKWARD_BEGIN:
+                return Memory :: instance () . create < HashMapDelegateBackwardIterator > ( this, true );
+            case DelegateIteratorRequestType :: BACKWARD_END:
+                return Memory :: instance () . create < HashMapDelegateBackwardIterator > ( this, false );
+        }
+    }
+
+    auto delegateConstIterator ( DelegateIteratorRequestType requestType ) const noexcept -> UniquePointer < DelegateConstIterator > override {
+        switch ( requestType ) {
+            case DelegateIteratorRequestType :: FORWARD_BEGIN:
+                return Memory :: instance () . create < HashMapDelegateForwardConstIterator > ( this, true );
+            case DelegateIteratorRequestType :: FORWARD_END:
+                return Memory :: instance () . create < HashMapDelegateForwardConstIterator > ( this, false );
+            case DelegateIteratorRequestType :: BACKWARD_BEGIN:
+                return Memory :: instance () . create < HashMapDelegateBackwardConstIterator > ( this, true );
+            case DelegateIteratorRequestType :: BACKWARD_END:
+                return Memory :: instance () . create < HashMapDelegateBackwardConstIterator > ( this, false );
+        }
+    }
+
 public:
-    class IteratorBase : public CollectionIterator {
-    protected:
-        HashMap < K, V, H > * pMap {nullptr};
-        Index bucketIndex {0};
-        HashBucket * pBuckets { nullptr };
-
-        constexpr IteratorBase() noexcept = default;
-        constexpr IteratorBase(IteratorBase const &) noexcept = default;
-        constexpr IteratorBase(IteratorBase &&) noexcept = default;
-
-        constexpr explicit IteratorBase( HashBucket * pB, Index i, HashMap < K, V, H > * pMap ) noexcept :
-                CollectionIterator (pMap),
-                pBuckets(pB),
-                bucketIndex ( i ),
-                pMap(pMap) {
-
-        }
-
-        __CDS_cpplang_ConstexprDestructor ~IteratorBase() noexcept override = default;
-
-        __CDS_OptionalInline auto nextBucket () noexcept -> IteratorBase & {
-            if ( isOutOfRange() )
-                return * this;
-            this->bucketIndex ++;
-            while ( ! isOutOfRange() && this->pBuckets[this->bucketIndex].empty() )
-                this->bucketIndex++;
-            return * this;
-        }
-
-        __CDS_OptionalInline auto previousBucket () noexcept -> IteratorBase & {
-            if ( isOutOfRange() )
-                return * this;
-            this->bucketIndex --;
-            while ( ! isOutOfRange() && this->pBuckets[this->bucketIndex].empty() )
-                this->bucketIndex --;
-            return * this;
-        }
-
-        __CDS_NoDiscard auto constexpr isOutOfRange () const noexcept -> bool {
-            return bucketIndex < 0 || bucketIndex >= pMap->getHashCalculator().getBoundary();
-        }
-
-        __CDS_NoDiscard __CDS_cpplang_ConstexprPureAbstract auto copy () const noexcept -> IteratorBase * override = 0;
-    };
-
-    class ConstIteratorBase : public ConstCollectionIterator {
-    protected:
-        HashMap < K, V, H > const * pMap {nullptr};
-        Index bucketIndex {0};
-        HashBucket * pBuckets { nullptr };
-
-        constexpr ConstIteratorBase() noexcept = default;
-        constexpr ConstIteratorBase(ConstIteratorBase const &) noexcept = default;
-        constexpr ConstIteratorBase(ConstIteratorBase &&) noexcept = default;
-
-        constexpr explicit ConstIteratorBase( HashBucket * pB, Index i, HashMap < K, V, H > const * pMap ) noexcept :
-                ConstCollectionIterator(pMap),
-                pBuckets(pB),
-                bucketIndex ( i ),
-                pMap(pMap) {
-
-        }
-
-        __CDS_cpplang_ConstexprDestructor ~ConstIteratorBase() noexcept override = default;
-
-        __CDS_OptionalInline auto nextBucket () noexcept -> ConstIteratorBase & {
-            if ( isOutOfRange() )
-                return * this;
-            this->bucketIndex ++;
-            while ( ! this->isOutOfRange() && this->pBuckets[this->bucketIndex].empty() )
-                this->bucketIndex++;
-            return * this;
-        }
-
-        __CDS_OptionalInline auto previousBucket () noexcept -> ConstIteratorBase & {
-            if ( isOutOfRange() )
-                return * this;
-            this->bucketIndex --;
-            while ( ! this->isOutOfRange() && this->pBuckets[this->bucketIndex].empty() )
-                this->bucketIndex--;
-            return * this;
-        }
-
-        __CDS_NoDiscard auto constexpr isOutOfRange () const noexcept -> bool {
-            return bucketIndex < 0 || bucketIndex >= pMap->getHashCalculator().getBoundary();
-        }
-
-        __CDS_NoDiscard __CDS_cpplang_ConstexprPureAbstract auto copy () const noexcept -> ConstIteratorBase * override = 0;
-    };
-
-    class Iterator : public IteratorBase {
-    private:
-        BucketIterator it;
-
-    public:
-        constexpr Iterator() noexcept = delete;
-        constexpr Iterator(Iterator const &) noexcept = default;
-        constexpr Iterator(Iterator &&) noexcept = default;
-
-        constexpr explicit Iterator ( BucketIterator const & iter, HashBucket * pBucket, Index i, HashMap < K, V, H > * pMap ) noexcept :
-                IteratorBase(pBucket, i, pMap),
-                it(iter) {
-
-        }
-
-        __CDS_cpplang_ConstexprDestructor ~Iterator() noexcept = default;
-
-        __CDS_OptionalInline auto next () noexcept -> Iterator & final {
-            if ( this->isOutOfRange() ) return * this;
-            this->it.next();
-            if ( this->pBuckets[this->bucketIndex].end() == it ) {
-                this->nextBucket();
-                if ( this->isOutOfRange() )  {
-                    it = this->pBuckets[this->pMap->getHashCalculator().getBoundary() - 1].end();
-                    this->bucketIndex = this->pMap->getHashCalculator().getBoundary() - 1;
-                }
-                else it = this->pBuckets[this->bucketIndex].begin();
-
-                return * this;
-            }
-            return * this;
-        }
-
-        __CDS_cpplang_DynamicCastConstexpr auto equals ( CollectionIterator const & i ) const noexcept -> bool final {
-            auto p = dynamic_cast < Iterator const * > ( & i );
-            if ( p == nullptr ) return false;
-            
-            return this->bucketIndex == p->bucketIndex && p->it == this->it;
-        }
-
-        __CDS_NoDiscard __CDS_cpplang_ConstexprOverride auto value () const noexcept -> EntryReference final {
-            return this->it.value();
-        }
-
-        __CDS_OptimalInline auto operator ++ () noexcept -> Iterator & final {
-            return this->next();
-        }
-
-        __CDS_OptimalInline auto operator ++ (int) noexcept -> Iterator {
-            auto copy = * this;
-            this->next();
-            return copy;
-        }
-
-        __CDS_NoDiscard __CDS_OptimalInline auto copy () const noexcept -> Iterator * override {
-            return Memory :: instance().create < Iterator > ( * this );
-        }
-    };
-
-    class ConstIterator : public ConstIteratorBase {
-    private:
-        BucketConstIterator it;
-
-    public:
-        constexpr ConstIterator() noexcept = delete;
-        constexpr ConstIterator(ConstIterator const &) noexcept = default;
-        constexpr ConstIterator(ConstIterator &&) noexcept = default;
-
-        constexpr explicit ConstIterator ( BucketConstIterator const & iter, HashBucket * pBucket, Index i, HashMap < K, V, H > const * pMap ) noexcept :
-                ConstIteratorBase(pBucket, i, pMap),
-                it(iter) {
-
-        }
-
-        __CDS_cpplang_ConstexprDestructor ~ConstIterator() noexcept = default;
-
-        __CDS_OptionalInline auto next () noexcept -> ConstIterator & final {
-            if ( this->isOutOfRange() ) return * this;
-            this->it.next();
-            if ( this->pBuckets[this->bucketIndex].cend() == it ) {
-                this->nextBucket();
-                if ( this->isOutOfRange() ) {
-                    it = this->pBuckets[this->pMap->getHashCalculator().getBoundary() - 1].cend();
-                    this->bucketIndex = this->pMap->getHashCalculator().getBoundary() - 1;
-                }
-                else it = this->pBuckets[this->bucketIndex].cbegin();
-
-                return * this;
-            }
-            return * this;
-        }
-
-        __CDS_cpplang_DynamicCastConstexpr auto equals ( ConstCollectionIterator const & i ) const noexcept -> bool final {
-            auto p = dynamic_cast < ConstIterator const * > ( & i );
-            if ( p == nullptr ) return false;
-            return this->bucketIndex == p->bucketIndex && p->it == this->it;
-        }
-
-        __CDS_NoDiscard __CDS_cpplang_ConstexprOverride auto value () const noexcept -> EntryConstReference final {
-            return this->it.value();
-        }
-
-        __CDS_OptimalInline auto operator ++ () noexcept -> ConstIterator & final {
-            return this->next();
-        }
-
-        __CDS_OptimalInline auto operator ++ (int) noexcept -> ConstIterator {
-            auto copy = * this;
-            this->next();
-            return copy;
-        }
-
-        __CDS_NoDiscard __CDS_OptimalInline auto copy () const noexcept -> ConstIterator * override {
-            return Memory :: instance().create < ConstIterator > ( * this );
-        }
-    };
-
-    class ReverseIterator : public IteratorBase {
-    private:
-        BucketReverseIterator it;
-
-    public:
-        constexpr ReverseIterator() noexcept = default;
-        constexpr ReverseIterator(ReverseIterator const &) noexcept = default;
-        constexpr ReverseIterator(ReverseIterator &&) noexcept = default;
-
-        constexpr explicit ReverseIterator ( BucketReverseIterator const & iter, HashBucket * pBucket, Index i, HashMap < K, V, H > * pMap ) noexcept :
-                IteratorBase(pBucket, i, pMap),
-                it(iter) {
-
-        }
-
-        __CDS_cpplang_ConstexprDestructor ~ReverseIterator() noexcept = default;
-
-        __CDS_OptionalInline auto next () noexcept -> ReverseIterator & final {
-            if ( this->isOutOfRange() ) return * this;
-            this->it.next();
-            if ( this->pBuckets[this->bucketIndex].rend() == it ) {
-                this->previousBucket();
-                if ( this->isOutOfRange() ) {
-                    it = this->pBuckets[0].rend();
-                    this->bucketIndex = 0;
-                }
-                else it = this->pBuckets[this->bucketIndex].rbegin();
-
-                return * this;
-            }
-            return * this;
-        }
-
-
-        __CDS_cpplang_DynamicCastConstexpr auto equals ( CollectionIterator const & i ) const noexcept -> bool final {
-            auto p = dynamic_cast < ReverseIterator const * > ( & i );
-            if ( p == nullptr ) return false;
-            return this->bucketIndex == p->bucketIndex && p->it == this->it;
-        }
-
-        __CDS_cpplang_ConstexprOverride auto value () const noexcept -> EntryReference final {
-            return this->it.value();
-        }
-
-        __CDS_OptimalInline auto operator ++ () noexcept -> ReverseIterator & final {
-            return this->next();
-        }
-
-        __CDS_OptimalInline auto operator ++ (int) noexcept -> ReverseIterator {
-            auto copy = * this;
-            this->next();
-            return copy;
-        }
-
-        __CDS_NoDiscard __CDS_OptimalInline auto copy () const noexcept -> ReverseIterator * override {
-            return Memory :: instance().create < ReverseIterator > ( * this );
-        }
-    };
-
-    class ConstReverseIterator : public ConstIteratorBase {
-    private:
-        BucketConstReverseIterator it;
-
-    public:
-        constexpr ConstReverseIterator() noexcept = default;
-        constexpr ConstReverseIterator(ConstReverseIterator const &) noexcept = default;
-        constexpr ConstReverseIterator(ConstReverseIterator &&) noexcept = default;
-
-        constexpr explicit ConstReverseIterator ( BucketConstReverseIterator const & iter, HashBucket * pBucket, Index i, HashMap < K, V, H > const * pMap ) noexcept :
-                ConstIteratorBase(pBucket, i, pMap),
-                it(iter) {
-
-        }
-
-        __CDS_cpplang_ConstexprDestructor ~ConstReverseIterator() noexcept = default;
-
-        __CDS_OptionalInline auto next () noexcept -> ReverseIterator & final {
-            if ( this->isOutOfRange() ) return * this;
-            this->it.next();
-            if ( this->pBuckets[this->bucketIndex].crend() == it ) {
-                this->previousBucket();
-                if ( this->isOutOfRange() ) {
-                    it = this->pBuckets[0].crend();
-                    this->bucketIndex = 0;
-                }
-                else it = this->pBuckets[this->bucketIndex].crbegin();
-
-                return * this;
-            }
-            return * this;
-        }
-
-        __CDS_cpplang_DynamicCastConstexpr auto equals ( ConstCollectionIterator const & i ) const noexcept -> bool final {
-            auto p = dynamic_cast < ConstReverseIterator const * > ( & i );
-            if ( p == nullptr ) return false;
-            return this->bucketIndex == p->bucketIndex && p->it == this->it;
-        }
-
-        __CDS_cpplang_ConstexprOverride auto value () const noexcept -> EntryConstReference final {
-            return this->it.value();
-        }
-
-        __CDS_OptimalInline auto operator ++ () noexcept -> ConstReverseIterator & final {
-            return this->next();
-        }
-        __CDS_OptimalInline auto operator ++ (int) noexcept -> ConstReverseIterator {
-            auto copy = * this;
-            this->next();
-            return copy;
-        }
-
-        __CDS_NoDiscard __CDS_OptimalInline auto copy () const noexcept -> ConstReverseIterator * override {
-            return Memory :: instance().create < ConstReverseIterator > ( * this );
-        }
-    };
-
     auto operator == (HashMap const & o) const noexcept -> bool {
         if ( this == & o ) return true;
         if ( this->size() != o.size() ) return false;
 
         for ( auto b = this->begin(), bOther = o.begin(); b != this->end() && bOther != o.end(); b++, bOther++ )
-            if ( b.value () != bOther.value() )
+            if ( * b != * bOther )
                 return false;
 
         return true;
@@ -423,7 +400,7 @@ public:
             this->insert ( e );
     }
 
-    __CDS_OptionalInline HashMap ( InitializerList list ) noexcept :
+    __CDS_OptionalInline HashMap ( InitializerList list ) noexcept : // NOLINT(google-explicit-constructor)
             pBuckets(Memory :: instance().createArray < HashBucket > (hashCalculator.getBoundary())) {
 
         for ( auto & e : list )
@@ -431,23 +408,23 @@ public:
     }
 
     explicit HashMap (
-            CollectionIterator const & from,
-            CollectionIterator const & to
+            Iterator from,
+            Iterator to
     ) noexcept :
             pBuckets(Memory :: instance().createArray < HashBucket > (hashCalculator.getBoundary())) {
 
-        for ( auto it = UniquePointer < decltype ( & from ) > ( from.copy () ); ! it->equals ( from ); it->next() )
-            this->insert(it->value());
+        for ( auto it = from; it != to; ++ it )
+            this->insert( * it );
     }
 
     explicit HashMap (
-            ConstCollectionIterator const & from,
-            ConstCollectionIterator const & to
+            ConstIterator from,
+            ConstIterator to
     ) noexcept :
             pBuckets(Memory :: instance().createArray < HashBucket > (hashCalculator.getBoundary())) {
 
-        for ( auto it = UniquePointer < decltype ( & from ) > ( from.copy () ); ! it->equals ( from ); it->next() )
-            this->insert(it->value());
+        for ( auto it = from; it != to; ++ it )
+            this->insert( * it );
     }
 
     ~HashMap () noexcept override {
@@ -455,88 +432,88 @@ public:
     }
 
 private:
-    __CDS_OptionalInline auto beginPtr () noexcept -> Iterator * final {
-        Index i = 0;
-        while ( i < hashCalculator.getBoundary() && this->pBuckets[i].empty() )
-            i++;
-        if ( i >= hashCalculator.getBoundary() )
-            return this->endPtr();
-        return Memory::instance().create < Iterator > ( this->pBuckets[i].begin(), this->pBuckets, i, this );
-    }
-
-    __CDS_OptionalInline auto beginPtr () const noexcept -> ConstIterator * final  {
-        Index i = 0;
-        while ( i < hashCalculator.getBoundary() && this->pBuckets[i].empty() )
-            i++;
-        if ( i >= hashCalculator.getBoundary() )
-            return this->endPtr();
-        return Memory::instance().create < ConstIterator > ( this->pBuckets[i].cbegin(), this->pBuckets, i, this );
-    }
-
-    __CDS_OptimalInline auto endPtr () noexcept -> Iterator * final { return Memory :: instance().create < Iterator > ( this->pBuckets[hashCalculator.getBoundary() - 1].end(), this->pBuckets, hashCalculator.getBoundary() - 1, this ); }
-    __CDS_OptimalInline auto endPtr () const noexcept -> ConstIterator * final { return Memory :: instance().create < ConstIterator > (this->pBuckets[hashCalculator.getBoundary() - 1].cend(), this->pBuckets, hashCalculator.getBoundary() - 1, this ); }
+//    __CDS_OptionalInline auto beginPtr () noexcept -> Iterator * final {
+//        Index i = 0;
+//        while ( i < hashCalculator.getBoundary() && this->pBuckets[i].empty() )
+//            i++;
+//        if ( i >= hashCalculator.getBoundary() )
+//            return this->endPtr();
+//        return Memory::instance().create < Iterator > ( this->pBuckets[i].begin(), this->pBuckets, i, this );
+//    }
+//
+//    __CDS_OptionalInline auto beginPtr () const noexcept -> ConstIterator * final  {
+//        Index i = 0;
+//        while ( i < hashCalculator.getBoundary() && this->pBuckets[i].empty() )
+//            i++;
+//        if ( i >= hashCalculator.getBoundary() )
+//            return this->endPtr();
+//        return Memory::instance().create < ConstIterator > ( this->pBuckets[i].cbegin(), this->pBuckets, i, this );
+//    }
+//
+//    __CDS_OptimalInline auto endPtr () noexcept -> Iterator * final { return Memory :: instance().create < Iterator > ( this->pBuckets[hashCalculator.getBoundary() - 1].end(), this->pBuckets, hashCalculator.getBoundary() - 1, this ); }
+//    __CDS_OptimalInline auto endPtr () const noexcept -> ConstIterator * final { return Memory :: instance().create < ConstIterator > (this->pBuckets[hashCalculator.getBoundary() - 1].cend(), this->pBuckets, hashCalculator.getBoundary() - 1, this ); }
 
 public:
-    __CDS_cpplang_NonConstConstexprMemberFunction auto begin () noexcept -> Iterator {
-        Index i = 0;
-        while ( i < hashCalculator.getBoundary() && this->pBuckets[i].empty() )
-            i++;
-        if ( i >= hashCalculator.getBoundary() )
-            return this->end();
-        return Iterator( this->pBuckets[i].begin(), this->pBuckets, i, this );
-    }
-
-    __CDS_cpplang_ConstexprConditioned auto begin () const noexcept -> ConstIterator {
-        Index i = 0;
-        while ( i < hashCalculator.getBoundary() && this->pBuckets[i].empty() )
-            i++;
-        if ( i >= hashCalculator.getBoundary() )
-            return this->end();
-        return ConstIterator( this->pBuckets[i].cbegin(), this->pBuckets, i, this );
-    }
-
-    __CDS_cpplang_ConstexprConditioned auto cbegin () const noexcept -> ConstIterator {
-        Index i = 0;
-        while ( i < hashCalculator.getBoundary() && this->pBuckets[i].empty() )
-            i++;
-        if ( i >= hashCalculator.getBoundary() )
-            return this->cend();
-        return ConstIterator (this->pBuckets[i].cbegin(), this->pBuckets, i, this);
-    }
-
-    __CDS_cpplang_NonConstConstexprMemberFunction auto rbegin () noexcept -> ReverseIterator {
-        Index i = hashCalculator.getBoundary();
-        while ( i >= 0 && this->pBuckets[i].empty() )
-            i--;
-        if ( i < 0 )
-            return this->rend();
-        return ReverseIterator(this->pBuckets[i].rbegin(), this->pBuckets, i, this);
-    }
-
-    __CDS_cpplang_ConstexprConditioned auto rbegin () const noexcept -> ConstReverseIterator {
-        Index i = hashCalculator.getBoundary();
-        while ( i >= 0 && this->pBuckets[i].empty() )
-            i--;
-        if ( i < 0 )
-            return this->rend();
-        return ConstReverseIterator (this->pBuckets[i].rbegin(), this->pBuckets, i, this);
-    }
-
-    __CDS_MaybeUnused __CDS_cpplang_ConstexprConditioned auto crbegin () const noexcept -> ConstReverseIterator {
-        Index i = hashCalculator.getBoundary();
-        while ( i >= 0 && this->pBuckets[i].empty() )
-            i--;
-        if ( i < 0 )
-            return this->crend();
-        return ConstReverseIterator (this->pBuckets[i].rbegin(), this->pBuckets, i, this);
-    }
-
-    __CDS_cpplang_NonConstConstexprMemberFunction auto end () noexcept -> Iterator { return Iterator(this->pBuckets[hashCalculator.getBoundary() - 1].end(), this->pBuckets, hashCalculator.getBoundary() - 1, this); }
-    __CDS_OptimalInline auto end () const noexcept -> ConstIterator { return ConstIterator (this->pBuckets[hashCalculator.getBoundary() - 1].cend(), this->pBuckets, hashCalculator.getBoundary() - 1, this ); }
-    __CDS_OptimalInline auto cend () const noexcept -> ConstIterator { return ConstIterator (this->pBuckets[hashCalculator.getBoundary() - 1].cend(), this->pBuckets, hashCalculator.getBoundary() - 1, this ); }
-    __CDS_cpplang_NonConstConstexprMemberFunction auto rend () noexcept -> ReverseIterator { return ReverseIterator(this->pBuckets[0].rend(), this->pBuckets, 0, this); }
-    __CDS_OptimalInline auto rend () const noexcept -> ConstReverseIterator { return ConstReverseIterator (this->pBuckets[0].crend(), this->pBuckets, 0, this ); }
-    __CDS_OptimalInline auto crend () const noexcept -> ConstReverseIterator { return ConstReverseIterator (this->pBuckets[0].crend(), this->pBuckets, 0, this ); }
+//    __CDS_cpplang_NonConstConstexprMemberFunction auto begin () noexcept -> Iterator {
+//        Index i = 0;
+//        while ( i < hashCalculator.getBoundary() && this->pBuckets[i].empty() )
+//            i++;
+//        if ( i >= hashCalculator.getBoundary() )
+//            return this->end();
+//        return Iterator( this->pBuckets[i].begin(), this->pBuckets, i, this );
+//    }
+//
+//    __CDS_cpplang_ConstexprConditioned auto begin () const noexcept -> ConstIterator {
+//        Index i = 0;
+//        while ( i < hashCalculator.getBoundary() && this->pBuckets[i].empty() )
+//            i++;
+//        if ( i >= hashCalculator.getBoundary() )
+//            return this->end();
+//        return ConstIterator( this->pBuckets[i].cbegin(), this->pBuckets, i, this );
+//    }
+//
+//    __CDS_cpplang_ConstexprConditioned auto cbegin () const noexcept -> ConstIterator {
+//        Index i = 0;
+//        while ( i < hashCalculator.getBoundary() && this->pBuckets[i].empty() )
+//            i++;
+//        if ( i >= hashCalculator.getBoundary() )
+//            return this->cend();
+//        return ConstIterator (this->pBuckets[i].cbegin(), this->pBuckets, i, this);
+//    }
+//
+//    __CDS_cpplang_NonConstConstexprMemberFunction auto rbegin () noexcept -> ReverseIterator {
+//        Index i = hashCalculator.getBoundary();
+//        while ( i >= 0 && this->pBuckets[i].empty() )
+//            i--;
+//        if ( i < 0 )
+//            return this->rend();
+//        return ReverseIterator(this->pBuckets[i].rbegin(), this->pBuckets, i, this);
+//    }
+//
+//    __CDS_cpplang_ConstexprConditioned auto rbegin () const noexcept -> ConstReverseIterator {
+//        Index i = hashCalculator.getBoundary();
+//        while ( i >= 0 && this->pBuckets[i].empty() )
+//            i--;
+//        if ( i < 0 )
+//            return this->rend();
+//        return ConstReverseIterator (this->pBuckets[i].rbegin(), this->pBuckets, i, this);
+//    }
+//
+//    __CDS_MaybeUnused __CDS_cpplang_ConstexprConditioned auto crbegin () const noexcept -> ConstReverseIterator {
+//        Index i = hashCalculator.getBoundary();
+//        while ( i >= 0 && this->pBuckets[i].empty() )
+//            i--;
+//        if ( i < 0 )
+//            return this->crend();
+//        return ConstReverseIterator (this->pBuckets[i].rbegin(), this->pBuckets, i, this);
+//    }
+//
+//    __CDS_cpplang_NonConstConstexprMemberFunction auto end () noexcept -> Iterator { return Iterator(this->pBuckets[hashCalculator.getBoundary() - 1].end(), this->pBuckets, hashCalculator.getBoundary() - 1, this); }
+//    __CDS_OptimalInline auto end () const noexcept -> ConstIterator { return ConstIterator (this->pBuckets[hashCalculator.getBoundary() - 1].cend(), this->pBuckets, hashCalculator.getBoundary() - 1, this ); }
+//    __CDS_OptimalInline auto cend () const noexcept -> ConstIterator { return ConstIterator (this->pBuckets[hashCalculator.getBoundary() - 1].cend(), this->pBuckets, hashCalculator.getBoundary() - 1, this ); }
+//    __CDS_cpplang_NonConstConstexprMemberFunction auto rend () noexcept -> ReverseIterator { return ReverseIterator(this->pBuckets[0].rend(), this->pBuckets, 0, this); }
+//    __CDS_OptimalInline auto rend () const noexcept -> ConstReverseIterator { return ConstReverseIterator (this->pBuckets[0].crend(), this->pBuckets, 0, this ); }
+//    __CDS_OptimalInline auto crend () const noexcept -> ConstReverseIterator { return ConstReverseIterator (this->pBuckets[0].crend(), this->pBuckets, 0, this ); }
 
     __CDS_OptionalInline auto keys () const noexcept -> LinkedList < Reference < Key const > > final {
         LinkedList < Reference < Key const > > keys;
