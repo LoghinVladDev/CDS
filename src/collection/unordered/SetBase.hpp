@@ -142,6 +142,8 @@ protected:
                 return Memory :: instance () . create < SetDelegateIterator > ( this->_pFront );
             case DelegateIteratorRequestType :: BACKWARD_END:
                 return Memory :: instance () . create < SetDelegateIterator > ( nullptr );
+            default:
+                return nullptr;
         }
     }
 
@@ -155,6 +157,8 @@ protected:
                 return Memory :: instance () . create < SetDelegateConstIterator > ( this->_pFront );
             case DelegateIteratorRequestType :: BACKWARD_END:
                 return Memory :: instance () . create < SetDelegateConstIterator > ( nullptr );
+            default:
+                return nullptr;
         }
     }
 

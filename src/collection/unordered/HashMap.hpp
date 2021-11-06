@@ -327,6 +327,8 @@ private:
                 return Memory :: instance () . create < HashMapDelegateBackwardIterator > ( this, true );
             case DelegateIteratorRequestType :: BACKWARD_END:
                 return Memory :: instance () . create < HashMapDelegateBackwardIterator > ( this, false );
+            default:
+                return nullptr;
         }
     }
 
@@ -340,6 +342,8 @@ private:
                 return Memory :: instance () . create < HashMapDelegateBackwardConstIterator > ( this, true );
             case DelegateIteratorRequestType :: BACKWARD_END:
                 return Memory :: instance () . create < HashMapDelegateBackwardConstIterator > ( this, false );
+            default:
+                return nullptr;
         }
     }
 

@@ -20,9 +20,18 @@ protected:
     using ElementPtrRef                 = typename List < T > :: ElementPtrRef;
     using ElementCPtr                   = typename List < T > :: ElementCPtr;
 
-    using CollectionIterator            = typename List < T > :: CollectionIterator;
-    using ConstCollectionIterator       = typename List < T > :: ConstCollectionIterator;
     using InitializerList               = typename List < T > :: InitializerList;
+
+public:
+    using Iterator                      = typename List < T > :: Iterator;
+    using ConstIterator                 = typename List < T > :: ConstIterator;
+
+    using ReverseIterator               = typename List < T > :: ReverseIterator;
+    using ConstReverseIterator          = typename List < T > :: ConstReverseIterator;
+
+protected:
+    using DelegateIterator              = typename List < T > :: DelegateIterator;
+    using DelegateConstIterator         = typename List < T > :: DelegateConstIterator;
 
 private:
     struct Node {
@@ -41,13 +50,119 @@ private:
     Node * _pFront {nullptr};
     Node * _pBack {nullptr};
 
+protected:
+
+    class SingleLinkedListDelegateIterator : public DelegateIterator {
+    private:
+        ForeignPointer < SingleLinkedList :: Node > _pNode;
+
+    public:
+        explicit SingleLinkedListDelegateIterator ( SingleLinkedList :: Node * pNode ) noexcept :
+                DelegateIterator (),
+                _pNode ( pNode ) {
+
+        }
+
+        __CDS_NoDiscard constexpr auto node () const noexcept -> Node * {
+            return this->_pNode.get();
+        }
+
+        __CDS_NoDiscard auto isValid () const noexcept -> bool override {
+            return this->_pNode != nullptr;
+        }
+
+        SingleLinkedListDelegateIterator ( SingleLinkedListDelegateIterator const & ) noexcept = default;
+        SingleLinkedListDelegateIterator ( SingleLinkedListDelegateIterator && ) noexcept = default;
+
+        ~SingleLinkedListDelegateIterator() noexcept override = default;
+
+        auto next () noexcept -> SingleLinkedListDelegateIterator & override {
+            this->_pNode = this->_pNode->next();
+            return * this;
+        }
+
+        auto value () const noexcept -> ElementRef override {
+            return * this->_pNode->data();
+        }
+
+        auto equals ( DelegateIterator const & it ) const noexcept -> bool override {
+            if ( this == & it ) return true;
+            auto p = reinterpret_cast < decltype (this) > ( & it );
+
+            return this->_pNode == p->_pNode;
+        }
+
+        auto copy () const noexcept -> SingleLinkedListDelegateIterator * override {
+            return Memory :: instance() .create < SingleLinkedListDelegateIterator > ( * this );
+        }
+    };
+
+    class SingleLinkedListDelegateConstIterator : public DelegateConstIterator {
+    private:
+        ForeignPointer < SingleLinkedList :: Node const > _pNode;
+
+    public:
+        explicit SingleLinkedListDelegateConstIterator ( SingleLinkedList :: Node const * pNode ) noexcept :
+                DelegateConstIterator (),
+                _pNode ( pNode ) {
+
+        }
+
+        SingleLinkedListDelegateConstIterator ( SingleLinkedListDelegateConstIterator const & ) noexcept = default;
+        SingleLinkedListDelegateConstIterator ( SingleLinkedListDelegateConstIterator && ) noexcept = default;
+
+        ~SingleLinkedListDelegateConstIterator() noexcept override = default;
+
+        auto next () noexcept -> SingleLinkedListDelegateConstIterator & override {
+            this->_pNode = this->_pNode->next();
+            return * this;
+        }
+
+        auto value () const noexcept -> ElementCRef override {
+            return * this->_pNode->data();
+        }
+
+        auto equals ( DelegateConstIterator const & it ) const noexcept -> bool override {
+            if ( this == & it ) return true;
+            auto p = reinterpret_cast < decltype (this) > ( & it );
+
+            return this->_pNode == p->_pNode;
+        }
+
+        auto copy () const noexcept -> SingleLinkedListDelegateConstIterator * override {
+            return Memory :: instance() .create < SingleLinkedListDelegateConstIterator > ( * this );
+        }
+    };
+
+    using DelegateIteratorRequestType = typename Collection < T > :: DelegateIteratorRequestType;
+
+    auto delegateIterator ( DelegateIteratorRequestType requestType ) noexcept -> UniquePointer < DelegateIterator > override {
+        switch ( requestType ) {
+            case DelegateIteratorRequestType :: FORWARD_BEGIN:
+                return Memory :: instance () . create < SingleLinkedListDelegateIterator > ( this->_pFront );
+            case DelegateIteratorRequestType :: FORWARD_END:
+                return Memory :: instance () . create < SingleLinkedListDelegateIterator > ( nullptr );
+            case DelegateIteratorRequestType :: BACKWARD_BEGIN:
+            case DelegateIteratorRequestType :: BACKWARD_END:
+            default:
+                return nullptr;
+        }
+    }
+
+    auto delegateConstIterator ( DelegateIteratorRequestType requestType ) const noexcept -> UniquePointer < DelegateConstIterator > override {
+        switch ( requestType ) {
+            case DelegateIteratorRequestType :: FORWARD_BEGIN:
+                return Memory :: instance () . create < SingleLinkedListDelegateConstIterator > ( this->_pFront );
+            case DelegateIteratorRequestType :: FORWARD_END:
+                return Memory :: instance () . create < SingleLinkedListDelegateConstIterator > ( nullptr );
+            case DelegateIteratorRequestType :: BACKWARD_BEGIN:
+            case DelegateIteratorRequestType :: BACKWARD_END:
+            default:
+                return nullptr;
+        }
+    }
+
 public:
-
-    class IteratorBase;
-    class ConstIteratorBase;
-    class Iterator;
-    class ConstIterator;
-
     constexpr static const Index INVALID_POS = -1;
 
     constexpr SingleLinkedList ( ) noexcept = default;
@@ -62,34 +177,20 @@ public:
     }
 
     SingleLinkedList (
-            CollectionIterator const &,
-            CollectionIterator const &
+            Iterator const &,
+            Iterator const &
     ) noexcept;
 
     SingleLinkedList (
-            ConstCollectionIterator const &,
-            ConstCollectionIterator const &
+            ConstIterator const &,
+            ConstIterator const &
     ) noexcept;
 
     SingleLinkedList ( InitializerList ) noexcept; // NOLINT(google-explicit-constructor)
 
     ~SingleLinkedList() noexcept override;
 
-private:
-    auto beginPtr () noexcept -> Iterator * final;
-    auto endPtr () noexcept -> Iterator * final;
-    auto beginPtr () const noexcept -> ConstIterator * final;
-    auto endPtr () const noexcept -> ConstIterator * final;
-
 public:
-    auto begin () noexcept -> Iterator;
-    auto end () noexcept -> Iterator;
-
-    auto begin () const noexcept -> ConstIterator;
-    auto end () const noexcept -> ConstIterator;
-    auto cbegin () const noexcept -> ConstIterator;
-    auto cend () const noexcept -> ConstIterator;
-
     virtual auto remove (Index) noexcept -> bool;
 
     auto remove ( ElementCRef , Size ) noexcept -> bool override;
@@ -101,7 +202,7 @@ public:
     auto removeNotOf ( Collection<T> const &, Size ) noexcept -> bool override;
     auto removeLastNotOf ( Collection<T> const & ) noexcept -> bool override;
 
-    auto remove ( CollectionIterator const & ) noexcept (false) -> T override;
+    auto remove ( Iterator const & ) noexcept (false) -> T override;
 
     __CDS_OptimalInline auto removeOf ( InitializerList list, Size count ) noexcept -> bool override {
         return this->removeOf ( SingleLinkedList <T> (list), count );
@@ -152,7 +253,7 @@ public:
         if ( this->size() != o.size() ) return false;
 
         for ( auto i1 = this->begin(), i2 = o.begin(); i1 != this->end() && i2 != o.end(); ++ i1, ++ i2 )
-            if ( ! Type < T > :: compare ( i1.value(), i2.value() ) )
+            if ( ! Type < T > :: compare ( * i1, * i2 ) )
                 return false;
 
         return true;
@@ -244,10 +345,10 @@ private:
 #endif
 
     template < typename SortFunction >
-    auto static quickSort ( Iterator, Iterator, SortFunction const & ) noexcept -> void;
+    auto static quickSort ( Iterator const &, Iterator const &, SortFunction const & ) noexcept -> void;
 
     template < typename SortFunction >
-    auto static quickSortPartition ( Iterator, Iterator, SortFunction const & ) noexcept -> Iterator;
+    auto static quickSortPartition ( Iterator const &, Iterator const &, SortFunction const & ) noexcept -> Iterator;
 
 #if defined(__JETBRAINS_IDE__)
 #pragma clang diagnostic pop
@@ -289,150 +390,6 @@ public:
 
     __CDS_NoDiscard __CDS_cpplang_ConstexprOverride auto hash () const noexcept -> Index override {
         return this->size();
-    }
-};
-
-template < typename T >
-class SingleLinkedList < T > :: IteratorBase : public Collection < T > :: Iterator {
-protected:
-    Node mutable * _pNode {nullptr};
-
-    constexpr IteratorBase ( IteratorBase const & ) noexcept = default;
-    constexpr IteratorBase ( IteratorBase && ) noexcept = default;
-
-    constexpr explicit IteratorBase ( Node * pNode, SingleLinkedList < T > * pList ) noexcept :
-            Collection < T > :: Iterator (pList),
-            _pNode (pNode) {
-
-    }
-
-public:
-    constexpr IteratorBase () noexcept = delete;
-    __CDS_cpplang_ConstexprDestructor ~IteratorBase () noexcept override = default;
-
-    __CDS_NoDiscard __CDS_cpplang_ConstexprOverride auto equals ( CollectionIterator const & it ) const noexcept -> bool final {
-        if ( this == & it ) return true;
-        auto p = dynamic_cast < decltype (this) > ( & it );
-        if ( p == nullptr ) return false;
-
-        return this->_pNode == p->_pNode;
-    }
-
-    __CDS_NoDiscard __CDS_cpplang_ConstexprOverride auto value () const noexcept -> ElementRef final {
-        return * this->_pNode->_data;
-    }
-
-    __CDS_NoDiscard __CDS_cpplang_ConstexprPureAbstract auto copy () const noexcept -> IteratorBase * override = 0;
-};
-
-template < typename T >
-class SingleLinkedList < T > :: ConstIteratorBase : public Collection < T > :: ConstIterator {
-protected:
-    Node const * _pNode {nullptr};
-
-    constexpr ConstIteratorBase( ConstIteratorBase const & ) noexcept = default;
-    constexpr ConstIteratorBase( ConstIteratorBase && ) noexcept = default;
-
-    constexpr explicit ConstIteratorBase ( Node const * pNode, SingleLinkedList < T > const * pList ) noexcept :
-            Collection<T>::ConstIterator(pList),
-            _pNode(pNode) {
-
-    }
-
-public:
-    constexpr ConstIteratorBase() noexcept = delete;
-    __CDS_cpplang_ConstexprDestructor ~ConstIteratorBase() noexcept override = default;
-
-    __CDS_NoDiscard __CDS_cpplang_ConstexprOverride auto equals ( ConstCollectionIterator const & it ) const noexcept -> bool final {
-        if ( this == & it ) return true;
-        auto p = dynamic_cast < decltype ( this ) > ( & it );
-        if ( p == nullptr ) return false;
-
-        return this->_pNode == p->_pNode;
-    }
-
-    __CDS_NoDiscard __CDS_cpplang_ConstexprOverride auto value () const noexcept -> ElementCRef final {
-        return * this->_pNode->_data;
-    }
-
-    __CDS_NoDiscard __CDS_cpplang_ConstexprPureAbstract auto copy () const noexcept -> ConstIteratorBase * override = 0;
-};
-
-template < typename T >
-class SingleLinkedList < T > :: Iterator : public SingleLinkedList < T > :: IteratorBase {
-public:
-    constexpr Iterator () noexcept = delete;
-    constexpr Iterator ( Iterator const & ) noexcept = default;
-    constexpr Iterator ( Iterator && ) noexcept = default;
-
-    constexpr explicit Iterator (Node * pNode, SingleLinkedList < T > * pList) noexcept :
-            SingleLinkedList<T>::IteratorBase(pNode, pList) {
-
-    }
-
-    __CDS_cpplang_ConstexprDestructor ~Iterator () noexcept override = default;
-
-    __CDS_cpplang_NonConstConstexprMemberFunction auto operator = ( Iterator const & o ) noexcept -> Iterator & {
-        this->_pNode = o._pNode;
-        return * this;
-    }
-
-    __CDS_cpplang_ConstexprOverride auto operator ++ () noexcept -> Iterator & final {
-        return this->next();
-    }
-
-    __CDS_cpplang_ConstexprDestructor auto operator ++ (int) noexcept -> Iterator {
-        auto copy = * this;
-        this->next();
-        return copy;
-    }
-
-    __CDS_cpplang_ConstexprOverride auto next () noexcept -> Iterator & final {
-        this->_pNode = this->_pNode->_pNext;
-        return * this;
-    }
-
-    __CDS_NoDiscard __CDS_OptimalInline auto copy () const noexcept -> Iterator * override {
-        return Memory :: instance().create < Iterator > ( * this );
-    }
-};
-
-template < typename T >
-class SingleLinkedList < T > :: ConstIterator : public SingleLinkedList < T > :: ConstIteratorBase {
-public:
-    constexpr ConstIterator () noexcept = default;
-    constexpr ConstIterator ( ConstIterator const & ) noexcept = default;
-    constexpr ConstIterator ( ConstIterator && ) noexcept = default;
-
-    constexpr explicit ConstIterator ( Node const * pNode, SingleLinkedList < T > const * pList ) noexcept :
-            SingleLinkedList<T>::ConstIteratorBase (pNode, pList) {
-
-    }
-
-    __CDS_cpplang_ConstexprDestructor ~ConstIterator() noexcept override = default;
-
-    __CDS_cpplang_NonConstConstexprMemberFunction auto operator = ( ConstIterator const & o ) noexcept -> ConstIterator & {
-        this->_pNode = o._pNode;
-        return * this;
-    }
-
-    __CDS_cpplang_ConstexprOverride auto operator ++ () noexcept -> ConstIterator & override {
-        return this->next();
-    }
-
-    __CDS_OptimalInline auto operator ++ (int) noexcept -> ConstIterator {
-        auto copy = * this;
-        this->next();
-        return * this;
-    }
-
-    __CDS_cpplang_ConstexprOverride auto next () noexcept -> ConstIterator & final {
-        this->_pNode = this->_pNode->_pNext;
-        return * this;
-    }
-
-    __CDS_NoDiscard __CDS_OptimalInline auto copy () const noexcept -> ConstIterator * override {
-        return Memory :: instance().create < ConstIterator > ( * this );
     }
 };
 
@@ -734,19 +691,23 @@ auto SingleLinkedList < T > :: removeLastNotOf ( Collection < T > const & from )
 }
 
 template < typename T >
-auto SingleLinkedList < T > :: remove ( CollectionIterator const & it ) noexcept (false) -> T {
-    if ( this->empty() )
-        throw OutOfBoundsException("List is Empty");
+auto SingleLinkedList < T > :: remove ( Iterator const & it ) noexcept (false) -> T {
+    if ( ! it.of ( this ) )
+        throw IllegalArgumentException ( "Iterator not of this Collection" );
 
-    if ( this->begin() == it )
+    if ( this->empty() )
+        throw IllegalArgumentException ( "List is Empty" );
+
+    auto pDelegate = reinterpret_cast < SingleLinkedListDelegateIterator * > ( Collection < T > :: acquireDelegate( it ) );
+
+    if ( this->_pFront == pDelegate->node() )
         return this->popFront();
 
-
-    if ( Iterator ( this->_pBack, this ) == it )
+    if ( this->_pBack == pDelegate->node() )
         return this->popBack();
 
     for ( auto node = this->_pFront; node->next() != this->_pBack; node = node->next() ) {
-        if ( Iterator ( node->next(), this ) == it ) {
+        if ( node->next() == pDelegate->node() ) {
             auto p = node->next();
             node->next() = node->next()->next();
 
@@ -759,7 +720,7 @@ auto SingleLinkedList < T > :: remove ( CollectionIterator const & it ) noexcept
         }
     }
 
-    throw std::runtime_error("Wrong List Iterator");
+    throw IllegalArgumentException("Wrong List Iterator");
 }
 
 template < typename T >
@@ -769,70 +730,20 @@ SingleLinkedList < T > :: SingleLinkedList ( SingleLinkedList const & obj ) noex
 
 template < typename T >
 SingleLinkedList < T > :: SingleLinkedList (
-        CollectionIterator const & from,
-        CollectionIterator const & to
+        Iterator const & from,
+        Iterator const & to
 ) noexcept {
-    for ( auto it = UniquePointer < decltype ( & from ) > ( from.copy() ) ; ! it->equals(to); it->next() )
-        this->pushBack(it->value());
+    for ( auto it = from; it != to; ++ it )
+        this->pushBack( * it );
 }
 
 template < typename T >
 SingleLinkedList < T > :: SingleLinkedList (
-        ConstCollectionIterator const & from,
-        ConstCollectionIterator const & to
+        ConstIterator const & from,
+        ConstIterator const & to
 ) noexcept {
-    for ( auto it = UniquePointer < decltype ( & from ) > ( from.copy() ) ; ! it->equals(to); it->next() )
-        this->pushBack(it->value());
-}
-
-template < typename T >
-auto SingleLinkedList < T > :: beginPtr () noexcept -> Iterator * {
-    return Memory :: instance().create < Iterator > ( this->_pFront, this );
-}
-
-template < typename T >
-auto SingleLinkedList < T > :: endPtr () noexcept -> Iterator * {
-    return Memory :: instance().create < Iterator > ( nullptr, this );
-}
-
-template < typename T >
-auto SingleLinkedList < T > :: beginPtr () const noexcept -> ConstIterator * {
-    return Memory :: instance().create < ConstIterator > ( this->_pFront, this );
-}
-
-template < typename T >
-auto SingleLinkedList < T > :: endPtr () const noexcept -> ConstIterator * {
-    return Memory :: instance().create < ConstIterator > ( nullptr, this );
-}
-
-template < typename T >
-auto SingleLinkedList < T > :: begin () noexcept -> Iterator {
-    return Iterator ( this->_pFront, this );
-}
-
-template < typename T >
-auto SingleLinkedList < T > :: end () noexcept -> Iterator {
-    return Iterator ( nullptr, this );
-}
-
-template < typename T >
-auto SingleLinkedList < T > :: begin () const noexcept -> ConstIterator {
-    return ConstIterator ( this->_pFront, this );
-}
-
-template < typename T >
-auto SingleLinkedList < T > :: end () const noexcept -> ConstIterator {
-    return ConstIterator ( nullptr, this );
-}
-
-template < typename T >
-auto SingleLinkedList < T > :: cbegin () const noexcept -> ConstIterator {
-    return ConstIterator ( this->_pFront, this );
-}
-
-template < typename T >
-auto SingleLinkedList < T > :: cend () const noexcept -> ConstIterator {
-    return ConstIterator ( nullptr, this );
+    for ( auto it = from; it != to; ++ it )
+        this->pushBack( * it );
 }
 
 template < typename T >
@@ -905,70 +816,6 @@ auto SingleLinkedList < T > :: sort ( SortFunction const & function ) noexcept -
         previous = current;
 
     SingleLinkedList < T > :: quickSort ( this->begin(), previous, function );
-}
-
-template < typename T >
-template < typename SortFunction >
-__CDS_MaybeUnused auto SingleLinkedList < T > :: quickSort (
-    Iterator from,
-    Iterator to,
-    SortFunction const & f
-) noexcept -> void {auto next = to;
-    if ( next != Iterator(nullptr, nullptr) ) {
-        next.next();
-        if ( from == next )
-            return;
-    }
-
-    if ( from != to && from != Iterator(nullptr, nullptr) && to != Iterator(nullptr, nullptr) ) {
-        auto partitionIterator = SingleLinkedList<T >::quickSortPartition(from , to , f);
-
-        SingleLinkedList<T >::quickSort(from , partitionIterator , f);
-
-        if ( partitionIterator == Iterator(nullptr, nullptr) )
-            return;
-
-        if (partitionIterator == from) {
-            partitionIterator.next();
-            if ( partitionIterator != Iterator(nullptr, nullptr) )
-                SingleLinkedList<T >::quickSort(partitionIterator , to , f);
-            return;
-        }
-
-        partitionIterator.next();
-        if ( partitionIterator == Iterator(nullptr, nullptr) )
-            return;
-        partitionIterator.next();
-        SingleLinkedList<T >::quickSort ( partitionIterator , to , f );
-    }
-}
-
-template < typename T >
-template < typename SortFunction >
-__CDS_MaybeUnused auto SingleLinkedList < T > ::quickSortPartition(
-        Iterator from,
-        Iterator to,
-        SortFunction const & f
-) noexcept -> Iterator {
-    auto swap = [] ( T & a , T & b ) { auto aux = a; a = b; b = aux; };
-
-    auto pivot = to.value();
-    typename SingleLinkedList <T >::Iterator partitionIterator(from);
-
-    Iterator previous (nullptr, nullptr);
-
-    for ( auto it = from; it != to; it++ ) {
-        if ( f ( it.value() , pivot ) ) {
-            swap ( partitionIterator.value() , it.value() );
-            previous = partitionIterator;
-            partitionIterator.next();
-        }
-    }
-
-    swap ( partitionIterator.value() , to.value() );
-    if ( previous == Iterator(nullptr, nullptr) )
-        return partitionIterator;
-    return previous;
 }
 
 template < typename T >

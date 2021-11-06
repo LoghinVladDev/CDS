@@ -82,8 +82,4 @@
 #define __CDS_Memory_ArrayManagerCacheLifetimeCycles 128
 #endif
 
-#ifndef __CDS_ThreadSafeObjects
-#define __CDS_ThreadSafeObjects false
-#endif
-
 #endif //CDS_OPTIONS_HPP

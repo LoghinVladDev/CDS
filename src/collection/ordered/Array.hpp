@@ -47,13 +47,13 @@ public:
     Array ( Array && ) noexcept;
 
     Array (
-        Iterator,
-        Iterator
+        Iterator const &,
+        Iterator const &
     ) noexcept;
 
     Array (
-        ConstIterator,
-        ConstIterator
+        ConstIterator const &,
+        ConstIterator const &
     ) noexcept;
 
     template < typename V = T, EnableIf < Type < V > :: copyConstructible > = 0 >
@@ -221,6 +221,10 @@ private:
 
         ~ArrayDelegateIterator() noexcept override = default;
 
+        __CDS_NoDiscard constexpr auto index () const noexcept -> Index {
+            return this->_index;
+        }
+
         __CDS_NoDiscard auto isValid () const noexcept -> bool override {
             return
                 ! this->_pArray.isNull() &&
@@ -273,6 +277,10 @@ private:
 
         ~ArrayDelegateConstIterator() noexcept override = default;
 
+        __CDS_NoDiscard constexpr auto index () const noexcept -> Index {
+            return this->_index;
+        }
+
         __CDS_NoDiscard auto isValid () const noexcept -> bool override {
             return
                     ! this->_pArray.isNull() &&
@@ -317,6 +325,8 @@ private:
                 return Memory :: instance () . create < ArrayDelegateIterator > ( this, this->size() - 1, false );
             case DelegateIteratorRequestType :: BACKWARD_END:
                 return Memory :: instance () . create < ArrayDelegateIterator > ( this, -1, false );
+            default:
+                return nullptr;
         }
     }
 
@@ -330,6 +340,8 @@ private:
                 return Memory :: instance () . create < ArrayDelegateConstIterator > ( this, this->size() - 1, false );
             case DelegateIteratorRequestType :: BACKWARD_END:
                 return Memory :: instance () . create < ArrayDelegateConstIterator > ( this, -1, false );
+            default:
+                return nullptr;
         }
     }
 
@@ -339,31 +351,7 @@ private:
         return this->allocBackGetPtr();
     }
 
-#if defined(__JETBRAINS_IDE__)
-#pragma clang diagnostic push
-#pragma ide diagnostic ignored "NotImplementedFunctions"
-#endif
-
-    template < typename SortFunc, typename U = T, EnableIf < Type < U > :: copyAssignable > = 0 >
-    auto static quickSort ( Iterator, Iterator, SortFunc const & ) noexcept -> void;
-
-    template < typename SortFunc, typename U = T, EnableIf < Type < U > :: copyAssignable > = 0 >
-    auto static quickSortPartition ( Iterator, Iterator, SortFunc const & ) noexcept -> Iterator;
-
-#if defined(__JETBRAINS_IDE__)
-#pragma clang diagnostic pop
-#endif
-
 public:
-    template < typename SortFunc, typename U = T, EnableIf < Type < U > :: copyAssignable > = 0 >
-    auto sort ( SortFunc const & ) noexcept -> void;
-
-    template < typename U = T, EnableIf < Type < U > :: copyAssignable > = 0 >
-    __CDS_OptimalInline auto sort ( Comparator < ElementType > const & c ) noexcept -> void {
-
-        return this->sort ( [&c] (ElementCRef a, ElementCRef b) noexcept -> bool { return c(a, b); } );
-    }
-
     auto operator = ( Collection < ElementType > const & ) noexcept -> Array &;
 
     __CDS_OptimalInline auto operator = ( Array const & o ) noexcept -> Array & { // NOLINT(bugprone-unhandled-self-assignment)
@@ -552,8 +540,8 @@ Array<T>::Array( Array && moveObj ) noexcept {
 #include <CDS/Pointer>
 template < typename T >
 Array<T>::Array(
-        Iterator from,
-        Iterator to
+        Iterator const & from,
+        Iterator const & to
 ) noexcept {
     for ( auto it = from; it != to; ++ it )
         this->pushBack( * it );
@@ -561,8 +549,8 @@ Array<T>::Array(
 
 template < typename T >
 Array<T>::Array(
-        ConstIterator from,
-        ConstIterator to
+        ConstIterator const & from,
+        ConstIterator const & to
 ) noexcept {
     for ( auto it = from; it != to; ++ it )
         this->pushBack( * it );
@@ -823,25 +811,24 @@ auto Array<T>::removeLastNotOf( InitializerList elements) noexcept -> bool {
 #include <CDS/Utility>
 template < typename T >
 auto Array<T>::remove( Iterator const & it ) noexcept (false) -> ElementType {
-//    if ( ! Collection < T > :: iteratorIsOf (it, *this) )
-//        throw IllegalArgumentException("Iterator given is not of this collection");
-//
-//    Index at = reinterpret_cast < Iterator const * > ( & it )->_index;
-//
-//    if ( at < 0 || at >= this->size() )
-//        throw OutOfBoundsException(at, this->size());
-//
-//
-//    T retVal = * this->_pData[at];
-//    Memory :: instance().destroy ( Utility::exchange(this->_pData[at], nullptr) );
-//
-//    T ** pNewBuf = Memory :: instance().createArray < T * > ( this->size() - 1 );
-//    std::memcpy ( pNewBuf, this->_pData, at * sizeof ( T * ) );
-//    std::memcpy ( pNewBuf + at, this->_pData + at + 1, (this->size() - at - 1) * sizeof(T *) );
-//    Memory :: instance().destroyArray( Utility::exchange ( this->_pData, pNewBuf ) );
-//    this->_capacity = -- this->_size;
-//    return retVal;
-//    return ElementType ();
+    if ( ! it.of ( this ) )
+        throw IllegalArgumentException ( "Iterator given is not of this collection" );
+
+    auto pDelegate = reinterpret_cast < ArrayDelegateIterator * > ( Collection<T>::acquireDelegate( it ) );
+
+    if ( pDelegate->index() < 0 || pDelegate->index() >= this->size() )
+        throw OutOfBoundsException( pDelegate->index(), this->size() );
+
+    T retVal = * this->_pData[ pDelegate->index() ];
+    Memory :: instance().destroy ( Utility::exchange(this->_pData[ pDelegate->index() ], nullptr) );
+
+    T ** pNewBuf = Memory :: instance().createArray < T * > ( this->size() - 1 );
+    std::memcpy ( pNewBuf, this->_pData, pDelegate->index() * sizeof ( T * ) );
+    std::memcpy ( pNewBuf + pDelegate->index(), this->_pData + pDelegate->index() + 1, (this->size() - pDelegate->index() - 1) * sizeof(T *) );
+    Memory :: instance().destroyArray( Utility::exchange ( this->_pData, pNewBuf ) );
+
+    this->_capacity = -- this->_size;
+    return retVal;
 }
 
 template < typename T >
@@ -965,79 +952,6 @@ Array<T> & Array<T>::operator= (Collection<ElementType> const & c) noexcept {
     Memory :: instance().destroy ( pBegin );
     Memory :: instance().destroy ( pEnd );
     return * this;
-}
-
-template < typename T >
-template < typename SortFunc, typename U, EnableIf < Type < U > :: copyAssignable > >
-__CDS_MaybeUnused auto Array<T>::quickSortPartition(
-        Iterator from,
-        Iterator to,
-        SortFunc const & sortFunc
-) noexcept -> Iterator {
-    __CDS_cpplang_ConstexprLambda static auto swap = [] ( T & a, T & b ) { auto aux = a; a = b; b = aux; };
-
-    auto pivot = * to;
-    Iterator partitionIterator = from;
-    Iterator previous;
-
-    for ( auto it = from; it != to; it++ ) {
-        if ( sortFunc ( * it, pivot ) ) {
-            swap ( * partitionIterator, * it );
-            previous = partitionIterator;
-            ++ partitionIterator;
-        }
-    }
-
-    swap ( * partitionIterator, * to );
-    if ( ! previous.isValid() )
-        return partitionIterator;
-    return previous;
-}
-
-template < typename T >
-template < typename SortFunc, typename U, EnableIf < Type < U > :: copyAssignable > >
-__CDS_MaybeUnused auto Array<T>::quickSort(
-        Iterator from,
-        Iterator to,
-        SortFunc const & sortFunc
-) noexcept -> void {
-    auto next = to;
-    if ( next.isValid() ) {
-        ++ next;
-        if ( from == next )
-            return;
-    }
-
-    if ( from != to && from.isValid() && to.isValid() ) {
-        auto partitionIterator = Array::quickSortPartition(from, to, sortFunc);
-
-        Array::quickSort(from, partitionIterator, sortFunc);
-
-        if ( ! partitionIterator.isValid() )
-            return;
-
-        if ( partitionIterator == from ) {
-            ++ partitionIterator;
-            if ( partitionIterator.isValid() )
-                Array::quickSort(partitionIterator, to, sortFunc);
-            return;
-        }
-
-        ++ partitionIterator;
-        if ( ! partitionIterator.isValid() )
-            return;
-        ++ partitionIterator;
-        Array::quickSort( partitionIterator, to, sortFunc );
-    }
-}
-
-template < typename T >
-template < typename SortFunc, typename U, EnableIf < Type < U > :: copyAssignable > >
-auto Array<T>::sort(SortFunc const & sortFunc) noexcept -> void {
-    if ( this->size() < 2 )
-        return;
-
-    Array::quickSort( this->begin(), -- this->end(), sortFunc );
 }
 
 #include <CDS/Sequence>

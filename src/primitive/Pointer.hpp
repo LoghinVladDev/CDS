@@ -19,6 +19,7 @@ public:
     using Value                 = T;
     using ValueReference        = T &;
     using Pointer               = T *;
+    using ConstPointer          = T const *;
 
 protected:
     Pointer mutable pObj {nullptr};
@@ -40,13 +41,12 @@ public:
         return this->operator==(*p);
     }
 
-    __CDS_cpplang_ConstexprConditioned auto operator == (PointerBase const & o) const noexcept -> bool {
-        if ( this == & o ) return true;
+    constexpr auto operator == (PointerBase const & o) const noexcept -> bool {
+        return this->pObj == o.pObj;
+    }
 
-        if ( this->pObj == o.pObj ) return true;
-        if ( this->pObj == nullptr || o.pObj == nullptr ) return false;
-
-        return Type < T > :: compare ( * o.pObj, * this->pObj );
+    constexpr auto operator == (ConstPointer const p) const noexcept -> bool {
+        return this->pObj == p;
     }
 
     __CDS_cpplang_ConstexprConditioned auto operator * () const noexcept (false) -> ValueReference {

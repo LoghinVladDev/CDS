@@ -142,7 +142,7 @@ protected:
         }
 
         __CDS_NoDiscard auto of ( Collection const * pOtherCollection ) const noexcept -> bool {
-            return this->pCollection->get() == pOtherCollection;
+            return this->pCollection.get() == pOtherCollection;
         }
     };
 
@@ -150,6 +150,7 @@ public:
 
     class Iterator : public AbstractIterator {
     private:
+        friend class Collection;
         UniquePointer < DelegateIterator > pDelegate { nullptr };
 
     public:
@@ -202,7 +203,7 @@ public:
             return copy;
         }
 
-        __CDS_NoDiscard auto isValid () const noexcept -> bool {
+        __CDS_NoDiscard __CDS_MaybeUnused auto isValid () const noexcept -> bool {
             return ! this->pDelegate.isNull() && this->pDelegate->isValid();
         }
 
@@ -223,6 +224,7 @@ public:
 
     class ConstIterator : public AbstractIterator {
     private:
+        friend class Collection;
         UniquePointer < DelegateConstIterator > pDelegate { nullptr };
 
     public:
@@ -275,7 +277,7 @@ public:
             return copy;
         }
 
-        __CDS_NoDiscard auto isValid () const noexcept -> bool {
+        __CDS_NoDiscard __CDS_MaybeUnused auto isValid () const noexcept -> bool {
             return ! this->pDelegate.isNull() && this->pDelegate->isValid();
         }
 
@@ -296,6 +298,7 @@ public:
 
     class ReverseIterator : public AbstractIterator {
     private:
+        friend class Collection;
         UniquePointer < DelegateIterator > pDelegate { nullptr };
 
     public:
@@ -348,7 +351,7 @@ public:
             return copy;
         }
 
-        __CDS_NoDiscard auto isValid () const noexcept -> bool {
+        __CDS_NoDiscard __CDS_MaybeUnused auto isValid () const noexcept -> bool {
             return ! this->pDelegate.isNull() && this->pDelegate->isValid();
         }
 
@@ -369,6 +372,7 @@ public:
 
     class ConstReverseIterator : public AbstractIterator {
     private:
+        friend class Collection;
         UniquePointer < DelegateConstIterator > pDelegate { nullptr };
 
     public:
@@ -421,7 +425,7 @@ public:
             return copy;
         }
 
-        __CDS_NoDiscard auto isValid () const noexcept -> bool {
+        __CDS_NoDiscard __CDS_MaybeUnused auto isValid () const noexcept -> bool {
             return ! this->pDelegate.isNull() && this->pDelegate->isValid();
         }
 
@@ -441,6 +445,10 @@ public:
     };
 
 protected:
+    static auto acquireDelegate ( Iterator const & pIterator ) noexcept -> DelegateIterator * {
+        return pIterator.pDelegate.get();
+    }
+
     enum class DelegateIteratorRequestType {
         FORWARD_BEGIN,
         FORWARD_END,

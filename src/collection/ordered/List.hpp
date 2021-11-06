@@ -84,7 +84,27 @@ protected:
     virtual auto allocFrontGetPtr () noexcept -> ElementPtrRef = 0;
     virtual auto allocBackGetPtr () noexcept -> ElementPtrRef = 0;
 
+    template < typename SortFunc >
+    auto static quickSort ( Iterator const &, Iterator const &, SortFunc const & ) noexcept -> void;
+
+    template < typename SortFunc >
+    auto static quickSortPartition ( Iterator const &, Iterator const &, SortFunc const & ) noexcept -> Iterator;
+
 public:
+    template < typename SortFunc = Function < bool ( ElementCRef, ElementCRef ) > >
+    auto sort ( SortFunc const & sortFunction = []( ElementCRef a, ElementCRef b ) noexcept -> bool { return a < b; } ) noexcept -> void {
+        if ( this->size() < 2 ) return;
+
+        Iterator previous;
+        for ( auto it = this->begin(); it != this->end(); ++ it )
+            previous = it;
+
+        List < T > :: quickSort ( this->begin(), previous, sortFunction );
+    }
+
+    __CDS_OptimalInline auto sort ( Comparator < T > const & comparator ) noexcept -> void {
+        return this->sort ( [& comparator](T const & a, T const & b) noexcept -> bool { return comparator ( a, b ); } );
+    }
 
     template < typename V = T, EnableIf < Type < V > :: copyConstructible > = 0 >
     __CDS_OptimalInline auto pushFront ( ElementCRef value ) noexcept -> ElementRef {
@@ -724,6 +744,69 @@ __CDS_MaybeUnused auto List < T > :: sub ( Index from, Index to ) const noexcept
     });
 
     return list;
+}
+
+template < typename T >
+template < typename SortFunc >
+auto List < T > :: quickSort (
+        Iterator const & from,
+        Iterator const & to,
+        SortFunc const & comparisonFunction
+) noexcept -> void {
+
+    auto next = to;
+    if ( next.isValid() ) {
+        ++ next;
+        if ( from == next )
+            return;
+    }
+
+    if ( from != to && from.isValid() && to.isValid() ) {
+        auto partitionIterator = List < T > :: quickSortPartition ( from, to, comparisonFunction );
+
+        List < T > :: quickSort ( from, partitionIterator, comparisonFunction );
+        if ( ! partitionIterator.isValid() )
+            return;
+
+        if ( partitionIterator == from ) {
+            ++ partitionIterator;
+            if ( partitionIterator.isValid() )
+                List < T > :: quickSort ( partitionIterator, to, comparisonFunction );
+            return;
+        }
+
+        ++ partitionIterator;
+        if ( ! partitionIterator.isValid() )
+            return;
+
+        ++ partitionIterator;
+        List < T > :: quickSort ( partitionIterator, to, comparisonFunction );
+    }
+}
+
+template < typename T >
+template < typename SortFunc >
+auto List < T > :: quickSortPartition (
+        Iterator const & from,
+        Iterator const & to,
+        SortFunc const & comparisonFunction
+) noexcept -> Iterator {
+    auto swap = [] ( T & a, T & b ) { auto aux = a; a = b; b = aux; };
+    auto pivot = * to;
+    auto partitionIterator = from;
+    Iterator previous;
+
+    for ( auto it = from; it != to; ++ it )
+        if ( comparisonFunction ( * it, pivot ) ) {
+            swap ( * partitionIterator, * it );
+            previous = partitionIterator;
+            ++ partitionIterator;
+        }
+
+    swap ( * partitionIterator, * to );
+    if ( ! previous.isValid() )
+        return partitionIterator;
+    return previous;
 }
 
 __CDS_RegisterParseTypeTemplateT(List)

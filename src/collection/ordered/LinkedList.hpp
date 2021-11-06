@@ -78,6 +78,10 @@ private:
 
         ~DoubleLinkedListDelegateIterator () noexcept override = default;
 
+        __CDS_NoDiscard auto isValid () const noexcept -> bool override {
+            return this->_pNode != nullptr;
+        }
+
         auto next () noexcept -> DoubleLinkedListDelegateIterator & override {
             (void) ( this->_forward ? ( this->_pNode = this->_pNode->pNext ) : ( this->_pNode = this->_pNode->pPrevious ) );
             return * this;
@@ -90,6 +94,10 @@ private:
 
         auto value () const noexcept -> ElementRef override {
             return * this->_pNode->data;
+        }
+
+        __CDS_NoDiscard constexpr auto node () const noexcept -> DoubleLinkedList :: Node * {
+            return this->_pNode.get();
         }
 
         auto equals ( DelegateIterator const & it ) const noexcept -> bool override {
@@ -160,6 +168,8 @@ private:
                 return Memory :: instance () . create < DoubleLinkedListDelegateIterator > ( this->_pBack, false );
             case DelegateIteratorRequestType :: BACKWARD_END:
                 return Memory :: instance () . create < DoubleLinkedListDelegateIterator > ( nullptr, false );
+            default:
+                return nullptr;
         }
     }
 
@@ -173,6 +183,8 @@ private:
                 return Memory :: instance () . create < DoubleLinkedListConstDelegateIterator > ( this->_pBack, false );
             case DelegateIteratorRequestType :: BACKWARD_END:
                 return Memory :: instance () . create < DoubleLinkedListConstDelegateIterator > ( nullptr, false );
+            default:
+                return nullptr;
         }
     }
 
@@ -188,13 +200,13 @@ public:
     }
 
     DoubleLinkedList(
-            Iterator,
-            Iterator
+            Iterator const &,
+            Iterator const &
     ) noexcept;
 
     DoubleLinkedList(
-            ConstIterator,
-            ConstIterator
+            ConstIterator const &,
+            ConstIterator const &
     ) noexcept;
 
     DoubleLinkedList( InitializerList ) noexcept; // NOLINT(google-explicit-constructor)
@@ -357,32 +369,7 @@ private:
     auto pAt (Index) noexcept (false) -> ElementPtr override;
     auto pAt (Index) const noexcept (false) -> ElementCPtr override;
 
-#if defined(__JETBRAINS_IDE__)
-#pragma clang diagnostic push
-#pragma ide diagnostic ignored "NotImplementedFunctions"
-#endif
-
-    template < typename SortFunc >
-    auto static quickSort ( Iterator, Iterator, SortFunc const & ) noexcept -> void; // NOLINT(misc-no-recursion)
-
-    template < typename SortFunc >
-    auto static quickSortPartition ( Iterator, Iterator, SortFunc const & ) noexcept -> Iterator;
-
-#if defined(__JETBRAINS_IDE__)
-#pragma clang diagnostic pop
-#endif
-
 public:
-
-    __CDS_OptimalInline auto sort ( Comparator < T > const & c ) noexcept -> void {
-        auto f = ( [&c] (T const & a, T const & b) noexcept -> bool { return c(a, b); } );
-        return this->sort(f);
-    }
-
-    template < typename SortFunc >
-    auto sort ( SortFunc const & ) noexcept -> void;
-
-
     auto operator = ( Collection <T> const & ) noexcept -> DoubleLinkedList &;
 
     __CDS_OptimalInline auto operator = ( DoubleLinkedList <T> const & o ) noexcept -> DoubleLinkedList & {  // NOLINT(bugprone-unhandled-self-assignment)
@@ -737,56 +724,37 @@ auto DoubleLinkedList<T>::removeLastNotOf( Collection<T> const & from ) noexcept
 
 template < typename T >
 auto DoubleLinkedList<T>::remove ( Iterator const & it ) noexcept (false) -> T {
+    if ( ! it.of ( this ) )
+        throw IllegalArgumentException ( "Iterator is not of this Collection" );
+
     if ( this->empty() )
-        throw OutOfBoundsException("List is Empty");
-//
-//    if ( this->begin() == it ) {
-//        auto node = this->_pFront;
-//        auto retVal = * node->data;
-//        this->_pFront = node->pNext;
-//        this->_pFront->pPrevious = nullptr;
-//
-//        if ( this->size() == 1 )
-//            this->_pBack = this->_pFront;
-//
-//        -- this->_size;
-//        Memory :: instance().destroy ( node->data );
-//        Memory :: instance().destroy ( node );
-//        return retVal;
-//    }
-//
-//    if ( Iterator(this->_pBack, this) == it ) {
-//        auto node = this->_pBack;
-//        auto retVal = * node->data;
-//        this->_pBack = node->pPrevious;
-//        this->_pBack->pNext = nullptr;
-//
-//        if ( this->size() == 1 )
-//            this->_pFront = this->_pBack;
-//
-//        -- this->_size;
-//        Memory :: instance().destroy ( node->data );
-//        Memory :: instance().destroy ( node );
-//        return retVal;
-//    }
-//
-//    for ( auto node = this->_pFront->pNext; node != this->_pBack; node = node->pNext ) {
-//        if ( Iterator ( node, this ) == it ) {
-//            auto before = node->pPrevious;
-//            auto next = node->pNext;
-//
-//            before->pNext = next;
-//            next->pPrevious = before;
-//
-//            auto retVal = * node->data;
-//            -- this->_size;
-//
-//            Memory :: instance().destroy ( node->data );
-//            Memory :: instance().destroy ( node );
-//
-//            return retVal;
-//        }
-//    }
+        throw OutOfBoundsException ( "List is Empty" );
+
+    auto pDelegate = reinterpret_cast < DoubleLinkedListDelegateIterator * > ( Collection < T > ::acquireDelegate ( it ) );
+
+    if ( pDelegate->node() == this->_pFront )
+        return this->popFront();
+
+    if ( pDelegate->node() == this->_pBack )
+        return this->popBack();
+
+    for ( auto node = this->_pFront->pNext; node != this->_pBack; node = node->pNext ) {
+        if ( pDelegate->node() == node ) {
+            auto before = node->pPrevious;
+            auto next = node->pNext;
+
+            before->pNext = next;
+            next->pPrevious = before;
+
+            auto retVal = * node->data;
+            -- this->_size;
+
+            Memory :: instance().destroy ( node->data );
+            Memory :: instance().destroy ( node );
+
+            return retVal;
+        }
+    }
 
     throw IllegalArgumentException ("Wrong List Iterator");
 }
@@ -885,87 +853,9 @@ auto DoubleLinkedList < T > :: pAt ( Index pos ) const noexcept (false) -> Eleme
 }
 
 template < typename T >
-template < typename SortFunc >
-__CDS_MaybeUnused auto DoubleLinkedList < T >::sort ( SortFunc const & func ) noexcept -> void {
-    if ( this->size() < 2 )
-        return;
-
-    auto previous = this->begin();
-    for ( auto current = this->begin(); current != this->end(); ++ current )
-        previous = current;
-
-    quickSort ( this->begin() , previous , func );
-}
-
-template < typename T >
-template < typename SortFunc >
-auto DoubleLinkedList<T>::quickSort(
-        DoubleLinkedList::Iterator from,
-        DoubleLinkedList::Iterator to,
-        SortFunc const & func
-) noexcept -> void {
-    auto next = to;
-    if ( next != Iterator(nullptr, nullptr) ) {
-        next.next();
-        if ( from == next )
-            return;
-    }
-
-    if ( from != to && from != Iterator(nullptr, nullptr) && to != Iterator(nullptr, nullptr) ) {
-        auto partitionIterator = DoubleLinkedList<T >::quickSortPartition(from , to , func);
-
-        DoubleLinkedList<T >::quickSort(from , partitionIterator , func);
-
-        if ( partitionIterator == Iterator(nullptr, nullptr) )
-            return;
-
-        if (partitionIterator == from) {
-            partitionIterator.next();
-            if ( partitionIterator != Iterator(nullptr, nullptr) )
-                DoubleLinkedList<T >::quickSort(partitionIterator , to , func);
-            return;
-        }
-
-        partitionIterator.next();
-        if ( partitionIterator == Iterator(nullptr, nullptr) )
-            return;
-        partitionIterator.next();
-        DoubleLinkedList<T >::quickSort ( partitionIterator , to , func );
-    }
-}
-
-template < typename T >
-template < typename SortFunc >
-auto DoubleLinkedList<T>::quickSortPartition(
-        DoubleLinkedList::Iterator from,
-        DoubleLinkedList::Iterator to,
-        SortFunc const & func
-) noexcept -> Iterator {
-    auto swap = [] ( T & a , T & b ) { auto aux = a; a = b; b = aux; };
-
-    auto pivot = to.value();
-    typename DoubleLinkedList<T >::Iterator partitionIterator(from);
-
-    auto previous = Iterator(nullptr, nullptr);
-
-    for ( auto it = from; it != to; ++ it ) {
-        if ( func ( it.value() , pivot ) ) {
-            swap ( partitionIterator.value() , it.value() );
-            previous = partitionIterator;
-            partitionIterator.next();
-        }
-    }
-
-    swap ( partitionIterator.value() , to.value() );
-    if ( previous == Iterator(nullptr, nullptr) )
-        return partitionIterator;
-    return previous;
-}
-
-template < typename T >
 DoubleLinkedList<T>::DoubleLinkedList(
-        Iterator from,
-        Iterator to
+        Iterator const & from,
+        Iterator const & to
 ) noexcept {
     for ( auto it = from; it != to; ++ it )
         this->pushBack( * it );
@@ -973,8 +863,8 @@ DoubleLinkedList<T>::DoubleLinkedList(
 
 template < typename T >
 DoubleLinkedList<T>::DoubleLinkedList(
-        ConstIterator from,
-        ConstIterator to
+        ConstIterator const & from,
+        ConstIterator const & to
 ) noexcept {
     for ( auto it = from; it != to; ++ it )
         this->pushBack( * it );
