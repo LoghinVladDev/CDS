@@ -41,10 +41,10 @@ private:
         constexpr Node () noexcept = default;
 
         __CDS_cpplang_NonConstConstexprMemberFunction auto next () noexcept -> Node * & { return this->_pNext; }
-        constexpr auto next () const noexcept -> Node const * & { return this->_pNext; }
+        constexpr auto next () const noexcept -> Node const * const & { return this->_pNext; }
 
         __CDS_cpplang_NonConstConstexprMemberFunction auto data () noexcept -> T * & { return this->_data; }
-        constexpr auto data () const noexcept -> T const * & { return this->_data; }
+        constexpr auto data () const noexcept -> T const * const & { return this->_data; }
     };
 
     Node * _pFront {nullptr};

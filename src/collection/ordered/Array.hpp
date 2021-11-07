@@ -943,14 +943,9 @@ Array<T> & Array<T>::operator= (Collection<ElementType> const & c) noexcept {
 
     this->clear();
 
-    auto pBegin = Collection<T>::beginPtr(c);
-    auto pEnd = Collection<T>::endPtr(c);
+    for ( auto const & e : c )
+        this->pushBack( e );
 
-    for ( auto it = pBegin; ! it->equals( * pEnd ); it->next() )
-        this->pushBack ( it->value() );
-
-    Memory :: instance().destroy ( pBegin );
-    Memory :: instance().destroy ( pEnd );
     return * this;
 }
 
