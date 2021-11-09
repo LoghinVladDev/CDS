@@ -998,11 +998,11 @@ namespace cds {
 
         this->clear();
 
-    for ( auto const & e : c )
-        this->pushBack( e );
+        for ( auto const & e : c )
+            this->pushBack( e );
 
-    return * this;
-}
+        return * this;
+    }
 
 }
 
