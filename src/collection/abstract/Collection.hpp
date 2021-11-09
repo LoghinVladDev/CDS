@@ -15,7 +15,7 @@
 #endif
 #endif
 
-#include "std-types.h"
+#include <CDS/std-types>
 #include <CDS/Pointer>
 #include <CDS/Function>
 #include <CDS/Traits>
