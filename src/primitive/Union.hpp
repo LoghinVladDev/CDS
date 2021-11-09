@@ -108,7 +108,7 @@ namespace cds {
         void * pInstance {nullptr};
         Index _activeTypeIndex { -1 };
 
-        __CDS_cpplang_ConstexprDestructor static auto typesAsString () noexcept -> String {
+        __CDS_OptimalInline static auto typesAsString () noexcept -> String {
             if ( sizeof...(RemainingTypes) > 36 )
                 return "Too Many Types in Union to deduce";
 
@@ -220,20 +220,20 @@ namespace cds {
 
             UNION_DELETE36
 
-    #define UNION_COPY(_i)                                                                                                                      \
-        if ( value._activeTypeIndex == _i ) {                                                                                                   \
-            using Type ## _i = typename utility :: hidden :: unionImpl :: TypeAtIndexInPack < _i, FirstType, RemainingTypes ... > :: type;      \
-            if constexpr ( std :: is_same < Type ## _i, void > :: value ) {                                                                     \
-                throw TypeException ( String::f("Type '%s' is not copyable", Utility :: TypeParseTraits < Type ## _i > :: name) );              \
-            } else if constexpr ( Type < Type ## _i > :: copyConstructible ) {                                                                  \
-                this->pInstance = Memory :: instance().create < Type ## _i > ( * reinterpret_cast < Type ## _i const * > ( value.pInstance ) ); \
-                this->_activeTypeIndex = _i;                                                                                                    \
-            } else if constexpr ( Type < Type ## _i > :: copyAssignable ) {                                                                     \
-                this->pInstance = Memory :: instance().create < Type ## _i > ();                                                                \
-                * reinterpret_cast < Type ## _i * > ( this->pInstance ) = * reinterpret_cast < Type ## _i const * > ( value.pInstance );        \
-                this->_activeTypeIndex = _i;                                                                                                    \
-            } else                                                                                                                              \
-                throw TypeException ( String::f("Type '%s' is not copyable", Utility :: TypeParseTraits < Type ## _i > :: name) );              \
+    #define UNION_COPY(_i)                                                                                                                                  \
+        if ( value._activeTypeIndex == _i ) {                                                                                                               \
+            using Type ## _i = typename utility :: hidden :: unionImpl :: TypeAtIndexInPack < _i, FirstType, RemainingTypes ... > :: type;                  \
+            if constexpr ( std :: is_same < Type ## _i, void > :: value ) {                                                                                 \
+                throw TypeException ( String::f("Type '%s' is not copyable", utility :: TypeParseTraits < Type ## _i > :: name) );                          \
+            } else if constexpr ( Type < Type ## _i > :: copyConstructible ) {                                                                              \
+                this->pInstance = Memory :: instance().create < Type ## _i > ( * reinterpret_cast < Type ## _i const * > ( value.pInstance ) );             \
+                this->_activeTypeIndex = _i;                                                                                                                \
+            } else if constexpr ( Type < Type ## _i > :: copyAssignable ) {                                                                                 \
+                this->pInstance = Memory :: instance().create < Type ## _i > ();                                                                            \
+                * reinterpret_cast < Type ## _i * > ( this->pInstance ) = * reinterpret_cast < Type ## _i const * > ( value.pInstance );                    \
+                this->_activeTypeIndex = _i;                                                                                                                \
+            } else                                                                                                                                          \
+                throw TypeException ( String::f("Type '%s' is not copyable", utility :: TypeParseTraits < Type ## _i > :: name) );                          \
         }
 
             UNION_COPY(0)
@@ -333,8 +333,8 @@ namespace cds {
 
             UNION_DELETE36
 
-            this->pInstance = Utility :: exchange ( value.pInstance, nullptr );
-            this->_activeTypeIndex = Utility :: exchange ( value._activeTypeIndex, -1 );
+            this->pInstance = exchange ( value.pInstance, nullptr );
+            this->_activeTypeIndex = exchange ( value._activeTypeIndex, -1 );
 
             return * this;
         }
