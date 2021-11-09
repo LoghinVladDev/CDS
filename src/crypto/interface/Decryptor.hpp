@@ -7,28 +7,36 @@
 
 #include <CDS/crypto/CryptoOperation>
 
-template < Size byteSize >
-class Decryptor : virtual public CryptoOperation < byteSize > {
-public:
-    using IVType = CryptoBlock < byteSize >;
+namespace cds {
 
-protected:
-    auto run () noexcept -> Decryptor & override = 0;
+    template < Size byteSize >
+    class Decryptor : virtual public CryptoOperation < byteSize > {
+    public:
+        using IVType = CryptoBlock < byteSize >;
 
-    IVType _IV; // NOLINT(bugprone-reserved-identifier)
+    protected:
+        auto run () noexcept -> Decryptor & override = 0;
 
-public:
-    inline auto decrypt () noexcept -> Decryptor & { return this->run(); }
+        IVType _IV; // NOLINT(bugprone-reserved-identifier)
 
-    __CDS_NoDiscard constexpr auto IV () const noexcept -> IVType const & { return this->_IV; }
-    __CDS_NoDiscard constexpr auto IV () noexcept -> IVType & { return this->_IV; }
-};
+    public:
+        inline auto decrypt () noexcept -> Decryptor & { return this->run(); }
 
-namespace Utility {
-    template<Size byteSize>
-    struct TypeParseTraits<Decryptor<byteSize>> {
-        constexpr static StringLiteral name = "Decryptor";
+        __CDS_NoDiscard constexpr auto IV () const noexcept -> IVType const & { return this->_IV; }
+        __CDS_NoDiscard constexpr auto IV () noexcept -> IVType & { return this->_IV; }
     };
+
+}
+
+namespace cds { // NOLINT(modernize-concat-nested-namespaces)
+    namespace utility {
+
+        template<Size byteSize>
+        struct TypeParseTraits<Decryptor<byteSize>> {
+            constexpr static StringLiteral name = "Decryptor";
+        };
+
+    }
 }
 
 #endif //CDS_DECRYPTOR_HPP

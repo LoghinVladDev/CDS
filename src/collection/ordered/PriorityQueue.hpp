@@ -7,9 +7,13 @@
 
 #include <CDS/List>
 
-template < typename T, typename PriorityFunction = std::less<> >
-class PriorityQueue final : public List < T > {
+namespace cds {
 
-};
+    template < typename T, typename PriorityFunction = std::less<> >
+    class PriorityQueue final : public List < T > {
+
+    };
+
+}
 
 #endif //CDS_PRIORITYQUEUE_HPP

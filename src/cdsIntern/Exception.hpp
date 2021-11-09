@@ -9,97 +9,101 @@
 #include <CDS/Memory>
 #include <utility>
 
-class Exception : public Object, public std :: exception {
-private:
-    String _message;
+namespace cds {
 
-    __CDS_NoDiscard __CDS_cpplang_VirtualConstexpr auto what () const noexcept -> StringLiteral override { return this->_message.cStr(); }
+    class Exception : public Object, public std :: exception {
+    private:
+        String _message;
 
-public:
-    inline Exception () noexcept :
-            Object(),
-            std::exception(),
-            _message("Runtime Exception") {
+        __CDS_NoDiscard __CDS_cpplang_VirtualConstexpr auto what () const noexcept -> StringLiteral override { return this->_message.cStr(); }
 
-    }
+    public:
+        inline Exception () noexcept :
+                Object(),
+                std :: exception(),
+                _message("Runtime Exception") {
 
-    inline Exception ( Exception const & e ) noexcept = default;
-    inline Exception ( Exception && e ) noexcept = default;
+        }
 
-    __CDS_MaybeUnused inline Exception ( std :: exception const & e ) noexcept : // NOLINT(google-explicit-constructor)
-            Object (),
-            std :: exception ( e ),
-            _message(e.what()) {
+        inline Exception ( Exception const & e ) noexcept = default;
+        inline Exception ( Exception && e ) noexcept = default;
 
-    }
+        __CDS_MaybeUnused inline Exception ( std :: exception const & e ) noexcept : // NOLINT(google-explicit-constructor)
+                Object (),
+                std :: exception ( e ),
+                _message(e.what()) {
 
-    __CDS_MaybeUnused inline Exception ( std :: exception && e ) noexcept : // NOLINT(google-explicit-constructor)
-            Object (),
-            std :: exception ( e ),
-            _message ( e.what() ) {
+        }
 
-    }
+        __CDS_MaybeUnused inline Exception ( std :: exception && e ) noexcept : // NOLINT(google-explicit-constructor)
+                Object (),
+                std :: exception ( e ),
+                _message ( e.what() ) {
 
-    inline ~Exception () override = default;
+        }
 
-    __CDS_MaybeUnused inline explicit Exception ( String message ) noexcept :
-            Object (),
-            std :: exception (),
-            _message ( std :: move ( message ) ) {
+        inline ~Exception () override = default;
 
-    }
+        __CDS_MaybeUnused inline explicit Exception ( String message ) noexcept :
+                Object (),
+                std :: exception (),
+                _message ( std :: move ( message ) ) {
 
-    __CDS_MaybeUnused inline explicit Exception ( std :: string const & message ) noexcept :
-            Object (),
-            std :: exception (),
-            _message ( message ) {
+        }
 
-    }
+        __CDS_MaybeUnused inline explicit Exception ( std :: string const & message ) noexcept :
+                Object (),
+                std :: exception (),
+                _message ( message ) {
 
-    __CDS_MaybeUnused inline explicit Exception ( std :: string && message ) noexcept :
-            Object (),
-            std :: exception (),
-            _message ( message ) {
+        }
 
-    }
+        __CDS_MaybeUnused inline explicit Exception ( std :: string && message ) noexcept :
+                Object (),
+                std :: exception (),
+                _message ( message ) {
 
-    inline explicit Exception ( StringLiteral message ) noexcept :
-            Object (),
-            std :: exception (),
-            _message ( message ) {
+        }
 
-    }
+        inline explicit Exception ( StringLiteral message ) noexcept :
+                Object (),
+                std :: exception (),
+                _message ( message ) {
 
-    __CDS_MaybeUnused inline explicit Exception ( CString message ) noexcept :
-            Object (),
-            std :: exception (),
-            _message ( message ) {
+        }
 
-    }
+        __CDS_MaybeUnused inline explicit Exception ( CString message ) noexcept :
+                Object (),
+                std :: exception (),
+                _message ( message ) {
 
-    __CDS_NoDiscard __CDS_OptimalInline auto toString () const noexcept -> String override {
-        return this->_message;
-    }
+        }
 
-    __CDS_NoDiscard __CDS_cpplang_VirtualConstexpr auto hash () const noexcept -> Index override {
-        return this->_message.hash();
-    }
+        __CDS_NoDiscard __CDS_OptimalInline auto toString () const noexcept -> String override {
+            return this->_message;
+        }
 
-    __CDS_NoDiscard auto copy () const noexcept -> Exception * override {
-        return Memory::instance().create < Exception > ( * this );
-    }
+        __CDS_NoDiscard __CDS_cpplang_VirtualConstexpr auto hash () const noexcept -> Index override {
+            return this->_message.hash();
+        }
 
-    __CDS_NoDiscard __CDS_cpplang_VirtualConstexpr auto equals ( Object const & o ) const noexcept -> bool override {
-        if ( this == & o ) return true;
-        auto p = dynamic_cast < decltype (this) > ( & o );
-        if ( p == nullptr ) return false;
+        __CDS_NoDiscard auto copy () const noexcept -> Exception * override {
+            return Memory::instance().create < Exception > ( * this );
+        }
 
-        return this->_message == p->_message;
-    }
+        __CDS_NoDiscard __CDS_cpplang_VirtualConstexpr auto equals ( Object const & o ) const noexcept -> bool override {
+            if ( this == & o ) return true;
+            auto p = dynamic_cast < decltype (this) > ( & o );
+            if ( p == nullptr ) return false;
 
-    __CDS_NoDiscard __CDS_MaybeUnused constexpr auto message () const noexcept -> StringLiteral {
-        return this->_message.cStr();
-    }
-};
+            return this->_message == p->_message;
+        }
+
+        __CDS_NoDiscard __CDS_MaybeUnused constexpr auto message () const noexcept -> StringLiteral {
+            return this->_message.cStr();
+        }
+    };
+
+}
 
 #endif //CDS_EXCEPTION_HPP

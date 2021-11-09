@@ -15,13 +15,16 @@ concept HashCalculatorHasBoundaryFunction = requires (H hashCalculator) {
 #include "../std-types.h"
 #include "../prepro.h"
 
-class Object;
-class String;
+namespace cds {
+    class Object;
+    class String;
+}
 
 #include <cstring>
 #include <string>
 
-namespace dataTypes {
+namespace cds { // NOLINT(modernize-concat-nested-namespaces)
+
     template<class T> constexpr static auto hash(T const &) noexcept -> Index { return 0; }
     template<> auto hash<String>(String const &o) noexcept -> Index;
     template<> auto hash<Object>(Object const &o) noexcept -> Index;
@@ -56,63 +59,88 @@ namespace dataTypes {
     }
 
 #endif
+
 }
 
-template <typename K, Size hashBoundary>
-class HashCalculator {
-public:
-    using Value                 = K;
-    using ValueConstReference   = Value const &;
+namespace cds {
 
-    using HashValue             = Index;
-
-    virtual auto operator ()(ValueConstReference) const noexcept -> HashValue = 0;
-
-    __CDS_NoDiscard virtual __CDS_cpplang_VirtualConstexpr auto getBoundary () const noexcept -> Size { return hashBoundary; }
-};
-
-namespace dataTypes {
-    template <class K, Size hashBoundary>
-    class DefaultHashFunction : public HashCalculator<K, hashBoundary> {
+    template <typename K, Size hashBoundary>
+    class HashCalculator {
     public:
-        using AddressValue __CDS_MaybeUnused = std::size_t;
+        using Value                 = K;
+        using ValueConstReference   = Value const &;
 
-        auto operator ()(typename HashCalculator<K, hashBoundary>::ValueConstReference v) const noexcept -> typename HashCalculator<K, hashBoundary>::HashValue {
-            return dataTypes::hash(v) % hashBoundary;
-        }
+        using HashValue             = Index;
+
+        virtual auto operator ()(ValueConstReference) const noexcept -> HashValue = 0;
+
+        __CDS_NoDiscard virtual __CDS_cpplang_VirtualConstexpr auto getBoundary () const noexcept -> Size { return hashBoundary; }
     };
+
+}
+
+namespace cds { // NOLINT(modernize-concat-nested-namespaces)
+    namespace utility {
+
+        template <class K, Size hashBoundary>
+        class DefaultHashFunction : public HashCalculator<K, hashBoundary> {
+        public:
+            using AddressValue __CDS_MaybeUnused = std::size_t;
+
+            auto operator ()(typename HashCalculator<K, hashBoundary>::ValueConstReference v) const noexcept -> typename HashCalculator<K, hashBoundary>::HashValue {
+                return hash(v) % hashBoundary;
+            }
+        };
 
 #if defined(CDS_EASY_HASH_DEBUG)
-    template <class K> using HighCollisionDefaultHashFunction = DefaultHashFunction<K, 1>;
-    template <class K> using MediumCollisionDefaultHashFunction = DefaultHashFunction<K, 2>;
-    template <class K> using LowCollisionDefaultHashFunction = DefaultHashFunction<K, 3>;
+
+        template <class K> using HighCollisionDefaultHashFunction = DefaultHashFunction<K, 1>;
+        template <class K> using MediumCollisionDefaultHashFunction = DefaultHashFunction<K, 2>;
+        template <class K> using LowCollisionDefaultHashFunction = DefaultHashFunction<K, 3>;
+
 #else
-    template <class K> using HighCollisionDefaultHashFunction = DefaultHashFunction<K, 256>;
-    template <class K> using MediumCollisionDefaultHashFunction = DefaultHashFunction<K, 4096>;
-    template <class K> using LowCollisionDefaultHashFunction = DefaultHashFunction<K, 32768>;
+
+        template <class K> using HighCollisionDefaultHashFunction = DefaultHashFunction<K, 256>;
+        template <class K> using MediumCollisionDefaultHashFunction = DefaultHashFunction<K, 4096>;
+        template <class K> using LowCollisionDefaultHashFunction = DefaultHashFunction<K, 32768>;
+
 #endif
+
+    }
 }
 
-template < typename T >
-class Selector {
-public:
-    virtual auto operator () (T const &) const noexcept -> Index = 0;
-};
+namespace cds {
 
-namespace dataTypes {
     template < typename T >
-    class __CDS_MaybeUnused DefaultSelector : public Selector < T > {
+    class Selector {
     public:
-        auto operator () (T const & obj) const noexcept -> Index { return (Index) obj; }
+        virtual auto operator()(T const &) const noexcept -> Index = 0;
     };
+
 }
 
-namespace dataTypes {
-    template < typename T >
-    constexpr auto unsafeAddress () noexcept -> T * { return reinterpret_cast < T * > (0x10); }
+namespace cds { // NOLINT(modernize-concat-nested-namespaces)
+    namespace utility {
 
-    template < typename T >
-    __CDS_MaybeUnused constexpr auto unsafeConstAddress () noexcept -> T * { return reinterpret_cast < T const * > (0x10); }
+        template < typename T >
+        class __CDS_MaybeUnused DefaultSelector : public Selector < T > {
+        public:
+            auto operator () (T const & obj) const noexcept -> Index { return (Index) obj; }
+        };
+
+    }
+}
+
+namespace cds { // NOLINT(modernize-concat-nested-namespaces)
+    namespace utility {
+
+        template < typename T >
+        constexpr auto unsafeAddress () noexcept -> T * { return reinterpret_cast < T * > (0x10); }
+
+        template < typename T >
+        __CDS_MaybeUnused constexpr auto unsafeConstAddress () noexcept -> T * { return reinterpret_cast < T const * > (0x10); }
+
+    }
 }
 
 #endif //CDS_TYPES_HPP

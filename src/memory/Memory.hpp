@@ -15,174 +15,182 @@
 #define __CDS_Memory_Manager __CDS_Memory_CustomManager
 #endif
 
-class Memory {
-public:
-    class DefaultManager {
+namespace cds {
+
+    class Memory {
     public:
-        template < typename T, typename ... ArgumentTypes >
-        constexpr static auto create ( void * pRawMemory, ArgumentTypes && ... arguments ) noexcept ( noexcept ( T ( std :: forward < ArgumentTypes > ( arguments ) ... ) ) ) -> T * {
-            return new (pRawMemory) T ( std :: forward < ArgumentTypes > ( arguments ) ... );
-        }
-
-        template < typename T, EnableIf < ! std :: is_same < RemoveModifiers < T >, void > :: value > = 0 >
-        inline static auto destroy ( T * pObject ) noexcept (false) -> void * {
-            if ( pObject != nullptr )
-                pObject->~T();
-            return reinterpret_cast < void * > ( const_cast < RemoveConst < T > * > ( pObject ) );
-        }
-
-        template < typename T, EnableIf < std :: is_same < RemoveModifiers < T >, void > :: value > = 0 >
-        inline static auto destroy ( T * pObject ) noexcept (false) -> void * {
-            return nullptr;
-        }
-    };
-
-
-    class Allocator {
-        using MemoryManager = __CDS_Memory_Manager;
-
-    protected:
-        virtual auto allocate ( Size ) noexcept -> void * = 0;
-        virtual auto deallocate ( void * ) noexcept -> void = 0;
-
-    public:
-        virtual ~Allocator () noexcept = default;
-
-        __CDS_WarningSuppression_DeducedNoexceptTermination_SuppressEnable
-
-        template < typename T, typename ... ArgumentTypes >
-        inline auto create ( ArgumentTypes ... arguments ) noexcept ( noexcept ( T ( std :: forward < ArgumentTypes > ( arguments ) ... ) ) ) -> T * {
-            void * pRawMemory = nullptr;
-
-            try {
-                pRawMemory = this->allocate ( sizeof ( T ) );
-                return MemoryManager :: create < T > ( pRawMemory, std :: forward < ArgumentTypes > ( arguments ) ... );
-            } catch ( ... ) {
-                this->deallocate ( pRawMemory );
-                throw;
+        class DefaultManager {
+        public:
+            template < typename T, typename ... ArgumentTypes >
+            constexpr static auto create ( void * pRawMemory, ArgumentTypes && ... arguments ) noexcept ( noexcept ( T ( std :: forward < ArgumentTypes > ( arguments ) ... ) ) ) -> T * {
+                return new (pRawMemory) T ( std :: forward < ArgumentTypes > ( arguments ) ... );
             }
-        }
 
-        template < typename T >
-        inline auto createArray ( Size size ) noexcept ( noexcept ( T ( ) ) ) -> T * {
-            void * pRawMemory = nullptr;
+            template < typename T, EnableIf < ! std :: is_same < RemoveModifiers < T >, void > :: value > = 0 >
+            inline static auto destroy ( T * pObject ) noexcept (false) -> void * {
+                if ( pObject != nullptr )
+                    pObject->~T();
+                return reinterpret_cast < void * > ( const_cast < RemoveConst < T > * > ( pObject ) );
+            }
 
-            try {
-                pRawMemory = this->allocate ( sizeof ( T ) * size );
+            template < typename T, EnableIf < std :: is_same < RemoveModifiers < T >, void > :: value > = 0 >
+            inline static auto destroy ( T * ) noexcept (false) -> void * {
+                return nullptr;
+            }
+        };
 
-                Byte * startAddress = reinterpret_cast < Byte * > ( pRawMemory );
-                Byte * endAddress = reinterpret_cast < Byte * > ( pRawMemory ) + sizeof ( T ) * size;
+
+        class Allocator {
+            using MemoryManager = __CDS_Memory_Manager;
+
+        protected:
+            virtual auto allocate ( Size ) noexcept -> void * = 0;
+            virtual auto deallocate ( void * ) noexcept -> void = 0;
+
+        public:
+            virtual ~Allocator () noexcept = default;
+
+            __CDS_WarningSuppression_DeducedNoexceptTermination_SuppressEnable
+
+            template < typename T, typename ... ArgumentTypes >
+            inline auto create ( ArgumentTypes ... arguments ) noexcept ( noexcept ( T ( std :: forward < ArgumentTypes > ( arguments ) ... ) ) ) -> T * {
+                void * pRawMemory = nullptr;
+
+                try {
+                    pRawMemory = this->allocate ( sizeof ( T ) );
+                    return MemoryManager :: create < T > ( pRawMemory, std :: forward < ArgumentTypes > ( arguments ) ... );
+                } catch ( ... ) {
+                    this->deallocate ( pRawMemory );
+                    throw;
+                }
+            }
+
+            template < typename T >
+            inline auto createArray ( Size size ) noexcept ( noexcept ( T ( ) ) ) -> T * {
+                void * pRawMemory = nullptr;
+
+                try {
+                    pRawMemory = this->allocate ( sizeof ( T ) * size );
+
+                    Byte * startAddress = reinterpret_cast < Byte * > ( pRawMemory );
+                    Byte * endAddress = reinterpret_cast < Byte * > ( pRawMemory ) + sizeof ( T ) * size;
+
+                    for ( auto * pObject = startAddress; pObject < endAddress; pObject += sizeof ( T ) )
+                        MemoryManager :: create < T > ( pObject );
+
+                    return reinterpret_cast < T * > ( pRawMemory );
+
+                } catch ( ... ) {
+                    this->deallocate ( pRawMemory );
+                    throw;
+                }
+            }
+
+            __CDS_WarningSuppression_DeducedNoexceptTermination_SuppressDisable
+
+            template < typename T >
+            inline auto destroyArray ( T * pArray, Size size ) noexcept -> void {
+                Byte * startAddress = reinterpret_cast < Byte * > ( pArray );
+                Byte * endAddress = reinterpret_cast < Byte * > ( pArray ) + sizeof ( T ) * size;
 
                 for ( auto * pObject = startAddress; pObject < endAddress; pObject += sizeof ( T ) )
-                    MemoryManager :: create < T > ( pObject );
+                    MemoryManager :: destroy ( reinterpret_cast < T * > ( pObject ) );
 
-                return reinterpret_cast < T * > ( pRawMemory );
-
-            } catch ( ... ) {
-                this->deallocate ( pRawMemory );
-                throw;
+                this->deallocate( pArray );
             }
+
+            template < typename T >
+            inline auto destroy ( T * pObject ) noexcept -> void {
+                return this->deallocate ( MemoryManager :: destroy ( pObject ) );
+            }
+        };
+
+        class DefaultHeapAllocator : public Allocator  {
+        public:
+            DefaultHeapAllocator() noexcept = default;
+
+            inline auto allocate ( Size size ) noexcept -> void * override {
+                return malloc ( size );
+            }
+
+            inline auto deallocate ( void * pMemory ) noexcept -> void override {
+                free ( pMemory );
+            }
+        };
+
+        class __CDS_MaybeUnused LeakDetectionAllocator;
+
+    private:
+        Allocator * pAllocator { new DefaultHeapAllocator };
+        utility :: hidden :: memoryImpl :: ArraySizeManager sizeManager;
+
+        Memory () noexcept { } // NOLINT(modernize-use-equals-default) Windows cannot identify noexcept composite in default
+
+    public:
+        static auto instance () noexcept -> Memory & {
+            static Memory instance;
+            return instance;
         }
 
-        __CDS_WarningSuppression_DeducedNoexceptTermination_SuppressDisable
+        __CDS_OptimalInline auto replaceAllocator ( Allocator * allocator ) noexcept -> Allocator * {
+            return exchange ( this->pAllocator, allocator );
+        }
+
+        template < typename T, typename ... ArgumentTypes >
+        inline auto create ( ArgumentTypes ... arguments ) noexcept( noexcept ( T ( std :: forward < ArgumentTypes > ( arguments ) ... ) ) ) -> T * {
+
+    #if defined(__CDS_Memory_ForceDisable)
+            return new T ( std :: forward < ArgumentTypes > ( arguments ) ... );
+    #else
+            return this->pAllocator->create <T> ( std :: forward < ArgumentTypes > ( arguments ) ... );
+    #endif
+
+        }
 
         template < typename T >
-        inline auto destroyArray ( T * pArray, Size size ) noexcept -> void {
-            Byte * startAddress = reinterpret_cast < Byte * > ( pArray );
-            Byte * endAddress = reinterpret_cast < Byte * > ( pArray ) + sizeof ( T ) * size;
+        inline auto createArray ( Size size ) noexcept ( noexcept ( T () ) ) -> T * {
 
-            for ( auto * pObject = startAddress; pObject < endAddress; pObject += sizeof ( T ) )
-                MemoryManager :: destroy ( reinterpret_cast < T * > ( pObject ) );
+    #if defined(__CDS_Memory_ForceDisable)
+            return new T[size];
+    #else
+            return reinterpret_cast < T * > ( this->sizeManager.save ( reinterpret_cast < Byte * > ( this->pAllocator->createArray < T > ( size ) ), size ) );
+    #endif
 
-            this->deallocate( pArray );
         }
 
         template < typename T >
         inline auto destroy ( T * pObject ) noexcept -> void {
-            return this->deallocate ( MemoryManager :: destroy ( pObject ) );
+
+    #if defined(__CDS_Memory_ForceDisable)
+            delete pObject;
+    #else
+            return this->pAllocator->destroy( pObject );
+    #endif
+
+        }
+
+        template < typename T >
+        inline auto destroyArray ( T * pArray ) noexcept -> void {
+
+    #if defined(__CDS_Memory_ForceDisable)
+            delete [] pArray;
+    #else
+            return this->pAllocator->destroyArray ( pArray, this->sizeManager.load (reinterpret_cast < Byte const * > ( pArray ) ) );
+    #endif
+
+        }
+
+        ~Memory() noexcept {
+            delete this->pAllocator;
         }
     };
 
-    class DefaultHeapAllocator : public Allocator  {
-    public:
-        DefaultHeapAllocator() noexcept = default;
 
-        inline auto allocate ( Size size ) noexcept -> void * override {
-            return malloc ( size );
-        }
+//    auto Memory::instance() noexcept -> Memory & {
+//        static Memory instance;
+//        return instance;
+//    }
 
-        inline auto deallocate ( void * pMemory ) noexcept -> void override {
-            free ( pMemory );
-        }
-    };
-
-    class LeakDetectionAllocator;
-
-private:
-    Allocator * pAllocator { new DefaultHeapAllocator };
-    Utility::MemoryImpl::ArraySizeManager sizeManager;
-
-    Memory () noexcept { } // NOLINT(modernize-use-equals-default) Windows cannot identify noexcept composite in default
-
-public:
-    static auto instance () noexcept -> Memory &;
-
-    __CDS_OptimalInline auto replaceAllocator ( Allocator * allocator ) noexcept -> Allocator * {
-        return Utility :: exchange ( this->pAllocator, allocator );
-    }
-
-    template < typename T, typename ... ArgumentTypes >
-    inline auto create ( ArgumentTypes ... arguments ) noexcept( noexcept ( T ( std :: forward < ArgumentTypes > ( arguments ) ... ) ) ) -> T * {
-
-#if defined(__CDS_Memory_ForceDisable)
-        return new T ( std :: forward < ArgumentTypes > ( arguments ) ... );
-#else
-        return this->pAllocator->create <T> ( std :: forward < ArgumentTypes > ( arguments ) ... );
-#endif
-
-    }
-
-    template < typename T >
-    inline auto createArray ( Size size ) noexcept ( noexcept ( T () ) ) -> T * {
-
-#if defined(__CDS_Memory_ForceDisable)
-        return new T[size];
-#else
-        return reinterpret_cast < T * > ( this->sizeManager.save ( reinterpret_cast < Byte * > ( this->pAllocator->createArray < T > ( size ) ), size ) );
-#endif
-
-    }
-
-    template < typename T >
-    inline auto destroy ( T * pObject ) noexcept -> void {
-
-#if defined(__CDS_Memory_ForceDisable)
-        delete pObject;
-#else
-        return this->pAllocator->destroy( pObject );
-#endif
-
-    }
-
-    template < typename T >
-    inline auto destroyArray ( T * pArray ) noexcept -> void {
-
-#if defined(__CDS_Memory_ForceDisable)
-        delete [] pArray;
-#else
-        return this->pAllocator->destroyArray ( pArray, this->sizeManager.load (reinterpret_cast < Byte const * > ( pArray ) ) );
-#endif
-
-    }
-
-    ~Memory() noexcept {
-        delete this->pAllocator;
-    }
-};
-
-inline auto Memory::instance() noexcept -> Memory & {
-    static Memory instance;
-    return instance;
 }
 
 #undef __CDS_Memory_Manager

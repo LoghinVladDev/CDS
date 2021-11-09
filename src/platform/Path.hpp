@@ -21,433 +21,455 @@
 #warning Warning : Path-lib Unsupported
 #endif
 
-class Path : public Object {
-private:
-    explicit Path(bool skipPathCheck __CDS_MaybeUnused) noexcept {}
+namespace cds {
 
-#if __CDS_cpplang_core_version >= __CDS_cpplang_core_version_17
+    class Path : public Object {
+    private:
+        explicit Path(bool skipPathCheck __CDS_MaybeUnused) noexcept {}
 
-    static LinkedList < char > possibleDirectorySeparators;
+    #if __CDS_cpplang_core_version >= __CDS_cpplang_core_version_17
 
-#else
+        static LinkedList < char > possibleDirectorySeparators;
 
-    LinkedList < char > possibleDirectorySeparators = { '/', '\\' };
+    #else
 
-#endif
+        LinkedList < char > possibleDirectorySeparators = { '/', '\\' };
 
-protected:
-    String _osPath;
+    #endif
 
-public:
-    class InvalidPath : public std::exception {
-        __CDS_NoDiscard auto what() const noexcept -> StringLiteral override {
-            return "Invalid Path Given";
+    protected:
+        String _osPath;
+
+    public:
+        class InvalidPath : public std::exception {
+            __CDS_NoDiscard auto what() const noexcept -> StringLiteral override {
+                return "Invalid Path Given";
+            }
+        };
+
+        class WalkNotADirectory : public std::exception {
+            __CDS_NoDiscard auto what () const noexcept -> StringLiteral override {
+                return "Walk Error : Path given does not refer to a directory";
+            }
+        };
+
+        __CDS_OptimalInline auto operator == (Path const & o) const noexcept -> bool {
+            return this->_osPath == o._osPath;
         }
-    };
 
-    class WalkNotADirectory : public std::exception {
-        __CDS_NoDiscard auto what () const noexcept -> StringLiteral override {
-            return "Walk Error : Path given does not refer to a directory";
+        __CDS_NoDiscard auto equals(Object const & o) const noexcept -> bool override {
+            if ( this == & o ) return true;
+            auto p = dynamic_cast < decltype ( this ) > ( & o );
+            if ( p == nullptr ) return false;
+            return this->operator == (* p);
         }
-    };
 
-    __CDS_OptimalInline auto operator == (Path const & o) const noexcept -> bool {
-        return this->_osPath == o._osPath;
-    }
+    #if defined(WIN32)
+        class WalkIncompleteWin32 : public std::exception {
+            __CDS_NoDiscard auto what () const noexcept -> StringLiteral override {
+                return "Walk Error : Incomplete";
+            }
+        };
+    #endif
 
-    __CDS_NoDiscard auto equals(Object const & o) const noexcept -> bool override {
-        if ( this == & o ) return true;
-        auto p = dynamic_cast < decltype ( this ) > ( & o );
-        if ( p == nullptr ) return false;
-        return this->operator == (* p);
-    }
+        constexpr static StringLiteral CWD = "."; // current working directory
 
-#if defined(WIN32)
-    class WalkIncompleteWin32 : public std::exception {
-        __CDS_NoDiscard auto what () const noexcept -> StringLiteral override {
-            return "Walk Error : Incomplete";
+        static auto directorySeparator () noexcept -> char {
+    #if defined(WIN32)
+            return '\\';
+    #elif defined(__linux)
+            return '/';
+    #else
+    #warning Unsupported : Path::directorySeparator
+    #endif
         }
-    };
-#endif
 
-    constexpr static StringLiteral CWD = "."; // current working directory
+        Path() noexcept : Path(CWD) { }
+        Path(String const & path) noexcept (false) { // NOLINT(google-explicit-constructor)
+    #if defined(WIN32)
 
-    static auto directorySeparator () noexcept -> char {
-#if defined(WIN32)
-        return '\\';
-#elif defined(__linux)
-        return '/';
-#else
-#warning Unsupported : Path::directorySeparator
-#endif
-    }
+            constexpr static uint16 initialPathSize = 256;
+            char * resolvedPath = (char *) malloc (initialPathSize);
 
-    Path() noexcept : Path(CWD) { }
-    Path(String const & path) noexcept (false) { // NOLINT(google-explicit-constructor)
-#if defined(WIN32)
-
-        constexpr static uint16 initialPathSize = 256;
-        char * resolvedPath = (char *) malloc (initialPathSize);
-
-        auto res = GetFullPathNameA(path.cStr(), initialPathSize, resolvedPath, nullptr);
-        if ( res >= initialPathSize ) {
-            free ( resolvedPath );
-            resolvedPath = (char *) malloc (res + 1);
-            if ( GetFullPathNameA ( path.cStr(), res + 1, resolvedPath, nullptr ) == 0 ) {
+            auto res = GetFullPathNameA(path.cStr(), initialPathSize, resolvedPath, nullptr);
+            if ( res >= initialPathSize ) {
                 free ( resolvedPath );
+                resolvedPath = (char *) malloc (res + 1);
+                if ( GetFullPathNameA ( path.cStr(), res + 1, resolvedPath, nullptr ) == 0 ) {
+                    free ( resolvedPath );
+                    throw InvalidPath();
+                }
+            } else if ( res == 0 )
+                throw InvalidPath();
+
+            if ( GetFileAttributesA(resolvedPath) == INVALID_FILE_ATTRIBUTES ) {
+                free(resolvedPath);
                 throw InvalidPath();
             }
-        } else if ( res == 0 )
-            throw InvalidPath();
 
-        if ( GetFileAttributesA(resolvedPath) == INVALID_FILE_ATTRIBUTES ) {
-            free(resolvedPath);
-            throw InvalidPath();
+            this->_osPath = resolvedPath;
+            free ( resolvedPath );
+
+    #elif defined(__linux)
+
+            struct stat64 fileStat {};
+            if ( stat64 ( path.cStr(), & fileStat ) != 0 )
+                throw InvalidPath();
+
+            char resolvedPath[PATH_MAX];
+
+            __CDS_WarningSuppression_UnusedResult_SuppressEnable
+
+            realpath(path.cStr(), resolvedPath);
+
+            __CDS_WarningSuppression_UnusedResult_SuppressDisable
+
+            this->_osPath = resolvedPath;
+
+    #else
+
+    #warning Warning : Path::Path(String) Unsupported
+
+    #endif
         }
 
-        this->_osPath = resolvedPath;
-        free ( resolvedPath );
+        Path(StringLiteral path) noexcept(false) : Path(String(path)) {} // NOLINT(google-explicit-constructor)
 
-#elif defined(__linux)
-
-        struct stat64 fileStat {};
-        if ( stat64 ( path.cStr(), & fileStat ) != 0 )
-            throw InvalidPath();
-
-        char resolvedPath[PATH_MAX];
-
-        __CDS_WarningSuppression_UnusedResult_SuppressEnable
-
-        realpath(path.cStr(), resolvedPath);
-
-        __CDS_WarningSuppression_UnusedResult_SuppressDisable
-
-        this->_osPath = resolvedPath;
-
-#else
-
-#warning Warning : Path::Path(String) Unsupported
-
-#endif
-    }
-
-    Path(StringLiteral path) noexcept(false) : Path(String(path)) {} // NOLINT(google-explicit-constructor)
-
-    Path & operator = (Path const &) noexcept = default;
-    Path & operator = (String const & s) noexcept(false) {
-        return ( ( * this ) = Path( s ) );
-    }
-
-    Path & operator = (StringLiteral s) noexcept(false) {
-        return ( ( * this ) = Path( s ) );
-    }
-
-    __CDS_NoDiscard auto toString () const noexcept -> String override { return this->_osPath; }
-    __CDS_NoDiscard auto copy () const noexcept -> Path * override { return Memory :: instance().create < Path > (* this); }
-    __CDS_NoDiscard auto hash () const noexcept -> Index override { return this->parent().nodeName().hash(); }
-
-    __CDS_NoDiscard __CDS_OptimalInline auto parent () const noexcept(false) -> Path { // NOLINT(misc-no-recursion)
-        auto parentPath = String (this->_osPath.substr(0, this->_osPath.findLast(Path::directorySeparator())));
-        if ( parentPath.empty() ) parentPath = this->root().toString();
-
-        return parentPath;
-    }
-
-    __CDS_NoDiscard __CDS_MaybeUnused __CDS_OptimalInline auto previous () const noexcept -> Path { return this->parent(); }
-
-    __CDS_NoDiscard __CDS_OptimalInline auto nodeName () const noexcept -> String { return this->_osPath.substr(this->_osPath.findLast(Path::directorySeparator()) + 1); }
-    __CDS_NoDiscard __CDS_MaybeUnused __CDS_OptimalInline auto currentName () const noexcept -> String { return this->nodeName(); }
-
-    __CDS_NoDiscard auto root () const noexcept -> Path { // NOLINT(misc-no-recursion)
-        auto parent = this->parent();
-        if ( this->_osPath == parent._osPath )
-            return parent;
-        return parent.root();
-    }
-
-    auto operator / (String const & f) const noexcept (false) -> Path {
-        auto delimFiltered = [
-#if __CDS_cpplang_core_version < __CDS_cpplang_core_version_17
-                this,
-#endif
-                & f
-        ]() -> String { String c(f); c.forEach([
-#if __CDS_cpplang_core_version < __CDS_cpplang_core_version_17
-                this
-#endif
-        ](String::ElementType & e){if (Path::possibleDirectorySeparators.contains(e)) e = Path::directorySeparator(); }); return c; };
-        return {this->_osPath + Path::directorySeparator() + delimFiltered()};
-    }
-
-    __CDS_OptimalInline auto operator + (String const & f) const noexcept (false) -> Path { return (*this) / f; }
-    __CDS_NoDiscard __CDS_OptimalInline auto append (String const & f) const noexcept (false) -> Path { return (*this) / f; }
-
-    class WalkEntry;
-
-    __CDS_NoDiscard auto walk (int = INT32_MAX) const noexcept (false) -> LinkedList < WalkEntry >;
-
-    __CDS_NoDiscard static auto walk (Path const & path, int = INT32_MAX) noexcept (false) -> LinkedList < WalkEntry >;
-    __CDS_NoDiscard static auto walk (String const & path, int = INT32_MAX) noexcept (false) -> LinkedList < WalkEntry >;
-
-#if defined(WIN32)
-    class Win32RootPath;
-
-    __CDS_NoDiscard static auto platformDependantRoots () noexcept -> LinkedList < Win32RootPath >;
-#elif defined(__linux)
-#else
-#warning Warning : Path::platformDependantRoots () Undefined
-#endif
-    __CDS_NoDiscard static auto roots () noexcept -> LinkedList < Path >;
-};
-
-template <> struct isCallableType <Path::WalkEntry> : std :: false_type{};
-
-class Path::WalkEntry : public Object {
-private:
-    Path _root {false};
-    LinkedList < String > _directories;
-    LinkedList < String > _files;
-
-public:
-    __CDS_OptimalInline auto operator == (WalkEntry const & o) const noexcept -> bool {
-        return this->_root == o._root && this->_files == o._files && this->_directories == o._directories;
-    }
-
-    __CDS_NoDiscard auto equals(Object const & o) const noexcept -> bool override {
-        if ( this == & o ) return true;
-        auto p = dynamic_cast < decltype (this) > ( & o );
-        if ( p == nullptr ) return false;
-
-        return this->operator==(* p);
-    }
-
-    WalkEntry () noexcept = default;
-    WalkEntry ( WalkEntry const & ) noexcept = default;
-
-    __CDS_NoDiscard auto toString() const noexcept -> String override {
-        return String("WalkEntry {") +
-               " root = " + this->_root.toString() +
-               ", directories = " + this->_directories.toString() +
-               ", files = " + this->_files.toString() +
-               "}";
-    }
-
-    __CDS_NoDiscard __CDS_MaybeUnused constexpr auto root () const noexcept -> Path const & { return this->_root; }
-    __CDS_cpplang_NonConstConstexprMemberFunction auto root () noexcept -> Path & { return this->_root; }
-
-    __CDS_NoDiscard constexpr auto directories () const noexcept -> LinkedList < String > const & { return this->_directories; }
-    __CDS_cpplang_NonConstConstexprMemberFunction auto directories () noexcept -> LinkedList < String > & { return this->_directories; }
-
-    __CDS_NoDiscard constexpr auto files () const noexcept -> LinkedList < String > const & { return this->_files; }
-    __CDS_cpplang_NonConstConstexprMemberFunction auto files () noexcept -> LinkedList < String > & { return this->_files; }
-
-    __CDS_NoDiscard auto copy() const noexcept -> WalkEntry * override {
-        return Memory :: instance().create < WalkEntry > (* this);
-    }
-
-    __CDS_NoDiscard auto hash () const noexcept -> Index override {
-        return this->_root.hash() + this->_directories.hash() + this->_files.hash();
-    }
-};
-
-#if defined(WIN32)
-class Path::Win32RootPath : public Object {
-public:
-    Path    path;
-    String  deviceName;
-    String  volumeName;
-
-    __CDS_NoDiscard auto toString() const noexcept -> String override {
-        return String("Win32RootPath {") +
-            " path = " + this->path.toString() +
-            ", deviceName = " + this->deviceName +
-            ", volumeName = " + this->volumeName +
-            " }";
-    }
-
-    __CDS_OptimalInline auto operator == (Win32RootPath const & o) const noexcept -> bool {
-        if ( this == & o ) return true;
-
-        return this->path == o.path && this->deviceName == o.deviceName && this->volumeName == o.volumeName;
-    }
-
-    __CDS_NoDiscard auto equals (Object const & o) const noexcept -> bool override {
-        if ( this == & o ) return true;
-        auto p = dynamic_cast < decltype ( this ) > ( & o );
-        if ( p == nullptr ) return false;
-        return this->operator == (*p);
-    }
-};
-#endif
-
-inline auto Path::walk(int depth) const noexcept (false) -> LinkedList<WalkEntry> { // NOLINT(misc-no-recursion)
-    if ( depth <= 0 )
-        return {};
-
-    WalkEntry currentDirEntry;
-    LinkedList < WalkEntry > entries;
-
-    currentDirEntry.root() = * this;
-
-#if defined(WIN32)
-
-    WIN32_FIND_DATAA win32FindData {};
-
-    HANDLE fileHandle = FindFirstFileA ( (this->_osPath + Path::directorySeparator() + "*").cStr(), & win32FindData );
-    if ( fileHandle == INVALID_HANDLE_VALUE ) {
-        return {};
-    }
-
-    do {
-        if ( std::strcmp ( win32FindData.cFileName, "." ) == 0 || std::strcmp ( win32FindData.cFileName, ".." ) == 0 ) {
-            // do nothing
-        } else if ( (bool)(win32FindData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) ) {
-            currentDirEntry.directories().pushBack(win32FindData.cFileName);
-
-            auto nestedEntries = Path(this->append(win32FindData.cFileName)).walk(depth - 1);
-            for ( auto & e : nestedEntries )
-                entries.pushBack ( e );
-        } else {
-            currentDirEntry.files().pushBack(win32FindData.cFileName);
+        Path & operator = (Path const &) noexcept = default;
+        Path & operator = (String const & s) noexcept(false) {
+            return ( ( * this ) = Path( s ) );
         }
-    } while ( FindNextFileA ( fileHandle, & win32FindData ) != FALSE );
 
-    DWORD errorID = GetLastError();
-    if ( errorID != ERROR_NO_MORE_FILES ) {
+        Path & operator = (StringLiteral s) noexcept(false) {
+            return ( ( * this ) = Path( s ) );
+        }
+
+        __CDS_NoDiscard auto toString () const noexcept -> String override { return this->_osPath; }
+        __CDS_NoDiscard auto copy () const noexcept -> Path * override { return Memory :: instance().create < Path > (* this); }
+        __CDS_NoDiscard auto hash () const noexcept -> Index override { return this->parent().nodeName().hash(); }
+
+        __CDS_NoDiscard __CDS_OptimalInline auto parent () const noexcept(false) -> Path { // NOLINT(misc-no-recursion)
+            auto parentPath = String (this->_osPath.substr(0, this->_osPath.findLast(Path::directorySeparator())));
+            if ( parentPath.empty() ) parentPath = this->root().toString();
+
+            return parentPath;
+        }
+
+        __CDS_NoDiscard __CDS_MaybeUnused __CDS_OptimalInline auto previous () const noexcept -> Path { return this->parent(); }
+
+        __CDS_NoDiscard __CDS_OptimalInline auto nodeName () const noexcept -> String { return this->_osPath.substr(this->_osPath.findLast(Path::directorySeparator()) + 1); }
+        __CDS_NoDiscard __CDS_MaybeUnused __CDS_OptimalInline auto currentName () const noexcept -> String { return this->nodeName(); }
+
+        __CDS_NoDiscard auto root () const noexcept -> Path { // NOLINT(misc-no-recursion)
+            auto parent = this->parent();
+            if ( this->_osPath == parent._osPath )
+                return parent;
+            return parent.root();
+        }
+
+        auto operator / (String const & f) const noexcept (false) -> Path {
+            auto delimFiltered = [
+    #if __CDS_cpplang_core_version < __CDS_cpplang_core_version_17
+                    this,
+    #endif
+                    & f
+            ]() -> String { String c(f); c.forEach([
+    #if __CDS_cpplang_core_version < __CDS_cpplang_core_version_17
+                    this
+    #endif
+            ](String::ElementType & e){if (Path::possibleDirectorySeparators.contains(e)) e = Path::directorySeparator(); }); return c; };
+            return {this->_osPath + Path::directorySeparator() + delimFiltered()};
+        }
+
+        __CDS_OptimalInline auto operator + (String const & f) const noexcept (false) -> Path { return (*this) / f; }
+        __CDS_NoDiscard __CDS_OptimalInline auto append (String const & f) const noexcept (false) -> Path { return (*this) / f; }
+
+        class WalkEntry;
+
+        __CDS_NoDiscard auto walk (int = INT32_MAX) const noexcept (false) -> LinkedList < WalkEntry >;
+
+        __CDS_NoDiscard static auto walk (Path const & path, int = INT32_MAX) noexcept (false) -> LinkedList < WalkEntry >;
+        __CDS_NoDiscard static auto walk (String const & path, int = INT32_MAX) noexcept (false) -> LinkedList < WalkEntry >;
+
+    #if defined(WIN32)
+        class Win32RootPath;
+
+        __CDS_NoDiscard static auto platformDependantRoots () noexcept -> LinkedList < Win32RootPath >;
+    #elif defined(__linux)
+    #else
+    #warning Warning : Path::platformDependantRoots () Undefined
+    #endif
+        __CDS_NoDiscard static auto roots () noexcept -> LinkedList < Path >;
+    };
+
+}
+
+namespace cds {
+
+    template <> struct isCallableType <Path::WalkEntry> : std :: false_type{};
+
+    class Path::WalkEntry : public Object {
+    private:
+        Path _root {false};
+        LinkedList < String > _directories;
+        LinkedList < String > _files;
+
+    public:
+        __CDS_OptimalInline auto operator == (WalkEntry const & o) const noexcept -> bool {
+            return this->_root == o._root && this->_files == o._files && this->_directories == o._directories;
+        }
+
+        __CDS_NoDiscard auto equals(Object const & o) const noexcept -> bool override {
+            if ( this == & o ) return true;
+            auto p = dynamic_cast < decltype (this) > ( & o );
+            if ( p == nullptr ) return false;
+
+            return this->operator==(* p);
+        }
+
+        WalkEntry () noexcept = default;
+        WalkEntry ( WalkEntry const & ) noexcept = default;
+
+        __CDS_NoDiscard auto toString() const noexcept -> String override {
+            return String("WalkEntry {") +
+                   " root = " + this->_root.toString() +
+                   ", directories = " + this->_directories.toString() +
+                   ", files = " + this->_files.toString() +
+                   "}";
+        }
+
+        __CDS_NoDiscard __CDS_MaybeUnused constexpr auto root () const noexcept -> Path const & { return this->_root; }
+        __CDS_cpplang_NonConstConstexprMemberFunction auto root () noexcept -> Path & { return this->_root; }
+
+        __CDS_NoDiscard constexpr auto directories () const noexcept -> LinkedList < String > const & { return this->_directories; }
+        __CDS_cpplang_NonConstConstexprMemberFunction auto directories () noexcept -> LinkedList < String > & { return this->_directories; }
+
+        __CDS_NoDiscard constexpr auto files () const noexcept -> LinkedList < String > const & { return this->_files; }
+        __CDS_cpplang_NonConstConstexprMemberFunction auto files () noexcept -> LinkedList < String > & { return this->_files; }
+
+        __CDS_NoDiscard auto copy() const noexcept -> WalkEntry * override {
+            return Memory :: instance().create < WalkEntry > (* this);
+        }
+
+        __CDS_NoDiscard auto hash () const noexcept -> Index override {
+            return this->_root.hash() + this->_directories.hash() + this->_files.hash();
+        }
+    };
+
+}
+
+#if defined(WIN32)
+
+namespace cds {
+
+    class Path::Win32RootPath : public Object {
+    public:
+        Path    path;
+        String  deviceName;
+        String  volumeName;
+
+        __CDS_NoDiscard auto toString() const noexcept -> String override {
+            return String("Win32RootPath {") +
+                " path = " + this->path.toString() +
+                ", deviceName = " + this->deviceName +
+                ", volumeName = " + this->volumeName +
+                " }";
+        }
+
+        __CDS_OptimalInline auto operator == (Win32RootPath const & o) const noexcept -> bool {
+            if ( this == & o ) return true;
+
+            return this->path == o.path && this->deviceName == o.deviceName && this->volumeName == o.volumeName;
+        }
+
+        __CDS_NoDiscard auto equals (Object const & o) const noexcept -> bool override {
+            if ( this == & o ) return true;
+            auto p = dynamic_cast < decltype ( this ) > ( & o );
+            if ( p == nullptr ) return false;
+            return this->operator == (*p);
+        }
+    };
+
+}
+
+#endif
+
+namespace cds {
+
+    inline auto Path::walk(int depth) const noexcept (false) -> LinkedList<WalkEntry> { // NOLINT(misc-no-recursion)
+        if ( depth <= 0 )
+            return {};
+
+        WalkEntry currentDirEntry;
+        LinkedList < WalkEntry > entries;
+
+        currentDirEntry.root() = * this;
+
+    #if defined(WIN32)
+
+        WIN32_FIND_DATAA win32FindData {};
+
+        HANDLE fileHandle = FindFirstFileA ( (this->_osPath + Path::directorySeparator() + "*").cStr(), & win32FindData );
+        if ( fileHandle == INVALID_HANDLE_VALUE ) {
+            return {};
+        }
+
+        do {
+            if ( std::strcmp ( win32FindData.cFileName, "." ) == 0 || std::strcmp ( win32FindData.cFileName, ".." ) == 0 ) {
+                // do nothing
+            } else if ( (bool)(win32FindData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) ) {
+                currentDirEntry.directories().pushBack(win32FindData.cFileName);
+
+                auto nestedEntries = Path(this->append(win32FindData.cFileName)).walk(depth - 1);
+                for ( auto & e : nestedEntries )
+                    entries.pushBack ( e );
+            } else {
+                currentDirEntry.files().pushBack(win32FindData.cFileName);
+            }
+        } while ( FindNextFileA ( fileHandle, & win32FindData ) != FALSE );
+
+        DWORD errorID = GetLastError();
+        if ( errorID != ERROR_NO_MORE_FILES ) {
+            FindClose(fileHandle);
+            throw WalkIncompleteWin32();
+        }
+
         FindClose(fileHandle);
-        throw WalkIncompleteWin32();
+
+        entries.pushFront(currentDirEntry);
+
+    #elif defined(__linux)
+
+        auto dir = opendir ( this->_osPath.cStr() );
+        if ( dir == nullptr )
+            throw WalkNotADirectory();
+
+        auto entry = readdir64(dir);
+        while ( entry != nullptr ) {
+            if ( entry->d_type == DT_LNK ) {
+                // do nothing
+            }
+            if ( std::strcmp ( entry->d_name, "." ) == 0 || std::strcmp ( entry->d_name, ".." ) == 0 ) {
+                // do nothing
+            } else if ( entry->d_type == DT_DIR ) {
+                currentDirEntry.directories().pushBack(entry->d_name);
+
+                auto nestedEntries = Path(this->append(entry->d_name)).walk(depth - 1);
+                for ( auto & e : nestedEntries )
+                    entries.pushFront( e );
+            } else {
+                currentDirEntry.files().pushBack(entry->d_name);
+            }
+
+            entry = readdir64(dir);
+        }
+
+        closedir ( dir );
+        entries.pushBack(currentDirEntry);
+
+    #else
+
+    #warning Warning : Path::walk Unsupported
+
+    #endif
+
+        return entries;
     }
 
-    FindClose(fileHandle);
+    inline auto Path::walk(const Path &path, int depth) noexcept(false) -> LinkedList< WalkEntry > { return path.walk(depth); }
+    inline auto Path::walk(const String &path, int depth) noexcept(false) -> LinkedList< WalkEntry > { return Path(path).walk(depth); }
 
-    entries.pushFront(currentDirEntry);
+    __CDS_NoDiscard inline auto Path::roots () noexcept -> LinkedList < Path > {
+        LinkedList < Path > paths;
+    #if defined(WIN32)
+        auto pDRList = Path::platformDependantRoots();
 
-#elif defined(__linux)
+        for ( auto & p : pDRList )
+            paths.pushBack(p.path);
+    #elif defined(__linux)
 
-    auto dir = opendir ( this->_osPath.cStr() );
-    if ( dir == nullptr )
-        throw WalkNotADirectory();
+       paths = {"/"};
 
-    auto entry = readdir64(dir);
-    while ( entry != nullptr ) {
-        if ( entry->d_type == DT_LNK ) {
-            // do nothing
-        }
-        if ( std::strcmp ( entry->d_name, "." ) == 0 || std::strcmp ( entry->d_name, ".." ) == 0 ) {
-            // do nothing
-        } else if ( entry->d_type == DT_DIR ) {
-            currentDirEntry.directories().pushBack(entry->d_name);
+    #else
 
-            auto nestedEntries = Path(this->append(entry->d_name)).walk(depth - 1);
-            for ( auto & e : nestedEntries )
-                entries.pushFront( e );
-        } else {
-            currentDirEntry.files().pushBack(entry->d_name);
-        }
+    #warning Warning: Path::roots undefined
 
-        entry = readdir64(dir);
+    #endif
+        return paths;
     }
 
-    closedir ( dir );
-    entries.pushBack(currentDirEntry);
+    #if defined(WIN32)
 
-#else
+    __CDS_NoDiscard inline auto Path::platformDependantRoots () noexcept -> LinkedList < Win32RootPath > {
+        LinkedList < Win32RootPath > rootElements;
 
-#warning Warning : Path::walk Unsupported
+        char volumeName [MAX_PATH];
+        char deviceName [MAX_PATH];
+        char * names;
 
-#endif
+        HANDLE firstVolumeHandle = FindFirstVolumeA ( volumeName, MAX_PATH );
 
-    return entries;
-}
+        if ( firstVolumeHandle == INVALID_HANDLE_VALUE )  return rootElements;
 
-inline auto Path::walk(const Path &path, int depth) noexcept(false) -> LinkedList< WalkEntry > { return path.walk(depth); }
-inline auto Path::walk(const String &path, int depth) noexcept(false) -> LinkedList< WalkEntry > { return Path(path).walk(depth); }
+        do {
+            if ( strstr(volumeName, "\\\\?\\") != volumeName || volumeName[strlen(volumeName) - 1] != '\\' )
+                continue;
 
-__CDS_NoDiscard inline auto Path::roots () noexcept -> LinkedList < Path > {
-    LinkedList < Path > paths;
-#if defined(WIN32)
-    auto pDRList = Path::platformDependantRoots();
+            Win32RootPath current;
 
-    for ( auto & p : pDRList )
-        paths.pushBack(p.path);
-#elif defined(__linux)
+            char * actualName = volumeName + strlen("\\\\?\\");
+            * strrchr(actualName, '\\') = 0;
 
-   paths = {"/"};
+            DWORD charCount = QueryDosDeviceA( actualName, deviceName, MAX_PATH );
 
-#else
+            current.deviceName = deviceName;
+            current.volumeName = actualName;
 
-#warning Warning: Path::roots undefined
+            names = (char *)malloc(MAX_PATH + 1);
+            DWORD reqSize = 0;
 
-#endif
-    return paths;
-}
+            if ( GetVolumePathNamesForVolumeNameA ( actualName, names, MAX_PATH + 1, & reqSize ) == FALSE ) {
+                free (names);
 
-#if defined(WIN32)
+    //            if ( GetLastError() != ERROR_MORE_DATA )
+    //                continue;
 
-__CDS_NoDiscard inline auto Path::platformDependantRoots () noexcept -> LinkedList < Win32RootPath > {
-    LinkedList < Win32RootPath > rootElements;
+                names = (char *) malloc (reqSize + 1);
+                GetVolumePathNamesForVolumeNameA ( actualName, names, reqSize + 1, nullptr );
+            }
 
-    char volumeName [MAX_PATH];
-    char deviceName [MAX_PATH];
-    char * names;
+            for ( auto * p = names; p[0] != '\0'; p += strlen(p) + 1 )
+                printf("%s\n", p);
 
-    HANDLE firstVolumeHandle = FindFirstVolumeA ( volumeName, MAX_PATH );
+            try {
+                current.path = Path(names);
+            } catch (std::exception const & e) {
+                free (names);
+                continue;
+            }
 
-    if ( firstVolumeHandle == INVALID_HANDLE_VALUE )  return rootElements;
-
-    do {
-        if ( strstr(volumeName, "\\\\?\\") != volumeName || volumeName[strlen(volumeName) - 1] != '\\' )
-            continue;
-
-        Win32RootPath current;
-
-        char * actualName = volumeName + strlen("\\\\?\\");
-        * strrchr(actualName, '\\') = 0;
-
-        DWORD charCount = QueryDosDeviceA( actualName, deviceName, MAX_PATH );
-
-        current.deviceName = deviceName;
-        current.volumeName = actualName;
-
-        names = (char *)malloc(MAX_PATH + 1);
-        DWORD reqSize = 0;
-
-        if ( GetVolumePathNamesForVolumeNameA ( actualName, names, MAX_PATH + 1, & reqSize ) == FALSE ) {
             free (names);
 
-//            if ( GetLastError() != ERROR_MORE_DATA )
-//                continue;
+            std::cout << current.toString() << '\n';
 
-            names = (char *) malloc (reqSize + 1);
-            GetVolumePathNamesForVolumeNameA ( actualName, names, reqSize + 1, nullptr );
-        }
+        } while ( FindNextVolumeA (firstVolumeHandle, volumeName, MAX_PATH) != FALSE );
 
-        for ( auto * p = names; p[0] != '\0'; p += strlen(p) + 1 )
-            printf("%s\n", p);
+        FindVolumeClose(firstVolumeHandle);
 
-        try {
-            current.path = Path(names);
-        } catch (std::exception const & e) {
-            free (names);
-            continue;
-        }
-
-        free (names);
-
-        std::cout << current.toString() << '\n';
-
-    } while ( FindNextVolumeA (firstVolumeHandle, volumeName, MAX_PATH) != FALSE );
-
-    FindVolumeClose(firstVolumeHandle);
-
-    return rootElements;
-}
+        return rootElements;
+    }
 
 #endif
+
+}
 
 #if __CDS_cpplang_core_version >= __CDS_cpplang_core_version_17
 
-inline LinkedList < char > Path::possibleDirectorySeparators = {'/', '\\'};
+namespace cds {
+
+    inline LinkedList < char > Path::possibleDirectorySeparators = {'/', '\\'};
+
+}
 
 #endif
 

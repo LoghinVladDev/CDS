@@ -10,121 +10,125 @@
 
 #include <sstream>
 
-template < typename T >
-class Atomic : public Object {
-protected:
-    using DataType = T;
+namespace cds {
 
-    Mutex    mutable _access;
-    DataType         _data;
-public:
+    template < typename T >
+    class Atomic : public Object {
+    protected:
+        using DataType = T;
 
-    Atomic () noexcept = default;
+        Mutex    mutable _access;
+        DataType         _data;
+    public:
 
-    Atomic (Atomic const & obj) noexcept { this->set(obj.get()); }
+        Atomic () noexcept = default;
 
-    Atomic (Atomic && obj) noexcept {
-        if ( obj._access.tryLock() ) {
-            this->set(obj._data);
-            obj._access.unlock();
-        } else {
-            this->_data = obj._data;
-            this->_access.lock();
-        }
-    }
+        Atomic (Atomic const & obj) noexcept { this->set(obj.get()); }
 
-    Atomic (DataType const & v) noexcept { // NOLINT(google-explicit-constructor)
-        this->set(v);
-    }
-
-    __CDS_OptimalInline auto get () const noexcept -> T {
-        this->_access.lock();
-        auto v = this->_data;
-        this->_access.unlock();
-
-        return v;
-    }
-
-    __CDS_OptimalInline auto set ( DataType const & v ) noexcept -> void {
-        this->_access.lock();
-        this->_data = v;
-        this->_access.unlock();
-    }
-
-    __CDS_OptimalInline Atomic & operator = ( Atomic const & obj ) noexcept {
-        if ( this == & obj ) return * this;
-
-        this->set( obj.get() );
-
-        return * this;
-    }
-
-    Atomic & operator = ( Atomic && obj ) noexcept {
-        if ( this == & obj ) return * this;
-
-        if ( obj._access.tryLock() ) {
-            this->set(obj._data);
-            obj._access.unlock();
-        } else {
-            this->_data = obj._data;
-            this->_access.lock();
+        Atomic (Atomic && obj) noexcept {
+            if ( obj._access.tryLock() ) {
+                this->set(obj._data);
+                obj._access.unlock();
+            } else {
+                this->_data = obj._data;
+                this->_access.lock();
+            }
         }
 
-        return * this;
-    }
+        Atomic (DataType const & v) noexcept { // NOLINT(google-explicit-constructor)
+            this->set(v);
+        }
 
-    __CDS_OptimalInline virtual Atomic & operator = ( DataType const & v ) noexcept {
-        this->set( v );
+        __CDS_OptimalInline auto get () const noexcept -> T {
+            this->_access.lock();
+            auto v = this->_data;
+            this->_access.unlock();
 
-        return * this;
-    }
+            return v;
+        }
 
-    __CDS_OptimalInline Atomic & operator = ( DataType && v ) noexcept {
-        this->set ( std::move ( v ) );
+        __CDS_OptimalInline auto set ( DataType const & v ) noexcept -> void {
+            this->_access.lock();
+            this->_data = v;
+            this->_access.unlock();
+        }
 
-        return * this;
-    }
+        __CDS_OptimalInline Atomic & operator = ( Atomic const & obj ) noexcept {
+            if ( this == & obj ) return * this;
 
-    __CDS_OptimalInline auto operator == ( Atomic const & v ) const noexcept -> bool {
-        return this->get() == v.get();
-    }
+            this->set( obj.get() );
 
-    __CDS_OptimalInline auto operator == ( DataType const & v ) const noexcept -> bool {
-        return this->get() == v;
-    }
+            return * this;
+        }
 
-    __CDS_OptimalInline auto operator != ( Atomic const & v ) const noexcept -> bool {
-        return this->get() != v.get();
-    }
+        Atomic & operator = ( Atomic && obj ) noexcept {
+            if ( this == & obj ) return * this;
 
-    __CDS_OptimalInline auto operator != ( DataType const & v ) const noexcept -> bool {
-        return this->get() != v;
-    }
+            if ( obj._access.tryLock() ) {
+                this->set(obj._data);
+                obj._access.unlock();
+            } else {
+                this->_data = obj._data;
+                this->_access.lock();
+            }
 
-    __CDS_OptimalInline operator DataType () const noexcept { // NOLINT(google-explicit-constructor)
-        return this->get();
-    }
+            return * this;
+        }
 
-    __CDS_NoDiscard auto toString () const noexcept -> String override {
-        std::stringstream ss;
+        __CDS_OptimalInline virtual Atomic & operator = ( DataType const & v ) noexcept {
+            this->set( v );
 
-        ss
-            << "Atomic{"
-            << "data=" << this->_data
-            << ", accessLock" << this->_access.toString().cStr()
-            << "}";
+            return * this;
+        }
 
-        return ss.str();
-    }
+        __CDS_OptimalInline Atomic & operator = ( DataType && v ) noexcept {
+            this->set ( std::move ( v ) );
 
-    __CDS_NoDiscard auto equals ( Object const & o ) const noexcept -> bool override {
-        if ( this == & o ) return true;
-        auto p = dynamic_cast < decltype ( this ) > ( & o );
-        if ( p == nullptr ) return false;
+            return * this;
+        }
 
-        return p->get() == this->get();
-    }
-};
+        __CDS_OptimalInline auto operator == ( Atomic const & v ) const noexcept -> bool {
+            return this->get() == v.get();
+        }
+
+        __CDS_OptimalInline auto operator == ( DataType const & v ) const noexcept -> bool {
+            return this->get() == v;
+        }
+
+        __CDS_OptimalInline auto operator != ( Atomic const & v ) const noexcept -> bool {
+            return this->get() != v.get();
+        }
+
+        __CDS_OptimalInline auto operator != ( DataType const & v ) const noexcept -> bool {
+            return this->get() != v;
+        }
+
+        __CDS_OptimalInline operator DataType () const noexcept { // NOLINT(google-explicit-constructor)
+            return this->get();
+        }
+
+        __CDS_NoDiscard auto toString () const noexcept -> String override {
+            std::stringstream ss;
+
+            ss
+                << "Atomic{"
+                << "data=" << this->_data
+                << ", accessLock" << this->_access.toString().cStr()
+                << "}";
+
+            return ss.str();
+        }
+
+        __CDS_NoDiscard auto equals ( Object const & o ) const noexcept -> bool override {
+            if ( this == & o ) return true;
+            auto p = dynamic_cast < decltype ( this ) > ( & o );
+            if ( p == nullptr ) return false;
+
+            return p->get() == this->get();
+        }
+    };
+
+}
 
 __CDS_RegisterParseTypeTemplateT(Atomic)
 

@@ -7,29 +7,37 @@
 
 #include <CDS/crypto/CryptoOperation>
 
-template < Size byteSize >
-class AsymmetricCryptoOperation : virtual public CryptoOperation < byteSize > {
-public:
-    using KeyType = CryptoBlock < byteSize >;
+namespace cds {
 
-protected:
-    KeyType _publicKey;
-    KeyType _privateKey;
+    template < Size byteSize >
+    class AsymmetricCryptoOperation : virtual public CryptoOperation < byteSize > {
+    public:
+        using KeyType = CryptoBlock < byteSize >;
 
-public:
-    inline auto publicKey () const noexcept -> KeyType const & { return this->_publicKey; }
-    inline auto publicKey () noexcept -> KeyType & { return this->_publicKey; }
+    protected:
+        KeyType _publicKey;
+        KeyType _privateKey;
 
-    inline auto privateKey () const noexcept -> KeyType const & { return this->_privateKey; }
-    inline auto privateKey () noexcept -> KeyType & { return this->_privateKey; }
+    public:
+        inline auto publicKey () const noexcept -> KeyType const & { return this->_publicKey; }
+        inline auto publicKey () noexcept -> KeyType & { return this->_publicKey; }
 
-};
+        inline auto privateKey () const noexcept -> KeyType const & { return this->_privateKey; }
+        inline auto privateKey () noexcept -> KeyType & { return this->_privateKey; }
 
-namespace Utility {
-    template<Size byteSize>
-    struct TypeParseTraits<AsymmetricCryptoOperation<byteSize>> {
-        constexpr static StringLiteral name = "AsymmetricCryptoOperation";
     };
+
+}
+
+namespace cds { // NOLINT(modernize-concat-nested-namespaces)
+    namespace utility {
+
+        template<Size byteSize>
+        struct TypeParseTraits<AsymmetricCryptoOperation<byteSize>> {
+            constexpr static StringLiteral name = "AsymmetricCryptoOperation";
+        };
+
+    }
 }
 
 #endif //CDS_ASYMMETRICCRYPTOOPERATION_HPP

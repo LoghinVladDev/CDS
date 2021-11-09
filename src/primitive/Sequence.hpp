@@ -21,3517 +21,3520 @@
 
 #include "SequencePrivate.hpp"
 
+namespace cds {
 
-template < typename C >
-class Sequence : public Object {
-public:
-    using CollectionType = C;
-
-private:
-
-    using ClassName                 = RemoveReference < C >;
-    using IterableValue             = decltype ( * ( * ( Type < typename ClassName::Iterator > :: unsafeAddress () ) ) );
-
-public:
-    using ElementType               = RemoveReference < IterableValue >;
-
-private:
-    using StoredPredicate           = Function < bool (IterableValue) >;
-    using StoredMapper              = Function < RemoveReference < IterableValue > (IterableValue) >;
-
-    using StoredIndexedPredicate    = Function < bool (Index, IterableValue) >;
-    using StoredIndexedMapper       = Function < RemoveReference < IterableValue > (Index, IterableValue) >;
-
-    friend class Iterator;
-    friend class ConstIterator;
-
-    /**
-     * can be:
-     *      Unique < Foreign > representing lack of ownership, a view created over a structure outside its scope
-     *      Unique < Unique > representing ownership, a structure created by the view to iterate upon
-     */
-    UniquePointer < PointerBase < C > > pCollection { nullptr };
-    uint16                              chainCount  { 0 }; // used to determine order of operations
-
-    LinkedList < Pair < SharedPointer < StoredPredicate >,  Index > >       storedPredicates;
-    LinkedList < Pair < SharedPointer < StoredMapper >,     Index > >       storedMappers;
-
-    LinkedList < Pair < SharedPointer < StoredIndexedPredicate >, Index > > storedIndexedPredicates;
-    LinkedList < Pair < SharedPointer < StoredIndexedMapper >,    Index > > storedIndexedMappers;
-
-public:
-    class Iterator : public Object {
+    template < typename C >
+    class Sequence : public Object {
     public:
-        using CollectionIterator = TypeIf <
-                Type < CollectionType > :: isConst,
-                typename CollectionType :: ConstIterator,
-                typename CollectionType :: Iterator
-        >;
-
-        using CollectionElementType = typename Sequence::ElementType;
+        using CollectionType = C;
 
     private:
-        ForeignPointer < Sequence > pSeq;
-        CollectionIterator it;
-        Index index {0};
 
-        UniquePointer < CollectionElementType > precomputed;
-
-        auto skipFiltered () noexcept -> void;
+        using ClassName                 = RemoveReference < C >;
+        using IterableValue             = decltype ( * ( * ( Type < typename ClassName::Iterator > :: unsafeAddress () ) ) );
 
     public:
-
-#if __CDS_cpplang_core_version >= __CDS_cpplang_core_version_17
-
-        __CDS_NoDiscard auto toString () const noexcept -> String override;
-        __CDS_NoDiscard auto hash () const noexcept -> Index override;
-
-#else
-
-        template < typename U = C, EnableIf < isPrintable < decltype ( Sequence < U > :: Iterator :: it ) > :: value > = 0 >
-        __CDS_NoDiscard auto toString () const noexcept -> String {
-            std::stringstream oss;
-            oss << "Sequence::Iterator { pSequence = " << this->pSeq.toString() << ", it = " << this->it << " }";
-            return oss.str();
-        }
-
-        template < typename U = C, EnableIf < ! isPrintable < decltype ( Sequence < U > :: Iterator :: it ) > :: value > = 0 >
-        __CDS_NoDiscard auto toString () const noexcept -> String {
-            std::stringstream oss;
-            oss << "Sequence::Iterator { pSequence = " << this->pSeq.toString() << ", value = " << * this->it << " }";
-            return oss.str();
-        }
-
-        template < typename U = C, EnableIf < Type < decltype ( Sequence < U > :: Iterator :: it ) > :: objectDerived > = 0 >
-        __CDS_NoDiscard auto hash () const noexcept -> Index {
-            return this->it.hash();
-        }
-
-        template < typename U = C, EnableIf < ! Type < decltype ( Sequence < U > :: Iterator :: it ) > :: objectDerived && Type < decltype ( dataTypes::unsafeAddress < & Sequence < U > :: Iterator :: it > () -> operator *() ) > :: objectDerived > = 0 >
-        __CDS_NoDiscard auto hash () const noexcept -> Index {
-            return (* this->it).hash();
-        }
-
-        template < typename U = C, EnableIf < ! Type < decltype ( Sequence < U > :: Iterator :: it ) > :: objectDerived && ! Type < decltype ( dataTypes::unsafeAddress < & Sequence < U > :: Iterator :: it > () -> operator *() ) > :: objectDerived > = 0 >
-        __CDS_NoDiscard auto hash () const noexcept -> Index {
-            return 0;
-        }
-
-#endif
-
-        __CDS_NoDiscard auto copy () const noexcept -> Iterator * override;
-        __CDS_NoDiscard auto equals (Object const &) const noexcept -> bool override;
-
-        Iterator () noexcept = delete;
-        __CDS_OptimalInline Iterator (Iterator const & otherIt) noexcept :
-                pSeq ( otherIt.pSeq ),
-                it (otherIt.it),
-                precomputed ( Memory::instance () .create < CollectionElementType > ( * otherIt.precomputed ) ),
-                index (otherIt.index){
-
-        }
-
-        __CDS_OptimalInline Iterator (Iterator &&) noexcept = default;
-        Iterator (Sequence *, CollectionIterator const &) noexcept;
-        ~Iterator () noexcept override = default;
-
-        auto value () const noexcept -> CollectionElementType;
-        auto next () noexcept -> Iterator &;
-        auto equals ( Iterator const & ) const noexcept -> Boolean;
-
-        auto operator == ( Iterator const & ) const noexcept -> bool;
-        auto operator != ( Iterator const & ) const noexcept -> bool;
-        auto operator ++ () noexcept -> Iterator &;
-        auto operator ++ (int) noexcept -> Iterator;
-        auto operator * () const noexcept -> CollectionElementType;
-    };
-
-    class ConstIterator : public Object {
-    public:
-        using CollectionIterator = typename CollectionType::ConstIterator;
-        using CollectionElementType = typename Sequence::ElementType;
+        using ElementType               = RemoveReference < IterableValue >;
 
     private:
-        ForeignPointer < Sequence const > pSeq;
-        CollectionIterator it;
-        Index index {0};
+        using StoredPredicate           = Function < bool (IterableValue) >;
+        using StoredMapper              = Function < RemoveReference < IterableValue > (IterableValue) >;
 
-        UniquePointer < CollectionElementType > precomputed;
+        using StoredIndexedPredicate    = Function < bool (Index, IterableValue) >;
+        using StoredIndexedMapper       = Function < RemoveReference < IterableValue > (Index, IterableValue) >;
 
-        auto skipFiltered () noexcept -> void;
+        friend class Iterator;
+        friend class ConstIterator;
+
+        /**
+         * can be:
+         *      Unique < Foreign > representing lack of ownership, a view created over a structure outside its scope
+         *      Unique < Unique > representing ownership, a structure created by the view to iterate upon
+         */
+        UniquePointer < PointerBase < C > > pCollection { nullptr };
+        uint16                              chainCount  { 0 }; // used to determine order of operations
+
+        LinkedList < Pair < SharedPointer < StoredPredicate >,  Index > >       storedPredicates;
+        LinkedList < Pair < SharedPointer < StoredMapper >,     Index > >       storedMappers;
+
+        LinkedList < Pair < SharedPointer < StoredIndexedPredicate >, Index > > storedIndexedPredicates;
+        LinkedList < Pair < SharedPointer < StoredIndexedMapper >,    Index > > storedIndexedMappers;
 
     public:
+        class Iterator : public Object {
+        public:
+            using CollectionIterator = TypeIf <
+                    Type < CollectionType > :: isConst,
+                    typename CollectionType :: ConstIterator,
+                    typename CollectionType :: Iterator
+            >;
 
-#if __CDS_cpplang_core_version >= __CDS_cpplang_core_version_17
+            using CollectionElementType = typename Sequence::ElementType;
 
-        __CDS_NoDiscard auto toString () const noexcept -> String override;
-        __CDS_NoDiscard auto hash () const noexcept -> Index override;
+        private:
+            ForeignPointer < Sequence > pSeq;
+            CollectionIterator it;
+            Index index {0};
 
-#else
+            UniquePointer < CollectionElementType > precomputed;
 
-        template < typename U = C, EnableIf < isPrintable < decltype ( Sequence < U > :: ConstIterator :: it ) > :: value > = 0 >
-        __CDS_NoDiscard auto toString () const noexcept -> String {
-            std::stringstream oss;
-            oss << "Sequence::Iterator { pSequence = " << this->pSeq.toString() << ", it = " << this->it << " }";
-            return oss.str();
-        }
+            auto skipFiltered () noexcept -> void;
 
-        template < typename U = C, EnableIf < ! isPrintable < decltype ( Sequence < U > :: ConstIterator :: it ) > :: value > = 0 >
-        __CDS_NoDiscard auto toString () const noexcept -> String {
-            std::stringstream oss;
-            oss << "Sequence::Iterator { pSequence = " << this->pSeq.toString() << ", value = " << * this->it << " }";
-            return oss.str();
-        }
+        public:
 
-        template < typename U = C, EnableIf < Type < decltype ( Sequence < U > :: ConstIterator :: it ) > :: objectDerived > = 0 >
-        __CDS_NoDiscard auto hash () const noexcept -> Index {
-            return this->it.hash();
-        }
+    #if __CDS_cpplang_core_version >= __CDS_cpplang_core_version_17
 
-        template < typename U = C, EnableIf < ! Type < decltype ( Sequence < U > :: ConstIterator :: it ) > :: objectDerived && Type < decltype ( dataTypes::unsafeAddress < & Sequence < U > :: ConstIterator :: it > () -> operator *() ) > :: objectDerived > = 0 >
-        __CDS_NoDiscard auto hash () const noexcept -> Index {
-            return (* this->it).hash();
-        }
+            __CDS_NoDiscard auto toString () const noexcept -> String override;
+            __CDS_NoDiscard auto hash () const noexcept -> Index override;
 
-        template < typename U = C, EnableIf < ! Type < decltype ( Sequence < U > :: ConstIterator :: it ) > :: objectDerived && ! Type < decltype ( dataTypes::unsafeAddress < & Sequence < U > :: ConstIterator :: it > () -> operator *() ) > :: objectDerived > = 0 >
-        __CDS_NoDiscard auto hash () const noexcept -> Index {
-            return 0;
-        }
-#endif
+    #else
 
-        __CDS_NoDiscard auto copy () const noexcept -> ConstIterator * override;
-        __CDS_NoDiscard auto equals (Object const &) const noexcept -> bool override;
-
-        ConstIterator () noexcept = delete;
-        ConstIterator (ConstIterator const &) noexcept = default;
-        ConstIterator (ConstIterator &&) noexcept = default;
-        ConstIterator (Sequence const *, CollectionIterator const &) noexcept;
-        ~ConstIterator () noexcept override = default;
-
-        auto value () const noexcept -> CollectionElementType;
-        auto next () noexcept -> ConstIterator &;
-        auto equals ( ConstIterator const & ) const noexcept -> Boolean;
-
-        auto operator == ( ConstIterator const & ) const noexcept -> bool;
-        auto operator != ( ConstIterator const & ) const noexcept -> bool;
-        auto operator ++ () noexcept -> ConstIterator &;
-        auto operator ++ (int) noexcept -> ConstIterator;
-        auto operator * () const noexcept -> CollectionElementType;
-    };
-
-private:
-    auto clear () noexcept -> void;
-
-public:
-    __CDS_MaybeUnused Sequence () noexcept = delete;
-    __CDS_MaybeUnused Sequence (Sequence const &) noexcept;
-    __CDS_MaybeUnused Sequence (Sequence &&) noexcept;
-
-    __CDS_MaybeUnused explicit Sequence ( C & ) noexcept;
-    __CDS_MaybeUnused explicit Sequence ( C && ) noexcept;
-
-    ~Sequence () noexcept override = default;
-
-    auto operator = (Sequence const &) noexcept -> Sequence &;
-    auto operator = (Sequence &&) noexcept -> Sequence &;
-
-    __CDS_MaybeUnused auto begin () noexcept -> Iterator;
-    __CDS_MaybeUnused auto end () noexcept -> Iterator;
-
-    __CDS_MaybeUnused auto begin () const noexcept -> ConstIterator;
-    __CDS_MaybeUnused auto end () const noexcept -> ConstIterator;
-    __CDS_MaybeUnused auto cbegin () const noexcept -> ConstIterator;
-    __CDS_MaybeUnused auto cend () const noexcept -> ConstIterator;
-
-    __CDS_NoDiscard __CDS_MaybeUnused auto toString () const noexcept -> String override;
-    __CDS_NoDiscard __CDS_MaybeUnused auto hash () const noexcept -> Index override;
-    __CDS_NoDiscard __CDS_MaybeUnused auto copy () const noexcept -> Sequence * override;
-    __CDS_NoDiscard __CDS_MaybeUnused auto equals (Object const &) const noexcept -> bool override;
-
-    __CDS_MaybeUnused auto contains ( ElementType const & element ) const noexcept -> Boolean
-    __CDS_Requires ( ForwardIterable < C > ) {
-
-        for ( auto v : * this )
-            if ( Type < ElementType > :: compare ( element, v ) )
-                return true;
-        return false;
-    }
-
-    __CDS_MaybeUnused auto elementAt ( Index i ) const noexcept -> Optional < ElementType >
-    __CDS_Requires ( ForwardIterable < C > ) {
-
-        Index at = 0;
-        for ( auto v : * this )
-            if ( at == i )
-                return { v };
-            else
-                at ++;
-
-        return { };
-    }
-
-    __CDS_MaybeUnused auto elementAtOr ( Index i, ElementType const & replacement ) const noexcept -> ElementType
-    __CDS_Requires ( ForwardIterable < C > ) {
-        Index at = 0;
-        for ( auto v : * this )
-            if ( at == i )
-                return v;
-            else
-                at ++;
-
-        return replacement;
-    }
-
-    template < typename T = ElementType, EnableIf < Type < T > :: isPointer > = 0 >
-    __CDS_MaybeUnused auto elementAtOrNull ( Index i ) const noexcept -> ElementType
-    __CDS_Requires ( ForwardIterable < C > ) {
-
-        Index at = 0;
-        for ( auto v : * this )
-            if ( at == i )
-                return v;
-            else
-                at ++;
-
-        return nullptr;
-    }
-
-
-    __CDS_MaybeUnused auto indexOf ( ElementType const & element ) const noexcept -> Index
-    __CDS_Requires ( ForwardIterable < C > ) {
-
-        Index i = 0;
-        for ( auto v : * this )
-            if ( Type < ElementType > :: compare ( element, v ) )
-                return i;
-            else
-                i++;
-
-        return -1;
-    }
-
-    __CDS_MaybeUnused auto lastIndexOf ( ElementType const & element ) const noexcept -> Index
-    __CDS_Requires ( ForwardIterable < C > ) {
-
-        Index i = 0, last = -1;
-        for ( auto v : * this ) {
-            if ( Type < ElementType > :: compare ( element, v ) )
-                last = i;
-            i++;
-        }
-
-        return last;
-    }
-
-    __CDS_MaybeUnused auto indicesOf ( ElementType const & element ) const noexcept -> LinkedList < Index >
-    __CDS_Requires ( ForwardIterable < C > ) {
-
-        LinkedList < Index > result;
-        Index i = 0;
-        for ( auto v : * this ) {
-            if ( Type < ElementType > :: compare ( element, v ) )
-                result.append(i);
-            i++;
-        }
-
-        return result;
-    }
-
-
-    template < typename Action >
-    __CDS_MaybeUnused auto apply ( Action const & action ) && noexcept -> Sequence < LinkedList < ElementType > >
-    __CDS_Requires ( ForwardIterable < C > && ActionOver < Action, Sequence > ) {
-
-        action(* this);
-        LinkedList < ElementType > container;
-
-        Index i = 0;
-        for ( auto e : * this )
-            container.append(e);
-
-        return std::move(Sequence < LinkedList < ElementType > > (std::move(container)));
-    }
-
-    template < typename Action >
-    __CDS_MaybeUnused auto also ( Action const & action ) && noexcept -> Sequence < LinkedList < ElementType > >
-    __CDS_Requires ( ForwardIterable < C > && EmptyAction < Action > ) {
-
-        action();
-        LinkedList < ElementType > container;
-
-        for ( auto e : * this )
-            container.append(e);
-
-        return std::move(Sequence < LinkedList < ElementType > > (std::move(container)));
-    }
-
-    template < typename Action >
-    __CDS_MaybeUnused auto apply ( Action const & action ) & noexcept -> Sequence < LinkedList < ElementType > >
-    __CDS_Requires ( ForwardIterable < C > && ActionOver < Action, Sequence > ) {
-
-        Sequence copy(* this);
-        action(copy);
-        LinkedList < ElementType > container;
-
-        for ( auto e : copy )
-            container.append(e);
-
-        return std::move(Sequence < LinkedList < ElementType > > (std::move(container)));
-    }
-
-    template < typename Action >
-    __CDS_MaybeUnused auto also ( Action const & action ) & noexcept -> Sequence < LinkedList < ElementType > >
-    __CDS_Requires ( ForwardIterable < C > && EmptyAction < Action > ) {
-
-        action();
-        LinkedList < ElementType > container;
-
-        for ( auto e : * this )
-            container.append(e);
-
-        return std::move(Sequence < LinkedList < ElementType > > (std::move(container)));
-    }
-
-
-    template < typename Predicate = Function < bool ( ElementType const & ) > >
-    __CDS_MaybeUnused auto first (
-            Predicate const & predicate = [](ElementType const &) noexcept -> bool { return true; }
-    ) const noexcept -> Optional < ElementType >
-    __CDS_Requires ( ForwardIterable < C > && PredicateOver < Predicate, ElementType > ) {
-
-        for ( auto e : * this )
-            if ( predicate ( e ) )
-                return { e };
-        return { };
-    }
-
-    template < typename Predicate >
-    __CDS_MaybeUnused __CDS_OptimalInline auto find ( Predicate const & predicate ) const noexcept -> Optional < ElementType >
-    __CDS_Requires ( ForwardIterable < C > && PredicateOver < Predicate, ElementType > ) {
-
-        return this->first(predicate);
-    }
-
-    template < typename Predicate = Function < bool ( ElementType const & ) > >
-    __CDS_MaybeUnused auto firstOr (
-            ElementType const & replacement,
-            Predicate   const & predicate = [] ( ElementType const & ) noexcept -> bool { return true; }
-    ) const noexcept -> ElementType
-    __CDS_Requires ( ForwardIterable < C > && PredicateOver < Predicate, ElementType > ) {
-
-        for ( auto v : * this )
-            if ( predicate (v) )
-                return v;
-        return replacement;
-    }
-
-    template < typename Predicate = Function < bool ( ElementType const & ) > >
-    __CDS_MaybeUnused auto last (
-            Predicate const & predicate = [] ( ElementType const & predicate ) noexcept -> bool { return true; }
-    ) const noexcept -> Optional < ElementType >
-    __CDS_Requires ( ForwardIterable < C > && PredicateOver < Predicate, ElementType > ) {
-
-        ElementType v;
-        Boolean found = false;
-        for ( auto e : * this )
-            if ( predicate(e) ) {
-                found = true;
-                v = e;
+            template < typename U = C, EnableIf < isPrintable < decltype ( Sequence < U > :: Iterator :: it ) > :: value > = 0 >
+            __CDS_NoDiscard auto toString () const noexcept -> String {
+                std::stringstream oss;
+                oss << "Sequence::Iterator { pSequence = " << this->pSeq.toString() << ", it = " << this->it << " }";
+                return oss.str();
             }
 
-        if ( found )
-            return { v };
-        return { };
-    }
-
-    template < typename Predicate >
-    __CDS_MaybeUnused __CDS_OptimalInline auto findLast ( Predicate const & predicate ) const noexcept -> Optional < ElementType >
-    __CDS_Requires ( ForwardIterable < C > && PredicateOver < Predicate, ElementType > ) {
-
-        return this->last(predicate);
-    }
-
-    template < typename Predicate = Function < bool ( ElementType const & ) > >
-    __CDS_MaybeUnused auto lastOr (
-            ElementType const & replacement,
-            Predicate   const & predicate = [](ElementType const &) noexcept -> bool { return true; }
-    ) const noexcept -> ElementType
-    __CDS_Requires ( ForwardIterable < C > && PredicateOver < Predicate, ElementType > ) {
-
-        ElementType v;
-        Boolean found = false;
-        for ( auto e : * this )
-            if ( predicate(e) ) {
-                found = true;
-                v = e;
+            template < typename U = C, EnableIf < ! isPrintable < decltype ( Sequence < U > :: Iterator :: it ) > :: value > = 0 >
+            __CDS_NoDiscard auto toString () const noexcept -> String {
+                std::stringstream oss;
+                oss << "Sequence::Iterator { pSequence = " << this->pSeq.toString() << ", value = " << * this->it << " }";
+                return oss.str();
             }
 
-        if ( found )
-            return v;
-        return replacement;
-    }
-
-
-    __CDS_MaybeUnused __CDS_OptimalInline auto single () const noexcept -> Optional < ElementType >
-    __CDS_Requires ( ForwardIterable < C > ) {
-
-        if ( this->pCollection.valueAt().valueAt().size() != 1 )
-            return { };
-        return this->begin().value();
-    }
-
-    __CDS_MaybeUnused __CDS_OptimalInline auto singleOr ( ElementType const & replacement ) const noexcept -> ElementType
-    __CDS_Requires ( ForwardIterable < C > ) {
-
-        if ( this->pCollection.valueAt().valueAt().size() != 1 )
-            return replacement;
-        return this->begin().value();
-    }
-
-    template < typename Predicate >
-    __CDS_MaybeUnused auto single ( Predicate const & predicate ) const noexcept -> Optional < ElementType >
-    __CDS_Requires ( ForwardIterable < C > && PredicateOver < Predicate, ElementType > ) {
-
-        ElementType v;
-        Boolean found = false;
-        for ( auto e : * this )
-            if ( predicate ( e ) ) {
-                if (!found) {
-                    found = true;
-                    v = e;
-                } else {
-                    return { };
-                }
+            template < typename U = C, EnableIf < Type < decltype ( Sequence < U > :: Iterator :: it ) > :: objectDerived > = 0 >
+            __CDS_NoDiscard auto hash () const noexcept -> Index {
+                return this->it.hash();
             }
 
-        if ( found ) return { v };
-        return { };
-    }
-
-    template < typename Predicate >
-    __CDS_MaybeUnused auto singleOr ( ElementType const & replacement, Predicate const & predicate ) const noexcept -> ElementType
-    __CDS_Requires ( ForwardIterable < C > && PredicateOver < Predicate, ElementType > ) {
-
-        ElementType v;
-        Boolean found = false;
-        for ( auto e : * this )
-            if ( predicate ( e ) ) {
-                if (!found) {
-                    found = true;
-                    v = e;
-                } else {
-                    return replacement;
-                }
+            template < typename U = C, EnableIf < ! Type < decltype ( Sequence < U > :: Iterator :: it ) > :: objectDerived && Type < decltype ( dataTypes::unsafeAddress < & Sequence < U > :: Iterator :: it > () -> operator *() ) > :: objectDerived > = 0 >
+            __CDS_NoDiscard auto hash () const noexcept -> Index {
+                return (* this->it).hash();
             }
 
-        if ( found ) return v;
-        return replacement;
-    }
-
-
-    __CDS_MaybeUnused auto drop (Size count) && noexcept -> Sequence < LinkedList < ElementType > >
-    __CDS_Requires ( ForwardIterable < C > ) {
-
-        LinkedList < ElementType > remaining;
-
-        Index i = 0;
-        for ( auto e : * this ) {
-            if ( i < count ) {
-                i++;
-                continue;
+            template < typename U = C, EnableIf < ! Type < decltype ( Sequence < U > :: Iterator :: it ) > :: objectDerived && ! Type < decltype ( dataTypes::unsafeAddress < & Sequence < U > :: Iterator :: it > () -> operator *() ) > :: objectDerived > = 0 >
+            __CDS_NoDiscard auto hash () const noexcept -> Index {
+                return 0;
             }
 
-            remaining.append(e);
-        }
+    #endif
 
-        return std::move(Sequence < LinkedList < ElementType > > (std::move(remaining)));
-    }
+            __CDS_NoDiscard auto copy () const noexcept -> Iterator * override;
+            __CDS_NoDiscard auto equals (Object const &) const noexcept -> bool override;
 
-    __CDS_MaybeUnused auto drop (Size count) & noexcept -> Sequence < LinkedList < ElementType > >
-    __CDS_Requires ( ForwardIterable < C > ) {
+            Iterator () noexcept = delete;
+            __CDS_OptimalInline Iterator (Iterator const & otherIt) noexcept :
+                    pSeq ( otherIt.pSeq ),
+                    it (otherIt.it),
+                    precomputed ( Memory::instance () .create < CollectionElementType > ( * otherIt.precomputed ) ),
+                    index (otherIt.index){
 
-        LinkedList < ElementType > remaining;
-
-        Index i = 0;
-        for ( auto e : * this ) {
-            if ( i < count ) {
-                i++;
-                continue;
             }
 
-            remaining.append(e);
-        }
+            __CDS_OptimalInline Iterator (Iterator &&) noexcept = default;
+            Iterator (Sequence *, CollectionIterator const &) noexcept;
+            ~Iterator () noexcept override = default;
 
-        return std::move(Sequence < LinkedList < ElementType > > (std::move(remaining)));
-    }
+            auto value () const noexcept -> CollectionElementType;
+            auto next () noexcept -> Iterator &;
+            auto equals ( Iterator const & ) const noexcept -> Boolean;
 
-    __CDS_MaybeUnused auto dropLast (Size count) && noexcept -> Sequence < LinkedList < ElementType > >
-    __CDS_Requires ( ForwardIterable < C > ) {
+            auto operator == ( Iterator const & ) const noexcept -> bool;
+            auto operator != ( Iterator const & ) const noexcept -> bool;
+            auto operator ++ () noexcept -> Iterator &;
+            auto operator ++ (int) noexcept -> Iterator;
+            auto operator * () const noexcept -> CollectionElementType;
+        };
 
-        LinkedList < ElementType > remaining;
-        auto currentSize = this->pCollection.valueAt().valueAt().size();
+        class ConstIterator : public Object {
+        public:
+            using CollectionIterator = typename CollectionType::ConstIterator;
+            using CollectionElementType = typename Sequence::ElementType;
 
-        for ( auto e : * this ) {
-            if ( currentSize > count ) {
-                currentSize --;
-                remaining.append(e);
-            }
-        }
+        private:
+            ForeignPointer < Sequence const > pSeq;
+            CollectionIterator it;
+            Index index {0};
 
-        return std::move(Sequence < LinkedList < ElementType > > (std::move(remaining)));
-    }
+            UniquePointer < CollectionElementType > precomputed;
 
-    __CDS_MaybeUnused auto dropLast (Size count) & noexcept -> Sequence < LinkedList < ElementType > >
-    __CDS_Requires ( ForwardIterable < C > ) {
+            auto skipFiltered () noexcept -> void;
 
-        LinkedList < ElementType > remaining;
-        auto currentSize = this->pCollection.valueAt().valueAt().size();
+        public:
 
-        for ( auto e : * this ) {
-            if ( currentSize > count ) {
-                currentSize --;
-                remaining.append(e);
-            }
-        }
+    #if __CDS_cpplang_core_version >= __CDS_cpplang_core_version_17
 
-        return std::move(Sequence < LinkedList < ElementType > > (std::move(remaining)));
-    }
+            __CDS_NoDiscard auto toString () const noexcept -> String override;
+            __CDS_NoDiscard auto hash () const noexcept -> Index override;
 
-    template < typename Predicate >
-    __CDS_MaybeUnused auto dropWhile (
-            Predicate const & p,
-            Size count          = UINT64_MAX
-    ) && noexcept -> Sequence < LinkedList < ElementType > >
-    __CDS_Requires ( ForwardIterable < C > && PredicateOver < Predicate, ElementType > ) {
+    #else
 
-        LinkedList < ElementType > remaining;
-
-        Index i = 0;
-
-        for ( auto e : * this ) {
-            if ( i < count && p (e) ) {
-                i ++;
-                continue;
+            template < typename U = C, EnableIf < isPrintable < decltype ( Sequence < U > :: ConstIterator :: it ) > :: value > = 0 >
+            __CDS_NoDiscard auto toString () const noexcept -> String {
+                std::stringstream oss;
+                oss << "Sequence::Iterator { pSequence = " << this->pSeq.toString() << ", it = " << this->it << " }";
+                return oss.str();
             }
 
-            remaining.append(e);
-        }
-
-        return std::move(Sequence < LinkedList < ElementType > > (std::move(remaining)));
-    }
-
-    template < typename Predicate >
-    __CDS_MaybeUnused auto dropWhile (
-            Predicate const & p,
-            Size count          = UINT64_MAX
-    ) & noexcept -> Sequence < LinkedList < ElementType > >
-    __CDS_Requires ( ForwardIterable < C > && PredicateOver < Predicate, ElementType > ) {
-
-        LinkedList < ElementType > remaining;
-
-        Index i = 0;
-
-        for ( auto e : * this ) {
-            if ( i < count && p (e) ) {
-                i ++;
-                continue;
+            template < typename U = C, EnableIf < ! isPrintable < decltype ( Sequence < U > :: ConstIterator :: it ) > :: value > = 0 >
+            __CDS_NoDiscard auto toString () const noexcept -> String {
+                std::stringstream oss;
+                oss << "Sequence::Iterator { pSequence = " << this->pSeq.toString() << ", value = " << * this->it << " }";
+                return oss.str();
             }
 
-            remaining.append(e);
-        }
-
-        return std::move(Sequence < LinkedList < ElementType > > (std::move(remaining)));
-    }
-
-    template < typename Predicate >
-    __CDS_MaybeUnused auto dropLastWhile (
-            Predicate const & p,
-            Size count          = UINT64_MAX
-    ) && noexcept -> Sequence < LinkedList < ElementType > >
-    __CDS_Requires ( ForwardIterable < C > && PredicateOver < Predicate, ElementType > ) {
-
-        LinkedList < ElementType > all;
-        LinkedList < ElementType > remaining;
-
-        for ( auto e : * this )
-            all.append(e);
-
-        Index i = 0;
-
-        for ( auto it = all.rbegin(); it != all.rend(); ++ it ) {
-            if ( i < count && p (it.value()) ) {
-                i ++;
-                continue;
+            template < typename U = C, EnableIf < Type < decltype ( Sequence < U > :: ConstIterator :: it ) > :: objectDerived > = 0 >
+            __CDS_NoDiscard auto hash () const noexcept -> Index {
+                return this->it.hash();
             }
 
-            remaining.pushFront(it.value());
-        }
-
-        return std::move(Sequence < LinkedList < ElementType > > (std::move(remaining)));
-    }
-
-    template < typename Predicate >
-    __CDS_MaybeUnused auto dropLastWhile (
-            Predicate const & p,
-            Size count          = UINT64_MAX
-    ) & noexcept -> Sequence < LinkedList < ElementType > >
-    __CDS_Requires ( ForwardIterable < C > && PredicateOver < Predicate, ElementType > ) {
-
-        LinkedList < ElementType > all;
-        LinkedList < ElementType > remaining;
-
-        for ( auto e : * this )
-            all.append(e);
-
-        Index i = 0;
-
-        for ( auto it = all.rbegin(); it != all.rend(); ++ it ) {
-            if ( i < count && p (* it) ) {
-                i ++;
-                continue;
+            template < typename U = C, EnableIf < ! Type < decltype ( Sequence < U > :: ConstIterator :: it ) > :: objectDerived && Type < decltype ( dataTypes::unsafeAddress < & Sequence < U > :: ConstIterator :: it > () -> operator *() ) > :: objectDerived > = 0 >
+            __CDS_NoDiscard auto hash () const noexcept -> Index {
+                return (* this->it).hash();
             }
 
-            remaining.pushFront(* it);
-        }
-
-        return std::move(Sequence < LinkedList < ElementType > > (std::move(remaining)));
-    }
-
-    __CDS_MaybeUnused auto take (Size count) && noexcept -> Sequence < LinkedList < ElementType > >
-    __CDS_Requires ( ForwardIterable < C > ) {
-
-        LinkedList < ElementType > remaining;
-
-        Index i = 0;
-
-        for ( auto e : * this ) {
-            if ( i < count ) {
-                remaining.append(e);
-                i++;
-                continue;
+            template < typename U = C, EnableIf < ! Type < decltype ( Sequence < U > :: ConstIterator :: it ) > :: objectDerived && ! Type < decltype ( dataTypes::unsafeAddress < & Sequence < U > :: ConstIterator :: it > () -> operator *() ) > :: objectDerived > = 0 >
+            __CDS_NoDiscard auto hash () const noexcept -> Index {
+                return 0;
             }
-            break;
+    #endif
+
+            __CDS_NoDiscard auto copy () const noexcept -> ConstIterator * override;
+            __CDS_NoDiscard auto equals (Object const &) const noexcept -> bool override;
+
+            ConstIterator () noexcept = delete;
+            ConstIterator (ConstIterator const &) noexcept = default;
+            ConstIterator (ConstIterator &&) noexcept = default;
+            ConstIterator (Sequence const *, CollectionIterator const &) noexcept;
+            ~ConstIterator () noexcept override = default;
+
+            auto value () const noexcept -> CollectionElementType;
+            auto next () noexcept -> ConstIterator &;
+            auto equals ( ConstIterator const & ) const noexcept -> Boolean;
+
+            auto operator == ( ConstIterator const & ) const noexcept -> bool;
+            auto operator != ( ConstIterator const & ) const noexcept -> bool;
+            auto operator ++ () noexcept -> ConstIterator &;
+            auto operator ++ (int) noexcept -> ConstIterator;
+            auto operator * () const noexcept -> CollectionElementType;
+        };
+
+    private:
+        auto clear () noexcept -> void;
+
+    public:
+        __CDS_MaybeUnused Sequence () noexcept = delete;
+        __CDS_MaybeUnused Sequence (Sequence const &) noexcept;
+        __CDS_MaybeUnused Sequence (Sequence &&) noexcept;
+
+        __CDS_MaybeUnused explicit Sequence ( C & ) noexcept;
+        __CDS_MaybeUnused explicit Sequence ( C && ) noexcept;
+
+        ~Sequence () noexcept override = default;
+
+        auto operator = (Sequence const &) noexcept -> Sequence &;
+        auto operator = (Sequence &&) noexcept -> Sequence &;
+
+        __CDS_MaybeUnused auto begin () noexcept -> Iterator;
+        __CDS_MaybeUnused auto end () noexcept -> Iterator;
+
+        __CDS_MaybeUnused auto begin () const noexcept -> ConstIterator;
+        __CDS_MaybeUnused auto end () const noexcept -> ConstIterator;
+        __CDS_MaybeUnused auto cbegin () const noexcept -> ConstIterator;
+        __CDS_MaybeUnused auto cend () const noexcept -> ConstIterator;
+
+        __CDS_NoDiscard __CDS_MaybeUnused auto toString () const noexcept -> String override;
+        __CDS_NoDiscard __CDS_MaybeUnused auto hash () const noexcept -> Index override;
+        __CDS_NoDiscard __CDS_MaybeUnused auto copy () const noexcept -> Sequence * override;
+        __CDS_NoDiscard __CDS_MaybeUnused auto equals (Object const &) const noexcept -> bool override;
+
+        __CDS_MaybeUnused auto contains ( ElementType const & element ) const noexcept -> Boolean
+        __CDS_Requires ( ForwardIterable < C > ) {
+
+            for ( auto v : * this )
+                if ( Type < ElementType > :: compare ( element, v ) )
+                    return true;
+            return false;
         }
 
-        return std::move ( Sequence < LinkedList < ElementType > > (std::move(remaining)) );
-    }
-
-    __CDS_MaybeUnused auto take (Size count) & noexcept -> Sequence < LinkedList < ElementType > >
-    __CDS_Requires ( ForwardIterable < C > ) {
-
-        LinkedList < ElementType > remaining;
-
-        Index i = 0;
-
-        for ( auto e : * this ) {
-            if ( i < count ) {
-                remaining.append(e);
-                i++;
-                continue;
-            }
-            break;
-        }
-
-        return std::move ( Sequence < LinkedList < ElementType > > (std::move(remaining)) );
-    }
-
-    __CDS_MaybeUnused auto takeLast (Size count) && noexcept -> Sequence < LinkedList < ElementType > >
-    __CDS_Requires ( ForwardIterable < C > ) {
-
-        Size current = this->pCollection.valueAt().valueAt().size();
-        LinkedList < ElementType > remaining;
-
-        Index i = 0;
-
-        for ( auto e : * this ) {
-            if ( count < current )
-                -- current;
-            else
-                remaining.append(e);
-        }
-
-        return std::move ( Sequence < LinkedList < ElementType > > (std::move(remaining)) );
-    }
-
-    __CDS_MaybeUnused auto takeLast (Size count) & noexcept -> Sequence < LinkedList < ElementType > >
-    __CDS_Requires ( ForwardIterable < C > ) {
-
-        Size current = this->pCollection.valueAt().valueAt().size();
-        LinkedList < ElementType > remaining;
-
-        Index i = 0;
-
-        for ( auto e : * this ) {
-            if ( count < current )
-                -- current;
-            else
-                remaining.append(e);
-        }
-
-        return std::move ( Sequence < LinkedList < ElementType > > (std::move(remaining)) );
-    }
-
-    template < typename Predicate >
-    __CDS_MaybeUnused auto takeWhile (
-            Predicate const & predicate,
-            Size              count     = UINT64_MAX
-    ) && noexcept -> Sequence < LinkedList < ElementType > >
-    __CDS_Requires ( ForwardIterable < C > && PredicateOver < Predicate, ElementType > ) {
-
-        LinkedList < ElementType > remaining;
-        Index i = 0;
-
-        for ( auto e : * this ) {
-            if ( i < count && predicate ( e ) ) {
-                remaining.append(e);
-                i++;
-                continue;
-            }
-            break;
-        }
-
-        return std::move ( Sequence < LinkedList < ElementType > > ( std::move ( remaining ) ) );
-    }
-
-
-    template < typename Predicate >
-    __CDS_MaybeUnused auto takeWhile (
-            Predicate const & predicate,
-            Size              count     = UINT64_MAX
-    ) & noexcept -> Sequence < LinkedList < ElementType > >
-    __CDS_Requires ( ForwardIterable < C > && PredicateOver < Predicate, ElementType > ) {
-
-        LinkedList < ElementType > remaining;
-        Index i = 0;
-
-        for ( auto e : * this ) {
-            if ( i < count && predicate ( e ) ) {
-                remaining.append(e);
-                i++;
-                continue;
-            }
-            break;
-        }
-
-        return std::move ( Sequence < LinkedList < ElementType > > ( std::move ( remaining ) ) );
-    }
-
-    template < typename Predicate >
-    __CDS_MaybeUnused auto takeLastWhile (
-            Predicate const & p,
-            Size count          = UINT64_MAX
-    ) && noexcept -> Sequence < LinkedList < ElementType > >
-    __CDS_Requires ( ForwardIterable < C > && PredicateOver < Predicate, ElementType > ) {
-
-        LinkedList < ElementType > container;
-
-        for ( auto e : * this )
-            container.append(e);
-
-        LinkedList < ElementType > remaining;
-
-        Index i = 0;
-        for ( auto it = container.rbegin(); it != container.rend(); ++ it )
-            if ( i < count && p ( it.value() ) )
-                remaining.pushFront ( it.value() );
-
-        return std::move(Sequence < LinkedList < ElementType > > (std::move(remaining)));
-    }
-
-    template < typename Predicate >
-    __CDS_MaybeUnused auto takeLastWhile (
-            Predicate const & p,
-            Size count          = UINT64_MAX
-    ) & noexcept -> Sequence < LinkedList < ElementType > >
-    __CDS_Requires ( ForwardIterable < C > && PredicateOver < Predicate, ElementType > ) {
-
-        LinkedList < ElementType > container;
-
-        for ( auto e : * this )
-            container.append(e);
-
-        LinkedList < ElementType > remaining;
-
-        Index i = 0;
-        for ( auto it = container.rbegin(); it != container.rend(); ++ it )
-            if ( i < count && p ( * it ) )
-                remaining.pushFront ( * it );
-
-        return std::move(Sequence < LinkedList < ElementType > > (std::move(remaining)));
-    }
-
-
-    template < typename Predicate >
-    __CDS_MaybeUnused __CDS_OptimalInline auto filter ( Predicate const & predicate ) && noexcept -> Sequence
-    __CDS_Requires ( ForwardIterable < C > && PredicateOver < Predicate, ElementType > ) {
-
-        this->storedPredicates.append({ { Memory :: instance().create < StoredPredicate > (predicate)}, this->chainCount });
-        return std::move ( * this );
-    }
-
-    template < typename Predicate >
-    __CDS_MaybeUnused auto filter ( Predicate const & predicate ) & noexcept -> Sequence
-    __CDS_Requires ( ForwardIterable < C > && PredicateOver < Predicate, ElementType > ) {
-
-        Sequence < C > copy (* this );
-        copy.storedPredicates.append({ { Memory :: instance ().create < StoredPredicate > (predicate)}, this->chainCount });
-        return std::move (copy);
-    }
-
-    template < typename IndexedPredicate >
-    __CDS_MaybeUnused auto filterIndexed ( IndexedPredicate const & indexedPredicate ) && noexcept -> Sequence
-    __CDS_Requires ( ForwardIterable < C > && IndexedPredicateOver < IndexedPredicate, ElementType > ) {
-
-        this->storedIndexedPredicates.append({ { Memory :: instance().create < StoredIndexedPredicate > (indexedPredicate)}, this->chainCount });
-        return std::move ( * this );
-    }
-
-    template < typename IndexedPredicate >
-    __CDS_MaybeUnused auto filterIndexed ( IndexedPredicate const & indexedPredicate ) & noexcept -> Sequence
-    __CDS_Requires ( ForwardIterable < C > && IndexedPredicateOver < IndexedPredicate, ElementType > ) {
-
-        Sequence < C > copy (* this);
-        copy.storedIndexedPredicates.append({ { Memory :: instance().create < StoredIndexedPredicate > (indexedPredicate)}, this->chainCount });
-        return std::move ( copy );
-    }
-
-    template < typename Predicate >
-    __CDS_MaybeUnused auto filterTo (
-            Collection < ElementType >        & collection,
-            Predicate                   const & predicate
-    ) const noexcept -> Collection < ElementType > &
-    __CDS_Requires ( ForwardIterable < C > && PredicateOver < Predicate, ElementType > ) {
-
-        for ( auto e : * this )
-            if ( predicate(e) )
-                collection.add(e);
-
-        return collection;
-    }
-
-    template < typename IndexedPredicate >
-    __CDS_MaybeUnused auto filterIndexedTo (
-            Collection < ElementType >        & collection,
-            IndexedPredicate            const & predicate
-    ) const noexcept -> Collection < ElementType > &
-    __CDS_Requires ( ForwardIterable < C > && IndexedPredicateOver < IndexedPredicate, ElementType > ) {
-
-        Index i = 0;
-        for ( auto e : * this )
-            if ( predicate(i++, e) )
-                collection.add(e);
-
-        return collection;
-    }
-
-    template < typename NewType, typename OT = ElementType, typename NT = NewType, EnableIf < Type < OT > :: isBasicPointer > = 0 >
-    __CDS_MaybeUnused auto filterIsDerived () && noexcept -> Sequence < LinkedList < NewType > >
-    __CDS_Requires(
-            ForwardIterable < C > &&
-            Pointer < ElementType > &&
-            Pointer < NewType > &&
-            DerivedFrom < RemovePointer < NewType >, RemovePointer < ElementType > >
-    ) {
-
-        LinkedList < NewType > container;
-        for ( auto e : * this ) {
-            auto p = dynamic_cast < NewType > (e);
-            if ( p != nullptr )
-                container.add(p);
-        }
-
-        return std::move ( Sequence < LinkedList < NewType > > ( std::move ( container ) ) );
-    }
-
-    template < typename NewType, typename OT = ElementType, typename NT = NewType, EnableIf < Type < OT > :: isBasicPointer > = 0 >
-    __CDS_MaybeUnused auto filterIsDerived () & noexcept -> Sequence < LinkedList < NewType > >
-    __CDS_Requires(
-            ForwardIterable < C > &&
-            Pointer < ElementType > &&
-            Pointer < NewType > &&
-            DerivedFrom < RemovePointer < NewType >, RemovePointer < ElementType > >
-    ) {
-
-        LinkedList < NewType > container;
-        for ( auto e : * this ) {
-            auto p = dynamic_cast < NewType > (e);
-            if ( p != nullptr )
-                container.add(p);
-        }
-
-        return std::move ( Sequence < LinkedList < NewType > > ( std::move ( container ) ) );
-    }
-
-    template < typename NewType, typename OT = ElementType, typename NT = NewType, EnableIf < Type < OT > :: isSmartPointer > = 0 >
-    __CDS_MaybeUnused auto filterIsDerived () && noexcept -> Sequence < LinkedList < typename TypeExtensions < NT > :: AsUniquePointer > >
-    __CDS_Requires(
-            ForwardIterable < C > &&
-            Pointer < OT > &&
-            Pointer < NT > &&
-            DerivedFrom < RemovePointer < NewType >, RemovePointer < typename OT :: Pointer > >
-    ) {
-
-        LinkedList < typename TypeExtensions < NT > :: AsUniquePointer > container;
-        for ( auto e : * this ) {
-            auto p = dynamic_cast < NT > (e.release());
-            if ( p != nullptr )
-                container.add( typename TypeExtensions < NT > :: AsUniquePointer ( p ) );
-        }
-
-        return std::move ( Sequence < LinkedList < typename TypeExtensions < NT > :: AsForeignPointer > > ( std::move ( container ) ) );
-    }
-
-    template < typename NewType, typename OT = ElementType, typename NT = NewType, EnableIf < Type < OT > :: isSmartPointer > = 0 >
-    __CDS_MaybeUnused auto filterIsDerived () & noexcept -> Sequence < LinkedList < typename TypeExtensions < NT > :: AsForeignPointer > >
-    __CDS_Requires(
-            ForwardIterable < C > &&
-            Pointer < OT > &&
-            Pointer < NT > &&
-            DerivedFrom < RemovePointer < NewType >, RemovePointer < typename OT :: Pointer > >
-    ) {
-
-        LinkedList < typename TypeExtensions < NT > :: AsForeignPointer > container;
-        for ( auto e : * this ) {
-            auto p = dynamic_cast < NT > (e.get());
-            if ( p != nullptr )
-                container.add( typename TypeExtensions < NT > :: AsForeignPointer ( p ) );
-        }
-
-        return std::move ( Sequence < LinkedList < typename TypeExtensions < NT > :: AsForeignPointer > > ( std::move ( container ) ) );
-    }
-
-    template < typename NewType, typename CT = NewType, typename OT = ElementType, EnableIf < Type < OT > :: isBasicPointer > = 0 >
-    __CDS_MaybeUnused auto filterIsDerivedTo (
-            Collection < CT > & collection
-    ) const noexcept -> Collection < CT > &
-    __CDS_Requires (
-            ForwardIterable < C > &&
-            Pointer < ElementType > &&
-            Pointer < NewType > &&
-            DerivedFrom < RemovePointer < NewType >, RemovePointer < ElementType > >
-    ) {
-
-        for ( auto e : * this ) {
-            auto p = dynamic_cast < NewType > (e);
-            if ( p != nullptr )
-                collection.add(p);
-        }
-
-        return collection;
-    }
-
-    template < typename NewType, typename CT, typename OT = ElementType, EnableIf < Type < OT > :: isSmartPointer > = 0 >
-    __CDS_MaybeUnused auto filterIsDerivedTo (
-            Collection < CT > & collection
-    ) const noexcept -> Collection < CT > &
-    __CDS_Requires (
-            ForwardIterable < C > &&
-            Pointer < ElementType > &&
-            Pointer < NewType > &&
-            DerivedFrom < RemovePointer < NewType >, RemovePointer < typename OT :: Pointer > >
-    ) {
-
-        for ( auto e : * this ) {
-            auto p = dynamic_cast < NewType > (e.get());
-            if ( p != nullptr )
-                collection.add(CT(p));
-        }
-
-        return collection;
-    }
-
-    template < typename T = ElementType, EnableIf < Type < T > :: isBasicPointer > = 0 >
-    __CDS_MaybeUnused auto filterNotNull () & noexcept -> Sequence < LinkedList < T > >
-    __CDS_Requires( ForwardIterable < C > && Pointer < T > ) {
-
-        LinkedList < T > container;
-        for ( auto e : * this )
-            if ( e != nullptr )
-                container.add( e );
-
-        return std::move ( Sequence < LinkedList < T > > ( std::move ( container ) ) );
-    }
-
-    template < typename T = ElementType, EnableIf < Type < T > :: isBasicPointer > = 0 >
-    __CDS_MaybeUnused auto filterNotNull () && noexcept -> Sequence < LinkedList < T > >
-    __CDS_Requires( ForwardIterable < C > && Pointer < T > ) {
-
-        LinkedList < T > container;
-        for ( auto e : * this )
-            if ( e != nullptr )
-                container.add( e );
-
-        return std::move ( Sequence < LinkedList < T > > ( std::move ( container ) ) );
-    }
-
-    template < typename T = ElementType, EnableIf < Type < T > :: isSmartPointer > = 0 >
-    __CDS_MaybeUnused auto filterNotNull () & noexcept -> Sequence < LinkedList < T > >
-    __CDS_Requires( ForwardIterable < C > && Pointer < T > ) {
-
-        LinkedList < T > container;
-        for ( auto e : * this )
-            if ( ! e.isNull() )
-                container.add( e );
-
-        return std::move ( Sequence < LinkedList < T > > ( std::move ( container ) ) );
-    }
-
-    template < typename T = ElementType, EnableIf < Type < T > :: isSmartPointer > = 0 >
-    __CDS_MaybeUnused auto filterNotNull () && noexcept -> Sequence < LinkedList < T > >
-    __CDS_Requires( ForwardIterable < C > && Pointer < T > ) {
-
-        LinkedList < T > container;
-        for ( auto e : * this )
-            if ( ! e.isNull() )
-                container.add( e );
-
-        return std::move ( Sequence < LinkedList < T > > ( std::move ( container ) ) );
-    }
-
-    template < typename T = ElementType, EnableIf < Type < T > :: isBasicPointer > = 0 >
-    __CDS_MaybeUnused auto filterNotNullTo (Collection < T > & collection) const noexcept -> Collection < T > &
-    __CDS_Requires( ForwardIterable < C > && Pointer < T > ) {
-
-        for ( auto e : * this )
-            if ( e != nullptr )
-                collection.add(e);
-
-        return collection;
-    }
-
-    template < typename T = ElementType, EnableIf < Type < T > :: isSmartPointer > = 0 >
-    __CDS_MaybeUnused auto filterNotNullTo (Collection < T > & collection) const noexcept -> Collection < T > &
-    __CDS_Requires( ForwardIterable < C > && Pointer < T > ) {
-
-        for ( auto e : * this )
-            if ( ! e.isNull() )
-                collection.add(T(e.get()));
-
-        return collection;
-    }
-
-    template < typename Predicate >
-    __CDS_MaybeUnused __CDS_OptimalInline auto filterNot ( Predicate const & predicate ) && noexcept -> Sequence
-    __CDS_Requires ( ForwardIterable < C > && PredicateOver < Predicate, ElementType > ) {
-
-        return this->filter( [& predicate] (ElementType e) noexcept -> bool { return ! predicate(e); } );
-    }
-
-    template < typename Predicate >
-    __CDS_MaybeUnused __CDS_OptimalInline auto filterNot ( Predicate const & predicate ) & noexcept -> Sequence
-    __CDS_Requires ( ForwardIterable < C > && PredicateOver < Predicate, ElementType > ) {
-
-        return this->filter( [& predicate] (ElementType e) noexcept -> bool { return ! predicate(e); } );
-    }
-
-    template < typename IndexedPredicate >
-    __CDS_MaybeUnused __CDS_OptimalInline auto filterNotIndexed ( IndexedPredicate const & indexedPredicate ) && noexcept -> Sequence
-    __CDS_Requires ( ForwardIterable < C > && IndexedPredicateOver < IndexedPredicate, ElementType > ) {
-
-        return this->filterIndexed( [& indexedPredicate] (Index index, ElementType e) noexcept -> bool {
-            return ! indexedPredicate ( index, e );
-        });
-    }
-
-    template < typename IndexedPredicate >
-    __CDS_MaybeUnused __CDS_OptimalInline auto filterNotIndexed ( IndexedPredicate const & indexedPredicate ) & noexcept -> Sequence
-    __CDS_Requires ( ForwardIterable < C > && IndexedPredicateOver < IndexedPredicate, ElementType > ) {
-
-        return this->filterIndexed( [& indexedPredicate] (Index index, ElementType e) noexcept -> bool {
-            return ! indexedPredicate ( index, e );
-        });
-    }
-
-    template < typename Predicate >
-    __CDS_MaybeUnused auto filterNotTo (
-            Collection < ElementType >        & collection,
-            Predicate                   const & predicate
-    ) const noexcept -> Collection < ElementType > &
-    __CDS_Requires ( ForwardIterable < C > && PredicateOver < Predicate, ElementType > ) {
-
-        for ( auto e : * this )
-            if ( ! predicate ( e ) )
-                collection.add( e );
-
-        return collection;
-    }
-
-    template < typename IndexedPredicate >
-    __CDS_MaybeUnused auto filterNotIndexedTo (
-            Collection < ElementType >        & collection,
-            IndexedPredicate            const & indexedPredicate
-    ) const noexcept -> Collection < ElementType > &
-    __CDS_Requires ( ForwardIterable < C > && IndexedPredicateOver < IndexedPredicate, ElementType > ) {
-        Index i = 0;
-        for ( auto e : * this )
-            if ( ! indexedPredicate ( i++, e ) )
-                collection.add ( e );
-
-        return collection;
-    }
-
-
-    template < typename Predicate >
-    __CDS_MaybeUnused auto indexOfFirst ( Predicate const & predicate ) const noexcept -> Index
-    __CDS_Requires ( ForwardIterable < C > && PredicateOver < Predicate, ElementType > ) {
-
-        Index i = 0;
-        for ( auto e : * this ) {
-            if ( predicate (e) )
-                return i;
-            i++;
-        }
-
-        return -1;
-    }
-
-    template < typename Predicate >
-    __CDS_MaybeUnused auto indexOfLast ( Predicate const & predicate ) const noexcept -> Index
-    __CDS_Requires ( ForwardIterable < C > && PredicateOver < Predicate, ElementType > ) {
-
-        Index i = 0;
-        Index l = -1;
-        for ( auto e : * this ) {
-            if ( predicate (e) )
-                l = i;
-            i++;
-        }
-
-        return l;
-    }
-
-    template < typename Predicate >
-    __CDS_MaybeUnused auto indicesOfAll ( Predicate const & predicate ) const noexcept -> LinkedList < Index >
-    __CDS_Requires ( ForwardIterable < C > && PredicateOver < Predicate, ElementType > ) {
-
-        Index i = 0;
-        LinkedList < Index > indices;
-        for ( auto e : * this ) {
-            if ( predicate( e ) )
-                indices.add ( i );
-            i++;
-        }
-
-        return indices;
-    }
-
-    template < typename Predicate = Function < bool (ElementType const &) > >
-    __CDS_MaybeUnused auto any (
-            Predicate const & predicate = []( ElementType const & ) noexcept -> bool { return true; }
-    ) const noexcept -> Boolean
-    __CDS_Requires ( ForwardIterable < C > && PredicateOver < Predicate, ElementType > ) {
-
-        for ( auto e : * this )
-            if ( predicate ( e ) )
-                return true;
-        return false;
-    }
-
-    template < typename Predicate >
-    __CDS_MaybeUnused auto all ( Predicate const & predicate ) const noexcept -> Boolean
-    __CDS_Requires ( ForwardIterable < C > && PredicateOver < Predicate, ElementType > ) {
-
-        for ( auto e : * this )
-            if ( ! predicate ( e ) )
-                return false;
-
-        return true;
-    }
-
-    template < typename Predicate = Function < bool ( ElementType const & ) > >
-    __CDS_MaybeUnused auto count (
-            Predicate const & predicate = [](ElementType const &) noexcept -> bool { return true; }
-    ) const noexcept -> Int
-    __CDS_Requires ( ForwardIterable < C > && PredicateOver < Predicate, ElementType > ) {
-
-        Int count = 0;
-        for ( auto e : * this )
-            if ( predicate ( e ) )
-                count ++;
-
-        return count;
-    }
-
-    template < typename Predicate = Function < bool ( ElementType const & ) > >
-    __CDS_MaybeUnused auto none (
-            Predicate const & predicate = [](ElementType const &) noexcept -> bool { return true; }
-    ) const noexcept -> Boolean
-    __CDS_Requires ( ForwardIterable < C > && PredicateOver < Predicate, ElementType > ) {
-
-        for ( auto e : * this )
-            if ( predicate ( e ) )
-                return false;
-        return true;
-    }
-
-    template < typename Predicate = Function < bool ( ElementType const & ) > >
-    __CDS_MaybeUnused auto one (
-            Predicate const & predicate = [](ElementType const &) noexcept -> bool { return true; }
-    ) const noexcept -> Boolean
-    __CDS_Requires ( ForwardIterable < C > && PredicateOver < Predicate, ElementType > ) {
-
-        Boolean found = false;
-
-        for ( auto e : * this )
-            if ( predicate ( e ) ) {
-                if (!found)
-                    found = true;
+        __CDS_MaybeUnused auto elementAt ( Index i ) const noexcept -> Optional < ElementType >
+        __CDS_Requires ( ForwardIterable < C > ) {
+
+            Index at = 0;
+            for ( auto v : * this )
+                if ( at == i )
+                    return { v };
                 else
+                    at ++;
+
+            return { };
+        }
+
+        __CDS_MaybeUnused auto elementAtOr ( Index i, ElementType const & replacement ) const noexcept -> ElementType
+        __CDS_Requires ( ForwardIterable < C > ) {
+            Index at = 0;
+            for ( auto v : * this )
+                if ( at == i )
+                    return v;
+                else
+                    at ++;
+
+            return replacement;
+        }
+
+        template < typename T = ElementType, EnableIf < Type < T > :: isPointer > = 0 >
+        __CDS_MaybeUnused auto elementAtOrNull ( Index i ) const noexcept -> ElementType
+        __CDS_Requires ( ForwardIterable < C > ) {
+
+            Index at = 0;
+            for ( auto v : * this )
+                if ( at == i )
+                    return v;
+                else
+                    at ++;
+
+            return nullptr;
+        }
+
+
+        __CDS_MaybeUnused auto indexOf ( ElementType const & element ) const noexcept -> Index
+        __CDS_Requires ( ForwardIterable < C > ) {
+
+            Index i = 0;
+            for ( auto v : * this )
+                if ( Type < ElementType > :: compare ( element, v ) )
+                    return i;
+                else
+                    i++;
+
+            return -1;
+        }
+
+        __CDS_MaybeUnused auto lastIndexOf ( ElementType const & element ) const noexcept -> Index
+        __CDS_Requires ( ForwardIterable < C > ) {
+
+            Index i = 0, last = -1;
+            for ( auto v : * this ) {
+                if ( Type < ElementType > :: compare ( element, v ) )
+                    last = i;
+                i++;
+            }
+
+            return last;
+        }
+
+        __CDS_MaybeUnused auto indicesOf ( ElementType const & element ) const noexcept -> LinkedList < Index >
+        __CDS_Requires ( ForwardIterable < C > ) {
+
+            LinkedList < Index > result;
+            Index i = 0;
+            for ( auto v : * this ) {
+                if ( Type < ElementType > :: compare ( element, v ) )
+                    result.append(i);
+                i++;
+            }
+
+            return result;
+        }
+
+
+        template < typename Action >
+        __CDS_MaybeUnused auto apply ( Action const & action ) && noexcept -> Sequence < LinkedList < ElementType > >
+        __CDS_Requires ( ForwardIterable < C > && ActionOver < Action, Sequence > ) {
+
+            action(* this);
+            LinkedList < ElementType > container;
+
+            Index i = 0;
+            for ( auto e : * this )
+                container.append(e);
+
+            return std::move(Sequence < LinkedList < ElementType > > (std::move(container)));
+        }
+
+        template < typename Action >
+        __CDS_MaybeUnused auto also ( Action const & action ) && noexcept -> Sequence < LinkedList < ElementType > >
+        __CDS_Requires ( ForwardIterable < C > && EmptyAction < Action > ) {
+
+            action();
+            LinkedList < ElementType > container;
+
+            for ( auto e : * this )
+                container.append(e);
+
+            return std::move(Sequence < LinkedList < ElementType > > (std::move(container)));
+        }
+
+        template < typename Action >
+        __CDS_MaybeUnused auto apply ( Action const & action ) & noexcept -> Sequence < LinkedList < ElementType > >
+        __CDS_Requires ( ForwardIterable < C > && ActionOver < Action, Sequence > ) {
+
+            Sequence copy(* this);
+            action(copy);
+            LinkedList < ElementType > container;
+
+            for ( auto e : copy )
+                container.append(e);
+
+            return std::move(Sequence < LinkedList < ElementType > > (std::move(container)));
+        }
+
+        template < typename Action >
+        __CDS_MaybeUnused auto also ( Action const & action ) & noexcept -> Sequence < LinkedList < ElementType > >
+        __CDS_Requires ( ForwardIterable < C > && EmptyAction < Action > ) {
+
+            action();
+            LinkedList < ElementType > container;
+
+            for ( auto e : * this )
+                container.append(e);
+
+            return std::move(Sequence < LinkedList < ElementType > > (std::move(container)));
+        }
+
+
+        template < typename Predicate = Function < bool ( ElementType const & ) > >
+        __CDS_MaybeUnused auto first (
+                Predicate const & predicate = [](ElementType const &) noexcept -> bool { return true; }
+        ) const noexcept -> Optional < ElementType >
+        __CDS_Requires ( ForwardIterable < C > && PredicateOver < Predicate, ElementType > ) {
+
+            for ( auto e : * this )
+                if ( predicate ( e ) )
+                    return { e };
+            return { };
+        }
+
+        template < typename Predicate >
+        __CDS_MaybeUnused __CDS_OptimalInline auto find ( Predicate const & predicate ) const noexcept -> Optional < ElementType >
+        __CDS_Requires ( ForwardIterable < C > && PredicateOver < Predicate, ElementType > ) {
+
+            return this->first(predicate);
+        }
+
+        template < typename Predicate = Function < bool ( ElementType const & ) > >
+        __CDS_MaybeUnused auto firstOr (
+                ElementType const & replacement,
+                Predicate   const & predicate = [] ( ElementType const & ) noexcept -> bool { return true; }
+        ) const noexcept -> ElementType
+        __CDS_Requires ( ForwardIterable < C > && PredicateOver < Predicate, ElementType > ) {
+
+            for ( auto v : * this )
+                if ( predicate (v) )
+                    return v;
+            return replacement;
+        }
+
+        template < typename Predicate = Function < bool ( ElementType const & ) > >
+        __CDS_MaybeUnused auto last (
+                Predicate const & predicate = [] ( ElementType const & predicate ) noexcept -> bool { return true; }
+        ) const noexcept -> Optional < ElementType >
+        __CDS_Requires ( ForwardIterable < C > && PredicateOver < Predicate, ElementType > ) {
+
+            ElementType v;
+            Boolean found = false;
+            for ( auto e : * this )
+                if ( predicate(e) ) {
+                    found = true;
+                    v = e;
+                }
+
+            if ( found )
+                return { v };
+            return { };
+        }
+
+        template < typename Predicate >
+        __CDS_MaybeUnused __CDS_OptimalInline auto findLast ( Predicate const & predicate ) const noexcept -> Optional < ElementType >
+        __CDS_Requires ( ForwardIterable < C > && PredicateOver < Predicate, ElementType > ) {
+
+            return this->last(predicate);
+        }
+
+        template < typename Predicate = Function < bool ( ElementType const & ) > >
+        __CDS_MaybeUnused auto lastOr (
+                ElementType const & replacement,
+                Predicate   const & predicate = [](ElementType const &) noexcept -> bool { return true; }
+        ) const noexcept -> ElementType
+        __CDS_Requires ( ForwardIterable < C > && PredicateOver < Predicate, ElementType > ) {
+
+            ElementType v;
+            Boolean found = false;
+            for ( auto e : * this )
+                if ( predicate(e) ) {
+                    found = true;
+                    v = e;
+                }
+
+            if ( found )
+                return v;
+            return replacement;
+        }
+
+
+        __CDS_MaybeUnused __CDS_OptimalInline auto single () const noexcept -> Optional < ElementType >
+        __CDS_Requires ( ForwardIterable < C > ) {
+
+            if ( this->pCollection.valueAt().valueAt().size() != 1 )
+                return { };
+            return this->begin().value();
+        }
+
+        __CDS_MaybeUnused __CDS_OptimalInline auto singleOr ( ElementType const & replacement ) const noexcept -> ElementType
+        __CDS_Requires ( ForwardIterable < C > ) {
+
+            if ( this->pCollection.valueAt().valueAt().size() != 1 )
+                return replacement;
+            return this->begin().value();
+        }
+
+        template < typename Predicate >
+        __CDS_MaybeUnused auto single ( Predicate const & predicate ) const noexcept -> Optional < ElementType >
+        __CDS_Requires ( ForwardIterable < C > && PredicateOver < Predicate, ElementType > ) {
+
+            ElementType v;
+            Boolean found = false;
+            for ( auto e : * this )
+                if ( predicate ( e ) ) {
+                    if (!found) {
+                        found = true;
+                        v = e;
+                    } else {
+                        return { };
+                    }
+                }
+
+            if ( found ) return { v };
+            return { };
+        }
+
+        template < typename Predicate >
+        __CDS_MaybeUnused auto singleOr ( ElementType const & replacement, Predicate const & predicate ) const noexcept -> ElementType
+        __CDS_Requires ( ForwardIterable < C > && PredicateOver < Predicate, ElementType > ) {
+
+            ElementType v;
+            Boolean found = false;
+            for ( auto e : * this )
+                if ( predicate ( e ) ) {
+                    if (!found) {
+                        found = true;
+                        v = e;
+                    } else {
+                        return replacement;
+                    }
+                }
+
+            if ( found ) return v;
+            return replacement;
+        }
+
+
+        __CDS_MaybeUnused auto drop (Size count) && noexcept -> Sequence < LinkedList < ElementType > >
+        __CDS_Requires ( ForwardIterable < C > ) {
+
+            LinkedList < ElementType > remaining;
+
+            Index i = 0;
+            for ( auto e : * this ) {
+                if ( i < count ) {
+                    i++;
+                    continue;
+                }
+
+                remaining.append(e);
+            }
+
+            return std::move(Sequence < LinkedList < ElementType > > (std::move(remaining)));
+        }
+
+        __CDS_MaybeUnused auto drop (Size count) & noexcept -> Sequence < LinkedList < ElementType > >
+        __CDS_Requires ( ForwardIterable < C > ) {
+
+            LinkedList < ElementType > remaining;
+
+            Index i = 0;
+            for ( auto e : * this ) {
+                if ( i < count ) {
+                    i++;
+                    continue;
+                }
+
+                remaining.append(e);
+            }
+
+            return std::move(Sequence < LinkedList < ElementType > > (std::move(remaining)));
+        }
+
+        __CDS_MaybeUnused auto dropLast (Size count) && noexcept -> Sequence < LinkedList < ElementType > >
+        __CDS_Requires ( ForwardIterable < C > ) {
+
+            LinkedList < ElementType > remaining;
+            auto currentSize = this->pCollection.valueAt().valueAt().size();
+
+            for ( auto e : * this ) {
+                if ( currentSize > count ) {
+                    currentSize --;
+                    remaining.append(e);
+                }
+            }
+
+            return std::move(Sequence < LinkedList < ElementType > > (std::move(remaining)));
+        }
+
+        __CDS_MaybeUnused auto dropLast (Size count) & noexcept -> Sequence < LinkedList < ElementType > >
+        __CDS_Requires ( ForwardIterable < C > ) {
+
+            LinkedList < ElementType > remaining;
+            auto currentSize = this->pCollection.valueAt().valueAt().size();
+
+            for ( auto e : * this ) {
+                if ( currentSize > count ) {
+                    currentSize --;
+                    remaining.append(e);
+                }
+            }
+
+            return std::move(Sequence < LinkedList < ElementType > > (std::move(remaining)));
+        }
+
+        template < typename Predicate >
+        __CDS_MaybeUnused auto dropWhile (
+                Predicate const & p,
+                Size count          = UINT64_MAX
+        ) && noexcept -> Sequence < LinkedList < ElementType > >
+        __CDS_Requires ( ForwardIterable < C > && PredicateOver < Predicate, ElementType > ) {
+
+            LinkedList < ElementType > remaining;
+
+            Index i = 0;
+
+            for ( auto e : * this ) {
+                if ( i < count && p (e) ) {
+                    i ++;
+                    continue;
+                }
+
+                remaining.append(e);
+            }
+
+            return std::move(Sequence < LinkedList < ElementType > > (std::move(remaining)));
+        }
+
+        template < typename Predicate >
+        __CDS_MaybeUnused auto dropWhile (
+                Predicate const & p,
+                Size count          = UINT64_MAX
+        ) & noexcept -> Sequence < LinkedList < ElementType > >
+        __CDS_Requires ( ForwardIterable < C > && PredicateOver < Predicate, ElementType > ) {
+
+            LinkedList < ElementType > remaining;
+
+            Index i = 0;
+
+            for ( auto e : * this ) {
+                if ( i < count && p (e) ) {
+                    i ++;
+                    continue;
+                }
+
+                remaining.append(e);
+            }
+
+            return std::move(Sequence < LinkedList < ElementType > > (std::move(remaining)));
+        }
+
+        template < typename Predicate >
+        __CDS_MaybeUnused auto dropLastWhile (
+                Predicate const & p,
+                Size count          = UINT64_MAX
+        ) && noexcept -> Sequence < LinkedList < ElementType > >
+        __CDS_Requires ( ForwardIterable < C > && PredicateOver < Predicate, ElementType > ) {
+
+            LinkedList < ElementType > all;
+            LinkedList < ElementType > remaining;
+
+            for ( auto e : * this )
+                all.append(e);
+
+            Index i = 0;
+
+            for ( auto it = all.rbegin(); it != all.rend(); ++ it ) {
+                if ( i < count && p (it.value()) ) {
+                    i ++;
+                    continue;
+                }
+
+                remaining.pushFront(it.value());
+            }
+
+            return std::move(Sequence < LinkedList < ElementType > > (std::move(remaining)));
+        }
+
+        template < typename Predicate >
+        __CDS_MaybeUnused auto dropLastWhile (
+                Predicate const & p,
+                Size count          = UINT64_MAX
+        ) & noexcept -> Sequence < LinkedList < ElementType > >
+        __CDS_Requires ( ForwardIterable < C > && PredicateOver < Predicate, ElementType > ) {
+
+            LinkedList < ElementType > all;
+            LinkedList < ElementType > remaining;
+
+            for ( auto e : * this )
+                all.append(e);
+
+            Index i = 0;
+
+            for ( auto it = all.rbegin(); it != all.rend(); ++ it ) {
+                if ( i < count && p (* it) ) {
+                    i ++;
+                    continue;
+                }
+
+                remaining.pushFront(* it);
+            }
+
+            return std::move(Sequence < LinkedList < ElementType > > (std::move(remaining)));
+        }
+
+        __CDS_MaybeUnused auto take (Size count) && noexcept -> Sequence < LinkedList < ElementType > >
+        __CDS_Requires ( ForwardIterable < C > ) {
+
+            LinkedList < ElementType > remaining;
+
+            Index i = 0;
+
+            for ( auto e : * this ) {
+                if ( i < count ) {
+                    remaining.append(e);
+                    i++;
+                    continue;
+                }
+                break;
+            }
+
+            return std::move ( Sequence < LinkedList < ElementType > > (std::move(remaining)) );
+        }
+
+        __CDS_MaybeUnused auto take (Size count) & noexcept -> Sequence < LinkedList < ElementType > >
+        __CDS_Requires ( ForwardIterable < C > ) {
+
+            LinkedList < ElementType > remaining;
+
+            Index i = 0;
+
+            for ( auto e : * this ) {
+                if ( i < count ) {
+                    remaining.append(e);
+                    i++;
+                    continue;
+                }
+                break;
+            }
+
+            return std::move ( Sequence < LinkedList < ElementType > > (std::move(remaining)) );
+        }
+
+        __CDS_MaybeUnused auto takeLast (Size count) && noexcept -> Sequence < LinkedList < ElementType > >
+        __CDS_Requires ( ForwardIterable < C > ) {
+
+            Size current = this->pCollection.valueAt().valueAt().size();
+            LinkedList < ElementType > remaining;
+
+            Index i = 0;
+
+            for ( auto e : * this ) {
+                if ( count < current )
+                    -- current;
+                else
+                    remaining.append(e);
+            }
+
+            return std::move ( Sequence < LinkedList < ElementType > > (std::move(remaining)) );
+        }
+
+        __CDS_MaybeUnused auto takeLast (Size count) & noexcept -> Sequence < LinkedList < ElementType > >
+        __CDS_Requires ( ForwardIterable < C > ) {
+
+            Size current = this->pCollection.valueAt().valueAt().size();
+            LinkedList < ElementType > remaining;
+
+            Index i = 0;
+
+            for ( auto e : * this ) {
+                if ( count < current )
+                    -- current;
+                else
+                    remaining.append(e);
+            }
+
+            return std::move ( Sequence < LinkedList < ElementType > > (std::move(remaining)) );
+        }
+
+        template < typename Predicate >
+        __CDS_MaybeUnused auto takeWhile (
+                Predicate const & predicate,
+                Size              count     = UINT64_MAX
+        ) && noexcept -> Sequence < LinkedList < ElementType > >
+        __CDS_Requires ( ForwardIterable < C > && PredicateOver < Predicate, ElementType > ) {
+
+            LinkedList < ElementType > remaining;
+            Index i = 0;
+
+            for ( auto e : * this ) {
+                if ( i < count && predicate ( e ) ) {
+                    remaining.append(e);
+                    i++;
+                    continue;
+                }
+                break;
+            }
+
+            return std::move ( Sequence < LinkedList < ElementType > > ( std::move ( remaining ) ) );
+        }
+
+
+        template < typename Predicate >
+        __CDS_MaybeUnused auto takeWhile (
+                Predicate const & predicate,
+                Size              count     = UINT64_MAX
+        ) & noexcept -> Sequence < LinkedList < ElementType > >
+        __CDS_Requires ( ForwardIterable < C > && PredicateOver < Predicate, ElementType > ) {
+
+            LinkedList < ElementType > remaining;
+            Index i = 0;
+
+            for ( auto e : * this ) {
+                if ( i < count && predicate ( e ) ) {
+                    remaining.append(e);
+                    i++;
+                    continue;
+                }
+                break;
+            }
+
+            return std::move ( Sequence < LinkedList < ElementType > > ( std::move ( remaining ) ) );
+        }
+
+        template < typename Predicate >
+        __CDS_MaybeUnused auto takeLastWhile (
+                Predicate const & p,
+                Size count          = UINT64_MAX
+        ) && noexcept -> Sequence < LinkedList < ElementType > >
+        __CDS_Requires ( ForwardIterable < C > && PredicateOver < Predicate, ElementType > ) {
+
+            LinkedList < ElementType > container;
+
+            for ( auto e : * this )
+                container.append(e);
+
+            LinkedList < ElementType > remaining;
+
+            Index i = 0;
+            for ( auto it = container.rbegin(); it != container.rend(); ++ it )
+                if ( i < count && p ( it.value() ) )
+                    remaining.pushFront ( it.value() );
+
+            return std::move(Sequence < LinkedList < ElementType > > (std::move(remaining)));
+        }
+
+        template < typename Predicate >
+        __CDS_MaybeUnused auto takeLastWhile (
+                Predicate const & p,
+                Size count          = UINT64_MAX
+        ) & noexcept -> Sequence < LinkedList < ElementType > >
+        __CDS_Requires ( ForwardIterable < C > && PredicateOver < Predicate, ElementType > ) {
+
+            LinkedList < ElementType > container;
+
+            for ( auto e : * this )
+                container.append(e);
+
+            LinkedList < ElementType > remaining;
+
+            Index i = 0;
+            for ( auto it = container.rbegin(); it != container.rend(); ++ it )
+                if ( i < count && p ( * it ) )
+                    remaining.pushFront ( * it );
+
+            return std::move(Sequence < LinkedList < ElementType > > (std::move(remaining)));
+        }
+
+
+        template < typename Predicate >
+        __CDS_MaybeUnused __CDS_OptimalInline auto filter ( Predicate const & predicate ) && noexcept -> Sequence
+        __CDS_Requires ( ForwardIterable < C > && PredicateOver < Predicate, ElementType > ) {
+
+            this->storedPredicates.append({ { Memory :: instance().create < StoredPredicate > (predicate)}, this->chainCount });
+            return std::move ( * this );
+        }
+
+        template < typename Predicate >
+        __CDS_MaybeUnused auto filter ( Predicate const & predicate ) & noexcept -> Sequence
+        __CDS_Requires ( ForwardIterable < C > && PredicateOver < Predicate, ElementType > ) {
+
+            Sequence < C > copy (* this );
+            copy.storedPredicates.append({ { Memory :: instance ().create < StoredPredicate > (predicate)}, this->chainCount });
+            return std::move (copy);
+        }
+
+        template < typename IndexedPredicate >
+        __CDS_MaybeUnused auto filterIndexed ( IndexedPredicate const & indexedPredicate ) && noexcept -> Sequence
+        __CDS_Requires ( ForwardIterable < C > && IndexedPredicateOver < IndexedPredicate, ElementType > ) {
+
+            this->storedIndexedPredicates.append({ { Memory :: instance().create < StoredIndexedPredicate > (indexedPredicate)}, this->chainCount });
+            return std::move ( * this );
+        }
+
+        template < typename IndexedPredicate >
+        __CDS_MaybeUnused auto filterIndexed ( IndexedPredicate const & indexedPredicate ) & noexcept -> Sequence
+        __CDS_Requires ( ForwardIterable < C > && IndexedPredicateOver < IndexedPredicate, ElementType > ) {
+
+            Sequence < C > copy (* this);
+            copy.storedIndexedPredicates.append({ { Memory :: instance().create < StoredIndexedPredicate > (indexedPredicate)}, this->chainCount });
+            return std::move ( copy );
+        }
+
+        template < typename Predicate >
+        __CDS_MaybeUnused auto filterTo (
+                Collection < ElementType >        & collection,
+                Predicate                   const & predicate
+        ) const noexcept -> Collection < ElementType > &
+        __CDS_Requires ( ForwardIterable < C > && PredicateOver < Predicate, ElementType > ) {
+
+            for ( auto e : * this )
+                if ( predicate(e) )
+                    collection.add(e);
+
+            return collection;
+        }
+
+        template < typename IndexedPredicate >
+        __CDS_MaybeUnused auto filterIndexedTo (
+                Collection < ElementType >        & collection,
+                IndexedPredicate            const & predicate
+        ) const noexcept -> Collection < ElementType > &
+        __CDS_Requires ( ForwardIterable < C > && IndexedPredicateOver < IndexedPredicate, ElementType > ) {
+
+            Index i = 0;
+            for ( auto e : * this )
+                if ( predicate(i++, e) )
+                    collection.add(e);
+
+            return collection;
+        }
+
+        template < typename NewType, typename OT = ElementType, typename NT = NewType, EnableIf < Type < OT > :: isBasicPointer > = 0 >
+        __CDS_MaybeUnused auto filterIsDerived () && noexcept -> Sequence < LinkedList < NewType > >
+        __CDS_Requires(
+                ForwardIterable < C > &&
+                Pointer < ElementType > &&
+                Pointer < NewType > &&
+                DerivedFrom < RemovePointer < NewType >, RemovePointer < ElementType > >
+        ) {
+
+            LinkedList < NewType > container;
+            for ( auto e : * this ) {
+                auto p = dynamic_cast < NewType > (e);
+                if ( p != nullptr )
+                    container.add(p);
+            }
+
+            return std::move ( Sequence < LinkedList < NewType > > ( std::move ( container ) ) );
+        }
+
+        template < typename NewType, typename OT = ElementType, typename NT = NewType, EnableIf < Type < OT > :: isBasicPointer > = 0 >
+        __CDS_MaybeUnused auto filterIsDerived () & noexcept -> Sequence < LinkedList < NewType > >
+        __CDS_Requires(
+                ForwardIterable < C > &&
+                Pointer < ElementType > &&
+                Pointer < NewType > &&
+                DerivedFrom < RemovePointer < NewType >, RemovePointer < ElementType > >
+        ) {
+
+            LinkedList < NewType > container;
+            for ( auto e : * this ) {
+                auto p = dynamic_cast < NewType > (e);
+                if ( p != nullptr )
+                    container.add(p);
+            }
+
+            return std::move ( Sequence < LinkedList < NewType > > ( std::move ( container ) ) );
+        }
+
+        template < typename NewType, typename OT = ElementType, typename NT = NewType, EnableIf < Type < OT > :: isSmartPointer > = 0 >
+        __CDS_MaybeUnused auto filterIsDerived () && noexcept -> Sequence < LinkedList < typename TypeExtensions < NT > :: AsUniquePointer > >
+        __CDS_Requires(
+                ForwardIterable < C > &&
+                Pointer < OT > &&
+                Pointer < NT > &&
+                DerivedFrom < RemovePointer < NewType >, RemovePointer < typename OT :: Pointer > >
+        ) {
+
+            LinkedList < typename TypeExtensions < NT > :: AsUniquePointer > container;
+            for ( auto e : * this ) {
+                auto p = dynamic_cast < NT > (e.release());
+                if ( p != nullptr )
+                    container.add( typename TypeExtensions < NT > :: AsUniquePointer ( p ) );
+            }
+
+            return std::move ( Sequence < LinkedList < typename TypeExtensions < NT > :: AsForeignPointer > > ( std::move ( container ) ) );
+        }
+
+        template < typename NewType, typename OT = ElementType, typename NT = NewType, EnableIf < Type < OT > :: isSmartPointer > = 0 >
+        __CDS_MaybeUnused auto filterIsDerived () & noexcept -> Sequence < LinkedList < typename TypeExtensions < NT > :: AsForeignPointer > >
+        __CDS_Requires(
+                ForwardIterable < C > &&
+                Pointer < OT > &&
+                Pointer < NT > &&
+                DerivedFrom < RemovePointer < NewType >, RemovePointer < typename OT :: Pointer > >
+        ) {
+
+            LinkedList < typename TypeExtensions < NT > :: AsForeignPointer > container;
+            for ( auto e : * this ) {
+                auto p = dynamic_cast < NT > (e.get());
+                if ( p != nullptr )
+                    container.add( typename TypeExtensions < NT > :: AsForeignPointer ( p ) );
+            }
+
+            return std::move ( Sequence < LinkedList < typename TypeExtensions < NT > :: AsForeignPointer > > ( std::move ( container ) ) );
+        }
+
+        template < typename NewType, typename CT = NewType, typename OT = ElementType, EnableIf < Type < OT > :: isBasicPointer > = 0 >
+        __CDS_MaybeUnused auto filterIsDerivedTo (
+                Collection < CT > & collection
+        ) const noexcept -> Collection < CT > &
+        __CDS_Requires (
+                ForwardIterable < C > &&
+                Pointer < ElementType > &&
+                Pointer < NewType > &&
+                DerivedFrom < RemovePointer < NewType >, RemovePointer < ElementType > >
+        ) {
+
+            for ( auto e : * this ) {
+                auto p = dynamic_cast < NewType > (e);
+                if ( p != nullptr )
+                    collection.add(p);
+            }
+
+            return collection;
+        }
+
+        template < typename NewType, typename CT, typename OT = ElementType, EnableIf < Type < OT > :: isSmartPointer > = 0 >
+        __CDS_MaybeUnused auto filterIsDerivedTo (
+                Collection < CT > & collection
+        ) const noexcept -> Collection < CT > &
+        __CDS_Requires (
+                ForwardIterable < C > &&
+                Pointer < ElementType > &&
+                Pointer < NewType > &&
+                DerivedFrom < RemovePointer < NewType >, RemovePointer < typename OT :: Pointer > >
+        ) {
+
+            for ( auto e : * this ) {
+                auto p = dynamic_cast < NewType > (e.get());
+                if ( p != nullptr )
+                    collection.add(CT(p));
+            }
+
+            return collection;
+        }
+
+        template < typename T = ElementType, EnableIf < Type < T > :: isBasicPointer > = 0 >
+        __CDS_MaybeUnused auto filterNotNull () & noexcept -> Sequence < LinkedList < T > >
+        __CDS_Requires( ForwardIterable < C > && Pointer < T > ) {
+
+            LinkedList < T > container;
+            for ( auto e : * this )
+                if ( e != nullptr )
+                    container.add( e );
+
+            return std::move ( Sequence < LinkedList < T > > ( std::move ( container ) ) );
+        }
+
+        template < typename T = ElementType, EnableIf < Type < T > :: isBasicPointer > = 0 >
+        __CDS_MaybeUnused auto filterNotNull () && noexcept -> Sequence < LinkedList < T > >
+        __CDS_Requires( ForwardIterable < C > && Pointer < T > ) {
+
+            LinkedList < T > container;
+            for ( auto e : * this )
+                if ( e != nullptr )
+                    container.add( e );
+
+            return std::move ( Sequence < LinkedList < T > > ( std::move ( container ) ) );
+        }
+
+        template < typename T = ElementType, EnableIf < Type < T > :: isSmartPointer > = 0 >
+        __CDS_MaybeUnused auto filterNotNull () & noexcept -> Sequence < LinkedList < T > >
+        __CDS_Requires( ForwardIterable < C > && Pointer < T > ) {
+
+            LinkedList < T > container;
+            for ( auto e : * this )
+                if ( ! e.isNull() )
+                    container.add( e );
+
+            return std::move ( Sequence < LinkedList < T > > ( std::move ( container ) ) );
+        }
+
+        template < typename T = ElementType, EnableIf < Type < T > :: isSmartPointer > = 0 >
+        __CDS_MaybeUnused auto filterNotNull () && noexcept -> Sequence < LinkedList < T > >
+        __CDS_Requires( ForwardIterable < C > && Pointer < T > ) {
+
+            LinkedList < T > container;
+            for ( auto e : * this )
+                if ( ! e.isNull() )
+                    container.add( e );
+
+            return std::move ( Sequence < LinkedList < T > > ( std::move ( container ) ) );
+        }
+
+        template < typename T = ElementType, EnableIf < Type < T > :: isBasicPointer > = 0 >
+        __CDS_MaybeUnused auto filterNotNullTo (Collection < T > & collection) const noexcept -> Collection < T > &
+        __CDS_Requires( ForwardIterable < C > && Pointer < T > ) {
+
+            for ( auto e : * this )
+                if ( e != nullptr )
+                    collection.add(e);
+
+            return collection;
+        }
+
+        template < typename T = ElementType, EnableIf < Type < T > :: isSmartPointer > = 0 >
+        __CDS_MaybeUnused auto filterNotNullTo (Collection < T > & collection) const noexcept -> Collection < T > &
+        __CDS_Requires( ForwardIterable < C > && Pointer < T > ) {
+
+            for ( auto e : * this )
+                if ( ! e.isNull() )
+                    collection.add(T(e.get()));
+
+            return collection;
+        }
+
+        template < typename Predicate >
+        __CDS_MaybeUnused __CDS_OptimalInline auto filterNot ( Predicate const & predicate ) && noexcept -> Sequence
+        __CDS_Requires ( ForwardIterable < C > && PredicateOver < Predicate, ElementType > ) {
+
+            return this->filter( [& predicate] (ElementType e) noexcept -> bool { return ! predicate(e); } );
+        }
+
+        template < typename Predicate >
+        __CDS_MaybeUnused __CDS_OptimalInline auto filterNot ( Predicate const & predicate ) & noexcept -> Sequence
+        __CDS_Requires ( ForwardIterable < C > && PredicateOver < Predicate, ElementType > ) {
+
+            return this->filter( [& predicate] (ElementType e) noexcept -> bool { return ! predicate(e); } );
+        }
+
+        template < typename IndexedPredicate >
+        __CDS_MaybeUnused __CDS_OptimalInline auto filterNotIndexed ( IndexedPredicate const & indexedPredicate ) && noexcept -> Sequence
+        __CDS_Requires ( ForwardIterable < C > && IndexedPredicateOver < IndexedPredicate, ElementType > ) {
+
+            return this->filterIndexed( [& indexedPredicate] (Index index, ElementType e) noexcept -> bool {
+                return ! indexedPredicate ( index, e );
+            });
+        }
+
+        template < typename IndexedPredicate >
+        __CDS_MaybeUnused __CDS_OptimalInline auto filterNotIndexed ( IndexedPredicate const & indexedPredicate ) & noexcept -> Sequence
+        __CDS_Requires ( ForwardIterable < C > && IndexedPredicateOver < IndexedPredicate, ElementType > ) {
+
+            return this->filterIndexed( [& indexedPredicate] (Index index, ElementType e) noexcept -> bool {
+                return ! indexedPredicate ( index, e );
+            });
+        }
+
+        template < typename Predicate >
+        __CDS_MaybeUnused auto filterNotTo (
+                Collection < ElementType >        & collection,
+                Predicate                   const & predicate
+        ) const noexcept -> Collection < ElementType > &
+        __CDS_Requires ( ForwardIterable < C > && PredicateOver < Predicate, ElementType > ) {
+
+            for ( auto e : * this )
+                if ( ! predicate ( e ) )
+                    collection.add( e );
+
+            return collection;
+        }
+
+        template < typename IndexedPredicate >
+        __CDS_MaybeUnused auto filterNotIndexedTo (
+                Collection < ElementType >        & collection,
+                IndexedPredicate            const & indexedPredicate
+        ) const noexcept -> Collection < ElementType > &
+        __CDS_Requires ( ForwardIterable < C > && IndexedPredicateOver < IndexedPredicate, ElementType > ) {
+            Index i = 0;
+            for ( auto e : * this )
+                if ( ! indexedPredicate ( i++, e ) )
+                    collection.add ( e );
+
+            return collection;
+        }
+
+
+        template < typename Predicate >
+        __CDS_MaybeUnused auto indexOfFirst ( Predicate const & predicate ) const noexcept -> Index
+        __CDS_Requires ( ForwardIterable < C > && PredicateOver < Predicate, ElementType > ) {
+
+            Index i = 0;
+            for ( auto e : * this ) {
+                if ( predicate (e) )
+                    return i;
+                i++;
+            }
+
+            return -1;
+        }
+
+        template < typename Predicate >
+        __CDS_MaybeUnused auto indexOfLast ( Predicate const & predicate ) const noexcept -> Index
+        __CDS_Requires ( ForwardIterable < C > && PredicateOver < Predicate, ElementType > ) {
+
+            Index i = 0;
+            Index l = -1;
+            for ( auto e : * this ) {
+                if ( predicate (e) )
+                    l = i;
+                i++;
+            }
+
+            return l;
+        }
+
+        template < typename Predicate >
+        __CDS_MaybeUnused auto indicesOfAll ( Predicate const & predicate ) const noexcept -> LinkedList < Index >
+        __CDS_Requires ( ForwardIterable < C > && PredicateOver < Predicate, ElementType > ) {
+
+            Index i = 0;
+            LinkedList < Index > indices;
+            for ( auto e : * this ) {
+                if ( predicate( e ) )
+                    indices.add ( i );
+                i++;
+            }
+
+            return indices;
+        }
+
+        template < typename Predicate = Function < bool (ElementType const &) > >
+        __CDS_MaybeUnused auto any (
+                Predicate const & predicate = []( ElementType const & ) noexcept -> bool { return true; }
+        ) const noexcept -> Boolean
+        __CDS_Requires ( ForwardIterable < C > && PredicateOver < Predicate, ElementType > ) {
+
+            for ( auto e : * this )
+                if ( predicate ( e ) )
+                    return true;
+            return false;
+        }
+
+        template < typename Predicate >
+        __CDS_MaybeUnused auto all ( Predicate const & predicate ) const noexcept -> Boolean
+        __CDS_Requires ( ForwardIterable < C > && PredicateOver < Predicate, ElementType > ) {
+
+            for ( auto e : * this )
+                if ( ! predicate ( e ) )
                     return false;
-            }
 
-        return found;
-    }
-
-    template < typename Transformer, EnableIf < isPair < returnOf < Transformer > > :: value > = 0 >
-    __CDS_MaybeUnused auto associate (
-            Transformer const & transformer
-    ) && noexcept -> Sequence < LinkedList < returnOf < Transformer > > >
-    __CDS_Requires (
-            ForwardIterable < C > &&
-            PairType < returnOf < Transformer > > &&
-            TransformerOver < Transformer, ElementType >
-    ) {
-
-        LinkedList < returnOf < Transformer > > container;
-        for ( auto e : * this )
-            container.add ( transformer ( e ) );
-
-        return std::move ( Sequence < decltype ( container ) > ( std::move ( container ) ) );
-    }
-
-    template < typename Transformer, EnableIf < isPair < returnOf < Transformer > > :: value > = 0 >
-    __CDS_MaybeUnused auto associate (
-            Transformer const & transformer
-    ) & noexcept -> Sequence < LinkedList < returnOf < Transformer > > >
-    __CDS_Requires (
-            ForwardIterable < C > &&
-            PairType < returnOf < Transformer > > &&
-            TransformerOver < Transformer, ElementType >
-    ) {
-
-        LinkedList < returnOf < Transformer > > container;
-        for ( auto e : * this )
-            container.add ( transformer ( e ) );
-
-        return std::move ( Sequence < decltype ( container ) > ( std::move ( container ) ) );
-    }
-
-    template < typename KeyGenerator >
-    __CDS_MaybeUnused auto associateBy (
-            KeyGenerator const & keyGenerator
-    ) && noexcept -> Sequence < LinkedList < Pair < returnOf < KeyGenerator >, ElementType > > >
-    __CDS_Requires (
-            ForwardIterable < C > &&
-            FunctionOver < KeyGenerator, returnOf < KeyGenerator >, ElementType >
-    ) {
-
-        LinkedList < Pair < returnOf < KeyGenerator >, ElementType > > container;
-        for ( auto e : * this )
-            container.add ( { keyGenerator ( e ), e } );
-
-        return std::move ( Sequence < decltype ( container ) > ( std::move ( container ) ) );
-    }
-
-    template < typename KeyGenerator >
-    __CDS_MaybeUnused auto associateBy (
-            KeyGenerator const & keyGenerator
-    ) & noexcept -> Sequence < LinkedList < Pair < returnOf < KeyGenerator >, ElementType > > >
-    __CDS_Requires (
-            ForwardIterable < C > &&
-            FunctionOver < KeyGenerator, returnOf < KeyGenerator >, ElementType >
-    ) {
-
-        LinkedList < Pair < returnOf < KeyGenerator >, ElementType > > container;
-        for ( auto e : * this )
-            container.add ( { keyGenerator ( e ), e } );
-
-        return std::move ( Sequence < decltype ( container ) > ( std::move ( container ) ) );
-    }
-
-    template < typename KeyGenerator, typename ValueMapper >
-    __CDS_MaybeUnused auto associateBy (
-            KeyGenerator    const & keyGenerator,
-            ValueMapper     const & valueMapper
-    ) && noexcept -> Sequence < LinkedList < Pair < returnOf < KeyGenerator >, returnOf < ValueMapper > > > >
-    __CDS_Requires (
-            ForwardIterable < C > &&
-            FunctionOver < KeyGenerator, returnOf < KeyGenerator >, ElementType > &&
-            FunctionOver < ValueMapper, returnOf < ValueMapper >, ElementType >
-    ) {
-
-        LinkedList < Pair < returnOf < KeyGenerator >, returnOf < ValueMapper > > > container;
-        for ( auto e : * this )
-            container.add( { keyGenerator ( e ), valueMapper ( e ) } );
-
-        return std::move ( Sequence < decltype ( container ) > (std::move( container )) );
-    }
-
-    template < typename KeyGenerator, typename ValueMapper >
-    __CDS_MaybeUnused auto associateBy (
-            KeyGenerator    const & keyGenerator,
-            ValueMapper     const & valueMapper
-    ) & noexcept -> Sequence < LinkedList < Pair < returnOf < KeyGenerator >, returnOf < ValueMapper > > > >
-    __CDS_Requires (
-            ForwardIterable < C > &&
-            FunctionOver < KeyGenerator, returnOf < KeyGenerator >, ElementType > &&
-            FunctionOver < ValueMapper, returnOf < ValueMapper >, ElementType >
-    ) {
-
-        LinkedList < Pair < returnOf < KeyGenerator >, returnOf < ValueMapper > > > container;
-        for ( auto e : * this )
-            container.add( { keyGenerator ( e ), valueMapper ( e ) } );
-
-        return std::move ( Sequence < decltype ( container ) > (std::move( container )) );
-    }
-
-    template < typename KeyGenerator >
-    __CDS_MaybeUnused __CDS_OptimalInline auto associateByTo (
-            Map < returnOf < KeyGenerator >, ElementType >        & m,
-            KeyGenerator                                    const & keyGenerator
-    ) const noexcept -> Map < returnOf < KeyGenerator >, ElementType > &
-    __CDS_Requires (
-            ForwardIterable < C > &&
-            FunctionOver < KeyGenerator, returnOf < KeyGenerator >, ElementType >
-    ) {
-
-        for ( auto e : * this )
-            m [ keyGenerator (e) ] = e;
-        return m;
-    }
-
-    template < typename KeyGenerator, typename ValueMapper >
-    __CDS_MaybeUnused __CDS_OptimalInline auto associateByTo (
-            Map < returnOf < KeyGenerator >, returnOf < ValueMapper > >       & m,
-            KeyGenerator                                                const & keyGenerator,
-            ValueMapper                                                 const & valueMapper
-    ) const noexcept -> Map < returnOf < KeyGenerator >, returnOf < ValueMapper > > &
-    __CDS_Requires (
-            ForwardIterable < C > &&
-            FunctionOver < KeyGenerator, returnOf < KeyGenerator >, ElementType > &&
-            FunctionOver < ValueMapper, returnOf < ValueMapper >, ElementType >
-    ) {
-
-        for ( auto e : * this )
-            m [ keyGenerator (e) ] = valueMapper(e);
-        return m;
-    }
-
-    template < typename Transformer, typename K, typename V >
-    __CDS_MaybeUnused auto associateTo (
-            Map < K, V >          & m,
-            Transformer     const & t
-    ) const noexcept -> Map < K, V > &
-    __CDS_Requires (
-            ForwardIterable < C > &&
-            PairType < returnOf < Transformer > > &&
-            TransformerOver < Transformer, ElementType >
-    ) {
-
-        for ( auto e : * this ) {
-            auto p = t(e);
-            m[p.first()] = p.second();
+            return true;
         }
 
-        return m;
-    }
+        template < typename Predicate = Function < bool ( ElementType const & ) > >
+        __CDS_MaybeUnused auto count (
+                Predicate const & predicate = [](ElementType const &) noexcept -> bool { return true; }
+        ) const noexcept -> Int
+        __CDS_Requires ( ForwardIterable < C > && PredicateOver < Predicate, ElementType > ) {
 
-    template < typename ValueMapper >
-    __CDS_MaybeUnused auto associateWith (
-            ValueMapper const & valueMapper
-    ) && noexcept -> Sequence < LinkedList < Pair < ElementType, returnOf < ValueMapper > > > >
-    __CDS_Requires (
-            ForwardIterable < C > &&
-            FunctionOver < ValueMapper, returnOf < ValueMapper >, ElementType >
-    ) {
+            Int count = 0;
+            for ( auto e : * this )
+                if ( predicate ( e ) )
+                    count ++;
 
-        LinkedList < Pair < ElementType, returnOf < ValueMapper > > > container;
-        for ( auto e : * this )
-            container.add( { e, valueMapper(e) } );
-
-        return std::move ( Sequence < decltype ( container ) > (std::move(container)) );
-    }
-
-    template < typename ValueMapper >
-    __CDS_MaybeUnused auto associateWith (
-            ValueMapper const & valueMapper
-    ) & noexcept -> Sequence < LinkedList < Pair < ElementType, returnOf < ValueMapper > > > >
-    __CDS_Requires (
-            ForwardIterable < C > &&
-            FunctionOver < ValueMapper, returnOf < ValueMapper >, ElementType >
-    ) {
-
-        LinkedList < Pair < ElementType, returnOf < ValueMapper > > > container;
-        for ( auto e : * this )
-            container.add( { e, valueMapper(e) } );
-
-        return std::move ( Sequence < decltype ( container ) > (std::move(container)) );
-    }
-
-    template < typename ValueMapper >
-    __CDS_MaybeUnused auto associateWithTo (
-            Map < ElementType, returnOf < ValueMapper > >         & m,
-            ValueMapper                                     const & mapper
-    ) const noexcept -> Map < ElementType , returnOf < ValueMapper > > &
-    __CDS_Requires (
-            ForwardIterable < C > &&
-            FunctionOver < ValueMapper, returnOf < ValueMapper >, ElementType >
-    ) {
-
-        for ( auto e : * this )
-            m[e] = mapper(e);
-        return m;
-    }
-
-    template < typename Comparator = Function < bool (ElementType const &, ElementType const &) > >
-    __CDS_MaybeUnused auto sorted (
-            Comparator const & comparator = []( ElementType const & a, ElementType const & b) noexcept -> bool { return a < b; }
-    ) && noexcept -> Sequence < Array < ElementType > >
-    __CDS_Requires ( ForwardIterable < C > && ComparatorFor < Comparator, ElementType > ) {
-
-        Array < ElementType > container;
-        for ( auto e: * this )
-            container.add(e);
-
-        container.shrinkToSize(container.size());
-        container.sort(comparator);
-
-        return std::move ( Sequence < Array < ElementType > > (std::move(container)) );
-    }
-
-    template < typename Comparator = Function < bool (ElementType const &, ElementType const &) > >
-    __CDS_MaybeUnused auto sorted (
-            Comparator const & comparator = []( ElementType const & a, ElementType const & b) noexcept -> bool { return a < b; }
-    ) & noexcept -> Sequence < Array < ElementType > >
-    __CDS_Requires ( ForwardIterable < C > && ComparatorFor < Comparator, ElementType > ) {
-
-        Array < ElementType > container;
-        for ( auto e: * this )
-            container.add(e);
-
-        container.shrinkToSize(container.size());
-        container.sort(comparator);
-
-        return std::move ( Sequence < Array < ElementType > > (std::move(container)) );
-    }
-
-    template < typename Selector >
-    __CDS_MaybeUnused __CDS_OptimalInline auto sortedBy (
-            Selector const & selector
-    ) && noexcept -> Sequence < Array < ElementType > >
-    __CDS_Requires ( ForwardIterable < C > && AscendingSelectorFor < Selector, ElementType > ) {
-
-        return this->sorted([& selector](ElementType const & a, ElementType const & b) noexcept -> bool {
-            return selector(a) < selector(b);
-        });
-    }
-
-    template < typename Selector >
-    __CDS_MaybeUnused __CDS_OptimalInline auto sortedBy (
-            Selector const & selector
-    ) & noexcept -> Sequence < Array < ElementType > >
-    __CDS_Requires ( ForwardIterable < C > && AscendingSelectorFor < Selector, ElementType > ) {
-
-        return this->sorted([& selector](ElementType const & a, ElementType const & b) noexcept -> bool {
-            return selector(a) < selector(b);
-        });
-    }
-
-    template < typename Selector >
-    __CDS_MaybeUnused __CDS_OptimalInline auto sortedByDescending (
-            Selector const & selector
-    ) && noexcept -> Sequence < Array < ElementType > >
-    __CDS_Requires ( ForwardIterable < C > && DescendingSelectorFor < Selector, ElementType > ) {
-
-        return this->sorted([& selector](ElementType const & a, ElementType const & b) noexcept -> bool {
-            return selector(a) > selector(b);
-        });
-    }
-
-    template < typename Selector >
-    __CDS_MaybeUnused __CDS_OptimalInline auto sortedByDescending (
-            Selector const & selector
-    ) & noexcept -> Sequence < Array < ElementType > >
-    __CDS_Requires ( ForwardIterable < C > && DescendingSelectorFor < Selector, ElementType > ) {
-
-        return this->sorted([& selector](ElementType const & a, ElementType const & b) noexcept -> bool {
-            return selector(a) > selector(b);
-        });
-    }
-
-    template <
-            typename Selector,
-            typename Comparator = Function < bool ( returnOf < Selector > const &, returnOf < Selector > const & ) >
-    >
-    __CDS_MaybeUnused auto sortedByWith (
-            Selector    const & selector,
-            Comparator  const & comparator = [](
-                    returnOf < Selector > const & a,
-                    returnOf < Selector > const & b
-            ) noexcept -> bool { return a < b; }
-    ) && noexcept -> Sequence < Array < ElementType > >
-    __CDS_Requires (
-            ForwardIterable < C > &&
-            SelectorFor < Selector, ElementType > &&
-            ComparatorFor < Comparator, returnOf < Selector > >
-    ) {
-
-        return this->sorted([& selector, & comparator](ElementType const & a, ElementType const & b){
-            return comparator(selector(a), selector(b));
-        });
-    }
-
-    template <
-            typename Selector,
-            typename Comparator = Function < bool ( returnOf < Selector > const &, returnOf < Selector > const & ) >
-    >
-    __CDS_MaybeUnused auto sortedByWith (
-            Selector    const & selector,
-            Comparator  const & comparator = [](
-                    returnOf < Selector > const & a,
-                    returnOf < Selector > const & b
-            ) noexcept -> bool { return a < b; }
-    ) & noexcept -> Sequence < Array < ElementType > >
-    __CDS_Requires (
-            ForwardIterable < C > &&
-            SelectorFor < Selector, ElementType > &&
-            ComparatorFor < Comparator, returnOf < Selector > >
-    ) {
-
-        return this->sorted([& selector, & comparator](ElementType const & a, ElementType const & b){
-            return comparator(selector(a), selector(b));
-        });
-    }
-
-    template < typename CollectionType >
-    __CDS_MaybeUnused auto toCollection () const noexcept -> CollectionType
-    __CDS_Requires (
-            ForwardIterable < C > &&
-            DerivedFrom < CollectionType, Collection < ElementType > >
-    ) {
-
-        CollectionType c;
-        for ( auto e : * this )
-            c.add(e);
-        return c;
-    }
-
-    __CDS_MaybeUnused auto toLinkedList () const noexcept -> LinkedList < ElementType >
-    __CDS_Requires ( ForwardIterable < C > ) {
-
-        return this->toCollection<LinkedList<ElementType>>();
-    }
-
-    __CDS_MaybeUnused auto toArray () const noexcept -> Array < ElementType >
-    __CDS_Requires ( ForwardIterable < C > ) {
-
-        return this->toCollection<Array<ElementType>>();
-    }
-
-    template < typename Comparator >
-    __CDS_MaybeUnused auto toOrderedSet () const noexcept -> OrderedSet < ElementType, Comparator >
-    __CDS_Requires ( ForwardIterable < C > )  {
-
-        return this->toCollection<OrderedSet<ElementType, Comparator>>();
-    }
-
-    __CDS_MaybeUnused auto toUnorderedSet () const noexcept -> UnorderedSet < ElementType >
-    __CDS_Requires ( ForwardIterable < C > )  {
-
-        return this->toCollection<UnorderedSet<ElementType>>();
-    }
-
-    template <
-            typename U = C,
-            EnableIf < __CDS_Sequence::containedTypeIsPair < U > () > = 0,
-            typename FirstType = typename __CDS_Sequence::ContainedTypeAsPair < U > :: FirstType,
-            typename SecondType = typename __CDS_Sequence::ContainedTypeAsPair < U > :: SecondType,
-            typename PType = typename __CDS_Sequence::ContainedTypeAsPair < U > :: Type
-    >
-    __CDS_MaybeUnused auto toHashMap () const noexcept -> HashMap < FirstType, SecondType >
-    __CDS_Requires( ForwardIterable < C > && PairType < PType > ) {
-
-        HashMap < FirstType, SecondType > map;
-
-        for ( auto e : * this )
-            map[e.first()] = e.second();
-
-        return map;
-    }
-
-    template <
-            typename U = C,
-            EnableIf < __CDS_Sequence :: containedTypeIsPair < U > () > = 0,
-            typename FirstType = typename __CDS_Sequence::ContainedTypeAsPair < U > :: FirstType,
-            typename SecondType = typename __CDS_Sequence::ContainedTypeAsPair < U > :: SecondType,
-            typename PType = typename __CDS_Sequence::ContainedTypeAsPair < U > :: Type
-    >
-    __CDS_MaybeUnused auto unzip () const noexcept -> Pair < LinkedList < FirstType >, LinkedList < SecondType > >
-    __CDS_Requires ( ForwardIterable < C > && PairType < PType > ) {
-
-        Pair < LinkedList < FirstType >, LinkedList < SecondType > > result;
-
-        for ( auto e : * this ) {
-            result.first().append(e.first());
-            result.second().append(e.second());
+            return count;
         }
 
-        return result;
-    }
+        template < typename Predicate = Function < bool ( ElementType const & ) > >
+        __CDS_MaybeUnused auto none (
+                Predicate const & predicate = [](ElementType const &) noexcept -> bool { return true; }
+        ) const noexcept -> Boolean
+        __CDS_Requires ( ForwardIterable < C > && PredicateOver < Predicate, ElementType > ) {
 
-    template < typename CollectionType >
-    __CDS_MaybeUnused __CDS_OptimalInline auto toCollection (CollectionType & c) const noexcept -> CollectionType &
-    __CDS_Requires (
-            ForwardIterable < C > &&
-            DerivedFrom < CollectionType, Collection < ElementType > >
-    ) {
-
-        for ( auto e : * this )
-            c.add(e);
-        return c;
-    }
-
-    __CDS_MaybeUnused __CDS_OptimalInline auto toList (
-            List <ElementType> & a
-    ) const noexcept -> List < ElementType > &
-    __CDS_Requires ( ForwardIterable < C > ) {
-
-        return this->toCollection<List<ElementType>>(a);
-    }
-
-    __CDS_MaybeUnused __CDS_OptimalInline auto toLinkedList (
-            LinkedList < ElementType > & l
-    ) const noexcept -> LinkedList < ElementType > &
-    __CDS_Requires ( ForwardIterable < C > ) {
-
-        return this->toCollection<LinkedList<ElementType>>(l);
-    }
-
-    __CDS_MaybeUnused __CDS_OptimalInline auto toArray (
-            Array <ElementType> & a
-    ) const noexcept -> Array < ElementType > &
-    __CDS_Requires ( ForwardIterable < C > ) {
-
-        return this->toCollection<Array<ElementType>>(a);
-    }
-
-    __CDS_MaybeUnused __CDS_OptimalInline auto toSet (
-            Set < ElementType > & a
-    ) const noexcept -> Set < ElementType > &
-    __CDS_Requires ( ForwardIterable < C > ) {
-
-        return this->toCollection<Set<ElementType>>(a);
-    }
-
-    template < typename Comparator >
-    __CDS_MaybeUnused __CDS_OptimalInline auto toOrderedSet (
-            OrderedSet <ElementType, Comparator> & s
-    ) const noexcept -> OrderedSet < ElementType, Comparator > &
-    __CDS_Requires ( ForwardIterable < C > ) {
-
-        return this->toCollection<OrderedSet<ElementType, Comparator>>( s );
-    }
-
-    __CDS_MaybeUnused __CDS_OptimalInline auto toUnorderedSet (
-            UnorderedSet <ElementType> & s
-    ) const noexcept -> UnorderedSet < ElementType > &
-    __CDS_Requires ( ForwardIterable < C > ) {
-
-        return this->toCollection<UnorderedSet<ElementType>>(s);
-    }
-
-    template <
-            typename U = C,
-            EnableIf < __CDS_Sequence::containedTypeIsPair < U > () > = 0,
-            typename FirstType = typename __CDS_Sequence::ContainedTypeAsPair < U > :: FirstType,
-            typename SecondType = typename __CDS_Sequence::ContainedTypeAsPair < U > :: SecondType,
-            typename PType = typename __CDS_Sequence::ContainedTypeAsPair < U > :: Type
-    >
-    __CDS_MaybeUnused auto toMap (
-            Map < FirstType, SecondType > & map
-    ) const noexcept -> Map < FirstType, SecondType > &
-    __CDS_Requires( ForwardIterable < C > && PairType < PType > ) {
-
-        for ( auto e : * this )
-            map [e.first()] = e.second();
-
-        return map;
-    }
-
-    template <
-            typename U = C,
-            EnableIf < __CDS_Sequence::containedTypeIsPair < U > () > = 0,
-            typename FirstType = typename __CDS_Sequence::ContainedTypeAsPair < U > :: FirstType,
-            typename SecondType = typename __CDS_Sequence::ContainedTypeAsPair < U > :: SecondType,
-            typename PType = typename __CDS_Sequence::ContainedTypeAsPair < U > :: Type
-    >
-    __CDS_MaybeUnused auto toHashMap (
-            HashMap < FirstType, SecondType > & map
-    ) const noexcept -> HashMap < FirstType, SecondType > &
-    __CDS_Requires( ForwardIterable < C > && PairType < PType > ) {
-
-        for ( auto e : * this )
-            map [e.first()] = e.second();
-
-        return map;
-    }
-
-    template < typename Transformer >
-    __CDS_MaybeUnused auto flatMap (
-            Transformer const & transformer
-    ) && noexcept -> Sequence < LinkedList < __CDS_Sequence :: FlatMapDeducedType < Transformer > > >
-    __CDS_Requires (
-            ForwardIterable < C > &&
-            ForwardIterable < returnOf < Transformer > > &&
-            TransformerOver < Transformer, ElementType >
-    ) {
-
-        LinkedList < __CDS_Sequence :: FlatMapDeducedType < Transformer > > container;
-
-        for ( auto e : * this )
-            for ( auto const & s : transformer(e) )
-                container.add( s );
-        return std::move ( Sequence < decltype(container) > ( std::move(container) ) );
-    }
-
-    template < typename Transformer >
-    __CDS_MaybeUnused auto flatMap (
-            Transformer const & transformer
-    ) & noexcept -> Sequence < LinkedList < __CDS_Sequence :: FlatMapDeducedType < Transformer > > >
-    __CDS_Requires (
-            ForwardIterable < C > &&
-            ForwardIterable < returnOf < Transformer > > &&
-            TransformerOver < Transformer, ElementType >
-    ) {
-
-        LinkedList < __CDS_Sequence :: FlatMapDeducedType < Transformer > > container;
-
-        for ( auto e : * this )
-            for ( auto const & s : transformer(e) )
-                container.add( s );
-        return std::move ( Sequence < decltype(container) > ( std::move(container) ) );
-    }
-
-    template < typename IndexedTransformer >
-    __CDS_MaybeUnused auto flatMapIndexed (
-            IndexedTransformer const & transformer
-    ) && noexcept -> Sequence < LinkedList < __CDS_Sequence :: FlatMapDeducedType < IndexedTransformer > > > __CDS_Requires (
-            ForwardIterable < C > &&
-            ForwardIterable < returnOf < IndexedTransformer > > &&
-            TransformerOver < IndexedTransformer, Index, ElementType >
-    ) {
-
-        LinkedList < __CDS_Sequence :: FlatMapDeducedType < IndexedTransformer > > container;
-        Index i = 0;
-
-        for ( auto e : * this )
-            for ( auto const & s : transformer(i ++, e) )
-                container.add( s );
-        return std::move ( Sequence < decltype(container) > ( std::move(container) ) );
-    }
-
-    template < typename IndexedTransformer >
-    __CDS_MaybeUnused auto flatMapIndexed (
-            IndexedTransformer const & transformer
-    ) & noexcept -> Sequence < LinkedList < __CDS_Sequence :: FlatMapDeducedType < IndexedTransformer > > > __CDS_Requires (
-            ForwardIterable < C > &&
-            ForwardIterable < returnOf < IndexedTransformer > > &&
-            TransformerOver < IndexedTransformer, Index, ElementType >
-    ) {
-
-        LinkedList < __CDS_Sequence :: FlatMapDeducedType < IndexedTransformer > > container;
-        Index i = 0;
-
-        for ( auto e : * this )
-            for ( auto const & s : transformer(i ++, e) )
-                container.add( s );
-        return std::move ( Sequence < decltype(container) > ( std::move(container) ) );
-    }
-
-    template < typename Transformer >
-    __CDS_MaybeUnused auto flatMapTo (
-            Collection < __CDS_Sequence :: FlatMapDeducedType < Transformer > >       & collection,
-            Transformer                                                         const & transformer
-    ) const noexcept -> Collection < __CDS_Sequence :: FlatMapDeducedType < Transformer > > & __CDS_Requires (
-            ForwardIterable < C > &&
-            ForwardIterable < returnOf < Transformer > > &&
-            TransformerOver < Transformer, ElementType >
-    ) {
-
-        for ( auto i : * this )
-            for ( auto const & e : transformer(i) )
-                collection.add(e);
-
-        return collection;
-    }
-
-    template < typename IndexedTransformer >
-    __CDS_MaybeUnused auto flatMapIndexedTo (
-            Collection < __CDS_Sequence :: FlatMapDeducedType < IndexedTransformer > >        & collection,
-            IndexedTransformer                                                          const & transformer
-    ) const noexcept -> Collection < __CDS_Sequence :: FlatMapDeducedType < IndexedTransformer > > & __CDS_Requires (
-            ForwardIterable < C > &&
-            ForwardIterable < returnOf < IndexedTransformer > > &&
-            TransformerOver < IndexedTransformer, Index, ElementType >
-    ) {
-
-        Index j = 0;
-        for ( auto i : * this )
-            for ( auto const & e : transformer(j++, i) )
-                collection.add(e);
-
-        return collection;
-    }
-
-    template < typename KeySelector >
-    __CDS_MaybeUnused auto groupBy (
-            KeySelector const & keySelector
-    ) && noexcept -> Sequence < HashMap < returnOf < KeySelector >, LinkedList < ElementType > > >
-    __CDS_Requires (
-            ForwardIterable < C > &&
-            FunctionOver < KeySelector, returnOf < KeySelector >, ElementType >
-    ) {
-
-        HashMap < returnOf < KeySelector >, LinkedList < ElementType > > container;
-
-        for ( auto e : * this ) {
-            auto k = keySelector ( e );
-            if ( container.containsKey(k) )
-                container[k].add(e);
-            else
-                container[k] = { e };
+            for ( auto e : * this )
+                if ( predicate ( e ) )
+                    return false;
+            return true;
         }
 
-        return std::move ( Sequence < decltype ( container ) > ( std::move ( container ) ) );
-    }
+        template < typename Predicate = Function < bool ( ElementType const & ) > >
+        __CDS_MaybeUnused auto one (
+                Predicate const & predicate = [](ElementType const &) noexcept -> bool { return true; }
+        ) const noexcept -> Boolean
+        __CDS_Requires ( ForwardIterable < C > && PredicateOver < Predicate, ElementType > ) {
 
-    template < typename KeySelector >
-    __CDS_MaybeUnused auto groupBy (
-            KeySelector const & keySelector
-    ) & noexcept -> Sequence < HashMap < returnOf < KeySelector >, LinkedList < ElementType > > >
-    __CDS_Requires (
-            ForwardIterable < C > &&
-            FunctionOver < KeySelector, returnOf < KeySelector >, ElementType >
-    ) {
-
-        HashMap < returnOf < KeySelector >, LinkedList < ElementType > > container;
-
-        for ( auto e : * this ) {
-            auto k = keySelector ( e );
-            if ( container.containsKey(k) )
-                container[k].add(e);
-            else
-                container[k] = { e };
-        }
-
-        return std::move ( Sequence < decltype ( container ) > ( std::move ( container ) ) );
-    }
-
-    template < typename KeySelector, typename ValueMapper >
-    __CDS_MaybeUnused auto groupBy (
-            KeySelector const & keySelector,
-            ValueMapper const & valueMapper
-    ) && noexcept -> Sequence < HashMap < returnOf < KeySelector >, LinkedList < returnOf < ValueMapper > > > >
-    __CDS_Requires (
-            ForwardIterable < C > &&
-            FunctionOver < KeySelector, returnOf < KeySelector >, ElementType > &&
-            FunctionOver < ValueMapper, returnOf < ValueMapper >, ElementType >
-    ) {
-
-        HashMap < returnOf < KeySelector >, LinkedList < returnOf < ValueMapper > > > container;
-
-        for ( auto e : * this ) {
-            auto k = keySelector ( e ); auto v = valueMapper ( e );
-            if ( container.containsKey( k ) )
-                container[k].add(v);
-            else
-                container[k] = {v};
-        }
-
-        return std::move ( Sequence < decltype ( container ) > ( std::move ( container ) ) );
-    }
-
-    template < typename KeySelector, typename ValueMapper >
-    __CDS_MaybeUnused auto groupBy (
-            KeySelector const & keySelector,
-            ValueMapper const & valueMapper
-    ) & noexcept -> Sequence < HashMap < returnOf < KeySelector >, LinkedList < returnOf < ValueMapper > > > >
-    __CDS_Requires (
-            ForwardIterable < C > &&
-            FunctionOver < KeySelector, returnOf < KeySelector >, ElementType > &&
-            FunctionOver < ValueMapper, returnOf < ValueMapper >, ElementType >
-    ) {
-
-        HashMap < returnOf < KeySelector >, LinkedList < returnOf < ValueMapper > > > container;
-
-        for ( auto e : * this ) {
-            auto k = keySelector ( e ); auto v = valueMapper ( e );
-            if ( container.containsKey( k ) )
-                container[k].add(v);
-            else
-                container[k] = {v};
-        }
-
-        return std::move ( Sequence < decltype ( container ) > ( std::move ( container ) ) );
-    }
-
-    template < typename KeySelector >
-    __CDS_MaybeUnused auto groupByTo (
-            Map < returnOf < KeySelector >, LinkedList < ElementType > >          & map,
-            KeySelector                                                     const & keySelector
-    ) const noexcept -> Map < returnOf < KeySelector >, LinkedList < ElementType > > &
-    __CDS_Requires (
-            ForwardIterable < C > &&
-            FunctionOver < KeySelector, returnOf < KeySelector >, ElementType >
-    ) {
-
-        for ( auto e : * this ) {
-            auto k = keySelector ( e );
-            if ( map.containsKey( k ) )
-                map[k].add ( e );
-            else
-                map[k] = { e };
-        }
-
-        return map;
-    }
-
-    template < typename KeySelector, typename ValueMapper >
-    __CDS_MaybeUnused auto groupByTo (
-            Map < returnOf < KeySelector >, LinkedList < returnOf < ValueMapper > > >         & map,
-            KeySelector                                                                 const & keySelector,
-            ValueMapper                                                                 const & valueMapper
-    ) const noexcept -> Map < returnOf < KeySelector >, LinkedList < returnOf < ValueMapper > > > &
-    __CDS_Requires (
-            ForwardIterable < C > &&
-            FunctionOver < KeySelector, returnOf < KeySelector >, ElementType > &&
-            FunctionOver < ValueMapper, returnOf < ValueMapper >, ElementType >
-    ) {
-
-        for ( auto e : * this ) {
-            auto k = keySelector ( e ); auto v = valueMapper ( e );
-            if ( map.containsKey( k ) )
-                map[k].add ( v );
-            else
-                map[k] = { v };
-        }
-
-        return map;
-    }
-
-
-
-//    template < typename C1 = C, typename std :: enable_if < __CDS_Sequence :: isFlattable < C1 > (), int > :: type = 0 >
-//    __CDS_NoDiscard __CDS_MaybeUnused auto flatten () noexcept -> Sequence < typename __CDS_Sequence :: ContainedType < C1 > :: Type >;
-
-    /**
-     * Two versions of map, one for storage of mappers when keeping same type, another for switching to another data type
-     */
-
-    template < typename Mapper, EnableIf < ! __CDS_Sequence :: mapToSameType < Mapper, C > () > = 0 >
-    __CDS_MaybeUnused auto map (
-            Mapper const & mapper
-    ) && noexcept -> Sequence < LinkedList < returnOf < Mapper > > >
-    __CDS_Requires ( ForwardIterable < C > && MapperFor < Mapper, ElementType > ) {
-
-        LinkedList < returnOf < Mapper > > container;
-        for ( auto e : * this )
-            container.append(mapper(e));
-
-        return std::move(Sequence < LinkedList < returnOf < Mapper > > > (std::move(container)));
-    }
-
-    template < typename Mapper, EnableIf < __CDS_Sequence :: mapToSameType < Mapper, C > () > = 0 >
-    __CDS_MaybeUnused __CDS_OptimalInline auto map (
-            Mapper const & mapper
-    ) && noexcept -> Sequence < C >
-    __CDS_Requires ( ForwardIterable < C > && MapperFor < Mapper, ElementType > ) {
-
-        this->storedMappers.append({ { Memory :: instance().create < StoredMapper > (mapper) }, this->chainCount });
-        return std::move ( * this );
-    }
-
-    template < typename Mapper, EnableIf < ! __CDS_Sequence :: mapToSameType < Mapper, C > () > = 0 >
-    __CDS_MaybeUnused auto map (
-            Mapper const & mapper
-    ) & noexcept -> Sequence < LinkedList < returnOf < Mapper > > >
-    __CDS_Requires ( ForwardIterable < C > && MapperFor < Mapper, ElementType > ) {
-
-        LinkedList < returnOf < Mapper > > container;
-        for ( auto e : * this )
-            container.append(mapper(e));
-
-        return std::move(Sequence < LinkedList < returnOf < Mapper > > > (std::move(container)));
-    }
-
-    template < typename Mapper, EnableIf < __CDS_Sequence :: mapToSameType < Mapper, C > () > = 0 >
-    __CDS_MaybeUnused auto map (
-            Mapper const & mapper
-    ) & noexcept -> Sequence < C >
-    __CDS_Requires ( ForwardIterable < C > && MapperFor < Mapper, ElementType > ) {
-
-        Sequence < C > copy ( *this );
-        copy.storedMappers.append({ { Memory :: instance().create < StoredMapper >(mapper) }, this->chainCount });
-        return std::move(copy);
-    }
-
-
-    template < typename IndexedMapper, EnableIf < ! __CDS_Sequence :: mapToSameType < IndexedMapper, C > () > = 0 >
-    __CDS_MaybeUnused auto mapIndexed (
-            IndexedMapper const & indexedMapper
-    ) && noexcept -> Sequence < LinkedList < returnOf < IndexedMapper > > >
-    __CDS_Requires ( ForwardIterable < C > && MapperFor < IndexedMapper, Index, ElementType > ) {
-
-        LinkedList < returnOf < IndexedMapper > > container;
-        Index i = 0;
-        for ( auto e : * this )
-            container.append(mapper(i++, e));
-
-        return std::move(Sequence < LinkedList < returnOf < IndexedMapper > > > (std::move(container)));
-    }
-
-    template < typename IndexedMapper, EnableIf < ! __CDS_Sequence :: mapToSameType < IndexedMapper, C > () > = 0 >
-    __CDS_MaybeUnused auto mapIndexed (
-            IndexedMapper const & mapper
-    ) & noexcept -> Sequence < LinkedList < returnOf < IndexedMapper > > >
-    __CDS_Requires ( ForwardIterable < C > && MapperFor < IndexedMapper, Index, ElementType > ) {
-
-        LinkedList < returnOf < IndexedMapper > > container;
-        Index i = 0;
-        for ( auto e : * this )
-            container.append(mapper(i++, e));
-
-        return std::move(Sequence < LinkedList < returnOf < IndexedMapper > > > (std::move(container)));
-    }
-
-    template < typename IndexedMapper, EnableIf < __CDS_Sequence :: mapToSameType < IndexedMapper, C > () > = 0 >
-    __CDS_MaybeUnused auto mapIndexed (
-            IndexedMapper const & mapper
-    ) && noexcept -> Sequence < C >
-    __CDS_Requires ( ForwardIterable < C > && MapperFor < IndexedMapper, Index, ElementType > ) {
-
-        this->storedIndexedMappers.append({ { Memory :: instance().create < StoredIndexedMapper >(mapper) }, this->chainCount });
-        return std::move ( * this );
-    }
-
-    template < typename IndexedMapper, EnableIf < __CDS_Sequence :: mapToSameType < IndexedMapper, C > () > = 0 >
-    __CDS_MaybeUnused auto mapIndexed (
-            IndexedMapper const & mapper
-    ) & noexcept -> Sequence < C >
-    __CDS_Requires ( ForwardIterable < C > && MapperFor < IndexedMapper, Index, ElementType > ) {
-
-        Sequence < C > newSequence (* this);
-        newSequence.storedIndexedMappers.append({ { Memory::instance().create < StoredIndexedMapper >(mapper) }, this->chainCount });
-        return std::move ( newSequence );
-    }
-
-    template < typename Mapper, typename R >
-    __CDS_MaybeUnused auto mapTo (
-            Collection < R >          & collection,
-            Mapper              const & mapper
-    ) const noexcept -> Collection < R > &
-    __CDS_Requires (
-            ForwardIterable < C > &&
-            MapperFor < Mapper, ElementType > &&
-            ConvertibleTo < returnOf < Mapper >, R >
-    ) {
-
-        for ( auto e : * this )
-            collection.add ( mapper(e) );
-        return collection;
-    }
-
-    template < typename IndexedMapper, typename R >
-    __CDS_MaybeUnused auto mapIndexedTo (
-            Collection < R >          & collection,
-            IndexedMapper       const & mapper
-    ) const noexcept -> Collection < R > &
-    __CDS_Requires (
-            ForwardIterable < C > &&
-            MapperFor < IndexedMapper, Index, ElementType > &&
-            ConvertibleTo < returnOf < IndexedMapper >, R >
-    ) {
-
-        Index i = 0;
-        for ( auto e : * this )
-            collection.add ( mapper(i++, e) );
-        return collection;
-    }
-
-
-    __CDS_MaybeUnused auto indexed () && noexcept -> Sequence < LinkedList < Pair < Index, ElementType > > >
-    __CDS_Requires ( ForwardIterable < C > ) {
-
-        LinkedList < Pair < Index, ElementType > > container;
-        Index i = 0;
-        for ( auto e : * this )
-            container.add ( { i++, e } );
-
-        return std::move ( Sequence < LinkedList < Pair < Index, ElementType > > > ( std::move ( container ) ) );
-    }
-
-    __CDS_MaybeUnused auto indexed () & noexcept -> Sequence < LinkedList < Pair < Index, ElementType > > >
-    __CDS_Requires ( ForwardIterable < C > ) {
-
-        LinkedList < Pair < Index, ElementType > > container;
-        Index i = 0;
-        for ( auto e : * this )
-            container.add ( { i++, e } );
-
-        return std::move ( Sequence < LinkedList < Pair < Index, ElementType > > > ( std::move ( container ) ) );
-    }
-
-    __CDS_MaybeUnused auto distinct () && noexcept -> Sequence < UnorderedSet < ElementType > >
-    __CDS_Requires ( ForwardIterable < C > ) {
-
-        UnorderedSet < ElementType > container;
-        for ( auto e : * this )
-            container.add ( e );
-        return std::move ( Sequence < decltype (container) > ( std::move ( container ) ) );
-    }
-
-    __CDS_MaybeUnused auto distinct () & noexcept -> Sequence < UnorderedSet < ElementType > >
-    __CDS_Requires ( ForwardIterable < C > ) {
-
-        UnorderedSet < ElementType > container;
-        for ( auto e : * this )
-            container.add ( e );
-        return std::move ( Sequence < decltype (container) > ( std::move ( container ) ) );
-    }
-
-
-    template < typename Selector >
-    __CDS_MaybeUnused auto distinctBy (Selector const & selector) && noexcept -> Sequence < UnorderedSet < ElementType > >
-    __CDS_Requires ( ForwardIterable < C > && TransformerOver < Selector, ElementType > ) {
-
-        UnorderedSet < ElementType > container;
-        for ( auto e : * this )
-            if ( ! this->contains(selector(e)) )
-                container.add ( e );
-        return std::move ( Sequence < decltype (container) > ( std::move ( container ) ) );
-    }
-
-    template < typename Selector >
-    __CDS_MaybeUnused auto distinctBy (Selector const & selector) & noexcept -> Sequence < UnorderedSet < ElementType > >
-    __CDS_Requires ( ForwardIterable < C > && TransformerOver < Selector, ElementType > ) {
-
-        UnorderedSet < ElementType > container;
-        for ( auto e : * this )
-            if ( ! container.any([&](ElementType const & cE){ return Type < ElementType > :: compare ( selector(cE), selector(e) ); }) )
-                container.add ( e );
-        return std::move ( Sequence < decltype (container) > ( std::move ( container ) ) );
-    }
-
-    template < typename Action >
-    __CDS_MaybeUnused auto forEach ( Action const & action ) const noexcept -> void
-    __CDS_Requires ( ForwardIterable < C > && ActionOver < Action, ElementType > ) {
-
-        for ( auto e : * this )
-            action (e);
-    }
-
-    template < typename IndexedAction >
-    __CDS_MaybeUnused auto forEachIndexed ( IndexedAction const & indexedAction ) const noexcept -> void
-    __CDS_Requires ( ForwardIterable < C > && IndexedActionOver < IndexedAction, ElementType > ) {
-
-        Index i = 0;
-        for ( auto e : * this )
-            indexedAction (i++, e);
-    }
-
-    template < typename Action >
-    __CDS_MaybeUnused auto onEach ( Action const & action ) && noexcept -> Sequence < LinkedList < ElementType > >
-    __CDS_Requires ( ForwardIterable < C > && ActionOver < Action, ElementType > ) {
-
-        LinkedList < ElementType > container;
-        for ( auto e : * this ) {
-            action (e);
-            container.append(e);
-        }
-
-        return std::move(Sequence < LinkedList < ElementType > > (std::move(container)));
-    }
-
-    template < typename IndexedAction >
-    __CDS_MaybeUnused auto onEachIndexed (
-            IndexedAction const & indexedAction
-    ) && noexcept -> Sequence < LinkedList < ElementType > >
-    __CDS_Requires ( ForwardIterable < C > && IndexedActionOver < IndexedAction, ElementType > ) {
-
-        LinkedList < ElementType > container;
-        Index i = 0;
-        for ( auto e : * this ) {
-            indexedAction (i++, e);
-            container.append(e);
-        }
-
-        return std::move(Sequence < LinkedList < ElementType > > (std::move(container)));
-    }
-
-    template < typename Action >
-    __CDS_MaybeUnused auto onEach ( Action const & action ) & noexcept -> Sequence < LinkedList < ElementType > >
-    __CDS_Requires ( ForwardIterable < C > && ActionOver < Action, ElementType > ) {
-
-        Sequence copy (*this);
-
-        LinkedList < ElementType > container;
-        for ( auto e : copy ) {
-            action (e);
-            container.append(e);
-        }
-
-        return std::move(Sequence < LinkedList < ElementType > > (std::move(container)));
-    }
-
-    template < typename IndexedAction >
-    __CDS_MaybeUnused auto onEachIndexed (
-            IndexedAction const & indexedAction
-    ) & noexcept -> Sequence < LinkedList < ElementType > >
-    __CDS_Requires ( ForwardIterable < C > && IndexedActionOver < IndexedAction, ElementType > ) {
-
-        Sequence copy (*this);
-
-        LinkedList < ElementType > container;
-        Index i = 0;
-        for ( auto e : copy ) {
-            indexedAction (i++, e);
-            container.append(e);
-        }
-
-        return std::move(Sequence < LinkedList < ElementType > > (std::move(container)));
-    }
-
-#if defined(_MSC_VER)
-#pragma push_macro("min")
-#pragma push_macro("max")
-#undef min
-#undef max
-#endif
-
-    template < typename Comparator = Function < bool (ElementType const &, ElementType const &) > >
-    __CDS_MaybeUnused auto max (
-            Comparator const & comparator = [](ElementType const & a, ElementType const & b) noexcept -> bool { return a < b; }
-    ) const noexcept -> Optional < ElementType >
-    __CDS_Requires ( ForwardIterable < C > && ComparatorFor < Comparator, ElementType > ) {
-
-        if ( this->pCollection.valueAt().valueAt().size() == 0 ) return {  };
-
-        auto it = this->begin();
-        ElementType max = it.value();
-
-        for (it.next(); it != this->end(); ++it) {
-            auto v = it.value();
-            if ( comparator (max, v) )
-                max = v;
-        }
-
-        return {max};
-    }
-
-    template < typename Selector >
-    __CDS_MaybeUnused auto maxBy ( Selector const & selector ) const noexcept -> Optional < ElementType >
-    __CDS_Requires (
-            ForwardIterable < C > &&
-            AscendingSelectorFor < Selector, ElementType >
-    ) {
-
-        if ( this->pCollection.valueAt().valueAt().size() == 0 ) return { };
-
-        auto it = this->begin();
-        auto max = Pair < decltype( selector(it.value()) ), decltype( it.value() ) > ( selector (it.value()), it.value() );
-
-        for ( it.next(); it != this->end(); ++ it ) {
-            auto v = selector (it.value());
-            if ( max.first() < v )
-                max = { v, it.value() };
-        }
-
-        return {max.second()};
-    }
-
-    template < typename Selector >
-    __CDS_MaybeUnused auto maxOf ( Selector const & selector ) const noexcept -> Optional < returnOf < Selector > >
-    __CDS_Requires (
-            ForwardIterable < C > &&
-            AscendingSelectorFor < Selector, ElementType >
-    ) {
-
-        if ( this->pCollection.valueAt().valueAt().size() == 0 ) return { };
-
-        auto it = this->begin();
-        auto max = Pair < decltype( selector(it.value()) ), decltype( it.value() ) > ( selector (it.value()), it.value() );
-
-        for ( it.next(); it != this->end(); ++ it ) {
-            auto v = selector (it.value());
-            if ( max.first() < v )
-                max = { v, it.value() };
-        }
-
-        return {max.first()};
-    }
-
-    template < typename Comparator = Function < bool (ElementType const &, ElementType const &) > >
-    __CDS_MaybeUnused __CDS_OptimalInline auto maxOr (
-            ElementType const & e,
-            Comparator  const & comparator = [](ElementType const & a, ElementType const & b) noexcept -> bool { return a < b; }
-    ) const noexcept -> ElementType
-    __CDS_Requires ( ForwardIterable < C > && ComparatorFor < Comparator, ElementType > ) {
-
-        auto v = this->max ( comparator );
-        return v.isPresent() ? v.value() : e;
-    }
-
-    template < typename Selector >
-    __CDS_MaybeUnused auto maxByOr (
-            ElementType const & e,
-            Selector    const & selector
-    ) const noexcept -> ElementType __CDS_Requires (
-            ForwardIterable < C > &&
-            AscendingSelectorFor < Selector, ElementType >
-    ) {
-
-        auto v = this->maxBy ( selector );
-        return v.isPresent() ? v.value() : e;
-    }
-
-    template < typename Selector >
-    __CDS_MaybeUnused auto maxOfOr (
-            returnOf < Selector >   const & e,
-            Selector                const & selector
-    ) const noexcept -> returnOf < Selector > __CDS_Requires (
-            ForwardIterable < C > &&
-            AscendingSelectorFor < Selector, ElementType >
-    ) {
-
-        auto v = this->maxOf ( selector );
-        return v.isPresent() ? v.value() : e;
-    }
-
-    template < typename Comparator = Function < bool (ElementType const &, ElementType const &) > >
-    __CDS_MaybeUnused auto min (
-            Comparator const & comparator = [](ElementType const & a, ElementType const & b) noexcept -> bool { return a < b; }
-    ) const noexcept -> Optional < ElementType >
-    __CDS_Requires ( ForwardIterable < C > && ComparatorFor < Comparator, ElementType > )  {
-
-        if ( this->pCollection.valueAt().valueAt().size() == 0 ) return {  };
-
-        auto it = this->begin();
-        ElementType min = it.value();
-
-        for (it.next(); it != this->end(); ++it) {
-            auto v = it.value();
-            if ( comparator (v, min) )
-                min = v;
-        }
-
-        return {min};
-    }
-
-    template < typename Selector >
-    __CDS_MaybeUnused auto minBy (
-            Selector const & selector
-    ) const noexcept -> Optional < ElementType > __CDS_Requires (
-            ForwardIterable < C > &&
-            AscendingSelectorFor < Selector, ElementType >
-    ) {
-
-        if ( this->pCollection.valueAt().valueAt().size() == 0 ) return { };
-
-        auto it = this->begin();
-        auto min = Pair < decltype(selector(it.value())), decltype(it.value()) > (selector (it.value()), it.value() );
-
-        for ( it.next(); it != this->end(); ++ it ) {
-            auto v = selector (it.value());
-            if ( v < min.first() )
-                min = {v, it.value() };
-        }
-
-        return {min.second()};
-    }
-
-    template < typename Selector >
-    __CDS_MaybeUnused auto minOf ( Selector const & selector ) const noexcept -> Optional < returnOf < Selector > >
-    __CDS_Requires (
-            ForwardIterable < C > &&
-            AscendingSelectorFor < Selector, ElementType >
-    ) {
-
-        if ( this->pCollection.valueAt().valueAt().size() == 0 ) return { };
-
-        auto it = this->begin();
-        auto min = Pair < decltype(selector(it.value())), decltype(it.value()) > (selector (it.value()), it.value() );
-
-        for ( it.next(); it != this->end(); ++ it ) {
-            auto v = selector (it.value());
-            if ( v < min.first() )
-                min = {v, it.value() };
-        }
-
-        return {min.first()};
-    }
-
-    template < typename Comparator = Function < bool (ElementType const &, ElementType const &) > >
-    __CDS_MaybeUnused auto minOr (
-            ElementType const & e,
-            Comparator  const & comparator = [](ElementType const & a, ElementType const & b) noexcept -> bool { return a < b; }
-    ) const noexcept -> ElementType
-    __CDS_Requires ( ForwardIterable < C > && ComparatorFor < Comparator, ElementType > ) {
-
-        auto v = this->min ( comparator );
-        return v.isPresent() ? v.value() : e;
-    }
-
-    template < typename Selector >
-    __CDS_MaybeUnused auto minByOr (
-            ElementType const & e,
-            Selector    const & selector
-    ) const noexcept -> ElementType
-    __CDS_Requires (
-            ForwardIterable < C > &&
-            AscendingSelectorFor < Selector, ElementType >
-    ) {
-
-        auto v = this->minBy ( selector );
-        return v.isPresent() ? v.value() : e;
-    }
-
-    template < typename Selector >
-    __CDS_MaybeUnused auto minOfOr (
-            returnOf < Selector >   const & e,
-            Selector                const & selector
-    ) const noexcept -> returnOf < Selector >
-    __CDS_Requires (
-            ForwardIterable < C > &&
-            AscendingSelectorFor < Selector, ElementType >
-    ) {
-
-        auto v = this->minOf ( selector );
-        return v.isPresent() ? v.value() : e;
-    }
-
-#if defined(_MSC_VER)
-    #pragma pop_macro("max")
-    #pragma pop_macro("min")
-#endif
-
-    template < typename Accumulator, typename AccumulatedType >
-    __CDS_MaybeUnused auto fold (
-            AccumulatedType const & startingValue,
-            Accumulator     const & accumulator
-    ) const noexcept -> AccumulatedType
-    __CDS_Requires (
-            ForwardIterable < C > &&
-            AccumulatorFor < Accumulator, ElementType >
-    ) {
-
-        AccumulatedType result = startingValue;
-
-        for ( auto e : * this )
-            result = accumulator ( result, e );
-
-        return result;
-    }
-
-    template < typename IndexedAccumulator, typename AccumulatedType >
-    __CDS_MaybeUnused auto foldIndexed (
-            AccumulatedType     const & startingValue,
-            IndexedAccumulator  const & indexedAccumulator
-    ) const noexcept -> AccumulatedType
-    __CDS_Requires (
-            ForwardIterable < C > &&
-            IndexedAccumulatorFor < IndexedAccumulator, ElementType >
-    ) {
-        AccumulatedType result = startingValue;
-        Index i = 0;
-
-        for ( auto e : * this )
-            result = indexedAccumulator ( i++, result, e );
-
-        return result;
-    }
-
-    template < typename Accumulator, typename AccumulatedType >
-    __CDS_MaybeUnused auto runningFold (
-            AccumulatedType const & initialValue,
-            Accumulator     const & accumulator
-    ) && noexcept -> Sequence < LinkedList < AccumulatedType > >
-    __CDS_Requires (
-            ForwardIterable < C > &&
-            AccumulatorFor < Accumulator, ElementType >
-    ) {
-
-        LinkedList < AccumulatedType > results = { initialValue };
-
-        for ( auto e : * this )
-            results.add ( accumulator ( results.back(), e ) );
-
-        return std::move ( Sequence < decltype ( results ) > ( std::move ( results ) ) );
-    }
-
-    template < typename IndexedAccumulator, typename AccumulatedType >
-    __CDS_MaybeUnused auto runningFoldIndexed (
-            AccumulatedType     const & initialValue,
-            IndexedAccumulator  const & indexedAccumulator
-    ) && noexcept -> Sequence < LinkedList < AccumulatedType > >
-    __CDS_Requires (
-            ForwardIterable < C > &&
-            IndexedAccumulatorFor < IndexedAccumulator, ElementType >
-    ) {
-
-        LinkedList < AccumulatedType > results = { initialValue };
-        Index i = 0;
-
-        for ( auto e : * this )
-            results.add ( indexedAccumulator ( i++, results.back(), e ) );
-
-        return std::move ( Sequence < decltype ( results ) > ( std::move ( results ) ) );
-    }
-
-    template < typename Accumulator, typename AccumulatedType >
-    __CDS_MaybeUnused auto runningFold (
-            AccumulatedType const & initialValue,
-            Accumulator     const & accumulator
-    ) & noexcept -> Sequence < LinkedList < AccumulatedType > >
-    __CDS_Requires (
-            ForwardIterable < C > &&
-            AccumulatorFor < Accumulator, ElementType >
-    ) {
-
-        LinkedList < AccumulatedType > results = { initialValue };
-
-        for ( auto e : * this )
-            results.add ( accumulator ( results.back(), e ) );
-
-        return std::move ( Sequence < decltype ( results ) > ( std::move ( results ) ) );
-    }
-
-    template < typename IndexedAccumulator, typename AccumulatedType >
-    __CDS_MaybeUnused auto runningFoldIndexed (
-            AccumulatedType     const & initialValue,
-            IndexedAccumulator  const & indexedAccumulator
-    ) & noexcept -> Sequence < LinkedList < AccumulatedType > >
-    __CDS_Requires (
-            ForwardIterable < C > &&
-            IndexedAccumulatorFor < IndexedAccumulator, ElementType >
-    ) {
-
-        LinkedList < AccumulatedType > results = { initialValue };
-        Index i = 0;
-
-        for ( auto e : * this )
-            results.add ( indexedAccumulator ( i++, results.back(), e ) );
-
-        return std::move ( Sequence < decltype ( results ) > ( std::move ( results ) ) );
-    }
-
-    template < typename Accumulator >
-    __CDS_MaybeUnused auto reduce (
-            Accumulator const & accumulator
-    ) const noexcept (false) -> returnOf < Accumulator >
-    __CDS_Requires (
-            ForwardIterable < C > &&
-            AccumulatorFor < Accumulator, ElementType > &&
-            ConvertibleTo < ElementType, returnOf < Accumulator > >
-    ) {
-
-        if ( this->pCollection.valueAt().valueAt().size() == 0 )
-            throw OutOfBoundsException ("reduce used on empty Sequence");
-
-        auto it = this->begin();
-        returnOf < Accumulator > result = it.value();
-
-        for ( it.next(); it != this->end(); ++ it )
-            result = accumulator ( result, it.value() );
-
-        return result;
-    }
-
-    template < typename IndexedAccumulator >
-    __CDS_MaybeUnused auto reduceIndexed (
-            IndexedAccumulator const & indexedAccumulator
-    ) const noexcept (false) -> returnOf < IndexedAccumulator >
-    __CDS_Requires (
-            ForwardIterable < C > &&
-            IndexedAccumulatorFor < IndexedAccumulator, ElementType > &&
-            ConvertibleTo < ElementType, returnOf < IndexedAccumulator > >
-    ) {
-
-        if ( this->pCollection.valueAt().valueAt().size() == 0 )
-            throw OutOfBoundsException ("reduceIndexed used on empty Sequence");
-
-        auto it = this->begin();
-        returnOf < IndexedAccumulator > result = it.value();
-        Index i = 1;
-
-        for ( it.next(); it != this->end(); ++ it )
-            result = indexedAccumulator ( i ++, result, it.value() );
-
-        return result;
-    }
-
-    template < typename Accumulator >
-    __CDS_MaybeUnused auto runningReduce (
-            Accumulator const & accumulator
-    ) && noexcept -> Sequence < LinkedList < returnOf < Accumulator > > >
-    __CDS_Requires (
-            ForwardIterable < C > &&
-            AccumulatorFor < Accumulator, ElementType > &&
-            ConvertibleTo < ElementType, returnOf < Accumulator > >
-    ) {
-
-        LinkedList < returnOf < Accumulator > > results = { };
-
-        if ( this->pCollection.valueAt().valueAt().size() > 0 ) {
-            auto it = this->begin();
-            results.add(it.value());
-
-            for (it.next(); it != this->end(); ++it)
-                results.add(accumulator(results.back(), it.value()));
-        }
-
-        return std::move ( Sequence < decltype ( results ) > ( std::move ( results ) ) );
-    }
-
-    template < typename IndexedAccumulator >
-    __CDS_MaybeUnused auto runningReduceIndexed (
-            IndexedAccumulator const & indexedAccumulator
-    ) && noexcept -> Sequence < LinkedList < returnOf < IndexedAccumulator > > >
-    __CDS_Requires (
-            ForwardIterable < C > &&
-            IndexedAccumulatorFor < IndexedAccumulator, ElementType > &&
-            ConvertibleTo < ElementType, returnOf < IndexedAccumulator > >
-    ) {
-
-        LinkedList < returnOf < IndexedAccumulator > > results = { };
-
-        if ( this->pCollection.valueAt().valueAt().size() > 0 ) {
-            auto it = this->begin();
-            Index i = 1;
-
-            results.add(it.value());
-
-            for (it.next(); it != this->end(); ++it)
-                results.add(indexedAccumulator(i++, results.back(), it.value()));
-        }
-
-        return std::move ( Sequence < decltype ( results ) > ( std::move ( results ) ) );
-    }
-
-
-    template < typename Accumulator >
-    __CDS_MaybeUnused auto runningReduce (
-            Accumulator const & accumulator
-    ) & noexcept -> Sequence < LinkedList < returnOf < Accumulator > > >
-    __CDS_Requires (
-            ForwardIterable < C > &&
-            AccumulatorFor < Accumulator, ElementType > &&
-            ConvertibleTo < ElementType, returnOf < Accumulator > >
-    ) {
-
-        LinkedList < returnOf < Accumulator > > results = { };
-
-        if ( this->pCollection.valueAt().valueAt().size() > 0 ) {
-            auto it = this->begin();
-            results.add(it.value());
-
-            for (it.next(); it != this->end(); ++it)
-                results.add(accumulator(results.back(), it.value()));
-        }
-
-        return std::move ( Sequence < decltype ( results ) > ( std::move ( results ) ) );
-    }
-
-    template < typename IndexedAccumulator >
-    __CDS_MaybeUnused auto runningReduceIndexed (
-            IndexedAccumulator const & indexedAccumulator
-    ) & noexcept -> Sequence < LinkedList < returnOf < IndexedAccumulator > > >
-    __CDS_Requires (
-            ForwardIterable < C > &&
-            IndexedAccumulatorFor < IndexedAccumulator, ElementType > &&
-            ConvertibleTo < ElementType, returnOf < IndexedAccumulator > >
-    ) {
-
-        LinkedList < returnOf < IndexedAccumulator > > results = { };
-
-        if ( this->pCollection.valueAt().valueAt().size() > 0 ) {
-            auto it = this->begin();
-            Index i = 1;
-
-            results.add(it.value());
-
-            for (it.next(); it != this->end(); ++it)
-                results.add(indexedAccumulator(i++, results.back(), it.value()));
-        }
-
-        return std::move ( Sequence < decltype ( results ) > ( std::move ( results ) ) );
-    }
-
-    template < typename Accumulator, typename AccumulatedType >
-    __CDS_MaybeUnused __CDS_OptimalInline auto scan (
-            AccumulatedType const & initialValue,
-            Accumulator     const & accumulator
-    ) && noexcept -> Sequence < LinkedList < AccumulatedType > >
-    __CDS_Requires (
-            ForwardIterable < C > &&
-            AccumulatorFor < Accumulator, ElementType >
-    ) {
-
-        return this->runningFold( initialValue, accumulator );
-    }
-
-    template < typename Accumulator, typename AccumulatedType >
-    __CDS_MaybeUnused auto scan (
-            AccumulatedType const & initialValue,
-            Accumulator     const & accumulator
-    ) & noexcept -> Sequence < LinkedList < AccumulatedType > >
-    __CDS_Requires (
-            ForwardIterable < C > &&
-            AccumulatorFor < Accumulator, ElementType >
-    ) {
-
-        return this->runningFold( initialValue, accumulator );
-    }
-
-    template < typename IndexedAccumulator, typename AccumulatedType >
-    __CDS_MaybeUnused auto scanIndexed (
-            AccumulatedType     const & initialValue,
-            IndexedAccumulator  const & indexedAccumulator
-    ) && noexcept -> Sequence < LinkedList < AccumulatedType > >
-    __CDS_Requires (
-            ForwardIterable < C > &&
-            IndexedAccumulatorFor < IndexedAccumulator, ElementType >
-    ) {
-
-        return this->runningFoldIndexed ( initialValue, indexedAccumulator );
-    }
-
-    template < typename IndexedAccumulator, typename AccumulatedType >
-    __CDS_MaybeUnused auto scanIndexed (
-            AccumulatedType     const & initialValue,
-            IndexedAccumulator  const & indexedAccumulator
-    ) & noexcept -> Sequence < LinkedList < AccumulatedType > >
-    __CDS_Requires (
-            ForwardIterable < C > &&
-            IndexedAccumulatorFor < IndexedAccumulator, ElementType >
-    ) {
-
-        return this->runningFoldIndexed ( initialValue, indexedAccumulator );
-    }
-
-    template < typename E = ElementType, EnableIf < Type < E > :: isNumeric > = 0 >
-    __CDS_NoDiscard __CDS_MaybeUnused auto sum () const noexcept -> ElementType
-    __CDS_Requires ( ForwardIterable < C > && Integral < ElementType > ) {
-        ElementType sum = 0;
-        for ( auto e : * this )
-            sum = sum + e;
-
-        return sum;
-    }
-
-    template < typename E = ElementType, EnableIf < ! Type < E > :: isNumeric && Type < E > :: defaultConstructible > = 0 >
-    __CDS_NoDiscard __CDS_MaybeUnused auto sum () const noexcept -> ElementType
-    __CDS_Requires ( ForwardIterable < C > ) {
-
-        ElementType sum;
-        for ( auto e : * this )
-            sum = sum + e;
-
-        return sum;
-    }
-
-    template < typename Selector >
-    __CDS_MaybeUnused auto sumBy ( Selector const & selector ) const noexcept -> returnOf < Selector >
-    __CDS_Requires (
-            ForwardIterable < C > &&
-            MapperFor < Selector, ElementType > &&
-            Summable < ElementType >
-    ) {
-
-        auto it = this->begin();
-        auto sum = selector ( it.value() );
-
-        for (it.next(); it != this->end(); ++ it)
-            sum = sum + selector(it.value());
-
-        return sum;
-    }
-
-    template < typename U = C, EnableIf < __CDS_Sequence :: IsArithmetic < typename __CDS_Sequence::ContainedType < U > ::Type > :: Value > = 0 >
-    __CDS_NoDiscard __CDS_MaybeUnused auto average () const noexcept -> Double
-    __CDS_Requires ( ForwardIterable < C > && ConvertibleTo < double, ElementType > ) {
-        double average = 0.0; int eCount = 0;
-        for ( auto e : * this ) {
-            ++ eCount;
-            average += static_cast < double > ( e );
-        }
-
-        return average / static_cast < double > ( eCount );
-    }
-
-
-    __CDS_MaybeUnused auto chunked (Size chunkSize) && noexcept -> Sequence < LinkedList < Array < ElementType > > >
-    __CDS_Requires ( ForwardIterable < C > ) {
-
-        LinkedList < Array < ElementType > > container;
-        Array < ElementType > subContainer;
-        Index subContainerPos = 0;
-        subContainer.resize(chunkSize);
-
-        for ( auto e : * this ) {
-            subContainer[subContainerPos++] = e;
-
-            if ( subContainerPos >= chunkSize ){
-                container.add(subContainer);
-                subContainer.clear();
-                subContainer.resize(chunkSize);
-                subContainerPos = 0;
-            }
-        }
-
-        if ( ! subContainer.empty() && subContainerPos > 0 ) {
-            subContainer.resize(subContainerPos);
-            container.add(subContainer);
-        }
-
-        return std::move ( Sequence < decltype ( container ) > ( std::move ( container ) ) );
-    }
-
-    __CDS_MaybeUnused auto chunked (Size chunkSize) & noexcept -> Sequence < LinkedList < Array < ElementType > > >
-    __CDS_Requires ( ForwardIterable < C > ) {
-
-        LinkedList < Array < ElementType > > container;
-        Array < ElementType > subContainer;
-        Index subContainerPos = 0;
-        subContainer.resize(chunkSize);
-
-        for ( auto e : * this ) {
-            subContainer[subContainerPos++] = e;
-
-            if ( subContainerPos >= chunkSize ){
-                container.add(subContainer);
-                subContainer.clear();
-                subContainer.resize(chunkSize);
-                subContainerPos = 0;
-            }
-        }
-
-        if ( ! subContainer.empty() && subContainerPos > 0 ) {
-            subContainer.resize(subContainerPos);
-            container.add(subContainer);
-        }
-
-        return std::move ( Sequence < decltype ( container ) > ( std::move ( container ) ) );
-    }
-
-    template < typename ListTransformer >
-    __CDS_MaybeUnused auto chunked (
-            Size                    chunkSize,
-            ListTransformer const & listTransformer
-    ) && noexcept -> Sequence < LinkedList < returnOf < ListTransformer > > >
-    __CDS_Requires ( ForwardIterable < C > && TransformerOver < ListTransformer, List < ElementType > > ) {
-
-        LinkedList < returnOf < ListTransformer > > container;
-        Array < ElementType > subContainer;
-        Index subContainerPos = 0;
-        subContainer.resize(chunkSize);
-
-        for ( auto e : * this ) {
-            subContainer[subContainerPos++] = e;
-
-            if ( subContainerPos >= chunkSize ) {
-                container.add ( listTransformer ( subContainer ) );
-                subContainer.clear();
-                subContainer.resize(chunkSize);
-                subContainerPos = 0;
-            }
-        }
-
-        if ( ! subContainer.empty() && subContainerPos > 0 ) {
-            subContainer.resize(subContainerPos);
-            container.add ( listTransformer ( subContainer ) );
-        }
-
-        return std::move ( Sequence < decltype ( container ) > ( std::move ( container ) ) );
-    }
-
-    template < typename ListTransformer >
-    __CDS_MaybeUnused auto chunked (
-            Size                    chunkSize,
-            ListTransformer const & listTransformer
-    ) & noexcept -> Sequence < LinkedList < returnOf < ListTransformer > > >
-    __CDS_Requires ( ForwardIterable < C > && TransformerOver < ListTransformer, List < ElementType > > ) {
-
-        LinkedList < returnOf < ListTransformer > > container;
-        Array < ElementType > subContainer;
-        Index subContainerPos = 0;
-        subContainer.resize(chunkSize);
-
-        for ( auto e : * this ) {
-            subContainer[subContainerPos++] = e;
-
-            if ( subContainerPos >= chunkSize ) {
-                container.add ( listTransformer ( subContainer ) );
-                subContainer.clear();
-                subContainer.resize(chunkSize);
-                subContainerPos = 0;
-            }
-        }
-
-        if ( ! subContainer.empty() && subContainerPos > 0 ) {
-            subContainer.resize(subContainerPos);
-            container.add ( listTransformer ( subContainer ) );
-        }
-
-        return std::move ( Sequence < decltype ( container ) > ( std::move ( container ) ) );
-    }
-
-
-    __CDS_MaybeUnused auto minus (
-            ElementType const & toRemove
-    ) && noexcept -> Sequence < LinkedList < ElementType > >
-    __CDS_Requires ( ForwardIterable < C > ) {
-
-        LinkedList < ElementType > container;
-        Boolean found = false;
-
-        for ( auto e : * this )
-            if ( found || e != toRemove )
-                container.add( e );
-            else
-                found = true;
-
-        return std::move ( Sequence < decltype ( container ) > ( std::move ( container ) ) );
-    }
-
-    __CDS_MaybeUnused auto minus (
-            Collection < ElementType > const & toRemove
-    ) && noexcept -> Sequence < LinkedList < ElementType > >
-    __CDS_Requires ( ForwardIterable < C > ) {
-
-        LinkedList < ElementType > container;
-
-        for ( auto e : * this )
-            if ( ! toRemove.contains(e) )
-                container.add(e);
-
-        return std::move ( Sequence < decltype ( container ) > ( std::move ( container ) ) );
-    }
-
-
-    template < typename OC, typename OtherType = typename Sequence < C > :: ElementType >
-    __CDS_MaybeUnused auto minus (
-            Sequence < OC > const & sequence
-    ) && noexcept -> Sequence < LinkedList < OtherType > >
-    __CDS_Requires (
-            ForwardIterable < C > &&
-            ForwardIterable < OC > &&
-            EqualsComparable < ElementType, OtherType >
-    ) {
-
-        LinkedList < ElementType > container;
-
-        for ( auto e : * this ) {
             Boolean found = false;
-            for (auto v : sequence)
-                if ( v == e ) {
-                    found = true;
-                    break;
+
+            for ( auto e : * this )
+                if ( predicate ( e ) ) {
+                    if (!found)
+                        found = true;
+                    else
+                        return false;
                 }
 
-            if ( ! found )
-                container.add( e );
+            return found;
         }
 
-        return std::move ( Sequence < decltype ( container ) > ( std::move ( container ) ) );
-    }
+        template < typename Transformer, EnableIf < isPair < returnOf < Transformer > > :: value > = 0 >
+        __CDS_MaybeUnused auto associate (
+                Transformer const & transformer
+        ) && noexcept -> Sequence < LinkedList < returnOf < Transformer > > >
+        __CDS_Requires (
+                ForwardIterable < C > &&
+                PairType < returnOf < Transformer > > &&
+                TransformerOver < Transformer, ElementType >
+        ) {
 
-    __CDS_MaybeUnused auto minus (
-            ElementType const & toRemove
-    ) & noexcept -> Sequence < LinkedList < ElementType > >
-    __CDS_Requires ( ForwardIterable < C > ) {
+            LinkedList < returnOf < Transformer > > container;
+            for ( auto e : * this )
+                container.add ( transformer ( e ) );
 
-        LinkedList < ElementType > container;
-        Boolean found = false;
+            return std::move ( Sequence < decltype ( container ) > ( std::move ( container ) ) );
+        }
 
-        for ( auto e : * this )
-            if ( found || e != toRemove )
-                container.add( e );
-            else
-                found = true;
+        template < typename Transformer, EnableIf < isPair < returnOf < Transformer > > :: value > = 0 >
+        __CDS_MaybeUnused auto associate (
+                Transformer const & transformer
+        ) & noexcept -> Sequence < LinkedList < returnOf < Transformer > > >
+        __CDS_Requires (
+                ForwardIterable < C > &&
+                PairType < returnOf < Transformer > > &&
+                TransformerOver < Transformer, ElementType >
+        ) {
 
-        return std::move ( Sequence < decltype ( container ) > ( std::move ( container ) ) );
-    }
+            LinkedList < returnOf < Transformer > > container;
+            for ( auto e : * this )
+                container.add ( transformer ( e ) );
 
-    __CDS_MaybeUnused auto minus (
-            Collection < ElementType > const & toRemove
-    ) & noexcept -> Sequence < LinkedList < ElementType > >
-    __CDS_Requires ( ForwardIterable < C > ) {
+            return std::move ( Sequence < decltype ( container ) > ( std::move ( container ) ) );
+        }
 
-        LinkedList < ElementType > container;
+        template < typename KeyGenerator >
+        __CDS_MaybeUnused auto associateBy (
+                KeyGenerator const & keyGenerator
+        ) && noexcept -> Sequence < LinkedList < Pair < returnOf < KeyGenerator >, ElementType > > >
+        __CDS_Requires (
+                ForwardIterable < C > &&
+                FunctionOver < KeyGenerator, returnOf < KeyGenerator >, ElementType >
+        ) {
 
-        for ( auto e : * this )
-            if ( ! toRemove.contains(e) )
+            LinkedList < Pair < returnOf < KeyGenerator >, ElementType > > container;
+            for ( auto e : * this )
+                container.add ( { keyGenerator ( e ), e } );
+
+            return std::move ( Sequence < decltype ( container ) > ( std::move ( container ) ) );
+        }
+
+        template < typename KeyGenerator >
+        __CDS_MaybeUnused auto associateBy (
+                KeyGenerator const & keyGenerator
+        ) & noexcept -> Sequence < LinkedList < Pair < returnOf < KeyGenerator >, ElementType > > >
+        __CDS_Requires (
+                ForwardIterable < C > &&
+                FunctionOver < KeyGenerator, returnOf < KeyGenerator >, ElementType >
+        ) {
+
+            LinkedList < Pair < returnOf < KeyGenerator >, ElementType > > container;
+            for ( auto e : * this )
+                container.add ( { keyGenerator ( e ), e } );
+
+            return std::move ( Sequence < decltype ( container ) > ( std::move ( container ) ) );
+        }
+
+        template < typename KeyGenerator, typename ValueMapper >
+        __CDS_MaybeUnused auto associateBy (
+                KeyGenerator    const & keyGenerator,
+                ValueMapper     const & valueMapper
+        ) && noexcept -> Sequence < LinkedList < Pair < returnOf < KeyGenerator >, returnOf < ValueMapper > > > >
+        __CDS_Requires (
+                ForwardIterable < C > &&
+                FunctionOver < KeyGenerator, returnOf < KeyGenerator >, ElementType > &&
+                FunctionOver < ValueMapper, returnOf < ValueMapper >, ElementType >
+        ) {
+
+            LinkedList < Pair < returnOf < KeyGenerator >, returnOf < ValueMapper > > > container;
+            for ( auto e : * this )
+                container.add( { keyGenerator ( e ), valueMapper ( e ) } );
+
+            return std::move ( Sequence < decltype ( container ) > (std::move( container )) );
+        }
+
+        template < typename KeyGenerator, typename ValueMapper >
+        __CDS_MaybeUnused auto associateBy (
+                KeyGenerator    const & keyGenerator,
+                ValueMapper     const & valueMapper
+        ) & noexcept -> Sequence < LinkedList < Pair < returnOf < KeyGenerator >, returnOf < ValueMapper > > > >
+        __CDS_Requires (
+                ForwardIterable < C > &&
+                FunctionOver < KeyGenerator, returnOf < KeyGenerator >, ElementType > &&
+                FunctionOver < ValueMapper, returnOf < ValueMapper >, ElementType >
+        ) {
+
+            LinkedList < Pair < returnOf < KeyGenerator >, returnOf < ValueMapper > > > container;
+            for ( auto e : * this )
+                container.add( { keyGenerator ( e ), valueMapper ( e ) } );
+
+            return std::move ( Sequence < decltype ( container ) > (std::move( container )) );
+        }
+
+        template < typename KeyGenerator >
+        __CDS_MaybeUnused __CDS_OptimalInline auto associateByTo (
+                Map < returnOf < KeyGenerator >, ElementType >        & m,
+                KeyGenerator                                    const & keyGenerator
+        ) const noexcept -> Map < returnOf < KeyGenerator >, ElementType > &
+        __CDS_Requires (
+                ForwardIterable < C > &&
+                FunctionOver < KeyGenerator, returnOf < KeyGenerator >, ElementType >
+        ) {
+
+            for ( auto e : * this )
+                m [ keyGenerator (e) ] = e;
+            return m;
+        }
+
+        template < typename KeyGenerator, typename ValueMapper >
+        __CDS_MaybeUnused __CDS_OptimalInline auto associateByTo (
+                Map < returnOf < KeyGenerator >, returnOf < ValueMapper > >       & m,
+                KeyGenerator                                                const & keyGenerator,
+                ValueMapper                                                 const & valueMapper
+        ) const noexcept -> Map < returnOf < KeyGenerator >, returnOf < ValueMapper > > &
+        __CDS_Requires (
+                ForwardIterable < C > &&
+                FunctionOver < KeyGenerator, returnOf < KeyGenerator >, ElementType > &&
+                FunctionOver < ValueMapper, returnOf < ValueMapper >, ElementType >
+        ) {
+
+            for ( auto e : * this )
+                m [ keyGenerator (e) ] = valueMapper(e);
+            return m;
+        }
+
+        template < typename Transformer, typename K, typename V >
+        __CDS_MaybeUnused auto associateTo (
+                Map < K, V >          & m,
+                Transformer     const & t
+        ) const noexcept -> Map < K, V > &
+        __CDS_Requires (
+                ForwardIterable < C > &&
+                PairType < returnOf < Transformer > > &&
+                TransformerOver < Transformer, ElementType >
+        ) {
+
+            for ( auto e : * this ) {
+                auto p = t(e);
+                m[p.first()] = p.second();
+            }
+
+            return m;
+        }
+
+        template < typename ValueMapper >
+        __CDS_MaybeUnused auto associateWith (
+                ValueMapper const & valueMapper
+        ) && noexcept -> Sequence < LinkedList < Pair < ElementType, returnOf < ValueMapper > > > >
+        __CDS_Requires (
+                ForwardIterable < C > &&
+                FunctionOver < ValueMapper, returnOf < ValueMapper >, ElementType >
+        ) {
+
+            LinkedList < Pair < ElementType, returnOf < ValueMapper > > > container;
+            for ( auto e : * this )
+                container.add( { e, valueMapper(e) } );
+
+            return std::move ( Sequence < decltype ( container ) > (std::move(container)) );
+        }
+
+        template < typename ValueMapper >
+        __CDS_MaybeUnused auto associateWith (
+                ValueMapper const & valueMapper
+        ) & noexcept -> Sequence < LinkedList < Pair < ElementType, returnOf < ValueMapper > > > >
+        __CDS_Requires (
+                ForwardIterable < C > &&
+                FunctionOver < ValueMapper, returnOf < ValueMapper >, ElementType >
+        ) {
+
+            LinkedList < Pair < ElementType, returnOf < ValueMapper > > > container;
+            for ( auto e : * this )
+                container.add( { e, valueMapper(e) } );
+
+            return std::move ( Sequence < decltype ( container ) > (std::move(container)) );
+        }
+
+        template < typename ValueMapper >
+        __CDS_MaybeUnused auto associateWithTo (
+                Map < ElementType, returnOf < ValueMapper > >         & m,
+                ValueMapper                                     const & mapper
+        ) const noexcept -> Map < ElementType , returnOf < ValueMapper > > &
+        __CDS_Requires (
+                ForwardIterable < C > &&
+                FunctionOver < ValueMapper, returnOf < ValueMapper >, ElementType >
+        ) {
+
+            for ( auto e : * this )
+                m[e] = mapper(e);
+            return m;
+        }
+
+        template < typename Comparator = Function < bool (ElementType const &, ElementType const &) > >
+        __CDS_MaybeUnused auto sorted (
+                Comparator const & comparator = []( ElementType const & a, ElementType const & b) noexcept -> bool { return a < b; }
+        ) && noexcept -> Sequence < Array < ElementType > >
+        __CDS_Requires ( ForwardIterable < C > && ComparatorFor < Comparator, ElementType > ) {
+
+            Array < ElementType > container;
+            for ( auto e: * this )
                 container.add(e);
 
-        return std::move ( Sequence < decltype ( container ) > ( std::move ( container ) ) );
-    }
+            container.shrinkToSize(container.size());
+            container.sort(comparator);
 
-    template < typename OC, typename OtherType = typename Sequence < C > :: ElementType >
-    __CDS_MaybeUnused auto minus (
-            Sequence < OC > const & sequence
-    ) & noexcept -> Sequence < LinkedList < OtherType > >
-    __CDS_Requires (
-            ForwardIterable < C > &&
-            ForwardIterable < OC > &&
-            EqualsComparable < ElementType, OtherType >
-    ) {
+            return std::move ( Sequence < Array < ElementType > > (std::move(container)) );
+        }
 
-        LinkedList < ElementType > container;
+        template < typename Comparator = Function < bool (ElementType const &, ElementType const &) > >
+        __CDS_MaybeUnused auto sorted (
+                Comparator const & comparator = []( ElementType const & a, ElementType const & b) noexcept -> bool { return a < b; }
+        ) & noexcept -> Sequence < Array < ElementType > >
+        __CDS_Requires ( ForwardIterable < C > && ComparatorFor < Comparator, ElementType > ) {
 
-        for ( auto e : * this ) {
+            Array < ElementType > container;
+            for ( auto e: * this )
+                container.add(e);
+
+            container.shrinkToSize(container.size());
+            container.sort(comparator);
+
+            return std::move ( Sequence < Array < ElementType > > (std::move(container)) );
+        }
+
+        template < typename Selector >
+        __CDS_MaybeUnused __CDS_OptimalInline auto sortedBy (
+                Selector const & selector
+        ) && noexcept -> Sequence < Array < ElementType > >
+        __CDS_Requires ( ForwardIterable < C > && AscendingSelectorFor < Selector, ElementType > ) {
+
+            return this->sorted([& selector](ElementType const & a, ElementType const & b) noexcept -> bool {
+                return selector(a) < selector(b);
+            });
+        }
+
+        template < typename Selector >
+        __CDS_MaybeUnused __CDS_OptimalInline auto sortedBy (
+                Selector const & selector
+        ) & noexcept -> Sequence < Array < ElementType > >
+        __CDS_Requires ( ForwardIterable < C > && AscendingSelectorFor < Selector, ElementType > ) {
+
+            return this->sorted([& selector](ElementType const & a, ElementType const & b) noexcept -> bool {
+                return selector(a) < selector(b);
+            });
+        }
+
+        template < typename Selector >
+        __CDS_MaybeUnused __CDS_OptimalInline auto sortedByDescending (
+                Selector const & selector
+        ) && noexcept -> Sequence < Array < ElementType > >
+        __CDS_Requires ( ForwardIterable < C > && DescendingSelectorFor < Selector, ElementType > ) {
+
+            return this->sorted([& selector](ElementType const & a, ElementType const & b) noexcept -> bool {
+                return selector(a) > selector(b);
+            });
+        }
+
+        template < typename Selector >
+        __CDS_MaybeUnused __CDS_OptimalInline auto sortedByDescending (
+                Selector const & selector
+        ) & noexcept -> Sequence < Array < ElementType > >
+        __CDS_Requires ( ForwardIterable < C > && DescendingSelectorFor < Selector, ElementType > ) {
+
+            return this->sorted([& selector](ElementType const & a, ElementType const & b) noexcept -> bool {
+                return selector(a) > selector(b);
+            });
+        }
+
+        template <
+                typename Selector,
+                typename Comparator = Function < bool ( returnOf < Selector > const &, returnOf < Selector > const & ) >
+        >
+        __CDS_MaybeUnused auto sortedByWith (
+                Selector    const & selector,
+                Comparator  const & comparator = [](
+                        returnOf < Selector > const & a,
+                        returnOf < Selector > const & b
+                ) noexcept -> bool { return a < b; }
+        ) && noexcept -> Sequence < Array < ElementType > >
+        __CDS_Requires (
+                ForwardIterable < C > &&
+                SelectorFor < Selector, ElementType > &&
+                ComparatorFor < Comparator, returnOf < Selector > >
+        ) {
+
+            return this->sorted([& selector, & comparator](ElementType const & a, ElementType const & b){
+                return comparator(selector(a), selector(b));
+            });
+        }
+
+        template <
+                typename Selector,
+                typename Comparator = Function < bool ( returnOf < Selector > const &, returnOf < Selector > const & ) >
+        >
+        __CDS_MaybeUnused auto sortedByWith (
+                Selector    const & selector,
+                Comparator  const & comparator = [](
+                        returnOf < Selector > const & a,
+                        returnOf < Selector > const & b
+                ) noexcept -> bool { return a < b; }
+        ) & noexcept -> Sequence < Array < ElementType > >
+        __CDS_Requires (
+                ForwardIterable < C > &&
+                SelectorFor < Selector, ElementType > &&
+                ComparatorFor < Comparator, returnOf < Selector > >
+        ) {
+
+            return this->sorted([& selector, & comparator](ElementType const & a, ElementType const & b){
+                return comparator(selector(a), selector(b));
+            });
+        }
+
+        template < typename CollectionType >
+        __CDS_MaybeUnused auto toCollection () const noexcept -> CollectionType
+        __CDS_Requires (
+                ForwardIterable < C > &&
+                DerivedFrom < CollectionType, Collection < ElementType > >
+        ) {
+
+            CollectionType c;
+            for ( auto e : * this )
+                c.add(e);
+            return c;
+        }
+
+        __CDS_MaybeUnused auto toLinkedList () const noexcept -> LinkedList < ElementType >
+        __CDS_Requires ( ForwardIterable < C > ) {
+
+            return this->toCollection<LinkedList<ElementType>>();
+        }
+
+        __CDS_MaybeUnused auto toArray () const noexcept -> Array < ElementType >
+        __CDS_Requires ( ForwardIterable < C > ) {
+
+            return this->toCollection<Array<ElementType>>();
+        }
+
+        template < typename Comparator >
+        __CDS_MaybeUnused auto toOrderedSet () const noexcept -> OrderedSet < ElementType, Comparator >
+        __CDS_Requires ( ForwardIterable < C > )  {
+
+            return this->toCollection<OrderedSet<ElementType, Comparator>>();
+        }
+
+        __CDS_MaybeUnused auto toUnorderedSet () const noexcept -> UnorderedSet < ElementType >
+        __CDS_Requires ( ForwardIterable < C > )  {
+
+            return this->toCollection<UnorderedSet<ElementType>>();
+        }
+
+        template <
+                typename U = C,
+                EnableIf < utility :: hidden :: sequenceImpl::containedTypeIsPair < U > () > = 0,
+                typename FirstType = typename utility :: hidden :: sequenceImpl::ContainedTypeAsPair < U > :: FirstType,
+                typename SecondType = typename utility :: hidden :: sequenceImpl::ContainedTypeAsPair < U > :: SecondType,
+                typename PType = typename utility :: hidden :: sequenceImpl::ContainedTypeAsPair < U > :: Type
+        >
+        __CDS_MaybeUnused auto toHashMap () const noexcept -> HashMap < FirstType, SecondType >
+        __CDS_Requires( ForwardIterable < C > && PairType < PType > ) {
+
+            HashMap < FirstType, SecondType > map;
+
+            for ( auto e : * this )
+                map[e.first()] = e.second();
+
+            return map;
+        }
+
+        template <
+                typename U = C,
+                EnableIf < utility :: hidden :: sequenceImpl :: containedTypeIsPair < U > () > = 0,
+                typename FirstType = typename utility :: hidden :: sequenceImpl::ContainedTypeAsPair < U > :: FirstType,
+                typename SecondType = typename utility :: hidden :: sequenceImpl::ContainedTypeAsPair < U > :: SecondType,
+                typename PType = typename utility :: hidden :: sequenceImpl::ContainedTypeAsPair < U > :: Type
+        >
+        __CDS_MaybeUnused auto unzip () const noexcept -> Pair < LinkedList < FirstType >, LinkedList < SecondType > >
+        __CDS_Requires ( ForwardIterable < C > && PairType < PType > ) {
+
+            Pair < LinkedList < FirstType >, LinkedList < SecondType > > result;
+
+            for ( auto e : * this ) {
+                result.first().append(e.first());
+                result.second().append(e.second());
+            }
+
+            return result;
+        }
+
+        template < typename CollectionType >
+        __CDS_MaybeUnused __CDS_OptimalInline auto toCollection (CollectionType & c) const noexcept -> CollectionType &
+        __CDS_Requires (
+                ForwardIterable < C > &&
+                DerivedFrom < CollectionType, Collection < ElementType > >
+        ) {
+
+            for ( auto e : * this )
+                c.add(e);
+            return c;
+        }
+
+        __CDS_MaybeUnused __CDS_OptimalInline auto toList (
+                List <ElementType> & a
+        ) const noexcept -> List < ElementType > &
+        __CDS_Requires ( ForwardIterable < C > ) {
+
+            return this->toCollection<List<ElementType>>(a);
+        }
+
+        __CDS_MaybeUnused __CDS_OptimalInline auto toLinkedList (
+                LinkedList < ElementType > & l
+        ) const noexcept -> LinkedList < ElementType > &
+        __CDS_Requires ( ForwardIterable < C > ) {
+
+            return this->toCollection<LinkedList<ElementType>>(l);
+        }
+
+        __CDS_MaybeUnused __CDS_OptimalInline auto toArray (
+                Array <ElementType> & a
+        ) const noexcept -> Array < ElementType > &
+        __CDS_Requires ( ForwardIterable < C > ) {
+
+            return this->toCollection<Array<ElementType>>(a);
+        }
+
+        __CDS_MaybeUnused __CDS_OptimalInline auto toListSet (
+                ListSet < ElementType > & a
+        ) const noexcept -> ListSet < ElementType > &
+        __CDS_Requires ( ForwardIterable < C > ) {
+
+            return this->toCollection<ListSet<ElementType>>(a);
+        }
+
+        template < typename Comparator >
+        __CDS_MaybeUnused __CDS_OptimalInline auto toOrderedSet (
+                OrderedSet <ElementType, Comparator> & s
+        ) const noexcept -> OrderedSet < ElementType, Comparator > &
+        __CDS_Requires ( ForwardIterable < C > ) {
+
+            return this->toCollection<OrderedSet<ElementType, Comparator>>( s );
+        }
+
+        __CDS_MaybeUnused __CDS_OptimalInline auto toUnorderedSet (
+                UnorderedSet <ElementType> & s
+        ) const noexcept -> UnorderedSet < ElementType > &
+        __CDS_Requires ( ForwardIterable < C > ) {
+
+            return this->toCollection<UnorderedSet<ElementType>>(s);
+        }
+
+        template <
+                typename U = C,
+                EnableIf < utility :: hidden :: sequenceImpl::containedTypeIsPair < U > () > = 0,
+                typename FirstType = typename utility :: hidden :: sequenceImpl::ContainedTypeAsPair < U > :: FirstType,
+                typename SecondType = typename utility :: hidden :: sequenceImpl::ContainedTypeAsPair < U > :: SecondType,
+                typename PType = typename utility :: hidden :: sequenceImpl::ContainedTypeAsPair < U > :: Type
+        >
+        __CDS_MaybeUnused auto toMap (
+                Map < FirstType, SecondType > & map
+        ) const noexcept -> Map < FirstType, SecondType > &
+        __CDS_Requires( ForwardIterable < C > && PairType < PType > ) {
+
+            for ( auto e : * this )
+                map [e.first()] = e.second();
+
+            return map;
+        }
+
+        template <
+                typename U = C,
+                EnableIf < utility :: hidden :: sequenceImpl::containedTypeIsPair < U > () > = 0,
+                typename FirstType = typename utility :: hidden :: sequenceImpl::ContainedTypeAsPair < U > :: FirstType,
+                typename SecondType = typename utility :: hidden :: sequenceImpl::ContainedTypeAsPair < U > :: SecondType,
+                typename PType = typename utility :: hidden :: sequenceImpl::ContainedTypeAsPair < U > :: Type
+        >
+        __CDS_MaybeUnused auto toHashMap (
+                HashMap < FirstType, SecondType > & map
+        ) const noexcept -> HashMap < FirstType, SecondType > &
+        __CDS_Requires( ForwardIterable < C > && PairType < PType > ) {
+
+            for ( auto e : * this )
+                map [e.first()] = e.second();
+
+            return map;
+        }
+
+        template < typename Transformer >
+        __CDS_MaybeUnused auto flatMap (
+                Transformer const & transformer
+        ) && noexcept -> Sequence < LinkedList < utility :: hidden :: sequenceImpl :: FlatMapDeducedType < Transformer > > >
+        __CDS_Requires (
+                ForwardIterable < C > &&
+                ForwardIterable < returnOf < Transformer > > &&
+                TransformerOver < Transformer, ElementType >
+        ) {
+
+            LinkedList < utility :: hidden :: sequenceImpl :: FlatMapDeducedType < Transformer > > container;
+
+            for ( auto e : * this )
+                for ( auto const & s : transformer(e) )
+                    container.add( s );
+            return std::move ( Sequence < decltype(container) > ( std::move(container) ) );
+        }
+
+        template < typename Transformer >
+        __CDS_MaybeUnused auto flatMap (
+                Transformer const & transformer
+        ) & noexcept -> Sequence < LinkedList < utility :: hidden :: sequenceImpl :: FlatMapDeducedType < Transformer > > >
+        __CDS_Requires (
+                ForwardIterable < C > &&
+                ForwardIterable < returnOf < Transformer > > &&
+                TransformerOver < Transformer, ElementType >
+        ) {
+
+            LinkedList < utility :: hidden :: sequenceImpl :: FlatMapDeducedType < Transformer > > container;
+
+            for ( auto e : * this )
+                for ( auto const & s : transformer(e) )
+                    container.add( s );
+            return std::move ( Sequence < decltype(container) > ( std::move(container) ) );
+        }
+
+        template < typename IndexedTransformer >
+        __CDS_MaybeUnused auto flatMapIndexed (
+                IndexedTransformer const & transformer
+        ) && noexcept -> Sequence < LinkedList < utility :: hidden :: sequenceImpl :: FlatMapDeducedType < IndexedTransformer > > > __CDS_Requires (
+                ForwardIterable < C > &&
+                ForwardIterable < returnOf < IndexedTransformer > > &&
+                TransformerOver < IndexedTransformer, Index, ElementType >
+        ) {
+
+            LinkedList < utility :: hidden :: sequenceImpl :: FlatMapDeducedType < IndexedTransformer > > container;
+            Index i = 0;
+
+            for ( auto e : * this )
+                for ( auto const & s : transformer(i ++, e) )
+                    container.add( s );
+            return std::move ( Sequence < decltype(container) > ( std::move(container) ) );
+        }
+
+        template < typename IndexedTransformer >
+        __CDS_MaybeUnused auto flatMapIndexed (
+                IndexedTransformer const & transformer
+        ) & noexcept -> Sequence < LinkedList < utility :: hidden :: sequenceImpl :: FlatMapDeducedType < IndexedTransformer > > > __CDS_Requires (
+                ForwardIterable < C > &&
+                ForwardIterable < returnOf < IndexedTransformer > > &&
+                TransformerOver < IndexedTransformer, Index, ElementType >
+        ) {
+
+            LinkedList < utility :: hidden :: sequenceImpl :: FlatMapDeducedType < IndexedTransformer > > container;
+            Index i = 0;
+
+            for ( auto e : * this )
+                for ( auto const & s : transformer(i ++, e) )
+                    container.add( s );
+            return std::move ( Sequence < decltype(container) > ( std::move(container) ) );
+        }
+
+        template < typename Transformer >
+        __CDS_MaybeUnused auto flatMapTo (
+                Collection < utility :: hidden :: sequenceImpl :: FlatMapDeducedType < Transformer > >       & collection,
+                Transformer                                                         const & transformer
+        ) const noexcept -> Collection < utility :: hidden :: sequenceImpl :: FlatMapDeducedType < Transformer > > & __CDS_Requires (
+                ForwardIterable < C > &&
+                ForwardIterable < returnOf < Transformer > > &&
+                TransformerOver < Transformer, ElementType >
+        ) {
+
+            for ( auto i : * this )
+                for ( auto const & e : transformer(i) )
+                    collection.add(e);
+
+            return collection;
+        }
+
+        template < typename IndexedTransformer >
+        __CDS_MaybeUnused auto flatMapIndexedTo (
+                Collection < utility :: hidden :: sequenceImpl :: FlatMapDeducedType < IndexedTransformer > >        & collection,
+                IndexedTransformer                                                          const & transformer
+        ) const noexcept -> Collection < utility :: hidden :: sequenceImpl :: FlatMapDeducedType < IndexedTransformer > > & __CDS_Requires (
+                ForwardIterable < C > &&
+                ForwardIterable < returnOf < IndexedTransformer > > &&
+                TransformerOver < IndexedTransformer, Index, ElementType >
+        ) {
+
+            Index j = 0;
+            for ( auto i : * this )
+                for ( auto const & e : transformer(j++, i) )
+                    collection.add(e);
+
+            return collection;
+        }
+
+        template < typename KeySelector >
+        __CDS_MaybeUnused auto groupBy (
+                KeySelector const & keySelector
+        ) && noexcept -> Sequence < HashMap < returnOf < KeySelector >, LinkedList < ElementType > > >
+        __CDS_Requires (
+                ForwardIterable < C > &&
+                FunctionOver < KeySelector, returnOf < KeySelector >, ElementType >
+        ) {
+
+            HashMap < returnOf < KeySelector >, LinkedList < ElementType > > container;
+
+            for ( auto e : * this ) {
+                auto k = keySelector ( e );
+                if ( container.containsKey(k) )
+                    container[k].add(e);
+                else
+                    container[k] = { e };
+            }
+
+            return std::move ( Sequence < decltype ( container ) > ( std::move ( container ) ) );
+        }
+
+        template < typename KeySelector >
+        __CDS_MaybeUnused auto groupBy (
+                KeySelector const & keySelector
+        ) & noexcept -> Sequence < HashMap < returnOf < KeySelector >, LinkedList < ElementType > > >
+        __CDS_Requires (
+                ForwardIterable < C > &&
+                FunctionOver < KeySelector, returnOf < KeySelector >, ElementType >
+        ) {
+
+            HashMap < returnOf < KeySelector >, LinkedList < ElementType > > container;
+
+            for ( auto e : * this ) {
+                auto k = keySelector ( e );
+                if ( container.containsKey(k) )
+                    container[k].add(e);
+                else
+                    container[k] = { e };
+            }
+
+            return std::move ( Sequence < decltype ( container ) > ( std::move ( container ) ) );
+        }
+
+        template < typename KeySelector, typename ValueMapper >
+        __CDS_MaybeUnused auto groupBy (
+                KeySelector const & keySelector,
+                ValueMapper const & valueMapper
+        ) && noexcept -> Sequence < HashMap < returnOf < KeySelector >, LinkedList < returnOf < ValueMapper > > > >
+        __CDS_Requires (
+                ForwardIterable < C > &&
+                FunctionOver < KeySelector, returnOf < KeySelector >, ElementType > &&
+                FunctionOver < ValueMapper, returnOf < ValueMapper >, ElementType >
+        ) {
+
+            HashMap < returnOf < KeySelector >, LinkedList < returnOf < ValueMapper > > > container;
+
+            for ( auto e : * this ) {
+                auto k = keySelector ( e ); auto v = valueMapper ( e );
+                if ( container.containsKey( k ) )
+                    container[k].add(v);
+                else
+                    container[k] = {v};
+            }
+
+            return std::move ( Sequence < decltype ( container ) > ( std::move ( container ) ) );
+        }
+
+        template < typename KeySelector, typename ValueMapper >
+        __CDS_MaybeUnused auto groupBy (
+                KeySelector const & keySelector,
+                ValueMapper const & valueMapper
+        ) & noexcept -> Sequence < HashMap < returnOf < KeySelector >, LinkedList < returnOf < ValueMapper > > > >
+        __CDS_Requires (
+                ForwardIterable < C > &&
+                FunctionOver < KeySelector, returnOf < KeySelector >, ElementType > &&
+                FunctionOver < ValueMapper, returnOf < ValueMapper >, ElementType >
+        ) {
+
+            HashMap < returnOf < KeySelector >, LinkedList < returnOf < ValueMapper > > > container;
+
+            for ( auto e : * this ) {
+                auto k = keySelector ( e ); auto v = valueMapper ( e );
+                if ( container.containsKey( k ) )
+                    container[k].add(v);
+                else
+                    container[k] = {v};
+            }
+
+            return std::move ( Sequence < decltype ( container ) > ( std::move ( container ) ) );
+        }
+
+        template < typename KeySelector >
+        __CDS_MaybeUnused auto groupByTo (
+                Map < returnOf < KeySelector >, LinkedList < ElementType > >          & map,
+                KeySelector                                                     const & keySelector
+        ) const noexcept -> Map < returnOf < KeySelector >, LinkedList < ElementType > > &
+        __CDS_Requires (
+                ForwardIterable < C > &&
+                FunctionOver < KeySelector, returnOf < KeySelector >, ElementType >
+        ) {
+
+            for ( auto e : * this ) {
+                auto k = keySelector ( e );
+                if ( map.containsKey( k ) )
+                    map[k].add ( e );
+                else
+                    map[k] = { e };
+            }
+
+            return map;
+        }
+
+        template < typename KeySelector, typename ValueMapper >
+        __CDS_MaybeUnused auto groupByTo (
+                Map < returnOf < KeySelector >, LinkedList < returnOf < ValueMapper > > >         & map,
+                KeySelector                                                                 const & keySelector,
+                ValueMapper                                                                 const & valueMapper
+        ) const noexcept -> Map < returnOf < KeySelector >, LinkedList < returnOf < ValueMapper > > > &
+        __CDS_Requires (
+                ForwardIterable < C > &&
+                FunctionOver < KeySelector, returnOf < KeySelector >, ElementType > &&
+                FunctionOver < ValueMapper, returnOf < ValueMapper >, ElementType >
+        ) {
+
+            for ( auto e : * this ) {
+                auto k = keySelector ( e ); auto v = valueMapper ( e );
+                if ( map.containsKey( k ) )
+                    map[k].add ( v );
+                else
+                    map[k] = { v };
+            }
+
+            return map;
+        }
+
+
+
+    //    template < typename C1 = C, typename std :: enable_if < utility :: hidden :: sequenceImpl :: isFlattable < C1 > (), int > :: type = 0 >
+    //    __CDS_NoDiscard __CDS_MaybeUnused auto flatten () noexcept -> Sequence < typename utility :: hidden :: sequenceImpl :: ContainedType < C1 > :: Type >;
+
+        /**
+         * Two versions of map, one for storage of mappers when keeping same type, another for switching to another data type
+         */
+
+        template < typename Mapper, EnableIf < ! utility :: hidden :: sequenceImpl :: mapToSameType < Mapper, C > () > = 0 >
+        __CDS_MaybeUnused auto map (
+                Mapper const & mapper
+        ) && noexcept -> Sequence < LinkedList < returnOf < Mapper > > >
+        __CDS_Requires ( ForwardIterable < C > && MapperFor < Mapper, ElementType > ) {
+
+            LinkedList < returnOf < Mapper > > container;
+            for ( auto e : * this )
+                container.append(mapper(e));
+
+            return std::move(Sequence < LinkedList < returnOf < Mapper > > > (std::move(container)));
+        }
+
+        template < typename Mapper, EnableIf < utility :: hidden :: sequenceImpl :: mapToSameType < Mapper, C > () > = 0 >
+        __CDS_MaybeUnused __CDS_OptimalInline auto map (
+                Mapper const & mapper
+        ) && noexcept -> Sequence < C >
+        __CDS_Requires ( ForwardIterable < C > && MapperFor < Mapper, ElementType > ) {
+
+            this->storedMappers.append({ { Memory :: instance().create < StoredMapper > (mapper) }, this->chainCount });
+            return std::move ( * this );
+        }
+
+        template < typename Mapper, EnableIf < ! utility :: hidden :: sequenceImpl :: mapToSameType < Mapper, C > () > = 0 >
+        __CDS_MaybeUnused auto map (
+                Mapper const & mapper
+        ) & noexcept -> Sequence < LinkedList < returnOf < Mapper > > >
+        __CDS_Requires ( ForwardIterable < C > && MapperFor < Mapper, ElementType > ) {
+
+            LinkedList < returnOf < Mapper > > container;
+            for ( auto e : * this )
+                container.append(mapper(e));
+
+            return std::move(Sequence < LinkedList < returnOf < Mapper > > > (std::move(container)));
+        }
+
+        template < typename Mapper, EnableIf < utility :: hidden :: sequenceImpl :: mapToSameType < Mapper, C > () > = 0 >
+        __CDS_MaybeUnused auto map (
+                Mapper const & mapper
+        ) & noexcept -> Sequence < C >
+        __CDS_Requires ( ForwardIterable < C > && MapperFor < Mapper, ElementType > ) {
+
+            Sequence < C > copy ( *this );
+            copy.storedMappers.append({ { Memory :: instance().create < StoredMapper >(mapper) }, this->chainCount });
+            return std::move(copy);
+        }
+
+
+        template < typename IndexedMapper, EnableIf < ! utility :: hidden :: sequenceImpl :: mapToSameType < IndexedMapper, C > () > = 0 >
+        __CDS_MaybeUnused auto mapIndexed (
+                IndexedMapper const & indexedMapper
+        ) && noexcept -> Sequence < LinkedList < returnOf < IndexedMapper > > >
+        __CDS_Requires ( ForwardIterable < C > && MapperFor < IndexedMapper, Index, ElementType > ) {
+
+            LinkedList < returnOf < IndexedMapper > > container;
+            Index i = 0;
+            for ( auto e : * this )
+                container.append(mapper(i++, e));
+
+            return std::move(Sequence < LinkedList < returnOf < IndexedMapper > > > (std::move(container)));
+        }
+
+        template < typename IndexedMapper, EnableIf < ! utility :: hidden :: sequenceImpl :: mapToSameType < IndexedMapper, C > () > = 0 >
+        __CDS_MaybeUnused auto mapIndexed (
+                IndexedMapper const & mapper
+        ) & noexcept -> Sequence < LinkedList < returnOf < IndexedMapper > > >
+        __CDS_Requires ( ForwardIterable < C > && MapperFor < IndexedMapper, Index, ElementType > ) {
+
+            LinkedList < returnOf < IndexedMapper > > container;
+            Index i = 0;
+            for ( auto e : * this )
+                container.append(mapper(i++, e));
+
+            return std::move(Sequence < LinkedList < returnOf < IndexedMapper > > > (std::move(container)));
+        }
+
+        template < typename IndexedMapper, EnableIf < utility :: hidden :: sequenceImpl :: mapToSameType < IndexedMapper, C > () > = 0 >
+        __CDS_MaybeUnused auto mapIndexed (
+                IndexedMapper const & mapper
+        ) && noexcept -> Sequence < C >
+        __CDS_Requires ( ForwardIterable < C > && MapperFor < IndexedMapper, Index, ElementType > ) {
+
+            this->storedIndexedMappers.append({ { Memory :: instance().create < StoredIndexedMapper >(mapper) }, this->chainCount });
+            return std::move ( * this );
+        }
+
+        template < typename IndexedMapper, EnableIf < utility :: hidden :: sequenceImpl :: mapToSameType < IndexedMapper, C > () > = 0 >
+        __CDS_MaybeUnused auto mapIndexed (
+                IndexedMapper const & mapper
+        ) & noexcept -> Sequence < C >
+        __CDS_Requires ( ForwardIterable < C > && MapperFor < IndexedMapper, Index, ElementType > ) {
+
+            Sequence < C > newSequence (* this);
+            newSequence.storedIndexedMappers.append({ { Memory::instance().create < StoredIndexedMapper >(mapper) }, this->chainCount });
+            return std::move ( newSequence );
+        }
+
+        template < typename Mapper, typename R >
+        __CDS_MaybeUnused auto mapTo (
+                Collection < R >          & collection,
+                Mapper              const & mapper
+        ) const noexcept -> Collection < R > &
+        __CDS_Requires (
+                ForwardIterable < C > &&
+                MapperFor < Mapper, ElementType > &&
+                ConvertibleTo < returnOf < Mapper >, R >
+        ) {
+
+            for ( auto e : * this )
+                collection.add ( mapper(e) );
+            return collection;
+        }
+
+        template < typename IndexedMapper, typename R >
+        __CDS_MaybeUnused auto mapIndexedTo (
+                Collection < R >          & collection,
+                IndexedMapper       const & mapper
+        ) const noexcept -> Collection < R > &
+        __CDS_Requires (
+                ForwardIterable < C > &&
+                MapperFor < IndexedMapper, Index, ElementType > &&
+                ConvertibleTo < returnOf < IndexedMapper >, R >
+        ) {
+
+            Index i = 0;
+            for ( auto e : * this )
+                collection.add ( mapper(i++, e) );
+            return collection;
+        }
+
+
+        __CDS_MaybeUnused auto indexed () && noexcept -> Sequence < LinkedList < Pair < Index, ElementType > > >
+        __CDS_Requires ( ForwardIterable < C > ) {
+
+            LinkedList < Pair < Index, ElementType > > container;
+            Index i = 0;
+            for ( auto e : * this )
+                container.add ( { i++, e } );
+
+            return std::move ( Sequence < LinkedList < Pair < Index, ElementType > > > ( std::move ( container ) ) );
+        }
+
+        __CDS_MaybeUnused auto indexed () & noexcept -> Sequence < LinkedList < Pair < Index, ElementType > > >
+        __CDS_Requires ( ForwardIterable < C > ) {
+
+            LinkedList < Pair < Index, ElementType > > container;
+            Index i = 0;
+            for ( auto e : * this )
+                container.add ( { i++, e } );
+
+            return std::move ( Sequence < LinkedList < Pair < Index, ElementType > > > ( std::move ( container ) ) );
+        }
+
+        __CDS_MaybeUnused auto distinct () && noexcept -> Sequence < UnorderedSet < ElementType > >
+        __CDS_Requires ( ForwardIterable < C > ) {
+
+            UnorderedSet < ElementType > container;
+            for ( auto e : * this )
+                container.add ( e );
+            return std::move ( Sequence < decltype (container) > ( std::move ( container ) ) );
+        }
+
+        __CDS_MaybeUnused auto distinct () & noexcept -> Sequence < UnorderedSet < ElementType > >
+        __CDS_Requires ( ForwardIterable < C > ) {
+
+            UnorderedSet < ElementType > container;
+            for ( auto e : * this )
+                container.add ( e );
+            return std::move ( Sequence < decltype (container) > ( std::move ( container ) ) );
+        }
+
+
+        template < typename Selector >
+        __CDS_MaybeUnused auto distinctBy (Selector const & selector) && noexcept -> Sequence < UnorderedSet < ElementType > >
+        __CDS_Requires ( ForwardIterable < C > && TransformerOver < Selector, ElementType > ) {
+
+            UnorderedSet < ElementType > container;
+            for ( auto e : * this )
+                if ( ! this->contains(selector(e)) )
+                    container.add ( e );
+            return std::move ( Sequence < decltype (container) > ( std::move ( container ) ) );
+        }
+
+        template < typename Selector >
+        __CDS_MaybeUnused auto distinctBy (Selector const & selector) & noexcept -> Sequence < UnorderedSet < ElementType > >
+        __CDS_Requires ( ForwardIterable < C > && TransformerOver < Selector, ElementType > ) {
+
+            UnorderedSet < ElementType > container;
+            for ( auto e : * this )
+                if ( ! container.any([&](ElementType const & cE){ return Type < ElementType > :: compare ( selector(cE), selector(e) ); }) )
+                    container.add ( e );
+            return std::move ( Sequence < decltype (container) > ( std::move ( container ) ) );
+        }
+
+        template < typename Action >
+        __CDS_MaybeUnused auto forEach ( Action const & action ) const noexcept -> void
+        __CDS_Requires ( ForwardIterable < C > && ActionOver < Action, ElementType > ) {
+
+            for ( auto e : * this )
+                action (e);
+        }
+
+        template < typename IndexedAction >
+        __CDS_MaybeUnused auto forEachIndexed ( IndexedAction const & indexedAction ) const noexcept -> void
+        __CDS_Requires ( ForwardIterable < C > && IndexedActionOver < IndexedAction, ElementType > ) {
+
+            Index i = 0;
+            for ( auto e : * this )
+                indexedAction (i++, e);
+        }
+
+        template < typename Action >
+        __CDS_MaybeUnused auto onEach ( Action const & action ) && noexcept -> Sequence < LinkedList < ElementType > >
+        __CDS_Requires ( ForwardIterable < C > && ActionOver < Action, ElementType > ) {
+
+            LinkedList < ElementType > container;
+            for ( auto e : * this ) {
+                action (e);
+                container.append(e);
+            }
+
+            return std::move(Sequence < LinkedList < ElementType > > (std::move(container)));
+        }
+
+        template < typename IndexedAction >
+        __CDS_MaybeUnused auto onEachIndexed (
+                IndexedAction const & indexedAction
+        ) && noexcept -> Sequence < LinkedList < ElementType > >
+        __CDS_Requires ( ForwardIterable < C > && IndexedActionOver < IndexedAction, ElementType > ) {
+
+            LinkedList < ElementType > container;
+            Index i = 0;
+            for ( auto e : * this ) {
+                indexedAction (i++, e);
+                container.append(e);
+            }
+
+            return std::move(Sequence < LinkedList < ElementType > > (std::move(container)));
+        }
+
+        template < typename Action >
+        __CDS_MaybeUnused auto onEach ( Action const & action ) & noexcept -> Sequence < LinkedList < ElementType > >
+        __CDS_Requires ( ForwardIterable < C > && ActionOver < Action, ElementType > ) {
+
+            Sequence copy (*this);
+
+            LinkedList < ElementType > container;
+            for ( auto e : copy ) {
+                action (e);
+                container.append(e);
+            }
+
+            return std::move(Sequence < LinkedList < ElementType > > (std::move(container)));
+        }
+
+        template < typename IndexedAction >
+        __CDS_MaybeUnused auto onEachIndexed (
+                IndexedAction const & indexedAction
+        ) & noexcept -> Sequence < LinkedList < ElementType > >
+        __CDS_Requires ( ForwardIterable < C > && IndexedActionOver < IndexedAction, ElementType > ) {
+
+            Sequence copy (*this);
+
+            LinkedList < ElementType > container;
+            Index i = 0;
+            for ( auto e : copy ) {
+                indexedAction (i++, e);
+                container.append(e);
+            }
+
+            return std::move(Sequence < LinkedList < ElementType > > (std::move(container)));
+        }
+
+    #if defined(_MSC_VER)
+    #pragma push_macro("min")
+    #pragma push_macro("max")
+    #undef min
+    #undef max
+    #endif
+
+        template < typename Comparator = Function < bool (ElementType const &, ElementType const &) > >
+        __CDS_MaybeUnused auto max (
+                Comparator const & comparator = [](ElementType const & a, ElementType const & b) noexcept -> bool { return a < b; }
+        ) const noexcept -> Optional < ElementType >
+        __CDS_Requires ( ForwardIterable < C > && ComparatorFor < Comparator, ElementType > ) {
+
+            if ( this->pCollection.valueAt().valueAt().size() == 0 ) return {  };
+
+            auto it = this->begin();
+            ElementType max = it.value();
+
+            for (it.next(); it != this->end(); ++it) {
+                auto v = it.value();
+                if ( comparator (max, v) )
+                    max = v;
+            }
+
+            return {max};
+        }
+
+        template < typename Selector >
+        __CDS_MaybeUnused auto maxBy ( Selector const & selector ) const noexcept -> Optional < ElementType >
+        __CDS_Requires (
+                ForwardIterable < C > &&
+                AscendingSelectorFor < Selector, ElementType >
+        ) {
+
+            if ( this->pCollection.valueAt().valueAt().size() == 0 ) return { };
+
+            auto it = this->begin();
+            auto max = Pair < decltype( selector(it.value()) ), decltype( it.value() ) > ( selector (it.value()), it.value() );
+
+            for ( it.next(); it != this->end(); ++ it ) {
+                auto v = selector (it.value());
+                if ( max.first() < v )
+                    max = { v, it.value() };
+            }
+
+            return {max.second()};
+        }
+
+        template < typename Selector >
+        __CDS_MaybeUnused auto maxOf ( Selector const & selector ) const noexcept -> Optional < returnOf < Selector > >
+        __CDS_Requires (
+                ForwardIterable < C > &&
+                AscendingSelectorFor < Selector, ElementType >
+        ) {
+
+            if ( this->pCollection.valueAt().valueAt().size() == 0 ) return { };
+
+            auto it = this->begin();
+            auto max = Pair < decltype( selector(it.value()) ), decltype( it.value() ) > ( selector (it.value()), it.value() );
+
+            for ( it.next(); it != this->end(); ++ it ) {
+                auto v = selector (it.value());
+                if ( max.first() < v )
+                    max = { v, it.value() };
+            }
+
+            return {max.first()};
+        }
+
+        template < typename Comparator = Function < bool (ElementType const &, ElementType const &) > >
+        __CDS_MaybeUnused __CDS_OptimalInline auto maxOr (
+                ElementType const & e,
+                Comparator  const & comparator = [](ElementType const & a, ElementType const & b) noexcept -> bool { return a < b; }
+        ) const noexcept -> ElementType
+        __CDS_Requires ( ForwardIterable < C > && ComparatorFor < Comparator, ElementType > ) {
+
+            auto v = this->max ( comparator );
+            return v.isPresent() ? v.value() : e;
+        }
+
+        template < typename Selector >
+        __CDS_MaybeUnused auto maxByOr (
+                ElementType const & e,
+                Selector    const & selector
+        ) const noexcept -> ElementType __CDS_Requires (
+                ForwardIterable < C > &&
+                AscendingSelectorFor < Selector, ElementType >
+        ) {
+
+            auto v = this->maxBy ( selector );
+            return v.isPresent() ? v.value() : e;
+        }
+
+        template < typename Selector >
+        __CDS_MaybeUnused auto maxOfOr (
+                returnOf < Selector >   const & e,
+                Selector                const & selector
+        ) const noexcept -> returnOf < Selector > __CDS_Requires (
+                ForwardIterable < C > &&
+                AscendingSelectorFor < Selector, ElementType >
+        ) {
+
+            auto v = this->maxOf ( selector );
+            return v.isPresent() ? v.value() : e;
+        }
+
+        template < typename Comparator = Function < bool (ElementType const &, ElementType const &) > >
+        __CDS_MaybeUnused auto min (
+                Comparator const & comparator = [](ElementType const & a, ElementType const & b) noexcept -> bool { return a < b; }
+        ) const noexcept -> Optional < ElementType >
+        __CDS_Requires ( ForwardIterable < C > && ComparatorFor < Comparator, ElementType > )  {
+
+            if ( this->pCollection.valueAt().valueAt().size() == 0 ) return {  };
+
+            auto it = this->begin();
+            ElementType min = it.value();
+
+            for (it.next(); it != this->end(); ++it) {
+                auto v = it.value();
+                if ( comparator (v, min) )
+                    min = v;
+            }
+
+            return {min};
+        }
+
+        template < typename Selector >
+        __CDS_MaybeUnused auto minBy (
+                Selector const & selector
+        ) const noexcept -> Optional < ElementType > __CDS_Requires (
+                ForwardIterable < C > &&
+                AscendingSelectorFor < Selector, ElementType >
+        ) {
+
+            if ( this->pCollection.valueAt().valueAt().size() == 0 ) return { };
+
+            auto it = this->begin();
+            auto min = Pair < decltype(selector(it.value())), decltype(it.value()) > (selector (it.value()), it.value() );
+
+            for ( it.next(); it != this->end(); ++ it ) {
+                auto v = selector (it.value());
+                if ( v < min.first() )
+                    min = {v, it.value() };
+            }
+
+            return {min.second()};
+        }
+
+        template < typename Selector >
+        __CDS_MaybeUnused auto minOf ( Selector const & selector ) const noexcept -> Optional < returnOf < Selector > >
+        __CDS_Requires (
+                ForwardIterable < C > &&
+                AscendingSelectorFor < Selector, ElementType >
+        ) {
+
+            if ( this->pCollection.valueAt().valueAt().size() == 0 ) return { };
+
+            auto it = this->begin();
+            auto min = Pair < decltype(selector(it.value())), decltype(it.value()) > (selector (it.value()), it.value() );
+
+            for ( it.next(); it != this->end(); ++ it ) {
+                auto v = selector (it.value());
+                if ( v < min.first() )
+                    min = {v, it.value() };
+            }
+
+            return {min.first()};
+        }
+
+        template < typename Comparator = Function < bool (ElementType const &, ElementType const &) > >
+        __CDS_MaybeUnused auto minOr (
+                ElementType const & e,
+                Comparator  const & comparator = [](ElementType const & a, ElementType const & b) noexcept -> bool { return a < b; }
+        ) const noexcept -> ElementType
+        __CDS_Requires ( ForwardIterable < C > && ComparatorFor < Comparator, ElementType > ) {
+
+            auto v = this->min ( comparator );
+            return v.isPresent() ? v.value() : e;
+        }
+
+        template < typename Selector >
+        __CDS_MaybeUnused auto minByOr (
+                ElementType const & e,
+                Selector    const & selector
+        ) const noexcept -> ElementType
+        __CDS_Requires (
+                ForwardIterable < C > &&
+                AscendingSelectorFor < Selector, ElementType >
+        ) {
+
+            auto v = this->minBy ( selector );
+            return v.isPresent() ? v.value() : e;
+        }
+
+        template < typename Selector >
+        __CDS_MaybeUnused auto minOfOr (
+                returnOf < Selector >   const & e,
+                Selector                const & selector
+        ) const noexcept -> returnOf < Selector >
+        __CDS_Requires (
+                ForwardIterable < C > &&
+                AscendingSelectorFor < Selector, ElementType >
+        ) {
+
+            auto v = this->minOf ( selector );
+            return v.isPresent() ? v.value() : e;
+        }
+
+    #if defined(_MSC_VER)
+        #pragma pop_macro("max")
+        #pragma pop_macro("min")
+    #endif
+
+        template < typename Accumulator, typename AccumulatedType >
+        __CDS_MaybeUnused auto fold (
+                AccumulatedType const & startingValue,
+                Accumulator     const & accumulator
+        ) const noexcept -> AccumulatedType
+        __CDS_Requires (
+                ForwardIterable < C > &&
+                AccumulatorFor < Accumulator, ElementType >
+        ) {
+
+            AccumulatedType result = startingValue;
+
+            for ( auto e : * this )
+                result = accumulator ( result, e );
+
+            return result;
+        }
+
+        template < typename IndexedAccumulator, typename AccumulatedType >
+        __CDS_MaybeUnused auto foldIndexed (
+                AccumulatedType     const & startingValue,
+                IndexedAccumulator  const & indexedAccumulator
+        ) const noexcept -> AccumulatedType
+        __CDS_Requires (
+                ForwardIterable < C > &&
+                IndexedAccumulatorFor < IndexedAccumulator, ElementType >
+        ) {
+            AccumulatedType result = startingValue;
+            Index i = 0;
+
+            for ( auto e : * this )
+                result = indexedAccumulator ( i++, result, e );
+
+            return result;
+        }
+
+        template < typename Accumulator, typename AccumulatedType >
+        __CDS_MaybeUnused auto runningFold (
+                AccumulatedType const & initialValue,
+                Accumulator     const & accumulator
+        ) && noexcept -> Sequence < LinkedList < AccumulatedType > >
+        __CDS_Requires (
+                ForwardIterable < C > &&
+                AccumulatorFor < Accumulator, ElementType >
+        ) {
+
+            LinkedList < AccumulatedType > results = { initialValue };
+
+            for ( auto e : * this )
+                results.add ( accumulator ( results.back(), e ) );
+
+            return std::move ( Sequence < decltype ( results ) > ( std::move ( results ) ) );
+        }
+
+        template < typename IndexedAccumulator, typename AccumulatedType >
+        __CDS_MaybeUnused auto runningFoldIndexed (
+                AccumulatedType     const & initialValue,
+                IndexedAccumulator  const & indexedAccumulator
+        ) && noexcept -> Sequence < LinkedList < AccumulatedType > >
+        __CDS_Requires (
+                ForwardIterable < C > &&
+                IndexedAccumulatorFor < IndexedAccumulator, ElementType >
+        ) {
+
+            LinkedList < AccumulatedType > results = { initialValue };
+            Index i = 0;
+
+            for ( auto e : * this )
+                results.add ( indexedAccumulator ( i++, results.back(), e ) );
+
+            return std::move ( Sequence < decltype ( results ) > ( std::move ( results ) ) );
+        }
+
+        template < typename Accumulator, typename AccumulatedType >
+        __CDS_MaybeUnused auto runningFold (
+                AccumulatedType const & initialValue,
+                Accumulator     const & accumulator
+        ) & noexcept -> Sequence < LinkedList < AccumulatedType > >
+        __CDS_Requires (
+                ForwardIterable < C > &&
+                AccumulatorFor < Accumulator, ElementType >
+        ) {
+
+            LinkedList < AccumulatedType > results = { initialValue };
+
+            for ( auto e : * this )
+                results.add ( accumulator ( results.back(), e ) );
+
+            return std::move ( Sequence < decltype ( results ) > ( std::move ( results ) ) );
+        }
+
+        template < typename IndexedAccumulator, typename AccumulatedType >
+        __CDS_MaybeUnused auto runningFoldIndexed (
+                AccumulatedType     const & initialValue,
+                IndexedAccumulator  const & indexedAccumulator
+        ) & noexcept -> Sequence < LinkedList < AccumulatedType > >
+        __CDS_Requires (
+                ForwardIterable < C > &&
+                IndexedAccumulatorFor < IndexedAccumulator, ElementType >
+        ) {
+
+            LinkedList < AccumulatedType > results = { initialValue };
+            Index i = 0;
+
+            for ( auto e : * this )
+                results.add ( indexedAccumulator ( i++, results.back(), e ) );
+
+            return std::move ( Sequence < decltype ( results ) > ( std::move ( results ) ) );
+        }
+
+        template < typename Accumulator >
+        __CDS_MaybeUnused auto reduce (
+                Accumulator const & accumulator
+        ) const noexcept (false) -> returnOf < Accumulator >
+        __CDS_Requires (
+                ForwardIterable < C > &&
+                AccumulatorFor < Accumulator, ElementType > &&
+                ConvertibleTo < ElementType, returnOf < Accumulator > >
+        ) {
+
+            if ( this->pCollection.valueAt().valueAt().size() == 0 )
+                throw OutOfBoundsException ("reduce used on empty Sequence");
+
+            auto it = this->begin();
+            returnOf < Accumulator > result = it.value();
+
+            for ( it.next(); it != this->end(); ++ it )
+                result = accumulator ( result, it.value() );
+
+            return result;
+        }
+
+        template < typename IndexedAccumulator >
+        __CDS_MaybeUnused auto reduceIndexed (
+                IndexedAccumulator const & indexedAccumulator
+        ) const noexcept (false) -> returnOf < IndexedAccumulator >
+        __CDS_Requires (
+                ForwardIterable < C > &&
+                IndexedAccumulatorFor < IndexedAccumulator, ElementType > &&
+                ConvertibleTo < ElementType, returnOf < IndexedAccumulator > >
+        ) {
+
+            if ( this->pCollection.valueAt().valueAt().size() == 0 )
+                throw OutOfBoundsException ("reduceIndexed used on empty Sequence");
+
+            auto it = this->begin();
+            returnOf < IndexedAccumulator > result = it.value();
+            Index i = 1;
+
+            for ( it.next(); it != this->end(); ++ it )
+                result = indexedAccumulator ( i ++, result, it.value() );
+
+            return result;
+        }
+
+        template < typename Accumulator >
+        __CDS_MaybeUnused auto runningReduce (
+                Accumulator const & accumulator
+        ) && noexcept -> Sequence < LinkedList < returnOf < Accumulator > > >
+        __CDS_Requires (
+                ForwardIterable < C > &&
+                AccumulatorFor < Accumulator, ElementType > &&
+                ConvertibleTo < ElementType, returnOf < Accumulator > >
+        ) {
+
+            LinkedList < returnOf < Accumulator > > results = { };
+
+            if ( this->pCollection.valueAt().valueAt().size() > 0 ) {
+                auto it = this->begin();
+                results.add(it.value());
+
+                for (it.next(); it != this->end(); ++it)
+                    results.add(accumulator(results.back(), it.value()));
+            }
+
+            return std::move ( Sequence < decltype ( results ) > ( std::move ( results ) ) );
+        }
+
+        template < typename IndexedAccumulator >
+        __CDS_MaybeUnused auto runningReduceIndexed (
+                IndexedAccumulator const & indexedAccumulator
+        ) && noexcept -> Sequence < LinkedList < returnOf < IndexedAccumulator > > >
+        __CDS_Requires (
+                ForwardIterable < C > &&
+                IndexedAccumulatorFor < IndexedAccumulator, ElementType > &&
+                ConvertibleTo < ElementType, returnOf < IndexedAccumulator > >
+        ) {
+
+            LinkedList < returnOf < IndexedAccumulator > > results = { };
+
+            if ( this->pCollection.valueAt().valueAt().size() > 0 ) {
+                auto it = this->begin();
+                Index i = 1;
+
+                results.add(it.value());
+
+                for (it.next(); it != this->end(); ++it)
+                    results.add(indexedAccumulator(i++, results.back(), it.value()));
+            }
+
+            return std::move ( Sequence < decltype ( results ) > ( std::move ( results ) ) );
+        }
+
+
+        template < typename Accumulator >
+        __CDS_MaybeUnused auto runningReduce (
+                Accumulator const & accumulator
+        ) & noexcept -> Sequence < LinkedList < returnOf < Accumulator > > >
+        __CDS_Requires (
+                ForwardIterable < C > &&
+                AccumulatorFor < Accumulator, ElementType > &&
+                ConvertibleTo < ElementType, returnOf < Accumulator > >
+        ) {
+
+            LinkedList < returnOf < Accumulator > > results = { };
+
+            if ( this->pCollection.valueAt().valueAt().size() > 0 ) {
+                auto it = this->begin();
+                results.add(it.value());
+
+                for (it.next(); it != this->end(); ++it)
+                    results.add(accumulator(results.back(), it.value()));
+            }
+
+            return std::move ( Sequence < decltype ( results ) > ( std::move ( results ) ) );
+        }
+
+        template < typename IndexedAccumulator >
+        __CDS_MaybeUnused auto runningReduceIndexed (
+                IndexedAccumulator const & indexedAccumulator
+        ) & noexcept -> Sequence < LinkedList < returnOf < IndexedAccumulator > > >
+        __CDS_Requires (
+                ForwardIterable < C > &&
+                IndexedAccumulatorFor < IndexedAccumulator, ElementType > &&
+                ConvertibleTo < ElementType, returnOf < IndexedAccumulator > >
+        ) {
+
+            LinkedList < returnOf < IndexedAccumulator > > results = { };
+
+            if ( this->pCollection.valueAt().valueAt().size() > 0 ) {
+                auto it = this->begin();
+                Index i = 1;
+
+                results.add(it.value());
+
+                for (it.next(); it != this->end(); ++it)
+                    results.add(indexedAccumulator(i++, results.back(), it.value()));
+            }
+
+            return std::move ( Sequence < decltype ( results ) > ( std::move ( results ) ) );
+        }
+
+        template < typename Accumulator, typename AccumulatedType >
+        __CDS_MaybeUnused __CDS_OptimalInline auto scan (
+                AccumulatedType const & initialValue,
+                Accumulator     const & accumulator
+        ) && noexcept -> Sequence < LinkedList < AccumulatedType > >
+        __CDS_Requires (
+                ForwardIterable < C > &&
+                AccumulatorFor < Accumulator, ElementType >
+        ) {
+
+            return this->runningFold( initialValue, accumulator );
+        }
+
+        template < typename Accumulator, typename AccumulatedType >
+        __CDS_MaybeUnused auto scan (
+                AccumulatedType const & initialValue,
+                Accumulator     const & accumulator
+        ) & noexcept -> Sequence < LinkedList < AccumulatedType > >
+        __CDS_Requires (
+                ForwardIterable < C > &&
+                AccumulatorFor < Accumulator, ElementType >
+        ) {
+
+            return this->runningFold( initialValue, accumulator );
+        }
+
+        template < typename IndexedAccumulator, typename AccumulatedType >
+        __CDS_MaybeUnused auto scanIndexed (
+                AccumulatedType     const & initialValue,
+                IndexedAccumulator  const & indexedAccumulator
+        ) && noexcept -> Sequence < LinkedList < AccumulatedType > >
+        __CDS_Requires (
+                ForwardIterable < C > &&
+                IndexedAccumulatorFor < IndexedAccumulator, ElementType >
+        ) {
+
+            return this->runningFoldIndexed ( initialValue, indexedAccumulator );
+        }
+
+        template < typename IndexedAccumulator, typename AccumulatedType >
+        __CDS_MaybeUnused auto scanIndexed (
+                AccumulatedType     const & initialValue,
+                IndexedAccumulator  const & indexedAccumulator
+        ) & noexcept -> Sequence < LinkedList < AccumulatedType > >
+        __CDS_Requires (
+                ForwardIterable < C > &&
+                IndexedAccumulatorFor < IndexedAccumulator, ElementType >
+        ) {
+
+            return this->runningFoldIndexed ( initialValue, indexedAccumulator );
+        }
+
+        template < typename E = ElementType, EnableIf < Type < E > :: isNumeric > = 0 >
+        __CDS_NoDiscard __CDS_MaybeUnused auto sum () const noexcept -> ElementType
+        __CDS_Requires ( ForwardIterable < C > && Integral < ElementType > ) {
+            ElementType sum = 0;
+            for ( auto e : * this )
+                sum = sum + e;
+
+            return sum;
+        }
+
+        template < typename E = ElementType, EnableIf < ! Type < E > :: isNumeric && Type < E > :: defaultConstructible > = 0 >
+        __CDS_NoDiscard __CDS_MaybeUnused auto sum () const noexcept -> ElementType
+        __CDS_Requires ( ForwardIterable < C > ) {
+
+            ElementType sum;
+            for ( auto e : * this )
+                sum = sum + e;
+
+            return sum;
+        }
+
+        template < typename Selector >
+        __CDS_MaybeUnused auto sumBy ( Selector const & selector ) const noexcept -> returnOf < Selector >
+        __CDS_Requires (
+                ForwardIterable < C > &&
+                MapperFor < Selector, ElementType > &&
+                Summable < ElementType >
+        ) {
+
+            auto it = this->begin();
+            auto sum = selector ( it.value() );
+
+            for (it.next(); it != this->end(); ++ it)
+                sum = sum + selector(it.value());
+
+            return sum;
+        }
+
+        template < typename U = C, EnableIf < utility :: hidden :: sequenceImpl :: IsArithmetic < typename utility :: hidden :: sequenceImpl :: ContainedType < U > > :: Value > = 0 >
+        __CDS_NoDiscard __CDS_MaybeUnused auto average () const noexcept -> Double
+        __CDS_Requires ( ForwardIterable < C > && ConvertibleTo < double, ElementType > ) {
+            double average = 0.0; int eCount = 0;
+            for ( auto e : * this ) {
+                ++ eCount;
+                average += static_cast < double > ( e );
+            }
+
+            return average / static_cast < double > ( eCount );
+        }
+
+
+        __CDS_MaybeUnused auto chunked (Size chunkSize) && noexcept -> Sequence < LinkedList < Array < ElementType > > >
+        __CDS_Requires ( ForwardIterable < C > ) {
+
+            LinkedList < Array < ElementType > > container;
+            Array < ElementType > subContainer;
+            Index subContainerPos = 0;
+            subContainer.resize(chunkSize);
+
+            for ( auto e : * this ) {
+                subContainer[subContainerPos++] = e;
+
+                if ( subContainerPos >= chunkSize ){
+                    container.add(subContainer);
+                    subContainer.clear();
+                    subContainer.resize(chunkSize);
+                    subContainerPos = 0;
+                }
+            }
+
+            if ( ! subContainer.empty() && subContainerPos > 0 ) {
+                subContainer.resize(subContainerPos);
+                container.add(subContainer);
+            }
+
+            return std::move ( Sequence < decltype ( container ) > ( std::move ( container ) ) );
+        }
+
+        __CDS_MaybeUnused auto chunked (Size chunkSize) & noexcept -> Sequence < LinkedList < Array < ElementType > > >
+        __CDS_Requires ( ForwardIterable < C > ) {
+
+            LinkedList < Array < ElementType > > container;
+            Array < ElementType > subContainer;
+            Index subContainerPos = 0;
+            subContainer.resize(chunkSize);
+
+            for ( auto e : * this ) {
+                subContainer[subContainerPos++] = e;
+
+                if ( subContainerPos >= chunkSize ){
+                    container.add(subContainer);
+                    subContainer.clear();
+                    subContainer.resize(chunkSize);
+                    subContainerPos = 0;
+                }
+            }
+
+            if ( ! subContainer.empty() && subContainerPos > 0 ) {
+                subContainer.resize(subContainerPos);
+                container.add(subContainer);
+            }
+
+            return std::move ( Sequence < decltype ( container ) > ( std::move ( container ) ) );
+        }
+
+        template < typename ListTransformer >
+        __CDS_MaybeUnused auto chunked (
+                Size                    chunkSize,
+                ListTransformer const & listTransformer
+        ) && noexcept -> Sequence < LinkedList < returnOf < ListTransformer > > >
+        __CDS_Requires ( ForwardIterable < C > && TransformerOver < ListTransformer, List < ElementType > > ) {
+
+            LinkedList < returnOf < ListTransformer > > container;
+            Array < ElementType > subContainer;
+            Index subContainerPos = 0;
+            subContainer.resize(chunkSize);
+
+            for ( auto e : * this ) {
+                subContainer[subContainerPos++] = e;
+
+                if ( subContainerPos >= chunkSize ) {
+                    container.add ( listTransformer ( subContainer ) );
+                    subContainer.clear();
+                    subContainer.resize(chunkSize);
+                    subContainerPos = 0;
+                }
+            }
+
+            if ( ! subContainer.empty() && subContainerPos > 0 ) {
+                subContainer.resize(subContainerPos);
+                container.add ( listTransformer ( subContainer ) );
+            }
+
+            return std::move ( Sequence < decltype ( container ) > ( std::move ( container ) ) );
+        }
+
+        template < typename ListTransformer >
+        __CDS_MaybeUnused auto chunked (
+                Size                    chunkSize,
+                ListTransformer const & listTransformer
+        ) & noexcept -> Sequence < LinkedList < returnOf < ListTransformer > > >
+        __CDS_Requires ( ForwardIterable < C > && TransformerOver < ListTransformer, List < ElementType > > ) {
+
+            LinkedList < returnOf < ListTransformer > > container;
+            Array < ElementType > subContainer;
+            Index subContainerPos = 0;
+            subContainer.resize(chunkSize);
+
+            for ( auto e : * this ) {
+                subContainer[subContainerPos++] = e;
+
+                if ( subContainerPos >= chunkSize ) {
+                    container.add ( listTransformer ( subContainer ) );
+                    subContainer.clear();
+                    subContainer.resize(chunkSize);
+                    subContainerPos = 0;
+                }
+            }
+
+            if ( ! subContainer.empty() && subContainerPos > 0 ) {
+                subContainer.resize(subContainerPos);
+                container.add ( listTransformer ( subContainer ) );
+            }
+
+            return std::move ( Sequence < decltype ( container ) > ( std::move ( container ) ) );
+        }
+
+
+        __CDS_MaybeUnused auto minus (
+                ElementType const & toRemove
+        ) && noexcept -> Sequence < LinkedList < ElementType > >
+        __CDS_Requires ( ForwardIterable < C > ) {
+
+            LinkedList < ElementType > container;
             Boolean found = false;
-            for (auto v : sequence)
-                if ( v == e ) {
+
+            for ( auto e : * this )
+                if ( found || e != toRemove )
+                    container.add( e );
+                else
                     found = true;
-                    break;
+
+            return std::move ( Sequence < decltype ( container ) > ( std::move ( container ) ) );
+        }
+
+        __CDS_MaybeUnused auto minus (
+                Collection < ElementType > const & toRemove
+        ) && noexcept -> Sequence < LinkedList < ElementType > >
+        __CDS_Requires ( ForwardIterable < C > ) {
+
+            LinkedList < ElementType > container;
+
+            for ( auto e : * this )
+                if ( ! toRemove.contains(e) )
+                    container.add(e);
+
+            return std::move ( Sequence < decltype ( container ) > ( std::move ( container ) ) );
+        }
+
+
+        template < typename OC, typename OtherType = typename Sequence < C > :: ElementType >
+        __CDS_MaybeUnused auto minus (
+                Sequence < OC > const & sequence
+        ) && noexcept -> Sequence < LinkedList < OtherType > >
+        __CDS_Requires (
+                ForwardIterable < C > &&
+                ForwardIterable < OC > &&
+                EqualsComparable < ElementType, OtherType >
+        ) {
+
+            LinkedList < ElementType > container;
+
+            for ( auto e : * this ) {
+                Boolean found = false;
+                for (auto v : sequence)
+                    if ( v == e ) {
+                        found = true;
+                        break;
+                    }
+
+                if ( ! found )
+                    container.add( e );
+            }
+
+            return std::move ( Sequence < decltype ( container ) > ( std::move ( container ) ) );
+        }
+
+        __CDS_MaybeUnused auto minus (
+                ElementType const & toRemove
+        ) & noexcept -> Sequence < LinkedList < ElementType > >
+        __CDS_Requires ( ForwardIterable < C > ) {
+
+            LinkedList < ElementType > container;
+            Boolean found = false;
+
+            for ( auto e : * this )
+                if ( found || e != toRemove )
+                    container.add( e );
+                else
+                    found = true;
+
+            return std::move ( Sequence < decltype ( container ) > ( std::move ( container ) ) );
+        }
+
+        __CDS_MaybeUnused auto minus (
+                Collection < ElementType > const & toRemove
+        ) & noexcept -> Sequence < LinkedList < ElementType > >
+        __CDS_Requires ( ForwardIterable < C > ) {
+
+            LinkedList < ElementType > container;
+
+            for ( auto e : * this )
+                if ( ! toRemove.contains(e) )
+                    container.add(e);
+
+            return std::move ( Sequence < decltype ( container ) > ( std::move ( container ) ) );
+        }
+
+        template < typename OC, typename OtherType = typename Sequence < C > :: ElementType >
+        __CDS_MaybeUnused auto minus (
+                Sequence < OC > const & sequence
+        ) & noexcept -> Sequence < LinkedList < OtherType > >
+        __CDS_Requires (
+                ForwardIterable < C > &&
+                ForwardIterable < OC > &&
+                EqualsComparable < ElementType, OtherType >
+        ) {
+
+            LinkedList < ElementType > container;
+
+            for ( auto e : * this ) {
+                Boolean found = false;
+                for (auto v : sequence)
+                    if ( v == e ) {
+                        found = true;
+                        break;
+                    }
+
+                if ( ! found )
+                    container.add( e );
+            }
+
+            return std::move ( Sequence < decltype ( container ) > ( std::move ( container ) ) );
+        }
+
+
+        __CDS_MaybeUnused auto plus (
+                ElementType const & toAdd
+        ) && noexcept -> Sequence < LinkedList < ElementType > >
+        __CDS_Requires ( ForwardIterable < C > ) {
+
+            LinkedList < ElementType > container;
+
+            for ( auto e : * this )
+                container.add(e);
+            container.add(toAdd);
+
+            return std::move ( Sequence < decltype ( container ) > ( std::move ( container ) ) );
+        }
+
+        __CDS_MaybeUnused auto plus (
+                Collection < ElementType > const & toAdd
+        ) && noexcept -> Sequence < LinkedList < ElementType > >
+        __CDS_Requires ( ForwardIterable < C > ) {
+
+            LinkedList < ElementType > container;
+
+            for ( auto e : * this )
+                container.add(e);
+
+            toAdd.forEach([& container](ElementType const & e){container.add(e);});
+
+            return std::move ( Sequence < decltype ( container ) > ( std::move ( container ) ) );
+        }
+
+        template < typename OC >
+        __CDS_MaybeUnused auto plus (
+                Sequence < OC > const & toAdd
+        ) && noexcept -> Sequence < LinkedList < ElementType > >
+        __CDS_Requires ( ForwardIterable < C > && ForwardIterable < OC > ) {
+
+            LinkedList < ElementType > container;
+
+            for ( auto e : * this )
+                container.add(e);
+            for ( auto e : toAdd )
+                container.add(e);
+
+            return std::move ( Sequence < decltype ( container ) > ( std::move ( container ) ) );
+        }
+
+        __CDS_MaybeUnused auto plus (
+                ElementType const & toAdd
+        ) & noexcept -> Sequence < LinkedList < ElementType > >
+        __CDS_Requires ( ForwardIterable < C > ) {
+
+            LinkedList < ElementType > container;
+
+            for ( auto e : * this )
+                container.add(e);
+            container.add(toAdd);
+
+            return std::move ( Sequence < decltype ( container ) > ( std::move ( container ) ) );
+        }
+
+        __CDS_MaybeUnused auto plus (
+                Collection < ElementType > const & toAdd
+        ) & noexcept -> Sequence < LinkedList < ElementType > >
+        __CDS_Requires ( ForwardIterable < C > ) {
+
+            LinkedList < ElementType > container;
+
+            for ( auto e : * this )
+                container.add(e);
+
+            toAdd.forEach([& container](ElementType const & e){container.add(e);});
+
+            return std::move ( Sequence < decltype ( container ) > ( std::move ( container ) ) );
+        }
+
+        template < typename OC >
+        __CDS_MaybeUnused auto plus (
+                Sequence < OC > const & toAdd
+        ) & noexcept -> Sequence < LinkedList < ElementType > >
+        __CDS_Requires ( ForwardIterable < C > && ForwardIterable < OC > ) {
+
+            LinkedList < ElementType > container;
+
+            for ( auto e : * this )
+                container.add(e);
+            for ( auto e : toAdd )
+                container.add(e);
+
+            return std::move ( Sequence < decltype ( container ) > ( std::move ( container ) ) );
+        }
+
+
+        template < typename Predicate >
+        __CDS_MaybeUnused auto partition (
+                Predicate const & predicate
+        ) const noexcept -> Pair < LinkedList < ElementType >, LinkedList < ElementType > >
+        __CDS_Requires ( ForwardIterable < C > && PredicateOver < Predicate, ElementType > ) {
+
+            Pair < LinkedList < ElementType >, LinkedList < ElementType > > partitions;
+
+            for ( auto e : * this )
+                if ( predicate (e) )
+                    partitions.getFirst().add(e);
+                else
+                    partitions.getSecond().add(e);
+
+            return partitions;
+        }
+
+        template < typename IndexedPredicate >
+        __CDS_MaybeUnused auto partitionIndexed (
+                IndexedPredicate const & indexedPredicate
+        ) const noexcept -> Pair < LinkedList < ElementType >, LinkedList < ElementType > >
+        __CDS_Requires ( ForwardIterable < C > && IndexedPredicateOver < IndexedPredicate, ElementType > )  {
+
+            Pair < LinkedList < ElementType >, LinkedList < ElementType > > partitions;
+            Index i = 0;
+
+            for ( auto e : * this )
+                if ( indexedPredicate (i++,e) )
+                    partitions.getFirst().add(e);
+                else
+                    partitions.getSecond().add(e);
+
+            return partitions;
+        }
+
+        __CDS_MaybeUnused auto windowed (
+                Size            size,
+                Size            step            = 1,
+                Boolean const & partialWindows  = false
+        ) && noexcept -> Sequence < LinkedList < Array < ElementType > > >
+        __CDS_Requires ( ForwardIterable < C > ) {
+
+            LinkedList < Array < ElementType > > container;
+            Array < ElementType > window;
+            auto it = this->begin();
+
+
+            for ( ; it != this->end(); ) {
+                Index i = 0;
+                window.resize(size);
+
+                for ( auto wIt = it; wIt != this->end() && i < size; ++wIt ) {
+                    window[i++] = wIt.value();
                 }
 
-            if ( ! found )
+                if ( i == size )
+                    container.add(window);
+                else if ( partialWindows ) {
+                    window.resize(i);
+                    container.add(window);
+                }
+
+                window.clear();
+
+                for ( i = 0; i < step && it != this->end(); i++ )
+                    ++it;
+            }
+
+            return std::move ( Sequence < decltype ( container ) > ( std::move ( container ) ) );
+        }
+
+        __CDS_MaybeUnused auto windowed (
+                Size            size,
+                Size            step            = 1,
+                Boolean const & partialWindows  = false
+        ) & noexcept -> Sequence < LinkedList < Array < ElementType > > >
+        __CDS_Requires ( ForwardIterable < C > ) {
+
+            LinkedList < Array < ElementType > > container;
+            Array < ElementType > window;
+            auto it = this->begin();
+
+
+            for ( ; it != this->end(); ) {
+                Index i = 0;
+                window.resize(size);
+
+                for ( auto wIt = it; wIt != this->end() && i < size; ++wIt ) {
+                    window[i++] = wIt.value();
+                }
+
+                if ( i == size )
+                    container.add(window);
+                else if ( partialWindows ) {
+                    window.resize(i);
+                    container.add(window);
+                }
+
+                window.clear();
+
+                for ( i = 0; i < step && it != this->end(); i++ )
+                    ++it;
+            }
+
+            return std::move ( Sequence < decltype ( container ) > ( std::move ( container ) ) );
+        }
+
+        template < typename ListTransformer >
+        __CDS_MaybeUnused auto windowed (
+                ListTransformer const & transformer,
+                Size                    size,
+                Size                    step            = 1,
+                Boolean         const & partialWindows  = false
+        ) && noexcept -> Sequence < LinkedList < returnOf < ListTransformer > > >
+        __CDS_Requires ( ForwardIterable < C > && TransformerOver < ListTransformer, List < ElementType > > )  {
+
+            LinkedList < returnOf < ListTransformer > > container;
+            utility :: hidden :: sequenceImpl :: Windowed :: type < ListTransformer > window;
+
+            auto it = this->begin();
+            for (; it != this->end();) {
+                Index i = 0;
+                for (auto wIt = it; wIt != this->end() && i < size; ++wIt) {
+                    window.add(wIt.value());
+                }
+
+                if (i == size || partialWindows)
+                    container.add(transformer(window));
+
+                window.clear();
+                for (i = 0; i < step && it != this->end(); i++)
+                    ++it;
+            }
+
+            return std::move(Sequence<decltype(container)>(std::move(container)));
+        }
+
+        template < typename ListTransformer >
+        __CDS_MaybeUnused auto windowed (
+                ListTransformer const & transformer,
+                Size                    size,
+                Size                    step            = 1,
+                Boolean         const & partialWindows  = false
+        ) & noexcept -> Sequence < LinkedList < returnOf < ListTransformer > > >
+        __CDS_Requires ( ForwardIterable < C > && TransformerOver < ListTransformer, List < ElementType > > ) {
+
+            LinkedList < returnOf < ListTransformer > > container;
+            utility :: hidden :: sequenceImpl :: Windowed :: type < ListTransformer > window;
+
+            auto it = this->begin();
+            for (; it != this->end();) {
+                Index i = 0;
+                for (auto wIt = it; wIt != this->end() && i < size; ++wIt) {
+                    window.add(wIt.value());
+                }
+
+                if (i == size || partialWindows)
+                    container.add(transformer(window));
+
+                window.clear();
+                for (i = 0; i < step && it != this->end(); i++)
+                    ++it;
+            }
+
+            return std::move(Sequence<decltype(container)>(std::move(container)));
+        }
+
+        template < typename OC >
+        __CDS_MaybeUnused auto zip (
+                Sequence < OC > const & other
+        ) && noexcept -> Sequence < LinkedList < Pair < ElementType, typename Sequence < OC > :: ElementType > > >
+        __CDS_Requires ( ForwardIterable < C > && ForwardIterable < OC > ) {
+
+            auto it1 = this->begin();
+            auto it2 = other.begin();
+
+            LinkedList < Pair < decltype(it1.value()), decltype(it2.value()) > > container;
+
+            for (; it1 != this->end() && it2 != other.end(); ++ it1, ++ it2 )
+                container.add ( { it1.value(), it2.value() } );
+
+            return std::move ( Sequence < decltype ( container ) > ( std::move ( container ) ) );
+        }
+
+        template < typename OC >
+        __CDS_MaybeUnused auto zip (
+                Sequence < OC > const & other
+        ) & noexcept -> Sequence < LinkedList < Pair < ElementType, typename Sequence < OC > :: ElementType > > >
+        __CDS_Requires ( ForwardIterable < C > && ForwardIterable < OC > ) {
+
+            auto it1 = this->begin();
+            auto it2 = other.begin();
+
+            LinkedList < Pair < decltype(it1.value()), decltype(it2.value()) > > container;
+
+            for (; it1 != this->end() && it2 != other.end(); ++ it1, ++ it2 )
+                container.add ( { it1.value(), it2.value() } );
+
+            return std::move ( Sequence < decltype ( container ) > ( std::move ( container ) ) );
+        }
+
+        template < typename OC, typename Transformer >
+        __CDS_MaybeUnused auto zip (
+                Sequence < OC > const & other,
+                Transformer     const & transformer
+        ) && noexcept -> Sequence < LinkedList < returnOf < Transformer > > >
+        __CDS_Requires (
+                ForwardIterable < C > &&
+                ForwardIterable < OC > &&
+                TransformerOver < Transformer, ElementType, typename OC :: ElementType >
+        ) {
+
+            auto it1 = this->begin();
+            auto it2 = other.begin();
+
+            LinkedList < returnOf < Transformer > > container;
+
+            for (; it1 != this->end() && it2 != other.end(); ++ it1, ++ it2 )
+                container.add ( transformer( it1.value(), it2.value() ) );
+
+            return std::move ( Sequence < decltype ( container ) > ( std::move ( container ) ) );
+        }
+
+        template < typename OC, typename Transformer >
+        __CDS_MaybeUnused auto zip (
+                Sequence < OC > const & other,
+                Transformer     const & transformer
+        ) & noexcept -> Sequence < LinkedList < returnOf < Transformer > > >
+        __CDS_Requires (
+                ForwardIterable < C > &&
+                ForwardIterable < OC > &&
+                TransformerOver < Transformer, ElementType, typename OC :: ElementType >
+        ) {
+
+            auto it1 = this->begin();
+            auto it2 = other.begin();
+
+            LinkedList < returnOf < Transformer > > container;
+
+            for (; it1 != this->end() && it2 != other.end(); ++ it1, ++ it2 )
+                container.add ( transformer( it1.value(), it2.value() ) );
+
+            return std::move ( Sequence < decltype ( container ) > ( std::move ( container ) ) );
+        }
+
+
+        __CDS_MaybeUnused auto zipWithNext () && noexcept -> Sequence < LinkedList < Pair < ElementType, ElementType > > >
+        __CDS_Requires ( ForwardIterable < C > ) {
+
+            LinkedList < Pair < ElementType, ElementType > > container;
+
+            auto it = this->begin();
+            auto v = it.value();
+
+            for ( it.next(); it != this->end(); ++ it ) {
+                container.add ( { v, it.value() } );
+                v = it.value();
+            }
+
+            return std::move ( Sequence < decltype ( container ) > ( std::move ( container ) ) );
+        }
+
+        template < typename Transformer >
+        __CDS_MaybeUnused auto zipWithNext (
+                Transformer const & transformer
+        ) && noexcept -> Sequence < LinkedList < returnOf < Transformer > > >
+        __CDS_Requires ( ForwardIterable < C > && TransformerOver < Transformer, ElementType, ElementType > ) {
+
+            LinkedList < returnOf < Transformer > > container;
+
+            auto it = this->begin();
+            auto v = it.value();
+
+            for ( it.next(); it != this->end(); ++ it ) {
+                container.add ( transformer ( v, it.value() ) );
+                v = it.value();
+            }
+
+            return std::move ( Sequence < decltype ( container ) > ( std::move ( container ) ) );
+        }
+
+        __CDS_MaybeUnused auto zipWithNext () & noexcept -> Sequence < LinkedList < Pair < ElementType, ElementType > > >
+        __CDS_Requires ( ForwardIterable < C > ) {
+
+            LinkedList < Pair < ElementType, ElementType > > container;
+
+            auto it = this->begin();
+            auto v = it.value();
+
+            for ( it.next(); it != this->end(); ++ it ) {
+                container.add ( { v, it.value() } );
+                v = it.value();
+            }
+
+            return std::move ( Sequence < decltype ( container ) > ( std::move ( container ) ) );
+        }
+
+        template < typename Transformer >
+        __CDS_MaybeUnused auto zipWithNext (
+                Transformer const & transformer
+        ) & noexcept -> Sequence < LinkedList < returnOf < Transformer > > >
+        __CDS_Requires ( ForwardIterable < C > && TransformerOver < Transformer, ElementType, ElementType > ) {
+
+            LinkedList < returnOf < Transformer > > container;
+
+            auto it = this->begin();
+            auto v = it.value();
+
+            for ( it.next(); it != this->end(); ++ it ) {
+                container.add ( transformer ( v, it.value() ) );
+                v = it.value();
+            }
+
+            return std::move ( Sequence < decltype ( container ) > ( std::move ( container ) ) );
+        }
+
+        __CDS_NoDiscard __CDS_MaybeUnused auto shuffled () const noexcept -> Sequence < Array < ElementType > >
+        __CDS_Requires ( ForwardIterable < C > ) {
+
+            Array < ElementType > container;
+            for ( auto e : * this )
                 container.add( e );
+
+            for ( auto _ : Range(Int::random(container.size(), container.size() * 2), Int::random(container.size() * 3, container.size() * 10)) )
+                std :: swap ( container[Int::random(0, container.size() - 1)], container[Int::random(0, container.size() - 1)] );
+
+            return std :: move ( Sequence < Array < ElementType > > ( std :: move ( container ) ) );
         }
+    };
 
-        return std::move ( Sequence < decltype ( container ) > ( std::move ( container ) ) );
-    }
-
-
-    __CDS_MaybeUnused auto plus (
-            ElementType const & toAdd
-    ) && noexcept -> Sequence < LinkedList < ElementType > >
-    __CDS_Requires ( ForwardIterable < C > ) {
-
-        LinkedList < ElementType > container;
-
-        for ( auto e : * this )
-            container.add(e);
-        container.add(toAdd);
-
-        return std::move ( Sequence < decltype ( container ) > ( std::move ( container ) ) );
-    }
-
-    __CDS_MaybeUnused auto plus (
-            Collection < ElementType > const & toAdd
-    ) && noexcept -> Sequence < LinkedList < ElementType > >
-    __CDS_Requires ( ForwardIterable < C > ) {
-
-        LinkedList < ElementType > container;
-
-        for ( auto e : * this )
-            container.add(e);
-
-        toAdd.forEach([& container](ElementType const & e){container.add(e);});
-
-        return std::move ( Sequence < decltype ( container ) > ( std::move ( container ) ) );
-    }
-
-    template < typename OC >
-    __CDS_MaybeUnused auto plus (
-            Sequence < OC > const & toAdd
-    ) && noexcept -> Sequence < LinkedList < ElementType > >
-    __CDS_Requires ( ForwardIterable < C > && ForwardIterable < OC > ) {
-
-        LinkedList < ElementType > container;
-
-        for ( auto e : * this )
-            container.add(e);
-        for ( auto e : toAdd )
-            container.add(e);
-
-        return std::move ( Sequence < decltype ( container ) > ( std::move ( container ) ) );
-    }
-
-    __CDS_MaybeUnused auto plus (
-            ElementType const & toAdd
-    ) & noexcept -> Sequence < LinkedList < ElementType > >
-    __CDS_Requires ( ForwardIterable < C > ) {
-
-        LinkedList < ElementType > container;
-
-        for ( auto e : * this )
-            container.add(e);
-        container.add(toAdd);
-
-        return std::move ( Sequence < decltype ( container ) > ( std::move ( container ) ) );
-    }
-
-    __CDS_MaybeUnused auto plus (
-            Collection < ElementType > const & toAdd
-    ) & noexcept -> Sequence < LinkedList < ElementType > >
-    __CDS_Requires ( ForwardIterable < C > ) {
-
-        LinkedList < ElementType > container;
-
-        for ( auto e : * this )
-            container.add(e);
-
-        toAdd.forEach([& container](ElementType const & e){container.add(e);});
-
-        return std::move ( Sequence < decltype ( container ) > ( std::move ( container ) ) );
-    }
-
-    template < typename OC >
-    __CDS_MaybeUnused auto plus (
-            Sequence < OC > const & toAdd
-    ) & noexcept -> Sequence < LinkedList < ElementType > >
-    __CDS_Requires ( ForwardIterable < C > && ForwardIterable < OC > ) {
-
-        LinkedList < ElementType > container;
-
-        for ( auto e : * this )
-            container.add(e);
-        for ( auto e : toAdd )
-            container.add(e);
-
-        return std::move ( Sequence < decltype ( container ) > ( std::move ( container ) ) );
-    }
-
-
-    template < typename Predicate >
-    __CDS_MaybeUnused auto partition (
-            Predicate const & predicate
-    ) const noexcept -> Pair < LinkedList < ElementType >, LinkedList < ElementType > >
-    __CDS_Requires ( ForwardIterable < C > && PredicateOver < Predicate, ElementType > ) {
-
-        Pair < LinkedList < ElementType >, LinkedList < ElementType > > partitions;
-
-        for ( auto e : * this )
-            if ( predicate (e) )
-                partitions.getFirst().add(e);
-            else
-                partitions.getSecond().add(e);
-
-        return partitions;
-    }
-
-    template < typename IndexedPredicate >
-    __CDS_MaybeUnused auto partitionIndexed (
-            IndexedPredicate const & indexedPredicate
-    ) const noexcept -> Pair < LinkedList < ElementType >, LinkedList < ElementType > >
-    __CDS_Requires ( ForwardIterable < C > && IndexedPredicateOver < IndexedPredicate, ElementType > )  {
-
-        Pair < LinkedList < ElementType >, LinkedList < ElementType > > partitions;
-        Index i = 0;
-
-        for ( auto e : * this )
-            if ( indexedPredicate (i++,e) )
-                partitions.getFirst().add(e);
-            else
-                partitions.getSecond().add(e);
-
-        return partitions;
-    }
-
-    __CDS_MaybeUnused auto windowed (
-            Size            size,
-            Size            step            = 1,
-            Boolean const & partialWindows  = false
-    ) && noexcept -> Sequence < LinkedList < Array < ElementType > > >
-    __CDS_Requires ( ForwardIterable < C > ) {
-
-        LinkedList < Array < ElementType > > container;
-        Array < ElementType > window;
-        auto it = this->begin();
-
-
-        for ( ; it != this->end(); ) {
-            Index i = 0;
-            window.resize(size);
-
-            for ( auto wIt = it; wIt != this->end() && i < size; ++wIt ) {
-                window[i++] = wIt.value();
-            }
-
-            if ( i == size )
-                container.add(window);
-            else if ( partialWindows ) {
-                window.resize(i);
-                container.add(window);
-            }
-
-            window.clear();
-
-            for ( i = 0; i < step && it != this->end(); i++ )
-                ++it;
-        }
-
-        return std::move ( Sequence < decltype ( container ) > ( std::move ( container ) ) );
-    }
-
-    __CDS_MaybeUnused auto windowed (
-            Size            size,
-            Size            step            = 1,
-            Boolean const & partialWindows  = false
-    ) & noexcept -> Sequence < LinkedList < Array < ElementType > > >
-    __CDS_Requires ( ForwardIterable < C > ) {
-
-        LinkedList < Array < ElementType > > container;
-        Array < ElementType > window;
-        auto it = this->begin();
-
-
-        for ( ; it != this->end(); ) {
-            Index i = 0;
-            window.resize(size);
-
-            for ( auto wIt = it; wIt != this->end() && i < size; ++wIt ) {
-                window[i++] = wIt.value();
-            }
-
-            if ( i == size )
-                container.add(window);
-            else if ( partialWindows ) {
-                window.resize(i);
-                container.add(window);
-            }
-
-            window.clear();
-
-            for ( i = 0; i < step && it != this->end(); i++ )
-                ++it;
-        }
-
-        return std::move ( Sequence < decltype ( container ) > ( std::move ( container ) ) );
-    }
-
-    template < typename ListTransformer >
-    __CDS_MaybeUnused auto windowed (
-            ListTransformer const & transformer,
-            Size                    size,
-            Size                    step            = 1,
-            Boolean         const & partialWindows  = false
-    ) && noexcept -> Sequence < LinkedList < returnOf < ListTransformer > > >
-    __CDS_Requires ( ForwardIterable < C > && TransformerOver < ListTransformer, List < ElementType > > )  {
-
-        LinkedList < returnOf < ListTransformer > > container;
-        __CDS_Sequence :: Windowed :: type < ListTransformer > window;
-
-        auto it = this->begin();
-        for (; it != this->end();) {
-            Index i = 0;
-            for (auto wIt = it; wIt != this->end() && i < size; ++wIt) {
-                window.add(wIt.value());
-            }
-
-            if (i == size || partialWindows)
-                container.add(transformer(window));
-
-            window.clear();
-            for (i = 0; i < step && it != this->end(); i++)
-                ++it;
-        }
-
-        return std::move(Sequence<decltype(container)>(std::move(container)));
-    }
-
-    template < typename ListTransformer >
-    __CDS_MaybeUnused auto windowed (
-            ListTransformer const & transformer,
-            Size                    size,
-            Size                    step            = 1,
-            Boolean         const & partialWindows  = false
-    ) & noexcept -> Sequence < LinkedList < returnOf < ListTransformer > > >
-    __CDS_Requires ( ForwardIterable < C > && TransformerOver < ListTransformer, List < ElementType > > ) {
-
-        LinkedList < returnOf < ListTransformer > > container;
-        __CDS_Sequence :: Windowed :: type < ListTransformer > window;
-
-        auto it = this->begin();
-        for (; it != this->end();) {
-            Index i = 0;
-            for (auto wIt = it; wIt != this->end() && i < size; ++wIt) {
-                window.add(wIt.value());
-            }
-
-            if (i == size || partialWindows)
-                container.add(transformer(window));
-
-            window.clear();
-            for (i = 0; i < step && it != this->end(); i++)
-                ++it;
-        }
-
-        return std::move(Sequence<decltype(container)>(std::move(container)));
-    }
-
-    template < typename OC >
-    __CDS_MaybeUnused auto zip (
-            Sequence < OC > const & other
-    ) && noexcept -> Sequence < LinkedList < Pair < ElementType, typename Sequence < OC > :: ElementType > > >
-    __CDS_Requires ( ForwardIterable < C > && ForwardIterable < OC > ) {
-
-        auto it1 = this->begin();
-        auto it2 = other.begin();
-
-        LinkedList < Pair < decltype(it1.value()), decltype(it2.value()) > > container;
-
-        for (; it1 != this->end() && it2 != other.end(); ++ it1, ++ it2 )
-            container.add ( { it1.value(), it2.value() } );
-
-        return std::move ( Sequence < decltype ( container ) > ( std::move ( container ) ) );
-    }
-
-    template < typename OC >
-    __CDS_MaybeUnused auto zip (
-            Sequence < OC > const & other
-    ) & noexcept -> Sequence < LinkedList < Pair < ElementType, typename Sequence < OC > :: ElementType > > >
-    __CDS_Requires ( ForwardIterable < C > && ForwardIterable < OC > ) {
-
-        auto it1 = this->begin();
-        auto it2 = other.begin();
-
-        LinkedList < Pair < decltype(it1.value()), decltype(it2.value()) > > container;
-
-        for (; it1 != this->end() && it2 != other.end(); ++ it1, ++ it2 )
-            container.add ( { it1.value(), it2.value() } );
-
-        return std::move ( Sequence < decltype ( container ) > ( std::move ( container ) ) );
-    }
-
-    template < typename OC, typename Transformer >
-    __CDS_MaybeUnused auto zip (
-            Sequence < OC > const & other,
-            Transformer     const & transformer
-    ) && noexcept -> Sequence < LinkedList < returnOf < Transformer > > >
-    __CDS_Requires (
-            ForwardIterable < C > &&
-            ForwardIterable < OC > &&
-            TransformerOver < Transformer, ElementType, typename OC :: ElementType >
-    ) {
-
-        auto it1 = this->begin();
-        auto it2 = other.begin();
-
-        LinkedList < returnOf < Transformer > > container;
-
-        for (; it1 != this->end() && it2 != other.end(); ++ it1, ++ it2 )
-            container.add ( transformer( it1.value(), it2.value() ) );
-
-        return std::move ( Sequence < decltype ( container ) > ( std::move ( container ) ) );
-    }
-
-    template < typename OC, typename Transformer >
-    __CDS_MaybeUnused auto zip (
-            Sequence < OC > const & other,
-            Transformer     const & transformer
-    ) & noexcept -> Sequence < LinkedList < returnOf < Transformer > > >
-    __CDS_Requires (
-            ForwardIterable < C > &&
-            ForwardIterable < OC > &&
-            TransformerOver < Transformer, ElementType, typename OC :: ElementType >
-    ) {
-
-        auto it1 = this->begin();
-        auto it2 = other.begin();
-
-        LinkedList < returnOf < Transformer > > container;
-
-        for (; it1 != this->end() && it2 != other.end(); ++ it1, ++ it2 )
-            container.add ( transformer( it1.value(), it2.value() ) );
-
-        return std::move ( Sequence < decltype ( container ) > ( std::move ( container ) ) );
-    }
-
-
-    __CDS_MaybeUnused auto zipWithNext () && noexcept -> Sequence < LinkedList < Pair < ElementType, ElementType > > >
-    __CDS_Requires ( ForwardIterable < C > ) {
-
-        LinkedList < Pair < ElementType, ElementType > > container;
-
-        auto it = this->begin();
-        auto v = it.value();
-
-        for ( it.next(); it != this->end(); ++ it ) {
-            container.add ( { v, it.value() } );
-            v = it.value();
-        }
-
-        return std::move ( Sequence < decltype ( container ) > ( std::move ( container ) ) );
-    }
-
-    template < typename Transformer >
-    __CDS_MaybeUnused auto zipWithNext (
-            Transformer const & transformer
-    ) && noexcept -> Sequence < LinkedList < returnOf < Transformer > > >
-    __CDS_Requires ( ForwardIterable < C > && TransformerOver < Transformer, ElementType, ElementType > ) {
-
-        LinkedList < returnOf < Transformer > > container;
-
-        auto it = this->begin();
-        auto v = it.value();
-
-        for ( it.next(); it != this->end(); ++ it ) {
-            container.add ( transformer ( v, it.value() ) );
-            v = it.value();
-        }
-
-        return std::move ( Sequence < decltype ( container ) > ( std::move ( container ) ) );
-    }
-
-    __CDS_MaybeUnused auto zipWithNext () & noexcept -> Sequence < LinkedList < Pair < ElementType, ElementType > > >
-    __CDS_Requires ( ForwardIterable < C > ) {
-
-        LinkedList < Pair < ElementType, ElementType > > container;
-
-        auto it = this->begin();
-        auto v = it.value();
-
-        for ( it.next(); it != this->end(); ++ it ) {
-            container.add ( { v, it.value() } );
-            v = it.value();
-        }
-
-        return std::move ( Sequence < decltype ( container ) > ( std::move ( container ) ) );
-    }
-
-    template < typename Transformer >
-    __CDS_MaybeUnused auto zipWithNext (
-            Transformer const & transformer
-    ) & noexcept -> Sequence < LinkedList < returnOf < Transformer > > >
-    __CDS_Requires ( ForwardIterable < C > && TransformerOver < Transformer, ElementType, ElementType > ) {
-
-        LinkedList < returnOf < Transformer > > container;
-
-        auto it = this->begin();
-        auto v = it.value();
-
-        for ( it.next(); it != this->end(); ++ it ) {
-            container.add ( transformer ( v, it.value() ) );
-            v = it.value();
-        }
-
-        return std::move ( Sequence < decltype ( container ) > ( std::move ( container ) ) );
-    }
-
-    __CDS_NoDiscard __CDS_MaybeUnused auto shuffled () const noexcept -> Sequence < Array < ElementType > >
-    __CDS_Requires ( ForwardIterable < C > ) {
-
-        Array < ElementType > container;
-        for ( auto e : * this )
-            container.add( e );
-
-        for ( auto _ : Range(Int::random(container.size(), container.size() * 2), Int::random(container.size() * 3, container.size() * 10)) )
-            std :: swap ( container[Int::random(0, container.size() - 1)], container[Int::random(0, container.size() - 1)] );
-
-        return std :: move ( Sequence < Array < ElementType > > ( std :: move ( container ) ) );
-    }
-};
+}
 
 /// region Ctors Dtors Copy Move Clear
 
 #if !defined(_MSC_VER)
 
 template < typename C >
-__CDS_OptimalInline Sequence < C > ::Sequence ( Sequence const & s ) noexcept :
-        pCollection ( Memory::instance().create < ForeignPointer < typename std :: remove_reference < decltype (s.pCollection.valueAt().valueAt() ) > :: type > > ( s.pCollection.valueAt().get() ) ),
+__CDS_OptimalInline cds :: Sequence < C > ::Sequence ( cds :: Sequence < C > const & s ) noexcept :
+        pCollection ( cds :: Memory::instance().create < ForeignPointer < cds :: RemoveReference < decltype (s.pCollection.valueAt().valueAt() ) > > > ( s.pCollection.valueAt().get() ) ),
         chainCount ( s.chainCount ),
         storedMappers ( s.storedMappers ),
         storedPredicates ( s.storedPredicates ),
@@ -3543,7 +3546,7 @@ __CDS_OptimalInline Sequence < C > ::Sequence ( Sequence const & s ) noexcept :
 #else
 
 template < typename C >
-__CDS_OptimalInline Sequence < C > ::Sequence(Sequence const& s) noexcept :
+__CDS_OptimalInline cds :: Sequence < C > :: Sequence(cds :: Sequence const & s) noexcept :
  //   pCollection(Memory::instance().create < ForeignPointer < typename std::remove_reference < decltype (s.pCollection.valueAt().valueAt()) > ::type > >(s.pCollection.valueAt().get())),
     chainCount(s.chainCount),
     storedMappers(s.storedMappers),
@@ -3551,17 +3554,17 @@ __CDS_OptimalInline Sequence < C > ::Sequence(Sequence const& s) noexcept :
     storedIndexedMappers(s.storedIndexedMappers),
     storedIndexedPredicates(s.storedIndexedPredicates) {
 
-    using TypeOf = RemoveReference < decltype (s.pCollection.valueAt().valueAt()) >;
+    using TypeOf = cds :: RemoveReference < decltype (s.pCollection.valueAt().valueAt()) >;
     auto collection = s.pCollection.valueAt().get();
 
-    this->pCollection = Memory::instance().create < ForeignPointer < TypeOf > >(collection);
+    this->pCollection = cds :: Memory::instance().create < ForeignPointer < TypeOf > >(collection);
 }
 
 #endif
 
 template < typename C >
-__CDS_OptionalInline Sequence < C > ::Sequence ( Sequence && s ) noexcept :
-        chainCount ( Utility::exchange ( s.chainCount, 0 ) + 1 ),
+__CDS_OptionalInline cds :: Sequence < C > ::Sequence ( cds :: Sequence < C > && s ) noexcept :
+        chainCount ( cds :: exchange ( s.chainCount, 0 ) + 1 ),
         storedMappers ( std::move ( s.storedMappers ) ),
         storedPredicates ( std::move ( s.storedPredicates ) ),
         storedIndexedMappers ( std::move ( s.storedIndexedMappers ) ),
@@ -3569,25 +3572,25 @@ __CDS_OptionalInline Sequence < C > ::Sequence ( Sequence && s ) noexcept :
 
 #if !defined (_MSC_VER)
 
-    if (dynamic_cast <UniquePointer < C > *> (s.pCollection.get()) != nullptr)
-        this->pCollection = Memory::instance().create < UniquePointer < typename std::remove_reference < decltype (s.pCollection.valueAt().valueAt()) > ::type > >(s.pCollection.valueAt().release());
+    if (dynamic_cast < cds :: UniquePointer < C > *> (s.pCollection.get()) != nullptr)
+        this->pCollection = cds :: Memory::instance().create < cds :: UniquePointer < cds :: RemoveReference < decltype (s.pCollection.valueAt().valueAt()) > > >(s.pCollection.valueAt().release());
     else
-        this->pCollection = Memory::instance().create < ForeignPointer < typename std::remove_reference < decltype (s.pCollection.valueAt().valueAt()) > ::type > >(s.pCollection.valueAt().get());
+        this->pCollection = cds :: Memory::instance().create < cds :: ForeignPointer < cds :: RemoveReference < decltype (s.pCollection.valueAt().valueAt()) > > >(s.pCollection.valueAt().get());
 
 #else
 
     /// surpising nobody, MSVC cannot handle complex statements. Either statement commented below is not generated by the template substitution system, or it is skipped in assemby. Not nice.
 
-    using TypeOf = RemoveReference < decltype (s.pCollection.valueAt().valueAt()) >;
+    using TypeOf = cds :: RemoveReference < decltype (s.pCollection.valueAt().valueAt()) >;
 
-    if (dynamic_cast <UniquePointer < C > *> (s.pCollection.get()) != nullptr) {
+    if (dynamic_cast < cds :: UniquePointer < C > *> (s.pCollection.get()) != nullptr) {
         auto collection = s.pCollection.valueAt().release();
-        this->pCollection = Memory::instance().create < UniquePointer < TypeOf >> (collection);
+        this->pCollection = Memory::instance().create < cds :: UniquePointer < TypeOf >> (collection);
 
        // this->pCollection = Memory::instance().create < UniquePointer < typename std::remove_reference < decltype (s.pCollection.valueAt().valueAt()) > ::type > >(s.pCollection.valueAt().release());
     } else {
         auto collection = s.pCollection.valueAt().get();
-        this->pCollection = Memory::instance().create < ForeignPointer < TypeOf >> (collection);
+        this->pCollection = cds :: Memory::instance().create < cds :: ForeignPointer < TypeOf >> (collection);
 
         // this->pCollection = Memory::instance().create < ForeignPointer < typename std::remove_reference < decltype (s.pCollection.valueAt().valueAt()) > ::type > >(s.pCollection.valueAt().get());
     }
@@ -3597,26 +3600,26 @@ __CDS_OptionalInline Sequence < C > ::Sequence ( Sequence && s ) noexcept :
 }
 
 template < typename C >
-__CDS_OptimalInline Sequence < C > ::Sequence ( C & c ) noexcept :
-        pCollection ( Memory :: instance().create < ForeignPointer < typename std :: remove_reference < decltype ( c ) > :: type > > ( & c ) ),
+__CDS_OptimalInline cds :: Sequence < C > ::Sequence ( C & c ) noexcept :
+        pCollection ( cds :: Memory :: instance().create < cds :: ForeignPointer < cds :: RemoveReference < decltype ( c ) > > > ( & c ) ),
         chainCount ( 0u ) {
 
 }
 
 template < typename C >
-__CDS_OptimalInline Sequence < C > ::Sequence ( C && c ) noexcept :
-        pCollection ( Memory :: instance().create < UniquePointer < typename std :: remove_reference < decltype ( c ) > :: type > > ( Memory :: instance().create < C > (std::forward < C > (c)) ) ),
+__CDS_OptimalInline cds :: Sequence < C > ::Sequence ( C && c ) noexcept :
+        pCollection ( cds :: Memory :: instance().create < cds :: UniquePointer < cds :: RemoveReference < decltype ( c ) > > > ( cds :: Memory :: instance().create < C > (std :: forward < C > (c)) ) ),
         chainCount ( 0u ) {
 
 }
 
 template < typename C >
-__CDS_OptionalInline auto Sequence < C > ::operator = ( Sequence const & s ) noexcept -> Sequence & {
+__CDS_OptionalInline auto cds :: Sequence < C > ::operator = ( cds :: Sequence < C > const & s ) noexcept -> cds :: Sequence < C > & {
     if ( this == & s ) return * this;
 
     this->clear();
 
-    this->pCollection.reset( Memory :: instance().create < ForeignPointer < decltype ( s.pCollection.valueAt().get() ) > > ( s.pCollection.valueAt().valueAt() ) );
+    this->pCollection.reset( cds :: Memory :: instance().create < cds :: ForeignPointer < decltype ( s.pCollection.valueAt().get() ) > > ( s.pCollection.valueAt().valueAt() ) );
     this->chainCount                = s.chainCount;
 
     this->storedMappers             = s.storedMappers;
@@ -3629,13 +3632,13 @@ __CDS_OptionalInline auto Sequence < C > ::operator = ( Sequence const & s ) noe
 }
 
 template < typename C >
-__CDS_OptionalInline auto Sequence < C > ::operator = ( Sequence && s ) noexcept -> Sequence & {
+__CDS_OptionalInline auto cds :: Sequence < C > ::operator = ( cds :: Sequence < C > && s ) noexcept -> cds :: Sequence < C > & {
     if ( this == & s ) return * this;
 
     this->clear();
 
-    this->pCollection.reset( Memory :: instance().create < UniquePointer < decltype ( s.pCollection.valueAt().get() ) > > ( s.pCollection.valueAt().release() ) );
-    this->chainCount                = Utility::exchange ( s.chainCount, 0 ) + 1;
+    this->pCollection.reset( cds :: Memory :: instance().create < cds :: UniquePointer < decltype ( s.pCollection.valueAt().get() ) > > ( s.pCollection.valueAt().release() ) );
+    this->chainCount                = cds :: exchange ( s.chainCount, 0 ) + 1;
 
     this->storedMappers             = std::move (s.storedMappers);
     this->storedPredicates          = std::move (s.storedPredicates);
@@ -3647,7 +3650,7 @@ __CDS_OptionalInline auto Sequence < C > ::operator = ( Sequence && s ) noexcept
 }
 
 template < typename C >
-__CDS_OptionalInline auto Sequence < C > ::clear() noexcept -> void {
+__CDS_OptionalInline auto cds :: Sequence < C > ::clear() noexcept -> void {
     this->pCollection.reset();
     this->chainCount = 0;
 
@@ -3663,28 +3666,29 @@ __CDS_OptionalInline auto Sequence < C > ::clear() noexcept -> void {
 /// region Iterator Support
 
 template < typename C >
-__CDS_OptimalInline auto Sequence < C > ::begin() noexcept -> Iterator {
-    return Sequence::Iterator ( this, this->pCollection.valueAt().valueAt().begin() );
+__CDS_OptimalInline auto cds :: Sequence < C > ::begin() noexcept -> cds :: Sequence < C > :: Iterator {
+    return cds :: Sequence < C > :: Iterator ( this, this->pCollection.valueAt().valueAt().begin() );
 }
 
 template < typename C >
-__CDS_OptimalInline auto Sequence < C > ::end() noexcept -> Iterator {
-    return Sequence::Iterator ( this, this->pCollection.valueAt().valueAt().end() );
+__CDS_OptimalInline auto cds :: Sequence < C > ::end() noexcept -> cds :: Sequence < C > :: Iterator {
+    return cds :: Sequence < C > :: Iterator ( this, this->pCollection.valueAt().valueAt().end() );
 }
 
 template < typename C >
-__CDS_OptimalInline Sequence < C >::Iterator::Iterator(Sequence < C > * pSequence, CollectionIterator const & it) noexcept :
+__CDS_OptimalInline cds :: Sequence < C > :: Iterator :: Iterator ( cds :: Sequence < C > * pSequence, cds :: Sequence < C > :: Iterator :: CollectionIterator const & it) noexcept :
         pSeq ( pSequence ),
         it (it) {
+
     this->skipFiltered();
 }
 
 template < typename C >
-auto Sequence < C >::Iterator::skipFiltered() noexcept -> void {
-    Boolean skip = true;
+auto cds :: Sequence < C >::Iterator::skipFiltered() noexcept -> void {
+    cds :: Boolean skip = true;
 
     while ( skip && this->it != this->pSeq->pCollection->valueAt().end() ) {
-        this->precomputed = Memory :: instance().create < CollectionElementType > ( * this->it );
+        this->precomputed = cds :: Memory :: instance().create < CollectionElementType > ( * this->it );
         skip = false;
 
         auto currentMapperIterator = this->pSeq.valueAt().storedMappers.begin();
@@ -3693,7 +3697,7 @@ auto Sequence < C >::Iterator::skipFiltered() noexcept -> void {
         auto currentIndexedMapperIterator = this->pSeq.valueAt().storedIndexedMappers.begin();
         auto currentIndexedFilterIterator = this->pSeq.valueAt().storedIndexedPredicates.begin();
 
-        for ( uint32 i = 0; i < this->pSeq.valueAt().chainCount; i ++ ) {
+        for ( cds :: uint32 i = 0; i < this->pSeq.valueAt().chainCount; i ++ ) {
 
             if (
                     currentMapperIterator != this->pSeq.valueAt().storedMappers.end() &&
@@ -3746,7 +3750,7 @@ auto Sequence < C >::Iterator::skipFiltered() noexcept -> void {
 
         if ( ! skip ) {
 
-            for ( Index i = 0; i < this->pSeq.valueAt().chainCount; i++ ) {
+            for ( cds :: Index i = 0; i < this->pSeq.valueAt().chainCount; i++ ) {
                 if (
                         currentMapperIterator != this->pSeq.valueAt().storedMappers.end() &&
                         ( * currentMapperIterator ).getSecond() == i
@@ -3780,11 +3784,11 @@ auto Sequence < C >::Iterator::skipFiltered() noexcept -> void {
 #if __CDS_cpplang_core_version >= __CDS_cpplang_core_version_17
 
 template < typename C >
-auto Sequence < C > ::Iterator::toString() const noexcept -> String {
+auto cds :: Sequence < C > :: Iterator :: toString() const noexcept -> cds :: String {
     std::stringstream oss;
     oss << "Sequence::Iterator { pSequence = " << this->pSeq.toString();
 
-    if __CDS_cpplang_IfConstexpr ( isPrintable < decltype ( this->it ) >::value ) {
+    if __CDS_cpplang_IfConstexpr ( cds :: isPrintable < decltype ( this->it ) >::value ) {
         oss << ", it = " << this->it;
     } else {
         oss << ", value = " << * this->it;
@@ -3795,10 +3799,10 @@ auto Sequence < C > ::Iterator::toString() const noexcept -> String {
 }
 
 template < typename C >
-__CDS_OptionalInline auto Sequence < C > ::Iterator::hash() const noexcept -> Index {
-    if __CDS_cpplang_IfConstexpr ( isObjectDerived < decltype ( this->it ) > ::value )
+__CDS_OptionalInline auto cds :: Sequence < C > ::Iterator::hash() const noexcept -> cds :: Index {
+    if __CDS_cpplang_IfConstexpr ( cds :: isObjectDerived < decltype ( this->it ) > ::value )
         return this->it.hash ();
-    else if __CDS_cpplang_IfConstexpr ( isObjectDerived < decltype ( * this->it ) > ::value )
+    else if __CDS_cpplang_IfConstexpr ( cds :: isObjectDerived < decltype ( * this->it ) > ::value )
         return (* this->it).hash ();
     else
         return 0;
@@ -3810,12 +3814,12 @@ __CDS_OptionalInline auto Sequence < C > ::Iterator::hash() const noexcept -> In
 #endif
 
 template < typename C >
-__CDS_OptimalInline auto Sequence < C > ::Iterator::copy() const noexcept -> Iterator * {
+__CDS_OptimalInline auto cds :: Sequence < C > :: Iterator :: copy() const noexcept -> cds :: Sequence < C > :: Iterator * {
     return nullptr;
 }
 
 template < typename C >
-__CDS_OptimalInline auto Sequence < C > ::Iterator::equals(Object const & o) const noexcept -> bool {
+__CDS_OptimalInline auto cds :: Sequence < C > :: Iterator :: equals ( cds :: Object const & o) const noexcept -> bool {
     if ( this == & o ) return true;
     auto p = dynamic_cast < decltype ( this ) > ( & o );
     if ( p == nullptr ) return false;
@@ -3824,83 +3828,84 @@ __CDS_OptimalInline auto Sequence < C > ::Iterator::equals(Object const & o) con
 }
 
 template < typename C >
-__CDS_OptimalInline auto Sequence < C > ::Iterator::value() const noexcept -> CollectionElementType {
+__CDS_OptimalInline auto cds :: Sequence < C > :: Iterator :: value() const noexcept -> cds :: Sequence < C > :: Iterator :: CollectionElementType {
     return * this->precomputed;
 }
 
 template < typename C >
-__CDS_OptimalInline auto Sequence < C > ::Iterator::next() noexcept -> Iterator & {
+__CDS_OptimalInline auto cds :: Sequence < C > ::Iterator::next() noexcept -> cds :: Sequence < C > :: Iterator & {
     ++ this->it;
     this->skipFiltered();
     return * this;
 }
 
 template < typename C >
-__CDS_OptimalInline auto Sequence < C > ::Iterator::equals(Iterator const & otherIt) const noexcept -> Boolean {
+__CDS_OptimalInline auto cds :: Sequence < C > :: Iterator :: equals ( cds :: Sequence < C > :: Iterator const & otherIt) const noexcept -> cds :: Boolean {
     return this->it == otherIt.it;
 }
 
 template < typename C >
-__CDS_OptimalInline auto Sequence < C > ::Iterator::operator==(Iterator const & otherIt) const noexcept -> bool {
+__CDS_OptimalInline auto cds :: Sequence < C > :: Iterator :: operator== ( cds :: Sequence < C > :: Iterator const & otherIt) const noexcept -> bool {
     return this->equals (otherIt);
 }
 
 template < typename C >
-__CDS_OptimalInline auto Sequence < C > ::Iterator::operator!=(Iterator const & otherIt) const noexcept -> bool {
+__CDS_OptimalInline auto cds :: Sequence < C > :: Iterator :: operator!= ( cds :: Sequence < C > :: Iterator const & otherIt) const noexcept -> bool {
     return ! this->equals (otherIt);
 }
 
 template < typename C >
-__CDS_OptimalInline auto Sequence < C > ::Iterator::operator++() noexcept -> Iterator & {
+__CDS_OptimalInline auto cds :: Sequence < C > :: Iterator :: operator++() noexcept -> cds :: Sequence < C > :: Iterator & {
     return this->next();
 }
 
 template < typename C >
-__CDS_OptimalInline auto Sequence < C > ::Iterator::operator++(int) noexcept -> Iterator {
+__CDS_OptimalInline auto cds :: Sequence < C > :: Iterator :: operator++(int) noexcept -> cds :: Sequence < C > :: Iterator {
     auto c = * this; this->next(); return c;
 }
 
 template < typename C >
-__CDS_OptimalInline auto Sequence < C > ::Iterator::operator*() const noexcept -> CollectionElementType {
+__CDS_OptimalInline auto cds :: Sequence < C > :: Iterator :: operator*() const noexcept -> cds :: Sequence < C > :: Iterator :: CollectionElementType {
     return this->value();
 }
 
 template < typename C >
-__CDS_OptimalInline auto Sequence < C > ::begin() const noexcept -> ConstIterator {
-    return Sequence::ConstIterator ( this, this->pCollection.valueAt().valueAt().cbegin() );
+__CDS_OptimalInline auto cds :: Sequence < C > :: begin() const noexcept -> cds :: Sequence < C > :: ConstIterator {
+    return cds :: Sequence < C > :: ConstIterator ( this, this->pCollection.valueAt().valueAt().cbegin() );
 }
 
 template < typename C >
-__CDS_OptimalInline auto Sequence < C > ::end() const noexcept -> ConstIterator {
-    return Sequence::ConstIterator ( this, this->pCollection.valueAt().valueAt().cend() );
+__CDS_OptimalInline auto cds :: Sequence < C > :: end() const noexcept -> cds :: Sequence < C > :: ConstIterator {
+    return cds :: Sequence < C > :: ConstIterator ( this, this->pCollection.valueAt().valueAt().cend() );
 }
 
 template < typename C >
-__CDS_OptimalInline auto Sequence < C > ::cbegin() const noexcept -> ConstIterator {
-    return Sequence::ConstIterator ( this, this->pCollection.valueAt().valueAt().cbegin() );
+__CDS_OptimalInline auto cds :: Sequence < C > :: cbegin() const noexcept -> cds :: Sequence < C > :: ConstIterator {
+    return cds :: Sequence < C > :: ConstIterator ( this, this->pCollection.valueAt().valueAt().cbegin() );
 }
 
 template < typename C >
-__CDS_OptimalInline auto Sequence < C > ::cend() const noexcept -> ConstIterator {
-    return Sequence::ConstIterator ( this, this->pCollection.valueAt().valueAt().cend() );
+__CDS_OptimalInline auto cds :: Sequence < C > :: cend() const noexcept -> cds :: Sequence < C > :: ConstIterator {
+    return cds :: Sequence < C > :: ConstIterator ( this, this->pCollection.valueAt().valueAt().cend() );
 }
 
 template < typename C >
-__CDS_OptimalInline Sequence < C >::ConstIterator::ConstIterator(
-        Sequence < C >      const * pSequence,
-        CollectionIterator  const & it
+__CDS_OptimalInline cds :: Sequence < C > :: ConstIterator :: ConstIterator (
+        cds :: Sequence < C >                                           const * pSequence,
+        cds :: Sequence < C > :: ConstIterator :: CollectionIterator    const & it
 ) noexcept :
         pSeq ( pSequence ),
         it (it) {
+
     this->skipFiltered();
 }
 
 template < typename C >
-auto Sequence < C >::ConstIterator::skipFiltered() noexcept -> void {
-    Boolean skip = true;
+auto cds :: Sequence < C > :: ConstIterator :: skipFiltered() noexcept -> void {
+    cds :: Boolean skip = true;
 
     while ( skip && this->it != this->pSeq->pCollection->valueAt().cend() ) {
-        this->precomputed = Memory :: instance().create < CollectionElementType > ( * this->it );
+        this->precomputed = cds :: Memory :: instance().create < cds :: Sequence < C > :: ConstIterator :: CollectionElementType > ( * this->it );
         skip = false;
 
         auto currentMapperIterator = this->pSeq.valueAt().storedMappers.begin();
@@ -3909,7 +3914,7 @@ auto Sequence < C >::ConstIterator::skipFiltered() noexcept -> void {
         auto currentIndexedMapperIterator = this->pSeq.valueAt().storedIndexedMappers.begin();
         auto currentIndexedFilterIterator = this->pSeq.valueAt().storedIndexedPredicates.begin();
 
-        for ( uint32 i = 0; i < this->pSeq.valueAt().chainCount; i ++ ) {
+        for ( cds :: uint32 i = 0; i < this->pSeq.valueAt().chainCount; i ++ ) {
 
             if (
                     currentMapperIterator != this->pSeq.valueAt().storedMappers.end() &&
@@ -3956,13 +3961,13 @@ auto Sequence < C >::ConstIterator::skipFiltered() noexcept -> void {
                     currentMapperIterator           == this->pSeq.valueAt().storedMappers.end()         &&
                     currentIndexedMapperIterator    == this->pSeq.valueAt().storedIndexedMappers.end()  &&
                     currentIndexedFilterIterator    == this->pSeq.valueAt().storedIndexedPredicates.end()
-                    )
+            )
                 break;
         }
 
         if ( ! skip ) {
 
-            for ( Index i = 0; i < this->pSeq.valueAt().chainCount; i++ ) {
+            for ( cds :: Index i = 0; i < this->pSeq.valueAt().chainCount; i++ ) {
                 if (
                         currentMapperIterator != this->pSeq.valueAt().storedMappers.end() &&
                         ( * currentMapperIterator ).getSecond() == i
@@ -3995,12 +4000,13 @@ auto Sequence < C >::ConstIterator::skipFiltered() noexcept -> void {
 
 #if __CDS_cpplang_core_version >= __CDS_cpplang_core_version_17
 
+
 template < typename C >
-auto Sequence < C > ::ConstIterator::toString() const noexcept -> String {
+auto cds :: Sequence < C > :: ConstIterator :: toString() const noexcept -> cds :: String {
     std::stringstream oss;
     oss << "Sequence::Iterator { pSequence = " << this->pSeq.toString();
 
-    if __CDS_cpplang_IfConstexpr ( isPrintable < decltype ( this->it ) >::value ) {
+    if __CDS_cpplang_IfConstexpr ( cds :: isPrintable < decltype ( this->it ) >::value ) {
         oss << ", it = " << this->it;
     } else {
         oss << ", value = " << * this->it;
@@ -4017,10 +4023,10 @@ auto Sequence < C > ::ConstIterator::toString() const noexcept -> String {
 #if __CDS_cpplang_core_version >= __CDS_cpplang_core_version_17
 
 template < typename C >
-__CDS_OptimalInline auto Sequence < C > ::ConstIterator::hash() const noexcept -> Index {
-    if __CDS_cpplang_IfConstexpr( isObjectDerived < decltype ( this->it ) > ::value )
+__CDS_OptimalInline auto cds :: Sequence < C > :: ConstIterator :: hash() const noexcept -> cds :: Index {
+    if __CDS_cpplang_IfConstexpr( cds :: isObjectDerived < decltype ( this->it ) > ::value )
         return this->it.hash ();
-    else if __CDS_cpplang_IfConstexpr ( isObjectDerived < decltype ( * this->it ) > ::value )
+    else if __CDS_cpplang_IfConstexpr ( cds :: isObjectDerived < decltype ( * this->it ) > ::value )
         return (* this->it).hash ();
     else
         return 0;
@@ -4032,12 +4038,12 @@ __CDS_OptimalInline auto Sequence < C > ::ConstIterator::hash() const noexcept -
 #endif
 
 template < typename C >
-__CDS_OptimalInline auto Sequence < C > ::ConstIterator::copy() const noexcept -> ConstIterator * {
+__CDS_OptimalInline auto cds :: Sequence < C > :: ConstIterator :: copy() const noexcept -> cds :: Sequence < C > :: ConstIterator * {
     return nullptr;
 }
 
 template < typename C >
-__CDS_OptimalInline auto Sequence < C > ::ConstIterator::equals(Object const & o) const noexcept -> bool {
+__CDS_OptimalInline auto cds :: Sequence < C > :: ConstIterator :: equals ( cds :: Object const & o ) const noexcept -> bool {
     if ( this == & o ) return true;
     auto p = dynamic_cast < decltype ( this ) > ( & o );
     if ( p == nullptr ) return false;
@@ -4046,44 +4052,44 @@ __CDS_OptimalInline auto Sequence < C > ::ConstIterator::equals(Object const & o
 }
 
 template < typename C >
-__CDS_OptimalInline auto Sequence < C > ::ConstIterator::value() const noexcept -> CollectionElementType {
+__CDS_OptimalInline auto cds :: Sequence < C > :: ConstIterator :: value() const noexcept -> cds :: Sequence < C > :: ConstIterator :: CollectionElementType {
     return * this->precomputed;
 }
 
 template < typename C >
-__CDS_OptimalInline auto Sequence < C > ::ConstIterator::next() noexcept -> ConstIterator & {
+__CDS_OptimalInline auto cds :: Sequence < C > :: ConstIterator :: next() noexcept -> cds :: Sequence < C > :: ConstIterator & {
     ++ this->it;
     this->skipFiltered();
     return * this;
 }
 
 template < typename C >
-__CDS_OptimalInline auto Sequence < C > ::ConstIterator::equals(ConstIterator const & otherIt) const noexcept -> Boolean {
+__CDS_OptimalInline auto cds :: Sequence < C > :: ConstIterator :: equals ( cds :: Sequence < C > :: ConstIterator const & otherIt ) const noexcept -> cds :: Boolean {
     return this->it == otherIt.it;
 }
 
 template < typename C >
-__CDS_OptimalInline auto Sequence < C > ::ConstIterator::operator==(ConstIterator const & otherIt) const noexcept -> bool {
+__CDS_OptimalInline auto cds :: Sequence < C > :: ConstIterator :: operator== ( cds :: Sequence < C > :: ConstIterator const & otherIt) const noexcept -> bool {
     return this->equals (otherIt);
 }
 
 template < typename C >
-__CDS_OptimalInline auto Sequence < C > ::ConstIterator::operator!=(ConstIterator const & otherIt) const noexcept -> bool {
+__CDS_OptimalInline auto cds :: Sequence < C > :: ConstIterator :: operator!= ( cds :: Sequence < C > :: ConstIterator const & otherIt) const noexcept -> bool {
     return ! this->equals (otherIt);
 }
 
 template < typename C >
-__CDS_OptimalInline auto Sequence < C > ::ConstIterator::operator++() noexcept -> ConstIterator & {
+__CDS_OptimalInline auto cds :: Sequence < C > :: ConstIterator :: operator++() noexcept -> cds :: Sequence < C > :: ConstIterator & {
     return this->next();
 }
 
 template < typename C >
-__CDS_OptimalInline auto Sequence < C > ::ConstIterator::operator++(int) noexcept -> ConstIterator {
+__CDS_OptimalInline auto cds :: Sequence < C > :: ConstIterator :: operator++(int) noexcept -> cds :: Sequence < C > :: ConstIterator {
     auto c = * this; this->next(); return c;
 }
 
 template < typename C >
-__CDS_OptimalInline auto Sequence < C > ::ConstIterator::operator*() const noexcept -> CollectionElementType {
+__CDS_OptimalInline auto cds :: Sequence < C > :: ConstIterator :: operator*() const noexcept -> cds :: Sequence < C > :: ConstIterator :: CollectionElementType {
     return this->value();
 }
 
@@ -4092,7 +4098,7 @@ __CDS_OptimalInline auto Sequence < C > ::ConstIterator::operator*() const noexc
 /// region Object Derived Functions
 
 template < typename C >
-auto Sequence < C > ::toString() const noexcept -> String {
+auto cds :: Sequence < C > ::toString() const noexcept -> cds :: String {
     std::stringstream oss;
 
     oss << "Sequence { chainCount = "
@@ -4100,7 +4106,7 @@ auto Sequence < C > ::toString() const noexcept -> String {
         << ", elements = [ ";
 
     for ( auto e : * this )
-        if __CDS_cpplang_IfConstexpr ( isPrintable < ElementType >::value )
+        if __CDS_cpplang_IfConstexpr ( cds :: isPrintable < ElementType >::value )
             oss << e << ", ";
         else
             oss << "Object at 0x" << std::hex << reinterpret_cast < AddressValueType > ( & e ) << ", ";
@@ -4110,17 +4116,17 @@ auto Sequence < C > ::toString() const noexcept -> String {
 }
 
 template < typename C >
-__CDS_OptimalInline auto Sequence < C > ::hash() const noexcept -> Index {
+__CDS_OptimalInline auto cds :: Sequence < C > ::hash() const noexcept -> cds :: Index {
     return this->pCollection.valueAt().hash();
 }
 
 template < typename C >
-__CDS_OptimalInline auto Sequence < C > ::copy() const noexcept -> Sequence<C> * {
-    return Memory :: instance().create < Sequence > ( * this );
+__CDS_OptimalInline auto cds :: Sequence < C > ::copy() const noexcept -> cds :: Sequence < C > * {
+    return cds :: Memory :: instance().create < cds :: Sequence < C > > ( * this );
 }
 
 template < typename C >
-__CDS_OptimalInline auto Sequence < C > ::equals(Object const & o) const noexcept -> bool {
+__CDS_OptimalInline auto cds :: Sequence < C > :: equals ( cds :: Object const & o ) const noexcept -> bool {
     if ( this == & o ) return true;
     auto p = dynamic_cast < decltype ( this ) > (& o);
     if ( p == nullptr ) return false;
@@ -4135,105 +4141,127 @@ __CDS_OptimalInline auto Sequence < C > ::equals(Object const & o) const noexcep
 
 #if __CDS_cpplang_CTAD_available == true
 
-Sequence ( String ) -> Sequence < String >;
+namespace cds {
 
-template < typename T >
-Sequence ( Array < T > & ) -> Sequence < Array < T > >;
+    Sequence ( String ) -> Sequence < String >;
 
-template < typename T >
-Sequence ( Array < T > const & ) -> Sequence < Array < T > const >;
+    template < typename T >
+    Sequence ( Array < T > & ) -> Sequence < Array < T > >;
 
-template < typename T >
-Sequence ( Array < T > && ) -> Sequence < Array < T > >;
+    template < typename T >
+    Sequence ( Array < T > const & ) -> Sequence < Array < T > const >;
 
-template < typename T >
-Sequence ( DoubleLinkedList < T > & ) -> Sequence < DoubleLinkedList < T > >;
+    template < typename T >
+    Sequence ( Array < T > && ) -> Sequence < Array < T > >;
 
-template < typename T >
-Sequence ( DoubleLinkedList < T > const & ) -> Sequence < DoubleLinkedList < T > const >;
+    template < typename T >
+    Sequence ( DoubleLinkedList < T > & ) -> Sequence < DoubleLinkedList < T > >;
 
-template < typename T >
-Sequence ( DoubleLinkedList < T > && ) -> Sequence < DoubleLinkedList < T > >;
+    template < typename T >
+    Sequence ( DoubleLinkedList < T > const & ) -> Sequence < DoubleLinkedList < T > const >;
 
-template < typename T >
-Sequence ( OrderedSet < T > & ) -> Sequence < OrderedSet < T > >;
+    template < typename T >
+    Sequence ( DoubleLinkedList < T > && ) -> Sequence < DoubleLinkedList < T > >;
 
-template < typename T >
-Sequence ( OrderedSet < T > const & ) -> Sequence < OrderedSet < T > const >;
+    template < typename T >
+    Sequence ( OrderedSet < T > & ) -> Sequence < OrderedSet < T > >;
 
-template < typename T >
-Sequence ( OrderedSet < T > && ) -> Sequence < OrderedSet < T > >;
+    template < typename T >
+    Sequence ( OrderedSet < T > const & ) -> Sequence < OrderedSet < T > const >;
 
-template < typename T >
-Sequence ( UnorderedSet < T > & ) -> Sequence < UnorderedSet < T > >;
+    template < typename T >
+    Sequence ( OrderedSet < T > && ) -> Sequence < OrderedSet < T > >;
 
-template < typename T >
-Sequence ( UnorderedSet < T > const & ) -> Sequence < UnorderedSet < T > const >;
+    template < typename T >
+    Sequence ( UnorderedSet < T > & ) -> Sequence < UnorderedSet < T > >;
 
-template < typename T >
-Sequence ( UnorderedSet < T > && ) -> Sequence < UnorderedSet < T > >;
+    template < typename T >
+    Sequence ( UnorderedSet < T > const & ) -> Sequence < UnorderedSet < T > const >;
 
-template < typename K, typename V >
-Sequence ( HashMap < K, V > & ) -> Sequence < HashMap < K, V > >;
+    template < typename T >
+    Sequence ( UnorderedSet < T > && ) -> Sequence < UnorderedSet < T > >;
 
-template < typename K, typename V >
-Sequence ( HashMap < K, V > const & ) -> Sequence < HashMap < K, V > const >;
+    template < typename K, typename V >
+    Sequence ( HashMap < K, V > & ) -> Sequence < HashMap < K, V > >;
 
-template < typename K, typename V >
-Sequence ( HashMap < K, V > && ) -> Sequence < HashMap < K, V > >;
+    template < typename K, typename V >
+    Sequence ( HashMap < K, V > const & ) -> Sequence < HashMap < K, V > const >;
 
-//#include <CDS/JSON>
+    template < typename K, typename V >
+    Sequence ( HashMap < K, V > && ) -> Sequence < HashMap < K, V > >;
 
-class JSON;
-Sequence ( JSON const & ) -> Sequence < JSON const >;
+    class JSON;
+    Sequence ( JSON const & ) -> Sequence < JSON const >;
+
+}
 
 #include <CDS/Generator>
-template < typename T, typename ... Args >
-Sequence ( Generator < T, Args ... > const & ) -> Sequence < Generator < T, Args ... > const >;
+
+namespace cds {
+
+    template < typename T, typename ... Args >
+    Sequence ( Generator < T, Args ... > const & ) -> Sequence < Generator < T, Args ... > const >;
+
+}
 
 #include <CDS/Range>
-Sequence ( Range && ) -> Sequence < Range >;
+
+namespace cds {
+
+    Sequence ( Range && ) -> Sequence < Range >;
+
+}
 
 #include <CDS/Range>
-Sequence ( Range const & ) -> Sequence < Range const >;
+
+namespace cds {
+
+    Sequence ( Range const & ) -> Sequence < Range const >;
+
+}
 
 #include <CDS/Range>
-Sequence ( Range & ) -> Sequence < Range >;
+
+namespace cds {
+
+    Sequence ( Range & ) -> Sequence < Range >;
+
+}
 
 #endif
 
 /// endregion
 
-inline auto Range::sequence() & noexcept -> Sequence<Range> {
-    return Sequence < typename std :: remove_reference < decltype (*this) > :: type > (*this);
+inline auto cds :: Range :: sequence() & noexcept -> cds :: Sequence < cds :: Range > {
+    return cds :: Sequence < cds :: RemoveReference < decltype (*this) > > (*this);
 }
 
-inline auto Range::sequence() const & noexcept -> Sequence<const Range> {
-    return Sequence < typename std :: remove_reference < decltype (*this) > :: type > (*this);
+inline auto cds :: Range :: sequence() const & noexcept -> cds :: Sequence < cds :: Range const > {
+    return cds :: Sequence < cds :: RemoveReference < decltype (*this) > > (*this);
 }
 
-inline auto Range::sequence() && noexcept -> Sequence < Range > {
-    return Sequence < typename std :: remove_reference < decltype (* this) > :: type > (std::move(* this));
+inline auto cds :: Range :: sequence() && noexcept -> cds :: Sequence < cds :: Range > {
+    return cds :: Sequence < cds :: RemoveReference < decltype (* this) > > (std::move(* this));
 }
 
-inline auto Range::sequence() const && noexcept -> Sequence < const Range > {
-    return Sequence < typename std :: remove_reference < decltype (* this) > :: type > (std::move(* this));
+inline auto cds :: Range :: sequence() const && noexcept -> cds :: Sequence < cds :: Range const > {
+    return cds :: Sequence < cds :: RemoveReference < decltype (* this) > > (std::move(* this));
 }
 
-inline auto String::sequence () const & noexcept -> Sequence < const String > {
-    return Sequence < typename std :: remove_reference < decltype (*this) > :: type > (*this);
+inline auto cds :: String :: sequence () const & noexcept -> cds :: Sequence < cds :: String const > {
+    return cds :: Sequence < cds :: RemoveReference < decltype (*this) > > (*this);
 }
 
-inline auto String::sequence () & noexcept -> Sequence < String > {
-    return Sequence < typename std :: remove_reference < decltype (*this) > :: type > (*this);
+inline auto cds :: String :: sequence () & noexcept -> cds :: Sequence < cds :: String > {
+    return cds :: Sequence < cds :: RemoveReference < decltype (*this) > > (*this);
 }
 
-inline auto String::sequence () const && noexcept -> Sequence < const String > {
-    return Sequence < typename std :: remove_reference < decltype (* this) > :: type > (std::move(* this));
+inline auto cds :: String :: sequence () const && noexcept -> cds :: Sequence < cds :: String const > {
+    return cds :: Sequence < cds :: RemoveReference < decltype (* this) > > (std::move(* this));
 }
 
-inline auto String::sequence () && noexcept -> Sequence < String > {
-    return Sequence < typename std :: remove_reference < decltype (* this) > :: type > (std::move(* this));
+inline auto cds :: String :: sequence () && noexcept -> cds :: Sequence < cds :: String > {
+    return cds :: Sequence < cds :: RemoveReference < decltype (* this) > > (std::move(* this));
 }
 
 __CDS_RegisterParseTypeTemplateT(Sequence)

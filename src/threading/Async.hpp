@@ -9,62 +9,66 @@
 #include <CDS/Semaphore>
 #include <CDS/Memory>
 
-template < typename ReturnType, typename ... ArgumentTypes >
-class Async;
-
-template < typename T >
-class AsyncResult : public Object {
-private:
-    UniquePointer < T > result;
-    SharedPointer < Semaphore > asyncSemaphore { nullptr };
-
-    AsyncResult() noexcept = default;
-
-    explicit AsyncResult ( SharedPointer < Semaphore > && semaphore ) noexcept :
-            asyncSemaphore ( std :: forward < SharedPointer < Semaphore > > ( semaphore ) ) {
-
-    }
-
-    AsyncResult ( AsyncResult && resultObject ) noexcept :
-            result ( std :: forward < UniquePointer < T > > ( resultObject.result ) ),
-            asyncSemaphore ( resultObject.asyncSemaphore ) {
-
-    }
+namespace cds {
 
     template < typename ReturnType, typename ... ArgumentTypes >
-    friend class Async;
+    class Async;
 
-public:
-    auto get () noexcept -> T {
-        this->asyncSemaphore->wait();
-        return * this->result;
-    }
-};
+    template < typename T >
+    class AsyncResult : public Object {
+    private:
+        UniquePointer < T > result;
+        SharedPointer < Semaphore > asyncSemaphore { nullptr };
 
-template < typename ReturnType, typename ... ArgumentTypes >
-class Async < ReturnType ( ArgumentTypes ... ) > : public Object {
-private:
-    Function < ReturnType ( ArgumentTypes ... ) > function;
-    UniquePointer < Thread > pThread { nullptr };
+        AsyncResult() noexcept = default;
 
-public:
-    inline explicit Async ( Function < ReturnType ( ArgumentTypes ... ) > const & function ) noexcept:
-            function(function) {
+        explicit AsyncResult ( SharedPointer < Semaphore > && semaphore ) noexcept :
+                asyncSemaphore ( std :: forward < SharedPointer < Semaphore > > ( semaphore ) ) {
 
-    }
+        }
 
-    inline auto operator () ( ArgumentTypes ... arguments ) noexcept -> AsyncResult < ReturnType > {
-        AsyncResult < ReturnType > result ( Memory :: instance().create < Semaphore > () );
+        AsyncResult ( AsyncResult && resultObject ) noexcept :
+                result ( std :: forward < UniquePointer < T > > ( resultObject.result ) ),
+                asyncSemaphore ( resultObject.asyncSemaphore ) {
 
-        this->pThread = Memory :: instance().create < Runnable > ([& result, this, params = std :: make_tuple ( std :: forward < ArgumentTypes > ( arguments ) ... )] {
-            result.result = Memory :: instance().create < ReturnType > ( std :: apply ( this->function, params ) );
-            result.asyncSemaphore->notify();
-        });
+        }
 
-        this->pThread->start();
+        template < typename ReturnType, typename ... ArgumentTypes >
+        friend class Async;
 
-        return result;
-    }
-};
+    public:
+        auto get () noexcept -> T {
+            this->asyncSemaphore->wait();
+            return * this->result;
+        }
+    };
+
+    template < typename ReturnType, typename ... ArgumentTypes >
+    class Async < ReturnType ( ArgumentTypes ... ) > : public Object {
+    private:
+        Function < ReturnType ( ArgumentTypes ... ) > function;
+        UniquePointer < Thread > pThread { nullptr };
+
+    public:
+        inline explicit Async ( Function < ReturnType ( ArgumentTypes ... ) > const & function ) noexcept:
+                function(function) {
+
+        }
+
+        inline auto operator () ( ArgumentTypes ... arguments ) noexcept -> AsyncResult < ReturnType > {
+            AsyncResult < ReturnType > result ( Memory :: instance().create < Semaphore > () );
+
+            this->pThread = Memory :: instance().create < Runnable > ([& result, this, params = std :: make_tuple ( std :: forward < ArgumentTypes > ( arguments ) ... )] {
+                result.result = Memory :: instance().create < ReturnType > ( std :: apply ( this->function, params ) );
+                result.asyncSemaphore->notify();
+            });
+
+            this->pThread->start();
+
+            return result;
+        }
+    };
+
+}
 
 #endif //CDS_ASYNC_HPP

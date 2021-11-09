@@ -5,21 +5,28 @@
 #ifndef CDS_HASHER_HPP
 #define CDS_HASHER_HPP
 
-template < Size byteSize >
-class Hasher : virtual public CryptoOperation < byteSize > {
-protected:
-    auto run () noexcept -> Hasher & override = 0;
+namespace cds {
 
-public:
-    inline auto hash () noexcept -> Hasher & { return this->run(); }
-};
+    template < Size byteSize >
+    class Hasher : virtual public CryptoOperation < byteSize > {
+    protected:
+        auto run () noexcept -> Hasher & override = 0;
 
-
-namespace Utility {
-    template<Size byteSize>
-    struct TypeParseTraits<Hasher<byteSize>> {
-        constexpr static StringLiteral name = "Hasher";
+    public:
+        inline auto hash () noexcept -> Hasher & { return this->run(); }
     };
+
+}
+
+namespace cds { // NOLINT(modernize-concat-nested-namespaces)
+    namespace utility {
+
+        template<Size byteSize>
+        struct TypeParseTraits<Hasher<byteSize>> {
+            constexpr static StringLiteral name = "Hasher";
+        };
+
+    }
 }
 
 #endif //CDS_HASHER_HPP

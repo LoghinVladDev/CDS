@@ -1,43 +1,107 @@
-
-#include <CDS/Array>
-#include <CDS/HashMap>
 #include <iostream>
+#include <fstream>
+#include <algorithm>
+#include <list>
+#include <vector>
+using namespace std;
+ifstream fin ("vacanta2020.in");
+ofstream fout ("vacanta2020.out");
+int n,m,i,j,c,fr[35002],ticketsNo;
+int maxValue = 0x7FFFFFFF,nodeHasEdgeWith1[35002];
+long long dist[35002];
 
-class A {
-public:
-    A() noexcept { std :: cout << "Create\n"; }
-    ~A() noexcept { std :: cout << "Delete\n"; }
+struct graphEdge {
+    int node, cost;
 };
+list <graphEdge> Mat[35001];
 
-int main () {
+struct pathEdge {
+    int from = -1, to = -1, cost = -1;
+};
+vector <pathEdge> Edges[35001];
 
-    Array < int > a = { 1, 2, 3 };
+int edgeCost (int node, int val) {
+    for (auto & i : Mat[node])
+        if (i.node == val)
+            return i.cost;
+    return 0;
+}
 
-    std :: cout << a [1] << '\n';
+void copyPrevEdges (int fromNode, int toNode) {
+    Edges[toNode].clear();
+    for (auto & i : Edges[fromNode])
+        Edges[toNode].push_back(i);
+}
 
-    for ( auto & e : a )
-        std :: cout << e << '\n';
+void dijkstra (int finalNode) {
+    int cost = edgeCost(1,finalNode);
+    pathEdge e;
+    if (cost) {
+        dist[finalNode] = 0;
+        nodeHasEdgeWith1[finalNode] = 1;
+        e.from = 1;
+        e.to = finalNode;
+        e.cost = cost;
+        Edges[finalNode].push_back(e);
+        return;
+    }
+    int i;
+    i = 1;
+    while (i <= n) {
+        int min = maxValue;
+        int node = -1;
+        for (j = 1;j <= n;j++)
+            if (dist[j] < min && ! fr[j]) {
+                min = dist[j];
+                node = j;
+            }
+        if (node == -1) {
+            i++;
+            continue;
+        }
+        if (node == finalNode)
+            return;
+        fr[node] = 1;
+        for (j = 1;j <= n;j++) {
+            cost = edgeCost(node,j);
+            if (dist[node] + cost < dist[j] && cost) {
+                if (nodeHasEdgeWith1[node])
+                    dist[node] = edgeCost(node,1);
+                dist[j] = dist[node] + cost;
+                copyPrevEdges(node, j);
+                e.from = node;
+                e.to = j;
+                e.cost = cost;
+                Edges[j].push_back(e);
+            }
+        }
+        i++;
+    }
+}
 
-    LinkedList < int > ll = { 1, 2, 3, 4, 5 };
-
-    for ( auto & e : ll )
-        std :: cout << e << '\n';
-
-    OrderedSet < int > os = { 1, 2, 3, 1, 2, 3 };
-    UnorderedSet < int > us = { 1, 2, 3, 1, 2, 3 };
-
-    for ( auto & e : os )
-        std :: cout << e << '\n';
-    for ( auto & e : us )
-        std :: cout << e << '\n';
-
-    HashMap <int, int> const hm = { { 1, 2 }, { 3, 4 }, { 5, 6 } };
-
-    for ( auto & p : hm )
-        std :: cout << p << '\n';
-
-    for ( auto it = hm.rbegin(); it != hm.rend(); ++ it )
-        std :: cout << * it << '\n';
-
+int main() {
+    fin >> n >> m >> ticketsNo;
+    while (m--) {
+        fin >> i >> j >> c;
+        graphEdge e = {j,c};
+        Mat[i].push_back(e);
+        e.node = i;
+        Mat[j].push_back(e);
+    }
+    for (int i = 2;i <= n;i++)
+        dist[i] = maxValue;
+    for (i = 2;i <= n;i++) {
+        dijkstra(i);
+        sort (Edges[i].begin(),Edges[i].end(), [](pathEdge a, pathEdge b) { return a.cost > b.cost; });
+    }
+    for (i = 2;i <= n;i++)
+        if (! edgeCost(1,i))
+            for (j = 1;j <= ticketsNo;j++)
+                dist[i] -= Edges[i][j - 1].cost;
+    for (i = 1;i <= n;i++) {
+        if (edgeCost(1,i))
+            dist[i] = 0;
+        fout << dist[i] << ' ';
+    }
     return 0;
 }

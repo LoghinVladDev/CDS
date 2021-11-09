@@ -59,19 +59,21 @@ set(
 
 set(
         CDS_COLLECTION_INTERFACE
+
         ${CDS_PRIMITIVE}
-        src/collection/Collection.hpp
-        src/collection/ordered/List.hpp
-        src/collection/unordered/Set.hpp
-        src/collection/unordered/SetBase.hpp
+
+        src/collection/abstract/Collection.hpp
+        src/collection/abstract/List.hpp
+        src/collection/abstract/Set.hpp
+        src/collection/abstract/ListSet.hpp
         src/collection/unordered/HashMap.hpp
 )
 
 set(
         CDS_COLLECTION_ORDERED
 
-        src/collection/ordered/LinkedListPublic.hpp
         src/collection/ordered/LinkedList.hpp
+        src/collection/ordered/DoubleLinkedList.hpp
 
         src/collection/ordered/OrderedSet.hpp
         src/collection/ordered/Queue.hpp

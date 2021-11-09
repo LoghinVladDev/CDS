@@ -26,6 +26,7 @@
 #endif
 
 bool SequenceTest::execute() noexcept {
+    using namespace cds;
 //    delete Memory::instance().replaceAllocator ( new Memory::LeakDetectionAllocator () );
     bool ok = true;
     this->log("Start of test Sequence ... ");

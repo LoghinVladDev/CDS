@@ -89,15 +89,15 @@
 
 #define __CDS_cpplang_ConstexprOverride constexpr /* NOLINT(bugprone-reserved-identifier) */
 
-namespace Utility {
+namespace cds {
 
-    template<typename T, typename U = T>
-    constexpr auto forward(T &value) noexcept -> T && {
+    template < typename T, typename U = T >
+    constexpr auto forward(T & value) noexcept -> T && {
         return std::forward(value);
     }
 
     template<typename T, typename U = T>
-    constexpr auto exchange(T &obj, U &&newValue) -> T {
+    constexpr auto exchange(T & obj, U && newValue) -> T {
         return std::exchange(obj, newValue);
     }
 
@@ -119,7 +119,7 @@ namespace Utility {
 
 #define __CDS_cpplang_ConstexprOverride __CDS_OptionalInline /* NOLINT(bugprone-reserved-identifier) */
 
-namespace Utility {
+namespace cds {
 
     template < typename T >
     constexpr auto forward ( typename std :: remove_reference < T > :: type & value ) noexcept -> T && {
@@ -254,20 +254,24 @@ namespace Utility {
 
 #endif
 
-static inline auto __CDS_compilerVersionString() noexcept -> StringLiteral { /* NOLINT(bugprone-reserved-identifier) */
-    static char buffer[9] = {
-            __CDS_compiler_version / 10000 % 100 / 10 + '0',
-            __CDS_compiler_version / 10000 % 100 % 10 + '0',
-            '.',
-            __CDS_compiler_version / 100 % 100 / 10 + '0',
-            __CDS_compiler_version / 100 % 100 % 10 + '0',
-            '.',
-            __CDS_compiler_version % 100 / 10 + '0',
-            __CDS_compiler_version % 100 % 10 + '0',
-            '\0'
-    };
+namespace cds { // NOLINT(modernize-concat-nested-namespaces)
+    namespace utility {
+        static inline auto __CDS_compilerVersionString() noexcept -> StringLiteral { /* NOLINT(bugprone-reserved-identifier) */
+            static char buffer[9] = {
+                    __CDS_compiler_version / 10000 % 100 / 10 + '0',
+                    __CDS_compiler_version / 10000 % 100 % 10 + '0',
+                    '.',
+                    __CDS_compiler_version / 100 % 100 / 10 + '0',
+                    __CDS_compiler_version / 100 % 100 % 10 + '0',
+                    '.',
+                    __CDS_compiler_version % 100 / 10 + '0',
+                    __CDS_compiler_version % 100 % 10 + '0',
+                    '\0'
+            };
 
-    return buffer;
+            return buffer;
+        }
+    }
 }
 
 //// UNCOMMENT last condition if compiling MSVC c++latest

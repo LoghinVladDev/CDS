@@ -11,17 +11,21 @@
 
 #include <functional>
 
-class Request : public Object {
-private:
+namespace cds {
 
-    Socket socket {};
+    class Request : public Object {
+    private:
 
-    String _outParams;
+        Socket socket {};
 
-public:
+        String _outParams;
+
+    public:
 
 
-};
+    };
+
+}
 
 __CDS_RegisterParseType(Request)
 

@@ -12,26 +12,33 @@
 #include <openssl/evp.h>
 #endif
 
-template < Size byteSize >
-class __CDS_MaybeUnused SignatureGeneratorED25519 : public AsymmetricCryptoOperation < byteSize >, public SignatureVerifier < byteSize > {
-    auto run () noexcept -> SignatureGeneratorED25519 & override {
+namespace cds {
 
-#if defined(CDS_CRYPTO_OPENSSL)
+    template < Size byteSize >
+    class __CDS_MaybeUnused SignatureGeneratorED25519 : public AsymmetricCryptoOperation < byteSize >, public SignatureVerifier < byteSize > {
+        auto run () noexcept -> SignatureGeneratorED25519 & override {
 
-
-#endif
-
-        return * this;
-    }
-};
+    #if defined(CDS_CRYPTO_OPENSSL)
 
 
+    #endif
 
-namespace Utility {
-    template<Size byteSize>
-    struct TypeParseTraits<SignatureGeneratorED25519<byteSize>> {
-        constexpr static StringLiteral name = "SignatureGeneratorED25519";
+            return * this;
+        }
     };
+
+}
+
+
+namespace cds { // NOLINT(modernize-concat-nested-namespaces)
+    namespace utility {
+
+        template<Size byteSize>
+        struct TypeParseTraits<SignatureGeneratorED25519<byteSize>> {
+            constexpr static StringLiteral name = "SignatureGeneratorED25519";
+        };
+
+    }
 }
 
 

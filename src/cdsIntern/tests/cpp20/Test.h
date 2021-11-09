@@ -22,12 +22,13 @@
 #undef BACKGROUND_GREEN
 #undef BACKGROUND_BLUE
 #endif
+using namespace cds;
 
 class Test {
 public:
     class TerminalColor {
     public:
-        enum Modifier : uint32 {
+        enum Modifier : cds :: uint32 {
             RESET = FLAG(0),
 
             ENABLE_BOLD = FLAG(1),
@@ -60,23 +61,23 @@ public:
         };
 
     public:
-        typedef uint32 Flags;
+        typedef cds :: uint32 Flags;
     private:
 
-        static HashMap < Modifier, int > colorMap;
+        static cds :: HashMap < Modifier, int > colorMap;
         Flags f = FOREGROUND_DEFAULT | BACKGROUND_DEFAULT;
     public:
         [[nodiscard]] auto format () const noexcept -> Flags { return this->f; }
 
         constexpr explicit TerminalColor ( Flags f ) noexcept : f(f) {}
         constexpr TerminalColor ( TerminalColor const & ) noexcept = default;
-        static auto asList ( Flags f ) noexcept -> String {
+        static auto asList ( Flags f ) noexcept -> cds :: String {
 #if defined(_WIN32)
             return "";
 #endif
 
-            String res;
-            FOREACH_FLAG(0, 31, uint32, i ) {
+            cds :: String res;
+            FOREACH_FLAG(0, 31, cds :: uint32, i ) {
 
                 __CDS_WarningSuppression_UseScopedEnum_SuppressEnable
 
@@ -103,23 +104,23 @@ public:
     };
 
 private:
-    Size logDepth = 0;
+    cds :: Size logDepth = 0;
 
 protected:
-    [[nodiscard]] auto inline getDepthString() const noexcept -> String {
-        return String("\t") * this->logDepth;
+    [[nodiscard]] auto inline getDepthString() const noexcept -> cds :: String {
+        return cds :: String("\t") * this->logDepth;
     }
 
 public:
     virtual auto execute () noexcept -> bool = 0;
-    auto start (String const & testName) noexcept -> bool {
+    auto start (cds :: String const & testName) noexcept -> bool {
         auto start = std::chrono::high_resolution_clock::now();
 
         this->logBold("Start of test '%s', on platform : '%s', compiler : '%s', version : '%s', cpp standard : '%s'",
             testName.cStr(),
             __CDS_Platform,
             __CDS_compiler_name,
-            __CDS_compilerVersionString(),
+            cds :: utility :: __CDS_compilerVersionString(),
             __CDS_cpplang_core_version_name
         );
 
@@ -130,14 +131,14 @@ public:
                 testName.cStr(),
                 __CDS_Platform,
                 __CDS_compiler_name,
-                __CDS_compilerVersionString(),
+                cds :: utility :: __CDS_compilerVersionString(),
                 __CDS_cpplang_core_version_name
             ):
             this->logError("'%s' test Not OK, on platform : '%s', on compiler : '%s', version : '%s', cpp standard : '%s'",
                 testName.cStr(),
                 __CDS_Platform,
                 __CDS_compiler_name,
-                __CDS_compilerVersionString(),
+                cds :: utility :: __CDS_compilerVersionString(),
                 __CDS_cpplang_core_version_name
             );
 
@@ -151,7 +152,7 @@ public:
     }
 
     template < typename Function >
-    auto executeSubtest ( String const & title, Function const & subtest ) noexcept -> void {
+    auto executeSubtest ( cds :: String const & title, Function const & subtest ) noexcept -> void {
         this->logDepth++;
         this->logBold("-----Start of subtest '%s'-----", title.cStr());
         this->logDepth++;
@@ -161,11 +162,11 @@ public:
         this->logDepth--;
     }
 
-    auto logOK ( String const & ) noexcept -> void;
-    auto logError (String const &) noexcept -> void;
-    auto logWarning (String const &) noexcept -> void;
-    auto log(String const &) noexcept -> void;
-    auto logBold(String const &) noexcept -> void;
+    auto logOK ( cds :: String const & ) noexcept -> void;
+    auto logError ( cds :: String const &) noexcept -> void;
+    auto logWarning ( cds :: String const &) noexcept -> void;
+    auto log( cds :: String const &) noexcept -> void;
+    auto logBold( cds :: String const &) noexcept -> void;
 
     auto logOK ( const char *, ... ) noexcept -> void;
     auto logError ( const char *, ... ) noexcept -> void;

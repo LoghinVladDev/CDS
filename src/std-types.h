@@ -5,26 +5,30 @@
 #ifndef CDS_STD_TYPES_H
 #define CDS_STD_TYPES_H
 
-typedef char * CString;
-typedef const char * StringLiteral;
+namespace cds {
 
-typedef unsigned char uint8;
-typedef unsigned short int uint16;
-typedef unsigned int uint32;
-typedef unsigned long long int uint64;
+    using CString           = char *;
+    using StringLiteral     = const char *;
 
-typedef signed char sint8;
-typedef signed short int sint16;
-typedef signed int sint32;
-typedef signed long long int sint64;
+    using uint8             = unsigned char;
+    using uint16            = unsigned short int;
+    using uint32            = unsigned int;
+    using uint64            = unsigned long long int;
 
-typedef uint8 Byte;
+    using sint8             = signed char;
+    using sint16            = signed short int;
+    using sint32            = signed int;
+    using sint64            = signed long long int;
 
-typedef uint64 Size;
-typedef sint64 SignedSize;
+    using Byte              = uint8;
 
-typedef SignedSize Index;
+    using Size              = uint64;
+    using SignedSize        = sint64;
 
-typedef Size AddressValueType;
+    using Index             = sint64;
+
+    using AddressValueType  = uint64;
+
+}
 
 #endif //CDS_STD_TYPES_H

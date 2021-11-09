@@ -8,17 +8,21 @@
 #include <CDS/Object>
 #include <ctime>
 
-class DateTime : public Object {
-private:
-    time_t _raw;
+namespace cds {
 
-public:
-    
-};
+    class DateTime : public Object {
+    private:
+        time_t _raw;
 
-class Duration {
+    public:
 
-};
+    };
+
+    class Duration {
+
+    };
+
+}
 
 __CDS_RegisterParseType(DateTime)
 __CDS_RegisterParseType(Duration)

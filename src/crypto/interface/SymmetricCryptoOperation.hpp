@@ -7,25 +7,34 @@
 
 #include <CDS/crypto/CryptoOperation>
 
-template < Size byteSize >
-class SymmetricCryptoOperation : virtual public CryptoOperation < byteSize > {
-public:
-    using KeyType = CryptoBlock < byteSize >;
+namespace cds {
 
-protected:
-    KeyType _privateKey;
+    template < Size byteSize >
+    class SymmetricCryptoOperation : virtual public CryptoOperation < byteSize > {
+    public:
+        using KeyType = CryptoBlock < byteSize >;
 
-public:
-    inline auto privateKey () const noexcept -> KeyType const & { return this->_privateKey; }
-    inline auto privateKey () noexcept -> KeyType & { return this->_privateKey; }
+    protected:
+        KeyType _privateKey;
 
-};
+    public:
+        inline auto privateKey () const noexcept -> KeyType const & { return this->_privateKey; }
+        inline auto privateKey () noexcept -> KeyType & { return this->_privateKey; }
 
-namespace Utility {
-    template<Size byteSize>
-    struct TypeParseTraits<SymmetricCryptoOperation<byteSize>> {
-        constexpr static StringLiteral name = "SymmetricCryptoOperation";
     };
+
+}
+
+
+namespace cds {
+    namespace utility {
+
+        template<Size byteSize>
+        struct TypeParseTraits<SymmetricCryptoOperation<byteSize>> {
+            constexpr static StringLiteral name = "SymmetricCryptoOperation";
+        };
+
+    }
 }
 
 #endif //CDS_SYMMETRICCRYPTOOPERATION_HPP

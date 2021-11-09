@@ -8,55 +8,59 @@
 #include <CDS/InputStream>
 #include <CDS/OutputStream>
 
-class Stream : public InputStream, public OutputStream {
-private:
-    class Console;
+namespace cds {
 
-public:
-    static Console console;
-};
+    class Stream : public InputStream, public OutputStream {
+    private:
+        class Console;
 
-class Stream::Console : public Stream {
-private:
-    friend class Stream;
+    public:
+        static Console console;
+    };
 
-    Console() noexcept : Stream() {
-        this->flags = INPUT | OUTPUT;
-        this->handle = Stream::Console::CONSOLE_HANDLE;
-    }
+    class Stream::Console : public Stream {
+    private:
+        friend class Stream;
 
-    Console (Console const & o) noexcept = default;
-    Console (Console && o) noexcept = default;
-    ~Console () noexcept override = default;
+        Console() noexcept : Stream() {
+            this->flags = INPUT | OUTPUT;
+            this->handle = Stream::Console::CONSOLE_HANDLE;
+        }
 
-    constexpr static Handle in = 0;
-    constexpr static Handle out = 1;
+        Console (Console const & o) noexcept = default;
+        Console (Console && o) noexcept = default;
+        ~Console () noexcept override = default;
 
-    constexpr static Handle CONSOLE_HANDLE = -2;
+        constexpr static Handle in = 0;
+        constexpr static Handle out = 1;
 
-public:
+        constexpr static Handle CONSOLE_HANDLE = -2;
 
-    inline auto readLine (String const & sep = "\n") noexcept (false) -> String override {
-        this->handle = in;
-        auto s = InputStream::readLine(sep);
-        this->handle = CONSOLE_HANDLE;
+    public:
 
-        return s;
-    }
+        inline auto readLine (String const & sep = "\n") noexcept (false) -> String override {
+            this->handle = in;
+            auto s = InputStream::readLine(sep);
+            this->handle = CONSOLE_HANDLE;
 
-    auto writeBytes ( void const * p, Size s ) noexcept(false) -> Size override {
-        return AbstractStream::primitiveWrite( Console::out, p, s );
-    }
+            return s;
+        }
 
-    auto readBytes ( void * p, Size s ) noexcept(false) -> Size override {
-        return AbstractStream::primitiveRead( Console::in, p, s );
-    }
+        auto writeBytes ( void const * p, Size s ) noexcept(false) -> Size override {
+            return AbstractStream::primitiveWrite( Console::out, p, s );
+        }
 
-    auto toString () const noexcept -> String override {
-        return "";
-    }
-};
+        auto readBytes ( void * p, Size s ) noexcept(false) -> Size override {
+            return AbstractStream::primitiveRead( Console::in, p, s );
+        }
 
-inline Stream::Console Stream::console;
+        auto toString () const noexcept -> String override {
+            return "";
+        }
+    };
+
+    inline Stream::Console Stream::console;
+
+}
 
 #endif //CDS_STREAM_HPP
