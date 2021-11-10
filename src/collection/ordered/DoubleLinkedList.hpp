@@ -11,6 +11,8 @@
 #include <CDS/Traits>
 #include <CDS/Memory>
 
+#include <CDS/Hasher>
+
 namespace cds {
 
     template < typename T >

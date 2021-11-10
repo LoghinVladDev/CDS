@@ -6,18 +6,7 @@
 #define CDS_ORDEREDSET_HPP
 
 #include <CDS/ListSet>
-
-namespace cds { // NOLINT(modernize-concat-nested-namespaces)
-    namespace utility {
-
-        template <class T> __CDS_Requires( Comparable <T> )
-        class __CDS_MaybeUnused DefaultSetComparator : public Comparator<T> {
-        public:
-            __CDS_OptimalInline auto operator () (T const & a, T const & b) const noexcept -> bool { return a < b; }
-        };
-
-    }
-}
+#include <CDS/Comparator>
 
 namespace cds {
 

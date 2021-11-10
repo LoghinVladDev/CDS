@@ -221,17 +221,6 @@ namespace cds {
 
 }
 
-#include <CDS/FunctorInterface>
-
-namespace cds {
-
-    template <class T, class C>
-    concept ValidSetComparator =
-            std :: is_base_of < Comparator<T>, C > :: value ||
-            std :: is_invocable < C, T, T > :: type :: value;
-
-}
-
 #endif
 
 #endif //CDS_CONCEPTS_HPP

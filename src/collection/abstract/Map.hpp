@@ -12,6 +12,7 @@
 #include <CDS/Pair>
 #include <CDS/Optional>
 #include <CDS/Reference>
+#include <CDS/Hasher>
 
 namespace cds {
 

@@ -38,6 +38,7 @@
 
 #include <CDS/Traits>
 #include <CDS/Concepts>
+#include <CDS/Comparator>
 
 namespace cds {
 

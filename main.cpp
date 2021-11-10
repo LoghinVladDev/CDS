@@ -1,9 +1,9 @@
-#include <CDS/HashMap>
+#include <CDS/Union>
 
 using namespace cds;
 
 int main () {
-    HashMap <int, int> m;
+    Array <int> m;
 
     std :: cout << m << '\n';
 

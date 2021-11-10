@@ -7,6 +7,7 @@
 
 #include "../prepro.h"
 #include <ostream>
+#include <CDS/Hasher>
 
 namespace cds {
 
