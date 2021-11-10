@@ -264,6 +264,33 @@ namespace cds {
     #endif
             }
         }
+
+    private:
+
+        template < typename ... Types, EnableIf < sizeof ... (Types) == 0 > = 0 >
+        auto static accumulateTypesToString () noexcept -> String {
+            return "";
+        }
+
+        template < typename FirstType, typename ... Types >
+        auto static accumulateTypesToString () noexcept -> String {
+            if ( sizeof ... (Types) == 0 )
+                return utility :: TypeParseTraits < FirstType > :: name;
+            return String(utility :: TypeParseTraits < FirstType > :: name) + ", " + accumulateTypesToString < Types ... > ();
+        }
+
+    public:
+
+        __CDS_NoDiscard auto toString() const noexcept -> String override {
+            std :: stringstream oss;
+            oss << "Function " << utility :: TypeParseTraits < ReturnType > :: name << " ( ";
+
+            oss << Function :: accumulateTypesToString < ArgumentTypes ... > ();
+
+            oss << " ) at " << std :: hex << reinterpret_cast < AddressValueType > ( this->pCallableObject ) << std :: dec;
+
+            return oss.str();
+        }
     };
 
 }

@@ -943,7 +943,7 @@ namespace cds {
 
 }
 
-#include <CDS/LinkedList>
+#include <CDS/DoubleLinkedList>
 
 namespace cds {
 

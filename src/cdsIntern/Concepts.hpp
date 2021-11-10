@@ -5,6 +5,8 @@
 #ifndef CDS_CONCEPTS_HPP
 #define CDS_CONCEPTS_HPP
 
+#include <CDS/Compiler>
+
 #if __CDS_cpplang_Concepts_available
 
 namespace cds {
@@ -207,6 +209,26 @@ namespace cds {
     template < typename Accumulator, typename T >
     concept IndexedAccumulatorFor =
             FunctionOver < Accumulator, returnOf < Accumulator >, Index, returnOf < Accumulator >, T >;
+
+}
+
+namespace cds {
+
+    template < typename T >
+    concept Comparable = requires(T const &a, T const &b) {
+        std::is_convertible<decltype(a < b), bool>::value;
+    };
+
+}
+
+#include <CDS/FunctorInterface>
+
+namespace cds {
+
+    template <class T, class C>
+    concept ValidSetComparator =
+            std :: is_base_of < Comparator<T>, C > :: value ||
+            std :: is_invocable < C, T, T > :: type :: value;
 
 }
 

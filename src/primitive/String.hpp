@@ -4109,7 +4109,7 @@ namespace cds {
          * @test Not Applicable
          */
         friend __CDS_OptionalInline auto operator << ( std::ostream & out, String const & s ) noexcept -> std::ostream & {
-            return ( out << (s._p == nullptr ? "null" : s._p) );
+            return ( out << (s._p == nullptr ? "" : s._p) );
         }
 
         /**

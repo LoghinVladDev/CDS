@@ -6,7 +6,7 @@
 #ifndef CDS_QUEUE_HPP
 #define CDS_QUEUE_HPP
 
-#include <CDS/LinkedList>
+#include <CDS/SingleLinkedList>
 
 namespace cds {
 

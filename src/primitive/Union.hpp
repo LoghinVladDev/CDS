@@ -8,6 +8,8 @@
 #include <CDS/Object>
 #include <CDS/Warnings>
 #include <CDS/Memory>
+#include <CDS/Utility>
+#include <CDS/DoubleLinkedList>
 
 __CDS_WarningSuppression_UnsafeDeleteVoidPtr_SuppressEnable
 

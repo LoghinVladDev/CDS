@@ -4,6 +4,7 @@
 
 #ifndef CDS_ORDEREDSET_HPP
 #define CDS_ORDEREDSET_HPP
+
 #include <CDS/ListSet>
 
 namespace cds { // NOLINT(modernize-concat-nested-namespaces)
@@ -17,19 +18,6 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
     }
 }
-
-#if __CDS_cpplang_Concepts_available
-
-namespace cds {
-
-template <class T, class C>
-concept ValidSetComparator =
-    std::is_base_of<Comparator<T>, C>::value ||
-    std::is_invocable< C, T, T > :: type :: value;
-
-}
-
-#endif
 
 namespace cds {
 
@@ -202,37 +190,5 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
     }
 }
-
-#ifndef _OMIT_SEQUENCE_IMPL
-#ifndef _CDS_ORDERED_SET_SEQUENCE_IMPL // NOLINT(bugprone-reserved-identifier)
-#define _CDS_ORDERED_SET_SEQUENCE_IMPL // NOLINT(bugprone-reserved-identifier)
-#include <CDS/Sequence>
-
-namespace cds {
-
-    template <class T, class C> __CDS_Requires ( ValidSetComparator <T, C> )
-    auto OrderedSet<T, C>::sequence() const & noexcept -> Sequence < OrderedSet < T, C > const > {
-        return Sequence < typename std :: remove_reference < decltype (*this) > :: type > (*this);
-    }
-
-    template <class T, class C> __CDS_Requires ( ValidSetComparator <T, C> )
-    auto OrderedSet<T, C>::sequence() & noexcept -> Sequence < OrderedSet < T, C > > {
-        return Sequence < typename std :: remove_reference < decltype (*this) > :: type > (*this);
-    }
-
-    template <class T, class C> __CDS_Requires ( ValidSetComparator <T, C> )
-    auto OrderedSet<T, C>::sequence() const && noexcept -> Sequence < OrderedSet < T, C > const > {
-        return Sequence < typename std :: remove_reference < decltype (*this) > :: type > (std::move(*this));
-    }
-
-    template <class T, class C> __CDS_Requires ( ValidSetComparator <T, C> )
-    auto OrderedSet<T, C>::sequence() && noexcept -> Sequence < OrderedSet < T, C > > {
-        return Sequence < typename std :: remove_reference < decltype (*this) > :: type > (std::move(*this));
-    }
-
-}
-
-#endif
-#endif
 
 #endif //CDS_ORDEREDSET_HPP

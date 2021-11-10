@@ -144,11 +144,9 @@ namespace cds {
             this->promiseObjectUsed.reset();
             this->promiseObjectReady.reset();
 
-            this->pTaskThread = Memory :: instance().create < Runnable > (
-                    [&] {
-                        this->yield ( this->task ( std :: forward < Args > ( args ) ... ), true );
-                    }
-            );
+            auto task = [&] { this->yield ( this->task ( std :: forward < Args > ( args ) ... ), true ); };
+
+            this->pTaskThread = Memory :: instance().create < Runnable < decltype (task) > > ( task );
 
             this->pTaskThread->start();
             this->running = true;

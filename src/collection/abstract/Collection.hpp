@@ -33,19 +33,6 @@
 
 #endif
 
-#if __CDS_cpplang_Concepts_available == true
-
-namespace cds {
-
-    template < typename T >
-    concept Comparable = requires(T const &a, T const &b) {
-        std::is_convertible<decltype(a < b), bool>::value;
-    };
-
-}
-
-#endif
-
 #include <type_traits>
 #include <CDS/Object>
 
@@ -53,13 +40,6 @@ namespace cds {
 #include <CDS/Concepts>
 
 namespace cds {
-
-    template < typename T >
-    class Comparator {
-    public:
-        virtual auto operator () (T const &, T const &) const noexcept -> bool = 0;
-    };
-
 
     template < typename C >
     class Sequence;

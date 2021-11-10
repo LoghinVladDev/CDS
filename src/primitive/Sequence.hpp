@@ -4163,14 +4163,14 @@ namespace cds {
     template < typename T >
     Sequence ( DoubleLinkedList < T > && ) -> Sequence < DoubleLinkedList < T > >;
 
-    template < typename T >
-    Sequence ( OrderedSet < T > & ) -> Sequence < OrderedSet < T > >;
+    template < typename T, typename C >
+    Sequence ( OrderedSet < T, C > & ) -> Sequence < OrderedSet < T, C > >;
 
-    template < typename T >
-    Sequence ( OrderedSet < T > const & ) -> Sequence < OrderedSet < T > const >;
+    template < typename T, typename C >
+    Sequence ( OrderedSet < T, C > const & ) -> Sequence < OrderedSet < T, C > const >;
 
-    template < typename T >
-    Sequence ( OrderedSet < T > && ) -> Sequence < OrderedSet < T > >;
+    template < typename T, typename C >
+    Sequence ( OrderedSet < T, C > && ) -> Sequence < OrderedSet < T, C > >;
 
     template < typename T >
     Sequence ( UnorderedSet < T > & ) -> Sequence < UnorderedSet < T > >;
@@ -4262,6 +4262,53 @@ inline auto cds :: String :: sequence () const && noexcept -> cds :: Sequence < 
 
 inline auto cds :: String :: sequence () && noexcept -> cds :: Sequence < cds :: String > {
     return cds :: Sequence < cds :: RemoveReference < decltype (* this) > > (std::move(* this));
+}
+
+namespace cds {
+
+    template <class T>
+    auto UnorderedSet<T>::sequence() const & noexcept -> Sequence < UnorderedSet<T> const > {
+        return Sequence < typename std :: remove_reference < decltype (*this) > :: type > (*this);
+    }
+
+    template <class T>
+    auto UnorderedSet<T>::sequence() & noexcept -> Sequence<UnorderedSet<T>> {
+        return Sequence < typename std :: remove_reference < decltype (*this) > :: type > (*this);
+    }
+    template <class T>
+    auto UnorderedSet<T>::sequence() const && noexcept -> Sequence < UnorderedSet<T> const > {
+        return Sequence < typename std :: remove_reference < decltype (*this) > :: type > (std::move(*this));
+    }
+
+    template <class T>
+    auto UnorderedSet<T>::sequence() && noexcept -> Sequence<UnorderedSet<T>> {
+        return Sequence < typename std :: remove_reference < decltype (*this) > :: type > (std::move(*this));
+    }
+
+}
+
+namespace cds {
+
+    template <class T, class C> __CDS_Requires ( ValidSetComparator <T, C> )
+    auto OrderedSet<T, C>::sequence() const & noexcept -> Sequence < OrderedSet < T, C > const > {
+        return Sequence < typename std :: remove_reference < decltype (*this) > :: type > (*this);
+    }
+
+    template <class T, class C> __CDS_Requires ( ValidSetComparator <T, C> )
+    auto OrderedSet<T, C>::sequence() & noexcept -> Sequence < OrderedSet < T, C > > {
+        return Sequence < typename std :: remove_reference < decltype (*this) > :: type > (*this);
+    }
+
+    template <class T, class C> __CDS_Requires ( ValidSetComparator <T, C> )
+    auto OrderedSet<T, C>::sequence() const && noexcept -> Sequence < OrderedSet < T, C > const > {
+        return Sequence < typename std :: remove_reference < decltype (*this) > :: type > (std::move(*this));
+    }
+
+    template <class T, class C> __CDS_Requires ( ValidSetComparator <T, C> )
+    auto OrderedSet<T, C>::sequence() && noexcept -> Sequence < OrderedSet < T, C > > {
+        return Sequence < typename std :: remove_reference < decltype (*this) > :: type > (std::move(*this));
+    }
+
 }
 
 __CDS_RegisterParseTypeTemplateT(Sequence)

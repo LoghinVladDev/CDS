@@ -5,9 +5,8 @@
 #ifndef CDS_REFERENCE_HPP
 #define CDS_REFERENCE_HPP
 
-#include <utility>
-#include <functional>
-
+#include <CDS/Object>
+#include <CDS/Traits>
 
 namespace cds { // NOLINT(modernize-concat-nested-namespaces)
     namespace utility { // NOLINT(modernize-concat-nested-namespaces)
@@ -79,7 +78,7 @@ namespace cds {
             std::stringstream oss;
 
             Type < T > :: streamPrint ( oss << "< " << (std::is_const<T>::value ? "const " : "") << "& of 0x" << std::hex
-                << reinterpret_cast < typename PointerBase<T>::PointerType > ( p ) << std::dec << " : " , *p ) << " >";
+                << reinterpret_cast < AddressValueType > ( p ) << std::dec << " : " , *p ) << " >";
             return oss.str();
         }
 

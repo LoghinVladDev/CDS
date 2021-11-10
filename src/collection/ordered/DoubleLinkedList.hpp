@@ -8,8 +8,6 @@
 #include <CDS/List>
 #include <CDS/Concepts>
 
-#include <CDS/LinkedList>
-
 #include <CDS/Traits>
 #include <CDS/Memory>
 
@@ -946,12 +944,12 @@ namespace cds {
         return Sequence < typename std :: remove_reference < decltype (*this) > :: type > (std::move(*this));
     }
 
-    inline auto String::split(ElementType token, Size limit) const noexcept -> LinkedList < String > {
+    inline auto String::split(ElementType token, Size limit) const noexcept -> DoubleLinkedList < String > {
         Index splitIndex = 0;
         if (limit < 1 )
             limit = UINT32_MAX;
 
-        LinkedList < String > segments;
+        DoubleLinkedList < String > segments;
         if ( this->empty() )
             return segments;
 
@@ -975,16 +973,16 @@ namespace cds {
         return segments;
     }
 
-    __CDS_MaybeUnused inline auto String::lines() const noexcept -> LinkedList < String >{
+    __CDS_MaybeUnused inline auto String::lines() const noexcept -> DoubleLinkedList < String >{
         return this->split("\n\r");
     }
 
-    inline auto String::split(String const & delim, Size limit) const noexcept -> LinkedList < String > {
+    inline auto String::split(String const & delim, Size limit) const noexcept -> DoubleLinkedList < String > {
         Index splitIndex = 0;
         if (limit < 1 )
             limit = INT64_MAX;
 
-        LinkedList < String > segments;
+        DoubleLinkedList < String > segments;
         if ( this->empty() )
             return segments;
 
@@ -1006,7 +1004,7 @@ namespace cds {
         return segments;
     }
 
-    __CDS_MaybeUnused inline auto String::splitByString(String const & token, Size limit) const noexcept -> LinkedList < String > {
+    __CDS_MaybeUnused inline auto String::splitByString(String const & token, Size limit) const noexcept -> DoubleLinkedList < String > {
         String copy = * this;
         auto locations = this->find(token);
 
@@ -1018,8 +1016,8 @@ namespace cds {
         return copy.split('\x01');
     }
 
-    inline auto String::find (ElementType e) const noexcept -> LinkedList < Index > {
-        LinkedList < Index > indices;
+    inline auto String::find (ElementType e) const noexcept -> DoubleLinkedList < Index > {
+        DoubleLinkedList < Index > indices;
 
         Index i = 0;
         for ( auto c : (*this) ) {
@@ -1031,8 +1029,8 @@ namespace cds {
         return indices;
     }
 
-    inline auto String::findOf (String const & s) const noexcept -> LinkedList < Index > {
-        LinkedList < Index > indices;
+    inline auto String::findOf (String const & s) const noexcept -> DoubleLinkedList < Index > {
+        DoubleLinkedList < Index > indices;
 
         Index i = 0;
         for ( auto c : (*this) ) {
@@ -1044,8 +1042,8 @@ namespace cds {
         return indices;
     }
 
-    inline auto String::findNotOf (String const & s) const noexcept -> LinkedList < Index > {
-        LinkedList < Index > indices;
+    inline auto String::findNotOf (String const & s) const noexcept -> DoubleLinkedList < Index > {
+        DoubleLinkedList < Index > indices;
 
         Index i = 0;
         for ( auto c : (*this) ) {
@@ -1057,7 +1055,7 @@ namespace cds {
         return indices;
     }
 
-    inline auto String::find (String const & o) const noexcept -> LinkedList < Index > {
+    inline auto String::find (String const & o) const noexcept -> DoubleLinkedList < Index > {
     #if !defined(_MSC_VER)
         Index lpsArray [o.size()];
     #else
@@ -1088,7 +1086,7 @@ namespace cds {
 
         computeLPSArray();
 
-        LinkedList < Index > indices;
+        DoubleLinkedList < Index > indices;
         Index i = 0, j = 0;
         while ( i < static_cast<Index>(this->size()) ) {
             if ( o._p[j] == this->_p[i] ) {

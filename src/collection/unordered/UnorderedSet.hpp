@@ -134,39 +134,6 @@ namespace cds {
 
 }
 
-#ifndef _OMIT_SEQUENCE_IMPL
-#ifndef _CDS_UNORDERED_SET_SEQUENCE_IMPL // NOLINT(bugprone-reserved-identifier)
-#define _CDS_UNORDERED_SET_SEQUENCE_IMPL // NOLINT(bugprone-reserved-identifier)
-#include <CDS/Sequence>
-
-namespace cds {
-
-    template <class T>
-    auto UnorderedSet<T>::sequence() const & noexcept -> Sequence< UnorderedSet<T> const > {
-        return Sequence < typename std :: remove_reference < decltype (*this) > :: type > (*this);
-    }
-
-    template <class T>
-    auto UnorderedSet<T>::sequence() & noexcept -> Sequence<UnorderedSet<T>> {
-        return Sequence < typename std :: remove_reference < decltype (*this) > :: type > (*this);
-    }
-
-    template <class T>
-    auto UnorderedSet<T>::sequence() const && noexcept -> Sequence< UnorderedSet<T> const > {
-        return Sequence < typename std :: remove_reference < decltype (*this) > :: type > (std::move(*this));
-    }
-
-    template <class T>
-    auto UnorderedSet<T>::sequence() && noexcept -> Sequence<UnorderedSet<T>> {
-        return Sequence < typename std :: remove_reference < decltype (*this) > :: type > (std::move(*this));
-    }
-
-}
-
-#endif
-
-#endif
-
 #if __CDS_cpplang_CTAD_available == true
 
 namespace cds {
