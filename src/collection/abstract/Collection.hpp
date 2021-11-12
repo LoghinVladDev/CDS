@@ -583,7 +583,7 @@ namespace cds {
     protected:
 
         __CDS_cpplang_VirtualConstexpr static auto iListContains ( InitializerList list, ElementCRef what ) noexcept -> bool {
-            for ( auto & e : list )
+            for ( auto const & e : list )
                 if ( Type < T > :: compare (e, what) )
                     return true;
 
@@ -678,7 +678,15 @@ namespace cds {
         ) noexcept ( noexcept ( ( * Type < Predicate > :: unsafeAddress () ) ( Type < ElementType > :: unsafeReference() ) ) )
                 -> bool __CDS_Requires( PredicateOver < Predicate, T > ) {
 
-            return this->count(predicate) == count;
+//            return this->count(predicate) == count;
+
+            Size trueCount = 0;
+            for ( auto & e : * this )
+                if ( predicate ( e ) && trueCount < count )
+                    trueCount ++;
+                else if ( trueCount >= count ) return false;
+
+            return trueCount == count;
         }
 
         template < typename Predicate = Function < bool ( ElementCRef ) > >
@@ -688,7 +696,15 @@ namespace cds {
         ) const noexcept ( noexcept ( ( * Type < Predicate > :: unsafeAddress () ) ( Type < ElementType const > :: unsafeReference() ) ) )
                 -> bool __CDS_Requires( PredicateOver < Predicate, T > ) {
 
-            return this->count(predicate) == count;
+//            return this->count(predicate) == count;
+
+            Size trueCount = 0;
+            for ( auto const & e : * this )
+                if ( predicate ( e ) && trueCount < count )
+                    trueCount ++;
+                else if ( trueCount >= count ) return false;
+
+            return trueCount == count;
         }
 
         template < typename Predicate = Function < bool ( ElementCRef ) > >
@@ -698,7 +714,15 @@ namespace cds {
         ) noexcept ( noexcept ( ( * Type < Predicate > :: unsafeAddress () ) ( Type < ElementType > :: unsafeReference() ) ) )
                 -> bool __CDS_Requires( PredicateOver < Predicate, T > ) {
 
-            return this->count(predicate) >= count;
+//            return this->count(predicate) >= count;
+
+            Size trueCount = 0;
+            for ( auto & e : * this )
+                if ( predicate ( e ) && trueCount < count )
+                    trueCount ++;
+                else if ( trueCount >= count ) return true;
+
+            return false;
         }
 
         template < typename Predicate = Function < bool ( ElementCRef ) > >
@@ -708,7 +732,15 @@ namespace cds {
         ) const noexcept ( noexcept ( ( * Type < Predicate > :: unsafeAddress () ) ( Type < ElementType const > :: unsafeReference() ) ) )
                 -> bool __CDS_Requires( PredicateOver < Predicate, T > ) {
 
-            return this->count(predicate) >= count;
+//            return this->count(predicate) >= count;
+
+            Size trueCount = 0;
+            for ( auto const & e : * this )
+                if ( predicate ( e ) && trueCount < count )
+                    trueCount ++;
+                else if ( trueCount >= count ) return true;
+
+            return false;
         }
 
         template < typename Predicate = Function < bool ( ElementCRef ) > >
@@ -718,7 +750,15 @@ namespace cds {
         ) noexcept ( noexcept ( ( * Type < Predicate > :: unsafeAddress () ) ( Type < ElementType > :: unsafeReference() ) ) )
                 -> bool __CDS_Requires( PredicateOver < Predicate, T > ) {
 
-            return this->count(predicate) <= count;
+//            return this->count(predicate) <= count;
+
+            Size trueCount = 0;
+            for ( auto & e : * this )
+                if ( predicate ( e ) && trueCount < count )
+                    trueCount ++;
+                else if ( trueCount > count ) return false;
+
+            return true;
         }
 
         template < typename Predicate = Function < bool ( ElementCRef ) > >
@@ -728,7 +768,15 @@ namespace cds {
         ) const noexcept ( noexcept ( ( * Type < Predicate > :: unsafeAddress () ) ( Type < ElementType const > :: unsafeReference() ) ) )
                 -> bool __CDS_Requires( PredicateOver < Predicate, T > ) {
 
-            return this->count(predicate) <= count;
+//            return this->count(predicate) <= count;
+
+            Size trueCount = 0;
+            for ( auto const & e : * this )
+                if ( predicate ( e ) && trueCount < count )
+                    trueCount ++;
+                else if ( trueCount > count ) return false;
+
+            return true;
         }
 
         template < typename Predicate = Function < bool ( ElementCRef ) > >
@@ -758,7 +806,7 @@ namespace cds {
         ) noexcept ( noexcept ( ( * Type < Predicate > :: unsafeAddress () ) ( Type < ElementType > :: unsafeReference() ) ) )
                 -> bool __CDS_Requires( PredicateOver < Predicate, T > ) {
 
-            return this->lessThan ( count, predicate );
+            return this->atMost ( count, predicate );
         }
 
         template < typename Predicate = Function < bool ( ElementCRef ) > >
@@ -768,7 +816,7 @@ namespace cds {
         ) const noexcept ( noexcept ( ( * Type < Predicate > :: unsafeAddress () ) ( Type < ElementType const > :: unsafeReference() ) ) )
                 -> bool __CDS_Requires( PredicateOver < Predicate, T > ) {
 
-            return this->lessThan ( count, predicate );
+            return this->atMost ( count, predicate );
         }
 
         template < typename Predicate = Function < bool ( ElementCRef ) > >

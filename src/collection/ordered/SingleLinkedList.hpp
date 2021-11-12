@@ -271,12 +271,6 @@ namespace cds {
 
         auto clear () noexcept -> void final;
         auto makeUnique () noexcept -> void override;
-        auto contains ( ElementCRef ) const noexcept -> bool final;
-
-        __CDS_NoDiscard auto toString () const noexcept -> String final;
-
-        auto index ( ElementRef ) noexcept -> Index override;
-        auto index ( ElementCRef ) const noexcept -> Index override;
 
         auto popFront () noexcept (false) -> ElementType override {
             if ( this->empty() )
@@ -390,20 +384,6 @@ namespace cds {
 #include <sstream>
 
 namespace cds {
-
-    template < typename T >
-    auto SingleLinkedList < T > :: toString () const noexcept -> String {
-        if ( this->empty() ) return {"[ ]"};
-
-        std::stringstream out;
-        out << "[ ";
-
-        for ( auto const & e : * this )
-            Type < T > ::streamPrint( out, e ) << ", ";
-
-        auto s = out.str();
-        return s.substr(0, s.length() - 2).append(" ]");
-    }
 
     template < typename T >
     auto SingleLinkedList < T > :: remove ( Index i ) noexcept -> bool {
@@ -754,40 +734,6 @@ namespace cds {
                 newList.pushBack (e);
 
         * this = newList;
-    }
-
-    template < typename T >
-    auto SingleLinkedList < T > :: contains ( ElementCRef element ) const noexcept -> bool {
-        for ( auto const & i : * this )
-            if ( Type < T > :: compare ( i, element ) )
-                return true;
-        return false;
-    }
-
-    template < typename T >
-    auto SingleLinkedList < T > :: index ( ElementCRef element ) const noexcept -> Index {
-        Index current = 0;
-
-        for ( auto & item : (*this) )
-            if ( Type < T > :: compare ( item, element ) )
-                return current;
-            else
-                ++ current;
-
-        return INVALID_POS;
-    }
-
-    template < typename T >
-    auto SingleLinkedList < T > :: index ( ElementRef element ) noexcept -> Index {
-        Index current = 0;
-
-        for ( auto & item : (*this) )
-            if ( Type < T > :: compare ( item, element ) )
-                return current;
-            else
-                ++ current;
-
-        return INVALID_POS;
     }
 
     template < typename T >

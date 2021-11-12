@@ -181,15 +181,11 @@ namespace cds {
             this->_size = 0;
         }
 
-        __CDS_NoDiscard __CDS_cpplang_ConstexprOverride auto empty () const noexcept -> bool final {
-            return this->size() == 0;
-        }
-
         __CDS_NoDiscard __CDS_cpplang_ConstexprOverride auto size () const noexcept -> Size final {
             return this->_size;
         }
 
-        auto __CDS_OptimalInline operator != (ListSet const & o) const noexcept -> bool { return ! this->operator==(o); }
+        __CDS_OptimalInline auto operator != (ListSet const & o) const noexcept -> bool { return ! this->operator==(o); }
 
         auto operator == (ListSet const & o) const noexcept -> bool {
             if ( this == & o ) return true;
@@ -207,8 +203,6 @@ namespace cds {
 
             return this->operator == (*p);
         }
-
-        __CDS_NoDiscard auto toString () const noexcept -> String final;
     };
 
 }
@@ -216,21 +210,6 @@ namespace cds {
 #include <sstream>
 
 namespace cds {
-
-    template < typename T > __CDS_Requires( UniqueIdentifiable <T> )
-    auto ListSet<T>::toString() const noexcept -> String {
-        if ( this->empty() )
-            return {"{ }"};
-
-        std::stringstream out;
-        out << "{ ";
-
-        for ( ElementCRef e : (*this) )
-            Type < T > ::streamPrint( out, e ) << ", ";
-
-        auto s = out.str();
-        return {s.substr(0, s.length() - 2).append(" }")};
-    }
 
     template < typename T > __CDS_Requires( UniqueIdentifiable <T> )
     auto ListSet<T>::remove( ElementCRef e ) noexcept -> bool {

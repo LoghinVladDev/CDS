@@ -5,6 +5,10 @@
 #ifndef CDS_ARRAY_HPP
 #define CDS_ARRAY_HPP
 
+#if !defined(__CDS_LateInclude_Sequence)
+#define __CDS_LateInclude_Sequence
+#endif
+
 #include <CDS/List>
 #include <CDS/Memory>
 
@@ -161,12 +165,6 @@ namespace cds {
 
         auto clear () noexcept -> void final;
         auto makeUnique () noexcept -> void final;
-        auto contains ( ElementCRef ) const noexcept -> bool final;
-
-        __CDS_NoDiscard auto toString () const noexcept -> String final;
-
-        auto index ( ElementCRef ) const noexcept -> Index final;
-        auto index ( ElementRef ) noexcept -> Index final;
 
         __CDS_MaybeUnused auto indices ( ElementCRef ) const noexcept -> DoubleLinkedList < Index >;
 
@@ -463,24 +461,6 @@ namespace cds {
 
 #endif
 
-namespace cds {
-
-    template < typename T >
-    auto Array<T>::toString() const noexcept -> String {
-        if ( this->empty() )
-            return {"[ ]"};
-
-        std::stringstream out;
-        out << "[ ";
-
-        for ( const auto & e : (*this) )
-            Type < T > :: streamPrint( out, e ) << ", ";
-
-        auto s = out.str();
-        return s.substr(0, s.length() - 2).append(" ]");
-    }
-
-}
 
 #if defined(_MSC_VER)
 #pragma push_macro("max")
@@ -910,37 +890,6 @@ namespace cds {
 
         Memory :: instance().destroyArray( exchange ( this->_pData, pNewData ) );
     }
-
-    template < typename T >
-    auto Array<T>::contains( ElementCRef value ) const noexcept -> bool {
-        for ( auto & e : * this ) // NOLINT(readability-use-anyofallof)
-            if ( Type < T > :: compare ( e, value ) )
-                return true;
-        return false;
-    }
-
-    template < typename T >
-    auto Array<T>::index( ElementCRef value ) const noexcept -> Index {
-        Index i = 0;
-        for ( auto & e : * this )
-            if ( Type < T > :: compare ( e, value ) )
-                return i;
-            else
-                i++;
-        return -1;
-    }
-
-    template < typename T >
-    auto Array<T>::index( ElementRef value ) noexcept -> Index {
-        Index i = 0;
-        for ( auto & e : * this )
-            if ( Type < T > :: compare ( e, value ) )
-                return i;
-            else
-                i++;
-        return -1;
-    }
-
 }
 
 #include <CDS/DoubleLinkedList>
@@ -1006,7 +955,10 @@ namespace cds {
 
 }
 
+#if defined(__CDS_LateInclude_Sequence)
+#undef __CDS_LateInclude_Sequence
 #include <CDS/Sequence>
+#endif
 
 namespace cds {
 

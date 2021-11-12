@@ -4309,6 +4309,39 @@ namespace cds {
         return Sequence < typename std :: remove_reference < decltype (*this) > :: type > (std::move(*this));
     }
 
+#if defined(CDS_HASHSET_HPP) && !defined(CDS_HASHSET_SEQUENCE)
+#define CDS_HASHSET_SEQUENCE
+
+    template < typename T, typename H > __CDS_Requires (
+            UniqueIdentifiable < T > &&
+            HashCalculatorHasBoundaryFunction < H >
+    ) auto HashSet < T, H > :: sequence () const & noexcept -> Sequence < HashSet const > {
+        return Sequence < RemoveReference < decltype ( * this ) > ( * this );
+    }
+
+    template < typename T, typename H > __CDS_Requires (
+            UniqueIdentifiable < T > &&
+            HashCalculatorHasBoundaryFunction < H >
+    ) auto HashSet < T, H > :: sequence () & noexcept -> Sequence < HashSet > {
+        return Sequence < RemoveReference < decltype ( * this ) > ( * this );
+    }
+
+    template < typename T, typename H > __CDS_Requires (
+            UniqueIdentifiable < T > &&
+            HashCalculatorHasBoundaryFunction < H >
+    ) auto HashSet < T, H > :: sequence () const && noexcept -> Sequence < HashSet const > {
+        return Sequence < RemoveReference < decltype ( * this ) > ( std :: move ( * this ) );
+    }
+
+    template < typename T, typename H > __CDS_Requires (
+            UniqueIdentifiable < T > &&
+            HashCalculatorHasBoundaryFunction < H >
+    ) auto HashSet < T, H > :: sequence () && noexcept -> Sequence < HashSet > {
+        return Sequence < RemoveReference < decltype ( * this ) > ( std :: move ( * this ) );
+    }
+
+#endif
+
 }
 
 __CDS_RegisterParseTypeTemplateT(Sequence)

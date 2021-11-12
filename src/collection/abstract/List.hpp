@@ -12,6 +12,9 @@
 namespace cds {
 
     template < typename T >
+    class DoubleLinkedList;
+
+    template < typename T >
     class List : public Collection <T> {
     public:
         using ElementType   = typename Collection < T > :: ElementType;
@@ -38,10 +41,6 @@ namespace cds {
     protected:
         using DelegateIterator          = typename Collection < T > :: DelegateIterator;
         using DelegateConstIterator     = typename Collection < T > :: DelegateConstIterator;
-
-    public:
-        virtual auto index ( ElementCRef ) const noexcept -> Index = 0;
-        virtual auto index ( ElementRef ) noexcept -> Index = 0;
 
     protected:
         virtual auto pAt ( Index ) noexcept (false) -> ElementPtr = 0;
@@ -100,7 +99,7 @@ namespace cds {
             if ( this->size() < 2 ) return;
 
             Iterator previous;
-            for ( auto it = this->begin(); it != this->end(); ++ it )
+            for ( auto it = this->begin(), end = this->end(); it != end; ++ it )
                 previous = it;
 
             List < T > :: quickSort ( this->begin(), previous, sortFunction );
@@ -729,6 +728,140 @@ namespace cds {
         __CDS_NoDiscard __CDS_MaybeUnused __CDS_cpplang_ConstexprOverride auto empty () const noexcept -> bool override {
             return this->_size == 0;
         }
+
+        __CDS_NoDiscard auto toString () const noexcept -> String final {
+            if ( this->empty() )
+                return {"[ ]"};
+
+            std::stringstream out;
+            out << "[ ";
+
+            for ( const auto & e : (*this) )
+                Type < T > :: streamPrint( out, e ) << ", ";
+
+            auto s = out.str();
+            return s.substr(0, s.length() - 2).append(" ]");
+        }
+
+        auto index( ElementCRef value ) const noexcept -> Index {
+
+            __CDS_Collection_OperationalLock
+
+            Index i = 0;
+            for ( auto & e : * this )
+                if ( Type < T > :: compare ( e, value ) ) {
+
+                    __CDS_Collection_OperationalUnlock
+                    return i;
+                } else
+                    i++;
+
+            __CDS_Collection_OperationalUnlock
+
+            return -1;
+        }
+
+        __CDS_NoDiscard __CDS_MaybeUnused auto findFirst ( ElementCRef element ) noexcept -> Iterator {
+            for ( auto it = this->begin(), end = this->end(); it != end; ++ it )
+                if ( Type < ElementType > :: compare ( * it, element ) )
+                    return it;
+            return {};
+        }
+
+        __CDS_NoDiscard __CDS_MaybeUnused auto findLast ( ElementCRef element ) noexcept -> Iterator {
+            Iterator last;
+            for ( auto it = this->begin(), end = this->end(); it != end; ++ it )
+                if ( Type < ElementType > :: compare ( * it, element ) )
+                    last = it;
+            return last;
+        }
+
+        __CDS_NoDiscard __CDS_MaybeUnused auto findFirstOf ( Collection < ElementType > const & elements ) noexcept -> Iterator {
+            for ( auto it = this->begin(), end = this->end(); it != end; ++ it )
+                if ( elements.contains( * it ) )
+                    return it;
+            return {};
+        }
+
+        __CDS_NoDiscard __CDS_MaybeUnused auto findFirstNotOf ( Collection < ElementType > const & elements ) noexcept -> Iterator {
+            for ( auto it = this->begin(), end = this->end(); it != end; ++ it )
+                if ( ! elements.contains( * it ) )
+                    return it;
+            return {};
+        }
+
+        __CDS_NoDiscard __CDS_MaybeUnused auto findLastOf ( Collection < ElementType > const & elements ) noexcept -> Iterator {
+            Iterator last;
+
+            for ( auto it = this->begin(), end = this->end(); it != end; ++ it )
+                if ( elements.contains( * it ) )
+                    last = it;
+            return last;
+        }
+
+        __CDS_NoDiscard __CDS_MaybeUnused auto findLastNotOf ( Collection < ElementType > const & elements ) noexcept -> Iterator {
+            Iterator last;
+
+            for ( auto it = this->begin(), end = this->end(); it != end; ++ it )
+                if ( ! elements.contains( * it ) )
+                    last = it;
+            return last;
+        }
+
+        __CDS_NoDiscard __CDS_MaybeUnused auto find ( ElementCRef, Size = limits::U64_MAX ) noexcept -> DoubleLinkedList < Iterator >;
+        __CDS_NoDiscard __CDS_MaybeUnused auto findOf ( Collection < ElementType > const &, Size = limits::U64_MAX ) noexcept -> DoubleLinkedList < Iterator >;
+        __CDS_NoDiscard __CDS_MaybeUnused auto findNotOf ( Collection < ElementType > const &, Size = limits::U64_MAX ) noexcept -> DoubleLinkedList < Iterator >;
+
+        __CDS_NoDiscard __CDS_MaybeUnused auto findFirst ( ElementCRef element ) const noexcept -> ConstIterator {
+            for ( auto it = this->begin(), end = this->end(); it != end; ++ it )
+                if ( Type < ElementType > :: compare ( * it, element ) )
+                    return it;
+            return {};
+        }
+
+        __CDS_NoDiscard __CDS_MaybeUnused auto findLast ( ElementCRef element ) const noexcept -> ConstIterator {
+            ConstIterator last;
+            for ( auto it = this->begin(), end = this->end(); it != end; ++ it )
+                if ( Type < ElementType > :: compare ( * it, element ) )
+                    last = it;
+            return last;
+        }
+
+        __CDS_NoDiscard __CDS_MaybeUnused auto findFirstOf ( Collection < ElementType > const & elements ) const noexcept -> ConstIterator {
+            for ( auto it = this->begin(), end = this->end(); it != end; ++ it )
+                if ( elements.contains( * it ) )
+                    return it;
+            return {};
+        }
+
+        __CDS_NoDiscard __CDS_MaybeUnused auto findFirstNotOf ( Collection < ElementType > const & elements ) const noexcept -> ConstIterator {
+            for ( auto it = this->begin(), end = this->end(); it != end; ++ it )
+                if ( ! elements.contains( * it ) )
+                    return it;
+            return {};
+        }
+
+        __CDS_NoDiscard __CDS_MaybeUnused auto findLastOf ( Collection < ElementType > const & elements ) const noexcept -> ConstIterator {
+            ConstIterator last;
+
+            for ( auto it = this->begin(), end = this->end(); it != end; ++ it )
+                if ( elements.contains( * it ) )
+                    last = it;
+            return last;
+        }
+
+        __CDS_NoDiscard __CDS_MaybeUnused auto findLastNotOf ( Collection < ElementType > const & elements ) const noexcept -> ConstIterator {
+            ConstIterator last;
+
+            for ( auto it = this->begin(), end = this->end(); it != end; ++ it )
+                if ( ! elements.contains( * it ) )
+                    last = it;
+            return last;
+        }
+
+        __CDS_NoDiscard __CDS_MaybeUnused auto find ( ElementCRef, Size = limits::U64_MAX ) const noexcept -> DoubleLinkedList < ConstIterator >;
+        __CDS_NoDiscard __CDS_MaybeUnused auto findOf ( Collection < ElementType > const &, Size = limits::U64_MAX ) const noexcept -> DoubleLinkedList < ConstIterator >;
+        __CDS_NoDiscard __CDS_MaybeUnused auto findNotOf ( Collection < ElementType > const &, Size = limits::U64_MAX ) const noexcept -> DoubleLinkedList < ConstIterator >;
     };
 
 
@@ -742,11 +875,12 @@ namespace cds {
         if ( to >= this->size() ) to = this->size();
 
         Index i = 0;
-        this->forEach([&](ElementCRef element) noexcept -> void {
+
+        for ( auto const & e : * this ) {
             if ( i >= from && i < to )
-                list.add ( element );
+                list.add ( e );
             ++ i;
-        });
+        }
 
         return list;
     }
@@ -817,5 +951,7 @@ namespace cds {
 }
 
 __CDS_RegisterParseTypeTemplateT(List)
+
+#include <DoubleLinkedList.hpp>
 
 #endif //CDS_LIST_HPP

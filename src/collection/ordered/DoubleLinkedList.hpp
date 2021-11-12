@@ -296,12 +296,6 @@ namespace cds {
 
         auto clear () noexcept -> void final;
         auto makeUnique ()  noexcept -> void final;
-        auto contains ( ElementCRef ) const noexcept -> bool final;
-
-        __CDS_NoDiscard auto toString () const noexcept -> String final;
-
-        auto index ( ElementRef ) noexcept -> Index final;
-        auto index ( ElementCRef ) const noexcept -> Index final;
 
         auto popFront ( ) noexcept (false) -> ElementType final {
             if ( this->empty () )
@@ -454,21 +448,6 @@ namespace cds {
 #include <sstream>
 
 namespace cds {
-
-    template < typename T>
-    auto DoubleLinkedList<T>::toString() const noexcept -> String {
-        if ( this->empty() )
-            return {"[ ]"};
-
-        std::stringstream out;
-        out << "[ ";
-
-        for ( const auto & e : (*this) )
-            Type < T > ::streamPrint( out, e ) << ", ";
-
-        auto s = out.str();
-        return {s.substr(0, s.length() - 2).append(" ]")};
-    }
 
     template < typename T >
     auto DoubleLinkedList<T>::remove(Index i) noexcept -> bool {
@@ -816,14 +795,6 @@ namespace cds {
         return * this;
     }
 
-    template < typename T >
-    auto DoubleLinkedList<T>::contains( ElementCRef what ) const noexcept -> bool {
-        for ( const auto & e : (*this) ) // NOLINT(readability-use-anyofallof)
-            if ( Type < T > :: compare ( e, what ) )
-                return true;
-        return false;
-    }
-
 }
 
 #include <CDS/Utility>
@@ -894,35 +865,11 @@ namespace cds {
             this->pushBack( * it );
     }
 
-    template < typename T >
-    auto DoubleLinkedList<T>::index( ElementCRef e ) const noexcept -> Index {
-        Index current = 0;
-
-        for ( auto & item : (*this) )
-            if ( Type < T > :: compare ( item, e ) )
-                return current;
-            else
-                ++ current;
-
-        return -1;
-    }
-
-    template < typename T >
-    auto DoubleLinkedList<T>::index(ElementRef e) noexcept -> Index {
-        Index current = 0;
-
-        for ( auto & item : (*this) )
-            if ( Type < T > :: compare ( item, e ) )
-                return current;
-            else
-                ++ current;
-
-        return -1;
-    }
-
 }
 
+#if ! defined(__CDS_LateInclude_Sequence)
 #include <CDS/Sequence>
+#endif
 
 namespace cds {
 
@@ -1111,6 +1058,94 @@ namespace cds {
         Memory :: instance().destroyArray ( lpsArray );
     #endif
         return indices;
+    }
+
+}
+
+namespace cds {
+
+    template < typename T >
+    __CDS_MaybeUnused auto List < T > :: find ( ElementCRef element, Size count ) noexcept -> DoubleLinkedList < Iterator > {
+        DoubleLinkedList < Iterator > iterators;
+        Size added = 0;
+
+        for ( auto it = this->begin(), end = this->end(); it != end; ++ it )
+            if ( Type < ElementType > :: compare ( element, * it ) && added < count ) {
+                iterators.add(it);
+                ++ added;
+            } else if ( added >= count ) break;
+
+        return iterators;
+    }
+
+    template < typename T >
+    __CDS_MaybeUnused auto List < T > :: findOf ( Collection < ElementType > const & elements, Size count ) noexcept -> DoubleLinkedList < Iterator > {
+        DoubleLinkedList < Iterator > iterators;
+        Size added = 0;
+
+        for ( auto it = this->begin(), end = this->end(); it != end; ++ it )
+            if ( elements.contains ( * it ) && added < count ) {
+                iterators.add(it);
+                ++ added;
+            } else if ( added >= count ) break;
+
+        return iterators;
+    }
+
+    template < typename T >
+    __CDS_MaybeUnused auto List < T > :: findNotOf ( Collection < ElementType > const & elements, Size count ) noexcept -> DoubleLinkedList < Iterator > {
+        DoubleLinkedList < Iterator > iterators;
+        Size added = 0;
+
+        for ( auto it = this->begin(), end = this->end(); it != end; ++ it )
+            if ( ! elements.contains ( * it ) && added < count ) {
+                iterators.add(it);
+                ++ added;
+            } else if ( added >= count ) break;
+
+        return iterators;
+    }
+
+    template < typename T >
+    __CDS_MaybeUnused auto List < T > :: find ( ElementCRef element, Size count ) const noexcept -> DoubleLinkedList < ConstIterator > {
+        DoubleLinkedList < ConstIterator > iterators;
+        Size added = 0;
+
+        for ( auto it = this->begin(), end = this->end(); it != end; ++ it )
+            if ( Type < ElementType > :: compare ( element, * it ) && added < count ) {
+                iterators.add(it);
+                ++ added;
+            } else if ( added >= count ) break;
+
+        return iterators;
+    }
+
+    template < typename T >
+    __CDS_MaybeUnused auto List < T > :: findOf ( Collection < ElementType > const & elements, Size count ) const noexcept -> DoubleLinkedList < ConstIterator > {
+        DoubleLinkedList < ConstIterator > iterators;
+        Size added = 0;
+
+        for ( auto it = this->begin(), end = this->end(); it != end; ++ it )
+            if ( elements.contains ( * it ) && added < count ) {
+                iterators.add(it);
+                ++ added;
+            } else if ( added >= count ) break;
+
+        return iterators;
+    }
+
+    template < typename T >
+    __CDS_MaybeUnused auto List < T > :: findNotOf ( Collection < ElementType > const & elements, Size count ) const noexcept -> DoubleLinkedList < ConstIterator > {
+        DoubleLinkedList < ConstIterator > iterators;
+        Size added = 0;
+
+        for ( auto it = this->begin(), end = this->end(); it != end; ++ it )
+            if ( ! elements.contains ( * it ) && added < count ) {
+                iterators.add(it);
+                ++ added;
+            } else if ( added >= count ) break;
+
+        return iterators;
     }
 
 }

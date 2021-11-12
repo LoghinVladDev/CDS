@@ -65,7 +65,6 @@ namespace cds {
     public:
         virtual auto remove ( ElementCRef ) noexcept -> bool = 0;
         auto clear () noexcept -> void override = 0;
-        __CDS_NoDiscard __CDS_cpplang_ConstexprPureAbstract auto empty () const noexcept -> bool override = 0;
         __CDS_NoDiscard __CDS_cpplang_ConstexprPureAbstract auto size () const noexcept -> Size override = 0;
 
         template < typename V = T, EnableIf < Type < V > :: copyConstructible > = 0 >
@@ -78,7 +77,23 @@ namespace cds {
             return this->add(e);
         }
 
-        __CDS_NoDiscard auto toString () const noexcept -> String override = 0;
+        auto toString() const noexcept -> String final {
+            if ( this->empty() )
+                return {"{ }"};
+
+            std::stringstream out;
+            out << "{ ";
+
+            for ( ElementCRef e : (*this) )
+                Type < T > ::streamPrint( out, e ) << ", ";
+
+            auto s = out.str();
+            return {s.substr(0, s.length() - 2).append(" }")};
+        }
+
+        __CDS_NoDiscard __CDS_cpplang_ConstexprOverride auto empty () const noexcept -> bool final {
+            return this->size () == 0;
+        }
     };
 
 }
