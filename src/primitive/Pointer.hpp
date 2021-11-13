@@ -99,8 +99,21 @@ namespace cds {
         constexpr explicit operator bool () const noexcept { return ! this->isNull(); }
         constexpr auto get () const noexcept -> Pointer { return this->pObj; }
 
-        __CDS_cpplang_VirtualConstexpr virtual auto release () noexcept -> Pointer { auto p = this->pObj; this->pObj = nullptr; return p; }
-        __CDS_cpplang_VirtualConstexpr virtual auto reset ( Pointer p = nullptr ) noexcept -> void { auto oldP = this->pObj; this->pObj = p; Memory::instance().destroy ( oldP ); } // NOLINT(google-default-arguments)
+        __CDS_cpplang_VirtualConstexpr virtual auto release () noexcept -> Pointer {
+            auto p = this->pObj;
+            this->pObj = nullptr;
+            return p;
+        }
+
+        __CDS_OptimalInline virtual auto reset ( Pointer p ) noexcept -> void {
+            auto oldP = this->pObj;
+            this->pObj = p;
+            Memory::instance().destroy ( oldP );
+        } // NOLINT(google-default-arguments)
+
+        __CDS_OptimalInline auto reset () noexcept -> void {
+            return this->reset ( nullptr );
+        }
 
     private:
         template < typename U = T >
@@ -171,7 +184,9 @@ namespace cds {
             return * this;
         }
 
-        __CDS_cpplang_ConstexprDestructor ~UniquePointer() noexcept final { this->reset(); }
+        __CDS_cpplang_ConstexprDestructor ~UniquePointer() noexcept final {
+            Memory :: instance () . destroy ( this->pObj );
+        }
     };
 
     template <class T>

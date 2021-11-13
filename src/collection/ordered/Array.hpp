@@ -542,10 +542,14 @@ namespace cds {
 
     template < typename T >
     Array<T>::Array( Array const & o ) noexcept :
-            _pData( Memory :: instance ().createArray < T * > (o.size()) ),
+            _pData( nullptr ),
             _capacity( o.size() ){
 
         this->_size = o.size();
+
+        if ( this->_size > 0 )
+            this->_pData = Memory :: instance () .createArray < T * > ( this->_size );
+
         for ( auto i = 0; i < o.size(); ++ i )
             this->_pData[i] = Memory :: instance ().create < T > (*o._pData[i]);
     }
