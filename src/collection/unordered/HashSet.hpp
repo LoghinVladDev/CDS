@@ -10,6 +10,9 @@
 
 namespace cds {
 
+    template < typename C >
+    class Sequence;
+
     template < typename T, typename H = utility :: LowCollisionDefaultHashFunction < T > > __CDS_Requires(
             UniqueIdentifiable < T > &&
             HashCalculatorHasBoundaryFunction < H >
@@ -190,7 +193,7 @@ namespace cds {
             }
 
         public:
-            constexpr HashSetDelegateIterator ( Node ** listArray ) noexcept :
+            constexpr explicit HashSetDelegateIterator ( Node ** listArray ) noexcept :
                     DelegateIterator (),
                     _listArray ( listArray ) {
 
@@ -251,7 +254,7 @@ namespace cds {
             }
 
         public:
-            constexpr HashSetDelegateConstIterator ( Node ** listArray ) noexcept :
+            constexpr explicit HashSetDelegateConstIterator ( Node ** listArray ) noexcept :
                     DelegateConstIterator (),
                     _listArray ( listArray ) {
 
@@ -339,7 +342,7 @@ namespace cds {
             this->clear();
 
             Memory :: instance().destroyArray ( exchange ( this->_listArray, exchange ( set._listArray, Memory :: instance().createArray < Node * > ( set._hasher.getBoundary() ) ) ) );
-            std :: memset ( set._listArray, 0, sizeof ( Node * ) * set._hasher.getBoundary() );
+            std :: memset ( set._listArray, 0, sizeof ( Node * ) * set._hasher.getBoundary() ); // NOLINT(bugprone-sizeof-expression)
 
             this->_size = exchange ( set._size, 0 );
 
@@ -366,7 +369,7 @@ namespace cds {
                 this->insert ( e );
         }
 
-        __CDS_OptimalInline HashSet ( InitializerList initializerList ) noexcept {
+        __CDS_OptimalInline HashSet ( InitializerList initializerList ) noexcept { // NOLINT(google-explicit-constructor)
             for ( auto const & e : initializerList )
                 this->insert ( e );
         }
@@ -411,33 +414,35 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 #define CDS_HASHSET_SEQUENCE
 
 namespace cds {
+
     template < typename T, typename H > __CDS_Requires (
             UniqueIdentifiable < T > &&
             HashCalculatorHasBoundaryFunction < H >
     ) auto HashSet < T, H > :: sequence () const & noexcept -> Sequence < HashSet const > {
-        return Sequence < RemoveReference < decltype ( * this ) > ( * this );
+        return Sequence < RemoveReference < decltype ( * this ) > > ( * this );
     }
 
     template < typename T, typename H > __CDS_Requires (
             UniqueIdentifiable < T > &&
             HashCalculatorHasBoundaryFunction < H >
     ) auto HashSet < T, H > :: sequence () & noexcept -> Sequence < HashSet > {
-        return Sequence < RemoveReference < decltype ( * this ) > ( * this );
+        return Sequence < RemoveReference < decltype ( * this ) > > ( * this );
     }
 
     template < typename T, typename H > __CDS_Requires (
             UniqueIdentifiable < T > &&
             HashCalculatorHasBoundaryFunction < H >
     ) auto HashSet < T, H > :: sequence () const && noexcept -> Sequence < HashSet const > {
-        return Sequence < RemoveReference < decltype ( * this ) > ( std :: move ( * this ) );
+        return Sequence < RemoveReference < decltype ( * this ) > > ( std :: move ( * this ) );
     }
 
     template < typename T, typename H > __CDS_Requires (
             UniqueIdentifiable < T > &&
             HashCalculatorHasBoundaryFunction < H >
     ) auto HashSet < T, H > :: sequence () && noexcept -> Sequence < HashSet > {
-        return Sequence < RemoveReference < decltype ( * this ) > ( std :: move ( * this ) );
+        return Sequence < RemoveReference < decltype ( * this ) > > ( std :: move ( * this ) );
     }
+
 }
 
 #endif

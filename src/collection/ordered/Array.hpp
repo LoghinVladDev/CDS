@@ -14,6 +14,9 @@
 
 namespace cds {
 
+    template < typename C >
+    class Sequence;
+
     template < typename T >
     class Array : public List <T> {
     private:
@@ -145,8 +148,14 @@ namespace cds {
             if ( this == & o ) return true;
             if ( o.size() != this->size() ) return false;
 
-            for ( auto i1 = this->begin(), i2 = o.begin(); i1 != this->end() && i2 != o.end(); i1++, i2++ )
-                if ( ! ( Type < T > :: compare ( * i1, * i2 ) ) )
+            for (
+                    auto
+                        a = this->begin(), aEnd = this->end(),
+                        b = o.begin(), bEnd = o.end();
+                    a != aEnd && b != bEnd;
+                    ++ a, ++ b
+            )
+                if ( ! ( Type < T > :: compare ( * a, * b ) ) )
                     return false;
             return true;
         }
@@ -398,11 +407,11 @@ namespace cds {
 
     template < typename T >
     auto Array < T > :: allocFrontGetPtr () noexcept -> ElementPtrRef {
-
         if ( this->_size < this->_capacity ) {
-            Memory :: instance().destroy ( exchange(this->_pData[ this->_size ++ ], nullptr) );
-            for ( Index i = this->_size - 1; i > 0; -- i )
+            for ( Index i = this->_size; i > 0; -- i )
                 this->_pData[i] = this->_pData[i - 1];
+
+            ++ this->_size;
 
             return (this->_pData[0] = nullptr);
         }
@@ -618,7 +627,7 @@ namespace cds {
         this->_capacity = this->size();
         this->_size = l;
 
-        memset ( newBuf + l, 0, (this->_capacity - l) * sizeof(T *) );
+        std :: memset ( newBuf + l, 0, (this->_capacity - l) * sizeof(T *) );
         Memory :: instance().destroyArray ( exchange ( this->_pData, newBuf ) );
 
         return removed;
@@ -879,7 +888,7 @@ namespace cds {
 
         for ( Index i = 0; i < this->size(); ++ i )
             if ( ! newArrContains(pNewData, l, * this->_pData[i]) )
-                pNewData[l ++] = this->_pData[i];
+                pNewData[ ++ l ] = this->_pData[i];
             else
                 Memory :: instance().destroy ( exchange(this->_pData[i], nullptr) );
 
@@ -900,12 +909,9 @@ namespace cds {
     __CDS_MaybeUnused auto Array<T>::indices( ElementCRef value ) const noexcept -> DoubleLinkedList < Index > {
         DoubleLinkedList < Index > indices;
 
-        Index i = 0;
-        for ( auto & e : * this ) {
-            if ( Type < T > :: compare ( e, value ) )
+        for ( Index i = 0; i < this->_size; ++ i )
+            if ( Type < T > :: compare ( * this->_pData[i], value ) )
                 indices.pushBack(i);
-            i++;
-        }
 
         return indices;
     }
@@ -964,22 +970,22 @@ namespace cds {
 
     template < typename T >
     auto Array < T > :: sequence () const & noexcept -> Sequence < Array < T > const > {
-        return Sequence < typename std :: remove_reference < decltype (*this) > :: type > (*this);
+        return Sequence < RemoveReference < decltype (*this) > > (*this);
     }
 
     template < typename T >
     auto Array < T > :: sequence () & noexcept -> Sequence < Array < T > > {
-        return Sequence < typename std :: remove_reference < decltype (*this) > :: type > (*this);
+        return Sequence < RemoveReference < decltype (*this) > > (*this);
     }
 
     template < typename T >
     auto Array < T > :: sequence () const && noexcept -> Sequence < Array < T > const > {
-        return Sequence < typename std :: remove_reference < decltype (*this) > :: type > (std::move(*this));
+        return Sequence < RemoveReference < decltype (*this) > > (std::move(*this));
     }
 
     template < typename T >
     auto Array < T > :: sequence () && noexcept -> Sequence < Array < T > > {
-        return Sequence < typename std :: remove_reference < decltype (*this) > :: type > (std::move(*this));
+        return Sequence < RemoveReference < decltype (*this) > > (std::move(*this));
     }
 
 }

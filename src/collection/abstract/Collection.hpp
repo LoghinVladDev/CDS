@@ -681,10 +681,13 @@ namespace cds {
 //            return this->count(predicate) == count;
 
             Size trueCount = 0;
-            for ( auto & e : * this )
+            for ( auto & e : * this ) {
                 if ( predicate ( e ) && trueCount < count )
                     trueCount ++;
-                else if ( trueCount >= count ) return false;
+                if ( trueCount > count )
+                    return false;
+            }
+
 
             return trueCount == count;
         }
@@ -699,10 +702,12 @@ namespace cds {
 //            return this->count(predicate) == count;
 
             Size trueCount = 0;
-            for ( auto const & e : * this )
+            for ( auto & e : * this ) {
                 if ( predicate ( e ) && trueCount < count )
                     trueCount ++;
-                else if ( trueCount >= count ) return false;
+                if ( trueCount > count )
+                    return false;
+            }
 
             return trueCount == count;
         }
@@ -717,10 +722,12 @@ namespace cds {
 //            return this->count(predicate) >= count;
 
             Size trueCount = 0;
-            for ( auto & e : * this )
-                if ( predicate ( e ) && trueCount < count )
-                    trueCount ++;
-                else if ( trueCount >= count ) return true;
+            for ( auto & e : * this ) {
+                if (predicate(e) && trueCount < count)
+                    trueCount++;
+                if (trueCount >= count)
+                    return true;
+            }
 
             return false;
         }
@@ -735,12 +742,14 @@ namespace cds {
 //            return this->count(predicate) >= count;
 
             Size trueCount = 0;
-            for ( auto const & e : * this )
-                if ( predicate ( e ) && trueCount < count )
-                    trueCount ++;
-                else if ( trueCount >= count ) return true;
+            for ( auto & e : * this ) {
+                if (predicate(e) && trueCount < count)
+                    trueCount++;
+                if (trueCount >= count)
+                    return true;
+            }
 
-            return false;
+            return trueCount >= count;
         }
 
         template < typename Predicate = Function < bool ( ElementCRef ) > >
@@ -753,10 +762,12 @@ namespace cds {
 //            return this->count(predicate) <= count;
 
             Size trueCount = 0;
-            for ( auto & e : * this )
+            for ( auto & e : * this ) {
                 if ( predicate ( e ) && trueCount < count )
                     trueCount ++;
-                else if ( trueCount > count ) return false;
+                if ( trueCount > count )
+                    return false;
+            }
 
             return true;
         }
@@ -771,12 +782,14 @@ namespace cds {
 //            return this->count(predicate) <= count;
 
             Size trueCount = 0;
-            for ( auto const & e : * this )
+            for ( auto & e : * this ) {
                 if ( predicate ( e ) && trueCount < count )
                     trueCount ++;
-                else if ( trueCount > count ) return false;
+                if ( trueCount > count )
+                    return false;
+            }
 
-            return true;
+            return trueCount <= count;
         }
 
         template < typename Predicate = Function < bool ( ElementCRef ) > >

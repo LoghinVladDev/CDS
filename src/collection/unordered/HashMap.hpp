@@ -354,8 +354,14 @@ namespace cds {
             if ( this == & o ) return true;
             if ( this->size() != o.size() ) return false;
 
-            for ( auto b = this->begin(), bOther = o.begin(); b != this->end() && bOther != o.end(); b++, bOther++ )
-                if ( * b != * bOther )
+            for (
+                    auto
+                        a = this->begin(), aEnd = this->end(),
+                        b = o.begin(), bEnd = o.end();
+                    a != aEnd && b != bEnd;
+                    ++ a, ++ b
+            )
+                if ( ! Type < Entry > :: compare ( * a, * b ) )
                     return false;
 
             return true;

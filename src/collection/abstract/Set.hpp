@@ -77,7 +77,7 @@ namespace cds {
             return this->add(e);
         }
 
-        auto toString() const noexcept -> String final {
+        __CDS_NoDiscard auto toString() const noexcept -> String final {
             if ( this->empty() )
                 return {"{ }"};
 

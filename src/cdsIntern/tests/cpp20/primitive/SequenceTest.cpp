@@ -28,7 +28,8 @@
 bool SequenceTest::execute() noexcept {
     using namespace cds;
 //    delete Memory::instance().replaceAllocator ( new Memory::LeakDetectionAllocator () );
-    bool ok = true;
+    bool ok = true
+            ;
     this->log("Start of test Sequence ... ");
 
     Range r(20);
@@ -1180,12 +1181,13 @@ bool SequenceTest::execute() noexcept {
                 ok = false;
             }
 
+            bool prevOk = ok;
             ok = false;
             try {
                 log("empty.reduce : %d", Array<int>{}.sequence().reduce([](int _, int _1) { return 0; }));
             } catch ( OutOfBoundsException const & e ) {
                 log("Exception expected : %s", e.toString().cStr());
-                ok = true;
+                ok = prevOk;
             }
 
             ok = false;
@@ -1193,7 +1195,7 @@ bool SequenceTest::execute() noexcept {
                 log("empty.reduce : %d", Array<int>{}.sequence().reduceIndexed([](Index i, int _, int _1) { return 0; }));
             } catch ( OutOfBoundsException const & e ) {
                 log("Exception expected : %s", e.toString().cStr());
-                ok = true;
+                ok = prevOk;
             }
         };
 

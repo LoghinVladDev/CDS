@@ -4309,40 +4309,74 @@ namespace cds {
         return Sequence < typename std :: remove_reference < decltype (*this) > :: type > (std::move(*this));
     }
 
+}
+
 #if defined(CDS_HASHSET_HPP) && !defined(CDS_HASHSET_SEQUENCE)
 #define CDS_HASHSET_SEQUENCE
+
+namespace cds {
 
     template < typename T, typename H > __CDS_Requires (
             UniqueIdentifiable < T > &&
             HashCalculatorHasBoundaryFunction < H >
     ) auto HashSet < T, H > :: sequence () const & noexcept -> Sequence < HashSet const > {
-        return Sequence < RemoveReference < decltype ( * this ) > ( * this );
+        return Sequence < RemoveReference < decltype ( * this ) > > ( * this );
     }
 
     template < typename T, typename H > __CDS_Requires (
             UniqueIdentifiable < T > &&
             HashCalculatorHasBoundaryFunction < H >
     ) auto HashSet < T, H > :: sequence () & noexcept -> Sequence < HashSet > {
-        return Sequence < RemoveReference < decltype ( * this ) > ( * this );
+        return Sequence < RemoveReference < decltype ( * this ) > > ( * this );
     }
 
     template < typename T, typename H > __CDS_Requires (
             UniqueIdentifiable < T > &&
             HashCalculatorHasBoundaryFunction < H >
     ) auto HashSet < T, H > :: sequence () const && noexcept -> Sequence < HashSet const > {
-        return Sequence < RemoveReference < decltype ( * this ) > ( std :: move ( * this ) );
+        return Sequence < RemoveReference < decltype ( * this ) > > ( std :: move ( * this ) );
     }
 
     template < typename T, typename H > __CDS_Requires (
             UniqueIdentifiable < T > &&
             HashCalculatorHasBoundaryFunction < H >
     ) auto HashSet < T, H > :: sequence () && noexcept -> Sequence < HashSet > {
-        return Sequence < RemoveReference < decltype ( * this ) > ( std :: move ( * this ) );
+        return Sequence < RemoveReference < decltype ( * this ) > > ( std :: move ( * this ) );
     }
+
+}
 
 #endif
 
+#if defined(CDS_STATICARRAY_HPP) && !defined(CDS_STATICARRAY_SEQUENCE)
+#define CDS_STATICARRAY_SEQUENCE
+
+namespace cds {
+
+    template < typename T, Size capacity >
+    auto StaticArray < T, capacity > :: sequence () const & noexcept -> Sequence < StaticArray < T, capacity > const > {
+        return Sequence < RemoveReference < decltype ( * this ) > > ( * this );
+    }
+
+    template < typename T, Size capacity >
+    auto StaticArray < T, capacity > :: sequence () & noexcept -> Sequence < StaticArray < T, capacity > > {
+        return Sequence < RemoveReference < decltype ( * this ) > > ( * this );
+    }
+
+    template < typename T, Size capacity >
+    auto StaticArray < T, capacity > :: sequence () const && noexcept -> Sequence < StaticArray < T, capacity > const > {
+    return Sequence < RemoveReference < decltype ( * this ) > > ( std :: move ( * this ) );
+    }
+
+    template < typename T, Size capacity >
+    auto StaticArray < T, capacity > :: sequence () && noexcept -> Sequence < StaticArray < T, capacity > > {
+        return Sequence < RemoveReference < decltype ( * this ) > > ( std :: move ( * this ) );
+    }
+
 }
+
+#endif
+
 
 __CDS_RegisterParseTypeTemplateT(Sequence)
 

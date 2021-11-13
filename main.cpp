@@ -1,4 +1,5 @@
 #include <CDS/HashSet>
+#include <CDS/Sequence>
 
 using namespace cds;
 
@@ -12,6 +13,8 @@ int main () {
     m.insert(1);
 
     std :: cout << m << '\n';
+
+    m.sequence();
 
     return 0;
 }

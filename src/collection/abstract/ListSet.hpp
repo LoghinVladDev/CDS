@@ -190,8 +190,14 @@ namespace cds {
         auto operator == (ListSet const & o) const noexcept -> bool {
             if ( this == & o ) return true;
 
-            for ( auto itThis = this->begin(), itObj = o.begin(); itThis != this->end() && itObj != o.end(); itThis ++, itObj ++ )
-                if ( ! ( Type < T > :: compare ( * itThis, * itObj ) ) )
+            for (
+                    auto
+                        a = this->begin(), aEnd = this->end(),
+                        b = o.begin(), bEnd = o.end();
+                    a != aEnd && b != bEnd;
+                    ++ a, ++ b
+            )
+                if ( ! ( Type < T > :: compare ( * a, * b ) ) )
                     return false;
             return true;
         }

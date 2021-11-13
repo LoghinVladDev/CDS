@@ -44,7 +44,7 @@ namespace cds {
 
     protected:
         virtual auto pAt ( Index ) noexcept (false) -> ElementPtr = 0;
-        __CDS_MaybeUnused virtual auto pAt ( Index ) const noexcept (false) -> ElementCPtr = 0;
+        __CDS_NoDiscard __CDS_MaybeUnused virtual auto pAt ( Index ) const noexcept (false) -> ElementCPtr = 0;
 
     public:
 
@@ -52,7 +52,7 @@ namespace cds {
             return * this->pAt ( index );
         }
 
-        __CDS_OptimalInline auto get ( Index index ) const noexcept -> ElementCRef {
+        __CDS_NoDiscard __CDS_OptimalInline auto get ( Index index ) const noexcept -> ElementCRef {
             return * this->pAt ( index );
         };
 
@@ -112,37 +112,61 @@ namespace cds {
         template < typename V = T, EnableIf < Type < V > :: copyConstructible > = 0 >
         __CDS_OptimalInline auto pushFront ( ElementCRef value ) noexcept -> ElementRef {
             __CDS_Collection_OperationalLock
-            auto pVal = (this->allocFrontGetPtr() = Memory :: instance().create < ElementType > ( value ));
-            __CDS_Collection_OperationalUnlock
 
-            return * pVal;
+            auto & p = this->allocFrontGetPtr();
+            if ( p == nullptr ) {
+                auto pVal = (p = Memory::instance().create<ElementType>(value));
+
+                __CDS_Collection_OperationalUnlock
+                return * pVal;
+            }
+
+            return * p;
         }
 
         template < typename V = T, EnableIf < Type < V > :: copyConstructible > = 0 >
         __CDS_OptimalInline auto pushBack ( ElementCRef value ) noexcept -> ElementRef {
             __CDS_Collection_OperationalLock
-            auto pVal = (this->allocBackGetPtr() = Memory :: instance().create < ElementType > ( value ));
-            __CDS_Collection_OperationalUnlock
 
-            return * pVal;
+            auto & p = this->allocBackGetPtr();
+            if ( p == nullptr ) {
+                auto pVal = ( p = Memory::instance().create<ElementType>(value));
+
+                __CDS_Collection_OperationalUnlock
+                return * pVal;
+            }
+
+            return * p;
         }
 
         template < typename V = T, EnableIf < Type < V > :: moveConstructible > = 0 >
         __CDS_OptimalInline auto pushFront ( ElementMRef value ) noexcept -> ElementRef {
             __CDS_Collection_OperationalLock
-            auto pVal = (this->allocFrontGetPtr() = Memory :: instance().create < ElementType > ( std :: forward < ElementType > ( value ) ));
-            __CDS_Collection_OperationalUnlock
 
-            return * pVal;
+            auto & p = this->allocFrontGetPtr();
+            if ( p == nullptr ) {
+                auto pVal = ( p = Memory::instance().create < ElementType > ( std :: forward < ElementType > ( value ) ) );
+
+                __CDS_Collection_OperationalUnlock
+                return * pVal;
+            }
+
+            return * p;
         }
 
         template < typename V = T, EnableIf < Type < V > :: moveConstructible > = 0 >
         __CDS_OptimalInline auto pushBack ( ElementMRef value ) noexcept -> ElementRef {
             __CDS_Collection_OperationalLock
-            auto pVal = (this->allocBackGetPtr() = Memory :: instance().create < ElementType > ( std :: forward < ElementType > ( value ) ));
-            __CDS_Collection_OperationalUnlock
 
-            return * pVal;
+            auto & p = this->allocBackGetPtr();
+            if ( p == nullptr ) {
+                auto pVal = ( p = Memory::instance().create < ElementType > ( std :: forward < ElementType > ( value ) ) );
+
+                __CDS_Collection_OperationalUnlock
+                return * pVal;
+            }
+
+            return * p;
         }
 
         template < typename V = T, EnableIf< Type < V > :: copyConstructible > = 0 >
