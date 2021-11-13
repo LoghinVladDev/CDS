@@ -976,6 +976,6 @@ namespace cds {
 
 __CDS_RegisterParseTypeTemplateT(List)
 
-#include <DoubleLinkedList.hpp>
+#include <CDS/DoubleLinkedList>
 
 #endif //CDS_LIST_HPP
