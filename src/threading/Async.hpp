@@ -8,6 +8,8 @@
 #include <CDS/Pointer>
 #include <CDS/Semaphore>
 #include <CDS/Memory>
+#include <CDS/Function>
+#include <CDS/Thread>
 
 namespace cds {
 
@@ -58,10 +60,12 @@ namespace cds {
         inline auto operator () ( ArgumentTypes ... arguments ) noexcept -> AsyncResult < ReturnType > {
             AsyncResult < ReturnType > result ( Memory :: instance().create < Semaphore > () );
 
-            this->pThread = Memory :: instance().create < Runnable > ([& result, this, params = std :: make_tuple ( std :: forward < ArgumentTypes > ( arguments ) ... )] {
+            auto threadTask = [& result, this, params = std :: make_tuple ( std :: forward < ArgumentTypes > ( arguments ) ... )] {
                 result.result = Memory :: instance().create < ReturnType > ( std :: apply ( this->function, params ) );
                 result.asyncSemaphore->notify();
-            });
+            };
+
+            this->pThread = Memory :: instance().create < Runnable < decltype ( threadTask ) > > ( threadTask );
 
             this->pThread->start();
 

@@ -119,11 +119,11 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                                 RemoveReference <
                                     decltype (
                                         std::get < 0 > (
-                                            * utility :: unsafeAddress <
+                                            * Type <
                                                 argumentsOf <
                                                     Transformer
                                                 >
-                                            > ()
+                                            > :: unsafeAddress ()
                                         )
                                     )
                                 >
@@ -137,11 +137,11 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                             RemoveReference <
                                 decltype (
                                     std::get < 0 > (
-                                        * utility :: unsafeAddress <
+                                        * Type <
                                             argumentsOf <
                                                 Transformer
                                             >
-                                        > ()
+                                        > :: unsafeAddress ()
                                     )
                                 )
                             >
@@ -153,11 +153,11 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                         RemoveReference <
                             decltype(
                                 std::get<0>(
-                                    * utility :: unsafeAddress <
+                                    * Type <
                                         argumentsOf <
                                             Transformer
                                         >
-                                    >()
+                                    > :: unsafeAddress ()
                                 )
                             )
                         >

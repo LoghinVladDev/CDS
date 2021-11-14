@@ -59,7 +59,8 @@ namespace cds {
          */
         static auto random () noexcept -> Long {
             static UniquePointer < RandomGenerator > pRng;
-            if (pRng.isNull()) pRng.reset(Memory :: instance ().create < RandomGenerator > ());
+            if (pRng.isNull())
+                pRng.reset(Memory :: instance ().create < RandomGenerator > ());
 
             return pRng->get();
         }
@@ -81,7 +82,8 @@ namespace cds {
          */
         static auto random (CType low, CType high) noexcept -> Long {
             static UniquePointer < RandomGenerator > pRng;
-            if ( pRng.isNull() || pRng->low() != low && pRng->high() != high ) pRng.reset(Memory :: instance ().create < RandomGenerator > (low, high));
+            if ( pRng.isNull() || pRng->low() != low && pRng->high() != high )
+                pRng.reset(Memory :: instance ().create < RandomGenerator > (low, high));
 
             return pRng->get();
         }

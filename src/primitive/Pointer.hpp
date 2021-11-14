@@ -78,12 +78,14 @@ namespace cds {
         }
 
         __CDS_cpplang_ConstexprConditioned auto operator * () const noexcept (false) -> ValueReference {
-            if ( this->pObj == nullptr ) throw NullPointerException();
+            if ( this->pObj == nullptr )
+                throw NullPointerException();
             return * this->pObj;
         }
 
         __CDS_cpplang_ConstexprConditioned auto valueAt () const noexcept (false) -> ValueReference {
-            if ( this->pObj == nullptr ) throw NullPointerException();
+            if ( this->pObj == nullptr )
+                throw NullPointerException();
             return * this->pObj;
         }
 
@@ -100,16 +102,12 @@ namespace cds {
         constexpr auto get () const noexcept -> Pointer { return this->pObj; }
 
         __CDS_cpplang_VirtualConstexpr virtual auto release () noexcept -> Pointer {
-            auto p = this->pObj;
-            this->pObj = nullptr;
-            return p;
+            return cds :: exchange ( this->pObj, nullptr );
         }
 
         __CDS_OptimalInline virtual auto reset ( Pointer p ) noexcept -> void {
-            auto oldP = this->pObj;
-            this->pObj = p;
-            Memory::instance().destroy ( oldP );
-        } // NOLINT(google-default-arguments)
+            Memory::instance().destroy ( cds :: exchange ( this->pObj, p ) );
+        }
 
         __CDS_OptimalInline auto reset () noexcept -> void {
             return this->reset ( nullptr );
@@ -238,26 +236,26 @@ namespace cds {
             if ( this == & o )
                 return * this;
 
-            this->reset( o );
+            this-> SharedPointer :: reset( o );
             return * this;
         }
 
         __CDS_cpplang_ConstexprDynamicAllocation auto operator = ( typename PointerBase < T > :: Pointer p ) noexcept -> SharedPointer & {
-            this->reset(p);
+            this-> SharedPointer :: reset(p);
             return * this;
         }
 
         __CDS_cpplang_ConstexprDestructor ~SharedPointer() noexcept override {
-            this->reset();
+            this-> SharedPointer :: reset( nullptr );
         }
 
         __CDS_cpplang_ConstexprDynamicAllocation auto release () noexcept -> typename PointerBase<T>::Pointer final {
             auto p = this->pObj;
-            this->reset();
+            this-> SharedPointer :: reset ( nullptr );
             return p;
         }
 
-        __CDS_cpplang_ConstexprDynamicAllocation auto reset ( typename PointerBase<T>::Pointer p = nullptr ) noexcept -> void final {
+        __CDS_cpplang_ConstexprDynamicAllocation auto reset ( typename PointerBase<T>::Pointer p ) noexcept -> void final {
             if ( this->pObj == p ) return;
 
             auto pVal = this->pObj;
@@ -341,26 +339,26 @@ namespace cds {
             if ( this == & o )
                 return * this;
 
-            this->reset( o );
+            this-> AtomicSharedPointer :: reset( o );
             return * this;
         }
 
         __CDS_OptimalInline auto operator = ( typename PointerBase < T > :: Pointer p ) noexcept -> AtomicSharedPointer & {
-            this->reset(p);
+            this-> AtomicSharedPointer :: reset( p );
             return * this;
         }
 
         __CDS_OptimalInline ~AtomicSharedPointer() noexcept final {
-            this->reset();
+            this-> AtomicSharedPointer :: reset( nullptr );
         }
 
         __CDS_OptimalInline auto release () noexcept -> typename PointerBase<T>::Pointer final {
             auto p = this->pObj;
-            this->reset();
+            this-> AtomicSharedPointer :: reset( nullptr );
             return p;
         }
 
-        __CDS_OptionalInline auto reset ( typename PointerBase<T>::Pointer p = nullptr ) noexcept -> void final {
+        __CDS_OptionalInline auto reset ( typename PointerBase<T>::Pointer p ) noexcept -> void final {
             if ( this->pObj == p ) return;
 
             auto pVal = this->pObj;
@@ -435,7 +433,9 @@ namespace cds {
             return * this;
         }
 
-        __CDS_cpplang_NonConstConstexprMemberFunction auto reset ( typename PointerBase<T>::Pointer p = nullptr ) noexcept -> void final { this->pObj = p; }
+        __CDS_cpplang_NonConstConstexprMemberFunction auto reset ( typename PointerBase<T>::Pointer p = nullptr ) noexcept -> void final {
+            this->pObj = p;
+        }
     };
 
 }

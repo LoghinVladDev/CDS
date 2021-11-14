@@ -144,21 +144,37 @@ namespace cds {
             return ( ( * this ) = Path( s ) );
         }
 
-        __CDS_NoDiscard auto toString () const noexcept -> String override { return this->_osPath; }
-        __CDS_NoDiscard auto copy () const noexcept -> Path * override { return Memory :: instance().create < Path > (* this); }
-        __CDS_NoDiscard auto hash () const noexcept -> Index override { return this->parent().nodeName().hash(); }
+        __CDS_NoDiscard auto toString () const noexcept -> String override {
+            return this->_osPath;
+        }
+
+        __CDS_NoDiscard auto copy () const noexcept -> Path * override {
+            return Memory :: instance().create < Path > (* this);
+        }
+
+        __CDS_NoDiscard auto hash () const noexcept -> Index override {
+            return this->parent().nodeName().hash();
+        }
 
         __CDS_NoDiscard __CDS_OptimalInline auto parent () const noexcept(false) -> Path { // NOLINT(misc-no-recursion)
             auto parentPath = String (this->_osPath.substr(0, this->_osPath.findLast(Path::directorySeparator())));
-            if ( parentPath.empty() ) parentPath = this->root().toString();
+            if ( parentPath.empty() )
+                parentPath = this->root().toString();
 
             return parentPath;
         }
 
-        __CDS_NoDiscard __CDS_MaybeUnused __CDS_OptimalInline auto previous () const noexcept -> Path { return this->parent(); }
+        __CDS_NoDiscard __CDS_MaybeUnused __CDS_OptimalInline auto previous () const noexcept -> Path {
+            return this->parent();
+        }
 
-        __CDS_NoDiscard __CDS_OptimalInline auto nodeName () const noexcept -> String { return this->_osPath.substr(this->_osPath.findLast(Path::directorySeparator()) + 1); }
-        __CDS_NoDiscard __CDS_MaybeUnused __CDS_OptimalInline auto currentName () const noexcept -> String { return this->nodeName(); }
+        __CDS_NoDiscard __CDS_OptimalInline auto nodeName () const noexcept -> String {
+            return this->_osPath.substr(this->_osPath.findLast(Path::directorySeparator()) + 1);
+        }
+
+        __CDS_NoDiscard __CDS_MaybeUnused __CDS_OptimalInline auto currentName () const noexcept -> String {
+            return this->nodeName();
+        }
 
         __CDS_NoDiscard auto root () const noexcept -> Path { // NOLINT(misc-no-recursion)
             auto parent = this->parent();
@@ -168,21 +184,25 @@ namespace cds {
         }
 
         auto operator / (String const & f) const noexcept (false) -> Path {
-            auto delimFiltered = [
-    #if __CDS_cpplang_core_version < __CDS_cpplang_core_version_17
-                    this,
-    #endif
-                    & f
-            ]() -> String { String c(f); c.forEach([
-    #if __CDS_cpplang_core_version < __CDS_cpplang_core_version_17
-                    this
-    #endif
-            ](String::ElementType & e){if (Path::possibleDirectorySeparators.contains(e)) e = Path::directorySeparator(); }); return c; };
+            auto delimFiltered = [&]() -> String {
+                String c(f); c.forEach([&](String::ElementType & e){
+                    if (Path::possibleDirectorySeparators.contains(e))
+                        e = Path::directorySeparator();
+                });
+
+                return c;
+            };
+
             return {this->_osPath + Path::directorySeparator() + delimFiltered()};
         }
 
-        __CDS_OptimalInline auto operator + (String const & f) const noexcept (false) -> Path { return (*this) / f; }
-        __CDS_NoDiscard __CDS_OptimalInline auto append (String const & f) const noexcept (false) -> Path { return (*this) / f; }
+        __CDS_OptimalInline auto operator + (String const & f) const noexcept (false) -> Path {
+            return (*this) / f;
+        }
+
+        __CDS_NoDiscard __CDS_OptimalInline auto append (String const & f) const noexcept (false) -> Path {
+            return (*this) / f;
+        }
 
         class WalkEntry;
 
@@ -231,21 +251,36 @@ namespace cds {
         WalkEntry ( WalkEntry const & ) noexcept = default;
 
         __CDS_NoDiscard auto toString() const noexcept -> String override {
-            return String("WalkEntry {") +
+            return "WalkEntry {"_s +
                    " root = " + this->_root.toString() +
                    ", directories = " + this->_directories.toString() +
                    ", files = " + this->_files.toString() +
                    "}";
         }
 
-        __CDS_NoDiscard __CDS_MaybeUnused constexpr auto root () const noexcept -> Path const & { return this->_root; }
-        __CDS_cpplang_NonConstConstexprMemberFunction auto root () noexcept -> Path & { return this->_root; }
+        __CDS_NoDiscard __CDS_MaybeUnused constexpr auto root () const noexcept -> Path const & {
+            return this->_root;
+        }
 
-        __CDS_NoDiscard constexpr auto directories () const noexcept -> LinkedList < String > const & { return this->_directories; }
-        __CDS_cpplang_NonConstConstexprMemberFunction auto directories () noexcept -> LinkedList < String > & { return this->_directories; }
+        __CDS_cpplang_NonConstConstexprMemberFunction auto root () noexcept -> Path & {
+            return this->_root;
+        }
 
-        __CDS_NoDiscard constexpr auto files () const noexcept -> LinkedList < String > const & { return this->_files; }
-        __CDS_cpplang_NonConstConstexprMemberFunction auto files () noexcept -> LinkedList < String > & { return this->_files; }
+        __CDS_NoDiscard constexpr auto directories () const noexcept -> LinkedList < String > const & {
+            return this->_directories;
+        }
+
+        __CDS_cpplang_NonConstConstexprMemberFunction auto directories () noexcept -> LinkedList < String > & {
+            return this->_directories;
+        }
+
+        __CDS_NoDiscard constexpr auto files () const noexcept -> LinkedList < String > const & {
+            return this->_files;
+        }
+
+        __CDS_cpplang_NonConstConstexprMemberFunction auto files () noexcept -> LinkedList < String > & {
+            return this->_files;
+        }
 
         __CDS_NoDiscard auto copy() const noexcept -> WalkEntry * override {
             return Memory :: instance().create < WalkEntry > (* this);
@@ -357,9 +392,9 @@ namespace cds {
                 auto nestedEntries = Path(this->append(entry->d_name)).walk(depth - 1);
                 for ( auto & e : nestedEntries )
                     entries.pushFront( e );
-            } else {
+            } else
                 currentDirEntry.files().pushBack(entry->d_name);
-            }
+
 
             entry = readdir64(dir);
         }

@@ -41,24 +41,14 @@ namespace cds {
 
     protected:
         auto __CDS_OptimalInline remove ( const T & e, Size ) noexcept -> bool final { return this->remove(e); }
-        auto __CDS_OptimalInline removeAll ( const T & o ) noexcept -> bool final { return false; }
-        auto __CDS_OptimalInline removeFirst ( const T & o ) noexcept -> bool final { return false; }
         auto __CDS_OptimalInline removeLast ( const T & o ) noexcept -> bool final { return false; }
         auto __CDS_OptimalInline removeOf ( const Collection<T> &, Size ) noexcept -> bool final { return false; }
-        auto __CDS_OptimalInline removeFirstOf ( const Collection<T> & o ) noexcept -> bool final { return false; }
-        auto __CDS_OptimalInline removeAllOf ( const Collection<T> & o ) noexcept -> bool final { return false; }
         auto __CDS_OptimalInline removeLastOf ( const Collection<T> & ) noexcept -> bool final { return false; }
         auto __CDS_OptimalInline removeNotOf ( const Collection<T> &, Size ) noexcept -> bool final { return false; }
-        auto __CDS_OptimalInline removeFirstNotOf ( const Collection<T> & o ) noexcept -> bool final { return false; }
-        auto __CDS_OptimalInline removeAllNotOf ( const Collection<T> & o ) noexcept -> bool final { return false; }
         auto __CDS_OptimalInline removeLastNotOf ( const Collection<T> & ) noexcept -> bool final { return false; }
         auto __CDS_OptimalInline removeOf ( const std::initializer_list<T> &, Size ) noexcept -> bool final { return false; }
-        auto __CDS_OptimalInline removeFirstOf ( const std::initializer_list<T> & o ) noexcept -> bool final { return false; }
-        auto __CDS_OptimalInline removeAllOf ( const std::initializer_list<T> & o ) noexcept -> bool final { return false; }
         auto __CDS_OptimalInline removeLastOf ( const std::initializer_list<T> & ) noexcept -> bool final { return false; }
         auto __CDS_OptimalInline removeNotOf ( const std::initializer_list<T> &, Size ) noexcept -> bool final { return false; }
-        auto __CDS_OptimalInline removeFirstNotOf ( const std::initializer_list<T> & o ) noexcept -> bool final { return false; }
-        auto __CDS_OptimalInline removeAllNotOf ( const std::initializer_list<T> & o ) noexcept -> bool final { return false; }
         auto __CDS_OptimalInline removeLastNotOf ( const std::initializer_list<T> & ) noexcept -> bool final { return false; }
         auto makeUnique () noexcept -> void final { }
 

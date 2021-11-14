@@ -53,8 +53,8 @@ namespace cds {
         }
 
         __CDS_OptionalInline explicit UnorderedSet(
-            Iterator from,
-            Iterator to
+            Iterator const & from,
+            Iterator const & to
         ) noexcept :
                 ListSet<T>() {
 
@@ -63,8 +63,8 @@ namespace cds {
         }
 
         __CDS_OptionalInline explicit UnorderedSet(
-            ConstIterator from,
-            ConstIterator to
+            ConstIterator const & from,
+            ConstIterator const & to
         ) noexcept :
                 ListSet<T>() {
 
@@ -100,7 +100,8 @@ namespace cds {
         }
 
         __CDS_OptimalInline auto operator = ( UnorderedSet && set ) noexcept -> UnorderedSet & {
-            if ( this == & set ) return * this;
+            if ( this == & set )
+                return * this;
 
             this->clear();
             this->_pFront = exchange ( set._pFront, nullptr );
@@ -117,6 +118,7 @@ namespace cds {
 
         auto allocInsertGetPtr ( ElementCRef e __CDS_MaybeUnused ) noexcept -> ElementPtrRef override {
             auto head = this->_pFront;
+
             while ( head != nullptr ) {
                 if (Type<ElementType>::compare(* head->data, e))
                     return head->data;

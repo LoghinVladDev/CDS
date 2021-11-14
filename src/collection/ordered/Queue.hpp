@@ -44,20 +44,33 @@ namespace cds {
         inline auto removeFirstNotOf ( std::initializer_list<T> const & o ) noexcept -> bool override { return this->removeNotOf ( o, 1 ); }
         inline auto removeAllNotOf ( std::initializer_list<T> const & o ) noexcept -> bool override  { return this->removeNotOf( o, this->size() ); }
 
-        inline auto makeUnique () noexcept -> void override { return this->SingleLinkedList <T> :: makeUnique(); }
+        inline auto makeUnique () noexcept -> void override {
+            return this->SingleLinkedList <T> :: makeUnique();
+        }
 
-        inline auto popBack () noexcept (false) -> T override { return this->SingleLinkedList < T > :: popBack(); }
-        inline auto popFront () noexcept (false) -> T override { return this->SingleLinkedList < T > :: popFront(); }
+        inline auto popBack () noexcept (false) -> T override {
+            return this->SingleLinkedList < T > :: popBack();
+        }
+
+        inline auto popFront () noexcept (false) -> T override {
+            return this->SingleLinkedList < T > :: popFront();
+        }
 
     public:
 
         template < typename V = T, typename std :: enable_if < Type < V > :: copyConstructible, int > :: type = 0 >
-        inline auto push ( T const & e ) noexcept -> T& { return this->SingleLinkedList < T > :: pushBack (e); }
+        inline auto push ( T const & e ) noexcept -> T& {
+            return this->SingleLinkedList < T > :: pushBack (e);
+        }
 
         template < typename V = T, typename std :: enable_if < Type < V > :: moveConstructible, int > :: type = 0 >
-        __CDS_MaybeUnused inline auto push ( T && e ) noexcept -> T& { return this->SingleLinkedList < T > :: pushBack (e); }
+        __CDS_MaybeUnused inline auto push ( T && e ) noexcept -> T& {
+            return this->SingleLinkedList < T > :: pushBack (e);
+        }
 
-        inline auto pop () noexcept (false) -> T { return this->popFront(); }
+        inline auto pop () noexcept (false) -> T {
+            return this->popFront();
+        }
     };
 
 }

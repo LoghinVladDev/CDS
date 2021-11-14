@@ -471,7 +471,8 @@ namespace cds {
             Memory :: instance().destroy ( p );
             this->_size --;
 
-            if ( this->size() == 0 ) this->_pBack = nullptr;
+            if ( this->size() == 0 )
+                this->_pBack = nullptr;
 
             return true;
         }
@@ -482,7 +483,8 @@ namespace cds {
         }
 
         if ( previous != nullptr ) {
-            if ( previous->next() == this->_pBack ) this->_pBack = previous;
+            if ( previous->next() == this->_pBack )
+                this->_pBack = previous;
 
             auto p = previous->next();
             previous->next () = previous -> next () -> next ();
@@ -543,7 +545,9 @@ namespace cds {
         auto current = this->_pFront;
         decltype (current) previous = from.contains(* current->data()) ? current : nullptr;
 
-        auto nextNode = [& current] () noexcept  { current = current->next(); };
+        auto nextNode = [& current] () noexcept {
+            current = current->next();
+        };
 
         if ( from.contains(* this->_pFront->data()) ) {
             auto p = this->_pFront;
@@ -555,18 +559,21 @@ namespace cds {
 
             -- this->_size;
 
-            if ( this->size() == 0 ) this->_pBack = nullptr;
+            if ( this->size() == 0 )
+                this->_pBack = nullptr;
 
             return true;
         }
 
         while ( current->_pNext != nullptr ) {
-            if ( from.contains( * current->next()->data( )) ) previous = current;
+            if ( from.contains( * current->next()->data( )) )
+                previous = current;
             nextNode();
         }
 
         if ( previous != nullptr ) {
-            if ( previous->next() == this->_pBack ) this->_pBack = previous;
+            if ( previous->next() == this->_pBack )
+                this->_pBack = previous;
 
             auto p = previous->next();
             previous->next () = previous -> next () -> next ();
@@ -587,7 +594,9 @@ namespace cds {
         auto current = this->_pFront;
         decltype (current) previous = nullptr;
 
-        auto nextNode = [& current] () noexcept { current = current->next(); };
+        auto nextNode = [& current] () noexcept {
+            current = current->next();
+        };
 
         while ( current != nullptr && count > 0 ) {
             if ( ! from.contains( * current->data() ) ) {
@@ -627,7 +636,9 @@ namespace cds {
         auto current = this->_pFront;
         decltype (current) previous = ! from.contains(* current->data()) ? current : nullptr;
 
-        auto nextNode = [& current] () noexcept  { current = current->next(); };
+        auto nextNode = [& current] () noexcept {
+            current = current->next();
+        };
 
         if ( ! from.contains(* this->_pFront->data()) ) {
             auto p = this->_pFront;
@@ -637,18 +648,21 @@ namespace cds {
             Memory::instance().destroy ( p );
             --this->_size;
 
-            if ( this->size() == 0 ) this->_pBack = nullptr;
+            if ( this->size() == 0 )
+                this->_pBack = nullptr;
 
             return true;
         }
 
         while ( current->_pNext != nullptr ) {
-            if ( ! from.contains( * current->next()->data( )) ) previous = current;
+            if ( ! from.contains( * current->next()->data( )) )
+                previous = current;
             nextNode();
         }
 
         if ( previous != nullptr ) {
-            if ( previous->next() == this->_pBack ) this->_pBack = previous;
+            if ( previous->next() == this->_pBack )
+                this->_pBack = previous;
 
             auto p = previous->next();
             previous->next () = previous -> next () -> next ();
@@ -697,7 +711,8 @@ namespace cds {
 
     template < typename T >
     SingleLinkedList < T > :: SingleLinkedList ( SingleLinkedList const & obj ) noexcept {
-        for ( auto & e : obj ) this->pushBack(e);
+        for ( auto & e : obj )
+            this->pushBack(e);
     }
 
     template < typename T >
@@ -749,7 +764,9 @@ namespace cds {
 
         this->clear();
 
-        collection.forEach([this](T const & e){this->pushBack(e);});
+        collection.forEach([this](T const & e){
+            this->pushBack(e);
+        });
 
         return * this;
     }

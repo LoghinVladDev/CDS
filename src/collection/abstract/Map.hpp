@@ -71,8 +71,13 @@ namespace cds {
         virtual auto get (KeyConstReference) const noexcept(false) -> ValueConstReference = 0;
         __CDS_MaybeUnused virtual auto getOr (KeyConstReference, ValueConstReference) const noexcept -> ValueConstReference = 0;
 
-        virtual __CDS_OptimalInline auto operator [] (KeyConstReference k) noexcept -> ValueReference { return this->get(k); }
-        virtual __CDS_OptimalInline auto operator [] (KeyConstReference k) const noexcept(false) -> ValueConstReference { return this->get(k); }
+        virtual __CDS_OptimalInline auto operator [] (KeyConstReference k) noexcept -> ValueReference {
+            return this->get(k);
+        }
+
+        virtual __CDS_OptimalInline auto operator [] (KeyConstReference k) const noexcept(false) -> ValueConstReference {
+            return this->get(k);
+        }
 
         __CDS_MaybeUnused virtual auto containsValue (ValueConstReference) const noexcept -> bool = 0;
         virtual auto containsKey (KeyConstReference) const noexcept -> bool = 0;
@@ -102,24 +107,14 @@ namespace cds {
         auto makeUnique () noexcept -> void override { }
 
         auto remove ( EntryConstReference, Size ) noexcept -> bool override { return false; }
-        auto removeAll ( EntryConstReference o ) noexcept -> bool override { return false; }
-        auto removeFirst ( EntryConstReference o ) noexcept -> bool override { return false; }
         auto removeLast ( EntryConstReference o ) noexcept -> bool override { return false; }
         auto removeOf ( const Collection<Entry> &, Size ) noexcept -> bool override { return false; }
-        auto removeFirstOf ( const Collection<Entry> & o ) noexcept -> bool override { return false; }
-        auto removeAllOf ( const Collection<Entry> & o ) noexcept -> bool override { return false; }
         auto removeLastOf ( const Collection<Entry> & ) noexcept -> bool override { return false; }
         auto removeNotOf ( const Collection<Entry> &, Size ) noexcept -> bool override { return false; }
-        auto removeFirstNotOf ( const Collection<Entry> & o ) noexcept -> bool override { return false; }
-        auto removeAllNotOf ( const Collection<Entry> & o ) noexcept -> bool override { return false; }
         auto removeLastNotOf ( const Collection<Entry> & ) noexcept -> bool override { return false; }
         auto removeOf ( const std::initializer_list<Entry> &, Size ) noexcept -> bool override { return false; }
-        auto removeFirstOf ( const std::initializer_list<Entry> & o ) noexcept -> bool override { return false; }
-        auto removeAllOf ( const std::initializer_list<Entry> & o ) noexcept -> bool override { return false; }
         auto removeLastOf ( const std::initializer_list<Entry> & ) noexcept -> bool override { return false; }
         auto removeNotOf ( const std::initializer_list<Entry> &, Size ) noexcept -> bool override { return false; }
-        auto removeFirstNotOf ( const std::initializer_list<Entry> & o ) noexcept -> bool override { return false; }
-        auto removeAllNotOf ( const std::initializer_list<Entry> & o ) noexcept -> bool override { return false; }
         auto removeLastNotOf ( const std::initializer_list<Entry> & ) noexcept -> bool override { return false; }
     };
 

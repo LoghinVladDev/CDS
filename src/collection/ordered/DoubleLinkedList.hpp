@@ -401,7 +401,7 @@ namespace cds {
     template < typename T >
     DoubleLinkedList<T>::DoubleLinkedList( InitializerList initializerList ) noexcept {
         for ( const auto & e : initializerList )
-            this->pushBack( e );
+            this->add( e );
     }
 
     template < typename T >
@@ -457,8 +457,13 @@ namespace cds {
 
     template < typename T >
     auto DoubleLinkedList<T>::remove(Index i) noexcept -> bool {
-        if ( i < 0 || i >= this->size() ) return false;
-        if ( i == 0 ) { this->popFront(); return true; }
+        if ( i < 0 || i >= this->size() )
+            return false;
+
+        if ( i == 0 ) {
+            this->popFront();
+            return true;
+        }
 
         auto current = this->_pFront;
         Index currentIndex = 1;
@@ -490,7 +495,9 @@ namespace cds {
         bool removalDone = false;
 
         auto current = this->_pFront;
-        auto nextNode = [& current] () noexcept { current = current->pNext; };
+        auto nextNode = [& current] () noexcept {
+            current = current->pNext;
+        };
 
         while ( current != nullptr && count > 0 ) {
             if ( Type < T > :: compare ( * current->data, what ) ) {
@@ -530,7 +537,9 @@ namespace cds {
     template < typename T >
     auto DoubleLinkedList<T>::removeLast(ElementCRef what ) noexcept -> bool {
         auto * current = this->_pBack;
-        auto nextNode = [& current] () noexcept { current = current->pPrevious; };
+        auto nextNode = [& current] () noexcept {
+            current = current->pPrevious;
+        };
 
         while ( current != nullptr ) {
             if ( Type < T > :: compare ( * current->data, what ) ) {
@@ -569,7 +578,9 @@ namespace cds {
         bool removalDone = false;
 
         auto current = this->_pFront;
-        auto nextNode = [& current] () noexcept { current = current->pNext; };
+        auto nextNode = [& current] () noexcept {
+            current = current->pNext;
+        };
 
         while ( current != nullptr && count > 0 ) {
             if ( from.contains( * current->data ) ) {
@@ -609,7 +620,9 @@ namespace cds {
     template < typename T >
     auto DoubleLinkedList<T>::removeLastOf ( Collection<T> const & from ) noexcept -> bool {
         auto * current = this->_pBack;
-        auto nextNode = [& current] () noexcept { current = current->pPrevious; };
+        auto nextNode = [& current] () noexcept {
+            current = current->pPrevious;
+        };
 
         while ( current != nullptr ) {
             if ( from.contains( * current->data ) ) {
@@ -648,7 +661,9 @@ namespace cds {
         bool removalDone = false;
 
         auto current = this->_pFront;
-        auto nextNode = [& current] () noexcept { current = current->pNext; };
+        auto nextNode = [& current] () noexcept {
+            current = current->pNext;
+        };
 
         while ( current != nullptr && count > 0 ) {
             if ( ! from.contains( * current->data ) ) {
@@ -688,7 +703,9 @@ namespace cds {
     template < typename T >
     auto DoubleLinkedList<T>::removeLastNotOf( Collection<T> const & from ) noexcept -> bool {
         auto * current = this->_pBack;
-        auto nextNode = [& current] () noexcept { current = current->pPrevious; };
+        auto nextNode = [& current] () noexcept {
+            current = current->pPrevious;
+        };
 
         while ( current != nullptr ) {
             if ( ! from.contains( * current->data ) ) {
@@ -773,8 +790,8 @@ namespace cds {
             Memory :: instance().destroy (current->data);
             Memory :: instance().destroy (current);
         }
-        this->_pBack = nullptr;
 
+        this->_pBack = nullptr;
         this->_size = 0;
     }
 
@@ -1079,7 +1096,8 @@ namespace cds {
             if ( Type < ElementType > :: compare ( element, * it ) && added < count ) {
                 iterators.add(it);
                 ++ added;
-            } else if ( added >= count ) break;
+            } else if ( added >= count )
+                break;
 
         return iterators;
     }
@@ -1093,7 +1111,8 @@ namespace cds {
             if ( elements.contains ( * it ) && added < count ) {
                 iterators.add(it);
                 ++ added;
-            } else if ( added >= count ) break;
+            } else if ( added >= count )
+                break;
 
         return iterators;
     }
@@ -1107,7 +1126,8 @@ namespace cds {
             if ( ! elements.contains ( * it ) && added < count ) {
                 iterators.add(it);
                 ++ added;
-            } else if ( added >= count ) break;
+            } else if ( added >= count )
+                break;
 
         return iterators;
     }
@@ -1121,7 +1141,8 @@ namespace cds {
             if ( Type < ElementType > :: compare ( element, * it ) && added < count ) {
                 iterators.add(it);
                 ++ added;
-            } else if ( added >= count ) break;
+            } else if ( added >= count )
+                break;
 
         return iterators;
     }
@@ -1135,7 +1156,8 @@ namespace cds {
             if ( elements.contains ( * it ) && added < count ) {
                 iterators.add(it);
                 ++ added;
-            } else if ( added >= count ) break;
+            } else if ( added >= count )
+                break;
 
         return iterators;
     }
@@ -1149,7 +1171,8 @@ namespace cds {
             if ( ! elements.contains ( * it ) && added < count ) {
                 iterators.add(it);
                 ++ added;
-            } else if ( added >= count ) break;
+            } else if ( added >= count )
+                break;
 
         return iterators;
     }

@@ -91,7 +91,7 @@ namespace cds {
             this->_size = newSize;
         }
 
-        template < EnableIf < Type < T > :: copyConstructible > = 0 >
+        template < typename V = T, EnableIf < Type < V > :: copyConstructible > = 0 >
         __CDS_OptionalInline auto resize ( Size newSize, ElementCRef value ) noexcept -> void {
             this->_resize(newSize);
             for ( auto i = this->_size; i < newSize; ++ i )

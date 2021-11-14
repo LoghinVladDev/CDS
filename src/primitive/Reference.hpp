@@ -56,14 +56,26 @@ namespace cds {
         __CDS_cpplang_NonConstConstexprMemberFunction Reference & operator = ( Reference const & ) noexcept = default;
         __CDS_cpplang_ConstexprDestructor ~Reference () noexcept override = default;
 
-        constexpr operator T & () const noexcept { return * this -> p; } // NOLINT(google-explicit-constructor)
-        constexpr T & get () const noexcept { return * this -> p; }
+        constexpr operator T & () const noexcept { // NOLINT(google-explicit-constructor)
+            return * this->p;
+        }
 
-        __CDS_cpplang_NonConstConstexprMemberFunction operator T & () noexcept { return *p; } // NOLINT(google-explicit-constructor)
-        __CDS_cpplang_NonConstConstexprMemberFunction T & get () noexcept(false) { return *p; }
+        constexpr T & get () const noexcept {
+            return * this->p;
+        }
+
+        __CDS_cpplang_NonConstConstexprMemberFunction operator T & () noexcept { // NOLINT(google-explicit-constructor)
+            return *p;
+        }
+
+        __CDS_cpplang_NonConstConstexprMemberFunction T & get () noexcept(false) {
+            return *p;
+        }
 
         constexpr auto operator == (Reference const & o) const noexcept -> bool {
-            return this == & o || Type < T > :: compare ( o.get(), this->get() );
+            return
+                this == & o ||
+                Type < T > :: compare ( o.get(), this->get() );
         }
 
         __CDS_NoDiscard __CDS_cpplang_VirtualConstexpr auto equals ( Object const & o ) const noexcept -> bool final {

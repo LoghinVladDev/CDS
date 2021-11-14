@@ -51,8 +51,8 @@ namespace cds {
         }
 
         __CDS_OptionalInline explicit OrderedSet (
-            Iterator from,
-            Iterator to
+            Iterator const & from,
+            Iterator const & to
         ) noexcept :
                 ListSet<T>() {
 
@@ -61,8 +61,8 @@ namespace cds {
         }
 
         __CDS_OptionalInline explicit OrderedSet (
-            ConstIterator from,
-            ConstIterator to
+            ConstIterator const & from,
+            ConstIterator const & to
         ) noexcept :
                 ListSet<T>() {
 

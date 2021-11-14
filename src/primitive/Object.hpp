@@ -16,13 +16,21 @@ namespace cds {
     class Object {
     public:
         __CDS_NoDiscard virtual auto toString () const noexcept -> String;
-        __CDS_NoDiscard virtual auto equals (Object const & o) const noexcept -> bool { return this == & o; }
+        __CDS_NoDiscard virtual auto equals (Object const & o) const noexcept -> bool {
+            return this == & o;
+        }
 
         friend auto operator << (std::ostream &, Object const &) noexcept -> std::ostream &;
         virtual explicit operator String () const noexcept;
 
-        __CDS_NoDiscard virtual auto hash () const noexcept -> Index { return 0; }
-        __CDS_NoDiscard virtual auto copy () const noexcept -> Object * { return nullptr; }
+        __CDS_NoDiscard virtual auto hash () const noexcept -> Index {
+            return 0;
+        }
+
+        __CDS_NoDiscard virtual auto copy () const noexcept -> Object * {
+            return nullptr;
+        }
+
         virtual ~Object () noexcept = default;
     };
 
@@ -32,7 +40,9 @@ namespace cds {
 
 namespace cds {
 
-    template<> auto hash<Object>(Object const &o) noexcept -> Index { return o.hash(); }
+    template<> auto hash<Object>(Object const &o) noexcept -> Index {
+        return o.hash();
+    }
 
 }
 

@@ -106,7 +106,9 @@ namespace cds {
         }
 
         __CDS_OptimalInline auto sort ( Comparator < T > const & comparator ) noexcept -> void {
-            return this->sort ( [& comparator](T const & a, T const & b) noexcept -> bool { return comparator ( a, b ); } );
+            return this->sort ( [& comparator](T const & a, T const & b) noexcept -> bool {
+                return comparator ( a, b );
+            });
         }
 
         template < typename V = T, EnableIf < Type < V > :: copyConstructible > = 0 >
@@ -744,9 +746,9 @@ namespace cds {
         }
 
         __CDS_cpplang_ConstexprPureAbstract virtual auto back () noexcept (false) -> ElementRef = 0;
-        __CDS_cpplang_ConstexprPureAbstract virtual auto back () const noexcept (false) -> ElementCRef = 0;
+        __CDS_NoDiscard __CDS_cpplang_ConstexprPureAbstract virtual auto back () const noexcept (false) -> ElementCRef = 0;
 
-        __CDS_cpplang_ConstexprPureAbstract virtual auto front () const noexcept (false) -> ElementCRef = 0;
+        __CDS_NoDiscard __CDS_cpplang_ConstexprPureAbstract virtual auto front () const noexcept (false) -> ElementCRef = 0;
         __CDS_cpplang_ConstexprPureAbstract virtual auto front () noexcept (false) -> ElementRef = 0;
 
         __CDS_NoDiscard __CDS_MaybeUnused __CDS_cpplang_ConstexprOverride auto empty () const noexcept -> bool override {
@@ -767,7 +769,7 @@ namespace cds {
             return s.substr(0, s.length() - 2).append(" ]");
         }
 
-        auto index( ElementCRef value ) const noexcept -> Index {
+        __CDS_NoDiscard auto index( ElementCRef value ) const noexcept -> Index {
 
             __CDS_Collection_OperationalLock
 
@@ -894,9 +896,14 @@ namespace cds {
     __CDS_MaybeUnused auto List < T > :: sub ( Index from, Index to ) const noexcept(false) -> ListType {
         ListType list;
 
-        if ( from > to ) std :: swap ( from, to );
-        if ( from < 0 ) from = 0;
-        if ( to >= this->size() ) to = this->size();
+        if ( from > to )
+            std :: swap ( from, to );
+
+        if ( from < 0 )
+            from = 0;
+
+        if ( to >= this->size() )
+            to = this->size();
 
         Index i = 0;
 
@@ -918,11 +925,9 @@ namespace cds {
     ) noexcept -> void {
 
         auto next = to;
-        if ( next.isValid() ) {
-            ++ next;
-            if ( from == next )
+        if ( next.isValid() )
+            if ( from == ++ next )
                 return;
-        }
 
         if ( from != to && from.isValid() && to.isValid() ) {
             auto partitionIterator = List < T > :: quickSortPartition ( from, to, comparisonFunction );
@@ -932,18 +937,15 @@ namespace cds {
                 return;
 
             if ( partitionIterator == from ) {
-                ++ partitionIterator;
-                if ( partitionIterator.isValid() )
+                if ( ( ++ partitionIterator ).isValid() )
                     List < T > :: quickSort ( partitionIterator, to, comparisonFunction );
                 return;
             }
 
-            ++ partitionIterator;
-            if ( ! partitionIterator.isValid() )
+            if ( ! ( ++ partitionIterator ).isValid() )
                 return;
 
-            ++ partitionIterator;
-            List < T > :: quickSort ( partitionIterator, to, comparisonFunction );
+            List < T > :: quickSort ( ++ partitionIterator, to, comparisonFunction );
         }
     }
 
@@ -954,7 +956,12 @@ namespace cds {
             Iterator const & to,
             SortFunc const & comparisonFunction
     ) noexcept -> Iterator {
-        auto swap = [] ( T & a, T & b ) { auto aux = a; a = b; b = aux; };
+        auto swap = [] ( T & a, T & b ) {
+            auto aux = a;
+            a = b;
+            b = aux;
+        };
+
         auto pivot = * to;
         auto partitionIterator = from;
         Iterator previous;

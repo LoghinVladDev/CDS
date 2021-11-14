@@ -194,17 +194,27 @@ namespace cds {
             }
 
             __CDS_NoDiscard __CDS_MaybeUnused __CDS_cpplang_VirtualConstexpr auto isValid () const noexcept -> bool {
-                return ! this->pDelegate.isNull() && this->pDelegate->isValid();
+                return
+                        ! this->pDelegate.isNull() &&
+                        this->pDelegate->isValid();
             }
 
             __CDS_cpplang_VirtualConstexpr auto operator == ( Iterator const & it ) const noexcept -> bool {
-                if ( this == & it ) return true;
-                return this->pCollection == it.pCollection && this->pDelegate->equals( * it.pDelegate );
+                if ( this == & it )
+                    return true;
+
+                return
+                        this->pCollection == it.pCollection &&
+                        this->pDelegate->equals( * it.pDelegate );
             }
 
             __CDS_cpplang_VirtualConstexpr auto operator != ( Iterator const & it ) const noexcept -> bool {
-                if ( this == & it ) return false;
-                return this->pCollection != it.pCollection || ! this->pDelegate->equals ( * it.pDelegate );
+                if ( this == & it )
+                    return false;
+
+                return
+                        this->pCollection != it.pCollection ||
+                        ! this->pDelegate->equals ( * it.pDelegate );
             }
 
             __CDS_cpplang_VirtualConstexpr auto operator * () const noexcept -> ElementRef {
@@ -272,17 +282,27 @@ namespace cds {
             }
 
             __CDS_NoDiscard __CDS_MaybeUnused __CDS_cpplang_VirtualConstexpr auto isValid () const noexcept -> bool {
-                return ! this->pDelegate.isNull() && this->pDelegate->isValid();
+                return
+                        ! this->pDelegate.isNull() &&
+                        this->pDelegate->isValid();
             }
 
             __CDS_cpplang_VirtualConstexpr auto operator == ( ConstIterator const & it ) const noexcept -> bool {
-                if ( this == & it ) return true;
-                return this->pCollection == it.pCollection && this->pDelegate->equals( * it.pDelegate );
+                if ( this == & it )
+                    return true;
+
+                return
+                        this->pCollection == it.pCollection &&
+                        this->pDelegate->equals( * it.pDelegate );
             }
 
             __CDS_cpplang_VirtualConstexpr auto operator != ( ConstIterator const & it ) const noexcept -> bool {
-                if ( this == & it ) return false;
-                return this->pCollection != it.pCollection || ! this->pDelegate->equals ( * it.pDelegate );
+                if ( this == & it )
+                    return false;
+
+                return
+                        this->pCollection != it.pCollection ||
+                        ! this->pDelegate->equals ( * it.pDelegate );
             }
 
             __CDS_cpplang_VirtualConstexpr auto operator * () const noexcept -> ElementCRef {
@@ -318,7 +338,8 @@ namespace cds {
             __CDS_cpplang_ConstexprDestructor ~ReverseIterator () noexcept override = default;
 
             __CDS_OptimalInline auto operator = ( ReverseIterator const & it ) noexcept -> ReverseIterator & {
-                if ( this == & it ) return * this;
+                if ( this == & it )
+                    return * this;
 
                 this->pDelegate = it.pDelegate->copy();
                 this->pCollection = it.pCollection;
@@ -350,17 +371,27 @@ namespace cds {
             }
 
             __CDS_NoDiscard __CDS_MaybeUnused __CDS_cpplang_VirtualConstexpr auto isValid () const noexcept -> bool {
-                return ! this->pDelegate.isNull() && this->pDelegate->isValid();
+                return
+                        ! this->pDelegate.isNull() &&
+                        this->pDelegate->isValid();
             }
 
             __CDS_cpplang_VirtualConstexpr auto operator == ( ReverseIterator const & it ) const noexcept -> bool {
-                if ( this == & it ) return true;
-                return this->pCollection == it.pCollection && this->pDelegate->equals( * it.pDelegate );
+                if ( this == & it )
+                    return true;
+
+                return
+                        this->pCollection == it.pCollection &&
+                        this->pDelegate->equals( * it.pDelegate );
             }
 
             __CDS_cpplang_VirtualConstexpr auto operator != ( ReverseIterator const & it ) const noexcept -> bool {
-                if ( this == & it ) return false;
-                return this->pCollection != it.pCollection || ! this->pDelegate->equals ( * it.pDelegate );
+                if ( this == & it )
+                    return false;
+
+                return
+                        this->pCollection != it.pCollection ||
+                        ! this->pDelegate->equals ( * it.pDelegate );
             }
 
             __CDS_cpplang_VirtualConstexpr auto operator * () const noexcept -> ElementRef {
@@ -432,13 +463,21 @@ namespace cds {
             }
 
             __CDS_cpplang_VirtualConstexpr auto operator == ( ConstReverseIterator const & it ) const noexcept -> bool {
-                if ( this == & it ) return true;
-                return this->pCollection == it.pCollection && this->pDelegate->equals( * it.pDelegate );
+                if ( this == & it )
+                    return true;
+
+                return
+                        this->pCollection == it.pCollection &&
+                        this->pDelegate->equals( * it.pDelegate );
             }
 
             __CDS_cpplang_VirtualConstexpr auto operator != ( ConstReverseIterator const & it ) const noexcept -> bool {
-                if ( this == & it ) return false;
-                return this->pCollection != it.pCollection || ! this->pDelegate->equals ( * it.pDelegate );
+                if ( this == & it )
+                    return false;
+
+                return
+                        this->pCollection != it.pCollection ||
+                        ! this->pDelegate->equals ( * it.pDelegate );
             }
 
             __CDS_cpplang_VirtualConstexpr auto operator * () const noexcept -> ElementCRef {
@@ -556,29 +595,59 @@ namespace cds {
         }
 
         __CDS_MaybeUnused virtual auto remove ( ElementCRef, Size ) noexcept -> bool = 0;
-        __CDS_MaybeUnused __CDS_OptimalInline virtual auto removeAll ( ElementCRef o ) noexcept -> bool { return this->remove( o, this->size() ); }
-        __CDS_MaybeUnused __CDS_OptimalInline virtual auto removeFirst ( ElementCRef o ) noexcept -> bool { return this->remove( o, 1 ); }
         __CDS_MaybeUnused virtual auto removeLast ( ElementCRef o ) noexcept -> bool = 0;
 
         __CDS_MaybeUnused virtual auto removeOf ( Collection const &, Size ) noexcept -> bool = 0;
-        __CDS_MaybeUnused __CDS_OptimalInline virtual auto removeFirstOf ( Collection const & o ) noexcept -> bool { return this->removeOf( o, 1 ); }
-        __CDS_MaybeUnused __CDS_OptimalInline virtual auto removeAllOf ( Collection const & o ) noexcept -> bool { return this->removeOf ( o, this->size() ); }
         __CDS_MaybeUnused virtual auto removeLastOf ( Collection const & ) noexcept -> bool = 0;
 
         __CDS_MaybeUnused virtual auto removeNotOf ( Collection const &, Size ) noexcept -> bool = 0;
-        __CDS_MaybeUnused __CDS_OptimalInline virtual auto removeFirstNotOf ( Collection const & o ) noexcept -> bool { return this->removeNotOf ( o, 1 ); }
-        __CDS_MaybeUnused __CDS_OptimalInline virtual auto removeAllNotOf ( Collection const & o ) noexcept -> bool  { return this->removeNotOf( o, this->size() ); }
         __CDS_MaybeUnused virtual auto removeLastNotOf ( Collection const & ) noexcept -> bool = 0;
 
         __CDS_MaybeUnused virtual auto removeOf ( InitializerList, Size ) noexcept -> bool = 0;
-        __CDS_MaybeUnused __CDS_OptimalInline virtual auto removeFirstOf ( InitializerList o ) noexcept -> bool { return this->removeOf( o, 1 ); }
-        __CDS_MaybeUnused __CDS_OptimalInline virtual auto removeAllOf ( InitializerList o ) noexcept -> bool { return this->removeOf ( o, this->size() ); }
         __CDS_MaybeUnused virtual auto removeLastOf ( InitializerList ) noexcept -> bool = 0;
 
         __CDS_MaybeUnused virtual auto removeNotOf ( InitializerList, Size ) noexcept -> bool = 0;
-        __CDS_MaybeUnused __CDS_OptimalInline virtual auto removeFirstNotOf ( InitializerList list ) noexcept -> bool { return this->removeNotOf ( list, 1 ); }
-        __CDS_MaybeUnused __CDS_OptimalInline virtual auto removeAllNotOf ( InitializerList list ) noexcept -> bool  { return this->removeNotOf( list, this->size() ); }
         __CDS_MaybeUnused virtual auto removeLastNotOf ( InitializerList ) noexcept -> bool = 0;
+
+        __CDS_MaybeUnused __CDS_OptimalInline virtual auto removeAll ( ElementCRef o ) noexcept -> bool {
+            return this->remove( o, this->size() );
+        }
+
+        __CDS_MaybeUnused __CDS_OptimalInline virtual auto removeFirst ( ElementCRef o ) noexcept -> bool {
+            return this->remove( o, 1 );
+        }
+
+        __CDS_MaybeUnused __CDS_OptimalInline virtual auto removeFirstOf ( Collection const & o ) noexcept -> bool {
+            return this->removeOf( o, 1 );
+        }
+
+        __CDS_MaybeUnused __CDS_OptimalInline virtual auto removeAllOf ( Collection const & o ) noexcept -> bool {
+            return this->removeOf ( o, this->size() );
+        }
+
+        __CDS_MaybeUnused __CDS_OptimalInline virtual auto removeFirstNotOf ( Collection const & o ) noexcept -> bool {
+            return this->removeNotOf ( o, 1 );
+        }
+
+        __CDS_MaybeUnused __CDS_OptimalInline virtual auto removeAllNotOf ( Collection const & o ) noexcept -> bool  {
+            return this->removeNotOf( o, this->size() );
+        }
+
+        __CDS_MaybeUnused __CDS_OptimalInline virtual auto removeFirstOf ( InitializerList o ) noexcept -> bool {
+            return this->removeOf( o, 1 );
+        }
+
+        __CDS_MaybeUnused __CDS_OptimalInline virtual auto removeAllOf ( InitializerList o ) noexcept -> bool {
+            return this->removeOf ( o, this->size() );
+        }
+
+        __CDS_MaybeUnused __CDS_OptimalInline virtual auto removeFirstNotOf ( InitializerList list ) noexcept -> bool {
+            return this->removeNotOf ( list, 1 );
+        }
+
+        __CDS_MaybeUnused __CDS_OptimalInline virtual auto removeAllNotOf ( InitializerList list ) noexcept -> bool  {
+            return this->removeNotOf( list, this->size() );
+        }
 
     protected:
 
@@ -678,8 +747,6 @@ namespace cds {
         ) noexcept ( noexcept ( ( * Type < Predicate > :: unsafeAddress () ) ( Type < ElementType > :: unsafeReference() ) ) )
                 -> bool __CDS_Requires( PredicateOver < Predicate, T > ) {
 
-//            return this->count(predicate) == count;
-
             Size trueCount = 0;
             for ( auto & e : * this ) {
                 if ( predicate ( e ) && trueCount < count )
@@ -699,8 +766,6 @@ namespace cds {
         ) const noexcept ( noexcept ( ( * Type < Predicate > :: unsafeAddress () ) ( Type < ElementType const > :: unsafeReference() ) ) )
                 -> bool __CDS_Requires( PredicateOver < Predicate, T > ) {
 
-//            return this->count(predicate) == count;
-
             Size trueCount = 0;
             for ( auto & e : * this ) {
                 if ( predicate ( e ) && trueCount < count )
@@ -718,8 +783,6 @@ namespace cds {
                 Predicate   const & predicate = []( ElementCRef ) noexcept -> bool { return true; }
         ) noexcept ( noexcept ( ( * Type < Predicate > :: unsafeAddress () ) ( Type < ElementType > :: unsafeReference() ) ) )
                 -> bool __CDS_Requires( PredicateOver < Predicate, T > ) {
-
-//            return this->count(predicate) >= count;
 
             Size trueCount = 0;
             for ( auto & e : * this ) {
@@ -739,8 +802,6 @@ namespace cds {
         ) const noexcept ( noexcept ( ( * Type < Predicate > :: unsafeAddress () ) ( Type < ElementType const > :: unsafeReference() ) ) )
                 -> bool __CDS_Requires( PredicateOver < Predicate, T > ) {
 
-//            return this->count(predicate) >= count;
-
             Size trueCount = 0;
             for ( auto & e : * this ) {
                 if (predicate(e) && trueCount < count)
@@ -759,8 +820,6 @@ namespace cds {
         ) noexcept ( noexcept ( ( * Type < Predicate > :: unsafeAddress () ) ( Type < ElementType > :: unsafeReference() ) ) )
                 -> bool __CDS_Requires( PredicateOver < Predicate, T > ) {
 
-//            return this->count(predicate) <= count;
-
             Size trueCount = 0;
             for ( auto & e : * this ) {
                 if ( predicate ( e ) && trueCount < count )
@@ -778,8 +837,6 @@ namespace cds {
                 Predicate const & predicate = []( ElementCRef ) noexcept -> bool { return true; }
         ) const noexcept ( noexcept ( ( * Type < Predicate > :: unsafeAddress () ) ( Type < ElementType const > :: unsafeReference() ) ) )
                 -> bool __CDS_Requires( PredicateOver < Predicate, T > ) {
-
-//            return this->count(predicate) <= count;
 
             Size trueCount = 0;
             for ( auto & e : * this ) {
@@ -894,7 +951,9 @@ namespace cds {
         ) noexcept ( noexcept ( ( * Type < Predicate > :: unsafeAddress () ) ( Type < ElementType > :: unsafeReference() ) ) )
                 -> bool __CDS_Requires( PredicateOver < Predicate, T > ) {
 
-            return ! this->any ( [&p] (T & e) noexcept -> bool { return ! p(e); } );
+            return ! this->any ( [&p] (T & e) noexcept -> bool {
+                return ! p(e);
+            });
         }
 
         template < typename Predicate >
@@ -903,7 +962,9 @@ namespace cds {
         ) const noexcept ( noexcept ( ( * Type < Predicate > :: unsafeAddress () ) ( Type < ElementType const > :: unsafeReference() ) ) )
                 -> bool __CDS_Requires( PredicateOver < Predicate, T > ) {
 
-            return ! this->any ( [&p] ( ElementCRef e) noexcept -> bool { return ! p(e); } );
+            return ! this->any ( [&p] ( ElementCRef e) noexcept -> bool {
+                return ! p(e);
+            });
         }
 
         __CDS_OptimalInline virtual COLLECTION_EXPLICIT_CONVERSION operator bool () const noexcept { // NOLINT(google-explicit-constructor)

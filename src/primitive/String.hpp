@@ -4184,7 +4184,7 @@ namespace cds {
          * @test Tested in primitive/StringTest/ForEach Tests
          */
         template < typename Action >
-        __CDS_MaybeUnused __CDS_cpplang_ConstexprConditioned auto forEach ( Action const & a ) noexcept ( noexcept ( ( * utility :: unsafeAddress < Action > () ) ( Type < char > :: unsafeReference() ) ) ) -> String & {
+        __CDS_MaybeUnused __CDS_cpplang_ConstexprConditioned auto forEach ( Action const & a ) noexcept ( noexcept ( ( * Type < Action > :: unsafeAddress () ) ( Type < char > :: unsafeReference() ) ) ) -> String & {
             for ( Index i = 0; i < this->_l; ++ i )
                 a ( this->_p[i] );
 
@@ -4204,7 +4204,7 @@ namespace cds {
          * @test Tested in primitive/StringTest/ForEach Tests
          */
         template < typename Action >
-        __CDS_MaybeUnused __CDS_cpplang_ConstexprConditioned auto forEach ( Action const & a ) const noexcept ( noexcept ( ( * utility :: unsafeAddress < Action > () ) ( Type < const char > :: unsafeReference() ) ) ) -> String const & {
+        __CDS_MaybeUnused __CDS_cpplang_ConstexprConditioned auto forEach ( Action const & a ) const noexcept ( noexcept ( ( * Type < Action > :: unsafeAddress () ) ( Type < const char > :: unsafeReference() ) ) ) -> String const & {
             for ( Index i = 0; i < this->_l; ++ i )
                 a ( this->_p[i] );
 
@@ -4225,7 +4225,7 @@ namespace cds {
          * @test Tested in primitive/StringTest/ForEach tests
          */
         template < typename Predicate, typename P = Predicate, typename std :: enable_if < Type < P > :: isCallable, int > :: type = 0 >
-        __CDS_MaybeUnused __CDS_cpplang_ConstexprConditioned auto count ( Predicate const & p ) noexcept ( noexcept ( ( * utility :: unsafeAddress < Predicate > () ) ( Type < char > :: unsafeReference() ) ) ) -> Size {
+        __CDS_MaybeUnused __CDS_cpplang_ConstexprConditioned auto count ( Predicate const & p ) noexcept ( noexcept ( ( * Type < Predicate > :: unsafeAddress () ) ( Type < char > :: unsafeReference() ) ) ) -> Size {
             Size count = 0;
             for ( Index i = 0; i < this->_l; ++ i )
                 if ( p ( this->_p[i] ) )
@@ -4248,7 +4248,7 @@ namespace cds {
          * @test Tested in primitive/StringTest/ForEach tests
          */
         template < typename Predicate, typename P = Predicate, typename std :: enable_if < Type < P > :: isCallable, int > :: type = 0  >
-        __CDS_MaybeUnused __CDS_cpplang_ConstexprConditioned auto count ( Predicate const & p ) const noexcept ( noexcept ( ( * utility :: unsafeAddress < Predicate > () ) ( Type < const char > :: unsafeReference() ) ) ) -> Size {
+        __CDS_MaybeUnused __CDS_cpplang_ConstexprConditioned auto count ( Predicate const & p ) const noexcept ( noexcept ( ( * Type < Predicate > :: unsafeAddress () ) ( Type < const char > :: unsafeReference() ) ) ) -> Size {
             Size count = 0;
             for ( Index i = 0; i < this->_l; ++ i )
                 if ( p ( this->_p[i] ) )
@@ -4328,7 +4328,7 @@ namespace cds {
          * @test Tested in primitive/StringTest/ForEach tests
          */
         template < typename Predicate >
-        __CDS_MaybeUnused __CDS_cpplang_ConstexprConditioned auto any ( Predicate const & p ) const noexcept ( noexcept ( ( * utility :: unsafeAddress < Predicate > () ) ( Type < const char > :: unsafeReference() ) ) ) -> bool { return 1u <= this->count(p); }
+        __CDS_MaybeUnused __CDS_cpplang_ConstexprConditioned auto any ( Predicate const & p ) const noexcept ( noexcept ( ( * Type < Predicate > :: unsafeAddress () ) ( Type < const char > :: unsafeReference() ) ) ) -> bool { return 1u <= this->count(p); }
 
         /**
          * @brief Function used to verify if all the elements validate a certain Predicate. Requires mutable String, as Predicate given can change elements in String
@@ -4344,7 +4344,7 @@ namespace cds {
          * @test Tested in primitive/StringTest/ForEach tests
          */
         template < typename Predicate >
-        __CDS_MaybeUnused __CDS_cpplang_ConstexprConditioned auto all ( Predicate const & p ) noexcept ( noexcept ( ( * utility :: unsafeAddress < Predicate > () ) ( Type < char > :: unsafeReference() ) ) ) -> bool { return this->size() == this->count(p); }
+        __CDS_MaybeUnused __CDS_cpplang_ConstexprConditioned auto all ( Predicate const & p ) noexcept ( noexcept ( ( * Type < Predicate > :: unsafeAddress () ) ( Type < char > :: unsafeReference() ) ) ) -> bool { return this->size() == this->count(p); }
 
         /**
          * @brief Function used to verify if all the elements validate a certain Predicate. Requires Predicate that does not modify elements ( char & ), due to it being applied over immutable String
@@ -4360,7 +4360,7 @@ namespace cds {
          * @test Tested in primitive/StringTest/ForEach tests
          */
         template < typename Predicate >
-        __CDS_MaybeUnused __CDS_cpplang_ConstexprConditioned auto all ( Predicate const & p ) const noexcept ( noexcept ( ( * utility :: unsafeAddress < Predicate > () ) ( Type < const char > :: unsafeReference() ) ) ) -> bool { return this->size() == this->count(p); }
+        __CDS_MaybeUnused __CDS_cpplang_ConstexprConditioned auto all ( Predicate const & p ) const noexcept ( noexcept ( ( * Type < Predicate > :: unsafeAddress () ) ( Type < const char > :: unsafeReference() ) ) ) -> bool { return this->size() == this->count(p); }
 
         /**
          * @brief Function obtains a String that contains the contents of the caller in reverse order

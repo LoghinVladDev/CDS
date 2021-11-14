@@ -53,8 +53,15 @@ namespace cds {
             }
 
             Node() noexcept = default;
-            Node(Node const & o) noexcept : _label(o._label), _pObject(o._pObject->copy()) {}
-            ~Node() noexcept override { Memory :: instance().destroy ( this->_pObject ); }
+            Node(Node const & o) noexcept :
+                    _label(o._label),
+                    _pObject(o._pObject->copy()) {
+
+            }
+
+            ~Node() noexcept override {
+                Memory :: instance().destroy ( this->_pObject );
+            }
 
             auto clearData () noexcept -> Node & {
                 Memory :: instance().destroy ( this->_pObject );
@@ -79,7 +86,9 @@ namespace cds {
 
             __CDS_NoDiscard auto getBoolean () const noexcept(false) -> bool {
                 auto p = dynamic_cast < Boolean const * > (this->_pObject);
-                if ( p == nullptr ) throw TypeException(Boolean());
+                if ( p == nullptr )
+                    throw TypeException(Boolean());
+
                 return p->get();
             }
 
@@ -89,6 +98,7 @@ namespace cds {
                     auto pLong = dynamic_cast < Long const * > (this->_pObject);
                     if ( pLong == nullptr )
                         throw TypeException(Int());
+
                     return static_cast < int > (pLong->get());
                 }
 
@@ -140,37 +150,56 @@ namespace cds {
 
             __CDS_NoDiscard auto getJSON () const noexcept(false) -> JSON const & {
                 auto p = dynamic_cast < JSON const * > ( this->_pObject );
-                if ( p == nullptr ) throw TypeException(JSON());
+                if ( p == nullptr )
+                    throw TypeException(JSON());
+
                 return * p;
             }
 
             __CDS_NoDiscard auto getString () const noexcept(false) -> String const & {
                 auto p = dynamic_cast < String const * > ( this->_pObject );
-                if ( p == nullptr ) throw TypeException(String());
+                if ( p == nullptr )
+                    throw TypeException(String());
+
                 return * p;
             }
 
             __CDS_NoDiscard auto getArray () const noexcept(false) -> JSON::Array const &;
 
-            __CDS_OptimalInline auto getObject () noexcept -> Object & { return * this->_pObject; }
+            __CDS_OptimalInline auto getObject () noexcept -> Object & {
+                return * this->_pObject;
+            }
 
             auto getJSON () noexcept(false) -> JSON & {
                 auto p = dynamic_cast < JSON * > (this->_pObject);
-                if ( p == nullptr ) throw TypeException(JSON());
+                if ( p == nullptr )
+                    throw TypeException(JSON());
+
                 return * p;
             }
 
             auto getString () noexcept(false) -> String & {
                 auto p = dynamic_cast < String * > (this->_pObject);
-                if ( p == nullptr ) throw TypeException(String());
+                if ( p == nullptr )
+                    throw TypeException(String());
+
                 return * p;
             };
 
             auto getArray () noexcept(false) -> JSON::Array &;
 
-            __CDS_OptimalInline auto setLabel (String const & label) noexcept -> Node & { this->_label = label; return * this; }
-            __CDS_NoDiscard __CDS_MaybeUnused constexpr auto getLabel () const noexcept -> String const & { return this->_label; }
-            __CDS_cpplang_NonConstConstexprMemberFunction auto getLabel () noexcept -> String & { return this->_label; }
+            __CDS_OptimalInline auto setLabel (String const & label) noexcept -> Node & {
+                this->_label = label;
+                return * this;
+            }
+
+            __CDS_NoDiscard __CDS_MaybeUnused constexpr auto getLabel () const noexcept -> String const & {
+                return this->_label;
+            }
+
+            __CDS_cpplang_NonConstConstexprMemberFunction auto getLabel () noexcept -> String & {
+                return this->_label;
+            }
 
             __CDS_NoDiscard auto toString () const noexcept -> String override {
                 return
@@ -179,7 +208,9 @@ namespace cds {
 
             __CDS_NoDiscard auto dumpIndented (int indent, int count) const noexcept -> String;
 
-            __CDS_NoDiscard auto copy () const noexcept -> Node * override { return Memory::instance().create < Node > (*this); }
+            __CDS_NoDiscard auto copy () const noexcept -> Node * override {
+                return Memory::instance().create < Node > (*this);
+            }
         };
 
         LinkedList < Node > _nodes;
@@ -191,7 +222,8 @@ namespace cds {
         ~JSON () noexcept override = default;
 
         __CDS_OptimalInline auto operator = ( JSON const & json ) noexcept -> JSON & {
-            if ( this == & json ) return * this;
+            if ( this == & json )
+                return * this;
 
             this->_nodes = json._nodes;
 
@@ -199,7 +231,8 @@ namespace cds {
         }
 
         __CDS_OptimalInline auto operator = ( JSON && json ) noexcept -> JSON & {
-            if ( this == & json ) return * this;
+            if ( this == & json )
+                return * this;
 
             this->_nodes = std :: move ( json._nodes );
 
@@ -212,6 +245,7 @@ namespace cds {
             if ( this == & o ) return true;
             auto p = dynamic_cast < decltype ( this ) > (& o);
             if ( p == nullptr ) return false;
+
             return this->operator==(* p);
         }
 
@@ -274,12 +308,29 @@ namespace cds {
         auto put ( String const &, Object const & ) noexcept -> JSON &;
         auto put ( String const &, StringLiteral ) noexcept -> JSON &;
 
-        __CDS_NoDiscard __CDS_MaybeUnused auto begin () noexcept -> LinkedList < JSON::Node >::Iterator { return this->_nodes.begin(); }
-        __CDS_NoDiscard __CDS_MaybeUnused auto begin () const noexcept -> LinkedList < JSON::Node >::ConstIterator { return this->_nodes.begin(); }
-        __CDS_NoDiscard __CDS_MaybeUnused auto cbegin () const noexcept -> LinkedList < JSON::Node >::ConstIterator { return this->_nodes.cbegin(); }
-        __CDS_NoDiscard __CDS_MaybeUnused auto end () noexcept -> LinkedList < JSON::Node >::Iterator { return this->_nodes.end(); }
-        __CDS_NoDiscard __CDS_MaybeUnused auto end () const noexcept -> LinkedList < JSON::Node >::ConstIterator { return this->_nodes.end(); }
-        __CDS_NoDiscard __CDS_MaybeUnused auto cend () const noexcept -> LinkedList < JSON::Node >::ConstIterator { return this->_nodes.cend(); }
+        __CDS_NoDiscard __CDS_MaybeUnused auto begin () noexcept -> LinkedList < JSON::Node >::Iterator {
+            return this->_nodes.begin();
+        }
+
+        __CDS_NoDiscard __CDS_MaybeUnused auto begin () const noexcept -> LinkedList < JSON::Node >::ConstIterator {
+            return this->_nodes.begin();
+        }
+
+        __CDS_NoDiscard __CDS_MaybeUnused auto cbegin () const noexcept -> LinkedList < JSON::Node >::ConstIterator {
+            return this->_nodes.cbegin();
+        }
+
+        __CDS_NoDiscard __CDS_MaybeUnused auto end () noexcept -> LinkedList < JSON::Node >::Iterator {
+            return this->_nodes.end();
+        }
+
+        __CDS_NoDiscard __CDS_MaybeUnused auto end () const noexcept -> LinkedList < JSON::Node >::ConstIterator {
+            return this->_nodes.end();
+        }
+
+        __CDS_NoDiscard __CDS_MaybeUnused auto cend () const noexcept -> LinkedList < JSON::Node >::ConstIterator {
+            return this->_nodes.cend();
+        }
 
         __CDS_NoDiscard __CDS_MaybeUnused auto getBoolean ( String const & ) const noexcept (false) -> bool;
         __CDS_NoDiscard __CDS_MaybeUnused auto getInt ( String const & ) const noexcept (false) -> int;
@@ -378,7 +429,8 @@ namespace cds {
         }
 
         __CDS_OptimalInline auto operator = ( Array const & array ) noexcept -> Array & {
-            if ( this == & array ) return * this;
+            if ( this == & array )
+                return * this;
 
             this->_list = array._list;
 
@@ -386,7 +438,8 @@ namespace cds {
         }
 
         __CDS_OptimalInline auto operator = ( Array && array ) noexcept -> Array & {
-            if ( this == & array ) return * this;
+            if ( this == & array )
+                return * this;
 
             this->_list = std :: move ( array._list );
 
@@ -394,7 +447,8 @@ namespace cds {
         }
 
         __CDS_OptimalInline auto operator == (Array const & o) const noexcept -> bool {
-            if ( this == & o ) return true;
+            if ( this == & o )
+                return true;
             return this->_list == o._list;
         }
 
@@ -406,12 +460,29 @@ namespace cds {
             return this->operator== (*p);
         }
 
-        __CDS_NoDiscard auto begin () noexcept -> LinkedList < JSON::Node >::Iterator { return this->_list.begin(); }
-        __CDS_NoDiscard auto begin () const noexcept -> LinkedList < JSON::Node >::ConstIterator { return this->_list.begin(); }
-        __CDS_NoDiscard auto cbegin () const noexcept -> LinkedList < JSON::Node >::ConstIterator { return this->_list.cbegin(); }
-        __CDS_NoDiscard auto end () noexcept -> LinkedList < JSON::Node >::Iterator { return this->_list.end(); }
-        __CDS_NoDiscard auto end () const noexcept -> LinkedList < JSON::Node >::ConstIterator { return this->_list.end(); }
-        __CDS_NoDiscard auto cend () const noexcept -> LinkedList < JSON::Node >::ConstIterator { return this->_list.cend(); }
+        __CDS_NoDiscard auto begin () noexcept -> LinkedList < JSON::Node >::Iterator {
+            return this->_list.begin();
+        }
+
+        __CDS_NoDiscard auto begin () const noexcept -> LinkedList < JSON::Node >::ConstIterator {
+            return this->_list.begin();
+        }
+
+        __CDS_NoDiscard auto cbegin () const noexcept -> LinkedList < JSON::Node >::ConstIterator {
+            return this->_list.cbegin();
+        }
+
+        __CDS_NoDiscard auto end () noexcept -> LinkedList < JSON::Node >::Iterator {
+            return this->_list.end();
+        }
+
+        __CDS_NoDiscard auto end () const noexcept -> LinkedList < JSON::Node >::ConstIterator {
+            return this->_list.end();
+        }
+
+        __CDS_NoDiscard auto cend () const noexcept -> LinkedList < JSON::Node >::ConstIterator {
+            return this->_list.cend();
+        }
 
         auto put(Index i, JSON::Node const & o) noexcept -> Array & {
             if ( i > static_cast<Index>(this->_list.size()) )
@@ -476,8 +547,13 @@ namespace cds {
             return * this;
         }
 
-        __CDS_NoDiscard __CDS_MaybeUnused __CDS_OptimalInline auto length () const noexcept -> Size { return this->_list.size(); }
-        __CDS_NoDiscard __CDS_MaybeUnused __CDS_OptimalInline auto size () const noexcept -> Size { return this->_list.size(); }
+        __CDS_NoDiscard __CDS_MaybeUnused __CDS_OptimalInline auto length () const noexcept -> Size {
+            return this->_list.size();
+        }
+
+        __CDS_NoDiscard __CDS_MaybeUnused __CDS_OptimalInline auto size () const noexcept -> Size {
+            return this->_list.size();
+        }
 
         __CDS_NoDiscard __CDS_MaybeUnused auto get(Index i) const noexcept(false) -> JSON::Node const & {
             if ( i < 0 || i >= static_cast<Index>(this->_list.size()) )
@@ -537,9 +613,8 @@ namespace cds {
 
         __CDS_NoDiscard auto toString () const noexcept -> String override {
             String res;
-            for ( auto & e : this->_list ) {
+            for ( auto & e : this->_list )
                 res += e.stringFormattedData() + ", ";
-            }
 
             if (res.empty())
                 return "[]";
@@ -591,10 +666,14 @@ namespace cds {
                     if ( arrayBracketCount == 0 && objectBracketCount == 0 && c == ',' )
                         break;
                     else {
-                        if ( c == '{' )objectBracketCount ++;
-                        else if ( c == '}' )objectBracketCount --;
-                        else if ( c == '[' )arrayBracketCount ++;
-                        else if ( c == ']' )arrayBracketCount --;
+                        if ( c == '{' )
+                            objectBracketCount ++;
+                        else if ( c == '}' )
+                            objectBracketCount --;
+                        else if ( c == '[' )
+                            arrayBracketCount ++;
+                        else if ( c == ']' )
+                            arrayBracketCount --;
 
                         element += c;
                         segmentLength ++;
@@ -808,10 +887,14 @@ namespace cds {
                 if ( arrayBracketCount == 0 && objectBracketCount == 0 && c == ',' )
                     break;
                 else {
-                    if ( c == '{' ) objectBracketCount ++;
-                    else if ( c == '}' ) objectBracketCount --;
-                    else if ( c == '[' ) arrayBracketCount ++;
-                    else if ( c == ']' ) arrayBracketCount --;
+                    if ( c == '{' )
+                        objectBracketCount ++;
+                    else if ( c == '}' )
+                        objectBracketCount --;
+                    else if ( c == '[' )
+                        arrayBracketCount ++;
+                    else if ( c == ']' )
+                        arrayBracketCount --;
 
                     data += c;
                     segmentLength ++;
