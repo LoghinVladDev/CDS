@@ -3546,7 +3546,7 @@ __CDS_OptimalInline cds :: Sequence < C > ::Sequence ( cds :: Sequence < C > con
 #else
 
 template < typename C >
-__CDS_OptimalInline cds :: Sequence < C > :: Sequence(cds :: Sequence const & s) noexcept :
+__CDS_OptimalInline cds :: Sequence < C > :: Sequence(cds :: Sequence < C > const & s) noexcept :
  //   pCollection(Memory::instance().create < ForeignPointer < typename std::remove_reference < decltype (s.pCollection.valueAt().valueAt()) > ::type > >(s.pCollection.valueAt().get())),
     chainCount(s.chainCount),
     storedMappers(s.storedMappers),
