@@ -581,7 +581,7 @@ namespace cds {
                     }
                 } else if ( address.count(':') > 0 ) {
                     auto unverifiedPort = Int::parse(addressBits.back());
-                    if ( unverifiedPort > Limits::U16_MAX )
+                    if ( unverifiedPort > limits :: U16_MAX )
                         throw IllegalArgumentException ( "Invalid TCP/IP Port : "_s + unverifiedPort.toString() );
 
                     port = (uint16)(int)unverifiedPort;
@@ -620,7 +620,7 @@ namespace cds {
 
     #if defined(__CDS_Platform_Linux)
 
-            auto retVal = ::close ( Utility::exchange ( this->_platformSocket, Socket::UNIX_INVALID_PLATFORM_SOCKET ) );
+            auto retVal = ::close ( exchange ( this->_platformSocket, Socket::UNIX_INVALID_PLATFORM_SOCKET ) );
             if ( retVal == Socket::UNIX_SOCKET_FUNCTION_ERROR )
                 throw SocketException("Socket Close Exception");
 
@@ -895,7 +895,7 @@ namespace cds {
                 }
 
                 if ( this->pLastSocketAddress != nullptr )
-                    Memory :: instance().destroy ( Utility::exchange(this->pLastSocketAddress, nullptr) );
+                    Memory :: instance().destroy ( exchange(this->pLastSocketAddress, nullptr) );
 
                 switch ( protocolVersion ) {
                     case ProtocolVersion::INTERNET_PROTOCOL_NONE_SPECIFIED:
@@ -1307,7 +1307,7 @@ namespace cds {
 
     #if defined (__CDS_Platform_Linux)
 
-            return dataTypes::hash<int> ( this->_platformSocket );
+            return cds :: hash<int> ( this->_platformSocket );
 
     #elif defined(__CDS_Platform_Microsoft_Windows)
 
@@ -1481,7 +1481,7 @@ namespace cds {
 
     #if defined(__CDS_Platform_Linux)
 
-                _platformSocket(Utility::exchange(socket._platformSocket, Socket::UNIX_INVALID_PLATFORM_SOCKET)),
+                _platformSocket(exchange(socket._platformSocket, Socket::UNIX_INVALID_PLATFORM_SOCKET)),
 
     #elif defined(__CDS_Platform_Microsoft_Windows)
 
@@ -1493,11 +1493,11 @@ namespace cds {
 
     #endif
 
-                _port(Utility::exchange(socket._port, Socket::DEFAULT_PORT)),
-                _packetSize(Utility::exchange(socket._packetSize, Socket::DEFAULT_PACKET_SIZE)),
-                _protocolVersion(Utility::exchange(socket._protocolVersion, Socket::ProtocolVersion::AUTO)),
-                _packetSyncCount(Utility::exchange(socket._packetSyncCount, Socket::DEFAULT_PACKET_SYNC_COUNT)),
-                _synchronizeSettingsAtConnectionStartup(Utility::exchange(socket._synchronizeSettingsAtConnectionStartup, true)) {
+                _port(exchange(socket._port, Socket::DEFAULT_PORT)),
+                _packetSize(exchange(socket._packetSize, Socket::DEFAULT_PACKET_SIZE)),
+                _protocolVersion(exchange(socket._protocolVersion, Socket::ProtocolVersion::AUTO)),
+                _packetSyncCount(exchange(socket._packetSyncCount, Socket::DEFAULT_PACKET_SYNC_COUNT)),
+                _synchronizeSettingsAtConnectionStartup(exchange(socket._synchronizeSettingsAtConnectionStartup, true)) {
 
         }
 
@@ -1508,7 +1508,7 @@ namespace cds {
 
     #if defined(__CDS_Platform_Linux)
 
-            this->_platformSocket = Utility::exchange(socket._platformSocket, Socket::UNIX_INVALID_PLATFORM_SOCKET);
+            this->_platformSocket = exchange(socket._platformSocket, Socket::UNIX_INVALID_PLATFORM_SOCKET);
 
     #elif defined(__CDS_Platform_Microsoft_Windows)
 
@@ -1520,11 +1520,11 @@ namespace cds {
 
     #endif
 
-            this->_port = Utility::exchange(socket._port, Socket::DEFAULT_PORT);
-            this->_packetSize = Utility::exchange(socket._packetSize, Socket::DEFAULT_PACKET_SIZE);
-            this->_protocolVersion = Utility::exchange(socket._protocolVersion, Socket::ProtocolVersion::AUTO);
-            this->_packetSyncCount = Utility::exchange(socket._packetSyncCount, Socket::DEFAULT_PACKET_SYNC_COUNT);
-            this->_synchronizeSettingsAtConnectionStartup = Utility::exchange(socket._synchronizeSettingsAtConnectionStartup, true);
+            this->_port = exchange(socket._port, Socket::DEFAULT_PORT);
+            this->_packetSize = exchange(socket._packetSize, Socket::DEFAULT_PACKET_SIZE);
+            this->_protocolVersion = exchange(socket._protocolVersion, Socket::ProtocolVersion::AUTO);
+            this->_packetSyncCount = exchange(socket._packetSyncCount, Socket::DEFAULT_PACKET_SYNC_COUNT);
+            this->_synchronizeSettingsAtConnectionStartup = exchange(socket._synchronizeSettingsAtConnectionStartup, true);
 
             return * this;
         }
