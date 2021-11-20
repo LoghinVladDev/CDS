@@ -878,7 +878,7 @@ namespace cds {
             __CDS_OptimalInline LastAddressContainer() noexcept = default;
 
             __CDS_OptimalInline ~LastAddressContainer() noexcept {
-                Memory :: instance().destroy ( this->pLastSocketAddress );
+                delete this->pLastSocketAddress;
             }
 
             __CDS_OptionalInline auto specifyType ( ProtocolVersion protocolVersion ) noexcept -> void {
@@ -895,20 +895,20 @@ namespace cds {
                 }
 
                 if ( this->pLastSocketAddress != nullptr )
-                    Memory :: instance().destroy ( exchange(this->pLastSocketAddress, nullptr) );
+                    delete exchange(this->pLastSocketAddress, nullptr);
 
                 switch ( protocolVersion ) {
                     case ProtocolVersion::INTERNET_PROTOCOL_NONE_SPECIFIED:
                     case ProtocolVersion::INTERNET_PROTOCOL_VERSION_6:
                     case ProtocolVersion::INTERNET_PROTOCOL_VERSION_6_FORCED:
-                        this->pLastSocketAddress = reinterpret_cast < sockaddr * > (Memory :: instance().create < sockaddr_in6 > ());
+                        this->pLastSocketAddress = reinterpret_cast < sockaddr * > ( new sockaddr_in6 ());
                         this->lastSocketAddressSize = sizeof ( sockaddr_in6 );
                         this->lastProtocolType = ProtocolVersion::IPV6;
 
                         return;
                     case ProtocolVersion::INTERNET_PROTOCOL_VERSION_4:
 
-                        this->pLastSocketAddress = reinterpret_cast < sockaddr * > (Memory :: instance().create < sockaddr_in > ());
+                        this->pLastSocketAddress = reinterpret_cast < sockaddr * > ( new sockaddr_in ());
                         this->lastSocketAddressSize = sizeof ( sockaddr_in );
                         this->lastProtocolType = ProtocolVersion::IPV4;
                 }
