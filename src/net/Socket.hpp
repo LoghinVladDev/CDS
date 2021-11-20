@@ -865,7 +865,7 @@ namespace cds {
 
         }
 
-    private:
+    protected:
 
     #if defined(__CDS_Platform_Linux)
 
@@ -1539,6 +1539,11 @@ namespace cds {
         explicit ServerSocket ( uint16 port, ProtocolVersion protocolVersion = Socket::ProtocolVersion::AUTO ) noexcept (false) : Socket(protocolVersion) {
             this->bind (port).listen ();
         }
+
+        __CDS_NoDiscard __CDS_MaybeUnused constexpr auto lastClientAddressInfo () noexcept -> LastAddressContainer const & {
+            return * this->pLastAddressObtainedContainer;
+        };
+
     };
 
 }
