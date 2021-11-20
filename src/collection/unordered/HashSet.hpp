@@ -365,11 +365,15 @@ namespace cds {
         auto sequence () & noexcept -> Sequence < HashSet >;
 
         __CDS_OptimalInline HashSet ( HashSet const & set ) noexcept {
+            this->_listArray = Memory :: instance().createArray < Node * > ( this->_hasher.getBoundary() );
+
             for ( auto const & e : set )
                 this->insert ( e );
         }
 
         __CDS_OptimalInline HashSet ( InitializerList initializerList ) noexcept { // NOLINT(google-explicit-constructor)
+            this->_listArray = Memory :: instance().createArray < Node * > ( this->_hasher.getBoundary() );
+
             for ( auto const & e : initializerList )
                 this->insert ( e );
         }
@@ -379,6 +383,7 @@ namespace cds {
                 Iterator to
         ) noexcept :
                 Set <T> () {
+            this->_listArray = Memory :: instance().createArray < Node * > ( this->_hasher.getBoundary() );
 
             for ( auto it = from; it != to; ++ it )
                 this->insert ( * it );
@@ -389,6 +394,7 @@ namespace cds {
                 ConstIterator to
         ) noexcept :
                 Set <T> () {
+            this->_listArray = Memory :: instance().createArray < Node * > ( this->_hasher.getBoundary() );
 
             for ( auto it = from; it != to; ++ it )
                 this->insert ( * it );

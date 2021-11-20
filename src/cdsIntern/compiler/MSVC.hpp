@@ -47,7 +47,7 @@
 #define __CDS_cpplang_NestedInheritedOverride /* NOLINT(bugprone-reserved-identifier) */
 
 #undef __CDS_Requires
-#define __CDS_Requires(_requirements) /* NOLINT(bugprone-reserved-identifier) */
+#define __CDS_Requires(...) /* NOLINT(bugprone-reserved-identifier) */
 
 #endif
 
