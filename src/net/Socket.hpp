@@ -225,6 +225,7 @@ namespace cds {
         Size            _packetSyncCount    { Socket::DEFAULT_PACKET_SYNC_COUNT };
 
         bool            _synchronizeSettingsAtConnectionStartup { true };
+        bool            _connected          { false };
 
 
         Size            _port               { Socket::DEFAULT_PORT };
@@ -248,6 +249,10 @@ namespace cds {
 
     #endif
 
+        }
+
+        __CDS_NoDiscard constexpr auto connected () const noexcept -> bool {
+            return this->_connected;
         }
 
 
@@ -489,6 +494,8 @@ namespace cds {
 
             }
 
+            this->_connected = true;
+
             return * this;
         }
 
@@ -502,8 +509,13 @@ namespace cds {
             auto idIndex = addressBits.index( ipv4Identifier );
             if ( idIndex != -1 )
                 addressBits = addressBits.sub<Array<String>>(idIndex + 1);
-            else
-                addressBits.remove("", 2);
+            else {
+                idIndex = addressBits.index( ipv4Identifier.lower() );
+                if ( idIndex != -1 )
+                    addressBits = addressBits.sub<Array<String>>(idIndex + 1);
+                else
+                    addressBits.remove("", 2);
+            }
 
             if ( addressBits.size () > 3 )
                 throw IllegalArgumentException ( "IPV6 Address conversion failed : "_s + addressBits.toString () +
@@ -581,7 +593,7 @@ namespace cds {
                     }
                 } else if ( address.count(':') > 0 ) {
                     auto unverifiedPort = Int::parse(addressBits.back());
-                    if ( unverifiedPort > Limits::U16_MAX )
+                    if ( unverifiedPort > limits :: U16_MAX )
                         throw IllegalArgumentException ( "Invalid TCP/IP Port : "_s + unverifiedPort.toString() );
 
                     port = (uint16)(int)unverifiedPort;
@@ -618,9 +630,11 @@ namespace cds {
             if ( ! this->isOpen() )
                 return * this;
 
+            this->_connected = false;
+
     #if defined(__CDS_Platform_Linux)
 
-            auto retVal = ::close ( Utility::exchange ( this->_platformSocket, Socket::UNIX_INVALID_PLATFORM_SOCKET ) );
+            auto retVal = ::close ( exchange ( this->_platformSocket, Socket::UNIX_INVALID_PLATFORM_SOCKET ) );
             if ( retVal == Socket::UNIX_SOCKET_FUNCTION_ERROR )
                 throw SocketException("Socket Close Exception");
 
@@ -865,7 +879,7 @@ namespace cds {
 
         }
 
-    private:
+    protected:
 
     #if defined(__CDS_Platform_Linux)
 
@@ -878,7 +892,7 @@ namespace cds {
             __CDS_OptimalInline LastAddressContainer() noexcept = default;
 
             __CDS_OptimalInline ~LastAddressContainer() noexcept {
-                Memory :: instance().destroy ( this->pLastSocketAddress );
+                delete this->pLastSocketAddress;
             }
 
             __CDS_OptionalInline auto specifyType ( ProtocolVersion protocolVersion ) noexcept -> void {
@@ -895,22 +909,59 @@ namespace cds {
                 }
 
                 if ( this->pLastSocketAddress != nullptr )
-                    Memory :: instance().destroy ( Utility::exchange(this->pLastSocketAddress, nullptr) );
+                    delete exchange(this->pLastSocketAddress, nullptr);
 
                 switch ( protocolVersion ) {
                     case ProtocolVersion::INTERNET_PROTOCOL_NONE_SPECIFIED:
                     case ProtocolVersion::INTERNET_PROTOCOL_VERSION_6:
                     case ProtocolVersion::INTERNET_PROTOCOL_VERSION_6_FORCED:
-                        this->pLastSocketAddress = reinterpret_cast < sockaddr * > (Memory :: instance().create < sockaddr_in6 > ());
+                        this->pLastSocketAddress = reinterpret_cast < sockaddr * > ( new sockaddr_in6 ());
                         this->lastSocketAddressSize = sizeof ( sockaddr_in6 );
                         this->lastProtocolType = ProtocolVersion::IPV6;
 
                         return;
                     case ProtocolVersion::INTERNET_PROTOCOL_VERSION_4:
 
-                        this->pLastSocketAddress = reinterpret_cast < sockaddr * > (Memory :: instance().create < sockaddr_in > ());
+                        this->pLastSocketAddress = reinterpret_cast < sockaddr * > ( new sockaddr_in ());
                         this->lastSocketAddressSize = sizeof ( sockaddr_in );
                         this->lastProtocolType = ProtocolVersion::IPV4;
+                }
+            }
+
+            __CDS_NoDiscard auto address () const noexcept -> Pair < String, uint16 > {
+                switch ( this->lastProtocolType ) {
+                    case ProtocolVersion::INTERNET_PROTOCOL_NONE_SPECIFIED:
+                    case ProtocolVersion::INTERNET_PROTOCOL_VERSION_6:
+                    case ProtocolVersion::INTERNET_PROTOCOL_VERSION_6_FORCED: {
+                        Pair < String, uint16 > returnValue = { String(INET6_ADDRSTRLEN, '\0'), 0 };
+                        auto pAddressInfo = reinterpret_cast < sockaddr_in6 * > ( this->pLastSocketAddress );
+
+                        inet_ntop (
+                                AF_INET6,
+                                reinterpret_cast < void * > ( & pAddressInfo->sin6_addr ),
+                                returnValue.first().data(),
+                                INET6_ADDRSTRLEN
+                        );
+
+                        returnValue.second() = ntohs ( pAddressInfo->sin6_port );
+                        return returnValue;
+                    }
+                    case ProtocolVersion::INTERNET_PROTOCOL_VERSION_4: {
+                        Pair < String, uint16 > returnValue = { String(INET_ADDRSTRLEN, '\0'), 0 };
+                        auto pAddressInfo = reinterpret_cast < sockaddr_in * > ( this->pLastSocketAddress );
+
+                        inet_ntop (
+                                AF_INET,
+                                reinterpret_cast < void * > ( & pAddressInfo->sin_addr ),
+                                returnValue.first().data(),
+                                INET_ADDRSTRLEN
+                        );
+
+                        returnValue.second() = ntohs ( pAddressInfo->sin_port );
+                        return returnValue;
+                    }
+                    default:
+                        return {};
                 }
             }
         };
@@ -1027,6 +1078,7 @@ namespace cds {
                     clientSocket.writeSize ( this->_packetSyncCount );
 
                     acknowledge = clientSocket.readInt ();
+                    clientSocket._connected = true;
                 } catch ( Exception const & e ) {
                     throw SocketException("Synchronization of settings at connect initialization not acknowledged : "_s + e);
                 }
@@ -1307,7 +1359,7 @@ namespace cds {
 
     #if defined (__CDS_Platform_Linux)
 
-            return dataTypes::hash<int> ( this->_platformSocket );
+            return cds :: hash<int> ( this->_platformSocket );
 
     #elif defined(__CDS_Platform_Microsoft_Windows)
 
@@ -1402,7 +1454,8 @@ namespace cds {
                 _packetSize(socket._packetSize),
                 _protocolVersion(socket._protocolVersion),
                 _packetSyncCount(socket._packetSyncCount),
-                _synchronizeSettingsAtConnectionStartup(socket._synchronizeSettingsAtConnectionStartup) {
+                _synchronizeSettingsAtConnectionStartup(socket._synchronizeSettingsAtConnectionStartup),
+                _connected(socket._connected) {
 
     #if defined(__CDS_Platform_Microsoft_Windows)
 
@@ -1467,11 +1520,12 @@ namespace cds {
 
     #endif
 
-                this->_port = socket._port;
-                this->_packetSize = socket._packetSize;
-                this->_protocolVersion = socket._protocolVersion;
-                this->_packetSyncCount = socket._packetSyncCount;
-                this->_synchronizeSettingsAtConnectionStartup = socket._synchronizeSettingsAtConnectionStartup;
+                this->_port                                     = socket._port;
+                this->_packetSize                               = socket._packetSize;
+                this->_protocolVersion                          = socket._protocolVersion;
+                this->_packetSyncCount                          = socket._packetSyncCount;
+                this->_synchronizeSettingsAtConnectionStartup   = socket._synchronizeSettingsAtConnectionStartup;
+                this->_connected                                = socket._connected;
 
                 return * this;
         }
@@ -1481,7 +1535,7 @@ namespace cds {
 
     #if defined(__CDS_Platform_Linux)
 
-                _platformSocket(Utility::exchange(socket._platformSocket, Socket::UNIX_INVALID_PLATFORM_SOCKET)),
+                _platformSocket(exchange(socket._platformSocket, Socket::UNIX_INVALID_PLATFORM_SOCKET)),
 
     #elif defined(__CDS_Platform_Microsoft_Windows)
 
@@ -1493,11 +1547,12 @@ namespace cds {
 
     #endif
 
-                _port(Utility::exchange(socket._port, Socket::DEFAULT_PORT)),
-                _packetSize(Utility::exchange(socket._packetSize, Socket::DEFAULT_PACKET_SIZE)),
-                _protocolVersion(Utility::exchange(socket._protocolVersion, Socket::ProtocolVersion::AUTO)),
-                _packetSyncCount(Utility::exchange(socket._packetSyncCount, Socket::DEFAULT_PACKET_SYNC_COUNT)),
-                _synchronizeSettingsAtConnectionStartup(Utility::exchange(socket._synchronizeSettingsAtConnectionStartup, true)) {
+                _port(exchange(socket._port, Socket::DEFAULT_PORT)),
+                _packetSize(exchange(socket._packetSize, Socket::DEFAULT_PACKET_SIZE)),
+                _protocolVersion(exchange(socket._protocolVersion, Socket::ProtocolVersion::AUTO)),
+                _packetSyncCount(exchange(socket._packetSyncCount, Socket::DEFAULT_PACKET_SYNC_COUNT)),
+                _synchronizeSettingsAtConnectionStartup(exchange(socket._synchronizeSettingsAtConnectionStartup, true)),
+                _connected(exchange(socket._connected, false)){
 
         }
 
@@ -1508,7 +1563,7 @@ namespace cds {
 
     #if defined(__CDS_Platform_Linux)
 
-            this->_platformSocket = Utility::exchange(socket._platformSocket, Socket::UNIX_INVALID_PLATFORM_SOCKET);
+            this->_platformSocket = exchange(socket._platformSocket, Socket::UNIX_INVALID_PLATFORM_SOCKET);
 
     #elif defined(__CDS_Platform_Microsoft_Windows)
 
@@ -1520,13 +1575,52 @@ namespace cds {
 
     #endif
 
-            this->_port = Utility::exchange(socket._port, Socket::DEFAULT_PORT);
-            this->_packetSize = Utility::exchange(socket._packetSize, Socket::DEFAULT_PACKET_SIZE);
-            this->_protocolVersion = Utility::exchange(socket._protocolVersion, Socket::ProtocolVersion::AUTO);
-            this->_packetSyncCount = Utility::exchange(socket._packetSyncCount, Socket::DEFAULT_PACKET_SYNC_COUNT);
-            this->_synchronizeSettingsAtConnectionStartup = Utility::exchange(socket._synchronizeSettingsAtConnectionStartup, true);
+            this->_port                                     = exchange(socket._port, Socket::DEFAULT_PORT);
+            this->_packetSize                               = exchange(socket._packetSize, Socket::DEFAULT_PACKET_SIZE);
+            this->_protocolVersion                          = exchange(socket._protocolVersion, Socket::ProtocolVersion::AUTO);
+            this->_packetSyncCount                          = exchange(socket._packetSyncCount, Socket::DEFAULT_PACKET_SYNC_COUNT);
+            this->_synchronizeSettingsAtConnectionStartup   = exchange(socket._synchronizeSettingsAtConnectionStartup, true);
+            this->_connected                                = exchange(socket._connected, false);
 
             return * this;
+        }
+
+        __CDS_NoDiscard __CDS_MaybeUnused auto getPeerAddress () const noexcept (false) -> Pair < String, uint16 > {
+            if ( ! this->connected() )
+                throw SocketException ("Not Connected to a Peer");
+
+            switch ( this->_protocolVersion ) {
+                case ProtocolVersion::INTERNET_PROTOCOL_NONE_SPECIFIED:
+                case ProtocolVersion::INTERNET_PROTOCOL_VERSION_6:
+                case ProtocolVersion::INTERNET_PROTOCOL_VERSION_6_FORCED: {
+                    Pair < String, uint16 > returnValue = { String (INET6_ADDRSTRLEN, '\0'), 0 };
+
+                    sockaddr_in6 socketAddress {};
+                    socklen_t addressSize = sizeof ( socketAddress );
+
+                    (void)getpeername(this->_platformSocket, reinterpret_cast < sockaddr * > ( & socketAddress ), & addressSize);
+                    inet_ntop ( AF_INET6, reinterpret_cast < void * > ( & socketAddress.sin6_addr ), returnValue.first().data(), INET6_ADDRSTRLEN );
+
+                    returnValue.second() = ntohs ( socketAddress.sin6_port );
+
+                    return returnValue;
+                }
+                case ProtocolVersion::INTERNET_PROTOCOL_VERSION_4: {
+                    Pair < String, uint16 > returnValue = { String (INET_ADDRSTRLEN, '\0'), 0 };
+
+                    sockaddr_in socketAddress {};
+                    socklen_t addressSize = sizeof ( socketAddress );
+
+                    (void)getpeername(this->_platformSocket, reinterpret_cast < sockaddr * > ( & socketAddress ), & addressSize);
+                    inet_ntop ( AF_INET, reinterpret_cast < void * > ( & socketAddress.sin_addr ), returnValue.first().data(), INET_ADDRSTRLEN );
+
+                    returnValue.second() = ntohs ( socketAddress.sin_port );
+
+                    return returnValue;
+                }
+                default:
+                    return {};
+            }
         }
     };
 
@@ -1536,8 +1630,14 @@ namespace cds {
 
     class ServerSocket : public Socket {
     public:
-        explicit ServerSocket ( uint16 port, ProtocolVersion protocolVersion = Socket::ProtocolVersion::AUTO ) noexcept (false) : Socket(protocolVersion) {
+        explicit ServerSocket ( uint16 port, ProtocolVersion protocolVersion = Socket::ProtocolVersion::IPV4 ) noexcept (false) : Socket(protocolVersion) {
             this->bind (port).listen ();
+        }
+
+        __CDS_NoDiscard __CDS_MaybeUnused __CDS_OptimalInline auto lastClientAddress () const noexcept(false) -> Pair < String, uint16 > {
+            if ( this->pLastAddressObtainedContainer == nullptr )
+                throw SocketException ("No Last Connected Client");
+            return this->pLastAddressObtainedContainer->address();
         }
     };
 
