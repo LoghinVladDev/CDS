@@ -291,6 +291,10 @@ namespace cds {
 
             return oss.str();
         }
+
+        __CDS_NoDiscard __CDS_OptimalInline auto copy () const noexcept -> Function * override {
+            return Memory :: instance() .create < Function < ReturnType, ArgumentTypes ... > > ( * this );
+        }
     };
 
 }
@@ -457,6 +461,10 @@ namespace cds {
         __CDS_OptimalInline ~Function() noexcept override {
             if ( this->pManager != nullptr )
                 this->pManager->deleter ( this->pCallableObject );
+        }
+
+        __CDS_NoDiscard __CDS_OptimalInline auto copy () const noexcept -> Function * override {
+            return Memory :: instance() .create < Function < ReturnType, ArgumentTypes ... > > ( * this );
         }
     };
 
