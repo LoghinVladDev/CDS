@@ -2845,7 +2845,7 @@ namespace cds {
         __CDS_Requires (
                 ForwardIterable < C > &&
                 MapperFor < Selector, ElementType > &&
-                Summable < ElementType >
+                Summable < returnOf < Selector > >
         ) {
 
             auto it = this->begin();
