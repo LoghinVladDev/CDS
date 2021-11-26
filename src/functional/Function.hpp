@@ -293,7 +293,7 @@ namespace cds {
         }
 
         __CDS_NoDiscard __CDS_OptimalInline auto copy () const noexcept -> Function * override {
-            return Memory :: instance() .create < Function < ReturnType, ArgumentTypes ... > > ( * this );
+            return Memory :: instance() .create < Function < ReturnType ( ArgumentTypes ... ) > > ( * this );
         }
     };
 
@@ -464,7 +464,7 @@ namespace cds {
         }
 
         __CDS_NoDiscard __CDS_OptimalInline auto copy () const noexcept -> Function * override {
-            return Memory :: instance() .create < Function < ReturnType, ArgumentTypes ... > > ( * this );
+            return Memory :: instance() .create < Function < ReturnType ( ArgumentTypes ... ) > > ( * this );
         }
     };
 
