@@ -489,8 +489,12 @@ namespace cds {
             return (ostream << ( & obj ) );
         }
 
-        template < typename V = typename std :: remove_reference < T > :: type >
+        template < typename V = RemoveReference < T > >
         constexpr static auto unsafeAddress () noexcept -> V * { return reinterpret_cast < V * > (0x10); }
+
+        template < typename V = RemoveReference < T > >
+        constexpr static auto unsafeConstAddress () noexcept -> V const * { return reinterpret_cast < V const * > ( 0x10 ); }
+
         constexpr static auto unsafeReference () noexcept -> T & { return * Type :: unsafeAddress(); }
 
         template < typename U = T >

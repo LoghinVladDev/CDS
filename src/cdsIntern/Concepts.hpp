@@ -149,7 +149,7 @@ namespace cds {
 
     template < typename FunctionType, typename ReturnType, typename ... ArgumentTypes >
     concept FunctionOver =
-            std :: is_invocable_r < ReturnType, FunctionType, decltype ((* utility :: unsafeAddress< ArgumentTypes >())) ... > :: type :: value;
+            std :: is_invocable_r < ReturnType, FunctionType, decltype ((* Type < ArgumentTypes > :: unsafeAddress() )) ... > :: type :: value;
 
     template < typename Predicate, typename T >
     concept PredicateOver =

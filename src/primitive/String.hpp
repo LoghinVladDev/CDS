@@ -4280,7 +4280,7 @@ namespace cds {
          * @test Tested in primitive/StringTest/ForEach tests
          */
         template < typename Predicate >
-        __CDS_MaybeUnused __CDS_cpplang_ConstexprConditioned auto some ( Predicate const & p, Size s ) noexcept ( noexcept ( ( * utility :: unsafeAddress < Predicate > () ) ( Type < char > :: unsafeReference() ) ) ) -> bool { return s <= this->count ( p ); }
+        __CDS_MaybeUnused __CDS_cpplang_ConstexprConditioned auto some ( Predicate const & p, Size s ) noexcept ( noexcept ( ( * Type < Predicate > :: unsafeAddress () ) ( Type < char > :: unsafeReference() ) ) ) -> bool { return s <= this->count ( p ); }
 
         /**
          * @brief Function used to verify if a given number of elements validate a certain Predicate. Requires Predicate that does not modify elements ( char & ), due to it being applied over immutable String
@@ -4296,7 +4296,7 @@ namespace cds {
          * @test Tested in primitive/StringTest/ForEach tests
          */
          template < typename Predicate >
-        __CDS_MaybeUnused __CDS_cpplang_ConstexprConditioned auto some ( Predicate const & p, Size s ) const noexcept( noexcept ( ( * utility :: unsafeAddress < Predicate > () ) ( Type < const char > :: unsafeReference() ) ) ) -> bool { return s <= this->count ( p ); }
+        __CDS_MaybeUnused __CDS_cpplang_ConstexprConditioned auto some ( Predicate const & p, Size s ) const noexcept( noexcept ( ( * Type < Predicate > :: unsafeAddress () ) ( Type < const char > :: unsafeReference() ) ) ) -> bool { return s <= this->count ( p ); }
 
         /**
          * @brief Function used to verify if any element validates a certain Predicate. Requires mutable String, as Predicate given can change elements in String
@@ -4312,7 +4312,7 @@ namespace cds {
          * @test Tested in primitive/StringTest/ForEach tests
          */
         template < typename Predicate >
-        __CDS_MaybeUnused __CDS_cpplang_ConstexprConditioned auto any ( Predicate const & p ) noexcept ( noexcept ( ( * utility :: unsafeAddress < Predicate > () ) ( Type < char > :: unsafeReference() ) ) ) -> bool { return 1u <= this->count(p); }
+        __CDS_MaybeUnused __CDS_cpplang_ConstexprConditioned auto any ( Predicate const & p ) noexcept ( noexcept ( ( * Type < Predicate > :: unsafeAddress () ) ( Type < char > :: unsafeReference() ) ) ) -> bool { return 1u <= this->count(p); }
 
         /**
          * @brief Function used to verify if any element validates a certain Predicate. Requires Predicate that does not modify elements ( char & ), due to it being applied over immutable String

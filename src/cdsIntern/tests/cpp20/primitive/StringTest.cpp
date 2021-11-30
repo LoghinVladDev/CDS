@@ -195,14 +195,14 @@ auto StringTest::execute() noexcept -> bool {
             allOk = false;
         }
 
-        String fromAddress = dataTypes::unsafeAddress<int>();
+        String fromAddress = Type < int > ::unsafeAddress ();
 
         this->log("String constructed from raw address. Intended : '%d', Result : '%s'. Diag : '%s'", 16, fromAddress.cStr(), fromAddress.diag().cStr());
         if ( std::strcmp ( fromAddress.cStr(), "16" ) != 0 ) {
             this->logWarning("String from raw address construction error");
         }
 
-        String fromConstAddress = dataTypes::unsafeConstAddress<const int>();
+        String fromConstAddress = Type < int > :: unsafeConstAddress ();
 
         this->log("String constructed from raw const address. Intended : '%d', Result : '%s'. Diag : '%s'", 16, fromConstAddress.cStr(), fromConstAddress.diag().cStr());
         if ( std::strcmp ( fromConstAddress.cStr(), "16" ) != 0 ) {
