@@ -41,15 +41,19 @@ namespace cds {
         String _osPath;
 
     public:
-        class InvalidPath : public std::exception {
-            __CDS_NoDiscard auto what() const noexcept -> StringLiteral override {
-                return "Invalid Path Given";
+        class InvalidPath : public cds :: Exception {
+        public:
+            inline InvalidPath() noexcept :
+                    cds :: Exception ( "Invalid path Given" ) {
+
             }
         };
 
-        class WalkNotADirectory : public std::exception {
-            __CDS_NoDiscard auto what () const noexcept -> StringLiteral override {
-                return "Walk Error : Path given does not refer to a directory";
+        class WalkNotADirectory : public cds :: Exception {
+        public:
+            inline WalkNotADirectory() noexcept :
+                    cds :: Exception ("Walk Error : Path given does not refer to a directory") {
+
             }
         };
 
@@ -134,13 +138,28 @@ namespace cds {
         }
 
         Path(StringLiteral path) noexcept(false) : Path(String(path)) {} // NOLINT(google-explicit-constructor)
+        Path(Path const & path) noexcept = default;
 
-        Path & operator = (Path const &) noexcept = default;
-        Path & operator = (String const & s) noexcept(false) {
+        Path(Path && path) noexcept :
+                _osPath ( std :: move ( path._osPath ) ) {
+
+        }
+
+        auto operator = (Path const &) noexcept -> Path & = default;
+        auto operator = (Path && path) noexcept -> Path & {
+            if ( this == & path ) {
+                return * this;
+            }
+
+            this->_osPath = std :: move ( path._osPath );
+            return * this;
+        }
+
+        auto operator = (String const & s) noexcept(false) -> Path & {
             return ( ( * this ) = Path( s ) );
         }
 
-        Path & operator = (StringLiteral s) noexcept(false) {
+        auto operator = (StringLiteral s) noexcept(false) -> Path & {
             return ( ( * this ) = Path( s ) );
         }
 
