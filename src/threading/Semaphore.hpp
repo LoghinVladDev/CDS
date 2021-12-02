@@ -17,8 +17,8 @@ namespace cds {
 
     public:
         Semaphore () noexcept : _pBase(Memory :: instance().create < SharedPointer < Mutex > > (Memory :: instance().create < Mutex >())) {}
-        __CDS_MaybeUnused explicit Semaphore ( Mutex & m ) noexcept : _pBase(Memory :: instance().create < ForeignPointer < Mutex > >(& m)) {}
-        Semaphore ( Semaphore const & o ) noexcept : _pBase(o._pBase->copy()) { }
+        __CDS_MaybeUnused explicit Semaphore ( Mutex & mutex ) noexcept : _pBase(Memory :: instance().create < ForeignPointer < Mutex > > (& mutex)) {}
+        Semaphore ( Semaphore const & semaphore ) noexcept : _pBase(semaphore._pBase->copy()) { }
 
         ~Semaphore() noexcept override {
             Memory :: instance().destroy ( this->_pBase );

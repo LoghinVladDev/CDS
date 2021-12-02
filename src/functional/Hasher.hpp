@@ -22,26 +22,26 @@ namespace cds {
 namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
     template<class T> constexpr static auto hash(T const &) noexcept -> Index { return 0; }
-    template<> auto hash<String>(String const &o) noexcept -> Index;
-    template<> auto hash<Object>(Object const &o) noexcept -> Index;
-    template<> __CDS_cpplang_IfConstexpr auto hash<CString>(CString const &o) noexcept -> Index { return static_cast < Index > ( std::char_traits<char>::length(o) ); }
-    template<> __CDS_cpplang_IfConstexpr auto hash<StringLiteral>(StringLiteral const &o) noexcept -> Index { return static_cast < Index > ( std::char_traits<char>::length(o) ); }
-    template<> constexpr auto hash<uint8>(uint8 const &o) noexcept -> Index { return static_cast < Index const > ( o ); }
-    template<> constexpr auto hash<uint16>(uint16 const &o) noexcept -> Index { return static_cast < Index const > ( o ); }
-    template<> constexpr auto hash<uint32>(uint32 const &o) noexcept -> Index { return static_cast < Index const > ( o ); }
-    template<> constexpr auto hash<uint64>(uint64 const &o) noexcept -> Index { return static_cast < Index const > ( o ); }
-    template<> constexpr auto hash<sint8>(sint8 const &o) noexcept -> Index { return o; }
-    template<> constexpr auto hash<sint16>(sint16 const &o) noexcept -> Index { return o; }
-    template<> constexpr auto hash<sint32>(sint32 const &o) noexcept -> Index { return o; }
-    template<> constexpr auto hash<sint64>(sint64 const &o) noexcept -> Index { return o; }
+    template<> auto hash<String>(String const &object) noexcept -> Index;
+    template<> auto hash<Object>(Object const &object) noexcept -> Index;
+    template<> __CDS_cpplang_IfConstexpr auto hash<CString>(CString const &object) noexcept -> Index { return static_cast < Index > ( std::char_traits<char>::length(object) ); }
+    template<> __CDS_cpplang_IfConstexpr auto hash<StringLiteral>(StringLiteral const &object) noexcept -> Index { return static_cast < Index > ( std::char_traits<char>::length(object) ); }
+    template<> constexpr auto hash<uint8>(uint8 const &object) noexcept -> Index { return static_cast < Index const > ( object ); }
+    template<> constexpr auto hash<uint16>(uint16 const &object) noexcept -> Index { return static_cast < Index const > ( object ); }
+    template<> constexpr auto hash<uint32>(uint32 const &object) noexcept -> Index { return static_cast < Index const > ( object ); }
+    template<> constexpr auto hash<uint64>(uint64 const &object) noexcept -> Index { return static_cast < Index const > ( object ); }
+    template<> constexpr auto hash<sint8>(sint8 const &object) noexcept -> Index { return object; }
+    template<> constexpr auto hash<sint16>(sint16 const &object) noexcept -> Index { return object; }
+    template<> constexpr auto hash<sint32>(sint32 const &object) noexcept -> Index { return object; }
+    template<> constexpr auto hash<sint64>(sint64 const &object) noexcept -> Index { return object; }
 
     __CDS_WarningSuppression_ArithmeticOverflow_SuppressEnable
 
-    template <> constexpr auto hash<float> (float const & o) noexcept -> Index { return static_cast < Index> ( o * 1000.0f ); }
+    template <> constexpr auto hash<float> (float const & object) noexcept -> Index { return static_cast < Index> ( object * 1000.0f ); }
 
     __CDS_WarningSuppression_ArithmeticOverflow_SuppressDisable
 
-    template <> constexpr auto hash<double> (double const & o) noexcept -> Index { return static_cast < Index > ( o * 100000.0 ); }
+    template <> constexpr auto hash<double> (double const & object) noexcept -> Index { return static_cast < Index > ( object * 100000.0 ); }
 
 #if defined(CDS_GLM)
 
@@ -83,8 +83,8 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         public:
             using AddressValue __CDS_MaybeUnused = std::size_t;
 
-            auto operator ()(typename HashCalculator<K, hashBoundary>::ValueConstReference v) const noexcept -> typename HashCalculator<K, hashBoundary>::HashValue {
-                return hash(v) % hashBoundary;
+            auto operator ()(typename HashCalculator<K, hashBoundary>::ValueConstReference value) const noexcept -> typename HashCalculator<K, hashBoundary>::HashValue {
+                return hash(value) % hashBoundary;
             }
         };
 

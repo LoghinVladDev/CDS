@@ -76,7 +76,7 @@ namespace cds {
         template < typename T, typename V >
         TypeException () noexcept : Exception ( String::f("Type Cast Exception. Cannot convert '%s' to '%s'", Type < T > :: name(), Type < V > :: name()) ) { }
         template < typename T >
-        explicit TypeException ( T const & _ __CDS_MaybeUnused ) noexcept : Exception ( String::f("Type Cast Exception. Conversion to '%s' not possible", Type < T > :: name()) ) { }
+        explicit TypeException ( T const & unused __CDS_MaybeUnused ) noexcept : Exception ( String::f("Type Cast Exception. Conversion to '%s' not possible", Type < T > :: name()) ) { }
         explicit TypeException (String const & message) noexcept : Exception ("Type Cast Exception : "_s + message) { }
 
         ~TypeException() noexcept override = default;

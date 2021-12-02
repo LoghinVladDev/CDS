@@ -35,8 +35,8 @@ namespace cds {
             }
         }
 
-        Atomic (DataType const & v) noexcept { // NOLINT(google-explicit-constructor)
-            this->set(v);
+        Atomic (DataType const & value) noexcept { // NOLINT(google-explicit-constructor)
+            this->set(value);
         }
 
         __CDS_OptimalInline auto get () const noexcept -> T {

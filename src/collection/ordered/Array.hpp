@@ -18,7 +18,7 @@ namespace cds {
     class Sequence;
 
     template < typename T >
-    class Array : public List <T> {
+    class Array : public List <T> { // NOLINT(cppcoreguidelines-virtual-class-destructor)
     private:
         T ** _pData     {nullptr };
         Size _capacity  { 0ull };
@@ -152,23 +152,23 @@ namespace cds {
             return *this->_pData[0];
         }
 
-        __CDS_OptionalInline auto operator == (Array const & o) const noexcept -> bool {
-            if ( this == & o ) {
+        __CDS_OptionalInline auto operator == (Array const & array) const noexcept -> bool {
+            if ( this == & array ) {
                 return true;
             }
 
-            if ( o.size() != this->size() ) {
+            if (array.size() != this->size() ) {
                 return false;
             }
 
             for ( // NOLINT(clion-misra-cpp2008-6-5-1)
                     auto // NOLINT(clion-misra-cpp2008-8-0-1)
-                        a = this->begin(), aEnd = this->end(),
-                        b = o.begin(), bEnd = o.end();
-                    a != aEnd && b != bEnd;
-                    ++ a, ++ b // NOLINT(clion-misra-cpp2008-5-18-1)
+                        aIt = this->begin(), aEnd = this->end(),
+                        bIt = array.begin(), bEnd = array.end();
+                    aIt != aEnd && bIt != bEnd;
+                    ++ aIt, ++ bIt // NOLINT(clion-misra-cpp2008-5-18-1)
             ) {
-                if ( ! ( Type < T > :: compare ( * a, * b ) ) ) { // NOLINT(clion-misra-cpp2008-5-3-1)
+                if ( ! ( Type < T > :: compare (* aIt, * bIt ) ) ) { // NOLINT(clion-misra-cpp2008-5-3-1)
                     return false;
                 }
             }
@@ -176,21 +176,21 @@ namespace cds {
             return true;
         }
 
-        __CDS_OptimalInline auto operator != (Array const & o) const noexcept -> bool {
-            return ! this->operator==(o); // NOLINT(clion-misra-cpp2008-5-3-1)
+        __CDS_OptimalInline auto operator != (Array const & array) const noexcept -> bool {
+            return ! this->operator==(array); // NOLINT(clion-misra-cpp2008-5-3-1)
         }
 
-        __CDS_NoDiscard auto equals (Object const & o) const noexcept -> bool final {
-            if (this == &o) {
+        __CDS_NoDiscard auto equals (Object const & object) const noexcept -> bool final {
+            if (this == &object) {
                 return true;
             }
 
-            auto p = dynamic_cast < Array < T > const * > ( &o );
-            if (p == nullptr) {
+            auto pObject = dynamic_cast < Array < T > const * > ( &object );
+            if (pObject == nullptr) {
                 return false;
             }
 
-            return this->operator==(*p);
+            return this->operator==(*pObject);
         }
 
         auto clear () noexcept -> void final;
@@ -226,10 +226,10 @@ namespace cds {
                 throw OutOfBoundsException("Array is Empty");
             }
 
-            auto v = * this->_pData[--this->_size];
+            auto value = * this->_pData[--this->_size];
             Memory :: instance().destroy ( exchange(this->_pData[this->_size], nullptr) );
 
-            return v;
+            return value;
         }
 
     private:
@@ -278,14 +278,14 @@ namespace cds {
                 return * this->_pArray->_pData[ this->_index ];
             }
 
-            __CDS_OptimalInline auto equals ( DelegateIterator const & it ) const noexcept -> bool override {
-                if ( this == & it ) {
+            __CDS_OptimalInline auto equals ( DelegateIterator const & iterator ) const noexcept -> bool override {
+                if ( this == & iterator ) {
                     return true;
                 }
 
-                auto p = reinterpret_cast < decltype ( this ) > ( & it );
+                auto pObject = reinterpret_cast < decltype ( this ) > ( & iterator );
 
-                return this->_pArray == p->_pArray && this->_index == p->_index;
+                return this->_pArray == pObject->_pArray && this->_index == pObject->_index;
             }
 
             __CDS_OptimalInline auto copy () const noexcept -> ArrayDelegateIterator * override {
@@ -337,14 +337,14 @@ namespace cds {
                 return * this->_pArray->_pData[ this->_index ];
             }
 
-            __CDS_OptimalInline auto equals ( DelegateConstIterator const & it ) const noexcept -> bool override {
-                if ( this == & it ) {
+            __CDS_OptimalInline auto equals ( DelegateConstIterator const & iterator ) const noexcept -> bool override {
+                if ( this == & iterator ) {
                     return true;
                 }
 
-                auto p = reinterpret_cast < decltype ( this ) > ( & it );
+                auto pObject = reinterpret_cast < decltype ( this ) > ( & iterator );
 
-                return this->_pArray == p->_pArray && this->_index == p->_index;
+                return this->_pArray == pObject->_pArray && this->_index == pObject->_index;
             }
 
             __CDS_OptimalInline auto copy () const noexcept -> ArrayDelegateConstIterator * override {
@@ -386,15 +386,15 @@ namespace cds {
 
         auto allocFrontGetPtr () noexcept -> ElementPtrRef override;
         auto allocBackGetPtr () noexcept -> ElementPtrRef override;
-        __CDS_OptimalInline auto allocInsertGetPtr (ElementCRef e __CDS_MaybeUnused) noexcept -> ElementPtrRef override {
+        __CDS_OptimalInline auto allocInsertGetPtr (ElementCRef element __CDS_MaybeUnused) noexcept -> ElementPtrRef override {
             return this->allocBackGetPtr();
         }
 
     public:
         auto operator = ( Collection < ElementType > const & ) noexcept -> Array &;
 
-        __CDS_OptimalInline auto operator = ( Array const & o ) noexcept -> Array & { // NOLINT(bugprone-unhandled-self-assignment)
-            return this->operator=( reinterpret_cast < Collection<ElementType> const & > (o) );  // NOLINT(misc-unconventional-assign-operator)
+        __CDS_OptimalInline auto operator = ( Array const & array ) noexcept -> Array & { // NOLINT(bugprone-unhandled-self-assignment)
+            return this->operator=( reinterpret_cast < Collection<ElementType> const & > (array) );  // NOLINT(misc-unconventional-assign-operator)
         }
 
         __CDS_OptionalInline auto operator = ( Array && array ) noexcept -> Array & {
@@ -428,8 +428,8 @@ namespace cds {
     template < typename T >
     template < typename V, EnableIf < Type < V > :: copyConstructible > >
     Array<T>::Array( InitializerList initializerList __CDS_MaybeUnused ) noexcept {
-        for ( auto & e __CDS_MaybeUnused : initializerList ) {
-            this->pushBack(e);
+        for ( auto & element __CDS_MaybeUnused : initializerList ) {
+            this->pushBack(element);
         }
     }
 
@@ -590,18 +590,18 @@ namespace cds {
 namespace cds {
 
     template < typename T >
-    Array<T>::Array( Array const & o ) noexcept :
+    Array<T>::Array( Array const & array ) noexcept :
             _pData( nullptr ),
-            _capacity( o.size() ){
+            _capacity(array.size() ){
 
-        this->_size = o.size();
+        this->_size = array.size();
 
         if ( this->_size > 0 ) {
             this->_pData = Memory :: instance () .createArray < T * > ( this->_size );
         }
 
-        for ( auto i = 0; i < o.size(); ++ i ) {
-            this->_pData[i] = Memory :: instance ().create < T > (*o._pData[i]);
+        for (auto i = 0; i < array.size(); ++ i ) {
+            this->_pData[i] = Memory :: instance ().create < T > (*array._pData[i]);
         }
     }
 
@@ -620,27 +620,27 @@ namespace cds {
 
     template < typename T >
     Array<T>::Array(
-            Iterator const & from,
-            Iterator const & to
+            Iterator const & from, // NOLINT(bugprone-easily-swappable-parameters)
+            Iterator const & until
     ) noexcept {
-        for ( auto it = from; it != to; ++ it ) {
+        for (auto it = from; it != until; ++ it ) {
             this->pushBack( * it );
         }
     }
 
     template < typename T >
     Array<T>::Array(
-            ConstIterator const & from,
-            ConstIterator const & to
+            ConstIterator const & from, // NOLINT(bugprone-easily-swappable-parameters)
+            ConstIterator const & until
     ) noexcept {
-        for ( auto it = from; it != to; ++ it ) {
+        for (auto it = from; it != until; ++ it ) {
             this->pushBack( * it );
         }
     }
 
     template < typename T >
     Array < T > :: Array ( Collection < T > const & collection ) noexcept {
-        collection.forEach([this](T const & e){this->pushBack(e);});
+        collection.forEach([this](T const & element){this->pushBack(element);});
     }
 
     template < typename T >
@@ -668,29 +668,29 @@ namespace cds {
     }
 
     template < typename T >
-    auto Array<T>::remove(ElementCRef e, Size count) noexcept -> bool {
+    auto Array<T>::remove(ElementCRef element, Size count) noexcept -> bool {
         bool removed = false;
 
         T ** newBuf = Memory :: instance().createArray < T * > (this->size());
 
-        Index i = 0;
-        Index l = 0;
-        Size c = 0u;
+        Index index = 0;
+        Index newBufLength = 0;
+        Size currentCount = 0u;
 
-        for (; i < this->size() && c < count; i++) {
-            if ( ! Type < T > :: compare ( * this->_pData[i], e ) ) { // NOLINT(clion-misra-cpp2008-5-3-1)
-                newBuf[l++] = this->_pData[i];
+        for (; index < this->size() && currentCount < count; index++) {
+            if ( ! Type < T > :: compare (* this->_pData[index], element ) ) { // NOLINT(clion-misra-cpp2008-5-3-1)
+                newBuf[newBufLength++] = this->_pData[index];
             } else {
                 removed = true;
-                ++ c;
-                Memory :: instance().destroy ( exchange(this->_pData[i], nullptr) );
+                ++ currentCount;
+                Memory :: instance().destroy ( exchange(this->_pData[index], nullptr) );
             }
         }
 
         this->_capacity = this->size();
-        this->_size = l;
+        this->_size = newBufLength;
 
-        (void) std :: memset ( newBuf + l, 0, (this->_capacity - l) * sizeof(T *) );
+        (void) std :: memset (newBuf + newBufLength, 0, (this->_capacity - newBufLength) * sizeof(T *) );
         Memory :: instance().destroyArray ( exchange ( this->_pData, newBuf ) );
 
         return removed;
@@ -703,24 +703,24 @@ namespace cds {
 namespace cds {
 
     template < typename T >
-    auto Array<T>::removeLast(ElementCRef e) noexcept -> bool {
-        Index at = -1;
+    auto Array<T>::removeLast(ElementCRef element) noexcept -> bool {
+        Index position = -1;
         for ( Index i = this->size() - 1; i >= 0; -- i ) {
-            if ( Type < T > :: compare ( * this->_pData[i], e ) ) {
-                at = i;
+            if ( Type < T > :: compare (* this->_pData[i], element ) ) {
+                position = i;
                 break;
             }
         }
 
-        if ( at == -1 ) {
+        if (position == -1 ) {
             return false;
         }
 
-        Memory :: instance().destroy ( exchange(this->_pData[at], nullptr) );
+        Memory :: instance().destroy ( exchange(this->_pData[position], nullptr) );
 
         T ** pNewBuf = Memory::instance().createArray < T * > ( this->size() - 1 );
-        (void) std::memcpy ( pNewBuf, this->_pData, static_cast < Size > ( at ) * sizeof ( T * ) );
-        (void) std::memcpy ( pNewBuf + at, this->_pData + at + 1, (this->size() - at - 1) * sizeof(T *) );
+        (void) std::memcpy ( pNewBuf, this->_pData, static_cast < Size > ( position ) * sizeof ( T * ) );
+        (void) std::memcpy (pNewBuf + position, this->_pData + position + 1, (this->size() - position - 1) * sizeof(T *) );
 
         this->_capacity = -- this->_size;
         Memory :: instance().destroyArray ( exchange ( this->_pData, pNewBuf ) );
@@ -733,24 +733,24 @@ namespace cds {
 
         T ** newBuf = Memory :: instance ().createArray < T * > (this->size());
 
-        Index i = 0;
-        Index l = 0;
-        Size c = 0u;
+        Index index = 0;
+        Index newBufLength = 0;
+        Size currentCount = 0u;
 
-        for (; i < this->size() && c < count; i++) {
-            if ( ! elements.contains ( * this->_pData[i] ) ) { // NOLINT(clion-misra-cpp2008-5-3-1)
-                newBuf[l++] = this->_pData[i];
+        for (; index < this->size() && currentCount < count; index++) {
+            if ( ! elements.contains ( * this->_pData[index] ) ) { // NOLINT(clion-misra-cpp2008-5-3-1)
+                newBuf[newBufLength++] = this->_pData[index];
             } else {
                 removed = true;
-                ++ c;
-                Memory :: instance().destroy ( exchange(this->_pData[i], nullptr) );
+                ++ currentCount;
+                Memory :: instance().destroy ( exchange(this->_pData[index], nullptr) );
             }
         }
 
         this->_capacity = this->size();
-        this->_size = l;
+        this->_size = newBufLength;
 
-        (void) std::memset ( newBuf + l, 0, (this->_capacity - this->_size) * sizeof ( T * ) );
+        (void) std::memset (newBuf + newBufLength, 0, (this->_capacity - this->_size) * sizeof ( T * ) );
         Memory :: instance().destroyArray ( exchange ( this->_pData, newBuf ) );
 
         return removed;
@@ -761,23 +761,23 @@ namespace cds {
         bool removed = false;
 
         T ** newBuf = Memory :: instance().createArray < T * > ( this->size() );
-        Index i = 0;
-        Index l = 0;
-        Size c = 0u;
-        for (; i < this->size() && c < count; i++) {
-            if ( ! Collection < T > :: iListContains ( elements, * this->_pData[i] ) ) { // NOLINT(clion-misra-cpp2008-5-3-1)
-                newBuf[l++] = this->_pData[i];
+        Index index = 0;
+        Index newBufLength = 0;
+        Size currentCount = 0u;
+        for (; index < this->size() && currentCount < count; index++) {
+            if ( ! Collection < T > :: iListContains ( elements, * this->_pData[index] ) ) { // NOLINT(clion-misra-cpp2008-5-3-1)
+                newBuf[newBufLength++] = this->_pData[index];
             } else {
                 removed = true;
-                ++ c;
-                Memory :: instance ().destroy ( exchange(this->_pData[i], nullptr) );
+                ++ currentCount;
+                Memory :: instance ().destroy ( exchange(this->_pData[index], nullptr) );
             }
         }
 
         this->_capacity = this->size();
-        this->_size = l;
+        this->_size = newBufLength;
 
-        (void) std::memset ( newBuf + l, 0, (this->_capacity - this->_size) * sizeof ( T * ) );
+        (void) std::memset (newBuf + newBufLength, 0, (this->_capacity - this->_size) * sizeof ( T * ) );
         Memory :: instance().destroyArray ( exchange ( this->_pData, newBuf ) );
 
         return removed;
@@ -788,22 +788,22 @@ namespace cds {
         bool removed = false;
 
         T ** newBuf = Memory :: instance().createArray < T * > (this->size());
-        Index i = 0;
-        Index l = 0;
-        Size c = 0u;
-        for (; i < this->size() && c < count; i++) {
-            if ( elements.contains ( * this->_pData[i] ) ) {
-                newBuf[l++] = this->_pData[i];
+        Index index = 0;
+        Index newBufLength = 0;
+        Size currentCount = 0u;
+        for (; index < this->size() && currentCount < count; index++) {
+            if ( elements.contains ( * this->_pData[index] ) ) {
+                newBuf[newBufLength++] = this->_pData[index];
             } else {
                 removed = true;
-                ++ c;
-                Memory :: instance ().destroy ( exchange(this->_pData[i], nullptr) );
+                ++ currentCount;
+                Memory :: instance ().destroy ( exchange(this->_pData[index], nullptr) );
             }
         }
 
         this->_capacity = this->size();
-        this->_size = l;
-        (void) std::memset ( newBuf + l, 0, (this->_capacity - this->_size) * sizeof ( T * ) );
+        this->_size = newBufLength;
+        (void) std::memset (newBuf + newBufLength, 0, (this->_capacity - this->_size) * sizeof ( T * ) );
         Memory :: instance ().destroyArray ( exchange ( this->_pData, newBuf ) );
         return removed;
     }
@@ -813,46 +813,46 @@ namespace cds {
         bool removed = false;
 
         T ** newBuf = Memory :: instance().createArray < T * > ( this->size() );
-        Index i = 0;
-        Index l = 0;
-        Size c = 0u;
+        Index index = 0;
+        Index newBufLength = 0;
+        Size currentCount = 0u;
 
-        for (; i < this->size() && c < count; i++) {
-            if ( Collection < T > :: iListContains( elements, * this->_pData[i] ) ) {
-                newBuf[l++] = this->_pData[i];
+        for (; index < this->size() && currentCount < count; index++) {
+            if ( Collection < T > :: iListContains( elements, * this->_pData[index] ) ) {
+                newBuf[newBufLength++] = this->_pData[index];
             } else {
                 removed = true;
-                ++ c;
-                Memory :: instance ().destroy ( exchange(this->_pData[i], nullptr) );
+                ++ currentCount;
+                Memory :: instance ().destroy ( exchange(this->_pData[index], nullptr) );
             }
         }
 
         this->_capacity = this->size();
-        this->_size = l;
-        (void) std::memset ( newBuf + l, 0, (this->_capacity - this->_size) * sizeof ( T * ) );
+        this->_size = newBufLength;
+        (void) std::memset (newBuf + newBufLength, 0, (this->_capacity - this->_size) * sizeof ( T * ) );
         Memory :: instance ().destroyArray ( exchange ( this->_pData, newBuf ) );
         return removed;
     }
 
     template < typename T >
     auto Array<T>::removeLastOf(Collection<ElementType> const & elements) noexcept -> bool {
-        Index at = -1;
+        Index position = -1;
         for ( Index i = this->size() - 1; i >= 0; -- i ) {
             if ( elements.contains( * this->_pData[i] ) ) {
-                at = i;
+                position = i;
                 break;
             }
         }
 
-        if ( at == -1 ) {
+        if (position == -1 ) {
             return false;
         }
 
-        Memory :: instance().destroy ( exchange(this->_pData[at], nullptr) );
+        Memory :: instance().destroy ( exchange(this->_pData[position], nullptr) );
 
         T ** pNewBuf = Memory :: instance ().createArray < T * > ( this->size() - 1 );
-        (void) std::memcpy ( pNewBuf, this->_pData, static_cast < Size > ( at ) * sizeof ( T * ) );
-        (void) std::memcpy ( pNewBuf + at, this->_pData + at + 1, (this->size() - at - 1) * sizeof(T *) );
+        (void) std::memcpy ( pNewBuf, this->_pData, static_cast < Size > ( position ) * sizeof ( T * ) );
+        (void) std::memcpy (pNewBuf + position, this->_pData + position + 1, (this->size() - position - 1) * sizeof(T *) );
         Memory :: instance().destroyArray ( exchange ( this->_pData, pNewBuf ) );
         this->_capacity = -- this->_size;
         return true;
@@ -860,23 +860,23 @@ namespace cds {
 
     template < typename T >
     auto Array<T>::removeLastOf( InitializerList elements ) noexcept -> bool {
-        Index at = -1;
+        Index position = -1;
         for ( Index i = this->size() - 1; i >= 0; -- i ) {
             if ( Collection<T>::iListContains( elements, * this->_pData[i] ) ) {
-                at = i;
+                position = i;
                 break;
             }
         }
 
-        if ( at == -1 ) {
+        if (position == -1 ) {
             return false;
         }
 
-        Memory :: instance().destroy ( exchange(this->_pData[at], nullptr) );
+        Memory :: instance().destroy ( exchange(this->_pData[position], nullptr) );
 
         T ** pNewBuf = Memory :: instance().createArray < T * > ( this->size() - 1 );
-        (void) std::memcpy ( pNewBuf, this->_pData, static_cast < Size > ( at ) * sizeof ( T * ) );
-        (void) std::memcpy ( pNewBuf + at, this->_pData + at + 1, (this->size() - at - 1) * sizeof(T *) );
+        (void) std::memcpy ( pNewBuf, this->_pData, static_cast < Size > ( position ) * sizeof ( T * ) );
+        (void) std::memcpy (pNewBuf + position, this->_pData + position + 1, (this->size() - position - 1) * sizeof(T *) );
         Memory :: instance().destroyArray ( exchange ( this->_pData, pNewBuf ) );
         this->_capacity = -- this->_size;
         return true;
@@ -884,23 +884,23 @@ namespace cds {
 
     template < typename T >
     auto Array<T>::removeLastNotOf( Collection < ElementType > const & elements ) noexcept -> bool {
-        Index at = -1;
+        Index position = -1;
         for ( Index i = this->size() - 1; i >= 0; -- i ) {
             if ( ! elements.contains( * this->_pData[i] ) ) { // NOLINT(clion-misra-cpp2008-5-3-1)
-                at = i;
+                position = i;
                 break;
             }
         }
 
-        if ( at == -1 ) {
+        if (position == -1 ) {
             return false;
         }
 
-        Memory :: instance().destroy ( exchange(this->_pData[at], nullptr) );
+        Memory :: instance().destroy ( exchange(this->_pData[position], nullptr) );
 
         T ** pNewBuf = Memory :: instance(). createArray < T * > ( this->size() - 1 );
-        (void) std::memcpy ( pNewBuf, this->_pData, static_cast < Size > ( at ) * sizeof ( T * ) );
-        (void) std::memcpy ( pNewBuf + at, this->_pData + at + 1, (this->size() - at - 1) * sizeof(T *) );
+        (void) std::memcpy ( pNewBuf, this->_pData, static_cast < Size > ( position ) * sizeof ( T * ) );
+        (void) std::memcpy (pNewBuf + position, this->_pData + position + 1, (this->size() - position - 1) * sizeof(T *) );
         Memory :: instance().destroyArray ( exchange ( this->_pData, pNewBuf ) );
         this->_capacity = -- this->_size;
         return true;
@@ -908,23 +908,23 @@ namespace cds {
 
     template < typename T >
     auto Array<T>::removeLastNotOf( InitializerList elements) noexcept -> bool {
-        Index at = -1;
+        Index position = -1;
         for ( Index i = this->size() - 1; i >= 0; -- i ) {
             if ( ! Collection < T > ::iListContains( elements, * this->_pData[i] ) ) { // NOLINT(clion-misra-cpp2008-5-3-1)
-                at = i;
+                position = i;
                 break;
             }
         }
 
-        if ( at == -1 ) {
+        if (position == -1 ) {
             return false;
         }
 
-        Memory :: instance ().destroy ( exchange(this->_pData[at], nullptr) );
+        Memory :: instance ().destroy ( exchange(this->_pData[position], nullptr) );
 
         T ** pNewBuf = Memory :: instance().createArray < T * > ( this->size() - 1 );
-        (void) std::memcpy ( pNewBuf, this->_pData, static_cast < Size > ( at ) * sizeof ( T * ) );
-        (void) std::memcpy ( pNewBuf + at, this->_pData + at + 1, (this->size() - at - 1) * sizeof(T *) );
+        (void) std::memcpy ( pNewBuf, this->_pData, static_cast < Size > ( position ) * sizeof ( T * ) );
+        (void) std::memcpy (pNewBuf + position, this->_pData + position + 1, (this->size() - position - 1) * sizeof(T *) );
         Memory :: instance().destroyArray ( exchange ( this->_pData, pNewBuf ) );
         this->_capacity = -- this->_size;
         return true;
@@ -938,12 +938,12 @@ namespace cds {
 namespace cds {
 
     template < typename T >
-    auto Array<T>::remove( Iterator const & it ) noexcept (false) -> ElementType {
-        if ( ! it.of ( this ) ) { // NOLINT(clion-misra-cpp2008-5-3-1)
+    auto Array<T>::remove( Iterator const & iterator ) noexcept (false) -> ElementType {
+        if ( ! iterator.of (this ) ) { // NOLINT(clion-misra-cpp2008-5-3-1)
             throw IllegalArgumentException("Iterator given is not of this collection");
         }
 
-        auto pDelegate = reinterpret_cast < ArrayDelegateIterator * > ( Collection<T>::acquireDelegate( it ) );
+        auto pDelegate = reinterpret_cast < ArrayDelegateIterator * > ( Collection<T>::acquireDelegate(iterator ) );
 
         if ( pDelegate->index() < 0 || pDelegate->index() >= this->size() ) {
             throw OutOfBoundsException ( pDelegate->index(), this->size() );
@@ -973,11 +973,11 @@ namespace cds {
     template < typename T >
     auto Array<T> :: makeUnique() noexcept -> void {
         T ** pNewData = Memory :: instance().createArray < T * > (this->size());
-        Size l = 0u;
+        Size newLength = 0u;
 
-        static auto newArrContains = [](T ** p, Size l, ElementCRef e) noexcept -> bool {
-            for ( Size i = 0u; i < l; ++ i ) {
-                if ( Type < T > :: compare ( * p[i], e ) ) {
+        static auto newArrContains = [](T ** pArray, Size arrayLength, ElementCRef element) noexcept -> bool {
+            for (Size i = 0u; i < arrayLength; ++ i ) {
+                if ( Type < T > :: compare (* pArray[i], element ) ) {
                     return true;
                 }
             }
@@ -986,17 +986,17 @@ namespace cds {
         };
 
         for ( Index i = 0; i < this->size(); ++ i ) {
-            if ( ! newArrContains(pNewData, l, * this->_pData[i]) ) { // NOLINT(clion-misra-cpp2008-5-3-1)
-                pNewData[ ++ l ] = this->_pData[i];
+            if ( ! newArrContains(pNewData, newLength, * this->_pData[i]) ) { // NOLINT(clion-misra-cpp2008-5-3-1)
+                pNewData[ ++ newLength ] = this->_pData[i];
             } else {
                 Memory :: instance().destroy ( exchange(this->_pData[i], nullptr) );
             }
         }
 
-        (void) std :: memset ( pNewData + l, 0, (this->size() - l) * sizeof(T *) );
+        (void) std :: memset (pNewData + newLength, 0, (this->size() - newLength) * sizeof(T *) );
 
         this->_capacity = this->size();
-        this->_size = l;
+        this->_size = newLength;
 
         Memory :: instance().destroyArray( exchange ( this->_pData, pNewData ) );
     }
@@ -1025,49 +1025,49 @@ namespace cds {
 
 namespace cds {
     template < typename T >
-    auto Array < T > :: pAt ( Index i ) noexcept (false) -> ElementPtr {
+    auto Array < T > :: pAt ( Index index ) noexcept (false) -> ElementPtr {
         if ( this->empty() ) {
-            throw OutOfBoundsException(i, 0);
+            throw OutOfBoundsException(index, 0);
         }
 
-        if ( i < 0 ) {
-            i += ( this->size() / (-i) ) * this->size();
+        if (index < 0 ) {
+            index += (this->size() / (-index) ) * this->size();
         }
 
-        if ( i >= static_cast<Index>(this->size()) ) {
-            i = i % this->size();
+        if (index >= static_cast<Index>(this->size()) ) {
+            index = index % this->size();
         }
 
-        return this->_pData[i];
+        return this->_pData[index];
     }
 
     template < typename T >
-    auto Array < T > :: pAt ( Index i ) const noexcept (false) -> ElementCPtr {
+    auto Array < T > :: pAt ( Index index ) const noexcept (false) -> ElementCPtr {
         if ( this->empty() ) {
-            throw OutOfBoundsException(i, 0);
+            throw OutOfBoundsException(index, 0);
         }
 
-        if ( i < 0 ) {
-            i += (this->size() / (-i)) * this->size();
+        if (index < 0 ) {
+            index += (this->size() / (-index)) * this->size();
         }
 
-        if ( i >= static_cast<Index>(this->size()) ) {
-            i = i % this->size();
+        if (index >= static_cast<Index>(this->size()) ) {
+            index = index % this->size();
         }
 
-        return this->_pData[i];
+        return this->_pData[index];
     }
 
     template < typename T >
-    Array<T> & Array<T>::operator= (Collection<ElementType> const & c __CDS_MaybeUnused) noexcept {
-        if ( this == & c ) {
+    Array<T> & Array<T>::operator= (Collection<ElementType> const & collection __CDS_MaybeUnused) noexcept {
+        if ( this == & collection ) {
             return * this;
         }
 
         this->clear();
 
-        for ( auto const & e __CDS_MaybeUnused : c ) {
-            (void) this->pushBack(e);
+        for ( auto const & element __CDS_MaybeUnused : collection ) {
+            (void) this->pushBack(element);
         }
 
         return * this;

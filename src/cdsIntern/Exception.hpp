@@ -25,20 +25,20 @@ namespace cds {
 
         }
 
-        inline Exception ( Exception const & e ) noexcept = default;
-        inline Exception ( Exception && e ) noexcept = default;
+        inline Exception ( Exception const & exception ) noexcept = default;
+        inline Exception ( Exception && exception ) noexcept = default;
 
-        __CDS_MaybeUnused inline Exception ( std :: exception const & e ) noexcept : // NOLINT(google-explicit-constructor)
+        __CDS_MaybeUnused inline Exception ( std :: exception const & exception ) noexcept : // NOLINT(google-explicit-constructor)
                 Object (),
-                std :: exception ( e ),
-                _message(e.what()) {
+                std :: exception (exception ),
+                _message(exception.what()) {
 
         }
 
-        __CDS_MaybeUnused inline Exception ( std :: exception && e ) noexcept : // NOLINT(google-explicit-constructor)
+        __CDS_MaybeUnused inline Exception ( std :: exception && exception ) noexcept : // NOLINT(google-explicit-constructor)
                 Object (),
-                std :: exception ( e ),
-                _message ( e.what() ) {
+                std :: exception (exception ),
+                _message (exception.what() ) {
 
         }
 
@@ -91,18 +91,18 @@ namespace cds {
             return Memory::instance().create < Exception > ( * this );
         }
 
-        __CDS_NoDiscard __CDS_cpplang_VirtualConstexpr auto equals ( Object const & o ) const noexcept -> bool override {
-            if ( this == & o ) {
+        __CDS_NoDiscard __CDS_cpplang_VirtualConstexpr auto equals ( Object const & object ) const noexcept -> bool override {
+            if ( this == & object ) {
                 return true;
             }
 
-            auto p = dynamic_cast < decltype (this) > ( & o );
+            auto pObject = dynamic_cast < decltype (this) > ( & object );
 
-            if ( p == nullptr ) {
+            if (pObject == nullptr ) {
                 return false;
             }
 
-            return this->_message == p->_message;
+            return this->_message == pObject->_message;
         }
 
         __CDS_NoDiscard __CDS_MaybeUnused constexpr auto message () const noexcept -> StringLiteral {

@@ -256,7 +256,7 @@ namespace cds {
 
 namespace cds { // NOLINT(modernize-concat-nested-namespaces)
     namespace utility {
-        static inline auto __CDS_compilerVersionString() noexcept -> StringLiteral { /* NOLINT(bugprone-reserved-identifier) */
+        __CDS_MaybeUnused static inline auto __CDS_compilerVersionString() noexcept -> StringLiteral { /* NOLINT(bugprone-reserved-identifier) */
             static char buffer[9] = {
                     __CDS_compiler_version / 10000 % 100 / 10 + '0',
                     __CDS_compiler_version / 10000 % 100 % 10 + '0',

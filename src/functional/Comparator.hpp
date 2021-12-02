@@ -23,7 +23,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         template <class T> __CDS_Requires( Comparable <T> )
         class __CDS_MaybeUnused DefaultSetComparator : public Comparator<T> {
         public:
-            __CDS_OptimalInline auto operator () (T const & a, T const & b) const noexcept -> bool { return a < b; }
+            __CDS_OptimalInline auto operator () (T const & left, T const & right) const noexcept -> bool { return left < right; }
         };
 
     }

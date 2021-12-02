@@ -166,8 +166,8 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces) c++ 14 and lower d
                     }
 
                     ~ArraySizeManager() noexcept {
-                        for ( auto & p : this->pSizeDistribution ) {
-                            delete [] p.partition;
+                        for ( auto & address : this->pSizeDistribution ) {
+                            delete [] address.partition;
                         }
 
         #if defined(__CDS_Platform_Linux)

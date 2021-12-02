@@ -81,8 +81,8 @@ namespace cds {
             std::is_same < T, const String >::value;
 
     template < typename T >
-    concept Printable = requires (T t) {
-        { std::cout << t } -> std::same_as < std::ostream & >;
+    concept Printable = requires (T object) {
+        { std::cout << object } -> std::same_as < std::ostream & >;
     };
 
     template <class T>
@@ -94,17 +94,17 @@ namespace cds {
     };
 
     template <typename T>
-    concept UniqueIdentifiableByOperator = requires ( T const & a, T const & b ) {
-        a == b;
+    concept UniqueIdentifiableByOperator = requires (T const & left, T const & right ) {
+        left == right;
     };
 
     template < typename T >
-    concept Summable = requires ( T const & a, T const & b ) {
-        a + b;
+    concept Summable = requires ( T const & left, T const & right ) {
+        left + right;
     };
 
     template <typename T>
-    concept UniqueIdentifiable = requires ( T const & a, T const & b ) {
+    concept UniqueIdentifiable = requires ( T const & left, T const & right ) {
         UniqueIdentifiableByObject<T> || UniqueIdentifiableByOperator<T>;
     };
 
@@ -215,8 +215,8 @@ namespace cds {
 namespace cds {
 
     template < typename T >
-    concept Comparable = requires(T const &a, T const &b) {
-        std::is_convertible<decltype(a < b), bool>::value;
+    concept Comparable = requires(T const & left, T const & right) {
+        std::is_convertible<decltype(left < right), bool>::value;
     };
 
 }

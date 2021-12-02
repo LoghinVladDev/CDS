@@ -424,12 +424,12 @@ namespace cds {
                 return true;
             }
 
-            auto p = dynamic_cast < Union < FirstType, RemainingTypes ... > const * > ( & object );
-            if ( p == nullptr ) {
+            auto pUnion = dynamic_cast < Union < FirstType, RemainingTypes ... > const * > ( & object );
+            if (pUnion == nullptr ) {
                 return false;
             }
 
-            return this->operator == ( * p );
+            return this->operator == ( * pUnion );
         }
 
         template < typename T >

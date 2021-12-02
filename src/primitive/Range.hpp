@@ -54,12 +54,12 @@ namespace cds {
                 return copy;
             }
 
-            constexpr auto operator != ( Iterator const & o ) const noexcept -> bool {
-                return i != o.i;
+            constexpr auto operator != ( Iterator const & iterator ) const noexcept -> bool {
+                return i != iterator.i;
             }
 
-            constexpr auto operator == ( Iterator const & o ) const noexcept -> bool {
-                return i == o.i;
+            constexpr auto operator == ( Iterator const & iterator ) const noexcept -> bool {
+                return i == iterator.i;
             }
 
             constexpr Index operator *() const noexcept {
@@ -69,25 +69,25 @@ namespace cds {
 
         using ConstIterator = Iterator;
 
-        constexpr explicit Range(Index s, Index f) noexcept :
-                _s(s),
-                _f(f),
-                _rev(s > f) {
+        constexpr explicit Range(Index start, Index finish) noexcept :
+                _s(start),
+                _f(finish),
+                _rev(start > finish) {
 
         }
 
-        constexpr explicit Range(Index f) noexcept :
+        constexpr explicit Range(Index finish) noexcept :
                 _s(0),
-                _f(f),
-                _rev(0 > f) {
+                _f(finish),
+                _rev(0 > finish) {
 
         }
 
         template < typename T, EnableIf < std :: is_integral < T > :: type :: value > = 0 >
-        constexpr explicit Range(Pair < T, T > const & p) noexcept :
-                _s(p.first()),
-                _f(p.second()),
-                _rev(p.first() > p.second()) {
+        constexpr explicit Range(Pair < T, T > const & pair) noexcept :
+                _s(pair.first()),
+                _f(pair.second()),
+                _rev(pair.first() > pair.second()) {
 
         }
 

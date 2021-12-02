@@ -13,10 +13,10 @@
 namespace cds {
 
     template < typename C >
-    class Sequence;
+    class Sequence; // NOLINT(cppcoreguidelines-virtual-class-destructor)
 
     template < typename T, typename ... Args >
-    class Generator : public Object {
+    class Generator : public Object { // NOLINT(cppcoreguidelines-virtual-class-destructor)
     private:
         UniquePointer < T > pYieldedValue {nullptr}; // NOLINT(clion-misra-cpp2008-8-0-1)
         UniquePointer < T > pToReturnValue {nullptr}; // NOLINT(clion-misra-cpp2008-8-0-1)
@@ -168,7 +168,7 @@ namespace cds {
         }
 
     public:
-        class IterableGenerator : public Object {
+        class IterableGenerator : public Object { // NOLINT(cppcoreguidelines-virtual-class-destructor)
         public:
             class Iterator {
             private:
@@ -203,10 +203,10 @@ namespace cds {
                 inline auto operator * () const noexcept -> T & { return * this->pData; }
                 inline auto operator ++ () noexcept -> Iterator & { return this->next(); }
                 inline auto operator ++ (int) const noexcept -> Iterator { auto copy = * this; this->next(); return copy; }
-                inline auto operator == (Iterator const & it) const noexcept -> bool { return this->equals(it); }
-                inline auto operator != (Iterator const & it) const noexcept -> bool { return ! this->equals(it); } // NOLINT(clion-misra-cpp2008-5-3-1)
+                inline auto operator == (Iterator const & iterator) const noexcept -> bool { return this->equals(iterator); }
+                inline auto operator != (Iterator const & iterator) const noexcept -> bool { return ! this->equals(iterator); } // NOLINT(clion-misra-cpp2008-5-3-1)
 
-                auto equals ( Iterator const & it ) const noexcept -> bool { return this->pData == it.pData; }
+                auto equals ( Iterator const & iterator ) const noexcept -> bool { return this->pData == iterator.pData; }
             };
 
         private:

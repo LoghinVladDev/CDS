@@ -11,7 +11,7 @@
 namespace cds {
 
     template < typename T >
-    class UnorderedSet : public ListSet<T>  {
+    class UnorderedSet : public ListSet<T>  { // NOLINT(cppcoreguidelines-virtual-class-destructor)
 
     public:
         using ElementType                           = typename ListSet<T>::ElementType;
@@ -43,8 +43,8 @@ namespace cds {
         __CDS_OptimalInline UnorderedSet( UnorderedSet const & set __CDS_MaybeUnused ) noexcept :
                 ListSet<T>(set) {
 
-            for ( auto const & it __CDS_MaybeUnused : set ) {
-                this->insert(it);
+            for ( auto const & element __CDS_MaybeUnused : set ) {
+                this->insert(element);
             }
         }
 
@@ -54,23 +54,23 @@ namespace cds {
         }
 
         __CDS_OptionalInline explicit UnorderedSet(
-            Iterator const & from,
-            Iterator const & to
+            Iterator const & from, // NOLINT(bugprone-easily-swappable-parameters)
+            Iterator const & until
         ) noexcept :
                 ListSet<T>() {
 
-            for ( auto it = from; it != to; ++ it ) {
+            for (auto it = from; it != until; ++ it ) {
                 this->insert ( * it );
             }
         }
 
         __CDS_OptionalInline explicit UnorderedSet(
-            ConstIterator const & from,
-            ConstIterator const & to
+            ConstIterator const & from, // NOLINT(bugprone-easily-swappable-parameters)
+            ConstIterator const & until
         ) noexcept :
                 ListSet<T>() {
 
-            for ( auto it = from; it != to; ++ it ) {
+            for (auto it = from; it != until; ++ it ) {
                 this->insert ( * it );
             }
         }
@@ -78,30 +78,30 @@ namespace cds {
         __CDS_OptimalInline UnorderedSet ( InitializerList initializerList __CDS_MaybeUnused ) noexcept : // NOLINT(google-explicit-constructor)
                 ListSet<T>() {
 
-            for ( ElementCRef e __CDS_MaybeUnused : initializerList ) {
-                this->insert(e);
+            for ( ElementCRef element __CDS_MaybeUnused : initializerList ) {
+                this->insert(element);
             }
         }
 
         ~UnorderedSet() noexcept override = default;
 
     public:
-        auto operator = ( Collection <T> const & c __CDS_MaybeUnused ) noexcept -> UnorderedSet & {
-            if ( this == & c ) {
+        auto operator = ( Collection <T> const & collection __CDS_MaybeUnused ) noexcept -> UnorderedSet & {
+            if ( this == & collection ) {
                 return * this;
             }
 
             this->clear();
 
-            for ( auto & e __CDS_MaybeUnused : c ) {
-                this->insert(e);
+            for ( auto & element __CDS_MaybeUnused : collection ) {
+                this->insert(element);
             }
 
             return * this;
         }
 
-        __CDS_OptimalInline auto operator = ( UnorderedSet const & o ) noexcept -> UnorderedSet & {
-            return this->operator=( reinterpret_cast < Collection<T> const & > ( o ) ); // NOLINT(misc-unconventional-assign-operator)
+        __CDS_OptimalInline auto operator = ( UnorderedSet const & set ) noexcept -> UnorderedSet & {
+            return this->operator=( reinterpret_cast < Collection<T> const & > ( set ) ); // NOLINT(misc-unconventional-assign-operator)
         }
 
         __CDS_OptimalInline auto operator = ( UnorderedSet && set ) noexcept -> UnorderedSet & {
@@ -122,21 +122,21 @@ namespace cds {
         auto sequence () const && noexcept -> Sequence < UnorderedSet < T > const >;
         auto sequence () && noexcept -> Sequence < UnorderedSet < T > >;
 
-        auto allocInsertGetPtr ( ElementCRef e __CDS_MaybeUnused ) noexcept -> ElementPtrRef override {
+        auto allocInsertGetPtr ( ElementCRef element __CDS_MaybeUnused ) noexcept -> ElementPtrRef override {
             auto head = this->_pFront;
 
             while ( head != nullptr ) {
-                if (Type<ElementType>::compare(* head->data, e)) {
+                if (Type<ElementType>::compare(* head->data, element)) {
                     return head->data;
                 }
 
                 head = head->pNext;
             }
 
-            auto p = Memory :: instance().create < Node > ();
-            p->pNext = this->_pFront;
-            p->data = nullptr;
-            this->_pFront = p;
+            auto pNode = Memory :: instance().create < Node > ();
+            pNode->pNext = this->_pFront;
+            pNode->data = nullptr;
+            this->_pFront = pNode;
             ++ this->_size;
             return this->_pFront->data;
         }

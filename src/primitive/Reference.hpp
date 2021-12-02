@@ -14,7 +14,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             namespace referenceImpl {
 
                 template < typename T >
-                constexpr T & hiddenRef(T & t) noexcept { return t; }
+                constexpr T & hiddenRef(T & unused) noexcept { return unused; }
 
                 template < typename T >
                 __CDS_MaybeUnused constexpr auto hiddenRef(T && ) -> void = delete;
@@ -47,8 +47,8 @@ namespace cds {
                     RemoveConst < RemoveReference < V >
                 >
             > :: value > ()
-        ) > constexpr Reference ( V && v ) noexcept ( noexcept ( utility :: hidden :: referenceImpl :: hiddenRef < T > ( std :: forward < V > ( v )))) : // NOLINT(google-explicit-constructor,bugprone-forwarding-reference-overload)
-                p ( std :: addressof ( utility :: hidden :: referenceImpl :: hiddenRef < T > ( std :: forward < V > ( v )))) {
+        ) > constexpr Reference ( V && value ) noexcept ( noexcept ( utility :: hidden :: referenceImpl :: hiddenRef < T > (std :: forward < V > (value )))) : // NOLINT(google-explicit-constructor,bugprone-forwarding-reference-overload)
+                p ( std :: addressof ( utility :: hidden :: referenceImpl :: hiddenRef < T > ( std :: forward < V > (value )))) {
 
         }
 
@@ -72,23 +72,23 @@ namespace cds {
             return *p;
         }
 
-        constexpr auto operator == (Reference const & o) const noexcept -> bool {
+        constexpr auto operator == (Reference const & reference) const noexcept -> bool {
             return
-                this == & o ||
-                Type < T > :: compare ( o.get(), this->get() );
+                this == & reference ||
+                Type < T > :: compare (reference.get(), this->get() );
         }
 
-        __CDS_NoDiscard __CDS_cpplang_VirtualConstexpr auto equals ( Object const & o ) const noexcept -> bool final {
-            if ( this == & o ) {
+        __CDS_NoDiscard __CDS_cpplang_VirtualConstexpr auto equals ( Object const & object ) const noexcept -> bool final {
+            if ( this == & object ) {
                 return true;
             }
 
-            auto c = dynamic_cast < Reference < T > const * > ( & o );
-            if ( c == nullptr ) {
+            auto pReference = dynamic_cast < Reference < T > const * > ( & object );
+            if (pReference == nullptr ) {
                 return false;
             }
 
-            return this->operator==(*c);
+            return this->operator==(*pReference);
         }
 
         __CDS_NoDiscard __CDS_OptionalInline auto toString() const noexcept -> String final {

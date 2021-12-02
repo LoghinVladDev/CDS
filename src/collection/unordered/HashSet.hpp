@@ -16,30 +16,30 @@ namespace cds {
     template < typename T, typename H = utility :: LowCollisionDefaultHashFunction < T > > __CDS_Requires(
             UniqueIdentifiable < T > &&
             HashCalculatorHasBoundaryFunction < H >
-    ) class HashSet : public Set < T > {
+    ) class HashSet : public Set < T > { // NOLINT(cppcoreguidelines-virtual-class-destructor)
 
     public:
-        using ElementType               = typename Collection < T > :: ElementType;
+        using ElementType                     = typename Collection < T > :: ElementType;
 
     private:
-        using ElementRef                = typename Collection < T > :: ElementRef;
-        using ElementCRef               = typename Collection < T > :: ElementCRef;
-        using ElementMRef               = typename Collection < T > :: ElementMRef;
-        using ElementPtr                = typename Collection < T > :: ElementPtr;
-        using ElementPtrRef             = typename Collection < T > :: ElementPtrRef;
-        using ElementCPtr               = typename Collection < T > :: ElementCPtr;
-        using InitializerList           = typename Collection < T > :: InitializerList;
+        using ElementRef                      = typename Collection < T > :: ElementRef;
+        using ElementCRef                     = typename Collection < T > :: ElementCRef;
+        using ElementMRef   __CDS_MaybeUnused = typename Collection < T > :: ElementMRef;
+        using ElementPtr    __CDS_MaybeUnused = typename Collection < T > :: ElementPtr;
+        using ElementPtrRef                   = typename Collection < T > :: ElementPtrRef;
+        using ElementCPtr   __CDS_MaybeUnused = typename Collection < T > :: ElementCPtr;
+        using InitializerList                 = typename Collection < T > :: InitializerList;
 
     public:
-        using Iterator                  = typename Collection < T > :: Iterator;
-        using ConstIterator             = typename Collection < T > :: ConstIterator;
+        using Iterator                        = typename Collection < T > :: Iterator;
+        using ConstIterator                   = typename Collection < T > :: ConstIterator;
 
-        using ReverseIterator           = typename Collection < T > :: ReverseIterator;
-        using ConstReverseIterator      = typename Collection < T > :: ConstReverseIterator;
+        using ReverseIterator                 = typename Collection < T > :: ReverseIterator;
+        using ConstReverseIterator            = typename Collection < T > :: ConstReverseIterator;
 
     private:
-        using DelegateIterator          = typename Collection < T > :: DelegateIterator;
-        using DelegateConstIterator     = typename Collection < T > :: DelegateConstIterator;
+        using DelegateIterator                = typename Collection < T > :: DelegateIterator;
+        using DelegateConstIterator           = typename Collection < T > :: DelegateConstIterator;
 
     private:
 
@@ -73,9 +73,9 @@ namespace cds {
         auto clear () noexcept -> void final {
             for ( Index i = 0; i < this->_hasher.getBoundary(); ++ i ) {
                 while ( this->_listArray[i] != nullptr ) {
-                    auto * p = this->_listArray[i];
+                    auto * pHead = this->_listArray[i];
                     this->_listArray[i] = this->_listArray[i]->pNext;
-                    Memory :: instance().destroy ( p );
+                    Memory :: instance().destroy (pHead );
                 }
             }
 
@@ -87,27 +87,27 @@ namespace cds {
             Memory :: instance().destroyArray ( this->_listArray );
         }
 
-        auto allocInsertGetPtr ( ElementCRef e ) noexcept -> ElementPtrRef final {
-            auto hash = this->_hasher(e);
+        auto allocInsertGetPtr ( ElementCRef element ) noexcept -> ElementPtrRef final {
+            auto hash = this->_hasher(element);
 
             for (auto pHead = this->_listArray[hash]; pHead != nullptr; pHead = pHead->pNext ) { // NOLINT(clion-misra-cpp2008-6-5-2,clion-misra-cpp2008-6-5-4)
-                if ( Type < ElementType > :: compare ( * pHead->pData, e ) ) {
+                if ( Type < ElementType > :: compare (* pHead->pData, element ) ) {
                     return pHead->pData;
                 }
             }
 
-            auto p = Memory :: instance().create < Node > ();
-            p->pData = nullptr; p->pNext = this->_listArray[hash];
-            this->_listArray[hash] = p;
+            auto pNode = Memory :: instance().create < Node > ();
+            pNode->pData = nullptr; pNode->pNext = this->_listArray[hash];
+            this->_listArray[hash] = pNode;
 
             ++ this->_size;
 
             return this->_listArray[hash]->pData;
         }
 
-        auto contains ( ElementCRef e ) const noexcept -> bool final {
-            for (auto pHead = this->_listArray[this->_hasher(e)]; pHead != nullptr; pHead = pHead->pNext ) { // NOLINT(clion-misra-cpp2008-6-5-2,clion-misra-cpp2008-6-5-4)
-                if ( Type < ElementType > :: compare ( * pHead->pData, e ) ) {
+        auto contains ( ElementCRef element ) const noexcept -> bool final {
+            for (auto pHead = this->_listArray[this->_hasher(element)]; pHead != nullptr; pHead = pHead->pNext ) { // NOLINT(clion-misra-cpp2008-6-5-2,clion-misra-cpp2008-6-5-4)
+                if ( Type < ElementType > :: compare (* pHead->pData, element ) ) {
                     return true;
                 }
             }
@@ -115,20 +115,20 @@ namespace cds {
             return false;
         }
 
-        auto remove ( ElementCRef e ) noexcept -> bool final {
-            auto hash = this->_hasher(e);
+        auto remove ( ElementCRef element ) noexcept -> bool final {
+            auto hash = this->_hasher(element);
 
             if ( this->_listArray[hash] == nullptr ) {
                 return false;
             }
 
-            if ( Type < ElementType > :: compare ( e, * this->_listArray[hash]->pData ) ) {
-                auto p = this->_listArray[hash];
+            if ( Type < ElementType > :: compare (element, * this->_listArray[hash]->pData ) ) {
+                auto pNode = this->_listArray[hash];
                 this->_listArray[hash] = this->_listArray[hash]->pNext;
 
                 -- this->_size;
-                Memory :: instance().destroy ( p->pData );
-                Memory :: instance().destroy ( p );
+                Memory :: instance().destroy (pNode->pData );
+                Memory :: instance().destroy (pNode );
                 return true;
             }
 
@@ -140,7 +140,7 @@ namespace cds {
             Node * current = previous->pNext;
 
             while ( current != nullptr ) {
-                if ( Type < ElementType > :: compare ( e, * current->pData ) ) {
+                if ( Type < ElementType > :: compare (element, * current->pData ) ) {
                     previous->pNext = current->pNext;
 
                     Memory :: instance().destroy ( current->pData );
@@ -162,8 +162,8 @@ namespace cds {
                 return true;
             }
 
-            for ( auto a = this->begin(), b = set.begin(), aEnd = this->end(), bEnd = set.end(); a != aEnd && b != bEnd; ++ a, ++ b ) { // NOLINT(clion-misra-cpp2008-6-5-1,clion-misra-cpp2008-8-0-1,clion-misra-cpp2008-5-18-1)
-                if ( ! Type < ElementType > :: compare ( * a, * b ) ) { // NOLINT(clion-misra-cpp2008-5-3-1)
+            for (auto aIt = this->begin(), bIt = set.begin(), aEnd = this->end(), bEnd = set.end(); aIt != aEnd && bIt != bEnd; ++ aIt, ++ bIt ) { // NOLINT(clion-misra-cpp2008-6-5-1,clion-misra-cpp2008-8-0-1,clion-misra-cpp2008-5-18-1)
+                if ( ! Type < ElementType > :: compare (* aIt, * bIt ) ) { // NOLINT(clion-misra-cpp2008-5-3-1)
                     return false;
                 }
             }
@@ -175,17 +175,17 @@ namespace cds {
             return ! this->operator == ( set ); // NOLINT(clion-misra-cpp2008-5-3-1)
         }
 
-        __CDS_NoDiscard __CDS_OptimalInline auto equals ( Object const & o ) const noexcept -> bool final {
-            if ( this == & o ) {
+        __CDS_NoDiscard __CDS_OptimalInline auto equals ( Object const & object ) const noexcept -> bool final {
+            if ( this == & object ) {
                 return true;
             }
 
-            auto p = dynamic_cast < HashSet < T, H > const * > ( & o );
-            if ( p == nullptr ) {
+            auto pObject = dynamic_cast < HashSet < T, H > const * > ( & object );
+            if (pObject == nullptr ) {
                 return false;
             }
 
-            return this->operator == ( * p );
+            return this->operator == ( * pObject );
         }
 
     private:
@@ -243,14 +243,14 @@ namespace cds {
                 return * this->_pNode->pData;
             }
 
-            __CDS_OptimalInline auto equals ( DelegateIterator const & it ) const noexcept -> bool override {
-                if ( this == & it ) {
+            __CDS_OptimalInline auto equals ( DelegateIterator const & iterator ) const noexcept -> bool override {
+                if ( this == & iterator ) {
                     return true;
                 }
 
-                auto p = reinterpret_cast < decltype ( this ) > ( & it );
+                auto pIterator = reinterpret_cast < decltype ( this ) > ( & iterator );
 
-                return this->_pNode == p->_pNode;
+                return this->_pNode == pIterator->_pNode;
             }
 
             __CDS_OptimalInline auto copy () const noexcept -> HashSetDelegateIterator * override {
@@ -312,14 +312,14 @@ namespace cds {
                 return * this->_pNode->pData;
             }
 
-            __CDS_OptimalInline auto equals ( DelegateConstIterator const & it ) const noexcept -> bool override {
-                if ( this == & it ) {
+            __CDS_OptimalInline auto equals ( DelegateConstIterator const & iterator ) const noexcept -> bool override {
+                if ( this == & iterator ) {
                     return true;
                 }
 
-                auto p = reinterpret_cast < decltype ( this ) > ( & it );
+                auto pIterator = reinterpret_cast < decltype ( this ) > ( & iterator );
 
-                return this->_pNode == p->_pNode;
+                return this->_pNode == pIterator->_pNode;
             }
 
             __CDS_OptimalInline auto copy () const noexcept -> HashSetDelegateConstIterator * override {
@@ -366,8 +366,8 @@ namespace cds {
             }
 
             this->clear();
-            for ( auto const & e __CDS_MaybeUnused : set ) {
-                this->insert(e);
+            for ( auto const & element __CDS_MaybeUnused : set ) {
+                this->insert(element);
             }
 
             return * this;
@@ -394,8 +394,8 @@ namespace cds {
             }
 
             this->clear();
-            for ( auto const & e __CDS_MaybeUnused : obj ) {
-                this->insert(e);
+            for ( auto const & element __CDS_MaybeUnused : obj ) {
+                this->insert(element);
             }
 
             return * this;
@@ -409,39 +409,39 @@ namespace cds {
         __CDS_OptimalInline HashSet ( HashSet const & set __CDS_MaybeUnused ) noexcept {
             this->_listArray = Memory :: instance().createArray < Node * > ( this->_hasher.getBoundary() );
 
-            for ( auto const & e __CDS_MaybeUnused : set ) {
-                this->insert(e);
+            for ( auto const & element __CDS_MaybeUnused : set ) {
+                this->insert(element);
             }
         }
 
         __CDS_OptimalInline HashSet ( InitializerList initializerList __CDS_MaybeUnused ) noexcept { // NOLINT(google-explicit-constructor)
             this->_listArray = Memory :: instance().createArray < Node * > ( this->_hasher.getBoundary() );
 
-            for ( auto const & e __CDS_MaybeUnused : initializerList ) {
-                this->insert(e);
+            for ( auto const & element __CDS_MaybeUnused : initializerList ) {
+                this->insert(element);
             }
         }
 
         __CDS_OptionalInline explicit HashSet (
                 Iterator from,
-                Iterator to
+                Iterator until
         ) noexcept :
                 Set <T> () {
             this->_listArray = Memory :: instance().createArray < Node * > ( this->_hasher.getBoundary() );
 
-            for ( auto it = from; it != to; ++ it ) {
+            for (auto it = from; it != until; ++ it ) {
                 this->insert ( * it );
             }
         }
 
         __CDS_OptionalInline explicit HashSet (
                 ConstIterator from,
-                ConstIterator to
+                ConstIterator until
         ) noexcept :
                 Set <T> () {
             this->_listArray = Memory :: instance().createArray < Node * > ( this->_hasher.getBoundary() );
 
-            for ( auto it = from; it != to; ++ it ) {
+            for (auto it = from; it != until; ++ it ) {
                 this->insert ( * it );
             }
         }

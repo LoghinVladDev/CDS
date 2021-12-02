@@ -16,7 +16,7 @@
 namespace cds {
 
     template < typename T >
-    class DoubleLinkedList : public List < T > {
+    class DoubleLinkedList : public List < T > { // NOLINT(cppcoreguidelines-virtual-class-destructor)
     public:
         using ElementType                   = typename List < T > :: ElementType;
 
@@ -92,14 +92,14 @@ namespace cds {
                 return this->_pNode.get();
             }
 
-            __CDS_OptimalInline auto equals ( DelegateIterator const & it ) const noexcept -> bool override {
-                if ( this == & it ) {
+            __CDS_OptimalInline auto equals ( DelegateIterator const & iterator ) const noexcept -> bool override {
+                if ( this == & iterator ) {
                     return true;
                 }
 
-                auto p = reinterpret_cast < decltype ( this ) > ( & it );
+                auto pObject = reinterpret_cast < decltype ( this ) > ( & iterator );
 
-                return this->_pNode == p->_pNode;
+                return this->_pNode == pObject->_pNode;
             }
 
             __CDS_OptimalInline auto copy () const noexcept -> DoubleLinkedListDelegateIterator * override {
@@ -139,14 +139,14 @@ namespace cds {
                 return * this->_pNode->data;
             }
 
-            __CDS_OptimalInline auto equals ( DelegateConstIterator const & it ) const noexcept -> bool override {
-                if ( this == & it ) {
+            __CDS_OptimalInline auto equals ( DelegateConstIterator const & iterator ) const noexcept -> bool override {
+                if ( this == & iterator ) {
                     return true;
                 }
 
-                auto p = reinterpret_cast < decltype ( this ) > ( & it );
+                auto pObject = reinterpret_cast < decltype ( this ) > ( & iterator );
 
-                return this->_pNode == p->_pNode;
+                return this->_pNode == pObject->_pNode;
             }
 
             __CDS_OptimalInline auto copy () const noexcept -> DoubleLinkedListConstDelegateIterator * override {
@@ -273,23 +273,23 @@ namespace cds {
             return * this->_pFront->data;
         }
 
-        auto operator == (DoubleLinkedList const & o) const noexcept -> bool {
-            if ( this == & o ) {
+        auto operator == (DoubleLinkedList const & list) const noexcept -> bool {
+            if ( this == & list ) {
                 return true;
             }
 
-            if ( o.size () != this->size() ) {
+            if (list.size () != this->size() ) {
                 return false;
             }
 
             for ( // NOLINT(clion-misra-cpp2008-6-5-1)
                     auto // NOLINT(clion-misra-cpp2008-8-0-1)
-                        a = this->begin(), aEnd = this->end(),
-                        b = o.begin(), bEnd = o.end();
-                    a != aEnd && b != bEnd;
-                    ++ a, ++ b // NOLINT(clion-misra-cpp2008-5-18-1)
+                        aIt = this->begin(), aEnd = this->end(),
+                        bIt = list.begin(), bEnd = list.end();
+                    aIt != aEnd && bIt != bEnd;
+                    ++ aIt, ++ bIt // NOLINT(clion-misra-cpp2008-5-18-1)
             ) {
-                if ( ! ( Type < T > :: compare ( * a, * b ) ) ) { // NOLINT(clion-misra-cpp2008-5-3-1)
+                if ( ! ( Type < T > :: compare (* aIt, * bIt ) ) ) { // NOLINT(clion-misra-cpp2008-5-3-1)
                     return false;
                 }
             }
@@ -297,21 +297,21 @@ namespace cds {
             return true;
         }
 
-        __CDS_OptimalInline auto operator != (DoubleLinkedList const & o) const noexcept -> bool {
-            return ! this->operator==(o) ; // NOLINT(clion-misra-cpp2008-5-3-1)
+        __CDS_OptimalInline auto operator != (DoubleLinkedList const & list) const noexcept -> bool {
+            return ! this->operator==(list) ; // NOLINT(clion-misra-cpp2008-5-3-1)
         }
 
-        __CDS_NoDiscard __CDS_OptimalInline auto equals (Object const & o) const noexcept -> bool final {
-            if ( this == & o ) {
+        __CDS_NoDiscard __CDS_OptimalInline auto equals (Object const & object) const noexcept -> bool final {
+            if ( this == & object ) {
                 return true;
             }
 
-            auto p = dynamic_cast < DoubleLinkedList < T > const * > ( & o );
-            if ( p == nullptr ) {
+            auto pObject = dynamic_cast < DoubleLinkedList < T > const * > ( & object );
+            if (pObject == nullptr ) {
                 return false;
             }
 
-            return this->operator==(* p);
+            return this->operator==(* pObject);
         }
 
         auto clear () noexcept -> void final;
@@ -382,7 +382,7 @@ namespace cds {
         auto allocFrontGetPtr () noexcept -> ElementPtrRef override;
         auto allocBackGetPtr () noexcept -> ElementPtrRef override;
 
-        __CDS_OptimalInline auto allocInsertGetPtr ( ElementCRef e __CDS_MaybeUnused) noexcept -> ElementPtrRef override {
+        __CDS_OptimalInline auto allocInsertGetPtr ( ElementCRef element __CDS_MaybeUnused) noexcept -> ElementPtrRef override {
             return this->allocBackGetPtr();
         }
 
@@ -392,19 +392,19 @@ namespace cds {
     public:
         auto operator = ( Collection <T> const & ) noexcept -> DoubleLinkedList &;
 
-        __CDS_OptimalInline auto operator = ( DoubleLinkedList <T> const & o ) noexcept -> DoubleLinkedList & {  // NOLINT(bugprone-unhandled-self-assignment)
-            return this->operator= ( reinterpret_cast < Collection<T> const & > ( o )); // NOLINT(misc-unconventional-assign-operator)
+        __CDS_OptimalInline auto operator = ( DoubleLinkedList <T> const & list ) noexcept -> DoubleLinkedList & {  // NOLINT(bugprone-unhandled-self-assignment)
+            return this->operator= ( reinterpret_cast < Collection<T> const & > ( list )); // NOLINT(misc-unconventional-assign-operator)
         }
 
-        __CDS_cpplang_NonConstConstexprMemberFunction auto operator = ( DoubleLinkedList && o ) noexcept -> DoubleLinkedList & {
-            if ( this == & o ) {
+        __CDS_cpplang_NonConstConstexprMemberFunction auto operator = ( DoubleLinkedList && list ) noexcept -> DoubleLinkedList & {
+            if ( this == & list ) {
                 return * this;
             }
 
             this->clear();
-            this->_pFront = exchange(o._pFront, nullptr);
-            this->_pBack = exchange(o._pBack, nullptr);
-            this->_size = exchange(o._size, 0);
+            this->_pFront = exchange(list._pFront, nullptr);
+            this->_pBack = exchange(list._pBack, nullptr);
+            this->_size = exchange(list._size, 0);
 
             return * this;
         }
@@ -421,8 +421,8 @@ namespace cds {
 
     template < typename T >
     DoubleLinkedList<T>::DoubleLinkedList( InitializerList initializerList __CDS_MaybeUnused ) noexcept {
-        for ( const auto & e __CDS_MaybeUnused : initializerList ) {
-            this->add ( e );
+        for ( const auto & element __CDS_MaybeUnused : initializerList ) {
+            this->add (element );
         }
     }
 
@@ -482,12 +482,12 @@ namespace cds {
 namespace cds {
 
     template < typename T >
-    auto DoubleLinkedList<T>::remove(Index i) noexcept -> bool {
-        if ( i < 0 || i >= this->size() ) {
+    auto DoubleLinkedList<T>::remove(Index index) noexcept -> bool {
+        if (index < 0 || index >= this->size() ) {
             return false;
         }
 
-        if ( i == 0 ) {
+        if (index == 0 ) {
             this->popFront();
             return true;
         }
@@ -495,7 +495,7 @@ namespace cds {
         auto current = this->_pFront;
         Index currentIndex = 1;
 
-        while ( current->pNext != nullptr && currentIndex < i ) {
+        while ( current->pNext != nullptr && currentIndex < index ) {
             current = current->pNext;
             currentIndex ++;
         }
@@ -778,8 +778,8 @@ namespace cds {
     }
 
     template < typename T >
-    auto DoubleLinkedList<T>::remove ( Iterator const & it ) noexcept (false) -> T {
-        if ( ! it.of ( this ) ) { // NOLINT(clion-misra-cpp2008-5-3-1)
+    auto DoubleLinkedList<T>::remove ( Iterator const & iterator ) noexcept (false) -> T {
+        if ( ! iterator.of (this ) ) { // NOLINT(clion-misra-cpp2008-5-3-1)
             throw IllegalArgumentException("Iterator is not of this Collection");
         }
 
@@ -787,7 +787,7 @@ namespace cds {
             throw OutOfBoundsException("List is Empty");
         }
 
-        auto pDelegate = reinterpret_cast < DoubleLinkedListDelegateIterator * > ( Collection < T > ::acquireDelegate ( it ) );
+        auto pDelegate = reinterpret_cast < DoubleLinkedListDelegateIterator * > ( Collection < T > ::acquireDelegate (iterator ) );
 
         if ( pDelegate->node() == this->_pFront ) {
             return this->popFront();
@@ -820,8 +820,8 @@ namespace cds {
 
     template < typename T >
     DoubleLinkedList<T>::DoubleLinkedList(DoubleLinkedList const & obj __CDS_MaybeUnused) noexcept {
-        for ( const auto & e __CDS_MaybeUnused : obj ) {
-            (void) this->pushBack(e);
+        for ( const auto & element __CDS_MaybeUnused : obj ) {
+            (void) this->pushBack(element);
         }
     }
 
@@ -843,9 +843,9 @@ namespace cds {
     auto DoubleLinkedList<T>::makeUnique() noexcept -> void {
         DoubleLinkedList<T> uniqueList;
 
-        for ( const auto & e __CDS_MaybeUnused : (*this) ) {
-            if ( ! uniqueList.contains(e)) { // NOLINT(clion-misra-cpp2008-5-3-1)
-                uniqueList.pushBack(e);
+        for ( const auto & element __CDS_MaybeUnused : (*this) ) {
+            if ( ! uniqueList.contains(element)) { // NOLINT(clion-misra-cpp2008-5-3-1)
+                uniqueList.pushBack(element);
             }
         }
 
@@ -853,14 +853,14 @@ namespace cds {
     }
 
     template < typename T >
-    auto DoubleLinkedList<T>::operator =(Collection <T> const & c __CDS_MaybeUnused) noexcept -> DoubleLinkedList<T> & {
-        if ( this == & c ) {
+    auto DoubleLinkedList<T>::operator =(Collection <T> const & collection __CDS_MaybeUnused) noexcept -> DoubleLinkedList<T> & {
+        if ( this == & collection ) {
             return * this;
         }
 
         this->clear();
-        for ( auto & e __CDS_MaybeUnused : c ) {
-            (void) this->pushBack ( e );
+        for ( auto & element __CDS_MaybeUnused : collection ) {
+            (void) this->pushBack (element );
         }
 
         return * this;
@@ -887,9 +887,9 @@ namespace cds {
         }
 
         auto current __CDS_MaybeUnused = 0;
-        for ( auto & e __CDS_MaybeUnused : (*this) ) {
+        for ( auto & element __CDS_MaybeUnused : (*this) ) {
             if ( current == pos ) {
-                return & e;
+                return & element;
             }
 
             ++ current ;
@@ -919,9 +919,9 @@ namespace cds {
         }
 
         auto current __CDS_MaybeUnused = 0;
-        for ( auto & e __CDS_MaybeUnused : (*this) ) {
+        for ( auto & element __CDS_MaybeUnused : (*this) ) {
             if ( current == pos ) {
-                return & e;
+                return & element;
             }
 
             ++ current ;
@@ -932,20 +932,20 @@ namespace cds {
 
     template < typename T >
     DoubleLinkedList<T>::DoubleLinkedList(
-            Iterator const & from,
-            Iterator const & to
+            Iterator const & from, // NOLINT(bugprone-easily-swappable-parameters)
+            Iterator const & until
     ) noexcept {
-        for ( auto it = from; it != to; ++ it ) {
+        for (auto it = from; it != until; ++ it ) {
             (void) this->pushBack ( * it );
         }
     }
 
     template < typename T >
     DoubleLinkedList<T>::DoubleLinkedList(
-            ConstIterator const & from,
-            ConstIterator const & to
+            ConstIterator const & from, // NOLINT(bugprone-easily-swappable-parameters)
+            ConstIterator const & until
     ) noexcept {
-        for ( auto it = from; it != to; ++ it ) {
+        for (auto it = from; it != until; ++ it ) {
             (void) this->pushBack ( * it );
         }
     }
@@ -991,9 +991,9 @@ namespace cds {
 
         String currentSegment;
 
-        for ( auto c : (*this) ) {
-            if ( c != token || splitIndex >= static_cast<Index>(limit) - 1 ) {
-                currentSegment += c;
+        for ( auto character : (*this) ) {
+            if (character != token || splitIndex >= static_cast<Index>(limit) - 1 ) {
+                currentSegment += character;
             } else {
                 if ( currentSegment.empty() ) {
                     continue;
@@ -1029,9 +1029,9 @@ namespace cds {
 
         String currentSegment;
 
-        for ( auto c : (*this) ) {
-            if ( ! delim.contains(c) || splitIndex >= static_cast<Index>(limit) - 1 ) {
-                currentSegment += c;
+        for ( auto character : (*this) ) {
+            if (! delim.contains(character) || splitIndex >= static_cast<Index>(limit) - 1 ) {
+                currentSegment += character;
             } else {
                 splitIndex ++;
                 if ( ! currentSegment.empty() ) {
@@ -1052,9 +1052,9 @@ namespace cds {
         String copy = * this;
         auto locations = this->find(token);
 
-        auto i = static_cast < Index > (locations.size()) - 1;
-        for ( auto it = locations.rbegin(); it != locations.rend(); ++it, --i ) { // NOLINT(clion-misra-cpp2008-5-18-1)
-            if ( static_cast < Size > ( i + 1 ) < limit ) {
+        auto index = static_cast < Index > (locations.size()) - 1;
+        for ( auto it = locations.rbegin(); it != locations.rend(); ++it, --index ) { // NOLINT(clion-misra-cpp2008-5-18-1)
+            if (static_cast < Size > ( index + 1 ) < limit ) {
                 (void) copy.replace(* it, token.length(), "\x01");
             }
         }
@@ -1062,75 +1062,75 @@ namespace cds {
         return copy.split('\x01');
     }
 
-    inline auto String::find (ElementType e) const noexcept -> DoubleLinkedList < Index > {
+    inline auto String::find (ElementType element) const noexcept -> DoubleLinkedList < Index > {
         DoubleLinkedList < Index > indices;
 
-        Index i = 0;
-        for ( auto c : (*this) ) {
-            if ( c == e ) {
-                (void) indices.pushBack(i);
+        Index index = 0;
+        for ( auto character : (*this) ) {
+            if (character == element ) {
+                (void) indices.pushBack(index);
             }
 
-            i++;
+            index++;
         }
 
         return indices;
     }
 
-    inline auto String::findOf (String const & s) const noexcept -> DoubleLinkedList < Index > {
+    __CDS_MaybeUnused inline auto String::findOf (String const & string) const noexcept -> DoubleLinkedList < Index > {
         DoubleLinkedList < Index > indices;
 
-        Index i = 0;
-        for ( auto c : (*this) ) {
-            if ( s.contains(c) ) {
-                (void) indices.pushBack(i);
+        Index index = 0;
+        for ( auto character : (*this) ) {
+            if ( string.contains(character) ) {
+                (void) indices.pushBack(index);
             }
 
-            i++;
+            index++;
         }
 
         return indices;
     }
 
-    inline auto String::findNotOf (String const & s) const noexcept -> DoubleLinkedList < Index > {
+    __CDS_MaybeUnused inline auto String::findNotOf (String const & string) const noexcept -> DoubleLinkedList < Index > {
         DoubleLinkedList < Index > indices;
 
-        Index i = 0;
-        for ( auto c : (*this) ) {
-            if ( ! s.contains(c) ) {
-                (void) indices.pushBack(i);
+        Index index = 0;
+        for ( auto character : (*this) ) {
+            if ( ! string.contains(character) ) {
+                (void) indices.pushBack(index);
             }
 
-            i++;
+            index++;
         }
 
         return indices;
     }
 
-    inline auto String::find (String const & o) const noexcept -> DoubleLinkedList < Index > {
+    inline auto String::find (String const & string) const noexcept -> DoubleLinkedList < Index > {
     #if !defined(_MSC_VER)
-        Index lpsArray [o.size()];
+        Index lpsArray [string.size()];
     #else
         auto lpsArray = Memory :: instance().createArray < Index > (this->size());
     #endif
-        (void) std::memset(reinterpret_cast < void * > ( lpsArray ), 0, sizeof(Index) * o.size()); // NOLINT(clion-misra-cpp2008-5-2-12)
+        (void) std::memset(reinterpret_cast < void * > ( lpsArray ), 0, sizeof(Index) * string.size()); // NOLINT(clion-misra-cpp2008-5-2-12)
 
-        auto computeLPSArray = [& o, &lpsArray] () {
+        auto computeLPSArray = [& string, &lpsArray] () {
             Index len = 0;
             lpsArray[0] = 0;
 
-            Index i = 1;
-            while ( i < static_cast<Index>(o.size()) ) {
-                if ( o._p[i] == o._p[len] ) {
+            Index index = 1;
+            while (index < static_cast<Index>(string.size()) ) {
+                if (string._p[index] == string._p[len] ) {
                     len ++;
-                    lpsArray[i] = len;
-                    i ++;
+                    lpsArray[index] = len;
+                    index ++;
                 } else {
                     if ( len != 0 ) {
                         len = lpsArray[len - 1];
                     } else {
-                        lpsArray[i] = 0;
-                        i ++;
+                        lpsArray[index] = 0;
+                        index ++;
                     }
                 }
             }
@@ -1139,22 +1139,22 @@ namespace cds {
         computeLPSArray();
 
         DoubleLinkedList < Index > indices;
-        Index i = 0;
-        Index j = 0;
+        Index headIndex = 0;
+        Index aheadIndex = 0;
 
-        while ( i < static_cast<Index>(this->size()) ) {
-            if ( o._p[j] == this->_p[i] ) {
-                i ++; j ++;
+        while (headIndex < static_cast<Index>(this->size()) ) {
+            if (string._p[aheadIndex] == this->_p[headIndex] ) {
+                headIndex ++; aheadIndex ++;
             }
 
-            if ( j == static_cast<Index>(o.size()) ) {
-                (void) indices.pushBack(i - j);
-                j = lpsArray[j - 1];
-            } else if ( i < static_cast<Index>(this->size()) && this->_p[i] != o._p[j] ) {
-                if ( j != 0 ) {
-                    j = lpsArray[j - 1];
+            if (aheadIndex == static_cast<Index>(string.size()) ) {
+                (void) indices.pushBack(headIndex - aheadIndex);
+                aheadIndex = lpsArray[aheadIndex - 1];
+            } else if (headIndex < static_cast<Index>(this->size()) && this->_p[headIndex] != string._p[aheadIndex] ) {
+                if (aheadIndex != 0 ) {
+                    aheadIndex = lpsArray[aheadIndex - 1];
                 } else {
-                    ++ i;
+                    ++ headIndex;
                 }
             } else {
                 /// do nothing

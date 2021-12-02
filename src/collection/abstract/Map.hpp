@@ -23,7 +23,7 @@ namespace cds {
 
 
     template < typename K, typename V> __CDS_Requires( UniqueIdentifiable <K> )
-    class Map : public Collection < Pair < K, V > > {
+    class Map : public Collection < Pair < K, V > > { // NOLINT(cppcoreguidelines-virtual-class-destructor)
     public:
         using Key                       = K;
         using KeyReference              = Key &;
@@ -71,12 +71,12 @@ namespace cds {
         virtual auto get (KeyConstReference) const noexcept(false) -> ValueConstReference = 0;
         __CDS_MaybeUnused virtual auto getOr (KeyConstReference, ValueConstReference) const noexcept -> ValueConstReference = 0;
 
-        virtual __CDS_OptimalInline auto operator [] (KeyConstReference k) noexcept -> ValueReference {
-            return this->get(k);
+        virtual __CDS_OptimalInline auto operator [] (KeyConstReference key) noexcept -> ValueReference {
+            return this->get(key);
         }
 
-        virtual __CDS_OptimalInline auto operator [] (KeyConstReference k) const noexcept(false) -> ValueConstReference {
-            return this->get(k);
+        virtual __CDS_OptimalInline auto operator [] (KeyConstReference key) const noexcept(false) -> ValueConstReference {
+            return this->get(key);
         }
 
         __CDS_MaybeUnused virtual auto containsValue (ValueConstReference) const noexcept -> bool = 0;
@@ -96,8 +96,8 @@ namespace cds {
             return ( ( this->allocInsertGetPtr(entry)) = Memory :: instance().create < Entry > (entry) )->second();
         }
 
-        __CDS_MaybeUnused __CDS_OptimalInline auto emplace ( KeyConstReference k, ValueConstReference v ) noexcept -> ValueConstReference {
-            return this->insert( {k, v} );
+        __CDS_MaybeUnused __CDS_OptimalInline auto emplace (KeyConstReference key, ValueConstReference value ) noexcept -> ValueConstReference {
+            return this->insert( {key, value} );
         }
 
         __CDS_cpplang_ConstexprDestructor ~Map() noexcept override = default;
@@ -107,7 +107,7 @@ namespace cds {
         auto makeUnique () noexcept -> void override { }
 
         auto remove ( EntryConstReference, Size ) noexcept -> bool override { return false; }
-        auto removeLast ( EntryConstReference o ) noexcept -> bool override { return false; }
+        auto removeLast ( EntryConstReference entry ) noexcept -> bool override { return false; }
         auto removeOf ( const Collection<Entry> &, Size ) noexcept -> bool override { return false; }
         auto removeLastOf ( const Collection<Entry> & ) noexcept -> bool override { return false; }
         auto removeNotOf ( const Collection<Entry> &, Size ) noexcept -> bool override { return false; }

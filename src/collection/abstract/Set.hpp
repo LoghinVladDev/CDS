@@ -10,7 +10,7 @@
 namespace cds {
 
     template < typename T > __CDS_Requires( UniqueIdentifiable < T > )
-    class Set : public Collection < T > {
+    class Set : public Collection < T > { // NOLINT(cppcoreguidelines-virtual-class-destructor)
     public:
         using ElementType               = typename Collection < T > :: ElementType;
 
@@ -40,8 +40,8 @@ namespace cds {
         __CDS_cpplang_ConstexprDestructor ~Set () noexcept override = default;
 
     protected:
-        auto __CDS_OptimalInline remove ( const T & e, Size ) noexcept -> bool final { return this->remove(e); }
-        auto __CDS_OptimalInline removeLast ( const T & o ) noexcept -> bool final { return false; }
+        auto __CDS_OptimalInline remove (const T & element, Size ) noexcept -> bool final { return this->remove(element); }
+        auto __CDS_OptimalInline removeLast ( const T & element ) noexcept -> bool final { return false; }
         auto __CDS_OptimalInline removeOf ( const Collection<T> &, Size ) noexcept -> bool final { return false; }
         auto __CDS_OptimalInline removeLastOf ( const Collection<T> & ) noexcept -> bool final { return false; }
         auto __CDS_OptimalInline removeNotOf ( const Collection<T> &, Size ) noexcept -> bool final { return false; }
@@ -58,13 +58,13 @@ namespace cds {
         __CDS_NoDiscard __CDS_cpplang_ConstexprPureAbstract auto size () const noexcept -> Size override = 0;
 
         template < typename V = T, EnableIf < Type < V > :: copyConstructible > = 0 >
-        __CDS_OptimalInline auto insert ( ElementCRef e ) noexcept -> void {
-            return this->add(e);
+        __CDS_OptimalInline auto insert ( ElementCRef element ) noexcept -> void {
+            return this->add(element);
         }
 
         template < typename V = T, EnableIf < Type < V > :: moveConstructible > = 0 >
-        __CDS_OptimalInline auto insert ( ElementMRef e ) noexcept -> void {
-            return this->add(e);
+        __CDS_OptimalInline auto insert ( ElementMRef element ) noexcept -> void {
+            return this->add(element);
         }
 
         __CDS_NoDiscard auto toString() const noexcept -> String final {
@@ -75,12 +75,12 @@ namespace cds {
             std::stringstream out;
             out << "{ ";
 
-            for ( ElementCRef e __CDS_MaybeUnused : (*this) ) {
-                Type < T > ::streamPrint( out, e ) << ", ";
+            for ( ElementCRef element __CDS_MaybeUnused : (*this) ) {
+                Type < T > ::streamPrint(out, element ) << ", ";
             }
 
-            auto s = out.str();
-            return {s.substr(0u, s.length() - 2u).append(" }")};
+            auto asString = out.str();
+            return {asString.substr(0u, asString.length() - 2u).append(" }")};
         }
 
         __CDS_NoDiscard __CDS_cpplang_ConstexprOverride auto empty () const noexcept -> bool final {

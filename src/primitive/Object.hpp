@@ -11,13 +11,13 @@
 
 namespace cds {
 
-    class String;
+    class String; // NOLINT(cppcoreguidelines-virtual-class-destructor)
 
     class Object {
     public:
         __CDS_NoDiscard virtual auto toString () const noexcept -> String;
-        __CDS_NoDiscard virtual auto equals (Object const & o) const noexcept -> bool {
-            return this == & o;
+        __CDS_NoDiscard virtual auto equals (Object const & object) const noexcept -> bool {
+            return this == & object;
         }
 
         friend auto operator << (std::ostream &, Object const &) noexcept -> std::ostream &;
@@ -40,8 +40,8 @@ namespace cds {
 
 namespace cds {
 
-    template<> auto hash<Object>(Object const &o) noexcept -> Index {
-        return o.hash();
+    template<> auto hash<Object>(Object const &object) noexcept -> Index {
+        return object.hash();
     }
 
 }

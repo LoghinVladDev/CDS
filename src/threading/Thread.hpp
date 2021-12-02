@@ -82,8 +82,8 @@ namespace cds {
 
         __CDS_WarningSuppression_UseScopedEnum_SuppressEnable
 
-        __CDS_cpplang_ConstexprConditioned static auto stateToString ( State s ) noexcept -> StringLiteral {
-            switch ( s ) {
+        __CDS_cpplang_ConstexprConditioned static auto stateToString ( State state ) noexcept -> StringLiteral {
+            switch ( state ) {
                 case State::CREATED:                return "Not Started"; // NOLINT(clion-misra-cpp2008-6-4-5)
                 case State::RUNNING:                return "Running"; // NOLINT(clion-misra-cpp2008-6-4-5)
                 case State::FINISHED:               return "Finished Execution"; // NOLINT(clion-misra-cpp2008-6-4-5)
@@ -260,7 +260,7 @@ namespace cds {
     public:
 
         Runnable () noexcept = delete;
-        explicit Runnable ( ThreadFunction f ) noexcept : Thread(), function(f) {}
+        explicit Runnable ( ThreadFunction threadFunction ) noexcept : Thread(), function(threadFunction) {}
     };
 
 }

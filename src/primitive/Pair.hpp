@@ -161,61 +161,61 @@ namespace cds {
             return this->_second;
         }
 
-        __CDS_MaybeUnused auto __CDS_OptimalInline setFirst(K const & k) noexcept -> Pair & {
-            this->_first = k;
+        __CDS_MaybeUnused auto __CDS_OptimalInline setFirst(K const & first) noexcept -> Pair & {
+            this->_first = first;
             return * this;
         }
 
-        __CDS_MaybeUnused auto __CDS_OptimalInline setSecond(V const & v) noexcept -> Pair & {
-            this->_second = v;
+        __CDS_MaybeUnused auto __CDS_OptimalInline setSecond(V const & second) noexcept -> Pair & {
+            this->_second = second;
             return * this;
         }
 
-        constexpr auto operator == ( Pair const & o ) const noexcept -> bool {
+        constexpr auto operator == ( Pair const & pair ) const noexcept -> bool {
             return
-                this == & o || (
-                        Type<K>::compare(this->_first, o._first) &&
-                        Type<V>::compare(this->_second, o._second)
+                this == & pair || (
+                        Type<K>::compare(this->_first, pair._first) &&
+                        Type<V>::compare(this->_second, pair._second)
                 );
         }
 
-        constexpr auto operator != ( Pair const & o ) const noexcept -> bool {
-            return ! this->operator==(o); // NOLINT(clion-misra-cpp2008-5-3-1)
+        constexpr auto operator != ( Pair const & pair ) const noexcept -> bool {
+            return ! this->operator==(pair); // NOLINT(clion-misra-cpp2008-5-3-1)
         }
 
-        __CDS_NoDiscard __CDS_cpplang_VirtualConstexpr auto equals ( Object const & o ) const noexcept -> bool override {
-            if ( this == & o ) {
+        __CDS_NoDiscard __CDS_cpplang_VirtualConstexpr auto equals ( Object const & object ) const noexcept -> bool override {
+            if ( this == & object ) {
                 return true;
             }
 
-            auto p = dynamic_cast < Pair < K, V > const * > ( & o );
-            if ( p == nullptr ) {
+            auto pPair = dynamic_cast < Pair < K, V > const * > ( & object );
+            if (pPair == nullptr ) {
                 return false;
             }
 
-            return this->operator==(*p);
+            return this->operator==(*pPair);
         }
 
         template < typename K1 = K, typename V1 = V, EnableIf < Type < K1 > :: copyAssignable && Type < V1 > :: copyAssignable > = 0 >
-        __CDS_cpplang_NonConstConstexprMemberFunction auto operator = ( Pair const & o ) noexcept -> Pair & {
-            if ( this == & o ) {
+        __CDS_cpplang_NonConstConstexprMemberFunction auto operator = ( Pair const & pair ) noexcept -> Pair & {
+            if ( this == & pair ) {
                 return * this;
             }
 
-            this->_first = o._first;
-            this->_second = o._second;
+            this->_first = pair._first;
+            this->_second = pair._second;
 
             return * this;
         }
 
         template < typename K1 = K, typename V1 = V, EnableIf < Type < K1 > :: moveAssignable && Type < V1 > :: moveAssignable > = 0 >
-        __CDS_cpplang_NonConstConstexprMemberFunction auto operator = ( Pair && o ) noexcept -> Pair & {
-            if ( this == & o ) {
+        __CDS_cpplang_NonConstConstexprMemberFunction auto operator = ( Pair && pair ) noexcept -> Pair & {
+            if ( this == & pair ) {
                 return * this;
             }
 
-            this->_first = std :: move ( o._first );
-            this->_second = std :: move ( o._second );
+            this->_first = std :: move (pair._first );
+            this->_second = std :: move (pair._second );
 
             return * this;
         }

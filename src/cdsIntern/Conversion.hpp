@@ -50,7 +50,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 static_assert(std::is_integral < Type > :: value, "implementation bug");
                 static_assert(std::is_unsigned < Type > :: value, "implementation bug");
 
-                uint32 n = 1u;
+                uint32 digitCount = 1u;
                 uint32 const base2 = base * base;
                 uint32 const base3 = base2 * base;
                 uint32 const base4 = base3 * base;
@@ -58,19 +58,19 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 while(true) {
 
                     if ( value < base ) {
-                        return n;
+                        return digitCount;
                     } else if ( value < base2 ) {
-                        return n + 1u;
+                        return digitCount + 1u;
                     } else if ( value < base3 ) {
-                        return n + 2u;
+                        return digitCount + 2u;
                     } else if ( value < base4 ) {
-                        return n + 3u;
+                        return digitCount + 3u;
                     } else {
                         /// do nothing
                     }
 
                     value /= base4;
-                    n += 4u;
+                    digitCount += 4u;
                 }
             }
         }

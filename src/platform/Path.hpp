@@ -57,21 +57,21 @@ namespace cds {
             }
         };
 
-        __CDS_OptimalInline auto operator == (Path const & o) const noexcept -> bool {
-            return this->_osPath == o._osPath;
+        __CDS_OptimalInline auto operator == (Path const & path) const noexcept -> bool {
+            return this->_osPath == path._osPath;
         }
 
-        __CDS_NoDiscard auto equals(Object const & o) const noexcept -> bool override {
-            if ( this == & o ) {
+        __CDS_NoDiscard auto equals(Object const & object) const noexcept -> bool override {
+            if ( this == & object ) {
                 return true;
             }
 
-            auto p = dynamic_cast < decltype ( this ) > ( & o );
-            if ( p == nullptr ) {
+            auto pObject = dynamic_cast < decltype ( this ) > ( & object );
+            if (pObject == nullptr ) {
                 return false;
             }
 
-            return this->operator == (* p);
+            return this->operator == (* pObject);
         }
 
     #if defined(WIN32)
@@ -162,12 +162,12 @@ namespace cds {
             return * this;
         }
 
-        auto operator = (String const & s) noexcept(false) -> Path & {
-            return ( ( * this ) = Path( s ) );
+        auto operator = (String const & pathAsString) noexcept(false) -> Path & {
+            return ( ( * this ) = Path(pathAsString ) );
         }
 
-        auto operator = (StringLiteral s) noexcept(false) -> Path & {
-            return ( ( * this ) = Path( s ) );
+        auto operator = (StringLiteral pathAsString) noexcept(false) -> Path & {
+            return ( ( * this ) = Path(pathAsString ) );
         }
 
         __CDS_NoDiscard auto toString () const noexcept -> String override {
@@ -183,7 +183,7 @@ namespace cds {
         }
 
         __CDS_NoDiscard __CDS_OptimalInline auto parent () const noexcept(false) -> Path { // NOLINT(misc-no-recursion)
-            auto parentPath = String (this->_osPath.substr(0, this->_osPath.findLast(Path::directorySeparator())));
+            auto parentPath = this->_osPath.substr(0, this->_osPath.findLast(Path::directorySeparator()));
             if ( parentPath.empty() ) {
                 parentPath = this->root().toString();
             }
@@ -212,30 +212,30 @@ namespace cds {
             return parent.root();
         }
 
-        auto operator / (String const & f) const noexcept (false) -> Path {
+        auto operator / (String const & leaf) const noexcept (false) -> Path {
             auto delimFiltered = [&]() -> String {
-                String c(f);
-                (void) c.forEach([&](String::ElementType & e){
-                    if (Path::possibleDirectorySeparators.contains(e)) {
-                        e = Path::directorySeparator();
+                String modifiedPath(leaf);
+                (void) modifiedPath.forEach([&](String::ElementType & element){
+                    if (Path::possibleDirectorySeparators.contains(element)) {
+                        element = Path::directorySeparator();
                     }
                 });
 
-                return c;
+                return modifiedPath;
             };
 
             return {this->_osPath + Path::directorySeparator() + delimFiltered()};
         }
 
-        __CDS_OptimalInline auto operator + (String const & f) const noexcept (false) -> Path {
-            return (*this) / f;
+        __CDS_OptimalInline auto operator + (String const & leaf) const noexcept (false) -> Path {
+            return (*this) / leaf;
         }
 
-        __CDS_NoDiscard __CDS_OptimalInline auto append (String const & f) const noexcept (false) -> Path {
-            return (*this) / f;
+        __CDS_NoDiscard __CDS_OptimalInline auto append (String const & leaf) const noexcept (false) -> Path {
+            return (*this) / leaf;
         }
 
-        class WalkEntry;
+        class WalkEntry; // NOLINT(cppcoreguidelines-virtual-class-destructor)
 
         __CDS_NoDiscard auto walk (int = INT32_MAX) const noexcept (false) -> LinkedList < WalkEntry >;
 
@@ -266,21 +266,21 @@ namespace cds {
         LinkedList < String > _files;
 
     public:
-        __CDS_OptimalInline auto operator == (WalkEntry const & o) const noexcept -> bool {
-            return this->_root == o._root && this->_files == o._files && this->_directories == o._directories;
+        __CDS_OptimalInline auto operator == (WalkEntry const & object) const noexcept -> bool {
+            return this->_root == object._root && this->_files == object._files && this->_directories == object._directories;
         }
 
-        __CDS_NoDiscard auto equals(Object const & o) const noexcept -> bool override {
-            if ( this == & o ) {
+        __CDS_NoDiscard auto equals(Object const & object) const noexcept -> bool override {
+            if ( this == & object ) {
                 return true;
             }
 
-            auto p = dynamic_cast < decltype (this) > ( & o );
-            if ( p == nullptr ) {
+            auto pObject = dynamic_cast < decltype (this) > ( & object );
+            if (pObject == nullptr ) {
                 return false;
             }
 
-            return this->operator==(* p);
+            return this->operator==(* pObject);
         }
 
         WalkEntry () noexcept = default;
@@ -427,9 +427,9 @@ namespace cds {
             } else if ( entry->d_type == DT_DIR ) { // NOLINT(clion-misra-cpp2008-5-0-4)
                 (void) currentDirEntry.directories().pushBack(entry->d_name);
 
-                auto nestedEntries = Path(this->append(entry->d_name)).walk(depth - 1);
-                for ( auto & e : nestedEntries ) {
-                    (void) entries.pushFront(e);
+                auto nestedEntries = Path(this->append(entry->d_name)).walk(depth - 1); // NOLINT(clion-misra-cpp2008-5-2-4)
+                for ( auto & nestedEntry : nestedEntries ) {
+                    (void) entries.pushFront(nestedEntry);
                 }
             } else {
                 (void) currentDirEntry.files().pushBack(entry->d_name);

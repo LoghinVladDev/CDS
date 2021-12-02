@@ -64,8 +64,8 @@ namespace cds {
             UNLOCKED = 0x02U
         };
 
-        __CDS_cpplang_ConstexprConditioned static auto stateToString ( State s ) noexcept -> StringLiteral {
-            switch (s) {
+        __CDS_cpplang_ConstexprConditioned static auto stateToString ( State state ) noexcept -> StringLiteral {
+            switch (state) {
                 case State::LOCKED:    return "Locked"; // NOLINT(clion-misra-cpp2008-6-4-5)
                 case State::UNLOCKED:  return "Unlocked"; // NOLINT(clion-misra-cpp2008-6-4-5)
             }

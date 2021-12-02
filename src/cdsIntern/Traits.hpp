@@ -312,11 +312,15 @@ namespace cds {
         template<typename U, U>
         struct Check;
 
+        __CDS_WarningSuppression_NoReturnStatement_SuppressEnable
+
         template<typename>
         static YesType Test(...) {} // NOLINT(clion-misra-cpp2008-8-4-1)
 
         template<typename C>
         static NoType Test(Check<void (Fallback::*)(), &C::operator()>*) {}
+
+        __CDS_WarningSuppression_NoReturnStatement_SuppressDisable
 
     public:
         static bool const constexpr value = sizeof(Test<Derived>(0)) == sizeof(YesType); // NOLINT(clion-misra-cpp2008-5-3-4)
@@ -465,18 +469,18 @@ namespace cds {
     #endif
 
         template < typename U = T, EnableIf < Type < U > :: hasEqualityOperator > = 0 >
-        constexpr static auto compare (T const & a, T const & b, int = 0) noexcept -> bool {
-            return a == b;
+        constexpr static auto compare (T const & left, T const & right, int = 0) noexcept -> bool {
+            return left == right;
         }
 
         template < typename U = T, EnableIf < ! Type < U > :: hasEqualityOperator && Type < U > :: objectDerived > = 0 > // NOLINT(clion-misra-cpp2008-5-3-1)
-        __CDS_cpplang_VirtualConstexpr static auto compare (T const & a, T const & b, float = 0.0f) noexcept -> bool {
-            return a.equals(b);
+        __CDS_cpplang_VirtualConstexpr static auto compare (T const & left, T const & right, float = 0.0f) noexcept -> bool {
+            return left.equals(right);
         }
 
         template < typename U = T, EnableIf < ! Type < U > :: hasEqualityOperator && ! Type < U > :: objectDerived > = 0 > // NOLINT(clion-misra-cpp2008-5-3-1)
-        constexpr static auto compare (T const & a, T const & b) noexcept -> bool {
-            return & a == & b;
+        constexpr static auto compare (T const & left, T const & right) noexcept -> bool {
+            return & left == & right;
         }
 
         template < typename U = T, EnableIf < Type < U > :: ostreamPrintable > = 0 >
@@ -493,7 +497,7 @@ namespace cds {
         constexpr static auto unsafeAddress () noexcept -> V * { return reinterpret_cast < V * > (0x10); }
 
         template < typename V = RemoveReference < T > >
-        constexpr static auto unsafeConstAddress () noexcept -> V const * { return reinterpret_cast < V const * > ( 0x10 ); }
+        __CDS_MaybeUnused constexpr static auto unsafeConstAddress () noexcept -> V const * { return reinterpret_cast < V const * > ( 0x10 ); }
 
         constexpr static auto unsafeReference () noexcept -> T & { return * Type :: unsafeAddress(); }
 

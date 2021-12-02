@@ -8,10 +8,10 @@
 namespace cds {
 
     template < typename T >
-    class DoubleLinkedList;
+    class DoubleLinkedList; // NOLINT(cppcoreguidelines-virtual-class-destructor)
 
     template < typename T >
-    class SingleLinkedList;
+    class SingleLinkedList; // NOLINT(cppcoreguidelines-virtual-class-destructor)
 
 }
 

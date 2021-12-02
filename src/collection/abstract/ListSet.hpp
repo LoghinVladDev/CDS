@@ -10,7 +10,7 @@
 namespace cds {
 
     template < typename T> __CDS_Requires ( UniqueIdentifiable <T> )
-    class ListSet : public Set < T > {
+    class ListSet : public Set < T > { // NOLINT(cppcoreguidelines-virtual-class-destructor)
     public:
         using ElementType               = typename Set < T > :: ElementType;
 
@@ -49,9 +49,9 @@ namespace cds {
         constexpr ListSet() noexcept = default;
         __CDS_OptimalInline ListSet(ListSet const & set) noexcept {}
 
-        constexpr ListSet(ListSet && o) noexcept :
-                _pFront(exchange(o._pFront, nullptr)),
-                _size(exchange(o._size, 0ull)){
+        constexpr ListSet(ListSet && set) noexcept :
+                _pFront(exchange(set._pFront, nullptr)),
+                _size(exchange(set._size, 0ull)){
 
         }
 
@@ -80,14 +80,14 @@ namespace cds {
                 return * this->_pNode->data;
             }
 
-            __CDS_OptimalInline auto equals ( DelegateIterator const & it ) const noexcept -> bool override {
-                if ( this == & it ) {
+            __CDS_OptimalInline auto equals ( DelegateIterator const & iterator ) const noexcept -> bool override {
+                if ( this == & iterator ) {
                     return true;
                 }
 
-                auto p = reinterpret_cast < decltype ( this ) > ( & it );
+                auto pObject = reinterpret_cast < decltype ( this ) > ( & iterator );
 
-                return this->_pNode == p->_pNode;
+                return this->_pNode == pObject->_pNode;
             }
 
             __CDS_OptimalInline auto copy () const noexcept -> SetDelegateIterator * override {
@@ -120,14 +120,14 @@ namespace cds {
                 return * this->_pNode->data;
             }
 
-            __CDS_OptimalInline auto equals ( DelegateConstIterator const & it ) const noexcept -> bool override {
-                if ( this == & it ) {
+            __CDS_OptimalInline auto equals ( DelegateConstIterator const & iterator ) const noexcept -> bool override {
+                if ( this == & iterator ) {
                     return true;
                 }
 
-                auto p = reinterpret_cast < decltype ( this ) > ( & it );
+                auto pObject = reinterpret_cast < decltype ( this ) > ( & iterator );
 
-                return this->_pNode == p->_pNode;
+                return this->_pNode == pObject->_pNode;
             }
 
             __CDS_OptimalInline auto copy () const noexcept -> SetDelegateConstIterator * override {
@@ -190,23 +190,23 @@ namespace cds {
             return this->_size;
         }
 
-        __CDS_OptimalInline auto operator != (ListSet const & o) const noexcept -> bool {
-            return ! this->operator==(o); // NOLINT(clion-misra-cpp2008-5-3-1)
+        __CDS_OptimalInline auto operator != (ListSet const & set) const noexcept -> bool {
+            return ! this->operator==(set); // NOLINT(clion-misra-cpp2008-5-3-1)
         }
 
-        auto operator == (ListSet const & o) const noexcept -> bool {
-            if ( this == & o ) {
+        auto operator == (ListSet const & set) const noexcept -> bool {
+            if ( this == & set ) {
                 return true;
             }
 
             for ( // NOLINT(clion-misra-cpp2008-6-5-1)
                     auto // NOLINT(clion-misra-cpp2008-8-0-1)
-                        a = this->begin(), aEnd = this->end(),
-                        b = o.begin(), bEnd = o.end();
-                    a != aEnd && b != bEnd;
-                    ++ a, ++ b // NOLINT(clion-misra-cpp2008-5-18-1)
+                        aIt = this->begin(), aEnd = this->end(),
+                        bIt = set.begin(), bEnd = set.end();
+                    aIt != aEnd && bIt != bEnd;
+                    ++ aIt, ++ bIt // NOLINT(clion-misra-cpp2008-5-18-1)
             ) {
-                if ( ! ( Type < T > :: compare ( * a, * b ) ) ) { // NOLINT(clion-misra-cpp2008-5-3-1)
+                if ( ! ( Type < T > :: compare (* aIt, * bIt ) ) ) { // NOLINT(clion-misra-cpp2008-5-3-1)
                     return false;
                 }
             }
@@ -214,17 +214,17 @@ namespace cds {
             return true;
         }
 
-        __CDS_NoDiscard __CDS_OptimalInline auto equals (Object const & o) const noexcept -> bool final {
-            if ( & o == this ) {
+        __CDS_NoDiscard __CDS_OptimalInline auto equals (Object const & object) const noexcept -> bool final {
+            if (& object == this ) {
                 return true;
             }
 
-            auto p = dynamic_cast < ListSet < T > const * > ( & o );
-            if ( p == nullptr ) {
+            auto pObject = dynamic_cast < ListSet < T > const * > ( & object );
+            if (pObject == nullptr ) {
                 return false;
             }
 
-            return this->operator == (*p);
+            return this->operator == (*pObject);
         }
     };
 
@@ -235,18 +235,18 @@ namespace cds {
 namespace cds {
 
     template < typename T > __CDS_Requires( UniqueIdentifiable <T> )
-    auto ListSet<T>::remove( ElementCRef e ) noexcept -> bool {
+    auto ListSet<T>::remove( ElementCRef element ) noexcept -> bool {
         if ( this->empty() ) {
             return false;
         }
 
-        if ( Type < T > :: compare ( e, * this->_pFront->data ) ) {
-            auto p = this->_pFront;
+        if ( Type < T > :: compare (element, * this->_pFront->data ) ) {
+            auto pFront = this->_pFront;
             this->_pFront = this->_pFront->pNext;
             -- this->_size;
 
-            Memory::instance().destroy ( p->data );
-            Memory::instance().destroy ( p );
+            Memory::instance().destroy (pFront->data );
+            Memory::instance().destroy (pFront );
             return true;
         } else if ( this->size() == 1 ) {
             return false;
@@ -256,7 +256,7 @@ namespace cds {
 
         auto head = this->_pFront;
         while ( head->pNext != nullptr ) {
-            if ( Type < T > :: compare ( e, * head->pNext->data ) ) {
+            if ( Type < T > :: compare (element, * head->pNext->data ) ) {
                 auto node = head->pNext;
                 head->pNext = head->pNext->pNext;
 

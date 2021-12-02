@@ -3,7 +3,7 @@
 //
 // Generated for CDS through Warning Suppression Generator Tool
 // Author: Loghin Vlad-Andrei - github.com/LoghinVladDev
-// Generation Date: 03/11/21 - 00:04:44
+// Generation Date: 02/12/21 - 02:10:43
 // CDS Version - 0.0.2
 // Licenced under Project Licence - https://github.com/LoghinVladDev/CDS/blob/master/LICENSE
 //
@@ -104,6 +104,9 @@ _Pragma("GCC diagnostic pop")
 #define __CDS_WarningSuppression_MSVC_DeducedNoexceptTermination_SuppressEnable __CDS_WarningSuppression_MSVC_SuppressEnable(4297) /* NOLINT(bugprone-reserved-identifier) */
 #define __CDS_WarningSuppression_MSVC_DeducedNoexceptTermination_SuppressDisable __CDS_WarningSuppression_MSVC_SuppressDisable(4297) /* NOLINT(bugprone-reserved-identifier) */
 
+#define __CDS_WarningSuppression_MSVC_NoReturnStatement_SuppressEnable /* NOLINT(bugprone-reserved-identifier) */
+#define __CDS_WarningSuppression_MSVC_NoReturnStatement_SuppressDisable /* NOLINT(bugprone-reserved-identifier) */
+
 #define __CDS_WarningSuppression_GCC_ArgumentPossibleUnexpectedValue_SuppressEnable /* NOLINT(bugprone-reserved-identifier) */
 #define __CDS_WarningSuppression_GCC_ArgumentPossibleUnexpectedValue_SuppressDisable /* NOLINT(bugprone-reserved-identifier) */
 
@@ -133,6 +136,9 @@ _Pragma("GCC diagnostic pop")
 
 #define __CDS_WarningSuppression_GCC_DeducedNoexceptTermination_SuppressEnable __CDS_WarningSuppression_GCC_SuppressEnable(-Wterminate) /* NOLINT(bugprone-reserved-identifier) */
 #define __CDS_WarningSuppression_GCC_DeducedNoexceptTermination_SuppressDisable __CDS_WarningSuppression_GCC_SuppressDisable(-Wterminate) /* NOLINT(bugprone-reserved-identifier) */
+
+#define __CDS_WarningSuppression_GCC_NoReturnStatement_SuppressEnable __CDS_WarningSuppression_GCC_SuppressEnable(-Wreturn-type) /* NOLINT(bugprone-reserved-identifier) */
+#define __CDS_WarningSuppression_GCC_NoReturnStatement_SuppressDisable __CDS_WarningSuppression_GCC_SuppressDisable(-Wreturn-type) /* NOLINT(bugprone-reserved-identifier) */
 
 
 #define __CDS_WarningSuppression_SuppressEnable(_warning) /* NOLINT(bugprone-reserved-identifier) */ \
@@ -177,6 +183,9 @@ _Pragma("GCC diagnostic pop")
 
 #define __CDS_WarningSuppression_DeducedNoexceptTermination_SuppressEnable __CDS_WarningSuppression_SuppressEnable(DeducedNoexceptTermination) /* NOLINT(bugprone-reserved-identifier) */
 #define __CDS_WarningSuppression_DeducedNoexceptTermination_SuppressDisable __CDS_WarningSuppression_SuppressDisable(DeducedNoexceptTermination) /* NOLINT(bugprone-reserved-identifier) */
+
+#define __CDS_WarningSuppression_NoReturnStatement_SuppressEnable __CDS_WarningSuppression_SuppressEnable(NoReturnStatement) /* NOLINT(bugprone-reserved-identifier) */
+#define __CDS_WarningSuppression_NoReturnStatement_SuppressDisable __CDS_WarningSuppression_SuppressDisable(NoReturnStatement) /* NOLINT(bugprone-reserved-identifier) */
 
 //// End of Platform Dependent Config Macros
 

@@ -22,8 +22,8 @@ namespace cds {
 
     public:
         constexpr Optional() noexcept = default;
-        __CDS_cpplang_NonConstConstexprMemberFunction Optional(Optional const & o) noexcept {
-            * this = o;
+        __CDS_cpplang_NonConstConstexprMemberFunction Optional(Optional const & object) noexcept {
+            * this = object;
         }
 
         __CDS_cpplang_NonConstConstexprMemberFunction Optional(Optional && optional) noexcept :
@@ -33,13 +33,13 @@ namespace cds {
 
         __CDS_cpplang_ConstexprDestructor ~Optional() noexcept override = default;
 
-        __CDS_cpplang_ConstexprDynamicAllocation Optional ( ValueConstReference v ) noexcept : // NOLINT(google-explicit-constructor)
-                pObj ( Memory :: instance().create < Value > ( v ) ) {
+        __CDS_cpplang_ConstexprDynamicAllocation Optional ( ValueConstReference value ) noexcept : // NOLINT(google-explicit-constructor)
+                pObj ( Memory :: instance().create < Value > (value ) ) {
 
         }
 
-        __CDS_cpplang_ConstexprDynamicAllocation auto operator = ( ValueConstReference v ) noexcept -> Optional & {
-            this->pObj.reset( Memory :: instance().create < Value > ( v ));
+        __CDS_cpplang_ConstexprDynamicAllocation auto operator = ( ValueConstReference value ) noexcept -> Optional & {
+            this->pObj.reset( Memory :: instance().create < Value > (value ));
             return * this;
         }
 
@@ -71,12 +71,12 @@ namespace cds {
             return * this->pObj;
         }
 
-        __CDS_MaybeUnused constexpr auto valueOr (ValueReference v) const noexcept -> ValueReference {
-            return this->hasValue() ? this->value() : v;
+        __CDS_MaybeUnused constexpr auto valueOr (ValueReference value) const noexcept -> ValueReference {
+            return this->hasValue() ? this->value() : value;
         }
 
-        __CDS_MaybeUnused constexpr auto valueOr (ValueConstReference v) const noexcept -> ValueConstReference {
-            return this->hasValue() ? this->value() : v;
+        __CDS_MaybeUnused constexpr auto valueOr (ValueConstReference value) const noexcept -> ValueConstReference {
+            return this->hasValue() ? this->value() : value;
         }
 
         template < typename Action >
@@ -144,12 +144,12 @@ namespace cds {
             return * this;
         }
 
-        __CDS_cpplang_NonConstConstexprMemberFunction auto operator = (Optional const & o) noexcept -> Optional & {
-            if ( this == & o ) {
+        __CDS_cpplang_NonConstConstexprMemberFunction auto operator = (Optional const & object) noexcept -> Optional & {
+            if ( this == & object ) {
                 return * this;
             }
 
-            if ( ! o.hasValue() ) { // NOLINT(clion-misra-cpp2008-5-3-1)
+            if ( ! object.hasValue() ) { // NOLINT(clion-misra-cpp2008-5-3-1)
                 if ( this->hasValue() ) {
                     this->pObj.reset();
                 }
@@ -157,7 +157,7 @@ namespace cds {
                 return * this;
             }
 
-            this->pObj.reset( Memory :: instance ().create < Value > ( * o.pObj ) );
+            this->pObj.reset( Memory :: instance ().create < Value > ( * object.pObj ) );
 
             return * this;
         }
@@ -171,23 +171,23 @@ namespace cds {
             return * this;
         }
 
-        __CDS_NoDiscard __CDS_cpplang_VirtualConstexpr auto equals ( Object const & o ) const noexcept -> bool override {
-            if ( this == & o ) {
+        __CDS_NoDiscard __CDS_cpplang_VirtualConstexpr auto equals ( Object const & object ) const noexcept -> bool override {
+            if ( this == & object ) {
                 return true;
             }
 
-            auto p = dynamic_cast < Optional < T > const * > ( & o );
-            if ( p == nullptr ) {
+            auto pOptional = dynamic_cast < Optional < T > const * > ( & object );
+            if (pOptional == nullptr ) {
                 return false;
             }
 
-            return this->operator==(*p);
+            return this->operator==(*pOptional);
         }
 
-        constexpr auto operator == ( Optional const & o ) const noexcept -> bool {
+        constexpr auto operator == ( Optional const & optional ) const noexcept -> bool {
             return
-                this == & o ||
-                Type < T > :: compare ( this->value(), o.value() );
+                this == & optional ||
+                Type < T > :: compare (this->value(), optional.value() );
         }
 
         __CDS_NoDiscard __CDS_OptionalInline auto toString() const noexcept -> String final {

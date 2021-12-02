@@ -114,15 +114,15 @@ namespace cds {
             ForeignPointer < Collection const > pCollection { nullptr }; // NOLINT(clion-misra-cpp2008-11-0-1)
 
             constexpr AbstractIterator () noexcept = default;
-            constexpr AbstractIterator ( AbstractIterator const & it ) noexcept :
-                    pCollection ( it.pCollection ) {
+            constexpr AbstractIterator ( AbstractIterator const & iterator ) noexcept :
+                    pCollection (iterator.pCollection ) {
 
             }
 
             constexpr AbstractIterator ( AbstractIterator && ) noexcept = default;
 
         public:
-            __CDS_cpplang_NonConstConstexprMemberFunction auto operator = ( AbstractIterator const & it ) noexcept -> AbstractIterator & = default;
+            __CDS_cpplang_NonConstConstexprMemberFunction auto operator = ( AbstractIterator const & iterator ) noexcept -> AbstractIterator & = default;
             __CDS_cpplang_NonConstConstexprMemberFunction auto operator = ( AbstractIterator && ) noexcept -> AbstractIterator & = default;
             __CDS_cpplang_ConstexprDestructor ~AbstractIterator() noexcept override = default;
 
@@ -138,18 +138,18 @@ namespace cds {
 
     public:
 
-        class Iterator : public AbstractIterator {
+        class Iterator : public AbstractIterator { // NOLINT(cppcoreguidelines-virtual-class-destructor)
         private:
             friend class Collection;
             UniquePointer < DelegateIterator > pDelegate { nullptr };
 
         public:
             constexpr Iterator () noexcept = default;
-            constexpr Iterator ( Iterator && it ) noexcept = default;
+            constexpr Iterator ( Iterator && iterator ) noexcept = default;
 
-            __CDS_OptimalInline Iterator ( Iterator const & it ) noexcept :
-                    AbstractIterator ( it ),
-                    pDelegate ( it.pDelegate->copy() ) {
+            __CDS_OptimalInline Iterator ( Iterator const & iterator ) noexcept :
+                    AbstractIterator (iterator ),
+                    pDelegate (iterator.pDelegate->copy() ) {
 
             }
 
@@ -161,17 +161,17 @@ namespace cds {
 
             __CDS_cpplang_ConstexprDestructor ~Iterator () noexcept override = default;
 
-            __CDS_OptimalInline auto operator = ( Iterator const & it ) noexcept -> Iterator & {
-                if ( this == & it ) {
+            __CDS_OptimalInline auto operator = ( Iterator const & iterator ) noexcept -> Iterator & {
+                if ( this == & iterator ) {
                     return *this;
                 }
 
-                this->pDelegate = it.pDelegate->copy();
-                this->pCollection = it.pCollection;
+                this->pDelegate = iterator.pDelegate->copy();
+                this->pCollection = iterator.pCollection;
                 return * this;
             }
 
-            __CDS_cpplang_NonConstConstexprMemberFunction auto operator = ( Iterator && it ) noexcept -> Iterator & = default;
+            __CDS_cpplang_NonConstConstexprMemberFunction auto operator = ( Iterator && iterator ) noexcept -> Iterator & = default;
 
             __CDS_cpplang_VirtualConstexpr auto operator ++ () noexcept -> Iterator & {
                 this->pDelegate->next();
@@ -201,24 +201,24 @@ namespace cds {
                         this->pDelegate->isValid();
             }
 
-            __CDS_cpplang_VirtualConstexpr auto operator == ( Iterator const & it ) const noexcept -> bool {
-                if ( this == & it ) {
+            __CDS_cpplang_VirtualConstexpr auto operator == ( Iterator const & iterator ) const noexcept -> bool {
+                if ( this == & iterator ) {
                     return true;
                 }
 
                 return
-                        this->pCollection == it.pCollection &&
-                        this->pDelegate->equals( * it.pDelegate );
+                        this->pCollection == iterator.pCollection &&
+                        this->pDelegate->equals( * iterator.pDelegate );
             }
 
-            __CDS_cpplang_VirtualConstexpr auto operator != ( Iterator const & it ) const noexcept -> bool {
-                if ( this == & it ) {
+            __CDS_cpplang_VirtualConstexpr auto operator != ( Iterator const & iterator ) const noexcept -> bool {
+                if ( this == & iterator ) {
                     return false;
                 }
 
                 return
-                        this->pCollection != it.pCollection ||
-                        ! this->pDelegate->equals ( * it.pDelegate ); // NOLINT(clion-misra-cpp2008-5-3-1)
+                        this->pCollection != iterator.pCollection ||
+                        ! this->pDelegate->equals ( * iterator.pDelegate ); // NOLINT(clion-misra-cpp2008-5-3-1)
             }
 
             __CDS_cpplang_VirtualConstexpr auto operator * () const noexcept -> ElementRef {
@@ -230,18 +230,18 @@ namespace cds {
             }
         };
 
-        class ConstIterator : public AbstractIterator {
+        class ConstIterator : public AbstractIterator { // NOLINT(cppcoreguidelines-virtual-class-destructor)
         private:
             friend class Collection;
             UniquePointer < DelegateConstIterator > pDelegate { nullptr };
 
         public:
             constexpr ConstIterator () noexcept = default;
-            constexpr ConstIterator ( ConstIterator && it ) noexcept = default;
+            constexpr ConstIterator ( ConstIterator && iterator ) noexcept = default;
 
-            __CDS_OptimalInline ConstIterator ( ConstIterator const & it ) noexcept :
-                    AbstractIterator ( it ),
-                    pDelegate ( it.pDelegate->copy() ) {
+            __CDS_OptimalInline ConstIterator ( ConstIterator const & iterator ) noexcept :
+                    AbstractIterator (iterator ),
+                    pDelegate (iterator.pDelegate->copy() ) {
 
             }
 
@@ -253,17 +253,17 @@ namespace cds {
 
             __CDS_cpplang_ConstexprDestructor ~ConstIterator () noexcept override = default;
 
-             __CDS_OptimalInline auto operator = ( ConstIterator const & it ) noexcept -> ConstIterator & {
-                if ( this == & it ) {
+             __CDS_OptimalInline auto operator = ( ConstIterator const & iterator ) noexcept -> ConstIterator & {
+                if ( this == & iterator ) {
                     return *this;
                 }
 
-                this->pDelegate = it.pDelegate->copy();
-                this->pCollection = it.pCollection;
+                this->pDelegate = iterator.pDelegate->copy();
+                this->pCollection = iterator.pCollection;
                 return * this;
             }
 
-            __CDS_cpplang_NonConstConstexprMemberFunction auto operator = ( ConstIterator && it ) noexcept -> ConstIterator & = default;
+            __CDS_cpplang_NonConstConstexprMemberFunction auto operator = ( ConstIterator && iterator ) noexcept -> ConstIterator & = default;
 
             __CDS_cpplang_VirtualConstexpr auto operator ++ () noexcept -> ConstIterator & {
                 this->pDelegate->next();
@@ -293,24 +293,24 @@ namespace cds {
                         this->pDelegate->isValid();
             }
 
-            __CDS_cpplang_VirtualConstexpr auto operator == ( ConstIterator const & it ) const noexcept -> bool {
-                if ( this == & it ) {
+            __CDS_cpplang_VirtualConstexpr auto operator == ( ConstIterator const & iterator ) const noexcept -> bool {
+                if ( this == & iterator ) {
                     return true;
                 }
 
                 return
-                        this->pCollection == it.pCollection &&
-                        this->pDelegate->equals( * it.pDelegate );
+                        this->pCollection == iterator.pCollection &&
+                        this->pDelegate->equals( * iterator.pDelegate );
             }
 
-            __CDS_cpplang_VirtualConstexpr auto operator != ( ConstIterator const & it ) const noexcept -> bool {
-                if ( this == & it ) {
+            __CDS_cpplang_VirtualConstexpr auto operator != ( ConstIterator const & iterator ) const noexcept -> bool {
+                if ( this == & iterator ) {
                     return false;
                 }
 
                 return
-                        this->pCollection != it.pCollection ||
-                        ! this->pDelegate->equals ( * it.pDelegate ); // NOLINT(clion-misra-cpp2008-5-3-1)
+                        this->pCollection != iterator.pCollection ||
+                        ! this->pDelegate->equals ( * iterator.pDelegate ); // NOLINT(clion-misra-cpp2008-5-3-1)
             }
 
             __CDS_cpplang_VirtualConstexpr auto operator * () const noexcept -> ElementCRef {
@@ -322,18 +322,18 @@ namespace cds {
             }
         };
 
-        class ReverseIterator : public AbstractIterator {
+        class ReverseIterator : public AbstractIterator { // NOLINT(cppcoreguidelines-virtual-class-destructor)
         private:
             friend class Collection;
             UniquePointer < DelegateIterator > pDelegate { nullptr };
 
         public:
             constexpr ReverseIterator () noexcept = default;
-            constexpr ReverseIterator ( ReverseIterator && it ) noexcept = default;
+            constexpr ReverseIterator ( ReverseIterator && iterator ) noexcept = default;
 
-            __CDS_OptimalInline ReverseIterator ( ReverseIterator const & it ) noexcept :
-                    AbstractIterator ( it ),
-                    pDelegate ( it.pDelegate->copy() ) {
+            __CDS_OptimalInline ReverseIterator ( ReverseIterator const & iterator ) noexcept :
+                    AbstractIterator (iterator ),
+                    pDelegate (iterator.pDelegate->copy() ) {
 
             }
 
@@ -345,17 +345,17 @@ namespace cds {
 
             __CDS_cpplang_ConstexprDestructor ~ReverseIterator () noexcept override = default;
 
-            __CDS_OptimalInline auto operator = ( ReverseIterator const & it ) noexcept -> ReverseIterator & {
-                if ( this == & it ) {
+            __CDS_OptimalInline auto operator = ( ReverseIterator const & iterator ) noexcept -> ReverseIterator & {
+                if ( this == & iterator ) {
                     return *this;
                 }
 
-                this->pDelegate = it.pDelegate->copy();
-                this->pCollection = it.pCollection;
+                this->pDelegate = iterator.pDelegate->copy();
+                this->pCollection = iterator.pCollection;
                 return * this;
             }
 
-            __CDS_cpplang_NonConstConstexprMemberFunction auto operator = ( ReverseIterator && it ) noexcept -> ReverseIterator & = default;
+            __CDS_cpplang_NonConstConstexprMemberFunction auto operator = ( ReverseIterator && iterator ) noexcept -> ReverseIterator & = default;
 
             __CDS_cpplang_VirtualConstexpr auto operator ++ () noexcept -> ReverseIterator & {
                 this->pDelegate->next();
@@ -385,24 +385,24 @@ namespace cds {
                         this->pDelegate->isValid();
             }
 
-            __CDS_cpplang_VirtualConstexpr auto operator == ( ReverseIterator const & it ) const noexcept -> bool {
-                if ( this == & it ) {
+            __CDS_cpplang_VirtualConstexpr auto operator == ( ReverseIterator const & iterator ) const noexcept -> bool {
+                if ( this == & iterator ) {
                     return true;
                 }
 
                 return
-                        this->pCollection == it.pCollection &&
-                        this->pDelegate->equals( * it.pDelegate );
+                        this->pCollection == iterator.pCollection &&
+                        this->pDelegate->equals( * iterator.pDelegate );
             }
 
-            __CDS_cpplang_VirtualConstexpr auto operator != ( ReverseIterator const & it ) const noexcept -> bool {
-                if ( this == & it ) {
+            __CDS_cpplang_VirtualConstexpr auto operator != ( ReverseIterator const & iterator ) const noexcept -> bool {
+                if ( this == & iterator ) {
                     return false;
                 }
 
                 return
-                        this->pCollection != it.pCollection ||
-                        ! this->pDelegate->equals ( * it.pDelegate ); // NOLINT(clion-misra-cpp2008-5-3-1)
+                        this->pCollection != iterator.pCollection ||
+                        ! this->pDelegate->equals ( * iterator.pDelegate ); // NOLINT(clion-misra-cpp2008-5-3-1)
             }
 
             __CDS_cpplang_VirtualConstexpr auto operator * () const noexcept -> ElementRef {
@@ -414,18 +414,18 @@ namespace cds {
             }
         };
 
-        class ConstReverseIterator : public AbstractIterator {
+        class ConstReverseIterator : public AbstractIterator { // NOLINT(cppcoreguidelines-virtual-class-destructor)
         private:
             friend class Collection;
             UniquePointer < DelegateConstIterator > pDelegate { nullptr };
 
         public:
             constexpr ConstReverseIterator () noexcept = default;
-            constexpr ConstReverseIterator ( ConstReverseIterator && it ) noexcept = default;
+            constexpr ConstReverseIterator ( ConstReverseIterator && iterator ) noexcept = default;
 
-            __CDS_OptimalInline ConstReverseIterator ( ConstReverseIterator const & it ) noexcept :
-                    AbstractIterator ( it ),
-                    pDelegate ( it.pDelegate->copy() ) {
+            __CDS_OptimalInline ConstReverseIterator ( ConstReverseIterator const & iterator ) noexcept :
+                    AbstractIterator (iterator ),
+                    pDelegate (iterator.pDelegate->copy() ) {
 
             }
 
@@ -437,17 +437,17 @@ namespace cds {
 
             __CDS_cpplang_ConstexprDestructor ~ConstReverseIterator () noexcept override = default;
 
-            __CDS_OptimalInline auto operator = ( ConstReverseIterator const & it ) noexcept -> ConstReverseIterator & {
-                if ( this == & it ) {
+            __CDS_OptimalInline auto operator = ( ConstReverseIterator const & iterator ) noexcept -> ConstReverseIterator & {
+                if ( this == & iterator ) {
                     return * this;
                 }
 
-                this->pDelegate = it.pDelegate->copy();
-                this->pCollection = it.pCollection;
+                this->pDelegate = iterator.pDelegate->copy();
+                this->pCollection = iterator.pCollection;
                 return * this;
             }
 
-            __CDS_cpplang_NonConstConstexprMemberFunction auto operator = ( ConstReverseIterator && it ) noexcept -> ConstReverseIterator & = default;
+            __CDS_cpplang_NonConstConstexprMemberFunction auto operator = ( ConstReverseIterator && iterator ) noexcept -> ConstReverseIterator & = default;
 
             __CDS_cpplang_VirtualConstexpr auto operator ++ () noexcept -> ConstReverseIterator & {
                 this->pDelegate->next();
@@ -475,24 +475,24 @@ namespace cds {
                 return this->pDelegate != nullptr && this->pDelegate->isValid();
             }
 
-            __CDS_cpplang_VirtualConstexpr auto operator == ( ConstReverseIterator const & it ) const noexcept -> bool {
-                if ( this == & it ) {
+            __CDS_cpplang_VirtualConstexpr auto operator == ( ConstReverseIterator const & iterator ) const noexcept -> bool {
+                if ( this == & iterator ) {
                     return true;
                 }
 
                 return
-                        this->pCollection == it.pCollection &&
-                        this->pDelegate->equals( * it.pDelegate );
+                        this->pCollection == iterator.pCollection &&
+                        this->pDelegate->equals( * iterator.pDelegate );
             }
 
-            __CDS_cpplang_VirtualConstexpr auto operator != ( ConstReverseIterator const & it ) const noexcept -> bool {
-                if ( this == & it ) {
+            __CDS_cpplang_VirtualConstexpr auto operator != ( ConstReverseIterator const & iterator ) const noexcept -> bool {
+                if ( this == & iterator ) {
                     return false;
                 }
 
                 return
-                        this->pCollection != it.pCollection ||
-                        ! this->pDelegate->equals ( * it.pDelegate ); // NOLINT(clion-misra-cpp2008-5-3-1)
+                        this->pCollection != iterator.pCollection ||
+                        ! this->pDelegate->equals ( * iterator.pDelegate ); // NOLINT(clion-misra-cpp2008-5-3-1)
             }
 
             __CDS_cpplang_VirtualConstexpr auto operator * () const noexcept -> ElementCRef {
@@ -618,7 +618,7 @@ namespace cds {
         }
 
         __CDS_MaybeUnused virtual auto remove ( ElementCRef, Size ) noexcept -> bool = 0;
-        __CDS_MaybeUnused virtual auto removeLast ( ElementCRef o ) noexcept -> bool = 0;
+        __CDS_MaybeUnused virtual auto removeLast ( ElementCRef ) noexcept -> bool = 0;
 
         __CDS_MaybeUnused virtual auto removeOf ( Collection const &, Size ) noexcept -> bool = 0;
         __CDS_MaybeUnused virtual auto removeLastOf ( Collection const & ) noexcept -> bool = 0;
@@ -632,51 +632,51 @@ namespace cds {
         __CDS_MaybeUnused virtual auto removeNotOf ( InitializerList, Size ) noexcept -> bool = 0;
         __CDS_MaybeUnused virtual auto removeLastNotOf ( InitializerList ) noexcept -> bool = 0;
 
-        __CDS_MaybeUnused __CDS_OptimalInline virtual auto removeAll ( ElementCRef o ) noexcept -> bool {
-            return this->remove( o, this->size() );
+        __CDS_MaybeUnused __CDS_OptimalInline virtual auto removeAll ( ElementCRef element ) noexcept -> bool {
+            return this->remove(element, this->size() );
         }
 
-        __CDS_MaybeUnused __CDS_OptimalInline virtual auto removeFirst ( ElementCRef o ) noexcept -> bool {
-            return this->remove( o, 1 );
+        __CDS_MaybeUnused __CDS_OptimalInline virtual auto removeFirst ( ElementCRef element ) noexcept -> bool {
+            return this->remove( element, 1 );
         }
 
-        __CDS_MaybeUnused __CDS_OptimalInline virtual auto removeFirstOf ( Collection const & o ) noexcept -> bool {
-            return this->removeOf( o, 1 );
+        __CDS_MaybeUnused __CDS_OptimalInline virtual auto removeFirstOf ( Collection const & elements ) noexcept -> bool {
+            return this->removeOf( elements, 1 );
         }
 
-        __CDS_MaybeUnused __CDS_OptimalInline virtual auto removeAllOf ( Collection const & o ) noexcept -> bool {
-            return this->removeOf ( o, this->size() );
+        __CDS_MaybeUnused __CDS_OptimalInline virtual auto removeAllOf ( Collection const & elements ) noexcept -> bool {
+            return this->removeOf ( elements, this->size() );
         }
 
-        __CDS_MaybeUnused __CDS_OptimalInline virtual auto removeFirstNotOf ( Collection const & o ) noexcept -> bool {
-            return this->removeNotOf ( o, 1 );
+        __CDS_MaybeUnused __CDS_OptimalInline virtual auto removeFirstNotOf ( Collection const & elements ) noexcept -> bool {
+            return this->removeNotOf (elements, 1 );
         }
 
-        __CDS_MaybeUnused __CDS_OptimalInline virtual auto removeAllNotOf ( Collection const & o ) noexcept -> bool  {
-            return this->removeNotOf( o, this->size() );
+        __CDS_MaybeUnused __CDS_OptimalInline virtual auto removeAllNotOf ( Collection const & elements ) noexcept -> bool  {
+            return this->removeNotOf( elements, this->size() );
         }
 
-        __CDS_MaybeUnused __CDS_OptimalInline virtual auto removeFirstOf ( InitializerList o ) noexcept -> bool {
-            return this->removeOf( o, 1 );
+        __CDS_MaybeUnused __CDS_OptimalInline virtual auto removeFirstOf ( InitializerList elements ) noexcept -> bool {
+            return this->removeOf( elements, 1 );
         }
 
-        __CDS_MaybeUnused __CDS_OptimalInline virtual auto removeAllOf ( InitializerList o ) noexcept -> bool {
-            return this->removeOf ( o, this->size() );
+        __CDS_MaybeUnused __CDS_OptimalInline virtual auto removeAllOf ( InitializerList elements ) noexcept -> bool {
+            return this->removeOf ( elements, this->size() );
         }
 
-        __CDS_MaybeUnused __CDS_OptimalInline virtual auto removeFirstNotOf ( InitializerList list ) noexcept -> bool {
-            return this->removeNotOf ( list, 1 );
+        __CDS_MaybeUnused __CDS_OptimalInline virtual auto removeFirstNotOf ( InitializerList elements ) noexcept -> bool {
+            return this->removeNotOf ( elements, 1 );
         }
 
-        __CDS_MaybeUnused __CDS_OptimalInline virtual auto removeAllNotOf ( InitializerList list ) noexcept -> bool  {
-            return this->removeNotOf( list, this->size() );
+        __CDS_MaybeUnused __CDS_OptimalInline virtual auto removeAllNotOf ( InitializerList elements ) noexcept -> bool  {
+            return this->removeNotOf( elements, this->size() );
         }
 
     protected:
 
         __CDS_cpplang_VirtualConstexpr static auto iListContains ( InitializerList list __CDS_MaybeUnused, ElementCRef what __CDS_MaybeUnused ) noexcept -> bool {
-            for ( auto const & e __CDS_MaybeUnused : list ) {
-                if ( Type < T > :: compare ( e, what ) ) {
+            for ( auto const & element __CDS_MaybeUnused : list ) {
+                if ( Type < T > :: compare ( element, what ) ) {
                     return true;
                 }
             }
@@ -693,9 +693,9 @@ namespace cds {
 
             __CDS_Collection_OperationalLock
 
-            auto & p = this->allocInsertGetPtr(element);
-            if ( p == nullptr ) {
-                p = Memory :: instance().create < ElementType > (element);
+            auto & pObject = this->allocInsertGetPtr(element);
+            if (pObject == nullptr ) {
+                pObject = Memory :: instance().create < ElementType > (element);
             }
 
             __CDS_Collection_OperationalUnlock
@@ -707,9 +707,9 @@ namespace cds {
 
             __CDS_Collection_OperationalLock
 
-            auto & p = this->allocInsertGetPtr(element);
-            if ( p == nullptr ) {
-                p = Memory :: instance().create < ElementType > (element);
+            auto & pObject = this->allocInsertGetPtr(element);
+            if (pObject == nullptr ) {
+                pObject = Memory :: instance().create < ElementType > (element);
             }
 
             __CDS_Collection_OperationalUnlock
@@ -721,12 +721,12 @@ namespace cds {
         __CDS_MaybeUnused __CDS_NoDiscard __CDS_cpplang_ConstexprPureAbstract virtual auto size () const noexcept -> Size = 0;
         __CDS_MaybeUnused virtual auto makeUnique () noexcept -> void = 0;
 
-        __CDS_OptionalInline virtual auto contains ( ElementCRef e __CDS_MaybeUnused ) const noexcept -> bool {
+        __CDS_OptionalInline virtual auto contains ( ElementCRef object __CDS_MaybeUnused ) const noexcept -> bool {
 
             __CDS_Collection_OperationalLock
 
-            for ( auto const & i __CDS_MaybeUnused : * this ) {
-                if ( Type < ElementType > :: compare ( i, e ) ) {
+            for ( auto const & element __CDS_MaybeUnused : * this ) {
+                if ( Type < ElementType > :: compare (element, object ) ) {
 
                     __CDS_Collection_OperationalUnlock
                     return true;
@@ -746,8 +746,8 @@ namespace cds {
 
             __CDS_Collection_OperationalLock
 
-            for ( auto & it __CDS_MaybeUnused : * this ) {
-                action(it);
+            for ( auto & element __CDS_MaybeUnused : * this ) {
+                action(element);
             }
 
             __CDS_Collection_OperationalUnlock
@@ -762,8 +762,8 @@ namespace cds {
 
             __CDS_Collection_OperationalLock
 
-            for ( auto const & it __CDS_MaybeUnused : * this ) {
-                action(it);
+            for ( auto const & element __CDS_MaybeUnused : * this ) {
+                action(element);
             }
 
             __CDS_Collection_OperationalUnlock
@@ -778,8 +778,8 @@ namespace cds {
                 -> bool __CDS_Requires( PredicateOver < Predicate, T > ) {
 
             Size trueCount __CDS_MaybeUnused = 0u;
-            for ( auto & e __CDS_MaybeUnused : * this ) {
-                if ( predicate ( e ) && trueCount < count ) {
+            for ( auto & element __CDS_MaybeUnused : * this ) {
+                if (predicate (element ) && trueCount < count ) {
                     trueCount++;
                 }
 
@@ -800,8 +800,8 @@ namespace cds {
                 -> bool __CDS_Requires( PredicateOver < Predicate, T > ) {
 
             Size trueCount __CDS_MaybeUnused = 0u;
-            for ( auto & e __CDS_MaybeUnused : * this ) {
-                if ( predicate ( e ) && trueCount < count ) {
+            for ( auto & element __CDS_MaybeUnused : * this ) {
+                if (predicate (element ) && trueCount < count ) {
                     trueCount++;
                 }
 
@@ -821,8 +821,8 @@ namespace cds {
                 -> bool __CDS_Requires( PredicateOver < Predicate, T > ) {
 
             Size trueCount __CDS_MaybeUnused = 0u;
-            for ( auto & e __CDS_MaybeUnused : * this ) {
-                if (predicate(e) && trueCount < count) {
+            for ( auto & element __CDS_MaybeUnused : * this ) {
+                if (predicate(element) && trueCount < count) {
                     trueCount++;
                 }
 
@@ -842,8 +842,8 @@ namespace cds {
                 -> bool __CDS_Requires( PredicateOver < Predicate, T > ) {
 
             Size trueCount __CDS_MaybeUnused = 0u;
-            for ( auto & e __CDS_MaybeUnused : * this ) {
-                if (predicate(e) && trueCount < count) {
+            for ( auto & element __CDS_MaybeUnused : * this ) {
+                if (predicate(element) && trueCount < count) {
                     trueCount++;
                 }
 
@@ -863,8 +863,8 @@ namespace cds {
                 -> bool __CDS_Requires( PredicateOver < Predicate, T > ) {
 
             Size trueCount __CDS_MaybeUnused = 0u;
-            for ( auto & e __CDS_MaybeUnused : * this ) {
-                if ( predicate ( e ) && trueCount < count ) {
+            for ( auto & element __CDS_MaybeUnused : * this ) {
+                if (predicate (element ) && trueCount < count ) {
                     trueCount++;
                 }
 
@@ -884,8 +884,8 @@ namespace cds {
                 -> bool __CDS_Requires( PredicateOver < Predicate, T > ) {
 
             Size trueCount __CDS_MaybeUnused = 0u;
-            for ( auto & e __CDS_MaybeUnused : * this ) {
-                if ( predicate ( e ) && trueCount < count ) {
+            for ( auto & element __CDS_MaybeUnused : * this ) {
+                if (predicate (element ) && trueCount < count ) {
                     ++ trueCount;
                 }
                 if ( trueCount > count ) {
@@ -946,8 +946,8 @@ namespace cds {
 
             __CDS_Collection_OperationalLock
 
-            for ( auto & it __CDS_MaybeUnused : * this ) {
-                if (predicate(it)) {
+            for ( auto & element __CDS_MaybeUnused : * this ) {
+                if (predicate(element)) {
                     trueCount++;
                 }
             }
@@ -967,8 +967,8 @@ namespace cds {
 
             __CDS_Collection_OperationalLock
 
-            for ( auto const & it __CDS_MaybeUnused : * this ) {
-                if (predicate(it)) {
+            for ( auto const & element __CDS_MaybeUnused : * this ) {
+                if (predicate(element)) {
                     ++ trueCount;
                 }
             }
@@ -980,41 +980,41 @@ namespace cds {
 
         template < typename Predicate = Function < bool ( ElementCRef ) > >
         __CDS_MaybeUnused __CDS_OptimalInline auto any (
-                Predicate const & p = []( ElementCRef ) noexcept -> bool { return true; }
+                Predicate const & predicate = [](ElementCRef ) noexcept -> bool { return true; }
         ) noexcept ( noexcept ( ( * Type < Predicate > :: unsafeAddress () ) ( Type < ElementType > :: unsafeReference() ) ) )
                 -> bool __CDS_Requires( PredicateOver < Predicate, T > ) {
 
-            return this->atLeast ( 1, p );
+            return this->atLeast (1, predicate );
         }
 
         template < typename Predicate = Function < bool ( ElementCRef ) > >
         __CDS_MaybeUnused __CDS_OptimalInline auto any (
-                Predicate const & p = []( ElementCRef ) noexcept -> bool { return true; }
+                Predicate const & predicate = [](ElementCRef ) noexcept -> bool { return true; }
         ) const noexcept ( noexcept ( ( * Type < Predicate > :: unsafeAddress () ) ( Type < ElementType const > :: unsafeReference() ) ) )
                 -> bool __CDS_Requires( PredicateOver < Predicate, T > ) {
 
-            return this->atLeast ( 1, p );
+            return this->atLeast (1, predicate );
         }
 
         template < typename Predicate >
         __CDS_MaybeUnused __CDS_OptimalInline auto all (
-                Predicate const & p
+                Predicate const & predicate
         ) noexcept ( noexcept ( ( * Type < Predicate > :: unsafeAddress () ) ( Type < ElementType > :: unsafeReference() ) ) )
                 -> bool __CDS_Requires( PredicateOver < Predicate, T > ) {
 
-            return ! this->any ( [&p] (T & e) noexcept -> bool { // NOLINT(clion-misra-cpp2008-5-3-1)
-                return ! p(e); // NOLINT(clion-misra-cpp2008-5-3-1)
+            return ! this->any ( [&predicate] (T & element) noexcept -> bool { // NOLINT(clion-misra-cpp2008-5-3-1)
+                return ! predicate(element); // NOLINT(clion-misra-cpp2008-5-3-1)
             });
         }
 
         template < typename Predicate >
         __CDS_MaybeUnused __CDS_OptimalInline auto all (
-                Predicate const & p
+                Predicate const & predicate
         ) const noexcept ( noexcept ( ( * Type < Predicate > :: unsafeAddress () ) ( Type < ElementType const > :: unsafeReference() ) ) )
                 -> bool __CDS_Requires( PredicateOver < Predicate, T > ) {
 
-            return ! this->any ( [&p] ( ElementCRef e) noexcept -> bool { // NOLINT(clion-misra-cpp2008-5-3-1)
-                return ! p(e); // NOLINT(clion-misra-cpp2008-5-3-1)
+            return ! this->any ( [&predicate] (ElementCRef element) noexcept -> bool { // NOLINT(clion-misra-cpp2008-5-3-1)
+                return ! predicate(element); // NOLINT(clion-misra-cpp2008-5-3-1)
             });
         }
 
@@ -1026,8 +1026,8 @@ namespace cds {
 
         __CDS_cpplang_ConstexprDestructor ~Collection() noexcept override = default;
 
-        __CDS_OptimalInline friend auto operator << ( std::ostream & o, const Collection & c ) noexcept -> std::ostream & {
-            return ( o << c.toString() );
+        __CDS_OptimalInline friend auto operator << (std::ostream & stream, Collection const & collection ) noexcept -> std::ostream & {
+            return ( stream << collection.toString() );
         }
 
         __CDS_NoDiscard __CDS_MaybeUnused __CDS_cpplang_ConstexprPureAbstract virtual auto empty () const noexcept -> bool = 0;

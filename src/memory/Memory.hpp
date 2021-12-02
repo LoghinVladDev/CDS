@@ -136,7 +136,7 @@ namespace cds {
             return instance;
         }
 
-        __CDS_OptimalInline auto replaceAllocator ( Allocator * allocator ) noexcept -> Allocator * {
+        __CDS_MaybeUnused __CDS_OptimalInline auto replaceAllocator ( Allocator * allocator ) noexcept -> Allocator * {
             return exchange ( this->pAllocator, allocator );
         }
 

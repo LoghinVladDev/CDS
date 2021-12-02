@@ -74,18 +74,18 @@ namespace cds {
         /**
          * @brief Constructor from trivial boolean value
          *
-         * @param v : bool = value to assign to container
+         * @param value : bool = value to assign to container
          *
          * @exceptsafe
          *
          * @test Tested in primitive/BooleanTest/Constructor Test
          */
-        constexpr Boolean ( bool v ) noexcept : v(v) { } // NOLINT(google-explicit-constructor,clion-misra-cpp2008-12-1-3)
+        constexpr Boolean ( bool value ) noexcept : v(value) { } // NOLINT(google-explicit-constructor,clion-misra-cpp2008-12-1-3)
 
         /**
          * @brief Copy Operator.
          *
-         * @param o : Boolean cref = Constant Reference to a boolean object to copy value from
+         * @param value : Boolean cref = Constant Reference to a boolean object to copy value from
          *
          * @exceptsafe
          *
@@ -93,21 +93,21 @@ namespace cds {
          *
          * @test Tested in primitive/BooleanTest/Operator Tests
          */
-        __CDS_cpplang_NonConstConstexprMemberFunction auto operator = ( Boolean const & o ) noexcept -> Boolean & {
-            if ( this == & o ) {
+        __CDS_cpplang_NonConstConstexprMemberFunction auto operator = ( Boolean const & value ) noexcept -> Boolean & {
+            if ( this == & value ) {
                 return * this;
             }
 
-            this->v = o.v;
+            this->v = value.v;
             return * this;
         }
 
-        __CDS_cpplang_NonConstConstexprMemberFunction auto operator = ( Boolean && o ) noexcept -> Boolean & {
-            if ( this == & o ) {
+        __CDS_cpplang_NonConstConstexprMemberFunction auto operator = ( Boolean && value ) noexcept -> Boolean & {
+            if ( this == & value ) {
                 return * this;
             }
 
-            this->v = exchange ( o.v, false );
+            this->v = exchange (value.v, false );
             return * this;
         }
 
@@ -130,7 +130,7 @@ namespace cds {
         /**
          * @brief Boolean And Operator
          *
-         * @param o : Boolean cref = Constant Reference to Right Operand
+         * @param value : Boolean cref = Constant Reference to Right Operand
          *
          * @exceptsafe
          *
@@ -138,8 +138,8 @@ namespace cds {
          *
          * @test Tested in primitive/BooleanTest/Operator Tests
          */
-        __CDS_cpplang_ConstexprDestructor auto operator &&(Boolean const & o) const noexcept -> Boolean { // NOLINT(clion-misra-cpp2008-5-2-11)
-            return this->v && o.v;
+        __CDS_cpplang_ConstexprDestructor auto operator &&(Boolean const & value) const noexcept -> Boolean { // NOLINT(clion-misra-cpp2008-5-2-11)
+            return this->v && value.v;
         }
 
         /**
@@ -160,7 +160,7 @@ namespace cds {
         /**
          * @brief Boolean Or Operator
          *
-         * @param o : Boolean cref = Constant Reference to Right Operand
+         * @param value : Boolean cref = Constant Reference to Right Operand
          *
          * @exceptsafe
          *
@@ -168,8 +168,8 @@ namespace cds {
          *
          * @test Tested in primitive/BooleanTest/Operator Tests
          */
-        __CDS_cpplang_ConstexprDestructor auto operator ||(Boolean const & o) const noexcept -> Boolean { // NOLINT(clion-misra-cpp2008-5-2-11)
-            return this->v || o.v;
+        __CDS_cpplang_ConstexprDestructor auto operator ||(Boolean const & value) const noexcept -> Boolean { // NOLINT(clion-misra-cpp2008-5-2-11)
+            return this->v || value.v;
         }
 
         /**
@@ -203,7 +203,7 @@ namespace cds {
         /**
          * @brief Comparison Operator
          *
-         * @param o : Boolean cref = Constant Reference to a Boolean Object to compare this to
+         * @param value : Boolean cref = Constant Reference to a Boolean Object to compare this to
          *
          * @exceptsafe
          *
@@ -211,7 +211,7 @@ namespace cds {
          *
          * @test Tested in primitive/BooleanTest/Operator Tests
          */
-        constexpr auto operator == (Boolean const & o) const noexcept -> bool { return this->v == o.v; }
+        constexpr auto operator == (Boolean const & value) const noexcept -> bool { return this->v == value.v; }
 
         /**
          * @brief Comparison Operator
@@ -229,7 +229,7 @@ namespace cds {
         /**
          * @brief Comparison Operator
          *
-         * @param o : Boolean cref = Constant Reference to a Boolean Object to compare this to
+         * @param value : Boolean cref = Constant Reference to a Boolean Object to compare this to
          *
          * @exceptsafe
          *
@@ -237,7 +237,7 @@ namespace cds {
          *
          * @test Tested in primitive/BooleanTest/Operator Tests
          */
-        constexpr auto operator != (Boolean const & o) const noexcept -> bool { return this->v != o.v; }
+        constexpr auto operator != (Boolean const & value) const noexcept -> bool { return this->v != value.v; }
 
         /**
          * @brief Comparison Operator
@@ -255,7 +255,7 @@ namespace cds {
         /**
          * @brief Comparison Function
          *
-         * @param o : Object cref = Constant Reference to an Object Derived Object
+         * @param value : Object cref = Constant Reference to an Object Derived Object
          *
          * @exceptsafe
          *
@@ -263,17 +263,17 @@ namespace cds {
          *
          * @test Tested in primitive/BooleanTest/Operator Tests
          */
-        __CDS_NoDiscard __CDS_cpplang_VirtualConstexpr auto equals ( Object const & o ) const noexcept -> bool override {
-            if ( this == & o ) {
+        __CDS_NoDiscard __CDS_cpplang_VirtualConstexpr auto equals ( Object const & value ) const noexcept -> bool override {
+            if ( this == & value ) {
                 return true;
             }
 
-            auto p = dynamic_cast < decltype (this) > ( & o );
-            if ( p == nullptr ) {
+            auto pValue = dynamic_cast < decltype (this) > ( & value );
+            if (pValue == nullptr ) {
                 return false;
             }
 
-            return this->operator==(*p);
+            return this->operator==(*pValue);
         }
 
         /**
@@ -365,7 +365,7 @@ namespace cds {
         /**
          * @brief Thread Safe, Atomic container for Boolean Type
          */
-        class Atomic;
+        class Atomic; // NOLINT(cppcoreguidelines-virtual-class-destructor)
     };
 
 }
@@ -437,45 +437,45 @@ namespace cds {
         /**
          * @brief Constructor from Boolean Object
          *
-         * @param v : Boolean cref = Constant Reference to a Boolean Object
+         * @param value : Boolean cref = Constant Reference to a Boolean Object
          *
          * @exceptsafe
          * @threadsafe
          *
          * @test Tested in primitive/BooleanTest/Boolean::Atomic Tests
          */
-        __CDS_OptimalInline Atomic ( Boolean const & v ) noexcept :  // NOLINT(google-explicit-constructor)
-                utility :: hidden :: booleanAtomicImpl :: Base(v) {
+        __CDS_OptimalInline Atomic ( Boolean const & value ) noexcept :  // NOLINT(google-explicit-constructor)
+                utility :: hidden :: booleanAtomicImpl :: Base(value) {
 
         }
 
         /**
          * @brief Constructor from Boolean Object
          *
-         * @param v : Boolean mref = Move Reference ( rvalue ) to a Boolean Object
+         * @param value : Boolean mref = Move Reference ( rvalue ) to a Boolean Object
          *
          * @exceptsafe
          * @threadsafe
          *
          * @test Tested in primitive/BooleanTest/Boolean::Atomic Tests
          */
-        __CDS_OptimalInline Atomic ( Boolean && v ) noexcept :  // NOLINT(google-explicit-constructor)
-                utility :: hidden :: booleanAtomicImpl :: Base(v) {
+        __CDS_OptimalInline Atomic ( Boolean && value ) noexcept :  // NOLINT(google-explicit-constructor)
+                utility :: hidden :: booleanAtomicImpl :: Base(value) {
 
         }
 
         /**
          * @brief Constructor from bool literal
          *
-         * @param v : bool = value to assign
+         * @param value : bool = value to assign
          *
          * @exceptsafe
          * @threadsafe
          *
          * @test Tested in primitive/BooleanTest/Boolean::Atomic Tests
          */
-        __CDS_OptimalInline Atomic (bool v) noexcept { // NOLINT(google-explicit-constructor,clion-misra-cpp2008-12-1-3)
-            this->set(v);
+        __CDS_OptimalInline Atomic (bool value) noexcept { // NOLINT(google-explicit-constructor,clion-misra-cpp2008-12-1-3)
+            this->set(value);
         }
 
         /**

@@ -4784,7 +4784,7 @@ inline auto operator "" _s (const char * pString, std::size_t length __CDS_Maybe
 #include <CDS/Types>
 
 namespace cds {
-    template<> auto hash<String>(String const &o) noexcept -> Index { return static_cast < Index > ( o.length() ); }
+    template<> auto hash<String>(String const &object) noexcept -> Index { return static_cast < Index > ( object.length() ); }
 }
 
 __CDS_RegisterParseType(String) // NOLINT(clion-misra-cpp2008-8-0-1)
