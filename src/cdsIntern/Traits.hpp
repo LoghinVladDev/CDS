@@ -305,7 +305,7 @@ namespace cds {
         using YesType = char(&)[1];
         using NoType = char(&)[2];
 
-        struct Fallback { void operator()(); };
+        struct Fallback { void operator()() {} };
 
         struct Derived : T, Fallback {};
 
@@ -313,13 +313,13 @@ namespace cds {
         struct Check;
 
         template<typename>
-        static YesType Test(...);
+        static YesType Test(...) {} // NOLINT(clion-misra-cpp2008-8-4-1)
 
         template<typename C>
-        static NoType Test(Check<void (Fallback::*)(), &C::operator()>*);
+        static NoType Test(Check<void (Fallback::*)(), &C::operator()>*) {}
 
     public:
-        static bool const constexpr value = sizeof(Test<Derived>(0)) == sizeof(YesType);
+        static bool const constexpr value = sizeof(Test<Derived>(0)) == sizeof(YesType); // NOLINT(clion-misra-cpp2008-5-3-4)
     };
 
 }
@@ -355,20 +355,20 @@ namespace cds {                                                                 
     }                                                                                       \
 }
 
-__CDS_RegisterParseType(sint8)
-__CDS_RegisterParseType(sint16)
-__CDS_RegisterParseType(sint32)
-__CDS_RegisterParseType(sint64)
+__CDS_RegisterParseType(sint8) // NOLINT(clion-misra-cpp2008-8-0-1)
+__CDS_RegisterParseType(sint16) // NOLINT(clion-misra-cpp2008-8-0-1)
+__CDS_RegisterParseType(sint32) // NOLINT(clion-misra-cpp2008-8-0-1)
+__CDS_RegisterParseType(sint64) // NOLINT(clion-misra-cpp2008-8-0-1)
 
-__CDS_RegisterParseType(uint8)
-__CDS_RegisterParseType(uint16)
-__CDS_RegisterParseType(uint32)
-__CDS_RegisterParseType(uint64)
+__CDS_RegisterParseType(uint8) // NOLINT(clion-misra-cpp2008-8-0-1)
+__CDS_RegisterParseType(uint16) // NOLINT(clion-misra-cpp2008-8-0-1)
+__CDS_RegisterParseType(uint32) // NOLINT(clion-misra-cpp2008-8-0-1)
+__CDS_RegisterParseType(uint64) // NOLINT(clion-misra-cpp2008-8-0-1)
 
-__CDS_RegisterParseType(void)
-__CDS_RegisterParseType(bool)
-__CDS_RegisterParseType(float)
-__CDS_RegisterParseType(double)
+__CDS_RegisterParseType(void) // NOLINT(clion-misra-cpp2008-8-0-1)
+__CDS_RegisterParseType(bool) // NOLINT(clion-misra-cpp2008-8-0-1)
+__CDS_RegisterParseType(float) // NOLINT(clion-misra-cpp2008-8-0-1)
+__CDS_RegisterParseType(double) // NOLINT(clion-misra-cpp2008-8-0-1)
 
 namespace cds {
 
@@ -385,7 +385,7 @@ namespace cds {
 
     template < typename T >
     struct isStaticFunctionType < T > {
-        constexpr static bool value = std :: is_function < T > :: value && ! isCallableObjectType < T > :: value;
+        constexpr static bool value = std :: is_function < T > :: value && ! isCallableObjectType < T > :: value; // NOLINT(clion-misra-cpp2008-5-3-1)
     };
 
 }
@@ -469,12 +469,12 @@ namespace cds {
             return a == b;
         }
 
-        template < typename U = T, EnableIf < ! Type < U > :: hasEqualityOperator && Type < U > :: objectDerived > = 0 >
+        template < typename U = T, EnableIf < ! Type < U > :: hasEqualityOperator && Type < U > :: objectDerived > = 0 > // NOLINT(clion-misra-cpp2008-5-3-1)
         __CDS_cpplang_VirtualConstexpr static auto compare (T const & a, T const & b, float = 0.0f) noexcept -> bool {
             return a.equals(b);
         }
 
-        template < typename U = T, EnableIf < ! Type < U > :: hasEqualityOperator && ! Type < U > :: objectDerived > = 0 >
+        template < typename U = T, EnableIf < ! Type < U > :: hasEqualityOperator && ! Type < U > :: objectDerived > = 0 > // NOLINT(clion-misra-cpp2008-5-3-1)
         constexpr static auto compare (T const & a, T const & b) noexcept -> bool {
             return & a == & b;
         }
@@ -484,7 +484,7 @@ namespace cds {
             return (ostream << obj);
         }
 
-        template < typename U = T, EnableIf < ! Type < U > :: ostreamPrintable > = 0 >
+        template < typename U = T, EnableIf < ! Type < U > :: ostreamPrintable > = 0 > // NOLINT(clion-misra-cpp2008-5-3-1)
         static constexpr auto streamPrint(std::ostream & ostream, T const & obj) noexcept -> std :: ostream & {
             return (ostream << ( & obj ) );
         }

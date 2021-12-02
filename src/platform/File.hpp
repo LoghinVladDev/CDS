@@ -294,7 +294,7 @@ namespace cds {
         }
 
         __CDS_MaybeUnused static constexpr auto setDiagnosticFlags ( DiagnosticOptionFlags f ) noexcept -> void {
-            return File::_diagnosticFixesFlags;
+            File::_diagnosticFixesFlags = f;
         }
 
         __CDS_MaybeUnused static auto setDiagnosticFlag ( DiagnosticOptionFlag f, bool enable ) noexcept -> void {

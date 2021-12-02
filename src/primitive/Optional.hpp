@@ -56,11 +56,11 @@ namespace cds {
         }
 
         __CDS_NoDiscard constexpr auto hasValue () const noexcept -> bool {
-            return ! this->pObj.isNull();
+            return this->pObj != nullptr;
         }
 
         __CDS_NoDiscard constexpr auto isEmpty () const noexcept -> bool {
-            return ! this->hasValue();
+            return ! this->hasValue(); // NOLINT(clion-misra-cpp2008-5-3-1)
         }
 
         __CDS_NoDiscard constexpr auto isPresent () const noexcept -> bool {
@@ -81,36 +81,44 @@ namespace cds {
 
         template < typename Action >
         __CDS_MaybeUnused __CDS_cpplang_ConstexprNonLiteralReturn auto ifPresent (Action const & action) const noexcept -> void {
-            if ( this->isPresent() )
-                action ( this->pObj.valueAt() );
+            if ( this->isPresent() ) {
+                action(this->pObj.valueAt());
+            }
         }
 
         template < typename Action, typename EmptyAction >
         __CDS_MaybeUnused __CDS_cpplang_ConstexprNonLiteralReturn auto ifPresentOrElse ( Action const & action, EmptyAction const & onElse ) const noexcept -> void {
-            if ( this->isPresent() )
-                action ( this->pObj.valueAt() );
-            else
-                onElse ();
+            if ( this->isPresent() ) {
+                action(this->pObj.valueAt());
+            } else {
+                onElse();
+            }
         }
 
         template < typename Predicate >
         __CDS_MaybeUnused __CDS_cpplang_ConstexprConditioned auto filter ( Predicate const & predicate ) const noexcept -> Optional {
-            if ( this->isEmpty() )
+            if ( this->isEmpty() ) {
                 return * this;
+            }
+
             return predicate (this->pObj.valueAt()) ? (*this) : Optional();
         }
 
         template < typename Mapper >
         __CDS_cpplang_ConstexprDestructor auto map ( Mapper const & mapper ) const noexcept -> Optional < returnOf < Mapper > > {
-            if ( this->isEmpty() )
-                return Optional < returnOf < Mapper > > ();
+            if ( this->isEmpty() ) {
+                return Optional < returnOf < Mapper> > ();
+            }
+
             return Optional < returnOf < Mapper > > (mapper(this->pObj.valueAt()));
         }
 
         template < typename Supplier >
         __CDS_MaybeUnused __CDS_cpplang_ConstexprDestructor auto orSupply (Supplier const & supplier) const noexcept -> Optional {
-            if ( this->isPresent() )
+            if ( this->isPresent() ) {
                 return * this;
+            }
+
             return supplier();
         }
 
@@ -137,12 +145,15 @@ namespace cds {
         }
 
         __CDS_cpplang_NonConstConstexprMemberFunction auto operator = (Optional const & o) noexcept -> Optional & {
-            if ( this == & o )
+            if ( this == & o ) {
                 return * this;
+            }
 
-            if ( ! o.hasValue() ) {
-                if ( this->hasValue() )
+            if ( ! o.hasValue() ) { // NOLINT(clion-misra-cpp2008-5-3-1)
+                if ( this->hasValue() ) {
                     this->pObj.reset();
+                }
+
                 return * this;
             }
 
@@ -152,16 +163,23 @@ namespace cds {
         }
 
         __CDS_cpplang_NonConstConstexprMemberFunction auto operator = (Optional && optional) noexcept -> Optional & {
-            if ( this == & optional ) return * this;
+            if ( this == & optional ) {
+                return * this;
+            }
 
             this->pObj = std :: move ( optional.pObj );
             return * this;
         }
 
         __CDS_NoDiscard __CDS_cpplang_VirtualConstexpr auto equals ( Object const & o ) const noexcept -> bool override {
-            if ( this == & o ) return true;
-            auto p = dynamic_cast < decltype (this) > ( & o );
-            if ( p == nullptr ) return false;
+            if ( this == & o ) {
+                return true;
+            }
+
+            auto p = dynamic_cast < Optional < T > const * > ( & o );
+            if ( p == nullptr ) {
+                return false;
+            }
 
             return this->operator==(*p);
         }
@@ -175,10 +193,12 @@ namespace cds {
         __CDS_NoDiscard __CDS_OptionalInline auto toString() const noexcept -> String final {
             std::stringstream oss;
             oss << "| ";
-            if ( this->hasValue() )
+            if ( this->hasValue() ) {
                 oss << this->value();
-            else
+            } else {
                 oss << "none";
+            }
+
             oss << " |";
             return {oss.str()};
         }
@@ -201,6 +221,6 @@ namespace cds {
 
 #endif
 
-__CDS_RegisterParseTypeTemplateT(Optional)
+__CDS_RegisterParseTypeTemplateT(Optional) // NOLINT(clion-misra-cpp2008-8-0-1)
 
 #endif //CDS_OPTIONAL_HPP

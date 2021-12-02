@@ -102,13 +102,14 @@ namespace cds {
 
 }
 
-__CDS_RegisterParseType(ArithmeticException)
-__CDS_RegisterParseType(DivideByZeroException)
-__CDS_RegisterParseType(IllegalArgumentException)
-__CDS_RegisterParseType(NullPointerException)
-__CDS_RegisterParseType(OutOfBoundsException)
-__CDS_RegisterParseType(TypeException)
-__CDS_RegisterParseType(KeyException)
+__CDS_RegisterParseType(ArithmeticException) // NOLINT(clion-misra-cpp2008-8-0-1)
+__CDS_RegisterParseType(DivideByZeroException) // NOLINT(clion-misra-cpp2008-8-0-1)
+__CDS_RegisterParseType(IllegalArgumentException) // NOLINT(clion-misra-cpp2008-8-0-1)
+__CDS_RegisterParseType(NullPointerException) // NOLINT(clion-misra-cpp2008-8-0-1)
+__CDS_RegisterParseType(OutOfBoundsException) // NOLINT(clion-misra-cpp2008-8-0-1)
+__CDS_RegisterParseType(TypeException) // NOLINT(clion-misra-cpp2008-8-0-1)
+__CDS_RegisterParseType(KeyException) // NOLINT(clion-misra-cpp2008-8-0-1)
+__CDS_RegisterParseType(NotImplementedException) // NOLINT(clion-misra-cpp2008-8-0-1)
 
 
 #endif //CDS_UTILITY_HPP

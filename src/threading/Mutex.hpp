@@ -60,14 +60,14 @@ namespace cds {
     #endif
 
         enum class State: uint8 {
-            LOCKED = 0x01,
-            UNLOCKED = 0x02
+            LOCKED = 0x01U,
+            UNLOCKED = 0x02U
         };
 
         __CDS_cpplang_ConstexprConditioned static auto stateToString ( State s ) noexcept -> StringLiteral {
             switch (s) {
-                case State::LOCKED:    return "Locked";
-                case State::UNLOCKED:  return "Unlocked";
+                case State::LOCKED:    return "Locked"; // NOLINT(clion-misra-cpp2008-6-4-5)
+                case State::UNLOCKED:  return "Unlocked"; // NOLINT(clion-misra-cpp2008-6-4-5)
             }
 
             return "Undefined State";
@@ -87,7 +87,7 @@ namespace cds {
         Mutex (CTR_PARAM) noexcept : state(State::UNLOCKED) { // NOLINT(cppcoreguidelines-pro-type-member-init)
 
     #if defined(__linux)
-            pthread_mutex_init( & this->handle, nullptr );
+            (void) pthread_mutex_init( & this->handle, nullptr );
     #elif defined(WIN32)
     #if defined(MUTEX_IMPLEMENTATION_WINAPI_CRITICAL_SECTION)
             InitializeCriticalSection( & this->handle );
@@ -103,7 +103,7 @@ namespace cds {
         ~Mutex () noexcept override {
 
     #if defined(__linux)
-            pthread_mutex_destroy( & this->handle );
+            (void) pthread_mutex_destroy( & this->handle );
     #elif defined(WIN32)
     #if defined(MUTEX_IMPLEMENTATION_WINAPI_CRITICAL_SECTION)
             DeleteCriticalSection( & this->handle );
@@ -118,8 +118,8 @@ namespace cds {
 
         auto reset (CTR_PARAM) noexcept -> void {
     #if defined(__linux)
-            pthread_mutex_destroy( & this->handle );
-            pthread_mutex_init( & this->handle, nullptr );
+            (void) pthread_mutex_destroy( & this->handle );
+            (void) pthread_mutex_init( & this->handle, nullptr );
     #elif defined(WIN32)
     #if defined(MUTEX_IMPLEMENTATION_WINAPI_CRITICAL_SECTION)
             DeleteCriticalSection( & this->handle );
@@ -145,7 +145,7 @@ namespace cds {
         auto lock () noexcept (LOCK_EXCEPT_SPEC) -> void {
 
     #if defined(__linux)
-            pthread_mutex_lock( & this->handle );
+            (void) pthread_mutex_lock( & this->handle );
     #elif defined(WIN32)
     #if defined(MUTEX_IMPLEMENTATION_WINAPI_CRITICAL_SECTION)
             EnterCriticalSection( & this->handle );
@@ -167,7 +167,10 @@ namespace cds {
 
     #if defined(__linux)
             auto lockSuccess = pthread_mutex_trylock(& this->handle ) == 0;
-            if ( lockSuccess ) this->state = State::LOCKED;
+            if ( lockSuccess ) {
+                this->state = State::LOCKED;
+            }
+
             return lockSuccess;
     #elif defined(WIN32)
     #if defined(MUTEX_IMPLEMENTATION_WINAPI_CRITICAL_SECTION)
@@ -194,7 +197,7 @@ namespace cds {
         auto unlock () noexcept -> void {
 
     #if defined(__linux)
-            pthread_mutex_unlock( & this->handle );
+            (void) pthread_mutex_unlock( & this->handle );
     #elif defined(WIN32)
     #if defined(MUTEX_IMPLEMENTATION_WINAPI_CRITICAL_SECTION)
             LeaveCriticalSection( & this->handle );
@@ -223,6 +226,6 @@ namespace cds {
 #undef MUTEX_IMPLEMENTATION_WINAPI_CRITICAL_SECTION
 #endif
 
-__CDS_RegisterParseType(Mutex)
+__CDS_RegisterParseType(Mutex) // NOLINT(clion-misra-cpp2008-8-0-1)
 
 #endif //CDS_MUTEX_HPP

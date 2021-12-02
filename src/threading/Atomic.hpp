@@ -17,8 +17,8 @@ namespace cds {
     protected:
         using DataType = T;
 
-        Mutex    mutable _access;
-        DataType         _data;
+        Mutex    mutable _access; // NOLINT(clion-misra-cpp2008-11-0-1)
+        DataType         _data; // NOLINT(clion-misra-cpp2008-11-0-1)
     public:
 
         Atomic () noexcept = default;
@@ -54,7 +54,9 @@ namespace cds {
         }
 
         __CDS_OptimalInline Atomic & operator = ( Atomic const & obj ) noexcept {
-            if ( this == & obj ) return * this;
+            if ( this == & obj ) {
+                return * this;
+            }
 
             this->set( obj.get() );
 
@@ -62,7 +64,9 @@ namespace cds {
         }
 
         Atomic & operator = ( Atomic && obj ) noexcept {
-            if ( this == & obj ) return * this;
+            if ( this == & obj ) {
+                return * this;
+            }
 
             if ( obj._access.tryLock() ) {
                 this->set(obj._data);
@@ -120,9 +124,14 @@ namespace cds {
         }
 
         __CDS_NoDiscard auto equals ( Object const & o ) const noexcept -> bool override {
-            if ( this == & o ) return true;
-            auto p = dynamic_cast < decltype ( this ) > ( & o );
-            if ( p == nullptr ) return false;
+            if ( this == & o ) {
+                return true;
+            }
+
+            auto p = dynamic_cast < Atomic < T > const * > ( & o );
+            if ( p == nullptr ) {
+                return false;
+            }
 
             return p->get() == this->get();
         }
@@ -130,6 +139,6 @@ namespace cds {
 
 }
 
-__CDS_RegisterParseTypeTemplateT(Atomic)
+__CDS_RegisterParseTypeTemplateT(Atomic) // NOLINT(clion-misra-cpp2008-8-0-1)
 
 #endif //CDS_ATOMIC_HPP

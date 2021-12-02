@@ -54,8 +54,9 @@ namespace cds {
          */
         static auto random () noexcept -> Integer {
             static UniquePointer < RandomGenerator > pRng;
-            if (pRng.isNull())
+            if (pRng.isNull()) {
                 pRng.reset(Memory :: instance() .create < RandomGenerator > ());
+            }
 
             return pRng->get();
         }
@@ -77,8 +78,9 @@ namespace cds {
          */
         static auto random (int low, int high) noexcept -> Integer {
             static UniquePointer < RandomGenerator > pRng;
-            if ( pRng.isNull() || pRng->low() != low && pRng->high() != high )
+            if ( pRng.isNull() || pRng->low() != low && pRng->high() != high ) {
                 pRng.reset(Memory :: instance() .create < RandomGenerator > (low, high));
+            }
 
             return pRng->get();
         }
@@ -132,12 +134,12 @@ namespace cds {
          *
          * @test Tested in primitive/IntegerTest/Constructor Tests
          */
-        constexpr Integer(sint32 value) noexcept: v(value) {} // NOLINT(google-explicit-constructor)
+        constexpr Integer(sint32 value) noexcept: v(value) {} // NOLINT(google-explicit-constructor,clion-misra-cpp2008-12-1-3)
 
         explicit constexpr Integer(sint8 value) noexcept: v(value) {}
         explicit constexpr Integer(sint16 value) noexcept: v(value) {}
         explicit constexpr Integer(sint64 value) noexcept: v(static_cast < int > ( value )) {}
-        explicit constexpr Integer(uint8 value) noexcept: v(value) {}
+        explicit constexpr Integer(uint8 value) noexcept: v(static_cast < int > ( value )) {}
         explicit constexpr Integer(uint32 value) noexcept: v(static_cast < int > ( value )) {}
         explicit constexpr Integer(uint64 value) noexcept: v(static_cast < int > ( value )) {}
 
@@ -156,7 +158,10 @@ namespace cds {
          * @test Tested in primitive/Integer/Constructor Tests
          */
         __CDS_cpplang_NonConstConstexprMemberFunction auto operator=(Integer const &o) noexcept -> Integer & {
-            if (this == &o)return *this;
+            if (this == &o) {
+                return *this;
+            }
+
             this->v = o.v;
             return *this;
         }
@@ -178,7 +183,10 @@ namespace cds {
         }
 
         __CDS_cpplang_NonConstConstexprMemberFunction auto operator=(Integer && value) noexcept -> Integer & {
-            if (this == & value) return *this;
+            if (this == & value) {
+                return *this;
+            }
+
             this->v = exchange ( value.v, 0 );
             return *this;
         }
@@ -280,15 +288,25 @@ namespace cds {
          * @test Tested in primitive/Integer/Algebraic Operator Tests
          */
         __CDS_cpplang_ConstexprDestructor auto operator/(Integer const &o) const noexcept (false) -> Integer {
-            if ( o.v == 0 ) throw DivideByZeroException();
-            if ( o.v == INT32_MIN || this->v == INT32_MIN ) throw ArithmeticException ("Division by INT32_MIN is undefined behaviour");
+            if ( o.v == 0 ) {
+                throw DivideByZeroException();
+            }
+
+            if ( o.v == INT32_MIN || this->v == INT32_MIN ) {
+                throw ArithmeticException("Division by INT32_MIN is undefined behaviour");
+            }
 
             return this->v / o.v;
         }
 
         friend auto operator / (int value, Integer const & o) noexcept (false) -> Integer {
-            if ( o.v == 0 ) throw DivideByZeroException();
-            if ( o.v == INT32_MIN || value == INT32_MIN ) throw ArithmeticException ("Division by INT32_MIN is undefined behaviour");
+            if ( o.v == 0 ) {
+                throw DivideByZeroException();
+            }
+
+            if ( o.v == INT32_MIN || value == INT32_MIN ) {
+                throw ArithmeticException("Division by INT32_MIN is undefined behaviour");
+            }
 
             return value / o.v;
         }
@@ -306,8 +324,13 @@ namespace cds {
          * @test Tested in primitive/Integer/Algebraic Operator Tests
          */
         __CDS_cpplang_ConstexprDestructor auto operator / (int value) const noexcept (false) -> Integer {
-            if ( value == 0 ) throw DivideByZeroException();
-            if ( value == INT32_MIN || this->v == INT32_MIN ) throw ArithmeticException ("Division by INT32_MIN is undefined behaviour");
+            if ( value == 0 ) {
+                throw DivideByZeroException();
+            }
+
+            if ( value == INT32_MIN || this->v == INT32_MIN ) {
+                throw ArithmeticException("Division by INT32_MIN is undefined behaviour");
+            }
 
             return this->v / value;
         }
@@ -325,8 +348,13 @@ namespace cds {
          * @test Tested in primitive/Integer/Algebraic Operator Tests
          */
         __CDS_cpplang_ConstexprDestructor auto operator % (Integer const &o) const noexcept (false) -> Integer {
-            if ( o.v == 0 ) throw DivideByZeroException();
-            if ( o.v == INT32_MIN || this->v == INT32_MIN ) throw ArithmeticException ("Modulo by INT32_MIN is undefined behaviour");
+            if ( o.v == 0 ) {
+                throw DivideByZeroException();
+            }
+
+            if ( o.v == INT32_MIN || this->v == INT32_MIN ) {
+                throw ArithmeticException("Modulo by INT32_MIN is undefined behaviour");
+            }
 
             return this->v % o.v;
         }
@@ -344,15 +372,25 @@ namespace cds {
          * @test Tested in primitive/Integer/Algebraic Operator Tests
          */
         __CDS_cpplang_ConstexprDestructor auto operator % (int value) const noexcept (false) -> Integer {
-            if ( value == 0 ) throw DivideByZeroException();
-            if ( value == INT32_MIN || this->v == INT32_MIN ) throw ArithmeticException ("Modulo by INT32_MIN is undefined behaviour");
+            if ( value == 0) {
+                throw DivideByZeroException();
+            }
+
+            if ( value == INT32_MIN || this->v == INT32_MIN ) {
+                throw ArithmeticException("Modulo by INT32_MIN is undefined behaviour");
+            }
 
             return this->v % value;
         }
 
         __CDS_cpplang_ConstexprDestructor friend auto operator % (int value, Integer const & o) noexcept (false) -> Integer {
-            if ( o.v == 0 ) throw DivideByZeroException();
-            if ( o.v == INT32_MIN || value == INT32_MIN ) throw ArithmeticException ("Modulo by INT32_MIN is undefined behaviour");
+            if ( o.v == 0 ) {
+                throw DivideByZeroException();
+            }
+
+            if ( o.v == INT32_MIN || value == INT32_MIN ) {
+                throw ArithmeticException("Modulo by INT32_MIN is undefined behaviour");
+            }
 
             return value % o.v;
         }
@@ -466,8 +504,13 @@ namespace cds {
          * @test Tested in primitive/Integer/Algebraic Operator Tests
          */
         __CDS_cpplang_NonConstConstexprMemberFunction auto operator/=(Integer const &o) noexcept (false) -> Integer & {
-            if ( o.v == 0 ) throw DivideByZeroException();
-            if ( o.v == INT32_MIN || this->v == INT32_MIN ) throw ArithmeticException ("Division by INT32_MIN is undefined behaviour");
+            if ( o.v == 0 ) {
+                throw DivideByZeroException();
+            }
+
+            if ( o.v == INT32_MIN || this->v == INT32_MIN ) {
+                throw ArithmeticException("Division by INT32_MIN is undefined behaviour");
+            }
 
             this->v /= o.v;
             return *this;
@@ -486,8 +529,13 @@ namespace cds {
          * @test Tested in primitive/Integer/Algebraic Operator Tests
          */
         __CDS_cpplang_NonConstConstexprMemberFunction auto operator/=(int value) noexcept (false) -> Integer & {
-            if ( value == 0 ) throw DivideByZeroException();
-            if ( value == INT32_MIN || this->v == INT32_MIN ) throw ArithmeticException ("Division by INT32_MIN is undefined behaviour");
+            if ( value == 0 ) {
+                throw DivideByZeroException();
+            }
+
+            if ( value == INT32_MIN || this->v == INT32_MIN ) {
+                throw ArithmeticException("Division by INT32_MIN is undefined behaviour");
+            }
 
             this->v /= value;
             return *this;
@@ -506,8 +554,13 @@ namespace cds {
          * @test Tested in primitive/Integer/Algebraic Operator Tests
          */
         __CDS_cpplang_NonConstConstexprMemberFunction auto operator%=(Integer const &o) noexcept (false) -> Integer & {
-            if ( o.v == 0 ) throw DivideByZeroException();
-            if ( o.v == INT32_MIN || this->v == INT32_MIN ) throw ArithmeticException ("Modulo by INT32_MIN is undefined behaviour");
+            if ( o.v == 0 ) {
+                throw DivideByZeroException();
+            }
+
+            if ( o.v == INT32_MIN || this->v == INT32_MIN ) {
+                throw ArithmeticException("Modulo by INT32_MIN is undefined behaviour");
+            }
 
             this->v %= o.v;
             return *this;
@@ -526,8 +579,13 @@ namespace cds {
          * @test Tested in primitive/Integer/Algebraic Operator Tests
          */
         __CDS_cpplang_NonConstConstexprMemberFunction auto operator%=(int value) noexcept (false) -> Integer & {
-            if ( value == 0 ) throw DivideByZeroException();
-            if ( value == INT32_MIN || this->v == INT32_MIN ) throw ArithmeticException ("Modulo by INT32_MIN is undefined behaviour");
+            if ( value == 0 ) {
+                throw DivideByZeroException();
+            }
+
+            if ( value == INT32_MIN || this->v == INT32_MIN ) {
+                throw ArithmeticException("Modulo by INT32_MIN is undefined behaviour");
+            }
 
             this->v %= value;
             return *this;
@@ -722,7 +780,7 @@ namespace cds {
          *
          * @test Tested in primitive/IntegerTest/Relational Operator Tests
          */
-        __CDS_cpplang_ConstexprDestructor auto operator&(Integer const &o) const noexcept -> Integer { return this->v & o.v; }
+        __CDS_cpplang_ConstexprDestructor auto operator&(Integer const &o) const noexcept -> Integer { return this->v & o.v; } // NOLINT(clion-misra-cpp2008-5-3-3)
 
         /**
          * @brief Bitwise And Operator
@@ -735,9 +793,9 @@ namespace cds {
          *
          * @test Tested in primitive/IntegerTest/Relational Operator Tests
          */
-        __CDS_cpplang_ConstexprDestructor auto operator&(int value) const noexcept -> Integer { return this->v & value; }
+        __CDS_cpplang_ConstexprDestructor auto operator&(int value) const noexcept -> Integer { return this->v & value; } // NOLINT(clion-misra-cpp2008-5-3-3)
 
-        __CDS_cpplang_ConstexprDestructor friend auto operator & (int value, Integer const & o) noexcept -> Integer { return value & o.v; }
+        __CDS_cpplang_ConstexprDestructor friend auto operator & (int value, Integer const & o) noexcept -> Integer { return value & o.v; } // NOLINT(clion-misra-cpp2008-5-3-3)
 
         /**
          * @brief Bitwise Or Operator
@@ -1045,9 +1103,14 @@ namespace cds {
          * @test Tested in primitive/IntegerTest/Relational Operator Tests
          */
         __CDS_NoDiscard __CDS_cpplang_VirtualConstexpr auto equals ( Object const & o ) const noexcept -> bool override {
-            if ( this == & o ) return true;
-            auto p = dynamic_cast < decltype (this) > ( & o );
-            if ( p == nullptr ) return false;
+            if ( this == & o ) {
+                return true;
+            }
+
+            auto p = dynamic_cast < Integer const * > ( & o );
+            if ( p == nullptr ) {
+                return false;
+            }
 
             return this->operator==(*p);
         }
@@ -1143,8 +1206,11 @@ namespace cds {
             String rep;
 
             __CDS_cpplang_ConstexprLambda auto baseDigitToString = [](int value) noexcept -> char {
-                if ( value < 10 ) return (char) (value + '0');
-                return (char) (value + 'a' - 10);
+                if ( value < 10 ) {
+                    return static_cast < char > (value + '0');
+                }
+
+                return static_cast < char > (value + 'a' - 10);
             };
 
             while ( c > 0 ) {
@@ -1169,7 +1235,9 @@ namespace cds {
          * @test Tested in primitive/IntegerTest/Utility
          */
         static auto parse(String const & string, int base = 10) noexcept -> Integer {
-            if ( string.empty() ) return 0;
+            if ( string.empty() ) {
+                return 0;
+            }
 
             bool negative = false;
 
@@ -1180,37 +1248,49 @@ namespace cds {
             };
 
             __CDS_cpplang_ConstexprLambda static auto isBaseNumericChar = [](int base, char c) noexcept -> bool {
-                if ( base < 10 )
-                    return c >= '0' && c < (char)('0' + base);
+                if ( base < 10 ) {
+                    return c >= '0' && c < static_cast < char > ('0' + base);
+                }
 
                 return c >= '0' && c <= '9' || (c >= 'A' && c < 'A' + (base - 10) || c >= 'a' && c < 'a' + (base - 10));
             };
 
             __CDS_cpplang_ConstexprLambda static auto baseNumericCharToInt = [](char c) noexcept -> int {
-                if ( c >= '0' && c <= '9' ) return static_cast < int > ( c ) - '0';
-                if ( c >= 'A' && c <= 'Z' ) return static_cast < int > ( c ) - 'A' + 10;
-                if ( c >= 'a' && c <= 'z' ) return static_cast < int > ( c ) - 'a' + 10;
+                if ( c >= '0' && c <= '9' ) {
+                    return static_cast < int > ( c ) - '0';
+                }
+
+                if ( c >= 'A' && c <= 'Z' ) {
+                    return static_cast < int > ( c ) - 'A' + 10;
+                }
+
+                if ( c >= 'a' && c <= 'z' ) {
+                    return static_cast < int > ( c ) - 'a' + 10;
+                }
 
                 return static_cast<int>(c);
             };
 
             while( ( base == 10 && ! isNumericChar ( it.value() ) || ! isBaseNumericChar(base, it.value()) ) && it != string.end() ) {
-                if ( it.value() == '-' )
+                if ( it.value() == '-' ) {
                     negative = true;
-                it.next();
+                }
+
+                (void) it.next();
             }
 
             if ( base == 16 ) {
                 auto copy = it;
-                if ( copy.value() == '0' && copy.next().value() == 'x' )
+                if ( copy.value() == '0' && copy.next().value() == 'x' ) {
                     it = copy.next();
+                }
             }
 
             int numericValue = 0;
 
             while ( ( base == 10 && isNumericChar ( it.value() ) || isBaseNumericChar(base, it.value() ) ) && it != string.end() ) {
                 numericValue = numericValue * base + ((base == 10) ? numericCharToInt ( it.value() ) : baseNumericCharToInt(it.value()));
-                it.next();
+                (void) it.next();
             }
 
             return negative ? (-numericValue) : numericValue;
@@ -1242,32 +1322,62 @@ namespace cds {
         }
 
         __CDS_NoDiscard __CDS_MaybeUnused __CDS_cpplang_ConstexprDestructor auto coerceIn ( Integer const & minimumValue, Integer const & maximumValue ) const noexcept -> Integer {
-            if ( minimumValue > * this ) return minimumValue;
-            if ( maximumValue < * this ) return maximumValue;
+            if ( minimumValue > * this ) {
+                return minimumValue;
+            }
+
+            if ( maximumValue < * this ) {
+                return maximumValue;
+            }
+
             return * this;
         }
 
         __CDS_NoDiscard __CDS_MaybeUnused __CDS_cpplang_ConstexprDestructor auto coerceIn ( Integer const & minimumValue, int maximumValue ) const noexcept -> Integer {
-            if ( minimumValue > * this ) return minimumValue;
-            if ( maximumValue < * this ) return maximumValue;
+            if ( minimumValue > * this ) {
+                return minimumValue;
+            }
+
+            if ( maximumValue < * this ) {
+                return maximumValue;
+            }
+
             return * this;
         }
 
         __CDS_NoDiscard __CDS_MaybeUnused __CDS_cpplang_ConstexprDestructor auto coerceIn ( int minimumValue, Integer const & maximumValue ) const noexcept -> Integer {
-            if ( minimumValue > * this ) return minimumValue;
-            if ( maximumValue < * this ) return maximumValue;
+            if ( minimumValue > * this ) {
+                return minimumValue;
+            }
+
+            if ( maximumValue < * this ) {
+                return maximumValue;
+            }
+
             return * this;
         }
 
         __CDS_NoDiscard __CDS_MaybeUnused __CDS_cpplang_ConstexprDestructor auto coerceIn ( int minimumValue, int maximumValue ) const noexcept -> Integer {
-            if ( minimumValue > * this ) return minimumValue;
-            if ( maximumValue < * this ) return maximumValue;
+            if ( minimumValue > * this ) {
+                return minimumValue;
+            }
+
+            if ( maximumValue < * this ) {
+                return maximumValue;
+            }
+
             return * this;
         }
 
         __CDS_NoDiscard __CDS_MaybeUnused constexpr auto isDigit () const noexcept -> bool { return this->v < 10 && this->v >= 0; }
 
-        __CDS_NoDiscard __CDS_MaybeUnused __CDS_cpplang_ConstexprConditioned auto digitToChar () const noexcept (false) -> char { if ( ! this->isDigit() ) throw IllegalArgumentException(); return static_cast < char > ( this->v ) + '0'; } // NOLINT(cppcoreguidelines-narrowing-conversions)
+        __CDS_NoDiscard __CDS_MaybeUnused __CDS_cpplang_ConstexprConditioned auto digitToChar () const noexcept (false) -> char {
+            if ( ! this->isDigit() ) {
+                throw IllegalArgumentException();
+            }
+
+            return static_cast < char > ( this->v ) + '0'; // NOLINT(cppcoreguidelines-narrowing-conversions)
+        }
 
         __CDS_NoDiscard __CDS_MaybeUnused constexpr auto static isEven (int value) noexcept -> bool {
             return value % 2 == 0;
@@ -1339,7 +1449,7 @@ namespace cds {
         }
 
 
-        Atomic (int v) noexcept { // NOLINT(google-explicit-constructor)
+        Atomic (int v) noexcept { // NOLINT(google-explicit-constructor,clion-misra-cpp2008-12-1-3)
             this->set(v);
         }
 
@@ -1543,9 +1653,16 @@ namespace cds {
 
 
         __CDS_NoDiscard __CDS_OptimalInline auto operator / ( Atomic const & o ) const noexcept (false) -> Integer {
-            int rValue = o.get(), lValue = this->get();
-            if ( rValue == 0 ) throw DivideByZeroException();
-            if ( rValue == INT32_MIN || lValue == INT32_MIN ) throw ArithmeticException ("Division by INT32_MIN is undefined behaviour");
+            int rValue = o.get();
+            int lValue = this->get();
+
+            if ( rValue == 0 ) {
+                throw DivideByZeroException();
+            }
+
+            if ( rValue == INT32_MIN || lValue == INT32_MIN ) {
+                throw ArithmeticException("Division by INT32_MIN is undefined behaviour");
+            }
 
             return lValue / rValue;
         }
@@ -1553,8 +1670,13 @@ namespace cds {
         __CDS_NoDiscard __CDS_OptimalInline auto operator / ( Integer const & o ) const noexcept (false) -> Integer {
             int lValue = this->get();
 
-            if ( o == 0 ) throw DivideByZeroException();
-            if ( o == INT32_MIN || lValue == INT32_MIN ) throw ArithmeticException ("Division by INT32_MIN is undefined behaviour");
+            if ( o == 0 ) {
+                throw DivideByZeroException();
+            }
+
+            if ( o == INT32_MIN || lValue == INT32_MIN ) {
+                throw ArithmeticException("Division by INT32_MIN is undefined behaviour");
+            }
 
             return lValue / o;
         }
@@ -1562,74 +1684,119 @@ namespace cds {
         __CDS_NoDiscard __CDS_OptimalInline auto operator / ( int value ) const noexcept (false) -> Integer {
             auto lValue = this->get();
 
-            if ( value == 0 ) throw DivideByZeroException();
-            if ( value == INT32_MIN || lValue == INT32_MIN ) throw ArithmeticException ("Division by INT32_MIN is undefined behaviour");
+            if ( value == 0 ) {
+                throw DivideByZeroException();
+            }
+
+            if ( value == INT32_MIN || lValue == INT32_MIN ) {
+                throw ArithmeticException("Division by INT32_MIN is undefined behaviour");
+            }
 
             return lValue / value;
         }
 
         __CDS_NoDiscard friend __CDS_OptimalInline auto operator / ( Integer const & value, Atomic const & o ) noexcept (false) -> Integer {
             int rVal = o.get();
-            if ( rVal == 0 ) throw DivideByZeroException();
-            if ( rVal == INT32_MIN || value == INT32_MIN ) throw ArithmeticException ("Division by INT32_MIN is undefined behaviour");
+            if ( rVal == 0 ) {
+                throw DivideByZeroException();
+            }
+
+            if ( rVal == INT32_MIN || value == INT32_MIN ) {
+                throw ArithmeticException("Division by INT32_MIN is undefined behaviour");
+            }
 
             return value / rVal;
         }
         __CDS_NoDiscard friend __CDS_OptimalInline auto operator / ( int value, Atomic const & o ) noexcept (false) -> Integer {
             int rVal = o.get();
-            if ( rVal == 0 ) throw DivideByZeroException();
-            if ( rVal == INT32_MIN || value == INT32_MIN ) throw ArithmeticException ("Division by INT32_MIN is undefined behaviour");
+            if ( rVal == 0 ) {
+                throw DivideByZeroException();
+            }
+
+            if ( rVal == INT32_MIN || value == INT32_MIN ) {
+                throw ArithmeticException("Division by INT32_MIN is undefined behaviour");
+            }
 
             return value / rVal;
         }
 
 
         __CDS_NoDiscard __CDS_OptimalInline auto operator % ( Atomic const & o ) const noexcept (false) -> Integer {
-            int rValue = o.get(), lValue = this->get();
-            if (rValue == 0 ) throw DivideByZeroException();
-            if (rValue == INT32_MIN || lValue == INT32_MIN ) throw ArithmeticException ("Modulo by INT32_MIN is undefined behaviour");
+            int rValue = o.get();
+            int lValue = this->get();
+
+            if (rValue == 0 ) {
+                throw DivideByZeroException();
+            }
+
+            if (rValue == INT32_MIN || lValue == INT32_MIN ) {
+                throw ArithmeticException("Modulo by INT32_MIN is undefined behaviour");
+            }
 
             return lValue % rValue;
         }
 
         __CDS_NoDiscard __CDS_OptimalInline auto operator % ( Integer const & o ) const noexcept (false) -> Integer {
             int lValue = this->get();
-            if ( o == 0 ) throw DivideByZeroException();
-            if ( o == INT32_MIN || lValue == INT32_MIN ) throw ArithmeticException ("Modulo by INT32_MIN is undefined behaviour");
+
+            if ( o == 0 ) {
+                throw DivideByZeroException();
+            }
+
+            if ( o == INT32_MIN || lValue == INT32_MIN ) {
+                throw ArithmeticException("Modulo by INT32_MIN is undefined behaviour");
+            }
 
             return lValue % o;
         }
 
         __CDS_NoDiscard __CDS_OptimalInline auto operator % ( int rValue ) const noexcept (false) -> Integer {
             int lValue = this->get();
-            if (rValue == 0 ) throw DivideByZeroException();
-            if (rValue == INT32_MIN || lValue == INT32_MIN ) throw ArithmeticException ("Modulo by INT32_MIN is undefined behaviour");
+            if (rValue == 0 ) {
+                throw DivideByZeroException();
+            }
+
+            if (rValue == INT32_MIN || lValue == INT32_MIN ) {
+                throw ArithmeticException("Modulo by INT32_MIN is undefined behaviour");
+            }
 
             return lValue % rValue;
         }
 
         __CDS_NoDiscard friend __CDS_OptimalInline auto operator % ( Integer const & value, Atomic const & o ) noexcept (false) -> Integer {
             int rVal = o.get();
-            if ( rVal == 0 ) throw DivideByZeroException();
-            if ( rVal == INT32_MIN || value == INT32_MIN ) throw ArithmeticException ("Modulo by INT32_MIN is undefined behaviour");
+
+            if ( rVal == 0 ) {
+                throw DivideByZeroException();
+            }
+
+            if ( rVal == INT32_MIN || value == INT32_MIN ) {
+                throw ArithmeticException("Modulo by INT32_MIN is undefined behaviour");
+            }
 
             return value % rVal;
         }
         __CDS_NoDiscard friend __CDS_OptimalInline auto operator % ( int value, Atomic const & o ) noexcept (false) -> Integer {
             int rVal = o.get();
-            if ( rVal == 0 ) throw DivideByZeroException();
-            if ( rVal == INT32_MIN || value == INT32_MIN ) throw ArithmeticException ("Modulo by INT32_MIN is undefined behaviour");
+
+            if ( rVal == 0 ) {
+                throw DivideByZeroException();
+            }
+
+            if ( rVal == INT32_MIN || value == INT32_MIN ) {
+                throw ArithmeticException("Modulo by INT32_MIN is undefined behaviour");
+            }
 
             return value % rVal;
         }
 
 
-        __CDS_NoDiscard __CDS_OptimalInline auto operator & ( Atomic const & o ) const noexcept -> Integer { return this->get() & o.get(); }
-        __CDS_NoDiscard __CDS_OptimalInline auto operator & ( Integer const & o ) const noexcept -> Integer { return this->get() & o; }
-        __CDS_NoDiscard __CDS_OptimalInline auto operator & ( int value ) const noexcept -> Integer { return this->get() & value; }
+        __CDS_NoDiscard __CDS_OptimalInline auto operator & ( Atomic const & o ) const noexcept -> Integer { return this->get() & o.get(); } // NOLINT(clion-misra-cpp2008-5-3-3)
+        __CDS_NoDiscard __CDS_OptimalInline auto operator & ( Integer const & o ) const noexcept -> Integer { return this->get() & o; } // NOLINT(clion-misra-cpp2008-5-3-3)
+        __CDS_NoDiscard __CDS_OptimalInline auto operator & ( int value ) const noexcept -> Integer { return this->get() & value; } // NOLINT(clion-misra-cpp2008-5-3-3)
 
-        __CDS_NoDiscard friend __CDS_OptimalInline auto operator & ( Integer const & value, Atomic const & o ) noexcept -> Integer { return value & o.get(); }
-        __CDS_NoDiscard friend __CDS_OptimalInline auto operator & ( int value, Atomic const & o ) noexcept -> Integer { return value & o.get(); }
+        __CDS_NoDiscard friend __CDS_OptimalInline auto operator & ( Integer const & value, Atomic const & o ) noexcept -> Integer { return value & o.get(); } // NOLINT(clion-misra-cpp2008-5-3-3)
+        __CDS_NoDiscard friend __CDS_OptimalInline auto operator & ( int value, Atomic const & o ) noexcept -> Integer { return value & o.get(); } // NOLINT(clion-misra-cpp2008-5-3-3)
 
 
         __CDS_NoDiscard __CDS_OptimalInline auto operator | ( Atomic const & o ) const noexcept -> Integer { return this->get() | o.get(); }
@@ -1689,8 +1856,13 @@ namespace cds {
         }
 
         __CDS_OptionalInline auto operator /= (int value) noexcept (false) -> Atomic & {
-            if ( value == 0 ) throw DivideByZeroException();
-            if ( value == INT32_MIN ) throw ArithmeticException ("Division by INT32_MIN is undefined behaviour");
+            if ( value == 0 ) {
+                throw DivideByZeroException();
+            }
+
+            if ( value == INT32_MIN ) {
+                throw ArithmeticException("Division by INT32_MIN is undefined behaviour");
+            }
 
             this->_access.lock();
 
@@ -1705,8 +1877,13 @@ namespace cds {
         }
 
         __CDS_OptionalInline auto operator %= (int value) noexcept (false) -> Atomic & {
-            if ( value == 0 ) throw DivideByZeroException();
-            if ( value == INT32_MIN ) throw ArithmeticException ("Division by INT32_MIN is undefined behaviour");
+            if ( value == 0 ) {
+                throw DivideByZeroException();
+            }
+
+            if ( value == INT32_MIN ) {
+                throw ArithmeticException("Division by INT32_MIN is undefined behaviour");
+            }
 
             this->_access.lock();
 
@@ -1777,8 +1954,13 @@ namespace cds {
         }
 
         __CDS_OptionalInline auto operator /= (Integer const & value) noexcept (false) -> Atomic & {
-            if ( value == 0 ) throw DivideByZeroException();
-            if ( value == INT32_MIN ) throw ArithmeticException ("Division by INT32_MIN is undefined behaviour");
+            if ( value == 0 ) {
+                throw DivideByZeroException();
+            }
+
+            if ( value == INT32_MIN ) {
+                throw ArithmeticException("Division by INT32_MIN is undefined behaviour");
+            }
 
             this->_access.lock();
 
@@ -1793,14 +1975,18 @@ namespace cds {
         }
 
         __CDS_OptionalInline auto operator %= (Integer const & value) noexcept (false) -> Atomic & {
-            if ( value == 0 ) throw DivideByZeroException();
+            if ( value == 0 ) {
+                throw DivideByZeroException();
+            }
 
             if ( this->_data == INT32_MIN ) {
                 this->_access.unlock();
                 throw ArithmeticException ("Division by INT32_MIN is undefined behaviour");
             }
 
-            if ( value == INT32_MIN ) throw ArithmeticException ("Modulo by INT32_MIN is undefined behaviour");
+            if ( value == INT32_MIN ) {
+                throw ArithmeticException("Modulo by INT32_MIN is undefined behaviour");
+            }
 
             this->_access.lock();
             this->_data %= value;
@@ -1872,8 +2058,13 @@ namespace cds {
 
         __CDS_OptionalInline auto operator /= (Atomic const & value) noexcept (false) -> Atomic & {
             auto rValue = value.get();
-            if ( rValue == 0 ) throw DivideByZeroException();
-            if ( rValue == INT32_MIN ) throw ArithmeticException ("Division by INT32_MIN is undefined behaviour");
+            if ( rValue == 0 ) {
+                throw DivideByZeroException();
+            }
+
+            if ( rValue == INT32_MIN ) {
+                throw ArithmeticException("Division by INT32_MIN is undefined behaviour");
+            }
 
             this->_access.lock();
 
@@ -1889,8 +2080,13 @@ namespace cds {
 
         __CDS_OptionalInline auto operator %= (Atomic const & value) noexcept (false) -> Atomic & {
             auto rValue = value.get();
-            if ( rValue == 0 ) throw DivideByZeroException();
-            if ( rValue == INT32_MIN ) throw ArithmeticException ("Modulo by INT32_MIN is undefined behaviour");
+            if ( rValue == 0 ) {
+                throw DivideByZeroException();
+            }
+
+            if ( rValue == INT32_MIN ) {
+                throw ArithmeticException("Modulo by INT32_MIN is undefined behaviour");
+            }
 
             this->_access.lock();
 
@@ -1974,6 +2170,6 @@ namespace cds {
 
 }
 
-__CDS_RegisterParseType(Integer)
+__CDS_RegisterParseType(Integer) // NOLINT(clion-misra-cpp2008-8-0-1)
 
 #endif //CDS_INTEGER_HPP

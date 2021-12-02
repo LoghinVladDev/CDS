@@ -18,18 +18,16 @@ namespace cds {
     template < typename T, typename ... Args >
     class Generator : public Object {
     private:
-        UniquePointer < T > pYieldedValue {nullptr};
-        UniquePointer < T > pToReturnValue {nullptr};
-        UniquePointer < Thread > pTaskThread {nullptr};
+        UniquePointer < T > pYieldedValue {nullptr}; // NOLINT(clion-misra-cpp2008-8-0-1)
+        UniquePointer < T > pToReturnValue {nullptr}; // NOLINT(clion-misra-cpp2008-8-0-1)
+        UniquePointer < Thread > pTaskThread {nullptr}; // NOLINT(clion-misra-cpp2008-8-0-1)
 
         Semaphore promiseObjectReady;
         Semaphore promiseObjectUsed;
-        Boolean::Atomic firstCall {true};
-        Boolean::Atomic lastCall {false};
-        Boolean::Atomic running {false};
-        Boolean::Atomic trap {false};
-
-    //    UniquePointer < std :: tuple < Args ... > > pArguments {nullptr};
+        Boolean::Atomic firstCall {true}; // NOLINT(clion-misra-cpp2008-8-0-1)
+        Boolean::Atomic lastCall {false}; // NOLINT(clion-misra-cpp2008-8-0-1)
+        Boolean::Atomic running {false}; // NOLINT(clion-misra-cpp2008-8-0-1)
+        Boolean::Atomic trap {false}; // NOLINT(clion-misra-cpp2008-8-0-1)
 
     protected:
         virtual auto task ( Args ... ) noexcept -> T = 0;
@@ -44,12 +42,12 @@ namespace cds {
             return this->yield ( std :: forward < T > ( value ), false );
         }
 
-        template < typename V = T, typename std :: enable_if < ! Type < V > :: copyConstructible && Type < V > :: defaultConstructible && Type < V > :: copyAssignable, int > :: type = 0 >
+        template < typename V = T, typename std :: enable_if < ! Type < V > :: copyConstructible && Type < V > :: defaultConstructible && Type < V > :: copyAssignable, int > :: type = 0 > // NOLINT(clion-misra-cpp2008-5-3-1)
         __CDS_OptimalInline auto yield ( T const & value ) noexcept ( noexcept ( T ( value ) ) ) -> void {
             return this->yield ( value, false );
         }
 
-        template < typename V = T, typename std :: enable_if < ! Type < V > :: moveConstructible && Type < V > :: defaultConstructible && Type < V > :: moveAssignable, int > :: type = 0 >
+        template < typename V = T, typename std :: enable_if < ! Type < V > :: moveConstructible && Type < V > :: defaultConstructible && Type < V > :: moveAssignable, int > :: type = 0 > // NOLINT(clion-misra-cpp2008-5-3-1)
         __CDS_MaybeUnused __CDS_OptimalInline auto yield ( T && value ) noexcept ( noexcept ( T ( std :: forward < T > ( value ) ) ) ) -> void {
             return this->yield ( std :: forward < T > ( value ), false );
         }
@@ -57,70 +55,86 @@ namespace cds {
     private:
         template < typename V = T, typename std :: enable_if < Type < V > :: copyConstructible, int > :: type = 0 >
         __CDS_MaybeUnused auto yield ( T const & value, bool isFinal ) noexcept ( noexcept ( T ( value ) ) ) -> void {
-            while ( this->trap );
+            while ( this->trap ) {
 
-            if ( ! this->firstCall )
+            }
+
+            if ( ! this->firstCall ) { // NOLINT(clion-misra-cpp2008-5-3-1)
                 this->promiseObjectUsed.wait();
-            else
+            } else {
                 this->firstCall = false;
+            }
 
             this->pYieldedValue = Memory :: instance().create < T > (value);
 
-            if ( isFinal )
+            if ( isFinal ) {
                 this->lastCall = true;
+            }
 
             this->promiseObjectReady.notify();
         }
 
         template < typename V = T, typename std :: enable_if < Type < V > :: moveConstructible, int > :: type = 0 >
         __CDS_MaybeUnused auto yield ( T && value, bool isFinal ) noexcept ( noexcept ( T ( std :: forward < T > ( value ) ) ) ) -> void {
-            while ( this->trap );
+            while ( this->trap ) {
 
-            if ( ! this->firstCall )
+            }
+
+            if ( ! this->firstCall ) { // NOLINT(clion-misra-cpp2008-5-3-1)
                 this->promiseObjectUsed.wait();
-            else
+            } else {
                 this->firstCall = false;
+            }
 
             this->pYieldedValue = Memory :: instance().create < T > ( std :: forward < T > (value) );
 
-            if ( isFinal )
+            if ( isFinal ) {
                 this->lastCall = true;
+            }
 
             this->promiseObjectReady.notify();
         }
 
-        template < typename V = T, typename std :: enable_if < ! Type < V > :: copyConstructible && Type < V > :: defaultConstructible && Type < V > :: copyAssignable, int > :: type = 0 >
+        template < typename V = T, typename std :: enable_if < ! Type < V > :: copyConstructible && Type < V > :: defaultConstructible && Type < V > :: copyAssignable, int > :: type = 0 > // NOLINT(clion-misra-cpp2008-5-3-1)
         __CDS_MaybeUnused auto yield ( T const & value, bool isFinal ) noexcept ( noexcept ( T ( value ) ) ) -> void {
-            while ( this->trap );
+            while ( this->trap ) {
 
-            if ( ! this->firstCall )
+            }
+
+            if ( ! this->firstCall ) { // NOLINT(clion-misra-cpp2008-5-3-1)
                 this->promiseObjectUsed.wait();
-            else
+            } else {
                 this->firstCall = false;
+            }
 
             this->pYieldedValue = Memory :: instance().create < T > ();
             * this->pYieldedValue = value;
 
-            if ( isFinal )
+            if ( isFinal ) {
                 this->lastCall = true;
+            }
 
             this->promiseObjectReady.notify();
         }
 
-        template < typename V = T, typename std :: enable_if < ! Type < V > :: moveConstructible && Type < V > :: defaultConstructible && Type < V > :: moveAssignable, int > :: type = 0 >
+        template < typename V = T, typename std :: enable_if < ! Type < V > :: moveConstructible && Type < V > :: defaultConstructible && Type < V > :: moveAssignable, int > :: type = 0 > // NOLINT(clion-misra-cpp2008-5-3-1)
         __CDS_MaybeUnused auto yield ( T && value, bool isFinal ) noexcept ( noexcept ( T ( std :: forward < T > ( value ) ) ) ) -> void {
-            while ( this->trap );
+            while ( this->trap ) {
 
-            if ( ! this->firstCall )
+            }
+
+            if ( ! this->firstCall ) { // NOLINT(clion-misra-cpp2008-5-3-1)
                 this->promiseObjectUsed.wait();
-            else
+            } else {
                 this->firstCall = false;
+            }
 
             this->pYieldedValue = Memory :: instance().create < T > ();
             * this->pYieldedValue = std :: forward < T > ( value );
 
-            if ( isFinal )
+            if ( isFinal ) {
                 this->lastCall = true;
+            }
 
             this->promiseObjectReady.notify();
         }
@@ -130,10 +144,11 @@ namespace cds {
             this->promiseObjectReady.wait();
             this->pToReturnValue = this->pYieldedValue;
 
-            if ( ! this->lastCall )
+            if ( ! this->lastCall ) { // NOLINT(clion-misra-cpp2008-5-3-1)
                 this->promiseObjectUsed.notify();
-            else
+            } else {
                 this->running = false;
+            }
 
             return this->pToReturnValue.get();
         }
@@ -165,8 +180,9 @@ namespace cds {
                         pGen(gen),
                         pData(nullptr) {
 
-                    if ( ! ignore )
+                    if ( ! ignore ) {
                         this->pData = this->pGen->singleCallReturnValue();
+                    }
                 }
 
                 operator T & () const noexcept { // NOLINT(google-explicit-constructor)
@@ -175,10 +191,11 @@ namespace cds {
 
                 auto value () const noexcept -> T & { return * this->pData; }
                 auto next () noexcept -> Iterator & {
-                    if ( this->pGen->running )
+                    if ( this->pGen->running ) {
                         this->pData = this->pGen->singleCallReturnValue();
-                    else
+                    } else {
                         this->pData = nullptr;
+                    }
 
                     return * this;
                 }
@@ -187,13 +204,13 @@ namespace cds {
                 inline auto operator ++ () noexcept -> Iterator & { return this->next(); }
                 inline auto operator ++ (int) const noexcept -> Iterator { auto copy = * this; this->next(); return copy; }
                 inline auto operator == (Iterator const & it) const noexcept -> bool { return this->equals(it); }
-                inline auto operator != (Iterator const & it) const noexcept -> bool { return ! this->equals(it); }
+                inline auto operator != (Iterator const & it) const noexcept -> bool { return ! this->equals(it); } // NOLINT(clion-misra-cpp2008-5-3-1)
 
                 auto equals ( Iterator const & it ) const noexcept -> bool { return this->pData == it.pData; }
             };
 
         private:
-            Generator * pGen { nullptr };
+            Generator * pGen { nullptr }; // NOLINT(clion-misra-cpp2008-8-0-1)
 
         public:
 
@@ -227,8 +244,8 @@ namespace cds {
     public:
 
         auto operator () ( Args && ... args ) noexcept -> IterableGenerator {
-            if ( ! this->running ) {
-                if ( ! this->pTaskThread.isNull() ) {
+            if ( ! this->running ) { // NOLINT(clion-misra-cpp2008-5-3-1)
+                if ( this->pTaskThread != nullptr ) {
                     this->pTaskThread->join();
                     this->pTaskThread.reset();
                 }
@@ -240,7 +257,7 @@ namespace cds {
         }
 
         ~Generator () noexcept override {
-            if ( ! this->pTaskThread.isNull() ) {
+            if ( this->pTaskThread != nullptr ) {
                 this->trap = true;
                 this->promiseObjectReady.wait();
                 this->promiseObjectUsed.notify();

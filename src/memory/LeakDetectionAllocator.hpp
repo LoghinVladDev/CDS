@@ -16,12 +16,12 @@ namespace cds {
         class __CDS_MaybeUnused AddressComparator : public Comparator < Byte * > {
         public:
             inline auto operator ()(Byte * const & pAddrA, Byte * const & pAddrB) const noexcept -> bool override {
-                return reinterpret_cast < AddressValueType > ( pAddrA ) < reinterpret_cast < AddressValueType > ( pAddrB );
+                return reinterpret_cast < AddressValueType const > ( pAddrA ) < reinterpret_cast < AddressValueType const > ( pAddrB );
             }
         };
 
         HashMap < Byte *, Size > addressSet;
-        Allocator * pDefaultAllocator = new DefaultHeapAllocator ();
+        Allocator * pDefaultAllocator = new DefaultHeapAllocator (); // NOLINT(clion-misra-cpp2008-18-4-1)
         Mutex opLock;
 
     public:
@@ -29,11 +29,11 @@ namespace cds {
 
             this->opLock.lock();
 
-            auto pAddress = malloc ( size );
+            auto pAddress = malloc ( size ); // NOLINT(clion-misra-cpp2008-18-4-1)
 
-            Memory::instance().replaceAllocator( this->pDefaultAllocator );
-            this->addressSet.emplace ( reinterpret_cast < Byte * > (pAddress), size );
-            Memory::instance().replaceAllocator( this );
+            (void) Memory::instance().replaceAllocator( this->pDefaultAllocator );
+            (void) this->addressSet.emplace ( reinterpret_cast < Byte * > (pAddress), size );
+            (void) Memory::instance().replaceAllocator( this );
 
             this->opLock.unlock();
 
@@ -44,9 +44,9 @@ namespace cds {
 
             this->opLock.lock();
 
-            Memory::instance().replaceAllocator( this->pDefaultAllocator );
-            this->addressSet.remove ( reinterpret_cast < Byte * > ( pAddress ) );
-            Memory::instance().replaceAllocator( this );
+            (void) Memory::instance().replaceAllocator( this->pDefaultAllocator );
+            (void) this->addressSet.remove ( reinterpret_cast < Byte * > ( pAddress ) );
+            (void) Memory::instance().replaceAllocator( this );
 
             free (pAddress);
 
@@ -54,14 +54,15 @@ namespace cds {
         }
 
         ~LeakDetectionAllocator() noexcept override {
-            Memory::instance().replaceAllocator( this->pDefaultAllocator );
+            (void) Memory::instance().replaceAllocator( this->pDefaultAllocator );
             if ( ! this->addressSet.empty() ) {
 
                 std :: cerr << "\t" << this->addressSet.size() << " addresses leaked\n";
-                for (auto const & item : this->addressSet)
+                for (auto const & item : this->addressSet) {
                     std :: cerr << "\t\t" << std :: hex << reinterpret_cast < AddressValueType > ( item.first() ) << std :: dec << ", " << item.second() << " bytes\n";
+                }
 
-                std :: cerr.flush();
+                (void) std :: cerr.flush();
             }
         }
     };

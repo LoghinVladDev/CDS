@@ -37,7 +37,7 @@ namespace cds {
 
     #endif
 
-    protected:
+    private:
         String _osPath;
 
     public:
@@ -62,9 +62,15 @@ namespace cds {
         }
 
         __CDS_NoDiscard auto equals(Object const & o) const noexcept -> bool override {
-            if ( this == & o ) return true;
+            if ( this == & o ) {
+                return true;
+            }
+
             auto p = dynamic_cast < decltype ( this ) > ( & o );
-            if ( p == nullptr ) return false;
+            if ( p == nullptr ) {
+                return false;
+            }
+
             return this->operator == (* p);
         }
 
@@ -117,14 +123,15 @@ namespace cds {
     #elif defined(__linux)
 
             struct stat64 fileStat {};
-            if ( stat64 ( path.cStr(), & fileStat ) != 0 )
+            if ( stat64 ( path.cStr(), & fileStat ) != 0 ) {
                 throw InvalidPath();
+            }
 
             char resolvedPath[PATH_MAX];
 
             __CDS_WarningSuppression_UnusedResult_SuppressEnable
 
-            realpath(path.cStr(), resolvedPath);
+            (void) realpath(path.cStr(), resolvedPath); // NOLINT(clion-misra-cpp2008-5-2-12)
 
             __CDS_WarningSuppression_UnusedResult_SuppressDisable
 
@@ -145,7 +152,7 @@ namespace cds {
 
         }
 
-        auto operator = (Path const &) noexcept -> Path & = default;
+        auto operator = (Path const &) noexcept -> Path & = default; // NOLINT(clion-misra-cpp2008-0-1-7)
         auto operator = (Path && path) noexcept -> Path & {
             if ( this == & path ) {
                 return * this;
@@ -177,8 +184,9 @@ namespace cds {
 
         __CDS_NoDiscard __CDS_OptimalInline auto parent () const noexcept(false) -> Path { // NOLINT(misc-no-recursion)
             auto parentPath = String (this->_osPath.substr(0, this->_osPath.findLast(Path::directorySeparator())));
-            if ( parentPath.empty() )
+            if ( parentPath.empty() ) {
                 parentPath = this->root().toString();
+            }
 
             return parentPath;
         }
@@ -197,16 +205,20 @@ namespace cds {
 
         __CDS_NoDiscard auto root () const noexcept -> Path { // NOLINT(misc-no-recursion)
             auto parent = this->parent();
-            if ( this->_osPath == parent._osPath )
+            if ( this->_osPath == parent._osPath ) {
                 return parent;
+            }
+
             return parent.root();
         }
 
         auto operator / (String const & f) const noexcept (false) -> Path {
             auto delimFiltered = [&]() -> String {
-                String c(f); c.forEach([&](String::ElementType & e){
-                    if (Path::possibleDirectorySeparators.contains(e))
+                String c(f);
+                (void) c.forEach([&](String::ElementType & e){
+                    if (Path::possibleDirectorySeparators.contains(e)) {
                         e = Path::directorySeparator();
+                    }
                 });
 
                 return c;
@@ -259,9 +271,14 @@ namespace cds {
         }
 
         __CDS_NoDiscard auto equals(Object const & o) const noexcept -> bool override {
-            if ( this == & o ) return true;
+            if ( this == & o ) {
+                return true;
+            }
+
             auto p = dynamic_cast < decltype (this) > ( & o );
-            if ( p == nullptr ) return false;
+            if ( p == nullptr ) {
+                return false;
+            }
 
             return this->operator==(* p);
         }
@@ -351,8 +368,9 @@ namespace cds {
 namespace cds {
 
     inline auto Path::walk(int depth) const noexcept (false) -> LinkedList<WalkEntry> { // NOLINT(misc-no-recursion)
-        if ( depth <= 0 )
+        if ( depth <= 0 ) {
             return {};
+        }
 
         WalkEntry currentDirEntry;
         LinkedList < WalkEntry > entries;
@@ -395,31 +413,34 @@ namespace cds {
     #elif defined(__linux)
 
         auto dir = opendir ( this->_osPath.cStr() );
-        if ( dir == nullptr )
+        if ( dir == nullptr ) {
             throw WalkNotADirectory();
+        }
 
         auto entry = readdir64(dir);
         while ( entry != nullptr ) {
-            if ( entry->d_type == DT_LNK ) {
+            if ( entry->d_type == DT_LNK ) { // NOLINT(clion-misra-cpp2008-5-0-4)
                 // do nothing
             }
-            if ( std::strcmp ( entry->d_name, "." ) == 0 || std::strcmp ( entry->d_name, ".." ) == 0 ) {
+            if ( std::strcmp ( entry->d_name, "." ) == 0 || std::strcmp ( entry->d_name, ".." ) == 0 ) { // NOLINT(clion-misra-cpp2008-5-2-12)
                 // do nothing
-            } else if ( entry->d_type == DT_DIR ) {
-                currentDirEntry.directories().pushBack(entry->d_name);
+            } else if ( entry->d_type == DT_DIR ) { // NOLINT(clion-misra-cpp2008-5-0-4)
+                (void) currentDirEntry.directories().pushBack(entry->d_name);
 
                 auto nestedEntries = Path(this->append(entry->d_name)).walk(depth - 1);
-                for ( auto & e : nestedEntries )
-                    entries.pushFront( e );
-            } else
-                currentDirEntry.files().pushBack(entry->d_name);
+                for ( auto & e : nestedEntries ) {
+                    (void) entries.pushFront(e);
+                }
+            } else {
+                (void) currentDirEntry.files().pushBack(entry->d_name);
+            }
 
 
             entry = readdir64(dir);
         }
 
-        closedir ( dir );
-        entries.pushBack(currentDirEntry);
+        (void) closedir ( dir );
+        (void) entries.pushBack(currentDirEntry);
 
     #else
 
@@ -527,7 +548,7 @@ namespace cds {
 
 #endif
 
-__CDS_RegisterParseType(Path)
+__CDS_RegisterParseType(Path) // NOLINT(clion-misra-cpp2008-8-0-1)
 
 
 #endif //CDS_PATH_H

@@ -39,7 +39,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                         return pos;
                     }
 
-                    template < typename A = T, typename B = Head, EnableIf < ! std :: is_same < A, B > :: value > = 0 >
+                    template < typename A = T, typename B = Head, EnableIf < ! std :: is_same < A, B > :: value > = 0 > // NOLINT(clion-misra-cpp2008-5-3-1)
                     constexpr static auto index () noexcept -> sint32 {
                         return IndexOfTypeInPackImpl < pos + 1, T, Rest ...>::index();
                     }
@@ -111,10 +111,11 @@ namespace cds {
         Index _activeTypeIndex { -1 };
 
         __CDS_OptimalInline static auto typesAsString () noexcept -> String {
-            if ( sizeof...(RemainingTypes) > 36 )
+            if ( sizeof...(RemainingTypes) > 36u ) {
                 return "Too Many Types in Union to deduce";
+            }
 
-    #define TYPES_AS_STR_CASE(_i) if ( i == _i ) types += String( utility :: TypeParseTraits < typename utility :: hidden :: unionImpl :: TypeAtIndexInPack < _i, FirstType, RemainingTypes ... > :: type > :: name ) + ", ";
+    #define TYPES_AS_STR_CASE(_i) if ( i == _i ) { types += String( utility :: TypeParseTraits < typename utility :: hidden :: unionImpl :: TypeAtIndexInPack < _i, FirstType, RemainingTypes ... > :: type > :: name ) + ", " ; }
 
     #define TYPES_AS_STR_CASE2(_i)          \
         else TYPES_AS_STR_CASE((_i))        \
@@ -125,17 +126,18 @@ namespace cds {
         TYPES_AS_STR_CASE2((_i) + 2)
 
             String types = "";
-            for ( sint32 i = 0; i < sizeof...(RemainingTypes) + 1; ++ i )
-                TYPES_AS_STR_CASE(0)
-                TYPES_AS_STR_CASE4(1)
-                TYPES_AS_STR_CASE4(5)
-                TYPES_AS_STR_CASE4(9)
-                TYPES_AS_STR_CASE4(13)
-                TYPES_AS_STR_CASE4(17)
-                TYPES_AS_STR_CASE4(21)
-                TYPES_AS_STR_CASE4(25)
-                TYPES_AS_STR_CASE4(29)
-                TYPES_AS_STR_CASE4(33)
+            for ( Size i = 0u; i < sizeof...(RemainingTypes) + 1llu; ++ i ) {
+                TYPES_AS_STR_CASE(0) // NOLINT(clion-misra-cpp2008-5-0-4)
+                TYPES_AS_STR_CASE4(1) // NOLINT(clion-misra-cpp2008-5-0-4)
+                TYPES_AS_STR_CASE4(5) // NOLINT(clion-misra-cpp2008-5-0-4)
+                TYPES_AS_STR_CASE4(9) // NOLINT(clion-misra-cpp2008-5-0-4)
+                TYPES_AS_STR_CASE4(13) // NOLINT(clion-misra-cpp2008-5-0-4)
+                TYPES_AS_STR_CASE4(17) // NOLINT(clion-misra-cpp2008-5-0-4)
+                TYPES_AS_STR_CASE4(21) // NOLINT(clion-misra-cpp2008-5-0-4)
+                TYPES_AS_STR_CASE4(25) // NOLINT(clion-misra-cpp2008-5-0-4)
+                TYPES_AS_STR_CASE4(29) // NOLINT(clion-misra-cpp2008-5-0-4)
+                TYPES_AS_STR_CASE4(33) // NOLINT(clion-misra-cpp2008-5-0-4)
+            }
 
     #undef TYPES_AS_STR_CASE
     #undef TYPES_AS_STR_CASE2
@@ -155,14 +157,14 @@ namespace cds {
 
         }
 
-        template < typename T, EnableIf < utility :: hidden :: unionImpl :: PackContains < T, FirstType, RemainingTypes ... > :: value && ! Type < T > :: isFundamental && Type < T > :: copyConstructible > = 0 >
+        template < typename T, EnableIf < utility :: hidden :: unionImpl :: PackContains < T, FirstType, RemainingTypes ... > :: value && ! Type < T > :: isFundamental && Type < T > :: copyConstructible > = 0 > // NOLINT(clion-misra-cpp2008-5-3-1)
         __CDS_OptimalInline Union ( T const & value ) noexcept :  // NOLINT(google-explicit-constructor)
                 pInstance ( Memory::instance().create < T > (value) ),
                 _activeTypeIndex ( utility :: hidden :: unionImpl :: IndexOfTypeInPack < T, FirstType, RemainingTypes ... > :: index() ) {
 
         }
 
-        template < typename T, EnableIf < utility :: hidden :: unionImpl :: PackContains < T, FirstType, RemainingTypes ... > :: value && ! Type < T > :: isFundamental && ! Type < T > :: copyConstructible && Type < T > :: defaultConstructible && Type < T > :: copyAssignable > = 0 >
+        template < typename T, EnableIf < utility :: hidden :: unionImpl :: PackContains < T, FirstType, RemainingTypes ... > :: value && ! Type < T > :: isFundamental && ! Type < T > :: copyConstructible && Type < T > :: defaultConstructible && Type < T > :: copyAssignable > = 0 > // NOLINT(clion-misra-cpp2008-5-3-1)
         __CDS_OptimalInline Union ( T const & value ) noexcept :  // NOLINT(google-explicit-constructor)
                 pInstance ( Memory::instance().create < T > () ),
                 _activeTypeIndex ( utility :: hidden :: unionImpl :: IndexOfTypeInPack < T, FirstType, RemainingTypes ... > :: index() ) {
@@ -170,14 +172,14 @@ namespace cds {
             * reinterpret_cast < T * > ( this->pInstance ) = value;
         }
 
-        template < typename T, EnableIf < utility :: hidden :: unionImpl :: PackContains < T, FirstType, RemainingTypes ... > :: value && ! Type < T > :: isFundamental && Type < T > :: moveConstructible > = 0 >
+        template < typename T, EnableIf < utility :: hidden :: unionImpl :: PackContains < T, FirstType, RemainingTypes ... > :: value && ! Type < T > :: isFundamental && Type < T > :: moveConstructible > = 0 > // NOLINT(clion-misra-cpp2008-5-3-1)
         __CDS_MaybeUnused __CDS_OptimalInline Union ( T && value ) noexcept :  // NOLINT(google-explicit-constructor, bugprone-forwarding-reference-overload)
                 pInstance ( Memory :: instance().create < T > ( std :: forward < T > ( value ) ) ),
                 _activeTypeIndex ( utility :: hidden :: unionImpl :: IndexOfTypeInPack < T, FirstType, RemainingTypes ... > :: index() ) {
 
         }
 
-        template < typename T, EnableIf < utility :: hidden :: unionImpl :: PackContains < T, FirstType, RemainingTypes ... > :: value && ! Type < T > :: isFundamental && ! Type < T > :: moveConstructible && Type < T > :: defaultConstructible && Type < T > :: moveAssignable > = 0 >
+        template < typename T, EnableIf < utility :: hidden :: unionImpl :: PackContains < T, FirstType, RemainingTypes ... > :: value && ! Type < T > :: isFundamental && ! Type < T > :: moveConstructible && Type < T > :: defaultConstructible && Type < T > :: moveAssignable > = 0 > // NOLINT(clion-misra-cpp2008-5-3-1)
         __CDS_MaybeUnused __CDS_OptimalInline Union ( T && value ) noexcept :  // NOLINT(google-explicit-constructor, bugprone-forwarding-reference-overload)
                 pInstance ( Memory :: instance().create < T > () ),
                 _activeTypeIndex ( utility :: hidden :: unionImpl :: IndexOfTypeInPack < T, FirstType, RemainingTypes ... > :: index() ) {
@@ -187,8 +189,9 @@ namespace cds {
 
 
     #define UNION_DELETE(_i)                    \
-            if ( this->_activeTypeIndex == _i ) \
-                Memory :: instance().destroy ( reinterpret_cast < typename utility :: hidden :: unionImpl :: TypeAtIndexInPack < _i, FirstType, RemainingTypes ... > :: type * > ( this->pInstance ) );
+            if ( this->_activeTypeIndex == _i ) { \
+                Memory :: instance().destroy ( reinterpret_cast < typename utility :: hidden :: unionImpl :: TypeAtIndexInPack < _i, FirstType, RemainingTypes ... > :: type * > ( this->pInstance ) ); \
+            }
 
     #define UNION_DELETE2(_i)       \
             else UNION_DELETE(_i)   \
@@ -218,7 +221,9 @@ namespace cds {
         }
 
         __CDS_OptionalInline auto operator = ( Union const & value ) noexcept (false) -> Union & {
-            if ( this == & value ) return * this;
+            if ( this == & value ) {
+                return * this;
+            }
 
             UNION_DELETE36
 
@@ -234,8 +239,9 @@ namespace cds {
                 this->pInstance = Memory :: instance().create < Type ## _i > ();                                                                            \
                 * reinterpret_cast < Type ## _i * > ( this->pInstance ) = * reinterpret_cast < Type ## _i const * > ( value.pInstance );                    \
                 this->_activeTypeIndex = _i;                                                                                                                \
-            } else                                                                                                                                          \
+            } else {                                                                                                                                        \
                 throw TypeException ( String::f("Type '%s' is not copyable", utility :: TypeParseTraits < Type ## _i > :: name) );                          \
+            }                                                                                                                                               \
         }
 
             UNION_COPY(0)
@@ -306,22 +312,30 @@ namespace cds {
         UNION_COMPARE2(_i)      \
         UNION_COMPARE2((_i) + 2)
 
-        template < EnableIf < sizeof ... (RemainingTypes) <= 36 > = 0 >
+        template < EnableIf < sizeof ... (RemainingTypes) <= 36u > = 0 >
         __CDS_NoDiscard __CDS_OptionalInline auto operator == ( Union const & obj ) const noexcept -> bool {
-            if ( this == & obj ) return true;
-            if ( this->_activeTypeIndex != obj._activeTypeIndex ) return false;
-            if ( this->_activeTypeIndex == -1 ) return true;
+            if ( this == & obj ) {
+                return true;
+            }
 
-            UNION_COMPARE(0)
-            UNION_COMPARE4(1)
-            UNION_COMPARE4(5)
-            UNION_COMPARE4(9)
-            UNION_COMPARE4(13)
-            UNION_COMPARE4(17)
-            UNION_COMPARE4(21)
-            UNION_COMPARE4(25)
-            UNION_COMPARE4(29)
-            UNION_COMPARE4(33)
+            if ( this->_activeTypeIndex != obj._activeTypeIndex ) {
+                return false;
+            }
+
+            if ( this->_activeTypeIndex == -1 ) {
+                return true;
+            }
+
+            UNION_COMPARE(0) // NOLINT(clion-misra-cpp2008-6-4-1,clion-misra-cpp2008-5-3-1)
+            UNION_COMPARE4(1) // NOLINT(clion-misra-cpp2008-6-4-1,clion-misra-cpp2008-5-3-1)
+            UNION_COMPARE4(5) // NOLINT(clion-misra-cpp2008-6-4-1,clion-misra-cpp2008-5-3-1)
+            UNION_COMPARE4(9) // NOLINT(clion-misra-cpp2008-6-4-1,clion-misra-cpp2008-5-3-1)
+            UNION_COMPARE4(13) // NOLINT(clion-misra-cpp2008-6-4-1,clion-misra-cpp2008-5-3-1)
+            UNION_COMPARE4(17) // NOLINT(clion-misra-cpp2008-6-4-1,clion-misra-cpp2008-5-3-1)
+            UNION_COMPARE4(21) // NOLINT(clion-misra-cpp2008-6-4-1,clion-misra-cpp2008-5-3-1)
+            UNION_COMPARE4(25) // NOLINT(clion-misra-cpp2008-6-4-1,clion-misra-cpp2008-5-3-1)
+            UNION_COMPARE4(29) // NOLINT(clion-misra-cpp2008-6-4-1,clion-misra-cpp2008-5-3-1)
+            UNION_COMPARE4(33) // NOLINT(clion-misra-cpp2008-6-4-1,clion-misra-cpp2008-5-3-1)
 
             return false;
         }
@@ -331,7 +345,9 @@ namespace cds {
     #undef UNION_COMPARE
 
         __CDS_MaybeUnused __CDS_OptionalInline auto operator = ( Union && value ) noexcept -> Union & {
-            if ( this == & value ) return * this;
+            if ( this == & value ) {
+                return * this;
+            }
 
             UNION_DELETE36
 
@@ -341,7 +357,7 @@ namespace cds {
             return * this;
         }
 
-        template < typename T, EnableIf < utility :: hidden :: unionImpl :: PackContains < T, FirstType, RemainingTypes ... > :: value && Type < T > :: isFundamental && sizeof ... (RemainingTypes) <= 36 > = 0 >
+        template < typename T, EnableIf < utility :: hidden :: unionImpl :: PackContains < T, FirstType, RemainingTypes ... > :: value && Type < T > :: isFundamental && sizeof ... (RemainingTypes) <= 36u > = 0 >
         __CDS_OptionalInline auto operator = ( T value ) noexcept -> Union & {
 
             UNION_DELETE36
@@ -352,7 +368,7 @@ namespace cds {
             return * this;
         }
 
-        template < typename T, EnableIf < utility :: hidden :: unionImpl :: PackContains < T, FirstType, RemainingTypes ... > :: value && ! Type < T > :: isFundamental && Type < T > :: copyConstructible > = 0 >
+        template < typename T, EnableIf < utility :: hidden :: unionImpl :: PackContains < T, FirstType, RemainingTypes ... > :: value && ! Type < T > :: isFundamental && Type < T > :: copyConstructible > = 0 > // NOLINT(clion-misra-cpp2008-5-3-1)
         __CDS_OptionalInline auto operator = ( T const & value ) noexcept -> Union & {
 
             UNION_DELETE36
@@ -363,7 +379,7 @@ namespace cds {
             return * this;
         }
 
-        template < typename T, EnableIf < utility :: hidden :: unionImpl :: PackContains < T, FirstType, RemainingTypes ... > :: value && ! Type < T > :: isFundamental && ! Type < T > :: copyConstructible && Type < T > :: defaultConstructible && Type < T > :: copyAssignable > = 0 >
+        template < typename T, EnableIf < utility :: hidden :: unionImpl :: PackContains < T, FirstType, RemainingTypes ... > :: value && ! Type < T > :: isFundamental && ! Type < T > :: copyConstructible && Type < T > :: defaultConstructible && Type < T > :: copyAssignable > = 0 > // NOLINT(clion-misra-cpp2008-5-3-1)
         __CDS_OptionalInline auto operator = ( T const & value ) noexcept -> Union & {
 
             UNION_DELETE36
@@ -375,7 +391,7 @@ namespace cds {
             return * this;
         }
 
-        template < typename T, EnableIf < utility :: hidden :: unionImpl :: PackContains < T, FirstType, RemainingTypes ... > :: value && ! Type < T > :: isFundamental && Type < T > :: moveConstructible > = 0 >
+        template < typename T, EnableIf < utility :: hidden :: unionImpl :: PackContains < T, FirstType, RemainingTypes ... > :: value && ! Type < T > :: isFundamental && Type < T > :: moveConstructible > = 0 > // NOLINT(clion-misra-cpp2008-5-3-1)
         __CDS_MaybeUnused __CDS_OptionalInline auto operator = ( T && value ) noexcept -> Union & {
 
             UNION_DELETE36
@@ -386,7 +402,7 @@ namespace cds {
             return * this;
         }
 
-        template < typename T, EnableIf < utility :: hidden :: unionImpl :: PackContains < T, FirstType, RemainingTypes ... > :: value && ! Type < T > :: isFundamental && ! Type < T > :: moveConstructible && Type < T > :: defaultConstructible && Type < T > :: moveAssignable > = 0 >
+        template < typename T, EnableIf < utility :: hidden :: unionImpl :: PackContains < T, FirstType, RemainingTypes ... > :: value && ! Type < T > :: isFundamental && ! Type < T > :: moveConstructible && Type < T > :: defaultConstructible && Type < T > :: moveAssignable > = 0 > // NOLINT(clion-misra-cpp2008-5-3-1)
         __CDS_MaybeUnused __CDS_OptionalInline auto operator = ( T && value ) noexcept -> Union & {
 
             UNION_DELETE36
@@ -404,15 +420,20 @@ namespace cds {
     #undef UNION_DELETE36
 
         __CDS_NoDiscard __CDS_OptimalInline auto equals ( Object const & object ) const noexcept -> bool override {
-            if ( this == & object ) return true;
-            auto p = dynamic_cast < decltype ( this ) > ( & object );
-            if ( p == nullptr ) return false;
+            if ( this == & object ) {
+                return true;
+            }
+
+            auto p = dynamic_cast < Union < FirstType, RemainingTypes ... > const * > ( & object );
+            if ( p == nullptr ) {
+                return false;
+            }
 
             return this->operator == ( * p );
         }
 
         template < typename T >
-        operator T () noexcept {
+        operator T () noexcept { // NOLINT(google-explicit-constructor)
             return this->template get<T>();
         }
 
@@ -421,17 +442,19 @@ namespace cds {
             auto typeNames = Union :: typesAsString();
             constexpr auto typeIndex = utility :: hidden :: unionImpl :: IndexOfTypeInPack < T, FirstType, RemainingTypes ... > :: index();
 
-            if ( this->_activeTypeIndex == -1 ) throw TypeException (
-                    "No Assigned Value to Union, no Active Type"
-                );
+            if ( this->_activeTypeIndex == -1 ) {
+                throw TypeException("No Assigned Value to Union, no Active Type");
+            }
 
-            if ( this->_activeTypeIndex != typeIndex ) throw TypeException (
-                    String :: f (
+            if ( this->_activeTypeIndex != typeIndex ) {
+                throw TypeException (
+                    String :: f ( // NOLINT(clion-misra-cpp2008-0-1-7)
                         "Type '%s' is the current type, cannot convert to '%s'",
                         typeNames.split(",")[this->_activeTypeIndex].trim().cStr(),
                         Type < T > :: name()
                     )
                 );
+            }
 
             return * reinterpret_cast < T * > ( this->pInstance );
         }
@@ -441,17 +464,19 @@ namespace cds {
             auto typeNames = Union :: typesAsString();
             constexpr auto typeIndex = utility :: hidden :: unionImpl :: IndexOfTypeInPack < T, FirstType, RemainingTypes ... > :: index();
 
-            if ( this->_activeTypeIndex == -1 ) throw TypeException (
-                    "No Assigned Value to Union, no Active Type"
-                );
+            if ( this->_activeTypeIndex == -1 ) {
+                throw TypeException("No Assigned Value to Union, no Active Type");
+            }
 
-            if ( this->_activeTypeIndex != typeIndex ) throw TypeException (
-                    String :: f (
+            if ( this->_activeTypeIndex != typeIndex ) {
+                throw TypeException (
+                    String :: f ( // NOLINT(clion-misra-cpp2008-0-1-7)
                         "Type '%s' is the current type, cannot convert to '%s'",
                         typeNames.split(",")[this->_activeTypeIndex].trim().cStr(),
                         Type < T > :: name()
                     )
                 );
+            }
 
             return * reinterpret_cast < T * > ( this->pInstance );
         }
@@ -465,7 +490,7 @@ namespace cds {
         template < typename T, EnableIf < std :: is_same < T, void > :: value > = 0 >
         constexpr static auto buildSafeDereferenceWrapper ( T * addr __CDS_MaybeUnused ) noexcept -> int  { return 0; }
 
-        template < typename T, EnableIf < ! std :: is_same < T, void > :: value > = 0 >
+        template < typename T, EnableIf < ! std :: is_same < T, void > :: value > = 0 > // NOLINT(clion-misra-cpp2008-5-3-1)
         constexpr static auto buildSafeDereferenceWrapper ( T * addr ) noexcept -> T & { return * addr; }
 
     public:
@@ -501,7 +526,9 @@ namespace cds {
         TYPE_AS_STRING4(33, _typename, _valueAsString)
 
         __CDS_NoDiscard __CDS_OptionalInline auto toString () const noexcept -> String override {
-            if ( sizeof ... (RemainingTypes) >= 36 ) return "Union { <unable to determine type data due to hardcoded limit> };";
+            if ( sizeof ... (RemainingTypes) >= 36u ) {
+                return "Union { <unable to determine type data due to hardcoded limit> };";
+            }
 
             StringLiteral activeTypeName = nullptr; String valAsStr;
             TYPE_AS_STRING36(activeTypeName, valAsStr)
@@ -532,7 +559,7 @@ namespace cds {
 
 __CDS_WarningSuppression_UnsafeDeleteVoidPtr_SuppressDisable
 
-namespace cds {
+namespace cds { // NOLINT(modernize-concat-nested-namespaces)
     namespace utility {
 
         template< typename FirstType, typename ... RemainingTypes >

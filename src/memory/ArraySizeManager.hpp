@@ -43,16 +43,17 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces) c++ 14 and lower d
                     };
 
                     struct Partition {
-                        Record * partition = nullptr;
-                        Size size = 0;
-                        Size capacity = 0;
+                        Record * partition = nullptr; // NOLINT(clion-misra-cpp2008-11-0-1)
+                        Size size = 0u; // NOLINT(clion-misra-cpp2008-11-0-1)
+                        Size capacity = 0u; // NOLINT(clion-misra-cpp2008-11-0-1)
 
                         inline auto enlarge ( Size required ) noexcept -> void {
-                            Size newCap = std :: max ( 2 * this->capacity, required + this->size );
-                            auto newPartition = new Record [ newCap ];
+                            Size newCap = std :: max ( 2u * this->capacity, required + this->size );
+                            auto newPartition = new Record [ newCap ]; // NOLINT(clion-misra-cpp2008-18-4-1)
 
-                            if ( this->partition != nullptr )
-                                std :: memcpy ( newPartition, this->partition, sizeof(Record) * this->size );
+                            if ( this->partition != nullptr ) {
+                                (void) std :: memcpy(newPartition, this->partition, sizeof(Record) * this->size);
+                            }
 
                             delete [] this->partition;
                             this->partition = newPartition;
@@ -77,7 +78,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces) c++ 14 and lower d
 
         #if defined(__CDS_Platform_Linux)
 
-                        pthread_mutex_init( & this->opLock, nullptr );
+                        (void) pthread_mutex_init( & this->opLock, nullptr );
 
         #elif defined(__CDS_Platform_Microsoft_Windows)
 
@@ -92,18 +93,19 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces) c++ 14 and lower d
                         Partition & partition = this->pSizeDistribution[ address % __CDS_Memory_ArrayManagerCacheRange ];
 
         #if defined(__CDS_Platform_Linux)
-                        pthread_mutex_lock ( & this->opLock );
+                        (void) pthread_mutex_lock ( & this->opLock );
         #elif defined(__CDS_Platform_Microsoft_Windows)
                         EnterCriticalSection ( & this->criticalSection );
         #endif
 
-                        if ( partition.size >= partition.capacity )
-                            partition.enlarge( 1 );
+                        if ( partition.size >= partition.capacity ) {
+                            partition.enlarge(1u);
+                        }
 
                         partition.partition[ partition.size ++ ] = { address, size };
 
         #if defined(__CDS_Platform_Linux)
-                        pthread_mutex_unlock ( & this->opLock );
+                        (void) pthread_mutex_unlock ( & this->opLock );
         #elif defined(__CDS_Platform_Microsoft_Windows)
                         LeaveCriticalSection( & this->criticalSection );
         #endif
@@ -112,30 +114,32 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces) c++ 14 and lower d
                     }
 
                     inline auto load ( Byte const * pAddress ) noexcept -> Size {
-                        static Size loadCount = 0;
+                        static Size loadCount = 0u;
 
-                        const auto address = reinterpret_cast < AddressValueType > ( pAddress );
+                        const auto address = reinterpret_cast < AddressValueType const > ( pAddress );
                         Partition & partition = this->pSizeDistribution[ address % __CDS_Memory_ArrayManagerCacheRange ];
 
         #if defined(__CDS_Platform_Linux)
-                        pthread_mutex_lock ( & this->opLock );
+                        (void) pthread_mutex_lock ( & this->opLock );
         #elif defined(__CDS_Platform_Microsoft_Windows)
                         EnterCriticalSection ( & this->criticalSection );
         #endif
 
-                        Size arraySize = 0;
+                        Size arraySize = 0u;
 
-                        for ( Size i = 0; i < partition.size; ++ i )
+                        for ( Size i = 0u; i < partition.size; ++ i ) {
                             if ( partition.partition[i].address == address ) {
                                 arraySize = exchange( partition.partition[i].size, 0 );
                                 break;
                             }
+                        }
 
-                        if ( loadCount + 1 % __CDS_Memory_ArrayManagerCacheLifetimeCycles == 0 )
-                            this->cleanRecords ();
+                        if ( ( loadCount + 1u ) % static_cast < Size > ( __CDS_Memory_ArrayManagerCacheLifetimeCycles ) == 0u ) {
+                            this->cleanRecords();
+                        }
 
         #if defined(__CDS_Platform_Linux)
-                        pthread_mutex_unlock ( & this->opLock );
+                        (void) pthread_mutex_unlock ( & this->opLock );
         #elif defined(__CDS_Platform_Microsoft_Windows)
                         LeaveCriticalSection( & this->criticalSection );
         #endif
@@ -145,12 +149,14 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces) c++ 14 and lower d
 
                     inline auto cleanRecords () noexcept -> void {
                         for ( auto & partition : this->pSizeDistribution ) {
-                            auto pNewRecordArea = new Record [ partition.size ];
-                            Size newSize = 0;
+                            auto pNewRecordArea = new Record [ partition.size ]; // NOLINT(clion-misra-cpp2008-18-4-1)
+                            Size newSize = 0u;
 
-                            for ( Size i = 0; i < partition.size; ++ i )
-                                if ( partition.partition[i].size > 0 )
+                            for ( Size i = 0u; i < partition.size; ++ i ) {
+                                if ( partition.partition[i].size > 0u ) {
                                     pNewRecordArea [ newSize ++ ] = partition.partition[i];
+                                }
+                            }
 
                             delete [] partition.partition;
                             partition.partition = pNewRecordArea;
@@ -160,12 +166,13 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces) c++ 14 and lower d
                     }
 
                     ~ArraySizeManager() noexcept {
-                        for ( auto & p : this->pSizeDistribution )
+                        for ( auto & p : this->pSizeDistribution ) {
                             delete [] p.partition;
+                        }
 
         #if defined(__CDS_Platform_Linux)
 
-                        pthread_mutex_destroy( & this->opLock );
+                        (void) pthread_mutex_destroy( & this->opLock );
 
         #elif defined(__CDS_Platform_Microsoft_Windows)
 

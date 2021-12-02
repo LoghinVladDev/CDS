@@ -310,10 +310,10 @@ namespace cds {
 
                 Node (Node && pattern) noexcept :
                         Object (pattern),
-                        _isEndState(Utility::exchange(pattern._isEndState, false)),
-                        _minRepCount(Utility::exchange(pattern._minRepCount, 1)),
-                        _maxRepCount(Utility::exchange(pattern._maxRepCount, 1)),
-                        _debugStateIndex(Utility::exchange(pattern._debugStateIndex, 0)),
+                        _isEndState(exchange(pattern._isEndState, false)),
+                        _minRepCount(exchange(pattern._minRepCount, 1)),
+                        _maxRepCount(exchange(pattern._maxRepCount, 1)),
+                        _debugStateIndex(exchange(pattern._debugStateIndex, 0)),
                         _nextStates( std::move ( pattern._nextStates ) ) {
 
                 }

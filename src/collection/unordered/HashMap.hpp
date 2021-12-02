@@ -14,9 +14,10 @@ namespace cds {
             UniqueIdentifiable< K > &&
             HashCalculatorHasBoundaryFunction< H >
     ) class HashMap : public Map<K, V> {
-    public:
+    private:
         __CDS_NoUniqueAddress H hashCalculator;
 
+    public:
         using Key                                       = typename Map<K, V>::Key;
         using KeyReference            __CDS_MaybeUnused = typename Map<K, V>::KeyReference;
         using KeyConstReference                         = typename Map<K, V>::KeyConstReference;
@@ -63,13 +64,15 @@ namespace cds {
                 while (
                         this->_bucketIndex < this->_pMap->hashCalculator.getBoundary() &&
                         this->_pMap->pBuckets[ this->_bucketIndex ].empty ()
-                )
+                ) {
                     ++ this->_bucketIndex;
+                }
 
-                if ( this->_bucketIndex < this->_pMap->hashCalculator.getBoundary() )
+                if ( this->_bucketIndex < this->_pMap->hashCalculator.getBoundary() ) {
                     this->_bucketIterator = this->_pMap->pBuckets[ this->_bucketIndex ].begin();
-                else
+                } else {
                     this->_bucketIterator = this->_pMap->pBuckets[ this->_pMap->hashCalculator.getBoundary() - 1 ].end();
+                }
             }
 
         public:
@@ -87,8 +90,9 @@ namespace cds {
             __CDS_cpplang_ConstexprDestructor ~HashMapDelegateForwardIterator () noexcept override = default;
 
             __CDS_OptionalInline auto next () noexcept -> HashMapDelegateForwardIterator & override {
-                if ( this->_bucketIndex >= this->_pMap->hashCalculator.getBoundary() )
+                if ( this->_bucketIndex >= this->_pMap->hashCalculator.getBoundary() ) {
                     return * this;
+                }
 
                 ++ this->_bucketIterator;
 
@@ -105,7 +109,10 @@ namespace cds {
             }
 
             __CDS_OptimalInline auto equals ( DelegateIterator const & it ) const noexcept -> bool override {
-                if ( this == & it ) return true;
+                if ( this == & it ) {
+                    return true;
+                }
+
                 auto p = reinterpret_cast < decltype ( this ) > ( & it );
 
                 return
@@ -129,13 +136,15 @@ namespace cds {
                 while (
                         this->_bucketIndex < this->_pMap->hashCalculator.getBoundary() &&
                         this->_pMap->pBuckets[ this->_bucketIndex ].empty ()
-                )
+                ) {
                     ++ this->_bucketIndex;
+                }
 
-                if ( this->_bucketIndex < this->_pMap->hashCalculator.getBoundary() )
+                if ( this->_bucketIndex < this->_pMap->hashCalculator.getBoundary() ) {
                     this->_bucketIterator = this->_pMap->pBuckets[ this->_bucketIndex ].cbegin();
-                else
+                } else {
                     this->_bucketIterator = this->_pMap->pBuckets[ this->_pMap->hashCalculator.getBoundary() - 1 ].cend();
+                }
             }
 
         public:
@@ -153,8 +162,9 @@ namespace cds {
             __CDS_cpplang_ConstexprDestructor ~HashMapDelegateForwardConstIterator () noexcept override = default;
 
             __CDS_OptionalInline auto next () noexcept -> HashMapDelegateForwardConstIterator & override {
-                if ( this->_bucketIndex >= this->_pMap->hashCalculator.getBoundary() )
+                if ( this->_bucketIndex >= this->_pMap->hashCalculator.getBoundary() ) {
                     return * this;
+                }
 
                 ++ this->_bucketIterator;
 
@@ -171,7 +181,10 @@ namespace cds {
             }
 
             __CDS_OptimalInline auto equals ( DelegateConstIterator const & it ) const noexcept -> bool override {
-                if ( this == & it ) return true;
+                if ( this == & it ) {
+                    return true;
+                }
+
                 auto p = reinterpret_cast < decltype ( this ) > ( & it );
 
                 return
@@ -195,13 +208,15 @@ namespace cds {
                 while (
                         this->_bucketIndex > -1 &&
                         this->_pMap->pBuckets[ this->_bucketIndex ].empty ()
-                )
+                ) {
                     -- this->_bucketIndex;
+                }
 
-                if ( this->_bucketIndex > - 1 )
+                if ( this->_bucketIndex > - 1 ) {
                     this->_bucketIterator = this->_pMap->pBuckets[ this->_bucketIndex ].rbegin();
-                else
+                } else {
                     this->_bucketIterator = this->_pMap->pBuckets[ 0 ].rend();
+                }
             }
 
         public:
@@ -219,8 +234,9 @@ namespace cds {
             __CDS_cpplang_ConstexprDestructor ~HashMapDelegateBackwardIterator () noexcept override = default;
 
             __CDS_OptionalInline auto next () noexcept -> HashMapDelegateBackwardIterator & override {
-                if ( this->_bucketIndex < 0 )
+                if ( this->_bucketIndex < 0 ) {
                     return * this;
+                }
 
                 ++ this->_bucketIterator;
 
@@ -237,7 +253,10 @@ namespace cds {
             }
 
             __CDS_OptimalInline auto equals ( DelegateIterator const & it ) const noexcept -> bool override {
-                if ( this == & it ) return true;
+                if ( this == & it ) {
+                    return true;
+                }
+
                 auto p = reinterpret_cast < decltype ( this ) > ( & it );
 
                 return
@@ -261,13 +280,15 @@ namespace cds {
                 while (
                         this->_bucketIndex > -1 &&
                         this->_pMap->pBuckets[ this->_bucketIndex ].empty ()
-                )
+                ) {
                     -- this->_bucketIndex;
+                }
 
-                if ( this->_bucketIndex > - 1 )
+                if ( this->_bucketIndex > - 1 ) {
                     this->_bucketIterator = this->_pMap->pBuckets[ this->_bucketIndex ].crbegin();
-                else
+                } else {
                     this->_bucketIterator = this->_pMap->pBuckets[ 0 ].crend();
+                }
             }
 
         public:
@@ -285,8 +306,9 @@ namespace cds {
             __CDS_cpplang_ConstexprDestructor ~HashMapDelegateBackwardConstIterator () noexcept override = default;
 
             __CDS_OptionalInline auto next () noexcept -> HashMapDelegateBackwardConstIterator & override {
-                if ( this->_bucketIndex < 0 )
+                if ( this->_bucketIndex < 0 ) {
                     return * this;
+                }
 
                 ++ this->_bucketIterator;
 
@@ -303,7 +325,10 @@ namespace cds {
             }
 
             __CDS_OptimalInline auto equals ( DelegateConstIterator const & it ) const noexcept -> bool override {
-                if ( this == & it ) return true;
+                if ( this == & it ) {
+                    return true;
+                }
+
                 auto p = reinterpret_cast < decltype ( this ) > ( & it );
 
                 return
@@ -321,56 +346,68 @@ namespace cds {
 
         __CDS_OptimalInline auto delegateIterator ( DelegateIteratorRequestType requestType ) noexcept -> UniquePointer < DelegateIterator > override {
             switch ( requestType ) {
-                case DelegateIteratorRequestType :: FORWARD_BEGIN:
+                case DelegateIteratorRequestType :: FORWARD_BEGIN: // NOLINT(clion-misra-cpp2008-6-4-5)
                     return Memory :: instance () . create < HashMapDelegateForwardIterator > ( this, true );
-                case DelegateIteratorRequestType :: FORWARD_END:
+                case DelegateIteratorRequestType :: FORWARD_END: // NOLINT(clion-misra-cpp2008-6-4-5)
                     return Memory :: instance () . create < HashMapDelegateForwardIterator > ( this, false );
-                case DelegateIteratorRequestType :: BACKWARD_BEGIN:
+                case DelegateIteratorRequestType :: BACKWARD_BEGIN: // NOLINT(clion-misra-cpp2008-6-4-5)
                     return Memory :: instance () . create < HashMapDelegateBackwardIterator > ( this, true );
-                case DelegateIteratorRequestType :: BACKWARD_END:
+                case DelegateIteratorRequestType :: BACKWARD_END: // NOLINT(clion-misra-cpp2008-6-4-5)
                     return Memory :: instance () . create < HashMapDelegateBackwardIterator > ( this, false );
-                default:
+                default: // NOLINT(clion-misra-cpp2008-6-4-5)
                     return nullptr;
             }
         }
 
         __CDS_OptimalInline auto delegateConstIterator ( DelegateIteratorRequestType requestType ) const noexcept -> UniquePointer < DelegateConstIterator > override {
             switch ( requestType ) {
-                case DelegateIteratorRequestType :: FORWARD_BEGIN:
+                case DelegateIteratorRequestType :: FORWARD_BEGIN: // NOLINT(clion-misra-cpp2008-6-4-5)
                     return Memory :: instance () . create < HashMapDelegateForwardConstIterator > ( this, true );
-                case DelegateIteratorRequestType :: FORWARD_END:
+                case DelegateIteratorRequestType :: FORWARD_END: // NOLINT(clion-misra-cpp2008-6-4-5)
                     return Memory :: instance () . create < HashMapDelegateForwardConstIterator > ( this, false );
-                case DelegateIteratorRequestType :: BACKWARD_BEGIN:
+                case DelegateIteratorRequestType :: BACKWARD_BEGIN: // NOLINT(clion-misra-cpp2008-6-4-5)
                     return Memory :: instance () . create < HashMapDelegateBackwardConstIterator > ( this, true );
-                case DelegateIteratorRequestType :: BACKWARD_END:
+                case DelegateIteratorRequestType :: BACKWARD_END: // NOLINT(clion-misra-cpp2008-6-4-5)
                     return Memory :: instance () . create < HashMapDelegateBackwardConstIterator > ( this, false );
-                default:
+                default: // NOLINT(clion-misra-cpp2008-6-4-5)
                     return nullptr;
             }
         }
 
     public:
         auto operator == (HashMap const & o) const noexcept -> bool {
-            if ( this == & o ) return true;
-            if ( this->size() != o.size() ) return false;
+            if ( this == & o ) {
+                return true;
+            }
 
-            for (
-                    auto
+            if ( this->size() != o.size() ) {
+                return false;
+            }
+
+            for ( // NOLINT(clion-misra-cpp2008-6-5-1)
+                    auto // NOLINT(clion-misra-cpp2008-8-0-1)
                         a = this->begin(), aEnd = this->end(),
                         b = o.begin(), bEnd = o.end();
                     a != aEnd && b != bEnd;
-                    ++ a, ++ b
-            )
-                if ( ! Type < Entry > :: compare ( * a, * b ) )
+                    ++ a, ++ b // NOLINT(clion-misra-cpp2008-5-18-1)
+            ) {
+                if ( ! Type < Entry > :: compare ( * a, * b ) ) { // NOLINT(clion-misra-cpp2008-5-3-1)
                     return false;
+                }
+            }
 
             return true;
         }
 
         __CDS_NoDiscard auto equals (Object const & o) const noexcept -> bool final {
-            if ( & o == this ) return true;
+            if ( & o == this ) {
+                return true;
+            }
+
             auto p = dynamic_cast < HashMap const * > ( & o );
-            if ( p == nullptr ) return false;
+            if ( p == nullptr ) {
+                return false;
+            }
 
             return this->operator==(*p);
         }
@@ -400,19 +437,21 @@ namespace cds {
         }
 
         template < class OH > __CDS_Requires ( HashCalculatorHasBoundaryFunction <OH> )
-        explicit HashMap (HashMap<K, V, OH> const & hm) noexcept :
+        explicit HashMap (HashMap<K, V, OH> const & hm __CDS_MaybeUnused ) noexcept :
                 pBuckets(Memory :: instance().createArray < HashBucket > (hashCalculator.getBoundary())) {
 
             this->hashCalculator = hm.hashCalculator;
-            for ( auto & e : hm.entries() )
-                this->insert ( e );
+            for ( auto & e __CDS_MaybeUnused : hm.entries() ) {
+                (void) this->insert ( e );
+            }
         }
 
-        __CDS_OptionalInline HashMap ( InitializerList list ) noexcept : // NOLINT(google-explicit-constructor)
+        __CDS_OptionalInline HashMap ( InitializerList list __CDS_MaybeUnused ) noexcept : // NOLINT(google-explicit-constructor)
                 pBuckets(Memory :: instance().createArray < HashBucket > (hashCalculator.getBoundary())) {
 
-            for ( auto & e : list )
-                this->insert( e );
+            for ( auto & e __CDS_MaybeUnused : list ) {
+                (void) this->insert( e );
+            }
         }
 
         explicit HashMap (
@@ -421,8 +460,9 @@ namespace cds {
         ) noexcept :
                 pBuckets(Memory :: instance().createArray < HashBucket > (hashCalculator.getBoundary())) {
 
-            for ( auto it = from; it != to; ++ it )
-                this->insert( * it );
+            for ( auto it = from; it != to; ++ it ) {
+                (void) this->insert( * it );
+            }
         }
 
         explicit HashMap (
@@ -431,8 +471,9 @@ namespace cds {
         ) noexcept :
                 pBuckets(Memory :: instance().createArray < HashBucket > (hashCalculator.getBoundary())) {
 
-            for ( auto it = from; it != to; ++ it )
-                this->insert( * it );
+            for ( auto it = from; it != to; ++ it ) {
+                (void) this->insert( * it );
+            }
         }
 
         ~HashMap () noexcept override {
@@ -441,118 +482,147 @@ namespace cds {
 
         __CDS_OptionalInline auto keys () const noexcept -> DoubleLinkedList < Reference < Key const > > final {
             DoubleLinkedList < Reference < Key const > > keys;
-            for ( auto & e : ( *this ) )
-                keys.pushBack ( Reference < Key const > ( e.getFirst() ) );
+            for ( auto & e __CDS_MaybeUnused : ( *this ) ) {
+                (void) keys.pushBack ( Reference < Key const > ( e.getFirst() ) );
+            }
+
             return keys;
         }
 
         __CDS_OptionalInline auto values () noexcept -> DoubleLinkedList < Reference < Value > > override {
             DoubleLinkedList < Reference < Value > > values;
-            for ( auto & e : (*this) )
+            for ( auto & e __CDS_MaybeUnused : (*this) ) {
                 values.pushBack ( e.getSecond() );
+            }
 
             return values;
         }
 
         __CDS_OptionalInline auto values () const noexcept -> DoubleLinkedList < Reference < Value const > > final {
             DoubleLinkedList < Reference < Value const > > values;
-            for ( auto & e : (*this) )
+            for ( auto & e __CDS_MaybeUnused : (*this) ) {
                 values.pushBack ( e.getSecond() );
+            }
 
             return values;
         }
 
         __CDS_OptionalInline auto entries () noexcept -> DoubleLinkedList < Pair < Reference < Key const >, Reference < Value > > > final {
             DoubleLinkedList < Pair < Reference < Key const >, Reference < Value > > > entries;
-            for ( auto & e : (*this) )
+            for ( auto & e __CDS_MaybeUnused : (*this) ) {
                 entries.pushBack({ {e.getFirst()}, {e.getSecond()} });
+            }
 
             return entries;
         }
 
         __CDS_OptionalInline auto entries () const noexcept -> DoubleLinkedList < Pair < Reference < Key const >, Reference < Value const > > > final {
             DoubleLinkedList < Pair < Reference < Key const >, Reference < Value const > > > entries;
-            for ( auto & e : (*this) )
+            for ( auto & e __CDS_MaybeUnused : (*this) ) {
                 entries.pushBack({ {e.getFirst()}, {e.getSecond()} });
+            }
 
             return entries;
         }
 
-        __CDS_OptionalInline auto find ( KeyConstReference k ) const noexcept -> Optional < Reference < Value const > > final {
-            for ( auto & e : this->pBuckets[hashCalculator(k)] )
-                if ( Type < K > :: compare ( e.getFirst(), k ) )
+        __CDS_OptionalInline auto find ( KeyConstReference k __CDS_MaybeUnused ) const noexcept -> Optional < Reference < Value const > > final {
+            for ( auto & e __CDS_MaybeUnused : this->pBuckets[hashCalculator(k)] ) {
+                if ( Type < K > :: compare ( e.getFirst(), k ) ) {
                     return { e.getSecond() };
+                }
+            }
+
             return {};
         }
 
-        __CDS_OptionalInline auto find ( KeyConstReference k ) noexcept -> Optional < Reference < Value > > final {
-            for ( auto & e : this->pBuckets[hashCalculator(k)] )
-                if ( Type < K > :: compare ( e.getFirst(), k ) )
+        __CDS_OptionalInline auto find ( KeyConstReference k __CDS_MaybeUnused ) noexcept -> Optional < Reference < Value > > final {
+            for ( auto & e __CDS_MaybeUnused : this->pBuckets[hashCalculator(k)] ) {
+                if ( Type < K > :: compare ( e.getFirst(), k ) ) {
                     return { e.getSecond() };
+                }
+            }
+
             return {};
         }
 
-        auto get ( KeyConstReference k ) noexcept -> ValueReference final {
-            auto & b = this->pBuckets[hashCalculator(k)];
+        auto get ( KeyConstReference k __CDS_MaybeUnused ) noexcept -> ValueReference final {
+            auto & b __CDS_MaybeUnused = this->pBuckets[hashCalculator(k)];
 
-            for ( auto & e : b )
-                if ( Type < K > :: compare ( e.getFirst(), k ) )
+            for ( auto & e __CDS_MaybeUnused : b ) {
+                if ( Type < K > :: compare ( e.getFirst(), k ) ) {
                     return e.getSecond();
+                }
+            }
 
             b.pushBack ( Pair<Key, Value>{ k, Value() } );
             return b.back().getSecond();
         }
 
-        auto get ( KeyConstReference k ) const noexcept (false) -> ValueConstReference final {
-            auto & b = this->pBuckets[hashCalculator(k)];
+        auto get ( KeyConstReference k __CDS_MaybeUnused ) const noexcept (false) -> ValueConstReference final {
+            auto & b __CDS_MaybeUnused = this->pBuckets[hashCalculator(k)];
 
-            for ( auto & e : b )
-                if ( Type < K > :: compare ( e.getFirst(), k ) )
+            for ( auto & e __CDS_MaybeUnused : b ) {
+                if ( Type < K > :: compare ( e.getFirst(), k ) ) {
                     return e.getSecond();
+                }
+            }
 
             throw KeyException( k );
         }
 
-        auto getOr ( KeyConstReference k, ValueConstReference defVal ) const noexcept -> ValueConstReference final {
-            auto & b = this->pBuckets[hashCalculator(k)];
+        auto getOr ( KeyConstReference k __CDS_MaybeUnused, ValueConstReference defVal __CDS_MaybeUnused ) const noexcept -> ValueConstReference final {
+            auto & b __CDS_MaybeUnused = this->pBuckets[hashCalculator(k)];
 
-            for ( auto & e : b )
-                if ( Type < K > :: compare ( e.getFirst(), k ) )
+            for ( auto & e __CDS_MaybeUnused : b ) {
+                if ( Type < K > :: compare ( e.getFirst(), k ) ) {
                     return e.getSecond();
+                }
+            }
 
             return defVal;
         }
 
-        auto containsKey ( KeyConstReference k ) const noexcept -> bool final {
-            for ( EntryConstReference e : this->pBuckets[hashCalculator(k)] )
-                if ( Type < K > :: compare ( e.first(), k ) )
+        auto containsKey ( KeyConstReference k __CDS_MaybeUnused ) const noexcept -> bool final {
+            for ( EntryConstReference e __CDS_MaybeUnused : this->pBuckets[hashCalculator(k)] ) {
+                if ( Type < K > :: compare ( e.first(), k ) ) {
                     return true;
+                }
+            }
+
             return false;
         }
 
-        auto containsValue ( ValueConstReference v ) const noexcept -> bool final {
-            for ( EntryConstReference e : (*this) )
-                if ( Type < V > :: compare ( e.getSecond(), v ) )
+        auto containsValue ( ValueConstReference v __CDS_MaybeUnused ) const noexcept -> bool final {
+            for ( EntryConstReference e __CDS_MaybeUnused : (*this) ) {
+                if ( Type < V > :: compare ( e.getSecond(), v ) ) {
                     return true;
+                }
+            }
+
             return false;
         }
 
-        auto contains ( EntryConstReference entry ) const noexcept -> bool final {
-            for ( EntryConstReference e : this->pBuckets[hashCalculator(entry.first())] )
+        auto contains ( EntryConstReference entry __CDS_MaybeUnused ) const noexcept -> bool final {
+            for ( EntryConstReference e __CDS_MaybeUnused : this->pBuckets[hashCalculator(entry.first())] ) {
                 if (
                         Type < K > :: compare ( e.first(), entry.first() ) &&
                         Type < V > :: compare ( e.second(), entry.second() )
-                        )
+                ) {
                     return true;
+                }
+            }
+
             return false;
         }
 
-        auto remove ( KeyConstReference k ) noexcept -> bool final {
-            auto & b = this->pBuckets [ this->hashCalculator(k) ];
+        auto remove ( KeyConstReference k __CDS_MaybeUnused ) noexcept -> bool final {
+            auto & b __CDS_MaybeUnused = this->pBuckets [ this->hashCalculator(k) ];
 
-            for ( auto & e : b )
-                if ( Type < Key > :: compare ( e.first(), k ) )
+            for ( auto & e __CDS_MaybeUnused : b ) {
+                if ( Type < Key > :: compare ( e.first(), k ) ) {
                     return b.removeFirst ( e );
+                }
+            }
 
             return false;
         }
@@ -560,8 +630,9 @@ namespace cds {
         auto allocInsertGetPtr (EntryConstReference entry) noexcept -> EntryPointerReference override {
             auto pFront = this->pBuckets[hashCalculator(entry.first())]._pFront;
             while ( pFront != nullptr ) {
-                if ( Type < K > :: compare ( pFront->data->first(), entry.first() ) )
+                if ( Type < K > :: compare ( pFront->data->first(), entry.first() ) ) {
                     return pFront->data;
+                }
 
                 pFront = pFront->pNext;
             }
@@ -570,30 +641,37 @@ namespace cds {
         }
 
         __CDS_OptionalInline auto clear () noexcept -> void final {
-            for ( Index i = 0; i < hashCalculator.getBoundary(); i++ )
+            for ( Index i = 0; i < hashCalculator.getBoundary(); i++ ) {
                 this->pBuckets[i].clear();
+            }
         }
 
         __CDS_NoDiscard __CDS_OptionalInline auto size () const noexcept -> Size final {
             Size total = 0ull;
-            for ( Index i = 0; i < hashCalculator.getBoundary(); i++ )
+            for ( Index i = 0; i < hashCalculator.getBoundary(); i++ ) {
                 total += this->pBuckets[i].size();
+            }
+
             return total;
         }
 
-        __CDS_OptionalInline auto operator = ( HashMap const & o ) noexcept -> HashMap & {
-            if ( this == & o )
+        __CDS_OptionalInline auto operator = ( HashMap const & o __CDS_MaybeUnused ) noexcept -> HashMap & {
+            if ( this == & o ) {
                 return * this;
+            }
 
             this->clear();
-            for ( auto & e : o )
-                this->insert(e);
+            for ( auto & e __CDS_MaybeUnused : o ) {
+                (void) this->insert(e);
+            }
 
             return * this;
         }
 
         __CDS_OptimalInline auto operator = ( HashMap && hashMap ) noexcept -> HashMap & {
-            if ( this == & hashMap ) return * this;
+            if ( this == & hashMap ) {
+                return * this;
+            }
 
             Memory :: instance().destroyArray ( this->pBuckets );
 
@@ -608,11 +686,13 @@ namespace cds {
         }
 
         __CDS_NoDiscard auto toString() const noexcept -> String override {
-            if ( this->empty() )
+            if ( this->empty() ) {
                 return {"{ }"};
+            }
+
             std::stringstream oss;
             oss << "{ ";
-            for ( auto & e : (*this) ) {
+            for ( auto & e __CDS_MaybeUnused : (*this) ) {
     #if !defined(CDS_GLM)
                 Type < V > :: streamPrint ( Type < K > :: streamPrint ( oss, e.getFirst() ) << " : ", e.getSecond() ) << ", ";
     #else
@@ -628,7 +708,7 @@ namespace cds {
     #endif
             }
             auto s = oss.str();
-            return {s.substr(0, s.length() - 2).append(" }")};
+            return {s.substr(0u, s.length() - 2u).append(" }")};
         }
 
         auto sequence () const & noexcept -> Sequence < const HashMap < K, V, H > >;

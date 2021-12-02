@@ -38,11 +38,12 @@ namespace cds {
         using ConstReverseIterator      = typename Collection < T > :: ConstReverseIterator;
 
         constexpr OrderedSet() noexcept = default;
-        __CDS_OptimalInline OrderedSet(OrderedSet const & set) noexcept :
+        __CDS_OptimalInline OrderedSet(OrderedSet const & set __CDS_MaybeUnused) noexcept :
                 ListSet<T>(set) {
 
-            for ( auto const & e : set )
-                this->insert( e );
+            for ( auto const & e __CDS_MaybeUnused : set ) {
+                this->insert(e);
+            }
         }
 
         constexpr OrderedSet(OrderedSet && moveSet) noexcept :
@@ -56,8 +57,9 @@ namespace cds {
         ) noexcept :
                 ListSet<T>() {
 
-            for ( auto it = from; it != to; ++ it )
-                this->insert ( * it );
+            for ( auto it = from; it != to; ++ it ) {
+                this->insert( * it );
+            }
         }
 
         __CDS_OptionalInline explicit OrderedSet (
@@ -66,15 +68,17 @@ namespace cds {
         ) noexcept :
                 ListSet<T>() {
 
-            for ( auto it = from; it != to; ++ it )
-                this->insert ( * it );
+            for ( auto it = from; it != to; ++ it ) {
+                this->insert( * it );
+            }
         }
 
-        __CDS_OptimalInline OrderedSet ( InitializerList initializerList ) noexcept : // NOLINT(google-explicit-constructor)
+        __CDS_OptimalInline OrderedSet ( InitializerList initializerList __CDS_MaybeUnused ) noexcept : // NOLINT(google-explicit-constructor)
                 ListSet<T>() {
 
-            for ( ElementCRef e : initializerList )
+            for ( ElementCRef e __CDS_MaybeUnused : initializerList ) {
                 this->insert(e);
+            }
         }
 
         ~OrderedSet() noexcept override = default;
@@ -83,24 +87,28 @@ namespace cds {
         auto allocInsertGetPtr ( ElementCRef ) noexcept -> ElementPtrRef override;
 
     public:
-        auto operator = ( Collection < T > const & c ) noexcept -> OrderedSet & {
-            if ( this == & c )
-                return * this;
+        auto operator = ( Collection < T > const & c __CDS_MaybeUnused ) noexcept -> OrderedSet & {
+            if ( this == & c ) {
+                return *this;
+            }
 
             this->clear();
 
-            for ( auto const & e : c )
-                this->insert( e );
+            for ( auto const & e __CDS_MaybeUnused : c ) {
+                this->insert(e);
+            }
 
             return * this;
         }
 
         __CDS_OptimalInline auto operator = ( OrderedSet const & o ) noexcept -> OrderedSet & {
-            return this->operator =( (Collection<T> const &) ( o ) ); // NOLINT(misc-unconventional-assign-operator)
+            return this->operator =( reinterpret_cast < Collection < T > const & > ( o ) ); // NOLINT(misc-unconventional-assign-operator)
         }
 
         __CDS_OptimalInline auto operator = ( OrderedSet && set ) noexcept -> OrderedSet & {
-            if ( this == & set ) return * this;
+            if ( this == & set ) {
+                return *this;
+            }
 
             this->clear();
 
@@ -131,7 +139,9 @@ namespace cds {
             return this->_pFront->data;
         }
 
-        if ( Type < T > :: compare( * this->_pFront->data, e ) ) return this->_pFront->data;
+        if ( Type < T > :: compare( * this->_pFront->data, e ) ) {
+            return this->_pFront->data;
+        }
 
         if ( comparator ( e, * this->_pFront->data ) ) {
             auto p = Memory :: instance().create < Node > ();
@@ -145,7 +155,9 @@ namespace cds {
 
         auto head = this->_pFront;
         while ( head->pNext != nullptr ) {
-            if ( Type < T > :: compare ( * head->pNext->data, e ) ) return head->pNext->data;
+            if ( Type < T > :: compare ( * head->pNext->data, e ) ) {
+                return head->pNext->data;
+            }
 
             if ( comparator ( e, * head->pNext->data ) ){
                 auto p = Memory :: instance().create < Node > ();

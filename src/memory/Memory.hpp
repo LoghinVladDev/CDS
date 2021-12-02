@@ -26,10 +26,12 @@ namespace cds {
                 return new (pRawMemory) T ( std :: forward < ArgumentTypes > ( arguments ) ... );
             }
 
-            template < typename T, EnableIf < ! std :: is_same < RemoveModifiers < T >, void > :: value > = 0 >
+            template < typename T, EnableIf < ! std :: is_same < RemoveModifiers < T >, void > :: value > = 0 > // NOLINT(clion-misra-cpp2008-5-3-1)
             inline static auto destroy ( T * pObject ) noexcept (false) -> void * {
-                if ( pObject != nullptr )
+                if ( pObject != nullptr ) {
                     pObject->~T();
+                }
+
                 return reinterpret_cast < void * > ( const_cast < RemoveConst < T > * > ( pObject ) );
             }
 
@@ -75,8 +77,9 @@ namespace cds {
                     Byte * startAddress = reinterpret_cast < Byte * > ( pRawMemory );
                     Byte * endAddress = reinterpret_cast < Byte * > ( pRawMemory ) + sizeof ( T ) * size;
 
-                    for ( auto * pObject = startAddress; pObject < endAddress; pObject += sizeof ( T ) )
+                    for ( auto * pObject = startAddress; pObject < endAddress; pObject += sizeof ( T ) ) { // NOLINT(clion-misra-cpp2008-6-5-4)
                         MemoryManager :: create < T > ( pObject );
+                    }
 
                     return reinterpret_cast < T * > ( pRawMemory );
 
@@ -93,8 +96,9 @@ namespace cds {
                 Byte * startAddress = reinterpret_cast < Byte * > ( pArray );
                 Byte * endAddress = reinterpret_cast < Byte * > ( pArray ) + sizeof ( T ) * size;
 
-                for ( auto * pObject = startAddress; pObject < endAddress; pObject += sizeof ( T ) )
+                for ( auto * pObject = startAddress; pObject < endAddress; pObject += sizeof ( T ) ) { // NOLINT(clion-misra-cpp2008-6-5-4)
                     MemoryManager :: destroy ( reinterpret_cast < T * > ( pObject ) );
+                }
 
                 this->deallocate( pArray );
             }
@@ -110,7 +114,7 @@ namespace cds {
             DefaultHeapAllocator() noexcept = default;
 
             inline auto allocate ( Size size ) noexcept -> void * override {
-                return malloc ( size );
+                return malloc ( size ); // NOLINT(clion-misra-cpp2008-18-4-1)
             }
 
             inline auto deallocate ( void * pMemory ) noexcept -> void override {
@@ -121,7 +125,7 @@ namespace cds {
         class __CDS_MaybeUnused LeakDetectionAllocator;
 
     private:
-        Allocator * pAllocator { new DefaultHeapAllocator };
+        Allocator * pAllocator { new DefaultHeapAllocator }; // NOLINT(clion-misra-cpp2008-18-4-1)
         utility :: hidden :: memoryImpl :: ArraySizeManager sizeManager;
 
         Memory () noexcept { } // NOLINT(modernize-use-equals-default) Windows cannot identify noexcept composite in default

@@ -18,9 +18,9 @@
 
 #endif
 
-#define __CDS_StringFormat_StartSize 128
-#define __CDS_StringFormat_SizeMultiplier 4
-#define __CDS_StringFormat_MaxSize INT32_MAX
+#define __CDS_StringFormat_StartSize 128u
+#define __CDS_StringFormat_SizeMultiplier 4u
+#define __CDS_StringFormat_MaxSize limits :: U64_MAX
 
 #if defined(__CDS_StringFormat_SizeMultiplier_Fast)
 
@@ -75,11 +75,11 @@
 #endif
 
 #ifndef __CDS_Memory_ArrayManagerCacheRange
-#define __CDS_Memory_ArrayManagerCacheRange 32768
+#define __CDS_Memory_ArrayManagerCacheRange 32768u
 #endif
 
 #ifndef __CDS_Memory_ArrayManagerCacheLifetimeCycles
-#define __CDS_Memory_ArrayManagerCacheLifetimeCycles 128
+#define __CDS_Memory_ArrayManagerCacheLifetimeCycles 128u
 #endif
 
 #endif //CDS_OPTIONS_HPP

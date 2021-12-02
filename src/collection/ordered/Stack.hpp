@@ -45,9 +45,6 @@ namespace cds {
 
         inline auto makeUnique () noexcept -> void override { return this->SingleLinkedList <T> :: makeUnique(); }
 
-        inline auto index ( T const & e ) const noexcept -> Index override { return this->SingleLinkedList < T > :: index (e); }
-        inline auto index ( T & e ) noexcept -> Index override { return this->SingleLinkedList < T > :: index (e); }
-
         inline auto popBack () noexcept (false) -> T override { return this->SingleLinkedList < T > :: popBack(); }
         inline auto popFront () noexcept (false) -> T override { return this->SingleLinkedList < T > :: popFront(); }
 
@@ -67,6 +64,6 @@ namespace cds {
 
 }
 
-__CDS_RegisterParseTypeTemplateT(Stack)
+__CDS_RegisterParseTypeTemplateT(Stack) // NOLINT(clion-misra-cpp2008-8-0-1)
 
 #endif //CDS_STACK_HPP

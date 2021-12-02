@@ -40,11 +40,12 @@ namespace cds {
     public:
         constexpr UnorderedSet() noexcept = default;
 
-        __CDS_OptimalInline UnorderedSet( UnorderedSet const & set ) noexcept :
+        __CDS_OptimalInline UnorderedSet( UnorderedSet const & set __CDS_MaybeUnused ) noexcept :
                 ListSet<T>(set) {
 
-            for ( auto const & it : set )
+            for ( auto const & it __CDS_MaybeUnused : set ) {
                 this->insert(it);
+            }
         }
 
         constexpr UnorderedSet(UnorderedSet && moveSet) noexcept :
@@ -58,8 +59,9 @@ namespace cds {
         ) noexcept :
                 ListSet<T>() {
 
-            for ( auto it = from; it != to; ++ it )
+            for ( auto it = from; it != to; ++ it ) {
                 this->insert ( * it );
+            }
         }
 
         __CDS_OptionalInline explicit UnorderedSet(
@@ -68,14 +70,15 @@ namespace cds {
         ) noexcept :
                 ListSet<T>() {
 
-            for ( auto it = from; it != to; ++ it )
+            for ( auto it = from; it != to; ++ it ) {
                 this->insert ( * it );
+            }
         }
 
-        __CDS_OptimalInline UnorderedSet ( InitializerList initializerList ) noexcept : // NOLINT(google-explicit-constructor)
+        __CDS_OptimalInline UnorderedSet ( InitializerList initializerList __CDS_MaybeUnused ) noexcept : // NOLINT(google-explicit-constructor)
                 ListSet<T>() {
 
-            for ( ElementCRef e : initializerList ) {
+            for ( ElementCRef e __CDS_MaybeUnused : initializerList ) {
                 this->insert(e);
             }
         }
@@ -83,25 +86,28 @@ namespace cds {
         ~UnorderedSet() noexcept override = default;
 
     public:
-        auto operator = ( Collection <T> const & c ) noexcept -> UnorderedSet & {
-            if ( this == & c )
+        auto operator = ( Collection <T> const & c __CDS_MaybeUnused ) noexcept -> UnorderedSet & {
+            if ( this == & c ) {
                 return * this;
+            }
 
             this->clear();
 
-            for ( auto & e : c )
-                this->insert ( e );
+            for ( auto & e __CDS_MaybeUnused : c ) {
+                this->insert(e);
+            }
 
             return * this;
         }
 
         __CDS_OptimalInline auto operator = ( UnorderedSet const & o ) noexcept -> UnorderedSet & {
-            return this->operator=( (Collection<T> const &) ( o ) ); // NOLINT(misc-unconventional-assign-operator)
+            return this->operator=( reinterpret_cast < Collection<T> const & > ( o ) ); // NOLINT(misc-unconventional-assign-operator)
         }
 
         __CDS_OptimalInline auto operator = ( UnorderedSet && set ) noexcept -> UnorderedSet & {
-            if ( this == & set )
+            if ( this == & set ) {
                 return * this;
+            }
 
             this->clear();
             this->_pFront = exchange ( set._pFront, nullptr );
@@ -120,8 +126,10 @@ namespace cds {
             auto head = this->_pFront;
 
             while ( head != nullptr ) {
-                if (Type<ElementType>::compare(* head->data, e))
+                if (Type<ElementType>::compare(* head->data, e)) {
                     return head->data;
+                }
+
                 head = head->pNext;
             }
 
@@ -147,6 +155,6 @@ namespace cds {
 
 #endif
 
-__CDS_RegisterParseTypeTemplateT(UnorderedSet)
+__CDS_RegisterParseTypeTemplateT(UnorderedSet) // NOLINT(clion-misra-cpp2008-8-0-1)
 
 #endif //CDS_UNORDEREDSET_HPP

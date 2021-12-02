@@ -31,20 +31,53 @@ namespace cds {
             ValueType       _higherBound;
 
             __CDS_cpplang_ConstexprConditioned static auto typeName () noexcept -> StringLiteral {
-                if ( std::is_same<uint8, ValueType>::value ) return "uint8";
-                if ( std::is_same<uint16, ValueType>::value ) return "uint16";
-                if ( std::is_same<uint32, ValueType>::value ) return "uint32";
-                if ( std::is_same<uint64, ValueType>::value ) return "uint64";
+                if ( std::is_same<uint8, ValueType>::value ) {
+                    return "uint8";
+                }
 
-                if ( std::is_same<sint8, ValueType>::value ) return "int8";
-                if ( std::is_same<sint16, ValueType>::value ) return "int16";
-                if ( std::is_same<sint32, ValueType>::value ) return "int32";
-                if ( std::is_same<sint64, ValueType>::value ) return "int64";
+                if ( std::is_same<uint16, ValueType>::value ) {
+                    return "uint16";
+                }
 
-                if ( std::is_same<int, ValueType>::value ) return "int";
-                if ( std::is_same<long long, ValueType>::value ) return "long";
-                if ( std::is_same<float, ValueType>::value ) return "float";
-                if ( std::is_same<double, ValueType>::value ) return "double";
+                if ( std::is_same<uint32, ValueType>::value ) {
+                    return "uint32";
+                }
+
+                if ( std::is_same<uint64, ValueType>::value ) {
+                    return "uint64";
+                }
+
+                if ( std::is_same<sint8, ValueType>::value ) {
+                    return "int8";
+                }
+
+                if ( std::is_same<sint16, ValueType>::value ) {
+                    return "int16";
+                }
+
+                if ( std::is_same<sint32, ValueType>::value ) {
+                    return "int32";
+                }
+
+                if ( std::is_same<sint64, ValueType>::value ) {
+                    return "int64";
+                }
+
+                if ( std::is_same<int, ValueType>::value ) {
+                    return "int";
+                }
+
+                if ( std::is_same<long long, ValueType>::value ) {
+                    return "long";
+                }
+
+                if ( std::is_same<float, ValueType>::value ) {
+                    return "float";
+                }
+
+                if ( std::is_same<double, ValueType>::value ) {
+                    return "double";
+                }
 
                 return "unknown";
             };
@@ -102,7 +135,7 @@ namespace cds {
 
 }
 
-__CDS_RegisterParseType(Random)
+__CDS_RegisterParseType(Random) // NOLINT(clion-misra-cpp2008-8-0-1)
 
 namespace cds { // NOLINT(modernize-concat-nested-namespaces)
     namespace utility {
@@ -115,11 +148,11 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
     }
 }
 
-__CDS_RegisterParseType(Random::Int)
-__CDS_RegisterParseType(Random::Long)
-__CDS_RegisterParseType(Random::Float)
-__CDS_RegisterParseType(Random::Double)
-__CDS_RegisterParseType(Random::UnsignedInt)
-__CDS_RegisterParseType(Random::UnsignedLong)
+__CDS_RegisterParseType(Random::Int) // NOLINT(clion-misra-cpp2008-8-0-1)
+__CDS_RegisterParseType(Random::Long) // NOLINT(clion-misra-cpp2008-8-0-1)
+__CDS_RegisterParseType(Random::Float) // NOLINT(clion-misra-cpp2008-8-0-1)
+__CDS_RegisterParseType(Random::Double) // NOLINT(clion-misra-cpp2008-8-0-1)
+__CDS_RegisterParseType(Random::UnsignedInt) // NOLINT(clion-misra-cpp2008-8-0-1)
+__CDS_RegisterParseType(Random::UnsignedLong) // NOLINT(clion-misra-cpp2008-8-0-1)
 
 #endif //CDS_RANDOM_HPP

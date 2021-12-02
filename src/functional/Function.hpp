@@ -72,7 +72,7 @@ namespace cds {
             }
 
             __CDS_OptimalInline static auto copy ( GenericConstFunctorAddress pObject ) noexcept -> GenericFunctorAddress {
-                return reinterpret_cast < GenericFunctorAddress > ( new SubstitutedFunctor (
+                return reinterpret_cast < GenericFunctorAddress > ( new SubstitutedFunctor ( // NOLINT(clion-misra-cpp2008-18-4-1)
                     * reinterpret_cast < SubstitutedConstFunctorAddress > ( pObject )
                 ) );
             }
@@ -99,7 +99,7 @@ namespace cds {
             }
 
             __CDS_OptimalInline static auto copy ( GenericConstFunctorAddress pFunction ) noexcept -> GenericFunctorAddress {
-                return const_cast < GenericFunctorAddress > ( pFunction );
+                return const_cast < GenericFunctorAddress > ( pFunction ); // NOLINT(clion-misra-cpp2008-5-2-5)
             }
 
             __CDS_OptimalInline static auto clear ( GenericFunctorAddress ) noexcept -> void {
@@ -163,8 +163,9 @@ namespace cds {
             this->pManager = Memory :: instance().create < Manager > ( * function.pManager );
     #endif
 
-            if ( this->pManager != nullptr )
+            if ( this->pManager != nullptr ) {
                 this->pCallableObject = this->pManager->creator ( function.pCallableObject );
+            }
         }
 
         constexpr Function ( Function && function ) noexcept :
@@ -174,8 +175,13 @@ namespace cds {
         }
 
         __CDS_cpplang_NonConstConstexprMemberFunction auto operator = ( Function && function ) noexcept -> Function & {
-            if ( this == & function ) return * this;
-            if ( this->pCallableObject == function.pCallableObject ) return * this;
+            if ( this == & function ) {
+                return * this;
+            }
+
+            if ( this->pCallableObject == function.pCallableObject ) {
+                return * this;
+            }
 
             if ( this->pManager != nullptr ) {
                 this->pManager->deleter(this->pCallableObject);
@@ -193,7 +199,9 @@ namespace cds {
 
         template < typename Functor, EnableIf < Type < Functor > :: isCallableObject > = 0 >
         __CDS_OptimalInline auto operator = ( Functor const & functor ) noexcept -> Function & {
-            if ( this->pCallableObject == reinterpret_cast < GenericConstFunctorAddress > ( & functor ) ) return * this;
+            if ( this->pCallableObject == reinterpret_cast < GenericConstFunctorAddress > ( & functor ) ) {
+                return * this;
+            }
 
             if ( this->pManager != nullptr ) {
                 this->pManager->deleter(this->pCallableObject);
@@ -210,7 +218,9 @@ namespace cds {
 
         template < typename RequestedReturnType, typename ... RequestedArgumentTypes >
         __CDS_cpplang_NonConstConstexprMemberFunction auto operator = ( RequestedReturnType (* requestedStaticFunction ) ( RequestedArgumentTypes ... ) ) noexcept -> Function & {
-            if ( this->pCallableObject == reinterpret_cast < GenericFunctorAddress > ( requestedStaticFunction ) ) return * this;
+            if ( this->pCallableObject == reinterpret_cast < GenericFunctorAddress > ( requestedStaticFunction ) ) {
+                return * this;
+            }
 
             if ( this->pManager != nullptr ) {
                 this->pManager->deleter(this->pCallableObject);
@@ -225,8 +235,13 @@ namespace cds {
         }
 
         __CDS_OptimalInline auto operator = ( Function const & function ) noexcept -> Function & {
-            if ( this == & function ) return * this;
-            if ( this->pCallableObject == function.pCallableObject ) return * this;
+            if ( this == & function ) {
+                return * this;
+            }
+
+            if ( this->pCallableObject == function.pCallableObject ) {
+                return * this;
+            }
 
             if ( this->pManager != nullptr ) {
                 this->pManager->deleter(this->pCallableObject);
@@ -242,15 +257,17 @@ namespace cds {
             this->pManager = Memory :: instance().create < Manager > ( * function.pManager );
     #endif
 
-            if ( this->pManager != nullptr )
+            if ( this->pManager != nullptr ) {
                 this->pCallableObject = this->pManager->creator ( function.pCallableObject );
+            }
 
             return * this;
         }
 
         __CDS_OptimalInline auto operator () ( ArgumentTypes ... arguments ) const noexcept (false) -> ReturnType {
-            if ( this->pCallableObject == nullptr )
-                throw NullPointerException ("Function Variable not assigned");
+            if ( this->pCallableObject == nullptr ) {
+                throw NullPointerException("Function Variable not assigned");
+            }
 
             return this->pManager->invoker ( this->pCallableObject, std :: forward < ArgumentTypes > (arguments ) ... );
         }
@@ -267,15 +284,17 @@ namespace cds {
 
     private:
 
-        template < typename ... Types, EnableIf < sizeof ... (Types) == 0 > = 0 >
+        template < typename ... Types, EnableIf < sizeof ... (Types) == 0u > = 0 >
         auto static accumulateTypesToString () noexcept -> String {
             return "";
         }
 
         template < typename FirstType, typename ... Types >
         auto static accumulateTypesToString () noexcept -> String {
-            if ( sizeof ... (Types) == 0 )
+            if ( sizeof ... (Types) == 0u ) {
                 return utility :: TypeParseTraits < FirstType > :: name;
+            }
+
             return String(utility :: TypeParseTraits < FirstType > :: name) + ", " + accumulateTypesToString < Types ... > ();
         }
 
@@ -350,7 +369,7 @@ namespace cds {
             }
 
             __CDS_OptimalInline static auto copy ( GenericConstFunctorAddress pObject ) noexcept -> GenericFunctorAddress {
-                return reinterpret_cast < GenericFunctorAddress > ( new SubstitutedFunctor (
+                return reinterpret_cast < GenericFunctorAddress > ( new SubstitutedFunctor ( // NOLINT(clion-misra-cpp2008-18-4-1)
                     * reinterpret_cast < SubstitutedConstFunctorAddress > ( pObject )
                 ) );
             }
@@ -371,7 +390,7 @@ namespace cds {
             }
 
             __CDS_OptimalInline static auto copy ( GenericConstFunctorAddress pFunction ) noexcept -> GenericFunctorAddress {
-                return const_cast < GenericFunctorAddress > ( pFunction );
+                return const_cast < GenericFunctorAddress > ( pFunction ); // NOLINT(clion-misra-cpp2008-5-2-5)
             }
 
             __CDS_OptimalInline static auto clear ( GenericFunctorAddress ) noexcept -> void {
@@ -422,8 +441,13 @@ namespace cds {
 
         template < typename Functor, EnableIf < Type < Functor > :: isCallableObject > = 0 >
         __CDS_OptimalInline auto operator = ( Functor const & functor ) noexcept -> Function & {
-            if ( this->pCallableObject == reinterpret_cast < GenericConstFunctorAddress > ( & functor ) ) return * this;
-            if ( this->pManager != nullptr ) this->pManager->deleter ( this->pCallableObject );
+            if ( this->pCallableObject == reinterpret_cast < GenericConstFunctorAddress > ( & functor ) ) {
+                return * this;
+            }
+
+            if ( this->pManager != nullptr ) {
+                this->pManager->deleter(this->pCallableObject);
+            }
 
             this->initHandler ( functor );
 
@@ -432,18 +456,30 @@ namespace cds {
 
         template < typename RequestedReturnType, typename ... RequestedArgumentTypes >
         constexpr auto operator = ( RequestedReturnType (* requestedStaticFunction ) ( RequestedArgumentTypes ... ) noexcept ) noexcept -> Function & {
-            if ( this->pCallableObject == reinterpret_cast < GenericFunctorAddress > ( requestedStaticFunction ) ) return * this;
-            if ( this->pManager != nullptr ) this->pManager->deleter ( this->pCallableObject );
+            if ( this->pCallableObject == reinterpret_cast < GenericFunctorAddress > ( requestedStaticFunction ) ) {
+                return * this;
+            }
+
+            if ( this->pManager != nullptr ) {
+                this->pManager->deleter(this->pCallableObject);
+            }
 
             this->initHandler ( requestedStaticFunction );
             return * this;
         }
 
         __CDS_OptimalInline auto operator = ( Function const & function ) noexcept -> Function & {
-            if ( this == & function ) return * this;
-            if ( this->pCallableObject == function.pCallableObject ) return * this;
+            if ( this == & function ) {
+                return * this;
+            }
 
-            if ( this->pManager != nullptr ) this->pManager->deleter ( this->pCallableObject );
+            if ( this->pCallableObject == function.pCallableObject ) {
+                return * this;
+            }
+
+            if ( this->pManager != nullptr ) {
+                this->pManager->deleter(this->pCallableObject);
+            }
 
             this->pManager = function.pManager;
             this->pCallableObject = this->pManager->creator ( function.pCallableObject );
@@ -452,15 +488,17 @@ namespace cds {
         }
 
         __CDS_OptimalInline auto operator () ( ArgumentTypes ... arguments ) const noexcept (false) -> ReturnType {
-            if ( this->pCallableObject == nullptr )
-                throw NullPointerException ("Function Variable not assigned");
+            if ( this->pCallableObject == nullptr ) {
+                throw NullPointerException("Function Variable not assigned");
+            }
 
             return this->pManager->invoker ( this->pCallableObject, std :: forward < ArgumentTypes > (arguments ) ... );
         }
 
         __CDS_OptimalInline ~Function() noexcept override {
-            if ( this->pManager != nullptr )
-                this->pManager->deleter ( this->pCallableObject );
+            if ( this->pManager != nullptr ) {
+                this->pManager->deleter(this->pCallableObject);
+            }
         }
 
         __CDS_NoDiscard __CDS_OptimalInline auto copy () const noexcept -> Function * override {

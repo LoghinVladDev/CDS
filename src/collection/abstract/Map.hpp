@@ -16,13 +16,13 @@
 
 namespace cds {
 
-    template <class K, class V, class H = utility :: MediumCollisionDefaultHashFunction<K>> __CDS_Requires (
-        UniqueIdentifiable<K> &&
-        HashCalculatorHasBoundaryFunction<H>
+    template < typename K, typename V, typename H = utility :: MediumCollisionDefaultHashFunction < K > > __CDS_Requires (
+        UniqueIdentifiable < K > &&
+        HashCalculatorHasBoundaryFunction < H >
     ) class HashMap;
 
 
-    template <class K, class V> __CDS_Requires( UniqueIdentifiable <K> )
+    template < typename K, typename V> __CDS_Requires( UniqueIdentifiable <K> )
     class Map : public Collection < Pair < K, V > > {
     public:
         using Key                       = K;
@@ -88,12 +88,12 @@ namespace cds {
 
         template < typename U = Entry, EnableIf < Type < U > :: copyConstructible > = 0 >
         __CDS_OptimalInline auto insert (EntryConstReference entry) noexcept -> ValueReference {
-            return ( (this->allocInsertGetPtr(entry)) = new Entry(entry) )->second();
+            return ( (this->allocInsertGetPtr(entry)) = Memory :: instance().create < Entry > (entry) )->second();
         }
 
         template < typename U = Entry, EnableIf < Type < U > :: moveConstructible > = 0 >
         __CDS_OptimalInline auto insert (EntryMoveReference entry) noexcept -> ValueReference {
-            return ( ( this->allocInsertGetPtr(entry)) = new Entry(entry) )->second();
+            return ( ( this->allocInsertGetPtr(entry)) = Memory :: instance().create < Entry > (entry) )->second();
         }
 
         __CDS_MaybeUnused __CDS_OptimalInline auto emplace ( KeyConstReference k, ValueConstReference v ) noexcept -> ValueConstReference {

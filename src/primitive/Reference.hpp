@@ -40,9 +40,9 @@ namespace cds {
     public:
 
         template < class V, class = decltype (
-            utility :: hidden :: referenceImpl :: hiddenRef < T > ( std::declval < V > () ),
+            utility :: hidden :: referenceImpl :: hiddenRef < T > ( std::declval < V > () ), // NOLINT(clion-misra-cpp2008-5-18-1)
             std :: enable_if <
-                ! std::is_same <
+                ! std::is_same < // NOLINT(clion-misra-cpp2008-5-3-1)
                     Reference,
                     RemoveConst < RemoveReference < V >
                 >
@@ -79,9 +79,14 @@ namespace cds {
         }
 
         __CDS_NoDiscard __CDS_cpplang_VirtualConstexpr auto equals ( Object const & o ) const noexcept -> bool final {
-            if ( this == & o ) return true;
-            auto c = dynamic_cast < decltype (this) > ( & o );
-            if ( c == nullptr ) return false;
+            if ( this == & o ) {
+                return true;
+            }
+
+            auto c = dynamic_cast < Reference < T > const * > ( & o );
+            if ( c == nullptr ) {
+                return false;
+            }
 
             return this->operator==(*c);
         }
@@ -120,6 +125,6 @@ namespace cds {
 
 #endif
 
-__CDS_RegisterParseTypeTemplateT(Reference)
+__CDS_RegisterParseTypeTemplateT(Reference) // NOLINT(clion-misra-cpp2008-8-0-1)
 
 #endif //CDS_REFERENCE_HPP

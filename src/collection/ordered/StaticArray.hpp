@@ -114,7 +114,7 @@ namespace cds {
 
             Index i = 0, l = 0, c = 0;
             for (; i < this->size() && c < count; i++)
-                if ( ! Type < T > :: compare ( * this->_pData[i], e ) ) {
+                if ( ! Type < T > :: compare ( * this->_pData[i], element ) ) {
                     newBuffer[l++] = this->_pData[i];
                 } else {
                     removed = true;
@@ -230,7 +230,7 @@ namespace cds {
             this->_size = l;
         }
 
-        __CDS_MaybeUnused auto indices ( ElementCRef ) const noexcept -> DoubleLinkedList < T > {
+        __CDS_MaybeUnused auto indices ( ElementCRef value ) const noexcept -> DoubleLinkedList < T > {
             DoubleLinkedList < Index > indices;
 
             for ( Index i = 0; i < this->_size; ++ i )
@@ -243,26 +243,26 @@ namespace cds {
     private:
         auto pAt ( Index index ) noexcept (false) -> ElementPtr final {
             if ( this->empty() )
-                throw OutOfBoundsException ( i, 0 );
+                throw OutOfBoundsException (index, 0 );
 
-            if ( i < 0 )
-                i += ( this->size() / (-i) ) * this->size();
-            if ( i >= static_cast<Index>(this->size()) )
-                i = i % this->size();
+            if (index < 0 )
+                index += (this->size() / (-index) ) * this->size();
+            if (index >= static_cast<Index>(this->size()) )
+                index = index % this->size();
 
-            return this->_pData[i];
+            return this->_pData[index];
         }
 
         auto pAt ( Index index ) const noexcept (false) -> ElementPtr final {
             if ( this->empty() )
-                throw OutOfBoundsException ( i, 0 );
+                throw OutOfBoundsException (index, 0 );
 
-            if ( i < 0 )
-                i += ( this->size() / (-i) ) * this->size();
-            if ( i >= static_cast<Index>(this->size()) )
-                i = i % this->size();
+            if (index < 0 )
+                index += (this->size() / (-index) ) * this->size();
+            if (index >= static_cast<Index>(this->size()) )
+                index = index % this->size();
 
-            return this->_pData[i];
+            return this->_pData[index];
         }
 
     public:

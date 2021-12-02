@@ -218,7 +218,7 @@ namespace cds {
 
         constexpr static Size DEFAULT_PACKET_SIZE = Socket::PLATFORM_DEFAULT_PACKET_SIZE;
         constexpr static Size DEFAULT_CLIENT_QUEUE_SIZE = Socket::PLATFORM_DEFAULT_CLIENT_QUEUE_SIZE;
-        constexpr static uint16 DEFAULT_PORT = 8080;
+        constexpr static uint16 DEFAULT_PORT = 8080u;
         constexpr static Size DEFAULT_PACKET_SYNC_COUNT = Socket::PLATFORM_DEFAULT_PACKET_SYNC_COUNT;
 
         Size            _packetSize         { Socket::DEFAULT_PACKET_SIZE };
@@ -228,7 +228,7 @@ namespace cds {
         bool            _connected          { false };
 
 
-        Size            _port               { Socket::DEFAULT_PORT };
+        uint16         _port                { Socket::DEFAULT_PORT };
         ProtocolVersion _protocolVersion    { Socket::ProtocolVersion::IPV4 };
 
     public:
@@ -264,26 +264,31 @@ namespace cds {
 
     #endif
 
-            if ( this->isOpen() ) return * this;
+            if ( this->isOpen() ) {
+                return * this;
+            }
 
             switch ( this->_protocolVersion ) {
 
                 case ProtocolVersion::INTERNET_PROTOCOL_NONE_SPECIFIED:
                 case ProtocolVersion::INTERNET_PROTOCOL_VERSION_6:
-                case ProtocolVersion::INTERNET_PROTOCOL_VERSION_6_FORCED:
+                case ProtocolVersion::INTERNET_PROTOCOL_VERSION_6_FORCED: // NOLINT(clion-misra-cpp2008-6-4-5)
 
-                    if ( this->_protocolVersion == ProtocolVersion::AUTO )
+                    if ( this->_protocolVersion == ProtocolVersion::AUTO ) {
                         this->_protocolVersion = ProtocolVersion::INTERNET_PROTOCOL_VERSION_6;
+                    }
 
     #if defined(__CDS_Platform_Linux)
 
                     this->_platformSocket = :: socket( AF_INET6, SOCK_STREAM, IPPROTO_TCP);
 
-                    if ( this->_platformSocket != Socket::UNIX_SOCKET_FUNCTION_ERROR )
+                    if ( this->_platformSocket != Socket::UNIX_SOCKET_FUNCTION_ERROR ) {
                         return * this;
+                    }
 
-                    if ( this->_protocolVersion == ProtocolVersion::INTERNET_PROTOCOL_VERSION_6_FORCED )
-                        throw SocketException ( "Unable to open Socket on IPV6");
+                    if ( this->_protocolVersion == ProtocolVersion::INTERNET_PROTOCOL_VERSION_6_FORCED ) {
+                        throw SocketException("Unable to open Socket on IPV6");
+                    }
 
     #elif defined(__CDS_Platform_Microsoft_Windows)
 
@@ -301,16 +306,19 @@ namespace cds {
 
     #endif
 
-                    this->close();
+                    (void) this->close();
 
-                case ProtocolVersion::INTERNET_PROTOCOL_VERSION_4:
+                    __CDS_Fallthrough;
+
+                case ProtocolVersion::INTERNET_PROTOCOL_VERSION_4: // NOLINT(clion-misra-cpp2008-6-4-5)
 
     #if defined(__CDS_Platform_Linux)
 
                     this->_platformSocket = socket( AF_INET, SOCK_STREAM, IPPROTO_TCP);
 
-                    if ( this->_platformSocket != Socket::UNIX_SOCKET_FUNCTION_ERROR )
+                    if ( this->_platformSocket != Socket::UNIX_SOCKET_FUNCTION_ERROR ) {
                         return * this;
+                    }
 
                     throw SocketException ( "Unable to open Socket on IPV4" );
 
@@ -337,7 +345,7 @@ namespace cds {
         __CDS_OptimalInline explicit Socket ( ProtocolVersion protocolVersion = ProtocolVersion::IPV4 ) noexcept (false) :
                 _protocolVersion( protocolVersion) {
 
-            this->open();
+            (void) this->open();
         }
 
         constexpr explicit Socket ( PlatformSocket const & platformSocket ) noexcept : _platformSocket( platformSocket) {
@@ -347,14 +355,14 @@ namespace cds {
         __CDS_OptimalInline explicit Socket ( String const & address, ProtocolVersion protocolVersion = ProtocolVersion::IPV4 ) noexcept (false) :
                 _protocolVersion(protocolVersion) {
 
-            this->open().connect( this->extractAddress (  address ) );
+            (void) this->open().connect( this->extractAddress (  address ) );
         }
 
         __CDS_OptimalInline explicit Socket ( String const & address, uint16 port, ProtocolVersion protocolVersion = ProtocolVersion::IPV4 ) noexcept (false) :
                 _protocolVersion(protocolVersion),
                 _port(port) {
 
-            this->open().connect( this->extractAddress ( address ) );
+            (void) this->open().connect( this->extractAddress ( address ) );
         }
 
         __CDS_OptimalInline auto connect ( String const & address ) noexcept (false) -> Socket & {
@@ -374,31 +382,36 @@ namespace cds {
             switch ( this->_protocolVersion ) {
                 case ProtocolVersion::INTERNET_PROTOCOL_NONE_SPECIFIED:
                 case ProtocolVersion::INTERNET_PROTOCOL_VERSION_6:
-                case ProtocolVersion::INTERNET_PROTOCOL_VERSION_6_FORCED: {
+                case ProtocolVersion::INTERNET_PROTOCOL_VERSION_6_FORCED: { // NOLINT(clion-misra-cpp2008-6-4-5)
 
                     sockaddr_in6 ipv6AddressData {};
 
                     int retVal = inet_pton(AF_INET6, pack.first().cStr(), & ipv6AddressData.sin6_addr);
-                    if ( retVal == 0 ) throw SocketException("IPV6 Address Format Error : "_s + pack.first());
+                    if ( retVal == 0 ) {
+                        throw SocketException("IPV6 Address Format Error : "_s + pack.first());
+                    }
+
                     if ( retVal == 1 ) {
                         ipv6AddressData.sin6_port = htons(pack.second());
-                        ipv6AddressData.sin6_family = AF_INET6;
+                        ipv6AddressData.sin6_family = static_cast < sa_family_t > ( AF_INET6 );
 
                         retVal = ::connect(
                             this->_platformSocket,
                             reinterpret_cast < sockaddr * > (& ipv6AddressData),
-                            sizeof ( ipv6AddressData )
+                            static_cast < socklen_t > ( sizeof ( ipv6AddressData ) )
                         );
 
-                        if ( retVal == 0 )
+                        if ( retVal == 0 ) {
                             break;
+                        }
                     }
 
-                    if ( this->_protocolVersion == Socket::ProtocolVersion::INTERNET_PROTOCOL_VERSION_6_FORCED )
+                    if ( this->_protocolVersion == Socket::ProtocolVersion::INTERNET_PROTOCOL_VERSION_6_FORCED ) {
                         throw SocketException("Unable to connect to address through IPV6");
+                    }
 
                     this->_protocolVersion = ProtocolVersion::INTERNET_PROTOCOL_VERSION_4;
-                    this->close().open().connect(pack.first(), pack.second());
+                    return this->close().open().connect(pack.first(), pack.second());
 
                 } case ProtocolVersion::INTERNET_PROTOCOL_VERSION_4: {
 
@@ -406,16 +419,17 @@ namespace cds {
 
                     ipv4AddressData.sin_addr.s_addr = inet_addr ( pack.first ().cStr () );
                     ipv4AddressData.sin_port = htons ( pack.second () );
-                    ipv4AddressData.sin_family = AF_INET;
+                    ipv4AddressData.sin_family = static_cast < sa_family_t > ( AF_INET );
 
                     int retVal = :: connect (
                         this->_platformSocket,
                         reinterpret_cast < sockaddr * > ( & ipv4AddressData ),
-                        sizeof ( ipv4AddressData )
+                        static_cast < socklen_t > (sizeof ( ipv4AddressData ))
                     );
 
-                    if ( retVal == Socket::UNIX_SOCKET_FUNCTION_ERROR )
+                    if ( retVal == Socket::UNIX_SOCKET_FUNCTION_ERROR ) {
                         throw SocketException("Unable to connect to address through IPV4");
+                    }
 
                     break;
                 }
@@ -486,7 +500,7 @@ namespace cds {
                     this->_packetSize = this->readSize ();
                     this->_packetSyncCount = this->readSize ();
 
-                    this->writeInt(1);
+                    (void) this->writeInt(1);
 
                 } catch ( Exception const & e ) {
                     throw SocketException ( "Synchronization of settings at connect initialization not acknowledged : "_s + e );
@@ -502,76 +516,129 @@ namespace cds {
     private:
         __CDS_OptionalInline static auto convertIPV4ToIPV6(List < String > const & addressSegments) noexcept(false) -> String {
             auto addressBits = Array < String > ( addressSegments );
-            auto isBigEndian = []{ return htonl(47) == 47; };
+            auto isBigEndian = []{ return htonl(47u) == 47u; };
 
             String const ipv4Identifier = "FFFF";
 
             auto idIndex = addressBits.index( ipv4Identifier );
-            if ( idIndex != -1 )
+            if ( idIndex != -1 ) {
                 addressBits = addressBits.sub<Array<String>>(idIndex + 1);
-            else {
+            } else {
                 idIndex = addressBits.index( ipv4Identifier.lower() );
-                if ( idIndex != -1 )
+                if ( idIndex != -1 ) {
                     addressBits = addressBits.sub<Array<String>>(idIndex + 1);
-                else
-                    addressBits.remove("", 2);
+                } else {
+                    (void) addressBits.remove("", 2u);
+                }
             }
 
-            if ( addressBits.size () > 3 )
+            if ( addressBits.size () > 3u ) {
                 throw IllegalArgumentException ( "IPV6 Address conversion failed : "_s + addressBits.toString () +
                                                  ", assumed format : ::IPV4Address[:port]" );
+            }
 
-            if ( addressBits.size() == 1 ) {
-                if ( addressBits[ 0 ].count ( '.' ) != 3 || addressBits[ 0 ].findFirstNotOf ( ".0123456789" ) != String::INVALID_POS )
+            if ( addressBits.size() == 1u ) {
+                if ( addressBits[ 0 ].count ( '.' ) != 3u || addressBits[ 0 ].findFirstNotOf ( ".0123456789" ) != String::INVALID_POS ) {
                     throw IllegalArgumentException ( "IPV6 Address conversion failed : "_s + addressBits.toString () +
                                                      ", assumed format : ::IPV4Address" );
+                }
 
                 return addressBits[20];
             }
 
-            if ( addressBits.size() == 2 ) {
-                if ( addressBits[ 0 ].count ('.') == 0 ) {
-                    if ( addressBits[ 0 ].size() > 4 || addressBits[ 1 ].size() > 4 )
+            if ( addressBits.size() == 2u ) {
+                if ( addressBits[ 0 ].count ('.') == 0u ) {
+                    if ( addressBits[ 0 ].size() > 4u || addressBits[ 1 ].size() > 4u ) {
                         throw IllegalArgumentException ( "IPV6 Address conversion failed : "_s + addressBits.toString() +
                                                         ", assumed format : ::IPV4-1..2hex::IPV4-3..4hex -> to IPV4");
+                    }
 
-                    union {
-                        struct { uint16 first32, second32; };
-                        struct { uint8 l1, l2, l3, l4; };
+                    union { // NOLINT(clion-misra-cpp2008-8-0-1,clion-misra-cpp2008-9-5-1)
+                        struct {
+                            uint16 first32;
+                            uint16 second32;
+                        };
+
+                        struct {
+                            uint8 l1;
+                            uint8 l2;
+                            uint8 l3;
+                            uint8 l4;
+                        };
                     } address { };
 
-                    address.first32 = (uint16)(int)Int::parse(addressBits[ 0 ], 16);
-                    address.second32 = (uint16)(int)Int::parse(addressBits[ 1 ], 16);
+                    address.first32 = static_cast < uint16 > ( static_cast < int > ( Int::parse(addressBits[ 0 ], 16) ) );
+                    address.second32 = static_cast < uint16 > ( static_cast < int > ( Int::parse(addressBits[ 1 ], 16) ) );
 
-                    if ( isBigEndian() )
-                        return String::f("%d.%d.%d.%d", address.l1, address.l2, address.l3, address.l4);
-                    return String::f("%d.%d.%d.%d", address.l2, address.l1, address.l4, address.l3);
+                    if ( isBigEndian() ) {
+                        return String::f(
+                                "%d.%d.%d.%d",
+                                static_cast < int > ( address.l1 ),
+                                static_cast < int > ( address.l2 ),
+                                static_cast < int > ( address.l3 ),
+                                static_cast < int > ( address.l4 )
+                        );
+                    }
+
+                    return String::f(
+                            "%d.%d.%d.%d",
+                            static_cast < int > ( address.l2 ),
+                            static_cast < int > ( address.l1 ),
+                            static_cast < int > ( address.l4 ),
+                            static_cast < int > ( address.l3 )
+                    );
                 }
 
-                if ( addressBits[ 0 ].count ('.') != 3 || addressBits[ 0 ].findFirstNotOf ( ".0123456789" ) != String::INVALID_POS )
+                if ( addressBits[ 0 ].count ('.') != 3u || addressBits[ 0 ].findFirstNotOf ( ".0123456789" ) != String::INVALID_POS ) {
                     throw IllegalArgumentException( "IPV6 Address conversion failed : "_s + addressBits.toString() +
                                                     ", assumed format : ::IPV4:port");
+                }
 
                 return String::f("%s:%s", addressBits[0].cStr(), addressBits[1].cStr());
             }
 
-            if ( addressBits.size() == 3 ) {
-                if ( addressBits[ 0 ].count ('.') == 0 ) {
-                    if ( addressBits[ 0 ].size() > 4 || addressBits[ 1 ].size() > 4 )
+            if ( addressBits.size() == 3u ) {
+                if ( addressBits[ 0 ].count ('.') == 0u ) {
+                    if ( addressBits[ 0 ].size() > 4u || addressBits[ 1 ].size() > 4u ) {
                         throw IllegalArgumentException ( "IPV6 Address conversion failed : "_s + addressBits.toString() +
                                                          ", assumed format : ::IPV4-1..2hex::IPV4-3..4hex -> to IPV4");
+                    }
 
-                    union {
-                        struct { uint16 first32, second32; };
-                        struct { uint8 l1, l2, l3, l4; };
+                    union { // NOLINT(clion-misra-cpp2008-8-0-1,clion-misra-cpp2008-9-5-1)
+                        struct {
+                            uint16 first32;
+                            uint16 second32;
+                        };
+
+                        struct {
+                            uint8 l1;
+                            uint8 l2;
+                            uint8 l3;
+                            uint8 l4;
+                        };
                     } address {};
 
-                    address.first32 = (uint16)(int)Int::parse(addressBits[ 0 ], 16);
-                    address.second32 = (uint16)(int)Int::parse(addressBits[ 1 ], 16);
+                    address.first32 = static_cast < uint16 > ( static_cast < int > ( Int::parse(addressBits[ 0 ], 16) ) );
+                    address.second32 = static_cast < uint16 > ( static_cast < int > ( Int::parse(addressBits[ 1 ], 16) ) );
 
-                    if ( isBigEndian() )
-                        return String::f("%d.%d.%d.%d:%s", address.l1, address.l2, address.l3, address.l4, addressBits[ 2 ].cStr());
-                    return String::f("%d.%d.%d.%d:%s", address.l2, address.l1, address.l4, address.l3, addressBits[ 2 ].cStr());
+                    if ( isBigEndian() ) {
+                        return String::f(
+                                "%d.%d.%d.%d:%s",
+                                static_cast < int > ( address.l1 ),
+                                static_cast < int > ( address.l2 ),
+                                static_cast < int > ( address.l3 ),
+                                static_cast < int > ( address.l4 ),
+                                addressBits[2].cStr()
+                        );
+                    }
+                    return String::f(
+                            "%d.%d.%d.%d:%s",
+                            static_cast < int > ( address.l2 ),
+                            static_cast < int > ( address.l1 ),
+                            static_cast < int > ( address.l4 ),
+                            static_cast < int > ( address.l3 ),
+                            addressBits[ 2 ].cStr()
+                    );
                 }
             }
 
@@ -584,37 +651,40 @@ namespace cds {
             uint16 port = this->_port;
 
             if ( this->_protocolVersion == ProtocolVersion::INTERNET_PROTOCOL_VERSION_4 ) {
-                if ( address.count(':') > 1 ) {
+                if ( address.count(':') > 1u ) {
                     finalAddress = std::move ( Socket::convertIPV4ToIPV6 ( addressBits ) );
                     Index indexOfPortSeparator = finalAddress.findFirst (':');
                     if ( indexOfPortSeparator != String::INVALID_POS ) {
                         finalAddress = std::move ( finalAddress.split ( ':' )[ 0 ] );
-                        port = (uint16)(int)Int::parse(finalAddress.split (':')[1]);
+                        port = static_cast < uint16 > ( static_cast < int > ( Int::parse(finalAddress.split (':')[1]) ) );
                     }
-                } else if ( address.count(':') > 0 ) {
+                } else if ( address.count(':') > 0u ) {
                     auto unverifiedPort = Int::parse(addressBits.back());
-                    if ( unverifiedPort > limits :: U16_MAX )
+                    if ( unverifiedPort > static_cast < int > ( limits :: U16_MAX ) ) {
                         throw IllegalArgumentException ( "Invalid TCP/IP Port : "_s + unverifiedPort.toString() );
+                    }
 
-                    port = (uint16)(int)unverifiedPort;
+                    port = static_cast < uint16 > ( static_cast < int > ( unverifiedPort ) );
                     finalAddress = std :: move ( addressBits.front() );
-                } else
+                } else {
                     finalAddress = std :: move(addressBits.front());
+                }
             } else {
-                if( ! addressBits.empty() && addressBits.size() <= 2 && addressBits[0].count ('.') == 3 ) {
+                if( ! addressBits.empty() && addressBits.size() <= 2u && addressBits[0].count ('.') == 3u ) {
                     finalAddress = std::move(String::f("::FFFF:%s%s:%s%s",
-                        Int::parse(addressBits[0].split ('.')[0]).toString(16).ljust(2, '0').cStr(),
-                        Int::parse(addressBits[0].split ('.')[1]).toString(16).ljust(2, '0').cStr(),
-                        Int::parse(addressBits[0].split ('.')[2]).toString(16).ljust(2, '0').cStr(),
-                        Int::parse(addressBits[0].split ('.')[3]).toString(16).ljust(2, '0').cStr()
+                        Int::parse(addressBits[0].split ('.')[0]).toString(16).ljust(2u, '0').cStr(),
+                        Int::parse(addressBits[0].split ('.')[1]).toString(16).ljust(2u, '0').cStr(),
+                        Int::parse(addressBits[0].split ('.')[2]).toString(16).ljust(2u, '0').cStr(),
+                        Int::parse(addressBits[0].split ('.')[3]).toString(16).ljust(2u, '0').cStr()
                     ));
 
-                    if ( addressBits.size() == 2 )
-                        port = (int) Int::parse(addressBits[1]);
+                    if ( addressBits.size() == 2u ) {
+                        port = static_cast < uint16 > ( static_cast < int > ( Int::parse(addressBits[1]) ) );
+                    }
                 } else {
                     finalAddress = addressBits
                             .sequence()
-                            .fold(addressBits.size() < 8 ? ":" : ""_s, [](String const & s, String const & p){
+                            .fold(addressBits.size() < 8u ? ":" : ""_s, [](String const & s, String const & p){
                                 return s + ":" + p;
                             });
                 }
@@ -627,16 +697,18 @@ namespace cds {
 
         __CDS_OptimalInline auto close () noexcept (false) -> Socket & {
 
-            if ( ! this->isOpen() )
+            if ( ! this->isOpen() ) {
                 return * this;
+            }
 
             this->_connected = false;
 
     #if defined(__CDS_Platform_Linux)
 
             auto retVal = ::close ( exchange ( this->_platformSocket, Socket::UNIX_INVALID_PLATFORM_SOCKET ) );
-            if ( retVal == Socket::UNIX_SOCKET_FUNCTION_ERROR )
+            if ( retVal == Socket::UNIX_SOCKET_FUNCTION_ERROR ) {
                 throw SocketException("Socket Close Exception");
+            }
 
             this->_platformSocket = Socket::UNIX_INVALID_PLATFORM_SOCKET;
 
@@ -657,17 +729,18 @@ namespace cds {
             return * this;
         }
 
-        __CDS_OptionalInline auto bind ( uint16 port = 0 ) noexcept (false) -> Socket & {
+        __CDS_OptionalInline auto bind ( uint16 port = 0u ) noexcept (false) -> Socket & { // NOLINT(misc-no-recursion)
 
-            if ( port != 0 )
+            if ( port != 0u ) {
                 this->_port = port;
+            }
 
     #if defined(__CDS_Platform_Linux)
 
             switch ( this->_protocolVersion ) {
                 case ProtocolVersion::INTERNET_PROTOCOL_NONE_SPECIFIED:
                 case ProtocolVersion::INTERNET_PROTOCOL_VERSION_6:
-                case ProtocolVersion::INTERNET_PROTOCOL_VERSION_6_FORCED: {
+                case ProtocolVersion::INTERNET_PROTOCOL_VERSION_6_FORCED: { // NOLINT(clion-misra-cpp2008-6-4-5)
 
                     int flag = 0x01;
                     int retVal = :: setsockopt (
@@ -675,12 +748,13 @@ namespace cds {
                             SOL_SOCKET,
                             SO_REUSEADDR,
                             & flag,
-                            sizeof ( flag )
+                            static_cast < socklen_t > (sizeof ( flag ))
                     );
 
                     if ( retVal == Socket::UNIX_SOCKET_FUNCTION_ERROR ) {
-                        if ( this->_protocolVersion == Socket::ProtocolVersion::INTERNET_PROTOCOL_VERSION_6_FORCED )
+                        if ( this->_protocolVersion == Socket::ProtocolVersion::INTERNET_PROTOCOL_VERSION_6_FORCED ) {
                             throw SocketException("Bind Exception on IPV6 : SetSocketOption Error");
+                        }
 
                         this->_protocolVersion = Socket::ProtocolVersion::INTERNET_PROTOCOL_VERSION_4;
                         return this->close().open().bind();
@@ -688,19 +762,20 @@ namespace cds {
 
                     sockaddr_in6 ipv6AddressInfo {};
 
-                    ipv6AddressInfo.sin6_family = AF_INET6;
+                    ipv6AddressInfo.sin6_family = static_cast < sa_family_t > ( AF_INET6 );
                     ipv6AddressInfo.sin6_addr = in6addr_any;
                     ipv6AddressInfo.sin6_port = htons(this->_port);
 
                     retVal = :: bind (
                         this->_platformSocket,
                         reinterpret_cast < sockaddr * > ( & ipv6AddressInfo ),
-                        sizeof ( ipv6AddressInfo )
+                        static_cast < socklen_t > ( sizeof ( ipv6AddressInfo ) )
                     );
 
                     if ( retVal == Socket::UNIX_SOCKET_FUNCTION_ERROR ) {
-                        if ( this->_protocolVersion == Socket::ProtocolVersion::INTERNET_PROTOCOL_VERSION_6_FORCED )
+                        if ( this->_protocolVersion == Socket::ProtocolVersion::INTERNET_PROTOCOL_VERSION_6_FORCED ) {
                             throw SocketException("Bind Exception on IPV6");
+                        }
 
                         this->_protocolVersion = Socket::ProtocolVersion::INTERNET_PROTOCOL_VERSION_4;
                         return this->close().open().bind();
@@ -708,7 +783,7 @@ namespace cds {
 
                     return * this;
 
-                } case ProtocolVersion::INTERNET_PROTOCOL_VERSION_4: {
+                } case ProtocolVersion::INTERNET_PROTOCOL_VERSION_4: { // NOLINT(clion-misra-cpp2008-6-4-5)
 
                     int flag = 0x01;
                     int retVal = :: setsockopt (
@@ -716,26 +791,28 @@ namespace cds {
                             SOL_SOCKET,
                             SO_REUSEADDR,
                             & flag,
-                            sizeof ( flag )
+                            static_cast < socklen_t > ( sizeof ( flag ) )
                     );
 
-                    if ( retVal == Socket::UNIX_SOCKET_FUNCTION_ERROR )
+                    if ( retVal == Socket::UNIX_SOCKET_FUNCTION_ERROR ) {
                         throw SocketException("Bind Exception on IPV4 : SetSocketOption Error");
+                    }
 
                     sockaddr_in ipv4AddressInfo {};
 
-                    ipv4AddressInfo.sin_family = AF_INET;
-                    ipv4AddressInfo.sin_addr.s_addr = htonl(INADDR_ANY);
+                    ipv4AddressInfo.sin_family = static_cast < sa_family_t > ( AF_INET );
+                    ipv4AddressInfo.sin_addr.s_addr = htonl(INADDR_ANY); // NOLINT(clion-misra-cpp2008-5-2-4)
                     ipv4AddressInfo.sin_port = htons(this->_port);
 
                     retVal = :: bind (
                             this->_platformSocket,
                             reinterpret_cast < sockaddr * > ( & ipv4AddressInfo ),
-                            sizeof ( ipv4AddressInfo )
+                            static_cast < socklen_t > ( sizeof ( ipv4AddressInfo ) )
                     );
 
-                    if ( retVal == Socket::UNIX_SOCKET_FUNCTION_ERROR )
+                    if ( retVal == Socket::UNIX_SOCKET_FUNCTION_ERROR ) {
                         throw SocketException("Bind Exception on IPV4");
+                    }
 
                     return * this;
                 }
@@ -840,16 +917,21 @@ namespace cds {
 
         }
 
-        __CDS_OptionalInline auto listen ( int queueSize = 0 ) noexcept (false) -> Socket & { // NOLINT(misc-no-recursion)
-            if ( queueSize == 0 ) queueSize = Socket::DEFAULT_CLIENT_QUEUE_SIZE;
+        __CDS_OptionalInline auto listen ( Size queueSize = 0u ) noexcept (false) -> Socket & { // NOLINT(misc-no-recursion)
+            if ( queueSize == 0u ) {
+                queueSize = Socket::DEFAULT_CLIENT_QUEUE_SIZE;
+            }
 
     #if defined(__CDS_Platform_Linux)
 
-            if ( Socket::UNIX_SOCKET_FUNCTION_ERROR == :: listen ( this->_platformSocket, queueSize ) ) {
-                if ( this->_protocolVersion == Socket::ProtocolVersion::INTERNET_PROTOCOL_VERSION_6_FORCED )
+            if ( Socket::UNIX_SOCKET_FUNCTION_ERROR == :: listen ( this->_platformSocket, static_cast < int > ( queueSize ) ) ) {
+                if ( this->_protocolVersion == Socket::ProtocolVersion::INTERNET_PROTOCOL_VERSION_6_FORCED ) {
                     throw SocketException("Listen Exception on IPV6");
-                if ( this->_protocolVersion == Socket::ProtocolVersion::INTERNET_PROTOCOL_VERSION_4 )
+                }
+
+                if ( this->_protocolVersion == Socket::ProtocolVersion::INTERNET_PROTOCOL_VERSION_4 ) {
                     throw SocketException("Listen Exception on IPV4");
+                }
 
                 this->_protocolVersion = Socket::ProtocolVersion::INTERNET_PROTOCOL_VERSION_4;
                 return this->close().open().bind (this->_port).listen (queueSize);
@@ -885,9 +967,9 @@ namespace cds {
 
         struct LastAddressContainer {
         public:
-            sockaddr * pLastSocketAddress { nullptr };
-            socklen_t lastSocketAddressSize { 0 };
-            ProtocolVersion lastProtocolType { ProtocolVersion::INTERNET_PROTOCOL_NONE_SPECIFIED };
+            sockaddr * pLastSocketAddress { nullptr }; // NOLINT(clion-misra-cpp2008-11-0-1)
+            socklen_t lastSocketAddressSize { 0u }; // NOLINT(clion-misra-cpp2008-11-0-1)
+            ProtocolVersion lastProtocolType { ProtocolVersion::INTERNET_PROTOCOL_NONE_SPECIFIED }; // NOLINT(clion-misra-cpp2008-11-0-1)
 
             __CDS_OptimalInline LastAddressContainer() noexcept = default;
 
@@ -899,31 +981,34 @@ namespace cds {
                 switch ( protocolVersion ) {
                     case ProtocolVersion::INTERNET_PROTOCOL_NONE_SPECIFIED:
                     case ProtocolVersion::INTERNET_PROTOCOL_VERSION_6:
-                    case ProtocolVersion::INTERNET_PROTOCOL_VERSION_6_FORCED:
-                        if ( this->lastProtocolType == ProtocolVersion::IPV6 )
+                    case ProtocolVersion::INTERNET_PROTOCOL_VERSION_6_FORCED: // NOLINT(clion-misra-cpp2008-6-4-5)
+                        if ( this->lastProtocolType == ProtocolVersion::IPV6 ) {
                             return;
+                        }
 
-                    case ProtocolVersion::INTERNET_PROTOCOL_VERSION_4:
-                        if ( this->lastProtocolType == ProtocolVersion::IPV4 )
+                    case ProtocolVersion::INTERNET_PROTOCOL_VERSION_4: // NOLINT(clion-misra-cpp2008-6-4-5)
+                        if ( this->lastProtocolType == ProtocolVersion::IPV4 ) {
                             return;
+                        }
                 }
 
-                if ( this->pLastSocketAddress != nullptr )
+                if ( this->pLastSocketAddress != nullptr ) {
                     delete exchange(this->pLastSocketAddress, nullptr);
+                }
 
                 switch ( protocolVersion ) {
                     case ProtocolVersion::INTERNET_PROTOCOL_NONE_SPECIFIED:
                     case ProtocolVersion::INTERNET_PROTOCOL_VERSION_6:
-                    case ProtocolVersion::INTERNET_PROTOCOL_VERSION_6_FORCED:
-                        this->pLastSocketAddress = reinterpret_cast < sockaddr * > ( new sockaddr_in6 ());
-                        this->lastSocketAddressSize = sizeof ( sockaddr_in6 );
+                    case ProtocolVersion::INTERNET_PROTOCOL_VERSION_6_FORCED: // NOLINT(clion-misra-cpp2008-6-4-5)
+                        this->pLastSocketAddress = reinterpret_cast < sockaddr * > ( new sockaddr_in6 ()); // NOLINT(clion-misra-cpp2008-18-4-1)
+                        this->lastSocketAddressSize = static_cast < socklen_t > ( sizeof ( sockaddr_in6 ) );
                         this->lastProtocolType = ProtocolVersion::IPV6;
 
                         return;
-                    case ProtocolVersion::INTERNET_PROTOCOL_VERSION_4:
+                    case ProtocolVersion::INTERNET_PROTOCOL_VERSION_4: // NOLINT(clion-misra-cpp2008-6-4-5)
 
-                        this->pLastSocketAddress = reinterpret_cast < sockaddr * > ( new sockaddr_in ());
-                        this->lastSocketAddressSize = sizeof ( sockaddr_in );
+                        this->pLastSocketAddress = reinterpret_cast < sockaddr * > ( new sockaddr_in ()); // NOLINT(clion-misra-cpp2008-18-4-1)
+                        this->lastSocketAddressSize = static_cast < socklen_t > ( sizeof ( sockaddr_in ) );
                         this->lastProtocolType = ProtocolVersion::IPV4;
                 }
             }
@@ -932,41 +1017,41 @@ namespace cds {
                 switch ( this->lastProtocolType ) {
                     case ProtocolVersion::INTERNET_PROTOCOL_NONE_SPECIFIED:
                     case ProtocolVersion::INTERNET_PROTOCOL_VERSION_6:
-                    case ProtocolVersion::INTERNET_PROTOCOL_VERSION_6_FORCED: {
-                        Pair < String, uint16 > returnValue = { String(INET6_ADDRSTRLEN, '\0'), 0 };
+                    case ProtocolVersion::INTERNET_PROTOCOL_VERSION_6_FORCED: { // NOLINT(clion-misra-cpp2008-6-4-5)
+                        Pair < String, uint16 > returnValue = { String(static_cast < Size > ( INET6_ADDRSTRLEN ), '\0'), 0u };
                         auto pAddressInfo = reinterpret_cast < sockaddr_in6 * > ( this->pLastSocketAddress );
 
-                        inet_ntop (
+                        (void) inet_ntop (
                                 AF_INET6,
                                 reinterpret_cast < void * > ( & pAddressInfo->sin6_addr ),
                                 returnValue.first().data(),
-                                INET6_ADDRSTRLEN
+                                static_cast < socklen_t > ( INET6_ADDRSTRLEN )
                         );
 
                         returnValue.second() = ntohs ( pAddressInfo->sin6_port );
                         return returnValue;
                     }
-                    case ProtocolVersion::INTERNET_PROTOCOL_VERSION_4: {
-                        Pair < String, uint16 > returnValue = { String(INET_ADDRSTRLEN, '\0'), 0 };
+                    case ProtocolVersion::INTERNET_PROTOCOL_VERSION_4: { // NOLINT(clion-misra-cpp2008-6-4-5)
+                        Pair < String, uint16 > returnValue = { String(static_cast < Size > ( INET_ADDRSTRLEN ), '\0'), 0u };
                         auto pAddressInfo = reinterpret_cast < sockaddr_in * > ( this->pLastSocketAddress );
 
-                        inet_ntop (
+                        (void) inet_ntop (
                                 AF_INET,
                                 reinterpret_cast < void * > ( & pAddressInfo->sin_addr ),
                                 returnValue.first().data(),
-                                INET_ADDRSTRLEN
+                                static_cast < socklen_t > ( INET_ADDRSTRLEN )
                         );
 
                         returnValue.second() = ntohs ( pAddressInfo->sin_port );
                         return returnValue;
                     }
-                    default:
+                    default: // NOLINT(clion-misra-cpp2008-6-4-5)
                         return {};
                 }
             }
         };
 
-        LastAddressContainer * pLastAddressObtainedContainer { nullptr };
+        LastAddressContainer * pLastAddressObtainedContainer { nullptr }; // NOLINT(clion-misra-cpp2008-11-0-1)
 
     #elif defined(__CDS_Platform_Microsoft_Windows)
 
@@ -1032,8 +1117,9 @@ namespace cds {
             static LastAddressContainer lastAddressContainer;
             lastAddressContainer.specifyType (this->_protocolVersion);
 
-            if ( this->pLastAddressObtainedContainer == nullptr )
+            if ( this->pLastAddressObtainedContainer == nullptr ) {
                 this->pLastAddressObtainedContainer = & lastAddressContainer;
+            }
 
             PlatformSocket retVal = :: accept (
                 this->_platformSocket,
@@ -1041,8 +1127,9 @@ namespace cds {
                 & lastAddressContainer.lastSocketAddressSize
             );
 
-            if ( retVal == Socket::UNIX_INVALID_PLATFORM_SOCKET )
-                throw SocketException( "Accept Exception." );
+            if ( retVal == Socket::UNIX_INVALID_PLATFORM_SOCKET ) {
+                throw SocketException("Accept Exception.");
+            }
 
     #elif defined(__CDS_Platform_Microsoft_Windows)
 
@@ -1074,8 +1161,8 @@ namespace cds {
                 int acknowledge;
 
                 try {
-                    clientSocket.writeSize ( this->_packetSize );
-                    clientSocket.writeSize ( this->_packetSyncCount );
+                    (void) clientSocket.writeSize ( this->_packetSize );
+                    (void) clientSocket.writeSize ( this->_packetSyncCount );
 
                     acknowledge = clientSocket.readInt ();
                     clientSocket._connected = true;
@@ -1083,8 +1170,9 @@ namespace cds {
                     throw SocketException("Synchronization of settings at connect initialization not acknowledged : "_s + e);
                 }
 
-                if ( acknowledge != 1 )
+                if ( acknowledge != 1 ) {
                     throw SocketException("Synchronization of settings at connect initialization not acknowledged : Client Response Not OK");
+                }
 
             }
 
@@ -1097,10 +1185,16 @@ namespace cds {
 
             auto written = :: write ( this->_platformSocket, pBuffer, count );
 
-            if ( Socket::UNIX_SOCKET_FUNCTION_ERROR == written )
+            if ( Socket::UNIX_SOCKET_FUNCTION_ERROR == written ) {
                 throw SocketException("Socket writeBytes Exception");
-            if ( written != count )
-                throw SocketException(String::f("Unable to completely write message : intended : %d, sent : %d", count, written) );
+            }
+            if ( static_cast < Size > ( written ) != count ) {
+                throw SocketException(String::f( // NOLINT(clion-misra-cpp2008-0-1-7)
+                        "Unable to completely write message : intended : %d, sent : %d",
+                        static_cast < int > ( count ),
+                        static_cast < int > ( written )
+                ));
+            }
 
             return * this;
 
@@ -1129,14 +1223,17 @@ namespace cds {
 
             auto read = :: read ( this->_platformSocket, pBuffer, intendedForRead );
 
-            if ( Socket::UNIX_SOCKET_FUNCTION_ERROR == read )
+            if ( Socket::UNIX_SOCKET_FUNCTION_ERROR == read ) {
                 throw SocketException("Socket readBytes Exception");
+            }
 
-            if ( Socket::UNIX_SOCKET_READ_DISCONNECT == read )
+            if ( Socket::UNIX_SOCKET_READ_DISCONNECT == read ) {
                 throw SocketDisconnect();
+            }
 
-            if ( read != intendedForRead )
-                throw SocketException ("Read Bytes count Different from Intended Count");
+            if ( static_cast < Size > ( read ) != intendedForRead ) {
+                throw SocketException("Read Bytes count Different from Intended Count");
+            }
 
             return * this;
 
@@ -1207,24 +1304,27 @@ namespace cds {
 
         __CDS_MaybeUnused __CDS_OptionalInline auto writeString ( String const & string ) noexcept (false) -> Socket & {
             auto packetCount = string.size() / this->_packetSize;
-            if ( string.size() % this->_packetSize != 0 )
+            if ( string.size() % this->_packetSize != 0u ) {
                 ++ packetCount;
+            }
 
-            this->writeSize ( string.size() );
+            (void) this->writeSize ( string.size() );
 
             Size offset = 0U;
 
-            for ( Size i = 0; i < packetCount; ++ i ) {
-                this->writeBytes (
+            for ( Size i = 0u; i < packetCount; ++ i ) {
+                (void) this->writeBytes (
                     reinterpret_cast < Byte const * > ( string.cStr() ) + offset,
                     std::min ( this->_packetSize, string.size() - offset)
                 );
 
                 offset += this->_packetSize;
 
-                if ( ( i + 1 ) % this->_packetSyncCount == 0 ) {
+                if ( ( i + 1u ) % this->_packetSyncCount == 0u ) {
                     int ack = this->readInt();
-                    if ( ack != 1 ) throw SocketException("Large Data Write Synchronize Error");
+                    if ( ack != 1 ) {
+                        throw SocketException("Large Data Write Synchronize Error");
+                    }
                 }
             }
 
@@ -1234,49 +1334,49 @@ namespace cds {
 
         __CDS_NoDiscard __CDS_MaybeUnused __CDS_OptimalInline auto readInt8 () noexcept(false) -> sint8 {
             sint8 value;
-            this->readBytes(reinterpret_cast < Byte * > ( & value ), sizeof(value));
+            (void) this->readBytes(reinterpret_cast < Byte * > ( & value ), sizeof(value));
             return value;
         }
 
         __CDS_NoDiscard __CDS_MaybeUnused __CDS_OptimalInline auto readInt16 () noexcept(false) -> sint16 {
             sint16 value;
-            this->readBytes(reinterpret_cast < Byte * > ( & value ), sizeof(value));
+            (void) this->readBytes(reinterpret_cast < Byte * > ( & value ), sizeof(value));
             return value;
         }
 
         __CDS_NoDiscard __CDS_MaybeUnused __CDS_OptimalInline auto readInt32 () noexcept(false) -> sint32 {
             sint32 value;
-            this->readBytes(reinterpret_cast < Byte * > ( & value ), sizeof(value));
+            (void) this->readBytes(reinterpret_cast < Byte * > ( & value ), sizeof(value));
             return value;
         }
 
         __CDS_NoDiscard __CDS_MaybeUnused __CDS_OptimalInline auto readInt64 () noexcept(false) -> sint64 {
             sint64 value;
-            this->readBytes(reinterpret_cast < Byte * > ( & value ), sizeof(value));
+            (void) this->readBytes(reinterpret_cast < Byte * > ( & value ), sizeof(value));
             return value;
         }
 
         __CDS_NoDiscard __CDS_MaybeUnused __CDS_OptimalInline auto readUInt8 () noexcept(false) -> uint8 {
             uint8 value;
-            this->readBytes(reinterpret_cast < Byte * > ( & value ), sizeof(value));
+            (void) this->readBytes(reinterpret_cast < Byte * > ( & value ), sizeof(value));
             return value;
         }
 
         __CDS_NoDiscard __CDS_MaybeUnused __CDS_OptimalInline auto readUInt16 () noexcept(false) -> uint16 {
             uint16 value;
-            this->readBytes(reinterpret_cast < Byte * > ( & value ), sizeof(value));
+            (void) this->readBytes(reinterpret_cast < Byte * > ( & value ), sizeof(value));
             return value;
         }
 
         __CDS_NoDiscard __CDS_MaybeUnused __CDS_OptimalInline auto readUInt32 () noexcept(false) -> uint32 {
             uint32 value;
-            this->readBytes(reinterpret_cast < Byte * > ( & value ), sizeof(value));
+            (void) this->readBytes(reinterpret_cast < Byte * > ( & value ), sizeof(value));
             return value;
         }
 
         __CDS_NoDiscard __CDS_MaybeUnused __CDS_OptimalInline auto readUInt64 () noexcept(false) -> uint64 {
             uint64 value;
-            this->readBytes(reinterpret_cast < Byte * > ( & value ), sizeof(value));
+            (void) this->readBytes(reinterpret_cast < Byte * > ( & value ), sizeof(value));
             return value;
         }
 
@@ -1290,26 +1390,28 @@ namespace cds {
         }
 
         __CDS_NoDiscard __CDS_MaybeUnused __CDS_OptionalInline auto readString () noexcept (false) -> String {
-            Size originalSize = this->readSize(), offset = 0U;
+            Size originalSize = this->readSize();
+            Size offset = 0U;
             Size packetCount = originalSize / this->_packetSize;
 
-            if ( originalSize % this->_packetSize != 0 )
+            if ( originalSize % this->_packetSize != 0u ) {
                 ++ packetCount;
+            }
 
             String buffer;
             buffer.resize(originalSize);
             buffer._l = originalSize;
 
-            for ( Size i = 0; i < packetCount; ++ i ) {
-                this->readBytes (
+            for ( Size i = 0u; i < packetCount; ++ i ) {
+                (void) this->readBytes (
                     reinterpret_cast < Byte * > (buffer.data()) + offset,
                     std::min(this->_packetSize, originalSize - offset)
                 );
 
                 offset += this->_packetSize;
 
-                if ( (i + 1) % this->_packetSyncCount == 0 ) {
-                    this->writeInt(1);
+                if ( (i + 1u) % this->_packetSyncCount == 0u ) {
+                    (void) this->writeInt(1);
                 }
             }
 
@@ -1318,11 +1420,11 @@ namespace cds {
 
         __CDS_NoDiscard constexpr static auto protocolVersionToString (ProtocolVersion protocolVersion) noexcept -> StringLiteral {
             switch ( protocolVersion ) {
-                case ProtocolVersion::INTERNET_PROTOCOL_NONE_SPECIFIED:     return "Protocol Version Automatic Detection";
-                case ProtocolVersion::INTERNET_PROTOCOL_VERSION_4:          return "Internet Protocol Version 4 (IPV4, Preferred)";
-                case ProtocolVersion::INTERNET_PROTOCOL_VERSION_6:          return "Internet Protocol Version 6 (IPV6, Preferred)";
-                case ProtocolVersion::INTERNET_PROTOCOL_VERSION_6_FORCED:   return "Internet Protocol Version 6 (IPV6, Forced)";
-                default:                                                    return "Unknown Protocol Version Handler";
+                case ProtocolVersion::INTERNET_PROTOCOL_NONE_SPECIFIED:     return "Protocol Version Automatic Detection"; // NOLINT(clion-misra-cpp2008-6-4-5)
+                case ProtocolVersion::INTERNET_PROTOCOL_VERSION_4:          return "Internet Protocol Version 4 (IPV4, Preferred)"; // NOLINT(clion-misra-cpp2008-6-4-5)
+                case ProtocolVersion::INTERNET_PROTOCOL_VERSION_6:          return "Internet Protocol Version 6 (IPV6, Preferred)"; // NOLINT(clion-misra-cpp2008-6-4-5)
+                case ProtocolVersion::INTERNET_PROTOCOL_VERSION_6_FORCED:   return "Internet Protocol Version 6 (IPV6, Forced)"; // NOLINT(clion-misra-cpp2008-6-4-5)
+                default:                                                    return "Unknown Protocol Version Handler"; // NOLINT(clion-misra-cpp2008-6-4-5)
             }
         }
 
@@ -1410,9 +1512,15 @@ namespace cds {
         }
 
         __CDS_NoDiscard auto equals(Object const & o) const noexcept -> bool override {
-            if ( this == & o ) return true;
-            auto p = dynamic_cast < decltype (this) > ( & o );
-            if ( p == nullptr ) return false;
+            if ( this == & o ) {
+                return true;
+            }
+
+            auto p = dynamic_cast < Socket const * > ( & o );
+
+            if ( p == nullptr ) {
+                return false;
+            }
 
     #if defined(__CDS_Platform_Linux)
 
@@ -1430,7 +1538,7 @@ namespace cds {
         }
 
         __CDS_OptimalInline ~Socket () noexcept override {
-            this->close();
+            (void) this->close();
         }
 
         Socket(Socket const & socket) noexcept (Socket::socketDuplicateExceptSpec) :
@@ -1484,9 +1592,11 @@ namespace cds {
         }
 
         auto operator = (Socket const & socket) noexcept (Socket::socketDuplicateExceptSpec) -> Socket & {
-            if ( & socket == this ) return * this;
+            if ( & socket == this ) {
+                return * this;
+            }
 
-            this->close();
+            (void) this->close();
 
     #if defined(__CDS_Platform_Linux)
 
@@ -1557,9 +1667,11 @@ namespace cds {
         }
 
         auto operator = (Socket && socket) noexcept -> Socket & {
-            if ( & socket == this ) return * this;
+            if ( & socket == this ) {
+                return * this;
+            }
 
-            this->close();
+            (void) this->close();
 
     #if defined(__CDS_Platform_Linux)
 
@@ -1586,39 +1698,40 @@ namespace cds {
         }
 
         __CDS_NoDiscard __CDS_MaybeUnused auto getPeerAddress () const noexcept (false) -> Pair < String, uint16 > {
-            if ( ! this->connected() )
-                throw SocketException ("Not Connected to a Peer");
+            if ( ! this->connected() ) {
+                throw SocketException("Not Connected to a Peer");
+            }
 
             switch ( this->_protocolVersion ) {
                 case ProtocolVersion::INTERNET_PROTOCOL_NONE_SPECIFIED:
                 case ProtocolVersion::INTERNET_PROTOCOL_VERSION_6:
-                case ProtocolVersion::INTERNET_PROTOCOL_VERSION_6_FORCED: {
-                    Pair < String, uint16 > returnValue = { String (INET6_ADDRSTRLEN, '\0'), 0 };
+                case ProtocolVersion::INTERNET_PROTOCOL_VERSION_6_FORCED: { // NOLINT(clion-misra-cpp2008-6-4-5)
+                    Pair < String, uint16 > returnValue = { String (static_cast < Size > ( INET6_ADDRSTRLEN ), '\0'), 0u };
 
                     sockaddr_in6 socketAddress {};
-                    socklen_t addressSize = sizeof ( socketAddress );
+                    auto addressSize = static_cast < socklen_t > ( sizeof ( socketAddress ) );
 
                     (void)getpeername(this->_platformSocket, reinterpret_cast < sockaddr * > ( & socketAddress ), & addressSize);
-                    inet_ntop ( AF_INET6, reinterpret_cast < void * > ( & socketAddress.sin6_addr ), returnValue.first().data(), INET6_ADDRSTRLEN );
+                    (void)inet_ntop ( AF_INET6, reinterpret_cast < void * > ( & socketAddress.sin6_addr ), returnValue.first().data(), static_cast < socklen_t > (INET6_ADDRSTRLEN) );
 
                     returnValue.second() = ntohs ( socketAddress.sin6_port );
 
                     return returnValue;
                 }
-                case ProtocolVersion::INTERNET_PROTOCOL_VERSION_4: {
-                    Pair < String, uint16 > returnValue = { String (INET_ADDRSTRLEN, '\0'), 0 };
+                case ProtocolVersion::INTERNET_PROTOCOL_VERSION_4: { // NOLINT(clion-misra-cpp2008-6-4-5)
+                    Pair < String, uint16 > returnValue = { String (static_cast < Size > ( INET_ADDRSTRLEN ), '\0'), 0u };
 
                     sockaddr_in socketAddress {};
-                    socklen_t addressSize = sizeof ( socketAddress );
+                    auto addressSize = static_cast < socklen_t > ( sizeof ( socketAddress ) );
 
                     (void)getpeername(this->_platformSocket, reinterpret_cast < sockaddr * > ( & socketAddress ), & addressSize);
-                    inet_ntop ( AF_INET, reinterpret_cast < void * > ( & socketAddress.sin_addr ), returnValue.first().data(), INET_ADDRSTRLEN );
+                    (void)inet_ntop ( AF_INET, reinterpret_cast < void * > ( & socketAddress.sin_addr ), returnValue.first().data(), static_cast < socklen_t > (INET_ADDRSTRLEN) );
 
                     returnValue.second() = ntohs ( socketAddress.sin_port );
 
                     return returnValue;
                 }
-                default:
+                default: // NOLINT(clion-misra-cpp2008-6-4-5)
                     return {};
             }
         }
@@ -1631,19 +1744,21 @@ namespace cds {
     class ServerSocket : public Socket {
     public:
         explicit ServerSocket ( uint16 port, ProtocolVersion protocolVersion = Socket::ProtocolVersion::IPV4 ) noexcept (false) : Socket(protocolVersion) {
-            this->bind (port).listen ();
+            (void) this->bind (port).listen ();
         }
 
         __CDS_NoDiscard __CDS_MaybeUnused __CDS_OptimalInline auto lastClientAddress () const noexcept(false) -> Pair < String, uint16 > {
-            if ( this->pLastAddressObtainedContainer == nullptr )
-                throw SocketException ("No Last Connected Client");
+            if ( this->pLastAddressObtainedContainer == nullptr ) {
+                throw SocketException("No Last Connected Client");
+            }
+
             return this->pLastAddressObtainedContainer->address();
         }
     };
 
 }
 
-__CDS_RegisterParseType(Socket)
-__CDS_RegisterParseType(ServerSocket)
+__CDS_RegisterParseType(Socket) // NOLINT(clion-misra-cpp2008-8-0-1)
+__CDS_RegisterParseType(ServerSocket) // NOLINT(clion-misra-cpp2008-8-0-1)
 
 #endif //CDS_SOCKET_HPP

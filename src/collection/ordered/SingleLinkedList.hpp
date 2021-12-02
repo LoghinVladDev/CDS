@@ -37,20 +37,12 @@ namespace cds {
 
     private:
         struct Node {
-            ElementPtr  _data  {nullptr};
-            Node      * _pNext {nullptr};
+            ElementType * _data;
+            Node        * _pNext;
+        };
 
-            constexpr Node () noexcept = default;
-
-        __CDS_cpplang_NonConstConstexprMemberFunction auto next () noexcept -> Node * & { return this->_pNext; }
-        constexpr auto next () const noexcept -> Node const * const & { return this->_pNext; }
-
-        __CDS_cpplang_NonConstConstexprMemberFunction auto data () noexcept -> T * & { return this->_data; }
-        constexpr auto data () const noexcept -> T const * const & { return this->_data; }
-    };
-
-        Node * _pFront {nullptr};
-        Node * _pBack {nullptr};
+        Node * _pFront  {nullptr};
+        Node * _pBack   {nullptr};
 
     protected:
 
@@ -79,16 +71,19 @@ namespace cds {
             __CDS_cpplang_ConstexprDestructor ~SingleLinkedListDelegateIterator() noexcept override = default;
 
             __CDS_cpplang_ConstexprOverride auto next () noexcept -> SingleLinkedListDelegateIterator & override {
-                this->_pNode = this->_pNode->next();
+                this->_pNode = this->_pNode->_pNext;
                 return * this;
             }
 
             __CDS_cpplang_ConstexprOverride auto value () const noexcept -> ElementRef override {
-                return * this->_pNode->data();
+                return * this->_pNode->_data;
             }
 
             __CDS_OptimalInline auto equals ( DelegateIterator const & it ) const noexcept -> bool override {
-                if ( this == & it ) return true;
+                if ( this == & it ) {
+                    return true;
+                }
+
                 auto p = reinterpret_cast < decltype (this) > ( & it );
 
                 return this->_pNode == p->_pNode;
@@ -116,16 +111,19 @@ namespace cds {
             __CDS_cpplang_ConstexprDestructor ~SingleLinkedListDelegateConstIterator() noexcept override = default;
 
             __CDS_cpplang_ConstexprOverride auto next () noexcept -> SingleLinkedListDelegateConstIterator & override {
-                this->_pNode = this->_pNode->next();
+                this->_pNode = this->_pNode->_pNext;
                 return * this;
             }
 
             __CDS_cpplang_ConstexprOverride auto value () const noexcept -> ElementCRef override {
-                return * this->_pNode->data();
+                return * this->_pNode->_data;
             }
 
             __CDS_OptimalInline auto equals ( DelegateConstIterator const & it ) const noexcept -> bool override {
-                if ( this == & it ) return true;
+                if ( this == & it ) {
+                    return true;
+                }
+
                 auto p = reinterpret_cast < decltype (this) > ( & it );
 
                 return this->_pNode == p->_pNode;
@@ -140,26 +138,26 @@ namespace cds {
 
         __CDS_OptimalInline auto delegateIterator ( DelegateIteratorRequestType requestType ) noexcept -> UniquePointer < DelegateIterator > override {
             switch ( requestType ) {
-                case DelegateIteratorRequestType :: FORWARD_BEGIN:
+                case DelegateIteratorRequestType :: FORWARD_BEGIN: // NOLINT(clion-misra-cpp2008-6-4-5)
                     return Memory :: instance () . create < SingleLinkedListDelegateIterator > ( this->_pFront );
-                case DelegateIteratorRequestType :: FORWARD_END:
+                case DelegateIteratorRequestType :: FORWARD_END: // NOLINT(clion-misra-cpp2008-6-4-5)
                     return Memory :: instance () . create < SingleLinkedListDelegateIterator > ( nullptr );
                 case DelegateIteratorRequestType :: BACKWARD_BEGIN:
                 case DelegateIteratorRequestType :: BACKWARD_END:
-                default:
+                default: // NOLINT(clion-misra-cpp2008-6-4-5)
                     return nullptr;
             }
         }
 
         __CDS_OptimalInline auto delegateConstIterator ( DelegateIteratorRequestType requestType ) const noexcept -> UniquePointer < DelegateConstIterator > override {
             switch ( requestType ) {
-                case DelegateIteratorRequestType :: FORWARD_BEGIN:
+                case DelegateIteratorRequestType :: FORWARD_BEGIN: // NOLINT(clion-misra-cpp2008-6-4-5)
                     return Memory :: instance () . create < SingleLinkedListDelegateConstIterator > ( this->_pFront );
-                case DelegateIteratorRequestType :: FORWARD_END:
+                case DelegateIteratorRequestType :: FORWARD_END: // NOLINT(clion-misra-cpp2008-6-4-5)
                     return Memory :: instance () . create < SingleLinkedListDelegateConstIterator > ( nullptr );
                 case DelegateIteratorRequestType :: BACKWARD_BEGIN:
                 case DelegateIteratorRequestType :: BACKWARD_END:
-                default:
+                default: // NOLINT(clion-misra-cpp2008-6-4-5)
                     return nullptr;
             }
         }
@@ -223,54 +221,70 @@ namespace cds {
         }
 
         __CDS_NoDiscard __CDS_cpplang_NonConstConstexprMemberFunction auto back () noexcept (false) -> ElementRef override {
-            if ( this->empty() )
-                throw OutOfBoundsException ( "List is Empty" );
+            if ( this->empty() ) {
+                throw OutOfBoundsException("List is Empty");
+            }
 
-            return * this->_pBack->data();
+            return * this->_pBack->_data;
         }
 
         __CDS_NoDiscard __CDS_cpplang_ConstexprConditioned auto back () const noexcept (false) -> ElementCRef override {
-            if ( this->empty() )
-                throw OutOfBoundsException ( "List is Empty" );
+            if ( this->empty() ) {
+                throw OutOfBoundsException("List is Empty");
+            }
 
-            return * this->_pBack->data();
+            return * this->_pBack->_data;
         }
 
         __CDS_NoDiscard __CDS_cpplang_NonConstConstexprMemberFunction auto front () noexcept (false) -> ElementRef override {
-            if ( this->empty() )
-                throw OutOfBoundsException ( "List is Empty" );
+            if ( this->empty() ) {
+                throw OutOfBoundsException("List is Empty");
+            }
 
-            return * this->_pFront->data();
+            return * this->_pFront->_data;
         }
 
         __CDS_NoDiscard __CDS_cpplang_ConstexprConditioned auto front () const noexcept (false) -> ElementCRef override {
-            if ( this->empty() )
-                throw OutOfBoundsException ( "List is Empty" );
+            if ( this->empty() ) {
+                throw OutOfBoundsException("List is Empty");
+            }
 
-            return * this->_pFront->data();
+            return * this->_pFront->_data;
         }
 
         __CDS_NoDiscard auto operator == (SingleLinkedList const & o) const noexcept -> bool {
-            if ( this == & o ) return true;
-            if ( this->size() != o.size() ) return false;
+            if ( this == & o ) {
+                return true;
+            }
 
-            for (
-                    auto
+            if ( this->size() != o.size() ) {
+                return false;
+            }
+
+            for ( // NOLINT(clion-misra-cpp2008-6-5-1)
+                    auto // NOLINT(clion-misra-cpp2008-8-0-1)
                         a = this->begin(), aEnd = this->end(),
                         b = o.begin(), bEnd = o.end();
                     a != aEnd && b != bEnd;
-                    ++ a, ++ b
-            )
-                if ( ! Type < T > :: compare ( * a, * b ) )
+                    ++ a, ++ b // NOLINT(clion-misra-cpp2008-5-18-1)
+            ) {
+                if ( ! Type < T > :: compare ( * a, * b ) ) { // NOLINT(clion-misra-cpp2008-5-3-1)
                     return false;
+                }
+            }
 
             return true;
         }
 
         __CDS_NoDiscard __CDS_OptimalInline auto equals ( Object const & o ) const noexcept -> bool final {
-            if ( this == & o ) return true;
-            auto p = dynamic_cast < decltype (this) > (& o);
-            if ( p == nullptr ) return false;
+            if ( this == & o ) {
+                return true;
+            }
+
+            auto p = dynamic_cast < SingleLinkedList < T > const * > (& o);
+            if ( p == nullptr ) {
+                return false;
+            }
 
             return this->operator==(* p);
         }
@@ -279,35 +293,40 @@ namespace cds {
         auto makeUnique () noexcept -> void override;
 
         auto popFront () noexcept (false) -> ElementType override {
-            if ( this->empty() )
-                throw OutOfBoundsException ( "List is Empty" );
+            if ( this->empty() ) {
+                throw OutOfBoundsException("List is Empty");
+            }
 
             -- this->_size;
 
             auto node = this->_pFront;
             auto value = * node->_data;
 
-            if ( this->size() == 0 )
-                this->_pFront = this->_pBack = nullptr;
-            else
+            if ( this->size() == 0 ) {
+                this->_pFront = nullptr;
+                this->_pBack = nullptr;
+            } else {
                 this->_pFront = this->_pFront->_pNext;
+            }
 
-            Memory::instance().destroy ( node->data() );
+            Memory::instance().destroy ( node->_data );
             Memory::instance().destroy ( node );
             return value;
         }
 
         auto popBack () noexcept (false) -> ElementType override {
-            if ( this->empty() )
-                throw OutOfBoundsException ( "List is Empty" );
+            if ( this->empty() ) {
+                throw OutOfBoundsException("List is Empty");
+            }
 
             if ( this->size() == 1 ) {
                 auto v = * this->_pFront->_data;
 
-                Memory::instance().destroy ( this->_pFront->data() );
+                Memory::instance().destroy ( this->_pFront->_data );
                 Memory::instance().destroy ( this->_pFront );
 
-                this->_pFront = this->_pBack = nullptr;
+                this->_pFront = nullptr;
+                this->_pBack = nullptr;
                 this->_size = 0;
 
                 return v;
@@ -315,14 +334,15 @@ namespace cds {
 
             auto p = this->_pFront;
 
-            while ( p->_pNext->_pNext != nullptr )
+            while ( p->_pNext->_pNext != nullptr ) {
                 p = p->_pNext;
+            }
 
             auto v = * this->_pBack->_data;
 
             p->_pNext = nullptr;
 
-            Memory :: instance().destroy ( this->_pBack->data() );
+            Memory :: instance().destroy ( this->_pBack->_data );
             Memory :: instance().destroy ( this->_pBack );
             this->_pBack = p;
 
@@ -346,11 +366,13 @@ namespace cds {
         auto operator = ( Collection < T > const & ) noexcept -> SingleLinkedList &;
 
         __CDS_OptimalInline auto operator = ( SingleLinkedList const & o ) noexcept -> SingleLinkedList & {  // NOLINT(bugprone-unhandled-self-assignment)
-            return this->operator= ( (Collection <T> const &)o ); // NOLINT(misc-unconventional-assign-operator)
+            return this->operator= ( reinterpret_cast < Collection <T> const & > ( o ) ); // NOLINT(misc-unconventional-assign-operator)
         }
 
         __CDS_OptimalInline auto operator = ( SingleLinkedList && o ) noexcept -> SingleLinkedList & {
-            if ( this == & o ) return * this;
+            if ( this == & o ) {
+                return * this;
+            }
 
             this->clear();
             this->_pFront = exchange( o._pFront, nullptr );
@@ -375,9 +397,10 @@ namespace cds {
     };
 
     template < typename T >
-    SingleLinkedList < T > :: SingleLinkedList ( InitializerList initializerList ) noexcept {
-        for ( auto const & e : initializerList )
-            this->pushBack(e);
+    SingleLinkedList < T > :: SingleLinkedList ( InitializerList initializerList __CDS_MaybeUnused ) noexcept {
+        for ( auto const & e __CDS_MaybeUnused : initializerList ) {
+            (void) this->pushBack(e);
+        }
     }
 
     template < typename T >
@@ -393,22 +416,28 @@ namespace cds {
 
     template < typename T >
     auto SingleLinkedList < T > :: remove ( Index i ) noexcept -> bool {
-        if ( i < 0 || i >= this->size() ) return false;
-        if ( i == 0 ) { this->popFront(); return true; }
+        if ( i < 0 || i >= this->size() ) {
+            return false;
+        }
+
+        if ( i == 0 ) {
+            (void) this->popFront();
+            return true;
+        }
 
         auto current = this->_pFront;
         Index currentIndex = 1;
 
-        while ( current->next() != nullptr && currentIndex < i ) {
-            current = current->next();
+        while ( current->_pNext != nullptr && currentIndex < i ) {
+            current = current->_pNext;
             currentIndex ++;
         }
 
-        auto toRemove = current->next();
+        auto toRemove = current->_pNext;
 
-        current->next() = current->next()->next();
+        current->_pNext = current->_pNext->_pNext;
 
-        Memory :: instance().destroy ( toRemove->data() );
+        Memory :: instance().destroy ( toRemove->_data );
         Memory :: instance().destroy ( toRemove );
         return true;
     }
@@ -420,19 +449,21 @@ namespace cds {
         auto current = this->_pFront;
         decltype (current) previous = nullptr;
 
-        auto nextNode = [& current] () noexcept { current = current->next(); };
+        auto nextNode = [& current] () noexcept { current = current->_pNext; };
 
-        while ( current != nullptr && count > 0 ) {
-            if ( Type < T > :: compare ( * current->data(), what ) ) {
-                auto after = current->next();
+        while ( current != nullptr && count > 0u ) {
+            if ( Type < T > :: compare ( * current->_data, what ) ) {
+                auto after = current->_pNext;
 
-                if ( previous == nullptr )
+                if ( previous == nullptr ) {
                     this->_pFront = after;
-                else
-                    previous->next() = after;
+                } else {
+                    previous->_pNext = after;
+                }
 
-                if ( after == nullptr )
+                if ( after == nullptr ) {
                     this->_pBack = previous;
+                }
 
                 auto toRemove = current;
 
@@ -441,7 +472,7 @@ namespace cds {
 
                 nextNode();
 
-                Memory::instance().destroy ( toRemove->data() );
+                Memory::instance().destroy ( toRemove->_data );
                 Memory::instance().destroy ( toRemove );
 
                 removalDone = true;
@@ -458,37 +489,42 @@ namespace cds {
     template < typename T >
     auto SingleLinkedList < T > :: removeLast ( ElementCRef what ) noexcept -> bool {
         auto current = this->_pFront;
-        decltype (current) previous = Type < T > :: compare ( * current->data(), what ) ? current : nullptr;
+        decltype (current) previous = Type < T > :: compare ( * current->_data, what ) ? current : nullptr;
 
-        auto nextNode = [& current] () noexcept  { current = current->next(); };
+        auto nextNode = [& current] () noexcept  { current = current->_pNext; };
 
-        if ( Type < T > :: compare ( * this->_pFront->data(), what ) ) {
+        if ( Type < T > :: compare ( * this->_pFront->_data, what ) ) {
             auto p = this->_pFront;
 
-            this->_pFront = this->_pFront->next();
+            this->_pFront = this->_pFront->_pNext;
 
-            Memory :: instance().destroy ( p->data() );
+            Memory :: instance().destroy ( p->_data );
             Memory :: instance().destroy ( p );
             this->_size --;
 
-            if ( this->size() == 0 )
+            if ( this->size() == 0 ) {
                 this->_pBack = nullptr;
+            }
 
             return true;
         }
 
         while ( current->_pNext != nullptr ) {
-            if ( Type < T > :: compare ( * current->next()->data(), what ) ) previous = current;
+            if ( Type < T > :: compare ( * current->_pNext->_data, what ) ) {
+                previous = current;
+            }
+
             nextNode();
         }
 
         if ( previous != nullptr ) {
-            if ( previous->next() == this->_pBack )
+            if ( previous->_pNext == this->_pBack ) {
                 this->_pBack = previous;
+            }
 
-            auto p = previous->next();
-            previous->next () = previous -> next () -> next ();
-            Memory :: instance().destroy ( p->data() );
+            auto p = previous->_pNext;
+            previous->_pNext = previous->_pNext->_pNext;
+            Memory :: instance().destroy ( p->_data );
             Memory :: instance().destroy ( p );
             this->_size --;
 
@@ -505,19 +541,21 @@ namespace cds {
         auto current = this->_pFront;
         decltype (current) previous = nullptr;
 
-        auto nextNode = [& current] () noexcept { current = current->next(); };
+        auto nextNode = [& current] () noexcept { current = current->_pNext; };
 
-        while ( current != nullptr && count > 0 ) {
-            if ( from.contains( * current->data() ) ) {
-                auto after = current->next();
+        while ( current != nullptr && count > 0u ) {
+            if ( from.contains( * current->_data ) ) {
+                auto after = current->_pNext;
 
-                if ( previous == nullptr )
+                if ( previous == nullptr ) {
                     this->_pFront = after;
-                else
-                    previous->next() = after;
+                } else {
+                    previous->_pNext = after;
+                }
 
-                if ( after == nullptr )
+                if ( after == nullptr ) {
                     this->_pBack = previous;
+                }
 
                 auto toRemove = current;
 
@@ -526,7 +564,7 @@ namespace cds {
 
                 nextNode();
 
-                Memory :: instance().destroy ( toRemove->data() );
+                Memory :: instance().destroy ( toRemove->_data );
                 Memory :: instance().destroy ( toRemove );
 
                 removalDone = true;
@@ -543,41 +581,45 @@ namespace cds {
     template < typename T >
     auto SingleLinkedList < T > :: removeLastOf ( Collection < T > const & from ) noexcept -> bool {
         auto current = this->_pFront;
-        decltype (current) previous = from.contains(* current->data()) ? current : nullptr;
+        decltype (current) previous = from.contains(* current->_data) ? current : nullptr;
 
         auto nextNode = [& current] () noexcept {
-            current = current->next();
+            current = current->_pNext;
         };
 
-        if ( from.contains(* this->_pFront->data()) ) {
+        if ( from.contains(* this->_pFront->_data) ) {
             auto p = this->_pFront;
 
-            this->_pFront = this->_pFront->next();
+            this->_pFront = this->_pFront->_pNext;
 
-            Memory :: instance().destroy ( p->data() );
+            Memory :: instance().destroy ( p->_data );
             Memory :: instance().destroy ( p );
 
             -- this->_size;
 
-            if ( this->size() == 0 )
+            if ( this->size() == 0 ) {
                 this->_pBack = nullptr;
+            }
 
             return true;
         }
 
         while ( current->_pNext != nullptr ) {
-            if ( from.contains( * current->next()->data( )) )
+            if ( from.contains( * current->_pNext->_data ) ) {
                 previous = current;
+            }
+
             nextNode();
         }
 
         if ( previous != nullptr ) {
-            if ( previous->next() == this->_pBack )
+            if ( previous->_pNext == this->_pBack ) {
                 this->_pBack = previous;
+            }
 
-            auto p = previous->next();
-            previous->next () = previous -> next () -> next ();
-            Memory :: instance().destroy ( p->data() );
+            auto p = previous->_pNext;
+            previous->_pNext = previous->_pNext->_pNext;
+            Memory :: instance().destroy ( p->_data );
             Memory :: instance().destroy ( p );
             this->_size --;
 
@@ -595,20 +637,22 @@ namespace cds {
         decltype (current) previous = nullptr;
 
         auto nextNode = [& current] () noexcept {
-            current = current->next();
+            current = current->_pNext;
         };
 
-        while ( current != nullptr && count > 0 ) {
-            if ( ! from.contains( * current->data() ) ) {
-                auto after = current->next();
+        while ( current != nullptr && count > 0u ) {
+            if ( ! from.contains( * current->_data ) ) { // NOLINT(clion-misra-cpp2008-5-3-1)
+                auto after = current->_pNext;
 
-                if ( previous == nullptr )
+                if ( previous == nullptr ) {
                     this->_pFront = after;
-                else
-                    previous->next() = after;
+                } else {
+                    previous->_pNext = after;
+                }
 
-                if ( after == nullptr )
+                if ( after == nullptr ) {
                     this->_pBack = previous;
+                }
 
                 auto toRemove = current;
 
@@ -617,7 +661,7 @@ namespace cds {
 
                 nextNode();
 
-                Memory :: instance().destroy ( toRemove->data() );
+                Memory :: instance().destroy ( toRemove->_data );
                 Memory :: instance().destroy ( toRemove );
 
                 removalDone = true;
@@ -634,39 +678,43 @@ namespace cds {
     template < typename T >
     auto SingleLinkedList < T > :: removeLastNotOf ( Collection < T > const & from ) noexcept -> bool {
         auto current = this->_pFront;
-        decltype (current) previous = ! from.contains(* current->data()) ? current : nullptr;
+        decltype (current) previous = ! from.contains(* current->_data) ? current : nullptr; // NOLINT(clion-misra-cpp2008-5-3-1)
 
         auto nextNode = [& current] () noexcept {
-            current = current->next();
+            current = current->_pNext;
         };
 
-        if ( ! from.contains(* this->_pFront->data()) ) {
+        if ( ! from.contains(* this->_pFront->_data) ) { // NOLINT(clion-misra-cpp2008-5-3-1)
             auto p = this->_pFront;
 
-            this->_pFront = this->_pFront->next();
-            Memory::instance().destroy ( p->data() );
+            this->_pFront = this->_pFront->_pNext;
+            Memory::instance().destroy ( p->_data );
             Memory::instance().destroy ( p );
             --this->_size;
 
-            if ( this->size() == 0 )
+            if ( this->size() == 0 ) {
                 this->_pBack = nullptr;
+            }
 
             return true;
         }
 
         while ( current->_pNext != nullptr ) {
-            if ( ! from.contains( * current->next()->data( )) )
+            if ( ! from.contains( * current->_pNext->_data) ) { // NOLINT(clion-misra-cpp2008-5-3-1)
                 previous = current;
+            }
+
             nextNode();
         }
 
         if ( previous != nullptr ) {
-            if ( previous->next() == this->_pBack )
+            if ( previous->_pNext == this->_pBack ) {
                 this->_pBack = previous;
+            }
 
-            auto p = previous->next();
-            previous->next () = previous -> next () -> next ();
-            Memory :: instance().destroy ( p->data() );
+            auto p = previous->_pNext;
+            previous->_pNext = previous->_pNext->_pNext;
+            Memory :: instance().destroy ( p->_data );
             Memory :: instance().destroy ( p );
             this->_size --;
 
@@ -678,28 +726,32 @@ namespace cds {
 
     template < typename T >
     auto SingleLinkedList < T > :: remove ( Iterator const & it ) noexcept (false) -> T {
-        if ( ! it.of ( this ) )
-            throw IllegalArgumentException ( "Iterator not of this Collection" );
+        if ( ! it.of ( this ) ) { // NOLINT(clion-misra-cpp2008-5-3-1)
+            throw IllegalArgumentException("Iterator not of this Collection");
+        }
 
-        if ( this->empty() )
-            throw IllegalArgumentException ( "List is Empty" );
+        if ( this->empty() ) {
+            throw IllegalArgumentException("List is Empty");
+        }
 
         auto pDelegate = reinterpret_cast < SingleLinkedListDelegateIterator * > ( Collection < T > :: acquireDelegate( it ) );
 
-        if ( this->_pFront == pDelegate->node() )
+        if ( this->_pFront == pDelegate->node() ) {
             return this->popFront();
+        }
 
-        if ( this->_pBack == pDelegate->node() )
+        if ( this->_pBack == pDelegate->node() ) {
             return this->popBack();
+        }
 
-        for ( auto node = this->_pFront; node->next() != this->_pBack; node = node->next() ) {
-            if ( node->next() == pDelegate->node() ) {
-                auto p = node->next();
-                node->next() = node->next()->next();
+        for ( auto node = this->_pFront; node->_pNext != this->_pBack; node = node->_pNext ) { // NOLINT(clion-misra-cpp2008-6-5-2,clion-misra-cpp2008-6-5-4)
+            if ( node->_pNext == pDelegate->node() ) {
+                auto p = node->_pNext;
+                node->_pNext = node->_pNext->_pNext;
 
-                auto retVal = * p->data();
+                auto retVal = * p->_data;
                 -- this->_size;
-                Memory :: instance().destroy ( p->data() );
+                Memory :: instance().destroy ( p->_data );
                 Memory :: instance().destroy ( p );
 
                 return retVal;
@@ -710,9 +762,10 @@ namespace cds {
     }
 
     template < typename T >
-    SingleLinkedList < T > :: SingleLinkedList ( SingleLinkedList const & obj ) noexcept {
-        for ( auto & e : obj )
-            this->pushBack(e);
+    SingleLinkedList < T > :: SingleLinkedList ( SingleLinkedList const & obj __CDS_MaybeUnused ) noexcept {
+        for ( auto & e __CDS_MaybeUnused : obj ) {
+            (void) this->pushBack(e);
+        }
     }
 
     template < typename T >
@@ -720,8 +773,9 @@ namespace cds {
             Iterator const & from,
             Iterator const & to
     ) noexcept {
-        for ( auto it = from; it != to; ++ it )
-            this->pushBack( * it );
+        for ( auto it = from; it != to; ++ it ) {
+            (void) this->pushBack ( * it );
+        }
     }
 
     template < typename T >
@@ -729,8 +783,9 @@ namespace cds {
             ConstIterator const & from,
             ConstIterator const & to
     ) noexcept {
-        for ( auto it = from; it != to; ++ it )
-            this->pushBack( * it );
+        for ( auto it = from; it != to; ++ it ) {
+            (void) this->pushBack ( * it );
+        }
     }
 
     template < typename T >
@@ -740,8 +795,8 @@ namespace cds {
 
         while ( this->_pFront != nullptr ) {
             auto p = this->_pFront;
-            this->_pFront = this->_pFront->next();
-            Memory :: instance().destroy ( p->data() );
+            this->_pFront = this->_pFront->_pNext;
+            Memory :: instance().destroy ( p->_data );
             Memory :: instance().destroy ( p );
         }
     }
@@ -750,22 +805,25 @@ namespace cds {
     auto SingleLinkedList < T > :: makeUnique() noexcept -> void {
         SingleLinkedList newList;
 
-        for ( auto const & e : * this )
-            if ( ! newList.contains(e) )
-                newList.pushBack (e);
+        for ( auto const & e __CDS_MaybeUnused : * this ) {
+            if ( ! newList.contains(e)) { // NOLINT(clion-misra-cpp2008-5-3-1)
+                (void) newList.pushBack(e);
+            }
+        }
 
         * this = newList;
     }
 
     template < typename T >
     auto SingleLinkedList < T > :: operator = ( Collection < T > const & collection ) noexcept -> SingleLinkedList & {
-        if ( this == & collection )
+        if ( this == & collection ) {
             return * this;
+        }
 
         this->clear();
 
         collection.forEach([this](T const & e){
-            this->pushBack(e);
+            (void) this->pushBack(e);
         });
 
         return * this;
@@ -780,24 +838,27 @@ namespace cds {
         this->_pFront = p;
 
         ++ this->_size;
-        if ( this->size() == 1 )
+        if ( this->size() == 1 ) {
             this->_pBack = this->_pFront;
+        }
 
-        return this->_pFront->data();
+        return this->_pFront->_data;
     }
 
     template < typename T >
     auto SingleLinkedList < T > ::allocBackGetPtr() noexcept -> ElementPtrRef {
-        if ( this->empty() ) return this->allocFrontGetPtr();
+        if ( this->empty() ) {
+            return this->allocFrontGetPtr();
+        }
 
-        this->_pBack->next() = Memory :: instance().create < Node > ();
-        this->_pBack->next()->data() = nullptr;
-        this->_pBack->next()->next() = nullptr;
+        this->_pBack->_pNext = Memory :: instance().create < Node > ();
+        this->_pBack->_pNext->_data = nullptr;
+        this->_pBack->_pNext->_data = nullptr;
 
         this->_pBack = this->_pBack->_pNext;
         ++ this->_size;
 
-        return this->_pBack->data();
+        return this->_pBack->_data;
     }
 
 }
@@ -827,19 +888,25 @@ namespace cds {
     }
 
     template < typename T >
-    auto SingleLinkedList < T > :: pAt (Index index) noexcept(false) -> ElementPtr {
-        if ( this->size() == 0 )
+    auto SingleLinkedList < T > :: pAt ( Index index __CDS_MaybeUnused ) noexcept(false) -> ElementPtr {
+        if ( this->size() == 0 ) {
             throw OutOfBoundsException(index, 0);
+        }
 
-        if ( index < 0 )
-            index += ( (-index) / this->size() + 1 ) * this->size();
-        if ( index >= static_cast<Index>(this->size()) )
+        if ( index < 0 ) {
+            index += ((-index) / this->size() + 1) * this->size();
+        }
+
+        if ( index >= static_cast<Index>(this->size()) ) {
             index = index % this->size();
+        }
 
-        auto current = 0;
-        for ( auto & e : (*this) ) {
-            if ( current == index )
+        auto current __CDS_MaybeUnused = 0;
+        for ( auto & e __CDS_MaybeUnused : (*this) ) {
+            if ( current == index ) {
                 return & e;
+            }
+
             current ++;
         }
 
@@ -847,19 +914,25 @@ namespace cds {
     }
 
     template < typename T >
-    auto SingleLinkedList < T > :: pAt (Index index) const noexcept(false) -> ElementCPtr {
-        if ( this->size() == 0 )
+    auto SingleLinkedList < T > :: pAt ( Index index __CDS_MaybeUnused ) const noexcept(false) -> ElementCPtr {
+        if ( this->size() == 0 ) {
             throw OutOfBoundsException(index, 0);
+        }
 
-        if ( index < 0 )
-            index += ( (-index) / this->size() + 1 ) * this->size();
-        if ( index >= static_cast<Index>(this->size()) )
+        if ( index < 0 ) {
+            index += ((-index) / this->size() + 1) * this->size();
+        }
+
+        if ( index >= static_cast<Index>(this->size()) ) {
             index = index % this->size();
+        }
 
-        auto current = 0;
-        for ( auto & e : (*this) ) {
-            if ( current == index )
+        auto current __CDS_MaybeUnused = 0;
+        for ( auto & e __CDS_MaybeUnused : (*this) ) {
+            if ( current == index ) {
                 return & e;
+            }
+
             current ++;
         }
 
@@ -868,6 +941,6 @@ namespace cds {
 
 }
 
-__CDS_RegisterParseTypeTemplateT(SingleLinkedList)
+__CDS_RegisterParseTypeTemplateT(SingleLinkedList) // NOLINT(clion-misra-cpp2008-8-0-1)
 
 #endif //CDS_SINGLELINKEDLIST_HPP

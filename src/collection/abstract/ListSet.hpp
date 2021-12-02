@@ -35,17 +35,16 @@ namespace cds {
         using DelegateConstIterator     = typename Set < T > :: DelegateConstIterator;
 
 
-
         struct Node {
             T       * data;
-            Node    * pNext {nullptr};
+            Node    * pNext;
         };
 
         using NodePointer       = Node *;
         using ConstNodePointer  = Node const *;
 
-        NodePointer _pFront {nullptr};
-        Size        _size   {0ull};
+        NodePointer _pFront {nullptr}; // NOLINT(clion-misra-cpp2008-11-0-1)
+        Size        _size   {0ull}; // NOLINT(clion-misra-cpp2008-11-0-1)
 
         constexpr ListSet() noexcept = default;
         __CDS_OptimalInline ListSet(ListSet const & set) noexcept {}
@@ -82,7 +81,10 @@ namespace cds {
             }
 
             __CDS_OptimalInline auto equals ( DelegateIterator const & it ) const noexcept -> bool override {
-                if ( this == & it ) return true;
+                if ( this == & it ) {
+                    return true;
+                }
+
                 auto p = reinterpret_cast < decltype ( this ) > ( & it );
 
                 return this->_pNode == p->_pNode;
@@ -119,7 +121,10 @@ namespace cds {
             }
 
             __CDS_OptimalInline auto equals ( DelegateConstIterator const & it ) const noexcept -> bool override {
-                if ( this == & it ) return true;
+                if ( this == & it ) {
+                    return true;
+                }
+
                 auto p = reinterpret_cast < decltype ( this ) > ( & it );
 
                 return this->_pNode == p->_pNode;
@@ -134,30 +139,30 @@ namespace cds {
 
         __CDS_OptimalInline auto delegateIterator ( DelegateIteratorRequestType requestType ) noexcept -> UniquePointer < DelegateIterator > override {
             switch ( requestType ) {
-                case DelegateIteratorRequestType :: FORWARD_BEGIN:
+                case DelegateIteratorRequestType :: FORWARD_BEGIN: // NOLINT(clion-misra-cpp2008-6-4-5)
                     return Memory :: instance () . create < SetDelegateIterator > ( this->_pFront );
-                case DelegateIteratorRequestType :: FORWARD_END:
+                case DelegateIteratorRequestType :: FORWARD_END: // NOLINT(clion-misra-cpp2008-6-4-5)
                     return Memory :: instance () . create < SetDelegateIterator > ( nullptr );
-                case DelegateIteratorRequestType :: BACKWARD_BEGIN:
+                case DelegateIteratorRequestType :: BACKWARD_BEGIN: // NOLINT(clion-misra-cpp2008-6-4-5)
                     return Memory :: instance () . create < SetDelegateIterator > ( this->_pFront );
-                case DelegateIteratorRequestType :: BACKWARD_END:
+                case DelegateIteratorRequestType :: BACKWARD_END: // NOLINT(clion-misra-cpp2008-6-4-5)
                     return Memory :: instance () . create < SetDelegateIterator > ( nullptr );
-                default:
+                default: // NOLINT(clion-misra-cpp2008-6-4-5)
                     return nullptr;
             }
         }
 
         __CDS_OptimalInline auto delegateConstIterator ( DelegateIteratorRequestType requestType ) const noexcept -> UniquePointer < DelegateConstIterator > override {
             switch ( requestType ) {
-                case DelegateIteratorRequestType :: FORWARD_BEGIN:
+                case DelegateIteratorRequestType :: FORWARD_BEGIN: // NOLINT(clion-misra-cpp2008-6-4-5)
                     return Memory :: instance () . create < SetDelegateConstIterator > ( this->_pFront );
-                case DelegateIteratorRequestType :: FORWARD_END:
+                case DelegateIteratorRequestType :: FORWARD_END: // NOLINT(clion-misra-cpp2008-6-4-5)
                     return Memory :: instance () . create < SetDelegateConstIterator > ( nullptr );
-                case DelegateIteratorRequestType :: BACKWARD_BEGIN:
+                case DelegateIteratorRequestType :: BACKWARD_BEGIN: // NOLINT(clion-misra-cpp2008-6-4-5)
                     return Memory :: instance () . create < SetDelegateConstIterator > ( this->_pFront );
-                case DelegateIteratorRequestType :: BACKWARD_END:
+                case DelegateIteratorRequestType :: BACKWARD_END: // NOLINT(clion-misra-cpp2008-6-4-5)
                     return Memory :: instance () . create < SetDelegateConstIterator > ( nullptr );
-                default:
+                default: // NOLINT(clion-misra-cpp2008-6-4-5)
                     return nullptr;
             }
         }
@@ -185,27 +190,39 @@ namespace cds {
             return this->_size;
         }
 
-        __CDS_OptimalInline auto operator != (ListSet const & o) const noexcept -> bool { return ! this->operator==(o); }
+        __CDS_OptimalInline auto operator != (ListSet const & o) const noexcept -> bool {
+            return ! this->operator==(o); // NOLINT(clion-misra-cpp2008-5-3-1)
+        }
 
         auto operator == (ListSet const & o) const noexcept -> bool {
-            if ( this == & o ) return true;
+            if ( this == & o ) {
+                return true;
+            }
 
-            for (
-                    auto
+            for ( // NOLINT(clion-misra-cpp2008-6-5-1)
+                    auto // NOLINT(clion-misra-cpp2008-8-0-1)
                         a = this->begin(), aEnd = this->end(),
                         b = o.begin(), bEnd = o.end();
                     a != aEnd && b != bEnd;
-                    ++ a, ++ b
-            )
-                if ( ! ( Type < T > :: compare ( * a, * b ) ) )
+                    ++ a, ++ b // NOLINT(clion-misra-cpp2008-5-18-1)
+            ) {
+                if ( ! ( Type < T > :: compare ( * a, * b ) ) ) { // NOLINT(clion-misra-cpp2008-5-3-1)
                     return false;
+                }
+            }
+
             return true;
         }
 
         __CDS_NoDiscard __CDS_OptimalInline auto equals (Object const & o) const noexcept -> bool final {
-            if ( & o == this ) return true;
+            if ( & o == this ) {
+                return true;
+            }
+
             auto p = dynamic_cast < ListSet < T > const * > ( & o );
-            if ( p == nullptr ) return false;
+            if ( p == nullptr ) {
+                return false;
+            }
 
             return this->operator == (*p);
         }
@@ -219,8 +236,9 @@ namespace cds {
 
     template < typename T > __CDS_Requires( UniqueIdentifiable <T> )
     auto ListSet<T>::remove( ElementCRef e ) noexcept -> bool {
-        if ( this->empty() )
+        if ( this->empty() ) {
             return false;
+        }
 
         if ( Type < T > :: compare ( e, * this->_pFront->data ) ) {
             auto p = this->_pFront;
@@ -230,8 +248,11 @@ namespace cds {
             Memory::instance().destroy ( p->data );
             Memory::instance().destroy ( p );
             return true;
-        } else if ( this->size() == 1 )
+        } else if ( this->size() == 1 ) {
             return false;
+        } else {
+            /// do nothing
+        }
 
         auto head = this->_pFront;
         while ( head->pNext != nullptr ) {
@@ -254,7 +275,7 @@ namespace cds {
 
 }
 
-__CDS_RegisterParseTypeTemplateT(ListSet)
+__CDS_RegisterParseTypeTemplateT(ListSet) // NOLINT(clion-misra-cpp2008-8-0-1)
 
 #if !defined(__CDS_LISTSET_DOUBLEGUARD)
 #define __CDS_LISTSET_DOUBLEGUARD // NOLINT(bugprone-reserved-identifier)

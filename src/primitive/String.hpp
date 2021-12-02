@@ -11,6 +11,7 @@
 #include <CDS/Concepts>
 #include <cstdarg>
 #include <CDS/Options>
+#include <CDS/Limits>
 
 
 namespace cds {
@@ -33,7 +34,7 @@ namespace cds {
 #include <CDS/Memory>
 
 #include <cstring>
-#define CONSTR_CLEAR() _c(0), _l(0), _p(nullptr)
+#define CONSTR_CLEAR() _c(0llu), _l(0llu), _p(nullptr)
 
 
 namespace cds {
@@ -112,16 +113,18 @@ namespace cds {
          * @test Does not require testing
          */
         __CDS_cpplang_ConstexprDynamicAllocation void _alloc(Size size) noexcept {
-            if (this->_l + size + 1 < this->_c)
+            if (this->_l + size + 1u < this->_c) {
                 return;
+            }
 
-            auto newCap = std::max(size + this->_l, 2 * this->_c) + 1;
+            auto newCap = std::max(size + this->_l, 2u * this->_c) + 1u;
             auto newArea = Memory :: instance().createArray < ElementType > (newCap);
 
-            if (this->_p != nullptr)
-                std::memcpy(newArea, this->_p, this->_l);
+            if (this->_p != nullptr) {
+                (void) std::memcpy(newArea, this->_p, this->_l);
+            }
 
-            std::memset(newArea + this->_l, 0, newCap - this->_l);
+            (void)std::memset(newArea + this->_l, 0, newCap - this->_l);
 
             Memory :: instance().destroyArray ( this->_p );
 
@@ -145,12 +148,12 @@ namespace cds {
             /**
              * @brief Address to the String, mutable as to allow const functions with modifications over address location
              */
-            String mutable * _s {nullptr};
+            String mutable * _s {nullptr}; // NOLINT(clion-misra-cpp2008-11-0-1)
 
             /**
              * @brief Position in the String
              */
-            Index _pos          {0ull};
+            Index _pos          {0}; // NOLINT(clion-misra-cpp2008-11-0-1)
 
             /**
              * @brief Base Constructor, from a given String and Index in String
@@ -301,12 +304,12 @@ namespace cds {
             /**
              * @brief Address to the String
              */
-            const String *   _s {nullptr};
+            const String *   _s {nullptr}; // NOLINT(clion-misra-cpp2008-11-0-1)
 
             /**
              * @brief Position in the String
              */
-            Index _pos          {0ull};
+            Index _pos          {0}; // NOLINT(clion-misra-cpp2008-11-0-1)
 
             /**
              * @brief Base Constructor, from a given String and Index in String
@@ -523,7 +526,11 @@ namespace cds {
              *
              * @test Tested in primitive/StringTest/Iterable Tests
              */
-            __CDS_cpplang_ConstexprDestructor auto operator ++ (int) noexcept -> Iterator { auto copy = * this; this->next(); return copy; }
+            __CDS_cpplang_ConstexprDestructor auto operator ++ (int) noexcept -> Iterator {
+                auto copy = * this;
+                (void) this->next();
+                return copy;
+            }
         };
 
         /**
@@ -600,7 +607,11 @@ namespace cds {
              *
              * @test Tested in primitive/StringTest/Iterable Tests
              */
-            __CDS_cpplang_ConstexprDestructor auto operator ++ (int) noexcept -> ConstIterator { auto copy = * this; this->next(); return copy; }
+            __CDS_cpplang_ConstexprDestructor auto operator ++ (int) noexcept -> ConstIterator {
+                auto copy = * this;
+                (void) this->next();
+                return copy;
+            }
         };
 
         /**
@@ -677,7 +688,11 @@ namespace cds {
              *
              * @test Tested in primitive/StringTest/Iterable Tests
              */
-            __CDS_cpplang_ConstexprDestructor auto operator ++ (int) noexcept -> ReverseIterator { auto copy = * this; this->next(); return copy; }
+            __CDS_cpplang_ConstexprDestructor auto operator ++ (int) noexcept -> ReverseIterator {
+                auto copy = * this;
+                (void) this->next();
+                return copy;
+            }
         };
 
         /**
@@ -754,7 +769,11 @@ namespace cds {
              *
              * @test Tested in primitive/StringTest/Iterable Tests
              */
-            __CDS_cpplang_ConstexprDestructor auto operator ++ (int) noexcept -> ConstReverseIterator { auto copy = * this; this->next(); return copy; }
+            __CDS_cpplang_ConstexprDestructor auto operator ++ (int) noexcept -> ConstReverseIterator {
+                auto copy = * this;
+                (void) this->next();
+                return copy;
+            }
         };
 
         /**
@@ -776,15 +795,16 @@ namespace cds {
          * @test tested in primitive/StringTest/Constructor Tests
          */
         __CDS_cpplang_ConstexprConditioned String (String const & s) noexcept : CONSTR_CLEAR() {
-            if ( s.empty() )
+            if ( s.empty() ) {
                 return;
+            }
 
             this->_alloc(s._l);
             this->_l = s._l;
 
             __CDS_WarningSuppression_ArgumentPossibleUnexpectedValue_SuppressEnable
 
-            std::memcpy ( this->_p, s._p, this->_l + 1 );
+            (void) std::memcpy ( this->_p, s._p, this->_l + 1llu );
 
             __CDS_WarningSuppression_ArgumentPossibleUnexpectedValue_SuppressDisable
         }
@@ -815,12 +835,14 @@ namespace cds {
          * @test tested in primitive/StringTest/Constructor Tests
          */
         __CDS_cpplang_ConstexprConditioned String(StringLiteral cString, Size length = UINT64_MAX ) noexcept : CONSTR_CLEAR() { // NOLINT(google-explicit-constructor)
-            if ( cString == nullptr )
+            if ( cString == nullptr ) {
                 return;
+            }
 
             auto len = std::min(static_cast < Size > (strlen(cString)), length);
-            if ( len == 0 )
+            if ( len == 0u ) {
                 return;
+            }
 
             this->_alloc(len);
 
@@ -829,7 +851,7 @@ namespace cds {
             __CDS_WarningSuppression_ArgumentPossibleUnexpectedValue_SuppressEnable
 
             this->_p[this->_l] = '\0';
-            std::memcpy ( this->_p, cString, this->_l );
+            (void) std::memcpy ( this->_p, cString, this->_l );
 
             __CDS_WarningSuppression_ArgumentPossibleUnexpectedValue_SuppressDisable
         }
@@ -844,12 +866,14 @@ namespace cds {
          * @test tested in primitive/StringTest/Constructor Tests
          */
         __CDS_cpplang_ConstexprConditioned String(CString cString, Size length = UINT64_MAX) noexcept : CONSTR_CLEAR() { // NOLINT(google-explicit-constructor)
-            if ( cString == nullptr )
+            if ( cString == nullptr ) {
                 return;
+            }
 
             auto len = std::min(static_cast < Size > (strlen(cString)), length);
-            if ( len == 0 )
+            if ( len == 0u ) {
                 return;
+            }
 
             this->_alloc(len);
 
@@ -858,7 +882,7 @@ namespace cds {
             __CDS_WarningSuppression_ArgumentPossibleUnexpectedValue_SuppressEnable
 
             this->_p[this->_l] = '\0';
-            std::memcpy ( this->_p, cString, this->_l );
+            (void) std::memcpy ( this->_p, cString, this->_l );
 
             __CDS_WarningSuppression_ArgumentPossibleUnexpectedValue_SuppressDisable
         }
@@ -880,13 +904,14 @@ namespace cds {
          * @test tested in primitive/StringTest/Constructor Tests
          */
         __CDS_OptionalInline String(std::string const & s) noexcept : CONSTR_CLEAR() { // NOLINT(google-explicit-constructor)
-            if ( s.empty() )
+            if ( s.empty() ) {
                 return;
+            }
 
             this->_alloc(s.size());
 
             this->_l = s.size();
-            std::memcpy(this->_p, s.c_str(), s.size());
+            (void) std::memcpy(this->_p, s.c_str(), s.size());
         }
 
         /**
@@ -900,14 +925,15 @@ namespace cds {
          * @test tested in primitive/StringTest/Constructor Tests
          */
         __CDS_cpplang_ConstexprConditioned String(Size count, ElementType constant) noexcept : CONSTR_CLEAR() {
-            if ( count == 0 )
+            if ( count == 0u ) {
                 return;
+            }
 
             this->_alloc(count);
 
             __CDS_WarningSuppression_ArgumentPossibleUnexpectedValue_SuppressEnable
 
-            std::memset(this->_p, constant, count);
+            (void) std::memset(this->_p, constant, count);
 
             __CDS_WarningSuppression_ArgumentPossibleUnexpectedValue_SuppressDisable
 
@@ -925,13 +951,15 @@ namespace cds {
          * @test tested in primitive/StringTest/Constructor Tests
          */
         __CDS_cpplang_ConstexprSTLIteratorOp String(std::string::iterator const & begin, std::string::iterator const & end) noexcept : CONSTR_CLEAR() {
-            if ( end - begin <= 0 )
+            if ( end - begin <= 0 ) {
                 return;
+            }
 
-            this->_alloc(end - begin);
+            this->_alloc(end - begin); // NOLINT(clion-misra-cpp2008-5-0-4)
 
-            for ( auto it = begin; it != end; it++ )
+            for ( auto it = begin; it != end; it++ ) { // NOLINT(clion-misra-cpp2008-6-5-1)
                 this->_p[this->_l++] = *it;
+            }
         }
 
         /**
@@ -946,16 +974,21 @@ namespace cds {
          */
         __CDS_cpplang_ConstexprDestructor String(IteratorBase const & begin, IteratorBase const & end) noexcept : CONSTR_CLEAR() {
             bool reversed = dynamic_cast < Iterator const * > ( & begin ) == nullptr;
-            if ( ! reversed && end - begin <= 0 || reversed && begin - end <= 0)
+            if ( ! reversed && end - begin <= 0 || reversed && begin - end <= 0) {
                 return;
-            this->_alloc(! reversed ? end - begin : begin - end);
+            }
 
-            if ( ! reversed )
-                for ( auto it = dynamic_cast < Iterator const & > ( begin ); it != end; it.next() )
+            this->_alloc(! reversed ? end - begin : begin - end); // NOLINT(clion-misra-cpp2008-5-0-4)
+
+            if ( ! reversed ) {
+                for ( auto it = dynamic_cast < Iterator const & > ( begin ); it != end; it.next() ) { // NOLINT(clion-misra-cpp2008-6-5-1)
                     this->_p[this->_l++] = *it;
-            else
-                for ( auto it = dynamic_cast < ReverseIterator const & > ( begin ); it != end; it.next() )
+                }
+            } else {
+                for ( auto it = dynamic_cast < ReverseIterator const & > ( begin ); it != end; it.next() ) { // NOLINT(clion-misra-cpp2008-6-5-1)
                     this->_p[this->_l++] = *it;
+                }
+            }
         }
 
         /**
@@ -970,16 +1003,21 @@ namespace cds {
          */
         __CDS_cpplang_ConstexprDestructor String(ConstIteratorBase const & begin, ConstIteratorBase const & end) noexcept : CONSTR_CLEAR() {
             bool reversed = dynamic_cast < ConstIterator const * > ( & begin ) == nullptr;
-            if ( ! reversed && end - begin <= 0 || reversed && begin - end <= 0)
+            if ( ! reversed && end - begin <= 0 || reversed && begin - end <= 0) {
                 return;
-            this->_alloc(! reversed ? end - begin : begin - end);
+            }
 
-            if ( ! reversed )
-                for ( auto it = dynamic_cast < ConstIterator const & > ( begin ); it != end; it.next() )
+            this->_alloc(! reversed ? end - begin : begin - end); // NOLINT(clion-misra-cpp2008-5-0-4)
+
+            if ( ! reversed ) {
+                for ( auto it = dynamic_cast < ConstIterator const & > ( begin ); it != end; it.next() ) { // NOLINT(clion-misra-cpp2008-6-5-1)
                     this->_p[this->_l++] = *it;
-            else
-                for ( auto it = dynamic_cast < ConstReverseIterator const & > ( begin ); it != end; it.next() )
+                }
+            } else {
+                for ( auto it = dynamic_cast < ConstReverseIterator const & > ( begin ); it != end; it.next() ) { // NOLINT(clion-misra-cpp2008-6-5-1)
                     this->_p[this->_l++] = *it;
+                }
+            }
         }
 
         /**
@@ -992,12 +1030,14 @@ namespace cds {
          * @test tested in primitive/StringTest/Constructor Tests
          */
         __CDS_cpplang_ConstexprConditioned String(std::initializer_list<ElementType> const & list) noexcept : CONSTR_CLEAR() {
-            if ( list.size() == 0 )
+            if ( list.size() == 0u ) {
                 return;
+            }
 
             this->_alloc(list.size());
-            for ( auto e : list )
+            for ( auto e : list ) { // NOLINT(clion-misra-cpp2008-5-0-11)
                 this->_p[this->_l++] = e;
+            }
         }
 
     #if defined(CDS_QT)
@@ -1037,7 +1077,7 @@ namespace cds {
          *
          * @test tested in primitive/StringTest/Constructor Tests
          */
-        __CDS_OptimalInline String (uint8 v) noexcept : String(String().append(v)) { } // NOLINT(google-explicit-constructor)
+        __CDS_OptimalInline String (uint8 v) noexcept : String(String().append(v)) { } // NOLINT(google-explicit-constructor,clion-misra-cpp2008-12-1-3)
 
         /**
          * @brief Constructor which initializes String from a raw uint16 value
@@ -1048,7 +1088,7 @@ namespace cds {
          *
          * @test tested in primitive/StringTest/Constructor Tests
          */
-        __CDS_OptimalInline String (uint16 v) noexcept : String(String().append(v)) { } // NOLINT(google-explicit-constructor)
+        __CDS_OptimalInline String (uint16 v) noexcept : String(String().append(v)) { } // NOLINT(google-explicit-constructor,clion-misra-cpp2008-12-1-3)
 
         /**
          * @brief Constructor which initializes String from a raw uint32 value
@@ -1059,7 +1099,7 @@ namespace cds {
          *
          * @test tested in primitive/StringTest/Constructor Tests
          */
-        __CDS_OptimalInline String (uint32 v) noexcept : String(String().append(v)) { } // NOLINT(google-explicit-constructor)
+        __CDS_OptimalInline String (uint32 v) noexcept : String(String().append(v)) { } // NOLINT(google-explicit-constructor,clion-misra-cpp2008-12-1-3)
 
         /**
          * @brief Constructor which initializes String from a raw uint64 value
@@ -1070,7 +1110,7 @@ namespace cds {
          *
          * @test tested in primitive/StringTest/Constructor Tests
          */
-        __CDS_OptimalInline String (uint64 v) noexcept : String(String().append(v)) { } // NOLINT(google-explicit-constructor)
+        __CDS_OptimalInline String (uint64 v) noexcept : String(String().append(v)) { } // NOLINT(google-explicit-constructor,clion-misra-cpp2008-12-1-3)
 
         /**
          * @brief Constructor which initializes String from a raw sint8 value
@@ -1081,7 +1121,7 @@ namespace cds {
          *
          * @test tested in primitive/StringTest/Constructor Tests
          */
-        __CDS_OptimalInline String (sint8 v) noexcept : String(String().append(v)) { } // NOLINT(google-explicit-constructor)
+        __CDS_OptimalInline String (sint8 v) noexcept : String(String().append(v)) { } // NOLINT(google-explicit-constructor,clion-misra-cpp2008-12-1-3)
 
         /**
          * @brief Constructor which initializes String from a raw sint16 value
@@ -1092,7 +1132,7 @@ namespace cds {
          *
          * @test tested in primitive/StringTest/Constructor Tests
          */
-        __CDS_OptimalInline String (sint16 v) noexcept : String(String().append(v)) { } // NOLINT(google-explicit-constructor)
+        __CDS_OptimalInline String (sint16 v) noexcept : String(String().append(v)) { } // NOLINT(google-explicit-constructor,clion-misra-cpp2008-12-1-3)
 
         /**
          * @brief Constructor which initializes String from a raw sint32 value
@@ -1103,7 +1143,7 @@ namespace cds {
          *
          * @test tested in primitive/StringTest/Constructor Tests
          */
-        __CDS_OptimalInline String (sint32 v) noexcept : String(String().append(v)) { } // NOLINT(google-explicit-constructor)
+        __CDS_OptimalInline String (sint32 v) noexcept : String(String().append(v)) { } // NOLINT(google-explicit-constructor,clion-misra-cpp2008-12-1-3)
 
         /**
          * @brief Constructor which initializes String from a raw sint64 value
@@ -1114,7 +1154,7 @@ namespace cds {
          *
          * @test tested in primitive/StringTest/Constructor Tests
          */
-        __CDS_OptimalInline String (sint64 v) noexcept : String(String().append(v)) { } // NOLINT(google-explicit-constructor)
+        __CDS_OptimalInline String (sint64 v) noexcept : String(String().append(v)) { } // NOLINT(google-explicit-constructor,clion-misra-cpp2008-12-1-3)
 
         /**
          * @brief Constructor which initializes String from a raw float value
@@ -1125,7 +1165,7 @@ namespace cds {
          *
          * @test tested in primitive/StringTest/Constructor Tests
          */
-        __CDS_OptimalInline String (float v) noexcept : String(String().append(v)) { } // NOLINT(google-explicit-constructor)
+        __CDS_OptimalInline String (float v) noexcept : String(String().append(v)) { } // NOLINT(google-explicit-constructor,clion-misra-cpp2008-12-1-3)
 
         /**
          * @brief Constructor which initializes String from a raw double value
@@ -1136,7 +1176,7 @@ namespace cds {
          *
          * @test tested in primitive/StringTest/Constructor Tests
          */
-        __CDS_OptimalInline String (double v) noexcept : String(String().append(v)) { } // NOLINT(google-explicit-constructor)
+        __CDS_OptimalInline String (double v) noexcept : String(String().append(v)) { } // NOLINT(google-explicit-constructor,clion-misra-cpp2008-12-1-3)
 
     #if defined(__linux)
 
@@ -1149,7 +1189,9 @@ namespace cds {
          *
          * @test tested in primitive/StringTest/Constructor Tests
          */
-        __CDS_OptimalInline String(std::size_t v) noexcept : String((uint64)v) {} // NOLINT(google-explicit-constructor)
+        __CDS_OptimalInline String(std::size_t v) noexcept : String(static_cast < uint64 > (v) ) { // NOLINT(google-explicit-constructor,clion-misra-cpp2008-12-1-3)
+
+        }
 
     #endif
 
@@ -1164,7 +1206,7 @@ namespace cds {
          * @test tested in primitive/StringTest/Constructor Tests
          */
         template < typename T >
-        __CDS_cpplang_ConstexprConditioned String (T * v) noexcept : String((std::size_t)v) { } // NOLINT(google-explicit-constructor)
+        __CDS_cpplang_ConstexprConditioned String (T * v) noexcept : String( reinterpret_cast < std::size_t > ( v ) ) { } // NOLINT(google-explicit-constructor)
 
         /**
          * @brief Constructor which initializes String from a raw constant pointer value
@@ -1177,7 +1219,7 @@ namespace cds {
          * @test tested in primitive/StringTest/Constructor Tests
          */
         template < typename T >
-        __CDS_cpplang_ConstexprConditioned String (T const * v) noexcept : String((std::size_t)v) { } // NOLINT(google-explicit-constructor)
+        __CDS_cpplang_ConstexprConditioned String (T const * v) noexcept : String( reinterpret_cast < std :: size_t const > (v) ) { } // NOLINT(google-explicit-constructor)
 
         __CDS_WarningSuppression_DelegateCtorSuppressUninitializedMembers_SuppressDisable
 
@@ -1419,18 +1461,19 @@ namespace cds {
          * @test tested in primitive/StringTest/Memory Tests
          */
         __CDS_OptimalInline auto resize(Size size) noexcept -> void {
-            auto toCopy = std :: min ( this->_c, size + 1 );
-            this->_c = size + 1;
+            auto toCopy = std :: min ( this->_c, size + 1u );
+            this->_c = size + 1u;
             auto newArea = Memory :: instance().createArray < ElementType > ( this->_c );
 
             if ( ! this->empty() ) {
-                std::memcpy(newArea, this->_p, toCopy);
+                (void) std::memcpy(newArea, this->_p, toCopy);
                 Memory :: instance().destroyArray ( this->_p );
             }
 
             this->_p = newArea;
-            if ( this->_l >= this->_c )
-                this->_l = this->_c - 1;
+            if ( this->_l >= this->_c ) {
+                this->_l = this->_c - 1u;
+            }
         }
 
     #if defined(_MSC_VER)
@@ -1449,7 +1492,13 @@ namespace cds {
          *
          * @test tested in primitive/StringTest/Memory Tests
          */
-        __CDS_cpplang_ConstexprDynamicAllocation auto reserve(Size s) noexcept -> void { if ( s < this->_c ) return; this->resize( s ); }
+        __CDS_cpplang_ConstexprDynamicAllocation auto reserve(Size s) noexcept -> void {
+            if ( s < this->_c ) {
+                return;
+            }
+
+            this->resize( s );
+        }
 
         /**
          * @brief Function used to shrink the String's capacity, but not capable of enlarging it, if given size is greater than capacity
@@ -1461,7 +1510,17 @@ namespace cds {
          *
          * @test tested in primitive/StringTest/Memory Tests
          */
-        __CDS_cpplang_ConstexprDynamicAllocation auto shrink(SignedSize s = -1) noexcept -> void { if ( s == -1 ) s = static_cast < SignedSize > ( this->_l ); if ( s > this->_c ) return; this->resize( s ); }
+        __CDS_cpplang_ConstexprDynamicAllocation auto shrink(SignedSize s = -1) noexcept -> void {
+            if ( s == -1 ) {
+                s = static_cast < SignedSize > ( this->_l );
+            }
+
+            if ( static_cast < Size > ( s ) > this->_c ) {
+                return;
+            }
+
+            this->resize( static_cast < Size > ( s ) );
+        }
 
         /**
          * @brief Function used to clear the contents of the String
@@ -1475,12 +1534,12 @@ namespace cds {
 
                 __CDS_WarningSuppression_StringOperationOverflow_SuppressEnable
 
-                std::memset(this->_p, 0, this->_l);
+                (void) std::memset(this->_p, 0, this->_l);
 
                 __CDS_WarningSuppression_StringOperationOverflow_SuppressDisable
 
             }
-            this->_l = 0;
+            this->_l = 0u;
         }
 
         /**
@@ -1492,7 +1551,9 @@ namespace cds {
          *
          * @test tested in primitive/StringTest/Content Functions Tests
          */
-        __CDS_NoDiscard constexpr auto empty() const noexcept -> bool { return this->_l == 0; }
+        __CDS_NoDiscard constexpr auto empty() const noexcept -> bool {
+            return this->_l == 0u;
+        }
 
 
         /**
@@ -1507,13 +1568,17 @@ namespace cds {
          * @test tested in primitive/StringTest/Content Functions Tests
          */
         __CDS_cpplang_ConstexprConditioned auto operator [] (Index i) noexcept (false) -> ElementType & {
-            if ( this->empty() )
+            if ( this->empty() ) {
                 throw String::StringNullAccess();
+            }
 
-            if ( i < 0 )
-                i += ( (-i) / static_cast < Index > ( this->size() ) + 1 ) * static_cast < Index > ( this->size() );
-            if ( i >= static_cast<Index>(this->size()) )
-                i = static_cast < Index > ( i ) % static_cast < Index > ( this->size() );
+            if ( i < 0 ) {
+                i += ((-i) / static_cast < Index > ( this->size()) + 1) * static_cast < Index > ( this->size());
+            }
+
+            if ( i >= static_cast<Index>(this->size()) ) {
+                i = static_cast < Index > ( i ) % static_cast < Index > ( this->size());
+            }
 
             return this->_p[i];
         }
@@ -1530,13 +1595,17 @@ namespace cds {
          * @test tested in primitive/StringTest/Content Functions Tests
          */
         __CDS_NoDiscard __CDS_cpplang_ConstexprConditioned auto operator [] (Index i) const noexcept -> ElementType {
-            if ( this->empty() )
+            if ( this->empty() ) {
                 return '\0';
+            }
 
-            if ( i < 0 )
-                i += ( (-i) / static_cast < Index > ( this->size() ) + 1 ) * static_cast < Index > ( this->size() );
-            if ( i >= static_cast<Index>(this->size()) )
-                i = i % static_cast < Index > ( this->size() );
+            if ( i < 0 ) {
+                i += ((-i) / static_cast < Index > ( this->size()) + 1) * static_cast < Index > ( this->size());
+            }
+
+            if ( i >= static_cast<Index>(this->size()) ) {
+                i = i % static_cast < Index > ( this->size());
+            }
 
             return this->_p[i];
         }
@@ -1635,7 +1704,9 @@ namespace cds {
          *
          * @test If operator [] has a test, function is tested
          */
-        __CDS_NoDiscard __CDS_MaybeUnused __CDS_cpplang_ConstexprConditioned auto back() const noexcept -> ElementType { return this->empty() ? '\0' : this->_p[this->_l - 1]; }
+        __CDS_NoDiscard __CDS_MaybeUnused __CDS_cpplang_ConstexprConditioned auto back() const noexcept -> ElementType {
+            return this->empty() ? '\0' : this->_p[this->_l - 1u];
+        }
 
         /**
          * @brief Accumulate operator used to append an ElementType to the String
@@ -1848,7 +1919,7 @@ namespace cds {
          * @test tested in primitive/StringTest/Append/Prepend Tests
          */
         __CDS_cpplang_ConstexprDynamicAllocation auto append (ElementType v) noexcept -> String & {
-            this->_alloc(1);
+            this->_alloc(1u);
 
             this->_p[this->_l++] = v;
             return * this;
@@ -1866,12 +1937,14 @@ namespace cds {
          * @test tested in primitive/StringTest/Append/Prepend Tests
          */
         __CDS_cpplang_ConstexprDynamicAllocation auto append (StringLiteral cString) noexcept -> String & {
-            if ( cString == nullptr ) return * this;
+            if ( cString == nullptr ) {
+                return * this;
+            }
 
             auto len = std::char_traits<char>::length( cString );
             this->_alloc(len);
 
-            std::memcpy ( this->_p + this->_l, cString, len );
+            (void) std::memcpy ( this->_p + this->_l, cString, len );
             this->_l += len;
 
             return * this;
@@ -1889,12 +1962,14 @@ namespace cds {
          * @test tested in primitive/StringTest/Append/Prepend Tests
          */
         __CDS_cpplang_ConstexprDynamicAllocation auto append (CString cString) noexcept -> String & {
-            if ( cString == nullptr ) return * this;
+            if ( cString == nullptr ) {
+                return * this;
+            }
 
             auto len = std::char_traits<char>::length(cString);
             this->_alloc(len);
 
-            std::memcpy ( this->_p + this->_l, cString, len );
+            (void) std::memcpy ( this->_p + this->_l, cString, len );
             this->_l += len;
 
             return * this;
@@ -1912,11 +1987,13 @@ namespace cds {
          * @test tested in primitive/StringTest/Append/Prepend Tests
          */
         __CDS_cpplang_ConstexprDynamicAllocation auto append (String const & str) noexcept -> String & {
-            if ( str.empty() ) return * this;
+            if ( str.empty() ) {
+                return * this;
+            }
 
             this->_alloc(str._l);
 
-            std::memcpy ( this->_p + this->_l, str._p, str._l );
+            (void) std::memcpy ( this->_p + this->_l, str._p, str._l );
             this->_l += str._l;
 
             return * this;
@@ -1948,14 +2025,17 @@ namespace cds {
          */
         __CDS_cpplang_ConstexprDynamicAllocation auto append (sint16 v) noexcept -> String & {
             bool const negative = v < 0;
-            uint16 const uValue = negative ? static_cast < uint16 > (~ v) + 1u : v;
+            uint16 const uValue = negative ? static_cast < uint16 > (~ v) + 1u : static_cast < uint16 > ( v ); // NOLINT(clion-misra-cpp2008-5-0-6)
             auto const length = utility :: conversion :: toCharBase10Length( uValue );
 
-            this->_alloc(length + static_cast < uint8 > (negative));
+            this->_alloc(static_cast < Size > ( length ) + static_cast < uint8 > (negative));
 
-            if(negative) this->_p[this->_l] = '-';
-            utility :: conversion::toCharBase10( this->_p + this->_l + static_cast < uint8 > (negative), length, uValue );
-            this->_l += length + static_cast < uint8 > (negative);
+            if(negative) {
+                this->_p[this->_l] = '-';
+            }
+
+            utility :: conversion::toCharBase10( this->_p + this->_l + static_cast < uint8 > (negative), length, uValue ); // NOLINT(clion-misra-cpp2008-5-0-4)
+            this->_l += static_cast < Size > ( length ) + static_cast < uint8 > (negative);
 
             return * this;
         }
@@ -1973,14 +2053,17 @@ namespace cds {
          */
         __CDS_cpplang_ConstexprDynamicAllocation auto append (sint32 v) noexcept -> String & {
             bool const negative = v < 0;
-            uint32 const uValue = negative ? static_cast < uint32 > (~ v) + 1u : v;
+            uint32 const uValue = negative ? static_cast < uint32 > (~ v) + 1u : static_cast < uint32 > ( v );
             auto const length = utility :: conversion :: toCharBase10Length( uValue );
 
-            this->_alloc(length + static_cast < uint8 > (negative));
+            this->_alloc(static_cast < Size > ( length ) + static_cast < uint8 > (negative));
 
-            if(negative) this->_p[this->_l] = '-';
-            utility :: conversion::toCharBase10( this->_p + this->_l + static_cast < uint8 > (negative), length, uValue );
-            this->_l += length + static_cast < uint8 > (negative);
+            if(negative) {
+                this->_p[this->_l] = '-';
+            }
+
+            utility :: conversion::toCharBase10( this->_p + this->_l + static_cast < uint8 > (negative), length, uValue ); // NOLINT(clion-misra-cpp2008-5-0-4)
+            this->_l += static_cast < Size > ( length ) + static_cast < uint8 > (negative);
 
             return * this;
         }
@@ -1998,14 +2081,17 @@ namespace cds {
          */
         __CDS_cpplang_ConstexprDynamicAllocation auto append (sint64 v) noexcept -> String & {
             bool const negative = v < 0;
-            uint64 const uValue = negative ? static_cast < uint64 > (~ v) + 1u : v;
+            uint64 const uValue = negative ? static_cast < uint64 > (~ v) + 1u : static_cast < uint64 > (v);
             auto const length = utility :: conversion :: toCharBase10Length( uValue );
 
-            this->_alloc(length + static_cast < uint8 > (negative));
+            this->_alloc(static_cast < Size > ( length ) + static_cast < uint8 > (negative));
 
-            if(negative) this->_p[this->_l] = '-';
-            utility :: conversion::toCharBase10( this->_p + this->_l + static_cast < uint8 > (negative), length, uValue );
-            this->_l += length + static_cast < uint8 > (negative);
+            if(negative) {
+                this->_p[this->_l] = '-';
+            }
+
+            utility :: conversion::toCharBase10( this->_p + this->_l + static_cast < uint8 > (negative), length, uValue ); // NOLINT(clion-misra-cpp2008-5-0-4)
+            this->_l += static_cast < Size > (length) + static_cast < uint8 > (negative);
 
             return * this;
         }
@@ -2491,9 +2577,11 @@ namespace cds {
          * @test tested in primitive/StringTest/Find Tests
          */
         __CDS_NoDiscard __CDS_cpplang_ConstexprConditioned auto findFirst ( ElementType e ) const noexcept -> Index {
-            for ( Index i = 0; i < this->_l; ++ i )
-                if ( this->_p[i] == e )
+            for ( Index i = 0; static_cast < Size > ( i ) < this->_l; ++ i ) {
+                if (this->_p[i] == e) {
                     return i;
+                }
+            }
 
             return INVALID_POS;
         }
@@ -2510,9 +2598,11 @@ namespace cds {
          * @test tested in primitive/StringTest/Find Tests
          */
         __CDS_NoDiscard __CDS_cpplang_ConstexprConditioned auto findFirst ( String const & o ) const noexcept -> Index {
-            for ( Index i = 0; i < this->_l; ++ i )
-                if (this->size() - i >= o.size() && this->substr(i, i + static_cast < Index > ( o.size())) == o)
+            for ( Index i = 0; static_cast < Size > ( i ) < this->_l; ++ i ) {
+                if (this->size() - static_cast < Size > ( i ) >= o.size() && this->substr(i, i + static_cast < Index > ( o.size())) == o) {
                     return i;
+                }
+            }
 
             return INVALID_POS;
         }
@@ -2529,9 +2619,12 @@ namespace cds {
          * @test tested in primitive/StringTest/Find Tests
          */
         __CDS_NoDiscard __CDS_cpplang_ConstexprConditioned auto findLast ( ElementType e ) const noexcept -> Index {
-            for ( auto i = static_cast < Index > ( this->_l ) - 1; i >= 0; -- i )
-                if ( this->_p[i] == e )
+            for ( auto i = static_cast < Index > ( this->_l ) - 1; i >= 0; -- i ) {
+                if (this->_p[i] == e) {
                     return i;
+                }
+            }
+
             return INVALID_POS;
         }
 
@@ -2548,9 +2641,11 @@ namespace cds {
          */
         __CDS_NoDiscard __CDS_cpplang_ConstexprDynamicAllocation auto findLast ( String const & o ) const noexcept -> Index {
             auto i = static_cast < Index > ( this->size() ) - static_cast < Index > ( o.length() );
-            for ( ; i >= 0; i-- )
-                if ( this->substr(i, i + static_cast < Index > ( o.length() )) == o )
+            for ( ; i >= 0; i-- ) {
+                if ( this->substr(i, i + static_cast < Index > ( o.length() )) == o ) {
                     return i;
+                }
+            }
 
             return INVALID_POS;
         }
@@ -2567,9 +2662,12 @@ namespace cds {
          * @test tested in primitive/StringTest/Find Tests
          */
         __CDS_NoDiscard __CDS_cpplang_ConstexprConditioned auto findFirstOf ( String const & o ) const noexcept -> Index {
-            for ( Index i = 0; i < this->_l; ++ i )
-                if ( o.contains(this->_p[i]) )
+            for ( Index i = 0; static_cast < Size > ( i ) < this->_l; ++ i ) {
+                if (o.contains(this->_p[i])) {
                     return i;
+                }
+            }
+
             return INVALID_POS;
         }
 
@@ -2585,9 +2683,12 @@ namespace cds {
          * @test tested in primitive/StringTest/Find Tests
          */
         __CDS_NoDiscard __CDS_cpplang_ConstexprConditioned auto findFirstNotOf ( String const & o ) const noexcept -> Index {
-            for ( Index i = 0; i < this->_l; ++ i )
-                if ( ! o.contains(this->_p[i]) )
+            for ( Index i = 0; static_cast < Size > ( i ) < this->_l; ++ i ) {
+                if (!o.contains(this->_p[i])) {
                     return i;
+                }
+            }
+
             return INVALID_POS;
         }
 
@@ -2603,9 +2704,12 @@ namespace cds {
          * @test tested in primitive/StringTest/Find Tests
          */
         __CDS_NoDiscard __CDS_cpplang_ConstexprConditioned auto findLastOf ( String const & o ) const noexcept -> Index {
-            for ( auto i = static_cast < Index > ( this->_l ) - 1; i >= 0; -- i )
-                if ( o.contains(this->_p[i]) )
+            for ( auto i = static_cast < Index > ( this->_l ) - 1; i >= 0; -- i ) {
+                if (o.contains(this->_p[i])) {
                     return i;
+                }
+            }
+
             return INVALID_POS;
         }
 
@@ -2621,9 +2725,12 @@ namespace cds {
          * @test tested in primitive/StringTest/Find Tests
          */
         __CDS_NoDiscard __CDS_cpplang_ConstexprConditioned auto findLastNotOf ( String const & o ) const noexcept -> Index {
-            for ( auto i = static_cast < Index > ( this->_l ) - 1; i >= 0; -- i )
-                if ( ! o.contains(this->_p[i]) )
+            for ( auto i = static_cast < Index > ( this->_l ) - 1; i >= 0; -- i ) {
+                if (!o.contains(this->_p[i])) {
                     return i;
+                }
+            }
+
             return INVALID_POS;
         }
 
@@ -2640,13 +2747,18 @@ namespace cds {
          * @test tested in primitive/StringTest/Substring Tests
          */
         __CDS_NoDiscard __CDS_OptimalInline auto substr ( Index from, Index to = -1 ) const noexcept -> String {
-            if ( to == -1 || to > static_cast<Index>(this->size()) )
+            if ( to == -1 || to > static_cast<Index>(this->size()) ) {
                 to = static_cast < Index > (this->size());
-            if ( from < 0 )
-                from = 0;
+            }
 
-            if ( to < from )
-                return { };
+            if ( from < 0 ) {
+                from = 0;
+            }
+
+            if ( to < from ) {
+                return {};
+            }
+
             return { this->_p + from, static_cast < Size > ( to - from ) };
         }
 
@@ -2675,9 +2787,15 @@ namespace cds {
          * @test tested in primitive/StringTest/Comparison Tests
          */
         __CDS_NoDiscard __CDS_cpplang_VirtualConstexpr auto equals ( Object const & o) const noexcept -> bool final {
-            if ( this == & o ) return true;
+            if ( this == & o ) {
+                return true;
+            }
+
             auto p = dynamic_cast < decltype ( this ) > ( & o );
-            if ( p == nullptr ) return false;
+            if ( p == nullptr ) {
+                return false;
+            }
+
             return this->operator==(* p);
         }
 
@@ -2693,7 +2811,9 @@ namespace cds {
          *
          * @test tested in primitive/StringTest/Comparison Tests
          */
-        __CDS_NoDiscard constexpr auto operator == ( ElementType e ) const noexcept -> bool { return this->size() == 1 && this->_p[0] == e; }
+        __CDS_NoDiscard constexpr auto operator == ( ElementType e ) const noexcept -> bool {
+            return this->size() == 1u && this->_p[0] == e;
+        }
 
         /**
          * Comparison Operator
@@ -2755,8 +2875,14 @@ namespace cds {
          */
         __CDS_NoDiscard __CDS_cpplang_IfConstexpr auto operator >= ( String const & o ) const noexcept -> bool {
             auto compareResult = std :: char_traits < ElementType > :: compare ( this->cStr(), o.cStr(), this->_l );
-            if ( compareResult > 0 ) return true;
-            if ( compareResult < 0 ) return false;
+            if ( compareResult > 0 ) {
+                return true;
+            }
+
+            if ( compareResult < 0 ) {
+                return false;
+            }
+
             return this->_l > o._l;
         }
 
@@ -2772,7 +2898,9 @@ namespace cds {
          *
          * @test tested in primitive/StringTest/Comparison Tests
          */
-        __CDS_NoDiscard constexpr auto operator >= ( ElementType e ) const noexcept -> bool { return this->size() == 1 && this->_p[0] >= e; }
+        __CDS_NoDiscard constexpr auto operator >= ( ElementType e ) const noexcept -> bool {
+            return this->size() == 1u && this->_p[0] >= e;
+        }
 
         /**
          * Comparison Operator, Greater or Equals
@@ -2820,8 +2948,14 @@ namespace cds {
         __CDS_NoDiscard __CDS_cpplang_IfConstexpr auto operator >= ( StringLiteral cString ) const noexcept -> bool {
             auto length = std :: char_traits < ElementType > :: length ( cString );
             auto compareResult = std :: char_traits < ElementType > :: compare ( this->cStr(), cString, this->_l );
-            if ( compareResult > 0 ) return true;
-            if ( compareResult < 0 ) return false;
+            if ( compareResult > 0 ) {
+                return true;
+            }
+
+            if ( compareResult < 0 ) {
+                return false;
+            }
+
             return this->_l > length;
         }
 
@@ -2839,8 +2973,14 @@ namespace cds {
          */
         __CDS_NoDiscard __CDS_cpplang_IfConstexpr auto operator <= ( String const & o ) const noexcept -> bool {
             auto compareResult = std :: char_traits < ElementType > :: compare ( this->cStr(), o.cStr(), this->_l );
-            if ( compareResult < 0 ) return true;
-            if ( compareResult > 0 ) return false;
+            if ( compareResult < 0 ) {
+                return true;
+            }
+
+            if ( compareResult > 0 ) {
+                return false;
+            }
+
             return this->_l < o._l;
         }
 
@@ -2874,7 +3014,9 @@ namespace cds {
          *
          * @test tested in primitive/StringTest/Comparison Tests
          */
-        __CDS_NoDiscard constexpr auto operator <= ( ElementType e ) const noexcept -> bool { return this->size() == 1 && this->_p[0] <= e; }
+        __CDS_NoDiscard constexpr auto operator <= ( ElementType e ) const noexcept -> bool {
+            return this->size() == 1u && this->_p[0] <= e;
+        }
 
         /**
          * Comparison Operator, Less or Equals
@@ -2905,8 +3047,14 @@ namespace cds {
         __CDS_NoDiscard __CDS_cpplang_IfConstexpr auto operator <= ( StringLiteral cString ) const noexcept -> bool {
             auto length = std :: char_traits < ElementType > :: length ( cString );
             auto compareResult = std :: char_traits < ElementType > :: compare ( this->cStr(), cString, this->_l );
-            if ( compareResult < 0 ) return true;
-            if ( compareResult > 0 ) return false;
+            if ( compareResult < 0 ) {
+                return true;
+            }
+
+            if ( compareResult > 0 ) {
+                return false;
+            }
+
             return this->_l < length;
         }
 
@@ -2937,7 +3085,9 @@ namespace cds {
          *
          * @test tested in primitive/StringTest/Comparison Tests
          */
-        __CDS_NoDiscard constexpr auto operator != ( ElementType e ) const noexcept -> bool { return this->size() != 1 || this->_p[0] != e; }
+        __CDS_NoDiscard constexpr auto operator != ( ElementType e ) const noexcept -> bool {
+            return this->size() != 1u || this->_p[0] != e;
+        }
 
         /**
          * Comparison Operator, Not Equal
@@ -3015,7 +3165,9 @@ namespace cds {
          *
          * @test tested in primitive/StringTest/Comparison Tests
          */
-        __CDS_NoDiscard constexpr auto operator < ( ElementType e ) const noexcept -> bool { return this->size() == 1 && this->_p[0] < e; }
+        __CDS_NoDiscard constexpr auto operator < ( ElementType e ) const noexcept -> bool {
+            return this->size() == 1u && this->_p[0] < e;
+        }
 
         /**
          * Comparison Operator, Less
@@ -3083,7 +3235,9 @@ namespace cds {
          *
          * @test tested in primitive/StringTest/Comparison Tests
          */
-        __CDS_NoDiscard constexpr auto operator > ( ElementType e ) const noexcept -> bool { return this->size() == 1 && this->_p[0] > e; }
+        __CDS_NoDiscard constexpr auto operator > ( ElementType e ) const noexcept -> bool {
+            return this->size() == 1u && this->_p[0] > e;
+        }
 
         /**
          * Comparison Operator, Greater
@@ -3345,8 +3499,10 @@ namespace cds {
          */
         __CDS_NoDiscard __CDS_OptimalInline auto operator * (int count) const noexcept -> String {
             String res;
-            for ( int i = 0; i < count; i ++ )
+            for ( int i = 0; i < count; i ++ ) {
                 res += (*this);
+            }
+
             return res;
         }
 
@@ -3363,8 +3519,10 @@ namespace cds {
          * @test tested in primitive/StringTest/Utility Functions, String Formatting
          */
         __CDS_cpplang_ConstexprDynamicAllocation auto ltrim ( ElementType e = ' ' ) noexcept -> String & {
-            while ( ! this->empty () && this->front() == e )
-                * this = this->substr( 1 );
+            while ( ! this->empty () && this->front() == e ) {
+                * this = this->substr(1);
+            }
+
             return * this;
         }
 
@@ -3380,8 +3538,10 @@ namespace cds {
          * @test tested in primitive/StringTest/Utility Functions, String Formatting
          */
         __CDS_cpplang_ConstexprDynamicAllocation auto ltrim ( String const & s ) noexcept -> String & {
-            while ( ! this->empty () && s.contains( this->front() ) )
+            while ( ! this->empty () && s.contains( this->front() ) ) {
                 * this = this->substr(1);
+            }
+
             return * this;
         }
 
@@ -3427,8 +3587,9 @@ namespace cds {
          * @test tested in primitive/StringTest/Utility Functions, String Formatting
          */
         __CDS_cpplang_ConstexprConditioned auto rtrim ( ElementType e = ' ' ) noexcept -> String & {
-            while ( ! this->empty () && this->back() == e )
+            while ( ! this->empty () && this->back() == e ) {
                 this->_p[--this->_l] = '\0';
+            }
 
             return * this;
         }
@@ -3445,8 +3606,9 @@ namespace cds {
          * @test tested in primitive/StringTest/Utility Functions, String Formatting
          */
         __CDS_cpplang_ConstexprConditioned auto rtrim ( String const & s ) noexcept -> String & {
-            while ( ! this->empty () && s.contains(this->back()) )
+            while ( ! this->empty () && s.contains(this->back()) ) {
                 this->_p[--this->_l] = '\0';
+            }
 
             return * this;
         }
@@ -3554,8 +3716,9 @@ namespace cds {
          * @test tested in primitive/StringTest/Utility Functions, String Formatting
          */
         __CDS_cpplang_ConstexprDynamicAllocation auto rjust (Size justifySize, ElementType padChar = ' ') noexcept -> String & {
-            while ( this->size() < justifySize )
-                this->append(padChar);
+            while ( this->size() < justifySize ) {
+                (void) this->append(padChar);
+            }
 
             return * this;
         }
@@ -3595,8 +3758,9 @@ namespace cds {
          * @test tested in primitive/StringTest/Utility Functions, String Formatting
          */
         __CDS_cpplang_ConstexprDynamicAllocation auto ljust (Size justifySize, ElementType padChar = ' ') noexcept -> String & {
-            while ( this->size() < justifySize )
-                this->prepend(padChar);
+            while ( this->size() < justifySize ) {
+                (void) this->prepend(padChar);
+            }
 
             return * this;
         }
@@ -3789,7 +3953,13 @@ namespace cds {
          *
          * @test tested in primitive/StringTest/Utility Functions, String Formatting
          */
-        __CDS_cpplang_ConstexprConditioned auto toLower () noexcept -> String & { for ( Index i = 0; i < this->_l; i++ ) this->_p[i] = lowerChar(this->_p[i]); return * this; }
+        __CDS_cpplang_ConstexprConditioned auto toLower () noexcept -> String & {
+            for ( Index i = 0; static_cast < Size > ( i ) < this->_l; i++ ) {
+                this->_p[i] = lowerChar(this->_p[i]);
+            }
+
+            return * this;
+        }
 
         /**
          * @brief Function used to convert characters of a String to their upper values ( if are lower )
@@ -3800,7 +3970,13 @@ namespace cds {
          *
          * @test tested in primitive/StringTest/Utility Functions, String Formatting
          */
-        __CDS_cpplang_ConstexprConditioned auto toUpper () noexcept -> String & { for ( Index i = 0; i < this->_l; i++ ) this->_p[i] = upperChar(this->_p[i]); return * this; }
+        __CDS_cpplang_ConstexprConditioned auto toUpper () noexcept -> String & {
+            for ( Index i = 0; static_cast < Size > ( i ) < this->_l; i++ ) {
+                this->_p[i] = upperChar(this->_p[i]);
+            }
+
+            return * this;
+        }
     #else
 
         /**
@@ -3861,16 +4037,18 @@ namespace cds {
          * @test tested in primitive/StringTest/Assignment Tests
          */
         __CDS_cpplang_ConstexprDynamicAllocation auto operator = ( String const & o ) noexcept -> String & {
-            if ( this == & o )
+            if ( this == & o ) {
                 return * this;
+            }
 
             this->clear();
 
-            if ( o.empty() )
+            if ( o.empty() ) {
                 return * this;
+            }
 
             this->_alloc(o.size());
-            std::memcpy ( this->_p, o._p, o._l + 1 );
+            (void) std::memcpy ( this->_p, o._p, o._l + 1llu );
             this->_l = o._l;
 
             return * this;
@@ -3888,8 +4066,9 @@ namespace cds {
          * @test tested in primitive/StringTest/Assignment Tests
          */
         __CDS_cpplang_ConstexprDynamicAllocation auto operator = ( String && o ) noexcept -> String & {
-            if ( this == & o )
+            if ( this == & o ) {
                 return * this;
+            }
 
             Memory :: instance().destroyArray ( this->_p );
 
@@ -4185,8 +4364,9 @@ namespace cds {
          */
         template < typename Action >
         __CDS_MaybeUnused __CDS_cpplang_ConstexprConditioned auto forEach ( Action const & a ) noexcept ( noexcept ( ( * Type < Action > :: unsafeAddress () ) ( Type < char > :: unsafeReference() ) ) ) -> String & {
-            for ( Index i = 0; i < this->_l; ++ i )
-                a ( this->_p[i] );
+            for ( Index i = 0; static_cast < Size > ( i ) < this->_l; ++ i ) {
+                a(this->_p[i]);
+            }
 
             return * this;
         }
@@ -4205,8 +4385,9 @@ namespace cds {
          */
         template < typename Action >
         __CDS_MaybeUnused __CDS_cpplang_ConstexprConditioned auto forEach ( Action const & a ) const noexcept ( noexcept ( ( * Type < Action > :: unsafeAddress () ) ( Type < const char > :: unsafeReference() ) ) ) -> String const & {
-            for ( Index i = 0; i < this->_l; ++ i )
-                a ( this->_p[i] );
+            for ( Index i = 0; static_cast < Size > ( i ) < this->_l; ++ i ) {
+                a(this->_p[i]);
+            }
 
             return * this;
         }
@@ -4226,10 +4407,12 @@ namespace cds {
          */
         template < typename Predicate, typename P = Predicate, typename std :: enable_if < Type < P > :: isCallable, int > :: type = 0 >
         __CDS_MaybeUnused __CDS_cpplang_ConstexprConditioned auto count ( Predicate const & p ) noexcept ( noexcept ( ( * Type < Predicate > :: unsafeAddress () ) ( Type < char > :: unsafeReference() ) ) ) -> Size {
-            Size count = 0;
-            for ( Index i = 0; i < this->_l; ++ i )
-                if ( p ( this->_p[i] ) )
-                    count ++;
+            Size count = 0u;
+            for ( Index i = 0; static_cast < Size > ( i ) < this->_l; ++ i ) {
+                if (p(this->_p[i])) {
+                    count++;
+                }
+            }
 
             return count;
         }
@@ -4249,19 +4432,23 @@ namespace cds {
          */
         template < typename Predicate, typename P = Predicate, typename std :: enable_if < Type < P > :: isCallable, int > :: type = 0  >
         __CDS_MaybeUnused __CDS_cpplang_ConstexprConditioned auto count ( Predicate const & p ) const noexcept ( noexcept ( ( * Type < Predicate > :: unsafeAddress () ) ( Type < const char > :: unsafeReference() ) ) ) -> Size {
-            Size count = 0;
-            for ( Index i = 0; i < this->_l; ++ i )
-                if ( p ( this->_p[i] ) )
-                    count ++;
+            Size count = 0u;
+            for ( Index i = 0; static_cast < Size > ( i ) < this->_l; ++ i ) {
+                if (p(this->_p[i])) {
+                    count++;
+                }
+            }
 
             return count;
         }
 
         __CDS_MaybeUnused __CDS_NoDiscard __CDS_cpplang_ConstexprConditioned auto count ( ElementType element ) const noexcept -> Size {
-            Size count = 0;
-            for ( Index i = 0; i < this->_l; ++ i )
-                if ( this->_p [i] == element )
+            Size count = 0u;
+            for ( Index i = 0; static_cast < Size > ( i ) < this->_l; ++ i ) {
+                if (this->_p[i] == element) {
                     ++ count;
+                }
+            }
 
             return count;
         }
@@ -4374,8 +4561,10 @@ namespace cds {
         __CDS_NoDiscard __CDS_OptimalInline auto reversed() const noexcept -> String {
             String a;
             a._alloc(this->_l);
-            for (Index i = static_cast < Index > (this->_l) - 1; i >= 0; -- i)
+            for (Index i = static_cast < Index > (this->_l) - 1; i >= 0; -- i) {
                 a._p[a._l++] = this->_p[i];
+            }
+
             return a;
         }
 
@@ -4391,7 +4580,10 @@ namespace cds {
          * @test Tested in primitive/StringTest/Utility Tests
          */
         __CDS_NoDiscard __CDS_MaybeUnused __CDS_cpplang_ConstexprDynamicAllocation auto startsWith (String const & str) const noexcept -> bool {
-            if ( str.size() > this->size() ) return false;
+            if ( str.size() > this->size() ) {
+                return false;
+            }
+
             return this->substr(0, static_cast < Index > ( str.size() )) == str;
         }
 
@@ -4407,7 +4599,10 @@ namespace cds {
          * @test Tested in primitive/StringTest/Utility Tests
          */
         __CDS_NoDiscard __CDS_MaybeUnused __CDS_cpplang_ConstexprDynamicAllocation auto endsWith (String const & str) const noexcept -> bool {
-            if ( str.size() > this->size() ) return false;
+            if ( str.size() > this->size() ) {
+                return false;
+            }
+
             return this->substr(static_cast < Index > ( this->size() ) - static_cast < Index > ( str.size() )) == str;
         }
 
@@ -4423,8 +4618,14 @@ namespace cds {
          * @test Tested in primitive/StringTest/Utility Functions
          */
         __CDS_NoDiscard __CDS_cpplang_ConstexprDynamicAllocation auto removePrefix (String const & prefix) noexcept -> String & {
-            if ( this->length() < prefix.length() ) return * this;
-            if ( this->substr(0, static_cast < Index > ( prefix.length() )) == prefix ) * this = this->substr(static_cast < Index > ( prefix.length() ));
+            if ( this->length() < prefix.length() ) {
+                return * this;
+            }
+
+            if ( this->substr(0, static_cast < Index > ( prefix.length() )) == prefix ) {
+                * this = this->substr(static_cast < Index > ( prefix.length()));
+            }
+
             return * this;
         }
 
@@ -4451,8 +4652,14 @@ namespace cds {
          * @test Tested in primitive/StringTest/Utility Functions
          */
         __CDS_NoDiscard __CDS_cpplang_ConstexprDynamicAllocation auto removeSuffix (String const & suffix) noexcept -> String & {
-            if ( this->length() < suffix.length() ) return * this;
-            if ( this->substr( static_cast < Index > ( this->length() ) - static_cast < Index > ( suffix.length() ) ) == suffix ) * this = this->substr(0, static_cast < Index > ( this->length() ) - static_cast < Index > ( suffix.length() ));
+            if ( this->length() < suffix.length() ) {
+                return * this;
+            }
+
+            if ( this->substr( static_cast < Index > ( this->length() ) - static_cast < Index > ( suffix.length() ) ) == suffix ) {
+                * this = this->substr(0, static_cast < Index > ( this->length()) - static_cast < Index > ( suffix.length()));
+            }
+
             return * this;
         }
 
@@ -4467,59 +4674,59 @@ namespace cds {
          */
         __CDS_NoDiscard __CDS_OptimalInline auto removeSuffix (String const & suffix) const noexcept -> String { return String(*this).removeSuffix(suffix); }
 
-        __CDS_NoDiscard __CDS_OptionalInline auto static format (StringLiteral format, ...) noexcept (false) -> String {
+        __CDS_NoDiscard __CDS_OptionalInline auto static format (StringLiteral format, ...) noexcept (false) -> String { // NOLINT(clion-misra-cpp2008-8-4-1)
             va_list args;
-            va_start (args, format);
+            va_start (args, format); // NOLINT(clion-misra-cpp2008-5-2-12)
 
-            int currentSize = __CDS_StringFormat_StartSize;
+            Size currentSize = __CDS_StringFormat_StartSize;
 
             while(currentSize <= __CDS_StringFormat_MaxSize) {
                 char * buffer = Memory :: instance ().createArray < char > (currentSize);
 
-                int returnValue = std::vsnprintf ( buffer, currentSize, format, args );
-                if ( returnValue >= 0 && returnValue < currentSize ) {
-                    String s(buffer, returnValue);
+                int returnValue = std::vsnprintf ( buffer, currentSize, format, args ); // NOLINT(clion-misra-cpp2008-5-2-12)
+                if ( returnValue >= 0 && static_cast < Size > (returnValue) < currentSize ) {
+                    String s(buffer, static_cast < Size > ( returnValue ) );
                     Memory :: instance().destroyArray ( buffer );
-                    va_end (args);
+                    va_end (args); // NOLINT(clion-misra-cpp2008-5-2-12)
 
                     return s;
                 }
 
-                va_end(args);
-                va_start(args, format);
+                va_end(args); // NOLINT(clion-misra-cpp2008-5-2-12)
+                va_start(args, format); // NOLINT(clion-misra-cpp2008-5-2-12)
                 Memory :: instance ().destroyArray ( buffer );
                 currentSize *= __CDS_StringFormat_SizeMultiplier;
             }
 
-            va_end (args);
+            va_end (args); // NOLINT(clion-misra-cpp2008-5-2-12)
             throw FormatException();
         }
 
-        __CDS_NoDiscard __CDS_OptionalInline auto static f ( StringLiteral format, ... ) noexcept (false) -> String {
+        __CDS_NoDiscard __CDS_OptionalInline auto static f ( StringLiteral format, ... ) noexcept (false) -> String { // NOLINT(clion-misra-cpp2008-8-4-1)
             va_list args;
-            va_start (args, format);
+            va_start (args, format); // NOLINT(clion-misra-cpp2008-5-2-12)
 
-            int currentSize = __CDS_StringFormat_StartSize;
+            Size currentSize = __CDS_StringFormat_StartSize;
 
             while(currentSize <= __CDS_StringFormat_MaxSize) {
                 char * buffer = Memory :: instance().createArray < char > (currentSize);
 
-                int returnValue = std::vsnprintf ( buffer, currentSize, format, args );
-                if ( returnValue >= 0 && returnValue < currentSize ) {
-                    String s(buffer, returnValue);
+                int returnValue = std::vsnprintf ( buffer, currentSize, format, args ); // NOLINT(clion-misra-cpp2008-5-2-12)
+                if ( returnValue >= 0 && static_cast < Size > ( returnValue ) < currentSize ) {
+                    String s(buffer, static_cast < Size > ( returnValue ) );
                     Memory :: instance().destroyArray ( buffer );
-                    va_end (args);
+                    va_end (args); // NOLINT(clion-misra-cpp2008-5-2-12)
 
                     return s;
                 }
 
-                va_end(args);
-                va_start(args, format);
+                va_end(args); // NOLINT(clion-misra-cpp2008-5-2-12)
+                va_start(args, format); // NOLINT(clion-misra-cpp2008-5-2-12)
                 Memory :: instance().destroyArray( buffer );
                 currentSize *= __CDS_StringFormat_SizeMultiplier;
             }
 
-            va_end (args);
+            va_end (args); // NOLINT(clion-misra-cpp2008-5-2-12)
             throw FormatException();
         }
 
@@ -4547,7 +4754,7 @@ namespace cds {
 
     inline auto Object::toString() const noexcept -> String {
         std::stringstream oss;
-        oss << "Object at 0x" << std::hex << reinterpret_cast < AddressValueType > (this);
+        oss << "Object at 0x" << std::hex << reinterpret_cast < AddressValueType const > (this);
         return oss.str();
     }
 
@@ -4580,7 +4787,7 @@ namespace cds {
     template<> auto hash<String>(String const &o) noexcept -> Index { return static_cast < Index > ( o.length() ); }
 }
 
-__CDS_RegisterParseType(String)
-__CDS_RegisterParseType(Object)
+__CDS_RegisterParseType(String) // NOLINT(clion-misra-cpp2008-8-0-1)
+__CDS_RegisterParseType(Object) // NOLINT(clion-misra-cpp2008-8-0-1)
 
 #endif //CDS_STRING_HPP

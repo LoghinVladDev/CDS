@@ -75,6 +75,6 @@ namespace cds {
 
 }
 
-__CDS_RegisterParseTypeTemplateT(Queue)
+__CDS_RegisterParseTypeTemplateT(Queue) // NOLINT(clion-misra-cpp2008-8-0-1)
 
 #endif //CDS_QUEUE_HPP

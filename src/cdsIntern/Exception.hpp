@@ -92,9 +92,15 @@ namespace cds {
         }
 
         __CDS_NoDiscard __CDS_cpplang_VirtualConstexpr auto equals ( Object const & o ) const noexcept -> bool override {
-            if ( this == & o ) return true;
+            if ( this == & o ) {
+                return true;
+            }
+
             auto p = dynamic_cast < decltype (this) > ( & o );
-            if ( p == nullptr ) return false;
+
+            if ( p == nullptr ) {
+                return false;
+            }
 
             return this->_message == p->_message;
         }

@@ -24,7 +24,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         template < typename T >
         class __CDS_MaybeUnused DefaultSelector : public Selector < T > {
         public:
-        auto operator () (T const & obj) const noexcept -> Index { return (Index) obj; }
+        auto operator () (T const & obj) const noexcept -> Index { return static_cast <Index const> (obj); }
     };
 
 }

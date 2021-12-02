@@ -26,10 +26,10 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
     template<> auto hash<Object>(Object const &o) noexcept -> Index;
     template<> __CDS_cpplang_IfConstexpr auto hash<CString>(CString const &o) noexcept -> Index { return static_cast < Index > ( std::char_traits<char>::length(o) ); }
     template<> __CDS_cpplang_IfConstexpr auto hash<StringLiteral>(StringLiteral const &o) noexcept -> Index { return static_cast < Index > ( std::char_traits<char>::length(o) ); }
-    template<> constexpr auto hash<uint8>(uint8 const &o) noexcept -> Index { return o; }
-    template<> constexpr auto hash<uint16>(uint16 const &o) noexcept -> Index { return o; }
-    template<> constexpr auto hash<uint32>(uint32 const &o) noexcept -> Index { return o; }
-    template<> constexpr auto hash<uint64>(uint64 const &o) noexcept -> Index { return static_cast < Index > ( o ); }
+    template<> constexpr auto hash<uint8>(uint8 const &o) noexcept -> Index { return static_cast < Index const > ( o ); }
+    template<> constexpr auto hash<uint16>(uint16 const &o) noexcept -> Index { return static_cast < Index const > ( o ); }
+    template<> constexpr auto hash<uint32>(uint32 const &o) noexcept -> Index { return static_cast < Index const > ( o ); }
+    template<> constexpr auto hash<uint64>(uint64 const &o) noexcept -> Index { return static_cast < Index const > ( o ); }
     template<> constexpr auto hash<sint8>(sint8 const &o) noexcept -> Index { return o; }
     template<> constexpr auto hash<sint16>(sint16 const &o) noexcept -> Index { return o; }
     template<> constexpr auto hash<sint32>(sint32 const &o) noexcept -> Index { return o; }
@@ -96,9 +96,9 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
 #else
 
-        template <class K> using HighCollisionDefaultHashFunction = DefaultHashFunction<K, 256>;
-        template <class K> using MediumCollisionDefaultHashFunction = DefaultHashFunction<K, 4096>;
-        template <class K> using LowCollisionDefaultHashFunction = DefaultHashFunction<K, 32768>;
+        template < typename K > using HighCollisionDefaultHashFunction = DefaultHashFunction < K, 256u >;
+        template < typename K > using MediumCollisionDefaultHashFunction = DefaultHashFunction < K, 4096u >;
+        template < typename K > using LowCollisionDefaultHashFunction = DefaultHashFunction < K, 32768u >;
 
 #endif
 

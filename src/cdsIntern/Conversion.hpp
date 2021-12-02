@@ -23,22 +23,22 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                         "6061626364656667686970717273747576777879"
                         "8081828384858687888990919293949596979899";
 
-                uint32 pos = length - 1;
+                uint32 pos = length - 1u;
                 while (value >= 100) {
                     auto const number = (value % 100) * 2;
                     value /= 100;
 
-                    buffer[pos] = digits[number + 1];
-                    buffer[pos - 1] = digits[number];
-                    pos -= 2;
+                    buffer[pos] = digits[number + 1]; // NOLINT(clion-misra-cpp2008-5-0-11)
+                    buffer[pos - 1u] = digits[number]; // NOLINT(clion-misra-cpp2008-5-0-11)
+                    pos -= 2u;
                 }
 
                 if (value >= 10) {
                     auto const number = value * 2;
-                    buffer[1] = digits[number + 1];
-                    buffer[0] = digits[number];
+                    buffer[1u] = digits[number + 1]; // NOLINT(clion-misra-cpp2008-5-0-11)
+                    buffer[0u] = digits[number]; // NOLINT(clion-misra-cpp2008-5-0-11)
                 } else {
-                    buffer[0] = '0' + value;
+                    buffer[0u] = '0' + value; // NOLINT(clion-misra-cpp2008-5-0-11)
                 }
             }
 
@@ -46,22 +46,31 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
              * @brief Implementation 'borrowed' from gcc11 charconv.h to add constexpr functionality
              */
             template < typename Type >
-            __CDS_cpplang_ConstexprConditioned static auto toCharBase10Length (Type value, uint32 base = 10) noexcept -> uint32 {
+            __CDS_cpplang_ConstexprConditioned static auto toCharBase10Length (Type value, uint32 base = 10u) noexcept -> uint32 {
                 static_assert(std::is_integral < Type > :: value, "implementation bug");
                 static_assert(std::is_unsigned < Type > :: value, "implementation bug");
 
-                uint32 n = 1;
+                uint32 n = 1u;
                 uint32 const base2 = base * base;
                 uint32 const base3 = base2 * base;
                 uint32 const base4 = base3 * base;
 
                 while(true) {
-                    if ( value < base ) return n;
-                    else if ( value < base2 ) return n + 1;
-                    else if ( value < base3 ) return n + 2;
-                    else if ( value < base4 ) return n + 3;
+
+                    if ( value < base ) {
+                        return n;
+                    } else if ( value < base2 ) {
+                        return n + 1u;
+                    } else if ( value < base3 ) {
+                        return n + 2u;
+                    } else if ( value < base4 ) {
+                        return n + 3u;
+                    } else {
+                        /// do nothing
+                    }
+
                     value /= base4;
-                    n += 4;
+                    n += 4u;
                 }
             }
         }

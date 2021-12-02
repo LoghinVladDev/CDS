@@ -2,10 +2,10 @@
 
 using namespace cds;
 
-
+#include <CDS/SingleLinkedList>
 
 int main () {
-    Array const a = {1, 2, 3};
+    SingleLinkedList < int > a = {1, 2, 3};
 
     a.forEach([](auto e) { std :: cout << e << '\n'; });
 

@@ -21,16 +21,18 @@ namespace cds {
 
         static auto random () noexcept -> Float {
             static UniquePointer < RandomGenerator > pRng;
-            if ( pRng.isNull() )
+            if ( pRng.isNull() ) {
                 pRng.reset( Memory :: instance () .create < RandomGenerator > () );
+            }
 
             return pRng->get();
         }
 
         static auto random (float low, float high) noexcept -> Float {
             static UniquePointer < RandomGenerator > pRng;
-            if ( pRng.isNull() || pRng->low() != low && pRng->high() != high )
+            if ( pRng.isNull() || pRng->low() != low && pRng->high() != high ) {
                 pRng.reset( Memory :: instance () .create < RandomGenerator > (low, high) );
+            }
 
             return pRng->get();
         }
@@ -39,22 +41,25 @@ namespace cds {
         constexpr Float(Float const&)noexcept=default;
         constexpr Float(Float &&)noexcept=default;
         __CDS_cpplang_ConstexprDestructor ~Float() noexcept override = default;
-        constexpr Float(float value) noexcept: v(value) {} // NOLINT(google-explicit-constructor)
+        constexpr Float(float value) noexcept: v(value) {} // NOLINT(google-explicit-constructor,clion-misra-cpp2008-12-1-3)
 
-        explicit constexpr Float(sint8 value) noexcept: v(value) {}
-        explicit constexpr Float(sint16 value) noexcept: v(value) {}
+        explicit constexpr Float(sint8 value) noexcept: v(static_cast < float > (value)) {}
+        explicit constexpr Float(sint16 value) noexcept: v(static_cast < float > (value)) {}
         explicit constexpr Float(sint32 value) noexcept: v(static_cast < float > (value)) {}
         explicit constexpr Float(sint64 value) noexcept: v(static_cast < float > (value)) {}
 
-        explicit constexpr Float(uint8 value) noexcept: v(value) {}
-        explicit constexpr Float(uint16 value) noexcept: v(value) {}
+        explicit constexpr Float(uint8 value) noexcept: v(static_cast < float > (value)) {}
+        explicit constexpr Float(uint16 value) noexcept: v(static_cast < float > (value)) {}
         explicit constexpr Float(uint32 value) noexcept: v(static_cast < float > (value)) {}
         explicit constexpr Float(uint64 value) noexcept: v(static_cast < float > (value)) {}
 
         explicit constexpr Float(double value) noexcept: v(static_cast < float > (value)) {}
 
         __CDS_cpplang_NonConstConstexprMemberFunction auto operator=(Float const &o) noexcept -> Float & {
-            if (this == &o)return *this;
+            if (this == &o) {
+                return *this;
+            }
+
             this->v = o.v;
             return *this;
         }
@@ -65,7 +70,10 @@ namespace cds {
         }
 
         __CDS_cpplang_NonConstConstexprMemberFunction auto operator=(Float && value) noexcept -> Float & {
-            if (this == & value) return *this;
+            if (this == & value) {
+                return *this;
+            }
+
             this->v = exchange ( value.v, 0.0f );
             return *this;
         }
@@ -83,19 +91,25 @@ namespace cds {
         __CDS_cpplang_ConstexprDestructor friend auto operator*(float value, Float const &o) noexcept -> Float { return value * o.v; }
 
         __CDS_cpplang_ConstexprDestructor auto operator/(Float const &o) const noexcept (false) -> Float {
-            if ( o.v == 0.0f ) throw DivideByZeroException();
+            if ( o.v == 0.0f ) {
+                throw DivideByZeroException();
+            }
 
             return this->v / o.v;
         }
 
         __CDS_cpplang_ConstexprDestructor auto operator/(float value) const noexcept (false) -> Float {
-            if ( value == 0.0f ) throw DivideByZeroException();
+            if ( value == 0.0f ) {
+                throw DivideByZeroException();
+            }
 
             return this->v / value;
         }
 
         __CDS_cpplang_ConstexprDestructor friend auto operator/(float value, Float const & o) noexcept (false) -> Float {
-            if ( o.v == 0.0f ) throw DivideByZeroException();
+            if ( o.v == 0.0f ) {
+                throw DivideByZeroException();
+            }
 
             return value / o.v;
         }
@@ -131,14 +145,18 @@ namespace cds {
         }
 
         __CDS_cpplang_NonConstConstexprMemberFunction auto operator/=(Float const &o) noexcept (false) -> Float & {
-            if ( o.v == 0.0f ) throw DivideByZeroException();
+            if ( o.v == 0.0f ) {
+                throw DivideByZeroException();
+            }
 
             this->v /= o.v;
             return *this;
         }
 
         __CDS_cpplang_NonConstConstexprMemberFunction auto operator/=(float value) noexcept (false) -> Float & {
-            if ( value == 0.0f ) throw DivideByZeroException();
+            if ( value == 0.0f ) {
+                throw DivideByZeroException();
+            }
 
             this->v /= value;
             return *this;
@@ -172,9 +190,14 @@ namespace cds {
     #endif
 
         __CDS_NoDiscard auto equals ( Object const & o ) const noexcept -> bool override {
-            if ( this == & o ) return true;
+            if ( this == & o ) {
+                return true;
+            }
+
             auto p = dynamic_cast < decltype (this) > ( & o );
-            if ( p == nullptr ) return false;
+            if ( p == nullptr ) {
+                return false;
+            }
 
             return this->operator==(*p);
         }
@@ -193,43 +216,52 @@ namespace cds {
         }
 
         static auto parse(String const & string) noexcept -> Float {
-            if ( string.empty() ) return 0;
+            if ( string.empty() ) {
+                return 0.0f;
+            }
 
             auto it = string.begin();
             __CDS_cpplang_ConstexprLambda static auto isNumericChar = [] (char c) noexcept -> bool { return c >= '0' && c <= '9'; };
             __CDS_cpplang_ConstexprLambda static auto numericCharToInt = [] (char c) noexcept -> int { return static_cast < int > (c) - 48; };
 
-            bool pastFloatingPoint = false, negative = false;
+            bool pastFloatingPoint = false;
+            bool negative = false;
 
             while ( ! ( isNumericChar ( it.value() ) ) && it != string.end() && ! negative ) {
-                if ( it.value() == '-' )
+                if ( it.value() == '-' ) {
                     negative = true;
-                it.next();
+                }
+
+                (void) it.next();
             }
 
             while ( ! ( isNumericChar ( it.value() ) ) && it != string.end() ) {
-                if ( it.value() == '.' )
+                if ( it.value() == '.' ) {
                     pastFloatingPoint = true;
-                it.next();
+                }
+
+                (void) it.next();
             }
 
-            int whole = 0, frac = 0, div = 1;
+            int whole = 0;
+            int frac = 0;
+            int div = 1;
 
             while ( ( isNumericChar (it.value()) || it.value() == '.' ) && it != string.end() ) {
                 if ( it.value() == '.' ) {
                     pastFloatingPoint = true;
-                    it.next();
+                    (void) it.next();
                     continue;
                 }
 
-                if ( ! pastFloatingPoint )
-                    whole = whole * 10 + numericCharToInt ( it.value() );
-                else {
+                if ( ! pastFloatingPoint ) {
+                    whole = whole * 10 + numericCharToInt(it.value());
+                } else {
                     frac = frac * 10 + numericCharToInt(it.value());
                     div *= 10;
                 }
 
-                it.next();
+                (void) it.next();
             }
 
             auto value = static_cast<float> (whole) + ( static_cast<float>(frac) / static_cast<float>(div) );
@@ -269,7 +301,7 @@ namespace cds {
     class Float::Atomic : public utility :: hidden :: floatAtomicImpl :: Base { // NOLINT(bugprone-reserved-identifier)
     public:
         Atomic () noexcept {
-            this->set(0);
+            this->set(0.0f);
         }
 
         Atomic ( Atomic const & obj ) noexcept :  // NOLINT(modernize-use-equals-default)
@@ -288,7 +320,7 @@ namespace cds {
         }
 
 
-        Atomic (float v) noexcept { // NOLINT(google-explicit-constructor)
+        Atomic (float v) noexcept { // NOLINT(google-explicit-constructor,clion-misra-cpp2008-12-1-3)
             this->set(v);
         }
 
@@ -467,33 +499,43 @@ namespace cds {
 
         __CDS_NoDiscard __CDS_OptimalInline auto operator / ( Atomic const & o ) const noexcept(false) -> Float {
             auto rVal = o.get();
-            if ( rVal == 0.0f ) throw DivideByZeroException();
+            if ( rVal == 0.0f ) {
+                throw DivideByZeroException();
+            }
 
             return this->get() / rVal;
         }
 
         __CDS_NoDiscard __CDS_OptimalInline auto operator / ( Float const & o ) const noexcept(false) -> Float {
-            if (o == 0.0f) throw DivideByZeroException();
+            if (o == 0.0f) {
+                throw DivideByZeroException();
+            }
 
             return this->get() / o;
         }
 
         __CDS_NoDiscard __CDS_OptimalInline auto operator / ( float value ) const noexcept(false) -> Float {
-            if ( value == 0.0f ) throw DivideByZeroException();
+            if ( value == 0.0f ) {
+                throw DivideByZeroException();
+            }
 
             return this->get() / value;
         }
 
         __CDS_NoDiscard __CDS_OptimalInline friend auto operator / ( float value, Atomic const & o ) noexcept(false) -> Float {
             auto rVal = o.get();
-            if ( rVal == 0.0f ) throw DivideByZeroException();
+            if ( rVal == 0.0f ) {
+                throw DivideByZeroException();
+            }
 
             return value / rVal;
         }
 
         __CDS_NoDiscard __CDS_OptimalInline friend auto operator / ( Float const & value, Atomic const & o ) noexcept(false) -> Float {
             auto rVal = o.get();
-            if ( rVal == 0.0f ) throw DivideByZeroException();
+            if ( rVal == 0.0f ) {
+                throw DivideByZeroException();
+            }
 
             return value.get() / rVal;
         }
@@ -520,8 +562,9 @@ namespace cds {
         }
 
         __CDS_OptionalInline auto operator /= (float value) noexcept (false) -> Atomic & {
-            if (value == 0.0f)
+            if (value == 0.0f) {
                 throw DivideByZeroException();
+            }
 
             this->_access.lock();
             this->_data /= value;
@@ -551,8 +594,9 @@ namespace cds {
         }
 
         __CDS_OptionalInline auto operator /= (Float const & value) noexcept (false) -> Atomic & {
-            if (value == 0.0f)
+            if (value == 0.0f) {
                 throw DivideByZeroException();
+            }
 
             this->_access.lock();
             this->_data /= value;
@@ -589,8 +633,9 @@ namespace cds {
 
         __CDS_OptionalInline auto operator /= (Atomic const & value) noexcept (false) -> Atomic & {
             float rVal = value.get();
-            if (rVal == 0.0f)
+            if (rVal == 0.0f) {
                 throw DivideByZeroException();
+            }
 
             this->_access.lock();
             this->_data /= rVal;
@@ -613,6 +658,6 @@ __CDS_cpplang_ConstexprPostfixLiteral auto operator "" _f (long double value) no
 
 #endif
 
-__CDS_RegisterParseType(Float)
+__CDS_RegisterParseType(Float) // NOLINT(clion-misra-cpp2008-8-0-1)
 
 #endif //CDS_FLOAT_HPP

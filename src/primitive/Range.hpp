@@ -50,7 +50,7 @@ namespace cds {
 
             __CDS_cpplang_NonConstConstexprMemberFunction auto operator ++ (int) -> Iterator {
                 auto copy = * this;
-                this->next();
+                (void) this->next();
                 return copy;
             }
 
@@ -144,6 +144,6 @@ namespace cds {
 
 }
 
-__CDS_RegisterParseType(Range)
+__CDS_RegisterParseType(Range) // NOLINT(clion-misra-cpp2008-8-0-1)
 
 #endif //CDS_RANGE_HPP

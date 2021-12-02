@@ -20,7 +20,7 @@ namespace cds {
         using ElementType   = typename Collection < T > :: ElementType;
 
     protected:
-        Size _size { 0ull };
+        Size _size { 0ull }; // NOLINT(clion-misra-cpp2008-11-0-1)
 
         List () noexcept = default;
         using ElementRef                = typename Collection < T > :: ElementRef;
@@ -96,11 +96,14 @@ namespace cds {
     public:
         template < typename SortFunc = Function < bool ( ElementCRef, ElementCRef ) > >
         __CDS_OptimalInline auto sort ( SortFunc const & sortFunction = []( ElementCRef a, ElementCRef b ) noexcept -> bool { return a < b; } ) noexcept -> void {
-            if ( this->size() < 2 ) return;
+            if ( this->size() < 2 ) {
+                return;
+            }
 
             Iterator previous;
-            for ( auto it = this->begin(), end = this->end(); it != end; ++ it )
+            for ( auto it = this->begin(), end = this->end(); it != end; ++ it ) { // NOLINT(clion-misra-cpp2008-8-0-1)
                 previous = it;
+            }
 
             List < T > :: quickSort ( this->begin(), previous, sortFunction );
         }
@@ -117,10 +120,10 @@ namespace cds {
 
             auto & p = this->allocFrontGetPtr();
             if ( p == nullptr ) {
-                auto pVal = (p = Memory::instance().create<ElementType>(value));
+                p = Memory::instance().create<ElementType>(value);
 
                 __CDS_Collection_OperationalUnlock
-                return * pVal;
+                return * p;
             }
 
             return * p;
@@ -132,10 +135,10 @@ namespace cds {
 
             auto & p = this->allocBackGetPtr();
             if ( p == nullptr ) {
-                auto pVal = ( p = Memory::instance().create<ElementType>(value));
+                p = Memory::instance().create<ElementType>(value);
 
                 __CDS_Collection_OperationalUnlock
-                return * pVal;
+                return * p;
             }
 
             return * p;
@@ -147,10 +150,10 @@ namespace cds {
 
             auto & p = this->allocFrontGetPtr();
             if ( p == nullptr ) {
-                auto pVal = ( p = Memory::instance().create < ElementType > ( std :: forward < ElementType > ( value ) ) );
+                p = Memory::instance().create < ElementType > ( std :: forward < ElementType > ( value ) );
 
                 __CDS_Collection_OperationalUnlock
-                return * pVal;
+                return * p;
             }
 
             return * p;
@@ -162,10 +165,10 @@ namespace cds {
 
             auto & p = this->allocBackGetPtr();
             if ( p == nullptr ) {
-                auto pVal = ( p = Memory::instance().create < ElementType > ( std :: forward < ElementType > ( value ) ) );
+                p = Memory::instance().create < ElementType > ( std :: forward < ElementType > ( value ) );
 
                 __CDS_Collection_OperationalUnlock
-                return * pVal;
+                return * p;
             }
 
             return * p;
@@ -200,521 +203,576 @@ namespace cds {
 
         template < typename V = T, EnableIf < Type < V > :: copyAssignable > = 0 >
         __CDS_MaybeUnused __CDS_OptionalInline auto replace (
-                ElementCRef what,
-                ElementCRef with,
-                Size count
+                ElementCRef what    __CDS_MaybeUnused,
+                ElementCRef with    __CDS_MaybeUnused,
+                Size count          __CDS_MaybeUnused
         ) noexcept -> Size {
 
-            Size replaceCount = 0;
+            Size replaceCount __CDS_MaybeUnused = 0u;
 
-            for ( auto & e : * this )
+            for ( auto & e __CDS_MaybeUnused : * this ) {
                 if ( replaceCount < count ) {
                     if ( Type < T > :: compare ( e, what ) ) {
                         e = with;
                         ++ replaceCount;
                     }
-                } else
+                } else {
                     return count;
+                }
+            }
 
             return replaceCount;
         }
 
         template < typename V = T, EnableIf < Type < V > :: copyAssignable > = 0 >
         __CDS_MaybeUnused __CDS_OptionalInline auto replaceFirst (
-                ElementCRef what,
-                ElementCRef with
+                ElementCRef what __CDS_MaybeUnused,
+                ElementCRef with __CDS_MaybeUnused
         ) noexcept -> bool {
 
-            for ( auto & e : * this )
+            for ( auto & e __CDS_MaybeUnused : * this ) {
                 if ( Type < T > :: compare ( e, what ) ) {
                     e = with;
                     return true;
                 }
+            }
 
             return false;
         }
 
         template < typename V = T, EnableIf < Type < V > :: moveAssignable > = 0 >
         __CDS_MaybeUnused __CDS_OptionalInline auto replaceFirst (
-                ElementCRef what,
-                ElementMRef with
+                ElementCRef what __CDS_MaybeUnused,
+                ElementMRef with __CDS_MaybeUnused
         ) noexcept -> bool {
 
-            for ( auto & e : * this )
+            for ( auto & e __CDS_MaybeUnused : * this ) {
                 if ( Type < T > :: compare ( e, what ) ) {
                     e = std :: forward < ElementType > ( with );
                     return true;
                 }
+            }
 
             return false;
         }
 
         template < typename V = T, EnableIf < Type < V > :: copyAssignable > = 0 >
         __CDS_MaybeUnused __CDS_OptionalInline auto replaceAll (
-                ElementCRef what,
-                ElementCRef with
+                ElementCRef what __CDS_MaybeUnused,
+                ElementCRef with __CDS_MaybeUnused
         ) noexcept -> Size {
 
-            Size replacedCount = 0;
+            Size replacedCount __CDS_MaybeUnused = 0u;
 
-            for ( auto & e : * this )
+            for ( auto & e __CDS_MaybeUnused : * this ) {
                 if ( Type < T > :: compare ( e, what ) ) {
                     e = with;
                     ++ replacedCount;
                 }
+            }
 
             return replacedCount;
         }
 
         template < typename V = T, EnableIf < Type < V > :: copyAssignable > = 0 >
         __CDS_MaybeUnused __CDS_OptionalInline auto replaceLast (
-                ElementCRef what,
-                ElementCRef with
+                ElementCRef what __CDS_MaybeUnused,
+                ElementCRef with __CDS_MaybeUnused
         ) noexcept -> bool {
 
             ForeignPointer < ElementType > lastEncountered;
 
-            for ( auto & e : * this )
-                if ( Type < T > :: compare ( e, what ) )
+            for ( auto & e __CDS_MaybeUnused : * this ) {
+                if ( Type < T > :: compare ( e, what ) ) {
                     lastEncountered = & e;
+                }
+            }
 
-            if ( ! lastEncountered.isNull() )
+            if ( lastEncountered != nullptr ) {
                 * lastEncountered = with;
+            }
 
-            return ! lastEncountered.isNull();
+            return lastEncountered != nullptr;
         }
 
         template < typename V = T, EnableIf < Type < V > :: moveAssignable > = 0 >
         __CDS_MaybeUnused __CDS_OptionalInline auto replaceLast (
-                ElementCRef what,
-                ElementMRef with
+                ElementCRef what __CDS_MaybeUnused,
+                ElementMRef with __CDS_MaybeUnused
         ) noexcept -> bool {
 
             ForeignPointer < ElementType > lastEncountered;
 
-            for ( auto & e : * this )
-                if ( Type < T > :: compare ( e, what ) )
+            for ( auto & e __CDS_MaybeUnused : * this ) {
+                if ( Type < T > :: compare ( e, what ) ) {
                     lastEncountered = & e;
+                }
+            }
 
-            if ( ! lastEncountered.isNull() )
+            if ( lastEncountered != nullptr ) {
                 * lastEncountered = std :: forward < ElementType > ( with );
+            }
 
-            return ! lastEncountered.isNull();
+            return lastEncountered != nullptr;
         }
 
         template < typename V = T, EnableIf < Type < V > :: copyAssignable > = 0 >
         __CDS_MaybeUnused __CDS_OptionalInline auto replaceOf (
-                Collection < T > const & of,
-                ElementCRef with,
-                Size count
+                Collection < T > const & of __CDS_MaybeUnused,
+                ElementCRef with            __CDS_MaybeUnused,
+                Size count                  __CDS_MaybeUnused
         ) noexcept -> Size {
 
-            Size replacedCount = 0;
-            for ( auto & e : * this )
+            Size replacedCount __CDS_MaybeUnused = 0u;
+            for ( auto & e __CDS_MaybeUnused : * this ) {
                 if ( replacedCount < count ) {
                     if ( of.contains( e ) ) {
                         e = with;
                         ++ replacedCount;
                     }
-                } else
+                } else {
                     return count;
+                }
+            }
 
             return replacedCount;
         }
 
         template < typename V = T, EnableIf < Type < V > :: copyAssignable > = 0 >
         __CDS_MaybeUnused __CDS_OptionalInline auto replaceFirstOf (
-                Collection < T > const & of,
-                ElementCRef with
+                Collection < T > const & of __CDS_MaybeUnused,
+                ElementCRef with            __CDS_MaybeUnused
         ) noexcept -> bool {
 
-            for ( auto & e : * this )
+            for ( auto & e __CDS_MaybeUnused : * this ) {
                 if ( of.contains( e ) ) {
                     e = with;
                     return true;
                 }
+            }
 
             return false;
         }
 
         template < typename V = T, EnableIf < Type < V > :: moveAssignable > = 0 >
         __CDS_MaybeUnused __CDS_OptionalInline auto replaceFirstOf (
-                Collection < T > const & of,
-                ElementMRef with
+                Collection < T > const & of __CDS_MaybeUnused,
+                ElementMRef with            __CDS_MaybeUnused
         ) noexcept -> bool {
 
-            for ( auto & e : * this )
+            for ( auto & e __CDS_MaybeUnused : * this ) {
                 if ( of.contains( e ) ) {
                     e = std :: forward < ElementType > ( with );
                     return true;
                 }
+            }
 
             return false;
         }
 
         template < typename V = T, EnableIf < Type < V > :: copyAssignable > = 0 >
         __CDS_MaybeUnused __CDS_OptionalInline auto replaceAllOf (
-                Collection < T > const & of,
-                ElementCRef with
+                Collection < T > const & of __CDS_MaybeUnused,
+                ElementCRef with            __CDS_MaybeUnused
         ) noexcept -> Size {
 
-            Size replacedCount = 0;
+            Size replacedCount __CDS_MaybeUnused = 0u;
 
-            for ( auto & e : * this )
+            for ( auto & e __CDS_MaybeUnused : * this ) {
                 if ( of.contains( e ) ) {
                     e = with;
                     ++ replacedCount;
                 }
+            }
 
             return replacedCount;
         }
 
         template < typename V = T, EnableIf < Type < V > :: copyAssignable > = 0 >
         __CDS_MaybeUnused __CDS_OptionalInline auto replaceLastOf (
-                Collection < T > const & of,
-                ElementCRef with
+                Collection < T > const & of __CDS_MaybeUnused,
+                ElementCRef with            __CDS_MaybeUnused
         ) noexcept -> bool {
 
             ForeignPointer < ElementType > lastOccurred;
 
-            for ( auto & e : * this )
-                if ( of.contains( e ) )
+            for ( auto & e __CDS_MaybeUnused : * this ) {
+                if ( of.contains( e ) ) {
                     lastOccurred = & e ;
+                }
+            }
 
-            if ( ! lastOccurred.isNull() )
+            if ( lastOccurred != nullptr ) {
                 * lastOccurred = with;
+            }
 
-            return ! lastOccurred.isNull();
+            return lastOccurred != nullptr;
         }
 
         template < typename V = T, EnableIf < Type < V > :: moveAssignable > = 0 >
         __CDS_MaybeUnused __CDS_OptionalInline auto replaceLastOf (
-                Collection < T > const & of,
-                ElementMRef with
+                Collection < T > const & of __CDS_MaybeUnused,
+                ElementMRef with            __CDS_MaybeUnused
         ) noexcept -> bool {
 
             ForeignPointer < Iterator > lastOccurred;
 
-            for ( auto & e : * this )
-                if ( of.contains( e ) )
+            for ( auto & e __CDS_MaybeUnused : * this ) {
+                if ( of.contains( e ) ) {
                     lastOccurred = & e;
+                }
+            }
 
-            if ( ! lastOccurred.isNull() )
+            if ( lastOccurred != nullptr ) {
                 * lastOccurred = std :: forward < ElementType > ( with );
+            }
 
-            return ! lastOccurred.isNull();
+            return lastOccurred != nullptr;
         }
 
         template < typename V = T, EnableIf < Type < V > :: copyAssignable > = 0 >
         __CDS_MaybeUnused __CDS_OptionalInline auto replaceNotOf (
-                Collection < T > const & of,
-                ElementCRef with,
-                Size count
+                Collection < T > const & of __CDS_MaybeUnused,
+                ElementCRef with            __CDS_MaybeUnused,
+                Size count                  __CDS_MaybeUnused
         ) noexcept -> Size {
 
-            Size replacedCount = 0;
+            Size replacedCount __CDS_MaybeUnused = 0u;
 
-            for ( auto & e : * this )
+            for ( auto & e __CDS_MaybeUnused : * this ) {
                 if ( replacedCount < count ) {
-                    if ( ! of.contains( e ) ) {
+                    if ( ! of.contains( e ) ) { // NOLINT(clion-misra-cpp2008-5-3-1)
                         e = with;
                         ++ replacedCount;
                     }
-                } else
+                } else {
                     return count;
+                }
+            }
 
             return replacedCount;
         }
 
         template < typename V = T, EnableIf < Type < V > :: copyAssignable > = 0 >
         __CDS_MaybeUnused __CDS_OptionalInline auto replaceFirstNotOf (
-                Collection < T > const & of,
-                ElementCRef with
+                Collection < T > const & of __CDS_MaybeUnused,
+                ElementCRef with            __CDS_MaybeUnused
         ) noexcept -> bool {
 
-            for ( auto & e : * this )
-                if ( ! of.contains( e ) ) {
+            for ( auto & e __CDS_MaybeUnused : * this ) {
+                if ( ! of.contains( e ) ) { // NOLINT(clion-misra-cpp2008-5-3-1)
                     e = with;
                     return true;
                 }
+            }
 
             return false;
         }
 
         template < typename V = T, EnableIf < Type < V > :: moveAssignable > = 0 >
         __CDS_MaybeUnused __CDS_OptionalInline auto replaceFirstNotOf (
-                Collection < T > const & of,
-                ElementMRef with
+                Collection < T > const & of __CDS_MaybeUnused,
+                ElementMRef with            __CDS_MaybeUnused
         ) noexcept -> bool {
 
-            for ( auto & e : * this )
-                if ( ! of.contains( e ) ) {
+            for ( auto & e __CDS_MaybeUnused : * this ) {
+                if ( ! of.contains( e ) ) { // NOLINT(clion-misra-cpp2008-5-3-1)
                     e = std :: forward < ElementType > ( with );
                     return true;
                 }
+            }
 
             return false;
         }
 
         template < typename V = T, EnableIf < Type < V > :: copyAssignable > = 0 >
         __CDS_MaybeUnused __CDS_OptionalInline auto replaceAllNotOf (
-                Collection < T > const & of,
-                ElementCRef with
+                Collection < T > const & of __CDS_MaybeUnused,
+                ElementCRef with            __CDS_MaybeUnused
         ) noexcept -> Size {
 
-            Size replacedCount = 0;
+            Size replacedCount __CDS_MaybeUnused = 0u;
 
-            for ( auto & e : * this )
-                if ( ! of.contains( e ) ) {
+            for ( auto & e __CDS_MaybeUnused : * this ) {
+                if ( ! of.contains( e ) ) { // NOLINT(clion-misra-cpp2008-5-3-1)
                     e = with;
                     ++ replacedCount;
                 }
+            }
 
             return replacedCount;
         }
 
         template < typename V = T, EnableIf < Type < V > :: copyAssignable > = 0 >
         __CDS_MaybeUnused __CDS_OptionalInline auto replaceLastNotOf (
-                Collection < T > const & of,
-                ElementCRef with
+                Collection < T > const & of __CDS_MaybeUnused,
+                ElementCRef with            __CDS_MaybeUnused
         ) noexcept -> bool {
 
             ForeignPointer < ElementType > lastOccurred;
 
-            for ( auto & e : * this )
-                if ( ! of.contains( e ) )
+            for ( auto & e __CDS_MaybeUnused : * this ) {
+                if ( ! of.contains( e ) ) { // NOLINT(clion-misra-cpp2008-5-3-1)
                     lastOccurred = & e;
+                }
+            }
 
-            if ( ! lastOccurred.isNull() )
+            if ( lastOccurred != nullptr ) {
                 * lastOccurred = with;
+            }
 
-            return ! lastOccurred.isNull();
+            return lastOccurred != nullptr;
         }
 
         template < typename V = T, EnableIf < Type < V > :: moveAssignable > = 0 >
         __CDS_MaybeUnused __CDS_OptionalInline auto replaceLastNotOf (
-                Collection < T > const & of,
-                ElementMRef with
+                Collection < T > const & of __CDS_MaybeUnused,
+                ElementMRef with            __CDS_MaybeUnused
         ) noexcept -> bool {
 
             ForeignPointer < ElementType > lastOccurred;
 
-            for ( auto & e : * this )
-                if ( ! of.contains( e ) )
+            for ( auto & e __CDS_MaybeUnused : * this ) {
+                if ( ! of.contains( e ) ) { // NOLINT(clion-misra-cpp2008-5-3-1)
                     lastOccurred = & e;
+                }
+            }
 
-            if ( ! lastOccurred.isNull() )
+            if ( lastOccurred != nullptr ) {
                 * lastOccurred = std :: forward < ElementType > ( with );
+            }
 
-            return ! lastOccurred.isNull();
+            return lastOccurred != nullptr;
         }
 
         template < typename V = T, EnableIf < Type < V > :: copyAssignable > = 0 >
         __CDS_MaybeUnused __CDS_OptionalInline auto replaceOf (
-                InitializerList of,
-                ElementCRef with,
-                Size count
+                InitializerList of  __CDS_MaybeUnused,
+                ElementCRef with    __CDS_MaybeUnused,
+                Size count          __CDS_MaybeUnused
         ) noexcept -> Size {
 
-            Size replacedCount = 0;
+            Size replacedCount __CDS_MaybeUnused = 0u;
 
-            for ( auto & e : * this )
+            for ( auto & e __CDS_MaybeUnused : * this ) {
                 if ( replacedCount < count ) {
                     if ( Collection < T > :: iListContains ( of, e ) ) {
                         e = with;
                         ++ replacedCount;
                     }
-                } else
+                } else {
                     return count;
+                }
+            }
 
             return replacedCount;
         }
 
         template < typename V = T, EnableIf < Type < V > :: copyAssignable > = 0 >
         __CDS_MaybeUnused __CDS_OptionalInline auto replaceFirstOf (
-                InitializerList of,
-                ElementCRef with
+                InitializerList of  __CDS_MaybeUnused,
+                ElementCRef with    __CDS_MaybeUnused
         ) noexcept -> bool {
 
-            for ( auto & e : * this )
+            for ( auto & e __CDS_MaybeUnused : * this ) {
                 if ( Collection < T > :: iListContains ( of, e ) ) {
                     e = with;
                     return true;
                 }
+            }
 
             return false;
         }
 
         template < typename V = T, EnableIf < Type < V > :: moveAssignable > = 0 >
         __CDS_MaybeUnused __CDS_OptionalInline auto replaceFirstOf (
-                InitializerList of,
-                ElementMRef with
+                InitializerList of  __CDS_MaybeUnused,
+                ElementMRef with    __CDS_MaybeUnused
         ) noexcept -> bool {
 
-            for ( auto & e : * this )
+            for ( auto & e __CDS_MaybeUnused : * this ) {
                 if ( Collection < T > :: iListContains ( of, e ) ) {
                     e = std :: forward < ElementType > ( with );
                     return true;
                 }
+            }
 
             return false;
         }
 
         template < typename V = T, EnableIf < Type < V > :: copyAssignable > = 0 >
         __CDS_MaybeUnused __CDS_OptionalInline auto replaceAllOf (
-                InitializerList of,
-                ElementCRef with
+                InitializerList of  __CDS_MaybeUnused,
+                ElementCRef with    __CDS_MaybeUnused
         ) noexcept -> bool {
 
-            Size replacedCount = 0;
+            Size replacedCount __CDS_MaybeUnused = 0u;
 
-            for ( auto & e : * this )
+            for ( auto & e __CDS_MaybeUnused : * this ) {
                 if ( Collection < T > :: iListContains ( of, e ) ) {
                     e = with;
                     ++ replacedCount;
                 }
+            }
 
             return replacedCount;
         }
 
         template < typename V = T, EnableIf < Type < V > :: copyAssignable > = 0 >
         __CDS_MaybeUnused __CDS_OptionalInline auto replaceLastOf (
-                InitializerList of,
-                ElementCRef with
+                InitializerList of  __CDS_MaybeUnused,
+                ElementCRef with    __CDS_MaybeUnused
         ) noexcept -> bool {
 
             ForeignPointer < ElementType > lastOccurred;
 
-            for ( auto & e : * this )
-                if ( Collection < T > ::iListContains( of, e ) )
+            for ( auto & e __CDS_MaybeUnused : * this ) {
+                if ( Collection < T > ::iListContains( of, e ) ) {
                     lastOccurred = & e;
+                }
+            }
 
-            if ( ! lastOccurred.isNull() )
+            if ( lastOccurred != nullptr ) {
                 * lastOccurred = with;
+            }
 
-            return ! lastOccurred.isNull();
+            return lastOccurred != nullptr;
         }
 
         template < typename V = T, EnableIf < Type < V > :: moveAssignable > = 0 >
         __CDS_MaybeUnused __CDS_OptionalInline auto replaceLastOf (
-                InitializerList of,
-                ElementMRef with
+                InitializerList of  __CDS_MaybeUnused,
+                ElementMRef with    __CDS_MaybeUnused
         ) noexcept -> bool {
 
             ForeignPointer < ElementType > lastOccurred;
 
-            for ( auto & e : * this )
-                if ( Collection < T > ::iListContains( of, e ) )
+            for ( auto & e __CDS_MaybeUnused : * this ) {
+                if ( Collection < T > ::iListContains( of, e ) ) {
                     lastOccurred = & e;
+                }
+            }
 
-            if ( ! lastOccurred.isNull() )
+            if ( lastOccurred != nullptr ) {
                 * lastOccurred = std :: forward < ElementType > ( with );
+            }
 
-            return ! lastOccurred.isNull();
+            return lastOccurred != nullptr;
         }
 
         template < typename V = T, EnableIf < Type < V > :: copyAssignable > = 0 >
         __CDS_MaybeUnused __CDS_OptionalInline auto replaceNotOf (
-                InitializerList of,
-                ElementCRef with,
-                Size count
+                InitializerList of  __CDS_MaybeUnused,
+                ElementCRef with    __CDS_MaybeUnused,
+                Size count          __CDS_MaybeUnused
         ) noexcept -> Size {
 
-            Size replacedCount = 0;
+            Size replacedCount __CDS_MaybeUnused = 0u;
 
-            for ( auto & e : * this )
+            for ( auto & e __CDS_MaybeUnused : * this ) {
                 if ( replacedCount < count ) {
-                    if ( ! Collection < T > :: iListContains ( of, e ) ) {
+                    if ( ! Collection < T > :: iListContains ( of, e ) ) { // NOLINT(clion-misra-cpp2008-5-3-1)
                         e = with;
                         ++ replacedCount;
                     }
-                } else
+                } else {
                     return count;
+                }
+            }
 
             return replacedCount;
         }
 
         template < typename V = T, EnableIf < Type < V > :: copyAssignable > = 0 >
         __CDS_MaybeUnused __CDS_OptionalInline auto replaceFirstNotOf (
-                InitializerList of,
-                ElementCRef with
+                InitializerList of  __CDS_MaybeUnused,
+                ElementCRef with    __CDS_MaybeUnused
         ) noexcept -> bool {
 
-            for ( auto & e : * this )
-                if ( ! Collection < T > :: iListContains ( of, e ) ) {
+            for ( auto & e __CDS_MaybeUnused : * this ) {
+                if ( ! Collection < T > :: iListContains ( of, e ) ) { // NOLINT(clion-misra-cpp2008-5-3-1)
                     e = with;
                     return true;
                 }
+            }
 
             return false;
         }
 
         template < typename V = T, EnableIf < Type < V > :: moveAssignable > = 0 >
         __CDS_MaybeUnused __CDS_OptionalInline auto replaceFirstNotOf (
-                InitializerList of,
-                ElementMRef with
+                InitializerList of  __CDS_MaybeUnused,
+                ElementMRef with    __CDS_MaybeUnused
         ) noexcept -> bool {
 
-            for ( auto & e : * this )
-                if ( ! Collection < T > :: iListContains ( of, e ) ) {
+            for ( auto & e __CDS_MaybeUnused : * this ) {
+                if ( ! Collection < T > :: iListContains ( of, e ) ) { // NOLINT(clion-misra-cpp2008-5-3-1)
                     e = std :: forward < ElementType > ( with );
                     return true;
                 }
+            }
 
             return false;
         }
 
         template < typename V = T, EnableIf < Type < V > :: copyAssignable > = 0 >
         __CDS_MaybeUnused __CDS_OptionalInline auto replaceAllNotOf (
-                InitializerList of,
-                ElementCRef with
+                InitializerList of  __CDS_MaybeUnused,
+                ElementCRef with    __CDS_MaybeUnused
         ) noexcept -> bool {
 
-            Size replacedCount = 0;
+            Size replacedCount __CDS_MaybeUnused = 0u;
 
-            for ( auto & e : * this )
-                if ( ! Collection < T > :: iListContains ( of, e ) ) {
+            for ( auto & e __CDS_MaybeUnused : * this ) {
+                if ( ! Collection < T > :: iListContains ( of, e ) ) { // NOLINT(clion-misra-cpp2008-5-3-1)
                     e = with;
                     ++ replacedCount;
                 }
+            }
 
             return replacedCount;
         }
 
         template < typename V = T, EnableIf < Type < V > :: copyAssignable > = 0 >
         __CDS_MaybeUnused __CDS_OptionalInline auto replaceLastNotOf (
-                InitializerList of,
-                ElementCRef with
+                InitializerList of  __CDS_MaybeUnused,
+                ElementCRef with    __CDS_MaybeUnused
         ) noexcept -> bool {
 
             ForeignPointer < ElementType > lastOccurred;
 
-            for ( auto & e : * this )
-                if ( ! Collection < T > ::iListContains( of, e ) )
+            for ( auto & e __CDS_MaybeUnused : * this ) {
+                if ( ! Collection < T > ::iListContains( of, e ) ) { // NOLINT(clion-misra-cpp2008-5-3-1)
                     lastOccurred = & e;
+                }
+            }
 
-            if ( ! lastOccurred.isNull() )
+            if ( lastOccurred != nullptr ) {
                 * lastOccurred = with;
+            }
 
-            return ! lastOccurred.isNull();
+            return lastOccurred != nullptr;
         }
 
         template < typename V = T, EnableIf < Type < V > :: moveAssignable > = 0 >
         __CDS_MaybeUnused __CDS_OptionalInline auto replaceLastNotOf (
-                InitializerList of,
-                ElementMRef with
+                InitializerList of  __CDS_MaybeUnused,
+                ElementMRef with    __CDS_MaybeUnused
         ) noexcept -> bool {
 
             ForeignPointer < ElementType > lastOccurred;
 
-            for ( auto & e : * this )
-                if ( ! Collection < T > ::iListContains( of, e ) )
+            for ( auto & e __CDS_MaybeUnused : * this ) {
+                if ( ! Collection < T > ::iListContains( of, e ) ) { // NOLINT(clion-misra-cpp2008-5-3-1)
                     lastOccurred = & e;
+                }
+            }
 
-            if ( ! lastOccurred.isNull() )
+            if ( lastOccurred != nullptr ) {
                 * lastOccurred = std :: forward < ElementType > ( with );
+            }
 
-            return ! lastOccurred.isNull();
+            return lastOccurred != nullptr;
         }
 
         template < typename V = T, EnableIf < Type < V > :: copyAssignable > = 0 >
@@ -752,35 +810,39 @@ namespace cds {
         __CDS_cpplang_ConstexprPureAbstract virtual auto front () noexcept (false) -> ElementRef = 0;
 
         __CDS_NoDiscard __CDS_MaybeUnused __CDS_cpplang_ConstexprOverride auto empty () const noexcept -> bool override {
-            return this->_size == 0;
+            return this->_size == 0u;
         }
 
         __CDS_NoDiscard auto toString () const noexcept -> String final {
-            if ( this->empty() )
+            if ( this->empty() ) {
                 return {"[ ]"};
+            }
 
             std::stringstream out;
             out << "[ ";
 
-            for ( const auto & e : (*this) )
+            for ( const auto & e __CDS_MaybeUnused : (*this) ) {
                 Type < T > :: streamPrint( out, e ) << ", ";
+            }
 
             auto s = out.str();
-            return s.substr(0, s.length() - 2).append(" ]");
+            return s.substr(0u, s.length() - 2u).append(" ]");
         }
 
-        __CDS_NoDiscard auto index( ElementCRef value ) const noexcept -> Index {
+        __CDS_NoDiscard auto index( ElementCRef value __CDS_MaybeUnused ) const noexcept -> Index {
 
             __CDS_Collection_OperationalLock
 
-            Index i = 0;
-            for ( auto & e : * this )
+            Index i __CDS_MaybeUnused = 0;
+            for ( auto & e __CDS_MaybeUnused : * this ) {
                 if ( Type < T > :: compare ( e, value ) ) {
 
                     __CDS_Collection_OperationalUnlock
                     return i;
-                } else
-                    i++;
+                } else {
+                    ++ i;
+                }
+            }
 
             __CDS_Collection_OperationalUnlock
 
@@ -788,49 +850,67 @@ namespace cds {
         }
 
         __CDS_NoDiscard __CDS_MaybeUnused auto findFirst ( ElementCRef element ) noexcept -> Iterator {
-            for ( auto it = this->begin(), end = this->end(); it != end; ++ it )
-                if ( Type < ElementType > :: compare ( * it, element ) )
+            for ( auto it = this->begin(), end = this->end(); it != end; ++ it ) { // NOLINT(clion-misra-cpp2008-8-0-1)
+                if ( Type < ElementType > :: compare ( * it, element ) ) {
                     return it;
+                }
+            }
+
             return {};
         }
 
         __CDS_NoDiscard __CDS_MaybeUnused auto findLast ( ElementCRef element ) noexcept -> Iterator {
             Iterator last;
-            for ( auto it = this->begin(), end = this->end(); it != end; ++ it )
-                if ( Type < ElementType > :: compare ( * it, element ) )
+            for ( auto it = this->begin(), end = this->end(); it != end; ++ it ) { // NOLINT(clion-misra-cpp2008-8-0-1)
+                if ( Type < ElementType > :: compare ( * it, element ) ) {
                     last = it;
+                }
+            }
+
             return last;
         }
 
         __CDS_NoDiscard __CDS_MaybeUnused auto findFirstOf ( Collection < ElementType > const & elements ) noexcept -> Iterator {
-            for ( auto it = this->begin(), end = this->end(); it != end; ++ it )
-                if ( elements.contains( * it ) )
+            for ( auto it = this->begin(), end = this->end(); it != end; ++ it ) { // NOLINT(clion-misra-cpp2008-8-0-1)
+                if ( elements.contains( * it ) ) {
                     return it;
+                }
+            }
+
             return {};
         }
 
         __CDS_NoDiscard __CDS_MaybeUnused auto findFirstNotOf ( Collection < ElementType > const & elements ) noexcept -> Iterator {
-            for ( auto it = this->begin(), end = this->end(); it != end; ++ it )
-                if ( ! elements.contains( * it ) )
+            for ( auto it = this->begin(), end = this->end(); it != end; ++ it ) { // NOLINT(clion-misra-cpp2008-8-0-1)
+                if ( ! elements.contains( * it ) ) { // NOLINT(clion-misra-cpp2008-5-3-1)
                     return it;
+                }
+            }
+
             return {};
         }
 
         __CDS_NoDiscard __CDS_MaybeUnused auto findLastOf ( Collection < ElementType > const & elements ) noexcept -> Iterator {
             Iterator last;
 
-            for ( auto it = this->begin(), end = this->end(); it != end; ++ it )
-                if ( elements.contains( * it ) )
+            for ( auto it = this->begin(), end = this->end(); it != end; ++ it ) { // NOLINT(clion-misra-cpp2008-8-0-1)
+                if ( elements.contains( * it ) ) {
                     last = it;
+                }
+            }
+
             return last;
         }
 
         __CDS_NoDiscard __CDS_MaybeUnused auto findLastNotOf ( Collection < ElementType > const & elements ) noexcept -> Iterator {
             Iterator last;
 
-            for ( auto it = this->begin(), end = this->end(); it != end; ++ it )
-                if ( ! elements.contains( * it ) )
+            for ( auto it = this->begin(), end = this->end(); it != end; ++ it ) { // NOLINT(clion-misra-cpp2008-8-0-1)
+                if ( ! elements.contains( * it ) ) { // NOLINT(clion-misra-cpp2008-5-3-1)
                     last = it;
+                }
+            }
+
             return last;
         }
 
@@ -839,49 +919,67 @@ namespace cds {
         __CDS_NoDiscard __CDS_MaybeUnused auto findNotOf ( Collection < ElementType > const &, Size = limits::U64_MAX ) noexcept -> DoubleLinkedList < Iterator >;
 
         __CDS_NoDiscard __CDS_MaybeUnused auto findFirst ( ElementCRef element ) const noexcept -> ConstIterator {
-            for ( auto it = this->begin(), end = this->end(); it != end; ++ it )
-                if ( Type < ElementType > :: compare ( * it, element ) )
+            for ( auto it = this->begin(), end = this->end(); it != end; ++ it ) { // NOLINT(clion-misra-cpp2008-8-0-1)
+                if ( Type < ElementType > :: compare ( * it, element ) ) {
                     return it;
+                }
+            }
+
             return {};
         }
 
         __CDS_NoDiscard __CDS_MaybeUnused auto findLast ( ElementCRef element ) const noexcept -> ConstIterator {
             ConstIterator last;
-            for ( auto it = this->begin(), end = this->end(); it != end; ++ it )
-                if ( Type < ElementType > :: compare ( * it, element ) )
+            for ( auto it = this->begin(), end = this->end(); it != end; ++ it ) { // NOLINT(clion-misra-cpp2008-8-0-1)
+                if ( Type < ElementType > :: compare ( * it, element ) ) {
                     last = it;
+                }
+            }
+
             return last;
         }
 
         __CDS_NoDiscard __CDS_MaybeUnused auto findFirstOf ( Collection < ElementType > const & elements ) const noexcept -> ConstIterator {
-            for ( auto it = this->begin(), end = this->end(); it != end; ++ it )
-                if ( elements.contains( * it ) )
+            for ( auto it = this->begin(), end = this->end(); it != end; ++ it ) { // NOLINT(clion-misra-cpp2008-8-0-1)
+                if ( elements.contains( * it ) ) {
                     return it;
+                }
+            }
+
             return {};
         }
 
         __CDS_NoDiscard __CDS_MaybeUnused auto findFirstNotOf ( Collection < ElementType > const & elements ) const noexcept -> ConstIterator {
-            for ( auto it = this->begin(), end = this->end(); it != end; ++ it )
-                if ( ! elements.contains( * it ) )
+            for ( auto it = this->begin(), end = this->end(); it != end; ++ it ) { // NOLINT(clion-misra-cpp2008-8-0-1)
+                if ( ! elements.contains( * it ) ) { // NOLINT(clion-misra-cpp2008-5-3-1)
                     return it;
+                }
+            }
+
             return {};
         }
 
         __CDS_NoDiscard __CDS_MaybeUnused auto findLastOf ( Collection < ElementType > const & elements ) const noexcept -> ConstIterator {
             ConstIterator last;
 
-            for ( auto it = this->begin(), end = this->end(); it != end; ++ it )
-                if ( elements.contains( * it ) )
+            for ( auto it = this->begin(), end = this->end(); it != end; ++ it ) { // NOLINT(clion-misra-cpp2008-8-0-1)
+                if ( elements.contains( * it ) ) {
                     last = it;
+                }
+            }
+
             return last;
         }
 
         __CDS_NoDiscard __CDS_MaybeUnused auto findLastNotOf ( Collection < ElementType > const & elements ) const noexcept -> ConstIterator {
             ConstIterator last;
 
-            for ( auto it = this->begin(), end = this->end(); it != end; ++ it )
-                if ( ! elements.contains( * it ) )
+            for ( auto it = this->begin(), end = this->end(); it != end; ++ it ) { // NOLINT(clion-misra-cpp2008-8-0-1)
+                if ( ! elements.contains( * it ) ) { // NOLINT(clion-misra-cpp2008-5-3-1)
                     last = it;
+                }
+            }
+
             return last;
         }
 
@@ -893,23 +991,28 @@ namespace cds {
 
     template < typename T >
     template < typename ListType, typename V, EnableIf < Type < V > :: copyAssignable && isDerivedFrom < ListType, List < V > > :: value > >
-    __CDS_MaybeUnused auto List < T > :: sub ( Index from, Index to ) const noexcept(false) -> ListType {
+    __CDS_MaybeUnused auto List < T > :: sub ( Index from __CDS_MaybeUnused, Index to __CDS_MaybeUnused ) const noexcept(false) -> ListType {
         ListType list;
 
-        if ( from > to )
-            std :: swap ( from, to );
+        if ( from > to ) {
+            std :: swap (from, to);
+        }
 
-        if ( from < 0 )
+        if ( from < 0 ) {
             from = 0;
+        }
 
-        if ( to >= this->size() )
+        if ( to >= this->size() ) {
             to = this->size();
+        }
 
-        Index i = 0;
+        Index i __CDS_MaybeUnused = 0;
 
-        for ( auto const & e : * this ) {
-            if ( i >= from && i < to )
+        for ( auto const & e __CDS_MaybeUnused : * this ) {
+            if ( i >= from && i < to ) {
                 list.add ( e );
+            }
+
             ++ i;
         }
 
@@ -925,25 +1028,31 @@ namespace cds {
     ) noexcept -> void {
 
         auto next = to;
-        if ( next.isValid() )
-            if ( from == ++ next )
+        if ( next.isValid() ) {
+            if ( from == ++ next ) {
                 return;
+            }
+        }
 
         if ( from != to && from.isValid() && to.isValid() ) {
             auto partitionIterator = List < T > :: quickSortPartition ( from, to, comparisonFunction );
 
             List < T > :: quickSort ( from, partitionIterator, comparisonFunction );
-            if ( ! partitionIterator.isValid() )
-                return;
-
-            if ( partitionIterator == from ) {
-                if ( ( ++ partitionIterator ).isValid() )
-                    List < T > :: quickSort ( partitionIterator, to, comparisonFunction );
+            if ( ! partitionIterator.isValid() ) { // NOLINT(clion-misra-cpp2008-5-3-1)
                 return;
             }
 
-            if ( ! ( ++ partitionIterator ).isValid() )
+            if ( partitionIterator == from ) {
+                if ( ( ++ partitionIterator ).isValid() ) {
+                    List < T > :: quickSort ( partitionIterator, to, comparisonFunction );
+                }
+
                 return;
+            }
+
+            if ( ! ( ++ partitionIterator ).isValid() ) { // NOLINT(clion-misra-cpp2008-5-3-1)
+                return;
+            }
 
             List < T > :: quickSort ( ++ partitionIterator, to, comparisonFunction );
         }
@@ -966,22 +1075,25 @@ namespace cds {
         auto partitionIterator = from;
         Iterator previous;
 
-        for ( auto it = from; it != to; ++ it )
+        for ( auto it = from; it != to; ++ it ) {
             if ( comparisonFunction ( * it, pivot ) ) {
                 swap ( * partitionIterator, * it );
                 previous = partitionIterator;
                 ++ partitionIterator;
             }
+        }
 
         swap ( * partitionIterator, * to );
-        if ( ! previous.isValid() )
+        if ( ! previous.isValid() ) { // NOLINT(clion-misra-cpp2008-5-3-1)
             return partitionIterator;
+        }
+
         return previous;
     }
 
 }
 
-__CDS_RegisterParseTypeTemplateT(List)
+__CDS_RegisterParseTypeTemplateT(List) // NOLINT(clion-misra-cpp2008-8-0-1)
 
 #include <CDS/DoubleLinkedList>
 

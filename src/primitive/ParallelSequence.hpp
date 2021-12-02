@@ -28,7 +28,7 @@ namespace cds {
 
     private:
         using ClassName                     = typename std::remove_reference < C > :: type;
-        using IterableValue                 = decltype ( dataTypes::unsafeAddress < typename ClassName::Iterator > () -> value () );
+        using IterableValue                 = decltype ( Type < typename ClassName::Iterator > :: unsafeAddress () -> value () );
 
     public:
         using ElementType                   = typename std::remove_reference < IterableValue > :: type;
@@ -254,16 +254,16 @@ namespace cds {
         __CDS_MaybeUnused auto toOrderedSet ( OrderedSet < ElementType, Comparator > & ) const noexcept -> OrderedSet < ElementType, Comparator > & __CDS_Requires( Iterable < C > || ConstIterable < C > );
 
         template < typename Transformer >
-        __CDS_MaybeUnused auto flatMap ( Transformer const & ) && noexcept -> ParallelSequence < typename std :: remove_reference < decltype ( dataTypes :: unsafeAddress < typename returnOf < Transformer > :: Iterator >() -> value () ) > :: type > __CDS_Requires( ( Iterable < C > || ConstIterable < C > ) && ( Iterable < returnOf < Transformer > > || ConstIterable < returnOf < Transformer > > ) );
+        __CDS_MaybeUnused auto flatMap ( Transformer const & ) && noexcept -> ParallelSequence < typename std :: remove_reference < decltype ( Type < typename returnOf < Transformer > :: Iterator > :: unsafeAddress () -> value () ) > :: type > __CDS_Requires( ( Iterable < C > || ConstIterable < C > ) && ( Iterable < returnOf < Transformer > > || ConstIterable < returnOf < Transformer > > ) );
 
         template < typename IndexedTransformer >
-        __CDS_MaybeUnused auto flatMapIndexed ( IndexedTransformer const & ) && noexcept -> ParallelSequence < typename std :: remove_reference < decltype ( dataTypes :: unsafeAddress < typename returnOf < IndexedTransformer > :: Iterator > () -> value () ) > :: type > __CDS_Requires( ( Iterable < C > || ConstIterable < C > ) && ( Iterable < returnOf < IndexedTransformer > > || ConstIterable < returnOf < IndexedTransformer > > ) );
+        __CDS_MaybeUnused auto flatMapIndexed ( IndexedTransformer const & ) && noexcept -> ParallelSequence < typename std :: remove_reference < decltype ( Type < typename returnOf < IndexedTransformer > :: Iterator > :: unsafeAddress  () -> value () ) > :: type > __CDS_Requires( ( Iterable < C > || ConstIterable < C > ) && ( Iterable < returnOf < IndexedTransformer > > || ConstIterable < returnOf < IndexedTransformer > > ) );
 
         template < typename Transformer >
-        __CDS_MaybeUnused auto flatMapTo ( Collection < typename std :: remove_reference < decltype ( dataTypes :: unsafeAddress < typename returnOf < Transformer > :: Iterator > () -> value () ) > :: type > &, Transformer const & ) const noexcept -> Collection < typename std :: remove_reference < decltype ( dataTypes :: unsafeAddress < typename returnOf < Transformer > :: Iterator > () -> value () ) > :: type > & __CDS_Requires ( ( Iterable < C > || ConstIterable < C > && ( Iterable < typename std :: remove_reference < decltype ( dataTypes :: unsafeAddress < typename returnOf < Transformer > :: Iterator > () -> value () ) > :: type > || ConstIterable < typename std :: remove_reference < decltype ( dataTypes ::unsafeAddress < typename returnOf < Transformer > :: Iterator > () -> value () ) > :: type > ) ) );
+        __CDS_MaybeUnused auto flatMapTo ( Collection < typename std :: remove_reference < decltype ( Type < typename returnOf < Transformer > :: Iterator > :: unsafeAddress () -> value () ) > :: type > &, Transformer const & ) const noexcept -> Collection < typename std :: remove_reference < decltype ( Type < typename returnOf < Transformer > :: Iterator > :: unsafeAddress () -> value () ) > :: type > & __CDS_Requires ( ( Iterable < C > || ConstIterable < C > && ( Iterable < typename std :: remove_reference < decltype ( Type < typename returnOf < Transformer > :: Iterator > :: unsafeAddress() -> value () ) > :: type > || ConstIterable < typename std :: remove_reference < decltype ( Type < typename returnOf < Transformer > :: Iterator > :: unsafeAddress() -> value () ) > :: type > ) ) );
 
         template < typename IndexedTransformer >
-        __CDS_MaybeUnused auto flatMapIndexedTo ( Collection < typename std::remove_reference < decltype ( dataTypes::unsafeAddress < typename returnOf < IndexedTransformer > :: Iterator >()->value() ) > :: type > &, IndexedTransformer const & ) const noexcept -> Collection < typename std::remove_reference < decltype ( dataTypes::unsafeAddress < typename returnOf < IndexedTransformer > :: Iterator > ()->value() ) > :: type > & __CDS_Requires( ( Iterable < C > || ConstIterable < C >) && ( Iterable < typename std::remove_reference < decltype ( dataTypes::unsafeAddress < typename returnOf < IndexedTransformer > :: Iterator >()->value() ) > :: type > || ConstIterable < typename std::remove_reference < decltype ( dataTypes::unsafeAddress < typename returnOf < IndexedTransformer > :: Iterator >()->value() ) > :: type > ) );
+        __CDS_MaybeUnused auto flatMapIndexedTo ( Collection < typename std::remove_reference < decltype ( Type < typename returnOf < IndexedTransformer > :: Iterator > :: unsafeAddress()->value() ) > :: type > &, IndexedTransformer const & ) const noexcept -> Collection < typename std::remove_reference < decltype ( Type < typename returnOf < IndexedTransformer > :: Iterator > :: unsafeAddress ()->value() ) > :: type > & __CDS_Requires( ( Iterable < C > || ConstIterable < C >) && ( Iterable < typename std::remove_reference < decltype ( Type < typename returnOf < IndexedTransformer > :: Iterator > :: unsafeAddress()->value() ) > :: type > || ConstIterable < typename std::remove_reference < decltype ( Type < typename returnOf < IndexedTransformer > :: Iterator > :: unsafeAddress()->value() ) > :: type > ) );
 
         template < typename KeySelector >
         __CDS_MaybeUnused auto groupBy ( KeySelector const & ) && noexcept -> Sequence < HashMap < returnOf < KeySelector >, LinkedList < ElementType > > > __CDS_Requires( Iterable < C > || ConstIterable < C > );
@@ -277,16 +277,16 @@ namespace cds {
         template < typename KeySelector, typename ValueMapper >
         __CDS_MaybeUnused auto groupByTo ( Map < returnOf < KeySelector >, returnOf < ValueMapper > > &, KeySelector const &, ValueMapper const & ) const noexcept -> Map < returnOf < KeySelector >, returnOf < ElementType > > & __CDS_Requires( Iterable < C > || ConstIterable < C > );
 
-        template < typename Mapper, typename std :: enable_if < ! std :: is_same < typename std :: remove_reference < decltype ( dataTypes :: unsafeAddress < typename std :: remove_reference < C > :: type :: Iterator > () -> value () ) > :: type, returnOf < Mapper > > :: type :: value, int > :: type = 0 >
+        template < typename Mapper, typename std :: enable_if < ! std :: is_same < typename std :: remove_reference < decltype ( Type < typename std :: remove_reference < C > :: type :: Iterator > :: unsafeAddress() -> value () ) > :: type, returnOf < Mapper > > :: type :: value, int > :: type = 0 >
         __CDS_MaybeUnused auto map ( Mapper const & ) && noexcept -> Sequence < LinkedList < returnOf < Mapper > > > __CDS_Requires( Iterable < C > || ConstIterable < C > );
 
-        template < typename Mapper, typename std :: enable_if < std :: is_same < typename std :: remove_reference < decltype ( dataTypes :: unsafeAddress < typename std :: remove_reference < C > :: type :: Iterator > () -> value () ) > :: type, returnOf < Mapper > > :: type :: value, int > :: type = 0 >
+        template < typename Mapper, typename std :: enable_if < std :: is_same < typename std :: remove_reference < decltype ( Type < typename std :: remove_reference < C > :: type :: Iterator > :: unsafeAddress() -> value () ) > :: type, returnOf < Mapper > > :: type :: value, int > :: type = 0 >
         __CDS_MaybeUnused auto map ( Mapper const & ) && noexcept -> Sequence < C > __CDS_Requires ( Iterable < C > || ConstIterable < C > );
 
-        template < typename IndexedMapper, typename std :: enable_if < ! std :: is_same < typename std :: remove_reference < decltype ( dataTypes ::unsafeAddress < typename std :: remove_reference < C > :: type :: Iterator > () -> value () ) > :: type, returnOf < IndexedMapper > > :: type :: value, int > :: type = 0 >
+        template < typename IndexedMapper, typename std :: enable_if < ! std :: is_same < typename std :: remove_reference < decltype ( Type < typename std :: remove_reference < C > :: type :: Iterator > :: unsafeAddress() -> value () ) > :: type, returnOf < IndexedMapper > > :: type :: value, int > :: type = 0 >
         __CDS_MaybeUnused auto mapIndexed ( IndexedMapper const & ) && noexcept -> Sequence < LinkedList < returnOf < IndexedMapper > > > __CDS_Requires( Iterable < C > || ConstIterable < C > );
 
-        template < typename IndexedMapper, typename std :: enable_if < std :: is_same < typename std :: remove_reference < decltype ( dataTypes :: unsafeAddress < typename std :: remove_reference < C > :: type :: Iterator > () -> value () ) > :: type, returnOf < IndexedMapper > > :: type :: value, int > :: type = 0 >
+        template < typename IndexedMapper, typename std :: enable_if < std :: is_same < typename std :: remove_reference < decltype ( Type < typename std :: remove_reference < C > :: type :: Iterator > :: unsafeAddress() -> value () ) > :: type, returnOf < IndexedMapper > > :: type :: value, int > :: type = 0 >
         __CDS_MaybeUnused auto mapIndexed ( IndexedMapper const & ) && noexcept -> Sequence < C > __CDS_Requires ( Iterable < C > || ConstIterable < C > );
 
         template < typename Mapper, typename R >

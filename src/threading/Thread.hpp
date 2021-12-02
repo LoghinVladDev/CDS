@@ -73,22 +73,22 @@ namespace cds {
     #endif
 
         enum State: uint8 {
-            CREATED                 = 0x01u,
-            RUNNING                 = 0x02u,
-            FINISHED                = 0x04u,
-            KILLED                  = 0x08u,
-            EXCEPTION_TERMINATED    = 0x10u
+            CREATED                 = 0x01U,
+            RUNNING                 = 0x02U,
+            FINISHED                = 0x04U,
+            KILLED                  = 0x08U,
+            EXCEPTION_TERMINATED    = 0x10U
         };
 
         __CDS_WarningSuppression_UseScopedEnum_SuppressEnable
 
         __CDS_cpplang_ConstexprConditioned static auto stateToString ( State s ) noexcept -> StringLiteral {
             switch ( s ) {
-                case State::CREATED:                return "Not Started";
-                case State::RUNNING:                return "Running";
-                case State::FINISHED:               return "Finished Execution";
-                case State::KILLED:                 return "Killed Externally";
-                case State::EXCEPTION_TERMINATED:   return "Terminated by Exception inside Thread";
+                case State::CREATED:                return "Not Started"; // NOLINT(clion-misra-cpp2008-6-4-5)
+                case State::RUNNING:                return "Running"; // NOLINT(clion-misra-cpp2008-6-4-5)
+                case State::FINISHED:               return "Finished Execution"; // NOLINT(clion-misra-cpp2008-6-4-5)
+                case State::KILLED:                 return "Killed Externally"; // NOLINT(clion-misra-cpp2008-6-4-5)
+                case State::EXCEPTION_TERMINATED:   return "Terminated by Exception inside Thread"; // NOLINT(clion-misra-cpp2008-6-4-5)
             }
 
             return "Undefined State";
@@ -123,8 +123,9 @@ namespace cds {
 
     #if __CDS_cpplang_InlineStaticVariable_available == true
 
-                if ( Thread::pErrorCallback != nullptr )
-                    Thread::pErrorCallback( "Exception caught in Thread runtime", pThread, & e );
+                if ( Thread::pErrorCallback != nullptr ) {
+                    Thread::pErrorCallback("Exception caught in Thread runtime", pThread, &e);
+                }
 
     #else
 
@@ -133,8 +134,9 @@ namespace cds {
 
     #endif
 
-                else
+                else {
                     std::cerr << "Exception caught in Thread runtime : " << e.what() << '\n';
+                }
             }
 
             return THREAD_RETURN_OK;
@@ -147,7 +149,7 @@ namespace cds {
         auto start () noexcept(THREAD_EXCEPT_STAT) -> void {
 
     #if defined(__linux)
-            pthread_create ( & this->handle, nullptr, Thread::launcher, reinterpret_cast < void * > ( this ) );
+            (void) pthread_create ( & this->handle, nullptr, & Thread::launcher, reinterpret_cast < void * > ( this ) );
     #elif defined(WIN32)
             this->handle = Memory :: instance().create < Thread_t > ();
             memset ( this->handle, 0, sizeof ( Thread_t ) );
@@ -174,7 +176,7 @@ namespace cds {
         auto kill () noexcept -> void {
 
     #if defined(__linux)
-            pthread_cancel ( this->handle );
+            (void) pthread_cancel ( this->handle );
     #elif defined(WIN32)
             if ( this->handle != PRIMITIVE_NULL_HANDLE )
 
@@ -197,7 +199,7 @@ namespace cds {
         auto join () const noexcept -> void {
 
     #if defined(__linux)
-            pthread_join( this->handle, nullptr );
+            (void) pthread_join( this->handle, nullptr );
     #elif defined(WIN32)
             if ( this->handle != PRIMITIVE_NULL_HANDLE )
                 WaitForSingleObject( this->handle->handle, INFINITE );
@@ -216,8 +218,9 @@ namespace cds {
                 stateValue != Thread::State::FINISHED &&
                 stateValue != Thread::State::KILLED &&
                 stateValue != Thread::State::EXCEPTION_TERMINATED
-            )
+            ) {
                 this->kill();
+            }
         }
 
         __CDS_NoDiscard auto toString() const noexcept -> String override {
@@ -267,7 +270,7 @@ namespace cds {
 #undef THREAD_EXCEPT_STAT
 #undef MUTABLE_SPEC
 
-__CDS_RegisterParseType(Thread)
-__CDS_RegisterParseTypeTemplateT(Runnable)
+__CDS_RegisterParseType(Thread) // NOLINT(clion-misra-cpp2008-8-0-1)
+__CDS_RegisterParseTypeTemplateT(Runnable) // NOLINT(clion-misra-cpp2008-8-0-1)
 
 #endif //CDS_THREAD_H

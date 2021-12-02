@@ -32,23 +32,37 @@ namespace cds {
             Object *    _pObject {nullptr};
 
             __CDS_NoDiscard auto stringFormattedData () const noexcept(false) -> String {
-                if ( this->_pObject == nullptr ) throw NullPointerException ();
-                if ( dynamic_cast < String * > (this->_pObject) != nullptr )
+                if ( this->_pObject == nullptr ) {
+                    throw NullPointerException();
+                }
+
+                if ( dynamic_cast < String * > (this->_pObject) != nullptr ) {
                     return String("\"") + this->_pObject->toString() + "\"";
+                }
+
                 return this->_pObject->toString();
             }
 
         public:
             __CDS_OptimalInline auto operator == ( Node const & o ) const noexcept -> bool {
-                if ( this == & o ) return true;
+                if ( this == & o ) {
+                    return true;
+                }
 
                 return this->_label == o._label && this->_pObject->equals(*o._pObject);
             }
 
             __CDS_NoDiscard auto equals ( Object const & o ) const noexcept -> bool override {
-                if ( this == & o ) return true;
-                auto p = dynamic_cast < decltype ( this ) > (& o);
-                if ( p == nullptr ) return false;
+                if ( this == & o ) {
+                    return true;
+                }
+
+                auto p = dynamic_cast < JSON::Node const * > (& o);
+
+                if ( p == nullptr ) {
+                    return false;
+                }
+
                 return this->operator==(* p);
             }
 
@@ -70,7 +84,7 @@ namespace cds {
             }
 
             auto put (Object const & obj) noexcept -> Node & {
-                this->clearData();
+                (void) this->clearData();
                 this->_pObject = obj.copy();
                 return * this;
             }
@@ -82,12 +96,13 @@ namespace cds {
             __CDS_OptimalInline auto put (double v)                  noexcept -> Node & { return this->put(Double(v)); }
             __CDS_OptimalInline auto put (StringLiteral v)           noexcept -> Node & { return this->put(String(v)); }
                                 auto put (JSON::Array const &)       noexcept -> Node &;
-            __CDS_OptimalInline auto put (String const & v)          noexcept -> Node & { return this->put((Object &)v); }
+            __CDS_OptimalInline auto put (String const & v)          noexcept -> Node & { return this->put(reinterpret_cast < Object const & > ( v ) ); }
 
             __CDS_NoDiscard auto getBoolean () const noexcept(false) -> bool {
                 auto p = dynamic_cast < Boolean const * > (this->_pObject);
-                if ( p == nullptr )
+                if ( p == nullptr ) {
                     throw TypeException(Boolean());
+                }
 
                 return p->get();
             }
@@ -96,8 +111,9 @@ namespace cds {
                 auto p = dynamic_cast < Integer const * > (this->_pObject);
                 if ( p == nullptr ) {
                     auto pLong = dynamic_cast < Long const * > (this->_pObject);
-                    if ( pLong == nullptr )
+                    if ( pLong == nullptr ) {
                         throw TypeException(Int());
+                    }
 
                     return static_cast < int > (pLong->get());
                 }
@@ -109,8 +125,9 @@ namespace cds {
                 auto p = dynamic_cast < Long const * > (this->_pObject);
                 if ( p == nullptr ) {
                     auto pInteger = dynamic_cast < Integer const * > ( this->_pObject );
-                    if (pInteger == nullptr )
+                    if (pInteger == nullptr ) {
                         throw TypeException(Long());
+                    }
 
                     return static_cast<long long int>(pInteger->get());
                 }
@@ -122,8 +139,9 @@ namespace cds {
                 auto p = dynamic_cast < Float const * > (this->_pObject);
                 if ( p == nullptr ) {
                     auto pDouble = dynamic_cast < Double const * > ( this->_pObject );
-                    if ( pDouble == nullptr )
+                    if ( pDouble == nullptr ) {
                         throw TypeException(Float());
+                    }
 
                     return static_cast<float>(pDouble->get());
                 }
@@ -135,8 +153,9 @@ namespace cds {
                 auto p = dynamic_cast < Double const * > (this->_pObject);
                 if ( p == nullptr ) {
                     auto pFloat = dynamic_cast < Float const * > ( this->_pObject );
-                    if (pFloat == nullptr )
+                    if (pFloat == nullptr ) {
                         throw TypeException(Double());
+                    }
 
                     return static_cast<double>(pFloat->get());
                 }
@@ -150,16 +169,18 @@ namespace cds {
 
             __CDS_NoDiscard auto getJSON () const noexcept(false) -> JSON const & {
                 auto p = dynamic_cast < JSON const * > ( this->_pObject );
-                if ( p == nullptr )
+                if ( p == nullptr ) {
                     throw TypeException(JSON());
+                }
 
                 return * p;
             }
 
             __CDS_NoDiscard auto getString () const noexcept(false) -> String const & {
                 auto p = dynamic_cast < String const * > ( this->_pObject );
-                if ( p == nullptr )
+                if ( p == nullptr ) {
                     throw TypeException(String());
+                }
 
                 return * p;
             }
@@ -172,16 +193,18 @@ namespace cds {
 
             auto getJSON () noexcept(false) -> JSON & {
                 auto p = dynamic_cast < JSON * > (this->_pObject);
-                if ( p == nullptr )
+                if ( p == nullptr ) {
                     throw TypeException(JSON());
+                }
 
                 return * p;
             }
 
             auto getString () noexcept(false) -> String & {
                 auto p = dynamic_cast < String * > (this->_pObject);
-                if ( p == nullptr )
+                if ( p == nullptr ) {
                     throw TypeException(String());
+                }
 
                 return * p;
             };
@@ -222,8 +245,9 @@ namespace cds {
         ~JSON () noexcept override = default;
 
         __CDS_OptimalInline auto operator = ( JSON const & json ) noexcept -> JSON & {
-            if ( this == & json )
+            if ( this == & json ) {
                 return * this;
+            }
 
             this->_nodes = json._nodes;
 
@@ -231,8 +255,9 @@ namespace cds {
         }
 
         __CDS_OptimalInline auto operator = ( JSON && json ) noexcept -> JSON & {
-            if ( this == & json )
+            if ( this == & json ) {
                 return * this;
+            }
 
             this->_nodes = std :: move ( json._nodes );
 
@@ -242,9 +267,13 @@ namespace cds {
         auto operator == (JSON const & o) const noexcept -> bool;
 
         __CDS_NoDiscard auto equals ( Object const & o ) const noexcept -> bool override {
-            if ( this == & o ) return true;
+            if ( this == & o ) {
+                return true;
+            }
             auto p = dynamic_cast < decltype ( this ) > (& o);
-            if ( p == nullptr ) return false;
+            if ( p == nullptr ) {
+                return false;
+            }
 
             return this->operator==(* p);
         }
@@ -252,8 +281,9 @@ namespace cds {
         __CDS_NoDiscard auto labels () const noexcept -> LinkedList < Reference < const String > > {
             LinkedList < Reference < const String > > labelList;
 
-            for ( auto & e : this->_nodes )
-                labelList.pushBack( e.getLabel() );
+            for ( auto & e : this->_nodes ) {
+                (void) labelList.pushBack(e.getLabel());
+            }
 
             return labelList;
         }
@@ -261,8 +291,9 @@ namespace cds {
         __CDS_NoDiscard auto labels () noexcept -> LinkedList < Reference < String > > {
             LinkedList < Reference < String > > labelList;
 
-            for ( auto & e : this->_nodes )
-                labelList.pushBack( e.getLabel() );
+            for ( auto & e : this->_nodes ) {
+                (void)labelList.pushBack(e.getLabel());
+            }
 
             return labelList;
         }
@@ -278,8 +309,9 @@ namespace cds {
         __CDS_NoDiscard __CDS_MaybeUnused auto nodes () const noexcept -> LinkedList < Reference < const Node > > {
             LinkedList < Reference < const Node > > labelList;
 
-            for ( auto & e : this->_nodes )
-                labelList.pushBack( e );
+            for ( auto & e : this->_nodes ) {
+                (void) labelList.pushBack(e);
+            }
 
             return labelList;
         }
@@ -287,8 +319,9 @@ namespace cds {
         __CDS_NoDiscard __CDS_MaybeUnused auto nodes () noexcept -> LinkedList < Reference < Node > > {
             LinkedList < Reference < Node > > labelList;
 
-            for ( auto & e : this->_nodes )
-                labelList.pushBack( e );
+            for ( auto & e : this->_nodes ) {
+                (void) labelList.pushBack(e);
+            }
 
             return labelList;
         }
@@ -350,13 +383,15 @@ namespace cds {
         __CDS_NoDiscard auto toString () const noexcept -> String override {
             String res;
 
-            for ( auto & e : this->_nodes )
+            for ( auto & e : this->_nodes ) {
                 res += e.toString() + ", ";
+            }
 
-            if ( res.empty() )
+            if ( res.empty() ) {
                 return "{}";
+            }
 
-            return String().append("{").append(res.replace(static_cast < Index > (res.size()) - 2, 2, "")).append("}");
+            return String().append("{").append(res.replace(static_cast < Index > (res.size()) - 2, 2u, "")).append("}");
         }
 
         static auto parse(String const &) noexcept -> JSON;
@@ -371,13 +406,15 @@ namespace cds {
             String futureIndentation = indentation + String(" ") * indent;
 
             String res = "{\n";
-            for ( auto & e : this->_nodes )
+            for ( auto & e : this->_nodes ) {
                 res += futureIndentation + e.dumpIndented(indent, count + 1) + ",\n";
+            }
 
-            if ( this->_nodes.empty() )
+            if ( this->_nodes.empty() ) {
                 return "{}";
+            }
 
-            return res.replace(static_cast < Index > (res.size()) - 2, 2, "\n") + indentation + "}";
+            return res.replace(static_cast < Index > (res.size()) - 2, 2u, "\n") + indentation + "}";
         }
 
     public:
@@ -397,7 +434,9 @@ namespace cds {
         LinkedList < JSON::Node > _list;
 
         __CDS_NoDiscard auto dumpIndented (int indent, int count) const noexcept -> String { // NOLINT(misc-no-recursion)
-            if ( this->_list.empty() ) return "[]";
+            if ( this->_list.empty() ) {
+                return "[]";
+            }
 
             String indentation = String(" ") * (indent * (count));
             String futureIndentation = indentation + String(" ") * indent;
@@ -407,15 +446,16 @@ namespace cds {
                 auto pJSON = dynamic_cast < JSON const * > ( n._pObject );
                 auto pArr = dynamic_cast < JSON::Array const * > ( n._pObject );
 
-                if ( pJSON != nullptr )
+                if ( pJSON != nullptr ) {
                     res += futureIndentation + pJSON->dumpIndented(indent, count + 1) + ",\n";
-                else if ( pArr != nullptr )
+                } else if ( pArr != nullptr ) {
                     res += futureIndentation + pArr->dumpIndented(indent, count + 1) + ",\n";
-                else
+                } else {
                     res += futureIndentation + n.stringFormattedData() + ",\n";
+                }
             }
 
-            return res.replace(static_cast < Index > ( res.size() ) - 2, 2, "\n") + indentation + "]";
+            return res.replace(static_cast < Index > ( res.size() ) - 2, 2u, "\n") + indentation + "]";
         }
 
     public:
@@ -429,8 +469,9 @@ namespace cds {
         }
 
         __CDS_OptimalInline auto operator = ( Array const & array ) noexcept -> Array & {
-            if ( this == & array )
+            if ( this == & array ) {
                 return * this;
+            }
 
             this->_list = array._list;
 
@@ -438,8 +479,9 @@ namespace cds {
         }
 
         __CDS_OptimalInline auto operator = ( Array && array ) noexcept -> Array & {
-            if ( this == & array )
+            if ( this == & array ) {
                 return * this;
+            }
 
             this->_list = std :: move ( array._list );
 
@@ -447,15 +489,22 @@ namespace cds {
         }
 
         __CDS_OptimalInline auto operator == (Array const & o) const noexcept -> bool {
-            if ( this == & o )
+            if ( this == & o ) {
                 return true;
+            }
+
             return this->_list == o._list;
         }
 
         __CDS_NoDiscard auto equals (Object const & o) const noexcept -> bool override {
-            if ( this == & o ) return true;
-            auto p = dynamic_cast < decltype ( this ) > ( & o );
-            if ( p == nullptr ) return false;
+            if ( this == & o ) {
+                return true;
+            }
+
+            auto p = dynamic_cast < JSON::Array const * > ( & o );
+            if ( p == nullptr ) {
+                return false;
+            }
 
             return this->operator== (*p);
         }
@@ -485,66 +534,60 @@ namespace cds {
         }
 
         auto put(Index i, JSON::Node const & o) noexcept -> Array & {
-            if ( i > static_cast<Index>(this->_list.size()) )
+            if ( i > static_cast<Index>(this->_list.size()) ) {
                 i = static_cast<Index> (this->_list.size());
+            }
 
             decltype(this->_list) front;
 
-            for(Index listIndex = 0; listIndex < i; listIndex ++)
-                front.pushBack ( this->_list.popFront() );
+            for(Index listIndex = 0; listIndex < i; listIndex ++) {
+                (void) front.pushBack(this->_list.popFront());
+            }
 
-            front.pushBack( o );
+            (void) front.pushBack( o );
 
-            while ( ! this->_list.empty() )
-                front.pushBack ( this->_list.popFront() );
+            while ( ! this->_list.empty() ) {
+                (void) front.pushBack(this->_list.popFront());
+            }
 
             this->_list = front;
             return * this;
         }
 
         auto put(Index i, bool v) noexcept -> Array & {
-            this->put(i, JSON::Node().put(v));
-            return * this;
+            return this->put(i, JSON::Node().put(v));
         }
 
         auto put(Index i, int v) noexcept -> Array & {
-            this->put(i, JSON::Node().put(v));
-            return * this;
+            return this->put(i, JSON::Node().put(v));
         }
 
         auto put(Index i, long long int v) noexcept -> Array & {
-            this->put(i, JSON::Node().put(v));
-            return * this;
+            return this->put(i, JSON::Node().put(v));
         }
 
         auto put(Index i, float v) noexcept -> Array & {
-            this->put(i, JSON::Node().put(v));
-            return * this;
+            return this->put(i, JSON::Node().put(v));
         }
 
         auto put(Index i, double v) noexcept -> Array & {
-            this->put(i, JSON::Node().put(v));
-            return * this;
+            return this->put(i, JSON::Node().put(v));
         }
 
         auto put(Index i, String const & s) noexcept -> Array & {
-            this->put(i, JSON::Node().put(s));
-            return * this;
+            return this->put(i, JSON::Node().put(s));
         }
 
         auto put(Index i, StringLiteral s) noexcept -> Array & {
-            this->put(i, JSON::Node().put(s));
-            return * this;
+            return this->put(i, JSON::Node().put(s));
         }
 
         auto put(Index i, JSON const & o) -> Array & {
-            this->put(i, JSON::Node().put(o));
-            return * this;
+            return this->put(i, JSON::Node().put(o));
         }
 
         auto put(Index i, Array const & a) -> Array & {
-            this->put(i, JSON::Node().put(a));
-            return * this;
+            return this->put(i, JSON::Node().put(a));
         }
 
         __CDS_NoDiscard __CDS_MaybeUnused __CDS_OptimalInline auto length () const noexcept -> Size {
@@ -556,14 +599,18 @@ namespace cds {
         }
 
         __CDS_NoDiscard __CDS_MaybeUnused auto get(Index i) const noexcept(false) -> JSON::Node const & {
-            if ( i < 0 || i >= static_cast<Index>(this->_list.size()) )
-                throw OutOfBoundsException (i, static_cast < Index > (this->_list.size()));
+            if ( i < 0 || i >= static_cast<Index>(this->_list.size()) ) {
+                throw OutOfBoundsException(i, static_cast < Index > (this->_list.size())); // NOLINT(clion-misra-cpp2008-0-1-7)
+            }
+
             return this->_list.get(i);
         }
 
         __CDS_NoDiscard __CDS_MaybeUnused auto get(Index i) noexcept(false) -> JSON::Node & {
-            if ( i < 0 || i >= static_cast<Index>(this->_list.size()) )
-                throw OutOfBoundsException (i, static_cast < Index > (this->_list.size()));
+            if ( i < 0 || i >= static_cast<Index>(this->_list.size()) ) {
+                throw OutOfBoundsException(i, static_cast < Index > (this->_list.size())); // NOLINT(clion-misra-cpp2008-0-1-7)
+            }
+
             return this->_list.get(i);
         }
 
@@ -613,11 +660,13 @@ namespace cds {
 
         __CDS_NoDiscard auto toString () const noexcept -> String override {
             String res;
-            for ( auto & e : this->_list )
+            for ( auto & e : this->_list ) {
                 res += e.stringFormattedData() + ", ";
+            }
 
-            if (res.empty())
+            if (res.empty()) {
                 return "[]";
+            }
 
             return String().append("[").append(res.substr(0, static_cast < Index > (res.size()) - 2)).append("]");
         }
@@ -630,57 +679,63 @@ namespace cds {
             Array result;
 
             auto pushBackUnknown = [& result]( String const & data ) noexcept -> Array & { // NOLINT(misc-no-recursion)
-                if ( data.front() == '{' )
-                    result.put( static_cast < Index > ( result.size() ), JSON::parse(data) );
-                else if ( data.front() == '[' )
-                    result.put( static_cast < Index > ( result.size() ), Array::parse(data) );
-                else if ( data.findFirst('\"') != String::INVALID_POS )
-                    result.put (
+                if ( data.front() == '{' ) {
+                    (void) result.put(static_cast < Index > ( result.size()), JSON::parse(data));
+                } else if ( data.front() == '[' ) {
+                    (void) result.put(static_cast < Index > ( result.size()), Array::parse(data));
+                } else if ( data.findFirst('\"') != String::INVALID_POS ) {
+                    (void) result.put (
                             static_cast < Index > ( result.size() ),
                             String().append(data)
                                     .replace(data.findLast('\"'), data.size(), "")
-                                    .replace(0, data.findFirst('\"') + 1, "")
+                                    .replace(0, static_cast < Size > ( data.findFirst('\"') + 1 ), "")
                     );
-                else if ( data.findFirst('.') != String::INVALID_POS )
-                    result.put ( static_cast < Index > ( result.size() ), Double::parse(data).get() );
-                else if ( data.findFirst("true") != String::INVALID_POS || data.findFirst("false") != String::INVALID_POS )
-                    result.put ( static_cast < Index > ( result.size() ), data == "true" );
-                else
-                    result.put ( static_cast < Index > ( result.size() ), Long::parse(data).get() );
+                } else if ( data.findFirst('.') != String::INVALID_POS ) {
+                    (void) result.put ( static_cast < Index > ( result.size() ), Double::parse(data).get() );
+                } else if ( data.findFirst("true") != String::INVALID_POS || data.findFirst("false") != String::INVALID_POS ) {
+                    (void) result.put ( static_cast < Index > ( result.size() ), data == "true" );
+                } else {
+                    (void) result.put ( static_cast < Index > ( result.size() ), Long::parse(data).get() );
+                }
 
                 return result;
             };
 
             String copy = data;
-            copy.replace(0, copy.findFirst('[') + 1, "");
-            copy.replace(copy.findLast(']'), copy.size(), "");
+            (void) copy.replace(0, static_cast < Size > ( copy.findFirst('[') + 1 ), "");
+            (void) copy.replace(copy.findLast(']'), copy.size(), "");
             copy = copy.trim().trim('\n').trim();
 
             while ( ! copy.empty() ) {
-                copy.ltrim(' ');
+                (void) copy.ltrim(' ');
 
-                int arrayBracketCount = 0, objectBracketCount = 0, segmentLength = 0;
+                int arrayBracketCount = 0;
+                int objectBracketCount = 0;
+                int segmentLength = 0;
                 String element;
 
                 for ( auto c : copy ) {
-                    if ( arrayBracketCount == 0 && objectBracketCount == 0 && c == ',' )
+                    if ( arrayBracketCount == 0 && objectBracketCount == 0 && c == ',' ) {
                         break;
-                    else {
-                        if ( c == '{' )
-                            objectBracketCount ++;
-                        else if ( c == '}' )
-                            objectBracketCount --;
-                        else if ( c == '[' )
-                            arrayBracketCount ++;
-                        else if ( c == ']' )
-                            arrayBracketCount --;
+                    } else {
+                        if ( c == '{' ) {
+                            ++ objectBracketCount;
+                        } else if ( c == '}' ) {
+                            -- objectBracketCount;
+                        } else if ( c == '[' ) {
+                            ++ arrayBracketCount;
+                        } else if ( c == ']' ) {
+                            -- arrayBracketCount;
+                        } else {
+                            /// do nothing
+                        }
 
                         element += c;
                         segmentLength ++;
                     }
                 }
 
-                copy.replace(0, segmentLength + 1, "");
+                (void) copy.replace(0, static_cast < Size > ( static_cast < Index > ( segmentLength ) + 1 ), "");
                 pushBackUnknown(element);
             }
 
@@ -693,155 +748,181 @@ namespace cds {
 namespace cds {
 
     inline auto JSON::put ( String const & label, bool v ) noexcept -> JSON & {
-        this->_nodes.pushBack( JSON::Node().setLabel(label).put(v) );
+        (void) this->_nodes.pushBack( JSON::Node().setLabel(label).put(v) );
         return * this;
     }
 
     inline auto JSON::put ( String const & label, int v ) noexcept -> JSON & {
-        this->_nodes.pushBack( JSON::Node().setLabel(label).put(v) );
+        (void) this->_nodes.pushBack( JSON::Node().setLabel(label).put(v) );
         return * this;
     }
 
     inline auto JSON::put ( String const & label, long long int v ) noexcept -> JSON & {
-        this->_nodes.pushBack( JSON::Node().setLabel(label).put(v) );
+        (void) this->_nodes.pushBack( JSON::Node().setLabel(label).put(v) );
         return * this;
     }
 
     inline auto JSON::put ( String const & label, float v ) noexcept -> JSON & {
-        this->_nodes.pushBack( JSON::Node().setLabel(label).put(v) );
+        (void) this->_nodes.pushBack( JSON::Node().setLabel(label).put(v) );
         return * this;
     }
 
     inline auto JSON::put ( String const & label, double v ) noexcept -> JSON & {
-        this->_nodes.pushBack( JSON::Node().setLabel(label).put(v) );
+        (void) this->_nodes.pushBack( JSON::Node().setLabel(label).put(v) );
         return * this;
     }
 
     inline auto JSON::put ( String const & label, String const & v ) noexcept -> JSON & {
-        this->_nodes.pushBack( JSON::Node().setLabel(label).put(v) );
+        (void) this->_nodes.pushBack( JSON::Node().setLabel(label).put(v) );
         return * this;
     }
 
     inline auto JSON::put ( String const & label, Array const & v ) noexcept -> JSON & {
-        this->_nodes.pushBack( JSON::Node().setLabel(label).put(v) );
+        (void) this->_nodes.pushBack( JSON::Node().setLabel(label).put(v) );
         return * this;
     }
 
     inline auto JSON::put ( String const & label, JSON const & v ) noexcept -> JSON & {
-        this->_nodes.pushBack( JSON::Node().setLabel(label).put(v) );
+        (void) this->_nodes.pushBack( JSON::Node().setLabel(label).put(v) );
         return * this;
     }
 
     inline auto JSON::put ( String const & label, Object const & v ) noexcept -> JSON & {
-        this->_nodes.pushBack( JSON::Node().setLabel(label).put(v) );
+        (void) this->_nodes.pushBack( JSON::Node().setLabel(label).put(v) );
         return * this;
     }
 
     inline auto JSON::put ( String const & label, StringLiteral v ) noexcept -> JSON & {
-        this->_nodes.pushBack( JSON::Node().setLabel(label).put(v) );
+        (void) this->_nodes.pushBack( JSON::Node().setLabel(label).put(v) );
         return * this;
     }
 
     inline auto JSON::getBoolean ( String const & label ) const noexcept (false) -> bool {
-        for ( auto & e : this->_nodes )
-            if ( e.getLabel() == label )
-                return e.getBoolean ();
+        for ( auto & e : this->_nodes ) {
+            if (e.getLabel() == label) {
+                return e.getBoolean();
+            }
+        }
 
         throw KeyException(label);
     }
 
     inline auto JSON::getInt ( String const & label ) const noexcept (false) -> int {
-        for ( auto & e : this->_nodes )
-            if ( e.getLabel() == label )
-                return e.getInt ();
+        for ( auto & e : this->_nodes ) {
+            if (e.getLabel() == label) {
+                return e.getInt();
+            }
+        }
 
         throw KeyException(label);
     }
 
     inline auto JSON::getLong ( String const & label ) const noexcept (false) -> long long int {
-        for ( auto & e : this->_nodes )
-            if ( e.getLabel() == label )
-                return e.getLong ();
+        for ( auto & e : this->_nodes ) {
+            if (e.getLabel() == label) {
+                return e.getLong();
+            }
+        }
 
         throw KeyException(label);
     }
 
     inline auto JSON::getFloat ( String const & label ) const noexcept (false) -> float {
-        for ( auto & e : this->_nodes )
-            if ( e.getLabel() == label )
-                return e.getFloat ();
+        for ( auto & e : this->_nodes ) {
+            if (e.getLabel() == label) {
+                return e.getFloat();
+            }
+        }
 
         throw KeyException(label);
     }
 
     inline auto JSON::getDouble ( String const & label ) const noexcept (false) -> double {
-        for ( auto & e : this->_nodes )
-            if ( e.getLabel() == label )
-                return e.getDouble ();
+        for ( auto & e : this->_nodes ) {
+            if (e.getLabel() == label) {
+                return e.getDouble();
+            }
+        }
 
         throw KeyException(label);
     }
 
     inline auto JSON::getString ( String const & label ) const noexcept (false) -> String const & {
-        for ( auto & e : this->_nodes )
-            if ( e.getLabel() == label )
-                return e.getString ();
+        for ( auto & e : this->_nodes ) {
+            if (e.getLabel() == label) {
+                return e.getString();
+            }
+        }
 
         throw KeyException(label);
     }
 
     inline auto JSON::getJSON ( String const & label ) const noexcept (false) -> JSON const & {
-        for ( auto & e : this->_nodes )
-            if ( e.getLabel() == label )
-                return e.getJSON ();
+        for ( auto & e : this->_nodes ) {
+            if (e.getLabel() == label) {
+                return e.getJSON();
+            }
+        }
 
         throw KeyException(label);
     }
 
     inline auto JSON::getArray ( String const & label ) const noexcept (false) -> Array const & {
-        for ( auto & e : this->_nodes )
-            if ( e.getLabel() == label )
-                return e.getArray ();
+        for ( auto & e : this->_nodes ) {
+            if (e.getLabel() == label) {
+                return e.getArray();
+            }
+        }
 
         throw KeyException(label);
     }
 
     inline auto JSON::getObject ( String const & label ) const noexcept (false) -> Object const & {
-        for ( auto & e : this->_nodes )
-            if ( e.getLabel() == label )
-                return e.getObject ();
+        for ( auto & e : this->_nodes ) {
+            if (e.getLabel() == label) {
+                return e.getObject();
+            }
+        }
 
         throw KeyException(label);
     }
 
     inline auto JSON::getString ( String const & label ) noexcept (false) -> String & {
-        for ( auto & e : this->_nodes )
-            if ( e.getLabel() == label )
-                return e.getString ();
+        for ( auto & e : this->_nodes ) {
+            if (e.getLabel() == label) {
+                return e.getString();
+            }
+        }
 
         throw KeyException(label);
     }
 
     inline auto JSON::getJSON ( String const & label ) noexcept (false) -> JSON & {
-        for ( auto & e : this->_nodes )
-            if ( e.getLabel() == label )
-                return e.getJSON ();
+        for ( auto & e : this->_nodes ) {
+            if (e.getLabel() == label) {
+                return e.getJSON();
+            }
+        }
 
         throw KeyException(label);
     }
 
     inline auto JSON::getArray ( String const & label ) noexcept (false) -> Array & {
-        for ( auto & e : this->_nodes )
-            if ( e.getLabel() == label )
-                return e.getArray ();
+        for ( auto & e : this->_nodes ) {
+            if (e.getLabel() == label) {
+                return e.getArray();
+            }
+        }
 
         throw KeyException(label);
     }
 
     inline auto JSON::getObject ( String const & label ) noexcept (false) -> Object & {
-        for ( auto & e : this->_nodes )
-            if ( e.getLabel() == label )
-                return e.getObject ();
+        for ( auto & e : this->_nodes ) {
+            if (e.getLabel() == label) {
+                return e.getObject();
+            }
+        }
 
         throw KeyException(label);
     }
@@ -850,58 +931,69 @@ namespace cds {
         JSON result;
 
         auto emplaceUnknown = [& result] ( String const & label, String const & data ) -> JSON & { // NOLINT(misc-no-recursion)
-            if ( data.front() == '{' ) result.put(label, JSON::parse(data));
-            else if ( data.front() == '[' ) result.put(label, JSON::Array::parse(data));
-            else if ( data.findFirst('"') != String::INVALID_POS )
-                result.put(
+            if ( data.front() == '{' ) {
+                (void) result.put(label, JSON::parse(data));
+            } else if ( data.front() == '[' ) {
+                (void) result.put(label, JSON::Array::parse(data));
+            } else if ( data.findFirst('"') != String::INVALID_POS ) {
+                (void) result.put(
                         label,
                         String().append(data)
                                 .replace(data.findLast('"'), data.length(), "")
-                                .replace(0, data.findFirst('"') + 1, "")
+                                .replace(0, static_cast < Size > ( data.findFirst('"') + 1 ), "")
                 );
-            else if ( data.findFirst('.') != String::INVALID_POS ) result.put(label, Double::parse(data));
-            else if ( data.findFirst("true") != String::INVALID_POS || data.findFirst("false") != String::INVALID_POS )
-                result.put(label, data == "true");
-            else
-                result.put(label, Long::parse(data));
+            } else if ( data.findFirst('.') != String::INVALID_POS ) {
+                (void) result.put(label, Double::parse(data));
+            } else if ( data.findFirst("true") != String::INVALID_POS || data.findFirst("false") != String::INVALID_POS ) {
+                (void) result.put(label, data == "true");
+            } else {
+                (void) result.put(label, Long::parse(data));
+            }
+
             return result;
         };
 
         String copy = jsonString;
 
-        copy.replace(0, copy.findFirst('{') + 1, "");
-        copy.replace(copy.findLast('}'), copy.size(), "");
+        (void) copy.replace(0, static_cast < Size > ( copy.findFirst('{') + 1 ), "");
+        (void) copy.replace(copy.findLast('}'), copy.size(), "");
 
         while ( ! copy.empty() ) {
             String label = copy.substr(0, copy.findFirst(':'));
 
-            label.replace(0, label.findFirst('"') + 1, "");
-            label.replace(label.findLast('"'), label.size(), "");
+            (void) label.replace(0, static_cast < Size > ( label.findFirst('"') + 1 ), "");
+            (void) label.replace(label.findLast('"'), label.size(), "");
 
-            String data, fullData = copy.substr(copy.findFirst(':') + 1);
-            int arrayBracketCount = 0, objectBracketCount = 0, segmentLength = 0;
+            String data;
+            String fullData = copy.substr(copy.findFirst(':') + 1);
+            int arrayBracketCount = 0;
+            int objectBracketCount = 0;
+            int segmentLength = 0;
 
             fullData = fullData.trim().trim("\n").trim();
 
             for ( auto c : fullData ) {
-                if ( arrayBracketCount == 0 && objectBracketCount == 0 && c == ',' )
+                if ( arrayBracketCount == 0 && objectBracketCount == 0 && c == ',' ) {
                     break;
-                else {
-                    if ( c == '{' )
-                        objectBracketCount ++;
-                    else if ( c == '}' )
-                        objectBracketCount --;
-                    else if ( c == '[' )
-                        arrayBracketCount ++;
-                    else if ( c == ']' )
-                        arrayBracketCount --;
+                } else {
+                    if ( c == '{' ) {
+                        ++ objectBracketCount;
+                    } else if ( c == '}' ) {
+                        -- objectBracketCount;
+                    } else if ( c == '[' ) {
+                        ++ arrayBracketCount;
+                    } else if ( c == ']' ) {
+                        -- arrayBracketCount;
+                    } else {
+                        /// do nothing
+                    }
 
                     data += c;
                     segmentLength ++;
                 }
             }
 
-            fullData.replace(0, segmentLength + 1, "");
+            (void) fullData.replace(0, static_cast < Size > ( static_cast < Index > ( segmentLength ) + 1 ), "");
             emplaceUnknown(label, data);
             copy = fullData;
         }
@@ -910,23 +1002,25 @@ namespace cds {
     }
 
     inline auto JSON::Node::put ( JSON::Array const & a ) noexcept -> Node & {
-        this->clearData();
+        (void) this->clearData();
         this->_pObject = a.copy();
         return * this;
     }
 
     inline auto JSON::Node::getArray () const noexcept(false) -> JSON::Array const & {
         auto p = dynamic_cast < JSON::Array * > ( this->_pObject );
-        if ( p == nullptr )
+        if ( p == nullptr ) {
             throw TypeException(Array());
+        }
 
         return * p;
     }
 
     inline auto JSON::Node::getArray () noexcept(false) -> JSON::Array & { // NOLINT(readability-make-member-function-const)
         auto p = dynamic_cast < JSON::Array * > ( this->_pObject );
-        if ( p == nullptr )
+        if ( p == nullptr ) {
             throw TypeException(Array());
+        }
 
         return * p;
     }
@@ -950,15 +1044,22 @@ namespace cds {
         auto pObj = dynamic_cast < JSON const * > ( this->_pObject );
         auto pArr = dynamic_cast < JSON::Array const * > ( this->_pObject );
 
-        if ( pObj != nullptr )
+        if ( pObj != nullptr ) {
             return String("\"") + this->_label + "\" : \n" + indentation + String() * indent + pObj->dumpIndented(indent, count);
-        if ( pArr != nullptr )
+        }
+
+        if ( pArr != nullptr ) {
             return String("\"") + this->_label + "\" : \n" + indentation + String() * indent + pArr->dumpIndented(indent, count);
+        }
+
         return String("\"") + this->_label + "\" : " + this->stringFormattedData();
     }
 
     inline auto JSON::operator == (JSON const & o) const noexcept -> bool {
-        if ( this == & o ) return true;
+        if ( this == & o ) {
+            return true;
+        }
+
         return this->_nodes == o._nodes;
     }
 
@@ -968,8 +1069,8 @@ namespace cds {
 
 }
 
-__CDS_RegisterParseType(JSON)
-__CDS_RegisterParseType(JSON::Array)
-__CDS_RegisterParseType(JSON::Node)
+__CDS_RegisterParseType(JSON) // NOLINT(clion-misra-cpp2008-8-0-1)
+__CDS_RegisterParseType(JSON::Array) // NOLINT(clion-misra-cpp2008-8-0-1)
+__CDS_RegisterParseType(JSON::Node) // NOLINT(clion-misra-cpp2008-8-0-1)
 
 #endif //CDS_JSON_HPP

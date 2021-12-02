@@ -68,17 +68,19 @@ namespace cds {
         }
 
         __CDS_NoDiscard auto toString() const noexcept -> String final {
-            if ( this->empty() )
+            if ( this->empty() ) {
                 return {"{ }"};
+            }
 
             std::stringstream out;
             out << "{ ";
 
-            for ( ElementCRef e : (*this) )
+            for ( ElementCRef e __CDS_MaybeUnused : (*this) ) {
                 Type < T > ::streamPrint( out, e ) << ", ";
+            }
 
             auto s = out.str();
-            return {s.substr(0, s.length() - 2).append(" }")};
+            return {s.substr(0u, s.length() - 2u).append(" }")};
         }
 
         __CDS_NoDiscard __CDS_cpplang_ConstexprOverride auto empty () const noexcept -> bool final {

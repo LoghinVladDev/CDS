@@ -80,7 +80,7 @@ namespace cds {
          *
          * @test Tested in primitive/BooleanTest/Constructor Test
          */
-        constexpr Boolean ( bool v ) noexcept : v(v) { } // NOLINT(google-explicit-constructor)
+        constexpr Boolean ( bool v ) noexcept : v(v) { } // NOLINT(google-explicit-constructor,clion-misra-cpp2008-12-1-3)
 
         /**
          * @brief Copy Operator.
@@ -94,13 +94,19 @@ namespace cds {
          * @test Tested in primitive/BooleanTest/Operator Tests
          */
         __CDS_cpplang_NonConstConstexprMemberFunction auto operator = ( Boolean const & o ) noexcept -> Boolean & {
-            if ( this == & o ) return * this;
+            if ( this == & o ) {
+                return * this;
+            }
+
             this->v = o.v;
             return * this;
         }
 
         __CDS_cpplang_NonConstConstexprMemberFunction auto operator = ( Boolean && o ) noexcept -> Boolean & {
-            if ( this == & o ) return * this;
+            if ( this == & o ) {
+                return * this;
+            }
+
             this->v = exchange ( o.v, false );
             return * this;
         }
@@ -132,7 +138,7 @@ namespace cds {
          *
          * @test Tested in primitive/BooleanTest/Operator Tests
          */
-        __CDS_cpplang_ConstexprDestructor auto operator &&(Boolean const & o) const noexcept -> Boolean {
+        __CDS_cpplang_ConstexprDestructor auto operator &&(Boolean const & o) const noexcept -> Boolean { // NOLINT(clion-misra-cpp2008-5-2-11)
             return this->v && o.v;
         }
 
@@ -147,7 +153,7 @@ namespace cds {
          *
          * @test Tested in primitive/BooleanTest/Operator Tests
          */
-        __CDS_cpplang_ConstexprDestructor auto operator && ( bool value ) const noexcept -> Boolean {
+        __CDS_cpplang_ConstexprDestructor auto operator && ( bool value ) const noexcept -> Boolean { // NOLINT(clion-misra-cpp2008-5-2-11)
             return this->v && value;
         }
 
@@ -162,7 +168,7 @@ namespace cds {
          *
          * @test Tested in primitive/BooleanTest/Operator Tests
          */
-        __CDS_cpplang_ConstexprDestructor auto operator ||(Boolean const & o) const noexcept -> Boolean {
+        __CDS_cpplang_ConstexprDestructor auto operator ||(Boolean const & o) const noexcept -> Boolean { // NOLINT(clion-misra-cpp2008-5-2-11)
             return this->v || o.v;
         }
 
@@ -177,7 +183,7 @@ namespace cds {
          *
          * @test Tested in primitive/BooleanTest/Operator Tests
          */
-        __CDS_cpplang_ConstexprDestructor auto operator || ( bool value ) const noexcept -> Boolean {
+        __CDS_cpplang_ConstexprDestructor auto operator || ( bool value ) const noexcept -> Boolean { // NOLINT(clion-misra-cpp2008-5-2-11)
             return this->v || value;
         }
 
@@ -258,9 +264,14 @@ namespace cds {
          * @test Tested in primitive/BooleanTest/Operator Tests
          */
         __CDS_NoDiscard __CDS_cpplang_VirtualConstexpr auto equals ( Object const & o ) const noexcept -> bool override {
-            if ( this == & o ) return true;
+            if ( this == & o ) {
+                return true;
+            }
+
             auto p = dynamic_cast < decltype (this) > ( & o );
-            if ( p == nullptr ) return false;
+            if ( p == nullptr ) {
+                return false;
+            }
 
             return this->operator==(*p);
         }
@@ -331,7 +342,9 @@ namespace cds {
          * @test Tested in primitive/BooleanTest/Operator Tests
          */
         __CDS_cpplang_ConstexprDestructor static auto parse(String const & string) noexcept -> Boolean {
-            if ( string.empty() ) return false;
+            if ( string.empty() ) {
+                return false;
+            }
 
             return string == "true";
         }
@@ -461,7 +474,7 @@ namespace cds {
          *
          * @test Tested in primitive/BooleanTest/Boolean::Atomic Tests
          */
-        __CDS_OptimalInline Atomic (bool v) noexcept { // NOLINT(google-explicit-constructor)
+        __CDS_OptimalInline Atomic (bool v) noexcept { // NOLINT(google-explicit-constructor,clion-misra-cpp2008-12-1-3)
             this->set(v);
         }
 
@@ -634,7 +647,7 @@ namespace cds {
 #endif
 
 
-__CDS_RegisterParseType(Boolean)
+__CDS_RegisterParseType(Boolean) // NOLINT(clion-misra-cpp2008-8-0-1)
 
 
 #endif //CDS_BOOLEAN_HPP

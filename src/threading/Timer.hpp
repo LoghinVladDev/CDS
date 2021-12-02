@@ -81,18 +81,21 @@ namespace cds {
                                                 decltype(std::chrono::steady_clock::now()) lastStart;
                                                 bool firstStart = true;
 
-                                                while (! this->_timerShouldStop) {
-                                                    if (this->_millisCallback == TIMER_INFINITE_PERIODICITY)
+                                                while (! this->_timerShouldStop) { // NOLINT(clion-misra-cpp2008-5-3-1)
+                                                    if (this->_millisCallback == TIMER_INFINITE_PERIODICITY) {
                                                         continue;
+                                                    }
 
-                                                    if (this->_timerPaused)
+                                                    if (this->_timerPaused) {
                                                         continue;
+                                                    }
 
                                                     if (firstStart) {
                                                         firstStart = false;
                                                         lastStart = std::chrono::steady_clock::now();
-                                                        if ( ! this->_timerShouldStop )
-                                                            f(std::forward<Args>(args) ... );
+                                                        if ( ! this->_timerShouldStop ) { // NOLINT(clion-misra-cpp2008-5-3-1)
+                                                            f(std::forward<Args>(args) ...);
+                                                        }
 
                                                         continue;
                                                     }
@@ -101,13 +104,15 @@ namespace cds {
                                                             std::chrono::steady_clock::now() - lastStart
                                                     ).count();
 
-                                                    if (elapsed < this->_millisCallback)
+                                                    if (elapsed < this->_millisCallback) {
                                                         continue;
+                                                    }
 
                                                     lastStart = std::chrono::steady_clock::now();
 
-                                                    if ( ! this->_timerShouldStop )
-                                                        f( std::forward < Args > (args) ... );
+                                                    if ( ! this->_timerShouldStop ) { // NOLINT(clion-misra-cpp2008-5-3-1)
+                                                        f(std::forward<Args>(args) ...);
+                                                    }
                                                 }
 
                                                 this->_timerFinished.notify();
@@ -127,6 +132,6 @@ namespace cds {
 
 }
 
-__CDS_RegisterParseType(Timer)
+__CDS_RegisterParseType(Timer) // NOLINT(clion-misra-cpp2008-8-0-1)
 
 #endif //CDS_TIMER_HPP
