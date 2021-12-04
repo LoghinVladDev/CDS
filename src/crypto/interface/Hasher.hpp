@@ -5,10 +5,12 @@
 #ifndef CDS_HASHER_HPP
 #define CDS_HASHER_HPP
 
+#include <CDS/crypto/CryptoOperation>
+
 namespace cds {
 
     template < Size byteSize >
-    class Hasher : virtual public CryptoOperation < byteSize > {
+    class Hasher : virtual public CryptoOperation < byteSize > { // NOLINT(clion-misra-cpp2008-10-1-1)
     protected:
         auto run () noexcept -> Hasher & override = 0;
 

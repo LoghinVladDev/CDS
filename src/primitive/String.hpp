@@ -121,10 +121,10 @@ namespace cds {
             auto newArea = Memory :: instance().createArray < ElementType > (newCap);
 
             if (this->_p != nullptr) {
-                (void) std::memcpy(newArea, this->_p, this->_l);
+                (void) std :: memcpy(newArea, this->_p, this->_l);
             }
 
-            (void)std::memset(newArea + this->_l, 0, newCap - this->_l);
+            (void) std :: memset(newArea + this->_l, 0, newCap - this->_l);
 
             Memory :: instance().destroyArray ( this->_p );
 
@@ -158,14 +158,18 @@ namespace cds {
             /**
              * @brief Base Constructor, from a given String and Index in String
              *
-             * @param s : String ref = Reference to a String object
-             * @param i : Index = index to a String's position
+             * @param string : String ref = Reference to a String object
+             * @param index : Index = index to a String's position
              *
              * @exceptsafe
              *
              * @test Tested in primitive/StringTest/Iterable Tests
              */
-            constexpr IteratorBase ( String & s, Index i ) noexcept : _s ( & s ), _pos ( i ) {}
+            constexpr IteratorBase (String & string, Index index ) noexcept :
+                    _s (& string ),
+                    _pos (index ) {
+
+            }
 
             /**
              * @brief Copy Constructor
@@ -212,7 +216,7 @@ namespace cds {
             /**
              * @brief Function used to compare Iterator values
              *
-             * @param i : String::IteratorBase cref = Constant Reference to a String IteratorBase derived object
+             * @param iterator : String::IteratorBase cref = Constant Reference to a String IteratorBase derived object
              *
              * @exceptsafe
              *
@@ -220,7 +224,9 @@ namespace cds {
              *
              * @test Tested in primitive/StringTest/Iterable Tests
              */
-            __CDS_NoDiscard constexpr auto equals ( const String::IteratorBase & i ) const noexcept -> bool { return this->_s == i._s && this->_pos == i._pos; }
+            __CDS_NoDiscard constexpr auto equals ( const String::IteratorBase & iterator ) const noexcept -> bool {
+                return this->_s == iterator._s && this->_pos == iterator._pos;
+            }
 
             /**
              * @brief Function used to obtain value at Iterator Position
@@ -231,7 +237,9 @@ namespace cds {
              *
              * @test Tested in primitive/StringTest/Iterable Tests
              */
-            __CDS_NoDiscard __CDS_cpplang_ConstexprConditioned auto value ( ) const noexcept (false) -> ElementType & { return this->_s->get(this->_pos); }
+            __CDS_NoDiscard __CDS_cpplang_ConstexprConditioned auto value ( ) const noexcept (false) -> ElementType & {
+                return this->_s->get(this->_pos);
+            }
 
             /**
              * @brief Function used to shift the iterator to next element
@@ -242,12 +250,14 @@ namespace cds {
              *
              * @test Tested in primitive/StringTest/Iterable Tests
              */
-            __CDS_cpplang_VirtualConstexpr virtual auto operator ++ () noexcept -> IteratorBase & { return this->next(); }
+            __CDS_cpplang_VirtualConstexpr virtual auto operator ++ () noexcept -> IteratorBase & {
+                return this->next();
+            }
 
             /**
              * @brief Function used to compare Iterator values
              *
-             * @param o : String::IteratorBase cref = Constant Reference to a String IteratorBase derived object
+             * @param iterator : String::IteratorBase cref = Constant Reference to a String IteratorBase derived object
              *
              * @exceptsafe
              *
@@ -255,7 +265,9 @@ namespace cds {
              *
              * @test Tested in primitive/StringTest/Iterable Tests
              */
-            constexpr auto operator == ( const IteratorBase & o ) const noexcept -> bool { return this->equals(o); }
+            constexpr auto operator == ( IteratorBase const & iterator ) const noexcept -> bool {
+                return this->equals(iterator);
+            }
 
             /**
              * @brief Function used to compare Iterator values
@@ -268,7 +280,9 @@ namespace cds {
              *
              * @test Tested in primitive/StringTest/Iterable Tests
              */
-            constexpr auto operator != ( const IteratorBase & o ) const noexcept -> bool { return ! this->equals(o); }
+            constexpr auto operator != ( IteratorBase const & iterator ) const noexcept -> bool {
+                return ! this->equals(iterator);
+            }
 
             /**
              * @brief Function used to obtain difference size between two iterator positions
@@ -281,7 +295,9 @@ namespace cds {
              *
              * @test Tested in primitive/StringTest/Iterable Tests
              */
-            constexpr auto operator - ( const IteratorBase & o ) const noexcept -> SignedSize { return this->_pos - o._pos; }
+            constexpr auto operator - ( IteratorBase const & iteratorBase ) const noexcept -> SignedSize {
+                return this->_pos - iteratorBase._pos;
+            }
 
             /**
              * @brief Function used to obtain value at Iterator Position
@@ -292,7 +308,9 @@ namespace cds {
              *
              * @test Tested in primitive/StringTest/Iterable Tests
              */
-            __CDS_cpplang_ConstexprConditioned auto operator * ( ) const noexcept -> ElementType & { return this->value(); }
+            __CDS_cpplang_ConstexprConditioned auto operator * ( ) const noexcept -> ElementType & {
+                return this->value();
+            }
         };
 
         /**
@@ -314,14 +332,18 @@ namespace cds {
             /**
              * @brief Base Constructor, from a given String and Index in String
              *
-             * @param s : String cref = Constant Reference to a String object
-             * @param i : Index = index to a String's position
+             * @param string : String cref = Constant Reference to a String object
+             * @param index : Index = index to a String's position
              *
              * @exceptsafe
              *
              * @test Tested in primitive/StringTest/Iterable Tests
              */
-            constexpr ConstIteratorBase ( String const & s, Index i ) noexcept : _s(& s), _pos(i) {}
+            constexpr ConstIteratorBase (String const & string, Index index ) noexcept :
+                    _s(& string),
+                    _pos(index) {
+
+            }
 
             /**
              * @brief Copy Constructor
@@ -332,7 +354,7 @@ namespace cds {
              *
              * @test Tested in primitive/StringTest/Iterable Tests
              */
-            constexpr ConstIteratorBase ( String::ConstIteratorBase const & ) = default;
+            constexpr ConstIteratorBase ( String :: ConstIteratorBase const & ) = default;
 
         public:
 
@@ -368,7 +390,7 @@ namespace cds {
             /**
              * @brief Function used to compare Iterator values
              *
-             * @param i : String::ConstIteratorBase cref = Constant Reference to a String ConstIteratorBase derived object
+             * @param iterator : String::ConstIteratorBase cref = Constant Reference to a String ConstIteratorBase derived object
              *
              * @exceptsafe
              *
@@ -376,7 +398,9 @@ namespace cds {
              *
              * @test Tested in primitive/StringTest/Iterable Tests
              */
-            __CDS_NoDiscard constexpr auto equals ( const String::ConstIteratorBase & i ) const noexcept -> bool { return this->_s == i._s && this->_pos == i._pos; }
+            __CDS_NoDiscard constexpr auto equals ( String :: ConstIteratorBase const & iterator ) const noexcept -> bool {
+                return this->_s == iterator._s && this->_pos == iterator._pos;
+            }
 
             /**
              * @brief Function used to obtain value at Iterator Position
@@ -387,7 +411,9 @@ namespace cds {
              *
              * @test Tested in primitive/StringTest/Iterable Tests
              */
-            __CDS_NoDiscard __CDS_cpplang_ConstexprConditioned auto value ( ) const noexcept -> ElementType { return this->_s->get(this->_pos); }
+            __CDS_NoDiscard __CDS_cpplang_ConstexprConditioned auto value ( ) const noexcept -> ElementType {
+                return this->_s->get(this->_pos);
+            }
 
             /**
              * @brief Function used to shift the iterator to next element
@@ -398,12 +424,14 @@ namespace cds {
              *
              * @test Tested in primitive/StringTest/Iterable Tests
              */
-            __CDS_cpplang_VirtualConstexpr virtual auto operator ++ () noexcept -> ConstIteratorBase & { return this->next(); }
+            __CDS_cpplang_VirtualConstexpr virtual auto operator ++ () noexcept -> ConstIteratorBase & {
+                return this->next();
+            }
 
             /**
              * @brief Function used to compare Iterator values
              *
-             * @param o : String::ConstIteratorBase cref = Constant Reference to a String ConstIteratorBase derived object
+             * @param iterator : String::ConstIteratorBase cref = Constant Reference to a String ConstIteratorBase derived object
              *
              * @exceptsafe
              *
@@ -411,7 +439,9 @@ namespace cds {
              *
              * @test Tested in primitive/StringTest/Iterable Tests
              */
-            constexpr auto operator == ( const ConstIteratorBase & o ) const noexcept -> bool { return this->equals(o); }
+            constexpr auto operator == ( ConstIteratorBase const & iterator ) const noexcept -> bool {
+                return this->equals(iterator);
+            }
 
             /**
              * @brief Function used to compare Iterator values
@@ -424,7 +454,9 @@ namespace cds {
              *
              * @test Tested in primitive/StringTest/Iterable Tests
              */
-            constexpr auto operator != ( const ConstIteratorBase & o ) const noexcept -> bool { return ! this->equals(o); }
+            constexpr auto operator != ( ConstIteratorBase const & iterator ) const noexcept -> bool {
+                return ! this->equals(iterator);
+            }
 
             /**
              * @brief Function used to obtain difference size between two iterator positions
@@ -437,7 +469,9 @@ namespace cds {
              *
              * @test Tested in primitive/StringTest/Iterable Tests
              */
-            constexpr auto operator - ( const ConstIteratorBase & o ) const noexcept -> SignedSize { return this->_pos - o._pos; }
+            constexpr auto operator - ( ConstIteratorBase const & iterator ) const noexcept -> SignedSize {
+                return this->_pos - iterator._pos;
+            }
 
             /**
              * @brief Function used to obtain value at Iterator Position
@@ -448,7 +482,9 @@ namespace cds {
              *
              * @test Tested in primitive/StringTest/Iterable Tests
              */
-            __CDS_cpplang_ConstexprConditioned auto operator * ( ) const noexcept -> ElementType { return this->value(); }
+            __CDS_cpplang_ConstexprConditioned auto operator * ( ) const noexcept -> ElementType {
+                return this->value();
+            }
         };
     public:
 
@@ -466,14 +502,17 @@ namespace cds {
             /**
              * @brief Base Constructor, from a given String and Index in String
              *
-             * @param s : String ref = Reference to a String object
-             * @param i : Index = index to a String's position
+             * @param string : String ref = Reference to a String object
+             * @param index : Index = index to a String's position
              *
              * @exceptsafe
              *
              * @test Tested in primitive/StringTest/Iterable Tests
              */
-            constexpr Iterator ( String & s, Index i ) noexcept : IteratorBase(s, i) {}
+            constexpr Iterator (String & string, Index index ) noexcept :
+                    IteratorBase(string, index) {
+
+            }
 
             /**
              * @brief Copy Constructor
@@ -504,7 +543,9 @@ namespace cds {
              *
              * @test Tested in primitive/StringTest/Iterable Tests
              */
-            __CDS_cpplang_VirtualConstexpr auto next () noexcept -> Iterator & final { this->_pos ++; return * this; }
+            __CDS_cpplang_VirtualConstexpr auto next () noexcept -> Iterator & final {
+                this->_pos ++; return * this;
+            }
 
             /**
              * @brief Function used to shift the iterator to next element
@@ -515,7 +556,9 @@ namespace cds {
              *
              * @test Tested in primitive/StringTest/Iterable Tests
              */
-            __CDS_cpplang_VirtualConstexpr auto operator ++ () noexcept -> Iterator & final { return this->next(); }
+            __CDS_cpplang_VirtualConstexpr auto operator ++ () noexcept -> Iterator & final {
+                return this->next();
+            }
 
             /**
              * @brief Function used to shift the iterator to next element into a new Iterator element
@@ -547,14 +590,17 @@ namespace cds {
             /**
              * @brief Base Constructor, from a given String and Index in String
              *
-             * @param s : String ref = Reference to a String object
-             * @param i : Index = index to a String's position
+             * @param string : String ref = Reference to a String object
+             * @param index : Index = index to a String's position
              *
              * @exceptsafe
              *
              * @test Tested in primitive/StringTest/Iterable Tests
              */
-            constexpr ConstIterator ( String const & s, Index i ) noexcept : ConstIteratorBase(s, i) {}
+            constexpr ConstIterator (String const & string, Index index ) noexcept :
+                    ConstIteratorBase(string, index) {
+
+            }
 
             /**
              * @brief Copy Constructor
@@ -585,7 +631,9 @@ namespace cds {
              *
              * @test Tested in primitive/StringTest/Iterable Tests
              */
-            __CDS_cpplang_VirtualConstexpr auto next () noexcept -> ConstIterator & final { this->_pos ++; return * this; }
+            __CDS_cpplang_VirtualConstexpr auto next () noexcept -> ConstIterator & final {
+                this->_pos ++; return * this;
+            }
 
             /**
              * @brief Function used to shift the iterator to next element
@@ -596,7 +644,9 @@ namespace cds {
              *
              * @test Tested in primitive/StringTest/Iterable Tests
              */
-            __CDS_cpplang_VirtualConstexpr auto operator ++ () noexcept -> ConstIterator & final { return this->next(); }
+            __CDS_cpplang_VirtualConstexpr auto operator ++ () noexcept -> ConstIterator & final {
+                return this->next();
+            }
 
             /**
              * @brief Function used to shift the iterator to next element into a new Iterator element
@@ -628,14 +678,17 @@ namespace cds {
             /**
              * @brief Base Constructor, from a given String and Index in String
              *
-             * @param s : String ref = Reference to a String object
-             * @param i : Index = index to a String's position
+             * @param string : String ref = Reference to a String object
+             * @param index : Index = index to a String's position
              *
              * @exceptsafe
              *
              * @test Tested in primitive/StringTest/Iterable Tests
              */
-            constexpr ReverseIterator ( String & s, Index i ) noexcept : IteratorBase(s, i) {}
+            constexpr ReverseIterator (String & string, Index index ) noexcept :
+                    IteratorBase(string, index) {
+
+            }
 
             /**
              * @brief Copy Constructor
@@ -666,7 +719,10 @@ namespace cds {
              *
              * @test Tested in primitive/StringTest/Iterable Tests
              */
-            __CDS_cpplang_VirtualConstexpr auto next () noexcept -> ReverseIterator & final { this->_pos --; return * this; }
+            __CDS_cpplang_VirtualConstexpr auto next () noexcept -> ReverseIterator & final {
+                this->_pos --;
+                return * this;
+            }
 
             /**
              * @brief Function used to shift the iterator to next element
@@ -677,7 +733,9 @@ namespace cds {
              *
              * @test Tested in primitive/StringTest/Iterable Tests
              */
-            __CDS_cpplang_VirtualConstexpr auto operator ++ () noexcept -> ReverseIterator & final { return this->next(); }
+            __CDS_cpplang_VirtualConstexpr auto operator ++ () noexcept -> ReverseIterator & final {
+                return this->next();
+            }
 
             /**
              * @brief Function used to shift the iterator to next element into a new Iterator element
@@ -709,14 +767,17 @@ namespace cds {
             /**
              * @brief Base Constructor, from a given String and Index in String
              *
-             * @param s : String ref = Reference to a String object
-             * @param i : Index = index to a String's position
+             * @param string : String ref = Reference to a String object
+             * @param index : Index = index to a String's position
              *
              * @exceptsafe
              *
              * @test Tested in primitive/StringTest/Iterable Tests
              */
-            constexpr ConstReverseIterator ( String const & s, Index i ) noexcept : ConstIteratorBase(s, i) {}
+            constexpr ConstReverseIterator (String const & string, Index index ) noexcept :
+                    ConstIteratorBase(string, index) {
+
+            }
 
             /**
              * @brief Copy Constructor
@@ -747,7 +808,10 @@ namespace cds {
              *
              * @test Tested in primitive/StringTest/Iterable Tests
              */
-            __CDS_cpplang_VirtualConstexpr auto next () noexcept -> ConstReverseIterator & final { this->_pos --; return * this; }
+            __CDS_cpplang_VirtualConstexpr auto next () noexcept -> ConstReverseIterator & final {
+                this->_pos --;
+                return * this;
+            }
 
             /**
              * @brief Function used to shift the iterator to next element
@@ -758,7 +822,9 @@ namespace cds {
              *
              * @test Tested in primitive/StringTest/Iterable Tests
              */
-            __CDS_cpplang_VirtualConstexpr auto operator ++ () noexcept -> ConstReverseIterator & final { return this->next(); }
+            __CDS_cpplang_VirtualConstexpr auto operator ++ () noexcept -> ConstReverseIterator & final {
+                return this->next();
+            }
 
             /**
              * @brief Function used to shift the iterator to next element into a new Iterator element
@@ -788,31 +854,33 @@ namespace cds {
         /**
          * @brief Copy Constructor
          *
-         * @param s : String cref = Constant Reference to the String to copy from
+         * @param string : String cref = Constant Reference to the String to copy from
          *
          * @exceptsafe
          *
          * @test tested in primitive/StringTest/Constructor Tests
          */
-        __CDS_cpplang_ConstexprConditioned String (String const & s) noexcept : CONSTR_CLEAR() {
-            if ( s.empty() ) {
+        __CDS_cpplang_ConstexprConditioned String (String const & string) noexcept
+                : CONSTR_CLEAR() {
+
+            if ( string.empty() ) {
                 return;
             }
 
-            this->_alloc(s._l);
-            this->_l = s._l;
+            this->_alloc(string._l);
+            this->_l = string._l;
 
             __CDS_WarningSuppression_ArgumentPossibleUnexpectedValue_SuppressEnable
 
-            (void) std::memcpy ( this->_p, s._p, this->_l + 1llu );
+            (void) std::memcpy (this->_p, string._p, this->_l + 1llu );
 
             __CDS_WarningSuppression_ArgumentPossibleUnexpectedValue_SuppressDisable
         }
 
-        __CDS_cpplang_ConstexprConditioned String (String && s) noexcept :
-                _p(exchange(s._p, nullptr)),
-                _l(exchange(s._l, 0)),
-                _c(exchange(s._c, 0)){
+        __CDS_cpplang_ConstexprConditioned String (String && string) noexcept :
+                _p(exchange(string._p, nullptr)),
+                _l(exchange(string._l, 0)),
+                _c(exchange(string._c, 0)){
 
         }
 
@@ -834,7 +902,9 @@ namespace cds {
          *
          * @test tested in primitive/StringTest/Constructor Tests
          */
-        __CDS_cpplang_ConstexprConditioned String(StringLiteral cString, Size length = UINT64_MAX ) noexcept : CONSTR_CLEAR() { // NOLINT(google-explicit-constructor)
+        __CDS_cpplang_ConstexprConditioned String(StringLiteral cString, Size length = UINT64_MAX ) noexcept : // NOLINT(google-explicit-constructor)
+                CONSTR_CLEAR() {
+
             if ( cString == nullptr ) {
                 return;
             }
@@ -897,21 +967,23 @@ namespace cds {
         /**
          * @brief Constructor with given std::string
          *
-         * @param s : std::string cref = Constant Reference to the std::string to copy from
+         * @param string : std::string cref = Constant Reference to the std::string to copy from
          *
          * @exceptsafe
          *
          * @test tested in primitive/StringTest/Constructor Tests
          */
-        __CDS_OptionalInline String(std::string const & s) noexcept : CONSTR_CLEAR() { // NOLINT(google-explicit-constructor)
-            if ( s.empty() ) {
+        __CDS_OptionalInline String(std::string const & string) noexcept : // NOLINT(google-explicit-constructor)
+                CONSTR_CLEAR() {
+
+            if ( string.empty() ) {
                 return;
             }
 
-            this->_alloc(s.size());
+            this->_alloc(string.size());
 
-            this->_l = s.size();
-            (void) std::memcpy(this->_p, s.c_str(), s.size());
+            this->_l = string.size();
+            (void) std::memcpy(this->_p, string.c_str(), string.size());
         }
 
         /**
@@ -924,7 +996,9 @@ namespace cds {
          *
          * @test tested in primitive/StringTest/Constructor Tests
          */
-        __CDS_cpplang_ConstexprConditioned String(Size count, ElementType constant) noexcept : CONSTR_CLEAR() {
+        __CDS_cpplang_ConstexprConditioned String(Size count, ElementType constant) noexcept :
+                CONSTR_CLEAR() {
+
             if ( count == 0u ) {
                 return;
             }
@@ -950,7 +1024,9 @@ namespace cds {
          *
          * @test tested in primitive/StringTest/Constructor Tests
          */
-        __CDS_cpplang_ConstexprSTLIteratorOp String(std::string::iterator const & begin, std::string::iterator const & end) noexcept : CONSTR_CLEAR() {
+        __CDS_cpplang_ConstexprSTLIteratorOp String(std::string::iterator const & begin, std::string::iterator const & end) noexcept :
+                CONSTR_CLEAR() {
+
             if ( end - begin <= 0 ) {
                 return;
             }
@@ -972,7 +1048,9 @@ namespace cds {
          *
          * @test tested in primitive/StringTest/Constructor Tests
          */
-        __CDS_cpplang_ConstexprDestructor String(IteratorBase const & begin, IteratorBase const & end) noexcept : CONSTR_CLEAR() {
+        __CDS_cpplang_ConstexprDestructor String(IteratorBase const & begin, IteratorBase const & end) noexcept :
+                CONSTR_CLEAR() {
+
             bool reversed = dynamic_cast < Iterator const * > ( & begin ) == nullptr;
             if ( ! reversed && end - begin <= 0 || reversed && begin - end <= 0) {
                 return;
@@ -1001,7 +1079,9 @@ namespace cds {
          *
          * @test tested in primitive/StringTest/Constructor Tests
          */
-        __CDS_cpplang_ConstexprDestructor String(ConstIteratorBase const & begin, ConstIteratorBase const & end) noexcept : CONSTR_CLEAR() {
+        __CDS_cpplang_ConstexprDestructor String(ConstIteratorBase const & begin, ConstIteratorBase const & end) noexcept :
+                CONSTR_CLEAR() {
+
             bool reversed = dynamic_cast < ConstIterator const * > ( & begin ) == nullptr;
             if ( ! reversed && end - begin <= 0 || reversed && begin - end <= 0) {
                 return;
@@ -1029,14 +1109,17 @@ namespace cds {
          *
          * @test tested in primitive/StringTest/Constructor Tests
          */
-        __CDS_cpplang_ConstexprConditioned String(std::initializer_list<ElementType> const & list) noexcept : CONSTR_CLEAR() {
+        __CDS_cpplang_ConstexprConditioned String(std::initializer_list<ElementType> const & list) noexcept :
+                CONSTR_CLEAR() {
+
             if ( list.size() == 0u ) {
                 return;
             }
 
             this->_alloc(list.size());
-            for ( auto e : list ) { // NOLINT(clion-misra-cpp2008-5-0-11)
-                this->_p[this->_l++] = e;
+
+            for ( auto element : list ) { // NOLINT(clion-misra-cpp2008-5-0-11)
+                this->_p[this->_l++] = element;
             }
         }
 
@@ -1045,13 +1128,16 @@ namespace cds {
         /**
          * @brief Constructor which initializes String from a QString
          *
-         * @param o : QString cref = Constant Reference to the QString to construct from
+         * @param qString : QString cref = Constant Reference to the QString to construct from
          *
          * @exceptsafe
          *
          * @test tested in MSK
          */
-        String(QString const & o) noexcept : String(o.toStdString()) {}
+        String(QString const & qString) noexcept : // NOLINT(google-explicit-constructor)
+                String(qString.toStdString()) {
+
+        }
 
     #endif
 
@@ -1060,136 +1146,170 @@ namespace cds {
         /**
          * @brief Constructor which initializes String from a CDS/Object's String representation
          *
-         * @param o : Object cref = Constant Reference to a CDS/Object
+         * @param object : Object cref = Constant Reference to a CDS/Object
          *
          * @exceptsafe
          *
          * @test tested in primitive/StringTest/Constructor Tests
          */
-        __CDS_OptimalInline String (Object const & o) noexcept : String(o.toString()) { } // NOLINT(google-explicit-constructor)
+        __CDS_OptimalInline String (Object const & object) noexcept : // NOLINT(google-explicit-constructor)
+                String(object.toString()) {
+
+        }
 
         /**
          * @brief Constructor which initializes String from a raw uint8 value
          *
-         * @param v : uint8 = Value to represent in the String
+         * @param value : uint8 = Value to represent in the String
          *
          * @exceptsafe
          *
          * @test tested in primitive/StringTest/Constructor Tests
          */
-        __CDS_OptimalInline String (uint8 v) noexcept : String(String().append(v)) { } // NOLINT(google-explicit-constructor,clion-misra-cpp2008-12-1-3)
+        __CDS_OptimalInline String (uint8 value) noexcept : // NOLINT(google-explicit-constructor,clion-misra-cpp2008-12-1-3)
+                String(String().append(value)) {
+
+        }
 
         /**
          * @brief Constructor which initializes String from a raw uint16 value
          *
-         * @param v : uint16 = Value to represent in the String
+         * @param value : uint16 = Value to represent in the String
          *
          * @exceptsafe
          *
          * @test tested in primitive/StringTest/Constructor Tests
          */
-        __CDS_OptimalInline String (uint16 v) noexcept : String(String().append(v)) { } // NOLINT(google-explicit-constructor,clion-misra-cpp2008-12-1-3)
+        __CDS_OptimalInline String (uint16 value) noexcept : // NOLINT(google-explicit-constructor,clion-misra-cpp2008-12-1-3)
+                String(String().append(value)) {
+
+        }
 
         /**
          * @brief Constructor which initializes String from a raw uint32 value
          *
-         * @param v : uint32 = Value to represent in the String
+         * @param value : uint32 = Value to represent in the String
          *
          * @exceptsafe
          *
          * @test tested in primitive/StringTest/Constructor Tests
          */
-        __CDS_OptimalInline String (uint32 v) noexcept : String(String().append(v)) { } // NOLINT(google-explicit-constructor,clion-misra-cpp2008-12-1-3)
+        __CDS_OptimalInline String (uint32 value) noexcept : // NOLINT(google-explicit-constructor,clion-misra-cpp2008-12-1-3)
+                String(String().append(value)) {
+
+        }
 
         /**
          * @brief Constructor which initializes String from a raw uint64 value
          *
-         * @param v : uint64 = Value to represent in the String
+         * @param value : uint64 = Value to represent in the String
          *
          * @exceptsafe
          *
          * @test tested in primitive/StringTest/Constructor Tests
          */
-        __CDS_OptimalInline String (uint64 v) noexcept : String(String().append(v)) { } // NOLINT(google-explicit-constructor,clion-misra-cpp2008-12-1-3)
+        __CDS_OptimalInline String (uint64 value) noexcept : // NOLINT(google-explicit-constructor,clion-misra-cpp2008-12-1-3)
+                String(String().append(value)) {
+
+        }
 
         /**
          * @brief Constructor which initializes String from a raw sint8 value
          *
-         * @param v : sint8 = Value to represent in the String
+         * @param value : sint8 = Value to represent in the String
          *
          * @exceptsafe
          *
          * @test tested in primitive/StringTest/Constructor Tests
          */
-        __CDS_OptimalInline String (sint8 v) noexcept : String(String().append(v)) { } // NOLINT(google-explicit-constructor,clion-misra-cpp2008-12-1-3)
+        __CDS_OptimalInline String (sint8 value) noexcept : // NOLINT(google-explicit-constructor,clion-misra-cpp2008-12-1-3)
+                String(String().append(value)) {
+
+        }
 
         /**
          * @brief Constructor which initializes String from a raw sint16 value
          *
-         * @param v : sint16 = Value to represent in the String
+         * @param value : sint16 = Value to represent in the String
          *
          * @exceptsafe
          *
          * @test tested in primitive/StringTest/Constructor Tests
          */
-        __CDS_OptimalInline String (sint16 v) noexcept : String(String().append(v)) { } // NOLINT(google-explicit-constructor,clion-misra-cpp2008-12-1-3)
+        __CDS_OptimalInline String (sint16 value) noexcept : // NOLINT(google-explicit-constructor,clion-misra-cpp2008-12-1-3)
+                String(String().append(value)) {
+
+        }
 
         /**
          * @brief Constructor which initializes String from a raw sint32 value
          *
-         * @param v : sint32 = Value to represent in the String
+         * @param value : sint32 = Value to represent in the String
          *
          * @exceptsafe
          *
          * @test tested in primitive/StringTest/Constructor Tests
          */
-        __CDS_OptimalInline String (sint32 v) noexcept : String(String().append(v)) { } // NOLINT(google-explicit-constructor,clion-misra-cpp2008-12-1-3)
+        __CDS_OptimalInline String (sint32 value) noexcept : // NOLINT(google-explicit-constructor,clion-misra-cpp2008-12-1-3)
+                String(String().append(value)) {
+
+        }
 
         /**
          * @brief Constructor which initializes String from a raw sint64 value
          *
-         * @param v : sint64 = Value to represent in the String
+         * @param value : sint64 = Value to represent in the String
          *
          * @exceptsafe
          *
          * @test tested in primitive/StringTest/Constructor Tests
          */
-        __CDS_OptimalInline String (sint64 v) noexcept : String(String().append(v)) { } // NOLINT(google-explicit-constructor,clion-misra-cpp2008-12-1-3)
+        __CDS_OptimalInline String (sint64 value) noexcept : // NOLINT(google-explicit-constructor,clion-misra-cpp2008-12-1-3)
+                String(String().append(value)) {
+
+        }
 
         /**
          * @brief Constructor which initializes String from a raw float value
          *
-         * @param v : float = Value to represent in the String
+         * @param value : float = Value to represent in the String
          *
          * @exceptsafe
          *
          * @test tested in primitive/StringTest/Constructor Tests
          */
-        __CDS_OptimalInline String (float v) noexcept : String(String().append(v)) { } // NOLINT(google-explicit-constructor,clion-misra-cpp2008-12-1-3)
+        __CDS_OptimalInline String (float value) noexcept : // NOLINT(google-explicit-constructor,clion-misra-cpp2008-12-1-3)
+                String(String().append(value)) {
+
+        }
 
         /**
          * @brief Constructor which initializes String from a raw double value
          *
-         * @param v : double = Value to represent in the String
+         * @param value : double = Value to represent in the String
          *
          * @exceptsafe
          *
          * @test tested in primitive/StringTest/Constructor Tests
          */
-        __CDS_OptimalInline String (double v) noexcept : String(String().append(v)) { } // NOLINT(google-explicit-constructor,clion-misra-cpp2008-12-1-3)
+        __CDS_OptimalInline String (double value) noexcept : // NOLINT(google-explicit-constructor,clion-misra-cpp2008-12-1-3)
+                String(String().append(value)) {
+
+        }
 
     #if defined(__linux)
 
         /**
          * @brief Constructor which initializes String from a raw std::size_t value
          *
-         * @param v : std::size_t = Value to represent in the String
+         * @param value : std::size_t = Value to represent in the String
          *
          * @exceptsafe
          *
          * @test tested in primitive/StringTest/Constructor Tests
          */
-        __CDS_OptimalInline String(std::size_t v) noexcept : String(static_cast < uint64 > (v) ) { // NOLINT(google-explicit-constructor,clion-misra-cpp2008-12-1-3)
+        __CDS_OptimalInline String(std::size_t value) noexcept : // NOLINT(google-explicit-constructor,clion-misra-cpp2008-12-1-3)
+                String(static_cast < uint64 > (value) ) {
 
         }
 
@@ -1199,27 +1319,33 @@ namespace cds {
          * @brief Constructor which initializes String from a raw pointer value
          *
          * @tparam T = type of object at the given address
-         * @param v : T ptr = Value to represent in the String
+         * @param address : T ptr = Value to represent in the String
          *
          * @exceptsafe
          *
          * @test tested in primitive/StringTest/Constructor Tests
          */
         template < typename T >
-        __CDS_cpplang_ConstexprConditioned String (T * v) noexcept : String( reinterpret_cast < std::size_t > ( v ) ) { } // NOLINT(google-explicit-constructor)
+        __CDS_cpplang_ConstexprConditioned String (T * address) noexcept : // NOLINT(google-explicit-constructor)
+                String( reinterpret_cast < std::size_t > ( address ) ) {
+
+        }
 
         /**
          * @brief Constructor which initializes String from a raw constant pointer value
          *
          * @tparam T = type of object at the given address
-         * @param v : T cptr = Value to represent in the String
+         * @param address : T cptr = Value to represent in the String
          *
          * @exceptsafe
          *
          * @test tested in primitive/StringTest/Constructor Tests
          */
         template < typename T >
-        __CDS_cpplang_ConstexprConditioned String (T const * v) noexcept : String( reinterpret_cast < std :: size_t const > (v) ) { } // NOLINT(google-explicit-constructor)
+        __CDS_cpplang_ConstexprConditioned String (T const * address) noexcept : // NOLINT(google-explicit-constructor)
+                String( reinterpret_cast < std :: size_t const > (address) ) {
+
+        }
 
         __CDS_WarningSuppression_DelegateCtorSuppressUninitializedMembers_SuppressDisable
 
@@ -1273,7 +1399,9 @@ namespace cds {
          *
          * @test tested in primitive/StringTest/Iterator Tests
          */
-        __CDS_NoDiscard __CDS_cpplang_ConstexprDestructor auto begin() noexcept -> Iterator { return {* this, 0 }; }
+        __CDS_NoDiscard __CDS_cpplang_ConstexprDestructor auto begin() noexcept -> Iterator {
+            return {* this, 0 };
+        }
 
         /**
          * @brief Function used to obtain an Iterator to the position past the last element in the String
@@ -1284,7 +1412,9 @@ namespace cds {
          *
          * @test tested in primitive/StringTest/Iterator Tests
          */
-        __CDS_NoDiscard __CDS_cpplang_ConstexprDestructor auto end () noexcept -> Iterator { return { * this, static_cast < Index > ( this->_l ) }; }
+        __CDS_NoDiscard __CDS_cpplang_ConstexprDestructor auto end () noexcept -> Iterator {
+            return { * this, static_cast < Index > ( this->_l ) };
+        }
 
         /**
          * @brief Function used to obtain a ConstIterator to the first element in the String
@@ -1295,7 +1425,9 @@ namespace cds {
          *
          * @test tested in primitive/StringTest/Iterator Tests
          */
-        __CDS_NoDiscard __CDS_cpplang_ConstexprDestructor auto begin() const noexcept -> ConstIterator { return { * this, 0 }; }
+        __CDS_NoDiscard __CDS_cpplang_ConstexprDestructor auto begin() const noexcept -> ConstIterator {
+            return { * this, 0 };
+        }
 
         /**
          * @brief Function used to obtain an ConstIterator to the position past the last element in the String
@@ -1306,7 +1438,9 @@ namespace cds {
          *
          * @test tested in primitive/StringTest/Iterator Tests
          */
-        __CDS_NoDiscard __CDS_cpplang_ConstexprDestructor auto end() const noexcept -> ConstIterator { return { * this, static_cast < Index > ( this->_l ) }; }
+        __CDS_NoDiscard __CDS_cpplang_ConstexprDestructor auto end() const noexcept -> ConstIterator {
+            return { * this, static_cast < Index > ( this->_l ) };
+        }
 
         /**
          * @brief Function used to obtain a ConstIterator to the first element in the String
@@ -1317,7 +1451,9 @@ namespace cds {
          *
          * @test tested in primitive/StringTest/Iterator Tests
          */
-        __CDS_NoDiscard __CDS_cpplang_ConstexprDestructor auto cbegin() const noexcept -> ConstIterator { return { * this, 0 }; }
+        __CDS_NoDiscard __CDS_cpplang_ConstexprDestructor auto cbegin() const noexcept -> ConstIterator {
+            return { * this, 0 };
+        }
 
         /**
          * @brief Function used to obtain an ConstIterator to the position past the last element in the String
@@ -1328,7 +1464,9 @@ namespace cds {
          *
          * @test tested in primitive/StringTest/Iterator Tests
          */
-        __CDS_NoDiscard __CDS_cpplang_ConstexprDestructor auto cend() const noexcept -> ConstIterator { return { * this, static_cast < Index > ( this->_l ) }; }
+        __CDS_NoDiscard __CDS_cpplang_ConstexprDestructor auto cend() const noexcept -> ConstIterator {
+            return { * this, static_cast < Index > ( this->_l ) };
+        }
 
 
         /**
@@ -1340,7 +1478,9 @@ namespace cds {
          *
          * @test tested in primitive/StringTest/Iterator Tests
          */
-        __CDS_NoDiscard __CDS_cpplang_ConstexprDestructor auto rbegin() noexcept -> ReverseIterator { return { * this, static_cast < Index > ( this->_l ) - 1 }; }
+        __CDS_NoDiscard __CDS_cpplang_ConstexprDestructor auto rbegin() noexcept -> ReverseIterator {
+            return { * this, static_cast < Index > ( this->_l ) - 1 };
+        }
 
         /**
          * @brief Function used to obtain a ReverseIterator to the first element in the String
@@ -1351,7 +1491,9 @@ namespace cds {
          *
          * @test tested in primitive/StringTest/Iterator Tests
          */
-        __CDS_NoDiscard __CDS_cpplang_ConstexprDestructor auto rend() noexcept -> ReverseIterator { return { * this, -1 }; }
+        __CDS_NoDiscard __CDS_cpplang_ConstexprDestructor auto rend() noexcept -> ReverseIterator {
+            return { * this, -1 };
+        }
 
         /**
          * @brief Function used to obtain a ConstReverseIterator to the position past the last element in the String
@@ -1362,7 +1504,9 @@ namespace cds {
          *
          * @test tested in primitive/StringTest/Iterator Tests
          */
-        __CDS_NoDiscard __CDS_cpplang_ConstexprDestructor auto rbegin() const noexcept -> ConstReverseIterator { return { * this, static_cast < Index > ( this->_l ) - 1 }; }
+        __CDS_NoDiscard __CDS_cpplang_ConstexprDestructor auto rbegin() const noexcept -> ConstReverseIterator {
+            return { * this, static_cast < Index > ( this->_l ) - 1 };
+        }
 
         /**
          * @brief Function used to obtain a ConstReverseIterator to the first element in the String
@@ -1373,7 +1517,9 @@ namespace cds {
          *
          * @test tested in primitive/StringTest/Iterator Tests
          */
-        __CDS_NoDiscard __CDS_cpplang_ConstexprDestructor auto rend() const noexcept -> ConstReverseIterator { return { * this, -1 }; }
+        __CDS_NoDiscard __CDS_cpplang_ConstexprDestructor auto rend() const noexcept -> ConstReverseIterator {
+            return { * this, -1 };
+        }
 
         /**
          * @brief Function used to obtain a ConstReverseIterator to the position past the last element in the String
@@ -1384,7 +1530,9 @@ namespace cds {
          *
          * @test tested in primitive/StringTest/Iterator Tests
          */
-        __CDS_NoDiscard __CDS_cpplang_ConstexprDestructor auto crbegin() const noexcept -> ConstReverseIterator { return { * this, static_cast < Index > ( this->_l ) - 1 }; }
+        __CDS_NoDiscard __CDS_MaybeUnused __CDS_cpplang_ConstexprDestructor auto crbegin() const noexcept -> ConstReverseIterator {
+            return { * this, static_cast < Index > ( this->_l ) - 1 };
+        }
 
         /**
          * @brief Function used to obtain a ConstReverseIterator to the first element in the String
@@ -1395,7 +1543,9 @@ namespace cds {
          *
          * @test tested in primitive/StringTest/Iterator Tests
          */
-        __CDS_NoDiscard __CDS_cpplang_ConstexprDestructor auto crend() const noexcept -> ConstReverseIterator { return { * this, -1 }; }
+        __CDS_NoDiscard __CDS_cpplang_ConstexprDestructor auto crend() const noexcept -> ConstReverseIterator {
+            return { * this, -1 };
+        }
 
 
         /**
@@ -1407,7 +1557,9 @@ namespace cds {
          *
          * @test tested in primitive/StringTest/Property Tests
          */
-        __CDS_NoDiscard constexpr auto size() const noexcept -> Size { return this->_l; }
+        __CDS_NoDiscard constexpr auto size() const noexcept -> Size {
+            return this->_l;
+        }
 
         /**
          * @brief Function used to obtain the number of characters in the String
@@ -1418,7 +1570,9 @@ namespace cds {
          *
          * @test tested in primitive/StringTest/Property Tests
          */
-        __CDS_NoDiscard constexpr auto length() const noexcept -> Size { return this->_l; }
+        __CDS_NoDiscard constexpr auto length() const noexcept -> Size {
+            return this->_l;
+        }
 
         /**
          * @brief Function used to obtain the allocated memory size in bytes
@@ -1429,7 +1583,9 @@ namespace cds {
          *
          * @test tested in primitive/StringTest/Property Tests
          */
-        __CDS_NoDiscard __CDS_MaybeUnused constexpr auto maxSize() const noexcept -> Size { return this->_c; }
+        __CDS_NoDiscard __CDS_MaybeUnused constexpr auto maxSize() const noexcept -> Size {
+            return this->_c;
+        }
 
         /**
          * @brief Function used to obtain the allocated memory size in bytes
@@ -1440,7 +1596,9 @@ namespace cds {
          *
          * @test tested in primitive/StringTest/Property Tests
          */
-        __CDS_NoDiscard constexpr auto capacity() const noexcept -> Size { return this->_c; }
+        __CDS_NoDiscard constexpr auto capacity() const noexcept -> Size {
+            return this->_c;
+        }
 
     #if defined(_MSC_VER)
 
@@ -1486,40 +1644,40 @@ namespace cds {
         /**
          * @brief Function used to enlarge the String's capacity to a required size, but not capable of shrinking it, if it is bigger
          *
-         * @param s : Size = target size for the String
+         * @param size : Size = target size for the String
          *
          * @exceptsafe
          *
          * @test tested in primitive/StringTest/Memory Tests
          */
-        __CDS_cpplang_ConstexprDynamicAllocation auto reserve(Size s) noexcept -> void {
-            if ( s < this->_c ) {
+        __CDS_MaybeUnused __CDS_cpplang_ConstexprDynamicAllocation auto reserve(Size size) noexcept -> void {
+            if (size < this->_c ) {
                 return;
             }
 
-            this->resize( s );
+            this->resize(size );
         }
 
         /**
          * @brief Function used to shrink the String's capacity, but not capable of enlarging it, if given size is greater than capacity
          * If no parameters are given, it shrinks to the least possible capacity, its' length
          *
-         * @param s : SignedSize = target size to shrink at. If left default (-1), it will shrink to length
+         * @param size : SignedSize = target size to shrink at. If left default (-1), it will shrink to length
          *
          * @exceptsafe
          *
          * @test tested in primitive/StringTest/Memory Tests
          */
-        __CDS_cpplang_ConstexprDynamicAllocation auto shrink(SignedSize s = -1) noexcept -> void {
-            if ( s == -1 ) {
-                s = static_cast < SignedSize > ( this->_l );
+        __CDS_MaybeUnused __CDS_cpplang_ConstexprDynamicAllocation auto shrink(SignedSize size = -1) noexcept -> void {
+            if ( size == -1 ) {
+                size = static_cast < SignedSize > ( this->_l );
             }
 
-            if ( static_cast < Size > ( s ) > this->_c ) {
+            if ( static_cast < Size > ( size ) > this->_c ) {
                 return;
             }
 
-            this->resize( static_cast < Size > ( s ) );
+            this->resize( static_cast < Size > ( size ) );
         }
 
         /**
@@ -1559,7 +1717,7 @@ namespace cds {
         /**
          * Get Operator used to acquire element at given index, behaves circularly ( if given index > length, it loops around, from the start )
          *
-         * @param i : Index = index to acquire element from
+         * @param index : Index = index to acquire element from
          *
          * @throws String::StringNullAccess() if used on an empty String
          *
@@ -1567,26 +1725,26 @@ namespace cds {
          *
          * @test tested in primitive/StringTest/Content Functions Tests
          */
-        __CDS_cpplang_ConstexprConditioned auto operator [] (Index i) noexcept (false) -> ElementType & {
+        __CDS_cpplang_ConstexprConditioned auto operator [] (Index index) noexcept (false) -> ElementType & {
             if ( this->empty() ) {
                 throw String::StringNullAccess();
             }
 
-            if ( i < 0 ) {
-                i += ((-i) / static_cast < Index > ( this->size()) + 1) * static_cast < Index > ( this->size());
+            if (index < 0 ) {
+                index += ((-index) / static_cast < Index > ( this->size()) + 1) * static_cast < Index > ( this->size());
             }
 
-            if ( i >= static_cast<Index>(this->size()) ) {
-                i = static_cast < Index > ( i ) % static_cast < Index > ( this->size());
+            if (index >= static_cast<Index>(this->size()) ) {
+                index = static_cast < Index > ( index ) % static_cast < Index > ( this->size());
             }
 
-            return this->_p[i];
+            return this->_p[index];
         }
 
         /**
          * @brief Get Operator used to acquire element value at given index, behaves circularly
          *
-         * @param i : Index = index to acquire value from
+         * @param index : Index = index to acquire value from
          *
          * @exceptsafe
          *
@@ -1594,26 +1752,26 @@ namespace cds {
          *
          * @test tested in primitive/StringTest/Content Functions Tests
          */
-        __CDS_NoDiscard __CDS_cpplang_ConstexprConditioned auto operator [] (Index i) const noexcept -> ElementType {
+        __CDS_NoDiscard __CDS_cpplang_ConstexprConditioned auto operator [] (Index index) const noexcept -> ElementType {
             if ( this->empty() ) {
                 return '\0';
             }
 
-            if ( i < 0 ) {
-                i += ((-i) / static_cast < Index > ( this->size()) + 1) * static_cast < Index > ( this->size());
+            if (index < 0 ) {
+                index += ((-index) / static_cast < Index > ( this->size()) + 1) * static_cast < Index > ( this->size());
             }
 
-            if ( i >= static_cast<Index>(this->size()) ) {
-                i = i % static_cast < Index > ( this->size());
+            if (index >= static_cast<Index>(this->size()) ) {
+                index = index % static_cast < Index > ( this->size());
             }
 
-            return this->_p[i];
+            return this->_p[index];
         }
 
         /**
          * @brief Explicit Get Function used to acquire element at given index, behaves circularly, calls operator []
          *
-         * @param i : Index = index to acquire element from
+         * @param index : Index = index to acquire element from
          *
          * @throws String::StringNullAccess() if used on an empty String
          *
@@ -1621,12 +1779,14 @@ namespace cds {
          *
          * @test If operator [] has a test, function is tested
          */
-        __CDS_MaybeUnused __CDS_NoDiscard __CDS_cpplang_ConstexprConditioned auto at (Index i) noexcept (false) -> ElementType & { return this->operator[](i); }
+        __CDS_MaybeUnused __CDS_NoDiscard __CDS_cpplang_ConstexprConditioned auto at (Index index) noexcept (false) -> ElementType & {
+            return this->operator[](index);
+        }
 
         /**
          * @brief Get Operator used to acquire element value at given index, behaves circularly, calls operator []
          *
-         * @param i : Index = index to acquire value from
+         * @param index : Index = index to acquire value from
          *
          * @exceptsafe
          *
@@ -1634,12 +1794,14 @@ namespace cds {
          *
          * @test tested in primitive/StringTest/Content Functions Tests
          */
-        __CDS_NoDiscard __CDS_MaybeUnused __CDS_cpplang_ConstexprConditioned auto at (Index i) const noexcept -> ElementType { return this->operator[](i); }
+        __CDS_NoDiscard __CDS_MaybeUnused __CDS_cpplang_ConstexprConditioned auto at (Index index) const noexcept -> ElementType {
+            return this->operator[](index);
+        }
 
         /**
          * @brief Explicit Get Function used to acquire element at given index, behaves circularly, calls operator []
          *
-         * @param i : Index = index to acquire element from
+         * @param index : Index = index to acquire element from
          *
          * @throws String::StringNullAccess() if used on an empty String
          *
@@ -1647,12 +1809,14 @@ namespace cds {
          *
          * @test If operator [] has a test, function is tested
          */
-        __CDS_NoDiscard __CDS_MaybeUnused __CDS_cpplang_ConstexprConditioned auto get (Index i) noexcept (false) -> ElementType & { return this->operator[](i); }
+        __CDS_NoDiscard __CDS_MaybeUnused __CDS_cpplang_ConstexprConditioned auto get (Index index) noexcept (false) -> ElementType & {
+            return this->operator[](index);
+        }
 
         /**
          * @brief Get Operator used to acquire element value at given index, behaves circularly, calls operator []
          *
-         * @param i : Index = index to acquire value from
+         * @param index : Index = index to acquire value from
          *
          * @exceptsafe
          *
@@ -1660,7 +1824,9 @@ namespace cds {
          *
          * @test tested in primitive/StringTest/Content Functions Tests
          */
-        __CDS_NoDiscard __CDS_MaybeUnused __CDS_cpplang_ConstexprConditioned auto get (Index i) const noexcept -> ElementType { return this->operator[](i); }
+        __CDS_NoDiscard __CDS_MaybeUnused __CDS_cpplang_ConstexprConditioned auto get (Index index) const noexcept -> ElementType {
+            return this->operator[](index);
+        }
 
         /**
          * @brief Function used to acquire element at the front of the String
@@ -1671,7 +1837,9 @@ namespace cds {
          *
          * @test If operator [] has a test, function is tested
          */
-        __CDS_NoDiscard __CDS_MaybeUnused __CDS_cpplang_ConstexprConditioned auto front () noexcept (false) -> ElementType & { return this->operator[](0); }
+        __CDS_NoDiscard __CDS_MaybeUnused __CDS_cpplang_ConstexprConditioned auto front () noexcept (false) -> ElementType & {
+            return this->operator[](0);
+        }
 
         /**
          * @brief Function used to acquire the last element in the String
@@ -1682,7 +1850,9 @@ namespace cds {
          *
          * @test If operator [] has a test, function is tested
          */
-        __CDS_NoDiscard __CDS_MaybeUnused __CDS_cpplang_ConstexprConditioned auto back () noexcept (false) -> ElementType & { return this->operator[](static_cast < Index > (this->_l) - 1); }
+        __CDS_NoDiscard __CDS_MaybeUnused __CDS_cpplang_ConstexprConditioned auto back () noexcept (false) -> ElementType & {
+            return this->operator[](static_cast < Index > (this->_l) - 1);
+        }
 
         /**
          * @brief Function used to acquire the value of the first element in the String, if any. Returns '\0' if empty
@@ -1693,7 +1863,9 @@ namespace cds {
          *
          * @test If operator [] has a test, function is tested
          */
-        __CDS_NoDiscard __CDS_MaybeUnused __CDS_cpplang_ConstexprConditioned auto front() const noexcept -> ElementType { return this->empty() ? '\0' : this->_p[0]; }
+        __CDS_NoDiscard __CDS_MaybeUnused __CDS_cpplang_ConstexprConditioned auto front() const noexcept -> ElementType {
+            return this->empty() ? '\0' : this->_p[0];
+        }
 
         /**
          * @brief Function used to acquire the value of the last element in the String, if any. Returns '\0' if empty
@@ -1711,7 +1883,7 @@ namespace cds {
         /**
          * @brief Accumulate operator used to append an ElementType to the String
          *
-         * @param v : ElementType = Value to add to the end of the String
+         * @param value : ElementType = Value to add to the end of the String
          *
          * @exceptsafe
          *
@@ -1719,12 +1891,14 @@ namespace cds {
          *
          * @test tested in primitive/StringTest/Append/Prepend Tests
          */
-        __CDS_cpplang_ConstexprDynamicAllocation auto operator += (ElementType v) noexcept -> String & { return this->append( v ); }
+        __CDS_cpplang_ConstexprDynamicAllocation auto operator += (ElementType value) noexcept -> String & {
+            return this->append(value );
+        }
 
         /**
          * @brief Accumulate operator used to append a StringLiteral to the String
          *
-         * @param v : StringLiteral = Address to a StringLiteral to add to the end of the String
+         * @param stringLiteral : StringLiteral = Address to a StringLiteral to add to the end of the String
          *
          * @exceptsafe
          *
@@ -1732,12 +1906,14 @@ namespace cds {
          *
          * @test tested in primitive/StringTest/Append/Prepend Tests
          */
-        __CDS_cpplang_ConstexprDynamicAllocation auto operator += (StringLiteral v) noexcept -> String & { return this->append( v ); }
+        __CDS_cpplang_ConstexprDynamicAllocation auto operator += (StringLiteral stringLiteral) noexcept -> String & {
+            return this->append(stringLiteral );
+        }
 
         /**
          * @brief Accumulate operator used to append a CString to the String
          *
-         * @param v : CString = Address to a CString to add to the end of the String
+         * @param string : CString = Address to a CString to add to the end of the String
          *
          * @exceptsafe
          *
@@ -1745,12 +1921,14 @@ namespace cds {
          *
          * @test tested in primitive/StringTest/Append/Prepend Tests
          */
-        __CDS_cpplang_ConstexprDynamicAllocation auto operator += (CString v) noexcept -> String & { return this->append( v ); }
+        __CDS_cpplang_ConstexprDynamicAllocation auto operator += (CString string) noexcept -> String & {
+            return this->append(string );
+        }
 
         /**
          * @brief Accumulate operator used to append a String to the String
          *
-         * @param v : String cref = Constant Reference to the String to add at the end of the String
+         * @param string : String cref = Constant Reference to the String to add at the end of the String
          *
          * @exceptsafe
          *
@@ -1758,12 +1936,14 @@ namespace cds {
          *
          * @test tested in primitive/StringTest/Append/Prepend Tests
          */
-        __CDS_cpplang_ConstexprDynamicAllocation auto operator += (String const & v) noexcept -> String & { return this->append( v ); }
+        __CDS_cpplang_ConstexprDynamicAllocation auto operator += (String const & string) noexcept -> String & {
+            return this->append(string );
+        }
 
         /**
          * @brief Accumulate operator used to append a std::string to the String
          *
-         * @param v : std::string cref = Constant Reference to the std::string to add at the end of the String
+         * @param string : std::string cref = Constant Reference to the std::string to add at the end of the String
          *
          * @exceptsafe
          *
@@ -1771,12 +1951,14 @@ namespace cds {
          *
          * @test tested in primitive/StringTest/Append/Prepend Tests
          */
-        __CDS_OptimalInline auto operator += (std::string const & v) noexcept -> String & { return this->append( v ); }
+        __CDS_OptimalInline auto operator += (std::string const & string) noexcept -> String & {
+            return this->append(string );
+        }
 
         /**
          * @brief Accumulate operator used to append a sint16 to the String
          *
-         * @param v : sint16 = value to add at the end of the String
+         * @param value : sint16 = value to add at the end of the String
          *
          * @exceptsafe
          *
@@ -1784,12 +1966,14 @@ namespace cds {
          *
          * @test tested in primitive/StringTest/Append/Prepend Tests
          */
-        __CDS_cpplang_ConstexprDynamicAllocation auto operator += (sint16 v) noexcept -> String & { return this->append(v); }
+        __CDS_cpplang_ConstexprDynamicAllocation auto operator += (sint16 value) noexcept -> String & {
+            return this->append(value);
+        }
 
         /**
          * @brief Accumulate operator used to append a sint32 to the String
          *
-         * @param v : sint32 = value to add at the end of the String
+         * @param value : sint32 = value to add at the end of the String
          *
          * @exceptsafe
          *
@@ -1797,12 +1981,14 @@ namespace cds {
          *
          * @test tested in primitive/StringTest/Append/Prepend Tests
          */
-        __CDS_cpplang_ConstexprDynamicAllocation auto operator += (sint32 v) noexcept -> String & { return this->append(v); }
+        __CDS_cpplang_ConstexprDynamicAllocation auto operator += (sint32 value) noexcept -> String & {
+            return this->append(value);
+        }
 
         /**
          * @brief Accumulate operator used to append a sint64 to the String
          *
-         * @param v : sint64 = value to add at the end of the String
+         * @param value : sint64 = value to add at the end of the String
          *
          * @exceptsafe
          *
@@ -1810,12 +1996,14 @@ namespace cds {
          *
          * @test tested in primitive/StringTest/Append/Prepend Tests
          */
-        __CDS_cpplang_ConstexprDynamicAllocation auto operator += (sint64 v) noexcept -> String & { return this->append(v); }
+        __CDS_cpplang_ConstexprDynamicAllocation auto operator += (sint64 value) noexcept -> String & {
+            return this->append(value);
+        }
 
         /**
          * @brief Accumulate operator used to append a uint8 to the String
          *
-         * @param v : uint8 = value to add at the end of the String
+         * @param value : uint8 = value to add at the end of the String
          *
          * @exceptsafe
          *
@@ -1823,12 +2011,14 @@ namespace cds {
          *
          * @test tested in primitive/StringTest/Append/Prepend Tests
          */
-        __CDS_cpplang_ConstexprDynamicAllocation auto operator += (uint8 v) noexcept -> String & { return this->append(v); }
+        __CDS_cpplang_ConstexprDynamicAllocation auto operator += (uint8 value) noexcept -> String & {
+            return this->append(value);
+        }
 
         /**
          * @brief Accumulate operator used to append a uint16 to the String
          *
-         * @param v : uint16 = value to add at the end of the String
+         * @param value : uint16 = value to add at the end of the String
          *
          * @exceptsafe
          *
@@ -1836,12 +2026,14 @@ namespace cds {
          *
          * @test tested in primitive/StringTest/Append/Prepend Tests
          */
-        __CDS_cpplang_ConstexprDynamicAllocation auto operator += (uint16 v) noexcept -> String & { return this->append(v); }
+        __CDS_cpplang_ConstexprDynamicAllocation auto operator += (uint16 value) noexcept -> String & {
+            return this->append(value);
+        }
 
         /**
          * @brief Accumulate operator used to append a uint32 to the String
          *
-         * @param v : uint32 = value to add at the end of the String
+         * @param value : uint32 = value to add at the end of the String
          *
          * @exceptsafe
          *
@@ -1849,12 +2041,14 @@ namespace cds {
          *
          * @test tested in primitive/StringTest/Append/Prepend Tests
          */
-        __CDS_cpplang_ConstexprDynamicAllocation auto operator += (uint32 v) noexcept -> String & { return this->append(v); }
+        __CDS_cpplang_ConstexprDynamicAllocation auto operator += (uint32 value) noexcept -> String & {
+            return this->append(value);
+        }
 
         /**
          * @brief Accumulate operator used to append a uint64 to the String
          *
-         * @param v : uint64 = value to add at the end of the String
+         * @param value : uint64 = value to add at the end of the String
          *
          * @exceptsafe
          *
@@ -1862,12 +2056,14 @@ namespace cds {
          *
          * @test tested in primitive/StringTest/Append/Prepend Tests
          */
-        __CDS_cpplang_ConstexprDynamicAllocation auto operator += (uint64 v) noexcept -> String & { return this->append(v); }
+        __CDS_cpplang_ConstexprDynamicAllocation auto operator += (uint64 value) noexcept -> String & {
+            return this->append(value);
+        }
 
         /**
          * @brief Accumulate operator used to append a float to the String
          *
-         * @param v : float = value to add at the end of the String
+         * @param value : float = value to add at the end of the String
          *
          * @exceptsafe
          *
@@ -1875,12 +2071,14 @@ namespace cds {
          *
          * @test tested in primitive/StringTest/Append/Prepend Tests
          */
-        __CDS_OptimalInline auto operator += (float v) noexcept -> String & { return this->operator+=( std::to_string(v) ); }
+        __CDS_OptimalInline auto operator += (float value) noexcept -> String & {
+            return this->operator+=( std::to_string(value) );
+        }
 
         /**
          * @brief Accumulate operator used to append a double to the String
          *
-         * @param v : double = value to add at the end of the String
+         * @param value : double = value to add at the end of the String
          *
          * @exceptsafe
          *
@@ -1888,14 +2086,16 @@ namespace cds {
          *
          * @test tested in primitive/StringTest/Append/Prepend Tests
          */
-        __CDS_OptimalInline auto operator += (double v) noexcept -> String & { return this->operator+=( std::to_string(v) ); }
+        __CDS_OptimalInline auto operator += (double value) noexcept -> String & {
+            return this->operator+=( std::to_string(value) );
+        }
 
     #if defined(CDS_QT)
 
         /**
          * @brief Accumulate operator used to append a QString to the String
          *
-         * @param v : QString cref = Constant Reference to a QString to append at the end of this String
+         * @param string : QString cref = Constant Reference to a QString to append at the end of this String
          *
          * @exceptsafe
          *
@@ -1903,14 +2103,16 @@ namespace cds {
          *
          * @test tested in MSK
          */
-        __CDS_OptimalInline auto operator += (QString const & v) noexcept -> String & { return this->operator += (String(v)); }
+        __CDS_OptimalInline auto operator += (QString const & string) noexcept -> String & {
+            return this->operator += (String(string));
+        }
 
     #endif
 
         /**
          * @brief Append Function used to append an ElementType to the String
          *
-         * @param v : ElementType = Value to add to the end of the String
+         * @param value : ElementType = Value to add to the end of the String
          *
          * @exceptsafe
          *
@@ -1918,10 +2120,10 @@ namespace cds {
          *
          * @test tested in primitive/StringTest/Append/Prepend Tests
          */
-        __CDS_cpplang_ConstexprDynamicAllocation auto append (ElementType v) noexcept -> String & {
+        __CDS_cpplang_ConstexprDynamicAllocation auto append (ElementType value) noexcept -> String & {
             this->_alloc(1u);
 
-            this->_p[this->_l++] = v;
+            this->_p[this->_l++] = value;
             return * this;
         }
 
@@ -2010,12 +2212,23 @@ namespace cds {
          *
          * @test tested in primitive/StringTest/Append/Prepend Tests
          */
-        __CDS_OptimalInline auto append (std::string const & s) noexcept -> String & { return this->append(s.c_str()); }
+        __CDS_OptimalInline auto append (std::string const & string) noexcept -> String & {
+            if ( string.empty() ) {
+                return * this;
+            }
+
+            this->_alloc(string.size());
+
+            (void) std::memcpy ( this->_p + this->_l, string.c_str(), string.size() );
+            this->_l += string.size();
+
+            return * this;
+        }
 
         /**
          * @brief Append Function used to append a sint16 to the String
          *
-         * @param v : sint16 = value to add at the end of the String
+         * @param value : sint16 = value to add at the end of the String
          *
          * @exceptsafe
          *
@@ -2023,9 +2236,9 @@ namespace cds {
          *
          * @test tested in primitive/StringTest/Append/Prepend Tests
          */
-        __CDS_cpplang_ConstexprDynamicAllocation auto append (sint16 v) noexcept -> String & {
-            bool const negative = v < 0;
-            uint16 const uValue = negative ? static_cast < uint16 > (~ v) + 1u : static_cast < uint16 > ( v ); // NOLINT(clion-misra-cpp2008-5-0-6)
+        __CDS_cpplang_ConstexprDynamicAllocation auto append (sint16 value) noexcept -> String & {
+            bool const negative = value < 0;
+            uint16 const uValue = negative ? static_cast < uint16 > (~ value) + 1u : static_cast < uint16 > ( value ); // NOLINT(clion-misra-cpp2008-5-0-6)
             auto const length = utility :: conversion :: toCharBase10Length( uValue );
 
             this->_alloc(static_cast < Size > ( length ) + static_cast < uint8 > (negative));
@@ -2043,7 +2256,7 @@ namespace cds {
         /**
          * @brief Append Function used to append a sint32 to the String
          *
-         * @param v : sint32 = value to add at the end of the String
+         * @param value : sint32 = value to add at the end of the String
          *
          * @exceptsafe
          *
@@ -2051,9 +2264,9 @@ namespace cds {
          *
          * @test tested in primitive/StringTest/Append/Prepend Tests
          */
-        __CDS_cpplang_ConstexprDynamicAllocation auto append (sint32 v) noexcept -> String & {
-            bool const negative = v < 0;
-            uint32 const uValue = negative ? static_cast < uint32 > (~ v) + 1u : static_cast < uint32 > ( v );
+        __CDS_cpplang_ConstexprDynamicAllocation auto append (sint32 value) noexcept -> String & {
+            bool const negative = value < 0;
+            uint32 const uValue = negative ? static_cast < uint32 > (~ value) + 1u : static_cast < uint32 > ( value );
             auto const length = utility :: conversion :: toCharBase10Length( uValue );
 
             this->_alloc(static_cast < Size > ( length ) + static_cast < uint8 > (negative));
@@ -2071,7 +2284,7 @@ namespace cds {
         /**
          * @brief Append Function used to append a sint64 to the String
          *
-         * @param v : sint64 = value to add at the end of the String
+         * @param value : sint64 = value to add at the end of the String
          *
          * @exceptsafe
          *
@@ -2079,9 +2292,9 @@ namespace cds {
          *
          * @test tested in primitive/StringTest/Append/Prepend Tests
          */
-        __CDS_cpplang_ConstexprDynamicAllocation auto append (sint64 v) noexcept -> String & {
-            bool const negative = v < 0;
-            uint64 const uValue = negative ? static_cast < uint64 > (~ v) + 1u : static_cast < uint64 > (v);
+        __CDS_cpplang_ConstexprDynamicAllocation auto append (sint64 value) noexcept -> String & {
+            bool const negative = value < 0;
+            uint64 const uValue = negative ? static_cast < uint64 > (~ value) + 1u : static_cast < uint64 > (value);
             auto const length = utility :: conversion :: toCharBase10Length( uValue );
 
             this->_alloc(static_cast < Size > ( length ) + static_cast < uint8 > (negative));
@@ -2099,7 +2312,7 @@ namespace cds {
         /**
          * @brief Append Function used to append a uint8 to the String
          *
-         * @param v : uint8 = value to add at the end of the String
+         * @param value : uint8 = value to add at the end of the String
          *
          * @exceptsafe
          *
@@ -2107,11 +2320,11 @@ namespace cds {
          *
          * @test tested in primitive/StringTest/Append/Prepend Tests
          */
-        __CDS_cpplang_ConstexprDynamicAllocation auto append (uint8 v) noexcept -> String & {
-            uint32 const length = utility :: conversion::toCharBase10Length(v);
+        __CDS_cpplang_ConstexprDynamicAllocation auto append (uint8 value) noexcept -> String & {
+            uint32 const length = utility :: conversion::toCharBase10Length(value);
             this->_alloc(length);
 
-            utility :: conversion::toCharBase10(this->_p + this->_l, length, v);
+            utility :: conversion::toCharBase10(this->_p + this->_l, length, value);
             this->_l += length;
             return * this;
         }
@@ -2119,7 +2332,7 @@ namespace cds {
         /**
          * @brief Append Function used to append a uint16 to the String
          *
-         * @param v : uint16 = value to add at the end of the String
+         * @param value : uint16 = value to add at the end of the String
          *
          * @exceptsafe
          *
@@ -2127,11 +2340,11 @@ namespace cds {
          *
          * @test tested in primitive/StringTest/Append/Prepend Tests
          */
-        __CDS_cpplang_ConstexprDynamicAllocation auto append (uint16 v) noexcept -> String & {
-            uint32 const length = utility :: conversion::toCharBase10Length(v);
+        __CDS_cpplang_ConstexprDynamicAllocation auto append (uint16 value) noexcept -> String & {
+            uint32 const length = utility :: conversion::toCharBase10Length(value);
             this->_alloc(length);
 
-            utility :: conversion::toCharBase10(this->_p + this->_l, length, v);
+            utility :: conversion::toCharBase10(this->_p + this->_l, length, value);
             this->_l += length;
             return * this;
         }
@@ -2139,7 +2352,7 @@ namespace cds {
         /**
          * @brief Append Function used to append a uint32 to the String
          *
-         * @param v : uint32 = value to add at the end of the String
+         * @param value : uint32 = value to add at the end of the String
          *
          * @exceptsafe
          *
@@ -2147,11 +2360,11 @@ namespace cds {
          *
          * @test tested in primitive/StringTest/Append/Prepend Tests
          */
-        __CDS_cpplang_ConstexprDynamicAllocation auto append (uint32 v) noexcept -> String & {
-            uint32 const length = utility :: conversion::toCharBase10Length(v);
+        __CDS_cpplang_ConstexprDynamicAllocation auto append (uint32 value) noexcept -> String & {
+            uint32 const length = utility :: conversion::toCharBase10Length(value);
             this->_alloc(length);
 
-            utility :: conversion::toCharBase10(this->_p + this->_l, length, v);
+            utility :: conversion::toCharBase10(this->_p + this->_l, length, value);
             this->_l += length;
             return * this;
         }
@@ -2159,7 +2372,7 @@ namespace cds {
         /**
          * @brief Append Function used to append a uint64 to the String
          *
-         * @param v : uint64 = value to add at the end of the String
+         * @param value : uint64 = value to add at the end of the String
          *
          * @exceptsafe
          *
@@ -2167,11 +2380,11 @@ namespace cds {
          *
          * @test tested in primitive/StringTest/Append/Prepend Tests
          */
-        __CDS_cpplang_ConstexprDynamicAllocation auto append (uint64 v) noexcept -> String & {
-            uint32 const length = utility :: conversion::toCharBase10Length(v);
+        __CDS_cpplang_ConstexprDynamicAllocation auto append (uint64 value) noexcept -> String & {
+            uint32 const length = utility :: conversion::toCharBase10Length(value);
             this->_alloc(length);
 
-            utility :: conversion::toCharBase10(this->_p + this->_l, length, v);
+            utility :: conversion::toCharBase10(this->_p + this->_l, length, value);
             this->_l += length;
             return * this;
         }
@@ -2179,7 +2392,7 @@ namespace cds {
         /**
          * @brief Append Function used to append a float to the String
          *
-         * @param v : float = value to add at the end of the String
+         * @param value : float = value to add at the end of the String
          *
          * @exceptsafe
          *
@@ -2187,12 +2400,14 @@ namespace cds {
          *
          * @test tested in primitive/StringTest/Append/Prepend Tests
          */
-        __CDS_OptimalInline auto append (float v) noexcept -> String & { return this->append( std::to_string(v) ); }
+        __CDS_OptimalInline auto append (float value) noexcept -> String & {
+            return this->append( std::to_string(value) );
+        }
 
         /**
          * @brief Append Function used to append a double to the String
          *
-         * @param v : double = value to add at the end of the String
+         * @param value : double = value to add at the end of the String
          *
          * @exceptsafe
          *
@@ -2200,14 +2415,16 @@ namespace cds {
          *
          * @test tested in primitive/StringTest/Append/Prepend Tests
          */
-        __CDS_OptimalInline auto append (double v) noexcept -> String & { return this->append( std::to_string(v) ); }
+        __CDS_OptimalInline auto append (double value) noexcept -> String & {
+            return this->append(std::to_string(value) );
+        }
 
     #if defined(CDS_QT)
 
         /**
          * @brief Append Function used to append a QString to the String
          *
-         * @param v : QString cref = Constant Reference to a QString to append at the end of this String
+         * @param string : QString cref = Constant Reference to a QString to append at the end of this String
          *
          * @exceptsafe
          *
@@ -2215,7 +2432,9 @@ namespace cds {
          *
          * @test tested in MSK
          */
-        __CDS_OptimalInline auto append (QString const & v) noexcept -> String & { return this->append(String(v)); }
+        __CDS_OptimalInline auto append (QString const & string) noexcept -> String & {
+            return this->append(String(string));
+        }
 
     #endif
 
@@ -2231,7 +2450,9 @@ namespace cds {
          *
          * @test tested in primitive/StringTest/Append/Prepend Tests
          */
-        __CDS_OptimalInline auto prepend (ElementType e) noexcept -> String & { return this->prepend(String().append(e)); }
+        __CDS_OptimalInline auto prepend (ElementType element) noexcept -> String & {
+            return this->prepend(String().append(element));
+        }
 
         /**
          * @brief Prepend Function used to prepend a StringLiteral to the String
@@ -2244,7 +2465,9 @@ namespace cds {
          *
          * @test tested in primitive/StringTest/Append/Prepend Tests
          */
-        __CDS_OptimalInline auto prepend (StringLiteral cString) noexcept -> String & { return this->prepend(String(cString)); }
+        __CDS_OptimalInline auto prepend (StringLiteral cString) noexcept -> String & {
+            return this->prepend(String(cString));
+        }
 
         /**
          * @brief Prepend Function used to prepend a CString to the String
@@ -2257,7 +2480,9 @@ namespace cds {
          *
          * @test tested in primitive/StringTest/Append/Prepend Tests
          */
-        __CDS_OptimalInline auto prepend (CString cString) noexcept -> String & { return this->prepend(String(cString)); }
+        __CDS_OptimalInline auto prepend (CString cString) noexcept -> String & {
+            return this->prepend(String(cString));
+        }
 
         /**
          * @brief Prepend Function used to prepend a String to the String
@@ -2270,7 +2495,9 @@ namespace cds {
          *
          * @test tested in primitive/StringTest/Append/Prepend Tests
          */
-        __CDS_OptimalInline auto prepend (String const & s) noexcept -> String & { return * this = (String(* this) = s).append(* this); }
+        __CDS_OptimalInline auto prepend (String const & string) noexcept -> String & {
+            return * this = (String( string )).append(* this);
+        }
 
         /**
          * @brief Prepend Function used to prepend a std::string to the String
@@ -2283,12 +2510,14 @@ namespace cds {
          *
          * @test tested in primitive/StringTest/Append/Prepend Tests
          */
-        __CDS_OptimalInline auto prepend (std::string const & s) noexcept -> String & { return this->prepend(s.c_str()); }
+        __CDS_OptimalInline auto prepend (std::string const & string) noexcept -> String & {
+            return this->prepend(string.c_str());
+        }
 
         /**
          * @brief Prepend Function used to prepend a sint16 to the String
          *
-         * @param v : sint16 = value to add at the beginning of the String
+         * @param value : sint16 = value to add at the beginning of the String
          *
          * @exceptsafe
          *
@@ -2296,12 +2525,14 @@ namespace cds {
          *
          * @test tested in primitive/StringTest/Append/Prepend Tests
          */
-        __CDS_OptimalInline auto prepend (sint16 v) noexcept -> String & { return this->prepend(String(v)); }
+        __CDS_OptimalInline auto prepend (sint16 value) noexcept -> String & {
+            return this->prepend(String(value));
+        }
 
         /**
          * @brief Prepend Function used to prepend a sint32 to the String
          *
-         * @param v : sint32 = value to add at the beginning of the String
+         * @param value : sint32 = value to add at the beginning of the String
          *
          * @exceptsafe
          *
@@ -2309,12 +2540,14 @@ namespace cds {
          *
          * @test tested in primitive/StringTest/Append/Prepend Tests
          */
-        __CDS_OptimalInline auto prepend (sint32 v) noexcept -> String & { return this->prepend(String(v)); }
+        __CDS_OptimalInline auto prepend (sint32 value) noexcept -> String & {
+            return this->prepend(String(value));
+        }
 
         /**
          * @brief Prepend Function used to prepend a sint64 to the String
          *
-         * @param v : sint64 = value to add at the beginning of the String
+         * @param value : sint64 = value to add at the beginning of the String
          *
          * @exceptsafe
          *
@@ -2322,12 +2555,14 @@ namespace cds {
          *
          * @test tested in primitive/StringTest/Append/Prepend Tests
          */
-        __CDS_OptimalInline auto prepend (sint64 v) noexcept -> String & { return this->prepend(String(v)); }
+        __CDS_OptimalInline auto prepend (sint64 value) noexcept -> String & {
+            return this->prepend(String(value));
+        }
 
         /**
          * @brief Prepend Function used to prepend a uint8 to the String
          *
-         * @param v : uint8 = value to add at the beginning of the String
+         * @param value : uint8 = value to add at the beginning of the String
          *
          * @exceptsafe
          *
@@ -2335,12 +2570,14 @@ namespace cds {
          *
          * @test tested in primitive/StringTest/Append/Prepend Tests
          */
-        __CDS_OptimalInline auto prepend (uint8 v) noexcept -> String & { return this->prepend(String(v)); }
+        __CDS_OptimalInline auto prepend (uint8 value) noexcept -> String & {
+            return this->prepend(String(value));
+        }
 
         /**
          * @brief Prepend Function used to prepend a uint16 to the String
          *
-         * @param v : uint16 = value to add at the beginning of the String
+         * @param value : uint16 = value to add at the beginning of the String
          *
          * @exceptsafe
          *
@@ -2348,12 +2585,14 @@ namespace cds {
          *
          * @test tested in primitive/StringTest/Append/Prepend Tests
          */
-        __CDS_OptimalInline auto prepend (uint16 v) noexcept -> String & { return this->prepend(String(v)); }
+        __CDS_OptimalInline auto prepend (uint16 value) noexcept -> String & {
+            return this->prepend(String(value));
+        }
 
         /**
          * @brief Prepend Function used to prepend a uint32 to the String
          *
-         * @param v : uint32 = value to add at the beginning of the String
+         * @param value : uint32 = value to add at the beginning of the String
          *
          * @exceptsafe
          *
@@ -2361,12 +2600,14 @@ namespace cds {
          *
          * @test tested in primitive/StringTest/Append/Prepend Tests
          */
-        __CDS_OptimalInline auto prepend (uint32 v) noexcept -> String & { return this->prepend(String(v)); }
+        __CDS_OptimalInline auto prepend (uint32 value) noexcept -> String & {
+            return this->prepend(String(value));
+        }
 
         /**
          * @brief Prepend Function used to prepend a uint64 to the String
          *
-         * @param v : uint64 = value to add at the beginning of the String
+         * @param value : uint64 = value to add at the beginning of the String
          *
          * @exceptsafe
          *
@@ -2374,12 +2615,14 @@ namespace cds {
          *
          * @test tested in primitive/StringTest/Append/Prepend Tests
          */
-        __CDS_OptimalInline auto prepend (uint64 v) noexcept -> String & { return this->prepend(String(v)); }
+        __CDS_OptimalInline auto prepend (uint64 value) noexcept -> String & {
+            return this->prepend(String(value));
+        }
 
         /**
          * @brief Prepend Function used to prepend a float to the String
          *
-         * @param v : float = value to add at the prepend of the String
+         * @param value : float = value to add at the prepend of the String
          *
          * @exceptsafe
          *
@@ -2387,12 +2630,14 @@ namespace cds {
          *
          * @test tested in primitive/StringTest/Append/Prepend Tests
          */
-        __CDS_OptimalInline auto prepend (float v) noexcept -> String & { return this->prepend( std::to_string(v) ); }
+        __CDS_OptimalInline auto prepend (float value) noexcept -> String & {
+            return this->prepend( std::to_string(value) );
+        }
 
         /**
          * @brief Prepend Function used to prepend a double to the String
          *
-         * @param v : double = value to add at the beginning of the String
+         * @param value : double = value to add at the beginning of the String
          *
          * @exceptsafe
          *
@@ -2400,14 +2645,16 @@ namespace cds {
          *
          * @test tested in primitive/StringTest/Append/Prepend Tests
          */
-        __CDS_OptimalInline auto prepend (double v) noexcept -> String & { return this->prepend( std::to_string(v) ); }
+        __CDS_OptimalInline auto prepend (double value) noexcept -> String & {
+            return this->prepend( std::to_string(value) );
+        }
 
     #if defined(CDS_QT)
 
         /**
          * @brief Prepend Function used to prepend a QString to the String
          *
-         * @param v : QString cref = Constant Reference to a QString to append at the beginning of this String
+         * @param string : QString cref = Constant Reference to a QString to append at the beginning of this String
          *
          * @exceptsafe
          *
@@ -2416,7 +2663,9 @@ namespace cds {
          * @test tested in MSK
          */
     
-        __CDS_OptimalInline auto prepend (QString const & v) noexcept -> String & { return this->prepend(String(v)); }
+        __CDS_OptimalInline auto prepend (QString const & string) noexcept -> String & {
+            return this->prepend(String(string));
+        }
 
     #endif
 
@@ -2429,7 +2678,9 @@ namespace cds {
          *
          * @test tested in primitive/StringTest
          */
-        __CDS_NoDiscard __CDS_OptimalInline auto toStdString () const noexcept -> std::string { return this->cStr(); }
+        __CDS_NoDiscard __CDS_OptimalInline auto toStdString () const noexcept -> std::string {
+            return this->cStr();
+        }
 
         /**
          * @brief Cast Specification used to obtain a std::string from this string
@@ -2440,7 +2691,9 @@ namespace cds {
          *
          * @test tested in primitive/StringTest
          */
-        __CDS_OptimalInline operator std::string () const noexcept { return this->toStdString(); } // NOLINT(google-explicit-constructor)
+        __CDS_OptimalInline operator std::string () const noexcept { // NOLINT(google-explicit-constructor)
+            return this->toStdString();
+        }
 
     #if defined(CDS_QT)
 
@@ -2453,7 +2706,9 @@ namespace cds {
          *
          * @test tested in MSK
          */
-        __CDS_NoDiscard __CDS_OptimalInline auto toQString () const noexcept -> QString { return QString(this->cStr()); }
+        __CDS_NoDiscard __CDS_OptimalInline auto toQString () const noexcept -> QString {
+            return {this->cStr() };
+        }
     
         /**
          * @brief Cast Specification used to obtain a QString from this string
@@ -2464,7 +2719,9 @@ namespace cds {
          *
          * @test tested in MSK
          */
-        __CDS_OptimalInline operator QString () const noexcept { return this->toQString(); }
+        __CDS_OptimalInline operator QString () const noexcept {  // NOLINT(google-explicit-constructor)
+            return this->toQString();
+        }
 
     #endif
 
@@ -2478,7 +2735,9 @@ namespace cds {
          *
          * @test tested in primitive/StringTest
          */
-        __CDS_NoDiscard constexpr auto cStr () const noexcept -> StringLiteral { return this->_p == nullptr ? "" : this->_p; }
+        __CDS_NoDiscard constexpr auto cStr () const noexcept -> StringLiteral {
+            return this->_p == nullptr ? "" : this->_p;
+        }
 
         /**
          * @brief Cast Specification used to obtain the immutable C String buffer of this String object
@@ -2489,7 +2748,9 @@ namespace cds {
          *
          * @test tested in primitive/StringTest/Append/
          */
-        constexpr explicit operator StringLiteral () const noexcept { return this->cStr(); }
+        constexpr explicit operator StringLiteral () const noexcept {
+            return this->cStr();
+        }
 
         /**
          * @brief Function used to obtain the mutable C String buffer of this String object
@@ -2500,7 +2761,9 @@ namespace cds {
          *
          * @test tested in primitive/StringTest/Append/
          */
-        __CDS_NoDiscard __CDS_cpplang_NonConstConstexprMemberFunction auto data () noexcept -> CString  { return this->_p; }
+        __CDS_NoDiscard __CDS_cpplang_NonConstConstexprMemberFunction auto data () noexcept -> CString  {
+            return this->_p;
+        }
 
         /**
          * @brief Cast Specification used to obtain the mutable C String buffer of this String object
@@ -2511,7 +2774,9 @@ namespace cds {
          *
          * @test tested in primitive/StringTest/Append/
          */
-        __CDS_cpplang_NonConstConstexprMemberFunction explicit operator CString () noexcept { return this->data(); }
+        __CDS_cpplang_NonConstConstexprMemberFunction explicit operator CString () noexcept {
+            return this->data();
+        }
 
         /**
          * @brief Function used to obtain the indices of the given element in the String
@@ -2550,7 +2815,7 @@ namespace cds {
          *
          * @test tested in primitive/StringTest/Find Tests
          */
-        __CDS_NoDiscard auto findOf (String const &) const noexcept -> DoubleLinkedList < Index >;
+        __CDS_NoDiscard __CDS_MaybeUnused auto findOf (String const &) const noexcept -> DoubleLinkedList < Index >;
 
         /**
          * @brief Function used to obtain the indices of the elements not in the given String, in the String
@@ -2563,12 +2828,12 @@ namespace cds {
          *
          * @test tested in primitive/StringTest/Find Tests
          */
-        __CDS_NoDiscard auto findNotOf (String const &) const noexcept -> DoubleLinkedList < Index >;
+        __CDS_NoDiscard __CDS_MaybeUnused auto findNotOf (String const &) const noexcept -> DoubleLinkedList < Index >;
 
         /**
          * @brief Function used to obtain the index of the first element in the String
          *
-         * @param e : ElementType = element to find in the String
+         * @param element : ElementType = element to find in the String
          *
          * @exceptsafe
          *
@@ -2576,9 +2841,9 @@ namespace cds {
          *
          * @test tested in primitive/StringTest/Find Tests
          */
-        __CDS_NoDiscard __CDS_cpplang_ConstexprConditioned auto findFirst ( ElementType e ) const noexcept -> Index {
+        __CDS_NoDiscard __CDS_cpplang_ConstexprConditioned auto findFirst ( ElementType element ) const noexcept -> Index {
             for ( Index i = 0; static_cast < Size > ( i ) < this->_l; ++ i ) {
-                if (this->_p[i] == e) {
+                if (this->_p[i] == element) {
                     return i;
                 }
             }
@@ -2597,9 +2862,9 @@ namespace cds {
          *
          * @test tested in primitive/StringTest/Find Tests
          */
-        __CDS_NoDiscard __CDS_cpplang_ConstexprConditioned auto findFirst ( String const & o ) const noexcept -> Index {
+        __CDS_NoDiscard __CDS_cpplang_ConstexprConditioned auto findFirst ( String const & string ) const noexcept -> Index {
             for ( Index i = 0; static_cast < Size > ( i ) < this->_l; ++ i ) {
-                if (this->size() - static_cast < Size > ( i ) >= o.size() && this->substr(i, i + static_cast < Index > ( o.size())) == o) {
+                if (this->size() - static_cast < Size > ( i ) >= string.size() && this->substr(i, i + static_cast < Index > ( string.size())) == string) {
                     return i;
                 }
             }
@@ -2610,7 +2875,7 @@ namespace cds {
         /**
          * @brief Function used to obtain the index of the last element in the String
          *
-         * @param e : ElementType = element to find in the String
+         * @param element : ElementType = element to find in the String
          *
          * @exceptsafe
          *
@@ -2618,9 +2883,9 @@ namespace cds {
          *
          * @test tested in primitive/StringTest/Find Tests
          */
-        __CDS_NoDiscard __CDS_cpplang_ConstexprConditioned auto findLast ( ElementType e ) const noexcept -> Index {
+        __CDS_NoDiscard __CDS_cpplang_ConstexprConditioned auto findLast ( ElementType element ) const noexcept -> Index {
             for ( auto i = static_cast < Index > ( this->_l ) - 1; i >= 0; -- i ) {
-                if (this->_p[i] == e) {
+                if (this->_p[i] == element) {
                     return i;
                 }
             }
@@ -2639,11 +2904,11 @@ namespace cds {
          *
          * @test tested in primitive/StringTest/Find Tests
          */
-        __CDS_NoDiscard __CDS_cpplang_ConstexprDynamicAllocation auto findLast ( String const & o ) const noexcept -> Index {
-            auto i = static_cast < Index > ( this->size() ) - static_cast < Index > ( o.length() );
-            for ( ; i >= 0; i-- ) {
-                if ( this->substr(i, i + static_cast < Index > ( o.length() )) == o ) {
-                    return i;
+        __CDS_NoDiscard __CDS_MaybeUnused __CDS_cpplang_ConstexprDynamicAllocation auto findLast ( String const & string ) const noexcept -> Index {
+            auto index = static_cast < Index > ( this->size() ) - static_cast < Index > ( string.length() );
+            for ( ; index >= 0; index-- ) {
+                if (this->substr(index, index + static_cast < Index > ( string.length() )) == string ) {
+                    return index;
                 }
             }
 
@@ -2661,9 +2926,9 @@ namespace cds {
          *
          * @test tested in primitive/StringTest/Find Tests
          */
-        __CDS_NoDiscard __CDS_cpplang_ConstexprConditioned auto findFirstOf ( String const & o ) const noexcept -> Index {
+        __CDS_NoDiscard __CDS_MaybeUnused __CDS_cpplang_ConstexprConditioned auto findFirstOf ( String const & string ) const noexcept -> Index {
             for ( Index i = 0; static_cast < Size > ( i ) < this->_l; ++ i ) {
-                if (o.contains(this->_p[i])) {
+                if (string.contains(this->_p[i])) {
                     return i;
                 }
             }
@@ -2682,9 +2947,9 @@ namespace cds {
          *
          * @test tested in primitive/StringTest/Find Tests
          */
-        __CDS_NoDiscard __CDS_cpplang_ConstexprConditioned auto findFirstNotOf ( String const & o ) const noexcept -> Index {
+        __CDS_NoDiscard __CDS_MaybeUnused __CDS_cpplang_ConstexprConditioned auto findFirstNotOf ( String const & string ) const noexcept -> Index {
             for ( Index i = 0; static_cast < Size > ( i ) < this->_l; ++ i ) {
-                if (!o.contains(this->_p[i])) {
+                if (!string.contains(this->_p[i])) {
                     return i;
                 }
             }
@@ -2703,9 +2968,9 @@ namespace cds {
          *
          * @test tested in primitive/StringTest/Find Tests
          */
-        __CDS_NoDiscard __CDS_cpplang_ConstexprConditioned auto findLastOf ( String const & o ) const noexcept -> Index {
+        __CDS_NoDiscard __CDS_MaybeUnused __CDS_cpplang_ConstexprConditioned auto findLastOf ( String const & string ) const noexcept -> Index {
             for ( auto i = static_cast < Index > ( this->_l ) - 1; i >= 0; -- i ) {
-                if (o.contains(this->_p[i])) {
+                if (string.contains(this->_p[i])) {
                     return i;
                 }
             }
@@ -2724,9 +2989,9 @@ namespace cds {
          *
          * @test tested in primitive/StringTest/Find Tests
          */
-        __CDS_NoDiscard __CDS_cpplang_ConstexprConditioned auto findLastNotOf ( String const & o ) const noexcept -> Index {
+        __CDS_NoDiscard __CDS_MaybeUnused __CDS_cpplang_ConstexprConditioned auto findLastNotOf ( String const & string ) const noexcept -> Index {
             for ( auto i = static_cast < Index > ( this->_l ) - 1; i >= 0; -- i ) {
-                if (!o.contains(this->_p[i])) {
+                if (!string.contains(this->_p[i])) {
                     return i;
                 }
             }
@@ -2738,7 +3003,7 @@ namespace cds {
          * @brief Function used to obtain a substring from given index and until given index
          *
          * @param from : Index = starting index
-         * @param to : Index = ending index. If not given, it will default to end of string
+         * @param until : Index = ending index. If not given, it will default to end of string
          *
          * @exceptsafe
          *
@@ -2746,26 +3011,26 @@ namespace cds {
          *
          * @test tested in primitive/StringTest/Substring Tests
          */
-        __CDS_NoDiscard __CDS_OptimalInline auto substr ( Index from, Index to = -1 ) const noexcept -> String {
-            if ( to == -1 || to > static_cast<Index>(this->size()) ) {
-                to = static_cast < Index > (this->size());
+        __CDS_NoDiscard __CDS_OptimalInline auto substr ( Index from, Index until = -1 ) const noexcept -> String {
+            if (until == -1 || until > static_cast<Index>(this->size()) ) {
+                until = static_cast < Index > (this->size());
             }
 
             if ( from < 0 ) {
                 from = 0;
             }
 
-            if ( to < from ) {
+            if (until < from ) {
                 return {};
             }
 
-            return { this->_p + from, static_cast < Size > ( to - from ) };
+            return { this->_p + from, static_cast < Size > ( until - from ) };
         }
 
         /**
          * @brief Comparison operator
          *
-         * @param o : String cref = Constant Reference to a String to compare this Object to
+         * @param string : String cref = Constant Reference to a String to compare this Object to
          *
          * @exceptsafe
          *
@@ -2773,12 +3038,14 @@ namespace cds {
          *
          * @test tested in primitive/StringTest/Comparison Tests
          */
-        __CDS_NoDiscard __CDS_cpplang_ConstexprConditioned auto operator == ( String const & o ) const noexcept -> bool { return this->size() == o.size() && std :: char_traits < ElementType > :: compare ( this->cStr(), o.cStr(), this->_l ) == 0; }
+        __CDS_NoDiscard __CDS_cpplang_ConstexprConditioned auto operator == ( String const & string ) const noexcept -> bool {
+            return this->size() == string.size() && std :: char_traits < ElementType > :: compare (this->cStr(), string.cStr(), this->_l ) == 0;
+        }
 
         /**
          * @brief Comparison Function
          *
-         * @param o : Object cref = Constant Reference to a CDS/Object to compare this Object to
+         * @param object : Object cref = Constant Reference to a CDS/Object to compare this Object to
          *
          * @exceptsafe
          *
@@ -2786,23 +3053,23 @@ namespace cds {
          *
          * @test tested in primitive/StringTest/Comparison Tests
          */
-        __CDS_NoDiscard __CDS_cpplang_VirtualConstexpr auto equals ( Object const & o) const noexcept -> bool final {
-            if ( this == & o ) {
+        __CDS_NoDiscard __CDS_cpplang_VirtualConstexpr auto equals ( Object const & object) const noexcept -> bool final {
+            if ( this == & object ) {
                 return true;
             }
 
-            auto p = dynamic_cast < decltype ( this ) > ( & o );
-            if ( p == nullptr ) {
+            auto pString = dynamic_cast < decltype ( this ) > ( & object );
+            if (pString == nullptr ) {
                 return false;
             }
 
-            return this->operator==(* p);
+            return this->operator==(* pString);
         }
 
         /**
          * @brief Comparison Operator
          *
-         * @param e : ElementType = Character to compare String to
+         * @param element : ElementType = Character to compare String to
          *
          * @overload
          * @exceptsafe
@@ -2811,8 +3078,8 @@ namespace cds {
          *
          * @test tested in primitive/StringTest/Comparison Tests
          */
-        __CDS_NoDiscard constexpr auto operator == ( ElementType e ) const noexcept -> bool {
-            return this->size() == 1u && this->_p[0] == e;
+        __CDS_NoDiscard constexpr auto operator == ( ElementType element ) const noexcept -> bool {
+            return this->size() == 1u && this->_p[0] == element;
         }
 
         /**
@@ -2841,14 +3108,16 @@ namespace cds {
          *
          * @test tested in primitive/StringTest/Comparison Tests
          */
-        __CDS_NoDiscard __CDS_cpplang_IfConstexpr auto operator == ( StringLiteral cString ) const noexcept -> bool { return std :: char_traits < ElementType > :: compare ( this->cStr(), cString, this->_l ) == 0; }
+        __CDS_NoDiscard __CDS_cpplang_IfConstexpr auto operator == ( StringLiteral cString ) const noexcept -> bool {
+            return std :: char_traits < ElementType > :: compare ( this->cStr(), cString, this->_l ) == 0;
+        }
 
     #if defined(CDS_QT)
 
         /**
          * Comparison Operator
          *
-         * @param v : QString cref = Constant Reference to a QString to compare contents of this String to
+         * @param string : QString cref = Constant Reference to a QString to compare contents of this String to
          *
          * @overload
          * @exceptsafe
@@ -2857,7 +3126,9 @@ namespace cds {
          *
          * @test tested in primitive/StringTest/Comparison Tests
          */
-        __CDS_OptimalInline auto operator == (QString const & v) const noexcept -> bool { return * this == String(v); }
+        __CDS_OptimalInline auto operator == (QString const & string) const noexcept -> bool {
+            return * this == String(string);
+        }
 
     #endif
 
@@ -2865,7 +3136,7 @@ namespace cds {
         /**
          * Comparison Operator, Greater or Equals
          *
-         * @param o : String cref = Constant Reference to a String to compare contents of this String to
+         * @param string : String cref = Constant Reference to a String to compare contents of this String to
          *
          * @exceptsafe
          *
@@ -2873,8 +3144,8 @@ namespace cds {
          *
          * @test tested in primitive/StringTest/Comparison Tests
          */
-        __CDS_NoDiscard __CDS_cpplang_IfConstexpr auto operator >= ( String const & o ) const noexcept -> bool {
-            auto compareResult = std :: char_traits < ElementType > :: compare ( this->cStr(), o.cStr(), this->_l );
+        __CDS_NoDiscard __CDS_cpplang_IfConstexpr auto operator >= ( String const & string ) const noexcept -> bool {
+            auto compareResult = std :: char_traits < ElementType > :: compare (this->cStr(), string.cStr(), this->_l );
             if ( compareResult > 0 ) {
                 return true;
             }
@@ -2883,13 +3154,13 @@ namespace cds {
                 return false;
             }
 
-            return this->_l > o._l;
+            return this->_l > string._l;
         }
 
         /**
          * @brief Comparison Operator, Greater or Equals
          *
-         * @param e : ElementType = Character to compare String to
+         * @param element : ElementType = Character to compare String to
          *
          * @overload
          * @exceptsafe
@@ -2898,8 +3169,8 @@ namespace cds {
          *
          * @test tested in primitive/StringTest/Comparison Tests
          */
-        __CDS_NoDiscard constexpr auto operator >= ( ElementType e ) const noexcept -> bool {
-            return this->size() == 1u && this->_p[0] >= e;
+        __CDS_NoDiscard constexpr auto operator >= ( ElementType element ) const noexcept -> bool {
+            return this->size() == 1u && this->_p[0] >= element;
         }
 
         /**
@@ -2921,7 +3192,7 @@ namespace cds {
         /**
          * Comparison Operator, Greater or Equals
          *
-         * @param v : QString cref = Constant Reference to a QString to compare contents of this String to
+         * @param string : QString cref = Constant Reference to a QString to compare contents of this String to
          *
          * @overload
          * @exceptsafe
@@ -2930,7 +3201,9 @@ namespace cds {
          *
          * @test tested in MSK
          */
-        __CDS_OptimalInline auto operator >= (QString const & v) const noexcept -> bool { return * this >= String(v); }
+        __CDS_OptimalInline auto operator >= (QString const & string) const noexcept -> bool {
+            return * this >= String(string);
+        }
     #endif
 
         /**
@@ -2959,11 +3232,10 @@ namespace cds {
             return this->_l > length;
         }
 
-
         /**
          * Comparison Operator, Less or Equals
          *
-         * @param o : String cref = Constant Reference to a String to compare contents of this String to
+         * @param string : String cref = Constant Reference to a String to compare contents of this String to
          *
          * @exceptsafe
          *
@@ -2971,8 +3243,8 @@ namespace cds {
          *
          * @test tested in primitive/StringTest/Comparison Tests
          */
-        __CDS_NoDiscard __CDS_cpplang_IfConstexpr auto operator <= ( String const & o ) const noexcept -> bool {
-            auto compareResult = std :: char_traits < ElementType > :: compare ( this->cStr(), o.cStr(), this->_l );
+        __CDS_NoDiscard __CDS_cpplang_IfConstexpr auto operator <= ( String const & string ) const noexcept -> bool {
+            auto compareResult = std :: char_traits < ElementType > :: compare (this->cStr(), string.cStr(), this->_l );
             if ( compareResult < 0 ) {
                 return true;
             }
@@ -2981,7 +3253,7 @@ namespace cds {
                 return false;
             }
 
-            return this->_l < o._l;
+            return this->_l < string._l;
         }
 
     #if defined(CDS_QT)
@@ -2989,7 +3261,7 @@ namespace cds {
         /**
          * Comparison Operator, Less or Equals
          *
-         * @param v : QString cref = Constant Reference to a QString to compare contents of this String to
+         * @param string : QString cref = Constant Reference to a QString to compare contents of this String to
          *
          * @overload
          * @exceptsafe
@@ -2998,14 +3270,17 @@ namespace cds {
          *
          * @test tested in primitive/StringTest/Comparison Tests
          */
-        __CDS_OptimalInline auto operator <= (QString const & v) const noexcept -> bool { return * this <= String(v); }
+        __CDS_OptimalInline auto operator <= (QString const & string) const noexcept -> bool {
+            return * this <= String(string);
+        }
+
     #endif
 
 
         /**
          * @brief Comparison Operator, Less or Equals
          *
-         * @param e : ElementType = Character to compare String to
+         * @param element : ElementType = Character to compare String to
          *
          * @overload
          * @exceptsafe
@@ -3014,8 +3289,8 @@ namespace cds {
          *
          * @test tested in primitive/StringTest/Comparison Tests
          */
-        __CDS_NoDiscard constexpr auto operator <= ( ElementType e ) const noexcept -> bool {
-            return this->size() == 1u && this->_p[0] <= e;
+        __CDS_NoDiscard constexpr auto operator <= ( ElementType element ) const noexcept -> bool {
+            return this->size() == 1u && this->_p[0] <= element;
         }
 
         /**
@@ -3061,7 +3336,7 @@ namespace cds {
         /**
          * @brief Comparison operator, Not Equal
          *
-         * @param o : String cref = Constant Reference to a String to compare this Object to
+         * @param string : String cref = Constant Reference to a String to compare this Object to
          *
          * @exceptsafe
          *
@@ -3069,14 +3344,14 @@ namespace cds {
          *
          * @test tested in primitive/StringTest/Comparison Tests
          */
-        __CDS_NoDiscard __CDS_cpplang_IfConstexpr auto operator != ( String const & o ) const noexcept -> bool {
-            return ! ( * this == o );
+        __CDS_NoDiscard __CDS_cpplang_IfConstexpr auto operator != ( String const & string ) const noexcept -> bool {
+            return ! (* this == string );
         }
 
         /**
          * @brief Comparison Operator, Not Equal
          *
-         * @param e : ElementType = Character to compare String to
+         * @param element : ElementType = Character to compare String to
          *
          * @overload
          * @exceptsafe
@@ -3085,8 +3360,8 @@ namespace cds {
          *
          * @test tested in primitive/StringTest/Comparison Tests
          */
-        __CDS_NoDiscard constexpr auto operator != ( ElementType e ) const noexcept -> bool {
-            return this->size() != 1u || this->_p[0] != e;
+        __CDS_NoDiscard constexpr auto operator != ( ElementType element ) const noexcept -> bool {
+            return this->size() != 1u || this->_p[0] != element;
         }
 
         /**
@@ -3124,7 +3399,7 @@ namespace cds {
         /**
          * Comparison Operator, Not Equal
          *
-         * @param v : QString cref = Constant Reference to a QString to compare contents of this String to
+         * @param string : QString cref = Constant Reference to a QString to compare contents of this String to
          *
          * @overload
          * @exceptsafe
@@ -3133,7 +3408,9 @@ namespace cds {
          *
          * @test tested in primitive/StringTest/Comparison Tests
          */
-        __CDS_OptimalInline auto operator != (QString const & v) const noexcept -> bool { return * this != String(v); }
+        __CDS_OptimalInline auto operator != (QString const & string) const noexcept -> bool {
+            return * this != String(string);
+        }
 
     #endif
 
@@ -3141,7 +3418,7 @@ namespace cds {
         /**
          * Comparison Operator, Less
          *
-         * @param o : String cref = Constant Reference to a String to compare contents of this String to
+         * @param string : String cref = Constant Reference to a String to compare contents of this String to
          *
          * @exceptsafe
          *
@@ -3149,14 +3426,14 @@ namespace cds {
          *
          * @test tested in primitive/StringTest/Comparison Tests
          */
-        __CDS_NoDiscard __CDS_cpplang_IfConstexpr auto operator < ( String const & o ) const noexcept -> bool {
-            return ! ( * this >= o );
+        __CDS_NoDiscard __CDS_cpplang_IfConstexpr auto operator < ( String const & string ) const noexcept -> bool {
+            return ! (* this >= string );
         }
 
         /**
          * @brief Comparison Operator, Less
          *
-         * @param e : ElementType = Character to compare String to
+         * @param element : ElementType = Character to compare String to
          *
          * @overload
          * @exceptsafe
@@ -3165,8 +3442,8 @@ namespace cds {
          *
          * @test tested in primitive/StringTest/Comparison Tests
          */
-        __CDS_NoDiscard constexpr auto operator < ( ElementType e ) const noexcept -> bool {
-            return this->size() == 1u && this->_p[0] < e;
+        __CDS_NoDiscard constexpr auto operator < ( ElementType element ) const noexcept -> bool {
+            return this->size() == 1u && this->_p[0] < element;
         }
 
         /**
@@ -3195,7 +3472,7 @@ namespace cds {
         /**
          * Comparison Operator, Less
          *
-         * @param v : QString cref = Constant Reference to a QString to compare contents of this String to
+         * @param string : QString cref = Constant Reference to a QString to compare contents of this String to
          *
          * @overload
          * @exceptsafe
@@ -3204,14 +3481,17 @@ namespace cds {
          *
          * @test tested in MSK
          */
-        __CDS_OptimalInline auto operator < (QString const & v) const noexcept -> bool { return * this < String(v); }
+        __CDS_OptimalInline auto operator < (QString const & string) const noexcept -> bool {
+            return * this < String(string);
+        }
+
     #endif
 
 
         /**
          * Comparison Operator, Greater
          *
-         * @param o : String cref = Constant Reference to a String to compare contents of this String to
+         * @param string : String cref = Constant Reference to a String to compare contents of this String to
          *
          * @exceptsafe
          *
@@ -3219,14 +3499,14 @@ namespace cds {
          *
          * @test tested in primitive/StringTest/Comparison Tests
          */
-        __CDS_NoDiscard auto operator > ( String const & o ) const noexcept -> bool {
-            return ! ( * this <= o );
+        __CDS_NoDiscard auto operator > ( String const & string ) const noexcept -> bool {
+            return ! (* this <= string );
         }
 
         /**
          * @brief Comparison Operator, Greater
          *
-         * @param e : ElementType = Character to compare String to
+         * @param element : ElementType = Character to compare String to
          *
          * @overload
          * @exceptsafe
@@ -3235,8 +3515,8 @@ namespace cds {
          *
          * @test tested in primitive/StringTest/Comparison Tests
          */
-        __CDS_NoDiscard constexpr auto operator > ( ElementType e ) const noexcept -> bool {
-            return this->size() == 1u && this->_p[0] > e;
+        __CDS_NoDiscard constexpr auto operator > ( ElementType element ) const noexcept -> bool {
+            return this->size() == 1u && this->_p[0] > element;
         }
 
         /**
@@ -3274,7 +3554,7 @@ namespace cds {
         /**
          * Comparison Operator, Greater
          *
-         * @param v : QString cref = Constant Reference to a QString to compare contents of this String to
+         * @param string : QString cref = Constant Reference to a QString to compare contents of this String to
          *
          * @overload
          * @exceptsafe
@@ -3283,7 +3563,9 @@ namespace cds {
          *
          * @test tested in MSK
          */
-        __CDS_OptimalInline auto operator > (QString const & v) const noexcept -> bool { return * this > String(v); }
+        __CDS_OptimalInline auto operator > (QString const & string) const noexcept -> bool {
+            return * this > String(string);
+        }
 
     #endif
 
@@ -3291,7 +3573,7 @@ namespace cds {
         /**
          * @brief Append Function used to append a String to the String
          *
-         * @param v : String cref = Constant Reference to the String to add at the end of the String
+         * @param string : String cref = Constant Reference to the String to add at the end of the String
          *
          * @exceptsafe
          *
@@ -3299,12 +3581,14 @@ namespace cds {
          *
          * @test tested in primitive/StringTest/Append/Prepend Tests
          */
-        __CDS_NoDiscard __CDS_OptimalInline auto operator + ( String const & v ) const noexcept -> String { return String(*this).append(v); }
+        __CDS_NoDiscard __CDS_OptimalInline auto operator + ( String const & string ) const noexcept -> String {
+            return String(*this).append(string);
+        }
 
         /**
          * @brief Append Function used to append an ElementType to the String
          *
-         * @param v : ElementType = Value to add to the end of the String
+         * @param element : ElementType = Value to add to the end of the String
          *
          * @exceptsafe
          *
@@ -3312,12 +3596,18 @@ namespace cds {
          *
          * @test tested in primitive/StringTest/Append/Prepend Tests
          */
-        __CDS_NoDiscard __CDS_OptimalInline auto operator + ( ElementType v ) const noexcept -> String { return String(*this).append(v); }
+        __CDS_NoDiscard __CDS_OptimalInline auto operator + ( ElementType element ) const noexcept -> String {
+            return String(*this).append(element);
+        }
+
+        __CDS_NoDiscard __CDS_MaybeUnused __CDS_OptimalInline friend auto operator + ( ElementType element, String const & string ) noexcept -> String {
+            return String(element).append(string);
+        }
 
         /**
          * @brief Append Function used to append a std::string to the String
          *
-         * @param v : std::string cref = Constant Reference to the std::string to add at the end of the String
+         * @param string : std::string cref = Constant Reference to the std::string to add at the end of the String
          *
          * @exceptsafe
          *
@@ -3325,12 +3615,18 @@ namespace cds {
          *
          * @test tested in primitive/StringTest/Append/Prepend Tests
          */
-        __CDS_NoDiscard __CDS_OptimalInline auto operator + ( std::string const & v ) const noexcept -> String { return String(*this).append(v); }
+        __CDS_NoDiscard __CDS_OptimalInline auto operator + ( std::string const & string ) const noexcept -> String {
+            return String(*this).append(string);
+        }
+
+        __CDS_NoDiscard __CDS_MaybeUnused __CDS_OptimalInline friend auto operator + ( std :: string const & element, String const & string ) noexcept -> String {
+            return String(element).append(string);
+        }
 
         /**
          * @brief Append Function used to append a StringLiteral to the String
          *
-         * @param v : StringLiteral = Address to a StringLiteral to add to the end of the String
+         * @param stringLiteral : StringLiteral = Address to a StringLiteral to add to the end of the String
          *
          * @exceptsafe
          *
@@ -3338,12 +3634,18 @@ namespace cds {
          *
          * @test tested in primitive/StringTest/Append/Prepend Tests
          */
-        __CDS_NoDiscard __CDS_OptimalInline auto operator + ( StringLiteral v ) const noexcept -> String { return String(*this).append(v); }
+        __CDS_NoDiscard __CDS_OptimalInline auto operator + ( StringLiteral stringLiteral ) const noexcept -> String {
+            return String(*this).append(stringLiteral);
+        }
+
+        __CDS_NoDiscard __CDS_MaybeUnused __CDS_OptimalInline friend auto operator + ( StringLiteral element, String const & string ) noexcept -> String {
+            return String(element).append(string);
+        }
 
         /**
          * @brief Append Function used to append a CString to the String
          *
-         * @param v : CString = Address to a CString to add to the end of the String
+         * @param string : CString = Address to a CString to add to the end of the String
          *
          * @exceptsafe
          *
@@ -3351,12 +3653,18 @@ namespace cds {
          *
          * @test tested in primitive/StringTest/Append/Prepend Tests
          */
-        __CDS_NoDiscard __CDS_OptimalInline auto operator + ( CString v ) const noexcept -> String { return String(*this).append(v); }
+        __CDS_NoDiscard __CDS_OptimalInline auto operator + ( CString string ) const noexcept -> String {
+            return String(*this).append(string);
+        }
+
+        __CDS_NoDiscard __CDS_MaybeUnused __CDS_OptimalInline friend auto operator + ( CString element, String const & string ) noexcept -> String {
+            return String(element).append(string);
+        }
 
         /**
          * @brief Append Function used to append a sint16 to the String
          *
-         * @param v : sint16 = value to add at the end of the String
+         * @param value : sint16 = value to add at the end of the String
          *
          * @exceptsafe
          *
@@ -3364,12 +3672,18 @@ namespace cds {
          *
          * @test tested in primitive/StringTest/Append/Prepend Tests
          */
-        __CDS_NoDiscard __CDS_OptimalInline auto operator + (sint16 v) const noexcept -> String { return String(*this).append(v); }
+        __CDS_NoDiscard __CDS_OptimalInline auto operator + (sint16 value) const noexcept -> String {
+            return String(*this).append(value);
+        }
+
+        __CDS_NoDiscard __CDS_MaybeUnused __CDS_OptimalInline friend auto operator + ( sint16 element, String const & string ) noexcept -> String {
+            return String(element).append(string);
+        }
 
         /**
          * @brief Append Function used to append a sint32 to the String
          *
-         * @param v : sint32 = value to add at the end of the String
+         * @param value : sint32 = value to add at the end of the String
          *
          * @exceptsafe
          *
@@ -3377,12 +3691,18 @@ namespace cds {
          *
          * @test tested in primitive/StringTest/Append/Prepend Tests
          */
-        __CDS_NoDiscard __CDS_OptimalInline auto operator + (sint32 v) const noexcept -> String { return String(*this).append(v); }
+        __CDS_NoDiscard __CDS_OptimalInline auto operator + (sint32 value) const noexcept -> String {
+            return String(*this).append(value);
+        }
+
+        __CDS_NoDiscard __CDS_MaybeUnused __CDS_OptimalInline friend auto operator + ( sint32 element, String const & string ) noexcept -> String {
+            return String(element).append(string);
+        }
 
         /**
          * @brief Append Function used to append a sint64 to the String
          *
-         * @param v : sint64 = value to add at the end of the String
+         * @param value : sint64 = value to add at the end of the String
          *
          * @exceptsafe
          *
@@ -3390,12 +3710,18 @@ namespace cds {
          *
          * @test tested in primitive/StringTest/Append/Prepend Tests
          */
-        __CDS_NoDiscard __CDS_OptimalInline auto operator + (sint64 v) const noexcept -> String { return String(*this).append(v); }
+        __CDS_NoDiscard __CDS_OptimalInline auto operator + (sint64 value) const noexcept -> String {
+            return String(*this).append(value);
+        }
+
+        __CDS_NoDiscard __CDS_MaybeUnused __CDS_OptimalInline friend auto operator + ( sint64 element, String const & string ) noexcept -> String {
+            return String(element).append(string);
+        }
 
         /**
          * @brief Append Function used to append a uint8 to the String
          *
-         * @param v : uint8 = value to add at the end of the String
+         * @param value : uint8 = value to add at the end of the String
          *
          * @exceptsafe
          *
@@ -3403,12 +3729,18 @@ namespace cds {
          *
          * @test tested in primitive/StringTest/Append/Prepend Tests
          */
-        __CDS_NoDiscard __CDS_OptimalInline auto operator + (uint8 v) const noexcept -> String { return String(*this).append(v); }
+        __CDS_NoDiscard __CDS_OptimalInline auto operator + (uint8 value) const noexcept -> String {
+            return String(*this).append(value);
+        }
+
+        __CDS_NoDiscard __CDS_MaybeUnused __CDS_OptimalInline friend auto operator + ( uint8 element, String const & string ) noexcept -> String {
+            return String(element).append(string);
+        }
 
         /**
          * @brief Append Function used to append a uint16 to the String
          *
-         * @param v : uint16 = value to add at the end of the String
+         * @param value : uint16 = value to add at the end of the String
          *
          * @exceptsafe
          *
@@ -3416,12 +3748,18 @@ namespace cds {
          *
          * @test tested in primitive/StringTest/Append/Prepend Tests
          */
-        __CDS_NoDiscard __CDS_OptimalInline auto operator + (uint16 v) const noexcept -> String { return String(*this).append(v); }
+        __CDS_NoDiscard __CDS_OptimalInline auto operator + (uint16 value) const noexcept -> String {
+            return String(*this).append(value);
+        }
+
+        __CDS_NoDiscard __CDS_MaybeUnused __CDS_OptimalInline friend auto operator + ( uint16 element, String const & string ) noexcept -> String {
+            return String(element).append(string);
+        }
 
         /**
          * @brief Append Function used to append a uint32 to the String
          *
-         * @param v : uint32 = value to add at the end of the String
+         * @param value : uint32 = value to add at the end of the String
          *
          * @exceptsafe
          *
@@ -3429,12 +3767,18 @@ namespace cds {
          *
          * @test tested in primitive/StringTest/Append/Prepend Tests
          */
-        __CDS_NoDiscard __CDS_OptimalInline auto operator + (uint32 v) const noexcept -> String { return String(*this).append(v); }
+        __CDS_NoDiscard __CDS_OptimalInline auto operator + (uint32 value) const noexcept -> String {
+            return String(*this).append(value);
+        }
+
+        __CDS_NoDiscard __CDS_MaybeUnused __CDS_OptimalInline friend auto operator + ( uint32 element, String const & string ) noexcept -> String {
+            return String(element).append(string);
+        }
 
         /**
          * @brief Append Function used to append a uint64 to the String
          *
-         * @param v : uint64 = value to add at the end of the String
+         * @param value : uint64 = value to add at the end of the String
          *
          * @exceptsafe
          *
@@ -3442,12 +3786,14 @@ namespace cds {
          *
          * @test tested in primitive/StringTest/Append/Prepend Tests
          */
-        __CDS_NoDiscard __CDS_OptimalInline auto operator + (uint64 v) const noexcept -> String { return String(*this).append(v); }
+        __CDS_NoDiscard __CDS_OptimalInline auto operator + (uint64 value) const noexcept -> String {
+            return String(*this).append(value);
+        }
 
         /**
          * @brief Append Function used to append a float to the String
          *
-         * @param v : float = value to add at the end of the String
+         * @param value : float = value to add at the end of the String
          *
          * @exceptsafe
          *
@@ -3455,12 +3801,18 @@ namespace cds {
          *
          * @test tested in primitive/StringTest/Append/Prepend Tests
          */
-        __CDS_NoDiscard __CDS_OptimalInline auto operator + (float v) const noexcept -> String { return this->operator+( std::to_string(v) ); }
+        __CDS_NoDiscard __CDS_OptimalInline auto operator + (float value) const noexcept -> String {
+            return this->operator+(std::to_string(value) );
+        }
+
+        __CDS_NoDiscard __CDS_MaybeUnused __CDS_OptimalInline friend auto operator + ( float element, String const & string ) noexcept -> String {
+            return String(element).append(string);
+        }
 
         /**
          * @brief Append Function used to append a double to the String
          *
-         * @param v : double = value to add at the end of the String
+         * @param value : double = value to add at the end of the String
          *
          * @exceptsafe
          *
@@ -3468,14 +3820,20 @@ namespace cds {
          *
          * @test tested in primitive/StringTest/Append/Prepend Tests
          */
-        __CDS_NoDiscard __CDS_OptimalInline auto operator + (double v) const noexcept -> String { return this->operator+( std::to_string(v) ); }
+        __CDS_NoDiscard __CDS_OptimalInline auto operator + (double value) const noexcept -> String {
+            return this->operator+(std::to_string(value) );
+        }
+
+        __CDS_NoDiscard __CDS_MaybeUnused __CDS_OptimalInline friend auto operator + ( double element, String const & string ) noexcept -> String {
+            return String(element).append(string);
+        }
 
     #if defined(CDS_QT)
 
         /**
          * @brief Append Function used to append a QString to the String
          *
-         * @param v : QString cref = Constant Reference to a QString to append at the end of this String
+         * @param string : QString cref = Constant Reference to a QString to append at the end of this String
          *
          * @exceptsafe
          *
@@ -3483,7 +3841,14 @@ namespace cds {
          *
          * @test tested in MSK
          */
-        __CDS_OptimalInline auto operator + (QString const & v) const noexcept -> String { return * this + String(v); }
+        __CDS_OptimalInline auto operator + (QString const & string) const noexcept -> String {
+            return * this + String(string);
+        }
+
+        __CDS_NoDiscard __CDS_MaybeUnused __CDS_OptimalInline friend auto operator + ( QString const & element, String const & string ) noexcept -> String {
+            return String(element).append(string);
+        }
+
     #endif
 
         /**
@@ -3510,7 +3875,7 @@ namespace cds {
         /**
          * @brief Function used to trim the occurrences of given element [e] from the left of the String
          *
-         * @param e : ElementType = element to trim from the left
+         * @param element : ElementType = element to trim from the left
          *
          * @exceptsafe
          *
@@ -3518,8 +3883,8 @@ namespace cds {
          *
          * @test tested in primitive/StringTest/Utility Functions, String Formatting
          */
-        __CDS_cpplang_ConstexprDynamicAllocation auto ltrim ( ElementType e = ' ' ) noexcept -> String & {
-            while ( ! this->empty () && this->front() == e ) {
+        __CDS_cpplang_ConstexprDynamicAllocation auto ltrim ( ElementType element = ' ' ) noexcept -> String & {
+            while ( ! this->empty () && this->front() == element ) {
                 * this = this->substr(1);
             }
 
@@ -3529,7 +3894,7 @@ namespace cds {
         /**
          * @brief Function used to trim the occurrences of given String [s] from the left of the String
          *
-         * @param s : String cref = Constant Reference to the String occurrences to remove from the left
+         * @param string : String cref = Constant Reference to the String occurrences to remove from the left
          *
          * @exceptsafe
          *
@@ -3537,8 +3902,8 @@ namespace cds {
          *
          * @test tested in primitive/StringTest/Utility Functions, String Formatting
          */
-        __CDS_cpplang_ConstexprDynamicAllocation auto ltrim ( String const & s ) noexcept -> String & {
-            while ( ! this->empty () && s.contains( this->front() ) ) {
+        __CDS_cpplang_ConstexprDynamicAllocation auto ltrim ( String const & string ) noexcept -> String & {
+            while (! this->empty () && string.contains(this->front() ) ) {
                 * this = this->substr(1);
             }
 
@@ -3548,7 +3913,7 @@ namespace cds {
         /**
          * @brief Function used to trim the occurrences of given element [e] from the left of the String into a new String
          *
-         * @param e : ElementType = element to trim from the left
+         * @param element : ElementType = element to trim from the left
          *
          * @exceptsafe
          *
@@ -3556,8 +3921,8 @@ namespace cds {
          *
          * @test tested in primitive/StringTest/Utility Functions, String Formatting
          */
-        __CDS_NoDiscard __CDS_MaybeUnused __CDS_OptimalInline auto ltrim ( ElementType e = ' ' ) const noexcept -> String {
-            return String(*this).ltrim(e);
+        __CDS_NoDiscard __CDS_MaybeUnused __CDS_OptimalInline auto ltrim ( ElementType element = ' ' ) const noexcept -> String {
+            return String(*this).ltrim(element);
         }
 
         /**
@@ -3571,14 +3936,14 @@ namespace cds {
          *
          * @test tested in primitive/StringTest/Utility Functions, String Formatting
          */
-        __CDS_NoDiscard __CDS_MaybeUnused __CDS_OptimalInline auto ltrim ( String const & e ) const noexcept -> String {
-            return String(*this).ltrim(e);
+        __CDS_NoDiscard __CDS_MaybeUnused __CDS_OptimalInline auto ltrim ( String const & string ) const noexcept -> String {
+            return String(*this).ltrim(string);
         }
 
         /**
          * @brief Function used to trim the occurrences of given element [e] from the right of the String
          *
-         * @param e : ElementType = element to trim from the right
+         * @param element : ElementType = element to trim from the right
          *
          * @exceptsafe
          *
@@ -3586,8 +3951,8 @@ namespace cds {
          *
          * @test tested in primitive/StringTest/Utility Functions, String Formatting
          */
-        __CDS_cpplang_ConstexprConditioned auto rtrim ( ElementType e = ' ' ) noexcept -> String & {
-            while ( ! this->empty () && this->back() == e ) {
+        __CDS_cpplang_ConstexprConditioned auto rtrim ( ElementType element = ' ' ) noexcept -> String & {
+            while ( ! this->empty () && this->back() == element ) {
                 this->_p[--this->_l] = '\0';
             }
 
@@ -3597,7 +3962,7 @@ namespace cds {
         /**
          * @brief Function used to trim the occurrences of given String [s] from the right of the String
          *
-         * @param s : String cref = Constant Reference to the String occurrences to remove
+         * @param string : String cref = Constant Reference to the String occurrences to remove
          *
          * @exceptsafe
          *
@@ -3605,8 +3970,8 @@ namespace cds {
          *
          * @test tested in primitive/StringTest/Utility Functions, String Formatting
          */
-        __CDS_cpplang_ConstexprConditioned auto rtrim ( String const & s ) noexcept -> String & {
-            while ( ! this->empty () && s.contains(this->back()) ) {
+        __CDS_cpplang_ConstexprConditioned auto rtrim ( String const & string ) noexcept -> String & {
+            while (! this->empty () && string.contains(this->back()) ) {
                 this->_p[--this->_l] = '\0';
             }
 
@@ -3616,7 +3981,7 @@ namespace cds {
         /**
          * @brief Function used to trim the occurrences of given element [e] from the right of the String into a new String
          *
-         * @param e : ElementType = element to trim from the right
+         * @param element : ElementType = element to trim from the right
          *
          * @exceptsafe
          *
@@ -3624,8 +3989,8 @@ namespace cds {
          *
          * @test tested in primitive/StringTest/Utility Functions, String Formatting
          */
-        __CDS_NoDiscard __CDS_MaybeUnused __CDS_OptimalInline auto rtrim ( ElementType e = ' ' ) const noexcept -> String {
-            return String(*this).rtrim(e);
+        __CDS_NoDiscard __CDS_MaybeUnused __CDS_OptimalInline auto rtrim ( ElementType element = ' ' ) const noexcept -> String {
+            return String(*this).rtrim(element);
         }
 
         /**
@@ -3639,14 +4004,14 @@ namespace cds {
          *
          * @test tested in primitive/StringTest/Utility Functions, String Formatting
          */
-        __CDS_NoDiscard __CDS_MaybeUnused __CDS_OptimalInline auto rtrim ( String const & e ) const noexcept -> String {
-            return String(*this).rtrim(e);
+        __CDS_NoDiscard __CDS_MaybeUnused __CDS_OptimalInline auto rtrim ( String const & string ) const noexcept -> String {
+            return String(*this).rtrim(string);
         }
 
         /**
          * @brief Function used to trim the occurrences of given element [e] from the left and right of the String
          *
-         * @param e : ElementType = element to trim from the left and right
+         * @param element : ElementType = element to trim from the left and right
          *
          * @exceptsafe
          *
@@ -3654,7 +4019,9 @@ namespace cds {
          *
          * @test tested in primitive/StringTest/Utility Functions, String Formatting
          */
-        __CDS_cpplang_ConstexprDynamicAllocation auto trim ( ElementType e = ' ' ) noexcept -> String & { return this->ltrim(e).rtrim(e); }
+        __CDS_cpplang_ConstexprDynamicAllocation auto trim ( ElementType element = ' ' ) noexcept -> String & {
+            return this->ltrim(element).rtrim(element);
+        }
 
         /**
          * @brief Function used to trim the occurrences of given String [s] from the left and right of the String
@@ -3667,12 +4034,14 @@ namespace cds {
          *
          * @test tested in primitive/StringTest/Utility Functions, String Formatting
          */
-        __CDS_cpplang_ConstexprDynamicAllocation auto trim ( String const & e ) noexcept -> String & { return this->ltrim(e).rtrim(e); }
+        __CDS_cpplang_ConstexprDynamicAllocation auto trim ( String const & string ) noexcept -> String & {
+            return this->ltrim(string).rtrim(string);
+        }
 
         /**
          * @brief Function used to trim the occurrences of given element [e] from the left and right of the String into a new String
          *
-         * @param e : ElementType = element to trim from the left and right
+         * @param element : ElementType = element to trim from the left and right
          *
          * @exceptsafe
          *
@@ -3680,8 +4049,8 @@ namespace cds {
          *
          * @test tested in primitive/StringTest/Utility Functions, String Formatting
          */
-        __CDS_NoDiscard __CDS_MaybeUnused __CDS_OptimalInline auto trim ( ElementType e = ' ' ) const noexcept -> String {
-            return String(*this).trim(e);
+        __CDS_NoDiscard __CDS_MaybeUnused __CDS_OptimalInline auto trim ( ElementType element = ' ' ) const noexcept -> String {
+            return String(*this).trim(element);
         }
 
         /**
@@ -3696,8 +4065,8 @@ namespace cds {
          * @test tested in primitive/StringTest/Utility Functions, String Formatting
          */
 
-        __CDS_NoDiscard __CDS_MaybeUnused __CDS_OptimalInline auto trim ( String const & e ) const noexcept -> String {
-            return String(*this).trim(e);
+        __CDS_NoDiscard __CDS_MaybeUnused __CDS_OptimalInline auto trim ( String const & string ) const noexcept -> String {
+            return String(*this).trim(string);
         }
 
         /**
@@ -3715,7 +4084,7 @@ namespace cds {
          *
          * @test tested in primitive/StringTest/Utility Functions, String Formatting
          */
-        __CDS_cpplang_ConstexprDynamicAllocation auto rjust (Size justifySize, ElementType padChar = ' ') noexcept -> String & {
+        __CDS_cpplang_ConstexprDynamicAllocation auto rjust (Size justifySize, ElementType padChar = ' ') noexcept -> String & { // NOLINT(bugprone-easily-swappable-parameters)
             while ( this->size() < justifySize ) {
                 (void) this->append(padChar);
             }
@@ -3738,8 +4107,8 @@ namespace cds {
          *
          * @test tested in primitive/StringTest/Utility Functions, String Formatting
          */
-        __CDS_NoDiscard __CDS_MaybeUnused __CDS_OptimalInline auto rjust (Size s, ElementType e = ' ') const noexcept -> String {
-            return String(*this).rjust(s, e);
+        __CDS_NoDiscard __CDS_MaybeUnused __CDS_OptimalInline auto rjust (Size size, ElementType element = ' ') const noexcept -> String {
+            return String(*this).rjust(size, element);
         }
 
         /**
@@ -3757,7 +4126,7 @@ namespace cds {
          *
          * @test tested in primitive/StringTest/Utility Functions, String Formatting
          */
-        __CDS_cpplang_ConstexprDynamicAllocation auto ljust (Size justifySize, ElementType padChar = ' ') noexcept -> String & {
+        __CDS_cpplang_ConstexprDynamicAllocation auto ljust (Size justifySize, ElementType padChar = ' ') noexcept -> String & { // NOLINT(bugprone-easily-swappable-parameters)
             while ( this->size() < justifySize ) {
                 (void) this->prepend(padChar);
             }
@@ -3780,8 +4149,8 @@ namespace cds {
          *
          * @test tested in primitive/StringTest/Utility Functions, String Formatting
          */
-        __CDS_NoDiscard __CDS_MaybeUnused __CDS_OptimalInline auto ljust (Size s, ElementType e = ' ') const noexcept -> String {
-            return String(*this).ljust(s, e);
+        __CDS_NoDiscard __CDS_MaybeUnused __CDS_OptimalInline auto ljust (Size size, ElementType element = ' ') const noexcept -> String {
+            return String(*this).ljust(size, element);
         }
 
     public:
@@ -3789,7 +4158,7 @@ namespace cds {
         /**
          * @brief Function used to check whether character is upper
          *
-         * @param c : char = Character to check whether is upper
+         * @param character : char = Character to check whether is upper
          *
          * @static
          * @exceptsafe
@@ -3798,12 +4167,14 @@ namespace cds {
          *
          * @test tested in primitive/StringTest/Utility Functions, String Formatting
          */
-        constexpr auto static isUpperChar(char c) noexcept -> bool { return c >= 'A' && c <= 'Z'; }
+        constexpr auto static isUpperChar(char character) noexcept -> bool {
+            return character >= 'A' && character <= 'Z';
+        }
 
         /**
          * @brief Function used to check whether character is lower
          *
-         * @param c : char = Character to check whether is lower
+         * @param character : char = Character to check whether is lower
          *
          * @static
          * @exceptsafe
@@ -3812,12 +4183,14 @@ namespace cds {
          *
          * @test tested in primitive/StringTest/Utility Functions, String Formatting
          */
-        constexpr auto static isLowerChar(char c) noexcept -> bool { return c >= 'a' && c <= 'z'; }
+        constexpr auto static isLowerChar(char character) noexcept -> bool {
+            return character >= 'a' && character <= 'z';
+        }
 
         /**
          * @brief Function used to check whether character is a digit
          *
-         * @param c : char = Character to check whether is a digit
+         * @param character : char = Character to check whether is a digit
          *
          * @static
          * @exceptsafe
@@ -3826,12 +4199,14 @@ namespace cds {
          *
          * @test tested in primitive/StringTest/Utility Functions, String Formatting
          */
-        constexpr auto static isDigit(char c) noexcept -> bool { return c >= '0' && c <= '9'; }
+        constexpr auto static isDigit(char character) noexcept -> bool {
+            return character >= '0' && character <= '9';
+        }
 
         /**
          * @brief Function used to check whether character is a letter
          *
-         * @param c : char = Character to check whether is a letter
+         * @param character : char = Character to check whether is a letter
          *
          * @static
          * @exceptsafe
@@ -3840,12 +4215,14 @@ namespace cds {
          *
          * @test tested in primitive/StringTest/Utility Functions, String Formatting
          */
-        constexpr auto static isLetter(char c) noexcept -> bool { return isUpperChar(c) || isLowerChar(c); }
+        constexpr auto static isLetter(char character) noexcept -> bool {
+            return isUpperChar(character) || isLowerChar(character);
+        }
 
         /**
          * @brief Function used to check whether character is alphanumeric
          *
-         * @param c : char = Character to check whether is alphanumeric
+         * @param character : char = Character to check whether is alphanumeric
          *
          * @static
          * @exceptsafe
@@ -3854,12 +4231,14 @@ namespace cds {
          *
          * @test tested in primitive/StringTest/Utility Functions, String Formatting
          */
-        constexpr auto static isAlpha(char c) noexcept -> bool { return isLetter(c) || isDigit(c); }
+        constexpr auto static isAlpha(char character) noexcept -> bool {
+            return isLetter(character) || isDigit(character);
+        }
 
         /**
          * @brief Function used to check whether character is a vowel
          *
-         * @param c : char = Character to check whether is a vowel
+         * @param character : char = Character to check whether is a vowel
          *
          * @static
          * @exceptsafe
@@ -3868,12 +4247,14 @@ namespace cds {
          *
          * @test tested in primitive/StringTest/Utility Functions, String Formatting
          */
-        __CDS_OptimalInline auto static isVowel(char c) noexcept -> bool { return String("aeiouAEIOU").contains(c); }
+        __CDS_OptimalInline auto static isVowel(char character) noexcept -> bool {
+            return String("aeiouAEIOU").contains(character);
+        }
 
         /**
          * @brief Function used to check whether character is a consonant
          *
-         * @param c : char = Character to check whether is a consonant
+         * @param character : char = Character to check whether is a consonant
          *
          * @static
          * @exceptsafe
@@ -3882,12 +4263,14 @@ namespace cds {
          *
          * @test tested in primitive/StringTest/Utility Functions, String Formatting
          */
-        __CDS_MaybeUnused __CDS_cpplang_ConstexprConditioned auto static isConsonant(char c) noexcept -> bool { return isLetter(c) && ! isVowel(c); }
+        __CDS_MaybeUnused __CDS_cpplang_ConstexprConditioned auto static isConsonant(char character) noexcept -> bool {
+            return isLetter(character) && ! isVowel(character);
+        }
 
         /**
          * @brief Function used to convert character to a lower character, if possible ( if is upper )
          *
-         * @param c : char = Character to convert
+         * @param character : char = Character to convert
          *
          * @static
          * @exceptsafe
@@ -3896,12 +4279,14 @@ namespace cds {
          *
          * @test tested in primitive/StringTest/Utility Functions, String Formatting
          */
-        constexpr auto static lowerChar(char c) noexcept -> char { return isUpperChar(c) ? static_cast < ElementType > ( c + 32 ) : c; }
+        constexpr auto static lowerChar(char character) noexcept -> char {
+            return isUpperChar(character) ? static_cast < ElementType > ( character + 32 ) : character;
+        }
 
         /**
          * @brief Function used to convert character to an upper character, if possible ( if is lower )
          *
-         * @param c : char = Character to convert
+         * @param character : char = Character to convert
          *
          * @static
          * @exceptsafe
@@ -3910,12 +4295,14 @@ namespace cds {
          *
          * @test tested in primitive/StringTest/Utility Functions, String Formatting
          */
-        constexpr auto static upperChar(char c) noexcept -> char { return isLowerChar(c) ? static_cast < ElementType > ( c - 32 ) : c; }
+        constexpr auto static upperChar(char character) noexcept -> char {
+            return isLowerChar(character) ? static_cast < ElementType > ( character - 32 ) : character;
+        }
 
         /**
          * @brief Function used to convert character to a lower character, if possible ( if is upper )
          *
-         * @param c : char ref = Reference Character to convert
+         * @param character : char ref = Reference Character to convert
          *
          * @static
          * @exceptsafe
@@ -3924,12 +4311,14 @@ namespace cds {
          *
          * @test tested in primitive/StringTest/Utility Functions, String Formatting
          */
-        __CDS_MaybeUnused __CDS_cpplang_ConstexprConditioned auto static toLowerChar(char & c) noexcept -> char & { c = lowerChar(c); return c; }
+        __CDS_MaybeUnused __CDS_cpplang_ConstexprConditioned auto static toLowerChar(char & character) noexcept -> char & {
+            character = lowerChar(character); return character;
+        }
 
         /**
          * @brief Function used to convert character to an upper character, if possible ( if is lower )
          *
-         * @param c : char ref = Reference Character to convert
+         * @param character : char ref = Reference Character to convert
          *
          * @static
          * @exceptsafe
@@ -3938,7 +4327,9 @@ namespace cds {
          *
          * @test tested in primitive/StringTest/Utility Functions, String Formatting
          */
-        __CDS_MaybeUnused __CDS_cpplang_ConstexprConditioned auto static toUpperChar(char & c) noexcept -> char & { c = upperChar(c); return c; }
+        __CDS_MaybeUnused __CDS_cpplang_ConstexprConditioned auto static toUpperChar(char & character) noexcept -> char & {
+            character = upperChar(character); return character;
+        }
 
     public:
 
@@ -4012,7 +4403,9 @@ namespace cds {
          *
          * @test tested in primitive/StringTest/Utility Functions, String Formatting
          */
-        __CDS_NoDiscard __CDS_OptimalInline auto lower () const noexcept -> String { return String(*this).toLower(); }
+        __CDS_NoDiscard __CDS_OptimalInline auto lower () const noexcept -> String {
+            return String(*this).toLower();
+        }
 
         /**
          * @brief Function used to convert characters of a String to their upper values ( if are lower ) and return it
@@ -4023,12 +4416,14 @@ namespace cds {
          *
          * @test tested in primitive/StringTest/Utility Functions, String Formatting
          */
-        __CDS_NoDiscard __CDS_OptimalInline auto upper () const noexcept -> String { return String(*this).toUpper(); }
+        __CDS_NoDiscard __CDS_OptimalInline auto upper () const noexcept -> String {
+            return String(*this).toUpper();
+        }
 
         /**
          * @brief Copy Operator
          *
-         * @param o : String cref = Constant Reference to a String to copy data from
+         * @param string : String cref = Constant Reference to a String to copy data from
          *
          * @exceptsafe
          *
@@ -4036,20 +4431,20 @@ namespace cds {
          *
          * @test tested in primitive/StringTest/Assignment Tests
          */
-        __CDS_cpplang_ConstexprDynamicAllocation auto operator = ( String const & o ) noexcept -> String & {
-            if ( this == & o ) {
+        __CDS_cpplang_ConstexprDynamicAllocation auto operator = ( String const & string ) noexcept -> String & {
+            if ( this == & string ) {
                 return * this;
             }
 
             this->clear();
 
-            if ( o.empty() ) {
+            if ( string.empty() ) {
                 return * this;
             }
 
-            this->_alloc(o.size());
-            (void) std::memcpy ( this->_p, o._p, o._l + 1llu );
-            this->_l = o._l;
+            this->_alloc(string.size());
+            (void) std::memcpy (this->_p, string._p, string._l + 1llu );
+            this->_l = string._l;
 
             return * this;
         }
@@ -4057,7 +4452,7 @@ namespace cds {
         /**
          * @brief Move Operator
          *
-         * @param o : String mref = Move Reference to a String to copy data from
+         * @param string : String mref = Move Reference to a String to copy data from
          *
          * @exceptsafe
          *
@@ -4065,16 +4460,16 @@ namespace cds {
          *
          * @test tested in primitive/StringTest/Assignment Tests
          */
-        __CDS_cpplang_ConstexprDynamicAllocation auto operator = ( String && o ) noexcept -> String & {
-            if ( this == & o ) {
+        __CDS_cpplang_ConstexprDynamicAllocation auto operator = ( String && string ) noexcept -> String & {
+            if ( this == & string ) {
                 return * this;
             }
 
             Memory :: instance().destroyArray ( this->_p );
 
-            this->_p = exchange( o._p, nullptr );
-            this->_l = exchange( o._l, 0u );
-            this->_c = exchange( o._c, 0u );
+            this->_p = exchange(string._p, nullptr );
+            this->_l = exchange(string._l, 0u );
+            this->_c = exchange(string._c, 0u );
 
             return * this;
         }
@@ -4084,7 +4479,7 @@ namespace cds {
         /**
          * @brief Copy Operator
          *
-         * @param v : QString cref = Constant Reference to a QString to copy data from
+         * @param string : QString cref = Constant Reference to a QString to copy data from
          *
          * @exceptsafe
          *
@@ -4092,13 +4487,16 @@ namespace cds {
          *
          * @test tested in primitive/StringTest/Assignment Tests
          */
-        __CDS_OptimalInline String & operator = (QString const & v) noexcept { return ((* this) = String(v)); }
+        __CDS_OptimalInline String & operator = (QString const & string) noexcept {
+            return ((* this) = String(string));
+        }
+
     #endif
 
         /**
          * @brief Copy Operator
          *
-         * @param s : std::string cref = Constant Reference to a std::string to copy data from
+         * @param string : std::string cref = Constant Reference to a std::string to copy data from
          *
          * @exceptsafe
          *
@@ -4106,12 +4504,14 @@ namespace cds {
          *
          * @test tested in primitive/StringTest/Assignment Tests
          */
-        __CDS_OptimalInline auto operator = ( std::string const & s ) noexcept -> String & { return this->operator=(String(s)); } // NOLINT(misc-unconventional-assign-operator)
+        __CDS_OptimalInline auto operator = ( std::string const & string ) noexcept -> String & {
+            return this->operator=(String(string)); // NOLINT(misc-unconventional-assign-operator)
+        }
 
         /**
          * @brief Copy Operator
          *
-         * @param e : ElementType = Element to assign to the String
+         * @param element : ElementType = Element to assign to the String
          *
          * @exceptsafe
          *
@@ -4119,7 +4519,9 @@ namespace cds {
          *
          * @test tested in primitive/StringTest/Assignment Tests
          */
-        __CDS_OptimalInline auto operator = ( ElementType e ) noexcept -> String & { return this->operator=(String().append(e)); } // NOLINT(misc-unconventional-assign-operator)
+        __CDS_OptimalInline auto operator = ( ElementType element ) noexcept -> String & {
+            return this->operator=(String().append(element));  // NOLINT(misc-unconventional-assign-operator)
+        }
 
         /**
          * @brief Copy Operator
@@ -4132,7 +4534,9 @@ namespace cds {
          *
          * @test tested in primitive/StringTest/Assignment Tests
          */
-        __CDS_OptimalInline auto operator = ( StringLiteral cString ) noexcept -> String & { return this->operator=(String(cString)); } // NOLINT(misc-unconventional-assign-operator)
+        __CDS_OptimalInline auto operator = ( StringLiteral cString ) noexcept -> String & {
+            return this->operator=(String(cString)); // NOLINT(misc-unconventional-assign-operator)
+        }
 
 
         /**
@@ -4187,7 +4591,7 @@ namespace cds {
         /**
          * @brief Function used to check whether String contains given element
          *
-         * @param e : ElementType = element to check if it exists in a String
+         * @param element : ElementType = element to check if it exists in a String
          *
          * @exceptsafe
          *
@@ -4195,14 +4599,14 @@ namespace cds {
          *
          * @test tested in primitive/StringTest/Content Functions Tests
          */
-        __CDS_NoDiscard __CDS_cpplang_ConstexprConditioned auto contains ( ElementType e ) const noexcept -> bool {
-            return this->findFirst( e ) != INVALID_POS;
+        __CDS_NoDiscard __CDS_cpplang_ConstexprConditioned auto contains ( ElementType element ) const noexcept -> bool {
+            return this->findFirst(element ) != INVALID_POS;
         }
 
         /**
          * @brief Function used to check whether String contains given String
          *
-         * @param e : String cref = Constant Reference to a String to check if Object contains it
+         * @param string : String cref = Constant Reference to a String to check if Object contains it
          *
          * @exceptsafe
          *
@@ -4210,12 +4614,14 @@ namespace cds {
          *
          * @test tested in primitive/StringTest/Content Functions Tests
          */
-        __CDS_NoDiscard __CDS_cpplang_ConstexprConditioned auto contains ( String const & e ) const noexcept -> bool { return this->findFirst( e ) != INVALID_POS; }
+        __CDS_NoDiscard __CDS_cpplang_ConstexprConditioned auto contains ( String const & string ) const noexcept -> bool {
+            return this->findFirst(string ) != INVALID_POS;
+        }
 
         /**
          * @brief Function used to check whether String contains given StringLiteral
          *
-         * @param e : StringLiteral = Address to a C String to check if Object contains it
+         * @param stringLiteral : StringLiteral = Address to a C String to check if Object contains it
          *
          * @exceptsafe
          *
@@ -4223,12 +4629,14 @@ namespace cds {
          *
          * @test tested in primitive/StringTest/Content Functions Tests
          */
-        __CDS_NoDiscard __CDS_OptimalInline auto contains ( StringLiteral e ) const noexcept -> bool { return this->findFirst( String(e) ) != INVALID_POS; }
+        __CDS_NoDiscard __CDS_OptimalInline auto contains ( StringLiteral stringLiteral ) const noexcept -> bool {
+            return this->findFirst( String(stringLiteral) ) != INVALID_POS;
+        }
 
         /**
          * @brief Function used to check whether String contains given std::string
          *
-         * @param e : std::string cref = Constant Reference to a std::string to check if Object contains it
+         * @param string : std::string cref = Constant Reference to a std::string to check if Object contains it
          *
          * @exceptsafe
          *
@@ -4236,7 +4644,9 @@ namespace cds {
          *
          * @test tested in primitive/StringTest/Content Functions Tests
          */
-        __CDS_NoDiscard __CDS_OptimalInline auto contains ( std::string const & e ) const noexcept -> bool { return this->findFirst( String(e) ) != INVALID_POS; }
+        __CDS_NoDiscard __CDS_OptimalInline auto contains ( std::string const & string ) const noexcept -> bool {
+            return this->findFirst(String(string) ) != INVALID_POS;
+        }
 
     #if defined(CDS_QT)
 
@@ -4251,7 +4661,10 @@ namespace cds {
          *
          * @test tested in primitive/StringTest/Content Functions Tests
          */
-        __CDS_OptimalInline auto contains (QString const & v) const noexcept -> bool { return this->contains(String(v)); }
+        __CDS_NoDiscard __CDS_OptimalInline auto contains (QString const & string) const noexcept -> bool {
+            return this->contains(String(string));
+        }
+
     #endif
 
     #ifndef NDEBUG
@@ -4279,7 +4692,7 @@ namespace cds {
          * @brief Print Operator
          *
          * @param out : std::ostream ref = Reference to an output stream to print on
-         * @param s : String cref = Constant Reference to the String to print
+         * @param string : String cref = Constant Reference to the String to print
          *
          * @exceptsafe
          *
@@ -4287,8 +4700,8 @@ namespace cds {
          *
          * @test Not Applicable
          */
-        friend __CDS_OptionalInline auto operator << ( std::ostream & out, String const & s ) noexcept -> std::ostream & {
-            return ( out << (s._p == nullptr ? "" : s._p) );
+        friend __CDS_OptionalInline auto operator << ( std::ostream & out, String const & string ) noexcept -> std::ostream & {
+            return ( out << (string._p == nullptr ? "" : string._p) );
         }
 
         /**
@@ -4354,7 +4767,7 @@ namespace cds {
          * @brief Function used to apply a function over each of the elements in the String iteratively. Requires mutable String, enables modification of elements
          *
          * @tparam Action = Callable type with void return type ( preferably ) and one input parameter representing an iterable element ( ElementType or ElementType ref or ElementType cref )
-         * @param a : Action cref = Constant Reference to the Callable to supply the element to
+         * @param action : Action cref = Constant Reference to the Callable to supply the element to
          *
          * @throws Action's exceptions, if any. If none, is exception safe
          *
@@ -4363,9 +4776,9 @@ namespace cds {
          * @test Tested in primitive/StringTest/ForEach Tests
          */
         template < typename Action >
-        __CDS_MaybeUnused __CDS_cpplang_ConstexprConditioned auto forEach ( Action const & a ) noexcept ( noexcept ( ( * Type < Action > :: unsafeAddress () ) ( Type < char > :: unsafeReference() ) ) ) -> String & {
+        __CDS_MaybeUnused __CDS_cpplang_ConstexprConditioned auto forEach ( Action const & action ) noexcept ( noexcept ( ( * Type < Action > :: unsafeAddress () ) (Type < char > :: unsafeReference() ) ) ) -> String & {
             for ( Index i = 0; static_cast < Size > ( i ) < this->_l; ++ i ) {
-                a(this->_p[i]);
+                action(this->_p[i]);
             }
 
             return * this;
@@ -4375,7 +4788,7 @@ namespace cds {
          * @brief Function used to apply a function over each of the elements in the String iteratively. Is const, requiring Action over immutable element ( no char & )
          *
          * @tparam Action = Callable type with void return type ( preferably ) and one input parameter representing an iterable element ( ElementType or ElementType ref or ElementType cref )
-         * @param a : Action cref = Constant Reference to the Callable to supply the element to
+         * @param action : Action cref = Constant Reference to the Callable to supply the element to
          *
          * @throws Action's exceptions, if any. If none, is exception safe
          *
@@ -4384,9 +4797,9 @@ namespace cds {
          * @test Tested in primitive/StringTest/ForEach Tests
          */
         template < typename Action >
-        __CDS_MaybeUnused __CDS_cpplang_ConstexprConditioned auto forEach ( Action const & a ) const noexcept ( noexcept ( ( * Type < Action > :: unsafeAddress () ) ( Type < const char > :: unsafeReference() ) ) ) -> String const & {
+        __CDS_MaybeUnused __CDS_cpplang_ConstexprConditioned auto forEach ( Action const & action ) const noexcept ( noexcept ( ( * Type < Action > :: unsafeAddress () ) (Type < const char > :: unsafeReference() ) ) ) -> String const & {
             for ( Index i = 0; static_cast < Size > ( i ) < this->_l; ++ i ) {
-                a(this->_p[i]);
+                action(this->_p[i]);
             }
 
             return * this;
@@ -4397,7 +4810,7 @@ namespace cds {
          *
          * @tparam Predicate = boolean return Callable with one parameter of ElementType, used to validate a property of an element
          *
-         * @param p : Predicate cref = Constant Reference to a Predicate - static function, Lambda, Function or any callable type object
+         * @param predicate : Predicate cref = Constant Reference to a Predicate - static function, Lambda, Function or any callable type object
          *
          * @throws Predicate's exception, if any. If none, is exception safe
          *
@@ -4406,10 +4819,10 @@ namespace cds {
          * @test Tested in primitive/StringTest/ForEach tests
          */
         template < typename Predicate, typename P = Predicate, typename std :: enable_if < Type < P > :: isCallable, int > :: type = 0 >
-        __CDS_MaybeUnused __CDS_cpplang_ConstexprConditioned auto count ( Predicate const & p ) noexcept ( noexcept ( ( * Type < Predicate > :: unsafeAddress () ) ( Type < char > :: unsafeReference() ) ) ) -> Size {
+        __CDS_MaybeUnused __CDS_cpplang_ConstexprConditioned auto count ( Predicate const & predicate ) noexcept ( noexcept ( ( * Type < Predicate > :: unsafeAddress () ) (Type < char > :: unsafeReference() ) ) ) -> Size {
             Size count = 0u;
             for ( Index i = 0; static_cast < Size > ( i ) < this->_l; ++ i ) {
-                if (p(this->_p[i])) {
+                if (predicate(this->_p[i])) {
                     count++;
                 }
             }
@@ -4422,7 +4835,7 @@ namespace cds {
          *
          * @tparam Predicate = boolean return Callable with one parameter of ElementType, used to validate a property of an element
          *
-         * @param p : Predicate cref = Constant Reference to a Predicate - static function, Lambda, Function or any callable type object
+         * @param predicate : Predicate cref = Constant Reference to a Predicate - static function, Lambda, Function or any callable type object
          *
          * @throws Predicate's exception, if any. If none, is exception safe
          *
@@ -4431,10 +4844,10 @@ namespace cds {
          * @test Tested in primitive/StringTest/ForEach tests
          */
         template < typename Predicate, typename P = Predicate, typename std :: enable_if < Type < P > :: isCallable, int > :: type = 0  >
-        __CDS_MaybeUnused __CDS_cpplang_ConstexprConditioned auto count ( Predicate const & p ) const noexcept ( noexcept ( ( * Type < Predicate > :: unsafeAddress () ) ( Type < const char > :: unsafeReference() ) ) ) -> Size {
+        __CDS_MaybeUnused __CDS_cpplang_ConstexprConditioned auto count ( Predicate const & predicate ) const noexcept ( noexcept ( ( * Type < Predicate > :: unsafeAddress () ) (Type < const char > :: unsafeReference() ) ) ) -> Size {
             Size count = 0u;
             for ( Index i = 0; static_cast < Size > ( i ) < this->_l; ++ i ) {
-                if (p(this->_p[i])) {
+                if (predicate(this->_p[i])) {
                     count++;
                 }
             }
@@ -4458,7 +4871,7 @@ namespace cds {
          *
          * @tparam Predicate = boolean return Callable with one parameter of ElementType, used to validate a property of an element
          *
-         * @param p : Predicate cref = Constant Reference to a Predicate - static function, Lambda, Function or any callable type object
+         * @param predicate : Predicate cref = Constant Reference to a Predicate - static function, Lambda, Function or any callable type object
          *
          * @throws Predicate's exception, if any. If none, is exception safe
          *
@@ -4467,14 +4880,16 @@ namespace cds {
          * @test Tested in primitive/StringTest/ForEach tests
          */
         template < typename Predicate >
-        __CDS_MaybeUnused __CDS_cpplang_ConstexprConditioned auto some ( Predicate const & p, Size s ) noexcept ( noexcept ( ( * Type < Predicate > :: unsafeAddress () ) ( Type < char > :: unsafeReference() ) ) ) -> bool { return s <= this->count ( p ); }
+        __CDS_MaybeUnused __CDS_cpplang_ConstexprConditioned auto some (Predicate const & predicate, Size count ) noexcept ( noexcept ( ( * Type < Predicate > :: unsafeAddress () ) (Type < char > :: unsafeReference() ) ) ) -> bool {
+            return count <= this->count (predicate );
+        }
 
         /**
          * @brief Function used to verify if a given number of elements validate a certain Predicate. Requires Predicate that does not modify elements ( char & ), due to it being applied over immutable String
          *
          * @tparam Predicate = boolean return Callable with one parameter of ElementType, used to validate a property of an element
          *
-         * @param p : Predicate cref = Constant Reference to a Predicate - static function, Lambda, Function or any callable type object
+         * @param predicate : Predicate cref = Constant Reference to a Predicate - static function, Lambda, Function or any callable type object
          *
          * @throws Predicate's exception, if any. If none, is exception safe
          *
@@ -4483,14 +4898,16 @@ namespace cds {
          * @test Tested in primitive/StringTest/ForEach tests
          */
          template < typename Predicate >
-        __CDS_MaybeUnused __CDS_cpplang_ConstexprConditioned auto some ( Predicate const & p, Size s ) const noexcept( noexcept ( ( * Type < Predicate > :: unsafeAddress () ) ( Type < const char > :: unsafeReference() ) ) ) -> bool { return s <= this->count ( p ); }
+        __CDS_MaybeUnused __CDS_cpplang_ConstexprConditioned auto some (Predicate const & predicate, Size count ) const noexcept( noexcept ( ( * Type < Predicate > :: unsafeAddress () ) (Type < const char > :: unsafeReference() ) ) ) -> bool {
+            return count <= this->count (predicate );
+        }
 
         /**
          * @brief Function used to verify if any element validates a certain Predicate. Requires mutable String, as Predicate given can change elements in String
          *
          * @tparam Predicate = boolean return Callable with one parameter of ElementType, used to validate a property of an element
          *
-         * @param p : Predicate cref = Constant Reference to a Predicate - static function, Lambda, Function or any callable type object
+         * @param predicate : Predicate cref = Constant Reference to a Predicate - static function, Lambda, Function or any callable type object
          *
          * @throws Predicate's exception, if any. If none, is exception safe
          *
@@ -4499,14 +4916,16 @@ namespace cds {
          * @test Tested in primitive/StringTest/ForEach tests
          */
         template < typename Predicate >
-        __CDS_MaybeUnused __CDS_cpplang_ConstexprConditioned auto any ( Predicate const & p ) noexcept ( noexcept ( ( * Type < Predicate > :: unsafeAddress () ) ( Type < char > :: unsafeReference() ) ) ) -> bool { return 1u <= this->count(p); }
+        __CDS_MaybeUnused __CDS_cpplang_ConstexprConditioned auto any ( Predicate const & predicate ) noexcept ( noexcept ( ( * Type < Predicate > :: unsafeAddress () ) (Type < char > :: unsafeReference() ) ) ) -> bool {
+            return 1u <= this->count(predicate);
+        }
 
         /**
          * @brief Function used to verify if any element validates a certain Predicate. Requires Predicate that does not modify elements ( char & ), due to it being applied over immutable String
          *
          * @tparam Predicate = boolean return Callable with one parameter of ElementType, used to validate a property of an element
          *
-         * @param p : Predicate cref = Constant Reference to a Predicate - static function, Lambda, Function or any callable type object
+         * @param predicate : Predicate cref = Constant Reference to a Predicate - static function, Lambda, Function or any callable type object
          *
          * @throws Predicate's exception, if any. If none, is exception safe
          *
@@ -4515,14 +4934,16 @@ namespace cds {
          * @test Tested in primitive/StringTest/ForEach tests
          */
         template < typename Predicate >
-        __CDS_MaybeUnused __CDS_cpplang_ConstexprConditioned auto any ( Predicate const & p ) const noexcept ( noexcept ( ( * Type < Predicate > :: unsafeAddress () ) ( Type < const char > :: unsafeReference() ) ) ) -> bool { return 1u <= this->count(p); }
+        __CDS_MaybeUnused __CDS_cpplang_ConstexprConditioned auto any ( Predicate const & predicate ) const noexcept ( noexcept ( ( * Type < Predicate > :: unsafeAddress () ) (Type < const char > :: unsafeReference() ) ) ) -> bool {
+            return 1u <= this->count(predicate);
+        }
 
         /**
          * @brief Function used to verify if all the elements validate a certain Predicate. Requires mutable String, as Predicate given can change elements in String
          *
          * @tparam Predicate = boolean return Callable with one parameter of ElementType, used to validate a property of an element
          *
-         * @param p : Predicate cref = Constant Reference to a Predicate - static function, Lambda, Function or any callable type object
+         * @param predicate : Predicate cref = Constant Reference to a Predicate - static function, Lambda, Function or any callable type object
          *
          * @throws Predicate's exception, if any. If none, is exception safe
          *
@@ -4531,14 +4952,16 @@ namespace cds {
          * @test Tested in primitive/StringTest/ForEach tests
          */
         template < typename Predicate >
-        __CDS_MaybeUnused __CDS_cpplang_ConstexprConditioned auto all ( Predicate const & p ) noexcept ( noexcept ( ( * Type < Predicate > :: unsafeAddress () ) ( Type < char > :: unsafeReference() ) ) ) -> bool { return this->size() == this->count(p); }
+        __CDS_MaybeUnused __CDS_cpplang_ConstexprConditioned auto all ( Predicate const & predicate ) noexcept ( noexcept ( ( * Type < Predicate > :: unsafeAddress () ) (Type < char > :: unsafeReference() ) ) ) -> bool {
+            return this->size() == this->count(predicate);
+        }
 
         /**
          * @brief Function used to verify if all the elements validate a certain Predicate. Requires Predicate that does not modify elements ( char & ), due to it being applied over immutable String
          *
          * @tparam Predicate = boolean return Callable with one parameter of ElementType, used to validate a property of an element
          *
-         * @param p : Predicate cref = Constant Reference to a Predicate - static function, Lambda, Function or any callable type object
+         * @param predicate : Predicate cref = Constant Reference to a Predicate - static function, Lambda, Function or any callable type object
          *
          * @throws Predicate's exception, if any. If none, is exception safe
          *
@@ -4547,7 +4970,9 @@ namespace cds {
          * @test Tested in primitive/StringTest/ForEach tests
          */
         template < typename Predicate >
-        __CDS_MaybeUnused __CDS_cpplang_ConstexprConditioned auto all ( Predicate const & p ) const noexcept ( noexcept ( ( * Type < Predicate > :: unsafeAddress () ) ( Type < const char > :: unsafeReference() ) ) ) -> bool { return this->size() == this->count(p); }
+        __CDS_MaybeUnused __CDS_cpplang_ConstexprConditioned auto all ( Predicate const & predicate ) const noexcept ( noexcept ( ( * Type < Predicate > :: unsafeAddress () ) (Type < const char > :: unsafeReference() ) ) ) -> bool {
+            return this->size() == this->count(predicate);
+        }
 
         /**
          * @brief Function obtains a String that contains the contents of the caller in reverse order
@@ -4559,13 +4984,13 @@ namespace cds {
          * @test Tested in primitive/StringTest/Constructor Tests
          */
         __CDS_NoDiscard __CDS_OptimalInline auto reversed() const noexcept -> String {
-            String a;
-            a._alloc(this->_l);
+            String reversed;
+            reversed._alloc(this->_l);
             for (Index i = static_cast < Index > (this->_l) - 1; i >= 0; -- i) {
-                a._p[a._l++] = this->_p[i];
+                reversed._p[reversed._l++] = this->_p[i];
             }
 
-            return a;
+            return reversed;
         }
 
         /**
@@ -4638,7 +5063,9 @@ namespace cds {
          *
          * @test Tested in primitive/StringTest/Utility Functions
          */
-        __CDS_NoDiscard __CDS_MaybeUnused __CDS_OptimalInline auto removePrefix (String const & prefix) const noexcept -> String { return String(*this).removePrefix(prefix); }
+        __CDS_NoDiscard __CDS_MaybeUnused __CDS_OptimalInline auto removePrefix (String const & prefix) const noexcept -> String {
+            return String(*this).removePrefix(prefix);
+        }
 
         /**
          * @brief Function used to remove a String's suffix. Used over mutable Strings, removing it from the caller String
@@ -4672,7 +5099,9 @@ namespace cds {
          *
          * @test Tested in primitive/StringTest/Utility Functions
          */
-        __CDS_NoDiscard __CDS_OptimalInline auto removeSuffix (String const & suffix) const noexcept -> String { return String(*this).removeSuffix(suffix); }
+        __CDS_NoDiscard __CDS_OptimalInline auto removeSuffix (String const & suffix) const noexcept -> String {
+            return String(*this).removeSuffix(suffix);
+        }
 
         __CDS_NoDiscard __CDS_OptionalInline auto static format (StringLiteral format, ...) noexcept (false) -> String { // NOLINT(clion-misra-cpp2008-8-4-1)
             va_list args;
@@ -4685,11 +5114,11 @@ namespace cds {
 
                 int returnValue = std::vsnprintf ( buffer, currentSize, format, args ); // NOLINT(clion-misra-cpp2008-5-2-12)
                 if ( returnValue >= 0 && static_cast < Size > (returnValue) < currentSize ) {
-                    String s(buffer, static_cast < Size > ( returnValue ) );
+                    String string(buffer, static_cast < Size > ( returnValue ) );
                     Memory :: instance().destroyArray ( buffer );
                     va_end (args); // NOLINT(clion-misra-cpp2008-5-2-12)
 
-                    return s;
+                    return string;
                 }
 
                 va_end(args); // NOLINT(clion-misra-cpp2008-5-2-12)
@@ -4713,11 +5142,11 @@ namespace cds {
 
                 int returnValue = std::vsnprintf ( buffer, currentSize, format, args ); // NOLINT(clion-misra-cpp2008-5-2-12)
                 if ( returnValue >= 0 && static_cast < Size > ( returnValue ) < currentSize ) {
-                    String s(buffer, static_cast < Size > ( returnValue ) );
+                    String string(buffer, static_cast < Size > ( returnValue ) );
                     Memory :: instance().destroyArray ( buffer );
                     va_end (args); // NOLINT(clion-misra-cpp2008-5-2-12)
 
-                    return s;
+                    return string;
                 }
 
                 va_end(args); // NOLINT(clion-misra-cpp2008-5-2-12)
@@ -4742,8 +5171,8 @@ namespace cds {
         return this->toString();
     }
 
-    inline auto operator << (std::ostream & out, Object const & o) noexcept -> std::ostream & {
-        return (out << o.toString());
+    inline auto operator << (std::ostream & out, Object const & object) noexcept -> std::ostream & {
+        return (out << object.toString());
     }
 
 }
@@ -4758,12 +5187,29 @@ namespace cds {
         return oss.str();
     }
 
-    inline auto String::operator == ( std::string const & stdString ) const noexcept -> bool { return std::strcmp ( this->cStr(), stdString.c_str() ) == 0; }
-    inline auto String::operator >= ( std::string const & stdString ) const noexcept -> bool { return std::strcmp ( this->cStr(), stdString.c_str() ) >= 0; }
-    inline auto String::operator <= ( std::string const & stdString ) const noexcept -> bool { return std::strcmp ( this->cStr(), stdString.c_str() ) <= 0; }
-    inline auto String::operator != ( std::string const & stdString ) const noexcept -> bool { return std::strcmp ( this->cStr(), stdString.c_str() ) != 0; }
-    inline auto String::operator < ( std::string const & stdString ) const noexcept -> bool { return std::strcmp ( this->cStr(), stdString.c_str() ) < 0; }
-    inline auto String::operator > ( std::string const & stdString ) const noexcept -> bool { return std::strcmp ( this->cStr(), stdString.c_str() ) > 0; }
+    inline auto String::operator == ( std::string const & stdString ) const noexcept -> bool {
+        return std::strcmp ( this->cStr(), stdString.c_str() ) == 0;
+    }
+
+    inline auto String::operator >= ( std::string const & stdString ) const noexcept -> bool {
+        return std::strcmp ( this->cStr(), stdString.c_str() ) >= 0;
+    }
+
+    inline auto String::operator <= ( std::string const & stdString ) const noexcept -> bool {
+        return std::strcmp ( this->cStr(), stdString.c_str() ) <= 0;
+    }
+
+    inline auto String::operator != ( std::string const & stdString ) const noexcept -> bool {
+        return std::strcmp ( this->cStr(), stdString.c_str() ) != 0;
+    }
+
+    inline auto String::operator < ( std::string const & stdString ) const noexcept -> bool {
+        return std::strcmp ( this->cStr(), stdString.c_str() ) < 0;
+    }
+
+    inline auto String::operator > ( std::string const & stdString ) const noexcept -> bool {
+        return std::strcmp ( this->cStr(), stdString.c_str() ) > 0;
+    }
 
 }
 

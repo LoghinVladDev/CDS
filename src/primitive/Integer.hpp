@@ -52,7 +52,7 @@ namespace cds {
          *
          * @test Tested in primitive/IntegerTest/Random Tests
          */
-        static auto random () noexcept -> Integer {
+        __CDS_MaybeUnused static auto random () noexcept -> Integer {
             static UniquePointer < RandomGenerator > pRng;
             if (pRng.isNull()) {
                 pRng.reset(Memory :: instance() .create < RandomGenerator > ());
@@ -149,7 +149,7 @@ namespace cds {
         /**
          * @brief Assignment Operator
          *
-         * @param o : Integer cref = Constant Reference to an Integer Object to assign value from
+         * @param integer : Integer cref = Constant Reference to an Integer Object to assign value from
          *
          * @exceptsafe
          *
@@ -157,12 +157,12 @@ namespace cds {
          *
          * @test Tested in primitive/Integer/Constructor Tests
          */
-        __CDS_cpplang_NonConstConstexprMemberFunction auto operator=(Integer const &o) noexcept -> Integer & {
-            if (this == &o) {
+        __CDS_cpplang_NonConstConstexprMemberFunction auto operator=(Integer const &integer) noexcept -> Integer & {
+            if (this == &integer) {
                 return *this;
             }
 
-            this->v = o.v;
+            this->v = integer.v;
             return *this;
         }
 
@@ -194,7 +194,7 @@ namespace cds {
         /**
          * @brief Sum Operator
          *
-         * @param o : Integer cref = Constant Reference to an Integer Object to sum with caller Object
+         * @param integer : Integer cref = Constant Reference to an Integer Object to sum with caller Object
          *
          * @exceptsafe
          *
@@ -202,7 +202,7 @@ namespace cds {
          *
          * @test Tested in primitive/Integer/Algebraic Operator Tests
          */
-        __CDS_cpplang_ConstexprDestructor auto operator+(Integer const &o) const noexcept -> Integer { return this->v + o.v; }
+        __CDS_cpplang_ConstexprDestructor auto operator+(Integer const &integer) const noexcept -> Integer { return this->v + integer.v; }
 
         /**
          * @brief Sum Operator
@@ -217,12 +217,12 @@ namespace cds {
          */
         __CDS_cpplang_ConstexprDestructor auto operator+(int value) const noexcept -> Integer { return this->v + value; }
 
-        __CDS_cpplang_ConstexprDestructor friend auto operator+ (int value, Integer const & o) noexcept -> Integer { return value + o.v; }
+        __CDS_cpplang_ConstexprDestructor friend auto operator+ (int value, Integer const & integer) noexcept -> Integer { return value + integer.v; }
 
         /**
          * @brief Difference Operator
          *
-         * @param o : Integer cref = Constant Reference to an Integer Object to subtract from caller Object
+         * @param integer : Integer cref = Constant Reference to an Integer Object to subtract from caller Object
          *
          * @exceptsafe
          *
@@ -230,9 +230,9 @@ namespace cds {
          *
          * @test Tested in primitive/Integer/Algebraic Operator Tests
          */
-        __CDS_cpplang_ConstexprDestructor auto operator-(Integer const &o) const noexcept -> Integer { return this->v - o.v; }
+        __CDS_cpplang_ConstexprDestructor auto operator-(Integer const &integer) const noexcept -> Integer { return this->v - integer.v; }
 
-        __CDS_cpplang_ConstexprDestructor friend auto operator - (int value, Integer const & o) noexcept -> Integer { return value - o.v; }
+        __CDS_cpplang_ConstexprDestructor friend auto operator - (int value, Integer const & integer) noexcept -> Integer { return value - integer.v; }
 
         /**
          * @brief Difference Operator
@@ -250,7 +250,7 @@ namespace cds {
         /**
          * @brief Multiply Operator
          *
-         * @param o : Integer cref = Constant Reference to an Integer Object to multiply from caller Object
+         * @param integer : Integer cref = Constant Reference to an Integer Object to multiply from caller Object
          *
          * @exceptsafe
          *
@@ -258,7 +258,7 @@ namespace cds {
          *
          * @test Tested in primitive/Integer/Algebraic Operator Tests
          */
-        __CDS_cpplang_ConstexprDestructor auto operator*(Integer const &o) const noexcept -> Integer { return this->v * o.v; }
+        __CDS_cpplang_ConstexprDestructor auto operator*(Integer const &integer) const noexcept -> Integer { return this->v * integer.v; }
 
         /**
          * @brief Multiply Operator
@@ -273,12 +273,12 @@ namespace cds {
          */
         __CDS_cpplang_ConstexprDestructor auto operator*(int value) const noexcept -> Integer { return this->v * value; }
 
-        __CDS_cpplang_ConstexprDestructor friend auto operator * (int value, Integer const & o) noexcept -> Integer { return value * o.v; }
+        __CDS_cpplang_ConstexprDestructor friend auto operator * (int value, Integer const & integer) noexcept -> Integer { return value * integer.v; }
 
         /**
          * @brief Division Operator
          *
-         * @param o : Integer cref = Constant Reference to an Integer Object to divide caller Object with
+         * @param integer : Integer cref = Constant Reference to an Integer Object to divide caller Object with
          *
          * @throws DivideByZeroException if right hand operator is 0
          * @throws ArithmeticException if right hand operator is INT32_MIN due to it being undefined behaviour ( if compiler is not C2 compliant )
@@ -287,28 +287,28 @@ namespace cds {
          *
          * @test Tested in primitive/Integer/Algebraic Operator Tests
          */
-        __CDS_cpplang_ConstexprDestructor auto operator/(Integer const &o) const noexcept (false) -> Integer {
-            if ( o.v == 0 ) {
+        __CDS_cpplang_ConstexprDestructor auto operator/(Integer const &integer) const noexcept (false) -> Integer {
+            if (integer.v == 0 ) {
                 throw DivideByZeroException();
             }
 
-            if ( o.v == INT32_MIN || this->v == INT32_MIN ) {
+            if (integer.v == INT32_MIN || this->v == INT32_MIN ) {
                 throw ArithmeticException("Division by INT32_MIN is undefined behaviour");
             }
 
-            return this->v / o.v;
+            return this->v / integer.v;
         }
 
-        friend auto operator / (int value, Integer const & o) noexcept (false) -> Integer {
-            if ( o.v == 0 ) {
+        friend auto operator / (int value, Integer const & integer) noexcept (false) -> Integer {
+            if (integer.v == 0 ) {
                 throw DivideByZeroException();
             }
 
-            if ( o.v == INT32_MIN || value == INT32_MIN ) {
+            if (integer.v == INT32_MIN || value == INT32_MIN ) {
                 throw ArithmeticException("Division by INT32_MIN is undefined behaviour");
             }
 
-            return value / o.v;
+            return value / integer.v;
         }
 
         /**
@@ -338,7 +338,7 @@ namespace cds {
         /**
          * @brief Modulo Operator
          *
-         * @param o : Integer cref = Constant Reference to an Integer Object to obtain remainder from caller Object
+         * @param integer : Integer cref = Constant Reference to an Integer Object to obtain remainder from caller Object
          *
          * @throws DivideByZeroException if right hand operator is 0
          * @throws ArithmeticException if right hand operator is INT32_MIN due to it being undefined behaviour ( if compiler is not C2 compliant )
@@ -347,16 +347,16 @@ namespace cds {
          *
          * @test Tested in primitive/Integer/Algebraic Operator Tests
          */
-        __CDS_cpplang_ConstexprDestructor auto operator % (Integer const &o) const noexcept (false) -> Integer {
-            if ( o.v == 0 ) {
+        __CDS_cpplang_ConstexprDestructor auto operator % (Integer const &integer) const noexcept (false) -> Integer {
+            if (integer.v == 0 ) {
                 throw DivideByZeroException();
             }
 
-            if ( o.v == INT32_MIN || this->v == INT32_MIN ) {
+            if (integer.v == INT32_MIN || this->v == INT32_MIN ) {
                 throw ArithmeticException("Modulo by INT32_MIN is undefined behaviour");
             }
 
-            return this->v % o.v;
+            return this->v % integer.v;
         }
 
         /**
@@ -383,22 +383,22 @@ namespace cds {
             return this->v % value;
         }
 
-        __CDS_cpplang_ConstexprDestructor friend auto operator % (int value, Integer const & o) noexcept (false) -> Integer {
-            if ( o.v == 0 ) {
+        __CDS_cpplang_ConstexprDestructor friend auto operator % (int value, Integer const & integer) noexcept (false) -> Integer {
+            if (integer.v == 0 ) {
                 throw DivideByZeroException();
             }
 
-            if ( o.v == INT32_MIN || value == INT32_MIN ) {
+            if (integer.v == INT32_MIN || value == INT32_MIN ) {
                 throw ArithmeticException("Modulo by INT32_MIN is undefined behaviour");
             }
 
-            return value % o.v;
+            return value % integer.v;
         }
 
         /**
          * @brief Sum Accumulate Operator
          *
-         * @param o : Integer cref = Constant Reference to Integer Object to sum into left, caller object
+         * @param integer : Integer cref = Constant Reference to Integer Object to sum into left, caller object
          *
          * @exceptsafe
          *
@@ -406,8 +406,8 @@ namespace cds {
          *
          * @test Tested in primitive/Integer/Algebraic Operator Tests
          */
-        __CDS_cpplang_ConstexprDestructor auto operator+=(Integer const &o) noexcept -> Integer & {
-            this->v += o.v;
+        __CDS_cpplang_ConstexprDestructor auto operator+=(Integer const &integer) noexcept -> Integer & {
+            this->v += integer.v;
             return *this;
         }
 
@@ -430,7 +430,7 @@ namespace cds {
         /**
          * @brief Sum Accumulate Operator
          *
-         * @param o : Integer cref = Constant Reference to Integer Object to subtract into left, caller object
+         * @param integer : Integer cref = Constant Reference to Integer Object to subtract into left, caller object
          *
          * @exceptsafe
          *
@@ -438,8 +438,8 @@ namespace cds {
          *
          * @test Tested in primitive/Integer/Algebraic Operator Tests
          */
-        __CDS_cpplang_NonConstConstexprMemberFunction auto operator-=(Integer const &o) noexcept -> Integer & {
-            this->v -= o.v;
+        __CDS_cpplang_NonConstConstexprMemberFunction auto operator-=(Integer const &integer) noexcept -> Integer & {
+            this->v -= integer.v;
             return *this;
         }
 
@@ -462,7 +462,7 @@ namespace cds {
         /**
          * @brief Sum Accumulate Operator
          *
-         * @param o : Integer cref = Constant Reference to Integer Object to multiply with left, caller object
+         * @param integer : Integer cref = Constant Reference to Integer Object to multiply with left, caller object
          *
          * @exceptsafe
          *
@@ -470,8 +470,8 @@ namespace cds {
          *
          * @test Tested in primitive/Integer/Algebraic Operator Tests
          */
-        __CDS_cpplang_NonConstConstexprMemberFunction auto operator*=(Integer const &o) noexcept -> Integer & {
-            this->v *= o.v;
+        __CDS_cpplang_NonConstConstexprMemberFunction auto operator*=(Integer const &integer) noexcept -> Integer & {
+            this->v *= integer.v;
             return *this;
         }
 
@@ -494,7 +494,7 @@ namespace cds {
         /**
          * @brief Sum Accumulate Operator
          *
-         * @param o : Integer cref = Constant Reference to Integer Object to divide with left, caller object
+         * @param integer : Integer cref = Constant Reference to Integer Object to divide with left, caller object
          *
          * @throws DivideByZeroException if right hand operator is 0
          * @throws ArithmeticException if right hand operator is INT32_MIN due to it being undefined behaviour ( if compiler is not C2 compliant )
@@ -503,16 +503,16 @@ namespace cds {
          *
          * @test Tested in primitive/Integer/Algebraic Operator Tests
          */
-        __CDS_cpplang_NonConstConstexprMemberFunction auto operator/=(Integer const &o) noexcept (false) -> Integer & {
-            if ( o.v == 0 ) {
+        __CDS_cpplang_NonConstConstexprMemberFunction auto operator/=(Integer const &integer) noexcept (false) -> Integer & {
+            if (integer.v == 0 ) {
                 throw DivideByZeroException();
             }
 
-            if ( o.v == INT32_MIN || this->v == INT32_MIN ) {
+            if (integer.v == INT32_MIN || this->v == INT32_MIN ) {
                 throw ArithmeticException("Division by INT32_MIN is undefined behaviour");
             }
 
-            this->v /= o.v;
+            this->v /= integer.v;
             return *this;
         }
 
@@ -544,7 +544,7 @@ namespace cds {
         /**
          * @brief Sum Accumulate Operator
          *
-         * @param o : Integer cref = Constant Reference to Integer Object to apply modulo with left, caller object
+         * @param integer : Integer cref = Constant Reference to Integer Object to apply modulo with left, caller object
          *
          * @throws DivideByZeroException if right hand operator is 0
          * @throws ArithmeticException if right hand operator is INT32_MIN due to it being undefined behaviour ( if compiler is not C2 compliant )
@@ -553,16 +553,16 @@ namespace cds {
          *
          * @test Tested in primitive/Integer/Algebraic Operator Tests
          */
-        __CDS_cpplang_NonConstConstexprMemberFunction auto operator%=(Integer const &o) noexcept (false) -> Integer & {
-            if ( o.v == 0 ) {
+        __CDS_cpplang_NonConstConstexprMemberFunction auto operator%=(Integer const &integer) noexcept (false) -> Integer & {
+            if (integer.v == 0 ) {
                 throw DivideByZeroException();
             }
 
-            if ( o.v == INT32_MIN || this->v == INT32_MIN ) {
+            if (integer.v == INT32_MIN || this->v == INT32_MIN ) {
                 throw ArithmeticException("Modulo by INT32_MIN is undefined behaviour");
             }
 
-            this->v %= o.v;
+            this->v %= integer.v;
             return *this;
         }
 
@@ -594,7 +594,7 @@ namespace cds {
         /**
          * @brief Equality Comparison Operator
          *
-         * @param o : Integer cref = Constant Reference to an Integer Object to compare this Object to
+         * @param integer : Integer cref = Constant Reference to an Integer Object to compare this Object to
          *
          * @exceptsafe
          *
@@ -602,7 +602,7 @@ namespace cds {
          *
          * @test Tested in primitive/IntegerTest/Relational Operators
          */
-        __CDS_NoDiscard constexpr auto operator==(Integer const &o) const noexcept -> bool { return this->v == o.v; }
+        __CDS_NoDiscard constexpr auto operator==(Integer const &integer) const noexcept -> bool { return this->v == integer.v; }
 
         /**
          * @brief Equality Comparison Operator
@@ -617,12 +617,12 @@ namespace cds {
          */
         __CDS_NoDiscard constexpr auto operator==(int value) const noexcept -> bool { return this->v == value; }
 
-        __CDS_NoDiscard constexpr friend auto operator == (int value, Integer const & o) noexcept -> bool { return value == o.v; }
+        __CDS_NoDiscard constexpr friend auto operator == (int value, Integer const & integer) noexcept -> bool { return value == integer.v; }
 
         /**
          * @brief Difference Comparison Operator
          *
-         * @param o : Integer cref = Constant Reference to an Integer Object to compare this Object to
+         * @param integer : Integer cref = Constant Reference to an Integer Object to compare this Object to
          *
          * @exceptsafe
          *
@@ -630,7 +630,7 @@ namespace cds {
          *
          * @test Tested in primitive/IntegerTest/Relational Operators
          */
-        __CDS_NoDiscard constexpr auto operator!=(Integer const &o) const noexcept -> bool { return this->v != o.v; }
+        __CDS_NoDiscard constexpr auto operator!=(Integer const &integer) const noexcept -> bool { return this->v != integer.v; }
 
         /**
          * @brief Difference Comparison Operator
@@ -645,12 +645,12 @@ namespace cds {
          */
         __CDS_NoDiscard constexpr auto operator!=(int value) const noexcept -> bool { return this->v != value; }
 
-        __CDS_NoDiscard constexpr friend auto operator != (int value, Integer const & o) noexcept -> bool { return value != o.v; }
+        __CDS_NoDiscard constexpr friend auto operator != (int value, Integer const & integer) noexcept -> bool { return value != integer.v; }
 
         /**
          * @brief Greater Comparison Operator
          *
-         * @param o : Integer cref = Constant Reference to an Integer Object to compare this Object to
+         * @param integer : Integer cref = Constant Reference to an Integer Object to compare this Object to
          *
          * @exceptsafe
          *
@@ -658,7 +658,7 @@ namespace cds {
          *
          * @test Tested in primitive/IntegerTest/Relational Operators
          */
-        __CDS_NoDiscard constexpr auto operator>(Integer const &o) const noexcept -> bool { return this->v > o.v; }
+        __CDS_NoDiscard constexpr auto operator>(Integer const &integer) const noexcept -> bool { return this->v > integer.v; }
 
         /**
          * @brief Greater Comparison Operator
@@ -673,12 +673,12 @@ namespace cds {
          */
         __CDS_NoDiscard constexpr auto operator>(int value) const noexcept -> bool { return this->v > value; }
 
-        __CDS_NoDiscard constexpr friend auto operator > (int value, Integer const & o) noexcept -> bool { return value > o.v; }
+        __CDS_NoDiscard constexpr friend auto operator > (int value, Integer const & integer) noexcept -> bool { return value > integer.v; }
 
         /**
          * @brief Less Comparison Operator
          *
-         * @param o : Integer cref = Constant Reference to an Integer Object to compare this Object to
+         * @param integer : Integer cref = Constant Reference to an Integer Object to compare this Object to
          *
          * @exceptsafe
          *
@@ -686,7 +686,7 @@ namespace cds {
          *
          * @test Tested in primitive/IntegerTest/Relational Operators
          */
-        __CDS_NoDiscard constexpr auto operator<(Integer const &o) const noexcept -> bool { return this->v < o.v; }
+        __CDS_NoDiscard constexpr auto operator<(Integer const &integer) const noexcept -> bool { return this->v < integer.v; }
 
         /**
          * @brief Less Comparison Operator
@@ -701,12 +701,12 @@ namespace cds {
          */
         __CDS_NoDiscard constexpr auto operator<(int value) const noexcept -> bool { return this->v < value; }
 
-        __CDS_NoDiscard constexpr friend auto operator < (int value, Integer const & o) noexcept -> bool { return value < o.v; }
+        __CDS_NoDiscard constexpr friend auto operator < (int value, Integer const & integer) noexcept -> bool { return value < integer.v; }
 
         /**
          * @brief Greater or Equals Comparison Operator
          *
-         * @param o : Integer cref = Constant Reference to an Integer Object to compare this Object to
+         * @param integer : Integer cref = Constant Reference to an Integer Object to compare this Object to
          *
          * @exceptsafe
          *
@@ -714,7 +714,7 @@ namespace cds {
          *
          * @test Tested in primitive/IntegerTest/Relational Operators
          */
-        __CDS_NoDiscard constexpr auto operator>=(Integer const &o) const noexcept -> bool { return this->v >= o.v; }
+        __CDS_NoDiscard constexpr auto operator>=(Integer const &integer) const noexcept -> bool { return this->v >= integer.v; }
 
         /**
          * @brief Greater or Equals Comparison Operator
@@ -729,12 +729,12 @@ namespace cds {
          */
         __CDS_NoDiscard constexpr auto operator>=(int value) const noexcept -> bool { return this->v >= value; }
 
-        __CDS_NoDiscard constexpr friend auto operator >= (int value, Integer const & o) noexcept -> bool { return value >= o.v; }
+        __CDS_NoDiscard constexpr friend auto operator >= (int value, Integer const & integer) noexcept -> bool { return value >= integer.v; }
 
         /**
          * @brief Less or Equals Comparison Operator
          *
-         * @param o : Integer cref = Constant Reference to an Integer Object to compare this Object to
+         * @param integer : Integer cref = Constant Reference to an Integer Object to compare this Object to
          *
          * @exceptsafe
          *
@@ -742,7 +742,7 @@ namespace cds {
          *
          * @test Tested in primitive/IntegerTest/Relational Operators
          */
-        constexpr auto operator<=(Integer const &o) const noexcept -> bool { return this->v <= o.v; }
+        constexpr auto operator<=(Integer const &integer) const noexcept -> bool { return this->v <= integer.v; }
 
         /**
          * @brief Less or Equals Comparison Operator
@@ -757,22 +757,22 @@ namespace cds {
          */
         constexpr auto operator<=(int value) const noexcept -> bool { return this->v <= value; }
 
-        constexpr friend auto operator <= (int value, Integer const & o) noexcept -> bool { return value <= o.v; }
+        constexpr friend auto operator <= (int value, Integer const & integer) noexcept -> bool { return value <= integer.v; }
 
     #if __CDS_cpplang_ThreeWayComparison_available == true
 
-        constexpr auto operator <=> (Integer const & o) const noexcept -> std::strong_ordering { return this->v <=> o.v; }
+        constexpr auto operator <=> (Integer const & integer) const noexcept -> std::strong_ordering { return this->v <=> integer.v; }
 
         constexpr auto operator <=> (int value) const noexcept -> std::strong_ordering { return this->v <=> value; }
 
-        constexpr friend auto operator <=> (int value, Integer const & o) noexcept -> std::strong_ordering { return value <=> o.v; }
+        constexpr friend auto operator <=> (int value, Integer const & integer) noexcept -> std::strong_ordering { return value <=> integer.v; }
 
     #endif
 
         /**
          * @brief Bitwise And Operator
          *
-         * @param o : Integer cref = Constant Reference to the Object to use in the bitwise operation as right hand operand
+         * @param integer : Integer cref = Constant Reference to the Object to use in the bitwise operation as right hand operand
          *
          * @exceptsafe
          *
@@ -780,7 +780,7 @@ namespace cds {
          *
          * @test Tested in primitive/IntegerTest/Relational Operator Tests
          */
-        __CDS_cpplang_ConstexprDestructor auto operator&(Integer const &o) const noexcept -> Integer { return this->v & o.v; } // NOLINT(clion-misra-cpp2008-5-3-3)
+        __CDS_cpplang_ConstexprDestructor auto operator&(Integer const &integer) const noexcept -> Integer { return this->v & integer.v; } // NOLINT(clion-misra-cpp2008-5-3-3)
 
         /**
          * @brief Bitwise And Operator
@@ -795,12 +795,12 @@ namespace cds {
          */
         __CDS_cpplang_ConstexprDestructor auto operator&(int value) const noexcept -> Integer { return this->v & value; } // NOLINT(clion-misra-cpp2008-5-3-3)
 
-        __CDS_cpplang_ConstexprDestructor friend auto operator & (int value, Integer const & o) noexcept -> Integer { return value & o.v; } // NOLINT(clion-misra-cpp2008-5-3-3)
+        __CDS_cpplang_ConstexprDestructor friend auto operator & (int value, Integer const & integer) noexcept -> Integer { return value & integer.v; } // NOLINT(clion-misra-cpp2008-5-3-3)
 
         /**
          * @brief Bitwise Or Operator
          *
-         * @param o : Integer cref = Constant Reference to the Object to use in the bitwise operation as right hand operand
+         * @param integer : Integer cref = Constant Reference to the Object to use in the bitwise operation as right hand operand
          *
          * @exceptsafe
          *
@@ -808,7 +808,7 @@ namespace cds {
          *
          * @test Tested in primitive/IntegerTest/Relational Operator Tests
          */
-        __CDS_cpplang_ConstexprDestructor auto operator|(Integer const &o) const noexcept -> Integer { return this->v | o.v; }
+        __CDS_cpplang_ConstexprDestructor auto operator|(Integer const &integer) const noexcept -> Integer { return this->v | integer.v; }
 
         /**
          * @brief Bitwise Or Operator
@@ -823,12 +823,12 @@ namespace cds {
          */
         __CDS_cpplang_ConstexprDestructor auto operator|(int value) const noexcept -> Integer { return this->v | value; }
 
-        __CDS_cpplang_ConstexprDestructor friend auto operator | (int value, Integer const & o) noexcept -> Integer { return value | o.v; }
+        __CDS_cpplang_ConstexprDestructor friend auto operator | (int value, Integer const & integer) noexcept -> Integer { return value | integer.v; }
 
         /**
          * @brief Bitwise Xor Operator
          *
-         * @param o : Integer cref = Constant Reference to the Object to use in the bitwise operation as right hand operand
+         * @param integer : Integer cref = Constant Reference to the Object to use in the bitwise operation as right hand operand
          *
          * @exceptsafe
          *
@@ -836,7 +836,7 @@ namespace cds {
          *
          * @test Tested in primitive/IntegerTest/Relational Operator Tests
          */
-        __CDS_cpplang_ConstexprDestructor auto operator^(Integer const &o) const noexcept -> Integer { return this->v ^ o.v; }
+        __CDS_cpplang_ConstexprDestructor auto operator^(Integer const &integer) const noexcept -> Integer { return this->v ^ integer.v; }
 
         /**
          * @brief Bitwise Xor Operator
@@ -851,12 +851,12 @@ namespace cds {
          */
         __CDS_cpplang_ConstexprDestructor auto operator^(int value) const noexcept -> Integer { return this->v ^ value; }
 
-        __CDS_cpplang_ConstexprDestructor friend auto operator ^ (int value, Integer const & o) noexcept -> Integer { return value ^ o.v; }
+        __CDS_cpplang_ConstexprDestructor friend auto operator ^ (int value, Integer const & integer) noexcept -> Integer { return value ^ integer.v; }
 
         /**
          * @brief Bitwise Left Shift Operator
          *
-         * @param o : Integer cref = Constant Reference to the Object to use in the bitwise operation as right hand operand
+         * @param integer : Integer cref = Constant Reference to the Object to use in the bitwise operation as right hand operand
          *
          * @exceptsafe
          *
@@ -864,7 +864,7 @@ namespace cds {
          *
          * @test Tested in primitive/IntegerTest/Relational Operator Tests
          */
-        __CDS_cpplang_ConstexprDestructor auto operator<<(Integer const &o) const noexcept -> Integer { return this->v << o.v; }
+        __CDS_cpplang_ConstexprDestructor auto operator<<(Integer const &integer) const noexcept -> Integer { return this->v << integer.v; }
 
         /**
          * @brief Bitwise Left Shift Operator
@@ -879,12 +879,12 @@ namespace cds {
          */
         __CDS_cpplang_ConstexprDestructor auto operator<<(int value) const noexcept -> Integer { return this->v << value; }
 
-        __CDS_cpplang_ConstexprDestructor friend auto operator << (int value, Integer const & o) noexcept -> Integer { return value << o.v; }
+        __CDS_cpplang_ConstexprDestructor friend auto operator << (int value, Integer const & integer) noexcept -> Integer { return value << integer.v; }
 
         /**
          * @brief Bitwise Right Shift Operator
          *
-         * @param o : Integer cref = Constant Reference to the Object to use in the bitwise operation as right hand operand
+         * @param integer : Integer cref = Constant Reference to the Object to use in the bitwise operation as right hand operand
          *
          * @exceptsafe
          *
@@ -892,7 +892,7 @@ namespace cds {
          *
          * @test Tested in primitive/IntegerTest/Relational Operator Tests
          */
-        __CDS_cpplang_ConstexprDestructor auto operator>>(Integer const &o) const noexcept -> Integer { return this->v >> o.v; }
+        __CDS_cpplang_ConstexprDestructor auto operator>>(Integer const &integer) const noexcept -> Integer { return this->v >> integer.v; }
 
         /**
          * @brief Bitwise Right Shift Operator
@@ -907,7 +907,7 @@ namespace cds {
          */
         __CDS_cpplang_ConstexprDestructor auto operator>>(int value) const noexcept -> Integer { return this->v >> value; }
 
-        __CDS_cpplang_ConstexprDestructor friend auto operator >> (int value, Integer const & o) noexcept -> Integer { return value >> o.v; }
+        __CDS_cpplang_ConstexprDestructor friend auto operator >> (int value, Integer const & integer) noexcept -> Integer { return value >> integer.v; }
 
         /**
          * @brief Bitwise Not Operator
@@ -923,7 +923,7 @@ namespace cds {
         /**
          * @brief Bitwise And Accumulator Operator
          *
-         * @param o : Integer cref = Constant Reference to the Object to accumulate to the caller
+         * @param integer : Integer cref = Constant Reference to the Object to accumulate to the caller
          *
          * @exceptsafe
          *
@@ -931,8 +931,8 @@ namespace cds {
          *
          * @test Tested in primitive/IntegerTest/Relational Operator Tests
          */
-        __CDS_cpplang_NonConstConstexprMemberFunction auto operator&=(Integer const &o) noexcept -> Integer & {
-            this->v &= o.v;
+        __CDS_cpplang_NonConstConstexprMemberFunction auto operator&=(Integer const &integer) noexcept -> Integer & {
+            this->v &= integer.v;
             return *this;
         }
 
@@ -955,7 +955,7 @@ namespace cds {
         /**
          * @brief Bitwise Or Accumulator Operator
          *
-         * @param o : Integer cref = Constant Reference to the Object to accumulate to the caller
+         * @param integer : Integer cref = Constant Reference to the Object to accumulate to the caller
          *
          * @exceptsafe
          *
@@ -963,8 +963,8 @@ namespace cds {
          *
          * @test Tested in primitive/IntegerTest/Relational Operator Tests
          */
-        __CDS_cpplang_NonConstConstexprMemberFunction auto operator|=(Integer const &o) noexcept -> Integer & {
-            this->v |= o.v;
+        __CDS_cpplang_NonConstConstexprMemberFunction auto operator|=(Integer const &integer) noexcept -> Integer & {
+            this->v |= integer.v;
             return *this;
         }
 
@@ -987,7 +987,7 @@ namespace cds {
         /**
          * @brief Bitwise Xor Accumulator Operator
          *
-         * @param o : Integer cref = Constant Reference to the Object to accumulate to the caller
+         * @param integer : Integer cref = Constant Reference to the Object to accumulate to the caller
          *
          * @exceptsafe
          *
@@ -995,8 +995,8 @@ namespace cds {
          *
          * @test Tested in primitive/IntegerTest/Relational Operator Tests
          */
-        __CDS_cpplang_NonConstConstexprMemberFunction auto operator^=(Integer const &o) noexcept -> Integer & {
-            this->v ^= o.v;
+        __CDS_cpplang_NonConstConstexprMemberFunction auto operator^=(Integer const &integer) noexcept -> Integer & {
+            this->v ^= integer.v;
             return *this;
         }
 
@@ -1019,7 +1019,7 @@ namespace cds {
         /**
          * @brief Bitwise Left Shift Accumulator Operator
          *
-         * @param o : Integer cref = Constant Reference to the Object to accumulate to the caller
+         * @param integer : Integer cref = Constant Reference to the Object to accumulate to the caller
          *
          * @exceptsafe
          *
@@ -1027,8 +1027,8 @@ namespace cds {
          *
          * @test Tested in primitive/IntegerTest/Relational Operator Tests
          */
-        __CDS_cpplang_NonConstConstexprMemberFunction auto operator<<=(Integer const &o) noexcept -> Integer & {
-            this->v <<= o.v;
+        __CDS_cpplang_NonConstConstexprMemberFunction auto operator<<=(Integer const &integer) noexcept -> Integer & {
+            this->v <<= integer.v;
             return *this;
         }
 
@@ -1051,7 +1051,7 @@ namespace cds {
         /**
          * @brief Bitwise Right Shift Accumulator Operator
          *
-         * @param o : Integer cref = Constant Reference to the Object to accumulate to the caller
+         * @param integer : Integer cref = Constant Reference to the Object to accumulate to the caller
          *
          * @exceptsafe
          *
@@ -1059,8 +1059,8 @@ namespace cds {
          *
          * @test Tested in primitive/IntegerTest/Relational Operator Tests
          */
-        __CDS_cpplang_NonConstConstexprMemberFunction auto operator>>=(Integer const &o) noexcept -> Integer & {
-            this->v >>= o.v;
+        __CDS_cpplang_NonConstConstexprMemberFunction auto operator>>=(Integer const &integer) noexcept -> Integer & {
+            this->v >>= integer.v;
             return *this;
         }
 
@@ -1094,7 +1094,7 @@ namespace cds {
         /**
          * @brief Equality Function used in Object comparisons
          *
-         * @param o : Object cref = Constant Reference to a CDS Object derived Instance
+         * @param object : Object cref = Constant Reference to a CDS Object derived Instance
          *
          * @exceptsafe
          *
@@ -1102,17 +1102,17 @@ namespace cds {
          *
          * @test Tested in primitive/IntegerTest/Relational Operator Tests
          */
-        __CDS_NoDiscard __CDS_cpplang_VirtualConstexpr auto equals ( Object const & o ) const noexcept -> bool override {
-            if ( this == & o ) {
+        __CDS_NoDiscard __CDS_cpplang_VirtualConstexpr auto equals ( Object const & object ) const noexcept -> bool override {
+            if ( this == & object ) {
                 return true;
             }
 
-            auto p = dynamic_cast < Integer const * > ( & o );
-            if ( p == nullptr ) {
+            auto pInteger = dynamic_cast < Integer const * > ( & object );
+            if (pInteger == nullptr ) {
                 return false;
             }
 
-            return this->operator==(*p);
+            return this->operator==(*pInteger);
         }
 
         /**
@@ -1137,7 +1137,7 @@ namespace cds {
          *
          * @test Tested in primitive/IntegerTest/Relational Operator Tests
          */
-        __CDS_cpplang_ConstexprDestructor auto operator ++ (int) noexcept -> Integer { auto c = * this; this->v++; return c; }
+        __CDS_cpplang_ConstexprDestructor auto operator ++ (int) noexcept -> Integer { auto integer = * this; this->v++; return integer; }
 
         /**
          * @brief Prefix Decrement Operator
@@ -1161,7 +1161,7 @@ namespace cds {
          *
          * @test Tested in primitive/IntegerTest/Relational Operator Tests
          */
-        __CDS_cpplang_ConstexprDestructor auto operator -- (int) noexcept -> Integer { auto c = * this; this->v--; return c; }
+        __CDS_cpplang_ConstexprDestructor auto operator -- (int) noexcept -> Integer { auto integer = * this; this->v--; return integer; }
 
         /**
          * @brief Explicit Conversion to Literal Function
@@ -1202,7 +1202,7 @@ namespace cds {
         }
 
         __CDS_NoDiscard __CDS_OptimalInline auto toString(int base) const noexcept -> String {
-            auto c = this->v;
+            auto intValue = this->v;
             String rep;
 
             __CDS_cpplang_ConstexprLambda auto baseDigitToString = [](int value) noexcept -> char {
@@ -1213,9 +1213,9 @@ namespace cds {
                 return static_cast < char > (value + 'a' - 10);
             };
 
-            while ( c > 0 ) {
-                rep += baseDigitToString(c % base);
-                c /= base;
+            while (intValue > 0 ) {
+                rep += baseDigitToString(intValue % base);
+                intValue /= base;
             }
 
             return std :: move ( (rep + (this->v < 0 ? "-" : "")).reversed() );
@@ -1241,56 +1241,56 @@ namespace cds {
 
             bool negative = false;
 
-            auto it = string.begin();
-            __CDS_cpplang_ConstexprLambda static auto isNumericChar = [] (char c) noexcept -> bool { return c >= '0' && c <= '9'; };
-            __CDS_cpplang_ConstexprLambda static auto numericCharToInt = [] (char c) noexcept -> int {
-                return static_cast < int > ( c ) - 48;
+            auto iterator = string.begin();
+            __CDS_cpplang_ConstexprLambda static auto isNumericChar = [] (char character) noexcept -> bool { return character >= '0' && character <= '9'; };
+            __CDS_cpplang_ConstexprLambda static auto numericCharToInt = [] (char character) noexcept -> int {
+                return static_cast < int > ( character ) - 48;
             };
 
-            __CDS_cpplang_ConstexprLambda static auto isBaseNumericChar = [](int base, char c) noexcept -> bool {
+            __CDS_cpplang_ConstexprLambda static auto isBaseNumericChar = [](int base, char character) noexcept -> bool {
                 if ( base < 10 ) {
-                    return c >= '0' && c < static_cast < char > ('0' + base);
+                    return character >= '0' && character < static_cast < char > ('0' + base);
                 }
 
-                return c >= '0' && c <= '9' || (c >= 'A' && c < 'A' + (base - 10) || c >= 'a' && c < 'a' + (base - 10));
+                return character >= '0' && character <= '9' || (character >= 'A' && character < 'A' + (base - 10) || character >= 'a' && character < 'a' + (base - 10));
             };
 
-            __CDS_cpplang_ConstexprLambda static auto baseNumericCharToInt = [](char c) noexcept -> int {
-                if ( c >= '0' && c <= '9' ) {
-                    return static_cast < int > ( c ) - '0';
+            __CDS_cpplang_ConstexprLambda static auto baseNumericCharToInt = [](char character) noexcept -> int {
+                if (character >= '0' && character <= '9' ) {
+                    return static_cast < int > ( character ) - '0';
                 }
 
-                if ( c >= 'A' && c <= 'Z' ) {
-                    return static_cast < int > ( c ) - 'A' + 10;
+                if (character >= 'A' && character <= 'Z' ) {
+                    return static_cast < int > ( character ) - 'A' + 10;
                 }
 
-                if ( c >= 'a' && c <= 'z' ) {
-                    return static_cast < int > ( c ) - 'a' + 10;
+                if (character >= 'a' && character <= 'z' ) {
+                    return static_cast < int > ( character ) - 'a' + 10;
                 }
 
-                return static_cast<int>(c);
+                return static_cast<int>(character);
             };
 
-            while( ( base == 10 && ! isNumericChar ( it.value() ) || ! isBaseNumericChar(base, it.value()) ) && it != string.end() ) {
-                if ( it.value() == '-' ) {
+            while(( base == 10 && ! isNumericChar (iterator.value() ) || ! isBaseNumericChar(base, iterator.value()) ) && iterator != string.end() ) {
+                if (iterator.value() == '-' ) {
                     negative = true;
                 }
 
-                (void) it.next();
+                (void) iterator.next();
             }
 
             if ( base == 16 ) {
-                auto copy = it;
+                auto copy = iterator;
                 if ( copy.value() == '0' && copy.next().value() == 'x' ) {
-                    it = copy.next();
+                    iterator = copy.next();
                 }
             }
 
             int numericValue = 0;
 
-            while ( ( base == 10 && isNumericChar ( it.value() ) || isBaseNumericChar(base, it.value() ) ) && it != string.end() ) {
-                numericValue = numericValue * base + ((base == 10) ? numericCharToInt ( it.value() ) : baseNumericCharToInt(it.value()));
-                (void) it.next();
+            while (( base == 10 && isNumericChar (iterator.value() ) || isBaseNumericChar(base, iterator.value() ) ) && iterator != string.end() ) {
+                numericValue = numericValue * base + ((base == 10) ? numericCharToInt (iterator.value() ) : baseNumericCharToInt(iterator.value()));
+                (void) iterator.next();
             }
 
             return negative ? (-numericValue) : numericValue;
@@ -1303,7 +1303,7 @@ namespace cds {
         /**
          * @brief Thread Safe, Atomic container for Integer Type
          */
-        class Atomic;
+        class Atomic; // NOLINT(cppcoreguidelines-virtual-class-destructor)
 
         __CDS_NoDiscard __CDS_MaybeUnused __CDS_cpplang_ConstexprDestructor auto coerceAtLeast ( Integer const & minimumValue ) const noexcept -> Integer {
             return minimumValue > * this ? minimumValue : * this;
@@ -1321,7 +1321,7 @@ namespace cds {
             return maximumValue < * this ? maximumValue : this->v;
         }
 
-        __CDS_NoDiscard __CDS_MaybeUnused __CDS_cpplang_ConstexprDestructor auto coerceIn ( Integer const & minimumValue, Integer const & maximumValue ) const noexcept -> Integer {
+        __CDS_NoDiscard __CDS_MaybeUnused __CDS_cpplang_ConstexprDestructor auto coerceIn ( Integer const & minimumValue, Integer const & maximumValue ) const noexcept -> Integer { // NOLINT(bugprone-easily-swappable-parameters)
             if ( minimumValue > * this ) {
                 return minimumValue;
             }
@@ -1333,7 +1333,7 @@ namespace cds {
             return * this;
         }
 
-        __CDS_NoDiscard __CDS_MaybeUnused __CDS_cpplang_ConstexprDestructor auto coerceIn ( Integer const & minimumValue, int maximumValue ) const noexcept -> Integer {
+        __CDS_NoDiscard __CDS_MaybeUnused __CDS_cpplang_ConstexprDestructor auto coerceIn ( Integer const & minimumValue, int maximumValue ) const noexcept -> Integer { // NOLINT(bugprone-easily-swappable-parameters)
             if ( minimumValue > * this ) {
                 return minimumValue;
             }
@@ -1345,7 +1345,7 @@ namespace cds {
             return * this;
         }
 
-        __CDS_NoDiscard __CDS_MaybeUnused __CDS_cpplang_ConstexprDestructor auto coerceIn ( int minimumValue, Integer const & maximumValue ) const noexcept -> Integer {
+        __CDS_NoDiscard __CDS_MaybeUnused __CDS_cpplang_ConstexprDestructor auto coerceIn ( int minimumValue, Integer const & maximumValue ) const noexcept -> Integer { // NOLINT(bugprone-easily-swappable-parameters)
             if ( minimumValue > * this ) {
                 return minimumValue;
             }
@@ -1357,7 +1357,7 @@ namespace cds {
             return * this;
         }
 
-        __CDS_NoDiscard __CDS_MaybeUnused __CDS_cpplang_ConstexprDestructor auto coerceIn ( int minimumValue, int maximumValue ) const noexcept -> Integer {
+        __CDS_NoDiscard __CDS_MaybeUnused __CDS_cpplang_ConstexprDestructor auto coerceIn ( int minimumValue, int maximumValue ) const noexcept -> Integer { // NOLINT(bugprone-easily-swappable-parameters)
             if ( minimumValue > * this ) {
                 return minimumValue;
             }
@@ -1443,14 +1443,14 @@ namespace cds {
 
         }
 
-        Atomic ( Integer const & v ) noexcept : // NOLINT(google-explicit-constructor)
-                utility :: hidden :: integerAtomicImpl :: Base (v) {
+        Atomic ( Integer const & integer ) noexcept : // NOLINT(google-explicit-constructor)
+                utility :: hidden :: integerAtomicImpl :: Base (integer) {
 
         }
 
 
-        Atomic (int v) noexcept { // NOLINT(google-explicit-constructor,clion-misra-cpp2008-12-1-3)
-            this->set(v);
+        Atomic (int value) noexcept { // NOLINT(google-explicit-constructor,clion-misra-cpp2008-12-1-3)
+            this->set(value);
         }
 
         auto operator ++ () noexcept -> Atomic & {
@@ -1508,152 +1508,152 @@ namespace cds {
             return this->get();
         }
 
-        __CDS_NoDiscard __CDS_OptimalInline auto operator == ( Atomic const & o ) const noexcept -> bool {
-            return this->get() == o.get();
+        __CDS_NoDiscard __CDS_OptimalInline auto operator == ( Atomic const & atomic ) const noexcept -> bool {
+            return this->get() == atomic.get();
         }
 
-        __CDS_NoDiscard __CDS_OptimalInline auto operator != ( Atomic const & o ) const noexcept -> bool {
-            return this->get() != o.get();
+        __CDS_NoDiscard __CDS_OptimalInline auto operator != ( Atomic const & atomic ) const noexcept -> bool {
+            return this->get() != atomic.get();
         }
 
-        __CDS_NoDiscard __CDS_OptimalInline auto operator == ( Integer const & o ) const noexcept -> bool {
-            return this->get() == o;
+        __CDS_NoDiscard __CDS_OptimalInline auto operator == ( Integer const & integer ) const noexcept -> bool {
+            return this->get() == integer;
         }
 
-        __CDS_NoDiscard __CDS_OptimalInline auto operator != ( Integer const & o ) const noexcept -> bool {
-            return this->get() != o;
+        __CDS_NoDiscard __CDS_OptimalInline auto operator != ( Integer const & integer ) const noexcept -> bool {
+            return this->get() != integer;
         }
 
-        __CDS_NoDiscard __CDS_OptimalInline auto operator == ( int o ) const noexcept -> bool {
-            return this->get() == o;
+        __CDS_NoDiscard __CDS_OptimalInline auto operator == ( int value ) const noexcept -> bool {
+            return this->get() == value;
         }
 
-        __CDS_NoDiscard __CDS_OptimalInline auto operator != ( int o ) const noexcept -> bool {
-            return this->get() != o;
+        __CDS_NoDiscard __CDS_OptimalInline auto operator != ( int value ) const noexcept -> bool {
+            return this->get() != value;
         }
 
-        __CDS_NoDiscard __CDS_OptimalInline auto operator > ( Atomic const & o ) const noexcept -> bool {
-            return this->get() > o.get();
+        __CDS_NoDiscard __CDS_OptimalInline auto operator > ( Atomic const & atomic ) const noexcept -> bool {
+            return this->get() > atomic.get();
         }
 
-        __CDS_NoDiscard __CDS_OptimalInline auto operator < ( Atomic const & o ) const noexcept -> bool {
-            return this->get() < o.get();
+        __CDS_NoDiscard __CDS_OptimalInline auto operator < ( Atomic const & atomic ) const noexcept -> bool {
+            return this->get() < atomic.get();
         }
 
-        __CDS_NoDiscard __CDS_OptimalInline auto operator > ( Integer const & o ) const noexcept -> bool {
-            return this->get() > o;
+        __CDS_NoDiscard __CDS_OptimalInline auto operator > ( Integer const & integer ) const noexcept -> bool {
+            return this->get() > integer;
         }
 
-        __CDS_NoDiscard __CDS_OptimalInline auto operator < ( Integer const & o ) const noexcept -> bool {
-            return this->get() < o;
+        __CDS_NoDiscard __CDS_OptimalInline auto operator < ( Integer const & integer ) const noexcept -> bool {
+            return this->get() < integer;
         }
 
-        __CDS_NoDiscard __CDS_OptimalInline auto operator > ( int o ) const noexcept -> bool {
-            return this->get() > o;
+        __CDS_NoDiscard __CDS_OptimalInline auto operator > ( int value ) const noexcept -> bool {
+            return this->get() > value;
         }
 
-        __CDS_NoDiscard __CDS_OptimalInline auto operator < ( int o ) const noexcept -> bool {
-            return this->get() < o;
+        __CDS_NoDiscard __CDS_OptimalInline auto operator < ( int value ) const noexcept -> bool {
+            return this->get() < value;
         }
 
-        __CDS_NoDiscard __CDS_OptimalInline auto operator >= ( Atomic const & o ) const noexcept -> bool {
-            return this->get() >= o.get();
+        __CDS_NoDiscard __CDS_OptimalInline auto operator >= ( Atomic const & atomic ) const noexcept -> bool {
+            return this->get() >= atomic.get();
         }
 
-        __CDS_NoDiscard __CDS_OptimalInline auto operator <= ( Atomic const & o ) const noexcept -> bool {
-            return this->get() <= o.get();
+        __CDS_NoDiscard __CDS_OptimalInline auto operator <= ( Atomic const & atomic ) const noexcept -> bool {
+            return this->get() <= atomic.get();
         }
 
-        __CDS_NoDiscard __CDS_OptimalInline auto operator >= ( Integer const & o ) const noexcept -> bool {
-            return this->get() >= o;
+        __CDS_NoDiscard __CDS_OptimalInline auto operator >= ( Integer const & integer ) const noexcept -> bool {
+            return this->get() >= integer;
         }
 
-        __CDS_NoDiscard __CDS_OptimalInline auto operator <= ( Integer const & o ) const noexcept -> bool {
-            return this->get() <= o;
+        __CDS_NoDiscard __CDS_OptimalInline auto operator <= ( Integer const & integer ) const noexcept -> bool {
+            return this->get() <= integer;
         }
 
-        __CDS_NoDiscard __CDS_OptimalInline auto operator >= ( int o ) const noexcept -> bool {
-            return this->get() >= o;
+        __CDS_NoDiscard __CDS_OptimalInline auto operator >= ( int value ) const noexcept -> bool {
+            return this->get() >= value;
         }
 
-        __CDS_NoDiscard __CDS_OptimalInline auto operator <= ( int o ) const noexcept -> bool {
-            return this->get() <= o;
+        __CDS_NoDiscard __CDS_OptimalInline auto operator <= ( int value ) const noexcept -> bool {
+            return this->get() <= value;
         }
 
-        __CDS_NoDiscard friend __CDS_OptimalInline auto operator == (int value, Atomic const & o) noexcept -> bool {
-            return value == o.get();
+        __CDS_NoDiscard friend __CDS_OptimalInline auto operator == (int value, Atomic const & atomic) noexcept -> bool {
+            return value == atomic.get();
         }
 
-        __CDS_NoDiscard friend __CDS_OptimalInline auto operator == (Integer const & value, Atomic const & o) noexcept -> bool {
-            return value == o.get();
+        __CDS_NoDiscard friend __CDS_OptimalInline auto operator == (Integer const & value, Atomic const & atomic) noexcept -> bool {
+            return value == atomic.get();
         }
 
-        __CDS_NoDiscard friend __CDS_OptimalInline auto operator != (int value, Atomic const & o) noexcept -> bool {
-            return value != o.get();
+        __CDS_NoDiscard friend __CDS_OptimalInline auto operator != (int value, Atomic const & atomic) noexcept -> bool {
+            return value != atomic.get();
         }
 
-        __CDS_NoDiscard friend __CDS_OptimalInline auto operator != (Integer const & value, Atomic const & o) noexcept -> bool {
-            return value != o.get();
+        __CDS_NoDiscard friend __CDS_OptimalInline auto operator != (Integer const & value, Atomic const & atomic) noexcept -> bool {
+            return value != atomic.get();
         }
 
-        __CDS_NoDiscard friend __CDS_OptimalInline auto operator >= (int value, Atomic const & o) noexcept -> bool {
-            return value >= o.get();
+        __CDS_NoDiscard friend __CDS_OptimalInline auto operator >= (int value, Atomic const & atomic) noexcept -> bool {
+            return value >= atomic.get();
         }
 
-        __CDS_NoDiscard friend __CDS_OptimalInline auto operator >= (Integer const & value, Atomic const & o) noexcept -> bool {
-            return value >= o.get();
+        __CDS_NoDiscard friend __CDS_OptimalInline auto operator >= (Integer const & value, Atomic const & atomic) noexcept -> bool {
+            return value >= atomic.get();
         }
 
-        __CDS_NoDiscard friend __CDS_OptimalInline auto operator <= (int value, Atomic const & o) noexcept -> bool {
-            return value <= o.get();
+        __CDS_NoDiscard friend __CDS_OptimalInline auto operator <= (int value, Atomic const & atomic) noexcept -> bool {
+            return value <= atomic.get();
         }
 
-        __CDS_NoDiscard friend __CDS_OptimalInline auto operator <= (Integer const & value, Atomic const & o) noexcept -> bool {
-            return value <= o.get();
+        __CDS_NoDiscard friend __CDS_OptimalInline auto operator <= (Integer const & value, Atomic const & atomic) noexcept -> bool {
+            return value <= atomic.get();
         }
 
-        __CDS_NoDiscard friend __CDS_OptimalInline auto operator > (int value, Atomic const & o) noexcept -> bool {
-            return value > o.get();
+        __CDS_NoDiscard friend __CDS_OptimalInline auto operator > (int value, Atomic const & atomic) noexcept -> bool {
+            return value > atomic.get();
         }
 
-        __CDS_NoDiscard friend __CDS_OptimalInline auto operator > (Integer const & value, Atomic const & o) noexcept -> bool {
-            return value > o.get();
+        __CDS_NoDiscard friend __CDS_OptimalInline auto operator > (Integer const & value, Atomic const & atomic) noexcept -> bool {
+            return value > atomic.get();
         }
 
-        __CDS_NoDiscard friend __CDS_OptimalInline auto operator < (int value, Atomic const & o) noexcept -> bool {
-            return value < o.get();
+        __CDS_NoDiscard friend __CDS_OptimalInline auto operator < (int value, Atomic const & atomic) noexcept -> bool {
+            return value < atomic.get();
         }
 
-        __CDS_NoDiscard friend __CDS_OptimalInline auto operator < (Integer const & value, Atomic const & o) noexcept -> bool {
-            return value < o.get();
+        __CDS_NoDiscard friend __CDS_OptimalInline auto operator < (Integer const & value, Atomic const & atomic) noexcept -> bool {
+            return value < atomic.get();
         }
 
-        __CDS_NoDiscard __CDS_OptimalInline auto operator + ( Atomic const & o ) const noexcept -> Integer { return this->get() + o.get(); }
-        __CDS_NoDiscard __CDS_OptimalInline auto operator + ( Integer const & o ) const noexcept -> Integer { return this->get() + o; }
+        __CDS_NoDiscard __CDS_OptimalInline auto operator + ( Atomic const & atomic ) const noexcept -> Integer { return this->get() + atomic.get(); }
+        __CDS_NoDiscard __CDS_OptimalInline auto operator + ( Integer const & integer ) const noexcept -> Integer { return this->get() + integer; }
         __CDS_NoDiscard __CDS_OptimalInline auto operator + ( int value ) const noexcept -> Integer { return this->get() + value; }
 
-        __CDS_NoDiscard friend __CDS_OptimalInline auto operator + ( Integer const & value, Atomic const & o ) noexcept -> Integer { return value + o.get(); }
-        __CDS_NoDiscard friend __CDS_OptimalInline auto operator + ( int value, Atomic const & o ) noexcept -> Integer { return value + o.get(); }
+        __CDS_NoDiscard friend __CDS_OptimalInline auto operator + ( Integer const & value, Atomic const & atomic ) noexcept -> Integer { return value + atomic.get(); }
+        __CDS_NoDiscard friend __CDS_OptimalInline auto operator + ( int value, Atomic const & atomic ) noexcept -> Integer { return value + atomic.get(); }
 
 
-        __CDS_NoDiscard __CDS_OptimalInline auto operator - ( Atomic const & o ) const noexcept -> Integer { return this->get() - o.get(); }
-        __CDS_NoDiscard __CDS_OptimalInline auto operator - ( Integer const & o ) const noexcept -> Integer { return this->get() - o; }
+        __CDS_NoDiscard __CDS_OptimalInline auto operator - ( Atomic const & atomic ) const noexcept -> Integer { return this->get() - atomic.get(); }
+        __CDS_NoDiscard __CDS_OptimalInline auto operator - ( Integer const & integer ) const noexcept -> Integer { return this->get() - integer; }
         __CDS_NoDiscard __CDS_OptimalInline auto operator - ( int value ) const noexcept -> Integer { return this->get() - value; }
 
-        __CDS_NoDiscard friend __CDS_OptimalInline auto operator - ( Integer const & value, Atomic const & o ) noexcept -> Integer { return value - o.get(); }
-        __CDS_NoDiscard friend __CDS_OptimalInline auto operator - ( int value, Atomic const & o ) noexcept -> Integer { return value - o.get(); }
+        __CDS_NoDiscard friend __CDS_OptimalInline auto operator - ( Integer const & value, Atomic const & atomic ) noexcept -> Integer { return value - atomic.get(); }
+        __CDS_NoDiscard friend __CDS_OptimalInline auto operator - ( int value, Atomic const & atomic ) noexcept -> Integer { return value - atomic.get(); }
 
 
-        __CDS_NoDiscard __CDS_OptimalInline auto operator * ( Atomic const & o ) const noexcept -> Integer { return this->get() * o.get(); }
-        __CDS_NoDiscard __CDS_OptimalInline auto operator * ( Integer const & o ) const noexcept -> Integer { return this->get() * o; }
+        __CDS_NoDiscard __CDS_OptimalInline auto operator * ( Atomic const & atomic ) const noexcept -> Integer { return this->get() * atomic.get(); }
+        __CDS_NoDiscard __CDS_OptimalInline auto operator * ( Integer const & integer ) const noexcept -> Integer { return this->get() * integer; }
         __CDS_NoDiscard __CDS_OptimalInline auto operator * ( int value ) const noexcept -> Integer { return this->get() * value; }
 
-        __CDS_NoDiscard friend __CDS_OptimalInline auto operator * ( Integer const & value, Atomic const & o ) noexcept -> Integer { return value * o.get(); }
-        __CDS_NoDiscard friend __CDS_OptimalInline auto operator * ( int value, Atomic const & o ) noexcept -> Integer { return value * o.get(); }
+        __CDS_NoDiscard friend __CDS_OptimalInline auto operator * ( Integer const & value, Atomic const & atomic ) noexcept -> Integer { return value * atomic.get(); }
+        __CDS_NoDiscard friend __CDS_OptimalInline auto operator * ( int value, Atomic const & atomic ) noexcept -> Integer { return value * atomic.get(); }
 
 
-        __CDS_NoDiscard __CDS_OptimalInline auto operator / ( Atomic const & o ) const noexcept (false) -> Integer {
-            int rValue = o.get();
+        __CDS_NoDiscard __CDS_OptimalInline auto operator / ( Atomic const & atomic ) const noexcept (false) -> Integer {
+            int rValue = atomic.get();
             int lValue = this->get();
 
             if ( rValue == 0 ) {
@@ -1667,18 +1667,18 @@ namespace cds {
             return lValue / rValue;
         }
 
-        __CDS_NoDiscard __CDS_OptimalInline auto operator / ( Integer const & o ) const noexcept (false) -> Integer {
+        __CDS_NoDiscard __CDS_OptimalInline auto operator / ( Integer const & integer ) const noexcept (false) -> Integer {
             int lValue = this->get();
 
-            if ( o == 0 ) {
+            if (integer == 0 ) {
                 throw DivideByZeroException();
             }
 
-            if ( o == INT32_MIN || lValue == INT32_MIN ) {
+            if (integer == INT32_MIN || lValue == INT32_MIN ) {
                 throw ArithmeticException("Division by INT32_MIN is undefined behaviour");
             }
 
-            return lValue / o;
+            return lValue / integer;
         }
 
         __CDS_NoDiscard __CDS_OptimalInline auto operator / ( int value ) const noexcept (false) -> Integer {
@@ -1695,8 +1695,8 @@ namespace cds {
             return lValue / value;
         }
 
-        __CDS_NoDiscard friend __CDS_OptimalInline auto operator / ( Integer const & value, Atomic const & o ) noexcept (false) -> Integer {
-            int rVal = o.get();
+        __CDS_NoDiscard friend __CDS_OptimalInline auto operator / ( Integer const & value, Atomic const & atomic ) noexcept (false) -> Integer {
+            int rVal = atomic.get();
             if ( rVal == 0 ) {
                 throw DivideByZeroException();
             }
@@ -1707,8 +1707,8 @@ namespace cds {
 
             return value / rVal;
         }
-        __CDS_NoDiscard friend __CDS_OptimalInline auto operator / ( int value, Atomic const & o ) noexcept (false) -> Integer {
-            int rVal = o.get();
+        __CDS_NoDiscard friend __CDS_OptimalInline auto operator / ( int value, Atomic const & atomic ) noexcept (false) -> Integer {
+            int rVal = atomic.get();
             if ( rVal == 0 ) {
                 throw DivideByZeroException();
             }
@@ -1721,8 +1721,8 @@ namespace cds {
         }
 
 
-        __CDS_NoDiscard __CDS_OptimalInline auto operator % ( Atomic const & o ) const noexcept (false) -> Integer {
-            int rValue = o.get();
+        __CDS_NoDiscard __CDS_OptimalInline auto operator % ( Atomic const & atomic ) const noexcept (false) -> Integer {
+            int rValue = atomic.get();
             int lValue = this->get();
 
             if (rValue == 0 ) {
@@ -1736,18 +1736,18 @@ namespace cds {
             return lValue % rValue;
         }
 
-        __CDS_NoDiscard __CDS_OptimalInline auto operator % ( Integer const & o ) const noexcept (false) -> Integer {
+        __CDS_NoDiscard __CDS_OptimalInline auto operator % ( Integer const & integer ) const noexcept (false) -> Integer {
             int lValue = this->get();
 
-            if ( o == 0 ) {
+            if (integer == 0 ) {
                 throw DivideByZeroException();
             }
 
-            if ( o == INT32_MIN || lValue == INT32_MIN ) {
+            if (integer == INT32_MIN || lValue == INT32_MIN ) {
                 throw ArithmeticException("Modulo by INT32_MIN is undefined behaviour");
             }
 
-            return lValue % o;
+            return lValue % integer;
         }
 
         __CDS_NoDiscard __CDS_OptimalInline auto operator % ( int rValue ) const noexcept (false) -> Integer {
@@ -1763,8 +1763,8 @@ namespace cds {
             return lValue % rValue;
         }
 
-        __CDS_NoDiscard friend __CDS_OptimalInline auto operator % ( Integer const & value, Atomic const & o ) noexcept (false) -> Integer {
-            int rVal = o.get();
+        __CDS_NoDiscard friend __CDS_OptimalInline auto operator % ( Integer const & value, Atomic const & atomic ) noexcept (false) -> Integer {
+            int rVal = atomic.get();
 
             if ( rVal == 0 ) {
                 throw DivideByZeroException();
@@ -1776,8 +1776,8 @@ namespace cds {
 
             return value % rVal;
         }
-        __CDS_NoDiscard friend __CDS_OptimalInline auto operator % ( int value, Atomic const & o ) noexcept (false) -> Integer {
-            int rVal = o.get();
+        __CDS_NoDiscard friend __CDS_OptimalInline auto operator % ( int value, Atomic const & atomic ) noexcept (false) -> Integer {
+            int rVal = atomic.get();
 
             if ( rVal == 0 ) {
                 throw DivideByZeroException();
@@ -1791,44 +1791,44 @@ namespace cds {
         }
 
 
-        __CDS_NoDiscard __CDS_OptimalInline auto operator & ( Atomic const & o ) const noexcept -> Integer { return this->get() & o.get(); } // NOLINT(clion-misra-cpp2008-5-3-3)
-        __CDS_NoDiscard __CDS_OptimalInline auto operator & ( Integer const & o ) const noexcept -> Integer { return this->get() & o; } // NOLINT(clion-misra-cpp2008-5-3-3)
+        __CDS_NoDiscard __CDS_OptimalInline auto operator & ( Atomic const & atomic ) const noexcept -> Integer { return this->get() & atomic.get(); } // NOLINT(clion-misra-cpp2008-5-3-3)
+        __CDS_NoDiscard __CDS_OptimalInline auto operator & ( Integer const & integer ) const noexcept -> Integer { return this->get() & integer; } // NOLINT(clion-misra-cpp2008-5-3-3)
         __CDS_NoDiscard __CDS_OptimalInline auto operator & ( int value ) const noexcept -> Integer { return this->get() & value; } // NOLINT(clion-misra-cpp2008-5-3-3)
 
-        __CDS_NoDiscard friend __CDS_OptimalInline auto operator & ( Integer const & value, Atomic const & o ) noexcept -> Integer { return value & o.get(); } // NOLINT(clion-misra-cpp2008-5-3-3)
-        __CDS_NoDiscard friend __CDS_OptimalInline auto operator & ( int value, Atomic const & o ) noexcept -> Integer { return value & o.get(); } // NOLINT(clion-misra-cpp2008-5-3-3)
+        __CDS_NoDiscard friend __CDS_OptimalInline auto operator & ( Integer const & value, Atomic const & atomic ) noexcept -> Integer { return value & atomic.get(); } // NOLINT(clion-misra-cpp2008-5-3-3)
+        __CDS_NoDiscard friend __CDS_OptimalInline auto operator & ( int value, Atomic const & atomic ) noexcept -> Integer { return value & atomic.get(); } // NOLINT(clion-misra-cpp2008-5-3-3)
 
 
-        __CDS_NoDiscard __CDS_OptimalInline auto operator | ( Atomic const & o ) const noexcept -> Integer { return this->get() | o.get(); }
-        __CDS_NoDiscard __CDS_OptimalInline auto operator | ( Integer const & o ) const noexcept -> Integer { return this->get() | o; }
+        __CDS_NoDiscard __CDS_OptimalInline auto operator | ( Atomic const & atomic ) const noexcept -> Integer { return this->get() | atomic.get(); }
+        __CDS_NoDiscard __CDS_OptimalInline auto operator | ( Integer const & integer ) const noexcept -> Integer { return this->get() | integer; }
         __CDS_NoDiscard __CDS_OptimalInline auto operator | ( int value ) const noexcept -> Integer { return this->get() | value; }
 
-        __CDS_NoDiscard friend __CDS_OptimalInline auto operator | ( Integer const & value, Atomic const & o ) noexcept -> Integer { return value | o.get(); }
-        __CDS_NoDiscard friend __CDS_OptimalInline auto operator | ( int value, Atomic const & o ) noexcept -> Integer { return value | o.get(); }
+        __CDS_NoDiscard friend __CDS_OptimalInline auto operator | ( Integer const & value, Atomic const & atomic ) noexcept -> Integer { return value | atomic.get(); }
+        __CDS_NoDiscard friend __CDS_OptimalInline auto operator | ( int value, Atomic const & atomic ) noexcept -> Integer { return value | atomic.get(); }
 
 
-        __CDS_NoDiscard __CDS_OptimalInline auto operator ^ ( Atomic const & o ) const noexcept -> Integer { return this->get() ^ o.get(); }
-        __CDS_NoDiscard __CDS_OptimalInline auto operator ^ ( Integer const & o ) const noexcept -> Integer { return this->get() ^ o; }
+        __CDS_NoDiscard __CDS_OptimalInline auto operator ^ ( Atomic const & atomic ) const noexcept -> Integer { return this->get() ^ atomic.get(); }
+        __CDS_NoDiscard __CDS_OptimalInline auto operator ^ ( Integer const & integer ) const noexcept -> Integer { return this->get() ^ integer; }
         __CDS_NoDiscard __CDS_OptimalInline auto operator ^ ( int value ) const noexcept -> Integer { return this->get() ^ value; }
 
-        __CDS_NoDiscard friend __CDS_OptimalInline auto operator ^ ( Integer const & value, Atomic const & o ) noexcept -> Integer { return value ^ o.get(); }
-        __CDS_NoDiscard friend __CDS_OptimalInline auto operator ^ ( int value, Atomic const & o ) noexcept -> Integer { return value ^ o.get(); }
+        __CDS_NoDiscard friend __CDS_OptimalInline auto operator ^ ( Integer const & value, Atomic const & atomic ) noexcept -> Integer { return value ^ atomic.get(); }
+        __CDS_NoDiscard friend __CDS_OptimalInline auto operator ^ ( int value, Atomic const & atomic ) noexcept -> Integer { return value ^ atomic.get(); }
 
 
-        __CDS_NoDiscard __CDS_OptimalInline auto operator << ( Atomic const & o ) const noexcept -> Integer { return this->get() << o.get(); }
-        __CDS_NoDiscard __CDS_OptimalInline auto operator << ( Integer const & o ) const noexcept -> Integer { return this->get() << o; }
+        __CDS_NoDiscard __CDS_OptimalInline auto operator << ( Atomic const & atomic ) const noexcept -> Integer { return this->get() << atomic.get(); }
+        __CDS_NoDiscard __CDS_OptimalInline auto operator << ( Integer const & integer ) const noexcept -> Integer { return this->get() << integer; }
         __CDS_NoDiscard __CDS_OptimalInline auto operator << ( int value ) const noexcept -> Integer { return this->get() << value; }
 
-        __CDS_NoDiscard friend __CDS_OptimalInline auto operator << ( Integer const & value, Atomic const & o ) noexcept -> Integer { return value << o.get(); }
-        __CDS_NoDiscard friend __CDS_OptimalInline auto operator << ( int value, Atomic const & o ) noexcept -> Integer { return value << o.get(); }
+        __CDS_NoDiscard friend __CDS_OptimalInline auto operator << ( Integer const & value, Atomic const & atomic ) noexcept -> Integer { return value << atomic.get(); }
+        __CDS_NoDiscard friend __CDS_OptimalInline auto operator << ( int value, Atomic const & atomic ) noexcept -> Integer { return value << atomic.get(); }
 
 
-        __CDS_NoDiscard __CDS_OptimalInline auto operator >> ( Atomic const & o ) const noexcept -> Integer { return this->get() >> o.get(); }
-        __CDS_NoDiscard __CDS_OptimalInline auto operator >> ( Integer const & o ) const noexcept -> Integer { return this->get() >> o; }
+        __CDS_NoDiscard __CDS_OptimalInline auto operator >> ( Atomic const & atomic ) const noexcept -> Integer { return this->get() >> atomic.get(); }
+        __CDS_NoDiscard __CDS_OptimalInline auto operator >> ( Integer const & integer ) const noexcept -> Integer { return this->get() >> integer; }
         __CDS_NoDiscard __CDS_OptimalInline auto operator >> ( int value ) const noexcept -> Integer { return this->get() >> value; }
 
-        __CDS_NoDiscard friend __CDS_OptimalInline auto operator >> ( Integer const & value, Atomic const & o ) noexcept -> Integer { return value >> o.get(); }
-        __CDS_NoDiscard friend __CDS_OptimalInline auto operator >> ( int value, Atomic const & o ) noexcept -> Integer { return value >> o.get(); }
+        __CDS_NoDiscard friend __CDS_OptimalInline auto operator >> ( Integer const & value, Atomic const & atomic ) noexcept -> Integer { return value >> atomic.get(); }
+        __CDS_NoDiscard friend __CDS_OptimalInline auto operator >> ( int value, Atomic const & atomic ) noexcept -> Integer { return value >> atomic.get(); }
 
         __CDS_NoDiscard __CDS_OptimalInline auto hash () const noexcept -> Index override {
             return this->get().hash();

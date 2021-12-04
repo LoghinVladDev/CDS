@@ -10,13 +10,13 @@
 namespace cds {
 
     template < Size byteSize >
-    class AsymmetricCryptoOperation : virtual public CryptoOperation < byteSize > {
+    class AsymmetricCryptoOperation : virtual public CryptoOperation < byteSize > { // NOLINT(clion-misra-cpp2008-10-1-1)
     public:
         using KeyType = CryptoBlock < byteSize >;
 
     protected:
-        KeyType _publicKey;
-        KeyType _privateKey;
+        KeyType _publicKey; // NOLINT(clion-misra-cpp2008-11-0-1)
+        KeyType _privateKey; // NOLINT(clion-misra-cpp2008-11-0-1)
 
     public:
         inline auto publicKey () const noexcept -> KeyType const & { return this->_publicKey; }

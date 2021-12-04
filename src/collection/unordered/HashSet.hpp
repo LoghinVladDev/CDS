@@ -70,6 +70,11 @@ namespace cds {
             set._listArray = Memory :: instance () .createArray < Node * > ( set._hasher.getBoundary() );
         }
 
+#if __JETBRAINS_IDE__
+#pragma clang diagnostic push
+#pragma ide diagnostic ignored "LoopDoesntUseConditionVariableInspection"
+#endif
+
         auto clear () noexcept -> void final {
             for ( Index i = 0; i < this->_hasher.getBoundary(); ++ i ) {
                 while ( this->_listArray[i] != nullptr ) {
@@ -81,6 +86,10 @@ namespace cds {
 
             this->_size = 0;
         }
+
+#if __JETBRAINS_IDE__
+#pragma clang diagnostic pop
+#endif
 
         __CDS_OptimalInline ~HashSet () noexcept override {
             this-> HashSet :: clear();

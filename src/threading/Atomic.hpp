@@ -41,15 +41,15 @@ namespace cds {
 
         __CDS_OptimalInline auto get () const noexcept -> T {
             this->_access.lock();
-            auto v = this->_data;
+            auto value = this->_data;
             this->_access.unlock();
 
-            return v;
+            return value;
         }
 
-        __CDS_OptimalInline auto set ( DataType const & v ) noexcept -> void {
+        __CDS_OptimalInline auto set ( DataType const & value ) noexcept -> void {
             this->_access.lock();
-            this->_data = v;
+            this->_data = value;
             this->_access.unlock();
         }
 
@@ -79,32 +79,32 @@ namespace cds {
             return * this;
         }
 
-        __CDS_OptimalInline virtual Atomic & operator = ( DataType const & v ) noexcept {
-            this->set( v );
+        __CDS_OptimalInline virtual Atomic & operator = ( DataType const & value ) noexcept {
+            this->set(value );
 
             return * this;
         }
 
-        __CDS_OptimalInline Atomic & operator = ( DataType && v ) noexcept {
-            this->set ( std::move ( v ) );
+        __CDS_OptimalInline Atomic & operator = ( DataType && value ) noexcept {
+            this->set ( std::move (value ) );
 
             return * this;
         }
 
-        __CDS_OptimalInline auto operator == ( Atomic const & v ) const noexcept -> bool {
-            return this->get() == v.get();
+        __CDS_OptimalInline auto operator == ( Atomic const & value ) const noexcept -> bool {
+            return this->get() == value.get();
         }
 
-        __CDS_OptimalInline auto operator == ( DataType const & v ) const noexcept -> bool {
-            return this->get() == v;
+        __CDS_OptimalInline auto operator == ( DataType const & value ) const noexcept -> bool {
+            return this->get() == value;
         }
 
-        __CDS_OptimalInline auto operator != ( Atomic const & v ) const noexcept -> bool {
-            return this->get() != v.get();
+        __CDS_OptimalInline auto operator != ( Atomic const & value ) const noexcept -> bool {
+            return this->get() != value.get();
         }
 
-        __CDS_OptimalInline auto operator != ( DataType const & v ) const noexcept -> bool {
-            return this->get() != v;
+        __CDS_OptimalInline auto operator != ( DataType const & value ) const noexcept -> bool {
+            return this->get() != value;
         }
 
         __CDS_OptimalInline operator DataType () const noexcept { // NOLINT(google-explicit-constructor)
@@ -112,28 +112,28 @@ namespace cds {
         }
 
         __CDS_NoDiscard auto toString () const noexcept -> String override {
-            std::stringstream ss;
+            std::stringstream stringStream;
 
-            ss
+            stringStream
                 << "Atomic{"
                 << "data=" << this->_data
                 << ", accessLock" << this->_access.toString().cStr()
                 << "}";
 
-            return ss.str();
+            return stringStream.str();
         }
 
-        __CDS_NoDiscard auto equals ( Object const & o ) const noexcept -> bool override {
-            if ( this == & o ) {
+        __CDS_NoDiscard auto equals ( Object const & object ) const noexcept -> bool override {
+            if ( this == & object ) {
                 return true;
             }
 
-            auto p = dynamic_cast < Atomic < T > const * > ( & o );
-            if ( p == nullptr ) {
+            auto pAtomic = dynamic_cast < Atomic < T > const * > ( & object );
+            if (pAtomic == nullptr ) {
                 return false;
             }
 
-            return p->get() == this->get();
+            return pAtomic->get() == this->get();
         }
     };
 

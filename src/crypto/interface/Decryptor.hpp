@@ -10,14 +10,14 @@
 namespace cds {
 
     template < Size byteSize >
-    class Decryptor : virtual public CryptoOperation < byteSize > {
+    class Decryptor : virtual public CryptoOperation < byteSize > { // NOLINT(clion-misra-cpp2008-10-1-1)
     public:
         using IVType = CryptoBlock < byteSize >;
 
     protected:
         auto run () noexcept -> Decryptor & override = 0;
 
-        IVType _IV; // NOLINT(bugprone-reserved-identifier)
+        IVType _IV; // NOLINT(bugprone-reserved-identifier,clion-misra-cpp2008-11-0-1)
 
     public:
         inline auto decrypt () noexcept -> Decryptor & { return this->run(); }

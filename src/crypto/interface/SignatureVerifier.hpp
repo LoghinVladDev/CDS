@@ -5,10 +5,12 @@
 #ifndef CDS_SIGNATUREVERIFIER_HPP
 #define CDS_SIGNATUREVERIFIER_HPP
 
+#include <CDS/crypto/CryptoOperation>
+
 namespace cds {
 
     template < Size byteSize >
-    class SignatureVerifier : virtual public CryptoOperation < byteSize > {
+    class SignatureVerifier : virtual public CryptoOperation < byteSize > { // NOLINT(clion-misra-cpp2008-10-1-1)
     protected:
         auto run () noexcept -> SignatureVerifier & override = 0;
 

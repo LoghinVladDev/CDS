@@ -28,7 +28,7 @@ namespace cds {
 
     class Thread : public Object {
     public:
-        __CDS_OptimalInline static auto hardwareConcurrency () noexcept -> Size {
+        __CDS_MaybeUnused __CDS_OptimalInline static auto hardwareConcurrency () noexcept -> Size {
     #if defined(WIN32)
             SYSTEM_INFO systemInformation;
             GetSystemInfo ( & systemInformation );

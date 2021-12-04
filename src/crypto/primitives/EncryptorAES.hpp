@@ -20,7 +20,10 @@ namespace cds {
     class EncryptorAES : public Encryptor < byteSize >, public SymmetricCryptoOperation < byteSize > {
     public:
         constexpr static auto isSizeSupported ( Size size ) noexcept -> bool {
-            return size == 128 || size == 192 || size == 256;
+            return
+                size == 128u ||
+                size == 192u ||
+                size == 256u;
         }
 
     protected:

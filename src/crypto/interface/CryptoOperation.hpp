@@ -12,8 +12,8 @@ namespace cds {
     template < Size byteSize >
     class __CDS_MaybeUnused CryptoOperation : public Object {
     protected:
-        CryptoBlock < byteSize > _input;
-        CryptoBlock < byteSize > _output;
+        CryptoBlock < byteSize > _input; // NOLINT(clion-misra-cpp2008-11-0-1)
+        CryptoBlock < byteSize > _output; // NOLINT(clion-misra-cpp2008-11-0-1)
 
         CryptoOperation() noexcept = default;
         ~CryptoOperation() noexcept override = default;

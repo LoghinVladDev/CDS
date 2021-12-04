@@ -5,10 +5,12 @@
 #ifndef CDS_SIGNATUREGENERATOR_HPP
 #define CDS_SIGNATUREGENERATOR_HPP
 
+#include <CDS/crypto/CryptoOperation>
+
 namespace cds {
 
     template < Size byteSize >
-    class SignatureGenerator : virtual public CryptoOperation < byteSize > {
+    class SignatureGenerator : virtual public CryptoOperation < byteSize > { // NOLINT(clion-misra-cpp2008-10-1-1)
     protected:
         auto run () noexcept -> SignatureGenerator & override = 0;
 
