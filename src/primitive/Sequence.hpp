@@ -1284,34 +1284,34 @@ namespace cds {
             return found;
         }
 
-        template < typename Transformer, EnableIf < isPair < returnOf < Transformer > > :: value > = 0 >
+        template < typename Transformer, EnableIf < isPair < ReturnOf < Transformer > > :: value > = 0 >
         __CDS_MaybeUnused auto associate (
                 Transformer const & transformer
-        ) && noexcept -> Sequence < LinkedList < returnOf < Transformer > > >
+        ) && noexcept -> Sequence < LinkedList < ReturnOf < Transformer > > >
         __CDS_Requires (
                 ForwardIterable < C > &&
-                PairType < returnOf < Transformer > > &&
+                PairType < ReturnOf < Transformer > > &&
                 TransformerOver < Transformer, ElementType >
         ) {
 
-            LinkedList < returnOf < Transformer > > container;
+            LinkedList < ReturnOf < Transformer > > container;
             for ( auto e : * this )
                 container.add ( transformer ( e ) );
 
             return std::move ( Sequence < decltype ( container ) > ( std::move ( container ) ) );
         }
 
-        template < typename Transformer, EnableIf < isPair < returnOf < Transformer > > :: value > = 0 >
+        template < typename Transformer, EnableIf < isPair < ReturnOf < Transformer > > :: value > = 0 >
         __CDS_MaybeUnused auto associate (
                 Transformer const & transformer
-        ) & noexcept -> Sequence < LinkedList < returnOf < Transformer > > >
+        ) & noexcept -> Sequence < LinkedList < ReturnOf < Transformer > > >
         __CDS_Requires (
                 ForwardIterable < C > &&
-                PairType < returnOf < Transformer > > &&
+                PairType < ReturnOf < Transformer > > &&
                 TransformerOver < Transformer, ElementType >
         ) {
 
-            LinkedList < returnOf < Transformer > > container;
+            LinkedList < ReturnOf < Transformer > > container;
             for ( auto e : * this )
                 container.add ( transformer ( e ) );
 
@@ -1321,13 +1321,13 @@ namespace cds {
         template < typename KeyGenerator >
         __CDS_MaybeUnused auto associateBy (
                 KeyGenerator const & keyGenerator
-        ) && noexcept -> Sequence < LinkedList < Pair < returnOf < KeyGenerator >, ElementType > > >
+        ) && noexcept -> Sequence < LinkedList < Pair < ReturnOf < KeyGenerator >, ElementType > > >
         __CDS_Requires (
                 ForwardIterable < C > &&
-                FunctionOver < KeyGenerator, returnOf < KeyGenerator >, ElementType >
+                FunctionOver < KeyGenerator, ReturnOf < KeyGenerator >, ElementType >
         ) {
 
-            LinkedList < Pair < returnOf < KeyGenerator >, ElementType > > container;
+            LinkedList < Pair < ReturnOf < KeyGenerator >, ElementType > > container;
             for ( auto e : * this )
                 container.add ( { keyGenerator ( e ), e } );
 
@@ -1337,13 +1337,13 @@ namespace cds {
         template < typename KeyGenerator >
         __CDS_MaybeUnused auto associateBy (
                 KeyGenerator const & keyGenerator
-        ) & noexcept -> Sequence < LinkedList < Pair < returnOf < KeyGenerator >, ElementType > > >
+        ) & noexcept -> Sequence < LinkedList < Pair < ReturnOf < KeyGenerator >, ElementType > > >
         __CDS_Requires (
                 ForwardIterable < C > &&
-                FunctionOver < KeyGenerator, returnOf < KeyGenerator >, ElementType >
+                FunctionOver < KeyGenerator, ReturnOf < KeyGenerator >, ElementType >
         ) {
 
-            LinkedList < Pair < returnOf < KeyGenerator >, ElementType > > container;
+            LinkedList < Pair < ReturnOf < KeyGenerator >, ElementType > > container;
             for ( auto e : * this )
                 container.add ( { keyGenerator ( e ), e } );
 
@@ -1354,14 +1354,14 @@ namespace cds {
         __CDS_MaybeUnused auto associateBy (
                 KeyGenerator    const & keyGenerator,
                 ValueMapper     const & valueMapper
-        ) && noexcept -> Sequence < LinkedList < Pair < returnOf < KeyGenerator >, returnOf < ValueMapper > > > >
+        ) && noexcept -> Sequence < LinkedList < Pair < ReturnOf < KeyGenerator >, ReturnOf < ValueMapper > > > >
         __CDS_Requires (
                 ForwardIterable < C > &&
-                FunctionOver < KeyGenerator, returnOf < KeyGenerator >, ElementType > &&
-                FunctionOver < ValueMapper, returnOf < ValueMapper >, ElementType >
+                FunctionOver < KeyGenerator, ReturnOf < KeyGenerator >, ElementType > &&
+                FunctionOver < ValueMapper, ReturnOf < ValueMapper >, ElementType >
         ) {
 
-            LinkedList < Pair < returnOf < KeyGenerator >, returnOf < ValueMapper > > > container;
+            LinkedList < Pair < ReturnOf < KeyGenerator >, ReturnOf < ValueMapper > > > container;
             for ( auto e : * this )
                 container.add( { keyGenerator ( e ), valueMapper ( e ) } );
 
@@ -1372,14 +1372,14 @@ namespace cds {
         __CDS_MaybeUnused auto associateBy (
                 KeyGenerator    const & keyGenerator,
                 ValueMapper     const & valueMapper
-        ) & noexcept -> Sequence < LinkedList < Pair < returnOf < KeyGenerator >, returnOf < ValueMapper > > > >
+        ) & noexcept -> Sequence < LinkedList < Pair < ReturnOf < KeyGenerator >, ReturnOf < ValueMapper > > > >
         __CDS_Requires (
                 ForwardIterable < C > &&
-                FunctionOver < KeyGenerator, returnOf < KeyGenerator >, ElementType > &&
-                FunctionOver < ValueMapper, returnOf < ValueMapper >, ElementType >
+                FunctionOver < KeyGenerator, ReturnOf < KeyGenerator >, ElementType > &&
+                FunctionOver < ValueMapper, ReturnOf < ValueMapper >, ElementType >
         ) {
 
-            LinkedList < Pair < returnOf < KeyGenerator >, returnOf < ValueMapper > > > container;
+            LinkedList < Pair < ReturnOf < KeyGenerator >, ReturnOf < ValueMapper > > > container;
             for ( auto e : * this )
                 container.add( { keyGenerator ( e ), valueMapper ( e ) } );
 
@@ -1388,12 +1388,12 @@ namespace cds {
 
         template < typename KeyGenerator >
         __CDS_MaybeUnused __CDS_OptimalInline auto associateByTo (
-                Map < returnOf < KeyGenerator >, ElementType >        & m,
+                Map < ReturnOf < KeyGenerator >, ElementType >        & m,
                 KeyGenerator                                    const & keyGenerator
-        ) const noexcept -> Map < returnOf < KeyGenerator >, ElementType > &
+        ) const noexcept -> Map < ReturnOf < KeyGenerator >, ElementType > &
         __CDS_Requires (
                 ForwardIterable < C > &&
-                FunctionOver < KeyGenerator, returnOf < KeyGenerator >, ElementType >
+                FunctionOver < KeyGenerator, ReturnOf < KeyGenerator >, ElementType >
         ) {
 
             for ( auto e : * this )
@@ -1403,14 +1403,14 @@ namespace cds {
 
         template < typename KeyGenerator, typename ValueMapper >
         __CDS_MaybeUnused __CDS_OptimalInline auto associateByTo (
-                Map < returnOf < KeyGenerator >, returnOf < ValueMapper > >       & m,
+                Map < ReturnOf < KeyGenerator >, ReturnOf < ValueMapper > >       & m,
                 KeyGenerator                                                const & keyGenerator,
                 ValueMapper                                                 const & valueMapper
-        ) const noexcept -> Map < returnOf < KeyGenerator >, returnOf < ValueMapper > > &
+        ) const noexcept -> Map < ReturnOf < KeyGenerator >, ReturnOf < ValueMapper > > &
         __CDS_Requires (
                 ForwardIterable < C > &&
-                FunctionOver < KeyGenerator, returnOf < KeyGenerator >, ElementType > &&
-                FunctionOver < ValueMapper, returnOf < ValueMapper >, ElementType >
+                FunctionOver < KeyGenerator, ReturnOf < KeyGenerator >, ElementType > &&
+                FunctionOver < ValueMapper, ReturnOf < ValueMapper >, ElementType >
         ) {
 
             for ( auto e : * this )
@@ -1425,7 +1425,7 @@ namespace cds {
         ) const noexcept -> Map < K, V > &
         __CDS_Requires (
                 ForwardIterable < C > &&
-                PairType < returnOf < Transformer > > &&
+                PairType < ReturnOf < Transformer > > &&
                 TransformerOver < Transformer, ElementType >
         ) {
 
@@ -1440,13 +1440,13 @@ namespace cds {
         template < typename ValueMapper >
         __CDS_MaybeUnused auto associateWith (
                 ValueMapper const & valueMapper
-        ) && noexcept -> Sequence < LinkedList < Pair < ElementType, returnOf < ValueMapper > > > >
+        ) && noexcept -> Sequence < LinkedList < Pair < ElementType, ReturnOf < ValueMapper > > > >
         __CDS_Requires (
                 ForwardIterable < C > &&
-                FunctionOver < ValueMapper, returnOf < ValueMapper >, ElementType >
+                FunctionOver < ValueMapper, ReturnOf < ValueMapper >, ElementType >
         ) {
 
-            LinkedList < Pair < ElementType, returnOf < ValueMapper > > > container;
+            LinkedList < Pair < ElementType, ReturnOf < ValueMapper > > > container;
             for ( auto e : * this )
                 container.add( { e, valueMapper(e) } );
 
@@ -1456,13 +1456,13 @@ namespace cds {
         template < typename ValueMapper >
         __CDS_MaybeUnused auto associateWith (
                 ValueMapper const & valueMapper
-        ) & noexcept -> Sequence < LinkedList < Pair < ElementType, returnOf < ValueMapper > > > >
+        ) & noexcept -> Sequence < LinkedList < Pair < ElementType, ReturnOf < ValueMapper > > > >
         __CDS_Requires (
                 ForwardIterable < C > &&
-                FunctionOver < ValueMapper, returnOf < ValueMapper >, ElementType >
+                FunctionOver < ValueMapper, ReturnOf < ValueMapper >, ElementType >
         ) {
 
-            LinkedList < Pair < ElementType, returnOf < ValueMapper > > > container;
+            LinkedList < Pair < ElementType, ReturnOf < ValueMapper > > > container;
             for ( auto e : * this )
                 container.add( { e, valueMapper(e) } );
 
@@ -1471,12 +1471,12 @@ namespace cds {
 
         template < typename ValueMapper >
         __CDS_MaybeUnused auto associateWithTo (
-                Map < ElementType, returnOf < ValueMapper > >         & m,
+                Map < ElementType, ReturnOf < ValueMapper > >         & m,
                 ValueMapper                                     const & mapper
-        ) const noexcept -> Map < ElementType , returnOf < ValueMapper > > &
+        ) const noexcept -> Map < ElementType , ReturnOf < ValueMapper > > &
         __CDS_Requires (
                 ForwardIterable < C > &&
-                FunctionOver < ValueMapper, returnOf < ValueMapper >, ElementType >
+                FunctionOver < ValueMapper, ReturnOf < ValueMapper >, ElementType >
         ) {
 
             for ( auto e : * this )
@@ -1562,19 +1562,19 @@ namespace cds {
 
         template <
                 typename Selector,
-                typename Comparator = Function < bool ( returnOf < Selector > const &, returnOf < Selector > const & ) >
+                typename Comparator = Function < bool ( ReturnOf < Selector > const &, ReturnOf < Selector > const & ) >
         >
         __CDS_MaybeUnused auto sortedByWith (
                 Selector    const & selector,
                 Comparator  const & comparator = [](
-                        returnOf < Selector > const & a,
-                        returnOf < Selector > const & b
+                        ReturnOf < Selector > const & a,
+                        ReturnOf < Selector > const & b
                 ) noexcept -> bool { return a < b; }
         ) && noexcept -> Sequence < Array < ElementType > >
         __CDS_Requires (
                 ForwardIterable < C > &&
                 SelectorFor < Selector, ElementType > &&
-                ComparatorFor < Comparator, returnOf < Selector > >
+                ComparatorFor < Comparator, ReturnOf < Selector > >
         ) {
 
             return this->sorted([& selector, & comparator](ElementType const & a, ElementType const & b){
@@ -1584,19 +1584,19 @@ namespace cds {
 
         template <
                 typename Selector,
-                typename Comparator = Function < bool ( returnOf < Selector > const &, returnOf < Selector > const & ) >
+                typename Comparator = Function < bool ( ReturnOf < Selector > const &, ReturnOf < Selector > const & ) >
         >
         __CDS_MaybeUnused auto sortedByWith (
                 Selector    const & selector,
                 Comparator  const & comparator = [](
-                        returnOf < Selector > const & a,
-                        returnOf < Selector > const & b
+                        ReturnOf < Selector > const & a,
+                        ReturnOf < Selector > const & b
                 ) noexcept -> bool { return a < b; }
         ) & noexcept -> Sequence < Array < ElementType > >
         __CDS_Requires (
                 ForwardIterable < C > &&
                 SelectorFor < Selector, ElementType > &&
-                ComparatorFor < Comparator, returnOf < Selector > >
+                ComparatorFor < Comparator, ReturnOf < Selector > >
         ) {
 
             return this->sorted([& selector, & comparator](ElementType const & a, ElementType const & b){
@@ -1783,7 +1783,7 @@ namespace cds {
         ) && noexcept -> Sequence < LinkedList < utility :: hidden :: sequenceImpl :: FlatMapDeducedType < Transformer > > >
         __CDS_Requires (
                 ForwardIterable < C > &&
-                ForwardIterable < returnOf < Transformer > > &&
+                ForwardIterable < ReturnOf < Transformer > > &&
                 TransformerOver < Transformer, ElementType >
         ) {
 
@@ -1801,7 +1801,7 @@ namespace cds {
         ) & noexcept -> Sequence < LinkedList < utility :: hidden :: sequenceImpl :: FlatMapDeducedType < Transformer > > >
         __CDS_Requires (
                 ForwardIterable < C > &&
-                ForwardIterable < returnOf < Transformer > > &&
+                ForwardIterable < ReturnOf < Transformer > > &&
                 TransformerOver < Transformer, ElementType >
         ) {
 
@@ -1818,7 +1818,7 @@ namespace cds {
                 IndexedTransformer const & transformer
         ) && noexcept -> Sequence < LinkedList < utility :: hidden :: sequenceImpl :: FlatMapDeducedType < IndexedTransformer > > > __CDS_Requires (
                 ForwardIterable < C > &&
-                ForwardIterable < returnOf < IndexedTransformer > > &&
+                ForwardIterable < ReturnOf < IndexedTransformer > > &&
                 TransformerOver < IndexedTransformer, Index, ElementType >
         ) {
 
@@ -1836,7 +1836,7 @@ namespace cds {
                 IndexedTransformer const & transformer
         ) & noexcept -> Sequence < LinkedList < utility :: hidden :: sequenceImpl :: FlatMapDeducedType < IndexedTransformer > > > __CDS_Requires (
                 ForwardIterable < C > &&
-                ForwardIterable < returnOf < IndexedTransformer > > &&
+                ForwardIterable < ReturnOf < IndexedTransformer > > &&
                 TransformerOver < IndexedTransformer, Index, ElementType >
         ) {
 
@@ -1855,7 +1855,7 @@ namespace cds {
                 Transformer                                                         const & transformer
         ) const noexcept -> Collection < utility :: hidden :: sequenceImpl :: FlatMapDeducedType < Transformer > > & __CDS_Requires (
                 ForwardIterable < C > &&
-                ForwardIterable < returnOf < Transformer > > &&
+                ForwardIterable < ReturnOf < Transformer > > &&
                 TransformerOver < Transformer, ElementType >
         ) {
 
@@ -1872,7 +1872,7 @@ namespace cds {
                 IndexedTransformer                                                          const & transformer
         ) const noexcept -> Collection < utility :: hidden :: sequenceImpl :: FlatMapDeducedType < IndexedTransformer > > & __CDS_Requires (
                 ForwardIterable < C > &&
-                ForwardIterable < returnOf < IndexedTransformer > > &&
+                ForwardIterable < ReturnOf < IndexedTransformer > > &&
                 TransformerOver < IndexedTransformer, Index, ElementType >
         ) {
 
@@ -1887,13 +1887,13 @@ namespace cds {
         template < typename KeySelector >
         __CDS_MaybeUnused auto groupBy (
                 KeySelector const & keySelector
-        ) && noexcept -> Sequence < HashMap < returnOf < KeySelector >, LinkedList < ElementType > > >
+        ) && noexcept -> Sequence < HashMap < ReturnOf < KeySelector >, LinkedList < ElementType > > >
         __CDS_Requires (
                 ForwardIterable < C > &&
-                FunctionOver < KeySelector, returnOf < KeySelector >, ElementType >
+                FunctionOver < KeySelector, ReturnOf < KeySelector >, ElementType >
         ) {
 
-            HashMap < returnOf < KeySelector >, LinkedList < ElementType > > container;
+            HashMap < ReturnOf < KeySelector >, LinkedList < ElementType > > container;
 
             for ( auto e : * this ) {
                 auto k = keySelector ( e );
@@ -1909,13 +1909,13 @@ namespace cds {
         template < typename KeySelector >
         __CDS_MaybeUnused auto groupBy (
                 KeySelector const & keySelector
-        ) & noexcept -> Sequence < HashMap < returnOf < KeySelector >, LinkedList < ElementType > > >
+        ) & noexcept -> Sequence < HashMap < ReturnOf < KeySelector >, LinkedList < ElementType > > >
         __CDS_Requires (
                 ForwardIterable < C > &&
-                FunctionOver < KeySelector, returnOf < KeySelector >, ElementType >
+                FunctionOver < KeySelector, ReturnOf < KeySelector >, ElementType >
         ) {
 
-            HashMap < returnOf < KeySelector >, LinkedList < ElementType > > container;
+            HashMap < ReturnOf < KeySelector >, LinkedList < ElementType > > container;
 
             for ( auto e : * this ) {
                 auto k = keySelector ( e );
@@ -1932,14 +1932,14 @@ namespace cds {
         __CDS_MaybeUnused auto groupBy (
                 KeySelector const & keySelector,
                 ValueMapper const & valueMapper
-        ) && noexcept -> Sequence < HashMap < returnOf < KeySelector >, LinkedList < returnOf < ValueMapper > > > >
+        ) && noexcept -> Sequence < HashMap < ReturnOf < KeySelector >, LinkedList < ReturnOf < ValueMapper > > > >
         __CDS_Requires (
                 ForwardIterable < C > &&
-                FunctionOver < KeySelector, returnOf < KeySelector >, ElementType > &&
-                FunctionOver < ValueMapper, returnOf < ValueMapper >, ElementType >
+                FunctionOver < KeySelector, ReturnOf < KeySelector >, ElementType > &&
+                FunctionOver < ValueMapper, ReturnOf < ValueMapper >, ElementType >
         ) {
 
-            HashMap < returnOf < KeySelector >, LinkedList < returnOf < ValueMapper > > > container;
+            HashMap < ReturnOf < KeySelector >, LinkedList < ReturnOf < ValueMapper > > > container;
 
             for ( auto e : * this ) {
                 auto k = keySelector ( e ); auto v = valueMapper ( e );
@@ -1956,14 +1956,14 @@ namespace cds {
         __CDS_MaybeUnused auto groupBy (
                 KeySelector const & keySelector,
                 ValueMapper const & valueMapper
-        ) & noexcept -> Sequence < HashMap < returnOf < KeySelector >, LinkedList < returnOf < ValueMapper > > > >
+        ) & noexcept -> Sequence < HashMap < ReturnOf < KeySelector >, LinkedList < ReturnOf < ValueMapper > > > >
         __CDS_Requires (
                 ForwardIterable < C > &&
-                FunctionOver < KeySelector, returnOf < KeySelector >, ElementType > &&
-                FunctionOver < ValueMapper, returnOf < ValueMapper >, ElementType >
+                FunctionOver < KeySelector, ReturnOf < KeySelector >, ElementType > &&
+                FunctionOver < ValueMapper, ReturnOf < ValueMapper >, ElementType >
         ) {
 
-            HashMap < returnOf < KeySelector >, LinkedList < returnOf < ValueMapper > > > container;
+            HashMap < ReturnOf < KeySelector >, LinkedList < ReturnOf < ValueMapper > > > container;
 
             for ( auto e : * this ) {
                 auto k = keySelector ( e ); auto v = valueMapper ( e );
@@ -1978,12 +1978,12 @@ namespace cds {
 
         template < typename KeySelector >
         __CDS_MaybeUnused auto groupByTo (
-                Map < returnOf < KeySelector >, LinkedList < ElementType > >          & map,
+                Map < ReturnOf < KeySelector >, LinkedList < ElementType > >          & map,
                 KeySelector                                                     const & keySelector
-        ) const noexcept -> Map < returnOf < KeySelector >, LinkedList < ElementType > > &
+        ) const noexcept -> Map < ReturnOf < KeySelector >, LinkedList < ElementType > > &
         __CDS_Requires (
                 ForwardIterable < C > &&
-                FunctionOver < KeySelector, returnOf < KeySelector >, ElementType >
+                FunctionOver < KeySelector, ReturnOf < KeySelector >, ElementType >
         ) {
 
             for ( auto e : * this ) {
@@ -1999,14 +1999,14 @@ namespace cds {
 
         template < typename KeySelector, typename ValueMapper >
         __CDS_MaybeUnused auto groupByTo (
-                Map < returnOf < KeySelector >, LinkedList < returnOf < ValueMapper > > >         & map,
+                Map < ReturnOf < KeySelector >, LinkedList < ReturnOf < ValueMapper > > >         & map,
                 KeySelector                                                                 const & keySelector,
                 ValueMapper                                                                 const & valueMapper
-        ) const noexcept -> Map < returnOf < KeySelector >, LinkedList < returnOf < ValueMapper > > > &
+        ) const noexcept -> Map < ReturnOf < KeySelector >, LinkedList < ReturnOf < ValueMapper > > > &
         __CDS_Requires (
                 ForwardIterable < C > &&
-                FunctionOver < KeySelector, returnOf < KeySelector >, ElementType > &&
-                FunctionOver < ValueMapper, returnOf < ValueMapper >, ElementType >
+                FunctionOver < KeySelector, ReturnOf < KeySelector >, ElementType > &&
+                FunctionOver < ValueMapper, ReturnOf < ValueMapper >, ElementType >
         ) {
 
             for ( auto e : * this ) {
@@ -2032,14 +2032,14 @@ namespace cds {
         template < typename Mapper, EnableIf < ! utility :: hidden :: sequenceImpl :: mapToSameType < Mapper, C > () > = 0 >
         __CDS_MaybeUnused auto map (
                 Mapper const & mapper
-        ) && noexcept -> Sequence < LinkedList < returnOf < Mapper > > >
+        ) && noexcept -> Sequence < LinkedList < ReturnOf < Mapper > > >
         __CDS_Requires ( ForwardIterable < C > && MapperFor < Mapper, ElementType > ) {
 
-            LinkedList < returnOf < Mapper > > container;
+            LinkedList < ReturnOf < Mapper > > container;
             for ( auto e : * this )
                 container.append(mapper(e));
 
-            return std::move(Sequence < LinkedList < returnOf < Mapper > > > (std::move(container)));
+            return std::move(Sequence < LinkedList < ReturnOf < Mapper > > > (std::move(container)));
         }
 
         template < typename Mapper, EnableIf < utility :: hidden :: sequenceImpl :: mapToSameType < Mapper, C > () > = 0 >
@@ -2055,14 +2055,14 @@ namespace cds {
         template < typename Mapper, EnableIf < ! utility :: hidden :: sequenceImpl :: mapToSameType < Mapper, C > () > = 0 >
         __CDS_MaybeUnused auto map (
                 Mapper const & mapper
-        ) & noexcept -> Sequence < LinkedList < returnOf < Mapper > > >
+        ) & noexcept -> Sequence < LinkedList < ReturnOf < Mapper > > >
         __CDS_Requires ( ForwardIterable < C > && MapperFor < Mapper, ElementType > ) {
 
-            LinkedList < returnOf < Mapper > > container;
+            LinkedList < ReturnOf < Mapper > > container;
             for ( auto e : * this )
                 container.append(mapper(e));
 
-            return std::move(Sequence < LinkedList < returnOf < Mapper > > > (std::move(container)));
+            return std::move(Sequence < LinkedList < ReturnOf < Mapper > > > (std::move(container)));
         }
 
         template < typename Mapper, EnableIf < utility :: hidden :: sequenceImpl :: mapToSameType < Mapper, C > () > = 0 >
@@ -2080,29 +2080,29 @@ namespace cds {
         template < typename IndexedMapper, EnableIf < ! utility :: hidden :: sequenceImpl :: mapToSameType < IndexedMapper, C > () > = 0 >
         __CDS_MaybeUnused auto mapIndexed (
                 IndexedMapper const & indexedMapper
-        ) && noexcept -> Sequence < LinkedList < returnOf < IndexedMapper > > >
+        ) && noexcept -> Sequence < LinkedList < ReturnOf < IndexedMapper > > >
         __CDS_Requires ( ForwardIterable < C > && MapperFor < IndexedMapper, Index, ElementType > ) {
 
-            LinkedList < returnOf < IndexedMapper > > container;
+            LinkedList < ReturnOf < IndexedMapper > > container;
             Index i = 0;
             for ( auto e : * this )
                 container.append(mapper(i++, e));
 
-            return std::move(Sequence < LinkedList < returnOf < IndexedMapper > > > (std::move(container)));
+            return std::move(Sequence < LinkedList < ReturnOf < IndexedMapper > > > (std::move(container)));
         }
 
         template < typename IndexedMapper, EnableIf < ! utility :: hidden :: sequenceImpl :: mapToSameType < IndexedMapper, C > () > = 0 >
         __CDS_MaybeUnused auto mapIndexed (
                 IndexedMapper const & mapper
-        ) & noexcept -> Sequence < LinkedList < returnOf < IndexedMapper > > >
+        ) & noexcept -> Sequence < LinkedList < ReturnOf < IndexedMapper > > >
         __CDS_Requires ( ForwardIterable < C > && MapperFor < IndexedMapper, Index, ElementType > ) {
 
-            LinkedList < returnOf < IndexedMapper > > container;
+            LinkedList < ReturnOf < IndexedMapper > > container;
             Index i = 0;
             for ( auto e : * this )
                 container.append(mapper(i++, e));
 
-            return std::move(Sequence < LinkedList < returnOf < IndexedMapper > > > (std::move(container)));
+            return std::move(Sequence < LinkedList < ReturnOf < IndexedMapper > > > (std::move(container)));
         }
 
         template < typename IndexedMapper, EnableIf < utility :: hidden :: sequenceImpl :: mapToSameType < IndexedMapper, C > () > = 0 >
@@ -2134,7 +2134,7 @@ namespace cds {
         __CDS_Requires (
                 ForwardIterable < C > &&
                 MapperFor < Mapper, ElementType > &&
-                ConvertibleTo < returnOf < Mapper >, R >
+                ConvertibleTo < ReturnOf < Mapper >, R >
         ) {
 
             for ( auto e : * this )
@@ -2150,7 +2150,7 @@ namespace cds {
         __CDS_Requires (
                 ForwardIterable < C > &&
                 MapperFor < IndexedMapper, Index, ElementType > &&
-                ConvertibleTo < returnOf < IndexedMapper >, R >
+                ConvertibleTo < ReturnOf < IndexedMapper >, R >
         ) {
 
             Index i = 0;
@@ -2351,7 +2351,7 @@ namespace cds {
         }
 
         template < typename Selector >
-        __CDS_MaybeUnused auto maxOf ( Selector const & selector ) const noexcept -> Optional < returnOf < Selector > >
+        __CDS_MaybeUnused auto maxOf ( Selector const & selector ) const noexcept -> Optional < ReturnOf < Selector > >
         __CDS_Requires (
                 ForwardIterable < C > &&
                 AscendingSelectorFor < Selector, ElementType >
@@ -2397,9 +2397,9 @@ namespace cds {
 
         template < typename Selector >
         __CDS_MaybeUnused auto maxOfOr (
-                returnOf < Selector >   const & e,
+                ReturnOf < Selector >   const & e,
                 Selector                const & selector
-        ) const noexcept -> returnOf < Selector > __CDS_Requires (
+        ) const noexcept -> ReturnOf < Selector > __CDS_Requires (
                 ForwardIterable < C > &&
                 AscendingSelectorFor < Selector, ElementType >
         ) {
@@ -2451,7 +2451,7 @@ namespace cds {
         }
 
         template < typename Selector >
-        __CDS_MaybeUnused auto minOf ( Selector const & selector ) const noexcept -> Optional < returnOf < Selector > >
+        __CDS_MaybeUnused auto minOf ( Selector const & selector ) const noexcept -> Optional < ReturnOf < Selector > >
         __CDS_Requires (
                 ForwardIterable < C > &&
                 AscendingSelectorFor < Selector, ElementType >
@@ -2498,9 +2498,9 @@ namespace cds {
 
         template < typename Selector >
         __CDS_MaybeUnused auto minOfOr (
-                returnOf < Selector >   const & e,
+                ReturnOf < Selector >   const & e,
                 Selector                const & selector
-        ) const noexcept -> returnOf < Selector >
+        ) const noexcept -> ReturnOf < Selector >
         __CDS_Requires (
                 ForwardIterable < C > &&
                 AscendingSelectorFor < Selector, ElementType >
@@ -2522,7 +2522,7 @@ namespace cds {
         ) const noexcept -> AccumulatedType
         __CDS_Requires (
                 ForwardIterable < C > &&
-                AccumulatorFor < Accumulator, ElementType >
+                AccumulatorFor < Accumulator, AccumulatedType, ElementType >
         ) {
 
             AccumulatedType result = startingValue;
@@ -2540,7 +2540,7 @@ namespace cds {
         ) const noexcept -> AccumulatedType
         __CDS_Requires (
                 ForwardIterable < C > &&
-                IndexedAccumulatorFor < IndexedAccumulator, ElementType >
+                IndexedAccumulatorFor < IndexedAccumulator, AccumulatedType, ElementType >
         ) {
             AccumulatedType result = startingValue;
             Index i = 0;
@@ -2558,7 +2558,7 @@ namespace cds {
         ) && noexcept -> Sequence < LinkedList < AccumulatedType > >
         __CDS_Requires (
                 ForwardIterable < C > &&
-                AccumulatorFor < Accumulator, ElementType >
+                AccumulatorFor < Accumulator, AccumulatedType, ElementType >
         ) {
 
             LinkedList < AccumulatedType > results = { initialValue };
@@ -2576,7 +2576,7 @@ namespace cds {
         ) && noexcept -> Sequence < LinkedList < AccumulatedType > >
         __CDS_Requires (
                 ForwardIterable < C > &&
-                IndexedAccumulatorFor < IndexedAccumulator, ElementType >
+                IndexedAccumulatorFor < IndexedAccumulator, AccumulatedType, ElementType >
         ) {
 
             LinkedList < AccumulatedType > results = { initialValue };
@@ -2595,7 +2595,7 @@ namespace cds {
         ) & noexcept -> Sequence < LinkedList < AccumulatedType > >
         __CDS_Requires (
                 ForwardIterable < C > &&
-                AccumulatorFor < Accumulator, ElementType >
+                AccumulatorFor < Accumulator, AccumulatedType, ElementType >
         ) {
 
             LinkedList < AccumulatedType > results = { initialValue };
@@ -2613,7 +2613,7 @@ namespace cds {
         ) & noexcept -> Sequence < LinkedList < AccumulatedType > >
         __CDS_Requires (
                 ForwardIterable < C > &&
-                IndexedAccumulatorFor < IndexedAccumulator, ElementType >
+                IndexedAccumulatorFor < IndexedAccumulator, AccumulatedType, ElementType >
         ) {
 
             LinkedList < AccumulatedType > results = { initialValue };
@@ -2628,18 +2628,18 @@ namespace cds {
         template < typename Accumulator >
         __CDS_MaybeUnused auto reduce (
                 Accumulator const & accumulator
-        ) const noexcept (false) -> returnOf < Accumulator >
+        ) const noexcept (false) -> ReturnOf < Accumulator >
         __CDS_Requires (
                 ForwardIterable < C > &&
-                AccumulatorFor < Accumulator, ElementType > &&
-                ConvertibleTo < ElementType, returnOf < Accumulator > >
+                AccumulatorFor < Accumulator, ElementType, ElementType > &&
+                ConvertibleTo < ElementType, ReturnOf < Accumulator > >
         ) {
 
             if ( this->pCollection.valueAt().valueAt().size() == 0 )
                 throw OutOfBoundsException ("reduce used on empty Sequence");
 
             auto it = this->begin();
-            returnOf < Accumulator > result = it.value();
+            ReturnOf < Accumulator > result = it.value();
 
             for ( it.next(); it != this->end(); ++ it )
                 result = accumulator ( result, it.value() );
@@ -2650,18 +2650,18 @@ namespace cds {
         template < typename IndexedAccumulator >
         __CDS_MaybeUnused auto reduceIndexed (
                 IndexedAccumulator const & indexedAccumulator
-        ) const noexcept (false) -> returnOf < IndexedAccumulator >
+        ) const noexcept (false) -> ReturnOf < IndexedAccumulator >
         __CDS_Requires (
                 ForwardIterable < C > &&
-                IndexedAccumulatorFor < IndexedAccumulator, ElementType > &&
-                ConvertibleTo < ElementType, returnOf < IndexedAccumulator > >
+                IndexedAccumulatorFor < IndexedAccumulator, ElementType, ElementType > &&
+                ConvertibleTo < ElementType, ReturnOf < IndexedAccumulator > >
         ) {
 
             if ( this->pCollection.valueAt().valueAt().size() == 0 )
                 throw OutOfBoundsException ("reduceIndexed used on empty Sequence");
 
             auto it = this->begin();
-            returnOf < IndexedAccumulator > result = it.value();
+            ReturnOf < IndexedAccumulator > result = it.value();
             Index i = 1;
 
             for ( it.next(); it != this->end(); ++ it )
@@ -2673,14 +2673,14 @@ namespace cds {
         template < typename Accumulator >
         __CDS_MaybeUnused auto runningReduce (
                 Accumulator const & accumulator
-        ) && noexcept -> Sequence < LinkedList < returnOf < Accumulator > > >
+        ) && noexcept -> Sequence < LinkedList < ReturnOf < Accumulator > > >
         __CDS_Requires (
                 ForwardIterable < C > &&
-                AccumulatorFor < Accumulator, ElementType > &&
-                ConvertibleTo < ElementType, returnOf < Accumulator > >
+                AccumulatorFor < Accumulator, ElementType, ElementType > &&
+                ConvertibleTo < ElementType, ReturnOf < Accumulator > >
         ) {
 
-            LinkedList < returnOf < Accumulator > > results = { };
+            LinkedList < ReturnOf < Accumulator > > results = { };
 
             if ( this->pCollection.valueAt().valueAt().size() > 0 ) {
                 auto it = this->begin();
@@ -2696,14 +2696,14 @@ namespace cds {
         template < typename IndexedAccumulator >
         __CDS_MaybeUnused auto runningReduceIndexed (
                 IndexedAccumulator const & indexedAccumulator
-        ) && noexcept -> Sequence < LinkedList < returnOf < IndexedAccumulator > > >
+        ) && noexcept -> Sequence < LinkedList < ReturnOf < IndexedAccumulator > > >
         __CDS_Requires (
                 ForwardIterable < C > &&
-                IndexedAccumulatorFor < IndexedAccumulator, ElementType > &&
-                ConvertibleTo < ElementType, returnOf < IndexedAccumulator > >
+                IndexedAccumulatorFor < IndexedAccumulator, ElementType, ElementType > &&
+                ConvertibleTo < ElementType, ReturnOf < IndexedAccumulator > >
         ) {
 
-            LinkedList < returnOf < IndexedAccumulator > > results = { };
+            LinkedList < ReturnOf < IndexedAccumulator > > results = { };
 
             if ( this->pCollection.valueAt().valueAt().size() > 0 ) {
                 auto it = this->begin();
@@ -2722,14 +2722,14 @@ namespace cds {
         template < typename Accumulator >
         __CDS_MaybeUnused auto runningReduce (
                 Accumulator const & accumulator
-        ) & noexcept -> Sequence < LinkedList < returnOf < Accumulator > > >
+        ) & noexcept -> Sequence < LinkedList < ReturnOf < Accumulator > > >
         __CDS_Requires (
                 ForwardIterable < C > &&
-                AccumulatorFor < Accumulator, ElementType > &&
-                ConvertibleTo < ElementType, returnOf < Accumulator > >
+                AccumulatorFor < Accumulator, ElementType, ElementType > &&
+                ConvertibleTo < ElementType, ReturnOf < Accumulator > >
         ) {
 
-            LinkedList < returnOf < Accumulator > > results = { };
+            LinkedList < ReturnOf < Accumulator > > results = { };
 
             if ( this->pCollection.valueAt().valueAt().size() > 0 ) {
                 auto it = this->begin();
@@ -2745,14 +2745,14 @@ namespace cds {
         template < typename IndexedAccumulator >
         __CDS_MaybeUnused auto runningReduceIndexed (
                 IndexedAccumulator const & indexedAccumulator
-        ) & noexcept -> Sequence < LinkedList < returnOf < IndexedAccumulator > > >
+        ) & noexcept -> Sequence < LinkedList < ReturnOf < IndexedAccumulator > > >
         __CDS_Requires (
                 ForwardIterable < C > &&
-                IndexedAccumulatorFor < IndexedAccumulator, ElementType > &&
-                ConvertibleTo < ElementType, returnOf < IndexedAccumulator > >
+                IndexedAccumulatorFor < IndexedAccumulator, ElementType, ElementType > &&
+                ConvertibleTo < ElementType, ReturnOf < IndexedAccumulator > >
         ) {
 
-            LinkedList < returnOf < IndexedAccumulator > > results = { };
+            LinkedList < ReturnOf < IndexedAccumulator > > results = { };
 
             if ( this->pCollection.valueAt().valueAt().size() > 0 ) {
                 auto it = this->begin();
@@ -2774,7 +2774,7 @@ namespace cds {
         ) && noexcept -> Sequence < LinkedList < AccumulatedType > >
         __CDS_Requires (
                 ForwardIterable < C > &&
-                AccumulatorFor < Accumulator, ElementType >
+                AccumulatorFor < Accumulator, ElementType, ElementType >
         ) {
 
             return this->runningFold( initialValue, accumulator );
@@ -2787,7 +2787,7 @@ namespace cds {
         ) & noexcept -> Sequence < LinkedList < AccumulatedType > >
         __CDS_Requires (
                 ForwardIterable < C > &&
-                AccumulatorFor < Accumulator, ElementType >
+                AccumulatorFor < Accumulator, ElementType, ElementType >
         ) {
 
             return this->runningFold( initialValue, accumulator );
@@ -2800,7 +2800,7 @@ namespace cds {
         ) && noexcept -> Sequence < LinkedList < AccumulatedType > >
         __CDS_Requires (
                 ForwardIterable < C > &&
-                IndexedAccumulatorFor < IndexedAccumulator, ElementType >
+                IndexedAccumulatorFor < IndexedAccumulator, ElementType, ElementType >
         ) {
 
             return this->runningFoldIndexed ( initialValue, indexedAccumulator );
@@ -2813,7 +2813,7 @@ namespace cds {
         ) & noexcept -> Sequence < LinkedList < AccumulatedType > >
         __CDS_Requires (
                 ForwardIterable < C > &&
-                IndexedAccumulatorFor < IndexedAccumulator, ElementType >
+                IndexedAccumulatorFor < IndexedAccumulator, ElementType, ElementType >
         ) {
 
             return this->runningFoldIndexed ( initialValue, indexedAccumulator );
@@ -2841,11 +2841,11 @@ namespace cds {
         }
 
         template < typename Selector >
-        __CDS_MaybeUnused auto sumBy ( Selector const & selector ) const noexcept -> returnOf < Selector >
+        __CDS_MaybeUnused auto sumBy ( Selector const & selector ) const noexcept -> ReturnOf < Selector >
         __CDS_Requires (
                 ForwardIterable < C > &&
                 MapperFor < Selector, ElementType > &&
-                Summable < returnOf < Selector > >
+                Summable < ReturnOf < Selector > >
         ) {
 
             auto it = this->begin();
@@ -2928,10 +2928,10 @@ namespace cds {
         __CDS_MaybeUnused auto chunked (
                 Size                    chunkSize,
                 ListTransformer const & listTransformer
-        ) && noexcept -> Sequence < LinkedList < returnOf < ListTransformer > > >
+        ) && noexcept -> Sequence < LinkedList < ReturnOf < ListTransformer > > >
         __CDS_Requires ( ForwardIterable < C > && TransformerOver < ListTransformer, List < ElementType > > ) {
 
-            LinkedList < returnOf < ListTransformer > > container;
+            LinkedList < ReturnOf < ListTransformer > > container;
             Array < ElementType > subContainer;
             Index subContainerPos = 0;
             subContainer.resize(chunkSize);
@@ -2959,10 +2959,10 @@ namespace cds {
         __CDS_MaybeUnused auto chunked (
                 Size                    chunkSize,
                 ListTransformer const & listTransformer
-        ) & noexcept -> Sequence < LinkedList < returnOf < ListTransformer > > >
+        ) & noexcept -> Sequence < LinkedList < ReturnOf < ListTransformer > > >
         __CDS_Requires ( ForwardIterable < C > && TransformerOver < ListTransformer, List < ElementType > > ) {
 
-            LinkedList < returnOf < ListTransformer > > container;
+            LinkedList < ReturnOf < ListTransformer > > container;
             Array < ElementType > subContainer;
             Index subContainerPos = 0;
             subContainer.resize(chunkSize);
@@ -3309,10 +3309,10 @@ namespace cds {
                 Size                    size,
                 Size                    step            = 1,
                 Boolean         const & partialWindows  = false
-        ) && noexcept -> Sequence < LinkedList < returnOf < ListTransformer > > >
+        ) && noexcept -> Sequence < LinkedList < ReturnOf < ListTransformer > > >
         __CDS_Requires ( ForwardIterable < C > && TransformerOver < ListTransformer, List < ElementType > > )  {
 
-            LinkedList < returnOf < ListTransformer > > container;
+            LinkedList < ReturnOf < ListTransformer > > container;
             utility :: hidden :: sequenceImpl :: Windowed :: type < ListTransformer > window;
 
             auto it = this->begin();
@@ -3339,10 +3339,10 @@ namespace cds {
                 Size                    size,
                 Size                    step            = 1,
                 Boolean         const & partialWindows  = false
-        ) & noexcept -> Sequence < LinkedList < returnOf < ListTransformer > > >
+        ) & noexcept -> Sequence < LinkedList < ReturnOf < ListTransformer > > >
         __CDS_Requires ( ForwardIterable < C > && TransformerOver < ListTransformer, List < ElementType > > ) {
 
-            LinkedList < returnOf < ListTransformer > > container;
+            LinkedList < ReturnOf < ListTransformer > > container;
             utility :: hidden :: sequenceImpl :: Windowed :: type < ListTransformer > window;
 
             auto it = this->begin();
@@ -3401,7 +3401,7 @@ namespace cds {
         __CDS_MaybeUnused auto zip (
                 Sequence < OC > const & other,
                 Transformer     const & transformer
-        ) && noexcept -> Sequence < LinkedList < returnOf < Transformer > > >
+        ) && noexcept -> Sequence < LinkedList < ReturnOf < Transformer > > >
         __CDS_Requires (
                 ForwardIterable < C > &&
                 ForwardIterable < OC > &&
@@ -3411,7 +3411,7 @@ namespace cds {
             auto it1 = this->begin();
             auto it2 = other.begin();
 
-            LinkedList < returnOf < Transformer > > container;
+            LinkedList < ReturnOf < Transformer > > container;
 
             for (; it1 != this->end() && it2 != other.end(); ++ it1, ++ it2 )
                 container.add ( transformer( it1.value(), it2.value() ) );
@@ -3423,7 +3423,7 @@ namespace cds {
         __CDS_MaybeUnused auto zip (
                 Sequence < OC > const & other,
                 Transformer     const & transformer
-        ) & noexcept -> Sequence < LinkedList < returnOf < Transformer > > >
+        ) & noexcept -> Sequence < LinkedList < ReturnOf < Transformer > > >
         __CDS_Requires (
                 ForwardIterable < C > &&
                 ForwardIterable < OC > &&
@@ -3433,7 +3433,7 @@ namespace cds {
             auto it1 = this->begin();
             auto it2 = other.begin();
 
-            LinkedList < returnOf < Transformer > > container;
+            LinkedList < ReturnOf < Transformer > > container;
 
             for (; it1 != this->end() && it2 != other.end(); ++ it1, ++ it2 )
                 container.add ( transformer( it1.value(), it2.value() ) );
@@ -3461,10 +3461,10 @@ namespace cds {
         template < typename Transformer >
         __CDS_MaybeUnused auto zipWithNext (
                 Transformer const & transformer
-        ) && noexcept -> Sequence < LinkedList < returnOf < Transformer > > >
+        ) && noexcept -> Sequence < LinkedList < ReturnOf < Transformer > > >
         __CDS_Requires ( ForwardIterable < C > && TransformerOver < Transformer, ElementType, ElementType > ) {
 
-            LinkedList < returnOf < Transformer > > container;
+            LinkedList < ReturnOf < Transformer > > container;
 
             auto it = this->begin();
             auto v = it.value();
@@ -3496,10 +3496,10 @@ namespace cds {
         template < typename Transformer >
         __CDS_MaybeUnused auto zipWithNext (
                 Transformer const & transformer
-        ) & noexcept -> Sequence < LinkedList < returnOf < Transformer > > >
+        ) & noexcept -> Sequence < LinkedList < ReturnOf < Transformer > > >
         __CDS_Requires ( ForwardIterable < C > && TransformerOver < Transformer, ElementType, ElementType > ) {
 
-            LinkedList < returnOf < Transformer > > container;
+            LinkedList < ReturnOf < Transformer > > container;
 
             auto it = this->begin();
             auto v = it.value();

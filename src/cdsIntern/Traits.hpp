@@ -125,78 +125,162 @@ namespace cds {
         return isObjectDerived < D > :: type :: value;
     }
 
-    template < typename T, typename = void >
-    struct functionTraits;
+    namespace functionUtility {
 
-    template < typename R, typename ... A >
-    struct functionTraits < R (*) (A ...) > {
-        using ReturnType = R;
-        using ClassType = void;
-        using ArgsType = std :: tuple < A ... >;
-    };
+        template < typename T, typename = void >
+        struct returnOf;
 
-    template < typename R, typename C, typename ... A >
-    struct functionTraits < R (C::*) (A ...) > {
-        using ReturnType = R;
-        using ClassType = C;
-        using ArgsType = std :: tuple < A ... >;
-    };
+        template < typename R, typename ... A >
+        struct returnOf < R (*) (A ...) > {
+            using Type = R;
+        };
 
-    template < typename R, typename C, typename ... A >
-    struct functionTraits < R (C::*) (A ...) const > {
-        using ReturnType = R;
-        using ClassType = C;
-        using ArgsType = std :: tuple < A ... >;
-    };
+        template < typename R, typename C, typename ... A >
+        struct returnOf < R (C::*) (A ...) > {
+            using Type = R;
+        };
 
-    template < typename R, typename ... A >
-    struct functionTraits < R ( A ... ) > {
-        using ReturnType = R;
-        using ClassType = void;
-        using ArgsType = std :: tuple < A ... >;
-    };
+        template < typename R, typename C, typename ... A >
+        struct returnOf < R (C::*) (A ...) const > {
+            using Type = R;
+        };
 
-    template < typename R, typename ... A >
-    struct functionTraits < R (*) (A ...) noexcept > {
-        using ReturnType = R;
-        using ClassType = void;
-        using ArgsType = std :: tuple < A ... >;
-    };
+        template < typename R, typename ... A >
+        struct returnOf < R ( A ... ) > {
+            using Type = R;
+        };
 
-    template < typename R, typename C, typename ... A >
-    struct functionTraits < R (C::*) (A ...) noexcept > {
-        using ReturnType = R;
-        using ClassType = C;
-        using ArgsType = std :: tuple < A ... >;
-    };
+        template < typename R, typename ... A >
+        struct returnOf < R (*) (A ...) noexcept > {
+            using Type = R;
+        };
 
-    template < typename R, typename C, typename ... A >
-    struct functionTraits < R (C::*) (A ...) const noexcept > {
-        using ReturnType = R;
-        using ClassType = C;
-        using ArgsType = std :: tuple < A ... >;
-    };
+        template < typename R, typename C, typename ... A >
+        struct returnOf < R (C::*) (A ...) noexcept > {
+            using Type = R;
+        };
 
-    template < typename R, typename ... A >
-    struct functionTraits < R ( A ... ) noexcept > {
-        using ReturnType = R;
-        using ClassType = void;
-        using ArgsType = std :: tuple < A ... >;
-    };
+        template < typename R, typename C, typename ... A >
+        struct returnOf < R (C::*) (A ...) const noexcept > {
+            using Type = R;
+        };
+
+        template < typename R, typename ... A >
+        struct returnOf < R ( A ... ) noexcept > {
+            using Type = R;
+        };
+
+        template < typename T >
+        struct returnOf < T, std::void_t < decltype ( & T :: operator () ) > > :
+                public returnOf < decltype ( & T :: operator () ) > {
+        };
+
+        template < typename T, typename = void >
+        struct classOf;
+
+        template < typename R, typename ... A >
+        struct classOf < R (*) (A ...) > {
+            using Type = void;
+        };
+
+        template < typename R, typename C, typename ... A >
+        struct classOf < R (C::*) (A ...) > {
+            using Type = C;
+        };
+
+        template < typename R, typename C, typename ... A >
+        struct classOf < R (C::*) (A ...) const > {
+            using Type = C;
+        };
+
+        template < typename R, typename ... A >
+        struct classOf < R ( A ... ) > {
+            using Type = void;
+        };
+
+        template < typename R, typename ... A >
+        struct classOf < R (*) (A ...) noexcept > {
+            using Type = void;
+        };
+
+        template < typename R, typename C, typename ... A >
+        struct classOf < R (C::*) (A ...) noexcept > {
+            using Type = C;
+        };
+
+        template < typename R, typename C, typename ... A >
+        struct classOf < R (C::*) (A ...) const noexcept > {
+            using Type = C;
+        };
+
+        template < typename R, typename ... A >
+        struct classOf < R ( A ... ) noexcept > {
+            using Type = void;
+        };
+
+        template < typename T >
+        struct classOf < T, std::void_t < decltype ( & T :: operator () ) > > :
+                public classOf < decltype ( & T :: operator () ) > {
+        };
+
+        template < typename T, typename = void >
+        struct argumentsOf;
+
+        template < typename R, typename ... A >
+        struct argumentsOf < R (*) (A ...) > {
+            using Type = std :: tuple < A ... >;
+        };
+
+        template < typename R, typename C, typename ... A >
+        struct argumentsOf < R (C::*) (A ...) > {
+            using Type = std :: tuple < A ... >;
+        };
+
+        template < typename R, typename C, typename ... A >
+        struct argumentsOf < R (C::*) (A ...) const > {
+            using Type = std :: tuple < A ... >;
+        };
+
+        template < typename R, typename ... A >
+        struct argumentsOf < R ( A ... ) > {
+            using Type = std :: tuple < A ... >;
+        };
+
+        template < typename R, typename ... A >
+        struct argumentsOf < R (*) (A ...) noexcept > {
+            using Type = std :: tuple < A ... >;
+        };
+
+        template < typename R, typename C, typename ... A >
+        struct argumentsOf < R (C::*) (A ...) noexcept > {
+            using Type = std :: tuple < A ... >;
+        };
+
+        template < typename R, typename C, typename ... A >
+        struct argumentsOf < R (C::*) (A ...) const noexcept > {
+            using Type = std :: tuple < A ... >;
+        };
+
+        template < typename R, typename ... A >
+        struct argumentsOf < R ( A ... ) noexcept > {
+            using Type = std :: tuple < A ... >;
+        };
+
+        template < typename T >
+        struct argumentsOf < T, std::void_t < decltype ( & T :: operator () ) > > :
+                public argumentsOf < decltype ( & T :: operator () ) > {
+        };
+
+    }
 
     template < typename T >
-    struct functionTraits < T, std::void_t < decltype ( & T :: operator () ) > > :
-        public functionTraits < decltype ( & T :: operator () ) > {
-    };
+    using ReturnOf = typename functionUtility :: returnOf < T > :: Type;
 
     template < typename T >
-    using returnOf = typename functionTraits < T > :: ReturnType;
+    using ArgumentsOf = typename functionUtility :: argumentsOf < T > :: Type;
 
     template < typename T >
-    using argumentsOf = typename functionTraits < T > :: ArgsType;
-
-    template < typename T >
-    using classOf __CDS_MaybeUnused = typename functionTraits < T > :: ClassType;
+    using ClassOf = typename functionUtility :: classOf < T > :: Type;
 
     template < typename T >
     constexpr auto typeFundamental () noexcept -> bool {
@@ -469,17 +553,17 @@ namespace cds {
     #endif
 
         template < typename U = T, EnableIf < Type < U > :: hasEqualityOperator > = 0 >
-        constexpr static auto compare (T const & left, T const & right, int = 0) noexcept -> bool {
+        constexpr static auto compare (U const & left, U const & right, int = 0) noexcept -> bool {
             return left == right;
         }
 
         template < typename U = T, EnableIf < ! Type < U > :: hasEqualityOperator && Type < U > :: objectDerived > = 0 > // NOLINT(clion-misra-cpp2008-5-3-1)
-        __CDS_cpplang_VirtualConstexpr static auto compare (T const & left, T const & right, float = 0.0f) noexcept -> bool {
+        __CDS_cpplang_VirtualConstexpr static auto compare (U const & left, U const & right, float = 0.0f) noexcept -> bool {
             return left.equals(right);
         }
 
         template < typename U = T, EnableIf < ! Type < U > :: hasEqualityOperator && ! Type < U > :: objectDerived > = 0 > // NOLINT(clion-misra-cpp2008-5-3-1)
-        constexpr static auto compare (T const & left, T const & right) noexcept -> bool {
+        constexpr static auto compare (U const & left, U const & right) noexcept -> bool {
             return & left == & right;
         }
 

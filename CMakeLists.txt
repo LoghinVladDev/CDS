@@ -87,7 +87,7 @@ set(
 
         src/collection/unordered/UnorderedSet.hpp
         src/collection/unordered/HashMap.hpp
-        src/collection/unordered/JSON.hpp
+        src/collection/format/JSON.hpp
 )
 
 set(

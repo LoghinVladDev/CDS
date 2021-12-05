@@ -105,12 +105,12 @@ namespace cds {
         }
 
         template < typename Mapper >
-        __CDS_cpplang_ConstexprDestructor auto map ( Mapper const & mapper ) const noexcept -> Optional < returnOf < Mapper > > {
+        __CDS_cpplang_ConstexprDestructor auto map ( Mapper const & mapper ) const noexcept -> Optional < ReturnOf < Mapper > > {
             if ( this->isEmpty() ) {
-                return Optional < returnOf < Mapper> > ();
+                return Optional < ReturnOf < Mapper> > ();
             }
 
-            return Optional < returnOf < Mapper > > (mapper(this->pObj.valueAt()));
+            return Optional < ReturnOf < Mapper > > (mapper(this->pObj.valueAt()));
         }
 
         template < typename Supplier >

@@ -52,6 +52,10 @@
             "Name": "DeducedNoexceptTermination",
             "MSVC": 4297,
             "GCC": "-Wterminate"
+        },
+        {
+            "Name": "NoReturnStatement",
+            "GCC": "-Wreturn-type"
         }
     ]
 }

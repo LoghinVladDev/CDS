@@ -175,7 +175,7 @@ namespace cds {
 
     template < typename Transformer, typename ... ArgumentTypes >
     concept TransformerOver =
-            FunctionOver < Transformer, returnOf < Transformer >, ArgumentTypes ... >;
+            FunctionOver < Transformer, ReturnOf < Transformer >, ArgumentTypes ... >;
 
     template < typename Mapper, typename ... ArgumentTypes >
     concept MapperFor =
@@ -187,28 +187,28 @@ namespace cds {
 
     template < typename Selector, typename ElementType >
     concept AscendingSelectorFor =
-            FunctionOver < Selector, returnOf < Selector >, ElementType > &&
-            TypeLessComparable < returnOf < Selector > >;
+            FunctionOver < Selector, ReturnOf < Selector >, ElementType > &&
+            TypeLessComparable < ReturnOf < Selector > >;
 
     template < typename Selector, typename ElementType >
     concept DescendingSelectorFor =
-            FunctionOver < Selector, returnOf < Selector >, ElementType > &&
-            TypeGreaterComparable < returnOf < Selector > >;
+            FunctionOver < Selector, ReturnOf < Selector >, ElementType > &&
+            TypeGreaterComparable < ReturnOf < Selector > >;
 
     template < typename Selector, typename ElementType >
     concept SelectorFor =
-            FunctionOver < Selector, returnOf < Selector >, ElementType > && (
-                TypeLessComparable < returnOf < Selector > > ||
-                TypeGreaterComparable < returnOf < Selector > >
+            FunctionOver < Selector, ReturnOf < Selector >, ElementType > && (
+                TypeLessComparable < ReturnOf < Selector > > ||
+                TypeGreaterComparable < ReturnOf < Selector > >
             );
 
-    template < typename Accumulator, typename T >
+    template < typename Accumulator, typename R, typename T >
     concept AccumulatorFor =
-            FunctionOver < Accumulator, returnOf < Accumulator >, returnOf < Accumulator >, T >;
+            FunctionOver < Accumulator, RemoveConst < RemoveReference < R > >, R, T >;
 
-    template < typename Accumulator, typename T >
+    template < typename Accumulator, typename R, typename T >
     concept IndexedAccumulatorFor =
-            FunctionOver < Accumulator, returnOf < Accumulator >, Index, returnOf < Accumulator >, T >;
+            FunctionOver < Accumulator, RemoveConst < RemoveReference < R > >, Index, R, T >;
 
 }
 

@@ -66,7 +66,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                                 > :: unsafeAddress ()
                             )
                         >,
-                        returnOf < MapperType >
+                            ReturnOf < MapperType >
                     > :: type :: value;
                 }
 
@@ -75,7 +75,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                     using Type = RemoveReference <
                         decltype (
                             * ( * Type <
-                                typename returnOf < TransformerType > :: Iterator
+                                typename ReturnOf < TransformerType > :: Iterator
                             > :: unsafeAddress () )
                         )
                     >;
@@ -120,7 +120,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                                     decltype (
                                         std::get < 0 > (
                                             * Type <
-                                                argumentsOf <
+                                                ArgumentsOf <
                                                     Transformer
                                                 >
                                             > :: unsafeAddress ()
@@ -138,7 +138,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                                 decltype (
                                     std::get < 0 > (
                                         * Type <
-                                            argumentsOf <
+                                            ArgumentsOf <
                                                 Transformer
                                             >
                                         > :: unsafeAddress ()
@@ -154,7 +154,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                             decltype(
                                 std::get<0>(
                                     * Type <
-                                        argumentsOf <
+                                        ArgumentsOf <
                                             Transformer
                                         >
                                     > :: unsafeAddress ()
