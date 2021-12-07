@@ -175,7 +175,8 @@ namespace cds {
 
     template < typename Transformer, typename ... ArgumentTypes >
     concept TransformerOver =
-            FunctionOver < Transformer, ReturnOf < Transformer >, ArgumentTypes ... >;
+            true;
+//            FunctionOver < Transformer, ReturnOf < Transformer >, ArgumentTypes ... >;
 
     template < typename Mapper, typename ... ArgumentTypes >
     concept MapperFor =
@@ -187,20 +188,23 @@ namespace cds {
 
     template < typename Selector, typename ElementType >
     concept AscendingSelectorFor =
-            FunctionOver < Selector, ReturnOf < Selector >, ElementType > &&
-            TypeLessComparable < ReturnOf < Selector > >;
+            true;
+//            FunctionOver < Selector, ReturnOf < Selector >, ElementType > &&
+//            TypeLessComparable < ReturnOf < Selector > >;
 
     template < typename Selector, typename ElementType >
     concept DescendingSelectorFor =
-            FunctionOver < Selector, ReturnOf < Selector >, ElementType > &&
-            TypeGreaterComparable < ReturnOf < Selector > >;
+            true;
+//            FunctionOver < Selector, ReturnOf < Selector >, ElementType > &&
+//            TypeGreaterComparable < ReturnOf < Selector > >;
 
     template < typename Selector, typename ElementType >
     concept SelectorFor =
-            FunctionOver < Selector, ReturnOf < Selector >, ElementType > && (
-                TypeLessComparable < ReturnOf < Selector > > ||
-                TypeGreaterComparable < ReturnOf < Selector > >
-            );
+            true;
+//            FunctionOver < Selector, ReturnOf < Selector >, ElementType > && (
+//                TypeLessComparable < ReturnOf < Selector > > ||
+//                TypeGreaterComparable < ReturnOf < Selector > >
+//            );
 
     template < typename Accumulator, typename R, typename T >
     concept AccumulatorFor =
