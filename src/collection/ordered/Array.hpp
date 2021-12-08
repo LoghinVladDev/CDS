@@ -677,8 +677,8 @@ namespace cds {
         Index newBufLength = 0;
         Size currentCount = 0u;
 
-        for (; index < this->size() && currentCount < count; index++) {
-            if ( ! Type < T > :: compare (* this->_pData[index], element ) ) { // NOLINT(clion-misra-cpp2008-5-3-1)
+        for (; index < this->size(); index++) {
+            if ( ! Type < T > :: compare (* this->_pData[index], element ) || currentCount >= count ) { // NOLINT(clion-misra-cpp2008-5-3-1)
                 newBuf[newBufLength++] = this->_pData[index];
             } else {
                 removed = true;
