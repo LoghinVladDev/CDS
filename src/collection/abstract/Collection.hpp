@@ -1036,6 +1036,14 @@ namespace cds {
     __CDS_NoDiscard __CDS_MaybeUnused inline auto String :: join ( Collection < String > const & strings, String const & separator ) noexcept -> String {
         String result;
 
+        if ( strings.empty() ) {
+            return "";
+        }
+
+        if ( strings.size() == 1u ) {
+            return * strings.begin();
+        }
+
         auto current = strings.begin();
         auto next = current;
         ++ next;
