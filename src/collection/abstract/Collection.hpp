@@ -1047,7 +1047,7 @@ namespace cds {
             current = next;
         }
 
-        result += current;
+        result += * current;
 
         return result;
     }
