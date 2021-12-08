@@ -22,6 +22,9 @@ namespace cds {
     template < typename C >
     class Sequence;
 
+    template < typename C >
+    class Collection;
+
 }
 
 #if defined(CDS_QT)
@@ -4992,6 +4995,8 @@ namespace cds {
 
             return reversed;
         }
+
+        __CDS_NoDiscard __CDS_MaybeUnused static auto join ( Collection < String > const &, String const & = "" ) noexcept -> String;
 
         /**
          * @brief Function checks whether a String starts with a given String
