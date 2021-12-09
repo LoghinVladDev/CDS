@@ -46,8 +46,12 @@ namespace cds {
             using MemoryManager = __CDS_Memory_Manager;
 
         protected:
-            virtual auto allocate ( Size ) noexcept -> void * = 0;
-            virtual auto deallocate ( void * ) noexcept -> void = 0;
+            __CDS_NoDiscard virtual auto allocate ( Size ) noexcept -> void * = 0;
+            __CDS_NoDiscard virtual auto deallocate ( void * ) noexcept -> void = 0;
+            __CDS_NoDiscard __CDS_OptimalInline virutal auto reallocate ( void * pAddress, Size newSize ) noexcept -> void * {
+                this->deallocate ( pAddress );
+                return this->allocate ( newSize );
+            }
 
         public:
             virtual ~Allocator () noexcept = default;
@@ -115,6 +119,10 @@ namespace cds {
 
             inline auto allocate ( Size size ) noexcept -> void * override {
                 return malloc ( size ); // NOLINT(clion-misra-cpp2008-18-4-1)
+            }
+
+            inline auto reallocate ( void * pMemory, Size size ) noexcept -> void * override {
+                return realloc ( pMemory, size );
             }
 
             inline auto deallocate ( void * pMemory ) noexcept -> void override {
@@ -188,12 +196,6 @@ namespace cds {
             delete this->pAllocator;
         }
     };
-
-
-//    auto Memory::instance() noexcept -> Memory & {
-//        static Memory instance;
-//        return instance;
-//    }
 
 }
 

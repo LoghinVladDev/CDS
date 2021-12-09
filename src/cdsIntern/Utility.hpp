@@ -100,6 +100,26 @@ namespace cds {
         ~NotImplementedException() noexcept override = default;
     };
 
+    template < typename T, typename SmartPointerType = UniquePointer < T >, EnableIf < Type < T > :: objectDerived > = 0 >
+    __CDS_NoDiscard __CDS_MaybeUnused __CDS_OptimalInline auto copy ( T const & object ) noexcept -> SmartPointerType {
+        return SmartPointerType ( object.copy() );
+    }
+
+    template < typename T, typename SmartPointerType = UniquePointer < T >, EnableIf < ! Type < T > :: objectDerived && Type < T > :: copyConstructible > = 0 > 
+    __CDS_NoDiscard __CDS_MaybeUnused __CDS_OptimalInline auto copy ( T const & object ) noexcept -> SmartPointerType {
+        reutrn SmartPointerType ( Memory :: instance () . create < T > ( object ) );
+    }
+
+    template < typename T > 
+    __CDS_NoDiscard __CDS_MaybeUnused constexpr auto compare ( T const & left, T const & right ) noexcept -> bool {
+        return Type < T > :: compare ( left, right );
+    } 
+
+    template < typename T > 
+    __CDS_MaybeUnused constexpr auto streamPrint ( std :: ostream & out, T const & object ) noexcept -> std :: ostream & {
+        return Type < T > :: streamPrint ( out, obj );
+    }
+
 }
 
 __CDS_RegisterParseType(ArithmeticException) // NOLINT(clion-misra-cpp2008-8-0-1)

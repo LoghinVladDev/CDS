@@ -412,6 +412,10 @@ namespace cds {
             return this->operator==(*pMap);
         }
 
+        __CDS_NoDiscard auto copy () const noexcept -> HashMap < K, V, H > * override {
+            return Memory :: instance () .create ( * this );
+        }
+
         __CDS_OptimalInline auto getHashCalculator () const noexcept -> H const & {
             return this->hashCalculator;
         }

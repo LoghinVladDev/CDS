@@ -19,6 +19,7 @@
 #include <CDS/Pointer>
 #include <CDS/Function>
 #include <CDS/Traits>
+#include <CDS/Hasher>
 
 #if defined(__CDS_ThreadSafeObjects)
 
@@ -1023,6 +1024,46 @@ namespace cds {
         }
 
         __CDS_NoDiscard auto toString () const noexcept -> String override = 0;
+        
+        __CDS_NoDiscard auto hash () const noexcept -> Index {
+            Index finalHashValue = 0;
+
+            for ( auto & e : * this ) {
+                finalHashValue += cds :: hash ( e ); 
+            }
+        }
+
+        __CDS_NoDiscard auto copy () const noexcept -> Collection < T > * override = 0;
+        
+        __CDS_NoDiscard auto equals ( Object const & object ) const noexcept -> bool override {
+            if ( this == & obj ) {
+                return true;
+            }
+
+            auto * pCollection = dynamic_cast < Collection < T > const * > ( & object );
+            if ( pCollection == nullptr ) {
+                return false;
+            }
+
+            if ( pCollection->size() != this->size() ) {
+                return false;
+            }
+
+            for ( 
+                auto
+                    aIt = this->begin(), aEnd = this->end(),
+                    bIt = pCollection->begin(), bEnd = pCollection->end();
+
+                aIt != aEnd && bIt != bEnd; 
+                ++ aIt, ++ bIt
+            ) {
+                if ( * aIt != * bIt ) {
+                    return false;
+                }
+            }
+
+            return true;
+        }
 
         __CDS_cpplang_ConstexprDestructor ~Collection() noexcept override = default;
 

@@ -95,7 +95,7 @@ namespace cds {
             __CDS_OptimalInline auto put (float value)                   noexcept -> Node & { return this->put(Float(value)); }
             __CDS_OptimalInline auto put (double value)                  noexcept -> Node & { return this->put(Double(value)); }
             __CDS_OptimalInline auto put (StringLiteral value)           noexcept -> Node & { return this->put(String(value)); }
-                                auto put (JSON::Array const &)       noexcept -> Node &;
+                                auto put (JSON::Array const &)           noexcept -> Node &;
             __CDS_OptimalInline auto put (String const & value)          noexcept -> Node & { return this->put(reinterpret_cast < Object const & > ( value ) ); }
 
             __CDS_NoDiscard auto getBoolean () const noexcept(false) -> bool {
