@@ -1031,12 +1031,14 @@ namespace cds {
             for ( auto & e : * this ) {
                 finalHashValue += cds :: hash ( e ); 
             }
+
+            return finalHashValue;
         }
 
         __CDS_NoDiscard auto copy () const noexcept -> Collection < T > * override = 0;
         
         __CDS_NoDiscard auto equals ( Object const & object ) const noexcept -> bool override {
-            if ( this == & obj ) {
+            if ( this == & object ) {
                 return true;
             }
 

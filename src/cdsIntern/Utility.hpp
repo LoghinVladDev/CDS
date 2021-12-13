@@ -107,7 +107,7 @@ namespace cds {
 
     template < typename T, typename SmartPointerType = UniquePointer < T >, EnableIf < ! Type < T > :: objectDerived && Type < T > :: copyConstructible > = 0 > 
     __CDS_NoDiscard __CDS_MaybeUnused __CDS_OptimalInline auto copy ( T const & object ) noexcept -> SmartPointerType {
-        reutrn SmartPointerType ( Memory :: instance () . create < T > ( object ) );
+        return SmartPointerType ( Memory :: instance () . create < T > ( object ) );
     }
 
     template < typename T > 
@@ -117,7 +117,7 @@ namespace cds {
 
     template < typename T > 
     __CDS_MaybeUnused constexpr auto streamPrint ( std :: ostream & out, T const & object ) noexcept -> std :: ostream & {
-        return Type < T > :: streamPrint ( out, obj );
+        return Type < T > :: streamPrint ( out, object );
     }
 
 }

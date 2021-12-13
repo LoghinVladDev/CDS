@@ -47,8 +47,8 @@ namespace cds {
 
         protected:
             __CDS_NoDiscard virtual auto allocate ( Size ) noexcept -> void * = 0;
-            __CDS_NoDiscard virtual auto deallocate ( void * ) noexcept -> void = 0;
-            __CDS_NoDiscard __CDS_OptimalInline virutal auto reallocate ( void * pAddress, Size newSize ) noexcept -> void * {
+            virtual auto deallocate ( void * ) noexcept -> void = 0;
+            __CDS_NoDiscard __CDS_OptimalInline virtual auto reallocate ( void * pAddress, Size newSize ) noexcept -> void * {
                 this->deallocate ( pAddress );
                 return this->allocate ( newSize );
             }
