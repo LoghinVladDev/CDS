@@ -14,7 +14,7 @@
 
 namespace cds {
 
-    template <class T>
+    template < typename T >
     class PointerBase : public Object {
     public:
         using PointerType           = std::size_t;
@@ -505,6 +505,30 @@ namespace cds {
 }
 
 #endif
+
+namespace cds {
+
+    template < typename T > 
+    __CDS_NoDiscard __CDS_MaybeUnused __CDS_OptimalInline auto makeUniquePointer ( T * addr ) noexcept -> UniquePointer < T > {
+        return UnqiuePointer < T > ( addr );
+    }
+
+    template < typename T >
+    __CDS_NoDiscard __CDS_MaybeUnused __CDS_OptimalInline auto makeSharedPointer ( T * addr ) noexcept -> SharedPointer < T > {
+        return SharedPointer < T > ( addr );
+    }
+
+    template < typename T > 
+    __CDS_NoDiscard __CDS_MaybeUnused __CDS_OptimalInline auto makeAtomicSharedPointer ( T * addr ) noexcept -> AtomicSharedPointer < T > {
+        return AtomicSharedPointer < T > ( addr );
+    }
+
+    template < typename T >
+    __CDS_NoDiscard __CDS_MaybeUnused __CDS_OptimalInline auto makeForeignPointer ( T * addr ) noexcept -> ForeignPointer < T > {
+        return ForeignPointer < T > ( addr );
+    }
+
+}
 
 __CDS_RegisterParseTypeTemplateT(PointerBase) // NOLINT(clion-misra-cpp2008-8-0-1)
 __CDS_RegisterParseTypeTemplateT(UniquePointer) // NOLINT(clion-misra-cpp2008-8-0-1)

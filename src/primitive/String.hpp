@@ -5,11 +5,7 @@
 #ifndef CDS_STRING_HPP
 #define CDS_STRING_HPP
 
-#include <ostream>
-#include <string>
-
 #include <CDS/Concepts>
-#include <cstdarg>
 #include <CDS/Options>
 #include <CDS/Limits>
 
@@ -27,18 +23,21 @@ namespace cds {
 
 }
 
-#if defined(CDS_QT)
-#include <QString>
-#endif
-
 #include <CDS/Object>
 #include <CDS/Traits>
 #include <CDS/Conversion>
 #include <CDS/Memory>
 
-#include <cstring>
-#define CONSTR_CLEAR() _c(0llu), _l(0llu), _p(nullptr)
+#if defined(CDS_QT)
+#include <QString>
+#endif
 
+#include <cstring>
+
+#include <ostream>
+#include <string>
+
+#include <cstdarg>
 
 namespace cds {
 
@@ -863,8 +862,7 @@ namespace cds {
          *
          * @test tested in primitive/StringTest/Constructor Tests
          */
-        __CDS_cpplang_ConstexprConditioned String (String const & string) noexcept
-                : CONSTR_CLEAR() {
+        __CDS_cpplang_ConstexprConditioned String (String const & string) noexcept {
 
             if ( string.empty() ) {
                 return;
@@ -905,8 +903,7 @@ namespace cds {
          *
          * @test tested in primitive/StringTest/Constructor Tests
          */
-        __CDS_cpplang_ConstexprConditioned String(StringLiteral cString, Size length = UINT64_MAX ) noexcept : // NOLINT(google-explicit-constructor)
-                CONSTR_CLEAR() {
+        __CDS_cpplang_ConstexprConditioned String(StringLiteral cString, Size length = UINT64_MAX ) noexcept { // NOLINT(google-explicit-constructor)
 
             if ( cString == nullptr ) {
                 return;
@@ -938,7 +935,7 @@ namespace cds {
          *
          * @test tested in primitive/StringTest/Constructor Tests
          */
-        __CDS_cpplang_ConstexprConditioned String(CString cString, Size length = UINT64_MAX) noexcept : CONSTR_CLEAR() { // NOLINT(google-explicit-constructor)
+        __CDS_cpplang_ConstexprConditioned String(CString cString, Size length = UINT64_MAX) noexcept { // NOLINT(google-explicit-constructor)
             if ( cString == nullptr ) {
                 return;
             }
@@ -976,8 +973,7 @@ namespace cds {
          *
          * @test tested in primitive/StringTest/Constructor Tests
          */
-        __CDS_OptionalInline String(std::string const & string) noexcept : // NOLINT(google-explicit-constructor)
-                CONSTR_CLEAR() {
+        __CDS_OptionalInline String(std::string const & string) noexcept { // NOLINT(google-explicit-constructor)
 
             if ( string.empty() ) {
                 return;
@@ -999,8 +995,7 @@ namespace cds {
          *
          * @test tested in primitive/StringTest/Constructor Tests
          */
-        __CDS_cpplang_ConstexprConditioned String(Size count, ElementType constant) noexcept :
-                CONSTR_CLEAR() {
+        __CDS_cpplang_ConstexprConditioned String(Size count, ElementType constant) noexcept {
 
             if ( count == 0u ) {
                 return;
@@ -1027,8 +1022,7 @@ namespace cds {
          *
          * @test tested in primitive/StringTest/Constructor Tests
          */
-        __CDS_cpplang_ConstexprSTLIteratorOp String(std::string::iterator const & begin, std::string::iterator const & end) noexcept :
-                CONSTR_CLEAR() {
+        __CDS_cpplang_ConstexprSTLIteratorOp String(std::string::iterator const & begin, std::string::iterator const & end) noexcept {
 
             if ( end - begin <= 0 ) {
                 return;
@@ -1051,8 +1045,7 @@ namespace cds {
          *
          * @test tested in primitive/StringTest/Constructor Tests
          */
-        __CDS_cpplang_ConstexprDestructor String(IteratorBase const & begin, IteratorBase const & end) noexcept :
-                CONSTR_CLEAR() {
+        __CDS_cpplang_ConstexprDestructor String(IteratorBase const & begin, IteratorBase const & end) noexcept {
 
             bool reversed = dynamic_cast < Iterator const * > ( & begin ) == nullptr;
             if ( ! reversed && end - begin <= 0 || reversed && begin - end <= 0) {
@@ -1082,8 +1075,7 @@ namespace cds {
          *
          * @test tested in primitive/StringTest/Constructor Tests
          */
-        __CDS_cpplang_ConstexprDestructor String(ConstIteratorBase const & begin, ConstIteratorBase const & end) noexcept :
-                CONSTR_CLEAR() {
+        __CDS_cpplang_ConstexprDestructor String(ConstIteratorBase const & begin, ConstIteratorBase const & end) noexcept {
 
             bool reversed = dynamic_cast < ConstIterator const * > ( & begin ) == nullptr;
             if ( ! reversed && end - begin <= 0 || reversed && begin - end <= 0) {
@@ -1112,8 +1104,7 @@ namespace cds {
          *
          * @test tested in primitive/StringTest/Constructor Tests
          */
-        __CDS_cpplang_ConstexprConditioned String(std::initializer_list<ElementType> const & list) noexcept :
-                CONSTR_CLEAR() {
+        __CDS_cpplang_ConstexprConditioned String(std::initializer_list<ElementType> const & list) noexcept {
 
             if ( list.size() == 0u ) {
                 return;
@@ -5229,8 +5220,6 @@ inline auto operator "" _s (const char * pString, std::size_t length __CDS_Maybe
 }
 
 #endif
-
-#undef CONSTR_CLEAR
 
 #include <CDS/Types>
 

@@ -99,6 +99,10 @@ namespace cds {
             return oss.str();
         }
 
+        __CDS_NoDiscard __CDS_OptimalInline auto copy () const noexcept -> Reference < T > * override {
+            return Memory :: instance () .create < Refernece < T > > ( * this );
+        }
+
     #if __CDS_cpplang_core_version >= __CDS_cpplang_core_version_17
 
         template <class...ArgTypes>
