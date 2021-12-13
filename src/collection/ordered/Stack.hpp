@@ -49,16 +49,24 @@ namespace cds {
         inline auto popFront () noexcept (false) -> T override { return this->SingleLinkedList < T > :: popFront(); }
 
     public:
-        inline auto push ( T const & e ) noexcept -> void {
+        inline auto push ( T const & e ) noexcept -> T & {
             return this->SingleLinkedList < T > :: pushFront (e);
         }
 
-        inline auto push ( T && e ) noexcept -> void {
+        inline auto push ( T && e ) noexcept -> T & {
             return this->SingleLinkedList < T > :: pushFront (e);
         }
 
         inline auto pop () noexcept (false) -> T {
             return this->popFront();
+        }
+
+        inline auto peek () const noexcept ( false ) -> T const & {
+            return this->front();
+        }
+
+        inline auto peek () noexcept ( false ) -> T & {
+            return this->front();
         }
     };
 
