@@ -1025,7 +1025,7 @@ namespace cds {
 
         __CDS_NoDiscard auto toString () const noexcept -> String override = 0;
         
-        __CDS_NoDiscard auto hash () const noexcept -> Index {
+        __CDS_NoDiscard auto hash () const noexcept -> Index override {
             Index finalHashValue = 0;
 
             for ( auto & e : * this ) {
@@ -1051,13 +1051,13 @@ namespace cds {
                 return false;
             }
 
-            for ( 
-                auto
+            for (  // NOLINT(clion-misra-cpp2008-6-5-1)
+                auto // NOLINT(clion-misra-cpp2008-8-0-1)
                     aIt = this->begin(), aEnd = this->end(),
                     bIt = pCollection->begin(), bEnd = pCollection->end();
 
                 aIt != aEnd && bIt != bEnd; 
-                ++ aIt, ++ bIt
+                ++ aIt, ++ bIt // NOLINT(clion-misra-cpp2008-5-18-1)
             ) {
                 if ( * aIt != * bIt ) {
                     return false;

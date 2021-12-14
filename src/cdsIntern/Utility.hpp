@@ -105,7 +105,7 @@ namespace cds {
         return SmartPointerType ( object.copy() );
     }
 
-    template < typename T, typename SmartPointerType = UniquePointer < T >, EnableIf < ! Type < T > :: objectDerived && Type < T > :: copyConstructible > = 0 > 
+    template < typename T, typename SmartPointerType = UniquePointer < T >, EnableIf < ! Type < T > :: objectDerived && Type < T > :: copyConstructible > = 0 >  // NOLINT(clion-misra-cpp2008-5-3-1)
     __CDS_NoDiscard __CDS_MaybeUnused __CDS_OptimalInline auto copy ( T const & object ) noexcept -> SmartPointerType {
         return SmartPointerType ( Memory :: instance () . create < T > ( object ) );
     }

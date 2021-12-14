@@ -3103,6 +3103,10 @@ namespace cds {
          * @test tested in primitive/StringTest/Comparison Tests
          */
         __CDS_NoDiscard __CDS_cpplang_IfConstexpr auto operator == ( StringLiteral cString ) const noexcept -> bool {
+            if ( this->_l == 0u ) {
+                return std :: char_traits < ElementType > :: length ( cString ) == 0u;
+            }
+
             return std :: char_traits < ElementType > :: compare ( this->cStr(), cString, this->_l ) == 0;
         }
 
