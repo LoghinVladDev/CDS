@@ -1059,7 +1059,7 @@ namespace cds {
                 aIt != aEnd && bIt != bEnd; 
                 ++ aIt, ++ bIt // NOLINT(clion-misra-cpp2008-5-18-1)
             ) {
-                if ( * aIt != * bIt ) {
+                if ( Type < T > :: compare ( * aIt, * bIt ) ) {
                     return false;
                 }
             }

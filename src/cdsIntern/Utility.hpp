@@ -45,6 +45,17 @@ namespace cds {
     };
 
 
+    class RuntimeException : public Exception {
+    public:
+        RuntimeException () noexcept : Exception ("Runtime Exception") { }
+        RuntimeException ( RuntimeException const & ) noexcept = default;
+        RuntimeException ( RuntimeException && ) noexcept = default;
+        __CDS_MaybeUnused explicit RuntimeException ( String const & message ) noexcept : Exception ( String("Runtime Exception : ") + message ) { }
+
+        ~RuntimeException() noexcept override = default;
+    };
+
+
     class NullPointerException : public Exception {
     public:
         NullPointerException () noexcept : Exception ("Tried De-Referencing a null valued Pointer") { }

@@ -508,19 +508,19 @@ namespace cds {
 
 namespace cds {
 
-    template < typename T > 
-    __CDS_NoDiscard __CDS_MaybeUnused __CDS_OptimalInline auto makeUniquePointer ( T * addr ) noexcept -> UniquePointer < T > {
-        return UnqiuePointer < T > ( addr );
+    template < typename T, typename ... Arguments >
+    __CDS_NoDiscard __CDS_MaybeUnused __CDS_OptimalInline auto makeUnique ( Arguments && ... arguments ) noexcept -> UniquePointer < T > {
+        return UniquePointer < T > ( Memory :: instance () . create < T > ( std :: forward < Arguments > ( arguments ) ... ) );
     }
 
-    template < typename T >
-    __CDS_NoDiscard __CDS_MaybeUnused __CDS_OptimalInline auto makeSharedPointer ( T * addr ) noexcept -> SharedPointer < T > {
-        return SharedPointer < T > ( addr );
+    template < typename T, typename ... Arguments >
+    __CDS_NoDiscard __CDS_MaybeUnused __CDS_OptimalInline auto makeShared ( Arguments && ... arguments ) noexcept -> SharedPointer < T > {
+        return SharedPointer < T > ( Memory :: instance () . create < T > ( std :: forward < Arguments > ( arguments ) ... ) );
     }
 
-    template < typename T > 
-    __CDS_NoDiscard __CDS_MaybeUnused __CDS_OptimalInline auto makeAtomicSharedPointer ( T * addr ) noexcept -> AtomicSharedPointer < T > {
-        return AtomicSharedPointer < T > ( addr );
+    template < typename T, typename ... Arguments >
+    __CDS_NoDiscard __CDS_MaybeUnused __CDS_OptimalInline auto makeAtomicShared ( Arguments && ... arguments ) noexcept -> AtomicSharedPointer < T > {
+        return AtomicSharedPointer < T > ( Memory :: instance () . create < T > ( std :: forward < Arguments > ( arguments ) ... ) );
     }
 
     template < typename T >

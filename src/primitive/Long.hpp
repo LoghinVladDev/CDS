@@ -1204,6 +1204,26 @@ namespace cds {
             return String().append(this->v);
         }
 
+        __CDS_NoDiscard __CDS_OptimalInline auto toString(int base) const noexcept -> String {
+            auto intValue = this->v;
+            String rep;
+
+            __CDS_cpplang_ConstexprLambda auto baseDigitToString = [](CType value) noexcept -> char {
+                if ( value < 10 ) {
+                    return static_cast < char > (value + '0');
+                }
+
+                return static_cast < char > (value + 'a' - 10);
+            };
+
+            while (intValue > 0 ) {
+                rep += baseDigitToString(intValue % base);
+                intValue /= base;
+            }
+
+            return std :: move ( (rep + (this->v < 0 ? "-" : "")).reversed() );
+        }
+
         /**
          * @brief Function used to obtain an Long value from a String
          *
