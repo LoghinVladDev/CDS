@@ -11,8 +11,11 @@
 
 #undef __CDS_compiler_name
 #undef __CDS_compiler_version
+#undef __CDS_compiler_undefined
+
 #define __CDS_compiler_name "clang" /* NOLINT(bugprone-reserved-identifier) */
 #define __CDS_compiler_version GCC_VERSION /* NOLINT(bugprone-reserved-identifier) */
+#define __CDS_compiler_clang
 
 
 #if __CDS_cpplang_core_version >= __CDS_cpplang_core_version_17

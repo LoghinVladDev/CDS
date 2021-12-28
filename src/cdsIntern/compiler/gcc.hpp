@@ -11,8 +11,11 @@
 
 #undef __CDS_compiler_name
 #undef __CDS_compiler_version
+#undef __CDS_compiler_undefined
+
 #define __CDS_compiler_name "GNU GCC" /* NOLINT(bugprone-reserved-identifier) */
 #define __CDS_compiler_version GCC_VERSION /* NOLINT(bugprone-reserved-identifier) */
+#define __CDS_compiler_gcc
 
 #endif
 

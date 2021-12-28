@@ -9,6 +9,7 @@
 
 #define __CDS_compiler_name "Undefined" /* NOLINT(bugprone-reserved-identifier) */
 #define __CDS_compiler_version 0 /* NOLINT(bugprone-reserved-identifier) */
+#define __CDS_compiler_undefined /* NOLINT(bugprone-reserved-identifier) */
 
 #define __CDS_cpplang_core_version_name "cpp-xx (unknown)" /* NOLINT(bugprone-reserved-identifier) */
 

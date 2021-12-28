@@ -5042,7 +5042,7 @@ namespace cds {
          *
          * @test Tested in primitive/StringTest/Utility Functions
          */
-        __CDS_NoDiscard __CDS_cpplang_ConstexprDynamicAllocation auto removePrefix (String const & prefix) noexcept -> String & {
+        __CDS_cpplang_ConstexprDynamicAllocation auto removePrefix (String const & prefix) noexcept -> String & {
             if ( this->length() < prefix.length() ) {
                 return * this;
             }
@@ -5078,7 +5078,7 @@ namespace cds {
          *
          * @test Tested in primitive/StringTest/Utility Functions
          */
-        __CDS_NoDiscard __CDS_cpplang_ConstexprDynamicAllocation auto removeSuffix (String const & suffix) noexcept -> String & {
+        __CDS_cpplang_ConstexprDynamicAllocation auto removeSuffix (String const & suffix) noexcept -> String & {
             if ( this->length() < suffix.length() ) {
                 return * this;
             }

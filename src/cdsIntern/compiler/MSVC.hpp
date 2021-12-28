@@ -9,10 +9,13 @@
 
 #define MSVC_VERSION ( _MSC_VER * 100 )
 
+#undef __CDS_compiler_undefined
 #undef __CDS_compiler_name
 #undef __CDS_compiler_version
+
 #define __CDS_compiler_name "Microsoft Visual C++" /* NOLINT(bugprone-reserved-identifier) */
 #define __CDS_compiler_version MSVC_VERSION /* NOLINT(bugprone-reserved-identifier) */
+#define __CDS_compiler_MSVC
 
 /**
 * List of features in the c++ standard that Microsoft is too retarded to support

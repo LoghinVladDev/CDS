@@ -27,18 +27,18 @@ namespace cds {
         using CollectionType                = C;
 
     private:
-        using ClassName                     = typename std::remove_reference < C > :: type;
+        using ClassName                     = RemoveReference < C >;
         using IterableValue                 = decltype ( Type < typename ClassName::Iterator > :: unsafeAddress () -> value () );
 
     public:
-        using ElementType                   = typename std::remove_reference < IterableValue > :: type;
+        using ElementType                   = RemoveReference < IterableValue >;
 
     debug_private:
         using StoredPredicate               = Function < bool (IterableValue) >;
-        using StoredMapper                  = Function < std::remove_reference_t < IterableValue > ( IterableValue ) >;
+        using StoredMapper                  = Function < RemoveReference < IterableValue > ( IterableValue ) >;
 
         using StoredIndexedPredicate        = Function < bool (Index, IterableValue) >;
-        using StoredIndexedMapper           = Function < std::remove_reference_t < IterableValue > ( Index, IterableValue ) >;
+        using StoredIndexedMapper           = Function < RemoveReference < IterableValue > ( Index, IterableValue ) >;
 
         using StoredPredicateList           = LinkedList < Pair < SharedPointer < StoredPredicate >, Index > >;
         using StoredMapperList              = LinkedList < Pair < SharedPointer < StoredMapper >, Index > >;
@@ -99,210 +99,6 @@ namespace cds {
         __CDS_NoDiscard __CDS_MaybeUnused auto hash () const noexcept -> Index override;
         __CDS_NoDiscard __CDS_MaybeUnused auto copy () const noexcept -> ParallelSequence * override;
         __CDS_NoDiscard __CDS_MaybeUnused auto equals (Object const &) const noexcept -> bool override;
-
-        __CDS_NoDiscard __CDS_MaybeUnused auto contains ( ElementType const & ) const noexcept -> Boolean __CDS_Requires( Iterable < C > || ConstIterable < C > );
-        __CDS_NoDiscard __CDS_MaybeUnused auto elementAt ( Index ) const noexcept -> Optional < ElementType > __CDS_Requires( Iterable < C > || ConstIterable < C > );
-        __CDS_NoDiscard __CDS_MaybeUnused auto elementAtOr ( Index, ElementType const & ) const noexcept -> ElementType __CDS_Requires( Iterable < C > || ConstIterable < C > );
-        __CDS_NoDiscard __CDS_MaybeUnused auto indexOf ( ElementType const & ) const noexcept -> Index __CDS_Requires( Iterable < C > || ConstIterable < C > );
-        __CDS_NoDiscard __CDS_MaybeUnused auto lastIndexOf ( ElementType const & ) const noexcept -> Index __CDS_Requires( Iterable < C > || ConstIterable < C > );
-        __CDS_NoDiscard __CDS_MaybeUnused auto indicesOf ( ElementType const & ) const noexcept -> LinkedList < Index > __CDS_Requires ( Iterable < C > || ConstIterable < C > );
-
-        template < typename Action >
-        __CDS_MaybeUnused auto apply ( Action const & ) && noexcept -> ParallelSequence < LinkedList < ElementType > > __CDS_Requires( Iterable < C > || ConstIterable < C > );
-
-        template < typename Action >
-        __CDS_MaybeUnused auto also ( Action const & ) && noexcept -> ParallelSequence < LinkedList < ElementType > > __CDS_Requires( Iterable < C > || ConstIterable < C > );
-
-
-        template < typename Predicate >
-        __CDS_NoDiscard __CDS_MaybeUnused auto find ( Predicate const & ) const noexcept -> Optional < ElementType > __CDS_Requires( Iterable < C > || ConstIterable < C > );
-
-        template < typename Predicate = std :: function < bool ( ElementType const & ) > >
-        __CDS_NoDiscard __CDS_MaybeUnused auto first ( Predicate const & = [](ElementType const &) noexcept -> bool {return true;} ) const noexcept -> Optional < ElementType > __CDS_Requires( Iterable < C > || ConstIterable < C > );
-
-        template < typename Predicate = std :: function < bool ( ElementType const & ) > >
-        __CDS_NoDiscard __CDS_MaybeUnused auto firstOr ( ElementType const &, Predicate const & = [](ElementType const &) noexcept -> bool {return true;} ) const noexcept -> ElementType __CDS_Requires( Iterable < C > || ConstIterable < C > );
-
-        template < typename Predicate >
-        __CDS_NoDiscard __CDS_MaybeUnused auto findLast ( Predicate const & ) const noexcept -> Optional < ElementType > __CDS_Requires( Iterable < C > || ConstIterable < C > );
-
-        template < typename Predicate = std :: function < bool ( ElementType const & ) > >
-        __CDS_NoDiscard __CDS_MaybeUnused auto last ( Predicate const & = [](ElementType const &) noexcept -> bool { return true; }) const noexcept -> Optional < ElementType > __CDS_Requires( Iterable < C > || ConstIterable < C > );
-
-        template < typename Predicate = std :: function < bool ( ElementType const & ) > >
-        __CDS_NoDiscard __CDS_MaybeUnused auto lastOr ( ElementType const &, Predicate const & = [](ElementType const &) noexcept -> bool { return true; } ) const noexcept -> ElementType __CDS_Requires( Iterable < C > || ConstIterable < C > );
-
-        template < typename Predicate = std :: function < bool ( ElementType const & ) > >
-        __CDS_NoDiscard __CDS_MaybeUnused auto single ( Predicate const & = [](ElementType const &) noexcept -> bool { return true; } ) const noexcept -> Optional < ElementType > __CDS_Requires( Iterable < C > || ConstIterable < C > );
-
-        template < typename Predicate = std :: function < bool ( ElementType const & ) > >
-        __CDS_NoDiscard __CDS_MaybeUnused auto singleOr ( ElementType const &, Predicate const & = [](ElementType const &) noexcept -> bool { return true; }) const noexcept -> ElementType __CDS_Requires( Iterable < C > || ConstIterable < C > );
-
-
-        __CDS_MaybeUnused auto drop ( Size ) && noexcept -> ParallelSequence < LinkedList < ElementType > > __CDS_Requires( Iterable < C > || ConstIterable < C > );
-
-        template < typename Predicate >
-        __CDS_MaybeUnused auto dropWhile ( Predicate const & p, Size = UINT64_MAX ) && noexcept -> ParallelSequence < LinkedList < ElementType > > __CDS_Requires( Iterable < C > || ConstIterable < C > );
-
-        __CDS_MaybeUnused auto take ( Size ) && noexcept -> ParallelSequence < LinkedList < ElementType > > __CDS_Requires ( Iterable < C > || ConstIterable < C > );
-
-        template < typename Predicate >
-        __CDS_MaybeUnused auto takeWhile ( Predicate const &, Size = UINT64_MAX ) && noexcept -> ParallelSequence < LinkedList < ElementType > > __CDS_Requires( Iterable < C > || ConstIterable < C > );
-
-        template < typename Predicate >
-        __CDS_MaybeUnused auto filter ( Predicate const & ) && noexcept -> ParallelSequence __CDS_Requires( Iterable < C > || ConstIterable < C > );
-
-        template < typename IndexedPredicate >
-        __CDS_MaybeUnused auto filterIndexed ( IndexedPredicate const & ) && noexcept -> ParallelSequence __CDS_Requires( Iterable < C > || ConstIterable < C > );
-
-        template < typename Predicate >
-        __CDS_MaybeUnused auto filterTo ( Collection < ElementType > const &, Predicate const & ) const noexcept -> Collection < ElementType > & __CDS_Requires ( Iterable < C > || ConstIterable < C > );
-
-        template < typename IndexedPredicate >
-        __CDS_MaybeUnused auto filterIndexedTo ( Collection < ElementType > const &, IndexedPredicate const & ) const noexcept -> Collection < ElementType > & __CDS_Requires( Iterable < C > || ConstIterable < C > );
-
-        template < typename NewType >
-        __CDS_MaybeUnused auto filterIsDerived () && noexcept -> Sequence < LinkedList < NewType > > __CDS_Requires( ( Iterable < C > || ConstIterable < C > ) && Pointer < ElementType > && Pointer < NewType > );
-
-        template < typename NewType >
-        __CDS_MaybeUnused auto filterIsDerivedTo ( Collection < ElementType > & ) const noexcept -> Collection < ElementType > & __CDS_Requires( ( Iterable < C > || ConstIterable < C > ) && Pointer < ElementType > && Pointer < NewType > );
-
-        template < typename Predicate >
-        __CDS_MaybeUnused auto filterNot ( Predicate const & ) && noexcept -> ParallelSequence __CDS_Requires( Iterable < C > || ConstIterable < C > );
-
-        template < typename IndexedPredicate >
-        __CDS_MaybeUnused auto filterNotIndexed ( IndexedPredicate const & ) && noexcept -> ParallelSequence __CDS_Requires( Iterable < C > || ConstIterable < C > );
-
-        template < typename Predicate >
-        __CDS_MaybeUnused auto filterNotTo ( Collection < ElementType > &, Predicate const & ) const noexcept -> Collection < ElementType > & __CDS_Requires( Iterable < C > || ConstIterable < C > );
-
-        template < typename IndexedPredicate >
-        __CDS_MaybeUnused auto filterNotIndexedTo ( Collection < ElementType > &, IndexedPredicate const & ) const noexcept -> Collection < ElementType  > & __CDS_Requires( Iterable < C > || ConstIterable < C > );
-
-        template < typename Predicate >
-        __CDS_NoDiscard __CDS_MaybeUnused auto indexOfFirst ( Predicate const & ) const noexcept -> Index __CDS_Requires( Iterable < C > || ConstIterable < C > );
-
-        template < typename Predicate >
-        __CDS_NoDiscard __CDS_MaybeUnused auto indexOfLast ( Predicate const & ) const noexcept -> Index __CDS_Requires( Iterable < C > || ConstIterable < C > );
-
-        template < typename Predicate >
-        __CDS_NoDiscard __CDS_MaybeUnused auto indicesOfAll ( Predicate const & ) const noexcept -> LinkedList < Index > __CDS_Requires( Iterable < C > || ConstIterable < C > );
-
-        template < typename Predicate = std :: function < bool ( ElementType const & ) > >
-        __CDS_NoDiscard __CDS_MaybeUnused auto any ( Predicate const & = [](ElementType const &) noexcept -> bool { return true; } ) const noexcept -> Boolean __CDS_Requires( Iterable < C > || ConstIterable < C > );
-
-        template < typename Predicate >
-        __CDS_NoDiscard __CDS_MaybeUnused auto all ( Predicate const & ) const noexcept -> Boolean __CDS_Requires( Iterable < C > || ConstIterable < C > );
-
-        template < typename Predicate = std :: function < bool ( ElementType const & ) > >
-        __CDS_NoDiscard __CDS_MaybeUnused auto count ( Predicate const & = [] (ElementType const &) noexcept -> bool { return true; } ) const noexcept -> Size __CDS_Requires( Iterable < C > || ConstIterable < C > );
-
-        template < typename Predicate = std :: function < bool ( ElementType const & ) > >
-        __CDS_NoDiscard __CDS_MaybeUnused auto none ( Predicate const & = [] (ElementType const &) noexcept -> bool { return true; } ) const noexcept -> Boolean __CDS_Requires( Iterable < C > || ConstIterable < C > );
-
-        template < typename Predicate = std :: function < bool ( ElementType const & ) > >
-        __CDS_NoDiscard __CDS_MaybeUnused auto one ( Predicate const & = [] (ElementType const &) noexcept -> bool { return true; } ) const noexcept -> Boolean __CDS_Requires( Iterable < C > || ConstIterable < C > );
-
-        template < typename Transformer, typename std :: enable_if < isPair < returnOf < Transformer > > :: value, int > :: type = 0 >
-        __CDS_MaybeUnused auto associate ( Transformer const & ) && noexcept -> ParallelSequence < LinkedList < returnOf < Transformer > > > __CDS_Requires( ( Iterable < C > || ConstIterable < C > ) && PairType < returnOf < Transformer > > );
-
-        template < typename KeyGenerator >
-        __CDS_MaybeUnused auto associateBy ( KeyGenerator const & ) && noexcept -> ParallelSequence < LinkedList < Pair < returnOf < KeyGenerator >, ElementType > > > __CDS_Requires( Iterable < C > || ConstIterable < C > );
-
-        template < typename KeyGenerator, typename ValueMapper >
-        __CDS_MaybeUnused auto associateBy ( KeyGenerator const &, ValueMapper const & ) && noexcept -> ParallelSequence < LinkedList < Pair < returnOf < KeyGenerator >, returnOf < ValueMapper > > > > __CDS_Requires( Iterable < C > || ConstIterable < C > );
-
-        template < typename KeyGenerator >
-        __CDS_MaybeUnused auto associateByTo ( Map < returnOf < KeyGenerator >, ElementType > &, KeyGenerator const & ) const noexcept -> Map < returnOf < KeyGenerator >, ElementType > & __CDS_Requires( Iterable < C > || ConstIterable < C > );
-
-        template < typename KeyGenerator, typename ValueMapper >
-        __CDS_MaybeUnused auto associateByTo ( Map < returnOf < KeyGenerator >, returnOf < ValueMapper > > &, KeyGenerator const &, ValueMapper const & ) const noexcept -> Map < returnOf < KeyGenerator >, returnOf < ValueMapper > > & __CDS_Requires( Iterable < C > || ConstIterable < C > );
-
-        template < typename Transformer, typename K, typename V >
-        __CDS_MaybeUnused auto associateTo ( Map < K, V > &, Transformer const & ) const noexcept -> Map < K, V > & __CDS_Requires( Iterable < C > || ConstIterable < C > );
-
-        template < typename ValueMapper >
-        __CDS_MaybeUnused auto associateWith ( ValueMapper const & ) && noexcept -> ParallelSequence < LinkedList < Pair < ElementType, returnOf < ValueMapper > > > > __CDS_Requires( Iterable < C > || ConstIterable < C > );
-
-        template < typename ValueMapper >
-        __CDS_MaybeUnused auto associateWithTo ( Map < ElementType, returnOf < ValueMapper > > &, ValueMapper const & ) const noexcept -> Map < ElementType, returnOf < ValueMapper > > & __CDS_Requires( Iterable < C > || ConstIterable < C > );
-
-        template < typename Comparator = std :: function < bool ( ElementType const &, ElementType const & ) > >
-        __CDS_MaybeUnused auto sorted ( Comparator const & = [] ( ElementType const & a, ElementType const & b ) noexcept -> bool { return a < b; } ) && noexcept -> ParallelSequence < Array < ElementType > > __CDS_Requires( Iterable < C > || ConstIterable < C > );
-
-        template < typename Selector, typename Comparator = std :: function < bool ( returnOf < Selector > const &, returnOf < Selector > const & ) > >
-        __CDS_MaybeUnused auto sortedBy ( Selector const &, Comparator const & = [] ( returnOf < Selector > const & a, returnOf < Selector > const & b ) noexcept -> bool { return a < b; } ) && noexcept -> ParallelSequence < Array < ElementType > > __CDS_Requires( Iterable < C > || ConstIterable < C > );
-
-        template < typename Collection >
-        __CDS_NoDiscard __CDS_MaybeUnused auto toCollection () const noexcept -> Collection __CDS_Requires( Iterable < C > || ConstIterable < C > );
-
-        __CDS_NoDiscard __CDS_MaybeUnused auto toLinkedList () const noexcept -> LinkedList < ElementType > __CDS_Requires( Iterable < C > || ConstIterable < C > );
-        __CDS_NoDiscard __CDS_MaybeUnused auto toArray () const noexcept -> Array < ElementType > __CDS_Requires( Iterable < C > || ConstIterable < C > );
-        __CDS_NoDiscard __CDS_MaybeUnused auto toUnorderedSet () const noexcept -> UnorderedSet < ElementType > __CDS_Requires( Iterable < C > || ConstIterable < C > );
-
-        template < typename Comparator >
-        __CDS_NoDiscard __CDS_MaybeUnused auto toOrderedSet () const noexcept -> OrderedSet < ElementType, Comparator > __CDS_Requires( Iterable < C > || ConstIterable < C > );
-
-        template < typename Collection >
-        __CDS_MaybeUnused auto toCollection ( Collection & ) const noexcept -> Collection & __CDS_Requires( Iterable < C > || ConstIterable < C > );
-
-        __CDS_MaybeUnused auto toLinkedList ( LinkedList < ElementType > & ) const noexcept -> LinkedList < ElementType > & __CDS_Requires( Iterable < C > || ConstIterable < C > );
-        __CDS_MaybeUnused auto toArray ( Array < ElementType > & ) const noexcept -> Array < ElementType > & __CDS_Requires( Iterable < C > || ConstIterable < C > );
-        __CDS_MaybeUnused auto toUnorderedSet ( UnorderedSet < ElementType > & ) const noexcept -> UnorderedSet < ElementType > & __CDS_Requires( Iterable < C > || ConstIterable < C > );
-
-        template < typename Comparator >
-        __CDS_MaybeUnused auto toOrderedSet ( OrderedSet < ElementType, Comparator > & ) const noexcept -> OrderedSet < ElementType, Comparator > & __CDS_Requires( Iterable < C > || ConstIterable < C > );
-
-        template < typename Transformer >
-        __CDS_MaybeUnused auto flatMap ( Transformer const & ) && noexcept -> ParallelSequence < typename std :: remove_reference < decltype ( Type < typename returnOf < Transformer > :: Iterator > :: unsafeAddress () -> value () ) > :: type > __CDS_Requires( ( Iterable < C > || ConstIterable < C > ) && ( Iterable < returnOf < Transformer > > || ConstIterable < returnOf < Transformer > > ) );
-
-        template < typename IndexedTransformer >
-        __CDS_MaybeUnused auto flatMapIndexed ( IndexedTransformer const & ) && noexcept -> ParallelSequence < typename std :: remove_reference < decltype ( Type < typename returnOf < IndexedTransformer > :: Iterator > :: unsafeAddress  () -> value () ) > :: type > __CDS_Requires( ( Iterable < C > || ConstIterable < C > ) && ( Iterable < returnOf < IndexedTransformer > > || ConstIterable < returnOf < IndexedTransformer > > ) );
-
-        template < typename Transformer >
-        __CDS_MaybeUnused auto flatMapTo ( Collection < typename std :: remove_reference < decltype ( Type < typename returnOf < Transformer > :: Iterator > :: unsafeAddress () -> value () ) > :: type > &, Transformer const & ) const noexcept -> Collection < typename std :: remove_reference < decltype ( Type < typename returnOf < Transformer > :: Iterator > :: unsafeAddress () -> value () ) > :: type > & __CDS_Requires ( ( Iterable < C > || ConstIterable < C > && ( Iterable < typename std :: remove_reference < decltype ( Type < typename returnOf < Transformer > :: Iterator > :: unsafeAddress() -> value () ) > :: type > || ConstIterable < typename std :: remove_reference < decltype ( Type < typename returnOf < Transformer > :: Iterator > :: unsafeAddress() -> value () ) > :: type > ) ) );
-
-        template < typename IndexedTransformer >
-        __CDS_MaybeUnused auto flatMapIndexedTo ( Collection < typename std::remove_reference < decltype ( Type < typename returnOf < IndexedTransformer > :: Iterator > :: unsafeAddress()->value() ) > :: type > &, IndexedTransformer const & ) const noexcept -> Collection < typename std::remove_reference < decltype ( Type < typename returnOf < IndexedTransformer > :: Iterator > :: unsafeAddress ()->value() ) > :: type > & __CDS_Requires( ( Iterable < C > || ConstIterable < C >) && ( Iterable < typename std::remove_reference < decltype ( Type < typename returnOf < IndexedTransformer > :: Iterator > :: unsafeAddress()->value() ) > :: type > || ConstIterable < typename std::remove_reference < decltype ( Type < typename returnOf < IndexedTransformer > :: Iterator > :: unsafeAddress()->value() ) > :: type > ) );
-
-        template < typename KeySelector >
-        __CDS_MaybeUnused auto groupBy ( KeySelector const & ) && noexcept -> Sequence < HashMap < returnOf < KeySelector >, LinkedList < ElementType > > > __CDS_Requires( Iterable < C > || ConstIterable < C > );
-
-        template < typename KeySelector, typename ValueMapper >
-        __CDS_MaybeUnused auto groupBy ( KeySelector const &, ValueMapper const & ) && noexcept -> Sequence < HashMap < returnOf < KeySelector >, LinkedList < returnOf < ValueMapper > > > > __CDS_Requires( Iterable < C > || ConstIterable < C > );
-
-        template < typename KeySelector >
-        __CDS_MaybeUnused auto groupByTo ( Map < returnOf < KeySelector >, LinkedList < ElementType > > &, KeySelector const & ) const noexcept -> Map < returnOf < KeySelector >, LinkedList < ElementType > > & __CDS_Requires( Iterable < C > || ConstIterable < C > );
-
-        template < typename KeySelector, typename ValueMapper >
-        __CDS_MaybeUnused auto groupByTo ( Map < returnOf < KeySelector >, returnOf < ValueMapper > > &, KeySelector const &, ValueMapper const & ) const noexcept -> Map < returnOf < KeySelector >, returnOf < ElementType > > & __CDS_Requires( Iterable < C > || ConstIterable < C > );
-
-        template < typename Mapper, typename std :: enable_if < ! std :: is_same < typename std :: remove_reference < decltype ( Type < typename std :: remove_reference < C > :: type :: Iterator > :: unsafeAddress() -> value () ) > :: type, returnOf < Mapper > > :: type :: value, int > :: type = 0 >
-        __CDS_MaybeUnused auto map ( Mapper const & ) && noexcept -> Sequence < LinkedList < returnOf < Mapper > > > __CDS_Requires( Iterable < C > || ConstIterable < C > );
-
-        template < typename Mapper, typename std :: enable_if < std :: is_same < typename std :: remove_reference < decltype ( Type < typename std :: remove_reference < C > :: type :: Iterator > :: unsafeAddress() -> value () ) > :: type, returnOf < Mapper > > :: type :: value, int > :: type = 0 >
-        __CDS_MaybeUnused auto map ( Mapper const & ) && noexcept -> Sequence < C > __CDS_Requires ( Iterable < C > || ConstIterable < C > );
-
-        template < typename IndexedMapper, typename std :: enable_if < ! std :: is_same < typename std :: remove_reference < decltype ( Type < typename std :: remove_reference < C > :: type :: Iterator > :: unsafeAddress() -> value () ) > :: type, returnOf < IndexedMapper > > :: type :: value, int > :: type = 0 >
-        __CDS_MaybeUnused auto mapIndexed ( IndexedMapper const & ) && noexcept -> Sequence < LinkedList < returnOf < IndexedMapper > > > __CDS_Requires( Iterable < C > || ConstIterable < C > );
-
-        template < typename IndexedMapper, typename std :: enable_if < std :: is_same < typename std :: remove_reference < decltype ( Type < typename std :: remove_reference < C > :: type :: Iterator > :: unsafeAddress() -> value () ) > :: type, returnOf < IndexedMapper > > :: type :: value, int > :: type = 0 >
-        __CDS_MaybeUnused auto mapIndexed ( IndexedMapper const & ) && noexcept -> Sequence < C > __CDS_Requires ( Iterable < C > || ConstIterable < C > );
-
-        template < typename Mapper, typename R >
-        __CDS_MaybeUnused auto mapTo ( Collection < R > &, Mapper const & ) const noexcept -> Collection < R > & __CDS_Requires( Iterable < C > || ConstIterable < C > );
-
-        template < typename IndexedMapper, typename R >
-        __CDS_MaybeUnused auto mapIndexedTo ( Collection < R > &, IndexedMapper const & ) const noexcept -> Collection < R > & __CDS_Requires( Iterable < C > || ConstIterable < C > );
-
-        __CDS_MaybeUnused auto indexed () && noexcept -> Sequence < LinkedList < Pair < Index, ElementType > > > __CDS_Requires( Iterable < C > || ConstIterable < C > );
-
-        __CDS_MaybeUnused auto distinct () && noexcept -> Sequence < UnorderedSet < ElementType > > __CDS_Requires( Iterable < C > || ConstIterable < C > );
-
-        template < typename Action >
-        __CDS_MaybeUnused auto forEach ( Action const & ) const noexcept -> void __CDS_Requires( Iterable < C > || ConstIterable < C > );
-
-
 
         class Worker : public Thread {
         public:
@@ -452,7 +248,7 @@ namespace cds {
 namespace cds {
 
     template < typename C >
-    auto ParallelSequence < C > ::filterContainer ( ParallelFilterContainer & container ) noexcept -> void {
+    auto ParallelSequence < C > :: filterContainer ( ParallelFilterContainer & container ) noexcept -> void {
         if (
             container.pPredicateList == nullptr ||
             container.pMapperList == nullptr ||
