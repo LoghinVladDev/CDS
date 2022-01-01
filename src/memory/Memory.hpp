@@ -133,7 +133,7 @@ namespace cds {
         class __CDS_MaybeUnused LeakDetectionAllocator;
 
     private:
-        Allocator * pAllocator { new DefaultHeapAllocator }; // NOLINT(clion-misra-cpp2008-18-4-1)
+        Allocator * pAllocator { nullptr }; // NOLINT(clion-misra-cpp2008-18-4-1)
         utility :: hidden :: memoryImpl :: ArraySizeManager sizeManager;
 
         Memory () noexcept { } // NOLINT(modernize-use-equals-default) Windows cannot identify noexcept composite in default
@@ -149,11 +149,15 @@ namespace cds {
         }
 
         template < typename T, typename ... ArgumentTypes >
-        inline auto create ( ArgumentTypes ... arguments ) noexcept( noexcept ( T ( std :: forward < ArgumentTypes > ( arguments ) ... ) ) ) -> T * {
+        inline auto create ( ArgumentTypes && ... arguments ) noexcept ( noexcept ( T ( std :: forward < ArgumentTypes && > ( arguments ) ... ) ) ) -> T * {
 
     #if defined(__CDS_Memory_ForceDisable)
             return new T ( std :: forward < ArgumentTypes > ( arguments ) ... );
     #else
+            if ( this->pAllocator == nullptr ) {
+                return new T ( std :: forward < ArgumentTypes && > ( arguments ) ... );
+            }
+
             return this->pAllocator->create <T> ( std :: forward < ArgumentTypes > ( arguments ) ... );
     #endif
 
@@ -165,6 +169,10 @@ namespace cds {
     #if defined(__CDS_Memory_ForceDisable)
             return new T[size];
     #else
+            if ( this->pAllocator == nullptr ) {
+                return new T [size];
+            }
+
             return reinterpret_cast < T * > ( this->sizeManager.save ( reinterpret_cast < Byte * > ( this->pAllocator->createArray < T > ( size ) ), size ) );
     #endif
 
@@ -176,6 +184,11 @@ namespace cds {
     #if defined(__CDS_Memory_ForceDisable)
             delete pObject;
     #else
+            if ( this->pAllocator == nullptr ) {
+                delete pObject;
+                return;
+            }
+
             return this->pAllocator->destroy( pObject );
     #endif
 
@@ -187,6 +200,11 @@ namespace cds {
     #if defined(__CDS_Memory_ForceDisable)
             delete [] pArray;
     #else
+            if ( this->pAllocator == nullptr ) {
+                delete[] pArray;
+                return;
+            }
+
             return this->pAllocator->destroyArray ( pArray, this->sizeManager.load (reinterpret_cast < Byte const * > ( pArray ) ) );
     #endif
 
