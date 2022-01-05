@@ -116,6 +116,10 @@ namespace cds {
             return this->pObj;
         }
 
+        constexpr operator Pointer () const noexcept { // NOLINT(google-explicit-constructor)
+            return this->pObj;
+        }
+
         __CDS_cpplang_VirtualConstexpr virtual auto release () noexcept -> Pointer {
             return cds :: exchange ( this->pObj, nullptr );
         }
