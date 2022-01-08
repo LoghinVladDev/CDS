@@ -676,6 +676,7 @@ namespace cds {
         }
 
         static auto parse ( String const & data ) noexcept -> Array { // NOLINT(misc-no-recursion)
+            constexpr char const * whitespace = " \t\f\r\n";
             Array result;
 
             auto pushBackUnknown = [& result]( String const & data ) noexcept -> Array & { // NOLINT(misc-no-recursion)
@@ -704,10 +705,10 @@ namespace cds {
             String copy = data;
             (void) copy.replace(0, static_cast < Size > ( copy.findFirst('[') + 1 ), "");
             (void) copy.replace(copy.findLast(']'), copy.size(), "");
-            copy = copy.trim().trim('\n').trim();
+            copy = copy.trim(whitespace);
 
             while ( ! copy.empty() ) {
-                (void) copy.ltrim(' ');
+                (void) copy.ltrim(" \n\r\t\f");
 
                 int arrayBracketCount = 0;
                 int objectBracketCount = 0;
@@ -928,6 +929,8 @@ namespace cds {
     }
 
     inline auto JSON::parse(String const & jsonString) noexcept -> JSON { // NOLINT(misc-no-recursion)
+        constexpr char const * whitespace = " \r\n\t\f";
+
         JSON result;
 
         auto emplaceUnknown = [& result] ( String const & label, String const & data ) -> JSON & { // NOLINT(misc-no-recursion)
@@ -970,7 +973,7 @@ namespace cds {
             int objectBracketCount = 0;
             int segmentLength = 0;
 
-            fullData = fullData.trim().trim("\n").trim();
+            fullData = fullData.trim(whitespace);
 
             for ( auto character : fullData ) {
                 if ( arrayBracketCount == 0 && objectBracketCount == 0 && character == ',' ) {
