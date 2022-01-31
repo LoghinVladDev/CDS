@@ -164,7 +164,7 @@ add_executable(
         CDS-dummy
         main.cpp
         ${CDS_HEADERS}
-)
+        src/threading/LockGuard.hpp include/CDS/LockGuard)
 
 target_link_libraries(
         CDS-dummy
