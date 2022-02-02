@@ -67,7 +67,6 @@ namespace cds {
                 _size ( exchange ( set._size, 0 ) ),
                 _hasher ( set._hasher ) {
 
-            set._listArray = Memory :: instance () .createArray < Node * > ( set._hasher.getBoundary() );
         }
 
 #if __JETBRAINS_IDE__
