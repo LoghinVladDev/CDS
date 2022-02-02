@@ -190,7 +190,9 @@ namespace cds {
 
     #define UNION_DELETE(_i)                    \
             if ( this->_activeTypeIndex == _i ) { \
-                Memory :: instance().destroy ( reinterpret_cast < typename utility :: hidden :: unionImpl :: TypeAtIndexInPack < _i, FirstType, RemainingTypes ... > :: type * > ( this->pInstance ) ); \
+                if constexpr ( ! cds :: isSame < typename utility :: hidden :: unionImpl :: TypeAtIndexInPack < _i, FirstType, RemainingTypes ... > :: type, void > ) {                                \
+                    Memory :: instance().destroy ( reinterpret_cast < typename utility :: hidden :: unionImpl :: TypeAtIndexInPack < _i, FirstType, RemainingTypes ... > :: type * > ( this->pInstance ) );\
+                }\
             }
 
     #define UNION_DELETE2(_i)       \

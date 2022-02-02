@@ -92,8 +92,10 @@ namespace cds {
 #endif
 
         __CDS_OptimalInline ~HashSet () noexcept override {
-            this-> HashSet :: clear();
-            Memory :: instance().destroyArray ( this->_listArray );
+            if ( this->_listArray != nullptr ) {
+                this-> HashSet :: clear();
+                Memory :: instance().destroyArray ( this->_listArray );
+            }
         }
 
         auto allocInsertGetPtr ( ElementCRef element ) noexcept -> ElementPtrRef final {
@@ -389,9 +391,7 @@ namespace cds {
 
             this->clear();
 
-            Memory :: instance().destroyArray ( exchange ( this->_listArray, exchange ( set._listArray, Memory :: instance().createArray < Node * > ( set._hasher.getBoundary() ) ) ) );
-            (void) std :: memset ( set._listArray, 0, sizeof ( Node * ) * set._hasher.getBoundary() ); // NOLINT(bugprone-sizeof-expression)
-
+            this->_listArray = exchange ( set._listArray, nullptr );
             this->_size = exchange ( set._size, 0 );
 
             return * this;
@@ -417,6 +417,7 @@ namespace cds {
 
         __CDS_OptimalInline HashSet ( HashSet const & set __CDS_MaybeUnused ) noexcept {
             this->_listArray = Memory :: instance().createArray < Node * > ( this->_hasher.getBoundary() );
+            (void) std::memset ( this->_listArray, 0, this->_hasher.getBoundary() * sizeof ( Node * ) ); // NOLINT(bugprone-sizeof-expression)
 
             for ( auto const & element __CDS_MaybeUnused : set ) {
                 this->insert(element);
@@ -424,7 +425,8 @@ namespace cds {
         }
 
         __CDS_OptimalInline HashSet ( InitializerList initializerList __CDS_MaybeUnused ) noexcept { // NOLINT(google-explicit-constructor)
-            this->_listArray = Memory :: instance().createArray < Node * > ( this->_hasher.getBoundary() );
+             this->_listArray = Memory :: instance().createArray < Node * > ( this->_hasher.getBoundary() );
+            (void) std::memset ( this->_listArray, 0, this->_hasher.getBoundary() * sizeof ( Node * ) ); // NOLINT(bugprone-sizeof-expression)
 
             for ( auto const & element __CDS_MaybeUnused : initializerList ) {
                 this->insert(element);
@@ -437,6 +439,7 @@ namespace cds {
         ) noexcept :
                 Set <T> () {
             this->_listArray = Memory :: instance().createArray < Node * > ( this->_hasher.getBoundary() );
+            (void) std::memset ( this->_listArray, 0, this->_hasher.getBoundary() * sizeof ( Node * ) ); // NOLINT(bugprone-sizeof-expression)
 
             for (auto it = from; it != until; ++ it ) {
                 this->insert ( * it );
@@ -449,6 +452,7 @@ namespace cds {
         ) noexcept :
                 Set <T> () {
             this->_listArray = Memory :: instance().createArray < Node * > ( this->_hasher.getBoundary() );
+            (void) std::memset ( this->_listArray, 0, this->_hasher.getBoundary() * sizeof ( Node * ) ); // NOLINT(bugprone-sizeof-expression)
 
             for (auto it = from; it != until; ++ it ) {
                 this->insert ( * it );
