@@ -9,6 +9,8 @@
 #include <fstream>
 #include <sstream>
 
+using namespace cds;
+
 bool JsonTest::execute() noexcept {
     bool allOk = true;
     this->logBold("Starting of test Json...");
