@@ -227,8 +227,16 @@ namespace cds {
             return {this->_osPath + Path::directorySeparator() + delimFiltered()};
         }
 
+        __CDS_OptimalInline auto operator /= ( String const & leaf ) noexcept (false) -> Path & {
+            return ( * this = * this / leaf );
+        }
+
         __CDS_OptimalInline auto operator + (String const & leaf) const noexcept (false) -> Path {
             return (*this) / leaf;
+        }
+
+        __CDS_OptimalInline auto operator += ( String const & leaf ) noexcept (false) -> Path & {
+            return ( * this = * this / leaf );
         }
 
         __CDS_NoDiscard __CDS_OptimalInline auto append (String const & leaf) const noexcept (false) -> Path {
