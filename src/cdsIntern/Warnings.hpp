@@ -3,8 +3,8 @@
 //
 // Generated for CDS through Warning Suppression Generator Tool
 // Author: Loghin Vlad-Andrei - github.com/LoghinVladDev
-// Generation Date: 11/03/22 - 02:56:43
-// CDS Version - 0.0.4
+// Generation Date: 11/03/22 - 03:07:30
+// CDS Version - 0.0.2
 // Licenced under Project Licence - https://github.com/LoghinVladDev/CDS/blob/master/LICENSE
 //
 
@@ -60,6 +60,27 @@ _Pragma("GCC diagnostic pop")
 
 
 #endif // if defined(__GNUC__)
+
+#if !defined(__GNUC__) && defined(__clang__)
+
+#define __CDS_WarningSuppression_clang_CreatePragma(_text) #_text
+
+#define __CDS_WarningSuppression_clang_SuppressEnable(_warningName) /* NOLINT(bugprone-reserved-identifier) */ \
+_Pragma("clang diagnostic push") \
+_Pragma(__CDS_WarningSuppression_clang_CreatePragma(clang diagnostic ignored #_warningName))
+
+#define __CDS_WarningSuppression_clang_SuppressDisable(_warningName) /* NOLINT(bugprone-reserved-identifier) */ \
+_Pragma("clang diagnostic pop")
+
+
+#else // if defined(__clang__)
+
+
+#define __CDS_WarningSuppression_clang_SuppressEnable(_warningName) /* NOLINT(bugprone-reserved-identifier) */
+#define __CDS_WarningSuppression_clang_SuppressDisable(_warningName) /* NOLINT(bugprone-reserved-identifier) */
+
+
+#endif // if defined(__clang__)
 
 //// End of Platform Dependent Macros
 
@@ -146,14 +167,52 @@ _Pragma("GCC diagnostic pop")
 #define __CDS_WarningSuppression_GCC_VoidPtrDereference_SuppressEnable __CDS_WarningSuppression_GCC_SuppressEnable(-Wvoid-ptr-dereference) /* NOLINT(bugprone-reserved-identifier) */
 #define __CDS_WarningSuppression_GCC_VoidPtrDereference_SuppressDisable __CDS_WarningSuppression_GCC_SuppressDisable(-Wvoid-ptr-dereference) /* NOLINT(bugprone-reserved-identifier) */
 
+#define __CDS_WarningSuppression_clang_ArgumentPossibleUnexpectedValue_SuppressEnable /* NOLINT(bugprone-reserved-identifier) */
+#define __CDS_WarningSuppression_clang_ArgumentPossibleUnexpectedValue_SuppressDisable /* NOLINT(bugprone-reserved-identifier) */
+
+#define __CDS_WarningSuppression_clang_UseScopedEnum_SuppressEnable /* NOLINT(bugprone-reserved-identifier) */
+#define __CDS_WarningSuppression_clang_UseScopedEnum_SuppressDisable /* NOLINT(bugprone-reserved-identifier) */
+
+#define __CDS_WarningSuppression_clang_DelegateCtorSuppressUninitializedMembers_SuppressEnable /* NOLINT(bugprone-reserved-identifier) */
+#define __CDS_WarningSuppression_clang_DelegateCtorSuppressUninitializedMembers_SuppressDisable /* NOLINT(bugprone-reserved-identifier) */
+
+#define __CDS_WarningSuppression_clang_ArithmeticOverflow_SuppressEnable /* NOLINT(bugprone-reserved-identifier) */
+#define __CDS_WarningSuppression_clang_ArithmeticOverflow_SuppressDisable /* NOLINT(bugprone-reserved-identifier) */
+
+#define __CDS_WarningSuppression_clang_ThreadForceTermination_SuppressEnable /* NOLINT(bugprone-reserved-identifier) */
+#define __CDS_WarningSuppression_clang_ThreadForceTermination_SuppressDisable /* NOLINT(bugprone-reserved-identifier) */
+
+#define __CDS_WarningSuppression_clang_StringOperationOverflow_SuppressEnable __CDS_WarningSuppression_clang_SuppressEnable(-Wstringop-overflow) /* NOLINT(bugprone-reserved-identifier) */
+#define __CDS_WarningSuppression_clang_StringOperationOverflow_SuppressDisable __CDS_WarningSuppression_clang_SuppressDisable(-Wstringop-overflow) /* NOLINT(bugprone-reserved-identifier) */
+
+#define __CDS_WarningSuppression_clang_UnusedResult_SuppressEnable __CDS_WarningSuppression_clang_SuppressEnable(-Wunused-result) /* NOLINT(bugprone-reserved-identifier) */
+#define __CDS_WarningSuppression_clang_UnusedResult_SuppressDisable __CDS_WarningSuppression_clang_SuppressDisable(-Wunused-result) /* NOLINT(bugprone-reserved-identifier) */
+
+#define __CDS_WarningSuppression_clang_UnsafeDeleteVoidPtr_SuppressEnable __CDS_WarningSuppression_clang_SuppressEnable(-Wdelete-incomplete) /* NOLINT(bugprone-reserved-identifier) */
+#define __CDS_WarningSuppression_clang_UnsafeDeleteVoidPtr_SuppressDisable __CDS_WarningSuppression_clang_SuppressDisable(-Wdelete-incomplete) /* NOLINT(bugprone-reserved-identifier) */
+
+#define __CDS_WarningSuppression_clang_FunctionTypeTraits_SuppressEnable /* NOLINT(bugprone-reserved-identifier) */
+#define __CDS_WarningSuppression_clang_FunctionTypeTraits_SuppressDisable /* NOLINT(bugprone-reserved-identifier) */
+
+#define __CDS_WarningSuppression_clang_DeducedNoexceptTermination_SuppressEnable __CDS_WarningSuppression_clang_SuppressEnable(-Wterminate) /* NOLINT(bugprone-reserved-identifier) */
+#define __CDS_WarningSuppression_clang_DeducedNoexceptTermination_SuppressDisable __CDS_WarningSuppression_clang_SuppressDisable(-Wterminate) /* NOLINT(bugprone-reserved-identifier) */
+
+#define __CDS_WarningSuppression_clang_NoReturnStatement_SuppressEnable __CDS_WarningSuppression_clang_SuppressEnable(-Wreturn-type) /* NOLINT(bugprone-reserved-identifier) */
+#define __CDS_WarningSuppression_clang_NoReturnStatement_SuppressDisable __CDS_WarningSuppression_clang_SuppressDisable(-Wreturn-type) /* NOLINT(bugprone-reserved-identifier) */
+
+#define __CDS_WarningSuppression_clang_VoidPtrDereference_SuppressEnable __CDS_WarningSuppression_clang_SuppressEnable(-Wvoid-ptr-dereference) /* NOLINT(bugprone-reserved-identifier) */
+#define __CDS_WarningSuppression_clang_VoidPtrDereference_SuppressDisable __CDS_WarningSuppression_clang_SuppressDisable(-Wvoid-ptr-dereference) /* NOLINT(bugprone-reserved-identifier) */
+
 
 #define __CDS_WarningSuppression_SuppressEnable(_warning) /* NOLINT(bugprone-reserved-identifier) */ \
 	__CDS_WarningSuppression_Platform_SuppressEnable(MSVC, _warning)\
-	__CDS_WarningSuppression_Platform_SuppressEnable(GCC, _warning)
+	__CDS_WarningSuppression_Platform_SuppressEnable(GCC, _warning)\
+	__CDS_WarningSuppression_Platform_SuppressEnable(clang, _warning)
 
 #define __CDS_WarningSuppression_SuppressDisable(_warning) /* NOLINT(bugprone-reserved-identifier) */ \
 	__CDS_WarningSuppression_Platform_SuppressDisable(MSVC, _warning)\
-	__CDS_WarningSuppression_Platform_SuppressDisable(GCC, _warning)
+	__CDS_WarningSuppression_Platform_SuppressDisable(GCC, _warning)\
+	__CDS_WarningSuppression_Platform_SuppressDisable(clang, _warning)
 
 //// End of Platform Dependent Config Macros
 

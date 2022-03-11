@@ -29,6 +29,20 @@ platform_dependent_templates = [
         "disable": [
             "_Pragma(\"GCC diagnostic pop\")"
         ]
+    }),
+    ("clang", {
+        "macroIdentifier": {"start": "#if !defined(__GNUC__) && defined(__clang__)",
+                            "mid": "#else // if defined(__clang__)",
+                            "end": "#endif // if defined(__clang__)"},
+        "parameters": "_warningName",
+        "pre": "#define __CDS_WarningSuppression_clang_CreatePragma(_text) #_text",
+        "enable": [
+            "_Pragma(\"clang diagnostic push\")",
+            "_Pragma(__CDS_WarningSuppression_clang_CreatePragma(clang diagnostic ignored #_warningName))"
+        ],
+        "disable": [
+            "_Pragma(\"clang diagnostic pop\")"
+        ]
     })
 ]
 

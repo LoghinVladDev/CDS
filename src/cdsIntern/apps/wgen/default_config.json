@@ -9,6 +9,10 @@
         {
             "name": "GCC",
             "type": 2
+        },
+        {
+            "name": "clang",
+            "type": 2
         }
     ],
     "warnings": [
@@ -34,15 +38,18 @@
         },
         {
             "Name": "StringOperationOverflow",
-            "GCC": "-Wstringop-overflow"
+            "GCC": "-Wstringop-overflow",
+            "clang": "-Wstringop-overflow"
         },
         {
             "Name": "UnusedResult",
-            "GCC": "-Wunused-result"
+            "GCC": "-Wunused-result",
+            "clang": "-Wunused-result"
         },
         {
             "Name": "UnsafeDeleteVoidPtr",
-            "GCC": "-Wdelete-incomplete"
+            "GCC": "-Wdelete-incomplete",
+            "clang": "-Wdelete-incomplete"
         },
         {
             "Name": "FunctionTypeTraits",
@@ -51,15 +58,18 @@
         {
             "Name": "DeducedNoexceptTermination",
             "MSVC": 4297,
-            "GCC": "-Wterminate"
+            "GCC": "-Wterminate",
+            "clang": "-Wterminate"
         },
         {
             "Name": "NoReturnStatement",
-            "GCC": "-Wreturn-type"
+            "GCC": "-Wreturn-type",
+            "clang": "-Wreturn-type"
         },
         {
             "Name": "VoidPtrDereference",
-            "GCC": "-Wvoid-ptr-dereference"
+            "GCC": "-Wvoid-ptr-dereference",
+            "clang": "-Wvoid-ptr-dereference"
         }
     ]
 }
