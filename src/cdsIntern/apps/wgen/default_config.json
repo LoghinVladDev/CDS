@@ -56,6 +56,10 @@
         {
             "Name": "NoReturnStatement",
             "GCC": "-Wreturn-type"
+        },
+        {
+            "Name": "VoidPtrDereference",
+            "GCC": "-Wvoid-ptr-dereference"
         }
     ]
 }
