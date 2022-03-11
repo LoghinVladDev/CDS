@@ -458,6 +458,18 @@ namespace cds {
             }
         }
 
+        __CDS_OptionalInline explicit HashSet (
+                Collection < T > const & collection
+        ) noexcept :
+                Set <T> () {
+            this->_listArray = Memory :: instance().createArray < Node * > ( this->_hasher.getBoundary() );
+            (void) std::memset ( this->_listArray, 0, this->_hasher.getBoundary() * sizeof ( Node * ) ); // NOLINT(bugprone-sizeof-expression)
+
+            for (auto it = collection.begin(); it != collection.end(); ++ it ) {
+                this->insert ( * it );
+            }
+        }
+
         __CDS_NoDiscard __CDS_OptimalInline auto copy () const noexcept -> HashSet < T, H > * override {
             return Memory :: instance () .create < HashSet < T, H > > ();
         }
