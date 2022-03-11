@@ -31,7 +31,7 @@ platform_dependent_templates = [
         ]
     }),
     ("clang", {
-        "macroIdentifier": {"start": "#if !defined(__GNUC__) && defined(__clang__)",
+        "macroIdentifier": {"start": "#if defined(__clang__)",
                             "mid": "#else // if defined(__clang__)",
                             "end": "#endif // if defined(__clang__)"},
         "parameters": "_warningName",

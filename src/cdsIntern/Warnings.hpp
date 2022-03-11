@@ -3,7 +3,7 @@
 //
 // Generated for CDS through Warning Suppression Generator Tool
 // Author: Loghin Vlad-Andrei - github.com/LoghinVladDev
-// Generation Date: 11/03/22 - 03:07:30
+// Generation Date: 11/03/22 - 03:22:36
 // CDS Version - 0.0.2
 // Licenced under Project Licence - https://github.com/LoghinVladDev/CDS/blob/master/LICENSE
 //
@@ -61,7 +61,7 @@ _Pragma("GCC diagnostic pop")
 
 #endif // if defined(__GNUC__)
 
-#if !defined(__GNUC__) && defined(__clang__)
+#if defined(__clang__)
 
 #define __CDS_WarningSuppression_clang_CreatePragma(_text) #_text
 
