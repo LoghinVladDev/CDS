@@ -38,8 +38,7 @@
         },
         {
             "Name": "StringOperationOverflow",
-            "GCC": "-Wstringop-overflow",
-            "clang": "-Wstringop-overflow"
+            "GCC": "-Wstringop-overflow"
         },
         {
             "Name": "UnusedResult",
@@ -58,8 +57,7 @@
         {
             "Name": "DeducedNoexceptTermination",
             "MSVC": 4297,
-            "GCC": "-Wterminate",
-            "clang": "-Wterminate"
+            "GCC": "-Wterminate"
         },
         {
             "Name": "NoReturnStatement",

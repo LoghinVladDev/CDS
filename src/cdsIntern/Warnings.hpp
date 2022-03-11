@@ -3,7 +3,7 @@
 //
 // Generated for CDS through Warning Suppression Generator Tool
 // Author: Loghin Vlad-Andrei - github.com/LoghinVladDev
-// Generation Date: 11/03/22 - 03:22:36
+// Generation Date: 11/03/22 - 03:25:03
 // CDS Version - 0.0.2
 // Licenced under Project Licence - https://github.com/LoghinVladDev/CDS/blob/master/LICENSE
 //
@@ -182,8 +182,8 @@ _Pragma("clang diagnostic pop")
 #define __CDS_WarningSuppression_clang_ThreadForceTermination_SuppressEnable /* NOLINT(bugprone-reserved-identifier) */
 #define __CDS_WarningSuppression_clang_ThreadForceTermination_SuppressDisable /* NOLINT(bugprone-reserved-identifier) */
 
-#define __CDS_WarningSuppression_clang_StringOperationOverflow_SuppressEnable __CDS_WarningSuppression_clang_SuppressEnable(-Wstringop-overflow) /* NOLINT(bugprone-reserved-identifier) */
-#define __CDS_WarningSuppression_clang_StringOperationOverflow_SuppressDisable __CDS_WarningSuppression_clang_SuppressDisable(-Wstringop-overflow) /* NOLINT(bugprone-reserved-identifier) */
+#define __CDS_WarningSuppression_clang_StringOperationOverflow_SuppressEnable /* NOLINT(bugprone-reserved-identifier) */
+#define __CDS_WarningSuppression_clang_StringOperationOverflow_SuppressDisable /* NOLINT(bugprone-reserved-identifier) */
 
 #define __CDS_WarningSuppression_clang_UnusedResult_SuppressEnable __CDS_WarningSuppression_clang_SuppressEnable(-Wunused-result) /* NOLINT(bugprone-reserved-identifier) */
 #define __CDS_WarningSuppression_clang_UnusedResult_SuppressDisable __CDS_WarningSuppression_clang_SuppressDisable(-Wunused-result) /* NOLINT(bugprone-reserved-identifier) */
@@ -194,8 +194,8 @@ _Pragma("clang diagnostic pop")
 #define __CDS_WarningSuppression_clang_FunctionTypeTraits_SuppressEnable /* NOLINT(bugprone-reserved-identifier) */
 #define __CDS_WarningSuppression_clang_FunctionTypeTraits_SuppressDisable /* NOLINT(bugprone-reserved-identifier) */
 
-#define __CDS_WarningSuppression_clang_DeducedNoexceptTermination_SuppressEnable __CDS_WarningSuppression_clang_SuppressEnable(-Wterminate) /* NOLINT(bugprone-reserved-identifier) */
-#define __CDS_WarningSuppression_clang_DeducedNoexceptTermination_SuppressDisable __CDS_WarningSuppression_clang_SuppressDisable(-Wterminate) /* NOLINT(bugprone-reserved-identifier) */
+#define __CDS_WarningSuppression_clang_DeducedNoexceptTermination_SuppressEnable /* NOLINT(bugprone-reserved-identifier) */
+#define __CDS_WarningSuppression_clang_DeducedNoexceptTermination_SuppressDisable /* NOLINT(bugprone-reserved-identifier) */
 
 #define __CDS_WarningSuppression_clang_NoReturnStatement_SuppressEnable __CDS_WarningSuppression_clang_SuppressEnable(-Wreturn-type) /* NOLINT(bugprone-reserved-identifier) */
 #define __CDS_WarningSuppression_clang_NoReturnStatement_SuppressDisable __CDS_WarningSuppression_clang_SuppressDisable(-Wreturn-type) /* NOLINT(bugprone-reserved-identifier) */
