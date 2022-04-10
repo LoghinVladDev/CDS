@@ -68,8 +68,16 @@ namespace cds {
             return *p;
         }
 
-        __CDS_cpplang_NonConstConstexprMemberFunction T & get () noexcept(false) {
+        __CDS_cpplang_NonConstConstexprMemberFunction T & get () noexcept {
             return *p;
+        }
+
+        __CDS_cpplang_NonConstConstexprMemberFunction auto operator -> () noexcept -> Pointer {
+            return this->p;
+        }
+
+        constexpr auto operator -> () const noexcept -> Pointer {
+            return this->p;
         }
 
         constexpr auto operator == (Reference const & reference) const noexcept -> bool {

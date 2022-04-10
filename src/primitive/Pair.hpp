@@ -80,8 +80,8 @@ namespace cds {
         }
 
         template < typename K1 = K, typename V1 = V, EnableIf < Type < K1 > :: moveConstructible && Type < V1 > :: moveConstructible && ! Type < K1 > :: isFundamental && ! Type < V1 > :: isFundamental > = 0 > // NOLINT(clion-misra-cpp2008-5-3-1)
-        constexpr Pair ( K && first, V && second ) noexcept(noexcept(K(std::move(first))) && noexcept(V(std::move(second)))) :
-                _first(std::move(first)), _second(std::move(second)) {
+        constexpr Pair ( K && first, V && second ) noexcept(noexcept(K(std::forward < K > (first))) && noexcept(V(std::forward < V > (second)))) :
+                _first(std::forward < K && > (first)), _second(std::forward < V && > (second)) {
 
         }
 
@@ -92,9 +92,9 @@ namespace cds {
         }
 
         template < typename K1 = K, typename V1 = V, EnableIf < Type < K1 > :: isFundamental && ! Type < V1 > :: isFundamental && Type < V1 > :: moveConstructible > = 0 > // NOLINT(clion-misra-cpp2008-5-3-1)
-        constexpr Pair ( K first, V && second ) noexcept(noexcept(V(std::move(second)))) :
+        constexpr Pair ( K first, V && second ) noexcept(noexcept(V(std::forward < V && >(second)))) :
                 _first(first),
-                _second(std::move(second)) {
+                _second(std::forward < V && >(second)) {
 
         }
 
@@ -106,22 +106,22 @@ namespace cds {
         }
 
         template < typename K1 = K, typename V1 = V, EnableIf < ! Type < K1 > :: isFundamental && Type < K1 > :: copyConstructible && ! Type < V1 > :: isFundamental && Type < V1 > :: moveConstructible > = 0 > // NOLINT(clion-misra-cpp2008-5-3-1)
-        constexpr Pair ( K const & first, V && second ) noexcept(noexcept(K(first)) && noexcept(V(std::move(second)))) :
+        constexpr Pair ( K const & first, V && second ) noexcept(noexcept(K(first)) && noexcept(V(std::forward < V && > (second)))) :
                 _first(first),
-                _second(std::move(second)) {
+                _second(std::forward < V && >(second)) {
 
         }
 
         template < typename K1 = K, typename V1 = V, EnableIf < ! Type < K1 > :: isFundamental && Type < K1 > :: moveConstructible && Type < V1 > :: isFundamental > = 0 > // NOLINT(clion-misra-cpp2008-5-3-1)
-        constexpr Pair ( K && first, V second ) noexcept(noexcept(K(std::move(first)))) :
-                _first(std::move(first)),
+        constexpr Pair ( K && first, V second ) noexcept(noexcept(K(std::forward < K && >(first)))) :
+                _first(std::forward < K && >(first)),
                 _second(second) {
 
         }
 
         template < typename K1 = K, typename V1 = V, EnableIf < ! Type < K1 > :: isFundamental && Type < K1 > :: moveConstructible && ! Type < V1 > :: isFundamental && Type < V1 > :: copyConstructible > = 0 > // NOLINT(clion-misra-cpp2008-5-3-1)
-        constexpr Pair ( K && first, V const & second ) noexcept(noexcept(K(std::move(first))) && noexcept(V(second))) :
-                _first(std::move(first)),
+        constexpr Pair ( K && first, V const & second ) noexcept(noexcept(K(std::forward < K && >(first))) && noexcept(V(second))) :
+                _first(std::forward < K && >(first)),
                 _second(second) {
 
         }

@@ -18,12 +18,12 @@
 
 namespace cds {
 
-    class JSON : public Object {
+    class __CDS_Deprecated JSON : public Object {
     public:
-        class Array; // NOLINT(cppcoreguidelines-virtual-class-destructor)
+        class __CDS_Deprecated Array; // NOLINT(cppcoreguidelines-virtual-class-destructor)
 
     private:
-        class Node : public Object {
+        class __CDS_Deprecated Node : public Object {
         private:
             friend class JSON::Array;
             friend class JSON;
@@ -31,7 +31,7 @@ namespace cds {
             String      _label;
             Object *    _pObject {nullptr};
 
-            __CDS_NoDiscard auto stringFormattedData () const noexcept(false) -> String {
+            __CDS_NoDiscard __CDS_Deprecated auto stringFormattedData () const noexcept(false) -> String {
                 if ( this->_pObject == nullptr ) {
                     throw NullPointerException();
                 }
@@ -44,7 +44,7 @@ namespace cds {
             }
 
         public:
-            __CDS_OptimalInline auto operator == ( Node const & node ) const noexcept -> bool {
+            __CDS_Deprecated __CDS_OptimalInline auto operator == ( Node const & node ) const noexcept -> bool {
                 if ( this == & node ) {
                     return true;
                 }
@@ -52,7 +52,7 @@ namespace cds {
                 return this->_label == node._label && this->_pObject->equals(*node._pObject);
             }
 
-            __CDS_NoDiscard auto equals ( Object const & object ) const noexcept -> bool override {
+            __CDS_Deprecated __CDS_NoDiscard auto equals ( Object const & object ) const noexcept -> bool override {
                 if ( this == & object ) {
                     return true;
                 }
@@ -66,39 +66,39 @@ namespace cds {
                 return this->operator==(* pObject);
             }
 
-            Node() noexcept = default;
-            Node(Node const & node) noexcept :
+            __CDS_Deprecated Node() noexcept = default;
+            __CDS_Deprecated Node(Node const & node) noexcept :
                     _label(node._label),
                     _pObject(node._pObject->copy()) {
 
             }
 
-            ~Node() noexcept override {
+            __CDS_Deprecated ~Node() noexcept override {
                 Memory :: instance().destroy ( this->_pObject );
             }
 
-            auto clearData () noexcept -> Node & {
+            __CDS_Deprecated auto clearData () noexcept -> Node & {
                 Memory :: instance().destroy ( this->_pObject );
                 this->_pObject = nullptr;
                 return * this;
             }
 
-            auto put (Object const & obj) noexcept -> Node & {
+            __CDS_Deprecated auto put (Object const & obj) noexcept -> Node & {
                 (void) this->clearData();
                 this->_pObject = obj.copy();
                 return * this;
             }
 
-            __CDS_OptimalInline auto put (bool value)                    noexcept -> Node & { return this->put(Boolean(value)); }
-            __CDS_OptimalInline auto put (int value)                     noexcept -> Node & { return this->put(Integer(value)); }
-            __CDS_OptimalInline auto put (long long value)               noexcept -> Node & { return this->put(Long(value)); }
-            __CDS_OptimalInline auto put (float value)                   noexcept -> Node & { return this->put(Float(value)); }
-            __CDS_OptimalInline auto put (double value)                  noexcept -> Node & { return this->put(Double(value)); }
-            __CDS_OptimalInline auto put (StringLiteral value)           noexcept -> Node & { return this->put(String(value)); }
-                                auto put (JSON::Array const &)           noexcept -> Node &;
-            __CDS_OptimalInline auto put (String const & value)          noexcept -> Node & { return this->put(reinterpret_cast < Object const & > ( value ) ); }
+            __CDS_Deprecated __CDS_OptimalInline auto put (bool value)                    noexcept -> Node & { return this->put(Boolean(value)); }
+            __CDS_Deprecated __CDS_OptimalInline auto put (int value)                     noexcept -> Node & { return this->put(Integer(value)); }
+            __CDS_Deprecated __CDS_OptimalInline auto put (long long value)               noexcept -> Node & { return this->put(Long(value)); }
+            __CDS_Deprecated __CDS_OptimalInline auto put (float value)                   noexcept -> Node & { return this->put(Float(value)); }
+            __CDS_Deprecated __CDS_OptimalInline auto put (double value)                  noexcept -> Node & { return this->put(Double(value)); }
+            __CDS_Deprecated __CDS_OptimalInline auto put (StringLiteral value)           noexcept -> Node & { return this->put(String(value)); }
+            __CDS_Deprecated                     auto put (JSON::Array const &)           noexcept -> Node &;
+            __CDS_Deprecated __CDS_OptimalInline auto put (String const & value)          noexcept -> Node & { return this->put(reinterpret_cast < Object const & > ( value ) ); }
 
-            __CDS_NoDiscard auto getBoolean () const noexcept(false) -> bool {
+            __CDS_Deprecated __CDS_NoDiscard auto getBoolean () const noexcept(false) -> bool {
                 auto pObject = dynamic_cast < Boolean const * > (this->_pObject);
                 if (pObject == nullptr ) {
                     throw TypeException(Boolean());
@@ -107,7 +107,7 @@ namespace cds {
                 return pObject->get();
             }
 
-            __CDS_NoDiscard auto getInt () const noexcept(false) -> int {
+            __CDS_Deprecated __CDS_NoDiscard auto getInt () const noexcept(false) -> int {
                 auto pObject = dynamic_cast < Integer const * > (this->_pObject);
                 if (pObject == nullptr ) {
                     auto pLong = dynamic_cast < Long const * > (this->_pObject);
@@ -121,7 +121,7 @@ namespace cds {
                 return pObject->get();
             }
 
-            __CDS_NoDiscard auto getLong () const noexcept(false) -> long long int {
+            __CDS_Deprecated __CDS_NoDiscard auto getLong () const noexcept(false) -> long long int {
                 auto pObject = dynamic_cast < Long const * > (this->_pObject);
                 if (pObject == nullptr ) {
                     auto pInteger = dynamic_cast < Integer const * > ( this->_pObject );
@@ -135,7 +135,7 @@ namespace cds {
                 return pObject->get();
             }
 
-            __CDS_NoDiscard auto getFloat () const noexcept(false) -> float {
+            __CDS_Deprecated __CDS_NoDiscard auto getFloat () const noexcept(false) -> float {
                 auto pObject = dynamic_cast < Float const * > (this->_pObject);
                 if (pObject == nullptr ) {
                     auto pDouble = dynamic_cast < Double const * > ( this->_pObject );
@@ -149,7 +149,7 @@ namespace cds {
                 return pObject->get();
             }
 
-            __CDS_NoDiscard auto getDouble () const noexcept(false) -> double {
+            __CDS_Deprecated __CDS_NoDiscard auto getDouble () const noexcept(false) -> double {
                 auto pObject = dynamic_cast < Double const * > (this->_pObject);
                 if (pObject == nullptr ) {
                     auto pFloat = dynamic_cast < Float const * > ( this->_pObject );
@@ -163,11 +163,11 @@ namespace cds {
                 return pObject->get();
             }
 
-            __CDS_NoDiscard __CDS_OptimalInline auto getObject () const noexcept -> Object const & {
+            __CDS_Deprecated __CDS_NoDiscard __CDS_OptimalInline auto getObject () const noexcept -> Object const & {
                 return * this->_pObject;
             }
 
-            __CDS_NoDiscard auto getJSON () const noexcept(false) -> JSON const & {
+            __CDS_Deprecated __CDS_NoDiscard auto getJSON () const noexcept(false) -> JSON const & {
                 auto pObject = dynamic_cast < JSON const * > ( this->_pObject );
                 if (pObject == nullptr ) {
                     throw TypeException(JSON());
@@ -176,7 +176,7 @@ namespace cds {
                 return * pObject;
             }
 
-            __CDS_NoDiscard auto getString () const noexcept(false) -> String const & {
+            __CDS_Deprecated __CDS_NoDiscard auto getString () const noexcept(false) -> String const & {
                 auto pObject = dynamic_cast < String const * > ( this->_pObject );
                 if (pObject == nullptr ) {
                     throw TypeException(String());
@@ -185,13 +185,13 @@ namespace cds {
                 return * pObject;
             }
 
-            __CDS_NoDiscard auto getArray () const noexcept(false) -> JSON::Array const &;
+            __CDS_Deprecated __CDS_NoDiscard auto getArray () const noexcept(false) -> JSON::Array const &;
 
-            __CDS_OptimalInline auto getObject () noexcept -> Object & {
+            __CDS_Deprecated __CDS_OptimalInline auto getObject () noexcept -> Object & {
                 return * this->_pObject;
             }
 
-            auto getJSON () noexcept(false) -> JSON & {
+            __CDS_Deprecated auto getJSON () noexcept(false) -> JSON & {
                 auto pObject = dynamic_cast < JSON * > (this->_pObject);
                 if (pObject == nullptr ) {
                     throw TypeException(JSON());
@@ -200,7 +200,7 @@ namespace cds {
                 return * pObject;
             }
 
-            auto getString () noexcept(false) -> String & {
+            __CDS_Deprecated auto getString () noexcept(false) -> String & {
                 auto pObject = dynamic_cast < String * > (this->_pObject);
                 if (pObject == nullptr ) {
                     throw TypeException(String());
@@ -209,42 +209,42 @@ namespace cds {
                 return * pObject;
             };
 
-            auto getArray () noexcept(false) -> JSON::Array &;
+            __CDS_Deprecated auto getArray () noexcept(false) -> JSON::Array &;
 
-            __CDS_OptimalInline auto setLabel (String const & label) noexcept -> Node & {
+            __CDS_Deprecated __CDS_OptimalInline auto setLabel (String const & label) noexcept -> Node & {
                 this->_label = label;
                 return * this;
             }
 
-            __CDS_NoDiscard __CDS_MaybeUnused constexpr auto getLabel () const noexcept -> String const & {
+            __CDS_Deprecated __CDS_NoDiscard __CDS_MaybeUnused constexpr auto getLabel () const noexcept -> String const & {
                 return this->_label;
             }
 
-            __CDS_cpplang_NonConstConstexprMemberFunction auto getLabel () noexcept -> String & {
+            __CDS_Deprecated __CDS_cpplang_NonConstConstexprMemberFunction auto getLabel () noexcept -> String & {
                 return this->_label;
             }
 
-            __CDS_NoDiscard auto toString () const noexcept -> String override {
+            __CDS_Deprecated __CDS_NoDiscard auto toString () const noexcept -> String override {
                 return
                         String("\"") + this->_label + "\" : " + this->stringFormattedData();
             }
 
-            __CDS_NoDiscard auto dumpIndented (int indent, int count) const noexcept -> String;
+            __CDS_Deprecated __CDS_NoDiscard auto dumpIndented (int indent, int count) const noexcept -> String;
 
-            __CDS_NoDiscard auto copy () const noexcept -> Node * override {
+            __CDS_Deprecated __CDS_NoDiscard auto copy () const noexcept -> Node * override {
                 return Memory::instance().create < Node > (*this);
             }
         };
 
-        LinkedList < Node > _nodes;
+        __CDS_Deprecated LinkedList < Node > _nodes;
 
     public:
-        JSON() noexcept = default;
-        JSON (JSON const &) noexcept = default;
-        JSON (JSON &&) noexcept;
-        ~JSON () noexcept override = default;
+        __CDS_Deprecated JSON() noexcept = default;
+        __CDS_Deprecated JSON (JSON const &) noexcept = default;
+        __CDS_Deprecated JSON (JSON &&) noexcept;
+        __CDS_Deprecated ~JSON () noexcept override = default;
 
-        __CDS_OptimalInline auto operator = ( JSON const & json ) noexcept -> JSON & {
+        __CDS_Deprecated __CDS_OptimalInline auto operator = ( JSON const & json ) noexcept -> JSON & {
             if ( this == & json ) {
                 return * this;
             }
@@ -254,7 +254,7 @@ namespace cds {
             return * this;
         }
 
-        __CDS_OptimalInline auto operator = ( JSON && json ) noexcept -> JSON & {
+        __CDS_Deprecated __CDS_OptimalInline auto operator = ( JSON && json ) noexcept -> JSON & {
             if ( this == & json ) {
                 return * this;
             }
@@ -264,9 +264,9 @@ namespace cds {
             return * this;
         }
 
-        auto operator == (JSON const & object) const noexcept -> bool;
+        __CDS_Deprecated auto operator == (JSON const & object) const noexcept -> bool;
 
-        __CDS_NoDiscard auto equals ( Object const & object ) const noexcept -> bool override {
+        __CDS_Deprecated __CDS_NoDiscard auto equals ( Object const & object ) const noexcept -> bool override {
             if ( this == & object ) {
                 return true;
             }
@@ -278,7 +278,7 @@ namespace cds {
             return this->operator==(* pObject);
         }
 
-        __CDS_NoDiscard auto labels () const noexcept -> LinkedList < Reference < const String > > {
+        __CDS_Deprecated __CDS_NoDiscard auto labels () const noexcept -> LinkedList < Reference < const String > > {
             LinkedList < Reference < const String > > labelList;
 
             for ( auto & element : this->_nodes ) {
@@ -288,7 +288,7 @@ namespace cds {
             return labelList;
         }
 
-        __CDS_NoDiscard auto labels () noexcept -> LinkedList < Reference < String > > {
+        __CDS_Deprecated __CDS_NoDiscard auto labels () noexcept -> LinkedList < Reference < String > > {
             LinkedList < Reference < String > > labelList;
 
             for ( auto & node : this->_nodes ) {
@@ -298,15 +298,15 @@ namespace cds {
             return labelList;
         }
 
-        __CDS_NoDiscard __CDS_MaybeUnused __CDS_OptimalInline auto keys () noexcept -> LinkedList < Reference < String > > {
+        __CDS_Deprecated __CDS_NoDiscard __CDS_MaybeUnused __CDS_OptimalInline auto keys () noexcept -> LinkedList < Reference < String > > {
             return this->labels();
         }
 
-        __CDS_NoDiscard __CDS_MaybeUnused __CDS_OptimalInline auto keys () const noexcept -> LinkedList < Reference < const String > > {
+        __CDS_Deprecated __CDS_NoDiscard __CDS_MaybeUnused __CDS_OptimalInline auto keys () const noexcept -> LinkedList < Reference < const String > > {
             return this->labels();
         }
 
-        __CDS_NoDiscard __CDS_MaybeUnused auto nodes () const noexcept -> LinkedList < Reference < const Node > > {
+        __CDS_Deprecated __CDS_NoDiscard __CDS_MaybeUnused auto nodes () const noexcept -> LinkedList < Reference < const Node > > {
             LinkedList < Reference < const Node > > labelList;
 
             for ( auto & node : this->_nodes ) {
@@ -316,7 +316,7 @@ namespace cds {
             return labelList;
         }
 
-        __CDS_NoDiscard __CDS_MaybeUnused auto nodes () noexcept -> LinkedList < Reference < Node > > {
+        __CDS_Deprecated __CDS_NoDiscard __CDS_MaybeUnused auto nodes () noexcept -> LinkedList < Reference < Node > > {
             LinkedList < Reference < Node > > labelList;
 
             for ( auto & node : this->_nodes ) {
@@ -326,61 +326,61 @@ namespace cds {
             return labelList;
         }
 
-        __CDS_NoDiscard __CDS_MaybeUnused auto labelExists ( String const & label ) const noexcept -> bool {
+        __CDS_Deprecated __CDS_NoDiscard __CDS_MaybeUnused auto labelExists ( String const & label ) const noexcept -> bool {
             return this->labels().contains( label );
         }
 
-        auto put ( String const &, bool ) noexcept -> JSON &;
-        auto put ( String const &, int ) noexcept -> JSON &;
-        auto put ( String const &, long long int ) noexcept -> JSON &;
-        auto put ( String const &, float ) noexcept -> JSON &;
-        auto put ( String const &, double ) noexcept -> JSON &;
-        auto put ( String const &, String const & ) noexcept -> JSON &;
-        auto put ( String const &, JSON::Array const & ) noexcept -> JSON &;
-        auto put ( String const &, JSON const & ) noexcept -> JSON &;
-        auto put ( String const &, Object const & ) noexcept -> JSON &;
-        auto put ( String const &, StringLiteral ) noexcept -> JSON &;
+        __CDS_Deprecated auto put ( String const &, bool ) noexcept -> JSON &;
+        __CDS_Deprecated auto put ( String const &, int ) noexcept -> JSON &;
+        __CDS_Deprecated auto put ( String const &, long long int ) noexcept -> JSON &;
+        __CDS_Deprecated auto put ( String const &, float ) noexcept -> JSON &;
+        __CDS_Deprecated auto put ( String const &, double ) noexcept -> JSON &;
+        __CDS_Deprecated auto put ( String const &, String const & ) noexcept -> JSON &;
+        __CDS_Deprecated auto put ( String const &, JSON::Array const & ) noexcept -> JSON &;
+        __CDS_Deprecated auto put ( String const &, JSON const & ) noexcept -> JSON &;
+        __CDS_Deprecated auto put ( String const &, Object const & ) noexcept -> JSON &;
+        __CDS_Deprecated auto put ( String const &, StringLiteral ) noexcept -> JSON &;
 
-        __CDS_NoDiscard __CDS_MaybeUnused auto begin () noexcept -> LinkedList < JSON::Node >::Iterator {
+        __CDS_Deprecated __CDS_NoDiscard __CDS_MaybeUnused auto begin () noexcept -> LinkedList < JSON::Node >::Iterator {
             return this->_nodes.begin();
         }
 
-        __CDS_NoDiscard __CDS_MaybeUnused auto begin () const noexcept -> LinkedList < JSON::Node >::ConstIterator {
+        __CDS_Deprecated __CDS_NoDiscard __CDS_MaybeUnused auto begin () const noexcept -> LinkedList < JSON::Node >::ConstIterator {
             return this->_nodes.begin();
         }
 
-        __CDS_NoDiscard __CDS_MaybeUnused auto cbegin () const noexcept -> LinkedList < JSON::Node >::ConstIterator {
+        __CDS_Deprecated __CDS_NoDiscard __CDS_MaybeUnused auto cbegin () const noexcept -> LinkedList < JSON::Node >::ConstIterator {
             return this->_nodes.cbegin();
         }
 
-        __CDS_NoDiscard __CDS_MaybeUnused auto end () noexcept -> LinkedList < JSON::Node >::Iterator {
+        __CDS_Deprecated __CDS_NoDiscard __CDS_MaybeUnused auto end () noexcept -> LinkedList < JSON::Node >::Iterator {
             return this->_nodes.end();
         }
 
-        __CDS_NoDiscard __CDS_MaybeUnused auto end () const noexcept -> LinkedList < JSON::Node >::ConstIterator {
+        __CDS_Deprecated __CDS_NoDiscard __CDS_MaybeUnused auto end () const noexcept -> LinkedList < JSON::Node >::ConstIterator {
             return this->_nodes.end();
         }
 
-        __CDS_NoDiscard __CDS_MaybeUnused auto cend () const noexcept -> LinkedList < JSON::Node >::ConstIterator {
+        __CDS_Deprecated __CDS_NoDiscard __CDS_MaybeUnused auto cend () const noexcept -> LinkedList < JSON::Node >::ConstIterator {
             return this->_nodes.cend();
         }
 
-        __CDS_NoDiscard __CDS_MaybeUnused auto getBoolean ( String const & ) const noexcept (false) -> bool;
-        __CDS_NoDiscard __CDS_MaybeUnused auto getInt ( String const & ) const noexcept (false) -> int;
-        __CDS_NoDiscard __CDS_MaybeUnused auto getLong ( String const & ) const noexcept (false) -> long long int;
-        __CDS_NoDiscard __CDS_MaybeUnused auto getFloat ( String const & ) const noexcept (false) -> float;
-        __CDS_NoDiscard __CDS_MaybeUnused auto getDouble ( String const & ) const noexcept (false) -> double;
-        __CDS_NoDiscard __CDS_MaybeUnused auto getString ( String const & ) const noexcept (false) -> String const &;
-        __CDS_NoDiscard __CDS_MaybeUnused auto getJSON ( String const & ) const noexcept (false) -> JSON const &;
-        __CDS_NoDiscard __CDS_MaybeUnused auto getArray ( String const & ) const noexcept (false) -> Array const &;
-        __CDS_NoDiscard __CDS_MaybeUnused auto getObject ( String const & ) const noexcept (false) -> Object const &;
+        __CDS_Deprecated __CDS_NoDiscard __CDS_MaybeUnused auto getBoolean ( String const & ) const noexcept (false) -> bool;
+        __CDS_Deprecated __CDS_NoDiscard __CDS_MaybeUnused auto getInt ( String const & ) const noexcept (false) -> int;
+        __CDS_Deprecated __CDS_NoDiscard __CDS_MaybeUnused auto getLong ( String const & ) const noexcept (false) -> long long int;
+        __CDS_Deprecated __CDS_NoDiscard __CDS_MaybeUnused auto getFloat ( String const & ) const noexcept (false) -> float;
+        __CDS_Deprecated __CDS_NoDiscard __CDS_MaybeUnused auto getDouble ( String const & ) const noexcept (false) -> double;
+        __CDS_Deprecated __CDS_NoDiscard __CDS_MaybeUnused auto getString ( String const & ) const noexcept (false) -> String const &;
+        __CDS_Deprecated __CDS_NoDiscard __CDS_MaybeUnused auto getJSON ( String const & ) const noexcept (false) -> JSON const &;
+        __CDS_Deprecated __CDS_NoDiscard __CDS_MaybeUnused auto getArray ( String const & ) const noexcept (false) -> Array const &;
+        __CDS_Deprecated __CDS_NoDiscard __CDS_MaybeUnused auto getObject ( String const & ) const noexcept (false) -> Object const &;
 
-        auto getString ( String const & ) noexcept (false) -> String &;
-        auto getJSON ( String const & ) noexcept (false) -> JSON &;
-        auto getArray ( String const & ) noexcept (false) -> Array &;
-        __CDS_MaybeUnused auto getObject ( String const & ) noexcept (false) -> Object &;
+        __CDS_Deprecated auto getString ( String const & ) noexcept (false) -> String &;
+        __CDS_Deprecated auto getJSON ( String const & ) noexcept (false) -> JSON &;
+        __CDS_Deprecated auto getArray ( String const & ) noexcept (false) -> Array &;
+        __CDS_Deprecated __CDS_MaybeUnused auto getObject ( String const & ) noexcept (false) -> Object &;
 
-        __CDS_NoDiscard auto toString () const noexcept -> String override {
+        __CDS_Deprecated __CDS_NoDiscard auto toString () const noexcept -> String override {
             String res;
 
             for ( auto & node : this->_nodes ) {
@@ -394,14 +394,14 @@ namespace cds {
             return String().append("{").append(res.replace(static_cast < Index > (res.size()) - 2, 2u, "")).append("}");
         }
 
-        static auto parse(String const &) noexcept -> JSON;
-        static auto load(Path const &) noexcept -> JSON;
-        __CDS_NoDiscard __CDS_OptimalInline auto dump(int indent = 4) const noexcept -> String {
+        __CDS_Deprecated static auto parse(String const &) noexcept -> JSON;
+        __CDS_Deprecated static auto load(Path const &) noexcept -> JSON;
+        __CDS_Deprecated __CDS_NoDiscard __CDS_OptimalInline auto dump(int indent = 4) const noexcept -> String {
             return this->dumpIndented(indent, 0);
         }
 
     private:
-        __CDS_NoDiscard auto dumpIndented (int indent, int count) const noexcept -> String { // NOLINT(misc-no-recursion)
+        __CDS_Deprecated __CDS_NoDiscard auto dumpIndented (int indent, int count) const noexcept -> String { // NOLINT(misc-no-recursion)
             String indentation = String(" ") * (indent * (count));
             String futureIndentation = indentation + String(" ") * indent;
 
@@ -419,7 +419,7 @@ namespace cds {
 
     public:
 
-        __CDS_NoDiscard auto copy () const noexcept -> JSON * override {
+        __CDS_Deprecated __CDS_NoDiscard auto copy () const noexcept -> JSON * override {
             return Memory :: instance().create < JSON > (*this);
         }
     };
@@ -428,12 +428,12 @@ namespace cds {
 
 namespace cds {
 
-    class JSON::Array : public Object {
+    class __CDS_Deprecated JSON::Array : public Object {
     private:
         friend class JSON;
-        LinkedList < JSON::Node > _list;
+        __CDS_Deprecated LinkedList < JSON::Node > _list;
 
-        __CDS_NoDiscard auto dumpIndented (int indent, int count) const noexcept -> String { // NOLINT(misc-no-recursion)
+        __CDS_Deprecated __CDS_NoDiscard auto dumpIndented (int indent, int count) const noexcept -> String { // NOLINT(misc-no-recursion)
             if ( this->_list.empty() ) {
                 return "[]";
             }
@@ -459,16 +459,16 @@ namespace cds {
         }
 
     public:
-        Array () noexcept = default;
-        Array (Array const &) noexcept = default;
-        ~Array () noexcept override = default;
+        __CDS_Deprecated Array () noexcept = default;
+        __CDS_Deprecated Array (Array const &) noexcept = default;
+        __CDS_Deprecated ~Array () noexcept override = default;
 
-        __CDS_OptimalInline Array ( Array && array ) noexcept :
+        __CDS_Deprecated __CDS_OptimalInline Array ( Array && array ) noexcept :
                 _list ( std :: forward < LinkedList < Node > > ( array._list ) ) {
 
         }
 
-        __CDS_OptimalInline auto operator = ( Array const & array ) noexcept -> Array & {
+        __CDS_Deprecated __CDS_OptimalInline auto operator = ( Array const & array ) noexcept -> Array & {
             if ( this == & array ) {
                 return * this;
             }
@@ -478,7 +478,7 @@ namespace cds {
             return * this;
         }
 
-        __CDS_OptimalInline auto operator = ( Array && array ) noexcept -> Array & {
+        __CDS_Deprecated __CDS_OptimalInline auto operator = ( Array && array ) noexcept -> Array & {
             if ( this == & array ) {
                 return * this;
             }
@@ -488,7 +488,7 @@ namespace cds {
             return * this;
         }
 
-        __CDS_OptimalInline auto operator == (Array const & array) const noexcept -> bool {
+        __CDS_Deprecated __CDS_OptimalInline auto operator == (Array const & array) const noexcept -> bool {
             if ( this == & array ) {
                 return true;
             }
@@ -496,7 +496,7 @@ namespace cds {
             return this->_list == array._list;
         }
 
-        __CDS_NoDiscard auto equals (Object const & object) const noexcept -> bool override {
+        __CDS_Deprecated __CDS_NoDiscard auto equals (Object const & object) const noexcept -> bool override {
             if ( this == & object ) {
                 return true;
             }
@@ -509,31 +509,31 @@ namespace cds {
             return this->operator== (*pObject);
         }
 
-        __CDS_NoDiscard auto begin () noexcept -> LinkedList < JSON::Node >::Iterator {
+        __CDS_Deprecated __CDS_NoDiscard auto begin () noexcept -> LinkedList < JSON::Node >::Iterator {
             return this->_list.begin();
         }
 
-        __CDS_NoDiscard auto begin () const noexcept -> LinkedList < JSON::Node >::ConstIterator {
+        __CDS_Deprecated __CDS_NoDiscard auto begin () const noexcept -> LinkedList < JSON::Node >::ConstIterator {
             return this->_list.begin();
         }
 
-        __CDS_NoDiscard auto cbegin () const noexcept -> LinkedList < JSON::Node >::ConstIterator {
+        __CDS_Deprecated __CDS_NoDiscard auto cbegin () const noexcept -> LinkedList < JSON::Node >::ConstIterator {
             return this->_list.cbegin();
         }
 
-        __CDS_NoDiscard auto end () noexcept -> LinkedList < JSON::Node >::Iterator {
+        __CDS_Deprecated __CDS_NoDiscard auto end () noexcept -> LinkedList < JSON::Node >::Iterator {
             return this->_list.end();
         }
 
-        __CDS_NoDiscard auto end () const noexcept -> LinkedList < JSON::Node >::ConstIterator {
+        __CDS_Deprecated __CDS_NoDiscard auto end () const noexcept -> LinkedList < JSON::Node >::ConstIterator {
             return this->_list.end();
         }
 
-        __CDS_NoDiscard auto cend () const noexcept -> LinkedList < JSON::Node >::ConstIterator {
+        __CDS_Deprecated __CDS_NoDiscard auto cend () const noexcept -> LinkedList < JSON::Node >::ConstIterator {
             return this->_list.cend();
         }
 
-        auto put(Index index, JSON::Node const & value) noexcept -> Array & {
+        __CDS_Deprecated auto put(Index index, JSON::Node const & value) noexcept -> Array & {
             if (index > static_cast<Index>(this->_list.size()) ) {
                 index = static_cast<Index> (this->_list.size());
             }
@@ -554,51 +554,51 @@ namespace cds {
             return * this;
         }
 
-        auto put(Index index, bool value) noexcept -> Array & {
+        __CDS_Deprecated auto put(Index index, bool value) noexcept -> Array & {
             return this->put(index, JSON::Node().put(value));
         }
 
-        auto put(Index index, int value) noexcept -> Array & {
+        __CDS_Deprecated auto put(Index index, int value) noexcept -> Array & {
             return this->put(index, JSON::Node().put(value));
         }
 
-        auto put(Index index, long long int value) noexcept -> Array & {
+        __CDS_Deprecated auto put(Index index, long long int value) noexcept -> Array & {
             return this->put(index, JSON::Node().put(value));
         }
 
-        auto put(Index index, float value) noexcept -> Array & {
+        __CDS_Deprecated auto put(Index index, float value) noexcept -> Array & {
             return this->put(index, JSON::Node().put(value));
         }
 
-        auto put(Index index, double value) noexcept -> Array & {
+        __CDS_Deprecated auto put(Index index, double value) noexcept -> Array & {
             return this->put(index, JSON::Node().put(value));
         }
 
-        auto put(Index index, String const & value) noexcept -> Array & {
+        __CDS_Deprecated auto put(Index index, String const & value) noexcept -> Array & {
             return this->put(index, JSON::Node().put(value));
         }
 
-        auto put(Index index, StringLiteral value) noexcept -> Array & {
+        __CDS_Deprecated auto put(Index index, StringLiteral value) noexcept -> Array & {
             return this->put(index, JSON::Node().put(value));
         }
 
-        auto put(Index index, JSON const & value) -> Array & {
+        __CDS_Deprecated auto put(Index index, JSON const & value) -> Array & {
             return this->put(index, JSON::Node().put(value));
         }
 
-        auto put(Index index, Array const & value) -> Array & {
+        __CDS_Deprecated auto put(Index index, Array const & value) -> Array & {
             return this->put(index, JSON::Node().put(value));
         }
 
-        __CDS_NoDiscard __CDS_MaybeUnused __CDS_OptimalInline auto length () const noexcept -> Size {
+        __CDS_Deprecated __CDS_NoDiscard __CDS_MaybeUnused __CDS_OptimalInline auto length () const noexcept -> Size {
             return this->_list.size();
         }
 
-        __CDS_NoDiscard __CDS_MaybeUnused __CDS_OptimalInline auto size () const noexcept -> Size {
+        __CDS_Deprecated __CDS_NoDiscard __CDS_MaybeUnused __CDS_OptimalInline auto size () const noexcept -> Size {
             return this->_list.size();
         }
 
-        __CDS_NoDiscard __CDS_MaybeUnused auto get(Index index) const noexcept(false) -> JSON::Node const & {
+        __CDS_Deprecated __CDS_NoDiscard __CDS_MaybeUnused auto get(Index index) const noexcept(false) -> JSON::Node const & {
             if (index < 0 || index >= static_cast<Index>(this->_list.size()) ) {
                 throw OutOfBoundsException(index, static_cast < Index > (this->_list.size())); // NOLINT(clion-misra-cpp2008-0-1-7)
             }
@@ -606,7 +606,7 @@ namespace cds {
             return this->_list.get(index);
         }
 
-        __CDS_NoDiscard __CDS_MaybeUnused auto get(Index index) noexcept(false) -> JSON::Node & {
+        __CDS_Deprecated __CDS_NoDiscard __CDS_MaybeUnused auto get(Index index) noexcept(false) -> JSON::Node & {
             if (index < 0 || index >= static_cast<Index>(this->_list.size()) ) {
                 throw OutOfBoundsException(index, static_cast < Index > (this->_list.size())); // NOLINT(clion-misra-cpp2008-0-1-7)
             }
@@ -614,51 +614,51 @@ namespace cds {
             return this->_list.get(index);
         }
 
-        __CDS_NoDiscard __CDS_MaybeUnused auto getBoolean(Index index) noexcept(false) -> bool {
+        __CDS_Deprecated __CDS_NoDiscard __CDS_MaybeUnused auto getBoolean(Index index) noexcept(false) -> bool {
             return this->get(index).getBoolean();
         }
 
-        __CDS_NoDiscard __CDS_MaybeUnused auto getInt(Index index) noexcept(false) -> int{
+        __CDS_Deprecated __CDS_NoDiscard __CDS_MaybeUnused auto getInt(Index index) noexcept(false) -> int{
             return this->get(index).getInt();
         }
 
-        __CDS_NoDiscard __CDS_MaybeUnused auto getLong(Index index) noexcept(false) -> long long int{
+        __CDS_Deprecated __CDS_NoDiscard __CDS_MaybeUnused auto getLong(Index index) noexcept(false) -> long long int{
             return this->get(index).getLong();
         }
 
-        __CDS_NoDiscard __CDS_MaybeUnused auto getFloat(Index index) noexcept(false) -> float{
+        __CDS_Deprecated __CDS_NoDiscard __CDS_MaybeUnused auto getFloat(Index index) noexcept(false) -> float{
             return this->get(index).getFloat();
         }
 
-        __CDS_NoDiscard __CDS_MaybeUnused auto getDouble(Index index) noexcept(false) -> double{
+        __CDS_Deprecated __CDS_NoDiscard __CDS_MaybeUnused auto getDouble(Index index) noexcept(false) -> double{
             return this->get(index).getDouble();
         }
 
-        __CDS_NoDiscard __CDS_MaybeUnused auto getString(Index index) const noexcept(false) -> String const &{
+        __CDS_Deprecated __CDS_NoDiscard __CDS_MaybeUnused auto getString(Index index) const noexcept(false) -> String const &{
             return this->get(index).getString();
         }
 
-        __CDS_NoDiscard __CDS_MaybeUnused auto getJSON(Index index) const noexcept(false) -> JSON const &{
+        __CDS_Deprecated __CDS_NoDiscard __CDS_MaybeUnused auto getJSON(Index index) const noexcept(false) -> JSON const &{
             return this->get(index).getJSON();
         }
 
-        __CDS_NoDiscard __CDS_MaybeUnused auto getArray(Index index) const noexcept(false) -> JSON::Array const &{
+        __CDS_Deprecated __CDS_NoDiscard __CDS_MaybeUnused auto getArray(Index index) const noexcept(false) -> JSON::Array const &{
             return this->get(index).getArray();
         }
 
-        __CDS_NoDiscard __CDS_MaybeUnused auto getString(Index index) noexcept(false) -> String &{
+        __CDS_Deprecated __CDS_NoDiscard __CDS_MaybeUnused auto getString(Index index) noexcept(false) -> String &{
             return this->get(index).getString();
         }
 
-        __CDS_NoDiscard __CDS_MaybeUnused auto getJSON(Index index) noexcept(false) -> JSON &{
+        __CDS_Deprecated __CDS_NoDiscard __CDS_MaybeUnused auto getJSON(Index index) noexcept(false) -> JSON &{
             return this->get(index).getJSON();
         }
 
-        __CDS_NoDiscard __CDS_MaybeUnused auto getArray(Index index) noexcept(false) -> JSON::Array &{
+        __CDS_Deprecated __CDS_NoDiscard __CDS_MaybeUnused auto getArray(Index index) noexcept(false) -> JSON::Array &{
             return this->get(index).getArray();
         }
 
-        __CDS_NoDiscard auto toString () const noexcept -> String override {
+        __CDS_Deprecated __CDS_NoDiscard auto toString () const noexcept -> String override {
             String res;
             for ( auto & node : this->_list ) {
                 res += node.stringFormattedData() + ", ";
@@ -671,11 +671,11 @@ namespace cds {
             return String().append("[").append(res.substr(0, static_cast < Index > (res.size()) - 2)).append("]");
         }
 
-        __CDS_NoDiscard auto copy() const noexcept -> Array * override {
+        __CDS_Deprecated __CDS_NoDiscard auto copy() const noexcept -> Array * override {
             return Memory :: instance().create < Array >(* this);
         }
 
-        static auto parse ( String const & data ) noexcept -> Array { // NOLINT(misc-no-recursion)
+        __CDS_Deprecated static auto parse ( String const & data ) noexcept -> Array { // NOLINT(misc-no-recursion)
             constexpr char const * whitespace = " \t\f\r\n";
             Array result;
 
@@ -748,57 +748,57 @@ namespace cds {
 
 namespace cds {
 
-    inline auto JSON::put ( String const & label, bool value ) noexcept -> JSON & {
+    __CDS_Deprecated inline auto JSON::put ( String const & label, bool value ) noexcept -> JSON & {
         (void) this->_nodes.pushBack( JSON::Node().setLabel(label).put(value) );
         return * this;
     }
 
-    inline auto JSON::put ( String const & label, int value ) noexcept -> JSON & {
+    __CDS_Deprecated inline auto JSON::put ( String const & label, int value ) noexcept -> JSON & {
         (void) this->_nodes.pushBack( JSON::Node().setLabel(label).put(value) );
         return * this;
     }
 
-    inline auto JSON::put ( String const & label, long long int value ) noexcept -> JSON & {
+    __CDS_Deprecated inline auto JSON::put ( String const & label, long long int value ) noexcept -> JSON & {
         (void) this->_nodes.pushBack( JSON::Node().setLabel(label).put(value) );
         return * this;
     }
 
-    inline auto JSON::put ( String const & label, float value ) noexcept -> JSON & {
+    __CDS_Deprecated inline auto JSON::put ( String const & label, float value ) noexcept -> JSON & {
         (void) this->_nodes.pushBack( JSON::Node().setLabel(label).put(value) );
         return * this;
     }
 
-    inline auto JSON::put ( String const & label, double value ) noexcept -> JSON & {
+    __CDS_Deprecated inline auto JSON::put ( String const & label, double value ) noexcept -> JSON & {
         (void) this->_nodes.pushBack( JSON::Node().setLabel(label).put(value) );
         return * this;
     }
 
-    inline auto JSON::put ( String const & label, String const & value ) noexcept -> JSON & {
+    __CDS_Deprecated inline auto JSON::put ( String const & label, String const & value ) noexcept -> JSON & {
         (void) this->_nodes.pushBack( JSON::Node().setLabel(label).put(value) );
         return * this;
     }
 
-    inline auto JSON::put ( String const & label, Array const & value ) noexcept -> JSON & {
+    __CDS_Deprecated inline auto JSON::put ( String const & label, Array const & value ) noexcept -> JSON & {
         (void) this->_nodes.pushBack( JSON::Node().setLabel(label).put(value) );
         return * this;
     }
 
-    inline auto JSON::put ( String const & label, JSON const & value ) noexcept -> JSON & {
+    __CDS_Deprecated inline auto JSON::put ( String const & label, JSON const & value ) noexcept -> JSON & {
         (void) this->_nodes.pushBack( JSON::Node().setLabel(label).put(value) );
         return * this;
     }
 
-    inline auto JSON::put ( String const & label, Object const & value ) noexcept -> JSON & {
+    __CDS_Deprecated inline auto JSON::put ( String const & label, Object const & value ) noexcept -> JSON & {
         (void) this->_nodes.pushBack( JSON::Node().setLabel(label).put(value) );
         return * this;
     }
 
-    inline auto JSON::put ( String const & label, StringLiteral value ) noexcept -> JSON & {
+    __CDS_Deprecated inline auto JSON::put ( String const & label, StringLiteral value ) noexcept -> JSON & {
         (void) this->_nodes.pushBack( JSON::Node().setLabel(label).put(value) );
         return * this;
     }
 
-    inline auto JSON::getBoolean ( String const & label ) const noexcept (false) -> bool {
+    __CDS_Deprecated inline auto JSON::getBoolean ( String const & label ) const noexcept (false) -> bool {
         for ( auto & node : this->_nodes ) {
             if (node.getLabel() == label) {
                 return node.getBoolean();
@@ -808,7 +808,7 @@ namespace cds {
         throw KeyException(label);
     }
 
-    inline auto JSON::getInt ( String const & label ) const noexcept (false) -> int {
+    __CDS_Deprecated inline auto JSON::getInt ( String const & label ) const noexcept (false) -> int {
         for ( auto & node : this->_nodes ) {
             if (node.getLabel() == label) {
                 return node.getInt();
@@ -818,7 +818,7 @@ namespace cds {
         throw KeyException(label);
     }
 
-    __CDS_MaybeUnused inline auto JSON::getLong ( String const & label ) const noexcept (false) -> long long int {
+    __CDS_Deprecated __CDS_MaybeUnused inline auto JSON::getLong ( String const & label ) const noexcept (false) -> long long int {
         for ( auto & node : this->_nodes ) {
             if (node.getLabel() == label) {
                 return node.getLong();
@@ -828,7 +828,7 @@ namespace cds {
         throw KeyException(label);
     }
 
-    __CDS_MaybeUnused inline auto JSON::getFloat ( String const & label ) const noexcept (false) -> float {
+    __CDS_Deprecated __CDS_MaybeUnused inline auto JSON::getFloat ( String const & label ) const noexcept (false) -> float {
         for ( auto & node : this->_nodes ) {
             if (node.getLabel() == label) {
                 return node.getFloat();
@@ -838,7 +838,7 @@ namespace cds {
         throw KeyException(label);
     }
 
-    __CDS_MaybeUnused inline auto JSON::getDouble ( String const & label ) const noexcept (false) -> double {
+    __CDS_Deprecated __CDS_MaybeUnused inline auto JSON::getDouble ( String const & label ) const noexcept (false) -> double {
         for ( auto & node : this->_nodes ) {
             if (node.getLabel() == label) {
                 return node.getDouble();
@@ -848,7 +848,7 @@ namespace cds {
         throw KeyException(label);
     }
 
-    inline auto JSON::getString ( String const & label ) const noexcept (false) -> String const & {
+    __CDS_Deprecated inline auto JSON::getString ( String const & label ) const noexcept (false) -> String const & {
         for ( auto & node : this->_nodes ) {
             if (node.getLabel() == label) {
                 return node.getString();
@@ -858,7 +858,7 @@ namespace cds {
         throw KeyException(label);
     }
 
-    inline auto JSON::getJSON ( String const & label ) const noexcept (false) -> JSON const & {
+    __CDS_Deprecated inline auto JSON::getJSON ( String const & label ) const noexcept (false) -> JSON const & {
         for ( auto & node : this->_nodes ) {
             if (node.getLabel() == label) {
                 return node.getJSON();
@@ -868,7 +868,7 @@ namespace cds {
         throw KeyException(label);
     }
 
-    inline auto JSON::getArray ( String const & label ) const noexcept (false) -> Array const & {
+    __CDS_Deprecated inline auto JSON::getArray ( String const & label ) const noexcept (false) -> Array const & {
         for ( auto & node : this->_nodes ) {
             if (node.getLabel() == label) {
                 return node.getArray();
@@ -878,7 +878,7 @@ namespace cds {
         throw KeyException(label);
     }
 
-    inline auto JSON::getObject ( String const & label ) const noexcept (false) -> Object const & {
+    __CDS_Deprecated inline auto JSON::getObject ( String const & label ) const noexcept (false) -> Object const & {
         for ( auto & node : this->_nodes ) {
             if (node.getLabel() == label) {
                 return node.getObject();
@@ -888,7 +888,7 @@ namespace cds {
         throw KeyException(label);
     }
 
-    inline auto JSON::getString ( String const & label ) noexcept (false) -> String & {
+    __CDS_Deprecated inline auto JSON::getString ( String const & label ) noexcept (false) -> String & {
         for ( auto & node : this->_nodes ) {
             if (node.getLabel() == label) {
                 return node.getString();
@@ -898,7 +898,7 @@ namespace cds {
         throw KeyException(label);
     }
 
-    inline auto JSON::getJSON ( String const & label ) noexcept (false) -> JSON & {
+    __CDS_Deprecated inline auto JSON::getJSON ( String const & label ) noexcept (false) -> JSON & {
         for ( auto & node : this->_nodes ) {
             if (node.getLabel() == label) {
                 return node.getJSON();
@@ -908,7 +908,7 @@ namespace cds {
         throw KeyException(label);
     }
 
-    inline auto JSON::getArray ( String const & label ) noexcept (false) -> Array & {
+    __CDS_Deprecated inline auto JSON::getArray ( String const & label ) noexcept (false) -> Array & {
         for ( auto & node : this->_nodes ) {
             if (node.getLabel() == label) {
                 return node.getArray();
@@ -918,7 +918,7 @@ namespace cds {
         throw KeyException(label);
     }
 
-    inline auto JSON::getObject ( String const & label ) noexcept (false) -> Object & {
+    __CDS_Deprecated inline auto JSON::getObject ( String const & label ) noexcept (false) -> Object & {
         for ( auto & node : this->_nodes ) {
             if (node.getLabel() == label) {
                 return node.getObject();
@@ -928,7 +928,7 @@ namespace cds {
         throw KeyException(label);
     }
 
-    inline auto JSON::parse(String const & jsonString) noexcept -> JSON { // NOLINT(misc-no-recursion)
+    __CDS_Deprecated inline auto JSON::parse(String const & jsonString) noexcept -> JSON { // NOLINT(misc-no-recursion)
         constexpr char const * whitespace = " \r\n\t\f";
 
         JSON result;
@@ -1004,13 +1004,13 @@ namespace cds {
         return result;
     }
 
-    inline auto JSON::Node::put ( JSON::Array const & value ) noexcept -> Node & {
+    __CDS_Deprecated inline auto JSON::Node::put ( JSON::Array const & value ) noexcept -> Node & {
         (void) this->clearData();
         this->_pObject = value.copy();
         return * this;
     }
 
-    inline auto JSON::Node::getArray () const noexcept(false) -> JSON::Array const & {
+    __CDS_Deprecated inline auto JSON::Node::getArray () const noexcept(false) -> JSON::Array const & {
         auto pValue = dynamic_cast < JSON::Array * > ( this->_pObject );
         if (pValue == nullptr ) {
             throw TypeException(Array());
@@ -1019,7 +1019,7 @@ namespace cds {
         return * pValue;
     }
 
-    inline auto JSON::Node::getArray () noexcept(false) -> JSON::Array & { // NOLINT(readability-make-member-function-const)
+    __CDS_Deprecated inline auto JSON::Node::getArray () noexcept(false) -> JSON::Array & { // NOLINT(readability-make-member-function-const)
         auto pValue = dynamic_cast < JSON::Array * > ( this->_pObject );
         if (pValue == nullptr ) {
             throw TypeException(Array());
@@ -1035,13 +1035,13 @@ namespace cds {
 
 namespace cds {
 
-    inline auto JSON::load(const Path & path) noexcept -> JSON {
+    __CDS_Deprecated inline auto JSON::load(const Path & path) noexcept -> JSON {
         std::stringstream input;
         input << std::ifstream(path.toString().cStr()).rdbuf();
         return JSON::parse(input.str());
     }
 
-    inline auto JSON::Node::dumpIndented(int indent, int count) const noexcept -> String { // NOLINT(misc-no-recursion)
+    __CDS_Deprecated inline auto JSON::Node::dumpIndented(int indent, int count) const noexcept -> String { // NOLINT(misc-no-recursion)
         String indentation = String(" ") * (indent * count);
 
         auto pObj = dynamic_cast < JSON const * > ( this->_pObject );
@@ -1058,7 +1058,7 @@ namespace cds {
         return String("\"") + this->_label + "\" : " + this->stringFormattedData();
     }
 
-    inline auto JSON::operator == (JSON const & object) const noexcept -> bool {
+    __CDS_Deprecated inline auto JSON::operator == (JSON const & object) const noexcept -> bool {
         if ( this == & object ) {
             return true;
         }
@@ -1066,7 +1066,7 @@ namespace cds {
         return this->_nodes == object._nodes;
     }
 
-    inline JSON::JSON(JSON && json) noexcept {
+    __CDS_Deprecated inline JSON::JSON(JSON && json) noexcept {
         this->_nodes = std :: move ( json._nodes );
     }
 

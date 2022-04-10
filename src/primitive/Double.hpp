@@ -15,6 +15,7 @@ namespace cds {
 
     class Double : public Object {
     private:
+    private:
         double v{0.0f};
     public:
 
@@ -204,6 +205,7 @@ namespace cds {
         }
 
         constexpr operator double() const noexcept { return this->v; } // NOLINT(google-explicit-constructor)
+        constexpr operator float() const noexcept { return static_cast < float > ( this->v ); } // NOLINT(google-explicit-constructor)
         constexpr operator int() const noexcept { return static_cast < int > (this->v); } // NOLINT(google-explicit-constructor)
         __CDS_NoDiscard constexpr auto get() const noexcept -> double { return this->v; }
 

@@ -516,6 +516,7 @@ namespace cds {
         __CDS_MaybeUnused static constexpr bool equalsComparable = isComparableEquals < T, T > :: type :: value;
 
         static constexpr bool isFundamental = typeFundamental < T >();
+        static constexpr bool isPrimitive = isFundamental;
         __CDS_MaybeUnused static constexpr bool isIntegral = std::is_integral < T > :: type :: value;
         static constexpr bool isNumeric = std :: is_arithmetic < T > :: type :: value;
         static constexpr bool isBasicPointer = std :: is_pointer < T > :: type :: value;

@@ -412,6 +412,7 @@ namespace cds {
             return this->operator==(*pMap);
         }
 
+    public:
         __CDS_NoDiscard auto copy () const noexcept -> HashMap < K, V, H > * override {
             return Memory :: instance () .create < HashMap < K, V, H > > ( * this );
         }
