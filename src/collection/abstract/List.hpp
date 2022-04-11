@@ -813,7 +813,7 @@ namespace cds {
             return this->_size == 0u;
         }
 
-        __CDS_NoDiscard auto toString () const noexcept -> String final {
+        __CDS_NoDiscard auto toString () const noexcept -> String override {
             if ( this->empty() ) {
                 return {"[ ]"};
             }

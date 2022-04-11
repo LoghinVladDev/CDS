@@ -231,9 +231,20 @@ namespace cds {
              return {oss.str()};
         }
 
-
-        __CDS_NoDiscard __CDS_cpplang_VirtualConstexpr auto copy () const noexcept -> Pair * override {
+    private:
+        template < typename F = K, typename S = V, EnableIf < Type < F > :: copyConstructible && Type < S > :: copyConstructible > = 0 >
+        __CDS_NoDiscard __CDS_OptimalInline auto _copy () const noexcept -> Pair * {
             return Memory :: instance ().create < Pair > ( * this );
+        }
+
+        template < typename F = K, typename S = V, EnableIf < ! ( Type < F > :: copyConstructible && Type < S > :: copyConstructible ) > = 0 >
+        __CDS_NoDiscard __CDS_OptimalInline auto _copy () const noexcept -> Pair * {
+            return nullptr;
+        }
+
+    public:
+        __CDS_NoDiscard __CDS_cpplang_VirtualConstexpr auto copy () const noexcept -> Pair * override {
+            return this->_copy();
         }
     };
 
