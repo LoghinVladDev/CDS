@@ -193,7 +193,7 @@ namespace cds {
             return this->operator==(*pObject);
         }
 
-        auto clear () noexcept -> void final;
+        auto clear () noexcept -> void override;
         auto makeUnique () noexcept -> void final;
 
         __CDS_MaybeUnused auto indices ( ElementCRef ) const noexcept -> DoubleLinkedList < Index >;

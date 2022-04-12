@@ -580,6 +580,11 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             __CDS_NoDiscard __CDS_OptimalInline auto empty () const noexcept -> bool override {
                 return this->orderedKeys.empty();
             }
+
+            __CDS_OptimalInline auto clear () noexcept -> void override {
+                this-> MapImplementationType :: clear ();
+                this->orderedKeys.clear();
+            }
         };
 
         template < typename ListImplementationType > __CDS_Requires (
@@ -737,6 +742,10 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
             __CDS_NoDiscard __CDS_OptimalInline auto empty () const noexcept -> bool override {
                 return this-> ListImplementationType :: empty ();
+            }
+
+            __CDS_OptimalInline auto clear () noexcept -> void override {
+                this-> ListImplementationType :: clear ();
             }
         };
 

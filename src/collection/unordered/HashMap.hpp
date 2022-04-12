@@ -645,7 +645,7 @@ namespace cds {
             return this->pBuckets[hashCalculator(entry.first())].allocBackGetPtr();
         }
 
-        __CDS_OptionalInline auto clear () noexcept -> void final {
+        __CDS_OptionalInline auto clear () noexcept -> void override {
             for ( Index i = 0; i < hashCalculator.getBoundary(); i++ ) {
                 this->pBuckets[i].clear();
             }
