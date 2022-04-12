@@ -993,6 +993,13 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             return hidden :: impl :: dumpIndented ( array, indent, 0 );
         }
 
+        namespace standard {
+
+            using JsonObject    = json :: JsonObject < json :: hidden :: impl :: JsonBaseMap >;
+            using JsonArray     = json :: JsonArray < json :: hidden :: impl :: JsonBaseList >;
+
+        }
+
     }
 }
 
