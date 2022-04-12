@@ -686,7 +686,7 @@ namespace cds {
             return * this;
         }
 
-        __CDS_NoDiscard __CDS_OptimalInline auto empty() const noexcept -> bool final {
+        __CDS_NoDiscard __CDS_OptimalInline auto empty() const noexcept -> bool override {
             return this->size() == 0;
         }
 

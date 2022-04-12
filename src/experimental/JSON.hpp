@@ -309,13 +309,17 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
                         return this->value->toString();
                     }
+
+                    __CDS_NoDiscard __CDS_OptimalInline auto is ( ElementType t ) const noexcept -> bool {
+                        return this->type == t;
+                    }
                 };
 
-                class JsonElementConstWrapper {
+                class JsonElementConstWrapper : public Object {
                 private:
                     JsonElement const * pElement;
                 public:
-                    constexpr JsonElementConstWrapper ( JsonElement const * pElement ) noexcept : pElement ( pElement ) {
+                    constexpr explicit JsonElementConstWrapper ( JsonElement const * pElement ) noexcept : pElement ( pElement ) {
 
                     }
 
@@ -355,13 +359,54 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
                     template < typename ListImplementationType = hidden :: impl :: JsonBaseList >
                     __CDS_NoDiscard __CDS_OptimalInline auto getArray () const noexcept -> JsonArray < ListImplementationType > const & {
-                        return this->pElement-> template toArray < ListImplementationType > ();
+                        return this->pElement->template toArray < ListImplementationType > ();
+                    }
+
+                    __CDS_NoDiscard __CDS_OptimalInline auto isInt () const noexcept -> bool {
+                        return this->pElement-> is ( ElementType :: Int );
+                    }
+
+                    __CDS_NoDiscard __CDS_OptimalInline auto isLong () const noexcept -> bool {
+                        return this->pElement-> is ( ElementType :: Long );
+                    }
+
+                    __CDS_NoDiscard __CDS_OptimalInline auto isBoolean () const noexcept -> bool {
+                        return this->pElement-> is ( ElementType :: Bool );
+                    }
+
+                    __CDS_NoDiscard __CDS_OptimalInline auto isFloat () const noexcept -> bool {
+                        return this->pElement-> is ( ElementType :: Float );
+                    }
+
+                    __CDS_NoDiscard __CDS_OptimalInline auto isDouble () const noexcept -> bool {
+                        return this->pElement-> is ( ElementType :: Double );
+                    }
+
+                    __CDS_NoDiscard __CDS_OptimalInline auto isString () const noexcept -> bool {
+                        return this->pElement-> is ( ElementType :: String );
+                    }
+
+                    __CDS_NoDiscard __CDS_OptimalInline auto isJson () const noexcept -> bool {
+                        return this->pElement-> is ( ElementType :: Object );
+                    }
+
+                    __CDS_NoDiscard __CDS_OptimalInline auto isArray () const noexcept -> bool {
+                        return this->pElement-> is ( ElementType :: Array );
+                    }
+
+                    __CDS_NoDiscard __CDS_MaybeUnused auto is ( ElementType type ) const noexcept -> bool {
+                        return this->pElement->is ( type );
+                    }
+
+                    __CDS_NoDiscard __CDS_OptimalInline auto toString () const noexcept -> String override {
+                        return this->pElement->toString();
                     }
                 };
             }
         }
 
-        using JsonElement = hidden :: impl :: JsonElement;
+        using JsonElement       = hidden :: impl :: JsonElement;
+        using JsonElementType   = hidden :: impl :: ElementType;
 
         template < typename MapImplementationType > __CDS_Requires (
                 hidden :: impl :: ValidJsonObjectBaseClass < MapImplementationType >
@@ -476,7 +521,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 String result;
 
                 for ( auto const & key : this->orderedKeys ) {
-                    result += R"(")" + key + R"(" : )" + this-> MapImplementationType :: get ( key )->toString ();
+                    result += R"(")" + key + R"(" : )" + this-> MapImplementationType :: get ( key ).toString () + ", ";
                 }
 
                 if ( result.empty() ) {
@@ -505,7 +550,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 }
 
                 __CDS_NoDiscard __CDS_OptimalInline auto operator * () const noexcept -> Pair < String, hidden :: impl :: JsonElementConstWrapper > {
-                    return { * this->baseIterator, hidden :: impl :: JsonElementConstWrapper ( & ( this->pBaseObject->get( * this->baseIterator ) ) ) };
+                    return { * this->baseIterator, hidden :: impl :: JsonElementConstWrapper ( & ( this->pBaseObject->MapImplementationType :: get( * this->baseIterator ) ) ) };
                 }
 
                 __CDS_NoDiscard __CDS_OptimalInline auto operator != ( ConstIterator const & it ) const noexcept -> bool {
@@ -530,6 +575,10 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
             __CDS_NoDiscard __CDS_OptimalInline auto end () const noexcept -> ConstIterator {
                 return ConstIterator ( this->orderedKeys.end(), this );
+            }
+
+            __CDS_NoDiscard __CDS_OptimalInline auto empty () const noexcept -> bool override {
+                return this->orderedKeys.empty();
             }
         };
 
@@ -639,7 +688,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             __CDS_NoDiscard auto toString () const noexcept -> String override {
                 String result;
 
-                for ( auto it = this -> ListImplementationType :: begin(); it != this->ListIteratorType :: ListImplementationType :: end (); ++ it ) {
+                for ( auto it = this -> ListImplementationType :: begin(); it != this-> ListImplementationType :: end (); ++ it ) {
                     result += (* it).toString() + ", ";
                 }
 
@@ -685,6 +734,10 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             __CDS_OptimalInline auto end () const noexcept -> ConstIterator {
                 return ConstIterator ( this-> ListImplementationType :: end () );
             }
+
+            __CDS_NoDiscard __CDS_OptimalInline auto empty () const noexcept -> bool override {
+                return this-> ListImplementationType :: empty ();
+            }
         };
 
         template <
@@ -708,9 +761,9 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                         JsonObject < MapImplementationType >      & json
                 ) noexcept -> void {
                     if ( data.front() == '{' ) {
-                        json.put ( label, parseJson < MapImplementationType > ( data ) );
+                        json.put ( label, parseJson < MapImplementationType, ListImplementationType > ( data ) );
                     } else if ( data.front() == '[' ) {
-                        json.put ( label, parseJsonArray < ListImplementationType > ( data ) );
+                        json.put ( label, parseJsonArray < MapImplementationType, ListImplementationType > ( data ) );
                     } else if ( data.findFirst('"') != String :: INVALID_POS ) {
                         json.put ( label, data.trim ( '"' ) );
                     } else if ( data.findFirst( '.' ) != String :: INVALID_POS ) {
@@ -730,9 +783,9 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                         JsonArray < ListImplementationType >      & array
                 ) noexcept -> void {
                     if ( data.front() == '{' ) {
-                        array.add ( parseJson < MapImplementationType > ( data ) );
+                        array.add ( json :: parseJson < MapImplementationType, ListImplementationType > ( data ) );
                     } else if ( data.front() == '[' ) {
-                        array.add ( parseJsonArray < ListImplementationType > ( data ) );
+                        array.add ( json :: parseJsonArray < MapImplementationType, ListImplementationType > ( data ) );
                     } else if ( data.findFirst('"') != String :: INVALID_POS ) {
                         array.add ( data.trim ( '"' ) );
                     } else if ( data.findFirst( '.' ) != String :: INVALID_POS ) {
@@ -851,13 +904,39 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         namespace hidden { // NOLINT(modernize-concat-nested-namespaces)
             namespace impl {
                 template < typename MapImplementationType = hidden :: impl :: JsonBaseMap >
-                using ObjectIterableValue = decltype ( typename Type < typename JsonObject < MapImplementationType > :: ConstIterator > :: unsafeAddress ()->operator* () );
+                using ObjectIterableValue = decltype ( Type < typename JsonObject < MapImplementationType > :: ConstIterator > :: unsafeAddress ()->operator* () );
+
+                template < typename ListImplementationType = hidden :: impl :: JsonBaseList >
+                using ArrayIterableValue = decltype ( Type < typename JsonArray < ListImplementationType > :: ConstIterator > :: unsafeAddress ()->operator* () );
 
                 template <
                         typename MapImplementationType = hidden :: impl :: JsonBaseMap,
                         typename ListImplementationType = hidden :: impl :: JsonBaseList
                 > __CDS_OptimalInline auto dumpIndented ( ObjectIterableValue < MapImplementationType > const & value, int indent, int depth ) noexcept -> String {
+                    String common = R"(")" + value.first() + "\" : ";
 
+                    if ( value.second().isJson () ) {
+                        return common + "\n" + (" "_s * ( indent * ( depth ) )) +
+                                dumpIndented < MapImplementationType, ListImplementationType > ( value.second().getJson(), indent, depth );
+                    } else if ( value.second().isArray() ) {
+                        return common + "\n" + (" "_s * ( indent * ( depth ) )) +
+                                dumpIndented < MapImplementationType, ListImplementationType > ( value.second().getArray(), indent, depth );
+                    } else {
+                        return common + value.second().toString ();
+                    }
+                }
+
+                template <
+                        typename MapImplementationType = hidden :: impl :: JsonBaseMap,
+                        typename ListImplementationType = hidden :: impl :: JsonBaseList
+                > __CDS_OptimalInline auto dumpIndented ( ArrayIterableValue < ListImplementationType > const & value, int indent, int depth ) noexcept -> String {
+                    if ( value.isJson () ) {
+                        return dumpIndented < MapImplementationType, ListImplementationType > ( value.getJson(), indent, depth );
+                    } else if ( value.isArray() ) {
+                        return dumpIndented < MapImplementationType, ListImplementationType > ( value.getArray(), indent, depth );
+                    } else {
+                        return value.toString ();
+                    }
                 }
 
                 template <
@@ -869,7 +948,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
                     String result = "{\n";
                     for ( auto const & element : object ) {
-                        result += futureIndentation + dumpIndented ( element, depth + 1 ) + ",\n";
+                        result += futureIndentation + dumpIndented < MapImplementationType, ListImplementationType > ( element, indent, depth + 1 ) + ",\n";
                     }
 
                     if ( object.empty () ) {
@@ -877,6 +956,25 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                     }
 
                     return result.replace ( static_cast < Index > (result.size()) - 2, 2U, "\n" ) + indentation + "}";
+                }
+
+                template <
+                        typename MapImplementationType = hidden :: impl :: JsonBaseMap,
+                        typename ListImplementationType = hidden :: impl :: JsonBaseList
+                > __CDS_OptimalInline auto dumpIndented ( JsonArray < ListImplementationType > const & array, int indent, int depth ) noexcept -> String {
+                    String indentation = " "_s * (indent * depth);
+                    String futureIndentation = indentation + " "_s * indent;
+
+                    String result = "[\n";
+                    for ( auto const & element : array ) {
+                        result += futureIndentation + dumpIndented < MapImplementationType, ListImplementationType > ( element, indent, depth + 1 ) + ",\n";
+                    }
+
+                    if ( array.empty () ) {
+                        return "[]";
+                    }
+
+                    return result.replace ( static_cast < Index > (result.size()) - 2, 2U, "\n" ) + indentation + "]";
                 }
             }
         }
@@ -886,6 +984,13 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 typename ListImplementationType = hidden :: impl :: JsonBaseList
         > __CDS_OptimalInline auto dump ( JsonObject < MapImplementationType > const & object, int indent = 4 ) noexcept -> String {
             return hidden :: impl :: dumpIndented ( object, indent, 0 );
+        }
+
+        template <
+                typename MapImplementationType = hidden :: impl :: JsonBaseMap,
+                typename ListImplementationType = hidden :: impl :: JsonBaseList
+        > __CDS_OptimalInline auto dump ( JsonArray < ListImplementationType > const & array, int indent = 4 ) noexcept -> String {
+            return hidden :: impl :: dumpIndented ( array, indent, 0 );
         }
 
     }
