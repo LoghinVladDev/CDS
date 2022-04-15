@@ -150,6 +150,8 @@ namespace cds {
             using Type = R;
         };
 
+#if __CDS_cpplang_TemplatePartialSpecNoexceptFunction_available
+
         template < typename R, typename ... A >
         struct returnOf < R (*) (A ...) noexcept > {
             using Type = R;
@@ -169,6 +171,8 @@ namespace cds {
         struct returnOf < R ( A ... ) noexcept > {
             using Type = R;
         };
+
+#endif
 
         template < typename T >
         struct returnOf < T, std::void_t < decltype ( & T :: operator () ) > > :
@@ -198,6 +202,8 @@ namespace cds {
             using Type = void;
         };
 
+#if __CDS_cpplang_TemplatePartialSpecNoexceptFunction_available
+
         template < typename R, typename ... A >
         struct classOf < R (*) (A ...) noexcept > {
             using Type = void;
@@ -217,6 +223,8 @@ namespace cds {
         struct classOf < R ( A ... ) noexcept > {
             using Type = void;
         };
+
+#endif
 
         template < typename T >
         struct classOf < T, std::void_t < decltype ( & T :: operator () ) > > :
@@ -246,6 +254,8 @@ namespace cds {
             using Type = std :: tuple < A ... >;
         };
 
+#if __CDS_cpplang_TemplatePartialSpecNoexceptFunction_available
+
         template < typename R, typename ... A >
         struct argumentsOf < R (*) (A ...) noexcept > {
             using Type = std :: tuple < A ... >;
@@ -265,6 +275,8 @@ namespace cds {
         struct argumentsOf < R ( A ... ) noexcept > {
             using Type = std :: tuple < A ... >;
         };
+
+#endif
 
         template < typename T >
         struct argumentsOf < T, std::void_t < decltype ( & T :: operator () ) > > :

@@ -22,11 +22,16 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 using JsonCompatibleList    = List < JsonElement >;
                 using JsonBaseList          = Array < JsonElement >;
 
+#if __CDS_cpplang_Concepts_available
+
                 template < typename T >
                 concept ValidJsonObjectBaseClass    = DerivedFrom < T, JsonCompatibleMap >;
 
                 template < typename T >
                 concept ValidJsonArrayBaseClass     = DerivedFrom < T, JsonCompatibleList >;
+
+#endif
+
             }
         }
 
@@ -53,7 +58,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                     Invalid,
                 };
 
-                constexpr auto toString ( ElementType type ) noexcept -> StringLiteral {
+                __CDS_cpplang_ConstexprMultipleReturn auto toString ( ElementType type ) noexcept -> StringLiteral {
                     switch ( type ) {
                         case ElementType :: Object:     return "Object";
                         case ElementType :: Array:      return "Array";
@@ -61,6 +66,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                         case ElementType :: Bool:       return "Bool";
                         case ElementType :: Long:       return "Long";
                         case ElementType :: Float:      return "Float";
+                        default:
                         case ElementType :: Invalid:    return "Invalid";
                     }
                 }
@@ -188,7 +194,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                     constexpr static bool value = AdaptorProperties < T > :: adaptable && ! Type < T > :: isPrimitive && ! ( isSame < T, StringLiteral > () && Type < T > :: isBasicPointer );
                 };
 
-                constexpr auto implicitAdaptPossible ( ElementType from, ElementType to ) noexcept -> bool {
+                __CDS_cpplang_ConstexprMultipleReturn auto implicitAdaptPossible ( ElementType from, ElementType to ) noexcept -> bool {
                     if ( from == ElementType :: Double && to == ElementType :: Long )   return true;
                     if ( from == ElementType :: Long && to == ElementType :: Double )   return true;
                     if ( from == ElementType :: Bool && to == ElementType :: Long )     return true;
@@ -323,7 +329,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
                     }
 
-                    constexpr JsonElementConstWrapper ( JsonElementConstWrapper && obj ) noexcept :
+                    __CDS_cpplang_ConstexprConditioned JsonElementConstWrapper ( JsonElementConstWrapper && obj ) noexcept :
                             pElement ( cds :: exchange ( obj.pElement, nullptr ) ) {
 
                     }
@@ -992,14 +998,14 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 typename MapImplementationType = hidden :: impl :: JsonBaseMap,
                 typename ListImplementationType = hidden :: impl :: JsonBaseList
         > __CDS_OptimalInline auto dump ( JsonObject < MapImplementationType > const & object, int indent = 4 ) noexcept -> String {
-            return hidden :: impl :: dumpIndented ( object, indent, 0 );
+            return hidden :: impl :: dumpIndented < MapImplementationType, ListImplementationType > ( object, indent, 0 );
         }
 
         template <
                 typename MapImplementationType = hidden :: impl :: JsonBaseMap,
                 typename ListImplementationType = hidden :: impl :: JsonBaseList
         > __CDS_OptimalInline auto dump ( JsonArray < ListImplementationType > const & array, int indent = 4 ) noexcept -> String {
-            return hidden :: impl :: dumpIndented ( array, indent, 0 );
+            return hidden :: impl :: dumpIndented < MapImplementationType, ListImplementationType > ( array, indent, 0 );
         }
 
         namespace standard {

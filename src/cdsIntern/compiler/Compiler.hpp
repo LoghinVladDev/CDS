@@ -162,6 +162,8 @@ namespace cds {
 #define __CDS_cpplang_CTAD_available true /* NOLINT(bugprone-reserved-identifier) */
 #define __CDS_cpplang_ConstexprLambda constexpr /* NOLINT(bugprone-reserved-identifier) */
 #define __CDS_cpplang_InlineStaticVariable_available true /* NOLINT(bugprone-reserved-identifier) */
+#define __CDS_cpplang_TemplatePartialSpecNoexceptFunction_available true /* NOLINT(bugprone-reserved-identifier) */
+#define __CDS_cpplang_ConstexprMultipleReturn constexpr /* NOLINT(bugprone-reserved-identifier) */
 
 #define __CDS_cpplang_FunctionAliasNoexcept(_exceptSpec) noexcept(_exceptSpec) /* NOLINT(bugprone-reserved-identifier) */
 
@@ -174,6 +176,8 @@ namespace cds {
 #define __CDS_cpplang_CTAD_available false /* NOLINT(bugprone-reserved-identifier) */
 #define __CDS_cpplang_ConstexprLambda /* NOLINT(bugprone-reserved-identifier) */
 #define __CDS_cpplang_InlineStaticVariable_available false /* NOLINT(bugprone-reserved-identifier) */
+#define __CDS_cpplang_TemplatePartialSpecNoexceptFunction_available false /* NOLINT(bugprone-reserved-identifier) */
+#define __CDS_cpplang_ConstexprMultipleReturn __CDS_OptimalInline /* NOLINT(bugprone-reserved-identifier) */
 
 #define __CDS_cpplang_FunctionAliasNoexcept(_exceptSpec) /* NOLINT(bugprone-reserved-identifier) */
 

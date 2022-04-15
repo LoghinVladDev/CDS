@@ -108,12 +108,12 @@ namespace cds {
                 return this->it.hash();
             }
 
-            template < typename U = C, EnableIf < ! Type < decltype ( Sequence < U > :: Iterator :: it ) > :: objectDerived && Type < decltype ( Type < & Sequence < U > :: Iterator :: it > :: unsafeAddress () -> operator *() ) > :: objectDerived > = 0 >
+            template < typename U = C, EnableIf < ! Type < decltype ( Sequence < U > :: Iterator :: it ) > :: objectDerived && Type < decltype ( Type < decltype ( Sequence < U > :: Iterator :: it ) > :: unsafeAddress () -> operator *() ) > :: objectDerived > = 0 >
             __CDS_NoDiscard auto hash () const noexcept -> Index {
                 return (* this->it).hash();
             }
 
-            template < typename U = C, EnableIf < ! Type < decltype ( Sequence < U > :: Iterator :: it ) > :: objectDerived && ! Type < decltype ( Type < & Sequence < U > :: Iterator :: it > :: unsafeAddress () -> operator *() ) > :: objectDerived > = 0 >
+            template < typename U = C, EnableIf < ! Type < decltype ( Sequence < U > :: Iterator :: it ) > :: objectDerived && ! Type < decltype ( Type < decltype ( Sequence < U > :: Iterator :: it ) > :: unsafeAddress () -> operator *() ) > :: objectDerived > = 0 >
             __CDS_NoDiscard auto hash () const noexcept -> Index {
                 return 0;
             }
@@ -189,12 +189,12 @@ namespace cds {
                 return this->it.hash();
             }
 
-            template < typename U = C, EnableIf < ! Type < decltype ( Sequence < U > :: ConstIterator :: it ) > :: objectDerived && Type < decltype ( Type < & Sequence < U > :: ConstIterator :: it > :: unsafeAddress () -> operator *() ) > :: objectDerived > = 0 >
+            template < typename U = C, EnableIf < ! Type < decltype ( Sequence < U > :: ConstIterator :: it ) > :: objectDerived && Type < decltype ( Type < decltype ( Sequence < U > :: ConstIterator :: it ) > :: unsafeAddress () -> operator *() ) > :: objectDerived > = 0 >
             __CDS_NoDiscard auto hash () const noexcept -> Index {
                 return (* this->it).hash();
             }
 
-            template < typename U = C, EnableIf < ! Type < decltype ( Sequence < U > :: ConstIterator :: it ) > :: objectDerived && ! Type < decltype ( Type < & Sequence < U > :: ConstIterator :: it > :: unsafeAddress () -> operator *() ) > :: objectDerived > = 0 >
+            template < typename U = C, EnableIf < ! Type < decltype ( Sequence < U > :: ConstIterator :: it ) > :: objectDerived && ! Type < decltype ( Type < decltype ( Sequence < U > :: ConstIterator :: it ) > :: unsafeAddress () -> operator *() ) > :: objectDerived > = 0 >
             __CDS_NoDiscard auto hash () const noexcept -> Index {
                 return 0;
             }

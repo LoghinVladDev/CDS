@@ -222,7 +222,7 @@ namespace cds {
             }
 
         public:
-            constexpr explicit HashSetDelegateIterator ( Node ** listArray ) noexcept :
+            __CDS_cpplang_ConstexprConstructorNonEmptyBody explicit HashSetDelegateIterator ( Node ** listArray ) noexcept :
                     DelegateIterator (),
                     _listArray ( listArray ) {
 
@@ -291,7 +291,7 @@ namespace cds {
             }
 
         public:
-            constexpr explicit HashSetDelegateConstIterator ( Node ** listArray ) noexcept :
+            __CDS_cpplang_ConstexprConstructorNonEmptyBody explicit HashSetDelegateConstIterator ( Node ** listArray ) noexcept :
                     DelegateConstIterator (),
                     _listArray ( listArray ) {
 
