@@ -334,37 +334,37 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
                     }
 
-                    __CDS_NoDiscard __CDS_OptimalInline auto getInt () const noexcept -> Integer {
+                    __CDS_NoDiscard __CDS_OptimalInline auto getInt () const noexcept (false) -> Integer {
                         return this->pElement-> template to < int > ();
                     }
 
-                    __CDS_NoDiscard __CDS_OptimalInline auto getLong () const noexcept -> Long {
+                    __CDS_NoDiscard __CDS_OptimalInline auto getLong () const noexcept (false) -> Long {
                         return this->pElement-> template to < long long > ();
                     }
 
-                    __CDS_NoDiscard __CDS_OptimalInline auto getBoolean () const noexcept -> Boolean {
+                    __CDS_NoDiscard __CDS_OptimalInline auto getBoolean () const noexcept (false) -> Boolean {
                         return this->pElement-> template to < bool > ();
                     }
 
-                    __CDS_NoDiscard __CDS_OptimalInline auto getFloat () const noexcept -> Float {
+                    __CDS_NoDiscard __CDS_OptimalInline auto getFloat () const noexcept (false) -> Float {
                         return this->pElement-> template to < float > ();
                     }
 
-                    __CDS_NoDiscard __CDS_OptimalInline auto getDouble () const noexcept -> Double {
+                    __CDS_NoDiscard __CDS_OptimalInline auto getDouble () const noexcept (false) -> Double {
                         return this->pElement-> template to < double > ();
                     }
 
-                    __CDS_NoDiscard __CDS_OptimalInline auto getString () const noexcept -> String const & {
+                    __CDS_NoDiscard __CDS_OptimalInline auto getString () const noexcept (false) -> String const & {
                         return this->pElement-> template to < String > ();
                     }
 
                     template < typename MapImplementationType = hidden :: impl :: JsonBaseMap >
-                    __CDS_NoDiscard __CDS_OptimalInline auto getJson () const noexcept -> JsonObject < MapImplementationType > const & {
+                    __CDS_NoDiscard __CDS_OptimalInline auto getJson () const noexcept (false) -> JsonObject < MapImplementationType > const & {
                         return this->pElement-> template toJson < MapImplementationType > ();
                     }
 
                     template < typename ListImplementationType = hidden :: impl :: JsonBaseList >
-                    __CDS_NoDiscard __CDS_OptimalInline auto getArray () const noexcept -> JsonArray < ListImplementationType > const & {
+                    __CDS_NoDiscard __CDS_OptimalInline auto getArray () const noexcept (false) -> JsonArray < ListImplementationType > const & {
                         return this->pElement->template toArray < ListImplementationType > ();
                     }
 
