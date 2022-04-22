@@ -753,6 +753,10 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             __CDS_OptimalInline auto clear () noexcept -> void override {
                 this-> ListImplementationType :: clear ();
             }
+
+            __CDS_NoDiscard __CDS_OptimalInline auto size () const noexcept -> Size override {
+                return this-> ListImplementationType :: size();
+            }
         };
 
         template <

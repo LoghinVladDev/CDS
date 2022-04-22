@@ -227,7 +227,7 @@ namespace cds {
         struct SharedPointerControlBlock {
             int ownerCount {1}; // NOLINT(clion-misra-cpp2008-11-0-1)
 
-    #if defined CDS_PTR_DEBUG
+#if defined CDS_PTR_DEBUG
 
             constexpr SharedPointerControlBlock() noexcept : ownerCount(1) {
                 std::cout << "Created Shared Pointer Control Block : 0x" << std::hex << reinterpret_cast < AddressValueType > (this) << '\n' << std :: dec;
@@ -237,11 +237,11 @@ namespace cds {
                 std::cout << "Destroyed Shared Pointer Control Block : 0x" << std::hex << reinterpret_cast < AddressValueType > (this) << '\n' << std :: dec;
             }
 
-    #endif
+#endif
 
-    #if __CDS_cpplang_StructBracesInitialization_available == false
+#if __CDS_cpplang_StructBracesInitialization_available == false
             constexpr explicit SharedPointerControlBlock(int ownerCount = 1) noexcept : ownerCount(ownerCount) {}
-    #endif
+#endif
 
         };
 
@@ -455,6 +455,9 @@ namespace cds {
 
         constexpr ForeignPointer( ForeignPointer const & pointer ) noexcept : PointerBase<T>(pointer.pObj) {}
         constexpr ForeignPointer( ForeignPointer && pointer ) noexcept : PointerBase<T>(pointer.release()) {}
+
+        constexpr ForeignPointer ( UniquePointer < T > const & pointer ) noexcept : PointerBase <T> ( pointer.get() ) {}
+        constexpr ForeignPointer ( UniquePointer < T > && ) noexcept = delete;
 
         __CDS_cpplang_VirtualConstexpr auto copy () const noexcept -> ForeignPointer * override {
             return Memory :: instance().create < ForeignPointer > ( * this );

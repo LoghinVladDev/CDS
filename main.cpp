@@ -2,17 +2,28 @@
 
 using namespace cds;
 
+class A {
+public:
+    A () {
+        std :: cout << "Constructed\n";
+    }
+
+    ~A () {
+        std :: cout << "Destructed\n";
+    }
+};
+
+auto f () {
+    obj = HashMap < int, UniquePointer < A > > {
+            { 1, makeUnique < A > () },
+            { 2, makeUnique < A > () }
+    };
+}
+
+auto f2 () {
+
+}
+
 int main () {
-
-    json::JsonObject json;
-
-    for ( auto it = json.begin(); it != json.end(); ++ it ) {
-        auto const & e = it.operator*();
-        decltype ( it.operator*() ) e2;
-    }
-
-    for ( auto const & e : json ) {
-
-    }
 
 }
