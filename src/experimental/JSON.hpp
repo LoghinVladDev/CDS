@@ -8,6 +8,8 @@
 #include <CDS/HashMap>
 #include <CDS/Concepts>
 #include <CDS/Path>
+#include <sstream>
+#include <fstream>
 
 namespace cds { // NOLINT(modernize-concat-nested-namespaces)
     namespace json {
@@ -416,7 +418,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
         template < typename MapImplementationType > __CDS_Requires (
                 hidden :: impl :: ValidJsonObjectBaseClass < MapImplementationType >
-        ) class JsonObject : private MapImplementationType {
+        ) class JsonObject : public MapImplementationType {
 
             static_assert (
                     isDerivedFrom < MapImplementationType, hidden :: impl :: JsonCompatibleMap > :: type :: value,
@@ -595,7 +597,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
         template < typename ListImplementationType > __CDS_Requires (
                 hidden :: impl :: ValidJsonArrayBaseClass < ListImplementationType >
-        ) class JsonArray : private ListImplementationType {
+        ) class JsonArray : public ListImplementationType {
 
             static_assert (
                     isDerivedFrom < ListImplementationType, hidden :: impl :: JsonCompatibleList > :: type :: value,
@@ -745,29 +747,17 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             __CDS_OptimalInline auto end () const noexcept -> ConstIterator {
                 return ConstIterator ( this-> ListImplementationType :: end () );
             }
-
-            __CDS_NoDiscard __CDS_OptimalInline auto empty () const noexcept -> bool override {
-                return this-> ListImplementationType :: empty ();
-            }
-
-            __CDS_OptimalInline auto clear () noexcept -> void override {
-                this-> ListImplementationType :: clear ();
-            }
-
-            __CDS_NoDiscard __CDS_OptimalInline auto size () const noexcept -> Size override {
-                return this-> ListImplementationType :: size();
-            }
         };
 
         template <
                 typename MapImplementationType = hidden :: impl :: JsonBaseMap,
                 typename ListImplementationType = hidden :: impl :: JsonBaseList
-        > __CDS_OptionalInline auto parseJson ( String jsonAsString ) noexcept -> JsonObject < MapImplementationType >;
+        > __CDS_OptionalInline auto parseJson ( String jsonAsString ) noexcept (false) -> JsonObject < MapImplementationType >;
 
         template <
                 typename MapImplementationType = hidden :: impl :: JsonBaseMap,
                 typename ListImplementationType = hidden :: impl :: JsonBaseList
-        > __CDS_OptimalInline auto parseJsonArray ( String ) noexcept -> JsonArray < ListImplementationType >;
+        > __CDS_OptimalInline auto parseJsonArray ( String ) noexcept (false) -> JsonArray < ListImplementationType >;
 
         namespace hidden { // NOLINT(modernize-concat-nested-namespaces)
             namespace impl {
@@ -778,7 +768,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                         String                              const & label,
                         String                              const & data,
                         JsonObject < MapImplementationType >      & json
-                ) noexcept -> void {
+                ) noexcept (false) -> void {
                     if ( data.front() == '{' ) {
                         json.put ( label, parseJson < MapImplementationType, ListImplementationType > ( data ) );
                     } else if ( data.front() == '[' ) {
@@ -800,7 +790,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 > __CDS_OptimalInline auto identifyAndPushBack (
                         String                              const & data,
                         JsonArray < ListImplementationType >      & array
-                ) noexcept -> void {
+                ) noexcept (false) -> void {
                     if ( data.front() == '{' ) {
                         array.add ( json :: parseJson < MapImplementationType, ListImplementationType > ( data ) );
                     } else if ( data.front() == '[' ) {
@@ -821,7 +811,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         template <
                 typename MapImplementationType,
                 typename ListImplementationType
-        > __CDS_OptionalInline auto parseJson ( String jsonAsString ) noexcept -> JsonObject < MapImplementationType > {
+        > __CDS_OptionalInline auto parseJson ( String jsonAsString ) noexcept (false) -> JsonObject < MapImplementationType > {
             constexpr StringLiteral whitespace = " \r\n\t\f";
             JsonObject < MapImplementationType > result;
 
@@ -868,14 +858,14 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         template <
                 typename MapImplementationType = hidden :: impl :: JsonBaseMap,
                 typename ListImplementationType = hidden :: impl :: JsonBaseList
-        > __CDS_OptimalInline auto loadJson ( Path const & path ) noexcept -> JsonObject < MapImplementationType > {
+        > __CDS_OptimalInline auto loadJson ( Path const & path ) noexcept (false) -> JsonObject < MapImplementationType > {
             return parseJson < MapImplementationType, ListImplementationType > ( ( std :: stringstream () << std :: ifstream ( path.toString().cStr() ).rdbuf() ).str() );
         }
 
         template <
                 typename MapImplementationType,
                 typename ListImplementationType
-        > __CDS_OptimalInline auto parseJsonArray ( String arrayAsString ) noexcept -> JsonArray < ListImplementationType > {
+        > __CDS_OptimalInline auto parseJsonArray ( String arrayAsString ) noexcept (false) -> JsonArray < ListImplementationType > {
             constexpr StringLiteral whitespace = " \t\r\n\f";
             JsonArray < ListImplementationType > result;
 
@@ -916,7 +906,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         template <
                 typename MapImplementationType = hidden :: impl :: JsonBaseMap,
                 typename ListImplementationType = hidden :: impl :: JsonBaseList
-        > __CDS_OptimalInline auto loadJsonArray ( Path const & path ) noexcept -> JsonArray < ListImplementationType > {
+        > __CDS_OptimalInline auto loadJsonArray ( Path const & path ) noexcept (false) -> JsonArray < ListImplementationType > {
             return parseJsonArray < MapImplementationType, ListImplementationType > ( ( std :: stringstream () << std :: ifstream ( path.toString().cStr() ).rdbuf() ).str() );
         }
 

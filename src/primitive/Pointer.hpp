@@ -211,6 +211,12 @@ namespace cds {
             return * this;
         }
 
+        template < typename D, EnableIf < isDerivedFrom < RemovePointer < D >, T > :: value > = 0 >
+        __CDS_cpplang_NonConstConstexprMemberFunction auto operator = ( D pointer ) noexcept -> UniquePointer & {
+            this->reset((T *)pointer);
+            return * this;
+        }
+
         __CDS_cpplang_NonConstConstexprMemberFunction auto operator = ( decltype(nullptr) ) noexcept -> UniquePointer & {
             this->reset();
             return * this;

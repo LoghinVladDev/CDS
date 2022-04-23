@@ -399,7 +399,7 @@ namespace cds {
             return true;
         }
 
-        __CDS_NoDiscard auto equals (Object const & object) const noexcept -> bool final {
+        __CDS_NoDiscard auto equals (Object const & object) const noexcept -> bool override {
             if (& object == this ) {
                 return true;
             }
