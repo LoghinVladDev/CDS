@@ -16,13 +16,11 @@ namespace cds {
             virtual ~AbstractDelegateIterator () noexcept = default;
 
         public:
-            virtual auto next () noexcept -> AbstractDelegateIterator & = 0;
+            __CDS_cpplang_ConstexprPureAbstract virtual auto next () noexcept -> AbstractDelegateIterator & = 0;
         public:
-            virtual auto previous () noexcept -> AbstractDelegateIterator & = 0;
+            __CDS_cpplang_ConstexprPureAbstract virtual auto previous () noexcept -> AbstractDelegateIterator & = 0;
         public:
-            virtual auto equals ( AbstractDelegateIterator const & ) const noexcept -> bool = 0;
-        public:
-            virtual auto copy () const noexcept -> AbstractDelegateIterator * = 0;
+            __CDS_cpplang_ConstexprPureAbstract virtual auto equals ( AbstractDelegateIterator const & ) const noexcept -> bool = 0;
 
         public:
             virtual auto valid () const noexcept -> bool = 0;

@@ -90,15 +90,27 @@ public:
     }
 };
 
+#include <vector>
+
 int main () {
 
     cds :: experimental :: Array < DefaultCopyMove > a;
-//    cds :: experimental :: Array < DefaultCopy > b;
-//    cds :: experimental :: Array < DefaultMove > c;
-//    cds :: experimental :: Array < CopyMove > d;
-//    cds :: experimental :: Array < Move > e;
-//    cds :: experimental :: Array < Copy > f;
-//    cds :: experimental :: Array < Default > g;
-//    cds :: experimental :: Array < None > h;
+    cds :: experimental :: Array < DefaultCopy > b;
+    cds :: experimental :: Array < DefaultMove > c;
+    cds :: experimental :: Array < CopyMove > d;
+    cds :: experimental :: Array < Move > e;
+    cds :: experimental :: Array < Copy > f;
+    cds :: experimental :: Array < Default > g;
+    cds :: experimental :: Array < None > h;
+
+    std :: vector < DefaultCopyMove > a1;
+    std :: vector < DefaultCopy > b1;
+    std :: vector < DefaultMove > c1;
+    std :: vector < CopyMove > d1;
+    std :: vector < Move > e1;
+    std :: vector < Copy > f1;
+    std :: vector < Default > g1;
+    std :: vector < None > h1;
+    std :: vector < None > h2 (std::move(h1));
     return 0;
 }

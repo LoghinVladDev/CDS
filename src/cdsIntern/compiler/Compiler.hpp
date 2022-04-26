@@ -93,8 +93,8 @@
 namespace cds {
 
     template < typename T, typename U = T >
-    constexpr auto forward(T & value) noexcept -> T && {
-        return std::forward(value);
+    constexpr auto forward ( typename std :: remove_reference < T > :: type & value ) noexcept -> T && {
+        return std::forward < T > (value);
     }
 
     template<typename T, typename U = T>

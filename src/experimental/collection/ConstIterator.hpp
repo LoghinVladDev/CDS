@@ -13,7 +13,7 @@ namespace cds {
         public:
             constexpr ConstIterator () noexcept = default;
         public:
-            ConstIterator ( ConstIterator const & ) noexcept;
+            __CDS_OptimalInline ConstIterator ( ConstIterator const & ) noexcept;
         public:
             constexpr ConstIterator ( ConstIterator && ) noexcept;
         public:
@@ -22,22 +22,22 @@ namespace cds {
             ~ConstIterator () noexcept override = default;
 
         public:
-            auto operator = ( ConstIterator const & ) noexcept -> ConstIterator &;
+            __CDS_OptimalInline auto operator = ( ConstIterator const & ) noexcept -> ConstIterator &;
         public:
-            auto operator = ( ConstIterator && ) noexcept -> ConstIterator &;
+            __CDS_cpplang_NonConstConstexprMemberFunction auto operator = ( ConstIterator && ) noexcept -> ConstIterator &;
 
         public:
-            auto operator ++ () noexcept -> ConstIterator &;
+            __CDS_cpplang_ConstexprPureAbstract auto operator ++ () noexcept -> ConstIterator &;
         public:
-            auto operator ++ (int) noexcept -> ConstIterator;
+            __CDS_cpplang_ConstexprPureAbstract auto operator ++ (int) noexcept -> ConstIterator;
         public:
-            auto operator -- () noexcept -> ConstIterator &;
+            __CDS_cpplang_ConstexprPureAbstract auto operator -- () noexcept -> ConstIterator &;
         public:
-            auto operator -- (int) noexcept -> ConstIterator;
+            __CDS_cpplang_ConstexprPureAbstract auto operator -- (int) noexcept -> ConstIterator;
         public:
-            auto operator * () const noexcept -> ElementType &;
+            __CDS_cpplang_ConstexprPureAbstract auto operator * () const noexcept -> ElementType const &;
         public:
-            auto operator -> () const noexcept -> ElementType *;
+            __CDS_cpplang_ConstexprOverride auto operator -> () const noexcept -> ElementType const *;
         };
 
     }

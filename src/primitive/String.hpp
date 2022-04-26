@@ -4716,19 +4716,6 @@ namespace cds {
         }
 
         /**
-         * @brief Function used to obtain a copy of this object
-         *
-         * @exceptsafe
-         *
-         * @returns String ptr = Address to a new String containing this object's data
-         *
-         * @test Not Applicable
-         */
-        __CDS_NoDiscard __CDS_OptimalInline auto copy () const noexcept -> String * override {
-            return Memory :: instance().create < String > ( * this );
-        }
-
-        /**
          * @brief Function used to obtain the String representation of this object
          *
          * @exceptsafe

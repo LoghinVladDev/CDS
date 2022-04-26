@@ -87,10 +87,6 @@ namespace cds {
             return this->_message.hash();
         }
 
-        __CDS_NoDiscard auto copy () const noexcept -> Exception * override {
-            return Memory::instance().create < Exception > ( * this );
-        }
-
         __CDS_NoDiscard __CDS_cpplang_VirtualConstexpr auto equals ( Object const & object ) const noexcept -> bool override {
             if ( this == & object ) {
                 return true;

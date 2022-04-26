@@ -5,11 +5,14 @@
 #ifndef __CDS_COLLECTION_ABSTRACT_ITERATOR_HPP__
 #define __CDS_COLLECTION_ABSTRACT_ITERATOR_HPP__
 
-namespace cds {
+namespace cds { // NOLINT(modernize-concat-nested-namespaces)
     namespace experimental {
 
         template < typename T >
         class Collection < T > :: AbstractIterator {
+        private:
+            friend class Collection < T >;
+
         protected:
             ForeignPointer < Collection < T > const >   _pCollection { nullptr };
             UniquePointer < AbstractDelegateIterator >  _pDelegate { nullptr };
@@ -17,7 +20,7 @@ namespace cds {
         protected:
             constexpr AbstractIterator () noexcept = default;
         protected:
-            constexpr AbstractIterator ( AbstractIterator const & ) noexcept;
+            __CDS_OptimalInline AbstractIterator ( AbstractIterator const & ) noexcept;
         protected:
             constexpr AbstractIterator ( AbstractIterator && ) noexcept;
         public:
@@ -29,21 +32,21 @@ namespace cds {
             ) noexcept;
 
         public:
-            constexpr auto of ( Collection < T > const * ) const noexcept -> bool;
+            __CDS_NoDiscard constexpr auto of ( Collection < T > const * ) const noexcept -> bool;
 
         public:
-            auto next () noexcept -> AbstractIterator &;
+            __CDS_cpplang_ConstexprPureAbstract auto next () noexcept -> AbstractIterator &;
         public:
-            auto previous () noexcept -> AbstractIterator &;
+            __CDS_cpplang_ConstexprPureAbstract auto previous () noexcept -> AbstractIterator &;
         public:
-            auto valid () const noexcept -> bool;
+            __CDS_NoDiscard __CDS_OptimalInline auto valid () const noexcept -> bool;
         public:
-            auto equals ( AbstractIterator const & ) const noexcept -> bool;
+            __CDS_cpplang_ConstexprOverride auto equals ( AbstractIterator const & ) const noexcept -> bool;
 
         public:
-            auto operator == ( AbstractIterator const & ) const noexcept -> bool;
+            __CDS_cpplang_ConstexprOverride auto operator == ( AbstractIterator const & ) const noexcept -> bool;
         public:
-            auto operator != ( AbstractIterator const & ) const noexcept -> bool;
+            __CDS_cpplang_ConstexprOverride auto operator != ( AbstractIterator const & ) const noexcept -> bool;
         };
 
     }

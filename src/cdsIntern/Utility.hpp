@@ -111,14 +111,9 @@ namespace cds {
         ~NotImplementedException() noexcept override = default;
     };
 
-    template < typename T, typename SmartPointerType = UniquePointer < T >, EnableIf < Type < T > :: objectDerived > = 0 >
+    template < typename T, typename SmartPointerType >
     __CDS_NoDiscard __CDS_MaybeUnused __CDS_OptimalInline auto copy ( T const & object ) noexcept -> SmartPointerType {
-        return SmartPointerType ( object.copy() );
-    }
-
-    template < typename T, typename SmartPointerType = UniquePointer < T >, EnableIf < ! Type < T > :: objectDerived && Type < T > :: copyConstructible > = 0 >  // NOLINT(clion-misra-cpp2008-5-3-1)
-    __CDS_NoDiscard __CDS_MaybeUnused __CDS_OptimalInline auto copy ( T const & object ) noexcept -> SmartPointerType {
-        return SmartPointerType ( Memory :: instance () . create < T > ( object ) );
+        return SmartPointerType ( copy ( object ) );
     }
 
     template < typename T > 
@@ -129,6 +124,11 @@ namespace cds {
     template < typename T > 
     __CDS_MaybeUnused constexpr auto streamPrint ( std :: ostream & out, T const & object ) noexcept -> std :: ostream & {
         return Type < T > :: streamPrint ( out, object );
+    }
+
+    template < typename T, typename = EnableIf < Type < T > :: copyConstructible > >
+    __CDS_NoDiscard __CDS_OptimalInline auto copy ( T const & obj ) noexcept -> T * {
+        return Memory :: instance().create < T > ( obj );
     }
 
 }

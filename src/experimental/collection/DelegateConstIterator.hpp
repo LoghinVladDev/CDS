@@ -20,11 +20,9 @@ namespace cds {
         public:
             auto previous () noexcept -> DelegateConstIterator & override = 0;
         public:
-            virtual auto value () const noexcept -> ElementType const & = 0;
+            __CDS_cpplang_ConstexprPureAbstract virtual auto value () const noexcept -> ElementType const & = 0;
         public:
-            auto equals ( DelegateConstIterator const & ) const noexcept -> bool override = 0;
-        public:
-            auto copy () const noexcept -> DelegateConstIterator * override = 0;
+            auto equals ( AbstractDelegateIterator const & ) const noexcept -> bool override = 0;
 
         public:
             auto valid () const noexcept -> bool override = 0;

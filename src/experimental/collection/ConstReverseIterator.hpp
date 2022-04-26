@@ -13,7 +13,7 @@ namespace cds {
         public:
             constexpr ConstReverseIterator () noexcept = default;
         public:
-            ConstReverseIterator ( ConstReverseIterator const & ) noexcept;
+            __CDS_OptimalInline ConstReverseIterator ( ConstReverseIterator const & ) noexcept;
         public:
             constexpr ConstReverseIterator ( ConstReverseIterator && ) noexcept;
         public:
@@ -22,22 +22,22 @@ namespace cds {
             ~ConstReverseIterator () noexcept override = default;
 
         public:
-            auto operator = ( ConstReverseIterator const & ) noexcept -> ConstReverseIterator &;
+            __CDS_OptimalInline auto operator = ( ConstReverseIterator const & ) noexcept -> ConstReverseIterator &;
         public:
-            auto operator = ( ConstReverseIterator && ) noexcept -> ConstReverseIterator &;
+            __CDS_cpplang_NonConstConstexprMemberFunction auto operator = ( ConstReverseIterator && ) noexcept -> ConstReverseIterator &;
 
         public:
-            auto operator ++ () noexcept -> ConstReverseIterator &;
+            __CDS_cpplang_ConstexprPureAbstract auto operator ++ () noexcept -> ConstReverseIterator &;
         public:
-            auto operator ++ (int) noexcept -> ConstReverseIterator;
+            __CDS_cpplang_ConstexprPureAbstract auto operator ++ (int) noexcept -> ConstReverseIterator;
         public:
-            auto operator -- () noexcept -> ConstReverseIterator &;
+            __CDS_cpplang_ConstexprPureAbstract auto operator -- () noexcept -> ConstReverseIterator &;
         public:
-            auto operator -- (int) noexcept -> ConstReverseIterator;
+            __CDS_cpplang_ConstexprPureAbstract auto operator -- (int) noexcept -> ConstReverseIterator;
         public:
-            auto operator * () const noexcept -> ElementType &;
+            __CDS_cpplang_ConstexprPureAbstract auto operator * () const noexcept -> ElementType const &;
         public:
-            auto operator -> () const noexcept -> ElementType *;
+            __CDS_cpplang_ConstexprOverride auto operator -> () const noexcept -> ElementType const *;
         };
 
     }

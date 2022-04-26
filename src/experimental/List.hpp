@@ -33,15 +33,15 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         protected:
             using typename Collection < T > :: DelegateConstIterator;
 
-        private:
+        protected:
             Size _size { 0U };
 
         protected:
-            List () noexcept = default;
+            constexpr List () noexcept = default;
         protected:
-            List ( List const & ) noexcept;
+            constexpr List ( List const & ) noexcept;
         protected:
-            List ( List && ) noexcept;
+            constexpr List ( List && ) noexcept;
 
         public:
             ~List () noexcept override = default;
@@ -52,7 +52,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             virtual auto get ( Index ) const noexcept (false) -> ElementType const & = 0;
 
         public:
-            auto equals ( Object const & ) const noexcept -> bool override;
+            __CDS_NoDiscard __CDS_OptimalInline auto equals ( Object const & ) const noexcept -> bool override;
 
         public:
             template < typename ListType, typename V = T, EnableIf < Type < V > :: copyConstructible && isDerivedFrom < ListType, Collection < T > > :: value > = 0 >
@@ -86,9 +86,9 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             auto operator [] ( Index ) const noexcept -> ElementType const &;
 
         public:
-            virtual auto popFront () noexcept (false) -> void;
+            virtual auto popFront () noexcept -> void = 0;
         public:
-            virtual auto popBack () noexcept (false) -> void;
+            virtual auto popBack () noexcept -> void = 0;
 
         public:
             template < typename V = T, typename = EnableIf < Type < V > :: copyConstructible > >
@@ -117,13 +117,16 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             auto prepend ( ElementType && ) noexcept -> ElementType &;
 
         public:
-            virtual auto remove ( Iterator const & ) noexcept -> bool override = 0;
+            virtual auto remove ( Index ) noexcept -> bool = 0;
+
         public:
-            virtual auto remove ( ConstIterator const & ) noexcept -> bool override = 0;
+            auto remove ( Iterator const & ) noexcept -> bool override = 0;
         public:
-            virtual auto remove ( ReverseIterator const & ) noexcept -> bool override = 0;
+            auto remove ( ConstIterator const & ) noexcept -> bool override = 0;
         public:
-            virtual auto remove ( ConstReverseIterator const & ) noexcept -> bool override = 0;
+            auto remove ( ReverseIterator const & ) noexcept -> bool override = 0;
+        public:
+            auto remove ( ConstReverseIterator const & ) noexcept -> bool override = 0;
 
         protected:
             template < typename ComparatorFunction >

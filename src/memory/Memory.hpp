@@ -9,6 +9,10 @@
 
 #include "ArraySizeManager.hpp"
 
+#if ! defined ( __CDS_Memory_ForceDisable )
+#define __CDS_Memory_ForceDisable
+#endif
+
 #if ! defined(__CDS_Memory_CustomManager)
 #define __CDS_Memory_Manager DefaultManager
 #else

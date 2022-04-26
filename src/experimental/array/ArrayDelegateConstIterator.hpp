@@ -5,7 +5,7 @@
 #ifndef __CDS_ARRAY_ARRAY_DELEGATE_CONST_ITERATOR_HPP__
 #define __CDS_ARRAY_ARRAY_DELEGATE_CONST_ITERATOR_HPP__
 
-namespace cds {
+namespace cds { // NOLINT(modernize-concat-nested-namespaces)
     namespace experimental {
 
         template < typename T >
@@ -22,23 +22,21 @@ namespace cds {
         public:
             constexpr ArrayDelegateConstIterator ( ArrayDelegateConstIterator && ) noexcept;
         public:
-            constexpr ~ArrayDelegateConstIterator() noexcept;
+            __CDS_cpplang_ConstexprDestructor ~ArrayDelegateConstIterator() noexcept = default;
 
         public:
-            constexpr auto index () const noexcept -> Index;
+            __CDS_NoDiscard constexpr auto index () const noexcept -> Index;
 
         public:
-            constexpr auto valid () const noexcept -> bool override;
+            __CDS_NoDiscard __CDS_cpplang_ConstexprOverride auto valid () const noexcept -> bool override;
         public:
-            constexpr auto next () noexcept -> ArrayDelegateConstIterator & override;
+            __CDS_cpplang_ConstexprOverride auto next () noexcept -> ArrayDelegateConstIterator & override;
         public:
-            constexpr auto previous () noexcept -> ArrayDelegateConstIterator & override;
+            __CDS_cpplang_ConstexprOverride auto previous () noexcept -> ArrayDelegateConstIterator & override;
         public:
-            constexpr auto value () const noexcept -> ElementType const & override;
+            __CDS_NoDiscard __CDS_cpplang_ConstexprOverride auto value () const noexcept -> ElementType const & override;
         public:
-            constexpr auto equals ( DelegateConstIterator const & ) const noexcept -> bool override;
-        public:
-            auto copy () const noexcept -> ArrayDelegateConstIterator * override;
+            __CDS_NoDiscard __CDS_cpplang_ConstexprOverride auto equals ( AbstractDelegateIterator const & ) const noexcept -> bool override;
         };
 
     }

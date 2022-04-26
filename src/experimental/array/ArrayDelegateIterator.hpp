@@ -22,23 +22,21 @@ namespace cds {
         public:
             constexpr ArrayDelegateIterator ( ArrayDelegateIterator && ) noexcept;
         public:
-            constexpr ~ArrayDelegateIterator() noexcept;
+            __CDS_cpplang_ConstexprDestructor ~ArrayDelegateIterator() noexcept = default;
 
         public:
-            constexpr auto index () const noexcept -> Index;
+            __CDS_NoDiscard constexpr auto index () const noexcept -> Index;
 
         public:
-            constexpr auto valid () const noexcept -> bool override;
+            __CDS_NoDiscard __CDS_cpplang_ConstexprOverride auto valid () const noexcept -> bool override;
         public:
-            constexpr auto next () noexcept -> ArrayDelegateIterator & override;
+            __CDS_cpplang_ConstexprOverride auto next () noexcept -> ArrayDelegateIterator & override;
         public:
-            constexpr auto previous () noexcept -> ArrayDelegateIterator & override;
+            __CDS_cpplang_ConstexprOverride auto previous () noexcept -> ArrayDelegateIterator & override;
         public:
-            constexpr auto value () const noexcept -> ElementType & override;
+            __CDS_NoDiscard __CDS_cpplang_ConstexprOverride auto value () const noexcept -> ElementType & override;
         public:
-            constexpr auto equals ( DelegateIterator const & ) const noexcept -> bool override;
-        public:
-            auto copy () const noexcept -> ArrayDelegateIterator * override;
+            __CDS_NoDiscard __CDS_cpplang_ConstexprOverride auto equals ( AbstractDelegateIterator const & ) const noexcept -> bool override;
         };
 
     }

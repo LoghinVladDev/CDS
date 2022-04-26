@@ -26,14 +26,15 @@ namespace cds {
     protected:
         Pointer mutable pObj {nullptr}; // NOLINT(clion-misra-cpp2008-11-0-1)
 
-    public:
-
+    protected:
         constexpr PointerBase() noexcept = default;
         explicit constexpr PointerBase(Pointer pointer) noexcept : pObj(pointer) {}
 
-        __CDS_cpplang_ConstexprDestructor ~PointerBase() noexcept override = default;
+        template < typename DerivedType, EnableIf < isDerivedFrom < DerivedType, T > :: value > = 0 >
+        explicit constexpr PointerBase(DerivedType pointer) noexcept : pObj ( (T*) pointer ) { }
 
-        __CDS_cpplang_ConstexprPureAbstract auto copy () const noexcept -> PointerBase * override = 0;
+    public:
+        __CDS_cpplang_ConstexprDestructor ~PointerBase() noexcept override = default;
 
         __CDS_cpplang_VirtualConstexpr auto equals ( Object const & object ) const noexcept -> bool final {
             if ( this == & object ) {
@@ -181,12 +182,12 @@ namespace cds {
         constexpr UniquePointer( typename PointerBase<T>::Pointer pointer ) noexcept : PointerBase<T>(pointer) { } // NOLINT(google-explicit-constructor)
 
         constexpr UniquePointer( UniquePointer const & pointer ) noexcept = delete;
+
         __CDS_cpplang_VirtualConstexpr UniquePointer( UniquePointer & pointer ) noexcept : PointerBase<T>(pointer.release()) { }
         __CDS_cpplang_VirtualConstexpr UniquePointer( UniquePointer && pointer ) noexcept : PointerBase<T>(pointer.release()) { }
 
-        __CDS_cpplang_VirtualConstexpr auto copy () const noexcept -> UniquePointer * override {
-            return nullptr;
-        }
+        template < typename DerivedType, EnableIf < isDerivedFrom < DerivedType, T > :: value > = 0 >
+        __CDS_cpplang_VirtualConstexpr UniquePointer ( UniquePointer < DerivedType > && pointer ) noexcept : PointerBase < T > ( pointer.release() ) { } // NOLINT(google-explicit-constructor)
 
         __CDS_cpplang_NonConstConstexprMemberFunction auto operator = ( UniquePointer && pointer ) noexcept -> UniquePointer & {
             if (&pointer == this ) {
@@ -464,10 +465,6 @@ namespace cds {
 
         constexpr ForeignPointer ( UniquePointer < T > const & pointer ) noexcept : PointerBase <T> ( pointer.get() ) {}
         constexpr ForeignPointer ( UniquePointer < T > && ) noexcept = delete;
-
-        __CDS_cpplang_VirtualConstexpr auto copy () const noexcept -> ForeignPointer * override {
-            return Memory :: instance().create < ForeignPointer > ( * this );
-        }
 
         __CDS_cpplang_NonConstConstexprMemberFunction auto operator = ( ForeignPointer const & pointer ) noexcept -> ForeignPointer & {
             if (&pointer == this ) {

@@ -13,7 +13,7 @@ namespace cds {
         public:
             constexpr ReverseIterator () noexcept = default;
         public:
-            ReverseIterator ( ReverseIterator const & ) noexcept;
+            __CDS_OptimalInline ReverseIterator ( ReverseIterator const & ) noexcept;
         public:
             constexpr ReverseIterator ( ReverseIterator && ) noexcept;
         public:
@@ -22,22 +22,22 @@ namespace cds {
             ~ReverseIterator () noexcept override = default;
 
         public:
-            auto operator = ( ReverseIterator const & ) noexcept -> ReverseIterator &;
+            __CDS_OptimalInline auto operator = ( ReverseIterator const & ) noexcept -> ReverseIterator &;
         public:
-            auto operator = ( ReverseIterator && ) noexcept -> ReverseIterator &;
+            __CDS_cpplang_NonConstConstexprMemberFunction auto operator = ( ReverseIterator && ) noexcept -> ReverseIterator &;
 
         public:
-            auto operator ++ () noexcept -> ReverseIterator &;
+            __CDS_cpplang_ConstexprPureAbstract auto operator ++ () noexcept -> ReverseIterator &;
         public:
-            auto operator ++ (int) noexcept -> ReverseIterator;
+            __CDS_cpplang_ConstexprPureAbstract auto operator ++ (int) noexcept -> ReverseIterator;
         public:
-            auto operator -- () noexcept -> ReverseIterator &;
+            __CDS_cpplang_ConstexprPureAbstract auto operator -- () noexcept -> ReverseIterator &;
         public:
-            auto operator -- (int) noexcept -> ReverseIterator;
+            __CDS_cpplang_ConstexprPureAbstract auto operator -- (int) noexcept -> ReverseIterator;
         public:
-            auto operator * () const noexcept -> ElementType &;
+            __CDS_cpplang_ConstexprPureAbstract auto operator * () const noexcept -> ElementType &;
         public:
-            auto operator -> () const noexcept -> ElementType *;
+            __CDS_cpplang_ConstexprOverride auto operator -> () const noexcept -> ElementType *;
         };
 
     }

@@ -12,7 +12,7 @@
 #include <CDS/Function>
 #include <CDS/Pointer>
 
-namespace cds {
+namespace cds { // NOLINT(modernize-concat-nested-namespaces)
     namespace experimental {
 
         template < typename T >
@@ -46,34 +46,40 @@ namespace cds {
         protected:
             constexpr static auto acquireDelegate ( Iterator const & ) noexcept -> DelegateIterator *;
         protected:
-            virtual auto delegateIterator ( DelegateIteratorRequestType ) noexcept -> UniquePointer < DelegateIterator >;
+            constexpr static auto acquireDelegate ( ConstIterator const & ) noexcept -> DelegateConstIterator *;
         protected:
-            virtual auto delegateConstIterator ( DelegateIteratorRequestType ) noexcept -> UniquePointer < DelegateConstIterator >;
+            constexpr static auto acquireDelegate ( ReverseIterator const & ) noexcept -> DelegateIterator *;
+        protected:
+            constexpr static auto acquireDelegate ( ConstReverseIterator const & ) noexcept -> DelegateConstIterator *;
+        protected:
+            virtual auto delegateIterator ( DelegateIteratorRequestType ) noexcept -> UniquePointer < DelegateIterator > = 0;
+        protected:
+            virtual auto delegateConstIterator ( DelegateIteratorRequestType ) const noexcept -> UniquePointer < DelegateConstIterator > = 0;
 
         public:
-            auto begin () noexcept -> Iterator;
+            __CDS_OptimalInline auto begin () noexcept -> Iterator;
         public:
-            auto end () noexcept -> Iterator;
+            __CDS_OptimalInline auto end () noexcept -> Iterator;
         public:
-            auto begin () const noexcept -> ConstIterator;
+            __CDS_OptimalInline auto begin () const noexcept -> ConstIterator;
         public:
-            auto end () const noexcept -> ConstIterator;
+            __CDS_OptimalInline auto end () const noexcept -> ConstIterator;
         public:
-            auto cbegin () const noexcept -> ConstIterator;
+            __CDS_OptimalInline auto cbegin () const noexcept -> ConstIterator;
         public:
-            auto cend () const noexcept -> ConstIterator;
+            __CDS_OptimalInline auto cend () const noexcept -> ConstIterator;
         public:
-            auto rbegin () noexcept -> ReverseIterator;
+            __CDS_OptimalInline auto rbegin () noexcept -> ReverseIterator;
         public:
-            auto rend () noexcept -> ReverseIterator;
+            __CDS_OptimalInline auto rend () noexcept -> ReverseIterator;
         public:
-            auto rbegin () const noexcept -> ConstReverseIterator;
+            __CDS_OptimalInline auto rbegin () const noexcept -> ConstReverseIterator;
         public:
-            auto rend () const noexcept -> ConstReverseIterator;
+            __CDS_OptimalInline auto rend () const noexcept -> ConstReverseIterator;
         public:
-            auto crbegin () const noexcept -> ConstReverseIterator;
+            __CDS_OptimalInline auto crbegin () const noexcept -> ConstReverseIterator;
         public:
-            auto crend () const noexcept -> ConstReverseIterator;
+            __CDS_OptimalInline auto crend () const noexcept -> ConstReverseIterator;
 
         public:
             virtual auto remove ( Iterator const & ) noexcept -> bool = 0;
@@ -287,13 +293,11 @@ namespace cds {
             operator bool () const noexcept;
 
         public:
-            auto toString () const noexcept -> String override = 0;
+            __CDS_NoDiscard auto toString () const noexcept -> String override = 0;
         public:
-            auto hash () const noexcept -> Index override;
+            __CDS_NoDiscard auto hash () const noexcept -> Index override;
         public:
-            auto equals ( Object const & ) const noexcept -> bool override;
-        public:
-            auto copy () const noexcept -> Collection * override = 0;
+            __CDS_NoDiscard auto equals ( Object const & ) const noexcept -> bool override;
 
         protected:
             constexpr Collection () noexcept = default;
@@ -303,9 +307,9 @@ namespace cds {
         public:
             virtual auto clear () noexcept -> void = 0;
         public:
-            virtual auto size () const noexcept -> Size = 0;
+            __CDS_NoDiscard __CDS_cpplang_ConstexprPureAbstract virtual auto size () const noexcept -> Size = 0;
         public:
-            virtual auto empty () const noexcept -> bool;
+            __CDS_NoDiscard __CDS_cpplang_ConstexprPureAbstract virtual auto empty () const noexcept -> bool;
         public:
             virtual auto contains ( ElementType const & ) const noexcept -> bool;
         };
