@@ -27,6 +27,10 @@ namespace cds {
             return 0;
         }
 
+        __CDS_NoDiscard virtual auto copy () const noexcept -> Object * {
+            return nullptr;
+        }
+
         virtual ~Object () noexcept = default;
     };
 

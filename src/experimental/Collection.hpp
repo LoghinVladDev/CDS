@@ -6,13 +6,14 @@
 #define __CDS_EX_COLLECTION_HPP__
 
 #include <CDS/std-types>
-#include <CDS/Object>
+#include <CDS/experimental/Object>
 #include <CDS/Traits>
 #include <CDS/Concepts>
 #include <CDS/Function>
 #include <CDS/Pointer>
 
 namespace cds { // NOLINT(modernize-concat-nested-namespaces)
+
     namespace experimental {
 
         template < typename T >
@@ -44,13 +45,13 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             class ConstReverseIterator;
 
         protected:
-            constexpr static auto acquireDelegate ( Iterator const & ) noexcept -> DelegateIterator *;
+            constexpr static auto acquireDelegate ( Iterator const & ) noexcept -> DelegateIterator const *;
         protected:
-            constexpr static auto acquireDelegate ( ConstIterator const & ) noexcept -> DelegateConstIterator *;
+            constexpr static auto acquireDelegate ( ConstIterator const & ) noexcept -> DelegateConstIterator const *;
         protected:
-            constexpr static auto acquireDelegate ( ReverseIterator const & ) noexcept -> DelegateIterator *;
+            constexpr static auto acquireDelegate ( ReverseIterator const & ) noexcept -> DelegateIterator const *;
         protected:
-            constexpr static auto acquireDelegate ( ConstReverseIterator const & ) noexcept -> DelegateConstIterator *;
+            constexpr static auto acquireDelegate ( ConstReverseIterator const & ) noexcept -> DelegateConstIterator const *;
         protected:
             virtual auto delegateIterator ( DelegateIteratorRequestType ) noexcept -> UniquePointer < DelegateIterator > = 0;
         protected:
@@ -89,6 +90,15 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             virtual auto remove ( ReverseIterator const & ) noexcept -> bool = 0;
         public:
             virtual auto remove ( ConstReverseIterator const & ) noexcept -> bool = 0;
+
+        public:
+            virtual auto remove ( Collection < Iterator > const & ) noexcept -> Size = 0;
+        public:
+            virtual auto remove ( Collection < ConstIterator > const & ) noexcept -> Size = 0;
+        public:
+            virtual auto remove ( Collection < ReverseIterator > const & ) noexcept -> Size = 0;
+        public:
+            virtual auto remove ( Collection < ConstReverseIterator > const & ) noexcept -> Size = 0;
 
         public:
             template < typename Predicate >
@@ -156,7 +166,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         public:
             template < typename Action >
             auto forEach ( Action const & ) const noexcept ( noexcept ( ( * ( ( Action * ) nullptr ) ) ( * ( ( ElementType const * ) nullptr ) ) ) ) -> void __CDS_Requires (
-                    ActionOver < Action, ElementType const >
+                    ActionOver < Action, ElementType >
             );
 
         public:
@@ -173,7 +183,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                     Size                count,
                     Predicate   const & predicate   = [] ( ElementType const & ) noexcept -> bool { return true; }
             ) const noexcept ( noexcept ( ( * ( ( Predicate * ) nullptr ) ) ( * ( ( ElementType const * ) nullptr ) ) ) ) -> bool __CDS_Requires (
-                    PredicateOver < Predicate, ElementType const >
+                    PredicateOver < Predicate, ElementType >
             );
 
         public:
@@ -190,7 +200,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                     Size                count,
                     Predicate   const & predicate   = [] ( ElementType const & ) noexcept -> bool { return true; }
             ) const noexcept ( noexcept ( ( * ( ( Predicate * ) nullptr ) ) ( * ( ( ElementType const * ) nullptr ) ) ) ) -> bool __CDS_Requires (
-                    PredicateOver < Predicate, ElementType const >
+                    PredicateOver < Predicate, ElementType >
             );
 
         public:
@@ -207,7 +217,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                     Size                count,
                     Predicate   const & predicate   = [] ( ElementType const & ) noexcept -> bool { return true; }
             ) const noexcept ( noexcept ( ( * ( ( Predicate * ) nullptr ) ) ( * ( ( ElementType const * ) nullptr ) ) ) ) -> bool __CDS_Requires (
-                    PredicateOver < Predicate, ElementType const >
+                    PredicateOver < Predicate, ElementType >
             );
 
         public:
@@ -224,7 +234,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                     Size                count,
                     Predicate   const & predicate   = [] ( ElementType const & ) noexcept -> bool { return true; }
             ) const noexcept ( noexcept ( ( * ( ( Predicate * ) nullptr ) ) ( * ( ( ElementType const * ) nullptr ) ) ) ) -> bool __CDS_Requires (
-                    PredicateOver < Predicate, ElementType const >
+                    PredicateOver < Predicate, ElementType >
             );
 
         public:
@@ -241,7 +251,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                     Size                count,
                     Predicate   const & predicate   = [] ( ElementType const & ) noexcept -> bool { return true; }
             ) const noexcept ( noexcept ( ( * ( ( Predicate * ) nullptr ) ) ( * ( ( ElementType const * ) nullptr ) ) ) ) -> bool __CDS_Requires (
-                    PredicateOver < Predicate, ElementType const >
+                    PredicateOver < Predicate, ElementType >
             );
 
         public:
@@ -256,7 +266,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             auto count (
                     Predicate   const & predicate   = [] ( ElementType const & ) noexcept -> bool { return true; }
             ) const noexcept ( noexcept ( ( * ( ( Predicate * ) nullptr ) ) ( * ( ( ElementType const * ) nullptr ) ) ) ) -> Size __CDS_Requires (
-                    PredicateOver < Predicate, ElementType const >
+                    PredicateOver < Predicate, ElementType >
             );
 
         public:
@@ -271,7 +281,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             auto any (
                     Predicate   const & predicate   = [] ( ElementType const & ) noexcept -> bool { return true; }
             ) const noexcept ( noexcept ( ( * ( ( Predicate * ) nullptr ) ) ( * ( ( ElementType const * ) nullptr ) ) ) ) -> bool __CDS_Requires (
-                    PredicateOver < Predicate, ElementType const >
+                    PredicateOver < Predicate, ElementType >
             );
 
         public:
@@ -286,11 +296,11 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             auto all (
                     Predicate   const & predicate   = [] ( ElementType const & ) noexcept -> bool { return true; }
             ) const noexcept ( noexcept ( ( * ( ( Predicate * ) nullptr ) ) ( * ( ( ElementType const * ) nullptr ) ) ) ) -> bool __CDS_Requires (
-                    PredicateOver < Predicate, ElementType const >
+                    PredicateOver < Predicate, ElementType >
             );
 
         public:
-            operator bool () const noexcept;
+            __CDS_cpplang_ConstexprPureAbstract operator bool () const noexcept;
 
         public:
             __CDS_NoDiscard auto toString () const noexcept -> String override = 0;

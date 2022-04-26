@@ -90,8 +90,6 @@ public:
     }
 };
 
-#include <vector>
-
 int main () {
 
     cds :: experimental :: Array < DefaultCopyMove > a;
@@ -103,14 +101,34 @@ int main () {
     cds :: experimental :: Array < Default > g;
     cds :: experimental :: Array < None > h;
 
-    std :: vector < DefaultCopyMove > a1;
-    std :: vector < DefaultCopy > b1;
-    std :: vector < DefaultMove > c1;
-    std :: vector < CopyMove > d1;
-    std :: vector < Move > e1;
-    std :: vector < Copy > f1;
-    std :: vector < Default > g1;
-    std :: vector < None > h1;
-    std :: vector < None > h2 (std::move(h1));
+    cds :: experimental :: Array < DefaultCopyMove > const ac;
+    cds :: experimental :: Array < DefaultCopy > const bc;
+    cds :: experimental :: Array < DefaultMove > const cc;
+    cds :: experimental :: Array < CopyMove > const dc;
+    cds :: experimental :: Array < Move > const ec;
+    cds :: experimental :: Array < Copy > const fc;
+    cds :: experimental :: Array < Default > const gc;
+    cds :: experimental :: Array < None > const hc;
+
+    cds :: experimental :: Array < int > arr = { 1, 2, 3, 4, 5 };
+    cds :: experimental :: Array < int > const arrc = { 1, 2, 3, 4, 5 };
+
+    arr.forEach ( [] ( int v ) { v = 3; } );
+    arr.forEach ( [] ( int & v ) { v = 3; } );
+    arr.forEach ( [] ( int const & v ) { (void)v; } );
+    arrc.forEach ( [] ( int v ) { v = 3; } );
+//    arrc.forEach ( [] ( int & v ) { /*v = 3;*/ v; } );
+    arrc.forEach ( [] ( int const & v ) { (void)v; } );
+
+    arr.forEach ( [] ( auto v ) { v = 3; } );
+    arr.forEach ( [] ( auto & v ) { v = 3; } );
+    arr.forEach ( [] ( auto const & v ) { (void)v; } );
+    arrc.forEach ( [] ( auto v ) { v = 3; } );
+    arrc.forEach ( [] ( auto & v ) { /*v = 3;*/ (void)v; } );
+    arrc.forEach ( [] ( auto const & v ) { (void)v; } );
+
+    arrc.forEach ( [] ( auto const & v ) { std :: cout << v << '\n'; } );
+    std :: for_each ( arrc.begin(), arrc.end(), [] ( auto const & v ) { std :: cout << v << '\n'; } );
+
     return 0;
 }

@@ -42,6 +42,8 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             constexpr List ( List const & ) noexcept;
         protected:
             constexpr List ( List && ) noexcept;
+        protected:
+            constexpr List ( Size ) noexcept;
 
         public:
             ~List () noexcept override = default;
@@ -90,31 +92,101 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         public:
             virtual auto popBack () noexcept -> void = 0;
 
+        protected:
+            virtual auto pNewFront () noexcept -> ElementType * & = 0;
+        protected:
+            virtual auto pNewBack () noexcept -> ElementType * & = 0;
+        protected:
+            virtual auto pNewBefore ( Iterator const & ) noexcept -> ElementType * & = 0;
+        protected:
+            virtual auto pNewAfter ( Iterator const & ) noexcept -> ElementType * & = 0;
+        protected:
+            virtual auto pNewBefore ( ConstIterator const & ) noexcept -> ElementType * & = 0;
+        protected:
+            virtual auto pNewAfter ( ConstIterator const & ) noexcept -> ElementType * & = 0;
+        protected:
+            virtual auto pNewBefore ( ReverseIterator const & ) noexcept -> ElementType * & = 0;
+        protected:
+            virtual auto pNewAfter ( ReverseIterator const & ) noexcept -> ElementType * & = 0;
+        protected:
+            virtual auto pNewBefore ( ConstReverseIterator const & ) noexcept -> ElementType * & = 0;
+        protected:
+            virtual auto pNewAfter ( ConstReverseIterator const & ) noexcept -> ElementType * & = 0;
+
         public:
-            template < typename V = T, typename = EnableIf < Type < V > :: copyConstructible > >
+            template < typename V = T, EnableIf < Type < V > :: copyConstructible > = 0 >
             auto pushFront ( ElementType const & ) noexcept -> ElementType &;
         public:
-            template < typename V = T, typename = EnableIf < Type < V > :: moveConstructible > >
+            template < typename V = T, EnableIf < Type < V > :: moveConstructible > = 0 >
             auto pushFront ( ElementType && ) noexcept -> ElementType &;
         public:
-            template < typename V = T, typename = EnableIf < Type < V > :: copyConstructible > >
+            template < typename V = T, EnableIf < Type < V > :: copyConstructible > = 0 >
             auto pushBack ( ElementType const & ) noexcept -> ElementType &;
         public:
-            template < typename V = T, typename = EnableIf < Type < V > :: moveConstructible > >
+            template < typename V = T, EnableIf < Type < V > :: moveConstructible > = 0 >
             auto pushBack ( ElementType && ) noexcept -> ElementType &;
 
         public:
-            template < typename V = T, typename = EnableIf < Type < V > :: copyConstructible > >
-            auto append ( ElementType const & ) noexcept -> ElementType &;
+            template < typename V = T, EnableIf < Type < V > :: copyConstructible > = 0 >
+            auto insertBefore ( Iterator const &, ElementType const & ) noexcept (false) -> ElementType &;
         public:
-            template < typename V = T, typename = EnableIf < Type < V > :: moveConstructible > >
-            auto append ( ElementType && ) noexcept -> ElementType &;
+            template < typename V = T, EnableIf < Type < V > :: moveConstructible > = 0 >
+            auto insertBefore ( Iterator const &, ElementType && ) noexcept (false) -> ElementType &;
         public:
-            template < typename V = T, typename = EnableIf < Type < V > :: copyConstructible > >
-            auto prepend ( ElementType const & ) noexcept -> ElementType &;
+            template < typename V = T, EnableIf < Type < V > :: copyConstructible > = 0 >
+            auto insertAfter ( Iterator const &, ElementType const & ) noexcept (false) -> ElementType &;
         public:
-            template < typename V = T, typename = EnableIf < Type < V > :: moveConstructible > >
-            auto prepend ( ElementType && ) noexcept -> ElementType &;
+            template < typename V = T, EnableIf < Type < V > :: moveConstructible > = 0 >
+            auto insertAfter ( Iterator const &, ElementType && ) noexcept (false) -> ElementType &;
+        public:
+            template < typename V = T, EnableIf < Type < V > :: copyConstructible > = 0 >
+            auto insertBefore ( ConstIterator const &, ElementType const & ) noexcept (false) -> ElementType &;
+        public:
+            template < typename V = T, EnableIf < Type < V > :: moveConstructible > = 0 >
+            auto insertBefore ( ConstIterator const &, ElementType && ) noexcept (false) -> ElementType &;
+        public:
+            template < typename V = T, EnableIf < Type < V > :: copyConstructible > = 0 >
+            auto insertAfter ( ConstIterator const &, ElementType const & ) noexcept (false) -> ElementType &;
+        public:
+            template < typename V = T, EnableIf < Type < V > :: moveConstructible > = 0 >
+            auto insertAfter ( ConstIterator const &, ElementType && ) noexcept (false) -> ElementType &;
+        public:
+            template < typename V = T, EnableIf < Type < V > :: copyConstructible > = 0 >
+            auto insertBefore ( ReverseIterator const &, ElementType const & ) noexcept (false) -> ElementType &;
+        public:
+            template < typename V = T, EnableIf < Type < V > :: moveConstructible > = 0 >
+            auto insertBefore ( ReverseIterator const &, ElementType && ) noexcept (false) -> ElementType &;
+        public:
+            template < typename V = T, EnableIf < Type < V > :: copyConstructible > = 0 >
+            auto insertAfter ( ReverseIterator const &, ElementType const & ) noexcept (false) -> ElementType &;
+        public:
+            template < typename V = T, EnableIf < Type < V > :: moveConstructible > = 0 >
+            auto insertAfter ( ReverseIterator const &, ElementType && ) noexcept (false) -> ElementType &;
+        public:
+            template < typename V = T, EnableIf < Type < V > :: copyConstructible > = 0 >
+            auto insertBefore ( ConstReverseIterator const &, ElementType const & ) noexcept (false) -> ElementType &;
+        public:
+            template < typename V = T, EnableIf < Type < V > :: moveConstructible > = 0 >
+            auto insertBefore ( ConstReverseIterator const &, ElementType && ) noexcept (false) -> ElementType &;
+        public:
+            template < typename V = T, EnableIf < Type < V > :: copyConstructible > = 0 >
+            auto insertAfter ( ConstReverseIterator const &, ElementType const & ) noexcept (false) -> ElementType &;
+        public:
+            template < typename V = T, EnableIf < Type < V > :: moveConstructible > = 0 >
+            auto insertAfter ( ConstReverseIterator const &, ElementType && ) noexcept (false) -> ElementType &;
+
+        public:
+            template < typename V = T, EnableIf < Type < V > :: copyConstructible > = 0 >
+            __CDS_OptimalInline auto append ( ElementType const & ) noexcept -> ElementType &;
+        public:
+            template < typename V = T, EnableIf < Type < V > :: moveConstructible > = 0 >
+            __CDS_OptimalInline auto append ( ElementType && ) noexcept -> ElementType &;
+        public:
+            template < typename V = T, EnableIf < Type < V > :: copyConstructible > = 0 >
+            __CDS_OptimalInline auto prepend ( ElementType const & ) noexcept -> ElementType &;
+        public:
+            template < typename V = T, EnableIf < Type < V > :: moveConstructible > = 0 >
+            __CDS_OptimalInline auto prepend ( ElementType && ) noexcept -> ElementType &;
 
         public:
             virtual auto remove ( Index ) noexcept -> bool = 0;
@@ -127,6 +199,15 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             auto remove ( ReverseIterator const & ) noexcept -> bool override = 0;
         public:
             auto remove ( ConstReverseIterator const & ) noexcept -> bool override = 0;
+
+        public:
+            auto remove ( Collection < Iterator > const & ) noexcept -> Size override = 0;
+        public:
+            auto remove ( Collection < ConstIterator > const & ) noexcept -> Size override = 0;
+        public:
+            auto remove ( Collection < ReverseIterator > const & ) noexcept -> Size override = 0;
+        public:
+            auto remove ( Collection < ConstReverseIterator > const & ) noexcept -> Size override = 0;
 
         protected:
             template < typename ComparatorFunction >

@@ -92,6 +92,8 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
         public:
             auto remove ( Index ) noexcept -> bool override;
+        public:
+            auto remove ( Collection < Index > const & ) noexcept -> Size;
 
         public:
             __CDS_OptimalInline auto remove ( Iterator const & ) noexcept -> bool override;
@@ -103,18 +105,53 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             __CDS_OptimalInline auto remove ( ConstReverseIterator const & ) noexcept -> bool override;
 
         public:
-            auto front () noexcept (false) -> ElementType & override;
+            auto remove ( Collection < Iterator > const & ) noexcept -> Size override;
         public:
-            auto front () const noexcept (false) -> ElementType const & override;
+            auto remove ( Collection < ConstIterator > const & ) noexcept -> Size override;
         public:
-            auto back () noexcept (false) -> ElementType & override;
+            auto remove ( Collection < ReverseIterator > const & ) noexcept -> Size override;
         public:
-            auto back () const noexcept (false) -> ElementType const & override;
+            auto remove ( Collection < ConstReverseIterator > const & ) noexcept -> Size override;
+
+        private:
+            auto pNewBefore ( Index ) noexcept -> ElementType * &;
+        private:
+            auto pNewAfter ( Index ) noexcept -> ElementType * &;
+
+        protected:
+            __CDS_OptimalInline auto pNewFront () noexcept -> ElementType * & override;
+        protected:
+            __CDS_OptimalInline auto pNewBack () noexcept -> ElementType * & override;
+        protected:
+            __CDS_OptimalInline auto pNewBefore ( Iterator const & ) noexcept -> ElementType * & override;
+        protected:
+            __CDS_OptimalInline auto pNewAfter ( Iterator const & ) noexcept -> ElementType * & override;
+        protected:
+            __CDS_OptimalInline auto pNewBefore ( ConstIterator const & ) noexcept -> ElementType * & override;
+        protected:
+            __CDS_OptimalInline auto pNewAfter ( ConstIterator const & ) noexcept -> ElementType * & override;
+        protected:
+            __CDS_OptimalInline auto pNewBefore ( ReverseIterator const & ) noexcept -> ElementType * & override;
+        protected:
+            __CDS_OptimalInline auto pNewAfter ( ReverseIterator const & ) noexcept -> ElementType * & override;
+        protected:
+            __CDS_OptimalInline auto pNewBefore ( ConstReverseIterator const & ) noexcept -> ElementType * & override;
+        protected:
+            __CDS_OptimalInline auto pNewAfter ( ConstReverseIterator const & ) noexcept -> ElementType * & override;
 
         public:
-            auto get ( Index ) noexcept (false) -> ElementType & override;
+            __CDS_NoDiscard __CDS_cpplang_ConstexprOverride auto front () noexcept (false) -> ElementType & override;
         public:
-            auto get ( Index ) const noexcept (false) -> ElementType const & override;
+            __CDS_NoDiscard __CDS_cpplang_ConstexprOverride auto front () const noexcept (false) -> ElementType const & override;
+        public:
+            __CDS_NoDiscard __CDS_cpplang_ConstexprOverride auto back () noexcept (false) -> ElementType & override;
+        public:
+            __CDS_NoDiscard __CDS_cpplang_ConstexprOverride auto back () const noexcept (false) -> ElementType const & override;
+
+        public:
+            __CDS_NoDiscard __CDS_cpplang_ConstexprOverride auto get ( Index ) noexcept (false) -> ElementType & override;
+        public:
+            __CDS_NoDiscard __CDS_cpplang_ConstexprOverride auto get ( Index ) const noexcept (false) -> ElementType const & override;
 
         public:
             __CDS_NoDiscard __CDS_OptimalInline auto equals ( Object const & ) const noexcept -> bool override;

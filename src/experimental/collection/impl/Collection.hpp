@@ -111,22 +111,22 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         }
 
         template < typename T >
-        constexpr auto Collection < T > :: acquireDelegate ( Iterator const & iterator ) noexcept -> DelegateIterator * {
+        constexpr auto Collection < T > :: acquireDelegate ( Iterator const & iterator ) noexcept -> DelegateIterator const * {
             return reinterpret_cast < DelegateIterator * > ( iterator._pDelegate.get() );
         }
 
         template < typename T >
-        constexpr auto Collection < T > :: acquireDelegate ( ConstIterator const & iterator ) noexcept -> DelegateConstIterator * {
+        constexpr auto Collection < T > :: acquireDelegate ( ConstIterator const & iterator ) noexcept -> DelegateConstIterator const * {
             return reinterpret_cast < DelegateConstIterator * > ( iterator._pDelegate.get() );
         }
 
         template < typename T >
-        constexpr auto Collection < T > :: acquireDelegate ( ReverseIterator const & iterator ) noexcept -> DelegateIterator * {
+        constexpr auto Collection < T > :: acquireDelegate ( ReverseIterator const & iterator ) noexcept -> DelegateIterator const * {
             return reinterpret_cast < DelegateIterator * > ( iterator._pDelegate.get() );
         }
 
         template < typename T >
-        constexpr auto Collection < T > :: acquireDelegate ( ConstReverseIterator const & iterator ) noexcept -> DelegateConstIterator * {
+        constexpr auto Collection < T > :: acquireDelegate ( ConstReverseIterator const & iterator ) noexcept -> DelegateConstIterator const * {
             return reinterpret_cast < DelegateConstIterator * > ( iterator._pDelegate.get() );
         }
 
@@ -139,6 +139,313 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             }
 
             return false;
+        }
+
+        template < typename T >
+        template < typename Action >
+        auto Collection < T > :: forEach ( Action const & action ) noexcept ( noexcept ( ( * ( ( Action * ) nullptr ) ) ( * ( ( ElementType * ) nullptr ) ) ) ) -> void __CDS_Requires (
+                ActionOver < Action, ElementType >
+        ) {
+            for ( auto iterator = this->begin(), end = this->end(); iterator != end; ++ iterator ) {
+                action ( * iterator );
+            }
+        }
+
+        template < typename T >
+        template < typename Action >
+        auto Collection < T > :: forEach ( Action const & action ) const noexcept ( noexcept ( ( * ( ( Action * ) nullptr ) ) ( * ( ( ElementType const * ) nullptr ) ) ) ) -> void __CDS_Requires (
+                ActionOver < Action, ElementType >
+        ) {
+            for ( auto iterator = this->begin(), end = this->end(); iterator != end; ++ iterator ) {
+                action ( * iterator );
+            }
+        }
+
+        template < typename T >
+        template < typename Predicate >
+        auto Collection < T > :: some (
+                Size                count,
+                Predicate   const & predicate
+        ) noexcept ( noexcept ( ( * ( ( Predicate * ) nullptr ) ) ( * ( ( ElementType * ) nullptr ) ) ) ) -> bool __CDS_Requires (
+                PredicateOver < Predicate, ElementType >
+        ) {
+
+            Size trueCount = 0ULL;
+            for ( auto iterator = this->begin(), end = this->end(); iterator != end; ++ iterator ) {
+                if ( predicate ( * iterator ) ) {
+                    ++ trueCount;
+                }
+
+                if ( trueCount > count ) {
+                    return false;
+                }
+            }
+
+            return trueCount == count;
+        }
+
+        template < typename T >
+        template < typename Predicate >
+        auto Collection < T > :: some (
+                Size                count,
+                Predicate   const & predicate
+        ) const noexcept ( noexcept ( ( * ( ( Predicate * ) nullptr ) ) ( * ( ( ElementType const * ) nullptr ) ) ) ) -> bool __CDS_Requires (
+                PredicateOver < Predicate, ElementType >
+        ) {
+
+            Size trueCount = 0ULL;
+            for ( auto iterator = this->begin(), end = this->end(); iterator != end; ++ iterator ) {
+                if ( predicate ( * iterator ) ) {
+                    ++ trueCount;
+                }
+
+                if ( trueCount > count ) {
+                    return false;
+                }
+            }
+
+            return trueCount == count;
+        }
+
+        template < typename T >
+        template < typename Predicate >
+        auto Collection < T > :: atLeast (
+                Size                count,
+                Predicate   const & predicate
+        ) noexcept ( noexcept ( ( * ( ( Predicate * ) nullptr ) ) ( * ( ( ElementType * ) nullptr ) ) ) ) -> bool __CDS_Requires (
+                PredicateOver < Predicate, ElementType >
+        ) {
+
+            Size trueCount = 0ULL;
+            for ( auto iterator = this->begin(), end = this->end(); iterator != end; ++ iterator ) {
+                if ( predicate ( * iterator ) ) {
+                    ++ trueCount;
+                }
+
+                if ( trueCount >= count ) {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        template < typename T >
+        template < typename Predicate >
+        auto Collection < T > :: atLeast (
+                Size                count,
+                Predicate   const & predicate
+        ) const noexcept ( noexcept ( ( * ( ( Predicate * ) nullptr ) ) ( * ( ( ElementType const * ) nullptr ) ) ) ) -> bool __CDS_Requires (
+                PredicateOver < Predicate, ElementType >
+        ) {
+
+            Size trueCount = 0ULL;
+            for ( auto iterator = this->begin(), end = this->end(); iterator != end; ++ iterator ) {
+                if ( predicate ( * iterator ) ) {
+                    ++ trueCount;
+                }
+
+                if ( trueCount >= count ) {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        template < typename T >
+        template < typename Predicate >
+        auto Collection < T > :: atMost (
+                Size                count,
+                Predicate   const & predicate
+        ) noexcept ( noexcept ( ( * ( ( Predicate * ) nullptr ) ) ( * ( ( ElementType * ) nullptr ) ) ) ) -> bool __CDS_Requires (
+                PredicateOver < Predicate, ElementType >
+        ) {
+
+            Size trueCount = 0ULL;
+            for ( auto iterator = this->begin(), end = this->end(); iterator != end; ++ iterator ) {
+                if ( predicate ( * iterator ) ) {
+                    ++ trueCount;
+                }
+
+                if ( trueCount > count ) {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
+        template < typename T >
+        template < typename Predicate >
+        auto Collection < T > :: atMost (
+                Size                count,
+                Predicate   const & predicate
+        ) const noexcept ( noexcept ( ( * ( ( Predicate * ) nullptr ) ) ( * ( ( ElementType const * ) nullptr ) ) ) ) -> bool __CDS_Requires (
+                PredicateOver < Predicate, ElementType >
+        ) {
+
+            Size trueCount = 0ULL;
+            for ( auto iterator = this->begin(), end = this->end(); iterator != end; ++ iterator ) {
+                if ( predicate ( * iterator ) ) {
+                    ++ trueCount;
+                }
+
+                if ( trueCount > count ) {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
+        template < typename T >
+        template < typename Predicate >
+        auto Collection < T > :: moreThan (
+                Size                count,
+                Predicate   const & predicate
+        ) noexcept ( noexcept ( ( * ( ( Predicate * ) nullptr ) ) ( * ( ( ElementType * ) nullptr ) ) ) ) -> bool __CDS_Requires (
+                PredicateOver < Predicate, ElementType >
+        ) {
+            return this->atLeast ( count + 1, predicate );
+        }
+
+        template < typename T >
+        template < typename Predicate >
+        auto Collection < T > :: moreThan (
+                Size                count,
+                Predicate   const & predicate
+        ) const noexcept ( noexcept ( ( * ( ( Predicate * ) nullptr ) ) ( * ( ( ElementType const * ) nullptr ) ) ) ) -> bool __CDS_Requires (
+                PredicateOver < Predicate, ElementType >
+        ) {
+            return this->atLeast ( count + 1, predicate );
+        }
+
+        template < typename T >
+        template < typename Predicate >
+        auto Collection < T > :: lessThan (
+                Size                count,
+                Predicate   const & predicate
+        ) noexcept ( noexcept ( ( * ( ( Predicate * ) nullptr ) ) ( * ( ( ElementType * ) nullptr ) ) ) ) -> bool __CDS_Requires (
+                PredicateOver < Predicate, ElementType >
+        ) {
+            return this->atMost ( count - 1, predicate );
+        }
+
+        template < typename T >
+        template < typename Predicate >
+        auto Collection < T > :: lessThan (
+                Size                count,
+                Predicate   const & predicate
+        ) const noexcept ( noexcept ( ( * ( ( Predicate * ) nullptr ) ) ( * ( ( ElementType const * ) nullptr ) ) ) ) -> bool __CDS_Requires (
+                PredicateOver < Predicate, ElementType >
+        ) {
+            return this->atMost ( count - 1, predicate );
+        }
+
+        template < typename T >
+        template < typename Predicate >
+        auto Collection < T > :: count (
+                Predicate const & predicate
+        ) noexcept ( noexcept ( ( * ( ( Predicate * ) nullptr ) ) ( * ( ( ElementType * ) nullptr ) ) ) ) -> Size __CDS_Requires (
+                PredicateOver < Predicate, ElementType >
+        ) {
+            Size trueCount = 0U;
+
+            for ( auto iterator = this->begin(), end = this->end(); iterator != end; ++ iterator ) {
+                if ( predicate ( * iterator ) ) {
+                    ++ trueCount;
+                }
+            }
+
+            return trueCount;
+        }
+
+        template < typename T >
+        template < typename Predicate >
+        auto Collection < T > :: count (
+                Predicate const & predicate
+        ) const noexcept ( noexcept ( ( * ( ( Predicate * ) nullptr ) ) ( * ( ( ElementType const * ) nullptr ) ) ) ) -> Size __CDS_Requires (
+                PredicateOver < Predicate, ElementType >
+        ) {
+            Size trueCount = 0U;
+
+            for ( auto iterator = this->begin(), end = this->end(); iterator != end; ++ iterator ) {
+                if ( predicate ( * iterator ) ) {
+                    ++ trueCount;
+                }
+            }
+
+            return trueCount;
+        }
+
+        template < typename T >
+        template < typename Predicate >
+        auto Collection < T > :: any (
+                Predicate const & predicate
+        ) noexcept ( noexcept ( ( * ( ( Predicate * ) nullptr ) ) ( * ( ( ElementType * ) nullptr ) ) ) ) -> bool __CDS_Requires (
+                PredicateOver < Predicate, ElementType >
+        ) {
+            for ( auto iterator = this->begin(), end = this->end(); iterator != end; ++ iterator ) {
+                if ( predicate ( * iterator ) ) {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        template < typename T >
+        template < typename Predicate >
+        auto Collection < T > :: any (
+                Predicate const & predicate
+        ) const noexcept ( noexcept ( ( * ( ( Predicate * ) nullptr ) ) ( * ( ( ElementType const * ) nullptr ) ) ) ) -> bool __CDS_Requires (
+                PredicateOver < Predicate, ElementType >
+        ) {
+            for ( auto iterator = this->begin(), end = this->end(); iterator != end; ++ iterator ) {
+                if ( predicate ( * iterator ) ) {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        template < typename T >
+        template < typename Predicate >
+        auto Collection < T > :: all (
+                Predicate const & predicate
+        ) noexcept ( noexcept ( ( * ( ( Predicate * ) nullptr ) ) ( * ( ( ElementType * ) nullptr ) ) ) ) -> bool __CDS_Requires (
+                PredicateOver < Predicate, ElementType >
+        ) {
+            for ( auto iterator = this->begin(), end = this->end(); iterator != end; ++ iterator ) {
+                if ( ! predicate ( * iterator ) ) {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
+        template < typename T >
+        template < typename Predicate >
+        auto Collection < T > :: all (
+                Predicate const & predicate
+        ) const noexcept ( noexcept ( ( * ( ( Predicate * ) nullptr ) ) ( * ( ( ElementType const * ) nullptr ) ) ) ) -> bool __CDS_Requires (
+                PredicateOver < Predicate, ElementType >
+        ) {
+            for ( auto iterator = this->begin(), end = this->end(); iterator != end; ++ iterator ) {
+                if ( ! predicate ( * iterator ) ) {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
+        template < typename T >
+        __CDS_cpplang_ConstexprPureAbstract Collection < T > :: operator bool () const noexcept {
+            return ! this->empty();
         }
 
     }
