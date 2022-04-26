@@ -104,8 +104,6 @@ namespace cds {
 
     private:
 
-        auto makeUnique () noexcept -> void override { }
-
         auto remove ( EntryConstReference, Size ) noexcept -> bool override { return false; }
         auto removeLast ( EntryConstReference entry ) noexcept -> bool override { return false; }
         auto removeOf ( const Collection<Entry> &, Size ) noexcept -> bool override { return false; }

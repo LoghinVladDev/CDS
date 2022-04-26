@@ -809,6 +809,8 @@ namespace cds {
         __CDS_NoDiscard __CDS_cpplang_ConstexprPureAbstract virtual auto front () const noexcept (false) -> ElementCRef = 0;
         __CDS_cpplang_ConstexprPureAbstract virtual auto front () noexcept (false) -> ElementRef = 0;
 
+        __CDS_MaybeUnused virtual auto makeUnique () noexcept -> void = 0;
+
         __CDS_NoDiscard __CDS_MaybeUnused __CDS_cpplang_ConstexprOverride auto empty () const noexcept -> bool override {
             return this->_size == 0u;
         }
@@ -821,7 +823,7 @@ namespace cds {
             std::stringstream out;
             out << "[ ";
 
-            for ( const auto & element __CDS_MaybeUnused : (*this) ) {
+            for ( auto const & element __CDS_MaybeUnused : (*this) ) {
                 Type < T > :: streamPrint(out, element ) << ", ";
             }
 

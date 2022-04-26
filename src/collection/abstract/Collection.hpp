@@ -710,7 +710,7 @@ namespace cds {
 
             auto & pObject = this->allocInsertGetPtr(element);
             if (pObject == nullptr ) {
-                pObject = Memory :: instance().create < ElementType > (element);
+                pObject = Memory :: instance().create < ElementType > (std :: forward < ElementType > (element));
             }
 
             __CDS_Collection_OperationalUnlock
@@ -720,7 +720,6 @@ namespace cds {
         virtual auto clear () noexcept -> void = 0;
 
         __CDS_MaybeUnused __CDS_NoDiscard __CDS_cpplang_ConstexprPureAbstract virtual auto size () const noexcept -> Size = 0;
-        __CDS_MaybeUnused virtual auto makeUnique () noexcept -> void = 0;
 
         __CDS_OptionalInline virtual auto contains ( ElementCRef object __CDS_MaybeUnused ) const noexcept -> bool {
 

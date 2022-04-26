@@ -164,7 +164,7 @@ add_executable(
         CDS-dummy
         main.cpp
         ${CDS_HEADERS}
-        src/threading/LockGuard.hpp include/CDS/LockGuard src/experimental/JSON.hpp)
+        src/threading/LockGuard.hpp include/CDS/LockGuard src/experimental/JSON.hpp src/experimental/Map.hpp)
 
 target_link_libraries(
         CDS-dummy
@@ -257,6 +257,7 @@ macro(test_set)
     test_suite(${ARGV0} primitive Sequence)
 
     test_suite(${ARGV0} collection Collection)
+    test_suite(${ARGV0} collection/unordered HashMap)
     test_suite(${ARGV0} collection/unordered Json)
 
     add_executable(

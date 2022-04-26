@@ -50,7 +50,6 @@ namespace cds {
         auto __CDS_OptimalInline removeLastOf ( const std::initializer_list<T> & ) noexcept -> bool final { return false; }
         auto __CDS_OptimalInline removeNotOf ( const std::initializer_list<T> &, Size ) noexcept -> bool final { return false; }
         auto __CDS_OptimalInline removeLastNotOf ( const std::initializer_list<T> & ) noexcept -> bool final { return false; }
-        auto makeUnique () noexcept -> void final { }
 
     public:
         virtual auto remove ( ElementCRef ) noexcept -> bool = 0;

@@ -801,6 +801,7 @@ namespace cds {
             return this->popBack();
         }
 
+        /// remove by using previous & next instead
         for ( auto node = this->_pFront->pNext; node != this->_pBack; node = node->pNext ) { // NOLINT(clion-misra-cpp2008-6-5-2,clion-misra-cpp2008-6-5-4)
             if ( pDelegate->node() == node ) {
                 auto before = node->pPrevious;

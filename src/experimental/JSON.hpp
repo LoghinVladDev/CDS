@@ -2,8 +2,8 @@
 // Created by loghin on 4/9/22.
 //
 
-#ifndef __CDS_JSON_HPP__
-#define __CDS_JSON_HPP__
+#ifndef __CDS_EX_JSON_HPP__
+#define __CDS_EX_JSON_HPP__
 
 #include <CDS/HashMap>
 #include <CDS/Concepts>
@@ -218,7 +218,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                             case ElementType::String:
                             case ElementType::Array:
                             case ElementType::Object:
-                            case ElementType::Invalid:  throw TypeException ( "Invalid Type For Key" );
+                            case ElementType::Invalid:  throw TypeException ( "Invalid Type For K" );
                         }
                     }
 
@@ -1012,4 +1012,4 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
     }
 }
 
-#endif // __CDS_JSON_HPP__
+#endif // __CDS_EX_JSON_HPP__

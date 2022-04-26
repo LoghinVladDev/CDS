@@ -20,7 +20,7 @@
 
 
 auto StringTest::execute() noexcept -> bool {
-    delete Memory::instance().replaceAllocator ( new Memory::LeakDetectionAllocator () );
+//    delete Memory::instance().replaceAllocator ( new Memory::LeakDetectionAllocator () );
 
     bool allOk = true;
     this->logBold("Start of test String....");

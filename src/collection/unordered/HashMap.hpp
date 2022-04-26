@@ -632,6 +632,7 @@ namespace cds {
             return false;
         }
 
+    private:
         auto allocInsertGetPtr (EntryConstReference entry) noexcept -> EntryPointerReference override {
             auto pFront = this->pBuckets[hashCalculator(entry.first())]._pFront;
             while ( pFront != nullptr ) {
@@ -645,6 +646,7 @@ namespace cds {
             return this->pBuckets[hashCalculator(entry.first())].allocBackGetPtr();
         }
 
+    public:
         __CDS_OptionalInline auto clear () noexcept -> void override {
             for ( Index i = 0; i < hashCalculator.getBoundary(); i++ ) {
                 this->pBuckets[i].clear();
