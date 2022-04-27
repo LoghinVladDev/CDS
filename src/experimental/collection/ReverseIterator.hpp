@@ -5,7 +5,7 @@
 #ifndef __CDS_COLLECTION_REVERSE_ITERATOR_HPP__
 #define __CDS_COLLECTION_REVERSE_ITERATOR_HPP__
 
-namespace cds {
+namespace cds { // NOLINT(modernize-concat-nested-namespaces)
     namespace experimental {
 
         template < typename T >

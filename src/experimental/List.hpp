@@ -1,5 +1,5 @@
 //
-// Created by uic70278 on 4/24/2022.
+// Created by loghin on 4/24/2022.
 //
 
 #ifndef __CDS_EX_LIST_HPP__
@@ -43,7 +43,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         protected:
             constexpr List ( List && ) noexcept;
         protected:
-            constexpr List ( Size ) noexcept;
+            constexpr explicit List ( Size ) noexcept;
 
         public:
             ~List () noexcept override = default;

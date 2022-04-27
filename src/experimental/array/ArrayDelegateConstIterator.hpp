@@ -12,7 +12,9 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         class Array < T > :: ArrayDelegateConstIterator : public Array < T > :: DelegateConstIterator {
         private:
             ForeignPointer < Array < T > const >    _pArray     { nullptr };
+        private:
             Index                                   _index      { 0 };
+        private:
             bool                                    _forward    { false };
 
         public:

@@ -1,5 +1,5 @@
 //
-// Created by uic70278 on 4/24/2022.
+// Created by loghin on 4/24/2022.
 //
 
 #ifndef __CDS_EX_ARRAY_HPP__
@@ -65,7 +65,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                     AbstractIterator const &
             ) noexcept;
         public:
-            Array ( InitializerList const & ) noexcept;
+            Array ( InitializerList const & ) noexcept; // NOLINT(google-explicit-constructor)
         public:
             template < typename V = T, typename = EnableIf < Type < V > :: defaultConstructible > >
             explicit Array ( Size ) noexcept;

@@ -1,5 +1,5 @@
 //
-// Created by uic70278 on 4/24/2022.
+// Created by loghin on 4/24/2022.
 //
 
 #ifndef __CDS_EX_COLLECTION_HPP__
@@ -346,5 +346,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 #include "collection/impl/ReverseIterator.hpp"
 #include "collection/impl/ConstReverseIterator.hpp"
 #include "collection/impl/Collection.hpp"
+
+//#include "collection/impl/CollectionDerivedRequired.hpp"
 
 #endif // __CDS_EX_COLLECTION_HPP__

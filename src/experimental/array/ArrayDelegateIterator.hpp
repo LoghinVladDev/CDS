@@ -5,14 +5,16 @@
 #ifndef __CDS_ARRAY_ARRAY_DELEGATE_ITERATOR_HPP__
 #define __CDS_ARRAY_ARRAY_DELEGATE_ITERATOR_HPP__
 
-namespace cds {
+namespace cds { // NOLINT(modernize-concat-nested-namespaces)
     namespace experimental {
 
         template < typename T >
         class Array < T > :: ArrayDelegateIterator : public Array < T > :: DelegateIterator {
         private:
             ForeignPointer < Array < T > >  _pArray     { nullptr };
+        private:
             Index                           _index      { 0 };
+        private:
             bool                            _forward    { false };
 
         public:

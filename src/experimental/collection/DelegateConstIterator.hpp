@@ -5,7 +5,7 @@
 #ifndef __CDS_COLLECTION_DELEGATE_CONST_ITERATOR_HPP__
 #define __CDS_COLLECTION_DELEGATE_CONST_ITERATOR_HPP__
 
-namespace cds {
+namespace cds { // NOLINT(modernize-concat-nested-namespaces)
     namespace experimental {
 
         template < typename T >
@@ -16,16 +16,16 @@ namespace cds {
             ~DelegateConstIterator () noexcept override = default;
 
         public:
-            auto next () noexcept -> DelegateConstIterator & override = 0;
+            __CDS_cpplang_ConstexprPureAbstract auto next () noexcept -> DelegateConstIterator & override = 0;
         public:
-            auto previous () noexcept -> DelegateConstIterator & override = 0;
+            __CDS_cpplang_ConstexprPureAbstract auto previous () noexcept -> DelegateConstIterator & override = 0;
         public:
             __CDS_cpplang_ConstexprPureAbstract virtual auto value () const noexcept -> ElementType const & = 0;
         public:
-            auto equals ( AbstractDelegateIterator const & ) const noexcept -> bool override = 0;
+            __CDS_NoDiscard __CDS_cpplang_ConstexprPureAbstract auto equals ( AbstractDelegateIterator const & ) const noexcept -> bool override = 0;
 
         public:
-            auto valid () const noexcept -> bool override = 0;
+            __CDS_NoDiscard __CDS_cpplang_ConstexprPureAbstract auto valid () const noexcept -> bool override = 0;
         };
 
     }

@@ -1,4 +1,5 @@
 #include <CDS/experimental/Array>
+#include <CDS/experimental/LinkedList>
 
 using namespace cds;
 
@@ -109,6 +110,24 @@ int main () {
     cds :: experimental :: Array < Copy > const fc;
     cds :: experimental :: Array < Default > const gc;
     cds :: experimental :: Array < None > const hc;
+
+    cds :: experimental :: LinkedList < DefaultCopyMove > la;
+    cds :: experimental :: LinkedList < DefaultCopy > lb;
+    cds :: experimental :: LinkedList < DefaultMove > lc;
+    cds :: experimental :: LinkedList < CopyMove > ld;
+    cds :: experimental :: LinkedList < Move > le;
+    cds :: experimental :: LinkedList < Copy > lf;
+    cds :: experimental :: LinkedList < Default > lg;
+    cds :: experimental :: LinkedList < None > lh;
+
+    cds :: experimental :: LinkedList < DefaultCopyMove > const lac;
+    cds :: experimental :: LinkedList < DefaultCopy > const lbc;
+    cds :: experimental :: LinkedList < DefaultMove > const lcc;
+    cds :: experimental :: LinkedList < CopyMove > const ldc;
+    cds :: experimental :: LinkedList < Move > const lec;
+    cds :: experimental :: LinkedList < Copy > const lfc;
+    cds :: experimental :: LinkedList < Default > const lgc;
+    cds :: experimental :: LinkedList < None > const lhc;
 
     cds :: experimental :: Array < int > arr = { 1, 2, 3, 4, 5 };
     cds :: experimental :: Array < int > const arrc = { 1, 2, 3, 4, 5 };
