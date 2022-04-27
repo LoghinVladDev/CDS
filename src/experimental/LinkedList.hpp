@@ -167,6 +167,12 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             auto sequence () const && noexcept -> Sequence < Array < T > const >;
         };
 
+        template < typename T >
+        using SingleLinkedList __CDS_Deprecated = LinkedList < T >;
+
+        template < typename T >
+        using DoubleLinkedList __CDS_Deprecated = LinkedList < T >;
+
     }
 }
 

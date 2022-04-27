@@ -163,6 +163,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             pNode->_pNext->_pPrevious = pNode->_pPrevious;
             Memory :: instance ().destroy ( pNode->_pData );
             Memory :: instance ().destroy ( pNode );
+            -- this->_size;
 
             return true;
         }
@@ -184,7 +185,6 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             }
 
             ++ this->_size;
-
             return newNode->_pData = nullptr;
         }
 
@@ -205,7 +205,6 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             }
 
             ++ this->_size;
-
             return newNode->_pData = nullptr;
         }
 
@@ -278,6 +277,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             pMutableNode->_pPrevious->_pNext    = pNewNode;
             pMutableNode->_pPrevious            = pNewNode;
 
+            ++ this->_size;
             return pNewNode->_pData = nullptr;
         }
 
@@ -291,7 +291,295 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             pMutableNode->_pNext->_pPrevious    = pNewNode;
             pMutableNode->_pNext                = pNewNode;
 
+            ++ this->_size;
             return pNewNode->_pData = nullptr;
+        }
+
+        template < typename T >
+        __CDS_OptimalInline auto LinkedList < T > :: delegateIterator ( DelegateIteratorRequestType requestType ) noexcept -> UniquePointer < DelegateIterator > {
+            switch ( requestType ) {
+                case DelegateIteratorRequestType :: ForwardBegin:
+                    return Memory :: instance().create < LinkedListDelegateIterator > ( this->_pFront, true );
+                case DelegateIteratorRequestType :: ForwardEnd:
+                    return Memory :: instance().create < LinkedListDelegateIterator > ( nullptr, true );
+                case DelegateIteratorRequestType :: BackwardBegin:
+                    return Memory :: instance().create < LinkedListDelegateIterator > ( this->_pBack, false );
+                case DelegateIteratorRequestType :: BackwardEnd:
+                    return Memory :: instance().create < LinkedListDelegateIterator > ( nullptr, false );
+            }
+        }
+
+        template < typename T >
+        __CDS_OptimalInline auto LinkedList < T > :: delegateConstIterator ( DelegateIteratorRequestType requestType ) const noexcept -> UniquePointer < DelegateConstIterator > {
+            switch ( requestType ) {
+                case DelegateIteratorRequestType :: ForwardBegin:
+                    return Memory :: instance().create < LinkedListDelegateConstIterator > ( this->_pFront, true );
+                case DelegateIteratorRequestType :: ForwardEnd:
+                    return Memory :: instance().create < LinkedListDelegateConstIterator > ( nullptr, true );
+                case DelegateIteratorRequestType :: BackwardBegin:
+                    return Memory :: instance().create < LinkedListDelegateConstIterator > ( this->_pBack, false );
+                case DelegateIteratorRequestType :: BackwardEnd:
+                    return Memory :: instance().create < LinkedListDelegateConstIterator > ( nullptr, false );
+            }
+        }
+
+        template < typename T >
+        auto LinkedList < T > :: remove ( Collection < Iterator > const & iterators ) noexcept -> Size {
+            LinkedList < void const * > nodes;
+
+            for ( auto iterator = iterators.begin(), end = iterators.end(); iterator != end; ++ iterator ) {
+                auto pNode = reinterpret_cast < LinkedListDelegateIterator const * > ( Collection < T > :: acquireDelegate ( * iterator ) )->node();
+                if ( pNode != nullptr ) {
+                    nodes.pushBack ( reinterpret_cast < void const * > ( pNode ) );
+                }
+            }
+
+            return this->remove ( reinterpret_cast < LinkedList < Node const * > const & > ( nodes ) );
+        }
+
+        template < typename T >
+        auto LinkedList < T > :: remove ( Collection < ConstIterator > const & iterators ) noexcept -> Size {
+            LinkedList < void const * > nodes;
+
+            for ( auto iterator = iterators.begin(), end = iterators.end(); iterator != end; ++ iterator ) {
+                auto pNode = reinterpret_cast < LinkedListDelegateConstIterator const * > ( Collection < T > :: acquireDelegate ( * iterator ) )->node();
+                if ( pNode != nullptr ) {
+                    nodes.pushBack ( reinterpret_cast < void const * > ( pNode ) );
+                }
+            }
+
+            return this->remove ( reinterpret_cast < LinkedList < Node const * > const & > ( nodes ) );
+        }
+
+        template < typename T >
+        auto LinkedList < T > :: remove ( Collection < ReverseIterator > const & iterators ) noexcept -> Size {
+            LinkedList < void const * > nodes;
+
+            for ( auto iterator = iterators.begin(), end = iterators.end(); iterator != end; ++ iterator ) {
+                auto pNode = reinterpret_cast < LinkedListDelegateIterator const * > ( Collection < T > :: acquireDelegate ( * iterator ) )->node();
+                if ( pNode != nullptr ) {
+                    nodes.pushBack ( reinterpret_cast < void const * > ( pNode ) );
+                }
+            }
+
+            return this->remove ( reinterpret_cast < LinkedList < Node const * > const & > ( nodes ) );
+        }
+
+        template < typename T >
+        auto LinkedList < T > :: remove ( Collection < ConstReverseIterator > const & iterators ) noexcept -> Size {
+            LinkedList < void const * > nodes;
+
+            for ( auto iterator = iterators.begin(), end = iterators.end(); iterator != end; ++ iterator ) {
+                auto pNode = reinterpret_cast < LinkedListDelegateConstIterator const * > ( Collection < T > :: acquireDelegate ( * iterator ) )->node();
+                if ( pNode != nullptr ) {
+                    nodes.pushBack ( reinterpret_cast < void const * > ( pNode ) );
+                }
+            }
+
+            return this->remove ( reinterpret_cast < LinkedList < Node const * > const & > ( nodes ) );
+        }
+
+        template < typename T >
+        auto LinkedList < T > :: remove ( Collection < Node const * > const & nodes ) noexcept -> Size {
+            Size removedCount = 0ULL;
+
+            while ( nodes.contains ( this->_pFront ) ) {
+                auto pNode                  = this->_pFront;
+                this->_pFront               = this->_pFront->_pNext;
+
+                if ( this->_pFront != nullptr ) {
+                    this->_pFront->_pPrevious = nullptr;
+                } else {
+                    this->_pBack = nullptr;
+                }
+
+                Memory :: instance ().destroy ( pNode->_pData );
+                Memory :: instance ().destroy ( pNode );
+
+                -- this->_size;
+                ++ removedCount;
+            }
+
+            while ( nodes.contains ( this->_pBack ) ) {
+                auto pNode                  = this->_pBack;
+                this->_pBack                = this->_pBack->_pPrevious;
+
+                if ( this->_pBack != nullptr ) {
+                    this->_pBack->_pNext = nullptr;
+                } else {
+                    this->_pFront = nullptr;
+                }
+
+                Memory :: instance ().destroy ( pNode->_pData );
+                Memory :: instance ().destroy ( pNode );
+
+                -- this->_size;
+                ++ removedCount;
+            }
+
+            if ( this->size() < 2 ) {
+                return removedCount;
+            }
+
+            auto pNode = this->_pFront->_pNext;
+            while ( pNode != nullptr && pNode->_pNext != nullptr ) {
+                while ( nodes.contains ( pNode ) ) {
+                    auto pNext      = pNode->_pNext;
+                    auto pPrevious  = pNode->_pPrevious;
+
+                    pNode->_pNext->_pPrevious = pPrevious;
+                    pNode->_pPrevious->_pNext = pNext;
+
+                    Memory :: instance().destroy ( pNode->_pData );
+                    Memory :: instance().destroy ( pNode );
+
+                    pNode = pNext;
+
+                    -- this->_size;
+                    ++ removedCount;
+                }
+
+                pNode = pNode->_pNext;
+            }
+
+            return removedCount;
+        }
+
+        template < typename T >
+        auto LinkedList < T > :: popFront () noexcept -> void {
+            if ( this->empty () ) {
+                return;
+            }
+
+            this->_size --;
+
+            auto node = this->_pFront;
+
+            if ( this->_size == 0ULL ) {
+                this->_pFront   = nullptr;
+                this->_pBack    = nullptr;
+
+                Memory :: instance().destroy ( node->_pData );
+                Memory :: instance().destroy ( node );
+                return;
+            }
+
+            this->_pFront = this->_pFront->_pNext;
+            Memory :: instance().destroy ( node->_pData );
+            Memory :: instance().destroy ( node );
+            this->_pFront->_pPrevious = nullptr;
+        }
+
+        template < typename T >
+        auto LinkedList < T > :: popBack () noexcept -> void {
+            if ( this->empty () ) {
+                return;
+            }
+
+            this->_size --;
+
+            auto node = this->_pBack;
+
+            if ( this->_size == 0ULL ) {
+                this->_pBack = nullptr;
+                this->_pFront = nullptr;
+
+                Memory :: instance().destroy ( node->_pData );
+                Memory :: instance().destroy ( node );
+                return;
+            }
+
+            this->_pBack = this->_pBack->_pPrevious;
+            Memory :: instance().destroy ( node->_pData );
+            Memory :: instance().destroy ( node );
+            this->_pBack->_pNext = nullptr;
+        }
+
+        template < typename T >
+        auto LinkedList < T > :: remove ( Index index ) noexcept -> bool {
+            if (index < 0 || index >= this->size() ) {
+                return false;
+            }
+
+            if ( index == 0 ) {
+                this->popFront();
+                return true;
+            }
+
+            if ( index == this->size() - 1 ) {
+                this->popBack();
+                return true;
+            }
+
+            auto current = this->_pFront;
+            Index currentIndex = 1;
+
+            while ( current->_pNext != nullptr && currentIndex < index ) {
+                current = current->_pNext;
+                currentIndex ++;
+            }
+
+            auto toRemove = current->_pNext;
+
+            current->_pNext->_pNext->_pPrevious = current;
+            current->_pNext = current->_pNext->_pNext;
+
+            Memory :: instance().destroy ( toRemove->_pData );
+            Memory :: instance().destroy ( toRemove );
+
+            return true;
+        }
+
+        template < typename T >
+        auto LinkedList < T > :: makeUnique () noexcept -> void {
+            Node * pNewHead = nullptr;
+            Node * pNewLast = nullptr;
+
+            Node * pHead    = this->_pFront;
+
+            static auto listContains = [](
+                    Node              * pList,
+                    ElementType const & element
+            ) noexcept -> bool {
+                while ( pList != nullptr ) {
+                    if ( Type < T > :: compare ( element, * pList->_pData ) ) {
+                        return true;
+                    }
+
+                    pList = pList->_pNext;
+                }
+
+                return false;
+            };
+
+            while ( pHead != nullptr ) {
+                if ( ! listContains ( pNewHead, * pHead->_pData ) ) {
+                    if ( pNewHead == nullptr ) {
+
+                        pNewHead                        = Memory :: instance().create < Node > ();
+
+                        pNewHead->_pData                = cds :: exchange ( pHead->_pData, nullptr );
+                        pNewHead->_pNext                = nullptr;
+                        pNewHead->_pPrevious            = nullptr;
+
+                        pNewLast                        = pNewHead;
+                    } else {
+
+                        pNewLast->_pNext                = Memory :: instance().create < Node > ();
+
+                        pNewLast->_pNext->_pData        = cds :: exchange ( pHead->_pData, nullptr );
+                        pNewLast->_pNext->_pNext        = nullptr;
+                        pNewLast->_pNext->_pPrevious    = pNewLast;
+                    }
+                }
+
+                pHead = pHead->_pNext;
+            }
+
+            this->clear();
+
+            this->_pFront = pNewHead;
+            this->_pBack  = pNewLast;
         }
 
     }
