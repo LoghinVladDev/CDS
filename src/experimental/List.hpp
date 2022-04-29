@@ -56,6 +56,9 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         public:
             __CDS_NoDiscard __CDS_OptimalInline auto equals ( Object const & ) const noexcept -> bool override;
 
+        protected:
+            __CDS_OptimalInline auto pNewInsert () noexcept -> ElementType * & override;
+
         public:
             template < typename ListType, typename V = T, EnableIf < Type < V > :: copyConstructible && isDerivedFrom < ListType, Collection < T > > :: value > = 0 >
             auto sub ( Index, Index, ListType & ) const noexcept (false) -> ListType &;
@@ -63,29 +66,29 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             template < typename ListType, typename V = T, EnableIf < Type < V > :: copyConstructible && isDerivedFrom < ListType, Collection < T > > :: value > = 0 >
             auto sub ( Index, Index ) const noexcept (false) -> ListType;
         public:
-            template < template < typename ... > typename ListType, typename V = T, EnableIf < Type < V > :: copyConstructible > = 0 >
-            auto sub ( Index, Index, ListType < ElementType > & ) const noexcept (false) -> ListType < ElementType > &;
+            template < template < typename ... > typename ListType, typename V = T, EnableIf < Type < V > :: copyConstructible && isDerivedFrom < ListType < T >, Collection < T > > :: value > = 0 >
+            __CDS_OptimalInline auto sub ( Index, Index, ListType < ElementType > & ) const noexcept (false) -> ListType < ElementType > &;
         public:
-            template < template < typename ... > typename ListType, typename V = T, EnableIf < Type < V > :: copyConstructible > = 0 >
-            auto sub ( Index, Index ) const noexcept (false) -> ListType < ElementType >;
+            template < template < typename ... > typename ListType, typename V = T, EnableIf < Type < V > :: copyConstructible && isDerivedFrom < ListType < T >, Collection < T > > :: value > = 0 >
+            __CDS_OptimalInline  auto sub ( Index, Index ) const noexcept (false) -> ListType < ElementType >;
 
         public:
-            template < typename ListType, typename = EnableIf < isDerivedFrom < ListType, Collection < T > > :: value > >
+            template < typename ListType, EnableIf < isDerivedFrom < ListType, Collection < Index > > :: value > = 0 >
             auto indices ( ElementType const &, ListType & ) const noexcept -> ListType &;
         public:
-            template < typename ListType, typename = EnableIf < isDerivedFrom < ListType, Collection < T > > :: value > >
+            template < typename ListType, EnableIf < isDerivedFrom < ListType, Collection < Index > > :: value > = 0 >
             auto indices ( ElementType const & ) const noexcept -> ListType;
         public:
-            template < template < typename ... > typename ListType >
-            auto indices ( ElementType const &, ListType < Index > & ) const noexcept -> ListType < Index > &;
+            template < template < typename ... > typename ListType, EnableIf < isDerivedFrom < ListType < Index >, Collection < Index > > :: value > = 0 >
+            __CDS_OptimalInline auto indices ( ElementType const &, ListType < Index > & ) const noexcept -> ListType < Index > &;
         public:
-            template < template < typename ... > typename ListType >
-            auto indices ( ElementType const & ) const noexcept -> ListType < Index >;
+            template < template < typename ... > typename ListType, EnableIf < isDerivedFrom < ListType < Index >, Collection < Index > > :: value > = 0 >
+            __CDS_OptimalInline auto indices ( ElementType const & ) const noexcept -> ListType < Index >;
 
         public:
-            auto operator [] ( Index ) noexcept (false) -> ElementType &;
+            __CDS_OptimalInline auto operator [] ( Index ) noexcept (false) -> ElementType &;
         public:
-            auto operator [] ( Index ) const noexcept -> ElementType const &;
+            __CDS_OptimalInline auto operator [] ( Index ) const noexcept (false) -> ElementType const &;
 
         public:
             virtual auto popFront () noexcept -> void = 0;
@@ -217,7 +220,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             auto static quickSortPartition ( Iterator const &, Iterator const &, ComparatorFunction const & ) noexcept -> Iterator;
         public:
             template < typename ComparatorFunction = Function < bool ( ElementType const &, ElementType const & ) > >
-            auto sort ( ComparatorFunction const & = [] ( ElementType const & a, ElementType const & b ) { return a < b; } ) noexcept -> void;
+            __CDS_OptimalInline auto sort ( ComparatorFunction const & = [] ( ElementType const & a, ElementType const & b ) { return a < b; } ) noexcept -> void;
 
         public:
             __CDS_NoDiscard constexpr auto size () const noexcept -> Size override;

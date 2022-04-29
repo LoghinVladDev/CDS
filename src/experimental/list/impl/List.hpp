@@ -545,6 +545,229 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             return * pNew;
         }
 
+        template < typename T >
+        __CDS_OptimalInline auto List < T > :: pNewInsert () noexcept -> ElementType * & {
+            return this->pNewBack();
+        }
+
+        template < typename T >
+        template < typename ListType, typename V, EnableIf < Type < V > :: copyConstructible && isDerivedFrom < ListType, Collection < T > > :: value > >
+        auto List < T > :: sub ( Index from, Index to, ListType & list ) const noexcept (false) -> ListType & {
+
+            list.clear();
+
+            if ( from > to ) {
+                std :: swap ( from, to );
+            }
+
+            if ( from < 0 ) {
+                from = 0;
+            }
+
+            if ( to >= this->size() ) {
+                to = this->size();
+            }
+
+            Index index __CDS_MaybeUnused = 0;
+
+            for ( auto iterator = this->begin(), end = this->end(); iterator != end; ++ iterator ) {
+                if (index >= from && index < to ) {
+                    list.add ( * iterator );
+                }
+
+                ++ index;
+            }
+
+            return list;
+        }
+
+        template < typename T >
+        template < typename ListType, typename V, EnableIf < Type < V > :: copyConstructible && isDerivedFrom < ListType, Collection < T > > :: value > >
+        auto List < T > :: sub ( Index from, Index to ) const noexcept (false) -> ListType {
+            ListType list;
+
+            if ( from > to ) {
+                std :: swap ( from, to );
+            }
+
+            if ( from < 0 ) {
+                from = 0;
+            }
+
+            if ( to >= this->size() ) {
+                to = this->size();
+            }
+
+            Index index __CDS_MaybeUnused = 0;
+
+            for ( auto iterator = this->begin(), end = this->end(); iterator != end; ++ iterator ) {
+                if (index >= from && index < to ) {
+                    list.add ( * iterator );
+                }
+
+                ++ index;
+            }
+
+            return list;
+        }
+
+        template < typename T >
+        template < template < typename ... > typename ListType, typename V, EnableIf < Type < V > :: copyConstructible && isDerivedFrom < ListType < T >, Collection < T > > :: value > >
+        __CDS_OptimalInline auto List < T > :: sub ( Index from, Index to, ListType < ElementType > & list ) const noexcept (false) -> ListType < ElementType > & {
+            return this->sub < ListType < T > > ( from, to, list );
+        }
+
+        template < typename T >
+        template < template < typename ... > typename ListType, typename V, EnableIf < Type < V > :: copyConstructible && isDerivedFrom < ListType < T >, Collection < T > > :: value > >
+        __CDS_OptimalInline auto List < T > :: sub ( Index from, Index to ) const noexcept (false) -> ListType < ElementType > {
+            return this->sub < ListType < T > > ( from, to );
+        }
+
+        template < typename T >
+        template < typename ListType, EnableIf < isDerivedFrom < ListType, Collection < Index > > :: value > >
+        auto List < T > :: indices ( ElementType const & element, ListType & list ) const noexcept -> ListType & {
+            list.clear ();
+
+            Index index = 0;
+            for ( auto iterator = this->begin(), end = this->end(); iterator != end; ++ iterator, ++ index ) {
+                if ( Type < ElementType > :: compare ( * iterator, element ) ) {
+                    list.add ( index );
+                }
+            }
+
+            return list;
+        }
+
+        template < typename T >
+        template < typename ListType, EnableIf < isDerivedFrom < ListType, Collection < Index > > :: value > >
+        auto List < T > :: indices ( ElementType const & element ) const noexcept -> ListType {
+            ListType list;
+
+            Index index = 0;
+            for ( auto iterator = this->begin(), end = this->end(); iterator != end; ++ iterator, ++ index ) {
+                if ( Type < ElementType > :: compare ( * iterator, element ) ) {
+                    list.add ( index );
+                }
+            }
+
+            return list;
+        }
+
+        template < typename T >
+        template < template < typename ... > typename ListType, EnableIf < isDerivedFrom < ListType < Index >, Collection < Index > > :: value > >
+        __CDS_OptimalInline auto List < T > :: indices ( ElementType const & element, ListType < Index > & list ) const noexcept -> ListType < Index > & {
+            return this->indices < ListType < T > > ( element, list );
+        }
+
+        template < typename T >
+        template < template < typename ... > typename ListType, EnableIf < isDerivedFrom < ListType < Index >, Collection < Index > > :: value > >
+        __CDS_OptimalInline auto List < T > :: indices ( ElementType const & element ) const noexcept -> ListType < Index > {
+            return this->indices < ListType < T > > ( element );
+        }
+
+        template < typename T >
+        __CDS_OptimalInline auto List < T > :: operator [] ( Index index ) noexcept (false) -> ElementType & {
+            return this->get ( index );
+        }
+
+        template < typename T >
+        __CDS_OptimalInline auto List < T > :: operator [] ( Index index ) const noexcept (false) -> ElementType const & {
+            return this->get ( index );
+        }
+
+        template < typename T >
+        template < typename ComparatorFunction >
+        __CDS_OptimalInline auto List < T > :: sort ( ComparatorFunction const & comparatorFunction ) noexcept -> void {
+            if ( this->size() < 2 ) {
+                return;
+            }
+
+            Iterator last = -- this->end();
+            if ( last == this->end() ) {
+                for ( auto it = this->begin(), end = this->end(); it != end; ++ it ) { // NOLINT(clion-misra-cpp2008-8-0-1)
+                    last = it;
+                }
+            }
+
+            List < T > :: quickSort ( this->begin(), last, comparatorFunction );
+        }
+
+        template < typename T >
+        template < typename ComparatorFunction >
+        auto List < T > :: quickSort ( Iterator const & from, Iterator const & to, ComparatorFunction const & function ) noexcept -> void {
+            if ( to.valid() ) {
+                auto actualEnd = to;
+                if ( from == ++ actualEnd ) {
+                    return;
+                }
+            }
+
+            if (from != to && from.valid() && to.valid() ) {
+                auto partitionIterator = List < T > :: quickSortPartition (from, to, function );
+
+                List < T > :: quickSort ( from, partitionIterator, function );
+                if ( ! partitionIterator.valid() ) { // NOLINT(clion-misra-cpp2008-5-3-1)
+                    return;
+                }
+
+                if ( partitionIterator == from ) {
+                    if ( ( ++ partitionIterator ).valid() ) {
+                        List < T > :: quickSort ( partitionIterator, to, function );
+                    }
+
+                    return;
+                }
+
+                if ( ! ( ++ partitionIterator ).valid() ) { // NOLINT(clion-misra-cpp2008-5-3-1)
+                    return;
+                }
+
+                List < T > :: quickSort (++ partitionIterator, to, function );
+            }
+        }
+
+        namespace hidden { // NOLINT(modernize-concat-nested-namespaces)
+            namespace impl {
+                template < typename T, EnableIf < Type < T > :: moveConstructible && Type < T > :: moveAssignable > = 0 >
+                constexpr auto swap ( T && left, T && right ) {
+                    auto aux    = cds :: forward < T > ( left );
+                    left        = cds :: forward < T > ( right );
+                    right       = cds :: forward < T > ( aux );
+                }
+
+                template < typename T >
+                constexpr auto swap ( T & left, T & right ) {
+                    auto aux    = left;
+                    left        = right;
+                    right       = aux;
+                }
+            }
+        }
+
+        template < typename T >
+        template < typename ComparatorFunction >
+        auto List < T > :: quickSortPartition ( Iterator const & from, Iterator const & to, ComparatorFunction const & function ) noexcept -> Iterator {
+
+            auto pivot = * to;
+            auto partitionIterator = from;
+            Iterator previous;
+
+            for (auto it = from; it != to; ++ it ) {
+                if ( function ( * it, pivot ) ) {
+                    hidden :: impl :: swap ( * partitionIterator, * it );
+                    previous = partitionIterator;
+                    ++ partitionIterator;
+                }
+            }
+
+            hidden :: impl :: swap ( * partitionIterator, * to );
+            if ( ! previous.valid() ) { // NOLINT(clion-misra-cpp2008-5-3-1)
+                return partitionIterator;
+            }
+
+            return previous;
+        }
+
     }
 }
 

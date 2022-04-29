@@ -37,6 +37,9 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             __CDS_NoDiscard __CDS_cpplang_ConstexprOverride auto value () const noexcept -> ElementType const & override;
         public:
             __CDS_NoDiscard __CDS_cpplang_ConstexprOverride auto equals ( AbstractDelegateIterator const & ) const noexcept -> bool override;
+
+        public:
+            __CDS_NoDiscard __CDS_OptimalInline auto copy () const noexcept -> LinkedListDelegateConstIterator * override;
         };
 
     }

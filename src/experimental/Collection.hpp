@@ -331,6 +331,18 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             __CDS_NoDiscard __CDS_cpplang_ConstexprPureAbstract virtual auto empty () const noexcept -> bool;
         public:
             virtual auto contains ( ElementType const & ) const noexcept -> bool;
+
+        public:
+            template < typename V = T, EnableIf < Type < V > :: copyConstructible > = 0 >
+            __CDS_OptimalInline auto add ( ElementType const & ) noexcept -> void;
+        public:
+            template < typename V = T, EnableIf < Type < V > :: moveConstructible > = 0 >
+            __CDS_OptimalInline auto add ( ElementType && ) noexcept -> void;
+
+        protected:
+            virtual auto pNewInsert () noexcept -> ElementType * & = 0;
+        protected:
+            __CDS_OptimalInline virtual auto pNewInsertPost () noexcept -> void;
         };
 
     }

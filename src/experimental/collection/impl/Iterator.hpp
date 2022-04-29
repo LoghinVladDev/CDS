@@ -42,7 +42,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 return * this;
             }
 
-            this->_pDelegate    = copy ( iterator._pDelegate.get() );
+            this->_pDelegate    = iterator._pDelegate->copy();
             this->_pCollection  = iterator._pCollection;
             return * this;
         }

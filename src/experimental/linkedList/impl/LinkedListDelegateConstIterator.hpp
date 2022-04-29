@@ -24,8 +24,8 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 LinkedListDelegateConstIterator const & iterator
         ) noexcept :
                 DelegateConstIterator (),
-                _pNode ( iterator.pNode ),
-                _forward ( iterator.forward ) {
+                _pNode ( iterator._pNode ),
+                _forward ( iterator._forward ) {
 
         }
 
@@ -34,8 +34,8 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 LinkedListDelegateConstIterator && iterator
         ) noexcept :
                 DelegateConstIterator (),
-                _pNode ( std :: move ( iterator.pNode ) ),
-                _forward ( cds :: exchange ( iterator.forward, true ) ) {
+                _pNode ( std :: move ( iterator._pNode ) ),
+                _forward ( cds :: exchange ( iterator._forward, true ) ) {
 
         }
 
@@ -73,6 +73,11 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             }
 
             return reinterpret_cast < decltype ( this ) > ( & iterator )->_pNode == this->_pNode;
+        }
+
+        template < typename T >
+        __CDS_OptimalInline auto LinkedList < T > :: LinkedListDelegateConstIterator :: copy () const noexcept -> LinkedListDelegateConstIterator * {
+            return cds :: copy ( * this );
         }
 
     }

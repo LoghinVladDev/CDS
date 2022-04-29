@@ -82,6 +82,11 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             return this->_pArray == pObject->_pArray && this->_index == pObject->_index;
         }
 
+        template < typename T >
+        __CDS_OptimalInline auto Array < T > :: ArrayDelegateIterator :: copy () const noexcept -> ArrayDelegateIterator * {
+            return cds :: copy ( * this );
+        }
+
     }
 }
 

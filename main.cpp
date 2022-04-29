@@ -129,25 +129,33 @@ int main () {
     cds :: experimental :: LinkedList < Default > const lgc;
     cds :: experimental :: LinkedList < None > const lhc;
 
-    cds :: experimental :: Array < int > arr = { 1, 2, 3, 4, 5 };
+    cds :: experimental :: Array < int > arr = { 5, 4, 3, 2, 1 };
     cds :: experimental :: Array < int > const arrc = { 1, 2, 3, 4, 5 };
 
-    arr.forEach ( [] ( int v ) { v = 3; } );
-    arr.forEach ( [] ( int & v ) { v = 3; } );
-    arr.forEach ( [] ( int const & v ) { (void)v; } );
-    arrc.forEach ( [] ( int v ) { v = 3; } );
-//    arrc.forEach ( [] ( int & v ) { /*v = 3;*/ v; } );
-    arrc.forEach ( [] ( int const & v ) { (void)v; } );
-
-    arr.forEach ( [] ( auto v ) { v = 3; } );
-    arr.forEach ( [] ( auto & v ) { v = 3; } );
-    arr.forEach ( [] ( auto const & v ) { (void)v; } );
-    arrc.forEach ( [] ( auto v ) { v = 3; } );
-    arrc.forEach ( [] ( auto & v ) { /*v = 3;*/ (void)v; } );
-    arrc.forEach ( [] ( auto const & v ) { (void)v; } );
+//    arr.forEach ( [] ( int v ) { v = 3; } );
+//    arr.forEach ( [] ( int & v ) { v = 3; } );
+//    arr.forEach ( [] ( int const & v ) { (void)v; } );
+//    arrc.forEach ( [] ( int v ) { v = 3; } );
+////    arrc.forEach ( [] ( int & v ) { /*v = 3;*/ v; } );
+//    arrc.forEach ( [] ( int const & v ) { (void)v; } );
+//
+//    arr.forEach ( [] ( auto v ) { v = 3; } );
+//    arr.forEach ( [] ( auto & v ) { v = 3; } );
+//    arr.forEach ( [] ( auto const & v ) { (void)v; } );
+//    arrc.forEach ( [] ( auto v ) { v = 3; } );
+//    arrc.forEach ( [] ( auto & v ) { /*v = 3;*/ (void)v; } );
+//    arrc.forEach ( [] ( auto const & v ) { (void)v; } );
 
     arrc.forEach ( [] ( auto const & v ) { std :: cout << v << '\n'; } );
     std :: for_each ( arrc.begin(), arrc.end(), [] ( auto const & v ) { std :: cout << v << '\n'; } );
+
+    std :: cout << arrc.sub < cds :: experimental :: Array > ( 1, 3 );
+    std :: cout << arrc.sub < cds :: experimental :: Array < int > > ( 1, 3 ) << '\n';
+
+    arr.sort();
+    std :: cout << arr << '\n';
+    arr.sort([](int a, int b){ return a > b; });
+    std :: cout << arr << '\n';
 
     return 0;
 }

@@ -5,7 +5,7 @@
 #ifndef __CDS_COLLECTION_ABSTRACT_DELEGATE_ITERATOR_HPP__
 #define __CDS_COLLECTION_ABSTRACT_DELEGATE_ITERATOR_HPP__
 
-namespace cds {
+namespace cds { // NOLINT(modernize-concat-nested-namespaces)
     namespace experimental {
 
         template < typename T >
@@ -23,7 +23,10 @@ namespace cds {
             __CDS_cpplang_ConstexprPureAbstract virtual auto equals ( AbstractDelegateIterator const & ) const noexcept -> bool = 0;
 
         public:
-            virtual auto valid () const noexcept -> bool = 0;
+            __CDS_NoDiscard __CDS_cpplang_ConstexprPureAbstract virtual auto valid () const noexcept -> bool = 0;
+
+        public:
+            __CDS_NoDiscard virtual auto copy () const noexcept -> AbstractDelegateIterator * = 0;
         };
 
     }

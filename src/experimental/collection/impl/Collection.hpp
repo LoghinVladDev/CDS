@@ -448,6 +448,29 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             return ! this->empty();
         }
 
+        template < typename T >
+        __CDS_OptimalInline auto Collection < T > :: pNewInsertPost() noexcept -> void {}
+
+        template < typename T >
+        template < typename V, EnableIf < Type < V > :: copyConstructible > >
+        auto Collection < T > :: add ( ElementType const & element ) noexcept -> void {
+            auto & pElementLocation = this->pNewInsert();
+            if ( pElementLocation == nullptr ) {
+                pElementLocation = Memory :: instance().create < ElementType > ( element );
+                this->pNewInsertPost();
+            }
+        }
+
+        template < typename T >
+        template < typename V, EnableIf < Type < V > :: moveConstructible > >
+        auto Collection < T > :: add ( ElementType && element ) noexcept -> void {
+            auto & pElementLocation = this->pNewInsert();
+            if ( pElementLocation == nullptr ) {
+                * pElementLocation = Memory :: instance().create < ElementType > ( cds :: forward < ElementType > ( element ) );
+                this->pNewInsertPost();
+            }
+        }
+
     }
 }
 

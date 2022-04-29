@@ -23,7 +23,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 AbstractIterator const & iterator
         ) noexcept :
                 _pCollection ( iterator._pCollection ),
-                _pDelegate ( copy ( iterator._pDelegate.get() ) ) {
+                _pDelegate ( iterator._pDelegate->copy() ) {
 
         }
 
