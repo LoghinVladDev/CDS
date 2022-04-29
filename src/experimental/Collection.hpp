@@ -100,6 +100,15 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         public:
             virtual auto remove ( Collection < ConstReverseIterator > const & ) noexcept -> Size = 0;
 
+        protected:
+            virtual auto remove ( Iterator const *, Size ) noexcept -> Size = 0;
+        protected:
+            virtual auto remove ( ConstIterator const *, Size ) noexcept -> Size = 0;
+        protected:
+            virtual auto remove ( ReverseIterator const *, Size ) noexcept -> Size = 0;
+        protected:
+            virtual auto remove ( ConstReverseIterator const *, Size ) noexcept -> Size = 0;
+
         public:
             template < typename Predicate >
             auto remove ( Predicate const &, Size ) noexcept -> Size;
@@ -347,6 +356,6 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 #include "collection/impl/ConstReverseIterator.hpp"
 #include "collection/impl/Collection.hpp"
 
-//#include "collection/impl/CollectionDerivedRequired.hpp"
+#include "collection/impl/CollectionDerivedRequired.hpp"
 
 #endif // __CDS_EX_COLLECTION_HPP__

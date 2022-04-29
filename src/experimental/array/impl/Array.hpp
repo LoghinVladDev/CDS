@@ -363,6 +363,58 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         }
 
         template < typename T >
+        auto Array < T > :: remove ( Iterator const * pIterators, Size iteratorCount ) noexcept -> Size {
+            Array < Index > indices;
+
+            for ( uint64 index = 0; index < iteratorCount; ++ index ) {
+                if ( pIterators[index].of ( this ) ) {
+                    indices.pushBack ( reinterpret_cast < ArrayDelegateIterator const * > ( Collection < T > :: acquireDelegate ( pIterators[index] ) )->index() );
+                }
+            }
+
+            return this->remove ( indices );
+        }
+
+        template < typename T >
+        auto Array < T > :: remove ( ConstIterator const * pIterators, Size iteratorCount ) noexcept -> Size {
+            Array < Index > indices;
+
+            for ( uint64 index = 0; index < iteratorCount; ++ index ) {
+                if ( pIterators[index].of ( this ) ) {
+                    indices.pushBack ( reinterpret_cast < ArrayDelegateConstIterator const * > ( Collection < T > :: acquireDelegate ( pIterators[index] ) )->index() );
+                }
+            }
+
+            return this->remove ( indices );
+        }
+
+        template < typename T >
+        auto Array < T > :: remove ( ReverseIterator const * pIterators, Size iteratorCount ) noexcept -> Size {
+            Array < Index > indices;
+
+            for ( uint64 index = 0; index < iteratorCount; ++ index ) {
+                if ( pIterators[index].of ( this ) ) {
+                    indices.pushBack ( reinterpret_cast < ArrayDelegateIterator const * > ( Collection < T > :: acquireDelegate ( pIterators[index] ) )->index() );
+                }
+            }
+
+            return this->remove ( indices );
+        }
+
+        template < typename T >
+        auto Array < T > :: remove ( ConstReverseIterator const * pIterators, Size iteratorCount ) noexcept -> Size {
+            Array < Index > indices;
+
+            for ( uint64 index = 0; index < iteratorCount; ++ index ) {
+                if ( pIterators[index].of ( this ) ) {
+                    indices.pushBack ( reinterpret_cast < ArrayDelegateConstIterator const * > ( Collection < T > :: acquireDelegate ( pIterators[index] ) )->index() );
+                }
+            }
+
+            return this->remove ( indices );
+        }
+
+        template < typename T >
         __CDS_OptimalInline auto Array < T > :: pNewBack () noexcept -> ElementType * & {
             if ( this->_size < this->_capacity ) {
                 this->_pData [ this->_size ] = nullptr;

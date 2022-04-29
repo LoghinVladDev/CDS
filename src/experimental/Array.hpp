@@ -113,6 +113,15 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         public:
             auto remove ( Collection < ConstReverseIterator > const & ) noexcept -> Size override;
 
+        protected:
+            auto remove ( Iterator const *, Size ) noexcept -> Size override;
+        protected:
+            auto remove ( ConstIterator const *, Size ) noexcept -> Size override;
+        protected:
+            auto remove ( ReverseIterator const *, Size ) noexcept -> Size override;
+        protected:
+            auto remove ( ConstReverseIterator const *, Size ) noexcept -> Size override;
+
         private:
             auto pNewBefore ( Index ) noexcept -> ElementType * &;
         private:

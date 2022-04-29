@@ -97,6 +97,15 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         public:
             auto remove ( Collection < ConstReverseIterator > const & ) noexcept -> Size override;
 
+        protected:
+            auto remove ( Iterator const *, Size ) noexcept -> Size override;
+        protected:
+            auto remove ( ConstIterator const *, Size ) noexcept -> Size override;
+        protected:
+            auto remove ( ReverseIterator const *, Size ) noexcept -> Size override;
+        protected:
+            auto remove ( ConstReverseIterator const *, Size ) noexcept -> Size override;
+
         private:
             auto pNewBefore ( Node const * ) noexcept -> ElementType * &;
         private:
@@ -158,13 +167,13 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             auto operator = ( Collection < T > const & ) noexcept -> LinkedList &;
 
         public:
-            auto sequence () & noexcept -> Sequence < Array < T > >;
+            auto sequence () & noexcept -> Sequence < LinkedList < T > >;
         public:
-            auto sequence () && noexcept -> Sequence < Array < T > >;
+            auto sequence () && noexcept -> Sequence < LinkedList < T > >;
         public:
-            auto sequence () const & noexcept -> Sequence < Array < T > const >;
+            auto sequence () const & noexcept -> Sequence < LinkedList < T > const >;
         public:
-            auto sequence () const && noexcept -> Sequence < Array < T > const >;
+            auto sequence () const && noexcept -> Sequence < LinkedList < T > const >;
         };
 
         template < typename T >

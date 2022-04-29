@@ -328,9 +328,11 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             LinkedList < void const * > nodes;
 
             for ( auto iterator = iterators.begin(), end = iterators.end(); iterator != end; ++ iterator ) {
-                auto pNode = reinterpret_cast < LinkedListDelegateIterator const * > ( Collection < T > :: acquireDelegate ( * iterator ) )->node();
-                if ( pNode != nullptr ) {
-                    nodes.pushBack ( reinterpret_cast < void const * > ( pNode ) );
+                if ( iterator->of ( this ) ) {
+                    auto pNode = reinterpret_cast < LinkedListDelegateIterator const * > ( Collection < T > :: acquireDelegate ( * iterator ) )->node();
+                    if ( pNode != nullptr ) {
+                        nodes.pushBack ( reinterpret_cast < void const * > ( pNode ) );
+                    }
                 }
             }
 
@@ -342,9 +344,11 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             LinkedList < void const * > nodes;
 
             for ( auto iterator = iterators.begin(), end = iterators.end(); iterator != end; ++ iterator ) {
-                auto pNode = reinterpret_cast < LinkedListDelegateConstIterator const * > ( Collection < T > :: acquireDelegate ( * iterator ) )->node();
-                if ( pNode != nullptr ) {
-                    nodes.pushBack ( reinterpret_cast < void const * > ( pNode ) );
+                if ( iterator->of ( this ) ) {
+                    auto pNode = reinterpret_cast < LinkedListDelegateConstIterator const * > ( Collection < T > :: acquireDelegate ( * iterator ) )->node();
+                    if ( pNode != nullptr ) {
+                        nodes.pushBack ( reinterpret_cast < void const * > ( pNode ) );
+                    }
                 }
             }
 
@@ -356,9 +360,11 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             LinkedList < void const * > nodes;
 
             for ( auto iterator = iterators.begin(), end = iterators.end(); iterator != end; ++ iterator ) {
-                auto pNode = reinterpret_cast < LinkedListDelegateIterator const * > ( Collection < T > :: acquireDelegate ( * iterator ) )->node();
-                if ( pNode != nullptr ) {
-                    nodes.pushBack ( reinterpret_cast < void const * > ( pNode ) );
+                if ( iterator->of ( this ) ) {
+                    auto pNode = reinterpret_cast < LinkedListDelegateIterator const * > ( Collection < T > :: acquireDelegate ( * iterator ) )->node();
+                    if ( pNode != nullptr ) {
+                        nodes.pushBack ( reinterpret_cast < void const * > ( pNode ) );
+                    }
                 }
             }
 
@@ -370,9 +376,75 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             LinkedList < void const * > nodes;
 
             for ( auto iterator = iterators.begin(), end = iterators.end(); iterator != end; ++ iterator ) {
-                auto pNode = reinterpret_cast < LinkedListDelegateConstIterator const * > ( Collection < T > :: acquireDelegate ( * iterator ) )->node();
-                if ( pNode != nullptr ) {
-                    nodes.pushBack ( reinterpret_cast < void const * > ( pNode ) );
+                if ( iterator->of ( this ) ) {
+                    auto pNode = reinterpret_cast < LinkedListDelegateConstIterator const * > ( Collection < T > :: acquireDelegate ( * iterator ) )->node();
+                    if ( pNode != nullptr ) {
+                        nodes.pushBack ( reinterpret_cast < void const * > ( pNode ) );
+                    }
+                }
+            }
+
+            return this->remove ( reinterpret_cast < LinkedList < Node const * > const & > ( nodes ) );
+        }
+
+        template < typename T >
+        auto LinkedList < T > :: remove ( Iterator const * pIterators, Size iteratorCount ) noexcept -> Size {
+            LinkedList < void const * > nodes;
+
+            for ( uint64 index = 0; index < iteratorCount; ++ index ) {
+                if ( pIterators[index].of ( this ) ) {
+                    auto pNode = reinterpret_cast < LinkedListDelegateIterator const * > ( Collection < T > :: acquireDelegate ( pIterators [ index ] ) )->node();
+                    if ( pNode != nullptr ) {
+                        nodes.pushBack ( reinterpret_cast < void const * > ( pNode ) );
+                    }
+                }
+            }
+
+            return this->remove ( reinterpret_cast < LinkedList < Node const * > const & > ( nodes ) );
+        }
+
+        template < typename T >
+        auto LinkedList < T > :: remove ( ConstIterator const * pIterators, Size iteratorCount ) noexcept -> Size {
+            LinkedList < void const * > nodes;
+
+            for ( uint64 index = 0; index < iteratorCount; ++ index ) {
+                if ( pIterators[index].of ( this ) ) {
+                    auto pNode = reinterpret_cast < LinkedListDelegateConstIterator const * > ( Collection < T > :: acquireDelegate ( pIterators [ index ] ) )->node();
+                    if ( pNode != nullptr ) {
+                        nodes.pushBack ( reinterpret_cast < void const * > ( pNode ) );
+                    }
+                }
+            }
+
+            return this->remove ( reinterpret_cast < LinkedList < Node const * > const & > ( nodes ) );
+        }
+
+        template < typename T >
+        auto LinkedList < T > :: remove ( ReverseIterator const * pIterators, Size iteratorCount ) noexcept -> Size {
+            LinkedList < void const * > nodes;
+
+            for ( uint64 index = 0; index < iteratorCount; ++ index ) {
+                if ( pIterators[index].of ( this ) ) {
+                    auto pNode = reinterpret_cast < LinkedListDelegateIterator const * > ( Collection < T > :: acquireDelegate ( pIterators [ index ] ) )->node();
+                    if ( pNode != nullptr ) {
+                        nodes.pushBack ( reinterpret_cast < void const * > ( pNode ) );
+                    }
+                }
+            }
+
+            return this->remove ( reinterpret_cast < LinkedList < Node const * > const & > ( nodes ) );
+        }
+
+        template < typename T >
+        auto LinkedList < T > :: remove ( ConstReverseIterator const * pIterators, Size iteratorCount ) noexcept -> Size {
+            LinkedList < void const * > nodes;
+
+            for ( uint64 index = 0; index < iteratorCount; ++ index ) {
+                if ( pIterators[index].of ( this ) ) {
+                    auto pNode = reinterpret_cast < LinkedListDelegateConstIterator const * > ( Collection < T > :: acquireDelegate ( pIterators [ index ] ) )->node();
+                    if ( pNode != nullptr ) {
+                        nodes.pushBack ( reinterpret_cast < void const * > ( pNode ) );
+                    }
                 }
             }
 
@@ -526,6 +598,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
             Memory :: instance().destroy ( toRemove->_pData );
             Memory :: instance().destroy ( toRemove );
+            -- this->_size;
 
             return true;
         }
@@ -534,6 +607,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         auto LinkedList < T > :: makeUnique () noexcept -> void {
             Node * pNewHead = nullptr;
             Node * pNewLast = nullptr;
+            Size newSize    = 0ULL;
 
             Node * pHead    = this->_pFront;
 
@@ -563,6 +637,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                         pNewHead->_pPrevious            = nullptr;
 
                         pNewLast                        = pNewHead;
+                        newSize                         = 1ULL;
                     } else {
 
                         pNewLast->_pNext                = Memory :: instance().create < Node > ();
@@ -570,6 +645,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                         pNewLast->_pNext->_pData        = cds :: exchange ( pHead->_pData, nullptr );
                         pNewLast->_pNext->_pNext        = nullptr;
                         pNewLast->_pNext->_pPrevious    = pNewLast;
+                        ++ newSize;
                     }
                 }
 
@@ -580,6 +656,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
             this->_pFront = pNewHead;
             this->_pBack  = pNewLast;
+            this->_size   = newSize;
         }
 
     }
