@@ -5,7 +5,7 @@
 #ifndef CDS_OBJECT_HPP
 #define CDS_OBJECT_HPP
 
-#include "../prepro.h"
+#include "../../prepro.h"
 #include <ostream>
 #include <CDS/Hasher>
 
