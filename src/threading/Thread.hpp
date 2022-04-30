@@ -29,31 +29,33 @@ namespace cds {
     class Thread : public Object {
     public:
         __CDS_MaybeUnused __CDS_OptimalInline static auto hardwareConcurrency () noexcept -> Size {
-    #if defined(WIN32)
+#if defined(WIN32)
             SYSTEM_INFO systemInformation;
             GetSystemInfo ( & systemInformation );
             return static_cast < Size > ( systemInformation.dwNumberOfProcessors );
-    #elif defined(__linux)
+#elif defined(__linux)
             return static_cast < Size > ( sysconf ( _SC_NPROCESSORS_ONLN ) );
-    #else
-    #error Thread not supported
+#else
+            #error Thread not supported
             return 0;
-    #endif
+#endif
         }
 
         using ErrorCallback = auto ( * ) ( String const &, Thread *, std::exception const * ) __CDS_cpplang_FunctionAliasNoexcept(false) -> void;
 
     private:
 
-    #if defined(__linux)
+#if defined(__linux)
         typedef pthread_t PrimitiveThread;
 
         constexpr static PrimitiveThread PRIMITIVE_NULL_HANDLE = 0llu;
         constexpr static StringLiteral IMPLEMENTATION_TYPE = "POSIX Thread (pthread)";
 
-    #define MUTABLE_SPEC
+        using ID = pthread_t;
 
-    #elif defined(WIN32)
+#define MUTABLE_SPEC
+
+#elif defined(WIN32)
         typedef struct {
             HANDLE  handle;
             DWORD   threadID;
@@ -70,7 +72,7 @@ namespace cds {
 
     #else
     #error Unsupported : Thread
-    #endif
+#endif
 
         enum State: uint8 {
             CREATED                 = 0x01U,
@@ -99,15 +101,15 @@ namespace cds {
         PrimitiveThread        MUTABLE_SPEC handle         { Thread::PRIMITIVE_NULL_HANDLE };
         Atomic < State >                    state          { Thread::State::CREATED };
 
-    #if __CDS_cpplang_InlineStaticVariable_available == true
+#if __CDS_cpplang_InlineStaticVariable_available == true
 
         inline static ErrorCallback         pErrorCallback { nullptr };
 
-    #else
+#else
 
         ErrorCallback                       pErrorCallback { nullptr };
 
-    #endif
+#endif
 
         virtual auto run () noexcept (false) -> void = 0;
 
@@ -121,18 +123,18 @@ namespace cds {
             } catch ( std::exception const & e ) {
                 pThread->state = State::EXCEPTION_TERMINATED;
 
-    #if __CDS_cpplang_InlineStaticVariable_available == true
+#if __CDS_cpplang_InlineStaticVariable_available == true
 
                 if ( Thread::pErrorCallback != nullptr ) {
                     Thread::pErrorCallback("Exception caught in Thread runtime", pThread, &e);
                 }
 
-    #else
+#else
 
-                if ( pThread->pErrorCallback != nullptr )
+                    if ( pThread->pErrorCallback != nullptr )
                     pThread->pErrorCallback( "Exception caught in Thread runtime", pThread, & e );
 
-    #endif
+#endif
 
                 else {
                     std::cerr << "Exception caught in Thread runtime : " << e.what() << '\n';
@@ -148,9 +150,9 @@ namespace cds {
     public:
         auto start () noexcept(THREAD_EXCEPT_STAT) -> void {
 
-    #if defined(__linux)
+#if defined(__linux)
             (void) pthread_create ( & this->handle, nullptr, & Thread::launcher, reinterpret_cast < void * > ( this ) );
-    #elif defined(WIN32)
+#elif defined(WIN32)
             this->handle = Memory :: instance().create < Thread_t > ();
             memset ( this->handle, 0, sizeof ( Thread_t ) );
 
@@ -169,15 +171,15 @@ namespace cds {
             this->handle->accessFlags = THREAD_ALL_ACCESS;
     #else
     #error Unsupported : Thread
-    #endif
+#endif
 
         }
 
         auto kill () noexcept -> void {
 
-    #if defined(__linux)
+#if defined(__linux)
             (void) pthread_cancel ( this->handle );
-    #elif defined(WIN32)
+#elif defined(WIN32)
             if ( this->handle != PRIMITIVE_NULL_HANDLE )
 
                 __CDS_WarningSuppression_ThreadForceTermination_SuppressEnable
@@ -190,7 +192,7 @@ namespace cds {
             this->handle = PRIMITIVE_NULL_HANDLE;
     #else
     #error Unsupported : Thread
-    #endif
+#endif
 
             this->state = State::KILLED;
 
@@ -198,16 +200,30 @@ namespace cds {
 
         auto join () const noexcept -> void {
 
-    #if defined(__linux)
+#if defined(__linux)
             (void) pthread_join( this->handle, nullptr );
-    #elif defined(WIN32)
+#elif defined(WIN32)
             if ( this->handle != PRIMITIVE_NULL_HANDLE )
                 WaitForSingleObject( this->handle->handle, INFINITE );
             Memory :: instance().destroy ( this->handle );
             this->handle = PRIMITIVE_NULL_HANDLE;
     #else
     #error Unsupported : Thread
-    #endif
+#endif
+
+        }
+
+        __CDS_OptimalInline static auto currentThreadID () noexcept -> ID {
+
+#if defined(__linux)
+
+            return pthread_self();
+
+#else
+
+#error "Unsupported"
+
+#endif
 
         }
 
@@ -215,28 +231,28 @@ namespace cds {
             auto stateValue = this->state.get();
 
             if (
-                stateValue != Thread::State::FINISHED &&
-                stateValue != Thread::State::KILLED &&
-                stateValue != Thread::State::EXCEPTION_TERMINATED
-            ) {
+                    stateValue != Thread::State::FINISHED &&
+                    stateValue != Thread::State::KILLED &&
+                    stateValue != Thread::State::EXCEPTION_TERMINATED
+                    ) {
                 this->kill();
             }
         }
 
         __CDS_NoDiscard auto toString() const noexcept -> String override {
             return String()
-                .append("Thread { <").append(Thread::IMPLEMENTATION_TYPE).append(">; handle = ")
-                .append(
-    #if defined(__linux)
-                        static_cast<uint64>(this->handle)
-    #elif defined(WIN32)
-                        static_cast<uint64>(this->handle == PRIMITIVE_NULL_HANDLE ? 0 : this->handle->threadID)
+                    .append("Thread { <").append(Thread::IMPLEMENTATION_TYPE).append(">; handle = ")
+                    .append(
+#if defined(__linux)
+                            static_cast<uint64>(this->handle)
+#elif defined(WIN32)
+                            static_cast<uint64>(this->handle == PRIMITIVE_NULL_HANDLE ? 0 : this->handle->threadID)
     #else
     #error Unsupported : Thread
     0
-    #endif
-                ).append(", state = ")
-                .append(Thread::stateToString(this->state)).append(" }");
+#endif
+                    ).append(", state = ")
+                    .append(Thread::stateToString(this->state)).append(" }");
         }
     };
 
