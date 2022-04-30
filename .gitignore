@@ -4,3 +4,5 @@
 /out/build/
 /.vscode/
 /.PVS-Studio/
+/*build*/
+*kdev*

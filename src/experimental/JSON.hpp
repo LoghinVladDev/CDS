@@ -331,9 +331,35 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
                     }
 
-                    __CDS_cpplang_ConstexprConditioned JsonElementConstWrapper ( JsonElementConstWrapper && obj ) noexcept :
+                    constexpr JsonElementConstWrapper () noexcept : pElement ( nullptr ) {
+
+                    }
+
+                    constexpr JsonElementConstWrapper ( JsonElementConstWrapper const & wrapper ) noexcept : pElement ( wrapper.pElement ) {
+
+                    }
+
+                    constexpr JsonElementConstWrapper ( JsonElementConstWrapper && obj ) noexcept :
                             pElement ( cds :: exchange ( obj.pElement, nullptr ) ) {
 
+                    }
+
+                    __CDS_cpplang_NonConstConstexprMemberFunction auto operator = ( JsonElementConstWrapper const & obj ) noexcept -> JsonElementConstWrapper & {
+                        if ( this == & obj ) {
+                            return * this;
+                        }
+
+                        this->pElement = obj.pElement;
+                        return * this;
+                    }
+
+                    __CDS_cpplang_NonConstConstexprMemberFunction auto operator = ( JsonElementConstWrapper && obj ) noexcept -> JsonElementConstWrapper & {
+                        if ( this == & obj ) {
+                            return * this;
+                        }
+
+                        this->pElement = cds :: exchange ( obj.pElement, nullptr );
+                        return * this;
                     }
 
                     __CDS_NoDiscard __CDS_OptimalInline auto getInt () const noexcept (false) -> Integer {
@@ -714,28 +740,43 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
             class ConstIterator {
             private:
-                typename ListImplementationType :: ConstIterator baseIterator;
+                typename ListImplementationType :: ConstIterator    baseIterator;
+                hidden :: impl :: JsonElementConstWrapper           wrapper;
             public:
-                explicit ConstIterator ( typename ListImplementationType :: ConstIterator const & it ) noexcept : baseIterator ( it ) {
+                constexpr ConstIterator () noexcept = default;
+
+                explicit ConstIterator ( typename ListImplementationType :: ConstIterator const & it ) noexcept :
+                        baseIterator ( it ),
+                        wrapper ( & ( * it ) ) {
 
                 }
 
-                __CDS_NoDiscard __CDS_OptimalInline auto operator * () const noexcept -> hidden :: impl :: JsonElementConstWrapper {
-                    return hidden :: impl :: JsonElementConstWrapper ( & (* this->baseIterator) );
+                __CDS_NoDiscard __CDS_OptimalInline auto operator * () const noexcept -> hidden :: impl :: JsonElementConstWrapper const & {
+                    return this->wrapper;
+                }
+
+                __CDS_NoDiscard __CDS_OptimalInline auto operator -> () const noexcept -> hidden :: impl :: JsonElementConstWrapper const * {
+                    return & this->wrapper;
                 }
 
                 __CDS_NoDiscard __CDS_OptimalInline auto operator != ( ConstIterator const & it ) const noexcept -> bool {
                     return this->baseIterator != it.baseIterator;
                 }
 
+                __CDS_NoDiscard __CDS_OptimalInline auto operator == ( ConstIterator const & it ) const noexcept -> bool {
+                    return this->baseIterator == it.baseIterator;
+                }
+
                 __CDS_OptimalInline auto operator ++ () noexcept -> ConstIterator & {
                     ++ this->baseIterator;
+                    this->wrapper = hidden :: impl :: JsonElementConstWrapper { & ( * this->baseIterator ) };
                     return * this;
                 }
 
                 __CDS_OptimalInline auto operator ++ ( int ) noexcept -> ConstIterator {
                     auto copy = * this;
                     ++ this->baseIterator;
+                    this->wrapper = hidden :: impl :: JsonElementConstWrapper { & ( * this->baseIterator ) };
                     return copy;
                 }
             };
@@ -926,10 +967,10 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
                     if ( value.second().isJson () ) {
                         return common + "\n" + (" "_s * ( indent * ( depth ) )) +
-                                dumpIndented < MapImplementationType, ListImplementationType > ( value.second().getJson(), indent, depth );
+                               dumpIndented < MapImplementationType, ListImplementationType > ( value.second().getJson(), indent, depth );
                     } else if ( value.second().isArray() ) {
                         return common + "\n" + (" "_s * ( indent * ( depth ) )) +
-                                dumpIndented < MapImplementationType, ListImplementationType > ( value.second().getArray(), indent, depth );
+                               dumpIndented < MapImplementationType, ListImplementationType > ( value.second().getArray(), indent, depth );
                     } else {
                         return common + value.second().toString ();
                     }
