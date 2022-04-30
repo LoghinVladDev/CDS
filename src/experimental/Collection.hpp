@@ -10,7 +10,8 @@
 #include <CDS/Traits>
 #include <CDS/Concepts>
 #include <CDS/Function>
-#include <CDS/Pointer>
+#include <CDS/pointer/UniquePointer>
+#include <CDS/pointer/ForeignPointer>
 
 namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 

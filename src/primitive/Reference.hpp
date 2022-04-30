@@ -24,8 +24,6 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
     }
 }
 
-#include <CDS/Pointer>
-
 namespace cds {
 
     template < typename T >

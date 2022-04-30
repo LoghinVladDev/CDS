@@ -618,7 +618,8 @@ namespace cds {
 
 }
 
-#include <CDS/Pointer>
+#include <CDS/pointer/UniquePointer>
+#include <CDS/pointer/ForeignPointer>
 
 namespace cds {
 

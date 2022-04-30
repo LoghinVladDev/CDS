@@ -5,7 +5,8 @@
 #ifndef CDS_ASYNC_HPP
 #define CDS_ASYNC_HPP
 
-#include <CDS/Pointer>
+#include <CDS/pointer/UniquePointer>
+#include <CDS/pointer/SharedPointer>
 #include <CDS/Semaphore>
 #include <CDS/Memory>
 #include <CDS/Function>

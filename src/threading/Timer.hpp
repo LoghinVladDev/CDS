@@ -9,7 +9,7 @@
 #include <tuple>
 
 #include <CDS/Thread>
-#include <CDS/Pointer>
+#include <CDS/pointer/UniquePointer>
 #include <CDS/Mutex>
 #include <CDS/Semaphore>
 #include <CDS/Memory>

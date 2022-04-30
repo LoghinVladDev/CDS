@@ -1,1 +1,3 @@
-#include "../../src/primitive/Pointer.hpp"
+#include <CDS/pointer/UniquePointer>
+#include <CDS/pointer/SharedPointer>
+#include <CDS/pointer/ForeignPointer>

@@ -1,1 +1,1 @@
-#include "../../src/primitive/Integer.hpp"
+#include "../../src/primitive/baseTypes/Integer.hpp"

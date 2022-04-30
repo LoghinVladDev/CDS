@@ -51,7 +51,7 @@ namespace cds {
          *      Unique < Foreign > representing lack of ownership, a view created over a structure outside its scope
          *      Unique < Unique > representing ownership, a structure created by the view to iterate upon
          */
-        UniquePointer < PointerBase < C > > pCollection { nullptr };
+        UniquePointer < SmartPointer < C > > pCollection { nullptr };
         uint16                              chainCount  { 0 }; // used to determine order of operations
 
         LinkedList < Pair < SharedPointer < StoredPredicate >,  Index > >       storedPredicates;

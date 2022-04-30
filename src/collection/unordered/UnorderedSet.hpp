@@ -6,7 +6,6 @@
 #define CDS_UNORDEREDSET_HPP
 
 #include <CDS/ListSet>
-#include <CDS/Pointer>
 
 namespace cds {
 

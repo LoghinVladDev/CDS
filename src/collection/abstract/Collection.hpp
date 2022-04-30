@@ -16,7 +16,8 @@
 #endif
 
 #include <CDS/std-types>
-#include <CDS/Pointer>
+#include <CDS/pointer/UniquePointer>
+#include <CDS/pointer/ForeignPointer>
 #include <CDS/Function>
 #include <CDS/Traits>
 #include <CDS/Hasher>

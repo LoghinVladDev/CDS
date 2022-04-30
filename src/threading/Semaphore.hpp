@@ -6,13 +6,14 @@
 #define CDS_SEMAPHORE_HPP
 
 #include <CDS/Mutex>
-#include <CDS/Pointer>
+#include <CDS/pointer/SharedPointer>
+#include <CDS/pointer/ForeignPointer>
 
 namespace cds {
 
     class Semaphore : public Object {
     private:
-        PointerBase < Mutex > * volatile _pBase;
+        SmartPointer < Mutex > * volatile _pBase;
         uint8                   volatile _count {0u};
 
     public:
