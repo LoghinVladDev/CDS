@@ -235,6 +235,8 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                         }
                     }
 
+                    __CDS_OptimalInline static auto copyByType ( JsonElement const & obj ) noexcept -> Object *;
+
                 public:
                     constexpr JsonElement () noexcept :
                             type ( ElementType :: Invalid ),
@@ -244,7 +246,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
                     __CDS_OptimalInline JsonElement ( JsonElement const & obj ) noexcept :
                             type ( obj.type ),
-                            value ( obj.value->copy() ) {
+                            value ( this->copyByType ( obj ) ) {
 
                     }
 
@@ -257,14 +259,21 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                     template < typename T, typename U = T, EnableIf < PrimitiveAdaptable < U > :: value > = 0 >
                     __CDS_OptimalInline JsonElement ( T object ) noexcept : // NOLINT(google-explicit-constructor)
                             type ( AdaptorProperties < T > :: adaptEnum ),
-                            value ( typename AdaptorProperties < T > :: AdaptedType ( object ).copy() ){ // NOLINT(cppcoreguidelines-pro-type-member-init)
+                            value ( cds :: copy < typename AdaptorProperties < T > :: AdaptedType > ( object ) ) { // NOLINT(cppcoreguidelines-pro-type-member-init)
 
                     }
 
-                    template < typename T, typename U = T, EnableIf < Adaptable < U > :: value > = 0 >
+                    template < typename T, typename U = T, EnableIf < Adaptable < U > :: value && isSame < typename AdaptorProperties < T > :: AdaptedType, T > () > = 0 >
                     __CDS_OptimalInline JsonElement ( T const & object ) noexcept : // NOLINT(google-explicit-constructor)
                             type ( AdaptorProperties < T > :: adaptEnum ),
-                            value ( typename AdaptorProperties < T > :: AdaptedType ( object ).copy() ){ // NOLINT(cppcoreguidelines-pro-type-member-init)
+                            value ( cds :: copy ( object ) ) { // NOLINT(cppcoreguidelines-pro-type-member-init)
+
+                    }
+
+                    template < typename T, typename U = T, EnableIf < Adaptable < U > :: value && ! isSame < typename AdaptorProperties < T > :: AdaptedType, T > () > = 0 >
+                    __CDS_OptimalInline JsonElement ( T const & object ) noexcept : // NOLINT(google-explicit-constructor)
+                            type ( AdaptorProperties < T > :: adaptEnum ),
+                            value ( cds :: copy < typename AdaptorProperties < T > :: AdaptedType > ( object ) ) { // NOLINT(cppcoreguidelines-pro-type-member-init)
 
                     }
 
@@ -1048,6 +1057,22 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             using JsonObject    = json :: JsonObject < json :: hidden :: impl :: JsonBaseMap >;
             using JsonArray     = json :: JsonArray < json :: hidden :: impl :: JsonBaseList >;
 
+        }
+
+        namespace hidden {
+            namespace impl {
+                __CDS_OptimalInline auto JsonElement :: copyByType ( JsonElement const & obj ) noexcept -> Object * {
+                    switch ( obj.type ) {
+                        case ElementType::Bool:     return cds :: copy ( * reinterpret_cast  < AdaptorProperties < Boolean > :: AdaptedType * > ( obj.value.get() ) );
+                        case ElementType::Long:     return cds :: copy ( * reinterpret_cast  < AdaptorProperties < Long > :: AdaptedType * > ( obj.value.get() ) );
+                        case ElementType::Double:   return cds :: copy ( * reinterpret_cast  < AdaptorProperties < Double > :: AdaptedType * > ( obj.value.get() ) );
+                        case ElementType::String:   return cds :: copy ( * reinterpret_cast  < AdaptorProperties < String > :: AdaptedType * > ( obj.value.get() ) );
+                        case ElementType::Array:    return cds :: copy ( * reinterpret_cast  < AdaptorProperties < JsonArray < JsonBaseList > > :: AdaptedType * > ( obj.value.get() ) );
+                        case ElementType::Object:   return cds :: copy ( * reinterpret_cast  < AdaptorProperties < JsonObject < JsonBaseMap > > :: AdaptedType * > ( obj.value.get() ) );
+                        case ElementType::Invalid:  return nullptr;
+                    }
+                }
+            }
         }
 
     }
