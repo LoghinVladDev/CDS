@@ -51,7 +51,9 @@ namespace cds {
         constexpr static PrimitiveThread PRIMITIVE_NULL_HANDLE = 0llu;
         constexpr static StringLiteral IMPLEMENTATION_TYPE = "POSIX Thread (pthread)";
 
+    public:
         using ID = pthread_t;
+    private:
 
 #define MUTABLE_SPEC
 
