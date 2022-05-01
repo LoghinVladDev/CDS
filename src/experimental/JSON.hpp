@@ -353,6 +353,11 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
                     }
 
+                    __CDS_cpplang_NonConstConstexprMemberFunction auto operator = ( JsonElement const * pNewElement ) noexcept -> JsonElementConstWrapper & {
+                        this->pElement = pNewElement;
+                        return * this;
+                    }
+
                     __CDS_cpplang_NonConstConstexprMemberFunction auto operator = ( JsonElementConstWrapper const & obj ) noexcept -> JsonElementConstWrapper & {
                         if ( this == & obj ) {
                             return * this;
@@ -755,9 +760,11 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 constexpr ConstIterator () noexcept = default;
 
                 explicit ConstIterator ( typename ListImplementationType :: ConstIterator const & it ) noexcept :
-                        baseIterator ( it ),
-                        wrapper ( & ( * it ) ) {
+                        baseIterator ( it ) {
 
+                    if ( it.isValid() ) {
+                        this->wrapper = & ( * it );
+                    }
                 }
 
                 __CDS_NoDiscard __CDS_OptimalInline auto operator * () const noexcept -> hidden :: impl :: JsonElementConstWrapper const & {
