@@ -56,13 +56,13 @@ namespace cds {
         Array ( Array && ) noexcept;
 
         Array (
-            Iterator const &,
-            Iterator const &
+                Iterator const &,
+                Iterator const &
         ) noexcept;
 
         Array (
-            ConstIterator const &,
-            ConstIterator const &
+                ConstIterator const &,
+                ConstIterator const &
         ) noexcept;
 
         template < typename V = T, EnableIf < Type < V > :: copyConstructible > = 0 >
@@ -163,11 +163,11 @@ namespace cds {
 
             for ( // NOLINT(clion-misra-cpp2008-6-5-1)
                     auto // NOLINT(clion-misra-cpp2008-8-0-1)
-                        aIt = this->begin(), aEnd = this->end(),
-                        bIt = array.begin(), bEnd = array.end();
+                    aIt = this->begin(), aEnd = this->end(),
+                            bIt = array.begin(), bEnd = array.end();
                     aIt != aEnd && bIt != bEnd;
                     ++ aIt, ++ bIt // NOLINT(clion-misra-cpp2008-5-18-1)
-            ) {
+                    ) {
                 if ( ! ( Type < T > :: compare (* aIt, * bIt ) ) ) { // NOLINT(clion-misra-cpp2008-5-3-1)
                     return false;
                 }
@@ -260,8 +260,8 @@ namespace cds {
 
             __CDS_NoDiscard __CDS_cpplang_ConstexprOverride auto isValid () const noexcept -> bool override {
                 return
-                    this->_pArray != nullptr &&
-                    this->_index >= 0 && this->_index < this->_pArray->size();
+                        this->_pArray != nullptr &&
+                        this->_index >= 0 && this->_index < this->_pArray->size();
             }
 
             __CDS_cpplang_ConstexprOverride auto next () noexcept -> ArrayDelegateIterator & override {
@@ -394,7 +394,21 @@ namespace cds {
         auto operator = ( Collection < ElementType > const & ) noexcept -> Array &;
 
         __CDS_OptimalInline auto operator = ( Array const & array ) noexcept -> Array & { // NOLINT(bugprone-unhandled-self-assignment)
-            return this->operator=( reinterpret_cast < Collection<ElementType> const & > (array) );  // NOLINT(misc-unconventional-assign-operator)
+            if ( this == & array ) {
+                return * this;
+            }
+
+            (void) this->clear ();
+
+            this->_size = array.size();
+            this->_capacity = array.size();
+            this->_pData = Memory :: instance().createArray < T * > ( array.size() );
+
+            for ( Index i = 0; i < this->_size; ++ i ) {
+                this->_pData[i] = Memory :: instance().create < T > ( array[i] );
+            }
+
+            return * this;
         }
 
         __CDS_OptionalInline auto operator = ( Array && array ) noexcept -> Array & {
@@ -1113,8 +1127,8 @@ namespace cds {
 
 namespace cds {
 
-template < typename T >
-Array ( std::initializer_list < T > ) -> Array < T >;
+    template < typename T >
+    Array ( std::initializer_list < T > ) -> Array < T >;
 
 }
 
