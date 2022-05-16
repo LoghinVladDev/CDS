@@ -6,8 +6,8 @@
 #define CDS_SEMAPHORE_HPP
 
 #include <CDS/Mutex>
-#include <CDS/pointer/SharedPointer>
-#include <CDS/pointer/ForeignPointer>
+#include <CDS/smartPointers/SharedPointer>
+#include <CDS/smartPointers/ForeignPointer>
 
 namespace cds {
 

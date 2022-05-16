@@ -1,27 +1,21 @@
-#include <iostream>
-#include <fstream>
-#include <string>
-#include <utility>
-#include <set>
-#include <queue>
+#include <CDS/Thread>
+#include <CDS/smartPointers/UniquePointer>
 
-int ctr = 0;
-
-void f ( int n, int i, int j ) {
-    if ( i <= n /2 ) {
-        if ( j <= n - 1 ) {
-            ctr ++;
-            f(n, i, j + 1);
-        } else {
-            ctr ++;
-            f(n, i + 1, i + 2);
-        }
-    }
-}
+using namespace cds;
 
 int main () {
-    f(7, 2, 4);
-std :: cout << ctr << '\n';
 
+    UniquePointer < Thread > t = new Runnable ( [& t]{
+
+        uint32 repeats = 10;
+
+        for ( uint32 i = 0; i < repeats; ++ i ) {
+            (void) t->sleep ( 500 );
+            std :: cout << "Slept for 500ms" << '\n';
+        }
+    });
+
+    t->start();
+    t->join();
     return 0;
 }

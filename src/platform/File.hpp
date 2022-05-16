@@ -11,7 +11,7 @@
 #include <CDS/LinkedList>
 #include <CDS/Path>
 #include <CDS/HashMap>
-#include <CDS/pointer/UniquePointer>
+#include <CDS/smartPointers/UniquePointer>
 #include <CDS/Memory>
 
 #if defined(__linux)

@@ -7,7 +7,7 @@
 
 #include <CDS/Object>
 #include <CDS/Random>
-#include <CDS/pointer/UniquePointer>
+#include <CDS/smartPointers/UniquePointer>
 #include <CDS/Utility>
 #include <CDS/Limits>
 #include <CDS/Integer>

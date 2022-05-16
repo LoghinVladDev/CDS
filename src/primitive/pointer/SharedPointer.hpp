@@ -5,7 +5,7 @@
 #ifndef __CDS_SHARED_POINTER_HPP__
 #define __CDS_SHARED_POINTER_HPP__
 
-#include <CDS/pointer/SmartPointer>
+#include <CDS/smartPointers/SmartPointer>
 
 namespace cds {
 

@@ -225,7 +225,7 @@ namespace cds {
 
         }
 
-        __CDS_NoDiscard auto sleep ( uint64 milliseconds ) const noexcept -> uint64 {
+        auto sleep ( uint64 milliseconds ) noexcept -> uint64 {
 
 #if defined(__linux)
             timespec timeSpecification {};

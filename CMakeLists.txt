@@ -34,21 +34,21 @@ include_directories(${CDS_INCLUDE_DIRECTORIES})
 
 set(
         CDS_PRIMITIVE
-        src/primitive/Object.hpp
+        src/primitive/baseTypes/Object.hpp
         src/primitive/Pointer.hpp
         src/primitive/Reference.hpp
         src/primitive/Optional.hpp
         src/primitive/Pair.hpp
         src/primitive/Range.hpp
-        src/primitive/String.hpp
+        src/primitive/baseTypes/String.hpp
         src/primitive/Sequence.hpp
         src/primitive/Regex.hpp
         src/primitive/ParallelSequence.hpp
-        src/primitive/Integer.hpp
-        src/primitive/Long.hpp
-        src/primitive/Float.hpp
-        src/primitive/Double.hpp
-        src/primitive/Boolean.hpp
+        src/primitive/baseTypes/Integer.hpp
+        src/primitive/baseTypes/Long.hpp
+        src/primitive/baseTypes/Float.hpp
+        src/primitive/baseTypes/Double.hpp
+        src/primitive/baseTypes/Boolean.hpp
         src/primitive/Tuple.hpp
 )
 
