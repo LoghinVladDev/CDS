@@ -12,7 +12,7 @@ namespace cds {
 
         class String : public Object {
         private:
-            auto retardedPrivateFunction () noexcept -> void;
+            auto doSomething () noexcept -> void;
         };
 
     }
