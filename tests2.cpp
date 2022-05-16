@@ -1,37 +1,27 @@
 #include <iostream>
-#include <cstring>
 #include <fstream>
-using namespace std;
-//ifstream fin ("minlex.in");
-//ofstream fout ("minlex.out");
-#define fin cin
-#define fout cout
-char s[100002],c,k,f[200002], minim[100001];
-int i,counter,pos;
-long long lg;
+#include <string>
+#include <utility>
+#include <set>
+#include <queue>
 
+int ctr = 0;
 
-int main()
-{
-    fin >> s;
-    lg = strlen(s);
-    strcat (f, s);
-    strcat (f, s);
-
-    memset(minim, 'z', 100000);
-
-    for ( i = 0; i < lg; ++ i ) {
-        c = f[i + lg];
-        f[i + lg] = 0;
-
-        if ( strcmp ( f + i, minim ) < 0 ) {
-            strcpy(minim, f + i);
-            pos = i;
+void f ( int n, int i, int j ) {
+    if ( i <= n /2 ) {
+        if ( j <= n - 1 ) {
+            ctr ++;
+            f(n, i, j + 1);
+        } else {
+            ctr ++;
+            f(n, i + 1, i + 2);
         }
-
-        f[i + lg] = c;
     }
+}
 
-    fout << pos << '\n';
+int main () {
+    f(7, 2, 4);
+std :: cout << ctr << '\n';
+
     return 0;
 }

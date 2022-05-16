@@ -215,6 +215,32 @@ namespace cds {
 
         }
 
+        auto detach () noexcept -> void {
+
+#if defined(__linux)
+            (void) pthread_detach ( this->handle );
+#else
+#error Unsupported : Thread
+#endif
+
+        }
+
+        __CDS_NoDiscard auto sleep ( uint64 milliseconds ) const noexcept -> uint64 {
+
+#if defined(__linux)
+            timespec timeSpecification {};
+            timeSpecification.tv_sec    = static_cast < time_t > ( milliseconds / 1000U );
+            timeSpecification.tv_nsec   = static_cast < signed long > ( ( milliseconds % 1000U ) * 1000000U );
+            if ( 0 == nanosleep ( & timeSpecification, & timeSpecification ) ) {
+                return 0;
+            }
+
+            return timeSpecification.tv_sec * 1000U + timeSpecification.tv_nsec / 1000000U;
+#else
+#error Unsupported : sleep
+#endif
+        }
+
         __CDS_OptimalInline static auto currentThreadID () noexcept -> ID {
 
 #if defined(__linux)
