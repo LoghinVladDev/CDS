@@ -11,7 +11,7 @@ namespace cds {
     namespace experimental {
 
         class String : public Object {
-        public:
+        private:
             auto retardedPrivateFunction () noexcept -> void;
         };
 
