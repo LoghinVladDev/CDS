@@ -3,19 +3,32 @@
 
 using namespace cds;
 
+template < typename T, typename = void >
+struct isMemberFunctionPointer : std :: false_type { };
+
+template < typename R, typename C >
+struct isMemberFunctionPointer < R C :: *, C > : std :: is_function < R > { };
+
+class B {
+public:
+    int f();
+};
+
+class A {
+public:
+    int x;
+    int f();
+};
+
+void g();
+int y;
+
 int main () {
 
-    UniquePointer < Thread > t = new Runnable ( [& t]{
+    std :: cout << isMemberFunctionPointer < decltype ( & A :: x ), A > :: value << '\n';
+    std :: cout << isMemberFunctionPointer < decltype ( & A :: f ), B > :: value << '\n';
+    std :: cout << isMemberFunctionPointer < decltype ( g ), A > :: value << '\n';
+    std :: cout << isMemberFunctionPointer < decltype ( y ), A > :: value << '\n';
 
-        uint32 repeats = 10;
-
-        for ( uint32 i = 0; i < repeats; ++ i ) {
-            (void) t->sleep ( 500 );
-            std :: cout << "Slept for 500ms" << '\n';
-        }
-    });
-
-    t->start();
-    t->join();
     return 0;
 }
