@@ -7,6 +7,7 @@
 
 #include <CDS/Object>
 
+#include <CDS/smartPointers/SharedPointer>
 #include <CDS/Boolean>
 #include <CDS/Optional>
 #include <CDS/Pair>
