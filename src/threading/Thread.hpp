@@ -58,6 +58,7 @@ namespace cds {
 #define MUTABLE_SPEC
 
 #elif defined(WIN32)
+    private:
         typedef struct {
             HANDLE  handle;
             DWORD   threadID;
@@ -71,6 +72,10 @@ namespace cds {
         constexpr static StringLiteral IMPLEMENTATION_TYPE = "WINAPI Thread (windows)";
 
     #define MUTABLE_SPEC mutable
+
+    public:
+        using ID = DWORD;
+    private:
 
     #else
     #error Unsupported : Thread
@@ -182,13 +187,15 @@ namespace cds {
 #if defined(__linux)
             (void) pthread_cancel ( this->handle );
 #elif defined(WIN32)
-            if ( this->handle != PRIMITIVE_NULL_HANDLE )
+            if ( this->handle != PRIMITIVE_NULL_HANDLE ) {
 
                 __CDS_WarningSuppression_ThreadForceTermination_SuppressEnable
 
                 TerminateThread( this->handle->handle, 0 );
 
                 __CDS_WarningSuppression_ThreadForceTermination_SuppressDisable
+
+            }
 
             Memory :: instance().destroy ( this->handle );
             this->handle = PRIMITIVE_NULL_HANDLE;
@@ -219,7 +226,17 @@ namespace cds {
 
 #if defined(__linux)
             (void) pthread_detach ( this->handle );
+#elif defined(WIN32)
+            if ( this->handle != PRIMITIVE_NULL_HANDLE ) {
+                CloseHandle ( this->handle->handle );
+            }
+
+            Memory :: instance().destroy ( this->handle );
+            this->handle = PRIMITIVE_NULL_HANDLE;
 #else
+
+            this->handle->handle;
+
 #error Unsupported : Thread
 #endif
 
@@ -237,7 +254,8 @@ namespace cds {
 
             return timeSpecification.tv_sec * 1000U + timeSpecification.tv_nsec / 1000000U;
 #else
-#error Unsupported : sleep
+            Sleep ( milliseconds );
+            return 0U;
 #endif
         }
 
@@ -249,7 +267,7 @@ namespace cds {
 
 #else
 
-#error "Unsupported"
+            return GetCurrentThreadId();
 
 #endif
 
@@ -262,7 +280,7 @@ namespace cds {
                     stateValue != Thread::State::FINISHED &&
                     stateValue != Thread::State::KILLED &&
                     stateValue != Thread::State::EXCEPTION_TERMINATED
-                    ) {
+            ) {
                 this->kill();
             }
         }
