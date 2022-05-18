@@ -255,6 +255,7 @@ macro(test_set)
     test_suite(${ARGV0} primitive Reference)
     test_suite(${ARGV0} primitive String)
     test_suite(${ARGV0} primitive Sequence)
+    test_suite(${ARGV0} primitive Tuple)
 
     test_suite(${ARGV0} collection Collection)
     test_suite(${ARGV0} collection/unordered HashMap)
