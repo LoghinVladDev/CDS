@@ -46,6 +46,28 @@ namespace cds {
                 struct Conditional < false, TypeIfTrue, TypeIfFalse > {
                     using Type = TypeIfFalse;
                 };
+
+                template < typename T > struct RemoveConst                              { using Type = T; };
+                template < typename T > struct RemoveConst < T const >                  { using Type = T; };
+
+                template < typename T > struct RemoveVolatile                           { using Type = T; };
+                template < typename T > struct RemoveVolatile < T volatile >            { using Type = T; };
+
+                template < typename T > struct RemoveReference                          { using Type = T; };
+                template < typename T > struct RemoveReference < T & >                  { using Type = T; };
+                template < typename T > struct RemoveReference < T && >                 { using Type = T; };
+
+                template < typename T > struct RemoveConstVolatile                      { using Type = T; };
+                template < typename T > struct RemoveConstVolatile < T const >          { using Type = T; };
+                template < typename T > struct RemoveConstVolatile < T volatile >       { using Type = T; };
+                template < typename T > struct RemoveConstVolatile < T const volatile > { using Type = T; };
+
+                namespace removePtrImpl {
+                    template < typename T, typename > struct RemovePointer              { using Type = T; };
+                    template < typename T, typename U > struct RemovePointer < T, U * > { using Type = U; };
+                }
+
+                template < typename T > struct RemovePointer : removePtrImpl :: RemovePointer < T, typename RemoveConstVolatile < T > :: Type > {};
             }
 
             template < bool enableCondition, typename ReplacedType = int >
@@ -56,6 +78,12 @@ namespace cds {
 
             using FalseType = impl :: FalseType;
             using TrueType  = impl :: TrueType;
+
+            template < typename T > using RemoveConst           = typename impl :: RemoveConst < T > :: Type;
+            template < typename T > using RemoveVolatile        = typename impl :: RemoveVolatile < T > :: Type;
+            template < typename T > using RemoveReference       = typename impl :: RemoveReference < T > :: Type;
+            template < typename T > using RemoveConstVolatile   = typename impl :: RemoveConstVolatile < T > :: Type;
+            template < typename T > using RemovePointer         = typename impl :: RemovePointer < T > :: Type;
         }
     }
 }

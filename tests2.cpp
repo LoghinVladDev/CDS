@@ -2,6 +2,7 @@
 #include <CDS/smartPointers/UniquePointer>
 #include <CDS/experimental/meta/TypeTraits>
 #include <CDS/experimental/meta/FunctionTraits>
+#include <CDS/Pair>
 #include <CDS/experimental/Tuple>
 using namespace cds :: experimental;
 
@@ -58,6 +59,9 @@ struct is_base_of :
 
 int main () {
 //
+    std :: cout << meta :: isMemberFunctionPointer < decltype ( & A :: f ) > () << '\n';
+
+//    std :: cout << cds :: experimental::meta::impl::TypeParseTraits<D>::name << '\n';
 
     auto t = Tuple <int, int, int> ( 3, 4, 5 );
 ////    Tuple <int,int,int> t;
@@ -67,6 +71,13 @@ int main () {
 
     auto t4 = Tuple < int, std :: string > ( 3, "ana" );
     auto t5 = std :: move ( t4 );
+
+    Tuple < int, float, cds :: String, cds :: Pair < int, float > > t6 = {
+            3,
+            4.5f,
+            "Ana are mere",
+            cds :: Pair { 3, 6.4f }
+    };
 
     f <int>();
     f <bool>();
