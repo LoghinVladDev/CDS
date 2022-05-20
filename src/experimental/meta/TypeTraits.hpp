@@ -9,7 +9,23 @@
 #include <iostream>
 
 namespace cds { // NOLINT(modernize-concat-nested-namespaces)
+
+    template < typename K, typename V > class Pair;
+    template < typename T >             class SmartPointer;
+    template < typename T >             class UniquePointer;
+    template < typename T >             class SharedPointer;
+    template < typename T >             class ForeignPointer;
+    template < typename T >             class AtomicSharedPointer;
+
     namespace experimental { // NOLINT(modernize-concat-nested-namespaces)
+
+        template < typename K, typename V > class Pair;
+        template < typename T >             class SmartPointer;
+        template < typename T >             class UniquePointer;
+        template < typename T >             class SharedPointer;
+        template < typename T >             class ForeignPointer;
+        template < typename T >             class AtomicSharedPointer;
+
         namespace meta {
 
             namespace impl {
@@ -217,7 +233,28 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
                 template < typename T > struct IsMemberFunctionPointer < T > : isMemberPointerImpl :: IsMemberFunctionPointer < typename RemoveConstVolatile < T > :: Type > {};
                 template < typename T, typename C > struct IsMemberFunctionPointer < T C :: *, C > : isMemberPointerImpl :: IsMemberFunctionPointer < typename RemoveConstVolatile < T C :: * > :: Type > {};
-            };
+
+
+                template < typename T >             struct IsPair                                           : FalseType {};
+                template < typename K, typename V > struct IsPair < cds :: Pair < K, V > >                  : TrueType {};
+                template < typename K, typename V > struct IsPair < cds :: experimental :: Pair < K, V > >  : TrueType {};
+
+                template < typename T >             struct IsSmartPointer                                                       : FalseType {};
+                template < typename T >             struct IsSmartPointer < cds :: UniquePointer < T > >                        : TrueType {};
+                template < typename T >             struct IsSmartPointer < cds :: SharedPointer < T > >                        : TrueType {};
+                template < typename T >             struct IsSmartPointer < cds :: ForeignPointer < T > >                       : TrueType {};
+                template < typename T >             struct IsSmartPointer < cds :: AtomicSharedPointer < T > >                  : TrueType {};
+                template < typename T >             struct IsSmartPointer < cds :: experimental :: UniquePointer < T > >        : TrueType {};
+                template < typename T >             struct IsSmartPointer < cds :: experimental :: SharedPointer < T > >        : TrueType {};
+                template < typename T >             struct IsSmartPointer < cds :: experimental :: ForeignPointer < T > >       : TrueType {};
+                template < typename T >             struct IsSmartPointer < cds :: experimental :: AtomicSharedPointer < T > >  : TrueType {};
+
+                template < typename >       struct IsConst                      : FalseType {};
+                template < typename T >     struct IsConst < T const >          : TrueType {};
+
+                template < typename >       struct IsVolatile                   : FalseType {};
+                template < typename T >     struct IsVolatile < T volatile >    : TrueType {};
+            }
 
             template < typename LeftType, typename RightType >
             constexpr auto isSame () noexcept -> bool {
@@ -365,6 +402,16 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             }
 
             template < typename T >
+            constexpr auto isBasicPointer () noexcept -> bool {
+                return impl :: IsPointer < T > :: value;
+            }
+
+            template < typename T >
+            constexpr auto isSmartPointer () noexcept -> bool {
+                return impl :: IsSmartPointer < T > :: value;
+            }
+
+            template < typename T >
             constexpr auto isPointer () noexcept -> bool {
                 return impl :: IsPointer < T > :: value;
             }
@@ -407,6 +454,16 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             template < typename T, typename C >
             constexpr auto isMemberFunctionPointer () noexcept -> bool {
                 return impl :: IsMemberFunctionPointer < T, C > :: value;
+            }
+
+            template < typename T >
+            constexpr auto isConst () noexcept -> bool {
+                return impl :: IsConst < T > :: value;
+            }
+
+            template < typename T >
+            constexpr auto isVolatile () noexcept -> bool {
+                return impl :: IsVolatile < T > :: value;
             }
 
             template < typename T >
@@ -540,6 +597,14 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                     return meta :: isPointer < T > ();
                 }
 
+                constexpr static auto isBasicPointer () noexcept -> bool {
+                    return meta :: isBasicPointer < T > ();
+                }
+
+                constexpr static auto isSmartPointer () noexcept -> bool {
+                    return meta :: isSmartPointer < T > ();
+                }
+
                 constexpr static auto isLValueReference () noexcept -> bool {
                     return meta :: isLValueReference < T > ();
                 }
@@ -572,6 +637,14 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 template < typename C >
                 constexpr static auto isMemberFunctionPointer () noexcept -> bool {
                     return meta :: isMemberFunctionPointer < T, C > ();
+                }
+
+                constexpr static auto isConst () noexcept -> bool {
+                    return meta :: isConst < T > ();
+                }
+
+                constexpr static auto isVolatile () noexcept -> bool {
+                    return meta :: isVolatile < T > ();
                 }
             };
         }

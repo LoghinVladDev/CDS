@@ -83,7 +83,7 @@ int main () {
     f <bool>();
 
     class A{};
-    class B:  A{};
+    class B:A{};
 
     std :: cout << meta :: Type < A > :: isBaseFor < B > () << '\n';
 
