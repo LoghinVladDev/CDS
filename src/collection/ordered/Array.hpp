@@ -1121,6 +1121,31 @@ namespace cds {
         return Sequence < RemoveReference < decltype (*this) > > (std::move(*this));
     }
 
+    namespace hidden {
+        namespace impl {
+
+            template < typename ArrayType, typename LastArgumentType >
+            inline auto arrayOfPush ( ArrayType & array, LastArgumentType && lastArgument ) noexcept -> void {
+                (void) array.pushBack ( std :: forward < LastArgumentType > ( lastArgument ) );
+            }
+
+            template < typename ArrayType, typename FirstArgumentType, typename ... RemainingArgumentTypes >
+            inline auto arrayOfPush ( ArrayType & array, FirstArgumentType && first, RemainingArgumentTypes && ... remaining ) noexcept -> void {
+
+                (void) array.pushBack ( std :: forward < FirstArgumentType > ( first ) );
+                arrayOfPush ( array, std :: forward < RemainingArgumentTypes > ( remaining ) ... );
+            }
+        }
+    }
+
+    template < typename ... ArgumentTypes >
+    auto arrayOf ( ArgumentTypes && ... types ) noexcept -> Array < typename std :: common_type < ArgumentTypes ... > :: type > {
+        Array < typename std :: common_type < ArgumentTypes ... > :: type > array;
+
+        hidden :: impl :: arrayOfPush ( array, std :: forward < ArgumentTypes > ( types ) ... );
+        return array;
+    }
+
 }
 
 #if __CDS_cpplang_CTAD_available == true

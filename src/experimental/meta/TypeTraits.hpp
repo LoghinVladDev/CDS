@@ -167,7 +167,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                     using y = char (&)[1];
                     using n = char (&)[2];
 
-                    struct Fallback { void operator ()() {} };
+                    struct Fallback { auto operator ()() -> void {} };
                     struct Derived : T, Fallback {};
 
                     template < typename U, U >
@@ -413,7 +413,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
             template < typename T >
             constexpr auto isPointer () noexcept -> bool {
-                return impl :: IsPointer < T > :: value;
+                return isBasicPointer < T > () || isSmartPointer < T > ();
             }
 
             template < typename T >
