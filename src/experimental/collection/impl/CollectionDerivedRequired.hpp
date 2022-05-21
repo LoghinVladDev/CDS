@@ -12,7 +12,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         template < typename Predicate >
         auto Collection < T > :: remove ( Predicate const & predicate, Size count ) noexcept -> Size {
 
-            Iterator * pIteratorBuffer = Memory :: instance().createArray < Iterator > ( count );
+            ConstIterator * pIteratorBuffer = Memory :: instance().createArray < ConstIterator > ( count );
             Size iteratorCount = 0U;
 
             for ( auto iterator = this->begin(), end = this->end(); iteratorCount < count && iterator != end; ++ iterator ) {
@@ -42,7 +42,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         template < typename T >
         template < typename Predicate >
         auto Collection < T > :: removeLast ( Predicate const & predicate ) noexcept -> bool {
-            Iterator toRemove;
+            ConstIterator toRemove;
 
             for ( auto iterator = this->begin(), end = this->end(); iterator != end; ++ iterator ) {
                 if ( predicate ( * iterator ) ) {
@@ -57,7 +57,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         template < typename Predicate >
         auto Collection < T > :: removeAll ( Predicate const & predicate ) noexcept -> Size {
 
-            Iterator * pIteratorBuffer = Memory :: instance().createArray < Iterator > ( this->size() );
+            ConstIterator * pIteratorBuffer = Memory :: instance().createArray < ConstIterator > ( this->size() );
             Size iteratorCount = 0U;
 
             for ( auto iterator = this->begin(), end = this->end(); iterator != end; ++ iterator ) {
@@ -81,7 +81,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                     return true;
                 }
 
-                Iterator * pIteratorBuffer = Memory :: instance().createArray < Iterator > ( count );
+                ConstIterator * pIteratorBuffer = Memory :: instance().createArray < ConstIterator > ( count );
                 Size iteratorCount = 0U;
 
                 for ( auto iterator = this->begin(), end = this->end(); iteratorCount < count && iterator != end; ++ iterator ) {
@@ -94,7 +94,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 return removedCount;
             }
 
-            Iterator * pIteratorBuffer = Memory :: instance().createArray < Iterator > ( count );
+            ConstIterator * pIteratorBuffer = Memory :: instance().createArray < ConstIterator > ( count );
             Size iteratorCount = 0U;
 
             for ( auto iterator = this->begin(), end = this->end(); iterator != end; ++ iterator ) {
@@ -130,7 +130,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
         template < typename T >
         auto Collection < T > :: removeLastOf ( Collection < T > const & collection ) noexcept -> bool {
-            Iterator toRemove;
+            ConstIterator toRemove;
 
             if ( this == & collection ) {
                 for ( auto iterator = this->begin(), end = this->end(); iterator != end; ++ iterator ) {
@@ -157,7 +157,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 return removedCount;
             }
 
-            Iterator * pIteratorBuffer = Memory :: instance().createArray < Iterator > ( this->size() );
+            ConstIterator * pIteratorBuffer = Memory :: instance().createArray < ConstIterator > ( this->size() );
             Size iteratorCount = 0U;
 
             for ( auto iterator = this->begin(), end = this->end(); iterator != end; ++ iterator ) {
@@ -179,7 +179,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 return 0ULL;
             }
 
-            Iterator * pIteratorBuffer = Memory :: instance().createArray < Iterator > ( count );
+            ConstIterator * pIteratorBuffer = Memory :: instance().createArray < ConstIterator > ( count );
             Size iteratorCount = 0U;
 
             for ( auto iterator = this->begin(), end = this->end(); iterator != end; ++ iterator ) {
@@ -219,7 +219,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 return false;
             }
 
-            Iterator toRemove;
+            ConstIterator toRemove;
 
             for ( auto iterator = this->begin(), end = this->end(); iterator != end; ++ iterator ) {
                 if ( ! collection.contains ( * iterator ) ) {
@@ -236,7 +236,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 return 0ULL;
             }
 
-            Iterator * pIteratorBuffer = Memory :: instance().createArray < Iterator > ( this->size() );
+            ConstIterator * pIteratorBuffer = Memory :: instance().createArray < ConstIterator > ( this->size() );
             Size iteratorCount = 0U;
 
             for ( auto iterator = this->begin(), end = this->end(); iterator != end; ++ iterator ) {
@@ -271,7 +271,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         template < typename T >
         auto Collection < T > :: removeOf ( InitializerList const & list, Size count ) noexcept -> Size {
 
-            Iterator * pIteratorBuffer = Memory :: instance().createArray < Iterator > ( count );
+            ConstIterator * pIteratorBuffer = Memory :: instance().createArray < ConstIterator > ( count );
             Size iteratorCount = 0U;
 
             for ( auto iterator = this->begin(), end = this->end(); iterator != end; ++ iterator ) {
@@ -303,7 +303,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
         template < typename T >
         auto Collection < T > :: removeLastOf ( InitializerList const & list ) noexcept -> bool {
-            Iterator toRemove;
+            ConstIterator toRemove;
 
             for ( auto iterator = this->begin(), end = this->end(); iterator != end; ++ iterator ) {
                 if ( hidden :: impl :: initializerListContains ( list, * iterator ) ) {
@@ -317,7 +317,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         template < typename T >
         auto Collection < T > :: removeAllOf ( InitializerList const & list ) noexcept -> Size {
 
-            Iterator * pIteratorBuffer = Memory :: instance().createArray < Iterator > ( this->size() );
+            ConstIterator * pIteratorBuffer = Memory :: instance().createArray < ConstIterator > ( this->size() );
             Size iteratorCount = 0U;
 
             for ( auto iterator = this->begin(), end = this->end(); iterator != end; ++ iterator ) {
@@ -335,7 +335,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         template < typename T >
         auto Collection < T > :: removeNotOf ( InitializerList const & list, Size count ) noexcept -> Size {
 
-            Iterator * pIteratorBuffer = Memory :: instance().createArray < Iterator > ( count );
+            ConstIterator * pIteratorBuffer = Memory :: instance().createArray < ConstIterator > ( count );
             Size iteratorCount = 0U;
 
             for ( auto iterator = this->begin(), end = this->end(); iterator != end; ++ iterator ) {
@@ -368,7 +368,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
         template < typename T >
         auto Collection < T > :: removeLastNotOf ( InitializerList const & list ) noexcept -> bool {
-            Iterator toRemove;
+            ConstIterator toRemove;
 
             for ( auto iterator = this->begin(), end = this->end(); iterator != end; ++ iterator ) {
                 if ( ! hidden :: impl :: initializerListContains ( list, * iterator ) ) {
@@ -381,7 +381,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
         template < typename T >
         auto Collection < T > :: removeAllNotOf ( InitializerList const & list ) noexcept -> Size {
-            Iterator * pIteratorBuffer = Memory :: instance().createArray < Iterator > ( this->size() );
+            ConstIterator * pIteratorBuffer = Memory :: instance().createArray < ConstIterator > ( this->size() );
             Size iteratorCount = 0U;
 
             for ( auto iterator = this->begin(), end = this->end(); iterator != end; ++ iterator ) {

@@ -17,7 +17,7 @@ namespace cds {
         public:
             constexpr ConstReverseIterator ( ConstReverseIterator && ) noexcept;
         public:
-            constexpr ConstReverseIterator ( Collection < T > const *, UniquePointer < DelegateConstIterator > && ) noexcept;
+            constexpr ConstReverseIterator ( Collection < T > const *, cds :: UniquePointer < DelegateConstIterator > && ) noexcept;
         public:
             ~ConstReverseIterator () noexcept override = default;
 

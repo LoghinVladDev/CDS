@@ -14,8 +14,8 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             friend class Collection < T >;
 
         protected:
-            ForeignPointer < Collection < T > const >   _pCollection { nullptr };
-            UniquePointer < AbstractDelegateIterator >  _pDelegate { nullptr };
+            Collection < T > const *                            _pCollection { nullptr };
+            cds :: UniquePointer < AbstractDelegateIterator >   _pDelegate { nullptr };
 
         protected:
             constexpr AbstractIterator () noexcept = default;
@@ -28,7 +28,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         public:
             constexpr AbstractIterator (
                     Collection < T > const *,
-                    UniquePointer < AbstractDelegateIterator > &&
+                    cds :: UniquePointer < AbstractDelegateIterator > &&
             ) noexcept;
 
         public:

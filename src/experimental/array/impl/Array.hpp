@@ -60,7 +60,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         }
 
         template < typename T >
-        auto Array < T > :: delegateIterator ( DelegateIteratorRequestType requestType ) noexcept -> UniquePointer < DelegateIterator > {
+        auto Array < T > :: delegateIterator ( DelegateIteratorRequestType requestType ) noexcept -> cds :: UniquePointer < DelegateIterator > {
             switch ( requestType ) {
                 case DelegateIteratorRequestType :: ForwardBegin:
                     return Memory :: instance().create < ArrayDelegateIterator > ( this, 0, true );
@@ -74,7 +74,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         }
 
         template < typename T >
-        auto Array < T > :: delegateConstIterator ( DelegateIteratorRequestType requestType ) const noexcept -> UniquePointer < DelegateConstIterator > {
+        auto Array < T > :: delegateConstIterator ( DelegateIteratorRequestType requestType ) const noexcept -> cds :: UniquePointer < DelegateConstIterator > {
             switch ( requestType ) {
                 case DelegateIteratorRequestType :: ForwardBegin:
                     return Memory :: instance().create < ArrayDelegateConstIterator > ( this, 0, true );
@@ -463,12 +463,12 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
         template < typename T >
         __CDS_OptimalInline auto Array < T > :: pNewBefore ( Iterator const & iterator ) noexcept -> ElementType * & {
-            return this->pNewBefore ( reinterpret_cast < ArrayDelegateIterator const * > ( Collection < T > :: acquireDelegate ( iterator ) )->index() );
+            return this->pNewBefore ( reinterpret_cast < ArrayDelegateIterator const * > ( List < T > :: acquireDelegate ( iterator ) )->index() );
         }
 
         template < typename T >
         __CDS_OptimalInline auto Array < T > :: pNewAfter ( Iterator const & iterator ) noexcept -> ElementType * & {
-            return this->pNewAfter ( reinterpret_cast < ArrayDelegateIterator const * > ( Collection < T > :: acquireDelegate ( iterator ) )->index() );
+            return this->pNewAfter ( reinterpret_cast < ArrayDelegateIterator const * > ( List < T > :: acquireDelegate ( iterator ) )->index() );
         }
 
         template < typename T >
@@ -483,12 +483,12 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
         template < typename T >
         __CDS_OptimalInline auto Array < T > :: pNewBefore ( ReverseIterator const & iterator ) noexcept -> ElementType * & {
-            return this->pNewBefore ( reinterpret_cast < ArrayDelegateIterator const * > ( Collection < T > :: acquireDelegate ( iterator ) )->index() );
+            return this->pNewBefore ( reinterpret_cast < ArrayDelegateIterator const * > ( List < T > :: acquireDelegate ( iterator ) )->index() );
         }
 
         template < typename T >
         __CDS_OptimalInline auto Array < T > :: pNewAfter ( ReverseIterator const & iterator ) noexcept -> ElementType * & {
-            return this->pNewAfter ( reinterpret_cast < ArrayDelegateIterator const * > ( Collection < T > :: acquireDelegate ( iterator ) )->index() );
+            return this->pNewAfter ( reinterpret_cast < ArrayDelegateIterator const * > ( List < T > :: acquireDelegate ( iterator ) )->index() );
         }
 
         template < typename T >

@@ -17,7 +17,7 @@ namespace cds {
         public:
             constexpr ConstIterator ( ConstIterator && ) noexcept;
         public:
-            constexpr ConstIterator ( Collection < T > const *, UniquePointer < DelegateConstIterator > && ) noexcept;
+            constexpr ConstIterator ( Collection < T > const *, cds :: UniquePointer < DelegateConstIterator > && ) noexcept;
         public:
             ~ConstIterator () noexcept override = default;
 

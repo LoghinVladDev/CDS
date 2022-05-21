@@ -42,9 +42,9 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         private:
             using typename Collection < T > :: DelegateIteratorRequestType;
         private:
-            auto delegateIterator ( DelegateIteratorRequestType ) noexcept -> UniquePointer < DelegateIterator > override;
+            auto delegateIterator ( DelegateIteratorRequestType ) noexcept -> cds :: UniquePointer < DelegateIterator > override;
         private:
-            auto delegateConstIterator ( DelegateIteratorRequestType ) const noexcept -> UniquePointer < DelegateConstIterator > override;
+            auto delegateConstIterator ( DelegateIteratorRequestType ) const noexcept -> cds :: UniquePointer < DelegateConstIterator > override;
 
         private:
             ElementType ** _pData       { nullptr };
@@ -67,10 +67,10 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         public:
             Array ( InitializerList const & ) noexcept; // NOLINT(google-explicit-constructor)
         public:
-            template < typename V = T, typename = EnableIf < Type < V > :: defaultConstructible > >
+            template < typename V = T, meta :: EnableIf < meta :: isDefaultConstructible < V > () > >
             explicit Array ( Size ) noexcept;
         public:
-            template < typename V = T, typename = EnableIf < Type < V > :: copyConstructible > >
+            template < typename V = T, meta :: EnableIf < meta :: isCopyConstructible < V > () > >
             Array ( Size, ElementType const & ) noexcept;
         public:
             Array ( Collection < T > const & ) noexcept;
@@ -81,10 +81,10 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             auto _resize ( Size ) noexcept -> void;
 
         public:
-            template < typename V = T, typename = EnableIf < Type < V > :: defaultConstructible > >
+            template < typename V = T, meta :: EnableIf < meta :: isDefaultConstructible < V > () > >
             auto resize ( Size ) noexcept -> void;
         public:
-            template < typename V = T, typename = EnableIf < Type < V > :: copyConstructible > >
+            template < typename V = T, meta :: EnableIf < meta :: isCopyConstructible < V > () > >
             auto resize ( Size, ElementType const & ) noexcept -> void;
 
         public:

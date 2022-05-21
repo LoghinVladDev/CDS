@@ -9,6 +9,36 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
     namespace experimental {
 
         template < typename T >
+        __CDS_OptimalInline auto List < T > :: begin () noexcept -> Iterator {
+            return Iterator ( this, std :: move ( this->delegateIterator ( DelegateIteratorRequestType :: ForwardBegin ) ) );
+        }
+
+        template < typename T >
+        __CDS_OptimalInline auto List < T > :: end () noexcept -> Iterator {
+            return Iterator ( this, std :: move ( this->delegateIterator ( DelegateIteratorRequestType :: ForwardEnd ) ) );
+        }
+
+        template < typename T >
+        __CDS_OptimalInline auto List < T > :: rbegin () noexcept -> ReverseIterator {
+            return Iterator ( this, std :: move ( this->delegateIterator ( DelegateIteratorRequestType :: BackwardBegin ) ) );
+        }
+
+        template < typename T >
+        __CDS_OptimalInline auto List < T > :: rend () noexcept -> ReverseIterator {
+            return Iterator ( this, std :: move ( this->delegateIterator ( DelegateIteratorRequestType :: BackwardEnd ) ) );
+        }
+
+        template < typename T >
+        constexpr auto List < T > :: acquireDelegate ( Iterator const & iterator ) noexcept -> DelegateIterator const * {
+            return reinterpret_cast < DelegateIterator const * > ( Collection < T > :: acquireDelegate ( iterator ) );
+        }
+
+        template < typename T >
+        constexpr auto List < T > :: acquireDelegate ( ReverseIterator const & iterator ) noexcept -> DelegateIterator const * {
+            return reinterpret_cast < DelegateIterator const * > ( Collection < T > :: acquireDelegate ( iterator ) );
+        }
+
+        template < typename T >
         constexpr auto List < T > :: size () const noexcept -> Size {
             return this->_size;
         }
@@ -70,31 +100,31 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         }
 
         template < typename T >
-        template < typename V, EnableIf < Type < V > :: copyConstructible > >
+        template < typename V, meta :: EnableIf < meta :: isCopyConstructible < V > () > >
         __CDS_OptimalInline auto List < T > :: append ( ElementType const & element ) noexcept -> ElementType & {
             return this->pushBack ( element );
         }
 
         template < typename T >
-        template < typename V, EnableIf < Type < V > :: moveConstructible > >
+        template < typename V, meta :: EnableIf < meta :: isMoveConstructible < V > () > >
         __CDS_OptimalInline auto List < T > :: append ( ElementType && element ) noexcept -> ElementType & {
             return this->pushBack ( cds :: forward < ElementType > ( element ) );
         }
 
         template < typename T >
-        template < typename V, EnableIf < Type < V > :: copyConstructible > >
+        template < typename V, meta :: EnableIf < meta :: isCopyConstructible < V > () > >
         __CDS_OptimalInline auto List < T > :: prepend ( ElementType const & element ) noexcept -> ElementType & {
             return this->pushFront ( element );
         }
 
         template < typename T >
-        template < typename V, EnableIf < Type < V > :: moveConstructible > >
+        template < typename V, meta :: EnableIf < meta :: isMoveConstructible < V > () > >
         __CDS_OptimalInline auto List < T > :: prepend ( ElementType && element ) noexcept -> ElementType & {
             return this->pushFront ( cds :: forward < ElementType > ( element ) );
         }
 
         template < typename T >
-        template < typename V, EnableIf < Type < V > :: copyConstructible > >
+        template < typename V, meta :: EnableIf < meta :: isCopyConstructible < V > () > >
         __CDS_OptimalInline auto List < T > :: pushBack ( ElementType const & element ) noexcept -> ElementType & {
             auto & pNew = this->pNewBack();
 
@@ -107,7 +137,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         }
 
         template < typename T >
-        template < typename V, EnableIf < Type < V > :: moveConstructible > >
+        template < typename V, meta :: EnableIf < meta :: isMoveConstructible < V > () > >
         __CDS_OptimalInline auto List < T > :: pushBack ( ElementType && element ) noexcept -> ElementType & {
             auto & pNew = this->pNewBack();
 
@@ -120,7 +150,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         }
 
         template < typename T >
-        template < typename V, EnableIf < Type < V > :: copyConstructible > >
+        template < typename V, meta :: EnableIf < meta :: isCopyConstructible < V > () > >
         __CDS_OptimalInline auto List < T > :: pushFront ( ElementType const & element ) noexcept -> ElementType & {
             auto & pNew = this->pNewFront();
 
@@ -133,7 +163,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         }
 
         template < typename T >
-        template < typename V, EnableIf < Type < V > :: moveConstructible > >
+        template < typename V, meta :: EnableIf < meta :: isMoveConstructible < V > () > >
         __CDS_OptimalInline auto List < T > :: pushFront ( ElementType && element ) noexcept -> ElementType & {
             auto & pNew = this->pNewFront();
 
@@ -146,7 +176,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         }
 
         template < typename T >
-        template < typename V, EnableIf < Type < V > :: copyConstructible > >
+        template < typename V, meta :: EnableIf < meta :: isCopyConstructible < V > () > >
         __CDS_OptimalInline auto List < T > :: insertBefore ( Iterator const & iterator, ElementType const & element ) noexcept (false) -> ElementType & {
             if ( ! iterator.of ( this ) ) {
                 throw IllegalArgumentException ( "Iterator not of this Collection" );
@@ -175,7 +205,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         }
 
         template < typename T >
-        template < typename V, EnableIf < Type < V > :: moveConstructible > >
+        template < typename V, meta :: EnableIf < meta :: isMoveConstructible < V > () > >
         __CDS_OptimalInline auto List < T > :: insertBefore ( Iterator const & iterator, ElementType && element ) noexcept (false) -> ElementType & {
             if ( ! iterator.of ( this ) ) {
                 throw IllegalArgumentException ( "Iterator not of this Collection" );
@@ -204,7 +234,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         }
 
         template < typename T >
-        template < typename V, EnableIf < Type < V > :: copyConstructible > >
+        template < typename V, meta :: EnableIf < meta :: isCopyConstructible < V > () > >
         __CDS_OptimalInline auto List < T > :: insertAfter ( Iterator const & iterator, ElementType const & element ) noexcept (false) -> ElementType & {
             if ( ! iterator.of ( this ) ) {
                 throw IllegalArgumentException ( "Iterator not of this Collection" );
@@ -225,7 +255,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         }
 
         template < typename T >
-        template < typename V, EnableIf < Type < V > :: moveConstructible > >
+        template < typename V, meta :: EnableIf < meta :: isMoveConstructible < V > () > >
         __CDS_OptimalInline auto List < T > :: insertAfter ( Iterator const & iterator, ElementType && element ) noexcept (false) -> ElementType & {
             if ( ! iterator.of ( this ) ) {
                 throw IllegalArgumentException ( "Iterator not of this Collection" );
@@ -246,7 +276,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         }
 
         template < typename T >
-        template < typename V, EnableIf < Type < V > :: copyConstructible > >
+        template < typename V, meta :: EnableIf < meta :: isCopyConstructible < V > () > >
         __CDS_OptimalInline auto List < T > :: insertBefore ( ConstIterator const & iterator, ElementType const & element ) noexcept (false) -> ElementType & {
             if ( ! iterator.of ( this ) ) {
                 throw IllegalArgumentException ( "Iterator not of this Collection" );
@@ -275,7 +305,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         }
 
         template < typename T >
-        template < typename V, EnableIf < Type < V > :: moveConstructible > >
+        template < typename V, meta :: EnableIf < meta :: isMoveConstructible < V > () > >
         __CDS_OptimalInline auto List < T > :: insertBefore ( ConstIterator const & iterator, ElementType && element ) noexcept (false) -> ElementType & {
             if ( ! iterator.of ( this ) ) {
                 throw IllegalArgumentException ( "Iterator not of this Collection" );
@@ -304,7 +334,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         }
 
         template < typename T >
-        template < typename V, EnableIf < Type < V > :: copyConstructible > >
+        template < typename V, meta :: EnableIf < meta :: isCopyConstructible < V > () > >
         __CDS_OptimalInline auto List < T > :: insertAfter ( ConstIterator const & iterator, ElementType const & element ) noexcept (false) -> ElementType & {
             if ( ! iterator.of ( this ) ) {
                 throw IllegalArgumentException ( "Iterator not of this Collection" );
@@ -325,7 +355,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         }
 
         template < typename T >
-        template < typename V, EnableIf < Type < V > :: moveConstructible > >
+        template < typename V, meta :: EnableIf < meta :: isMoveConstructible < V > () > >
         __CDS_OptimalInline auto List < T > :: insertAfter ( ConstIterator const & iterator, ElementType && element ) noexcept (false) -> ElementType & {
             if ( ! iterator.of ( this ) ) {
                 throw IllegalArgumentException ( "Iterator not of this Collection" );
@@ -346,7 +376,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         }
 
         template < typename T >
-        template < typename V, EnableIf < Type < V > :: copyConstructible > >
+        template < typename V, meta :: EnableIf < meta :: isCopyConstructible < V > () > >
         __CDS_OptimalInline auto List < T > :: insertBefore ( ReverseIterator const & iterator, ElementType const & element ) noexcept (false) -> ElementType & {
             if ( ! iterator.of ( this ) ) {
                 throw IllegalArgumentException ( "Iterator not of this Collection" );
@@ -375,7 +405,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         }
 
         template < typename T >
-        template < typename V, EnableIf < Type < V > :: moveConstructible > >
+        template < typename V, meta :: EnableIf < meta :: isMoveConstructible < V > () > >
         __CDS_OptimalInline auto List < T > :: insertBefore ( ReverseIterator const & iterator, ElementType && element ) noexcept (false) -> ElementType & {
             if ( ! iterator.of ( this ) ) {
                 throw IllegalArgumentException ( "Iterator not of this Collection" );
@@ -404,7 +434,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         }
 
         template < typename T >
-        template < typename V, EnableIf < Type < V > :: copyConstructible > >
+        template < typename V, meta :: EnableIf < meta :: isCopyConstructible < V > () > >
         __CDS_OptimalInline auto List < T > :: insertAfter ( ReverseIterator const & iterator, ElementType const & element ) noexcept (false) -> ElementType & {
             if ( ! iterator.of ( this ) ) {
                 throw IllegalArgumentException ( "Iterator not of this Collection" );
@@ -425,7 +455,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         }
 
         template < typename T >
-        template < typename V, EnableIf < Type < V > :: moveConstructible > >
+        template < typename V, meta :: EnableIf < meta :: isMoveConstructible < V > () > >
         __CDS_OptimalInline auto List < T > :: insertAfter ( ReverseIterator const & iterator, ElementType && element ) noexcept (false) -> ElementType & {
             if ( ! iterator.of ( this ) ) {
                 throw IllegalArgumentException ( "Iterator not of this Collection" );
@@ -446,7 +476,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         }
 
         template < typename T >
-        template < typename V, EnableIf < Type < V > :: copyConstructible > >
+        template < typename V, meta :: EnableIf < meta :: isCopyConstructible < V > () > >
         __CDS_OptimalInline auto List < T > :: insertBefore ( ConstReverseIterator const & iterator, ElementType const & element ) noexcept (false) -> ElementType & {
             if ( ! iterator.of ( this ) ) {
                 throw IllegalArgumentException ( "Iterator not of this Collection" );
@@ -475,7 +505,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         }
 
         template < typename T >
-        template < typename V, EnableIf < Type < V > :: moveConstructible > >
+        template < typename V, meta :: EnableIf < meta :: isMoveConstructible < V > () > >
         __CDS_OptimalInline auto List < T > :: insertBefore ( ConstReverseIterator const & iterator, ElementType && element ) noexcept (false) -> ElementType & {
             if ( ! iterator.of ( this ) ) {
                 throw IllegalArgumentException ( "Iterator not of this Collection" );
@@ -504,7 +534,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         }
 
         template < typename T >
-        template < typename V, EnableIf < Type < V > :: copyConstructible > >
+        template < typename V, meta :: EnableIf < meta :: isCopyConstructible < V > () > >
         __CDS_OptimalInline auto List < T > :: insertAfter ( ConstReverseIterator const & iterator, ElementType const & element ) noexcept (false) -> ElementType & {
             if ( ! iterator.of ( this ) ) {
                 throw IllegalArgumentException ( "Iterator not of this Collection" );
@@ -525,7 +555,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         }
 
         template < typename T >
-        template < typename V, EnableIf < Type < V > :: moveConstructible > >
+        template < typename V, meta :: EnableIf < meta :: isMoveConstructible < V > () > >
         __CDS_OptimalInline auto List < T > :: insertAfter ( ConstReverseIterator const & iterator, ElementType && element ) noexcept (false) -> ElementType & {
             if ( ! iterator.of ( this ) ) {
                 throw IllegalArgumentException ( "Iterator not of this Collection" );
@@ -551,7 +581,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         }
 
         template < typename T >
-        template < typename ListType, typename V, EnableIf < Type < V > :: copyConstructible && isDerivedFrom < ListType, Collection < T > > :: value > >
+        template < typename ListType, typename V, meta :: EnableIf < meta :: isCopyConstructible < V > () && meta :: isDerivedFrom < ListType, Collection < T > > () > >
         auto List < T > :: sub ( Index from, Index to, ListType & list ) const noexcept (false) -> ListType & {
 
             list.clear();
@@ -582,7 +612,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         }
 
         template < typename T >
-        template < typename ListType, typename V, EnableIf < Type < V > :: copyConstructible && isDerivedFrom < ListType, Collection < T > > :: value > >
+        template < typename ListType, typename V, meta :: EnableIf < meta :: isCopyConstructible < V > () && meta :: isDerivedFrom < ListType, Collection < T > > () > >
         auto List < T > :: sub ( Index from, Index to ) const noexcept (false) -> ListType {
             ListType list;
 
@@ -612,19 +642,19 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         }
 
         template < typename T >
-        template < template < typename ... > typename ListType, typename V, EnableIf < Type < V > :: copyConstructible && isDerivedFrom < ListType < T >, Collection < T > > :: value > >
+        template < template < typename ... > typename ListType, typename V, meta :: EnableIf < meta :: isCopyConstructible < V > () && meta :: isDerivedFrom < ListType < T >, Collection < T > > () > >
         __CDS_OptimalInline auto List < T > :: sub ( Index from, Index to, ListType < ElementType > & list ) const noexcept (false) -> ListType < ElementType > & {
             return this->sub < ListType < T > > ( from, to, list );
         }
 
         template < typename T >
-        template < template < typename ... > typename ListType, typename V, EnableIf < Type < V > :: copyConstructible && isDerivedFrom < ListType < T >, Collection < T > > :: value > >
+        template < template < typename ... > typename ListType, typename V, meta :: EnableIf < meta :: isCopyConstructible < V > () && meta :: isDerivedFrom < ListType < T >, Collection < T > > () > >
         __CDS_OptimalInline auto List < T > :: sub ( Index from, Index to ) const noexcept (false) -> ListType < ElementType > {
             return this->sub < ListType < T > > ( from, to );
         }
 
         template < typename T >
-        template < typename ListType, EnableIf < isDerivedFrom < ListType, Collection < Index > > :: value > >
+        template < typename ListType, meta :: EnableIf < meta :: isDerivedFrom < ListType, Collection < Index > > () > >
         auto List < T > :: indices ( ElementType const & element, ListType & list ) const noexcept -> ListType & {
             list.clear ();
 
@@ -639,7 +669,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         }
 
         template < typename T >
-        template < typename ListType, EnableIf < isDerivedFrom < ListType, Collection < Index > > :: value > >
+        template < typename ListType, meta :: EnableIf < meta :: isDerivedFrom < ListType, Collection < Index > > () > >
         auto List < T > :: indices ( ElementType const & element ) const noexcept -> ListType {
             ListType list;
 
@@ -654,13 +684,13 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         }
 
         template < typename T >
-        template < template < typename ... > typename ListType, EnableIf < isDerivedFrom < ListType < Index >, Collection < Index > > :: value > >
+        template < template < typename ... > typename ListType, meta :: EnableIf < meta :: isDerivedFrom < ListType < Index >, Collection < Index > > () > >
         __CDS_OptimalInline auto List < T > :: indices ( ElementType const & element, ListType < Index > & list ) const noexcept -> ListType < Index > & {
             return this->indices < ListType < T > > ( element, list );
         }
 
         template < typename T >
-        template < template < typename ... > typename ListType, EnableIf < isDerivedFrom < ListType < Index >, Collection < Index > > :: value > >
+        template < template < typename ... > typename ListType, meta :: EnableIf < meta :: isDerivedFrom < ListType < Index >, Collection < Index > > () > >
         __CDS_OptimalInline auto List < T > :: indices ( ElementType const & element ) const noexcept -> ListType < Index > {
             return this->indices < ListType < T > > ( element );
         }

@@ -296,7 +296,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         }
 
         template < typename T >
-        __CDS_OptimalInline auto LinkedList < T > :: delegateIterator ( DelegateIteratorRequestType requestType ) noexcept -> UniquePointer < DelegateIterator > {
+        __CDS_OptimalInline auto LinkedList < T > :: delegateIterator ( DelegateIteratorRequestType requestType ) noexcept -> cds :: UniquePointer < DelegateIterator > {
             switch ( requestType ) {
                 case DelegateIteratorRequestType :: ForwardBegin:
                     return Memory :: instance().create < LinkedListDelegateIterator > ( this->_pFront, true );
@@ -310,7 +310,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         }
 
         template < typename T >
-        __CDS_OptimalInline auto LinkedList < T > :: delegateConstIterator ( DelegateIteratorRequestType requestType ) const noexcept -> UniquePointer < DelegateConstIterator > {
+        __CDS_OptimalInline auto LinkedList < T > :: delegateConstIterator ( DelegateIteratorRequestType requestType ) const noexcept -> cds :: UniquePointer < DelegateConstIterator > {
             switch ( requestType ) {
                 case DelegateIteratorRequestType :: ForwardBegin:
                     return Memory :: instance().create < LinkedListDelegateConstIterator > ( this->_pFront, true );

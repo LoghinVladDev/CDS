@@ -10,11 +10,11 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
         template < typename T >
         constexpr Collection < T > :: AbstractIterator :: AbstractIterator (
-                Collection < T >                            const * pCollection,
-                UniquePointer < AbstractDelegateIterator >       && pIterator
+                Collection < T >                                    const * pCollection,
+                cds :: UniquePointer < AbstractDelegateIterator >        && pIterator
         ) noexcept :
                 _pCollection ( pCollection ),
-                _pDelegate ( cds :: forward < UniquePointer < AbstractDelegateIterator > > ( pIterator ) ) {
+                _pDelegate ( cds :: forward < cds :: UniquePointer < AbstractDelegateIterator > > ( pIterator ) ) {
 
         }
 
@@ -31,7 +31,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         constexpr Collection < T > :: AbstractIterator :: AbstractIterator (
                 AbstractIterator && iterator
         ) noexcept :
-                _pCollection ( std :: move ( iterator._pCollection ) ),
+                _pCollection ( cds :: exchange ( iterator._pCollection, nullptr ) ),
                 _pDelegate ( std :: move ( iterator._pDelegate ) ) {
 
         }

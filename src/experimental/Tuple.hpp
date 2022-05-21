@@ -6,7 +6,7 @@
 #define __CDS_EX_TUPLE_HPP__
 
 #include <CDS/experimental/Object>
-#include <CDS/experimental/meta/Base>
+#include <CDS/experimental/meta/TypeTraits>
 
 namespace cds { // NOLINT(modernize-concat-nested-namespaces)
     namespace experimental {
@@ -59,25 +59,25 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                     }
 
                 public:
-                    template < uint32 requestedIndex, EnableIf < requestedIndex == index > = 0 >
+                    template < uint32 requestedIndex, meta :: EnableIf < requestedIndex == index > = 0 >
                     auto get () noexcept -> CurrentType & {
                         return this->data;
                     }
 
                 public:
-                    template < uint32 requestedIndex, EnableIf < requestedIndex != index > = 0 >
+                    template < uint32 requestedIndex, meta :: EnableIf < requestedIndex != index > = 0 >
                     auto get () noexcept -> typename hidden :: impl :: TypeAt < requestedIndex - index, CurrentType, RemainingTypes ... > :: Type & {
                         return this->TupleNode < index + 1, RemainingTypes ... > :: template get < requestedIndex > ();
                     }
 
                 public:
-                    template < uint32 requestedIndex, EnableIf < requestedIndex == index > = 0 >
+                    template < uint32 requestedIndex, meta :: EnableIf < requestedIndex == index > = 0 >
                     auto get () const noexcept -> CurrentType const & {
                         return this->data;
                     }
 
                 public:
-                    template < uint32 requestedIndex, EnableIf < requestedIndex != index > = 0 >
+                    template < uint32 requestedIndex, meta :: EnableIf < requestedIndex != index > = 0 >
                     auto get () const noexcept -> typename hidden :: impl :: TypeAt < requestedIndex - index, CurrentType, RemainingTypes ... > :: Type const & {
                         return this->TupleNode < index + 1, RemainingTypes ... > :: template get < requestedIndex > ();
                     }
@@ -97,13 +97,13 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                     }
 
                 public:
-                    template < uint32 size = sizeof ... (RemainingTypes), EnableIf < size == 0 > = 0 >
+                    template < uint32 size = sizeof ... (RemainingTypes), meta :: EnableIf < size == 0 > = 0 >
                     auto toString ( std :: ostream & str ) const noexcept -> void {
                         str << this->data;
                     }
 
                 public:
-                    template < uint32 size = sizeof ... (RemainingTypes), EnableIf < size != 0 > = 0 >
+                    template < uint32 size = sizeof ... (RemainingTypes), meta :: EnableIf < size != 0 > = 0 >
                     auto toString ( std :: ostream & str ) const noexcept -> void {
                         str << this->data << ", ";
                         this->TupleNode < index + 1, RemainingTypes ... > :: toString ( str );
@@ -139,7 +139,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         public:
             template <
                     typename ... ConstructorTypePack,
-                    EnableIf < ( sizeof ... ( ConstructorTypePack ) == sizeof ... ( TypePack ) && sizeof ... ( ConstructorTypePack ) > 1 ) > = 0
+                    meta :: EnableIf < ( sizeof ... ( ConstructorTypePack ) == sizeof ... ( TypePack ) && sizeof ... ( ConstructorTypePack ) > 1 ) > = 0
             > Tuple ( ConstructorTypePack && ... argumentPack ) noexcept : // NOLINT(google-explicit-constructor)
                     node ( std :: forward < ConstructorTypePack > ( argumentPack ) ... ) {
 
@@ -148,7 +148,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         public:
             template <
                     typename ... ConstructorTypePack,
-                    EnableIf < (
+                    meta :: EnableIf < (
                             sizeof ... ( ConstructorTypePack ) == sizeof ... ( TypePack ) && sizeof ... ( ConstructorTypePack ) == 1 &&
                             ! isSame < ConstructorTypePack ..., Tuple > ()
                     ) > = 0

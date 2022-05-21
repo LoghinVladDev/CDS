@@ -3,6 +3,8 @@
 //
 
 #include "CollectionTest.h"
+
+#if !defined(CDS_TEST_EXPERIMENTAL)
 #include <CDS/Array>
 
 using namespace cds;
@@ -99,3 +101,21 @@ auto CollectionTest :: execute() noexcept -> bool {
 
     return allOk;
 }
+
+#endif
+
+#if defined(CDS_TEST_EXPERIMENTAL)
+#include <CDS/smartPointers/UniquePointer>
+#include <CDS/experimental/Array>
+
+using namespace cds;
+
+auto CollectionTest :: execute() noexcept -> bool {
+    bool allOk = true;
+
+    experimental :: Array < int > arrayTestObject = {1, 2, 3, 4, 5, 6, 7, 8, 9};
+
+    return allOk;
+}
+
+#endif

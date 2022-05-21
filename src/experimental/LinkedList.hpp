@@ -45,9 +45,9 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         private:
             using typename Collection < T > :: DelegateIteratorRequestType;
         private:
-            auto delegateIterator ( DelegateIteratorRequestType ) noexcept -> UniquePointer < DelegateIterator > override;
+            auto delegateIterator ( DelegateIteratorRequestType ) noexcept -> cds :: UniquePointer < DelegateIterator > override;
         private:
-            auto delegateConstIterator ( DelegateIteratorRequestType ) const noexcept -> UniquePointer < DelegateConstIterator > override;
+            auto delegateConstIterator ( DelegateIteratorRequestType ) const noexcept -> cds :: UniquePointer < DelegateConstIterator > override;
         private:
             struct Node;
 

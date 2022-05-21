@@ -7,7 +7,7 @@
 
 #include <CDS/std-types>
 #include <CDS/experimental/Object>
-#include <CDS/Traits>
+#include <CDS/experimental/meta/TypeTraits>
 #include <CDS/Concepts>
 #include <CDS/Function>
 #include <CDS/smartPointers/UniquePointer>
@@ -27,8 +27,8 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
         protected:
             class AbstractDelegateIterator;
-        protected:
-            class DelegateIterator;
+//        protected:
+//            class DelegateIterator;
         protected:
             class DelegateConstIterator;
         protected:
@@ -36,32 +36,35 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         protected:
             enum class DelegateIteratorRequestType;
 
-        public:
-            class Iterator;
+//        public:
+//            class Iterator;
         public:
             class ConstIterator;
-        public:
-            class ReverseIterator;
+//        public:
+//            class ReverseIterator;
         public:
             class ConstReverseIterator;
 
         protected:
-            constexpr static auto acquireDelegate ( Iterator const & ) noexcept -> DelegateIterator const *;
+            constexpr static auto acquireDelegate ( AbstractIterator const & ) noexcept -> AbstractDelegateIterator const *;
+
+//        protected:
+//            constexpr static auto acquireDelegate ( Iterator const & ) noexcept -> DelegateIterator const *;
         protected:
             constexpr static auto acquireDelegate ( ConstIterator const & ) noexcept -> DelegateConstIterator const *;
-        protected:
-            constexpr static auto acquireDelegate ( ReverseIterator const & ) noexcept -> DelegateIterator const *;
+//        protected:
+//            constexpr static auto acquireDelegate ( ReverseIterator const & ) noexcept -> DelegateIterator const *;
         protected:
             constexpr static auto acquireDelegate ( ConstReverseIterator const & ) noexcept -> DelegateConstIterator const *;
+//        protected:
+//            virtual auto delegateIterator ( DelegateIteratorRequestType ) noexcept -> UniquePointer < DelegateIterator > = 0;
         protected:
-            virtual auto delegateIterator ( DelegateIteratorRequestType ) noexcept -> UniquePointer < DelegateIterator > = 0;
-        protected:
-            virtual auto delegateConstIterator ( DelegateIteratorRequestType ) const noexcept -> UniquePointer < DelegateConstIterator > = 0;
-
-        public:
-            __CDS_OptimalInline auto begin () noexcept -> Iterator;
-        public:
-            __CDS_OptimalInline auto end () noexcept -> Iterator;
+            virtual auto delegateConstIterator ( DelegateIteratorRequestType ) const noexcept -> cds :: UniquePointer < DelegateConstIterator > = 0;
+//
+//        public:
+//            __CDS_OptimalInline auto begin () noexcept -> Iterator;
+//        public:
+//            __CDS_OptimalInline auto end () noexcept -> Iterator;
         public:
             __CDS_OptimalInline auto begin () const noexcept -> ConstIterator;
         public:
@@ -70,10 +73,10 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             __CDS_OptimalInline auto cbegin () const noexcept -> ConstIterator;
         public:
             __CDS_OptimalInline auto cend () const noexcept -> ConstIterator;
-        public:
-            __CDS_OptimalInline auto rbegin () noexcept -> ReverseIterator;
-        public:
-            __CDS_OptimalInline auto rend () noexcept -> ReverseIterator;
+//        public:
+//            __CDS_OptimalInline auto rbegin () noexcept -> ReverseIterator;
+//        public:
+//            __CDS_OptimalInline auto rend () noexcept -> ReverseIterator;
         public:
             __CDS_OptimalInline auto rbegin () const noexcept -> ConstReverseIterator;
         public:
@@ -83,30 +86,30 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         public:
             __CDS_OptimalInline auto crend () const noexcept -> ConstReverseIterator;
 
-        public:
-            virtual auto remove ( Iterator const & ) noexcept -> bool = 0;
+//        public:
+//            virtual auto remove ( Iterator const & ) noexcept -> bool = 0;
         public:
             virtual auto remove ( ConstIterator const & ) noexcept -> bool = 0;
-        public:
-            virtual auto remove ( ReverseIterator const & ) noexcept -> bool = 0;
+//        public:
+//            virtual auto remove ( ReverseIterator const & ) noexcept -> bool = 0;
         public:
             virtual auto remove ( ConstReverseIterator const & ) noexcept -> bool = 0;
 
-        public:
-            virtual auto remove ( Collection < Iterator > const & ) noexcept -> Size = 0;
+//        public:
+//            virtual auto remove ( Collection < Iterator > const & ) noexcept -> Size = 0;
         public:
             virtual auto remove ( Collection < ConstIterator > const & ) noexcept -> Size = 0;
-        public:
-            virtual auto remove ( Collection < ReverseIterator > const & ) noexcept -> Size = 0;
+//        public:
+//            virtual auto remove ( Collection < ReverseIterator > const & ) noexcept -> Size = 0;
         public:
             virtual auto remove ( Collection < ConstReverseIterator > const & ) noexcept -> Size = 0;
 
-        protected:
-            virtual auto remove ( Iterator const *, Size ) noexcept -> Size = 0;
+//        protected:
+//            virtual auto remove ( Iterator const *, Size ) noexcept -> Size = 0;
         protected:
             virtual auto remove ( ConstIterator const *, Size ) noexcept -> Size = 0;
-        protected:
-            virtual auto remove ( ReverseIterator const *, Size ) noexcept -> Size = 0;
+//        protected:
+//            virtual auto remove ( ReverseIterator const *, Size ) noexcept -> Size = 0;
         protected:
             virtual auto remove ( ConstReverseIterator const *, Size ) noexcept -> Size = 0;
 
@@ -334,10 +337,10 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             virtual auto contains ( ElementType const & ) const noexcept -> bool;
 
         public:
-            template < typename V = T, EnableIf < Type < V > :: copyConstructible > = 0 >
+            template < typename V = T, meta :: EnableIf < meta :: isCopyConstructible < V > () > = 0 >
             __CDS_OptimalInline auto add ( ElementType const & ) noexcept -> void;
         public:
-            template < typename V = T, EnableIf < Type < V > :: moveConstructible > = 0 >
+            template < typename V = T, meta :: EnableIf < meta :: isMoveConstructible < V > () > = 0 >
             __CDS_OptimalInline auto add ( ElementType && ) noexcept -> void;
 
         protected:
@@ -351,22 +354,17 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
 #include "collection/DelegateIteratorRequestType.hpp"
 #include "collection/AbstractDelegateIterator.hpp"
-#include "collection/DelegateIterator.hpp"
 #include "collection/DelegateConstIterator.hpp"
 #include "collection/AbstractIterator.hpp"
-#include "collection/Iterator.hpp"
 #include "collection/ConstIterator.hpp"
-#include "collection/ReverseIterator.hpp"
 #include "collection/ConstReverseIterator.hpp"
 
 #include "collection/impl/AbstractDelegateIterator.hpp"
-#include "collection/impl/DelegateIterator.hpp"
 #include "collection/impl/DelegateConstIterator.hpp"
 #include "collection/impl/AbstractIterator.hpp"
-#include "collection/impl/Iterator.hpp"
 #include "collection/impl/ConstIterator.hpp"
-#include "collection/impl/ReverseIterator.hpp"
 #include "collection/impl/ConstReverseIterator.hpp"
+
 #include "collection/impl/Collection.hpp"
 
 #include "collection/impl/CollectionDerivedRequired.hpp"

@@ -20,21 +20,60 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             using typename Collection < T > :: InitializerList;
 
         public:
-            using typename Collection < T > :: Iterator;
+            class Iterator;
         public:
             using typename Collection < T > :: ConstIterator;
         public:
-            using typename Collection < T > :: ReverseIterator;
+            class ReverseIterator;
         public:
             using typename Collection < T > :: ConstReverseIterator;
 
         protected:
-            using typename Collection < T > :: DelegateIterator;
+            using typename Collection < T > :: AbstractIterator;
+        protected:
+            using typename Collection < T > :: AbstractDelegateIterator;
+        protected:
+            class DelegateIterator;
         protected:
             using typename Collection < T > :: DelegateConstIterator;
 
         protected:
             Size _size { 0U };
+
+        protected:
+            using DelegateIteratorRequestType = typename Collection < T > :: DelegateIteratorRequestType;
+        protected:
+            constexpr static auto acquireDelegate ( Iterator const & ) noexcept -> DelegateIterator const *;
+        protected:
+            constexpr static auto acquireDelegate ( ReverseIterator const & ) noexcept -> DelegateIterator const *;
+        protected:
+            virtual auto delegateIterator ( DelegateIteratorRequestType ) noexcept -> cds :: UniquePointer < DelegateIterator > = 0;
+
+        public:
+            __CDS_OptimalInline auto begin () noexcept -> Iterator;
+        public:
+            __CDS_OptimalInline auto end () noexcept -> Iterator;
+        public:
+            __CDS_OptimalInline auto rbegin () noexcept -> ReverseIterator;
+        public:
+            __CDS_OptimalInline auto rend () noexcept -> ReverseIterator;
+
+        public:
+            using Collection < T > :: begin;
+        public:
+            using Collection < T > :: end;
+        public:
+            using Collection < T > :: cbegin;
+        public:
+            using Collection < T > :: cend;
+        public:
+            using Collection < T > :: rbegin;
+        public:
+            using Collection < T > :: rend;
+        public:
+            using Collection < T > :: crbegin;
+        public:
+            using Collection < T > :: crend;
 
         protected:
             constexpr List () noexcept = default;
@@ -60,29 +99,29 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             __CDS_OptimalInline auto pNewInsert () noexcept -> ElementType * & override;
 
         public:
-            template < typename ListType, typename V = T, EnableIf < Type < V > :: copyConstructible && isDerivedFrom < ListType, Collection < T > > :: value > = 0 >
+            template < typename ListType, typename V = T, meta :: EnableIf < meta :: isCopyConstructible < V > () && meta :: isDerivedFrom < ListType, Collection < T > > () > = 0 >
             auto sub ( Index, Index, ListType & ) const noexcept (false) -> ListType &;
         public:
-            template < typename ListType, typename V = T, EnableIf < Type < V > :: copyConstructible && isDerivedFrom < ListType, Collection < T > > :: value > = 0 >
+            template < typename ListType, typename V = T, meta :: EnableIf < meta :: isCopyConstructible < V > () && meta :: isDerivedFrom < ListType, Collection < T > > () > = 0 >
             auto sub ( Index, Index ) const noexcept (false) -> ListType;
         public:
-            template < template < typename ... > typename ListType, typename V = T, EnableIf < Type < V > :: copyConstructible && isDerivedFrom < ListType < T >, Collection < T > > :: value > = 0 >
+            template < template < typename ... > typename ListType, typename V = T, meta :: EnableIf < meta :: isCopyConstructible < V > () && meta :: isDerivedFrom < ListType < T >, Collection < T > > () > = 0 >
             __CDS_OptimalInline auto sub ( Index, Index, ListType < ElementType > & ) const noexcept (false) -> ListType < ElementType > &;
         public:
-            template < template < typename ... > typename ListType, typename V = T, EnableIf < Type < V > :: copyConstructible && isDerivedFrom < ListType < T >, Collection < T > > :: value > = 0 >
+            template < template < typename ... > typename ListType, typename V = T, meta :: EnableIf < meta :: isCopyConstructible < V > () && meta :: isDerivedFrom < ListType < T >, Collection < T > > () > = 0 >
             __CDS_OptimalInline  auto sub ( Index, Index ) const noexcept (false) -> ListType < ElementType >;
 
         public:
-            template < typename ListType, EnableIf < isDerivedFrom < ListType, Collection < Index > > :: value > = 0 >
+            template < typename ListType, meta :: EnableIf < meta :: isDerivedFrom < ListType, Collection < Index > > () > = 0 >
             auto indices ( ElementType const &, ListType & ) const noexcept -> ListType &;
         public:
-            template < typename ListType, EnableIf < isDerivedFrom < ListType, Collection < Index > > :: value > = 0 >
+            template < typename ListType, meta :: EnableIf < meta :: isDerivedFrom < ListType, Collection < Index > > () > = 0 >
             auto indices ( ElementType const & ) const noexcept -> ListType;
         public:
-            template < template < typename ... > typename ListType, EnableIf < isDerivedFrom < ListType < Index >, Collection < Index > > :: value > = 0 >
+            template < template < typename ... > typename ListType, meta :: EnableIf < meta :: isDerivedFrom < ListType < Index >, Collection < Index > > () > = 0 >
             __CDS_OptimalInline auto indices ( ElementType const &, ListType < Index > & ) const noexcept -> ListType < Index > &;
         public:
-            template < template < typename ... > typename ListType, EnableIf < isDerivedFrom < ListType < Index >, Collection < Index > > :: value > = 0 >
+            template < template < typename ... > typename ListType, meta :: EnableIf < meta :: isDerivedFrom < ListType < Index >, Collection < Index > > () > = 0 >
             __CDS_OptimalInline auto indices ( ElementType const & ) const noexcept -> ListType < Index >;
 
         public:
@@ -117,100 +156,110 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             virtual auto pNewAfter ( ConstReverseIterator const & ) noexcept -> ElementType * & = 0;
 
         public:
-            template < typename V = T, EnableIf < Type < V > :: copyConstructible > = 0 >
+            template < typename V = T, meta :: EnableIf < meta :: isCopyConstructible < V > () > = 0 >
             auto pushFront ( ElementType const & ) noexcept -> ElementType &;
         public:
-            template < typename V = T, EnableIf < Type < V > :: moveConstructible > = 0 >
+            template < typename V = T, meta :: EnableIf < meta :: isMoveConstructible < V > () > = 0 >
             auto pushFront ( ElementType && ) noexcept -> ElementType &;
         public:
-            template < typename V = T, EnableIf < Type < V > :: copyConstructible > = 0 >
+            template < typename V = T, meta :: EnableIf < meta :: isCopyConstructible < V > () > = 0 >
             auto pushBack ( ElementType const & ) noexcept -> ElementType &;
         public:
-            template < typename V = T, EnableIf < Type < V > :: moveConstructible > = 0 >
+            template < typename V = T, meta :: EnableIf < meta :: isMoveConstructible < V > () > = 0 >
             auto pushBack ( ElementType && ) noexcept -> ElementType &;
 
         public:
-            template < typename V = T, EnableIf < Type < V > :: copyConstructible > = 0 >
+            template < typename V = T, meta :: EnableIf < meta :: isCopyConstructible < V > () > = 0 >
             auto insertBefore ( Iterator const &, ElementType const & ) noexcept (false) -> ElementType &;
         public:
-            template < typename V = T, EnableIf < Type < V > :: moveConstructible > = 0 >
+            template < typename V = T, meta :: EnableIf < meta :: isMoveConstructible < V > () > = 0 >
             auto insertBefore ( Iterator const &, ElementType && ) noexcept (false) -> ElementType &;
         public:
-            template < typename V = T, EnableIf < Type < V > :: copyConstructible > = 0 >
+            template < typename V = T, meta :: EnableIf < meta :: isCopyConstructible < V > () > = 0 >
             auto insertAfter ( Iterator const &, ElementType const & ) noexcept (false) -> ElementType &;
         public:
-            template < typename V = T, EnableIf < Type < V > :: moveConstructible > = 0 >
+            template < typename V = T, meta :: EnableIf < meta :: isMoveConstructible < V > () > = 0 >
             auto insertAfter ( Iterator const &, ElementType && ) noexcept (false) -> ElementType &;
         public:
-            template < typename V = T, EnableIf < Type < V > :: copyConstructible > = 0 >
+            template < typename V = T, meta :: EnableIf < meta :: isCopyConstructible < V > () > = 0 >
             auto insertBefore ( ConstIterator const &, ElementType const & ) noexcept (false) -> ElementType &;
         public:
-            template < typename V = T, EnableIf < Type < V > :: moveConstructible > = 0 >
+            template < typename V = T, meta :: EnableIf < meta :: isMoveConstructible < V > () > = 0 >
             auto insertBefore ( ConstIterator const &, ElementType && ) noexcept (false) -> ElementType &;
         public:
-            template < typename V = T, EnableIf < Type < V > :: copyConstructible > = 0 >
+            template < typename V = T, meta :: EnableIf < meta :: isCopyConstructible < V > () > = 0 >
             auto insertAfter ( ConstIterator const &, ElementType const & ) noexcept (false) -> ElementType &;
         public:
-            template < typename V = T, EnableIf < Type < V > :: moveConstructible > = 0 >
+            template < typename V = T, meta :: EnableIf < meta :: isMoveConstructible < V > () > = 0 >
             auto insertAfter ( ConstIterator const &, ElementType && ) noexcept (false) -> ElementType &;
         public:
-            template < typename V = T, EnableIf < Type < V > :: copyConstructible > = 0 >
+            template < typename V = T, meta :: EnableIf < meta :: isCopyConstructible < V > () > = 0 >
             auto insertBefore ( ReverseIterator const &, ElementType const & ) noexcept (false) -> ElementType &;
         public:
-            template < typename V = T, EnableIf < Type < V > :: moveConstructible > = 0 >
+            template < typename V = T, meta :: EnableIf < meta :: isMoveConstructible < V > () > = 0 >
             auto insertBefore ( ReverseIterator const &, ElementType && ) noexcept (false) -> ElementType &;
         public:
-            template < typename V = T, EnableIf < Type < V > :: copyConstructible > = 0 >
+            template < typename V = T, meta :: EnableIf < meta :: isCopyConstructible < V > () > = 0 >
             auto insertAfter ( ReverseIterator const &, ElementType const & ) noexcept (false) -> ElementType &;
         public:
-            template < typename V = T, EnableIf < Type < V > :: moveConstructible > = 0 >
+            template < typename V = T, meta :: EnableIf < meta :: isMoveConstructible < V > () > = 0 >
             auto insertAfter ( ReverseIterator const &, ElementType && ) noexcept (false) -> ElementType &;
         public:
-            template < typename V = T, EnableIf < Type < V > :: copyConstructible > = 0 >
+            template < typename V = T, meta :: EnableIf < meta :: isCopyConstructible < V > () > = 0 >
             auto insertBefore ( ConstReverseIterator const &, ElementType const & ) noexcept (false) -> ElementType &;
         public:
-            template < typename V = T, EnableIf < Type < V > :: moveConstructible > = 0 >
+            template < typename V = T, meta :: EnableIf < meta :: isMoveConstructible < V > () > = 0 >
             auto insertBefore ( ConstReverseIterator const &, ElementType && ) noexcept (false) -> ElementType &;
         public:
-            template < typename V = T, EnableIf < Type < V > :: copyConstructible > = 0 >
+            template < typename V = T, meta :: EnableIf < meta :: isCopyConstructible < V > () > = 0 >
             auto insertAfter ( ConstReverseIterator const &, ElementType const & ) noexcept (false) -> ElementType &;
         public:
-            template < typename V = T, EnableIf < Type < V > :: moveConstructible > = 0 >
+            template < typename V = T, meta :: EnableIf < meta :: isMoveConstructible < V > () > = 0 >
             auto insertAfter ( ConstReverseIterator const &, ElementType && ) noexcept (false) -> ElementType &;
 
         public:
-            template < typename V = T, EnableIf < Type < V > :: copyConstructible > = 0 >
+            template < typename V = T, meta :: EnableIf < meta :: isCopyConstructible < V > () > = 0 >
             __CDS_OptimalInline auto append ( ElementType const & ) noexcept -> ElementType &;
         public:
-            template < typename V = T, EnableIf < Type < V > :: moveConstructible > = 0 >
+            template < typename V = T, meta :: EnableIf < meta :: isMoveConstructible < V > () > = 0 >
             __CDS_OptimalInline auto append ( ElementType && ) noexcept -> ElementType &;
         public:
-            template < typename V = T, EnableIf < Type < V > :: copyConstructible > = 0 >
+            template < typename V = T, meta :: EnableIf < meta :: isCopyConstructible < V > () > = 0 >
             __CDS_OptimalInline auto prepend ( ElementType const & ) noexcept -> ElementType &;
         public:
-            template < typename V = T, EnableIf < Type < V > :: moveConstructible > = 0 >
+            template < typename V = T, meta :: EnableIf < meta :: isMoveConstructible < V > () > = 0 >
             __CDS_OptimalInline auto prepend ( ElementType && ) noexcept -> ElementType &;
 
         public:
             virtual auto remove ( Index ) noexcept -> bool = 0;
 
         public:
-            auto remove ( Iterator const & ) noexcept -> bool override = 0;
+            virtual auto remove ( Iterator const & ) noexcept -> bool = 0;
         public:
             auto remove ( ConstIterator const & ) noexcept -> bool override = 0;
         public:
-            auto remove ( ReverseIterator const & ) noexcept -> bool override = 0;
+            virtual auto remove ( ReverseIterator const & ) noexcept -> bool = 0;
         public:
             auto remove ( ConstReverseIterator const & ) noexcept -> bool override = 0;
 
         public:
-            auto remove ( Collection < Iterator > const & ) noexcept -> Size override = 0;
+            virtual auto remove ( Collection < Iterator > const & ) noexcept -> Size = 0;
         public:
             auto remove ( Collection < ConstIterator > const & ) noexcept -> Size override = 0;
         public:
-            auto remove ( Collection < ReverseIterator > const & ) noexcept -> Size override = 0;
+            virtual auto remove ( Collection < ReverseIterator > const & ) noexcept -> Size = 0;
         public:
             auto remove ( Collection < ConstReverseIterator > const & ) noexcept -> Size override = 0;
+
+
+        protected:
+            virtual auto remove ( Iterator const *, Size ) noexcept -> Size = 0;
+        protected:
+            auto remove ( ConstIterator const *, Size ) noexcept -> Size override = 0;
+        protected:
+            virtual auto remove ( ReverseIterator const *, Size ) noexcept -> Size = 0;
+        protected:
+            auto remove ( ConstReverseIterator const *, Size ) noexcept -> Size override = 0;
 
         protected:
             template < typename ComparatorFunction >
@@ -226,281 +275,281 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             __CDS_NoDiscard constexpr auto size () const noexcept -> Size override;
 
         public:
-            template < typename V = T, typename = EnableIf < Type < V > :: copyAssignable > >
+            template < typename V = T, meta :: EnableIf < meta :: isCopyAssignable < V > () > = 0 >
             auto replace (
                     ElementType const &,
                     ElementType const &,
                     Size
             ) noexcept -> Size;
         public:
-            template < typename V = T, typename = EnableIf < Type < V > :: copyAssignable > >
+            template < typename V = T, meta :: EnableIf < meta :: isCopyAssignable < V > () > = 0 >
             auto replaceAll (
                     ElementType const &,
                     ElementType const &
             ) noexcept -> Size;
         public:
-            template < typename V = T, typename = EnableIf < Type < V > :: copyAssignable > >
+            template < typename V = T, meta :: EnableIf < meta :: isCopyAssignable < V > () > = 0 >
             auto replaceFirst (
                     ElementType const &,
                     ElementType const &
             ) noexcept -> bool;
         public:
-            template < typename V = T, typename = EnableIf < Type < V > :: moveAssignable > >
+            template < typename V = T, meta :: EnableIf < meta :: isMoveAssignable < V > () > = 0 >
             auto replaceFirst (
                     ElementType const &,
                     ElementType      &&
             ) noexcept -> bool;
         public:
-            template < typename V = T, typename = EnableIf < Type < V > :: copyAssignable > >
+            template < typename V = T, meta :: EnableIf < meta :: isCopyAssignable < V > () > = 0 >
             auto replaceLast (
                     ElementType const &,
                     ElementType const &
             ) noexcept -> bool;
         public:
-            template < typename V = T, typename = EnableIf < Type < V > :: moveAssignable > >
+            template < typename V = T, meta :: EnableIf < meta :: isMoveAssignable < V > () > = 0 >
             auto replaceLast (
                     ElementType const &,
                     ElementType      &&
             ) noexcept -> bool;
 
         public:
-            template < typename V = T, typename = EnableIf < Type < V > :: copyAssignable > >
+            template < typename V = T, meta :: EnableIf < meta :: isCopyAssignable < V > () > = 0 >
             auto replaceOf (
                     Collection < T >    const &,
                     ElementType         const &,
                     Size
             ) noexcept -> Size;
         public:
-            template < typename V = T, typename = EnableIf < Type < V > :: copyAssignable > >
+            template < typename V = T, meta :: EnableIf < meta :: isCopyAssignable < V > () > = 0 >
             auto replaceAllOf (
                     Collection < T >    const &,
                     ElementType         const &
             ) noexcept -> Size;
         public:
-            template < typename V = T, typename = EnableIf < Type < V > :: copyAssignable > >
+            template < typename V = T, meta :: EnableIf < meta :: isCopyAssignable < V > () > = 0 >
             auto replaceFirstOf (
                     Collection < T >    const &,
                     ElementType         const &
             ) noexcept -> bool;
         public:
-            template < typename V = T, typename = EnableIf < Type < V > :: moveAssignable > >
+            template < typename V = T, meta :: EnableIf < meta :: isMoveAssignable < V > () > = 0 >
             auto replaceFirstOf (
                     Collection < T >    const &,
                     ElementType              &&
             ) noexcept -> bool;
         public:
-            template < typename V = T, typename = EnableIf < Type < V > :: copyAssignable > >
+            template < typename V = T, meta :: EnableIf < meta :: isCopyAssignable < V > () > = 0 >
             auto replaceLastOf (
                     Collection < T >    const &,
                     ElementType         const &
             ) noexcept -> bool;
         public:
-            template < typename V = T, typename = EnableIf < Type < V > :: moveAssignable > >
+            template < typename V = T, meta :: EnableIf < meta :: isMoveAssignable < V > () > = 0 >
             auto replaceLastOf (
                     Collection < T >    const &,
                     ElementType              &&
             ) noexcept -> bool;
 
         public:
-            template < typename V = T, typename = EnableIf < Type < V > :: copyAssignable > >
+            template < typename V = T, meta :: EnableIf < meta :: isCopyAssignable < V > () > = 0 >
             auto replaceNotOf (
                     Collection < T >    const &,
                     ElementType         const &,
                     Size
             ) noexcept -> Size;
         public:
-            template < typename V = T, typename = EnableIf < Type < V > :: copyAssignable > >
+            template < typename V = T, meta :: EnableIf < meta :: isCopyAssignable < V > () > = 0 >
             auto replaceAllNotOf (
                     Collection < T >    const &,
                     ElementType         const &
             ) noexcept -> Size;
         public:
-            template < typename V = T, typename = EnableIf < Type < V > :: copyAssignable > >
+            template < typename V = T, meta :: EnableIf < meta :: isCopyAssignable < V > () > = 0 >
             auto replaceFirstNotOf (
                     Collection < T >    const &,
                     ElementType         const &
             ) noexcept -> bool;
         public:
-            template < typename V = T, typename = EnableIf < Type < V > :: moveAssignable > >
+            template < typename V = T, meta :: EnableIf < meta :: isMoveAssignable < V > () > = 0 >
             auto replaceFirstNotOf (
                     Collection < T >    const &,
                     ElementType              &&
             ) noexcept -> bool;
         public:
-            template < typename V = T, typename = EnableIf < Type < V > :: copyAssignable > >
+            template < typename V = T, meta :: EnableIf < meta :: isCopyAssignable < V > () > = 0 >
             auto replaceLastNotOf (
                     Collection < T >    const &,
                     ElementType         const &
             ) noexcept -> bool;
         public:
-            template < typename V = T, typename = EnableIf < Type < V > :: moveAssignable > >
+            template < typename V = T, meta :: EnableIf < meta :: isMoveAssignable < V > () > = 0 >
             auto replaceLastNotOf (
                     Collection < T >    const &,
                     ElementType              &&
             ) noexcept -> bool;
 
         public:
-            template < typename V = T, typename = EnableIf < Type < V > :: copyAssignable > >
+            template < typename V = T, meta :: EnableIf < meta :: isCopyAssignable < V > () > = 0 >
             auto replaceOf (
                     InitializerList     const &,
                     ElementType         const &,
                     Size
             ) noexcept -> Size;
         public:
-            template < typename V = T, typename = EnableIf < Type < V > :: copyAssignable > >
+            template < typename V = T, meta :: EnableIf < meta :: isCopyAssignable < V > () > = 0 >
             auto replaceAllOf (
                     InitializerList     const &,
                     ElementType         const &
             ) noexcept -> Size;
         public:
-            template < typename V = T, typename = EnableIf < Type < V > :: copyAssignable > >
+            template < typename V = T, meta :: EnableIf < meta :: isCopyAssignable < V > () > = 0 >
             auto replaceFirstOf (
                     InitializerList     const &,
                     ElementType         const &
             ) noexcept -> bool;
         public:
-            template < typename V = T, typename = EnableIf < Type < V > :: moveAssignable > >
+            template < typename V = T, meta :: EnableIf < meta :: isMoveAssignable < V > () > = 0 >
             auto replaceFirstOf (
                     InitializerList     const &,
                     ElementType              &&
             ) noexcept -> bool;
         public:
-            template < typename V = T, typename = EnableIf < Type < V > :: copyAssignable > >
+            template < typename V = T, meta :: EnableIf < meta :: isCopyAssignable < V > () > = 0 >
             auto replaceLastOf (
                     InitializerList     const &,
                     ElementType         const &
             ) noexcept -> bool;
         public:
-            template < typename V = T, typename = EnableIf < Type < V > :: moveAssignable > >
+            template < typename V = T, meta :: EnableIf < meta :: isMoveAssignable < V > () > = 0 >
             auto replaceLastOf (
                     InitializerList     const &,
                     ElementType              &&
             ) noexcept -> bool;
 
         public:
-            template < typename V = T, typename = EnableIf < Type < V > :: copyAssignable > >
+            template < typename V = T, meta :: EnableIf < meta :: isCopyAssignable < V > () > = 0 >
             auto replaceNotOf (
                     InitializerList     const &,
                     ElementType         const &,
                     Size
             ) noexcept -> Size;
         public:
-            template < typename V = T, typename = EnableIf < Type < V > :: copyAssignable > >
+            template < typename V = T, meta :: EnableIf < meta :: isCopyAssignable < V > () > = 0 >
             auto replaceAllNotOf (
                     InitializerList     const &,
                     ElementType         const &
             ) noexcept -> Size;
         public:
-            template < typename V = T, typename = EnableIf < Type < V > :: copyAssignable > >
+            template < typename V = T, meta :: EnableIf < meta :: isCopyAssignable < V > () > = 0 >
             auto replaceFirstNotOf (
                     InitializerList     const &,
                     ElementType         const &
             ) noexcept -> bool;
         public:
-            template < typename V = T, typename = EnableIf < Type < V > :: moveAssignable > >
+            template < typename V = T, meta :: EnableIf < meta :: isMoveAssignable < V > () > = 0 >
             auto replaceFirstNotOf (
                     InitializerList     const &,
                     ElementType              &&
             ) noexcept -> bool;
         public:
-            template < typename V = T, typename = EnableIf < Type < V > :: copyAssignable > >
+            template < typename V = T, meta :: EnableIf < meta :: isCopyAssignable < V > () > = 0 >
             auto replaceLastNotOf (
                     InitializerList     const &,
                     ElementType         const &
             ) noexcept -> bool;
         public:
-            template < typename V = T, typename = EnableIf < Type < V > :: moveAssignable > >
+            template < typename V = T, meta :: EnableIf < meta :: isMoveAssignable < V > () > = 0 >
             auto replaceLastNotOf (
                     InitializerList     const &,
                     ElementType              &&
             ) noexcept -> bool;
 
         public:
-            template < typename V = T, typename = EnableIf < Type < V > :: copyAssignable > >
+            template < typename V = T, meta :: EnableIf < meta :: isCopyAssignable < V > () > = 0 >
             auto replace (
                     Iterator    const &,
                     ElementType const &
             ) noexcept -> bool;
         public:
-            template < typename V = T, typename = EnableIf < Type < V > :: moveAssignable > >
+            template < typename V = T, meta :: EnableIf < meta :: isMoveAssignable < V > () > = 0 >
             auto replace (
                     Iterator    const &,
                     ElementType      &&
             ) noexcept -> bool;
 
         public:
-            template < typename V = T, typename = EnableIf < Type < V > :: copyAssignable > >
+            template < typename V = T, meta :: EnableIf < meta :: isCopyAssignable < V > () > = 0 >
             auto replace (
                     ConstIterator   const &,
                     ElementType     const &
             ) noexcept -> bool;
         public:
-            template < typename V = T, typename = EnableIf < Type < V > :: moveAssignable > >
+            template < typename V = T, meta :: EnableIf < meta :: isMoveAssignable < V > () > = 0 >
             auto replace (
                     ConstIterator   const &,
                     ElementType          &&
             ) noexcept -> bool;
 
         public:
-            template < typename V = T, typename = EnableIf < Type < V > :: copyAssignable > >
+            template < typename V = T, meta :: EnableIf < meta :: isCopyAssignable < V > () > = 0 >
             auto replace (
                     ReverseIterator const &,
                     ElementType     const &
             ) noexcept -> bool;
         public:
-            template < typename V = T, typename = EnableIf < Type < V > :: moveAssignable > >
+            template < typename V = T, meta :: EnableIf < meta :: isMoveAssignable < V > () > = 0 >
             auto replace (
                     ReverseIterator const &,
                     ElementType          &&
             ) noexcept -> bool;
 
         public:
-            template < typename V = T, typename = EnableIf < Type < V > :: copyAssignable > >
+            template < typename V = T, meta :: EnableIf < meta :: isCopyAssignable < V > () > = 0 >
             auto replace (
                     ConstReverseIterator    const &,
                     ElementType             const &
             ) noexcept -> bool;
         public:
-            template < typename V = T, typename = EnableIf < Type < V > :: moveAssignable > >
+            template < typename V = T, meta :: EnableIf < meta :: isMoveAssignable < V > () > = 0 >
             auto replace (
                     ConstReverseIterator    const &,
                     ElementType                  &&
             ) noexcept -> bool;
 
         public:
-            template < typename Predicate, typename V = T, typename = EnableIf < Type < V > :: copyAssignable > >
+            template < typename Predicate, typename V = T, meta :: EnableIf < meta :: isCopyAssignable < V > () > = 0 >
             auto replace (
                     Predicate   const &,
                     ElementType const &,
                     Size
             ) noexcept -> Size;
         public:
-            template < typename Predicate, typename V = T, typename = EnableIf < Type < V > :: copyAssignable > >
+            template < typename Predicate, typename V = T, meta :: EnableIf < meta :: isCopyAssignable < V > () > = 0 >
             auto replaceAll (
                     Predicate   const &,
                     ElementType const &,
                     Size
             ) noexcept -> Size;
         public:
-            template < typename Predicate, typename V = T, typename = EnableIf < Type < V > :: copyAssignable > >
+            template < typename Predicate, typename V = T, meta :: EnableIf < meta :: isCopyAssignable < V > () > = 0 >
             auto replaceFirst (
                     Predicate   const &,
                     ElementType const &
             ) noexcept -> bool;
         public:
-            template < typename Predicate, typename V = T, typename = EnableIf < Type < V > :: moveAssignable > >
+            template < typename Predicate, typename V = T, meta :: EnableIf < meta :: isMoveAssignable < V > () > = 0 >
             auto replaceFirst (
                     Predicate   const &,
                     ElementType      &&
             ) noexcept -> bool;
         public:
-            template < typename Predicate, typename V = T, typename = EnableIf < Type < V > :: copyAssignable > >
+            template < typename Predicate, typename V = T, meta :: EnableIf < meta :: isCopyAssignable < V > () > = 0 >
             auto replaceLast (
                     Predicate   const &,
                     ElementType const &
             ) noexcept -> bool;
         public:
-            template < typename Predicate, typename V = T, typename = EnableIf < Type < V > :: moveAssignable > >
+            template < typename Predicate, typename V = T, meta :: EnableIf < meta :: isMoveAssignable < V > () > = 0 >
             auto replaceLast (
                     Predicate   const &,
                     ElementType      &&
@@ -755,6 +804,14 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
     }
 }
+
+#include "list/DelegateIterator.hpp"
+#include "list/Iterator.hpp"
+#include "list/ReverseIterator.hpp"
+
+#include "list/impl/DelegateIterator.hpp"
+#include "list/impl/Iterator.hpp"
+#include "list/impl/ReverseIterator.hpp"
 
 #include "list/impl/List.hpp"
 
