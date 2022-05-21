@@ -1,21 +1,25 @@
 #include <CDS/Thread>
+#include <CDS/Array>
 #include <CDS/smartPointers/UniquePointer>
-
+#include <CDS/experimental/meta/TypeTraits>
+#include <CDS/experimental/meta/FunctionTraits>
+#include <CDS/Pair>
+#include <CDS/experimental/Tuple>
+#include <CDS/Pointer>
 using namespace cds;
 
 int main () {
 
-    UniquePointer < Thread > t = new Runnable ( [& t]{
+    auto a = arrayOf <String> ( "ana", "are", "mere" );
+    a.forEach ( & println < String > );
 
-        uint32 repeats = 10;
+String s;
+auto pfn = & String::length;
+    (s.*pfn)();
 
-        for ( uint32 i = 0; i < repeats; ++ i ) {
-            (void) t->sleep ( 500 );
-            std :: cout << "Slept for 500ms" << '\n';
-        }
-    });
 
-    t->start();
-    t->join();
+    a.forEach ( & String :: length );
+//    std :: cout << experimental :: meta :: impl :: IsMemberFunctionPointer < decltype ( & String :: length ), String > :: value << '\n';
+
     return 0;
 }

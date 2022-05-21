@@ -21,6 +21,7 @@
 #include <CDS/Function>
 #include <CDS/Traits>
 #include <CDS/Hasher>
+#include <CDS/experimental/meta/TypeTraits>
 
 #if defined(__CDS_ThreadSafeObjects)
 
@@ -739,11 +740,11 @@ namespace cds {
             return false;
         }
 
-        template < typename Action >
+        template < typename Action, experimental :: meta :: EnableIf < ! experimental :: meta :: isMemberFunctionPointer < Action > () > = 0 >
         __CDS_MaybeUnused auto forEach (
                 Action const & action __CDS_MaybeUnused
         ) noexcept ( noexcept ( ( * Type < Action > :: unsafeAddress () ) ( Type < ElementType > :: unsafeReference() ) ) )
-                -> void __CDS_Requires ( ActionOver < Action, T > ) {
+                -> void {
 
             __CDS_Collection_OperationalLock
 
@@ -755,16 +756,80 @@ namespace cds {
 
         }
 
-        template < typename Action >
+        template < typename Action, experimental :: meta :: EnableIf < ! experimental :: meta :: isMemberFunctionPointer < Action > () > = 0 >
         __CDS_MaybeUnused auto forEach (
                 Action const & action __CDS_MaybeUnused
         ) const noexcept ( noexcept ( ( * Type < Action > :: unsafeAddress () ) ( Type < ElementType const > :: unsafeReference() ) ) )
-                -> void __CDS_Requires ( ActionOver < Action, T > ) {
+                -> void {
 
             __CDS_Collection_OperationalLock
 
             for ( auto const & element __CDS_MaybeUnused : * this ) {
                 action(element);
+            }
+
+            __CDS_Collection_OperationalUnlock
+
+        }
+
+        template < typename Action, experimental :: meta :: EnableIf < experimental :: meta :: isMemberFunctionPointer < Action > () && ! experimental :: meta :: isPointer < ElementType > () > = 0 >
+        __CDS_MaybeUnused auto forEach (
+                Action const & action __CDS_MaybeUnused
+        ) noexcept ( noexcept ( ( experimental :: meta :: referenceOf < ElementType > ().* action ) () ) )
+                -> void {
+
+            __CDS_Collection_OperationalLock
+
+            for ( auto & element __CDS_MaybeUnused : * this ) {
+                ( element.*action ) ();
+            }
+
+            __CDS_Collection_OperationalUnlock
+
+        }
+
+        template < typename Action, experimental :: meta :: EnableIf < experimental :: meta :: isMemberFunctionPointer < Action > () && ! experimental :: meta :: isPointer < ElementType > () > = 0 >
+        __CDS_MaybeUnused auto forEach (
+                Action const & action __CDS_MaybeUnused
+        ) const noexcept ( noexcept ( ( experimental :: meta :: referenceOf < ElementType > ().* action ) () ) )
+                -> void {
+
+            __CDS_Collection_OperationalLock
+
+            for ( auto const & element __CDS_MaybeUnused : * this ) {
+                ( element.*action ) ();
+            }
+
+            __CDS_Collection_OperationalUnlock
+
+        }
+
+        template < typename Action, experimental :: meta :: EnableIf < experimental :: meta :: isMemberFunctionPointer < Action > () && experimental :: meta :: isPointer < ElementType > () > = 0 >
+        __CDS_MaybeUnused auto forEach (
+                Action const & action __CDS_MaybeUnused
+        ) noexcept ( noexcept ( ( experimental :: meta :: referenceOf < ElementType > ()->* action ) () ) )
+                -> void {
+
+            __CDS_Collection_OperationalLock
+
+            for ( auto & element __CDS_MaybeUnused : * this ) {
+                ( element->*action ) ();
+            }
+
+            __CDS_Collection_OperationalUnlock
+
+        }
+
+        template < typename Action, experimental :: meta :: EnableIf < experimental :: meta :: isMemberFunctionPointer < Action > () && experimental :: meta :: isPointer < ElementType > () > = 0 >
+        __CDS_MaybeUnused auto forEach (
+                Action const & action __CDS_MaybeUnused
+        ) const noexcept ( noexcept ( ( experimental :: meta :: referenceOf < ElementType > ()->* action ) () ) )
+                -> void {
+
+            __CDS_Collection_OperationalLock
+
+            for ( auto const & element __CDS_MaybeUnused : * this ) {
+                ( element->*action ) ();
             }
 
             __CDS_Collection_OperationalUnlock

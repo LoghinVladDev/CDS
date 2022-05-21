@@ -115,6 +115,11 @@ namespace cds {
         }
     };
 
+    template < typename T, typename ... ArgumentTypes >
+    __CDS_NoDiscard __CDS_MaybeUnused __CDS_OptimalInline auto makeAtomicShared ( ArgumentTypes && ... arguments ) noexcept -> UniquePointer < T > {
+        return AtomicSharedPointer < T > ( Memory :: instance ().create < T > ( std :: forward < ArgumentTypes > ( arguments ) ... ) );
+    }
+
 }
 
 #endif // __CDS_ATOMIC_SHARED_POINTER_HPP__

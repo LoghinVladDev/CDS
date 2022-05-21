@@ -10,6 +10,7 @@
 #include <CDS/Conversion>
 #include <CDS/Exception>
 #include <CDS/Limits>
+#include <CDS/experimental/meta/TypeTraits>
 
 namespace cds {
 
@@ -129,6 +130,11 @@ namespace cds {
     template < typename T, typename = EnableIf < Type < T > :: copyConstructible > >
     __CDS_NoDiscard __CDS_OptimalInline auto copy ( T const & obj ) noexcept -> T * {
         return Memory :: instance().create < T > ( obj );
+    }
+
+    template < typename T, experimental :: meta :: EnableIf < experimental :: meta :: isPrintable < T > () > = 0 >
+    __CDS_OptimalInline auto println ( T const & obj ) noexcept -> std :: ostream & {
+        return std :: cout << obj << '\n';
     }
 
 }
