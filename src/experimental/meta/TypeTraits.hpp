@@ -254,7 +254,88 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
                 template < typename >       struct IsVolatile                   : FalseType {};
                 template < typename T >     struct IsVolatile < T volatile >    : TrueType {};
-            }
+
+                namespace decayImpl {
+                    template < typename T, bool isArray = IsArray < T > :: value, bool isFunction = IsFunction < T > :: value >
+                    struct Decay {};
+
+                    template < typename T >
+                    struct Decay < T, false, false > {
+                        using Type = typename RemoveConstVolatile < T > :: Type;
+                    };
+
+                    template < typename T >
+                    struct Decay < T, true, false > {
+                        using Type = typename RemoveExtent < T > :: Type *;
+                    };
+
+                    template < typename T >
+                    struct Decay < T, false, true > {
+                        using Type = typename AddPointer < T > :: Type *;
+                    };
+                }
+
+                template < typename T >
+                struct Decay {
+
+                private:
+                    using FirstParseDecayedType = typename RemoveReference < T > :: Type;
+
+                public:
+                    using Type = typename decayImpl :: Decay < FirstParseDecayedType > :: Type;
+                };
+
+                template < typename ... TypePack >  struct Common;
+                template <>                         struct Common <> {};
+                template < typename T >             struct Common < T > : Common < T, T > {};
+
+                namespace commonImpl {
+                    struct CommonTest {
+                        template < typename T > struct SuccessType { using Type = T; };
+                                                struct FailureType { };
+
+                        template < typename T, typename U > using ConditionalType = decltype ( true ? valueOf < T > () : valueOf < U > () );
+                        template < typename T, typename U > static SuccessType < typename Decay < ConditionalType < T, U > > :: Type > test ( int );
+                        template < typename T, typename U > static SuccessType < typename RemoveConstVolatile < ConditionalType < T const &, U const & > > :: Type > test2 ( int ); /// cpp-17?
+
+                        template < typename, typename >     static FailureType test2 ( ... );
+                        template < typename T, typename U > static decltype ( CommonTest :: test2 < T, U > ( 0 ) ) test ( ... );
+                    };
+
+                    template < typename T1, typename T2, typename DecayedT1 = typename Decay < T1 > :: Type, typename DecayedT2 = typename Decay < T2 > :: Type >
+                    struct CommonDecayed {
+                        using Type = Common < DecayedT1, DecayedT2 >;
+                    };
+
+                    template < typename T1, typename T2 >
+                    struct CommonDecayed < T1, T2, T1, T2 > : private CommonTest {
+                        using Type = decltype ( CommonTest :: test < T1, T2 > (0) );
+                    };
+
+                    template < typename ... >
+                    struct CommonPack {};
+
+                    template < typename, typename, typename = void >
+                    struct CommonFold {};
+
+                    template < typename CurrentType, typename ... RemainingTypes >
+                    struct CommonFold < CurrentType, CommonPack < RemainingTypes ... >, Void < typename CurrentType :: Type > > :
+                            public meta :: impl :: Common < typename CurrentType :: Type, RemainingTypes ... > {};
+
+                    template < typename CurrentType, typename RemainingType >
+                    struct CommonFold < CurrentType, RemainingType, void > {};
+                };
+
+                template < typename T1, typename T2 >
+                struct Common < T1, T2 > : public commonImpl :: CommonDecayed < T1, T2 > :: Type {};
+
+                template < typename T1, typename T2, typename ... RemainingTypes >
+                struct Common < T1, T2, RemainingTypes ... > :
+                        public commonImpl :: CommonFold < Common < T1, T2 >, commonImpl :: CommonPack < RemainingTypes ... > > {};
+            };
+
+            template < typename T >         using Decay     = typename impl :: Decay < T > :: Type;
+            template < typename ... Types > using Common    = typename impl :: Common < Types ... > :: Type;
 
             template < typename LeftType, typename RightType >
             constexpr auto isSame () noexcept -> bool {

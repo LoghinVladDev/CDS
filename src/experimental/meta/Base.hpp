@@ -68,6 +68,85 @@ namespace cds {
                 }
 
                 template < typename T > struct RemovePointer : removePtrImpl :: RemovePointer < T, typename RemoveConstVolatile < T > :: Type > {};
+
+                template < typename T >
+                struct RemoveExtent {
+                    using Type = T;
+                };
+
+                template < typename T, Size size >
+                struct RemoveExtent < T [size] > {
+                    using Type = T;
+                };
+
+                template < typename T >
+                struct RemoveExtent < T [] > {
+                    using Type = T;
+                };
+
+                template < typename T >
+                struct RemoveAllExtents {
+                    using Type = T;
+                };
+
+                template < typename T, Size size >
+                struct RemoveAllExtents < T [size] > {
+                    using Type = typename RemoveAllExtents < T > :: Type;
+                };
+
+                template < typename T >
+                struct RemoveAllExtents < T [] > {
+                    using Type = typename RemoveAllExtents < T > :: Type;
+                };
+
+                template < typename T, typename = void >
+                struct IsReferenceable : FalseType {};
+
+                template < typename T >
+                struct IsReferenceable < T, Void < T & > > : TrueType {};
+
+                namespace isVoidImpl {
+                    template < typename >   struct IsVoid           : FalseType {};
+                    template <>             struct IsVoid < void >  : TrueType {};
+                };
+
+                template < typename T >
+                struct IsVoid : isVoidImpl :: IsVoid < RemoveConstVolatile < T > > :: Type {};
+
+                namespace addPtrImpl {
+                    template < typename T, bool = IsReferenceable < T > :: value || IsVoid < T > :: value >
+                    struct AddPointer {
+                        using Type = T;
+                    };
+
+                    template < typename T >
+                    struct AddPointer < T, true > {
+                        using Type = typename RemoveReference < T > :: Type *;
+                    };
+                }
+
+                template < typename T > struct AddPointer : addPtrImpl :: AddPointer < T, true > {};
+
+                template < typename T > struct AddConst             { using Type = T const; };
+                template < typename T > struct AddVolatile          { using Type = T volatile; };
+                template < typename T > struct AddConstVolatile     { using Type = typename AddConst < typename AddVolatile < T > :: Type > :: Type; };
+
+                namespace addReferenceImpl {
+                    template < typename T, bool = IsReferenceable < T > :: value >
+                    struct AddLValueReference               { using Type = T; };
+
+                    template < typename T >
+                    struct AddLValueReference < T, true >   { using Type = T &; };
+
+                    template < typename T, bool = IsReferenceable < T > :: value >
+                    struct AddRValueReference               { using Type = T; };
+
+                    template < typename T >
+                    struct AddRValueReference < T, true >   { using Type = T &&; };
+                }
+
+                template < typename T > struct AddLValueReference : addReferenceImpl :: AddLValueReference < T > {};
+                template < typename T > struct AddRValueReference : addReferenceImpl :: AddRValueReference < T > {};
             }
 
             template < bool enableCondition, typename ReplacedType = int >
@@ -84,6 +163,27 @@ namespace cds {
             template < typename T > using RemoveReference       = typename impl :: RemoveReference < T > :: Type;
             template < typename T > using RemoveConstVolatile   = typename impl :: RemoveConstVolatile < T > :: Type;
             template < typename T > using RemovePointer         = typename impl :: RemovePointer < T > :: Type;
+
+            template < typename T > using RemoveExtent          = typename impl :: RemoveExtent < T > :: Type;
+            template < typename T > using RemoveAllExtents      = typename impl :: RemoveAllExtents < T > :: Type;
+
+
+            template < typename T > using AddConst              = typename impl :: AddConst < T > :: Type;
+            template < typename T > using AddVolatile           = typename impl :: AddVolatile < T > :: Type;
+            template < typename T > using AddLValueReference    = typename impl :: AddLValueReference < T > :: Type;
+            template < typename T > using AddRValueReference    = typename impl :: AddRValueReference < T > :: Type;
+            template < typename T > using AddConstVolatile      = typename impl :: AddConstVolatile < T > :: Type;
+            template < typename T > using AddPointer            = typename impl :: AddPointer < T > :: Type;
+
+            template < typename T >
+            constexpr auto isVoid () noexcept -> bool {
+                return impl :: IsVoid < T > :: value;
+            }
+
+            template < typename T >
+            constexpr auto isReferenceable () noexcept -> bool {
+                return impl :: IsReferenceable < T > :: value;
+            }
         }
     }
 }

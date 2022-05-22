@@ -446,6 +446,542 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             }
         }
 
+        template < typename T >
+        template < typename Predicate >
+        auto Collection < T > :: remove ( Predicate const & predicate, Size count ) noexcept -> Size {
+
+            ConstIterator * pIteratorBuffer = Memory :: instance().createArray < ConstIterator > ( count );
+            Size iteratorCount = 0U;
+
+            for ( auto iterator = this->begin(), end = this->end(); iteratorCount < count && iterator != end; ++ iterator ) {
+                if ( predicate ( * iterator ) ) {
+                    pIteratorBuffer [ iteratorCount ++ ] = iterator;
+                }
+            }
+
+            auto removedCount = this->remove ( reinterpret_cast < ConstIterator const * > ( & pIteratorBuffer[0] ), iteratorCount );
+            Memory :: instance().destroyArray ( pIteratorBuffer );
+
+            return removedCount;
+        }
+
+        template < typename T >
+        template < typename Predicate >
+        auto Collection < T > :: removeFirst ( Predicate const & predicate ) noexcept -> bool {
+            for ( auto iterator = this->begin(), end = this->end(); iterator != end; ++ iterator ) {
+                if ( predicate ( * iterator ) ) {
+                    return this->remove ( iterator );
+                }
+            }
+
+            return false;
+        }
+
+        template < typename T >
+        template < typename Predicate >
+        auto Collection < T > :: removeLast ( Predicate const & predicate ) noexcept -> bool {
+            ConstIterator toRemove;
+
+            for ( auto iterator = this->begin(), end = this->end(); iterator != end; ++ iterator ) {
+                if ( predicate ( * iterator ) ) {
+                    toRemove = iterator;
+                }
+            }
+
+            return toRemove.valid() && this->remove ( toRemove );
+        }
+
+        template < typename T >
+        template < typename Predicate >
+        auto Collection < T > :: removeAll ( Predicate const & predicate ) noexcept -> Size {
+
+            ConstIterator * pIteratorBuffer = Memory :: instance().createArray < ConstIterator > ( this->size() );
+            Size iteratorCount = 0U;
+
+            for ( auto iterator = this->begin(), end = this->end(); iterator != end; ++ iterator ) {
+                if ( predicate ( * iterator ) ) {
+                    pIteratorBuffer [ iteratorCount ++ ] = iterator;
+                }
+            }
+
+            auto removedCount = this->remove ( reinterpret_cast < ConstIterator const * > ( & pIteratorBuffer[0] ), iteratorCount );
+            Memory :: instance().destroyArray ( pIteratorBuffer );
+
+            return removedCount;
+        }
+
+        template < typename T >
+        auto Collection < T > :: removeOf ( Collection < T > const & collection, Size count ) noexcept -> Size {
+
+            if ( this == & collection ) {
+                if ( this->size() <= count ) {
+                    this->clear();
+                    return true;
+                }
+
+                ConstIterator * pIteratorBuffer = Memory :: instance().createArray < ConstIterator > ( count );
+                Size iteratorCount = 0U;
+
+                for ( auto iterator = this->begin(), end = this->end(); iteratorCount < count && iterator != end; ++ iterator ) {
+                    pIteratorBuffer [ iteratorCount ++ ] = iterator;
+                }
+
+                auto removedCount = this->remove ( reinterpret_cast < ConstIterator const * > ( & pIteratorBuffer[0] ), iteratorCount );
+                Memory :: instance().destroyArray ( pIteratorBuffer );
+
+                return removedCount;
+            }
+
+            ConstIterator * pIteratorBuffer = Memory :: instance().createArray < ConstIterator > ( count );
+            Size iteratorCount = 0U;
+
+            for ( auto iterator = this->begin(), end = this->end(); iterator != end; ++ iterator ) {
+                if ( collection.contains ( * iterator ) ) {
+                    pIteratorBuffer [ iteratorCount ++ ] = iterator;
+                }
+
+                if ( iteratorCount >= count ) {
+                    break;
+                }
+            }
+
+            auto removedCount = this->remove ( reinterpret_cast < ConstIterator const * > ( & pIteratorBuffer[0] ), iteratorCount );
+            Memory :: instance().destroyArray ( pIteratorBuffer );
+
+            return removedCount;
+        }
+
+        template < typename T >
+        auto Collection < T > :: removeFirstOf ( Collection < T > const & collection ) noexcept -> bool {
+            if ( this == & collection ) {
+                return this->remove ( this->begin() );
+            }
+
+            for ( auto iterator = this->begin(), end = this->end(); iterator != end; ++ iterator ) {
+                if ( collection.contains ( * iterator ) ) {
+                    return this->remove ( iterator );
+                }
+            }
+
+            return false;
+        }
+
+        template < typename T >
+        auto Collection < T > :: removeLastOf ( Collection < T > const & collection ) noexcept -> bool {
+            ConstIterator toRemove;
+
+            if ( this == & collection ) {
+                for ( auto iterator = this->begin(), end = this->end(); iterator != end; ++ iterator ) {
+                    toRemove = iterator;
+                }
+
+                return this->remove ( toRemove );
+            }
+
+            for ( auto iterator = this->begin(), end = this->end(); iterator != end; ++ iterator ) {
+                if ( collection.contains ( * iterator ) ) {
+                    toRemove = iterator;
+                }
+            }
+
+            return toRemove.valid() && this->remove ( toRemove );
+        }
+
+        template < typename T >
+        auto Collection < T > :: removeAllOf ( Collection < T > const & collection ) noexcept -> Size {
+            if ( this == & collection ) {
+                auto removedCount = this->size();
+                this->clear();
+                return removedCount;
+            }
+
+            ConstIterator * pIteratorBuffer = Memory :: instance().createArray < ConstIterator > ( this->size() );
+            Size iteratorCount = 0U;
+
+            for ( auto iterator = this->begin(), end = this->end(); iterator != end; ++ iterator ) {
+                if ( collection.contains ( * iterator ) ) {
+                    pIteratorBuffer [ iteratorCount ++ ] = iterator;
+                }
+            }
+
+            auto removedCount = this->remove ( reinterpret_cast < ConstIterator const * > ( & pIteratorBuffer[0] ), iteratorCount );
+            Memory :: instance().destroyArray ( pIteratorBuffer );
+
+            return removedCount;
+        }
+
+        template < typename T >
+        auto Collection < T > :: removeNotOf ( Collection < T > const & collection, Size count ) noexcept -> Size {
+
+            if ( this == & collection ) {
+                return 0ULL;
+            }
+
+            ConstIterator * pIteratorBuffer = Memory :: instance().createArray < ConstIterator > ( count );
+            Size iteratorCount = 0U;
+
+            for ( auto iterator = this->begin(), end = this->end(); iterator != end; ++ iterator ) {
+                if ( ! collection.contains ( * iterator ) ) {
+                    pIteratorBuffer [ iteratorCount ++ ] = iterator;
+                }
+
+                if ( iteratorCount >= count ) {
+                    break;
+                }
+            }
+
+            auto removedCount = this->remove ( reinterpret_cast < ConstIterator const * > ( & pIteratorBuffer[0] ), iteratorCount );
+            Memory :: instance().destroyArray ( pIteratorBuffer );
+
+            return removedCount;
+        }
+
+        template < typename T >
+        auto Collection < T > :: removeFirstNotOf ( Collection < T > const & collection ) noexcept -> bool {
+            if ( this == & collection ) {
+                return false;
+            }
+
+            for ( auto iterator = this->begin(), end = this->end(); iterator != end; ++ iterator ) {
+                if ( ! collection.contains ( * iterator ) ) {
+                    return this->remove ( iterator );
+                }
+            }
+
+            return false;
+        }
+
+        template < typename T >
+        auto Collection < T > :: removeLastNotOf ( Collection < T > const & collection ) noexcept -> bool {
+            if ( this == & collection ) {
+                return false;
+            }
+
+            ConstIterator toRemove;
+
+            for ( auto iterator = this->begin(), end = this->end(); iterator != end; ++ iterator ) {
+                if ( ! collection.contains ( * iterator ) ) {
+                    toRemove = iterator;
+                }
+            }
+
+            return toRemove.valid() && this->remove ( toRemove );
+        }
+
+        template < typename T >
+        auto Collection < T > :: removeAllNotOf ( Collection < T > const & collection ) noexcept -> Size {
+            if ( this == & collection ) {
+                return 0ULL;
+            }
+
+            ConstIterator * pIteratorBuffer = Memory :: instance().createArray < ConstIterator > ( this->size() );
+            Size iteratorCount = 0U;
+
+            for ( auto iterator = this->begin(), end = this->end(); iterator != end; ++ iterator ) {
+                if ( ! collection.contains ( * iterator ) ) {
+                    pIteratorBuffer [ iteratorCount ++ ] = iterator;
+                }
+            }
+
+            auto removedCount = this->remove ( reinterpret_cast < ConstIterator const * > ( & pIteratorBuffer[0] ), iteratorCount );
+            Memory :: instance().destroyArray ( pIteratorBuffer );
+
+            return removedCount;
+        }
+
+        namespace hidden {
+            namespace impl {
+
+                template < typename T >
+                __CDS_OptimalInline static auto initializerListContains ( std :: initializer_list < T > const & list, T const & element ) noexcept -> bool {
+                    for ( auto const & e : list ) {
+                        if ( Type < T > :: compare ( e, element ) ) {
+                            return true;
+                        }
+                    }
+
+                    return false;
+                }
+
+            }
+        }
+
+        template < typename T >
+        auto Collection < T > :: removeOf ( InitializerList const & list, Size count ) noexcept -> Size {
+
+            ConstIterator * pIteratorBuffer = Memory :: instance().createArray < ConstIterator > ( count );
+            Size iteratorCount = 0U;
+
+            for ( auto iterator = this->begin(), end = this->end(); iterator != end; ++ iterator ) {
+                if ( hidden :: impl :: initializerListContains ( list, * iterator ) ) {
+                    pIteratorBuffer [ iteratorCount ++ ] = iterator;
+                }
+
+                if ( iteratorCount >= count ) {
+                    break;
+                }
+            }
+
+            auto removedCount = this->remove ( reinterpret_cast < ConstIterator const * > ( & pIteratorBuffer[0] ), iteratorCount );
+            Memory :: instance().destroyArray ( pIteratorBuffer );
+
+            return removedCount;
+        }
+
+        template < typename T >
+        auto Collection < T > :: removeFirstOf ( InitializerList const & list ) noexcept -> bool {
+            for ( auto iterator = this->begin(), end = this->end(); iterator != end; ++ iterator ) {
+                if ( hidden :: impl :: initializerListContains ( list, * iterator ) ) {
+                    return this->remove ( iterator );
+                }
+            }
+
+            return false;
+        }
+
+        template < typename T >
+        auto Collection < T > :: removeLastOf ( InitializerList const & list ) noexcept -> bool {
+            ConstIterator toRemove;
+
+            for ( auto iterator = this->begin(), end = this->end(); iterator != end; ++ iterator ) {
+                if ( hidden :: impl :: initializerListContains ( list, * iterator ) ) {
+                    toRemove = iterator;
+                }
+            }
+
+            return toRemove.valid() && this->remove ( toRemove );
+        }
+
+        template < typename T >
+        auto Collection < T > :: removeAllOf ( InitializerList const & list ) noexcept -> Size {
+
+            ConstIterator * pIteratorBuffer = Memory :: instance().createArray < ConstIterator > ( this->size() );
+            Size iteratorCount = 0U;
+
+            for ( auto iterator = this->begin(), end = this->end(); iterator != end; ++ iterator ) {
+                if ( hidden :: impl :: initializerListContains ( list, * iterator ) ) {
+                    pIteratorBuffer [ iteratorCount ++ ] = iterator;
+                }
+            }
+
+            auto removedCount = this->remove ( reinterpret_cast < ConstIterator const * > ( & pIteratorBuffer[0] ), iteratorCount );
+            Memory :: instance().destroyArray ( pIteratorBuffer );
+
+            return removedCount;
+        }
+
+        template < typename T >
+        auto Collection < T > :: removeNotOf ( InitializerList const & list, Size count ) noexcept -> Size {
+
+            ConstIterator * pIteratorBuffer = Memory :: instance().createArray < ConstIterator > ( count );
+            Size iteratorCount = 0U;
+
+            for ( auto iterator = this->begin(), end = this->end(); iterator != end; ++ iterator ) {
+                if ( ! hidden :: impl :: initializerListContains ( list, * iterator ) ) {
+                    pIteratorBuffer [ iteratorCount ++ ] = iterator;
+                }
+
+                if ( iteratorCount >= count ) {
+                    break;
+                }
+            }
+
+            auto removedCount = this->remove ( reinterpret_cast < ConstIterator const * > ( & pIteratorBuffer[0] ), iteratorCount );
+            Memory :: instance().destroyArray ( pIteratorBuffer );
+
+            return removedCount;
+        }
+
+        template < typename T >
+        auto Collection < T > :: removeFirstNotOf ( InitializerList const & list ) noexcept -> bool {
+
+            for ( auto iterator = this->begin(), end = this->end(); iterator != end; ++ iterator ) {
+                if ( ! hidden :: impl :: initializerListContains ( list, * iterator ) ) {
+                    return this->remove ( iterator );
+                }
+            }
+
+            return false;
+        }
+
+        template < typename T >
+        auto Collection < T > :: removeLastNotOf ( InitializerList const & list ) noexcept -> bool {
+            ConstIterator toRemove;
+
+            for ( auto iterator = this->begin(), end = this->end(); iterator != end; ++ iterator ) {
+                if ( ! hidden :: impl :: initializerListContains ( list, * iterator ) ) {
+                    toRemove = iterator;
+                }
+            }
+
+            return toRemove.valid() && this->remove ( toRemove );
+        }
+
+        template < typename T >
+        auto Collection < T > :: removeAllNotOf ( InitializerList const & list ) noexcept -> Size {
+            ConstIterator * pIteratorBuffer = Memory :: instance().createArray < ConstIterator > ( this->size() );
+            Size iteratorCount = 0U;
+
+            for ( auto iterator = this->begin(), end = this->end(); iterator != end; ++ iterator ) {
+                if ( ! hidden :: impl :: initializerListContains ( list, * iterator ) ) {
+                    pIteratorBuffer [ iteratorCount ++ ] = iterator;
+                }
+            }
+
+            auto removedCount = this->remove ( reinterpret_cast < ConstIterator const * > ( & pIteratorBuffer[0] ), iteratorCount );
+            Memory :: instance().destroyArray ( pIteratorBuffer );
+
+            return removedCount;
+        }
+
+        template < typename T >
+        auto Collection < T > :: remove ( ElementType const & element, Size count ) noexcept -> Size {
+
+            ConstIterator * pIteratorBuffer = Memory :: instance().createArray < ConstIterator > ( count );
+            Size iteratorCount = 0U;
+
+            for ( auto iterator = this->begin(), end = this->end(); iteratorCount < count && iterator != end; ++ iterator ) {
+                if ( meta :: equals ( * iterator, element ) ) {
+                    pIteratorBuffer [ iteratorCount ++ ] = iterator;
+                }
+            }
+
+            auto removedCount = this->remove ( reinterpret_cast < ConstIterator const * > ( & pIteratorBuffer[0] ), iteratorCount );
+            Memory :: instance().destroyArray ( pIteratorBuffer );
+
+            return removedCount;
+        }
+
+        template < typename T >
+        auto Collection < T > :: removeFirst ( ElementType const & element ) noexcept -> bool {
+            for ( auto iterator = this->begin(), end = this->end(); iterator != end; ++ iterator ) {
+                if ( meta :: equals ( * iterator, element ) ) {
+                    return this->remove ( iterator );
+                }
+            }
+
+            return false;
+        }
+
+        template < typename T >
+        auto Collection < T > :: removeLast ( ElementType const & element ) noexcept -> bool {
+            ConstIterator toRemove;
+
+            for ( auto iterator = this->begin(), end = this->end(); iterator != end; ++ iterator ) {
+                if ( meta :: equals ( * iterator, element ) ) {
+                    toRemove = iterator;
+                }
+            }
+
+            return toRemove.valid() && this->remove ( toRemove );
+        }
+
+        template < typename T >
+        auto Collection < T > :: removeAll ( ElementType const & element ) noexcept -> Size {
+
+            ConstIterator * pIteratorBuffer = Memory :: instance().createArray < ConstIterator > ( this->size() );
+            Size iteratorCount = 0U;
+
+            for ( auto iterator = this->begin(), end = this->end(); iterator != end; ++ iterator ) {
+                if ( meta :: equals ( * iterator, element ) ) {
+                    pIteratorBuffer [ iteratorCount ++ ] = iterator;
+                }
+            }
+
+            auto removedCount = this->remove ( reinterpret_cast < ConstIterator const * > ( & pIteratorBuffer[0] ), iteratorCount );
+            Memory :: instance().destroyArray ( pIteratorBuffer );
+
+            return removedCount;
+        }
+
+        template < typename T >
+        auto Collection < T > :: containsAnyOf ( Collection < ElementType > const & elements ) const noexcept -> bool {
+            for ( auto iterator = elements.begin(), end = elements.end(); iterator != end; ++ iterator ) {
+                if ( this->contains ( * iterator ) ) {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        template < typename T >
+        auto Collection < T > :: containsAnyNotOf ( Collection < ElementType > const & elements ) const noexcept -> bool {
+            for ( auto iterator = elements.begin(), end = elements.end(); iterator != end; ++ iterator ) {
+                if ( ! this->contains ( * iterator ) ) {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        template < typename T >
+        auto Collection < T > :: containsAllOf ( Collection < ElementType > const & elements ) const noexcept -> bool {
+            for ( auto iterator = elements.begin(), end = elements.end(); iterator != end; ++ iterator ) {
+                if ( ! this->contains ( * iterator ) ) {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
+        template < typename T >
+        auto Collection < T > :: containsAllNotOf ( Collection < ElementType > const & elements ) const noexcept -> bool {
+            for ( auto iterator = elements.begin(), end = elements.end(); iterator != end; ++ iterator ) {
+                if ( this->contains ( * iterator ) ) {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
+        template < typename T >
+        auto Collection < T > :: containsAnyOf ( InitializerList const & elements ) const noexcept -> bool {
+            for ( auto iterator = elements.begin(), end = elements.end(); iterator != end; ++ iterator ) {
+                if ( this->contains ( * iterator ) ) {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        template < typename T >
+        auto Collection < T > :: containsAnyNotOf ( InitializerList const & elements ) const noexcept -> bool {
+            for ( auto iterator = elements.begin(), end = elements.end(); iterator != end; ++ iterator ) {
+                if ( ! this->contains ( * iterator ) ) {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        template < typename T >
+        auto Collection < T > :: containsAllOf ( InitializerList const & elements ) const noexcept -> bool {
+            for ( auto iterator = elements.begin(), end = elements.end(); iterator != end; ++ iterator ) {
+                if ( ! this->contains ( * iterator ) ) {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
+        template < typename T >
+        auto Collection < T > :: containsAllNotOf ( InitializerList const & elements ) const noexcept -> bool {
+            for ( auto iterator = elements.begin(), end = elements.end(); iterator != end; ++ iterator ) {
+                if ( this->contains ( * iterator ) ) {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
     }
 }
 

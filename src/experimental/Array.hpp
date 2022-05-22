@@ -48,7 +48,10 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
         private:
             ElementType ** _pData       { nullptr };
+        private:
             Size           _capacity    { 0ULL };
+        private:
+            constexpr static Size minCapacity = 32ULL;
 
         private:
             auto initializeByCopy ( Array const & ) noexcept -> void;

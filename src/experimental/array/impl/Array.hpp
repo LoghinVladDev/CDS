@@ -20,8 +20,8 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         template < typename T >
         Array < T > :: Array ( InitializerList const & initializerList ) noexcept :
                 List < T > ( static_cast < Size > ( initializerList.size() ) ),
-                _capacity ( initializerList.size() ),
-                _pData ( Memory :: instance().createArray < T * > ( initializerList.size() ) ) {
+                _capacity ( maxOf ( initializerList.size(), Array :: minCapacity ) ),
+                _pData ( Memory :: instance().createArray < T * > ( maxOf ( initializerList.size(), Array :: minCapacity ) ) ) {
 
             Index i = 0;
             for ( auto const & element : initializerList ) {
@@ -37,8 +37,8 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         template < typename T >
         __CDS_OptimalInline Array < T > :: Array ( Array < T > const & array ) noexcept :
                 List < T > ( array ),
-                _capacity ( array.List < T > :: size() ),
-                _pData ( array.List < T > :: empty() ? nullptr : Memory :: instance().createArray < T * > ( array.List < T > :: size() ) ){
+                _capacity ( maxOf ( array.List < T > :: size(), Array :: minCapacity ) ),
+                _pData ( array.List < T > :: empty() ? nullptr : Memory :: instance().createArray < T * > ( maxOf ( array.List < T > :: size(), Array :: minCapacity ) ) ){
 
             this->initializeByCopy ( array );
         }
@@ -99,7 +99,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
             Memory :: instance().destroy ( exchange ( this->_pData [ index ], nullptr ) );
 
-            if ( this->size() * 2 > this->_capacity ) {
+            if ( this->size() * 2 > this->_capacity || this->_capacity <= Array :: minCapacity ) {
 
                 for ( auto copyIndex = index, len = static_cast < Index > ( this->size() ) - 1; copyIndex < len; ++ copyIndex ) {
                     this->_pData [ copyIndex ] = this->_pData [ copyIndex + 1 ];
@@ -373,7 +373,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 return this->_pData [ this->_size ++ ];
             }
 
-            auto newSize = std :: max ( this->_capacity * 2, this->_size + 1 );
+            auto newSize = maxOf ( this->_capacity * 2, this->_size + 1, Array :: minCapacity );
             T ** newBuf = Memory :: instance ().createArray < T * > (newSize);
 
             (void) std :: memcpy ( newBuf, this->_pData, this->_size * sizeof(T *) );
@@ -399,7 +399,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 return this->_pData[0];
             }
 
-            auto newSize = this->_capacity * 2;
+            auto newSize = maxOf ( this->_capacity * 2, this->_size + 1, Array :: minCapacity );
             auto newBuf = Memory :: instance().createArray < T * > ( newSize );
             (void) std::memcpy ( newBuf + 1, this->_pData, this->_size * sizeof ( T * ) );
             (void) std::memset ( newBuf + 1 + this->_size, 0, (newSize - this->_size - 1) * sizeof(T *) );
@@ -464,7 +464,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 return this->_pData [ index + 1 ] = nullptr;
             }
 
-            auto newCap = std :: max ( this->_capacity * 2, this->_size + 1 );
+            auto newCap = maxOf ( this->_capacity * 2, this->_size + 1, Array :: minCapacity );
             auto newBuf = Memory :: instance ().createArray < T * > ( newCap );
 
             (void) std :: memcpy ( newBuf, this->_pData, sizeof ( T * ) * ( index ) );
@@ -488,7 +488,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 return this->_pData [ index ] = nullptr;
             }
 
-            auto newCap = std :: max ( this->_capacity * 2, this->_size + 1 );
+            auto newCap = maxOf ( this->_capacity * 2, this->_size + 1, Array :: minCapacity );
             auto newBuf = Memory :: instance ().createArray < T * > ( newCap );
 
             (void) std :: memcpy ( newBuf - index, this->_pData, sizeof ( T * ) * ( index - 1 ) );

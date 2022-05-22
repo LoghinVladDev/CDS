@@ -299,6 +299,24 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             virtual auto contains ( ElementType const & ) const noexcept -> bool;
 
         public:
+            auto containsAnyOf ( Collection < ElementType > const & ) const noexcept -> bool;
+        public:
+            auto containsAnyNotOf ( Collection < ElementType > const & ) const noexcept -> bool;
+        public:
+            auto containsAllOf ( Collection < ElementType > const & ) const noexcept -> bool;
+        public:
+            auto containsAllNotOf ( Collection < ElementType > const & ) const noexcept -> bool;
+
+        public:
+            auto containsAnyOf ( InitializerList const & ) const noexcept -> bool;
+        public:
+            auto containsAnyNotOf ( InitializerList const & ) const noexcept -> bool;
+        public:
+            auto containsAllOf ( InitializerList const & ) const noexcept -> bool;
+        public:
+            auto containsAllNotOf ( InitializerList const & ) const noexcept -> bool;
+
+        public:
             template < typename V = T, meta :: EnableIf < meta :: isCopyConstructible < V > () > = 0 >
             __CDS_OptimalInline auto add ( ElementType const & ) noexcept -> void;
         public:
@@ -328,7 +346,5 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 #include "collection/impl/ConstReverseIterator.hpp"
 
 #include "collection/impl/Collection.hpp"
-
-#include "collection/impl/CollectionDerivedRequired.hpp"
 
 #endif // __CDS_EX_COLLECTION_HPP__

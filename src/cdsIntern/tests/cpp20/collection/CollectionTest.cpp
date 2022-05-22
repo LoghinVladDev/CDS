@@ -786,14 +786,331 @@ auto CollectionTest :: execute() noexcept -> bool {
             collection.removeOf ( experimental :: Array < int > { 2, 3, 4 }, 2 );
 
             if ( collection.contains ( 2 ) || collection.contains ( 3 ) || ! collection.contains (4) ) {
-                this->logError ( "removeAll Collection cref, Size error" );
+                this->logError ( "removeOf Collection cref, Size error" );
                 allOk = false;
             }
 
             collection.removeOf ( experimental :: Array < int > { 2, 3, 4 }, 2 );
 
             if ( collection.contains ( 2 ) || collection.contains ( 3 ) || collection.contains (4) ) {
-                this->logError ( "removeAll Collection cref, Size error" );
+                this->logError ( "removeOf Collection cref, Size error" );
+                allOk = false;
+            }
+
+            collection.clear ();
+
+            collection.add ( 1 );
+            collection.add ( 2 );
+            collection.add ( 3 );
+            collection.add ( 4 );
+            collection.add ( 5 );
+            collection.add ( 6 );
+
+            collection.removeFirstOf ( experimental :: Array < int > { 3, 2 } );
+
+            if ( collection.contains ( 2 ) || ! collection.contains ( 3 ) ) {
+                this->logError ( "removeFirstOf Collection cref error" );
+                allOk = false;
+            }
+
+            collection.removeFirstOf ( experimental :: Array < int > { 3, 2 } );
+
+            if ( collection.contains ( 2 ) || collection.contains ( 3 ) ) {
+                this->logError ( "removeFirstOf Collection cref error" );
+                allOk = false;
+            }
+
+            collection.clear ();
+
+            collection.add ( 1 );
+            collection.add ( 2 );
+            collection.add ( 3 );
+            collection.add ( 4 );
+            collection.add ( 5 );
+            collection.add ( 6 );
+
+            collection.removeLastOf ( experimental :: Array < int > { 3, 2 } );
+
+            if ( ! collection.contains ( 2 ) || collection.contains ( 3 ) ) {
+                this->logError ( "removeLastOf Collection cref error" );
+                allOk = false;
+            }
+
+            collection.removeLastOf ( experimental :: Array < int > { 3, 2 } );
+
+            if ( collection.contains ( 2 ) || collection.contains ( 3 ) ) {
+                this->logError ( "removeLastOf Collection cref error" );
+                allOk = false;
+            }
+
+            collection.clear ();
+
+            collection.add ( 1 );
+            collection.add ( 2 );
+            collection.add ( 3 );
+            collection.add ( 4 );
+            collection.add ( 5 );
+            collection.add ( 6 );
+
+            collection.removeAllOf ( experimental :: Array < int > { 3, 2 } );
+
+            if ( collection.contains ( 2 ) || collection.contains ( 3 ) ) {
+                this->logError ( "removeAllOf Collection cref error" );
+                allOk = false;
+            }
+
+            collection.clear ();
+
+            collection.add ( 1 );
+            collection.add ( 2 );
+            collection.add ( 3 );
+            collection.add ( 4 );
+            collection.add ( 5 );
+            collection.add ( 6 );
+
+            collection.removeNotOf ( experimental :: Array < int > { 2, 3, 4 }, 2 );
+
+            if ( collection.containsAnyOf ( { 1, 5 } ) || ! collection.containsAllOf ( { 2, 3, 4, 6 } ) ) {
+                this->logError ( "removeNotOf Collection cref, Size error" );
+                allOk = false;
+            }
+
+            collection.removeNotOf ( experimental :: Array < int > { 2, 3, 4 }, 2 );
+
+            if ( collection.containsAnyOf ( { 1, 5, 6 } ) || ! collection.containsAllOf ( { 2, 3, 4 } ) ) {
+                this->logError ( "removeNotOf Collection cref, Size error" );
+                allOk = false;
+            }
+
+            collection.clear ();
+
+            collection.add ( 1 );
+            collection.add ( 2 );
+            collection.add ( 3 );
+            collection.add ( 4 );
+            collection.add ( 5 );
+            collection.add ( 6 );
+
+            collection.removeFirstNotOf ( experimental :: Array < int > { 3, 2 } );
+
+            if ( collection.containsAnyNotOf ( { 2, 3, 4, 5, 6 } ) ) {
+                this->logError ( "removeFirstNotOf Collection cref error" );
+                allOk = false;
+            }
+
+            collection.removeFirstNotOf ( experimental :: Array < int > { 3, 2 } );
+
+            if ( collection.containsAnyNotOf ( { 2, 3, 5, 6 } ) ) {
+                this->logError ( "removeFirstNotOf Collection cref error" );
+                allOk = false;
+            }
+
+            collection.clear ();
+
+            collection.add ( 1 );
+            collection.add ( 2 );
+            collection.add ( 3 );
+            collection.add ( 4 );
+            collection.add ( 5 );
+            collection.add ( 6 );
+
+            collection.removeLastNotOf ( experimental :: Array < int > { 3, 2 } );
+
+            if ( collection.containsAnyNotOf ( { 1, 2, 3, 4, 5 } ) ) {
+                this->logError ( "removeLastNotOf Collection cref error" );
+                allOk = false;
+            }
+
+            collection.removeLastNotOf ( experimental :: Array < int > { 4, 5 } );
+
+            if ( collection.containsAnyNotOf ( { 1, 2, 4, 5 } ) ) {
+                this->logError ( "removeLastNotOf Collection cref error" );
+                allOk = false;
+            }
+
+            collection.clear ();
+
+            collection.add ( 1 );
+            collection.add ( 2 );
+            collection.add ( 3 );
+            collection.add ( 4 );
+            collection.add ( 5 );
+            collection.add ( 6 );
+
+            collection.removeAllNotOf ( experimental :: Array < int > { 3, 2 } );
+
+            if ( collection.containsAnyNotOf ( { 2, 3 } ) ) {
+                this->logError ( "removeAllOf Collection cref error" );
+                allOk = false;
+            }
+
+            collection.clear ();
+
+            collection.add ( 1 );
+            collection.add ( 2 );
+            collection.add ( 3 );
+            collection.add ( 4 );
+            collection.add ( 5 );
+            collection.add ( 6 );
+
+            collection.removeOf ( { 2, 3, 4 }, 2 );
+
+            if ( collection.contains ( 2 ) || collection.contains ( 3 ) || ! collection.contains (4) ) {
+                this->logError ( "removeOf Collection cref, Size error" );
+                allOk = false;
+            }
+
+            collection.removeOf ( { 2, 3, 4 }, 2 );
+
+            if ( collection.contains ( 2 ) || collection.contains ( 3 ) || collection.contains (4) ) {
+                this->logError ( "removeOf Collection cref, Size error" );
+                allOk = false;
+            }
+
+            collection.clear ();
+
+            collection.add ( 1 );
+            collection.add ( 2 );
+            collection.add ( 3 );
+            collection.add ( 4 );
+            collection.add ( 5 );
+            collection.add ( 6 );
+
+            collection.removeFirstOf ( { 3, 2 } );
+
+            if ( collection.contains ( 2 ) || ! collection.contains ( 3 ) ) {
+                this->logError ( "removeFirstOf Collection cref error" );
+                allOk = false;
+            }
+
+            collection.removeFirstOf ( { 3, 2 } );
+
+            if ( collection.contains ( 2 ) || collection.contains ( 3 ) ) {
+                this->logError ( "removeFirstOf Collection cref error" );
+                allOk = false;
+            }
+
+            collection.clear ();
+
+            collection.add ( 1 );
+            collection.add ( 2 );
+            collection.add ( 3 );
+            collection.add ( 4 );
+            collection.add ( 5 );
+            collection.add ( 6 );
+
+            collection.removeLastOf ( { 3, 2 } );
+
+            if ( ! collection.contains ( 2 ) || collection.contains ( 3 ) ) {
+                this->logError ( "removeLastOf Collection cref error" );
+                allOk = false;
+            }
+
+            collection.removeLastOf ( { 3, 2 } );
+
+            if ( collection.contains ( 2 ) || collection.contains ( 3 ) ) {
+                this->logError ( "removeLastOf Collection cref error" );
+                allOk = false;
+            }
+
+            collection.clear ();
+
+            collection.add ( 1 );
+            collection.add ( 2 );
+            collection.add ( 3 );
+            collection.add ( 4 );
+            collection.add ( 5 );
+            collection.add ( 6 );
+
+            collection.removeAllOf ( { 3, 2 } );
+
+            if ( collection.contains ( 2 ) || collection.contains ( 3 ) ) {
+                this->logError ( "removeAllOf Collection cref error" );
+                allOk = false;
+            }
+
+            collection.clear ();
+
+            collection.add ( 1 );
+            collection.add ( 2 );
+            collection.add ( 3 );
+            collection.add ( 4 );
+            collection.add ( 5 );
+            collection.add ( 6 );
+
+            collection.removeNotOf ( { 2, 3, 4 }, 2 );
+
+            if ( collection.containsAnyOf ( { 1, 5 } ) || ! collection.containsAllOf ( { 2, 3, 4, 6 } ) ) {
+                this->logError ( "removeNotOf Collection cref, Size error" );
+                allOk = false;
+            }
+
+            collection.removeNotOf ( { 2, 3, 4 }, 2 );
+
+            if ( collection.containsAnyOf ( { 1, 5, 6 } ) || ! collection.containsAllOf ( { 2, 3, 4 } ) ) {
+                this->logError ( "removeNotOf Collection cref, Size error" );
+                allOk = false;
+            }
+
+            collection.clear ();
+
+            collection.add ( 1 );
+            collection.add ( 2 );
+            collection.add ( 3 );
+            collection.add ( 4 );
+            collection.add ( 5 );
+            collection.add ( 6 );
+
+            collection.removeFirstNotOf ( { 3, 2 } );
+
+            if ( collection.containsAnyNotOf ( { 2, 3, 4, 5, 6 } ) ) {
+                this->logError ( "removeFirstNotOf Collection cref error" );
+                allOk = false;
+            }
+
+            collection.removeFirstNotOf ( { 3, 2 } );
+
+            if ( collection.containsAnyNotOf ( { 2, 3, 5, 6 } ) ) {
+                this->logError ( "removeFirstNotOf Collection cref error" );
+                allOk = false;
+            }
+
+            collection.clear ();
+
+            collection.add ( 1 );
+            collection.add ( 2 );
+            collection.add ( 3 );
+            collection.add ( 4 );
+            collection.add ( 5 );
+            collection.add ( 6 );
+
+            collection.removeLastNotOf ( { 3, 2 } );
+
+            if ( collection.containsAnyNotOf ( { 1, 2, 3, 4, 5 } ) ) {
+                this->logError ( "removeLastNotOf Collection cref error" );
+                allOk = false;
+            }
+
+            collection.removeLastNotOf ( { 4, 5 } );
+
+            if ( collection.containsAnyNotOf ( { 1, 2, 4, 5 } ) ) {
+                this->logError ( "removeLastNotOf Collection cref error" );
+                allOk = false;
+            }
+
+            collection.clear ();
+
+            collection.add ( 1 );
+            collection.add ( 2 );
+            collection.add ( 3 );
+            collection.add ( 4 );
+            collection.add ( 5 );
+            collection.add ( 6 );
+
+            collection.removeAllNotOf ( { 3, 2 } );
+
+            if ( collection.containsAnyNotOf ( { 2, 3 } ) ) {
+                this->logError ( "removeAllOf Collection cref error" );
                 allOk = false;
             }
         });

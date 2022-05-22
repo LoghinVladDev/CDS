@@ -10,16 +10,5 @@ using namespace cds;
 
 int main () {
 
-    auto a = arrayOf <String> ( "ana", "are", "mere" );
-    a.forEach ( & println < String > );
-
-String s;
-auto pfn = & String::length;
-    (s.*pfn)();
-
-
-    a.forEach ( & String :: length );
-//    std :: cout << experimental :: meta :: impl :: IsMemberFunctionPointer < decltype ( & String :: length ), String > :: value << '\n';
-
     return 0;
 }
