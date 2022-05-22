@@ -307,6 +307,8 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 case DelegateIteratorRequestType :: BackwardEnd:
                     return Memory :: instance().create < LinkedListDelegateIterator > ( nullptr, false );
             }
+
+            return nullptr;
         }
 
         template < typename T >
@@ -321,71 +323,9 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 case DelegateIteratorRequestType :: BackwardEnd:
                     return Memory :: instance().create < LinkedListDelegateConstIterator > ( nullptr, false );
             }
-        }
 
-//        template < typename T >
-//        auto LinkedList < T > :: remove ( Collection < Iterator > const & iterators ) noexcept -> Size {
-//            LinkedList < void const * > nodes;
-//
-//            for ( auto iterator = iterators.begin(), end = iterators.end(); iterator != end; ++ iterator ) {
-//                if ( iterator->of ( this ) ) {
-//                    auto pNode = reinterpret_cast < LinkedListDelegateIterator const * > ( Collection < T > :: acquireDelegate ( * iterator ) )->node();
-//                    if ( pNode != nullptr ) {
-//                        nodes.pushBack ( reinterpret_cast < void const * > ( pNode ) );
-//                    }
-//                }
-//            }
-//
-//            return this->remove ( reinterpret_cast < LinkedList < Node const * > const & > ( nodes ) );
-//        }
-//
-//        template < typename T >
-//        auto LinkedList < T > :: remove ( Collection < ConstIterator > const & iterators ) noexcept -> Size {
-//            LinkedList < void const * > nodes;
-//
-//            for ( auto iterator = iterators.begin(), end = iterators.end(); iterator != end; ++ iterator ) {
-//                if ( iterator->of ( this ) ) {
-//                    auto pNode = reinterpret_cast < LinkedListDelegateConstIterator const * > ( Collection < T > :: acquireDelegate ( * iterator ) )->node();
-//                    if ( pNode != nullptr ) {
-//                        nodes.pushBack ( reinterpret_cast < void const * > ( pNode ) );
-//                    }
-//                }
-//            }
-//
-//            return this->remove ( reinterpret_cast < LinkedList < Node const * > const & > ( nodes ) );
-//        }
-//
-//        template < typename T >
-//        auto LinkedList < T > :: remove ( Collection < ReverseIterator > const & iterators ) noexcept -> Size {
-//            LinkedList < void const * > nodes;
-//
-//            for ( auto iterator = iterators.begin(), end = iterators.end(); iterator != end; ++ iterator ) {
-//                if ( iterator->of ( this ) ) {
-//                    auto pNode = reinterpret_cast < LinkedListDelegateIterator const * > ( Collection < T > :: acquireDelegate ( * iterator ) )->node();
-//                    if ( pNode != nullptr ) {
-//                        nodes.pushBack ( reinterpret_cast < void const * > ( pNode ) );
-//                    }
-//                }
-//            }
-//
-//            return this->remove ( reinterpret_cast < LinkedList < Node const * > const & > ( nodes ) );
-//        }
-//
-//        template < typename T >
-//        auto LinkedList < T > :: remove ( Collection < ConstReverseIterator > const & iterators ) noexcept -> Size {
-//            LinkedList < void const * > nodes;
-//
-//            for ( auto iterator = iterators.begin(), end = iterators.end(); iterator != end; ++ iterator ) {
-//                if ( iterator->of ( this ) ) {
-//                    auto pNode = reinterpret_cast < LinkedListDelegateConstIterator const * > ( Collection < T > :: acquireDelegate ( * iterator ) )->node();
-//                    if ( pNode != nullptr ) {
-//                        nodes.pushBack ( reinterpret_cast < void const * > ( pNode ) );
-//                    }
-//                }
-//            }
-//
-//            return this->remove ( reinterpret_cast < LinkedList < Node const * > const & > ( nodes ) );
-//        }
+            return nullptr;
+        }
 
         template < typename T >
         auto LinkedList < T > :: remove ( Iterator const * pIterators, Size iteratorCount ) noexcept -> Size {

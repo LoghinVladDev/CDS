@@ -675,6 +675,126 @@ auto CollectionTest :: execute() noexcept -> bool {
             collection.remove ( [](int v){ return v >= 6; }, 9 );
             if ( collection.any ( [](int v){ return v >= 6; } ) ) {
                 this->logError("remove Predicate error");
+                allOk = false;
+            }
+
+            collection.removeFirst ( []( int v ) { return v == 3; } );
+            if ( collection.contains (3) ) {
+                this->logError ("removeFirst Predicate error");
+                allOk = false;
+            }
+
+            collection.add ( 3 );
+            collection.add ( 3 );
+
+            collection.removeFirst ( []( int v ) { return v == 3; } );
+            if ( ! collection.contains (3) ) {
+                this->logError ("removeFirst Predicate error");
+                allOk = false;
+            }
+
+            collection.removeLast ( []( int v ) { return v == 3; } );
+            if ( collection.contains (3) ) {
+                this->logError ("removeLast Predicate error");
+                allOk = false;
+            }
+
+            collection.add ( 3 );
+            collection.add ( 3 );
+
+            collection.removeLast ( []( int v ) { return v == 3; } );
+            if ( ! collection.contains (3) ) {
+                this->logError ("removeLast Predicate error");
+                allOk = false;
+            }
+
+            collection.add ( 3 );
+            collection.add ( 3 );
+            collection.add ( 3 );
+            collection.add ( 3 );
+
+            collection.removeAll ( []( int v ) { return v == 3; } );
+            if ( collection.contains (3) ) {
+                this->logError ("removeAll Predicate error");
+                allOk = false;
+            }
+
+            collection.add ( 3 );
+            collection.add ( 3 );
+            collection.add ( 3 );
+
+            collection.remove ( 3, 2 );
+            if ( ! collection.contains ( 3 ) ) {
+                this->logError ( "remove ElementType, Size error" );
+                allOk = false;
+            }
+
+            collection.remove ( 3, 2 );
+            if ( collection.contains ( 3 ) ) {
+                this->logError ( "remove ElementType, Size error" );
+                allOk = false;
+            }
+
+            collection.add (3);
+            collection.add (3);
+
+            collection.removeFirst ( 3 );
+            if ( ! collection.contains ( 3 ) ) {
+                this->logError ( "removeFirst ElementType error" );
+                allOk = false;
+            }
+
+            collection.removeFirst ( 3 );
+            if ( collection.contains ( 3 ) ) {
+                this->logError ( "removeFirst ElementType error" );
+                allOk = false;
+            }
+
+            collection.add (3);
+            collection.add (3);
+
+            collection.removeLast ( 3 );
+            if ( ! collection.contains ( 3 ) ) {
+                this->logError ( "removeFirst ElementType error" );
+                allOk = false;
+            }
+
+            collection.removeLast ( 3 );
+            if ( collection.contains ( 3 ) ) {
+                this->logError ( "removeFirst ElementType error" );
+                allOk = false;
+            }
+
+            collection.add (3);
+            collection.add (3);
+
+            collection.removeAll ( 3 );
+            if ( collection.contains ( 3 ) ) {
+                this->logError ( "removeAll ElementType error" );
+                allOk = false;
+            }
+
+            collection.clear ();
+
+            collection.add ( 1 );
+            collection.add ( 2 );
+            collection.add ( 3 );
+            collection.add ( 4 );
+            collection.add ( 5 );
+            collection.add ( 6 );
+
+            collection.removeOf ( experimental :: Array < int > { 2, 3, 4 }, 2 );
+
+            if ( collection.contains ( 2 ) || collection.contains ( 3 ) || ! collection.contains (4) ) {
+                this->logError ( "removeAll Collection cref, Size error" );
+                allOk = false;
+            }
+
+            collection.removeOf ( experimental :: Array < int > { 2, 3, 4 }, 2 );
+
+            if ( collection.contains ( 2 ) || collection.contains ( 3 ) || collection.contains (4) ) {
+                this->logError ( "removeAll Collection cref, Size error" );
+                allOk = false;
             }
         });
     };

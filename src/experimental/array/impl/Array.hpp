@@ -71,6 +71,8 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 case DelegateIteratorRequestType :: BackwardEnd:
                     return Memory :: instance().create < ArrayDelegateIterator > ( this, -1, false );
             }
+
+            return nullptr;
         }
 
         template < typename T >
@@ -85,6 +87,8 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 case DelegateIteratorRequestType :: BackwardEnd:
                     return Memory :: instance().create < ArrayDelegateConstIterator > ( this, -1, false );
             }
+
+            return nullptr;
         }
 
         template < typename T >
@@ -309,58 +313,6 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
             return removedCount;
         }
-
-//        template < typename T >
-//        auto Array < T > :: remove ( Collection < Iterator > const & iterators ) noexcept -> Size {
-//            Array < Index > indices;
-//
-//            for ( auto iterator = iterators.begin(), end = iterators.end(); iterator != end; ++ iterator ) {
-//                if ( iterator->of ( this ) ) {
-//                    indices.pushBack ( reinterpret_cast < ArrayDelegateIterator const * > ( Collection < T > :: acquireDelegate ( * iterator ) )->index() );
-//                }
-//            }
-//
-//            return this->remove ( indices );
-//        }
-//
-//        template < typename T >
-//        auto Array < T > :: remove ( Collection < ConstIterator > const & iterators ) noexcept -> Size {
-//            Array < Index > indices;
-//
-//            for ( auto iterator = iterators.begin(), end = iterators.end(); iterator != end; ++ iterator ) {
-//                if ( iterator->of ( this ) ) {
-//                    indices.pushBack ( reinterpret_cast < ArrayDelegateConstIterator const * > ( Collection < T > :: acquireDelegate ( * iterator ) )->index() );
-//                }
-//            }
-//
-//            return this->remove ( indices );
-//        }
-//
-//        template < typename T >
-//        auto Array < T > :: remove ( Collection < ReverseIterator > const & iterators ) noexcept -> Size {
-//            Array < Index > indices;
-//
-//            for ( auto iterator = iterators.begin(), end = iterators.end(); iterator != end; ++ iterator ) {
-//                if ( iterator->of ( this ) ) {
-//                    indices.pushBack ( reinterpret_cast < ArrayDelegateIterator const * > ( Collection < T > :: acquireDelegate ( * iterator ) )->index() );
-//                }
-//            }
-//
-//            return this->remove ( indices );
-//        }
-//
-//        template < typename T >
-//        auto Array < T > :: remove ( Collection < ConstReverseIterator > const & iterators ) noexcept -> Size {
-//            Array < Index > indices;
-//
-//            for ( auto iterator = iterators.begin(), end = iterators.end(); iterator != end; ++ iterator ) {
-//                if ( iterator->of ( this ) ) {
-//                    indices.pushBack ( reinterpret_cast < ArrayDelegateConstIterator const * > ( Collection < T > :: acquireDelegate ( * iterator ) )->index() );
-//                }
-//            }
-//
-//            return this->remove ( indices );
-//        }
 
         template < typename T >
         auto Array < T > :: remove ( Iterator const * pIterators, Size iteratorCount ) noexcept -> Size {

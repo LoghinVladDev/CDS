@@ -70,11 +70,6 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         public:
             virtual auto remove ( ConstReverseIterator const & ) noexcept -> bool = 0;
 
-//        public:
-//            virtual auto remove ( Collection < ConstIterator > const & ) noexcept -> Size = 0;
-//        public:
-//            virtual auto remove ( Collection < ConstReverseIterator > const & ) noexcept -> Size = 0;
-
         protected:
             virtual auto remove ( ConstIterator const *, Size ) noexcept -> Size = 0;
         protected:

@@ -8,16 +8,6 @@
 namespace cds { // NOLINT(modernize-concat-nested-namespaces)
     namespace experimental {
 
-//        template < typename T >
-//        __CDS_OptimalInline auto Collection < T > :: begin () noexcept -> Iterator {
-//            return Iterator ( this, std :: move ( this->delegateIterator ( DelegateIteratorRequestType :: ForwardBegin ) ) );
-//        }
-//
-//        template < typename T >
-//        __CDS_OptimalInline auto Collection < T > :: end () noexcept -> Iterator {
-//            return Iterator ( this, std :: move ( this->delegateIterator ( DelegateIteratorRequestType :: ForwardEnd ) ) );
-//        }
-
         template < typename T >
         __CDS_OptimalInline auto Collection < T > :: begin () const noexcept -> ConstIterator {
             return this->cbegin();
@@ -37,16 +27,6 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         __CDS_OptimalInline auto Collection < T > :: cend () const noexcept -> ConstIterator {
             return ConstIterator ( this, std :: move ( this->delegateConstIterator ( DelegateIteratorRequestType :: ForwardEnd ) ) );
         }
-
-//        template < typename T >
-//        __CDS_OptimalInline auto Collection < T > :: rbegin () noexcept -> ReverseIterator {
-//            return ReverseIterator ( this, std :: move ( this->delegateIterator ( DelegateIteratorRequestType :: BackwardBegin ) ) );
-//        }
-//
-//        template < typename T >
-//        __CDS_OptimalInline auto Collection < T > :: rend () noexcept -> ReverseIterator {
-//            return ReverseIterator ( this, std :: move ( this->delegateIterator ( DelegateIteratorRequestType :: BackwardEnd ) ) );
-//        }
 
         template < typename T >
         __CDS_OptimalInline auto Collection < T > :: rbegin () const noexcept -> ConstReverseIterator {
@@ -86,7 +66,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                     leftIt != leftEnd;
                     ++ leftIt, ++ rightIt
             ) {
-                if ( ! Type < T > :: compare ( * leftIt, * rightIt ) ) {
+                if ( ! meta :: equals ( * leftIt, * rightIt ) ) {
                     return false;
                 }
             }
@@ -115,20 +95,10 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             return iterator._pDelegate.get();
         }
 
-//        template < typename T >
-//        constexpr auto Collection < T > :: acquireDelegate ( Iterator const & iterator ) noexcept -> DelegateIterator const * {
-//            return reinterpret_cast < DelegateIterator * > ( iterator._pDelegate.get() );
-//        }
-
         template < typename T >
         constexpr auto Collection < T > :: acquireDelegate ( ConstIterator const & iterator ) noexcept -> DelegateConstIterator const * {
             return reinterpret_cast < DelegateConstIterator * > ( iterator._pDelegate.get() );
         }
-
-//        template < typename T >
-//        constexpr auto Collection < T > :: acquireDelegate ( ReverseIterator const & iterator ) noexcept -> DelegateIterator const * {
-//            return reinterpret_cast < DelegateIterator * > ( iterator._pDelegate.get() );
-//        }
 
         template < typename T >
         constexpr auto Collection < T > :: acquireDelegate ( ConstReverseIterator const & iterator ) noexcept -> DelegateConstIterator const * {
@@ -138,7 +108,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         template < typename T >
         __CDS_OptimalInline auto Collection < T > :: contains ( ElementType const & element ) const noexcept -> bool {
             for ( auto iterator = this->begin(), end = this->end(); iterator != end; ++ iterator ) {
-                if ( Type < ElementType > :: compare ( * iterator, element ) ) {
+                if ( meta :: equals ( * iterator, element ) ) {
                     return true;
                 }
             }

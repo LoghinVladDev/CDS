@@ -466,6 +466,21 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 return impl :: IsVolatile < T > :: value;
             }
 
+            template < typename LeftType, typename RightType, EnableIf < equalToPossible < LeftType, RightType > () > = 0 >
+            constexpr auto equals ( LeftType const & left, RightType const & right ) noexcept -> bool {
+                return left == right;
+            }
+
+            template < typename LeftType, typename RightType, EnableIf < ! equalToPossible < LeftType, RightType > () && isDerivedFrom < LeftType, Object > () && isDerivedFrom < RightType, Object > () > = 0 >
+            constexpr auto equals ( LeftType const & left, RightType const & right, int = 0 ) noexcept -> bool {
+                return left.equals ( right );
+            }
+
+            template < typename LeftType, typename RightType, EnableIf < ! equalToPossible < LeftType, RightType > () && ! ( isDerivedFrom < LeftType, Object > () && isDerivedFrom < RightType, Object > () ) > = 0 >
+            constexpr auto equals ( LeftType const & left, RightType const & right, float = 0.0f ) noexcept -> bool {
+                return & left == & right;
+            }
+
             template < typename T >
             struct Type {
 

@@ -396,6 +396,66 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             return removedCount;
         }
 
+        template < typename T >
+        auto Collection < T > :: remove ( ElementType const & element, Size count ) noexcept -> Size {
+
+            ConstIterator * pIteratorBuffer = Memory :: instance().createArray < ConstIterator > ( count );
+            Size iteratorCount = 0U;
+
+            for ( auto iterator = this->begin(), end = this->end(); iteratorCount < count && iterator != end; ++ iterator ) {
+                if ( meta :: equals ( * iterator, element ) ) {
+                    pIteratorBuffer [ iteratorCount ++ ] = iterator;
+                }
+            }
+
+            auto removedCount = this->remove ( reinterpret_cast < ConstIterator const * > ( & pIteratorBuffer[0] ), iteratorCount );
+            Memory :: instance().destroyArray ( pIteratorBuffer );
+
+            return removedCount;
+        }
+
+        template < typename T >
+        auto Collection < T > :: removeFirst ( ElementType const & element ) noexcept -> bool {
+            for ( auto iterator = this->begin(), end = this->end(); iterator != end; ++ iterator ) {
+                if ( meta :: equals ( * iterator, element ) ) {
+                    return this->remove ( iterator );
+                }
+            }
+
+            return false;
+        }
+
+        template < typename T >
+        auto Collection < T > :: removeLast ( ElementType const & element ) noexcept -> bool {
+            ConstIterator toRemove;
+
+            for ( auto iterator = this->begin(), end = this->end(); iterator != end; ++ iterator ) {
+                if ( meta :: equals ( * iterator, element ) ) {
+                    toRemove = iterator;
+                }
+            }
+
+            return toRemove.valid() && this->remove ( toRemove );
+        }
+
+        template < typename T >
+        auto Collection < T > :: removeAll ( ElementType const & element ) noexcept -> Size {
+
+            ConstIterator * pIteratorBuffer = Memory :: instance().createArray < ConstIterator > ( this->size() );
+            Size iteratorCount = 0U;
+
+            for ( auto iterator = this->begin(), end = this->end(); iterator != end; ++ iterator ) {
+                if ( meta :: equals ( * iterator, element ) ) {
+                    pIteratorBuffer [ iteratorCount ++ ] = iterator;
+                }
+            }
+
+            auto removedCount = this->remove ( reinterpret_cast < ConstIterator const * > ( & pIteratorBuffer[0] ), iteratorCount );
+            Memory :: instance().destroyArray ( pIteratorBuffer );
+
+            return removedCount;
+        }
+
     }
 }
 
