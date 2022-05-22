@@ -91,9 +91,9 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             auto shrink ( Size ) noexcept -> void;
 
         public:
-            auto remove ( Index ) noexcept -> bool override;
+            auto removeAt ( Index ) noexcept -> bool override;
         public:
-            auto remove ( Collection < Index > const & ) noexcept -> Size;
+            auto removeAt ( Collection < Index > const & ) noexcept -> Size override;
 
         public:
             __CDS_OptimalInline auto remove ( Iterator const & ) noexcept -> bool override;
@@ -104,14 +104,14 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         public:
             __CDS_OptimalInline auto remove ( ConstReverseIterator const & ) noexcept -> bool override;
 
-        public:
-            auto remove ( Collection < Iterator > const & ) noexcept -> Size override;
-        public:
-            auto remove ( Collection < ConstIterator > const & ) noexcept -> Size override;
-        public:
-            auto remove ( Collection < ReverseIterator > const & ) noexcept -> Size override;
-        public:
-            auto remove ( Collection < ConstReverseIterator > const & ) noexcept -> Size override;
+//        public:
+//            auto remove ( Collection < Iterator > const & ) noexcept -> Size override;
+//        public:
+//            auto remove ( Collection < ConstIterator > const & ) noexcept -> Size override;
+//        public:
+//            auto remove ( Collection < ReverseIterator > const & ) noexcept -> Size override;
+//        public:
+//            auto remove ( Collection < ConstReverseIterator > const & ) noexcept -> Size override;
 
         protected:
             auto remove ( Iterator const *, Size ) noexcept -> Size override;

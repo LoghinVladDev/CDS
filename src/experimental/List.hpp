@@ -231,7 +231,9 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             __CDS_OptimalInline auto prepend ( ElementType && ) noexcept -> ElementType &;
 
         public:
-            virtual auto remove ( Index ) noexcept -> bool = 0;
+            virtual auto removeAt ( Index ) noexcept -> bool = 0;
+        public:
+            virtual auto removeAt ( Collection < Index > const & ) noexcept -> Size = 0;
 
         public:
             virtual auto remove ( Iterator const & ) noexcept -> bool = 0;
@@ -242,14 +244,14 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         public:
             auto remove ( ConstReverseIterator const & ) noexcept -> bool override = 0;
 
-        public:
-            virtual auto remove ( Collection < Iterator > const & ) noexcept -> Size = 0;
-        public:
-            auto remove ( Collection < ConstIterator > const & ) noexcept -> Size override = 0;
-        public:
-            virtual auto remove ( Collection < ReverseIterator > const & ) noexcept -> Size = 0;
-        public:
-            auto remove ( Collection < ConstReverseIterator > const & ) noexcept -> Size override = 0;
+//        public:
+//            virtual auto remove ( Collection < Iterator > const & ) noexcept -> Size = 0;
+//        public:
+//            auto remove ( Collection < ConstIterator > const & ) noexcept -> Size override = 0;
+//        public:
+//            virtual auto remove ( Collection < ReverseIterator > const & ) noexcept -> Size = 0;
+//        public:
+//            auto remove ( Collection < ConstReverseIterator > const & ) noexcept -> Size override = 0;
 
 
         protected:

@@ -21,7 +21,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 }
             }
 
-            auto removedCount = this->remove ( & pIteratorBuffer[0], iteratorCount );
+            auto removedCount = this->remove ( reinterpret_cast < ConstIterator const * > ( & pIteratorBuffer[0] ), iteratorCount );
             Memory :: instance().destroyArray ( pIteratorBuffer );
 
             return removedCount;

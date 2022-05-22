@@ -10,7 +10,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
         template < typename T >
         Array < T > :: ~Array () noexcept {
-            for ( Index i = 0U; i < this->_capacity; ++ i ) {
+            for ( Index i = 0U; i < this->_size; ++ i ) {
                 Memory :: instance().destroy ( this->_pData[i] );
             }
 
@@ -88,7 +88,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         }
 
         template < typename T >
-        auto Array < T > :: remove ( Index index ) noexcept -> bool {
+        auto Array < T > :: removeAt ( Index index ) noexcept -> bool {
             if ( index < 0 || index >= this->_size ) {
                 return false;
             }
@@ -97,7 +97,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
             if ( this->size() * 2 > this->_capacity ) {
 
-                for ( auto copyIndex = index, len = static_cast < Index > ( this->size() ) - 1; index < len; ++ index ) {
+                for ( auto copyIndex = index, len = static_cast < Index > ( this->size() ) - 1; copyIndex < len; ++ copyIndex ) {
                     this->_pData [ copyIndex ] = this->_pData [ copyIndex + 1 ];
                 }
 
@@ -120,7 +120,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 return false;
             }
 
-            return reinterpret_cast < ArrayDelegateIterator const * > ( Collection < T > :: acquireDelegate ( iterator ) )->index();
+            return this->removeAt ( reinterpret_cast < ArrayDelegateIterator const * > ( Collection < T > :: acquireDelegate ( iterator ) )->index() );
         }
 
         template < typename T >
@@ -129,7 +129,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 return false;
             }
 
-            return reinterpret_cast < ArrayDelegateConstIterator const * > ( Collection < T > :: acquireDelegate ( iterator ) )->index();
+            return this->removeAt ( reinterpret_cast < ArrayDelegateConstIterator const * > ( Collection < T > :: acquireDelegate ( iterator ) )->index() );
         }
 
         template < typename T >
@@ -138,7 +138,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 return false;
             }
 
-            return reinterpret_cast < ArrayDelegateIterator const * > ( Collection < T > :: acquireDelegate ( iterator ) )->index();
+            return this->removeAt ( reinterpret_cast < ArrayDelegateIterator const * > ( Collection < T > :: acquireDelegate ( iterator ) )->index() );
         }
 
         template < typename T >
@@ -147,7 +147,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 return false;
             }
 
-            return reinterpret_cast < ArrayDelegateConstIterator const * > ( Collection < T > :: acquireDelegate ( iterator ) )->index();
+            return this->removeAt ( reinterpret_cast < ArrayDelegateConstIterator const * > ( Collection < T > :: acquireDelegate ( iterator ) )->index() );
         }
 
         template < typename T >
@@ -281,7 +281,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         }
 
         template < typename T >
-        auto Array < T > :: remove ( Collection < Index > const & indices ) noexcept -> Size {
+        auto Array < T > :: removeAt ( Collection < Index > const & indices ) noexcept -> Size {
             if ( indices.empty() ) {
                 return 0U;
             }
@@ -299,7 +299,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
             auto adjustedBuf    = Memory :: instance().createArray < T * > ( newLen );
             auto removedCount   = this->size() - newLen;
-            (void) std :: memcpy ( adjustedBuf, newBuf, this->size() * sizeof ( T * ) );
+            (void) std :: memcpy ( adjustedBuf, newBuf, newLen * sizeof ( T * ) );
 
             Memory :: instance ().destroyArray ( cds :: exchange ( this->_pData, adjustedBuf ) );
             Memory :: instance ().destroyArray ( newBuf );
@@ -310,57 +310,57 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             return removedCount;
         }
 
-        template < typename T >
-        auto Array < T > :: remove ( Collection < Iterator > const & iterators ) noexcept -> Size {
-            Array < Index > indices;
-
-            for ( auto iterator = iterators.begin(), end = iterators.end(); iterator != end; ++ iterator ) {
-                if ( iterator->of ( this ) ) {
-                    indices.pushBack ( reinterpret_cast < ArrayDelegateIterator const * > ( Collection < T > :: acquireDelegate ( * iterator ) )->index() );
-                }
-            }
-
-            return this->remove ( indices );
-        }
-
-        template < typename T >
-        auto Array < T > :: remove ( Collection < ConstIterator > const & iterators ) noexcept -> Size {
-            Array < Index > indices;
-
-            for ( auto iterator = iterators.begin(), end = iterators.end(); iterator != end; ++ iterator ) {
-                if ( iterator->of ( this ) ) {
-                    indices.pushBack ( reinterpret_cast < ArrayDelegateConstIterator const * > ( Collection < T > :: acquireDelegate ( * iterator ) )->index() );
-                }
-            }
-
-            return this->remove ( indices );
-        }
-
-        template < typename T >
-        auto Array < T > :: remove ( Collection < ReverseIterator > const & iterators ) noexcept -> Size {
-            Array < Index > indices;
-
-            for ( auto iterator = iterators.begin(), end = iterators.end(); iterator != end; ++ iterator ) {
-                if ( iterator->of ( this ) ) {
-                    indices.pushBack ( reinterpret_cast < ArrayDelegateIterator const * > ( Collection < T > :: acquireDelegate ( * iterator ) )->index() );
-                }
-            }
-
-            return this->remove ( indices );
-        }
-
-        template < typename T >
-        auto Array < T > :: remove ( Collection < ConstReverseIterator > const & iterators ) noexcept -> Size {
-            Array < Index > indices;
-
-            for ( auto iterator = iterators.begin(), end = iterators.end(); iterator != end; ++ iterator ) {
-                if ( iterator->of ( this ) ) {
-                    indices.pushBack ( reinterpret_cast < ArrayDelegateConstIterator const * > ( Collection < T > :: acquireDelegate ( * iterator ) )->index() );
-                }
-            }
-
-            return this->remove ( indices );
-        }
+//        template < typename T >
+//        auto Array < T > :: remove ( Collection < Iterator > const & iterators ) noexcept -> Size {
+//            Array < Index > indices;
+//
+//            for ( auto iterator = iterators.begin(), end = iterators.end(); iterator != end; ++ iterator ) {
+//                if ( iterator->of ( this ) ) {
+//                    indices.pushBack ( reinterpret_cast < ArrayDelegateIterator const * > ( Collection < T > :: acquireDelegate ( * iterator ) )->index() );
+//                }
+//            }
+//
+//            return this->remove ( indices );
+//        }
+//
+//        template < typename T >
+//        auto Array < T > :: remove ( Collection < ConstIterator > const & iterators ) noexcept -> Size {
+//            Array < Index > indices;
+//
+//            for ( auto iterator = iterators.begin(), end = iterators.end(); iterator != end; ++ iterator ) {
+//                if ( iterator->of ( this ) ) {
+//                    indices.pushBack ( reinterpret_cast < ArrayDelegateConstIterator const * > ( Collection < T > :: acquireDelegate ( * iterator ) )->index() );
+//                }
+//            }
+//
+//            return this->remove ( indices );
+//        }
+//
+//        template < typename T >
+//        auto Array < T > :: remove ( Collection < ReverseIterator > const & iterators ) noexcept -> Size {
+//            Array < Index > indices;
+//
+//            for ( auto iterator = iterators.begin(), end = iterators.end(); iterator != end; ++ iterator ) {
+//                if ( iterator->of ( this ) ) {
+//                    indices.pushBack ( reinterpret_cast < ArrayDelegateIterator const * > ( Collection < T > :: acquireDelegate ( * iterator ) )->index() );
+//                }
+//            }
+//
+//            return this->remove ( indices );
+//        }
+//
+//        template < typename T >
+//        auto Array < T > :: remove ( Collection < ConstReverseIterator > const & iterators ) noexcept -> Size {
+//            Array < Index > indices;
+//
+//            for ( auto iterator = iterators.begin(), end = iterators.end(); iterator != end; ++ iterator ) {
+//                if ( iterator->of ( this ) ) {
+//                    indices.pushBack ( reinterpret_cast < ArrayDelegateConstIterator const * > ( Collection < T > :: acquireDelegate ( * iterator ) )->index() );
+//                }
+//            }
+//
+//            return this->remove ( indices );
+//        }
 
         template < typename T >
         auto Array < T > :: remove ( Iterator const * pIterators, Size iteratorCount ) noexcept -> Size {
@@ -372,7 +372,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 }
             }
 
-            return this->remove ( indices );
+            return this->removeAt ( indices );
         }
 
         template < typename T >
@@ -385,7 +385,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 }
             }
 
-            return this->remove ( indices );
+            return this->removeAt ( indices );
         }
 
         template < typename T >
@@ -398,7 +398,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 }
             }
 
-            return this->remove ( indices );
+            return this->removeAt ( indices );
         }
 
         template < typename T >
@@ -411,7 +411,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 }
             }
 
-            return this->remove ( indices );
+            return this->removeAt ( indices );
         }
 
         template < typename T >

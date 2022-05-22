@@ -471,7 +471,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         auto Collection < T > :: add ( ElementType && element ) noexcept -> void {
             auto & pElementLocation = this->pNewInsert();
             if ( pElementLocation == nullptr ) {
-                * pElementLocation = Memory :: instance().create < ElementType > ( cds :: forward < ElementType > ( element ) );
+                pElementLocation = Memory :: instance().create < ElementType > ( cds :: forward < ElementType > ( element ) );
                 this->pNewInsertPost();
             }
         }
