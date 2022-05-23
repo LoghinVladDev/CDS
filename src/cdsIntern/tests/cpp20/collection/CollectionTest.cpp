@@ -1134,7 +1134,70 @@ auto CollectionTest :: execute() noexcept -> bool {
                 allOk = false;
             }
 
-//            if ( collection.some (  ) )
+            if ( ! collection.some ( 1, [](int v){ return v == 3; } ) ) {
+                this->logError ( "some error" );
+                allOk = false;
+            }
+
+            if ( ! collection.atLeast ( 2, [](int v){ return v > 3; } ) ) {
+                this->logError ( "atLeast error" );
+                allOk = false;
+            }
+
+            if ( ! collection.atMost ( 2, [](int v){ return v < 5; } ) ) {
+                this->logError ( "atMost error" );
+                allOk = false;
+            }
+
+            if ( ! collection.moreThan ( 1, [](int v){ return v > 3; } ) ) {
+                this->logError ( "moreThan error" );
+                allOk = false;
+            }
+
+            if ( collection.moreThan ( 2, [](int v){ return v > 3; } ) ) {
+                this->logError ( "moreThan error" );
+                allOk = false;
+            }
+
+            if ( ! collection.lessThan ( 3, [](int v){ return v < 5; } ) ) {
+                this->logError ( "lessThan error" );
+                allOk = false;
+            }
+
+            if ( collection.lessThan ( 2, [](int v){ return v < 5; } ) ) {
+                this->logError ( "lessThan error" );
+                allOk = false;
+            }
+
+            if ( collection.count () != 3 ) {
+                this->logError ( "count error" );
+                allOk = false;
+            }
+
+            if ( collection.count ( [](int v) { return v >= 3 && v <= 4; } ) != 2 ) {
+                this->logError ( "count error" );
+                allOk = false;
+            }
+
+            if ( collection.any ( [](int v) { return v > 5; } ) ) {
+                this->logError ( "any error" );
+                allOk = false;
+            }
+
+            if ( ! collection.any ( [](int v) { return v < 4; } ) ) {
+                this->logError ( "any error" );
+                allOk = false;
+            }
+
+            if ( ! collection.all ( [](int v) { return v >= 3 && v <= 5; } ) ) {
+                this->logError ( "all error" );
+                allOk = false;
+            }
+
+            if ( collection.all ( [](int v) { return v > 4; } ) ) {
+                this->logError ( "all error" );
+                allOk = false;
+            }
         });
     };
 
