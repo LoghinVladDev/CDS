@@ -279,7 +279,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
         template < typename T >
         template < typename Predicate >
-        auto Collection < T > :: remove ( Predicate const & predicate, Size count ) noexcept -> Size {
+        auto Collection < T > :: remove ( Size count, Predicate const & predicate ) noexcept -> Size {
 
             ConstIterator * pIteratorBuffer = Memory :: instance().createArray < ConstIterator > ( count );
             Size iteratorCount = 0U;
@@ -342,7 +342,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         }
 
         template < typename T >
-        auto Collection < T > :: removeOf ( Collection < T > const & collection, Size count ) noexcept -> Size {
+        auto Collection < T > :: removeOf ( Size count, Collection < T > const & collection ) noexcept -> Size {
 
             if ( this == & collection ) {
                 if ( this->size() <= count ) {
@@ -442,7 +442,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         }
 
         template < typename T >
-        auto Collection < T > :: removeNotOf ( Collection < T > const & collection, Size count ) noexcept -> Size {
+        auto Collection < T > :: removeNotOf ( Size count, Collection < T > const & collection ) noexcept -> Size {
 
             if ( this == & collection ) {
                 return 0ULL;
@@ -538,7 +538,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         }
 
         template < typename T >
-        auto Collection < T > :: removeOf ( InitializerList const & list, Size count ) noexcept -> Size {
+        auto Collection < T > :: removeOf ( Size count, InitializerList const & list ) noexcept -> Size {
 
             ConstIterator * pIteratorBuffer = Memory :: instance().createArray < ConstIterator > ( count );
             Size iteratorCount = 0U;
@@ -602,7 +602,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         }
 
         template < typename T >
-        auto Collection < T > :: removeNotOf ( InitializerList const & list, Size count ) noexcept -> Size {
+        auto Collection < T > :: removeNotOf ( Size count, InitializerList const & list ) noexcept -> Size {
 
             ConstIterator * pIteratorBuffer = Memory :: instance().createArray < ConstIterator > ( count );
             Size iteratorCount = 0U;
@@ -666,7 +666,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         }
 
         template < typename T >
-        auto Collection < T > :: remove ( ElementType const & element, Size count ) noexcept -> Size {
+        auto Collection < T > :: remove ( Size count, ElementType const & element ) noexcept -> Size {
 
             ConstIterator * pIteratorBuffer = Memory :: instance().createArray < ConstIterator > ( count );
             Size iteratorCount = 0U;

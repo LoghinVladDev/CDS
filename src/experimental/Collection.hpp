@@ -40,249 +40,440 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             class ConstReverseIterator;
 
         protected:
-            constexpr static auto acquireDelegate ( AbstractIterator const & ) noexcept -> AbstractDelegateIterator const *;
+            constexpr static auto acquireDelegate (
+                    AbstractIterator const &
+            ) noexcept -> AbstractDelegateIterator const *;
         protected:
-            constexpr static auto acquireDelegate ( ConstIterator const & ) noexcept -> DelegateConstIterator const *;
+            constexpr static auto acquireDelegate (
+                    ConstIterator const &
+            ) noexcept -> DelegateConstIterator const *;
         protected:
-            constexpr static auto acquireDelegate ( ConstReverseIterator const & ) noexcept -> DelegateConstIterator const *;
+            constexpr static auto acquireDelegate (
+                    ConstReverseIterator const &
+            ) noexcept -> DelegateConstIterator const *;
         protected:
-            virtual auto delegateConstIterator ( DelegateIteratorRequestType ) const noexcept -> cds :: UniquePointer < DelegateConstIterator > = 0;
+            virtual auto delegateConstIterator (
+                    DelegateIteratorRequestType
+            ) const noexcept -> cds :: UniquePointer < DelegateConstIterator > = 0;
 
         public:
-            __CDS_OptimalInline auto begin () const noexcept -> ConstIterator;
+            auto begin () const noexcept -> ConstIterator;
         public:
-            __CDS_OptimalInline auto end () const noexcept -> ConstIterator;
+            auto end () const noexcept -> ConstIterator;
         public:
-            __CDS_OptimalInline auto cbegin () const noexcept -> ConstIterator;
+            auto cbegin () const noexcept -> ConstIterator;
         public:
-            __CDS_OptimalInline auto cend () const noexcept -> ConstIterator;
+            auto cend () const noexcept -> ConstIterator;
         public:
-            __CDS_OptimalInline auto rbegin () const noexcept -> ConstReverseIterator;
+            auto rbegin () const noexcept -> ConstReverseIterator;
         public:
-            __CDS_OptimalInline auto rend () const noexcept -> ConstReverseIterator;
+            auto rend () const noexcept -> ConstReverseIterator;
         public:
-            __CDS_OptimalInline auto crbegin () const noexcept -> ConstReverseIterator;
+            auto crbegin () const noexcept -> ConstReverseIterator;
         public:
-            __CDS_OptimalInline auto crend () const noexcept -> ConstReverseIterator;
+            auto crend () const noexcept -> ConstReverseIterator;
 
         public:
-            virtual auto remove ( ConstIterator const & ) noexcept -> bool = 0;
+            virtual auto remove (
+                    ConstIterator const &
+            ) noexcept -> bool = 0;
         public:
-            virtual auto remove ( ConstReverseIterator const & ) noexcept -> bool = 0;
+            virtual auto remove (
+                    ConstReverseIterator const &
+            ) noexcept -> bool = 0;
 
         protected:
-            virtual auto remove ( ConstIterator const *, Size ) noexcept -> Size = 0;
+            virtual auto remove (
+                    ConstIterator const *,
+                    Size
+            ) noexcept -> Size = 0;
         protected:
-            virtual auto remove ( ConstReverseIterator const *, Size ) noexcept -> Size = 0;
+            virtual auto remove (
+                    ConstReverseIterator const *,
+                    Size
+            ) noexcept -> Size = 0;
 
         public:
             template < typename Predicate >
-            auto remove ( Predicate const &, Size ) noexcept -> Size;
+            auto remove (
+                    Size,
+                    Predicate const &
+            ) noexcept -> Size;
         public:
             template < typename Predicate >
-            auto removeFirst ( Predicate const & ) noexcept -> bool;
+            auto removeFirst (
+                    Predicate const &
+            ) noexcept -> bool;
         public:
             template < typename Predicate >
-            auto removeLast ( Predicate const & ) noexcept -> bool;
+            auto removeLast (
+                    Predicate const &
+            ) noexcept -> bool;
         public:
             template < typename Predicate >
-            auto removeAll ( Predicate const & ) noexcept -> Size;
+            auto removeAll (
+                    Predicate const &
+            ) noexcept -> Size;
 
         public:
-            auto remove ( ElementType const &, Size ) noexcept -> Size;
+            auto remove (
+                    Size,
+                    ElementType const &
+            ) noexcept -> Size;
         public:
-            auto removeFirst ( ElementType const & ) noexcept -> bool;
+            auto removeFirst (
+                    ElementType const &
+            ) noexcept -> bool;
         public:
-            auto removeLast ( ElementType const & ) noexcept -> bool;
+            auto removeLast (
+                    ElementType const &
+            ) noexcept -> bool;
         public:
-            auto removeAll ( ElementType const & ) noexcept -> Size;
+            auto removeAll (
+                    ElementType const &
+            ) noexcept -> Size;
 
         public:
-            auto removeOf ( Collection < T > const &, Size ) noexcept -> Size;
+            auto removeOf (
+                    Size,
+                    Collection < T > const &
+            ) noexcept -> Size;
         public:
-            auto removeFirstOf ( Collection < T > const & ) noexcept -> bool;
+            auto removeFirstOf (
+                    Collection < T > const &
+            ) noexcept -> bool;
         public:
-            auto removeLastOf ( Collection < T > const & ) noexcept -> bool;
+            auto removeLastOf (
+                    Collection < T > const &
+            ) noexcept -> bool;
         public:
-            auto removeAllOf ( Collection < T > const & ) noexcept -> Size;
+            auto removeAllOf (
+                    Collection < T > const &
+            ) noexcept -> Size;
 
         public:
-            auto removeNotOf ( Collection < T > const &, Size ) noexcept -> Size;
+            auto removeNotOf (
+                    Size,
+                    Collection < T > const &
+            ) noexcept -> Size;
         public:
-            auto removeFirstNotOf ( Collection < T > const & ) noexcept -> bool;
+            auto removeFirstNotOf (
+                    Collection < T > const &
+            ) noexcept -> bool;
         public:
-            auto removeLastNotOf ( Collection < T > const & ) noexcept -> bool;
+            auto removeLastNotOf (
+                    Collection < T > const &
+            ) noexcept -> bool;
         public:
-            auto removeAllNotOf ( Collection < T > const & ) noexcept -> Size;
+            auto removeAllNotOf (
+                    Collection < T > const &
+            ) noexcept -> Size;
 
         public:
-            auto removeOf ( InitializerList const &, Size ) noexcept -> Size;
+            auto removeOf (
+                    Size,
+                    InitializerList const &
+            ) noexcept -> Size;
         public:
-            auto removeFirstOf ( InitializerList const & ) noexcept -> bool;
+            auto removeFirstOf (
+                    InitializerList const &
+            ) noexcept -> bool;
         public:
-            auto removeLastOf ( InitializerList const & ) noexcept -> bool;
+            auto removeLastOf (
+                    InitializerList const &
+            ) noexcept -> bool;
         public:
-            auto removeAllOf ( InitializerList const & ) noexcept -> Size;
+            auto removeAllOf (
+                    InitializerList const &
+            ) noexcept -> Size;
 
         public:
-            auto removeNotOf ( InitializerList const &, Size ) noexcept -> Size;
+            auto removeNotOf (
+                    Size,
+                    InitializerList const &
+            ) noexcept -> Size;
         public:
-            auto removeFirstNotOf ( InitializerList const & ) noexcept -> bool;
+            auto removeFirstNotOf (
+                    InitializerList const &
+            ) noexcept -> bool;
         public:
-            auto removeLastNotOf ( InitializerList const & ) noexcept -> bool;
+            auto removeLastNotOf (
+                    InitializerList const &
+            ) noexcept -> bool;
         public:
-            auto removeAllNotOf ( InitializerList const & ) noexcept -> Size;
+            auto removeAllNotOf (
+                    InitializerList const &
+            ) noexcept -> Size;
 
         public:
             template < typename Action >
-            auto forEach ( Action const & ) const noexcept ( noexcept ( meta :: valueOf < Action > () ( meta :: referenceOf < ElementType const > () ) ) ) -> void;
+            auto forEach (
+                    Action const &
+            ) const noexcept ( noexcept ( meta :: valueOf < Action > () ( meta :: referenceOf < ElementType const > () ) ) ) -> void;
         public:
             template < typename Predicate = Function < bool ( ElementType const & ) > >
             auto some (
                     Size                count,
-                    Predicate   const & predicate   = [] ( ElementType const & ) noexcept -> bool { return true; }
+                    Predicate   const & predicate = [] ( ElementType const & ) noexcept -> bool {
+                        return true;
+                    }
             ) const noexcept ( noexcept ( meta :: valueOf < Predicate > () ( meta :: referenceOf < ElementType const > () ) ) ) -> bool;
         public:
             template < typename Predicate = Function < bool ( ElementType const & ) > >
             auto atLeast (
                     Size                count,
-                    Predicate   const & predicate   = [] ( ElementType const & ) noexcept -> bool { return true; }
+                    Predicate   const & predicate = [] ( ElementType const & ) noexcept -> bool {
+                        return true;
+                    }
             ) const noexcept ( noexcept ( meta :: valueOf < Predicate > () ( meta :: referenceOf < ElementType const > () ) ) ) -> bool;
         public:
             template < typename Predicate = Function < bool ( ElementType const & ) > >
             auto atMost (
                     Size                count,
-                    Predicate   const & predicate   = [] ( ElementType const & ) noexcept -> bool { return true; }
+                    Predicate   const & predicate = [] ( ElementType const & ) noexcept -> bool {
+                        return true;
+                    }
             ) const noexcept ( noexcept ( meta :: valueOf < Predicate > () ( meta :: referenceOf < ElementType const > () ) ) ) -> bool;
         public:
             template < typename Predicate = Function < bool ( ElementType const & ) > >
             auto moreThan (
                     Size                count,
-                    Predicate   const & predicate   = [] ( ElementType const & ) noexcept -> bool { return true; }
+                    Predicate   const & predicate = [] ( ElementType const & ) noexcept -> bool {
+                        return true;
+                    }
             ) const noexcept ( noexcept ( meta :: valueOf < Predicate > () ( meta :: referenceOf < ElementType const > () ) ) ) -> bool;
         public:
             template < typename Predicate = Function < bool ( ElementType const & ) > >
             auto lessThan (
                     Size                count,
-                    Predicate   const & predicate   = [] ( ElementType const & ) noexcept -> bool { return true; }
+                    Predicate   const & predicate = [] ( ElementType const & ) noexcept -> bool {
+                        return true;
+                    }
             ) const noexcept ( noexcept ( meta :: valueOf < Predicate > () ( meta :: referenceOf < ElementType const > () ) ) ) -> bool;
         public:
             template < typename Predicate = Function < bool ( ElementType const & ) > >
             auto count (
-                    Predicate   const & predicate   = [] ( ElementType const & ) noexcept -> bool { return true; }
+                    Predicate   const & predicate = [] ( ElementType const & ) noexcept -> bool {
+                        return true;
+                    }
             ) const noexcept ( noexcept ( meta :: valueOf < Predicate > () ( meta :: referenceOf < ElementType const > () ) ) ) -> Size;
         public:
             template < typename Predicate = Function < bool ( ElementType const & ) > >
             auto any (
-                    Predicate   const & predicate   = [] ( ElementType const & ) noexcept -> bool { return true; }
+                    Predicate   const & predicate = [] ( ElementType const & ) noexcept -> bool {
+                        return true;
+                    }
             ) const noexcept ( noexcept ( meta :: valueOf < Predicate > () ( meta :: referenceOf < ElementType const > () ) ) ) -> bool;
         public:
             template < typename Predicate = Function < bool ( ElementType const & ) > >
             auto all (
-                    Predicate   const & predicate   = [] ( ElementType const & ) noexcept -> bool { return true; }
+                    Predicate   const & predicate = [] ( ElementType const & ) noexcept -> bool {
+                        return true;
+                    }
             ) const noexcept ( noexcept ( meta :: valueOf < Predicate > () ( meta :: referenceOf < ElementType const > () ) ) ) -> bool;
 
         public:
             template < template < typename ... > typename CollectionType >
-            auto find ( ElementType const &, CollectionType < ConstIterator > &, Size ) const noexcept -> CollectionType < ConstIterator > &;
+            auto find (
+                    Size,
+                    ElementType                         const &,
+                    CollectionType < ConstIterator >          &
+            ) const noexcept -> CollectionType < ConstIterator > &;
         public:
             template < template < typename ... > typename CollectionType >
-            auto find ( ElementType const &, Size ) const noexcept -> CollectionType < ConstIterator >;
+            auto find (
+                    Size,
+                    ElementType const &
+            ) const noexcept -> CollectionType < ConstIterator >;
         public:
-            auto findFirst ( ElementType const & ) const noexcept -> ConstIterator;
+            auto findFirst (
+                    ElementType const &
+            ) const noexcept -> ConstIterator;
         public:
-            auto findLast ( ElementType const & ) const noexcept -> ConstIterator;
-        public:
-            template < template < typename ... > typename CollectionType >
-            auto findAll ( ElementType const &, CollectionType < ConstIterator > & ) const noexcept -> CollectionType < ConstIterator > &;
-        public:
-            template < template < typename ... > typename CollectionType >
-            auto findAll ( ElementType const & ) const noexcept -> CollectionType < ConstIterator >;
-        public:
-            template < template < typename ... > typename CollectionType >
-            auto findOf ( Collection < T > const &, CollectionType < ConstIterator > &, Size ) const noexcept -> CollectionType < ConstIterator > &;
+            auto findLast (
+                    ElementType const &
+            ) const noexcept -> ConstIterator;
         public:
             template < template < typename ... > typename CollectionType >
-            auto findOf ( Collection < T > const &, Size ) const noexcept -> CollectionType < ConstIterator >;
-        public:
-            auto findFirstOf ( Collection < T > const & ) const noexcept -> ConstIterator;
-        public:
-            auto findLastOf ( Collection < T > const & ) const noexcept -> ConstIterator;
-        public:
-            template < template < typename ... > typename CollectionType >
-            auto findAllOf ( Collection < T > const &, CollectionType < ConstIterator > & ) const noexcept -> CollectionType < ConstIterator > &;
+            auto findAll (
+                    ElementType                         const &,
+                    CollectionType < ConstIterator >          &
+            ) const noexcept -> CollectionType < ConstIterator > &;
         public:
             template < template < typename ... > typename CollectionType >
-            auto findAllOf ( Collection < T > const & ) const noexcept -> CollectionType < ConstIterator >;
-        public:
-            template < template < typename ... > typename CollectionType >
-            auto findNotOf ( Collection < T > const &, CollectionType < ConstIterator > &, Size ) const noexcept -> CollectionType < ConstIterator > &;
-        public:
-            template < template < typename ... > typename CollectionType >
-            auto findNotOf ( Collection < T > const &, Size ) const noexcept -> CollectionType < ConstIterator >;
-        public:
-            auto findFirstNotOf ( Collection < T > const & ) const noexcept -> ConstIterator;
-        public:
-            auto findLastNotOf ( Collection < T > const & ) const noexcept -> ConstIterator;
-        public:
-            template < template < typename ... > typename CollectionType >
-            auto findAllNotOf ( Collection < T > const &, CollectionType < ConstIterator > & ) const noexcept -> CollectionType < ConstIterator > &;
-        public:
-            template < template < typename ... > typename CollectionType >
-            auto findAllNotOf ( Collection < T > const & ) const noexcept -> CollectionType < ConstIterator >;
-        public:
-            template < template < typename ... > typename CollectionType >
-            auto findOf ( InitializerList const &, CollectionType < ConstIterator > &, Size ) const noexcept -> CollectionType < ConstIterator > &;
-        public:
-            template < template < typename ... > typename CollectionType >
-            auto findOf ( InitializerList const &, Size ) const noexcept -> CollectionType < ConstIterator >;
-        public:
-            auto findFirstOf ( InitializerList const & ) const noexcept -> ConstIterator;
-        public:
-            auto findLastOf ( InitializerList const & ) const noexcept -> ConstIterator;
-        public:
-            template < template < typename ... > typename CollectionType >
-            auto findAllOf ( InitializerList const &, CollectionType < ConstIterator > & ) const noexcept -> CollectionType < ConstIterator > &;
-        public:
-            template < template < typename ... > typename CollectionType >
-            auto findAllOf ( InitializerList const & ) const noexcept -> CollectionType < ConstIterator >;
-        public:
-            template < template < typename ... > typename CollectionType >
-            auto findNotOf ( InitializerList const &, Size, CollectionType < ConstIterator > & ) const noexcept -> CollectionType < ConstIterator > &;
-        public:
-            template < template < typename ... > typename CollectionType >
-            auto findNotOf ( InitializerList const &, Size ) const noexcept -> CollectionType < ConstIterator >;
-        public:
-            auto findFirstNotOf ( InitializerList const & ) const noexcept -> ConstIterator;
-        public:
-            auto findLastNotOf ( InitializerList const & ) const noexcept -> ConstIterator;
-        public:
-            template < template < typename ... > typename CollectionType >
-            auto findAllNotOf ( InitializerList const &, CollectionType < ConstIterator > & ) const noexcept -> CollectionType < ConstIterator > &;
-        public:
-            template < template < typename ... > typename CollectionType >
-            auto findAllNotOf ( InitializerList const & ) const noexcept -> CollectionType < ConstIterator >;
-        public:
-            template < template < typename ... > typename CollectionType, typename Predicate >
-            auto find ( Predicate const &, CollectionType < ConstIterator > &, Size ) const noexcept ( noexcept ( meta :: valueOf < Predicate > () ( meta :: referenceOf < ElementType const > () ) ) ) -> CollectionType < ConstIterator > &;
-        public:
-            template < template < typename ... > typename CollectionType, typename Predicate >
-            auto find ( Predicate const &, Size ) const noexcept ( noexcept ( meta :: valueOf < Predicate > () ( meta :: referenceOf < ElementType const > () ) ) ) -> CollectionType < ConstIterator >;
-        public:
-            template < typename Predicate >
-            auto findFirst ( Predicate const & ) const noexcept ( noexcept ( meta :: valueOf < Predicate > () ( meta :: referenceOf < ElementType const > () ) ) ) -> ConstIterator;
-        public:
-            template < typename Predicate >
-            auto findLast ( Predicate const & ) const noexcept ( noexcept ( meta :: valueOf < Predicate > () ( meta :: referenceOf < ElementType const > () ) ) ) -> ConstIterator;
-        public:
-            template < template < typename ... > typename CollectionType, typename Predicate >
-            auto findAll ( Predicate const &, CollectionType < ConstIterator > & ) const noexcept ( noexcept ( meta :: valueOf < Predicate > () ( meta :: referenceOf < ElementType const > () ) ) ) -> CollectionType < ConstIterator > &;
-        public:
-            template < template < typename ... > typename CollectionType, typename Predicate >
-            auto findAll ( Predicate const & ) const noexcept ( noexcept ( meta :: valueOf < Predicate > () ( meta :: referenceOf < ElementType const > () ) ) ) -> CollectionType < ConstIterator >;
+            auto findAll (
+                    ElementType const &
+            ) const noexcept -> CollectionType < ConstIterator >;
 
         public:
-            __CDS_cpplang_ConstexprPureAbstract __CDS_explicit(false) operator bool () const noexcept;
+            template < template < typename ... > typename CollectionType >
+            auto findOf (
+                    Size,
+                    Collection < T >                    const &,
+                    CollectionType < ConstIterator >          &
+            ) const noexcept -> CollectionType < ConstIterator > &;
+        public:
+            template < template < typename ... > typename CollectionType >
+            auto findOf (
+                    Size,
+                    Collection < T > const &
+            ) const noexcept -> CollectionType < ConstIterator >;
+        public:
+            auto findFirstOf (
+                    Collection < T > const &
+            ) const noexcept -> ConstIterator;
+        public:
+            auto findLastOf (
+                    Collection < T > const &
+            ) const noexcept -> ConstIterator;
+        public:
+            template < template < typename ... > typename CollectionType >
+            auto findAllOf (
+                    Collection < T >                    const &,
+                    CollectionType < ConstIterator >          &
+            ) const noexcept -> CollectionType < ConstIterator > &;
+        public:
+            template < template < typename ... > typename CollectionType >
+            auto findAllOf (
+                    Collection < T > const &
+            ) const noexcept -> CollectionType < ConstIterator >;
+
+        public:
+            template < template < typename ... > typename CollectionType >
+            auto findNotOf (
+                    Size,
+                    Collection < T >                    const &,
+                    CollectionType < ConstIterator >          &
+            ) const noexcept -> CollectionType < ConstIterator > &;
+        public:
+            template < template < typename ... > typename CollectionType >
+            auto findNotOf (
+                    Size,
+                    Collection < T > const &
+            ) const noexcept -> CollectionType < ConstIterator >;
+        public:
+            auto findFirstNotOf (
+                    Collection < T > const &
+            ) const noexcept -> ConstIterator;
+        public:
+            auto findLastNotOf (
+                    Collection < T > const &
+            ) const noexcept -> ConstIterator;
+        public:
+            template < template < typename ... > typename CollectionType >
+            auto findAllNotOf (
+                    Collection < T >                    const &,
+                    CollectionType < ConstIterator >          &
+            ) const noexcept -> CollectionType < ConstIterator > &;
+        public:
+            template < template < typename ... > typename CollectionType >
+            auto findAllNotOf (
+                    Collection < T > const &
+            ) const noexcept -> CollectionType < ConstIterator >;
+
+        public:
+            template < template < typename ... > typename CollectionType >
+            auto findOf (
+                    Size,
+                    InitializerList                     const &,
+                    CollectionType < ConstIterator >          &
+            ) const noexcept -> CollectionType < ConstIterator > &;
+        public:
+            template < template < typename ... > typename CollectionType >
+            auto findOf (
+                    Size,
+                    InitializerList const &
+            ) const noexcept -> CollectionType < ConstIterator >;
+        public:
+            auto findFirstOf (
+                    InitializerList const &
+            ) const noexcept -> ConstIterator;
+        public:
+            auto findLastOf (
+                    InitializerList const &
+            ) const noexcept -> ConstIterator;
+        public:
+            template < template < typename ... > typename CollectionType >
+            auto findAllOf (
+                    InitializerList                     const &,
+                    CollectionType < ConstIterator >          &
+            ) const noexcept -> CollectionType < ConstIterator > &;
+        public:
+            template < template < typename ... > typename CollectionType >
+            auto findAllOf (
+                    InitializerList const &
+            ) const noexcept -> CollectionType < ConstIterator >;
+
+        public:
+            template < template < typename ... > typename CollectionType >
+            auto findNotOf (
+                    Size,
+                    InitializerList                     const &,
+                    CollectionType < ConstIterator >          &
+            ) const noexcept -> CollectionType < ConstIterator > &;
+        public:
+            template < template < typename ... > typename CollectionType >
+            auto findNotOf (
+                    Size,
+                    InitializerList const &
+            ) const noexcept -> CollectionType < ConstIterator >;
+        public:
+            auto findFirstNotOf (
+                    InitializerList const &
+            ) const noexcept -> ConstIterator;
+        public:
+            auto findLastNotOf (
+                    InitializerList const &
+            ) const noexcept -> ConstIterator;
+        public:
+            template < template < typename ... > typename CollectionType >
+            auto findAllNotOf (
+                    InitializerList                     const &,
+                    CollectionType < ConstIterator >          &
+            ) const noexcept -> CollectionType < ConstIterator > &;
+        public:
+            template < template < typename ... > typename CollectionType >
+            auto findAllNotOf (
+                    InitializerList const &
+            ) const noexcept -> CollectionType < ConstIterator >;
+
+        public:
+            template < template < typename ... > typename CollectionType, typename Predicate >
+            auto find (
+                    Size,
+                    Predicate                           const &,
+                    CollectionType < ConstIterator >          &
+            ) const noexcept ( noexcept ( meta :: valueOf < Predicate > () ( meta :: referenceOf < ElementType const > () ) ) ) -> CollectionType < ConstIterator > &;
+        public:
+            template < template < typename ... > typename CollectionType, typename Predicate >
+            auto find (
+                    Size,
+                    Predicate const &
+            ) const noexcept ( noexcept ( meta :: valueOf < Predicate > () ( meta :: referenceOf < ElementType const > () ) ) ) -> CollectionType < ConstIterator >;
+        public:
+            template < typename Predicate >
+            auto findFirst (
+                    Predicate const &
+            ) const noexcept ( noexcept ( meta :: valueOf < Predicate > () ( meta :: referenceOf < ElementType const > () ) ) ) -> ConstIterator;
+        public:
+            template < typename Predicate >
+            auto findLast (
+                    Predicate const &
+            ) const noexcept ( noexcept ( meta :: valueOf < Predicate > () ( meta :: referenceOf < ElementType const > () ) ) ) -> ConstIterator;
+        public:
+            template < template < typename ... > typename CollectionType, typename Predicate >
+            auto findAll (
+                    Predicate                           const &,
+                    CollectionType < ConstIterator >          &
+            ) const noexcept ( noexcept ( meta :: valueOf < Predicate > () ( meta :: referenceOf < ElementType const > () ) ) ) -> CollectionType < ConstIterator > &;
+        public:
+            template < template < typename ... > typename CollectionType, typename Predicate >
+            auto findAll (
+                    Predicate const &
+            ) const noexcept ( noexcept ( meta :: valueOf < Predicate > () ( meta :: referenceOf < ElementType const > () ) ) ) -> CollectionType < ConstIterator >;
+
+        public:
+            __CDS_cpplang_ConstexprPureAbstract __CDS_explicit(false) operator bool () const noexcept; // NOLINT(google-explicit-constructor)
 
         public:
             __CDS_NoDiscard auto toString () const noexcept -> String override = 0;
@@ -303,45 +494,71 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         public:
             __CDS_NoDiscard __CDS_cpplang_ConstexprPureAbstract virtual auto empty () const noexcept -> bool;
         public:
-            virtual auto contains ( ElementType const & ) const noexcept -> bool;
+            virtual auto contains (
+                    ElementType const &
+            ) const noexcept -> bool;
 
         public:
-            auto containsAnyOf ( Collection < ElementType > const & ) const noexcept -> bool;
+            auto containsAnyOf (
+                    Collection < ElementType > const &
+            ) const noexcept -> bool;
         public:
-            auto containsAnyNotOf ( Collection < ElementType > const & ) const noexcept -> bool;
+            auto containsAnyNotOf (
+                    Collection < ElementType > const &
+            ) const noexcept -> bool;
         public:
-            auto containsAllOf ( Collection < ElementType > const & ) const noexcept -> bool;
+            auto containsAllOf (
+                    Collection < ElementType > const &
+            ) const noexcept -> bool;
         public:
-            auto containsAllNotOf ( Collection < ElementType > const & ) const noexcept -> bool;
+            auto containsAllNotOf (
+                    Collection < ElementType > const &
+            ) const noexcept -> bool;
 
         public:
-            auto containsAnyOf ( InitializerList const & ) const noexcept -> bool;
+            auto containsAnyOf (
+                    InitializerList const &
+            ) const noexcept -> bool;
         public:
-            auto containsAnyNotOf ( InitializerList const & ) const noexcept -> bool;
+            auto containsAnyNotOf (
+                    InitializerList const &
+            ) const noexcept -> bool;
         public:
-            auto containsAllOf ( InitializerList const & ) const noexcept -> bool;
+            auto containsAllOf (
+                    InitializerList const &
+            ) const noexcept -> bool;
         public:
-            auto containsAllNotOf ( InitializerList const & ) const noexcept -> bool;
+            auto containsAllNotOf (
+                    InitializerList const &
+            ) const noexcept -> bool;
 
         public:
             template < typename V = T, meta :: EnableIf < meta :: isCopyConstructible < V > () > = 0 >
-            __CDS_OptimalInline auto add ( ElementType const & ) noexcept -> void;
+            auto add (
+                    ElementType const &
+            ) noexcept -> void;
         public:
             template < typename V = T, meta :: EnableIf < meta :: isMoveConstructible < V > () > = 0 >
-            __CDS_OptimalInline auto add ( ElementType && ) noexcept -> void;
+            auto add (
+                    ElementType &&
+            ) noexcept -> void;
 
         public:
             template < typename ... ArgumentTypes >
-            auto addAll ( ArgumentTypes && ... ) noexcept -> void;
+            auto addAll (
+                    ArgumentTypes && ...
+            ) noexcept -> void;
 
         public:
             template < typename R, typename V = T, meta :: EnableIf < meta :: isCopyConstructible < V > () || meta :: isConvertible < R, V > () > = 0 >
-            auto addAllOf ( Collection < R > const & ) noexcept -> void;
+            auto addAllOf (
+                    Collection < R > const &
+            ) noexcept -> void;
 
         protected:
             virtual auto pNewInsert () noexcept -> ElementType * & = 0;
         protected:
-            __CDS_OptimalInline virtual auto pNewInsertPost () noexcept -> void;
+            virtual auto pNewInsertPost () noexcept -> void;
         };
 
     }

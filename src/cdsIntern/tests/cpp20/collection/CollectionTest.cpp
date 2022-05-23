@@ -672,7 +672,7 @@ auto CollectionTest :: execute() noexcept -> bool {
             collection.add ( 8 );
             collection.add ( 9 );
 
-            collection.remove ( [](int v){ return v >= 6; }, 9 );
+            collection.remove ( 9, [](int v){ return v >= 6; } );
             if ( collection.any ( [](int v){ return v >= 6; } ) ) {
                 this->logError("remove Predicate error");
                 allOk = false;
@@ -723,13 +723,13 @@ auto CollectionTest :: execute() noexcept -> bool {
             collection.add ( 3 );
             collection.add ( 3 );
 
-            collection.remove ( 3, 2 );
+            collection.remove ( 2, 3 );
             if ( ! collection.contains ( 3 ) ) {
                 this->logError ( "remove ElementType, Size error" );
                 allOk = false;
             }
 
-            collection.remove ( 3, 2 );
+            collection.remove ( 2, 3 );
             if ( collection.contains ( 3 ) ) {
                 this->logError ( "remove ElementType, Size error" );
                 allOk = false;
@@ -783,14 +783,14 @@ auto CollectionTest :: execute() noexcept -> bool {
             collection.add ( 5 );
             collection.add ( 6 );
 
-            collection.removeOf ( experimental :: Array < int > { 2, 3, 4 }, 2 );
+            collection.removeOf ( 2, experimental :: Array < int > { 2, 3, 4 } );
 
             if ( collection.contains ( 2 ) || collection.contains ( 3 ) || ! collection.contains (4) ) {
                 this->logError ( "removeOf Collection cref, Size error" );
                 allOk = false;
             }
 
-            collection.removeOf ( experimental :: Array < int > { 2, 3, 4 }, 2 );
+            collection.removeOf ( 2, experimental :: Array < int > { 2, 3, 4 } );
 
             if ( collection.contains ( 2 ) || collection.contains ( 3 ) || collection.contains (4) ) {
                 this->logError ( "removeOf Collection cref, Size error" );
@@ -868,14 +868,14 @@ auto CollectionTest :: execute() noexcept -> bool {
             collection.add ( 5 );
             collection.add ( 6 );
 
-            collection.removeNotOf ( experimental :: Array < int > { 2, 3, 4 }, 2 );
+            collection.removeNotOf ( 2, experimental :: Array < int > { 2, 3, 4 } );
 
             if ( collection.containsAnyOf ( { 1, 5 } ) || ! collection.containsAllOf ( { 2, 3, 4, 6 } ) ) {
                 this->logError ( "removeNotOf Collection cref, Size error" );
                 allOk = false;
             }
 
-            collection.removeNotOf ( experimental :: Array < int > { 2, 3, 4 }, 2 );
+            collection.removeNotOf ( 2, experimental :: Array < int > { 2, 3, 4 } );
 
             if ( collection.containsAnyOf ( { 1, 5, 6 } ) || ! collection.containsAllOf ( { 2, 3, 4 } ) ) {
                 this->logError ( "removeNotOf Collection cref, Size error" );
@@ -953,14 +953,14 @@ auto CollectionTest :: execute() noexcept -> bool {
             collection.add ( 5 );
             collection.add ( 6 );
 
-            collection.removeOf ( { 2, 3, 4 }, 2 );
+            collection.removeOf ( 2, { 2, 3, 4 } );
 
             if ( collection.contains ( 2 ) || collection.contains ( 3 ) || ! collection.contains (4) ) {
                 this->logError ( "removeOf Collection cref, Size error" );
                 allOk = false;
             }
 
-            collection.removeOf ( { 2, 3, 4 }, 2 );
+            collection.removeOf ( 2, { 2, 3, 4 } );
 
             if ( collection.contains ( 2 ) || collection.contains ( 3 ) || collection.contains (4) ) {
                 this->logError ( "removeOf Collection cref, Size error" );
@@ -1038,14 +1038,14 @@ auto CollectionTest :: execute() noexcept -> bool {
             collection.add ( 5 );
             collection.add ( 6 );
 
-            collection.removeNotOf ( { 2, 3, 4 }, 2 );
+            collection.removeNotOf ( 2, { 2, 3, 4 } );
 
             if ( collection.containsAnyOf ( { 1, 5 } ) || ! collection.containsAllOf ( { 2, 3, 4, 6 } ) ) {
                 this->logError ( "removeNotOf Collection cref, Size error" );
                 allOk = false;
             }
 
-            collection.removeNotOf ( { 2, 3, 4 }, 2 );
+            collection.removeNotOf ( 2, { 2, 3, 4 } );
 
             if ( collection.containsAnyOf ( { 1, 5, 6 } ) || ! collection.containsAllOf ( { 2, 3, 4 } ) ) {
                 this->logError ( "removeNotOf Collection cref, Size error" );
@@ -1133,6 +1133,8 @@ auto CollectionTest :: execute() noexcept -> bool {
                 this->logError ( "forEach error" );
                 allOk = false;
             }
+
+//            if ( collection.some (  ) )
         });
     };
 
