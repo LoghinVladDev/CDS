@@ -118,19 +118,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
         template < typename T >
         template < typename Action >
-        auto Collection < T > :: forEach ( Action const & action ) noexcept ( noexcept ( ( * ( ( Action * ) nullptr ) ) ( * ( ( ElementType * ) nullptr ) ) ) ) -> void __CDS_Requires (
-                ActionOver < Action, ElementType >
-        ) {
-            for ( auto iterator = this->begin(), end = this->end(); iterator != end; ++ iterator ) {
-                action ( * iterator );
-            }
-        }
-
-        template < typename T >
-        template < typename Action >
-        auto Collection < T > :: forEach ( Action const & action ) const noexcept ( noexcept ( ( * ( ( Action * ) nullptr ) ) ( * ( ( ElementType const * ) nullptr ) ) ) ) -> void __CDS_Requires (
-                ActionOver < Action, ElementType >
-        ) {
+        auto Collection < T > :: forEach ( Action const & action ) const noexcept ( noexcept ( meta :: valueOf < Action > () ( meta :: referenceOf < ElementType const > () ) ) ) -> void {
             for ( auto iterator = this->begin(), end = this->end(); iterator != end; ++ iterator ) {
                 action ( * iterator );
             }
@@ -141,32 +129,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         auto Collection < T > :: some (
                 Size                count,
                 Predicate   const & predicate
-        ) noexcept ( noexcept ( ( * ( ( Predicate * ) nullptr ) ) ( * ( ( ElementType * ) nullptr ) ) ) ) -> bool __CDS_Requires (
-                PredicateOver < Predicate, ElementType >
-        ) {
-
-            Size trueCount = 0ULL;
-            for ( auto iterator = this->begin(), end = this->end(); iterator != end; ++ iterator ) {
-                if ( predicate ( * iterator ) ) {
-                    ++ trueCount;
-                }
-
-                if ( trueCount > count ) {
-                    return false;
-                }
-            }
-
-            return trueCount == count;
-        }
-
-        template < typename T >
-        template < typename Predicate >
-        auto Collection < T > :: some (
-                Size                count,
-                Predicate   const & predicate
-        ) const noexcept ( noexcept ( ( * ( ( Predicate * ) nullptr ) ) ( * ( ( ElementType const * ) nullptr ) ) ) ) -> bool __CDS_Requires (
-                PredicateOver < Predicate, ElementType >
-        ) {
+        ) const noexcept ( noexcept ( meta :: valueOf < Predicate > () ( meta :: referenceOf < ElementType const > () ) ) ) -> bool {
 
             Size trueCount = 0ULL;
             for ( auto iterator = this->begin(), end = this->end(); iterator != end; ++ iterator ) {
@@ -187,32 +150,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         auto Collection < T > :: atLeast (
                 Size                count,
                 Predicate   const & predicate
-        ) noexcept ( noexcept ( ( * ( ( Predicate * ) nullptr ) ) ( * ( ( ElementType * ) nullptr ) ) ) ) -> bool __CDS_Requires (
-                PredicateOver < Predicate, ElementType >
-        ) {
-
-            Size trueCount = 0ULL;
-            for ( auto iterator = this->begin(), end = this->end(); iterator != end; ++ iterator ) {
-                if ( predicate ( * iterator ) ) {
-                    ++ trueCount;
-                }
-
-                if ( trueCount >= count ) {
-                    return true;
-                }
-            }
-
-            return false;
-        }
-
-        template < typename T >
-        template < typename Predicate >
-        auto Collection < T > :: atLeast (
-                Size                count,
-                Predicate   const & predicate
-        ) const noexcept ( noexcept ( ( * ( ( Predicate * ) nullptr ) ) ( * ( ( ElementType const * ) nullptr ) ) ) ) -> bool __CDS_Requires (
-                PredicateOver < Predicate, ElementType >
-        ) {
+        ) const noexcept ( noexcept ( meta :: valueOf < Predicate > () ( meta :: referenceOf < ElementType const > () ) ) ) -> bool {
 
             Size trueCount = 0ULL;
             for ( auto iterator = this->begin(), end = this->end(); iterator != end; ++ iterator ) {
@@ -233,32 +171,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         auto Collection < T > :: atMost (
                 Size                count,
                 Predicate   const & predicate
-        ) noexcept ( noexcept ( ( * ( ( Predicate * ) nullptr ) ) ( * ( ( ElementType * ) nullptr ) ) ) ) -> bool __CDS_Requires (
-                PredicateOver < Predicate, ElementType >
-        ) {
-
-            Size trueCount = 0ULL;
-            for ( auto iterator = this->begin(), end = this->end(); iterator != end; ++ iterator ) {
-                if ( predicate ( * iterator ) ) {
-                    ++ trueCount;
-                }
-
-                if ( trueCount > count ) {
-                    return false;
-                }
-            }
-
-            return true;
-        }
-
-        template < typename T >
-        template < typename Predicate >
-        auto Collection < T > :: atMost (
-                Size                count,
-                Predicate   const & predicate
-        ) const noexcept ( noexcept ( ( * ( ( Predicate * ) nullptr ) ) ( * ( ( ElementType const * ) nullptr ) ) ) ) -> bool __CDS_Requires (
-                PredicateOver < Predicate, ElementType >
-        ) {
+        ) const noexcept ( noexcept ( meta :: valueOf < Predicate > () ( meta :: referenceOf < ElementType const > () ) ) ) -> bool {
 
             Size trueCount = 0ULL;
             for ( auto iterator = this->begin(), end = this->end(); iterator != end; ++ iterator ) {
@@ -279,20 +192,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         auto Collection < T > :: moreThan (
                 Size                count,
                 Predicate   const & predicate
-        ) noexcept ( noexcept ( ( * ( ( Predicate * ) nullptr ) ) ( * ( ( ElementType * ) nullptr ) ) ) ) -> bool __CDS_Requires (
-                PredicateOver < Predicate, ElementType >
-        ) {
-            return this->atLeast ( count + 1, predicate );
-        }
-
-        template < typename T >
-        template < typename Predicate >
-        auto Collection < T > :: moreThan (
-                Size                count,
-                Predicate   const & predicate
-        ) const noexcept ( noexcept ( ( * ( ( Predicate * ) nullptr ) ) ( * ( ( ElementType const * ) nullptr ) ) ) ) -> bool __CDS_Requires (
-                PredicateOver < Predicate, ElementType >
-        ) {
+        ) const noexcept ( noexcept ( meta :: valueOf < Predicate > () ( meta :: referenceOf < ElementType const > () ) ) ) -> bool {
             return this->atLeast ( count + 1, predicate );
         }
 
@@ -301,20 +201,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         auto Collection < T > :: lessThan (
                 Size                count,
                 Predicate   const & predicate
-        ) noexcept ( noexcept ( ( * ( ( Predicate * ) nullptr ) ) ( * ( ( ElementType * ) nullptr ) ) ) ) -> bool __CDS_Requires (
-                PredicateOver < Predicate, ElementType >
-        ) {
-            return this->atMost ( count - 1, predicate );
-        }
-
-        template < typename T >
-        template < typename Predicate >
-        auto Collection < T > :: lessThan (
-                Size                count,
-                Predicate   const & predicate
-        ) const noexcept ( noexcept ( ( * ( ( Predicate * ) nullptr ) ) ( * ( ( ElementType const * ) nullptr ) ) ) ) -> bool __CDS_Requires (
-                PredicateOver < Predicate, ElementType >
-        ) {
+        ) const noexcept ( noexcept ( meta :: valueOf < Predicate > () ( meta :: referenceOf < ElementType const > () ) ) ) -> bool {
             return this->atMost ( count - 1, predicate );
         }
 
@@ -322,27 +209,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         template < typename Predicate >
         auto Collection < T > :: count (
                 Predicate const & predicate
-        ) noexcept ( noexcept ( ( * ( ( Predicate * ) nullptr ) ) ( * ( ( ElementType * ) nullptr ) ) ) ) -> Size __CDS_Requires (
-                PredicateOver < Predicate, ElementType >
-        ) {
-            Size trueCount = 0U;
-
-            for ( auto iterator = this->begin(), end = this->end(); iterator != end; ++ iterator ) {
-                if ( predicate ( * iterator ) ) {
-                    ++ trueCount;
-                }
-            }
-
-            return trueCount;
-        }
-
-        template < typename T >
-        template < typename Predicate >
-        auto Collection < T > :: count (
-                Predicate const & predicate
-        ) const noexcept ( noexcept ( ( * ( ( Predicate * ) nullptr ) ) ( * ( ( ElementType const * ) nullptr ) ) ) ) -> Size __CDS_Requires (
-                PredicateOver < Predicate, ElementType >
-        ) {
+        ) const noexcept ( noexcept ( meta :: valueOf < Predicate > () ( meta :: referenceOf < ElementType const > () ) ) ) -> Size {
             Size trueCount = 0U;
 
             for ( auto iterator = this->begin(), end = this->end(); iterator != end; ++ iterator ) {
@@ -358,25 +225,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         template < typename Predicate >
         auto Collection < T > :: any (
                 Predicate const & predicate
-        ) noexcept ( noexcept ( ( * ( ( Predicate * ) nullptr ) ) ( * ( ( ElementType * ) nullptr ) ) ) ) -> bool __CDS_Requires (
-                PredicateOver < Predicate, ElementType >
-        ) {
-            for ( auto iterator = this->begin(), end = this->end(); iterator != end; ++ iterator ) {
-                if ( predicate ( * iterator ) ) {
-                    return true;
-                }
-            }
-
-            return false;
-        }
-
-        template < typename T >
-        template < typename Predicate >
-        auto Collection < T > :: any (
-                Predicate const & predicate
-        ) const noexcept ( noexcept ( ( * ( ( Predicate * ) nullptr ) ) ( * ( ( ElementType const * ) nullptr ) ) ) ) -> bool __CDS_Requires (
-                PredicateOver < Predicate, ElementType >
-        ) {
+        ) const noexcept ( noexcept ( meta :: valueOf < Predicate > () ( meta :: referenceOf < ElementType const > () ) ) ) -> bool {
             for ( auto iterator = this->begin(), end = this->end(); iterator != end; ++ iterator ) {
                 if ( predicate ( * iterator ) ) {
                     return true;
@@ -390,25 +239,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         template < typename Predicate >
         auto Collection < T > :: all (
                 Predicate const & predicate
-        ) noexcept ( noexcept ( ( * ( ( Predicate * ) nullptr ) ) ( * ( ( ElementType * ) nullptr ) ) ) ) -> bool __CDS_Requires (
-                PredicateOver < Predicate, ElementType >
-        ) {
-            for ( auto iterator = this->begin(), end = this->end(); iterator != end; ++ iterator ) {
-                if ( ! predicate ( * iterator ) ) {
-                    return false;
-                }
-            }
-
-            return true;
-        }
-
-        template < typename T >
-        template < typename Predicate >
-        auto Collection < T > :: all (
-                Predicate const & predicate
-        ) const noexcept ( noexcept ( ( * ( ( Predicate * ) nullptr ) ) ( * ( ( ElementType const * ) nullptr ) ) ) ) -> bool __CDS_Requires (
-                PredicateOver < Predicate, ElementType >
-        ) {
+        ) const noexcept ( noexcept ( meta :: valueOf < Predicate > () ( meta :: referenceOf < ElementType const > () ) ) ) -> bool {
             for ( auto iterator = this->begin(), end = this->end(); iterator != end; ++ iterator ) {
                 if ( ! predicate ( * iterator ) ) {
                     return false;
@@ -980,6 +811,35 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             }
 
             return true;
+        }
+
+        namespace hidden { // NOLINT(modernize-concat-nested-namespaces)
+            namespace impl {
+                template < typename T, typename LastType >
+                inline auto collectionAdd ( Collection < T > & collection, LastType && element ) noexcept -> void {
+                    collection.add ( std :: forward < LastType > ( element ) );
+                }
+
+                template < typename T, typename FirstType, typename ... RemainingTypes >
+                inline auto collectionAdd ( Collection < T > & collection, FirstType && firstElement, RemainingTypes && ... remainingElements ) noexcept -> void {
+                    collection.add ( std :: forward < FirstType > ( firstElement ) );
+                    collectionAdd ( collection, std :: forward < RemainingTypes > ( remainingElements ) ... );
+                }
+            }
+        }
+
+        template < typename T >
+        template < typename ... ArgumentTypes >
+        auto Collection < T > :: addAll ( ArgumentTypes && ... arguments ) noexcept -> void {
+            hidden :: impl :: collectionAdd ( * this, std :: forward < ArgumentTypes > ( arguments ) ... );
+        }
+
+        template < typename T >
+        template < typename R, typename V, meta :: EnableIf < meta :: isCopyConstructible < V > () || meta :: isConvertible < R, V > () > >
+        auto Collection < T > :: addAllOf ( Collection < R > const & otherCollection ) noexcept -> void {
+            for ( auto iterator = otherCollection.begin(), end = otherCollection.end(); iterator != end; ++ iterator ) {
+                this->add ( * iterator );
+            }
         }
 
     }

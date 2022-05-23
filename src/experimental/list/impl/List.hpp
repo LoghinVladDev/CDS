@@ -798,6 +798,139 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             return previous;
         }
 
+        template < typename T >
+        template < typename Action >
+        auto List < T > :: forEach ( Action const & action ) noexcept ( noexcept ( meta :: valueOf < Action > () ( meta :: referenceOf < ElementType > () ) ) ) -> void {
+            for ( auto iterator = this->begin(), end = this->end(); iterator != end; ++ iterator ) {
+                action ( * iterator );
+            }
+        }
+
+        template < typename T >
+        template < typename Predicate >
+        auto List < T > :: some (
+                Size                count,
+                Predicate   const & predicate
+        ) noexcept ( noexcept ( meta :: valueOf < Predicate > () ( meta :: referenceOf < ElementType > () ) ) ) -> bool {
+
+            Size trueCount = 0ULL;
+            for ( auto iterator = this->begin(), end = this->end(); iterator != end; ++ iterator ) {
+                if ( predicate ( * iterator ) ) {
+                    ++ trueCount;
+                }
+
+                if ( trueCount > count ) {
+                    return false;
+                }
+            }
+
+            return trueCount == count;
+        }
+
+        template < typename T >
+        template < typename Predicate >
+        auto List < T > :: atLeast (
+                Size                count,
+                Predicate   const & predicate
+        ) noexcept ( noexcept ( meta :: valueOf < Predicate > () ( meta :: referenceOf < ElementType > () ) ) ) -> bool {
+
+            Size trueCount = 0ULL;
+            for ( auto iterator = this->begin(), end = this->end(); iterator != end; ++ iterator ) {
+                if ( predicate ( * iterator ) ) {
+                    ++ trueCount;
+                }
+
+                if ( trueCount >= count ) {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        template < typename T >
+        template < typename Predicate >
+        auto List < T > :: atMost (
+                Size                count,
+                Predicate   const & predicate
+        ) noexcept ( noexcept ( meta :: valueOf < Predicate > () ( meta :: referenceOf < ElementType > () ) ) ) -> bool {
+
+            Size trueCount = 0ULL;
+            for ( auto iterator = this->begin(), end = this->end(); iterator != end; ++ iterator ) {
+                if ( predicate ( * iterator ) ) {
+                    ++ trueCount;
+                }
+
+                if ( trueCount > count ) {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
+        template < typename T >
+        template < typename Predicate >
+        auto List < T > :: moreThan (
+                Size                count,
+                Predicate   const & predicate
+        ) noexcept ( noexcept ( meta :: valueOf < Predicate > () ( meta :: referenceOf < ElementType > () ) ) ) -> bool {
+            return this->atLeast ( count + 1, predicate );
+        }
+
+        template < typename T >
+        template < typename Predicate >
+        auto List < T > :: lessThan (
+                Size                count,
+                Predicate   const & predicate
+        ) noexcept ( noexcept ( meta :: valueOf < Predicate > () ( meta :: referenceOf < ElementType > () ) ) ) -> bool {
+            return this->atMost ( count - 1, predicate );
+        }
+
+        template < typename T >
+        template < typename Predicate >
+        auto List < T > :: count (
+                Predicate const & predicate
+        ) noexcept ( noexcept ( meta :: valueOf < Predicate > () ( meta :: referenceOf < ElementType > () ) ) ) -> Size {
+            Size trueCount = 0U;
+
+            for ( auto iterator = this->begin(), end = this->end(); iterator != end; ++ iterator ) {
+                if ( predicate ( * iterator ) ) {
+                    ++ trueCount;
+                }
+            }
+
+            return trueCount;
+        }
+
+        template < typename T >
+        template < typename Predicate >
+        auto List < T > :: any (
+                Predicate const & predicate
+        ) noexcept ( noexcept ( meta :: valueOf < Predicate > () ( meta :: referenceOf < ElementType > () ) ) ) -> bool {
+            for ( auto iterator = this->begin(), end = this->end(); iterator != end; ++ iterator ) {
+                if ( predicate ( * iterator ) ) {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        template < typename T >
+        template < typename Predicate >
+        auto List < T > :: all (
+                Predicate const & predicate
+        ) noexcept ( noexcept ( meta :: valueOf < Predicate > () ( meta :: referenceOf < ElementType > () ) ) ) -> bool {
+            for ( auto iterator = this->begin(), end = this->end(); iterator != end; ++ iterator ) {
+                if ( ! predicate ( * iterator ) ) {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
     }
 }
 

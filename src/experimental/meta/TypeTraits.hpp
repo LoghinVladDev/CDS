@@ -324,7 +324,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
                     template < typename CurrentType, typename RemainingType >
                     struct CommonFold < CurrentType, RemainingType, void > {};
-                };
+                }
 
                 template < typename T1, typename T2 >
                 struct Common < T1, T2 > : public commonImpl :: CommonDecayed < T1, T2 > :: Type {};
@@ -332,10 +332,41 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 template < typename T1, typename T2, typename ... RemainingTypes >
                 struct Common < T1, T2, RemainingTypes ... > :
                         public commonImpl :: CommonFold < Common < T1, T2 >, commonImpl :: CommonPack < RemainingTypes ... > > {};
+
+                namespace isConvertibleImpl {
+                    template < typename From, typename To, bool = IsVoid < From > :: value || IsFunction < To > :: value || IsArray < To > :: value >
+                    struct IsConvertible {
+                        using Type = typename IsVoid < To > :: Type;
+                    };
+
+                    template < typename From, typename To >
+                    struct IsConvertible < From, To, false > {
+                    private:
+                        template < typename To1 >
+                        static void metaTest ( To1 ) noexcept;
+
+                        template < typename From1, typename To1, typename = decltype ( metaTest < To1 > ( valueOf < From1 > () ) ) >
+                        static TrueType test (int);
+
+                        template < typename, typename >
+                        static FalseType test (...);
+
+                    public:
+                        using Type = decltype ( test < From, To > (0) );
+                    };
+                }
+
+                template < typename From, typename To >
+                struct IsConvertible : isConvertibleImpl :: IsConvertible < From, To > :: Type {};
             };
 
-            template < typename T >         using Decay     = typename impl :: Decay < T > :: Type;
-            template < typename ... Types > using Common    = typename impl :: Common < Types ... > :: Type;
+            template < typename T >                 using Decay     = typename impl :: Decay < T > :: Type;
+            template < typename ... Types >         using Common    = typename impl :: Common < Types ... > :: Type;
+
+            template < typename From, typename To >
+            constexpr auto isConvertible () noexcept -> bool {
+                return impl :: IsConvertible < From, To > :: value;
+            }
 
             template < typename LeftType, typename RightType >
             constexpr auto isSame () noexcept -> bool {

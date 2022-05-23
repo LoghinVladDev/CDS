@@ -7,7 +7,6 @@
 
 namespace cds { // NOLINT(modernize-concat-nested-namespaces)
     namespace experimental {
-
         template < typename T >
         Array < T > :: ~Array () noexcept {
             for ( Index i = 0U; i < this->_size; ++ i ) {
@@ -467,7 +466,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             auto newCap = maxOf ( this->_capacity * 2, this->_size + 1, Array :: minCapacity );
             auto newBuf = Memory :: instance ().createArray < T * > ( newCap );
 
-            (void) std :: memcpy ( newBuf, this->_pData, sizeof ( T * ) * ( index ) );
+            (void) std :: memcpy ( newBuf, this->_pData, sizeof ( T * ) * index );
             (void) std :: memcpy ( newBuf + index + 2, this->_pData + index + 1, sizeof ( T * ) * ( static_cast < Index > ( this->_size ) - index ) );
 
             this->_capacity = newCap;
@@ -500,7 +499,6 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
             return this->_pData [ index ] = nullptr;
         }
-
     }
 }
 

@@ -233,7 +233,7 @@ auto CollectionTest :: execute() noexcept -> bool {
 //    experimental :: LinkedList < int > listTestObject = {1, 2, 3, 4, 5, 6, 7, 8, 9};
 //    experimental :: LinkedList < String > listTestObjectStr = { "Ana", "are", "mere" };
 
-    static auto primitiveTest = [this, & allOk]( experimental :: Collection < int > & collection, experimental :: Collection < int > & emptyCollection ) {
+    auto primitiveTest = [this, & allOk]( experimental :: Collection < int > & collection, experimental :: Collection < int > & emptyCollection ) {
 
         this->log ( "Object in test : %s", collection.toString().cStr() );
         this->log ( "Empty object in test : %s", emptyCollection.toString().cStr() );
@@ -1113,10 +1113,30 @@ auto CollectionTest :: execute() noexcept -> bool {
                 this->logError ( "removeAllOf Collection cref error" );
                 allOk = false;
             }
+
+            collection.clear();
+
+            collection.addAll ( 3, 4, 5 );
+
+            this->log("Add all : %s", collection.toString().cStr());
+            if ( collection.size() != 3 ) {
+                this->logError ( "add all error" );
+                allOk = false;
+            }
+
+            int expectedSum = 3 + 4 + 5;
+            int actualSum = 0;
+
+            collection.forEach ( [& actualSum] ( int v ) { actualSum += v; } );
+
+            if ( actualSum != expectedSum ) {
+                this->logError ( "forEach error" );
+                allOk = false;
+            }
         });
     };
 
-    static auto objectTest = [this, & allOk]( experimental :: Collection < String > & collection, experimental :: Collection < String > & emptyCollection ) {
+    auto objectTest = [this, & allOk]( experimental :: Collection < String > & collection, experimental :: Collection < String > & emptyCollection ) {
 
         this->log ( "Object in test : %s", collection.toString().cStr() );
         this->log ( "Empty object in test : %s", emptyCollection.toString().cStr() );
