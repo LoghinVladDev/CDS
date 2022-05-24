@@ -842,6 +842,29 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             }
         }
 
+        namespace meta { // NOLINT(modernize-concat-nested-namespaces)
+            namespace impl {
+                template < typename CollectionType, typename LastArgumentType >
+                inline auto collectionOfPush ( CollectionType & collection, LastArgumentType && lastValue ) noexcept -> void {
+                    collection.add ( std :: forward < LastArgumentType > ( lastValue ) );
+                }
+
+                template < typename CollectionType, typename FirstArgumentType, typename ... RemainingArgumentTypes >
+                inline auto collectionOfPush ( CollectionType & collection, FirstArgumentType && firstValue, RemainingArgumentTypes && ... remainingValues ) noexcept -> void {
+                    collection.add ( std :: forward < FirstArgumentType > ( firstValue ) );
+                    collectionOfPush ( collection, std :: forward < RemainingArgumentTypes > ( remainingValues ) ... );
+                }
+            }
+        }
+
+        template < template < typename ... > typename CollectionType, typename ... ArgumentTypes, typename Common >
+        auto collectionOf ( ArgumentTypes && ... values ) noexcept -> CollectionType < Common > {
+            CollectionType < Common > collection;
+
+            meta :: impl :: collectionOfPush ( collection, std :: forward < ArgumentTypes > ( values ) ... );
+            return collection;
+        }
+
     }
 }
 

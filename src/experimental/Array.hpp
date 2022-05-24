@@ -258,6 +258,11 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             auto sequence () const && noexcept -> Sequence < Array < T > const >;
         };
 
+        template < typename ... ArgumentTypes >
+        inline auto arrayOf ( ArgumentTypes && ... values ) noexcept -> Array < meta :: Common < ArgumentTypes ... > > {
+            return collectionOf < Array > ( std :: forward < ArgumentTypes > ( values ) ... );
+        }
+
     }
 }
 

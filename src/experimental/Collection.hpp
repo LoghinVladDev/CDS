@@ -561,6 +561,9 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             virtual auto pNewInsertPost () noexcept -> void;
         };
 
+        template < template < typename ... > typename CollectionType, typename ... ArgumentTypes, typename Common = meta :: Common < ArgumentTypes ... > >
+        auto collectionOf ( ArgumentTypes && ... ) noexcept -> CollectionType < Common >;
+
     }
 }
 

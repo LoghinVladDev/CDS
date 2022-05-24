@@ -11,10 +11,8 @@ using namespace cds;
 
 
 int main () {
-    experimental :: Array < UniquePointer < int > > arr;
 
-    arr.addAll ( new int (3), new int (4), new int (5) );
-
+    auto arr = experimental :: arrayOf ( 1, 2, "test"_s, 3, 4, 5, 6, 1, 2.4f );
     std :: cout << arr << '\n';
 
     return 0;
