@@ -1228,6 +1228,29 @@ auto CollectionTest :: execute() noexcept -> bool {
                 this->logError ( "Iterators not positioned in correct places" );
                 allOk = false;
             }
+
+            auto iteratorsReturned = collection.find < Array > ( 2, 5 );
+
+            if ( iteratorsReturned.size () != 2 ) {
+                this->logError ( "wrong element count found" );
+                allOk = false;
+            }
+
+            if ( * iteratorsReturned[0] != 5 || * iteratorsReturned[1] != 5 ) {
+                this->logError ( "Iterators not ok from value pov" );
+                allOk = false;
+            }
+
+            if ( * ( ++ iteratorsReturned[0] ) != 6 || * ( ++ iteratorsReturned[1] ) != 4 ) {
+                this->logError ( "Iterators not positioned in correct places" );
+                allOk = false;
+            }
+
+            iter = collection.findFirst ( 5 );
+
+//            if ( * iter != 5 ) {
+//                this->logError()
+//            }
         });
     };
 
