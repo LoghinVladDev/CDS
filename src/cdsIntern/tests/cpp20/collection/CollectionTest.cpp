@@ -1198,6 +1198,36 @@ auto CollectionTest :: execute() noexcept -> bool {
                 this->logError ( "all error" );
                 allOk = false;
             }
+
+            try {
+                collection.any ( [](int v) { throw NullPointerException(); return false; } );
+                this->logError ( "Exception not triggered, error" );
+                allOk = false;
+            } catch ( Exception const & ) {
+                this->log("Exception caught ok from functional request");
+            }
+
+            collection.clear ();
+
+            collection.addAll ( 1, 2, 3, 4, 5, 6, 5, 4, 3, 2, 1 );
+
+            Array < experimental :: meta :: RemoveReference < decltype ( collection ) > :: ConstIterator > iterators;
+            collection.find ( 2, 5, iterators );
+
+            if ( iterators.size () != 2 ) {
+                this->logError ( "wrong element count found" );
+                allOk = false;
+            }
+
+            if ( * iterators[0] != 5 || * iterators[1] != 5 ) {
+                this->logError ( "Iterators not ok from value pov" );
+                allOk = false;
+            }
+
+            if ( * ( ++ iterators[0] ) != 6 || * ( ++ iterators[1] ) != 4 ) {
+                this->logError ( "Iterators not positioned in correct places" );
+                allOk = false;
+            }
         });
     };
 
