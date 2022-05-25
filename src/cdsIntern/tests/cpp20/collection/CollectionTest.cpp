@@ -1229,6 +1229,18 @@ auto CollectionTest :: execute() noexcept -> bool {
                 allOk = false;
             }
 
+            iterators.clear();
+            collection.find ( 1, 5, iterators );
+            if ( iterators.size() != 1 ) {
+                this->logError ( "wrong iterator count returned by limited find" );
+                allOk = false;
+            }
+
+            if ( * ( ++ iterators[0] ) != 6 ) {
+                this->logError ( "Iterator not positioned in correct place" );
+                allOk = false;
+            }
+
             auto iteratorsReturned = collection.find < Array > ( 2, 5 );
 
             if ( iteratorsReturned.size () != 2 ) {
@@ -1248,9 +1260,63 @@ auto CollectionTest :: execute() noexcept -> bool {
 
             iter = collection.findFirst ( 5 );
 
-//            if ( * iter != 5 ) {
-//                this->logError()
-//            }
+            if ( * iter != 5 ) {
+                this->logError ( "Iterator not ok from value PoV" );
+                allOk = false;
+            }
+
+            if ( * ( ++ iter ) != 6 ) {
+                this->logError ( "Iterator not ok from position PoV" );
+                allOk = false;
+            }
+
+            iter = collection.findLast ( 5 );
+
+            if ( * iter != 5 ) {
+                this->logError ( "Iterator not ok from value PoV" );
+                allOk = false;
+            }
+
+            if ( * ( ++ iter ) != 4 ) {
+                this->logError ( "Iterator not ok from position PoV" );
+                allOk = false;
+            }
+
+            iterators.clear();
+
+            collection.findAll ( 5, iterators );
+
+            if ( iterators.size () != 2 ) {
+                this->logError ( "wrong element count found" );
+                allOk = false;
+            }
+
+            if ( * iterators[0] != 5 || * iterators[1] != 5 ) {
+                this->logError ( "Iterators not ok from value pov" );
+                allOk = false;
+            }
+
+            if ( * ( ++ iterators[0] ) != 6 || * ( ++ iterators[1] ) != 4 ) {
+                this->logError ( "Iterators not positioned in correct places" );
+                allOk = false;
+            }
+
+            iteratorsReturned = collection.findAll < Array > ( 5 );
+
+            if ( iteratorsReturned.size () != 2 ) {
+                this->logError ( "wrong element count found" );
+                allOk = false;
+            }
+
+            if ( * iteratorsReturned[0] != 5 || * iteratorsReturned[1] != 5 ) {
+                this->logError ( "Iterators not ok from value pov" );
+                allOk = false;
+            }
+
+            if ( * ( ++ iteratorsReturned[0] ) != 6 || * ( ++ iteratorsReturned[1] ) != 4 ) {
+                this->logError ( "Iterators not positioned in correct places" );
+                allOk = false;
+            }
         });
     };
 

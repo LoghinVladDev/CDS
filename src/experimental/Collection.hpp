@@ -17,93 +17,265 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
     namespace experimental {
 
+        /**
+         * @class Abstract Object representing any Iterable Container of given elements of type
+         * @tparam T type of elements contained into Collection
+         * @test tested in collection/CollectionTest
+         */
         template < typename T >
         class Collection : public Object {
         public:
+
+            /**
+             * @typedef Alias for T, the type of the contained elements, publicly accessible, useful in sfinae statements - decltype ( Collection ) :: ElementType
+             */
             using ElementType = T;
 
         protected:
+            /**
+             * @typedef Alias for std :: initializer_list < T > or std :: initializer_list < ElementType >
+             */
             using InitializerList = std :: initializer_list < T >;
 
         protected:
+            /**
+             * @interface An Iterator Delegate represents the actual implementation of the iterator done by the derived classes. The Abstract Delegate Iterator is the base used by the Iterator bases
+             */
             class AbstractDelegateIterator;
+
         protected:
+            /**
+             * @class The base class for Iterator types, mutable or immutable. It is the wrapper over the AbstractDelegateIterator, acquired from derived classes implementation
+             */
             class DelegateConstIterator;
+
         protected:
+            /**
+             * @class The base class for Iterator types, mutable or immutable. It is the wrapper over the AbstractDelegateIterator, acquired from derived classes implementation
+             */
             class AbstractIterator;
+
         protected:
+            /**
+             * @enum The types of delegate iterator requests the Collection Base Object can make to its Derivated Objects when acquiring an Iterator Delegate Implementation
+             */
             enum class DelegateIteratorRequestType;
 
         public:
+            /**
+             * @class The Iterator type used for Forward Iteration over immutable values
+             */
             class ConstIterator;
+
         public:
+            /**
+             * @class The Iterator type used for Backward Iteration over immutable values
+             */
             class ConstReverseIterator;
 
         protected:
+            /**
+             * @brief Function used to safely acquire a Delegate Iterator Owned by a given Iterator
+             * @param iterator : AbstractIterator cref = Constant Reference to an AbstractIterator-derived Object
+             * @exceptsafe
+             * @return AbstractDelegateIterator cptr = Pointer to an Immutable, AbstractDelegateIterator-derived Object
+             * @test tested in the class test
+             */
             constexpr static auto acquireDelegate (
-                    AbstractIterator const &
+                    AbstractIterator const & iterator
             ) noexcept -> AbstractDelegateIterator const *;
+
         protected:
+            /**
+             * @brief Function used to safely acquire a Delegate Iterator Owned by a given Iterator
+             * @param iterator : ConstIterator cref = Constant Reference to an ConstIterator Object
+             * @exceptsafe
+             * @return DelegateConstIterator cptr = Pointer to an Immutable, DelegateConstIterator-derived Object
+             * @test tested in the class test
+             */
             constexpr static auto acquireDelegate (
-                    ConstIterator const &
+                    ConstIterator const & iterator
             ) noexcept -> DelegateConstIterator const *;
+
         protected:
+            /**
+             * @brief Function used to safely acquire a Delegate Iterator Owned by a given Iterator
+             * @param iterator : ConstReverseIterator cref = Constant Reference to an ConstIterator Object
+             * @exceptsafe
+             * @return DelegateConstIterator cptr = Pointer to an Immutable, DelegateConstIterator-derived Object
+             * @test tested in the class test
+             */
             constexpr static auto acquireDelegate (
-                    ConstReverseIterator const &
+                    ConstReverseIterator const & iterator
             ) noexcept -> DelegateConstIterator const *;
+
         protected:
+            /**
+             * @brief Function used to request a DelegateConstIterator from the Iterator constructing functions ( begin/cbegin/rbegin/crbegin/end/cend/rend/crend ) to acquire a DelegateConstIterator containing
+             *      the implementation from the derived class, of requested iterator type
+             * @param requestType : DelegateIteratorRequestType = the type of request, associated with expected returned type of iterator implementation
+             * @exceptsafe
+             * @return UniquePointer < DelegateConstIterator > = Uniquely-Owned Pointer to a DelegateConstIterator-derived object
+             * @test tested in the class test
+             */
             virtual auto delegateConstIterator (
-                    DelegateIteratorRequestType
+                    DelegateIteratorRequestType requestType
             ) const noexcept -> cds :: UniquePointer < DelegateConstIterator > = 0;
 
         public:
+            /**
+             * @brief Function used to acquire a Forward-ConstIterator, indicating to the first element of the collection
+             * @exceptsafe
+             * @return ConstIterator = requested Iterator object
+             * @test tested in the class test
+             */
             auto begin () const noexcept -> ConstIterator;
+
         public:
+            /**
+             * @brief Function used to acquire a Forward-ConstIterator, indicating after the last element of the collection
+             * @exceptsafe
+             * @return ConstIterator = requested Iterator object
+             * @test tested in the class test
+             */
             auto end () const noexcept -> ConstIterator;
+
         public:
+            /**
+             * @brief Function used to acquire a Forward-ConstIterator, indicating to the first element of the collection
+             * @exceptsafe
+             * @return ConstIterator = requested Iterator object
+             * @test tested in the class test
+             */
             auto cbegin () const noexcept -> ConstIterator;
+
         public:
+            /**
+             * @brief Function used to acquire a Forward-ConstIterator, indicating after the last element of the collection
+             * @exceptsafe
+             * @return ConstIterator = requested Iterator object
+             * @test tested in the class test
+             */
             auto cend () const noexcept -> ConstIterator;
+
         public:
+            /**
+             * @brief Function used to acquire a Backward-ConstIterator, indicating to the first element of the collection in reverse iteration order - last element of the collection
+             * @exceptsafe
+             * @return ConstReverseIterator = requested Iterator object
+             * @test tested in the class test
+             */
             auto rbegin () const noexcept -> ConstReverseIterator;
+
         public:
+            /**
+             * @brief Function used to acquire a Backward-ConstIterator, indicating after the last element of the collection in reverse iteration order - before first element of the collection
+             * @exceptsafe
+             * @return ConstReverseIterator = requested Iterator object
+             * @test tested in the class test
+             */
             auto rend () const noexcept -> ConstReverseIterator;
+
         public:
+            /**
+             * @brief Function used to acquire a Backward-ConstIterator, indicating to the first element of the collection in reverse iteration order - last element of the collection
+             * @exceptsafe
+             * @return ConstReverseIterator = requested Iterator object
+             * @test tested in the class test
+             */
             auto crbegin () const noexcept -> ConstReverseIterator;
+
         public:
+            /**
+             * @brief Function used to acquire a Backward-ConstIterator, indicating after the last element of the collection in reverse iteration order - before first element of the collection
+             * @exceptsafe
+             * @return ConstReverseIterator = requested Iterator object
+             * @test tested in the class test
+             */
             auto crend () const noexcept -> ConstReverseIterator;
 
         public:
+            /**
+             * @brief Function used to remove an element identified by a given Iterator
+             * @param iterator : ConstIterator cref = Constant Reference to the Iterator indicating the value to be removed
+             * @exceptsafe
+             * @return bool = true if removal was successful, false otherwise ( invalid iterator )
+             * @test tested in the class test
+             */
             virtual auto remove (
-                    ConstIterator const &
+                    ConstIterator const & iterator
             ) noexcept -> bool = 0;
+
         public:
+            /**
+             * @brief Function used to remove an element identified by a given Iterator
+             * @param iterator : ConstReverseIterator cref = Constant Reference to the Reverse Iterator indicating the value to be removed
+             * @exceptsafe
+             * @return bool = true if removal was successful, false otherwise ( invalid iterator )
+             * @test tested in the class test
+             */
             virtual auto remove (
-                    ConstReverseIterator const &
+                    ConstReverseIterator const & iterator
             ) noexcept -> bool = 0;
 
         protected:
+            /**
+             * @brief Function used to remove a batch of elements identified by a given array of Iterators
+             * @param pIterators : ConstIterator cptr = Address to an array of Constant ConstIterator objects, indicating the elements to be removed
+             * @param size : Size = the number of elements in the pIterators array
+             * @exceptsafe
+             * @return Size = number of elements that were successfully removed
+             * @test tested in the class test
+             */
             virtual auto remove (
-                    ConstIterator const *,
-                    Size
+                    ConstIterator   const * pIterators,
+                    Size                    size
             ) noexcept -> Size = 0;
+
         protected:
+            /**
+             * @brief Function used to remove a batch of elements identified by a given array of Iterators
+             * @param pIterators : ConstReverseIterator cptr = Address to an array of Constant ConstReverseIterator objects, indicating the elements to be removed
+             * @param size : Size = the number of elements in the pIterators array
+             * @exceptsafe
+             * @return Size = number of elements that were successfully removed
+             * @test tested in the class test
+             */
             virtual auto remove (
-                    ConstReverseIterator const *,
-                    Size
+                    ConstReverseIterator    const * pIterators,
+                    Size                            size
             ) noexcept -> Size = 0;
 
         public:
+            /**
+             * @brief Function used to remove a given number of elements based on the validation by a given predicate ( bool ( ElementType ) function )
+             * @tparam Predicate the type of the given predicate. Must refer to a callable object, whose call is compatible with bool ( Decay < ElementType > )
+             * @param count : Size = maximum number of elements to remove
+             * @param predicate : Predicate cref = Constant Reference to a callable function, lambda or object, compatible with the bool ( Decay < ElementType > ) signature
+             * @exceptsafe if predicate is exceptsafe
+             * @return Size = number of removed elements
+             * @test tested in the class test
+             */
             template < typename Predicate >
             auto remove (
-                    Size,
-                    Predicate const &
-            ) noexcept -> Size;
+                    Size                count,
+                    Predicate   const & predicate
+            ) noexcept ( noexcept ( ( meta :: valueOf < Predicate > () ) ( meta :: referenceOf < ElementType > () ) ) ) -> Size;
+
         public:
+            /**
+             * @brief Function used to remove the first element that matches the validation of a given predicate ( bool ( ElementType ) function )
+             * @tparam Predicate the type of the given predicate. Must refer to a callable object, whose call is compatible with bool ( Decay < ElementType > )
+             * @param predicate : Predicate cref = Constant Reference to a callable function, lambda or object, compatible with the bool ( Decay < ElementType > ) signature
+             * @exceptsafe if predicate is exceptsafe
+             * @return bool = true if one element was removed, false otherwise
+             * @test tested in the class test
+             */
             template < typename Predicate >
             auto removeFirst (
-                    Predicate const &
+                    Predicate const & predicate
             ) noexcept -> bool;
+
         public:
             template < typename Predicate >
             auto removeLast (

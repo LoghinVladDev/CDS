@@ -146,7 +146,7 @@ int main () {
 //    arrc.forEach ( [] ( auto & v ) { /*v = 3;*/ (void)v; } );
 //    arrc.forEach ( [] ( auto const & v ) { (void)v; } );
 
-    arrc.forEach ( [] ( auto const & v ) { std :: cout << v << '\n'; } );
+arrc.findLast ( 5 );
     std :: for_each ( arrc.begin(), arrc.end(), [] ( auto const & v ) { std :: cout << v << '\n'; } );
 
     std :: cout << arrc.sub < cds :: experimental :: Array > ( 1, 3 );

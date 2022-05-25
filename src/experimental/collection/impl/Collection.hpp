@@ -279,7 +279,10 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
         template < typename T >
         template < typename Predicate >
-        auto Collection < T > :: remove ( Size count, Predicate const & predicate ) noexcept -> Size {
+        auto Collection < T > :: remove (
+                Size                count,
+                Predicate   const & predicate
+        ) noexcept ( noexcept ( ( meta :: valueOf < Predicate > () ) ( meta :: referenceOf < ElementType > () ) ) ) -> Size {
 
             ConstIterator * pIteratorBuffer = Memory :: instance().createArray < ConstIterator > ( count );
             Size iteratorCount = 0U;
@@ -864,14 +867,15 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 ElementType const & element
         ) const noexcept -> ConstIterator {
 
-            auto end = this->rend();
-            for ( auto iterator = this->rbegin(); iterator != end; ++ iterator ) {
+            auto end = this->end();
+            auto lastFound = end;
+            for ( auto iterator = this->begin(); iterator != end; ++ iterator ) {
                 if ( meta :: equals ( element, * iterator ) ) {
-                    return iterator;
+                    lastFound = iterator;
                 }
             }
 
-            return end;
+            return lastFound;
         }
 
         template < typename T >
@@ -951,14 +955,15 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 Collection < ElementType > const & elements
         ) const noexcept -> ConstIterator {
 
-            auto end = this->rend();
-            for ( auto iterator = this->rbegin(); iterator != end; ++ iterator ) {
+            auto end = this->end();
+            auto lastFound = end;
+            for ( auto iterator = this->begin(); iterator != end; ++ iterator ) {
                 if ( elements.contains ( * iterator ) ) {
-                    return iterator;
+                    lastFound = end;
                 }
             }
 
-            return end;
+            return lastFound;
         }
 
         template < typename T >
@@ -1028,14 +1033,15 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 Collection < ElementType > const & elements
         ) const noexcept -> ConstIterator {
 
-            auto end = this->rend();
-            for ( auto iterator = this->rbegin(); iterator != end; ++ iterator ) {
+            auto end = this->end();
+            auto lastFound = end;
+            for ( auto iterator = this->begin(); iterator != end; ++ iterator ) {
                 if ( ! elements.contains ( * iterator ) ) {
-                    return iterator;
+                    lastFound = iterator;
                 }
             }
 
-            return end;
+            return lastFound;
         }
 
         template < typename T >
@@ -1115,14 +1121,15 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 InitializerList const & elements
         ) const noexcept -> ConstIterator {
 
-            auto end = this->rend();
-            for ( auto iterator = this->rbegin(); iterator != end; ++ iterator ) {
+            auto end = this->end();
+            auto lastFound = end;
+            for ( auto iterator = this->begin(); iterator != end; ++ iterator ) {
                 if ( hidden :: impl :: initializerListContains ( elements, * iterator ) ) {
-                    return iterator;
+                    lastFound = iterator;
                 }
             }
 
-            return end;
+            return lastFound;
         }
 
         template < typename T >
@@ -1192,14 +1199,15 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 InitializerList                     const & elements
         ) const noexcept -> ConstIterator {
 
-            auto end = this->rend();
-            for ( auto iterator = this->rbegin(); iterator != end; ++ iterator ) {
+            auto end = this->end();
+            auto lastFound = end;
+            for ( auto iterator = this->begin(); iterator != end; ++ iterator ) {
                 if ( ! hidden :: impl :: initializerListContains ( elements,  * iterator ) ) {
-                    return iterator;
+                    lastFound = iterator;
                 }
             }
 
-            return end;
+            return lastFound;
         }
 
         template < typename T >

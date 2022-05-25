@@ -1047,6 +1047,49 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                         return true;
                     }
             ) noexcept ( noexcept ( meta :: valueOf < Predicate > () ( meta :: referenceOf < ElementType > () ) ) ) -> bool;
+
+        public:
+            using Collection < T > :: forEach;
+        public:
+            using Collection < T > :: some;
+        public:
+            using Collection < T > :: atLeast;
+        public:
+            using Collection < T > :: atMost;
+        public:
+            using Collection < T > :: moreThan;
+        public:
+            using Collection < T > :: lessThan;
+        public:
+            using Collection < T > :: count;
+        public:
+            using Collection < T > :: any;
+        public:
+            using Collection < T > :: all;
+        public:
+            using Collection < T > :: find;
+        public:
+            using Collection < T > :: findFirst;
+        public:
+            using Collection < T > :: findLast;
+        public:
+            using Collection < T > :: findAll;
+        public:
+            using Collection < T > :: findOf;
+        public:
+            using Collection < T > :: findFirstOf;
+        public:
+            using Collection < T > :: findLastOf;
+        public:
+            using Collection < T > :: findAllOf;
+        public:
+            using Collection < T > :: findNotOf;
+        public:
+            using Collection < T > :: findFirstNotOf;
+        public:
+            using Collection < T > :: findLastNotOf;
+        public:
+            using Collection < T > :: findAllNotOf;
         };
 
     }
