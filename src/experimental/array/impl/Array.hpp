@@ -7,6 +7,10 @@
 
 namespace cds { // NOLINT(modernize-concat-nested-namespaces)
     namespace experimental {
+
+        template < typename T >
+        constexpr Size const Array < T > :: minCapacity = 32ULL;
+
         template < typename T >
         Array < T > :: ~Array () noexcept {
             for ( Index i = 0U; i < this->_size; ++ i ) {

@@ -130,14 +130,14 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                     Index
             ) const noexcept (false) -> ListType;
         public:
-            template < template < typename ... > typename ListType, typename V = T, meta :: EnableIf < meta :: isCopyConstructible < V > () && meta :: isDerivedFrom < ListType < T >, Collection < T > > () > = 0 >
+            template < template < typename ... > class ListType, typename V = T, meta :: EnableIf < meta :: isCopyConstructible < V > () && meta :: isDerivedFrom < ListType < T >, Collection < T > > () > = 0 >
             auto sub (
                     Index,
                     Index,
                     ListType < ElementType > &
             ) const noexcept (false) -> ListType < ElementType > &;
         public:
-            template < template < typename ... > typename ListType, typename V = T, meta :: EnableIf < meta :: isCopyConstructible < V > () && meta :: isDerivedFrom < ListType < T >, Collection < T > > () > = 0 >
+            template < template < typename ... > class ListType, typename V = T, meta :: EnableIf < meta :: isCopyConstructible < V > () && meta :: isDerivedFrom < ListType < T >, Collection < T > > () > = 0 >
              auto sub (
                      Index,
                      Index
@@ -155,13 +155,13 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                     ElementType const &
             ) const noexcept -> ListType;
         public:
-            template < template < typename ... > typename ListType, meta :: EnableIf < meta :: isDerivedFrom < ListType < Index >, Collection < Index > > () > = 0 >
+            template < template < typename ... > class ListType, meta :: EnableIf < meta :: isDerivedFrom < ListType < Index >, Collection < Index > > () > = 0 >
             auto indices (
                     ElementType const &,
                     ListType < Index > &
             ) const noexcept -> ListType < Index > &;
         public:
-            template < template < typename ... > typename ListType, meta :: EnableIf < meta :: isDerivedFrom < ListType < Index >, Collection < Index > > () > = 0 >
+            template < template < typename ... > class ListType, meta :: EnableIf < meta :: isDerivedFrom < ListType < Index >, Collection < Index > > () > = 0 >
             auto indices (
                     ElementType const &
             ) const noexcept -> ListType < Index >;
@@ -178,13 +178,13 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                     Predicate const &
             ) const noexcept -> ListType;
         public:
-            template < typename Predicate, template < typename ... > typename ListType, meta :: EnableIf < meta :: isDerivedFrom < ListType < Index >, Collection < Index > > () > = 0 >
+            template < typename Predicate, template < typename ... > class ListType, meta :: EnableIf < meta :: isDerivedFrom < ListType < Index >, Collection < Index > > () > = 0 >
             auto indices (
                     Predicate    const &,
                     ListType < Index > &
             ) const noexcept -> ListType < Index > &;
         public:
-            template < typename Predicate, template < typename ... > typename ListType, meta :: EnableIf < meta :: isDerivedFrom < ListType < Index >, Collection < Index > > () > = 0 >
+            template < typename Predicate, template < typename ... > class ListType, meta :: EnableIf < meta :: isDerivedFrom < ListType < Index >, Collection < Index > > () > = 0 >
             auto indices (
                     Predicate const &
             ) const noexcept -> ListType < Index >;
@@ -782,14 +782,14 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             ) const noexcept -> Index;
 
         public:
-            template < template < typename ... > typename ListType >
+            template < template < typename ... > class ListType >
             auto find (
                     Size,
                     ElementType             const &,
                     ListType < Iterator >         &
             ) noexcept -> ListType < Iterator > &;
         public:
-            template < template < typename ... > typename ListType >
+            template < template < typename ... > class ListType >
             auto find (
                     Size,
                     ElementType const &
@@ -803,26 +803,26 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                     ElementType const &
             ) noexcept -> Iterator;
         public:
-            template < template < typename ... > typename ListType >
+            template < template < typename ... > class ListType >
             auto findAll (
                     ElementType             const &,
                     ListType < Iterator >         &
             ) noexcept -> ListType < Iterator > &;
         public:
-            template < template < typename ... > typename ListType >
+            template < template < typename ... > class ListType >
             auto findAll (
                     ElementType const &
             ) noexcept -> ListType < Iterator >;
 
         public:
-            template < template < typename ... > typename ListType >
+            template < template < typename ... > class ListType >
             auto findOf (
                     Size,
                     Collection < T >        const &,
                     ListType < Iterator >         &
             ) noexcept -> ListType < Iterator > &;
         public:
-            template < template < typename ... > typename ListType >
+            template < template < typename ... > class ListType >
             auto findOf (
                     Size,
                     Collection < T > const &
@@ -836,26 +836,26 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                     Collection < T > const &
             ) noexcept -> Iterator;
         public:
-            template < template < typename ... > typename ListType >
+            template < template < typename ... > class ListType >
             auto findAllOf (
                     Collection < T >        const &,
                     ListType < Iterator >         &
             ) noexcept -> ListType < Iterator > &;
         public:
-            template < template < typename ... > typename ListType >
+            template < template < typename ... > class ListType >
             auto findAllOf (
                     Collection < T > const &
             ) noexcept -> ListType < Iterator >;
 
         public:
-            template < template < typename ... > typename ListType >
+            template < template < typename ... > class ListType >
             auto findNotOf (
                     Size,
                     Collection < T >        const &,
                     ListType < Iterator >         &
             ) noexcept -> ListType < Iterator > &;
         public:
-            template < template < typename ... > typename ListType >
+            template < template < typename ... > class ListType >
             auto findNotOf (
                     Size,
                     Collection < T > const &
@@ -869,26 +869,26 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                     Collection < T > const &
             ) noexcept -> Iterator;
         public:
-            template < template < typename ... > typename ListType >
+            template < template < typename ... > class ListType >
             auto findAllNotOf (
                     Collection < T >        const &,
                     ListType < Iterator >         &
             ) noexcept -> ListType < Iterator > &;
         public:
-            template < template < typename ... > typename ListType >
+            template < template < typename ... > class ListType >
             auto findAllNotOf (
                     Collection < T > const &
             ) noexcept -> ListType < Iterator >;
 
         public:
-            template < template < typename ... > typename ListType >
+            template < template < typename ... > class ListType >
             auto findOf (
                     Size,
                     InitializerList         const &,
                     ListType < Iterator >         &
             ) noexcept -> ListType < Iterator > &;
         public:
-            template < template < typename ... > typename ListType >
+            template < template < typename ... > class ListType >
             auto findOf (
                     Size,
                     InitializerList const &
@@ -902,26 +902,26 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                     InitializerList const &
             ) noexcept -> Iterator;
         public:
-            template < template < typename ... > typename ListType >
+            template < template < typename ... > class ListType >
             auto findAllOf (
                     InitializerList         const &,
                     ListType < Iterator >         &
             ) noexcept -> ListType < Iterator > &;
         public:
-            template < template < typename ... > typename ListType >
+            template < template < typename ... > class ListType >
             auto findAllOf (
                     InitializerList const &
             ) noexcept -> ListType < Iterator >;
 
         public:
-            template < template < typename ... > typename ListType >
+            template < template < typename ... > class ListType >
             auto findNotOf (
                     Size,
                     InitializerList         const &,
                     ListType < Iterator >         &
             ) noexcept -> ListType < Iterator > &;
         public:
-            template < template < typename ... > typename ListType >
+            template < template < typename ... > class ListType >
             auto findNotOf (
                     Size,
                     InitializerList const &
@@ -935,26 +935,26 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                     InitializerList const &
             ) noexcept -> Iterator;
         public:
-            template < template < typename ... > typename ListType >
+            template < template < typename ... > class ListType >
             auto findAllNotOf (
                     InitializerList         const &,
                     ListType < Iterator >         &
             ) noexcept -> ListType < Iterator > &;
         public:
-            template < template < typename ... > typename ListType >
+            template < template < typename ... > class ListType >
             auto findAllNotOf (
                     InitializerList const &
             ) noexcept -> ListType < Iterator >;
 
         public:
-            template < template < typename ... > typename ListType, typename Predicate >
+            template < template < typename ... > class ListType, typename Predicate >
             auto find (
                     Size,
                     Predicate               const &,
                     ListType < Iterator >         &
             ) noexcept ( noexcept ( meta :: valueOf < Predicate > () ( meta :: referenceOf < ElementType > () ) ) ) -> ListType < Iterator > &;
         public:
-            template < template < typename ... > typename ListType, typename Predicate >
+            template < template < typename ... > class ListType, typename Predicate >
             auto find (
                     Size,
                     Predicate const &
@@ -970,13 +970,13 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                     Predicate const &
             ) noexcept ( noexcept ( meta :: valueOf < Predicate > () ( meta :: referenceOf < ElementType > () ) ) ) -> Iterator;
         public:
-            template < template < typename ... > typename ListType, typename Predicate >
+            template < template < typename ... > class ListType, typename Predicate >
             auto findAll (
                     Predicate               const &,
                     ListType < Iterator >         &
             ) noexcept ( noexcept ( meta :: valueOf < Predicate > () ( meta :: referenceOf < ElementType > () ) ) ) -> ListType < Iterator > &;
         public:
-            template < template < typename ... > typename ListType, typename Predicate >
+            template < template < typename ... > class ListType, typename Predicate >
             auto findAll (
                     Predicate const &
             ) noexcept ( noexcept ( meta :: valueOf < Predicate > () ( meta :: referenceOf < ElementType > () ) ) ) -> ListType < Iterator >;

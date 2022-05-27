@@ -57,7 +57,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
         protected:
             /**
-             * @enum The types of delegate iterator requests the Collection Base Object can make to its Derivated Objects when acquiring an Iterator Delegate Implementation
+             * @enum The types of delegate iterator requests the Collection Base Object can make to its Derivative Objects when acquiring an Iterator Delegate Implementation
              */
             enum class DelegateIteratorRequestType;
 
@@ -724,7 +724,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
              * @return Collection < Collection < ElementType > :: ConstIterator > ref = Reference to the given collection inside the 'storeIn' parameter
              * @test tested in base class test
              */
-            template < template < typename ... > typename CollectionType >
+            template < template < typename ... > class CollectionType >
             auto find (
                     Size                                        maxCount,
                     ElementType                         const & element,
@@ -741,7 +741,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
              * @return Collection < Collection < ElementType > :: ConstIterator > = Newly created object containing the requested Iterators
              * @test tested in base class test
              */
-            template < template < typename ... > typename CollectionType >
+            template < template < typename ... > class CollectionType >
             auto find (
                     Size                maxCount,
                     ElementType const & element
@@ -781,7 +781,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
              * @return Collection < Collection < ElementType > :: ConstIterator > ref = Reference to the given collection inside the 'storeIn' parameter
              * @test tested in base class test
              */
-            template < template < typename ... > typename CollectionType >
+            template < template < typename ... > class CollectionType >
             auto findAll (
                     ElementType                         const & element,
                     CollectionType < ConstIterator >          & storeIn
@@ -796,7 +796,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
              * @return Collection < Collection < ElementType > :: ConstIterator > = Newly created object containing the requested Iterators
              * @test tested in base class test
              */
-            template < template < typename ... > typename CollectionType >
+            template < template < typename ... > class CollectionType >
             auto findAll (
                     ElementType const & element
             ) const noexcept -> CollectionType < ConstIterator >;
@@ -812,7 +812,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
              * @return Collection < Collection < ElementType > :: ConstIterator > ref = Reference to the given collection inside the 'storeIn' parameter
              * @test tested in base class test
              */
-            template < template < typename ... > typename CollectionType >
+            template < template < typename ... > class CollectionType >
             auto findOf (
                     Size                                        maxCount,
                     Collection < ElementType >          const & elements,
@@ -829,7 +829,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
              * @return Collection < Collection < ElementType > :: ConstIterator > = Newly created object containing the requested Iterators
              * @test tested in base class test
              */
-            template < template < typename ... > typename CollectionType >
+            template < template < typename ... > class CollectionType >
             auto findOf (
                     Size                                maxCount,
                     Collection < ElementType >  const & elements
@@ -869,7 +869,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
              * @return Collection < Collection < ElementType > :: ConstIterator > ref = Reference to the given collection inside the 'storeIn' parameter
              * @test tested in base class test
              */
-            template < template < typename ... > typename CollectionType >
+            template < template < typename ... > class CollectionType >
             auto findAllOf (
                     Collection < ElementType >          const & elements,
                     CollectionType < ConstIterator >          & storeIn
@@ -884,7 +884,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
              * @return Collection < Collection < ElementType > :: ConstIterator > = Newly created object containing the requested Iterators
              * @test tested in base class test
              */
-            template < template < typename ... > typename CollectionType >
+            template < template < typename ... > class CollectionType >
             auto findAllOf (
                     Collection < ElementType > const & elements
             ) const noexcept -> CollectionType < ConstIterator >;
@@ -900,7 +900,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
              * @return Collection < Collection < ElementType > :: ConstIterator > ref = Reference to the given collection inside the 'storeIn' parameter
              * @test tested in base class test
              */
-            template < template < typename ... > typename CollectionType >
+            template < template < typename ... > class CollectionType >
             auto findNotOf (
                     Size                                        maxCount,
                     Collection < ElementType >          const & elements,
@@ -917,7 +917,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
              * @return Collection < Collection < ElementType > :: ConstIterator > = Newly created object containing the requested Iterators
              * @test tested in base class test
              */
-            template < template < typename ... > typename CollectionType >
+            template < template < typename ... > class CollectionType >
             auto findNotOf (
                     Size                                maxCount,
                     Collection < ElementType >  const & elements
@@ -957,7 +957,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
              * @return Collection < Collection < ElementType > :: ConstIterator > ref = Reference to the given collection inside the 'storeIn' parameter
              * @test tested in base class test
              */
-            template < template < typename ... > typename CollectionType >
+            template < template < typename ... > class CollectionType >
             auto findAllNotOf (
                     Collection < ElementType >          const & elements,
                     CollectionType < ConstIterator >          & storeIn
@@ -972,7 +972,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
              * @return Collection < Collection < ElementType > :: ConstIterator > = Newly created object containing the requested Iterators
              * @test tested in base class test
              */
-            template < template < typename ... > typename CollectionType >
+            template < template < typename ... > class CollectionType >
             auto findAllNotOf (
                     Collection < T > const & elements
             ) const noexcept -> CollectionType < ConstIterator >;
@@ -988,7 +988,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
              * @return Collection < Collection < ElementType > :: ConstIterator > ref = Reference to the given collection inside the 'storeIn' parameter
              * @test tested in base class test
              */
-            template < template < typename ... > typename CollectionType >
+            template < template < typename ... > class CollectionType >
             auto findOf (
                     Size                                        maxCount,
                     InitializerList                     const & elements,
@@ -1005,7 +1005,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
              * @return Collection < Collection < ElementType > :: ConstIterator > = Newly created object containing the requested Iterators
              * @test tested in base class test
              */
-            template < template < typename ... > typename CollectionType >
+            template < template < typename ... > class CollectionType >
             auto findOf (
                     Size                    maxCount,
                     InitializerList const & elements
@@ -1045,7 +1045,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
              * @return Collection < Collection < ElementType > :: ConstIterator > ref = Reference to the given collection inside the 'storeIn' parameter
              * @test tested in base class test
              */
-            template < template < typename ... > typename CollectionType >
+            template < template < typename ... > class CollectionType >
             auto findAllOf (
                     InitializerList                     const & elements,
                     CollectionType < ConstIterator >          & storeIn
@@ -1060,7 +1060,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
              * @return Collection < Collection < ElementType > :: ConstIterator > = Newly created object containing the requested Iterators
              * @test tested in base class test
              */
-            template < template < typename ... > typename CollectionType >
+            template < template < typename ... > class CollectionType >
             auto findAllOf (
                     InitializerList const & elements
             ) const noexcept -> CollectionType < ConstIterator >;
@@ -1076,7 +1076,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
              * @return Collection < Collection < ElementType > :: ConstIterator > ref = Reference to the given collection inside the 'storeIn' parameter
              * @test tested in base class test
              */
-            template < template < typename ... > typename CollectionType >
+            template < template < typename ... > class CollectionType >
             auto findNotOf (
                     Size                                        maxCount,
                     InitializerList                     const & elements,
@@ -1093,7 +1093,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
              * @return Collection < Collection < ElementType > :: ConstIterator > = Newly created object containing the requested Iterators
              * @test tested in base class test
              */
-            template < template < typename ... > typename CollectionType >
+            template < template < typename ... > class CollectionType >
             auto findNotOf (
                     Size                    maxCount,
                     InitializerList const & elements
@@ -1133,7 +1133,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
              * @return Collection < Collection < ElementType > :: ConstIterator > ref = Reference to the given collection inside the 'storeIn' parameter
              * @test tested in base class test
              */
-            template < template < typename ... > typename CollectionType >
+            template < template < typename ... > class CollectionType >
             auto findAllNotOf (
                     InitializerList                     const & elements,
                     CollectionType < ConstIterator >          & storeIn
@@ -1148,7 +1148,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
              * @return Collection < Collection < ElementType > :: ConstIterator > = Newly created object containing the requested Iterators
              * @test tested in base class test
              */
-            template < template < typename ... > typename CollectionType >
+            template < template < typename ... > class CollectionType >
             auto findAllNotOf (
                     InitializerList const & elements
             ) const noexcept -> CollectionType < ConstIterator >;
@@ -1165,7 +1165,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
              * @return Collection < Collection < ElementType > :: ConstIterator > ref = Reference to the given collection inside the 'storeIn' parameter
              * @test tested in base class test
              */
-            template < template < typename ... > typename CollectionType, typename Predicate >
+            template < template < typename ... > class CollectionType, typename Predicate >
             auto find (
                     Size                                        maxCount,
                     Predicate                           const & predicate,
@@ -1183,7 +1183,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
              * @return Collection < Collection < ElementType > :: ConstIterator > = Newly created object containing the requested Iterators
              * @test tested in base class test
              */
-            template < template < typename ... > typename CollectionType, typename Predicate >
+            template < template < typename ... > class CollectionType, typename Predicate >
             auto find (
                     Size                maxCount,
                     Predicate   const & predicate
@@ -1228,7 +1228,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
              * @return Collection < Collection < ElementType > :: ConstIterator > ref = Reference to the given collection inside the 'storeIn' parameter
              * @test tested in base class test
              */
-            template < template < typename ... > typename CollectionType, typename Predicate >
+            template < template < typename ... > class CollectionType, typename Predicate >
             auto findAll (
                     Predicate                           const & predicate,
                     CollectionType < ConstIterator >          & storeIn
@@ -1244,7 +1244,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
              * @return Collection < Collection < ElementType > :: ConstIterator > = Newly created object containing the requested Iterators
              * @test tested in base class test
              */
-            template < template < typename ... > typename CollectionType, typename Predicate >
+            template < template < typename ... > class CollectionType, typename Predicate >
             auto findAll (
                     Predicate const & predicate
             ) const noexcept ( noexcept ( ( meta :: valueOf < Predicate > () ) ( meta :: referenceOf < ElementType const > () ) ) ) -> CollectionType < ConstIterator >;
@@ -1508,7 +1508,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
          * @return CollectionType < Common > = newly created collection-derived non-abstract object instance, containing the given elements
          * @test tested in base class test
          */
-        template < template < typename ... > typename CollectionType, typename ... ArgumentTypes, typename Common = meta :: Common < ArgumentTypes ... > >
+        template < template < typename ... > class CollectionType, typename ... ArgumentTypes, typename Common = meta :: Common < ArgumentTypes ... > >
         auto collectionOf ( ArgumentTypes && ... values ) noexcept -> CollectionType < Common >;
 
     }

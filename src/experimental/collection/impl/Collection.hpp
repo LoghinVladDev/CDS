@@ -817,7 +817,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         }
 
         template < typename T >
-        template < template < typename ... > typename CollectionType >
+        template < template < typename ... > class CollectionType >
         auto Collection < T > :: find (
                 Size                                        maxCount,
                 ElementType                         const & element,
@@ -837,7 +837,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         }
 
         template < typename T >
-        template < template < typename ... > typename CollectionType >
+        template < template < typename ... > class CollectionType >
         auto Collection < T > :: find (
                 Size                                        maxCount,
                 ElementType                         const & element
@@ -879,7 +879,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         }
 
         template < typename T >
-        template < template < typename ... > typename CollectionType >
+        template < template < typename ... > class CollectionType >
         auto Collection < T > :: findAll (
                 ElementType                         const & element,
                 CollectionType < ConstIterator >          & storeIn
@@ -895,7 +895,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         }
 
         template < typename T >
-        template < template < typename ... > typename CollectionType >
+        template < template < typename ... > class CollectionType >
         auto Collection < T > :: findAll (
                 ElementType                         const & element
         ) const noexcept -> CollectionType < ConstIterator > {
@@ -905,7 +905,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         }
 
         template < typename T >
-        template < template < typename ... > typename CollectionType >
+        template < template < typename ... > class CollectionType >
         auto Collection < T > :: findOf (
                 Size                                        maxCount,
                 Collection < ElementType >          const & elements,
@@ -925,7 +925,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         }
 
         template < typename T >
-        template < template < typename ... > typename CollectionType >
+        template < template < typename ... > class CollectionType >
         auto Collection < T > :: findOf (
                 Size                                        maxCount,
                 Collection < ElementType >          const & elements
@@ -967,7 +967,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         }
 
         template < typename T >
-        template < template < typename ... > typename CollectionType >
+        template < template < typename ... > class CollectionType >
         auto Collection < T > :: findAllOf (
                 Collection < ElementType >          const & elements,
                 CollectionType < ConstIterator >          & storeIn
@@ -983,7 +983,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         }
 
         template < typename T >
-        template < template < typename ... > typename CollectionType >
+        template < template < typename ... > class CollectionType >
         auto Collection < T > :: findAllOf (
                 Collection < ElementType >          const & elements
         ) const noexcept -> CollectionType < ConstIterator > {
@@ -993,7 +993,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         }
 
         template < typename T >
-        template < template < typename ... > typename CollectionType >
+        template < template < typename ... > class CollectionType >
         auto Collection < T > :: findNotOf (
                 Size                                        maxCount,
                 Collection < ElementType >          const & elements,
@@ -1013,7 +1013,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         }
 
         template < typename T >
-        template < template < typename ... > typename CollectionType >
+        template < template < typename ... > class CollectionType >
         auto Collection < T > :: findNotOf (
                 Size                                        maxCount,
                 Collection < ElementType >          const & elements
@@ -1055,7 +1055,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         }
 
         template < typename T >
-        template < template < typename ... > typename CollectionType >
+        template < template < typename ... > class CollectionType >
         auto Collection < T > :: findAllNotOf (
                 Collection < ElementType >          const & elements,
                 CollectionType < ConstIterator >          & storeIn
@@ -1071,7 +1071,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         }
 
         template < typename T >
-        template < template < typename ... > typename CollectionType >
+        template < template < typename ... > class CollectionType >
         auto Collection < T > :: findAllNotOf (
                 Collection < ElementType >  const & elements
         ) const noexcept -> CollectionType < ConstIterator > {
@@ -1081,7 +1081,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         }
 
         template < typename T >
-        template < template < typename ... > typename CollectionType >
+        template < template < typename ... > class CollectionType >
         auto Collection < T > :: findOf (
                 Size                                        maxCount,
                 InitializerList                     const & elements,
@@ -1101,7 +1101,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         }
 
         template < typename T >
-        template < template < typename ... > typename CollectionType >
+        template < template < typename ... > class CollectionType >
         auto Collection < T > :: findOf (
                 Size                                        maxCount,
                 InitializerList                     const & elements
@@ -1143,7 +1143,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         }
 
         template < typename T >
-        template < template < typename ... > typename CollectionType >
+        template < template < typename ... > class CollectionType >
         auto Collection < T > :: findAllOf (
                 InitializerList                     const & elements,
                 CollectionType < ConstIterator >          & storeIn
@@ -1159,7 +1159,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         }
 
         template < typename T >
-        template < template < typename ... > typename CollectionType >
+        template < template < typename ... > class CollectionType >
         auto Collection < T > :: findAllOf (
                 InitializerList                     const & elements
         ) const noexcept -> CollectionType < ConstIterator > {
@@ -1169,7 +1169,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         }
 
         template < typename T >
-        template < template < typename ... > typename CollectionType >
+        template < template < typename ... > class CollectionType >
         auto Collection < T > :: findNotOf (
                 Size                                        maxCount,
                 InitializerList                     const & elements,
@@ -1189,7 +1189,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         }
 
         template < typename T >
-        template < template < typename ... > typename CollectionType >
+        template < template < typename ... > class CollectionType >
         auto Collection < T > :: findNotOf (
                 Size                                        maxCount,
                 InitializerList                     const & elements
@@ -1231,7 +1231,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         }
 
         template < typename T >
-        template < template < typename ... > typename CollectionType >
+        template < template < typename ... > class CollectionType >
         auto Collection < T > :: findAllNotOf (
                 InitializerList                     const & elements,
                 CollectionType < ConstIterator >          & storeIn
@@ -1247,7 +1247,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         }
 
         template < typename T >
-        template < template < typename ... > typename CollectionType >
+        template < template < typename ... > class CollectionType >
         auto Collection < T > :: findAllNotOf (
                 InitializerList                     const & elements
         ) const noexcept -> CollectionType < ConstIterator > {
@@ -1257,7 +1257,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         }
 
         template < typename T >
-        template < template < typename ... > typename CollectionType, typename Predicate >
+        template < template < typename ... > class CollectionType, typename Predicate >
         auto Collection < T > :: find (
                 Size                                        maxCount,
                 Predicate                           const & predicate,
@@ -1276,7 +1276,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         }
 
         template < typename T >
-        template < template < typename ... > typename CollectionType, typename Predicate >
+        template < template < typename ... > class CollectionType, typename Predicate >
         auto Collection < T > :: find (
                 Size                                        maxCount,
                 Predicate                           const & predicate
@@ -1320,7 +1320,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         }
 
         template < typename T >
-        template < template < typename ... > typename CollectionType, typename Predicate >
+        template < template < typename ... > class CollectionType, typename Predicate >
         auto Collection < T > :: findAll (
                 Predicate                           const & predicate,
                 CollectionType < ConstIterator >          & storeIn
@@ -1336,7 +1336,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         }
 
         template < typename T >
-        template < template < typename ... > typename CollectionType, typename Predicate >
+        template < template < typename ... > class CollectionType, typename Predicate >
         auto Collection < T > :: findAll (
                 Predicate                           const & predicate
         ) const noexcept ( noexcept ( ( meta :: valueOf < Predicate > () ) ( meta :: referenceOf < ElementType const > () ) ) ) -> CollectionType < ConstIterator > {
@@ -1389,7 +1389,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             }
         }
 
-        template < template < typename ... > typename CollectionType, typename ... ArgumentTypes, typename Common >
+        template < template < typename ... > class CollectionType, typename ... ArgumentTypes, typename Common >
         auto collectionOf ( ArgumentTypes && ... values ) noexcept -> CollectionType < Common > {
             CollectionType < Common > collection;
 

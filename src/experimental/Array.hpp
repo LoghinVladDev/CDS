@@ -55,7 +55,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         private:
             Size           _capacity    { 0ULL };
         private:
-            constexpr static Size minCapacity = 32ULL;
+            static Size const minCapacity;
 
         private:
             auto initializeByCopy ( Array const & ) noexcept -> void;

@@ -642,13 +642,13 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         }
 
         template < typename T >
-        template < template < typename ... > typename ListType, typename V, meta :: EnableIf < meta :: isCopyConstructible < V > () && meta :: isDerivedFrom < ListType < T >, Collection < T > > () > >
+        template < template < typename ... > class ListType, typename V, meta :: EnableIf < meta :: isCopyConstructible < V > () && meta :: isDerivedFrom < ListType < T >, Collection < T > > () > >
         __CDS_OptimalInline auto List < T > :: sub ( Index from, Index to, ListType < ElementType > & list ) const noexcept (false) -> ListType < ElementType > & {
             return this->sub < ListType < T > > ( from, to, list );
         }
 
         template < typename T >
-        template < template < typename ... > typename ListType, typename V, meta :: EnableIf < meta :: isCopyConstructible < V > () && meta :: isDerivedFrom < ListType < T >, Collection < T > > () > >
+        template < template < typename ... > class ListType, typename V, meta :: EnableIf < meta :: isCopyConstructible < V > () && meta :: isDerivedFrom < ListType < T >, Collection < T > > () > >
         __CDS_OptimalInline auto List < T > :: sub ( Index from, Index to ) const noexcept (false) -> ListType < ElementType > {
             return this->sub < ListType < T > > ( from, to );
         }
@@ -684,13 +684,13 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         }
 
         template < typename T >
-        template < template < typename ... > typename ListType, meta :: EnableIf < meta :: isDerivedFrom < ListType < Index >, Collection < Index > > () > >
+        template < template < typename ... > class ListType, meta :: EnableIf < meta :: isDerivedFrom < ListType < Index >, Collection < Index > > () > >
         __CDS_OptimalInline auto List < T > :: indices ( ElementType const & element, ListType < Index > & list ) const noexcept -> ListType < Index > & {
             return this->indices < ListType < T > > ( element, list );
         }
 
         template < typename T >
-        template < template < typename ... > typename ListType, meta :: EnableIf < meta :: isDerivedFrom < ListType < Index >, Collection < Index > > () > >
+        template < template < typename ... > class ListType, meta :: EnableIf < meta :: isDerivedFrom < ListType < Index >, Collection < Index > > () > >
         __CDS_OptimalInline auto List < T > :: indices ( ElementType const & element ) const noexcept -> ListType < Index > {
             return this->indices < ListType < T > > ( element );
         }
@@ -759,14 +759,14 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         namespace hidden { // NOLINT(modernize-concat-nested-namespaces)
             namespace impl {
                 template < typename T, EnableIf < Type < T > :: moveConstructible && Type < T > :: moveAssignable > = 0 >
-                constexpr auto swap ( T && left, T && right ) {
+                __CDS_cpplang_ConstexprNonLiteralReturn auto swap ( T && left, T && right ) noexcept -> void {
                     auto aux    = cds :: forward < T > ( left );
                     left        = cds :: forward < T > ( right );
                     right       = cds :: forward < T > ( aux );
                 }
 
                 template < typename T >
-                constexpr auto swap ( T & left, T & right ) {
+                __CDS_cpplang_ConstexprNonLiteralReturn auto swap ( T & left, T & right ) noexcept -> void {
                     auto aux    = left;
                     left        = right;
                     right       = aux;

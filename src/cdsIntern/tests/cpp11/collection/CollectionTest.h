@@ -5,9 +5,13 @@
 #ifndef CDS_COLLECTIONTEST_H
 #define CDS_COLLECTIONTEST_H
 
+#define CDS_TEST_EXPERIMENTAL
 
-class CollectionTest {
+#include <cdsIntern/tests/cpp11/Test.h>
 
+class CollectionTest : public Test {
+public:
+    bool execute () noexcept override;
 };
 
 
