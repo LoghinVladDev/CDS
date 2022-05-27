@@ -132,6 +132,8 @@ int main () {
     cds :: experimental :: Array < int > arr = { 5, 4, 3, 2, 1 };
     cds :: experimental :: Array < int > const arrc = { 1, 2, 3, 4, 5 };
 
+    experimental :: Collection < int > & c2 = arr;
+
 //    arr.forEach ( [] ( int v ) { v = 3; } );
 //    arr.forEach ( [] ( int & v ) { v = 3; } );
 //    arr.forEach ( [] ( int const & v ) { (void)v; } );
@@ -146,7 +148,7 @@ int main () {
 //    arrc.forEach ( [] ( auto & v ) { /*v = 3;*/ (void)v; } );
 //    arrc.forEach ( [] ( auto const & v ) { (void)v; } );
 
-arrc.findLast ( 5 );
+arrc.findLast ( [](int v){return true;} );
     std :: for_each ( arrc.begin(), arrc.end(), [] ( auto const & v ) { std :: cout << v << '\n'; } );
 
     std :: cout << arrc.sub < cds :: experimental :: Array > ( 1, 3 );
