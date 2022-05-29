@@ -377,7 +377,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
              * @test tested in the class test
              */
             auto removeFirstOf (
-                    Collection < T > const & collection
+                    Collection < ElementType > const & collection
             ) noexcept -> bool;
 
         public:
@@ -389,7 +389,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
              * @test tested in the class test
              */
             auto removeLastOf (
-                    Collection < T > const & collection
+                    Collection < ElementType > const & collection
             ) noexcept -> bool;
 
         public:
@@ -401,7 +401,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
              * @test tested in the class test
              */
             auto removeAllOf (
-                    Collection < T > const & collection
+                    Collection < ElementType > const & collection
             ) noexcept -> Size;
 
         public:
@@ -415,7 +415,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
              */
             auto removeNotOf (
                     Size                        count,
-                    Collection < T >    const & collection
+                    Collection < ElementType >    const & collection
             ) noexcept -> Size;
 
         public:
@@ -427,7 +427,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
              * @test tested in the class test
              */
             auto removeFirstNotOf (
-                    Collection < T > const & collection
+                    Collection < ElementType > const & collection
             ) noexcept -> bool;
 
         public:
@@ -439,7 +439,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
              * @test tested in the class test
              */
             auto removeLastNotOf (
-                    Collection < T > const & collection
+                    Collection < ElementType > const & collection
             ) noexcept -> bool;
 
         public:
@@ -451,7 +451,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
              * @test tested in the class test
              */
             auto removeAllNotOf (
-                    Collection < T > const & collection
+                    Collection < ElementType > const & collection
             ) noexcept -> Size;
 
         public:
@@ -1509,7 +1509,9 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
          * @test tested in base class test
          */
         template < template < typename ... > class CollectionType, typename ... ArgumentTypes, typename Common = meta :: Common < ArgumentTypes ... > >
-        auto collectionOf ( ArgumentTypes && ... values ) noexcept -> CollectionType < Common >;
+        auto collectionOf (
+                ArgumentTypes && ... values
+        ) noexcept -> CollectionType < Common >;
 
     }
 }

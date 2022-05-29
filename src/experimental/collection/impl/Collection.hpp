@@ -8,274 +8,155 @@
 namespace cds { // NOLINT(modernize-concat-nested-namespaces)
     namespace experimental {
 
-        template < typename T >
-        __CDS_OptimalInline auto Collection < T > :: begin () const noexcept -> ConstIterator {
-            return this->cbegin();
-        }
 
-        template < typename T >
-        __CDS_OptimalInline auto Collection < T > :: end () const noexcept -> ConstIterator {
-            return this->cend();
-        }
+        namespace hidden { // NOLINT(modernize-concat-nested-namespaces)
+            namespace impl {
 
-        template < typename T >
-        __CDS_OptimalInline auto Collection < T > :: cbegin () const noexcept -> ConstIterator {
-            return ConstIterator ( this, std :: move ( this->delegateConstIterator ( DelegateIteratorRequestType :: ForwardBegin ) ) );
-        }
+                template < typename T >
+                __CDS_OptimalInline static auto initializerListContains (
+                        std :: initializer_list < T >   const & list,
+                        T                               const & element
+                ) noexcept -> bool {
 
-        template < typename T >
-        __CDS_OptimalInline auto Collection < T > :: cend () const noexcept -> ConstIterator {
-            return ConstIterator ( this, std :: move ( this->delegateConstIterator ( DelegateIteratorRequestType :: ForwardEnd ) ) );
-        }
+                    for ( auto const & e : list ) {
+                        if ( Type < T > :: compare ( e, element ) ) {
+                            return true;
+                        }
+                    }
 
-        template < typename T >
-        __CDS_OptimalInline auto Collection < T > :: rbegin () const noexcept -> ConstReverseIterator {
-            return this->crbegin();
-        }
-
-        template < typename T >
-        __CDS_OptimalInline auto Collection < T > :: rend () const noexcept -> ConstReverseIterator {
-            return this->crend();
-        }
-
-        template < typename T >
-        __CDS_OptimalInline auto Collection < T > :: crbegin () const noexcept -> ConstReverseIterator {
-            return ConstReverseIterator ( this, std :: move ( this->delegateConstIterator ( DelegateIteratorRequestType :: BackwardBegin ) ) );
-        }
-
-        template < typename T >
-        __CDS_OptimalInline auto Collection < T > :: crend () const noexcept -> ConstReverseIterator {
-            return ConstReverseIterator ( this, std :: move ( this->delegateConstIterator ( DelegateIteratorRequestType :: BackwardEnd ) ) );
-        }
-
-        template < typename T >
-        __CDS_OptimalInline auto Collection < T > :: equals ( Object const & object ) const noexcept -> bool {
-            auto pObject = dynamic_cast < decltype ( this ) > ( & object );
-            if ( pObject == nullptr ) {
-                return false;
-            }
-
-            if ( this->size() != pObject->size() ) {
-                return false;
-            }
-
-            for (
-                    auto
-                        leftIt  = this->begin(),    leftEnd     = this->end(),
-                        rightIt = pObject->begin();
-                    leftIt != leftEnd;
-                    ++ leftIt, ++ rightIt
-            ) {
-                if ( ! meta :: equals ( * leftIt, * rightIt ) ) {
                     return false;
                 }
+
+
+                template < typename T, typename LastType >
+                inline auto collectionAdd (
+                        Collection < T >    & collection,
+                        LastType           && element
+                ) noexcept -> void {
+
+                    collection.add ( std :: forward < LastType > ( element ) );
+                }
+
+
+                template < typename T, typename FirstType, typename ... RemainingTypes >
+                inline auto collectionAdd (
+                        Collection < T >     &      collection,
+                        FirstType           &&      firstElement,
+                        RemainingTypes      && ...  remainingElements
+                ) noexcept -> void {
+
+                    collection.add ( std :: forward < FirstType > ( firstElement ) );
+                    collectionAdd ( collection, std :: forward < RemainingTypes > ( remainingElements ) ... );
+                }
+
+
+                template < typename CollectionType, typename LastArgumentType >
+                inline auto collectionOfPush (
+                        CollectionType      & collection,
+                        LastArgumentType   && lastValue
+                ) noexcept -> void {
+
+                    collection.add ( std :: forward < LastArgumentType > ( lastValue ) );
+                }
+
+
+                template < typename CollectionType, typename FirstArgumentType, typename ... RemainingArgumentTypes >
+                inline auto collectionOfPush (
+                        CollectionType          &       collection,
+                        FirstArgumentType      &&       firstValue,
+                        RemainingArgumentTypes && ...   remainingValues
+                ) noexcept -> void {
+
+                    collection.add ( std :: forward < FirstArgumentType > ( firstValue ) );
+                    collectionOfPush ( collection, std :: forward < RemainingArgumentTypes > ( remainingValues ) ... );
+                }
+
             }
-
-            return true;
         }
 
-        template < typename T >
-        __CDS_cpplang_ConstexprPureAbstract auto Collection < T > :: empty () const noexcept -> bool {
-            return this->size() == 0ULL;
-        }
 
         template < typename T >
-        auto Collection < T > :: hash () const noexcept -> Index {
-            Index finalHashValue __CDS_MaybeUnused = 0;
+        constexpr auto Collection < T > :: acquireDelegate (
+                AbstractIterator const & iterator
+        ) noexcept -> AbstractDelegateIterator const * {
 
-            for ( auto iterator = this->begin(), end = this->end(); iterator != end; ++ iterator ) {
-                finalHashValue += cds :: hash ( * iterator );
-            }
-
-            return finalHashValue;
-        }
-
-        template < typename T >
-        constexpr auto Collection < T > :: acquireDelegate ( AbstractIterator const & iterator ) noexcept -> AbstractDelegateIterator const * {
             return iterator._pDelegate.get();
         }
 
+
         template < typename T >
-        constexpr auto Collection < T > :: acquireDelegate ( ConstIterator const & iterator ) noexcept -> DelegateConstIterator const * {
+        constexpr auto Collection < T > :: acquireDelegate (
+                ConstIterator const & iterator
+        ) noexcept -> DelegateConstIterator const * {
+
             return reinterpret_cast < DelegateConstIterator * > ( iterator._pDelegate.get() );
         }
 
+
         template < typename T >
-        constexpr auto Collection < T > :: acquireDelegate ( ConstReverseIterator const & iterator ) noexcept -> DelegateConstIterator const * {
+        constexpr auto Collection < T > :: acquireDelegate (
+                ConstReverseIterator const & iterator
+        ) noexcept -> DelegateConstIterator const * {
+
             return reinterpret_cast < DelegateConstIterator * > ( iterator._pDelegate.get() );
         }
 
-        template < typename T >
-        __CDS_OptimalInline auto Collection < T > :: contains ( ElementType const & element ) const noexcept -> bool {
-            for ( auto iterator = this->begin(), end = this->end(); iterator != end; ++ iterator ) {
-                if ( meta :: equals ( * iterator, element ) ) {
-                    return true;
-                }
-            }
 
-            return false;
+        template < typename T >
+        __CDS_OptimalInline auto Collection < T > :: begin () const noexcept -> ConstIterator {
+
+            return this->cbegin();
         }
 
+
         template < typename T >
-        template < typename Action >
-        auto Collection < T > :: forEach ( Action const & action ) const noexcept ( noexcept ( meta :: valueOf < Action > () ( meta :: referenceOf < ElementType const > () ) ) ) -> void {
-            for ( auto iterator = this->begin(), end = this->end(); iterator != end; ++ iterator ) {
-                action ( * iterator );
-            }
+        __CDS_OptimalInline auto Collection < T > :: end () const noexcept -> ConstIterator {
+
+            return this->cend();
         }
 
+
         template < typename T >
-        template < typename Predicate >
-        auto Collection < T > :: some (
-                Size                count,
-                Predicate   const & predicate
-        ) const noexcept ( noexcept ( meta :: valueOf < Predicate > () ( meta :: referenceOf < ElementType const > () ) ) ) -> bool {
+        __CDS_OptimalInline auto Collection < T > :: cbegin () const noexcept -> ConstIterator {
 
-            Size trueCount = 0ULL;
-            for ( auto iterator = this->begin(), end = this->end(); iterator != end; ++ iterator ) {
-                if ( predicate ( * iterator ) ) {
-                    ++ trueCount;
-                }
-
-                if ( trueCount > count ) {
-                    return false;
-                }
-            }
-
-            return trueCount == count;
+            return ConstIterator ( this, std :: move ( this->delegateConstIterator ( DelegateIteratorRequestType :: ForwardBegin ) ) );
         }
 
+
         template < typename T >
-        template < typename Predicate >
-        auto Collection < T > :: atLeast (
-                Size                count,
-                Predicate   const & predicate
-        ) const noexcept ( noexcept ( meta :: valueOf < Predicate > () ( meta :: referenceOf < ElementType const > () ) ) ) -> bool {
+        __CDS_OptimalInline auto Collection < T > :: cend () const noexcept -> ConstIterator {
 
-            Size trueCount = 0ULL;
-            for ( auto iterator = this->begin(), end = this->end(); iterator != end; ++ iterator ) {
-                if ( predicate ( * iterator ) ) {
-                    ++ trueCount;
-                }
-
-                if ( trueCount >= count ) {
-                    return true;
-                }
-            }
-
-            return false;
+            return ConstIterator ( this, std :: move ( this->delegateConstIterator ( DelegateIteratorRequestType :: ForwardEnd ) ) );
         }
 
+
         template < typename T >
-        template < typename Predicate >
-        auto Collection < T > :: atMost (
-                Size                count,
-                Predicate   const & predicate
-        ) const noexcept ( noexcept ( meta :: valueOf < Predicate > () ( meta :: referenceOf < ElementType const > () ) ) ) -> bool {
+        __CDS_OptimalInline auto Collection < T > :: rbegin () const noexcept -> ConstReverseIterator {
 
-            Size trueCount = 0ULL;
-            for ( auto iterator = this->begin(), end = this->end(); iterator != end; ++ iterator ) {
-                if ( predicate ( * iterator ) ) {
-                    ++ trueCount;
-                }
-
-                if ( trueCount > count ) {
-                    return false;
-                }
-            }
-
-            return true;
+            return this->crbegin();
         }
 
+
         template < typename T >
-        template < typename Predicate >
-        auto Collection < T > :: moreThan (
-                Size                count,
-                Predicate   const & predicate
-        ) const noexcept ( noexcept ( meta :: valueOf < Predicate > () ( meta :: referenceOf < ElementType const > () ) ) ) -> bool {
-            return this->atLeast ( count + 1, predicate );
+        __CDS_OptimalInline auto Collection < T > :: rend () const noexcept -> ConstReverseIterator {
+
+            return this->crend();
         }
 
+
         template < typename T >
-        template < typename Predicate >
-        auto Collection < T > :: lessThan (
-                Size                count,
-                Predicate   const & predicate
-        ) const noexcept ( noexcept ( meta :: valueOf < Predicate > () ( meta :: referenceOf < ElementType const > () ) ) ) -> bool {
-            return this->atMost ( count - 1, predicate );
+        __CDS_OptimalInline auto Collection < T > :: crbegin () const noexcept -> ConstReverseIterator {
+
+            return ConstReverseIterator ( this, std :: move ( this->delegateConstIterator ( DelegateIteratorRequestType :: BackwardBegin ) ) );
         }
 
+
         template < typename T >
-        template < typename Predicate >
-        auto Collection < T > :: count (
-                Predicate const & predicate
-        ) const noexcept ( noexcept ( meta :: valueOf < Predicate > () ( meta :: referenceOf < ElementType const > () ) ) ) -> Size {
-            Size trueCount = 0U;
+        __CDS_OptimalInline auto Collection < T > :: crend () const noexcept -> ConstReverseIterator {
 
-            for ( auto iterator = this->begin(), end = this->end(); iterator != end; ++ iterator ) {
-                if ( predicate ( * iterator ) ) {
-                    ++ trueCount;
-                }
-            }
-
-            return trueCount;
+            return ConstReverseIterator ( this, std :: move ( this->delegateConstIterator ( DelegateIteratorRequestType :: BackwardEnd ) ) );
         }
 
-        template < typename T >
-        template < typename Predicate >
-        auto Collection < T > :: any (
-                Predicate const & predicate
-        ) const noexcept ( noexcept ( meta :: valueOf < Predicate > () ( meta :: referenceOf < ElementType const > () ) ) ) -> bool {
-            for ( auto iterator = this->begin(), end = this->end(); iterator != end; ++ iterator ) {
-                if ( predicate ( * iterator ) ) {
-                    return true;
-                }
-            }
-
-            return false;
-        }
-
-        template < typename T >
-        template < typename Predicate >
-        auto Collection < T > :: all (
-                Predicate const & predicate
-        ) const noexcept ( noexcept ( meta :: valueOf < Predicate > () ( meta :: referenceOf < ElementType const > () ) ) ) -> bool {
-            for ( auto iterator = this->begin(), end = this->end(); iterator != end; ++ iterator ) {
-                if ( ! predicate ( * iterator ) ) {
-                    return false;
-                }
-            }
-
-            return true;
-        }
-
-        template < typename T >
-        __CDS_cpplang_ConstexprPureAbstract Collection < T > :: operator bool () const noexcept {
-            return ! this->empty();
-        }
-
-        template < typename T >
-        __CDS_OptimalInline auto Collection < T > :: pNewInsertPost() noexcept -> void {}
-
-        template < typename T >
-        template < typename V, meta :: EnableIf < meta :: isCopyConstructible < V > () > >
-        auto Collection < T > :: add ( ElementType const & element ) noexcept ( noexcept ( ElementType ( element ) ) ) -> void {
-            auto & pElementLocation = this->pNewInsert();
-            if ( pElementLocation == nullptr ) {
-                pElementLocation = Memory :: instance().create < ElementType > ( element );
-                this->pNewInsertPost();
-            }
-        }
-
-        template < typename T >
-        template < typename V, meta :: EnableIf < meta :: isMoveConstructible < V > () > >
-        auto Collection < T > :: add ( ElementType && element ) noexcept ( noexcept ( ElementType ( std :: move ( element ) ) ) ) -> void {
-            auto & pElementLocation = this->pNewInsert();
-            if ( pElementLocation == nullptr ) {
-                pElementLocation = Memory :: instance().create < ElementType > ( std :: move ( element ) );
-                this->pNewInsertPost();
-            }
-        }
 
         template < typename T >
         template < typename Predicate >
@@ -299,9 +180,13 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             return removedCount;
         }
 
+
         template < typename T >
         template < typename Predicate >
-        auto Collection < T > :: removeFirst ( Predicate const & predicate ) noexcept -> bool {
+        auto Collection < T > :: removeFirst (
+                Predicate const & predicate
+        ) noexcept -> bool {
+
             for ( auto iterator = this->begin(), end = this->end(); iterator != end; ++ iterator ) {
                 if ( predicate ( * iterator ) ) {
                     return this->remove ( iterator );
@@ -311,9 +196,13 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             return false;
         }
 
+
         template < typename T >
         template < typename Predicate >
-        auto Collection < T > :: removeLast ( Predicate const & predicate ) noexcept -> bool {
+        auto Collection < T > :: removeLast (
+                Predicate const & predicate
+        ) noexcept -> bool {
+
             ConstIterator toRemove;
 
             for ( auto iterator = this->begin(), end = this->end(); iterator != end; ++ iterator ) {
@@ -325,9 +214,12 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             return toRemove.valid() && this->remove ( toRemove );
         }
 
+
         template < typename T >
         template < typename Predicate >
-        auto Collection < T > :: removeAll ( Predicate const & predicate ) noexcept -> Size {
+        auto Collection < T > :: removeAll (
+                Predicate const & predicate
+        ) noexcept -> Size {
 
             ConstIterator * pIteratorBuffer = Memory :: instance().createArray < ConstIterator > ( this->size() );
             Size iteratorCount = 0U;
@@ -344,8 +236,86 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             return removedCount;
         }
 
+
         template < typename T >
-        auto Collection < T > :: removeOf ( Size count, Collection < ElementType > const & collection ) noexcept -> Size {
+        auto Collection < T > :: remove (
+                Size                count,
+                ElementType const & element
+        ) noexcept -> Size {
+
+            ConstIterator * pIteratorBuffer = Memory :: instance().createArray < ConstIterator > ( count );
+            Size iteratorCount = 0U;
+
+            for ( auto iterator = this->begin(), end = this->end(); iteratorCount < count && iterator != end; ++ iterator ) {
+                if ( meta :: equals ( * iterator, element ) ) {
+                    pIteratorBuffer [ iteratorCount ++ ] = iterator;
+                }
+            }
+
+            auto removedCount = this->remove ( reinterpret_cast < ConstIterator const * > ( & pIteratorBuffer[0] ), iteratorCount );
+            Memory :: instance().destroyArray ( pIteratorBuffer );
+
+            return removedCount;
+        }
+
+
+        template < typename T >
+        auto Collection < T > :: removeFirst (
+                ElementType const & element
+        ) noexcept -> bool {
+
+            for ( auto iterator = this->begin(), end = this->end(); iterator != end; ++ iterator ) {
+                if ( meta :: equals ( * iterator, element ) ) {
+                    return this->remove ( iterator );
+                }
+            }
+
+            return false;
+        }
+
+
+        template < typename T >
+        auto Collection < T > :: removeLast (
+                ElementType const & element
+        ) noexcept -> bool {
+
+            ConstIterator toRemove;
+            for ( auto iterator = this->begin(), end = this->end(); iterator != end; ++ iterator ) {
+                if ( meta :: equals ( * iterator, element ) ) {
+                    toRemove = iterator;
+                }
+            }
+
+            return toRemove.valid() && this->remove ( toRemove );
+        }
+
+
+        template < typename T >
+        auto Collection < T > :: removeAll (
+                ElementType const & element
+        ) noexcept -> Size {
+
+            ConstIterator * pIteratorBuffer = Memory :: instance().createArray < ConstIterator > ( this->size() );
+            Size iteratorCount = 0U;
+
+            for ( auto iterator = this->begin(), end = this->end(); iterator != end; ++ iterator ) {
+                if ( meta :: equals ( * iterator, element ) ) {
+                    pIteratorBuffer [ iteratorCount ++ ] = iterator;
+                }
+            }
+
+            auto removedCount = this->remove ( reinterpret_cast < ConstIterator const * > ( & pIteratorBuffer[0] ), iteratorCount );
+            Memory :: instance().destroyArray ( pIteratorBuffer );
+
+            return removedCount;
+        }
+
+
+        template < typename T >
+        auto Collection < T > :: removeOf (
+                Size                                count,
+                Collection < ElementType >  const & collection
+        ) noexcept -> Size {
 
             if ( this == & collection ) {
                 if ( this->size() <= count ) {
@@ -385,8 +355,12 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             return removedCount;
         }
 
+
         template < typename T >
-        auto Collection < T > :: removeFirstOf ( Collection < T > const & collection ) noexcept -> bool {
+        auto Collection < T > :: removeFirstOf (
+                Collection < ElementType > const & collection
+        ) noexcept -> bool {
+
             if ( this == & collection ) {
                 return this->remove ( this->begin() );
             }
@@ -400,10 +374,13 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             return false;
         }
 
-        template < typename T >
-        auto Collection < T > :: removeLastOf ( Collection < T > const & collection ) noexcept -> bool {
-            ConstIterator toRemove;
 
+        template < typename T >
+        auto Collection < T > :: removeLastOf (
+                Collection < ElementType > const & collection
+        ) noexcept -> bool {
+
+            ConstIterator toRemove;
             if ( this == & collection ) {
                 for ( auto iterator = this->begin(), end = this->end(); iterator != end; ++ iterator ) {
                     toRemove = iterator;
@@ -421,8 +398,12 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             return toRemove.valid() && this->remove ( toRemove );
         }
 
+
         template < typename T >
-        auto Collection < T > :: removeAllOf ( Collection < T > const & collection ) noexcept -> Size {
+        auto Collection < T > :: removeAllOf (
+                Collection < ElementType > const & collection
+        ) noexcept -> Size {
+
             if ( this == & collection ) {
                 auto removedCount = this->size();
                 this->clear();
@@ -444,8 +425,12 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             return removedCount;
         }
 
+
         template < typename T >
-        auto Collection < T > :: removeNotOf ( Size count, Collection < T > const & collection ) noexcept -> Size {
+        auto Collection < T > :: removeNotOf (
+                Size                                count,
+                Collection < ElementType >  const & collection
+        ) noexcept -> Size {
 
             if ( this == & collection ) {
                 return 0ULL;
@@ -470,8 +455,12 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             return removedCount;
         }
 
+
         template < typename T >
-        auto Collection < T > :: removeFirstNotOf ( Collection < T > const & collection ) noexcept -> bool {
+        auto Collection < T > :: removeFirstNotOf (
+                Collection < ElementType > const & collection
+        ) noexcept -> bool {
+
             if ( this == & collection ) {
                 return false;
             }
@@ -485,8 +474,12 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             return false;
         }
 
+
         template < typename T >
-        auto Collection < T > :: removeLastNotOf ( Collection < T > const & collection ) noexcept -> bool {
+        auto Collection < T > :: removeLastNotOf (
+                Collection < ElementType > const & collection
+        ) noexcept -> bool {
+
             if ( this == & collection ) {
                 return false;
             }
@@ -502,8 +495,12 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             return toRemove.valid() && this->remove ( toRemove );
         }
 
+
         template < typename T >
-        auto Collection < T > :: removeAllNotOf ( Collection < T > const & collection ) noexcept -> Size {
+        auto Collection < T > :: removeAllNotOf (
+                Collection < ElementType > const & collection
+        ) noexcept -> Size {
+
             if ( this == & collection ) {
                 return 0ULL;
             }
@@ -523,25 +520,12 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             return removedCount;
         }
 
-        namespace hidden {
-            namespace impl {
-
-                template < typename T >
-                __CDS_OptimalInline static auto initializerListContains ( std :: initializer_list < T > const & list, T const & element ) noexcept -> bool {
-                    for ( auto const & e : list ) {
-                        if ( Type < T > :: compare ( e, element ) ) {
-                            return true;
-                        }
-                    }
-
-                    return false;
-                }
-
-            }
-        }
 
         template < typename T >
-        auto Collection < T > :: removeOf ( Size count, InitializerList const & list ) noexcept -> Size {
+        auto Collection < T > :: removeOf (
+                Size                    count,
+                InitializerList const & list
+        ) noexcept -> Size {
 
             ConstIterator * pIteratorBuffer = Memory :: instance().createArray < ConstIterator > ( count );
             Size iteratorCount = 0U;
@@ -562,8 +546,12 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             return removedCount;
         }
 
+
         template < typename T >
-        auto Collection < T > :: removeFirstOf ( InitializerList const & list ) noexcept -> bool {
+        auto Collection < T > :: removeFirstOf (
+                InitializerList const & list
+        ) noexcept -> bool {
+
             for ( auto iterator = this->begin(), end = this->end(); iterator != end; ++ iterator ) {
                 if ( hidden :: impl :: initializerListContains ( list, * iterator ) ) {
                     return this->remove ( iterator );
@@ -573,10 +561,13 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             return false;
         }
 
-        template < typename T >
-        auto Collection < T > :: removeLastOf ( InitializerList const & list ) noexcept -> bool {
-            ConstIterator toRemove;
 
+        template < typename T >
+        auto Collection < T > :: removeLastOf (
+                InitializerList const & list
+        ) noexcept -> bool {
+
+            ConstIterator toRemove;
             for ( auto iterator = this->begin(), end = this->end(); iterator != end; ++ iterator ) {
                 if ( hidden :: impl :: initializerListContains ( list, * iterator ) ) {
                     toRemove = iterator;
@@ -586,8 +577,11 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             return toRemove.valid() && this->remove ( toRemove );
         }
 
+
         template < typename T >
-        auto Collection < T > :: removeAllOf ( InitializerList const & list ) noexcept -> Size {
+        auto Collection < T > :: removeAllOf (
+                InitializerList const & list
+        ) noexcept -> Size {
 
             ConstIterator * pIteratorBuffer = Memory :: instance().createArray < ConstIterator > ( this->size() );
             Size iteratorCount = 0U;
@@ -604,8 +598,12 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             return removedCount;
         }
 
+
         template < typename T >
-        auto Collection < T > :: removeNotOf ( Size count, InitializerList const & list ) noexcept -> Size {
+        auto Collection < T > :: removeNotOf (
+                Size                    count,
+                InitializerList const & list
+        ) noexcept -> Size {
 
             ConstIterator * pIteratorBuffer = Memory :: instance().createArray < ConstIterator > ( count );
             Size iteratorCount = 0U;
@@ -626,8 +624,11 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             return removedCount;
         }
 
+
         template < typename T >
-        auto Collection < T > :: removeFirstNotOf ( InitializerList const & list ) noexcept -> bool {
+        auto Collection < T > :: removeFirstNotOf (
+                InitializerList const & list
+        ) noexcept -> bool {
 
             for ( auto iterator = this->begin(), end = this->end(); iterator != end; ++ iterator ) {
                 if ( ! hidden :: impl :: initializerListContains ( list, * iterator ) ) {
@@ -638,10 +639,13 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             return false;
         }
 
-        template < typename T >
-        auto Collection < T > :: removeLastNotOf ( InitializerList const & list ) noexcept -> bool {
-            ConstIterator toRemove;
 
+        template < typename T >
+        auto Collection < T > :: removeLastNotOf (
+                InitializerList const & list
+        ) noexcept -> bool {
+
+            ConstIterator toRemove;
             for ( auto iterator = this->begin(), end = this->end(); iterator != end; ++ iterator ) {
                 if ( ! hidden :: impl :: initializerListContains ( list, * iterator ) ) {
                     toRemove = iterator;
@@ -651,8 +655,12 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             return toRemove.valid() && this->remove ( toRemove );
         }
 
+
         template < typename T >
-        auto Collection < T > :: removeAllNotOf ( InitializerList const & list ) noexcept -> Size {
+        auto Collection < T > :: removeAllNotOf (
+                InitializerList const & list
+        ) noexcept -> Size {
+
             ConstIterator * pIteratorBuffer = Memory :: instance().createArray < ConstIterator > ( this->size() );
             Size iteratorCount = 0U;
 
@@ -668,70 +676,132 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             return removedCount;
         }
 
-        template < typename T >
-        auto Collection < T > :: remove ( Size count, ElementType const & element ) noexcept -> Size {
-
-            ConstIterator * pIteratorBuffer = Memory :: instance().createArray < ConstIterator > ( count );
-            Size iteratorCount = 0U;
-
-            for ( auto iterator = this->begin(), end = this->end(); iteratorCount < count && iterator != end; ++ iterator ) {
-                if ( meta :: equals ( * iterator, element ) ) {
-                    pIteratorBuffer [ iteratorCount ++ ] = iterator;
-                }
-            }
-
-            auto removedCount = this->remove ( reinterpret_cast < ConstIterator const * > ( & pIteratorBuffer[0] ), iteratorCount );
-            Memory :: instance().destroyArray ( pIteratorBuffer );
-
-            return removedCount;
-        }
 
         template < typename T >
-        auto Collection < T > :: removeFirst ( ElementType const & element ) noexcept -> bool {
-            for ( auto iterator = this->begin(), end = this->end(); iterator != end; ++ iterator ) {
-                if ( meta :: equals ( * iterator, element ) ) {
-                    return this->remove ( iterator );
-                }
-            }
-
-            return false;
-        }
-
-        template < typename T >
-        auto Collection < T > :: removeLast ( ElementType const & element ) noexcept -> bool {
-            ConstIterator toRemove;
+        template < typename Action >
+        auto Collection < T > :: forEach (
+                Action const & action
+        ) const noexcept ( noexcept ( meta :: valueOf < Action > () ( meta :: referenceOf < ElementType const > () ) ) ) -> void {
 
             for ( auto iterator = this->begin(), end = this->end(); iterator != end; ++ iterator ) {
-                if ( meta :: equals ( * iterator, element ) ) {
-                    toRemove = iterator;
+                action ( * iterator );
+            }
+        }
+
+
+        template < typename T >
+        template < typename Predicate >
+        auto Collection < T > :: some (
+                Size                count,
+                Predicate   const & predicate
+        ) const noexcept ( noexcept ( meta :: valueOf < Predicate > () ( meta :: referenceOf < ElementType const > () ) ) ) -> bool {
+
+            Size trueCount = 0ULL;
+            for ( auto iterator = this->begin(), end = this->end(); iterator != end; ++ iterator ) {
+                if ( predicate ( * iterator ) ) {
+                    ++ trueCount;
+                }
+
+                if ( trueCount > count ) {
+                    return false;
                 }
             }
 
-            return toRemove.valid() && this->remove ( toRemove );
+            return trueCount == count;
         }
 
-        template < typename T >
-        auto Collection < T > :: removeAll ( ElementType const & element ) noexcept -> Size {
 
-            ConstIterator * pIteratorBuffer = Memory :: instance().createArray < ConstIterator > ( this->size() );
-            Size iteratorCount = 0U;
+        template < typename T >
+        template < typename Predicate >
+        auto Collection < T > :: atLeast (
+                Size                count,
+                Predicate   const & predicate
+        ) const noexcept ( noexcept ( meta :: valueOf < Predicate > () ( meta :: referenceOf < ElementType const > () ) ) ) -> bool {
+
+            Size trueCount = 0ULL;
+            for ( auto iterator = this->begin(), end = this->end(); iterator != end; ++ iterator ) {
+                if ( predicate ( * iterator ) ) {
+                    ++ trueCount;
+                }
+
+                if ( trueCount >= count ) {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+
+        template < typename T >
+        template < typename Predicate >
+        auto Collection < T > :: atMost (
+                Size                count,
+                Predicate   const & predicate
+        ) const noexcept ( noexcept ( meta :: valueOf < Predicate > () ( meta :: referenceOf < ElementType const > () ) ) ) -> bool {
+
+            Size trueCount = 0ULL;
+            for ( auto iterator = this->begin(), end = this->end(); iterator != end; ++ iterator ) {
+                if ( predicate ( * iterator ) ) {
+                    ++ trueCount;
+                }
+
+                if ( trueCount > count ) {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
+
+        template < typename T >
+        template < typename Predicate >
+        auto Collection < T > :: moreThan (
+                Size                count,
+                Predicate   const & predicate
+        ) const noexcept ( noexcept ( meta :: valueOf < Predicate > () ( meta :: referenceOf < ElementType const > () ) ) ) -> bool {
+
+            return this->atLeast ( count + 1, predicate );
+        }
+
+
+        template < typename T >
+        template < typename Predicate >
+        auto Collection < T > :: lessThan (
+                Size                count,
+                Predicate   const & predicate
+        ) const noexcept ( noexcept ( meta :: valueOf < Predicate > () ( meta :: referenceOf < ElementType const > () ) ) ) -> bool {
+
+            return this->atMost ( count - 1, predicate );
+        }
+
+
+        template < typename T >
+        template < typename Predicate >
+        auto Collection < T > :: count (
+                Predicate const & predicate
+        ) const noexcept ( noexcept ( meta :: valueOf < Predicate > () ( meta :: referenceOf < ElementType const > () ) ) ) -> Size {
+
+            Size trueCount = 0U;
+            for ( auto iterator = this->begin(), end = this->end(); iterator != end; ++ iterator ) {
+                if ( predicate ( * iterator ) ) {
+                    ++ trueCount;
+                }
+            }
+
+            return trueCount;
+        }
+
+
+        template < typename T >
+        template < typename Predicate >
+        auto Collection < T > :: any (
+                Predicate const & predicate
+        ) const noexcept ( noexcept ( meta :: valueOf < Predicate > () ( meta :: referenceOf < ElementType const > () ) ) ) -> bool {
 
             for ( auto iterator = this->begin(), end = this->end(); iterator != end; ++ iterator ) {
-                if ( meta :: equals ( * iterator, element ) ) {
-                    pIteratorBuffer [ iteratorCount ++ ] = iterator;
-                }
-            }
-
-            auto removedCount = this->remove ( reinterpret_cast < ConstIterator const * > ( & pIteratorBuffer[0] ), iteratorCount );
-            Memory :: instance().destroyArray ( pIteratorBuffer );
-
-            return removedCount;
-        }
-
-        template < typename T >
-        auto Collection < T > :: containsAnyOf ( Collection < ElementType > const & elements ) const noexcept -> bool {
-            for ( auto iterator = elements.begin(), end = elements.end(); iterator != end; ++ iterator ) {
-                if ( this->contains ( * iterator ) ) {
+                if ( predicate ( * iterator ) ) {
                     return true;
                 }
             }
@@ -739,21 +809,15 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             return false;
         }
 
-        template < typename T >
-        auto Collection < T > :: containsAnyNotOf ( Collection < ElementType > const & elements ) const noexcept -> bool {
-            for ( auto iterator = elements.begin(), end = elements.end(); iterator != end; ++ iterator ) {
-                if ( ! this->contains ( * iterator ) ) {
-                    return true;
-                }
-            }
-
-            return false;
-        }
 
         template < typename T >
-        auto Collection < T > :: containsAllOf ( Collection < ElementType > const & elements ) const noexcept -> bool {
-            for ( auto iterator = elements.begin(), end = elements.end(); iterator != end; ++ iterator ) {
-                if ( ! this->contains ( * iterator ) ) {
+        template < typename Predicate >
+        auto Collection < T > :: all (
+                Predicate const & predicate
+        ) const noexcept ( noexcept ( meta :: valueOf < Predicate > () ( meta :: referenceOf < ElementType const > () ) ) ) -> bool {
+
+            for ( auto iterator = this->begin(), end = this->end(); iterator != end; ++ iterator ) {
+                if ( ! predicate ( * iterator ) ) {
                     return false;
                 }
             }
@@ -761,60 +825,6 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             return true;
         }
 
-        template < typename T >
-        auto Collection < T > :: containsAllNotOf ( Collection < ElementType > const & elements ) const noexcept -> bool {
-            for ( auto iterator = elements.begin(), end = elements.end(); iterator != end; ++ iterator ) {
-                if ( this->contains ( * iterator ) ) {
-                    return false;
-                }
-            }
-
-            return true;
-        }
-
-        template < typename T >
-        auto Collection < T > :: containsAnyOf ( InitializerList const & elements ) const noexcept -> bool {
-            for ( auto iterator = elements.begin(), end = elements.end(); iterator != end; ++ iterator ) {
-                if ( this->contains ( * iterator ) ) {
-                    return true;
-                }
-            }
-
-            return false;
-        }
-
-        template < typename T >
-        auto Collection < T > :: containsAnyNotOf ( InitializerList const & elements ) const noexcept -> bool {
-            for ( auto iterator = elements.begin(), end = elements.end(); iterator != end; ++ iterator ) {
-                if ( ! this->contains ( * iterator ) ) {
-                    return true;
-                }
-            }
-
-            return false;
-        }
-
-        template < typename T >
-        auto Collection < T > :: containsAllOf ( InitializerList const & elements ) const noexcept -> bool {
-            for ( auto iterator = elements.begin(), end = elements.end(); iterator != end; ++ iterator ) {
-                if ( ! this->contains ( * iterator ) ) {
-                    return false;
-                }
-            }
-
-            return true;
-        }
-
-        template < typename T >
-        auto Collection < T > :: containsAllNotOf ( InitializerList const & elements ) const noexcept -> bool {
-            for ( auto iterator = elements.begin(), end = elements.end(); iterator != end; ++ iterator ) {
-                if ( this->contains ( * iterator ) ) {
-                    return false;
-                }
-            }
-
-            return true;
-        }
 
         template < typename T >
         template < template < typename ... > class CollectionType >
@@ -836,6 +846,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             return storeIn;
         }
 
+
         template < typename T >
         template < template < typename ... > class CollectionType >
         auto Collection < T > :: find (
@@ -846,6 +857,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             CollectionType < ConstIterator > iterators;
             return this-> find ( maxCount, element, iterators );
         }
+
 
         template < typename T >
         auto Collection < T > :: findFirst (
@@ -861,6 +873,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
             return end;
         }
+
 
         template < typename T >
         auto Collection < T > :: findLast (
@@ -878,6 +891,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             return lastFound;
         }
 
+
         template < typename T >
         template < template < typename ... > class CollectionType >
         auto Collection < T > :: findAll (
@@ -894,6 +908,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             return storeIn;
         }
 
+
         template < typename T >
         template < template < typename ... > class CollectionType >
         auto Collection < T > :: findAll (
@@ -903,6 +918,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             CollectionType < ConstIterator > iterators;
             return this-> findAll ( element, iterators );
         }
+
 
         template < typename T >
         template < template < typename ... > class CollectionType >
@@ -924,6 +940,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             return storeIn;
         }
 
+
         template < typename T >
         template < template < typename ... > class CollectionType >
         auto Collection < T > :: findOf (
@@ -934,6 +951,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             CollectionType < ConstIterator > iterators;
             return this-> findOf ( maxCount, elements, iterators );
         }
+
 
         template < typename T >
         auto Collection < T > :: findFirstOf (
@@ -949,6 +967,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
             return end;
         }
+
 
         template < typename T >
         auto Collection < T > :: findLastOf (
@@ -966,6 +985,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             return lastFound;
         }
 
+
         template < typename T >
         template < template < typename ... > class CollectionType >
         auto Collection < T > :: findAllOf (
@@ -982,6 +1002,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             return storeIn;
         }
 
+
         template < typename T >
         template < template < typename ... > class CollectionType >
         auto Collection < T > :: findAllOf (
@@ -991,6 +1012,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             Collection < ConstIterator > iterators;
             return this->findAllOf ( elements, iterators );
         }
+
 
         template < typename T >
         template < template < typename ... > class CollectionType >
@@ -1012,6 +1034,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             return storeIn;
         }
 
+
         template < typename T >
         template < template < typename ... > class CollectionType >
         auto Collection < T > :: findNotOf (
@@ -1022,6 +1045,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             CollectionType < ConstIterator > iterators;
             return this-> findNotOf ( maxCount, elements, iterators );
         }
+
 
         template < typename T >
         auto Collection < T > :: findFirstNotOf (
@@ -1037,6 +1061,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
             return end;
         }
+
 
         template < typename T >
         auto Collection < T > :: findLastNotOf (
@@ -1054,6 +1079,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             return lastFound;
         }
 
+
         template < typename T >
         template < template < typename ... > class CollectionType >
         auto Collection < T > :: findAllNotOf (
@@ -1070,6 +1096,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             return storeIn;
         }
 
+
         template < typename T >
         template < template < typename ... > class CollectionType >
         auto Collection < T > :: findAllNotOf (
@@ -1079,6 +1106,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             CollectionType < ConstIterator > iterators;
             return this-> findAllNotOf ( elements, iterators );
         }
+
 
         template < typename T >
         template < template < typename ... > class CollectionType >
@@ -1100,6 +1128,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             return storeIn;
         }
 
+
         template < typename T >
         template < template < typename ... > class CollectionType >
         auto Collection < T > :: findOf (
@@ -1110,6 +1139,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             CollectionType < ConstIterator > iterators;
             return this-> findOf ( maxCount, elements, iterators );
         }
+
 
         template < typename T >
         auto Collection < T > :: findFirstOf (
@@ -1125,6 +1155,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
             return end;
         }
+
 
         template < typename T >
         auto Collection < T > :: findLastOf (
@@ -1142,6 +1173,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             return lastFound;
         }
 
+
         template < typename T >
         template < template < typename ... > class CollectionType >
         auto Collection < T > :: findAllOf (
@@ -1158,6 +1190,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             return storeIn;
         }
 
+
         template < typename T >
         template < template < typename ... > class CollectionType >
         auto Collection < T > :: findAllOf (
@@ -1167,6 +1200,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             Collection < ConstIterator > iterators;
             return this->findAllOf ( elements, iterators );
         }
+
 
         template < typename T >
         template < template < typename ... > class CollectionType >
@@ -1188,6 +1222,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             return storeIn;
         }
 
+
         template < typename T >
         template < template < typename ... > class CollectionType >
         auto Collection < T > :: findNotOf (
@@ -1198,6 +1233,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             CollectionType < ConstIterator > iterators;
             return this-> findNotOf ( maxCount, elements, iterators );
         }
+
 
         template < typename T >
         auto Collection < T > :: findFirstNotOf (
@@ -1213,6 +1249,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
             return end;
         }
+
 
         template < typename T >
         auto Collection < T > :: findLastNotOf (
@@ -1230,6 +1267,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             return lastFound;
         }
 
+
         template < typename T >
         template < template < typename ... > class CollectionType >
         auto Collection < T > :: findAllNotOf (
@@ -1246,6 +1284,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             return storeIn;
         }
 
+
         template < typename T >
         template < template < typename ... > class CollectionType >
         auto Collection < T > :: findAllNotOf (
@@ -1255,6 +1294,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             CollectionType < ConstIterator > iterators;
             return this-> findAllNotOf ( elements, iterators );
         }
+
 
         template < typename T >
         template < template < typename ... > class CollectionType, typename Predicate >
@@ -1275,6 +1315,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             return storeIn;
         }
 
+
         template < typename T >
         template < template < typename ... > class CollectionType, typename Predicate >
         auto Collection < T > :: find (
@@ -1285,6 +1326,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             CollectionType < ConstIterator > iterators;
             return this->find ( maxCount, predicate, iterators );
         }
+
 
         template < typename T >
         template < typename Predicate >
@@ -1301,6 +1343,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
             return end;
         }
+
 
         template < typename T >
         template < typename Predicate >
@@ -1319,6 +1362,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             return lastFound;
         }
 
+
         template < typename T >
         template < template < typename ... > class CollectionType, typename Predicate >
         auto Collection < T > :: findAll (
@@ -1335,6 +1379,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             return storeIn;
         }
 
+
         template < typename T >
         template < template < typename ... > class CollectionType, typename Predicate >
         auto Collection < T > :: findAll (
@@ -1345,55 +1390,259 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             return this->findAll ( predicate, iterators );
         }
 
-        namespace hidden { // NOLINT(modernize-concat-nested-namespaces)
-            namespace impl {
-                template < typename T, typename LastType >
-                inline auto collectionAdd ( Collection < T > & collection, LastType && element ) noexcept -> void {
-                    collection.add ( std :: forward < LastType > ( element ) );
-                }
 
-                template < typename T, typename FirstType, typename ... RemainingTypes >
-                inline auto collectionAdd ( Collection < T > & collection, FirstType && firstElement, RemainingTypes && ... remainingElements ) noexcept -> void {
-                    collection.add ( std :: forward < FirstType > ( firstElement ) );
-                    collectionAdd ( collection, std :: forward < RemainingTypes > ( remainingElements ) ... );
+        template < typename T >
+        __CDS_cpplang_ConstexprPureAbstract Collection < T > :: operator bool () const noexcept {
+
+            return ! this->empty();
+        }
+
+
+        template < typename T >
+        auto Collection < T > :: hash () const noexcept -> Index {
+
+            Index finalHashValue __CDS_MaybeUnused = 0;
+            for ( auto iterator = this->begin(), end = this->end(); iterator != end; ++ iterator ) {
+                finalHashValue += cds :: hash ( * iterator );
+            }
+
+            return finalHashValue;
+        }
+
+
+        template < typename T >
+        __CDS_OptimalInline auto Collection < T > :: equals (
+                Object const & object
+        ) const noexcept -> bool {
+
+            auto pObject = dynamic_cast < decltype ( this ) > ( & object );
+            if ( pObject == nullptr ) {
+                return false;
+            }
+
+            if ( this->size() != pObject->size() ) {
+                return false;
+            }
+
+            for (
+                    auto
+                        leftIt  = this->begin(),    leftEnd     = this->end(),
+                        rightIt = pObject->begin();
+                    leftIt != leftEnd;
+                    ++ leftIt, ++ rightIt
+            ) {
+                if ( ! meta :: equals ( * leftIt, * rightIt ) ) {
+                    return false;
                 }
+            }
+
+            return true;
+        }
+
+
+        template < typename T >
+        __CDS_cpplang_ConstexprPureAbstract auto Collection < T > :: empty () const noexcept -> bool {
+
+            return this->size() == 0ULL;
+        }
+
+
+        template < typename T >
+        __CDS_OptimalInline auto Collection < T > :: contains (
+                ElementType const & element
+        ) const noexcept -> bool {
+
+            for ( auto iterator = this->begin(), end = this->end(); iterator != end; ++ iterator ) {
+                if ( meta :: equals ( * iterator, element ) ) {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+
+        template < typename T >
+        auto Collection < T > :: containsAnyOf (
+                Collection < ElementType > const & elements
+        ) const noexcept -> bool {
+
+            for ( auto iterator = elements.begin(), end = elements.end(); iterator != end; ++ iterator ) {
+                if ( this->contains ( * iterator ) ) {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        template < typename T >
+        auto Collection < T > :: containsAnyNotOf (
+                Collection < ElementType > const & elements
+        ) const noexcept -> bool {
+
+            for ( auto iterator = elements.begin(), end = elements.end(); iterator != end; ++ iterator ) {
+                if ( ! this->contains ( * iterator ) ) {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+
+        template < typename T >
+        auto Collection < T > :: containsAllOf (
+                Collection < ElementType > const & elements
+        ) const noexcept -> bool {
+
+            for ( auto iterator = elements.begin(), end = elements.end(); iterator != end; ++ iterator ) {
+                if ( ! this->contains ( * iterator ) ) {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
+        template < typename T >
+        auto Collection < T > :: containsAllNotOf (
+                Collection < ElementType > const & elements
+        ) const noexcept -> bool {
+
+            for ( auto iterator = elements.begin(), end = elements.end(); iterator != end; ++ iterator ) {
+                if ( this->contains ( * iterator ) ) {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
+        template < typename T >
+        auto Collection < T > :: containsAnyOf (
+                InitializerList const & elements
+        ) const noexcept -> bool {
+
+            for ( auto iterator = elements.begin(), end = elements.end(); iterator != end; ++ iterator ) {
+                if ( this->contains ( * iterator ) ) {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+
+        template < typename T >
+        auto Collection < T > :: containsAnyNotOf (
+                InitializerList const & elements
+        ) const noexcept -> bool {
+
+            for ( auto iterator = elements.begin(), end = elements.end(); iterator != end; ++ iterator ) {
+                if ( ! this->contains ( * iterator ) ) {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+
+        template < typename T >
+        auto Collection < T > :: containsAllOf (
+                InitializerList const & elements
+        ) const noexcept -> bool {
+
+            for ( auto iterator = elements.begin(), end = elements.end(); iterator != end; ++ iterator ) {
+                if ( ! this->contains ( * iterator ) ) {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
+
+        template < typename T >
+        auto Collection < T > :: containsAllNotOf (
+                InitializerList const & elements
+        ) const noexcept -> bool {
+
+            for ( auto iterator = elements.begin(), end = elements.end(); iterator != end; ++ iterator ) {
+                if ( this->contains ( * iterator ) ) {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
+
+        template < typename T >
+        template < typename V, meta :: EnableIf < meta :: isCopyConstructible < V > () > >
+        auto Collection < T > :: add (
+                ElementType const & element
+        ) noexcept ( noexcept ( ElementType ( element ) ) ) -> void {
+
+            auto & pElementLocation = this->pNewInsert();
+            if ( pElementLocation == nullptr ) {
+                pElementLocation = Memory :: instance().create < ElementType > ( element );
+                this->pNewInsertPost();
             }
         }
 
+
+        template < typename T >
+        template < typename V, meta :: EnableIf < meta :: isMoveConstructible < V > () > >
+        auto Collection < T > :: add (
+                ElementType && element
+        ) noexcept ( noexcept ( ElementType ( std :: move ( element ) ) ) ) -> void {
+
+            auto & pElementLocation = this->pNewInsert();
+            if ( pElementLocation == nullptr ) {
+                pElementLocation = Memory :: instance().create < ElementType > ( std :: move ( element ) );
+                this->pNewInsertPost();
+            }
+        }
+
+
         template < typename T >
         template < typename ... ArgumentTypes >
-        auto Collection < T > :: addAll ( ArgumentTypes && ... arguments ) noexcept -> void {
+        auto Collection < T > :: addAll (
+                ArgumentTypes && ... arguments
+        ) noexcept -> void {
+
             hidden :: impl :: collectionAdd ( * this, std :: forward < ArgumentTypes > ( arguments ) ... );
         }
 
+
         template < typename T >
         template < typename R, typename V, meta :: EnableIf < meta :: isCopyConstructible < V > () || meta :: isConvertible < R, V > () > >
-        auto Collection < T > :: addAllOf ( Collection < R > const & otherCollection ) noexcept -> void {
+        auto Collection < T > :: addAllOf (
+                Collection < R > const & otherCollection
+        ) noexcept -> void {
+
             for ( auto iterator = otherCollection.begin(), end = otherCollection.end(); iterator != end; ++ iterator ) {
                 this->add ( * iterator );
             }
         }
 
-        namespace meta { // NOLINT(modernize-concat-nested-namespaces)
-            namespace impl {
-                template < typename CollectionType, typename LastArgumentType >
-                inline auto collectionOfPush ( CollectionType & collection, LastArgumentType && lastValue ) noexcept -> void {
-                    collection.add ( std :: forward < LastArgumentType > ( lastValue ) );
-                }
 
-                template < typename CollectionType, typename FirstArgumentType, typename ... RemainingArgumentTypes >
-                inline auto collectionOfPush ( CollectionType & collection, FirstArgumentType && firstValue, RemainingArgumentTypes && ... remainingValues ) noexcept -> void {
-                    collection.add ( std :: forward < FirstArgumentType > ( firstValue ) );
-                    collectionOfPush ( collection, std :: forward < RemainingArgumentTypes > ( remainingValues ) ... );
-                }
-            }
+        template < typename T >
+        __CDS_OptimalInline auto Collection < T > :: pNewInsertPost() noexcept -> void {
+            /* left empty intentionally, derived classes can override this, but it is not mandatory.
+             * Refer to Collection :: add to when this should be overridden */
         }
 
-        template < template < typename ... > class CollectionType, typename ... ArgumentTypes, typename Common >
-        auto collectionOf ( ArgumentTypes && ... values ) noexcept -> CollectionType < Common > {
-            CollectionType < Common > collection;
 
-            meta :: impl :: collectionOfPush ( collection, std :: forward < ArgumentTypes > ( values ) ... );
+        template < template < typename ... > class CollectionType, typename ... ArgumentTypes, typename Common >
+        auto collectionOf (
+                ArgumentTypes && ... values
+        ) noexcept -> CollectionType < Common > {
+
+            CollectionType < Common > collection;
+            hidden :: impl :: collectionOfPush ( collection, std :: forward < ArgumentTypes > ( values ) ... );
             return collection;
         }
 
