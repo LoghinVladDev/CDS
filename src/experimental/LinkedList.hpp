@@ -97,9 +97,15 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             auto removeAt (
                     Index
             ) noexcept -> bool override;
+
         public:
             auto removeAt (
                     Collection < Index > const &
+            ) noexcept -> Size override;
+
+        public:
+            auto removeAt (
+                    std :: initializer_list < Index > const &
             ) noexcept -> Size override;
 
         public:

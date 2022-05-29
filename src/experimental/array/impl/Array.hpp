@@ -318,6 +318,36 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         }
 
         template < typename T >
+        auto Array < T > :: removeAt ( std :: initializer_list < Index > const & indices ) noexcept -> Size {
+            if ( indices.size() == 0 ) {
+                return 0U;
+            }
+
+            auto newBuf = Memory :: instance().createArray < T * > ( this->size() );
+            auto newLen = 0U;
+
+            for ( Index index = 0, len = static_cast < Index > ( this->size() ); index < len; ++ index ) {
+                if ( ! hidden :: impl :: initializerListContains ( indices, index ) ) {
+                    newBuf [ newLen ++ ] = this->_pData [ index ];
+                } else {
+                    Memory :: instance ().destroy ( this->_pData [ index ] );
+                }
+            }
+
+            auto adjustedBuf    = Memory :: instance().createArray < T * > ( newLen );
+            auto removedCount   = this->size() - newLen;
+            (void) std :: memcpy ( adjustedBuf, newBuf, newLen * sizeof ( T * ) );
+
+            Memory :: instance ().destroyArray ( cds :: exchange ( this->_pData, adjustedBuf ) );
+            Memory :: instance ().destroyArray ( newBuf );
+
+            this->_size     = newLen;
+            this->_capacity = newLen;
+
+            return removedCount;
+        }
+
+        template < typename T >
         auto Array < T > :: remove ( Iterator const * pIterators, Size iteratorCount ) noexcept -> Size {
             Array < Index > indices;
 
@@ -428,32 +458,32 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
         template < typename T >
         __CDS_OptimalInline auto Array < T > :: pNewBefore ( ConstIterator const & iterator ) noexcept -> ElementType * & {
-            return this->pNewBefore ( reinterpret_cast < ArrayDelegateIterator const * > ( Collection < T > :: acquireDelegate ( iterator ) )->index() );
+            return this->pNewBefore ( reinterpret_cast < ArrayDelegateConstIterator const * > ( Collection < T > :: acquireDelegate ( iterator ) )->index() );
         }
 
         template < typename T >
         __CDS_OptimalInline auto Array < T > :: pNewAfter ( ConstIterator const & iterator ) noexcept -> ElementType * & {
-            return this->pNewAfter ( reinterpret_cast < ArrayDelegateIterator const * > ( Collection < T > :: acquireDelegate ( iterator ) )->index() );
+            return this->pNewAfter ( reinterpret_cast < ArrayDelegateConstIterator const * > ( Collection < T > :: acquireDelegate ( iterator ) )->index() );
         }
 
         template < typename T >
         __CDS_OptimalInline auto Array < T > :: pNewBefore ( ReverseIterator const & iterator ) noexcept -> ElementType * & {
-            return this->pNewBefore ( reinterpret_cast < ArrayDelegateIterator const * > ( List < T > :: acquireDelegate ( iterator ) )->index() );
-        }
-
-        template < typename T >
-        __CDS_OptimalInline auto Array < T > :: pNewAfter ( ReverseIterator const & iterator ) noexcept -> ElementType * & {
             return this->pNewAfter ( reinterpret_cast < ArrayDelegateIterator const * > ( List < T > :: acquireDelegate ( iterator ) )->index() );
         }
 
         template < typename T >
+        __CDS_OptimalInline auto Array < T > :: pNewAfter ( ReverseIterator const & iterator ) noexcept -> ElementType * & {
+            return this->pNewBefore ( reinterpret_cast < ArrayDelegateIterator const * > ( List < T > :: acquireDelegate ( iterator ) )->index() );
+        }
+
+        template < typename T >
         __CDS_OptimalInline auto Array < T > :: pNewBefore ( ConstReverseIterator const & iterator ) noexcept -> ElementType * & {
-            return this->pNewBefore ( reinterpret_cast < ArrayDelegateIterator const * > ( Collection < T > :: acquireDelegate ( iterator ) )->index() );
+            return this->pNewAfter ( reinterpret_cast < ArrayDelegateConstIterator const * > ( Collection < T > :: acquireDelegate ( iterator ) )->index() );
         }
 
         template < typename T >
         __CDS_OptimalInline auto Array < T > :: pNewAfter ( ConstReverseIterator const & iterator ) noexcept -> ElementType * & {
-            return this->pNewAfter ( reinterpret_cast < ArrayDelegateIterator const * > ( Collection < T > :: acquireDelegate ( iterator ) )->index() );
+            return this->pNewBefore ( reinterpret_cast < ArrayDelegateConstIterator const * > ( Collection < T > :: acquireDelegate ( iterator ) )->index() );
         }
 
         template < typename T >

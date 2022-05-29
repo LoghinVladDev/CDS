@@ -1159,12 +1159,12 @@ auto CollectionTest :: execute() noexcept -> bool {
                 allOk = false;
             }
 
-            if ( ! collection.lessThan ( 3, [](int v){ return v < 5; } ) ) {
+            if ( ! collection.fewerThan ( 3, [](int v){ return v < 5; } ) ) {
                 this->logError ( "lessThan error" );
                 allOk = false;
             }
 
-            if ( collection.lessThan ( 2, [](int v){ return v < 5; } ) ) {
+            if ( collection.fewerThan ( 2, [](int v){ return v < 5; } ) ) {
                 this->logError ( "lessThan error" );
                 allOk = false;
             }

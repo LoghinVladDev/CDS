@@ -90,6 +90,7 @@ public:
         return "None";
     }
 };
+#include <CDS/experimental/Tuple>
 
 int main () {
 
@@ -150,6 +151,8 @@ int main () {
 
 arrc.findLast ( [](int v){return true;} );
     std :: for_each ( arrc.begin(), arrc.end(), [] ( auto const & v ) { std :: cout << v << '\n'; } );
+* arr.begin() = 3;
+//    arr.insertBefore ( arr.begin(), 3 );
 
     std :: cout << arrc.sub < cds :: experimental :: Array > ( 1, 3 );
     std :: cout << arrc.sub < cds :: experimental :: Array < int > > ( 1, 3 ) << '\n';

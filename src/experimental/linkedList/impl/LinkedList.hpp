@@ -230,22 +230,22 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
         template < typename T >
         __CDS_OptimalInline auto LinkedList < T > :: pNewBefore ( ReverseIterator const & iterator ) noexcept -> ElementType * & {
-            return this->pNewBefore ( reinterpret_cast < LinkedListDelegateIterator const * > ( Collection < T > :: acquireDelegate ( iterator ) )->node() );
-        }
-
-        template < typename T >
-        __CDS_OptimalInline auto LinkedList < T > :: pNewAfter ( ReverseIterator const & iterator ) noexcept -> ElementType * & {
             return this->pNewAfter ( reinterpret_cast < LinkedListDelegateIterator const * > ( Collection < T > :: acquireDelegate ( iterator ) )->node() );
         }
 
         template < typename T >
+        __CDS_OptimalInline auto LinkedList < T > :: pNewAfter ( ReverseIterator const & iterator ) noexcept -> ElementType * & {
+            return this->pNewBefore ( reinterpret_cast < LinkedListDelegateIterator const * > ( Collection < T > :: acquireDelegate ( iterator ) )->node() );
+        }
+
+        template < typename T >
         __CDS_OptimalInline auto LinkedList < T > :: pNewBefore ( ConstReverseIterator const & iterator ) noexcept -> ElementType * & {
-            return this->pNewBefore ( reinterpret_cast < LinkedListDelegateConstIterator const * > ( Collection < T > :: acquireDelegate ( iterator ) )->node() );
+            return this->pNewAfter ( reinterpret_cast < LinkedListDelegateConstIterator const * > ( Collection < T > :: acquireDelegate ( iterator ) )->node() );
         }
 
         template < typename T >
         __CDS_OptimalInline auto LinkedList < T > :: pNewAfter ( ConstReverseIterator const & iterator ) noexcept -> ElementType * & {
-            return this->pNewAfter ( reinterpret_cast < LinkedListDelegateConstIterator const * > ( Collection < T > :: acquireDelegate ( iterator ) )->node() );
+            return this->pNewBefore ( reinterpret_cast < LinkedListDelegateConstIterator const * > ( Collection < T > :: acquireDelegate ( iterator ) )->node() );
         }
 
         template < typename T >
@@ -554,6 +554,52 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             Index currentIndex = 0;
             for ( Node * pHead = this->_pFront; pHead != nullptr; pHead = pHead->_pNext, ++ currentIndex ) {
                 if ( indices.contains ( currentIndex ) ) {
+                    pToRemove [ toRemoveLength ++ ] = pHead;
+                } else {
+                    pToKeep [ toKeepLength ++ ] = pHead;
+                }
+            }
+
+            if ( toKeepLength > 0 ) {
+                pToKeep [ 0 ]->_pPrevious = nullptr;
+                pToKeep [ toKeepLength - 1 ]->_pNext = nullptr;
+
+                this->_pFront   = pToKeep [0];
+                this->_pBack    = pToKeep [ toKeepLength - 1 ];
+            } else {
+                this->_pFront   = nullptr;
+                this->_pBack    = nullptr;
+            }
+
+            for ( Index nodeIndex = 0; nodeIndex + 1 < toKeepLength; ++ nodeIndex ) {
+                pToKeep [ nodeIndex ]->_pNext           = pToKeep [ nodeIndex + 1 ];
+                pToKeep [ nodeIndex + 1 ]->_pPrevious   = pToKeep [ nodeIndex ];
+            }
+
+            for ( Index nodeIndex = 0; nodeIndex < toRemoveLength; ++ nodeIndex ) {
+                Memory :: instance().destroy ( pToRemove [ nodeIndex ]->_pData );
+                Memory :: instance().destroy ( pToRemove [ nodeIndex ] );
+            }
+
+            Memory :: instance().destroyArray( pToKeep );
+            Memory :: instance().destroyArray( pToRemove );
+
+            return toRemoveLength;
+        }
+
+        template < typename T >
+        auto LinkedList < T > :: removeAt (
+                std :: initializer_list < Index > const & indices
+        ) noexcept -> Size {
+
+            Node ** pToKeep         = Memory :: instance().createArray < Node * > ( this->size() );
+            Node ** pToRemove       = Memory :: instance().createArray < Node * > ( indices.size() );
+            Size    toKeepLength    = 0ULL;
+            Size    toRemoveLength  = 0ULL;
+
+            Index currentIndex = 0;
+            for ( Node * pHead = this->_pFront; pHead != nullptr; pHead = pHead->_pNext, ++ currentIndex ) {
+                if ( hidden :: impl :: initializerListContains ( indices, currentIndex ) ) {
                     pToRemove [ toRemoveLength ++ ] = pHead;
                 } else {
                     pToKeep [ toKeepLength ++ ] = pHead;

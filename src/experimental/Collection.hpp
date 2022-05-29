@@ -9,23 +9,21 @@
 #include <CDS/experimental/Object>
 #include <CDS/experimental/meta/TypeTraits>
 #include <CDS/Concepts>
-#include <CDS/Function>
 #include <CDS/smartPointers/UniquePointer>
 #include <CDS/smartPointers/ForeignPointer>
 
 namespace cds { // NOLINT(modernize-concat-nested-namespaces)
-
     namespace experimental {
 
         /**
          * @class Abstract Object representing any Iterable Container of given elements of type
-         * @tparam T type of elements contained into Collection
+         * @tparam T is the type of elements contained into Collection
          * @test tested in collection/CollectionTest
          */
         template < typename T >
         class Collection : public Object {
-        public:
 
+        public:
             /**
              * @typedef Alias for T, the type of the contained elements, publicly accessible, useful in sfinae statements - decltype ( Collection ) :: ElementType
              */
@@ -45,7 +43,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
         protected:
             /**
-             * @class The base class for Iterator types, mutable or immutable. It is the wrapper over the AbstractDelegateIterator, acquired from derived classes implementation
+             * @class The base class for immutable Iterator types. It is the wrapper over the AbstractDelegateIterator, acquired from derived classes implementation
              */
             class DelegateConstIterator;
 
@@ -565,7 +563,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             template < typename Action >
             auto forEach (
                     Action const & action
-            ) const noexcept ( noexcept ( meta :: valueOf < Action > () ( meta :: referenceOf < ElementType const > () ) ) ) -> void;
+            ) const noexcept ( noexcept ( action ( meta :: referenceOf < ElementType const > () ) ) ) -> void;
 
         public:
             /**
@@ -578,13 +576,11 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
              * @return bool = true if number of elements validated == count, false otherwise
              * @test tested in base class test
              */
-            template < typename Predicate = Function < bool ( ElementType const & ) > >
+            template < typename Predicate = decltype ( & predicates :: alwaysTrue < ElementType > ) >
             auto some (
                     Size                count,
-                    Predicate   const & predicate = [] ( ElementType const & ) noexcept -> bool {
-                        return true;
-                    }
-            ) const noexcept ( noexcept ( meta :: valueOf < Predicate > () ( meta :: referenceOf < ElementType const > () ) ) ) -> bool;
+                    Predicate   const & predicate = & predicates :: alwaysTrue < ElementType >
+            ) const noexcept ( noexcept ( predicate ( meta :: referenceOf < ElementType const > () ) ) ) -> bool;
 
         public:
             /**
@@ -597,13 +593,11 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
              * @return bool = true if number of elements validated >= count, false otherwise
              * @test tested in base class test
              */
-            template < typename Predicate = Function < bool ( ElementType const & ) > >
+            template < typename Predicate = decltype ( & predicates :: alwaysTrue < ElementType > ) >
             auto atLeast (
                     Size                count,
-                    Predicate   const & predicate = [] ( ElementType const & ) noexcept -> bool {
-                        return true;
-                    }
-            ) const noexcept ( noexcept ( meta :: valueOf < Predicate > () ( meta :: referenceOf < ElementType const > () ) ) ) -> bool;
+                    Predicate   const & predicate = & predicates :: alwaysTrue < ElementType >
+            ) const noexcept ( noexcept ( predicate ( meta :: referenceOf < ElementType const > () ) ) ) -> bool;
 
         public:
             /**
@@ -616,13 +610,11 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
              * @return bool = true if number of elements validated <= count, false otherwise
              * @test tested in base class test
              */
-            template < typename Predicate = Function < bool ( ElementType const & ) > >
+            template < typename Predicate = decltype ( & predicates :: alwaysTrue < ElementType > ) >
             auto atMost (
                     Size                count,
-                    Predicate   const & predicate = [] ( ElementType const & ) noexcept -> bool {
-                        return true;
-                    }
-            ) const noexcept ( noexcept ( meta :: valueOf < Predicate > () ( meta :: referenceOf < ElementType const > () ) ) ) -> bool;
+                    Predicate   const & predicate = & predicates :: alwaysTrue < ElementType >
+            ) const noexcept ( noexcept ( predicate ( meta :: referenceOf < ElementType const > () ) ) ) -> bool;
 
         public:
             /**
@@ -635,13 +627,11 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
              * @return bool = true if number of elements validated > count, false otherwise
              * @test tested in base class test
              */
-            template < typename Predicate = Function < bool ( ElementType const & ) > >
+            template < typename Predicate = decltype ( & predicates :: alwaysTrue < ElementType > ) >
             auto moreThan (
                     Size                count,
-                    Predicate   const & predicate = [] ( ElementType const & ) noexcept -> bool {
-                        return true;
-                    }
-            ) const noexcept ( noexcept ( meta :: valueOf < Predicate > () ( meta :: referenceOf < ElementType const > () ) ) ) -> bool;
+                    Predicate   const & predicate = & predicates :: alwaysTrue < ElementType >
+            ) const noexcept ( noexcept ( predicate ( meta :: referenceOf < ElementType const > () ) ) ) -> bool;
 
         public:
             /**
@@ -649,18 +639,16 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
              * @tparam Predicate the type of the predicate given as a parameter, the type must be callable and compatible with the bool ( Decay < ElementType > ) function signature
              * @param count : Size = maximum number of elements required to match
              * @param predicate : Predicate cref = Constant Reference to callable object, to be called with each element of the collection as a parameter. If no predicate is given, it will default to a predicate that will validate every value
-             *      If no predicate is given, 'lessThan' must yield the same value as 'caller.size() < count'
+             *      If no predicate is given, 'fewerThan' must yield the same value as 'caller.size() < count'
              * @exceptsafe if Predicate is exceptsafe
              * @return bool = true if number of elements validated < count, false otherwise
              * @test tested in base class test
              */
-            template < typename Predicate = Function < bool ( ElementType const & ) > >
-            auto lessThan (
+            template < typename Predicate = decltype ( & predicates :: alwaysTrue < ElementType > ) >
+            auto fewerThan (
                     Size                count,
-                    Predicate   const & predicate = [] ( ElementType const & ) noexcept -> bool {
-                        return true;
-                    }
-            ) const noexcept ( noexcept ( meta :: valueOf < Predicate > () ( meta :: referenceOf < ElementType const > () ) ) ) -> bool;
+                    Predicate   const & predicate = & predicates :: alwaysTrue < ElementType >
+            ) const noexcept ( noexcept ( predicate ( meta :: referenceOf < ElementType const > () ) ) ) -> bool;
 
         public:
             /**
@@ -672,12 +660,10 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
              * @return Size = number of elements that are validated by the given predicate
              * @test tested in base class test
              */
-            template < typename Predicate = Function < bool ( ElementType const & ) > >
+            template < typename Predicate = decltype ( & predicates :: alwaysTrue < ElementType > ) >
             auto count (
-                    Predicate   const & predicate = [] ( ElementType const & ) noexcept -> bool {
-                        return true;
-                    }
-            ) const noexcept ( noexcept ( meta :: valueOf < Predicate > () ( meta :: referenceOf < ElementType const > () ) ) ) -> Size;
+                    Predicate   const & predicate = & predicates :: alwaysTrue < ElementType >
+            ) const noexcept ( noexcept ( predicate ( meta :: referenceOf < ElementType const > () ) ) ) -> Size;
 
         public:
             /**
@@ -689,12 +675,10 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
              * @return bool = true if at least one element is validated by the given predicate, false otherwise
              * @test tested in base class test
              */
-            template < typename Predicate = Function < bool ( ElementType const & ) > >
+            template < typename Predicate = decltype ( & predicates :: alwaysTrue < ElementType > ) >
             auto any (
-                    Predicate   const & predicate = [] ( ElementType const & ) noexcept -> bool {
-                        return true;
-                    }
-            ) const noexcept ( noexcept ( meta :: valueOf < Predicate > () ( meta :: referenceOf < ElementType const > () ) ) ) -> bool;
+                    Predicate   const & predicate = & predicates :: alwaysTrue < ElementType >
+            ) const noexcept ( noexcept ( predicate ( meta :: referenceOf < ElementType const > () ) ) ) -> bool;
 
         public:
             /**
@@ -706,12 +690,25 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
              * @return bool = true if all of the collection's elements are validated by the given predicate, false otherwise
              * @test tested in base class test
              */
-            template < typename Predicate = Function < bool ( ElementType const & ) > >
+            template < typename Predicate = decltype ( & predicates :: alwaysTrue < ElementType > ) >
             auto all (
-                    Predicate   const & predicate = [] ( ElementType const & ) noexcept -> bool {
-                        return true;
-                    }
-            ) const noexcept ( noexcept ( meta :: valueOf < Predicate > () ( meta :: referenceOf < ElementType const > () ) ) ) -> bool;
+                    Predicate   const & predicate = & predicates :: alwaysTrue < ElementType >
+            ) const noexcept ( noexcept ( predicate ( meta :: referenceOf < ElementType const > () ) ) ) -> bool;
+
+        public:
+            /**
+             * @brief Function used to check if none of the collection's elements are validated by a given predicate
+             * @tparam Predicate the type of the predicate given as a parameter, the type must be callable and compatible with the bool ( Decay < ElementType > ) function signature
+             * @param predicate : Predicate cref = Constant Reference to callable object, to be called with each element of the collection as a parameter. If no predicate is given, it will default to a predicate that will validate every value
+             *      If no predicate is given, 'none' must yield the same value as 'caller.empty()'
+             * @exceptsafe if Predicate is exceptsafe
+             * @return bool = true if none of the collection's elements are validated by the given predicate, false otherwise
+             * @test tested in base class test
+             */
+            template < typename Predicate = decltype ( & predicates :: alwaysTrue < ElementType > ) >
+            auto none (
+                    Predicate   const & predicate = & predicates :: alwaysTrue < ElementType >
+            ) const noexcept ( noexcept ( predicate ( meta :: referenceOf < ElementType const > () ) ) ) -> bool;
 
         public:
             /**

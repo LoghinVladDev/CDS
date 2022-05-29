@@ -681,7 +681,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         template < typename Action >
         auto Collection < T > :: forEach (
                 Action const & action
-        ) const noexcept ( noexcept ( meta :: valueOf < Action > () ( meta :: referenceOf < ElementType const > () ) ) ) -> void {
+        ) const noexcept ( noexcept ( action ( meta :: referenceOf < ElementType const > () ) ) ) -> void {
 
             for ( auto iterator = this->begin(), end = this->end(); iterator != end; ++ iterator ) {
                 action ( * iterator );
@@ -694,7 +694,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         auto Collection < T > :: some (
                 Size                count,
                 Predicate   const & predicate
-        ) const noexcept ( noexcept ( meta :: valueOf < Predicate > () ( meta :: referenceOf < ElementType const > () ) ) ) -> bool {
+        ) const noexcept ( noexcept ( predicate ( meta :: referenceOf < ElementType const > () ) ) ) -> bool {
 
             Size trueCount = 0ULL;
             for ( auto iterator = this->begin(), end = this->end(); iterator != end; ++ iterator ) {
@@ -716,7 +716,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         auto Collection < T > :: atLeast (
                 Size                count,
                 Predicate   const & predicate
-        ) const noexcept ( noexcept ( meta :: valueOf < Predicate > () ( meta :: referenceOf < ElementType const > () ) ) ) -> bool {
+        ) const noexcept ( noexcept ( predicate ( meta :: referenceOf < ElementType const > () ) ) ) -> bool {
 
             Size trueCount = 0ULL;
             for ( auto iterator = this->begin(), end = this->end(); iterator != end; ++ iterator ) {
@@ -738,7 +738,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         auto Collection < T > :: atMost (
                 Size                count,
                 Predicate   const & predicate
-        ) const noexcept ( noexcept ( meta :: valueOf < Predicate > () ( meta :: referenceOf < ElementType const > () ) ) ) -> bool {
+        ) const noexcept ( noexcept ( predicate ( meta :: referenceOf < ElementType const > () ) ) ) -> bool {
 
             Size trueCount = 0ULL;
             for ( auto iterator = this->begin(), end = this->end(); iterator != end; ++ iterator ) {
@@ -760,7 +760,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         auto Collection < T > :: moreThan (
                 Size                count,
                 Predicate   const & predicate
-        ) const noexcept ( noexcept ( meta :: valueOf < Predicate > () ( meta :: referenceOf < ElementType const > () ) ) ) -> bool {
+        ) const noexcept ( noexcept ( predicate ( meta :: referenceOf < ElementType const > () ) ) ) -> bool {
 
             return this->atLeast ( count + 1, predicate );
         }
@@ -768,10 +768,10 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
         template < typename T >
         template < typename Predicate >
-        auto Collection < T > :: lessThan (
+        auto Collection < T > :: fewerThan (
                 Size                count,
                 Predicate   const & predicate
-        ) const noexcept ( noexcept ( meta :: valueOf < Predicate > () ( meta :: referenceOf < ElementType const > () ) ) ) -> bool {
+        ) const noexcept ( noexcept ( predicate ( meta :: referenceOf < ElementType const > () ) ) ) -> bool {
 
             return this->atMost ( count - 1, predicate );
         }
@@ -781,7 +781,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         template < typename Predicate >
         auto Collection < T > :: count (
                 Predicate const & predicate
-        ) const noexcept ( noexcept ( meta :: valueOf < Predicate > () ( meta :: referenceOf < ElementType const > () ) ) ) -> Size {
+        ) const noexcept ( noexcept ( predicate ( meta :: referenceOf < ElementType const > () ) ) ) -> Size {
 
             Size trueCount = 0U;
             for ( auto iterator = this->begin(), end = this->end(); iterator != end; ++ iterator ) {
@@ -798,7 +798,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         template < typename Predicate >
         auto Collection < T > :: any (
                 Predicate const & predicate
-        ) const noexcept ( noexcept ( meta :: valueOf < Predicate > () ( meta :: referenceOf < ElementType const > () ) ) ) -> bool {
+        ) const noexcept ( noexcept ( predicate ( meta :: referenceOf < ElementType const > () ) ) ) -> bool {
 
             for ( auto iterator = this->begin(), end = this->end(); iterator != end; ++ iterator ) {
                 if ( predicate ( * iterator ) ) {
@@ -814,10 +814,26 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         template < typename Predicate >
         auto Collection < T > :: all (
                 Predicate const & predicate
-        ) const noexcept ( noexcept ( meta :: valueOf < Predicate > () ( meta :: referenceOf < ElementType const > () ) ) ) -> bool {
+        ) const noexcept ( noexcept ( predicate ( meta :: referenceOf < ElementType const > () ) ) ) -> bool {
 
             for ( auto iterator = this->begin(), end = this->end(); iterator != end; ++ iterator ) {
                 if ( ! predicate ( * iterator ) ) {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
+
+        template < typename T >
+        template < typename Predicate >
+        auto Collection < T > :: none (
+                Predicate const & predicate
+        ) const noexcept ( noexcept ( predicate ( meta :: referenceOf < ElementType const > () ) ) ) -> bool {
+
+            for ( auto iterator = this->begin(), end = this->end(); iterator != end; ++ iterator ) {
+                if ( predicate ( * iterator ) ) {
                     return false;
                 }
             }
