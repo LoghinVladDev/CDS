@@ -258,7 +258,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             auto remove (
                     Size                count,
                     Predicate   const & predicate
-            ) noexcept ( noexcept ( ( meta :: valueOf < Predicate > () ) ( meta :: referenceOf < ElementType > () ) ) ) -> Size;
+            ) noexcept ( noexcept ( predicate ( meta :: referenceOf < ElementType > () ) ) ) -> Size;
 
         public:
             /**
@@ -971,7 +971,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
              */
             template < template < typename ... > class CollectionType >
             auto findAllNotOf (
-                    Collection < T > const & elements
+                    Collection < ElementType > const & elements
             ) const noexcept -> CollectionType < ConstIterator >;
 
         public:
@@ -1167,7 +1167,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                     Size                                        maxCount,
                     Predicate                           const & predicate,
                     CollectionType < ConstIterator >          & storeIn
-            ) const noexcept ( noexcept ( ( meta :: valueOf < Predicate > () ) ( meta :: referenceOf < ElementType const > () ) ) ) -> CollectionType < ConstIterator > &;
+            ) const noexcept ( noexcept ( predicate ( meta :: referenceOf < ElementType const > () ) ) ) -> CollectionType < ConstIterator > &;
 
         public:
             /**
@@ -1184,7 +1184,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             auto find (
                     Size                maxCount,
                     Predicate   const & predicate
-            ) const noexcept ( noexcept ( ( meta :: valueOf < Predicate > () ) ( meta :: referenceOf < ElementType const > () ) ) ) -> CollectionType < ConstIterator >;
+            ) const noexcept ( noexcept ( predicate ( meta :: referenceOf < ElementType const > () ) ) ) -> CollectionType < ConstIterator >;
 
         public:
             /**
@@ -1198,7 +1198,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             template < typename Predicate >
             auto findFirst (
                     Predicate const & predicate
-            ) const noexcept ( noexcept ( ( meta :: valueOf < Predicate > () ) ( meta :: referenceOf < ElementType const > () ) ) ) -> ConstIterator;
+            ) const noexcept ( noexcept ( predicate ( meta :: referenceOf < ElementType const > () ) ) ) -> ConstIterator;
 
         public:
             /**
@@ -1212,7 +1212,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             template < typename Predicate >
             auto findLast (
                     Predicate const & predicate
-            ) const noexcept ( noexcept ( ( meta :: valueOf < Predicate > () ) ( meta :: referenceOf < ElementType const > () ) ) ) -> ConstIterator;
+            ) const noexcept ( noexcept ( predicate ( meta :: referenceOf < ElementType const > () ) ) ) -> ConstIterator;
 
         public:
             /**
@@ -1229,7 +1229,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             auto findAll (
                     Predicate                           const & predicate,
                     CollectionType < ConstIterator >          & storeIn
-            ) const noexcept ( noexcept ( ( meta :: valueOf < Predicate > () ) ( meta :: referenceOf < ElementType const > () ) ) ) -> CollectionType < ConstIterator > &;
+            ) const noexcept ( noexcept ( predicate ( meta :: referenceOf < ElementType const > () ) ) ) -> CollectionType < ConstIterator > &;
 
         public:
             /**
@@ -1244,7 +1244,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             template < template < typename ... > class CollectionType, typename Predicate >
             auto findAll (
                     Predicate const & predicate
-            ) const noexcept ( noexcept ( ( meta :: valueOf < Predicate > () ) ( meta :: referenceOf < ElementType const > () ) ) ) -> CollectionType < ConstIterator >;
+            ) const noexcept ( noexcept ( predicate ( meta :: referenceOf < ElementType const > () ) ) ) -> CollectionType < ConstIterator >;
 
         public:
             /**

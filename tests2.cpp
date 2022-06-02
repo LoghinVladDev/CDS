@@ -30,6 +30,7 @@ int main () {
 
     std :: cout << arr << '\n';
 
+
     arr.sort ();
 
     std :: cout << arr << '\n';

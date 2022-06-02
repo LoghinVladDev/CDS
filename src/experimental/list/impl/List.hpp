@@ -277,84 +277,6 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
 
         template < typename T >
-        template < typename ListType, meta :: EnableIf < meta :: isDerivedFrom < ListType, Collection < Index > > () > >
-        auto List < T > :: indices (
-                ListType            & storeIn,
-                ElementType   const & element
-        ) const noexcept -> ListType & {
-
-            Index index = 0;
-            for ( auto iterator = this->begin(), end = this->end(); iterator != end; ++ iterator, ++ index ) {
-                if ( meta :: equals ( * iterator, element ) ) {
-                    storeIn.add ( index );
-                }
-            }
-
-            return storeIn;
-        }
-
-
-        template < typename T >
-        template < typename ListType, meta :: EnableIf < meta :: isDerivedFrom < ListType, Collection < Index > > () > >
-        __CDS_OptimalInline auto List < T > :: indices (
-                ElementType const & element
-        ) const noexcept -> ListType {
-
-            ListType list;
-            return this->indices ( list, element );
-        }
-
-
-        template < typename T >
-        template < template < typename ... > class ListType, meta :: EnableIf < meta :: isDerivedFrom < ListType < Index >, Collection < Index > > () > >
-        __CDS_OptimalInline auto List < T > :: indices (
-                ElementType const & element
-        ) const noexcept -> ListType < Index > {
-
-            return this->indices < ListType < T > > ( element );
-        }
-
-
-        template < typename T >
-        template < typename Predicate, typename ListType, meta :: EnableIf < meta :: isDerivedFrom < ListType, Collection < Index > > () > >
-        auto List < T > :: indices (
-                ListType            & storeIn,
-                Predicate     const & predicate
-        ) const noexcept ( noexcept ( ( meta :: valueOf < Predicate > () ) ( meta :: referenceOf < ElementType > () ) ) ) -> ListType & {
-
-            Index index = 0;
-            for ( auto iterator = this->begin(), end = this->end(); iterator != end; ++ iterator, ++ index ) {
-                if ( predicate ( * iterator ) ) {
-                    storeIn.add ( index );
-                }
-            }
-
-            return storeIn;
-        }
-
-
-        template < typename T >
-        template < typename Predicate, typename ListType, meta :: EnableIf < meta :: isDerivedFrom < ListType, Collection < Index > > () > >
-        __CDS_OptimalInline auto List < T > :: indices (
-                Predicate const & predicate
-        ) const noexcept -> ListType {
-
-            ListType list;
-            return this->indices ( list, predicate );
-        }
-
-
-        template < typename T >
-        template < typename Predicate, template < typename ... > class ListType, meta :: EnableIf < meta :: isDerivedFrom < ListType < Index >, Collection < Index > > () > >
-        __CDS_OptimalInline auto List < T > :: indices (
-                Predicate const & predicate
-        ) const noexcept -> ListType < Index > {
-
-            return this->indices < ListType < Index > > ( predicate );
-        }
-
-
-        template < typename T >
         __CDS_OptimalInline auto List < T > :: operator [] (
                 Index index
         ) noexcept (false) -> ElementType & {
@@ -1774,13 +1696,811 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             std::stringstream out;
             out << "[ ";
 
-                for ( auto const & element __CDS_MaybeUnused : (*this) ) {
-                Type < T > :: streamPrint(out, element ) << ", ";
+            for ( auto iterator = this->begin(), end = this->end(); iterator != end; ++ iterator ) {
+                Type < T > :: streamPrint ( out, * iterator ) << ", ";
             }
 
             auto asString = out.str();
             return asString.substr(0u, asString.length() - 2u).append(" ]");
         }
+
+
+        template < typename T >
+        template < typename ListType, meta :: EnableIf < meta :: isDerivedFrom < ListType, Collection < Index > > () > >
+        auto List < T > :: indices (
+                Size                  count,
+                ListType            & storeIn,
+                ElementType   const & element
+        ) const noexcept -> ListType & {
+
+            Index index = 0;
+            Size foundCount = 0U;
+            for ( auto iterator = this->begin(), end = this->end(); iterator != end && foundCount < count; ++ iterator, ++ index ) {
+                if ( meta :: equals ( * iterator, element ) ) {
+                    storeIn.add ( index );
+                    ++ foundCount;
+                }
+            }
+
+            return storeIn;
+        }
+
+
+        template < typename T >
+        template < typename ListType, meta :: EnableIf < meta :: isDerivedFrom < ListType, Collection < Index > > () > >
+        __CDS_OptimalInline auto List < T > :: indices (
+                Size                count,
+                ElementType const & element
+        ) const noexcept -> ListType {
+
+            ListType list;
+            return this->indices ( count, list, element );
+        }
+
+
+        template < typename T >
+        template < template < typename ... > class ListType, meta :: EnableIf < meta :: isDerivedFrom < ListType < Index >, Collection < Index > > () > >
+        __CDS_OptimalInline auto List < T > :: indices (
+                Size                count,
+                ElementType const & element
+        ) const noexcept -> ListType < Index > {
+
+            return this->indices < ListType < T > > ( count, element );
+        }
+
+
+        template < typename T >
+        auto List < T > :: firstIndex (
+                ElementType const & element
+        ) const noexcept -> Index {
+
+            Index index = 0;
+            for ( auto iterator = this->begin(), end = this->end(); iterator != end; ++ iterator, ++ index ) {
+                if ( meta :: equals ( * iterator, element ) ) {
+                    return index;
+                }
+            }
+
+            return List :: invalidIndex;
+        }
+
+
+        template < typename T >
+        auto List < T > :: lastIndex (
+                ElementType const & element
+        ) const noexcept -> Index {
+
+            Index index = static_cast < Index > ( this->size() ) - 1;
+            for ( auto iterator = this->rbegin(), end = this->rend(); iterator != end; ++ iterator, -- index ) {
+                if ( meta :: equals ( * iterator, element ) ) {
+                    return index;
+                }
+            }
+
+            return List :: invalidIndex;
+        }
+
+
+        template < typename T >
+        template < typename ListType, meta :: EnableIf < meta :: isDerivedFrom < ListType, Collection < Index > > () > >
+        auto List < T > :: allIndices (
+                ListType            & storeIn,
+                ElementType   const & element
+        ) const noexcept -> ListType & {
+
+            Index index = 0;
+            for ( auto iterator = this->begin(), end = this->end(); iterator != end; ++ iterator, ++ index ) {
+                if ( meta :: equals ( * iterator, element ) ) {
+                    storeIn.add ( index );
+                }
+            }
+
+            return storeIn;
+        }
+
+
+        template < typename T >
+        template < typename ListType, meta :: EnableIf < meta :: isDerivedFrom < ListType, Collection < Index > > () > >
+        __CDS_OptimalInline auto List < T > :: allIndices (
+                ElementType const & element
+        ) const noexcept -> ListType {
+
+            ListType list;
+            return this->allIndices ( list, element );
+        }
+
+
+        template < typename T >
+        template < template < typename ... > class ListType, meta :: EnableIf < meta :: isDerivedFrom < ListType < Index >, Collection < Index > > () > >
+        __CDS_OptimalInline auto List < T > :: allIndices (
+                ElementType const & element
+        ) const noexcept -> ListType < Index > {
+
+            return this->allIndices < ListType < T > > ( element );
+        }
+
+
+        template < typename T >
+        template < typename Predicate, typename ListType, meta :: EnableIf < meta :: isDerivedFrom < ListType, Collection < Index > > () > >
+        auto List < T > :: indices (
+                Size                  count,
+                ListType            & storeIn,
+                Predicate     const & predicate
+        ) const noexcept ( noexcept ( predicate ( meta :: referenceOf < ElementType const > () ) ) ) -> ListType & {
+
+            Index index = 0;
+            Size foundCount = 0U;
+            for ( auto iterator = this->begin(), end = this->end(); iterator != end && foundCount < count; ++ iterator, ++ index ) {
+                if ( predicate ( * iterator ) ) {
+                    storeIn.add ( index );
+                    ++ foundCount;
+                }
+            }
+
+            return storeIn;
+        }
+
+
+        template < typename T >
+        template < typename Predicate, typename ListType, meta :: EnableIf < meta :: isDerivedFrom < ListType, Collection < Index > > () > >
+        __CDS_OptimalInline auto List < T > :: indices (
+                Size                count,
+                Predicate   const & predicate
+        ) const noexcept ( noexcept ( predicate ( meta :: referenceOf < ElementType const > () ) ) ) -> ListType {
+
+            ListType list;
+            return this->indices ( count, list, predicate );
+        }
+
+
+        template < typename T >
+        template < typename Predicate, template < typename ... > class ListType, meta :: EnableIf < meta :: isDerivedFrom < ListType < Index >, Collection < Index > > () > >
+        __CDS_OptimalInline auto List < T > :: indices (
+                Size                count,
+                Predicate   const & predicate
+        ) const noexcept ( noexcept ( predicate ( meta :: referenceOf < ElementType const > () ) ) ) -> ListType < Index > {
+
+            return this->indices < ListType < T > > ( count, predicate );
+        }
+
+
+        template < typename T >
+        template < typename Predicate >
+        auto List < T > :: firstIndex (
+                Predicate const & predicate
+        ) const noexcept ( noexcept ( predicate ( meta :: referenceOf < ElementType const > () ) ) ) -> Index {
+
+            Index index = 0;
+            for ( auto iterator = this->begin(), end = this->end(); iterator != end; ++ iterator, ++ index ) {
+                if ( predicate ( * iterator ) ) {
+                    return index;
+                }
+            }
+
+            return List :: invalidIndex;
+        }
+
+
+        template < typename T >
+        template < typename Predicate >
+        auto List < T > :: lastIndex (
+                Predicate const & predicate
+        ) const noexcept ( noexcept ( predicate ( meta :: referenceOf < ElementType const > () ) ) ) -> Index {
+
+            Index index = static_cast < Index > ( this->size() ) - 1;
+            for ( auto iterator = this->rbegin(), end = this->rend(); iterator != end; ++ iterator, -- index ) {
+                if ( predicate ( * iterator ) ) {
+                    return index;
+                }
+            }
+
+            return List :: invalidIndex;
+        }
+
+
+        template < typename T >
+        template < typename Predicate, typename ListType, meta :: EnableIf < meta :: isDerivedFrom < ListType, Collection < Index > > () > >
+        auto List < T > :: allIndices (
+                ListType            & storeIn,
+                Predicate     const & predicate
+        ) const noexcept ( noexcept ( predicate ( meta :: referenceOf < ElementType const > () ) ) ) -> ListType & {
+
+            Index index = 0;
+            for ( auto iterator = this->begin(), end = this->end(); iterator != end; ++ iterator, ++ index ) {
+                if ( predicate ( * iterator ) ) {
+                    storeIn.add ( index );
+                }
+            }
+
+            return storeIn;
+        }
+
+
+        template < typename T >
+        template < typename Predicate, typename ListType, meta :: EnableIf < meta :: isDerivedFrom < ListType, Collection < Index > > () > >
+        __CDS_OptimalInline auto List < T > :: allIndices (
+                Predicate const & predicate
+        ) const noexcept ( noexcept ( predicate ( meta :: referenceOf < ElementType const > () ) ) ) -> ListType {
+
+            ListType list;
+            return this->allIndices ( list, predicate );
+        }
+
+
+        template < typename T >
+        template < typename Predicate, template < typename ... > class ListType, meta :: EnableIf < meta :: isDerivedFrom < ListType < Index >, Collection < Index > > () > >
+        __CDS_OptimalInline auto List < T > :: allIndices (
+                Predicate const & predicate
+        ) const noexcept ( noexcept ( predicate ( meta :: referenceOf < ElementType const > () ) ) ) -> ListType < Index > {
+
+            return this->allIndices < ListType < Index > > ( predicate );
+        }
+
+
+        template < typename T >
+        template < template < typename ... > class CollectionType >
+        auto List < T > :: find (
+                Size                                        maxCount,
+                ElementType                         const & element,
+                CollectionType < Iterator >               & storeIn
+        ) noexcept -> CollectionType < Iterator > & {
+
+            Size found = 0ULL;
+            for ( auto iterator = this->begin(), end = this->end(); iterator != end && found < maxCount; ++ iterator ) {
+                if ( meta :: equals ( element, * iterator ) ) {
+                    ++ found;
+
+                    storeIn.add ( iterator );
+                }
+            }
+
+            return storeIn;
+        }
+
+
+        template < typename T >
+        template < template < typename ... > class CollectionType >
+        auto List < T > :: find (
+                Size                                        maxCount,
+                ElementType                         const & element
+        ) noexcept -> CollectionType < Iterator > {
+
+            CollectionType < Iterator > iterators;
+            return this-> find ( maxCount, element, iterators );
+        }
+
+
+        template < typename T >
+        auto List < T > :: findFirst (
+                ElementType const & element
+        ) noexcept -> Iterator {
+
+            auto end = this->end();
+            for ( auto iterator = this->begin(); iterator != end; ++ iterator ) {
+                if ( meta :: equals ( element, * iterator ) ) {
+                    return iterator;
+                }
+            }
+
+            return end;
+        }
+
+
+        template < typename T >
+        auto List < T > :: findLast (
+                ElementType const & element
+        ) noexcept -> Iterator {
+
+            auto end = this->end();
+            auto lastFound = end;
+            for ( auto iterator = this->begin(); iterator != end; ++ iterator ) {
+                if ( meta :: equals ( element, * iterator ) ) {
+                    lastFound = iterator;
+                }
+            }
+
+            return lastFound;
+        }
+
+
+        template < typename T >
+        template < template < typename ... > class CollectionType >
+        auto List < T > :: findAll (
+                ElementType                         const & element,
+                CollectionType < Iterator >               & storeIn
+        ) noexcept -> CollectionType < Iterator > & {
+
+            for ( auto iterator = this->begin(), end = this->end(); iterator != end; ++ iterator ) {
+                if ( meta :: equals ( element, * iterator ) ) {
+                    storeIn.add ( iterator );
+                }
+            }
+
+            return storeIn;
+        }
+
+
+        template < typename T >
+        template < template < typename ... > class CollectionType >
+        auto List < T > :: findAll (
+                ElementType                         const & element
+        ) noexcept -> CollectionType < Iterator > {
+
+            CollectionType < Iterator > iterators;
+            return this-> findAll ( element, iterators );
+        }
+
+
+        template < typename T >
+        template < template < typename ... > class CollectionType >
+        auto List < T > :: findOf (
+                Size                                        maxCount,
+                Collection < ElementType >          const & elements,
+                CollectionType < Iterator >               & storeIn
+        ) noexcept -> CollectionType < Iterator > & {
+
+            Size found = 0ULL;
+            for ( auto iterator = this->begin(), end = this->end(); iterator != end && found < maxCount; ++ iterator ) {
+                if ( elements.contains ( * iterator ) ) {
+                    ++ found;
+
+                    storeIn.add ( iterator );
+                }
+            }
+
+            return storeIn;
+        }
+
+
+        template < typename T >
+        template < template < typename ... > class CollectionType >
+        auto List < T > :: findOf (
+                Size                                        maxCount,
+                Collection < ElementType >          const & elements
+        ) noexcept -> CollectionType < Iterator > {
+
+            CollectionType < Iterator > iterators;
+            return this-> findOf ( maxCount, elements, iterators );
+        }
+
+
+        template < typename T >
+        auto List < T > :: findFirstOf (
+                Collection < ElementType > const & elements
+        ) noexcept -> Iterator {
+
+            auto end = this->end();
+            for ( auto iterator = this->begin(); iterator != end; ++ iterator ) {
+                if ( elements.contains ( * iterator ) ) {
+                    return iterator;
+                }
+            }
+
+            return end;
+        }
+
+
+        template < typename T >
+        auto List < T > :: findLastOf (
+                Collection < ElementType > const & elements
+        ) noexcept -> Iterator {
+
+            auto end = this->end();
+            auto lastFound = end;
+            for ( auto iterator = this->begin(); iterator != end; ++ iterator ) {
+                if ( elements.contains ( * iterator ) ) {
+                    lastFound = end;
+                }
+            }
+
+            return lastFound;
+        }
+
+
+        template < typename T >
+        template < template < typename ... > class CollectionType >
+        auto List < T > :: findAllOf (
+                Collection < ElementType >          const & elements,
+                CollectionType < Iterator >               & storeIn
+        ) noexcept -> CollectionType < Iterator > & {
+
+            for ( auto iterator = this->begin(), end = this->end(); iterator != end; ++ iterator ) {
+                if ( elements.contains ( * iterator ) ) {
+                    storeIn.add ( iterator );
+                }
+            }
+
+            return storeIn;
+        }
+
+
+        template < typename T >
+        template < template < typename ... > class CollectionType >
+        auto List < T > :: findAllOf (
+                Collection < ElementType >          const & elements
+        ) noexcept -> CollectionType < Iterator > {
+
+            Collection < Iterator > iterators;
+            return this->findAllOf ( elements, iterators );
+        }
+
+
+        template < typename T >
+        template < template < typename ... > class CollectionType >
+        auto List < T > :: findNotOf (
+                Size                                        maxCount,
+                Collection < ElementType >          const & elements,
+                CollectionType < Iterator >               & storeIn
+        ) noexcept -> CollectionType < Iterator > & {
+
+            Size found = 0ULL;
+            for ( auto iterator = this->begin(), end = this->end(); iterator != end && found < maxCount; ++ iterator ) {
+                if ( ! elements.contains ( * iterator ) ) {
+                    ++ found;
+
+                    storeIn.add ( iterator );
+                }
+            }
+
+            return storeIn;
+        }
+
+
+        template < typename T >
+        template < template < typename ... > class CollectionType >
+        auto List < T > :: findNotOf (
+                Size                                        maxCount,
+                Collection < ElementType >          const & elements
+        ) noexcept -> CollectionType < Iterator > {
+
+            CollectionType < Iterator > iterators;
+            return this-> findNotOf ( maxCount, elements, iterators );
+        }
+
+
+        template < typename T >
+        auto List < T > :: findFirstNotOf (
+                Collection < ElementType > const & elements
+        ) noexcept -> Iterator {
+
+            auto end = this->end();
+            for ( auto iterator = this->begin(); iterator != end; ++ iterator ) {
+                if ( ! elements.contains ( * iterator ) ) {
+                    return iterator;
+                }
+            }
+
+            return end;
+        }
+
+
+        template < typename T >
+        auto List < T > :: findLastNotOf (
+                Collection < ElementType > const & elements
+        ) noexcept -> Iterator {
+
+            auto end = this->end();
+            auto lastFound = end;
+            for ( auto iterator = this->begin(); iterator != end; ++ iterator ) {
+                if ( ! elements.contains ( * iterator ) ) {
+                    lastFound = iterator;
+                }
+            }
+
+            return lastFound;
+        }
+
+
+        template < typename T >
+        template < template < typename ... > class CollectionType >
+        auto List < T > :: findAllNotOf (
+                Collection < ElementType >          const & elements,
+                CollectionType < Iterator >               & storeIn
+        ) noexcept -> CollectionType < Iterator > & {
+
+            for ( auto iterator = this->begin(), end = this->end(); iterator != end; ++ iterator ) {
+                if ( ! elements.contains ( * iterator ) ) {
+                    storeIn.add ( iterator );
+                }
+            }
+
+            return storeIn;
+        }
+
+
+        template < typename T >
+        template < template < typename ... > class CollectionType >
+        auto List < T > :: findAllNotOf (
+                Collection < ElementType >  const & elements
+        ) noexcept -> CollectionType < Iterator > {
+
+            CollectionType < Iterator > iterators;
+            return this-> findAllNotOf ( elements, iterators );
+        }
+
+
+        template < typename T >
+        template < template < typename ... > class CollectionType >
+        auto List < T > :: findOf (
+                Size                                        maxCount,
+                InitializerList                     const & elements,
+                CollectionType < Iterator >               & storeIn
+        ) noexcept -> CollectionType < Iterator > & {
+
+            Size found = 0ULL;
+            for ( auto iterator = this->begin(), end = this->end(); iterator != end && found < maxCount; ++ iterator ) {
+                if ( hidden :: impl :: initializerListContains ( elements, * iterator ) ) {
+                    ++ found;
+
+                    storeIn.add ( iterator );
+                }
+            }
+
+            return storeIn;
+        }
+
+
+        template < typename T >
+        template < template < typename ... > class CollectionType >
+        auto List < T > :: findOf (
+                Size                                        maxCount,
+                InitializerList                     const & elements
+        ) noexcept -> CollectionType < Iterator > {
+
+            CollectionType < Iterator > iterators;
+            return this-> findOf ( maxCount, elements, iterators );
+        }
+
+
+        template < typename T >
+        auto List < T > :: findFirstOf (
+                InitializerList const & elements
+        ) noexcept -> Iterator {
+
+            auto end = this->end();
+            for ( auto iterator = this->begin(); iterator != end; ++ iterator ) {
+                if ( hidden :: impl :: initializerListContains ( elements, * iterator ) ) {
+                    return iterator;
+                }
+            }
+
+            return end;
+        }
+
+
+        template < typename T >
+        auto List < T > :: findLastOf (
+                InitializerList const & elements
+        ) noexcept -> Iterator {
+
+            auto end = this->end();
+            auto lastFound = end;
+            for ( auto iterator = this->begin(); iterator != end; ++ iterator ) {
+                if ( hidden :: impl :: initializerListContains ( elements, * iterator ) ) {
+                    lastFound = iterator;
+                }
+            }
+
+            return lastFound;
+        }
+
+
+        template < typename T >
+        template < template < typename ... > class CollectionType >
+        auto List < T > :: findAllOf (
+                InitializerList                     const & elements,
+                CollectionType < Iterator >               & storeIn
+        ) noexcept -> CollectionType < Iterator > & {
+
+            for ( auto iterator = this->begin(), end = this->end(); iterator != end; ++ iterator ) {
+                if ( elements.contains ( * iterator ) ) {
+                    storeIn.add ( iterator );
+                }
+            }
+
+            return storeIn;
+        }
+
+
+        template < typename T >
+        template < template < typename ... > class CollectionType >
+        auto List < T > :: findAllOf (
+                InitializerList                     const & elements
+        ) noexcept -> CollectionType < Iterator > {
+
+            Collection < Iterator > iterators;
+            return this->findAllOf ( elements, iterators );
+        }
+
+
+        template < typename T >
+        template < template < typename ... > class CollectionType >
+        auto List < T > :: findNotOf (
+                Size                                        maxCount,
+                InitializerList                     const & elements,
+                CollectionType < Iterator >               & storeIn
+        ) noexcept -> CollectionType < Iterator > & {
+
+            Size found = 0ULL;
+            for ( auto iterator = this->begin(), end = this->end(); iterator != end && found < maxCount; ++ iterator ) {
+                if ( ! hidden :: impl :: initializerListContains ( elements, * iterator ) ) {
+                    ++ found;
+
+                    storeIn.add ( iterator );
+                }
+            }
+
+            return storeIn;
+        }
+
+
+        template < typename T >
+        template < template < typename ... > class CollectionType >
+        auto List < T > :: findNotOf (
+                Size                                        maxCount,
+                InitializerList                     const & elements
+        ) noexcept -> CollectionType < Iterator > {
+
+            CollectionType < Iterator > iterators;
+            return this-> findNotOf ( maxCount, elements, iterators );
+        }
+
+
+        template < typename T >
+        auto List < T > :: findFirstNotOf (
+                InitializerList                     const & elements
+        ) noexcept -> Iterator {
+
+            auto end = this->end();
+            for ( auto iterator = this->begin(); iterator != end; ++ iterator ) {
+                if ( ! hidden :: impl :: initializerListContains ( elements,  * iterator ) ) {
+                    return iterator;
+                }
+            }
+
+            return end;
+        }
+
+
+        template < typename T >
+        auto List < T > :: findLastNotOf (
+                InitializerList                     const & elements
+        ) noexcept -> Iterator {
+
+            auto end = this->end();
+            auto lastFound = end;
+            for ( auto iterator = this->begin(); iterator != end; ++ iterator ) {
+                if ( ! hidden :: impl :: initializerListContains ( elements,  * iterator ) ) {
+                    lastFound = iterator;
+                }
+            }
+
+            return lastFound;
+        }
+
+
+        template < typename T >
+        template < template < typename ... > class CollectionType >
+        auto List < T > :: findAllNotOf (
+                InitializerList                     const & elements,
+                CollectionType < Iterator >               & storeIn
+        ) noexcept -> CollectionType < Iterator > & {
+
+            for ( auto iterator = this->begin(), end = this->end(); iterator != end; ++ iterator ) {
+                if ( ! hidden :: impl :: initializerListContains ( elements,  * iterator ) ) {
+                    storeIn.add ( iterator );
+                }
+            }
+
+            return storeIn;
+        }
+
+
+        template < typename T >
+        template < template < typename ... > class CollectionType >
+        auto List < T > :: findAllNotOf (
+                InitializerList                     const & elements
+        ) noexcept -> CollectionType < Iterator > {
+
+            CollectionType < Iterator > iterators;
+            return this-> findAllNotOf ( elements, iterators );
+        }
+
+
+        template < typename T >
+        template < template < typename ... > class CollectionType, typename Predicate >
+        auto List < T > :: find (
+                Size                                        maxCount,
+                Predicate                           const & predicate,
+                CollectionType < Iterator >               & storeIn
+        ) noexcept ( noexcept ( predicate ( meta :: referenceOf < ElementType > () ) ) ) -> CollectionType < Iterator > & {
+
+            Size matchCount = 0U;
+            for ( auto iterator = this->begin(), end = this->end(); iterator != end && matchCount < maxCount; ++ iterator ) {
+                if ( predicate ( * iterator ) ) {
+                    ++ matchCount;
+                    storeIn.add ( iterator );
+                }
+            }
+
+            return storeIn;
+        }
+
+
+        template < typename T >
+        template < template < typename ... > class CollectionType, typename Predicate >
+        auto List < T > :: find (
+                Size                                        maxCount,
+                Predicate                           const & predicate
+        ) noexcept ( noexcept ( predicate ( meta :: referenceOf < ElementType > () ) ) ) -> CollectionType < Iterator > {
+
+            CollectionType < Iterator > iterators;
+            return this->find ( maxCount, predicate, iterators );
+        }
+
+
+        template < typename T >
+        template < typename Predicate >
+        auto List < T > :: findFirst (
+                Predicate const & predicate
+        ) noexcept ( noexcept ( predicate ( meta :: referenceOf < ElementType > () ) ) ) -> Iterator {
+
+            auto end = this->end();
+            for ( auto iterator = this->begin(); iterator != end; ++ iterator ) {
+                if ( predicate ( * iterator ) ) {
+                    return iterator;
+                }
+            }
+
+            return end;
+        }
+
+
+        template < typename T >
+        template < typename Predicate >
+        auto List < T > :: findLast (
+                Predicate const & predicate
+        ) noexcept ( noexcept ( predicate ( meta :: referenceOf < ElementType > () ) ) ) -> Iterator {
+
+            auto end = this->end();
+            auto lastFound = end;
+            for ( auto iterator = this->begin(); iterator != end; ++ iterator ) {
+                if ( predicate ( * iterator ) ) {
+                    lastFound = iterator;
+                }
+            }
+
+            return lastFound;
+        }
+
+
+        template < typename T >
+        template < template < typename ... > class CollectionType, typename Predicate >
+        auto List < T > :: findAll (
+                Predicate                           const & predicate,
+                CollectionType < Iterator >               & storeIn
+        ) noexcept ( noexcept ( predicate ( meta :: referenceOf < ElementType > () ) ) ) -> CollectionType < Iterator > & {
+
+            for ( auto iterator = this->begin(), end = this->end(); iterator != end; ++ iterator ) {
+                if ( predicate ( * iterator ) ) {
+                    storeIn.add ( iterator );
+                }
+            }
+
+            return storeIn;
+        }
+
+
+        template < typename T >
+        template < template < typename ... > class CollectionType, typename Predicate >
+        auto List < T > :: findAll (
+                Predicate                           const & predicate
+        ) noexcept ( noexcept ( predicate ( meta :: referenceOf < ElementType > () ) ) ) -> CollectionType < Iterator > {
+
+            CollectionType < Iterator > iterators;
+            return this->findAll ( predicate, iterators );
+        }
+
 
         template < typename T >
         template < typename Action >
@@ -1814,6 +2534,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             return trueCount == count;
         }
 
+
         template < typename T >
         template < typename Predicate >
         auto List < T > :: atLeast (
@@ -1834,6 +2555,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
             return false;
         }
+
 
         template < typename T >
         template < typename Predicate >
@@ -1856,14 +2578,17 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             return true;
         }
 
+
         template < typename T >
         template < typename Predicate >
         auto List < T > :: moreThan (
                 Size                count,
                 Predicate   const & predicate
         ) noexcept ( noexcept ( predicate ( meta :: referenceOf < ElementType > () ) ) ) -> bool {
+
             return this->atLeast ( count + 1, predicate );
         }
+
 
         template < typename T >
         template < typename Predicate >
@@ -1871,16 +2596,18 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 Size                count,
                 Predicate   const & predicate
         ) noexcept ( noexcept ( predicate ( meta :: referenceOf < ElementType > () ) ) ) -> bool {
+
             return this->atMost ( count - 1, predicate );
         }
+
 
         template < typename T >
         template < typename Predicate >
         auto List < T > :: count (
                 Predicate const & predicate
         ) noexcept ( noexcept ( predicate ( meta :: referenceOf < ElementType > () ) ) ) -> Size {
-            Size trueCount = 0U;
 
+            Size trueCount = 0U;
             for ( auto iterator = this->begin(), end = this->end(); iterator != end; ++ iterator ) {
                 if ( predicate ( * iterator ) ) {
                     ++ trueCount;
@@ -1890,11 +2617,13 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             return trueCount;
         }
 
+
         template < typename T >
         template < typename Predicate >
         auto List < T > :: any (
                 Predicate const & predicate
         ) noexcept ( noexcept ( predicate ( meta :: referenceOf < ElementType > () ) ) ) -> bool {
+
             for ( auto iterator = this->begin(), end = this->end(); iterator != end; ++ iterator ) {
                 if ( predicate ( * iterator ) ) {
                     return true;
@@ -1904,11 +2633,13 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             return false;
         }
 
+
         template < typename T >
         template < typename Predicate >
         auto List < T > :: all (
                 Predicate const & predicate
         ) noexcept ( noexcept ( predicate ( meta :: referenceOf < ElementType > () ) ) ) -> bool {
+
             for ( auto iterator = this->begin(), end = this->end(); iterator != end; ++ iterator ) {
                 if ( ! predicate ( * iterator ) ) {
                     return false;
@@ -1918,11 +2649,13 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             return true;
         }
 
+
         template < typename T >
         template < typename Predicate >
         auto List < T > :: none (
                 Predicate const & predicate
         ) noexcept ( noexcept ( predicate ( meta :: referenceOf < ElementType > () ) ) ) -> bool {
+
             for ( auto iterator = this->begin(), end = this->end(); iterator != end; ++ iterator ) {
                 if ( predicate ( * iterator ) ) {
                     return false;

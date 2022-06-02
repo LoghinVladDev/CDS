@@ -87,6 +87,9 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             /// number of elements present in the list
             Size _size { 0U };
 
+        public:
+            static Index const invalidIndex;
+
         protected:
             /**
              * @brief Function used to safely acquire a Delegate Iterator Owned by a given Iterator
@@ -369,94 +372,6 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                      Index from,
                      Index to
              ) const noexcept -> ListType < ElementType >;
-
-        public:
-            /**
-             * @brief Function used to obtain the indices of a given element and store them into a given list
-             * @tparam ListType is the type of the list to store the indices into
-             * @param storeIn : ListType ref = Reference to the List to store the indices into
-             * @param element : ElementType cref = Constant Reference to the Element to acquire the indices for
-             * @exceptsafe
-             * @return ListType ref = Reference to the list passed in the 'storeIn' parameter
-             */
-            template < typename ListType, meta :: EnableIf < meta :: isDerivedFrom < ListType, Collection < Index > > () > = 0 >
-            auto indices (
-                    ListType            & storeIn,
-                    ElementType   const & element
-            ) const noexcept -> ListType &;
-
-        public:
-            /**
-             * @brief Function used to obtain the indices of a given element
-             * @tparam ListType is the type of the list to store the indices into
-             * @param element : ElementType cref = Constant Reference to the Element to acquire the indices for
-             * @exceptsafe
-             * @return ListType = List containing the requested indices
-             */
-            template < typename ListType, meta :: EnableIf < meta :: isDerivedFrom < ListType, Collection < Index > > () > = 0 >
-            auto indices (
-                    ElementType const & element
-            ) const noexcept -> ListType;
-
-        public:
-            /**
-             * @brief Function used to obtain the indices of a given element
-             * @tparam ListType is the type of the list to store the indices into
-             * @param element : ElementType cref = Constant Reference to the Element to acquire the indices for
-             * @exceptsafe
-             * @return ListType = List containing the requested indices
-             */
-            template < template < typename ... > class ListType, meta :: EnableIf < meta :: isDerivedFrom < ListType < Index >, Collection < Index > > () > = 0 >
-            auto indices (
-                    ElementType const & element
-            ) const noexcept -> ListType < Index >;
-
-        public:
-            /**
-             * @brief Function used to obtain the indices of the elements that validate a given predicate
-             * @tparam Predicate is the type of the predicate object, it must be a valid callable type object, with a signature compatible with
-             *      bool ( Decay < ElementType > )
-             * @tparam ListType is the type of the list to store the indices into
-             * @param storeIn : ListType ref = Reference to the List to store the indices into
-             * @param predicate : Predicate cref = Constant Reference to the predicate callable object
-             * @exceptsafe
-             * @return ListType ref = Reference to the list passed in the 'storeIn' parameter
-             */
-            template < typename Predicate, typename ListType, meta :: EnableIf < meta :: isDerivedFrom < ListType, Collection < Index > > () > = 0 >
-            auto indices (
-                    ListType          & storeIn,
-                    Predicate   const & predicate
-            ) const noexcept ( noexcept ( ( meta :: valueOf < Predicate > () ) ( meta :: referenceOf < ElementType > () ) ) ) -> ListType &;
-
-        public:
-            /**
-             * @brief Function used to obtain the indices of the elements that validate a given predicate
-             * @tparam Predicate is the type of the predicate object, it must be a valid callable type object, with a signature compatible with
-             *      bool ( Decay < ElementType > )
-             * @tparam ListType is the type of the list to store the indices into
-             * @param predicate : Predicate cref = Constant Reference to the predicate callable object
-             * @exceptsafe
-             * @return ListType = List containing the requested indices
-             */
-            template < typename Predicate, typename ListType, meta :: EnableIf < meta :: isDerivedFrom < ListType, Collection < Index > > () > = 0 >
-            auto indices (
-                    Predicate const & predicate
-            ) const noexcept -> ListType;
-
-        public:
-            /**
-             * @brief Function used to obtain the indices of the elements that validate a given predicate
-             * @tparam Predicate is the type of the predicate object, it must be a valid callable type object, with a signature compatible with
-             *      bool ( Decay < ElementType > )
-             * @tparam ListType is the type of the list to store the indices into
-             * @param predicate : Predicate cref = Constant Reference to the predicate callable object
-             * @exceptsafe
-             * @return ListType = List containing the requested indices
-             */
-            template < typename Predicate, template < typename ... > class ListType, meta :: EnableIf < meta :: isDerivedFrom < ListType < Index >, Collection < Index > > () > = 0 >
-            auto indices (
-                    Predicate const & predicate
-            ) const noexcept -> ListType < Index >;
 
         public:
             /**
@@ -1415,210 +1330,777 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         public:
             __CDS_NoDiscard auto toString () const noexcept -> String override;
 
+
         public:
-            auto index (
-                    ElementType const &
+            /**
+             * @brief Function used to obtain a maximum number of indices of a given element and store them into a given list
+             * @tparam ListType is the type of the list to store the indices into
+             * @param count : Size = maximum number of indices to obtain
+             * @param storeIn : ListType ref = Reference to the List to store the indices into
+             * @param element : ElementType cref = Constant Reference to the Element to acquire the indices for
+             * @exceptsafe
+             * @return ListType ref = Reference to the list passed in the 'storeIn' parameter
+             */
+            template < typename ListType, meta :: EnableIf < meta :: isDerivedFrom < ListType, Collection < Index > > () > = 0 >
+            auto indices (
+                    Size                  count,
+                    ListType            & storeIn,
+                    ElementType   const & element
+            ) const noexcept -> ListType &;
+
+        public:
+            /**
+             * @brief Function used to obtain the indices of a given element
+             * @tparam ListType is the type of the list to store the indices into
+             * @param count : Size = maximum number of indices to obtain
+             * @param element : ElementType cref = Constant Reference to the Element to acquire the indices for
+             * @exceptsafe
+             * @return ListType = List containing the requested indices
+             */
+            template < typename ListType, meta :: EnableIf < meta :: isDerivedFrom < ListType, Collection < Index > > () > = 0 >
+            auto indices (
+                    Size                count,
+                    ElementType const & element
+            ) const noexcept -> ListType;
+
+        public:
+            /**
+             * @brief Function used to obtain the indices of a given element
+             * @tparam ListType is the type of the list to store the indices into
+             * @param count : Size = maximum number of indices to obtain
+             * @param element : ElementType cref = Constant Reference to the Element to acquire the indices for
+             * @exceptsafe
+             * @return ListType = List containing the requested indices
+             */
+            template < template < typename ... > class ListType, meta :: EnableIf < meta :: isDerivedFrom < ListType < Index >, Collection < Index > > () > = 0 >
+            auto indices (
+                    Size                count,
+                    ElementType const & element
+            ) const noexcept -> ListType < Index >;
+
+        public:
+            auto firstIndex (
+                    ElementType const & element
             ) const noexcept -> Index;
 
         public:
-            template < template < typename ... > class ListType >
-            auto find (
-                    Size,
-                    ElementType             const &,
-                    ListType < Iterator >         &
-            ) noexcept -> ListType < Iterator > &;
-        public:
-            template < template < typename ... > class ListType >
-            auto find (
-                    Size,
-                    ElementType const &
-            ) noexcept -> ListType < Iterator >;
-        public:
-            auto findFirst (
-                    ElementType const &
-            ) noexcept -> Iterator;
-        public:
-            auto findLast (
-                    ElementType const &
-            ) noexcept -> Iterator;
-        public:
-            template < template < typename ... > class ListType >
-            auto findAll (
-                    ElementType             const &,
-                    ListType < Iterator >         &
-            ) noexcept -> ListType < Iterator > &;
-        public:
-            template < template < typename ... > class ListType >
-            auto findAll (
-                    ElementType const &
-            ) noexcept -> ListType < Iterator >;
+            auto lastIndex (
+                    ElementType const & element
+            ) const noexcept -> Index;
 
         public:
-            template < template < typename ... > class ListType >
-            auto findOf (
-                    Size,
-                    Collection < T >        const &,
-                    ListType < Iterator >         &
-            ) noexcept -> ListType < Iterator > &;
-        public:
-            template < template < typename ... > class ListType >
-            auto findOf (
-                    Size,
-                    Collection < T > const &
-            ) noexcept -> ListType < Iterator >;
-        public:
-            auto findFirstOf (
-                    Collection < T > const &
-            ) noexcept -> Iterator;
-        public:
-            auto findLastOf (
-                    Collection < T > const &
-            ) noexcept -> Iterator;
-        public:
-            template < template < typename ... > class ListType >
-            auto findAllOf (
-                    Collection < T >        const &,
-                    ListType < Iterator >         &
-            ) noexcept -> ListType < Iterator > &;
-        public:
-            template < template < typename ... > class ListType >
-            auto findAllOf (
-                    Collection < T > const &
-            ) noexcept -> ListType < Iterator >;
+            /**
+             * @brief Function used to obtain the indices of a given element and store them into a given list
+             * @tparam ListType is the type of the list to store the indices into
+             * @param storeIn : ListType ref = Reference to the List to store the indices into
+             * @param element : ElementType cref = Constant Reference to the Element to acquire the indices for
+             * @exceptsafe
+             * @return ListType ref = Reference to the list passed in the 'storeIn' parameter
+             */
+            template < typename ListType, meta :: EnableIf < meta :: isDerivedFrom < ListType, Collection < Index > > () > = 0 >
+            auto allIndices (
+                    ListType            & storeIn,
+                    ElementType   const & element
+            ) const noexcept -> ListType &;
 
         public:
-            template < template < typename ... > class ListType >
-            auto findNotOf (
-                    Size,
-                    Collection < T >        const &,
-                    ListType < Iterator >         &
-            ) noexcept -> ListType < Iterator > &;
-        public:
-            template < template < typename ... > class ListType >
-            auto findNotOf (
-                    Size,
-                    Collection < T > const &
-            ) noexcept -> ListType < Iterator >;
-        public:
-            auto findFirstNotOf (
-                    Collection < T > const &
-            ) noexcept -> Iterator;
-        public:
-            auto findLastNotOf (
-                    Collection < T > const &
-            ) noexcept -> Iterator;
-        public:
-            template < template < typename ... > class ListType >
-            auto findAllNotOf (
-                    Collection < T >        const &,
-                    ListType < Iterator >         &
-            ) noexcept -> ListType < Iterator > &;
-        public:
-            template < template < typename ... > class ListType >
-            auto findAllNotOf (
-                    Collection < T > const &
-            ) noexcept -> ListType < Iterator >;
+            /**
+             * @brief Function used to obtain the indices of a given element
+             * @tparam ListType is the type of the list to store the indices into
+             * @param element : ElementType cref = Constant Reference to the Element to acquire the indices for
+             * @exceptsafe
+             * @return ListType = List containing the requested indices
+             */
+            template < typename ListType, meta :: EnableIf < meta :: isDerivedFrom < ListType, Collection < Index > > () > = 0 >
+            auto allIndices (
+                    ElementType const & element
+            ) const noexcept -> ListType;
 
         public:
-            template < template < typename ... > class ListType >
-            auto findOf (
-                    Size,
-                    InitializerList         const &,
-                    ListType < Iterator >         &
-            ) noexcept -> ListType < Iterator > &;
-        public:
-            template < template < typename ... > class ListType >
-            auto findOf (
-                    Size,
-                    InitializerList const &
-            ) noexcept -> ListType < Iterator >;
-        public:
-            auto findFirstOf (
-                    InitializerList const &
-            ) noexcept -> Iterator;
-        public:
-            auto findLastOf (
-                    InitializerList const &
-            ) noexcept -> Iterator;
-        public:
-            template < template < typename ... > class ListType >
-            auto findAllOf (
-                    InitializerList         const &,
-                    ListType < Iterator >         &
-            ) noexcept -> ListType < Iterator > &;
-        public:
-            template < template < typename ... > class ListType >
-            auto findAllOf (
-                    InitializerList const &
-            ) noexcept -> ListType < Iterator >;
+            /**
+             * @brief Function used to obtain the indices of a given element
+             * @tparam ListType is the type of the list to store the indices into
+             * @param element : ElementType cref = Constant Reference to the Element to acquire the indices for
+             * @exceptsafe
+             * @return ListType = List containing the requested indices
+             */
+            template < template < typename ... > class ListType, meta :: EnableIf < meta :: isDerivedFrom < ListType < Index >, Collection < Index > > () > = 0 >
+            auto allIndices (
+                    ElementType const & element
+            ) const noexcept -> ListType < Index >;
 
         public:
-            template < template < typename ... > class ListType >
-            auto findNotOf (
-                    Size,
-                    InitializerList         const &,
-                    ListType < Iterator >         &
-            ) noexcept -> ListType < Iterator > &;
-        public:
-            template < template < typename ... > class ListType >
-            auto findNotOf (
-                    Size,
-                    InitializerList const &
-            ) noexcept -> ListType < Iterator >;
-        public:
-            auto findFirstNotOf (
-                    InitializerList const &
-            ) noexcept -> Iterator;
-        public:
-            auto findLastNotOf (
-                    InitializerList const &
-            ) noexcept -> Iterator;
-        public:
-            template < template < typename ... > class ListType >
-            auto findAllNotOf (
-                    InitializerList         const &,
-                    ListType < Iterator >         &
-            ) noexcept -> ListType < Iterator > &;
-        public:
-            template < template < typename ... > class ListType >
-            auto findAllNotOf (
-                    InitializerList const &
-            ) noexcept -> ListType < Iterator >;
+            /**
+             * @brief Function used to obtain the indices of the elements that validate a given predicate
+             * @tparam Predicate is the type of the predicate object, it must be a valid callable type object, with a signature compatible with
+             *      bool ( Decay < ElementType > )
+             * @tparam ListType is the type of the list to store the indices into
+             * @param count : Size = maximum number of indices to obtain
+             * @param storeIn : ListType ref = Reference to the List to store the indices into
+             * @param predicate : Predicate cref = Constant Reference to the predicate callable object
+             * @exceptsafe
+             * @return ListType ref = Reference to the list passed in the 'storeIn' parameter
+             */
+            template < typename Predicate, typename ListType, meta :: EnableIf < meta :: isDerivedFrom < ListType, Collection < Index > > () > = 0 >
+            auto indices (
+                    Size                count,
+                    ListType          & storeIn,
+                    Predicate   const & predicate
+            ) const noexcept ( noexcept ( predicate ( meta :: referenceOf < ElementType const > () ) ) ) -> ListType &;
 
         public:
-            template < template < typename ... > class ListType, typename Predicate >
-            auto find (
-                    Size,
-                    Predicate               const &,
-                    ListType < Iterator >         &
-            ) noexcept ( noexcept ( meta :: valueOf < Predicate > () ( meta :: referenceOf < ElementType > () ) ) ) -> ListType < Iterator > &;
+            /**
+             * @brief Function used to obtain the indices of the elements that validate a given predicate
+             * @tparam Predicate is the type of the predicate object, it must be a valid callable type object, with a signature compatible with
+             *      bool ( Decay < ElementType > )
+             * @tparam ListType is the type of the list to store the indices into
+             * @param count : Size = maximum number of indices to obtain
+             * @param predicate : Predicate cref = Constant Reference to the predicate callable object
+             * @exceptsafe
+             * @return ListType = List containing the requested indices
+             */
+            template < typename Predicate, typename ListType, meta :: EnableIf < meta :: isDerivedFrom < ListType, Collection < Index > > () > = 0 >
+            auto indices (
+                    Size              count,
+                    Predicate const & predicate
+            ) const noexcept ( noexcept ( predicate ( meta :: referenceOf < ElementType const > () ) ) ) -> ListType;
+
         public:
-            template < template < typename ... > class ListType, typename Predicate >
-            auto find (
-                    Size,
-                    Predicate const &
-            ) noexcept ( noexcept ( meta :: valueOf < Predicate > () ( meta :: referenceOf < ElementType > () ) ) ) -> ListType < Iterator >;
+            /**
+             * @brief Function used to obtain the indices of the elements that validate a given predicate
+             * @tparam Predicate is the type of the predicate object, it must be a valid callable type object, with a signature compatible with
+             *      bool ( Decay < ElementType > )
+             * @tparam ListType is the type of the list to store the indices into
+             * @param count : Size = maximum number of indices to obtain
+             * @param predicate : Predicate cref = Constant Reference to the predicate callable object
+             * @exceptsafe
+             * @return ListType = List containing the requested indices
+             */
+            template < typename Predicate, template < typename ... > class ListType, meta :: EnableIf < meta :: isDerivedFrom < ListType < Index >, Collection < Index > > () > = 0 >
+            auto indices (
+                    Size              count,
+                    Predicate const & predicate
+            ) const noexcept ( noexcept ( predicate ( meta :: referenceOf < ElementType const > () ) ) ) -> ListType < Index >;
+
         public:
             template < typename Predicate >
-            auto findFirst (
-                    Predicate const &
-            ) noexcept ( noexcept ( meta :: valueOf < Predicate > () ( meta :: referenceOf < ElementType > () ) ) ) -> Iterator;
+            auto firstIndex (
+                    Predicate const & predicate
+            ) const noexcept ( noexcept ( predicate ( meta :: referenceOf < ElementType const > () ) ) ) -> Index;
+
         public:
             template < typename Predicate >
+            auto lastIndex (
+                    Predicate const & predicate
+            ) const noexcept ( noexcept ( predicate ( meta :: referenceOf < ElementType const > () ) ) ) -> Index;
+
+        public:
+            /**
+             * @brief Function used to obtain the indices of the elements that validate a given predicate
+             * @tparam Predicate is the type of the predicate object, it must be a valid callable type object, with a signature compatible with
+             *      bool ( Decay < ElementType > )
+             * @tparam ListType is the type of the list to store the indices into
+             * @param storeIn : ListType ref = Reference to the List to store the indices into
+             * @param predicate : Predicate cref = Constant Reference to the predicate callable object
+             * @exceptsafe
+             * @return ListType ref = Reference to the list passed in the 'storeIn' parameter
+             */
+            template < typename Predicate, typename ListType, meta :: EnableIf < meta :: isDerivedFrom < ListType, Collection < Index > > () > = 0 >
+            auto allIndices (
+                    ListType          & storeIn,
+                    Predicate   const & predicate
+            ) const noexcept ( noexcept ( predicate ( meta :: referenceOf < ElementType const > () ) ) ) -> ListType &;
+
+        public:
+            /**
+             * @brief Function used to obtain the indices of the elements that validate a given predicate
+             * @tparam Predicate is the type of the predicate object, it must be a valid callable type object, with a signature compatible with
+             *      bool ( Decay < ElementType > )
+             * @tparam ListType is the type of the list to store the indices into
+             * @param predicate : Predicate cref = Constant Reference to the predicate callable object
+             * @exceptsafe
+             * @return ListType = List containing the requested indices
+             */
+            template < typename Predicate, template < typename ... > class ListType, meta :: EnableIf < meta :: isDerivedFrom < ListType < Index >, Collection < Index > > () > = 0 >
+            auto allIndices (
+                    Predicate const & predicate
+            ) const noexcept ( noexcept ( predicate ( meta :: referenceOf < ElementType const > () ) ) ) -> ListType < Index >;
+
+        public:
+            /**
+             * @brief Function used to obtain the indices of the elements that validate a given predicate
+             * @tparam Predicate is the type of the predicate object, it must be a valid callable type object, with a signature compatible with
+             *      bool ( Decay < ElementType > )
+             * @tparam ListType is the type of the list to store the indices into
+             * @param predicate : Predicate cref = Constant Reference to the predicate callable object
+             * @exceptsafe
+             * @return ListType = List containing the requested indices
+             */
+            template < typename Predicate, typename ListType, meta :: EnableIf < meta :: isDerivedFrom < ListType, Collection < Index > > () > = 0 >
+            auto allIndices (
+                    Predicate const & predicate
+            ) const noexcept ( noexcept ( predicate ( meta :: referenceOf < ElementType const > () ) ) ) -> ListType;
+
+        public:
+            /**
+             * @brief Function used to populate a given Collection of Iterators, 'storeIn', with maximum 'maxCount' elements, pointing to the values matching the comparison to the given 'element' value
+             * @tparam CollectionType the type of the Collection passed in the 'storeIn' parameter. Constraint : CollectionType must be derived from Collection / compatible to Collection derived types, with one template parameter
+             * @param maxCount : Size = maximum number of iterators to add to the storeIn object
+             * @param element : ElementType cref = Constant Reference to the element to compare the collection's elements to
+             * @param storeIn : CollectionType < Collection < ElementType > :: Iterator > ref = Reference to the collection of iterators to add the found iterators to
+             * @exceptsafe
+             * @return Collection < Collection < ElementType > :: Iterator > ref = Reference to the given collection inside the 'storeIn' parameter
+             * @test tested in base class test
+             */
+            template < template < typename ... > class CollectionType >
+            auto find (
+                    Size                                        maxCount,
+                    ElementType                         const & element,
+                    CollectionType < Iterator >               & storeIn
+            ) noexcept -> CollectionType < Iterator > &;
+
+        public:
+            /**
+             * @brief Function used to return a Collection non-abstract derived type of Iterators with maximum 'maxCount' elements, pointing to the values matching the comparison to the given 'element' value
+             * @tparam CollectionType the type of the Collection to be returned. Constraint : CollectionType must be a non-abstract type derived from Collection / compatible to Collection derived types, with one template parameter. non-abstract derived from Collection types are Array, LinkedList, HashSet, ...
+             * @param maxCount : Size = maximum number of iterators to add to the returned object
+             * @param element : ElementType cref = Constant Reference to the element to compare the collection's elements to
+             * @exceptsafe
+             * @return Collection < Collection < ElementType > :: Iterator > = Newly created object containing the requested Iterators
+             * @test tested in base class test
+             */
+            template < template < typename ... > class CollectionType >
+            auto find (
+                    Size                maxCount,
+                    ElementType const & element
+            ) noexcept -> CollectionType < Iterator >;
+
+        public:
+            /**
+             * @brief Function used to return the ConstIterator matching the first value that is equal to the given 'element' value
+             * @param element : ElementType cref = Constant Reference to an element to compare the collection's elements to
+             * @exceptsafe
+             * @return Iterator = iterator matching the first value equal to the given 'element' value, caller.end() if no value matches
+             * @test tested in base class test
+             */
+            auto findFirst (
+                    ElementType const & element
+            ) noexcept -> Iterator;
+
+        public:
+            /**
+             * @brief Function used to return the ConstIterator matching the last value that is equal to the given 'element' value
+             * @param element : ElementType cref = Constant Reference to an element to compare the collection's elements to
+             * @exceptsafe
+             * @return Iterator = iterator matching the last value equal to the given 'element' value, caller.end() if no value matches
+             * @test tested in base class test
+             */
             auto findLast (
-                    Predicate const &
-            ) noexcept ( noexcept ( meta :: valueOf < Predicate > () ( meta :: referenceOf < ElementType > () ) ) ) -> Iterator;
+                    ElementType const & element
+            ) noexcept -> Iterator;
+
         public:
-            template < template < typename ... > class ListType, typename Predicate >
+            /**
+             * @brief Function used to populate a given Collection of Iterators, 'storeIn', with all the iterators pointing to the values matching the comparison to the given 'element' value
+             * @tparam CollectionType the type of the Collection passed in the 'storeIn' parameter. Constraint : CollectionType must be derived from Collection / compatible to Collection derived types, with one template parameter
+             * @param element : ElementType cref = Constant Reference to the element to compare the collection's elements to
+             * @param storeIn : CollectionType < Collection < ElementType > :: Iterator > ref = Reference to the collection of iterators to add the found iterators to
+             * @exceptsafe
+             * @return Collection < Collection < ElementType > :: Iterator > ref = Reference to the given collection inside the 'storeIn' parameter
+             * @test tested in base class test
+             */
+            template < template < typename ... > class CollectionType >
             auto findAll (
-                    Predicate               const &,
-                    ListType < Iterator >         &
-            ) noexcept ( noexcept ( meta :: valueOf < Predicate > () ( meta :: referenceOf < ElementType > () ) ) ) -> ListType < Iterator > &;
+                    ElementType                         const & element,
+                    CollectionType < Iterator >               & storeIn
+            ) noexcept -> CollectionType < Iterator > &;
+
         public:
-            template < template < typename ... > class ListType, typename Predicate >
+            /**
+             * @brief Function used to return a Collection non-abstract derived type of Iterators with all the iterators pointing to the values matching the comparison to the given 'element' value
+             * @tparam CollectionType the type of the Collection to be returned. Constraint : CollectionType must be a non-abstract type derived from Collection / compatible to Collection derived types, with one template parameter. non-abstract derived from Collection types are Array, LinkedList, HashSet, ...
+             * @param element : ElementType cref = Constant Reference to the element to compare the collection's elements to
+             * @exceptsafe
+             * @return Collection < Collection < ElementType > :: Iterator > = Newly created object containing the requested Iterators
+             * @test tested in base class test
+             */
+            template < template < typename ... > class CollectionType >
             auto findAll (
-                    Predicate const &
-            ) noexcept ( noexcept ( meta :: valueOf < Predicate > () ( meta :: referenceOf < ElementType > () ) ) ) -> ListType < Iterator >;
+                    ElementType const & element
+            ) noexcept -> CollectionType < Iterator >;
+
+        public:
+            /**
+             * @brief Function used to populate a given Collection of Iterators, 'storeIn', with maximum 'maxCount' elements, pointing to the values that are also found in the 'elements' collection
+             * @tparam CollectionType the type of the Collection passed in the 'storeIn' parameter. Constraint : CollectionType must be derived from Collection / compatible to Collection derived types, with one template parameter
+             * @param maxCount : Size = maximum number of iterators to add to the storeIn object
+             * @param elements : Collection < ElementType > cref = Constant Reference to the collection to check the contains condition for
+             * @param storeIn : CollectionType < Collection < ElementType > :: Iterator > ref = Reference to the collection of iterators to add the found iterators to
+             * @exceptsafe
+             * @return Collection < Collection < ElementType > :: Iterator > ref = Reference to the given collection inside the 'storeIn' parameter
+             * @test tested in base class test
+             */
+            template < template < typename ... > class CollectionType >
+            auto findOf (
+                    Size                                        maxCount,
+                    Collection < ElementType >          const & elements,
+                    CollectionType < Iterator >          & storeIn
+            ) noexcept -> CollectionType < Iterator > &;
+
+        public:
+            /**
+             * @brief Function used to return a Collection non-abstract derived type of Iterators with maximum 'maxCount' elements, pointing to the values that are also found in the 'elements' collection
+             * @tparam CollectionType the type of the Collection to be returned. Constraint : CollectionType must be a non-abstract type derived from Collection / compatible to Collection derived types, with one template parameter. non-abstract derived from Collection types are Array, LinkedList, HashSet, ...
+             * @param maxCount : Size = maximum number of iterators to add to the returned object
+             * @param elements : Collection < ElementType > cref = Constant Reference to the collection to check the contains condition for
+             * @exceptsafe
+             * @return Collection < Collection < ElementType > :: Iterator > = Newly created object containing the requested Iterators
+             * @test tested in base class test
+             */
+            template < template < typename ... > class CollectionType >
+            auto findOf (
+                    Size                                maxCount,
+                    Collection < ElementType >  const & elements
+            ) noexcept -> CollectionType < Iterator >;
+
+        public:
+            /**
+             * @brief Function used to return the ConstIterator matching the first value that is also found in the 'elements' collection
+             * @param elements : Collection < ElementType > cref = Constant Reference to the collection to check the contains condition for
+             * @exceptsafe
+             * @return Iterator = iterator matching the first value also found in the 'elements' collection, caller.end() if no value matches
+             * @test tested in base class test
+             */
+            auto findFirstOf (
+                    Collection < ElementType > const & elements
+            ) noexcept -> Iterator;
+
+        public:
+            /**
+             * @brief Function used to return the ConstIterator matching the last value that is also found in the 'elements' collection
+             * @param elements : Collection < ElementType > cref = Constant Reference to the collection to check the contains condition for
+             * @exceptsafe
+             * @return Iterator = iterator matching the last value also found in the 'elements' collection, caller.end() if no value matches
+             * @test tested in base class test
+             */
+            auto findLastOf (
+                    Collection < ElementType > const & elements
+            ) noexcept -> Iterator;
+
+        public:
+            /**
+             * @brief Function used to populate a given Collection of Iterators, 'storeIn', with all the iterators pointing to the values that are also found in the 'elements' collection
+             * @tparam CollectionType the type of the Collection passed in the 'storeIn' parameter. Constraint : CollectionType must be derived from Collection / compatible to Collection derived types, with one template parameter
+             * @param elements : Collection < ElementType > cref = Constant Reference to the collection to check the contains condition for
+             * @param storeIn : CollectionType < Collection < ElementType > :: Iterator > ref = Reference to the collection of iterators to add the found iterators to
+             * @exceptsafe
+             * @return Collection < Collection < ElementType > :: Iterator > ref = Reference to the given collection inside the 'storeIn' parameter
+             * @test tested in base class test
+             */
+            template < template < typename ... > class CollectionType >
+            auto findAllOf (
+                    Collection < ElementType >          const & elements,
+                    CollectionType < Iterator >               & storeIn
+            ) noexcept -> CollectionType < Iterator > &;
+
+        public:
+            /**
+             * @brief Function used to return a Collection non-abstract derived type of Iterators with all the iterators pointing to the values that are also found in the 'elements' collection
+             * @tparam CollectionType the type of the Collection to be returned. Constraint : CollectionType must be a non-abstract type derived from Collection / compatible to Collection derived types, with one template parameter. non-abstract derived from Collection types are Array, LinkedList, HashSet, ...
+             * @param elements : Collection < ElementType > cref = Constant Reference to the collection to check the contains condition for
+             * @exceptsafe
+             * @return Collection < Collection < ElementType > :: Iterator > = Newly created object containing the requested Iterators
+             * @test tested in base class test
+             */
+            template < template < typename ... > class CollectionType >
+            auto findAllOf (
+                    Collection < ElementType > const & elements
+            ) noexcept -> CollectionType < Iterator >;
+
+        public:
+            /**
+             * @brief Function used to populate a given Collection of Iterators, 'storeIn', with maximum 'maxCount' elements, pointing to the values that are not found in the 'elements' collection
+             * @tparam CollectionType the type of the Collection passed in the 'storeIn' parameter. Constraint : CollectionType must be derived from Collection / compatible to Collection derived types, with one template parameter
+             * @param maxCount : Size = maximum number of iterators to add to the storeIn object
+             * @param elements : Collection < ElementType > cref = Constant Reference to the collection to check the not contains condition for
+             * @param storeIn : CollectionType < Collection < ElementType > :: Iterator > ref = Reference to the collection of iterators to add the found iterators to
+             * @exceptsafe
+             * @return Collection < Collection < ElementType > :: Iterator > ref = Reference to the given collection inside the 'storeIn' parameter
+             * @test tested in base class test
+             */
+            template < template < typename ... > class CollectionType >
+            auto findNotOf (
+                    Size                                        maxCount,
+                    Collection < ElementType >          const & elements,
+                    CollectionType < Iterator >               & storeIn
+            ) noexcept -> CollectionType < Iterator > &;
+
+        public:
+            /**
+             * @brief Function used to return a Collection non-abstract derived type of Iterators with maximum 'maxCount' elements, pointing to the values that are not found in the 'elements' collection
+             * @tparam CollectionType the type of the Collection to be returned. Constraint : CollectionType must be a non-abstract type derived from Collection / compatible to Collection derived types, with one template parameter. non-abstract derived from Collection types are Array, LinkedList, HashSet, ...
+             * @param maxCount : Size = maximum number of iterators to add to the returned object
+             * @param elements : Collection < ElementType > cref = Constant Reference to the collection to check the not contains condition for
+             * @exceptsafe
+             * @return Collection < Collection < ElementType > :: Iterator > = Newly created object containing the requested Iterators
+             * @test tested in base class test
+             */
+            template < template < typename ... > class CollectionType >
+            auto findNotOf (
+                    Size                                maxCount,
+                    Collection < ElementType >  const & elements
+            ) noexcept -> CollectionType < Iterator >;
+
+        public:
+            /**
+             * @brief Function used to return the ConstIterator matching the first value that is not found in the 'elements' collection
+             * @param elements : Collection < ElementType > cref = Constant Reference to the collection to check the not contains condition for
+             * @exceptsafe
+             * @return Iterator = iterator matching the first value not found in the 'elements' collection, caller.end() if no value matches
+             * @test tested in base class test
+             */
+            auto findFirstNotOf (
+                    Collection < ElementType > const & elements
+            ) noexcept -> Iterator;
+
+        public:
+            /**
+             * @brief Function used to return the ConstIterator matching the last value that is not found in the 'elements' collection
+             * @param elements : Collection < ElementType > cref = Constant Reference to the collection to check the not contains condition for
+             * @exceptsafe
+             * @return Iterator = iterator matching the last value not found in the 'elements' collection, caller.end() if no value matches
+             * @test tested in base class test
+             */
+            auto findLastNotOf (
+                    Collection < ElementType > const & elements
+            ) noexcept -> Iterator;
+
+        public:
+            /**
+             * @brief Function used to populate a given Collection of Iterators, 'storeIn', with all the iterators pointing to the values that are not found in the 'elements' collection
+             * @tparam CollectionType the type of the Collection passed in the 'storeIn' parameter. Constraint : CollectionType must be derived from Collection / compatible to Collection derived types, with one template parameter
+             * @param elements : Collection < ElementType > cref = Constant Reference to the collection to check the not contains condition for
+             * @param storeIn : CollectionType < Collection < ElementType > :: Iterator > ref = Reference to the collection of iterators to add the found iterators to
+             * @exceptsafe
+             * @return Collection < Collection < ElementType > :: Iterator > ref = Reference to the given collection inside the 'storeIn' parameter
+             * @test tested in base class test
+             */
+            template < template < typename ... > class CollectionType >
+            auto findAllNotOf (
+                    Collection < ElementType >          const & elements,
+                    CollectionType < Iterator >               & storeIn
+            ) noexcept -> CollectionType < Iterator > &;
+
+        public:
+            /**
+             * @brief Function used to return a Collection non-abstract derived type of Iterators with all the iterators pointing to the values that are not found in the 'elements' collection
+             * @tparam CollectionType the type of the Collection to be returned. Constraint : CollectionType must be a non-abstract type derived from Collection / compatible to Collection derived types, with one template parameter. non-abstract derived from Collection types are Array, LinkedList, HashSet, ...
+             * @param elements : Collection < ElementType > cref = Constant Reference to the collection to check the not contains condition for
+             * @exceptsafe
+             * @return Collection < Collection < ElementType > :: Iterator > = Newly created object containing the requested Iterators
+             * @test tested in base class test
+             */
+            template < template < typename ... > class CollectionType >
+            auto findAllNotOf (
+                    Collection < ElementType > const & elements
+            ) noexcept -> CollectionType < Iterator >;
+
+        public:
+            /**
+             * @brief Function used to populate a given Collection of Iterators, 'storeIn', with maximum 'maxCount' elements, pointing to the values that are also found in the 'elements' InitializerList
+             * @tparam CollectionType the type of the Collection passed in the 'storeIn' parameter. Constraint : CollectionType must be derived from Collection / compatible to Collection derived types, with one template parameter
+             * @param maxCount : Size = maximum number of iterators to add to the storeIn object
+             * @param elements : Collection < ElementType > :: InitializerList cref = Constant Reference to the initializer list to check the contains condition for
+             * @param storeIn : CollectionType < Collection < ElementType > :: Iterator > ref = Reference to the collection of iterators to add the found iterators to
+             * @exceptsafe
+             * @return Collection < Collection < ElementType > :: Iterator > ref = Reference to the given collection inside the 'storeIn' parameter
+             * @test tested in base class test
+             */
+            template < template < typename ... > class CollectionType >
+            auto findOf (
+                    Size                                        maxCount,
+                    InitializerList                     const & elements,
+                    CollectionType < Iterator >               & storeIn
+            ) noexcept -> CollectionType < Iterator > &;
+
+        public:
+            /**
+             * @brief Function used to return a Collection non-abstract derived type of Iterators with maximum 'maxCount' elements, pointing to the values that are also found in the 'elements' InitializerList
+             * @tparam CollectionType the type of the Collection to be returned. Constraint : CollectionType must be a non-abstract type derived from Collection / compatible to Collection derived types, with one template parameter. non-abstract derived from Collection types are Array, LinkedList, HashSet, ...
+             * @param maxCount : Size = maximum number of iterators to add to the returned object
+             * @param elements : Collection < ElementType > :: InitializerList cref = Constant Reference to the initializer list to check the contains condition for
+             * @exceptsafe
+             * @return Collection < Collection < ElementType > :: Iterator > = Newly created object containing the requested Iterators
+             * @test tested in base class test
+             */
+            template < template < typename ... > class CollectionType >
+            auto findOf (
+                    Size                    maxCount,
+                    InitializerList const & elements
+            ) noexcept -> CollectionType < Iterator >;
+
+        public:
+            /**
+             * @brief Function used to return the ConstIterator matching the first value that is also found in the 'elements' InitializerList
+             * @param elements : Collection < ElementType > :: InitializerList cref = Constant Reference to the initializer list to check the contains condition for
+             * @exceptsafe
+             * @return Iterator = iterator matching the first value also found in the 'elements' list, caller.end() if no value matches
+             * @test tested in base class test
+             */
+            auto findFirstOf (
+                    InitializerList const & elements
+            ) noexcept -> Iterator;
+
+        public:
+            /**
+             * @brief Function used to return the ConstIterator matching the last value that is also found in the 'elements' InitializerList
+             * @param elements : Collection < ElementType > :: InitializerList cref = Constant Reference to the initializer list to check the contains condition for
+             * @exceptsafe
+             * @return Iterator = iterator matching the last value also found in the 'elements' list, caller.end() if no value matches
+             * @test tested in base class test
+             */
+            auto findLastOf (
+                    InitializerList const & elements
+            ) noexcept -> Iterator;
+
+        public:
+            /**
+             * @brief Function used to populate a given Collection of Iterators, 'storeIn', with all the iterators pointing to the values that are also found in the 'elements' InitializerList
+             * @tparam CollectionType the type of the Collection passed in the 'storeIn' parameter. Constraint : CollectionType must be derived from Collection / compatible to Collection derived types, with one template parameter
+             * @param elements : Collection < ElementType > :: InitializerList cref = Constant Reference to the initializer list to check the contains condition for
+             * @param storeIn : CollectionType < Collection < ElementType > :: Iterator > ref = Reference to the collection of iterators to add the found iterators to
+             * @exceptsafe
+             * @return Collection < Collection < ElementType > :: Iterator > ref = Reference to the given collection inside the 'storeIn' parameter
+             * @test tested in base class test
+             */
+            template < template < typename ... > class CollectionType >
+            auto findAllOf (
+                    InitializerList                     const & elements,
+                    CollectionType < Iterator >               & storeIn
+            ) noexcept -> CollectionType < Iterator > &;
+
+        public:
+            /**
+             * @brief Function used to return a Collection non-abstract derived type of Iterators with all the iterators pointing to the values that are also found in the 'elements' InitializerList
+             * @tparam CollectionType the type of the Collection to be returned. Constraint : CollectionType must be a non-abstract type derived from Collection / compatible to Collection derived types, with one template parameter. non-abstract derived from Collection types are Array, LinkedList, HashSet, ...
+             * @param elements : Collection < ElementType > :: InitializerList cref = Constant Reference to the initializer list to check the contains condition for
+             * @exceptsafe
+             * @return Collection < Collection < ElementType > :: Iterator > = Newly created object containing the requested Iterators
+             * @test tested in base class test
+             */
+            template < template < typename ... > class CollectionType >
+            auto findAllOf (
+                    InitializerList const & elements
+            ) noexcept -> CollectionType < Iterator >;
+
+        public:
+            /**
+             * @brief Function used to populate a given Collection of Iterators, 'storeIn', with maximum 'maxCount' elements, pointing to the values that are not found in the 'elements' InitializerList
+             * @tparam CollectionType the type of the Collection passed in the 'storeIn' parameter. Constraint : CollectionType must be derived from Collection / compatible to Collection derived types, with one template parameter
+             * @param maxCount : Size = maximum number of iterators to add to the storeIn object
+             * @param elements : Collection < ElementType > :: InitializerList cref = Constant Reference to the initializer list to check the contains condition for
+             * @param storeIn : CollectionType < Collection < ElementType > :: Iterator > ref = Reference to the collection of iterators to add the found iterators to
+             * @exceptsafe
+             * @return Collection < Collection < ElementType > :: Iterator > ref = Reference to the given collection inside the 'storeIn' parameter
+             * @test tested in base class test
+             */
+            template < template < typename ... > class CollectionType >
+            auto findNotOf (
+                    Size                                        maxCount,
+                    InitializerList                     const & elements,
+                    CollectionType < Iterator >               & storeIn
+            ) noexcept -> CollectionType < Iterator > &;
+
+        public:
+            /**
+             * @brief Function used to return a Collection non-abstract derived type of Iterators with maximum 'maxCount' elements, pointing to the values that are not found in the 'elements' InitializerList
+             * @tparam CollectionType the type of the Collection to be returned. Constraint : CollectionType must be a non-abstract type derived from Collection / compatible to Collection derived types, with one template parameter. non-abstract derived from Collection types are Array, LinkedList, HashSet, ...
+             * @param maxCount : Size = maximum number of iterators to add to the returned object
+             * @param elements : Collection < ElementType > :: InitializerList cref = Constant Reference to the initializer list to check the contains condition for
+             * @exceptsafe
+             * @return Collection < Collection < ElementType > :: Iterator > = Newly created object containing the requested Iterators
+             * @test tested in base class test
+             */
+            template < template < typename ... > class CollectionType >
+            auto findNotOf (
+                    Size                    maxCount,
+                    InitializerList const & elements
+            ) noexcept -> CollectionType < Iterator >;
+
+        public:
+            /**
+             * @brief Function used to return the ConstIterator matching the first value that is not found in the 'elements' InitializerList
+             * @param elements : Collection < ElementType > :: InitializerList cref = Constant Reference to the initializer list to check the contains condition for
+             * @exceptsafe
+             * @return Iterator = iterator matching the first value not found in the 'elements' list, caller.end() if no value matches
+             * @test tested in base class test
+             */
+            auto findFirstNotOf (
+                    InitializerList const & elements
+            ) noexcept -> Iterator;
+
+        public:
+            /**
+             * @brief Function used to return the ConstIterator matching the last value that is not found in the 'elements' InitializerList
+             * @param elements : Collection < ElementType > :: InitializerList cref = Constant Reference to the initializer list to check the contains condition for
+             * @exceptsafe
+             * @return Iterator = iterator matching the last value not found in the 'elements' list, caller.end() if no value matches
+             * @test tested in base class test
+             */
+            auto findLastNotOf (
+                    InitializerList const & elements
+            ) noexcept -> Iterator;
+
+        public:
+            /**
+             * @brief Function used to populate a given Collection of Iterators, 'storeIn', with all the iterators pointing to the values that are not found in the 'elements' InitializerList
+             * @tparam CollectionType the type of the Collection passed in the 'storeIn' parameter. Constraint : CollectionType must be derived from Collection / compatible to Collection derived types, with one template parameter
+             * @param elements : Collection < ElementType > :: InitializerList cref = Constant Reference to the initializer list to check the contains condition for
+             * @param storeIn : CollectionType < Collection < ElementType > :: Iterator > ref = Reference to the collection of iterators to add the found iterators to
+             * @exceptsafe
+             * @return Collection < Collection < ElementType > :: Iterator > ref = Reference to the given collection inside the 'storeIn' parameter
+             * @test tested in base class test
+             */
+            template < template < typename ... > class CollectionType >
+            auto findAllNotOf (
+                    InitializerList                     const & elements,
+                    CollectionType < Iterator >               & storeIn
+            ) noexcept -> CollectionType < Iterator > &;
+
+        public:
+            /**
+             * @brief Function used to return a Collection non-abstract derived type of Iterators with all the iterators pointing to the values that are not found in the 'elements' InitializerList
+             * @tparam CollectionType the type of the Collection to be returned. Constraint : CollectionType must be a non-abstract type derived from Collection / compatible to Collection derived types, with one template parameter. non-abstract derived from Collection types are Array, LinkedList, HashSet, ...
+             * @param elements : Collection < ElementType > :: InitializerList cref = Constant Reference to the initializer list to check the contains condition for
+             * @exceptsafe
+             * @return Collection < Collection < ElementType > :: Iterator > = Newly created object containing the requested Iterators
+             * @test tested in base class test
+             */
+            template < template < typename ... > class CollectionType >
+            auto findAllNotOf (
+                    InitializerList const & elements
+            ) noexcept -> CollectionType < Iterator >;
+
+        public:
+            /**
+             * @brief Function used to populate a given Collection derived type of Iterators, with a maximum number of 'maxCount' iterators, pointing to the first or all the elements in the collection that are validated by a given predicate
+             * @tparam CollectionType the type of the Collection passed in the 'storeIn' parameter. Constraint : CollectionType must be derived from Collection / compatible to Collection derived types, with one template parameter
+             * @tparam Predicate the type of the predicate given as a parameter, the type must be callable and compatible with the bool ( Decay < ElementType > ) function signature
+             * @param maxCount : Size = maximum number of iterators to add to the storeIn object
+             * @param predicate : Predicate cref = Constant Reference to the callable predicate object to pass each element to
+             * @param storeIn : CollectionType < Collection < ElementType > :: Iterator > ref = Reference to the collection of iterators to add the found iterators to
+             * @exceptsafe if Predicate is exceptsafe
+             * @return Collection < Collection < ElementType > :: Iterator > ref = Reference to the given collection inside the 'storeIn' parameter
+             * @test tested in base class test
+             */
+            template < template < typename ... > class CollectionType, typename Predicate >
+            auto find (
+                    Size                                        maxCount,
+                    Predicate                           const & predicate,
+                    CollectionType < Iterator >               & storeIn
+            ) noexcept ( noexcept ( predicate ( meta :: referenceOf < ElementType > () ) ) ) -> CollectionType < Iterator > &;
+
+        public:
+            /**
+             * @brief Function used to return a Collection non-abstract derived type of Iterators, with a maximum number of 'maxCount' iterators, pointing to the first or all the elements in the collection that are validated by a given predicate
+             * @tparam CollectionType the type of the Collection to be returned. Constraint : CollectionType must be a non-abstract type derived from Collection / compatible to Collection derived types, with one template parameter. non-abstract derived from Collection types are Array, LinkedList, HashSet, ...
+             * @tparam Predicate the type of the predicate given as a parameter, the type must be callable and compatible with the bool ( Decay < ElementType > ) function signature
+             * @param maxCount : Size = maximum number of iterators to add to the returned object
+             * @param predicate : Predicate cref = Constant Reference to the callable predicate object to pass each element to
+             * @exceptsafe if Predicate is exceptsafe
+             * @return Collection < Collection < ElementType > :: Iterator > = Newly created object containing the requested Iterators
+             * @test tested in base class test
+             */
+            template < template < typename ... > class CollectionType, typename Predicate >
+            auto find (
+                    Size                maxCount,
+                    Predicate   const & predicate
+            ) noexcept ( noexcept ( predicate ( meta :: referenceOf < ElementType > () ) ) ) -> CollectionType < Iterator >;
+
+        public:
+            /**
+             * @brief Function used to return an iterator to the first element validated by the given predicate
+             * @tparam Predicate the type of the predicate given as a parameter, the type must be callable and compatible with the bool ( Decay < ElementType > ) function signature
+             * @param predicate : Predicate cref = Constant Reference to the callable predicate object to pass each element to
+             * @exceptsafe if Predicate is exceptsafe
+             * @return Collection < ElementType > :: Iterator = Iterator to the first element validated by the given predicate, caller.end() if none exist
+             * @test tested in base class test
+             */
+            template < typename Predicate >
+            auto findFirst (
+                    Predicate const & predicate
+            ) noexcept ( noexcept ( predicate ( meta :: referenceOf < ElementType > () ) ) ) -> Iterator;
+
+        public:
+            /**
+             * @brief Function used to return an iterator to the last element validated by the given predicate
+             * @tparam Predicate the type of the predicate given as a parameter, the type must be callable and compatible with the bool ( Decay < ElementType > ) function signature
+             * @param predicate : Predicate cref = Constant Reference to the callable predicate object to pass each element to
+             * @exceptsafe if Predicate is exceptsafe
+             * @return Collection < ElementType > :: Iterator = Iterator to the last element validated by the given predicate, caller.end() if none exist
+             * @test tested in base class test
+             */
+            template < typename Predicate >
+            auto findLast (
+                    Predicate const & predicate
+            ) noexcept ( noexcept ( predicate ( meta :: referenceOf < ElementType > () ) ) ) -> Iterator;
+
+        public:
+            /**
+             * @brief Function used to populate a given Collection derived type of Iterators with all iterators pointing to the first or all the elements in the collection that are validated by a given predicate
+             * @tparam CollectionType the type of the Collection passed in the 'storeIn' parameter. Constraint : CollectionType must be derived from Collection / compatible to Collection derived types, with one template parameter
+             * @tparam Predicate the type of the predicate given as a parameter, the type must be callable and compatible with the bool ( Decay < ElementType > ) function signature
+             * @param predicate : Predicate cref = Constant Reference to the callable predicate object to pass each element to
+             * @param storeIn : CollectionType < Collection < ElementType > :: Iterator > ref = Reference to the collection of iterators to add the found iterators to
+             * @exceptsafe if Predicate is exceptsafe
+             * @return Collection < Collection < ElementType > :: Iterator > ref = Reference to the given collection inside the 'storeIn' parameter
+             * @test tested in base class test
+             */
+            template < template < typename ... > class CollectionType, typename Predicate >
+            auto findAll (
+                    Predicate                           const & predicate,
+                    CollectionType < Iterator >               & storeIn
+            ) noexcept ( noexcept ( predicate ( meta :: referenceOf < ElementType > () ) ) ) -> CollectionType < Iterator > &;
+
+        public:
+            /**
+             * @brief Function used to return a Collection non-abstract derived type of Iterators with all the iterators pointing to the first or all the elements in the collection that are validated by a given predicate
+             * @tparam CollectionType the type of the Collection to be returned. Constraint : CollectionType must be a non-abstract type derived from Collection / compatible to Collection derived types, with one template parameter. non-abstract derived from Collection types are Array, LinkedList, HashSet, ...
+             * @tparam Predicate the type of the predicate given as a parameter, the type must be callable and compatible with the bool ( Decay < ElementType > ) function signature
+             * @param predicate : Predicate cref = Constant Reference to the callable predicate object to pass each element to
+             * @exceptsafe if Predicate is exceptsafe
+             * @return Collection < Collection < ElementType > :: Iterator > = Newly created object containing the requested Iterators
+             * @test tested in base class test
+             */
+            template < template < typename ... > class CollectionType, typename Predicate >
+            auto findAll (
+                    Predicate const & predicate
+            ) noexcept ( noexcept ( predicate ( meta :: referenceOf < ElementType > () ) ) ) -> CollectionType < Iterator >;
+
+        public:
+            using Collection < T > :: find;
+        public:
+            using Collection < T > :: findFirst;
+        public:
+            using Collection < T > :: findLast;
+        public:
+            using Collection < T > :: findAll;
+        public:
+            using Collection < T > :: findOf;
+        public:
+            using Collection < T > :: findFirstOf;
+        public:
+            using Collection < T > :: findLastOf;
+        public:
+            using Collection < T > :: findAllOf;
+        public:
+            using Collection < T > :: findNotOf;
+        public:
+            using Collection < T > :: findFirstNotOf;
+        public:
+            using Collection < T > :: findLastNotOf;
+        public:
+            using Collection < T > :: findAllNotOf;
 
         public:
             template < typename Action >
@@ -1705,30 +2187,6 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             using Collection < T > :: all;
         public:
             using Collection < T > :: none;
-        public:
-            using Collection < T > :: find;
-        public:
-            using Collection < T > :: findFirst;
-        public:
-            using Collection < T > :: findLast;
-        public:
-            using Collection < T > :: findAll;
-        public:
-            using Collection < T > :: findOf;
-        public:
-            using Collection < T > :: findFirstOf;
-        public:
-            using Collection < T > :: findLastOf;
-        public:
-            using Collection < T > :: findAllOf;
-        public:
-            using Collection < T > :: findNotOf;
-        public:
-            using Collection < T > :: findFirstNotOf;
-        public:
-            using Collection < T > :: findLastNotOf;
-        public:
-            using Collection < T > :: findAllNotOf;
         };
 
     }

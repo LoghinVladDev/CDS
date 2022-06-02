@@ -163,7 +163,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         auto Collection < T > :: remove (
                 Size                count,
                 Predicate   const & predicate
-        ) noexcept ( noexcept ( ( meta :: valueOf < Predicate > () ) ( meta :: referenceOf < ElementType > () ) ) ) -> Size {
+        ) noexcept ( noexcept ( predicate ( meta :: referenceOf < ElementType > () ) ) ) -> Size {
 
             ConstIterator * pIteratorBuffer = Memory :: instance().createArray < ConstIterator > ( count );
             Size iteratorCount = 0U;
@@ -1318,7 +1318,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 Size                                        maxCount,
                 Predicate                           const & predicate,
                 CollectionType < ConstIterator >          & storeIn
-        ) const noexcept ( noexcept ( ( meta :: valueOf < Predicate > () ) ( meta :: referenceOf < ElementType const > () ) ) ) -> CollectionType < ConstIterator > & {
+        ) const noexcept ( noexcept ( predicate ( meta :: referenceOf < ElementType const > () ) ) ) -> CollectionType < ConstIterator > & {
 
             Size matchCount = 0U;
             for ( auto iterator = this->begin(), end = this->end(); iterator != end && matchCount < maxCount; ++ iterator ) {
@@ -1337,7 +1337,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         auto Collection < T > :: find (
                 Size                                        maxCount,
                 Predicate                           const & predicate
-        ) const noexcept ( noexcept ( ( meta :: valueOf < Predicate > () ) ( meta :: referenceOf < ElementType const > () ) ) ) -> CollectionType < ConstIterator > {
+        ) const noexcept ( noexcept ( predicate ( meta :: referenceOf < ElementType const > () ) ) ) -> CollectionType < ConstIterator > {
 
             CollectionType < ConstIterator > iterators;
             return this->find ( maxCount, predicate, iterators );
@@ -1348,7 +1348,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         template < typename Predicate >
         auto Collection < T > :: findFirst (
                 Predicate const & predicate
-        ) const noexcept ( noexcept ( ( meta :: valueOf < Predicate > () ) ( meta :: referenceOf < ElementType const > () ) ) ) -> ConstIterator {
+        ) const noexcept ( noexcept ( predicate ( meta :: referenceOf < ElementType const > () ) ) ) -> ConstIterator {
 
             auto end = this->end();
             for ( auto iterator = this->begin(); iterator != end; ++ iterator ) {
@@ -1365,7 +1365,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         template < typename Predicate >
         auto Collection < T > :: findLast (
                 Predicate const & predicate
-        ) const noexcept ( noexcept ( ( meta :: valueOf < Predicate > () ) ( meta :: referenceOf < ElementType const > () ) ) ) -> ConstIterator {
+        ) const noexcept ( noexcept ( predicate ( meta :: referenceOf < ElementType const > () ) ) ) -> ConstIterator {
 
             auto end = this->end();
             auto lastFound = end;
@@ -1384,7 +1384,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         auto Collection < T > :: findAll (
                 Predicate                           const & predicate,
                 CollectionType < ConstIterator >          & storeIn
-        ) const noexcept ( noexcept ( ( meta :: valueOf < Predicate > () ) ( meta :: referenceOf < ElementType const > () ) ) ) -> CollectionType < ConstIterator > & {
+        ) const noexcept ( noexcept ( predicate ( meta :: referenceOf < ElementType const > () ) ) ) -> CollectionType < ConstIterator > & {
 
             for ( auto iterator = this->begin(), end = this->end(); iterator != end; ++ iterator ) {
                 if ( predicate ( * iterator ) ) {
@@ -1400,7 +1400,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         template < template < typename ... > class CollectionType, typename Predicate >
         auto Collection < T > :: findAll (
                 Predicate                           const & predicate
-        ) const noexcept ( noexcept ( ( meta :: valueOf < Predicate > () ) ( meta :: referenceOf < ElementType const > () ) ) ) -> CollectionType < ConstIterator > {
+        ) const noexcept ( noexcept ( predicate ( meta :: referenceOf < ElementType const > () ) ) ) -> CollectionType < ConstIterator > {
 
             CollectionType < ConstIterator > iterators;
             return this->findAll ( predicate, iterators );
