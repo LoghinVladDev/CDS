@@ -49,6 +49,12 @@ int main () {
 
     std :: cout << test << '\n';
 
+//    experimental :: Array a2 ( arr.begin(), arr.end() );
+//    experimental :: Array a3 ( 2, 5 );
+
+//    std :: cout << experimental :: meta :: isIterator < decltype ( a2.begin() ) > () << '\n';
+    std :: cout << experimental :: meta :: isIterator < int > () << '\n';
+
 //    experimental :: Set < int > set;
 
     return 0;

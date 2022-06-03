@@ -306,7 +306,10 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         };
 
         template < typename ... ArgumentTypes >
-        inline auto arrayOf ( ArgumentTypes && ... values ) noexcept -> Array < meta :: Common < ArgumentTypes ... > > {
+        inline auto arrayOf (
+                ArgumentTypes && ... values
+        ) noexcept -> Array < meta :: Common < ArgumentTypes ... > > {
+
             return collectionOf < Array > ( std :: forward < ArgumentTypes > ( values ) ... );
         }
 
@@ -319,5 +322,8 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 #include "array/impl/Array.hpp"
 #include "array/impl/ArrayDelegateIterator.hpp"
 #include "array/impl/ArrayDelegateConstIterator.hpp"
+#include "array/CTAD.hpp"
+
+#include "shared/array/impl/ArraySequence.hpp"
 
 #endif // __CDS_EX_ARRAY_HPP__

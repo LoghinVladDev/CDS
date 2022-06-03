@@ -137,6 +137,10 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                  */
                 template < typename LeftType, typename RightType, typename = Void <> > struct EqualToPossible : FalseType {};
 
+                template < typename Type, typename = Void <> > struct IndirectionPossible : FalseType {};
+
+                template < typename Type, typename = Void <> > struct PrefixIncrementPossible : FalseType {};
+
                 /**
                  * @brief Meta-type implementation used to check if two given types can be compared by not equal to operator (!=)
                  * @tparam LeftType is the first type
@@ -161,6 +165,12 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
                 template < typename LeftType, typename RightType >
                 struct NotEqualToPossible < LeftType, RightType, Void < decltype ( valueOf < LeftType > () != valueOf < RightType > () ) > > : TrueType {};
+
+                template < typename Type >
+                struct IndirectionPossible < Type, Void < decltype ( * valueOf < Type > () ) > > : TrueType {};
+
+                template < typename Type >
+                struct PrefixIncrementPossible < Type, Void < decltype ( ++ valueOf < Type > () ) > > : TrueType {};
 
                 /**
                  * @brief Meta-type implementation used to check if a given type is printable ( std :: ostream << type )
@@ -1090,6 +1100,24 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             template < typename T >
             constexpr auto isVolatile () noexcept -> bool {
                 return impl :: IsVolatile < T > :: value;
+            }
+
+            template < typename T >
+            constexpr auto indirectionPossible () noexcept -> bool {
+                return impl :: IndirectionPossible < T > :: value;
+            }
+
+            template < typename T >
+            constexpr auto prefixIncrementPossible () noexcept -> bool {
+                return impl :: PrefixIncrementPossible < T > :: value;
+            }
+
+            template < typename T >
+            constexpr auto isIterator () noexcept -> bool {
+                return
+                        indirectionPossible < T > () &&
+                        prefixIncrementPossible < T > () &&
+                        notEqualToPossible < T, T > ();
             }
 
             /**

@@ -4381,4 +4381,6 @@ namespace cds {
 
 __CDS_RegisterParseTypeTemplateT(Sequence)
 
+#include "../experimental/shared/array/impl/ArraySequence.hpp"
+
 #endif //CDS_SEQUENCE_HPP
