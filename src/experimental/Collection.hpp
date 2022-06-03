@@ -12,6 +12,8 @@
 #include <CDS/smartPointers/UniquePointer>
 #include <CDS/smartPointers/ForeignPointer>
 
+#include "collection/DelegateIteratorRequestType.hpp"
+
 namespace cds { // NOLINT(modernize-concat-nested-namespaces)
     namespace experimental {
 
@@ -53,12 +55,6 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
              */
             class AbstractIterator;
 
-        protected:
-            /**
-             * @enum The types of delegate iterator requests the Collection Base Object can make to its Derivative Objects when acquiring an Iterator Delegate Implementation
-             */
-            enum class DelegateIteratorRequestType;
-
         public:
             /**
              * @class The Iterator type used for Forward Iteration over immutable values
@@ -70,6 +66,13 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
              * @class The Iterator type used for Backward Iteration over immutable values
              */
             class ConstReverseIterator;
+
+        protected:
+            /**
+             * @enum The types of delegate iterator requests the Collection Base Object can make to its Derived Objects when acquiring an Iterator Delegate Implementation
+             * @test tested in nester class test
+             */
+            using DelegateIteratorRequestType = hidden :: impl :: DelegateIteratorRequestType;
 
         protected:
             /**
