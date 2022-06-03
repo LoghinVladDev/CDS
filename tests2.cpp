@@ -7,6 +7,7 @@
 #include <CDS/experimental/Tuple>
 #include <CDS/Pointer>
 #include <CDS/experimental/Array>
+#include <CDS/experimental/Set>
 using namespace cds;
 
 
@@ -37,6 +38,18 @@ int main () {
 
     arr.count ( Function ( [] (String v) { return true; } ) );
 
+    class Test {
+
+    };
+
+    experimental :: Array < Test > test;
+    test.pushBack(Test());
+    test.pushBack(Test());
+    test.pushBack(Test());
+
+    std :: cout << test << '\n';
+
+//    experimental :: Set < int > set;
 
     return 0;
 }

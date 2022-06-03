@@ -87,13 +87,13 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             ) noexcept;
 
         public:
-            __CDS_implicit Array ( // NOLINT(google-explicit-constructor)
+            __CDS_Implicit Array ( // NOLINT(google-explicit-constructor)
                     InitializerList const &
             ) noexcept;
 
         public:
             template < typename V = T, meta :: EnableIf < meta :: isDefaultConstructible < V > () > >
-            __CDS_explicit Array (
+            __CDS_Explicit Array (
                     Size size
             ) noexcept;
 
@@ -106,7 +106,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
         public:
             template < typename R, meta :: EnableIf < meta :: isConvertible < R, T > () > = 0 >
-            __CDS_explicit Array (
+            __CDS_Explicit Array (
                     Collection < R > const & collection
             ) noexcept;
 

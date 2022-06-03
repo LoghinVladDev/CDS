@@ -212,8 +212,8 @@ namespace cds {
 
 #define __CDS_cpplang_ConstexprPostfixLiteral constexpr /* NOLINT(bugprone-reserved-identifier) */
 
-#define __CDS_explicit explicit(true) /* NOLINT(bugprone-reserved-identifier) */
-#define __CDS_implicit explicit(false) /* NOLINT(bugprone-reserved-identifier) */
+#define __CDS_Explicit explicit(true) /* NOLINT(bugprone-reserved-identifier) */
+#define __CDS_Implicit explicit(false) /* NOLINT(bugprone-reserved-identifier) */
 
 #undef __CDS_cpplang_core_version_name
 #define __CDS_cpplang_core_version_name "cpp-20" /* NOLINT(bugprone-reserved-identifier) */
@@ -229,8 +229,8 @@ namespace cds {
 
 #define __CDS_cpplang_ConstexprPostfixLiteral inline /* NOLINT(bugprone-reserved-identifier) */
 
-#define __CDS_explicit explicit /* NOLINT(bugprone-reserved-identifier) */
-#define __CDS_implicit /* NOLINT(bugprone-reserved-identifier) */
+#define __CDS_Explicit explicit /* NOLINT(bugprone-reserved-identifier) */
+#define __CDS_Implicit /* NOLINT(bugprone-reserved-identifier) */
 
 #endif
 

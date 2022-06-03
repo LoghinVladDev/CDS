@@ -57,7 +57,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             /**
              * @enum The types of delegate iterator requests the Collection Base Object can make to its Derivative Objects when acquiring an Iterator Delegate Implementation
              */
-            using DelegateIteratorRequestType = typename Collection < T > :: DelegateIteratorRequestType;
+            using typename Collection < T > :: DelegateIteratorRequestType;
 
         public:
             /**

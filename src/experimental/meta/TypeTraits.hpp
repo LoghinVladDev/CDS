@@ -1119,6 +1119,16 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 return & left == & right;
             }
 
+            template < typename T, meta :: EnableIf < isPrintable < T > () > = 0 >
+            constexpr auto print ( std :: ostream & out, T const & object ) noexcept -> std :: ostream & {
+                return ( out << object );
+            }
+
+            template < typename T, meta :: EnableIf < ! isPrintable < T > () > = 0 >
+            constexpr auto print ( std :: ostream & out, T const & object ) noexcept -> std :: ostream & {
+                return ( out << "Unknown@0x" << std :: hex << ( & object ) );
+            }
+
             /**
              * @brief Meta-object helper, containing utilities for a given type. Alternative to above functions
              * @tparam T type given for which to access meta functions

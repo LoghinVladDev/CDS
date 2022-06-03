@@ -1695,14 +1695,15 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         template < typename T >
         auto List < T > :: toString () const noexcept -> String {
             if ( this->empty() ) {
-                return {"[ ]"};
+                return {"[]"};
             }
 
             std::stringstream out;
             out << "[ ";
 
             for ( auto iterator = this->begin(), end = this->end(); iterator != end; ++ iterator ) {
-                Type < T > :: streamPrint ( out, * iterator ) << ", ";
+
+                meta :: print ( out, * iterator ) << ", ";
             }
 
             auto asString = out.str();

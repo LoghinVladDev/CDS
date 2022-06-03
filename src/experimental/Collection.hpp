@@ -1256,7 +1256,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
              * @return bool = true if collection is not empty, false otherwise
              * @test tested in base class test
              */
-            __CDS_cpplang_ConstexprPureAbstract __CDS_implicit operator bool () const noexcept; // NOLINT(google-explicit-constructor)
+            __CDS_cpplang_ConstexprPureAbstract __CDS_Implicit operator bool () const noexcept; // NOLINT(google-explicit-constructor)
 
         public:
             /**
