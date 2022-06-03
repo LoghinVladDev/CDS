@@ -119,6 +119,11 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             }
         }
 
+
+        template < typename T >
+        constexpr Index const List < T > :: invalidIndex = -1;
+
+
         template < typename T >
         constexpr auto List < T > :: acquireDelegate (
                 Iterator const & iterator

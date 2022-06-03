@@ -34,7 +34,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             template <
                     typename ... ConstructorTypePack,
                     meta :: EnableIf < ( sizeof ... ( ConstructorTypePack ) == sizeof ... ( TypePack ) && sizeof ... ( ConstructorTypePack ) > 1 ) > = 0
-            > __CDS_explicit ( false ) Tuple ( ConstructorTypePack && ... argumentPack ) noexcept : // NOLINT(google-explicit-constructor)
+            > __CDS_implicit Tuple ( ConstructorTypePack && ... argumentPack ) noexcept : // NOLINT(google-explicit-constructor)
                     node ( std :: forward < ConstructorTypePack > ( argumentPack ) ... ) {
 
             }
@@ -46,7 +46,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                             sizeof ... ( ConstructorTypePack ) == sizeof ... ( TypePack ) && sizeof ... ( ConstructorTypePack ) == 1 &&
                             ! isSame < ConstructorTypePack ..., Tuple > ()
                     ) > = 0
-            > __CDS_explicit ( false ) Tuple ( ConstructorTypePack && ... argumentPack ) noexcept : // NOLINT(google-explicit-constructor)
+            > __CDS_implicit Tuple ( ConstructorTypePack && ... argumentPack ) noexcept : // NOLINT(google-explicit-constructor)
                     node ( std :: forward < ConstructorTypePack > ( argumentPack ) ... ) {
 
             }

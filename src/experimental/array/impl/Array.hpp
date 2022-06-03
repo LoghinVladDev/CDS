@@ -8,62 +8,16 @@
 namespace cds { // NOLINT(modernize-concat-nested-namespaces)
     namespace experimental {
 
+
         template < typename T >
         constexpr Size const Array < T > :: minCapacity = 32ULL;
 
-        template < typename T >
-        Array < T > :: ~Array () noexcept {
-            for ( Index i = 0U; i < this->_size; ++ i ) {
-                Memory :: instance().destroy ( this->_pData[i] );
-            }
-
-            Memory :: instance().destroyArray ( this->_pData );
-        }
 
         template < typename T >
-        Array < T > :: Array ( InitializerList const & initializerList ) noexcept :
-                List < T > ( static_cast < Size > ( initializerList.size() ) ),
-                _capacity ( maxOf ( initializerList.size(), Array :: minCapacity ) ),
-                _pData ( Memory :: instance().createArray < T * > ( maxOf ( initializerList.size(), Array :: minCapacity ) ) ) {
+        auto Array < T > :: delegateIterator (
+                DelegateIteratorRequestType requestType
+        ) noexcept -> cds :: UniquePointer < DelegateIterator > {
 
-            Index i = 0;
-            for ( auto const & element : initializerList ) {
-                this->_pData [ i ++ ] = Memory :: instance().create < T > ( element );
-            }
-        }
-
-        template < typename T >
-        __CDS_OptimalInline auto Array < T > :: equals ( Object const & object ) const noexcept -> bool {
-            return this->List < T > :: equals ( object );
-        }
-
-        template < typename T >
-        __CDS_OptimalInline Array < T > :: Array ( Array < T > const & array ) noexcept :
-                List < T > ( array ),
-                _capacity ( maxOf ( array.List < T > :: size(), Array :: minCapacity ) ),
-                _pData ( array.List < T > :: empty() ? nullptr : Memory :: instance().createArray < T * > ( maxOf ( array.List < T > :: size(), Array :: minCapacity ) ) ){
-
-            this->initializeByCopy ( array );
-        }
-
-        template < typename T >
-        constexpr Array < T > :: Array ( Array < T > && array ) noexcept :
-                List < T > ( cds :: forward < List < T > > ( array ) ),
-                _pData ( cds :: exchange ( array._pData, nullptr ) ),
-                _capacity ( cds :: exchange ( array._capacity, 0ULL ) ) {
-
-        }
-
-        template < typename T >
-        auto Array < T > :: initializeByCopy ( Array < T > const & array ) noexcept -> void {
-            static_assert ( Type < T > :: copyConstructible, "Cannot copy an array of given Type, Type has no Copy Constructor" );
-            for ( Index i = 0; i < static_cast < Index > ( array.size() ); ++ i ) {
-                this->_pData[i] = Memory :: instance().create < T > ( * array._pData[i] );
-            }
-        }
-
-        template < typename T >
-        auto Array < T > :: delegateIterator ( DelegateIteratorRequestType requestType ) noexcept -> cds :: UniquePointer < DelegateIterator > {
             switch ( requestType ) {
                 case DelegateIteratorRequestType :: ForwardBegin:
                     return Memory :: instance().create < ArrayDelegateIterator > ( this, 0, true );
@@ -78,8 +32,12 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             return nullptr;
         }
 
+
         template < typename T >
-        auto Array < T > :: delegateConstIterator ( DelegateIteratorRequestType requestType ) const noexcept -> cds :: UniquePointer < DelegateConstIterator > {
+        auto Array < T > :: delegateConstIterator (
+                DelegateIteratorRequestType requestType
+        ) const noexcept -> cds :: UniquePointer < DelegateConstIterator > {
+
             switch ( requestType ) {
                 case DelegateIteratorRequestType :: ForwardBegin:
                     return Memory :: instance().create < ArrayDelegateConstIterator > ( this, 0, true );
@@ -94,8 +52,230 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             return nullptr;
         }
 
+
         template < typename T >
-        auto Array < T > :: removeAt ( Index index ) noexcept -> bool {
+        auto Array < T > :: initializeByCopy (
+                Array < T > const & array
+        ) noexcept -> void {
+
+            static_assert ( Type < T > :: copyConstructible, "Cannot copy an array of given Type, Type has no Copy Constructor" );
+            for ( Index i = 0; i < static_cast < Index > ( array.size() ); ++ i ) {
+                this->_pData[i] = Memory :: instance().create < T > ( * array._pData[i] );
+            }
+        }
+
+
+        template < typename T >
+        __CDS_OptimalInline Array < T > :: Array (
+                Array < T > const & array
+        ) noexcept :
+                List < T > ( array ),
+                _capacity ( maxOf ( array.List < T > :: size(), Array :: minCapacity ) ),
+                _pData ( array.List < T > :: empty() ? nullptr : Memory :: instance().createArray < T * > ( maxOf ( array.List < T > :: size(), Array :: minCapacity ) ) ){
+
+            this->initializeByCopy ( array );
+        }
+
+
+        template < typename T >
+        constexpr Array < T > :: Array (
+                Array < T > && array
+        ) noexcept :
+                List < T > ( cds :: forward < List < T > > ( array ) ),
+                _pData ( cds :: exchange ( array._pData, nullptr ) ),
+                _capacity ( cds :: exchange ( array._capacity, 0ULL ) ) {
+
+        }
+
+
+        template < typename T >
+        template < typename IteratorType >
+        Array < T > :: Array (
+                IteratorType const & begin,
+                IteratorType const & end
+        ) noexcept {
+
+            for ( auto iterator = begin; iterator != end; ++ iterator ) {
+                this->pushBack ( * iterator );
+            }
+        }
+
+
+        template < typename T >
+        Array < T > :: Array (
+                InitializerList const & initializerList
+        ) noexcept :
+                List < T > ( static_cast < Size > ( initializerList.size() ) ),
+                _capacity ( maxOf ( initializerList.size(), Array :: minCapacity ) ),
+                _pData ( Memory :: instance().createArray < T * > ( maxOf ( initializerList.size(), Array :: minCapacity ) ) ) {
+
+            Index i = 0;
+            for ( auto const & element : initializerList ) {
+                this->_pData [ i ++ ] = Memory :: instance().create < T > ( element );
+            }
+        }
+
+
+        template < typename T >
+        template < typename V, meta :: EnableIf < meta :: isDefaultConstructible < V > () > >
+        Array < T > :: Array (
+                Size size
+        ) noexcept :
+                List < T > ( size ),
+                _capacity ( maxOf ( size, Array :: minCapacity ) ),
+                _pData ( Memory :: instance().createArray < T * > ( maxOf ( size, Array :: minCapacity ) ) ) {
+
+            for ( Index index = 0; index < this->size(); ++ index ) {
+                this->_pData [ index ] = Memory :: instance().create < T > ();
+            }
+        }
+
+
+        template < typename T >
+        template < typename V, meta :: EnableIf < meta :: isCopyConstructible < V > () > >
+        Array < T > :: Array (
+                Size                size,
+                ElementType const & defaultValue
+        ) noexcept :
+                List < T > ( size ),
+                _capacity ( maxOf ( size, Array :: minCapacity ) ),
+                _pData ( Memory :: instance().createArray < T * > ( maxOf ( size, Array :: minCapacity ) ) ) {
+
+            for ( Index index = 0; index < this->size(); ++ index ) {
+                this->_pData [ index ] = Memory :: instance().create < T > ( defaultValue );
+            }
+        }
+
+
+        template < typename T >
+        template < typename R, meta :: EnableIf < meta :: isConvertible < R, T > () > >
+        Array < T > :: Array (
+                Collection < R > const & collection
+        ) noexcept :
+                List < T > ( collection.size() ),
+                _capacity ( maxOf ( collection.size(), Array :: minCapacity ) ),
+                _pData ( Memory :: instance().createArray < T * > ( maxOf ( collection.size(), Array :: minCapacity ) ) ) {
+
+            Index index = 0;
+            for ( auto iterator = collection.begin(), end = collection.end(); iterator != end; ++ iterator, ++ index ) {
+                this->_pData [ index ] = Memory :: instance().create < T > ( * iterator );
+            }
+        }
+
+
+        template < typename T >
+        Array < T > :: ~Array () noexcept {
+            for ( Index i = 0U; i < this->_size; ++ i ) {
+                Memory :: instance().destroy ( this->_pData[i] );
+            }
+
+            Memory :: instance().destroyArray ( this->_pData );
+        }
+
+
+        template < typename T >
+        template < typename V, meta :: EnableIf < meta :: isDefaultConstructible < V > () > >
+        auto Array < T > :: resize (
+                Size size
+        ) noexcept -> void {
+
+            for ( Size index = size; index < this->size(); ++ index ) {
+                delete exchange ( this->_pData[index], nullptr );
+            }
+
+            for ( Size index = this->size(); index < minOf ( size, this->_capacity ); ++ index ) {
+                this->_pData[index] = Memory :: instance().create < T > ();
+            }
+
+            this->_size = size;
+            auto newCapacity = maxOf ( size, Array :: minCapacity );
+
+            if ( newCapacity == this->_capacity ) {
+                return;
+            }
+
+            auto newBuffer = Memory :: instance().createArray < T * > ( newCapacity );
+            for ( Size index = 0; index < minOf ( size, this->_capacity ); ++ index ) {
+                newBuffer [ index ] = this->_pData [ index ];
+            }
+
+            for ( Size index = minOf ( size, this->_capacity ); index < size; ++ index ) {
+                newBuffer [ index ] = Memory :: instance().create < T > ();
+            }
+
+            this->_capacity = newCapacity;
+            Memory :: instance().destroyArray ( exchange ( this->_pData, newBuffer ) );
+        }
+
+
+        template < typename T >
+        template < typename V, meta :: EnableIf < meta :: isCopyConstructible < V > () > >
+        auto Array < T > :: resize (
+                Size                size,
+                ElementType const & defaultValue
+        ) noexcept -> void {
+
+            for ( Size index = size; index < this->size(); ++ index ) {
+                delete exchange ( this->_pData[index], nullptr );
+            }
+
+            for ( Size index = this->size(); index < minOf ( size, this->_capacity ); ++ index ) {
+                this->_pData[index] = Memory :: instance().create < T > ( defaultValue );
+            }
+
+            this->_size = size;
+            auto newCapacity = maxOf ( size, Array :: minCapacity );
+
+            if ( newCapacity == this->_capacity ) {
+                return;
+            }
+
+            auto newBuffer = Memory :: instance().createArray < T * > ( newCapacity );
+            for ( Size index = 0; index < minOf ( size, this->_capacity ); ++ index ) {
+                newBuffer [ index ] = this->_pData [ index ];
+            }
+
+            for ( Size index = minOf ( size, this->_capacity ); index < size; ++ index ) {
+                newBuffer [ index ] = Memory :: instance().create < T > ( defaultValue );
+            }
+
+            this->_capacity = newCapacity;
+            Memory :: instance().destroyArray ( exchange ( this->_pData, newBuffer ) );
+        }
+
+
+        template < typename T >
+        auto Array < T > :: shrink (
+                Size size
+        ) noexcept -> void {
+
+            for ( Size index = size; index < this->size(); ++ index ) {
+                delete exchange ( this->_pData [ index ], nullptr );
+            }
+
+            this->_size = minOf ( size, this->size() );
+
+            if ( size == this->_capacity ) {
+                return;
+            }
+
+            auto newCapacity = maxOf ( minOf ( this->_capacity, size ), Array :: minCapacity );
+            auto newBuffer = Memory :: instance().createArray < T * > ( newCapacity );
+
+            for ( Size index = 0; index < this->size(); ++ index ) {
+                newBuffer [ index ] = this->_pData [ index ];
+            }
+
+            Memory :: instance().destroyArray ( exchange ( this->_pData, newBuffer ) );
+            this->_capacity = newCapacity;
+        }
+
+
+        template < typename T >
+        auto Array < T > :: removeAt (
+                Index index
+        ) noexcept -> bool {
+
             if ( index < 0 || index >= this->_size ) {
                 return false;
             }
@@ -121,8 +301,80 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             return true;
         }
 
+
         template < typename T >
-        auto Array < T > :: remove ( Iterator const & iterator ) noexcept -> bool {
+        auto Array < T > :: removeAt (
+                Collection < Index > const & indices
+        ) noexcept -> Size {
+
+            if ( indices.empty() ) {
+                return 0U;
+            }
+
+            auto newBuf = Memory :: instance().createArray < T * > ( this->size() );
+            auto newLen = 0U;
+
+            for ( Index index = 0, len = static_cast < Index > ( this->size() ); index < len; ++ index ) {
+                if ( ! indices.contains ( index ) ) {
+                    newBuf [ newLen ++ ] = this->_pData [ index ];
+                } else {
+                    Memory :: instance ().destroy ( this->_pData [ index ] );
+                }
+            }
+
+            auto adjustedBuf    = Memory :: instance().createArray < T * > ( newLen );
+            auto removedCount   = this->size() - newLen;
+            (void) std :: memcpy ( adjustedBuf, newBuf, newLen * sizeof ( T * ) );
+
+            Memory :: instance ().destroyArray ( cds :: exchange ( this->_pData, adjustedBuf ) );
+            Memory :: instance ().destroyArray ( newBuf );
+
+            this->_size     = newLen;
+            this->_capacity = newLen;
+
+            return removedCount;
+        }
+
+
+        template < typename T >
+        auto Array < T > :: removeAt (
+                std :: initializer_list < Index > const & indices
+        ) noexcept -> Size {
+
+            if ( indices.size() == 0 ) {
+                return 0U;
+            }
+
+            auto newBuf = Memory :: instance().createArray < T * > ( this->size() );
+            auto newLen = 0U;
+
+            for ( Index index = 0, len = static_cast < Index > ( this->size() ); index < len; ++ index ) {
+                if ( ! hidden :: impl :: initializerListContains ( indices, index ) ) {
+                    newBuf [ newLen ++ ] = this->_pData [ index ];
+                } else {
+                    Memory :: instance ().destroy ( this->_pData [ index ] );
+                }
+            }
+
+            auto adjustedBuf    = Memory :: instance().createArray < T * > ( newLen );
+            auto removedCount   = this->size() - newLen;
+            (void) std :: memcpy ( adjustedBuf, newBuf, newLen * sizeof ( T * ) );
+
+            Memory :: instance ().destroyArray ( cds :: exchange ( this->_pData, adjustedBuf ) );
+            Memory :: instance ().destroyArray ( newBuf );
+
+            this->_size     = newLen;
+            this->_capacity = newLen;
+
+            return removedCount;
+        }
+
+
+        template < typename T >
+        auto Array < T > :: remove (
+                Iterator const & iterator
+        ) noexcept -> bool {
+
             if ( ! iterator.of ( this ) ) {
                 return false;
             }
@@ -130,8 +382,12 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             return this->removeAt ( reinterpret_cast < ArrayDelegateIterator const * > ( Collection < T > :: acquireDelegate ( iterator ) )->index() );
         }
 
+
         template < typename T >
-        auto Array < T > :: remove ( ConstIterator const & iterator ) noexcept -> bool {
+        auto Array < T > :: remove (
+                ConstIterator const & iterator
+        ) noexcept -> bool {
+
             if ( ! iterator.of ( this ) ) {
                 return false;
             }
@@ -139,8 +395,12 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             return this->removeAt ( reinterpret_cast < ArrayDelegateConstIterator const * > ( Collection < T > :: acquireDelegate ( iterator ) )->index() );
         }
 
+
         template < typename T >
-        auto Array < T > :: remove ( ReverseIterator const & iterator ) noexcept -> bool {
+        auto Array < T > :: remove (
+                ReverseIterator const & iterator
+        ) noexcept -> bool {
+
             if ( ! iterator.of ( this ) ) {
                 return false;
             }
@@ -148,17 +408,356 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             return this->removeAt ( reinterpret_cast < ArrayDelegateIterator const * > ( Collection < T > :: acquireDelegate ( iterator ) )->index() );
         }
 
+
         template < typename T >
-        auto Array < T > :: remove ( ConstReverseIterator const & iterator ) noexcept -> bool {
+        auto Array < T > :: remove (
+                ConstReverseIterator const & iterator
+        ) noexcept -> bool {
+
             if ( ! iterator.of ( this ) ) {
                 return false;
             }
 
             return this->removeAt ( reinterpret_cast < ArrayDelegateConstIterator const * > ( Collection < T > :: acquireDelegate ( iterator ) )->index() );
         }
+
+
+        template < typename T >
+        auto Array < T > :: remove (
+                Iterator    const * pIterators,
+                Size                iteratorCount
+        ) noexcept -> Size {
+
+            Array < Index > indices;
+            for ( uint64 index = 0; index < iteratorCount; ++ index ) {
+                if ( pIterators[index].of ( this ) ) {
+                    indices.pushBack ( reinterpret_cast < ArrayDelegateIterator const * > ( Collection < T > :: acquireDelegate ( pIterators[index] ) )->index() );
+                }
+            }
+
+            return this->removeAt ( indices );
+        }
+
+
+        template < typename T >
+        auto Array < T > :: remove (
+                ConstIterator   const * pIterators,
+                Size                    iteratorCount
+        ) noexcept -> Size {
+
+            Array < Index > indices;
+            for ( uint64 index = 0; index < iteratorCount; ++ index ) {
+                if ( pIterators[index].of ( this ) ) {
+                    indices.pushBack ( reinterpret_cast < ArrayDelegateConstIterator const * > ( Collection < T > :: acquireDelegate ( pIterators[index] ) )->index() );
+                }
+            }
+
+            return this->removeAt ( indices );
+        }
+
+
+        template < typename T >
+        auto Array < T > :: remove (
+                ReverseIterator const * pIterators,
+                Size                    iteratorCount
+        ) noexcept -> Size {
+
+            Array < Index > indices;
+            for ( uint64 index = 0; index < iteratorCount; ++ index ) {
+                if ( pIterators[index].of ( this ) ) {
+                    indices.pushBack ( reinterpret_cast < ArrayDelegateIterator const * > ( Collection < T > :: acquireDelegate ( pIterators[index] ) )->index() );
+                }
+            }
+
+            return this->removeAt ( indices );
+        }
+
+
+        template < typename T >
+        auto Array < T > :: remove (
+                ConstReverseIterator    const * pIterators,
+                Size                            iteratorCount
+        ) noexcept -> Size {
+
+            Array < Index > indices;
+            for ( uint64 index = 0; index < iteratorCount; ++ index ) {
+                if ( pIterators[index].of ( this ) ) {
+                    indices.pushBack ( reinterpret_cast < ArrayDelegateConstIterator const * > ( Collection < T > :: acquireDelegate ( pIterators[index] ) )->index() );
+                }
+            }
+
+            return this->removeAt ( indices );
+        }
+
+
+        template < typename T >
+        __CDS_OptimalInline auto Array < T > :: pNewBefore (
+                Index index
+        ) noexcept -> ElementType * & {
+
+            if ( this->_size < this->_capacity ) {
+                for ( auto moveIndex = static_cast < Index > ( this->_size ), until = index; moveIndex > until; -- moveIndex ) {
+                    this->_pData [ moveIndex ] = this->_pData [ moveIndex - 1 ];
+                }
+
+                ++ this->_size;
+                return this->_pData [ index ] = nullptr;
+            }
+
+            auto newCap = maxOf ( this->_capacity * 2, this->_size + 1, Array :: minCapacity );
+            auto newBuf = Memory :: instance ().createArray < T * > ( newCap );
+
+            (void) std :: memcpy ( newBuf - index, this->_pData, sizeof ( T * ) * ( index - 1 ) );
+            (void) std :: memcpy ( newBuf + index + 1, this->_pData + index, sizeof ( T * ) * ( static_cast < Index > ( this->_size ) - index + 1 ) );
+
+            this->_capacity = newCap;
+            ++ this->_size;
+            Memory :: instance().destroyArray ( cds :: exchange ( this->_pData, newBuf ) );
+
+            return this->_pData [ index ] = nullptr;
+        }
+
+
+        template < typename T >
+        __CDS_OptimalInline auto Array < T > :: pNewAfter (
+                Index index
+        ) noexcept -> ElementType * & {
+
+            if ( this->_size < this->_capacity ) {
+                for ( auto moveIndex = static_cast < Index > ( this->_size ), until = index + 1; moveIndex > until; -- moveIndex ) {
+                    this->_pData [ moveIndex ] = this->_pData [ moveIndex - 1 ];
+                }
+
+                ++ this->_size;
+                return this->_pData [ index + 1 ] = nullptr;
+            }
+
+            auto newCap = maxOf ( this->_capacity * 2, this->_size + 1, Array :: minCapacity );
+            auto newBuf = Memory :: instance ().createArray < T * > ( newCap );
+
+            (void) std :: memcpy ( newBuf, this->_pData, sizeof ( T * ) * index );
+            (void) std :: memcpy ( newBuf + index + 2, this->_pData + index + 1, sizeof ( T * ) * ( static_cast < Index > ( this->_size ) - index ) );
+
+            this->_capacity = newCap;
+            ++ this->_size;
+            Memory :: instance().destroyArray ( cds :: exchange ( this->_pData, newBuf ) );
+
+            return this->_pData [ index + 1 ] = nullptr;
+        }
+
+
+        template < typename T >
+        __CDS_OptimalInline auto Array < T > :: pNewBack () noexcept -> ElementType * & {
+
+            if ( this->_size < this->_capacity ) {
+                this->_pData [ this->_size ] = nullptr;
+                return this->_pData [ this->_size ++ ];
+            }
+
+            auto newSize = maxOf ( this->_capacity * 2, this->_size + 1, Array :: minCapacity );
+            T ** newBuf = Memory :: instance ().createArray < T * > (newSize);
+
+            (void) std :: memcpy ( newBuf, this->_pData, this->_size * sizeof(T *) );
+            (void) std :: memset ( newBuf + this->_size, 0, ( newSize - this->_size ) * sizeof (T*) );
+
+            this->_capacity = newSize;
+            Memory :: instance ().destroyArray ( exchange ( this->_pData, newBuf ) );
+
+            this->_pData [ this->_size ] = nullptr;
+            return this->_pData [ this->_size ++ ];
+        }
+
+
+        template < typename T >
+        __CDS_OptimalInline auto Array < T > :: pNewFront () noexcept -> ElementType * & {
+
+            if ( this->_size < this->_capacity ) {
+                for ( Index i = this->_size; i > 0; -- i ) {
+                    this->_pData[i] = this->_pData[i - 1];
+                }
+
+                ++ this->_size;
+
+                this->_pData[0] = nullptr;
+                return this->_pData[0];
+            }
+
+            auto newSize = maxOf ( this->_capacity * 2, this->_size + 1, Array :: minCapacity );
+            auto newBuf = Memory :: instance().createArray < T * > ( newSize );
+            (void) std::memcpy ( newBuf + 1, this->_pData, this->_size * sizeof ( T * ) );
+            (void) std::memset ( newBuf + 1 + this->_size, 0, (newSize - this->_size - 1) * sizeof(T *) );
+
+            this->_capacity = newSize;
+            this->_size ++;
+
+            Memory :: instance().destroyArray ( exchange ( this->_pData, newBuf ) );
+
+            this->_pData[0] = nullptr;
+            return this->_pData[0];
+        }
+
+
+        template < typename T >
+        __CDS_OptimalInline auto Array < T > :: pNewBefore (
+                Iterator const & iterator
+        ) noexcept -> ElementType * & {
+
+            return this->pNewBefore ( reinterpret_cast < ArrayDelegateIterator const * > ( List < T > :: acquireDelegate ( iterator ) )->index() );
+        }
+
+
+        template < typename T >
+        __CDS_OptimalInline auto Array < T > :: pNewAfter (
+                Iterator const & iterator
+        ) noexcept -> ElementType * & {
+
+            return this->pNewAfter ( reinterpret_cast < ArrayDelegateIterator const * > ( List < T > :: acquireDelegate ( iterator ) )->index() );
+        }
+
+
+        template < typename T >
+        __CDS_OptimalInline auto Array < T > :: pNewBefore (
+                ConstIterator const & iterator
+        ) noexcept -> ElementType * & {
+
+            return this->pNewBefore ( reinterpret_cast < ArrayDelegateConstIterator const * > ( Collection < T > :: acquireDelegate ( iterator ) )->index() );
+        }
+
+
+        template < typename T >
+        __CDS_OptimalInline auto Array < T > :: pNewAfter (
+                ConstIterator const & iterator
+        ) noexcept -> ElementType * & {
+
+            return this->pNewAfter ( reinterpret_cast < ArrayDelegateConstIterator const * > ( Collection < T > :: acquireDelegate ( iterator ) )->index() );
+        }
+
+
+        template < typename T >
+        __CDS_OptimalInline auto Array < T > :: pNewBefore (
+                ReverseIterator const & iterator
+        ) noexcept -> ElementType * & {
+
+            return this->pNewAfter ( reinterpret_cast < ArrayDelegateIterator const * > ( List < T > :: acquireDelegate ( iterator ) )->index() );
+        }
+
+
+        template < typename T >
+        __CDS_OptimalInline auto Array < T > :: pNewAfter (
+                ReverseIterator const & iterator
+        ) noexcept -> ElementType * & {
+
+            return this->pNewBefore ( reinterpret_cast < ArrayDelegateIterator const * > ( List < T > :: acquireDelegate ( iterator ) )->index() );
+        }
+
+
+        template < typename T >
+        __CDS_OptimalInline auto Array < T > :: pNewBefore (
+                ConstReverseIterator const & iterator
+        ) noexcept -> ElementType * & {
+
+            return this->pNewAfter ( reinterpret_cast < ArrayDelegateConstIterator const * > ( Collection < T > :: acquireDelegate ( iterator ) )->index() );
+        }
+
+
+        template < typename T >
+        __CDS_OptimalInline auto Array < T > :: pNewAfter (
+                ConstReverseIterator const & iterator
+        ) noexcept -> ElementType * & {
+
+            return this->pNewBefore ( reinterpret_cast < ArrayDelegateConstIterator const * > ( Collection < T > :: acquireDelegate ( iterator ) )->index() );
+        }
+
+
+        template < typename T >
+        __CDS_cpplang_ConstexprOverride auto Array < T > :: front () noexcept (false) -> ElementType & {
+
+            if ( this->empty() ) {
+                throw OutOfBoundsException("Array is Empty");
+            }
+
+            return * this->_pData[0];
+        }
+
+
+        template < typename T >
+        __CDS_cpplang_ConstexprOverride auto Array < T > :: front () const noexcept (false) -> ElementType const & {
+
+            if ( this->empty() ) {
+                throw OutOfBoundsException("Array is Empty");
+            }
+
+            return * this->_pData[0];
+        }
+
+
+        template < typename T >
+        __CDS_cpplang_ConstexprOverride auto Array < T > :: back () noexcept (false) -> ElementType & {
+
+            if ( this->empty() ) {
+                throw OutOfBoundsException("Array is Empty");
+            }
+
+            return * this->_pData[this->_size - 1];
+        }
+
+
+        template < typename T >
+        __CDS_cpplang_ConstexprOverride auto Array < T > :: back () const noexcept (false) -> ElementType const & {
+
+            if ( this->empty() ) {
+                throw OutOfBoundsException("Array is Empty");
+            }
+
+            return * this->_pData[this->_size - 1];
+        }
+
+
+        template < typename T >
+        __CDS_cpplang_ConstexprOverride auto Array < T > :: get (
+                Index index
+        ) noexcept (false) -> ElementType & {
+
+            if ( this->empty() ) {
+                throw OutOfBoundsException ( index, 0 );
+            }
+
+            if (index < 0 ) {
+                index += (this->size() / (-index) ) * this->size();
+            }
+
+            if (index >= static_cast<Index>(this->size()) ) {
+                index = index % this->size();
+            }
+
+            return * this->_pData[index];
+        }
+
+
+        template < typename T >
+        __CDS_cpplang_ConstexprOverride auto Array < T > :: get (
+                Index index
+        ) const noexcept (false) -> ElementType const & {
+
+            if ( this->empty() ) {
+                throw OutOfBoundsException ( index, 0 );
+            }
+
+            if (index < 0 ) {
+                index += (this->size() / (-index) ) * this->size();
+            }
+
+            if (index >= static_cast<Index>(this->size()) ) {
+                index = index % this->size();
+            }
+
+            return * this->_pData[index];
+        }
+
 
         template < typename T >
         auto Array < T > :: clear () noexcept -> void {
+
             for ( Index i = 0; i < this->_size; ++ i ) {
                 Memory :: instance().destroy ( exchange ( this->_pData[i], nullptr ) );
             }
@@ -166,94 +765,10 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             this->_size = 0;
         }
 
-        template < typename T >
-        __CDS_cpplang_ConstexprOverride auto Array < T > :: get ( Index index ) noexcept (false) -> ElementType & {
-            if ( this->empty() ) {
-                throw OutOfBoundsException ( index, 0 );
-            }
-
-            if (index < 0 ) {
-                index += (this->size() / (-index) ) * this->size();
-            }
-
-            if (index >= static_cast<Index>(this->size()) ) {
-                index = index % this->size();
-            }
-
-            return * this->_pData[index];
-        }
-
-        template < typename T >
-        __CDS_cpplang_ConstexprOverride auto Array < T > :: get ( Index index ) const noexcept (false) -> ElementType const & {
-            if ( this->empty() ) {
-                throw OutOfBoundsException ( index, 0 );
-            }
-
-            if (index < 0 ) {
-                index += (this->size() / (-index) ) * this->size();
-            }
-
-            if (index >= static_cast<Index>(this->size()) ) {
-                index = index % this->size();
-            }
-
-            return * this->_pData[index];
-        }
-
-        template < typename T >
-        auto Array < T > :: popFront () noexcept -> void {
-            Memory :: instance().destroy ( exchange(this->_pData[0], nullptr) );
-
-            for ( Index i = 0; i < this->size() - 1; i ++ ) {
-                this->_pData[i] = this->_pData[i + 1];
-            }
-
-            this->_pData[-- this->_size] = nullptr;
-        }
-
-        template < typename T >
-        auto Array < T > :: popBack () noexcept -> void {
-            Memory :: instance().destroy ( exchange(this->_pData[--this->_size], nullptr) );
-        }
-
-        template < typename T >
-        __CDS_cpplang_ConstexprOverride auto Array < T > :: front () noexcept (false) -> ElementType & {
-            if ( this->empty() ) {
-                throw OutOfBoundsException("Array is Empty");
-            }
-
-            return * this->_pData[0];
-        }
-
-        template < typename T >
-        __CDS_cpplang_ConstexprOverride auto Array < T > :: front () const noexcept (false) -> ElementType const & {
-            if ( this->empty() ) {
-                throw OutOfBoundsException("Array is Empty");
-            }
-
-            return * this->_pData[0];
-        }
-
-        template < typename T >
-        __CDS_cpplang_ConstexprOverride auto Array < T > :: back () noexcept (false) -> ElementType & {
-            if ( this->empty() ) {
-                throw OutOfBoundsException("Array is Empty");
-            }
-
-            return * this->_pData[this->_size - 1];
-        }
-
-        template < typename T >
-        __CDS_cpplang_ConstexprOverride auto Array < T > :: back () const noexcept (false) -> ElementType const & {
-            if ( this->empty() ) {
-                throw OutOfBoundsException("Array is Empty");
-            }
-
-            return * this->_pData[this->_size - 1];
-        }
 
         template < typename T >
         auto Array < T > :: makeUnique () noexcept -> void {
+
             T ** pNewData = Memory :: instance().createArray < T * > (this->size());
             Size newLength = 0u;
 
@@ -287,252 +802,91 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             Memory :: instance().destroyArray( exchange ( this->_pData, pNewData ) );
         }
 
+
         template < typename T >
-        auto Array < T > :: removeAt ( Collection < Index > const & indices ) noexcept -> Size {
-            if ( indices.empty() ) {
-                return 0U;
+        auto Array < T > :: popFront () noexcept -> void {
+
+            Memory :: instance().destroy ( exchange(this->_pData[0], nullptr) );
+
+            for ( Index i = 0; i < this->size() - 1; i ++ ) {
+                this->_pData[i] = this->_pData[i + 1];
             }
 
-            auto newBuf = Memory :: instance().createArray < T * > ( this->size() );
-            auto newLen = 0U;
+            this->_pData[-- this->_size] = nullptr;
+        }
 
-            for ( Index index = 0, len = static_cast < Index > ( this->size() ); index < len; ++ index ) {
-                if ( ! indices.contains ( index ) ) {
-                    newBuf [ newLen ++ ] = this->_pData [ index ];
-                } else {
-                    Memory :: instance ().destroy ( this->_pData [ index ] );
-                }
+
+        template < typename T >
+        auto Array < T > :: popBack () noexcept -> void {
+
+            Memory :: instance().destroy ( exchange(this->_pData[--this->_size], nullptr) );
+        }
+
+        template < typename T >
+        template < typename V, meta :: EnableIf < meta :: isCopyConstructible < V > () > >
+        auto Array < T > :: operator = (
+                Array const & array
+        ) noexcept -> Array & {
+
+            if ( this == & array ) {
+                return * this;
             }
 
-            auto adjustedBuf    = Memory :: instance().createArray < T * > ( newLen );
-            auto removedCount   = this->size() - newLen;
-            (void) std :: memcpy ( adjustedBuf, newBuf, newLen * sizeof ( T * ) );
+            this->clear();
 
-            Memory :: instance ().destroyArray ( cds :: exchange ( this->_pData, adjustedBuf ) );
-            Memory :: instance ().destroyArray ( newBuf );
+            this->_capacity = maxOf ( array.size(), Array :: minCapacity );
+            this->_size     = array.size();
+            Memory :: instance().destroyArray ( exchange ( this->_pData, Memory :: instance().createArray < T * > ( this->_capacity ) ) );
 
-            this->_size     = newLen;
-            this->_capacity = newLen;
-
-            return removedCount;
-        }
-
-        template < typename T >
-        auto Array < T > :: removeAt ( std :: initializer_list < Index > const & indices ) noexcept -> Size {
-            if ( indices.size() == 0 ) {
-                return 0U;
+            for ( Size index = 0; index < array.size(); ++ index ) {
+                this->_pData [ index ] = Memory :: instance().create ( * array._pData [ index ] );
             }
 
-            auto newBuf = Memory :: instance().createArray < T * > ( this->size() );
-            auto newLen = 0U;
+            return * this;
+        }
 
-            for ( Index index = 0, len = static_cast < Index > ( this->size() ); index < len; ++ index ) {
-                if ( ! hidden :: impl :: initializerListContains ( indices, index ) ) {
-                    newBuf [ newLen ++ ] = this->_pData [ index ];
-                } else {
-                    Memory :: instance ().destroy ( this->_pData [ index ] );
-                }
+        template < typename T >
+        auto Array < T > :: operator = (
+                Array && array
+        ) noexcept -> Array & {
+
+            if ( this == & array ) {
+                return * this;
             }
 
-            auto adjustedBuf    = Memory :: instance().createArray < T * > ( newLen );
-            auto removedCount   = this->size() - newLen;
-            (void) std :: memcpy ( adjustedBuf, newBuf, newLen * sizeof ( T * ) );
+            this->clear();
 
-            Memory :: instance ().destroyArray ( cds :: exchange ( this->_pData, adjustedBuf ) );
-            Memory :: instance ().destroyArray ( newBuf );
+            this->_capacity = exchange ( array._capacity, 0ULL );
+            this->_size     = exchange ( array._size, 0ULL );
+            Memory :: instance().destroyArray ( exchange ( this->_pData, exchange ( array._pData, nullptr ) ) );
 
-            this->_size     = newLen;
-            this->_capacity = newLen;
-
-            return removedCount;
+            return * this;
         }
 
         template < typename T >
-        auto Array < T > :: remove ( Iterator const * pIterators, Size iteratorCount ) noexcept -> Size {
-            Array < Index > indices;
+        template < typename R, meta :: EnableIf < meta :: isConvertible < R, T > () > >
+        auto Array < T > :: operator = (
+                Collection < R > const & collection
+        ) noexcept -> Array & {
 
-            for ( uint64 index = 0; index < iteratorCount; ++ index ) {
-                if ( pIterators[index].of ( this ) ) {
-                    indices.pushBack ( reinterpret_cast < ArrayDelegateIterator const * > ( Collection < T > :: acquireDelegate ( pIterators[index] ) )->index() );
-                }
+            if ( this == & collection ) {
+                return * this;
             }
 
-            return this->removeAt ( indices );
-        }
+            this->clear();
 
-        template < typename T >
-        auto Array < T > :: remove ( ConstIterator const * pIterators, Size iteratorCount ) noexcept -> Size {
-            Array < Index > indices;
+            this->_capacity = maxOf ( collection.size(), Array :: minCapacity );
+            this->_size     = collection.size();
+            Memory :: instance().destroyArray ( exchange ( this->_pData, Memory :: instance().createArray < T * > ( this->_capacity ) ) );
 
-            for ( uint64 index = 0; index < iteratorCount; ++ index ) {
-                if ( pIterators[index].of ( this ) ) {
-                    indices.pushBack ( reinterpret_cast < ArrayDelegateConstIterator const * > ( Collection < T > :: acquireDelegate ( pIterators[index] ) )->index() );
-                }
+            Size index = 0ULL;
+            for ( auto iterator = collection.begin(), end = collection.end(); iterator != end; ++ iterator, ++ index ) {
+                this->_pData [ index ] = Memory :: instance().create ( * iterator );
             }
 
-            return this->removeAt ( indices );
+            return * this;
         }
 
-        template < typename T >
-        auto Array < T > :: remove ( ReverseIterator const * pIterators, Size iteratorCount ) noexcept -> Size {
-            Array < Index > indices;
-
-            for ( uint64 index = 0; index < iteratorCount; ++ index ) {
-                if ( pIterators[index].of ( this ) ) {
-                    indices.pushBack ( reinterpret_cast < ArrayDelegateIterator const * > ( Collection < T > :: acquireDelegate ( pIterators[index] ) )->index() );
-                }
-            }
-
-            return this->removeAt ( indices );
-        }
-
-        template < typename T >
-        auto Array < T > :: remove ( ConstReverseIterator const * pIterators, Size iteratorCount ) noexcept -> Size {
-            Array < Index > indices;
-
-            for ( uint64 index = 0; index < iteratorCount; ++ index ) {
-                if ( pIterators[index].of ( this ) ) {
-                    indices.pushBack ( reinterpret_cast < ArrayDelegateConstIterator const * > ( Collection < T > :: acquireDelegate ( pIterators[index] ) )->index() );
-                }
-            }
-
-            return this->removeAt ( indices );
-        }
-
-        template < typename T >
-        __CDS_OptimalInline auto Array < T > :: pNewBack () noexcept -> ElementType * & {
-            if ( this->_size < this->_capacity ) {
-                this->_pData [ this->_size ] = nullptr;
-                return this->_pData [ this->_size ++ ];
-            }
-
-            auto newSize = maxOf ( this->_capacity * 2, this->_size + 1, Array :: minCapacity );
-            T ** newBuf = Memory :: instance ().createArray < T * > (newSize);
-
-            (void) std :: memcpy ( newBuf, this->_pData, this->_size * sizeof(T *) );
-            (void) std :: memset ( newBuf + this->_size, 0, ( newSize - this->_size ) * sizeof (T*) );
-
-            this->_capacity = newSize;
-            Memory :: instance ().destroyArray ( exchange ( this->_pData, newBuf ) );
-
-            this->_pData [ this->_size ] = nullptr;
-            return this->_pData [ this->_size ++ ];
-        }
-
-        template < typename T >
-        __CDS_OptimalInline auto Array < T > :: pNewFront () noexcept -> ElementType * & {
-            if ( this->_size < this->_capacity ) {
-                for ( Index i = this->_size; i > 0; -- i ) {
-                    this->_pData[i] = this->_pData[i - 1];
-                }
-
-                ++ this->_size;
-
-                this->_pData[0] = nullptr;
-                return this->_pData[0];
-            }
-
-            auto newSize = maxOf ( this->_capacity * 2, this->_size + 1, Array :: minCapacity );
-            auto newBuf = Memory :: instance().createArray < T * > ( newSize );
-            (void) std::memcpy ( newBuf + 1, this->_pData, this->_size * sizeof ( T * ) );
-            (void) std::memset ( newBuf + 1 + this->_size, 0, (newSize - this->_size - 1) * sizeof(T *) );
-
-            this->_capacity = newSize;
-            this->_size ++;
-
-            Memory :: instance().destroyArray ( exchange ( this->_pData, newBuf ) );
-
-            this->_pData[0] = nullptr;
-            return this->_pData[0];
-        }
-
-        template < typename T >
-        __CDS_OptimalInline auto Array < T > :: pNewBefore ( Iterator const & iterator ) noexcept -> ElementType * & {
-            return this->pNewBefore ( reinterpret_cast < ArrayDelegateIterator const * > ( List < T > :: acquireDelegate ( iterator ) )->index() );
-        }
-
-        template < typename T >
-        __CDS_OptimalInline auto Array < T > :: pNewAfter ( Iterator const & iterator ) noexcept -> ElementType * & {
-            return this->pNewAfter ( reinterpret_cast < ArrayDelegateIterator const * > ( List < T > :: acquireDelegate ( iterator ) )->index() );
-        }
-
-        template < typename T >
-        __CDS_OptimalInline auto Array < T > :: pNewBefore ( ConstIterator const & iterator ) noexcept -> ElementType * & {
-            return this->pNewBefore ( reinterpret_cast < ArrayDelegateConstIterator const * > ( Collection < T > :: acquireDelegate ( iterator ) )->index() );
-        }
-
-        template < typename T >
-        __CDS_OptimalInline auto Array < T > :: pNewAfter ( ConstIterator const & iterator ) noexcept -> ElementType * & {
-            return this->pNewAfter ( reinterpret_cast < ArrayDelegateConstIterator const * > ( Collection < T > :: acquireDelegate ( iterator ) )->index() );
-        }
-
-        template < typename T >
-        __CDS_OptimalInline auto Array < T > :: pNewBefore ( ReverseIterator const & iterator ) noexcept -> ElementType * & {
-            return this->pNewAfter ( reinterpret_cast < ArrayDelegateIterator const * > ( List < T > :: acquireDelegate ( iterator ) )->index() );
-        }
-
-        template < typename T >
-        __CDS_OptimalInline auto Array < T > :: pNewAfter ( ReverseIterator const & iterator ) noexcept -> ElementType * & {
-            return this->pNewBefore ( reinterpret_cast < ArrayDelegateIterator const * > ( List < T > :: acquireDelegate ( iterator ) )->index() );
-        }
-
-        template < typename T >
-        __CDS_OptimalInline auto Array < T > :: pNewBefore ( ConstReverseIterator const & iterator ) noexcept -> ElementType * & {
-            return this->pNewAfter ( reinterpret_cast < ArrayDelegateConstIterator const * > ( Collection < T > :: acquireDelegate ( iterator ) )->index() );
-        }
-
-        template < typename T >
-        __CDS_OptimalInline auto Array < T > :: pNewAfter ( ConstReverseIterator const & iterator ) noexcept -> ElementType * & {
-            return this->pNewBefore ( reinterpret_cast < ArrayDelegateConstIterator const * > ( Collection < T > :: acquireDelegate ( iterator ) )->index() );
-        }
-
-        template < typename T >
-        __CDS_OptimalInline auto Array < T > :: pNewAfter ( Index index ) noexcept -> ElementType * & {
-            if ( this->_size < this->_capacity ) {
-                for ( auto moveIndex = static_cast < Index > ( this->_size ), until = index + 1; moveIndex > until; -- moveIndex ) {
-                    this->_pData [ moveIndex ] = this->_pData [ moveIndex - 1 ];
-                }
-
-                ++ this->_size;
-                return this->_pData [ index + 1 ] = nullptr;
-            }
-
-            auto newCap = maxOf ( this->_capacity * 2, this->_size + 1, Array :: minCapacity );
-            auto newBuf = Memory :: instance ().createArray < T * > ( newCap );
-
-            (void) std :: memcpy ( newBuf, this->_pData, sizeof ( T * ) * index );
-            (void) std :: memcpy ( newBuf + index + 2, this->_pData + index + 1, sizeof ( T * ) * ( static_cast < Index > ( this->_size ) - index ) );
-
-            this->_capacity = newCap;
-            ++ this->_size;
-            Memory :: instance().destroyArray ( cds :: exchange ( this->_pData, newBuf ) );
-
-            return this->_pData [ index + 1 ] = nullptr;
-        }
-
-        template < typename T >
-        __CDS_OptimalInline auto Array < T > :: pNewBefore ( Index index ) noexcept -> ElementType * & {
-            if ( this->_size < this->_capacity ) {
-                for ( auto moveIndex = static_cast < Index > ( this->_size ), until = index; moveIndex > until; -- moveIndex ) {
-                    this->_pData [ moveIndex ] = this->_pData [ moveIndex - 1 ];
-                }
-
-                ++ this->_size;
-                return this->_pData [ index ] = nullptr;
-            }
-
-            auto newCap = maxOf ( this->_capacity * 2, this->_size + 1, Array :: minCapacity );
-            auto newBuf = Memory :: instance ().createArray < T * > ( newCap );
-
-            (void) std :: memcpy ( newBuf - index, this->_pData, sizeof ( T * ) * ( index - 1 ) );
-            (void) std :: memcpy ( newBuf + index + 1, this->_pData + index, sizeof ( T * ) * ( static_cast < Index > ( this->_size ) - index + 1 ) );
-
-            this->_capacity = newCap;
-            ++ this->_size;
-            Memory :: instance().destroyArray ( cds :: exchange ( this->_pData, newBuf ) );
-
-            return this->_pData [ index ] = nullptr;
-        }
     }
 }
 
