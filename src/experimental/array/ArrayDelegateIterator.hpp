@@ -11,7 +11,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         template < typename T >
         class Array < T > :: ArrayDelegateIterator : public Array < T > :: DelegateIterator {
         private:
-            ForeignPointer < Array < T > >  _pArray     { nullptr };
+            Array < T >                  *  _pArray     { nullptr };
         private:
             Index                           _index      { 0 };
         private:

@@ -10,12 +10,12 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
         template < typename T >
         constexpr Collection < T > :: ConstIterator :: ConstIterator (
-                Collection < T >                        const * pCollection,
-                UniquePointer < DelegateConstIterator >      && pIterator
+                Collection < T >                               const * pCollection,
+                cds :: UniquePointer < DelegateConstIterator >      && pIterator
         ) noexcept :
                 Collection < T > :: AbstractIterator (
                         pCollection,
-                        UniquePointer < AbstractDelegateIterator > ( cds :: forward < UniquePointer < DelegateConstIterator > > ( pIterator ) )
+                        cds :: UniquePointer < AbstractDelegateIterator > ( cds :: forward < cds :: UniquePointer < DelegateConstIterator > > ( pIterator ) )
                 ) {
 
         }

@@ -2,14 +2,14 @@
 // Created by loghin on 4/26/22.
 //
 
-#ifndef __CDS_COLLECTION_DELEGATE_ITERATOR_HPP__
-#define __CDS_COLLECTION_DELEGATE_ITERATOR_HPP__
+#ifndef __CDS_LIST_DELEGATE_ITERATOR_HPP__
+#define __CDS_LIST_DELEGATE_ITERATOR_HPP__
 
 namespace cds { // NOLINT(modernize-concat-nested-namespaces)
     namespace experimental {
 
         template < typename T >
-        class Collection < T > :: DelegateIterator : public Collection < T > :: AbstractDelegateIterator {
+        class List < T > :: DelegateIterator : public List < T > :: AbstractDelegateIterator {
         protected:
             constexpr DelegateIterator () noexcept = default;
         public:
@@ -31,4 +31,4 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
     }
 }
 
-#endif // __CDS_COLLECTION_DELEGATE_ITERATOR_HPP__
+#endif // __CDS_LIST_DELEGATE_ITERATOR_HPP__

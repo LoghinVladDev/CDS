@@ -105,7 +105,7 @@ namespace cds {
 
     template <typename T>
     concept UniqueIdentifiable = requires ( T const & left, T const & right ) {
-        UniqueIdentifiableByObject<T> || UniqueIdentifiableByOperator<T>;
+        requires UniqueIdentifiableByObject<T> || UniqueIdentifiableByOperator<T>;
     };
 
 }

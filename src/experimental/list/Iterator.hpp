@@ -2,14 +2,14 @@
 // Created by loghin on 4/26/22.
 //
 
-#ifndef __CDS_COLLECTION_ITERATOR_HPP__
-#define __CDS_COLLECTION_ITERATOR_HPP__
+#ifndef __CDS_LIST_ITERATOR_HPP__
+#define __CDS_LIST_ITERATOR_HPP__
 
 namespace cds {
     namespace experimental {
 
         template < typename T >
-        class Collection < T > :: Iterator : public Collection < T > :: AbstractIterator {
+        class List < T > :: Iterator : public List < T > :: AbstractIterator {
         public:
             constexpr Iterator () noexcept = default;
         public:
@@ -17,7 +17,7 @@ namespace cds {
         public:
             constexpr Iterator ( Iterator && ) noexcept;
         public:
-            constexpr Iterator ( Collection < T > const *, UniquePointer < DelegateIterator > && ) noexcept;
+            constexpr Iterator ( List < T > const *, cds :: UniquePointer < DelegateIterator > && ) noexcept;
         public:
             ~Iterator () noexcept override = default;
 
@@ -43,4 +43,4 @@ namespace cds {
     }
 }
 
-#endif // __CDS_COLLECTION_ITERATOR_HPP__
+#endif // __CDS_LIST_ITERATOR_HPP__

@@ -5,6 +5,8 @@
 #ifndef CDS_COLLECTIONTEST_H
 #define CDS_COLLECTIONTEST_H
 
+#define CDS_TEST_EXPERIMENTAL
+
 #include <cdsIntern/tests/cpp20/Test.h>
 
 class CollectionTest : public Test {

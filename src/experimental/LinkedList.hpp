@@ -44,10 +44,16 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             class LinkedListDelegateConstIterator;
         private:
             using typename Collection < T > :: DelegateIteratorRequestType;
+
         private:
-            auto delegateIterator ( DelegateIteratorRequestType ) noexcept -> UniquePointer < DelegateIterator > override;
+            auto delegateIterator (
+                    DelegateIteratorRequestType
+            ) noexcept -> cds :: UniquePointer < DelegateIterator > override;
         private:
-            auto delegateConstIterator ( DelegateIteratorRequestType ) const noexcept -> UniquePointer < DelegateConstIterator > override;
+            auto delegateConstIterator (
+                    DelegateIteratorRequestType
+            ) const noexcept -> cds :: UniquePointer < DelegateConstIterator > override;
+
         private:
             struct Node;
 
@@ -59,78 +65,132 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         public:
             constexpr LinkedList () noexcept = default;
         public:
-            __CDS_OptimalInline LinkedList ( LinkedList const & ) noexcept;
+            LinkedList (
+                    LinkedList const &
+            ) noexcept;
         public:
-            constexpr LinkedList ( LinkedList && ) noexcept;
+            constexpr LinkedList (
+                    LinkedList &&
+            ) noexcept;
         public:
-            __CDS_OptimalInline LinkedList (
+            LinkedList (
                     AbstractIterator const &,
                     AbstractIterator const &
             ) noexcept;
         public:
-            LinkedList ( InitializerList const & ) noexcept;
+            LinkedList (
+                    InitializerList const &
+            ) noexcept;
         public:
             ~LinkedList () noexcept;
 
         private:
-            auto remove ( Index ) noexcept -> bool override;
+            auto remove (
+                    Node const *
+            ) noexcept -> bool;
         private:
-            auto remove ( Node const * ) noexcept -> bool;
+            auto remove (
+                    Collection < Node const * > const &
+            ) noexcept -> Size;
+
+        public:
+            auto removeAt (
+                    Index
+            ) noexcept -> bool override;
+
+        public:
+            auto removeAt (
+                    Collection < Index > const &
+            ) noexcept -> Size override;
+
+        public:
+            auto removeAt (
+                    std :: initializer_list < Index > const &
+            ) noexcept -> Size override;
+
+        public:
+            auto remove (
+                    Iterator const &
+            ) noexcept -> bool override;
+        public:
+            auto remove (
+                    ConstIterator const &
+            ) noexcept -> bool override;
+        public:
+            auto remove (
+                    ReverseIterator const &
+            ) noexcept -> bool override;
+        public:
+            auto remove (
+                    ConstReverseIterator const &
+            ) noexcept -> bool override;
+
+        protected:
+            auto remove (
+                    Iterator const *,
+                    Size
+            ) noexcept -> Size override;
+        protected:
+            auto remove (
+                    ConstIterator const *,
+                    Size
+            ) noexcept -> Size override;
+        protected:
+            auto remove (
+                    ReverseIterator const *,
+                    Size
+            ) noexcept -> Size override;
+        protected:
+            auto remove (
+                    ConstReverseIterator const *,
+                    Size
+            ) noexcept -> Size override;
+
         private:
-            auto remove ( Collection < Node const * > const & ) noexcept -> Size;
-
-        public:
-            __CDS_OptimalInline auto remove ( Iterator const & ) noexcept -> bool override;
-        public:
-            __CDS_OptimalInline auto remove ( ConstIterator const & ) noexcept -> bool override;
-        public:
-            __CDS_OptimalInline auto remove ( ReverseIterator const & ) noexcept -> bool override;
-        public:
-            __CDS_OptimalInline auto remove ( ConstReverseIterator const & ) noexcept -> bool override;
-
-        public:
-            auto remove ( Collection < Iterator > const & ) noexcept -> Size override;
-        public:
-            auto remove ( Collection < ConstIterator > const & ) noexcept -> Size override;
-        public:
-            auto remove ( Collection < ReverseIterator > const & ) noexcept -> Size override;
-        public:
-            auto remove ( Collection < ConstReverseIterator > const & ) noexcept -> Size override;
-
-        protected:
-            auto remove ( Iterator const *, Size ) noexcept -> Size override;
-        protected:
-            auto remove ( ConstIterator const *, Size ) noexcept -> Size override;
-        protected:
-            auto remove ( ReverseIterator const *, Size ) noexcept -> Size override;
-        protected:
-            auto remove ( ConstReverseIterator const *, Size ) noexcept -> Size override;
-
+            auto pNewBefore (
+                    Node const *
+            ) noexcept -> ElementType * &;
         private:
-            auto pNewBefore ( Node const * ) noexcept -> ElementType * &;
-        private:
-            auto pNewAfter ( Node const * ) noexcept -> ElementType * &;
+            auto pNewAfter (
+                    Node const *
+            ) noexcept -> ElementType * &;
 
         protected:
-            __CDS_OptimalInline auto pNewFront () noexcept -> ElementType * & override;
+            auto pNewFront () noexcept -> ElementType * & override;
         protected:
-            __CDS_OptimalInline auto pNewBack () noexcept -> ElementType * & override;
+            auto pNewBack () noexcept -> ElementType * & override;
         protected:
-            __CDS_OptimalInline auto pNewBefore ( Iterator const & ) noexcept -> ElementType * & override;
+            auto pNewBefore (
+                    Iterator const &
+            ) noexcept -> ElementType * & override;
         protected:
-            __CDS_OptimalInline auto pNewAfter ( Iterator const & ) noexcept -> ElementType * & override;
+            auto pNewAfter (
+                    Iterator const &
+            ) noexcept -> ElementType * & override;
         protected:
-            __CDS_OptimalInline auto pNewBefore ( ConstIterator const & ) noexcept -> ElementType * & override;
+            auto pNewBefore (
+                    ConstIterator const &
+            ) noexcept -> ElementType * & override;
         protected:
-            __CDS_OptimalInline auto pNewAfter ( ConstIterator const & ) noexcept -> ElementType * & override;
+            auto pNewAfter (
+                    ConstIterator const &
+            ) noexcept -> ElementType * & override;
         protected:
-            __CDS_OptimalInline auto pNewBefore ( ReverseIterator const & ) noexcept -> ElementType * & override;
+            auto pNewBefore (
+                    ReverseIterator const &
+            ) noexcept -> ElementType * & override;
         protected:
-            __CDS_OptimalInline auto pNewAfter ( ReverseIterator const & ) noexcept -> ElementType * & override;
+            auto pNewAfter (
+                    ReverseIterator const &
+            ) noexcept -> ElementType * & override;
         protected:
-            __CDS_OptimalInline auto pNewBefore ( ConstReverseIterator const & ) noexcept -> ElementType * & override;
+            auto pNewBefore (
+                    ConstReverseIterator const &
+            ) noexcept -> ElementType * & override;
         protected:
-            __CDS_OptimalInline auto pNewAfter ( ConstReverseIterator const & ) noexcept -> ElementType * & override;
+            auto pNewAfter (
+                    ConstReverseIterator const &
+            ) noexcept -> ElementType * & override;
 
         public:
             __CDS_NoDiscard __CDS_cpplang_ConstexprOverride auto front () noexcept (false) -> ElementType & override;
@@ -142,12 +202,18 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             __CDS_NoDiscard __CDS_cpplang_ConstexprOverride auto back () const noexcept (false) -> ElementType const & override;
 
         public:
-            __CDS_NoDiscard __CDS_cpplang_ConstexprOverride auto get ( Index ) noexcept (false) -> ElementType & override;
+            __CDS_NoDiscard __CDS_cpplang_ConstexprOverride auto get (
+                    Index
+            ) noexcept (false) -> ElementType & override;
         public:
-            __CDS_NoDiscard __CDS_cpplang_ConstexprOverride auto get ( Index ) const noexcept (false) -> ElementType const & override;
+            __CDS_NoDiscard __CDS_cpplang_ConstexprOverride auto get (
+                    Index
+            ) const noexcept (false) -> ElementType const & override;
 
         public:
-            __CDS_NoDiscard __CDS_OptimalInline auto equals ( Object const & ) const noexcept -> bool override;
+            __CDS_NoDiscard auto equals (
+                    Object const &
+            ) const noexcept -> bool override;
 
         public:
             auto clear () noexcept -> void override;
@@ -160,11 +226,17 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             auto popBack () noexcept -> void override;
 
         public:
-            auto operator = ( LinkedList const & ) noexcept -> LinkedList &;
+            auto operator = (
+                    LinkedList const &
+            ) noexcept -> LinkedList &;
         public:
-            auto operator = ( LinkedList && ) noexcept -> LinkedList &;
+            auto operator = (
+                    LinkedList &&
+            ) noexcept -> LinkedList &;
         public:
-            auto operator = ( Collection < T > const & ) noexcept -> LinkedList &;
+            auto operator = (
+                    Collection < T > const &
+            ) noexcept -> LinkedList &;
 
         public:
             auto sequence () & noexcept -> Sequence < LinkedList < T > >;

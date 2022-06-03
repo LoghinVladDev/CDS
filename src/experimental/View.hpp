@@ -5,6 +5,8 @@
 #ifndef __CDS_EX_VIEW_HPP__
 #define __CDS_EX_VIEW_HPP__
 
+#include <CDS/experimental/meta/TypeTraits>
+
 namespace cds { // NOLINT(modernize-concat-nested-namespaces)
     namespace experimental {
 
@@ -19,7 +21,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
             }
 
-            template < typename DerivedIterableType, EnableIf < isDerivedFrom < RemoveReference < DerivedIterableType >, RemoveReference < IterableType > > :: value > = 0 >
+            template < typename DerivedIterableType, meta :: EnableIf < meta :: isDerivedFrom < meta :: RemoveReference < DerivedIterableType >, meta :: RemoveReference < IterableType > > () > = 0 >
             explicit constexpr View ( DerivedIterableType & iterable ) noexcept :
                     iterable ( iterable ) {
 
@@ -31,17 +33,17 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
             class Iterator {
             private:
-                using IterableTypeIterator = typename std :: conditional <
-                        Type < IterableType > :: isConst,
+                using IterableTypeIterator = meta :: Conditional <
+                        meta :: isConst < IterableType > (),
                         typename IterableType :: ConstIterator,
                         typename IterableType :: Iterator
-                > :: type;
+                >;
 
-                using IterableTypeElementType = typename std :: conditional <
-                        Type < IterableType > :: isConst,
+                using IterableTypeElementType = meta :: Conditional <
+                        meta :: isConst < IterableType > (),
                         typename IterableType :: ElementType const,
                         typename IterableType :: ElementType
-                > :: type;
+                >;
 
                 IterableTypeIterator it;
 

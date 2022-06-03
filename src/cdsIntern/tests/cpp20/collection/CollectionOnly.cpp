@@ -6,5 +6,6 @@
 
 int main () {
     CollectionTest ().start ( "CollectionTest" );
+
     return 0;
 }

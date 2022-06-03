@@ -2,26 +2,26 @@
 // Created by loghin on 4/26/22.
 //
 
-#ifndef __CDS_COLLECTION_ITERATOR_IMPL_HPP__
-#define __CDS_COLLECTION_ITERATOR_IMPL_HPP__
+#ifndef __CDS_LIST_ITERATOR_IMPL_HPP__
+#define __CDS_LIST_ITERATOR_IMPL_HPP__
 
 namespace cds { // NOLINT(modernize-concat-nested-namespaces)
     namespace experimental {
 
         template < typename T >
-        constexpr Collection < T > :: Iterator :: Iterator (
-                Collection < T >                   const * pCollection,
-                UniquePointer < DelegateIterator >      && pIterator
+        constexpr List < T > :: Iterator :: Iterator (
+                List < T >                         const * pList,
+                cds :: UniquePointer < DelegateIterator >      && pIterator
         ) noexcept :
-                Collection < T > :: AbstractIterator (
-                        pCollection,
-                        UniquePointer < AbstractDelegateIterator > ( cds :: forward < UniquePointer < DelegateIterator > > ( pIterator ) )
+                List < T > :: AbstractIterator (
+                        pList,
+                        cds :: UniquePointer < AbstractDelegateIterator > ( cds :: forward < cds :: UniquePointer < DelegateIterator > > ( pIterator ) )
                 ) {
 
         }
 
         template < typename T >
-        __CDS_OptimalInline Collection < T > :: Iterator :: Iterator (
+        __CDS_OptimalInline List < T > :: Iterator :: Iterator (
                 Iterator const & iterator
         ) noexcept :
                 AbstractIterator ( iterator ) {
@@ -29,7 +29,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         }
 
         template < typename T >
-        constexpr Collection < T > :: Iterator :: Iterator (
+        constexpr List < T > :: Iterator :: Iterator (
                 Iterator && iterator
         ) noexcept :
                 AbstractIterator ( cds :: forward < AbstractIterator > ( iterator ) ) {
@@ -37,7 +37,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         }
 
         template < typename T >
-        __CDS_OptimalInline auto Collection < T > :: Iterator :: operator = ( Iterator const & iterator ) noexcept -> Iterator & {
+        __CDS_OptimalInline auto List < T > :: Iterator :: operator = ( Iterator const & iterator ) noexcept -> Iterator & {
             if ( this == & iterator ) {
                 return * this;
             }
@@ -48,7 +48,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         }
 
         template < typename T >
-        __CDS_cpplang_NonConstConstexprMemberFunction auto Collection < T > :: Iterator :: operator = ( Iterator && iterator ) noexcept -> Iterator & {
+        __CDS_cpplang_NonConstConstexprMemberFunction auto List < T > :: Iterator :: operator = ( Iterator && iterator ) noexcept -> Iterator & {
             if ( this == & iterator ) {
                 return * this;
             }
@@ -59,42 +59,42 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         }
 
         template < typename T >
-        __CDS_cpplang_ConstexprOverride auto Collection < T > :: Iterator :: operator -> () const noexcept -> ElementType * {
+        __CDS_cpplang_ConstexprOverride auto List < T > :: Iterator :: operator -> () const noexcept -> ElementType * {
             return & ( * ( * this ) );
         }
 
         template < typename T >
-        __CDS_cpplang_ConstexprPureAbstract auto Collection < T > :: Iterator :: operator ++ () noexcept -> Iterator & {
+        __CDS_cpplang_ConstexprPureAbstract auto List < T > :: Iterator :: operator ++ () noexcept -> Iterator & {
             (void) this->next();
             return * this;
         }
 
         template < typename T >
-        __CDS_cpplang_ConstexprPureAbstract auto Collection < T > :: Iterator :: operator ++ (int) noexcept -> Iterator {
+        __CDS_cpplang_ConstexprPureAbstract auto List < T > :: Iterator :: operator ++ (int) noexcept -> Iterator {
             auto copy = * this;
             (void) this->next();
             return copy;
         }
 
         template < typename T >
-        __CDS_cpplang_ConstexprPureAbstract auto Collection < T > :: Iterator :: operator -- () noexcept -> Iterator & {
+        __CDS_cpplang_ConstexprPureAbstract auto List < T > :: Iterator :: operator -- () noexcept -> Iterator & {
             (void) this->previous();
             return * this;
         }
 
         template < typename T >
-        __CDS_cpplang_ConstexprPureAbstract auto Collection < T > :: Iterator :: operator -- (int) noexcept -> Iterator {
+        __CDS_cpplang_ConstexprPureAbstract auto List < T > :: Iterator :: operator -- (int) noexcept -> Iterator {
             auto copy = * this;
             (void) this->previous();
             return copy;
         }
 
         template < typename T >
-        __CDS_cpplang_ConstexprPureAbstract auto Collection < T > :: Iterator :: operator * () const noexcept -> ElementType & {
+        __CDS_cpplang_ConstexprPureAbstract auto List < T > :: Iterator :: operator * () const noexcept -> ElementType & {
             return reinterpret_cast < DelegateIterator const * > ( this->_pDelegate.get() )->value();
         }
 
     }
 }
 
-#endif // __CDS_COLLECTION_ITERATOR_IMPL_HPP__
+#endif // __CDS_LIST_ITERATOR_IMPL_HPP__

@@ -5,6 +5,16 @@
 #ifndef __CDS_OBJECT_IMPL_HPP__
 #define __CDS_OBJECT_IMPL_HPP__
 
+namespace cds {
+
+    template <> auto hash < experimental :: Object > (
+            experimental :: Object const & object
+    ) noexcept -> Index {
+        return object.hash();
+    }
+
+}
+
 namespace cds { // NOLINT(modernize-concat-nested-namespaces)
     namespace experimental {
 
@@ -18,10 +28,22 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             return this->toString();
         }
 
-        inline auto operator << ( std :: ostream & out, Object const & object ) noexcept -> std::ostream & {
+        inline auto operator << (
+                std :: ostream        & out,
+                Object          const & object
+        ) noexcept -> std::ostream & {
             return (out << object.toString());
         }
 
+        __CDS_cpplang_VirtualConstexpr auto Object :: hash () const noexcept -> Index {
+            return 0;
+        }
+
+        __CDS_cpplang_VirtualConstexpr auto Object :: equals (
+                Object const & object
+        ) const noexcept -> bool {
+            return this == & object;
+        }
     }
 }
 

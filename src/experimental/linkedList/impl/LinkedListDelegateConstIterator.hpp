@@ -34,14 +34,14 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 LinkedListDelegateConstIterator && iterator
         ) noexcept :
                 DelegateConstIterator (),
-                _pNode ( std :: move ( iterator._pNode ) ),
+                _pNode ( cds :: exchange ( iterator._pNode, nullptr ) ),
                 _forward ( cds :: exchange ( iterator._forward, true ) ) {
 
         }
 
         template < typename T >
         constexpr auto LinkedList < T > :: LinkedListDelegateConstIterator :: node () const noexcept -> LinkedList < T > :: Node const * {
-            return this->_pNode.get();
+            return this->_pNode;
         }
 
         template < typename T >

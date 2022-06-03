@@ -41,129 +41,232 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             class ArrayDelegateConstIterator;
         private:
             using typename Collection < T > :: DelegateIteratorRequestType;
+
         private:
-            auto delegateIterator ( DelegateIteratorRequestType ) noexcept -> UniquePointer < DelegateIterator > override;
+            auto delegateIterator (
+                    DelegateIteratorRequestType requestType
+            ) noexcept -> cds :: UniquePointer < DelegateIterator > override;
+
         private:
-            auto delegateConstIterator ( DelegateIteratorRequestType ) const noexcept -> UniquePointer < DelegateConstIterator > override;
+            auto delegateConstIterator (
+                    DelegateIteratorRequestType requestType
+            ) const noexcept -> cds :: UniquePointer < DelegateConstIterator > override;
 
         private:
             ElementType ** _pData       { nullptr };
+
+        private:
             Size           _capacity    { 0ULL };
 
         private:
-            auto initializeByCopy ( Array const & ) noexcept -> void;
+            static Size const minCapacity = 32ULL;
+
+        private:
+            auto initializeByCopy (
+                    Array const & array
+            ) noexcept -> void;
 
         public:
             constexpr Array () noexcept = default;
-        public:
-            __CDS_OptimalInline Array ( Array const & ) noexcept;
-        public:
-            constexpr Array ( Array && ) noexcept;
+
         public:
             Array (
-                    AbstractIterator const &,
-                    AbstractIterator const &
+                    Array const & array
             ) noexcept;
+
         public:
-            Array ( InitializerList const & ) noexcept; // NOLINT(google-explicit-constructor)
+            constexpr Array (
+                    Array && array
+            ) noexcept;
+
         public:
-            template < typename V = T, typename = EnableIf < Type < V > :: defaultConstructible > >
-            explicit Array ( Size ) noexcept;
+            template < typename IteratorType >
+            Array (
+                    IteratorType const & begin,
+                    IteratorType const & end
+            ) noexcept;
+
         public:
-            template < typename V = T, typename = EnableIf < Type < V > :: copyConstructible > >
-            Array ( Size, ElementType const & ) noexcept;
+            __CDS_Implicit Array ( // NOLINT(google-explicit-constructor)
+                    InitializerList const &
+            ) noexcept;
+
         public:
-            Array ( Collection < T > const & ) noexcept;
+            template < typename V = T, meta :: EnableIf < meta :: isDefaultConstructible < V > () > >
+            __CDS_Explicit Array (
+                    Size size
+            ) noexcept;
+
+        public:
+            template < typename V = T, meta :: EnableIf < meta :: isCopyConstructible < V > () > >
+            Array (
+                    Size                size,
+                    ElementType const & defaultValue
+            ) noexcept;
+
+        public:
+            template < typename R, meta :: EnableIf < meta :: isConvertible < R, T > () > = 0 >
+            __CDS_Explicit Array (
+                    Collection < R > const & collection
+            ) noexcept;
+
         public:
             ~Array () noexcept override;
 
+
+        public:
+            template < typename V = T, meta :: EnableIf < meta :: isDefaultConstructible < V > () > >
+            auto resize (
+                    Size
+            ) noexcept -> void;
+        public:
+            template < typename V = T, meta :: EnableIf < meta :: isCopyConstructible < V > () > >
+            auto resize (
+                    Size,
+                    ElementType const &
+            ) noexcept -> void;
+
+        public:
+            auto shrink (
+                    Size
+            ) noexcept -> void;
+
+        public:
+            auto removeAt (
+                    Index index
+            ) noexcept -> bool override;
+
+        public:
+            auto removeAt (
+                    Collection < Index > const & indices
+            ) noexcept -> Size override;
+
+        public:
+            auto removeAt (
+                    std :: initializer_list < Index > const & indices
+            ) noexcept -> Size override;
+
+        public:
+            auto remove (
+                    Iterator const & iterator
+            ) noexcept -> bool override;
+
+        public:
+            auto remove (
+                    ConstIterator const & iterator
+            ) noexcept -> bool override;
+
+        public:
+            auto remove (
+                    ReverseIterator const & iterator
+            ) noexcept -> bool override;
+
+        public:
+            auto remove (
+                    ConstReverseIterator const & iterator
+            ) noexcept -> bool override;
+
+        protected:
+            auto remove (
+                    Iterator    const * pIterators,
+                    Size                iteratorCount
+            ) noexcept -> Size override;
+
+        protected:
+            auto remove (
+                    ConstIterator   const * pIterators,
+                    Size                    iteratorCount
+            ) noexcept -> Size override;
+
+        protected:
+            auto remove (
+                    ReverseIterator const * pIterators,
+                    Size                    iteratorCount
+            ) noexcept -> Size override;
+
+        protected:
+            auto remove (
+                    ConstReverseIterator    const * pIterators,
+                    Size                            iteratorCount
+            ) noexcept -> Size override;
+
         private:
-            auto _resize ( Size ) noexcept -> void;
-
-        public:
-            template < typename V = T, typename = EnableIf < Type < V > :: defaultConstructible > >
-            auto resize ( Size ) noexcept -> void;
-        public:
-            template < typename V = T, typename = EnableIf < Type < V > :: copyConstructible > >
-            auto resize ( Size, ElementType const & ) noexcept -> void;
-
-        public:
-            auto shrink ( Size ) noexcept -> void;
-
-        public:
-            auto remove ( Index ) noexcept -> bool override;
-        public:
-            auto remove ( Collection < Index > const & ) noexcept -> Size;
-
-        public:
-            __CDS_OptimalInline auto remove ( Iterator const & ) noexcept -> bool override;
-        public:
-            __CDS_OptimalInline auto remove ( ConstIterator const & ) noexcept -> bool override;
-        public:
-            __CDS_OptimalInline auto remove ( ReverseIterator const & ) noexcept -> bool override;
-        public:
-            __CDS_OptimalInline auto remove ( ConstReverseIterator const & ) noexcept -> bool override;
-
-        public:
-            auto remove ( Collection < Iterator > const & ) noexcept -> Size override;
-        public:
-            auto remove ( Collection < ConstIterator > const & ) noexcept -> Size override;
-        public:
-            auto remove ( Collection < ReverseIterator > const & ) noexcept -> Size override;
-        public:
-            auto remove ( Collection < ConstReverseIterator > const & ) noexcept -> Size override;
-
-        protected:
-            auto remove ( Iterator const *, Size ) noexcept -> Size override;
-        protected:
-            auto remove ( ConstIterator const *, Size ) noexcept -> Size override;
-        protected:
-            auto remove ( ReverseIterator const *, Size ) noexcept -> Size override;
-        protected:
-            auto remove ( ConstReverseIterator const *, Size ) noexcept -> Size override;
+            auto pNewBefore (
+                    Index index
+            ) noexcept -> ElementType * &;
 
         private:
-            auto pNewBefore ( Index ) noexcept -> ElementType * &;
-        private:
-            auto pNewAfter ( Index ) noexcept -> ElementType * &;
+            auto pNewAfter (
+                    Index index
+            ) noexcept -> ElementType * &;
 
         protected:
-            __CDS_OptimalInline auto pNewFront () noexcept -> ElementType * & override;
+            auto pNewFront () noexcept -> ElementType * & override;
+
         protected:
-            __CDS_OptimalInline auto pNewBack () noexcept -> ElementType * & override;
+            auto pNewBack () noexcept -> ElementType * & override;
+
         protected:
-            __CDS_OptimalInline auto pNewBefore ( Iterator const & ) noexcept -> ElementType * & override;
+            auto pNewBefore (
+                    Iterator const & iterator
+            ) noexcept -> ElementType * & override;
+
         protected:
-            __CDS_OptimalInline auto pNewAfter ( Iterator const & ) noexcept -> ElementType * & override;
+            auto pNewAfter (
+                    Iterator const & iterator
+            ) noexcept -> ElementType * & override;
+
         protected:
-            __CDS_OptimalInline auto pNewBefore ( ConstIterator const & ) noexcept -> ElementType * & override;
+            auto pNewBefore (
+                    ConstIterator const & iterator
+            ) noexcept -> ElementType * & override;
+
         protected:
-            __CDS_OptimalInline auto pNewAfter ( ConstIterator const & ) noexcept -> ElementType * & override;
+            auto pNewAfter (
+                    ConstIterator const & iterator
+            ) noexcept -> ElementType * & override;
+
         protected:
-            __CDS_OptimalInline auto pNewBefore ( ReverseIterator const & ) noexcept -> ElementType * & override;
+            auto pNewBefore (
+                    ReverseIterator const & iterator
+            ) noexcept -> ElementType * & override;
+
         protected:
-            __CDS_OptimalInline auto pNewAfter ( ReverseIterator const & ) noexcept -> ElementType * & override;
+            auto pNewAfter (
+                    ReverseIterator const & iterator
+            ) noexcept -> ElementType * & override;
+
         protected:
-            __CDS_OptimalInline auto pNewBefore ( ConstReverseIterator const & ) noexcept -> ElementType * & override;
+            auto pNewBefore (
+                    ConstReverseIterator const & iterator
+            ) noexcept -> ElementType * & override;
+
         protected:
-            __CDS_OptimalInline auto pNewAfter ( ConstReverseIterator const & ) noexcept -> ElementType * & override;
+            auto pNewAfter (
+                    ConstReverseIterator const & iterator
+            ) noexcept -> ElementType * & override;
 
         public:
             __CDS_NoDiscard __CDS_cpplang_ConstexprOverride auto front () noexcept (false) -> ElementType & override;
+
         public:
             __CDS_NoDiscard __CDS_cpplang_ConstexprOverride auto front () const noexcept (false) -> ElementType const & override;
+
         public:
             __CDS_NoDiscard __CDS_cpplang_ConstexprOverride auto back () noexcept (false) -> ElementType & override;
+
         public:
             __CDS_NoDiscard __CDS_cpplang_ConstexprOverride auto back () const noexcept (false) -> ElementType const & override;
 
         public:
-            __CDS_NoDiscard __CDS_cpplang_ConstexprOverride auto get ( Index ) noexcept (false) -> ElementType & override;
-        public:
-            __CDS_NoDiscard __CDS_cpplang_ConstexprOverride auto get ( Index ) const noexcept (false) -> ElementType const & override;
+            __CDS_NoDiscard __CDS_cpplang_ConstexprOverride auto get (
+                    Index
+            ) noexcept (false) -> ElementType & override;
 
         public:
-            __CDS_NoDiscard __CDS_OptimalInline auto equals ( Object const & ) const noexcept -> bool override;
+            __CDS_NoDiscard __CDS_cpplang_ConstexprOverride auto get (
+                    Index
+            ) const noexcept (false) -> ElementType const & override;
 
         public:
             auto clear () noexcept -> void override;
@@ -176,11 +279,21 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             auto popBack () noexcept -> void override;
 
         public:
-            auto operator = ( Array const & ) noexcept -> Array &;
+            template < typename V = T, meta :: EnableIf < meta :: isCopyConstructible < V > () > = 0 >
+            auto operator = (
+                    Array const & array
+            ) noexcept -> Array &;
+
         public:
-            auto operator = ( Array && ) noexcept -> Array &;
+            auto operator = (
+                    Array && array
+            ) noexcept -> Array &;
+
         public:
-            auto operator = ( Collection < T > const & ) noexcept -> Array &;
+            template < typename R, meta :: EnableIf < meta :: isConvertible < R, T > () > = 0 >
+            auto operator = (
+                    Collection < R > const & collection
+            ) noexcept -> Array &;
 
         public:
             auto sequence () & noexcept -> Sequence < Array < T > >;
@@ -191,6 +304,11 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         public:
             auto sequence () const && noexcept -> Sequence < Array < T > const >;
         };
+
+        template < typename ... ArgumentTypes >
+        inline auto arrayOf ( ArgumentTypes && ... values ) noexcept -> Array < meta :: Common < ArgumentTypes ... > > {
+            return collectionOf < Array > ( std :: forward < ArgumentTypes > ( values ) ... );
+        }
 
     }
 }

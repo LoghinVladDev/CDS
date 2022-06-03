@@ -137,6 +137,196 @@ namespace cds {
         return std :: cout << obj << '\n';
     }
 
+    template < typename T, typename = T >
+    constexpr auto convertTo ( T const & value ) noexcept -> T const & {
+        return value;
+    }
+
+    template < typename T, typename U, experimental :: meta :: EnableIf < ! experimental :: meta :: isSame < T, U > () > = 0 >
+    constexpr auto convertTo ( T const & value ) noexcept -> U {
+        return U(value);
+    }
+
+    template < typename T >
+    constexpr auto minOf ( T const & value ) noexcept -> T const & {
+        return value;
+    }
+
+    template < typename T >
+    constexpr auto maxOf ( T const & value ) noexcept -> T const & {
+        return value;
+    }
+
+    template < typename T >
+    constexpr auto minOf ( T const & left, T const & right ) noexcept -> T const & {
+        return left < right ? left : right;
+    }
+
+    template < typename T >
+    constexpr auto maxOf ( T const & left, T const & right ) noexcept -> T const & {
+        return left > right ? left : right;
+    }
+
+    template <
+            typename LeftType,
+            typename RightType,
+            typename Common = experimental :: meta :: Common < LeftType, RightType >,
+            experimental :: meta :: EnableIf < ! experimental :: meta :: isSame < LeftType, RightType > () > = 0
+    > constexpr auto minOf ( LeftType const & left, RightType const & right ) noexcept -> Common {
+        return convertTo < Common > ( left ) < convertTo < Common > ( right ) ? convertTo < Common > ( left ) : convertTo < Common > ( right );
+    }
+
+    template < typename FirstType, typename ... RemainingTypes, typename Common = experimental :: meta :: Common < FirstType, RemainingTypes ... > >
+    constexpr auto minOf ( FirstType const & firstArgument, RemainingTypes const & ... remainingTypes ) noexcept -> experimental :: meta :: Common < FirstType, RemainingTypes ... > {
+        return minOf < Common > ( firstArgument, minOf ( remainingTypes ... ) );
+    }
+
+    template <
+            typename LeftType,
+            typename RightType,
+            typename Common = experimental :: meta :: Common < LeftType, RightType >,
+            experimental :: meta :: EnableIf < ! experimental :: meta :: isSame < LeftType, RightType > () > = 0
+    > constexpr auto maxOf ( LeftType const & left, RightType const & right ) noexcept -> Common {
+        return convertTo < Common > ( left ) > convertTo < Common > ( right ) ? convertTo < Common > ( left ) : convertTo < Common > ( right );
+    }
+
+    template < typename FirstType, typename ... RemainingTypes, typename Common = experimental :: meta :: Common < FirstType, RemainingTypes ... > >
+    constexpr auto maxOf ( FirstType const & firstArgument, RemainingTypes const & ... remainingTypes ) noexcept -> experimental :: meta :: Common < FirstType, RemainingTypes ... > {
+        return maxOf < Common > ( firstArgument, maxOf ( remainingTypes ... ) );
+    }
+
+    namespace predicates {
+        template < typename LeftType, typename RightType = LeftType, experimental :: meta :: EnableIf < experimental :: meta :: lessThanPossible < LeftType, RightType > () > = 0 >
+        constexpr auto lessThan (
+                LeftType    const & leftValue,
+                RightType   const & rightValue
+        ) noexcept ( noexcept ( leftValue < rightValue ) ) -> decltype ( leftValue < rightValue ) {
+
+            return leftValue < rightValue;
+        }
+
+        template < typename LeftType, typename RightType = LeftType, experimental :: meta :: EnableIf < ! experimental :: meta :: lessThanPossible < LeftType, RightType > () > = 0 >
+        constexpr auto lessThan (
+                LeftType    const &,
+                RightType   const &
+        ) noexcept -> bool {
+
+            static_assert ( experimental :: meta :: lessThanPossible < LeftType, RightType > (), "Not possible to invoke lessThan if LeftType < RightType is not possible" );
+            return false;
+        }
+
+        template < typename LeftType, typename RightType = LeftType, experimental :: meta :: EnableIf < experimental :: meta :: greaterThanPossible < LeftType, RightType > () > = 0 >
+        constexpr auto greaterThan (
+                LeftType    const & leftValue,
+                RightType   const & rightValue
+        ) noexcept ( noexcept ( leftValue > rightValue ) ) -> decltype ( leftValue > rightValue ) {
+
+            return leftValue > rightValue;
+        }
+
+        template < typename LeftType, typename RightType = LeftType, experimental :: meta :: EnableIf < ! experimental :: meta :: greaterThanPossible < LeftType, RightType > () > = 0 >
+        constexpr auto greaterThan (
+                LeftType    const &,
+                RightType   const &
+        ) noexcept -> bool {
+
+            static_assert ( experimental :: meta :: greaterThanPossible < LeftType, RightType > (), "Not possible to invoke greaterThan if LeftType > RightType is not possible" );
+            return false;
+        }
+
+        template < typename LeftType, typename RightType = LeftType, experimental :: meta :: EnableIf < experimental :: meta :: lessThanOrEqualToPossible < LeftType, RightType > () > = 0 >
+        constexpr auto lessThanOrEqualTo (
+                LeftType    const & leftValue,
+                RightType   const & rightValue
+        ) noexcept ( noexcept ( leftValue <= rightValue ) ) -> decltype ( leftValue <= rightValue ) {
+
+            return leftValue <= rightValue;
+        }
+
+        template < typename LeftType, typename RightType = LeftType, experimental :: meta :: EnableIf < ! experimental :: meta :: lessThanOrEqualToPossible < LeftType, RightType > () > = 0 >
+        constexpr auto lessThanOrEqualTo (
+                LeftType    const &,
+                RightType   const &
+        ) noexcept -> bool {
+
+            static_assert ( experimental :: meta :: lessThanOrEqualToPossible < LeftType, RightType > (), "Not possible to invoke lessThanOrEqualTo if LeftType <= RightType is not possible" );
+            return false;
+        }
+
+        template < typename LeftType, typename RightType = LeftType, experimental :: meta :: EnableIf < experimental :: meta :: greaterThanOrEqualToPossible < LeftType, RightType > () > = 0 >
+        constexpr auto greaterThanOrEqualTo (
+                LeftType    const & leftValue,
+                RightType   const & rightValue
+        ) noexcept ( noexcept ( leftValue >= rightValue ) ) -> decltype ( leftValue >= rightValue ) {
+
+            return leftValue >= rightValue;
+        }
+
+        template < typename LeftType, typename RightType = LeftType, experimental :: meta :: EnableIf < ! experimental :: meta :: greaterThanOrEqualToPossible < LeftType, RightType > () > = 0 >
+        constexpr auto greaterThanOrEqualTo (
+                LeftType    const &,
+                RightType   const &
+        ) noexcept -> bool {
+
+            static_assert ( experimental :: meta :: greaterThanOrEqualToPossible < LeftType, RightType > (), "Not possible to invoke greaterThanOrEqualTo if LeftType >= RightType is not possible" );
+            return false;
+        }
+
+        template < typename LeftType, typename RightType = LeftType, experimental :: meta :: EnableIf < experimental :: meta :: equalToPossible < LeftType, RightType > () > = 0 >
+        constexpr auto equalTo (
+                LeftType    const & leftValue,
+                RightType   const & rightValue
+        ) noexcept ( noexcept ( leftValue == rightValue ) ) -> decltype ( leftValue == rightValue ) {
+
+            return leftValue == rightValue;
+        }
+
+        template < typename LeftType, typename RightType = LeftType, experimental :: meta :: EnableIf < ! experimental :: meta :: equalToPossible < LeftType, RightType > () > = 0 >
+        constexpr auto equalTo (
+                LeftType    const &,
+                RightType   const &
+        ) noexcept -> bool {
+
+            static_assert ( experimental :: meta :: equalToPossible < LeftType, RightType > (), "Not possible to invoke equalTo if LeftType == RightType is not possible" );
+            return false;
+        }
+
+        template < typename LeftType, typename RightType = LeftType, experimental :: meta :: EnableIf < experimental :: meta :: notEqualToPossible < LeftType, RightType > () > = 0 >
+        constexpr auto notEqualTo (
+                LeftType    const & leftValue,
+                RightType   const & rightValue
+        ) noexcept ( noexcept ( leftValue != rightValue ) ) -> decltype ( leftValue != rightValue ) {
+
+            return leftValue != rightValue;
+        }
+
+        template < typename LeftType, typename RightType = LeftType, experimental :: meta :: EnableIf < ! experimental :: meta :: notEqualToPossible < LeftType, RightType > () > = 0 >
+        constexpr auto notEqualTo (
+                LeftType    const &,
+                RightType   const &
+        ) noexcept -> bool {
+
+            static_assert ( experimental :: meta :: notEqualToPossible < LeftType, RightType > (), "Not possible to invoke notEqualTo if LeftType != RightType is not possible" );
+            return false;
+        }
+
+        template < typename T >
+        constexpr auto alwaysTrue (
+                T const &
+        ) noexcept -> bool {
+
+            return true;
+        }
+
+        template < typename T >
+        constexpr auto alwaysFalse (
+                T const &
+        ) noexcept -> bool {
+
+            return false;
+        }
+    }
+
 }
 
 __CDS_RegisterParseType(ArithmeticException) // NOLINT(clion-misra-cpp2008-8-0-1)

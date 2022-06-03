@@ -7,6 +7,7 @@
 
 #include <CDS/Object>
 #include <CDS/Traits>
+#include <functional>
 
 namespace cds { // NOLINT(modernize-concat-nested-namespaces)
     namespace utility { // NOLINT(modernize-concat-nested-namespaces)

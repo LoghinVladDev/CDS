@@ -11,7 +11,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         template < typename T >
         class LinkedList < T > :: LinkedListDelegateConstIterator : public LinkedList < T > :: DelegateConstIterator {
         private:
-            ForeignPointer < LinkedList < T > :: Node const >   _pNode;
+            LinkedList < T > :: Node const                    * _pNode;
         private:
             bool                                                _forward;
 

@@ -5,6 +5,7 @@
 #ifndef __CDS_EX_JSON_HPP__
 #define __CDS_EX_JSON_HPP__
 
+#include <CDS/experimental/meta/TypeTraits>
 #include <CDS/HashMap>
 #include <CDS/Concepts>
 #include <CDS/Path>
@@ -183,7 +184,13 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
                 template < typename T >
                 struct PrimitiveAdaptable < T > {
-                    constexpr static bool value = AdaptorProperties < T > :: adaptable && ( Type < T > :: isPrimitive || ( isSame < T, StringLiteral > () && Type < T > :: isBasicPointer ) );
+                    constexpr static bool value =
+                            AdaptorProperties < T > :: adaptable && (
+                                    experimental :: meta :: isFundamental < T > () || (
+                                            experimental :: meta :: isSame < T, StringLiteral > () &&
+                                            experimental :: meta :: isBasicPointer < T > ()
+                                    )
+                            );
                 };
 
                 template < typename T, typename = void >
@@ -193,7 +200,12 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
                 template < typename T >
                 struct Adaptable < T > {
-                    constexpr static bool value = AdaptorProperties < T > :: adaptable && ! Type < T > :: isPrimitive && ! ( isSame < T, StringLiteral > () && Type < T > :: isBasicPointer );
+                    constexpr static bool value =
+                            AdaptorProperties < T > :: adaptable &&
+                            ! experimental :: meta :: isFundamental < T > () && ! (
+                                    experimental :: meta ::  isSame < T, StringLiteral > () &&
+                                    experimental :: meta :: isBasicPointer < T > ()
+                            );
                 };
 
                 __CDS_cpplang_ConstexprMultipleReturn auto implicitAdaptPossible ( ElementType from, ElementType to ) noexcept -> bool {
@@ -206,10 +218,10 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
                 class JsonElement {
                 private:
-                    ElementType              type;
-                    UniquePointer < Object > value;
+                    ElementType                     type;
+                    cds :: UniquePointer < Object > value;
 
-                    template < typename T, typename U = T, EnableIf < Type < U > :: isPrimitive > = 0 >
+                    template < typename T, typename U = T, experimental :: meta :: EnableIf < experimental :: meta :: isFundamental < U > () > = 0 >
                     __CDS_OptimalInline auto implicitAdapt () const noexcept (false) -> T {
                         switch ( this->type ) {
                             case ElementType::Bool:     return static_cast < T > ( reinterpret_cast < Boolean const * > ( this->value.get() )->get() );
@@ -222,7 +234,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                         }
                     }
 
-                    template < typename T, typename U = T, EnableIf < ! Type < U > :: isPrimitive && Type < U > :: isBasicPointer && isSame < U, StringLiteral > > = 0 >
+                    template < typename T, typename U = T, experimental :: meta :: EnableIf < ! experimental :: meta :: isFundamental < U > () && experimental :: meta :: isBasicPointer < U > () && experimental :: meta :: isSame < U, StringLiteral > () > = 0 >
                     __CDS_OptimalInline auto implicitAdapt () const noexcept (false) -> T {
                         switch ( this->type ) {
                             case ElementType::Bool:
@@ -256,21 +268,21 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
                     }
 
-                    template < typename T, typename U = T, EnableIf < PrimitiveAdaptable < U > :: value > = 0 >
+                    template < typename T, typename U = T, experimental :: meta :: EnableIf < PrimitiveAdaptable < U > :: value > = 0 >
                     __CDS_OptimalInline JsonElement ( T object ) noexcept : // NOLINT(google-explicit-constructor)
                             type ( AdaptorProperties < T > :: adaptEnum ),
                             value ( cds :: copy < typename AdaptorProperties < T > :: AdaptedType > ( object ) ) { // NOLINT(cppcoreguidelines-pro-type-member-init)
 
                     }
 
-                    template < typename T, typename U = T, EnableIf < Adaptable < U > :: value && isSame < typename AdaptorProperties < T > :: AdaptedType, T > () > = 0 >
+                    template < typename T, typename U = T, experimental :: meta :: EnableIf < Adaptable < U > :: value && experimental :: meta :: isSame < typename AdaptorProperties < T > :: AdaptedType, T > () > = 0 >
                     __CDS_OptimalInline JsonElement ( T const & object ) noexcept : // NOLINT(google-explicit-constructor)
                             type ( AdaptorProperties < T > :: adaptEnum ),
                             value ( cds :: copy ( object ) ) { // NOLINT(cppcoreguidelines-pro-type-member-init)
 
                     }
 
-                    template < typename T, typename U = T, EnableIf < Adaptable < U > :: value && ! isSame < typename AdaptorProperties < T > :: AdaptedType, T > () > = 0 >
+                    template < typename T, typename U = T, experimental :: meta :: EnableIf < Adaptable < U > :: value && ! experimental :: meta :: isSame < typename AdaptorProperties < T > :: AdaptedType, T > () > = 0 >
                     __CDS_OptimalInline JsonElement ( T const & object ) noexcept : // NOLINT(google-explicit-constructor)
                             type ( AdaptorProperties < T > :: adaptEnum ),
                             value ( cds :: copy < typename AdaptorProperties < T > :: AdaptedType > ( object ) ) { // NOLINT(cppcoreguidelines-pro-type-member-init)
@@ -279,7 +291,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
                     __CDS_OptimalInline ~JsonElement() noexcept = default;
 
-                    template < typename T, typename U = T, EnableIf < Adaptable < U > :: value > = 0 >
+                    template < typename T, typename U = T, experimental :: meta :: EnableIf < Adaptable < U > :: value > = 0 >
                     __CDS_OptimalInline auto to () const noexcept (false) -> typename AdaptorProperties < U > :: AdaptedType const & {
                         if ( AdaptorProperties < T > :: adaptEnum != this->type ) {
                             throw TypeException ( String :: f ( "Type Cast Exception. Cannot Convert '%s' to '%s'", impl :: toString ( type ), Type < T > :: name() ) );
@@ -288,7 +300,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                         return * reinterpret_cast < typename AdaptorProperties < T > :: AdaptedType * > ( this->value.get() );
                     };
 
-                    template < typename T, typename U = T, EnableIf < PrimitiveAdaptable < U > :: value > = 0 >
+                    template < typename T, typename U = T, experimental :: meta :: EnableIf < PrimitiveAdaptable < U > :: value > = 0 >
                     __CDS_OptimalInline auto to () const noexcept (false) -> T {
                         if ( AdaptorProperties < T > :: adaptEnum != this->type ) {
                             if ( implicitAdaptPossible ( AdaptorProperties < T > :: adaptEnum, this->type ) ) {
@@ -461,7 +473,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         ) class JsonObject : public MapImplementationType {
 
             static_assert (
-                    isDerivedFrom < MapImplementationType, hidden :: impl :: JsonCompatibleMap > :: type :: value,
+                    experimental :: meta :: isDerivedFrom < MapImplementationType, hidden :: impl :: JsonCompatibleMap > (),
                     "json :: Object requires a Map < String, hidden :: impl :: Element > compatible template parameter to be used"
             );
 
@@ -482,7 +494,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 return Memory :: instance().create < JsonObject > ( * this );
             }
 
-            template < typename T, typename U = T, EnableIf < hidden :: impl :: PrimitiveAdaptable < U > :: value > = 0 >
+            template < typename T, typename U = T, experimental :: meta :: EnableIf < hidden :: impl :: PrimitiveAdaptable < U > :: value > = 0 >
             __CDS_OptimalInline auto put ( String label, T object ) noexcept -> JsonObject & {
                 if ( ! this->orderedKeys.contains ( label ) ) {
                     this->orderedKeys.add ( label );
@@ -492,7 +504,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 return * this;
             }
 
-            template < typename T, typename U = T, EnableIf < hidden :: impl :: Adaptable < U > :: value > = 0 >
+            template < typename T, typename U = T, experimental :: meta :: EnableIf < hidden :: impl :: Adaptable < U > :: value > = 0 >
             __CDS_OptimalInline auto put ( String label, T const & object ) noexcept -> JsonObject & {
                 if ( ! this->orderedKeys.contains ( label ) ) {
                     this->orderedKeys.add ( label );
@@ -502,7 +514,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 return * this;
             }
 
-            template < typename T, typename U = T, EnableIf < hidden :: impl :: Adaptable < U > :: value > = 0 >
+            template < typename T, typename U = T, experimental :: meta :: EnableIf < hidden :: impl :: Adaptable < U > :: value > = 0 >
             __CDS_NoDiscard __CDS_OptimalInline auto get ( String const & label ) const noexcept (false) -> typename hidden :: impl :: AdaptorProperties < T > :: AdaptedType const & {
                 auto value = MapImplementationType :: find ( label );
                 if ( ! value.hasValue() ) {
@@ -512,7 +524,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 return value.value() -> template to < T > ();
             }
 
-            template < typename T, typename U = T, EnableIf < hidden :: impl :: PrimitiveAdaptable < U > :: value > = 0 >
+            template < typename T, typename U = T, experimental :: meta :: EnableIf < hidden :: impl :: PrimitiveAdaptable < U > :: value > = 0 >
             __CDS_NoDiscard __CDS_OptimalInline auto get ( String const & label ) const noexcept (false) -> T {
                 auto value = MapImplementationType :: find ( label );
                 if ( ! value.hasValue() ) {
@@ -640,7 +652,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         ) class JsonArray : public ListImplementationType {
 
             static_assert (
-                    isDerivedFrom < ListImplementationType, hidden :: impl :: JsonCompatibleList > :: type :: value,
+                    experimental :: meta :: isDerivedFrom < ListImplementationType, hidden :: impl :: JsonCompatibleList > (),
                     "json :: Array requires a List < hidden :: impl :: Element > compatible template parameter to be used"
             );
 
@@ -659,48 +671,48 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 return Memory :: instance ().create < JsonArray > ( * this );
             }
 
-            template < typename T, typename U = T, EnableIf < hidden :: impl :: PrimitiveAdaptable < U > :: value > = 0 >
+            template < typename T, typename U = T, experimental :: meta :: EnableIf < hidden :: impl :: PrimitiveAdaptable < U > :: value > = 0 >
             __CDS_OptimalInline auto add ( T object ) -> JsonArray & {
                 this->Collection < JsonElement > :: add ( object );
                 return * this;
             }
 
-            template < typename T, typename U = T, EnableIf < hidden :: impl :: Adaptable < U > :: value > = 0 >
+            template < typename T, typename U = T, experimental :: meta :: EnableIf < hidden :: impl :: Adaptable < U > :: value > = 0 >
             __CDS_OptimalInline auto add ( T const & object ) -> JsonArray & {
                 this->Collection < JsonElement > :: add ( object );
                 return * this;
             }
 
-            template < typename T, typename U = T, EnableIf < hidden :: impl :: PrimitiveAdaptable < U > :: value > = 0 >
+            template < typename T, typename U = T, experimental :: meta :: EnableIf < hidden :: impl :: PrimitiveAdaptable < U > :: value > = 0 >
             __CDS_OptimalInline auto pushBack ( T object ) -> JsonArray & {
                 this->ListImplementationType :: pushBack ( object );
                 return * this;
             }
 
-            template < typename T, typename U = T, EnableIf < hidden :: impl :: Adaptable < U > :: value > = 0 >
+            template < typename T, typename U = T, experimental :: meta :: EnableIf < hidden :: impl :: Adaptable < U > :: value > = 0 >
             __CDS_OptimalInline auto pushBack ( T const & object ) -> JsonArray & {
                 this->ListImplementationType :: pushBack ( object );
                 return * this;
             }
 
-            template < typename T, typename U = T, EnableIf < hidden :: impl :: PrimitiveAdaptable < U > :: value > = 0 >
+            template < typename T, typename U = T, experimental :: meta :: EnableIf < hidden :: impl :: PrimitiveAdaptable < U > :: value > = 0 >
             __CDS_OptimalInline auto pushFront ( T object ) -> JsonArray & {
                 this->ListImplementationType :: pushFront ( object );
                 return * this;
             }
 
-            template < typename T, typename U = T, EnableIf < hidden :: impl :: Adaptable < U > :: value > = 0 >
+            template < typename T, typename U = T, experimental :: meta :: EnableIf < hidden :: impl :: Adaptable < U > :: value > = 0 >
             __CDS_OptimalInline auto pushFront ( T const & object ) -> JsonArray & {
                 this->ListImplementationType :: pushFront ( object );
                 return * this;
             }
 
-            template < typename T, typename U = T, EnableIf < hidden :: impl :: Adaptable < U > :: value > = 0 >
+            template < typename T, typename U = T, experimental :: meta :: EnableIf < hidden :: impl :: Adaptable < U > :: value > = 0 >
             __CDS_NoDiscard __CDS_OptimalInline auto get ( Index index ) const noexcept (false) -> typename hidden :: impl :: AdaptorProperties < T > :: AdaptedType const & {
                 return ListImplementationType :: get ( index ). template to < T > ();
             }
 
-            template < typename T, typename U = T, EnableIf < hidden :: impl :: PrimitiveAdaptable < U > :: value > = 0 >
+            template < typename T, typename U = T, experimental :: meta :: EnableIf < hidden :: impl :: PrimitiveAdaptable < U > :: value > = 0 >
             __CDS_NoDiscard __CDS_OptimalInline auto get ( Index index ) const noexcept (false) -> T {
                 return ListImplementationType :: get ( index ). template to < T > ();
             }
