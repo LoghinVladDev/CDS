@@ -88,7 +88,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             Size _size { 0U };
 
         public:
-            static Index const invalidIndex;
+            static Index const invalidIndex = -1;
 
         protected:
             /**

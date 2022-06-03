@@ -121,7 +121,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
 
         template < typename T >
-        constexpr Index const List < T > :: invalidIndex = -1;
+        Index const List < T > :: invalidIndex;
 
 
         template < typename T >

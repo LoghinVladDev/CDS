@@ -10,7 +10,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
 
         template < typename T >
-        constexpr Size const Array < T > :: minCapacity = 32ULL;
+        Size const Array < T > :: minCapacity;
 
 
         template < typename T >
