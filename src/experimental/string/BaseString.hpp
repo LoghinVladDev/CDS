@@ -278,14 +278,14 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
 
                 public:
-                    constexpr auto length () const noexcept -> Size;
+                    __CDS_NoDiscard constexpr auto length () const noexcept -> Size;
 
                 public:
-                    constexpr auto size () const noexcept -> Size;
+                    __CDS_NoDiscard constexpr auto size () const noexcept -> Size;
 
 
                 public:
-                    constexpr auto capacity () const noexcept -> Size;
+                    __CDS_NoDiscard constexpr auto capacity () const noexcept -> Size;
 
 
                 public:
@@ -308,7 +308,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                     auto clear () noexcept -> void;
 
                 public:
-                    constexpr auto empty () const noexcept -> bool;
+                    __CDS_NoDiscard constexpr auto empty () const noexcept -> bool;
 
                 public:
                     __CDS_cpplang_NonConstConstexprMemberFunction auto operator [] (
@@ -3011,9 +3011,10 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 #include "ConstIterator.hpp"
 #include "ReverseIterator.hpp"
 #include "ConstReverseIterator.hpp"
-#include "StringUtils.hpp"
 
 #include "view/BaseStringView.hpp"
+
+#include "StringUtils.hpp"
 
 #include "impl/AbstractIterator.hpp"
 #include "impl/AbstractConstIterator.hpp"
@@ -3021,6 +3022,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 #include "impl/ConstIterator.hpp"
 #include "impl/ReverseIterator.hpp"
 #include "impl/ConstReverseIterator.hpp"
+#include "impl/StringUtils.hpp"
 #include "impl/BaseString.hpp"
 
 #endif // __CDS_EX_STRING_BASE_HPP__

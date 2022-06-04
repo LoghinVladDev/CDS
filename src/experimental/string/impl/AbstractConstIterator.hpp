@@ -65,6 +65,13 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 }
 
                 template < typename CharType >
+                __CDS_cpplang_NonConstConstexprMemberFunction auto BaseString < CharType > :: AbstractConstIterator :: next () noexcept -> AbstractConstIterator & {
+
+                    this->_forward ? ++ this->_index : -- this->_index;
+                    return * this;
+                }
+
+                template < typename CharType >
                 __CDS_cpplang_NonConstConstexprMemberFunction auto BaseString < CharType > :: AbstractConstIterator :: previous () noexcept -> AbstractConstIterator & {
 
                     this->_forward ? -- this->_index : ++ this->_index;

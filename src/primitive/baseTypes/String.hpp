@@ -1729,7 +1729,7 @@ namespace cds {
             }
 
             if (index >= static_cast<Index>(this->size()) ) {
-                index = static_cast < Index > ( index ) % static_cast < Index > ( this->size());
+                index = index % static_cast < Index > ( this->size());
             }
 
             return this->_p[index];
