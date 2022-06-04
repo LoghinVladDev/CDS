@@ -8,6 +8,7 @@
 #include <CDS/Pointer>
 #include <CDS/experimental/Array>
 #include <CDS/experimental/Set>
+#include <CDS/experimental/String>
 using namespace cds;
 
 
@@ -35,6 +36,11 @@ int main () {
     arr.sort ();
 
     std :: cout << arr << '\n';
+
+//    experimental :: String s23;
+
+    String s;
+    s += 'a';
 
     arr.count ( Function ( [] (String v) { return true; } ) );
 

@@ -89,7 +89,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
 
         template < typename T >
-        template < typename IteratorType >
+        template < typename IteratorType, meta :: EnableIf < meta :: isIterator < IteratorType > () > >
         Array < T > :: Array (
                 IteratorType const & begin,
                 IteratorType const & end

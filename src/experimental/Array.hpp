@@ -8,6 +8,10 @@
 #include <CDS/experimental/List>
 
 namespace cds { // NOLINT(modernize-concat-nested-namespaces)
+
+    template < typename C >
+    class Sequence;
+
     namespace experimental {
 
         template < typename T >
@@ -80,7 +84,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             ) noexcept;
 
         public:
-            template < typename IteratorType >
+            template < typename IteratorType, meta :: EnableIf < meta :: isIterator < IteratorType > () > = 0 >
             Array (
                     IteratorType const & begin,
                     IteratorType const & end
