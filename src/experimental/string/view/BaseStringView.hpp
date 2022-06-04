@@ -56,22 +56,22 @@ namespace cds {
                     ) noexcept;
 
                 public:
-                    constexpr BaseStringView (
+                    __CDS_Implicit constexpr BaseStringView (
                             BaseString < CharType > const & string
                     ) noexcept;
 
                 public:
-                    constexpr BaseStringView (
+                    __CDS_Implicit constexpr BaseStringView (
                             std :: basic_string < CharType > const & string
                     ) noexcept;
 
                 public:
-                    constexpr BaseStringView (
+                    __CDS_Implicit constexpr BaseStringView (
                             std :: basic_string_view < CharType > const & string
                     ) noexcept;
 
                 public:
-                    constexpr BaseStringView (
+                    __CDS_Implicit __CDS_cpplang_ConstexprConditioned BaseStringView ( // NOLINT(google-explicit-constructor)
                             ElementType const * pString
                     ) noexcept;
 
@@ -557,6 +557,248 @@ namespace cds {
                             ElementType             character,
                             BaseStringView  const & string
                     ) noexcept -> bool;
+
+
+                public:
+                    auto operator + (
+                            BaseStringView const & string
+                    ) const noexcept -> BaseString < CharType >;
+
+                public:
+                    auto operator + (
+                            std :: basic_string < CharType > const & string
+                    ) const noexcept -> BaseString < CharType >;
+
+                public:
+                    auto operator + (
+                            ElementType const * pString
+                    ) const noexcept -> BaseString < CharType >;
+
+#if defined(CDS_QT)
+
+                    public:
+                    auto operator + (
+                            QString const & string
+                    ) const noexcept -> BaseString < CharType >;
+
+#endif
+
+                public:
+                    template < typename T = CharType, meta :: EnableIf < meta :: isSame < T, uint8 > () > = 0 >
+                    auto operator + (
+                            ElementType character
+                    ) const noexcept -> BaseString < CharType >;
+
+                public:
+                    template < typename T = CharType, meta :: EnableIf < meta :: isSame < T, uint16 > () > = 0 >
+                    auto operator + (
+                            ElementType character
+                    ) const noexcept -> BaseString < CharType >;
+
+                public:
+                    template < typename T = CharType, meta :: EnableIf < meta :: isSame < T, sint8 > () > = 0 >
+                    auto operator + (
+                            ElementType character
+                    ) const noexcept -> BaseString < CharType >;
+
+                public:
+                    template < typename T = CharType, meta :: EnableIf < meta :: isSame < T, sint16 > () > = 0 >
+                    auto operator + (
+                            ElementType character
+                    ) const noexcept -> BaseString < CharType >;
+
+                public:
+                    template < typename T = CharType, meta :: EnableIf < ! meta :: isSame < T, uint8 > () > = 0 >
+                    auto operator + (
+                            uint8 value
+                    ) const noexcept -> BaseString < CharType >;
+
+                public:
+                    template < typename T = CharType, meta :: EnableIf < ! meta :: isSame < T, uint16 > () > = 0 >
+                    auto operator + (
+                            uint16 value
+                    ) const noexcept -> BaseString < CharType >;
+
+                public:
+                    template < typename T = CharType, meta :: EnableIf < ! meta :: isSame < T, sint8 > () > = 0 >
+                    auto operator + (
+                            sint8 value
+                    ) const noexcept -> BaseString < CharType >;
+
+                public:
+                    template < typename T = CharType, meta :: EnableIf < ! meta :: isSame < T, sint16 > () > = 0 >
+                    auto operator + (
+                            sint16 value
+                    ) const noexcept -> BaseString < CharType >;
+
+                public:
+                    template < typename T = std :: size_t, meta :: EnableIf < ! meta :: isSame < T, uint64 > () > = 0 >
+                    auto operator + (
+                            std :: size_t value
+                    ) const noexcept -> BaseString < CharType >;
+
+                public:
+                    auto operator + (
+                            bool value
+                    ) const noexcept -> BaseString < CharType >;
+
+                public:
+                    auto operator + (
+                            uint32 value
+                    ) const noexcept -> BaseString < CharType >;
+
+                public:
+                    auto operator + (
+                            uint64 value
+                    ) const noexcept -> BaseString < CharType >;
+
+                public:
+                    auto operator + (
+                            sint32 value
+                    ) const noexcept -> BaseString < CharType >;
+
+                public:
+                    auto operator + (
+                            sint64 value
+                    ) const noexcept -> BaseString < CharType >;
+
+                public:
+                    auto operator + (
+                            float value
+                    ) const noexcept -> BaseString < CharType >;
+
+                public:
+                    auto operator + (
+                            double value
+                    ) const noexcept -> BaseString < CharType >;
+
+
+                public:
+                    friend auto operator + (
+                            std :: basic_string < CharType >    const & leftString,
+                            BaseStringView                      const & rightString
+                    ) noexcept -> BaseString < CharType >;
+
+                public:
+                    friend auto operator + (
+                            ElementType     const * leftString,
+                            BaseStringView  const & rightString
+                    ) noexcept -> BaseString < CharType >;
+
+#if defined(CDS_QT)
+
+                    public:
+                    friend auto operator + (
+                            QString         const & leftString,
+                            BaseStringView  const & rightString
+                    ) noexcept -> BaseString < CharType >;
+
+#endif
+
+                public:
+                    template < typename T, meta :: EnableIf < meta :: isSame < T, uint8 > () > >
+                    friend auto operator + (
+                            ElementType             character,
+                            BaseStringView  const & string
+                    ) noexcept -> BaseString < CharType >;
+
+                public:
+                    template < typename T, meta :: EnableIf < meta :: isSame < T, uint16 > () > >
+                    friend auto operator + (
+                            ElementType             character,
+                            BaseStringView  const & string
+                    ) noexcept -> BaseString < CharType >;
+
+                public:
+                    template < typename T, meta :: EnableIf < meta :: isSame < T, sint8 > () > >
+                    friend auto operator + (
+                            ElementType         character,
+                            BaseStringView  const & string
+                    ) noexcept -> BaseString < CharType >;
+
+                public:
+                    template < typename T, meta :: EnableIf < meta :: isSame < T, sint16 > () > >
+                    friend auto operator + (
+                            ElementType             character,
+                            BaseStringView  const & string
+                    ) noexcept -> BaseString < CharType >;
+
+                public:
+                    template < typename T, meta :: EnableIf < ! meta :: isSame < T, uint8 > () > >
+                    friend auto operator + (
+                            uint8                   value,
+                            BaseStringView  const & string
+                    ) noexcept -> BaseString < CharType >;
+
+                public:
+                    template < typename T, meta :: EnableIf < ! meta :: isSame < T, uint16 > () > >
+                    friend auto operator + (
+                            uint16                  value,
+                            BaseStringView  const & string
+                    ) noexcept -> BaseString < CharType >;
+
+                public:
+                    template < typename T, meta :: EnableIf < ! meta :: isSame < T, sint8 > () > >
+                    friend auto operator + (
+                            sint8                   value,
+                            BaseStringView  const & string
+                    ) noexcept -> BaseString < CharType >;
+
+                public:
+                    template < typename T, meta :: EnableIf < ! meta :: isSame < T, sint16 > () > >
+                    friend auto operator + (
+                            sint16                  value,
+                            BaseStringView  const & string
+                    ) noexcept -> BaseString < CharType >;
+
+                public:
+                    template < typename T, meta :: EnableIf < ! meta :: isSame < T, uint64 > () > >
+                    friend auto operator + (
+                            std :: size_t           value,
+                            BaseStringView  const & string
+                    ) noexcept -> BaseString < CharType >;
+
+                public:
+                    friend auto operator + (
+                            bool                    value,
+                            BaseStringView  const & string
+                    ) noexcept -> BaseString < CharType >;
+
+                public:
+                    friend auto operator + (
+                            uint32                  value,
+                            BaseStringView  const & string
+                    ) noexcept -> BaseString < CharType >;
+
+                public:
+                    friend auto operator + (
+                            uint64                  value,
+                            BaseStringView  const & string
+                    ) noexcept -> BaseString < CharType >;
+
+                public:
+                    friend auto operator + (
+                            sint32                  value,
+                            BaseStringView  const & string
+                    ) noexcept -> BaseString < CharType >;
+
+                public:
+                    friend auto operator + (
+                            sint64                  value,
+                            BaseStringView  const & string
+                    ) noexcept -> BaseString < CharType >;
+
+                public:
+                    friend auto operator + (
+                            float                   value,
+                            BaseStringView  const & string
+                    ) noexcept -> BaseString < CharType >;
+
+                public:
+                    friend auto operator + (
+                            double                  value,
+                            BaseStringView  const & string
+                    ) noexcept -> BaseString < CharType >;
 
 
 
@@ -1471,14 +1713,5 @@ namespace cds {
         }
     }
 }
-
-#include "AbstractConstIterator.hpp"
-#include "ConstIterator.hpp"
-#include "ConstReverseIterator.hpp"
-
-#include "impl/AbstractConstIterator.hpp"
-#include "impl/ConstIterator.hpp"
-#include "impl/ConstReverseIterator.hpp"
-#include "impl/BaseStringView.hpp"
 
 #endif // __CDS_EX_BASE_STRING_VIEW_HPP__

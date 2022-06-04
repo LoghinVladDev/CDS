@@ -238,6 +238,17 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 template < typename T >
                 struct IsArithmetic : BoolConstant < std :: is_arithmetic < T > :: value > {};
 
+                namespace isSignedImpl {
+                    template < typename T, bool = IsArithmetic < T > :: value >
+                    struct IsSigned : FalseType {};
+
+                    template < typename T >
+                    struct IsSigned < T, true > : impl :: BoolConstant < T ( -1 ) < T ( 0 ) > {};
+                }
+
+                template < typename T >
+                struct IsSigned : isSignedImpl :: IsSigned < T > :: Type {};
+
                 /**
                  * @brief Meta-type implementation used to check if a given type can be constructed without arguments ( has default constructor )
                  * @tparam T is the type checked
@@ -672,6 +683,16 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                  */
                 template < typename From, typename To >
                 struct IsConvertible : isConvertibleImpl :: IsConvertible < From, To > :: Type {};
+
+                template < typename T >
+                struct MakeSigned {
+                    using Type = typename std :: make_signed < T > :: type;
+                };
+
+                template < typename T >
+                struct MakeUnsigned {
+                    using Type = typename std :: make_unsigned < T > :: type;
+                };
             }
 
             /**
@@ -702,6 +723,9 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
              * <pre>- Common \< String, uint64, float \> = String;</pre>
              */
             template < typename ... Types >         using Common    = typename impl :: Common < Types ... > :: Type;
+
+            template < typename T >                 using MakeSigned    = typename impl :: MakeSigned < T > :: Type;
+            template < typename T >                 using MakeUnsigned  = typename impl :: MakeUnsigned < T > :: Type;
 
             /**
              * @brief Meta-function used to check if a given type is convertible to another given type
@@ -862,6 +886,18 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             template < typename Type >
             constexpr auto isArithmetic () noexcept -> bool {
                 return impl :: IsArithmetic < Type > :: value;
+            }
+
+            template < typename Type >
+            constexpr auto isSigned () noexcept -> bool {
+                return impl :: IsSigned < Type > :: value;
+            }
+
+            template < typename Type >
+            constexpr auto isUnsigned () noexcept -> bool {
+                return
+                        isArithmetic < Type > () &&
+                        ! isSigned < Type > ();
             }
 
             /**

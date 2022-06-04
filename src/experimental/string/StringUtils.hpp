@@ -81,6 +81,39 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             ) noexcept -> Size;
 
         public:
+            __CDS_cpplang_ConstexprConditioned static auto copy (
+                    ElementType       * pDestination,
+                    ElementType const * pSource,
+                    Size                length
+            ) noexcept -> ElementType *;
+
+        public:
+            template < typename OtherCharType, meta :: EnableIf < ! meta :: isSame < OtherCharType, CharType > () && sizeof ( CharType ) >= sizeof ( OtherCharType ) > = 0 >
+            __CDS_cpplang_ConstexprConditioned static auto copy (
+                    ElementType         * pDestination,
+                    OtherCharType const * pSource,
+                    Size                  length
+            ) noexcept -> ElementType *;
+
+        public:
+            template < typename NumericType, meta :: EnableIf < meta :: isUnsigned < NumericType > () > = 0 >
+            __CDS_cpplang_ConstexprConditioned static auto write (
+                    ElementType           * pDestination,
+                    Size                    offset,
+                    NumericType             value,
+                    Size                  * pOffsetAfterWrite
+            ) noexcept -> ElementType *;
+
+        public:
+            template < typename NumericType, meta :: EnableIf < meta :: isSigned < NumericType > () > = 0 >
+            __CDS_cpplang_ConstexprConditioned static auto write (
+                    ElementType           * pDestination,
+                    Size                    offset,
+                    NumericType             value,
+                    Size                  * pOffsetAfterWrite
+            ) noexcept -> ElementType *;
+
+        public:
             __CDS_cpplang_ConstexprConditioned static auto contains (
                     ElementType const * pBuffer,
                     Size                length,

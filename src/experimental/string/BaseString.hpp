@@ -89,35 +89,66 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                     ) noexcept;
 
                 public:
+                    template < typename OtherCharType, meta :: EnableIf < ! meta :: isSame < OtherCharType, CharType > () && sizeof ( CharType ) >= sizeof ( OtherCharType ) > = 0 >
+                    __CDS_Implicit BaseString ( // NOLINT(google-explicit-constructor)
+                            BaseString < OtherCharType > const & string
+                    ) noexcept;
+
+                public:
                     constexpr BaseString (
                             BaseString && string
                     ) noexcept;
 
                 public:
-                    __CDS_Implicit BaseString (
+                    __CDS_Implicit BaseString ( // NOLINT(google-explicit-constructor)
                             BaseStringView < CharType > const & string
+                    ) noexcept;
+
+                public:
+                    __CDS_Implicit BaseString ( // NOLINT(google-explicit-constructor)
+                            ElementType const * pString
                     ) noexcept;
 
                 public:
                     BaseString (
                             ElementType const * pString,
-                            Size                length  = limits :: U64_MAX
+                            Size                length
                     ) noexcept;
 
                 public:
-                    __CDS_Implicit BaseString (
+                    template < typename OtherCharType, meta :: EnableIf < ! meta :: isSame < OtherCharType, CharType > () && sizeof ( CharType ) >= sizeof ( OtherCharType ) > = 0 >
+                    __CDS_Implicit BaseString ( // NOLINT(google-explicit-constructor)
+                            OtherCharType const * pString
+                    ) noexcept;
+
+                public:
+                    template < typename OtherCharType, meta :: EnableIf < ! meta :: isSame < OtherCharType, CharType > () && sizeof ( CharType ) >= sizeof ( OtherCharType ) > = 0 >
+                    BaseString (
+                            OtherCharType   const * pString,
+                            Size                    length
+                    ) noexcept;
+
+                public:
+                    __CDS_Implicit BaseString ( // NOLINT(google-explicit-constructor)
                             std :: basic_string < CharType > const & string
                     ) noexcept;
 
                 public:
-                    __CDS_Implicit BaseString (
+                    __CDS_Implicit BaseString ( // NOLINT(google-explicit-constructor)
                             experimental :: Object const & object
                     ) noexcept;
 
                 public:
                     BaseString (
-                            Size count,
-                            ElementType
+                            Size        length,
+                            ElementType fillCharacter
+                    ) noexcept;
+
+                public:
+                    template < typename OtherCharType, meta :: EnableIf < ! meta :: isSame < OtherCharType, CharType > () && sizeof ( CharType ) >= sizeof ( OtherCharType ) > = 0 >
+                    BaseString (
+                            Size            length,
+                            OtherCharType   fillCharacter
                     ) noexcept;
 
                 public:
@@ -132,6 +163,12 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                             std :: initializer_list < ElementType > const & initializerList
                     ) noexcept;
 
+                public:
+                    template < typename OtherCharType, meta :: EnableIf < ! meta :: isSame < OtherCharType, CharType > () && sizeof ( CharType ) >= sizeof ( OtherCharType ) > = 0 >
+                    __CDS_Implicit BaseString (
+                            std :: initializer_list < OtherCharType > const & initializerList
+                    ) noexcept;
+
 #if defined(CDS_QT)
 
                 public:
@@ -143,91 +180,96 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
                 public:
                     template < typename T = CharType, meta :: EnableIf < meta :: isSame < T, uint8 > () > = 0 >
-                    __CDS_Implicit BaseString (
+                    __CDS_Implicit BaseString ( // NOLINT(google-explicit-constructor)
                             ElementType value
                     ) noexcept;
 
                 public:
                     template < typename T = CharType, meta :: EnableIf < meta :: isSame < T, sint8 > () > = 0 >
-                    __CDS_Implicit BaseString (
+                    __CDS_Implicit BaseString ( // NOLINT(google-explicit-constructor)
                             ElementType value
                     ) noexcept;
 
                 public:
                     template < typename T = CharType, meta :: EnableIf < meta :: isSame < T, uint16 > () > = 0 >
-                    __CDS_Implicit BaseString (
+                    __CDS_Implicit BaseString ( // NOLINT(google-explicit-constructor)
                             ElementType value
                     ) noexcept;
 
                 public:
                     template < typename T = CharType, meta :: EnableIf < meta :: isSame < T, sint16 > () > = 0 >
-                    __CDS_Implicit BaseString (
+                    __CDS_Implicit BaseString ( // NOLINT(google-explicit-constructor)
                             ElementType value
                     ) noexcept;
 
                 public:
                     template < typename T = CharType, meta :: EnableIf < ! meta :: isSame < T, uint8 > () > = 0 >
-                    __CDS_Implicit BaseString (
+                    __CDS_Implicit BaseString ( // NOLINT(google-explicit-constructor)
                             uint8 value
                     ) noexcept;
 
                 public:
                     template < typename T = CharType, meta :: EnableIf < ! meta :: isSame < T, sint8 > () > = 0 >
-                    __CDS_Implicit BaseString (
+                    __CDS_Implicit BaseString ( // NOLINT(google-explicit-constructor)
                             sint8 value
                     ) noexcept;
 
                 public:
                     template < typename T = CharType, meta :: EnableIf < ! meta :: isSame < T, uint16 > () > = 0 >
-                    __CDS_Implicit BaseString (
+                    __CDS_Implicit BaseString ( // NOLINT(google-explicit-constructor)
                             uint16 value
                     ) noexcept;
 
                 public:
                     template < typename T = CharType, meta :: EnableIf < ! meta :: isSame < T, sint16 > () > = 0 >
-                    __CDS_Implicit BaseString (
+                    __CDS_Implicit BaseString ( // NOLINT(google-explicit-constructor)
                             sint16 value
                     ) noexcept;
 
                 public:
                     template < typename T = std :: size_t, meta :: EnableIf < ! meta :: isSame < T, uint64 > () > = 0 >
-                    __CDS_Implicit BaseString (
+                    __CDS_Implicit BaseString ( // NOLINT(google-explicit-constructor)
                             std :: size_t value
                     ) noexcept;
 
                 public:
-                    __CDS_Implicit BaseString (
+                    __CDS_Implicit BaseString ( // NOLINT(google-explicit-constructor)
                             bool value
                     ) noexcept;
 
                 public:
-                    __CDS_Implicit BaseString (
+                    __CDS_Implicit BaseString ( // NOLINT(google-explicit-constructor)
                             uint32 value
                     ) noexcept;
 
                 public:
-                    __CDS_Implicit BaseString (
+                    __CDS_Implicit BaseString ( // NOLINT(google-explicit-constructor)
                             uint64 value
                     ) noexcept;
 
                 public:
-                    __CDS_Implicit BaseString (
+                    __CDS_Implicit BaseString ( // NOLINT(google-explicit-constructor)
                             sint32 value
                     ) noexcept;
 
                 public:
-                    __CDS_Implicit BaseString (
+                    __CDS_Implicit BaseString ( // NOLINT(google-explicit-constructor)
                             sint64 value
                     ) noexcept;
 
                 public:
-                    __CDS_Implicit BaseString (
+                    __CDS_Implicit BaseString ( // NOLINT(google-explicit-constructor)
                             float value
                     ) noexcept;
 
                 public:
-                    __CDS_Implicit BaseString (
+                    __CDS_Implicit BaseString ( // NOLINT(google-explicit-constructor)
                             double value
+                    ) noexcept;
+
+                public:
+                    __CDS_Implicit BaseString ( // NOLINT(google-explicit-constructor)
+                            long double value
                     ) noexcept;
 
                 public:
@@ -3024,5 +3066,14 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 #include "impl/ConstReverseIterator.hpp"
 #include "impl/StringUtils.hpp"
 #include "impl/BaseString.hpp"
+
+#include "view/AbstractConstIterator.hpp"
+#include "view/ConstIterator.hpp"
+#include "view/ConstReverseIterator.hpp"
+
+#include "view/impl/AbstractConstIterator.hpp"
+#include "view/impl/ConstIterator.hpp"
+#include "view/impl/ConstReverseIterator.hpp"
+#include "view/impl/BaseStringView.hpp"
 
 #endif // __CDS_EX_STRING_BASE_HPP__
