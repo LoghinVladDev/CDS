@@ -6257,6 +6257,68 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
 
                 template < typename CharType >
+                __CDS_cpplang_ConstexprConditioned auto BaseString < CharType > :: toLower () noexcept -> BaseString & {
+
+                    for ( Size index = 0ULL; index < this->length(); ++ index ) {
+                        this->_pBuffer [ index ] = StringUtils < CharType > :: lower ( this->_pBuffer [ index ] );
+                    }
+
+                    return * this;
+                }
+
+
+                template < typename CharType >
+                __CDS_cpplang_ConstexprConditioned auto BaseString < CharType > :: toUpper () noexcept -> BaseString & {
+
+                    for ( Size index = 0ULL; index < this->length(); ++ index ) {
+                        this->_pBuffer [ index ] = StringUtils < CharType > :: upper ( this->_pBuffer [ index ] );
+                    }
+
+                    return * this;
+                }
+
+
+                template < typename CharType >
+                template < typename ListType >
+                auto BaseString < CharType > :: split (
+                        ElementType     separator,
+                        ListType      & storeIn,
+                        Size            maxCount
+                ) const noexcept -> ListType & {
+
+                    Index splitIndex = 0;
+                    if ( this->empty() ) {
+                        return storeIn;
+                    }
+
+                    Index   currentSegmentOffset    = 0;
+                    Size    currentSegmentLength    = 0ULL;
+
+                    for ( Size index = 0ULL; index < this->length(); ++ index ) {
+                        if ( this->_pBuffer [ index ] != separator || splitIndex >= static_cast < Index > ( maxCount ) - 1 ) {
+                            ++ currentSegmentLength;
+                        } else {
+
+                            if ( currentSegmentLength == 0ULL ) {
+                                continue;
+                            }
+
+                            ++ splitIndex;
+                            storeIn.add ( BaseString ( this->_pBuffer + currentSegmentOffset, currentSegmentLength ) );
+                            currentSegmentLength = 0ULL;
+                            currentSegmentOffset = static_cast < Index > ( index ) + 1ULL;
+                        }
+                    }
+
+                    if ( currentSegmentLength != 0ULL ) {
+                        storeIn.add ( BaseString ( this->_pBuffer + currentSegmentOffset, currentSegmentLength ) );
+                    }
+
+                    return storeIn;
+                }
+
+
+                template < typename CharType >
                 __CDS_cpplang_ConstexprOverride auto BaseString < CharType > :: hash () const noexcept -> Index {
                     return static_cast < Index > ( this->_length );
                 }

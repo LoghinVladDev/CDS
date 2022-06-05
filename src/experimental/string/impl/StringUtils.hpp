@@ -144,11 +144,10 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 ElementType character
         ) noexcept -> ElementType {
 
-            if ( ! StringUtils :: isUpper ( character ) ) {
-                return character;
-            }
-
-            return character - static_cast < ElementType > ( 'A' ) + static_cast < ElementType > ( 'a' );
+            return
+                    ! StringUtils :: isUpper ( character ) ?
+                    character :
+                    character - static_cast < ElementType > ( 'A' ) + static_cast < ElementType > ( 'a' );
         }
 
 
@@ -157,11 +156,10 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 ElementType character
         ) noexcept -> ElementType {
 
-            if ( ! StringUtils :: isLower ( character ) ) {
-                return character;
-            }
-
-            return character - static_cast < ElementType > ( 'a' ) + static_cast < ElementType > ( 'A' );
+            return
+                    ! StringUtils :: isLower ( character ) ?
+                    character :
+                    character - static_cast < ElementType > ( 'a' ) + static_cast < ElementType > ( 'A' );
         }
 
 

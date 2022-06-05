@@ -2654,10 +2654,10 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
 
                 public:
-                    auto toLower () noexcept -> BaseString &;
+                    __CDS_cpplang_ConstexprConditioned auto toLower () noexcept -> BaseString &;
 
                 public:
-                    auto toUpper () noexcept -> BaseString &;
+                    __CDS_cpplang_ConstexprConditioned auto toUpper () noexcept -> BaseString &;
 
 
                 public:
