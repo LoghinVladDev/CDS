@@ -40,7 +40,7 @@ namespace cds {
                     Size                _length { 0ULL };
 
                 public:
-                    static Index const  invalidIndex    { -1 };
+                    static Index const  invalidIndex;
 
                 public:
                     constexpr BaseStringView () noexcept = default;
@@ -101,17 +101,17 @@ namespace cds {
 
 
                 public:
-                    constexpr auto length () const noexcept -> Size;
+                    __CDS_NoDiscard constexpr auto length () const noexcept -> Size;
 
                 public:
-                    constexpr auto size () const noexcept -> Size;
+                    __CDS_NoDiscard constexpr auto size () const noexcept -> Size;
 
 
                 public:
                     __CDS_cpplang_NonConstConstexprMemberFunction auto clear () noexcept -> void;
 
                 public:
-                    constexpr auto empty () const noexcept -> bool;
+                    __CDS_NoDiscard constexpr auto empty () const noexcept -> bool;
 
                 public:
                     __CDS_cpplang_ConstexprConditioned auto operator [] (

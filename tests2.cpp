@@ -34,7 +34,6 @@ int main () {
 
 
     arr.sort ();
-
     std :: cout << arr << '\n';
 
 //    experimental :: String s23;
