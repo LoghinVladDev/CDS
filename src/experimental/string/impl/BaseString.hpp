@@ -865,14 +865,79 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
 
                 template < typename CharType >
+                __CDS_OptimalInline auto BaseString < CharType > :: toStdString () const noexcept -> std :: basic_string < CharType > {
+                    return std :: basic_string < CharType > ( this->_pBuffer );
+                }
+
+
+                template < typename CharType >
                 constexpr auto BaseString < CharType > :: cStr () const noexcept -> ElementType const * {
                     return this->_pBuffer;
                 }
 
 
                 template < typename CharType >
-                constexpr auto BaseString < CharType > :: data () noexcept -> ElementType * {
+                __CDS_cpplang_NonConstConstexprMemberFunction auto BaseString < CharType > :: data () noexcept -> ElementType * {
                     return this->_pBuffer;
+                }
+
+
+                template < typename CharType >
+                __CDS_OptimalInline BaseString < CharType > :: operator std :: basic_string < CharType > () const noexcept {
+                    return this->toStdString();
+                }
+
+
+                template < typename CharType >
+                constexpr BaseString < CharType > :: operator ElementType const * () const noexcept {
+                    return this->cStr();
+                }
+
+
+                template < typename CharType >
+                __CDS_cpplang_NonConstConstexprMemberFunction BaseString < CharType > :: operator ElementType * () noexcept {
+                    return this->data();
+                }
+
+
+                template < typename CharType >
+                __CDS_OptimalInline auto BaseString < CharType > :: substr (
+                        Index from,
+                        Index until
+                ) const noexcept -> BaseString < CharType > {
+
+                    if ( until == -1 || until > static_cast < Index > ( this->size() ) ) {
+                        until = static_cast < Index > ( this->size() );
+                    }
+
+                    if ( from < 0 ) {
+                        from = 0;
+                    }
+
+                    if ( until < from ) {
+                        return BaseString ();
+                    }
+
+                    return BaseString ( this->_pBuffer, static_cast < Size > ( until - from ) );
+                }
+
+
+                template < typename CharType >
+                __CDS_OptimalInline auto BaseString < CharType > :: operator () (
+                        Index from,
+                        Index until
+                ) const noexcept -> BaseString < CharType > {
+
+                    return this->substr ( from, until );
+                }
+
+
+                template < typename CharType >
+                __CDS_OptimalInline auto BaseString < CharType > :: operator [] (
+                        Range const & range
+                ) const noexcept -> BaseString < CharType > {
+
+                    return this->substr ( range.from(), range.to() );
                 }
 
 
@@ -3088,6 +3153,158 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 ) noexcept -> BaseString < CharType > {
 
                     return string.prepend ( value );
+                }
+
+
+                template < typename CharType >
+                __CDS_OptimalInline auto BaseString < CharType > :: operator * (
+                        int count
+                ) const & noexcept -> BaseString {
+
+                    BaseString result;
+
+                    if ( this->empty() || count == 0 ) {
+                        return result;
+                    }
+
+                    if ( count == 1 ) {
+                        return * this;
+                    }
+
+                    result.reserve ( count * this->length() + 1ULL );
+
+                    for ( int i = 0; i < count; ++ i ) {
+                        StringUtils < CharType > :: copy (
+                                result._pBuffer,
+                                result._length,
+                                this->_pBuffer,
+                                0ULL,
+                                this->length(),
+                                false
+                        );
+
+                        result._length += this->length();
+                    }
+
+                    result._pBuffer [ result._length ] = static_cast < ElementType > ( '\0' );
+                    return result;
+                }
+
+
+                template < typename CharType >
+                __CDS_OptimalInline auto BaseString < CharType > :: operator * (
+                        int count
+                ) && noexcept -> BaseString {
+
+                    if ( this->empty() || count == 0 ) {
+                        __allocation :: __free ( cds :: exchange ( this->_pBuffer, nullptr ) );
+                        (void) cds :: exchange ( this->_length, 0ULL );
+                        (void) cds :: exchange ( this->_capacity, 0ULL );
+
+                        return std :: move ( * this );
+                    }
+
+                    this->_pBuffer = __allocation :: __enlarge (
+                            this->_pBuffer,
+                            this->_capacity,
+                            this->_length * count + 1ULL,
+                            & this->_capacity
+                    );
+
+                    auto newLength = this->length();
+                    for ( int i = 1; i < count; ++ i ) {
+                        StringUtils < CharType > :: copy (
+                                this->_pBuffer,
+                                newLength,
+                                this->_pBuffer,
+                                0ULL,
+                                this->length(),
+                                false
+                        );
+
+                        newLength += this->length();
+                    }
+
+                    this->_length = newLength;
+                    this->_pBuffer [ this->_length ] = static_cast < ElementType > ( '\0' );
+                    return std :: move ( * this );
+                }
+
+
+                template < typename CharType >
+                __CDS_OptimalInline auto operator * (
+                        int                             count,
+                        BaseString < CharType > const & string
+                ) noexcept -> BaseString < CharType > {
+
+                    BaseString < CharType > result;
+
+                    if ( string.empty() || count == 0 ) {
+                        return result;
+                    }
+
+                    if ( count == 1 ) {
+                        return * string;
+                    }
+
+                    result.reserve ( count * string.length() + 1ULL );
+
+                    for ( int i = 0; i < count; ++ i ) {
+                        StringUtils < CharType > :: copy (
+                                result._pBuffer,
+                                result._length,
+                                string->_pBuffer,
+                                0ULL,
+                                string->length(),
+                                false
+                        );
+
+                        result._length += string->length();
+                    }
+
+                    result._pBuffer [ result._length ] = static_cast < CharType > ( '\0' );
+                    return result;
+                }
+
+
+                template < typename CharType >
+                __CDS_OptimalInline auto operator * (
+                        int                         count,
+                        BaseString < CharType >  && string
+                ) noexcept -> BaseString < CharType > {
+
+                    if ( string.empty() || count == 0 ) {
+                        __allocation :: __free ( cds :: exchange ( string._pBuffer, nullptr ) );
+                        (void) cds :: exchange ( string._length, 0ULL );
+                        (void) cds :: exchange ( string._capacity, 0ULL );
+
+                        return std :: move ( * string );
+                    }
+
+                    string._pBuffer = __allocation :: __enlarge (
+                            string._pBuffer,
+                            string._capacity,
+                            string._length * count + 1ULL,
+                            & string._capacity
+                    );
+
+                    auto newLength = string.length();
+                    for ( int i = 1; i < count; ++ i ) {
+                        StringUtils < CharType > :: copy (
+                                string._pBuffer,
+                                newLength,
+                                string._pBuffer,
+                                0ULL,
+                                string.length(),
+                                false
+                        );
+
+                        newLength += string.length();
+                    }
+
+                    string._length = newLength;
+                    string._pBuffer [ string._length ] = static_cast < CharType > ( '\0' );
+                    return std :: move ( * string );
                 }
 
 

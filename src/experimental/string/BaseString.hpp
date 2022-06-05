@@ -416,19 +416,19 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
 
                 public:
-                    auto substr (
+                    __CDS_NoDiscard auto substr (
                             Index from,
                             Index until = -1
                     ) const noexcept -> BaseString;
 
                 public:
-                    auto operator () (
+                    __CDS_NoDiscard auto operator () (
                             Index from,
                             Index to = -1
                     ) const noexcept -> BaseString;
 
                 public:
-                    auto operator [] (
+                    __CDS_NoDiscard auto operator [] (
                             Range const & range
                     ) const noexcept -> BaseString;
 
