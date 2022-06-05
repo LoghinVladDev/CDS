@@ -1276,80 +1276,80 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 }
 
 
-                template < typename CharType >
+                template < typename FCharType >
                 __CDS_cpplang_ConstexprConditioned auto operator == (
-                        BaseStringView < CharType > const & leftString,
-                        BaseString < CharType >     const & rightString
+                        BaseStringView < FCharType > const & leftString,
+                        BaseString < FCharType >     const & rightString
                 ) noexcept -> bool {
 
                     if ( leftString.length() != rightString.length() ) {
                         return false;
                     }
 
-                    return StringUtils < CharType > :: compare (
+                    return StringUtils < FCharType > :: compare (
                             leftString.cStr(),
                             leftString.length(),
                             rightString.cStr(),
                             rightString.length()
-                    ) == StringUtils < CharType > :: equal;
+                    ) == StringUtils < FCharType > :: equal;
                 }
 
 
-                template < typename CharType >
+                template < typename FCharType >
                 __CDS_cpplang_ConstexprConditioned auto operator == (
-                        std :: basic_string < CharType >    const & leftString,
-                        BaseString < CharType >             const & rightString
+                        std :: basic_string < FCharType >    const & leftString,
+                        BaseString < FCharType >             const & rightString
                 ) noexcept -> bool {
 
                     if ( leftString.length() != rightString.length() ) {
                         return false;
                     }
 
-                    return StringUtils < CharType > :: compare (
+                    return StringUtils < FCharType > :: compare (
                             leftString.c_str(),
                             leftString.length(),
                             rightString.cStr(),
                             rightString.length()
-                    ) == StringUtils < CharType > :: equal;
+                    ) == StringUtils < FCharType > :: equal;
                 }
 
 
-                template < typename CharType >
+                template < typename FCharType >
                 __CDS_cpplang_ConstexprConditioned auto operator == (
-                        CharType                            const * pLeftString,
-                        BaseString < CharType >             const & rightString
+                        FCharType                            const * pLeftString,
+                        BaseString < FCharType >             const & rightString
                 ) noexcept -> bool {
 
-                    auto leftLength = StringUtils < CharType > :: length ( pLeftString );
+                    auto leftLength = StringUtils < FCharType > :: length ( pLeftString );
                     if ( leftLength != rightString.length() ) {
                         return false;
                     }
 
-                    return StringUtils < CharType > :: compare (
+                    return StringUtils < FCharType > :: compare (
                             pLeftString,
                             leftLength,
                             rightString.cStr(),
                             rightString.length()
-                    ) == StringUtils < CharType > :: equal;
+                    ) == StringUtils < FCharType > :: equal;
                 }
 
 
-                template < typename CharType >
+                template < typename FCharType >
                 __CDS_cpplang_ConstexprConditioned auto operator == (
-                        CharType                                    character,
-                        BaseString < CharType >             const & string
+                        FCharType                                    character,
+                        BaseString < FCharType >             const & string
                 ) noexcept -> bool {
 
                     if ( string.length() != 1ULL ) {
                         return false;
                     }
 
-                    return StringUtils < CharType > :: compare (
+                    return StringUtils < FCharType > :: compare (
                             & character,
                             1U,
                             string.cStr(),
                             string.length()
-                    ) == StringUtils < CharType > :: equal;
+                    ) == StringUtils < FCharType > :: equal;
                 }
 
 
@@ -1444,80 +1444,80 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 }
 
 
-                template < typename CharType >
+                template < typename FCharType >
                 __CDS_cpplang_ConstexprConditioned auto operator != (
-                        BaseStringView < CharType > const & leftString,
-                        BaseString < CharType >     const & rightString
+                        BaseStringView < FCharType > const & leftString,
+                        BaseString < FCharType >     const & rightString
                 ) noexcept -> bool {
 
                     if ( leftString.length() != rightString.length() ) {
                         return true;
                     }
 
-                    return StringUtils < CharType > :: compare (
+                    return StringUtils < FCharType > :: compare (
                             leftString.cStr(),
                             leftString.length(),
                             rightString.cStr(),
                             rightString.length()
-                    ) != StringUtils < CharType > :: equal;
+                    ) != StringUtils < FCharType > :: equal;
                 }
 
 
-                template < typename CharType >
+                template < typename FCharType >
                 __CDS_cpplang_ConstexprConditioned auto operator != (
-                        std :: basic_string < CharType >    const & leftString,
-                        BaseString < CharType >             const & rightString
+                        std :: basic_string < FCharType >    const & leftString,
+                        BaseString < FCharType >             const & rightString
                 ) noexcept -> bool {
 
                     if ( leftString.length() != rightString.length() ) {
                         return true;
                     }
 
-                    return StringUtils < CharType > :: compare (
+                    return StringUtils < FCharType > :: compare (
                             leftString.c_str(),
                             leftString.length(),
                             rightString.cStr(),
                             rightString.length()
-                    ) != StringUtils < CharType > :: equal;
+                    ) != StringUtils < FCharType > :: equal;
                 }
 
 
-                template < typename CharType >
+                template < typename FCharType >
                 __CDS_cpplang_ConstexprConditioned auto operator != (
-                        CharType                            const * pLeftString,
-                        BaseString < CharType >             const & rightString
+                        FCharType                            const * pLeftString,
+                        BaseString < FCharType >             const & rightString
                 ) noexcept -> bool {
 
-                    auto leftLength = StringUtils < CharType > :: length ( pLeftString );
+                    auto leftLength = StringUtils < FCharType > :: length ( pLeftString );
                     if ( leftLength != rightString.length() ) {
                         return true;
                     }
 
-                    return StringUtils < CharType > :: compare (
+                    return StringUtils < FCharType > :: compare (
                             pLeftString,
                             leftLength,
                             rightString.cStr(),
                             rightString.length()
-                    ) != StringUtils < CharType > :: equal;
+                    ) != StringUtils < FCharType > :: equal;
                 }
 
 
-                template < typename CharType >
+                template < typename FCharType >
                 __CDS_cpplang_ConstexprConditioned auto operator != (
-                        CharType                                    character,
-                        BaseString < CharType >             const & string
+                        FCharType                                    character,
+                        BaseString < FCharType >             const & string
                 ) noexcept -> bool {
 
                     if ( string.length() != 1ULL ) {
                         return true;
                     }
 
-                    return StringUtils < CharType > :: compare (
+                    return StringUtils < FCharType > :: compare (
                             & character,
                             1U,
                             string.cStr(),
                             string.length()
-                    ) != StringUtils < CharType > :: equal;
+                    ) != StringUtils < FCharType > :: equal;
                 }
 
 
@@ -1591,63 +1591,63 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 }
 
 
-                template < typename CharType >
+                template < typename FCharType >
                 __CDS_cpplang_ConstexprConditioned auto operator < (
-                        BaseStringView < CharType > const & leftString,
-                        BaseString < CharType >     const & rightString
+                        BaseStringView < FCharType > const & leftString,
+                        BaseString < FCharType >     const & rightString
                 ) noexcept -> bool {
 
-                    return StringUtils < CharType > :: compare (
+                    return StringUtils < FCharType > :: compare (
                             leftString.cStr(),
                             leftString.length(),
                             rightString.cStr(),
                             rightString.length()
-                    ) == StringUtils < CharType > :: lesser;
+                    ) == StringUtils < FCharType > :: lesser;
                 }
 
 
-                template < typename CharType >
+                template < typename FCharType >
                 __CDS_cpplang_ConstexprConditioned auto operator < (
-                        std :: basic_string < CharType >    const & leftString,
-                        BaseString < CharType >             const & rightString
+                        std :: basic_string < FCharType >    const & leftString,
+                        BaseString < FCharType >             const & rightString
                 ) noexcept -> bool {
 
-                    return StringUtils < CharType > :: compare (
+                    return StringUtils < FCharType > :: compare (
                             leftString.c_str(),
                             leftString.length(),
                             rightString.cStr(),
                             rightString.length()
-                    ) == StringUtils < CharType > :: lesser;
+                    ) == StringUtils < FCharType > :: lesser;
                 }
 
 
-                template < typename CharType >
+                template < typename FCharType >
                 __CDS_cpplang_ConstexprConditioned auto operator < (
-                        CharType                            const * pLeftString,
-                        BaseString < CharType >             const & rightString
+                        FCharType                            const * pLeftString,
+                        BaseString < FCharType >             const & rightString
                 ) noexcept -> bool {
 
-                    return StringUtils < CharType > :: compare (
+                    return StringUtils < FCharType > :: compare (
                             pLeftString,
-                            StringUtils < CharType > :: length ( pLeftString ),
+                            StringUtils < FCharType > :: length ( pLeftString ),
                             rightString.cStr(),
                             rightString.length()
-                    ) == StringUtils < CharType > :: lesser;
+                    ) == StringUtils < FCharType > :: lesser;
                 }
 
 
-                template < typename CharType >
+                template < typename FCharType >
                 __CDS_cpplang_ConstexprConditioned auto operator < (
-                        CharType                                    character,
-                        BaseString < CharType >             const & string
+                        FCharType                                    character,
+                        BaseString < FCharType >             const & string
                 ) noexcept -> bool {
 
-                    return StringUtils < CharType > :: compare (
+                    return StringUtils < FCharType > :: compare (
                             & character,
                             1U,
                             string.cStr(),
                             string.length()
-                    ) == StringUtils < CharType > :: lesser;
+                    ) == StringUtils < FCharType > :: lesser;
                 }
 
 
@@ -1721,63 +1721,63 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 }
 
 
-                template < typename CharType >
+                template < typename FCharType >
                 __CDS_cpplang_ConstexprConditioned auto operator > (
-                        BaseStringView < CharType > const & leftString,
-                        BaseString < CharType >     const & rightString
+                        BaseStringView < FCharType > const & leftString,
+                        BaseString < FCharType >     const & rightString
                 ) noexcept -> bool {
 
-                    return StringUtils < CharType > :: compare (
+                    return StringUtils < FCharType > :: compare (
                             leftString.cStr(),
                             leftString.length(),
                             rightString.cStr(),
                             rightString.length()
-                    ) == StringUtils < CharType > :: greater;
+                    ) == StringUtils < FCharType > :: greater;
                 }
 
 
-                template < typename CharType >
+                template < typename FCharType >
                 __CDS_cpplang_ConstexprConditioned auto operator > (
-                        std :: basic_string < CharType >    const & leftString,
-                        BaseString < CharType >             const & rightString
+                        std :: basic_string < FCharType >    const & leftString,
+                        BaseString < FCharType >             const & rightString
                 ) noexcept -> bool {
 
-                    return StringUtils < CharType > :: compare (
+                    return StringUtils < FCharType > :: compare (
                             leftString.c_str(),
                             leftString.length(),
                             rightString.cStr(),
                             rightString.length()
-                    ) == StringUtils < CharType > :: greater;
+                    ) == StringUtils < FCharType > :: greater;
                 }
 
 
-                template < typename CharType >
+                template < typename FCharType >
                 __CDS_cpplang_ConstexprConditioned auto operator > (
-                        CharType                            const * pLeftString,
-                        BaseString < CharType >             const & rightString
+                        FCharType                            const * pLeftString,
+                        BaseString < FCharType >             const & rightString
                 ) noexcept -> bool {
 
-                    return StringUtils < CharType > :: compare (
+                    return StringUtils < FCharType > :: compare (
                             pLeftString,
-                            StringUtils < CharType > :: length ( pLeftString ),
+                            StringUtils < FCharType > :: length ( pLeftString ),
                             rightString.cStr(),
                             rightString.length()
-                    ) == StringUtils < CharType > :: greater;
+                    ) == StringUtils < FCharType > :: greater;
                 }
 
 
-                template < typename CharType >
+                template < typename FCharType >
                 __CDS_cpplang_ConstexprConditioned auto operator > (
-                        CharType                                    character,
-                        BaseString < CharType >             const & string
+                        FCharType                                    character,
+                        BaseString < FCharType >             const & string
                 ) noexcept -> bool {
 
-                    return StringUtils < CharType > :: compare (
+                    return StringUtils < FCharType > :: compare (
                             & character,
                             1U,
                             string.cStr(),
                             string.length()
-                    ) == StringUtils < CharType > :: greater;
+                    ) == StringUtils < FCharType > :: greater;
                 }
 
 
@@ -1827,40 +1827,40 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 }
 
 
-                template < typename CharType >
+                template < typename FCharType >
                 __CDS_cpplang_ConstexprConditioned auto operator <= (
-                        BaseStringView < CharType > const & leftString,
-                        BaseString < CharType >     const & rightString
+                        BaseStringView < FCharType > const & leftString,
+                        BaseString < FCharType >     const & rightString
                 ) noexcept -> bool {
 
                     return ! ( leftString > rightString );
                 }
 
 
-                template < typename CharType >
+                template < typename FCharType >
                 __CDS_cpplang_ConstexprConditioned auto operator <= (
-                        std :: basic_string < CharType >    const & leftString,
-                        BaseString < CharType >             const & rightString
+                        std :: basic_string < FCharType >    const & leftString,
+                        BaseString < FCharType >             const & rightString
                 ) noexcept -> bool {
 
                     return ! ( leftString > rightString );
                 }
 
 
-                template < typename CharType >
+                template < typename FCharType >
                 __CDS_cpplang_ConstexprConditioned auto operator <= (
-                        CharType                            const * pLeftString,
-                        BaseString < CharType >             const & rightString
+                        FCharType                            const * pLeftString,
+                        BaseString < FCharType >             const & rightString
                 ) noexcept -> bool {
 
                     return ! ( pLeftString > rightString );
                 }
 
 
-                template < typename CharType >
+                template < typename FCharType >
                 __CDS_cpplang_ConstexprConditioned auto operator <= (
-                        CharType                                    character,
-                        BaseString < CharType >             const & string
+                        FCharType                                    character,
+                        BaseString < FCharType >             const & string
                 ) noexcept -> bool {
 
                     return ! ( character > string );
@@ -1913,40 +1913,40 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 }
 
 
-                template < typename CharType >
+                template < typename FCharType >
                 __CDS_cpplang_ConstexprConditioned auto operator >= (
-                        BaseStringView < CharType > const & leftString,
-                        BaseString < CharType >     const & rightString
+                        BaseStringView < FCharType > const & leftString,
+                        BaseString < FCharType >     const & rightString
                 ) noexcept -> bool {
 
                     return ! ( leftString < rightString );
                 }
 
 
-                template < typename CharType >
+                template < typename FCharType >
                 __CDS_cpplang_ConstexprConditioned auto operator >= (
-                        std :: basic_string < CharType >    const & leftString,
-                        BaseString < CharType >             const & rightString
+                        std :: basic_string < FCharType >    const & leftString,
+                        BaseString < FCharType >             const & rightString
                 ) noexcept -> bool {
 
                     return ! ( leftString < rightString );
                 }
 
 
-                template < typename CharType >
+                template < typename FCharType >
                 __CDS_cpplang_ConstexprConditioned auto operator >= (
-                        CharType                            const * pLeftString,
-                        BaseString < CharType >             const & rightString
+                        FCharType                            const * pLeftString,
+                        BaseString < FCharType >             const & rightString
                 ) noexcept -> bool {
 
                     return ! ( pLeftString < rightString );
                 }
 
 
-                template < typename CharType >
+                template < typename FCharType >
                 __CDS_cpplang_ConstexprConditioned auto operator >= (
-                        CharType                                    character,
-                        BaseString < CharType >             const & string
+                        FCharType                                    character,
+                        BaseString < FCharType >             const & string
                 ) noexcept -> bool {
 
                     return ! ( character < string );
@@ -2461,40 +2461,40 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 }
 
 
-                template < typename CharType >
+                template < typename FCharType >
                 __CDS_OptimalInline auto operator + (
-                        BaseStringView < CharType > const & leftString,
-                        BaseString < CharType >     const & rightString
-                ) noexcept -> BaseString < CharType > {
+                        BaseStringView < FCharType > const & leftString,
+                        BaseString < FCharType >     const & rightString
+                ) noexcept -> BaseString < FCharType > {
 
-                    BaseString < CharType > result;
+                    BaseString < FCharType > result;
                     result.reserve ( leftString.length() + rightString.length() + 1U );
 
                     return result.append ( leftString ).append ( rightString );
                 }
 
 
-                template < typename CharType >
+                template < typename FCharType >
                 __CDS_OptimalInline auto operator + (
-                        std :: basic_string < CharType >    const & leftString,
-                        BaseString < CharType >             const & rightString
-                ) noexcept -> BaseString < CharType > {
+                        std :: basic_string < FCharType >    const & leftString,
+                        BaseString < FCharType >             const & rightString
+                ) noexcept -> BaseString < FCharType > {
 
-                    BaseString < CharType > result;
+                    BaseString < FCharType > result;
                     result.reserve ( leftString.length() + rightString.length() + 1U );
 
                     return result.append ( leftString ).append ( rightString );
                 }
 
 
-                template < typename CharType >
+                template < typename FCharType >
                 __CDS_OptimalInline auto operator + (
-                        CharType                            const * pLeftString,
-                        BaseString < CharType >             const & rightString
-                ) noexcept -> BaseString < CharType > {
+                        FCharType                            const * pLeftString,
+                        BaseString < FCharType >             const & rightString
+                ) noexcept -> BaseString < FCharType > {
 
-                    BaseString < CharType > result;
-                    BaseStringView < CharType > wrapper = pLeftString;
+                    BaseString < FCharType > result;
+                    BaseStringView < FCharType > wrapper = pLeftString;
 
                     result.reserve ( wrapper.length() + rightString.length() + 1U );
 
@@ -2629,13 +2629,13 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 }
 
 
-                template < typename CharType >
+                template < typename FCharType >
                 __CDS_OptimalInline auto operator + (
                         bool                               value,
-                        BaseString < CharType >    const & string
-                ) noexcept -> BaseString < CharType > {
+                        BaseString < FCharType >    const & string
+                ) noexcept -> BaseString < FCharType > {
 
-                    BaseString < CharType > result;
+                    BaseString < FCharType > result;
                     auto valueLength = value ? 4ULL : 5ULL;
 
                     result.reserve ( string.length() + valueLength + 1ULL );
@@ -2644,14 +2644,14 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 }
 
 
-                template < typename CharType >
+                template < typename FCharType >
                 __CDS_OptimalInline auto operator + (
                         uint32                              value,
-                        BaseString < CharType >     const & string
-                ) noexcept -> BaseString < CharType > {
+                        BaseString < FCharType >     const & string
+                ) noexcept -> BaseString < FCharType > {
 
-                    BaseString < CharType > result;
-                    auto valueLength = StringUtils < CharType > :: integerLength ( value );
+                    BaseString < FCharType > result;
+                    auto valueLength = StringUtils < FCharType > :: integerLength ( value );
 
                     result.reserve ( string.length() + valueLength + 1ULL );
 
@@ -2659,14 +2659,14 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 }
 
 
-                template < typename CharType >
+                template < typename FCharType >
                 __CDS_OptimalInline auto operator + (
                         uint64                              value,
-                        BaseString < CharType >     const & string
-                ) noexcept -> BaseString < CharType > {
+                        BaseString < FCharType >     const & string
+                ) noexcept -> BaseString < FCharType > {
 
-                    BaseString < CharType > result;
-                    auto valueLength = StringUtils < CharType > :: integerLength ( value );
+                    BaseString < FCharType > result;
+                    auto valueLength = StringUtils < FCharType > :: integerLength ( value );
 
                     result.reserve ( string.length() + valueLength + 1ULL );
 
@@ -2674,14 +2674,14 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 }
 
 
-                template < typename CharType >
+                template < typename FCharType >
                 __CDS_OptimalInline auto operator + (
                         sint32                              value,
-                        BaseString < CharType >     const & string
-                ) noexcept -> BaseString < CharType > {
+                        BaseString < FCharType >     const & string
+                ) noexcept -> BaseString < FCharType > {
 
-                    BaseString < CharType > result;
-                    auto valueLength = StringUtils < CharType > :: integerLength ( value );
+                    BaseString < FCharType > result;
+                    auto valueLength = StringUtils < FCharType > :: integerLength ( value );
 
                     result.reserve ( string.length() + valueLength + 1ULL );
 
@@ -2689,14 +2689,14 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 }
 
 
-                template < typename CharType >
+                template < typename FCharType >
                 __CDS_OptimalInline auto operator + (
                         sint64                              value,
-                        BaseString < CharType >     const & string
-                ) noexcept -> BaseString < CharType > {
+                        BaseString < FCharType >     const & string
+                ) noexcept -> BaseString < FCharType > {
 
-                    BaseString < CharType > result;
-                    auto valueLength = StringUtils < CharType > :: integerLength ( value );
+                    BaseString < FCharType > result;
+                    auto valueLength = StringUtils < FCharType > :: integerLength ( value );
 
                     result.reserve ( string.length() + valueLength + 1ULL );
 
@@ -2704,13 +2704,13 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 }
 
 
-                template < typename CharType >
+                template < typename FCharType >
                 __CDS_OptimalInline auto operator + (
                         float                               value,
-                        BaseString < CharType >     const & string
-                ) noexcept -> BaseString < CharType > {
+                        BaseString < FCharType >     const & string
+                ) noexcept -> BaseString < FCharType > {
 
-                    BaseString < CharType > result;
+                    BaseString < FCharType > result;
                     auto wrapper = std :: to_string ( value );
 
                     result.reserve ( string.length() + wrapper.length() + 1ULL );
@@ -2719,13 +2719,13 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 }
 
 
-                template < typename CharType >
+                template < typename FCharType >
                 __CDS_OptimalInline auto operator + (
                         double                              value,
-                        BaseString < CharType >     const & string
-                ) noexcept -> BaseString < CharType > {
+                        BaseString < FCharType >     const & string
+                ) noexcept -> BaseString < FCharType > {
 
-                    BaseString < CharType > result;
+                    BaseString < FCharType > result;
                     auto wrapper = std :: to_string ( value );
 
                     result.reserve ( string.length() + wrapper.length() + 1ULL );
@@ -2734,13 +2734,13 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 }
 
 
-                template < typename CharType >
+                template < typename FCharType >
                 __CDS_OptimalInline auto operator + (
                         long double                         value,
-                        BaseString < CharType >     const & string
-                ) noexcept -> BaseString < CharType > {
+                        BaseString < FCharType >     const & string
+                ) noexcept -> BaseString < FCharType > {
 
-                    BaseString < CharType > result;
+                    BaseString < FCharType > result;
                     auto wrapper = std :: to_string ( value );
 
                     result.reserve ( string.length() + wrapper.length() + 1ULL );
@@ -2956,31 +2956,31 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 }
 
 
-                template < typename CharType >
+                template < typename FCharType >
                 __CDS_OptimalInline auto operator + (
-                        BaseStringView < CharType > const & leftString,
-                        BaseString < CharType >          && rightString
-                ) noexcept -> BaseString < CharType > {
+                        BaseStringView < FCharType > const & leftString,
+                        BaseString < FCharType >          && rightString
+                ) noexcept -> BaseString < FCharType > {
 
                     return rightString.prepend ( leftString );
                 }
 
 
-                template < typename CharType >
+                template < typename FCharType >
                 __CDS_OptimalInline auto operator + (
-                        std :: basic_string < CharType >    const & leftString,
-                        BaseString < CharType >                  && rightString
-                ) noexcept -> BaseString < CharType > {
+                        std :: basic_string < FCharType >    const & leftString,
+                        BaseString < FCharType >                  && rightString
+                ) noexcept -> BaseString < FCharType > {
 
                     return rightString.prepend ( leftString );
                 }
 
 
-                template < typename CharType >
+                template < typename FCharType >
                 __CDS_OptimalInline auto operator + (
-                        CharType                            const * pLeftString,
-                        BaseString < CharType >                  && rightString
-                ) noexcept -> BaseString < CharType > {
+                        FCharType                            const * pLeftString,
+                        BaseString < FCharType >                  && rightString
+                ) noexcept -> BaseString < FCharType > {
 
                     return rightString.prepend ( pLeftString );
                 }
@@ -3076,81 +3076,81 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 }
 
 
-                template < typename CharType >
+                template < typename FCharType >
                 __CDS_OptimalInline auto operator + (
                         bool                              value,
-                        BaseString < CharType >        && string
-                ) noexcept -> BaseString < CharType > {
+                        BaseString < FCharType >        && string
+                ) noexcept -> BaseString < FCharType > {
 
                     return string.prepend ( value );
                 }
 
 
-                template < typename CharType >
+                template < typename FCharType >
                 __CDS_OptimalInline auto operator + (
                         uint32                             value,
-                        BaseString < CharType >         && string
-                ) noexcept -> BaseString < CharType > {
+                        BaseString < FCharType >         && string
+                ) noexcept -> BaseString < FCharType > {
 
                     return string.prepend ( value );
                 }
 
 
-                template < typename CharType >
+                template < typename FCharType >
                 __CDS_OptimalInline auto operator + (
                         uint64                             value,
-                        BaseString < CharType >         && string
-                ) noexcept -> BaseString < CharType > {
+                        BaseString < FCharType >         && string
+                ) noexcept -> BaseString < FCharType > {
 
                     return string.prepend ( value );
                 }
 
 
-                template < typename CharType >
+                template < typename FCharType >
                 __CDS_OptimalInline auto operator + (
                         sint32                             value,
-                        BaseString < CharType >         && string
-                ) noexcept -> BaseString < CharType > {
+                        BaseString < FCharType >         && string
+                ) noexcept -> BaseString < FCharType > {
 
                     return string.prepend ( value );
                 }
 
 
-                template < typename CharType >
+                template < typename FCharType >
                 __CDS_OptimalInline auto operator + (
                         sint64                             value,
-                        BaseString < CharType >         && string
-                ) noexcept -> BaseString < CharType > {
+                        BaseString < FCharType >         && string
+                ) noexcept -> BaseString < FCharType > {
 
                     return string.prepend ( value );
                 }
 
 
-                template < typename CharType >
+                template < typename FCharType >
                 __CDS_OptimalInline auto operator + (
                         float                               value,
-                        BaseString < CharType >          && string
-                ) noexcept -> BaseString < CharType > {
+                        BaseString < FCharType >          && string
+                ) noexcept -> BaseString < FCharType > {
 
                     return string.prepend ( value );
                 }
 
 
-                template < typename CharType >
+                template < typename FCharType >
                 __CDS_OptimalInline auto operator + (
                         double                              value,
-                        BaseString < CharType >          && string
-                ) noexcept -> BaseString < CharType > {
+                        BaseString < FCharType >          && string
+                ) noexcept -> BaseString < FCharType > {
 
                     return string.prepend ( value );
                 }
 
 
-                template < typename CharType >
+                template < typename FCharType >
                 __CDS_OptimalInline auto operator + (
                         long double                         value,
-                        BaseString < CharType >          && string
-                ) noexcept -> BaseString < CharType > {
+                        BaseString < FCharType >          && string
+                ) noexcept -> BaseString < FCharType > {
 
                     return string.prepend ( value );
                 }
@@ -3231,13 +3231,13 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 }
 
 
-                template < typename CharType >
+                template < typename FCharType >
                 __CDS_OptimalInline auto operator * (
                         int                             count,
-                        BaseString < CharType > const & string
-                ) noexcept -> BaseString < CharType > {
+                        BaseString < FCharType > const & string
+                ) noexcept -> BaseString < FCharType > {
 
-                    BaseString < CharType > result;
+                    BaseString < FCharType > result;
 
                     if ( string.empty() || count == 0 ) {
                         return result;
@@ -3250,7 +3250,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                     result.reserve ( count * string.length() + 1ULL );
 
                     for ( int i = 0; i < count; ++ i ) {
-                        StringUtils < CharType > :: copy (
+                        StringUtils < FCharType > :: copy (
                                 result._pBuffer,
                                 result._length,
                                 string->_pBuffer,
@@ -3262,16 +3262,16 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                         result._length += string->length();
                     }
 
-                    result._pBuffer [ result._length ] = static_cast < CharType > ( '\0' );
+                    result._pBuffer [ result._length ] = static_cast < FCharType > ( '\0' );
                     return result;
                 }
 
 
-                template < typename CharType >
+                template < typename FCharType >
                 __CDS_OptimalInline auto operator * (
                         int                         count,
-                        BaseString < CharType >  && string
-                ) noexcept -> BaseString < CharType > {
+                        BaseString < FCharType >  && string
+                ) noexcept -> BaseString < FCharType > {
 
                     if ( string.empty() || count == 0 ) {
                         __allocation :: __free ( cds :: exchange ( string._pBuffer, nullptr ) );
@@ -3290,7 +3290,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
                     auto newLength = string.length();
                     for ( int i = 1; i < count; ++ i ) {
-                        StringUtils < CharType > :: copy (
+                        StringUtils < FCharType > :: copy (
                                 string._pBuffer,
                                 newLength,
                                 string._pBuffer,
@@ -3303,7 +3303,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                     }
 
                     string._length = newLength;
-                    string._pBuffer [ string._length ] = static_cast < CharType > ( '\0' );
+                    string._pBuffer [ string._length ] = static_cast < FCharType > ( '\0' );
                     return std :: move ( * string );
                 }
 
@@ -5689,12 +5689,13 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 ) const noexcept -> CollectionType < Index > & {
 
                     Size found  = 0ULL;
+                    auto stringLength = StringUtils < CharType > :: length ( pString );
                     for ( Size index = 0ULL; index < this->length() && found < maxCount; ++ index ) {
 
                         if (
                                 StringUtils < CharType > :: contains (
                                         pString,
-                                        StringUtils < CharType > :: length ( pString ),
+                                        stringLength,
                                         this->_pBuffer [ index ]
                                 )
                         ) {
@@ -5724,12 +5725,13 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                         ElementType                      const * pString
                 ) const noexcept -> Index {
 
+                    auto stringLength = StringUtils < CharType > :: length ( pString );
                     for ( Size index = 0ULL; index < this->length(); ++ index ) {
 
                         if (
                                 StringUtils < CharType > :: contains (
                                         pString,
-                                        StringUtils < CharType > :: length ( pString ),
+                                        stringLength,
                                         this->_pBuffer [ index ]
                                 )
                         ) {
@@ -5746,12 +5748,13 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                         ElementType                      const * pString
                 ) const noexcept -> Index {
 
+                    auto stringLength = StringUtils < CharType > :: length ( pString );
                     for ( Index index = static_cast < Index > ( this->length() ) - 1; index >= 0; -- index ) {
 
                         if (
                                 StringUtils < CharType > :: contains (
                                         pString,
-                                        StringUtils < CharType > :: length ( pString ),
+                                        stringLength,
                                         this->_pBuffer [ index ]
                                 )
                         ) {
@@ -5770,12 +5773,13 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                         CollectionType < Index >               & storeIn
                 ) const noexcept -> CollectionType < Index > & {
 
+                    auto stringLength = StringUtils < CharType > :: length ( pString );
                     for ( Size index = 0ULL; index < this->length(); ++ index ) {
 
                         if (
                                 StringUtils < CharType > :: contains (
                                         pString,
-                                        StringUtils < CharType > :: length ( pString ),
+                                        stringLength,
                                         this->_pBuffer [ index ]
                                 )
                         ) {
@@ -5806,13 +5810,14 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                         CollectionType < Index >               & storeIn
                 ) const noexcept -> CollectionType < Index > & {
 
-                    Size found  = 0ULL;
+                    Size found          = 0ULL;
+                    auto stringLength   = StringUtils < CharType > :: length ( pString );
                     for ( Size index = 0ULL; index < this->length() && found < maxCount; ++ index ) {
 
                         if (
                                 ! StringUtils < CharType > :: contains (
                                         pString,
-                                        StringUtils < CharType > :: length ( pString ),
+                                        stringLength,
                                         this->_pBuffer [ index ]
                                 )
                         ) {
@@ -5842,12 +5847,13 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                         ElementType const * pString
                 ) const noexcept -> Index {
 
+                    auto stringLength = StringUtils < CharType > :: length ( pString );
                     for ( Size index = 0ULL; index < this->length(); ++ index ) {
 
                         if (
                                 ! StringUtils < CharType > :: contains (
                                         pString,
-                                        StringUtils < CharType > :: length ( pString ),
+                                        stringLength,
                                         this->_pBuffer [ index ]
                                 )
                         ) {
@@ -5864,12 +5870,13 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                         ElementType const * pString
                 ) const noexcept -> Index {
 
+                    auto stringLength = StringUtils < CharType > :: length ( pString );
                     for ( Index index = static_cast < Index > ( this->length() ) - 1; index >= 0; -- index ) {
 
                         if (
                                 ! StringUtils < CharType > :: contains (
                                         pString,
-                                        StringUtils < CharType > :: length ( pString ),
+                                        stringLength,
                                         this->_pBuffer [ index ]
                                 )
                         ) {
@@ -5888,12 +5895,13 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                         CollectionType < Index >               & storeIn
                 ) const noexcept -> CollectionType < Index > & {
 
+                    auto stringLength = StringUtils < CharType > :: length ( pString );
                     for ( Size index = 0ULL; index < this->length(); ++ index ) {
 
                         if (
                                 ! StringUtils < CharType > :: contains (
                                         pString,
-                                        StringUtils < CharType > :: length ( pString ),
+                                        stringLength,
                                         this->_pBuffer [ index ]
                                 )
                         ) {
@@ -5913,6 +5921,338 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
                     CollectionType < Index > indices;
                     return this->findAllNotOf ( pString, indices );
+                }
+
+
+                template < typename CharType >
+                auto BaseString < CharType > :: ltrim (
+                        CharType const * pCharacters
+                ) noexcept -> BaseString & {
+
+                    Size offset = 0ULL;
+                    Size charactersLength = StringUtils < CharType > :: length ( pCharacters );
+                    while ( offset < this->length() && StringUtils < CharType > :: contains ( pCharacters, charactersLength, this->_pBuffer [ offset ] ) ) {
+                        ++ offset;
+                    }
+
+                    if ( offset == 0ULL ) {
+                        return * this;
+                    }
+
+                    this->_length -= offset;
+
+                    (void) std :: memmove (
+                            this->_pBuffer,
+                            this->_pBuffer + offset,
+                            this->length() * sizeof ( ElementType )
+                    );
+
+                    this->_pBuffer [ this->length() ] = static_cast < ElementType > ( '\0' );
+
+                    return * this;
+                }
+
+
+                template < typename CharType >
+                auto BaseString < CharType > :: ltrim (
+                        BaseString const & characters
+                ) noexcept -> BaseString & {
+
+                    Size offset = 0ULL;
+                    while ( offset < this->length() && characters.contains ( this->_pBuffer [ offset ] ) ) {
+                        ++ offset;
+                    }
+
+                    if ( offset == 0ULL ) {
+                        return * this;
+                    }
+
+                    this->_length -= offset;
+
+                    (void) std :: memmove (
+                            this->_pBuffer,
+                            this->_pBuffer + offset,
+                            this->length() * sizeof ( ElementType )
+                    );
+
+                    this->_pBuffer [ this->length() ] = static_cast < ElementType > ( '\0' );
+
+                    return * this;
+                }
+
+
+                template < typename CharType >
+                auto BaseString < CharType > :: ltrim (
+                        BaseStringView < CharType > const & characters
+                ) noexcept -> BaseString & {
+
+                    Size offset = 0ULL;
+                    while ( offset < this->length() && characters.contains ( this->_pBuffer [ offset ] ) ) {
+                        ++ offset;
+                    }
+
+                    if ( offset == 0ULL ) {
+                        return * this;
+                    }
+
+                    this->_length -= offset;
+
+                    (void) std :: memmove (
+                            this->_pBuffer,
+                            this->_pBuffer + offset,
+                            this->length() * sizeof ( ElementType )
+                    );
+
+                    this->_pBuffer [ this->length() ] = static_cast < ElementType > ( '\0' );
+
+                    return * this;
+                }
+
+
+                template < typename CharType >
+                auto BaseString < CharType > :: ltrim (
+                        std :: basic_string < CharType > const & characters
+                ) noexcept -> BaseString & {
+
+                    Size offset = 0ULL;
+                    while ( offset < this->length() && StringUtils < CharType > :: contains ( characters.c_str(), characters.length(), this->_pBuffer [ offset ] ) ) {
+                        ++ offset;
+                    }
+
+                    if ( offset == 0ULL ) {
+                        return * this;
+                    }
+
+                    this->_length -= offset;
+
+                    (void) std :: memmove (
+                            this->_pBuffer,
+                            this->_pBuffer + offset,
+                            this->length() * sizeof ( ElementType )
+                    );
+
+                    this->_pBuffer [ this->length() ] = static_cast < ElementType > ( '\0' );
+
+                    return * this;
+                }
+
+
+                template < typename CharType >
+                auto BaseString < CharType > :: rtrim (
+                        ElementType character
+                ) noexcept -> BaseString & {
+
+                    Index offset = static_cast < Index > ( this->length() ) - 1;
+                    while ( offset >= 0 && this->_pBuffer [ offset ] == character ) {
+                        -- offset;
+                    }
+
+                    if ( offset == 0ULL ) {
+                        return * this;
+                    }
+
+                    this->_length -= offset;
+                    this->_pBuffer [ this->length() ] = static_cast < ElementType > ( '\0' );
+
+                    return * this;
+                }
+
+
+                template < typename CharType >
+                auto BaseString < CharType > :: rtrim (
+                        ElementType const * pCharacters
+                ) noexcept -> BaseString & {
+
+                    Index offset = static_cast < Index > ( this->length() ) - 1;
+                    auto charactersLength = StringUtils < CharType > :: length ( pCharacters );
+                    while ( offset >= 0 && StringUtils < CharType > :: contains ( pCharacters, charactersLength, this->_pBuffer [ offset ] ) ) {
+                        -- offset;
+                    }
+
+                    if ( offset == 0ULL ) {
+                        return * this;
+                    }
+
+                    this->_length -= offset;
+                    this->_pBuffer [ this->length() ] = static_cast < ElementType > ( '\0' );
+
+                    return * this;
+                }
+
+
+                template < typename CharType >
+                auto BaseString < CharType > :: rtrim (
+                        BaseString const & characters
+                ) noexcept -> BaseString & {
+
+                    Index offset = static_cast < Index > ( this->length() ) - 1;
+                    while ( offset >= 0 && characters.contains ( this->_pBuffer [ offset ] ) ) {
+                        -- offset;
+                    }
+
+                    if ( offset == 0ULL ) {
+                        return * this;
+                    }
+
+                    this->_length -= offset;
+                    this->_pBuffer [ this->length() ] = static_cast < ElementType > ( '\0' );
+
+                    return * this;
+                }
+
+
+                template < typename CharType >
+                auto BaseString < CharType > :: rtrim (
+                        BaseStringView < CharType > const & characters
+                ) noexcept -> BaseString & {
+
+                    Index offset = static_cast < Index > ( this->length() ) - 1;
+                    while ( offset >= 0 && characters.contains ( this->_pBuffer [ offset ] ) ) {
+                        -- offset;
+                    }
+
+                    if ( offset == 0ULL ) {
+                        return * this;
+                    }
+
+                    this->_length -= offset;
+                    this->_pBuffer [ this->length() ] = static_cast < ElementType > ( '\0' );
+
+                    return * this;
+                }
+
+
+                template < typename CharType >
+                auto BaseString < CharType > :: rtrim (
+                        std :: basic_string < CharType > const & characters
+                ) noexcept -> BaseString & {
+
+                    Index offset = static_cast < Index > ( this->length() ) - 1;
+                    while ( offset >= 0 && StringUtils < CharType > :: contains ( characters.c_str(), characters.length(), this->_pBuffer [ offset ] ) ) {
+                        -- offset;
+                    }
+
+                    if ( offset == 0ULL ) {
+                        return * this;
+                    }
+
+                    this->_length -= offset;
+                    this->_pBuffer [ this->length() ] = static_cast < ElementType > ( '\0' );
+
+                    return * this;
+                }
+
+
+                template < typename CharType >
+                auto BaseString < CharType > :: trim (
+                        ElementType character
+                ) noexcept -> BaseString & {
+
+                    return this->ltrim ( character ).rtrim ( character );
+                }
+
+
+                template < typename CharType >
+                auto BaseString < CharType > :: trim (
+                        ElementType const * pCharacters
+                ) noexcept -> BaseString & {
+
+                    return this->ltrim ( pCharacters ).rtrim ( pCharacters );
+                }
+
+
+                template < typename CharType >
+                auto BaseString < CharType > :: trim (
+                        BaseString const & characters
+                ) noexcept -> BaseString & {
+
+                    return this->ltrim ( characters ).rtrim ( characters );
+                }
+
+
+                template < typename CharType >
+                auto BaseString < CharType > :: trim (
+                        BaseStringView < CharType > const & characters
+                ) noexcept -> BaseString & {
+
+                    return this->ltrim ( characters ).rtrim ( characters );
+                }
+
+
+                template < typename CharType >
+                auto BaseString < CharType > :: trim (
+                        std :: basic_string < CharType > const & characters
+                ) noexcept -> BaseString & {
+
+                    return this->ltrim ( characters ).rtrim ( characters );
+                }
+
+
+                template < typename CharType >
+                auto BaseString < CharType > :: ljust (
+                        Size        size,
+                        ElementType element
+                ) noexcept -> BaseString & {
+
+                    if ( size <= this->length() ) {
+                        return * this;
+                    }
+
+                    size -= this->length();
+
+                    auto newCapacity = maxOf (
+                            this->_capacity,
+                            size + this->length() + 1U,
+                            BaseString :: minCapacity
+                    );
+
+                    auto newBuffer = __allocation :: __alloc < CharType > ( newCapacity );
+
+                    for ( Size index = 0ULL; index < size; ++ index ) {
+                        newBuffer [ index ] = element;
+                    }
+
+                    StringUtils < CharType > :: copy (
+                            newBuffer,
+                            size,
+                            this->_pBuffer,
+                            0ULL,
+                            this->length()
+                    );
+
+                    __allocation :: __free ( cds :: exchange ( this->_pBuffer, newBuffer ) );
+
+                    this->_capacity = newCapacity;
+                    this->_length = size + this->_length;
+
+                    return * this;
+                }
+
+
+                template < typename CharType >
+                auto BaseString < CharType > :: rjust (
+                        Size        size,
+                        ElementType element
+                ) noexcept -> BaseString & {
+
+                    if ( size <= this->length() ) {
+                        return * this;
+                    }
+
+                    this->_pBuffer = __allocation :: __enlarge (
+                            this->_pBuffer,
+                            this->_capacity,
+                            size + 1ULL,
+                            & this->_capacity
+                    );
+
+                    for ( Size index = this->length(); index < size; ++ index ) {
+                        this->_pBuffer [ index ] = element;
+                    }
+
+                    this->_pBuffer [ size ] = static_cast < ElementType > ( '\0' );
+                    this->_length = size;
+                    return * this;
                 }
 
 

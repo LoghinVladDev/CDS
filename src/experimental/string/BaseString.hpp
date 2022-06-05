@@ -506,37 +506,42 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
 
                 public:
+                    template < typename FCharType >
                     __CDS_cpplang_ConstexprConditioned friend auto operator == (
-                            BaseStringView < CharType > const & leftString,
-                            BaseString                  const & rightString
+                            BaseStringView < FCharType > const & leftString,
+                            BaseString < FCharType >     const & rightString
                     ) noexcept -> bool;
 
                 public:
+                    template < typename FCharType >
                     __CDS_cpplang_ConstexprConditioned friend auto operator == (
-                            std :: basic_string < CharType >    const & leftString,
-                            BaseString                          const & rightString
+                            std :: basic_string < FCharType >    const & leftString,
+                            BaseString < FCharType >             const & rightString
                     ) noexcept -> bool;
 
 #if defined(CDS_QT)
 
-                    public:
+                public:
+                    template < typename FCharType >
                     __CDS_cpplang_ConstexprConditioned friend auto operator == (
-                            QString     const & leftString,
-                            BaseString  const & rightString
+                            QString                     const & leftString,
+                            BaseString < FCharType >    const & rightString
                     ) noexcept -> bool;
 
 #endif
 
                 public:
+                    template < typename FCharType >
                     __CDS_cpplang_ConstexprConditioned friend auto operator == (
-                            ElementType const * pLeftString,
-                            BaseString  const & rightString
+                            FCharType                   const * pLeftString,
+                            BaseString < FCharType >    const & rightString
                     ) noexcept -> bool;
 
                 public:
+                    template < typename FCharType >
                     __CDS_cpplang_ConstexprConditioned friend auto operator == (
-                            ElementType         character,
-                            BaseString  const & string
+                            FCharType                           character,
+                            BaseString < FCharType >    const & string
                     ) noexcept -> bool;
 
 
@@ -576,37 +581,42 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
 
                 public:
+                    template < typename FCharType >
                     __CDS_cpplang_ConstexprConditioned friend auto operator != (
-                            BaseStringView < CharType > const & leftString,
-                            BaseString                  const & rightString
+                            BaseStringView < FCharType > const & leftString,
+                            BaseString < FCharType >     const & rightString
                     ) noexcept -> bool;
 
                 public:
+                    template < typename FCharType >
                     __CDS_cpplang_ConstexprConditioned friend auto operator != (
-                            std :: basic_string < CharType >    const & leftString,
-                            BaseString                          const & rightString
+                            std :: basic_string < FCharType >   const & leftString,
+                            BaseString < FCharType >            const & rightString
                     ) noexcept -> bool;
 
 #if defined(CDS_QT)
 
-                    public:
+                public:
+                    template < typename FCharType >
                     __CDS_cpplang_ConstexprConditioned friend auto operator != (
-                            QString     const & leftString,
-                            BaseString  const & rightString
+                            QString                     const & leftString,
+                            BaseString < FCharType >    const & rightString
                     ) noexcept -> bool;
 
 #endif
 
                 public:
+                    template < typename FCharType >
                     __CDS_cpplang_ConstexprConditioned friend auto operator != (
-                            ElementType const * pLeftString,
-                            BaseString  const & rightString
+                            FCharType                   const * pLeftString,
+                            BaseString < FCharType >    const & rightString
                     ) noexcept -> bool;
 
                 public:
+                    template < typename FCharType >
                     __CDS_cpplang_ConstexprConditioned friend auto operator != (
-                            ElementType         character,
-                            BaseString  const & string
+                            FCharType                           character,
+                            BaseString < FCharType >    const & string
                     ) noexcept -> bool;
 
 
@@ -646,37 +656,42 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
 
                 public:
+                    template < typename FCharType >
                     __CDS_cpplang_ConstexprConditioned friend auto operator < (
-                            BaseStringView < CharType > const & leftString,
-                            BaseString                  const & rightString
+                            BaseStringView < FCharType >    const & leftString,
+                            BaseString < FCharType >        const & rightString
                     ) noexcept -> bool;
 
                 public:
+                    template < typename FCharType >
                     __CDS_cpplang_ConstexprConditioned friend auto operator < (
-                            std :: basic_string < CharType >    const & leftString,
-                            BaseString                          const & rightString
+                            std :: basic_string < FCharType >   const & leftString,
+                            BaseString < FCharType >            const & rightString
                     ) noexcept -> bool;
 
 #if defined(CDS_QT)
 
-                    public:
+                public:
+                    template < typename FCharType >
                     __CDS_cpplang_ConstexprConditioned friend auto operator < (
-                            QString     const & leftString,
-                            BaseString  const & rightString
+                            QString                     const & leftString,
+                            BaseString < FCharType >    const & rightString
                     ) noexcept -> bool;
 
 #endif
 
                 public:
+                    template < typename FCharType >
                     __CDS_cpplang_ConstexprConditioned friend auto operator < (
-                            ElementType const * pLeftString,
-                            BaseString  const & rightString
+                            FCharType                   const * pLeftString,
+                            BaseString < FCharType >    const & rightString
                     ) noexcept -> bool;
 
                 public:
+                    template < typename FCharType >
                     __CDS_cpplang_ConstexprConditioned friend auto operator < (
-                            ElementType         character,
-                            BaseString  const & string
+                            FCharType                           character,
+                            BaseString < FCharType >    const & string
                     ) noexcept -> bool;
 
 
@@ -697,7 +712,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
 #if defined(CDS_QT)
 
-                    public:
+                public:
                     __CDS_NoDiscard __CDS_cpplang_ConstexprConditioned auto operator > (
                             QString const & string
                     ) const noexcept -> bool;
@@ -716,37 +731,42 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
 
                 public:
+                    template < typename FCharType >
                     __CDS_cpplang_ConstexprConditioned friend auto operator > (
-                            BaseStringView < CharType > const & leftString,
-                            BaseString                  const & rightString
+                            BaseStringView < FCharType >    const & leftString,
+                            BaseString < FCharType >        const & rightString
                     ) noexcept -> bool;
 
                 public:
+                    template < typename FCharType >
                     __CDS_cpplang_ConstexprConditioned friend auto operator > (
-                            std :: basic_string < CharType >    const & leftString,
-                            BaseString                          const & rightString
+                            std :: basic_string < FCharType >   const & leftString,
+                            BaseString < FCharType >            const & rightString
                     ) noexcept -> bool;
 
 #if defined(CDS_QT)
 
-                    public:
+                public:
+                    template < typename FCharType >
                     __CDS_cpplang_ConstexprConditioned friend auto operator > (
-                            QString     const & leftString,
-                            BaseString  const & rightString
+                            QString                     const & leftString,
+                            BaseString < FCharType >    const & rightString
                     ) noexcept -> bool;
 
 #endif
 
                 public:
+                    template < typename FCharType >
                     __CDS_cpplang_ConstexprConditioned friend auto operator > (
-                            ElementType const * pLeftString,
-                            BaseString  const & rightString
+                            FCharType                   const * pLeftString,
+                            BaseString < FCharType >    const & rightString
                     ) noexcept -> bool;
 
                 public:
+                    template < typename FCharType >
                     __CDS_cpplang_ConstexprConditioned friend auto operator > (
-                            ElementType         character,
-                            BaseString  const & string
+                            FCharType                           character,
+                            BaseString < FCharType >    const & string
                     ) noexcept -> bool;
 
 
@@ -786,37 +806,42 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
 
                 public:
+                    template < typename FCharType >
                     __CDS_cpplang_ConstexprConditioned friend auto operator <= (
-                            BaseStringView < CharType > const & leftString,
-                            BaseString                  const & rightString
+                            BaseStringView < FCharType > const & leftString,
+                            BaseString < FCharType >     const & rightString
                     ) noexcept -> bool;
 
                 public:
+                    template < typename FCharType >
                     __CDS_cpplang_ConstexprConditioned friend auto operator <= (
-                            std :: basic_string < CharType >    const & leftString,
-                            BaseString                          const & rightString
+                            std :: basic_string < FCharType >   const & leftString,
+                            BaseString < FCharType >            const & rightString
                     ) noexcept -> bool;
 
 #if defined(CDS_QT)
 
-                    public:
+                public:
+                    template < typename FCharType >
                     __CDS_cpplang_ConstexprConditioned friend auto operator <= (
-                            QString     const & leftString,
-                            BaseString  const & rightString
+                            QString                     const & leftString,
+                            BaseString < FCharType >    const & rightString
                     ) noexcept -> bool;
 
 #endif
 
                 public:
+                    template < typename FCharType >
                     __CDS_cpplang_ConstexprConditioned friend auto operator <= (
-                            ElementType const * pLeftString,
-                            BaseString  const & rightString
+                            FCharType                   const * pLeftString,
+                            BaseString < FCharType >    const & rightString
                     ) noexcept -> bool;
 
                 public:
+                    template < typename FCharType >
                     __CDS_cpplang_ConstexprConditioned friend auto operator <= (
-                            ElementType         character,
-                            BaseString  const & string
+                            FCharType         character,
+                            BaseString < FCharType > const & string
                     ) noexcept -> bool;
 
 
@@ -856,37 +881,42 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
 
                 public:
+                    template < typename FCharType >
                     __CDS_cpplang_ConstexprConditioned friend auto operator >= (
-                            BaseStringView < CharType > const & leftString,
-                            BaseString                  const & rightString
+                            BaseStringView < FCharType >    const & leftString,
+                            BaseString < FCharType >        const & rightString
                     ) noexcept -> bool;
 
                 public:
+                    template < typename FCharType >
                     __CDS_cpplang_ConstexprConditioned friend auto operator >= (
-                            std :: basic_string < CharType >    const & leftString,
-                            BaseString                          const & rightString
+                            std :: basic_string < FCharType >   const & leftString,
+                            BaseString < FCharType >            const & rightString
                     ) noexcept -> bool;
 
 #if defined(CDS_QT)
 
-                    public:
+                public:
+                    template < typename FCharType >
                     __CDS_cpplang_ConstexprConditioned friend auto operator >= (
-                            QString     const & leftString,
-                            BaseString  const & rightString
+                            QString                     const & leftString,
+                            BaseString < FCharType >    const & rightString
                     ) noexcept -> bool;
 
 #endif
 
                 public:
+                    template < typename FCharType >
                     __CDS_cpplang_ConstexprConditioned friend auto operator >= (
-                            ElementType const * pLeftString,
-                            BaseString  const & rightString
+                            FCharType                   const * pLeftString,
+                            BaseString < FCharType >    const & rightString
                     ) noexcept -> bool;
 
                 public:
+                    template < typename FCharType >
                     __CDS_cpplang_ConstexprConditioned friend auto operator >= (
-                            ElementType         character,
-                            BaseString  const & string
+                            FCharType                           character,
+                            BaseString < FCharType >    const & string
                     ) noexcept -> bool;
 
 
@@ -1149,30 +1179,34 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
 
                 public:
+                    template < typename FCharType >
                     friend auto operator + (
-                            BaseStringView < CharType > const & leftString,
-                            BaseString                  const & rightString
-                    ) noexcept -> BaseString;
+                            BaseStringView < FCharType >    const & leftString,
+                            BaseString < FCharType >        const & rightString
+                    ) noexcept -> BaseString < FCharType >;
 
                 public:
+                    template < typename FCharType >
                     friend auto operator + (
-                            std :: basic_string < CharType >    const & leftString,
-                            BaseString                          const & rightString
-                    ) noexcept -> BaseString;
+                            std :: basic_string < FCharType >   const & leftString,
+                            BaseString < FCharType >            const & rightString
+                    ) noexcept -> BaseString < FCharType >;
 
                 public:
+                    template < typename FCharType >
                     friend auto operator + (
-                            ElementType const * pLeftString,
-                            BaseString  const & rightString
-                    ) noexcept -> BaseString;
+                            FCharType                   const * pLeftString,
+                            BaseString < FCharType >    const & rightString
+                    ) noexcept -> BaseString < FCharType >;
 
 #if defined(CDS_QT)
 
-                    public:
+                public:
+                    template < typename FCharType >
                     friend auto operator + (
                             QString     const & leftString,
-                            BaseString  const & rightString
-                    ) noexcept -> BaseString;
+                            BaseString < FCharType > const & rightString
+                    ) noexcept -> BaseString < FCharType >;
 
 #endif
 
@@ -1240,52 +1274,60 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                     ) noexcept -> BaseString < FCharType >;
 
                 public:
+                    template < typename FCharType >
                     friend auto operator + (
-                            bool                value,
-                            BaseString  const & string
-                    ) noexcept -> BaseString;
+                            bool                                value,
+                            BaseString < FCharType >    const & string
+                    ) noexcept -> BaseString < FCharType >;
 
                 public:
+                    template < typename FCharType >
                     friend auto operator + (
-                            uint32              value,
-                            BaseString  const & string
-                    ) noexcept -> BaseString;
+                            uint32                              value,
+                            BaseString < FCharType >    const & string
+                    ) noexcept -> BaseString < FCharType >;
 
                 public:
+                    template < typename FCharType >
                     friend auto operator + (
-                            uint64              value,
-                            BaseString  const & string
-                    ) noexcept -> BaseString;
+                            uint64                              value,
+                            BaseString < FCharType >    const & string
+                    ) noexcept -> BaseString< FCharType >;
 
                 public:
+                    template < typename FCharType >
                     friend auto operator + (
-                            sint32              value,
-                            BaseString  const & string
-                    ) noexcept -> BaseString;
+                            sint32                               value,
+                            BaseString < FCharType >     const & string
+                    ) noexcept -> BaseString < FCharType >;
 
                 public:
+                    template < typename FCharType >
                     friend auto operator + (
-                            sint64              value,
-                            BaseString  const & string
-                    ) noexcept -> BaseString;
+                            sint64                              value,
+                            BaseString < FCharType >    const & string
+                    ) noexcept -> BaseString < FCharType >;
 
                 public:
+                    template < typename FCharType >
                     friend auto operator + (
-                            float               value,
-                            BaseString  const & string
-                    ) noexcept -> BaseString;
+                            float                               value,
+                            BaseString < FCharType >    const & string
+                    ) noexcept -> BaseString < FCharType >;
 
                 public:
+                    template < typename FCharType >
                     friend auto operator + (
-                            double              value,
-                            BaseString  const & string
-                    ) noexcept -> BaseString;
+                            double                              value,
+                            BaseString < FCharType >    const & string
+                    ) noexcept -> BaseString < FCharType >;
 
                 public:
+                    template < typename FCharType >
                     friend auto operator + (
-                            long double         value,
-                            BaseString  const & string
-                    ) noexcept -> BaseString;
+                            long double                         value,
+                            BaseString < FCharType >    const & string
+                    ) noexcept -> BaseString < FCharType >;
 
 
 
@@ -1419,30 +1461,34 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
 
                 public:
+                    template < typename FCharType >
                     friend auto operator + (
-                            BaseStringView < CharType > const & leftString,
-                            BaseString                       && rightString
-                    ) noexcept -> BaseString;
+                            BaseStringView < FCharType > const & leftString,
+                            BaseString < FCharType >          && rightString
+                    ) noexcept -> BaseString < FCharType >;
 
                 public:
+                    template < typename FCharType >
                     friend auto operator + (
-                            std :: basic_string < CharType >    const & leftString,
-                            BaseString                               && rightString
-                    ) noexcept -> BaseString;
+                            std :: basic_string < FCharType >   const & leftString,
+                            BaseString < FCharType >                 && rightString
+                    ) noexcept -> BaseString < FCharType >;
 
                 public:
+                    template < typename FCharType >
                     friend auto operator + (
-                            ElementType const * pLeftString,
-                            BaseString       && rightString
-                    ) noexcept -> BaseString;
+                            FCharType                   const * pLeftString,
+                            BaseString < FCharType >         && rightString
+                    ) noexcept -> BaseString < FCharType >;
 
 #if defined(CDS_QT)
 
-                    public:
+                public:
+                    template < typename FCharType >
                     friend auto operator + (
-                            QString     const & leftString,
-                            BaseString       && rightString
-                    ) noexcept -> BaseString;
+                            QString                  const & leftString,
+                            BaseString < FCharType >      && rightString
+                    ) noexcept -> BaseString < FCharType >;
 
 #endif
 
@@ -1510,52 +1556,60 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                     ) noexcept -> BaseString;
 
                 public:
+                    template < typename FCharType >
                     friend auto operator + (
-                            bool                value,
-                            BaseString       && rightString
-                    ) noexcept -> BaseString;
+                            bool                        value,
+                            BaseString < FCharType > && rightString
+                    ) noexcept -> BaseString < FCharType >;
 
                 public:
+                    template < typename FCharType >
                     friend auto operator + (
-                            uint32              value,
-                            BaseString       && rightString
-                    ) noexcept -> BaseString;
+                            uint32                      value,
+                            BaseString < FCharType > && rightString
+                    ) noexcept -> BaseString < FCharType >;
 
                 public:
+                    template < typename FCharType >
                     friend auto operator + (
-                            uint64              value,
-                            BaseString       && rightString
-                    ) noexcept -> BaseString;
+                            uint64                      value,
+                            BaseString < FCharType > && rightString
+                    ) noexcept -> BaseString < FCharType >;
 
                 public:
+                    template < typename FCharType >
                     friend auto operator + (
-                            sint32              value,
-                            BaseString       && rightString
-                    ) noexcept -> BaseString;
+                            sint32                      value,
+                            BaseString < FCharType > && rightString
+                    ) noexcept -> BaseString < FCharType >;
 
                 public:
+                    template < typename FCharType >
                     friend auto operator + (
-                            sint64              value,
-                            BaseString       && rightString
-                    ) noexcept -> BaseString;
+                            sint64                      value,
+                            BaseString < FCharType > && rightString
+                    ) noexcept -> BaseString < FCharType >;
 
                 public:
+                    template < typename FCharType >
                     friend auto operator + (
-                            float               value,
-                            BaseString       && rightString
-                    ) noexcept -> BaseString;
+                            float                          value,
+                            BaseString < FCharType >    && rightString
+                    ) noexcept -> BaseString < FCharType >;
 
                 public:
+                    template < typename FCharType >
                     friend auto operator + (
-                            double              value,
-                            BaseString       && rightString
-                    ) noexcept -> BaseString;
+                            double                      value,
+                            BaseString < FCharType > && rightString
+                    ) noexcept -> BaseString < FCharType >;
 
                 public:
+                    template < typename FCharType >
                     friend auto operator + (
-                            long double         value,
-                            BaseString       && rightString
-                    ) noexcept -> BaseString;
+                            long double                 value,
+                            BaseString < FCharType > && rightString
+                    ) noexcept -> BaseString < FCharType >;
 
 
                 public:
@@ -1569,16 +1623,18 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                     ) && noexcept -> BaseString;
 
                 public:
+                    template < typename FCharType >
                     friend auto operator * (
-                            int                 repeatCount,
-                            BaseString  const & string
-                    ) noexcept -> BaseString;
+                            int                                 repeatCount,
+                            BaseString < FCharType >    const & string
+                    ) noexcept -> BaseString < FCharType >;
 
                 public:
+                    template < typename FCharType >
                     friend auto operator * (
-                            int             repeatCount,
-                            BaseString   && string
-                    ) noexcept -> BaseString;
+                            int                         repeatCount,
+                            BaseString < FCharType > && string
+                    ) noexcept -> BaseString < FCharType >;
 
 
                 public:

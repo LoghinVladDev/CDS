@@ -237,31 +237,35 @@ namespace cds {
                     ) const noexcept -> bool;
 
                 public:
+                    template < typename FCharType >
                     __CDS_cpplang_ConstexprConditioned friend auto operator == (
-                            std :: basic_string < CharType >    const & leftString,
-                            BaseStringView                      const & rightString
+                            std :: basic_string < FCharType >   const & leftString,
+                            BaseStringView < FCharType >        const & rightString
                     ) noexcept -> bool;
 
 #if defined(CDS_QT)
 
-                    public:
+                public:
+                    template < typename FCharType >
                     __CDS_cpplang_ConstexprConditioned friend auto operator == (
-                            QString         const & leftString,
-                            BaseStringView  const & rightString
+                            QString                         const & leftString,
+                            BaseStringView < FCharType >    const & rightString
                     ) noexcept -> bool;
 
 #endif
 
                 public:
+                    template < typename FCharType >
                     __CDS_cpplang_ConstexprConditioned friend auto operator == (
-                            ElementType     const * pLeftString,
-                            BaseStringView  const & rightString
+                            FCharType                       const * pLeftString,
+                            BaseStringView < FCharType >    const & rightString
                     ) noexcept -> bool;
 
                 public:
+                    template < typename FCharType >
                     __CDS_cpplang_ConstexprConditioned friend auto operator == (
-                            ElementType             character,
-                            BaseStringView  const & string
+                            FCharType                               character,
+                            BaseStringView < FCharType >    const & string
                     ) noexcept -> bool;
 
 
@@ -296,31 +300,35 @@ namespace cds {
 
 
                 public:
+                    template < typename FCharType >
                     __CDS_cpplang_ConstexprConditioned friend auto operator != (
-                            std :: basic_string < CharType >        const & leftString,
-                            BaseStringView                          const & rightString
+                            std :: basic_string < CharType >    const & leftString,
+                            BaseStringView < FCharType >        const & rightString
                     ) noexcept -> bool;
 
 #if defined(CDS_QT)
 
-                    public:
+                public:
+                    template < typename FCharType >
                     __CDS_cpplang_ConstexprConditioned friend auto operator != (
-                            QString         const & leftString,
-                            BaseStringView  const & rightString
+                            QString                         const & leftString,
+                            BaseStringView < FCharType >    const & rightString
                     ) noexcept -> bool;
 
 #endif
 
                 public:
+                    template < typename FCharType >
                     __CDS_cpplang_ConstexprConditioned friend auto operator != (
-                            ElementType     const * pLeftString,
-                            BaseStringView  const & rightString
+                            FCharType                       const * pLeftString,
+                            BaseStringView < FCharType >    const & rightString
                     ) noexcept -> bool;
 
                 public:
+                    template < typename FCharType >
                     __CDS_cpplang_ConstexprConditioned friend auto operator != (
-                            ElementType             character,
-                            BaseStringView  const & string
+                            FCharType                               character,
+                            BaseStringView < FCharType >    const & string
                     ) noexcept -> bool;
 
 
@@ -355,31 +363,35 @@ namespace cds {
 
 
                 public:
+                    template < typename FCharType >
                     __CDS_cpplang_ConstexprConditioned friend auto operator < (
-                            std :: basic_string < CharType >        const & leftString,
-                            BaseStringView                          const & rightString
+                            std :: basic_string < FCharType >   const & leftString,
+                            BaseStringView < FCharType >        const & rightString
                     ) noexcept -> bool;
 
 #if defined(CDS_QT)
 
-                    public:
+                public:
+                    template < typename FCharType >
                     __CDS_cpplang_ConstexprConditioned friend auto operator < (
-                            QString         const & leftString,
-                            BaseStringView  const & rightString
+                            QString                         const & leftString,
+                            BaseStringView < FCharType >    const & rightString
                     ) noexcept -> bool;
 
 #endif
 
                 public:
+                    template < typename FCharType >
                     __CDS_cpplang_ConstexprConditioned friend auto operator < (
-                            ElementType     const * pLeftString,
-                            BaseStringView  const & rightString
+                            FCharType                       const * pLeftString,
+                            BaseStringView < FCharType >    const & rightString
                     ) noexcept -> bool;
 
                 public:
+                    template < typename FCharType >
                     __CDS_cpplang_ConstexprConditioned friend auto operator < (
-                            ElementType             character,
-                            BaseStringView  const & string
+                            FCharType                               character,
+                            BaseStringView < FCharType >    const & string
                     ) noexcept -> bool;
 
 
@@ -414,31 +426,35 @@ namespace cds {
 
 
                 public:
+                    template < typename FCharType >
                     __CDS_cpplang_ConstexprConditioned friend auto operator > (
-                            std :: basic_string < CharType >        const & leftString,
-                            BaseStringView                          const & rightString
+                            std :: basic_string < FCharType >   const & leftString,
+                            BaseStringView < FCharType >        const & rightString
                     ) noexcept -> bool;
 
 #if defined(CDS_QT)
 
-                    public:
+                public:
+                    template < typename FCharType >
                     __CDS_cpplang_ConstexprConditioned friend auto operator > (
-                            QString         const & leftString,
-                            BaseStringView  const & rightString
+                            QString                         const & leftString,
+                            BaseStringView < FCharType >    const & rightString
                     ) noexcept -> bool;
 
 #endif
 
                 public:
+                    template < typename FCharType >
                     __CDS_cpplang_ConstexprConditioned friend auto operator > (
-                            ElementType     const * pLeftString,
-                            BaseStringView  const & rightString
+                            FCharType                       const * pLeftString,
+                            BaseStringView < FCharType >    const & rightString
                     ) noexcept -> bool;
 
                 public:
+                    template < typename FCharType >
                     __CDS_cpplang_ConstexprConditioned friend auto operator > (
-                            ElementType             character,
-                            BaseStringView  const & string
+                            FCharType                               character,
+                            BaseStringView < FCharType >    const & string
                     ) noexcept -> bool;
 
 
@@ -472,31 +488,35 @@ namespace cds {
                     ) const noexcept -> bool;
 
                 public:
+                    template < typename FCharType >
                     __CDS_cpplang_ConstexprConditioned friend auto operator <= (
-                            std :: basic_string < CharType >        const & leftString,
-                            BaseStringView                          const & rightString
+                            std :: basic_string < FCharType >   const & leftString,
+                            BaseStringView < FCharType >        const & rightString
                     ) noexcept -> bool;
 
 #if defined(CDS_QT)
 
-                    public:
+                public:
+                    template < typename FCharType >
                     __CDS_cpplang_ConstexprConditioned friend auto operator <= (
-                            QString         const & leftString,
-                            BaseStringView  const & rightString
+                            QString                         const & leftString,
+                            BaseStringView < FCharType >    const & rightString
                     ) noexcept -> bool;
 
 #endif
 
                 public:
+                    template < typename FCharType >
                     __CDS_cpplang_ConstexprConditioned friend auto operator <= (
-                            ElementType     const * pLeftString,
-                            BaseStringView  const & rightString
+                            FCharType                       const * pLeftString,
+                            BaseStringView < FCharType >    const & rightString
                     ) noexcept -> bool;
 
                 public:
+                    template < typename FCharType >
                     __CDS_cpplang_ConstexprConditioned friend auto operator <= (
-                            ElementType             character,
-                            BaseStringView  const & string
+                            FCharType                               character,
+                            BaseStringView < FCharType >    const & string
                     ) noexcept -> bool;
 
 
@@ -531,31 +551,35 @@ namespace cds {
 
 
                 public:
+                    template < typename FCharType >
                     __CDS_cpplang_ConstexprConditioned friend auto operator >= (
-                            std :: basic_string < CharType >        const & leftString,
-                            BaseStringView                          const & rightString
+                            std :: basic_string < FCharType >   const & leftString,
+                            BaseStringView < FCharType >        const & rightString
                     ) noexcept -> bool;
 
 #if defined(CDS_QT)
 
-                    public:
+                public:
+                    template < typename FCharType >
                     __CDS_cpplang_ConstexprConditioned friend auto operator >= (
-                            QString         const & leftString,
-                            BaseStringView  const & rightString
+                            QString                         const & leftString,
+                            BaseStringView < FCharType >    const & rightString
                     ) noexcept -> bool;
 
 #endif
 
                 public:
+                    template < typename FCharType >
                     __CDS_cpplang_ConstexprConditioned friend auto operator >= (
-                            ElementType     const * pLeftString,
-                            BaseStringView  const & rightString
+                            FCharType                       const * pLeftString,
+                            BaseStringView < FCharType >    const & rightString
                     ) noexcept -> bool;
 
                 public:
+                    template < typename FCharType >
                     __CDS_cpplang_ConstexprConditioned friend auto operator >= (
-                            ElementType             character,
-                            BaseStringView  const & string
+                            FCharType                               character,
+                            BaseStringView < FCharType >    const & string
                     ) noexcept -> bool;
 
 
@@ -674,24 +698,27 @@ namespace cds {
 
 
                 public:
+                    template < typename FCharType >
                     friend auto operator + (
-                            std :: basic_string < CharType >    const & leftString,
-                            BaseStringView                      const & rightString
-                    ) noexcept -> BaseString < CharType >;
+                            std :: basic_string < FCharType >   const & leftString,
+                            BaseStringView < FCharType >        const & rightString
+                    ) noexcept -> BaseString < FCharType >;
 
                 public:
+                    template < typename FCharType >
                     friend auto operator + (
-                            ElementType     const * leftString,
-                            BaseStringView  const & rightString
-                    ) noexcept -> BaseString < CharType >;
+                            FCharType                       const * leftString,
+                            BaseStringView < FCharType >    const & rightString
+                    ) noexcept -> BaseString < FCharType >;
 
 #if defined(CDS_QT)
 
-                    public:
+                public:
+                    template < typename FCharType >
                     friend auto operator + (
-                            QString         const & leftString,
-                            BaseStringView  const & rightString
-                    ) noexcept -> BaseString < CharType >;
+                            QString                         const & leftString,
+                            BaseStringView < FCharType >    const & rightString
+                    ) noexcept -> BaseString < FCharType >;
 
 #endif
 
@@ -759,46 +786,53 @@ namespace cds {
                     ) noexcept -> BaseString < CharType >;
 
                 public:
+                    template < typename FCharType >
                     friend auto operator + (
-                            bool                    value,
-                            BaseStringView  const & string
-                    ) noexcept -> BaseString < CharType >;
+                            bool                                    value,
+                            BaseStringView < FCharType >    const & string
+                    ) noexcept -> BaseString < FCharType >;
 
                 public:
+                    template < typename FCharType >
                     friend auto operator + (
-                            uint32                  value,
-                            BaseStringView  const & string
-                    ) noexcept -> BaseString < CharType >;
+                            uint32                                  value,
+                            BaseStringView < FCharType >    const & string
+                    ) noexcept -> BaseString < FCharType >;
 
                 public:
+                    template < typename FCharType >
                     friend auto operator + (
-                            uint64                  value,
-                            BaseStringView  const & string
-                    ) noexcept -> BaseString < CharType >;
+                            uint64                                  value,
+                            BaseStringView < FCharType >    const & string
+                    ) noexcept -> BaseString < FCharType >;
 
                 public:
+                    template < typename FCharType >
                     friend auto operator + (
-                            sint32                  value,
-                            BaseStringView  const & string
-                    ) noexcept -> BaseString < CharType >;
+                            sint32                                  value,
+                            BaseStringView < FCharType >    const & string
+                    ) noexcept -> BaseString < FCharType >;
 
                 public:
+                    template < typename FCharType >
                     friend auto operator + (
-                            sint64                  value,
-                            BaseStringView  const & string
-                    ) noexcept -> BaseString < CharType >;
+                            sint64                                  value,
+                            BaseStringView < FCharType >    const & string
+                    ) noexcept -> BaseString < FCharType >;
 
                 public:
+                    template < typename FCharType >
                     friend auto operator + (
-                            float                   value,
-                            BaseStringView  const & string
-                    ) noexcept -> BaseString < CharType >;
+                            float                                   value,
+                            BaseStringView < FCharType >    const & string
+                    ) noexcept -> BaseString < FCharType >;
 
                 public:
+                    template < typename FCharType >
                     friend auto operator + (
-                            double                  value,
-                            BaseStringView  const & string
-                    ) noexcept -> BaseString < CharType >;
+                            double                                  value,
+                            BaseStringView < FCharType >    const & string
+                    ) noexcept -> BaseString < FCharType >;
 
 
 
