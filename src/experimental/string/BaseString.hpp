@@ -46,6 +46,9 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 public:
                     class ConstReverseIterator;
 
+                private:
+                    friend class BaseStringView < CharType >;
+
 
                 private:
                     ElementType       * _pBuffer        { nullptr };
@@ -102,6 +105,12 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 public:
                     __CDS_Implicit BaseString ( // NOLINT(google-explicit-constructor)
                             BaseStringView < CharType > const & string
+                    ) noexcept;
+
+                public:
+                    template < typename OtherCharType, meta :: EnableIf < ! meta :: isSame < OtherCharType, CharType > () && sizeof ( CharType ) >= sizeof ( OtherCharType ) > = 0 >
+                    __CDS_Implicit BaseString ( // NOLINT(google-explicit-constructor)
+                            BaseStringView < OtherCharType > const & string
                     ) noexcept;
 
                 public:
@@ -465,7 +474,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
 
                 public:
-                    __CDS_NoDiscard auto equals (
+                    __CDS_NoDiscard __CDS_cpplang_DynamicCastConstexpr auto equals (
                             Object const & object
                     ) const noexcept -> bool override;
 
@@ -2828,7 +2837,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                     auto replace (
                             Index               from,
                             Index               until,
-                            ElementType const * inPlace
+                            ElementType const * pInPlace
                     ) noexcept -> BaseString &;
 
 

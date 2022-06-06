@@ -56,23 +56,29 @@ namespace cds {
                     ) noexcept;
 
                 public:
-                    __CDS_Implicit constexpr BaseStringView (
+                    __CDS_Implicit constexpr BaseStringView ( // NOLINT(google-explicit-constructor)
                             BaseString < CharType > const & string
                     ) noexcept;
 
                 public:
-                    __CDS_Implicit constexpr BaseStringView (
+                    __CDS_Implicit constexpr BaseStringView ( // NOLINT(google-explicit-constructor)
                             std :: basic_string < CharType > const & string
                     ) noexcept;
 
                 public:
-                    __CDS_Implicit constexpr BaseStringView (
+                    __CDS_Implicit constexpr BaseStringView ( // NOLINT(google-explicit-constructor)
                             std :: basic_string_view < CharType > const & string
                     ) noexcept;
 
                 public:
-                    __CDS_Implicit __CDS_cpplang_ConstexprConditioned BaseStringView ( // NOLINT(google-explicit-constructor)
+                    __CDS_Implicit constexpr BaseStringView ( // NOLINT(google-explicit-constructor)
                             ElementType const * pString
+                    ) noexcept;
+
+                public:
+                    constexpr BaseStringView (
+                            ElementType const * pString,
+                            Size                length
                     ) noexcept;
 
                 public:
@@ -146,10 +152,10 @@ namespace cds {
 
 
                 public:
-                    __CDS_Implicit operator std :: basic_string < CharType > () const noexcept;
+                    __CDS_Implicit operator std :: basic_string < CharType > () const noexcept; // NOLINT(google-explicit-constructor)
 
                 public:
-                    __CDS_Implicit constexpr operator ElementType const * () const noexcept;
+                    __CDS_Implicit constexpr operator ElementType const * () const noexcept; // NOLINT(google-explicit-constructor)
 
 
                 public:
@@ -171,38 +177,38 @@ namespace cds {
 
 
                 public:
-                    auto operator = (
+                    __CDS_cpplang_NonConstConstexprMemberFunction auto operator = (
                             BaseString < CharType > const & string
                     ) noexcept -> BaseStringView &;
 
                 public:
-                    auto operator = (
+                    __CDS_cpplang_NonConstConstexprMemberFunction auto operator = (
                             BaseStringView const & string
                     ) noexcept -> BaseStringView &;
 
                 public:
-                    auto operator = (
+                    __CDS_cpplang_NonConstConstexprMemberFunction auto operator = (
                             BaseStringView && string
                     ) noexcept -> BaseStringView &;
 
                 public:
-                    auto operator = (
+                    __CDS_cpplang_NonConstConstexprMemberFunction auto operator = (
                             std :: basic_string < CharType > const & string
                     ) noexcept -> BaseStringView &;
 
                 public:
-                    auto operator = (
+                    __CDS_cpplang_NonConstConstexprMemberFunction auto operator = (
                             std :: basic_string_view < CharType > const & string
                     ) noexcept -> BaseStringView &;
 
                 public:
-                    auto operator = (
+                    __CDS_cpplang_NonConstConstexprMemberFunction auto operator = (
                             ElementType const * pString
                     ) noexcept -> BaseStringView &;
 
 
                 public:
-                    __CDS_NoDiscard auto equals (
+                    __CDS_NoDiscard __CDS_cpplang_DynamicCastConstexpr auto equals (
                             Object const & object
                     ) const noexcept -> bool;
 
@@ -696,6 +702,11 @@ namespace cds {
                             double value
                     ) const noexcept -> BaseString < CharType >;
 
+                public:
+                    auto operator + (
+                            long double value
+                    ) const noexcept -> BaseString < CharType >;
+
 
                 public:
                     template < typename FCharType >
@@ -723,67 +734,67 @@ namespace cds {
 #endif
 
                 public:
-                    template < typename T, meta :: EnableIf < meta :: isSame < T, uint8 > () > >
+                    template < typename FCharType, meta :: EnableIf < meta :: isSame < FCharType, uint8 > () > >
                     friend auto operator + (
-                            ElementType             character,
+                            FCharType               character,
                             BaseStringView  const & string
                     ) noexcept -> BaseString < CharType >;
 
                 public:
-                    template < typename T, meta :: EnableIf < meta :: isSame < T, uint16 > () > >
+                    template < typename FCharType, meta :: EnableIf < meta :: isSame < FCharType, uint16 > () > >
                     friend auto operator + (
-                            ElementType             character,
+                            FCharType               character,
                             BaseStringView  const & string
                     ) noexcept -> BaseString < CharType >;
 
                 public:
-                    template < typename T, meta :: EnableIf < meta :: isSame < T, sint8 > () > >
+                    template < typename FCharType, meta :: EnableIf < meta :: isSame < FCharType, sint8 > () > >
                     friend auto operator + (
-                            ElementType         character,
+                            FCharType           character,
                             BaseStringView  const & string
                     ) noexcept -> BaseString < CharType >;
 
                 public:
-                    template < typename T, meta :: EnableIf < meta :: isSame < T, sint16 > () > >
+                    template < typename FCharType, meta :: EnableIf < meta :: isSame < FCharType, sint16 > () > >
                     friend auto operator + (
-                            ElementType             character,
+                            FCharType               character,
                             BaseStringView  const & string
                     ) noexcept -> BaseString < CharType >;
 
                 public:
-                    template < typename T, meta :: EnableIf < ! meta :: isSame < T, uint8 > () > >
+                    template < typename FCharType, meta :: EnableIf < ! meta :: isSame < FCharType, uint8 > () > >
                     friend auto operator + (
                             uint8                   value,
                             BaseStringView  const & string
                     ) noexcept -> BaseString < CharType >;
 
                 public:
-                    template < typename T, meta :: EnableIf < ! meta :: isSame < T, uint16 > () > >
+                    template < typename FCharType, meta :: EnableIf < ! meta :: isSame < FCharType, uint16 > () > >
                     friend auto operator + (
                             uint16                  value,
                             BaseStringView  const & string
                     ) noexcept -> BaseString < CharType >;
 
                 public:
-                    template < typename T, meta :: EnableIf < ! meta :: isSame < T, sint8 > () > >
+                    template < typename FCharType, meta :: EnableIf < ! meta :: isSame < FCharType, sint8 > () > >
                     friend auto operator + (
                             sint8                   value,
                             BaseStringView  const & string
                     ) noexcept -> BaseString < CharType >;
 
                 public:
-                    template < typename T, meta :: EnableIf < ! meta :: isSame < T, sint16 > () > >
+                    template < typename FCharType, meta :: EnableIf < ! meta :: isSame < FCharType, sint16 > () > >
                     friend auto operator + (
                             sint16                  value,
                             BaseStringView  const & string
                     ) noexcept -> BaseString < CharType >;
 
                 public:
-                    template < typename T, meta :: EnableIf < ! meta :: isSame < T, uint64 > () > >
+                    template < typename FCharType, typename T, meta :: EnableIf < ! meta :: isSame < T, uint64 > () > >
                     friend auto operator + (
                             std :: size_t           value,
                             BaseStringView  const & string
-                    ) noexcept -> BaseString < CharType >;
+                    ) noexcept -> BaseString < FCharType >;
 
                 public:
                     template < typename FCharType >
@@ -834,135 +845,155 @@ namespace cds {
                             BaseStringView < FCharType >    const & string
                     ) noexcept -> BaseString < FCharType >;
 
+                public:
+                    template < typename FCharType >
+                    friend auto operator + (
+                            long double                             value,
+                            BaseStringView < FCharType >    const & string
+                    ) noexcept -> BaseString < FCharType >;
 
 
 
                 public:
-                    auto contains (
+                    auto operator * (
+                            int repeatCount
+                    ) const & noexcept -> BaseString < CharType >;
+
+                public:
+                    template < typename FCharType >
+                    friend auto operator * (
+                            int                                     repeatCount,
+                            BaseStringView < FCharType >    const & string
+                    ) noexcept -> BaseString < FCharType >;
+
+
+
+                public:
+                    __CDS_NoDiscard __CDS_cpplang_ConstexprConditioned auto contains (
                             ElementType character
                     ) const noexcept -> bool;
 
                 public:
-                    auto contains (
+                    __CDS_NoDiscard __CDS_cpplang_ConstexprDynamicAllocation auto contains (
                             BaseString < CharType > const & string
                     ) const noexcept -> bool;
 
                 public:
-                    auto contains (
+                    __CDS_NoDiscard __CDS_cpplang_ConstexprDynamicAllocation auto contains (
                             BaseStringView < CharType > const & string
                     ) const noexcept -> bool;
 
                 public:
-                    auto contains (
+                    __CDS_NoDiscard __CDS_cpplang_ConstexprDynamicAllocation auto contains (
                             std :: basic_string < CharType > const & string
                     ) const noexcept -> bool;
 
                 public:
-                    auto contains (
+                    __CDS_NoDiscard __CDS_cpplang_ConstexprDynamicAllocation auto contains (
+                            ElementType const * pString
+                    ) const noexcept -> bool;
+
+                public:
+                    template < template < typename ... > class CollectionType >
+                    __CDS_NoDiscard auto containsAnyOf (
+                            CollectionType < ElementType > const & string
+                    ) const noexcept -> bool;
+
+                public:
+                    __CDS_NoDiscard auto containsAnyOf (
+                            BaseString < CharType > const & string
+                    ) const noexcept -> bool;
+
+                public:
+                    __CDS_NoDiscard auto containsAnyOf (
+                            BaseStringView < CharType > const & string
+                    ) const noexcept -> bool;
+
+                public:
+                    __CDS_NoDiscard auto containsAnyOf (
+                            std :: basic_string < CharType > const & string
+                    ) const noexcept -> bool;
+
+                public:
+                    __CDS_NoDiscard auto containsAnyOf (
                             ElementType const * string
                     ) const noexcept -> bool;
 
                 public:
                     template < template < typename ... > class CollectionType >
-                    auto containsAnyOf (
+                    __CDS_NoDiscard auto containsAllOf (
                             CollectionType < ElementType > const & string
                     ) const noexcept -> bool;
 
                 public:
-                    auto containsAnyOf (
+                    __CDS_NoDiscard auto containsAllOf (
                             BaseString < CharType > const & string
                     ) const noexcept -> bool;
 
                 public:
-                    auto containsAnyOf (
+                    __CDS_NoDiscard auto containsAllOf (
                             BaseStringView < CharType > const & string
                     ) const noexcept -> bool;
 
                 public:
-                    auto containsAnyOf (
+                    __CDS_NoDiscard auto containsAllOf (
                             std :: basic_string < CharType > const & string
                     ) const noexcept -> bool;
 
                 public:
-                    auto containsAnyOf (
+                    __CDS_NoDiscard auto containsAllOf (
                             ElementType const * string
                     ) const noexcept -> bool;
 
                 public:
                     template < template < typename ... > class CollectionType >
-                    auto containsAllOf (
+                    __CDS_NoDiscard auto containsAnyNotOf (
                             CollectionType < ElementType > const & string
                     ) const noexcept -> bool;
 
                 public:
-                    auto containsAllOf (
+                    __CDS_NoDiscard auto containsAnyNotOf (
                             BaseString < CharType > const & string
                     ) const noexcept -> bool;
 
                 public:
-                    auto containsAllOf (
+                    __CDS_NoDiscard auto containsAnyNotOf (
                             BaseStringView < CharType > const & string
                     ) const noexcept -> bool;
 
                 public:
-                    auto containsAllOf (
+                    __CDS_NoDiscard auto containsAnyNotOf (
                             std :: basic_string < CharType > const & string
                     ) const noexcept -> bool;
 
                 public:
-                    auto containsAllOf (
+                    __CDS_NoDiscard auto containsAnyNotOf (
                             ElementType const * string
                     ) const noexcept -> bool;
 
                 public:
                     template < template < typename ... > class CollectionType >
-                    auto containsAnyNotOf (
+                    __CDS_NoDiscard auto containsAllNotOf (
                             CollectionType < ElementType > const & string
                     ) const noexcept -> bool;
 
                 public:
-                    auto containsAnyNotOf (
+                    __CDS_NoDiscard auto containsAllNotOf (
                             BaseString < CharType > const & string
                     ) const noexcept -> bool;
 
                 public:
-                    auto containsAnyNotOf (
+                    __CDS_NoDiscard auto containsAllNotOf (
                             BaseStringView < CharType > const & string
                     ) const noexcept -> bool;
 
                 public:
-                    auto containsAnyNotOf (
+                    __CDS_NoDiscard auto containsAllNotOf (
                             std :: basic_string < CharType > const & string
                     ) const noexcept -> bool;
 
                 public:
-                    auto containsAnyNotOf (
-                            ElementType const * string
-                    ) const noexcept -> bool;
-
-                public:
-                    template < template < typename ... > class CollectionType >
-                    auto containsAllNotOf (
-                            CollectionType < ElementType > const & string
-                    ) const noexcept -> bool;
-
-                public:
-                    auto containsAllNotOf (
-                            BaseString < CharType > const & string
-                    ) const noexcept -> bool;
-
-                public:
-                    auto containsAllNotOf (
-                            BaseStringView < CharType > const & string
-                    ) const noexcept -> bool;
-
-                public:
-                    auto containsAllNotOf (
-                            std :: basic_string < CharType > const & string
-                    ) const noexcept -> bool;
-
-                public:
-                    auto containsAllNotOf (
+                    __CDS_NoDiscard auto containsAllNotOf (
                             ElementType const * string
                     ) const noexcept -> bool;
 
@@ -978,18 +1009,18 @@ namespace cds {
 
                 public:
                     template < template < typename ... > class CollectionType >
-                    auto find (
+                    __CDS_NoDiscard auto find (
                             Size                        maxCount,
                             ElementType                 character
                     ) const noexcept -> CollectionType < Index >;
 
                 public:
-                    auto findFirst (
+                    __CDS_NoDiscard __CDS_cpplang_ConstexprConditioned auto findFirst (
                             ElementType character
                     ) const noexcept -> Index;
 
                 public:
-                    auto findLast (
+                    __CDS_NoDiscard __CDS_cpplang_ConstexprConditioned auto findLast (
                             ElementType character
                     ) const noexcept -> Index;
 
@@ -1002,7 +1033,7 @@ namespace cds {
 
                 public:
                     template < template < typename ... > class CollectionType >
-                    auto findAll (
+                    __CDS_NoDiscard auto findAll (
                             ElementType                 character
                     ) const noexcept -> CollectionType < Index >;
 
@@ -1010,220 +1041,220 @@ namespace cds {
                 public:
                     template < template < typename ... > class CollectionType >
                     auto find (
-                            Size                                     maxCount,
-                            BaseString < CharType >          const & string,
-                            CollectionType < Index >               & storeIn
+                            Size                            maxCount,
+                            BaseString < CharType > const & string,
+                            CollectionType < Index >      & storeIn
                     ) const noexcept -> CollectionType < Index > &;
+
+                public:
+                    template < template < typename ... > class CollectionType >
+                    __CDS_NoDiscard auto find (
+                            Size                            maxCount,
+                            BaseString < CharType > const & string
+                    ) const noexcept -> CollectionType < Index >;
+
+                public:
+                    __CDS_NoDiscard __CDS_cpplang_ConstexprDynamicAllocation auto findFirst (
+                            BaseString < CharType >          const & string
+                    ) const noexcept -> Index;
+
+                public:
+                    __CDS_NoDiscard __CDS_cpplang_ConstexprDynamicAllocation auto findLast (
+                            BaseString < CharType >          const & string
+                    ) const noexcept -> Index;
+
+                public:
+                    template < template < typename ... > class CollectionType >
+                    auto findAll (
+                            BaseString < CharType > const & string,
+                            CollectionType < Index >      & storeIn
+                    ) const noexcept -> CollectionType < Index > &;
+
+                public:
+                    template < template < typename ... > class CollectionType >
+                    __CDS_NoDiscard auto findAll (
+                            BaseString < CharType > const & string
+                    ) const noexcept -> CollectionType < Index >;
+
+
+                public:
+                    template < template < typename ... > class CollectionType >
+                    auto findOf (
+                            Size                            maxCount,
+                            BaseString < CharType > const & string,
+                            CollectionType < Index >      & storeIn
+                    ) const noexcept -> CollectionType < Index > &;
+
+                public:
+                    template < template < typename ... > class CollectionType >
+                    __CDS_NoDiscard auto findOf (
+                            Size                            maxCount,
+                            BaseString < CharType > const & string
+                    ) const noexcept -> CollectionType < Index >;
+
+                public:
+                    __CDS_NoDiscard __CDS_cpplang_ConstexprConditioned auto findFirstOf (
+                            BaseString < CharType >          const & string
+                    ) const noexcept -> Index;
+
+                public:
+                    __CDS_NoDiscard __CDS_cpplang_ConstexprConditioned auto findLastOf (
+                            BaseString < CharType >          const & string
+                    ) const noexcept -> Index;
+
+                public:
+                    template < template < typename ... > class CollectionType >
+                    auto findAllOf (
+                            BaseString < CharType > const & string,
+                            CollectionType < Index >      & storeIn
+                    ) const noexcept -> CollectionType < Index > &;
+
+                public:
+                    template < template < typename ... > class CollectionType >
+                    __CDS_NoDiscard auto findAllOf (
+                            BaseString < CharType >          const & string
+                    ) const noexcept -> CollectionType < Index >;
+
+
+                public:
+                    template < template < typename ... > class CollectionType >
+                    auto findNotOf (
+                            Size                                maxCount,
+                            BaseString < CharType >     const & string,
+                            CollectionType < Index >          & storeIn
+                    ) const noexcept -> CollectionType < Index > &;
+
+                public:
+                    template < template < typename ... > class CollectionType >
+                    __CDS_NoDiscard auto findNotOf (
+                            Size                            maxCount,
+                            BaseString < CharType > const & string
+                    ) const noexcept -> CollectionType < Index >;
+
+                public:
+                    __CDS_NoDiscard __CDS_cpplang_ConstexprConditioned auto findFirstNotOf (
+                            BaseString < CharType >          const & string
+                    ) const noexcept -> Index;
+
+                public:
+                    __CDS_NoDiscard __CDS_cpplang_ConstexprConditioned auto findLastNotOf (
+                            BaseString < CharType >          const & string
+                    ) const noexcept -> Index;
+
+                public:
+                    template < template < typename ... > class CollectionType >
+                    auto findAllNotOf (
+                            BaseString < CharType > const & string,
+                            CollectionType < Index >      & storeIn
+                    ) const noexcept -> CollectionType < Index > &;
+
+                public:
+                    template < template < typename ... > class CollectionType >
+                    __CDS_NoDiscard auto findAllNotOf (
+                            BaseString < CharType > const & string
+                    ) const noexcept -> CollectionType < Index >;
+
 
                 public:
                     template < template < typename ... > class CollectionType >
                     auto find (
-                            Size                                     maxCount,
-                            BaseString < CharType >          const & string
-                    ) const noexcept -> CollectionType < Index >;
-
-                public:
-                    auto findFirst (
-                            BaseString < CharType >          const & string
-                    ) const noexcept -> Index;
-
-                public:
-                    auto findLast (
-                            BaseString < CharType >          const & string
-                    ) const noexcept -> Index;
-
-                public:
-                    template < template < typename ... > class CollectionType >
-                    auto findAll (
-                            BaseString < CharType >          const & string,
-                            CollectionType < Index >               & storeIn
+                            Size                                maxCount,
+                            BaseStringView < CharType > const & string,
+                            CollectionType < Index >          & storeIn
                     ) const noexcept -> CollectionType < Index > &;
 
                 public:
                     template < template < typename ... > class CollectionType >
+                    __CDS_NoDiscard auto find (
+                            Size                                maxCount,
+                            BaseStringView < CharType > const & string
+                    ) const noexcept -> CollectionType < Index >;
+
+                public:
+                    __CDS_NoDiscard __CDS_cpplang_ConstexprDynamicAllocation auto findFirst (
+                            BaseStringView < CharType > const & string
+                    ) const noexcept -> Index;
+
+                public:
+                    __CDS_NoDiscard __CDS_cpplang_ConstexprDynamicAllocation auto findLast (
+                            BaseStringView < CharType > const & string
+                    ) const noexcept -> Index;
+
+                public:
+                    template < template < typename ... > class CollectionType >
                     auto findAll (
-                            BaseString < CharType >          const & string
+                            BaseStringView < CharType > const & string,
+                            CollectionType < Index >          & storeIn
+                    ) const noexcept -> CollectionType < Index > &;
+
+                public:
+                    template < template < typename ... > class CollectionType >
+                    __CDS_NoDiscard auto findAll (
+                            BaseStringView < CharType > const & string
                     ) const noexcept -> CollectionType < Index >;
 
 
                 public:
                     template < template < typename ... > class CollectionType >
                     auto findOf (
-                            Size                                     maxCount,
-                            BaseString < CharType >          const & string,
-                            CollectionType < Index >               & storeIn
+                            Size                                maxCount,
+                            BaseStringView < CharType > const & string,
+                            CollectionType < Index >          & storeIn
                     ) const noexcept -> CollectionType < Index > &;
 
                 public:
                     template < template < typename ... > class CollectionType >
-                    auto findOf (
+                    __CDS_NoDiscard auto findOf (
+                            Size                                maxCount,
+                            BaseStringView < CharType > const & string
+                    ) const noexcept -> CollectionType < Index >;
+
+                public:
+                    __CDS_NoDiscard __CDS_cpplang_ConstexprConditioned auto findFirstOf (
+                            BaseStringView < CharType > const & string
+                    ) const noexcept -> Index;
+
+                public:
+                    __CDS_NoDiscard __CDS_cpplang_ConstexprConditioned auto findLastOf (
+                            BaseStringView < CharType > const & string
+                    ) const noexcept -> Index;
+
+                public:
+                    template < template < typename ... > class CollectionType >
+                    auto findAllOf (
+                            BaseStringView < CharType > const & string,
+                            CollectionType < Index >          & storeIn
+                    ) const noexcept -> CollectionType < Index > &;
+
+                public:
+                    template < template < typename ... > class CollectionType >
+                    __CDS_NoDiscard auto findAllOf (
+                            BaseStringView < CharType > const & string
+                    ) const noexcept -> CollectionType < Index >;
+
+
+                public:
+                    template < template < typename ... > class CollectionType >
+                    auto findNotOf (
                             Size                        maxCount,
-                            BaseString < CharType >          const & string
-                    ) const noexcept -> CollectionType < Index >;
-
-                public:
-                    auto findFirstOf (
-                            BaseString < CharType >          const & string
-                    ) const noexcept -> Index;
-
-                public:
-                    auto findLastOf (
-                            BaseString < CharType >          const & string
-                    ) const noexcept -> Index;
-
-                public:
-                    template < template < typename ... > class CollectionType >
-                    auto findAllOf (
-                            BaseString < CharType >          const & string,
-                            CollectionType < Index >               & storeIn
-                    ) const noexcept -> CollectionType < Index > &;
-
-                public:
-                    template < template < typename ... > class CollectionType >
-                    auto findAllOf (
-                            BaseString < CharType >          const & string
-                    ) const noexcept -> CollectionType < Index >;
-
-
-                public:
-                    template < template < typename ... > class CollectionType >
-                    auto findNotOf (
-                            Size                                     maxCount,
-                            BaseString < CharType >          const & string,
-                            CollectionType < Index >               & storeIn
-                    ) const noexcept -> CollectionType < Index > &;
-
-                public:
-                    template < template < typename ... > class CollectionType >
-                    auto findNotOf (
-                            Size                                     maxCount,
-                            BaseString < CharType >          const & string
-                    ) const noexcept -> CollectionType < Index >;
-
-                public:
-                    auto findFirstNotOf (
-                            BaseString < CharType >          const & string
-                    ) const noexcept -> Index;
-
-                public:
-                    auto findLastNotOf (
-                            BaseString < CharType >          const & string
-                    ) const noexcept -> Index;
-
-                public:
-                    template < template < typename ... > class CollectionType >
-                    auto findAllNotOf (
-                            BaseString < CharType >          const & string,
-                            CollectionType < Index >               & storeIn
-                    ) const noexcept -> CollectionType < Index > &;
-
-                public:
-                    template < template < typename ... > class CollectionType >
-                    auto findAllNotOf (
-                            BaseString < CharType >          const & string
-                    ) const noexcept -> CollectionType < Index >;
-
-
-                public:
-                    template < template < typename ... > class CollectionType >
-                    auto find (
-                            Size                                maxCount,
                             BaseStringView < CharType > const & string,
                             CollectionType < Index >          & storeIn
                     ) const noexcept -> CollectionType < Index > &;
 
                 public:
                     template < template < typename ... > class CollectionType >
-                    auto find (
+                    __CDS_NoDiscard auto findNotOf (
                             Size                                maxCount,
                             BaseStringView < CharType > const & string
                     ) const noexcept -> CollectionType < Index >;
 
                 public:
-                    auto findFirst (
+                    __CDS_NoDiscard __CDS_cpplang_ConstexprConditioned auto findFirstNotOf (
                             BaseStringView < CharType > const & string
                     ) const noexcept -> Index;
 
                 public:
-                    auto findLast (
-                            BaseStringView < CharType > const & string
-                    ) const noexcept -> Index;
-
-                public:
-                    template < template < typename ... > class CollectionType >
-                    auto findAll (
-                            BaseStringView < CharType > const & string,
-                            CollectionType < Index >          & storeIn
-                    ) const noexcept -> CollectionType < Index > &;
-
-                public:
-                    template < template < typename ... > class CollectionType >
-                    auto findAll (
-                            BaseStringView < CharType > const & string
-                    ) const noexcept -> CollectionType < Index >;
-
-
-                public:
-                    template < template < typename ... > class CollectionType >
-                    auto findOf (
-                            Size                                maxCount,
-                            BaseStringView < CharType > const & string,
-                            CollectionType < Index >          & storeIn
-                    ) const noexcept -> CollectionType < Index > &;
-
-                public:
-                    template < template < typename ... > class CollectionType >
-                    auto findOf (
-                            Size                                maxCount,
-                            BaseStringView < CharType > const & string
-                    ) const noexcept -> CollectionType < Index >;
-
-                public:
-                    auto findFirstOf (
-                            BaseStringView < CharType > const & string
-                    ) const noexcept -> Index;
-
-                public:
-                    auto findLastOf (
-                            BaseStringView < CharType > const & string
-                    ) const noexcept -> Index;
-
-                public:
-                    template < template < typename ... > class CollectionType >
-                    auto findAllOf (
-                            BaseStringView < CharType > const & string,
-                            CollectionType < Index >          & storeIn
-                    ) const noexcept -> CollectionType < Index > &;
-
-                public:
-                    template < template < typename ... > class CollectionType >
-                    auto findAllOf (
-                            BaseStringView < CharType > const & string
-                    ) const noexcept -> CollectionType < Index >;
-
-
-                public:
-                    template < template < typename ... > class CollectionType >
-                    auto findNotOf (
-                            Size                        maxCount,
-                            BaseStringView < CharType > const & string,
-                            CollectionType < Index >          & storeIn
-                    ) const noexcept -> CollectionType < Index > &;
-
-                public:
-                    template < template < typename ... > class CollectionType >
-                    auto findNotOf (
-                            Size                                maxCount,
-                            BaseStringView < CharType > const & string
-                    ) const noexcept -> CollectionType < Index >;
-
-                public:
-                    auto findFirstNotOf (
-                            BaseStringView < CharType > const & string
-                    ) const noexcept -> Index;
-
-                public:
-                    auto findLastNotOf (
+                    __CDS_NoDiscard __CDS_cpplang_ConstexprConditioned auto findLastNotOf (
                             BaseStringView < CharType > const & string
                     ) const noexcept -> Index;
 
@@ -1236,7 +1267,7 @@ namespace cds {
 
                 public:
                     template < template < typename ... > class CollectionType >
-                    auto findAllNotOf (
+                    __CDS_NoDiscard auto findAllNotOf (
                             BaseStringView < CharType > const & string
                     ) const noexcept -> CollectionType < Index >;
 
@@ -1251,18 +1282,18 @@ namespace cds {
 
                 public:
                     template < template < typename ... > class CollectionType >
-                    auto find (
+                    __CDS_NoDiscard auto find (
                             Size                                     maxCount,
                             std :: basic_string < CharType > const & string
                     ) const noexcept -> CollectionType < Index >;
 
                 public:
-                    auto findFirst (
+                    __CDS_NoDiscard __CDS_cpplang_ConstexprDynamicAllocation auto findFirst (
                             std :: basic_string < CharType > const & string
                     ) const noexcept -> Index;
 
                 public:
-                    auto findLast (
+                    __CDS_NoDiscard __CDS_cpplang_ConstexprDynamicAllocation auto findLast (
                             std :: basic_string < CharType > const & string
                     ) const noexcept -> Index;
 
@@ -1275,7 +1306,7 @@ namespace cds {
 
                 public:
                     template < template < typename ... > class CollectionType >
-                    auto findAll (
+                    __CDS_NoDiscard auto findAll (
                             std :: basic_string < CharType > const & string
                     ) const noexcept -> CollectionType < Index >;
 
@@ -1290,18 +1321,18 @@ namespace cds {
 
                 public:
                     template < template < typename ... > class CollectionType >
-                    auto findOf (
+                    __CDS_NoDiscard auto findOf (
                             Size                                     maxCount,
                             std :: basic_string < CharType > const & string
                     ) const noexcept -> CollectionType < Index >;
 
                 public:
-                    auto findFirstOf (
+                    __CDS_NoDiscard __CDS_cpplang_ConstexprConditioned auto findFirstOf (
                             std :: basic_string < CharType > const & string
                     ) const noexcept -> Index;
 
                 public:
-                    auto findLastOf (
+                    __CDS_NoDiscard __CDS_cpplang_ConstexprConditioned auto findLastOf (
                             std :: basic_string < CharType > const & string
                     ) const noexcept -> Index;
 
@@ -1314,7 +1345,7 @@ namespace cds {
 
                 public:
                     template < template < typename ... > class CollectionType >
-                    auto findAllOf (
+                    __CDS_NoDiscard auto findAllOf (
                             std :: basic_string < CharType > const & string
                     ) const noexcept -> CollectionType < Index >;
 
@@ -1329,18 +1360,18 @@ namespace cds {
 
                 public:
                     template < template < typename ... > class CollectionType >
-                    auto findNotOf (
+                    __CDS_NoDiscard auto findNotOf (
                             Size                                     maxCount,
                             std :: basic_string < CharType > const & string
                     ) const noexcept -> CollectionType < Index >;
 
                 public:
-                    auto findFirstNotOf (
+                    __CDS_NoDiscard __CDS_cpplang_ConstexprConditioned auto findFirstNotOf (
                             std :: basic_string < CharType > const & string
                     ) const noexcept -> Index;
 
                 public:
-                    auto findLastNotOf (
+                    __CDS_NoDiscard __CDS_cpplang_ConstexprConditioned auto findLastNotOf (
                             std :: basic_string < CharType > const & string
                     ) const noexcept -> Index;
 
@@ -1353,33 +1384,33 @@ namespace cds {
 
                 public:
                     template < template < typename ... > class CollectionType >
-                    auto findAllNotOf (
+                    __CDS_NoDiscard auto findAllNotOf (
                             std :: basic_string < CharType > const & string
                     ) const noexcept -> CollectionType < Index >;
 
-
-                public:
-                    template < template < typename ... > class CollectionType >
-                    auto find (
-                            Size                                        maxCount,
-                            ElementType                         const * pString,
-                            CollectionType < Index >                  & storeIn
-                    ) const noexcept -> CollectionType < Index > &;
 
                 public:
                     template < template < typename ... > class CollectionType >
                     auto find (
                             Size                                        maxCount,
+                            ElementType                         const * pString,
+                            CollectionType < Index >                  & storeIn
+                    ) const noexcept -> CollectionType < Index > &;
+
+                public:
+                    template < template < typename ... > class CollectionType >
+                    __CDS_NoDiscard auto find (
+                            Size                                        maxCount,
                             ElementType                         const * pString
                     ) const noexcept -> CollectionType < Index >;
 
                 public:
-                    auto findFirst (
+                    __CDS_NoDiscard __CDS_cpplang_ConstexprDynamicAllocation auto findFirst (
                             ElementType                         const * pString
                     ) const noexcept -> Index;
 
                 public:
-                    auto findLast (
+                    __CDS_NoDiscard __CDS_cpplang_ConstexprDynamicAllocation auto findLast (
                             ElementType                         const * pString
                     ) const noexcept -> Index;
 
@@ -1392,7 +1423,7 @@ namespace cds {
 
                 public:
                     template < template < typename ... > class CollectionType >
-                    auto findAll (
+                    __CDS_NoDiscard auto findAll (
                             ElementType                         const * pString
                     ) const noexcept -> CollectionType < Index >;
 
@@ -1407,31 +1438,31 @@ namespace cds {
 
                 public:
                     template < template < typename ... > class CollectionType >
-                    auto findOf (
+                    __CDS_NoDiscard auto findOf (
                             Size                                        maxCount,
                             ElementType                         const * pString
                     ) const noexcept -> CollectionType < Index >;
 
                 public:
-                    auto findFirstOf (
+                    __CDS_NoDiscard __CDS_cpplang_ConstexprConditioned auto findFirstOf (
                             ElementType                         const * pString
                     ) const noexcept -> Index;
 
                 public:
-                    auto findLastOf (
+                    __CDS_NoDiscard __CDS_cpplang_ConstexprConditioned auto findLastOf (
                             ElementType                         const * pString
                     ) const noexcept -> Index;
 
                 public:
                     template < template < typename ... > class CollectionType >
                     auto findAllOf (
-                            std :: basic_string < CharType >    const & string,
-                            ElementType                         const * pString
+                            ElementType                         const * pString,
+                            CollectionType < Index >                  & storeIn
                     ) const noexcept -> CollectionType < Index > &;
 
                 public:
                     template < template < typename ... > class CollectionType >
-                    auto findAllOf (
+                    __CDS_NoDiscard auto findAllOf (
                             ElementType                         const * pString
                     ) const noexcept -> CollectionType < Index >;
 
@@ -1446,18 +1477,18 @@ namespace cds {
 
                 public:
                     template < template < typename ... > class CollectionType >
-                    auto findNotOf (
+                    __CDS_NoDiscard auto findNotOf (
                             Size                                        maxCount,
                             ElementType                         const * pString
                     ) const noexcept -> CollectionType < Index >;
 
                 public:
-                    auto findFirstNotOf (
+                    __CDS_NoDiscard __CDS_cpplang_ConstexprConditioned auto findFirstNotOf (
                             ElementType                         const * pString
                     ) const noexcept -> Index;
 
                 public:
-                    auto findLastNotOf (
+                    __CDS_NoDiscard __CDS_cpplang_ConstexprConditioned auto findLastNotOf (
                             ElementType                         const * pString
                     ) const noexcept -> Index;
 
@@ -1470,7 +1501,7 @@ namespace cds {
 
                 public:
                     template < template < typename ... > class CollectionType >
-                    auto findAllNotOf (
+                    __CDS_NoDiscard auto findAllNotOf (
                             ElementType                         const * pString
                     ) const noexcept -> CollectionType < Index >;
 

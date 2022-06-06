@@ -36,7 +36,14 @@ int main () {
     arr.sort ();
     std :: cout << arr << '\n';
 
+    std :: string trivial = "test string";
+    cds :: experimental :: String copyByView = trivial;
+
+    std :: cout << copyByView << '\n';
+
 //    experimental :: String s23;
+
+
 
     String s;
     s += 'a';

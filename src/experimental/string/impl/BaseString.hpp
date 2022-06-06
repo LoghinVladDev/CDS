@@ -76,26 +76,20 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
 
                 template < typename CharType >
-                BaseString < CharType > :: BaseString (
+                __CDS_OptimalInline BaseString < CharType > :: BaseString (
                         BaseString const & string
                 ) noexcept :
-                        BaseString (
-                                string.cStr(),
-                                string.length()
-                        ) {
+                        BaseString ( BaseStringView < CharType > ( string ) ) {
 
                 }
 
 
                 template < typename CharType >
                 template < typename OtherCharType, meta :: EnableIf < ! meta :: isSame < OtherCharType, CharType > () && sizeof ( CharType ) >= sizeof ( OtherCharType ) > >
-                BaseString < CharType > :: BaseString (
+                __CDS_OptimalInline BaseString < CharType > :: BaseString (
                         BaseString < OtherCharType > const & string
                 ) noexcept :
-                        BaseString (
-                                string.cStr(),
-                                string.length()
-                        ) {
+                        BaseString ( BaseStringView < OtherCharType > ( string ) ) {
 
                 }
 
@@ -114,108 +108,111 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 template < typename CharType >
                 BaseString < CharType > :: BaseString (
                         BaseStringView < CharType > const & string
-                ) noexcept :
-                        BaseString (
-                                string.cStr(),
-                                string.length()
-                        ) {
+                ) noexcept {
 
+                    if ( string.empty() ) {
+                        return;
+                    }
+
+                    this->_capacity     = maxOf ( BaseString :: minCapacity, string.length() + 1ULL );
+                    this->_length       = string.length();
+                    this->_pBuffer      = StringUtils < CharType > :: copy (
+                            __allocation :: __alloc < CharType > ( this->_capacity ),
+                            0ULL,
+                            string.cStr(),
+                            0ULL,
+                            this->_length
+                    );
                 }
 
 
                 template < typename CharType >
+                template < typename OtherCharType, meta :: EnableIf < ! meta :: isSame < OtherCharType, CharType > () && sizeof ( CharType ) >= sizeof ( OtherCharType ) > >
                 BaseString < CharType > :: BaseString (
+                        BaseStringView < OtherCharType > const & string
+                ) noexcept {
+
+                    if ( string.empty() ) {
+                        return;
+                    }
+
+                    this->_capacity = maxOf ( BaseString :: minCapacity, string.length() + 1ULL );
+                    this->_length   = string.length();
+                    this->_pBuffer  = StringUtils < CharType > :: copy (
+                            __allocation :: __alloc < CharType > ( this->_capacity ),
+                            0ULL,
+                            string.cStr(),
+                            0ULL,
+                            this->_length
+                    );
+                }
+
+
+                template < typename CharType >
+                __CDS_OptimalInline BaseString < CharType > :: BaseString (
                         ElementType const * pString,
                         Size                length
-                ) noexcept {
+                ) noexcept :
+                        BaseString (
+                                BaseStringView < CharType > (
+                                        pString,
+                                        length
+                                )
+                        ) {
 
-                    if ( pString == nullptr ) {
-                        return;
-                    }
-
-                    this->_capacity = maxOf ( BaseString :: minCapacity, length + 1ULL );
-                    this->_length   = length;
-
-                    this->_pBuffer  = StringUtils < CharType > :: copy (
-                            __allocation :: __alloc < CharType > ( this->_capacity ),
-                            0ULL,
-                            pString,
-                            0ULL,
-                            length
-                    );
                 }
 
 
                 template < typename CharType >
-                BaseString < CharType > :: BaseString (
+                __CDS_OptimalInline BaseString < CharType > :: BaseString (
                         ElementType const * pString
                 ) noexcept :
-                        BaseString (
-                                pString,
-                                StringUtils < CharType > :: length ( pString )
-                        ) {
+                        BaseString ( BaseStringView < CharType > ( pString ) ) {
 
                 }
 
 
                 template < typename CharType >
                 template < typename OtherCharType, meta :: EnableIf < ! meta :: isSame < OtherCharType, CharType > () && sizeof ( CharType ) >= sizeof ( OtherCharType ) > >
-                BaseString < CharType > :: BaseString (
+                __CDS_OptimalInline BaseString < CharType > :: BaseString (
                         OtherCharType   const * pString,
                         Size                    length
-                ) noexcept {
+                ) noexcept :
+                        BaseString (
+                                BaseStringView < OtherCharType > (
+                                        pString,
+                                        length
+                                )
+                        ) {
 
-                    if ( pString == nullptr ) {
-                        return;
-                    }
-
-                    this->_capacity = maxOf ( BaseString :: minCapacity, length + 1ULL );
-                    this->_length   = length;
-
-                    this->_pBuffer  = StringUtils < CharType > :: copy (
-                            __allocation :: __alloc < CharType > ( this->_capacity ),
-                            0ULL,
-                            pString,
-                            0ULL,
-                            length
-                    );
                 }
 
 
                 template < typename CharType >
                 template < typename OtherCharType, meta :: EnableIf < ! meta :: isSame < OtherCharType, CharType > () && sizeof ( CharType ) >= sizeof ( OtherCharType ) > >
-                BaseString < CharType > :: BaseString (
+                __CDS_OptimalInline BaseString < CharType > :: BaseString (
                         OtherCharType const * pString
                 ) noexcept :
-                        BaseString (
-                                pString,
-                                pString == nullptr ? 0ULL : StringUtils < OtherCharType > :: length ( pString )
-                        ) {
+                        BaseString ( BaseStringView < OtherCharType > ( pString ) ) {
 
                 }
 
 
                 template < typename CharType >
-                BaseString < CharType > :: BaseString (
+                __CDS_OptimalInline BaseString < CharType > :: BaseString (
                         std :: basic_string < CharType > const & string
                 ) noexcept :
-                        BaseString (
-                                string.c_str(),
-                                string.length()
-                        ) {
+                        BaseString ( BaseStringView < CharType > ( string ) ) {
 
                 }
 
 
                 /// TODO : replace after replacing experimental :: Object :: toString () -> BaseString
                 template < typename CharType >
-                BaseString < CharType > :: BaseString (
+                __CDS_OptimalInline BaseString < CharType > :: BaseString (
                         experimental :: Object const & object
                 ) noexcept :
-                        BaseString (
-                                object.toString().cStr(),
-                                object.toString().length()
-                        ) {
+                        BaseString ( BaseStringView < CharType > ( object.toString().cStr() ) ) {
 
                 }
 
@@ -244,7 +241,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
                 template < typename CharType >
                 template < typename OtherCharType, meta :: EnableIf < ! meta :: isSame < OtherCharType, CharType > () && sizeof ( CharType ) >= sizeof ( OtherCharType ) > >
-                BaseString < CharType > :: BaseString (
+                __CDS_OptimalInline BaseString < CharType > :: BaseString (
                         Size            length,
                         OtherCharType   fillCharacter
                 ) noexcept :
@@ -304,7 +301,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
                 template < typename CharType >
                 template < typename T, meta :: EnableIf < meta :: isSame < T, uint8 > () > >
-                BaseString < CharType > :: BaseString (
+                __CDS_OptimalInline BaseString < CharType > :: BaseString (
                         ElementType value
                 ) noexcept :
                         _length ( 1ULL ),
@@ -318,7 +315,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
                 template < typename CharType >
                 template < typename T, meta :: EnableIf < meta :: isSame < T, uint16 > () > >
-                BaseString < CharType > :: BaseString (
+                __CDS_OptimalInline BaseString < CharType > :: BaseString (
                         ElementType value
                 ) noexcept :
                         _length ( 1ULL ),
@@ -332,7 +329,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
                 template < typename CharType >
                 template < typename T, meta :: EnableIf < meta :: isSame < T, sint8 > () > >
-                BaseString < CharType > :: BaseString (
+                __CDS_OptimalInline BaseString < CharType > :: BaseString (
                         ElementType value
                 ) noexcept :
                         _length ( 1ULL ),
@@ -346,7 +343,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
                 template < typename CharType >
                 template < typename T, meta :: EnableIf < meta :: isSame < T, sint16 > () > >
-                BaseString < CharType > :: BaseString (
+                __CDS_OptimalInline BaseString < CharType > :: BaseString (
                         ElementType value
                 ) noexcept :
                         _length ( 1ULL ),
@@ -453,27 +450,16 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                         bool value
                 ) noexcept :
                         _capacity ( BaseString :: minCapacity ),
+                        _length ( value ? 4ULL : 5ULL ),
                         _pBuffer ( __allocation :: __alloc < CharType > ( BaseString :: minCapacity ) ) {
 
-                    if ( value ) {
-
-                        (void) StringUtils < ElementType > :: copy (
-                                this->_pBuffer,
-                                0ULL,
-                                "true",
-                                0ULL,
-                                4ULL
-                        );
-                    } else {
-
-                        (void) StringUtils < ElementType > :: copy (
-                                this->_pBuffer,
-                                0ULL,
-                                "false",
-                                0ULL,
-                                5ULL
-                        );
-                    }
+                    (void) StringUtils < ElementType > :: copy (
+                            this->_pBuffer,
+                            0ULL,
+                            value ? "true" : "false",
+                            0ULL,
+                            this->_length
+                    );
                 }
 
 
@@ -691,7 +677,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
 
                 template < typename CharType >
-                auto BaseString < CharType > :: reserve (
+                __CDS_OptimalInline auto BaseString < CharType > :: reserve (
                         Size size
                 ) noexcept -> void {
 
@@ -704,7 +690,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
 
                 template < typename CharType >
-                auto BaseString < CharType > :: shrink (
+                __CDS_OptimalInline auto BaseString < CharType > :: shrink (
                         Size size
                 ) noexcept -> void {
 
@@ -866,36 +852,42 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
                 template < typename CharType >
                 __CDS_OptimalInline auto BaseString < CharType > :: toStdString () const noexcept -> std :: basic_string < CharType > {
+
                     return std :: basic_string < CharType > ( this->_pBuffer );
                 }
 
 
                 template < typename CharType >
                 constexpr auto BaseString < CharType > :: cStr () const noexcept -> ElementType const * {
-                    return this->_pBuffer;
+
+                    return this->_pBuffer == nullptr ? "" : this->_pBuffer;
                 }
 
 
                 template < typename CharType >
                 __CDS_cpplang_NonConstConstexprMemberFunction auto BaseString < CharType > :: data () noexcept -> ElementType * {
+
                     return this->_pBuffer;
                 }
 
 
                 template < typename CharType >
                 __CDS_OptimalInline BaseString < CharType > :: operator std :: basic_string < CharType > () const noexcept {
+
                     return this->toStdString();
                 }
 
 
                 template < typename CharType >
                 constexpr BaseString < CharType > :: operator ElementType const * () const noexcept {
+
                     return this->cStr();
                 }
 
 
                 template < typename CharType >
                 __CDS_cpplang_NonConstConstexprMemberFunction BaseString < CharType > :: operator ElementType * () noexcept {
+
                     return this->data();
                 }
 
@@ -942,49 +934,16 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
 
                 template < typename CharType >
-                auto BaseString < CharType > :: operator = (
+                __CDS_OptimalInline auto BaseString < CharType > :: operator = ( // NOLINT(bugprone-unhandled-self-assignment)
                         BaseString const & string
                 ) noexcept -> BaseString & {
 
-                    if ( this == & string ) {
-                        return * this;
-                    }
-
-                    if ( string.empty() ) {
-                        __allocation :: __free ( cds :: exchange ( this->_pBuffer, nullptr ) );
-                        this->_length   = 0ULL;
-                        this->_capacity = 0ULL;
-
-                        return * this;
-                    }
-
-                    if ( this->_capacity < string.length() + 1ULL ) {
-
-                        this->_capacity = maxOf ( string.length() + 1ULL, BaseString :: minCapacity );
-                        __allocation :: __free (
-                                cds :: exchange (
-                                        this->_pBuffer,
-                                        __allocation :: __alloc < CharType > ( this->_capacity )
-                                )
-                        );
-                    }
-
-                    this->_length = string.length();
-
-                    (void) StringUtils < ElementType > :: copy (
-                            this->_pBuffer,
-                            0ULL,
-                            string.cStr(),
-                            0ULL,
-                            string.length()
-                    );
-
-                    return * this;
+                    return this->operator = ( BaseStringView < CharType > ( string ) ); // NOLINT(misc-unconventional-assign-operator)
                 }
 
 
                 template < typename CharType >
-                auto BaseString < CharType > :: operator = (
+                __CDS_OptionalInline auto BaseString < CharType > :: operator = (
                         BaseString && string
                 ) noexcept -> BaseString & {
 
@@ -1030,7 +989,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
                         this->_capacity = maxOf ( string.length() + 1ULL, BaseString :: minCapacity );
 
-                        this->_pBuffer  = __allocation :: __free (
+                        __allocation :: __free (
                                 cds :: exchange (
                                         this->_pBuffer,
                                         __allocation :: __alloc < CharType > ( this->_capacity )
@@ -1053,122 +1012,45 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
 
                 template < typename CharType >
-                auto BaseString < CharType > :: operator = (
+                __CDS_OptimalInline auto BaseString < CharType > :: operator = (
                         std :: basic_string < CharType > const & string
                 ) noexcept -> BaseString & {
 
-                    if ( string.empty() ) {
-                        __allocation :: __free ( cds :: exchange ( this->_pBuffer, nullptr ) );
-                        this->_length   = 0ULL;
-                        this->_capacity = 0ULL;
-
-                        return * this;
-                    }
-
-
-                    if ( this->_capacity < string.length() + 1ULL ) {
-
-                        this->_capacity = maxOf ( string.length() + 1ULL, BaseString :: minCapacity );
-                        __allocation :: __free (
-                                cds :: exchange (
-                                        this->_pBuffer,
-                                        __allocation :: __alloc < CharType > ( this->_capacity )
-                                )
-                        );
-                    }
-
-                    this->_length = string.length();
-
-                    (void) StringUtils < ElementType > :: copy (
-                            this->_pBuffer,
-                            0ULL,
-                            string.c_str(),
-                            0ULL,
-                            string.length()
-                    );
-
-                    return * this;
+                    return this->operator = ( BaseStringView < CharType > ( string ) ); // NOLINT(misc-unconventional-assign-operator)
                 }
 
 
                 template < typename CharType >
-                auto BaseString < CharType > :: operator = (
+                __CDS_OptimalInline auto BaseString < CharType > :: operator = (
                         ElementType const * pString
                 ) noexcept -> BaseString & {
 
-                    if ( this->_pBuffer == pString ) {
-                        return * this;
-                    }
-
-                    auto stringLength = StringUtils < ElementType > :: length ( pString );
-
-                    if ( stringLength == 0ULL ) {
-                        __allocation :: __free ( cds :: exchange ( this->_pBuffer, nullptr ) );
-                        this->_length   = 0ULL;
-                        this->_capacity = 0ULL;
-
-                        return * this;
-                    }
-
-
-                    if ( this->_capacity < stringLength + 1ULL ) {
-
-                        this->_capacity = maxOf ( stringLength + 1ULL, BaseString :: minCapacity );
-
-                        __allocation :: __free (
-                                cds :: exchange (
-                                        this->_pBuffer,
-                                        __allocation :: __alloc < CharType > ( this->_capacity )
-                                )
-                        );
-                    }
-
-                    this->_length = stringLength;
-
-                    (void) StringUtils < ElementType > :: copy (
-                            this->_pBuffer,
-                            0ULL,
-                            pString,
-                            0ULL,
-                            stringLength
-                    );
-
-                    return * this;
+                    return this->operator = ( BaseStringView < CharType > ( pString ) ); // NOLINT(misc-unconventional-assign-operator)
                 }
 
 
                 template < typename CharType >
-                auto BaseString < CharType > :: operator = (
+                __CDS_OptimalInline auto BaseString < CharType > :: operator = (
                         ElementType character
                 ) noexcept -> BaseString & {
 
-                    if ( this->_capacity < 2ULL ) {
-
-                        this->_capacity = BaseString :: minCapacity;
-                        __allocation :: __free (
-                                cds :: exchange (
-                                        this->_pBuffer,
-                                        __allocation :: __alloc < CharType > ( this->_capacity )
-                                )
-                        );
-                    }
+                    this->_pBuffer = __allocation :: __enlarge (
+                            this->_pBuffer,
+                            this->_capacity,
+                            2ULL,
+                            & this->_capacity
+                    );
 
                     this->_length = 1ULL;
-
-                    (void) StringUtils < ElementType > :: copy (
-                            this->_pBuffer,
-                            0ULL,
-                            & character,
-                            0ULL,
-                            1ULL
-                    );
+                    this->_pBuffer [ 0 ] = character;
+                    this->_pBuffer [ 1 ] = static_cast < ElementType > ( character );
 
                     return * this;
                 }
 
 
                 template < typename CharType >
-                auto BaseString < CharType > :: equals (
+                __CDS_cpplang_DynamicCastConstexpr auto BaseString < CharType > :: equals (
                         Object const & object
                 ) const noexcept -> bool {
 
@@ -1181,7 +1063,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                         return false;
                     }
 
-                    return this->operator == ( * pString );
+                    return this->operator == ( BaseStringView < CharType > ( * pString ) );
                 }
 
 
@@ -1190,16 +1072,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                         BaseString const & string
                 ) const noexcept -> bool {
 
-                    if ( this->length() != string.length() ) {
-                        return false;
-                    }
-
-                    return StringUtils < CharType > :: compare (
-                            this->cStr(),
-                            this->length(),
-                            string.cStr(),
-                            string.length()
-                    ) == StringUtils < CharType > :: equal;
+                    return BaseStringView < CharType > ( * this ) == BaseStringView < CharType > ( string );
                 }
 
 
@@ -1208,16 +1081,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                         BaseStringView < CharType > const & string
                 ) const noexcept -> bool {
 
-                    if ( this->length() != string.length() ) {
-                        return false;
-                    }
-
-                    return StringUtils < CharType > :: compare (
-                            this->cStr(),
-                            this->length(),
-                            string.cStr(),
-                            string.length()
-                    ) == StringUtils < CharType > :: equal;
+                    return BaseStringView < CharType > ( * this ) == string;
                 }
 
 
@@ -1226,16 +1090,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                         std :: basic_string < CharType > const & string
                 ) const noexcept -> bool {
 
-                    if ( this->length() != string.length() ) {
-                        return false;
-                    }
-
-                    return StringUtils < CharType > :: compare (
-                            this->cStr(),
-                            this->length(),
-                            string.c_str(),
-                            string.length()
-                    ) == StringUtils < CharType > :: equal;
+                    return BaseStringView < CharType > ( * this ) == BaseStringView < CharType > ( string );
                 }
 
 
@@ -1244,17 +1099,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                         ElementType const * pString
                 ) const noexcept -> bool {
 
-                    auto otherStringLength = StringUtils < CharType > :: length ( pString );
-                    if ( this->length() != otherStringLength ) {
-                        return false;
-                    }
-
-                    return StringUtils < CharType > :: compare (
-                            this->cStr(),
-                            this->length(),
-                            pString,
-                            otherStringLength
-                    ) == StringUtils < CharType > :: equal;
+                    return BaseStringView < CharType > ( * this ) == BaseStringView < CharType > ( pString );
                 }
 
 
@@ -1267,12 +1112,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                         return false;
                     }
 
-                    return StringUtils < CharType > :: compare (
-                            this->cStr(),
-                            this->length(),
-                            & character,
-                            1U
-                    ) == StringUtils < CharType > :: equal;
+                    return this->_pBuffer [ 0 ] == character;
                 }
 
 
@@ -1282,16 +1122,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                         BaseString < FCharType >     const & rightString
                 ) noexcept -> bool {
 
-                    if ( leftString.length() != rightString.length() ) {
-                        return false;
-                    }
-
-                    return StringUtils < FCharType > :: compare (
-                            leftString.cStr(),
-                            leftString.length(),
-                            rightString.cStr(),
-                            rightString.length()
-                    ) == StringUtils < FCharType > :: equal;
+                    return leftString == BaseStringView < FCharType > ( rightString );
                 }
 
 
@@ -1301,16 +1132,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                         BaseString < FCharType >             const & rightString
                 ) noexcept -> bool {
 
-                    if ( leftString.length() != rightString.length() ) {
-                        return false;
-                    }
-
-                    return StringUtils < FCharType > :: compare (
-                            leftString.c_str(),
-                            leftString.length(),
-                            rightString.cStr(),
-                            rightString.length()
-                    ) == StringUtils < FCharType > :: equal;
+                    return BaseStringView < FCharType > ( leftString ) == BaseStringView < FCharType > ( rightString );
                 }
 
 
@@ -1320,17 +1142,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                         BaseString < FCharType >             const & rightString
                 ) noexcept -> bool {
 
-                    auto leftLength = StringUtils < FCharType > :: length ( pLeftString );
-                    if ( leftLength != rightString.length() ) {
-                        return false;
-                    }
-
-                    return StringUtils < FCharType > :: compare (
-                            pLeftString,
-                            leftLength,
-                            rightString.cStr(),
-                            rightString.length()
-                    ) == StringUtils < FCharType > :: equal;
+                    return BaseStringView < FCharType > ( pLeftString ) == BaseStringView < FCharType > ( rightString );
                 }
 
 
@@ -1344,12 +1156,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                         return false;
                     }
 
-                    return StringUtils < FCharType > :: compare (
-                            & character,
-                            1U,
-                            string.cStr(),
-                            string.length()
-                    ) == StringUtils < FCharType > :: equal;
+                    return string._pBuffer [ 0 ] == character;
                 }
 
 
@@ -1358,16 +1165,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                         BaseString const & string
                 ) const noexcept -> bool {
 
-                    if ( this->length() != string.length() ) {
-                        return true;
-                    }
-
-                    return StringUtils < CharType > :: compare (
-                            this->cStr(),
-                            this->length(),
-                            string.cStr(),
-                            string.length()
-                    ) != StringUtils < CharType > :: equal;
+                    return BaseStringView < CharType > ( * this ) != BaseStringView < CharType > ( string );
                 }
 
 
@@ -1376,16 +1174,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                         BaseStringView < CharType > const & string
                 ) const noexcept -> bool {
 
-                    if ( this->length() != string.length() ) {
-                        return true;
-                    }
-
-                    return StringUtils < CharType > :: compare (
-                            this->cStr(),
-                            this->length(),
-                            string.cStr(),
-                            string.length()
-                    ) != StringUtils < CharType > :: equal;
+                    return BaseStringView < CharType > ( * this ) != string;
                 }
 
 
@@ -1394,16 +1183,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                         std :: basic_string < CharType > const & string
                 ) const noexcept -> bool {
 
-                    if ( this->length() != string.length() ) {
-                        return true;
-                    }
-
-                    return StringUtils < CharType > :: compare (
-                            this->cStr(),
-                            this->length(),
-                            string.c_str(),
-                            string.length()
-                    ) != StringUtils < CharType > :: equal;
+                    return BaseStringView < CharType > ( * this ) != BaseStringView < CharType > ( string );
                 }
 
 
@@ -1412,17 +1192,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                         ElementType const * pString
                 ) const noexcept -> bool {
 
-                    auto otherStringLength = StringUtils < CharType > :: length ( pString );
-                    if ( this->length() != otherStringLength ) {
-                        return true;
-                    }
-
-                    return StringUtils < CharType > :: compare (
-                            this->cStr(),
-                            this->length(),
-                            pString,
-                            otherStringLength
-                    ) != StringUtils < CharType > :: equal;
+                    return BaseStringView < CharType > ( * this ) != BaseStringView < CharType > ( pString );
                 }
 
 
@@ -1431,16 +1201,11 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                         ElementType character
                 ) const noexcept -> bool {
 
-                    if ( this->_length != 1ULL ) {
+                    if ( this->length() != 1ULL ) {
                         return true;
                     }
 
-                    return StringUtils < CharType > :: compare (
-                            this->cStr(),
-                            this->length(),
-                            & character,
-                            1U
-                    ) != StringUtils < CharType > :: equal;
+                    return this->_pBuffer [ 0 ] != character;
                 }
 
 
@@ -1450,16 +1215,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                         BaseString < FCharType >     const & rightString
                 ) noexcept -> bool {
 
-                    if ( leftString.length() != rightString.length() ) {
-                        return true;
-                    }
-
-                    return StringUtils < FCharType > :: compare (
-                            leftString.cStr(),
-                            leftString.length(),
-                            rightString.cStr(),
-                            rightString.length()
-                    ) != StringUtils < FCharType > :: equal;
+                    return leftString != BaseStringView < FCharType > ( rightString );
                 }
 
 
@@ -1469,16 +1225,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                         BaseString < FCharType >             const & rightString
                 ) noexcept -> bool {
 
-                    if ( leftString.length() != rightString.length() ) {
-                        return true;
-                    }
-
-                    return StringUtils < FCharType > :: compare (
-                            leftString.c_str(),
-                            leftString.length(),
-                            rightString.cStr(),
-                            rightString.length()
-                    ) != StringUtils < FCharType > :: equal;
+                    return BaseStringView < FCharType > ( leftString ) != BaseStringView < FCharType > ( rightString );
                 }
 
 
@@ -1488,17 +1235,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                         BaseString < FCharType >             const & rightString
                 ) noexcept -> bool {
 
-                    auto leftLength = StringUtils < FCharType > :: length ( pLeftString );
-                    if ( leftLength != rightString.length() ) {
-                        return true;
-                    }
-
-                    return StringUtils < FCharType > :: compare (
-                            pLeftString,
-                            leftLength,
-                            rightString.cStr(),
-                            rightString.length()
-                    ) != StringUtils < FCharType > :: equal;
+                    return BaseStringView < FCharType > ( pLeftString ) != BaseStringView < FCharType > ( rightString );
                 }
 
 
@@ -1512,12 +1249,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                         return true;
                     }
 
-                    return StringUtils < FCharType > :: compare (
-                            & character,
-                            1U,
-                            string.cStr(),
-                            string.length()
-                    ) != StringUtils < FCharType > :: equal;
+                    return string._pBuffer [ 0 ] != character;
                 }
 
 
@@ -1526,12 +1258,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                         BaseString const & string
                 ) const noexcept -> bool {
 
-                    return StringUtils < CharType > :: compare (
-                            this->cStr(),
-                            this->length(),
-                            string.cStr(),
-                            string.length()
-                    ) == StringUtils < CharType > :: lesser;
+                    return BaseStringView < CharType > ( * this ) < BaseStringView < CharType > ( string );
                 }
 
 
@@ -1540,12 +1267,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                         BaseStringView < CharType > const & string
                 ) const noexcept -> bool {
 
-                    return StringUtils < CharType > :: compare (
-                            this->cStr(),
-                            this->length(),
-                            string.cStr(),
-                            string.length()
-                    ) == StringUtils < CharType > :: lesser;
+                    return BaseStringView < CharType > ( * this ) < string;
                 }
 
 
@@ -1554,12 +1276,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                         std :: basic_string < CharType > const & string
                 ) const noexcept -> bool {
 
-                    return StringUtils < CharType > :: compare (
-                            this->cStr(),
-                            this->length(),
-                            string.c_str(),
-                            string.length()
-                    ) == StringUtils < CharType > :: lesser;
+                    return BaseStringView < CharType > ( * this ) < BaseStringView < CharType > ( string );
                 }
 
 
@@ -1568,12 +1285,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                         ElementType const * pString
                 ) const noexcept -> bool {
 
-                    return StringUtils < CharType > :: compare (
-                            this->cStr(),
-                            this->length(),
-                            pString,
-                            StringUtils < CharType > :: length ( pString )
-                    ) == StringUtils < CharType > :: lesser;
+                    return BaseStringView < CharType > ( * this ) < BaseStringView < CharType > ( pString );
                 }
 
 
@@ -1582,12 +1294,11 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                         ElementType character
                 ) const noexcept -> bool {
 
-                    return StringUtils < CharType > :: compare (
-                            this->cStr(),
-                            this->length(),
-                            & character,
-                            1U
-                    ) == StringUtils < CharType > :: lesser;
+                    if ( this->empty() ) {
+                        return true;
+                    }
+
+                    return this->_pBuffer [ 0 ] < character;
                 }
 
 
@@ -1597,12 +1308,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                         BaseString < FCharType >     const & rightString
                 ) noexcept -> bool {
 
-                    return StringUtils < FCharType > :: compare (
-                            leftString.cStr(),
-                            leftString.length(),
-                            rightString.cStr(),
-                            rightString.length()
-                    ) == StringUtils < FCharType > :: lesser;
+                    return leftString < BaseStringView < FCharType > ( rightString );
                 }
 
 
@@ -1612,12 +1318,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                         BaseString < FCharType >             const & rightString
                 ) noexcept -> bool {
 
-                    return StringUtils < FCharType > :: compare (
-                            leftString.c_str(),
-                            leftString.length(),
-                            rightString.cStr(),
-                            rightString.length()
-                    ) == StringUtils < FCharType > :: lesser;
+                    return BaseStringView < FCharType > ( leftString ) < BaseStringView < FCharType > ( rightString );
                 }
 
 
@@ -1627,12 +1328,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                         BaseString < FCharType >             const & rightString
                 ) noexcept -> bool {
 
-                    return StringUtils < FCharType > :: compare (
-                            pLeftString,
-                            StringUtils < FCharType > :: length ( pLeftString ),
-                            rightString.cStr(),
-                            rightString.length()
-                    ) == StringUtils < FCharType > :: lesser;
+                    return BaseStringView < FCharType > ( pLeftString ) < BaseStringView < FCharType > ( rightString );
                 }
 
 
@@ -1642,12 +1338,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                         BaseString < FCharType >             const & string
                 ) noexcept -> bool {
 
-                    return StringUtils < FCharType > :: compare (
-                            & character,
-                            1U,
-                            string.cStr(),
-                            string.length()
-                    ) == StringUtils < FCharType > :: lesser;
+                    return character < BaseStringView < FCharType > ( string );
                 }
 
 
@@ -1656,12 +1347,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                         BaseString const & string
                 ) const noexcept -> bool {
 
-                    return StringUtils < CharType > :: compare (
-                            this->cStr(),
-                            this->length(),
-                            string.cStr(),
-                            string.length()
-                    ) == StringUtils < CharType > :: greater;
+                    return BaseStringView < CharType > ( * this ) > BaseStringView < CharType > ( string );
                 }
 
 
@@ -1670,12 +1356,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                         BaseStringView < CharType > const & string
                 ) const noexcept -> bool {
 
-                    return StringUtils < CharType > :: compare (
-                            this->cStr(),
-                            this->length(),
-                            string.cStr(),
-                            string.length()
-                    ) == StringUtils < CharType > :: greater;
+                    return BaseStringView < CharType > ( * this ) > string;
                 }
 
 
@@ -1684,12 +1365,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                         std :: basic_string < CharType > const & string
                 ) const noexcept -> bool {
 
-                    return StringUtils < CharType > :: compare (
-                            this->cStr(),
-                            this->length(),
-                            string.c_str(),
-                            string.length()
-                    ) == StringUtils < CharType > :: greater;
+                    return BaseStringView < CharType > ( * this ) > BaseStringView < CharType > ( string );
                 }
 
 
@@ -1698,12 +1374,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                         ElementType const * pString
                 ) const noexcept -> bool {
 
-                    return StringUtils < CharType > :: compare (
-                            this->cStr(),
-                            this->length(),
-                            pString,
-                            StringUtils < CharType > :: length ( pString )
-                    ) == StringUtils < CharType > :: greater;
+                    return BaseStringView < CharType > ( * this ) > BaseStringView < CharType > ( pString );
                 }
 
 
@@ -1712,12 +1383,15 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                         ElementType character
                 ) const noexcept -> bool {
 
-                    return StringUtils < CharType > :: compare (
-                            this->cStr(),
-                            this->length(),
-                            & character,
-                            1U
-                    ) == StringUtils < CharType > :: greater;
+                    if ( this->empty() ) {
+                        return false;
+                    }
+
+                    if ( this->length() > 1 && this->_pData [0] == character ) {
+                        return true;
+                    }
+
+                    return this->_pBuffer [ 1 ] > character;
                 }
 
 
@@ -1727,12 +1401,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                         BaseString < FCharType >     const & rightString
                 ) noexcept -> bool {
 
-                    return StringUtils < FCharType > :: compare (
-                            leftString.cStr(),
-                            leftString.length(),
-                            rightString.cStr(),
-                            rightString.length()
-                    ) == StringUtils < FCharType > :: greater;
+                    return leftString < BaseStringView < FCharType > ( rightString );
                 }
 
 
@@ -1742,12 +1411,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                         BaseString < FCharType >             const & rightString
                 ) noexcept -> bool {
 
-                    return StringUtils < FCharType > :: compare (
-                            leftString.c_str(),
-                            leftString.length(),
-                            rightString.cStr(),
-                            rightString.length()
-                    ) == StringUtils < FCharType > :: greater;
+                    return BaseStringView < FCharType > ( leftString ) < BaseStringView < FCharType > ( rightString );
                 }
 
 
@@ -1757,12 +1421,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                         BaseString < FCharType >             const & rightString
                 ) noexcept -> bool {
 
-                    return StringUtils < FCharType > :: compare (
-                            pLeftString,
-                            StringUtils < FCharType > :: length ( pLeftString ),
-                            rightString.cStr(),
-                            rightString.length()
-                    ) == StringUtils < FCharType > :: greater;
+                    return BaseStringView < FCharType > ( pLeftString ) < BaseStringView < FCharType > ( rightString );
                 }
 
 
@@ -1772,12 +1431,11 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                         BaseString < FCharType >             const & string
                 ) noexcept -> bool {
 
-                    return StringUtils < FCharType > :: compare (
-                            & character,
-                            1U,
-                            string.cStr(),
-                            string.length()
-                    ) == StringUtils < FCharType > :: greater;
+                    if ( string.empty() ) {
+                        return false;
+                    }
+
+                    return character > string._pBuffer [ 0 ];
                 }
 
 
@@ -1786,7 +1444,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                         BaseString const & string
                 ) const noexcept -> bool {
 
-                    return ! this->operator > ( string );
+                    return ! ( BaseStringView < CharType > ( * this ) > BaseStringView < CharType > ( string ) );
                 }
 
 
@@ -1795,7 +1453,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                         BaseStringView < CharType > const & string
                 ) const noexcept -> bool {
 
-                    return ! this->operator > ( string );
+                    return ! ( BaseStringView < CharType > ( * this ) > string );
                 }
 
 
@@ -1804,7 +1462,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                         std :: basic_string < CharType > const & string
                 ) const noexcept -> bool {
 
-                    return ! this->operator > ( string );
+                    return ! ( BaseStringView < CharType > ( * this ) > BaseStringView < CharType > ( string ) );
                 }
 
 
@@ -1813,8 +1471,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                         ElementType const * pString
                 ) const noexcept -> bool {
 
-
-                    return ! this->operator > ( pString );
+                    return ! ( BaseStringView < CharType > ( * this ) > BaseStringView < CharType > ( pString ) );
                 }
 
 
@@ -1833,7 +1490,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                         BaseString < FCharType >     const & rightString
                 ) noexcept -> bool {
 
-                    return ! ( leftString > rightString );
+                    return ! ( leftString > BaseStringView < FCharType > ( rightString ) );
                 }
 
 
@@ -1843,7 +1500,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                         BaseString < FCharType >             const & rightString
                 ) noexcept -> bool {
 
-                    return ! ( leftString > rightString );
+                    return ! ( BaseStringView < FCharType > ( leftString ) > BaseStringView < FCharType > ( rightString ) );
                 }
 
 
@@ -1853,7 +1510,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                         BaseString < FCharType >             const & rightString
                 ) noexcept -> bool {
 
-                    return ! ( pLeftString > rightString );
+                    return ! ( BaseStringView < FCharType > ( pLeftString ) > BaseStringView < FCharType > ( rightString ) );
                 }
 
 
@@ -1872,7 +1529,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                         BaseString const & string
                 ) const noexcept -> bool {
 
-                    return ! this->operator < ( string );
+                    return ! ( BaseStringView < CharType > ( * this ) < BaseStringView < CharType > ( string ) );
                 }
 
 
@@ -1881,7 +1538,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                         BaseStringView < CharType > const & string
                 ) const noexcept -> bool {
 
-                    return ! this->operator < ( string );
+                    return ! ( BaseStringView < CharType > ( * this ) < string );
                 }
 
 
@@ -1890,7 +1547,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                         std :: basic_string < CharType > const & string
                 ) const noexcept -> bool {
 
-                    return ! this->operator < ( string );
+                    return ! ( BaseStringView < CharType > ( * this ) < BaseStringView < CharType > ( string ) );
                 }
 
 
@@ -1899,8 +1556,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                         ElementType const * pString
                 ) const noexcept -> bool {
 
-
-                    return ! this->operator < ( pString );
+                    return ! ( BaseStringView < CharType > ( * this ) < BaseStringView < CharType > ( pString ) );
                 }
 
 
@@ -1919,7 +1575,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                         BaseString < FCharType >     const & rightString
                 ) noexcept -> bool {
 
-                    return ! ( leftString < rightString );
+                    return ! ( leftString < BaseStringView < FCharType > ( rightString ) );
                 }
 
 
@@ -1929,7 +1585,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                         BaseString < FCharType >             const & rightString
                 ) noexcept -> bool {
 
-                    return ! ( leftString < rightString );
+                    return ! ( BaseStringView < FCharType > ( leftString ) < BaseStringView < FCharType > ( rightString ) );
                 }
 
 
@@ -1939,7 +1595,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                         BaseString < FCharType >             const & rightString
                 ) noexcept -> bool {
 
-                    return ! ( pLeftString < rightString );
+                    return ! ( BaseStringView < FCharType > ( pLeftString ) < BaseStringView < FCharType > ( rightString ) );
                 }
 
 
@@ -1958,7 +1614,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                         BaseString const & string
                 ) noexcept -> BaseString & {
 
-                    return this->append ( string );
+                    return this->append ( BaseStringView < CharType > ( string ) );
                 }
 
 
@@ -1985,7 +1641,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                         std :: basic_string < CharType > const & string
                 ) noexcept -> BaseString & {
 
-                    return this->append ( string );
+                    return this->append ( BaseStringView < CharType > ( string ) );
                 }
 
 
@@ -1994,7 +1650,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                         ElementType const * pString
                 ) noexcept -> BaseString & {
 
-                    return this->append ( pString );
+                    return this->append ( BaseStringView < CharType > ( pString ) );
                 }
 
 
@@ -2165,10 +1821,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                         BaseString const & string
                 ) const & noexcept -> BaseString {
 
-                    BaseString result;
-                    result.reserve ( this->length() + string.length() + 1U );
-
-                    return result.append ( * this ).append ( string );
+                    return BaseStringView < CharType > ( * this ) + BaseStringView < CharType > ( string );
                 }
 
 
@@ -2189,10 +1842,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                         BaseStringView < CharType > const & string
                 ) const & noexcept -> BaseString {
 
-                    BaseString result;
-                    result.reserve ( this->length() + string.length() + 1U );
-
-                    return result.append ( * this ).append ( string );
+                    return BaseStringView < CharType > ( * this ) + string;
                 }
 
 
@@ -2201,10 +1851,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                         std :: basic_string < CharType > const & string
                 ) const & noexcept -> BaseString {
 
-                    BaseString result;
-                    result.reserve ( this->length() + string.length() + 1U );
-
-                    return result.append ( * this ).append ( string );
+                    return BaseStringView < CharType > ( * this ) + BaseStringView < CharType > ( string );
                 }
 
 
@@ -2213,12 +1860,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                         ElementType const * pString
                 ) const & noexcept -> BaseString {
 
-                    BaseString result;
-                    BaseStringView < CharType > wrapper = pString;
-
-                    result.reserve ( this->length() + wrapper.length() + 1U );
-
-                    return result.append ( * this ).append ( wrapper );
+                    return BaseStringView < CharType > ( * this ) + BaseStringView < CharType > ( pString );
                 }
 
 
@@ -2228,10 +1870,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                         ElementType character
                 ) const & noexcept -> BaseString {
 
-                    BaseString result;
-                    result.reserve ( this->length() + 2U );
-
-                    return result.append ( * this ).append ( character );
+                    return BaseStringView < CharType > ( * this ) + character;
                 }
 
 
@@ -2241,10 +1880,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                         ElementType character
                 ) const & noexcept -> BaseString {
 
-                    BaseString result;
-                    result.reserve ( this->length() + 2U );
-
-                    return result.append ( * this ).append ( character );
+                    return BaseStringView < CharType > ( * this ) + character;
                 }
 
 
@@ -2254,10 +1890,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                         ElementType character
                 ) const & noexcept -> BaseString {
 
-                    BaseString result;
-                    result.reserve ( this->length() + 2U );
-
-                    return result.append ( * this ).append ( character );
+                    return BaseStringView < CharType > ( * this ) + character;
                 }
 
 
@@ -2267,10 +1900,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                         ElementType character
                 ) const & noexcept -> BaseString {
 
-                    BaseString result;
-                    result.reserve ( this->length() + 2U );
-
-                    return result.append ( * this ).append ( character );
+                    return BaseStringView < CharType > ( * this ) + character;
                 }
 
 
@@ -2280,12 +1910,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                         uint8 value
                 ) const & noexcept -> BaseString {
 
-                    BaseString result;
-                    auto valueLength = StringUtils < CharType > :: integerLength ( value );
-
-                    result.reserve ( this->length() + valueLength + 1U );
-
-                    return result.append ( * this ).append ( value );
+                    return BaseStringView < CharType > ( * this ) + value;
                 }
 
 
@@ -2295,12 +1920,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                         uint16 value
                 ) const & noexcept -> BaseString {
 
-                    BaseString result;
-                    auto valueLength = StringUtils < CharType > :: integerLength ( value );
-
-                    result.reserve ( this->length() + valueLength + 1U );
-
-                    return result.append ( * this ).append ( value );
+                    return BaseStringView < CharType > ( * this ) + value;
                 }
 
 
@@ -2310,12 +1930,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                         sint8 value
                 ) const & noexcept -> BaseString {
 
-                    BaseString result;
-                    auto valueLength = StringUtils < CharType > :: integerLength ( value );
-
-                    result.reserve ( this->length() + valueLength + 1U );
-
-                    return result.append ( * this ).append ( value );
+                    return BaseStringView < CharType > ( * this ) + value;
                 }
 
 
@@ -2325,12 +1940,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                         sint16 value
                 ) const & noexcept -> BaseString {
 
-                    BaseString result;
-                    auto valueLength = StringUtils < CharType > :: integerLength ( value );
-
-                    result.reserve ( this->length() + valueLength + 1U );
-
-                    return result.append ( * this ).append ( value );
+                    return BaseStringView < CharType > ( * this ) + value;
                 }
 
 
@@ -2340,12 +1950,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                         std :: size_t value
                 ) const & noexcept -> BaseString {
 
-                    BaseString result;
-                    auto valueLength = StringUtils < CharType > :: integerLength ( value );
-
-                    result.reserve ( this->length() + valueLength + 1U );
-
-                    return result.append ( * this ).append ( value );
+                    return BaseStringView < CharType > ( * this ) + value;
                 }
 
 
@@ -2354,12 +1959,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                         bool value
                 ) const & noexcept -> BaseString {
 
-                    BaseString result;
-                    auto valueLength = value ? 4ULL : 5ULL;
-
-                    result.reserve ( this->length() + valueLength + 1U );
-
-                    return result.append ( * this ).append ( value );
+                    return BaseStringView < CharType > ( * this ) + value;
                 }
 
 
@@ -2368,12 +1968,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                         uint32 value
                 ) const & noexcept -> BaseString {
 
-                    BaseString result;
-                    auto valueLength = StringUtils < CharType > :: integerLength ( value );
-
-                    result.reserve ( this->length() + valueLength + 1U );
-
-                    return result.append ( * this ).append ( value );
+                    return BaseStringView < CharType > ( * this ) + value;
                 }
 
 
@@ -2382,12 +1977,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                         uint64 value
                 ) const & noexcept -> BaseString {
 
-                    BaseString result;
-                    auto valueLength = StringUtils < CharType > :: integerLength ( value );
-
-                    result.reserve ( this->length() + valueLength + 1U );
-
-                    return result.append ( * this ).append ( value );
+                    return BaseStringView < CharType > ( * this ) + value;
                 }
 
 
@@ -2396,12 +1986,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                         sint32 value
                 ) const & noexcept -> BaseString {
 
-                    BaseString result;
-                    auto valueLength = StringUtils < CharType > :: integerLength ( value );
-
-                    result.reserve ( this->length() + valueLength + 1U );
-
-                    return result.append ( * this ).append ( value );
+                    return BaseStringView < CharType > ( * this ) + value;
                 }
 
 
@@ -2410,12 +1995,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                         sint64 value
                 ) const & noexcept -> BaseString {
 
-                    BaseString result;
-                    auto valueLength = StringUtils < CharType > :: integerLength ( value );
-
-                    result.reserve ( this->length() + valueLength + 1U );
-
-                    return result.append ( * this ).append ( value );
+                    return BaseStringView < CharType > ( * this ) + value;
                 }
 
 
@@ -2424,12 +2004,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                         float value
                 ) const & noexcept -> BaseString {
 
-                    BaseString result;
-                    auto wrapper = std :: to_string ( value );
-
-                    result.reserve ( this->length() + wrapper.length() + 1U );
-
-                    return result.append ( * this ).append ( wrapper );
+                    return BaseStringView < CharType > ( * this ) + value;
                 }
 
 
@@ -2438,12 +2013,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                         double value
                 ) const & noexcept -> BaseString {
 
-                    BaseString result;
-                    auto wrapper = std :: to_string ( value );
-
-                    result.reserve ( this->length() + wrapper.length() + 1U );
-
-                    return result.append ( * this ).append ( wrapper );
+                    return BaseStringView < CharType > ( * this ) + value;
                 }
 
 
@@ -2452,12 +2022,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                         long double value
                 ) const & noexcept -> BaseString {
 
-                    BaseString result;
-                    auto wrapper = std :: to_string ( value );
-
-                    result.reserve ( this->length() + wrapper.length() + 1U );
-
-                    return result.append ( * this ).append ( wrapper );
+                    return BaseStringView < CharType > ( * this ) + value;
                 }
 
 
@@ -2467,10 +2032,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                         BaseString < FCharType >     const & rightString
                 ) noexcept -> BaseString < FCharType > {
 
-                    BaseString < FCharType > result;
-                    result.reserve ( leftString.length() + rightString.length() + 1U );
-
-                    return result.append ( leftString ).append ( rightString );
+                    return leftString + BaseStringView < FCharType > ( rightString );
                 }
 
 
@@ -2480,10 +2042,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                         BaseString < FCharType >             const & rightString
                 ) noexcept -> BaseString < FCharType > {
 
-                    BaseString < FCharType > result;
-                    result.reserve ( leftString.length() + rightString.length() + 1U );
-
-                    return result.append ( leftString ).append ( rightString );
+                    return BaseStringView < FCharType > ( leftString ) + BaseStringView < FCharType > ( rightString );
                 }
 
 
@@ -2493,12 +2052,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                         BaseString < FCharType >             const & rightString
                 ) noexcept -> BaseString < FCharType > {
 
-                    BaseString < FCharType > result;
-                    BaseStringView < FCharType > wrapper = pLeftString;
-
-                    result.reserve ( wrapper.length() + rightString.length() + 1U );
-
-                    return result.append ( wrapper ).append ( rightString );
+                    return BaseStringView < FCharType > ( pLeftString ) + BaseStringView < FCharType > ( rightString );
                 }
 
 
@@ -2508,10 +2062,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                         BaseString < FCharType >    const & string
                 ) noexcept -> BaseString < FCharType > {
 
-                    BaseString < FCharType > result;
-                    result.reserve ( string.length() + 2ULL );
-
-                    return result.append ( character ).append ( string );
+                    return character + BaseStringView < FCharType > ( string );
                 }
 
 
@@ -2521,10 +2072,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                         BaseString < FCharType >    const & string
                 ) noexcept -> BaseString < FCharType > {
 
-                    BaseString < FCharType > result;
-                    result.reserve ( string.length() + 2ULL );
-
-                    return result.append ( character ).append ( string );
+                    return character + BaseStringView < FCharType > ( string );
                 }
 
 
@@ -2534,10 +2082,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                         BaseString < FCharType >    const & string
                 ) noexcept -> BaseString < FCharType > {
 
-                    BaseString < FCharType > result;
-                    result.reserve ( string.length() + 2ULL );
-
-                    return result.append ( character ).append ( string );
+                    return character + BaseStringView < FCharType > ( string );
                 }
 
 
@@ -2547,10 +2092,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                         BaseString < FCharType >    const & string
                 ) noexcept -> BaseString < FCharType > {
 
-                    BaseString < FCharType > result;
-                    result.reserve ( string.length() + 2ULL );
-
-                    return result.append ( character ).append ( string );
+                    return character + BaseStringView < FCharType > ( string );
                 }
 
 
@@ -2560,12 +2102,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                         BaseString < FCharType >    const & string
                 ) noexcept -> BaseString < FCharType > {
 
-                    BaseString < FCharType > result;
-                    auto valueLength = StringUtils < FCharType > :: integerLength ( value );
-
-                    result.reserve ( string.length() + valueLength + 1ULL );
-
-                    return result.append ( value ).append ( string );
+                    return value + BaseStringView < FCharType > ( string );
                 }
 
 
@@ -2575,12 +2112,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                         BaseString < FCharType >    const & string
                 ) noexcept -> BaseString < FCharType > {
 
-                    BaseString < FCharType > result;
-                    auto valueLength = StringUtils < FCharType > :: integerLength ( value );
-
-                    result.reserve ( string.length() + valueLength + 1ULL );
-
-                    return result.append ( value ).append ( string );
+                    return value + BaseStringView < FCharType > ( string );
                 }
 
 
@@ -2590,12 +2122,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                         BaseString < FCharType >    const & string
                 ) noexcept -> BaseString < FCharType > {
 
-                    BaseString < FCharType > result;
-                    auto valueLength = StringUtils < FCharType > :: integerLength ( value );
-
-                    result.reserve ( string.length() + valueLength + 1ULL );
-
-                    return result.append ( value ).append ( string );
+                    return value + BaseStringView < FCharType > ( string );
                 }
 
 
@@ -2605,12 +2132,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                         BaseString < FCharType >    const & string
                 ) noexcept -> BaseString < FCharType > {
 
-                    BaseString < FCharType > result;
-                    auto valueLength = StringUtils < FCharType > :: integerLength ( value );
-
-                    result.reserve ( string.length() + valueLength + 1ULL );
-
-                    return result.append ( value ).append ( string );
+                    return value + BaseStringView < FCharType > ( string );
                 }
 
 
@@ -2620,12 +2142,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                         BaseString < FCharType >    const & string
                 ) noexcept -> BaseString < FCharType > {
 
-                    BaseString < FCharType > result;
-                    auto valueLength = StringUtils < FCharType > :: integerLength ( value );
-
-                    result.reserve ( string.length() + valueLength + 1ULL );
-
-                    return result.append ( value ).append ( string );
+                    return value + BaseStringView < FCharType > ( string );
                 }
 
 
@@ -2635,12 +2152,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                         BaseString < FCharType >    const & string
                 ) noexcept -> BaseString < FCharType > {
 
-                    BaseString < FCharType > result;
-                    auto valueLength = value ? 4ULL : 5ULL;
-
-                    result.reserve ( string.length() + valueLength + 1ULL );
-
-                    return result.append ( value ).append ( string );
+                    return value + BaseStringView < FCharType > ( string );
                 }
 
 
@@ -2650,12 +2162,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                         BaseString < FCharType >     const & string
                 ) noexcept -> BaseString < FCharType > {
 
-                    BaseString < FCharType > result;
-                    auto valueLength = StringUtils < FCharType > :: integerLength ( value );
-
-                    result.reserve ( string.length() + valueLength + 1ULL );
-
-                    return result.append ( value ).append ( string );
+                    return value + BaseStringView < FCharType > ( string );
                 }
 
 
@@ -2665,12 +2172,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                         BaseString < FCharType >     const & string
                 ) noexcept -> BaseString < FCharType > {
 
-                    BaseString < FCharType > result;
-                    auto valueLength = StringUtils < FCharType > :: integerLength ( value );
-
-                    result.reserve ( string.length() + valueLength + 1ULL );
-
-                    return result.append ( value ).append ( string );
+                    return value + BaseStringView < FCharType > ( string );
                 }
 
 
@@ -2680,12 +2182,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                         BaseString < FCharType >     const & string
                 ) noexcept -> BaseString < FCharType > {
 
-                    BaseString < FCharType > result;
-                    auto valueLength = StringUtils < FCharType > :: integerLength ( value );
-
-                    result.reserve ( string.length() + valueLength + 1ULL );
-
-                    return result.append ( value ).append ( string );
+                    return value + BaseStringView < FCharType > ( string );
                 }
 
 
@@ -2695,12 +2192,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                         BaseString < FCharType >     const & string
                 ) noexcept -> BaseString < FCharType > {
 
-                    BaseString < FCharType > result;
-                    auto valueLength = StringUtils < FCharType > :: integerLength ( value );
-
-                    result.reserve ( string.length() + valueLength + 1ULL );
-
-                    return result.append ( value ).append ( string );
+                    return value + BaseStringView < FCharType > ( string );
                 }
 
 
@@ -2710,12 +2202,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                         BaseString < FCharType >     const & string
                 ) noexcept -> BaseString < FCharType > {
 
-                    BaseString < FCharType > result;
-                    auto wrapper = std :: to_string ( value );
-
-                    result.reserve ( string.length() + wrapper.length() + 1ULL );
-
-                    return result.append ( wrapper ).append ( string );
+                    return value + BaseStringView < FCharType > ( string );
                 }
 
 
@@ -2725,12 +2212,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                         BaseString < FCharType >     const & string
                 ) noexcept -> BaseString < FCharType > {
 
-                    BaseString < FCharType > result;
-                    auto wrapper = std :: to_string ( value );
-
-                    result.reserve ( string.length() + wrapper.length() + 1ULL );
-
-                    return result.append ( wrapper ).append ( string );
+                    return value + BaseStringView < FCharType > ( string );
                 }
 
 
@@ -2740,12 +2222,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                         BaseString < FCharType >     const & string
                 ) noexcept -> BaseString < FCharType > {
 
-                    BaseString < FCharType > result;
-                    auto wrapper = std :: to_string ( value );
-
-                    result.reserve ( string.length() + wrapper.length() + 1ULL );
-
-                    return result.append ( wrapper ).append ( string );
+                    return value + BaseStringView < FCharType > ( string );
                 }
 
 
@@ -3078,7 +2555,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
                 template < typename FCharType >
                 __CDS_OptimalInline auto operator + (
-                        bool                              value,
+                        bool                               value,
                         BaseString < FCharType >        && string
                 ) noexcept -> BaseString < FCharType > {
 
@@ -3088,7 +2565,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
                 template < typename FCharType >
                 __CDS_OptimalInline auto operator + (
-                        uint32                             value,
+                        uint32                              value,
                         BaseString < FCharType >         && string
                 ) noexcept -> BaseString < FCharType > {
 
@@ -3098,7 +2575,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
                 template < typename FCharType >
                 __CDS_OptimalInline auto operator + (
-                        uint64                             value,
+                        uint64                              value,
                         BaseString < FCharType >         && string
                 ) noexcept -> BaseString < FCharType > {
 
@@ -3108,7 +2585,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
                 template < typename FCharType >
                 __CDS_OptimalInline auto operator + (
-                        sint32                             value,
+                        sint32                              value,
                         BaseString < FCharType >         && string
                 ) noexcept -> BaseString < FCharType > {
 
@@ -3128,7 +2605,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
                 template < typename FCharType >
                 __CDS_OptimalInline auto operator + (
-                        float                               value,
+                        float                                value,
                         BaseString < FCharType >          && string
                 ) noexcept -> BaseString < FCharType > {
 
@@ -3138,7 +2615,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
                 template < typename FCharType >
                 __CDS_OptimalInline auto operator + (
-                        double                              value,
+                        double                               value,
                         BaseString < FCharType >          && string
                 ) noexcept -> BaseString < FCharType > {
 
@@ -3148,7 +2625,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
                 template < typename FCharType >
                 __CDS_OptimalInline auto operator + (
-                        long double                         value,
+                        long double                          value,
                         BaseString < FCharType >          && string
                 ) noexcept -> BaseString < FCharType > {
 
@@ -3161,38 +2638,12 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                         int count
                 ) const & noexcept -> BaseString {
 
-                    BaseString result;
-
-                    if ( this->empty() || count == 0 ) {
-                        return result;
-                    }
-
-                    if ( count == 1 ) {
-                        return * this;
-                    }
-
-                    result.reserve ( count * this->length() + 1ULL );
-
-                    for ( int i = 0; i < count; ++ i ) {
-                        StringUtils < CharType > :: copy (
-                                result._pBuffer,
-                                result._length,
-                                this->_pBuffer,
-                                0ULL,
-                                this->length(),
-                                false
-                        );
-
-                        result._length += this->length();
-                    }
-
-                    result._pBuffer [ result._length ] = static_cast < ElementType > ( '\0' );
-                    return result;
+                    return BaseStringView < CharType > ( * this ) * count;
                 }
 
 
                 template < typename CharType >
-                __CDS_OptimalInline auto BaseString < CharType > :: operator * (
+                __CDS_OptionalInline auto BaseString < CharType > :: operator * (
                         int count
                 ) && noexcept -> BaseString {
 
@@ -3233,42 +2684,16 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
                 template < typename FCharType >
                 __CDS_OptimalInline auto operator * (
-                        int                             count,
+                        int                              count,
                         BaseString < FCharType > const & string
                 ) noexcept -> BaseString < FCharType > {
 
-                    BaseString < FCharType > result;
-
-                    if ( string.empty() || count == 0 ) {
-                        return result;
-                    }
-
-                    if ( count == 1 ) {
-                        return * string;
-                    }
-
-                    result.reserve ( count * string.length() + 1ULL );
-
-                    for ( int i = 0; i < count; ++ i ) {
-                        StringUtils < FCharType > :: copy (
-                                result._pBuffer,
-                                result._length,
-                                string->_pBuffer,
-                                0ULL,
-                                string->length(),
-                                false
-                        );
-
-                        result._length += string->length();
-                    }
-
-                    result._pBuffer [ result._length ] = static_cast < FCharType > ( '\0' );
-                    return result;
+                    return count * BaseStringView < FCharType > ( string );
                 }
 
 
                 template < typename FCharType >
-                __CDS_OptimalInline auto operator * (
+                __CDS_OptionalInline auto operator * (
                         int                         count,
                         BaseString < FCharType >  && string
                 ) noexcept -> BaseString < FCharType > {
@@ -4662,7 +4087,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                         ElementType character
                 ) const noexcept -> bool {
 
-                    return this->findFirst ( character ) != BaseString :: invalidIndex;
+                    return BaseStringView < CharType > ( * this ).contains ( character );
                 }
 
 
@@ -4671,7 +4096,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                         BaseString const & string
                 ) const noexcept -> bool {
 
-                    return this->findFirst ( string ) != BaseString :: invalidIndex;
+                    return BaseStringView < CharType > ( * this ).contains ( BaseStringView < CharType > ( string ) );
                 }
 
 
@@ -4680,7 +4105,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                         BaseStringView < CharType > const & string
                 ) const noexcept -> bool {
 
-                    return this->findFirst ( string ) != BaseString :: invalidIndex;
+                    return BaseStringView < CharType > ( * this ).contains ( string );
                 }
 
 
@@ -4689,7 +4114,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                         std :: basic_string < CharType > const & string
                 ) const noexcept -> bool {
 
-                    return this->findFirst ( string ) != BaseString :: invalidIndex;
+                    return BaseStringView < CharType > ( * this ).contains ( BaseStringView < CharType > ( string ) );
                 }
 
 
@@ -4698,7 +4123,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                         ElementType const * pString
                 ) const noexcept -> bool {
 
-                    return this->findFirst ( pString ) != BaseString :: invalidIndex;
+                    return BaseStringView < CharType > ( * this ).contains ( BaseStringView < CharType > ( pString ) );
                 }
 
 
@@ -4710,15 +4135,11 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                         CollectionType < Index >  & storeIn
                 ) const noexcept -> CollectionType < Index > & {
 
-                    Size found = 0ULL;
-                    for ( Size index = 0ULL; index < this->_length && found < maxCount; ++ index ) {
-                        if ( this->_pBuffer [ index ] == character ) {
-                            storeIn.add ( static_cast < Index > ( index ) );
-                            ++ found;
-                        }
-                    }
-
-                    return storeIn;
+                    return BaseStringView < CharType > ( * this ).find (
+                            maxCount,
+                            character,
+                            storeIn
+                    );
                 }
 
 
@@ -4730,7 +4151,11 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 ) const noexcept -> CollectionType < Index > {
 
                     CollectionType < Index > indices;
-                    return this->find ( maxCount, character, indices );
+                    return BaseStringView < CharType > ( * this ).find (
+                            maxCount,
+                            character,
+                            indices
+                    );
                 }
 
 
@@ -4739,13 +4164,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                         ElementType character
                 ) const noexcept -> Index {
 
-                    for ( Size index = 0ULL; index < this->_length; ++ index ) {
-                        if ( this->_pBuffer [ index ] == character ) {
-                            return static_cast < Index > ( index );
-                        }
-                    }
-
-                    return BaseString :: invalidIndex;
+                    return BaseStringView < CharType > ( * this ).findFirst ( character );
                 }
 
 
@@ -4754,13 +4173,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                         ElementType character
                 ) const noexcept -> Index {
 
-                    for ( Index index = static_cast < Index > ( this->_length ) - 1; index >= 0; -- index ) {
-                        if ( this->_pBuffer [ index ] == character ) {
-                            return index;
-                        }
-                    }
-
-                    return BaseString :: invalidIndex;
+                    return BaseStringView < CharType > ( * this ).findLast ( character );
                 }
 
 
@@ -4771,13 +4184,10 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                         CollectionType < Index >  & storeIn
                 ) const noexcept -> CollectionType < Index > & {
 
-                    for ( Size index = 0ULL; index < this->_length; ++ index ) {
-                        if ( this->_pBuffer [ index ] == character ) {
-                            storeIn.add ( static_cast < Index > ( index ) );
-                        }
-                    }
-
-                    return storeIn;
+                    return BaseStringView < CharType > ( * this ).findAll (
+                            character,
+                            storeIn
+                    );
                 }
 
 
@@ -4788,7 +4198,10 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 ) const noexcept -> CollectionType < Index > {
 
                     CollectionType < Index > indices;
-                    return this->findAll ( character, indices );
+                    return BaseStringView < CharType > ( * this ).findAll (
+                            character,
+                            indices
+                    );
                 }
 
 
@@ -4800,12 +4213,9 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                         CollectionType < Index >          & storeIn
                 ) const noexcept -> CollectionType < Index > & {
 
-                    return StringUtils < CharType > :: find (
-                            this->_pBuffer,
-                            this->_length,
-                            string.cStr(),
-                            string.length(),
+                    return BaseStringView < CharType > ( * this ).find (
                             maxCount,
+                            BaseStringView < CharType > ( string ),
                             storeIn
                     );
                 }
@@ -4819,7 +4229,11 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 ) const noexcept -> CollectionType < Index > {
 
                     CollectionType < Index > indices;
-                    return this->find ( maxCount, string, indices );
+                    return BaseStringView < CharType > ( * this ).find (
+                            maxCount,
+                            BaseStringView < CharType > ( string ),
+                            indices
+                    );
                 }
 
 
@@ -4828,11 +4242,8 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                         BaseString const & string
                 ) const noexcept -> Index {
 
-                    return StringUtils < CharType > :: findFirst (
-                            this->_pBuffer,
-                            this->_length,
-                            string.cStr(),
-                            string.length()
+                    return BaseStringView < CharType > ( * this ).findFirst (
+                            BaseStringView < CharType > ( string )
                     );
                 }
 
@@ -4842,11 +4253,8 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                         BaseString const & string
                 ) const noexcept -> Index {
 
-                    return StringUtils < CharType > :: findLast (
-                            this->_pBuffer,
-                            this->_length,
-                            string.cStr(),
-                            string.length()
+                    return BaseStringView < CharType > ( * this ).findLast (
+                            BaseStringView < CharType > ( string )
                     );
                 }
 
@@ -4858,11 +4266,8 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                         CollectionType < Index >          & storeIn
                 ) const noexcept -> CollectionType < Index > & {
 
-                    return StringUtils < CharType > :: findAll (
-                            this->_pBuffer,
-                            this->_length,
-                            string.cStr(),
-                            string.length(),
+                    return BaseStringView < CharType > ( * this ).findAll (
+                            BaseStringView < CharType > ( string ),
                             storeIn
                     );
                 }
@@ -4875,39 +4280,42 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 ) const noexcept -> CollectionType < Index > {
 
                     CollectionType < Index > indices;
-                    return this->findAll ( string, indices );
+                    return BaseStringView < CharType > ( * this ).findAll (
+                            BaseStringView < CharType > ( string ),
+                            indices
+                    );
                 }
 
 
                 template < typename CharType >
                 template < template < typename ... > class CollectionType >
-                auto BaseString < CharType > :: findOf (
+                __CDS_OptimalInline auto BaseString < CharType > :: findOf (
                         Size                            maxCount,
                         BaseString              const & string,
                         CollectionType < Index >      & storeIn
                 ) const noexcept -> CollectionType < Index > & {
 
-                    Size found = 0ULL;
-                    for ( Size index = 0ULL; index < this->length() && found < maxCount; ++ index ) {
-                        if ( string.contains ( this->_pBuffer [ index ] ) ) {
-                            storeIn.add ( static_cast < Index > ( index ) );
-                            ++ found;
-                        }
-                    }
-
-                    return storeIn;
+                    return BaseStringView < CharType > ( * this ).findOf (
+                            maxCount,
+                            BaseStringView < CharType > ( string ),
+                            storeIn
+                    );
                 }
 
 
                 template < typename CharType >
                 template < template < typename ... > class CollectionType >
-                auto BaseString < CharType > :: findOf (
+                __CDS_OptimalInline auto BaseString < CharType > :: findOf (
                         Size                            maxCount,
                         BaseString              const & string
                 ) const noexcept -> CollectionType < Index > {
 
                     CollectionType < Index > indices;
-                    return this->findOf ( maxCount, string, indices );
+                    return BaseStringView < CharType > ( * this ).findOf (
+                            maxCount,
+                            BaseStringView < CharType > ( string ),
+                            indices
+                    );
                 }
 
 
@@ -4916,13 +4324,9 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                         BaseString const & string
                 ) const noexcept -> Index {
 
-                    for ( Size index = 0ULL; index < this->length(); ++ index ) {
-                        if ( string.contains ( this->_pBuffer [ index ] ) ) {
-                            return static_cast < Index > ( index );
-                        }
-                    }
-
-                    return BaseString :: invalidIndex;
+                    return BaseStringView < CharType > ( * this ).findFirstOf (
+                            BaseStringView < CharType > ( string )
+                    );
                 }
 
 
@@ -4931,73 +4335,69 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                         BaseString const & string
                 ) const noexcept -> Index {
 
-                    for ( Index index = static_cast < Index > ( this->length() ) - 1; index >= 0; -- index ) {
-                        if ( string.contains ( this->_pBuffer [ index ] ) ) {
-                            return static_cast < Index > ( index );
-                        }
-                    }
-
-                    return BaseString :: invalidIndex;
+                    return BaseStringView < CharType > ( * this ).findLastOf (
+                            BaseStringView < CharType > ( string )
+                    );
                 }
 
 
                 template < typename CharType >
                 template < template < typename ... > class CollectionType >
-                auto BaseString < CharType > :: findAllOf (
+                __CDS_OptimalInline auto BaseString < CharType > :: findAllOf (
                         BaseString              const & string,
                         CollectionType < Index >      & storeIn
                 ) const noexcept -> CollectionType < Index > & {
 
-                    for ( Size index = 0ULL; index < this->length(); ++ index ) {
-                        if ( string.contains ( this->_pBuffer [ index ] ) ) {
-                            storeIn.add ( static_cast < Index > ( index ) );
-                        }
-                    }
-
-                    return storeIn;
+                    return BaseStringView < CharType > ( * this ).findAllOf (
+                            BaseStringView < CharType > ( string ),
+                            storeIn
+                    );
                 }
 
 
                 template < typename CharType >
                 template < template < typename ... > class CollectionType >
-                auto BaseString < CharType > :: findAllOf (
+                __CDS_OptimalInline auto BaseString < CharType > :: findAllOf (
                         BaseString              const & string
                 ) const noexcept -> CollectionType < Index > {
 
                     CollectionType < Index > indices;
-                    return this->findAllOf ( string, indices );
+                    return BaseStringView < CharType > ( * this ).findAllOf (
+                            BaseStringView < CharType > ( string ),
+                            indices
+                    );
                 }
 
 
                 template < typename CharType >
                 template < template < typename ... > class CollectionType >
-                auto BaseString < CharType > :: findNotOf (
+                __CDS_OptimalInline auto BaseString < CharType > :: findNotOf (
                         Size                            maxCount,
                         BaseString              const & string,
                         CollectionType < Index >      & storeIn
                 ) const noexcept -> CollectionType < Index > & {
 
-                    Size found = 0ULL;
-                    for ( Size index = 0ULL; index < this->length() && found < maxCount; ++ index ) {
-                        if ( ! string.contains ( this->_pBuffer [ index ] ) ) {
-                            storeIn.add ( static_cast < Index > ( index ) );
-                            ++ found;
-                        }
-                    }
-
-                    return storeIn;
+                    return BaseStringView < CharType > ( * this ).findNotOf (
+                            maxCount,
+                            BaseStringView < CharType > ( string ),
+                            storeIn
+                    );
                 }
 
 
                 template < typename CharType >
                 template < template < typename ... > class CollectionType >
-                auto BaseString < CharType > :: findNotOf (
+                __CDS_OptimalInline auto BaseString < CharType > :: findNotOf (
                         Size                            maxCount,
                         BaseString              const & string
                 ) const noexcept -> CollectionType < Index > {
 
                     CollectionType < Index > indices;
-                    return this->findNotOf ( maxCount, string, indices );
+                    return BaseStringView < CharType > ( * this ).findNotOf (
+                            maxCount,
+                            BaseStringView < CharType > ( string ),
+                            indices
+                    );
                 }
 
 
@@ -5006,13 +4406,9 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                         BaseString const & string
                 ) const noexcept -> Index {
 
-                    for ( Size index = 0ULL; index < this->length(); ++ index ) {
-                        if ( ! string.contains ( this->_pBuffer [ index ] ) ) {
-                            return static_cast < Index > ( index );
-                        }
-                    }
-
-                    return BaseString :: invalidIndex;
+                    return BaseStringView < CharType > ( * this ).findFirstNotOf (
+                            BaseStringView < CharType > ( string )
+                    );
                 }
 
 
@@ -5021,41 +4417,37 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                         BaseString const & string
                 ) const noexcept -> Index {
 
-                    for ( Index index = static_cast < Index > ( this->length() ) - 1; index >= 0; -- index ) {
-                        if ( ! string.contains ( this->_pBuffer [ index ] ) ) {
-                            return static_cast < Index > ( index );
-                        }
-                    }
-
-                    return BaseString :: invalidIndex;
+                    return BaseStringView < CharType > ( * this ).findLastNotOf (
+                            BaseStringView < CharType > ( string )
+                    );
                 }
 
 
                 template < typename CharType >
                 template < template < typename ... > class CollectionType >
-                auto BaseString < CharType > :: findAllNotOf (
+                __CDS_OptimalInline auto BaseString < CharType > :: findAllNotOf (
                         BaseString              const & string,
                         CollectionType < Index >      & storeIn
                 ) const noexcept -> CollectionType < Index > & {
 
-                    for ( Size index = 0ULL; index < this->length(); ++ index ) {
-                        if ( ! string.contains ( this->_pBuffer [ index ] ) ) {
-                            storeIn.add ( static_cast < Index > ( index ) );
-                        }
-                    }
-
-                    return storeIn;
+                    return BaseStringView < CharType > ( * this ).findAllNotOf (
+                            BaseStringView < CharType > ( string ),
+                            storeIn
+                    );
                 }
 
 
                 template < typename CharType >
                 template < template < typename ... > class CollectionType >
-                auto BaseString < CharType > :: findAllNotOf (
+                __CDS_OptimalInline auto BaseString < CharType > :: findAllNotOf (
                         BaseString              const & string
                 ) const noexcept -> CollectionType < Index > {
 
                     CollectionType < Index > indices;
-                    return this->findAllNotOf ( string, indices );
+                    return BaseStringView < CharType > ( * this ).findAllNotOf (
+                            BaseStringView < CharType > ( string ),
+                            indices
+                    );
                 }
 
 
@@ -5067,12 +4459,9 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                         CollectionType < Index >          & storeIn
                 ) const noexcept -> CollectionType < Index > & {
 
-                    return StringUtils < CharType > :: find (
-                            this->_pBuffer,
-                            this->_length,
-                            string.cStr(),
-                            string.length(),
+                    return BaseStringView < CharType > ( * this ).find (
                             maxCount,
+                            string,
                             storeIn
                     );
                 }
@@ -5086,7 +4475,11 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 ) const noexcept -> CollectionType < Index > {
 
                     CollectionType < Index > indices;
-                    return this->find ( maxCount, string, indices );
+                    return BaseStringView < CharType > ( * this ).find (
+                            maxCount,
+                            string,
+                            indices
+                    );
                 }
 
 
@@ -5095,12 +4488,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                         BaseStringView < CharType > const & string
                 ) const noexcept -> Index {
 
-                    return StringUtils < CharType > :: findFirst (
-                            this->_pBuffer,
-                            this->_length,
-                            string.cStr(),
-                            string.length()
-                    );
+                    return BaseStringView < CharType > ( * this ).findFirst ( string );
                 }
 
 
@@ -5109,12 +4497,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                         BaseStringView < CharType > const & string
                 ) const noexcept -> Index {
 
-                    return StringUtils < CharType > :: findLast (
-                            this->_pBuffer,
-                            this->_length,
-                            string.cStr(),
-                            string.length()
-                    );
+                    return BaseStringView < CharType > ( * this ).findLast ( string );
                 }
 
 
@@ -5125,11 +4508,8 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                         CollectionType < Index >          & storeIn
                 ) const noexcept -> CollectionType < Index > & {
 
-                    return StringUtils < CharType > :: findAll (
-                            this->_pBuffer,
-                            this->_length,
-                            string.cStr(),
-                            string.length(),
+                    return BaseStringView < CharType > ( * this ).findAll (
+                            string,
                             storeIn
                     );
                 }
@@ -5142,39 +4522,42 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 ) const noexcept -> CollectionType < Index > {
 
                     CollectionType < Index > indices;
-                    return this->findAll ( string, indices );
+                    return BaseStringView < CharType > ( * this ).findAll (
+                            string,
+                            indices
+                    );
                 }
 
 
                 template < typename CharType >
                 template < template < typename ... > class CollectionType >
-                auto BaseString < CharType > :: findOf (
+                __CDS_OptimalInline auto BaseString < CharType > :: findOf (
                         Size                                maxCount,
                         BaseStringView < CharType > const & string,
                         CollectionType < Index >          & storeIn
                 ) const noexcept -> CollectionType < Index > & {
 
-                    Size found = 0ULL;
-                    for ( Size index = 0ULL; index < this->length() && found < maxCount; ++ index ) {
-                        if ( string.contains ( this->_pBuffer [ index ] ) ) {
-                            storeIn.add ( static_cast < Index > ( index ) );
-                            ++ found;
-                        }
-                    }
-
-                    return storeIn;
+                    return BaseStringView < CharType > ( * this ).findOf (
+                            maxCount,
+                            string,
+                            storeIn
+                    );
                 }
 
 
                 template < typename CharType >
                 template < template < typename ... > class CollectionType >
-                auto BaseString < CharType > :: findOf (
+                __CDS_OptimalInline auto BaseString < CharType > :: findOf (
                         Size                                maxCount,
                         BaseStringView < CharType > const & string
                 ) const noexcept -> CollectionType < Index > {
 
                     CollectionType < Index > indices;
-                    return this->findOf ( maxCount, string, indices );
+                    return BaseStringView < CharType > ( * this ).findOf (
+                            maxCount,
+                            string,
+                            indices
+                    );
                 }
 
 
@@ -5183,13 +4566,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                         BaseStringView < CharType > const & string
                 ) const noexcept -> Index {
 
-                    for ( Size index = 0ULL; index < this->length(); ++ index ) {
-                        if ( string.contains ( this->_pBuffer [ index ] ) ) {
-                            return static_cast < Index > ( index );
-                        }
-                    }
-
-                    return BaseString :: invalidIndex;
+                    return BaseStringView < CharType > ( * this ).findFirstOf ( string );
                 }
 
 
@@ -5198,73 +4575,67 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                         BaseStringView < CharType > const & string
                 ) const noexcept -> Index {
 
-                    for ( Index index = static_cast < Index > ( this->length() ) - 1; index >= 0; -- index ) {
-                        if ( string.contains ( this->_pBuffer [ index ] ) ) {
-                            return static_cast < Index > ( index );
-                        }
-                    }
-
-                    return BaseString :: invalidIndex;
+                    return BaseStringView < CharType > ( * this ).findLastOf ( string );
                 }
 
 
                 template < typename CharType >
                 template < template < typename ... > class CollectionType >
-                auto BaseString < CharType > :: findAllOf (
+                __CDS_OptimalInline auto BaseString < CharType > :: findAllOf (
                         BaseStringView < CharType > const & string,
                         CollectionType < Index >          & storeIn
                 ) const noexcept -> CollectionType < Index > & {
 
-                    for ( Size index = 0ULL; index < this->length(); ++ index ) {
-                        if ( string.contains ( this->_pBuffer [ index ] ) ) {
-                            storeIn.add ( static_cast < Index > ( index ) );
-                        }
-                    }
-
-                    return storeIn;
+                    return BaseStringView < CharType > ( * this ).findAllOf (
+                            string,
+                            storeIn
+                    );
                 }
 
 
                 template < typename CharType >
                 template < template < typename ... > class CollectionType >
-                auto BaseString < CharType > :: findAllOf (
+                __CDS_OptimalInline auto BaseString < CharType > :: findAllOf (
                         BaseStringView < CharType > const & string
                 ) const noexcept -> CollectionType < Index > {
 
                     CollectionType < Index > indices;
-                    return this->findAllOf ( string, indices );
+                    return BaseStringView < CharType > ( * this ).findAllOf (
+                            string,
+                            indices
+                    );
                 }
 
 
                 template < typename CharType >
                 template < template < typename ... > class CollectionType >
-                auto BaseString < CharType > :: findNotOf (
+                __CDS_OptimalInline auto BaseString < CharType > :: findNotOf (
                         Size                                maxCount,
                         BaseStringView < CharType > const & string,
                         CollectionType < Index >          & storeIn
                 ) const noexcept -> CollectionType < Index > & {
 
-                    Size found = 0ULL;
-                    for ( Size index = 0ULL; index < this->length() && found < maxCount; ++ index ) {
-                        if ( ! string.contains ( this->_pBuffer [ index ] ) ) {
-                            storeIn.add ( static_cast < Index > ( index ) );
-                            ++ found;
-                        }
-                    }
-
-                    return storeIn;
+                    return BaseStringView < CharType > ( * this ).findNotOf (
+                            maxCount,
+                            string,
+                            storeIn
+                    );
                 }
 
 
                 template < typename CharType >
                 template < template < typename ... > class CollectionType >
-                auto BaseString < CharType > :: findNotOf (
+                __CDS_OptimalInline auto BaseString < CharType > :: findNotOf (
                         Size                                maxCount,
                         BaseStringView < CharType > const & string
                 ) const noexcept -> CollectionType < Index > {
 
                     CollectionType < Index > indices;
-                    return this->findNotOf ( maxCount, string, indices );
+                    return BaseStringView < CharType > ( * this ).findNotOf (
+                            maxCount,
+                            string,
+                            indices
+                    );
                 }
 
 
@@ -5273,13 +4644,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                         BaseStringView < CharType > const & string
                 ) const noexcept -> Index {
 
-                    for ( Size index = 0ULL; index < this->length(); ++ index ) {
-                        if ( ! string.contains ( this->_pBuffer [ index ] ) ) {
-                            return static_cast < Index > ( index );
-                        }
-                    }
-
-                    return BaseString :: invalidIndex;
+                    return BaseStringView < CharType > ( * this ).findFirstNotOf ( string );
                 }
 
 
@@ -5288,41 +4653,35 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                         BaseStringView < CharType > const & string
                 ) const noexcept -> Index {
 
-                    for ( Index index = static_cast < Index > ( this->length() ) - 1; index >= 0; -- index ) {
-                        if ( ! string.contains ( this->_pBuffer [ index ] ) ) {
-                            return static_cast < Index > ( index );
-                        }
-                    }
-
-                    return BaseString :: invalidIndex;
+                    return BaseStringView < CharType > ( * this ).findLastNotOf ( string );
                 }
 
 
                 template < typename CharType >
                 template < template < typename ... > class CollectionType >
-                auto BaseString < CharType > :: findAllNotOf (
+                __CDS_OptimalInline auto BaseString < CharType > :: findAllNotOf (
                         BaseStringView < CharType > const & string,
                         CollectionType < Index >          & storeIn
                 ) const noexcept -> CollectionType < Index > & {
 
-                    for ( Size index = 0ULL; index < this->length(); ++ index ) {
-                        if ( ! string.contains ( this->_pBuffer [ index ] ) ) {
-                            storeIn.add ( static_cast < Index > ( index ) );
-                        }
-                    }
-
-                    return storeIn;
+                    return BaseStringView < CharType > ( * this ).findAllNotOf (
+                            string,
+                            storeIn
+                    );
                 }
 
 
                 template < typename CharType >
                 template < template < typename ... > class CollectionType >
-                auto BaseString < CharType > :: findAllNotOf (
+                __CDS_OptimalInline auto BaseString < CharType > :: findAllNotOf (
                         BaseStringView < CharType > const & string
                 ) const noexcept -> CollectionType < Index > {
 
                     CollectionType < Index > indices;
-                    return this->findAllNotOf ( string, indices );
+                    return BaseStringView < CharType > ( * this ).findAllNotOf (
+                            string,
+                            indices
+                    );
                 }
 
 
@@ -5334,12 +4693,9 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                         CollectionType < Index >                  & storeIn
                 ) const noexcept -> CollectionType < Index > & {
 
-                    return StringUtils < CharType > :: find (
-                            this->_pBuffer,
-                            this->_length,
-                            string.c_str(),
-                            string.length(),
+                    return BaseStringView < CharType > ( * this ).find (
                             maxCount,
+                            BaseStringView < CharType > ( string ),
                             storeIn
                     );
                 }
@@ -5353,7 +4709,11 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 ) const noexcept -> CollectionType < Index > {
 
                     CollectionType < Index > indices;
-                    return this->find ( maxCount, string, indices );
+                    return BaseStringView < CharType > ( * this ).find (
+                            maxCount,
+                            BaseStringView < CharType > ( string ),
+                            indices
+                    );
                 }
 
 
@@ -5362,11 +4722,8 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                         std :: basic_string < CharType > const & string
                 ) const noexcept -> Index {
 
-                    return StringUtils < CharType > :: findFirst (
-                            this->_pBuffer,
-                            this->_length,
-                            string.c_str(),
-                            string.length()
+                    return BaseStringView < CharType > ( * this ).findFirst (
+                            BaseStringView < CharType > ( string )
                     );
                 }
 
@@ -5376,11 +4733,8 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                         std :: basic_string < CharType > const & string
                 ) const noexcept -> Index {
 
-                    return StringUtils < CharType > :: findLast (
-                            this->_pBuffer,
-                            this->_length,
-                            string.c_str(),
-                            string.length()
+                    return BaseStringView < CharType > ( * this ).findLast (
+                            BaseStringView < CharType > ( string )
                     );
                 }
 
@@ -5392,11 +4746,8 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                         CollectionType < Index >               & storeIn
                 ) const noexcept -> CollectionType < Index > & {
 
-                    return StringUtils < CharType > :: findAll (
-                            this->_pBuffer,
-                            this->_length,
-                            string.c_str(),
-                            string.length(),
+                    return BaseStringView < CharType > ( * this ).findAll (
+                            BaseStringView < CharType > ( string ),
                             storeIn
                     );
                 }
@@ -5409,39 +4760,42 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 ) const noexcept -> CollectionType < Index > {
 
                     CollectionType < Index > indices;
-                    return this->findAll ( string, indices );
+                    return BaseStringView < CharType > ( * this ).findAll (
+                            BaseStringView < CharType > ( string ),
+                            indices
+                    );
                 }
 
 
                 template < typename CharType >
                 template < template < typename ... > class CollectionType >
-                auto BaseString < CharType > :: findOf (
+                __CDS_OptimalInline auto BaseString < CharType > :: findOf (
                         Size                                     maxCount,
                         std :: basic_string < CharType > const & string,
                         CollectionType < Index >               & storeIn
                 ) const noexcept -> CollectionType < Index > & {
 
-                    Size found = 0ULL;
-                    for ( Size index = 0ULL; index < this->length() && found < maxCount; ++ index ) {
-                        if ( StringUtils < CharType > :: contains ( string.c_str(), string.length(), this->_pBuffer [ index ] ) ) {
-                            storeIn.add ( static_cast < Index > ( index ) );
-                            ++ found;
-                        }
-                    }
-
-                    return storeIn;
+                    return BaseStringView < CharType > ( * this ).findOf (
+                            maxCount,
+                            BaseStringView < CharType > ( string ),
+                            storeIn
+                    );
                 }
 
 
                 template < typename CharType >
                 template < template < typename ... > class CollectionType >
-                auto BaseString < CharType > :: findOf (
+                __CDS_OptimalInline auto BaseString < CharType > :: findOf (
                         Size                                     maxCount,
                         std :: basic_string < CharType > const & string
                 ) const noexcept -> CollectionType < Index > {
 
                     CollectionType < Index > indices;
-                    return this->findOf ( maxCount, string, indices );
+                    return BaseStringView < CharType > ( * this ).findOf (
+                            maxCount,
+                            BaseStringView < CharType > ( string ),
+                            indices
+                    );
                 }
 
 
@@ -5450,13 +4804,9 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                         std :: basic_string < CharType > const & string
                 ) const noexcept -> Index {
 
-                    for ( Size index = 0ULL; index < this->length(); ++ index ) {
-                        if ( StringUtils < CharType > :: contains ( string.c_str(), string.length(), this->_pBuffer [ index ] ) ) {
-                            return static_cast < Index > ( index );
-                        }
-                    }
-
-                    return BaseString :: invalidIndex;
+                    return BaseStringView < CharType > ( * this ).findFirstOf (
+                            BaseStringView < CharType > ( string )
+                    );
                 }
 
 
@@ -5465,73 +4815,69 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                         std :: basic_string < CharType > const & string
                 ) const noexcept -> Index {
 
-                    for ( Index index = static_cast < Index > ( this->length() ) - 1; index >= 0; -- index ) {
-                        if ( StringUtils < CharType > :: contains ( string.c_str(), string.length(), this->_pBuffer [ index ] ) ) {
-                            return static_cast < Index > ( index );
-                        }
-                    }
-
-                    return BaseString :: invalidIndex;
+                    return BaseStringView < CharType > ( * this ).findLastOf (
+                            BaseStringView < CharType > ( string )
+                    );
                 }
 
 
                 template < typename CharType >
                 template < template < typename ... > class CollectionType >
-                auto BaseString < CharType > :: findAllOf (
+                __CDS_OptimalInline auto BaseString < CharType > :: findAllOf (
                         std :: basic_string < CharType > const & string,
                         CollectionType < Index >               & storeIn
                 ) const noexcept -> CollectionType < Index > & {
 
-                    for ( Size index = 0ULL; index < this->length(); ++ index ) {
-                        if ( StringUtils < CharType > :: contains ( string.c_str(), string.length(), this->_pBuffer [ index ] ) ) {
-                            storeIn.add ( static_cast < Index > ( index ) );
-                        }
-                    }
-
-                    return storeIn;
+                    return BaseStringView < CharType > ( * this ).findAllOf (
+                            BaseStringView < CharType > ( string ),
+                            storeIn
+                    );
                 }
 
 
                 template < typename CharType >
                 template < template < typename ... > class CollectionType >
-                auto BaseString < CharType > :: findAllOf (
+                __CDS_OptimalInline auto BaseString < CharType > :: findAllOf (
                         std :: basic_string < CharType > const & string
                 ) const noexcept -> CollectionType < Index > {
 
                     CollectionType < Index > indices;
-                    return this->findAllOf ( string, indices );
+                    return BaseStringView < CharType > ( * this ).findAllOf (
+                            BaseStringView < CharType > ( string ),
+                            indices
+                    );
                 }
 
 
                 template < typename CharType >
                 template < template < typename ... > class CollectionType >
-                auto BaseString < CharType > :: findNotOf (
+                __CDS_OptimalInline auto BaseString < CharType > :: findNotOf (
                         Size                                     maxCount,
                         std :: basic_string < CharType > const & string,
                         CollectionType < Index >               & storeIn
                 ) const noexcept -> CollectionType < Index > & {
 
-                    Size found = 0ULL;
-                    for ( Size index = 0ULL; index < this->length() && found < maxCount; ++ index ) {
-                        if ( ! StringUtils < CharType > :: contains ( string.c_str(), string.length(), this->_pBuffer [ index ] ) ) {
-                            storeIn.add ( static_cast < Index > ( index ) );
-                            ++ found;
-                        }
-                    }
-
-                    return storeIn;
+                    return BaseStringView < CharType > ( * this ).findNotOf (
+                            maxCount,
+                            BaseStringView < CharType > ( string ),
+                            storeIn
+                    );
                 }
 
 
                 template < typename CharType >
                 template < template < typename ... > class CollectionType >
-                auto BaseString < CharType > :: findNotOf (
+                __CDS_OptimalInline auto BaseString < CharType > :: findNotOf (
                         Size                                     maxCount,
                         std :: basic_string < CharType > const & string
                 ) const noexcept -> CollectionType < Index > {
 
                     CollectionType < Index > indices;
-                    return this->findNotOf ( maxCount, string, indices );
+                    return BaseStringView < CharType > ( * this ).findNotOf (
+                            maxCount,
+                            BaseStringView < CharType > ( string ),
+                            indices
+                    );
                 }
 
 
@@ -5540,13 +4886,9 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                         std :: basic_string < CharType > const & string
                 ) const noexcept -> Index {
 
-                    for ( Size index = 0ULL; index < this->length(); ++ index ) {
-                        if ( ! StringUtils < CharType > :: contains ( string.c_str(), string.length(), this->_pBuffer [ index ] ) ) {
-                            return static_cast < Index > ( index );
-                        }
-                    }
-
-                    return BaseString :: invalidIndex;
+                    return BaseStringView < CharType > ( * this ).findFirstNotOf (
+                            BaseStringView < CharType > ( string )
+                    );
                 }
 
 
@@ -5555,41 +4897,37 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                         std :: basic_string < CharType > const & string
                 ) const noexcept -> Index {
 
-                    for ( Index index = static_cast < Index > ( this->length() ) - 1; index >= 0; -- index ) {
-                        if ( ! StringUtils < CharType > :: contains ( string.c_str(), string.length(), this->_pBuffer [ index ] ) ) {
-                            return static_cast < Index > ( index );
-                        }
-                    }
-
-                    return BaseString :: invalidIndex;
+                    return BaseStringView < CharType > ( * this ).findLastNotOf (
+                            BaseStringView < CharType > ( string )
+                    );
                 }
 
 
                 template < typename CharType >
                 template < template < typename ... > class CollectionType >
-                auto BaseString < CharType > :: findAllNotOf (
+                __CDS_OptimalInline auto BaseString < CharType > :: findAllNotOf (
                         std :: basic_string < CharType > const & string,
                         CollectionType < Index >               & storeIn
                 ) const noexcept -> CollectionType < Index > & {
 
-                    for ( Size index = 0ULL; index < this->length(); ++ index ) {
-                        if ( ! StringUtils < CharType > :: contains ( string.c_str(), string.length(), this->_pBuffer [ index ] ) ) {
-                            storeIn.add ( static_cast < Index > ( index ) );
-                        }
-                    }
-
-                    return storeIn;
+                    return BaseStringView < CharType > ( * this ).findAllNotOf (
+                            BaseStringView < CharType > ( string ),
+                            storeIn
+                    );
                 }
 
 
                 template < typename CharType >
                 template < template < typename ... > class CollectionType >
-                auto BaseString < CharType > :: findAllNotOf (
+                __CDS_OptimalInline auto BaseString < CharType > :: findAllNotOf (
                         std :: basic_string < CharType > const & string
                 ) const noexcept -> CollectionType < Index > {
 
                     CollectionType < Index > indices;
-                    return this->findAllNotOf ( string, indices );
+                    return BaseStringView < CharType > ( * this ).findAllNotOf (
+                            BaseStringView < CharType > ( string ),
+                            indices
+                    );
                 }
 
 
@@ -5601,12 +4939,9 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                         CollectionType < Index >                  & storeIn
                 ) const noexcept -> CollectionType < Index > & {
 
-                    return StringUtils < CharType > :: find (
-                            this->_pBuffer,
-                            this->_length,
-                            pString,
-                            StringUtils < CharType > :: length ( pString ),
+                    return BaseStringView < CharType > ( * this ).find (
                             maxCount,
+                            BaseStringView < CharType > ( pString ),
                             storeIn
                     );
                 }
@@ -5620,7 +4955,11 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 ) const noexcept -> CollectionType < Index > {
 
                     CollectionType < Index > indices;
-                    return this->find ( maxCount, pString, indices );
+                    return BaseStringView < CharType > ( * this ).find (
+                            maxCount,
+                            BaseStringView < CharType > ( pString ),
+                            indices
+                    );
                 }
 
 
@@ -5629,11 +4968,8 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                         ElementType const * pString
                 ) const noexcept -> Index {
 
-                    return StringUtils < CharType > :: findFirst (
-                            this->_pBuffer,
-                            this->_length,
-                            pString,
-                            StringUtils < CharType > :: length ( pString )
+                    return BaseStringView < CharType > ( * this ).findFirst (
+                            BaseStringView < CharType > ( pString )
                     );
                 }
 
@@ -5643,11 +4979,8 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                         ElementType const * pString
                 ) const noexcept -> Index {
 
-                    return StringUtils < CharType > :: findLast (
-                            this->_pBuffer,
-                            this->_length,
-                            pString,
-                            StringUtils < CharType > :: length ( pString )
+                    return BaseStringView < CharType > ( * this ).findLast (
+                            BaseStringView < CharType > ( pString )
                     );
                 }
 
@@ -5659,11 +4992,8 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                         CollectionType < Index >               & storeIn
                 ) const noexcept -> CollectionType < Index > & {
 
-                    return StringUtils < CharType > :: findAll (
-                            this->_pBuffer,
-                            this->_length,
-                            pString,
-                            StringUtils < CharType > :: length ( pString ),
+                    return BaseStringView < CharType > ( * this ).findAll (
+                            BaseStringView < CharType > ( pString ),
                             storeIn
                     );
                 }
@@ -5676,47 +5006,42 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 ) const noexcept -> CollectionType < Index > {
 
                     CollectionType < Index > indices;
-                    return this->findAll ( pString, indices );
+                    return BaseStringView < CharType > ( * this ).findAll (
+                            BaseStringView < CharType > ( pString ),
+                            indices
+                    );
                 }
 
 
                 template < typename CharType >
                 template < template < typename ... > class CollectionType >
-                auto BaseString < CharType > :: findOf (
+                __CDS_OptimalInline auto BaseString < CharType > :: findOf (
                         Size                                     maxCount,
                         ElementType                      const * pString,
                         CollectionType < Index >               & storeIn
                 ) const noexcept -> CollectionType < Index > & {
 
-                    Size found  = 0ULL;
-                    auto stringLength = StringUtils < CharType > :: length ( pString );
-                    for ( Size index = 0ULL; index < this->length() && found < maxCount; ++ index ) {
-
-                        if (
-                                StringUtils < CharType > :: contains (
-                                        pString,
-                                        stringLength,
-                                        this->_pBuffer [ index ]
-                                )
-                        ) {
-                            storeIn.add ( static_cast < Index > ( index ) );
-                            ++ found;
-                        }
-                    }
-
-                    return storeIn;
+                    return BaseStringView < CharType > ( * this ).findOf (
+                            maxCount,
+                            BaseStringView < CharType > ( pString ),
+                            storeIn
+                    );
                 }
 
 
                 template < typename CharType >
                 template < template < typename ... > class CollectionType >
-                auto BaseString < CharType > :: findOf (
+                __CDS_OptimalInline auto BaseString < CharType > :: findOf (
                         Size                                     maxCount,
                         ElementType                      const * pString
                 ) const noexcept -> CollectionType < Index > {
 
                     CollectionType < Index > indices;
-                    return this->findOf ( maxCount, pString, indices );
+                    return BaseStringView < CharType > ( * this ).findOf (
+                            maxCount,
+                            BaseStringView < CharType > ( pString ),
+                            indices
+                    );
                 }
 
 
@@ -5725,21 +5050,9 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                         ElementType                      const * pString
                 ) const noexcept -> Index {
 
-                    auto stringLength = StringUtils < CharType > :: length ( pString );
-                    for ( Size index = 0ULL; index < this->length(); ++ index ) {
-
-                        if (
-                                StringUtils < CharType > :: contains (
-                                        pString,
-                                        stringLength,
-                                        this->_pBuffer [ index ]
-                                )
-                        ) {
-                            return static_cast < Index > ( index );
-                        }
-                    }
-
-                    return BaseString :: invalidIndex;
+                    return BaseStringView < CharType > ( * this ).findFirstOf (
+                            BaseStringView < CharType > ( pString )
+                    );
                 }
 
 
@@ -5748,97 +5061,69 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                         ElementType                      const * pString
                 ) const noexcept -> Index {
 
-                    auto stringLength = StringUtils < CharType > :: length ( pString );
-                    for ( Index index = static_cast < Index > ( this->length() ) - 1; index >= 0; -- index ) {
-
-                        if (
-                                StringUtils < CharType > :: contains (
-                                        pString,
-                                        stringLength,
-                                        this->_pBuffer [ index ]
-                                )
-                        ) {
-                            return static_cast < Index > ( index );
-                        }
-                    }
-
-                    return BaseString :: invalidIndex;
+                    return BaseStringView < CharType > ( * this ).findLastOf (
+                            BaseStringView < CharType > ( pString )
+                    );
                 }
 
 
                 template < typename CharType >
                 template < template < typename ... > class CollectionType >
-                auto BaseString < CharType > :: findAllOf (
+                __CDS_OptimalInline auto BaseString < CharType > :: findAllOf (
                         ElementType                      const * pString,
                         CollectionType < Index >               & storeIn
                 ) const noexcept -> CollectionType < Index > & {
 
-                    auto stringLength = StringUtils < CharType > :: length ( pString );
-                    for ( Size index = 0ULL; index < this->length(); ++ index ) {
-
-                        if (
-                                StringUtils < CharType > :: contains (
-                                        pString,
-                                        stringLength,
-                                        this->_pBuffer [ index ]
-                                )
-                        ) {
-                            storeIn.add ( static_cast < Index > ( index ) );
-                        }
-                    }
-
-                    return storeIn;
+                    return BaseStringView < CharType > ( * this ).findAllOf (
+                            BaseStringView < CharType > ( pString ),
+                            storeIn
+                    );
                 }
 
 
                 template < typename CharType >
                 template < template < typename ... > class CollectionType >
-                auto BaseString < CharType > :: findAllOf (
+                __CDS_OptimalInline auto BaseString < CharType > :: findAllOf (
                         ElementType const * pString
                 ) const noexcept -> CollectionType < Index > {
 
                     CollectionType < Index > indices;
-                    return this->findAllOf ( pString, indices );
+                    return BaseStringView < CharType > ( * this ).findAllOf (
+                            BaseStringView < CharType > ( pString ),
+                            indices
+                    );
                 }
 
 
                 template < typename CharType >
                 template < template < typename ... > class CollectionType >
-                auto BaseString < CharType > :: findNotOf (
+                __CDS_OptimalInline auto BaseString < CharType > :: findNotOf (
                         Size                                     maxCount,
                         ElementType                      const * pString,
                         CollectionType < Index >               & storeIn
                 ) const noexcept -> CollectionType < Index > & {
 
-                    Size found          = 0ULL;
-                    auto stringLength   = StringUtils < CharType > :: length ( pString );
-                    for ( Size index = 0ULL; index < this->length() && found < maxCount; ++ index ) {
-
-                        if (
-                                ! StringUtils < CharType > :: contains (
-                                        pString,
-                                        stringLength,
-                                        this->_pBuffer [ index ]
-                                )
-                        ) {
-                            storeIn.add ( static_cast < Index > ( index ) );
-                            ++ found;
-                        }
-                    }
-
-                    return storeIn;
+                    return BaseStringView < CharType > ( * this ).findNotOf (
+                            maxCount,
+                            BaseStringView < CharType > ( pString ),
+                            storeIn
+                    );
                 }
 
 
                 template < typename CharType >
                 template < template < typename ... > class CollectionType >
-                auto BaseString < CharType > :: findNotOf (
+                __CDS_OptimalInline auto BaseString < CharType > :: findNotOf (
                         Size                                     maxCount,
                         ElementType                      const * pString
                 ) const noexcept -> CollectionType < Index > {
 
                     CollectionType < Index > indices;
-                    return this->findNotOf ( maxCount, pString, indices );
+                    return BaseStringView < CharType > ( * this ).findNotOf (
+                            maxCount,
+                            BaseStringView < CharType > ( pString ),
+                            indices
+                    );
                 }
 
 
@@ -5847,21 +5132,9 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                         ElementType const * pString
                 ) const noexcept -> Index {
 
-                    auto stringLength = StringUtils < CharType > :: length ( pString );
-                    for ( Size index = 0ULL; index < this->length(); ++ index ) {
-
-                        if (
-                                ! StringUtils < CharType > :: contains (
-                                        pString,
-                                        stringLength,
-                                        this->_pBuffer [ index ]
-                                )
-                        ) {
-                            return static_cast < Index > ( index );
-                        }
-                    }
-
-                    return BaseString :: invalidIndex;
+                    return BaseStringView < CharType > ( * this ).findFirstNotOf (
+                            BaseStringView < CharType > ( pString )
+                    );
                 }
 
 
@@ -5870,57 +5143,37 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                         ElementType const * pString
                 ) const noexcept -> Index {
 
-                    auto stringLength = StringUtils < CharType > :: length ( pString );
-                    for ( Index index = static_cast < Index > ( this->length() ) - 1; index >= 0; -- index ) {
-
-                        if (
-                                ! StringUtils < CharType > :: contains (
-                                        pString,
-                                        stringLength,
-                                        this->_pBuffer [ index ]
-                                )
-                        ) {
-                            return static_cast < Index > ( index );
-                        }
-                    }
-
-                    return BaseString :: invalidIndex;
+                    return BaseStringView < CharType > ( * this ).findLastNotOf (
+                            BaseStringView < CharType > ( pString )
+                    );
                 }
 
 
                 template < typename CharType >
                 template < template < typename ... > class CollectionType >
-                auto BaseString < CharType > :: findAllNotOf (
+                __CDS_OptimalInline auto BaseString < CharType > :: findAllNotOf (
                         ElementType                      const * pString,
                         CollectionType < Index >               & storeIn
                 ) const noexcept -> CollectionType < Index > & {
 
-                    auto stringLength = StringUtils < CharType > :: length ( pString );
-                    for ( Size index = 0ULL; index < this->length(); ++ index ) {
-
-                        if (
-                                ! StringUtils < CharType > :: contains (
-                                        pString,
-                                        stringLength,
-                                        this->_pBuffer [ index ]
-                                )
-                        ) {
-                            storeIn.add ( static_cast < Index > ( index ) );
-                        }
-                    }
-
-                    return storeIn;
+                    return BaseStringView < CharType > ( * this ).findAllNotOf (
+                            BaseStringView < CharType > ( pString ),
+                            storeIn
+                    );
                 }
 
 
                 template < typename CharType >
                 template < template < typename ... > class CollectionType >
-                auto BaseString < CharType > :: findAllNotOf (
+                __CDS_OptimalInline auto BaseString < CharType > :: findAllNotOf (
                         ElementType const * pString
                 ) const noexcept -> CollectionType < Index > {
 
                     CollectionType < Index > indices;
-                    return this->findAllNotOf ( pString, indices );
+                    return BaseStringView < CharType > ( * this ).findAllNotOf (
+                            BaseStringView < CharType > ( pString ),
+                            indices
+                    );
                 }
 
 
@@ -6144,7 +5397,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
 
                 template < typename CharType >
-                auto BaseString < CharType > :: trim (
+                __CDS_OptimalInline auto BaseString < CharType > :: trim (
                         ElementType character
                 ) noexcept -> BaseString & {
 
@@ -6153,7 +5406,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
 
                 template < typename CharType >
-                auto BaseString < CharType > :: trim (
+                __CDS_OptimalInline auto BaseString < CharType > :: trim (
                         ElementType const * pCharacters
                 ) noexcept -> BaseString & {
 
@@ -6162,7 +5415,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
 
                 template < typename CharType >
-                auto BaseString < CharType > :: trim (
+                __CDS_OptimalInline auto BaseString < CharType > :: trim (
                         BaseString const & characters
                 ) noexcept -> BaseString & {
 
@@ -6171,7 +5424,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
 
                 template < typename CharType >
-                auto BaseString < CharType > :: trim (
+                __CDS_OptimalInline auto BaseString < CharType > :: trim (
                         BaseStringView < CharType > const & characters
                 ) noexcept -> BaseString & {
 
@@ -6180,7 +5433,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
 
                 template < typename CharType >
-                auto BaseString < CharType > :: trim (
+                __CDS_OptimalInline auto BaseString < CharType > :: trim (
                         std :: basic_string < CharType > const & characters
                 ) noexcept -> BaseString & {
 
@@ -6280,41 +5533,17 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
                 template < typename CharType >
                 template < typename ListType >
-                auto BaseString < CharType > :: split (
+                __CDS_OptimalInline auto BaseString < CharType > :: split (
                         ElementType     separator,
                         ListType      & storeIn,
                         Size            maxCount
                 ) const noexcept -> ListType & {
 
-                    Index splitIndex = 0;
-                    if ( this->empty() ) {
-                        return storeIn;
-                    }
-
-                    Index   currentSegmentOffset    = 0;
-                    Size    currentSegmentLength    = 0ULL;
-
-                    for ( Index index = 0ULL; index < static_cast < Index > ( this->length() ); ++ index ) {
-                        if ( this->_pBuffer [ index ] != separator || splitIndex >= static_cast < Index > ( maxCount ) - 1 ) {
-                            ++ currentSegmentLength;
-                        } else {
-
-                            if ( currentSegmentLength == 0ULL ) {
-                                continue;
-                            }
-
-                            ++ splitIndex;
-                            storeIn.add ( BaseString ( this->_pBuffer + currentSegmentOffset, currentSegmentLength ) );
-                            currentSegmentLength = 0ULL;
-                            currentSegmentOffset = index + 1;
-                        }
-                    }
-
-                    if ( currentSegmentLength != 0ULL ) {
-                        storeIn.add ( BaseString ( this->_pBuffer + currentSegmentOffset, currentSegmentLength ) );
-                    }
-
-                    return storeIn;
+                    return BaseStringView < CharType > ( * this ).split (
+                            separator,
+                            storeIn,
+                            maxCount
+                    );
                 }
 
 
@@ -6326,47 +5555,27 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 ) const noexcept -> ListType < BaseString > {
 
                     ListType < BaseString > tokens;
-                    return this->split ( separator, tokens, maxCount );
+                    return BaseStringView < CharType > ( * this ).split (
+                            separator,
+                            tokens,
+                            maxCount
+                    );
                 }
 
 
                 template < typename CharType >
                 template < typename ListType >
-                auto BaseString < CharType > :: split (
+                __CDS_OptimalInline auto BaseString < CharType > :: split (
                         BaseString  const & separators,
                         ListType          & storeIn,
                         Size                maxCount
                 ) const noexcept -> ListType & {
 
-                    Index splitIndex = 0;
-                    if ( this->empty() ) {
-                        return storeIn;
-                    }
-
-                    Index   currentSegmentOffset    = 0;
-                    Size    currentSegmentLength    = 0ULL;
-
-                    for ( Index index = 0ULL; index < static_cast < Index > ( this->length() ); ++ index ) {
-                        if ( ! separators.contains ( this->_pBuffer [ index ] ) || splitIndex >= static_cast < Index > ( maxCount ) - 1 ) {
-                            ++ currentSegmentLength;
-                        } else {
-
-                            if ( currentSegmentLength == 0ULL ) {
-                                continue;
-                            }
-
-                            ++ splitIndex;
-                            storeIn.add ( BaseString ( this->_pBuffer + currentSegmentOffset, currentSegmentLength ) );
-                            currentSegmentLength = 0ULL;
-                            currentSegmentOffset = index + 1;
-                        }
-                    }
-
-                    if ( currentSegmentLength != 0ULL ) {
-                        storeIn.add ( BaseString ( this->_pBuffer + currentSegmentOffset, currentSegmentLength ) );
-                    }
-
-                    return storeIn;
+                    return BaseStringView < CharType > ( * this ).split (
+                            BaseStringView < CharType > ( separators ),
+                            storeIn,
+                            maxCount
+                    );
                 }
 
 
@@ -6378,47 +5587,27 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 ) const noexcept -> ListType < BaseString > {
 
                     ListType < BaseString > tokens;
-                    return this->split ( separators, tokens, maxCount );
+                    return BaseStringView < CharType > ( * this ).split (
+                            BaseStringView < CharType > ( separators ),
+                            tokens,
+                            maxCount
+                    );
                 }
 
 
                 template < typename CharType >
                 template < typename ListType >
-                auto BaseString < CharType > :: split (
+                __CDS_OptimalInline auto BaseString < CharType > :: split (
                         BaseStringView < CharType > const & separators,
                         ListType                          & storeIn,
                         Size                                maxCount
                 ) const noexcept -> ListType & {
 
-                    Index splitIndex = 0;
-                    if ( this->empty() ) {
-                        return storeIn;
-                    }
-
-                    Index   currentSegmentOffset    = 0;
-                    Size    currentSegmentLength    = 0ULL;
-
-                    for ( Index index = 0ULL; index < static_cast < Index > ( this->length() ); ++ index ) {
-                        if ( ! separators.contains ( this->_pBuffer [ index ] ) || splitIndex >= static_cast < Index > ( maxCount ) - 1 ) {
-                            ++ currentSegmentLength;
-                        } else {
-
-                            if ( currentSegmentLength == 0ULL ) {
-                                continue;
-                            }
-
-                            ++ splitIndex;
-                            storeIn.add ( BaseString ( this->_pBuffer + currentSegmentOffset, currentSegmentLength ) );
-                            currentSegmentLength = 0ULL;
-                            currentSegmentOffset = index + 1;
-                        }
-                    }
-
-                    if ( currentSegmentLength != 0ULL ) {
-                        storeIn.add ( BaseString ( this->_pBuffer + currentSegmentOffset, currentSegmentLength ) );
-                    }
-
-                    return storeIn;
+                    return BaseStringView < CharType > ( * this ).split (
+                            separators,
+                            storeIn,
+                            maxCount
+                    );
                 }
 
 
@@ -6430,47 +5619,27 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 ) const noexcept -> ListType < BaseString > {
 
                     ListType < BaseString > tokens;
-                    return this->split ( separators, tokens, maxCount );
+                    return BaseStringView < CharType > ( * this ).split (
+                            BaseStringView < CharType > ( separators ),
+                            tokens,
+                            maxCount
+                    );
                 }
 
 
                 template < typename CharType >
                 template < typename ListType >
-                auto BaseString < CharType > :: split (
+                __CDS_OptimalInline auto BaseString < CharType > :: split (
                         std :: basic_string < CharType >    const & separators,
                         ListType                                  & storeIn,
                         Size                                        maxCount
                 ) const noexcept -> ListType & {
 
-                    Index splitIndex = 0;
-                    if ( this->empty() ) {
-                        return storeIn;
-                    }
-
-                    Index   currentSegmentOffset    = 0;
-                    Size    currentSegmentLength    = 0ULL;
-
-                    for ( Index index = 0ULL; index < static_cast < Index > ( this->length() ); ++ index ) {
-                        if ( ! StringUtils < CharType > :: contains ( separators.c_str(), separators.length(), this->_pBuffer [ index ] ) || splitIndex >= static_cast < Index > ( maxCount ) - 1 ) {
-                            ++ currentSegmentLength;
-                        } else {
-
-                            if ( currentSegmentLength == 0ULL ) {
-                                continue;
-                            }
-
-                            ++ splitIndex;
-                            storeIn.add ( BaseString ( this->_pBuffer + currentSegmentOffset, currentSegmentLength ) );
-                            currentSegmentLength = 0ULL;
-                            currentSegmentOffset = index + 1;
-                        }
-                    }
-
-                    if ( currentSegmentLength != 0ULL ) {
-                        storeIn.add ( BaseString ( this->_pBuffer + currentSegmentOffset, currentSegmentLength ) );
-                    }
-
-                    return storeIn;
+                    return BaseStringView < CharType > ( * this ).split (
+                            BaseStringView < CharType > ( separators ),
+                            storeIn,
+                            maxCount
+                    );
                 }
 
 
@@ -6482,48 +5651,27 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 ) const noexcept -> ListType < BaseString > {
 
                     ListType < BaseString > tokens;
-                    return this->split ( separators, tokens, maxCount );
+                    return BaseStringView < CharType > ( * this ).split (
+                            BaseStringView < CharType > ( separators ),
+                            tokens,
+                            maxCount
+                    );
                 }
 
 
                 template < typename CharType >
                 template < typename ListType >
-                auto BaseString < CharType > :: split (
+                __CDS_OptimalInline auto BaseString < CharType > :: split (
                         ElementType                         const * pSeparators,
                         ListType                                  & storeIn,
                         Size                                        maxCount
                 ) const noexcept -> ListType & {
 
-                    Index splitIndex = 0;
-                    if ( this->empty() ) {
-                        return storeIn;
-                    }
-
-                    Index   currentSegmentOffset    = 0;
-                    Size    currentSegmentLength    = 0ULL;
-                    auto    separatorsLength        = StringUtils < CharType > :: length ( pSeparators );
-
-                    for ( Index index = 0ULL; index < static_cast < Index > ( this->length() ); ++ index ) {
-                        if ( ! StringUtils < CharType > :: contains ( pSeparators, separatorsLength, this->_pBuffer [ index ] ) || splitIndex >= static_cast < Index > ( maxCount ) - 1 ) {
-                            ++ currentSegmentLength;
-                        } else {
-
-                            if ( currentSegmentLength == 0ULL ) {
-                                continue;
-                            }
-
-                            ++ splitIndex;
-                            storeIn.add ( BaseString ( this->_pBuffer + currentSegmentOffset, currentSegmentLength ) );
-                            currentSegmentLength = 0ULL;
-                            currentSegmentOffset = index + 1;
-                        }
-                    }
-
-                    if ( currentSegmentLength != 0ULL ) {
-                        storeIn.add ( BaseString ( this->_pBuffer + currentSegmentOffset, currentSegmentLength ) );
-                    }
-
-                    return storeIn;
+                    return BaseStringView < CharType > ( * this ).split (
+                            BaseStringView < CharType > ( pSeparators ),
+                            storeIn,
+                            maxCount
+                    );
                 }
 
 
@@ -6535,13 +5683,308 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 ) const noexcept -> ListType < BaseString > {
 
                     ListType < BaseString > tokens;
-                    return this->split ( pSeparators, tokens, maxCount );
+                    return BaseStringView < CharType > ( * this ).split (
+                            BaseStringView < CharType > ( pSeparators ),
+                            tokens,
+                            maxCount
+                    );
                 }
 
 
                 template < typename CharType >
                 __CDS_cpplang_ConstexprOverride auto BaseString < CharType > :: hash () const noexcept -> Index {
                     return static_cast < Index > ( this->_length );
+                }
+
+
+                template < typename CharType >
+                __CDS_OptimalInline auto BaseString < CharType > :: toString () const noexcept -> cds :: String {
+                    return cds :: String ( this->cStr() );
+                }
+
+
+                template < typename CharType >
+                __CDS_OptionalInline auto BaseString < CharType > :: replace (
+                        Index               from,
+                        Index               until,
+                        BaseString  const & inPlace
+                ) noexcept -> BaseString & {
+
+                    if ( from < 0 ) {
+                        from = 0;
+                    }
+
+                    if ( static_cast < Size > ( until ) > this->length() ) {
+                        until = static_cast < Index > ( this->length() );
+                    }
+
+                    if ( from > until ) {
+                        return * this;
+                    }
+
+                    auto leftLength         = static_cast < Size > ( from );
+                    auto sectionLength      = static_cast < Size > ( until - from );
+                    auto remainingLength    = static_cast < Size > ( this->length() - until );
+
+                    this->_length = this->length() - sectionLength + inPlace.length();
+
+                    if ( this->_length + 1ULL < this->_capacity ) {
+                        (void) std :: memmove (
+                                this->_pBuffer + until,
+                                this->_pBuffer + from,
+                                 remainingLength * sizeof ( ElementType )
+                        );
+
+                        (void) std :: memcpy (
+                                this->_pBuffer + from,
+                                inPlace.cStr(),
+                                sectionLength * sizeof ( ElementType )
+                        );
+
+                        this->_pBuffer [ this->_length ] = static_cast < ElementType > ( '\0' );
+                        return * this;
+                    }
+
+                    auto newCapacity = maxOf ( this->_length + 1ULL, BaseString :: minCapacity );
+                    auto newBuffer = __allocation :: __alloc < CharType > ( newCapacity );
+
+                    (void) std :: memcpy (
+                            newBuffer,
+                            this->_pBuffer,
+                            leftLength * sizeof ( ElementType )
+                    );
+
+                    (void) std :: memcpy (
+                            newBuffer + until,
+                            this->_pBuffer + from,
+                            remainingLength * sizeof ( ElementType )
+                    );
+
+                    (void) std :: memcpy (
+                            newBuffer + from,
+                            inPlace.cStr(),
+                            sectionLength * sizeof ( ElementType )
+                    );
+
+                    newBuffer [ this->_length ] = static_cast < ElementType > ( '\0' );
+                    this->_capacity = newCapacity;
+                    __allocation :: __free ( cds :: exchange ( this->_pBuffer, newBuffer ) );
+
+                    return * this;
+                }
+
+
+                template < typename CharType >
+                __CDS_OptionalInline auto BaseString < CharType > :: replace (
+                        Index                                   from,
+                        Index                                   until,
+                        BaseStringView < CharType >     const & inPlace
+                ) noexcept -> BaseString & {
+
+                    if ( from < 0 ) {
+                        from = 0;
+                    }
+
+                    if ( static_cast < Size > ( until ) > this->length() ) {
+                        until = static_cast < Index > ( this->length() );
+                    }
+
+                    if ( from > until ) {
+                        return * this;
+                    }
+
+                    auto leftLength         = static_cast < Size > ( from );
+                    auto sectionLength      = static_cast < Size > ( until - from );
+                    auto remainingLength    = static_cast < Size > ( this->length() - until );
+
+                    this->_length = this->length() - sectionLength + inPlace.length();
+
+                    if ( this->_length + 1ULL < this->_capacity ) {
+                        (void) std :: memmove (
+                                this->_pBuffer + until,
+                                this->_pBuffer + from,
+                                 remainingLength * sizeof ( ElementType )
+                        );
+
+                        (void) std :: memcpy (
+                                this->_pBuffer + from,
+                                inPlace.cStr(),
+                                sectionLength * sizeof ( ElementType )
+                        );
+
+                        this->_pBuffer [ this->_length ] = static_cast < ElementType > ( '\0' );
+                        return * this;
+                    }
+
+                    auto newCapacity = maxOf ( this->_length + 1ULL, BaseString :: minCapacity );
+                    auto newBuffer = __allocation :: __alloc < CharType > ( newCapacity );
+
+                    (void) std :: memcpy (
+                            newBuffer,
+                            this->_pBuffer,
+                            leftLength * sizeof ( ElementType )
+                    );
+
+                    (void) std :: memcpy (
+                            newBuffer + until,
+                            this->_pBuffer + from,
+                            remainingLength * sizeof ( ElementType )
+                    );
+
+                    (void) std :: memcpy (
+                            newBuffer + from,
+                            inPlace.cStr(),
+                            sectionLength * sizeof ( ElementType )
+                    );
+
+                    newBuffer [ this->_length ] = static_cast < ElementType > ( '\0' );
+                    this->_capacity = newCapacity;
+                    __allocation :: __free ( cds :: exchange ( this->_pBuffer, newBuffer ) );
+
+                    return * this;
+                }
+
+
+                template < typename CharType >
+                __CDS_OptionalInline auto BaseString < CharType > :: replace (
+                        Index                                       from,
+                        Index                                       until,
+                        std :: basic_string < CharType >    const & inPlace
+                ) noexcept -> BaseString & {
+
+                    if ( from < 0 ) {
+                        from = 0;
+                    }
+
+                    if ( static_cast < Size > ( until ) > this->length() ) {
+                        until = static_cast < Index > ( this->length() );
+                    }
+
+                    if ( from > until ) {
+                        return * this;
+                    }
+
+                    auto leftLength         = static_cast < Size > ( from );
+                    auto sectionLength      = static_cast < Size > ( until - from );
+                    auto remainingLength    = static_cast < Size > ( this->length() - until );
+
+                    this->_length = this->length() - sectionLength + inPlace.length();
+
+                    if ( this->_length + 1ULL < this->_capacity ) {
+                        (void) std :: memmove (
+                                this->_pBuffer + until,
+                                this->_pBuffer + from,
+                                 remainingLength * sizeof ( ElementType )
+                        );
+
+                        (void) std :: memcpy (
+                                this->_pBuffer + from,
+                                inPlace.c_str(),
+                                sectionLength * sizeof ( ElementType )
+                        );
+
+                        this->_pBuffer [ this->_length ] = static_cast < ElementType > ( '\0' );
+                        return * this;
+                    }
+
+                    auto newCapacity = maxOf ( this->_length + 1ULL, BaseString :: minCapacity );
+                    auto newBuffer = __allocation :: __alloc < CharType > ( newCapacity );
+
+                    (void) std :: memcpy (
+                            newBuffer,
+                            this->_pBuffer,
+                            leftLength * sizeof ( ElementType )
+                    );
+
+                    (void) std :: memcpy (
+                            newBuffer + until,
+                            this->_pBuffer + from,
+                            remainingLength * sizeof ( ElementType )
+                    );
+
+                    (void) std :: memcpy (
+                            newBuffer + from,
+                            inPlace.c_str(),
+                            sectionLength * sizeof ( ElementType )
+                    );
+
+                    newBuffer [ this->_length ] = static_cast < ElementType > ( '\0' );
+                    this->_capacity = newCapacity;
+                    __allocation :: __free ( cds :: exchange ( this->_pBuffer, newBuffer ) );
+
+                    return * this;
+                }
+
+
+                template < typename CharType >
+                __CDS_OptionalInline auto BaseString < CharType > :: replace (
+                        Index               from,
+                        Index               until,
+                        ElementType const * pInPlace
+                ) noexcept -> BaseString & {
+
+                    if ( from < 0 ) {
+                        from = 0;
+                    }
+
+                    if ( static_cast < Size > ( until ) > this->length() ) {
+                        until = static_cast < Index > ( this->length() );
+                    }
+
+                    if ( from > until ) {
+                        return * this;
+                    }
+
+                    auto leftLength         = static_cast < Size > ( from );
+                    auto sectionLength      = static_cast < Size > ( until - from );
+                    auto remainingLength    = static_cast < Size > ( this->length() - until );
+                    auto inPlaceLength      = StringUtils < CharType > :: length ( pInPlace );
+
+                    this->_length = this->length() - sectionLength + inPlaceLength;
+
+                    if ( this->_length + 1ULL < this->_capacity ) {
+                        (void) std :: memmove (
+                                this->_pBuffer + until,
+                                this->_pBuffer + from,
+                                 remainingLength * sizeof ( ElementType )
+                        );
+
+                        (void) std :: memcpy (
+                                this->_pBuffer + from,
+                                pInPlace,
+                                sectionLength * sizeof ( ElementType )
+                        );
+
+                        this->_pBuffer [ this->_length ] = static_cast < ElementType > ( '\0' );
+                        return * this;
+                    }
+
+                    auto newCapacity = maxOf ( this->_length + 1ULL, BaseString :: minCapacity );
+                    auto newBuffer = __allocation :: __alloc < CharType > ( newCapacity );
+
+                    (void) std :: memcpy (
+                            newBuffer,
+                            this->_pBuffer,
+                            leftLength * sizeof ( ElementType )
+                    );
+
+                    (void) std :: memcpy (
+                            newBuffer + until,
+                            this->_pBuffer + from,
+                            remainingLength * sizeof ( ElementType )
+                    );
+
+                    (void) std :: memcpy (
+                            newBuffer + from,
+                            pInPlace,
+                            sectionLength * sizeof ( ElementType )
+                    );
+
+                    newBuffer [ this->_length ] = static_cast < ElementType > ( '\0' );
+                    this->_capacity = newCapacity;
+                    __allocation :: __free ( cds :: exchange ( this->_pBuffer, newBuffer ) );
+
+                    return * this;
                 }
 
 
@@ -6568,7 +6011,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 template < typename Action >
                 auto BaseString < CharType > :: forEach (
                         Action const & action
-                ) const noexcept ( noexcept ( action ( meta :: valueOf < ElementType > () ) ) ) -> void {
+                ) noexcept ( noexcept ( action ( meta :: referenceOf < ElementType > () ) ) ) -> void {
 
                     for ( Size index = 0ULL; index < this->_length; ++ index ) {
                         action ( this->_pBuffer [ index ] );
@@ -6580,11 +6023,317 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 template < typename Action >
                 auto BaseString < CharType > :: forEach (
                         Action const & action
-                ) noexcept ( noexcept ( action ( meta :: referenceOf < ElementType > () ) ) ) -> void {
+                ) const noexcept ( noexcept ( action ( meta :: valueOf < ElementType > () ) ) ) -> void {
 
                     for ( Size index = 0ULL; index < this->_length; ++ index ) {
                         action ( this->_pBuffer [ index ] );
                     }
+                }
+
+
+                template < typename CharType >
+                template < typename Predicate >
+                auto BaseString < CharType > :: some (
+                        Size                count,
+                        Predicate   const & predicate
+                ) noexcept ( noexcept ( predicate ( meta :: referenceOf < ElementType > () ) ) ) -> bool {
+
+                    Size trueCount = 0ULL;
+                    for ( Size index = 0ULL; index < this->_length; ++ index ) {
+                        if ( predicate ( this->_pBuffer [ index ] ) ) {
+                            ++ trueCount;
+                        }
+
+                        if ( trueCount > count ) {
+                            return false;
+                        }
+                    }
+
+                    return trueCount == count;
+                }
+
+
+                template < typename CharType >
+                template < typename Predicate >
+                auto BaseString < CharType > :: some (
+                        Size                count,
+                        Predicate   const & predicate
+                ) const noexcept ( noexcept ( predicate ( meta :: valueOf < ElementType > () ) ) ) -> bool {
+
+                    Size trueCount = 0ULL;
+                    for ( Size index = 0ULL; index < this->_length; ++ index ) {
+                        if ( predicate ( this->_pBuffer [ index ] ) ) {
+                            ++ trueCount;
+                        }
+
+                        if ( trueCount > count ) {
+                            return false;
+                        }
+                    }
+
+                    return trueCount == count;
+                }
+
+
+                template < typename CharType >
+                template < typename Predicate >
+                auto BaseString < CharType > :: atLeast (
+                        Size                count,
+                        Predicate   const & predicate
+                ) noexcept ( noexcept ( predicate ( meta :: referenceOf < ElementType > () ) ) ) -> bool {
+
+                    Size trueCount = 0ULL;
+                    for ( Size index = 0ULL; index < this->_length; ++ index ) {
+                        if ( predicate ( this->_pBuffer [ index ] ) ) {
+                            ++ trueCount;
+                        }
+
+                        if ( trueCount >= count ) {
+                            return true;
+                        }
+                    }
+
+                    return false;
+                }
+
+
+                template < typename CharType >
+                template < typename Predicate >
+                auto BaseString < CharType > :: atLeast (
+                        Size                count,
+                        Predicate   const & predicate
+                ) const noexcept ( noexcept ( predicate ( meta :: valueOf < ElementType > () ) ) ) -> bool {
+
+                    Size trueCount = 0ULL;
+                    for ( Size index = 0ULL; index < this->_length; ++ index ) {
+                        if ( predicate ( this->_pBuffer [ index ] ) ) {
+                            ++ trueCount;
+                        }
+
+                        if ( trueCount >= count ) {
+                            return true;
+                        }
+                    }
+
+                    return false;
+                }
+
+
+                template < typename CharType >
+                template < typename Predicate >
+                auto BaseString < CharType > :: atMost (
+                        Size                count,
+                        Predicate   const & predicate
+                ) noexcept ( noexcept ( predicate ( meta :: referenceOf < ElementType > () ) ) ) -> bool {
+
+                    Size trueCount = 0ULL;
+                    for ( Size index = 0ULL; index < this->_length; ++ index ) {
+                        if ( predicate ( this->_pBuffer [ index ] ) ) {
+                            ++ trueCount;
+                        }
+
+                        if ( trueCount > count ) {
+                            return false;
+                        }
+                    }
+
+                    return true;
+                }
+
+
+                template < typename CharType >
+                template < typename Predicate >
+                auto BaseString < CharType > :: atMost (
+                        Size                count,
+                        Predicate   const & predicate
+                ) const noexcept ( noexcept ( predicate ( meta :: valueOf < ElementType > () ) ) ) -> bool {
+
+                    Size trueCount = 0ULL;
+                    for ( Size index = 0ULL; index < this->_length; ++ index ) {
+                        if ( predicate ( this->_pBuffer [ index ] ) ) {
+                            ++ trueCount;
+                        }
+
+                        if ( trueCount > count ) {
+                            return false;
+                        }
+                    }
+
+                    return true;
+                }
+
+
+                template < typename CharType >
+                template < typename Predicate >
+                __CDS_OptimalInline auto BaseString < CharType > :: moreThan (
+                        Size                count,
+                        Predicate   const & predicate
+                ) noexcept ( noexcept ( predicate ( meta :: referenceOf < ElementType > () ) ) ) -> bool {
+
+                    return this->atLeast ( count + 1, predicate );
+                }
+
+
+                template < typename CharType >
+                template < typename Predicate >
+                __CDS_OptimalInline auto BaseString < CharType > :: moreThan (
+                        Size                count,
+                        Predicate   const & predicate
+                ) const noexcept ( noexcept ( predicate ( meta :: valueOf < ElementType > () ) ) ) -> bool {
+
+                    return this->atLeast ( count + 1, predicate );
+                }
+
+
+                template < typename CharType >
+                template < typename Predicate >
+                __CDS_OptimalInline auto BaseString < CharType > :: fewerThan (
+                        Size                count,
+                        Predicate   const & predicate
+                ) noexcept ( noexcept ( predicate ( meta :: referenceOf < ElementType > () ) ) ) -> bool {
+
+                    return this->atMost ( count - 1, predicate );
+                }
+
+
+                template < typename CharType >
+                template < typename Predicate >
+                __CDS_OptimalInline auto BaseString < CharType > :: fewerThan (
+                        Size                count,
+                        Predicate   const & predicate
+                ) const noexcept ( noexcept ( predicate ( meta :: valueOf < ElementType > () ) ) ) -> bool {
+
+                    return this->atMost ( count - 1, predicate );
+                }
+
+
+                template < typename CharType >
+                template < typename Predicate >
+                auto BaseString < CharType > :: count (
+                        Predicate const & predicate
+                ) noexcept ( noexcept ( predicate ( meta :: referenceOf < ElementType > () ) ) ) -> Size {
+
+                    Size trueCount = 0U;
+                    for ( Size index = 0ULL; index < this->_length; ++ index ) {
+                        if ( predicate ( this->_pBuffer [ index ] ) ) {
+                            ++ trueCount;
+                        }
+                    }
+
+                    return trueCount;
+                }
+
+
+                template < typename CharType >
+                template < typename Predicate >
+                auto BaseString < CharType > :: count (
+                        Predicate const & predicate
+                ) const noexcept ( noexcept ( predicate ( meta :: valueOf < ElementType > () ) ) ) -> Size {
+
+                    Size trueCount = 0U;
+                    for ( Size index = 0ULL; index < this->_length; ++ index ) {
+                        if ( predicate ( this->_pBuffer [ index ] ) ) {
+                            ++ trueCount;
+                        }
+                    }
+
+                    return trueCount;
+                }
+
+
+                template < typename CharType >
+                template < typename Predicate >
+                auto BaseString < CharType > :: any (
+                        Predicate const & predicate
+                ) noexcept ( noexcept ( predicate ( meta :: referenceOf < ElementType > () ) ) ) -> bool {
+
+                    for ( Size index = 0ULL; index < this->_length; ++ index ) {
+                        if ( predicate ( this->_pBuffer [ index ] ) ) {
+                            return true;
+                        }
+                    }
+
+                    return false;
+                }
+
+
+                template < typename CharType >
+                template < typename Predicate >
+                auto BaseString < CharType > :: any (
+                        Predicate const & predicate
+                ) const noexcept ( noexcept ( predicate ( meta :: valueOf < ElementType > () ) ) ) -> bool {
+
+                    for ( Size index = 0ULL; index < this->_length; ++ index ) {
+                        if ( predicate ( this->_pBuffer [ index ] ) ) {
+                            return true;
+                        }
+                    }
+
+                    return false;
+                }
+
+
+                template < typename CharType >
+                template < typename Predicate >
+                auto BaseString < CharType > :: all (
+                        Predicate const & predicate
+                ) noexcept ( noexcept ( predicate ( meta :: referenceOf < ElementType > () ) ) ) -> bool {
+
+                    for ( Size index = 0ULL; index < this->_length; ++ index ) {
+                        if ( ! predicate ( this->_pBuffer [ index ] ) ) {
+                            return false;
+                        }
+                    }
+
+                    return true;
+                }
+
+
+                template < typename CharType >
+                template < typename Predicate >
+                auto BaseString < CharType > :: all (
+                        Predicate const & predicate
+                ) const noexcept ( noexcept ( predicate ( meta :: valueOf < ElementType > () ) ) ) -> bool {
+
+                    for ( Size index = 0ULL; index < this->_length; ++ index ) {
+                        if ( ! predicate ( this->_pBuffer [ index ] ) ) {
+                            return false;
+                        }
+                    }
+
+                    return true;
+                }
+
+
+                template < typename CharType >
+                template < typename Predicate >
+                auto BaseString < CharType > :: none (
+                        Predicate const & predicate
+                ) noexcept ( noexcept ( predicate ( meta :: referenceOf < ElementType > () ) ) ) -> bool {
+
+                    for ( Size index = 0ULL; index < this->_length; ++ index ) {
+                        if ( predicate ( this->_pBuffer [ index ] ) ) {
+                            return false;
+                        }
+                    }
+
+                    return true;
+                }
+
+
+                template < typename CharType >
+                template < typename Predicate >
+                auto BaseString < CharType > :: none (
+                        Predicate const & predicate
+                ) const noexcept ( noexcept ( predicate ( meta :: valueOf < ElementType > () ) ) ) -> bool {
+
+                    for ( Size index = 0ULL; index < this->_length; ++ index ) {
+                        if ( predicate ( this->_pBuffer [ index ] ) ) {
+                            return false;
+                        }
+                    }
+
+                    return true;
                 }
 
 #if defined(CDS_STRING_DEBUG)
