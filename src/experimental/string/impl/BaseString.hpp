@@ -6294,7 +6294,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                     Index   currentSegmentOffset    = 0;
                     Size    currentSegmentLength    = 0ULL;
 
-                    for ( Size index = 0ULL; index < this->length(); ++ index ) {
+                    for ( Index index = 0ULL; index < static_cast < Index > ( this->length() ); ++ index ) {
                         if ( this->_pBuffer [ index ] != separator || splitIndex >= static_cast < Index > ( maxCount ) - 1 ) {
                             ++ currentSegmentLength;
                         } else {
@@ -6306,7 +6306,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                             ++ splitIndex;
                             storeIn.add ( BaseString ( this->_pBuffer + currentSegmentOffset, currentSegmentLength ) );
                             currentSegmentLength = 0ULL;
-                            currentSegmentOffset = static_cast < Index > ( index ) + 1ULL;
+                            currentSegmentOffset = index + 1;
                         }
                     }
 
@@ -6315,6 +6315,227 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                     }
 
                     return storeIn;
+                }
+
+
+                template < typename CharType >
+                template < template < typename ... > class ListType >
+                __CDS_OptimalInline auto BaseString < CharType > :: split (
+                        ElementType separator,
+                        Size        maxCount
+                ) const noexcept -> ListType < BaseString > {
+
+                    ListType < BaseString > tokens;
+                    return this->split ( separator, tokens, maxCount );
+                }
+
+
+                template < typename CharType >
+                template < typename ListType >
+                auto BaseString < CharType > :: split (
+                        BaseString  const & separators,
+                        ListType          & storeIn,
+                        Size                maxCount
+                ) const noexcept -> ListType & {
+
+                    Index splitIndex = 0;
+                    if ( this->empty() ) {
+                        return storeIn;
+                    }
+
+                    Index   currentSegmentOffset    = 0;
+                    Size    currentSegmentLength    = 0ULL;
+
+                    for ( Index index = 0ULL; index < static_cast < Index > ( this->length() ); ++ index ) {
+                        if ( ! separators.contains ( this->_pBuffer [ index ] ) || splitIndex >= static_cast < Index > ( maxCount ) - 1 ) {
+                            ++ currentSegmentLength;
+                        } else {
+
+                            if ( currentSegmentLength == 0ULL ) {
+                                continue;
+                            }
+
+                            ++ splitIndex;
+                            storeIn.add ( BaseString ( this->_pBuffer + currentSegmentOffset, currentSegmentLength ) );
+                            currentSegmentLength = 0ULL;
+                            currentSegmentOffset = index + 1;
+                        }
+                    }
+
+                    if ( currentSegmentLength != 0ULL ) {
+                        storeIn.add ( BaseString ( this->_pBuffer + currentSegmentOffset, currentSegmentLength ) );
+                    }
+
+                    return storeIn;
+                }
+
+
+                template < typename CharType >
+                template < template < typename ... > class ListType >
+                __CDS_OptimalInline auto BaseString < CharType > :: split (
+                        BaseString  const & separators,
+                        Size                maxCount
+                ) const noexcept -> ListType < BaseString > {
+
+                    ListType < BaseString > tokens;
+                    return this->split ( separators, tokens, maxCount );
+                }
+
+
+                template < typename CharType >
+                template < typename ListType >
+                auto BaseString < CharType > :: split (
+                        BaseStringView < CharType > const & separators,
+                        ListType                          & storeIn,
+                        Size                                maxCount
+                ) const noexcept -> ListType & {
+
+                    Index splitIndex = 0;
+                    if ( this->empty() ) {
+                        return storeIn;
+                    }
+
+                    Index   currentSegmentOffset    = 0;
+                    Size    currentSegmentLength    = 0ULL;
+
+                    for ( Index index = 0ULL; index < static_cast < Index > ( this->length() ); ++ index ) {
+                        if ( ! separators.contains ( this->_pBuffer [ index ] ) || splitIndex >= static_cast < Index > ( maxCount ) - 1 ) {
+                            ++ currentSegmentLength;
+                        } else {
+
+                            if ( currentSegmentLength == 0ULL ) {
+                                continue;
+                            }
+
+                            ++ splitIndex;
+                            storeIn.add ( BaseString ( this->_pBuffer + currentSegmentOffset, currentSegmentLength ) );
+                            currentSegmentLength = 0ULL;
+                            currentSegmentOffset = index + 1;
+                        }
+                    }
+
+                    if ( currentSegmentLength != 0ULL ) {
+                        storeIn.add ( BaseString ( this->_pBuffer + currentSegmentOffset, currentSegmentLength ) );
+                    }
+
+                    return storeIn;
+                }
+
+
+                template < typename CharType >
+                template < template < typename ... > class ListType >
+                __CDS_OptimalInline auto BaseString < CharType > :: split (
+                        BaseStringView < CharType > const & separators,
+                        Size                                maxCount
+                ) const noexcept -> ListType < BaseString > {
+
+                    ListType < BaseString > tokens;
+                    return this->split ( separators, tokens, maxCount );
+                }
+
+
+                template < typename CharType >
+                template < typename ListType >
+                auto BaseString < CharType > :: split (
+                        std :: basic_string < CharType >    const & separators,
+                        ListType                                  & storeIn,
+                        Size                                        maxCount
+                ) const noexcept -> ListType & {
+
+                    Index splitIndex = 0;
+                    if ( this->empty() ) {
+                        return storeIn;
+                    }
+
+                    Index   currentSegmentOffset    = 0;
+                    Size    currentSegmentLength    = 0ULL;
+
+                    for ( Index index = 0ULL; index < static_cast < Index > ( this->length() ); ++ index ) {
+                        if ( ! StringUtils < CharType > :: contains ( separators.c_str(), separators.length(), this->_pBuffer [ index ] ) || splitIndex >= static_cast < Index > ( maxCount ) - 1 ) {
+                            ++ currentSegmentLength;
+                        } else {
+
+                            if ( currentSegmentLength == 0ULL ) {
+                                continue;
+                            }
+
+                            ++ splitIndex;
+                            storeIn.add ( BaseString ( this->_pBuffer + currentSegmentOffset, currentSegmentLength ) );
+                            currentSegmentLength = 0ULL;
+                            currentSegmentOffset = index + 1;
+                        }
+                    }
+
+                    if ( currentSegmentLength != 0ULL ) {
+                        storeIn.add ( BaseString ( this->_pBuffer + currentSegmentOffset, currentSegmentLength ) );
+                    }
+
+                    return storeIn;
+                }
+
+
+                template < typename CharType >
+                template < template < typename ... > class ListType >
+                __CDS_OptimalInline auto BaseString < CharType > :: split (
+                        std :: basic_string < CharType >    const & separators,
+                        Size                                        maxCount
+                ) const noexcept -> ListType < BaseString > {
+
+                    ListType < BaseString > tokens;
+                    return this->split ( separators, tokens, maxCount );
+                }
+
+
+                template < typename CharType >
+                template < typename ListType >
+                auto BaseString < CharType > :: split (
+                        ElementType                         const * pSeparators,
+                        ListType                                  & storeIn,
+                        Size                                        maxCount
+                ) const noexcept -> ListType & {
+
+                    Index splitIndex = 0;
+                    if ( this->empty() ) {
+                        return storeIn;
+                    }
+
+                    Index   currentSegmentOffset    = 0;
+                    Size    currentSegmentLength    = 0ULL;
+                    auto    separatorsLength        = StringUtils < CharType > :: length ( pSeparators );
+
+                    for ( Index index = 0ULL; index < static_cast < Index > ( this->length() ); ++ index ) {
+                        if ( ! StringUtils < CharType > :: contains ( pSeparators, separatorsLength, this->_pBuffer [ index ] ) || splitIndex >= static_cast < Index > ( maxCount ) - 1 ) {
+                            ++ currentSegmentLength;
+                        } else {
+
+                            if ( currentSegmentLength == 0ULL ) {
+                                continue;
+                            }
+
+                            ++ splitIndex;
+                            storeIn.add ( BaseString ( this->_pBuffer + currentSegmentOffset, currentSegmentLength ) );
+                            currentSegmentLength = 0ULL;
+                            currentSegmentOffset = index + 1;
+                        }
+                    }
+
+                    if ( currentSegmentLength != 0ULL ) {
+                        storeIn.add ( BaseString ( this->_pBuffer + currentSegmentOffset, currentSegmentLength ) );
+                    }
+
+                    return storeIn;
+                }
+
+
+                template < typename CharType >
+                template < template < typename ... > class ListType >
+                __CDS_OptimalInline auto BaseString < CharType > :: split (
+                        ElementType                         const * pSeparators,
+                        Size                                        maxCount
+                ) const noexcept -> ListType < BaseString > {
+
+                    ListType < BaseString > tokens;
+                    return this->split ( pSeparators, tokens, maxCount );
                 }
 
 
