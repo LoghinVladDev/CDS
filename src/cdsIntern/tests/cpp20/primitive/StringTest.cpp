@@ -1622,7 +1622,7 @@ auto StringTest::execute() noexcept -> bool {
         }
 
 #define __FROM_RAW_CONSTRUCT(_typename, _initval) /* NOLINT(bugprone-reserved-identifier) */ { \
-        experimental :: String fromRaw ## _typename = (_typename) (_initval);                                  \
+        experimental :: String fromRaw ## _typename = experimental :: String ((_typename) (_initval));                                  \
                                                                                                \
         this->log("String constructed from %s. Intended : '%s', Result : '%s'. Diag : '%s'", # _typename, # _initval, fromRaw ## _typename.cStr(), fromRaw ## _typename.diag().cStr()); \
                                                                                                \
@@ -1647,7 +1647,7 @@ auto StringTest::execute() noexcept -> bool {
         __FROM_RAW_CONSTRUCT(double, 95232.000000);
         __FROM_RAW_CONSTRUCT(double, -3200.000000);
 
-        experimental :: String fromRawSizeT = (std::size_t) (1234);
+        experimental :: String fromRawSizeT = experimental :: String ( (std::size_t) (1234) );
 
         this->log("String constructed from std::size_t. Intended : '%d', Result : '%s'. Diag : '%s'", 1234, fromRawSizeT.cStr(), fromRawSizeT.diag().cStr());
         if ( std::strcmp ( fromRawSizeT.cStr(), "1234" ) != 0 ) {
@@ -1655,14 +1655,14 @@ auto StringTest::execute() noexcept -> bool {
             allOk = false;
         }
 
-        experimental :: String fromAddress = Type < int > ::unsafeAddress ();
+        experimental :: String fromAddress = experimental :: String ( Type < int > ::unsafeAddress () );
 
         this->log("String constructed from raw address. Intended : '%d', Result : '%s'. Diag : '%s'", 16, fromAddress.cStr(), fromAddress.diag().cStr());
         if ( std::strcmp ( fromAddress.cStr(), "16" ) != 0 ) {
             this->logWarning("String from raw address construction error");
         }
 
-        experimental :: String fromConstAddress = Type < int > :: unsafeConstAddress ();
+        experimental :: String fromConstAddress = experimental :: String ( Type < int > :: unsafeConstAddress () );
 
         this->log("String constructed from raw const address. Intended : '%d', Result : '%s'. Diag : '%s'", 16, fromConstAddress.cStr(), fromConstAddress.diag().cStr());
         if ( std::strcmp ( fromConstAddress.cStr(), "16" ) != 0 ) {

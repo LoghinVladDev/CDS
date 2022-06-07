@@ -66,6 +66,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
 
                 template < typename CharType >
+                template < typename T, meta :: EnableIf < meta :: isStringCharType < T > () > >
                 constexpr BaseStringView < CharType > :: BaseStringView (
                         ElementType const * pString
                 ) noexcept :
@@ -890,7 +891,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                             string.length()
                     );
 
-                    return string;
+                    return result;
                 }
 
 
@@ -913,7 +914,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
 
                 template < typename CharType >
-                template < typename T, meta :: EnableIf < meta :: isSame < T, uint8 > () > >
+                template < typename T, meta :: EnableIf < meta :: isStringCharType < T > () > >
                 auto BaseStringView < CharType > :: operator + (
                         ElementType character
                 ) const noexcept -> BaseString < CharType > {
@@ -941,229 +942,9 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
 
                 template < typename CharType >
-                template < typename T, meta :: EnableIf < meta :: isSame < T, uint16 > () > >
+                template < typename NumericType, meta :: EnableIf < meta :: isIntegralToString < CharType, NumericType > () > >
                 auto BaseStringView < CharType > :: operator + (
-                        ElementType character
-                ) const noexcept -> BaseString < CharType > {
-
-                    BaseString < CharType > result;
-
-                    result._length      = this->length() + 1ULL;
-                    result._capacity    = maxOf ( result._length + 1U, __allocation :: minCapacity );
-                    result._pBuffer     = __allocation :: __alloc < CharType > ( result._capacity );
-
-                    StringUtils < CharType > :: copy (
-                            result.data(),
-                            0ULL,
-                            this->cStr(),
-                            0ULL,
-                            this->length(),
-                            false
-                    );
-
-                    result._pBuffer [ result._length - 1ULL ]   = character;
-                    result._pBuffer [ result._length ]          = static_cast < ElementType > ( character );
-
-                    return result;
-                }
-
-
-                template < typename CharType >
-                template < typename T, meta :: EnableIf < meta :: isSame < T, sint8 > () > >
-                auto BaseStringView < CharType > :: operator + (
-                        ElementType character
-                ) const noexcept -> BaseString < CharType > {
-
-                    BaseString < CharType > result;
-
-                    result._length      = this->length() + 1ULL;
-                    result._capacity    = maxOf ( result._length + 1U, __allocation :: minCapacity );
-                    result._pBuffer     = __allocation :: __alloc < CharType > ( result._capacity );
-
-                    StringUtils < CharType > :: copy (
-                            result.data(),
-                            0ULL,
-                            this->cStr(),
-                            0ULL,
-                            this->length(),
-                            false
-                    );
-
-                    result._pBuffer [ result._length - 1ULL ]   = character;
-                    result._pBuffer [ result._length ]          = static_cast < ElementType > ( character );
-
-                    return result;
-                }
-
-
-                template < typename CharType >
-                template < typename T, meta :: EnableIf < meta :: isSame < T, sint16 > () > >
-                auto BaseStringView < CharType > :: operator + (
-                        ElementType character
-                ) const noexcept -> BaseString < CharType > {
-
-                    BaseString < CharType > result;
-
-                    result._length      = this->length() + 1ULL;
-                    result._capacity    = maxOf ( result._length + 1U, __allocation :: minCapacity );
-                    result._pBuffer     = __allocation :: __alloc < CharType > ( result._capacity );
-
-                    StringUtils < CharType > :: copy (
-                            result.data(),
-                            0ULL,
-                            this->cStr(),
-                            0ULL,
-                            this->length(),
-                            false
-                    );
-
-                    result._pBuffer [ result._length - 1ULL ]   = character;
-                    result._pBuffer [ result._length ]          = static_cast < ElementType > ( character );
-
-                    return result;
-                }
-
-
-                template < typename CharType >
-                template < typename T, meta :: EnableIf < ! meta :: isSame < T, uint8 > () > >
-                auto BaseStringView < CharType > :: operator + (
-                        uint8 value
-                ) const noexcept -> BaseString < CharType > {
-
-                    BaseString < CharType > result;
-                    auto valueLength = StringUtils < CharType > :: integerLength ( value );
-
-                    result._length      = this->length() + valueLength;
-                    result._capacity    = maxOf ( result._length + 1U, __allocation :: minCapacity );
-                    result._pBuffer     = __allocation :: __alloc < CharType > ( result._capacity );
-
-                    StringUtils < CharType > :: copy (
-                            result.data(),
-                            0ULL,
-                            this->_pData,
-                            0ULL,
-                            this->length(),
-                            false
-                    );
-
-                    * StringUtils < CharType > :: writeInteger (
-                            result.data(),
-                            this->length(),
-                            value,
-                            valueLength,
-                            nullptr
-                    ) = static_cast < ElementType > ( '\0' );
-
-                    return result;
-                }
-
-
-                template < typename CharType >
-                template < typename T, meta :: EnableIf < ! meta :: isSame < T, uint16 > () > >
-                auto BaseStringView < CharType > :: operator + (
-                        uint16 value
-                ) const noexcept -> BaseString < CharType > {
-
-                    BaseString < CharType > result;
-                    auto valueLength = StringUtils < CharType > :: integerLength ( value );
-
-                    result._length      = this->length() + valueLength;
-                    result._capacity    = maxOf ( result._length + 1U, __allocation :: minCapacity );
-                    result._pBuffer     = __allocation :: __alloc < CharType > ( result._capacity );
-
-                    StringUtils < CharType > :: copy (
-                            result.data(),
-                            0ULL,
-                            this->_pData,
-                            0ULL,
-                            this->length(),
-                            false
-                    );
-
-                    * StringUtils < CharType > :: writeInteger (
-                            result.data(),
-                            this->length(),
-                            value,
-                            valueLength,
-                            nullptr
-                    ) = static_cast < ElementType > ( '\0' );
-
-                    return result;
-                }
-
-
-                template < typename CharType >
-                template < typename T, meta :: EnableIf < ! meta :: isSame < T, sint8 > () > >
-                auto BaseStringView < CharType > :: operator + (
-                        sint8 value
-                ) const noexcept -> BaseString < CharType > {
-
-                    BaseString < CharType > result;
-                    auto valueLength = StringUtils < CharType > :: integerLength ( value );
-
-                    result._length      = this->length() + valueLength;
-                    result._capacity    = maxOf ( result._length + 1U, __allocation :: minCapacity );
-                    result._pBuffer     = __allocation :: __alloc < CharType > ( result._capacity );
-
-                    StringUtils < CharType > :: copy (
-                            result.data(),
-                            0ULL,
-                            this->_pData,
-                            0ULL,
-                            this->length(),
-                            false
-                    );
-
-                    * StringUtils < CharType > :: writeInteger (
-                            result.data(),
-                            this->length(),
-                            value,
-                            valueLength,
-                            nullptr
-                    ) = static_cast < ElementType > ( '\0' );
-
-                    return result;
-                }
-
-
-                template < typename CharType >
-                template < typename T, meta :: EnableIf < ! meta :: isSame < T, sint16 > () > >
-                auto BaseStringView < CharType > :: operator + (
-                        sint16 value
-                ) const noexcept -> BaseString < CharType > {
-
-                    BaseString < CharType > result;
-                    auto valueLength = StringUtils < CharType > :: integerLength ( value );
-
-                    result._length      = this->length() + valueLength;
-                    result._capacity    = maxOf ( result._length + 1U, __allocation :: minCapacity );
-                    result._pBuffer     = __allocation :: __alloc < CharType > ( result._capacity );
-
-                    StringUtils < CharType > :: copy (
-                            result.data(),
-                            0ULL,
-                            this->_pData,
-                            0ULL,
-                            this->length(),
-                            false
-                    );
-
-                    * StringUtils < CharType > :: writeInteger (
-                            result.data(),
-                            this->length(),
-                            value,
-                            valueLength,
-                            nullptr
-                    ) = static_cast < ElementType > ( '\0' );
-
-                    return result;
-                }
-
-
-                template < typename CharType >
-                template < typename T, meta :: EnableIf < ! meta :: isSame < T, uint64 > () > >
-                auto BaseStringView < CharType > :: operator + (
-                        std :: size_t value
+                        NumericType value
                 ) const noexcept -> BaseString < CharType > {
 
                     BaseString < CharType > result;
@@ -1228,158 +1009,9 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
 
                 template < typename CharType >
-                auto BaseStringView < CharType > :: operator + (
-                        uint32 value
-                ) const noexcept -> BaseString < CharType > {
-
-                    BaseString < CharType > result;
-                    auto valueLength = StringUtils < CharType > :: integerLength ( value );
-
-                    result._length      = this->length() + valueLength;
-                    result._capacity    = maxOf ( result._length + 1U, __allocation :: minCapacity );
-                    result._pBuffer     = __allocation :: __alloc < CharType > ( result._capacity );
-
-                    StringUtils < CharType > :: copy (
-                            result.data(),
-                            0ULL,
-                            this->_pData,
-                            0ULL,
-                            this->length(),
-                            false
-                    );
-
-                    * StringUtils < CharType > :: writeInteger (
-                            result.data(),
-                            this->length(),
-                            value,
-                            valueLength,
-                            nullptr
-                    ) = static_cast < ElementType > ( '\0' );
-
-                    return result;
-                }
-
-
-                template < typename CharType >
-                auto BaseStringView < CharType > :: operator + (
-                        uint64 value
-                ) const noexcept -> BaseString < CharType > {
-
-                    BaseString < CharType > result;
-                    auto valueLength = StringUtils < CharType > :: integerLength ( value );
-
-                    result._length      = this->length() + valueLength;
-                    result._capacity    = maxOf ( result._length + 1U, __allocation :: minCapacity );
-                    result._pBuffer     = __allocation :: __alloc < CharType > ( result._capacity );
-
-                    StringUtils < CharType > :: copy (
-                            result.data(),
-                            0ULL,
-                            this->_pData,
-                            0ULL,
-                            this->length(),
-                            false
-                    );
-
-                    * StringUtils < CharType > :: writeInteger (
-                            result.data(),
-                            this->length(),
-                            value,
-                            valueLength,
-                            nullptr
-                    ) = static_cast < ElementType > ( '\0' );
-
-                    return result;
-                }
-
-
-                template < typename CharType >
-                auto BaseStringView < CharType > :: operator + (
-                        sint32 value
-                ) const noexcept -> BaseString < CharType > {
-
-                    BaseString < CharType > result;
-                    auto valueLength = StringUtils < CharType > :: integerLength ( value );
-
-                    result._length      = this->length() + valueLength;
-                    result._capacity    = maxOf ( result._length + 1U, __allocation :: minCapacity );
-                    result._pBuffer     = __allocation :: __alloc < CharType > ( result._capacity );
-
-                    StringUtils < CharType > :: copy (
-                            result.data(),
-                            0ULL,
-                            this->_pData,
-                            0ULL,
-                            this->length(),
-                            false
-                    );
-
-                    * StringUtils < CharType > :: writeInteger (
-                            result.data(),
-                            this->length(),
-                            value,
-                            valueLength,
-                            nullptr
-                    ) = static_cast < ElementType > ( '\0' );
-
-                    return result;
-                }
-
-
-                template < typename CharType >
-                auto BaseStringView < CharType > :: operator + (
-                        sint64 value
-                ) const noexcept -> BaseString < CharType > {
-
-                    BaseString < CharType > result;
-                    auto valueLength = StringUtils < CharType > :: integerLength ( value );
-
-                    result._length      = this->length() + valueLength;
-                    result._capacity    = maxOf ( result._length + 1U, __allocation :: minCapacity );
-                    result._pBuffer     = __allocation :: __alloc < CharType > ( result._capacity );
-
-                    StringUtils < CharType > :: copy (
-                            result.data(),
-                            0ULL,
-                            this->_pData,
-                            0ULL,
-                            this->length(),
-                            false
-                    );
-
-                    * StringUtils < CharType > :: writeInteger (
-                            result.data(),
-                            this->length(),
-                            value,
-                            valueLength,
-                            nullptr
-                    ) = static_cast < ElementType > ( '\0' );
-
-                    return result;
-                }
-
-
-                template < typename CharType >
+                template < typename FloatingPointType, meta :: EnableIf < meta :: isFloatingPoint < FloatingPointType > () > >
                 __CDS_OptimalInline auto BaseStringView < CharType > :: operator + (
-                        float value
-                ) const noexcept -> BaseString < CharType > {
-
-                    return this->operator + ( BaseStringView ( std :: to_string ( value ) ) );
-                }
-
-
-                template < typename CharType >
-                __CDS_OptimalInline auto BaseStringView < CharType > :: operator + (
-                        double value
-                ) const noexcept -> BaseString < CharType > {
-
-                    return this->operator + ( BaseStringView ( std :: to_string ( value ) ) );
-                }
-
-
-                template < typename CharType >
-                __CDS_OptimalInline auto BaseStringView < CharType > :: operator + (
-                        long double value
+                        FloatingPointType value
                 ) const noexcept -> BaseString < CharType > {
 
                     return this->operator + ( BaseStringView ( std :: to_string ( value ) ) );
@@ -1406,7 +1038,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 }
 
 
-                template < typename FCharType, meta :: EnableIf < meta :: isSame < FCharType, uint8 > () > = 0 >
+                template < typename FCharType, meta :: EnableIf < meta :: isStringCharType < FCharType > () > = 0 >
                 auto operator + (
                         FCharType                               character,
                         BaseStringView < FCharType >    const & string
@@ -1434,225 +1066,9 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 }
 
 
-                template < typename FCharType, meta :: EnableIf < meta :: isSame < FCharType, uint16 > () > = 0 >
+                template < typename FCharType, typename NumericType, meta :: EnableIf < meta :: isIntegralToString < FCharType, NumericType > () > = 0 >
                 auto operator + (
-                        FCharType                               character,
-                        BaseStringView < FCharType >    const & string
-                ) noexcept -> BaseString < FCharType > {
-
-                    BaseString < FCharType > result;
-
-                    result._length      = string.length() + 1ULL;
-                    result._capacity    = maxOf ( result._length + 1U, __allocation :: minCapacity );
-                    result._pBuffer     = __allocation :: __alloc < FCharType > ( result._capacity );
-
-                    result._pBuffer [ 0 ] = character;
-
-                    StringUtils < FCharType > :: copy (
-                            result.data(),
-                            1ULL,
-                            string._pData,
-                            0ULL,
-                            string.length()
-                    );
-
-                    result._pBuffer [ result._length ]          = static_cast < FCharType > ( character );
-
-                    return result;
-                }
-
-
-                template < typename FCharType, meta :: EnableIf < meta :: isSame < FCharType, sint8 > () > = 0 >
-                auto operator + (
-                        FCharType                               character,
-                        BaseStringView < FCharType >    const & string
-                ) noexcept -> BaseString < FCharType > {
-
-                    BaseString < FCharType > result;
-
-                    result._length      = string.length() + 1ULL;
-                    result._capacity    = maxOf ( result._length + 1U, __allocation :: minCapacity );
-                    result._pBuffer     = __allocation :: __alloc < FCharType > ( result._capacity );
-
-                    result._pBuffer [ 0 ] = character;
-
-                    StringUtils < FCharType > :: copy (
-                            result.data(),
-                            1ULL,
-                            string._pData,
-                            0ULL,
-                            string.length()
-                    );
-
-                    result._pBuffer [ result._length ]          = static_cast < FCharType > ( character );
-
-                    return result;
-                }
-
-
-                template < typename FCharType, meta :: EnableIf < meta :: isSame < FCharType, sint16 > () > = 0 >
-                auto operator + (
-                        FCharType                               character,
-                        BaseStringView < FCharType >    const & string
-                ) noexcept -> BaseString < FCharType > {
-
-                    BaseString < FCharType > result;
-
-                    result._length      = string.length() + 1ULL;
-                    result._capacity    = maxOf ( result._length + 1U, __allocation :: minCapacity );
-                    result._pBuffer     = __allocation :: __alloc < FCharType > ( result._capacity );
-
-                    result._pBuffer [ 0 ] = character;
-
-                    StringUtils < FCharType > :: copy (
-                            result.data(),
-                            1ULL,
-                            string._pData,
-                            0ULL,
-                            string.length()
-                    );
-
-                    result._pBuffer [ result._length ]          = static_cast < FCharType > ( character );
-
-                    return result;
-                }
-
-
-                template < typename FCharType, meta :: EnableIf < ! meta :: isSame < FCharType, uint8 > () > = 0 >
-                auto operator + (
-                        uint8                                   value,
-                        BaseStringView < FCharType >    const & string
-                ) noexcept -> BaseString < FCharType > {
-
-                    BaseString < FCharType > result;
-                    auto valueLength = StringUtils < FCharType > :: integerLength ( value );
-
-                    result._length      = string.length() + valueLength;
-                    result._capacity    = maxOf ( result._length + 1U, __allocation :: minCapacity );
-                    result._pBuffer     = __allocation :: __alloc < FCharType > ( result._capacity );
-
-                    (void) StringUtils < FCharType > :: writeInteger (
-                            result.data(),
-                            0ULL,
-                            value,
-                            valueLength,
-                            nullptr
-                    );
-
-                    StringUtils < FCharType > :: copy (
-                            result.data(),
-                            valueLength,
-                            string._pData,
-                            0ULL,
-                            string.length()
-                    );
-
-                    return result;
-                }
-
-
-                template < typename FCharType, meta :: EnableIf < ! meta :: isSame < FCharType, uint16 > () > = 0 >
-                auto operator + (
-                        uint16                                  value,
-                        BaseStringView < FCharType >    const & string
-                ) noexcept -> BaseString < FCharType > {
-
-                    BaseString < FCharType > result;
-                    auto valueLength = StringUtils < FCharType > :: integerLength ( value );
-
-                    result._length      = string.length() + valueLength;
-                    result._capacity    = maxOf ( result._length + 1U, __allocation :: minCapacity );
-                    result._pBuffer     = __allocation :: __alloc < FCharType > ( result._capacity );
-
-                    (void) StringUtils < FCharType > :: writeInteger (
-                            result.data(),
-                            0ULL,
-                            value,
-                            valueLength,
-                            nullptr
-                    );
-
-                    StringUtils < FCharType > :: copy (
-                            result.data(),
-                            valueLength,
-                            string._pData,
-                            0ULL,
-                            string.length()
-                    );
-
-                    return result;
-                }
-
-
-                template < typename FCharType, meta :: EnableIf < ! meta :: isSame < FCharType, sint8 > () > = 0 >
-                auto operator + (
-                        sint8                                   value,
-                        BaseStringView < FCharType >    const & string
-                ) noexcept -> BaseString < FCharType > {
-
-                    BaseString < FCharType > result;
-                    auto valueLength = StringUtils < FCharType > :: integerLength ( value );
-
-                    result._length      = string.length() + valueLength;
-                    result._capacity    = maxOf ( result._length + 1U, __allocation :: minCapacity );
-                    result._pBuffer     = __allocation :: __alloc < FCharType > ( result._capacity );
-
-                    (void) StringUtils < FCharType > :: writeInteger (
-                            result.data(),
-                            0ULL,
-                            value,
-                            valueLength,
-                            nullptr
-                    );
-
-                    StringUtils < FCharType > :: copy (
-                            result.data(),
-                            valueLength,
-                            string._pData,
-                            0ULL,
-                            string.length()
-                    );
-
-                    return result;
-                }
-
-
-                template < typename FCharType, meta :: EnableIf < ! meta :: isSame < FCharType, sint16 > () > = 0 >
-                auto operator + (
-                        sint16                                  value,
-                        BaseStringView < FCharType >    const & string
-                ) noexcept -> BaseString < FCharType > {
-
-                    BaseString < FCharType > result;
-                    auto valueLength = StringUtils < FCharType > :: integerLength ( value );
-
-                    result._length      = string.length() + valueLength;
-                    result._capacity    = maxOf ( result._length + 1U, __allocation :: minCapacity );
-                    result._pBuffer     = __allocation :: __alloc < FCharType > ( result._capacity );
-
-                    (void) StringUtils < FCharType > :: writeInteger (
-                            result.data(),
-                            0ULL,
-                            value,
-                            valueLength,
-                            nullptr
-                    );
-
-                    StringUtils < FCharType > :: copy (
-                            result.data(),
-                            valueLength,
-                            string._pData,
-                            0ULL,
-                            string.length()
-                    );
-
-                    return result;
-                }
-
-
-                template < typename FCharType, typename T, meta :: EnableIf < ! meta :: isSame < T, uint64 > () > = 0 >
-                auto operator + (
-                        std :: size_t                           value,
+                        NumericType                             value,
                         BaseStringView < FCharType >    const & string
                 ) noexcept -> BaseString < FCharType > {
 
@@ -1718,161 +1134,9 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 }
 
 
-                template < typename FCharType >
-                auto operator + (
-                        uint32                                  value,
-                        BaseStringView < FCharType >    const & string
-                ) noexcept -> BaseString < FCharType > {
-
-                    BaseString < FCharType > result;
-                    auto valueLength = StringUtils < FCharType > :: integerLength ( value );
-
-                    result._length      = string.length() + valueLength;
-                    result._capacity    = maxOf ( result._length + 1U, __allocation :: minCapacity );
-                    result._pBuffer     = __allocation :: __alloc < FCharType > ( result._capacity );
-
-                    (void) StringUtils < FCharType > :: writeInteger (
-                            result.data(),
-                            0ULL,
-                            value,
-                            valueLength,
-                            nullptr
-                    );
-
-                    StringUtils < FCharType > :: copy (
-                            result.data(),
-                            valueLength,
-                            string._pData,
-                            0ULL,
-                            string.length()
-                    );
-
-                    return result;
-                }
-
-
-                template < typename FCharType >
-                auto operator + (
-                        uint64                                  value,
-                        BaseStringView < FCharType >    const & string
-                ) noexcept -> BaseString < FCharType > {
-
-                    BaseString < FCharType > result;
-                    auto valueLength = StringUtils < FCharType > :: integerLength ( value );
-
-                    result._length      = string.length() + valueLength;
-                    result._capacity    = maxOf ( result._length + 1U, __allocation :: minCapacity );
-                    result._pBuffer     = __allocation :: __alloc < FCharType > ( result._capacity );
-
-                    (void) StringUtils < FCharType > :: writeInteger (
-                            result.data(),
-                            0ULL,
-                            value,
-                            valueLength,
-                            nullptr
-                    );
-
-                    StringUtils < FCharType > :: copy (
-                            result.data(),
-                            valueLength,
-                            string._pData,
-                            0ULL,
-                            string.length()
-                    );
-
-                    return result;
-                }
-
-
-                template < typename FCharType >
-                auto operator + (
-                        sint32                                  value,
-                        BaseStringView < FCharType >    const & string
-                ) noexcept -> BaseString < FCharType > {
-
-                    BaseString < FCharType > result;
-                    auto valueLength = StringUtils < FCharType > :: integerLength ( value );
-
-                    result._length      = string.length() + valueLength;
-                    result._capacity    = maxOf ( result._length + 1U, __allocation :: minCapacity );
-                    result._pBuffer     = __allocation :: __alloc < FCharType > ( result._capacity );
-
-                    (void) StringUtils < FCharType > :: writeInteger (
-                            result.data(),
-                            0ULL,
-                            value,
-                            valueLength,
-                            nullptr
-                    );
-
-                    StringUtils < FCharType > :: copy (
-                            result.data(),
-                            valueLength,
-                            string._pData,
-                            0ULL,
-                            string.length()
-                    );
-
-                    return result;
-                }
-
-
-                template < typename FCharType >
-                auto operator + (
-                        sint64                                  value,
-                        BaseStringView < FCharType >    const & string
-                ) noexcept -> BaseString < FCharType > {
-
-                    BaseString < FCharType > result;
-                    auto valueLength = StringUtils < FCharType > :: integerLength ( value );
-
-                    result._length      = string.length() + valueLength;
-                    result._capacity    = maxOf ( result._length + 1U, __allocation :: minCapacity );
-                    result._pBuffer     = __allocation :: __alloc < FCharType > ( result._capacity );
-
-                    (void) StringUtils < FCharType > :: writeInteger (
-                            result.data(),
-                            0ULL,
-                            value,
-                            valueLength,
-                            nullptr
-                    );
-
-                    StringUtils < FCharType > :: copy (
-                            result.data(),
-                            valueLength,
-                            string._pData,
-                            0ULL,
-                            string.length()
-                    );
-
-                    return result;
-                }
-
-
-                template < typename FCharType >
+                template < typename FCharType, typename FloatingPointType, meta :: EnableIf < meta :: isFloatingPoint < FloatingPointType > () > >
                 __CDS_OptimalInline auto operator + (
-                        float                                   value,
-                        BaseStringView < FCharType >    const & string
-                ) noexcept -> BaseString < FCharType > {
-
-                    return BaseStringView < FCharType > ( std :: to_string ( value ) ) + string;
-                }
-
-
-                template < typename FCharType >
-                __CDS_OptimalInline auto operator + (
-                        double                                  value,
-                        BaseStringView < FCharType >    const & string
-                ) noexcept -> BaseString < FCharType > {
-
-                    return BaseStringView < FCharType > ( std :: to_string ( value ) ) + string;
-                }
-
-
-                template < typename FCharType >
-                __CDS_OptimalInline auto operator + (
-                        long double                             value,
+                        FloatingPointType                       value,
                         BaseStringView < FCharType >    const & string
                 ) noexcept -> BaseString < FCharType > {
 
@@ -1963,11 +1227,12 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
 
                 template < typename CharType >
+                template < typename ConvertibleType, meta :: EnableIf < meta :: isConvertibleToBaseStringView < ConvertibleType, CharType > () > >
                 __CDS_cpplang_ConstexprDynamicAllocation auto BaseStringView < CharType > :: contains (
-                        BaseString < CharType > const & string
+                        ConvertibleType && string
                 ) const noexcept -> bool {
 
-                    return this->contains ( BaseStringView ( string ) );
+                    return this->contains ( BaseStringView ( std :: forward < ConvertibleType > ( string ) ) );
                 }
 
 
@@ -1977,24 +1242,6 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 ) const noexcept -> bool {
 
                     return this->findFirst ( string ) != BaseStringView :: invalidIndex;
-                }
-
-
-                template < typename CharType >
-                __CDS_cpplang_ConstexprDynamicAllocation auto BaseStringView < CharType > :: contains (
-                        std :: basic_string < CharType > const & string
-                ) const noexcept -> bool {
-
-                    return this->contains ( BaseStringView ( string ) );
-                }
-
-
-                template < typename CharType >
-                __CDS_cpplang_ConstexprDynamicAllocation auto BaseStringView < CharType > :: contains (
-                        ElementType const * pString
-                ) const noexcept -> bool {
-
-                    return this->contains ( BaseStringView ( pString ) );
                 }
 
 
@@ -2096,234 +1343,239 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
 
                 template < typename CharType >
-                template < template < typename ... > class CollectionType >
+                template < template < typename ... > class CollectionType, typename ConvertibleType, meta :: EnableIf < meta :: isConvertibleToBaseStringView < ConvertibleType, CharType > () > >
                 __CDS_OptimalInline auto BaseStringView < CharType > :: find (
                         Size                                maxCount,
-                        BaseString < CharType >     const & string,
+                        ConvertibleType                  && string,
                         CollectionType < Index >          & storeIn
                 ) const noexcept -> CollectionType < Index > & {
 
                     return this->find (
                             maxCount,
-                            BaseStringView ( string ),
+                            BaseStringView ( std :: forward < ConvertibleType > ( string ) ),
                             storeIn
                     );
                 }
 
 
                 template < typename CharType >
-                template < template < typename ... > class CollectionType >
+                template < template < typename ... > class CollectionType, typename ConvertibleType, meta :: EnableIf < meta :: isConvertibleToBaseStringView < ConvertibleType, CharType > () > >
                 __CDS_OptimalInline auto BaseStringView < CharType > :: find (
                         Size                                maxCount,
-                        BaseString < CharType >     const & string
+                        ConvertibleType                  && string
                 ) const noexcept -> CollectionType < Index > {
 
                     CollectionType < Index > indices;
                     return this->find (
-                            maxCount,
-                            BaseStringView ( string ),
+                            BaseStringView ( std :: forward < ConvertibleType > ( string ) ),
                             indices
                     );
                 }
 
 
                 template < typename CharType >
+                template < typename ConvertibleType, meta :: EnableIf < meta :: isConvertibleToBaseStringView < ConvertibleType, CharType > () > >
                 __CDS_cpplang_ConstexprDynamicAllocation auto BaseStringView < CharType > :: findFirst (
-                        BaseString < CharType > const & string
+                        ConvertibleType && string
                 ) const noexcept -> Index {
 
-                    return this->findFirst ( BaseStringView ( string ) );
+                    return this->findFirst ( BaseStringView ( std :: forward < ConvertibleType > ( string ) ) );
                 }
 
 
                 template < typename CharType >
+                template < typename ConvertibleType, meta :: EnableIf < meta :: isConvertibleToBaseStringView < ConvertibleType, CharType > () > >
                 __CDS_cpplang_ConstexprDynamicAllocation auto BaseStringView < CharType > :: findLast (
-                        BaseString < CharType > const & string
+                        ConvertibleType && string
                 ) const noexcept -> Index {
 
-                    return this->findLast ( BaseStringView ( string ) );
+                    return this->findLast ( BaseStringView ( std :: forward < ConvertibleType > ( string ) ) );
                 }
 
 
                 template < typename CharType >
-                template < template < typename ... > class CollectionType >
+                template < template < typename ... > class CollectionType, typename ConvertibleType, meta :: EnableIf < meta :: isConvertibleToBaseStringView < ConvertibleType, CharType > () > >
                 __CDS_OptimalInline auto BaseStringView < CharType > :: findAll (
-                        BaseString < CharType >     const & string,
+                        ConvertibleType                  && string,
                         CollectionType < Index >          & storeIn
                 ) const noexcept -> CollectionType < Index > & {
 
                     return this->findAll (
-                            BaseStringView ( string ),
+                            BaseStringView ( std :: forward < ConvertibleType > ( string ) ),
                             storeIn
                     );
                 }
 
 
                 template < typename CharType >
-                template < template < typename ... > class CollectionType >
+                template < template < typename ... > class CollectionType, typename ConvertibleType, meta :: EnableIf < meta :: isConvertibleToBaseStringView < ConvertibleType, CharType > () > >
                 __CDS_OptimalInline auto BaseStringView < CharType > :: findAll (
-                        BaseString < CharType > const & string
+                        ConvertibleType && string
                 ) const noexcept -> CollectionType < Index > {
 
                     CollectionType < Index > indices;
                     return this->findAll (
-                            BaseStringView ( string ),
+                            BaseStringView ( std :: forward < ConvertibleType > ( string ) ),
                             indices
                     );
                 }
 
 
                 template < typename CharType >
-                template < template < typename ... > class CollectionType >
+                    template < template < typename ... > class CollectionType, typename ConvertibleType, meta :: EnableIf < meta :: isConvertibleToBaseStringView < ConvertibleType, CharType > () > >
                 __CDS_OptimalInline auto BaseStringView < CharType > :: findOf (
                         Size                            maxCount,
-                        BaseString < CharType > const & string,
+                        ConvertibleType              && string,
                         CollectionType < Index >      & storeIn
                 ) const noexcept -> CollectionType < Index > & {
 
                     return this->findOf (
                             maxCount,
-                            BaseStringView ( string ),
+                            BaseStringView ( std :: forward < ConvertibleType > ( string ) ),
                             storeIn
                     );
                 }
 
 
                 template < typename CharType >
-                template < template < typename ... > class CollectionType >
+                    template < template < typename ... > class CollectionType, typename ConvertibleType, meta :: EnableIf < meta :: isConvertibleToBaseStringView < ConvertibleType, CharType > () > >
                 __CDS_OptimalInline auto BaseStringView < CharType > :: findOf (
                         Size                            maxCount,
-                        BaseString < CharType > const & string
+                        ConvertibleType              && string
                 ) const noexcept -> CollectionType < Index > {
 
                     CollectionType < Index > indices;
                     return this->findOf (
                             maxCount,
-                            BaseStringView ( string ),
+                            BaseStringView ( std :: forward < ConvertibleType > ( string ) ),
                             indices
                     );
                 }
 
 
                 template < typename CharType >
+                template < typename ConvertibleType, meta :: EnableIf < meta :: isConvertibleToBaseStringView < ConvertibleType, CharType > () > >
                 __CDS_cpplang_ConstexprConditioned auto BaseStringView < CharType > :: findFirstOf (
-                        BaseString < CharType > const & string
+                        ConvertibleType && string
                 ) const noexcept -> Index {
 
-                    return this->findFirstOf ( BaseStringView ( string ) );
+                    return this->findFirstOf ( BaseStringView ( std :: forward < ConvertibleType > ( string ) ) );
                 }
 
 
                 template < typename CharType >
+                template < typename ConvertibleType, meta :: EnableIf < meta :: isConvertibleToBaseStringView < ConvertibleType, CharType > () > >
                 __CDS_cpplang_ConstexprConditioned auto BaseStringView < CharType > :: findLastOf (
-                        BaseString < CharType > const & string
+                        ConvertibleType && string
                 ) const noexcept -> Index {
 
-                    return this->findLastOf ( BaseStringView ( string ) );
+                    return this->findLastOf ( BaseStringView ( std :: forward < ConvertibleType > ( string ) ) );
                 }
 
 
                 template < typename CharType >
-                template < template < typename ... > class CollectionType >
+                template < template < typename ... > class CollectionType, typename ConvertibleType, meta :: EnableIf < meta :: isConvertibleToBaseStringView < ConvertibleType, CharType > () > >
                 __CDS_OptimalInline auto BaseStringView < CharType > :: findAllOf (
-                        BaseString < CharType > const & string,
+                        ConvertibleType              && string,
                         CollectionType < Index >      & storeIn
                 ) const noexcept -> CollectionType < Index > & {
 
                     return this->findAllOf (
-                            BaseStringView ( string ),
+                            BaseStringView ( std :: forward < ConvertibleType > ( string ) ),
                             storeIn
                     );
                 }
 
 
                 template < typename CharType >
-                template < template < typename ... > class CollectionType >
+                template < template < typename ... > class CollectionType, typename ConvertibleType, meta :: EnableIf < meta :: isConvertibleToBaseStringView < ConvertibleType, CharType > () > >
                 __CDS_OptimalInline auto BaseStringView < CharType > :: findAllOf (
-                        BaseString < CharType > const & string
+                        ConvertibleType && string
                 ) const noexcept -> CollectionType < Index > {
 
                     CollectionType < Index > indices;
                     return this->findAllOf (
-                            BaseStringView ( string ),
+                            BaseStringView ( std :: forward < ConvertibleType > ( string ) ),
                             indices
                     );
                 }
 
 
                 template < typename CharType >
-                template < template < typename ... > class CollectionType >
+                template < template < typename ... > class CollectionType, typename ConvertibleType, meta :: EnableIf < meta :: isConvertibleToBaseStringView < ConvertibleType, CharType > () > >
                 __CDS_OptimalInline auto BaseStringView < CharType > :: findNotOf (
                         Size                            maxCount,
-                        BaseString < CharType > const & string,
+                        ConvertibleType              && string,
                         CollectionType < Index >      & storeIn
                 ) const noexcept -> CollectionType < Index > & {
 
                     return this->findNotOf (
                             maxCount,
-                            BaseStringView ( string ),
+                            BaseStringView ( std :: forward < ConvertibleType > ( string ) ),
                             storeIn
                     );
                 }
 
 
                 template < typename CharType >
-                template < template < typename ... > class CollectionType >
+                template < template < typename ... > class CollectionType, typename ConvertibleType, meta :: EnableIf < meta :: isConvertibleToBaseStringView < ConvertibleType, CharType > () > >
                 __CDS_OptimalInline auto BaseStringView < CharType > :: findNotOf (
                         Size                            maxCount,
-                        BaseString < CharType > const & string
+                        ConvertibleType              && string
                 ) const noexcept -> CollectionType < Index > {
 
                     CollectionType < Index > indices;
                     return this->findNotOf (
                             maxCount,
-                            BaseStringView ( string ),
+                            BaseStringView ( std :: forward < ConvertibleType > ( string ) ),
                             indices
                     );
                 }
 
 
                 template < typename CharType >
+                template < typename ConvertibleType, meta :: EnableIf < meta :: isConvertibleToBaseStringView < ConvertibleType, CharType > () > >
                 __CDS_cpplang_ConstexprConditioned auto BaseStringView < CharType > :: findFirstNotOf (
-                        BaseString < CharType > const & string
+                        ConvertibleType && string
                 ) const noexcept -> Index {
 
-                    return this->findFirstNotOf ( BaseStringView ( string ) );
+                    return this->findFirstNotOf ( BaseStringView ( std :: forward < ConvertibleType > ( string ) ) );
                 }
 
 
                 template < typename CharType >
+                template < typename ConvertibleType, meta :: EnableIf < meta :: isConvertibleToBaseStringView < ConvertibleType, CharType > () > >
                 __CDS_cpplang_ConstexprConditioned auto BaseStringView < CharType > :: findLastNotOf (
-                        BaseString < CharType > const & string
+                        ConvertibleType && string
                 ) const noexcept -> Index {
 
-                    return this->findLastNotOf ( BaseStringView ( string ) );
+                    return this->findLastNotOf ( BaseStringView ( std :: forward < ConvertibleType > ( string ) ) );
                 }
 
 
                 template < typename CharType >
-                template < template < typename ... > class CollectionType >
+                template < template < typename ... > class CollectionType, typename ConvertibleType, meta :: EnableIf < meta :: isConvertibleToBaseStringView < ConvertibleType, CharType > () > >
                 __CDS_OptimalInline auto BaseStringView < CharType > :: findAllNotOf (
-                        BaseString < CharType > const & string,
+                        ConvertibleType              && string,
                         CollectionType < Index >      & storeIn
                 ) const noexcept -> CollectionType < Index > & {
 
                     return this->findAllNotOf (
-                            BaseStringView ( string ),
+                            BaseStringView ( std :: forward < ConvertibleType > ( string ) ),
                             storeIn
                     );
                 }
 
 
                 template < typename CharType >
-                template < template < typename ... > class CollectionType >
+                template < template < typename ... > class CollectionType, typename ConvertibleType, meta :: EnableIf < meta :: isConvertibleToBaseStringView < ConvertibleType, CharType > () > >
                 __CDS_OptimalInline auto BaseStringView < CharType > :: findAllNotOf (
-                        BaseString < CharType > const & string
+                        ConvertibleType && string
                 ) const noexcept -> CollectionType < Index > {
 
                     CollectionType < Index > indices;
                     return this->findAllNotOf (
-                            BaseStringView ( string ),
+                            BaseStringView ( std :: forward < ConvertibleType > ( string ) ),
                             indices
                     );
                 }
@@ -2597,474 +1849,6 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
 
                 template < typename CharType >
-                template < template < typename ... > class CollectionType >
-                __CDS_OptimalInline auto BaseStringView < CharType > :: find (
-                        Size                                        maxCount,
-                        std :: basic_string < CharType >    const & string,
-                        CollectionType < Index >                  & storeIn
-                ) const noexcept -> CollectionType < Index > & {
-
-                    return this->find (
-                            maxCount,
-                            BaseStringView ( string ),
-                            storeIn
-                    );
-                }
-
-
-                template < typename CharType >
-                template < template < typename ... > class CollectionType >
-                __CDS_OptimalInline auto BaseStringView < CharType > :: find (
-                        Size                                        maxCount,
-                        std :: basic_string < CharType >    const & string
-                ) const noexcept -> CollectionType < Index > {
-
-                    CollectionType < Index > indices;
-                    return this->find (
-                            maxCount,
-                            BaseStringView ( string ),
-                            indices
-                    );
-                }
-
-
-                template < typename CharType >
-                __CDS_cpplang_ConstexprDynamicAllocation auto BaseStringView < CharType > :: findFirst (
-                        std :: basic_string < CharType > const & string
-                ) const noexcept -> Index {
-
-                    return this->findFirst ( BaseStringView ( string ) );
-                }
-
-
-                template < typename CharType >
-                __CDS_cpplang_ConstexprDynamicAllocation auto BaseStringView < CharType > :: findLast (
-                        std :: basic_string < CharType > const & string
-                ) const noexcept -> Index {
-
-                    return this->findLast ( BaseStringView ( string ) );
-                }
-
-
-                template < typename CharType >
-                template < template < typename ... > class CollectionType >
-                __CDS_OptimalInline auto BaseStringView < CharType > :: findAll (
-                        std :: basic_string < CharType > const & string,
-                        CollectionType < Index >               & storeIn
-                ) const noexcept -> CollectionType < Index > & {
-
-                    return this->findAll (
-                            BaseStringView ( string ),
-                            storeIn
-                    );
-                }
-
-
-                template < typename CharType >
-                template < template < typename ... > class CollectionType >
-                __CDS_OptimalInline auto BaseStringView < CharType > :: findAll (
-                        std :: basic_string < CharType > const & string
-                ) const noexcept -> CollectionType < Index > {
-
-                    CollectionType < Index > indices;
-                    return this->findAll (
-                            BaseStringView ( string ),
-                            indices
-                    );
-                }
-
-
-                template < typename CharType >
-                template < template < typename ... > class CollectionType >
-                __CDS_OptimalInline auto BaseStringView < CharType > :: findOf (
-                        Size                                     maxCount,
-                        std :: basic_string < CharType > const & string,
-                        CollectionType < Index >               & storeIn
-                ) const noexcept -> CollectionType < Index > & {
-
-                    return this->findOf (
-                            maxCount,
-                            BaseStringView ( string ),
-                            storeIn
-                    );
-                }
-
-
-                template < typename CharType >
-                template < template < typename ... > class CollectionType >
-                __CDS_OptimalInline auto BaseStringView < CharType > :: findOf (
-                        Size                                     maxCount,
-                        std :: basic_string < CharType > const & string
-                ) const noexcept -> CollectionType < Index > {
-
-                    CollectionType < Index > indices;
-                    return this->findOf (
-                            maxCount,
-                            BaseStringView ( string ),
-                            indices
-                    );
-                }
-
-
-                template < typename CharType >
-                __CDS_cpplang_ConstexprConditioned auto BaseStringView < CharType > :: findFirstOf (
-                        std :: basic_string < CharType > const & string
-                ) const noexcept -> Index {
-
-                    return this->findFirstOf ( BaseStringView ( string ) );
-                }
-
-
-                template < typename CharType >
-                __CDS_cpplang_ConstexprConditioned auto BaseStringView < CharType > :: findLastOf (
-                        std :: basic_string < CharType > const & string
-                ) const noexcept -> Index {
-
-                    return this->findLastOf ( BaseStringView ( string ) );
-                }
-
-
-                template < typename CharType >
-                template < template < typename ... > class CollectionType >
-                __CDS_OptimalInline auto BaseStringView < CharType > :: findAllOf (
-                        std :: basic_string < CharType > const & string,
-                        CollectionType < Index >               & storeIn
-                ) const noexcept -> CollectionType < Index > & {
-
-                    return this->findAllOf (
-                            BaseStringView ( string ),
-                            storeIn
-                    );
-                }
-
-
-                template < typename CharType >
-                template < template < typename ... > class CollectionType >
-                __CDS_OptimalInline auto BaseStringView < CharType > :: findAllOf (
-                        std :: basic_string < CharType > const & string
-                ) const noexcept -> CollectionType < Index > {
-
-                    CollectionType < Index > indices;
-                    return this->findAllOf (
-                            BaseStringView ( string ),
-                            indices
-                    );
-                }
-
-
-                template < typename CharType >
-                template < template < typename ... > class CollectionType >
-                __CDS_OptimalInline auto BaseStringView < CharType > :: findNotOf (
-                        Size                                     maxCount,
-                        std :: basic_string < CharType > const & string,
-                        CollectionType < Index >               & storeIn
-                ) const noexcept -> CollectionType < Index > & {
-
-                    return this->findNotOf (
-                            maxCount,
-                            BaseStringView ( string ),
-                            storeIn
-                    );
-                }
-
-
-                template < typename CharType >
-                template < template < typename ... > class CollectionType >
-                __CDS_OptimalInline auto BaseStringView < CharType > :: findNotOf (
-                        Size                                     maxCount,
-                        std :: basic_string < CharType > const & string
-                ) const noexcept -> CollectionType < Index > {
-
-                    CollectionType < Index > indices;
-                    return this->findNotOf (
-                            maxCount,
-                            BaseStringView ( string ),
-                            indices
-                    );
-                }
-
-
-                template < typename CharType >
-                __CDS_cpplang_ConstexprConditioned auto BaseStringView < CharType > :: findFirstNotOf (
-                        std :: basic_string < CharType > const & string
-                ) const noexcept -> Index {
-
-                    return this->findFirstNotOf ( BaseStringView ( string ) );
-                }
-
-
-                template < typename CharType >
-                __CDS_cpplang_ConstexprConditioned auto BaseStringView < CharType > :: findLastNotOf (
-                        std :: basic_string < CharType > const & string
-                ) const noexcept -> Index {
-
-                    return this->findLastNotOf ( BaseStringView ( string ) );
-                }
-
-
-                template < typename CharType >
-                template < template < typename ... > class CollectionType >
-                __CDS_OptimalInline auto BaseStringView < CharType > :: findAllNotOf (
-                        std :: basic_string < CharType > const & string,
-                        CollectionType < Index >               & storeIn
-                ) const noexcept -> CollectionType < Index > & {
-
-                    return this->findAllNotOf (
-                            BaseStringView ( string ),
-                            storeIn
-                    );
-                }
-
-
-                template < typename CharType >
-                template < template < typename ... > class CollectionType >
-                __CDS_OptimalInline auto BaseStringView < CharType > :: findAllNotOf (
-                        std :: basic_string < CharType > const & string
-                ) const noexcept -> CollectionType < Index > {
-
-                    CollectionType < Index > indices;
-                    return this->findAllNotOf (
-                            BaseStringView ( string ),
-                            indices
-                    );
-                }
-
-
-                template < typename CharType >
-                template < template < typename ... > class CollectionType >
-                __CDS_OptimalInline auto BaseStringView < CharType > :: find (
-                        Size                                        maxCount,
-                        ElementType                         const * pString,
-                        CollectionType < Index >                  & storeIn
-                ) const noexcept -> CollectionType < Index > & {
-
-                    return this->find (
-                            maxCount,
-                            BaseStringView ( pString ),
-                            storeIn
-                    );
-                }
-
-
-                template < typename CharType >
-                template < template < typename ... > class CollectionType >
-                __CDS_OptimalInline auto BaseStringView < CharType > :: find (
-                        Size                                        maxCount,
-                        ElementType                         const * pString
-                ) const noexcept -> CollectionType < Index > {
-
-                    CollectionType < Index > indices;
-                    return this->find (
-                            maxCount,
-                            BaseStringView ( pString ),
-                            indices
-                    );
-                }
-
-
-                template < typename CharType >
-                __CDS_cpplang_ConstexprDynamicAllocation auto BaseStringView < CharType > :: findFirst (
-                        ElementType const * pString
-                ) const noexcept -> Index {
-
-                    return this->findFirst ( BaseStringView ( pString ) );
-                }
-
-
-                template < typename CharType >
-                __CDS_cpplang_ConstexprDynamicAllocation auto BaseStringView < CharType > :: findLast (
-                        ElementType const * pString
-                ) const noexcept -> Index {
-
-                    return this->findLast ( BaseStringView ( pString ) );
-                }
-
-
-                template < typename CharType >
-                template < template < typename ... > class CollectionType >
-                __CDS_OptimalInline auto BaseStringView < CharType > :: findAll (
-                        ElementType                      const * pString,
-                        CollectionType < Index >               & storeIn
-                ) const noexcept -> CollectionType < Index > & {
-
-                    return this->findAll (
-                            BaseStringView ( pString ),
-                            storeIn
-                    );
-                }
-
-
-                template < typename CharType >
-                template < template < typename ... > class CollectionType >
-                __CDS_OptimalInline auto BaseStringView < CharType > :: findAll (
-                        ElementType const * pString
-                ) const noexcept -> CollectionType < Index > {
-
-                    CollectionType < Index > indices;
-                    return this->findAll (
-                            BaseStringView ( pString ),
-                            indices
-                    );
-                }
-
-
-                template < typename CharType >
-                template < template < typename ... > class CollectionType >
-                __CDS_OptimalInline auto BaseStringView < CharType > :: findOf (
-                        Size                                     maxCount,
-                        ElementType                      const * pString,
-                        CollectionType < Index >               & storeIn
-                ) const noexcept -> CollectionType < Index > & {
-
-                    return this->findOf (
-                            maxCount,
-                            BaseStringView ( pString ),
-                            storeIn
-                    );
-                }
-
-
-                template < typename CharType >
-                template < template < typename ... > class CollectionType >
-                __CDS_OptimalInline auto BaseStringView < CharType > :: findOf (
-                        Size                                     maxCount,
-                        ElementType                      const * pString
-                ) const noexcept -> CollectionType < Index > {
-
-                    CollectionType < Index > indices;
-                    return this->findOf (
-                            maxCount,
-                            BaseStringView ( pString ),
-                            indices
-                    );
-                }
-
-
-                template < typename CharType >
-                __CDS_cpplang_ConstexprConditioned auto BaseStringView < CharType > :: findFirstOf (
-                        ElementType                      const * pString
-                ) const noexcept -> Index {
-
-                    return this->findFirstOf ( BaseStringView ( pString ) );
-                }
-
-
-                template < typename CharType >
-                __CDS_cpplang_ConstexprConditioned auto BaseStringView < CharType > :: findLastOf (
-                        ElementType                      const * pString
-                ) const noexcept -> Index {
-
-                    return this->findLastOf ( BaseStringView ( pString ) );
-                }
-
-
-                template < typename CharType >
-                template < template < typename ... > class CollectionType >
-                __CDS_OptimalInline auto BaseStringView < CharType > :: findAllOf (
-                        ElementType                      const * pString,
-                        CollectionType < Index >               & storeIn
-                ) const noexcept -> CollectionType < Index > & {
-
-                    return this->findAllOf (
-                            BaseStringView ( pString ),
-                            storeIn
-                    );
-                }
-
-
-                template < typename CharType >
-                template < template < typename ... > class CollectionType >
-                __CDS_OptimalInline auto BaseStringView < CharType > :: findAllOf (
-                        ElementType const * pString
-                ) const noexcept -> CollectionType < Index > {
-
-                    CollectionType < Index > indices;
-                    return this->findAllOf (
-                            BaseStringView ( pString ),
-                            indices
-                    );
-                }
-
-
-                template < typename CharType >
-                template < template < typename ... > class CollectionType >
-                __CDS_OptimalInline auto BaseStringView < CharType > :: findNotOf (
-                        Size                                     maxCount,
-                        ElementType                      const * pString,
-                        CollectionType < Index >               & storeIn
-                ) const noexcept -> CollectionType < Index > & {
-
-                    return this->findNotOf (
-                            maxCount,
-                            BaseStringView ( pString ),
-                            storeIn
-                    );
-                }
-
-
-                template < typename CharType >
-                template < template < typename ... > class CollectionType >
-                __CDS_OptimalInline auto BaseStringView < CharType > :: findNotOf (
-                        Size                                     maxCount,
-                        ElementType                      const * pString
-                ) const noexcept -> CollectionType < Index > {
-
-                    CollectionType < Index > indices;
-                    return this->findNotOf (
-                            maxCount,
-                            BaseStringView ( pString ),
-                            indices
-                    );
-                }
-
-
-                template < typename CharType >
-                __CDS_cpplang_ConstexprConditioned auto BaseStringView < CharType > :: findFirstNotOf (
-                        ElementType const * pString
-                ) const noexcept -> Index {
-
-                    return this->findFirstNotOf ( BaseStringView ( pString ) );
-                }
-
-
-                template < typename CharType >
-                __CDS_cpplang_ConstexprConditioned auto BaseStringView < CharType > :: findLastNotOf (
-                        ElementType const * pString
-                ) const noexcept -> Index {
-
-                    return this->findLastNotOf ( BaseStringView ( pString ) );
-                }
-
-
-                template < typename CharType >
-                template < template < typename ... > class CollectionType >
-                __CDS_OptimalInline auto BaseStringView < CharType > :: findAllNotOf (
-                        ElementType                      const * pString,
-                        CollectionType < Index >               & storeIn
-                ) const noexcept -> CollectionType < Index > & {
-
-                    return this->findAllNotOf (
-                            BaseStringView ( pString ),
-                            storeIn
-                    );
-                }
-
-
-                template < typename CharType >
-                template < template < typename ... > class CollectionType >
-                __CDS_OptimalInline auto BaseStringView < CharType > :: findAllNotOf (
-                        ElementType const * pString
-                ) const noexcept -> CollectionType < Index > {
-
-                    CollectionType < Index > indices;
-                    return this->findAllNotOf (
-                            BaseStringView ( pString ),
-                            indices
-                    );
-                }
-
-
-                template < typename CharType >
                 template < typename ListType >
                 auto BaseStringView < CharType > :: split (
                         ElementType     separator,
@@ -3121,15 +1905,15 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
 
                 template < typename CharType >
-                template < typename ListType >
+                template < typename ListType, typename ConvertibleType, meta :: EnableIf < meta :: isConvertibleToBaseStringView < ConvertibleType, CharType > () > >
                 __CDS_OptimalInline auto BaseStringView < CharType > :: split (
-                        BaseString < CharType > const & separators,
+                        ConvertibleType             && separators,
                         ListType                      & storeIn,
                         Size                            maxCount
                 ) const noexcept -> ListType & {
 
                     return this->split (
-                            BaseStringView ( separators ),
+                            BaseStringView ( std :: forward < ConvertibleType > ( separators ) ),
                             storeIn,
                             maxCount
                     );
@@ -3137,15 +1921,15 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
 
                 template < typename CharType >
-                template < template < typename ... > class ListType >
+                template < template < typename ... > class ListType, typename ConvertibleType, meta :: EnableIf < meta :: isConvertibleToBaseStringView < ConvertibleType, CharType > () > >
                 __CDS_OptimalInline auto BaseStringView < CharType > :: split (
-                        BaseString < CharType > const & separators,
+                        ConvertibleType              && separators,
                         Size                            maxCount
                 ) const noexcept -> ListType < BaseString < CharType > > {
 
                     ListType < BaseString < CharType > > tokens;
                     return this->split (
-                            BaseStringView ( separators ),
+                            BaseStringView ( std :: forward < ConvertibleType > ( separators ) ),
                             tokens,
                             maxCount
                     );
@@ -3202,70 +1986,6 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                     ListType < BaseString < CharType > > tokens;
                     return this->split (
                             separators,
-                            tokens,
-                            maxCount
-                    );
-                }
-
-
-                template < typename CharType >
-                template < typename ListType >
-                __CDS_OptimalInline auto BaseStringView < CharType > :: split (
-                        std :: basic_string < CharType >    const & separators,
-                        ListType                                  & storeIn,
-                        Size                                        maxCount
-                ) const noexcept -> ListType & {
-
-                    return this->split (
-                            BaseStringView ( separators ),
-                            storeIn,
-                            maxCount
-                    );
-                }
-
-
-                template < typename CharType >
-                template < template < typename ... > class ListType >
-                __CDS_OptimalInline auto BaseStringView < CharType > :: split (
-                        std :: basic_string < CharType >    const & separators,
-                        Size                                        maxCount
-                ) const noexcept -> ListType < BaseString < CharType > > {
-
-                    ListType < BaseString < CharType > > tokens;
-                    return this->split (
-                            BaseStringView ( separators ),
-                            tokens,
-                            maxCount
-                    );
-                }
-
-
-                template < typename CharType >
-                template < typename ListType >
-                __CDS_OptimalInline auto BaseStringView < CharType > :: split (
-                        ElementType                         const * pSeparators,
-                        ListType                                  & storeIn,
-                        Size                                        maxCount
-                ) const noexcept -> ListType & {
-
-                    return this->split (
-                            BaseStringView ( pSeparators ),
-                            storeIn,
-                            maxCount
-                    );
-                }
-
-
-                template < typename CharType >
-                template < template < typename ... > class ListType >
-                __CDS_OptimalInline auto BaseStringView < CharType > :: split (
-                        ElementType                         const * pSeparators,
-                        Size                                        maxCount
-                ) const noexcept -> ListType < BaseString < CharType > > {
-
-                    ListType < BaseString < CharType > > tokens;
-                    return this->split (
-                            BaseStringView ( pSeparators ),
                             tokens,
                             maxCount
                     );

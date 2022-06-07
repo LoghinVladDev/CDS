@@ -378,7 +378,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 * pOffsetAfterWrite = offset + valueLength;
             }
 
-            return pDestination + valueLength;
+            return pDestination + offset + valueLength;
         }
 
 

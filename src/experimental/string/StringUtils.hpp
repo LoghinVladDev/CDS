@@ -6,7 +6,79 @@
 #define __CDS_EX_STRING_STRING_UTILS_HPP__
 
 namespace cds { // NOLINT(modernize-concat-nested-namespaces)
-    namespace experimental {
+    namespace experimental { // NOLINT(modernize-concat-nested-namespaces)
+
+        namespace hidden { // NOLINT(modernize-concat-nested-namespaces)
+            namespace impl {
+
+                template < typename CharType >
+                class BaseStringView;
+
+                template < typename CharType >
+                class BaseString;
+
+            }
+        }
+
+        namespace meta { // NOLINT(modernize-concat-nested-namespaces)
+            namespace impl {
+
+                template < typename CharType >
+                struct IsStringCharType : FalseType {};
+
+                template <>
+                struct IsStringCharType < char > : TrueType {};
+
+                template <>
+                struct IsStringCharType < wchar_t > : TrueType {};
+
+
+                template < typename CharType, typename NumericType >
+                struct IsIntegralToString : impl :: BoolConstant <
+                        ! isSame < CharType, NumericType > () && (
+                                isSigned < NumericType > () ||
+                                isUnsigned < NumericType > ()
+                        ) && isIntegral < NumericType > ()
+                > {};
+
+
+                template < typename ConvertibleToViewType, typename CharType, typename = void >
+                struct IsConvertibleToBaseStringView : FalseType {};
+
+                template < typename ConvertibleType, typename CharType >
+                struct IsConvertibleToBaseStringView <
+                        ConvertibleType,
+                        CharType,
+                        Void < decltype ( hidden :: impl :: BaseStringView < CharType > ( valueOf < ConvertibleType > () ) ) >
+                > : impl :: BoolConstant < ! meta :: isSame < ConvertibleType, hidden :: impl :: BaseStringView < CharType > > () > {};
+
+
+                template < typename ConvertibleToViewType, typename CharType, typename = void >
+                struct IsNonAmbiguousConvertibleToBaseStringView : FalseType {};
+            }
+
+            template < typename CharType >
+            constexpr auto isStringCharType () noexcept -> bool {
+                return impl :: IsStringCharType < CharType > :: value;
+            }
+
+            template < typename CharType, typename NumericType >
+            constexpr auto isIntegralToString () noexcept -> bool {
+                return impl :: IsIntegralToString < CharType, NumericType > :: value;
+            }
+
+            template < typename ConvertibleType, typename CharType >
+            constexpr auto isConvertibleToBaseStringView () noexcept -> bool {
+                return impl :: IsConvertibleToBaseStringView < ConvertibleType, CharType > :: value;
+            }
+
+            template < typename ConvertibleType, typename CharType >
+            constexpr auto isNonAmbiguousConvertibleToBaseStringView () noexcept -> bool {
+                return
+                        isConvertibleToBaseStringView < ConvertibleType, CharType > () &&
+                        ! isSame < Decay < ConvertibleType >, hidden :: impl :: BaseString < CharType > > ();
+            }
+        }
 
         template < typename CharType >
         class StringUtils {

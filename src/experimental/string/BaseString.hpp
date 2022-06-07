@@ -6,6 +6,7 @@
 #define __CDS_EX_STRING_BASE_HPP__
 
 #include <CDS/Range>
+#include "StringUtils.hpp"
 
 namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
@@ -119,6 +120,17 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                     ) noexcept;
 
                 public:
+                    __CDS_Implicit BaseString ( // NOLINT(google-explicit-constructor)
+                            std :: basic_string < CharType > const & string
+                    ) noexcept;
+
+                /// todo remove
+                public:
+                    __CDS_Implicit BaseString ( // NOLINT(google-explicit-constructor)
+                            cds :: String const & string
+                    ) noexcept;
+
+                public:
                     BaseString (
                             ElementType const * pString,
                             Size                length
@@ -135,11 +147,6 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                     BaseString (
                             OtherCharType   const * pString,
                             Size                    length
-                    ) noexcept;
-
-                public:
-                    __CDS_Implicit BaseString ( // NOLINT(google-explicit-constructor)
-                            std :: basic_string < CharType > const & string
                     ) noexcept;
 
                 public:
@@ -188,97 +195,26 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 #endif
 
                 public:
-                    template < typename T = CharType, meta :: EnableIf < meta :: isSame < T, uint8 > () > = 0 >
-                    __CDS_Implicit BaseString ( // NOLINT(google-explicit-constructor)
+                    template < typename T = CharType, meta :: EnableIf < meta :: isStringCharType < T > () > = 0 >
+                    __CDS_Explicit BaseString ( // NOLINT(google-explicit-constructor)
                             ElementType value
                     ) noexcept;
 
                 public:
-                    template < typename T = CharType, meta :: EnableIf < meta :: isSame < T, sint8 > () > = 0 >
-                    __CDS_Implicit BaseString ( // NOLINT(google-explicit-constructor)
-                            ElementType value
+                    template < typename NumericType, meta :: EnableIf < meta :: isIntegralToString < CharType, NumericType > () > = 0 >
+                    __CDS_Explicit BaseString ( // NOLINT(google-explicit-constructor)
+                            NumericType value
                     ) noexcept;
 
                 public:
-                    template < typename T = CharType, meta :: EnableIf < meta :: isSame < T, uint16 > () > = 0 >
-                    __CDS_Implicit BaseString ( // NOLINT(google-explicit-constructor)
-                            ElementType value
-                    ) noexcept;
-
-                public:
-                    template < typename T = CharType, meta :: EnableIf < meta :: isSame < T, sint16 > () > = 0 >
-                    __CDS_Implicit BaseString ( // NOLINT(google-explicit-constructor)
-                            ElementType value
-                    ) noexcept;
-
-                public:
-                    template < typename T = CharType, meta :: EnableIf < ! meta :: isSame < T, uint8 > () > = 0 >
-                    __CDS_Implicit BaseString ( // NOLINT(google-explicit-constructor)
-                            uint8 value
-                    ) noexcept;
-
-                public:
-                    template < typename T = CharType, meta :: EnableIf < ! meta :: isSame < T, sint8 > () > = 0 >
-                    __CDS_Implicit BaseString ( // NOLINT(google-explicit-constructor)
-                            sint8 value
-                    ) noexcept;
-
-                public:
-                    template < typename T = CharType, meta :: EnableIf < ! meta :: isSame < T, uint16 > () > = 0 >
-                    __CDS_Implicit BaseString ( // NOLINT(google-explicit-constructor)
-                            uint16 value
-                    ) noexcept;
-
-                public:
-                    template < typename T = CharType, meta :: EnableIf < ! meta :: isSame < T, sint16 > () > = 0 >
-                    __CDS_Implicit BaseString ( // NOLINT(google-explicit-constructor)
-                            sint16 value
-                    ) noexcept;
-
-                public:
-                    template < typename T = std :: size_t, meta :: EnableIf < ! meta :: isSame < T, uint64 > () > = 0 >
-                    __CDS_Implicit BaseString ( // NOLINT(google-explicit-constructor)
-                            std :: size_t value
-                    ) noexcept;
-
-                public:
-                    __CDS_Implicit BaseString ( // NOLINT(google-explicit-constructor)
+                    __CDS_Explicit BaseString ( // NOLINT(google-explicit-constructor)
                             bool value
                     ) noexcept;
 
                 public:
-                    __CDS_Implicit BaseString ( // NOLINT(google-explicit-constructor)
-                            uint32 value
-                    ) noexcept;
-
-                public:
-                    __CDS_Implicit BaseString ( // NOLINT(google-explicit-constructor)
-                            uint64 value
-                    ) noexcept;
-
-                public:
-                    __CDS_Implicit BaseString ( // NOLINT(google-explicit-constructor)
-                            sint32 value
-                    ) noexcept;
-
-                public:
-                    __CDS_Implicit BaseString ( // NOLINT(google-explicit-constructor)
-                            sint64 value
-                    ) noexcept;
-
-                public:
-                    __CDS_Implicit BaseString ( // NOLINT(google-explicit-constructor)
-                            float value
-                    ) noexcept;
-
-                public:
-                    __CDS_Implicit BaseString ( // NOLINT(google-explicit-constructor)
-                            double value
-                    ) noexcept;
-
-                public:
-                    __CDS_Implicit BaseString ( // NOLINT(google-explicit-constructor)
-                            long double value
+                    template < typename FloatingPointType, meta :: EnableIf < meta :: isFloatingPoint < FloatingPointType > () > = 0 >
+                    __CDS_Explicit BaseString ( // NOLINT(google-explicit-constructor)
+                            FloatingPointType value
                     ) noexcept;
 
                 public:
@@ -415,13 +351,13 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
 
                 public:
-                    __CDS_Implicit operator std :: basic_string < CharType > () const noexcept;
+                    __CDS_Implicit operator std :: basic_string < CharType > () const noexcept; // NOLINT(google-explicit-constructor)
 
                 public:
-                    __CDS_Implicit constexpr operator ElementType const * () const noexcept;
+                    __CDS_Explicit constexpr operator ElementType const * () const noexcept; // NOLINT(google-explicit-constructor)
 
                 public:
-                    __CDS_Implicit __CDS_cpplang_NonConstConstexprMemberFunction operator ElementType * () noexcept;
+                    __CDS_Explicit __CDS_cpplang_NonConstConstexprMemberFunction operator ElementType * () noexcept; // NOLINT(google-explicit-constructor)
 
 
                 public:
@@ -433,7 +369,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 public:
                     __CDS_NoDiscard auto operator () (
                             Index from,
-                            Index to = -1
+                            Index until = -1
                     ) const noexcept -> BaseString;
 
                 public:
@@ -443,8 +379,9 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
 
                 public:
+                    template < typename ConvertibleType, meta :: EnableIf < meta :: isConvertibleToBaseStringView < ConvertibleType, CharType > () > = 0 >
                     auto operator = (
-                            BaseString const & string
+                            ConvertibleType && string
                     ) noexcept -> BaseString &;
 
                 public:
@@ -458,18 +395,26 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                     ) noexcept -> BaseString &;
 
                 public:
-                    auto operator = (
-                            std :: basic_string < CharType > const & string
-                    ) noexcept -> BaseString &;
-
-                public:
-                    auto operator = (
-                            ElementType const * pString
-                    ) noexcept -> BaseString &;
-
-                public:
+                    template < typename T = CharType, meta :: EnableIf < meta :: isStringCharType < T > () > = 0 >
                     auto operator = (
                             ElementType character
+                    ) noexcept -> BaseString &;
+
+                public:
+                    template < typename NumericType, meta :: EnableIf < meta :: isIntegralToString < CharType, NumericType > () > = 0 >
+                    auto operator = (
+                            NumericType value
+                    ) noexcept -> BaseString &;
+
+                public:
+                    auto operator = (
+                            bool value
+                    ) noexcept -> BaseString &;
+
+                public:
+                    template < typename FloatingPointType, meta :: EnableIf < meta :: isFloatingPoint < FloatingPointType > () > = 0 >
+                    auto operator = (
+                            FloatingPointType value
                     ) noexcept -> BaseString &;
 
 
@@ -480,6 +425,13 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
 
                 public:
+                    template < typename ConvertibleType, meta :: EnableIf < meta :: isNonAmbiguousConvertibleToBaseStringView< ConvertibleType, CharType > () > = 0 >
+                    __CDS_NoDiscard __CDS_cpplang_ConstexprConditioned auto operator == (
+                            ConvertibleType && string
+                    ) const noexcept -> bool;
+
+                //// cpp-20 non-ambiguity rule
+                public:
                     __CDS_NoDiscard __CDS_cpplang_ConstexprConditioned auto operator == (
                             BaseString const & string
                     ) const noexcept -> bool;
@@ -487,11 +439,6 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 public:
                     __CDS_NoDiscard __CDS_cpplang_ConstexprConditioned auto operator == (
                             BaseStringView < CharType > const & string
-                    ) const noexcept -> bool;
-
-                public:
-                    __CDS_NoDiscard __CDS_cpplang_ConstexprConditioned auto operator == (
-                            std :: basic_string < CharType > const & string
                     ) const noexcept -> bool;
 
 #if defined(CDS_QT)
@@ -504,11 +451,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 #endif
 
                 public:
-                    __CDS_NoDiscard __CDS_cpplang_ConstexprConditioned auto operator == (
-                            ElementType const * pString
-                    ) const noexcept -> bool;
-
-                public:
+                    template < typename T = CharType, meta :: EnableIf < meta :: isStringCharType < T > () > = 0 >
                     __CDS_NoDiscard __CDS_cpplang_ConstexprConditioned auto operator == (
                             ElementType character
                     ) const noexcept -> bool;
@@ -522,10 +465,10 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                     ) noexcept -> bool;
 
                 public:
-                    template < typename FCharType >
+                    template < typename FCharType, typename ConvertibleType, meta :: EnableIf < meta :: isNonAmbiguousConvertibleToBaseStringView < ConvertibleType, FCharType > () > >
                     __CDS_cpplang_ConstexprConditioned friend auto operator == (
-                            std :: basic_string < FCharType >    const & leftString,
-                            BaseString < FCharType >             const & rightString
+                            ConvertibleType && leftString,
+                            BaseString < FCharType >    const & rightString
                     ) noexcept -> bool;
 
 #if defined(CDS_QT)
@@ -540,20 +483,20 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 #endif
 
                 public:
-                    template < typename FCharType >
-                    __CDS_cpplang_ConstexprConditioned friend auto operator == (
-                            FCharType                   const * pLeftString,
-                            BaseString < FCharType >    const & rightString
-                    ) noexcept -> bool;
-
-                public:
-                    template < typename FCharType >
+                    template < typename FCharType, meta :: EnableIf < meta :: isStringCharType < FCharType > () > >
                     __CDS_cpplang_ConstexprConditioned friend auto operator == (
                             FCharType                           character,
                             BaseString < FCharType >    const & string
                     ) noexcept -> bool;
 
 
+                public:
+                    template < typename ConvertibleType, meta :: EnableIf < meta :: isNonAmbiguousConvertibleToBaseStringView < ConvertibleType, CharType > () > = 0 >
+                    __CDS_NoDiscard __CDS_cpplang_ConstexprConditioned auto operator != (
+                            ConvertibleType && string
+                    ) const noexcept -> bool;
+
+                    //// cpp-20 non-ambiguity rule
                 public:
                     __CDS_NoDiscard __CDS_cpplang_ConstexprConditioned auto operator != (
                             BaseString const & string
@@ -562,11 +505,6 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 public:
                     __CDS_NoDiscard __CDS_cpplang_ConstexprConditioned auto operator != (
                             BaseStringView < CharType > const & string
-                    ) const noexcept -> bool;
-
-                public:
-                    __CDS_NoDiscard __CDS_cpplang_ConstexprConditioned auto operator != (
-                            std :: basic_string < CharType > const & string
                     ) const noexcept -> bool;
 
 #if defined(CDS_QT)
@@ -579,11 +517,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 #endif
 
                 public:
-                    __CDS_NoDiscard __CDS_cpplang_ConstexprConditioned auto operator != (
-                            ElementType const * pString
-                    ) const noexcept -> bool;
-
-                public:
+                    template < typename T = CharType, meta :: EnableIf < meta :: isStringCharType < T > () > = 0 >
                     __CDS_NoDiscard __CDS_cpplang_ConstexprConditioned auto operator != (
                             ElementType character
                     ) const noexcept -> bool;
@@ -597,10 +531,10 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                     ) noexcept -> bool;
 
                 public:
-                    template < typename FCharType >
+                    template < typename FCharType, typename ConvertibleType, meta :: EnableIf < meta :: isNonAmbiguousConvertibleToBaseStringView < ConvertibleType, FCharType > () > >
                     __CDS_cpplang_ConstexprConditioned friend auto operator != (
-                            std :: basic_string < FCharType >   const & leftString,
-                            BaseString < FCharType >            const & rightString
+                            ConvertibleType && leftString,
+                            BaseString < FCharType >    const & rightString
                     ) noexcept -> bool;
 
 #if defined(CDS_QT)
@@ -615,33 +549,21 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 #endif
 
                 public:
-                    template < typename FCharType >
-                    __CDS_cpplang_ConstexprConditioned friend auto operator != (
-                            FCharType                   const * pLeftString,
-                            BaseString < FCharType >    const & rightString
-                    ) noexcept -> bool;
-
-                public:
-                    template < typename FCharType >
+                    template < typename FCharType, meta :: EnableIf < meta :: isStringCharType < FCharType > () > >
                     __CDS_cpplang_ConstexprConditioned friend auto operator != (
                             FCharType                           character,
                             BaseString < FCharType >    const & string
                     ) noexcept -> bool;
 
-
                 public:
+                    template < typename ConvertibleType, meta :: EnableIf < meta :: isConvertibleToBaseStringView < ConvertibleType, CharType > () > = 0 >
                     __CDS_NoDiscard __CDS_cpplang_ConstexprConditioned auto operator < (
-                            BaseString const & string
+                            ConvertibleType && string
                     ) const noexcept -> bool;
 
                 public:
                     __CDS_NoDiscard __CDS_cpplang_ConstexprConditioned auto operator < (
                             BaseStringView < CharType > const & string
-                    ) const noexcept -> bool;
-
-                public:
-                    __CDS_NoDiscard __CDS_cpplang_ConstexprConditioned auto operator < (
-                            std :: basic_string < CharType > const & string
                     ) const noexcept -> bool;
 
 #if defined(CDS_QT)
@@ -654,11 +576,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 #endif
 
                 public:
-                    __CDS_NoDiscard __CDS_cpplang_ConstexprConditioned auto operator < (
-                            ElementType const * pString
-                    ) const noexcept -> bool;
-
-                public:
+                    template < typename T = CharType, meta :: EnableIf < meta :: isStringCharType < T > () > = 0 >
                     __CDS_NoDiscard __CDS_cpplang_ConstexprConditioned auto operator < (
                             ElementType character
                     ) const noexcept -> bool;
@@ -672,10 +590,10 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                     ) noexcept -> bool;
 
                 public:
-                    template < typename FCharType >
+                    template < typename FCharType, typename ConvertibleType, meta :: EnableIf < meta :: isNonAmbiguousConvertibleToBaseStringView < ConvertibleType, FCharType > () > >
                     __CDS_cpplang_ConstexprConditioned friend auto operator < (
-                            std :: basic_string < FCharType >   const & leftString,
-                            BaseString < FCharType >            const & rightString
+                            ConvertibleType && leftString,
+                            BaseString < FCharType >    const & rightString
                     ) noexcept -> bool;
 
 #if defined(CDS_QT)
@@ -690,14 +608,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 #endif
 
                 public:
-                    template < typename FCharType >
-                    __CDS_cpplang_ConstexprConditioned friend auto operator < (
-                            FCharType                   const * pLeftString,
-                            BaseString < FCharType >    const & rightString
-                    ) noexcept -> bool;
-
-                public:
-                    template < typename FCharType >
+                    template < typename FCharType, meta :: EnableIf < meta :: isStringCharType < FCharType > () > >
                     __CDS_cpplang_ConstexprConditioned friend auto operator < (
                             FCharType                           character,
                             BaseString < FCharType >    const & string
@@ -705,18 +616,14 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
 
                 public:
+                    template < typename ConvertibleType, meta :: EnableIf < meta :: isConvertibleToBaseStringView < ConvertibleType, CharType > () > = 0 >
                     __CDS_NoDiscard __CDS_cpplang_ConstexprConditioned auto operator > (
-                            BaseString const & string
+                            ConvertibleType && string
                     ) const noexcept -> bool;
 
                 public:
                     __CDS_NoDiscard __CDS_cpplang_ConstexprConditioned auto operator > (
                             BaseStringView < CharType > const & string
-                    ) const noexcept -> bool;
-
-                public:
-                    __CDS_NoDiscard __CDS_cpplang_ConstexprConditioned auto operator > (
-                            std :: basic_string < CharType > const & string
                     ) const noexcept -> bool;
 
 #if defined(CDS_QT)
@@ -729,11 +636,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 #endif
 
                 public:
-                    __CDS_NoDiscard __CDS_cpplang_ConstexprConditioned auto operator > (
-                            ElementType const * pString
-                    ) const noexcept -> bool;
-
-                public:
+                    template < typename T = CharType, meta :: EnableIf < meta :: isStringCharType < T > () > = 0 >
                     __CDS_NoDiscard __CDS_cpplang_ConstexprConditioned auto operator > (
                             ElementType character
                     ) const noexcept -> bool;
@@ -747,10 +650,10 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                     ) noexcept -> bool;
 
                 public:
-                    template < typename FCharType >
+                    template < typename FCharType, typename ConvertibleType, meta :: EnableIf < meta :: isNonAmbiguousConvertibleToBaseStringView < ConvertibleType, FCharType > () > >
                     __CDS_cpplang_ConstexprConditioned friend auto operator > (
-                            std :: basic_string < FCharType >   const & leftString,
-                            BaseString < FCharType >            const & rightString
+                            ConvertibleType && leftString,
+                            BaseString < FCharType >    const & rightString
                     ) noexcept -> bool;
 
 #if defined(CDS_QT)
@@ -765,14 +668,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 #endif
 
                 public:
-                    template < typename FCharType >
-                    __CDS_cpplang_ConstexprConditioned friend auto operator > (
-                            FCharType                   const * pLeftString,
-                            BaseString < FCharType >    const & rightString
-                    ) noexcept -> bool;
-
-                public:
-                    template < typename FCharType >
+                    template < typename FCharType, meta :: EnableIf < meta :: isStringCharType < FCharType > () > >
                     __CDS_cpplang_ConstexprConditioned friend auto operator > (
                             FCharType                           character,
                             BaseString < FCharType >    const & string
@@ -780,18 +676,14 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
 
                 public:
+                    template < typename ConvertibleType, meta :: EnableIf < meta :: isConvertibleToBaseStringView < ConvertibleType, CharType > () > = 0 >
                     __CDS_NoDiscard __CDS_cpplang_ConstexprConditioned auto operator <= (
-                            BaseString const & string
+                            ConvertibleType && string
                     ) const noexcept -> bool;
 
                 public:
                     __CDS_NoDiscard __CDS_cpplang_ConstexprConditioned auto operator <= (
                             BaseStringView < CharType > const & string
-                    ) const noexcept -> bool;
-
-                public:
-                    __CDS_NoDiscard __CDS_cpplang_ConstexprConditioned auto operator <= (
-                            std :: basic_string < CharType > const & string
                     ) const noexcept -> bool;
 
 #if defined(CDS_QT)
@@ -804,14 +696,11 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 #endif
 
                 public:
-                    __CDS_NoDiscard __CDS_cpplang_ConstexprConditioned auto operator <= (
-                            ElementType const * pString
-                    ) const noexcept -> bool;
-
-                public:
+                    template < typename T = CharType, meta :: EnableIf < meta :: isStringCharType < T > () > = 0 >
                     __CDS_NoDiscard __CDS_cpplang_ConstexprConditioned auto operator <= (
                             ElementType character
                     ) const noexcept -> bool;
+
 
 
                 public:
@@ -822,10 +711,10 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                     ) noexcept -> bool;
 
                 public:
-                    template < typename FCharType >
+                    template < typename FCharType, typename ConvertibleType, meta :: EnableIf < meta :: isNonAmbiguousConvertibleToBaseStringView < ConvertibleType, FCharType > () > >
                     __CDS_cpplang_ConstexprConditioned friend auto operator <= (
-                            std :: basic_string < FCharType >   const & leftString,
-                            BaseString < FCharType >            const & rightString
+                            ConvertibleType && leftString,
+                            BaseString < FCharType >    const & rightString
                     ) noexcept -> bool;
 
 #if defined(CDS_QT)
@@ -840,33 +729,22 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 #endif
 
                 public:
-                    template < typename FCharType >
+                    template < typename FCharType, meta :: EnableIf < meta :: isStringCharType < FCharType > () > >
                     __CDS_cpplang_ConstexprConditioned friend auto operator <= (
-                            FCharType                   const * pLeftString,
-                            BaseString < FCharType >    const & rightString
-                    ) noexcept -> bool;
-
-                public:
-                    template < typename FCharType >
-                    __CDS_cpplang_ConstexprConditioned friend auto operator <= (
-                            FCharType         character,
+                            FCharType                        character,
                             BaseString < FCharType > const & string
                     ) noexcept -> bool;
 
 
                 public:
+                    template < typename ConvertibleType, meta :: EnableIf < meta :: isConvertibleToBaseStringView < ConvertibleType, CharType > () > = 0 >
                     __CDS_NoDiscard __CDS_cpplang_ConstexprConditioned auto operator >= (
-                            BaseString const & string
+                            ConvertibleType && string
                     ) const noexcept -> bool;
 
                 public:
                     __CDS_NoDiscard __CDS_cpplang_ConstexprConditioned auto operator >= (
                             BaseStringView < CharType > const & string
-                    ) const noexcept -> bool;
-
-                public:
-                    __CDS_NoDiscard __CDS_cpplang_ConstexprConditioned auto operator >= (
-                            std :: basic_string < CharType > const & string
                     ) const noexcept -> bool;
 
 #if defined(CDS_QT)
@@ -879,11 +757,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 #endif
 
                 public:
-                    __CDS_NoDiscard __CDS_cpplang_ConstexprConditioned auto operator >= (
-                            ElementType const * pString
-                    ) const noexcept -> bool;
-
-                public:
+                    template < typename T = CharType, meta :: EnableIf < meta :: isStringCharType < T > () > = 0 >
                     __CDS_NoDiscard __CDS_cpplang_ConstexprConditioned auto operator >= (
                             ElementType character
                     ) const noexcept -> bool;
@@ -897,10 +771,10 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                     ) noexcept -> bool;
 
                 public:
-                    template < typename FCharType >
+                    template < typename FCharType, typename ConvertibleType, meta :: EnableIf < meta :: isNonAmbiguousConvertibleToBaseStringView < ConvertibleType, FCharType > () > >
                     __CDS_cpplang_ConstexprConditioned friend auto operator >= (
-                            std :: basic_string < FCharType >   const & leftString,
-                            BaseString < FCharType >            const & rightString
+                            ConvertibleType && leftString,
+                            BaseString < FCharType >    const & rightString
                     ) noexcept -> bool;
 
 #if defined(CDS_QT)
@@ -915,14 +789,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 #endif
 
                 public:
-                    template < typename FCharType >
-                    __CDS_cpplang_ConstexprConditioned friend auto operator >= (
-                            FCharType                   const * pLeftString,
-                            BaseString < FCharType >    const & rightString
-                    ) noexcept -> bool;
-
-                public:
-                    template < typename FCharType >
+                    template < typename FCharType, meta :: EnableIf < meta :: isStringCharType < FCharType > () > >
                     __CDS_cpplang_ConstexprConditioned friend auto operator >= (
                             FCharType                           character,
                             BaseString < FCharType >    const & string
@@ -930,8 +797,9 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
 
                 public:
+                    template < typename ConvertibleType, meta :: EnableIf < meta :: isConvertibleToBaseStringView < ConvertibleType, CharType > () > = 0 >
                     auto operator += (
-                            BaseString const & string
+                            ConvertibleType && string
                     ) noexcept -> BaseString &;
 
                 public:
@@ -942,16 +810,6 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 public:
                     auto operator += (
                             BaseStringView < CharType > const & string
-                    ) noexcept -> BaseString &;
-
-                public:
-                    auto operator += (
-                            std :: basic_string < CharType > const & string
-                    ) noexcept -> BaseString &;
-
-                public:
-                    auto operator += (
-                            ElementType const * pString
                     ) noexcept -> BaseString &;
 
 #if defined(CDS_QT)
@@ -964,57 +822,15 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 #endif
 
                 public:
-                    template < typename T = CharType, meta :: EnableIf < meta :: isSame < T, uint8 > () > = 0 >
+                    template < typename T = CharType, meta :: EnableIf < meta :: isStringCharType < T > () > = 0 >
                     auto operator += (
                             ElementType character
                     ) noexcept -> BaseString &;
 
                 public:
-                    template < typename T = CharType, meta :: EnableIf < meta :: isSame < T, uint16 > () > = 0 >
+                    template < typename NumericType, meta :: EnableIf < meta :: isIntegralToString < CharType, NumericType > () > = 0 >
                     auto operator += (
-                            ElementType character
-                    ) noexcept -> BaseString &;
-
-                public:
-                    template < typename T = CharType, meta :: EnableIf < meta :: isSame < T, sint8 > () > = 0 >
-                    auto operator += (
-                            ElementType character
-                    ) noexcept -> BaseString &;
-
-                public:
-                    template < typename T = CharType, meta :: EnableIf < meta :: isSame < T, sint16 > () > = 0 >
-                    auto operator += (
-                            ElementType character
-                    ) noexcept -> BaseString &;
-
-                public:
-                    template < typename T = CharType, meta :: EnableIf < ! meta :: isSame < T, uint8 > () > = 0 >
-                    auto operator += (
-                            uint8 value
-                    ) noexcept -> BaseString &;
-
-                public:
-                    template < typename T = CharType, meta :: EnableIf < ! meta :: isSame < T, uint16 > () > = 0 >
-                    auto operator += (
-                            uint16 value
-                    ) noexcept -> BaseString &;
-
-                public:
-                    template < typename T = CharType, meta :: EnableIf < ! meta :: isSame < T, sint8 > () > = 0 >
-                    auto operator += (
-                            sint8 value
-                    ) noexcept -> BaseString &;
-
-                public:
-                    template < typename T = CharType, meta :: EnableIf < ! meta :: isSame < T, sint16 > () > = 0 >
-                    auto operator += (
-                            sint16 value
-                    ) noexcept -> BaseString &;
-
-                public:
-                    template < typename T = std :: size_t, meta :: EnableIf < ! meta :: isSame < T, uint64 > () > = 0 >
-                    auto operator += (
-                            std :: size_t value
+                            NumericType value
                     ) noexcept -> BaseString &;
 
                 public:
@@ -1023,44 +839,16 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                     ) noexcept -> BaseString &;
 
                 public:
+                    template < typename FloatingPointType, meta :: EnableIf < meta :: isFloatingPoint < FloatingPointType > () > = 0 >
                     auto operator += (
-                            uint32 value
-                    ) noexcept -> BaseString &;
-
-                public:
-                    auto operator += (
-                            uint64 value
-                    ) noexcept -> BaseString &;
-
-                public:
-                    auto operator += (
-                            sint32 value
-                    ) noexcept -> BaseString &;
-
-                public:
-                    auto operator += (
-                            sint64 value
-                    ) noexcept -> BaseString &;
-
-                public:
-                    auto operator += (
-                            float value
-                    ) noexcept -> BaseString &;
-
-                public:
-                    auto operator += (
-                            double value
-                    ) noexcept -> BaseString &;
-
-                public:
-                    auto operator += (
-                            long double value
+                            FloatingPointType value
                     ) noexcept -> BaseString &;
 
 
                 public:
+                    template < typename ConvertibleType, meta :: EnableIf < meta :: isConvertibleToBaseStringView < ConvertibleType, CharType > () > = 0 >
                     auto operator + (
-                            BaseString const & string
+                            ConvertibleType && string
                     ) const & noexcept -> BaseString;
 
                 public:
@@ -1071,16 +859,6 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 public:
                     auto operator + (
                             BaseStringView < CharType > const & string
-                    ) const & noexcept -> BaseString;
-
-                public:
-                    auto operator + (
-                            std :: basic_string < CharType > const & string
-                    ) const & noexcept -> BaseString;
-
-                public:
-                    auto operator + (
-                            ElementType const * pString
                     ) const & noexcept -> BaseString;
 
 #if defined(CDS_QT)
@@ -1093,57 +871,15 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 #endif
 
                 public:
-                    template < typename T = CharType, meta :: EnableIf < meta :: isSame < T, uint8 > () > = 0 >
+                    template < typename T = CharType, meta :: EnableIf < meta :: isStringCharType < T > () > = 0 >
                     auto operator + (
                             ElementType character
                     ) const & noexcept -> BaseString;
 
                 public:
-                    template < typename T = CharType, meta :: EnableIf < meta :: isSame < T, uint16 > () > = 0 >
+                    template < typename NumericType, meta :: EnableIf < meta :: isIntegralToString < CharType, NumericType > () > = 0 >
                     auto operator + (
-                            ElementType character
-                    ) const & noexcept -> BaseString;
-
-                public:
-                    template < typename T = CharType, meta :: EnableIf < meta :: isSame < T, sint8 > () > = 0 >
-                    auto operator + (
-                            ElementType character
-                    ) const & noexcept -> BaseString;
-
-                public:
-                    template < typename T = CharType, meta :: EnableIf < meta :: isSame < T, sint16 > () > = 0 >
-                    auto operator + (
-                            ElementType character
-                    ) const & noexcept -> BaseString;
-
-                public:
-                    template < typename T = CharType, meta :: EnableIf < ! meta :: isSame < T, uint8 > () > = 0 >
-                    auto operator + (
-                            uint8 value
-                    ) const & noexcept -> BaseString;
-
-                public:
-                    template < typename T = CharType, meta :: EnableIf < ! meta :: isSame < T, uint16 > () > = 0 >
-                    auto operator + (
-                            uint16 value
-                    ) const & noexcept -> BaseString;
-
-                public:
-                    template < typename T = CharType, meta :: EnableIf < ! meta :: isSame < T, sint8 > () > = 0 >
-                    auto operator + (
-                            sint8 value
-                    ) const & noexcept -> BaseString;
-
-                public:
-                    template < typename T = CharType, meta :: EnableIf < ! meta :: isSame < T, sint16 > () > = 0 >
-                    auto operator + (
-                            sint16 value
-                    ) const & noexcept -> BaseString;
-
-                public:
-                    template < typename T = std :: size_t, meta :: EnableIf < ! meta :: isSame < T, uint64 > () > = 0 >
-                    auto operator + (
-                            std :: size_t value
+                            NumericType value
                     ) const & noexcept -> BaseString;
 
                 public:
@@ -1152,38 +888,9 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                     ) const & noexcept -> BaseString;
 
                 public:
+                    template < typename FloatingPointType, meta :: EnableIf < meta :: isFloatingPoint < FloatingPointType > () > = 0 >
                     auto operator + (
-                            uint32 value
-                    ) const & noexcept -> BaseString;
-
-                public:
-                    auto operator + (
-                            uint64 value
-                    ) const & noexcept -> BaseString;
-
-                public:
-                    auto operator + (
-                            sint32 value
-                    ) const & noexcept -> BaseString;
-
-                public:
-                    auto operator + (
-                            sint64 value
-                    ) const & noexcept -> BaseString;
-
-                public:
-                    auto operator + (
-                            float value
-                    ) const & noexcept -> BaseString;
-
-                public:
-                    auto operator + (
-                            double value
-                    ) const & noexcept -> BaseString;
-
-                public:
-                    auto operator + (
-                            long double value
+                            FloatingPointType value
                     ) const & noexcept -> BaseString;
 
 
@@ -1195,16 +902,9 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                     ) noexcept -> BaseString < FCharType >;
 
                 public:
-                    template < typename FCharType >
+                    template < typename FCharType, typename ConvertibleType, meta :: EnableIf < meta :: isNonAmbiguousConvertibleToBaseStringView < ConvertibleType, FCharType > () > >
                     friend auto operator + (
-                            std :: basic_string < FCharType >   const & leftString,
-                            BaseString < FCharType >            const & rightString
-                    ) noexcept -> BaseString < FCharType >;
-
-                public:
-                    template < typename FCharType >
-                    friend auto operator + (
-                            FCharType                   const * pLeftString,
+                            ConvertibleType && leftString,
                             BaseString < FCharType >    const & rightString
                     ) noexcept -> BaseString < FCharType >;
 
@@ -1220,65 +920,16 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 #endif
 
                 public:
-                    template < typename FCharType, meta :: EnableIf < meta :: isSame < FCharType, uint8 > () > >
+                    template < typename FCharType, meta :: EnableIf < meta :: isStringCharType < FCharType > () > >
                     friend auto operator + (
-                            ElementType                         character,
+                            FCharType                           character,
                             BaseString < FCharType >    const & string
                     ) noexcept -> BaseString < FCharType >;
 
                 public:
-                    template < typename FCharType, meta :: EnableIf < meta :: isSame < FCharType, uint8 > () > >
+                    template < typename FCharType, typename NumericType, meta :: EnableIf < meta :: isIntegralToString < FCharType, NumericType > () > >
                     friend auto operator + (
-                            ElementType                         character,
-                            BaseString < FCharType >    const & string
-                    ) noexcept -> BaseString < FCharType >;
-
-                public:
-                    template < typename FCharType, meta :: EnableIf < meta :: isSame < FCharType, uint8 > () > >
-                    friend auto operator + (
-                            ElementType                         character,
-                            BaseString < FCharType >    const & string
-                    ) noexcept -> BaseString < FCharType >;
-
-                public:
-                    template < typename FCharType, meta :: EnableIf < meta :: isSame < FCharType, uint8 > () > >
-                    friend auto operator + (
-                            ElementType                         character,
-                            BaseString < FCharType >    const & string
-                    ) noexcept -> BaseString < FCharType >;
-
-                public:
-                    template < typename FCharType, meta :: EnableIf < ! meta :: isSame < FCharType, uint8 > () > >
-                    friend auto operator + (
-                            uint8                               value,
-                            BaseString < FCharType >    const & string
-                    ) noexcept -> BaseString < FCharType >;
-
-                public:
-                    template < typename FCharType, meta :: EnableIf < ! meta :: isSame < FCharType, uint16 > () > >
-                    friend auto operator + (
-                            uint16                              value,
-                            BaseString < FCharType >    const & string
-                    ) noexcept -> BaseString < FCharType >;
-
-                public:
-                    template < typename FCharType, meta :: EnableIf < ! meta :: isSame < FCharType, sint8 > () > >
-                    friend auto operator + (
-                            sint8                               value,
-                            BaseString < FCharType >    const & string
-                    ) noexcept -> BaseString < FCharType >;
-
-                public:
-                    template < typename FCharType, meta :: EnableIf < ! meta :: isSame < FCharType, sint16 > () > >
-                    friend auto operator + (
-                            sint16                              value,
-                            BaseString < FCharType >    const & string
-                    ) noexcept -> BaseString < FCharType >;
-
-                public:
-                    template < typename FCharType, typename T, meta :: EnableIf < ! meta :: isSame < T, uint64 > () > >
-                    friend auto operator + (
-                            std :: size_t                       value,
+                            NumericType                         value,
                             BaseString < FCharType >    const & string
                     ) noexcept -> BaseString < FCharType >;
 
@@ -1290,59 +941,18 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                     ) noexcept -> BaseString < FCharType >;
 
                 public:
-                    template < typename FCharType >
+                    template < typename FCharType, typename FloatingPointType, meta :: EnableIf < meta :: isFloatingPoint < FloatingPointType > () > >
                     friend auto operator + (
-                            uint32                              value,
-                            BaseString < FCharType >    const & string
-                    ) noexcept -> BaseString < FCharType >;
-
-                public:
-                    template < typename FCharType >
-                    friend auto operator + (
-                            uint64                              value,
-                            BaseString < FCharType >    const & string
-                    ) noexcept -> BaseString< FCharType >;
-
-                public:
-                    template < typename FCharType >
-                    friend auto operator + (
-                            sint32                               value,
-                            BaseString < FCharType >     const & string
-                    ) noexcept -> BaseString < FCharType >;
-
-                public:
-                    template < typename FCharType >
-                    friend auto operator + (
-                            sint64                              value,
-                            BaseString < FCharType >    const & string
-                    ) noexcept -> BaseString < FCharType >;
-
-                public:
-                    template < typename FCharType >
-                    friend auto operator + (
-                            float                               value,
-                            BaseString < FCharType >    const & string
-                    ) noexcept -> BaseString < FCharType >;
-
-                public:
-                    template < typename FCharType >
-                    friend auto operator + (
-                            double                              value,
-                            BaseString < FCharType >    const & string
-                    ) noexcept -> BaseString < FCharType >;
-
-                public:
-                    template < typename FCharType >
-                    friend auto operator + (
-                            long double                         value,
+                            FloatingPointType                   value,
                             BaseString < FCharType >    const & string
                     ) noexcept -> BaseString < FCharType >;
 
 
 
                 public:
+                    template < typename ConvertibleType, meta :: EnableIf < meta :: isConvertibleToBaseStringView < ConvertibleType, CharType > () > = 0 >
                     auto operator + (
-                            BaseString const & string
+                            ConvertibleType && string
                     ) && noexcept -> BaseString;
 
                 public:
@@ -1355,16 +965,6 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                             BaseStringView < CharType > const & string
                     ) && noexcept -> BaseString;
 
-                public:
-                    auto operator + (
-                            std :: basic_string < CharType > const & string
-                    ) && noexcept -> BaseString;
-
-                public:
-                    auto operator + (
-                            ElementType const * pString
-                    ) && noexcept -> BaseString;
-
 #if defined(CDS_QT)
 
                     public:
@@ -1375,57 +975,15 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 #endif
 
                 public:
-                    template < typename T = CharType, meta :: EnableIf < meta :: isSame < T, uint8 > () > = 0 >
+                    template < typename T = CharType, meta :: EnableIf < meta :: isStringCharType < T > () > = 0 >
                     auto operator + (
                             ElementType character
                     ) && noexcept -> BaseString;
 
                 public:
-                    template < typename T = CharType, meta :: EnableIf < meta :: isSame < T, uint16 > () > = 0 >
+                    template < typename NumericType, meta :: EnableIf < meta :: isIntegralToString < CharType, NumericType > () > = 0 >
                     auto operator + (
-                            ElementType character
-                    ) && noexcept -> BaseString;
-
-                public:
-                    template < typename T = CharType, meta :: EnableIf < meta :: isSame < T, sint8 > () > = 0 >
-                    auto operator + (
-                            ElementType character
-                    ) && noexcept -> BaseString;
-
-                public:
-                    template < typename T = CharType, meta :: EnableIf < meta :: isSame < T, sint16 > () > = 0 >
-                    auto operator + (
-                            ElementType character
-                    ) && noexcept -> BaseString;
-
-                public:
-                    template < typename T = CharType, meta :: EnableIf < ! meta :: isSame < T, uint8 > () > = 0 >
-                    auto operator + (
-                            uint8 value
-                    ) && noexcept -> BaseString;
-
-                public:
-                    template < typename T = CharType, meta :: EnableIf < ! meta :: isSame < T, uint16 > () > = 0 >
-                    auto operator + (
-                            uint16 value
-                    ) && noexcept -> BaseString;
-
-                public:
-                    template < typename T = CharType, meta :: EnableIf < ! meta :: isSame < T, sint8 > () > = 0 >
-                    auto operator + (
-                            sint8 value
-                    ) && noexcept -> BaseString;
-
-                public:
-                    template < typename T = CharType, meta :: EnableIf < ! meta :: isSame < T, sint16 > () > = 0 >
-                    auto operator + (
-                            sint16 value
-                    ) && noexcept -> BaseString;
-
-                public:
-                    template < typename T = std :: size_t, meta :: EnableIf < ! meta :: isSame < T, uint64 > () > = 0 >
-                    auto operator + (
-                            std :: size_t value
+                            NumericType value
                     ) && noexcept -> BaseString;
 
                 public:
@@ -1434,38 +992,9 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                     ) && noexcept -> BaseString;
 
                 public:
+                    template < typename FloatingPointType, meta :: EnableIf < meta :: isFloatingPoint < FloatingPointType > () > = 0 >
                     auto operator + (
-                            uint32 value
-                    ) && noexcept -> BaseString;
-
-                public:
-                    auto operator + (
-                            uint64 value
-                    ) && noexcept -> BaseString;
-
-                public:
-                    auto operator + (
-                            sint32 value
-                    ) && noexcept -> BaseString;
-
-                public:
-                    auto operator + (
-                            sint64 value
-                    ) && noexcept -> BaseString;
-
-                public:
-                    auto operator + (
-                            float value
-                    ) && noexcept -> BaseString;
-
-                public:
-                    auto operator + (
-                            double value
-                    ) && noexcept -> BaseString;
-
-                public:
-                    auto operator + (
-                            long double value
+                            FloatingPointType value
                     ) && noexcept -> BaseString;
 
 
@@ -1477,16 +1006,9 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                     ) noexcept -> BaseString < FCharType >;
 
                 public:
-                    template < typename FCharType >
+                    template < typename FCharType, typename ConvertibleType, meta :: EnableIf < meta :: isNonAmbiguousConvertibleToBaseStringView < ConvertibleType, FCharType > () > >
                     friend auto operator + (
-                            std :: basic_string < FCharType >   const & leftString,
-                            BaseString < FCharType >                 && rightString
-                    ) noexcept -> BaseString < FCharType >;
-
-                public:
-                    template < typename FCharType >
-                    friend auto operator + (
-                            FCharType                   const * pLeftString,
+                            ConvertibleType && leftString,
                             BaseString < FCharType >         && rightString
                     ) noexcept -> BaseString < FCharType >;
 
@@ -1502,67 +1024,18 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 #endif
 
                 public:
-                    template < typename FCharType, meta :: EnableIf < meta :: isSame < FCharType, uint8 > () > >
+                    template < typename FCharType, meta :: EnableIf < meta :: isStringCharType < FCharType > () > >
                     friend auto operator + (
-                            ElementType         character,
-                            BaseString       && rightString
-                    ) noexcept -> BaseString;
+                            FCharType                      character,
+                            BaseString < FCharType >    && rightString
+                    ) noexcept -> BaseString < FCharType >;
 
                 public:
-                    template < typename FCharType, meta :: EnableIf < meta :: isSame < FCharType, uint16 > () > >
+                    template < typename FCharType, typename NumericType, meta :: EnableIf < meta :: isIntegralToString < FCharType, NumericType > () > >
                     friend auto operator + (
-                            ElementType         character,
-                            BaseString       && rightString
-                    ) noexcept -> BaseString;
-
-                public:
-                    template < typename FCharType, meta :: EnableIf < meta :: isSame < FCharType, sint8 > () > >
-                    friend auto operator + (
-                            ElementType         character,
-                            BaseString       && rightString
-                    ) noexcept -> BaseString;
-
-                public:
-                    template < typename FCharType, meta :: EnableIf < meta :: isSame < FCharType, sint16 > () > >
-                    friend auto operator + (
-                            ElementType         character,
-                            BaseString       && rightString
-                    ) noexcept -> BaseString;
-
-                public:
-                    template < typename FCharType, meta :: EnableIf < ! meta :: isSame < FCharType, uint8 > () > >
-                    friend auto operator + (
-                            uint8               value,
-                            BaseString       && rightString
-                    ) noexcept -> BaseString;
-
-                public:
-                    template < typename FCharType, meta :: EnableIf < ! meta :: isSame < FCharType, uint16 > () > >
-                    friend auto operator + (
-                            uint16              value,
-                            BaseString       && rightString
-                    ) noexcept -> BaseString;
-
-                public:
-                    template < typename FCharType, meta :: EnableIf < ! meta :: isSame < FCharType, sint8 > () > >
-                    friend auto operator + (
-                            sint8               value,
-                            BaseString       && rightString
-                    ) noexcept -> BaseString;
-
-                public:
-                    template < typename FCharType, meta :: EnableIf < ! meta :: isSame < FCharType, sint16 > () > >
-                    friend auto operator + (
-                            sint16              value,
-                            BaseString       && rightString
-                    ) noexcept -> BaseString;
-
-                public:
-                    template < typename FCharType, typename T, meta :: EnableIf < ! meta :: isSame < T, uint64 > () > >
-                    friend auto operator + (
-                            std :: size_t       value,
-                            BaseString       && rightString
-                    ) noexcept -> BaseString;
+                            NumericType                    value,
+                            BaseString < FCharType >    && rightString
+                    ) noexcept -> BaseString < FCharType >;
 
                 public:
                     template < typename FCharType >
@@ -1572,52 +1045,10 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                     ) noexcept -> BaseString < FCharType >;
 
                 public:
-                    template < typename FCharType >
+                    template < typename FCharType, typename FloatingPointType, meta :: EnableIf < meta :: isFloatingPoint < FloatingPointType > () > >
                     friend auto operator + (
-                            uint32                      value,
-                            BaseString < FCharType > && rightString
-                    ) noexcept -> BaseString < FCharType >;
-
-                public:
-                    template < typename FCharType >
-                    friend auto operator + (
-                            uint64                      value,
-                            BaseString < FCharType > && rightString
-                    ) noexcept -> BaseString < FCharType >;
-
-                public:
-                    template < typename FCharType >
-                    friend auto operator + (
-                            sint32                      value,
-                            BaseString < FCharType > && rightString
-                    ) noexcept -> BaseString < FCharType >;
-
-                public:
-                    template < typename FCharType >
-                    friend auto operator + (
-                            sint64                      value,
-                            BaseString < FCharType > && rightString
-                    ) noexcept -> BaseString < FCharType >;
-
-                public:
-                    template < typename FCharType >
-                    friend auto operator + (
-                            float                          value,
+                            FloatingPointType              value,
                             BaseString < FCharType >    && rightString
-                    ) noexcept -> BaseString < FCharType >;
-
-                public:
-                    template < typename FCharType >
-                    friend auto operator + (
-                            double                      value,
-                            BaseString < FCharType > && rightString
-                    ) noexcept -> BaseString < FCharType >;
-
-                public:
-                    template < typename FCharType >
-                    friend auto operator + (
-                            long double                 value,
-                            BaseString < FCharType > && rightString
                     ) noexcept -> BaseString < FCharType >;
 
 
@@ -1647,8 +1078,9 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
 
                 public:
+                    template < typename ConvertibleType, meta :: EnableIf < meta :: isConvertibleToBaseStringView < ConvertibleType, CharType > () > = 0 >
                     auto append (
-                            BaseString const & string
+                            ConvertibleType && string
                     ) noexcept -> BaseString &;
 
                 public:
@@ -1661,16 +1093,6 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                             BaseStringView < CharType > const & string
                     ) noexcept -> BaseString &;
 
-                public:
-                    auto append (
-                            std :: basic_string < CharType > const & string
-                    ) noexcept -> BaseString &;
-
-                public:
-                    auto append (
-                            ElementType const * pString
-                    ) noexcept -> BaseString &;
-
 #if defined(CDS_QT)
 
                 public:
@@ -1681,57 +1103,15 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 #endif
 
                 public:
-                    template < typename T = CharType, meta :: EnableIf < meta :: isSame < T, uint8 > () > = 0 >
+                    template < typename T = CharType, meta :: EnableIf < meta :: isStringCharType < T > () > = 0 >
                     auto append (
                             ElementType character
                     ) noexcept -> BaseString &;
 
                 public:
-                    template < typename T = CharType, meta :: EnableIf < meta :: isSame < T, uint16 > () > = 0 >
+                    template < typename NumericType, meta :: EnableIf < meta :: isIntegralToString < CharType, NumericType > () > = 0 >
                     auto append (
-                            ElementType character
-                    ) noexcept -> BaseString &;
-
-                public:
-                    template < typename T = CharType, meta :: EnableIf < meta :: isSame < T, sint8 > () > = 0 >
-                    auto append (
-                            ElementType character
-                    ) noexcept -> BaseString &;
-
-                public:
-                    template < typename T = CharType, meta :: EnableIf < meta :: isSame < T, sint16 > () > = 0 >
-                    auto append (
-                            ElementType character
-                    ) noexcept -> BaseString &;
-
-                public:
-                    template < typename T = CharType, meta :: EnableIf < ! meta :: isSame < T, uint8 > () > = 0 >
-                    auto append (
-                            uint8 value
-                    ) noexcept -> BaseString &;
-
-                public:
-                    template < typename T = CharType, meta :: EnableIf < ! meta :: isSame < T, uint16 > () > = 0 >
-                    auto append (
-                            uint16 value
-                    ) noexcept -> BaseString &;
-
-                public:
-                    template < typename T = CharType, meta :: EnableIf < ! meta :: isSame < T, sint8 > () > = 0 >
-                    auto append (
-                            sint8 value
-                    ) noexcept -> BaseString &;
-
-                public:
-                    template < typename T = CharType, meta :: EnableIf < ! meta :: isSame < T, sint16 > () > = 0 >
-                    auto append (
-                            sint16 value
-                    ) noexcept -> BaseString &;
-
-                public:
-                    template < typename T = std :: size_t, meta :: EnableIf < ! meta :: isSame < T, uint64 > () > = 0 >
-                    auto append (
-                            std :: size_t value
+                            NumericType value
                     ) noexcept -> BaseString &;
 
                 public:
@@ -1740,44 +1120,16 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                     ) noexcept -> BaseString &;
 
                 public:
+                    template < typename FloatingPointType, meta :: EnableIf < meta :: isFloatingPoint < FloatingPointType > () > = 0 >
                     auto append (
-                            uint32 value
-                    ) noexcept -> BaseString &;
-
-                public:
-                    auto append (
-                            uint64 value
-                    ) noexcept -> BaseString &;
-
-                public:
-                    auto append (
-                            sint32 value
-                    ) noexcept -> BaseString &;
-
-                public:
-                    auto append (
-                            sint64 value
-                    ) noexcept -> BaseString &;
-
-                public:
-                    auto append (
-                            float value
-                    ) noexcept -> BaseString &;
-
-                public:
-                    auto append (
-                            double value
-                    ) noexcept -> BaseString &;
-
-                public:
-                    auto append (
-                            long double value
+                            FloatingPointType value
                     ) noexcept -> BaseString &;
 
 
                 public:
+                    template < typename ConvertibleType, meta :: EnableIf < meta :: isConvertibleToBaseStringView < ConvertibleType, CharType > () > = 0 >
                     auto prepend (
-                            BaseString const & string
+                            ConvertibleType && string
                     ) noexcept -> BaseString &;
 
                 public:
@@ -1790,16 +1142,6 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                             BaseStringView < CharType > const & string
                     ) noexcept -> BaseString &;
 
-                public:
-                    auto prepend (
-                            std :: basic_string < CharType > const & string
-                    ) noexcept -> BaseString &;
-
-                public:
-                    auto prepend (
-                            ElementType const * pString
-                    ) noexcept -> BaseString &;
-
 #if defined(CDS_QT)
 
                 public:
@@ -1810,57 +1152,15 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 #endif
 
                 public:
-                    template < typename T = CharType, meta :: EnableIf < meta :: isSame < T, uint8 > () > = 0 >
+                    template < typename T = CharType, meta :: EnableIf < meta :: isStringCharType < T > () > = 0 >
                     auto prepend (
                             ElementType character
                     ) noexcept -> BaseString &;
 
                 public:
-                    template < typename T = CharType, meta :: EnableIf < meta :: isSame < T, uint16 > () > = 0 >
+                    template < typename NumericType, meta :: EnableIf < meta :: isIntegralToString < CharType, NumericType > () > = 0 >
                     auto prepend (
-                            ElementType character
-                    ) noexcept -> BaseString &;
-
-                public:
-                    template < typename T = CharType, meta :: EnableIf < meta :: isSame < T, sint8 > () > = 0 >
-                    auto prepend (
-                            ElementType character
-                    ) noexcept -> BaseString &;
-
-                public:
-                    template < typename T = CharType, meta :: EnableIf < meta :: isSame < T, sint16 > () > = 0 >
-                    auto prepend (
-                            ElementType character
-                    ) noexcept -> BaseString &;
-
-                public:
-                    template < typename T = CharType, meta :: EnableIf < ! meta :: isSame < T, uint8 > () > = 0 >
-                    auto prepend (
-                            uint8 value
-                    ) noexcept -> BaseString &;
-
-                public:
-                    template < typename T = CharType, meta :: EnableIf < ! meta :: isSame < T, uint16 > () > = 0 >
-                    auto prepend (
-                            uint16 value
-                    ) noexcept -> BaseString &;
-
-                public:
-                    template < typename T = CharType, meta :: EnableIf < ! meta :: isSame < T, sint8 > () > = 0 >
-                    auto prepend (
-                            sint8 value
-                    ) noexcept -> BaseString &;
-
-                public:
-                    template < typename T = CharType, meta :: EnableIf < ! meta :: isSame < T, sint16 > () > = 0 >
-                    auto prepend (
-                            sint16 value
-                    ) noexcept -> BaseString &;
-
-                public:
-                    template < typename T = std :: size_t, meta :: EnableIf < ! meta :: isSame < T, uint64 > () > = 0 >
-                    auto prepend (
-                            std :: size_t value
+                            NumericType value
                     ) noexcept -> BaseString &;
 
                 public:
@@ -1869,38 +1169,9 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                     ) noexcept -> BaseString &;
 
                 public:
+                    template < typename FloatingPointType, meta :: EnableIf < meta :: isFloatingPoint < FloatingPointType > () > = 0 >
                     auto prepend (
-                            uint32 value
-                    ) noexcept -> BaseString &;
-
-                public:
-                    auto prepend (
-                            uint64 value
-                    ) noexcept -> BaseString &;
-
-                public:
-                    auto prepend (
-                            sint32 value
-                    ) noexcept -> BaseString &;
-
-                public:
-                    auto prepend (
-                            sint64 value
-                    ) noexcept -> BaseString &;
-
-                public:
-                    auto prepend (
-                            float value
-                    ) noexcept -> BaseString &;
-
-                public:
-                    auto prepend (
-                            double value
-                    ) noexcept -> BaseString &;
-
-                public:
-                    auto prepend (
-                            long double value
+                            FloatingPointType value
                     ) noexcept -> BaseString &;
 
 
@@ -1911,23 +1182,14 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                     ) const noexcept -> bool;
 
                 public:
+                    template < typename ConvertibleType, meta :: EnableIf < meta :: isConvertibleToBaseStringView < ConvertibleType, CharType > () > = 0 >
                     __CDS_NoDiscard __CDS_cpplang_ConstexprDynamicAllocation auto contains (
-                            BaseString const & string
+                            ConvertibleType && string
                     ) const noexcept -> bool;
 
                 public:
                     __CDS_NoDiscard __CDS_cpplang_ConstexprDynamicAllocation auto contains (
                             BaseStringView < CharType > const & string
-                    ) const noexcept -> bool;
-
-                public:
-                    __CDS_NoDiscard __CDS_cpplang_ConstexprDynamicAllocation auto contains (
-                            std :: basic_string < CharType > const & string
-                    ) const noexcept -> bool;
-
-                public:
-                    __CDS_NoDiscard __CDS_cpplang_ConstexprDynamicAllocation auto contains (
-                            ElementType const * pString
                     ) const noexcept -> bool;
 
                 public:
@@ -1937,23 +1199,13 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                     ) const noexcept -> bool;
 
                 public:
+                    template < typename ConvertibleType, meta :: EnableIf < meta :: isConvertibleToBaseStringView < ConvertibleType, CharType > () > = 0 >
                     __CDS_NoDiscard auto containsAnyOf (
-                            BaseString const & string
+                            ConvertibleType && string
                     ) const noexcept -> bool;
-
                 public:
                     __CDS_NoDiscard auto containsAnyOf (
                             BaseStringView < CharType > const & string
-                    ) const noexcept -> bool;
-
-                public:
-                    __CDS_NoDiscard auto containsAnyOf (
-                            std :: basic_string < CharType > const & string
-                    ) const noexcept -> bool;
-
-                public:
-                    __CDS_NoDiscard auto containsAnyOf (
-                            ElementType const * string
                     ) const noexcept -> bool;
 
                 public:
@@ -1963,23 +1215,14 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                     ) const noexcept -> bool;
 
                 public:
+                    template < typename ConvertibleType, meta :: EnableIf < meta :: isConvertibleToBaseStringView < ConvertibleType, CharType > () > = 0 >
                     __CDS_NoDiscard auto containsAllOf (
-                            BaseString const & string
+                            ConvertibleType && string
                     ) const noexcept -> bool;
 
                 public:
                     __CDS_NoDiscard auto containsAllOf (
                             BaseStringView < CharType > const & string
-                    ) const noexcept -> bool;
-
-                public:
-                    __CDS_NoDiscard auto containsAllOf (
-                            std :: basic_string < CharType > const & string
-                    ) const noexcept -> bool;
-
-                public:
-                    __CDS_NoDiscard auto containsAllOf (
-                            ElementType const * string
                     ) const noexcept -> bool;
 
                 public:
@@ -1989,23 +1232,14 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                     ) const noexcept -> bool;
 
                 public:
+                    template < typename ConvertibleType, meta :: EnableIf < meta :: isConvertibleToBaseStringView < ConvertibleType, CharType > () > = 0 >
                     __CDS_NoDiscard auto containsAnyNotOf (
-                            BaseString const & string
+                            ConvertibleType && string
                     ) const noexcept -> bool;
 
                 public:
                     __CDS_NoDiscard auto containsAnyNotOf (
                             BaseStringView < CharType > const & string
-                    ) const noexcept -> bool;
-
-                public:
-                    __CDS_NoDiscard auto containsAnyNotOf (
-                            std :: basic_string < CharType > const & string
-                    ) const noexcept -> bool;
-
-                public:
-                    __CDS_NoDiscard auto containsAnyNotOf (
-                            ElementType const * string
                     ) const noexcept -> bool;
 
                 public:
@@ -2015,23 +1249,14 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                     ) const noexcept -> bool;
 
                 public:
+                    template < typename ConvertibleType, meta :: EnableIf < meta :: isConvertibleToBaseStringView < ConvertibleType, CharType > () > = 0 >
                     __CDS_NoDiscard auto containsAllNotOf (
-                            BaseString const & string
+                            ConvertibleType && string
                     ) const noexcept -> bool;
 
                 public:
                     __CDS_NoDiscard auto containsAllNotOf (
                             BaseStringView < CharType > const & string
-                    ) const noexcept -> bool;
-
-                public:
-                    __CDS_NoDiscard auto containsAllNotOf (
-                            std :: basic_string < CharType > const & string
-                    ) const noexcept -> bool;
-
-                public:
-                    __CDS_NoDiscard auto containsAllNotOf (
-                            ElementType const * string
                     ) const noexcept -> bool;
 
 
@@ -2076,80 +1301,203 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
 
                 public:
-                    template < template < typename ... > class CollectionType >
+                    template < template < typename ... > class CollectionType, typename ConvertibleType, meta :: EnableIf < meta :: isConvertibleToBaseStringView < ConvertibleType, CharType > () > = 0 >
                     auto find (
                             Size                        maxCount,
-                            BaseString          const & string,
+                            ConvertibleType && string,
                             CollectionType < Index >  & storeIn
+                    ) const noexcept -> CollectionType < Index > &;
+
+                public:
+                    template < template < typename ... > class CollectionType, typename ConvertibleType, meta :: EnableIf < meta :: isConvertibleToBaseStringView < ConvertibleType, CharType > () > = 0 >
+                    __CDS_NoDiscard auto find (
+                            Size                        maxCount,
+                            ConvertibleType && string
+                    ) const noexcept -> CollectionType < Index >;
+
+                public:
+                    template < typename ConvertibleType, meta :: EnableIf < meta :: isConvertibleToBaseStringView < ConvertibleType, CharType > () > = 0 >
+                    __CDS_NoDiscard __CDS_cpplang_ConstexprDynamicAllocation auto findFirst (
+                            ConvertibleType && string
+                    ) const noexcept -> Index;
+
+                public:
+                    template < typename ConvertibleType, meta :: EnableIf < meta :: isConvertibleToBaseStringView < ConvertibleType, CharType > () > = 0 >
+                    __CDS_NoDiscard __CDS_cpplang_ConstexprDynamicAllocation auto findLast (
+                            ConvertibleType && string
+                    ) const noexcept -> Index;
+
+                public:
+                    template < template < typename ... > class CollectionType, typename ConvertibleType, meta :: EnableIf < meta :: isConvertibleToBaseStringView < ConvertibleType, CharType > () > = 0 >
+                    auto findAll (
+                            ConvertibleType && string,
+                            CollectionType < Index >          & storeIn
+                    ) const noexcept -> CollectionType < Index > &;
+
+                public:
+                    template < template < typename ... > class CollectionType, typename ConvertibleType, meta :: EnableIf < meta :: isConvertibleToBaseStringView < ConvertibleType, CharType > () > = 0 >
+                    __CDS_NoDiscard auto findAll (
+                            ConvertibleType && string
+                    ) const noexcept -> CollectionType < Index >;
+
+
+                public:
+                    template < template < typename ... > class CollectionType, typename ConvertibleType, meta :: EnableIf < meta :: isConvertibleToBaseStringView < ConvertibleType, CharType > () > = 0 >
+                    auto findOf (
+                            Size                        maxCount,
+                            ConvertibleType && string,
+                            CollectionType < Index >  & storeIn
+                    ) const noexcept -> CollectionType < Index > &;
+
+                public:
+                    template < template < typename ... > class CollectionType, typename ConvertibleType, meta :: EnableIf < meta :: isConvertibleToBaseStringView < ConvertibleType, CharType > () > = 0 >
+                    __CDS_NoDiscard auto findOf (
+                            Size                        maxCount,
+                            ConvertibleType && string
+                    ) const noexcept -> CollectionType < Index >;
+
+                public:
+                    template < typename ConvertibleType, meta :: EnableIf < meta :: isConvertibleToBaseStringView < ConvertibleType, CharType > () > = 0 >
+                    __CDS_NoDiscard __CDS_cpplang_ConstexprConditioned auto findFirstOf (
+                            ConvertibleType && string
+                    ) const noexcept -> Index;
+
+                public:
+                    template < typename ConvertibleType, meta :: EnableIf < meta :: isConvertibleToBaseStringView < ConvertibleType, CharType > () > = 0 >
+                    __CDS_NoDiscard __CDS_cpplang_ConstexprConditioned auto findLastOf (
+                            ConvertibleType && string
+                    ) const noexcept -> Index;
+
+                public:
+                    template < template < typename ... > class CollectionType, typename ConvertibleType, meta :: EnableIf < meta :: isConvertibleToBaseStringView < ConvertibleType, CharType > () > = 0 >
+                    auto findAllOf (
+                            ConvertibleType && string,
+                            CollectionType < Index >  & storeIn
+                    ) const noexcept -> CollectionType < Index > &;
+
+                public:
+                    template < template < typename ... > class CollectionType, typename ConvertibleType, meta :: EnableIf < meta :: isConvertibleToBaseStringView < ConvertibleType, CharType > () > = 0 >
+                    __CDS_NoDiscard auto findAllOf (
+                            ConvertibleType && string
+                    ) const noexcept -> CollectionType < Index >;
+
+
+                public:
+                    template < template < typename ... > class CollectionType, typename ConvertibleType, meta :: EnableIf < meta :: isConvertibleToBaseStringView < ConvertibleType, CharType > () > = 0 >
+                    auto findNotOf (
+                            Size                        maxCount,
+                            ConvertibleType && string,
+                            CollectionType < Index >  & storeIn
+                    ) const noexcept -> CollectionType < Index > &;
+
+                public:
+                    template < template < typename ... > class CollectionType, typename ConvertibleType, meta :: EnableIf < meta :: isConvertibleToBaseStringView < ConvertibleType, CharType > () > = 0 >
+                    __CDS_NoDiscard auto findNotOf (
+                            Size                        maxCount,
+                            ConvertibleType && string
+                    ) const noexcept -> CollectionType < Index >;
+
+                public:
+                    template < typename ConvertibleType, meta :: EnableIf < meta :: isConvertibleToBaseStringView < ConvertibleType, CharType > () > = 0 >
+                    __CDS_NoDiscard __CDS_cpplang_ConstexprConditioned auto findFirstNotOf (
+                            ConvertibleType && string
+                    ) const noexcept -> Index;
+
+                public:
+                    template < typename ConvertibleType, meta :: EnableIf < meta :: isConvertibleToBaseStringView < ConvertibleType, CharType > () > = 0 >
+                    __CDS_NoDiscard __CDS_cpplang_ConstexprConditioned auto findLastNotOf (
+                            ConvertibleType && string
+                    ) const noexcept -> Index;
+
+                public:
+                    template < template < typename ... > class CollectionType, typename ConvertibleType, meta :: EnableIf < meta :: isConvertibleToBaseStringView < ConvertibleType, CharType > () > = 0 >
+                    auto findAllNotOf (
+                            ConvertibleType && string,
+                            CollectionType < Index >  & storeIn
+                    ) const noexcept -> CollectionType < Index > &;
+
+                public:
+                    template < template < typename ... > class CollectionType, typename ConvertibleType, meta :: EnableIf < meta :: isConvertibleToBaseStringView < ConvertibleType, CharType > () > = 0 >
+                    __CDS_NoDiscard auto findAllNotOf (
+                            ConvertibleType && string
+                    ) const noexcept -> CollectionType < Index >;
+
+
+                public:
+                    template < template < typename ... > class CollectionType >
+                    auto find (
+                            Size                                maxCount,
+                            BaseStringView < CharType > const & string,
+                            CollectionType < Index >          & storeIn
                     ) const noexcept -> CollectionType < Index > &;
 
                 public:
                     template < template < typename ... > class CollectionType >
                     __CDS_NoDiscard auto find (
-                            Size                        maxCount,
-                            BaseString          const & string
+                            Size                                maxCount,
+                            BaseStringView < CharType > const & string
                     ) const noexcept -> CollectionType < Index >;
 
                 public:
                     __CDS_NoDiscard __CDS_cpplang_ConstexprDynamicAllocation auto findFirst (
-                            BaseString          const & string
+                            BaseStringView < CharType > const & string
                     ) const noexcept -> Index;
 
                 public:
                     __CDS_NoDiscard __CDS_cpplang_ConstexprDynamicAllocation auto findLast (
-                            BaseString          const & string
+                            BaseStringView < CharType > const & string
                     ) const noexcept -> Index;
 
                 public:
                     template < template < typename ... > class CollectionType >
                     auto findAll (
-                            BaseString          const & string,
-                            CollectionType < Index >  & storeIn
+                            BaseStringView < CharType > const & string,
+                            CollectionType < Index >          & storeIn
                     ) const noexcept -> CollectionType < Index > &;
 
                 public:
                     template < template < typename ... > class CollectionType >
                     __CDS_NoDiscard auto findAll (
-                            BaseString          const & string
+                            BaseStringView < CharType > const & string
                     ) const noexcept -> CollectionType < Index >;
 
 
                 public:
                     template < template < typename ... > class CollectionType >
                     auto findOf (
-                            Size                        maxCount,
-                            BaseString          const & string,
-                            CollectionType < Index >  & storeIn
+                            Size                                maxCount,
+                            BaseStringView < CharType > const & string,
+                            CollectionType < Index >          & storeIn
                     ) const noexcept -> CollectionType < Index > &;
 
                 public:
                     template < template < typename ... > class CollectionType >
                     __CDS_NoDiscard auto findOf (
-                            Size                        maxCount,
-                            BaseString          const & string
+                            Size                                maxCount,
+                            BaseStringView < CharType > const & string
                     ) const noexcept -> CollectionType < Index >;
 
                 public:
                     __CDS_NoDiscard __CDS_cpplang_ConstexprConditioned auto findFirstOf (
-                            BaseString          const & string
+                            BaseStringView < CharType > const & string
                     ) const noexcept -> Index;
 
                 public:
                     __CDS_NoDiscard __CDS_cpplang_ConstexprConditioned auto findLastOf (
-                            BaseString          const & string
+                            BaseStringView < CharType > const & string
                     ) const noexcept -> Index;
 
                 public:
                     template < template < typename ... > class CollectionType >
                     auto findAllOf (
-                            BaseString          const & string,
-                            CollectionType < Index >  & storeIn
+                            BaseStringView < CharType > const & string,
+                            CollectionType < Index >          & storeIn
                     ) const noexcept -> CollectionType < Index > &;
 
                 public:
                     template < template < typename ... > class CollectionType >
                     __CDS_NoDiscard auto findAllOf (
-                            BaseString          const & string
+                            BaseStringView < CharType > const & string
                     ) const noexcept -> CollectionType < Index >;
 
 
@@ -2157,123 +1505,6 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                     template < template < typename ... > class CollectionType >
                     auto findNotOf (
                             Size                        maxCount,
-                            BaseString          const & string,
-                            CollectionType < Index >  & storeIn
-                    ) const noexcept -> CollectionType < Index > &;
-
-                public:
-                    template < template < typename ... > class CollectionType >
-                    __CDS_NoDiscard auto findNotOf (
-                            Size                        maxCount,
-                            BaseString          const & string
-                    ) const noexcept -> CollectionType < Index >;
-
-                public:
-                    __CDS_NoDiscard __CDS_cpplang_ConstexprConditioned auto findFirstNotOf (
-                            BaseString          const & string
-                    ) const noexcept -> Index;
-
-                public:
-                    __CDS_NoDiscard __CDS_cpplang_ConstexprConditioned auto findLastNotOf (
-                            BaseString          const & string
-                    ) const noexcept -> Index;
-
-                public:
-                    template < template < typename ... > class CollectionType >
-                    auto findAllNotOf (
-                            BaseString          const & string,
-                            CollectionType < Index >  & storeIn
-                    ) const noexcept -> CollectionType < Index > &;
-
-                public:
-                    template < template < typename ... > class CollectionType >
-                    __CDS_NoDiscard auto findAllNotOf (
-                            BaseString          const & string
-                    ) const noexcept -> CollectionType < Index >;
-
-
-                public:
-                    template < template < typename ... > class CollectionType >
-                    auto find (
-                            Size                                maxCount,
-                            BaseStringView < CharType > const & string,
-                            CollectionType < Index >          & storeIn
-                    ) const noexcept -> CollectionType < Index > &;
-
-                public:
-                    template < template < typename ... > class CollectionType >
-                    __CDS_NoDiscard auto find (
-                            Size                                maxCount,
-                            BaseStringView < CharType > const & string
-                    ) const noexcept -> CollectionType < Index >;
-
-                public:
-                    __CDS_NoDiscard __CDS_cpplang_ConstexprDynamicAllocation auto findFirst (
-                            BaseStringView < CharType > const & string
-                    ) const noexcept -> Index;
-
-                public:
-                    __CDS_NoDiscard __CDS_cpplang_ConstexprDynamicAllocation auto findLast (
-                            BaseStringView < CharType > const & string
-                    ) const noexcept -> Index;
-
-                public:
-                    template < template < typename ... > class CollectionType >
-                    auto findAll (
-                            BaseStringView < CharType > const & string,
-                            CollectionType < Index >          & storeIn
-                    ) const noexcept -> CollectionType < Index > &;
-
-                public:
-                    template < template < typename ... > class CollectionType >
-                    __CDS_NoDiscard auto findAll (
-                            BaseStringView < CharType > const & string
-                    ) const noexcept -> CollectionType < Index >;
-
-
-                public:
-                    template < template < typename ... > class CollectionType >
-                    auto findOf (
-                            Size                                maxCount,
-                            BaseStringView < CharType > const & string,
-                            CollectionType < Index >          & storeIn
-                    ) const noexcept -> CollectionType < Index > &;
-
-                public:
-                    template < template < typename ... > class CollectionType >
-                    __CDS_NoDiscard auto findOf (
-                            Size                                maxCount,
-                            BaseStringView < CharType > const & string
-                    ) const noexcept -> CollectionType < Index >;
-
-                public:
-                    __CDS_NoDiscard __CDS_cpplang_ConstexprConditioned auto findFirstOf (
-                            BaseStringView < CharType > const & string
-                    ) const noexcept -> Index;
-
-                public:
-                    __CDS_NoDiscard __CDS_cpplang_ConstexprConditioned auto findLastOf (
-                            BaseStringView < CharType > const & string
-                    ) const noexcept -> Index;
-
-                public:
-                    template < template < typename ... > class CollectionType >
-                    auto findAllOf (
-                            BaseStringView < CharType > const & string,
-                            CollectionType < Index >          & storeIn
-                    ) const noexcept -> CollectionType < Index > &;
-
-                public:
-                    template < template < typename ... > class CollectionType >
-                    __CDS_NoDiscard auto findAllOf (
-                            BaseStringView < CharType > const & string
-                    ) const noexcept -> CollectionType < Index >;
-
-
-                public:
-                    template < template < typename ... > class CollectionType >
-                    auto findNotOf (
-                            Size                        maxCount,
                             BaseStringView < CharType > const & string,
                             CollectionType < Index >          & storeIn
                     ) const noexcept -> CollectionType < Index > &;
@@ -2307,266 +1538,22 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                     __CDS_NoDiscard auto findAllNotOf (
                             BaseStringView < CharType > const & string
                     ) const noexcept -> CollectionType < Index >;
-
-
-                public:
-                    template < template < typename ... > class CollectionType >
-                    auto find (
-                            Size                                        maxCount,
-                            std :: basic_string < CharType >    const & string,
-                            CollectionType < Index >                  & storeIn
-                    ) const noexcept -> CollectionType < Index > &;
-
-                public:
-                    template < template < typename ... > class CollectionType >
-                    __CDS_NoDiscard auto find (
-                            Size                                     maxCount,
-                            std :: basic_string < CharType > const & string
-                    ) const noexcept -> CollectionType < Index >;
-
-                public:
-                    __CDS_NoDiscard __CDS_cpplang_ConstexprDynamicAllocation auto findFirst (
-                            std :: basic_string < CharType > const & string
-                    ) const noexcept -> Index;
-
-                public:
-                    __CDS_NoDiscard __CDS_cpplang_ConstexprDynamicAllocation auto findLast (
-                            std :: basic_string < CharType > const & string
-                    ) const noexcept -> Index;
-
-                public:
-                    template < template < typename ... > class CollectionType >
-                    auto findAll (
-                            std :: basic_string < CharType > const & string,
-                            CollectionType < Index >               & storeIn
-                    ) const noexcept -> CollectionType < Index > &;
-
-                public:
-                    template < template < typename ... > class CollectionType >
-                    __CDS_NoDiscard auto findAll (
-                            std :: basic_string < CharType > const & string
-                    ) const noexcept -> CollectionType < Index >;
-
-
-                public:
-                    template < template < typename ... > class CollectionType >
-                    auto findOf (
-                            Size                                     maxCount,
-                            std :: basic_string < CharType > const & string,
-                            CollectionType < Index >               & storeIn
-                    ) const noexcept -> CollectionType < Index > &;
-
-                public:
-                    template < template < typename ... > class CollectionType >
-                    __CDS_NoDiscard auto findOf (
-                            Size                                     maxCount,
-                            std :: basic_string < CharType > const & string
-                    ) const noexcept -> CollectionType < Index >;
-
-                public:
-                    __CDS_NoDiscard __CDS_cpplang_ConstexprConditioned auto findFirstOf (
-                            std :: basic_string < CharType > const & string
-                    ) const noexcept -> Index;
-
-                public:
-                    __CDS_NoDiscard __CDS_cpplang_ConstexprConditioned auto findLastOf (
-                            std :: basic_string < CharType > const & string
-                    ) const noexcept -> Index;
-
-                public:
-                    template < template < typename ... > class CollectionType >
-                    auto findAllOf (
-                            std :: basic_string < CharType > const & string,
-                            CollectionType < Index >               & storeIn
-                    ) const noexcept -> CollectionType < Index > &;
-
-                public:
-                    template < template < typename ... > class CollectionType >
-                    __CDS_NoDiscard auto findAllOf (
-                            std :: basic_string < CharType > const & string
-                    ) const noexcept -> CollectionType < Index >;
-
-
-                public:
-                    template < template < typename ... > class CollectionType >
-                    auto findNotOf (
-                            Size                                     maxCount,
-                            std :: basic_string < CharType > const & string,
-                            CollectionType < Index >               & storeIn
-                    ) const noexcept -> CollectionType < Index > &;
-
-                public:
-                    template < template < typename ... > class CollectionType >
-                    __CDS_NoDiscard auto findNotOf (
-                            Size                                     maxCount,
-                            std :: basic_string < CharType > const & string
-                    ) const noexcept -> CollectionType < Index >;
-
-                public:
-                    __CDS_NoDiscard __CDS_cpplang_ConstexprConditioned auto findFirstNotOf (
-                            std :: basic_string < CharType > const & string
-                    ) const noexcept -> Index;
-
-                public:
-                    __CDS_NoDiscard __CDS_cpplang_ConstexprConditioned auto findLastNotOf (
-                            std :: basic_string < CharType > const & string
-                    ) const noexcept -> Index;
-
-                public:
-                    template < template < typename ... > class CollectionType >
-                    auto findAllNotOf (
-                            std :: basic_string < CharType > const & string,
-                            CollectionType < Index >               & storeIn
-                    ) const noexcept -> CollectionType < Index > &;
-
-                public:
-                    template < template < typename ... > class CollectionType >
-                    __CDS_NoDiscard auto findAllNotOf (
-                            std :: basic_string < CharType > const & string
-                    ) const noexcept -> CollectionType < Index >;
-
-
-                public:
-                    template < template < typename ... > class CollectionType >
-                    auto find (
-                            Size                                        maxCount,
-                            ElementType                         const * pString,
-                            CollectionType < Index >                  & storeIn
-                    ) const noexcept -> CollectionType < Index > &;
-
-                public:
-                    template < template < typename ... > class CollectionType >
-                    __CDS_NoDiscard auto find (
-                            Size                                        maxCount,
-                            ElementType                         const * pString
-                    ) const noexcept -> CollectionType < Index >;
-
-                public:
-                    __CDS_NoDiscard __CDS_cpplang_ConstexprDynamicAllocation auto findFirst (
-                            ElementType                         const * pString
-                    ) const noexcept -> Index;
-
-                public:
-                    __CDS_NoDiscard __CDS_cpplang_ConstexprDynamicAllocation auto findLast (
-                            ElementType                         const * pString
-                    ) const noexcept -> Index;
-
-                public:
-                    template < template < typename ... > class CollectionType >
-                    auto findAll (
-                            ElementType                         const * pString,
-                            CollectionType < Index >                  & storeIn
-                    ) const noexcept -> CollectionType < Index > &;
-
-                public:
-                    template < template < typename ... > class CollectionType >
-                    __CDS_NoDiscard auto findAll (
-                            ElementType                         const * pString
-                    ) const noexcept -> CollectionType < Index >;
-
-
-                public:
-                    template < template < typename ... > class CollectionType >
-                    auto findOf (
-                            Size                                        maxCount,
-                            ElementType                         const * pString,
-                            CollectionType < Index >                  & storeIn
-                    ) const noexcept -> CollectionType < Index > &;
-
-                public:
-                    template < template < typename ... > class CollectionType >
-                    __CDS_NoDiscard auto findOf (
-                            Size                                        maxCount,
-                            ElementType                         const * pString
-                    ) const noexcept -> CollectionType < Index >;
-
-                public:
-                    __CDS_NoDiscard __CDS_cpplang_ConstexprConditioned auto findFirstOf (
-                            ElementType                         const * pString
-                    ) const noexcept -> Index;
-
-                public:
-                    __CDS_NoDiscard __CDS_cpplang_ConstexprConditioned auto findLastOf (
-                            ElementType                         const * pString
-                    ) const noexcept -> Index;
-
-                public:
-                    template < template < typename ... > class CollectionType >
-                    auto findAllOf (
-                            ElementType                         const * pString,
-                            CollectionType < Index >                  & storeIn
-                    ) const noexcept -> CollectionType < Index > &;
-
-                public:
-                    template < template < typename ... > class CollectionType >
-                    __CDS_NoDiscard auto findAllOf (
-                            ElementType                         const * pString
-                    ) const noexcept -> CollectionType < Index >;
-
-
-                public:
-                    template < template < typename ... > class CollectionType >
-                    auto findNotOf (
-                            Size                                        maxCount,
-                            ElementType                         const * pString,
-                            CollectionType < Index >                  & storeIn
-                    ) const noexcept -> CollectionType < Index > &;
-
-                public:
-                    template < template < typename ... > class CollectionType >
-                    __CDS_NoDiscard auto findNotOf (
-                            Size                                        maxCount,
-                            ElementType                         const * pString
-                    ) const noexcept -> CollectionType < Index >;
-
-                public:
-                    __CDS_NoDiscard __CDS_cpplang_ConstexprConditioned auto findFirstNotOf (
-                            ElementType                         const * pString
-                    ) const noexcept -> Index;
-
-                public:
-                    __CDS_NoDiscard __CDS_cpplang_ConstexprConditioned auto findLastNotOf (
-                            ElementType                         const * pString
-                    ) const noexcept -> Index;
-
-                public:
-                    template < template < typename ... > class CollectionType >
-                    auto findAllNotOf (
-                            ElementType                         const * pString,
-                            CollectionType < Index >                  & storeIn
-                    ) const noexcept -> CollectionType < Index > &;
-
-                public:
-                    template < template < typename ... > class CollectionType >
-                    __CDS_NoDiscard auto findAllNotOf (
-                            ElementType                         const * pString
-                    ) const noexcept -> CollectionType < Index >;
-
 
 
                 public:
                     auto ltrim (
-                            ElementType element
+                            ElementType character
                     ) noexcept -> BaseString &;
 
                 public:
+                    template < typename ConvertibleType, meta :: EnableIf < meta :: isConvertibleToBaseStringView < ConvertibleType, CharType > () > = 0 >
                     auto ltrim (
-                            ElementType const * pCharacters
-                    ) noexcept -> BaseString &;
-
-                public:
-                    auto ltrim (
-                            BaseString const & characters
+                            ConvertibleType && characters
                     ) noexcept -> BaseString &;
 
                 public:
                     auto ltrim (
                             BaseStringView < CharType > const & characters = BaseString :: whitespace
-                    ) noexcept -> BaseString &;
-
-                public:
-                    auto ltrim (
-                            std :: basic_string < CharType > const & characters
                     ) noexcept -> BaseString &;
 
 #if defined(CDS_QT)
@@ -2581,27 +1568,18 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
                 public:
                     auto rtrim (
-                            ElementType element
+                            ElementType character
                     ) noexcept -> BaseString &;
 
                 public:
+                    template < typename ConvertibleType, meta :: EnableIf < meta :: isConvertibleToBaseStringView < ConvertibleType, CharType > () > = 0 >
                     auto rtrim (
-                            ElementType const * pCharacters
-                    ) noexcept -> BaseString &;
-
-                public:
-                    auto rtrim (
-                            BaseString const & characters
+                            ConvertibleType && characters
                     ) noexcept -> BaseString &;
 
                 public:
                     auto rtrim (
                             BaseStringView < CharType > const & characters = BaseString :: whitespace
-                    ) noexcept -> BaseString &;
-
-                public:
-                    auto rtrim (
-                            std :: basic_string < CharType > const & characters
                     ) noexcept -> BaseString &;
 
 #if defined(CDS_QT)
@@ -2616,27 +1594,18 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
                 public:
                     auto trim (
-                            ElementType element
+                            ElementType character
                     ) noexcept -> BaseString &;
 
                 public:
+                    template < typename ConvertibleType, meta :: EnableIf < meta :: isConvertibleToBaseStringView < ConvertibleType, CharType > () > = 0 >
                     auto trim (
-                            ElementType const * pCharacters
-                    ) noexcept -> BaseString &;
-
-                public:
-                    auto trim (
-                            BaseString const & characters
+                            ConvertibleType && characters
                     ) noexcept -> BaseString &;
 
                 public:
                     auto trim (
                             BaseStringView < CharType > const & characters = BaseString :: whitespace
-                    ) noexcept -> BaseString &;
-
-                public:
-                    auto trim (
-                            std :: basic_string < CharType > const & characters
                     ) noexcept -> BaseString &;
 
 #if defined(CDS_QT)
@@ -2685,18 +1654,18 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                     ) const noexcept -> ListType < BaseString >;
 
                 public:
-                    template < typename ListType >
+                    template < typename ListType, typename ConvertibleType, meta :: EnableIf < meta :: isConvertibleToBaseStringView < ConvertibleType, CharType > () > = 0 >
                     auto split (
-                            BaseString  const & separators,
-                            ListType          & storeIn,
-                            Size                maxCount = limits :: U64_MAX
+                            ConvertibleType && separators,
+                            ListType              & storeIn,
+                            Size                    maxCount = limits :: U64_MAX
                     ) const noexcept -> ListType &;
 
                 public:
-                    template < template < typename ... > class ListType >
+                    template < template < typename ... > class ListType, typename ConvertibleType, meta :: EnableIf < meta :: isConvertibleToBaseStringView < ConvertibleType, CharType > () > = 0 >
                     __CDS_NoDiscard auto split (
-                            BaseString  const & separators,
-                            Size                maxCount = limits :: U64_MAX
+                            ConvertibleType && separators,
+                            Size                    maxCount = limits :: U64_MAX
                     ) const noexcept -> ListType < BaseString >;
 
                 public:
@@ -2715,48 +1684,18 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                     ) const noexcept -> ListType < BaseString >;
 
                 public:
-                    template < typename ListType >
-                    auto split (
-                            std :: basic_string < CharType >    const & separators,
-                            ListType                                  & storeIn,
-                            Size                                        maxCount = limits :: U64_MAX
-                    ) const noexcept -> ListType &;
-
-                public:
-                    template < template < typename ... > class ListType >
-                    __CDS_NoDiscard auto split (
-                            std :: basic_string < CharType >    const & separators,
-                            Size                                        maxCount = limits :: U64_MAX
-                    ) const noexcept -> ListType < BaseString >;
-
-                public:
-                    template < typename ListType >
-                    auto split (
-                            CharType    const * separators,
-                            ListType          & storeIn,
-                            Size                maxCount = limits :: U64_MAX
-                    ) const noexcept -> ListType &;
-
-                public:
-                    template < template < typename ... > class ListType >
-                    __CDS_NoDiscard auto split (
-                            CharType    const * separators,
-                            Size                maxCount = limits :: U64_MAX
-                    ) const noexcept -> ListType < BaseString >;
-
-                public:
-                    template < typename ListType >
+                    template < typename ListType, typename ConvertibleType, meta :: EnableIf < meta :: isConvertibleToBaseStringView < ConvertibleType, CharType > () > = 0 >
                     auto splitByString (
-                            BaseString  const & separators,
-                            ListType          & storeIn,
-                            Size                maxCount = limits :: U64_MAX
+                            ConvertibleType && separators,
+                            ListType              & storeIn,
+                            Size                    maxCount = limits :: U64_MAX
                     ) const noexcept -> ListType &;
 
                 public:
-                    template < template < typename ... > class ListType >
+                    template < template < typename ... > class ListType, typename ConvertibleType, meta :: EnableIf < meta :: isConvertibleToBaseStringView < ConvertibleType, CharType > () > = 0 >
                     __CDS_NoDiscard auto splitByString (
-                            BaseString  const & separators,
-                            Size                maxCount = limits :: U64_MAX
+                            ConvertibleType && separators,
+                            Size                    maxCount = limits :: U64_MAX
                     ) const noexcept -> ListType < BaseString >;
 
                 public:
@@ -2772,36 +1711,6 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                     __CDS_NoDiscard auto splitByString (
                             BaseStringView < CharType > const & separators,
                             Size                                maxCount = limits :: U64_MAX
-                    ) const noexcept -> ListType < BaseString >;
-
-                public:
-                    template < typename ListType >
-                    auto splitByString (
-                            std :: basic_string < CharType >    const & separators,
-                            ListType                                  & storeIn,
-                            Size                                        maxCount = limits :: U64_MAX
-                    ) const noexcept -> ListType &;
-
-                public:
-                    template < template < typename ... > class ListType >
-                    __CDS_NoDiscard auto splitByString (
-                            std :: basic_string < CharType >    const & separators,
-                            Size                                        maxCount = limits :: U64_MAX
-                    ) const noexcept -> ListType < BaseString >;
-
-                public:
-                    template < typename ListType >
-                    auto splitByString (
-                            CharType    const * separators,
-                            ListType          & storeIn,
-                            Size                maxCount = limits :: U64_MAX
-                    ) const noexcept -> ListType &;
-
-                public:
-                    template < template < typename ... > class ListType >
-                    __CDS_NoDiscard auto splitByString (
-                            CharType    const * separators,
-                            Size                maxCount = limits :: U64_MAX
                     ) const noexcept -> ListType < BaseString >;
 
 
@@ -2813,10 +1722,11 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                     __CDS_NoDiscard auto toString () const noexcept -> cds :: String override;
 
                 public:
+                    template < typename ConvertibleType, meta :: EnableIf < meta :: isConvertibleToBaseStringView < ConvertibleType, CharType > () > = 0 >
                     auto replace (
-                            Index               from,
-                            Index               until,
-                            BaseString  const & inPlace
+                            Index                   from,
+                            Index                   until,
+                            ConvertibleType && inPlace
                     ) noexcept -> BaseString &;
 
                 public:
@@ -2824,20 +1734,6 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                             Index                               from,
                             Index                               until,
                             BaseStringView < CharType > const & inPlace
-                    ) noexcept -> BaseString &;
-
-                public:
-                    auto replace (
-                            Index                                       from,
-                            Index                                       until,
-                            std :: basic_string < CharType >    const & inPlace
-                    ) noexcept -> BaseString &;
-
-                public:
-                    auto replace (
-                            Index               from,
-                            Index               until,
-                            ElementType const * pInPlace
                     ) noexcept -> BaseString &;
 
 
@@ -2851,23 +1747,14 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                     ) const noexcept -> bool;
 
                 public:
+                    template < typename ConvertibleType, meta :: EnableIf < meta :: isConvertibleToBaseStringView < ConvertibleType, CharType > () > = 0 >
                     constexpr auto startsWith (
-                            ElementType const * pString
-                    ) const noexcept -> bool;
-
-                public:
-                    constexpr auto startsWith (
-                            BaseString const & string
+                            ConvertibleType && string
                     ) const noexcept -> bool;
 
                 public:
                     constexpr auto startsWith (
                             BaseStringView < CharType > const & string
-                    ) const noexcept -> bool;
-
-                public:
-                    constexpr auto startsWith (
-                            std :: basic_string < CharType > const & string
                     ) const noexcept -> bool;
 
 
@@ -2877,23 +1764,14 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                     ) const noexcept -> bool;
 
                 public:
+                    template < typename ConvertibleType, meta :: EnableIf < meta :: isConvertibleToBaseStringView < ConvertibleType, CharType > () > = 0 >
                     constexpr auto endsWith (
-                            ElementType const * pString
-                    ) const noexcept -> bool;
-
-                public:
-                    constexpr auto endsWith (
-                            BaseString const & string
+                            ConvertibleType && string
                     ) const noexcept -> bool;
 
                 public:
                     constexpr auto endsWith (
                             BaseStringView < CharType > const & string
-                    ) const noexcept -> bool;
-
-                public:
-                    constexpr auto endsWith (
-                            std :: basic_string < CharType > const & string
                     ) const noexcept -> bool;
 
 
@@ -2903,23 +1781,14 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                     ) noexcept -> BaseString &;
 
                 public:
+                    template < typename ConvertibleType, meta :: EnableIf < meta :: isConvertibleToBaseStringView < ConvertibleType, CharType > () > = 0 >
                     constexpr auto removePrefix (
-                            ElementType const * pString
-                    ) noexcept -> BaseString &;
-
-                public:
-                    constexpr auto removePrefix (
-                            BaseString const & string
+                            ConvertibleType && string
                     ) noexcept -> BaseString &;
 
                 public:
                     constexpr auto removePrefix (
                             BaseStringView < CharType > const & string
-                    ) noexcept -> BaseString &;
-
-                public:
-                    constexpr auto removePrefix (
-                            std :: basic_string < CharType > const & string
                     ) noexcept -> BaseString &;
 
 
@@ -2929,13 +1798,9 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                     ) noexcept -> BaseString &;
 
                 public:
+                    template < typename ConvertibleType, meta :: EnableIf < meta :: isConvertibleToBaseStringView < ConvertibleType, CharType > () > = 0 >
                     constexpr auto removeSuffix (
-                            ElementType const * pString
-                    ) noexcept -> BaseString &;
-
-                public:
-                    constexpr auto removeSuffix (
-                            BaseString const & string
+                            ConvertibleType && string
                     ) noexcept -> BaseString &;
 
                 public:
@@ -2943,18 +1808,13 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                             BaseStringView < CharType > const & string
                     ) noexcept -> BaseString &;
 
-                public:
-                    constexpr auto removeSuffix (
-                            std :: basic_string < CharType > const & string
-                    ) noexcept -> BaseString &;
-
 
                 public:
-                    template < template < typename ... > class CollectionType >
+                    template < template < typename ... > class CollectionType, typename ConvertibleType, meta :: EnableIf < meta :: isConvertibleToBaseStringView < ConvertibleType, CharType > () > = 0 >
                     __CDS_NoDiscard static auto join (
                             CollectionType < BaseString >   const & tokens,
-                            BaseString                      const & delimiter
-                    ) noexcept -> BaseString;
+                            ConvertibleType && delimiter
+                    ) noexcept -> BaseString < BaseString >;
 
                 public:
                     template < template < typename ... > class CollectionType >
@@ -2966,15 +1826,8 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 public:
                     template < template < typename ... > class CollectionType >
                     __CDS_NoDiscard static auto join (
-                            CollectionType < BaseString >       const & tokens,
-                            std :: basic_string < CharType >    const & delimiter
-                    ) noexcept -> BaseString;
-
-                public:
-                    template < template < typename ... > class CollectionType >
-                    __CDS_NoDiscard static auto join (
-                            CollectionType < BaseString >       const & tokens,
-                            CharType                            const * delimiter
+                            CollectionType < BaseString >   const & tokens,
+                            ElementType                             delimiter
                     ) noexcept -> BaseString;
 
 
@@ -3139,7 +1992,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 #if defined(CDS_STRING_DEBUG)
 
                 public:
-                    auto diag () const noexcept -> BaseString;
+                    __CDS_NoDiscard auto diag () const noexcept -> BaseString;
 
 #endif
                 };
@@ -3157,8 +2010,6 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 #include "ConstReverseIterator.hpp"
 
 #include "view/BaseStringView.hpp"
-
-#include "StringUtils.hpp"
 
 #include "impl/AbstractIterator.hpp"
 #include "impl/AbstractConstIterator.hpp"
