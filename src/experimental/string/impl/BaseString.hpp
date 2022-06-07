@@ -75,22 +75,22 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 Index const BaseString < CharType > :: invalidIndex = StringUtils < CharType > :: invalidIndex;
                 
                 template < typename CharType >
-                BaseStringView < CharType > const BaseString < CharType > :: whitespace = meta :: impl :: StringData < CharType > :: whitespace;
+                BaseStringView < CharType > const BaseString < CharType > :: whitespace = BaseStringView < CharType > ( meta :: impl :: StringData < CharType > :: whitespace );
                 
                 template < typename CharType >
-                BaseStringView < CharType > const BaseString < CharType > :: digits = meta :: impl :: StringData < CharType > :: digits;
+                BaseStringView < CharType > const BaseString < CharType > :: digits = BaseStringView < CharType > ( meta :: impl :: StringData < CharType > :: digits );
                 
                 template < typename CharType >
-                BaseStringView < CharType > const BaseString < CharType > :: lowercaseAlphabet = meta :: impl :: StringData < CharType > :: lowercaseAlphabet;
+                BaseStringView < CharType > const BaseString < CharType > :: lowercaseAlphabet = BaseStringView < CharType > ( meta :: impl :: StringData < CharType > :: lowercaseAlphabet );
                 
                 template < typename CharType >
-                BaseStringView < CharType > const BaseString < CharType > :: uppercaseAlphabet = meta :: impl :: StringData < CharType > :: uppercaseAlphabet;
+                BaseStringView < CharType > const BaseString < CharType > :: uppercaseAlphabet = BaseStringView < CharType > ( meta :: impl :: StringData < CharType > :: uppercaseAlphabet );
                 
                 template < typename CharType >
-                BaseStringView < CharType > const BaseString < CharType > :: vowels = meta :: impl :: StringData < CharType > :: vowels;
+                BaseStringView < CharType > const BaseString < CharType > :: vowels = BaseStringView < CharType > ( meta :: impl :: StringData < CharType > :: vowels );
                 
                 template < typename CharType >
-                BaseStringView < CharType > const BaseString < CharType > :: consonants = meta :: impl :: StringData < CharType > :: consonants;
+                BaseStringView < CharType > const BaseString < CharType > :: consonants = BaseStringView < CharType > ( meta :: impl :: StringData < CharType > :: consonants );
 
 
                 template < typename CharType >
