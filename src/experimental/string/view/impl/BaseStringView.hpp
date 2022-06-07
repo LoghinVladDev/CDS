@@ -56,16 +56,6 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
 
                 template < typename CharType >
-                constexpr BaseStringView < CharType > :: BaseStringView (
-                        std :: basic_string_view < CharType > const & string
-                ) noexcept :
-                        _pData ( string.data() ),
-                        _length ( string.length() ) {
-
-                }
-
-
-                template < typename CharType >
                 template < typename T, meta :: EnableIf < meta :: isStringCharType < T > () > >
                 constexpr BaseStringView < CharType > :: BaseStringView (
                         ElementType const * pString
@@ -365,15 +355,6 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
                 template < typename CharType >
                 __CDS_cpplang_NonConstConstexprMemberFunction auto BaseStringView < CharType > :: operator = ( // NOLINT(bugprone-unhandled-self-assignment)
-                        std :: basic_string_view < CharType > const & string
-                ) noexcept -> BaseStringView & {
-
-                    return this->operator = ( BaseStringView ( string ) ); // NOLINT(misc-unconventional-assign-operator)
-                }
-
-
-                template < typename CharType >
-                __CDS_cpplang_NonConstConstexprMemberFunction auto BaseStringView < CharType > :: operator = ( // NOLINT(bugprone-unhandled-self-assignment)
                         ElementType const * pString
                 ) noexcept -> BaseStringView & {
 
@@ -454,7 +435,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                         BaseStringView < FCharType >        const & rightString
                 ) noexcept -> bool {
 
-                    return BaseStringView ( leftString ) == rightString;
+                    return BaseStringView < FCharType > ( leftString ) == rightString;
                 }
 
 
@@ -464,7 +445,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                         BaseStringView < FCharType >        const & rightString
                 ) noexcept -> bool {
 
-                    return BaseStringView ( pLeftString ) == rightString;
+                    return BaseStringView < FCharType > ( pLeftString ) == rightString;
                 }
 
 
@@ -537,7 +518,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                         BaseStringView < FCharType >        const & rightString
                 ) noexcept -> bool {
 
-                    return BaseStringView ( leftString ) != rightString;
+                    return BaseStringView < FCharType > ( leftString ) != rightString;
                 }
 
 
@@ -547,7 +528,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                         BaseStringView < FCharType >        const & rightString
                 ) noexcept -> bool {
 
-                    return BaseStringView ( pLeftString ) != rightString;
+                    return BaseStringView < FCharType > ( pLeftString ) != rightString;
                 }
 
 
@@ -616,7 +597,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                         BaseStringView < FCharType >        const & rightString
                 ) noexcept -> bool {
 
-                    return BaseStringView ( leftString ) < rightString;
+                    return BaseStringView < FCharType > ( leftString ) < rightString;
                 }
 
 
@@ -626,7 +607,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                         BaseStringView < FCharType >        const & rightString
                 ) noexcept -> bool {
 
-                    return BaseStringView ( pLeftString ) < rightString;
+                    return BaseStringView < FCharType > ( pLeftString ) < rightString;
                 }
 
 
@@ -703,7 +684,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                         BaseStringView < FCharType >        const & rightString
                 ) noexcept -> bool {
 
-                    return BaseStringView ( leftString ) > rightString;
+                    return BaseStringView < FCharType > ( leftString ) > rightString;
                 }
 
 
@@ -713,7 +694,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                         BaseStringView < FCharType >        const & rightString
                 ) noexcept -> bool {
 
-                    return BaseStringView ( pLeftString ) > rightString;
+                    return BaseStringView < FCharType > ( pLeftString ) > rightString;
                 }
 
 
@@ -773,7 +754,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                         BaseStringView < FCharType >        const & rightString
                 ) noexcept -> bool {
 
-                    return ! ( BaseStringView ( leftString ) > rightString );
+                    return ! ( BaseStringView < FCharType > ( leftString ) > rightString );
                 }
 
 
@@ -783,7 +764,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                         BaseStringView < FCharType >        const & rightString
                 ) noexcept -> bool {
 
-                    return ! ( BaseStringView ( pLeftString ) > rightString );
+                    return ! ( BaseStringView < FCharType > ( pLeftString ) > rightString );
                 }
 
 
@@ -839,7 +820,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                         BaseStringView < FCharType >        const & rightString
                 ) noexcept -> bool {
 
-                    return ! ( BaseStringView ( leftString ) < rightString );
+                    return ! ( BaseStringView < FCharType > ( leftString ) < rightString );
                 }
 
 
@@ -849,7 +830,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                         BaseStringView < FCharType >        const & rightString
                 ) noexcept -> bool {
 
-                    return ! ( BaseStringView ( pLeftString ) < rightString );
+                    return ! ( BaseStringView < FCharType > ( pLeftString ) < rightString );
                 }
 
 
@@ -935,7 +916,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                     );
 
                     result._pBuffer [ result._length - 1ULL ]   = character;
-                    result._pBuffer [ result._length ]          = static_cast < ElementType > ( character );
+                    result._pBuffer [ result._length ]          = static_cast < ElementType > ( '\0' );
 
                     return result;
                 }
@@ -1874,14 +1855,14 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                             }
 
                             ++ splitIndex;
-                            storeIn.add ( BaseString ( this->_pData + currentSegmentOffset, currentSegmentLength ) );
+                            storeIn.add ( BaseString < CharType > ( this->_pData + currentSegmentOffset, currentSegmentLength ) );
                             currentSegmentLength = 0ULL;
                             currentSegmentOffset = index + 1;
                         }
                     }
 
                     if ( currentSegmentLength != 0ULL ) {
-                        storeIn.add ( BaseString ( this->_pData + currentSegmentOffset, currentSegmentLength ) );
+                        storeIn.add ( BaseString < CharType > ( this->_pData + currentSegmentOffset, currentSegmentLength ) );
                     }
 
                     return storeIn;
@@ -1958,18 +1939,19 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                         } else {
 
                             if ( currentSegmentLength == 0ULL ) {
+                                currentSegmentOffset = index + 1;
                                 continue;
                             }
 
                             ++ splitIndex;
-                            storeIn.add ( BaseString ( this->_pData + currentSegmentOffset, currentSegmentLength ) );
+                            storeIn.add ( BaseString < CharType > ( this->_pData + currentSegmentOffset, currentSegmentLength ) );
                             currentSegmentLength = 0ULL;
                             currentSegmentOffset = index + 1;
                         }
                     }
 
                     if ( currentSegmentLength != 0ULL ) {
-                        storeIn.add ( BaseString ( this->_pData + currentSegmentOffset, currentSegmentLength ) );
+                        storeIn.add ( BaseString < CharType > ( this->_pData + currentSegmentOffset, currentSegmentLength ) );
                     }
 
                     return storeIn;

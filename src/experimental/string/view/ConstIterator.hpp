@@ -43,7 +43,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                     __CDS_cpplang_ConstexprDestructor ~ConstIterator() noexcept override = default;
 
                 public:
-                    constexpr auto operator ++ () noexcept -> ConstIterator &;
+                    __CDS_cpplang_NonConstConstexprMemberFunction auto operator ++ () noexcept -> ConstIterator &;
 
                 public:
                     __CDS_cpplang_ConstexprNonLiteralReturn auto operator ++ (
@@ -51,7 +51,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                     ) noexcept -> ConstIterator;
 
                 public:
-                    constexpr auto operator -- () noexcept -> ConstIterator &;
+                    __CDS_cpplang_NonConstConstexprMemberFunction auto operator -- () noexcept -> ConstIterator &;
 
                 public:
                     __CDS_cpplang_ConstexprNonLiteralReturn auto operator -- (

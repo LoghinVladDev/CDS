@@ -1657,15 +1657,15 @@ auto StringTest::execute() noexcept -> bool {
 
         experimental :: String fromAddress = experimental :: String ( Type < int > ::unsafeAddress () );
 
-        this->log("String constructed from raw address. Intended : '%d', Result : '%s'. Diag : '%s'", 16, fromAddress.cStr(), fromAddress.diag().cStr());
-        if ( std::strcmp ( fromAddress.cStr(), "16" ) != 0 ) {
+        this->log("String constructed from raw address. Intended : 0x'%d', Result : '%s'. Diag : '%s'", 10, fromAddress.cStr(), fromAddress.diag().cStr());
+        if ( std::strcmp ( fromAddress.cStr(), "10" ) != 0 ) {
             this->logWarning("String from raw address construction error");
         }
 
         experimental :: String fromConstAddress = experimental :: String ( Type < int > :: unsafeConstAddress () );
 
-        this->log("String constructed from raw const address. Intended : '%d', Result : '%s'. Diag : '%s'", 16, fromConstAddress.cStr(), fromConstAddress.diag().cStr());
-        if ( std::strcmp ( fromConstAddress.cStr(), "16" ) != 0 ) {
+        this->log("String constructed from raw const address. Intended : 0x'%d', Result : '%s'. Diag : '%s'", 10, fromConstAddress.cStr(), fromConstAddress.diag().cStr());
+        if ( std::strcmp ( fromConstAddress.cStr(), "10" ) != 0 ) {
             this->logWarning("String from raw const address construction error");
         }
     });

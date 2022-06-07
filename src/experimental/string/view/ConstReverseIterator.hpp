@@ -43,7 +43,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                     __CDS_cpplang_ConstexprDestructor ~ConstReverseIterator() noexcept override = default;
 
                 public:
-                    constexpr auto operator ++ () noexcept -> ConstReverseIterator &;
+                    __CDS_cpplang_NonConstConstexprMemberFunction auto operator ++ () noexcept -> ConstReverseIterator &;
 
                 public:
                     __CDS_cpplang_ConstexprNonLiteralReturn auto operator ++ (
@@ -51,7 +51,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                     ) noexcept -> ConstReverseIterator;
 
                 public:
-                    constexpr auto operator -- () noexcept -> ConstReverseIterator &;
+                    __CDS_cpplang_NonConstConstexprMemberFunction auto operator -- () noexcept -> ConstReverseIterator &;
 
                 public:
                     __CDS_cpplang_ConstexprNonLiteralReturn auto operator -- (

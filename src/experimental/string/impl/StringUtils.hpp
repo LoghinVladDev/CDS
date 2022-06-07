@@ -302,6 +302,8 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                     return digitCount + 1U;
                 } else if ( value < base3 ) {
                     return digitCount + 2U;
+                } else if ( value < base4 ) {
+                    return digitCount + 3U;
                 } else {
                     /// nothing
                 }
@@ -559,6 +561,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 if ( patternIndex == static_cast < Index > ( toBeFoundLength ) ) {
 
                     lastMatch = sourceIndex - patternIndex;
+                    patternIndex = pLPSArray [ patternIndex - 1 ];
                 } else if (
                         sourceIndex < static_cast < Index > ( sourceLength ) &&
                         pSource [ sourceIndex ] != pToBeFound [ patternIndex ]
@@ -611,6 +614,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 if ( patternIndex == static_cast < Index > ( toBeFoundLength ) ) {
 
                     storeIn.add ( sourceIndex - patternIndex );
+                    patternIndex = pLPSArray [ patternIndex - 1 ];
                 } else if (
                         sourceIndex < static_cast < Index > ( sourceLength ) &&
                         pSource [ sourceIndex ] != pToBeFound [ patternIndex ]

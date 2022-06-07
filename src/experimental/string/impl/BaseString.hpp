@@ -487,7 +487,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                         return;
                     }
 
-                    this->_capacity = maxOf ( size, BaseString :: minCapacity );;
+                    this->_capacity = maxOf ( size, BaseString :: minCapacity );
                     this->_pBuffer = __allocation :: __realloc ( this->_pBuffer, this->_capacity );
 
                     if ( this->_length >= this->_capacity ) {
@@ -732,7 +732,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                         return BaseString ();
                     }
 
-                    return BaseString ( this->_pBuffer, static_cast < Size > ( until - from ) );
+                    return BaseString ( this->_pBuffer + from, static_cast < Size > ( until - from ) );
                 }
 
 
@@ -849,7 +849,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
                     this->_length = 1ULL;
                     this->_pBuffer [ 0 ] = character;
-                    this->_pBuffer [ 1 ] = static_cast < ElementType > ( character );
+                    this->_pBuffer [ 1 ] = static_cast < ElementType > ( '\0' );
 
                     return * this;
                 }
@@ -874,7 +874,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                             0ULL,
                             value,
                             valueLength,
-                            nullptr
+                            nullptr,
                             & this->_length
                      ) = static_cast < ElementType > ( '\0' );
 
@@ -993,7 +993,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                         BaseString < FCharType >    const & rightString
                 ) noexcept -> bool {
 
-                    return BaseStringView < FCharType > ( leftString ) == BaseStringView < FCharType > ( std :: forward < ConvertibleType > ( rightString ) );
+                    return BaseStringView < FCharType > ( std :: forward < ConvertibleType > ( leftString ) ) == BaseStringView < FCharType > ( rightString );
                 }
 
 
@@ -1069,7 +1069,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                         BaseString < FCharType >    const & rightString
                 ) noexcept -> bool {
 
-                    return BaseStringView < FCharType > ( leftString ) != BaseStringView < FCharType > ( std :: forward < ConvertibleType > ( rightString ) );
+                    return BaseStringView < FCharType > ( std :: forward < ConvertibleType > ( leftString ) ) != BaseStringView < FCharType > ( rightString );
                 }
 
 
@@ -1136,7 +1136,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                         BaseString < FCharType >    const & rightString
                 ) noexcept -> bool {
 
-                    return BaseStringView < FCharType > ( leftString ) < BaseStringView < FCharType > ( std :: forward < ConvertibleType > ( rightString ) );
+                    return BaseStringView < FCharType > ( std :: forward < ConvertibleType > ( leftString ) ) < BaseStringView < FCharType > ( rightString );
                 }
 
 
@@ -1203,7 +1203,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                         BaseString < FCharType >    const & rightString
                 ) noexcept -> bool {
 
-                    return BaseStringView < FCharType > ( leftString ) < BaseStringView < FCharType > ( std :: forward < ConvertibleType > ( rightString ) );
+                    return BaseStringView < FCharType > ( std :: forward < ConvertibleType > ( leftString ) ) < BaseStringView < FCharType > ( rightString );
                 }
 
 
@@ -1266,7 +1266,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                         BaseString < FCharType >    const & rightString
                 ) noexcept -> bool {
 
-                    return ! ( BaseStringView < FCharType > ( leftString ) > BaseStringView < FCharType > ( std :: forward < ConvertibleType > ( rightString ) ) );
+                    return ! ( BaseStringView < FCharType > ( std :: forward < ConvertibleType > ( leftString ) ) > BaseStringView < FCharType > ( rightString ) );
                 }
 
 
@@ -1324,7 +1324,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                         BaseString < FCharType >    const & rightString
                 ) noexcept -> bool {
 
-                    return ! ( BaseStringView < FCharType > ( leftString ) < BaseStringView < FCharType > ( std :: forward < ConvertibleType > ( rightString ) ) );
+                    return ! ( BaseStringView < FCharType > ( std :: forward < ConvertibleType > ( leftString ) ) < BaseStringView < FCharType > ( rightString ) );
                 }
 
 
@@ -1491,7 +1491,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                         BaseString < FCharType >    const & rightString
                 ) noexcept -> BaseString < FCharType > {
 
-                    return BaseStringView < FCharType > ( leftString ) + BaseStringView < FCharType > ( std :: forward < ConvertibleType > ( rightString ) );
+                    return BaseStringView < FCharType > ( std :: forward < ConvertibleType > ( leftString ) ) + BaseStringView < FCharType > ( rightString );
                 }
 
 
@@ -2879,11 +2879,11 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                         -- offset;
                     }
 
-                    if ( offset == 0ULL ) {
+                    if ( static_cast < Size > ( offset ) + 1ULL == this->length() ) {
                         return * this;
                     }
 
-                    this->_length -= offset;
+                    this->_length = static_cast < Size > ( offset ) + 1ULL;
                     this->_pBuffer [ this->length() ] = static_cast < ElementType > ( '\0' );
 
                     return * this;
@@ -2905,7 +2905,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                         ConvertibleType && characters
                 ) noexcept -> BaseString & {
 
-                    auto view = BaseStringView ( std :: forward < ConvertibleType > ( characters ) );
+                    auto view = BaseStringView < CharType > ( std :: forward < ConvertibleType > ( characters ) );
                     return this->ltrim ( view ).rtrim ( view );
                 }
 
@@ -3556,7 +3556,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
                 template < typename CharType >
                 auto BaseString < CharType > :: diag () const noexcept -> BaseString {
-                    return BaseStringView ( "Debug = { data = '" ) + this->_pBuffer +
+                    return BaseStringView < CharType > ( "Debug = { data = '" ) + this->_pBuffer +
                             "', length = " + this->_length +
                             ", capacity = " + this->_capacity + " }";
                 }

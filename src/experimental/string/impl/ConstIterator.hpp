@@ -48,7 +48,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 }
 
                 template < typename CharType >
-                constexpr auto BaseString < CharType > :: ConstIterator :: operator ++ () noexcept -> ConstIterator & {
+                __CDS_cpplang_NonConstConstexprMemberFunction auto BaseString < CharType > :: ConstIterator :: operator ++ () noexcept -> ConstIterator & {
 
                     return reinterpret_cast < ConstIterator & > ( this->next() );
                 }
@@ -64,7 +64,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 }
 
                 template < typename CharType >
-                constexpr auto BaseString < CharType > :: ConstIterator :: operator -- () noexcept -> ConstIterator & {
+                __CDS_cpplang_NonConstConstexprMemberFunction auto BaseString < CharType > :: ConstIterator :: operator -- () noexcept -> ConstIterator & {
 
                     return reinterpret_cast < ConstIterator & > ( this->previous() );
                 }

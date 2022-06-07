@@ -66,11 +66,6 @@ namespace cds {
                     ) noexcept;
 
                 public:
-                    __CDS_Explicit constexpr BaseStringView ( // NOLINT(google-explicit-constructor)
-                            std :: basic_string_view < CharType > const & string
-                    ) noexcept;
-
-                public:
                     template < typename T = CharType, meta :: EnableIf < meta :: isStringCharType < T > () > = 0 >
                     __CDS_Explicit constexpr BaseStringView ( // NOLINT(google-explicit-constructor)
                             ElementType const * pString
@@ -195,11 +190,6 @@ namespace cds {
                 public:
                     __CDS_cpplang_NonConstConstexprMemberFunction auto operator = (
                             std :: basic_string < CharType > const & string
-                    ) noexcept -> BaseStringView &;
-
-                public:
-                    __CDS_cpplang_NonConstConstexprMemberFunction auto operator = (
-                            std :: basic_string_view < CharType > const & string
                     ) noexcept -> BaseStringView &;
 
                 public:
@@ -1075,14 +1065,14 @@ namespace cds {
                     auto split (
                             ElementType     separator,
                             ListType      & storeIn,
-                            Size            maxCount = limits :: U64_MAX
+                            Size            maxCount = limits :: U32_MAX
                     ) const noexcept -> ListType &;
 
                 public:
                     template < template < typename ... > class ListType >
                     __CDS_NoDiscard auto split (
                             ElementType     separator,
-                            Size            maxCount = limits :: U64_MAX
+                            Size            maxCount = limits :: U32_MAX
                     ) const noexcept -> ListType < BaseString < CharType > >;
 
                 public:
@@ -1090,14 +1080,14 @@ namespace cds {
                     auto split (
                             ConvertibleType && separators,
                             ListType              & storeIn,
-                            Size                    maxCount = limits :: U64_MAX
+                            Size                    maxCount = limits :: U32_MAX
                     ) const noexcept -> ListType &;
 
                 public:
                     template < template < typename ... > class ListType, typename ConvertibleType, meta :: EnableIf < meta :: isConvertibleToBaseStringView < ConvertibleType, CharType > () > = 0 >
                     __CDS_NoDiscard auto split (
                             ConvertibleType && separators,
-                            Size                    maxCount = limits :: U64_MAX
+                            Size                    maxCount = limits :: U32_MAX
                     ) const noexcept -> ListType < BaseString < CharType > >;
 
                 public:
@@ -1105,14 +1095,14 @@ namespace cds {
                     auto split (
                             BaseStringView < CharType > const & separators,
                             ListType                          & storeIn,
-                            Size                                maxCount = limits :: U64_MAX
+                            Size                                maxCount = limits :: U32_MAX
                     ) const noexcept -> ListType &;
 
                 public:
                     template < template < typename ... > class ListType >
                     __CDS_NoDiscard auto split (
                             BaseStringView < CharType > const & separators,
-                            Size                                maxCount = limits :: U64_MAX
+                            Size                                maxCount = limits :: U32_MAX
                     ) const noexcept -> ListType < BaseString < CharType > >;
 
                 public:
@@ -1120,14 +1110,14 @@ namespace cds {
                     auto splitByString (
                             ConvertibleType && separators,
                             ListType              & storeIn,
-                            Size                    maxCount = limits :: U64_MAX
+                            Size                    maxCount = limits :: U32_MAX
                     ) const noexcept -> ListType &;
 
                 public:
                     template < template < typename ... > class ListType, typename ConvertibleType, meta :: EnableIf < meta :: isConvertibleToBaseStringView < ConvertibleType, CharType > () > = 0 >
                     __CDS_NoDiscard auto splitByString (
                             ConvertibleType && separators,
-                            Size                    maxCount = limits :: U64_MAX
+                            Size                    maxCount = limits :: U32_MAX
                     ) const noexcept -> ListType < BaseString < CharType > >;
 
                 public:
@@ -1135,14 +1125,14 @@ namespace cds {
                     auto splitByString (
                             BaseStringView < CharType > const & separators,
                             ListType                          & storeIn,
-                            Size                                maxCount = limits :: U64_MAX
+                            Size                                maxCount = limits :: U32_MAX
                     ) const noexcept -> ListType &;
 
                 public:
                     template < template < typename ... > class ListType >
                     __CDS_NoDiscard auto splitByString (
                             BaseStringView < CharType > const & separators,
-                            Size                                maxCount = limits :: U64_MAX
+                            Size                                maxCount = limits :: U32_MAX
                     ) const noexcept -> ListType < BaseString < CharType > >;
 
 

@@ -18,7 +18,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                         AbstractConstIterator (
                                 pString,
                                 index,
-                                true
+                                false
                         ) {
 
                 }
@@ -48,7 +48,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 }
 
                 template < typename CharType >
-                constexpr auto BaseStringView < CharType > :: ConstReverseIterator :: operator ++ () noexcept -> ConstReverseIterator & {
+                __CDS_cpplang_NonConstConstexprMemberFunction auto BaseStringView < CharType > :: ConstReverseIterator :: operator ++ () noexcept -> ConstReverseIterator & {
 
                     return reinterpret_cast < ConstReverseIterator & > ( this->next() );
                 }
@@ -64,7 +64,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 }
 
                 template < typename CharType >
-                constexpr auto BaseStringView < CharType > :: ConstReverseIterator :: operator -- () noexcept -> ConstReverseIterator & {
+                __CDS_cpplang_NonConstConstexprMemberFunction auto BaseStringView < CharType > :: ConstReverseIterator :: operator -- () noexcept -> ConstReverseIterator & {
 
                     return reinterpret_cast < ConstReverseIterator & > ( this->previous() );
                 }

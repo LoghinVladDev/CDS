@@ -5,6 +5,8 @@
 #ifndef CDS_STRINGTEST_H
 #define CDS_STRINGTEST_H
 
+#define CDS_TEST_EXPERIMENTAL
+
 #include <cdsIntern/tests/cpp20/Test.h>
 
 class StringTest : public Test {
