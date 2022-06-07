@@ -1622,7 +1622,7 @@ auto StringTest::execute() noexcept -> bool {
         }
 
 #define __FROM_RAW_CONSTRUCT(_typename, _initval) /* NOLINT(bugprone-reserved-identifier) */ { \
-        experimental :: String fromRaw ## _typename = experimental :: String ((_typename) (_initval));                                  \
+        experimental :: String fromRaw ## _typename = (_typename) (_initval);                                  \
                                                                                                \
         this->log("String constructed from %s. Intended : '%s', Result : '%s'. Diag : '%s'", # _typename, # _initval, fromRaw ## _typename.cStr(), fromRaw ## _typename.diag().cStr()); \
                                                                                                \

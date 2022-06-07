@@ -196,24 +196,24 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
                 public:
                     template < typename T = CharType, meta :: EnableIf < meta :: isStringCharType < T > () > = 0 >
-                    __CDS_Explicit BaseString ( // NOLINT(google-explicit-constructor)
+                    __CDS_Implicit BaseString ( // NOLINT(google-explicit-constructor)
                             ElementType value
                     ) noexcept;
 
                 public:
                     template < typename NumericType, meta :: EnableIf < meta :: isIntegralToString < CharType, NumericType > () > = 0 >
-                    __CDS_Explicit BaseString ( // NOLINT(google-explicit-constructor)
+                    __CDS_Implicit BaseString ( // NOLINT(google-explicit-constructor)
                             NumericType value
                     ) noexcept;
 
                 public:
-                    __CDS_Explicit BaseString ( // NOLINT(google-explicit-constructor)
+                    __CDS_Implicit BaseString ( // NOLINT(google-explicit-constructor)
                             bool value
                     ) noexcept;
 
                 public:
                     template < typename FloatingPointType, meta :: EnableIf < meta :: isFloatingPoint < FloatingPointType > () > = 0 >
-                    __CDS_Explicit BaseString ( // NOLINT(google-explicit-constructor)
+                    __CDS_Implicit BaseString ( // NOLINT(google-explicit-constructor)
                             FloatingPointType value
                     ) noexcept;
 

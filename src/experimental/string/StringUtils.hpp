@@ -50,7 +50,16 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                         ConvertibleType,
                         CharType,
                         Void < decltype ( hidden :: impl :: BaseStringView < CharType > ( valueOf < ConvertibleType > () ) ) >
-                > : impl :: BoolConstant < ! meta :: isSame < ConvertibleType, hidden :: impl :: BaseStringView < CharType > > () > {};
+                > : impl :: BoolConstant <
+                        ! meta :: isSame < ConvertibleType, hidden :: impl :: BaseStringView < CharType > > () && (
+                                meta :: isSame < typename Decay < ConvertibleType > :: Type, CharType const * > () ||
+                                meta :: isSame < typename Decay < ConvertibleType > :: Type, CharType * > () ||
+                                meta :: isSame < typename Decay < ConvertibleType > :: Type, hidden :: impl :: BaseString < CharType > const > () ||
+                                meta :: isSame < typename Decay < ConvertibleType > :: Type, hidden :: impl :: BaseString < CharType > > () ||
+                                meta :: isSame < typename Decay < ConvertibleType > :: Type, std :: basic_string < CharType > const > () ||
+                                meta :: isSame < typename Decay < ConvertibleType > :: Type, std :: basic_string < CharType > > ()
+                        )
+                > {};
 
 
                 template < typename ConvertibleToViewType, typename CharType, typename = void >
