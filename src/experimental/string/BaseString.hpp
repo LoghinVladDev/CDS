@@ -1748,12 +1748,12 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
                 public:
                     template < typename ConvertibleType, meta :: EnableIf < meta :: isConvertibleToBaseStringView < ConvertibleType, CharType > () > = 0 >
-                    constexpr auto startsWith (
+                    __CDS_cpplang_ConstexprConditioned auto startsWith (
                             ConvertibleType && string
                     ) const noexcept -> bool;
 
                 public:
-                    constexpr auto startsWith (
+                    __CDS_cpplang_ConstexprConditioned auto startsWith (
                             BaseStringView < CharType > const & string
                     ) const noexcept -> bool;
 
@@ -1765,12 +1765,12 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
                 public:
                     template < typename ConvertibleType, meta :: EnableIf < meta :: isConvertibleToBaseStringView < ConvertibleType, CharType > () > = 0 >
-                    constexpr auto endsWith (
+                    __CDS_cpplang_ConstexprConditioned auto endsWith (
                             ConvertibleType && string
                     ) const noexcept -> bool;
 
                 public:
-                    constexpr auto endsWith (
+                    __CDS_cpplang_ConstexprConditioned auto endsWith (
                             BaseStringView < CharType > const & string
                     ) const noexcept -> bool;
 

@@ -2182,8 +2182,8 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                         return storeIn;
                     }
 
-                    auto separatorPredictiveCount = this->count ([first = separator[0]]( char character ) noexcept -> bool {
-                        return character == first;
+                    auto separatorPredictiveCount = this->count ([& separator]( char character ) noexcept -> bool {
+                        return character == separator[0];
                     });
 
                     Index * pOccurrences = __allocation :: __alloc < Index > ( separatorPredictiveCount );
