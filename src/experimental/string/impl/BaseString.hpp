@@ -73,6 +73,24 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
                 template < typename CharType >
                 Index const BaseString < CharType > :: invalidIndex = StringUtils < CharType > :: invalidIndex;
+                
+                template < typename CharType >
+                BaseStringView < CharType > const BaseString < CharType > :: whitespace = meta :: impl :: StringData < CharType > :: whitespace;
+                
+                template < typename CharType >
+                BaseStringView < CharType > const BaseString < CharType > :: digits = meta :: impl :: StringData < CharType > :: digits;
+                
+                template < typename CharType >
+                BaseStringView < CharType > const BaseString < CharType > :: lowercaseAlphabet = meta :: impl :: StringData < CharType > :: lowercaseAlphabet;
+                
+                template < typename CharType >
+                BaseStringView < CharType > const BaseString < CharType > :: uppercaseAlphabet = meta :: impl :: StringData < CharType > :: uppercaseAlphabet;
+                
+                template < typename CharType >
+                BaseStringView < CharType > const BaseString < CharType > :: vowels = meta :: impl :: StringData < CharType > :: vowels;
+                
+                template < typename CharType >
+                BaseStringView < CharType > const BaseString < CharType > :: consonants = meta :: impl :: StringData < CharType > :: consonants;
 
 
                 template < typename CharType >
@@ -244,7 +262,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                         this->_pBuffer [ index ] = fillCharacter;
                     }
 
-                    this->_pBuffer [ this->_length ] = static_cast < ElementType > ( '\0' );
+                    this->_pBuffer [ this->_length ] = meta :: impl :: StringData < ElementType > :: nullCharacter;
                 }
 
 
@@ -287,7 +305,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                         this->_pBuffer [ this->_length ++ ] = character;
                     }
 
-                    this->_pBuffer [ this->_length ] = static_cast < ElementType > ( '\0' );
+                    this->_pBuffer [ this->_length ] = meta :: impl :: StringData < ElementType > :: nullCharacter;
                 }
 
 
@@ -304,7 +322,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                         this->_pBuffer [ this->_length ++ ] = static_cast < ElementType > ( character );
                     }
 
-                    this->_pBuffer [ this->_length ] = static_cast < ElementType > ( '\0' );
+                    this->_pBuffer [ this->_length ] = meta :: impl :: StringData < ElementType > :: nullCharacter;
                 }
 
 
@@ -318,7 +336,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                         _pBuffer ( __allocation :: __alloc < CharType > ( BaseString :: minCapacity ) ) {
 
                     this->_pBuffer [ 0 ] = value;
-                    this->_pBuffer [ 1 ] = static_cast < ElementType > ( '\0' );
+                    this->_pBuffer [ 1 ] = meta :: impl :: StringData < ElementType > :: nullCharacter;
                 }
 
 
@@ -336,7 +354,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                             value,
                             StringUtils < ElementType > :: integerLength ( value ),
                             & this->_length
-                    ) = static_cast < ElementType > ( '\0' );
+                    ) = meta :: impl :: StringData < ElementType > :: nullCharacter;
                 }
 
 
@@ -494,7 +512,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                         this->_length = this->_capacity - 1U;
                     }
 
-                    this->_pBuffer [ this->_length ] = static_cast < ElementType > ( '\0' );
+                    this->_pBuffer [ this->_length ] = meta :: impl :: StringData < ElementType > :: nullCharacter;
                 }
 
 
@@ -541,7 +559,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                         return;
                     }
 
-                    this->_pBuffer [0]  = static_cast < ElementType > ( '\0' );
+                    this->_pBuffer [0]  = meta :: impl :: StringData < ElementType > :: nullCharacter;
                     this->_length       = 0ULL;
                 }
 
@@ -682,7 +700,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 template < typename CharType >
                 constexpr auto BaseString < CharType > :: cStr () const noexcept -> ElementType const * {
 
-                    return this->_pBuffer == nullptr ? "" : this->_pBuffer;
+                    return this->_pBuffer == nullptr ? meta :: impl :: StringData < CharType > :: emptyString : this->_pBuffer;
                 }
 
 
@@ -849,7 +867,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
                     this->_length = 1ULL;
                     this->_pBuffer [ 0 ] = character;
-                    this->_pBuffer [ 1 ] = static_cast < ElementType > ( '\0' );
+                    this->_pBuffer [ 1 ] = meta :: impl :: StringData < ElementType > :: nullCharacter;
 
                     return * this;
                 }
@@ -876,7 +894,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                             valueLength,
                             nullptr,
                             & this->_length
-                     ) = static_cast < ElementType > ( '\0' );
+                     ) = meta :: impl :: StringData < ElementType > :: nullCharacter;
 
                     return * this;
                 }
@@ -1706,7 +1724,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                     }
 
                     this->_length = newLength;
-                    this->_pBuffer [ this->_length ] = static_cast < ElementType > ( '\0' );
+                    this->_pBuffer [ this->_length ] = meta :: impl :: StringData < ElementType > :: nullCharacter;
                     return std :: move ( * this );
                 }
 
@@ -1800,7 +1818,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                                 this->length() * sizeof ( CharType )
                         );
 
-                        string._pBuffer [ newLength ] = static_cast < ElementType > ( '\0' );
+                        string._pBuffer [ newLength ] = meta :: impl :: StringData < ElementType > :: nullCharacter;
 
                         __allocation :: __free (
                                 cds :: exchange (
@@ -1921,7 +1939,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                             value,
                             numberLength,
                             & this->_length
-                    ) = static_cast < ElementType > ( '\0' );
+                    ) = meta :: impl :: StringData < ElementType > :: nullCharacter;
 
                     return * this;
                 }
@@ -2034,7 +2052,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                                 this->_length * sizeof ( ElementType )
                         );
 
-                        this->_pBuffer [ newLength ] = static_cast < ElementType > ( '\0' );
+                        this->_pBuffer [ newLength ] = meta :: impl :: StringData < ElementType > :: nullCharacter;
                         this->_length                = newLength;
 
                         (void) std :: memcpy (
@@ -2092,7 +2110,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                     );
 
                     this->_pBuffer [ 0 ] = character;
-                    this->_pBuffer [ ++ this->_length ] = static_cast < ElementType > ( '\0' );
+                    this->_pBuffer [ ++ this->_length ] = meta :: impl :: StringData < ElementType > :: nullCharacter;
 
                     return * this;
                 }
@@ -2128,7 +2146,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                     );
 
                     this->_length += numberLength;
-                    this->_pBuffer [ this->_length ] = static_cast < ElementType > ( '\0' );
+                    this->_pBuffer [ this->_length ] = meta :: impl :: StringData < ElementType > :: nullCharacter;
 
                     return * this;
                 }
@@ -2164,7 +2182,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                     );
 
                     this->_length += valueLength;
-                    this->_pBuffer [ this->_length ] = static_cast < ElementType > ( '\0' );
+                    this->_pBuffer [ this->_length ] = meta :: impl :: StringData < ElementType > :: nullCharacter;
 
                     return * this;
                 }
@@ -2205,6 +2223,146 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 ) const noexcept -> bool {
 
                     return BaseStringView < CharType > ( * this ).contains ( string );
+                }
+
+
+                template < typename CharType >
+                template < template < typename ... > class CollectionType >
+                __CDS_OptionalInline auto BaseString < CharType > :: containsAnyOf (
+                        CollectionType < ElementType > const & characters
+                ) const noexcept -> bool {
+
+                    return BaseStringView < CharType > ( * this ).containsAnyOf (
+                            characters
+                    );
+                }
+
+
+                template < typename CharType >
+                template < typename ConvertibleType, meta :: EnableIf < meta :: isConvertibleToBaseStringView < ConvertibleType, CharType > () > >
+                __CDS_cpplang_ConstexprConditioned auto BaseString < CharType > :: containsAnyOf (
+                        ConvertibleType && string
+                ) const noexcept -> bool {
+
+                    return BaseStringView < CharType > ( * this ).containsAnyOf (
+                            BaseStringView < CharType > ( std :: forward < ConvertibleType > ( string ) )
+                    );
+                }
+
+
+                template < typename CharType >
+                __CDS_cpplang_ConstexprConditioned auto BaseString < CharType > :: containsAnyOf (
+                        BaseStringView < CharType > const & string
+                ) const noexcept -> bool {
+
+                    return BaseStringView < CharType > ( * this ).containsAnyOf (
+                            string
+                    );
+                }
+
+
+                template < typename CharType >
+                template < template < typename ... > class CollectionType >
+                __CDS_OptionalInline auto BaseString < CharType > :: containsAllOf (
+                        CollectionType < ElementType > const & characters
+                ) const noexcept -> bool {
+
+                    return BaseStringView < CharType > ( * this ).containsAllOf (
+                            characters
+                    );
+                }
+
+
+                template < typename CharType >
+                template < typename ConvertibleType, meta :: EnableIf < meta :: isConvertibleToBaseStringView < ConvertibleType, CharType > () > >
+                __CDS_cpplang_ConstexprConditioned auto BaseString < CharType > :: containsAllOf (
+                        ConvertibleType && string
+                ) const noexcept -> bool {
+
+                    return BaseStringView < CharType > ( * this ).containsAllOf (
+                            BaseStringView < CharType > ( std :: forward < ConvertibleType > ( string ) )
+                    );
+                }
+
+
+                template < typename CharType >
+                __CDS_cpplang_ConstexprConditioned auto BaseString < CharType > :: containsAllOf (
+                        BaseStringView < CharType > const & string
+                ) const noexcept -> bool {
+
+                    return BaseStringView < CharType > ( * this ).containsAllOf (
+                            string
+                    );
+                }
+
+
+                template < typename CharType >
+                template < template < typename ... > class CollectionType >
+                __CDS_OptionalInline auto BaseString < CharType > :: containsAnyNotOf (
+                        CollectionType < ElementType > const & characters
+                ) const noexcept -> bool {
+
+                    return BaseStringView < CharType > ( * this ).containsAnyNotOf (
+                            characters
+                    );
+                }
+
+
+                template < typename CharType >
+                template < typename ConvertibleType, meta :: EnableIf < meta :: isConvertibleToBaseStringView < ConvertibleType, CharType > () > >
+                __CDS_cpplang_ConstexprConditioned auto BaseString < CharType > :: containsAnyNotOf (
+                        ConvertibleType && string
+                ) const noexcept -> bool {
+
+                    return BaseStringView < CharType > ( * this ).containsAnyNotOf (
+                            BaseStringView < CharType > ( std :: forward < ConvertibleType > ( string ) )
+                    );
+                }
+
+
+                template < typename CharType >
+                __CDS_cpplang_ConstexprConditioned auto BaseString < CharType > :: containsAnyNotOf (
+                        BaseStringView < CharType > const & string
+                ) const noexcept -> bool {
+
+                    return BaseStringView < CharType > ( * this ).containsAnyNotOf (
+                            string
+                    );
+                }
+
+
+                template < typename CharType >
+                template < template < typename ... > class CollectionType >
+                __CDS_OptionalInline auto BaseString < CharType > :: containsAllNotOf (
+                        CollectionType < ElementType > const & characters
+                ) const noexcept -> bool {
+
+                    return BaseStringView < CharType > ( * this ).containsAllNotOf (
+                            characters
+                    );
+                }
+
+
+                template < typename CharType >
+                template < typename ConvertibleType, meta :: EnableIf < meta :: isConvertibleToBaseStringView < ConvertibleType, CharType > () > >
+                __CDS_cpplang_ConstexprConditioned auto BaseString < CharType > :: containsAllNotOf (
+                        ConvertibleType && string
+                ) const noexcept -> bool {
+
+                    return BaseStringView < CharType > ( * this ).containsAllNotOf (
+                            BaseStringView < CharType > ( std :: forward < ConvertibleType > ( string ) )
+                    );
+                }
+
+
+                template < typename CharType >
+                __CDS_cpplang_ConstexprConditioned auto BaseString < CharType > :: containsAllNotOf (
+                        BaseStringView < CharType > const & string
+                ) const noexcept -> bool {
+
+                    return BaseStringView < CharType > ( * this ).containsAllNotOf (
+                            string
+                    );
                 }
 
 
@@ -2804,7 +2962,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                             this->length() * sizeof ( ElementType )
                     );
 
-                    this->_pBuffer [ this->length() ] = static_cast < ElementType > ( '\0' );
+                    this->_pBuffer [ this->length() ] = meta :: impl :: StringData < ElementType > :: nullCharacter;
 
                     return * this;
                 }
@@ -2832,7 +2990,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                             this->length() * sizeof ( ElementType )
                     );
 
-                    this->_pBuffer [ this->length() ] = static_cast < ElementType > ( '\0' );
+                    this->_pBuffer [ this->length() ] = meta :: impl :: StringData < ElementType > :: nullCharacter;
 
                     return * this;
                 }
@@ -2853,7 +3011,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                     }
 
                     this->_length -= offset;
-                    this->_pBuffer [ this->length() ] = static_cast < ElementType > ( '\0' );
+                    this->_pBuffer [ this->length() ] = meta :: impl :: StringData < ElementType > :: nullCharacter;
 
                     return * this;
                 }
@@ -2884,7 +3042,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                     }
 
                     this->_length = static_cast < Size > ( offset ) + 1ULL;
-                    this->_pBuffer [ this->length() ] = static_cast < ElementType > ( '\0' );
+                    this->_pBuffer [ this->length() ] = meta :: impl :: StringData < ElementType > :: nullCharacter;
 
                     return * this;
                 }
@@ -2981,7 +3139,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                         this->_pBuffer [ index ] = element;
                     }
 
-                    this->_pBuffer [ size ] = static_cast < ElementType > ( '\0' );
+                    this->_pBuffer [ size ] = meta :: impl :: StringData < ElementType > :: nullCharacter;
                     this->_length = size;
                     return * this;
                 }
@@ -3106,14 +3264,138 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
 
                 template < typename CharType >
+                template < typename ListType, typename ConvertibleType, meta :: EnableIf < meta :: isConvertibleToBaseStringView < ConvertibleType, CharType > () > >
+                __CDS_OptimalInline auto BaseString < CharType > :: splitByString (
+                        ConvertibleType      && separator,
+                        ListType              & storeIn,
+                        Size                    maxCount
+                ) const noexcept -> ListType & {
+
+                    return BaseStringView < CharType > ( * this ).splitByString (
+                            BaseStringView < CharType > ( std :: forward < ConvertibleType > ( separator ) ),
+                            storeIn,
+                            maxCount
+                    );
+                }
+
+
+                template < typename CharType >
+                template < template < typename ... > class ListType, typename ConvertibleType, meta :: EnableIf < meta :: isConvertibleToBaseStringView < ConvertibleType, CharType > () > >
+                __CDS_OptimalInline auto BaseString < CharType > :: splitByString (
+                        ConvertibleType         && separator,
+                        Size                       maxCount
+                ) const noexcept -> ListType < BaseString > {
+
+                    ListType < BaseString > tokens;
+                    return BaseStringView < CharType > ( * this ).splitByString (
+                            BaseStringView < CharType > ( std :: forward < ConvertibleType > ( separator ) ),
+                            tokens,
+                            maxCount
+                    );
+                }
+
+
+                template < typename CharType >
+                template < typename ListType >
+                __CDS_OptimalInline auto BaseString < CharType > :: splitByString (
+                        BaseStringView < CharType > const & separator,
+                        ListType                          & storeIn,
+                        Size                                maxCount
+                ) const noexcept -> ListType & {
+
+                    return BaseStringView < CharType > ( * this ).splitByString (
+                            separator,
+                            storeIn,
+                            maxCount
+                    );
+                }
+
+
+                template < typename CharType >
+                template < template < typename ... > class ListType >
+                __CDS_OptimalInline auto BaseString < CharType > :: splitByString (
+                        BaseStringView < CharType > const & separator,
+                        Size                                maxCount
+                ) const noexcept -> ListType < BaseString > {
+
+                    ListType < BaseString > tokens;
+                    return BaseStringView < CharType > ( * this ).splitByString (
+                            separator,
+                            tokens,
+                            maxCount
+                    );
+                }
+
+
+                template < typename CharType >
                 __CDS_cpplang_ConstexprOverride auto BaseString < CharType > :: hash () const noexcept -> Index {
-                    return static_cast < Index > ( this->_length );
+                    return BaseStringView < CharType > ( * this ).hash();
                 }
 
 
                 template < typename CharType >
                 __CDS_OptimalInline auto BaseString < CharType > :: toString () const noexcept -> cds :: String {
                     return cds :: String ( this->cStr() );
+                }
+
+
+                template < typename CharType >
+                constexpr auto BaseString < CharType > :: startsWith (
+                        ElementType character
+                ) const noexcept -> bool {
+
+                    return ! this->empty() && this->_pData [ 0 ] == character;
+                }
+
+
+                template < typename CharType >
+                template < typename ConvertibleType, meta :: EnableIf < meta :: isConvertibleToBaseStringView < ConvertibleType, CharType > () > >
+                __CDS_cpplang_ConstexprConditioned auto BaseString < CharType > :: startsWith (
+                        ConvertibleType && string
+                ) const noexcept -> bool {
+
+                    return BaseStringView < CharType > ( * this ).startsWith (
+                            BaseStringView < CharType > ( std :: forward < ConvertibleType > ( string ) )
+                    );
+                }
+
+
+                template < typename CharType >
+                __CDS_cpplang_ConstexprConditioned auto BaseString < CharType > :: startsWith (
+                        BaseStringView < CharType > const & string
+                ) const noexcept -> bool {
+
+                    return BaseStringView < CharType > ( * this ).startsWith ( string );
+                }
+
+
+                template < typename CharType >
+                constexpr auto BaseString < CharType > :: endsWith (
+                        ElementType character
+                ) const noexcept -> bool {
+
+                    return ! this->empty() && this->_pData [ this->_length - 1ULL ] == character;
+                }
+
+
+                template < typename CharType >
+                template < typename ConvertibleType, meta :: EnableIf < meta :: isConvertibleToBaseStringView < ConvertibleType, CharType > () > >
+                __CDS_cpplang_ConstexprConditioned auto BaseString < CharType > :: endsWith (
+                        ConvertibleType && string
+                ) const noexcept -> bool {
+
+                    return BaseStringView < CharType > ( * this ).endsWith (
+                            BaseStringView < CharType > ( std :: forward < ConvertibleType > ( string ) )
+                    );
+                }
+
+
+                template < typename CharType >
+                __CDS_cpplang_ConstexprConditioned auto BaseString < CharType > :: endsWith (
+                        BaseStringView < CharType > const & string
+                ) const noexcept -> bool {
+
+                    return BaseStringView < CharType > ( * this ).endsWith ( string );
                 }
 
 
@@ -3171,7 +3453,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                                 sectionLength * sizeof ( ElementType )
                         );
 
-                        this->_pBuffer [ this->_length ] = static_cast < ElementType > ( '\0' );
+                        this->_pBuffer [ this->_length ] = meta :: impl :: StringData < ElementType > :: nullCharacter;
                         return * this;
                     }
 
@@ -3196,7 +3478,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                             sectionLength * sizeof ( ElementType )
                     );
 
-                    newBuffer [ this->_length ] = static_cast < ElementType > ( '\0' );
+                    newBuffer [ this->_length ] = meta :: impl :: StringData < ElementType > :: nullCharacter;
                     this->_capacity = newCapacity;
                     __allocation :: __free ( cds :: exchange ( this->_pBuffer, newBuffer ) );
 
@@ -3550,6 +3832,15 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                     }
 
                     return true;
+                }
+
+
+                template < typename FCharType >
+                auto operator << (
+                        std :: wostream                & out,
+                        BaseString < FCharType > const & obj
+                ) noexcept -> std :: wostream & {
+                    return ( out << obj.cStr() );
                 }
 
 #if defined(CDS_STRING_DEBUG)

@@ -64,6 +64,31 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
                 template < typename ConvertibleToViewType, typename CharType, typename = void >
                 struct IsNonAmbiguousConvertibleToBaseStringView : FalseType {};
+
+                template < typename CharType >
+                struct StringData {};
+
+                template <>
+                struct StringData < char > {
+                    constexpr static char       const * const emptyString       = "";
+                    constexpr static char               const nullCharacter     = '\0';
+                    constexpr static char       const * const digits            = "0123456789";
+                    constexpr static char       const * const lowercaseAlphabet = "abcdefghijklmnopqrstuvxyzw";
+                    constexpr static char       const * const uppercaseAlphabet = "ABCDEFGHIJKLMNOPQRSTUVXYZW";
+                    constexpr static char       const * const vowels            = "AEIOUaeiou";
+                    constexpr static char       const * const consonants        = "BCDFGHJKLMNPQRSTVXYZWbcdfghjklmnpqrstvxyzw";
+                };
+
+                template <>
+                struct StringData < wchar_t > {
+                    constexpr static wchar_t    const * const emptyString       = L"";
+                    constexpr static wchar_t            const nullCharacter     = L'\0';
+                    constexpr static wchar_t    const * const digits            = L"0123456789";
+                    constexpr static wchar_t    const * const lowercaseAlphabet = L"abcdefghijklmnopqrstuvxyzw";
+                    constexpr static wchar_t    const * const uppercaseAlphabet = L"ABCDEFGHIJKLMNOPQRSTUVXYZW";
+                    constexpr static wchar_t    const * const vowels            = L"AEIOUaeiou";
+                    constexpr static wchar_t    const * const consonants        = L"BCDFGHJKLMNPQRSTVXYZWbcdfghjklmnpqrstvxyzw";
+                };
             }
 
             template < typename CharType >
@@ -259,6 +284,17 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                     Size                                toBeFoundLength,
                     CollectionType < Index >          & storeIn
             ) noexcept -> CollectionType < Index > &;
+
+        public:
+            template < template < typename ... > class CollectionType >
+            static auto findAll (
+                    ElementType                 const * pSource,
+                    Size                                sourceLength,
+                    ElementType                 const * toBeFound,
+                    Size                                toBeFoundLength,
+                    Index                             * pIndices,
+                    Size                                maxIndexCount
+            ) noexcept -> Size;
 
         public:
             __CDS_NoDiscard __CDS_cpplang_ConstexprConditioned static auto contains (

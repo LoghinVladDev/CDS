@@ -618,7 +618,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 } else if (
                         sourceIndex < static_cast < Index > ( sourceLength ) &&
                         pSource [ sourceIndex ] != pToBeFound [ patternIndex ]
-                        ) {
+                ) {
 
                     if ( patternIndex != 0 ) {
                         patternIndex = pLPSArray [ patternIndex - 1 ];
@@ -632,6 +632,67 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
             Memory :: instance().destroyArray ( pLPSArray );
             return storeIn;
+        }
+
+
+        template < typename CharType >
+        template < template < typename ... > class CollectionType >
+        inline auto StringUtils < CharType > :: findAll (
+                ElementType                 const * pSource,
+                Size                                sourceLength,
+                ElementType                 const * pToBeFound,
+                Size                                toBeFoundLength,
+                Index                             * pIndices,
+                Size                                maxIndexCount
+        ) noexcept -> Size {
+
+            auto pLPSArray = Memory :: instance().createArray < Index > ( toBeFoundLength );
+
+            hidden :: impl :: KMPComputeLPSArray (
+                    pToBeFound,
+                    toBeFoundLength,
+                    pLPSArray
+            );
+
+            Index sourceIndex   = 0;
+            Index patternIndex  = 0;
+            Size indexCount     = 0ULL;
+
+            while ( sourceIndex < static_cast < Index > ( sourceLength ) ) {
+
+                if ( pToBeFound [ patternIndex ] == pSource [ sourceIndex ] ) {
+
+                    ++ patternIndex;
+                    ++ sourceIndex;
+                }
+
+                if ( patternIndex == static_cast < Index > ( toBeFoundLength ) ) {
+
+                    if ( indexCount < maxIndexCount ) {
+                        pIndices [ indexCount ++ ] = sourceIndex - patternIndex;
+                    } else {
+                        Memory :: instance().destroyArray ( pLPSArray );
+                        return maxIndexCount;
+                    }
+
+                    patternIndex = pLPSArray [ patternIndex - 1 ];
+                } else if (
+                        sourceIndex < static_cast < Index > ( sourceLength ) &&
+                        pSource [ sourceIndex ] != pToBeFound [ patternIndex ]
+                        ) {
+
+                    if ( patternIndex != 0 ) {
+                        patternIndex = pLPSArray [ patternIndex - 1 ];
+                    } else {
+                        ++ sourceIndex;
+                    }
+                } else {
+                    /// do nothing
+                }
+            }
+
+            Memory :: instance().destroyArray ( pLPSArray );
+            return indexCount;
         }
 
 

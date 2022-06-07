@@ -67,6 +67,16 @@ int main () {
 //    std :: cout << experimental :: meta :: isIterator < decltype ( a2.begin() ) > () << '\n';
     std :: cout << experimental :: meta :: isIterator < int > () << '\n';
 
+
+    cds :: experimental :: String str;
+
+    for ( char c = 'z'; c >= 'A'; -- c ) {
+        std :: wcout << str << ": " << str.hash() << '\n';
+        str += c;
+    }
+
+    std :: wcout << str << '\n';
+
 //    experimental :: Set < int > set;
 
     return 0;

@@ -916,7 +916,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                     );
 
                     result._pBuffer [ result._length - 1ULL ]   = character;
-                    result._pBuffer [ result._length ]          = static_cast < ElementType > ( '\0' );
+                    result._pBuffer [ result._length ]          = meta :: impl :: StringData < ElementType > :: nullCharacter;
 
                     return result;
                 }
@@ -950,7 +950,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                             value,
                             valueLength,
                             nullptr
-                    ) = static_cast < ElementType > ( '\0' );
+                    ) = meta :: impl :: StringData < ElementType > :: nullCharacter;
 
                     return result;
                 }
@@ -1156,7 +1156,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                         result._length += this->length();
                     }
 
-                    result._pBuffer [ result._length ] = static_cast < ElementType > ( '\0' );
+                    result._pBuffer [ result._length ] = meta :: impl :: StringData < ElementType > :: nullCharacter;
                     return result;
                 }
 
@@ -1223,6 +1223,170 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 ) const noexcept -> bool {
 
                     return this->findFirst ( string ) != BaseStringView :: invalidIndex;
+                }
+
+
+                template < typename CharType >
+                template < template < typename ... > class CollectionType >
+                __CDS_OptionalInline auto BaseStringView < CharType > :: containsAnyOf (
+                        CollectionType < ElementType > const & characters
+                ) const noexcept -> bool {
+
+                    for ( Size index = 0ULL; index < this->length(); ++ index ) {
+                        if ( characters.contains ( this->_pData [ index ] ) ) {
+                            return true;
+                        }
+                    }
+
+                    return false;
+                }
+
+
+                template < typename CharType >
+                template < typename ConvertibleType, meta :: EnableIf < meta :: isConvertibleToBaseStringView < ConvertibleType, CharType > () > >
+                __CDS_cpplang_ConstexprConditioned auto BaseStringView < CharType > :: containsAnyOf (
+                        ConvertibleType && string
+                ) const noexcept -> bool {
+
+                    return this->containsAnyOf ( BaseStringView < CharType > ( std :: forward < ConvertibleType > ( string ) ) );
+                }
+
+
+                template < typename CharType >
+                __CDS_cpplang_ConstexprConditioned auto BaseStringView < CharType > :: containsAnyOf (
+                        BaseStringView const & string
+                ) const noexcept -> bool {
+
+                    for ( Size index = 0ULL; index < this->length(); ++ index ) {
+                        if ( string.contains ( this->_pData [ index ] ) ) {
+                            return true;
+                        }
+                    }
+
+                    return false;
+                }
+
+
+                template < typename CharType >
+                template < template < typename ... > class CollectionType >
+                __CDS_OptionalInline auto BaseStringView < CharType > :: containsAllOf (
+                        CollectionType < ElementType > const & characters
+                ) const noexcept -> bool {
+
+                    for ( Size index = 0ULL; index < this->length(); ++ index ) {
+                        if ( ! characters.contains ( this->_pData [ index ] ) ) {
+                            return false;
+                        }
+                    }
+
+                    return true;
+                }
+
+
+                template < typename CharType >
+                template < typename ConvertibleType, meta :: EnableIf < meta :: isConvertibleToBaseStringView < ConvertibleType, CharType > () > >
+                __CDS_cpplang_ConstexprConditioned auto BaseStringView < CharType > :: containsAllOf (
+                        ConvertibleType && string
+                ) const noexcept -> bool {
+
+                    return this->containsAllOf ( BaseStringView < CharType > ( std :: forward < ConvertibleType > ( string ) ) );
+                }
+
+
+                template < typename CharType >
+                __CDS_cpplang_ConstexprConditioned auto BaseStringView < CharType > :: containsAllOf (
+                        BaseStringView const & string
+                ) const noexcept -> bool {
+
+                    for ( Size index = 0ULL; index < this->length(); ++ index ) {
+                        if ( ! string.contains ( this->_pData [ index ] ) ) {
+                            return false;
+                        }
+                    }
+
+                    return true;
+                }
+
+
+                template < typename CharType >
+                template < template < typename ... > class CollectionType >
+                __CDS_OptionalInline auto BaseStringView < CharType > :: containsAnyNotOf (
+                        CollectionType < ElementType > const & characters
+                ) const noexcept -> bool {
+
+                    for ( Size index = 0ULL; index < this->length(); ++ index ) {
+                        if ( ! characters.contains ( this->_pData [ index ] ) ) {
+                            return true;
+                        }
+                    }
+
+                    return false;
+                }
+
+
+                template < typename CharType >
+                template < typename ConvertibleType, meta :: EnableIf < meta :: isConvertibleToBaseStringView < ConvertibleType, CharType > () > >
+                __CDS_cpplang_ConstexprConditioned auto BaseStringView < CharType > :: containsAnyNotOf (
+                        ConvertibleType && string
+                ) const noexcept -> bool {
+
+                    return this->containsAnyNotOf ( BaseStringView < CharType > ( std :: forward < ConvertibleType > ( string ) ) );
+                }
+
+
+                template < typename CharType >
+                __CDS_cpplang_ConstexprConditioned auto BaseStringView < CharType > :: containsAnyNotOf (
+                        BaseStringView const & string
+                ) const noexcept -> bool {
+
+                    for ( Size index = 0ULL; index < this->length(); ++ index ) {
+                        if ( ! string.contains ( this->_pData [ index ] ) ) {
+                            return true;
+                        }
+                    }
+
+                    return false;
+                }
+
+
+                template < typename CharType >
+                template < template < typename ... > class CollectionType >
+                __CDS_OptionalInline auto BaseStringView < CharType > :: containsAllNotOf (
+                        CollectionType < ElementType > const & characters
+                ) const noexcept -> bool {
+
+                    for ( Size index = 0ULL; index < this->length(); ++ index ) {
+                        if ( characters.contains ( this->_pData [ index ] ) ) {
+                            return false;
+                        }
+                    }
+
+                    return true;
+                }
+
+
+                template < typename CharType >
+                template < typename ConvertibleType, meta :: EnableIf < meta :: isConvertibleToBaseStringView < ConvertibleType, CharType > () > >
+                __CDS_cpplang_ConstexprConditioned auto BaseStringView < CharType > :: containsAllNotOf (
+                        ConvertibleType && string
+                ) const noexcept -> bool {
+
+                    return this->containsAllNotOf ( BaseStringView < CharType > ( std :: forward < ConvertibleType > ( string ) ) );
+                }
+
+
+                template < typename CharType >
+                __CDS_cpplang_ConstexprConditioned auto BaseStringView < CharType > :: containsAllNotOf (
+                        BaseStringView const & string
+                ) const noexcept -> bool {
+
+                    for ( Size index = 0ULL; index < this->length(); ++ index ) {
+                        if ( string.contains ( this->_pData [ index ] ) ) {
+                            return false;
+                        }
+                    }
+
+                    return true;
                 }
 
 
@@ -1971,6 +2135,387 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                             tokens,
                             maxCount
                     );
+                }
+
+
+                template < typename CharType >
+                template < typename ListType, typename ConvertibleType, meta :: EnableIf < meta :: isConvertibleToBaseStringView < ConvertibleType, CharType > () > >
+                __CDS_OptimalInline auto BaseStringView < CharType > :: splitByString (
+                        ConvertibleType && separator,
+                        ListType         & storeIn,
+                        Size               maxCount
+                ) const noexcept -> ListType & {
+
+                    return this->splitByString (
+                            BaseStringView < CharType > ( std :: forward < ConvertibleType > ( separator ) ),
+                            storeIn,
+                            maxCount
+                    );
+                }
+
+
+                template < typename CharType >
+                template < template < typename ...> class ListType, typename ConvertibleType, meta :: EnableIf < meta :: isConvertibleToBaseStringView < ConvertibleType, CharType > () > >
+                __CDS_OptimalInline auto BaseStringView < CharType > :: splitByString (
+                        ConvertibleType && separator,
+                        Size               maxCount
+                ) const noexcept -> ListType < BaseString < CharType > > {
+
+                    ListType < BaseString < CharType > > list;
+                    return this->splitByString (
+                            BaseStringView < CharType > ( std :: forward < ConvertibleType > ( separator ) ),
+                            list,
+                            maxCount
+                    );
+                }
+
+
+                template < typename CharType >
+                template < typename ListType >
+                auto BaseStringView < CharType > :: splitByString (
+                        BaseStringView < CharType > const & separator,
+                        ListType                          & storeIn,
+                        Size                                maxCount
+                ) const noexcept -> ListType & {
+
+                    if ( separator.empty() ) {
+                        return storeIn;
+                    }
+
+                    auto separatorPredictiveCount = this->count ([first = separator[0]]( char character ) noexcept -> bool {
+                        return character == first;
+                    });
+
+                    Index * pOccurrences = __allocation :: __alloc < Index > ( separatorPredictiveCount );
+
+                    auto actualSeparatorCount = StringUtils < CharType > :: findAll (
+                            this->_pData,
+                            this->_length,
+                            separator._pData,
+                            separator._length,
+                            pOccurrences,
+                            separatorPredictiveCount
+                    );
+
+                    Size tokenOffset        = 0ULL;
+                    Size addedTokenCount    = 0ULL;
+
+                    for ( Size currentSeparatorIndex = 0ULL; currentSeparatorIndex < actualSeparatorCount; ++ currentSeparatorIndex ) {
+
+                        if ( tokenOffset < pOccurrences [ currentSeparatorIndex ] ) {
+
+                            if ( addedTokenCount < maxCount ) {
+                                ++ addedTokenCount;
+                                storeIn.add (
+                                        BaseString < CharType > (
+                                                this->_pData + tokenOffset,
+                                                static_cast < Size > ( pOccurrences [ currentSeparatorIndex ] )
+                                        )
+                                );
+                            } else {
+                                break;
+                            }
+
+                            while (
+                                    currentSeparatorIndex < actualSeparatorCount &&
+                                    pOccurrences [ currentSeparatorIndex ] + separator._length <= pOccurrences [ currentSeparatorIndex + 1 ]
+                            ) {
+                                currentSeparatorIndex ++;
+                                tokenOffset = pOccurrences [ currentSeparatorIndex ] + separator._length;
+                            }
+                        }
+                    }
+
+                    __allocation :: __free ( pOccurrences );
+                    return storeIn;
+                }
+
+
+                template < typename CharType >
+                template < template < typename ... > class ListType >
+                auto BaseStringView < CharType > :: splitByString (
+                        BaseStringView < CharType > const & separator,
+                        Size                                maxCount
+                ) const noexcept -> ListType < BaseString < CharType > > {
+
+                    ListType < BaseString < CharType > > tokens;
+                    return this->splitByString (
+                            separator,
+                            tokens,
+                            maxCount
+                    );
+                }
+
+
+                template < typename CharType >
+                __CDS_cpplang_ConstexprOverride auto BaseStringView < CharType > :: hash () const noexcept -> Index {
+
+                    Size finalHash = 0;
+
+                    if ( ! this->empty() ) {
+                        finalHash += ( this->_length & 0xFF00U ) + ( this->_pData [ 0 ] & 0xFFU );
+                    }
+
+                    Size shlOffset  = 4ULL;
+                    Size shlMask    = 0xFFULL;
+
+                    while ( ( shlOffset < 56ULL ) && ( shlOffset >> 2ULL ) < this->length() ) {
+
+                        finalHash |= ( ( static_cast < Size > ( this->_pData [ shlOffset >> 2ULL ] ) & shlMask ) << shlOffset );
+                        shlOffset += 2ULL;
+                    }
+
+                    return static_cast < Index > ( finalHash );
+                }
+
+
+                template < typename CharType >
+                __CDS_OptimalInline auto BaseStringView < CharType > :: toString () const noexcept -> BaseString < CharType > {
+                    return BaseString < CharType > ( this->_pData, this->_length );
+                }
+
+
+                template < typename CharType >
+                constexpr auto BaseStringView < CharType > :: startsWith (
+                        ElementType character
+                ) const noexcept -> bool {
+
+                    return ! this->empty() && this->_pData [ 0 ] == character;
+                }
+
+
+                template < typename CharType >
+                template < typename ConvertibleType, meta :: EnableIf < meta :: isConvertibleToBaseStringView < ConvertibleType, CharType > () > >
+                __CDS_cpplang_ConstexprConditioned auto BaseStringView < CharType > :: startsWith (
+                        ConvertibleType && string
+                ) const noexcept -> bool {
+
+                    return this->startsWith ( BaseStringView < CharType > ( std :: forward < ConvertibleType > ( string ) ) );
+                }
+
+
+                template < typename CharType >
+                __CDS_cpplang_ConstexprConditioned auto BaseStringView < CharType > :: startsWith (
+                        BaseStringView < CharType > const & string
+                ) const noexcept -> bool {
+
+                    Size offset = 0ULL;
+                    for ( auto minLength = minOf ( this->_length, string._length ); offset < minLength; ++ offset ) {
+                        if ( this->_pData [ offset ] != string._pData [ offset ] ) {
+                            return false;
+                        }
+                    }
+
+                    return offset == string._length;
+                }
+
+
+                template < typename CharType >
+                constexpr auto BaseStringView < CharType > :: endsWith (
+                        ElementType character
+                ) const noexcept -> bool {
+
+                    return ! this->empty() && this->_pData [ this->_length - 1ULL ] == character;
+                }
+
+
+                template < typename CharType >
+                template < typename ConvertibleType, meta :: EnableIf < meta :: isConvertibleToBaseStringView < ConvertibleType, CharType > () > >
+                __CDS_cpplang_ConstexprConditioned auto BaseStringView < CharType > :: endsWith (
+                        ConvertibleType && string
+                ) const noexcept -> bool {
+
+                    return this->endsWith ( BaseStringView < CharType > ( std :: forward < ConvertibleType > ( string ) ) );
+                }
+
+
+                template < typename CharType >
+                __CDS_cpplang_ConstexprConditioned auto BaseStringView < CharType > :: endsWith (
+                        BaseStringView < CharType > const & string
+                ) const noexcept -> bool {
+
+                    Size offset = 0;
+                    for ( auto minLength = minOf ( this->_length, string._length ); offset < minLength; ++ offset ) {
+                        if ( this->_pData [ this->_length - offset ] != string._pData [ string._length - offset ] ) {
+                            return false;
+                        }
+                    }
+
+                    return offset == string._length;
+                }
+
+
+                template < typename CharType >
+                template < typename Action >
+                auto BaseStringView < CharType > :: forEach (
+                        Action const & action
+                ) const noexcept ( noexcept ( action ( meta :: valueOf < ElementType > () ) ) ) -> void {
+
+                    for ( Size index = 0ULL; index < this->_length; ++ index ) {
+                        action ( this->_pData [ index ] );
+                    }
+                }
+
+
+                template < typename CharType >
+                template < typename Predicate >
+                auto BaseStringView < CharType > :: some (
+                        Size                count,
+                        Predicate   const & predicate
+                ) const noexcept ( noexcept ( predicate ( meta :: valueOf < ElementType > () ) ) ) -> bool {
+
+                    Size trueCount = 0ULL;
+                    for ( Size index = 0ULL; index < this->_length; ++ index ) {
+                        if ( predicate ( this->_pData [ index ] ) ) {
+                            ++ trueCount;
+                        }
+
+                        if ( trueCount > count ) {
+                            return false;
+                        }
+                    }
+
+                    return trueCount == count;
+                }
+
+
+                template < typename CharType >
+                template < typename Predicate >
+                auto BaseStringView < CharType > :: atLeast (
+                        Size                count,
+                        Predicate   const & predicate
+                ) const noexcept ( noexcept ( predicate ( meta :: valueOf < ElementType > () ) ) ) -> bool {
+
+                    Size trueCount = 0ULL;
+                    for ( Size index = 0ULL; index < this->_length; ++ index ) {
+                        if ( predicate ( this->_pData [ index ] ) ) {
+                            ++ trueCount;
+                        }
+
+                        if ( trueCount >= count ) {
+                            return true;
+                        }
+                    }
+
+                    return false;
+                }
+
+
+                template < typename CharType >
+                template < typename Predicate >
+                auto BaseStringView < CharType > :: atMost (
+                        Size                count,
+                        Predicate   const & predicate
+                ) const noexcept ( noexcept ( predicate ( meta :: valueOf < ElementType > () ) ) ) -> bool {
+
+                    Size trueCount = 0ULL;
+                    for ( Size index = 0ULL; index < this->_length; ++ index ) {
+                        if ( predicate ( this->_pData [ index ] ) ) {
+                            ++ trueCount;
+                        }
+
+                        if ( trueCount > count ) {
+                            return false;
+                        }
+                    }
+
+                    return true;
+                }
+
+
+                template < typename CharType >
+                template < typename Predicate >
+                __CDS_OptimalInline auto BaseStringView < CharType > :: moreThan (
+                        Size                count,
+                        Predicate   const & predicate
+                ) const noexcept ( noexcept ( predicate ( meta :: valueOf < ElementType > () ) ) ) -> bool {
+
+                    return this->atLeast ( count + 1, predicate );
+                }
+
+
+                template < typename CharType >
+                template < typename Predicate >
+                __CDS_OptimalInline auto BaseStringView < CharType > :: fewerThan (
+                        Size                count,
+                        Predicate   const & predicate
+                ) const noexcept ( noexcept ( predicate ( meta :: valueOf < ElementType > () ) ) ) -> bool {
+
+                    return this->atMost ( count - 1, predicate );
+                }
+
+
+                template < typename CharType >
+                template < typename Predicate >
+                auto BaseStringView < CharType > :: count (
+                        Predicate const & predicate
+                ) const noexcept ( noexcept ( predicate ( meta :: valueOf < ElementType > () ) ) ) -> Size {
+
+                    Size trueCount = 0U;
+                    for ( Size index = 0ULL; index < this->_length; ++ index ) {
+                        if ( predicate ( this->_pData [ index ] ) ) {
+                            ++ trueCount;
+                        }
+                    }
+
+                    return trueCount;
+                }
+
+
+                template < typename CharType >
+                template < typename Predicate >
+                auto BaseStringView < CharType > :: any (
+                        Predicate const & predicate
+                ) const noexcept ( noexcept ( predicate ( meta :: valueOf < ElementType > () ) ) ) -> bool {
+
+                    for ( Size index = 0ULL; index < this->_length; ++ index ) {
+                        if ( predicate ( this->_pData [ index ] ) ) {
+                            return true;
+                        }
+                    }
+
+                    return false;
+                }
+
+
+                template < typename CharType >
+                template < typename Predicate >
+                auto BaseStringView < CharType > :: all (
+                        Predicate const & predicate
+                ) const noexcept ( noexcept ( predicate ( meta :: valueOf < ElementType > () ) ) ) -> bool {
+
+                    for ( Size index = 0ULL; index < this->_length; ++ index ) {
+                        if ( ! predicate ( this->_pData [ index ] ) ) {
+                            return false;
+                        }
+                    }
+
+                    return true;
+                }
+
+
+                template < typename CharType >
+                template < typename Predicate >
+                auto BaseStringView < CharType > :: none (
+                        Predicate const & predicate
+                ) const noexcept ( noexcept ( predicate ( meta :: valueOf < ElementType > () ) ) ) -> bool {
+
+                    for ( Size index = 0ULL; index < this->_length; ++ index ) {
+                        if ( predicate ( this->_pData [ index ] ) ) {
+                            return false;
+                        }
+                    }
+
+                    return true;
+                }
+
+
+                template < typename FCharType >
+                auto operator << (
+                        std :: wostream                    & out,
+                        BaseStringView < FCharType > const & obj
+                ) noexcept -> std :: wostream & {
+                    return ( out << obj.cStr() );
                 }
 
             }

@@ -1200,11 +1200,11 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
                 public:
                     template < typename ConvertibleType, meta :: EnableIf < meta :: isConvertibleToBaseStringView < ConvertibleType, CharType > () > = 0 >
-                    __CDS_NoDiscard auto containsAnyOf (
+                    __CDS_NoDiscard __CDS_cpplang_ConstexprConditioned auto containsAnyOf (
                             ConvertibleType && string
                     ) const noexcept -> bool;
                 public:
-                    __CDS_NoDiscard auto containsAnyOf (
+                    __CDS_NoDiscard __CDS_cpplang_ConstexprConditioned auto containsAnyOf (
                             BaseStringView < CharType > const & string
                     ) const noexcept -> bool;
 
@@ -1216,12 +1216,12 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
                 public:
                     template < typename ConvertibleType, meta :: EnableIf < meta :: isConvertibleToBaseStringView < ConvertibleType, CharType > () > = 0 >
-                    __CDS_NoDiscard auto containsAllOf (
+                    __CDS_NoDiscard __CDS_cpplang_ConstexprConditioned auto containsAllOf (
                             ConvertibleType && string
                     ) const noexcept -> bool;
 
                 public:
-                    __CDS_NoDiscard auto containsAllOf (
+                    __CDS_NoDiscard __CDS_cpplang_ConstexprConditioned auto containsAllOf (
                             BaseStringView < CharType > const & string
                     ) const noexcept -> bool;
 
@@ -1233,12 +1233,12 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
                 public:
                     template < typename ConvertibleType, meta :: EnableIf < meta :: isConvertibleToBaseStringView < ConvertibleType, CharType > () > = 0 >
-                    __CDS_NoDiscard auto containsAnyNotOf (
+                    __CDS_NoDiscard __CDS_cpplang_ConstexprConditioned auto containsAnyNotOf (
                             ConvertibleType && string
                     ) const noexcept -> bool;
 
                 public:
-                    __CDS_NoDiscard auto containsAnyNotOf (
+                    __CDS_NoDiscard __CDS_cpplang_ConstexprConditioned auto containsAnyNotOf (
                             BaseStringView < CharType > const & string
                     ) const noexcept -> bool;
 
@@ -1250,12 +1250,12 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
                 public:
                     template < typename ConvertibleType, meta :: EnableIf < meta :: isConvertibleToBaseStringView < ConvertibleType, CharType > () > = 0 >
-                    __CDS_NoDiscard auto containsAllNotOf (
+                    __CDS_NoDiscard __CDS_cpplang_ConstexprConditioned auto containsAllNotOf (
                             ConvertibleType && string
                     ) const noexcept -> bool;
 
                 public:
-                    __CDS_NoDiscard auto containsAllNotOf (
+                    __CDS_NoDiscard __CDS_cpplang_ConstexprConditioned auto containsAllNotOf (
                             BaseStringView < CharType > const & string
                     ) const noexcept -> bool;
 
@@ -1686,7 +1686,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 public:
                     template < typename ListType, typename ConvertibleType, meta :: EnableIf < meta :: isConvertibleToBaseStringView < ConvertibleType, CharType > () > = 0 >
                     auto splitByString (
-                            ConvertibleType && separators,
+                            ConvertibleType      && separator,
                             ListType              & storeIn,
                             Size                    maxCount = limits :: U32_MAX
                     ) const noexcept -> ListType &;
@@ -1694,7 +1694,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 public:
                     template < template < typename ... > class ListType, typename ConvertibleType, meta :: EnableIf < meta :: isConvertibleToBaseStringView < ConvertibleType, CharType > () > = 0 >
                     __CDS_NoDiscard auto splitByString (
-                            ConvertibleType && separators,
+                            ConvertibleType      && separator,
                             Size                    maxCount = limits :: U32_MAX
                     ) const noexcept -> ListType < BaseString >;
 
@@ -1989,6 +1989,14 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                     auto sequence () const && noexcept -> Sequence < BaseString const >;
 
 
+                public:
+                    template < typename FCharType >
+                    friend auto operator << (
+                            std :: wostream                & out,
+                            BaseString < FCharType > const & obj
+                    ) noexcept -> std :: wostream &;
+
+
 #if defined(CDS_STRING_DEBUG)
 
                 public:
@@ -2028,5 +2036,8 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 #include "view/impl/ConstIterator.hpp"
 #include "view/impl/ConstReverseIterator.hpp"
 #include "view/impl/BaseStringView.hpp"
+
+#include "../shared/string/impl/StringSequence.hpp"
+#include "../shared/string/view/impl/StringViewSequence.hpp"
 
 #endif // __CDS_EX_STRING_BASE_HPP__
