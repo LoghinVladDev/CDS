@@ -2,8 +2,8 @@
 // Created by loghin on 22.01.2021.
 //
 
-#ifndef CDS_STRING_HPP
-#define CDS_STRING_HPP
+#ifndef __CDS_STRING_HPP__
+#define __CDS_STRING_HPP__
 
 #include <CDS/Concepts>
 #include <CDS/Options>
@@ -1361,12 +1361,12 @@ namespace cds {
         template < glm::length_t l, typename T, glm::qualifier q >
         __CDS_OptionalInline String ( glm::vec < l, T, q > const & v ) noexcept {
             * this = String ("glm::vec") + static_cast < uint32 > (l) + " { ";
-    
+
             if constexpr ( l == 1 ) { this->append("x = ").append(v.x); }
             if constexpr ( l == 2 ) { this->append(", y = ").append(v.y); }
             if constexpr ( l == 3 ) { this->append(", z = ").append(v.z); }
             if constexpr ( l == 4 ) { this->append(", w = ").append(v.w); }
-    
+
             * this += " }";
         }
 
@@ -2656,7 +2656,7 @@ namespace cds {
          *
          * @test tested in MSK
          */
-    
+
         __CDS_OptimalInline auto prepend (QString const & string) noexcept -> String & {
             return this->prepend(String(string));
         }
@@ -2703,7 +2703,7 @@ namespace cds {
         __CDS_NoDiscard __CDS_OptimalInline auto toQString () const noexcept -> QString {
             return {this->cStr() };
         }
-    
+
         /**
          * @brief Cast Specification used to obtain a QString from this string
          *
@@ -4378,7 +4378,7 @@ namespace cds {
          * @test tested in primitive/StringTest/Utility Functions, String Formatting
          */
         __CDS_cpplang_ConstexprConditioned auto toLower () noexcept -> String & { for ( Size i = 0; i < this->_l; i++ ) this->_p[i] = lowerChar(this->_p[i]); return * this; }
-    
+
         /**
          * @brief Function used to convert characters of a String to their upper values ( if are lower )
          *
@@ -5154,25 +5154,11 @@ namespace cds {
         friend class Socket;
     };
 
-    inline Object::operator String () const noexcept {
-        return this->toString();
-    }
-
-    inline auto operator << (std::ostream & out, Object const & object) noexcept -> std::ostream & {
-        return (out << object.toString());
-    }
-
 }
 
 #include <sstream>
 
 namespace cds {
-
-    inline auto Object::toString() const noexcept -> String {
-        std::stringstream oss;
-        oss << "Object at 0x" << std::hex << reinterpret_cast < AddressValueType const > (this);
-        return oss.str();
-    }
 
     inline auto String::operator == ( std::string const & stdString ) const noexcept -> bool {
         return std::strcmp ( this->cStr(), stdString.c_str() ) == 0;
@@ -5215,10 +5201,16 @@ inline auto operator "" _s (const char * pString, std::size_t length __CDS_Maybe
 #include <CDS/Types>
 
 namespace cds {
-    template<> auto hash<String>(String const &object) noexcept -> Index { return static_cast < Index > ( object.length() ); }
+    template<>
+    constexpr auto hash < String > (
+            String const & object
+    ) noexcept -> Index {
+
+        return static_cast < Index > ( object.length() );
+    }
 }
 
 __CDS_RegisterParseType(String) // NOLINT(clion-misra-cpp2008-8-0-1)
 __CDS_RegisterParseType(Object) // NOLINT(clion-misra-cpp2008-8-0-1)
 
-#endif //CDS_STRING_HPP
+#endif // __CDS_STRING_HPP__

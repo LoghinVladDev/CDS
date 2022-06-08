@@ -202,10 +202,6 @@ namespace cds {
             oss << " |";
             return {oss.str()};
         }
-
-        __CDS_NoDiscard __CDS_cpplang_ConstexprDynamicAllocation auto copy () const noexcept -> Optional * override {
-            return Memory :: instance().create < Optional >( * this );
-        }
     };
 
 }

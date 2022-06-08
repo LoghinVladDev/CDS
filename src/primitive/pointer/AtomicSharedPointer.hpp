@@ -33,10 +33,6 @@ namespace cds {
             pointer.pControl->lock.unlock();
         }
 
-        __CDS_OptimalInline auto copy () const noexcept -> AtomicSharedPointer * override {
-            return Memory :: instance().create < AtomicSharedPointer >(* this);
-        }
-
         __CDS_OptimalInline AtomicSharedPointer(typename SmartPointer<T>::Pointer pointer) noexcept : // NOLINT(google-explicit-constructor)
                 SmartPointer<T>(pointer),
                 pControl(Memory :: instance().create < SharedPointerControlBlock > ()){

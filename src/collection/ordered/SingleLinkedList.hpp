@@ -387,10 +387,6 @@ namespace cds {
         __CDS_NoDiscard auto sequence () const && noexcept -> Sequence < SingleLinkedList < T > const >;
         __CDS_NoDiscard auto sequence () && noexcept -> Sequence < SingleLinkedList < T > >;
 
-        __CDS_NoDiscard __CDS_OptimalInline auto copy () const noexcept -> SingleLinkedList < T > * override {
-            return Memory :: instance().create < SingleLinkedList > (* this);
-        }
-
         __CDS_NoDiscard __CDS_cpplang_ConstexprOverride auto hash () const noexcept -> Index override {
             return this->size();
         }

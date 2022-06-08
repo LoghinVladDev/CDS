@@ -271,10 +271,6 @@ namespace cds {
             return negative ? -value : value;
         }
 
-        __CDS_NoDiscard auto copy () const noexcept -> Double * override {
-            return Memory::instance().create < Double >( * this );
-        }
-
         class Atomic; // NOLINT(cppcoreguidelines-virtual-class-destructor)
     };
 

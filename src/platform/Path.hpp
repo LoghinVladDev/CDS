@@ -174,10 +174,6 @@ namespace cds {
             return this->_osPath;
         }
 
-        __CDS_NoDiscard auto copy () const noexcept -> Path * override {
-            return Memory :: instance().create < Path > (* this);
-        }
-
         __CDS_NoDiscard auto hash () const noexcept -> Index override {
             return this->parent().nodeName().hash();
         }
@@ -324,10 +320,6 @@ namespace cds {
 
         __CDS_cpplang_NonConstConstexprMemberFunction auto files () noexcept -> LinkedList < String > & {
             return this->_files;
-        }
-
-        __CDS_NoDiscard auto copy() const noexcept -> WalkEntry * override {
-            return Memory :: instance().create < WalkEntry > (* this);
         }
 
         __CDS_NoDiscard auto hash () const noexcept -> Index override {

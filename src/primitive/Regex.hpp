@@ -252,10 +252,6 @@ namespace cds {
                             return s + String().append((char)i);
                     });
             }
-
-            [[nodiscard]] inline auto copy () const noexcept -> CharacterSet * override {
-                return new CharacterSet(*this);
-            }
         };
 
     debug_private:

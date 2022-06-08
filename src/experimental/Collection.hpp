@@ -6,7 +6,7 @@
 #define __CDS_EX_COLLECTION_HPP__
 
 #include <CDS/std-types>
-#include <CDS/experimental/Object>
+#include <CDS/Object>
 #include <CDS/experimental/meta/TypeTraits>
 #include <CDS/Concepts>
 #include <CDS/smartPointers/UniquePointer>
@@ -23,7 +23,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
          * @test tested in collection/CollectionTest
          */
         template < typename T >
-        class Collection : public Object {
+        class Collection : public cds :: Object {
 
         public:
             /**

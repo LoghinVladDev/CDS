@@ -350,19 +350,6 @@ namespace cds {
         }
 
         /**
-         * @brief Function used to obtain a copy of this object into another, new variable
-         *
-         * @exceptsafe
-         *
-         * @returns Boolean ptr = Address to a new Boolean Object
-         *
-         * @test Does not Apply
-         */
-        __CDS_NoDiscard __CDS_OptimalInline auto copy () const noexcept -> Boolean * override {
-            return Memory::instance().create < Boolean > ( * this );
-        }
-
-        /**
          * @brief Thread Safe, Atomic container for Boolean Type
          */
         class Atomic; // NOLINT(cppcoreguidelines-virtual-class-destructor)

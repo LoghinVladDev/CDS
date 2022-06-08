@@ -1296,10 +1296,6 @@ namespace cds {
             return negative ? (-numericValue) : numericValue;
         }
 
-        __CDS_NoDiscard auto copy () const noexcept -> Integer * override {
-            return Memory :: instance().create < Integer > ( * this );
-        }
-
         /**
          * @brief Thread Safe, Atomic container for Integer Type
          */

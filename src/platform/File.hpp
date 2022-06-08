@@ -420,7 +420,7 @@ namespace cds {
 
         __CDS_NoDiscard static auto at (Path const &) noexcept -> UniquePointer < File >;
 
-        __CDS_NoDiscard auto copy () const noexcept -> File * override = 0;
+        __CDS_NoDiscard virtual auto copy () const noexcept -> File * = 0;
 
         __CDS_NoDiscard auto toString () const noexcept -> String override {
             return

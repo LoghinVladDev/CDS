@@ -124,10 +124,6 @@ namespace cds {
                 " )";
         }
 
-        __CDS_NoDiscard __CDS_OptimalInline auto copy () const noexcept -> Range * override {
-            return Memory :: instance().create < Range > ( * this );
-        }
-
         __CDS_NoDiscard constexpr auto from () const noexcept -> Index {
             return this->_s;
         }

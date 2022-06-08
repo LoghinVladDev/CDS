@@ -268,10 +268,6 @@ namespace cds {
             return negative ? -value : value;
         }
 
-        __CDS_NoDiscard auto copy () const noexcept -> Float * override {
-            return Memory :: instance() .create < Float > ( * this );
-        }
-
         class Atomic; // NOLINT(cppcoreguidelines-virtual-class-destructor)
     };
 

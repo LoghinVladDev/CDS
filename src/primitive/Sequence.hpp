@@ -120,8 +120,6 @@ namespace cds {
             }
 
     #endif
-
-            __CDS_NoDiscard auto copy () const noexcept -> Iterator * override;
             __CDS_NoDiscard auto equals (Object const &) const noexcept -> bool override;
 
             Iterator () noexcept = delete;
@@ -201,7 +199,6 @@ namespace cds {
             }
     #endif
 
-            __CDS_NoDiscard auto copy () const noexcept -> ConstIterator * override;
             __CDS_NoDiscard auto equals (Object const &) const noexcept -> bool override;
 
             ConstIterator () noexcept = delete;
@@ -247,7 +244,6 @@ namespace cds {
 
         __CDS_NoDiscard __CDS_MaybeUnused auto toString () const noexcept -> String override;
         __CDS_NoDiscard __CDS_MaybeUnused auto hash () const noexcept -> Index override;
-        __CDS_NoDiscard __CDS_MaybeUnused auto copy () const noexcept -> Sequence * override;
         __CDS_NoDiscard __CDS_MaybeUnused auto equals (Object const &) const noexcept -> bool override;
 
         __CDS_MaybeUnused auto contains ( ElementType const & element ) const noexcept -> Boolean
@@ -3815,11 +3811,6 @@ __CDS_OptionalInline auto cds :: Sequence < C > ::Iterator::hash() const noexcep
 #endif
 
 template < typename C >
-__CDS_OptimalInline auto cds :: Sequence < C > :: Iterator :: copy() const noexcept -> cds :: Sequence < C > :: Iterator * {
-    return nullptr;
-}
-
-template < typename C >
 __CDS_OptimalInline auto cds :: Sequence < C > :: Iterator :: equals ( cds :: Object const & o) const noexcept -> bool {
     if ( this == & o ) return true;
     auto p = dynamic_cast < decltype ( this ) > ( & o );
@@ -4039,11 +4030,6 @@ __CDS_OptimalInline auto cds :: Sequence < C > :: ConstIterator :: hash() const 
 #endif
 
 template < typename C >
-__CDS_OptimalInline auto cds :: Sequence < C > :: ConstIterator :: copy() const noexcept -> cds :: Sequence < C > :: ConstIterator * {
-    return nullptr;
-}
-
-template < typename C >
 __CDS_OptimalInline auto cds :: Sequence < C > :: ConstIterator :: equals ( cds :: Object const & o ) const noexcept -> bool {
     if ( this == & o ) return true;
     auto p = dynamic_cast < decltype ( this ) > ( & o );
@@ -4119,11 +4105,6 @@ auto cds :: Sequence < C > ::toString() const noexcept -> cds :: String {
 template < typename C >
 __CDS_OptimalInline auto cds :: Sequence < C > ::hash() const noexcept -> cds :: Index {
     return this->pCollection.valueAt().hash();
-}
-
-template < typename C >
-__CDS_OptimalInline auto cds :: Sequence < C > ::copy() const noexcept -> cds :: Sequence < C > * {
-    return cds :: Memory :: instance().create < cds :: Sequence < C > > ( * this );
 }
 
 template < typename C >

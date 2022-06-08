@@ -69,7 +69,7 @@ namespace cds {
             __CDS_Deprecated Node() noexcept = default;
             __CDS_Deprecated Node(Node const & node) noexcept :
                     _label(node._label),
-                    _pObject(node._pObject->copy()) {
+                    _pObject(cds :: copy ( * node._pObject)) {
 
             }
 
@@ -85,7 +85,7 @@ namespace cds {
 
             __CDS_Deprecated auto put (Object const & obj) noexcept -> Node & {
                 (void) this->clearData();
-                this->_pObject = obj.copy();
+                this->_pObject = cds :: copy ( obj );
                 return * this;
             }
 
@@ -230,10 +230,6 @@ namespace cds {
             }
 
             __CDS_Deprecated __CDS_NoDiscard auto dumpIndented (int indent, int count) const noexcept -> String;
-
-            __CDS_Deprecated __CDS_NoDiscard auto copy () const noexcept -> Node * override {
-                return Memory::instance().create < Node > (*this);
-            }
         };
 
         __CDS_Deprecated LinkedList < Node > _nodes;
@@ -418,10 +414,6 @@ namespace cds {
         }
 
     public:
-
-        __CDS_Deprecated __CDS_NoDiscard auto copy () const noexcept -> JSON * override {
-            return Memory :: instance().create < JSON > (*this);
-        }
     };
 
 }
@@ -669,10 +661,6 @@ namespace cds {
             }
 
             return String().append("[").append(res.substr(0, static_cast < Index > (res.size()) - 2)).append("]");
-        }
-
-        __CDS_Deprecated __CDS_NoDiscard auto copy() const noexcept -> Array * override {
-            return Memory :: instance().create < Array >(* this);
         }
 
         __CDS_Deprecated static auto parse ( String const & data ) noexcept -> Array { // NOLINT(misc-no-recursion)
@@ -1006,7 +994,7 @@ namespace cds {
 
     __CDS_Deprecated inline auto JSON::Node::put ( JSON::Array const & value ) noexcept -> Node & {
         (void) this->clearData();
-        this->_pObject = value.copy();
+        this->_pObject = cds :: copy ( value );
         return * this;
     }
 

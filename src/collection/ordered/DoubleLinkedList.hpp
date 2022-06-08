@@ -413,10 +413,6 @@ namespace cds {
         __CDS_NoDiscard auto sequence () & noexcept -> Sequence < DoubleLinkedList < T > >;
         __CDS_NoDiscard auto sequence () const && noexcept -> Sequence < DoubleLinkedList < T > const >;
         __CDS_NoDiscard auto sequence () && noexcept -> Sequence < DoubleLinkedList < T > >;
-
-        __CDS_NoDiscard __CDS_OptimalInline auto copy () const noexcept -> DoubleLinkedList < T > * override {
-            return Memory :: instance() . create < DoubleLinkedList < T > > ( * this );
-        }
     };
 
 }

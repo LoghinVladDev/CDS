@@ -122,10 +122,6 @@ namespace cds {
         auto sequence () && noexcept -> Sequence < OrderedSet < T, C > >;
         auto sequence () const & noexcept -> Sequence < OrderedSet < T, C > const >;
         auto sequence () & noexcept -> Sequence < OrderedSet < T, C > >;
-
-        auto copy () const noexcept -> OrderedSet < T, C > * override {
-            return Memory :: instance ().create < OrderedSet < T, C > > ( * this );
-        }
     };
 
 }

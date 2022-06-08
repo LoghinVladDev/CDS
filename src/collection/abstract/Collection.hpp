@@ -85,7 +85,7 @@ namespace cds {
                 return true;
             }
 
-            auto copy () const noexcept -> DelegateIterator * override = 0;
+            virtual auto copy () const noexcept -> DelegateIterator * = 0;
 
             __CDS_cpplang_ConstexprDestructor ~DelegateIterator () noexcept override = default;
         };
@@ -107,7 +107,7 @@ namespace cds {
                 return true;
             }
 
-            auto copy () const noexcept -> DelegateConstIterator * override = 0;
+            virtual auto copy () const noexcept -> DelegateConstIterator * = 0;
 
             __CDS_cpplang_ConstexprDestructor ~DelegateConstIterator () noexcept override = default;
         };
@@ -1099,8 +1099,6 @@ namespace cds {
 
             return finalHashValue;
         }
-
-        __CDS_NoDiscard auto copy () const noexcept -> Collection < T > * override = 0;
         
         __CDS_NoDiscard auto equals ( Object const & object ) const noexcept -> bool override {
             if ( this == & object ) {
