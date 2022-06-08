@@ -7,16 +7,16 @@
 
 namespace cds { // NOLINT(modernize-concat-nested-namespaces)
     namespace experimental { // NOLINT(modernize-concat-nested-namespaces)
-        namespace hidden { // NOLINT(modernize-concat-nested-namespaces)
-            namespace impl {
+        namespace __hidden { // NOLINT(modernize-concat-nested-namespaces, bugprone-reserved-identifier)
+            namespace __impl { // NOLINT(bugprone-reserved-identifier)
 
-                template < typename CharType >
-                class BaseStringView < CharType > :: ConstIterator : public AbstractConstIterator {
+                template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
+                class __BaseStringView < __CharType > :: ConstIterator : public AbstractConstIterator {
 
                 public:
                     constexpr ConstIterator (
-                            BaseStringView < CharType > const * pString,
-                            Index                               index
+                            __BaseStringView < __CharType > const * pString,
+                            Index                                   index
                     ) noexcept;
 
                 public:
@@ -59,7 +59,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                     ) noexcept -> ConstIterator;
 
                 public:
-                    constexpr auto operator * () const noexcept -> CharType;
+                    constexpr auto operator * () const noexcept -> __CharType;
 
                 public:
                     constexpr auto operator == (

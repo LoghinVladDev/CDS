@@ -8,12 +8,12 @@
 namespace cds { // NOLINT(modernize-concat-nested-namespaces)
     namespace experimental {
 
-        namespace hidden { // NOLINT(modernize-concat-nested-namespaces)
-            namespace impl {
+        namespace __hidden { // NOLINT(modernize-concat-nested-namespaces, bugprone-reserved-identifier)
+            namespace __impl { // NOLINT(bugprone-reserved-identifier)
 
-                template < typename CharType >
-                __CDS_cpplang_ConstexprConditioned auto KMPComputeLPSArray (
-                        CharType    const * pPatternString,
+                template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
+                __CDS_cpplang_ConstexprConditioned auto __KMPComputeLPSArray ( // NOLINT(bugprone-reserved-identifier)
+                        __CharType  const * pPatternString,
                         Size                length,
                         Index             * pLPSArray
                 ) noexcept -> void {
@@ -38,24 +38,47 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                     }
                 }
 
+                template < typename __CharType, typename __ArgumentType > // NOLINT(bugprone-reserved-identifier)
+                __CDS_NoDiscard __CDS_cpplang_ConstexprConditioned auto __stringLengthOfArguments (  // NOLINT(bugprone-reserved-identifier)
+                        __ArgumentType && argument
+                ) noexcept -> Size {
+
+                    return StringUtils < __CharType > :: stringLengthOfArgument (
+                            std :: forward < __ArgumentType > ( argument )
+                    );
+                }
+
+                template < typename __CharType, typename __FirstArgumentType, typename ... __RemainingArgumentTypes > // NOLINT(bugprone-reserved-identifier)
+                __CDS_NoDiscard __CDS_cpplang_ConstexprConditioned auto __stringLengthOfArguments (  // NOLINT(bugprone-reserved-identifier)
+                        __FirstArgumentType      &&     firstArgument,
+                        __RemainingArgumentTypes && ... remainingArguments
+                ) noexcept -> Size {
+
+                    return StringUtils < __CharType > :: stringLengthOfArgument (
+                            std :: forward < __FirstArgumentType > ( firstArgument )
+                    ) + __stringLengthOfArguments < __CharType, __RemainingArgumentTypes ... > (
+                            std :: forward < __RemainingArgumentTypes > ( remainingArguments ) ...
+                    );
+                }
+
             }
         }
 
-        template < typename CharType >
-        sint8 const StringUtils < CharType > :: lesser;
+        template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
+        sint8 const StringUtils < __CharType > :: lesser;
 
-        template < typename CharType >
-        sint8 const StringUtils < CharType > :: equal;
+        template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
+        sint8 const StringUtils < __CharType > :: equal;
 
-        template < typename CharType >
-        sint8 const StringUtils < CharType > :: greater;
+        template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
+        sint8 const StringUtils < __CharType > :: greater;
 
-        template < typename CharType >
-        Index const StringUtils < CharType > :: invalidIndex;
+        template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
+        Index const StringUtils < __CharType > :: invalidIndex;
 
 
-        template < typename CharType >
-        constexpr auto StringUtils < CharType > :: isUpper (
+        template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
+        constexpr auto StringUtils < __CharType > :: isUpper (
                 ElementType character
         ) noexcept -> bool {
 
@@ -65,8 +88,8 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         }
 
 
-        template < typename CharType >
-        constexpr auto StringUtils < CharType > :: isLower (
+        template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
+        constexpr auto StringUtils < __CharType > :: isLower (
                 ElementType character
         ) noexcept -> bool {
 
@@ -76,8 +99,8 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         }
 
 
-        template < typename CharType >
-        constexpr auto StringUtils < CharType > :: isDigit (
+        template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
+        constexpr auto StringUtils < __CharType > :: isDigit (
                 ElementType character
         ) noexcept -> bool {
 
@@ -87,8 +110,8 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         }
 
 
-        template < typename CharType >
-        constexpr auto StringUtils < CharType > :: isLetter (
+        template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
+        constexpr auto StringUtils < __CharType > :: isLetter (
                 ElementType character
         ) noexcept -> bool {
 
@@ -98,8 +121,8 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         }
 
 
-        template < typename CharType >
-        constexpr auto StringUtils < CharType > :: isAlpha (
+        template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
+        constexpr auto StringUtils < __CharType > :: isAlpha (
                 ElementType character
         ) noexcept -> bool {
 
@@ -109,8 +132,8 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         }
 
 
-        template < typename CharType >
-        constexpr auto StringUtils < CharType > :: isVowel (
+        template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
+        constexpr auto StringUtils < __CharType > :: isVowel (
                 ElementType character
         ) noexcept -> bool {
 
@@ -128,8 +151,8 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         }
 
 
-        template < typename CharType >
-        constexpr auto StringUtils < CharType > :: isConsonant (
+        template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
+        constexpr auto StringUtils < __CharType > :: isConsonant (
                 ElementType character
         ) noexcept -> bool {
 
@@ -139,8 +162,8 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         }
 
 
-        template < typename CharType >
-        constexpr auto StringUtils < CharType > :: lower (
+        template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
+        constexpr auto StringUtils < __CharType > :: lower (
                 ElementType character
         ) noexcept -> ElementType {
 
@@ -151,8 +174,8 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         }
 
 
-        template < typename CharType >
-        constexpr auto StringUtils < CharType > :: upper (
+        template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
+        constexpr auto StringUtils < __CharType > :: upper (
                 ElementType character
         ) noexcept -> ElementType {
 
@@ -163,8 +186,8 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         }
 
 
-        template < typename CharType >
-        __CDS_cpplang_ConstexprConditioned auto StringUtils < CharType > :: compare (
+        template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
+        __CDS_cpplang_ConstexprConditioned auto StringUtils < __CharType > :: compare (
                 ElementType const * pLeftString,
                 Size                leftLength,
                 ElementType const * pRightString,
@@ -207,8 +230,8 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         }
 
 
-        template < typename CharType >
-        __CDS_cpplang_ConstexprConditioned auto StringUtils < CharType > :: length (
+        template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
+        __CDS_cpplang_ConstexprConditioned auto StringUtils < __CharType > :: length (
                 ElementType const * pBuffer
         ) noexcept -> Size {
 
@@ -227,8 +250,8 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         }
 
 
-        template < typename CharType >
-        __CDS_cpplang_ConstexprConditioned auto StringUtils < CharType > :: copy (
+        template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
+        __CDS_cpplang_ConstexprConditioned auto StringUtils < __CharType > :: copy (
                 ElementType       * pDestination,
                 Size                destinationOffset,
                 ElementType const * pSource,
@@ -244,7 +267,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             (void) std :: memcpy (
                     pDestination + destinationOffset,
                     pSource + sourceOffset,
-                    length * sizeof ( CharType )
+                    length * sizeof ( __CharType )
             );
 
             if ( writeTerminator ) {
@@ -255,15 +278,15 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         }
 
 
-        template < typename CharType >
-        template < typename OtherCharType, meta :: EnableIf < ! meta :: isSame < OtherCharType, CharType > () && sizeof ( CharType ) >= sizeof ( OtherCharType ) > >
-        __CDS_cpplang_ConstexprConditioned auto StringUtils < CharType > :: copy (
-                ElementType         * pDestination,
-                Size                  destinationOffset,
-                OtherCharType const * pSource,
-                Size                  sourceOffset,
-                Size                  length,
-                bool                  writeTerminator
+        template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
+        template < typename __OtherCharType, meta :: EnableIf < ! meta :: isSame < __OtherCharType, __CharType > () && sizeof ( __CharType ) >= sizeof ( __OtherCharType ) > > // NOLINT(bugprone-reserved-identifier)
+        __CDS_cpplang_ConstexprConditioned auto StringUtils < __CharType > :: copy (
+                ElementType           * pDestination,
+                Size                    destinationOffset,
+                __OtherCharType const * pSource,
+                Size                    sourceOffset,
+                Size                    length,
+                bool                    writeTerminator
         ) noexcept -> ElementType * {
 
             if ( pDestination == nullptr || pSource == nullptr ) {
@@ -282,11 +305,11 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         }
 
 
-        template < typename CharType >
-        template < typename NumericType, meta :: EnableIf < meta :: isUnsigned < NumericType > () > >
-        __CDS_cpplang_ConstexprConditioned auto StringUtils < CharType > :: integerLength (
-                NumericType value,
-                uint8       base
+        template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
+        template < typename __NumericType, meta :: EnableIf < meta :: isUnsigned < __NumericType > () > > // NOLINT(bugprone-reserved-identifier)
+        __CDS_cpplang_ConstexprConditioned auto StringUtils < __CharType > :: integerLength (
+                __NumericType value,
+                uint8         base
         ) noexcept -> uint8 {
 
             uint8 digitCount = 1U;
@@ -314,30 +337,31 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         }
 
 
-        template < typename CharType >
-        template < typename NumericType, meta :: EnableIf < meta :: isSigned < NumericType > () > >
-        __CDS_cpplang_ConstexprConditioned auto StringUtils < CharType > :: integerLength (
-                NumericType value,
-                uint8       base
+        template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
+        template < typename __NumericType, meta :: EnableIf < meta :: isSigned < __NumericType > () > > // NOLINT(bugprone-reserved-identifier)
+        __CDS_cpplang_ConstexprConditioned auto StringUtils < __CharType > :: integerLength (
+                __NumericType value,
+                uint8         base
         ) noexcept -> uint8 {
 
-            using               UnsignedType    = meta :: MakeUnsigned < NumericType >;
+            using               UnsignedType    = meta :: MakeUnsigned < __NumericType >;
             bool const          isNegative      = value < 0;
 
             return
                     static_cast < uint8 > ( isNegative ) +
                     StringUtils :: integerLength (
-                            isNegative ? static_cast < UnsignedType > ( ~ value ) + 1U : static_cast < UnsignedType > ( value )
+                            isNegative ? static_cast < UnsignedType > ( ~ value ) + 1U : static_cast < UnsignedType > ( value ),
+                            base
                     );
         }
 
 
-        template < typename CharType >
-        template < typename NumericType, meta :: EnableIf < meta :: isUnsigned < NumericType > () > >
-        __CDS_cpplang_ConstexprConditioned auto StringUtils < CharType > :: writeInteger (
+        template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
+        template < typename __NumericType, meta :: EnableIf < meta :: isUnsigned < __NumericType > () > > // NOLINT(bugprone-reserved-identifier)
+        __CDS_cpplang_ConstexprConditioned auto StringUtils < __CharType > :: writeInteger (
                 ElementType   * pDestination,
                 Size            offset,
-                NumericType     value,
+                __NumericType   value,
                 uint8           valueLength,
                 Size          * pOffsetAfterWrite
         ) noexcept -> ElementType * {
@@ -384,17 +408,17 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         }
 
 
-        template < typename CharType >
-        template < typename NumericType, meta :: EnableIf < meta :: isSigned < NumericType > () > >
-        __CDS_cpplang_ConstexprConditioned auto StringUtils < CharType > :: writeInteger (
+        template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
+        template < typename __NumericType, meta :: EnableIf < meta :: isSigned < __NumericType > () > > // NOLINT(bugprone-reserved-identifier)
+        __CDS_cpplang_ConstexprConditioned auto StringUtils < __CharType > :: writeInteger (
                 ElementType   * pDestination,
                 Size            offset,
-                NumericType     value,
+                __NumericType   value,
                 uint8           valueLength,
                 Size          * pOffsetAfterWrite
         ) noexcept -> ElementType * {
 
-            using UnsignedType = meta :: MakeUnsigned < NumericType >;
+            using UnsignedType = meta :: MakeUnsigned < __NumericType >;
 
             bool const          isNegative      = value < 0;
             UnsignedType const  unsignedValue   =
@@ -418,20 +442,20 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         }
 
 
-        template < typename CharType >
-        template < template < typename ... > class CollectionType >
-        inline auto StringUtils < CharType > :: find (
+        template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
+        template < template < typename ... > class __CollectionType > // NOLINT(bugprone-reserved-identifier)
+        inline auto StringUtils < __CharType > :: find (
                 ElementType                 const * pSource,
                 Size                                sourceLength,
                 ElementType                 const * pToBeFound,
                 Size                                toBeFoundLength,
                 Size                                maxCount,
-                CollectionType < Index >          & storeIn
-        ) noexcept -> CollectionType < Index > & {
+                __CollectionType < Index >        & storeIn
+        ) noexcept -> __CollectionType < Index > & {
 
             auto pLPSArray = Memory :: instance().createArray < Index > ( toBeFoundLength );
 
-            hidden :: impl :: KMPComputeLPSArray (
+            __hidden :: __impl :: __KMPComputeLPSArray (
                     pToBeFound,
                     toBeFoundLength,
                     pLPSArray
@@ -478,8 +502,8 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         }
 
 
-        template < typename CharType >
-        __CDS_cpplang_ConstexprDynamicAllocation auto StringUtils < CharType > :: findFirst (
+        template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
+        __CDS_cpplang_ConstexprDynamicAllocation auto StringUtils < __CharType > :: findFirst (
                 ElementType const * pSource,
                 Size                sourceLength,
                 ElementType const * pToBeFound,
@@ -488,7 +512,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
             auto pLPSArray = Memory :: instance().createArray < Index > ( toBeFoundLength );
 
-            hidden :: impl :: KMPComputeLPSArray (
+            __hidden :: __impl :: __KMPComputeLPSArray (
                     pToBeFound,
                     toBeFoundLength,
                     pLPSArray
@@ -530,8 +554,8 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         }
 
 
-        template < typename CharType >
-        __CDS_cpplang_ConstexprDynamicAllocation auto StringUtils < CharType > :: findLast (
+        template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
+        __CDS_cpplang_ConstexprDynamicAllocation auto StringUtils < __CharType > :: findLast (
                 ElementType const * pSource,
                 Size                sourceLength,
                 ElementType const * pToBeFound,
@@ -540,7 +564,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
             auto pLPSArray = Memory :: instance().createArray < Index > ( toBeFoundLength );
 
-            hidden :: impl :: KMPComputeLPSArray (
+            __hidden :: __impl :: __KMPComputeLPSArray (
                     pToBeFound,
                     toBeFoundLength,
                     pLPSArray
@@ -582,19 +606,19 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         }
 
 
-        template < typename CharType >
-        template < template < typename ... > class CollectionType >
-        inline auto StringUtils < CharType > :: findAll (
+        template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
+        template < template < typename ... > class __CollectionType > // NOLINT(bugprone-reserved-identifier)
+        inline auto StringUtils < __CharType > :: findAll (
                 ElementType                 const * pSource,
                 Size                                sourceLength,
                 ElementType                 const * pToBeFound,
                 Size                                toBeFoundLength,
-                CollectionType < Index >          & storeIn
-        ) noexcept -> CollectionType < Index > & {
+                __CollectionType < Index >        & storeIn
+        ) noexcept -> __CollectionType < Index > & {
 
             auto pLPSArray = Memory :: instance().createArray < Index > ( toBeFoundLength );
 
-            hidden :: impl :: KMPComputeLPSArray (
+            __hidden :: __impl :: __KMPComputeLPSArray (
                     pToBeFound,
                     toBeFoundLength,
                     pLPSArray
@@ -635,9 +659,8 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         }
 
 
-        template < typename CharType >
-        template < template < typename ... > class CollectionType >
-        inline auto StringUtils < CharType > :: findAll (
+        template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
+        inline auto StringUtils < __CharType > :: findAll (
                 ElementType                 const * pSource,
                 Size                                sourceLength,
                 ElementType                 const * pToBeFound,
@@ -648,7 +671,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
             auto pLPSArray = Memory :: instance().createArray < Index > ( toBeFoundLength );
 
-            hidden :: impl :: KMPComputeLPSArray (
+            __hidden :: __impl :: __KMPComputeLPSArray (
                     pToBeFound,
                     toBeFoundLength,
                     pLPSArray
@@ -696,8 +719,8 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         }
 
 
-        template < typename CharType >
-        __CDS_cpplang_ConstexprConditioned auto StringUtils < CharType > :: contains (
+        template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
+        __CDS_cpplang_ConstexprConditioned auto StringUtils < __CharType > :: contains (
                 ElementType const * pBuffer,
                 Size                length,
                 ElementType         character
@@ -710,6 +733,77 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             }
 
             return false;
+        }
+
+
+        template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
+        template < typename __ArgumentType, meta :: EnableIf < meta :: isConvertibleToBaseStringView < __ArgumentType > () > > // NOLINT(bugprone-reserved-identifier)
+        __CDS_NoDiscard __CDS_cpplang_ConstexprConditioned auto StringUtils < __CharType > :: stringLengthOfArgument (
+                __ArgumentType && argumentType
+        ) noexcept -> Size {
+
+            return StringUtils < __CharType > :: stringLengthOfArgument (
+                    __hidden :: __impl :: __BaseStringView < __CharType > ( std :: forward < __ArgumentType > ( argumentType ) )
+            );
+        }
+
+
+        template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
+        __CDS_NoDiscard __CDS_cpplang_ConstexprConditioned auto StringUtils < __CharType > :: stringLengthOfArgument (
+                __hidden :: __impl :: __BaseStringView < __CharType > const & string
+        ) noexcept -> Size {
+
+            return string.length();
+        }
+
+
+        template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
+        __CDS_NoDiscard __CDS_cpplang_ConstexprConditioned auto StringUtils < __CharType > :: stringLengthOfArgument (
+                ElementType character
+        ) noexcept -> Size {
+
+            return 1ULL;
+        }
+
+
+        template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
+        __CDS_NoDiscard __CDS_cpplang_ConstexprConditioned auto StringUtils < __CharType > :: stringLengthOfArgument (
+                bool value
+        ) noexcept -> Size {
+
+            return value ? 4ULL : 5ULL;
+        }
+
+
+        template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
+        template < typename __NumericType, meta :: EnableIf < meta :: isIntegralToString < __CharType, __NumericType > () > > // NOLINT(bugprone-reserved-identifier)
+        __CDS_NoDiscard __CDS_cpplang_ConstexprConditioned auto StringUtils < __CharType > :: stringLengthOfArgument (
+                __NumericType value
+        ) noexcept -> Size {
+
+            return StringUtils < __CharType > :: integerLength ( value );
+        }
+
+
+        template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
+        template < typename __FloatingPointType, meta :: EnableIf < meta :: isFloatingPoint < __FloatingPointType > () > > // NOLINT(bugprone-reserved-identifier)
+        __CDS_NoDiscard __CDS_cpplang_ConstexprConditioned auto StringUtils < __CharType > :: stringLengthOfArgument (
+                __FloatingPointType value
+        ) noexcept -> Size {
+
+            return 64ULL; /// leave constant for now, undeterministic way to constexpr determine length of float / double / long double
+        }
+
+
+        template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
+        template < typename ... __ArgumentTypes > // NOLINT(bugprone-reserved-identifier)
+        __CDS_NoDiscard __CDS_cpplang_ConstexprConditioned auto StringUtils < __CharType > :: stringLengthOfArguments (
+                __ArgumentTypes && ... arguments
+        ) noexcept -> Size {
+
+            return __hidden :: __impl :: __stringLengthOfArguments < __CharType > (
+                    std :: forward < __ArgumentTypes > ( arguments ) ...
+            );
         }
 
     }

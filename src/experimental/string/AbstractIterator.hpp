@@ -7,26 +7,26 @@
 
 namespace cds { // NOLINT(modernize-concat-nested-namespaces)
     namespace experimental { // NOLINT(modernize-concat-nested-namespaces)
-        namespace hidden { // NOLINT(modernize-concat-nested-namespaces)
-            namespace impl {
+        namespace __hidden { // NOLINT(modernize-concat-nested-namespaces, bugprone-reserved-identifier)
+            namespace __impl { // NOLINT(bugprone-reserved-identifier)
 
-                template < typename CharType >
-                class BaseString < CharType > :: AbstractIterator {
-
-                private:
-                    BaseString < CharType >   * _pString    { nullptr };
+                template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
+                class __BaseString < __CharType > :: AbstractIterator {
 
                 private:
-                    Index                       _index      { 0 };
+                    __BaseString < __CharType >   * _pString    { nullptr };
 
                 private:
-                    bool                        _forward    { true };
+                    Index                           _index      { 0 };
+
+                private:
+                    bool                            _forward    { true };
 
                 protected:
                     constexpr AbstractIterator (
-                            BaseString < CharType >   * pString,
-                            Index                       index,
-                            bool                        forward
+                            __BaseString < __CharType >   * pString,
+                            Index                           index,
+                            bool                            forward
                     ) noexcept;
 
                 protected:
@@ -59,7 +59,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                     __CDS_cpplang_NonConstConstexprMemberFunction auto previous () noexcept -> AbstractIterator &;
 
                 public:
-                    constexpr auto value () const noexcept -> CharType &;
+                    constexpr auto value () const noexcept -> __CharType &;
 
                 public:
                     __CDS_NoDiscard constexpr auto equals (

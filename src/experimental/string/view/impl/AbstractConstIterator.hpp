@@ -7,14 +7,14 @@
 
 namespace cds { // NOLINT(modernize-concat-nested-namespaces)
     namespace experimental { // NOLINT(modernize-concat-nested-namespaces)
-        namespace hidden { // NOLINT(modernize-concat-nested-namespaces)
-            namespace impl {
+        namespace __hidden { // NOLINT(modernize-concat-nested-namespaces, bugprone-reserved-identifier)
+            namespace __impl { // NOLINT(bugprone-reserved-identifier)
 
-                template < typename CharType >
-                constexpr BaseStringView < CharType > :: AbstractConstIterator :: AbstractConstIterator (
-                        BaseStringView < CharType > const * pString,
-                        Index                               index,
-                        bool                                forward
+                template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
+                constexpr __BaseStringView < __CharType > :: AbstractConstIterator :: AbstractConstIterator (
+                        __BaseStringView < __CharType > const * pString,
+                        Index                                   index,
+                        bool                                    forward
                 ) noexcept :
                         _pString ( pString ),
                         _index ( index ),
@@ -22,8 +22,8 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
                 }
 
-                template < typename CharType >
-                constexpr BaseStringView < CharType > :: AbstractConstIterator :: AbstractConstIterator (
+                template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
+                constexpr __BaseStringView < __CharType > :: AbstractConstIterator :: AbstractConstIterator (
                         AbstractConstIterator && iterator
                 ) noexcept :
                         _pString ( exchange ( iterator._pString, nullptr ) ),
@@ -32,8 +32,8 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
                 }
 
-                template < typename CharType >
-                __CDS_cpplang_NonConstConstexprMemberFunction auto BaseStringView < CharType > :: AbstractConstIterator :: operator = (
+                template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
+                __CDS_cpplang_NonConstConstexprMemberFunction auto __BaseStringView < __CharType > :: AbstractConstIterator :: operator = (
                         AbstractConstIterator const & iterator
                 ) noexcept -> AbstractConstIterator & {
 
@@ -48,8 +48,8 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                     return * this;
                 }
 
-                template < typename CharType >
-                __CDS_cpplang_NonConstConstexprMemberFunction auto BaseStringView < CharType > :: AbstractConstIterator :: operator = (
+                template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
+                __CDS_cpplang_NonConstConstexprMemberFunction auto __BaseStringView < __CharType > :: AbstractConstIterator :: operator = (
                         AbstractConstIterator && iterator
                 ) noexcept -> AbstractConstIterator & {
 
@@ -64,21 +64,21 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                     return * this;
                 }
 
-                template < typename CharType >
-                __CDS_cpplang_NonConstConstexprMemberFunction auto BaseStringView < CharType > :: AbstractConstIterator :: previous () noexcept -> AbstractConstIterator & {
+                template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
+                __CDS_cpplang_NonConstConstexprMemberFunction auto __BaseStringView < __CharType > :: AbstractConstIterator :: previous () noexcept -> AbstractConstIterator & {
 
                     this->_forward ? -- this->_index : ++ this->_index;
                     return * this;
                 }
 
-                template < typename CharType >
-                constexpr auto BaseStringView < CharType > :: AbstractConstIterator :: value () const noexcept -> CharType {
+                template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
+                constexpr auto __BaseStringView < __CharType > :: AbstractConstIterator :: value () const noexcept -> __CharType {
 
                     return this->_pString->_pBuffer [ this->_index ];
                 }
 
-                template < typename CharType >
-                constexpr auto BaseStringView < CharType > :: AbstractConstIterator :: equals (
+                template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
+                constexpr auto __BaseStringView < __CharType > :: AbstractConstIterator :: equals (
                         AbstractConstIterator const & iterator
                 ) const noexcept -> bool {
 

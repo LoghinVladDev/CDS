@@ -7,31 +7,31 @@
 #ifndef __CDS_EX_BASE_STRING_SEQEUENCE_IMPL_HPP__
 #define __CDS_EX_BASE_STRING_SEQEUENCE_IMPL_HPP__
 
-namespace cds {
-    namespace experimental {
-        namespace hidden {
-            namespace impl {
+namespace cds { // NOLINT(modernize-concat-nested-namespaces)
+    namespace experimental { // NOLINT(modernize-concat-nested-namespaces)
+        namespace __hidden { // NOLINT(modernize-concat-nested-namespaces, bugprone-reserved-identifier)
+            namespace __impl { // NOLINT(bugprone-reserved-identifier)
 
-                template < typename CharType >
-                __CDS_OptimalInline auto BaseString < CharType > :: sequence () & noexcept -> Sequence < BaseString < CharType > > {
+                template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
+                __CDS_OptimalInline auto __BaseString < __CharType > :: sequence () & noexcept -> Sequence < __BaseString < __CharType > > {
 
                     return Sequence < RemoveReference < decltype (*this) > > ( * this );
                 }
 
-                template < typename CharType >
-                __CDS_OptimalInline auto BaseString < CharType > :: sequence () && noexcept -> Sequence < BaseString < CharType > > {
+                template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
+                __CDS_OptimalInline auto __BaseString < __CharType > :: sequence () && noexcept -> Sequence < __BaseString < __CharType > > {
 
                     return Sequence < RemoveReference < decltype (*this) > > ( std :: move ( * this ) );
                 }
 
-                template < typename CharType >
-                __CDS_OptimalInline auto BaseString < CharType > :: sequence () const & noexcept -> Sequence < BaseString < CharType > const > {
+                template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
+                __CDS_OptimalInline auto __BaseString < __CharType > :: sequence () const & noexcept -> Sequence < __BaseString < __CharType > const > {
 
                     return Sequence < RemoveReference < decltype (*this) > > ( * this );
                 }
 
-                template < typename CharType >
-                __CDS_OptimalInline auto BaseString < CharType > :: sequence () const && noexcept -> Sequence < BaseString < CharType > const > {
+                template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
+                __CDS_OptimalInline auto __BaseString < __CharType > :: sequence () const && noexcept -> Sequence < __BaseString < __CharType > const > {
 
                     return Sequence < RemoveReference < decltype (*this) > > ( std :: move ( * this ) );
                 }

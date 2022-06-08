@@ -71,11 +71,12 @@ int main () {
     cds :: experimental :: String str;
 
     for ( char c = 'z'; c >= 'A'; -- c ) {
-        std :: wcout << str << ": " << str.hash() << '\n';
-        str += c;
+        str += cds :: experimental :: String :: consonants;
     }
 
     std :: wcout << str << '\n';
+
+    std :: cout << experimental :: String :: f ( "%s are %d mere", "Ana", 5 );
 
 //    experimental :: Set < int > set;
 

@@ -7,17 +7,17 @@
 
 
 namespace cds { // NOLINT(modernize-concat-nested-namespaces)
-    namespace experimental {
-        namespace hidden {
-            namespace impl {
+    namespace experimental { // NOLINT(modernize-concat-nested-namespaces)
+        namespace __hidden {  // NOLINT(modernize-concat-nested-namespaces, bugprone-reserved-identifier)
+            namespace __impl { // NOLINT(bugprone-reserved-identifier)
 
-                template < typename CharType >
-                Index const BaseStringView < CharType > :: invalidIndex = StringUtils < CharType > :: invalidIndex;
+                template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
+                Index const __BaseStringView < __CharType > :: invalidIndex = StringUtils < __CharType > :: invalidIndex;
 
 
-                template < typename CharType >
-                constexpr BaseStringView < CharType > :: BaseStringView (
-                        BaseStringView const & string
+                template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
+                constexpr __BaseStringView < __CharType > :: __BaseStringView (
+                        __BaseStringView const & string
                 ) noexcept :
                         _pData ( string._pData ),
                         _length ( string._length ) {
@@ -25,9 +25,9 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 }
 
 
-                template < typename CharType >
-                constexpr BaseStringView < CharType > :: BaseStringView (
-                        BaseStringView && string
+                template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
+                constexpr __BaseStringView < __CharType > :: __BaseStringView (
+                        __BaseStringView && string
                 ) noexcept :
                         _pData ( cds :: exchange ( string._pData, nullptr ) ),
                         _length ( cds :: exchange ( string._length, 0ULL ) ) {
@@ -35,9 +35,9 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 }
 
 
-                template < typename CharType >
-                constexpr BaseStringView < CharType > :: BaseStringView (
-                        BaseString < CharType > const & string
+                template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
+                constexpr __BaseStringView < __CharType > :: __BaseStringView (
+                       __BaseString < __CharType > const & string
                 ) noexcept :
                         _pData ( string._pBuffer ),
                         _length ( string._length ) {
@@ -45,9 +45,9 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 }
 
 
-                template < typename CharType >
-                constexpr BaseStringView < CharType > :: BaseStringView (
-                        std :: basic_string < CharType > const & string
+                template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
+                constexpr __BaseStringView < __CharType > :: __BaseStringView (
+                        std :: basic_string < __CharType > const & string
                 ) noexcept :
                         _pData ( string.c_str() ),
                         _length ( string.length() ) {
@@ -55,21 +55,21 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 }
 
 
-                template < typename CharType >
-                template < typename T, meta :: EnableIf < meta :: isStringCharType < T > () > >
-                constexpr BaseStringView < CharType > :: BaseStringView (
+                template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
+                template < typename __TCharType, meta :: EnableIf < meta :: isStringCharType < __TCharType > () > > // NOLINT(bugprone-reserved-identifier)
+                constexpr __BaseStringView < __CharType > :: __BaseStringView (
                         ElementType const * pString
                 ) noexcept :
-                        BaseStringView (
+                        __BaseStringView (
                                 pString,
-                                pString == nullptr ? 0ULL : StringUtils < CharType > :: length ( pString )
+                                pString == nullptr ? 0ULL : StringUtils < __CharType > :: length ( pString )
                         ) {
 
                 }
 
 
-                template < typename CharType >
-                constexpr BaseStringView < CharType > :: BaseStringView (
+                template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
+                constexpr __BaseStringView < __CharType > :: __BaseStringView (
                         ElementType const * pString,
                         Size                length
                 ) noexcept :
@@ -79,93 +79,93 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 }
 
 
-                template < typename CharType >
-                __CDS_cpplang_ConstexprNonLiteralReturn auto BaseStringView < CharType > :: begin () const noexcept -> ConstIterator {
+                template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
+                __CDS_cpplang_ConstexprNonLiteralReturn auto __BaseStringView < __CharType > :: begin () const noexcept -> ConstIterator {
 
                     return ConstIterator ( this, 0 );
                 }
 
 
-                template < typename CharType >
-                __CDS_cpplang_ConstexprNonLiteralReturn auto BaseStringView < CharType > :: end () const noexcept -> ConstIterator {
+                template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
+                __CDS_cpplang_ConstexprNonLiteralReturn auto __BaseStringView < __CharType > :: end () const noexcept -> ConstIterator {
 
                     return ConstIterator ( this, this->_length );
                 }
 
 
-                template < typename CharType >
-                __CDS_cpplang_ConstexprNonLiteralReturn auto BaseStringView < CharType > :: cbegin () const noexcept -> ConstIterator {
+                template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
+                __CDS_cpplang_ConstexprNonLiteralReturn auto __BaseStringView < __CharType > :: cbegin () const noexcept -> ConstIterator {
 
                     return ConstIterator ( this, 0 );
                 }
 
 
-                template < typename CharType >
-                __CDS_cpplang_ConstexprNonLiteralReturn auto BaseStringView < CharType > :: cend () const noexcept -> ConstIterator {
+                template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
+                __CDS_cpplang_ConstexprNonLiteralReturn auto __BaseStringView < __CharType > :: cend () const noexcept -> ConstIterator {
 
                     return ConstIterator ( this, this->_length );
                 }
 
 
-                template < typename CharType >
-                __CDS_cpplang_ConstexprNonLiteralReturn auto BaseStringView < CharType > :: rbegin () const noexcept -> ConstReverseIterator {
+                template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
+                __CDS_cpplang_ConstexprNonLiteralReturn auto __BaseStringView < __CharType > :: rbegin () const noexcept -> ConstReverseIterator {
 
                     return ConstReverseIterator ( this, this->_length - 1 );
                 }
 
 
-                template < typename CharType >
-                __CDS_cpplang_ConstexprNonLiteralReturn auto BaseStringView < CharType > :: rend () const noexcept -> ConstReverseIterator {
+                template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
+                __CDS_cpplang_ConstexprNonLiteralReturn auto __BaseStringView < __CharType > :: rend () const noexcept -> ConstReverseIterator {
 
                     return ConstReverseIterator ( this, -1 );
                 }
 
 
-                template < typename CharType >
-                __CDS_cpplang_ConstexprNonLiteralReturn auto BaseStringView < CharType > :: crbegin () const noexcept -> ConstReverseIterator {
+                template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
+                __CDS_cpplang_ConstexprNonLiteralReturn auto __BaseStringView < __CharType > :: crbegin () const noexcept -> ConstReverseIterator {
 
                     return ConstReverseIterator ( this, this->_length - 1 );
                 }
 
 
-                template < typename CharType >
-                __CDS_cpplang_ConstexprNonLiteralReturn auto BaseStringView < CharType > :: crend () const noexcept -> ConstReverseIterator {
+                template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
+                __CDS_cpplang_ConstexprNonLiteralReturn auto __BaseStringView < __CharType > :: crend () const noexcept -> ConstReverseIterator {
 
                     return ConstReverseIterator ( this, -1 );
                 }
 
 
-                template < typename CharType >
-                constexpr auto BaseStringView < CharType > :: length () const noexcept -> Size {
+                template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
+                constexpr auto __BaseStringView < __CharType > :: length () const noexcept -> Size {
 
                     return this->_length;
                 }
 
 
-                template < typename CharType >
-                constexpr auto BaseStringView < CharType > :: size () const noexcept -> Size {
+                template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
+                constexpr auto __BaseStringView < __CharType > :: size () const noexcept -> Size {
 
                     return this->length();
                 }
 
 
-                template < typename CharType >
-                __CDS_cpplang_NonConstConstexprMemberFunction auto BaseStringView < CharType > :: clear () noexcept -> void {
+                template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
+                __CDS_cpplang_NonConstConstexprMemberFunction auto __BaseStringView < __CharType > :: clear () noexcept -> void {
 
                     this->_pData    = nullptr;
                     this->_length   = 0ULL;
                 }
 
 
-                template < typename CharType >
-                constexpr auto BaseStringView < CharType > :: empty () const noexcept -> bool {
+                template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
+                constexpr auto __BaseStringView < __CharType > :: empty () const noexcept -> bool {
 
                     return this->_length == 0ULL;
                 }
 
 
-                template < typename CharType >
-                __CDS_cpplang_ConstexprConditioned auto BaseStringView < CharType > :: operator [] (
+                template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
+                __CDS_cpplang_ConstexprConditioned auto __BaseStringView < __CharType > :: operator [] (
                         Index index
                 ) const noexcept (false) -> ElementType {
 
@@ -173,8 +173,8 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 }
 
 
-                template < typename CharType >
-                __CDS_cpplang_ConstexprConditioned auto BaseStringView < CharType > :: at (
+                template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
+                __CDS_cpplang_ConstexprConditioned auto __BaseStringView < __CharType > :: at (
                         Index index
                 ) const noexcept (false) -> ElementType {
 
@@ -182,8 +182,8 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 }
 
 
-                template < typename CharType >
-                __CDS_cpplang_ConstexprConditioned auto BaseStringView < CharType > :: get (
+                template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
+                __CDS_cpplang_ConstexprConditioned auto __BaseStringView < __CharType > :: get (
                         Index index
                 ) const noexcept (false) -> ElementType {
 
@@ -205,8 +205,8 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 }
 
 
-                template < typename CharType >
-                __CDS_cpplang_ConstexprConditioned auto BaseStringView < CharType > :: front () const noexcept (false) -> ElementType {
+                template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
+                __CDS_cpplang_ConstexprConditioned auto __BaseStringView < __CharType > :: front () const noexcept (false) -> ElementType {
 
                     if ( this->empty() ) {
                         throw OutOfBoundsException ( 0, 0 );
@@ -216,8 +216,8 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 }
 
 
-                template < typename CharType >
-                __CDS_cpplang_ConstexprConditioned auto BaseStringView < CharType > :: back () const noexcept (false) -> ElementType {
+                template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
+                __CDS_cpplang_ConstexprConditioned auto __BaseStringView < __CharType > :: back () const noexcept (false) -> ElementType {
 
                     if ( this->empty() ) {
                         throw OutOfBoundsException ( 0, 0 );
@@ -227,46 +227,46 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 }
 
 
-                template < typename CharType >
-                __CDS_OptimalInline auto BaseStringView < CharType > :: toStdString () const noexcept -> std :: basic_string < CharType > {
+                template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
+                __CDS_OptimalInline auto __BaseStringView < __CharType > :: toStdString () const noexcept -> std :: basic_string < __CharType > {
 
-                    return std :: basic_string < CharType > ( this->_pData );
+                    return std :: basic_string < __CharType > ( this->_pData );
                 }
 
 
-                template < typename CharType >
-                constexpr auto BaseStringView < CharType > :: cStr () const noexcept -> ElementType const * {
+                template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
+                constexpr auto __BaseStringView < __CharType > :: cStr () const noexcept -> ElementType const * {
 
-                    return this->_pData == nullptr ? "" : this->_pData;
+                    return this->_pData == nullptr ? meta :: __impl :: __StringData < __CharType > :: emptyString : this->_pData;
                 }
 
 
-                template < typename CharType >
-                constexpr auto BaseStringView < CharType > :: data () const noexcept -> ElementType const * {
+                template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
+                constexpr auto __BaseStringView < __CharType > :: data () const noexcept -> ElementType const * {
 
-                    return this->_pData == nullptr ? "" : this->_pData;
+                    return this->_pData == nullptr ? meta :: __impl :: __StringData < __CharType > :: emptyString : this->_pData;
                 }
 
 
-                template < typename CharType >
-                constexpr BaseStringView < CharType > :: operator ElementType const * () const noexcept {
+                template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
+                constexpr __BaseStringView < __CharType > :: operator ElementType const * () const noexcept {
 
                     return this->_pData;
                 }
 
 
-                template < typename CharType >
-                __CDS_OptimalInline BaseStringView < CharType > :: operator std :: basic_string < CharType > () const noexcept {
+                template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
+                __CDS_OptimalInline __BaseStringView < __CharType > :: operator std :: basic_string < __CharType > () const noexcept {
 
-                    return std :: basic_string < CharType > ( this->_pData );
+                    return std :: basic_string < __CharType > ( this->_pData );
                 }
 
 
-                template < typename CharType >
-                __CDS_OptionalInline auto BaseStringView < CharType > :: substr (
+                template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
+                __CDS_OptionalInline auto __BaseStringView < __CharType > :: substr (
                         Index from,
                         Index until
-                ) const noexcept -> BaseString < CharType > {
+                ) const noexcept ->__BaseString < __CharType > {
 
                     if ( until == -1 || until > static_cast < Index > ( this->size() ) ) {
                         until = static_cast < Index > ( this->size() );
@@ -277,45 +277,45 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                     }
 
                     if ( until < from ) {
-                        return BaseString < CharType > ();
+                        return __BaseString < __CharType > ();
                     }
 
-                    return BaseString < CharType > ( this->_pBuffer, static_cast < Size > ( until - from ) );
+                    return __BaseString < __CharType > ( this->_pBuffer, static_cast < Size > ( until - from ) );
                 }
 
 
-                template < typename CharType >
-                __CDS_OptimalInline auto BaseStringView < CharType > :: operator () (
+                template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
+                __CDS_OptimalInline auto __BaseStringView < __CharType > :: operator () (
                         Index from,
                         Index until
-                ) const noexcept -> BaseString < CharType > {
+                ) const noexcept ->__BaseString < __CharType > {
 
                     return this->substr ( from, until );
                 }
 
 
-                template < typename CharType >
-                __CDS_OptimalInline auto BaseStringView < CharType > :: operator [] (
+                template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
+                __CDS_OptimalInline auto __BaseStringView < __CharType > :: operator [] (
                         Range const & range
-                ) const noexcept -> BaseString < CharType > {
+                ) const noexcept ->__BaseString < __CharType > {
 
                     return this->substr ( range.from(), range.to() );
                 }
 
 
-                template < typename CharType >
-                __CDS_cpplang_NonConstConstexprMemberFunction auto BaseStringView < CharType > :: operator = ( // NOLINT(bugprone-unhandled-self-assignment)
-                        BaseString < CharType > const & string
-                ) noexcept -> BaseStringView & {
+                template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
+                __CDS_cpplang_NonConstConstexprMemberFunction auto __BaseStringView < __CharType > :: operator = ( // NOLINT(bugprone-unhandled-self-assignment)
+                       __BaseString < __CharType > const & string
+                ) noexcept -> __BaseStringView & {
 
-                    return this->operator = ( BaseStringView ( string ) ); // NOLINT(misc-unconventional-assign-operator)
+                    return this->operator = ( __BaseStringView ( string ) ); // NOLINT(misc-unconventional-assign-operator)
                 }
 
 
-                template < typename CharType >
-                __CDS_cpplang_NonConstConstexprMemberFunction auto BaseStringView < CharType > :: operator = ( // NOLINT(bugprone-unhandled-self-assignment)
-                        BaseStringView const & string
-                ) noexcept -> BaseStringView & {
+                template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
+                __CDS_cpplang_NonConstConstexprMemberFunction auto __BaseStringView < __CharType > :: operator = ( // NOLINT(bugprone-unhandled-self-assignment)
+                        __BaseStringView const & string
+                ) noexcept -> __BaseStringView & {
 
                     if ( this->_pData == string._pData ) {
                         return * this;
@@ -328,10 +328,10 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 }
 
 
-                template < typename CharType >
-                __CDS_cpplang_NonConstConstexprMemberFunction auto BaseStringView < CharType > :: operator = ( // NOLINT(bugprone-unhandled-self-assignment)
-                        BaseStringView && string
-                ) noexcept -> BaseStringView & {
+                template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
+                __CDS_cpplang_NonConstConstexprMemberFunction auto __BaseStringView < __CharType > :: operator = ( // NOLINT(bugprone-unhandled-self-assignment)
+                        __BaseStringView && string
+                ) noexcept -> __BaseStringView & {
 
                     if ( this->_pData == string._pData ) {
                         return * this;
@@ -344,26 +344,26 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 }
 
 
-                template < typename CharType >
-                __CDS_cpplang_NonConstConstexprMemberFunction auto BaseStringView < CharType > :: operator = ( // NOLINT(bugprone-unhandled-self-assignment)
-                        std :: basic_string < CharType > const & string
-                ) noexcept -> BaseStringView & {
+                template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
+                __CDS_cpplang_NonConstConstexprMemberFunction auto __BaseStringView < __CharType > :: operator = ( // NOLINT(bugprone-unhandled-self-assignment)
+                        std :: basic_string < __CharType > const & string
+                ) noexcept -> __BaseStringView & {
 
-                    return this->operator = ( BaseStringView ( string ) ); // NOLINT(misc-unconventional-assign-operator)
+                    return this->operator = ( __BaseStringView ( string ) ); // NOLINT(misc-unconventional-assign-operator)
                 }
 
 
-                template < typename CharType >
-                __CDS_cpplang_NonConstConstexprMemberFunction auto BaseStringView < CharType > :: operator = ( // NOLINT(bugprone-unhandled-self-assignment)
+                template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
+                __CDS_cpplang_NonConstConstexprMemberFunction auto __BaseStringView < __CharType > :: operator = ( // NOLINT(bugprone-unhandled-self-assignment)
                         ElementType const * pString
-                ) noexcept -> BaseStringView & {
+                ) noexcept -> __BaseStringView & {
 
-                    return this->operator = ( BaseStringView ( pString ) ); // NOLINT(misc-unconventional-assign-operator)
+                    return this->operator = ( __BaseStringView ( pString ) ); // NOLINT(misc-unconventional-assign-operator)
                 }
 
 
-                template < typename CharType >
-                __CDS_cpplang_DynamicCastConstexpr auto BaseStringView < CharType > :: equals ( // NOLINT(bugprone-unhandled-self-assignment)
+                template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
+                __CDS_cpplang_DynamicCastConstexpr auto __BaseStringView < __CharType > :: equals ( // NOLINT(bugprone-unhandled-self-assignment)
                         Object const & object
                 ) const noexcept -> bool {
 
@@ -380,44 +380,44 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 }
 
 
-                template < typename CharType >
-                __CDS_cpplang_ConstexprConditioned auto BaseStringView < CharType > :: operator == (
-                        BaseStringView const & string
+                template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
+                __CDS_cpplang_ConstexprConditioned auto __BaseStringView < __CharType > :: operator == (
+                        __BaseStringView const & string
                 ) const noexcept -> bool {
 
                     if ( this->length() != string.length() ) {
                         return false;
                     }
 
-                    return StringUtils < CharType > :: compare (
+                    return StringUtils < __CharType > :: compare (
                             this->_pData,
                             this->length(),
                             string._pData,
                             string.length()
-                    ) == StringUtils < CharType > :: equal;
+                    ) == StringUtils < __CharType > :: equal;
                 }
 
 
-                template < typename CharType >
-                __CDS_cpplang_ConstexprConditioned auto BaseStringView < CharType > :: operator == (
-                        std :: basic_string < CharType > const & string
+                template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
+                __CDS_cpplang_ConstexprConditioned auto __BaseStringView < __CharType > :: operator == (
+                        std :: basic_string < __CharType > const & string
                 ) const noexcept -> bool {
 
-                    return this->operator == ( BaseStringView ( string ) );
+                    return this->operator == ( __BaseStringView ( string ) );
                 }
 
 
-                template < typename CharType >
-                __CDS_cpplang_ConstexprConditioned auto BaseStringView < CharType > :: operator == (
+                template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
+                __CDS_cpplang_ConstexprConditioned auto __BaseStringView < __CharType > :: operator == (
                         ElementType const * pString
                 ) const noexcept -> bool {
 
-                    return this->operator == ( BaseStringView ( pString ) );
+                    return this->operator == ( __BaseStringView ( pString ) );
                 }
 
 
-                template < typename CharType >
-                __CDS_cpplang_ConstexprConditioned auto BaseStringView < CharType > :: operator == (
+                template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
+                __CDS_cpplang_ConstexprConditioned auto __BaseStringView < __CharType > :: operator == (
                         ElementType character
                 ) const noexcept -> bool {
 
@@ -429,30 +429,30 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 }
 
 
-                template < typename FCharType >
+                template < typename __FCharType > // NOLINT(bugprone-reserved-identifier)
                 __CDS_cpplang_ConstexprConditioned auto operator == (
-                        std :: basic_string < FCharType >   const & leftString,
-                        BaseStringView < FCharType >        const & rightString
+                        std :: basic_string < __FCharType >     const & leftString,
+                        __BaseStringView < __FCharType >        const & rightString
                 ) noexcept -> bool {
 
-                    return BaseStringView < FCharType > ( leftString ) == rightString;
+                    return __BaseStringView < __FCharType > ( leftString ) == rightString;
                 }
 
 
-                template < typename FCharType >
+                template < typename __FCharType > // NOLINT(bugprone-reserved-identifier)
                 __CDS_cpplang_ConstexprConditioned auto operator == (
-                        FCharType                           const * pLeftString,
-                        BaseStringView < FCharType >        const & rightString
+                        __FCharType                             const * pLeftString,
+                        __BaseStringView < __FCharType >        const & rightString
                 ) noexcept -> bool {
 
-                    return BaseStringView < FCharType > ( pLeftString ) == rightString;
+                    return __BaseStringView < __FCharType > ( pLeftString ) == rightString;
                 }
 
 
-                template < typename FCharType >
+                template < typename __FCharType > // NOLINT(bugprone-reserved-identifier)
                 __CDS_cpplang_ConstexprConditioned auto operator == (
-                        FCharType                                   character,
-                        BaseStringView < FCharType >        const & string
+                        __FCharType                                   character,
+                        __BaseStringView < __FCharType >        const & string
                 ) noexcept -> bool {
 
                     if ( string.length() != 1ULL ) {
@@ -463,44 +463,44 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 }
 
 
-                template < typename CharType >
-                __CDS_cpplang_ConstexprConditioned auto BaseStringView < CharType > :: operator != (
-                        BaseStringView const & string
+                template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
+                __CDS_cpplang_ConstexprConditioned auto __BaseStringView < __CharType > :: operator != (
+                        __BaseStringView const & string
                 ) const noexcept -> bool {
 
                     if ( this->length() != string.length() ) {
                         return true;
                     }
 
-                    return StringUtils < CharType > :: compare (
+                    return StringUtils < __CharType > :: compare (
                             this->_pData,
                             this->length(),
                             string._pData,
                             string.length()
-                    ) != StringUtils < CharType > :: equal;
+                    ) != StringUtils < __CharType > :: equal;
                 }
 
 
-                template < typename CharType >
-                __CDS_cpplang_ConstexprConditioned auto BaseStringView < CharType > :: operator != (
-                        std :: basic_string < CharType > const & string
+                template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
+                __CDS_cpplang_ConstexprConditioned auto __BaseStringView < __CharType > :: operator != (
+                        std :: basic_string < __CharType > const & string
                 ) const noexcept -> bool {
 
-                    return this->operator != ( BaseStringView ( string ) );
+                    return this->operator != ( __BaseStringView ( string ) );
                 }
 
 
-                template < typename CharType >
-                __CDS_cpplang_ConstexprConditioned auto BaseStringView < CharType > :: operator != (
+                template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
+                __CDS_cpplang_ConstexprConditioned auto __BaseStringView < __CharType > :: operator != (
                         ElementType const * pString
                 ) const noexcept -> bool {
 
-                    return this->operator != ( BaseStringView ( pString ) );
+                    return this->operator != ( __BaseStringView ( pString ) );
                 }
 
 
-                template < typename CharType >
-                __CDS_cpplang_ConstexprConditioned auto BaseStringView < CharType > :: operator != (
+                template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
+                __CDS_cpplang_ConstexprConditioned auto __BaseStringView < __CharType > :: operator != (
                         ElementType character
                 ) const noexcept -> bool {
 
@@ -512,30 +512,30 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 }
 
 
-                template < typename FCharType >
+                template < typename __FCharType > // NOLINT(bugprone-reserved-identifier)
                 __CDS_cpplang_ConstexprConditioned auto operator != (
-                        std :: basic_string < FCharType >   const & leftString,
-                        BaseStringView < FCharType >        const & rightString
+                        std :: basic_string < __FCharType >   const & leftString,
+                        __BaseStringView < __FCharType >        const & rightString
                 ) noexcept -> bool {
 
-                    return BaseStringView < FCharType > ( leftString ) != rightString;
+                    return __BaseStringView < __FCharType > ( leftString ) != rightString;
                 }
 
 
-                template < typename FCharType >
+                template < typename __FCharType > // NOLINT(bugprone-reserved-identifier)
                 __CDS_cpplang_ConstexprConditioned auto operator != (
-                        FCharType                           const * pLeftString,
-                        BaseStringView < FCharType >        const & rightString
+                        __FCharType                           const * pLeftString,
+                        __BaseStringView < __FCharType >        const & rightString
                 ) noexcept -> bool {
 
-                    return BaseStringView < FCharType > ( pLeftString ) != rightString;
+                    return __BaseStringView < __FCharType > ( pLeftString ) != rightString;
                 }
 
 
-                template < typename FCharType >
+                template < typename __FCharType > // NOLINT(bugprone-reserved-identifier)
                 __CDS_cpplang_ConstexprConditioned auto operator != (
-                        FCharType                                   character,
-                        BaseStringView < FCharType >        const & string
+                        __FCharType                                   character,
+                        __BaseStringView < __FCharType >        const & string
                 ) noexcept -> bool {
 
                     if ( string.length() != 1ULL ) {
@@ -546,40 +546,40 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 }
 
 
-                template < typename CharType >
-                __CDS_cpplang_ConstexprConditioned auto BaseStringView < CharType > :: operator < (
-                        BaseStringView const & string
+                template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
+                __CDS_cpplang_ConstexprConditioned auto __BaseStringView < __CharType > :: operator < (
+                        __BaseStringView const & string
                 ) const noexcept -> bool {
 
-                    return StringUtils < CharType > :: compare (
+                    return StringUtils < __CharType > :: compare (
                             this->_pData,
                             this->length(),
                             string._pData,
                             string.length()
-                    ) == StringUtils < CharType > :: lesser;
+                    ) == StringUtils < __CharType > :: lesser;
                 }
 
 
-                template < typename CharType >
-                __CDS_cpplang_ConstexprConditioned auto BaseStringView < CharType > :: operator < (
-                        std :: basic_string < CharType > const & string
+                template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
+                __CDS_cpplang_ConstexprConditioned auto __BaseStringView < __CharType > :: operator < (
+                        std :: basic_string < __CharType > const & string
                 ) const noexcept -> bool {
 
-                    return this->operator < ( BaseStringView ( string ) );
+                    return this->operator < ( __BaseStringView ( string ) );
                 }
 
 
-                template < typename CharType >
-                __CDS_cpplang_ConstexprConditioned auto BaseStringView < CharType > :: operator < (
+                template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
+                __CDS_cpplang_ConstexprConditioned auto __BaseStringView < __CharType > :: operator < (
                         ElementType const * pString
                 ) const noexcept -> bool {
 
-                    return this->operator < ( BaseStringView ( pString ) );
+                    return this->operator < ( __BaseStringView ( pString ) );
                 }
 
 
-                template < typename CharType >
-                __CDS_cpplang_ConstexprConditioned auto BaseStringView < CharType > :: operator < (
+                template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
+                __CDS_cpplang_ConstexprConditioned auto __BaseStringView < __CharType > :: operator < (
                         ElementType character
                 ) const noexcept -> bool {
 
@@ -591,30 +591,30 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 }
 
 
-                template < typename FCharType >
+                template < typename __FCharType > // NOLINT(bugprone-reserved-identifier)
                 __CDS_cpplang_ConstexprConditioned auto operator < (
-                        std :: basic_string < FCharType >   const & leftString,
-                        BaseStringView < FCharType >        const & rightString
+                        std :: basic_string < __FCharType >     const & leftString,
+                        __BaseStringView < __FCharType >        const & rightString
                 ) noexcept -> bool {
 
-                    return BaseStringView < FCharType > ( leftString ) < rightString;
+                    return __BaseStringView < __FCharType > ( leftString ) < rightString;
                 }
 
 
-                template < typename FCharType >
+                template < typename __FCharType > // NOLINT(bugprone-reserved-identifier)
                 __CDS_cpplang_ConstexprConditioned auto operator < (
-                        FCharType                           const * pLeftString,
-                        BaseStringView < FCharType >        const & rightString
+                        __FCharType                             const * pLeftString,
+                        __BaseStringView < __FCharType >        const & rightString
                 ) noexcept -> bool {
 
-                    return BaseStringView < FCharType > ( pLeftString ) < rightString;
+                    return __BaseStringView < __FCharType > ( pLeftString ) < rightString;
                 }
 
 
-                template < typename FCharType >
+                template < typename __FCharType > // NOLINT(bugprone-reserved-identifier)
                 __CDS_cpplang_ConstexprConditioned auto operator < (
-                        FCharType                                   character,
-                        BaseStringView < FCharType >        const & string
+                        __FCharType                                   character,
+                        __BaseStringView < __FCharType >        const & string
                 ) noexcept -> bool {
 
                     if ( string.empty() ) {
@@ -629,40 +629,40 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 }
 
 
-                template < typename CharType >
-                __CDS_cpplang_ConstexprConditioned auto BaseStringView < CharType > :: operator > (
-                        BaseStringView const & string
+                template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
+                __CDS_cpplang_ConstexprConditioned auto __BaseStringView < __CharType > :: operator > (
+                        __BaseStringView const & string
                 ) const noexcept -> bool {
 
-                    return StringUtils < CharType > :: compare (
+                    return StringUtils < __CharType > :: compare (
                             this->_pData,
                             this->length(),
                             string._pData,
                             string.length()
-                    ) == StringUtils < CharType > :: greater;
+                    ) == StringUtils < __CharType > :: greater;
                 }
 
 
-                template < typename CharType >
-                __CDS_cpplang_ConstexprConditioned auto BaseStringView < CharType > :: operator > (
-                        std :: basic_string < CharType > const & string
+                template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
+                __CDS_cpplang_ConstexprConditioned auto __BaseStringView < __CharType > :: operator > (
+                        std :: basic_string < __CharType > const & string
                 ) const noexcept -> bool {
 
-                    return this->operator > ( BaseStringView ( string ) );
+                    return this->operator > ( __BaseStringView ( string ) );
                 }
 
 
-                template < typename CharType >
-                __CDS_cpplang_ConstexprConditioned auto BaseStringView < CharType > :: operator > (
+                template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
+                __CDS_cpplang_ConstexprConditioned auto __BaseStringView < __CharType > :: operator > (
                         ElementType const * pString
                 ) const noexcept -> bool {
 
-                    return this->operator > ( BaseStringView ( pString ) );
+                    return this->operator > ( __BaseStringView ( pString ) );
                 }
 
 
-                template < typename CharType >
-                __CDS_cpplang_ConstexprConditioned auto BaseStringView < CharType > :: operator > (
+                template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
+                __CDS_cpplang_ConstexprConditioned auto __BaseStringView < __CharType > :: operator > (
                         ElementType character
                 ) const noexcept -> bool {
 
@@ -678,30 +678,30 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 }
 
 
-                template < typename FCharType >
+                template < typename __FCharType > // NOLINT(bugprone-reserved-identifier)
                 __CDS_cpplang_ConstexprConditioned auto operator > (
-                        std :: basic_string < FCharType >   const & leftString,
-                        BaseStringView < FCharType >        const & rightString
+                        std :: basic_string < __FCharType >     const & leftString,
+                        __BaseStringView < __FCharType >        const & rightString
                 ) noexcept -> bool {
 
-                    return BaseStringView < FCharType > ( leftString ) > rightString;
+                    return __BaseStringView < __FCharType > ( leftString ) > rightString;
                 }
 
 
-                template < typename FCharType >
+                template < typename __FCharType > // NOLINT(bugprone-reserved-identifier)
                 __CDS_cpplang_ConstexprConditioned auto operator > (
-                        FCharType                           const * pLeftString,
-                        BaseStringView < FCharType >        const & rightString
+                        __FCharType                             const * pLeftString,
+                        __BaseStringView < __FCharType >        const & rightString
                 ) noexcept -> bool {
 
-                    return BaseStringView < FCharType > ( pLeftString ) > rightString;
+                    return __BaseStringView < __FCharType > ( pLeftString ) > rightString;
                 }
 
 
-                template < typename FCharType >
+                template < typename __FCharType > // NOLINT(bugprone-reserved-identifier)
                 __CDS_cpplang_ConstexprConditioned auto operator > (
-                        FCharType                                   character,
-                        BaseStringView < FCharType >        const & string
+                        __FCharType                                   character,
+                        __BaseStringView < __FCharType >        const & string
                 ) noexcept -> bool {
 
                     if ( string.empty() ) {
@@ -712,35 +712,35 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 }
 
 
-                template < typename CharType >
-                __CDS_cpplang_ConstexprConditioned auto BaseStringView < CharType > :: operator <= (
-                        BaseStringView const & string
+                template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
+                __CDS_cpplang_ConstexprConditioned auto __BaseStringView < __CharType > :: operator <= (
+                        __BaseStringView const & string
                 ) const noexcept -> bool {
 
                     return ! this->operator > ( string );
                 }
 
 
-                template < typename CharType >
-                __CDS_cpplang_ConstexprConditioned auto BaseStringView < CharType > :: operator <= (
-                        std :: basic_string < CharType > const & string
+                template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
+                __CDS_cpplang_ConstexprConditioned auto __BaseStringView < __CharType > :: operator <= (
+                        std :: basic_string < __CharType > const & string
                 ) const noexcept -> bool {
 
-                    return ! this->operator > ( BaseStringView ( string ) );
+                    return ! this->operator > ( __BaseStringView ( string ) );
                 }
 
 
-                template < typename CharType >
-                __CDS_cpplang_ConstexprConditioned auto BaseStringView < CharType > :: operator <= (
+                template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
+                __CDS_cpplang_ConstexprConditioned auto __BaseStringView < __CharType > :: operator <= (
                         ElementType const * pString
                 ) const noexcept -> bool {
 
-                    return ! this->operator > ( BaseStringView ( pString ) );
+                    return ! this->operator > ( __BaseStringView ( pString ) );
                 }
 
 
-                template < typename CharType >
-                __CDS_cpplang_ConstexprConditioned auto BaseStringView < CharType > :: operator <= (
+                template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
+                __CDS_cpplang_ConstexprConditioned auto __BaseStringView < __CharType > :: operator <= (
                         ElementType character
                 ) const noexcept -> bool {
 
@@ -748,65 +748,65 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 }
 
 
-                template < typename FCharType >
+                template < typename __FCharType > // NOLINT(bugprone-reserved-identifier)
                 __CDS_cpplang_ConstexprConditioned auto operator <= (
-                        std :: basic_string < FCharType >   const & leftString,
-                        BaseStringView < FCharType >        const & rightString
+                        std :: basic_string < __FCharType >     const & leftString,
+                        __BaseStringView < __FCharType >        const & rightString
                 ) noexcept -> bool {
 
-                    return ! ( BaseStringView < FCharType > ( leftString ) > rightString );
+                    return ! ( __BaseStringView < __FCharType > ( leftString ) > rightString );
                 }
 
 
-                template < typename FCharType >
+                template < typename __FCharType > // NOLINT(bugprone-reserved-identifier)
                 __CDS_cpplang_ConstexprConditioned auto operator <= (
-                        FCharType                           const * pLeftString,
-                        BaseStringView < FCharType >        const & rightString
+                        __FCharType                             const * pLeftString,
+                        __BaseStringView < __FCharType >        const & rightString
                 ) noexcept -> bool {
 
-                    return ! ( BaseStringView < FCharType > ( pLeftString ) > rightString );
+                    return ! ( __BaseStringView < __FCharType > ( pLeftString ) > rightString );
                 }
 
 
-                template < typename FCharType >
+                template < typename __FCharType > // NOLINT(bugprone-reserved-identifier)
                 __CDS_cpplang_ConstexprConditioned auto operator <= (
-                        FCharType                                   character,
-                        BaseStringView < FCharType >        const & string
+                        __FCharType                                   character,
+                        __BaseStringView < __FCharType >        const & string
                 ) noexcept -> bool {
 
                     return ! ( character > string );
                 }
 
 
-                template < typename CharType >
-                __CDS_cpplang_ConstexprConditioned auto BaseStringView < CharType > :: operator >= (
-                        BaseStringView const & string
+                template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
+                __CDS_cpplang_ConstexprConditioned auto __BaseStringView < __CharType > :: operator >= (
+                        __BaseStringView const & string
                 ) const noexcept -> bool {
 
                     return ! this->operator < ( string );
                 }
 
 
-                template < typename CharType >
-                __CDS_cpplang_ConstexprConditioned auto BaseStringView < CharType > :: operator >= (
-                        std :: basic_string < CharType > const & string
+                template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
+                __CDS_cpplang_ConstexprConditioned auto __BaseStringView < __CharType > :: operator >= (
+                        std :: basic_string < __CharType > const & string
                 ) const noexcept -> bool {
 
-                    return ! this->operator < ( BaseStringView ( string ) );
+                    return ! this->operator < ( __BaseStringView ( string ) );
                 }
 
 
-                template < typename CharType >
-                __CDS_cpplang_ConstexprConditioned auto BaseStringView < CharType > :: operator >= (
+                template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
+                __CDS_cpplang_ConstexprConditioned auto __BaseStringView < __CharType > :: operator >= (
                         ElementType const * pString
                 ) const noexcept -> bool {
 
-                    return ! this->operator < ( BaseStringView ( pString ) );
+                    return ! this->operator < ( __BaseStringView ( pString ) );
                 }
 
 
-                template < typename CharType >
-                __CDS_cpplang_ConstexprConditioned auto BaseStringView < CharType > :: operator >= (
+                template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
+                __CDS_cpplang_ConstexprConditioned auto __BaseStringView < __CharType > :: operator >= (
                         ElementType character
                 ) const noexcept -> bool {
 
@@ -814,48 +814,48 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 }
 
 
-                template < typename FCharType >
+                template < typename __FCharType > // NOLINT(bugprone-reserved-identifier)
                 __CDS_cpplang_ConstexprConditioned auto operator >= (
-                        std :: basic_string < FCharType >   const & leftString,
-                        BaseStringView < FCharType >        const & rightString
+                        std :: basic_string < __FCharType >     const & leftString,
+                        __BaseStringView < __FCharType >        const & rightString
                 ) noexcept -> bool {
 
-                    return ! ( BaseStringView < FCharType > ( leftString ) < rightString );
+                    return ! ( __BaseStringView < __FCharType > ( leftString ) < rightString );
                 }
 
 
-                template < typename FCharType >
+                template < typename __FCharType > // NOLINT(bugprone-reserved-identifier)
                 __CDS_cpplang_ConstexprConditioned auto operator >= (
-                        FCharType                           const * pLeftString,
-                        BaseStringView < FCharType >        const & rightString
+                        __FCharType                             const * pLeftString,
+                        __BaseStringView < __FCharType >        const & rightString
                 ) noexcept -> bool {
 
-                    return ! ( BaseStringView < FCharType > ( pLeftString ) < rightString );
+                    return ! ( __BaseStringView < __FCharType > ( pLeftString ) < rightString );
                 }
 
 
-                template < typename FCharType >
+                template < typename __FCharType > // NOLINT(bugprone-reserved-identifier)
                 __CDS_cpplang_ConstexprConditioned auto operator >= (
-                        FCharType                                   character,
-                        BaseStringView < FCharType >        const & string
+                        __FCharType                                   character,
+                        __BaseStringView < __FCharType >        const & string
                 ) noexcept -> bool {
 
                     return ! ( character < string );
                 }
 
 
-                template < typename CharType >
-                auto BaseStringView < CharType > :: operator + (
-                        BaseStringView < CharType > const & string
-                ) const noexcept -> BaseString < CharType > {
+                template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
+                auto __BaseStringView < __CharType > :: operator + (
+                        __BaseStringView < __CharType > const & string
+                ) const noexcept ->__BaseString < __CharType > {
 
-                    BaseString < CharType > result;
+                   __BaseString < __CharType > result;
 
                     result._length      = this->length() + string.length();
-                    result._capacity    = maxOf ( result._length + 1U, __allocation :: minCapacity );
-                    result._pBuffer     = __allocation :: __alloc < CharType > ( result._capacity );
+                    result._capacity    = maxOf ( result._length + 1U, __allocation :: __minCapacity );
+                    result._pBuffer     = __allocation :: __alloc < __CharType > ( result._capacity );
 
-                    StringUtils < CharType > :: copy (
+                    StringUtils < __CharType > :: copy (
                             result.data(),
                             0ULL,
                             this->cStr(),
@@ -864,7 +864,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                             false
                     );
 
-                    StringUtils < CharType > :: copy (
+                    StringUtils < __CharType > :: copy (
                             result.data(),
                             this->length(),
                             string.cStr(),
@@ -876,37 +876,37 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 }
 
 
-                template < typename CharType >
-                __CDS_OptimalInline auto BaseStringView < CharType > :: operator + (
-                        std :: basic_string < CharType > const & string
-                ) const noexcept -> BaseString < CharType > {
+                template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
+                __CDS_OptimalInline auto __BaseStringView < __CharType > :: operator + (
+                        std :: basic_string < __CharType > const & string
+                ) const noexcept ->__BaseString < __CharType > {
 
-                    return this->operator + ( BaseStringView ( string ) );
+                    return this->operator + ( __BaseStringView ( string ) );
                 }
 
 
-                template < typename CharType >
-                __CDS_OptimalInline auto BaseStringView < CharType > :: operator + (
+                template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
+                __CDS_OptimalInline auto __BaseStringView < __CharType > :: operator + (
                         ElementType const * pString
-                ) const noexcept -> BaseString < CharType > {
+                ) const noexcept ->__BaseString < __CharType > {
 
-                    return this->operator + ( BaseStringView ( pString ) );
+                    return this->operator + ( __BaseStringView ( pString ) );
                 }
 
 
-                template < typename CharType >
-                template < typename T, meta :: EnableIf < meta :: isStringCharType < T > () > >
-                auto BaseStringView < CharType > :: operator + (
+                template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
+                template < typename __TCharType, meta :: EnableIf < meta :: isStringCharType < __TCharType > () > > // NOLINT(bugprone-reserved-identifier)
+                auto __BaseStringView < __CharType > :: operator + (
                         ElementType character
-                ) const noexcept -> BaseString < CharType > {
+                ) const noexcept -> __BaseString < __CharType > {
 
-                    BaseString < CharType > result;
+                   __BaseString < __CharType > result;
 
                     result._length      = this->length() + 1ULL;
-                    result._capacity    = maxOf ( result._length + 1U, __allocation :: minCapacity );
-                    result._pBuffer     = __allocation :: __alloc < CharType > ( result._capacity );
+                    result._capacity    = maxOf ( result._length + 1U, __allocation :: __minCapacity );
+                    result._pBuffer     = __allocation :: __alloc < __CharType > ( result._capacity );
 
-                    StringUtils < CharType > :: copy (
+                    StringUtils < __CharType > :: copy (
                             result.data(),
                             0ULL,
                             this->cStr(),
@@ -916,26 +916,26 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                     );
 
                     result._pBuffer [ result._length - 1ULL ]   = character;
-                    result._pBuffer [ result._length ]          = meta :: impl :: StringData < ElementType > :: nullCharacter;
+                    result._pBuffer [ result._length ]          = meta :: __impl :: __StringData < ElementType > :: nullCharacter;
 
                     return result;
                 }
 
 
-                template < typename CharType >
-                template < typename NumericType, meta :: EnableIf < meta :: isIntegralToString < CharType, NumericType > () > >
-                auto BaseStringView < CharType > :: operator + (
-                        NumericType value
-                ) const noexcept -> BaseString < CharType > {
+                template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
+                template < typename __NumericType, meta :: EnableIf < meta :: isIntegralToString < __CharType, __NumericType > () > > // NOLINT(bugprone-reserved-identifier)
+                auto __BaseStringView < __CharType > :: operator + (
+                        __NumericType value
+                ) const noexcept ->__BaseString < __CharType > {
 
-                    BaseString < CharType > result;
-                    auto valueLength = StringUtils < CharType > :: integerLength ( value );
+                   __BaseString < __CharType > result;
+                    auto valueLength = StringUtils < __CharType > :: integerLength ( value );
 
                     result._length      = this->length() + valueLength;
-                    result._capacity    = maxOf ( result._length + 1U, __allocation :: minCapacity );
-                    result._pBuffer     = __allocation :: __alloc < CharType > ( result._capacity );
+                    result._capacity    = maxOf ( result._length + 1U, __allocation :: __minCapacity );
+                    result._pBuffer     = __allocation :: __alloc < __CharType > ( result._capacity );
 
-                    StringUtils < CharType > :: copy (
+                    StringUtils < __CharType > :: copy (
                             result.data(),
                             0ULL,
                             this->_pData,
@@ -944,31 +944,31 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                             false
                     );
 
-                    * StringUtils < CharType > :: writeInteger (
+                    * StringUtils < __CharType > :: writeInteger (
                             result.data(),
                             this->length(),
                             value,
                             valueLength,
                             nullptr
-                    ) = meta :: impl :: StringData < ElementType > :: nullCharacter;
+                    ) = meta :: __impl :: __StringData < ElementType > :: nullCharacter;
 
                     return result;
                 }
 
 
-                template < typename CharType >
-                auto BaseStringView < CharType > :: operator + (
+                template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
+                auto __BaseStringView < __CharType > :: operator + (
                         bool value
-                ) const noexcept -> BaseString < CharType > {
+                ) const noexcept ->__BaseString < __CharType > {
 
-                    BaseString < CharType > result;
+                   __BaseString < __CharType > result;
                     auto valueLength = value ? 4ULL : 5ULL;
 
                     result._length      = this->length() + valueLength;
-                    result._capacity    = maxOf ( result._length + 1U, __allocation :: minCapacity );
-                    result._pBuffer     = __allocation :: __alloc < CharType > ( result._capacity );
+                    result._capacity    = maxOf ( result._length + 1U, __allocation :: __minCapacity );
+                    result._pBuffer     = __allocation :: __alloc < __CharType > ( result._capacity );
 
-                    StringUtils < CharType > :: copy (
+                    StringUtils < __CharType > :: copy (
                             result._pBuffer,
                             0ULL,
                             this->_pData,
@@ -977,7 +977,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                             false
                     );
 
-                    StringUtils < CharType > :: copy (
+                    StringUtils < __CharType > :: copy (
                             result._pBuffer,
                             this->length(),
                             value ? "true" : "false",
@@ -989,51 +989,51 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 }
 
 
-                template < typename CharType >
-                template < typename FloatingPointType, meta :: EnableIf < meta :: isFloatingPoint < FloatingPointType > () > >
-                __CDS_OptimalInline auto BaseStringView < CharType > :: operator + (
-                        FloatingPointType value
-                ) const noexcept -> BaseString < CharType > {
+                template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
+                template < typename __FloatingPointType, meta :: EnableIf < meta :: isFloatingPoint < __FloatingPointType > () > > // NOLINT(bugprone-reserved-identifier)
+                __CDS_OptimalInline auto __BaseStringView < __CharType > :: operator + (
+                        __FloatingPointType value
+                ) const noexcept ->__BaseString < __CharType > {
 
-                    return this->operator + ( BaseStringView ( std :: to_string ( value ) ) );
+                    return this->operator + ( __BaseStringView ( std :: to_string ( value ) ) );
                 }
 
 
-                template < typename FCharType >
+                template < typename __FCharType > // NOLINT(bugprone-reserved-identifier)
                 __CDS_OptimalInline auto operator + (
-                        std :: basic_string < FCharType >   const & leftString,
-                        BaseStringView < FCharType >        const & rightString
-                ) noexcept -> BaseString < FCharType > {
+                        std :: basic_string < __FCharType >     const & leftString,
+                        __BaseStringView < __FCharType >        const & rightString
+                ) noexcept ->__BaseString < __FCharType > {
 
-                    return BaseStringView < FCharType > ( leftString ) + rightString;
+                    return __BaseStringView < __FCharType > ( leftString ) + rightString;
                 }
 
 
-                template < typename FCharType >
+                template < typename __FCharType > // NOLINT(bugprone-reserved-identifier)
                 __CDS_OptimalInline auto operator + (
-                        FCharType                           const * pLeftString,
-                        BaseStringView < FCharType >        const & rightString
-                ) noexcept -> BaseString < FCharType > {
+                        __FCharType                             const * pLeftString,
+                        __BaseStringView < __FCharType >        const & rightString
+                ) noexcept ->__BaseString < __FCharType > {
 
-                    return BaseStringView < FCharType > ( pLeftString ) + rightString;
+                    return __BaseStringView < __FCharType > ( pLeftString ) + rightString;
                 }
 
 
-                template < typename FCharType, meta :: EnableIf < meta :: isStringCharType < FCharType > () > = 0 >
+                template < typename __FCharType, meta :: EnableIf < meta :: isStringCharType < __FCharType > () > = 0 > // NOLINT(bugprone-reserved-identifier)
                 auto operator + (
-                        FCharType                               character,
-                        BaseStringView < FCharType >    const & string
-                ) noexcept -> BaseString < FCharType > {
+                        __FCharType                                 character,
+                        __BaseStringView < __FCharType >    const & string
+                ) noexcept ->__BaseString < __FCharType > {
 
-                    BaseString < FCharType > result;
+                   __BaseString < __FCharType > result;
 
                     result._length      = string.length() + 1ULL;
-                    result._capacity    = maxOf ( result._length + 1U, __allocation :: minCapacity );
-                    result._pBuffer     = __allocation :: __alloc < FCharType > ( result._capacity );
+                    result._capacity    = maxOf ( result._length + 1U, __allocation :: __minCapacity );
+                    result._pBuffer     = __allocation :: __alloc < __FCharType > ( result._capacity );
 
                     result._pBuffer [ 0 ] = character;
 
-                    StringUtils < FCharType > :: copy (
+                    StringUtils < __FCharType > :: copy (
                             result.data(),
                             1ULL,
                             string._pData,
@@ -1041,26 +1041,26 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                             string.length()
                     );
 
-                    result._pBuffer [ result._length ]          = static_cast < FCharType > ( character );
+                    result._pBuffer [ result._length ]          = static_cast < __FCharType > ( character );
 
                     return result;
                 }
 
 
-                template < typename FCharType, typename NumericType, meta :: EnableIf < meta :: isIntegralToString < FCharType, NumericType > () > = 0 >
+                template < typename __FCharType, typename __NumericType, meta :: EnableIf < meta :: isIntegralToString < __FCharType, __NumericType > () > = 0 > // NOLINT(bugprone-reserved-identifier)
                 auto operator + (
-                        NumericType                             value,
-                        BaseStringView < FCharType >    const & string
-                ) noexcept -> BaseString < FCharType > {
+                        __NumericType                               value,
+                        __BaseStringView < __FCharType >    const & string
+                ) noexcept ->__BaseString < __FCharType > {
 
-                    BaseString < FCharType > result;
-                    auto valueLength = StringUtils < FCharType > :: integerLength ( value );
+                   __BaseString < __FCharType > result;
+                    auto valueLength = StringUtils < __FCharType > :: integerLength ( value );
 
                     result._length      = string.length() + valueLength;
-                    result._capacity    = maxOf ( result._length + 1U, __allocation :: minCapacity );
-                    result._pBuffer     = __allocation :: __alloc < FCharType > ( result._capacity );
+                    result._capacity    = maxOf ( result._length + 1U, __allocation :: __minCapacity );
+                    result._pBuffer     = __allocation :: __alloc < __FCharType > ( result._capacity );
 
-                    (void) StringUtils < FCharType > :: writeInteger (
+                    (void) StringUtils < __FCharType > :: writeInteger (
                             result.data(),
                             0ULL,
                             value,
@@ -1068,7 +1068,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                             nullptr
                     );
 
-                    StringUtils < FCharType > :: copy (
+                    StringUtils < __FCharType > :: copy (
                             result.data(),
                             valueLength,
                             string._pData,
@@ -1080,20 +1080,20 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 }
 
 
-                template < typename FCharType >
+                template < typename __FCharType > // NOLINT(bugprone-reserved-identifier)
                 auto operator + (
-                        bool                                    value,
-                        BaseStringView < FCharType >    const & string
-                ) noexcept -> BaseString < FCharType > {
+                        bool                                        value,
+                        __BaseStringView < __FCharType >    const & string
+                ) noexcept ->__BaseString < __FCharType > {
 
-                    BaseString < FCharType > result;
+                   __BaseString < __FCharType > result;
                     auto valueLength = value ? 4ULL : 5ULL;
 
                     result._length      = string.length() + valueLength;
-                    result._capacity    = maxOf ( result._length + 1U, __allocation :: minCapacity );
-                    result._pBuffer     = __allocation :: __alloc < FCharType > ( result._capacity );
+                    result._capacity    = maxOf ( result._length + 1U, __allocation :: __minCapacity );
+                    result._pBuffer     = __allocation :: __alloc < __FCharType > ( result._capacity );
 
-                    StringUtils < FCharType > :: copy (
+                    StringUtils < __FCharType > :: copy (
                             result.data (),
                             0ULL,
                             value ? "true" : "false",
@@ -1102,7 +1102,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                             false
                     );
 
-                    StringUtils < FCharType > :: copy (
+                    StringUtils < __FCharType > :: copy (
                             result.data(),
                             valueLength,
                             string._pData,
@@ -1115,22 +1115,22 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 }
 
 
-                template < typename FCharType, typename FloatingPointType, meta :: EnableIf < meta :: isFloatingPoint < FloatingPointType > () > >
+                template < typename __FCharType, typename __FloatingPointType, meta :: EnableIf < meta :: isFloatingPoint < __FloatingPointType > () > > // NOLINT(bugprone-reserved-identifier)
                 __CDS_OptimalInline auto operator + (
-                        FloatingPointType                       value,
-                        BaseStringView < FCharType >    const & string
-                ) noexcept -> BaseString < FCharType > {
+                        __FloatingPointType                         value,
+                        __BaseStringView < __FCharType >    const & string
+                ) noexcept ->__BaseString < __FCharType > {
 
-                    return BaseStringView < FCharType > ( std :: to_string ( value ) ) + string;
+                    return __BaseStringView < __FCharType > ( std :: to_string ( value ) ) + string;
                 }
 
 
-                template < typename CharType >
-                auto BaseStringView < CharType > :: operator * (
+                template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
+                auto __BaseStringView < __CharType > :: operator * (
                         int count
-                ) const & noexcept -> BaseString < CharType > {
+                ) const & noexcept ->__BaseString < __CharType > {
 
-                    BaseString < CharType > result;
+                   __BaseString < __CharType > result;
 
                     if ( this->empty() || count == 0 ) {
                         return result;
@@ -1140,11 +1140,11 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                         return * this;
                     }
 
-                    result._capacity = maxOf ( count * this->length() + 1ULL, __allocation :: minCapacity );
-                    result._pBuffer = __allocation :: __alloc < CharType > ( result._capacity );
+                    result._capacity = maxOf ( count * this->length() + 1ULL, __allocation :: __minCapacity );
+                    result._pBuffer = __allocation :: __alloc < __CharType > ( result._capacity );
 
                     for ( int i = 0; i < count; ++ i ) {
-                        StringUtils < CharType > :: copy (
+                        StringUtils < __CharType > :: copy (
                                 result._pBuffer,
                                 result._length,
                                 this->_pBuffer,
@@ -1156,18 +1156,18 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                         result._length += this->length();
                     }
 
-                    result._pBuffer [ result._length ] = meta :: impl :: StringData < ElementType > :: nullCharacter;
+                    result._pBuffer [ result._length ] = meta :: __impl :: __StringData < ElementType > :: nullCharacter;
                     return result;
                 }
 
 
-                template < typename FCharType >
+                template < typename __FCharType > // NOLINT(bugprone-reserved-identifier)
                 auto operator * (
-                        int                                  count,
-                        BaseStringView < FCharType > const & string
-                ) noexcept -> BaseString < FCharType > {
+                        int                                      count,
+                        __BaseStringView < __FCharType > const & string
+                ) noexcept ->__BaseString < __FCharType > {
 
-                    BaseString < FCharType > result;
+                   __BaseString < __FCharType > result;
 
                     if ( string.empty() || count == 0 ) {
                         return result;
@@ -1177,11 +1177,11 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                         return * string;
                     }
 
-                    result._capacity = maxOf ( count * string.length() + 1ULL, __allocation :: minCapacity );
-                    result._pBuffer = __allocation :: __alloc < FCharType > ( result._capacity );
+                    result._capacity = maxOf ( count * string.length() + 1ULL, __allocation :: __minCapacity );
+                    result._pBuffer = __allocation :: __alloc < __FCharType > ( result._capacity );
 
                     for ( int i = 0; i < count; ++ i ) {
-                        StringUtils < FCharType > :: copy (
+                        StringUtils < __FCharType > :: copy (
                                 result._pBuffer,
                                 result._length,
                                 string._pBuffer,
@@ -1193,43 +1193,43 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                         result._length += string.length();
                     }
 
-                    result._pBuffer [ result._length ] = static_cast < FCharType > ( '\0' );
+                    result._pBuffer [ result._length ] = static_cast < __FCharType > ( '\0' );
                     return result;
                 }
 
 
-                template < typename CharType >
-                __CDS_cpplang_ConstexprConditioned auto BaseStringView < CharType > :: contains (
+                template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
+                __CDS_cpplang_ConstexprConditioned auto __BaseStringView < __CharType > :: contains (
                         ElementType character
                 ) const noexcept -> bool {
 
-                    return this->findFirst ( character ) != BaseStringView :: invalidIndex;
+                    return this->findFirst ( character ) != __BaseStringView :: invalidIndex;
                 }
 
 
-                template < typename CharType >
-                template < typename ConvertibleType, meta :: EnableIf < meta :: isConvertibleToBaseStringView < ConvertibleType, CharType > () > >
-                __CDS_cpplang_ConstexprDynamicAllocation auto BaseStringView < CharType > :: contains (
-                        ConvertibleType && string
+                template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
+                template < typename __ConvertibleType, meta :: EnableIf < meta :: isConvertibleToBaseStringView < __ConvertibleType, __CharType > () > > // NOLINT(bugprone-reserved-identifier)
+                __CDS_cpplang_ConstexprDynamicAllocation auto __BaseStringView < __CharType > :: contains (
+                        __ConvertibleType && string
                 ) const noexcept -> bool {
 
-                    return this->contains ( BaseStringView ( std :: forward < ConvertibleType > ( string ) ) );
+                    return this->contains ( __BaseStringView ( std :: forward < __ConvertibleType > ( string ) ) );
                 }
 
 
-                template < typename CharType >
-                __CDS_cpplang_ConstexprDynamicAllocation auto BaseStringView < CharType > :: contains (
-                        BaseStringView < CharType > const & string
+                template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
+                __CDS_cpplang_ConstexprDynamicAllocation auto __BaseStringView < __CharType > :: contains (
+                        __BaseStringView < __CharType > const & string
                 ) const noexcept -> bool {
 
-                    return this->findFirst ( string ) != BaseStringView :: invalidIndex;
+                    return this->findFirst ( string ) != __BaseStringView :: invalidIndex;
                 }
 
 
-                template < typename CharType >
-                template < template < typename ... > class CollectionType >
-                __CDS_OptionalInline auto BaseStringView < CharType > :: containsAnyOf (
-                        CollectionType < ElementType > const & characters
+                template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
+                template < template < typename ... > class __CollectionType > // NOLINT(bugprone-reserved-identifier)
+                __CDS_OptionalInline auto __BaseStringView < __CharType > :: containsAnyOf (
+                        __CollectionType < ElementType > const & characters
                 ) const noexcept -> bool {
 
                     for ( Size index = 0ULL; index < this->length(); ++ index ) {
@@ -1242,19 +1242,19 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 }
 
 
-                template < typename CharType >
-                template < typename ConvertibleType, meta :: EnableIf < meta :: isConvertibleToBaseStringView < ConvertibleType, CharType > () > >
-                __CDS_cpplang_ConstexprConditioned auto BaseStringView < CharType > :: containsAnyOf (
-                        ConvertibleType && string
+                template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
+                template < typename __ConvertibleType, meta :: EnableIf < meta :: isConvertibleToBaseStringView < __ConvertibleType, __CharType > () > > // NOLINT(bugprone-reserved-identifier)
+                __CDS_cpplang_ConstexprConditioned auto __BaseStringView < __CharType > :: containsAnyOf (
+                        __ConvertibleType && string
                 ) const noexcept -> bool {
 
-                    return this->containsAnyOf ( BaseStringView < CharType > ( std :: forward < ConvertibleType > ( string ) ) );
+                    return this->containsAnyOf ( __BaseStringView < __CharType > ( std :: forward < __ConvertibleType > ( string ) ) );
                 }
 
 
-                template < typename CharType >
-                __CDS_cpplang_ConstexprConditioned auto BaseStringView < CharType > :: containsAnyOf (
-                        BaseStringView const & string
+                template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
+                __CDS_cpplang_ConstexprConditioned auto __BaseStringView < __CharType > :: containsAnyOf (
+                        __BaseStringView const & string
                 ) const noexcept -> bool {
 
                     for ( Size index = 0ULL; index < this->length(); ++ index ) {
@@ -1267,10 +1267,10 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 }
 
 
-                template < typename CharType >
-                template < template < typename ... > class CollectionType >
-                __CDS_OptionalInline auto BaseStringView < CharType > :: containsAllOf (
-                        CollectionType < ElementType > const & characters
+                template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
+                template < template < typename ... > class __CollectionType > // NOLINT(bugprone-reserved-identifier)
+                __CDS_OptionalInline auto __BaseStringView < __CharType > :: containsAllOf (
+                        __CollectionType < ElementType > const & characters
                 ) const noexcept -> bool {
 
                     for ( Size index = 0ULL; index < this->length(); ++ index ) {
@@ -1283,19 +1283,19 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 }
 
 
-                template < typename CharType >
-                template < typename ConvertibleType, meta :: EnableIf < meta :: isConvertibleToBaseStringView < ConvertibleType, CharType > () > >
-                __CDS_cpplang_ConstexprConditioned auto BaseStringView < CharType > :: containsAllOf (
-                        ConvertibleType && string
+                template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
+                template < typename __ConvertibleType, meta :: EnableIf < meta :: isConvertibleToBaseStringView < __ConvertibleType, __CharType > () > > // NOLINT(bugprone-reserved-identifier)
+                __CDS_cpplang_ConstexprConditioned auto __BaseStringView < __CharType > :: containsAllOf (
+                        __ConvertibleType && string
                 ) const noexcept -> bool {
 
-                    return this->containsAllOf ( BaseStringView < CharType > ( std :: forward < ConvertibleType > ( string ) ) );
+                    return this->containsAllOf ( __BaseStringView < __CharType > ( std :: forward < __ConvertibleType > ( string ) ) );
                 }
 
 
-                template < typename CharType >
-                __CDS_cpplang_ConstexprConditioned auto BaseStringView < CharType > :: containsAllOf (
-                        BaseStringView const & string
+                template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
+                __CDS_cpplang_ConstexprConditioned auto __BaseStringView < __CharType > :: containsAllOf (
+                        __BaseStringView const & string
                 ) const noexcept -> bool {
 
                     for ( Size index = 0ULL; index < this->length(); ++ index ) {
@@ -1308,10 +1308,10 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 }
 
 
-                template < typename CharType >
-                template < template < typename ... > class CollectionType >
-                __CDS_OptionalInline auto BaseStringView < CharType > :: containsAnyNotOf (
-                        CollectionType < ElementType > const & characters
+                template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
+                template < template < typename ... > class __CollectionType > // NOLINT(bugprone-reserved-identifier)
+                __CDS_OptionalInline auto __BaseStringView < __CharType > :: containsAnyNotOf (
+                        __CollectionType < ElementType > const & characters
                 ) const noexcept -> bool {
 
                     for ( Size index = 0ULL; index < this->length(); ++ index ) {
@@ -1324,19 +1324,19 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 }
 
 
-                template < typename CharType >
-                template < typename ConvertibleType, meta :: EnableIf < meta :: isConvertibleToBaseStringView < ConvertibleType, CharType > () > >
-                __CDS_cpplang_ConstexprConditioned auto BaseStringView < CharType > :: containsAnyNotOf (
-                        ConvertibleType && string
+                template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
+                template < typename __ConvertibleType, meta :: EnableIf < meta :: isConvertibleToBaseStringView < __ConvertibleType, __CharType > () > > // NOLINT(bugprone-reserved-identifier)
+                __CDS_cpplang_ConstexprConditioned auto __BaseStringView < __CharType > :: containsAnyNotOf (
+                        __ConvertibleType && string
                 ) const noexcept -> bool {
 
-                    return this->containsAnyNotOf ( BaseStringView < CharType > ( std :: forward < ConvertibleType > ( string ) ) );
+                    return this->containsAnyNotOf ( __BaseStringView < __CharType > ( std :: forward < __ConvertibleType > ( string ) ) );
                 }
 
 
-                template < typename CharType >
-                __CDS_cpplang_ConstexprConditioned auto BaseStringView < CharType > :: containsAnyNotOf (
-                        BaseStringView const & string
+                template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
+                __CDS_cpplang_ConstexprConditioned auto __BaseStringView < __CharType > :: containsAnyNotOf (
+                        __BaseStringView const & string
                 ) const noexcept -> bool {
 
                     for ( Size index = 0ULL; index < this->length(); ++ index ) {
@@ -1349,10 +1349,10 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 }
 
 
-                template < typename CharType >
-                template < template < typename ... > class CollectionType >
-                __CDS_OptionalInline auto BaseStringView < CharType > :: containsAllNotOf (
-                        CollectionType < ElementType > const & characters
+                template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
+                template < template < typename ... > class __CollectionType > // NOLINT(bugprone-reserved-identifier)
+                __CDS_OptionalInline auto __BaseStringView < __CharType > :: containsAllNotOf (
+                        __CollectionType < ElementType > const & characters
                 ) const noexcept -> bool {
 
                     for ( Size index = 0ULL; index < this->length(); ++ index ) {
@@ -1365,19 +1365,19 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 }
 
 
-                template < typename CharType >
-                template < typename ConvertibleType, meta :: EnableIf < meta :: isConvertibleToBaseStringView < ConvertibleType, CharType > () > >
-                __CDS_cpplang_ConstexprConditioned auto BaseStringView < CharType > :: containsAllNotOf (
-                        ConvertibleType && string
+                template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
+                template < typename __ConvertibleType, meta :: EnableIf < meta :: isConvertibleToBaseStringView < __ConvertibleType, __CharType > () > > // NOLINT(bugprone-reserved-identifier)
+                __CDS_cpplang_ConstexprConditioned auto __BaseStringView < __CharType > :: containsAllNotOf (
+                        __ConvertibleType && string
                 ) const noexcept -> bool {
 
-                    return this->containsAllNotOf ( BaseStringView < CharType > ( std :: forward < ConvertibleType > ( string ) ) );
+                    return this->containsAllNotOf ( __BaseStringView < __CharType > ( std :: forward < __ConvertibleType > ( string ) ) );
                 }
 
 
-                template < typename CharType >
-                __CDS_cpplang_ConstexprConditioned auto BaseStringView < CharType > :: containsAllNotOf (
-                        BaseStringView const & string
+                template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
+                __CDS_cpplang_ConstexprConditioned auto __BaseStringView < __CharType > :: containsAllNotOf (
+                        __BaseStringView const & string
                 ) const noexcept -> bool {
 
                     for ( Size index = 0ULL; index < this->length(); ++ index ) {
@@ -1390,13 +1390,13 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 }
 
 
-                template < typename CharType >
-                template < template < typename ... > class CollectionType >
-                auto BaseStringView < CharType > :: find (
-                        Size                        maxCount,
-                        ElementType                 character,
-                        CollectionType < Index >  & storeIn
-                ) const noexcept -> CollectionType < Index > & {
+                template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
+                template < template < typename ... > class __CollectionType > // NOLINT(bugprone-reserved-identifier)
+                auto __BaseStringView < __CharType > :: find (
+                        Size                          maxCount,
+                        ElementType                   character,
+                        __CollectionType < Index >  & storeIn
+                ) const noexcept -> __CollectionType < Index > & {
 
                     Size found = 0ULL;
                     for ( Size index = 0ULL; index < this->_length && found < maxCount; ++ index ) {
@@ -1410,14 +1410,14 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 }
 
 
-                template < typename CharType >
-                template < template < typename ... > class CollectionType >
-                __CDS_OptimalInline auto BaseStringView < CharType > :: find (
+                template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
+                template < template < typename ... > class __CollectionType > // NOLINT(bugprone-reserved-identifier)
+                __CDS_OptimalInline auto __BaseStringView < __CharType > :: find (
                         Size                        maxCount,
                         ElementType                 character
-                ) const noexcept -> CollectionType < Index > {
+                ) const noexcept -> __CollectionType < Index > {
 
-                    CollectionType < Index > indices;
+                    __CollectionType < Index > indices;
                     return this->find (
                             maxCount,
                             character,
@@ -1426,8 +1426,8 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 }
 
 
-                template < typename CharType >
-                __CDS_cpplang_ConstexprConditioned auto BaseStringView < CharType > :: findFirst (
+                template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
+                __CDS_cpplang_ConstexprConditioned auto __BaseStringView < __CharType > :: findFirst (
                         ElementType character
                 ) const noexcept -> Index {
 
@@ -1437,12 +1437,12 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                         }
                     }
 
-                    return BaseStringView :: invalidIndex;
+                    return __BaseStringView :: invalidIndex;
                 }
 
 
-                template < typename CharType >
-                __CDS_cpplang_ConstexprConditioned auto BaseStringView < CharType > :: findLast (
+                template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
+                __CDS_cpplang_ConstexprConditioned auto __BaseStringView < __CharType > :: findLast (
                         ElementType character
                 ) const noexcept -> Index {
 
@@ -1452,16 +1452,16 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                         }
                     }
 
-                    return BaseStringView :: invalidIndex;
+                    return __BaseStringView :: invalidIndex;
                 }
 
 
-                template < typename CharType >
-                template < template < typename ... > class CollectionType >
-                auto BaseStringView < CharType > :: findAll (
+                template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
+                template < template < typename ... > class __CollectionType > // NOLINT(bugprone-reserved-identifier)
+                auto __BaseStringView < __CharType > :: findAll (
                         ElementType                 character,
-                        CollectionType < Index >  & storeIn
-                ) const noexcept -> CollectionType < Index > & {
+                        __CollectionType < Index >  & storeIn
+                ) const noexcept -> __CollectionType < Index > & {
 
                     for ( Size index = 0ULL; index < this->_length; ++ index ) {
                         if ( this->_pData [ index ] == character ) {
@@ -1473,13 +1473,13 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 }
 
 
-                template < typename CharType >
-                template < template < typename ... > class CollectionType >
-                __CDS_OptimalInline auto BaseStringView < CharType > :: findAll (
+                template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
+                template < template < typename ... > class __CollectionType > // NOLINT(bugprone-reserved-identifier)
+                __CDS_OptimalInline auto __BaseStringView < __CharType > :: findAll (
                         ElementType                 character
-                ) const noexcept -> CollectionType < Index > {
+                ) const noexcept -> __CollectionType < Index > {
 
-                    CollectionType < Index > indices;
+                    __CollectionType < Index > indices;
                     return this->findAll (
                             character,
                             indices
@@ -1487,254 +1487,254 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 }
 
 
-                template < typename CharType >
-                template < template < typename ... > class CollectionType, typename ConvertibleType, meta :: EnableIf < meta :: isConvertibleToBaseStringView < ConvertibleType, CharType > () > >
-                __CDS_OptimalInline auto BaseStringView < CharType > :: find (
-                        Size                                maxCount,
-                        ConvertibleType                  && string,
-                        CollectionType < Index >          & storeIn
-                ) const noexcept -> CollectionType < Index > & {
+                template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
+                template < template < typename ... > class __CollectionType, typename __ConvertibleType, meta :: EnableIf < meta :: isConvertibleToBaseStringView < __ConvertibleType, __CharType > () > > // NOLINT(bugprone-reserved-identifier)
+                __CDS_OptimalInline auto __BaseStringView < __CharType > :: find (
+                        Size                                  maxCount,
+                        __ConvertibleType                  && string,
+                        __CollectionType < Index >          & storeIn
+                ) const noexcept -> __CollectionType < Index > & {
 
                     return this->find (
                             maxCount,
-                            BaseStringView ( std :: forward < ConvertibleType > ( string ) ),
+                            __BaseStringView ( std :: forward < __ConvertibleType > ( string ) ),
                             storeIn
                     );
                 }
 
 
-                template < typename CharType >
-                template < template < typename ... > class CollectionType, typename ConvertibleType, meta :: EnableIf < meta :: isConvertibleToBaseStringView < ConvertibleType, CharType > () > >
-                __CDS_OptimalInline auto BaseStringView < CharType > :: find (
-                        Size                                maxCount,
-                        ConvertibleType                  && string
-                ) const noexcept -> CollectionType < Index > {
+                template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
+                template < template < typename ... > class __CollectionType, typename __ConvertibleType, meta :: EnableIf < meta :: isConvertibleToBaseStringView < __ConvertibleType, __CharType > () > > // NOLINT(bugprone-reserved-identifier)
+                __CDS_OptimalInline auto __BaseStringView < __CharType > :: find (
+                        Size                                  maxCount,
+                        __ConvertibleType                  && string
+                ) const noexcept -> __CollectionType < Index > {
 
-                    CollectionType < Index > indices;
+                    __CollectionType < Index > indices;
                     return this->find (
-                            BaseStringView ( std :: forward < ConvertibleType > ( string ) ),
+                            __BaseStringView ( std :: forward < __ConvertibleType > ( string ) ),
                             indices
                     );
                 }
 
 
-                template < typename CharType >
-                template < typename ConvertibleType, meta :: EnableIf < meta :: isConvertibleToBaseStringView < ConvertibleType, CharType > () > >
-                __CDS_cpplang_ConstexprDynamicAllocation auto BaseStringView < CharType > :: findFirst (
-                        ConvertibleType && string
+                template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
+                template < typename __ConvertibleType, meta :: EnableIf < meta :: isConvertibleToBaseStringView < __ConvertibleType, __CharType > () > > // NOLINT(bugprone-reserved-identifier)
+                __CDS_cpplang_ConstexprDynamicAllocation auto __BaseStringView < __CharType > :: findFirst (
+                        __ConvertibleType && string
                 ) const noexcept -> Index {
 
-                    return this->findFirst ( BaseStringView ( std :: forward < ConvertibleType > ( string ) ) );
+                    return this->findFirst ( __BaseStringView ( std :: forward < __ConvertibleType > ( string ) ) );
                 }
 
 
-                template < typename CharType >
-                template < typename ConvertibleType, meta :: EnableIf < meta :: isConvertibleToBaseStringView < ConvertibleType, CharType > () > >
-                __CDS_cpplang_ConstexprDynamicAllocation auto BaseStringView < CharType > :: findLast (
-                        ConvertibleType && string
+                template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
+                template < typename __ConvertibleType, meta :: EnableIf < meta :: isConvertibleToBaseStringView < __ConvertibleType, __CharType > () > > // NOLINT(bugprone-reserved-identifier)
+                __CDS_cpplang_ConstexprDynamicAllocation auto __BaseStringView < __CharType > :: findLast (
+                        __ConvertibleType && string
                 ) const noexcept -> Index {
 
-                    return this->findLast ( BaseStringView ( std :: forward < ConvertibleType > ( string ) ) );
+                    return this->findLast ( __BaseStringView ( std :: forward < __ConvertibleType > ( string ) ) );
                 }
 
 
-                template < typename CharType >
-                template < template < typename ... > class CollectionType, typename ConvertibleType, meta :: EnableIf < meta :: isConvertibleToBaseStringView < ConvertibleType, CharType > () > >
-                __CDS_OptimalInline auto BaseStringView < CharType > :: findAll (
-                        ConvertibleType                  && string,
-                        CollectionType < Index >          & storeIn
-                ) const noexcept -> CollectionType < Index > & {
+                template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
+                template < template < typename ... > class __CollectionType, typename __ConvertibleType, meta :: EnableIf < meta :: isConvertibleToBaseStringView < __ConvertibleType, __CharType > () > > // NOLINT(bugprone-reserved-identifier)
+                __CDS_OptimalInline auto __BaseStringView < __CharType > :: findAll (
+                        __ConvertibleType                  && string,
+                        __CollectionType < Index >          & storeIn
+                ) const noexcept -> __CollectionType < Index > & {
 
                     return this->findAll (
-                            BaseStringView ( std :: forward < ConvertibleType > ( string ) ),
+                            __BaseStringView ( std :: forward < __ConvertibleType > ( string ) ),
                             storeIn
                     );
                 }
 
 
-                template < typename CharType >
-                template < template < typename ... > class CollectionType, typename ConvertibleType, meta :: EnableIf < meta :: isConvertibleToBaseStringView < ConvertibleType, CharType > () > >
-                __CDS_OptimalInline auto BaseStringView < CharType > :: findAll (
-                        ConvertibleType && string
-                ) const noexcept -> CollectionType < Index > {
+                template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
+                template < template < typename ... > class __CollectionType, typename __ConvertibleType, meta :: EnableIf < meta :: isConvertibleToBaseStringView < __ConvertibleType, __CharType > () > > // NOLINT(bugprone-reserved-identifier)
+                __CDS_OptimalInline auto __BaseStringView < __CharType > :: findAll (
+                        __ConvertibleType && string
+                ) const noexcept -> __CollectionType < Index > {
 
-                    CollectionType < Index > indices;
+                    __CollectionType < Index > indices;
                     return this->findAll (
-                            BaseStringView ( std :: forward < ConvertibleType > ( string ) ),
+                            __BaseStringView ( std :: forward < __ConvertibleType > ( string ) ),
                             indices
                     );
                 }
 
 
-                template < typename CharType >
-                    template < template < typename ... > class CollectionType, typename ConvertibleType, meta :: EnableIf < meta :: isConvertibleToBaseStringView < ConvertibleType, CharType > () > >
-                __CDS_OptimalInline auto BaseStringView < CharType > :: findOf (
+                template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
+                    template < template < typename ... > class __CollectionType, typename __ConvertibleType, meta :: EnableIf < meta :: isConvertibleToBaseStringView < __ConvertibleType, __CharType > () > > // NOLINT(bugprone-reserved-identifier)
+                __CDS_OptimalInline auto __BaseStringView < __CharType > :: findOf (
                         Size                            maxCount,
-                        ConvertibleType              && string,
-                        CollectionType < Index >      & storeIn
-                ) const noexcept -> CollectionType < Index > & {
+                        __ConvertibleType              && string,
+                        __CollectionType < Index >      & storeIn
+                ) const noexcept -> __CollectionType < Index > & {
 
                     return this->findOf (
                             maxCount,
-                            BaseStringView ( std :: forward < ConvertibleType > ( string ) ),
+                            __BaseStringView ( std :: forward < __ConvertibleType > ( string ) ),
                             storeIn
                     );
                 }
 
 
-                template < typename CharType >
-                    template < template < typename ... > class CollectionType, typename ConvertibleType, meta :: EnableIf < meta :: isConvertibleToBaseStringView < ConvertibleType, CharType > () > >
-                __CDS_OptimalInline auto BaseStringView < CharType > :: findOf (
-                        Size                            maxCount,
-                        ConvertibleType              && string
-                ) const noexcept -> CollectionType < Index > {
+                template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
+                    template < template < typename ... > class __CollectionType, typename __ConvertibleType, meta :: EnableIf < meta :: isConvertibleToBaseStringView < __ConvertibleType, __CharType > () > > // NOLINT(bugprone-reserved-identifier)
+                __CDS_OptimalInline auto __BaseStringView < __CharType > :: findOf (
+                        Size                              maxCount,
+                        __ConvertibleType              && string
+                ) const noexcept -> __CollectionType < Index > {
 
-                    CollectionType < Index > indices;
+                    __CollectionType < Index > indices;
                     return this->findOf (
                             maxCount,
-                            BaseStringView ( std :: forward < ConvertibleType > ( string ) ),
+                            __BaseStringView ( std :: forward < __ConvertibleType > ( string ) ),
                             indices
                     );
                 }
 
 
-                template < typename CharType >
-                template < typename ConvertibleType, meta :: EnableIf < meta :: isConvertibleToBaseStringView < ConvertibleType, CharType > () > >
-                __CDS_cpplang_ConstexprConditioned auto BaseStringView < CharType > :: findFirstOf (
-                        ConvertibleType && string
+                template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
+                template < typename __ConvertibleType, meta :: EnableIf < meta :: isConvertibleToBaseStringView < __ConvertibleType, __CharType > () > > // NOLINT(bugprone-reserved-identifier)
+                __CDS_cpplang_ConstexprConditioned auto __BaseStringView < __CharType > :: findFirstOf (
+                        __ConvertibleType && string
                 ) const noexcept -> Index {
 
-                    return this->findFirstOf ( BaseStringView ( std :: forward < ConvertibleType > ( string ) ) );
+                    return this->findFirstOf ( __BaseStringView ( std :: forward < __ConvertibleType > ( string ) ) );
                 }
 
 
-                template < typename CharType >
-                template < typename ConvertibleType, meta :: EnableIf < meta :: isConvertibleToBaseStringView < ConvertibleType, CharType > () > >
-                __CDS_cpplang_ConstexprConditioned auto BaseStringView < CharType > :: findLastOf (
-                        ConvertibleType && string
+                template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
+                template < typename __ConvertibleType, meta :: EnableIf < meta :: isConvertibleToBaseStringView < __ConvertibleType, __CharType > () > > // NOLINT(bugprone-reserved-identifier)
+                __CDS_cpplang_ConstexprConditioned auto __BaseStringView < __CharType > :: findLastOf (
+                        __ConvertibleType && string
                 ) const noexcept -> Index {
 
-                    return this->findLastOf ( BaseStringView ( std :: forward < ConvertibleType > ( string ) ) );
+                    return this->findLastOf ( __BaseStringView ( std :: forward < __ConvertibleType > ( string ) ) );
                 }
 
 
-                template < typename CharType >
-                template < template < typename ... > class CollectionType, typename ConvertibleType, meta :: EnableIf < meta :: isConvertibleToBaseStringView < ConvertibleType, CharType > () > >
-                __CDS_OptimalInline auto BaseStringView < CharType > :: findAllOf (
-                        ConvertibleType              && string,
-                        CollectionType < Index >      & storeIn
-                ) const noexcept -> CollectionType < Index > & {
+                template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
+                template < template < typename ... > class __CollectionType, typename __ConvertibleType, meta :: EnableIf < meta :: isConvertibleToBaseStringView < __ConvertibleType, __CharType > () > > // NOLINT(bugprone-reserved-identifier)
+                __CDS_OptimalInline auto __BaseStringView < __CharType > :: findAllOf (
+                        __ConvertibleType              && string,
+                        __CollectionType < Index >      & storeIn
+                ) const noexcept -> __CollectionType < Index > & {
 
                     return this->findAllOf (
-                            BaseStringView ( std :: forward < ConvertibleType > ( string ) ),
+                            __BaseStringView ( std :: forward < __ConvertibleType > ( string ) ),
                             storeIn
                     );
                 }
 
 
-                template < typename CharType >
-                template < template < typename ... > class CollectionType, typename ConvertibleType, meta :: EnableIf < meta :: isConvertibleToBaseStringView < ConvertibleType, CharType > () > >
-                __CDS_OptimalInline auto BaseStringView < CharType > :: findAllOf (
-                        ConvertibleType && string
-                ) const noexcept -> CollectionType < Index > {
+                template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
+                template < template < typename ... > class __CollectionType, typename __ConvertibleType, meta :: EnableIf < meta :: isConvertibleToBaseStringView < __ConvertibleType, __CharType > () > > // NOLINT(bugprone-reserved-identifier)
+                __CDS_OptimalInline auto __BaseStringView < __CharType > :: findAllOf (
+                        __ConvertibleType && string
+                ) const noexcept -> __CollectionType < Index > {
 
-                    CollectionType < Index > indices;
+                    __CollectionType < Index > indices;
                     return this->findAllOf (
-                            BaseStringView ( std :: forward < ConvertibleType > ( string ) ),
+                            __BaseStringView ( std :: forward < __ConvertibleType > ( string ) ),
                             indices
                     );
                 }
 
 
-                template < typename CharType >
-                template < template < typename ... > class CollectionType, typename ConvertibleType, meta :: EnableIf < meta :: isConvertibleToBaseStringView < ConvertibleType, CharType > () > >
-                __CDS_OptimalInline auto BaseStringView < CharType > :: findNotOf (
-                        Size                            maxCount,
-                        ConvertibleType              && string,
-                        CollectionType < Index >      & storeIn
-                ) const noexcept -> CollectionType < Index > & {
+                template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
+                template < template < typename ... > class __CollectionType, typename __ConvertibleType, meta :: EnableIf < meta :: isConvertibleToBaseStringView < __ConvertibleType, __CharType > () > > // NOLINT(bugprone-reserved-identifier)
+                __CDS_OptimalInline auto __BaseStringView < __CharType > :: findNotOf (
+                        Size                              maxCount,
+                        __ConvertibleType              && string,
+                        __CollectionType < Index >      & storeIn
+                ) const noexcept -> __CollectionType < Index > & {
 
                     return this->findNotOf (
                             maxCount,
-                            BaseStringView ( std :: forward < ConvertibleType > ( string ) ),
+                            __BaseStringView ( std :: forward < __ConvertibleType > ( string ) ),
                             storeIn
                     );
                 }
 
 
-                template < typename CharType >
-                template < template < typename ... > class CollectionType, typename ConvertibleType, meta :: EnableIf < meta :: isConvertibleToBaseStringView < ConvertibleType, CharType > () > >
-                __CDS_OptimalInline auto BaseStringView < CharType > :: findNotOf (
-                        Size                            maxCount,
-                        ConvertibleType              && string
-                ) const noexcept -> CollectionType < Index > {
+                template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
+                template < template < typename ... > class __CollectionType, typename __ConvertibleType, meta :: EnableIf < meta :: isConvertibleToBaseStringView < __ConvertibleType, __CharType > () > > // NOLINT(bugprone-reserved-identifier)
+                __CDS_OptimalInline auto __BaseStringView < __CharType > :: findNotOf (
+                        Size                              maxCount,
+                        __ConvertibleType              && string
+                ) const noexcept -> __CollectionType < Index > {
 
-                    CollectionType < Index > indices;
+                    __CollectionType < Index > indices;
                     return this->findNotOf (
                             maxCount,
-                            BaseStringView ( std :: forward < ConvertibleType > ( string ) ),
+                            __BaseStringView ( std :: forward < __ConvertibleType > ( string ) ),
                             indices
                     );
                 }
 
 
-                template < typename CharType >
-                template < typename ConvertibleType, meta :: EnableIf < meta :: isConvertibleToBaseStringView < ConvertibleType, CharType > () > >
-                __CDS_cpplang_ConstexprConditioned auto BaseStringView < CharType > :: findFirstNotOf (
-                        ConvertibleType && string
+                template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
+                template < typename __ConvertibleType, meta :: EnableIf < meta :: isConvertibleToBaseStringView < __ConvertibleType, __CharType > () > > // NOLINT(bugprone-reserved-identifier)
+                __CDS_cpplang_ConstexprConditioned auto __BaseStringView < __CharType > :: findFirstNotOf (
+                        __ConvertibleType && string
                 ) const noexcept -> Index {
 
-                    return this->findFirstNotOf ( BaseStringView ( std :: forward < ConvertibleType > ( string ) ) );
+                    return this->findFirstNotOf ( __BaseStringView ( std :: forward < __ConvertibleType > ( string ) ) );
                 }
 
 
-                template < typename CharType >
-                template < typename ConvertibleType, meta :: EnableIf < meta :: isConvertibleToBaseStringView < ConvertibleType, CharType > () > >
-                __CDS_cpplang_ConstexprConditioned auto BaseStringView < CharType > :: findLastNotOf (
-                        ConvertibleType && string
+                template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
+                template < typename __ConvertibleType, meta :: EnableIf < meta :: isConvertibleToBaseStringView < __ConvertibleType, __CharType > () > > // NOLINT(bugprone-reserved-identifier)
+                __CDS_cpplang_ConstexprConditioned auto __BaseStringView < __CharType > :: findLastNotOf (
+                        __ConvertibleType && string
                 ) const noexcept -> Index {
 
-                    return this->findLastNotOf ( BaseStringView ( std :: forward < ConvertibleType > ( string ) ) );
+                    return this->findLastNotOf ( __BaseStringView ( std :: forward < __ConvertibleType > ( string ) ) );
                 }
 
 
-                template < typename CharType >
-                template < template < typename ... > class CollectionType, typename ConvertibleType, meta :: EnableIf < meta :: isConvertibleToBaseStringView < ConvertibleType, CharType > () > >
-                __CDS_OptimalInline auto BaseStringView < CharType > :: findAllNotOf (
-                        ConvertibleType              && string,
-                        CollectionType < Index >      & storeIn
-                ) const noexcept -> CollectionType < Index > & {
+                template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
+                template < template < typename ... > class __CollectionType, typename __ConvertibleType, meta :: EnableIf < meta :: isConvertibleToBaseStringView < __ConvertibleType, __CharType > () > > // NOLINT(bugprone-reserved-identifier)
+                __CDS_OptimalInline auto __BaseStringView < __CharType > :: findAllNotOf (
+                        __ConvertibleType              && string,
+                        __CollectionType < Index >      & storeIn
+                ) const noexcept -> __CollectionType < Index > & {
 
                     return this->findAllNotOf (
-                            BaseStringView ( std :: forward < ConvertibleType > ( string ) ),
+                            __BaseStringView ( std :: forward < __ConvertibleType > ( string ) ),
                             storeIn
                     );
                 }
 
 
-                template < typename CharType >
-                template < template < typename ... > class CollectionType, typename ConvertibleType, meta :: EnableIf < meta :: isConvertibleToBaseStringView < ConvertibleType, CharType > () > >
-                __CDS_OptimalInline auto BaseStringView < CharType > :: findAllNotOf (
-                        ConvertibleType && string
-                ) const noexcept -> CollectionType < Index > {
+                template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
+                template < template < typename ... > class __CollectionType, typename __ConvertibleType, meta :: EnableIf < meta :: isConvertibleToBaseStringView < __ConvertibleType, __CharType > () > > // NOLINT(bugprone-reserved-identifier)
+                __CDS_OptimalInline auto __BaseStringView < __CharType > :: findAllNotOf (
+                        __ConvertibleType && string
+                ) const noexcept -> __CollectionType < Index > {
 
-                    CollectionType < Index > indices;
+                    __CollectionType < Index > indices;
                     return this->findAllNotOf (
-                            BaseStringView ( std :: forward < ConvertibleType > ( string ) ),
+                            __BaseStringView ( std :: forward < __ConvertibleType > ( string ) ),
                             indices
                     );
                 }
 
 
-                template < typename CharType >
-                template < template < typename ... > class CollectionType >
-                __CDS_OptimalInline auto BaseStringView < CharType > :: find (
-                        Size                                maxCount,
-                        BaseStringView < CharType > const & string,
-                        CollectionType < Index >          & storeIn
-                ) const noexcept -> CollectionType < Index > & {
+                template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
+                template < template < typename ... > class __CollectionType > // NOLINT(bugprone-reserved-identifier)
+                __CDS_OptimalInline auto __BaseStringView < __CharType > :: find (
+                        Size                                    maxCount,
+                        __BaseStringView < __CharType > const & string,
+                        __CollectionType < Index >            & storeIn
+                ) const noexcept -> __CollectionType < Index > & {
 
-                    return StringUtils < CharType > :: find (
+                    return StringUtils < __CharType > :: find (
                             this->_pBuffer,
                             this->_length,
                             string.cStr(),
@@ -1745,24 +1745,24 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 }
 
 
-                template < typename CharType >
-                template < template < typename ... > class CollectionType >
-                __CDS_OptimalInline auto BaseStringView < CharType > :: find (
-                        Size                                maxCount,
-                        BaseStringView < CharType > const & string
-                ) const noexcept -> CollectionType < Index > {
+                template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
+                template < template < typename ... > class __CollectionType > // NOLINT(bugprone-reserved-identifier)
+                __CDS_OptimalInline auto __BaseStringView < __CharType > :: find (
+                        Size                                    maxCount,
+                        __BaseStringView < __CharType > const & string
+                ) const noexcept -> __CollectionType < Index > {
 
-                    CollectionType < Index > indices;
+                    __CollectionType < Index > indices;
                     return this->find ( maxCount, string, indices );
                 }
 
 
-                template < typename CharType >
-                __CDS_cpplang_ConstexprDynamicAllocation auto BaseStringView < CharType > :: findFirst (
-                        BaseStringView < CharType > const & string
+                template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
+                __CDS_cpplang_ConstexprDynamicAllocation auto __BaseStringView < __CharType > :: findFirst (
+                        __BaseStringView < __CharType > const & string
                 ) const noexcept -> Index {
 
-                    return StringUtils < CharType > :: findFirst (
+                    return StringUtils < __CharType > :: findFirst (
                             this->_pData,
                             this->_length,
                             string.cStr(),
@@ -1771,12 +1771,12 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 }
 
 
-                template < typename CharType >
-                __CDS_cpplang_ConstexprDynamicAllocation auto BaseStringView < CharType > :: findLast (
-                        BaseStringView < CharType > const & string
+                template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
+                __CDS_cpplang_ConstexprDynamicAllocation auto __BaseStringView < __CharType > :: findLast (
+                        __BaseStringView < __CharType > const & string
                 ) const noexcept -> Index {
 
-                    return StringUtils < CharType > :: findLast (
+                    return StringUtils < __CharType > :: findLast (
                             this->_pData,
                             this->_length,
                             string.cStr(),
@@ -1785,14 +1785,14 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 }
 
 
-                template < typename CharType >
-                template < template < typename ... > class CollectionType >
-                __CDS_OptimalInline auto BaseStringView < CharType > :: findAll (
-                        BaseStringView < CharType > const & string,
-                        CollectionType < Index >          & storeIn
-                ) const noexcept -> CollectionType < Index > & {
+                template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
+                template < template < typename ... > class __CollectionType > // NOLINT(bugprone-reserved-identifier)
+                __CDS_OptimalInline auto __BaseStringView < __CharType > :: findAll (
+                        __BaseStringView < __CharType > const & string,
+                        __CollectionType < Index >            & storeIn
+                ) const noexcept -> __CollectionType < Index > & {
 
-                    return StringUtils < CharType > :: findAll (
+                    return StringUtils < __CharType > :: findAll (
                             this->_pData,
                             this->_length,
                             string.cStr(),
@@ -1802,24 +1802,24 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 }
 
 
-                template < typename CharType >
-                template < template < typename ... > class CollectionType >
-                __CDS_OptimalInline auto BaseStringView < CharType > :: findAll (
-                        BaseStringView < CharType > const & string
-                ) const noexcept -> CollectionType < Index > {
+                template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
+                template < template < typename ... > class __CollectionType > // NOLINT(bugprone-reserved-identifier)
+                __CDS_OptimalInline auto __BaseStringView < __CharType > :: findAll (
+                        __BaseStringView < __CharType > const & string
+                ) const noexcept -> __CollectionType < Index > {
 
-                    CollectionType < Index > indices;
+                    __CollectionType < Index > indices;
                     return this->findAll ( string, indices );
                 }
 
 
-                template < typename CharType >
-                template < template < typename ... > class CollectionType >
-                __CDS_OptimalInline auto BaseStringView < CharType > :: findOf (
-                        Size                                maxCount,
-                        BaseStringView < CharType > const & string,
-                        CollectionType < Index >          & storeIn
-                ) const noexcept -> CollectionType < Index > & {
+                template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
+                template < template < typename ... > class __CollectionType > // NOLINT(bugprone-reserved-identifier)
+                __CDS_OptimalInline auto __BaseStringView < __CharType > :: findOf (
+                        Size                                    maxCount,
+                        __BaseStringView < __CharType > const & string,
+                        __CollectionType < Index >            & storeIn
+                ) const noexcept -> __CollectionType < Index > & {
 
                     Size found = 0ULL;
                     for ( Size index = 0ULL; index < this->length() && found < maxCount; ++ index ) {
@@ -1833,21 +1833,21 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 }
 
 
-                template < typename CharType >
-                template < template < typename ... > class CollectionType >
-                __CDS_OptimalInline auto BaseStringView < CharType > :: findOf (
-                        Size                                maxCount,
-                        BaseStringView < CharType > const & string
-                ) const noexcept -> CollectionType < Index > {
+                template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
+                template < template < typename ... > class __CollectionType > // NOLINT(bugprone-reserved-identifier)
+                __CDS_OptimalInline auto __BaseStringView < __CharType > :: findOf (
+                        Size                                    maxCount,
+                        __BaseStringView < __CharType > const & string
+                ) const noexcept -> __CollectionType < Index > {
 
-                    CollectionType < Index > indices;
+                    __CollectionType < Index > indices;
                     return this->findOf ( maxCount, string, indices );
                 }
 
 
-                template < typename CharType >
-                __CDS_cpplang_ConstexprConditioned auto BaseStringView < CharType > :: findFirstOf (
-                        BaseStringView < CharType > const & string
+                template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
+                __CDS_cpplang_ConstexprConditioned auto __BaseStringView < __CharType > :: findFirstOf (
+                        __BaseStringView < __CharType > const & string
                 ) const noexcept -> Index {
 
                     for ( Size index = 0ULL; index < this->length(); ++ index ) {
@@ -1856,13 +1856,13 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                         }
                     }
 
-                    return BaseStringView :: invalidIndex;
+                    return __BaseStringView :: invalidIndex;
                 }
 
 
-                template < typename CharType >
-                __CDS_cpplang_ConstexprConditioned auto BaseStringView < CharType > :: findLastOf (
-                        BaseStringView < CharType > const & string
+                template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
+                __CDS_cpplang_ConstexprConditioned auto __BaseStringView < __CharType > :: findLastOf (
+                        __BaseStringView < __CharType > const & string
                 ) const noexcept -> Index {
 
                     for ( Index index = static_cast < Index > ( this->length() ) - 1; index >= 0; -- index ) {
@@ -1871,16 +1871,16 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                         }
                     }
 
-                    return BaseStringView :: invalidIndex;
+                    return __BaseStringView :: invalidIndex;
                 }
 
 
-                template < typename CharType >
-                template < template < typename ... > class CollectionType >
-                auto BaseStringView < CharType > :: findAllOf (
-                        BaseStringView < CharType > const & string,
-                        CollectionType < Index >          & storeIn
-                ) const noexcept -> CollectionType < Index > & {
+                template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
+                template < template < typename ... > class __CollectionType > // NOLINT(bugprone-reserved-identifier)
+                auto __BaseStringView < __CharType > :: findAllOf (
+                        __BaseStringView < __CharType > const & string,
+                        __CollectionType < Index >            & storeIn
+                ) const noexcept -> __CollectionType < Index > & {
 
                     for ( Size index = 0ULL; index < this->length(); ++ index ) {
                         if ( string.contains ( this->_pData [ index ] ) ) {
@@ -1892,24 +1892,24 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 }
 
 
-                template < typename CharType >
-                template < template < typename ... > class CollectionType >
-                __CDS_OptimalInline auto BaseStringView < CharType > :: findAllOf (
-                        BaseStringView < CharType > const & string
-                ) const noexcept -> CollectionType < Index > {
+                template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
+                template < template < typename ... > class __CollectionType > // NOLINT(bugprone-reserved-identifier)
+                __CDS_OptimalInline auto __BaseStringView < __CharType > :: findAllOf (
+                        __BaseStringView < __CharType > const & string
+                ) const noexcept -> __CollectionType < Index > {
 
-                    CollectionType < Index > indices;
+                    __CollectionType < Index > indices;
                     return this->findAllOf ( string, indices );
                 }
 
 
-                template < typename CharType >
-                template < template < typename ... > class CollectionType >
-                auto BaseStringView < CharType > :: findNotOf (
-                        Size                                maxCount,
-                        BaseStringView < CharType > const & string,
-                        CollectionType < Index >          & storeIn
-                ) const noexcept -> CollectionType < Index > & {
+                template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
+                template < template < typename ... > class __CollectionType > // NOLINT(bugprone-reserved-identifier)
+                auto __BaseStringView < __CharType > :: findNotOf (
+                        Size                                    maxCount,
+                        __BaseStringView < __CharType > const & string,
+                        __CollectionType < Index >            & storeIn
+                ) const noexcept -> __CollectionType < Index > & {
 
                     Size found = 0ULL;
                     for ( Size index = 0ULL; index < this->length() && found < maxCount; ++ index ) {
@@ -1923,21 +1923,21 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 }
 
 
-                template < typename CharType >
-                template < template < typename ... > class CollectionType >
-                __CDS_OptimalInline auto BaseStringView < CharType > :: findNotOf (
-                        Size                                maxCount,
-                        BaseStringView < CharType > const & string
-                ) const noexcept -> CollectionType < Index > {
+                template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
+                template < template < typename ... > class __CollectionType > // NOLINT(bugprone-reserved-identifier)
+                __CDS_OptimalInline auto __BaseStringView < __CharType > :: findNotOf (
+                        Size                                    maxCount,
+                        __BaseStringView < __CharType > const & string
+                ) const noexcept -> __CollectionType < Index > {
 
-                    CollectionType < Index > indices;
+                    __CollectionType < Index > indices;
                     return this->findNotOf ( maxCount, string, indices );
                 }
 
 
-                template < typename CharType >
-                __CDS_cpplang_ConstexprConditioned auto BaseStringView < CharType > :: findFirstNotOf (
-                        BaseStringView < CharType > const & string
+                template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
+                __CDS_cpplang_ConstexprConditioned auto __BaseStringView < __CharType > :: findFirstNotOf (
+                        __BaseStringView < __CharType > const & string
                 ) const noexcept -> Index {
 
                     for ( Size index = 0ULL; index < this->length(); ++ index ) {
@@ -1946,13 +1946,13 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                         }
                     }
 
-                    return BaseStringView :: invalidIndex;
+                    return __BaseStringView :: invalidIndex;
                 }
 
 
-                template < typename CharType >
-                __CDS_cpplang_ConstexprConditioned auto BaseStringView < CharType > :: findLastNotOf (
-                        BaseStringView < CharType > const & string
+                template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
+                __CDS_cpplang_ConstexprConditioned auto __BaseStringView < __CharType > :: findLastNotOf (
+                        __BaseStringView < __CharType > const & string
                 ) const noexcept -> Index {
 
                     for ( Index index = static_cast < Index > ( this->length() ) - 1; index >= 0; -- index ) {
@@ -1961,16 +1961,16 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                         }
                     }
 
-                    return BaseStringView :: invalidIndex;
+                    return __BaseStringView :: invalidIndex;
                 }
 
 
-                template < typename CharType >
-                template < template < typename ... > class CollectionType >
-                auto BaseStringView < CharType > :: findAllNotOf (
-                        BaseStringView < CharType > const & string,
-                        CollectionType < Index >          & storeIn
-                ) const noexcept -> CollectionType < Index > & {
+                template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
+                template < template < typename ... > class __CollectionType > // NOLINT(bugprone-reserved-identifier)
+                auto __BaseStringView < __CharType > :: findAllNotOf (
+                        __BaseStringView < __CharType > const & string,
+                        __CollectionType < Index >            & storeIn
+                ) const noexcept -> __CollectionType < Index > & {
 
                     for ( Size index = 0ULL; index < this->length(); ++ index ) {
                         if ( ! string.contains ( this->_pData [ index ] ) ) {
@@ -1982,24 +1982,24 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 }
 
 
-                template < typename CharType >
-                template < template < typename ... > class CollectionType >
-                __CDS_OptimalInline auto BaseStringView < CharType > :: findAllNotOf (
-                        BaseStringView < CharType > const & string
-                ) const noexcept -> CollectionType < Index > {
+                template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
+                template < template < typename ... > class __CollectionType > // NOLINT(bugprone-reserved-identifier)
+                __CDS_OptimalInline auto __BaseStringView < __CharType > :: findAllNotOf (
+                        __BaseStringView < __CharType > const & string
+                ) const noexcept -> __CollectionType < Index > {
 
-                    CollectionType < Index > indices;
+                    __CollectionType < Index > indices;
                     return this->findAllNotOf ( string, indices );
                 }
 
 
-                template < typename CharType >
-                template < typename ListType >
-                auto BaseStringView < CharType > :: split (
-                        ElementType     separator,
-                        ListType      & storeIn,
-                        Size            maxCount
-                ) const noexcept -> ListType & {
+                template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
+                template < typename __CollectionType > // NOLINT(bugprone-reserved-identifier)
+                auto __BaseStringView < __CharType > :: split (
+                        ElementType             separator,
+                        __CollectionType      & storeIn,
+                        Size                    maxCount
+                ) const noexcept -> __CollectionType & {
 
                     Index splitIndex = 0;
                     if ( this->empty() ) {
@@ -2019,28 +2019,28 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                             }
 
                             ++ splitIndex;
-                            storeIn.add ( BaseString < CharType > ( this->_pData + currentSegmentOffset, currentSegmentLength ) );
+                            storeIn.add (__BaseString < __CharType > ( this->_pData + currentSegmentOffset, currentSegmentLength ) );
                             currentSegmentLength = 0ULL;
                             currentSegmentOffset = index + 1;
                         }
                     }
 
                     if ( currentSegmentLength != 0ULL ) {
-                        storeIn.add ( BaseString < CharType > ( this->_pData + currentSegmentOffset, currentSegmentLength ) );
+                        storeIn.add (__BaseString < __CharType > ( this->_pData + currentSegmentOffset, currentSegmentLength ) );
                     }
 
                     return storeIn;
                 }
 
 
-                template < typename CharType >
-                template < template < typename ... > class ListType >
-                __CDS_OptimalInline auto BaseStringView < CharType > :: split (
+                template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
+                template < template < typename ... > class __CollectionType > // NOLINT(bugprone-reserved-identifier)
+                __CDS_OptimalInline auto __BaseStringView < __CharType > :: split (
                         ElementType separator,
                         Size        maxCount
-                ) const noexcept -> ListType < BaseString < CharType > > {
+                ) const noexcept -> __CollectionType <__BaseString < __CharType > > {
 
-                    ListType < BaseString < CharType > > tokens;
+                    __CollectionType <__BaseString < __CharType > > tokens;
                     return this->split (
                             separator,
                             tokens,
@@ -2049,45 +2049,45 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 }
 
 
-                template < typename CharType >
-                template < typename ListType, typename ConvertibleType, meta :: EnableIf < meta :: isConvertibleToBaseStringView < ConvertibleType, CharType > () > >
-                __CDS_OptimalInline auto BaseStringView < CharType > :: split (
-                        ConvertibleType             && separators,
-                        ListType                      & storeIn,
-                        Size                            maxCount
-                ) const noexcept -> ListType & {
+                template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
+                template < typename __CollectionType, typename __ConvertibleType, meta :: EnableIf < meta :: isConvertibleToBaseStringView < __ConvertibleType, __CharType > () > > // NOLINT(bugprone-reserved-identifier)
+                __CDS_OptimalInline auto __BaseStringView < __CharType > :: split (
+                        __ConvertibleType             && separators,
+                        __CollectionType               & storeIn,
+                        Size                             maxCount
+                ) const noexcept -> __CollectionType & {
 
                     return this->split (
-                            BaseStringView ( std :: forward < ConvertibleType > ( separators ) ),
+                            __BaseStringView ( std :: forward < __ConvertibleType > ( separators ) ),
                             storeIn,
                             maxCount
                     );
                 }
 
 
-                template < typename CharType >
-                template < template < typename ... > class ListType, typename ConvertibleType, meta :: EnableIf < meta :: isConvertibleToBaseStringView < ConvertibleType, CharType > () > >
-                __CDS_OptimalInline auto BaseStringView < CharType > :: split (
-                        ConvertibleType              && separators,
-                        Size                            maxCount
-                ) const noexcept -> ListType < BaseString < CharType > > {
+                template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
+                template < template < typename ... > class __CollectionType, typename __ConvertibleType, meta :: EnableIf < meta :: isConvertibleToBaseStringView < __ConvertibleType, __CharType > () > > // NOLINT(bugprone-reserved-identifier)
+                __CDS_OptimalInline auto __BaseStringView < __CharType > :: split (
+                        __ConvertibleType              && separators,
+                        Size                              maxCount
+                ) const noexcept -> __CollectionType <__BaseString < __CharType > > {
 
-                    ListType < BaseString < CharType > > tokens;
+                    __CollectionType <__BaseString < __CharType > > tokens;
                     return this->split (
-                            BaseStringView ( std :: forward < ConvertibleType > ( separators ) ),
+                            __BaseStringView ( std :: forward < __ConvertibleType > ( separators ) ),
                             tokens,
                             maxCount
                     );
                 }
 
 
-                template < typename CharType >
-                template < typename ListType >
-                auto BaseStringView < CharType > :: split (
-                        BaseStringView < CharType > const & separators,
-                        ListType                          & storeIn,
-                        Size                                maxCount
-                ) const noexcept -> ListType & {
+                template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
+                template < typename __CollectionType > // NOLINT(bugprone-reserved-identifier)
+                auto __BaseStringView < __CharType > :: split (
+                        __BaseStringView < __CharType > const & separators,
+                        __CollectionType                      & storeIn,
+                        Size                                    maxCount
+                ) const noexcept -> __CollectionType & {
 
                     Index splitIndex = 0;
                     if ( this->empty() ) {
@@ -2108,28 +2108,28 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                             }
 
                             ++ splitIndex;
-                            storeIn.add ( BaseString < CharType > ( this->_pData + currentSegmentOffset, currentSegmentLength ) );
+                            storeIn.add (__BaseString < __CharType > ( this->_pData + currentSegmentOffset, currentSegmentLength ) );
                             currentSegmentLength = 0ULL;
                             currentSegmentOffset = index + 1;
                         }
                     }
 
                     if ( currentSegmentLength != 0ULL ) {
-                        storeIn.add ( BaseString < CharType > ( this->_pData + currentSegmentOffset, currentSegmentLength ) );
+                        storeIn.add (__BaseString < __CharType > ( this->_pData + currentSegmentOffset, currentSegmentLength ) );
                     }
 
                     return storeIn;
                 }
 
 
-                template < typename CharType >
-                template < template < typename ... > class ListType >
-                __CDS_OptimalInline auto BaseStringView < CharType > :: split (
-                        BaseStringView < CharType > const & separators,
-                        Size                                maxCount
-                ) const noexcept -> ListType < BaseString < CharType > > {
+                template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
+                template < template < typename ... > class __CollectionType > // NOLINT(bugprone-reserved-identifier)
+                __CDS_OptimalInline auto __BaseStringView < __CharType > :: split (
+                        __BaseStringView < __CharType > const & separators,
+                        Size                                    maxCount
+                ) const noexcept -> __CollectionType <__BaseString < __CharType > > {
 
-                    ListType < BaseString < CharType > > tokens;
+                    __CollectionType <__BaseString < __CharType > > tokens;
                     return this->split (
                             separators,
                             tokens,
@@ -2138,45 +2138,45 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 }
 
 
-                template < typename CharType >
-                template < typename ListType, typename ConvertibleType, meta :: EnableIf < meta :: isConvertibleToBaseStringView < ConvertibleType, CharType > () > >
-                __CDS_OptimalInline auto BaseStringView < CharType > :: splitByString (
-                        ConvertibleType && separator,
-                        ListType         & storeIn,
-                        Size               maxCount
-                ) const noexcept -> ListType & {
+                template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
+                template < typename __CollectionType, typename __ConvertibleType, meta :: EnableIf < meta :: isConvertibleToBaseStringView < __ConvertibleType, __CharType > () > > // NOLINT(bugprone-reserved-identifier)
+                __CDS_OptimalInline auto __BaseStringView < __CharType > :: splitByString (
+                        __ConvertibleType && separator,
+                        __CollectionType   & storeIn,
+                        Size                 maxCount
+                ) const noexcept -> __CollectionType & {
 
                     return this->splitByString (
-                            BaseStringView < CharType > ( std :: forward < ConvertibleType > ( separator ) ),
+                            __BaseStringView < __CharType > ( std :: forward < __ConvertibleType > ( separator ) ),
                             storeIn,
                             maxCount
                     );
                 }
 
 
-                template < typename CharType >
-                template < template < typename ...> class ListType, typename ConvertibleType, meta :: EnableIf < meta :: isConvertibleToBaseStringView < ConvertibleType, CharType > () > >
-                __CDS_OptimalInline auto BaseStringView < CharType > :: splitByString (
-                        ConvertibleType && separator,
-                        Size               maxCount
-                ) const noexcept -> ListType < BaseString < CharType > > {
+                template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
+                template < template < typename ...> class __CollectionType, typename __ConvertibleType, meta :: EnableIf < meta :: isConvertibleToBaseStringView < __ConvertibleType, __CharType > () > > // NOLINT(bugprone-reserved-identifier)
+                __CDS_OptimalInline auto __BaseStringView < __CharType > :: splitByString (
+                        __ConvertibleType && separator,
+                        Size                 maxCount
+                ) const noexcept -> __CollectionType <__BaseString < __CharType > > {
 
-                    ListType < BaseString < CharType > > list;
+                    __CollectionType <__BaseString < __CharType > > list;
                     return this->splitByString (
-                            BaseStringView < CharType > ( std :: forward < ConvertibleType > ( separator ) ),
+                            __BaseStringView < __CharType > ( std :: forward < __ConvertibleType > ( separator ) ),
                             list,
                             maxCount
                     );
                 }
 
 
-                template < typename CharType >
-                template < typename ListType >
-                auto BaseStringView < CharType > :: splitByString (
-                        BaseStringView < CharType > const & separator,
-                        ListType                          & storeIn,
-                        Size                                maxCount
-                ) const noexcept -> ListType & {
+                template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
+                template < typename __CollectionType > // NOLINT(bugprone-reserved-identifier)
+                auto __BaseStringView < __CharType > :: splitByString (
+                        __BaseStringView < __CharType > const & separator,
+                        __CollectionType                      & storeIn,
+                        Size                                    maxCount
+                ) const noexcept -> __CollectionType & {
 
                     if ( separator.empty() ) {
                         return storeIn;
@@ -2188,7 +2188,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
                     Index * pOccurrences = __allocation :: __alloc < Index > ( separatorPredictiveCount );
 
-                    auto actualSeparatorCount = StringUtils < CharType > :: findAll (
+                    auto actualSeparatorCount = StringUtils < __CharType > :: findAll (
                             this->_pData,
                             this->_length,
                             separator._pData,
@@ -2207,7 +2207,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                             if ( addedTokenCount < maxCount ) {
                                 ++ addedTokenCount;
                                 storeIn.add (
-                                        BaseString < CharType > (
+                                       __BaseString < __CharType > (
                                                 this->_pData + tokenOffset,
                                                 static_cast < Size > ( pOccurrences [ currentSeparatorIndex ] )
                                         )
@@ -2231,14 +2231,14 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 }
 
 
-                template < typename CharType >
-                template < template < typename ... > class ListType >
-                auto BaseStringView < CharType > :: splitByString (
-                        BaseStringView < CharType > const & separator,
-                        Size                                maxCount
-                ) const noexcept -> ListType < BaseString < CharType > > {
+                template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
+                template < template < typename ... > class __CollectionType > // NOLINT(bugprone-reserved-identifier)
+                auto __BaseStringView < __CharType > :: splitByString (
+                        __BaseStringView < __CharType > const & separator,
+                        Size                                    maxCount
+                ) const noexcept -> __CollectionType < __BaseString < __CharType > > {
 
-                    ListType < BaseString < CharType > > tokens;
+                    __CollectionType <__BaseString < __CharType > > tokens;
                     return this->splitByString (
                             separator,
                             tokens,
@@ -2247,8 +2247,8 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 }
 
 
-                template < typename CharType >
-                __CDS_cpplang_ConstexprOverride auto BaseStringView < CharType > :: hash () const noexcept -> Index {
+                template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
+                __CDS_cpplang_ConstexprOverride auto __BaseStringView < __CharType > :: hash () const noexcept -> Index {
 
                     Size finalHash = 0;
 
@@ -2269,14 +2269,14 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 }
 
 
-                template < typename CharType >
-                __CDS_OptimalInline auto BaseStringView < CharType > :: toString () const noexcept -> BaseString < CharType > {
-                    return BaseString < CharType > ( this->_pData, this->_length );
+                template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
+                __CDS_OptimalInline auto __BaseStringView < __CharType > :: toString () const noexcept ->__BaseString < __CharType > {
+                    return __BaseString < __CharType > ( this->_pData, this->_length );
                 }
 
 
-                template < typename CharType >
-                constexpr auto BaseStringView < CharType > :: startsWith (
+                template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
+                constexpr auto __BaseStringView < __CharType > :: startsWith (
                         ElementType character
                 ) const noexcept -> bool {
 
@@ -2284,19 +2284,19 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 }
 
 
-                template < typename CharType >
-                template < typename ConvertibleType, meta :: EnableIf < meta :: isConvertibleToBaseStringView < ConvertibleType, CharType > () > >
-                __CDS_cpplang_ConstexprConditioned auto BaseStringView < CharType > :: startsWith (
-                        ConvertibleType && string
+                template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
+                template < typename __ConvertibleType, meta :: EnableIf < meta :: isConvertibleToBaseStringView < __ConvertibleType, __CharType > () > > // NOLINT(bugprone-reserved-identifier)
+                __CDS_cpplang_ConstexprConditioned auto __BaseStringView < __CharType > :: startsWith (
+                        __ConvertibleType && string
                 ) const noexcept -> bool {
 
-                    return this->startsWith ( BaseStringView < CharType > ( std :: forward < ConvertibleType > ( string ) ) );
+                    return this->startsWith ( __BaseStringView < __CharType > ( std :: forward < __ConvertibleType > ( string ) ) );
                 }
 
 
-                template < typename CharType >
-                __CDS_cpplang_ConstexprConditioned auto BaseStringView < CharType > :: startsWith (
-                        BaseStringView < CharType > const & string
+                template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
+                __CDS_cpplang_ConstexprConditioned auto __BaseStringView < __CharType > :: startsWith (
+                        __BaseStringView < __CharType > const & string
                 ) const noexcept -> bool {
 
                     Size offset = 0ULL;
@@ -2310,8 +2310,8 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 }
 
 
-                template < typename CharType >
-                constexpr auto BaseStringView < CharType > :: endsWith (
+                template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
+                constexpr auto __BaseStringView < __CharType > :: endsWith (
                         ElementType character
                 ) const noexcept -> bool {
 
@@ -2319,19 +2319,19 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 }
 
 
-                template < typename CharType >
-                template < typename ConvertibleType, meta :: EnableIf < meta :: isConvertibleToBaseStringView < ConvertibleType, CharType > () > >
-                __CDS_cpplang_ConstexprConditioned auto BaseStringView < CharType > :: endsWith (
-                        ConvertibleType && string
+                template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
+                template < typename __ConvertibleType, meta :: EnableIf < meta :: isConvertibleToBaseStringView < __ConvertibleType, __CharType > () > > // NOLINT(bugprone-reserved-identifier)
+                __CDS_cpplang_ConstexprConditioned auto __BaseStringView < __CharType > :: endsWith (
+                        __ConvertibleType && string
                 ) const noexcept -> bool {
 
-                    return this->endsWith ( BaseStringView < CharType > ( std :: forward < ConvertibleType > ( string ) ) );
+                    return this->endsWith ( __BaseStringView < __CharType > ( std :: forward < __ConvertibleType > ( string ) ) );
                 }
 
 
-                template < typename CharType >
-                __CDS_cpplang_ConstexprConditioned auto BaseStringView < CharType > :: endsWith (
-                        BaseStringView < CharType > const & string
+                template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
+                __CDS_cpplang_ConstexprConditioned auto __BaseStringView < __CharType > :: endsWith (
+                        __BaseStringView < __CharType > const & string
                 ) const noexcept -> bool {
 
                     Size offset = 0;
@@ -2345,10 +2345,10 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 }
 
 
-                template < typename CharType >
-                template < typename Action >
-                auto BaseStringView < CharType > :: forEach (
-                        Action const & action
+                template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
+                template < typename __Action > // NOLINT(bugprone-reserved-identifier)
+                auto __BaseStringView < __CharType > :: forEach (
+                        __Action const & action
                 ) const noexcept ( noexcept ( action ( meta :: valueOf < ElementType > () ) ) ) -> void {
 
                     for ( Size index = 0ULL; index < this->_length; ++ index ) {
@@ -2357,11 +2357,11 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 }
 
 
-                template < typename CharType >
-                template < typename Predicate >
-                auto BaseStringView < CharType > :: some (
-                        Size                count,
-                        Predicate   const & predicate
+                template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
+                template < typename __Predicate > // NOLINT(bugprone-reserved-identifier)
+                auto __BaseStringView < __CharType > :: some (
+                        Size                  count,
+                        __Predicate   const & predicate
                 ) const noexcept ( noexcept ( predicate ( meta :: valueOf < ElementType > () ) ) ) -> bool {
 
                     Size trueCount = 0ULL;
@@ -2379,11 +2379,11 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 }
 
 
-                template < typename CharType >
-                template < typename Predicate >
-                auto BaseStringView < CharType > :: atLeast (
-                        Size                count,
-                        Predicate   const & predicate
+                template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
+                template < typename __Predicate > // NOLINT(bugprone-reserved-identifier)
+                auto __BaseStringView < __CharType > :: atLeast (
+                        Size                  count,
+                        __Predicate   const & predicate
                 ) const noexcept ( noexcept ( predicate ( meta :: valueOf < ElementType > () ) ) ) -> bool {
 
                     Size trueCount = 0ULL;
@@ -2401,11 +2401,11 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 }
 
 
-                template < typename CharType >
-                template < typename Predicate >
-                auto BaseStringView < CharType > :: atMost (
-                        Size                count,
-                        Predicate   const & predicate
+                template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
+                template < typename __Predicate > // NOLINT(bugprone-reserved-identifier)
+                auto __BaseStringView < __CharType > :: atMost (
+                        Size                  count,
+                        __Predicate   const & predicate
                 ) const noexcept ( noexcept ( predicate ( meta :: valueOf < ElementType > () ) ) ) -> bool {
 
                     Size trueCount = 0ULL;
@@ -2423,32 +2423,32 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 }
 
 
-                template < typename CharType >
-                template < typename Predicate >
-                __CDS_OptimalInline auto BaseStringView < CharType > :: moreThan (
-                        Size                count,
-                        Predicate   const & predicate
+                template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
+                template < typename __Predicate > // NOLINT(bugprone-reserved-identifier)
+                __CDS_OptimalInline auto __BaseStringView < __CharType > :: moreThan (
+                        Size                  count,
+                        __Predicate   const & predicate
                 ) const noexcept ( noexcept ( predicate ( meta :: valueOf < ElementType > () ) ) ) -> bool {
 
                     return this->atLeast ( count + 1, predicate );
                 }
 
 
-                template < typename CharType >
-                template < typename Predicate >
-                __CDS_OptimalInline auto BaseStringView < CharType > :: fewerThan (
-                        Size                count,
-                        Predicate   const & predicate
+                template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
+                template < typename __Predicate > // NOLINT(bugprone-reserved-identifier)
+                __CDS_OptimalInline auto __BaseStringView < __CharType > :: fewerThan (
+                        Size                  count,
+                        __Predicate   const & predicate
                 ) const noexcept ( noexcept ( predicate ( meta :: valueOf < ElementType > () ) ) ) -> bool {
 
                     return this->atMost ( count - 1, predicate );
                 }
 
 
-                template < typename CharType >
-                template < typename Predicate >
-                auto BaseStringView < CharType > :: count (
-                        Predicate const & predicate
+                template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
+                template < typename __Predicate > // NOLINT(bugprone-reserved-identifier)
+                auto __BaseStringView < __CharType > :: count (
+                        __Predicate const & predicate
                 ) const noexcept ( noexcept ( predicate ( meta :: valueOf < ElementType > () ) ) ) -> Size {
 
                     Size trueCount = 0U;
@@ -2462,10 +2462,10 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 }
 
 
-                template < typename CharType >
-                template < typename Predicate >
-                auto BaseStringView < CharType > :: any (
-                        Predicate const & predicate
+                template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
+                template < typename __Predicate > // NOLINT(bugprone-reserved-identifier)
+                auto __BaseStringView < __CharType > :: any (
+                        __Predicate const & predicate
                 ) const noexcept ( noexcept ( predicate ( meta :: valueOf < ElementType > () ) ) ) -> bool {
 
                     for ( Size index = 0ULL; index < this->_length; ++ index ) {
@@ -2478,10 +2478,10 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 }
 
 
-                template < typename CharType >
-                template < typename Predicate >
-                auto BaseStringView < CharType > :: all (
-                        Predicate const & predicate
+                template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
+                template < typename __Predicate > // NOLINT(bugprone-reserved-identifier)
+                auto __BaseStringView < __CharType > :: all (
+                        __Predicate const & predicate
                 ) const noexcept ( noexcept ( predicate ( meta :: valueOf < ElementType > () ) ) ) -> bool {
 
                     for ( Size index = 0ULL; index < this->_length; ++ index ) {
@@ -2494,10 +2494,10 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 }
 
 
-                template < typename CharType >
-                template < typename Predicate >
-                auto BaseStringView < CharType > :: none (
-                        Predicate const & predicate
+                template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
+                template < typename __Predicate > // NOLINT(bugprone-reserved-identifier)
+                auto __BaseStringView < __CharType > :: none (
+                        __Predicate const & predicate
                 ) const noexcept ( noexcept ( predicate ( meta :: valueOf < ElementType > () ) ) ) -> bool {
 
                     for ( Size index = 0ULL; index < this->_length; ++ index ) {
@@ -2510,10 +2510,10 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 }
 
 
-                template < typename FCharType >
+                template < typename __FCharType > // NOLINT(bugprone-reserved-identifier)
                 auto operator << (
-                        std :: wostream                    & out,
-                        BaseStringView < FCharType > const & obj
+                        std :: wostream                        & out,
+                        __BaseStringView < __FCharType > const & obj
                 ) noexcept -> std :: wostream & {
                     return ( out << obj.cStr() );
                 }

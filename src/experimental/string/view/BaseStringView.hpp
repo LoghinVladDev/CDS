@@ -11,17 +11,17 @@ namespace cds {
     class Sequence;
 
     namespace experimental { // NOLINT(modernize-concat-nested-namespaces)
-        namespace hidden { // NOLINT(modernize-concat-nested-namespaces)
-            namespace impl {
+        namespace __hidden { // NOLINT(modernize-concat-nested-namespaces, bugprone-reserved-identifier)
+            namespace __impl { // NOLINT(bugprone-reserved-identifier)
 
-                template < typename CharType >
-                class BaseStringView {
+                template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
+                class __BaseStringView { // NOLINT(bugprone-reserved-identifier)
 
                 public:
                     /**
                      * @brief Represents an element in the string
                      */
-                    using ElementType = CharType;
+                    using ElementType = __CharType;
 
                 private:
                     class AbstractConstIterator;
@@ -43,36 +43,36 @@ namespace cds {
                     static Index const  invalidIndex;
 
                 public:
-                    constexpr BaseStringView () noexcept = default;
+                    constexpr __BaseStringView () noexcept = default;
 
                 public:
-                    constexpr BaseStringView (
-                            BaseStringView const & string
+                    constexpr __BaseStringView (
+                            __BaseStringView const & string
                     ) noexcept;
 
                 public:
-                    constexpr BaseStringView (
-                            BaseStringView && string
+                    constexpr __BaseStringView (
+                            __BaseStringView && string
                     ) noexcept;
 
                 public:
-                    __CDS_Explicit constexpr BaseStringView ( // NOLINT(google-explicit-constructor)
-                            BaseString < CharType > const & string
+                    __CDS_Explicit constexpr __BaseStringView ( // NOLINT(google-explicit-constructor)
+                            __BaseString < __CharType > const & string
                     ) noexcept;
 
                 public:
-                    __CDS_Explicit constexpr BaseStringView ( // NOLINT(google-explicit-constructor)
-                            std :: basic_string < CharType > const & string
+                    __CDS_Explicit constexpr __BaseStringView ( // NOLINT(google-explicit-constructor)
+                            std :: basic_string < __CharType > const & string
                     ) noexcept;
 
                 public:
-                    template < typename T = CharType, meta :: EnableIf < meta :: isStringCharType < T > () > = 0 >
-                    __CDS_Explicit constexpr BaseStringView ( // NOLINT(google-explicit-constructor)
+                    template < typename __TCharType = __CharType, meta :: EnableIf < meta :: isStringCharType < __TCharType > () > = 0 > // NOLINT(bugprone-reserved-identifier)
+                    __CDS_Explicit constexpr __BaseStringView ( // NOLINT(google-explicit-constructor)
                             ElementType const * pString
                     ) noexcept;
 
                 public:
-                    constexpr BaseStringView (
+                    constexpr __BaseStringView (
                             ElementType const * pString,
                             Size                length
                     ) noexcept;
@@ -138,7 +138,7 @@ namespace cds {
 
 
                 public:
-                    __CDS_NoDiscard auto toStdString () const noexcept -> std :: basic_string < CharType >;
+                    __CDS_NoDiscard auto toStdString () const noexcept -> std :: basic_string < __CharType >;
 
                 public:
                     __CDS_NoDiscard constexpr auto cStr () const noexcept -> ElementType const *;
@@ -148,7 +148,7 @@ namespace cds {
 
 
                 public:
-                    __CDS_Implicit operator std :: basic_string < CharType > () const noexcept; // NOLINT(google-explicit-constructor)
+                    __CDS_Implicit operator std :: basic_string < __CharType > () const noexcept; // NOLINT(google-explicit-constructor)
 
                 public:
                     __CDS_Implicit constexpr operator ElementType const * () const noexcept; // NOLINT(google-explicit-constructor)
@@ -158,44 +158,44 @@ namespace cds {
                     auto substr (
                             Index from,
                             Index until = -1
-                    ) const noexcept -> BaseString < CharType >;
+                    ) const noexcept -> __BaseString < __CharType >;
 
                 public:
                     auto operator () (
                             Index from,
                             Index to = -1
-                    ) const noexcept -> BaseString < CharType >;
+                    ) const noexcept -> __BaseString < __CharType >;
 
                 public:
                     auto operator [] (
                             Range const & range
-                    ) const noexcept -> BaseString < CharType >;
+                    ) const noexcept -> __BaseString < __CharType >;
 
 
                 public:
                     __CDS_cpplang_NonConstConstexprMemberFunction auto operator = (
-                            BaseString < CharType > const & string
-                    ) noexcept -> BaseStringView &;
+                            __BaseString < __CharType > const & string
+                    ) noexcept -> __BaseStringView &;
 
                 public:
                     __CDS_cpplang_NonConstConstexprMemberFunction auto operator = (
-                            BaseStringView const & string
-                    ) noexcept -> BaseStringView &;
+                            __BaseStringView const & string
+                    ) noexcept -> __BaseStringView &;
 
                 public:
                     __CDS_cpplang_NonConstConstexprMemberFunction auto operator = (
-                            BaseStringView && string
-                    ) noexcept -> BaseStringView &;
+                            __BaseStringView && string
+                    ) noexcept -> __BaseStringView &;
 
                 public:
                     __CDS_cpplang_NonConstConstexprMemberFunction auto operator = (
-                            std :: basic_string < CharType > const & string
-                    ) noexcept -> BaseStringView &;
+                            std :: basic_string < __CharType > const & string
+                    ) noexcept -> __BaseStringView &;
 
                 public:
                     __CDS_cpplang_NonConstConstexprMemberFunction auto operator = (
                             ElementType const * pString
-                    ) noexcept -> BaseStringView &;
+                    ) noexcept -> __BaseStringView &;
 
 
                 public:
@@ -206,12 +206,12 @@ namespace cds {
 
                 public:
                     __CDS_NoDiscard __CDS_cpplang_ConstexprConditioned auto operator == (
-                            BaseStringView const & string
+                            __BaseStringView const & string
                     ) const noexcept -> bool;
 
                 public:
                     __CDS_NoDiscard __CDS_cpplang_ConstexprConditioned auto operator == (
-                            std :: basic_string < CharType > const & string
+                            std :: basic_string < __CharType > const & string
                     ) const noexcept -> bool;
 
 #if defined(CDS_QT)
@@ -234,46 +234,46 @@ namespace cds {
                     ) const noexcept -> bool;
 
                 public:
-                    template < typename FCharType >
+                    template < typename __FCharType > // NOLINT(bugprone-reserved-identifier)
                     __CDS_cpplang_ConstexprConditioned friend auto operator == (
-                            std :: basic_string < FCharType >   const & leftString,
-                            BaseStringView < FCharType >        const & rightString
+                            std :: basic_string < __FCharType >     const & leftString,
+                            __BaseStringView < __FCharType >        const & rightString
                     ) noexcept -> bool;
 
 #if defined(CDS_QT)
 
                 public:
-                    template < typename FCharType >
+                    template < typename __FCharType > // NOLINT(bugprone-reserved-identifier)
                     __CDS_cpplang_ConstexprConditioned friend auto operator == (
-                            QString                         const & leftString,
-                            BaseStringView < FCharType >    const & rightString
+                            QString                             const & leftString,
+                            __BaseStringView < __FCharType >    const & rightString
                     ) noexcept -> bool;
 
 #endif
 
                 public:
-                    template < typename FCharType >
+                    template < typename __FCharType > // NOLINT(bugprone-reserved-identifier)
                     __CDS_cpplang_ConstexprConditioned friend auto operator == (
-                            FCharType                       const * pLeftString,
-                            BaseStringView < FCharType >    const & rightString
+                            __FCharType                         const * pLeftString,
+                            __BaseStringView < __FCharType >    const & rightString
                     ) noexcept -> bool;
 
                 public:
-                    template < typename FCharType >
+                    template < typename __FCharType > // NOLINT(bugprone-reserved-identifier)
                     __CDS_cpplang_ConstexprConditioned friend auto operator == (
-                            FCharType                               character,
-                            BaseStringView < FCharType >    const & string
+                            __FCharType                               character,
+                            __BaseStringView < __FCharType >    const & string
                     ) noexcept -> bool;
 
 
                 public:
                     __CDS_NoDiscard __CDS_cpplang_ConstexprConditioned auto operator != (
-                            BaseStringView const & string
+                            __BaseStringView const & string
                     ) const noexcept -> bool;
 
                 public:
                     __CDS_NoDiscard __CDS_cpplang_ConstexprConditioned auto operator != (
-                            std :: basic_string < CharType > const & string
+                            std :: basic_string < __CharType > const & string
                     ) const noexcept -> bool;
 
 #if defined(CDS_QT)
@@ -297,46 +297,46 @@ namespace cds {
 
 
                 public:
-                    template < typename FCharType >
+                    template < typename __FCharType > // NOLINT(bugprone-reserved-identifier)
                     __CDS_cpplang_ConstexprConditioned friend auto operator != (
-                            std :: basic_string < CharType >    const & leftString,
-                            BaseStringView < FCharType >        const & rightString
+                            std :: basic_string < __FCharType >     const & leftString,
+                            __BaseStringView < __FCharType >        const & rightString
                     ) noexcept -> bool;
 
 #if defined(CDS_QT)
 
                 public:
-                    template < typename FCharType >
+                    template < typename __FCharType > // NOLINT(bugprone-reserved-identifier)
                     __CDS_cpplang_ConstexprConditioned friend auto operator != (
-                            QString                         const & leftString,
-                            BaseStringView < FCharType >    const & rightString
+                            QString                             const & leftString,
+                            __BaseStringView < __FCharType >    const & rightString
                     ) noexcept -> bool;
 
 #endif
 
                 public:
-                    template < typename FCharType >
+                    template < typename __FCharType > // NOLINT(bugprone-reserved-identifier)
                     __CDS_cpplang_ConstexprConditioned friend auto operator != (
-                            FCharType                       const * pLeftString,
-                            BaseStringView < FCharType >    const & rightString
+                            __FCharType                         const * pLeftString,
+                            __BaseStringView < __FCharType >    const & rightString
                     ) noexcept -> bool;
 
                 public:
-                    template < typename FCharType >
+                    template < typename __FCharType > // NOLINT(bugprone-reserved-identifier)
                     __CDS_cpplang_ConstexprConditioned friend auto operator != (
-                            FCharType                               character,
-                            BaseStringView < FCharType >    const & string
+                            __FCharType                                 character,
+                            __BaseStringView < __FCharType >    const & string
                     ) noexcept -> bool;
 
 
                 public:
                     __CDS_NoDiscard __CDS_cpplang_ConstexprConditioned auto operator < (
-                            BaseStringView < CharType > const & string
+                            __BaseStringView < __CharType > const & string
                     ) const noexcept -> bool;
 
                 public:
                     __CDS_NoDiscard __CDS_cpplang_ConstexprConditioned auto operator < (
-                            std :: basic_string < CharType > const & string
+                            std :: basic_string < __CharType > const & string
                     ) const noexcept -> bool;
 
 #if defined(CDS_QT)
@@ -360,46 +360,46 @@ namespace cds {
 
 
                 public:
-                    template < typename FCharType >
+                    template < typename __FCharType > // NOLINT(bugprone-reserved-identifier)
                     __CDS_cpplang_ConstexprConditioned friend auto operator < (
-                            std :: basic_string < FCharType >   const & leftString,
-                            BaseStringView < FCharType >        const & rightString
+                            std :: basic_string < __FCharType >     const & leftString,
+                            __BaseStringView < __FCharType >        const & rightString
                     ) noexcept -> bool;
 
 #if defined(CDS_QT)
 
                 public:
-                    template < typename FCharType >
+                    template < typename __FCharType > // NOLINT(bugprone-reserved-identifier)
                     __CDS_cpplang_ConstexprConditioned friend auto operator < (
-                            QString                         const & leftString,
-                            BaseStringView < FCharType >    const & rightString
+                            QString                             const & leftString,
+                            __BaseStringView < __FCharType >    const & rightString
                     ) noexcept -> bool;
 
 #endif
 
                 public:
-                    template < typename FCharType >
+                    template < typename __FCharType > // NOLINT(bugprone-reserved-identifier)
                     __CDS_cpplang_ConstexprConditioned friend auto operator < (
-                            FCharType                       const * pLeftString,
-                            BaseStringView < FCharType >    const & rightString
+                            __FCharType                       const * pLeftString,
+                            __BaseStringView < __FCharType >  const & rightString
                     ) noexcept -> bool;
 
                 public:
-                    template < typename FCharType >
+                    template < typename __FCharType > // NOLINT(bugprone-reserved-identifier)
                     __CDS_cpplang_ConstexprConditioned friend auto operator < (
-                            FCharType                               character,
-                            BaseStringView < FCharType >    const & string
+                            __FCharType                                 character,
+                            __BaseStringView < __FCharType >    const & string
                     ) noexcept -> bool;
 
 
                 public:
                     __CDS_NoDiscard __CDS_cpplang_ConstexprConditioned auto operator > (
-                            BaseStringView < CharType > const & string
+                            __BaseStringView < __CharType > const & string
                     ) const noexcept -> bool;
 
                 public:
                     __CDS_NoDiscard __CDS_cpplang_ConstexprConditioned auto operator > (
-                            std :: basic_string < CharType > const & string
+                            std :: basic_string < __CharType > const & string
                     ) const noexcept -> bool;
 
 #if defined(CDS_QT)
@@ -423,46 +423,46 @@ namespace cds {
 
 
                 public:
-                    template < typename FCharType >
+                    template < typename __FCharType > // NOLINT(bugprone-reserved-identifier)
                     __CDS_cpplang_ConstexprConditioned friend auto operator > (
-                            std :: basic_string < FCharType >   const & leftString,
-                            BaseStringView < FCharType >        const & rightString
+                            std :: basic_string < __FCharType >     const & leftString,
+                            __BaseStringView < __FCharType >        const & rightString
                     ) noexcept -> bool;
 
 #if defined(CDS_QT)
 
                 public:
-                    template < typename FCharType >
+                    template < typename __FCharType > // NOLINT(bugprone-reserved-identifier)
                     __CDS_cpplang_ConstexprConditioned friend auto operator > (
-                            QString                         const & leftString,
-                            BaseStringView < FCharType >    const & rightString
+                            QString                             const & leftString,
+                            __BaseStringView < __FCharType >    const & rightString
                     ) noexcept -> bool;
 
 #endif
 
                 public:
-                    template < typename FCharType >
+                    template < typename __FCharType > // NOLINT(bugprone-reserved-identifier)
                     __CDS_cpplang_ConstexprConditioned friend auto operator > (
-                            FCharType                       const * pLeftString,
-                            BaseStringView < FCharType >    const & rightString
+                            __FCharType                         const * pLeftString,
+                            __BaseStringView < __FCharType >    const & rightString
                     ) noexcept -> bool;
 
                 public:
-                    template < typename FCharType >
+                    template < typename __FCharType > // NOLINT(bugprone-reserved-identifier)
                     __CDS_cpplang_ConstexprConditioned friend auto operator > (
-                            FCharType                               character,
-                            BaseStringView < FCharType >    const & string
+                            __FCharType                                 character,
+                            __BaseStringView < __FCharType >    const & string
                     ) noexcept -> bool;
 
 
                 public:
                     __CDS_NoDiscard __CDS_cpplang_ConstexprConditioned auto operator <= (
-                            BaseStringView < CharType > const & string
+                            __BaseStringView < __CharType > const & string
                     ) const noexcept -> bool;
 
                 public:
                     __CDS_NoDiscard __CDS_cpplang_ConstexprConditioned auto operator <= (
-                            std :: basic_string < CharType > const & string
+                            std :: basic_string < __CharType > const & string
                     ) const noexcept -> bool;
 
 #if defined(CDS_QT)
@@ -485,46 +485,46 @@ namespace cds {
                     ) const noexcept -> bool;
 
                 public:
-                    template < typename FCharType >
+                    template < typename __FCharType > // NOLINT(bugprone-reserved-identifier)
                     __CDS_cpplang_ConstexprConditioned friend auto operator <= (
-                            std :: basic_string < FCharType >   const & leftString,
-                            BaseStringView < FCharType >        const & rightString
+                            std :: basic_string < __FCharType >     const & leftString,
+                            __BaseStringView < __FCharType >        const & rightString
                     ) noexcept -> bool;
 
 #if defined(CDS_QT)
 
                 public:
-                    template < typename FCharType >
+                    template < typename __FCharType > // NOLINT(bugprone-reserved-identifier)
                     __CDS_cpplang_ConstexprConditioned friend auto operator <= (
-                            QString                         const & leftString,
-                            BaseStringView < FCharType >    const & rightString
+                            QString                             const & leftString,
+                            __BaseStringView < __FCharType >    const & rightString
                     ) noexcept -> bool;
 
 #endif
 
                 public:
-                    template < typename FCharType >
+                    template < typename __FCharType > // NOLINT(bugprone-reserved-identifier)
                     __CDS_cpplang_ConstexprConditioned friend auto operator <= (
-                            FCharType                       const * pLeftString,
-                            BaseStringView < FCharType >    const & rightString
+                            __FCharType                         const * pLeftString,
+                            __BaseStringView < __FCharType >    const & rightString
                     ) noexcept -> bool;
 
                 public:
-                    template < typename FCharType >
+                    template < typename __FCharType > // NOLINT(bugprone-reserved-identifier)
                     __CDS_cpplang_ConstexprConditioned friend auto operator <= (
-                            FCharType                               character,
-                            BaseStringView < FCharType >    const & string
+                            __FCharType                                 character,
+                            __BaseStringView < __FCharType >    const & string
                     ) noexcept -> bool;
 
 
                 public:
                     __CDS_NoDiscard __CDS_cpplang_ConstexprConditioned auto operator >= (
-                            BaseStringView < CharType > const & string
+                            __BaseStringView < __CharType > const & string
                     ) const noexcept -> bool;
 
                 public:
                     __CDS_NoDiscard __CDS_cpplang_ConstexprConditioned auto operator >= (
-                            std :: basic_string < CharType > const & string
+                            std :: basic_string < __CharType > const & string
                     ) const noexcept -> bool;
 
 #if defined(CDS_QT)
@@ -548,151 +548,151 @@ namespace cds {
 
 
                 public:
-                    template < typename FCharType >
+                    template < typename __FCharType > // NOLINT(bugprone-reserved-identifier)
                     __CDS_cpplang_ConstexprConditioned friend auto operator >= (
-                            std :: basic_string < FCharType >   const & leftString,
-                            BaseStringView < FCharType >        const & rightString
+                            std :: basic_string < __FCharType >     const & leftString,
+                            __BaseStringView < __FCharType >        const & rightString
                     ) noexcept -> bool;
 
 #if defined(CDS_QT)
 
                 public:
-                    template < typename FCharType >
+                    template < typename __FCharType > // NOLINT(bugprone-reserved-identifier)
                     __CDS_cpplang_ConstexprConditioned friend auto operator >= (
-                            QString                         const & leftString,
-                            BaseStringView < FCharType >    const & rightString
+                            QString                             const & leftString,
+                            __BaseStringView < __FCharType >    const & rightString
                     ) noexcept -> bool;
 
 #endif
 
                 public:
-                    template < typename FCharType >
+                    template < typename __FCharType > // NOLINT(bugprone-reserved-identifier)
                     __CDS_cpplang_ConstexprConditioned friend auto operator >= (
-                            FCharType                       const * pLeftString,
-                            BaseStringView < FCharType >    const & rightString
+                            __FCharType                         const * pLeftString,
+                            __BaseStringView < __FCharType >    const & rightString
                     ) noexcept -> bool;
 
                 public:
-                    template < typename FCharType >
+                    template < typename __FCharType > // NOLINT(bugprone-reserved-identifier)
                     __CDS_cpplang_ConstexprConditioned friend auto operator >= (
-                            FCharType                               character,
-                            BaseStringView < FCharType >    const & string
+                            __FCharType                                 character,
+                            __BaseStringView < __FCharType >    const & string
                     ) noexcept -> bool;
 
 
                 public:
                     auto operator + (
-                            BaseStringView const & string
-                    ) const noexcept -> BaseString < CharType >;
+                            __BaseStringView const & string
+                    ) const noexcept -> __BaseString < __CharType >;
 
                 public:
                     auto operator + (
-                            std :: basic_string < CharType > const & string
-                    ) const noexcept -> BaseString < CharType >;
+                            std :: basic_string < __CharType > const & string
+                    ) const noexcept -> __BaseString < __CharType >;
 
                 public:
                     auto operator + (
                             ElementType const * pString
-                    ) const noexcept -> BaseString < CharType >;
+                    ) const noexcept -> __BaseString < __CharType >;
 
 #if defined(CDS_QT)
 
                     public:
                     auto operator + (
                             QString const & string
-                    ) const noexcept -> BaseString < CharType >;
+                    ) const noexcept -> __BaseString < __CharType >;
 
 #endif
 
                 public:
-                    template < typename T = CharType, meta :: EnableIf < meta :: isStringCharType < T > () > = 0 >
+                    template < typename __TCharType = __CharType, meta :: EnableIf < meta :: isStringCharType < __TCharType > () > = 0 > // NOLINT(bugprone-reserved-identifier)
                     auto operator + (
                             ElementType character
-                    ) const noexcept -> BaseString < CharType >;
+                    ) const noexcept -> __BaseString < __CharType >;
 
                 public:
-                    template < typename NumericType, meta :: EnableIf < meta :: isIntegralToString < CharType, NumericType > () > = 0 >
+                    template < typename __NumericType, meta :: EnableIf < meta :: isIntegralToString < __CharType, __NumericType > () > = 0 > // NOLINT(bugprone-reserved-identifier)
                     auto operator + (
-                            NumericType value
-                    ) const noexcept -> BaseString < CharType >;
+                            __NumericType value
+                    ) const noexcept -> __BaseString < __CharType >;
 
                 public:
                     auto operator + (
                             bool value
-                    ) const noexcept -> BaseString < CharType >;
+                    ) const noexcept -> __BaseString < __CharType >;
 
                 public:
-                    template < typename FloatingPointType, meta :: EnableIf < meta :: isFloatingPoint < FloatingPointType > () > = 0 >
+                    template < typename __FloatingPointType, meta :: EnableIf < meta :: isFloatingPoint < __FloatingPointType > () > = 0 > // NOLINT(bugprone-reserved-identifier)
                     auto operator + (
-                            FloatingPointType value
-                    ) const noexcept -> BaseString < CharType >;
+                            __FloatingPointType value
+                    ) const noexcept -> __BaseString < __CharType >;
 
 
                 public:
-                    template < typename FCharType >
+                    template < typename __FCharType > // NOLINT(bugprone-reserved-identifier)
                     friend auto operator + (
-                            std :: basic_string < FCharType >   const & leftString,
-                            BaseStringView < FCharType >        const & rightString
-                    ) noexcept -> BaseString < FCharType >;
+                            std :: basic_string < __FCharType >     const & leftString,
+                            __BaseStringView < __FCharType >        const & rightString
+                    ) noexcept -> __BaseString < __FCharType >;
 
                 public:
-                    template < typename FCharType >
+                    template < typename __FCharType > // NOLINT(bugprone-reserved-identifier)
                     friend auto operator + (
-                            FCharType                       const * leftString,
-                            BaseStringView < FCharType >    const & rightString
-                    ) noexcept -> BaseString < FCharType >;
+                            __FCharType                         const * leftString,
+                            __BaseStringView < __FCharType >    const & rightString
+                    ) noexcept -> __BaseString < __FCharType >;
 
 #if defined(CDS_QT)
 
                 public:
-                    template < typename FCharType >
+                    template < typename __FCharType > // NOLINT(bugprone-reserved-identifier)
                     friend auto operator + (
-                            QString                         const & leftString,
-                            BaseStringView < FCharType >    const & rightString
-                    ) noexcept -> BaseString < FCharType >;
+                            QString                             const & leftString,
+                            __BaseStringView < __FCharType >    const & rightString
+                    ) noexcept -> __BaseString < __FCharType >;
 
 #endif
 
                 public:
-                    template < typename FCharType, meta :: EnableIf < meta :: isStringCharType < FCharType > () > >
+                    template < typename __FCharType, meta :: EnableIf < meta :: isStringCharType < __FCharType > () > > // NOLINT(bugprone-reserved-identifier)
                     friend auto operator + (
-                            FCharType               character,
-                            BaseStringView  const & string
-                    ) noexcept -> BaseString < CharType >;
+                            __FCharType               character,
+                            __BaseStringView  const & string
+                    ) noexcept -> __BaseString < __FCharType >;
 
                 public:
-                    template < typename FCharType, typename NumericType, meta :: EnableIf < meta :: isIntegralToString < FCharType, NumericType > () > >
+                    template < typename __FCharType, typename __NumericType, meta :: EnableIf < meta :: isIntegralToString < __FCharType, __NumericType > () > > // NOLINT(bugprone-reserved-identifier)
                     friend auto operator + (
-                            NumericType             value,
-                            BaseStringView  const & string
-                    ) noexcept -> BaseString < CharType >;
+                            __NumericType             value,
+                            __BaseStringView  const & string
+                    ) noexcept -> __BaseString < __FCharType >;
 
                 public:
-                    template < typename FCharType >
+                    template < typename __FCharType > // NOLINT(bugprone-reserved-identifier)
                     friend auto operator + (
-                            bool                                    value,
-                            BaseStringView < FCharType >    const & string
-                    ) noexcept -> BaseString < FCharType >;
+                            bool                                        value,
+                            __BaseStringView < __FCharType >    const & string
+                    ) noexcept -> __BaseString < __FCharType >;
 
                 public:
-                    template < typename FCharType, typename FloatingPointType, meta :: EnableIf < meta :: isFloatingPoint < FloatingPointType > () > >
+                    template < typename __FCharType, typename __FloatingPointType, meta :: EnableIf < meta :: isFloatingPoint < __FloatingPointType > () > > // NOLINT(bugprone-reserved-identifier)
                     friend auto operator + (
-                            FloatingPointType                       value,
-                            BaseStringView < FCharType >    const & string
-                    ) noexcept -> BaseString < FCharType >;
+                            __FloatingPointType                         value,
+                            __BaseStringView < __FCharType >    const & string
+                    ) noexcept -> __BaseString < __FCharType >;
 
 
                 public:
                     auto operator * (
                             int repeatCount
-                    ) const & noexcept -> BaseString < CharType >;
+                    ) const & noexcept -> __BaseString < __CharType >;
 
                 public:
-                    template < typename FCharType >
+                    template < typename __FCharType > // NOLINT(bugprone-reserved-identifier)
                     friend auto operator * (
-                            int                                     repeatCount,
-                            BaseStringView < FCharType >    const & string
-                    ) noexcept -> BaseString < FCharType >;
+                            int                                         repeatCount,
+                            __BaseStringView < __FCharType >    const & string
+                    ) noexcept -> __BaseString < __FCharType >;
 
 
 
@@ -702,99 +702,100 @@ namespace cds {
                     ) const noexcept -> bool;
 
                 public:
-                    template < typename ConvertibleType, meta :: EnableIf < meta :: isConvertibleToBaseStringView < ConvertibleType, CharType > () > = 0 >
+                    template < typename __ConvertibleType, meta :: EnableIf < meta :: isConvertibleToBaseStringView < __ConvertibleType, __CharType > () > = 0 > // NOLINT(bugprone-reserved-identifier)
                     __CDS_NoDiscard __CDS_cpplang_ConstexprDynamicAllocation auto contains (
-                            ConvertibleType && string
+                            __ConvertibleType && string
                     ) const noexcept -> bool;
 
                 public:
                     __CDS_NoDiscard __CDS_cpplang_ConstexprDynamicAllocation auto contains (
-                            BaseStringView < CharType > const & string
+                            __BaseStringView < __CharType > const & string
                     ) const noexcept -> bool;
 
                 public:
-                    template < template < typename ... > class CollectionType >
+                    template < template < typename ... > class __CollectionType > // NOLINT(bugprone-reserved-identifier)
                     __CDS_NoDiscard auto containsAnyOf (
-                            CollectionType < ElementType > const & characters
+                            __CollectionType < ElementType > const & characters
                     ) const noexcept -> bool;
 
                 public:
-                    template < typename ConvertibleType, meta :: EnableIf < meta :: isConvertibleToBaseStringView < ConvertibleType, CharType > () > = 0 >
+                    template < typename __ConvertibleType, meta :: EnableIf < meta :: isConvertibleToBaseStringView < __ConvertibleType, __CharType > () > = 0 > // NOLINT(bugprone-reserved-identifier)
                     __CDS_NoDiscard __CDS_cpplang_ConstexprConditioned auto containsAnyOf (
-                            ConvertibleType && string
-                    ) const noexcept -> bool;
-                public:
-                    __CDS_NoDiscard __CDS_cpplang_ConstexprConditioned auto containsAnyOf (
-                            BaseStringView < CharType > const & string
+                            __ConvertibleType && string
                     ) const noexcept -> bool;
 
                 public:
-                    template < template < typename ... > class CollectionType >
+                    __CDS_NoDiscard __CDS_cpplang_ConstexprConditioned auto containsAnyOf (
+                            __BaseStringView < __CharType > const & string
+                    ) const noexcept -> bool;
+
+                public:
+                    template < template < typename ... > class __CollectionType > // NOLINT(bugprone-reserved-identifier)
                     __CDS_NoDiscard auto containsAllOf (
-                            CollectionType < ElementType > const & string
+                            __CollectionType < ElementType > const & string
                     ) const noexcept -> bool;
 
                 public:
-                    template < typename ConvertibleType, meta :: EnableIf < meta :: isConvertibleToBaseStringView < ConvertibleType, CharType > () > = 0 >
+                    template < typename __ConvertibleType, meta :: EnableIf < meta :: isConvertibleToBaseStringView < __ConvertibleType, __CharType > () > = 0 > // NOLINT(bugprone-reserved-identifier)
                     __CDS_NoDiscard __CDS_cpplang_ConstexprConditioned auto containsAllOf (
-                            ConvertibleType && string
+                            __ConvertibleType && string
                     ) const noexcept -> bool;
 
                 public:
                     __CDS_NoDiscard __CDS_cpplang_ConstexprConditioned auto containsAllOf (
-                            BaseStringView < CharType > const & string
+                            __BaseStringView < __CharType > const & string
                     ) const noexcept -> bool;
 
                 public:
-                    template < template < typename ... > class CollectionType >
+                    template < template < typename ... > class __CollectionType > // NOLINT(bugprone-reserved-identifier)
                     __CDS_NoDiscard auto containsAnyNotOf (
-                            CollectionType < ElementType > const & string
+                            __CollectionType < ElementType > const & string
                     ) const noexcept -> bool;
 
                 public:
-                    template < typename ConvertibleType, meta :: EnableIf < meta :: isConvertibleToBaseStringView < ConvertibleType, CharType > () > = 0 >
+                    template < typename __ConvertibleType, meta :: EnableIf < meta :: isConvertibleToBaseStringView < __ConvertibleType, __CharType > () > = 0 > // NOLINT(bugprone-reserved-identifier)
                     __CDS_NoDiscard __CDS_cpplang_ConstexprConditioned auto containsAnyNotOf (
-                            ConvertibleType && string
+                            __ConvertibleType && string
                     ) const noexcept -> bool;
 
                 public:
                     __CDS_NoDiscard __CDS_cpplang_ConstexprConditioned auto containsAnyNotOf (
-                            BaseStringView < CharType > const & string
+                            __BaseStringView < __CharType > const & string
                     ) const noexcept -> bool;
 
                 public:
-                    template < template < typename ... > class CollectionType >
+                    template < template < typename ... > class __CollectionType > // NOLINT(bugprone-reserved-identifier)
                     __CDS_NoDiscard auto containsAllNotOf (
-                            CollectionType < ElementType > const & string
+                            __CollectionType < ElementType > const & string
                     ) const noexcept -> bool;
 
                 public:
-                    template < typename ConvertibleType, meta :: EnableIf < meta :: isConvertibleToBaseStringView < ConvertibleType, CharType > () > = 0 >
+                    template < typename __ConvertibleType, meta :: EnableIf < meta :: isConvertibleToBaseStringView < __ConvertibleType, __CharType > () > = 0 > // NOLINT(bugprone-reserved-identifier)
                     __CDS_NoDiscard __CDS_cpplang_ConstexprConditioned auto containsAllNotOf (
-                            ConvertibleType && string
+                            __ConvertibleType && string
                     ) const noexcept -> bool;
 
                 public:
                     __CDS_NoDiscard __CDS_cpplang_ConstexprConditioned auto containsAllNotOf (
-                            BaseStringView < CharType > const & string
+                            __BaseStringView < __CharType > const & string
                     ) const noexcept -> bool;
 
 
 
                 public:
-                    template < template < typename ... > class CollectionType >
+                    template < template < typename ... > class __CollectionType > // NOLINT(bugprone-reserved-identifier)
                     auto find (
-                            Size                        maxCount,
-                            ElementType                 character,
-                            CollectionType < Index >  & storeIn
-                    ) const noexcept -> CollectionType < Index > &;
+                            Size                          maxCount,
+                            ElementType                   character,
+                            __CollectionType < Index >  & storeIn
+                    ) const noexcept -> __CollectionType < Index > &;
 
                 public:
-                    template < template < typename ... > class CollectionType >
+                    template < template < typename ... > class __CollectionType > // NOLINT(bugprone-reserved-identifier)
                     __CDS_NoDiscard auto find (
                             Size                        maxCount,
                             ElementType                 character
-                    ) const noexcept -> CollectionType < Index >;
+                    ) const noexcept -> __CollectionType < Index >;
 
                 public:
                     __CDS_NoDiscard __CDS_cpplang_ConstexprConditioned auto findFirst (
@@ -807,340 +808,340 @@ namespace cds {
                     ) const noexcept -> Index;
 
                 public:
-                    template < template < typename ... > class CollectionType >
+                    template < template < typename ... > class __CollectionType > // NOLINT(bugprone-reserved-identifier)
                     auto findAll (
-                            ElementType                 character,
-                            CollectionType < Index >  & storeIn
-                    ) const noexcept -> CollectionType < Index > &;
+                            ElementType                   character,
+                            __CollectionType < Index >  & storeIn
+                    ) const noexcept -> __CollectionType < Index > &;
 
                 public:
-                    template < template < typename ... > class CollectionType >
+                    template < template < typename ... > class __CollectionType > // NOLINT(bugprone-reserved-identifier)
                     __CDS_NoDiscard auto findAll (
                             ElementType                 character
-                    ) const noexcept -> CollectionType < Index >;
+                    ) const noexcept -> __CollectionType < Index >;
 
 
                 public:
-                    template < template < typename ... > class CollectionType, typename ConvertibleType, meta :: EnableIf < meta :: isConvertibleToBaseStringView < ConvertibleType, CharType > () > = 0 >
+                    template < template < typename ... > class __CollectionType, typename __ConvertibleType, meta :: EnableIf < meta :: isConvertibleToBaseStringView < __ConvertibleType, __CharType > () > = 0 > // NOLINT(bugprone-reserved-identifier)
                     auto find (
-                            Size                        maxCount,
-                            ConvertibleType          && string,
-                            CollectionType < Index >  & storeIn
-                    ) const noexcept -> CollectionType < Index > &;
+                            Size                          maxCount,
+                            __ConvertibleType          && string,
+                            __CollectionType < Index >  & storeIn
+                    ) const noexcept -> __CollectionType < Index > &;
 
                 public:
-                    template < template < typename ... > class CollectionType, typename ConvertibleType, meta :: EnableIf < meta :: isConvertibleToBaseStringView < ConvertibleType, CharType > () > = 0 >
+                    template < template < typename ... > class __CollectionType, typename __ConvertibleType, meta :: EnableIf < meta :: isConvertibleToBaseStringView < __ConvertibleType, __CharType > () > = 0 > // NOLINT(bugprone-reserved-identifier)
                     __CDS_NoDiscard auto find (
-                            Size                        maxCount,
-                            ConvertibleType          && string
-                    ) const noexcept -> CollectionType < Index >;
+                            Size                          maxCount,
+                            __ConvertibleType          && string
+                    ) const noexcept -> __CollectionType < Index >;
 
                 public:
-                    template < typename ConvertibleType, meta :: EnableIf < meta :: isConvertibleToBaseStringView < ConvertibleType, CharType > () > = 0 >
+                    template < typename __ConvertibleType, meta :: EnableIf < meta :: isConvertibleToBaseStringView < __ConvertibleType, __CharType > () > = 0 > // NOLINT(bugprone-reserved-identifier)
                     __CDS_NoDiscard __CDS_cpplang_ConstexprDynamicAllocation auto findFirst (
-                            ConvertibleType && string
+                            __ConvertibleType && string
                     ) const noexcept -> Index;
 
                 public:
-                    template < typename ConvertibleType, meta :: EnableIf < meta :: isConvertibleToBaseStringView < ConvertibleType, CharType > () > = 0 >
+                    template < typename __ConvertibleType, meta :: EnableIf < meta :: isConvertibleToBaseStringView < __ConvertibleType, __CharType > () > = 0 > // NOLINT(bugprone-reserved-identifier)
                     __CDS_NoDiscard __CDS_cpplang_ConstexprDynamicAllocation auto findLast (
-                            ConvertibleType && string
+                            __ConvertibleType && string
                     ) const noexcept -> Index;
 
                 public:
-                    template < template < typename ... > class CollectionType, typename ConvertibleType, meta :: EnableIf < meta :: isConvertibleToBaseStringView < ConvertibleType, CharType > () > = 0 >
+                    template < template < typename ... > class __CollectionType, typename __ConvertibleType, meta :: EnableIf < meta :: isConvertibleToBaseStringView < __ConvertibleType, __CharType > () > = 0 > // NOLINT(bugprone-reserved-identifier)
                     auto findAll (
-                            ConvertibleType                  && string,
-                            CollectionType < Index >          & storeIn
-                    ) const noexcept -> CollectionType < Index > &;
+                            __ConvertibleType                  && string,
+                            __CollectionType < Index >          & storeIn
+                    ) const noexcept -> __CollectionType < Index > &;
 
                 public:
-                    template < template < typename ... > class CollectionType, typename ConvertibleType, meta :: EnableIf < meta :: isConvertibleToBaseStringView < ConvertibleType, CharType > () > = 0 >
+                    template < template < typename ... > class __CollectionType, typename __ConvertibleType, meta :: EnableIf < meta :: isConvertibleToBaseStringView < __ConvertibleType, __CharType > () > = 0 > // NOLINT(bugprone-reserved-identifier)
                     __CDS_NoDiscard auto findAll (
-                            ConvertibleType && string
-                    ) const noexcept -> CollectionType < Index >;
+                            __ConvertibleType && string
+                    ) const noexcept -> __CollectionType < Index >;
 
 
                 public:
-                    template < template < typename ... > class CollectionType, typename ConvertibleType, meta :: EnableIf < meta :: isConvertibleToBaseStringView < ConvertibleType, CharType > () > = 0 >
+                    template < template < typename ... > class __CollectionType, typename __ConvertibleType, meta :: EnableIf < meta :: isConvertibleToBaseStringView < __ConvertibleType, __CharType > () > = 0 > // NOLINT(bugprone-reserved-identifier)
                     auto findOf (
-                            Size                        maxCount,
-                            ConvertibleType          && string,
-                            CollectionType < Index >  & storeIn
-                    ) const noexcept -> CollectionType < Index > &;
+                            Size                          maxCount,
+                            __ConvertibleType          && string,
+                            __CollectionType < Index >  & storeIn
+                    ) const noexcept -> __CollectionType < Index > &;
 
                 public:
-                    template < template < typename ... > class CollectionType, typename ConvertibleType, meta :: EnableIf < meta :: isConvertibleToBaseStringView < ConvertibleType, CharType > () > = 0 >
+                    template < template < typename ... > class __CollectionType, typename __ConvertibleType, meta :: EnableIf < meta :: isConvertibleToBaseStringView < __ConvertibleType, __CharType > () > = 0 > // NOLINT(bugprone-reserved-identifier)
                     __CDS_NoDiscard auto findOf (
-                            Size                        maxCount,
-                            ConvertibleType          && string
-                    ) const noexcept -> CollectionType < Index >;
+                            Size                          maxCount,
+                            __ConvertibleType          && string
+                    ) const noexcept -> __CollectionType < Index >;
 
                 public:
-                    template < typename ConvertibleType, meta :: EnableIf < meta :: isConvertibleToBaseStringView < ConvertibleType, CharType > () > = 0 >
+                    template < typename __ConvertibleType, meta :: EnableIf < meta :: isConvertibleToBaseStringView < __ConvertibleType, __CharType > () > = 0 > // NOLINT(bugprone-reserved-identifier)
                     __CDS_NoDiscard __CDS_cpplang_ConstexprConditioned auto findFirstOf (
-                            ConvertibleType && string
+                            __ConvertibleType && string
                     ) const noexcept -> Index;
 
                 public:
-                    template < typename ConvertibleType, meta :: EnableIf < meta :: isConvertibleToBaseStringView < ConvertibleType, CharType > () > = 0 >
+                    template < typename __ConvertibleType, meta :: EnableIf < meta :: isConvertibleToBaseStringView < __ConvertibleType, __CharType > () > = 0 > // NOLINT(bugprone-reserved-identifier)
                     __CDS_NoDiscard __CDS_cpplang_ConstexprConditioned auto findLastOf (
-                            ConvertibleType && string
+                            __ConvertibleType && string
                     ) const noexcept -> Index;
 
                 public:
-                    template < template < typename ... > class CollectionType, typename ConvertibleType, meta :: EnableIf < meta :: isConvertibleToBaseStringView < ConvertibleType, CharType > () > = 0 >
+                    template < template < typename ... > class __CollectionType, typename __ConvertibleType, meta :: EnableIf < meta :: isConvertibleToBaseStringView < __ConvertibleType, __CharType > () > = 0 > // NOLINT(bugprone-reserved-identifier)
                     auto findAllOf (
-                            ConvertibleType && string,
-                            CollectionType < Index >  & storeIn
-                    ) const noexcept -> CollectionType < Index > &;
+                            __ConvertibleType          && string,
+                            __CollectionType < Index >  & storeIn
+                    ) const noexcept -> __CollectionType < Index > &;
 
                 public:
-                    template < template < typename ... > class CollectionType, typename ConvertibleType, meta :: EnableIf < meta :: isConvertibleToBaseStringView < ConvertibleType, CharType > () > = 0 >
+                    template < template < typename ... > class __CollectionType, typename __ConvertibleType, meta :: EnableIf < meta :: isConvertibleToBaseStringView < __ConvertibleType, __CharType > () > = 0 > // NOLINT(bugprone-reserved-identifier)
                     __CDS_NoDiscard auto findAllOf (
-                            ConvertibleType && string
-                    ) const noexcept -> CollectionType < Index >;
+                            __ConvertibleType && string
+                    ) const noexcept -> __CollectionType < Index >;
 
 
                 public:
-                    template < template < typename ... > class CollectionType, typename ConvertibleType, meta :: EnableIf < meta :: isConvertibleToBaseStringView < ConvertibleType, CharType > () > = 0 >
+                    template < template < typename ... > class __CollectionType, typename __ConvertibleType, meta :: EnableIf < meta :: isConvertibleToBaseStringView < __ConvertibleType, __CharType > () > = 0 > // NOLINT(bugprone-reserved-identifier)
                     auto findNotOf (
-                            Size                        maxCount,
-                            ConvertibleType          && string,
-                            CollectionType < Index >  & storeIn
-                    ) const noexcept -> CollectionType < Index > &;
+                            Size                          maxCount,
+                            __ConvertibleType          && string,
+                            __CollectionType < Index >  & storeIn
+                    ) const noexcept -> __CollectionType < Index > &;
 
                 public:
-                    template < template < typename ... > class CollectionType, typename ConvertibleType, meta :: EnableIf < meta :: isConvertibleToBaseStringView < ConvertibleType, CharType > () > = 0 >
+                    template < template < typename ... > class __CollectionType, typename __ConvertibleType, meta :: EnableIf < meta :: isConvertibleToBaseStringView < __ConvertibleType, __CharType > () > = 0 > // NOLINT(bugprone-reserved-identifier)
                     __CDS_NoDiscard auto findNotOf (
                             Size                        maxCount,
-                            ConvertibleType && string
-                    ) const noexcept -> CollectionType < Index >;
+                            __ConvertibleType        && string
+                    ) const noexcept -> __CollectionType < Index >;
 
                 public:
-                    template < typename ConvertibleType, meta :: EnableIf < meta :: isConvertibleToBaseStringView < ConvertibleType, CharType > () > = 0 >
+                    template < typename __ConvertibleType, meta :: EnableIf < meta :: isConvertibleToBaseStringView < __ConvertibleType, __CharType > () > = 0 > // NOLINT(bugprone-reserved-identifier)
                     __CDS_NoDiscard __CDS_cpplang_ConstexprConditioned auto findFirstNotOf (
-                            ConvertibleType && string
+                            __ConvertibleType && string
                     ) const noexcept -> Index;
 
                 public:
-                    template < typename ConvertibleType, meta :: EnableIf < meta :: isConvertibleToBaseStringView < ConvertibleType, CharType > () > = 0 >
+                    template < typename __ConvertibleType, meta :: EnableIf < meta :: isConvertibleToBaseStringView < __ConvertibleType, __CharType > () > = 0 > // NOLINT(bugprone-reserved-identifier)
                     __CDS_NoDiscard __CDS_cpplang_ConstexprConditioned auto findLastNotOf (
-                            ConvertibleType && string
+                            __ConvertibleType && string
                     ) const noexcept -> Index;
 
                 public:
-                    template < template < typename ... > class CollectionType, typename ConvertibleType, meta :: EnableIf < meta :: isConvertibleToBaseStringView < ConvertibleType, CharType > () > = 0 >
+                    template < template < typename ... > class __CollectionType, typename __ConvertibleType, meta :: EnableIf < meta :: isConvertibleToBaseStringView < __ConvertibleType, __CharType > () > = 0 > // NOLINT(bugprone-reserved-identifier)
                     auto findAllNotOf (
-                            ConvertibleType          && string,
-                            CollectionType < Index >  & storeIn
-                    ) const noexcept -> CollectionType < Index > &;
+                            __ConvertibleType          && string,
+                            __CollectionType < Index >  & storeIn
+                    ) const noexcept -> __CollectionType < Index > &;
 
                 public:
-                    template < template < typename ... > class CollectionType, typename ConvertibleType, meta :: EnableIf < meta :: isConvertibleToBaseStringView < ConvertibleType, CharType > () > = 0 >
+                    template < template < typename ... > class __CollectionType, typename __ConvertibleType, meta :: EnableIf < meta :: isConvertibleToBaseStringView < __ConvertibleType, __CharType > () > = 0 > // NOLINT(bugprone-reserved-identifier)
                     __CDS_NoDiscard auto findAllNotOf (
-                            ConvertibleType && string
-                    ) const noexcept -> CollectionType < Index >;
+                            __ConvertibleType && string
+                    ) const noexcept -> __CollectionType < Index >;
 
 
                 public:
-                    template < template < typename ... > class CollectionType >
+                    template < template < typename ... > class __CollectionType > // NOLINT(bugprone-reserved-identifier)
                     auto find (
-                            Size                                maxCount,
-                            BaseStringView < CharType > const & string,
-                            CollectionType < Index >          & storeIn
-                    ) const noexcept -> CollectionType < Index > &;
+                            Size                                    maxCount,
+                            __BaseStringView < __CharType > const & string,
+                            __CollectionType < Index >            & storeIn
+                    ) const noexcept -> __CollectionType < Index > &;
 
                 public:
-                    template < template < typename ... > class CollectionType >
+                    template < template < typename ... > class __CollectionType > // NOLINT(bugprone-reserved-identifier)
                     __CDS_NoDiscard auto find (
-                            Size                                maxCount,
-                            BaseStringView < CharType > const & string
-                    ) const noexcept -> CollectionType < Index >;
+                            Size                                    maxCount,
+                            __BaseStringView < __CharType > const & string
+                    ) const noexcept -> __CollectionType < Index >;
 
                 public:
                     __CDS_NoDiscard __CDS_cpplang_ConstexprDynamicAllocation auto findFirst (
-                            BaseStringView < CharType > const & string
+                            __BaseStringView < __CharType > const & string
                     ) const noexcept -> Index;
 
                 public:
                     __CDS_NoDiscard __CDS_cpplang_ConstexprDynamicAllocation auto findLast (
-                            BaseStringView < CharType > const & string
+                            __BaseStringView < __CharType > const & string
                     ) const noexcept -> Index;
 
                 public:
-                    template < template < typename ... > class CollectionType >
+                    template < template < typename ... > class __CollectionType > // NOLINT(bugprone-reserved-identifier)
                     auto findAll (
-                            BaseStringView < CharType > const & string,
-                            CollectionType < Index >          & storeIn
-                    ) const noexcept -> CollectionType < Index > &;
+                            __BaseStringView < __CharType > const & string,
+                            __CollectionType < Index >            & storeIn
+                    ) const noexcept -> __CollectionType < Index > &;
 
                 public:
-                    template < template < typename ... > class CollectionType >
+                    template < template < typename ... > class __CollectionType > // NOLINT(bugprone-reserved-identifier)
                     __CDS_NoDiscard auto findAll (
-                            BaseStringView < CharType > const & string
-                    ) const noexcept -> CollectionType < Index >;
+                            __BaseStringView < __CharType > const & string
+                    ) const noexcept -> __CollectionType < Index >;
 
 
                 public:
-                    template < template < typename ... > class CollectionType >
+                    template < template < typename ... > class __CollectionType > // NOLINT(bugprone-reserved-identifier)
                     auto findOf (
-                            Size                                maxCount,
-                            BaseStringView < CharType > const & string,
-                            CollectionType < Index >          & storeIn
-                    ) const noexcept -> CollectionType < Index > &;
+                            Size                                    maxCount,
+                            __BaseStringView < __CharType > const & string,
+                            __CollectionType < Index >            & storeIn
+                    ) const noexcept -> __CollectionType < Index > &;
 
                 public:
-                    template < template < typename ... > class CollectionType >
+                    template < template < typename ... > class __CollectionType > // NOLINT(bugprone-reserved-identifier)
                     __CDS_NoDiscard auto findOf (
-                            Size                                maxCount,
-                            BaseStringView < CharType > const & string
-                    ) const noexcept -> CollectionType < Index >;
+                            Size                                    maxCount,
+                            __BaseStringView < __CharType > const & string
+                    ) const noexcept -> __CollectionType < Index >;
 
                 public:
                     __CDS_NoDiscard __CDS_cpplang_ConstexprConditioned auto findFirstOf (
-                            BaseStringView < CharType > const & string
+                            __BaseStringView < __CharType > const & string
                     ) const noexcept -> Index;
 
                 public:
                     __CDS_NoDiscard __CDS_cpplang_ConstexprConditioned auto findLastOf (
-                            BaseStringView < CharType > const & string
+                            __BaseStringView < __CharType > const & string
                     ) const noexcept -> Index;
 
                 public:
-                    template < template < typename ... > class CollectionType >
+                    template < template < typename ... > class __CollectionType > // NOLINT(bugprone-reserved-identifier)
                     auto findAllOf (
-                            BaseStringView < CharType > const & string,
-                            CollectionType < Index >          & storeIn
-                    ) const noexcept -> CollectionType < Index > &;
+                            __BaseStringView < __CharType > const & string,
+                            __CollectionType < Index >            & storeIn
+                    ) const noexcept -> __CollectionType < Index > &;
 
                 public:
-                    template < template < typename ... > class CollectionType >
+                    template < template < typename ... > class __CollectionType > // NOLINT(bugprone-reserved-identifier)
                     __CDS_NoDiscard auto findAllOf (
-                            BaseStringView < CharType > const & string
-                    ) const noexcept -> CollectionType < Index >;
+                            __BaseStringView < __CharType > const & string
+                    ) const noexcept -> __CollectionType < Index >;
 
 
                 public:
-                    template < template < typename ... > class CollectionType >
+                    template < template < typename ... > class __CollectionType > // NOLINT(bugprone-reserved-identifier)
                     auto findNotOf (
-                            Size                        maxCount,
-                            BaseStringView < CharType > const & string,
-                            CollectionType < Index >          & storeIn
-                    ) const noexcept -> CollectionType < Index > &;
+                            Size                                    maxCount,
+                            __BaseStringView < __CharType > const & string,
+                            __CollectionType < Index >            & storeIn
+                    ) const noexcept -> __CollectionType < Index > &;
 
                 public:
-                    template < template < typename ... > class CollectionType >
+                    template < template < typename ... > class __CollectionType > // NOLINT(bugprone-reserved-identifier)
                     __CDS_NoDiscard auto findNotOf (
-                            Size                                maxCount,
-                            BaseStringView < CharType > const & string
-                    ) const noexcept -> CollectionType < Index >;
+                            Size                                    maxCount,
+                            __BaseStringView < __CharType > const & string
+                    ) const noexcept -> __CollectionType < Index >;
 
                 public:
                     __CDS_NoDiscard __CDS_cpplang_ConstexprConditioned auto findFirstNotOf (
-                            BaseStringView < CharType > const & string
+                            __BaseStringView < __CharType > const & string
                     ) const noexcept -> Index;
 
                 public:
                     __CDS_NoDiscard __CDS_cpplang_ConstexprConditioned auto findLastNotOf (
-                            BaseStringView < CharType > const & string
+                            __BaseStringView < __CharType > const & string
                     ) const noexcept -> Index;
 
                 public:
-                    template < template < typename ... > class CollectionType >
+                    template < template < typename ... > class __CollectionType > // NOLINT(bugprone-reserved-identifier)
                     auto findAllNotOf (
-                            BaseStringView < CharType > const & string,
-                            CollectionType < Index >          & storeIn
-                    ) const noexcept -> CollectionType < Index > &;
+                            __BaseStringView < __CharType > const & string,
+                            __CollectionType < Index >            & storeIn
+                    ) const noexcept -> __CollectionType < Index > &;
 
                 public:
-                    template < template < typename ... > class CollectionType >
+                    template < template < typename ... > class __CollectionType > // NOLINT(bugprone-reserved-identifier)
                     __CDS_NoDiscard auto findAllNotOf (
-                            BaseStringView < CharType > const & string
-                    ) const noexcept -> CollectionType < Index >;
+                            __BaseStringView < __CharType > const & string
+                    ) const noexcept -> __CollectionType < Index >;
 
 
                 public:
-                    template < typename ListType >
+                    template < typename __CollectionType > // NOLINT(bugprone-reserved-identifier)
                     auto split (
-                            ElementType     separator,
-                            ListType      & storeIn,
-                            Size            maxCount = limits :: U32_MAX
-                    ) const noexcept -> ListType &;
+                            ElementType         separator,
+                            __CollectionType  & storeIn,
+                            Size                maxCount = limits :: U32_MAX
+                    ) const noexcept -> __CollectionType &;
 
                 public:
-                    template < template < typename ... > class ListType >
+                    template < template < typename ... > class __CollectionType > // NOLINT(bugprone-reserved-identifier)
                     __CDS_NoDiscard auto split (
                             ElementType     separator,
                             Size            maxCount = limits :: U32_MAX
-                    ) const noexcept -> ListType < BaseString < CharType > >;
+                    ) const noexcept -> __CollectionType < __BaseString < __CharType > >;
 
                 public:
-                    template < typename ListType, typename ConvertibleType, meta :: EnableIf < meta :: isConvertibleToBaseStringView < ConvertibleType, CharType > () > = 0 >
+                    template < typename __CollectionType, typename __ConvertibleType, meta :: EnableIf < meta :: isConvertibleToBaseStringView < __ConvertibleType, __CharType > () > = 0 > // NOLINT(bugprone-reserved-identifier)
                     auto split (
-                            ConvertibleType && separators,
-                            ListType              & storeIn,
-                            Size                    maxCount = limits :: U32_MAX
-                    ) const noexcept -> ListType &;
+                            __ConvertibleType   && separators,
+                            __CollectionType     & storeIn,
+                            Size                   maxCount = limits :: U32_MAX
+                    ) const noexcept -> __CollectionType &;
 
                 public:
-                    template < template < typename ... > class ListType, typename ConvertibleType, meta :: EnableIf < meta :: isConvertibleToBaseStringView < ConvertibleType, CharType > () > = 0 >
+                    template < template < typename ... > class __CollectionType, typename __ConvertibleType, meta :: EnableIf < meta :: isConvertibleToBaseStringView < __ConvertibleType, __CharType > () > = 0 > // NOLINT(bugprone-reserved-identifier)
                     __CDS_NoDiscard auto split (
-                            ConvertibleType && separators,
-                            Size                    maxCount = limits :: U32_MAX
-                    ) const noexcept -> ListType < BaseString < CharType > >;
+                            __ConvertibleType && separators,
+                            Size                 maxCount = limits :: U32_MAX
+                    ) const noexcept -> __CollectionType < __BaseString < __CharType > >;
 
                 public:
-                    template < typename ListType >
+                    template < typename __CollectionType > // NOLINT(bugprone-reserved-identifier)
                     auto split (
-                            BaseStringView < CharType > const & separators,
-                            ListType                          & storeIn,
-                            Size                                maxCount = limits :: U32_MAX
-                    ) const noexcept -> ListType &;
+                            __BaseStringView < __CharType > const & separators,
+                            __CollectionType                      & storeIn,
+                            Size                                    maxCount = limits :: U32_MAX
+                    ) const noexcept -> __CollectionType &;
 
                 public:
-                    template < template < typename ... > class ListType >
+                    template < template < typename ... > class __CollectionType > // NOLINT(bugprone-reserved-identifier)
                     __CDS_NoDiscard auto split (
-                            BaseStringView < CharType > const & separators,
-                            Size                                maxCount = limits :: U32_MAX
-                    ) const noexcept -> ListType < BaseString < CharType > >;
+                            __BaseStringView < __CharType > const & separators,
+                            Size                                    maxCount = limits :: U32_MAX
+                    ) const noexcept -> __CollectionType < __BaseString < __CharType > >;
 
                 public:
-                    template < typename ListType, typename ConvertibleType, meta :: EnableIf < meta :: isConvertibleToBaseStringView < ConvertibleType, CharType > () > = 0 >
+                    template < typename __CollectionType, typename __ConvertibleType, meta :: EnableIf < meta :: isConvertibleToBaseStringView < __ConvertibleType, __CharType > () > = 0 > // NOLINT(bugprone-reserved-identifier)
                     auto splitByString (
-                            ConvertibleType      && separators,
-                            ListType              & storeIn,
-                            Size                    maxCount = limits :: U32_MAX
-                    ) const noexcept -> ListType &;
+                            __ConvertibleType      && separators,
+                            __CollectionType        & storeIn,
+                            Size                      maxCount = limits :: U32_MAX
+                    ) const noexcept -> __CollectionType &;
 
                 public:
-                    template < template < typename ... > class ListType, typename ConvertibleType, meta :: EnableIf < meta :: isConvertibleToBaseStringView < ConvertibleType, CharType > () > = 0 >
+                    template < template < typename ... > class __CollectionType, typename __ConvertibleType, meta :: EnableIf < meta :: isConvertibleToBaseStringView < __ConvertibleType, __CharType > () > = 0 > // NOLINT(bugprone-reserved-identifier)
                     __CDS_NoDiscard auto splitByString (
-                            ConvertibleType      && separator,
+                            __ConvertibleType    && separator,
                             Size                    maxCount = limits :: U32_MAX
-                    ) const noexcept -> ListType < BaseString < CharType > >;
+                    ) const noexcept -> __CollectionType < __BaseString < __CharType > >;
 
                 public:
-                    template < typename ListType >
+                    template < typename __CollectionType > // NOLINT(bugprone-reserved-identifier)
                     auto splitByString (
-                            BaseStringView < CharType > const & separator,
-                            ListType                          & storeIn,
-                            Size                                maxCount = limits :: U32_MAX
-                    ) const noexcept -> ListType &;
+                            __BaseStringView < __CharType > const & separator,
+                            __CollectionType                      & storeIn,
+                            Size                                    maxCount = limits :: U32_MAX
+                    ) const noexcept -> __CollectionType &;
 
                 public:
-                    template < template < typename ... > class ListType >
+                    template < template < typename ... > class __CollectionType > // NOLINT(bugprone-reserved-identifier)
                     __CDS_NoDiscard auto splitByString (
-                            BaseStringView < CharType > const & separator,
-                            Size                                maxCount = limits :: U32_MAX
-                    ) const noexcept -> ListType < BaseString < CharType > >;
+                            __BaseStringView < __CharType > const & separator,
+                            Size                                    maxCount = limits :: U32_MAX
+                    ) const noexcept -> __CollectionType < __BaseString < __CharType > >;
 
 
                 public:
                     __CDS_NoDiscard __CDS_cpplang_ConstexprOverride auto hash () const noexcept -> Index;
 
                 public:
-                    __CDS_NoDiscard auto toString () const noexcept -> BaseString < CharType >;
+                    __CDS_NoDiscard auto toString () const noexcept -> __BaseString < __CharType >;
 
 
                 public:
@@ -1149,14 +1150,14 @@ namespace cds {
                     ) const noexcept -> bool;
 
                 public:
-                    template < typename ConvertibleType, meta :: EnableIf < meta :: isConvertibleToBaseStringView < ConvertibleType, CharType > () > = 0 >
+                    template < typename __ConvertibleType, meta :: EnableIf < meta :: isConvertibleToBaseStringView < __ConvertibleType, __CharType > () > = 0 > // NOLINT(bugprone-reserved-identifier)
                     __CDS_cpplang_ConstexprConditioned auto startsWith (
-                            ConvertibleType && string
+                            __ConvertibleType && string
                     ) const noexcept -> bool;
 
                 public:
                     __CDS_cpplang_ConstexprConditioned auto startsWith (
-                            BaseStringView < CharType > const & string
+                            __BaseStringView < __CharType > const & string
                     ) const noexcept -> bool;
 
 
@@ -1166,95 +1167,95 @@ namespace cds {
                     ) const noexcept -> bool;
 
                 public:
-                    template < typename ConvertibleType, meta :: EnableIf < meta :: isConvertibleToBaseStringView < ConvertibleType, CharType > () > = 0 >
+                    template < typename __ConvertibleType, meta :: EnableIf < meta :: isConvertibleToBaseStringView < __ConvertibleType, __CharType > () > = 0 > // NOLINT(bugprone-reserved-identifier)
                     __CDS_cpplang_ConstexprConditioned auto endsWith (
-                            ConvertibleType && string
+                            __ConvertibleType && string
                     ) const noexcept -> bool;
 
                 public:
                     __CDS_cpplang_ConstexprConditioned auto endsWith (
-                            BaseStringView < CharType > const & string
+                            __BaseStringView < __CharType > const & string
                     ) const noexcept -> bool;
 
 
                 public:
-                    template < typename Action >
+                    template < typename __Action > // NOLINT(bugprone-reserved-identifier)
                     auto forEach (
-                            Action const & action
+                            __Action const & action
                     ) const noexcept ( noexcept ( action ( meta :: valueOf < ElementType > () ) ) ) -> void;
 
                 public:
-                    template < typename Predicate = decltype ( & predicates :: alwaysTrue < ElementType > ) >
+                    template < typename __Predicate = decltype ( & predicates :: alwaysTrue < ElementType > ) > // NOLINT(bugprone-reserved-identifier)
                     auto some (
                             Size                count,
-                            Predicate   const & predicate = & predicates :: alwaysTrue < ElementType >
+                            __Predicate const & predicate = & predicates :: alwaysTrue < ElementType >
                     ) const noexcept ( noexcept ( predicate ( meta :: valueOf < ElementType > () ) ) ) -> bool;
 
                 public:
-                    template < typename Predicate = decltype ( & predicates :: alwaysTrue < ElementType > ) >
+                    template < typename __Predicate = decltype ( & predicates :: alwaysTrue < ElementType > ) > // NOLINT(bugprone-reserved-identifier)
                     auto atLeast (
                             Size                count,
-                            Predicate   const & predicate = & predicates :: alwaysTrue < ElementType >
+                            __Predicate const & predicate = & predicates :: alwaysTrue < ElementType >
                     ) const noexcept ( noexcept ( predicate ( meta :: valueOf < ElementType > () ) ) ) -> bool;
 
                 public:
-                    template < typename Predicate = decltype ( & predicates :: alwaysTrue < ElementType > ) >
+                    template < typename __Predicate = decltype ( & predicates :: alwaysTrue < ElementType > ) > // NOLINT(bugprone-reserved-identifier)
                     auto atMost (
                             Size                count,
-                            Predicate   const & predicate = & predicates :: alwaysTrue < ElementType >
+                            __Predicate const & predicate = & predicates :: alwaysTrue < ElementType >
                     ) const noexcept ( noexcept ( predicate ( meta :: valueOf < ElementType > () ) ) ) -> bool;
 
                 public:
-                    template < typename Predicate = decltype ( & predicates :: alwaysTrue < ElementType > ) >
+                    template < typename __Predicate = decltype ( & predicates :: alwaysTrue < ElementType > ) > // NOLINT(bugprone-reserved-identifier)
                     auto moreThan (
                             Size                count,
-                            Predicate   const & predicate = & predicates :: alwaysTrue < ElementType >
+                            __Predicate const & predicate = & predicates :: alwaysTrue < ElementType >
                     ) const noexcept ( noexcept ( predicate ( meta :: valueOf < ElementType > () ) ) ) -> bool;
 
                 public:
-                    template < typename Predicate = decltype ( & predicates :: alwaysTrue < ElementType > ) >
+                    template < typename __Predicate = decltype ( & predicates :: alwaysTrue < ElementType > ) > // NOLINT(bugprone-reserved-identifier)
                     auto fewerThan (
                             Size                count,
-                            Predicate   const & predicate = & predicates :: alwaysTrue < ElementType >
+                            __Predicate const & predicate = & predicates :: alwaysTrue < ElementType >
                     ) const noexcept ( noexcept ( predicate ( meta :: valueOf < ElementType > () ) ) ) -> bool;
 
                 public:
-                    template < typename Predicate = decltype ( & predicates :: alwaysTrue < ElementType > ) >
+                    template < typename __Predicate = decltype ( & predicates :: alwaysTrue < ElementType > ) > // NOLINT(bugprone-reserved-identifier)
                     auto count (
-                            Predicate   const & predicate = & predicates :: alwaysTrue < ElementType >
+                            __Predicate const & predicate = & predicates :: alwaysTrue < ElementType >
                     ) const noexcept ( noexcept ( predicate ( meta :: valueOf < ElementType > () ) ) ) -> Size;
 
                 public:
-                    template < typename Predicate = decltype ( & predicates :: alwaysTrue < ElementType > ) >
+                    template < typename __Predicate = decltype ( & predicates :: alwaysTrue < ElementType > ) > // NOLINT(bugprone-reserved-identifier)
                     auto any (
-                            Predicate   const & predicate = & predicates :: alwaysTrue < ElementType >
+                            __Predicate const & predicate = & predicates :: alwaysTrue < ElementType >
                     ) const noexcept ( noexcept ( predicate ( meta :: valueOf < ElementType > () ) ) ) -> bool;
 
                 public:
-                    template < typename Predicate = decltype ( & predicates :: alwaysTrue < ElementType > ) >
+                    template < typename __Predicate = decltype ( & predicates :: alwaysTrue < ElementType > ) > // NOLINT(bugprone-reserved-identifier)
                     auto all (
-                            Predicate   const & predicate = & predicates :: alwaysTrue < ElementType >
+                            __Predicate const & predicate = & predicates :: alwaysTrue < ElementType >
                     ) const noexcept ( noexcept ( predicate ( meta :: valueOf < ElementType > () ) ) ) -> bool;
 
                 public:
-                    template < typename Predicate = decltype ( & predicates :: alwaysTrue < ElementType > ) >
+                    template < typename __Predicate = decltype ( & predicates :: alwaysTrue < ElementType > ) > // NOLINT(bugprone-reserved-identifier)
                     auto none (
-                            Predicate   const & predicate = & predicates :: alwaysTrue < ElementType >
+                            __Predicate const & predicate = & predicates :: alwaysTrue < ElementType >
                     ) const noexcept ( noexcept ( predicate ( meta :: valueOf < ElementType > () ) ) ) -> bool;
 
 
                 public:
-                    auto sequence () const & noexcept -> Sequence < BaseStringView < CharType > const >;
+                    auto sequence () const & noexcept -> Sequence < __BaseStringView < __CharType > const >;
 
                 public:
-                    auto sequence () const && noexcept -> Sequence < BaseStringView < CharType > const >;
+                    auto sequence () const && noexcept -> Sequence < __BaseStringView < __CharType > const >;
 
 
                 public:
-                    template < typename FCharType >
+                    template < typename __FCharType > // NOLINT(bugprone-reserved-identifier)
                     friend auto operator << (
-                            std :: wostream                    & out,
-                            BaseStringView < FCharType > const & obj
+                            std :: wostream                        & out,
+                            __BaseStringView < __FCharType > const & obj
                     ) noexcept -> std :: wostream &;
 
                 };

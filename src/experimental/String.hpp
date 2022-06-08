@@ -13,8 +13,11 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
     namespace experimental {
 
-        using String = hidden :: impl :: BaseString < char >;
-        using WideString = hidden :: impl :: BaseString < wchar_t >;
+        using String            = __hidden :: __impl :: __BaseString < char >;
+        using WideString        = __hidden :: __impl :: __BaseString < wchar_t >;
+
+        using StringView        = __hidden :: __impl :: __BaseStringView < char >;
+        using WideStringView    = __hidden :: __impl :: __BaseStringView < wchar_t >;
 
     }
 }

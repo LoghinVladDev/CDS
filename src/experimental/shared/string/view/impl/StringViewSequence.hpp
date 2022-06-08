@@ -7,19 +7,19 @@
 #ifndef __CDS_EX_BASE_STRING_VIEW_SEQEUENCE_IMPL_HPP__
 #define __CDS_EX_BASE_STRING_VIEW_SEQEUENCE_IMPL_HPP__
 
-namespace cds {
-    namespace experimental {
-        namespace hidden {
-            namespace impl {
+namespace cds { // NOLINT(modernize-concat-nested-namespaces)
+    namespace experimental { // NOLINT(modernize-concat-nested-namespaces)
+        namespace __hidden { // NOLINT(modernize-concat-nested-namespaces, bugprone-reserved-identifier)
+            namespace __impl { // NOLINT(bugprone-reserved-identifier)
 
-                template < typename CharType >
-                __CDS_OptimalInline auto BaseStringView < CharType > :: sequence () const & noexcept -> Sequence < BaseStringView < CharType > const > {
+                template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
+                __CDS_OptimalInline auto __BaseStringView < __CharType > :: sequence () const & noexcept -> Sequence < __BaseStringView < __CharType > const > {
 
                     return Sequence < RemoveReference < decltype (*this) > > ( * this );
                 }
 
-                template < typename CharType >
-                __CDS_OptimalInline auto BaseStringView < CharType > :: sequence () const && noexcept -> Sequence < BaseStringView < CharType > const > {
+                template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
+                __CDS_OptimalInline auto __BaseStringView < __CharType > :: sequence () const && noexcept -> Sequence < __BaseStringView < __CharType > const > {
 
                     return Sequence < RemoveReference < decltype (*this) > > ( std :: move ( * this ) );
                 }

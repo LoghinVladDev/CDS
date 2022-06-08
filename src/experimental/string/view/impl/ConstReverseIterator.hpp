@@ -7,13 +7,13 @@
 
 namespace cds { // NOLINT(modernize-concat-nested-namespaces)
     namespace experimental { // NOLINT(modernize-concat-nested-namespaces)
-        namespace hidden { // NOLINT(modernize-concat-nested-namespaces)
-            namespace impl {
+        namespace __hidden { // NOLINT(modernize-concat-nested-namespaces)
+            namespace __impl {
 
-                template < typename CharType >
-                constexpr BaseStringView < CharType > :: ConstReverseIterator :: ConstReverseIterator (
-                        BaseStringView < CharType > const * pString,
-                        Index                               index
+                template < typename __CharType >
+                constexpr __BaseStringView < __CharType > :: ConstReverseIterator :: ConstReverseIterator (
+                        __BaseStringView < __CharType > const * pString,
+                        Index                                   index
                 ) noexcept :
                         AbstractConstIterator (
                                 pString,
@@ -23,38 +23,38 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
                 }
 
-                template < typename CharType >
-                constexpr BaseStringView < CharType > :: ConstReverseIterator :: ConstReverseIterator (
+                template < typename __CharType >
+                constexpr __BaseStringView < __CharType > :: ConstReverseIterator :: ConstReverseIterator (
                         ConstReverseIterator && iterator
                 ) noexcept :
                         AbstractConstIterator ( std :: move ( iterator ) ) {
 
                 }
 
-                template < typename CharType >
-                __CDS_cpplang_NonConstConstexprMemberFunction auto BaseStringView < CharType > :: ConstReverseIterator :: operator = (
+                template < typename __CharType >
+                __CDS_cpplang_NonConstConstexprMemberFunction auto __BaseStringView < __CharType > :: ConstReverseIterator :: operator = (
                         ConstReverseIterator const & iterator
                 ) noexcept -> ConstReverseIterator & {
 
                     return reinterpret_cast < ConstReverseIterator & > ( this-> AbstractConstIterator :: operator = ( iterator ) );  // NOLINT(misc-unconventional-assign-operator)
                 }
 
-                template < typename CharType >
-                __CDS_cpplang_NonConstConstexprMemberFunction auto BaseStringView < CharType > :: ConstReverseIterator :: operator = (
+                template < typename __CharType >
+                __CDS_cpplang_NonConstConstexprMemberFunction auto __BaseStringView < __CharType > :: ConstReverseIterator :: operator = (
                         ConstReverseIterator && iterator
                 ) noexcept -> ConstReverseIterator & {
 
                     return reinterpret_cast < ConstReverseIterator & > ( this-> AbstractConstIterator :: operator = ( std :: move ( iterator ) ) );  // NOLINT(misc-unconventional-assign-operator)
                 }
 
-                template < typename CharType >
-                __CDS_cpplang_NonConstConstexprMemberFunction auto BaseStringView < CharType > :: ConstReverseIterator :: operator ++ () noexcept -> ConstReverseIterator & {
+                template < typename __CharType >
+                __CDS_cpplang_NonConstConstexprMemberFunction auto __BaseStringView < __CharType > :: ConstReverseIterator :: operator ++ () noexcept -> ConstReverseIterator & {
 
                     return reinterpret_cast < ConstReverseIterator & > ( this->next() );
                 }
 
-                template < typename CharType >
-                __CDS_cpplang_ConstexprNonLiteralReturn auto BaseStringView < CharType > :: ConstReverseIterator :: operator ++ (
+                template < typename __CharType >
+                __CDS_cpplang_ConstexprNonLiteralReturn auto __BaseStringView < __CharType > :: ConstReverseIterator :: operator ++ (
                         int
                 ) noexcept -> ConstReverseIterator {
 
@@ -63,14 +63,14 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                     return copy;
                 }
 
-                template < typename CharType >
-                __CDS_cpplang_NonConstConstexprMemberFunction auto BaseStringView < CharType > :: ConstReverseIterator :: operator -- () noexcept -> ConstReverseIterator & {
+                template < typename __CharType >
+                __CDS_cpplang_NonConstConstexprMemberFunction auto __BaseStringView < __CharType > :: ConstReverseIterator :: operator -- () noexcept -> ConstReverseIterator & {
 
                     return reinterpret_cast < ConstReverseIterator & > ( this->previous() );
                 }
 
-                template < typename CharType >
-                __CDS_cpplang_ConstexprNonLiteralReturn auto BaseStringView < CharType > :: ConstReverseIterator :: operator -- (
+                template < typename __CharType >
+                __CDS_cpplang_ConstexprNonLiteralReturn auto __BaseStringView < __CharType > :: ConstReverseIterator :: operator -- (
                         int
                 ) noexcept -> ConstReverseIterator {
 
@@ -79,22 +79,22 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                     return copy;
                 }
 
-                template < typename CharType >
-                constexpr auto BaseStringView < CharType > :: ConstReverseIterator :: operator * () const noexcept -> CharType {
+                template < typename __CharType >
+                constexpr auto __BaseStringView < __CharType > :: ConstReverseIterator :: operator * () const noexcept -> __CharType {
 
                     return this->value();
                 }
 
-                template < typename CharType >
-                constexpr auto BaseStringView < CharType > :: ConstReverseIterator :: operator == (
+                template < typename __CharType >
+                constexpr auto __BaseStringView < __CharType > :: ConstReverseIterator :: operator == (
                         ConstReverseIterator const & iterator
                 ) const noexcept -> bool {
 
                     return this->equals ( iterator );
                 }
 
-                template < typename CharType >
-                constexpr auto BaseStringView < CharType > :: ConstReverseIterator :: operator != (
+                template < typename __CharType >
+                constexpr auto __BaseStringView < __CharType > :: ConstReverseIterator :: operator != (
                         ConstReverseIterator const & iterator
                 ) const noexcept -> bool {
 

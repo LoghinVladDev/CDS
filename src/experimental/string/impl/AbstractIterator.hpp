@@ -7,14 +7,14 @@
 
 namespace cds { // NOLINT(modernize-concat-nested-namespaces)
     namespace experimental { // NOLINT(modernize-concat-nested-namespaces)
-        namespace hidden { // NOLINT(modernize-concat-nested-namespaces)
-            namespace impl {
+        namespace __hidden { // NOLINT(modernize-concat-nested-namespaces, bugprone-reserved-identifier)
+            namespace __impl { // NOLINT(bugprone-reserved-identifier)
 
-                template < typename CharType >
-                constexpr BaseString < CharType > :: AbstractIterator :: AbstractIterator (
-                        BaseString < CharType >   * pString,
-                        Index                       index,
-                        bool                        forward
+                template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
+                constexpr __BaseString < __CharType > :: AbstractIterator :: AbstractIterator (
+                        __BaseString < __CharType >   * pString,
+                        Index                           index,
+                        bool                            forward
                 ) noexcept :
                         _pString ( pString ),
                         _index ( index ),
@@ -22,8 +22,8 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
                 }
 
-                template < typename CharType >
-                constexpr BaseString < CharType > :: AbstractIterator :: AbstractIterator (
+                template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
+                constexpr __BaseString < __CharType > :: AbstractIterator :: AbstractIterator (
                         AbstractIterator && iterator
                 ) noexcept :
                         _pString ( exchange ( iterator._pString, nullptr ) ),
@@ -32,8 +32,8 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
                 }
 
-                template < typename CharType >
-                __CDS_cpplang_NonConstConstexprMemberFunction auto BaseString < CharType > :: AbstractIterator :: operator = (
+                template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
+                __CDS_cpplang_NonConstConstexprMemberFunction auto __BaseString < __CharType > :: AbstractIterator :: operator = (
                         AbstractIterator const & iterator
                 ) noexcept -> AbstractIterator & {
 
@@ -48,8 +48,8 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                     return * this;
                 }
 
-                template < typename CharType >
-                __CDS_cpplang_NonConstConstexprMemberFunction auto BaseString < CharType > :: AbstractIterator :: operator = (
+                template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
+                __CDS_cpplang_NonConstConstexprMemberFunction auto __BaseString < __CharType > :: AbstractIterator :: operator = (
                         AbstractIterator && iterator
                 ) noexcept -> AbstractIterator & {
 
@@ -64,28 +64,28 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                     return * this;
                 }
 
-                template < typename CharType >
-                __CDS_cpplang_NonConstConstexprMemberFunction auto BaseString < CharType > :: AbstractIterator :: next () noexcept -> AbstractIterator & {
+                template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
+                __CDS_cpplang_NonConstConstexprMemberFunction auto __BaseString < __CharType > :: AbstractIterator :: next () noexcept -> AbstractIterator & {
 
                     this->_forward ? ++ this->_index : -- this->_index;
                     return * this;
                 }
 
-                template < typename CharType >
-                __CDS_cpplang_NonConstConstexprMemberFunction auto BaseString < CharType > :: AbstractIterator :: previous () noexcept -> AbstractIterator & {
+                template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
+                __CDS_cpplang_NonConstConstexprMemberFunction auto __BaseString < __CharType > :: AbstractIterator :: previous () noexcept -> AbstractIterator & {
 
                     this->_forward ? -- this->_index : ++ this->_index;
                     return * this;
                 }
 
-                template < typename CharType >
-                constexpr auto BaseString < CharType > :: AbstractIterator :: value () const noexcept -> CharType & {
+                template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
+                constexpr auto __BaseString < __CharType > :: AbstractIterator :: value () const noexcept -> __CharType & {
 
                     return this->_pString->_pBuffer [ this->_index ];
                 }
 
-                template < typename CharType >
-                constexpr auto BaseString < CharType > :: AbstractIterator :: equals (
+                template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
+                constexpr auto __BaseString < __CharType > :: AbstractIterator :: equals (
                         AbstractIterator const & iterator
                 ) const noexcept -> bool {
 

@@ -8,68 +8,68 @@
 namespace cds { // NOLINT(modernize-concat-nested-namespaces)
     namespace experimental { // NOLINT(modernize-concat-nested-namespaces)
 
-        namespace hidden { // NOLINT(modernize-concat-nested-namespaces)
-            namespace impl {
+        namespace __hidden { // NOLINT(modernize-concat-nested-namespaces, bugprone-reserved-identifier)
+            namespace __impl { // NOLINT(bugprone-reserved-identifier)
 
-                template < typename CharType >
-                class BaseStringView;
+                template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
+                class __BaseStringView; // NOLINT(bugprone-reserved-identifier)
 
-                template < typename CharType >
-                class BaseString;
+                template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
+                class __BaseString; // NOLINT(bugprone-reserved-identifier)
 
             }
         }
 
         namespace meta { // NOLINT(modernize-concat-nested-namespaces)
-            namespace impl {
+            namespace __impl { // NOLINT(bugprone-reserved-identifier)
 
-                template < typename CharType >
-                struct IsStringCharType : FalseType {};
-
-                template <>
-                struct IsStringCharType < char > : TrueType {};
+                template < typename >
+                struct __IsStringCharType               : FalseType {}; // NOLINT(bugprone-reserved-identifier)
 
                 template <>
-                struct IsStringCharType < wchar_t > : TrueType {};
+                struct __IsStringCharType < char >      : TrueType {};
+
+                template <>
+                struct __IsStringCharType < wchar_t >   : TrueType {};
 
 
-                template < typename CharType, typename NumericType >
-                struct IsIntegralToString : impl :: BoolConstant <
-                        ! isSame < CharType, NumericType > () && (
-                                isSigned < NumericType > () ||
-                                isUnsigned < NumericType > ()
-                        ) && isIntegral < NumericType > ()
+                template < typename __CharType, typename __NumericType > // NOLINT(bugprone-reserved-identifier)
+                struct __IsIntegralToString : impl :: BoolConstant < // NOLINT(bugprone-reserved-identifier)
+                        ! isSame < __CharType, __NumericType > () && (
+                                isSigned    < __NumericType > () ||
+                                isUnsigned  < __NumericType > ()
+                        ) && isIntegral < __NumericType > ()
                 > {};
 
 
-                template < typename ConvertibleToViewType, typename CharType, typename = void >
-                struct IsConvertibleToBaseStringView : FalseType {};
+                template < typename, typename, typename = void >
+                struct __IsConvertibleToBaseStringView : FalseType {}; // NOLINT(bugprone-reserved-identifier)
 
-                template < typename ConvertibleType, typename CharType >
-                struct IsConvertibleToBaseStringView <
-                        ConvertibleType,
-                        CharType,
-                        Void < decltype ( hidden :: impl :: BaseStringView < CharType > ( valueOf < ConvertibleType > () ) ) >
+                template < typename __ConvertibleType, typename __CharType > // NOLINT(bugprone-reserved-identifier)
+                struct __IsConvertibleToBaseStringView < // NOLINT(bugprone-reserved-identifier)
+                        __ConvertibleType,
+                        __CharType,
+                        Void < decltype ( __hidden :: __impl :: __BaseStringView < __CharType > ( valueOf < __ConvertibleType > () ) ) >
                 > : impl :: BoolConstant <
-                        ! meta :: isSame < ConvertibleType, hidden :: impl :: BaseStringView < CharType > > () && (
-                                meta :: isSame < typename Decay < ConvertibleType > :: Type, CharType const * > () ||
-                                meta :: isSame < typename Decay < ConvertibleType > :: Type, CharType * > () ||
-                                meta :: isSame < typename Decay < ConvertibleType > :: Type, hidden :: impl :: BaseString < CharType > const > () ||
-                                meta :: isSame < typename Decay < ConvertibleType > :: Type, hidden :: impl :: BaseString < CharType > > () ||
-                                meta :: isSame < typename Decay < ConvertibleType > :: Type, std :: basic_string < CharType > const > () ||
-                                meta :: isSame < typename Decay < ConvertibleType > :: Type, std :: basic_string < CharType > > ()
+                        ! meta :: isSame < __ConvertibleType, __hidden :: __impl :: __BaseStringView < __CharType > > () && (
+                                meta :: isSame < Decay < __ConvertibleType >, __CharType const * > ()                                       ||
+                                meta :: isSame < Decay < __ConvertibleType >, __CharType * > ()                                             ||
+                                meta :: isSame < Decay < __ConvertibleType >, __hidden :: __impl :: __BaseString < __CharType > const > ()  ||
+                                meta :: isSame < Decay < __ConvertibleType >, __hidden :: __impl :: __BaseString < __CharType > > ()        ||
+                                meta :: isSame < Decay < __ConvertibleType >, std :: basic_string < __CharType > const > ()                 ||
+                                meta :: isSame < Decay < __ConvertibleType >, std :: basic_string < __CharType > > ()
                         )
                 > {};
 
 
-                template < typename ConvertibleToViewType, typename CharType, typename = void >
-                struct IsNonAmbiguousConvertibleToBaseStringView : FalseType {};
+                template < typename, typename, typename = void >
+                struct __IsNonAmbiguousConvertibleToBaseStringView : FalseType {}; // NOLINT(bugprone-reserved-identifier)
 
-                template < typename CharType >
-                struct StringData {};
+                template < typename >
+                struct __StringData {}; // NOLINT(bugprone-reserved-identifier)
 
                 template <>
-                struct StringData < char > {
+                struct __StringData < char > {
                     constexpr static char       const * const emptyString       = "";
                     constexpr static char               const nullCharacter     = '\0';
                     constexpr static char       const * const digits            = "0123456789";
@@ -80,7 +80,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 };
 
                 template <>
-                struct StringData < wchar_t > {
+                struct __StringData < wchar_t > {
                     constexpr static wchar_t    const * const emptyString       = L"";
                     constexpr static wchar_t            const nullCharacter     = L'\0';
                     constexpr static wchar_t    const * const digits            = L"0123456789";
@@ -91,34 +91,34 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 };
             }
 
-            template < typename CharType >
-            constexpr auto isStringCharType () noexcept -> bool {
-                return impl :: IsStringCharType < CharType > :: value;
+            template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
+            constexpr auto isStringCharType () noexcept -> bool { // NOLINT(bugprone-reserved-identifier)
+                return __impl :: __IsStringCharType < __CharType > :: value;
             }
 
-            template < typename CharType, typename NumericType >
-            constexpr auto isIntegralToString () noexcept -> bool {
-                return impl :: IsIntegralToString < CharType, NumericType > :: value;
+            template < typename __CharType, typename __NumericType > // NOLINT(bugprone-reserved-identifier)
+            constexpr auto isIntegralToString () noexcept -> bool { // NOLINT(bugprone-reserved-identifier)
+                return __impl :: __IsIntegralToString < __CharType, __NumericType > :: value;
             }
 
-            template < typename ConvertibleType, typename CharType >
-            constexpr auto isConvertibleToBaseStringView () noexcept -> bool {
-                return impl :: IsConvertibleToBaseStringView < ConvertibleType, CharType > :: value;
+            template < typename __ConvertibleType, typename __CharType > // NOLINT(bugprone-reserved-identifier)
+            constexpr auto isConvertibleToBaseStringView () noexcept -> bool { // NOLINT(bugprone-reserved-identifier)
+                return __impl :: __IsConvertibleToBaseStringView < __ConvertibleType, __CharType > :: value;
             }
 
-            template < typename ConvertibleType, typename CharType >
-            constexpr auto isNonAmbiguousConvertibleToBaseStringView () noexcept -> bool {
+            template < typename __ConvertibleType, typename __CharType > // NOLINT(bugprone-reserved-identifier)
+            constexpr auto isNonAmbiguousConvertibleToBaseStringView () noexcept -> bool { // NOLINT(bugprone-reserved-identifier)
                 return
-                        isConvertibleToBaseStringView < ConvertibleType, CharType > () &&
-                        ! isSame < Decay < ConvertibleType >, hidden :: impl :: BaseString < CharType > > ();
+                        isConvertibleToBaseStringView < __ConvertibleType, __CharType > () &&
+                        ! isSame < Decay < __ConvertibleType >, __hidden :: __impl :: __BaseString < __CharType > > ();
             }
         }
 
-        template < typename CharType >
+        template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
         class StringUtils {
 
         public:
-            using ElementType = CharType;
+            using ElementType = __CharType;
 
         public:
             StringUtils () noexcept = delete;
@@ -127,10 +127,10 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             static sint8 const lesser       { -1 };
 
         public:
-            static sint8 const equal        { 0 };
+            static sint8 const equal        {  0 };
 
         public:
-            static sint8 const greater      { 1 };
+            static sint8 const greater      {  1 };
 
         public:
             static Index const invalidIndex { -1 };
@@ -204,60 +204,60 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             ) noexcept -> ElementType *;
 
         public:
-            template < typename OtherCharType, meta :: EnableIf < ! meta :: isSame < OtherCharType, CharType > () && sizeof ( CharType ) >= sizeof ( OtherCharType ) > = 0 >
+            template < typename __OtherCharType, meta :: EnableIf < ! meta :: isSame < __OtherCharType, __CharType > () && sizeof ( __CharType ) >= sizeof ( __OtherCharType ) > = 0 > // NOLINT(bugprone-reserved-identifier)
             __CDS_cpplang_ConstexprConditioned static auto copy (
-                    ElementType         * pDestination,
-                    Size                  destinationOffset,
-                    OtherCharType const * pSource,
-                    Size                  sourceOffset,
-                    Size                  length,
-                    bool                  writeTerminator = true
+                    ElementType           * pDestination,
+                    Size                    destinationOffset,
+                    __OtherCharType const * pSource,
+                    Size                    sourceOffset,
+                    Size                    length,
+                    bool                    writeTerminator = true
             ) noexcept -> ElementType *;
 
         public:
-            template < typename NumericType, meta :: EnableIf < meta :: isUnsigned < NumericType > () > = 0 >
+            template < typename __NumericType, meta :: EnableIf < meta :: isUnsigned < __NumericType > () > = 0 > // NOLINT(bugprone-reserved-identifier)
             __CDS_cpplang_ConstexprConditioned static auto integerLength (
-                    NumericType value,
-                    uint8       base = 10U
+                    __NumericType value,
+                    uint8         base = 10U
             ) noexcept -> uint8;
 
         public:
-            template < typename NumericType, meta :: EnableIf < meta :: isSigned < NumericType > () > = 0 >
+            template < typename __NumericType, meta :: EnableIf < meta :: isSigned < __NumericType > () > = 0 > // NOLINT(bugprone-reserved-identifier)
             __CDS_cpplang_ConstexprConditioned static auto integerLength (
-                    NumericType value,
-                    uint8       base = 10U
+                    __NumericType value,
+                    uint8         base = 10U
             ) noexcept -> uint8;
 
         public:
-            template < typename NumericType, meta :: EnableIf < meta :: isUnsigned < NumericType > () > = 0 >
+            template < typename __NumericType, meta :: EnableIf < meta :: isUnsigned < __NumericType > () > = 0 > // NOLINT(bugprone-reserved-identifier)
             __CDS_cpplang_ConstexprConditioned static auto writeInteger (
                     ElementType           * pDestination,
                     Size                    offset,
-                    NumericType             value,
+                    __NumericType           value,
                     uint8                   valueLength,
                     Size                  * pOffsetAfterWrite
             ) noexcept -> ElementType *;
 
         public:
-            template < typename NumericType, meta :: EnableIf < meta :: isSigned < NumericType > () > = 0 >
+            template < typename __NumericType, meta :: EnableIf < meta :: isSigned < __NumericType > () > = 0 > // NOLINT(bugprone-reserved-identifier)
             __CDS_cpplang_ConstexprConditioned static auto writeInteger (
                     ElementType           * pDestination,
                     Size                    offset,
-                    NumericType             value,
+                    __NumericType           value,
                     uint8                   valueLength,
                     Size                  * pOffsetAfterWrite
             ) noexcept -> ElementType *;
 
         public:
-            template < template < typename ... > class CollectionType >
+            template < template < typename ... > class __CollectionType > // NOLINT(bugprone-reserved-identifier)
             static auto find (
                     ElementType                 const * pSource,
                     Size                                sourceLength,
                     ElementType                 const * toBeFound,
                     Size                                toBeFoundLength,
                     Size                                maxCount,
-                    CollectionType < Index >          & storeIn
-            ) noexcept -> CollectionType < Index > &;
+                    __CollectionType < Index >        & storeIn
+            ) noexcept -> __CollectionType < Index > &;
 
         public:
             __CDS_cpplang_ConstexprDynamicAllocation static auto findFirst (
@@ -276,17 +276,16 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             ) noexcept -> Index;
 
         public:
-            template < template < typename ... > class CollectionType >
+            template < template < typename ... > class __CollectionType > // NOLINT(bugprone-reserved-identifier)
             static auto findAll (
                     ElementType                 const * pSource,
                     Size                                sourceLength,
                     ElementType                 const * toBeFound,
                     Size                                toBeFoundLength,
-                    CollectionType < Index >          & storeIn
-            ) noexcept -> CollectionType < Index > &;
+                    __CollectionType < Index >        & storeIn
+            ) noexcept -> __CollectionType < Index > &;
 
         public:
-            template < template < typename ... > class CollectionType >
             static auto findAll (
                     ElementType                 const * pSource,
                     Size                                sourceLength,
@@ -302,6 +301,45 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                     Size                length,
                     ElementType         character
             ) noexcept -> bool;
+
+        public:
+            template < typename __ArgumentType, meta :: EnableIf < meta :: isConvertibleToBaseStringView < __ArgumentType > () > = 0 > // NOLINT(bugprone-reserved-identifier)
+            __CDS_NoDiscard __CDS_cpplang_ConstexprConditioned static auto stringLengthOfArgument (
+                    __ArgumentType && argumentType
+            ) noexcept -> Size;
+
+        public:
+            __CDS_NoDiscard __CDS_cpplang_ConstexprConditioned static auto stringLengthOfArgument (
+                    __hidden :: __impl :: __BaseStringView < __CharType > const & string
+            ) noexcept -> Size;
+
+        public:
+            __CDS_NoDiscard __CDS_cpplang_ConstexprConditioned static auto stringLengthOfArgument (
+                    ElementType character
+            ) noexcept -> Size;
+
+        public:
+            __CDS_NoDiscard __CDS_cpplang_ConstexprConditioned static auto stringLengthOfArgument (
+                    bool value
+            ) noexcept -> Size;
+
+        public:
+            template < typename __NumericType, meta :: EnableIf < meta :: isIntegralToString < __CharType, __NumericType > () > = 0 > // NOLINT(bugprone-reserved-identifier)
+            __CDS_NoDiscard __CDS_cpplang_ConstexprConditioned static auto stringLengthOfArgument (
+                    __NumericType value
+            ) noexcept -> Size;
+
+        public:
+            template < typename __FloatingPointType, meta :: EnableIf < meta :: isFloatingPoint < __FloatingPointType > () > = 0 > // NOLINT(bugprone-reserved-identifier)
+            __CDS_NoDiscard __CDS_cpplang_ConstexprConditioned static auto stringLengthOfArgument (
+                    __FloatingPointType value
+            ) noexcept -> Size;
+
+        public:
+            template < typename ... __ArgumentTypes > // NOLINT(bugprone-reserved-identifier)
+            __CDS_NoDiscard __CDS_cpplang_ConstexprConditioned static auto stringLengthOfArguments (
+                    __ArgumentTypes && ... arguments
+            ) noexcept -> Size;
         };
     }
 }

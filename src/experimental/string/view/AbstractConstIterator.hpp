@@ -7,26 +7,26 @@
 
 namespace cds { // NOLINT(modernize-concat-nested-namespaces)
     namespace experimental { // NOLINT(modernize-concat-nested-namespaces)
-        namespace hidden { // NOLINT(modernize-concat-nested-namespaces)
-            namespace impl {
+        namespace __hidden { // NOLINT(modernize-concat-nested-namespaces, bugprone-reserved-identifier)
+            namespace __impl { // NOLINT(bugprone-reserved-identifier)
 
-                template < typename CharType >
-                class BaseStringView < CharType > :: AbstractConstIterator {
-
-                private:
-                    BaseStringView < CharType > const * _pString    { nullptr };
+                template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
+                class __BaseStringView < __CharType > :: AbstractConstIterator {
 
                 private:
-                    Index                               _index      { 0 };
+                    __BaseStringView < __CharType > const * _pString    { nullptr };
 
                 private:
-                    bool                                _forward    { true };
+                    Index                                   _index      { 0 };
+
+                private:
+                    bool                                    _forward    { true };
 
                 protected:
                     constexpr AbstractConstIterator (
-                            BaseStringView < CharType > const * pString,
-                            Index                               index,
-                            bool                                forward
+                            __BaseStringView < __CharType > const * pString,
+                            Index                                   index,
+                            bool                                    forward
                     ) noexcept;
 
                 protected:
@@ -59,7 +59,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                     __CDS_cpplang_NonConstConstexprMemberFunction auto previous () noexcept -> AbstractConstIterator &;
 
                 public:
-                    constexpr auto value () const noexcept -> CharType;
+                    constexpr auto value () const noexcept -> __CharType;
 
                 public:
                     __CDS_NoDiscard constexpr auto equals (
