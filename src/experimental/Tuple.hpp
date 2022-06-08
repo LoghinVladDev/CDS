@@ -5,7 +5,7 @@
 #ifndef __CDS_EX_TUPLE_HPP__
 #define __CDS_EX_TUPLE_HPP__
 
-#include <CDS/experimental/Object>
+#include <CDS/Object>
 #include <CDS/experimental/meta/TypeTraits>
 
 #include "tuple/TupleNode.hpp"

@@ -5,7 +5,7 @@
 #ifndef __CDS_EX_STRING_HPP__
 #define __CDS_EX_STRING_HPP__
 
-#include <CDS/experimental/Object>
+#include <CDS/Object>
 
 #include "string/BaseString.hpp"
 

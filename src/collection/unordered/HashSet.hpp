@@ -469,10 +469,6 @@ namespace cds {
                 this->insert ( * it );
             }
         }
-
-        __CDS_NoDiscard __CDS_OptimalInline auto copy () const noexcept -> HashSet < T, H > * override {
-            return Memory :: instance () .create < HashSet < T, H > > ();
-        }
     };
 
 }

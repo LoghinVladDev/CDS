@@ -1266,10 +1266,6 @@ namespace cds {
             return negative ? (-numericValue) : numericValue;
         }
 
-        __CDS_NoDiscard auto copy () const noexcept -> Long * override {
-            return Memory :: instance ().create < Long > ( * this );
-        }
-
         /**
          * @brief Thread Safe, Atomic container for Long Type
          */

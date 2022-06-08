@@ -237,7 +237,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 /// TODO : replace after replacing experimental :: Object :: toString () -> BaseString
                 template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
                 __CDS_OptimalInline __BaseString < __CharType > :: __BaseString (
-                        experimental :: Object const & object
+                        Object const & object
                 ) noexcept :
                         __BaseString ( __BaseStringView < __CharType > ( object.toString() ) ) {
 
@@ -1001,7 +1001,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                         __BaseString < __FCharType >     const & rightString
                 ) noexcept -> bool {
 
-                    return leftString == BaseStringView < __FCharType > ( rightString );
+                    return leftString == __BaseStringView < __FCharType > ( rightString );
                 }
 
 

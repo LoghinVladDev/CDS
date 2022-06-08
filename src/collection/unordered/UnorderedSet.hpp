@@ -139,10 +139,6 @@ namespace cds {
             ++ this->_size;
             return this->_pFront->data;
         }
-
-        __CDS_NoDiscard __CDS_OptimalInline auto copy () const noexcept -> UnorderedSet < T > * override {
-            return Memory :: instance () .create < UnorderedSet < T > > ( * this );
-        }
     };
 
 }

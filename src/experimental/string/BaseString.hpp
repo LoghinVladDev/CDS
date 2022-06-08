@@ -21,7 +21,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 class __BaseStringView; // NOLINT(bugprone-reserved-identifier)
 
                 template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
-                class __BaseString : public experimental :: Object { // NOLINT(bugprone-reserved-identifier)
+                class __BaseString : public Object { // NOLINT(bugprone-reserved-identifier)
 
                 public:
                     /**
@@ -151,7 +151,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
                 public:
                     __CDS_Implicit __BaseString ( // NOLINT(google-explicit-constructor)
-                            experimental :: Object const & object
+                            Object const & object
                     ) noexcept;
 
                 public:

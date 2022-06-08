@@ -433,10 +433,6 @@ namespace cds {
         auto sequence () & noexcept -> Sequence < Array < T > >;
         auto sequence () const && noexcept -> Sequence < Array < T > const >;
         auto sequence () && noexcept -> Sequence < Array < T > >;
-
-        __CDS_NoDiscard auto copy () const noexcept -> Array < T > * override {
-            return Memory :: instance () .create < Array < T > > ( * this );
-        }
     };
 
 }
