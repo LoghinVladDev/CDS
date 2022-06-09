@@ -56,12 +56,12 @@ namespace cds {
         auto clear () noexcept -> void override = 0;
         __CDS_NoDiscard __CDS_cpplang_ConstexprPureAbstract auto size () const noexcept -> Size override = 0;
 
-        template < typename V = T, EnableIf < Type < V > :: copyConstructible > = 0 >
+        template < typename V = T, meta :: EnableIf < meta :: isCopyConstructible < V > () > = 0 >
         __CDS_OptimalInline auto insert ( ElementCRef element ) noexcept -> void {
             return this->add(element);
         }
 
-        template < typename V = T, EnableIf < Type < V > :: moveConstructible > = 0 >
+        template < typename V = T, meta :: EnableIf < meta :: isMoveConstructible < V > () > = 0 >
         __CDS_OptimalInline auto insert ( ElementMRef element ) noexcept -> void {
             return this->add(element);
         }
@@ -75,7 +75,7 @@ namespace cds {
             out << "{ ";
 
             for ( ElementCRef element __CDS_MaybeUnused : (*this) ) {
-                Type < T > ::streamPrint(out, element ) << ", ";
+                meta :: print (out, element ) << ", ";
             }
 
             auto asString = out.str();

@@ -660,7 +660,7 @@ __CDS_cpplang_ConstexprPostfixLiteral auto operator "" _d (long double value) no
 
 #endif
 
-__CDS_RegisterParseType(Double) // NOLINT(clion-misra-cpp2008-8-0-1)
+__CDS_Meta_RegisterParseType(Double) // NOLINT(clion-misra-cpp2008-8-0-1)
 
 
 #endif //CDS_DOUBLE_HPP

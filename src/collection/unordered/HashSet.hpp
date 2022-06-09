@@ -101,7 +101,7 @@ namespace cds {
             auto hash = this->_hasher(element);
 
             for (auto pHead = this->_listArray[hash]; pHead != nullptr; pHead = pHead->pNext ) { // NOLINT(clion-misra-cpp2008-6-5-2,clion-misra-cpp2008-6-5-4)
-                if ( Type < ElementType > :: compare (* pHead->pData, element ) ) {
+                if ( meta :: equals (* pHead->pData, element ) ) {
                     return pHead->pData;
                 }
             }
@@ -117,7 +117,7 @@ namespace cds {
 
         auto contains ( ElementCRef element ) const noexcept -> bool final {
             for (auto pHead = this->_listArray[this->_hasher(element)]; pHead != nullptr; pHead = pHead->pNext ) { // NOLINT(clion-misra-cpp2008-6-5-2,clion-misra-cpp2008-6-5-4)
-                if ( Type < ElementType > :: compare (* pHead->pData, element ) ) {
+                if ( meta :: equals (* pHead->pData, element ) ) {
                     return true;
                 }
             }
@@ -132,7 +132,7 @@ namespace cds {
                 return false;
             }
 
-            if ( Type < ElementType > :: compare (element, * this->_listArray[hash]->pData ) ) {
+            if ( meta :: equals (element, * this->_listArray[hash]->pData ) ) {
                 auto pNode = this->_listArray[hash];
                 this->_listArray[hash] = this->_listArray[hash]->pNext;
 
@@ -150,7 +150,7 @@ namespace cds {
             Node * current = previous->pNext;
 
             while ( current != nullptr ) {
-                if ( Type < ElementType > :: compare (element, * current->pData ) ) {
+                if ( meta :: equals (element, * current->pData ) ) {
                     previous->pNext = current->pNext;
 
                     Memory :: instance().destroy ( current->pData );
@@ -173,7 +173,7 @@ namespace cds {
             }
 
             for (auto aIt = this->begin(), bIt = set.begin(), aEnd = this->end(), bEnd = set.end(); aIt != aEnd && bIt != bEnd; ++ aIt, ++ bIt ) { // NOLINT(clion-misra-cpp2008-6-5-1,clion-misra-cpp2008-8-0-1,clion-misra-cpp2008-5-18-1)
-                if ( ! Type < ElementType > :: compare (* aIt, * bIt ) ) { // NOLINT(clion-misra-cpp2008-5-3-1)
+                if ( ! meta :: equals (* aIt, * bIt ) ) { // NOLINT(clion-misra-cpp2008-5-3-1)
                     return false;
                 }
             }
@@ -473,18 +473,7 @@ namespace cds {
 
 }
 
-namespace cds { // NOLINT(modernize-concat-nested-namespaces)
-    namespace utility {
-
-        template<typename T, typename H> __CDS_Requires(
-                UniqueIdentifiable < T > &&
-                HashCalculatorHasBoundaryFunction < H >
-        ) struct TypeParseTraits<HashSet<T, H>> {
-            constexpr static StringLiteral name = "HashSet";
-        };
-
-    }
-}
+__CDS_Meta_RegisterParseTemplateType(HashSet)
 
 #if defined(CDS_SEQUENCE_HPP) && !defined(CDS_HASHSET_SEQUENCE)
 #define CDS_HASHSET_SEQUENCE
@@ -495,28 +484,28 @@ namespace cds {
             UniqueIdentifiable < T > &&
             HashCalculatorHasBoundaryFunction < H >
     ) auto HashSet < T, H > :: sequence () const & noexcept -> Sequence < HashSet const > {
-        return Sequence < RemoveReference < decltype ( * this ) > > ( * this );
+        return Sequence < meta :: RemoveReference < decltype ( * this ) > > ( * this );
     }
 
     template < typename T, typename H > __CDS_Requires (
             UniqueIdentifiable < T > &&
             HashCalculatorHasBoundaryFunction < H >
     ) auto HashSet < T, H > :: sequence () & noexcept -> Sequence < HashSet > {
-        return Sequence < RemoveReference < decltype ( * this ) > > ( * this );
+        return Sequence < meta :: RemoveReference < decltype ( * this ) > > ( * this );
     }
 
     template < typename T, typename H > __CDS_Requires (
             UniqueIdentifiable < T > &&
             HashCalculatorHasBoundaryFunction < H >
     ) auto HashSet < T, H > :: sequence () const && noexcept -> Sequence < HashSet const > {
-        return Sequence < RemoveReference < decltype ( * this ) > > ( std :: move ( * this ) );
+        return Sequence < meta :: RemoveReference < decltype ( * this ) > > ( std :: move ( * this ) );
     }
 
     template < typename T, typename H > __CDS_Requires (
             UniqueIdentifiable < T > &&
             HashCalculatorHasBoundaryFunction < H >
     ) auto HashSet < T, H > :: sequence () && noexcept -> Sequence < HashSet > {
-        return Sequence < RemoveReference < decltype ( * this ) > > ( std :: move ( * this ) );
+        return Sequence < meta :: RemoveReference < decltype ( * this ) > > ( std :: move ( * this ) );
     }
 
 }

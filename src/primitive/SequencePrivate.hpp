@@ -34,11 +34,11 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
                 template < typename C >
                 struct ContainedTypeImpl {
-                    using Type = RemoveReference <
+                    using Type = meta :: RemoveReference <
                         decltype (
-                            * ( * Type <
-                                    typename RemoveReference < C > :: Iterator
-                            > :: unsafeAddress () )
+                            * ( meta :: referenceOf <
+                                    typename meta :: RemoveReference < C > :: Iterator
+                            > () )
                         )
                     >;
                 };
@@ -59,24 +59,24 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 template < typename MapperType, typename C >
                 constexpr auto mapToSameType () noexcept -> bool {
                     return std :: is_same <
-                        RemoveReference <
+                        meta :: RemoveReference <
                             decltype (
-                                * Type <
-                                        typename RemoveReference < C > :: Iterator
-                                > :: unsafeAddress ()
+                                meta :: referenceOf <
+                                        typename meta :: RemoveReference < C > :: Iterator
+                                > ()
                             )
                         >,
-                            ReturnOf < MapperType >
+                        meta :: ReturnOf < MapperType >
                     > :: type :: value;
                 }
 
                 template < typename TransformerType >
                 struct FlatMapDeducted {
-                    using Type = RemoveReference <
+                    using Type = meta :: RemoveReference <
                         decltype (
-                            * ( * Type <
-                                typename ReturnOf < TransformerType > :: Iterator
-                            > :: unsafeAddress () )
+                            * ( meta :: referenceOf <
+                                typename meta :: ReturnOf < TransformerType > :: Iterator
+                            > () )
                         )
                     >;
                 };
@@ -86,24 +86,24 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
                 template < typename C >
                 constexpr auto containedTypeIsPair () noexcept -> bool {
-                    return isPair <
-                        RemoveReference <
+                    return meta :: isPair <
+                        meta :: RemoveReference <
                             decltype (
-                                * ( * Type <
-                                    typename RemoveReference < C > :: Iterator
-                                > :: unsafeAddress () )
+                                * ( meta :: referenceOf <
+                                    typename meta :: RemoveReference < C > :: Iterator
+                                > () )
                             )
                         >
-                    > :: type :: value;
+                    > ();
                 }
 
                 template < typename C >
                 struct ContainedTypeAsPair : pairTrait <
-                    RemoveReference <
+                    meta :: RemoveReference <
                         decltype (
-                            * ( * Type <
-                                typename RemoveReference < C > :: Iterator
-                            > :: unsafeAddress () )
+                            * ( meta :: referenceOf <
+                                typename meta :: RemoveReference < C > :: Iterator
+                            > () )
                         )
                     >
                 > {

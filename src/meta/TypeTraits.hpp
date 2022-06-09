@@ -1428,7 +1428,7 @@ namespace cds {                                                                 
 namespace cds {                                                                     \
     namespace meta {                                                                \
         namespace __impl {                                                          \
-            template < typename ... __Types >                                       \
+            template < typename ... Types >                                         \
             struct __TypeParseTraits < _type < Types ... > > {                      \
                 constexpr static StringLiteral name = # _type;                      \
             };                                                                      \

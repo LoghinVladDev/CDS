@@ -289,7 +289,7 @@ namespace cds {
                     aIt != aEnd && bIt != bEnd;
                     ++ aIt, ++ bIt // NOLINT(clion-misra-cpp2008-5-18-1)
             ) {
-                if ( ! ( Type < T > :: compare (* aIt, * bIt ) ) ) { // NOLINT(clion-misra-cpp2008-5-3-1)
+                if ( ! ( meta :: equals (* aIt, * bIt ) ) ) { // NOLINT(clion-misra-cpp2008-5-3-1)
                     return false;
                 }
             }
@@ -527,7 +527,7 @@ namespace cds {
         };
 
         while ( current != nullptr && count > 0u ) {
-            if ( Type < T > :: compare ( * current->data, what ) ) {
+            if ( meta :: equals ( * current->data, what ) ) {
                 auto before = current->pPrevious;
                 auto after = current->pNext;
 
@@ -571,7 +571,7 @@ namespace cds {
         };
 
         while ( current != nullptr ) {
-            if ( Type < T > :: compare ( * current->data, what ) ) {
+            if ( meta :: equals ( * current->data, what ) ) {
                 auto * before = current->pPrevious;
                 auto * after = current->pNext;
 
@@ -1179,7 +1179,7 @@ namespace cds {
         Size added = 0u;
 
         for ( auto it = this->begin(), end = this->end(); it != end; ++ it ) { // NOLINT(clion-misra-cpp2008-8-0-1)
-            if ( Type < ElementType > :: compare ( element, * it ) && added < count ) {
+            if ( meta :: equals ( element, * it ) && added < count ) {
                 iterators.add(it);
                 ++ added;
             } else if ( added >= count ) {
@@ -1236,7 +1236,7 @@ namespace cds {
         Size added = 0u;
 
         for ( auto it = this->begin(), end = this->end(); it != end; ++ it ) { // NOLINT(clion-misra-cpp2008-8-0-1)
-            if ( Type < ElementType > :: compare ( element, * it ) && added < count ) {
+            if ( meta :: equals ( element, * it ) && added < count ) {
                 iterators.add(it);
                 ++ added;
             } else if ( added >= count ) {
@@ -1300,6 +1300,6 @@ namespace cds {
 
 #endif
 
-__CDS_RegisterParseTypeTemplateT(DoubleLinkedList) // NOLINT(clion-misra-cpp2008-8-0-1)
+__CDS_Meta_RegisterParseTemplateType(DoubleLinkedList) // NOLINT(clion-misra-cpp2008-8-0-1)
 
 #endif //CDS_DOUBLELINKEDLIST_HPP
