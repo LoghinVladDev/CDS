@@ -459,7 +459,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                     return false;
                 }
 
-                return string._pData [ 0 ] == character;
+                return string.cStr() [ 0 ] == character;
             }
 
 
@@ -514,7 +514,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
             template < typename __FCharType > // NOLINT(bugprone-reserved-identifier)
             __CDS_cpplang_ConstexprConditioned auto operator != (
-                    std :: basic_string < __FCharType >   const & leftString,
+                    std :: basic_string < __FCharType >     const & leftString,
                     __BaseStringView < __FCharType >        const & rightString
             ) noexcept -> bool {
 
@@ -524,7 +524,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
             template < typename __FCharType > // NOLINT(bugprone-reserved-identifier)
             __CDS_cpplang_ConstexprConditioned auto operator != (
-                    __FCharType                           const * pLeftString,
+                    __FCharType                             const * pLeftString,
                     __BaseStringView < __FCharType >        const & rightString
             ) noexcept -> bool {
 
@@ -534,7 +534,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
             template < typename __FCharType > // NOLINT(bugprone-reserved-identifier)
             __CDS_cpplang_ConstexprConditioned auto operator != (
-                    __FCharType                                   character,
+                    __FCharType                                     character,
                     __BaseStringView < __FCharType >        const & string
             ) noexcept -> bool {
 
@@ -542,7 +542,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                     return true;
                 }
 
-                return string._pData [ 0 ] != character;
+                return string.cStr() [ 0 ] != character;
             }
 
 
@@ -621,11 +621,11 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                     return true;
                 }
 
-                if ( string.length() > 1 && character == string._pData [ 0 ] ) {
+                if ( string.length() > 1 && character == string.cStr() [ 0 ] ) {
                     return true;
                 }
 
-                return character < string._pData [0];
+                return character < string.cStr() [0];
             }
 
 
@@ -700,7 +700,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
             template < typename __FCharType > // NOLINT(bugprone-reserved-identifier)
             __CDS_cpplang_ConstexprConditioned auto operator > (
-                    __FCharType                                   character,
+                    __FCharType                                     character,
                     __BaseStringView < __FCharType >        const & string
             ) noexcept -> bool {
 
@@ -708,7 +708,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                     return false;
                 }
 
-                return character > string._pData [ 0 ];
+                return character > string.cStr() [ 0 ];
             }
 
 
@@ -770,7 +770,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
             template < typename __FCharType > // NOLINT(bugprone-reserved-identifier)
             __CDS_cpplang_ConstexprConditioned auto operator <= (
-                    __FCharType                                   character,
+                    __FCharType                                     character,
                     __BaseStringView < __FCharType >        const & string
             ) noexcept -> bool {
 
@@ -836,7 +836,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
             template < typename __FCharType > // NOLINT(bugprone-reserved-identifier)
             __CDS_cpplang_ConstexprConditioned auto operator >= (
-                    __FCharType                                   character,
+                    __FCharType                                     character,
                     __BaseStringView < __FCharType >        const & string
             ) noexcept -> bool {
 
@@ -1019,7 +1019,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             }
 
 
-            template < typename __FCharType, meta :: EnableIf < meta :: isStringCharType < __FCharType > () > = 0 > // NOLINT(bugprone-reserved-identifier)
+            template < typename __FCharType, meta :: EnableIf < meta :: isStringCharType < __FCharType > () > > // NOLINT(bugprone-reserved-identifier)
             auto operator + (
                     __FCharType                                 character,
                     __BaseStringView < __FCharType >    const & string
@@ -1036,7 +1036,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 StringUtils < __FCharType > :: copy (
                         result.data(),
                         1ULL,
-                        string._pData,
+                        string.cStr(),
                         0ULL,
                         string.length()
                 );
@@ -1047,7 +1047,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             }
 
 
-            template < typename __FCharType, typename __NumericType, meta :: EnableIf < meta :: isIntegralToString < __FCharType, __NumericType > () > = 0 > // NOLINT(bugprone-reserved-identifier)
+            template < typename __FCharType, typename __NumericType, meta :: EnableIf < meta :: isIntegralToString < __FCharType, __NumericType > () > > // NOLINT(bugprone-reserved-identifier)
             auto operator + (
                     __NumericType                               value,
                     __BaseStringView < __FCharType >    const & string
@@ -1071,7 +1071,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 StringUtils < __FCharType > :: copy (
                         result.data(),
                         valueLength,
-                        string._pData,
+                        string.cStr(),
                         0ULL,
                         string.length()
                 );
@@ -1105,7 +1105,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 StringUtils < __FCharType > :: copy (
                         result.data(),
                         valueLength,
-                        string._pData,
+                        string.cStr(),
                         0ULL,
                         string.length(),
                         false
@@ -1184,7 +1184,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                     StringUtils < __FCharType > :: copy (
                             result._pBuffer,
                             result._length,
-                            string._pBuffer,
+                            string.cStr(),
                             0ULL,
                             string.length(),
                             false
@@ -2512,9 +2512,20 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
             template < typename __FCharType > // NOLINT(bugprone-reserved-identifier)
             auto operator << (
+                    std :: ostream                         & out,
+                    __BaseStringView < __FCharType > const & obj
+            ) noexcept -> std :: ostream & {
+
+                return ( out << obj.cStr() );
+            }
+
+
+            template < typename __FCharType > // NOLINT(bugprone-reserved-identifier)
+            auto operator << (
                     std :: wostream                        & out,
                     __BaseStringView < __FCharType > const & obj
             ) noexcept -> std :: wostream & {
+
                 return ( out << obj.cStr() );
             }
 

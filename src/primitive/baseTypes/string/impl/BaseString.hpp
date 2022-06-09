@@ -4059,6 +4059,17 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                     std :: wostream                    & out,
                     __BaseString < __FCharType > const & obj
             ) noexcept -> std :: wostream & {
+
+                return ( out << obj.cStr() );
+            }
+
+
+            template < typename __FCharType > // NOLINT(bugprone-reserved-identifier)
+            auto operator << (
+                    std :: ostream                     & out,
+                    __BaseString < __FCharType > const & obj
+            ) noexcept -> std :: ostream & {
+
                 return ( out << obj.cStr() );
             }
 

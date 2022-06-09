@@ -1963,6 +1963,12 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
             template < typename __FCharType > // NOLINT(bugprone-reserved-identifier)
             auto operator << (
+                    std :: ostream                     & out,
+                    __BaseString < __FCharType > const & obj
+            ) noexcept -> std :: ostream &;
+
+            template < typename __FCharType > // NOLINT(bugprone-reserved-identifier)
+            auto operator << (
                     std :: wostream                    & out,
                     __BaseString < __FCharType > const & obj
             ) noexcept -> std :: wostream &;
