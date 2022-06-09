@@ -83,7 +83,7 @@ namespace cds {
 
         }
 
-        template < typename T, EnableIf < std :: is_integral < T > :: type :: value > = 0 >
+        template < typename T, meta :: EnableIf < meta :: isIntegral < T > () > = 0 >
         constexpr explicit Range(Pair < T, T > const & pair) noexcept :
                 _s(pair.first()),
                 _f(pair.second()),
@@ -117,15 +117,11 @@ namespace cds {
 
         __CDS_NoDiscard __CDS_OptimalInline auto toString () const noexcept -> String final {
             return
-                "( "_s +
+                StringView ( "( " ) +
                 _s +
                 " ... " +
                 _f +
                 " )";
-        }
-
-        __CDS_NoDiscard __CDS_OptimalInline auto copy () const noexcept -> Range * override {
-            return Memory :: instance().create < Range > ( * this );
         }
 
         __CDS_NoDiscard constexpr auto from () const noexcept -> Index {
@@ -144,6 +140,6 @@ namespace cds {
 
 }
 
-__CDS_RegisterParseType(Range) // NOLINT(clion-misra-cpp2008-8-0-1)
+__CDS_Meta_RegisterParseType(Range) // NOLINT(clion-misra-cpp2008-8-0-1)
 
 #endif //CDS_RANGE_HPP

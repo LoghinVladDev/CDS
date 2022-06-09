@@ -125,7 +125,7 @@ namespace cds {
             auto head = this->_pFront;
 
             while ( head != nullptr ) {
-                if (Type<ElementType>::compare(* head->data, element)) {
+                if (meta :: equals(* head->data, element)) {
                     return head->data;
                 }
 
@@ -138,10 +138,6 @@ namespace cds {
             this->_pFront = pNode;
             ++ this->_size;
             return this->_pFront->data;
-        }
-
-        __CDS_NoDiscard __CDS_OptimalInline auto copy () const noexcept -> UnorderedSet < T > * override {
-            return Memory :: instance () .create < UnorderedSet < T > > ( * this );
         }
     };
 
@@ -158,6 +154,6 @@ namespace cds {
 
 #endif
 
-__CDS_RegisterParseTypeTemplateT(UnorderedSet) // NOLINT(clion-misra-cpp2008-8-0-1)
+__CDS_Meta_RegisterParseTemplateType(UnorderedSet) // NOLINT(clion-misra-cpp2008-8-0-1)
 
 #endif //CDS_UNORDEREDSET_HPP

@@ -21,6 +21,15 @@ namespace cds {
         HashCalculatorHasBoundaryFunction < H >
     ) class HashMap;
 
+    template < typename K, typename V > __CDS_Requires (
+            UniqueIdentifiable < K >
+    ) class Map;
+
+}
+
+#include <CDS/DoubleLinkedList>
+
+namespace cds {
 
     template < typename K, typename V> __CDS_Requires( UniqueIdentifiable <K> )
     class Map : public Collection < Pair < K, V > > { // NOLINT(cppcoreguidelines-virtual-class-destructor)
@@ -86,12 +95,12 @@ namespace cds {
 
         auto allocInsertGetPtr (EntryConstReference) noexcept -> EntryPointerReference override = 0;
 
-        template < typename U = Entry, EnableIf < Type < U > :: copyConstructible > = 0 >
+        template < typename U = Entry, meta :: EnableIf < meta :: isCopyConstructible < U > () > = 0 >
         __CDS_OptimalInline auto insert (EntryConstReference entry) noexcept -> ValueReference {
             return ( (this->allocInsertGetPtr(entry)) = Memory :: instance().create < Entry > (entry) )->second();
         }
 
-        template < typename U = Entry, EnableIf < Type < U > :: moveConstructible > = 0 >
+        template < typename U = Entry, meta :: EnableIf < meta :: isMoveConstructible < U > () > = 0 >
         __CDS_OptimalInline auto insert (EntryMoveReference entry) noexcept -> ValueReference {
             return ( ( this->allocInsertGetPtr(entry)) = Memory :: instance().create < Entry > (entry) )->second();
         }
@@ -140,15 +149,6 @@ namespace cds {
 
 }
 
-namespace cds { // NOLINT(modernize-concat-nested-namespaces)
-    namespace utility {
-
-        template <class K, class V> __CDS_Requires( UniqueIdentifiable <K> )
-        struct TypeParseTraits<Map< K, V> > {
-            constexpr static StringLiteral name = "Map";
-        };
-
-    }
-}
+__CDS_Meta_RegisterParseTemplateType(Map)
 
 #endif //CDS_MAP_HPP

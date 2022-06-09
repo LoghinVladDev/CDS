@@ -268,7 +268,7 @@ namespace cds {
                     aIt != aEnd && bIt != bEnd;
                     ++ aIt, ++ bIt // NOLINT(clion-misra-cpp2008-5-18-1)
             ) {
-                if ( ! Type < T > :: compare (* aIt, * bIt ) ) { // NOLINT(clion-misra-cpp2008-5-3-1)
+                if ( ! meta :: equals (* aIt, * bIt ) ) { // NOLINT(clion-misra-cpp2008-5-3-1)
                     return false;
                 }
             }
@@ -387,10 +387,6 @@ namespace cds {
         __CDS_NoDiscard auto sequence () const && noexcept -> Sequence < SingleLinkedList < T > const >;
         __CDS_NoDiscard auto sequence () && noexcept -> Sequence < SingleLinkedList < T > >;
 
-        __CDS_NoDiscard __CDS_OptimalInline auto copy () const noexcept -> SingleLinkedList < T > * override {
-            return Memory :: instance().create < SingleLinkedList > (* this);
-        }
-
         __CDS_NoDiscard __CDS_cpplang_ConstexprOverride auto hash () const noexcept -> Index override {
             return this->size();
         }
@@ -452,7 +448,7 @@ namespace cds {
         auto nextNode = [& current] () noexcept { current = current->_pNext; };
 
         while ( current != nullptr && count > 0u ) {
-            if ( Type < T > :: compare ( * current->_data, what ) ) {
+            if ( meta :: equals ( * current->_data, what ) ) {
                 auto after = current->_pNext;
 
                 if ( previous == nullptr ) {
@@ -489,11 +485,11 @@ namespace cds {
     template < typename T >
     auto SingleLinkedList < T > :: removeLast ( ElementCRef what ) noexcept -> bool {
         auto current = this->_pFront;
-        decltype (current) previous = Type < T > :: compare ( * current->_data, what ) ? current : nullptr;
+        decltype (current) previous = meta :: equals ( * current->_data, what ) ? current : nullptr;
 
         auto nextNode = [& current] () noexcept  { current = current->_pNext; };
 
-        if ( Type < T > :: compare ( * this->_pFront->_data, what ) ) {
+        if ( meta :: equals ( * this->_pFront->_data, what ) ) {
             auto pFront = this->_pFront;
 
             this->_pFront = this->_pFront->_pNext;
@@ -510,7 +506,7 @@ namespace cds {
         }
 
         while ( current->_pNext != nullptr ) {
-            if ( Type < T > :: compare ( * current->_pNext->_data, what ) ) {
+            if ( meta :: equals ( * current->_pNext->_data, what ) ) {
                 previous = current;
             }
 
@@ -941,6 +937,6 @@ namespace cds {
 
 }
 
-__CDS_RegisterParseTypeTemplateT(SingleLinkedList) // NOLINT(clion-misra-cpp2008-8-0-1)
+__CDS_Meta_RegisterParseTemplateType(SingleLinkedList) // NOLINT(clion-misra-cpp2008-8-0-1)
 
 #endif //CDS_SINGLELINKEDLIST_HPP

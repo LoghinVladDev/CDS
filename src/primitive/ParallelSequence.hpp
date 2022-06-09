@@ -97,7 +97,6 @@ namespace cds {
 
         __CDS_NoDiscard __CDS_MaybeUnused auto toString () const noexcept -> String override;
         __CDS_NoDiscard __CDS_MaybeUnused auto hash () const noexcept -> Index override;
-        __CDS_NoDiscard __CDS_MaybeUnused auto copy () const noexcept -> ParallelSequence * override;
         __CDS_NoDiscard __CDS_MaybeUnused auto equals (Object const &) const noexcept -> bool override;
 
         class Worker : public Thread {

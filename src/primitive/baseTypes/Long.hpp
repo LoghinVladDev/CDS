@@ -1221,7 +1221,7 @@ namespace cds {
                 intValue /= base;
             }
 
-            return std :: move ( (rep + (this->v < 0 ? "-" : "")).reversed() );
+            return std :: move ( (rep + (this->v < 0 ? "-" : "")).reverse() );
         }
 
         /**
@@ -1264,10 +1264,6 @@ namespace cds {
             }
 
             return negative ? (-numericValue) : numericValue;
-        }
-
-        __CDS_NoDiscard auto copy () const noexcept -> Long * override {
-            return Memory :: instance ().create < Long > ( * this );
         }
 
         /**
@@ -2052,6 +2048,6 @@ __CDS_cpplang_ConstexprPostfixLiteral auto operator "" _l (unsigned long long in
 
 #endif
 
-__CDS_RegisterParseType(Long) // NOLINT(clion-misra-cpp2008-8-0-1)
+__CDS_Meta_RegisterParseType(Long) // NOLINT(clion-misra-cpp2008-8-0-1)
 
 #endif //CDS_LONG_HPP

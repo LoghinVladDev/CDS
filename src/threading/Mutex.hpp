@@ -41,19 +41,14 @@ namespace cds {
     #if defined(__linux)
         typedef pthread_mutex_t PrimitiveMutex;
 
-        constexpr static StringLiteral IMPLEMENTATION_TYPE = "POSIX Mutex (pthread)";
     #elif defined(WIN32)
     #if defined(MUTEX_IMPLEMENTATION_WINAPI_CRITICAL_SECTION)
         typedef CRITICAL_SECTION PrimitiveMutex;
-
-        constexpr static StringLiteral IMPLEMENTATION_TYPE = "WINAPI Critical Sections (windows)";
     #elif defined(MUTEX_IMPLEMENTATION_WINAPI_MUTEX)
         typedef struct {
             HANDLE                  handle;
             LPSECURITY_ATTRIBUTES   pSecurityAttributes;
         } PrimitiveMutex;
-
-        constexpr static StringLiteral IMPLEMENTATION_TYPE = "WINAPI Anonymous/Named Mutex (windows)";
     #endif
     #else
     #error Unsupported : Mutex
@@ -214,7 +209,7 @@ namespace cds {
 
         __CDS_NoDiscard auto toString() const noexcept -> String override {
             return String()
-                .append("Mutex { <").append(Mutex::IMPLEMENTATION_TYPE).append(">; state = ")
+                .append("Mutex { state = ")
                 .append(Mutex::stateToString(this->state)).append(" }");
         }
     };
@@ -226,6 +221,6 @@ namespace cds {
 #undef MUTEX_IMPLEMENTATION_WINAPI_CRITICAL_SECTION
 #endif
 
-__CDS_RegisterParseType(Mutex) // NOLINT(clion-misra-cpp2008-8-0-1)
+__CDS_Meta_RegisterParseType(Mutex) // NOLINT(clion-misra-cpp2008-8-0-1)
 
 #endif //CDS_MUTEX_HPP

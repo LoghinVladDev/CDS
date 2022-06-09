@@ -289,7 +289,7 @@ namespace cds {
                     aIt != aEnd && bIt != bEnd;
                     ++ aIt, ++ bIt // NOLINT(clion-misra-cpp2008-5-18-1)
             ) {
-                if ( ! ( Type < T > :: compare (* aIt, * bIt ) ) ) { // NOLINT(clion-misra-cpp2008-5-3-1)
+                if ( ! ( meta :: equals (* aIt, * bIt ) ) ) { // NOLINT(clion-misra-cpp2008-5-3-1)
                     return false;
                 }
             }
@@ -413,10 +413,6 @@ namespace cds {
         __CDS_NoDiscard auto sequence () & noexcept -> Sequence < DoubleLinkedList < T > >;
         __CDS_NoDiscard auto sequence () const && noexcept -> Sequence < DoubleLinkedList < T > const >;
         __CDS_NoDiscard auto sequence () && noexcept -> Sequence < DoubleLinkedList < T > >;
-
-        __CDS_NoDiscard __CDS_OptimalInline auto copy () const noexcept -> DoubleLinkedList < T > * override {
-            return Memory :: instance() . create < DoubleLinkedList < T > > ( * this );
-        }
     };
 
 }
@@ -531,7 +527,7 @@ namespace cds {
         };
 
         while ( current != nullptr && count > 0u ) {
-            if ( Type < T > :: compare ( * current->data, what ) ) {
+            if ( meta :: equals ( * current->data, what ) ) {
                 auto before = current->pPrevious;
                 auto after = current->pNext;
 
@@ -575,7 +571,7 @@ namespace cds {
         };
 
         while ( current != nullptr ) {
-            if ( Type < T > :: compare ( * current->data, what ) ) {
+            if ( meta :: equals ( * current->data, what ) ) {
                 auto * before = current->pPrevious;
                 auto * after = current->pNext;
 
@@ -983,196 +979,6 @@ namespace cds {
         return Sequence < typename std :: remove_reference < decltype (*this) > :: type > (std::move(*this));
     }
 
-    inline auto String::split(ElementType token, Size limit) const noexcept -> DoubleLinkedList < String > {
-        Index splitIndex = 0;
-        if (limit < 1u ) {
-            limit = limits :: U32_MAX;
-        }
-
-        DoubleLinkedList < String > segments;
-        if ( this->empty() ) {
-            return segments;
-        }
-
-        String currentSegment;
-
-        for ( auto character : (*this) ) {
-            if (character != token || splitIndex >= static_cast<Index>(limit) - 1 ) {
-                currentSegment += character;
-            } else {
-                if ( currentSegment.empty() ) {
-                    continue;
-                }
-
-                splitIndex ++;
-                (void) segments.pushBack ( currentSegment );
-                currentSegment.clear();
-            }
-        }
-
-        if ( ! currentSegment.empty() ) {
-            (void) segments.pushBack(currentSegment);
-        }
-
-        return segments;
-    }
-
-    __CDS_MaybeUnused inline auto String::lines() const noexcept -> DoubleLinkedList < String >{
-        return this->split("\n\r");
-    }
-
-    inline auto String::split(String const & delim, Size limit) const noexcept -> DoubleLinkedList < String > {
-        Index splitIndex = 0;
-        if (limit < 1u ) {
-            limit = limits :: U64_MAX;
-        }
-
-        DoubleLinkedList < String > segments;
-        if ( this->empty() ) {
-            return segments;
-        }
-
-        String currentSegment;
-
-        for ( auto character : (*this) ) {
-            if (! delim.contains(character) || splitIndex >= static_cast<Index>(limit) - 1 ) {
-                currentSegment += character;
-            } else {
-                splitIndex ++;
-                if ( ! currentSegment.empty() ) {
-                    (void) segments.pushBack(currentSegment);
-                }
-
-                currentSegment.clear();
-            }
-        }
-
-        if ( ! currentSegment.empty() ) {
-            (void) segments.pushBack(currentSegment);
-        }
-        return segments;
-    }
-
-    __CDS_MaybeUnused inline auto String::splitByString(String const & token, Size limit) const noexcept -> DoubleLinkedList < String > {
-        String copy = * this;
-        auto locations = this->find(token);
-
-        auto index = static_cast < Index > (locations.size()) - 1;
-        for ( auto it = locations.rbegin(); it != locations.rend(); ++it, --index ) { // NOLINT(clion-misra-cpp2008-5-18-1)
-            if (static_cast < Size > ( index + 1 ) < limit ) {
-                (void) copy.replace(* it, token.length(), "\x01");
-            }
-        }
-
-        return copy.split('\x01');
-    }
-
-    inline auto String::find (ElementType element) const noexcept -> DoubleLinkedList < Index > {
-        DoubleLinkedList < Index > indices;
-
-        Index index = 0;
-        for ( auto character : (*this) ) {
-            if (character == element ) {
-                (void) indices.pushBack(index);
-            }
-
-            index++;
-        }
-
-        return indices;
-    }
-
-    __CDS_MaybeUnused inline auto String::findOf (String const & string) const noexcept -> DoubleLinkedList < Index > {
-        DoubleLinkedList < Index > indices;
-
-        Index index = 0;
-        for ( auto character : (*this) ) {
-            if ( string.contains(character) ) {
-                (void) indices.pushBack(index);
-            }
-
-            index++;
-        }
-
-        return indices;
-    }
-
-    __CDS_MaybeUnused inline auto String::findNotOf (String const & string) const noexcept -> DoubleLinkedList < Index > {
-        DoubleLinkedList < Index > indices;
-
-        Index index = 0;
-        for ( auto character : (*this) ) {
-            if ( ! string.contains(character) ) {
-                (void) indices.pushBack(index);
-            }
-
-            index++;
-        }
-
-        return indices;
-    }
-
-    inline auto String::find (String const & string) const noexcept -> DoubleLinkedList < Index > {
-    #if !defined(_MSC_VER)
-        Index lpsArray [string.size()];
-    #else
-        auto lpsArray = Memory :: instance().createArray < Index > (this->size());
-    #endif
-        (void) std::memset(reinterpret_cast < void * > ( lpsArray ), 0, sizeof(Index) * string.size()); // NOLINT(clion-misra-cpp2008-5-2-12)
-
-        auto computeLPSArray = [& string, &lpsArray] () {
-            Index len = 0;
-            lpsArray[0] = 0;
-
-            Index index = 1;
-            while (index < static_cast<Index>(string.size()) ) {
-                if (string._p[index] == string._p[len] ) {
-                    len ++;
-                    lpsArray[index] = len;
-                    index ++;
-                } else {
-                    if ( len != 0 ) {
-                        len = lpsArray[len - 1];
-                    } else {
-                        lpsArray[index] = 0;
-                        index ++;
-                    }
-                }
-            }
-        };
-
-        computeLPSArray();
-
-        DoubleLinkedList < Index > indices;
-        Index headIndex = 0;
-        Index aheadIndex = 0;
-
-        while (headIndex < static_cast<Index>(this->size()) ) {
-            if (string._p[aheadIndex] == this->_p[headIndex] ) {
-                headIndex ++; aheadIndex ++;
-            }
-
-            if (aheadIndex == static_cast<Index>(string.size()) ) {
-                (void) indices.pushBack(headIndex - aheadIndex);
-                aheadIndex = lpsArray[aheadIndex - 1];
-            } else if (headIndex < static_cast<Index>(this->size()) && this->_p[headIndex] != string._p[aheadIndex] ) {
-                if (aheadIndex != 0 ) {
-                    aheadIndex = lpsArray[aheadIndex - 1];
-                } else {
-                    ++ headIndex;
-                }
-            } else {
-                /// do nothing
-            }
-        }
-
-    #if !defined(_MSC_VER)
-    #else
-        Memory :: instance().destroyArray ( lpsArray );
-    #endif
-        return indices;
-    }
-
 }
 
 namespace cds {
@@ -1183,7 +989,7 @@ namespace cds {
         Size added = 0u;
 
         for ( auto it = this->begin(), end = this->end(); it != end; ++ it ) { // NOLINT(clion-misra-cpp2008-8-0-1)
-            if ( Type < ElementType > :: compare ( element, * it ) && added < count ) {
+            if ( meta :: equals ( element, * it ) && added < count ) {
                 iterators.add(it);
                 ++ added;
             } else if ( added >= count ) {
@@ -1240,7 +1046,7 @@ namespace cds {
         Size added = 0u;
 
         for ( auto it = this->begin(), end = this->end(); it != end; ++ it ) { // NOLINT(clion-misra-cpp2008-8-0-1)
-            if ( Type < ElementType > :: compare ( element, * it ) && added < count ) {
+            if ( meta :: equals ( element, * it ) && added < count ) {
                 iterators.add(it);
                 ++ added;
             } else if ( added >= count ) {
@@ -1304,6 +1110,6 @@ namespace cds {
 
 #endif
 
-__CDS_RegisterParseTypeTemplateT(DoubleLinkedList) // NOLINT(clion-misra-cpp2008-8-0-1)
+__CDS_Meta_RegisterParseTemplateType(DoubleLinkedList) // NOLINT(clion-misra-cpp2008-8-0-1)
 
 #endif //CDS_DOUBLELINKEDLIST_HPP

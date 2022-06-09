@@ -206,7 +206,7 @@ namespace cds {
                     aIt != aEnd && bIt != bEnd;
                     ++ aIt, ++ bIt // NOLINT(clion-misra-cpp2008-5-18-1)
             ) {
-                if ( ! ( Type < T > :: compare (* aIt, * bIt ) ) ) { // NOLINT(clion-misra-cpp2008-5-3-1)
+                if ( ! ( meta :: equals (* aIt, * bIt ) ) ) { // NOLINT(clion-misra-cpp2008-5-3-1)
                     return false;
                 }
             }
@@ -240,7 +240,7 @@ namespace cds {
             return false;
         }
 
-        if ( Type < T > :: compare (element, * this->_pFront->data ) ) {
+        if ( meta :: equals (element, * this->_pFront->data ) ) {
             auto pFront = this->_pFront;
             this->_pFront = this->_pFront->pNext;
             -- this->_size;
@@ -256,7 +256,7 @@ namespace cds {
 
         auto head = this->_pFront;
         while ( head->pNext != nullptr ) {
-            if ( Type < T > :: compare (element, * head->pNext->data ) ) {
+            if ( meta :: equals (element, * head->pNext->data ) ) {
                 auto node = head->pNext;
                 head->pNext = head->pNext->pNext;
 
@@ -275,7 +275,7 @@ namespace cds {
 
 }
 
-__CDS_RegisterParseTypeTemplateT(ListSet) // NOLINT(clion-misra-cpp2008-8-0-1)
+__CDS_Meta_RegisterParseTemplateType(ListSet) // NOLINT(clion-misra-cpp2008-8-0-1)
 
 #if !defined(__CDS_LISTSET_DOUBLEGUARD)
 #define __CDS_LISTSET_DOUBLEGUARD // NOLINT(bugprone-reserved-identifier)

@@ -56,17 +56,17 @@ namespace cds {
             return * this->pAt ( index );
         };
 
-        template < typename V = T, EnableIf < Type < V > :: copyAssignable > = 0 >
+        template < typename V = T, meta :: EnableIf < meta :: isCopyAssignable < V > () > = 0 >
         __CDS_OptimalInline auto set (ElementCRef element, Index index ) noexcept (false) -> ElementRef {
             * this->pAt(index) = element;
         }
 
-        template < typename V = T, EnableIf < Type < V > :: moveAssignable > = 0 >
+        template < typename V = T, meta :: EnableIf < meta :: isMoveAssignable < V > () > = 0 >
         __CDS_OptimalInline auto set (ElementMRef element, Index index ) noexcept (false) -> ElementRef {
             * this->pAt(index) = std :: forward < ElementType > (element );
         }
 
-        template < typename ListType, typename V = T, EnableIf < Type < V > :: copyAssignable && isDerivedFrom < ListType, List < V > > :: value > = 0 >
+        template < typename ListType, typename V = T, meta :: EnableIf < meta :: isCopyAssignable < V > () && meta :: isDerivedFrom < ListType, List < V > > () > = 0 >
         __CDS_MaybeUnused auto sub ( Index, Index = limits::S64_MAX ) const noexcept (false) -> ListType;
 
         __CDS_OptimalInline auto operator [] ( Index index ) noexcept -> ElementRef {
@@ -114,7 +114,7 @@ namespace cds {
             });
         }
 
-        template < typename V = T, EnableIf < Type < V > :: copyConstructible > = 0 >
+        template < typename V = T, meta :: EnableIf < meta :: isCopyConstructible < V > () > = 0 >
         __CDS_OptimalInline auto pushFront ( ElementCRef value ) noexcept -> ElementRef {
             __CDS_Collection_OperationalLock
 
@@ -129,7 +129,7 @@ namespace cds {
             return * pObject;
         }
 
-        template < typename V = T, EnableIf < Type < V > :: copyConstructible > = 0 >
+        template < typename V = T, meta :: EnableIf < meta :: isCopyConstructible < V > () > = 0 >
         __CDS_OptimalInline auto pushBack ( ElementCRef value ) noexcept -> ElementRef {
             __CDS_Collection_OperationalLock
 
@@ -144,7 +144,7 @@ namespace cds {
             return * pObject;
         }
 
-        template < typename V = T, EnableIf < Type < V > :: moveConstructible > = 0 >
+        template < typename V = T, meta :: EnableIf < meta :: isMoveConstructible < V > ()> = 0 >
         __CDS_OptimalInline auto pushFront ( ElementMRef value ) noexcept -> ElementRef {
             __CDS_Collection_OperationalLock
 
@@ -159,7 +159,7 @@ namespace cds {
             return * pObject;
         }
 
-        template < typename V = T, EnableIf < Type < V > :: moveConstructible > = 0 >
+        template < typename V = T, meta :: EnableIf < meta :: isMoveConstructible < V > ()> = 0 >
         __CDS_OptimalInline auto pushBack ( ElementMRef value ) noexcept -> ElementRef {
             __CDS_Collection_OperationalLock
 
@@ -174,23 +174,23 @@ namespace cds {
             return * pObject;
         }
 
-        template < typename V = T, EnableIf< Type < V > :: copyConstructible > = 0 >
+        template < typename V = T, meta :: EnableIf< meta :: isCopyConstructible < V > () > = 0 >
         __CDS_OptimalInline auto append ( ElementCRef element ) noexcept -> ElementRef {
             return this->pushBack (element );
         }
 
-        template < typename V = T, EnableIf < Type < V > :: moveConstructible > = 0 >
+        template < typename V = T, meta :: EnableIf < meta :: isMoveConstructible < V > ()> = 0 >
         __CDS_OptimalInline auto append ( ElementMRef element ) noexcept -> ElementRef {
             return this->pushBack ( std :: forward < ElementType > (element ) );
         }
 
 
-        template < typename V = T, EnableIf < Type < V > :: copyConstructible > = 0 >
+        template < typename V = T, meta :: EnableIf < meta :: isCopyConstructible < V > () > = 0 >
         __CDS_MaybeUnused __CDS_OptimalInline auto prepend ( ElementCRef element ) noexcept -> ElementRef {
             return this->pushFront(element);
         }
 
-        template < typename V = T, EnableIf < Type < V > :: moveConstructible > = 0 >
+        template < typename V = T, meta :: EnableIf < meta :: isMoveConstructible < V > ()> = 0 >
         __CDS_MaybeUnused __CDS_OptimalInline auto prepend ( ElementMRef element ) noexcept -> ElementRef {
             return this->pushFront ( std :: forward < ElementType > (element ) );
         }
@@ -201,7 +201,7 @@ namespace cds {
 
         __CDS_cpplang_ConstexprDestructor ~List () noexcept override = default;
 
-        template < typename V = T, EnableIf < Type < V > :: copyAssignable > = 0 >
+        template < typename V = T, meta :: EnableIf < meta :: isCopyAssignable < V > () > = 0 >
         __CDS_MaybeUnused __CDS_OptionalInline auto replace (
                 ElementCRef what    __CDS_MaybeUnused, // NOLINT(bugprone-easily-swappable-parameters)
                 ElementCRef with    __CDS_MaybeUnused,
@@ -212,7 +212,7 @@ namespace cds {
 
             for ( auto & element __CDS_MaybeUnused : * this ) {
                 if ( replaceCount < count ) {
-                    if ( Type < T > :: compare (element, what ) ) {
+                    if ( meta :: equals (element, what ) ) {
                         element = with;
                         ++ replaceCount;
                     }
@@ -224,14 +224,14 @@ namespace cds {
             return replaceCount;
         }
 
-        template < typename V = T, EnableIf < Type < V > :: copyAssignable > = 0 >
+        template < typename V = T, meta :: EnableIf < meta :: isCopyAssignable < V > () > = 0 >
         __CDS_MaybeUnused __CDS_OptionalInline auto replaceFirst (
                 ElementCRef what __CDS_MaybeUnused, // NOLINT(bugprone-easily-swappable-parameters)
                 ElementCRef with __CDS_MaybeUnused
         ) noexcept -> bool {
 
             for ( auto & element __CDS_MaybeUnused : * this ) {
-                if ( Type < T > :: compare (element, what ) ) {
+                if ( meta :: equals (element, what ) ) {
                     element = with;
                     return true;
                 }
@@ -240,14 +240,14 @@ namespace cds {
             return false;
         }
 
-        template < typename V = T, EnableIf < Type < V > :: moveAssignable > = 0 >
+        template < typename V = T, meta :: EnableIf < meta :: isMoveAssignable < V > () > = 0 >
         __CDS_MaybeUnused __CDS_OptionalInline auto replaceFirst (
                 ElementCRef what __CDS_MaybeUnused,
                 ElementMRef with __CDS_MaybeUnused
         ) noexcept -> bool {
 
             for ( auto & element __CDS_MaybeUnused : * this ) {
-                if ( Type < T > :: compare (element, what ) ) {
+                if ( meta :: equals (element, what ) ) {
                     element = std :: forward < ElementType > (with );
                     return true;
                 }
@@ -256,7 +256,7 @@ namespace cds {
             return false;
         }
 
-        template < typename V = T, EnableIf < Type < V > :: copyAssignable > = 0 >
+        template < typename V = T, meta :: EnableIf < meta :: isCopyAssignable < V > () > = 0 >
         __CDS_MaybeUnused __CDS_OptionalInline auto replaceAll (
                 ElementCRef what __CDS_MaybeUnused, // NOLINT(bugprone-easily-swappable-parameters)
                 ElementCRef with __CDS_MaybeUnused
@@ -265,7 +265,7 @@ namespace cds {
             Size replacedCount __CDS_MaybeUnused = 0u;
 
             for ( auto & element __CDS_MaybeUnused : * this ) {
-                if ( Type < T > :: compare (element, what ) ) {
+                if ( meta :: equals (element, what ) ) {
                     element = with;
                     ++ replacedCount;
                 }
@@ -274,7 +274,7 @@ namespace cds {
             return replacedCount;
         }
 
-        template < typename V = T, EnableIf < Type < V > :: copyAssignable > = 0 >
+        template < typename V = T, meta :: EnableIf < meta :: isCopyAssignable < V > () > = 0 >
         __CDS_MaybeUnused __CDS_OptionalInline auto replaceLast (
                 ElementCRef what __CDS_MaybeUnused, // NOLINT(bugprone-easily-swappable-parameters)
                 ElementCRef with __CDS_MaybeUnused
@@ -283,7 +283,7 @@ namespace cds {
             ForeignPointer < ElementType > lastEncountered;
 
             for ( auto & element __CDS_MaybeUnused : * this ) {
-                if ( Type < T > :: compare (element, what ) ) {
+                if ( meta :: equals (element, what ) ) {
                     lastEncountered = & element;
                 }
             }
@@ -295,7 +295,7 @@ namespace cds {
             return lastEncountered != nullptr;
         }
 
-        template < typename V = T, EnableIf < Type < V > :: moveAssignable > = 0 >
+        template < typename V = T, meta :: EnableIf < meta :: isMoveAssignable < V > () > = 0 >
         __CDS_MaybeUnused __CDS_OptionalInline auto replaceLast (
                 ElementCRef what __CDS_MaybeUnused,
                 ElementMRef with __CDS_MaybeUnused
@@ -304,7 +304,7 @@ namespace cds {
             ForeignPointer < ElementType > lastEncountered;
 
             for ( auto & element __CDS_MaybeUnused : * this ) {
-                if ( Type < T > :: compare (element, what ) ) {
+                if ( meta :: equals (element, what ) ) {
                     lastEncountered = & element;
                 }
             }
@@ -316,7 +316,7 @@ namespace cds {
             return lastEncountered != nullptr;
         }
 
-        template < typename V = T, EnableIf < Type < V > :: copyAssignable > = 0 >
+        template < typename V = T, meta :: EnableIf < meta :: isCopyAssignable < V > () > = 0 >
         __CDS_MaybeUnused __CDS_OptionalInline auto replaceOf (
                 Collection < T > const & from __CDS_MaybeUnused,
                 ElementCRef with            __CDS_MaybeUnused,
@@ -338,7 +338,7 @@ namespace cds {
             return replacedCount;
         }
 
-        template < typename V = T, EnableIf < Type < V > :: copyAssignable > = 0 >
+        template < typename V = T, meta :: EnableIf < meta :: isCopyAssignable < V > () > = 0 >
         __CDS_MaybeUnused __CDS_OptionalInline auto replaceFirstOf (
                 Collection < T > const & from __CDS_MaybeUnused,
                 ElementCRef with            __CDS_MaybeUnused
@@ -354,7 +354,7 @@ namespace cds {
             return false;
         }
 
-        template < typename V = T, EnableIf < Type < V > :: moveAssignable > = 0 >
+        template < typename V = T, meta :: EnableIf < meta :: isMoveAssignable < V > () > = 0 >
         __CDS_MaybeUnused __CDS_OptionalInline auto replaceFirstOf (
                 Collection < T > const & from __CDS_MaybeUnused,
                 ElementMRef with            __CDS_MaybeUnused
@@ -370,7 +370,7 @@ namespace cds {
             return false;
         }
 
-        template < typename V = T, EnableIf < Type < V > :: copyAssignable > = 0 >
+        template < typename V = T, meta :: EnableIf < meta :: isCopyAssignable < V > () > = 0 >
         __CDS_MaybeUnused __CDS_OptionalInline auto replaceAllOf (
                 Collection < T > const & from __CDS_MaybeUnused,
                 ElementCRef with            __CDS_MaybeUnused
@@ -388,7 +388,7 @@ namespace cds {
             return replacedCount;
         }
 
-        template < typename V = T, EnableIf < Type < V > :: copyAssignable > = 0 >
+        template < typename V = T, meta :: EnableIf < meta :: isCopyAssignable < V > () > = 0 >
         __CDS_MaybeUnused __CDS_OptionalInline auto replaceLastOf (
                 Collection < T > const & from __CDS_MaybeUnused,
                 ElementCRef with            __CDS_MaybeUnused
@@ -409,7 +409,7 @@ namespace cds {
             return lastOccurred != nullptr;
         }
 
-        template < typename V = T, EnableIf < Type < V > :: moveAssignable > = 0 >
+        template < typename V = T, meta :: EnableIf < meta :: isMoveAssignable < V > () > = 0 >
         __CDS_MaybeUnused __CDS_OptionalInline auto replaceLastOf (
                 Collection < T > const & from __CDS_MaybeUnused,
                 ElementMRef with            __CDS_MaybeUnused
@@ -430,7 +430,7 @@ namespace cds {
             return lastOccurred != nullptr;
         }
 
-        template < typename V = T, EnableIf < Type < V > :: copyAssignable > = 0 >
+        template < typename V = T, meta :: EnableIf < meta :: isCopyAssignable < V > () > = 0 >
         __CDS_MaybeUnused __CDS_OptionalInline auto replaceNotOf (
                 Collection < T > const & from __CDS_MaybeUnused,
                 ElementCRef with            __CDS_MaybeUnused,
@@ -453,7 +453,7 @@ namespace cds {
             return replacedCount;
         }
 
-        template < typename V = T, EnableIf < Type < V > :: copyAssignable > = 0 >
+        template < typename V = T, meta :: EnableIf < meta :: isCopyAssignable < V > () > = 0 >
         __CDS_MaybeUnused __CDS_OptionalInline auto replaceFirstNotOf (
                 Collection < T > const & from __CDS_MaybeUnused,
                 ElementCRef with            __CDS_MaybeUnused
@@ -469,7 +469,7 @@ namespace cds {
             return false;
         }
 
-        template < typename V = T, EnableIf < Type < V > :: moveAssignable > = 0 >
+        template < typename V = T, meta :: EnableIf < meta :: isMoveAssignable < V > () > = 0 >
         __CDS_MaybeUnused __CDS_OptionalInline auto replaceFirstNotOf (
                 Collection < T > const & from __CDS_MaybeUnused,
                 ElementMRef with            __CDS_MaybeUnused
@@ -485,7 +485,7 @@ namespace cds {
             return false;
         }
 
-        template < typename V = T, EnableIf < Type < V > :: copyAssignable > = 0 >
+        template < typename V = T, meta :: EnableIf < meta :: isCopyAssignable < V > () > = 0 >
         __CDS_MaybeUnused __CDS_OptionalInline auto replaceAllNotOf (
                 Collection < T > const & from __CDS_MaybeUnused,
                 ElementCRef with            __CDS_MaybeUnused
@@ -503,7 +503,7 @@ namespace cds {
             return replacedCount;
         }
 
-        template < typename V = T, EnableIf < Type < V > :: copyAssignable > = 0 >
+        template < typename V = T, meta :: EnableIf < meta :: isCopyAssignable < V > () > = 0 >
         __CDS_MaybeUnused __CDS_OptionalInline auto replaceLastNotOf (
                 Collection < T > const & from __CDS_MaybeUnused,
                 ElementCRef with            __CDS_MaybeUnused
@@ -524,7 +524,7 @@ namespace cds {
             return lastOccurred != nullptr;
         }
 
-        template < typename V = T, EnableIf < Type < V > :: moveAssignable > = 0 >
+        template < typename V = T, meta :: EnableIf < meta :: isMoveAssignable < V > () > = 0 >
         __CDS_MaybeUnused __CDS_OptionalInline auto replaceLastNotOf (
                 Collection < T > const & from __CDS_MaybeUnused,
                 ElementMRef with            __CDS_MaybeUnused
@@ -545,7 +545,7 @@ namespace cds {
             return lastOccurred != nullptr;
         }
 
-        template < typename V = T, EnableIf < Type < V > :: copyAssignable > = 0 >
+        template < typename V = T, meta :: EnableIf < meta :: isCopyAssignable < V > () > = 0 >
         __CDS_MaybeUnused __CDS_OptionalInline auto replaceOf (
                 InitializerList from  __CDS_MaybeUnused,
                 ElementCRef with    __CDS_MaybeUnused,
@@ -568,7 +568,7 @@ namespace cds {
             return replacedCount;
         }
 
-        template < typename V = T, EnableIf < Type < V > :: copyAssignable > = 0 >
+        template < typename V = T, meta :: EnableIf < meta :: isCopyAssignable < V > () > = 0 >
         __CDS_MaybeUnused __CDS_OptionalInline auto replaceFirstOf (
                 InitializerList from  __CDS_MaybeUnused,
                 ElementCRef with    __CDS_MaybeUnused
@@ -584,7 +584,7 @@ namespace cds {
             return false;
         }
 
-        template < typename V = T, EnableIf < Type < V > :: moveAssignable > = 0 >
+        template < typename V = T, meta :: EnableIf < meta :: isMoveAssignable < V > () > = 0 >
         __CDS_MaybeUnused __CDS_OptionalInline auto replaceFirstOf (
                 InitializerList from  __CDS_MaybeUnused,
                 ElementMRef with    __CDS_MaybeUnused
@@ -600,7 +600,7 @@ namespace cds {
             return false;
         }
 
-        template < typename V = T, EnableIf < Type < V > :: copyAssignable > = 0 >
+        template < typename V = T, meta :: EnableIf < meta :: isCopyAssignable < V > () > = 0 >
         __CDS_MaybeUnused __CDS_OptionalInline auto replaceAllOf (
                 InitializerList from  __CDS_MaybeUnused,
                 ElementCRef with    __CDS_MaybeUnused
@@ -618,7 +618,7 @@ namespace cds {
             return replacedCount;
         }
 
-        template < typename V = T, EnableIf < Type < V > :: copyAssignable > = 0 >
+        template < typename V = T, meta :: EnableIf < meta :: isCopyAssignable < V > () > = 0 >
         __CDS_MaybeUnused __CDS_OptionalInline auto replaceLastOf (
                 InitializerList from  __CDS_MaybeUnused,
                 ElementCRef with    __CDS_MaybeUnused
@@ -639,7 +639,7 @@ namespace cds {
             return lastOccurred != nullptr;
         }
 
-        template < typename V = T, EnableIf < Type < V > :: moveAssignable > = 0 >
+        template < typename V = T, meta :: EnableIf < meta :: isMoveAssignable < V > () > = 0 >
         __CDS_MaybeUnused __CDS_OptionalInline auto replaceLastOf (
                 InitializerList from  __CDS_MaybeUnused,
                 ElementMRef with    __CDS_MaybeUnused
@@ -660,7 +660,7 @@ namespace cds {
             return lastOccurred != nullptr;
         }
 
-        template < typename V = T, EnableIf < Type < V > :: copyAssignable > = 0 >
+        template < typename V = T, meta :: EnableIf < meta :: isCopyAssignable < V > () > = 0 >
         __CDS_MaybeUnused __CDS_OptionalInline auto replaceNotOf (
                 InitializerList from  __CDS_MaybeUnused,
                 ElementCRef with    __CDS_MaybeUnused,
@@ -683,7 +683,7 @@ namespace cds {
             return replacedCount;
         }
 
-        template < typename V = T, EnableIf < Type < V > :: copyAssignable > = 0 >
+        template < typename V = T, meta :: EnableIf < meta :: isCopyAssignable < V > () > = 0 >
         __CDS_MaybeUnused __CDS_OptionalInline auto replaceFirstNotOf (
                 InitializerList from  __CDS_MaybeUnused,
                 ElementCRef with    __CDS_MaybeUnused
@@ -699,7 +699,7 @@ namespace cds {
             return false;
         }
 
-        template < typename V = T, EnableIf < Type < V > :: moveAssignable > = 0 >
+        template < typename V = T, meta :: EnableIf < meta :: isMoveAssignable < V > () > = 0 >
         __CDS_MaybeUnused __CDS_OptionalInline auto replaceFirstNotOf (
                 InitializerList from  __CDS_MaybeUnused,
                 ElementMRef with    __CDS_MaybeUnused
@@ -715,7 +715,7 @@ namespace cds {
             return false;
         }
 
-        template < typename V = T, EnableIf < Type < V > :: copyAssignable > = 0 >
+        template < typename V = T, meta :: EnableIf < meta :: isCopyAssignable < V > () > = 0 >
         __CDS_MaybeUnused __CDS_OptionalInline auto replaceAllNotOf (
                 InitializerList from  __CDS_MaybeUnused,
                 ElementCRef with    __CDS_MaybeUnused
@@ -733,7 +733,7 @@ namespace cds {
             return replacedCount;
         }
 
-        template < typename V = T, EnableIf < Type < V > :: copyAssignable > = 0 >
+        template < typename V = T, meta :: EnableIf < meta :: isCopyAssignable < V > () > = 0 >
         __CDS_MaybeUnused __CDS_OptionalInline auto replaceLastNotOf (
                 InitializerList from  __CDS_MaybeUnused,
                 ElementCRef with    __CDS_MaybeUnused
@@ -754,7 +754,7 @@ namespace cds {
             return lastOccurred != nullptr;
         }
 
-        template < typename V = T, EnableIf < Type < V > :: moveAssignable > = 0 >
+        template < typename V = T, meta :: EnableIf < meta :: isMoveAssignable < V > () > = 0 >
         __CDS_MaybeUnused __CDS_OptionalInline auto replaceLastNotOf (
                 InitializerList from  __CDS_MaybeUnused,
                 ElementMRef with    __CDS_MaybeUnused
@@ -775,7 +775,7 @@ namespace cds {
             return lastOccurred != nullptr;
         }
 
-        template < typename V = T, EnableIf < Type < V > :: copyAssignable > = 0 >
+        template < typename V = T, meta :: EnableIf < meta :: isCopyAssignable < V > () > = 0 >
         __CDS_MaybeUnused __CDS_OptimalInline auto replace (
                 Iterator const & iterator,
                 ElementCRef value
@@ -789,7 +789,7 @@ namespace cds {
             return false;
         }
 
-        template < typename V = T, EnableIf < Type < V > :: moveAssignable > = 0 >
+        template < typename V = T, meta :: EnableIf < meta :: isMoveAssignable < V > () > = 0 >
         __CDS_MaybeUnused __CDS_OptimalInline auto replace (
                 Iterator const & iterator,
                 ElementMRef value
@@ -824,7 +824,7 @@ namespace cds {
             out << "[ ";
 
             for ( auto const & element __CDS_MaybeUnused : (*this) ) {
-                Type < T > :: streamPrint(out, element ) << ", ";
+                meta :: print (out, element ) << ", ";
             }
 
             auto asString = out.str();
@@ -837,7 +837,7 @@ namespace cds {
 
             Index index __CDS_MaybeUnused = 0;
             for ( auto & element __CDS_MaybeUnused : * this ) {
-                if ( Type < T > :: compare (element, value ) ) {
+                if ( meta :: equals (element, value ) ) {
 
                     __CDS_Collection_OperationalUnlock
                     return index;
@@ -853,7 +853,7 @@ namespace cds {
 
         __CDS_NoDiscard __CDS_MaybeUnused auto findFirst ( ElementCRef element ) noexcept -> Iterator {
             for ( auto it = this->begin(), end = this->end(); it != end; ++ it ) { // NOLINT(clion-misra-cpp2008-8-0-1)
-                if ( Type < ElementType > :: compare ( * it, element ) ) {
+                if ( meta :: equals ( * it, element ) ) {
                     return it;
                 }
             }
@@ -864,7 +864,7 @@ namespace cds {
         __CDS_NoDiscard __CDS_MaybeUnused auto findLast ( ElementCRef element ) noexcept -> Iterator {
             Iterator last;
             for ( auto it = this->begin(), end = this->end(); it != end; ++ it ) { // NOLINT(clion-misra-cpp2008-8-0-1)
-                if ( Type < ElementType > :: compare ( * it, element ) ) {
+                if ( meta :: equals ( * it, element ) ) {
                     last = it;
                 }
             }
@@ -922,7 +922,7 @@ namespace cds {
 
         __CDS_NoDiscard __CDS_MaybeUnused auto findFirst ( ElementCRef element ) const noexcept -> ConstIterator {
             for ( auto it = this->begin(), end = this->end(); it != end; ++ it ) { // NOLINT(clion-misra-cpp2008-8-0-1)
-                if ( Type < ElementType > :: compare ( * it, element ) ) {
+                if ( meta :: equals ( * it, element ) ) {
                     return it;
                 }
             }
@@ -933,7 +933,7 @@ namespace cds {
         __CDS_NoDiscard __CDS_MaybeUnused auto findLast ( ElementCRef element ) const noexcept -> ConstIterator {
             ConstIterator last;
             for ( auto it = this->begin(), end = this->end(); it != end; ++ it ) { // NOLINT(clion-misra-cpp2008-8-0-1)
-                if ( Type < ElementType > :: compare ( * it, element ) ) {
+                if ( meta :: equals ( * it, element ) ) {
                     last = it;
                 }
             }
@@ -992,7 +992,7 @@ namespace cds {
 
 
     template < typename T >
-    template < typename ListType, typename V, EnableIf < Type < V > :: copyAssignable && isDerivedFrom < ListType, List < V > > :: value > >
+    template < typename ListType, typename V, meta :: EnableIf < meta :: isCopyAssignable < V > () && meta :: isDerivedFrom < ListType, List < V > > () > >
     __CDS_MaybeUnused auto List < T > :: sub ( Index from __CDS_MaybeUnused, Index until __CDS_MaybeUnused ) const noexcept(false) -> ListType {
         ListType list;
 
@@ -1095,7 +1095,7 @@ namespace cds {
 
 }
 
-__CDS_RegisterParseTypeTemplateT(List) // NOLINT(clion-misra-cpp2008-8-0-1)
+__CDS_Meta_RegisterParseTemplateType(List) // NOLINT(clion-misra-cpp2008-8-0-1)
 
 #include <CDS/DoubleLinkedList>
 

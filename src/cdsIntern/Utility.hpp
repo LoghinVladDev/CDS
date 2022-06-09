@@ -10,7 +10,7 @@
 #include <CDS/Conversion>
 #include <CDS/Exception>
 #include <CDS/Limits>
-#include <CDS/experimental/meta/TypeTraits>
+#include <CDS/meta/TypeTraits>
 
 namespace cds {
 
@@ -62,7 +62,7 @@ namespace cds {
         NullPointerException () noexcept : Exception ("Tried De-Referencing a null valued Pointer") { }
         NullPointerException ( NullPointerException const & ) noexcept = default;
         NullPointerException ( NullPointerException && ) noexcept = default;
-        __CDS_OptimalInline explicit NullPointerException ( String const & message ) noexcept : Exception ( "Tried De-Referencing a null valued Pointer : "_s + message ) {}
+        __CDS_OptimalInline explicit NullPointerException ( String const & message ) noexcept : Exception ( StringView ( "Tried De-Referencing a null valued Pointer : " ) + message ) {}
         __CDS_OptimalInline explicit NullPointerException ( StringLiteral message ) noexcept : NullPointerException ( String(message) ) {}
 
         ~NullPointerException() noexcept override = default;
@@ -86,10 +86,10 @@ namespace cds {
         TypeException () noexcept : Exception ( "Type Cast Exception" ) { }
 
         template < typename T, typename V >
-        TypeException () noexcept : Exception ( String::f("Type Cast Exception. Cannot convert '%s' to '%s'", Type < T > :: name(), Type < V > :: name()) ) { }
+        TypeException () noexcept : Exception ( String::f("Type Cast Exception. Cannot convert '%s' to '%s'", meta :: Type < T > :: name(), meta :: Type < V > :: name()) ) { }
         template < typename T >
-        explicit TypeException ( T const & unused __CDS_MaybeUnused ) noexcept : Exception ( String::f("Type Cast Exception. Conversion to '%s' not possible", Type < T > :: name()) ) { }
-        explicit TypeException (String const & message) noexcept : Exception ("Type Cast Exception : "_s + message) { }
+        explicit TypeException ( T const & unused __CDS_MaybeUnused ) noexcept : Exception ( String::f("Type Cast Exception. Conversion to '%s' not possible", meta :: Type < T > :: name()) ) { }
+        explicit TypeException (String const & message) noexcept : Exception ( StringView ( "Type Cast Exception : " ) + message) { }
 
         ~TypeException() noexcept override = default;
     };
@@ -107,7 +107,7 @@ namespace cds {
     class NotImplementedException : public Exception {
     public:
         NotImplementedException () noexcept : Exception ( "Not Implemented" ) { }
-        explicit NotImplementedException ( String const & message ) noexcept : Exception ( "Not Implemented : "_s + message ) { }
+        explicit NotImplementedException ( String const & message ) noexcept : Exception ( StringView ( "Not Implemented : " ) + message ) { }
 
         ~NotImplementedException() noexcept override = default;
     };
@@ -119,224 +119,37 @@ namespace cds {
 
     template < typename T > 
     __CDS_NoDiscard __CDS_MaybeUnused constexpr auto compare ( T const & left, T const & right ) noexcept -> bool {
-        return Type < T > :: compare ( left, right );
+        return meta :: equals ( left, right );
     } 
 
     template < typename T > 
     __CDS_MaybeUnused constexpr auto streamPrint ( std :: ostream & out, T const & object ) noexcept -> std :: ostream & {
-        return Type < T > :: streamPrint ( out, object );
+        return meta :: print ( out, object );
     }
 
-    template < typename T, typename = EnableIf < Type < T > :: copyConstructible > >
+    template < typename T, typename = meta :: EnableIf < meta :: isCopyConstructible < T > () > >
     __CDS_NoDiscard __CDS_OptimalInline auto copy ( T const & obj ) noexcept -> T * {
         return Memory :: instance().create < T > ( obj );
     }
 
-    template < typename T, experimental :: meta :: EnableIf < experimental :: meta :: isPrintable < T > () > = 0 >
+    template < typename T, meta :: EnableIf < meta :: isPrintable < T > () > = 0 >
     __CDS_OptimalInline auto println ( T const & obj ) noexcept -> std :: ostream & {
         return std :: cout << obj << '\n';
     }
 
-    template < typename T, typename = T >
-    constexpr auto convertTo ( T const & value ) noexcept -> T const & {
-        return value;
-    }
-
-    template < typename T, typename U, experimental :: meta :: EnableIf < ! experimental :: meta :: isSame < T, U > () > = 0 >
-    constexpr auto convertTo ( T const & value ) noexcept -> U {
-        return U(value);
-    }
-
-    template < typename T >
-    constexpr auto minOf ( T const & value ) noexcept -> T const & {
-        return value;
-    }
-
-    template < typename T >
-    constexpr auto maxOf ( T const & value ) noexcept -> T const & {
-        return value;
-    }
-
-    template < typename T >
-    constexpr auto minOf ( T const & left, T const & right ) noexcept -> T const & {
-        return left < right ? left : right;
-    }
-
-    template < typename T >
-    constexpr auto maxOf ( T const & left, T const & right ) noexcept -> T const & {
-        return left > right ? left : right;
-    }
-
-    template <
-            typename LeftType,
-            typename RightType,
-            typename Common = experimental :: meta :: Common < LeftType, RightType >,
-            experimental :: meta :: EnableIf < ! experimental :: meta :: isSame < LeftType, RightType > () > = 0
-    > constexpr auto minOf ( LeftType const & left, RightType const & right ) noexcept -> Common {
-        return convertTo < Common > ( left ) < convertTo < Common > ( right ) ? convertTo < Common > ( left ) : convertTo < Common > ( right );
-    }
-
-    template < typename FirstType, typename ... RemainingTypes, typename Common = experimental :: meta :: Common < FirstType, RemainingTypes ... > >
-    constexpr auto minOf ( FirstType const & firstArgument, RemainingTypes const & ... remainingTypes ) noexcept -> experimental :: meta :: Common < FirstType, RemainingTypes ... > {
-        return minOf < Common > ( firstArgument, minOf ( remainingTypes ... ) );
-    }
-
-    template <
-            typename LeftType,
-            typename RightType,
-            typename Common = experimental :: meta :: Common < LeftType, RightType >,
-            experimental :: meta :: EnableIf < ! experimental :: meta :: isSame < LeftType, RightType > () > = 0
-    > constexpr auto maxOf ( LeftType const & left, RightType const & right ) noexcept -> Common {
-        return convertTo < Common > ( left ) > convertTo < Common > ( right ) ? convertTo < Common > ( left ) : convertTo < Common > ( right );
-    }
-
-    template < typename FirstType, typename ... RemainingTypes, typename Common = experimental :: meta :: Common < FirstType, RemainingTypes ... > >
-    constexpr auto maxOf ( FirstType const & firstArgument, RemainingTypes const & ... remainingTypes ) noexcept -> experimental :: meta :: Common < FirstType, RemainingTypes ... > {
-        return maxOf < Common > ( firstArgument, maxOf ( remainingTypes ... ) );
-    }
-
-    namespace predicates {
-        template < typename LeftType, typename RightType = LeftType, experimental :: meta :: EnableIf < experimental :: meta :: lessThanPossible < LeftType, RightType > () > = 0 >
-        constexpr auto lessThan (
-                LeftType    const & leftValue,
-                RightType   const & rightValue
-        ) noexcept ( noexcept ( leftValue < rightValue ) ) -> decltype ( leftValue < rightValue ) {
-
-            return leftValue < rightValue;
-        }
-
-        template < typename LeftType, typename RightType = LeftType, experimental :: meta :: EnableIf < ! experimental :: meta :: lessThanPossible < LeftType, RightType > () > = 0 >
-        constexpr auto lessThan (
-                LeftType    const &,
-                RightType   const &
-        ) noexcept -> bool {
-
-            static_assert ( experimental :: meta :: lessThanPossible < LeftType, RightType > (), "Not possible to invoke lessThan if LeftType < RightType is not possible" );
-            return false;
-        }
-
-        template < typename LeftType, typename RightType = LeftType, experimental :: meta :: EnableIf < experimental :: meta :: greaterThanPossible < LeftType, RightType > () > = 0 >
-        constexpr auto greaterThan (
-                LeftType    const & leftValue,
-                RightType   const & rightValue
-        ) noexcept ( noexcept ( leftValue > rightValue ) ) -> decltype ( leftValue > rightValue ) {
-
-            return leftValue > rightValue;
-        }
-
-        template < typename LeftType, typename RightType = LeftType, experimental :: meta :: EnableIf < ! experimental :: meta :: greaterThanPossible < LeftType, RightType > () > = 0 >
-        constexpr auto greaterThan (
-                LeftType    const &,
-                RightType   const &
-        ) noexcept -> bool {
-
-            static_assert ( experimental :: meta :: greaterThanPossible < LeftType, RightType > (), "Not possible to invoke greaterThan if LeftType > RightType is not possible" );
-            return false;
-        }
-
-        template < typename LeftType, typename RightType = LeftType, experimental :: meta :: EnableIf < experimental :: meta :: lessThanOrEqualToPossible < LeftType, RightType > () > = 0 >
-        constexpr auto lessThanOrEqualTo (
-                LeftType    const & leftValue,
-                RightType   const & rightValue
-        ) noexcept ( noexcept ( leftValue <= rightValue ) ) -> decltype ( leftValue <= rightValue ) {
-
-            return leftValue <= rightValue;
-        }
-
-        template < typename LeftType, typename RightType = LeftType, experimental :: meta :: EnableIf < ! experimental :: meta :: lessThanOrEqualToPossible < LeftType, RightType > () > = 0 >
-        constexpr auto lessThanOrEqualTo (
-                LeftType    const &,
-                RightType   const &
-        ) noexcept -> bool {
-
-            static_assert ( experimental :: meta :: lessThanOrEqualToPossible < LeftType, RightType > (), "Not possible to invoke lessThanOrEqualTo if LeftType <= RightType is not possible" );
-            return false;
-        }
-
-        template < typename LeftType, typename RightType = LeftType, experimental :: meta :: EnableIf < experimental :: meta :: greaterThanOrEqualToPossible < LeftType, RightType > () > = 0 >
-        constexpr auto greaterThanOrEqualTo (
-                LeftType    const & leftValue,
-                RightType   const & rightValue
-        ) noexcept ( noexcept ( leftValue >= rightValue ) ) -> decltype ( leftValue >= rightValue ) {
-
-            return leftValue >= rightValue;
-        }
-
-        template < typename LeftType, typename RightType = LeftType, experimental :: meta :: EnableIf < ! experimental :: meta :: greaterThanOrEqualToPossible < LeftType, RightType > () > = 0 >
-        constexpr auto greaterThanOrEqualTo (
-                LeftType    const &,
-                RightType   const &
-        ) noexcept -> bool {
-
-            static_assert ( experimental :: meta :: greaterThanOrEqualToPossible < LeftType, RightType > (), "Not possible to invoke greaterThanOrEqualTo if LeftType >= RightType is not possible" );
-            return false;
-        }
-
-        template < typename LeftType, typename RightType = LeftType, experimental :: meta :: EnableIf < experimental :: meta :: equalToPossible < LeftType, RightType > () > = 0 >
-        constexpr auto equalTo (
-                LeftType    const & leftValue,
-                RightType   const & rightValue
-        ) noexcept ( noexcept ( leftValue == rightValue ) ) -> decltype ( leftValue == rightValue ) {
-
-            return leftValue == rightValue;
-        }
-
-        template < typename LeftType, typename RightType = LeftType, experimental :: meta :: EnableIf < ! experimental :: meta :: equalToPossible < LeftType, RightType > () > = 0 >
-        constexpr auto equalTo (
-                LeftType    const &,
-                RightType   const &
-        ) noexcept -> bool {
-
-            static_assert ( experimental :: meta :: equalToPossible < LeftType, RightType > (), "Not possible to invoke equalTo if LeftType == RightType is not possible" );
-            return false;
-        }
-
-        template < typename LeftType, typename RightType = LeftType, experimental :: meta :: EnableIf < experimental :: meta :: notEqualToPossible < LeftType, RightType > () > = 0 >
-        constexpr auto notEqualTo (
-                LeftType    const & leftValue,
-                RightType   const & rightValue
-        ) noexcept ( noexcept ( leftValue != rightValue ) ) -> decltype ( leftValue != rightValue ) {
-
-            return leftValue != rightValue;
-        }
-
-        template < typename LeftType, typename RightType = LeftType, experimental :: meta :: EnableIf < ! experimental :: meta :: notEqualToPossible < LeftType, RightType > () > = 0 >
-        constexpr auto notEqualTo (
-                LeftType    const &,
-                RightType   const &
-        ) noexcept -> bool {
-
-            static_assert ( experimental :: meta :: notEqualToPossible < LeftType, RightType > (), "Not possible to invoke notEqualTo if LeftType != RightType is not possible" );
-            return false;
-        }
-
-        template < typename T >
-        constexpr auto alwaysTrue (
-                T const &
-        ) noexcept -> bool {
-
-            return true;
-        }
-
-        template < typename T >
-        constexpr auto alwaysFalse (
-                T const &
-        ) noexcept -> bool {
-
-            return false;
-        }
-    }
-
 }
 
-__CDS_RegisterParseType(ArithmeticException) // NOLINT(clion-misra-cpp2008-8-0-1)
-__CDS_RegisterParseType(DivideByZeroException) // NOLINT(clion-misra-cpp2008-8-0-1)
-__CDS_RegisterParseType(IllegalArgumentException) // NOLINT(clion-misra-cpp2008-8-0-1)
-__CDS_RegisterParseType(NullPointerException) // NOLINT(clion-misra-cpp2008-8-0-1)
-__CDS_RegisterParseType(OutOfBoundsException) // NOLINT(clion-misra-cpp2008-8-0-1)
-__CDS_RegisterParseType(TypeException) // NOLINT(clion-misra-cpp2008-8-0-1)
-__CDS_RegisterParseType(KeyException) // NOLINT(clion-misra-cpp2008-8-0-1)
-__CDS_RegisterParseType(NotImplementedException) // NOLINT(clion-misra-cpp2008-8-0-1)
+#include "../shared/impl/arithmetic.hpp"
+#include "../shared/impl/generalPredicates.hpp"
+
+__CDS_Meta_RegisterParseType(ArithmeticException) // NOLINT(clion-misra-cpp2008-8-0-1)
+__CDS_Meta_RegisterParseType(DivideByZeroException) // NOLINT(clion-misra-cpp2008-8-0-1)
+__CDS_Meta_RegisterParseType(IllegalArgumentException) // NOLINT(clion-misra-cpp2008-8-0-1)
+__CDS_Meta_RegisterParseType(NullPointerException) // NOLINT(clion-misra-cpp2008-8-0-1)
+__CDS_Meta_RegisterParseType(OutOfBoundsException) // NOLINT(clion-misra-cpp2008-8-0-1)
+__CDS_Meta_RegisterParseType(TypeException) // NOLINT(clion-misra-cpp2008-8-0-1)
+__CDS_Meta_RegisterParseType(KeyException) // NOLINT(clion-misra-cpp2008-8-0-1)
+__CDS_Meta_RegisterParseType(NotImplementedException) // NOLINT(clion-misra-cpp2008-8-0-1)
 
 
 #endif //CDS_UTILITY_HPP

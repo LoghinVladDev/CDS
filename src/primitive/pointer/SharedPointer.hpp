@@ -44,10 +44,6 @@ namespace cds {
             ++ pointer.pControl->ownerCount;
         }
 
-        __CDS_cpplang_VirtualConstexpr auto copy () const noexcept -> SharedPointer * override {
-            return Memory :: instance().create < SharedPointer > (* this);
-        }
-
         __CDS_cpplang_ConstexprDynamicAllocation SharedPointer(typename SmartPointer<T>::Pointer pointer) noexcept : // NOLINT(google-explicit-constructor)
                 SmartPointer<T>(pointer),
                 pControl(Memory :: instance().create < SharedPointerControlBlock > ()){

@@ -2587,7 +2587,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
         template < typename T >
         template < typename Predicate >
-        auto List < T > :: moreThan (
+        __CDS_OptimalInline auto List < T > :: moreThan (
                 Size                count,
                 Predicate   const & predicate
         ) noexcept ( noexcept ( predicate ( meta :: referenceOf < ElementType > () ) ) ) -> bool {
@@ -2598,7 +2598,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
         template < typename T >
         template < typename Predicate >
-        auto List < T > :: fewerThan (
+        __CDS_OptimalInline auto List < T > :: fewerThan (
                 Size                count,
                 Predicate   const & predicate
         ) noexcept ( noexcept ( predicate ( meta :: referenceOf < ElementType > () ) ) ) -> bool {

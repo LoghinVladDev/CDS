@@ -391,7 +391,7 @@ namespace cds {
                     aIt != aEnd && bIt != bEnd;
                     ++ aIt, ++ bIt // NOLINT(clion-misra-cpp2008-5-18-1)
             ) {
-                if ( ! Type < Entry > :: compare (* aIt, * bIt ) ) { // NOLINT(clion-misra-cpp2008-5-3-1)
+                if ( ! meta :: equals (* aIt, * bIt ) ) { // NOLINT(clion-misra-cpp2008-5-3-1)
                     return false;
                 }
             }
@@ -410,11 +410,6 @@ namespace cds {
             }
 
             return this->operator==(*pMap);
-        }
-
-    public:
-        __CDS_NoDiscard auto copy () const noexcept -> HashMap < K, V, H > * override {
-            return Memory :: instance () .create < HashMap < K, V, H > > ( * this );
         }
 
         __CDS_OptimalInline auto getHashCalculator () const noexcept -> H const & {
@@ -532,7 +527,7 @@ namespace cds {
 
         __CDS_OptionalInline auto find ( KeyConstReference key __CDS_MaybeUnused ) const noexcept -> Optional < Reference < Value const > > final {
             for ( auto & element __CDS_MaybeUnused : this->pBuckets[hashCalculator(key)] ) {
-                if ( Type < K > :: compare (element.getFirst(), key ) ) {
+                if ( meta :: equals (element.getFirst(), key ) ) {
                     return {element.getSecond() };
                 }
             }
@@ -542,7 +537,7 @@ namespace cds {
 
         __CDS_OptionalInline auto find ( KeyConstReference key __CDS_MaybeUnused ) noexcept -> Optional < Reference < Value > > final {
             for ( auto & element __CDS_MaybeUnused : this->pBuckets[hashCalculator(key)] ) {
-                if ( Type < K > :: compare (element.getFirst(), key ) ) {
+                if ( meta :: equals (element.getFirst(), key ) ) {
                     return {element.getSecond() };
                 }
             }
@@ -554,7 +549,7 @@ namespace cds {
             auto & bucket __CDS_MaybeUnused = this->pBuckets[hashCalculator(key)];
 
             for ( auto & element __CDS_MaybeUnused : bucket ) {
-                if ( Type < K > :: compare (element.getFirst(), key ) ) {
+                if ( meta :: equals (element.getFirst(), key ) ) {
                     return element.getSecond();
                 }
             }
@@ -567,7 +562,7 @@ namespace cds {
             auto & bucket __CDS_MaybeUnused = this->pBuckets[hashCalculator(key)];
 
             for ( auto & element __CDS_MaybeUnused : bucket ) {
-                if ( Type < K > :: compare (element.getFirst(), key ) ) {
+                if ( meta :: equals (element.getFirst(), key ) ) {
                     return element.getSecond();
                 }
             }
@@ -579,7 +574,7 @@ namespace cds {
             auto & bucket __CDS_MaybeUnused = this->pBuckets[hashCalculator(key)];
 
             for ( auto & element __CDS_MaybeUnused : bucket ) {
-                if ( Type < K > :: compare (element.getFirst(), key ) ) {
+                if ( meta :: equals (element.getFirst(), key ) ) {
                     return element.getSecond();
                 }
             }
@@ -589,7 +584,7 @@ namespace cds {
 
         auto containsKey ( KeyConstReference key __CDS_MaybeUnused ) const noexcept -> bool final {
             for ( EntryConstReference element __CDS_MaybeUnused : this->pBuckets[hashCalculator(key)] ) {
-                if ( Type < K > :: compare (element.first(), key ) ) {
+                if ( meta :: equals (element.first(), key ) ) {
                     return true;
                 }
             }
@@ -599,7 +594,7 @@ namespace cds {
 
         auto containsValue ( ValueConstReference value __CDS_MaybeUnused ) const noexcept -> bool final {
             for ( EntryConstReference element __CDS_MaybeUnused : (*this) ) {
-                if ( Type < V > :: compare (element.getSecond(), value ) ) {
+                if ( meta :: equals (element.getSecond(), value ) ) {
                     return true;
                 }
             }
@@ -610,8 +605,8 @@ namespace cds {
         auto contains ( EntryConstReference entry __CDS_MaybeUnused ) const noexcept -> bool final {
             for ( EntryConstReference element __CDS_MaybeUnused : this->pBuckets[hashCalculator(entry.first())] ) {
                 if (
-                        Type < K > :: compare (element.first(), entry.first() ) &&
-                        Type < V > :: compare (element.second(), entry.second() )
+                        meta :: equals (element.first(), entry.first() ) &&
+                        meta :: equals (element.second(), entry.second() )
                 ) {
                     return true;
                 }
@@ -624,7 +619,7 @@ namespace cds {
             auto & bucket __CDS_MaybeUnused = this->pBuckets [ this->hashCalculator(key) ];
 
             for ( auto & element __CDS_MaybeUnused : bucket ) {
-                if ( Type < Key > :: compare (element.first(), key ) ) {
+                if ( meta :: equals (element.first(), key ) ) {
                     return bucket.removeFirst (element );
                 }
             }
@@ -636,7 +631,7 @@ namespace cds {
         auto allocInsertGetPtr (EntryConstReference entry) noexcept -> EntryPointerReference override {
             auto pFront = this->pBuckets[hashCalculator(entry.first())]._pFront;
             while ( pFront != nullptr ) {
-                if ( Type < K > :: compare ( pFront->data->first(), entry.first() ) ) {
+                if ( meta :: equals ( pFront->data->first(), entry.first() ) ) {
                     return pFront->data;
                 }
 
@@ -701,7 +696,7 @@ namespace cds {
             oss << "{ ";
             for ( auto & element __CDS_MaybeUnused : (*this) ) {
     #if !defined(CDS_GLM)
-                Type < V > :: streamPrint (Type < K > :: streamPrint (oss, element.getFirst() ) << " : ", element.getSecond() ) << ", ";
+                meta :: print ( meta :: print (oss, element.getFirst() ) << " : ", element.getSecond() ) << ", ";
     #else
                 if constexpr (
                         std::is_same < glm::vec1, Value >::type::value ||
@@ -773,24 +768,7 @@ namespace cds {
 
 }
 
-namespace cds { // NOLINT(modernize-concat-nested-namespaces)
-    namespace utility {
-
-        template <class K, class V, class H> __CDS_Requires (
-                UniqueIdentifiable< K > &&
-                HashCalculatorHasBoundaryFunction< H >
-        ) struct TypeParseTraits<HashMap < K, V, H >> {
-            constexpr static StringLiteral name = "HashMap";
-        };
-
-        template <class K, class V, class H> __CDS_Requires (
-                UniqueIdentifiable< K > &&
-                HashCalculatorHasBoundaryFunction< H >
-        ) struct TypeParseTraits<MultiHashMap < K, V, H >> {
-            constexpr static StringLiteral name = "MultiHashMap";
-        };
-
-    }
-}
+__CDS_Meta_RegisterParseTemplateType(HashMap)
+__CDS_Meta_RegisterParseTemplateType(MultiHashMap)
 
 #endif //CDS_HASHMAP_HPP

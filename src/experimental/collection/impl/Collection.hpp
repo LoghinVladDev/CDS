@@ -19,7 +19,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 ) noexcept -> bool {
 
                     for ( auto const & e : list ) {
-                        if ( Type < T > :: compare ( e, element ) ) {
+                        if ( meta :: equals ( e, element ) ) {
                             return true;
                         }
                     }
@@ -757,7 +757,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
         template < typename T >
         template < typename Predicate >
-        auto Collection < T > :: moreThan (
+        __CDS_OptimalInline auto Collection < T > :: moreThan (
                 Size                count,
                 Predicate   const & predicate
         ) const noexcept ( noexcept ( predicate ( meta :: referenceOf < ElementType const > () ) ) ) -> bool {
@@ -768,7 +768,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
         template < typename T >
         template < typename Predicate >
-        auto Collection < T > :: fewerThan (
+        __CDS_OptimalInline auto Collection < T > :: fewerThan (
                 Size                count,
                 Predicate   const & predicate
         ) const noexcept ( noexcept ( predicate ( meta :: referenceOf < ElementType const > () ) ) ) -> bool {

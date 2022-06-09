@@ -12,6 +12,8 @@
 #include <CDS/Utility>
 #include <CDS/Memory>
 
+#warning Header deprecated. Do not include this directly via relative pathing!
+
 namespace cds {
 
     template < typename T >
@@ -263,10 +265,6 @@ namespace cds {
             ++ pointer.pControl->ownerCount;
         }
 
-        __CDS_cpplang_VirtualConstexpr auto copy () const noexcept -> SharedPointer * override {
-            return Memory :: instance().create < SharedPointer > (* this);
-        }
-
         __CDS_cpplang_ConstexprDynamicAllocation SharedPointer(typename PointerBase<T>::Pointer pointer) noexcept : // NOLINT(google-explicit-constructor)
                 PointerBase<T>(pointer),
                 pControl(Memory :: instance().create < SharedPointerControlBlock > ()){
@@ -370,10 +368,6 @@ namespace cds {
             pointer.pControl->lock.lock();
             ++ pointer.pControl->ownerCount;
             pointer.pControl->lock.unlock();
-        }
-
-        __CDS_OptimalInline auto copy () const noexcept -> AtomicSharedPointer * override {
-            return Memory :: instance().create < AtomicSharedPointer >(* this);
         }
 
         __CDS_OptimalInline AtomicSharedPointer(typename PointerBase<T>::Pointer pointer) noexcept : // NOLINT(google-explicit-constructor)

@@ -1474,43 +1474,6 @@ namespace cds {
     #endif
         }
 
-        __CDS_NoDiscard __CDS_OptionalInline auto copy () const noexcept -> Socket * override {
-
-    #if defined (__CDS_Platform_Linux)
-
-            return Memory :: instance().create < Socket > (dup(this->_platformSocket));
-
-    #elif defined(__CDS_Platform_Microsoft_Windows)
-
-            WSAPROTOCOL_INFO wsaProtocolInfo;
-
-            if ( 0 != WSADuplicateSocket(this->_platformSocket, GetCurrentProcessId(), & wsaProtocolInfo) ) {
-                return nullptr;
-            }
-
-            PlatformSocket platformSocket = WSASocket(
-                    wsaProtocolInfo.iAddressFamily,
-                    wsaProtocolInfo.iSocketType,
-                    wsaProtocolInfo.iProtocol,
-                    & wsaProtocolInfo,
-                    0,
-                    0
-            );
-
-            if ( this->_platformSocket == Socket::WIN32_INVALID_PLATFORM_SOCKET ) {
-                return nullptr;
-            }
-
-            return Memory :: instance().create < Socket > (platformSocket);
-
-    #else
-
-    #error Socket::copy Unimplemented
-
-    #endif
-
-        }
-
         __CDS_NoDiscard auto equals(Object const & o) const noexcept -> bool override {
             if ( this == & o ) {
                 return true;

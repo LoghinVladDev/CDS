@@ -10,6 +10,7 @@
 #include <CDS/Integer>
 #include <CDS/Float>
 #include <CDS/Long>
+#include <CDS/Tuple>
 
 namespace cds { // NOLINT(modernize-concat-nested-namespaces)
     namespace utility { // NOLINT(modernize-concat-nested-namespaces)
@@ -34,11 +35,11 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
                 template < typename C >
                 struct ContainedTypeImpl {
-                    using Type = RemoveReference <
+                    using Type = meta :: RemoveReference <
                         decltype (
-                            * ( * Type <
-                                    typename RemoveReference < C > :: Iterator
-                            > :: unsafeAddress () )
+                            * ( meta :: referenceOf <
+                                    typename meta :: RemoveReference < C > :: Iterator
+                            > () )
                         )
                     >;
                 };
@@ -59,24 +60,24 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 template < typename MapperType, typename C >
                 constexpr auto mapToSameType () noexcept -> bool {
                     return std :: is_same <
-                        RemoveReference <
+                        meta :: RemoveReference <
                             decltype (
-                                * Type <
-                                        typename RemoveReference < C > :: Iterator
-                                > :: unsafeAddress ()
+                                meta :: referenceOf <
+                                        typename meta :: RemoveReference < C > :: Iterator
+                                > ()
                             )
                         >,
-                            ReturnOf < MapperType >
+                        meta :: ReturnOf < MapperType >
                     > :: type :: value;
                 }
 
                 template < typename TransformerType >
                 struct FlatMapDeducted {
-                    using Type = RemoveReference <
+                    using Type = meta :: RemoveReference <
                         decltype (
-                            * ( * Type <
-                                typename ReturnOf < TransformerType > :: Iterator
-                            > :: unsafeAddress () )
+                            * ( meta :: referenceOf <
+                                typename meta :: ReturnOf < TransformerType > :: Iterator
+                            > () )
                         )
                     >;
                 };
@@ -86,24 +87,24 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
                 template < typename C >
                 constexpr auto containedTypeIsPair () noexcept -> bool {
-                    return isPair <
-                        RemoveReference <
+                    return meta :: isPair <
+                        meta :: RemoveReference <
                             decltype (
-                                * ( * Type <
-                                    typename RemoveReference < C > :: Iterator
-                                > :: unsafeAddress () )
+                                * ( meta :: referenceOf <
+                                    typename meta :: RemoveReference < C > :: Iterator
+                                > () )
                             )
                         >
-                    > :: type :: value;
+                    > ();
                 }
 
                 template < typename C >
-                struct ContainedTypeAsPair : pairTrait <
-                    RemoveReference <
+                struct ContainedTypeAsPair : meta :: PairTraits <
+                    meta :: RemoveReference <
                         decltype (
-                            * ( * Type <
-                                typename RemoveReference < C > :: Iterator
-                            > :: unsafeAddress () )
+                            * ( meta :: referenceOf <
+                                typename meta :: RemoveReference < C > :: Iterator
+                            > () )
                         )
                     >
                 > {
@@ -115,16 +116,14 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                     template < typename Transformer >
                     constexpr static auto isAbstract () noexcept -> bool {
                         return std::is_abstract <
-                            RemoveConst <
-                                RemoveReference <
+                            meta :: RemoveConst <
+                                meta :: RemoveReference <
                                     decltype (
-                                        std::get < 0 > (
-                                            * Type <
-                                                ArgumentsOf <
-                                                    Transformer
-                                                >
-                                            > :: unsafeAddress ()
-                                        )
+                                        meta :: valueOf <
+                                            meta :: ArgumentsOf <
+                                                Transformer
+                                            >
+                                        > ().template get < 0 > ()
                                     )
                                 >
                             >
@@ -133,39 +132,35 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
                     template < typename Transformer >
                     using typeIfAbstract = LinkedList <
-                        typename RemoveConst <
-                            RemoveReference <
+                        typename meta :: RemoveConst <
+                            meta :: RemoveReference <
                                 decltype (
-                                    std::get < 0 > (
-                                        * Type <
-                                            ArgumentsOf <
-                                                Transformer
-                                            >
-                                        > :: unsafeAddress ()
-                                    )
+                                    meta :: valueOf <
+                                        meta :: ArgumentsOf <
+                                            Transformer
+                                        >
+                                    > ().template get < 0 > ()
                                 )
                             >
-                        > ::ElementType
+                        > :: ElementType
                     >;
 
                     template < typename Transformer >
-                    using typeIfNotAbstract = RemoveConst <
-                        RemoveReference <
+                    using typeIfNotAbstract = meta :: RemoveConst <
+                        meta :: RemoveReference <
                             decltype(
-                                std::get<0>(
-                                    * Type <
-                                        ArgumentsOf <
-                                            Transformer
-                                        >
-                                    > :: unsafeAddress ()
-                                )
+                                meta :: valueOf <
+                                    meta :: ArgumentsOf <
+                                        Transformer
+                                    >
+                                > ().template get < 0 > ()
                             )
                         >
                     >;
 
                     template < typename ListTransformer >
                     using type =
-                        TypeIf <
+                        meta :: Conditional <
                             isAbstract < ListTransformer > (),
                             typeIfAbstract < ListTransformer >,
                             typeIfNotAbstract < ListTransformer >

@@ -43,7 +43,7 @@ namespace cds {
             std :: enable_if <
                 ! std::is_same < // NOLINT(clion-misra-cpp2008-5-3-1)
                     Reference,
-                    RemoveConst < RemoveReference < V >
+                    meta :: RemoveConst < meta :: RemoveReference < V >
                 >
             > :: value > ()
         ) > constexpr Reference ( V && value ) noexcept ( noexcept ( utility :: hidden :: referenceImpl :: hiddenRef < T > (std :: forward < V > (value )))) : // NOLINT(google-explicit-constructor,bugprone-forwarding-reference-overload)
@@ -82,7 +82,7 @@ namespace cds {
         constexpr auto operator == (Reference const & reference) const noexcept -> bool {
             return
                 this == & reference ||
-                Type < T > :: compare (reference.get(), this->get() );
+                meta :: equals ( reference.get(), this->get() );
         }
 
         __CDS_NoDiscard __CDS_cpplang_VirtualConstexpr auto equals ( Object const & object ) const noexcept -> bool final {
@@ -101,13 +101,9 @@ namespace cds {
         __CDS_NoDiscard __CDS_OptionalInline auto toString() const noexcept -> String final {
             std::stringstream oss;
 
-            Type < T > :: streamPrint ( oss << "< " << (std::is_const<T>::value ? "const " : "") << "& of 0x" << std::hex
+            meta :: print ( oss << "< " << (std::is_const<T>::value ? "const " : "") << "& of 0x" << std::hex
                 << reinterpret_cast < AddressValueType > ( p ) << std::dec << " : " , *p ) << " >";
             return oss.str();
-        }
-
-        __CDS_NoDiscard __CDS_OptimalInline auto copy () const noexcept -> Reference < T > * override {
-            return Memory :: instance () .create < Reference < T > > ( * this );
         }
 
     #if __CDS_cpplang_core_version >= __CDS_cpplang_core_version_17
@@ -136,6 +132,6 @@ namespace cds {
 
 #endif
 
-__CDS_RegisterParseTypeTemplateT(Reference) // NOLINT(clion-misra-cpp2008-8-0-1)
+__CDS_Meta_RegisterParseTemplateType(Reference) // NOLINT(clion-misra-cpp2008-8-0-1)
 
 #endif //CDS_REFERENCE_HPP

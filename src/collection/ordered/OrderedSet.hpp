@@ -122,10 +122,6 @@ namespace cds {
         auto sequence () && noexcept -> Sequence < OrderedSet < T, C > >;
         auto sequence () const & noexcept -> Sequence < OrderedSet < T, C > const >;
         auto sequence () & noexcept -> Sequence < OrderedSet < T, C > >;
-
-        auto copy () const noexcept -> OrderedSet < T, C > * override {
-            return Memory :: instance ().create < OrderedSet < T, C > > ( * this );
-        }
     };
 
 }
@@ -143,7 +139,7 @@ namespace cds {
             return this->_pFront->data;
         }
 
-        if ( Type < T > :: compare(* this->_pFront->data, element ) ) {
+        if ( meta :: equals (* this->_pFront->data, element ) ) {
             return this->_pFront->data;
         }
 
@@ -159,7 +155,7 @@ namespace cds {
 
         auto head = this->_pFront;
         while ( head->pNext != nullptr ) {
-            if ( Type < T > :: compare (* head->pNext->data, element ) ) {
+            if ( meta :: equals (* head->pNext->data, element ) ) {
                 return head->pNext->data;
             }
 
@@ -185,15 +181,6 @@ namespace cds {
 
 }
 
-namespace cds { // NOLINT(modernize-concat-nested-namespaces)
-    namespace utility {
-
-        template<typename T, typename C> __CDS_Requires(ValidSetComparator < T, C >)
-        struct TypeParseTraits<OrderedSet<T, C>> {
-            constexpr static StringLiteral name = "OrderedSet";
-        };
-
-    }
-}
+__CDS_Meta_RegisterParseTemplateType(OrderedSet)
 
 #endif //CDS_ORDEREDSET_HPP

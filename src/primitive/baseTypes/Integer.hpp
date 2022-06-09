@@ -1218,7 +1218,7 @@ namespace cds {
                 intValue /= base;
             }
 
-            return std :: move ( (rep + (this->v < 0 ? "-" : "")).reversed() );
+            return std :: move ( (rep + (this->v < 0 ? "-" : "")).reverse() );
         }
 
         /**
@@ -1282,7 +1282,7 @@ namespace cds {
             if ( base == 16 ) {
                 auto copy = iterator;
                 if ( copy.value() == '0' && copy.next().value() == 'x' ) {
-                    iterator = copy.next();
+                    iterator = ++ copy;
                 }
             }
 
@@ -1294,10 +1294,6 @@ namespace cds {
             }
 
             return negative ? (-numericValue) : numericValue;
-        }
-
-        __CDS_NoDiscard auto copy () const noexcept -> Integer * override {
-            return Memory :: instance().create < Integer > ( * this );
         }
 
         /**
@@ -2170,6 +2166,6 @@ namespace cds {
 
 }
 
-__CDS_RegisterParseType(Integer) // NOLINT(clion-misra-cpp2008-8-0-1)
+__CDS_Meta_RegisterParseType(Integer) // NOLINT(clion-misra-cpp2008-8-0-1)
 
 #endif //CDS_INTEGER_HPP

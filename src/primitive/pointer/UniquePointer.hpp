@@ -20,7 +20,7 @@ namespace cds {
         __CDS_cpplang_VirtualConstexpr UniquePointer( UniquePointer & pointer ) noexcept : SmartPointer<T>(pointer.release()) { }
         __CDS_cpplang_VirtualConstexpr UniquePointer( UniquePointer && pointer ) noexcept : SmartPointer<T>(pointer.release()) { }
 
-        template < typename DerivedType, EnableIf < isDerivedFrom < DerivedType, T > :: value > = 0 >
+        template < typename DerivedType, meta :: EnableIf < meta :: isDerivedFrom < DerivedType, T > () > = 0 >
         __CDS_cpplang_VirtualConstexpr UniquePointer ( UniquePointer < DerivedType > && pointer ) noexcept : SmartPointer < T > ( pointer.release() ) { } // NOLINT(google-explicit-constructor)
 
         __CDS_cpplang_NonConstConstexprMemberFunction auto operator = ( UniquePointer && pointer ) noexcept -> UniquePointer & {
@@ -46,7 +46,7 @@ namespace cds {
             return * this;
         }
 
-        template < typename D, EnableIf < isDerivedFrom < RemovePointer < D >, T > :: value > = 0 >
+        template < typename D, meta :: EnableIf < meta :: isDerivedFrom < meta :: RemovePointer < D >, T > () > = 0 >
         __CDS_cpplang_NonConstConstexprMemberFunction auto operator = ( D pointer ) noexcept -> UniquePointer & {
             this->reset((T *)pointer);
             return * this;

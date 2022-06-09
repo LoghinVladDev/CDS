@@ -342,10 +342,6 @@ namespace cds {
 
                 return this->_pArray == p->_pArray && this->_index == p->_index;
             }
-
-            __CDS_OptimalInline auto copy () const noexcept -> StaticArrayDelegateIterator * override {
-                return Memory :: instance () . create < StaticArrayDelegateIterator > ( * this );
-            }
         };
 
         class StaticArrayDelegateConstIterator : public DelegateConstIterator {
