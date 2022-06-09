@@ -324,103 +324,191 @@
 //        return std :: is_move_assignable < T > :: type :: value;
 //    }
 //
-//    template<typename T, typename U = void>
-//    struct isCallableType
-//    {
-//        static bool const constexpr value = std::conditional<
-//                std::is_class<typename std::remove_reference<T> :: type>::value,
-//                isCallableType<typename std::remove_reference<T> :: type, int>,
+//#ifndef __T_E_S_T__
+//#define __T_E_S_T__
+//namespace cds {
+//    template < typename T, typename U = void >
+//    struct isCallableType {
+//        static bool const constexpr value = std::conditional <
+//                std::is_class < typename std::remove_reference < T >::type >::value,
+//                isCallableType < typename std::remove_reference < T >::type, int >,
 //                std::false_type
-//            >::type::value;
+//        >::type::value;
 //    };
 //
-//    template <> struct isCallableType <String> : std :: false_type{};
-//    template <> struct isCallableType <Object> : std :: false_type{};
+////    template <> struct isCallableType <cds::String> : std :: false_type{};
+////    template <> struct isCallableType <Object> : std :: false_type{};
 //
-//    template<typename T, typename U, typename ...Args>
-//    struct isCallableType<T(Args...), U> : std::true_type {};
-//    template<typename T, typename U, typename ...Args>
-//    struct isCallableType<T(*)(Args...), U> : std::true_type {};
-//    template<typename T, typename U, typename ...Args>
-//    struct isCallableType<T(&)(Args...), U> : std::true_type {};
-//    template<typename T, typename U, typename ...Args>
-//    struct isCallableType<T(Args...,...), U> : std::true_type {};
-//    template<typename T, typename U, typename ...Args>
-//    struct isCallableType<T(*)(Args...,...), U> : std::true_type {};
-//    template<typename T, typename U, typename ...Args>
-//    struct isCallableType<T(&)(Args...,...), U> : std::true_type {};
-//    template<typename T, typename U, typename ...Args>
-//    struct isCallableType<T(Args...)const, U> : std::true_type {};
-//    template<typename T, typename U, typename ...Args>
-//    struct isCallableType<T(Args...)volatile, U> : std::true_type {};
-//    template<typename T, typename U, typename ...Args>
-//    struct isCallableType<T(Args...)const volatile, U> : std::true_type {};
-//    template<typename T, typename U, typename ...Args>
-//    struct isCallableType<T(Args...,...)const, U> : std::true_type {};
-//    template<typename T, typename U, typename ...Args>
-//    struct isCallableType<T(Args...,...)volatile, U> : std::true_type{};
-//    template<typename T, typename U, typename ...Args>
-//    struct isCallableType<T(Args...,...)const volatile, U> : std::true_type {};
-//    template<typename T, typename U, typename ...Args>
-//    struct isCallableType<T(Args...)&, U> : std::true_type {};
-//    template<typename T, typename U, typename ...Args>
-//    struct isCallableType<T(Args...)const&, U> : std::true_type{};
-//    template<typename T, typename U, typename ...Args>
-//    struct isCallableType<T(Args...)volatile&, U> : std::true_type{};
-//    template<typename T, typename U, typename ...Args>
-//    struct isCallableType<T(Args...)const volatile&, U> : std::true_type{};
-//    template<typename T, typename U, typename ...Args>
-//    struct isCallableType<T(Args...,...)&, U> : std::true_type {};
-//    template<typename T, typename U, typename ...Args>
-//    struct isCallableType<T(Args...,...)const&, U> : std::true_type{};
-//    template<typename T, typename U, typename ...Args>
-//    struct isCallableType<T(Args...,...)volatile&, U> : std::true_type{};
-//    template<typename T, typename U, typename ...Args>
-//    struct isCallableType<T(Args...,...)const volatile&, U> : std::true_type{};
-//    template<typename T, typename U, typename ...Args>
-//    struct isCallableType<T(Args...)&&, U> : std::true_type{};
-//    template<typename T, typename U, typename ...Args>
-//    struct isCallableType<T(Args...)const&&, U> : std::true_type{};
-//    template<typename T, typename U, typename ...Args>
-//    struct isCallableType<T(Args...)volatile&&, U> : std::true_type{};
-//    template<typename T, typename U, typename ...Args>
-//    struct isCallableType<T(Args...)const volatile&&, U> : std::true_type{};
-//    template<typename T, typename U, typename ...Args>
-//    struct isCallableType<T(Args...,...)&&, U> : std::true_type{};
-//    template<typename T, typename U, typename ...Args>
-//    struct isCallableType<T(Args...,...)const&&, U> : std::true_type{};
-//    template<typename T, typename U, typename ...Args>
-//    struct isCallableType<T(Args...,...)volatile&&, U> : std::true_type{};
-//    template<typename T, typename U, typename ...Args>
-//    struct isCallableType<T(Args...,...)const volatile&&, U> : std::true_type{};
+//    template < typename T, typename U, typename ...Args >
+//    struct isCallableType < T ( Args... ), U > : std::true_type {};
+//    template < typename T, typename U, typename ...Args >
+//    struct isCallableType < T( * ) ( Args... ), U > : std::true_type {};
+//    template < typename T, typename U, typename ...Args >
+//    struct isCallableType < T( & ) ( Args... ), U > : std::true_type {};
+//    template < typename T, typename U, typename ...Args >
+//    struct isCallableType <
+//            T (
+//                    Args...,
+//                    ...
+//            ), U
+//    > : std::true_type {
+//    };
+//    template < typename T, typename U, typename ...Args >
+//    struct isCallableType <
+//            T( * ) (
+//                    Args...,
+//                    ...
+//            ), U
+//    > : std::true_type {
+//    };
+//    template < typename T, typename U, typename ...Args >
+//    struct isCallableType <
+//            T( & ) (
+//                    Args...,
+//                    ...
+//            ), U
+//    > : std::true_type {
+//    };
+//    template < typename T, typename U, typename ...Args >
+//    struct isCallableType < T ( Args... ) const, U > : std::true_type {};
+//    template < typename T, typename U, typename ...Args >
+//    struct isCallableType < T ( Args... ) volatile, U > : std::true_type {};
+//    template < typename T, typename U, typename ...Args >
+//    struct isCallableType < T ( Args... ) const volatile, U > : std::true_type {};
+//    template < typename T, typename U, typename ...Args >
+//    struct isCallableType <
+//            T (
+//                    Args...,
+//                    ...
+//            ) const, U
+//    > : std::true_type {
+//    };
+//    template < typename T, typename U, typename ...Args >
+//    struct isCallableType <
+//            T (
+//                    Args...,
+//                    ...
+//            ) volatile, U
+//    > : std::true_type {
+//    };
+//    template < typename T, typename U, typename ...Args >
+//    struct isCallableType <
+//            T (
+//                    Args...,
+//                    ...
+//            ) const volatile, U
+//    > : std::true_type {
+//    };
+//    template < typename T, typename U, typename ...Args >
+//    struct isCallableType < T ( Args... ) &, U > : std::true_type {};
+//    template < typename T, typename U, typename ...Args >
+//    struct isCallableType < T ( Args... ) const &, U > : std::true_type {};
+//    template < typename T, typename U, typename ...Args >
+//    struct isCallableType < T ( Args... ) volatile &, U > : std::true_type {};
+//    template < typename T, typename U, typename ...Args >
+//    struct isCallableType < T ( Args... ) const volatile &, U > : std::true_type {};
+//    template < typename T, typename U, typename ...Args >
+//    struct isCallableType <
+//            T (
+//                    Args...,
+//                    ...
+//            ) &, U
+//    > : std::true_type {
+//    };
+//    template < typename T, typename U, typename ...Args >
+//    struct isCallableType <
+//            T (
+//                    Args...,
+//                    ...
+//            ) const &, U
+//    > : std::true_type {
+//    };
+//    template < typename T, typename U, typename ...Args >
+//    struct isCallableType <
+//            T (
+//                    Args...,
+//                    ...
+//            ) volatile &, U
+//    > : std::true_type {
+//    };
+//    template < typename T, typename U, typename ...Args >
+//    struct isCallableType <
+//            T (
+//                    Args...,
+//                    ...
+//            ) const volatile &, U
+//    > : std::true_type {
+//    };
+//    template < typename T, typename U, typename ...Args >
+//    struct isCallableType < T ( Args... ) &&, U > : std::true_type {};
+//    template < typename T, typename U, typename ...Args >
+//    struct isCallableType < T ( Args... ) const &&, U > : std::true_type {};
+//    template < typename T, typename U, typename ...Args >
+//    struct isCallableType < T ( Args... ) volatile &&, U > : std::true_type {};
+//    template < typename T, typename U, typename ...Args >
+//    struct isCallableType < T ( Args... ) const volatile &&, U > : std::true_type {};
+//    template < typename T, typename U, typename ...Args >
+//    struct isCallableType <
+//            T (
+//                    Args...,
+//                    ...
+//            ) &&, U
+//    > : std::true_type {
+//    };
+//    template < typename T, typename U, typename ...Args >
+//    struct isCallableType <
+//            T (
+//                    Args...,
+//                    ...
+//            ) const &&, U
+//    > : std::true_type {
+//    };
+//    template < typename T, typename U, typename ...Args >
+//    struct isCallableType <
+//            T (
+//                    Args...,
+//                    ...
+//            ) volatile &&, U
+//    > : std::true_type {
+//    };
+//    template < typename T, typename U, typename ...Args >
+//    struct isCallableType <
+//            T (
+//                    Args...,
+//                    ...
+//            ) const volatile &&, U
+//    > : std::true_type {
+//    };
 //
-//    template<typename T>
-//    struct isCallableType<T, int>
-//    {
+//    template < typename T >
+//    struct isCallableType < T, int > {
 //    private:
-//        using YesType = char(&)[1];
-//        using NoType = char(&)[2];
+//        using YesType = char ( & )[1];
+//        using NoType = char ( & )[2];
 //
-//        struct Fallback { void operator()() {} };
+//        struct Fallback { void operator () () {} };
 //
 //        struct Derived : T, Fallback {};
 //
-//        template<typename U, U>
+//        template < typename U, U >
 //        struct Check;
 //
 //        __CDS_WarningSuppression_NoReturnStatement_SuppressEnable
 //
-//        template<typename>
-//        static YesType Test(...) {} // NOLINT(clion-misra-cpp2008-8-4-1)
+//        template < typename >
+//        static YesType Test ( ... ) {} // NOLINT(clion-misra-cpp2008-8-4-1)
 //
-//        template<typename C>
-//        static NoType Test(Check<void (Fallback::*)(), &C::operator()>*) {}
+//        template < typename C >
+//        static NoType Test ( Check < void ( Fallback::* ) (), & C::operator () > * ) {}
 //
 //        __CDS_WarningSuppression_NoReturnStatement_SuppressDisable
 //
 //    public:
-//        static bool const constexpr value = sizeof(Test<Derived>(0)) == sizeof(YesType); // NOLINT(clion-misra-cpp2008-5-3-4)
+//        static bool const constexpr value =
+//                sizeof ( Test < Derived > ( 0 ) ) == sizeof ( YesType ); // NOLINT(clion-misra-cpp2008-5-3-4)
 //    };
+//}
+//#endif
 //
 //}
 //

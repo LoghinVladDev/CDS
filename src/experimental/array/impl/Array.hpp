@@ -58,7 +58,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 Array < T > const & array
         ) noexcept -> void {
 
-            static_assert ( Type < T > :: copyConstructible, "Cannot copy an array of given Type, Type has no Copy Constructor" );
+            static_assert ( meta :: isCopyConstructible < T > (), "Cannot copy an array of given Type, Type has no Copy Constructor" );
             for ( Index i = 0; i < static_cast < Index > ( array.size() ); ++ i ) {
                 this->_pData[i] = Memory :: instance().create < T > ( * array._pData[i] );
             }
@@ -778,7 +778,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                     ElementType const & element
             ) noexcept -> bool {
                 for (Size i = 0u; i < arrayLength; ++ i ) {
-                    if ( Type < T > :: compare (* pArray[i], element ) ) {
+                    if ( meta :: equals (* pArray[i], element ) ) {
                         return true;
                     }
                 }

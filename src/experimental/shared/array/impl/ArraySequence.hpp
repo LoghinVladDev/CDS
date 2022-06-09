@@ -13,22 +13,22 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
         template < typename T >
         __CDS_OptimalInline auto Array < T > :: sequence () & noexcept -> Sequence < Array < T > > {
-            return Sequence < RemoveReference < decltype (*this) > > ( * this );
+            return Sequence < meta :: RemoveReference < decltype (*this) > > ( * this );
         }
 
         template < typename T >
         __CDS_OptimalInline auto Array < T > :: sequence () const & noexcept -> Sequence < Array < T > const > {
-            return Sequence < RemoveReference < decltype (*this) > > (*this);
+            return Sequence < meta :: RemoveReference < decltype (*this) > > (*this);
         }
 
         template < typename T >
         __CDS_OptimalInline auto Array < T > :: sequence () && noexcept -> Sequence < Array < T > > {
-            return Sequence < RemoveReference < decltype (*this) > > (std::move(*this));
+            return Sequence < meta :: RemoveReference < decltype (*this) > > (std::move(*this));
         }
 
         template < typename T >
         __CDS_OptimalInline auto Array < T > :: sequence () const && noexcept -> Sequence < Array < T > const > {
-            return Sequence < RemoveReference < decltype (*this) > > (std::move(*this));
+            return Sequence < meta :: RemoveReference < decltype (*this) > > (std::move(*this));
         }
 
     }

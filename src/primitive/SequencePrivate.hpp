@@ -10,6 +10,7 @@
 #include <CDS/Integer>
 #include <CDS/Float>
 #include <CDS/Long>
+#include <CDS/experimental/Tuple>
 
 namespace cds { // NOLINT(modernize-concat-nested-namespaces)
     namespace utility { // NOLINT(modernize-concat-nested-namespaces)
@@ -98,7 +99,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 }
 
                 template < typename C >
-                struct ContainedTypeAsPair : pairTrait <
+                struct ContainedTypeAsPair : meta :: PairTraits <
                     meta :: RemoveReference <
                         decltype (
                             * ( meta :: referenceOf <
@@ -115,16 +116,14 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                     template < typename Transformer >
                     constexpr static auto isAbstract () noexcept -> bool {
                         return std::is_abstract <
-                            RemoveConst <
-                                RemoveReference <
+                            meta :: RemoveConst <
+                                meta :: RemoveReference <
                                     decltype (
-                                        std::get < 0 > (
-                                            * Type <
-                                                ArgumentsOf <
-                                                    Transformer
-                                                >
-                                            > :: unsafeAddress ()
-                                        )
+                                        meta :: valueOf <
+                                            meta :: ArgumentsOf <
+                                                Transformer
+                                            >
+                                        > ().template get < 0 > ()
                                     )
                                 >
                             >
@@ -133,39 +132,35 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
                     template < typename Transformer >
                     using typeIfAbstract = LinkedList <
-                        typename RemoveConst <
-                            RemoveReference <
+                        typename meta :: RemoveConst <
+                            meta :: RemoveReference <
                                 decltype (
-                                    std::get < 0 > (
-                                        * Type <
-                                            ArgumentsOf <
-                                                Transformer
-                                            >
-                                        > :: unsafeAddress ()
-                                    )
+                                    meta :: valueOf <
+                                        meta :: ArgumentsOf <
+                                            Transformer
+                                        >
+                                    > ().template get < 0 > ()
                                 )
                             >
-                        > ::ElementType
+                        > :: ElementType
                     >;
 
                     template < typename Transformer >
-                    using typeIfNotAbstract = RemoveConst <
-                        RemoveReference <
+                    using typeIfNotAbstract = meta :: RemoveConst <
+                        meta :: RemoveReference <
                             decltype(
-                                std::get<0>(
-                                    * Type <
-                                        ArgumentsOf <
-                                            Transformer
-                                        >
-                                    > :: unsafeAddress ()
-                                )
+                                meta :: valueOf <
+                                    meta :: ArgumentsOf <
+                                        Transformer
+                                    >
+                                > ().template get < 0 > ()
                             )
                         >
                     >;
 
                     template < typename ListTransformer >
                     using type =
-                        TypeIf <
+                        meta :: Conditional <
                             isAbstract < ListTransformer > (),
                             typeIfAbstract < ListTransformer >,
                             typeIfNotAbstract < ListTransformer >

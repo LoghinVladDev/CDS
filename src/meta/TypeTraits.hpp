@@ -282,8 +282,8 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 > :: Type :: value;
             };
 
-            template < typename __T, typename __U, typename ... __A >
-            struct __IsCallable < __T ( __A ... ), __U > : __TrueType {};
+            template < typename __T, typename ... __A >
+            struct __IsCallable < __T ( __A ... ) > : __TrueType {};
 
             template < typename __T, typename __U, typename ... __A >
             struct __IsCallable < __T (*) ( __A ... ), __U > : __TrueType {};
@@ -978,7 +978,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
          */
         template < typename __Type >
         constexpr auto isCallable () noexcept -> bool {
-            return __impl :: __IsCallable < __Type > :: value;
+            return __impl :: __IsFunction < __Type > :: value || __impl :: __IsObjectFunction < __Type > :: value;
         }
 
         /**
@@ -1405,6 +1405,10 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
             constexpr static auto isVolatile () noexcept -> bool {
                 return meta :: isVolatile < __T > ();
+            }
+
+            constexpr static auto name () noexcept -> StringLiteral {
+                return meta :: __impl :: __TypeParseTraits < __T > :: name;
             }
         };
     }

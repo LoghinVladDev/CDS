@@ -227,12 +227,31 @@ namespace cds {
         __CDS_NoDiscard __CDS_OptionalInline auto toString() const noexcept -> String final {
             std::stringstream oss;
 
-            meta :: print < V > ()  ( ( meta :: print < K > ()  ( ( oss << "( k = " ), this->first() ) << ", v = " ), this->second() ) << " )";
+            meta :: print  ( ( meta :: print ( ( oss << "( k = " ), this->first() ) << ", v = " ), this->second() ) << " )";
              return {oss.str()};
         }
     };
 
+    namespace meta {
+
+        template < typename T, bool = isPair < T > () >
+        struct PairTraits {
+            using FirstType     = void;
+            using SecondType    = void;
+            using Type          = Pair < FirstType, SecondType >;
+        };
+
+        template < typename T >
+        struct PairTraits < T, true > {
+            using FirstType     = RemoveReference < decltype ( valueOf < T > ().first() ) >;
+            using SecondType    = RemoveReference < decltype ( valueOf < T > ().second() ) >;
+            using Type          = Pair < FirstType, SecondType >;
+        };
+
+    }
+
 }
+
 #if __CDS_cpplang_CTAD_available == true
 
 namespace cds {

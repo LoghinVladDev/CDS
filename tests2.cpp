@@ -14,7 +14,6 @@ using namespace cds;
 
 int main () {
 
-    std::common_type < int, float >
     cds :: experimental :: Tuple < int, String, float > t = { 3, "some String", 4.5f };
 
     std :: cout << t.get<0>() << '\n';
@@ -49,7 +48,7 @@ int main () {
     String s;
     s += 'a';
 
-    arr.count ( Function ( [] (String v) { return true; } ) );
+    arr.count ( Function < bool (String) > ( [] (String v) { return true; } ) );
 
     class Test {
 
@@ -77,7 +76,12 @@ int main () {
 
     std :: wcout << str << '\n';
 
-    std :: cout << experimental :: String :: f ( "%s are %d mere", "Ana", 5 );
+    std :: cout << experimental :: String :: f ( "%s are %d mere", "Ana", 5 ) << '\n';
+
+    std :: cout << meta :: isCallable < decltype ( String :: isVowel ) > () << '\n';
+
+    decltype ( String :: isVowel ) v;
+//    v
 
 //    experimental :: Set < int > set;
 

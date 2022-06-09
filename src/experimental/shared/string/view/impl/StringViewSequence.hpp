@@ -15,13 +15,13 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
                 __CDS_OptimalInline auto __BaseStringView < __CharType > :: sequence () const & noexcept -> Sequence < __BaseStringView < __CharType > const > {
 
-                    return Sequence < RemoveReference < decltype (*this) > > ( * this );
+                    return Sequence < meta :: RemoveReference < decltype (*this) > > ( * this );
                 }
 
                 template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
                 __CDS_OptimalInline auto __BaseStringView < __CharType > :: sequence () const && noexcept -> Sequence < __BaseStringView < __CharType > const > {
 
-                    return Sequence < RemoveReference < decltype (*this) > > ( std :: move ( * this ) );
+                    return Sequence < meta :: RemoveReference < decltype (*this) > > ( std :: move ( * this ) );
                 }
 
             }

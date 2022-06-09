@@ -6,6 +6,7 @@
 #define CDS_MEMORY_HPP
 
 #include <new>
+#include <CDS/meta/TypeTraits>
 
 #include "ArraySizeManager.hpp"
 

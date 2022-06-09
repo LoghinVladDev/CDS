@@ -332,7 +332,7 @@ namespace cds {
 #undef THREAD_EXCEPT_STAT
 #undef MUTABLE_SPEC
 
-__CDS_RegisterParseType(Thread) // NOLINT(clion-misra-cpp2008-8-0-1)
-__CDS_RegisterParseTypeTemplateT(Runnable) // NOLINT(clion-misra-cpp2008-8-0-1)
+__CDS_Meta_RegisterParseType(Thread) // NOLINT(clion-misra-cpp2008-8-0-1)
+__CDS_Meta_RegisterParseTemplateType(Runnable) // NOLINT(clion-misra-cpp2008-8-0-1)
 
 #endif //CDS_THREAD_H

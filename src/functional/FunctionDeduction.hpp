@@ -9,15 +9,33 @@
 
 namespace cds {
     
-    template < typename ... __ArgumentTypes >
-    __CDS_NoDiscard constexpr static auto tupleSize ( Tuple < __ArgumentTypes ... > const & ) noexcept -> Size {
-        return 0ULL;
-    }
+//    template < typename ... __ArgumentTypes >
+//    __CDS_NoDiscard constexpr static auto tupleSize ( experimental :: Tuple < __ArgumentTypes ... > const & ) noexcept -> Size {
+//        return 0ULL;
+//    }
+//
+//    template < Size __index, typename ... __ArgumentTypes >
+//    __CDS_NoDiscard constexpr static auto tupleElement ( Tuple < __ArgumentTypes ... > const & ) noexcept -> int {
+//        return 0ULL;
+//    }
+//
+//    template < int ... > struct seq {};
+//    template < int n, int ... s > struct gens : gens < n - 1, n - 1, s ... > {};
+//    template < int ... s > struct gens < 0, s ... > { using type = seq < s ... >; };
+//
+//    template < typename T, int index >
+//    constexpr auto get ( T const & e ) -> decltype ( e.template get <index> () );
 
-    template < Size __index, typename ... __ArgumentTypes >
-    __CDS_NoDiscard constexpr static auto tupleElement ( Tuple < __ArgumentTypes ... > const & ) noexcept -> int {
-        return 0ULL;
-    }
+}
+
+namespace cds {
+
+    template < typename ReturnType, typename ... ArgumentTypes >
+    Function ( ReturnType (*) ( ArgumentTypes ... ) ) -> Function < ReturnType ( ArgumentTypes ... ) >;
+//
+//    template < typename Functor, typename AsTuple = meta :: ArgumentsOf < Functor >, typename s = cds :: gens < meta :: valueOf < AsTuple > ().size() >, typename s2 =  meta :: EnableIf < meta :: isCallable < Functor > () > = 0 >
+//    Function ( Functor ) -> Function < cds :: get <
+
 }
 
 //namespace cds {

@@ -1381,48 +1381,48 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         }
     }
 }
+//
+//#define __CDS_Meta_RegisterParseType(_type) /* NOLINT(bugprone-reserved-identifier) */  \
+//namespace cds {                                                                         \
+//    namespace experimental {                                                            \
+//        namespace meta {                                                                \
+//            namespace impl {                                                            \
+//                template <>                                                             \
+//                struct TypeParseTraits < _type > {                                      \
+//                    constexpr static StringLiteral name = # _type;                      \
+//                };                                                                      \
+//            }                                                                           \
+//        }                                                                               \
+//    }                                                                                   \
+//}
+//
+//#define __CDS_Meta_RegisterParseTemplateType(_type) /* NOLINT(bugprone-reserved-identifier) */  \
+//namespace cds {                                                                         \
+//    namespace experimental {                                                            \
+//        namespace meta {                                                                \
+//            namespace impl {                                                            \
+//                template < typename ... Types >                                         \
+//                struct TypeParseTraits < _type < Types ... > > {                        \
+//                    constexpr static StringLiteral name = # _type;                      \
+//                };                                                                      \
+//            }                                                                           \
+//        }                                                                               \
+//    }                                                                                   \
+//}
 
-#define __CDS_Meta_RegisterParseType(_type) /* NOLINT(bugprone-reserved-identifier) */  \
-namespace cds {                                                                         \
-    namespace experimental {                                                            \
-        namespace meta {                                                                \
-            namespace impl {                                                            \
-                template <>                                                             \
-                struct TypeParseTraits < _type > {                                      \
-                    constexpr static StringLiteral name = # _type;                      \
-                };                                                                      \
-            }                                                                           \
-        }                                                                               \
-    }                                                                                   \
-}
-
-#define __CDS_Meta_RegisterParseTemplateType(_type) /* NOLINT(bugprone-reserved-identifier) */  \
-namespace cds {                                                                         \
-    namespace experimental {                                                            \
-        namespace meta {                                                                \
-            namespace impl {                                                            \
-                template < typename ... Types >                                         \
-                struct TypeParseTraits < _type < Types ... > > {                        \
-                    constexpr static StringLiteral name = # _type;                      \
-                };                                                                      \
-            }                                                                           \
-        }                                                                               \
-    }                                                                                   \
-}
-
-__CDS_Meta_RegisterParseType ( sint8 )
-__CDS_Meta_RegisterParseType ( sint16 )
-__CDS_Meta_RegisterParseType ( sint32 )
-__CDS_Meta_RegisterParseType ( sint64 )
-
-__CDS_Meta_RegisterParseType ( uint8 )
-__CDS_Meta_RegisterParseType ( uint16 )
-__CDS_Meta_RegisterParseType ( uint32 )
-__CDS_Meta_RegisterParseType ( uint64 )
-
-__CDS_Meta_RegisterParseType ( void )
-__CDS_Meta_RegisterParseType ( bool )
-__CDS_Meta_RegisterParseType ( float )
-__CDS_Meta_RegisterParseType ( double )
+//__CDS_Meta_RegisterParseType ( sint8 )
+//__CDS_Meta_RegisterParseType ( sint16 )
+//__CDS_Meta_RegisterParseType ( sint32 )
+//__CDS_Meta_RegisterParseType ( sint64 )
+//
+//__CDS_Meta_RegisterParseType ( uint8 )
+//__CDS_Meta_RegisterParseType ( uint16 )
+//__CDS_Meta_RegisterParseType ( uint32 )
+//__CDS_Meta_RegisterParseType ( uint64 )
+//
+//__CDS_Meta_RegisterParseType ( void )
+//__CDS_Meta_RegisterParseType ( bool )
+//__CDS_Meta_RegisterParseType ( float )
+//__CDS_Meta_RegisterParseType ( double )
 
 #endif // __CDS_EX_META_TYPE_TRAITS_HPP__

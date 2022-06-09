@@ -9,13 +9,17 @@
 
 namespace cds {
 
-    /**
-     * @class Type representing an element-tuple, a gathering of different value types, similar
-     * to a struct with given member types in order.
-     * @tparam __Pack is the types pack, representing the types of the fields of the tuple
-     */
-    template < typename ... __Pack >
-    class Tuple;
+    namespace experimental {
+
+        /**
+         * @class Type representing an element-tuple, a gathering of different value types, similar
+         * to a struct with given member types in order.
+         * @tparam __Pack is the types pack, representing the types of the fields of the tuple
+         */
+        template < typename ... __Pack >
+        class Tuple;
+
+    }
 
     namespace meta {
         namespace __impl {
@@ -36,28 +40,28 @@ namespace cds {
             struct __FunctionTraits < auto ( __A ... ) -> __R > {
                 using ReturnType    = __R;
                 using ClassType     = void;
-                using ArgumentsType = Tuple < __A ... >;
+                using ArgumentsType = experimental :: Tuple < __A ... >;
             };
 
             template < typename __R, typename ... __A >
             struct __FunctionTraits < auto ( * ) ( __A ... ) -> __R > {
                 using ReturnType = __R;
                 using ClassType  = void;
-                using ArgumentsType = Tuple < __A ... >;
+                using ArgumentsType = experimental :: Tuple < __A ... >;
             };
 
             template < typename __R, typename __C, typename ... __A >
             struct __FunctionTraits < auto ( __C :: * ) ( __A ... ) -> __R > {
                 using ReturnType = __R;
                 using ClassType  = __C;
-                using ArgumentsType = Tuple < __A ... >;
+                using ArgumentsType = experimental :: Tuple < __A ... >;
             };
 
             template < typename __R, typename __C, typename ... __A >
             struct __FunctionTraits < auto ( __C :: * ) ( __A ... ) const -> __R > {
                 using ReturnType = __R;
                 using ClassType  = __C;
-                using ArgumentsType = Tuple < __A ... >;
+                using ArgumentsType = experimental :: Tuple < __A ... >;
             };
 
 #if __CDS_cpplang_TemplatePartialSpecNoexceptFunction_available
@@ -66,28 +70,28 @@ namespace cds {
             struct __FunctionTraits < auto ( __A ... ) noexcept -> __R > {
                 using ReturnType = __R;
                 using ClassType  = void;
-                using ArgumentsType = Tuple < __A ... >;
+                using ArgumentsType = experimental :: Tuple < __A ... >;
             };
 
             template < typename __R, typename ... __A >
             struct __FunctionTraits < auto ( * ) ( __A ... ) noexcept -> __R > {
                 using ReturnType = __R;
                 using ClassType  = void;
-                using ArgumentsType = Tuple < __A ... >;
+                using ArgumentsType = experimental :: Tuple < __A ... >;
             };
 
             template < typename __R, typename __C, typename ... __A >
             struct __FunctionTraits < auto ( __C :: * ) ( __A ... ) noexcept -> __R > {
                 using ReturnType = __R;
                 using ClassType  = __C;
-                using ArgumentsType = Tuple < __A ... >;
+                using ArgumentsType = experimental :: Tuple < __A ... >;
             };
 
             template < typename __R, typename __C, typename ... __A >
             struct __FunctionTraits < auto ( __C :: * ) ( __A ... ) const noexcept -> __R > {
                 using ReturnType = __R;
                 using ClassType  = __C;
-                using ArgumentsType = Tuple < __A ... >;
+                using ArgumentsType = experimental :: Tuple < __A ... >;
             };
 
 #endif

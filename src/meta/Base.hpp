@@ -306,6 +306,9 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         template < bool __condition, typename __TypeIfTrue, typename __TypeIfFalse >
         using Conditional = typename __impl :: __Conditional < __condition, __TypeIfTrue, __TypeIfFalse > :: Type;
 
+        template < bool __condition >
+        using BoolConstant = __impl :: __BoolConstant < __condition >;
+
         /**
          * @brief True Bool Constant container structure
          */

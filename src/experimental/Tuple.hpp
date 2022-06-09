@@ -16,6 +16,11 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         template < typename ... TypePack >
         class Tuple : public Object {
 
+        public:
+            __CDS_NoDiscard constexpr auto size () const noexcept -> Size {
+                return sizeof ... ( TypePack );
+            }
+
         private:
             hidden :: impl :: TupleNode < 0, TypePack ... > node;
 
@@ -44,7 +49,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                     typename ... ConstructorTypePack,
                     meta :: EnableIf < (
                             sizeof ... ( ConstructorTypePack ) == sizeof ... ( TypePack ) && sizeof ... ( ConstructorTypePack ) == 1 &&
-                            ! isSame < ConstructorTypePack ..., Tuple > ()
+                            ! meta :: isSame < ConstructorTypePack ..., Tuple > ()
                     ) > = 0
             > __CDS_Implicit Tuple ( ConstructorTypePack && ... argumentPack ) noexcept : // NOLINT(google-explicit-constructor)
                     node ( std :: forward < ConstructorTypePack > ( argumentPack ) ... ) {

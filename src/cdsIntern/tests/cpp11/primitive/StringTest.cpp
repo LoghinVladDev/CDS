@@ -197,17 +197,17 @@ auto StringTest::execute() noexcept -> bool {
             allOk = false;
         }
 
-        String fromAddress = Type < int > ::unsafeAddress ();
+        String fromAddress = ( int * ) 0x10;
 
-        this->log("String constructed from raw address. Intended : '%d', Result : '%s'. Diag : '%s'", 16, fromAddress.cStr(), fromAddress.diag().cStr());
-        if ( std::strcmp ( fromAddress.cStr(), "16" ) != 0 ) {
+        this->log("String constructed from raw address. Intended : '%d', Result : '%s'. Diag : '%s'", 10, fromAddress.cStr(), fromAddress.diag().cStr());
+        if ( std::strcmp ( fromAddress.cStr(), "10" ) != 0 ) {
             this->logWarning("String from raw address construction error");
         }
 
-        String fromConstAddress = Type < int > :: unsafeConstAddress ();
+        String fromConstAddress = ( int const * const ) 0x10;
 
-        this->log("String constructed from raw const address. Intended : '%d', Result : '%s'. Diag : '%s'", 16, fromConstAddress.cStr(), fromConstAddress.diag().cStr());
-        if ( std::strcmp ( fromConstAddress.cStr(), "16" ) != 0 ) {
+        this->log("String constructed from raw const address. Intended : '%d', Result : '%s'. Diag : '%s'", 10, fromConstAddress.cStr(), fromConstAddress.diag().cStr());
+        if ( std::strcmp ( fromConstAddress.cStr(), "10" ) != 0 ) {
             this->logWarning("String from raw const address construction error");
         }
     });
@@ -1432,7 +1432,7 @@ auto StringTest::execute() noexcept -> bool {
             String toApplyTo = "Test String";
             int sum = 0;
 
-            toApplyTo.forEach([& sum](auto e) { sum += e; });
+            toApplyTo.forEach([& sum](char e) { sum += e; });
 
             this->log("forEach used over string '%s' to sum character values. Resulted : '%d', Expected : '%d'",
                       toApplyTo.cStr(), sum, 1079);
@@ -1447,7 +1447,7 @@ auto StringTest::execute() noexcept -> bool {
             const String toApplyTo = "Test String";
             int sum = 0;
 
-            toApplyTo.forEach([& sum](auto e) { sum += e; });
+            toApplyTo.forEach([& sum](char e) { sum += e; });
 
             this->log("forEach used over string '%s' to sum character values. Resulted : '%d', Expected : '%d'",
                       toApplyTo.cStr(), sum, 1079);
@@ -1655,14 +1655,14 @@ auto StringTest::execute() noexcept -> bool {
             allOk = false;
         }
 
-        experimental :: String fromAddress = experimental :: String ( Type < int > ::unsafeAddress () );
+        experimental :: String fromAddress = ( int * ) 0x10;
 
         this->log("String constructed from raw address. Intended : 0x'%d', Result : '%s'. Diag : '%s'", 10, fromAddress.cStr(), fromAddress.diag().cStr());
         if ( std::strcmp ( fromAddress.cStr(), "10" ) != 0 ) {
             this->logWarning("String from raw address construction error");
         }
 
-        experimental :: String fromConstAddress = experimental :: String ( Type < int > :: unsafeConstAddress () );
+        experimental :: String fromConstAddress = ( int const * const ) 0x10;
 
         this->log("String constructed from raw const address. Intended : 0x'%d', Result : '%s'. Diag : '%s'", 10, fromConstAddress.cStr(), fromConstAddress.diag().cStr());
         if ( std::strcmp ( fromConstAddress.cStr(), "10" ) != 0 ) {

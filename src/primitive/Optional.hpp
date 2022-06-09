@@ -5,6 +5,7 @@
 #ifndef CDS_OPTIONAL_HPP
 #define CDS_OPTIONAL_HPP
 
+#include <CDS/meta/FunctionTraits>
 #include <CDS/smartPointers/UniquePointer>
 #include <CDS/Memory>
 

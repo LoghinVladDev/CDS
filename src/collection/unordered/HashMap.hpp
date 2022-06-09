@@ -768,24 +768,7 @@ namespace cds {
 
 }
 
-namespace cds { // NOLINT(modernize-concat-nested-namespaces)
-    namespace utility {
-
-        template <class K, class V, class H> __CDS_Requires (
-                UniqueIdentifiable< K > &&
-                HashCalculatorHasBoundaryFunction< H >
-        ) struct TypeParseTraits<HashMap < K, V, H >> {
-            constexpr static StringLiteral name = "HashMap";
-        };
-
-        template <class K, class V, class H> __CDS_Requires (
-                UniqueIdentifiable< K > &&
-                HashCalculatorHasBoundaryFunction< H >
-        ) struct TypeParseTraits<MultiHashMap < K, V, H >> {
-            constexpr static StringLiteral name = "MultiHashMap";
-        };
-
-    }
-}
+__CDS_Meta_RegisterParseTemplateType(HashMap)
+__CDS_Meta_RegisterParseTemplateType(MultiHashMap)
 
 #endif //CDS_HASHMAP_HPP

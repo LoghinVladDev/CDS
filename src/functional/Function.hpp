@@ -302,7 +302,7 @@ namespace cds {
 
         __CDS_NoDiscard auto toString() const noexcept -> String override {
             std :: stringstream oss;
-            oss << "Function " << meta :: Type < ReturnType > :: name() << " ( ";
+            oss << "Function " << meta :: Type < ReturnType > :: name () << " ( ";
 
             oss << Function :: accumulateTypesToString < ArgumentTypes ... > ();
 
