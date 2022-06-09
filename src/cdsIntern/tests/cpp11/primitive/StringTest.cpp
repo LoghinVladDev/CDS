@@ -12,7 +12,7 @@
 
 #include <CDS/String>
 
-using namespace cds :: experimental;
+using namespace cds;
 
 #if defined(_MSC_VER)
 #undef min

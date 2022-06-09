@@ -6,7 +6,7 @@
 #define __CDS_TUPLE_HPP__
 
 #include <CDS/Object>
-#include <CDS/experimental/meta/TypeTraits>
+#include <CDS/meta/TypeTraits>
 
 #include "tuple/TupleNode.hpp"
 

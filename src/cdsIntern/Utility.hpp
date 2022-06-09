@@ -10,7 +10,7 @@
 #include <CDS/Conversion>
 #include <CDS/Exception>
 #include <CDS/Limits>
-#include <CDS/experimental/meta/TypeTraits>
+#include <CDS/meta/TypeTraits>
 
 namespace cds {
 

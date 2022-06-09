@@ -21,7 +21,7 @@
 #include <CDS/Function>
 #include <CDS/Traits>
 #include <CDS/Hasher>
-#include <CDS/experimental/meta/TypeTraits>
+#include <CDS/meta/TypeTraits>
 
 #if defined(__CDS_ThreadSafeObjects)
 
