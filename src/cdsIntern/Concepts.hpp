@@ -14,7 +14,7 @@ namespace cds {
     class String;
 }
 
-#include <CDS/Traits>
+#include <CDS/meta/TypeTraits>
 #include <type_traits>
 #include <concepts>
 #include <iostream>
@@ -32,7 +32,7 @@ namespace cds {
 
     template < typename T >
     concept Pointer =
-            Type < T > :: isPointer;
+            meta :: isPointer < T > ();
 
     template < typename T >
     concept Iterable = requires ( T obj ) {
@@ -116,15 +116,15 @@ namespace cds {
 
     template < typename T >
     concept PairType =
-            isPair < T > :: value ;
+            meta :: isPair < T > ();
 
     template < typename T, typename V >
     concept LessComparable =
-            isComparableLess < T, V > :: type :: value;
+            meta :: lessThanPossible < T, V > ();
 
     template < typename T, typename V >
     concept GreaterComparable =
-            isComparableGreater < T, V > :: type :: value;
+            meta :: greaterThanPossible < T, V > ();
 
     template < typename T >
     concept TypeLessComparable =
@@ -136,7 +136,7 @@ namespace cds {
 
     template < typename T, typename V >
     concept EqualsComparable =
-            isComparableEquals < T, V > :: type :: value;
+            meta :: equalToPossible < T, V > ();
 
     template < typename T >
     concept TypeEqualsComparable =
@@ -144,12 +144,12 @@ namespace cds {
 
     template < typename D, typename B >
     concept DerivedFrom =
-            isDerivedFrom < D, B > :: type :: value;
+            meta :: isDerivedFrom < D, B > ();
 
 
     template < typename FunctionType, typename ReturnType, typename ... ArgumentTypes >
     concept FunctionOver =
-            std :: is_invocable_r < ReturnType, FunctionType, decltype ((* Type < ArgumentTypes > :: unsafeAddress() )) ... > :: type :: value;
+            std :: is_invocable_r < ReturnType, FunctionType, decltype ((meta :: referenceOf < ArgumentTypes > () )) ... > :: type :: value;
 
     template < typename Predicate, typename T >
     concept PredicateOver =
@@ -208,11 +208,11 @@ namespace cds {
 
     template < typename Accumulator, typename R, typename T >
     concept AccumulatorFor =
-            FunctionOver < Accumulator, RemoveConst < RemoveReference < R > >, R, T >;
+            FunctionOver < Accumulator, meta :: RemoveConst < meta :: RemoveReference < R > >, R, T >;
 
     template < typename Accumulator, typename R, typename T >
     concept IndexedAccumulatorFor =
-            FunctionOver < Accumulator, RemoveConst < RemoveReference < R > >, Index, R, T >;
+            FunctionOver < Accumulator, meta :: RemoveConst < meta :: RemoveReference < R > >, Index, R, T >;
 
 }
 

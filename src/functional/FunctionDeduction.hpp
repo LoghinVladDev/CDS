@@ -5,6 +5,8 @@
 #ifndef CDS_FUNCTIONDEDUCTION_HPP
 #define CDS_FUNCTIONDEDUCTION_HPP
 
+#include <CDS/meta/FunctionTraits>
+
 namespace cds {
 
     template < typename ReturnType, typename ... ArgumentTypes >
@@ -13,8 +15,8 @@ namespace cds {
     template <
             typename Functor,
             EnableIf <
-                    Type < Functor > :: isCallable &&
-                    std :: tuple_size < ArgumentsOf < Functor > > :: value == 0
+                    meta :: EnableIf < meta :: isCallable < Functor > () > &&
+//                    std :: tuple_size < meta :: ArgumentsOf < Functor > > == 0 /// hard dependency on experimental :: Tuple ::
             > = 0
     >
     Function ( Functor ) -> Function <

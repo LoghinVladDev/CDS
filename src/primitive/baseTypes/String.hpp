@@ -4761,7 +4761,7 @@ namespace cds {
          * @test Tested in primitive/StringTest/ForEach Tests
          */
         template < typename Action >
-        __CDS_MaybeUnused __CDS_cpplang_ConstexprConditioned auto forEach ( Action const & action ) noexcept ( noexcept ( ( * Type < Action > :: unsafeAddress () ) (Type < char > :: unsafeReference() ) ) ) -> String & {
+        __CDS_MaybeUnused __CDS_cpplang_ConstexprConditioned auto forEach ( Action const & action ) noexcept ( noexcept ( action ( meta :: referenceOf < char > () ) ) ) -> String & {
             for ( Index i = 0; static_cast < Size > ( i ) < this->_l; ++ i ) {
                 action(this->_p[i]);
             }
@@ -4782,7 +4782,7 @@ namespace cds {
          * @test Tested in primitive/StringTest/ForEach Tests
          */
         template < typename Action >
-        __CDS_MaybeUnused __CDS_cpplang_ConstexprConditioned auto forEach ( Action const & action ) const noexcept ( noexcept ( ( * Type < Action > :: unsafeAddress () ) (Type < const char > :: unsafeReference() ) ) ) -> String const & {
+        __CDS_MaybeUnused __CDS_cpplang_ConstexprConditioned auto forEach ( Action const & action ) const noexcept ( noexcept ( action ( meta :: referenceOf < char > () ) ) ) -> String const & {
             for ( Index i = 0; static_cast < Size > ( i ) < this->_l; ++ i ) {
                 action(this->_p[i]);
             }
@@ -4803,8 +4803,8 @@ namespace cds {
          *
          * @test Tested in primitive/StringTest/ForEach tests
          */
-        template < typename Predicate, typename P = Predicate, typename std :: enable_if < Type < P > :: isCallable, int > :: type = 0 >
-        __CDS_MaybeUnused __CDS_cpplang_ConstexprConditioned auto count ( Predicate const & predicate ) noexcept ( noexcept ( ( * Type < Predicate > :: unsafeAddress () ) (Type < char > :: unsafeReference() ) ) ) -> Size {
+        template < typename Predicate, typename P = Predicate, typename std :: enable_if < meta :: isCallable < P > (), int > :: type = 0 >
+        __CDS_MaybeUnused __CDS_cpplang_ConstexprConditioned auto count ( Predicate const & predicate ) noexcept ( noexcept ( predicate ( meta :: valueOf < char > () ) ) ) -> Size {
             Size count = 0u;
             for ( Index i = 0; static_cast < Size > ( i ) < this->_l; ++ i ) {
                 if (predicate(this->_p[i])) {
@@ -4828,8 +4828,8 @@ namespace cds {
          *
          * @test Tested in primitive/StringTest/ForEach tests
          */
-        template < typename Predicate, typename P = Predicate, typename std :: enable_if < Type < P > :: isCallable, int > :: type = 0  >
-        __CDS_MaybeUnused __CDS_cpplang_ConstexprConditioned auto count ( Predicate const & predicate ) const noexcept ( noexcept ( ( * Type < Predicate > :: unsafeAddress () ) (Type < const char > :: unsafeReference() ) ) ) -> Size {
+        template < typename Predicate, typename P = Predicate, typename std :: enable_if < meta :: isCallable < P > (), int > :: type = 0  >
+        __CDS_MaybeUnused __CDS_cpplang_ConstexprConditioned auto count ( Predicate const & predicate ) const noexcept ( noexcept ( predicate ( meta :: referenceOf < char > () ) ) ) -> Size {
             Size count = 0u;
             for ( Index i = 0; static_cast < Size > ( i ) < this->_l; ++ i ) {
                 if (predicate(this->_p[i])) {
@@ -4865,7 +4865,7 @@ namespace cds {
          * @test Tested in primitive/StringTest/ForEach tests
          */
         template < typename Predicate >
-        __CDS_MaybeUnused __CDS_cpplang_ConstexprConditioned auto some (Predicate const & predicate, Size count ) noexcept ( noexcept ( ( * Type < Predicate > :: unsafeAddress () ) (Type < char > :: unsafeReference() ) ) ) -> bool {
+        __CDS_MaybeUnused __CDS_cpplang_ConstexprConditioned auto some (Predicate const & predicate, Size count ) noexcept ( noexcept ( predicate ( meta :: referenceOf < char > () ) ) ) -> bool {
             return count <= this->count (predicate );
         }
 
@@ -4883,7 +4883,7 @@ namespace cds {
          * @test Tested in primitive/StringTest/ForEach tests
          */
          template < typename Predicate >
-        __CDS_MaybeUnused __CDS_cpplang_ConstexprConditioned auto some (Predicate const & predicate, Size count ) const noexcept( noexcept ( ( * Type < Predicate > :: unsafeAddress () ) (Type < const char > :: unsafeReference() ) ) ) -> bool {
+        __CDS_MaybeUnused __CDS_cpplang_ConstexprConditioned auto some (Predicate const & predicate, Size count ) const noexcept ( noexcept ( predicate ( meta :: valueOf < char > () ) ) ) -> bool {
             return count <= this->count (predicate );
         }
 
@@ -4901,7 +4901,7 @@ namespace cds {
          * @test Tested in primitive/StringTest/ForEach tests
          */
         template < typename Predicate >
-        __CDS_MaybeUnused __CDS_cpplang_ConstexprConditioned auto any ( Predicate const & predicate ) noexcept ( noexcept ( ( * Type < Predicate > :: unsafeAddress () ) (Type < char > :: unsafeReference() ) ) ) -> bool {
+        __CDS_MaybeUnused __CDS_cpplang_ConstexprConditioned auto any ( Predicate const & predicate ) noexcept ( noexcept ( predicate ( meta :: referenceOf < char > () ) ) ) -> bool {
             return 1u <= this->count(predicate);
         }
 
@@ -4919,7 +4919,7 @@ namespace cds {
          * @test Tested in primitive/StringTest/ForEach tests
          */
         template < typename Predicate >
-        __CDS_MaybeUnused __CDS_cpplang_ConstexprConditioned auto any ( Predicate const & predicate ) const noexcept ( noexcept ( ( * Type < Predicate > :: unsafeAddress () ) (Type < const char > :: unsafeReference() ) ) ) -> bool {
+        __CDS_MaybeUnused __CDS_cpplang_ConstexprConditioned auto any ( Predicate const & predicate ) const noexcept ( noexcept ( predicate ( meta :: valueOf < char > () ) ) ) -> bool {
             return 1u <= this->count(predicate);
         }
 
@@ -4937,7 +4937,7 @@ namespace cds {
          * @test Tested in primitive/StringTest/ForEach tests
          */
         template < typename Predicate >
-        __CDS_MaybeUnused __CDS_cpplang_ConstexprConditioned auto all ( Predicate const & predicate ) noexcept ( noexcept ( ( * Type < Predicate > :: unsafeAddress () ) (Type < char > :: unsafeReference() ) ) ) -> bool {
+        __CDS_MaybeUnused __CDS_cpplang_ConstexprConditioned auto all ( Predicate const & predicate ) noexcept ( noexcept ( predicate ( meta :: referenceOf < char > () ) ) ) -> bool {
             return this->size() == this->count(predicate);
         }
 
@@ -4955,7 +4955,7 @@ namespace cds {
          * @test Tested in primitive/StringTest/ForEach tests
          */
         template < typename Predicate >
-        __CDS_MaybeUnused __CDS_cpplang_ConstexprConditioned auto all ( Predicate const & predicate ) const noexcept ( noexcept ( ( * Type < Predicate > :: unsafeAddress () ) (Type < const char > :: unsafeReference() ) ) ) -> bool {
+        __CDS_MaybeUnused __CDS_cpplang_ConstexprConditioned auto all ( Predicate const & predicate ) const noexcept ( noexcept ( predicate ( meta :: valueOf < char > () ) ) ) -> bool {
             return this->size() == this->count(predicate);
         }
 
@@ -5210,7 +5210,6 @@ namespace cds {
     }
 }
 
-__CDS_RegisterParseType(String) // NOLINT(clion-misra-cpp2008-8-0-1)
-__CDS_RegisterParseType(Object) // NOLINT(clion-misra-cpp2008-8-0-1)
+__CDS_Meta_RegisterParseType(String) // NOLINT(clion-misra-cpp2008-8-0-1)
 
 #endif // __CDS_STRING_HPP__

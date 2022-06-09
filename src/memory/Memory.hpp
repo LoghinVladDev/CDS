@@ -30,16 +30,16 @@ namespace cds {
                 return new (pRawMemory) T ( std :: forward < ArgumentTypes > ( arguments ) ... );
             }
 
-            template < typename T, EnableIf < ! std :: is_same < RemoveModifiers < T >, void > :: value > = 0 > // NOLINT(clion-misra-cpp2008-5-3-1)
+            template < typename T, meta :: EnableIf < ! meta :: isSame < meta :: Decay < T >, void > () > = 0 > // NOLINT(clion-misra-cpp2008-5-3-1)
             inline static auto destroy ( T * pObject ) noexcept (false) -> void * {
                 if ( pObject != nullptr ) {
                     pObject->~T();
                 }
 
-                return reinterpret_cast < void * > ( const_cast < RemoveConst < T > * > ( pObject ) );
+                return reinterpret_cast < void * > ( const_cast < meta :: RemoveConst < T > * > ( pObject ) );
             }
 
-            template < typename T, EnableIf < std :: is_same < RemoveModifiers < T >, void > :: value > = 0 >
+            template < typename T, meta :: EnableIf < meta :: isSame < meta :: Decay < T >, void > () > = 0 >
             inline static auto destroy ( T * ) noexcept (false) -> void * {
                 return nullptr;
             }
