@@ -10,7 +10,7 @@
 #include <CDS/Integer>
 #include <CDS/Float>
 #include <CDS/Long>
-#include <CDS/experimental/Tuple>
+#include <CDS/Tuple>
 
 namespace cds { // NOLINT(modernize-concat-nested-namespaces)
     namespace utility { // NOLINT(modernize-concat-nested-namespaces)
