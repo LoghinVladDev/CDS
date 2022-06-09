@@ -3,9 +3,9 @@
 //
 
 #include "TupleTest.h"
-#include <CDS/experimental/Tuple>
+#include <CDS/Tuple>
 
-using namespace cds :: experimental;
+using namespace cds;
 
 bool TupleTest :: execute () noexcept {
 
