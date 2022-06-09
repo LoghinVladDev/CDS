@@ -14,6 +14,7 @@ using namespace cds;
 
 int main () {
 
+    std::common_type < int, float >
     cds :: experimental :: Tuple < int, String, float > t = { 3, "some String", 4.5f };
 
     std :: cout << t.get<0>() << '\n';
