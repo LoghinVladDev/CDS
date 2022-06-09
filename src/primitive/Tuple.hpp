@@ -12,7 +12,7 @@
 
 namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
-    template < typename ... __TypePack >
+    template < typename ... __TypePack > // NOLINT(bugprone-reserved-identifier)
     class Tuple : public Object {
 
     public:
@@ -48,7 +48,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
     public:
         template <
-                typename ... __ConstructorTypePack,
+                typename ... __ConstructorTypePack, // NOLINT(bugprone-reserved-identifier)
                 meta :: EnableIf < ( sizeof ... ( __ConstructorTypePack ) == sizeof ... ( __TypePack ) && sizeof ... ( __ConstructorTypePack ) > 1 ) > = 0
         > __CDS_Implicit Tuple ( __ConstructorTypePack && ... argumentPack ) noexcept : // NOLINT(google-explicit-constructor)
                 node ( std :: forward < __ConstructorTypePack > ( argumentPack ) ... ) {
@@ -57,7 +57,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
     public:
         template <
-                typename ... __ConstructorTypePack,
+                typename ... __ConstructorTypePack, // NOLINT(bugprone-reserved-identifier)
                 meta :: EnableIf < (
                         sizeof ... ( __ConstructorTypePack ) == sizeof ... ( __TypePack ) && sizeof ... ( __ConstructorTypePack ) == 1 &&
                         ! meta :: isSame < __ConstructorTypePack ..., Tuple > ()
@@ -68,11 +68,11 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         }
 
     public:
-        template < uint32 __index >
+        template < uint32 __index > // NOLINT(bugprone-reserved-identifier)
         __CDS_cpplang_NonConstConstexprMemberFunction auto get () noexcept -> typename __hidden :: __impl :: __TypeAt < __index, __TypePack ... > :: Type &;
 
     public:
-        template < uint32 __index >
+        template < uint32 __index > // NOLINT(bugprone-reserved-identifier)
         constexpr auto get () const noexcept -> typename __hidden :: __impl :: __TypeAt < __index, __TypePack ... > :: Type const &;
 
     public:
@@ -86,7 +86,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         ) const noexcept -> bool;
 
     public:
-        template < uint32 __index >
+        template < uint32 __index > // NOLINT(bugprone-reserved-identifier)
         using TypeOf = typename __hidden :: __impl :: __TypeAt < __index, __TypePack ... > :: Type;
 
     public:
