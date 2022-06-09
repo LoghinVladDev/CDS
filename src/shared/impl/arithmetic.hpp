@@ -7,72 +7,113 @@
 
 namespace cds {
 
-    template < typename T, typename = T >
-    constexpr auto convertTo ( T const & value ) noexcept -> T const & {
+    template < typename __T, typename = __T > // NOLINT(bugprone-reserved-identifier)
+    constexpr auto convertTo (
+            __T const & value
+    ) noexcept -> __T const & {
 
         return value;
     }
 
-    template < typename T, typename U, meta :: EnableIf < ! meta :: isSame < T, U > () > = 0 >
-    constexpr auto convertTo ( T const & value ) noexcept -> U {
+
+    template < typename __T, typename __U, meta :: EnableIf < ! meta :: isSame < __T, __U > () > = 0 > // NOLINT(bugprone-reserved-identifier)
+    constexpr auto convertTo (
+            __T const & value
+    ) noexcept -> __U {
         
-        return U(value);
+        return __U(value);
     }
 
-    template < typename T >
-    constexpr auto minOf ( T const & value ) noexcept -> T const & {
+
+    template < typename __T > // NOLINT(bugprone-reserved-identifier)
+    constexpr auto minOf (
+            __T const & value
+    ) noexcept -> __T const & {
 
         return value;
     }
 
-    template < typename T >
-    constexpr auto maxOf ( T const & value ) noexcept -> T const & {
+
+    template < typename __T > // NOLINT(bugprone-reserved-identifier)
+    constexpr auto maxOf (
+            __T const & value
+    ) noexcept -> __T const & {
 
         return value;
     }
 
-    template < typename T >
-    constexpr auto minOf ( T const & left, T const & right ) noexcept -> T const & {
+
+    template < typename __T > // NOLINT(bugprone-reserved-identifier)
+    constexpr auto minOf (
+            __T const & left,
+            __T const & right
+    ) noexcept -> __T const & {
 
         return left < right ? left : right;
     }
 
-    template < typename T >
-    constexpr auto maxOf ( T const & left, T const & right ) noexcept -> T const & {
+
+    template < typename __T > // NOLINT(bugprone-reserved-identifier)
+    constexpr auto maxOf (
+            __T const & left,
+            __T const & right
+    ) noexcept -> __T const & {
 
         return left > right ? left : right;
     }
 
-    template <
-            typename LeftType,
-            typename RightType,
-            typename Common = meta :: Common < LeftType, RightType >,
-            meta :: EnableIf < ! meta :: isSame < LeftType, RightType > () > = 0
-    > constexpr auto minOf ( LeftType const & left, RightType const & right ) noexcept -> Common {
-
-        return convertTo < Common > ( left ) < convertTo < Common > ( right ) ? convertTo < Common > ( left ) : convertTo < Common > ( right );
-    }
-
-    template < typename FirstType, typename ... RemainingTypes, typename Common = meta :: Common < FirstType, RemainingTypes ... > >
-    constexpr auto minOf ( FirstType const & firstArgument, RemainingTypes const & ... remainingTypes ) noexcept -> meta :: Common < FirstType, RemainingTypes ... > {
-
-        return minOf < Common > ( firstArgument, minOf ( remainingTypes ... ) );
-    }
 
     template <
-            typename LeftType,
-            typename RightType,
-            typename Common = meta :: Common < LeftType, RightType >,
-            meta :: EnableIf < ! meta :: isSame < LeftType, RightType > () > = 0
-    > constexpr auto maxOf ( LeftType const & left, RightType const & right ) noexcept -> Common {
+            typename __LeftType, // NOLINT(bugprone-reserved-identifier)
+            typename __RightType, // NOLINT(bugprone-reserved-identifier)
+            typename __Common = meta :: Common < __LeftType, __RightType >, // NOLINT(bugprone-reserved-identifier)
+            meta :: EnableIf < ! meta :: isSame < __LeftType, __RightType > () > = 0
+    > constexpr auto minOf (
+            __LeftType  const & left,
+            __RightType const & right
+    ) noexcept -> __Common {
 
-        return convertTo < Common > ( left ) > convertTo < Common > ( right ) ? convertTo < Common > ( left ) : convertTo < Common > ( right );
+        return convertTo < __Common > ( left ) < convertTo < __Common > ( right ) ? convertTo < __Common > ( left ) : convertTo < __Common > ( right );
     }
 
-    template < typename FirstType, typename ... RemainingTypes, typename Common = meta :: Common < FirstType, RemainingTypes ... > >
-    constexpr auto maxOf ( FirstType const & firstArgument, RemainingTypes const & ... remainingTypes ) noexcept -> meta :: Common < FirstType, RemainingTypes ... > {
 
-        return maxOf < Common > ( firstArgument, maxOf ( remainingTypes ... ) );
+    template <
+            typename __FirstType,  // NOLINT(bugprone-reserved-identifier)
+            typename ... __RemainingTypes, // NOLINT(bugprone-reserved-identifier)
+            typename __Common = meta :: Common < __FirstType, __RemainingTypes ... > // NOLINT(bugprone-reserved-identifier)
+    > constexpr auto minOf (
+            __FirstType         const &     firstArgument,
+            __RemainingTypes    const & ... remainingTypes
+    ) noexcept -> __Common {
+
+        return minOf < __Common > ( firstArgument, minOf ( remainingTypes ... ) );
+    }
+
+
+    template <
+            typename __LeftType, // NOLINT(bugprone-reserved-identifier)
+            typename __RightType, // NOLINT(bugprone-reserved-identifier)
+            typename __Common = meta :: Common < __LeftType, __RightType >, // NOLINT(bugprone-reserved-identifier)
+            meta :: EnableIf < ! meta :: isSame < __LeftType, __RightType > () > = 0
+    > constexpr auto maxOf (
+            __LeftType  const & left,
+            __RightType const & right
+    ) noexcept -> __Common {
+
+        return convertTo < __Common > ( left ) > convertTo < __Common > ( right ) ? convertTo < __Common > ( left ) : convertTo < __Common > ( right );
+    }
+
+
+    template <
+            typename __FirstType, // NOLINT(bugprone-reserved-identifier)
+            typename ... __RemainingTypes, // NOLINT(bugprone-reserved-identifier)
+            typename __Common = meta :: Common < __FirstType, __RemainingTypes ... > // NOLINT(bugprone-reserved-identifier)
+    > constexpr auto maxOf (
+            __FirstType         const &     firstArgument,
+            __RemainingTypes    const & ... remainingTypes
+    ) noexcept -> __Common {
+
+        return maxOf < __Common > ( firstArgument, maxOf ( remainingTypes ... ) );
     }
 
 }

@@ -646,7 +646,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                     ElementType const & element
             ) noexcept -> bool {
                 while ( pList != nullptr ) {
-                    if ( Type < T > :: compare ( element, * pList->_pData ) ) {
+                    if ( meta :: equals ( element, * pList->_pData ) ) {
                         return true;
                     }
 

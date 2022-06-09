@@ -31,8 +31,49 @@ namespace cds {
 
     private:
 
+        template < typename, typename = void >
+        struct HasIterator : meta :: FalseType {};
+
+        template < typename ClassType >
+        struct HasIterator < ClassType, meta :: Void < typename ClassType::Iterator > > : meta :: TrueType {};
+
+        template < typename, typename = void >
+        struct HasConstIterator : meta :: FalseType {};
+
+        template < typename ClassType >
+        struct HasConstIterator < ClassType, meta :: Void < typename ClassType::ConstIterator > > : meta :: TrueType {};
+
+        template < typename ClassType, bool = HasIterator < ClassType > :: value, bool = HasConstIterator < ClassType > :: value >
+        struct ClassIteratorType {
+
+        };
+
+        template < typename ClassType >
+        struct ClassIteratorType < ClassType, true, true > {
+            using IteratorType          = typename ClassType::Iterator;
+            using ConstIteratorType     = typename ClassType::ConstIterator;
+
+            using CommonIteratorType    = IteratorType;
+        };
+
+        template < typename ClassType >
+        struct ClassIteratorType < ClassType, true, false > {
+            using IteratorType      = typename ClassType::Iterator;
+            using ConstIteratorType = typename ClassType::Iterator;
+
+            using CommonIteratorType    = IteratorType;
+        };
+
+        template < typename ClassType >
+        struct ClassIteratorType < ClassType, false, true > {
+            using IteratorType      = typename ClassType::ConstIterator;
+            using ConstIteratorType = typename ClassType::ConstIterator;
+
+            using CommonIteratorType    = ConstIteratorType;
+        };
+
         using ClassName                 = meta :: RemoveReference < C >;
-        using IterableValue             = decltype ( * ( meta :: valueOf < typename ClassName::Iterator > () ) );
+        using IterableValue             = decltype ( * meta :: valueOf < typename ClassIteratorType < ClassName > :: CommonIteratorType > () );
 
     public:
         using ElementType               = meta :: RemoveReference < IterableValue >;
@@ -66,8 +107,8 @@ namespace cds {
         public:
             using CollectionIterator = meta :: Conditional <
                     meta :: isConst < CollectionType > (),
-                    typename CollectionType :: ConstIterator,
-                    typename CollectionType :: Iterator
+                    typename ClassIteratorType < ClassName > :: ConstIteratorType,
+                    typename ClassIteratorType < ClassName > :: CommonIteratorType
             >;
 
             using CollectionElementType = typename Sequence::ElementType;

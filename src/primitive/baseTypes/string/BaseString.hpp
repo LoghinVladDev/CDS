@@ -2,8 +2,8 @@
 // Created by loghin on 6/3/22.
 //
 
-#ifndef __CDS_EX_STRING_BASE_HPP__
-#define __CDS_EX_STRING_BASE_HPP__
+#ifndef __CDS_STRING_BASE_HPP__
+#define __CDS_STRING_BASE_HPP__
 
 #include <CDS/meta/TypeTraits>
 
@@ -101,7 +101,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 ) noexcept;
 
             public:
-                template < typename __OtherCharType, meta :: EnableIf < ! meta :: isSame < __OtherCharType, __CharType > () && sizeof ( __CharType ) >= sizeof ( __OtherCharType ) > = 0 > // NOLINT(bugprone-reserved-identifier)
+                template < typename __OtherCharType, meta :: EnableIf < meta :: isStringCharType < __OtherCharType > () && ! meta :: isSame < __OtherCharType, __CharType > () > = 0 > // NOLINT(bugprone-reserved-identifier)
                 __CDS_Implicit __BaseString ( // NOLINT(google-explicit-constructor)
                         __BaseString < __OtherCharType > const & string
                 ) noexcept;
@@ -117,7 +117,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 ) noexcept;
 
             public:
-                template < typename __OtherCharType, meta :: EnableIf < ! meta :: isSame < __OtherCharType, __CharType > () && sizeof ( __CharType ) >= sizeof ( __OtherCharType ) > = 0 > // NOLINT(bugprone-reserved-identifier)
+                template < typename __OtherCharType, meta :: EnableIf < meta :: isStringCharType < __OtherCharType > () && ! meta :: isSame < __OtherCharType, __CharType > () > = 0 > // NOLINT(bugprone-reserved-identifier)
                 __CDS_Implicit __BaseString ( // NOLINT(google-explicit-constructor)
                         __BaseStringView < __OtherCharType > const & string
                 ) noexcept;
@@ -139,13 +139,13 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 ) noexcept;
 
             public:
-                template < typename __OtherCharType, meta :: EnableIf < ! meta :: isSame < __OtherCharType, __CharType > () && sizeof ( __CharType ) >= sizeof ( __OtherCharType ) > = 0 > // NOLINT(bugprone-reserved-identifier)
+                template < typename __OtherCharType, meta :: EnableIf < meta :: isStringCharType < __OtherCharType > () && ! meta :: isSame < __OtherCharType, __CharType > () > = 0 > // NOLINT(bugprone-reserved-identifier)
                 __CDS_Implicit __BaseString ( // NOLINT(google-explicit-constructor)
                         __OtherCharType const * pString
                 ) noexcept;
 
             public:
-                template < typename __OtherCharType, meta :: EnableIf < ! meta :: isSame < __OtherCharType, __CharType > () && sizeof ( __CharType ) >= sizeof ( __OtherCharType ) > = 0 > // NOLINT(bugprone-reserved-identifier)
+                template < typename __OtherCharType, meta :: EnableIf < meta :: isStringCharType < __OtherCharType > () && ! meta :: isSame < __OtherCharType, __CharType > () > = 0 > // NOLINT(bugprone-reserved-identifier)
                 __BaseString (
                         __OtherCharType   const * pString,
                         Size                      length
@@ -163,7 +163,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 ) noexcept;
 
             public:
-                template < typename __OtherCharType, meta :: EnableIf < ! meta :: isSame < __OtherCharType, __CharType > () && sizeof ( __CharType ) >= sizeof ( __OtherCharType ) > = 0 > // NOLINT(bugprone-reserved-identifier)
+                template < typename __OtherCharType, meta :: EnableIf < meta :: isStringCharType < __OtherCharType > () && ! meta :: isSame < __OtherCharType, __CharType > () > = 0 > // NOLINT(bugprone-reserved-identifier)
                 __BaseString (
                         Size              length,
                         __OtherCharType   fillCharacter
@@ -182,7 +182,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 ) noexcept;
 
             public:
-                template < typename __OtherCharType, meta :: EnableIf < ! meta :: isSame < __OtherCharType, __CharType > () && sizeof ( __CharType ) >= sizeof ( __OtherCharType ) > = 0 > // NOLINT(bugprone-reserved-identifier)
+                template < typename __OtherCharType, meta :: EnableIf < meta :: isStringCharType < __OtherCharType > () && ! meta :: isSame < __OtherCharType, __CharType > () > = 0 > // NOLINT(bugprone-reserved-identifier)
                 __CDS_Implicit __BaseString (
                         std :: initializer_list < __OtherCharType > const & initializerList
                 ) noexcept;
@@ -220,7 +220,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 ) noexcept;
 
             public:
-                template < typename __AddressType, meta :: EnableIf < ! meta :: isSame < __AddressType, ElementType > () > = 0 > // NOLINT(bugprone-reserved-identifier)
+                template < typename __AddressType, meta :: EnableIf < ! meta :: isStringCharType < __AddressType > () > = 0 > // NOLINT(bugprone-reserved-identifier)
                 __CDS_Explicit __BaseString (
                         __AddressType const * address
                 ) noexcept;
@@ -389,6 +389,11 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
             public:
                 auto operator = (
+                        __BaseString const & string
+                ) noexcept -> __BaseString &;
+
+            public:
+                auto operator = (
                         __BaseString && string
                 ) noexcept -> __BaseString &;
 
@@ -461,39 +466,6 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
 
             public:
-                template < typename __FCharType > // NOLINT(bugprone-reserved-identifier)
-                __CDS_cpplang_ConstexprConditioned friend auto operator == (
-                        __BaseStringView < __FCharType > const & leftString,
-                        __BaseString < __FCharType >     const & rightString
-                ) noexcept -> bool;
-
-            public:
-                template < typename __FCharType, typename __ConvertibleType, meta :: EnableIf < meta :: isNonAmbiguousConvertibleToBaseStringView < __ConvertibleType, __FCharType > () > > // NOLINT(bugprone-reserved-identifier)
-                __CDS_cpplang_ConstexprConditioned friend auto operator == (
-                        __ConvertibleType                    && leftString,
-                        __BaseString < __FCharType >    const & rightString
-                ) noexcept -> bool;
-
-#if defined(CDS_QT)
-
-            public:
-                template < typename __FCharType > // NOLINT(bugprone-reserved-identifier)
-                __CDS_cpplang_ConstexprConditioned friend auto operator == (
-                        QString                         const & leftString,
-                        __BaseString < __FCharType >    const & rightString
-                ) noexcept -> bool;
-
-#endif
-
-            public:
-                template < typename __FCharType, meta :: EnableIf < meta :: isStringCharType < __FCharType > () > > // NOLINT(bugprone-reserved-identifier)
-                __CDS_cpplang_ConstexprConditioned friend auto operator == (
-                        __FCharType                             character,
-                        __BaseString < __FCharType >    const & string
-                ) noexcept -> bool;
-
-
-            public:
                 template < typename __ConvertibleType, meta :: EnableIf < meta :: isNonAmbiguousConvertibleToBaseStringView < __ConvertibleType, __CharType > () > = 0 > // NOLINT(bugprone-reserved-identifier)
                 __CDS_NoDiscard __CDS_cpplang_ConstexprConditioned auto operator != (
                         __ConvertibleType && string
@@ -527,38 +499,6 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
 
             public:
-                template < typename __FCharType > // NOLINT(bugprone-reserved-identifier)
-                __CDS_cpplang_ConstexprConditioned friend auto operator != (
-                        __BaseStringView < __FCharType > const & leftString,
-                        __BaseString < __FCharType >     const & rightString
-                ) noexcept -> bool;
-
-            public:
-                template < typename __FCharType, typename __ConvertibleType, meta :: EnableIf < meta :: isNonAmbiguousConvertibleToBaseStringView < __ConvertibleType, __FCharType > () > > // NOLINT(bugprone-reserved-identifier)
-                __CDS_cpplang_ConstexprConditioned friend auto operator != (
-                        __ConvertibleType                    && leftString,
-                        __BaseString < __FCharType >    const & rightString
-                ) noexcept -> bool;
-
-#if defined(CDS_QT)
-
-            public:
-                template < typename __FCharType > // NOLINT(bugprone-reserved-identifier)
-                __CDS_cpplang_ConstexprConditioned friend auto operator != (
-                        QString                         const & leftString,
-                        __BaseString < __FCharType >    const & rightString
-                ) noexcept -> bool;
-
-#endif
-
-            public:
-                template < typename __FCharType, meta :: EnableIf < meta :: isStringCharType < __FCharType > () > > // NOLINT(bugprone-reserved-identifier)
-                __CDS_cpplang_ConstexprConditioned friend auto operator != (
-                        __FCharType                             character,
-                        __BaseString < __FCharType >    const & string
-                ) noexcept -> bool;
-
-            public:
                 template < typename __ConvertibleType, meta :: EnableIf < meta :: isConvertibleToBaseStringView < __ConvertibleType, __CharType > () > = 0 > // NOLINT(bugprone-reserved-identifier)
                 __CDS_NoDiscard __CDS_cpplang_ConstexprConditioned auto operator < (
                         __ConvertibleType && string
@@ -586,39 +526,6 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
 
             public:
-                template < typename __FCharType > // NOLINT(bugprone-reserved-identifier)
-                __CDS_cpplang_ConstexprConditioned friend auto operator < (
-                        __BaseStringView < __FCharType >    const & leftString,
-                        __BaseString < __FCharType >        const & rightString
-                ) noexcept -> bool;
-
-            public:
-                template < typename __FCharType, typename __ConvertibleType, meta :: EnableIf < meta :: isNonAmbiguousConvertibleToBaseStringView < __ConvertibleType, __FCharType > () > > // NOLINT(bugprone-reserved-identifier)
-                __CDS_cpplang_ConstexprConditioned friend auto operator < (
-                        __ConvertibleType                    && leftString,
-                        __BaseString < __FCharType >    const & rightString
-                ) noexcept -> bool;
-
-#if defined(CDS_QT)
-
-            public:
-                template < typename __FCharType > // NOLINT(bugprone-reserved-identifier)
-                __CDS_cpplang_ConstexprConditioned friend auto operator < (
-                        QString                         const & leftString,
-                        __BaseString < __FCharType >    const & rightString
-                ) noexcept -> bool;
-
-#endif
-
-            public:
-                template < typename __FCharType, meta :: EnableIf < meta :: isStringCharType < __FCharType > () > > // NOLINT(bugprone-reserved-identifier)
-                __CDS_cpplang_ConstexprConditioned friend auto operator < (
-                        __FCharType                             character,
-                        __BaseString < __FCharType >    const & string
-                ) noexcept -> bool;
-
-
-            public:
                 template < typename __ConvertibleType, meta :: EnableIf < meta :: isConvertibleToBaseStringView < __ConvertibleType, __CharType > () > = 0 > // NOLINT(bugprone-reserved-identifier)
                 __CDS_NoDiscard __CDS_cpplang_ConstexprConditioned auto operator > (
                         __ConvertibleType && string
@@ -643,39 +550,6 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 __CDS_NoDiscard __CDS_cpplang_ConstexprConditioned auto operator > (
                         ElementType character
                 ) const noexcept -> bool;
-
-
-            public:
-                template < typename __FCharType > // NOLINT(bugprone-reserved-identifier)
-                __CDS_cpplang_ConstexprConditioned friend auto operator > (
-                        __BaseStringView < __FCharType >    const & leftString,
-                        __BaseString < __FCharType >        const & rightString
-                ) noexcept -> bool;
-
-            public:
-                template < typename __FCharType, typename __ConvertibleType, meta :: EnableIf < meta :: isNonAmbiguousConvertibleToBaseStringView < __ConvertibleType, __FCharType > () > > // NOLINT(bugprone-reserved-identifier)
-                __CDS_cpplang_ConstexprConditioned friend auto operator > (
-                        __ConvertibleType                    && leftString,
-                        __BaseString < __FCharType >    const & rightString
-                ) noexcept -> bool;
-
-#if defined(CDS_QT)
-
-            public:
-                template < typename __FCharType > // NOLINT(bugprone-reserved-identifier)
-                __CDS_cpplang_ConstexprConditioned friend auto operator > (
-                        QString                         const & leftString,
-                        __BaseString < __FCharType >    const & rightString
-                ) noexcept -> bool;
-
-#endif
-
-            public:
-                template < typename __FCharType, meta :: EnableIf < meta :: isStringCharType < __FCharType > () > > // NOLINT(bugprone-reserved-identifier)
-                __CDS_cpplang_ConstexprConditioned friend auto operator > (
-                        __FCharType                             character,
-                        __BaseString < __FCharType >    const & string
-                ) noexcept -> bool;
 
 
             public:
@@ -706,38 +580,6 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
 
 
-            public:
-                template < typename __FCharType > // NOLINT(bugprone-reserved-identifier)
-                __CDS_cpplang_ConstexprConditioned friend auto operator <= (
-                        __BaseStringView < __FCharType > const & leftString,
-                        __BaseString < __FCharType >     const & rightString
-                ) noexcept -> bool;
-
-            public:
-                template < typename __FCharType, typename __ConvertibleType, meta :: EnableIf < meta :: isNonAmbiguousConvertibleToBaseStringView < __ConvertibleType, __FCharType > () > > // NOLINT(bugprone-reserved-identifier)
-                __CDS_cpplang_ConstexprConditioned friend auto operator <= (
-                        __ConvertibleType                    && leftString,
-                        __BaseString < __FCharType >    const & rightString
-                ) noexcept -> bool;
-
-#if defined(CDS_QT)
-
-            public:
-                template < typename __FCharType > // NOLINT(bugprone-reserved-identifier)
-                __CDS_cpplang_ConstexprConditioned friend auto operator <= (
-                        QString                         const & leftString,
-                        __BaseString < __FCharType >    const & rightString
-                ) noexcept -> bool;
-
-#endif
-
-            public:
-                template < typename __FCharType, meta :: EnableIf < meta :: isStringCharType < __FCharType > () > > // NOLINT(bugprone-reserved-identifier)
-                __CDS_cpplang_ConstexprConditioned friend auto operator <= (
-                        __FCharType                          character,
-                        __BaseString < __FCharType > const & string
-                ) noexcept -> bool;
-
 
             public:
                 template < typename __ConvertibleType, meta :: EnableIf < meta :: isConvertibleToBaseStringView < __ConvertibleType, __CharType > () > = 0 > // NOLINT(bugprone-reserved-identifier)
@@ -764,39 +606,6 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 __CDS_NoDiscard __CDS_cpplang_ConstexprConditioned auto operator >= (
                         ElementType character
                 ) const noexcept -> bool;
-
-
-            public:
-                template < typename __FCharType > // NOLINT(bugprone-reserved-identifier)
-                __CDS_cpplang_ConstexprConditioned friend auto operator >= (
-                        __BaseStringView < __FCharType >    const & leftString,
-                        __BaseString < __FCharType >        const & rightString
-                ) noexcept -> bool;
-
-            public:
-                template < typename __FCharType, typename __ConvertibleType, meta :: EnableIf < meta :: isNonAmbiguousConvertibleToBaseStringView < __ConvertibleType, __FCharType > () > > // NOLINT(bugprone-reserved-identifier)
-                __CDS_cpplang_ConstexprConditioned friend auto operator >= (
-                        __ConvertibleType                    && leftString,
-                        __BaseString < __FCharType >    const & rightString
-                ) noexcept -> bool;
-
-#if defined(CDS_QT)
-
-            public:
-                template < typename __FCharType > // NOLINT(bugprone-reserved-identifier)
-                __CDS_cpplang_ConstexprConditioned friend auto operator >= (
-                        QString                         const & leftString,
-                        __BaseString < __FCharType >    const & rightString
-                ) noexcept -> bool;
-
-#endif
-
-            public:
-                template < typename __FCharType, meta :: EnableIf < meta :: isStringCharType < __FCharType > () > > // NOLINT(bugprone-reserved-identifier)
-                __CDS_cpplang_ConstexprConditioned friend auto operator >= (
-                        __FCharType                             character,
-                        __BaseString < __FCharType >    const & string
-                ) noexcept -> bool;
 
 
             public:
@@ -897,60 +706,6 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 ) const & noexcept -> __BaseString;
 
 
-            public:
-                template < typename __FCharType > // NOLINT(bugprone-reserved-identifier)
-                friend auto operator + (
-                        __BaseStringView < __FCharType >    const & leftString,
-                        __BaseString < __FCharType >        const & rightString
-                ) noexcept -> __BaseString < __FCharType >;
-
-            public:
-                template < typename __FCharType, typename __ConvertibleType, meta :: EnableIf < meta :: isNonAmbiguousConvertibleToBaseStringView < __ConvertibleType, __FCharType > () > > // NOLINT(bugprone-reserved-identifier)
-                friend auto operator + (
-                        __ConvertibleType                    && leftString,
-                        __BaseString < __FCharType >    const & rightString
-                ) noexcept -> __BaseString < __FCharType >;
-
-#if defined(CDS_QT)
-
-            public:
-                template < typename __FCharType > // NOLINT(bugprone-reserved-identifier)
-                friend auto operator + (
-                        QString                      const & leftString,
-                        __BaseString < __FCharType > const & rightString
-                ) noexcept -> __BaseString < __FCharType >;
-
-#endif
-
-            public:
-                template < typename __FCharType, meta :: EnableIf < meta :: isStringCharType < __FCharType > () > > // NOLINT(bugprone-reserved-identifier)
-                friend auto operator + (
-                        __FCharType                             character,
-                        __BaseString < __FCharType >    const & string
-                ) noexcept -> __BaseString < __FCharType >;
-
-            public:
-                template < typename __FCharType, typename __NumericType, meta :: EnableIf < meta :: isIntegralToString < __FCharType, __NumericType > () > > // NOLINT(bugprone-reserved-identifier)
-                friend auto operator + (
-                        __NumericType                           value,
-                        __BaseString < __FCharType >    const & string
-                ) noexcept -> __BaseString < __FCharType >;
-
-            public:
-                template < typename __FCharType > // NOLINT(bugprone-reserved-identifier)
-                friend auto operator + (
-                        bool                                    value,
-                        __BaseString < __FCharType >    const & string
-                ) noexcept -> __BaseString < __FCharType >;
-
-            public:
-                template < typename __FCharType, typename __FloatingPointType, meta :: EnableIf < meta :: isFloatingPoint < __FloatingPointType > () > > // NOLINT(bugprone-reserved-identifier)
-                friend auto operator + (
-                        __FloatingPointType                     value,
-                        __BaseString < __FCharType >    const & string
-                ) noexcept -> __BaseString < __FCharType >;
-
-
 
             public:
                 template < typename __ConvertibleType, meta :: EnableIf < meta :: isConvertibleToBaseStringView < __ConvertibleType, __CharType > () > = 0 > // NOLINT(bugprone-reserved-identifier)
@@ -999,60 +754,6 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 auto operator + (
                         __FloatingPointType value
                 ) && noexcept -> __BaseString;
-
-
-            public:
-                template < typename __FCharType > // NOLINT(bugprone-reserved-identifier)
-                friend auto operator + (
-                        __BaseStringView < __FCharType > const & leftString,
-                        __BaseString < __FCharType >          && rightString
-                ) noexcept -> __BaseString < __FCharType >;
-
-            public:
-                template < typename __FCharType, typename __ConvertibleType, meta :: EnableIf < meta :: isNonAmbiguousConvertibleToBaseStringView < __ConvertibleType, __FCharType > () > > // NOLINT(bugprone-reserved-identifier)
-                friend auto operator + (
-                        __ConvertibleType                    && leftString,
-                        __BaseString < __FCharType >         && rightString
-                ) noexcept -> __BaseString < __FCharType >;
-
-#if defined(CDS_QT)
-
-            public:
-                template < typename __FCharType > // NOLINT(bugprone-reserved-identifier)
-                friend auto operator + (
-                        QString                      const & leftString,
-                        __BaseString < __FCharType >      && rightString
-                ) noexcept -> __BaseString < __FCharType >;
-
-#endif
-
-            public:
-                template < typename __FCharType, meta :: EnableIf < meta :: isStringCharType < __FCharType > () > > // NOLINT(bugprone-reserved-identifier)
-                friend auto operator + (
-                        __FCharType                        character,
-                        __BaseString < __FCharType >    && rightString
-                ) noexcept -> __BaseString < __FCharType >;
-
-            public:
-                template < typename __FCharType, typename __NumericType, meta :: EnableIf < meta :: isIntegralToString < __FCharType, __NumericType > () > > // NOLINT(bugprone-reserved-identifier)
-                friend auto operator + (
-                        __NumericType                      value,
-                        __BaseString < __FCharType >    && rightString
-                ) noexcept -> __BaseString < __FCharType >;
-
-            public:
-                template < typename __FCharType > // NOLINT(bugprone-reserved-identifier)
-                friend auto operator + (
-                        bool                            value,
-                        __BaseString < __FCharType > && rightString
-                ) noexcept -> __BaseString < __FCharType >;
-
-            public:
-                template < typename __FCharType, typename __FloatingPointType, meta :: EnableIf < meta :: isFloatingPoint < __FloatingPointType > () > > // NOLINT(bugprone-reserved-identifier)
-                friend auto operator + (
-                        __FloatingPointType                value,
-                        __BaseString < __FCharType >    && rightString
-                ) noexcept -> __BaseString < __FCharType >;
 
 
             public:
@@ -1064,20 +765,6 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 auto operator * (
                         int repeatCount
                 ) && noexcept -> __BaseString;
-
-            public:
-                template < typename __FCharType > // NOLINT(bugprone-reserved-identifier)
-                friend auto operator * (
-                        int                                     repeatCount,
-                        __BaseString < __FCharType >    const & string
-                ) noexcept -> __BaseString < __FCharType >;
-
-            public:
-                template < typename __FCharType > // NOLINT(bugprone-reserved-identifier)
-                friend auto operator * (
-                        int                             repeatCount,
-                        __BaseString < __FCharType > && string
-                ) noexcept -> __BaseString < __FCharType >;
 
 
             public:
@@ -1993,14 +1680,6 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 auto sequence () const && noexcept -> Sequence < __BaseString const >;
 
 
-            public:
-                template < typename __FCharType > // NOLINT(bugprone-reserved-identifier)
-                friend auto operator << (
-                        std :: wostream                    & out,
-                        __BaseString < __FCharType > const & obj
-                ) noexcept -> std :: wostream &;
-
-
 #if defined(CDS_STRING_DEBUG)
 
             public:
@@ -2008,6 +1687,285 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
 #endif
             };
+
+
+            template < typename __FCharType > // NOLINT(bugprone-reserved-identifier)
+            __CDS_cpplang_ConstexprConditioned auto operator == (
+                    __BaseStringView < __FCharType > const & leftString,
+                    __BaseString < __FCharType >     const & rightString
+            ) noexcept -> bool;
+
+            template < typename __FCharType, typename __ConvertibleType, meta :: EnableIf < meta :: isNonAmbiguousConvertibleToBaseStringView < __ConvertibleType, __FCharType > () > = 0 > // NOLINT(bugprone-reserved-identifier)
+            __CDS_cpplang_ConstexprConditioned auto operator == (
+                    __ConvertibleType                    && leftString,
+                    __BaseString < __FCharType >    const & rightString
+            ) noexcept -> bool;
+
+#if defined(CDS_QT)
+
+            template < typename __FCharType > // NOLINT(bugprone-reserved-identifier)
+            __CDS_cpplang_ConstexprConditioned auto operator == (
+                    QString                         const & leftString,
+                    __BaseString < __FCharType >    const & rightString
+            ) noexcept -> bool;
+
+#endif
+
+            template < typename __FCharType, meta :: EnableIf < meta :: isStringCharType < __FCharType > () > = 0 > // NOLINT(bugprone-reserved-identifier)
+            __CDS_cpplang_ConstexprConditioned auto operator == (
+                    __FCharType                             character,
+                    __BaseString < __FCharType >    const & string
+            ) noexcept -> bool;
+
+            template < typename __FCharType > // NOLINT(bugprone-reserved-identifier)
+            __CDS_cpplang_ConstexprConditioned auto operator != (
+                    __BaseStringView < __FCharType > const & leftString,
+                    __BaseString < __FCharType >     const & rightString
+            ) noexcept -> bool;
+
+            template < typename __FCharType, typename __ConvertibleType, meta :: EnableIf < meta :: isNonAmbiguousConvertibleToBaseStringView < __ConvertibleType, __FCharType > () > = 0 > // NOLINT(bugprone-reserved-identifier)
+            __CDS_cpplang_ConstexprConditioned auto operator != (
+                    __ConvertibleType                    && leftString,
+                    __BaseString < __FCharType >    const & rightString
+            ) noexcept -> bool;
+
+#if defined(CDS_QT)
+
+            template < typename __FCharType > // NOLINT(bugprone-reserved-identifier)
+            __CDS_cpplang_ConstexprConditioned auto operator != (
+                    QString                         const & leftString,
+                    __BaseString < __FCharType >    const & rightString
+            ) noexcept -> bool;
+
+#endif
+
+            template < typename __FCharType, meta :: EnableIf < meta :: isStringCharType < __FCharType > () > = 0 > // NOLINT(bugprone-reserved-identifier)
+            __CDS_cpplang_ConstexprConditioned auto operator != (
+                    __FCharType                             character,
+                    __BaseString < __FCharType >    const & string
+            ) noexcept -> bool;
+
+            template < typename __FCharType > // NOLINT(bugprone-reserved-identifier)
+            __CDS_cpplang_ConstexprConditioned auto operator < (
+                    __BaseStringView < __FCharType >    const & leftString,
+                    __BaseString < __FCharType >        const & rightString
+            ) noexcept -> bool;
+
+            template < typename __FCharType, typename __ConvertibleType, meta :: EnableIf < meta :: isNonAmbiguousConvertibleToBaseStringView < __ConvertibleType, __FCharType > () > = 0 > // NOLINT(bugprone-reserved-identifier)
+            __CDS_cpplang_ConstexprConditioned auto operator < (
+                    __ConvertibleType                    && leftString,
+                    __BaseString < __FCharType >    const & rightString
+            ) noexcept -> bool;
+
+#if defined(CDS_QT)
+
+            template < typename __FCharType > // NOLINT(bugprone-reserved-identifier)
+            __CDS_cpplang_ConstexprConditioned auto operator < (
+                    QString                         const & leftString,
+                    __BaseString < __FCharType >    const & rightString
+            ) noexcept -> bool;
+
+#endif
+
+            template < typename __FCharType, meta :: EnableIf < meta :: isStringCharType < __FCharType > () > = 0 > // NOLINT(bugprone-reserved-identifier)
+            __CDS_cpplang_ConstexprConditioned auto operator < (
+                    __FCharType                             character,
+                    __BaseString < __FCharType >    const & string
+            ) noexcept -> bool;
+
+            template < typename __FCharType > // NOLINT(bugprone-reserved-identifier)
+            __CDS_cpplang_ConstexprConditioned auto operator > (
+                    __BaseStringView < __FCharType >    const & leftString,
+                    __BaseString < __FCharType >        const & rightString
+            ) noexcept -> bool;
+
+            template < typename __FCharType, typename __ConvertibleType, meta :: EnableIf < meta :: isNonAmbiguousConvertibleToBaseStringView < __ConvertibleType, __FCharType > () > = 0 > // NOLINT(bugprone-reserved-identifier)
+            __CDS_cpplang_ConstexprConditioned auto operator > (
+                    __ConvertibleType                    && leftString,
+                    __BaseString < __FCharType >    const & rightString
+            ) noexcept -> bool;
+
+#if defined(CDS_QT)
+
+            template < typename __FCharType > // NOLINT(bugprone-reserved-identifier)
+            __CDS_cpplang_ConstexprConditioned auto operator > (
+                    QString                         const & leftString,
+                    __BaseString < __FCharType >    const & rightString
+            ) noexcept -> bool;
+
+#endif
+
+            template < typename __FCharType, meta :: EnableIf < meta :: isStringCharType < __FCharType > () > = 0 > // NOLINT(bugprone-reserved-identifier)
+            __CDS_cpplang_ConstexprConditioned auto operator > (
+                    __FCharType                             character,
+                    __BaseString < __FCharType >    const & string
+            ) noexcept -> bool;
+
+            template < typename __FCharType > // NOLINT(bugprone-reserved-identifier)
+            __CDS_cpplang_ConstexprConditioned auto operator <= (
+                    __BaseStringView < __FCharType > const & leftString,
+                    __BaseString < __FCharType >     const & rightString
+            ) noexcept -> bool;
+
+            template < typename __FCharType, typename __ConvertibleType, meta :: EnableIf < meta :: isNonAmbiguousConvertibleToBaseStringView < __ConvertibleType, __FCharType > () > = 0 > // NOLINT(bugprone-reserved-identifier)
+            __CDS_cpplang_ConstexprConditioned auto operator <= (
+                    __ConvertibleType                    && leftString,
+                    __BaseString < __FCharType >    const & rightString
+            ) noexcept -> bool;
+
+#if defined(CDS_QT)
+
+            template < typename __FCharType > // NOLINT(bugprone-reserved-identifier)
+            __CDS_cpplang_ConstexprConditioned auto operator <= (
+                    QString                         const & leftString,
+                    __BaseString < __FCharType >    const & rightString
+            ) noexcept -> bool;
+
+#endif
+
+            template < typename __FCharType, meta :: EnableIf < meta :: isStringCharType < __FCharType > () > = 0 > // NOLINT(bugprone-reserved-identifier)
+            __CDS_cpplang_ConstexprConditioned auto operator <= (
+                    __FCharType                          character,
+                    __BaseString < __FCharType > const & string
+            ) noexcept -> bool;
+
+            template < typename __FCharType > // NOLINT(bugprone-reserved-identifier)
+            __CDS_cpplang_ConstexprConditioned auto operator >= (
+                    __BaseStringView < __FCharType >    const & leftString,
+                    __BaseString < __FCharType >        const & rightString
+            ) noexcept -> bool;
+
+            template < typename __FCharType, typename __ConvertibleType, meta :: EnableIf < meta :: isNonAmbiguousConvertibleToBaseStringView < __ConvertibleType, __FCharType > () > = 0 > // NOLINT(bugprone-reserved-identifier)
+            __CDS_cpplang_ConstexprConditioned auto operator >= (
+                    __ConvertibleType                    && leftString,
+                    __BaseString < __FCharType >    const & rightString
+            ) noexcept -> bool;
+
+#if defined(CDS_QT)
+
+            template < typename __FCharType > // NOLINT(bugprone-reserved-identifier)
+            __CDS_cpplang_ConstexprConditioned auto operator >= (
+                    QString                         const & leftString,
+                    __BaseString < __FCharType >    const & rightString
+            ) noexcept -> bool;
+
+#endif
+
+            template < typename __FCharType, meta :: EnableIf < meta :: isStringCharType < __FCharType > () > = 0 > // NOLINT(bugprone-reserved-identifier)
+            __CDS_cpplang_ConstexprConditioned auto operator >= (
+                    __FCharType                             character,
+                    __BaseString < __FCharType >    const & string
+            ) noexcept -> bool;
+
+            template < typename __FCharType > // NOLINT(bugprone-reserved-identifier)
+            auto operator + (
+                    __BaseStringView < __FCharType >    const & leftString,
+                    __BaseString < __FCharType >        const & rightString
+            ) noexcept -> __BaseString < __FCharType >;
+
+            template < typename __FCharType, typename __ConvertibleType, meta :: EnableIf < meta :: isNonAmbiguousConvertibleToBaseStringView < __ConvertibleType, __FCharType > () > = 0 > // NOLINT(bugprone-reserved-identifier)
+            auto operator + (
+                    __ConvertibleType                    && leftString,
+                    __BaseString < __FCharType >    const & rightString
+            ) noexcept -> __BaseString < __FCharType >;
+
+#if defined(CDS_QT)
+
+            template < typename __FCharType > // NOLINT(bugprone-reserved-identifier)
+            auto operator + (
+                    QString                      const & leftString,
+                    __BaseString < __FCharType > const & rightString
+            ) noexcept -> __BaseString < __FCharType >;
+
+#endif
+
+            template < typename __FCharType, meta :: EnableIf < meta :: isStringCharType < __FCharType > () > = 0 > // NOLINT(bugprone-reserved-identifier)
+            auto operator + (
+                    __FCharType                             character,
+                    __BaseString < __FCharType >    const & string
+            ) noexcept -> __BaseString < __FCharType >;
+
+            template < typename __FCharType, typename __NumericType, meta :: EnableIf < meta :: isIntegralToString < __FCharType, __NumericType > () > = 0 > // NOLINT(bugprone-reserved-identifier)
+            auto operator + (
+                    __NumericType                           value,
+                    __BaseString < __FCharType >    const & string
+            ) noexcept -> __BaseString < __FCharType >;
+
+            template < typename __FCharType > // NOLINT(bugprone-reserved-identifier)
+            auto operator + (
+                    bool                                    value,
+                    __BaseString < __FCharType >    const & string
+            ) noexcept -> __BaseString < __FCharType >;
+
+            template < typename __FCharType, typename __FloatingPointType, meta :: EnableIf < meta :: isFloatingPoint < __FloatingPointType > () > = 0 > // NOLINT(bugprone-reserved-identifier)
+            auto operator + (
+                    __FloatingPointType                     value,
+                    __BaseString < __FCharType >    const & string
+            ) noexcept -> __BaseString < __FCharType >;
+
+            template < typename __FCharType > // NOLINT(bugprone-reserved-identifier)
+            auto operator + (
+                    __BaseStringView < __FCharType > const & leftString,
+                    __BaseString < __FCharType >          && rightString
+            ) noexcept -> __BaseString < __FCharType >;
+
+            template < typename __FCharType, typename __ConvertibleType, meta :: EnableIf < meta :: isNonAmbiguousConvertibleToBaseStringView < __ConvertibleType, __FCharType > () > = 0 > // NOLINT(bugprone-reserved-identifier)
+            auto operator + (
+                    __ConvertibleType                    && leftString,
+                    __BaseString < __FCharType >         && rightString
+            ) noexcept -> __BaseString < __FCharType >;
+
+#if defined(CDS_QT)
+
+            template < typename __FCharType > // NOLINT(bugprone-reserved-identifier)
+            friend auto operator + (
+                    QString                      const & leftString,
+                    __BaseString < __FCharType >      && rightString
+            ) noexcept -> __BaseString < __FCharType >;
+
+#endif
+
+            template < typename __FCharType, meta :: EnableIf < meta :: isStringCharType < __FCharType > () > = 0 > // NOLINT(bugprone-reserved-identifier)
+            auto operator + (
+                    __FCharType                        character,
+                    __BaseString < __FCharType >    && rightString
+            ) noexcept -> __BaseString < __FCharType >;
+
+            template < typename __FCharType, typename __NumericType, meta :: EnableIf < meta :: isIntegralToString < __FCharType, __NumericType > () > = 0 > // NOLINT(bugprone-reserved-identifier)
+            auto operator + (
+                    __NumericType                      value,
+                    __BaseString < __FCharType >    && rightString
+            ) noexcept -> __BaseString < __FCharType >;
+
+            template < typename __FCharType > // NOLINT(bugprone-reserved-identifier)
+            auto operator + (
+                    bool                            value,
+                    __BaseString < __FCharType > && rightString
+            ) noexcept -> __BaseString < __FCharType >;
+
+            template < typename __FCharType, typename __FloatingPointType, meta :: EnableIf < meta :: isFloatingPoint < __FloatingPointType > () > = 0 > // NOLINT(bugprone-reserved-identifier)
+            auto operator + (
+                    __FloatingPointType                value,
+                    __BaseString < __FCharType >    && rightString
+            ) noexcept -> __BaseString < __FCharType >;
+
+            template < typename __FCharType > // NOLINT(bugprone-reserved-identifier)
+            auto operator * (
+                    int                                     repeatCount,
+                    __BaseString < __FCharType >    const & string
+            ) noexcept -> __BaseString < __FCharType >;
+
+            template < typename __FCharType > // NOLINT(bugprone-reserved-identifier)
+            auto operator * (
+                    int                             repeatCount,
+                    __BaseString < __FCharType > && string
+            ) noexcept -> __BaseString < __FCharType >;
+
+            template < typename __FCharType > // NOLINT(bugprone-reserved-identifier)
+            auto operator << (
+                    std :: wostream                    & out,
+                    __BaseString < __FCharType > const & obj
+            ) noexcept -> std :: wostream &;
 
         }
     }
@@ -2021,6 +1979,8 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 #include "ConstReverseIterator.hpp"
 
 #include "view/BaseStringView.hpp"
+
+#include "impl/BaseStringNonException.hpp"
 
 #include <CDS/Utility>
 
@@ -2042,7 +2002,9 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 #include "view/impl/ConstReverseIterator.hpp"
 #include "view/impl/BaseStringView.hpp"
 
+#include "view/Literal.hpp"
+
 #include "../../../shared/string/impl/StringSequence.hpp"
 #include "../../../shared/string/view/impl/StringViewSequence.hpp"
 
-#endif // __CDS_EX_STRING_BASE_HPP__
+#endif // __CDS_STRING_BASE_HPP__

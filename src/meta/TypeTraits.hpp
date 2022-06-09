@@ -268,124 +268,6 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             > {};
 
             /**
-             * @brief Meta-type implementation used to check if a given type is a callable type ( function / object with operator () )
-             * @tparam __T is the type checked
-             */
-            template < typename __T, typename = void > // NOLINT(bugprone-reserved-identifier)
-            struct __CDS_Deprecated __IsCallable { // NOLINT(bugprone-reserved-identifier)
-                /// if the given type is a class, or a class reference, use the operator() deduction implementation value. Otherwise, false,
-                /// unless it is overridden by a partial template specialization
-                constexpr static bool value = __Conditional <
-                        __IsClass < typename __RemoveReference < __T > :: Type > :: value,
-                        __IsCallable < typename __RemoveReference < __T > :: Type, int >,
-                        __FalseType
-                > :: Type :: value;
-            };
-
-            template < typename __T, typename ... __A > // NOLINT(bugprone-reserved-identifier)
-            struct __IsCallable < __T ( __A ... ) > : __TrueType {};
-
-            template < typename __T, typename __U, typename ... __A > // NOLINT(bugprone-reserved-identifier)
-            struct __IsCallable < __T (*) ( __A ... ), __U > : __TrueType {};
-
-            template < typename __T, typename __U, typename ... __A > // NOLINT(bugprone-reserved-identifier)
-            struct __IsCallable < __T (&) ( __A ... ), __U > : __TrueType {};
-
-            template < typename __T, typename __U, typename ... __A > // NOLINT(bugprone-reserved-identifier)
-            struct __IsCallable < __T ( __A ..., ... ), __U > : __TrueType {};
-
-            template < typename __T, typename __U, typename ... __A > // NOLINT(bugprone-reserved-identifier)
-            struct __IsCallable < __T (*) ( __A ..., ... ), __U > : __TrueType {};
-
-            template < typename __T, typename __U, typename ... __A > // NOLINT(bugprone-reserved-identifier)
-            struct __IsCallable < __T (&) ( __A ..., ... ), __U > : __TrueType {};
-
-            template < typename __T, typename __U, typename ... __A > // NOLINT(bugprone-reserved-identifier)
-            struct __IsCallable < __T ( __A ... ) const, __U > : __TrueType {};
-
-            template < typename __T, typename __U, typename ... __A > // NOLINT(bugprone-reserved-identifier)
-            struct __IsCallable < __T ( __A ... ) volatile, __U > : __TrueType {};
-
-            template < typename __T, typename __U, typename ... __A > // NOLINT(bugprone-reserved-identifier)
-            struct __IsCallable < __T ( __A ... ) const volatile, __U > : __TrueType {};
-
-            template < typename __T, typename __U, typename ... __A > // NOLINT(bugprone-reserved-identifier)
-            struct __IsCallable < __T ( __A ..., ... ) const, __U > : __TrueType {};
-
-            template < typename __T, typename __U, typename ... __A > // NOLINT(bugprone-reserved-identifier)
-            struct __IsCallable < __T ( __A ..., ... ) volatile, __U > : __TrueType {};
-
-            template < typename __T, typename __U, typename ... __A > // NOLINT(bugprone-reserved-identifier)
-            struct __IsCallable < __T ( __A ..., ... ) const volatile, __U > : __TrueType {};
-
-            template < typename __T, typename __U, typename ... __A > // NOLINT(bugprone-reserved-identifier)
-            struct __IsCallable < __T ( __A ... ) &, __U > : __TrueType {};
-
-            template < typename __T, typename __U, typename ... __A > // NOLINT(bugprone-reserved-identifier)
-            struct __IsCallable < __T ( __A ... ) const &, __U > : __TrueType {};
-
-            template < typename __T, typename __U, typename ... __A > // NOLINT(bugprone-reserved-identifier)
-            struct __IsCallable < __T ( __A ... ) volatile &, __U > : __TrueType {};
-
-            template < typename __T, typename __U, typename ... __A > // NOLINT(bugprone-reserved-identifier)
-            struct __IsCallable < __T ( __A ... ) const volatile &, __U > : __TrueType {};
-
-            template < typename __T, typename __U, typename ... __A > // NOLINT(bugprone-reserved-identifier)
-            struct __IsCallable < __T ( __A ..., ... ) const &, __U > : __TrueType {};
-
-            template < typename __T, typename __U, typename ... __A > // NOLINT(bugprone-reserved-identifier)
-            struct __IsCallable < __T ( __A ..., ... ) volatile &, __U > : __TrueType {};
-
-            template < typename __T, typename __U, typename ... __A > // NOLINT(bugprone-reserved-identifier)
-            struct __IsCallable < __T ( __A ..., ... ) const volatile &, __U > : __TrueType {};
-
-            template < typename __T, typename __U, typename ... __A > // NOLINT(bugprone-reserved-identifier)
-            struct __IsCallable < __T ( __A ... ) &&, __U > : __TrueType {};
-
-            template < typename __T, typename __U, typename ... __A > // NOLINT(bugprone-reserved-identifier)
-            struct __IsCallable < __T ( __A ... ) const &&, __U > : __TrueType {};
-
-            template < typename __T, typename __U, typename ... __A > // NOLINT(bugprone-reserved-identifier)
-            struct __IsCallable < __T ( __A ... ) volatile &&, __U > : __TrueType {};
-
-            template < typename __T, typename __U, typename ... __A > // NOLINT(bugprone-reserved-identifier)
-            struct __IsCallable < __T ( __A ... ) const volatile &&, __U > : __TrueType {};
-
-            template < typename __T, typename __U, typename ... __A > // NOLINT(bugprone-reserved-identifier)
-            struct __IsCallable < __T ( __A ..., ... ) const &&, __U > : __TrueType {};
-
-            template < typename __T, typename __U, typename ... __A > // NOLINT(bugprone-reserved-identifier)
-            struct __IsCallable < __T ( __A ..., ... ) volatile &&, __U > : __TrueType {};
-
-            template < typename __T, typename __U, typename ... __A > // NOLINT(bugprone-reserved-identifier)
-            struct __IsCallable < __T ( __A ..., ... ) const volatile &&, __U > : __TrueType {};
-
-
-            template < typename __T > // NOLINT(bugprone-reserved-identifier)
-            struct __IsCallable < __T, int > {
-            private:
-                using __y = char (&)[1]; // NOLINT(bugprone-reserved-identifier)
-                using __n = char (&)[2]; // NOLINT(bugprone-reserved-identifier)
-
-                struct __Fallback { auto operator ()() -> void {} }; // NOLINT(bugprone-reserved-identifier)
-                struct __Derived : __T, __Fallback {}; // NOLINT(bugprone-reserved-identifier)
-
-                template < typename __U, __U > // NOLINT(bugprone-reserved-identifier)
-                struct __Check; // NOLINT(bugprone-reserved-identifier)
-
-                __CDS_WarningSuppression_NoReturnStatement_SuppressEnable
-                template < typename >
-                static auto __test ( ... ) -> __y {} // NOLINT(clion-misra-cpp2008-8-4-1, bugprone-reserved-identifier)
-
-                template < typename __C > // NOLINT(bugprone-reserved-identifier)
-                static auto __test ( __Check < auto ( __Fallback :: * ) () -> void, & __C :: operator () > * ) -> __n {} // NOLINT(bugprone-reserved-identifier)
-                __CDS_WarningSuppression_NoReturnStatement_SuppressDisable
-
-            public:
-                constexpr static bool value = sizeof ( __test < __Derived > (0) ) == sizeof (__y);
-            };
-
-            /**
              * @brief Meta-type implementation used to obtain the type name in a StringLiteral format ( char const * )
              * @tparam __T is the type for which the name is obtained
              */
@@ -602,11 +484,11 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                                                 struct FailureType { };
 
                     template < typename __T, typename __U > using ConditionalType = decltype ( true ? valueOf < __T > () : valueOf < __U > () ); // NOLINT(bugprone-reserved-identifier)
-                    template < typename __T, typename __U > static SuccessType < typename __Decay < ConditionalType < __T, __U > > :: Type >                                __test ( int ) {} // NOLINT(bugprone-reserved-identifier)
-                    template < typename __T, typename __U > static SuccessType < typename __RemoveConstVolatile < ConditionalType < __T const &, __U const & > > :: Type >  __test2 ( int ) {}  // NOLINT(bugprone-reserved-identifier)
+                    template < typename __T, typename __U > static SuccessType < typename __Decay < ConditionalType < __T, __U > > :: Type >                                __test ( int ); // NOLINT(bugprone-reserved-identifier)
+                    template < typename __T, typename __U > static SuccessType < typename __RemoveConstVolatile < ConditionalType < __T const &, __U const & > > :: Type >  __test2 ( int );  // NOLINT(bugprone-reserved-identifier)
 
-                    template < typename, typename >         static FailureType                                                                                              __test2 ( ... ) {} // NOLINT(bugprone-reserved-identifier)
-                    template < typename __T, typename __U > static decltype ( __CommonTest :: __test2 < __T, __U > ( 0 ) )                                                  __test ( ... ) {} // NOLINT(bugprone-reserved-identifier)
+                    template < typename, typename >         static FailureType                                                                                              __test2 ( ... ); // NOLINT(bugprone-reserved-identifier)
+                    template < typename __T, typename __U > static decltype ( __CommonTest :: __test2 < __T, __U > ( 0 ) )                                                  __test ( ... ); // NOLINT(bugprone-reserved-identifier)
                 };
 
                 /**
@@ -670,13 +552,13 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 struct __IsConvertible < __From, __To, false > {
                 private:
                     template < typename __To1 > // NOLINT(bugprone-reserved-identifier)
-                    static void __metaTest ( __To1 ) noexcept {} // NOLINT(bugprone-reserved-identifier)
+                    static void __metaTest ( __To1 ) noexcept; // NOLINT(bugprone-reserved-identifier)
 
                     template < typename __From1, typename __To1, typename = decltype ( __metaTest < __To1 > ( valueOf < __From1 > () ) ) > // NOLINT(bugprone-reserved-identifier)
-                    static __TrueType __test (int) {} // NOLINT(bugprone-reserved-identifier)
+                    static __TrueType __test (int); // NOLINT(bugprone-reserved-identifier)
 
                     template < typename, typename >
-                    static __FalseType __test (...) {} // NOLINT(bugprone-reserved-identifier)
+                    static __FalseType __test (...); // NOLINT(bugprone-reserved-identifier)
 
                 public:
                     using Type = decltype ( __test < __From, __To > (0) );

@@ -10,6 +10,7 @@
 #include <CDS/experimental/Set>
 #include <CDS/experimental/String>
 using namespace cds;
+using namespace cds :: literals;
 
 
 int main () {
@@ -20,7 +21,7 @@ int main () {
     std :: cout << t.get<1>() << '\n';
     std :: cout << t.get<2>() << '\n';
 
-    auto arr = experimental :: arrayOf ( 1, 2, "test"_s, 3, 4, 5, 6, 1, 2.4f );
+    auto arr = experimental :: arrayOf ( 1, 2, String("test"), 3, 4, 5, 6, 1, 2.4f );
     std :: cout << arr << '\n';
 
     std :: cout << arr.sub <experimental::Array> (2, 5) << '\n';
@@ -78,9 +79,11 @@ int main () {
 
     std :: cout << experimental :: String :: f ( "%s are %d mere", "Ana", 5 ) << '\n';
 
-    std :: cout << meta :: isCallable < decltype ( String :: isVowel ) > () << '\n';
+    std :: cout << meta :: isCallable < decltype ( StringUtils < char > :: isVowel ) > () << '\n';
 
-    decltype ( String :: isVowel ) v;
+    decltype ( StringUtils < char > :: isVowel ) v;
+
+    std :: cout << str.sequence();
 //    v
 
 //    experimental :: Set < int > set;

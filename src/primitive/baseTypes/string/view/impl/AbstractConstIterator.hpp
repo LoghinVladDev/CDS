@@ -64,6 +64,13 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             }
 
             template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
+            __CDS_cpplang_NonConstConstexprMemberFunction auto __BaseStringView < __CharType > :: AbstractConstIterator :: next () noexcept -> AbstractConstIterator & {
+
+                this->_forward ? ++ this->_index : -- this->_index;
+                return * this;
+            }
+
+            template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
             __CDS_cpplang_NonConstConstexprMemberFunction auto __BaseStringView < __CharType > :: AbstractConstIterator :: previous () noexcept -> AbstractConstIterator & {
 
                 this->_forward ? -- this->_index : ++ this->_index;
@@ -73,7 +80,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
             constexpr auto __BaseStringView < __CharType > :: AbstractConstIterator :: value () const noexcept -> __CharType {
 
-                return this->_pString->_pBuffer [ this->_index ];
+                return this->_pString->_pData [ this->_index ];
             }
 
             template < typename __CharType > // NOLINT(bugprone-reserved-identifier)

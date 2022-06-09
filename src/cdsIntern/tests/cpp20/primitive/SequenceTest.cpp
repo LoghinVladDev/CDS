@@ -27,6 +27,7 @@
 
 bool SequenceTest::execute() noexcept {
     using namespace cds;
+    using namespace cds :: literals;
 //    delete Memory::instance().replaceAllocator ( new Memory::LeakDetectionAllocator () );
     bool ok = true
             ;
@@ -34,7 +35,7 @@ bool SequenceTest::execute() noexcept {
 
     Range r(20);
     Array < float > fArray = {0.5f, 0.3f, 1.7f, 3.0f, 2.2f, 1.4f, 2.2f, 4.0f, 3.0f, 0.3f, 0.5f, 0.5f, 4.3f, 2.1f, 2.2f};
-    LinkedList < String > sList = String("Ana are mere, dar merele o au pe Ana?. Ce este cert, Ana are pere si mere").split(" ,?.");
+    LinkedList < String > sList = String("Ana are mere, dar merele o au pe Ana?. Ce este cert, Ana are pere si mere").split<LinkedList>(" ,?.");
     HashMap < String, int > siHMap;
     OrderedSet < int > intSet = {4, 2 ,1 ,0 , 1, 2, 7 , 8, 9 ,14, 11, 2, 5};
     UnorderedSet < uint32 > uintUSet = { 3, 1, 2 ,11, 14, 7 };
@@ -292,7 +293,7 @@ bool SequenceTest::execute() noexcept {
                 ok = false;
             }
 
-            auto strings = "Ana are mere, dar merele o au pe Ana?"_s.split(", ?").sequence();
+            auto strings = "Ana are mere, dar merele o au pe Ana?"_s.split<Array>(", ?").sequence();
 
             log("strings : %s", strings.toArray().toString().cStr());
             log("strings.max : %s", strings.max().value().cStr());
@@ -322,7 +323,7 @@ bool SequenceTest::execute() noexcept {
         };
 
         auto maxByTest = [&]{
-            auto strings = "Ana are mere, dar merele o au pe Ana?"_s.split(", ?").sequence();
+            auto strings = "Ana are mere, dar merele o au pe Ana?"_s.split<Array>(", ?").sequence();
 
             log("strings : %s", strings.toArray().toString().cStr());
             log("strings.max : %s", strings.maxBy([](String const & s){return s.length();}).value().cStr());
@@ -356,7 +357,7 @@ bool SequenceTest::execute() noexcept {
         };
 
         auto maxOfTest = [&]{
-            auto strings = "Ana are mere, dar merele o au pe Ana?"_s.split(", ?").sequence();
+            auto strings = "Ana are mere, dar merele o au pe Ana?"_s.split<Array>(", ?").sequence();
 
             log("strings : %s", strings.toArray().toString().cStr());
             log("strings.max : %d", strings.maxOf([](String const & s){return s.length();}).value());
@@ -401,7 +402,7 @@ bool SequenceTest::execute() noexcept {
                 ok = false;
             }
 
-            auto strings = "Ana are mere, dar merele o au pe Ana?"_s.split(", ?").sequence();
+            auto strings = "Ana are mere, dar merele o au pe Ana?"_s.split<Array>(", ?").sequence();
 
             log("strings : %s", strings.toArray().toString().cStr());
             log("strings.max : %s", strings.maxOr("no-max").cStr());
@@ -431,7 +432,7 @@ bool SequenceTest::execute() noexcept {
         };
 
         auto maxByOrTest = [&]{
-            auto strings = "Ana are mere, dar merele o au pe Ana?"_s.split(", ?").sequence();
+            auto strings = "Ana are mere, dar merele o au pe Ana?"_s.split<Array>(", ?").sequence();
 
             log("strings : %s", strings.toArray().toString().cStr());
             log("strings.max : %s", strings.maxByOr("no-max", [](String const & s){return s.length();}).cStr());
@@ -465,7 +466,7 @@ bool SequenceTest::execute() noexcept {
         };
 
         auto maxOfOrTest = [&]{
-            auto strings = "Ana are mere, dar merele o au pe Ana?"_s.split(", ?").sequence();
+            auto strings = "Ana are mere, dar merele o au pe Ana?"_s.split<Array>(", ?").sequence();
 
             log("strings : %s", strings.toArray().toString().cStr());
             log("strings.max : %d", strings.maxOfOr(0,[](String const & s){return s.length();}));
@@ -510,7 +511,7 @@ bool SequenceTest::execute() noexcept {
                 ok = false;
             }
 
-            auto strings = "Ana are mere, dar merele o au pe Ana?"_s.split(", ?").sequence();
+            auto strings = "Ana are mere, dar merele o au pe Ana?"_s.split<Array>(", ?").sequence();
 
             log("strings : %s", strings.toArray().toString().cStr());
             log("strings.min : %s", strings.min().value().cStr());
@@ -540,7 +541,7 @@ bool SequenceTest::execute() noexcept {
         };
 
         auto minByTest = [&]{
-            auto strings = "Ana are mere, dar merele o au pe Ana?"_s.split(", ?").sequence();
+            auto strings = "Ana are mere, dar merele o au pe Ana?"_s.split<Array>(", ?").sequence();
 
             log("strings : %s", strings.toArray().toString().cStr());
             log("strings.min : %s", strings.minBy([](String const & s){return s.length();}).value().cStr());
@@ -576,7 +577,7 @@ bool SequenceTest::execute() noexcept {
         };
 
         auto minOfTest = [&]{
-            auto strings = "Ana are mere, dar merele o au pe Ana?"_s.split(", ?").sequence();
+            auto strings = "Ana are mere, dar merele o au pe Ana?"_s.split<Array>(", ?").sequence();
 
             log("strings : %s", strings.toArray().toString().cStr());
             log("strings.min : %d", strings.minOf([](String const & s){return s.length();}).value());
@@ -621,7 +622,7 @@ bool SequenceTest::execute() noexcept {
                 ok = false;
             }
 
-            auto strings = "Ana are mere, dar merele o au pe Ana?"_s.split(", ?").sequence();
+            auto strings = "Ana are mere, dar merele o au pe Ana?"_s.split<Array>(", ?").sequence();
 
             log("strings : %s", strings.toArray().toString().cStr());
             log("strings.min : %s", strings.minOr("no-min").cStr());
@@ -651,7 +652,7 @@ bool SequenceTest::execute() noexcept {
         };
 
         auto minByOrTest = [&]{
-            auto strings = "Ana are mere, dar merele o au pe Ana?"_s.split(", ?").sequence();
+            auto strings = "Ana are mere, dar merele o au pe Ana?"_s.split<Array>(", ?").sequence();
 
             log("strings : %s", strings.toArray().toString().cStr());
             log("strings.min : %s", strings.minByOr("no-min", [](String const & s){return s.length();}).cStr());
@@ -685,7 +686,7 @@ bool SequenceTest::execute() noexcept {
         };
 
         auto minOfOrTest = [&]{
-            auto strings = "Ana are mere, dar merele o au pe Ana?"_s.split(", ?").sequence();
+            auto strings = "Ana are mere, dar merele o au pe Ana?"_s.split<Array>(", ?").sequence();
 
             log("strings : %s", strings.toArray().toString().cStr());
             log("strings.min : %d", strings.minOfOr(0,[](String const & s){return s.length();}));
@@ -995,14 +996,14 @@ bool SequenceTest::execute() noexcept {
 
             log("list : %s", list.toArray().toString().cStr());
             log("list.distinct(): %s", list.distinct().toArray().toString().cStr());
-            log("list.distinctBy(String::upperChar): %s", list.distinctBy(String::upperChar).toArray().toString().cStr());
+            log("list.distinctBy(String::upperChar): %s", list.distinctBy(StringUtils<char>::upper).toArray().toString().cStr());
 
             if ( list.distinct().toArray() != Array < char > { 'B', 'b', 'A', 'a' } ) {
                 ok = false;
                 logWarning("distinct error");
             }
 
-            if ( list.distinctBy(String::upperChar).toArray() != Array < char > { 'b', 'a' } ) {
+            if ( list.distinctBy(StringUtils<char>::upper).toArray() != Array < char > { 'b', 'a' } ) {
                 ok = false;
                 logWarning("distinct error");
             }
@@ -1019,14 +1020,14 @@ bool SequenceTest::execute() noexcept {
             log ("numbers.fold : %d", numbers.fold(0, [](int s, int n){return s + n;}));
             log ("numbers.fold(start 5) : %d", numbers.fold(5, [](int s, int n){ return s + n; }));
 
-            log ("strings.fold : %s", strings.fold(""_s, [](String const & s, String const & t){ return s + t; }).cStr());
-            log ("strings.fold(start 'xyz' : %s", strings.fold("xyz"_s, [](String const & s, String const & t){ return s + t; }).cStr());
+            log ("strings.fold : %s", strings.fold(String(""), [](String const & s, String const & t){ return s + t; }).cStr());
+            log ("strings.fold(start 'xyz' : %s", strings.fold(String("xyz"), [](String const & s, String const & t){ return s + t; }).cStr());
 
             if (
                     numbers.fold(0, [](int s, int n){return s + n;}) != 21 ||
                     numbers.fold(5, [](int s, int n){ return s + n; }) != 26 ||
-                    strings.fold(""_s, [](String const & s, String const & t){ return s + t; }) != "abcd" ||
-                    strings.fold("xyz"_s, [](String const & s, String const & t){ return s + t; }) != "xyzabcd"
+                    strings.fold(String(""), [](String const & s, String const & t){ return s + t; }) != "abcd" ||
+                    strings.fold(String("xyz"), [](String const & s, String const & t){ return s + t; }) != "xyzabcd"
             ) {
                 logWarning("fold error");
                 ok = false;
@@ -1044,14 +1045,14 @@ bool SequenceTest::execute() noexcept {
             log ("numbers.fold : %d", numbers.foldIndexed(0, [](Index i, int s, int n){if ( i % 2 == 0 ) return s + n; return s;}));
             log ("numbers.fold(start 5) : %d", numbers.foldIndexed(5, [](Index i, int s, int n){if ( i % 2 == 0 ) return s + n; return s;}));
 
-            log ("strings.fold : %s", strings.foldIndexed(""_s, [](Index i, String const & s, String const & t){ if ( i % 2 == 1 ) return s + t; return s; }).cStr());
-            log ("strings.fold(start 'xyz' : %s", strings.foldIndexed("xyz"_s, [](Index i, String const & s, String const & t){ if ( i % 2 == 1 ) return s + t; return s; }).cStr());
+            log ("strings.fold : %s", strings.foldIndexed(String(""), [](Index i, String const & s, String const & t){ if ( i % 2 == 1 ) return s + t; return s; }).cStr());
+            log ("strings.fold(start 'xyz' : %s", strings.foldIndexed(String("xyz"), [](Index i, String const & s, String const & t){ if ( i % 2 == 1 ) return s + t; return s; }).cStr());
 
             if (
                     numbers.foldIndexed(0, [](Index i, int s, int n){if ( i % 2 == 0 ) return s + n; return s;}) != 9 ||
                     numbers.foldIndexed(5, [](Index i, int s, int n){if ( i % 2 == 0 ) return s + n; return s;}) != 14 ||
-                    strings.foldIndexed(""_s, [](Index i, String const & s, String const & t){ if ( i % 2 == 1 ) return s + t; return s; }) != "bd" ||
-                    strings.foldIndexed("xyz"_s, [](Index i, String const & s, String const & t){ if ( i % 2 == 1 ) return s + t; return s; }) != "xyzbd"
+                    strings.foldIndexed(String(""), [](Index i, String const & s, String const & t){ if ( i % 2 == 1 ) return s + t; return s; }) != "bd" ||
+                    strings.foldIndexed(String("xyz"), [](Index i, String const & s, String const & t){ if ( i % 2 == 1 ) return s + t; return s; }) != "xyzbd"
             ) {
                 logWarning("fold error");
                 ok = false;
@@ -1203,13 +1204,13 @@ bool SequenceTest::execute() noexcept {
             auto strings = Array < String > {"a", "b", "c", "d"}.sequence();
 
             log ("strings : %s", strings.toArray().toString().cStr());
-            log ("strings.runningFold : %s", strings.runningFold("s"_s, [](String const & s, String const & t){ return s + t; }).toArray().toString().cStr());
-            log ("strings.runningFoldIndexed : %s", strings.runningFoldIndexed("s"_s, [](Index i, String const & s, String const & t){ return s + t + i; }).toArray().toString().cStr());
+            log ("strings.runningFold : %s", strings.runningFold(String("s"), [](String const & s, String const & t){ return s + t; }).toArray().toString().cStr());
+            log ("strings.runningFoldIndexed : %s", strings.runningFoldIndexed(String("s"), [](Index i, String const & s, String const & t){ return s + t + i; }).toArray().toString().cStr());
 
             if (
-                    strings.runningFold("s"_s, [](String const & s, String const & t){ return s + t; }).toArray() != Array < String > { "s", "sa", "sab", "sabc", "sabcd" } ||
-                    strings.runningFoldIndexed("s"_s, [](Index i, String const & s, String const & t){ return s + t + i; }).toArray() != Array < String > { "s", "sa0", "sa0b1", "sa0b1c2", "sa0b1c2d3" } ||
-                    Array < String > {}.sequence().runningFold("s"_s, [](String const &, String const &){ return "x"; }).toArray () != Array < String > { "s" }
+                    strings.runningFold(String("s"), [](String const & s, String const & t){ return s + t; }).toArray() != Array < String > { "s", "sa", "sab", "sabc", "sabcd" } ||
+                    strings.runningFoldIndexed(String("s"), [](Index i, String const & s, String const & t){ return s + t + i; }).toArray() != Array < String > { "s", "sa0", "sa0b1", "sa0b1c2", "sa0b1c2d3" } ||
+                    Array < String > {}.sequence().runningFold(String("s"), [](String const &, String const &){ return "x"; }).toArray () != Array < String > { "s" }
             ) {
                 logWarning("runningFold error");
                 ok = false;
@@ -1222,12 +1223,12 @@ bool SequenceTest::execute() noexcept {
             log ("strings : %s", strings.toArray().toString().cStr());
             log ("strings.runningReduce : %s", strings.runningReduce([](String const & s, String const & t){return s + t;}).toArray().toString().cStr());
             log ("strings.runningReduceIndexed : %s", strings.runningReduceIndexed([](Index i, String const & s, String const & t){ return s + t + i; }).toArray().toString().cStr());
-            log ("emptyList.runningReduce : %s", Array <String> {}.sequence().runningReduce([](String const &, String const &){return "X"_s;}).toArray().toString().cStr());
+            log ("emptyList.runningReduce : %s", Array <String> {}.sequence().runningReduce([](String const &, String const &)->String{return "X"_s;}).toArray().toString().cStr());
 
             if (
                     strings.runningReduce([](String const & s, String const & t){return s + t;}).toArray() != Array < String > { "a", "ab", "abc", "abcd" } ||
                     strings.runningReduceIndexed([](Index i, String const & s, String const & t){ return s + t + i; }).toArray() != Array < String > { "a", "ab1", "ab1c2", "ab1c2d3" } ||
-                    ! Array <String> {}.sequence().runningReduce([](String const &, String const &){return "X"_s;}).toArray().empty()
+                    ! Array <String> {}.sequence().runningReduce([](String const &, String const &)->String{return "X"_s;}).toArray().empty()
             ) {
                 logWarning("runningReduce error");
                 ok = false;
@@ -1328,12 +1329,12 @@ bool SequenceTest::execute() noexcept {
         auto associateTest = [&] {
             auto names = LinkedList<String>{"Grace Hopper", "Jacob Bernoulli", "Johann Bernoulli"}.sequence();
             log("byLastName : %s", names.associate([](String const &fullName) {
-                return Pair{fullName.split(" ")[1], fullName.split(" ")[0]};
+                return Pair{fullName.split<Array>(" ")[1], fullName.split<Array>(" ")[0]};
             }).toHashMap().toString().cStr());
 
             if (
                     names.associate([](String const &fullName) {
-                        return Pair{fullName.split(" ")[1], fullName.split(" ")[0]};
+                        return Pair{fullName.split<Array>(" ")[1], fullName.split<Array>(" ")[0]};
                     }).toHashMap() !=
                     HashMap<String, String>{
                             {"Hopper",    "Grace"},
@@ -1354,6 +1355,8 @@ bool SequenceTest::execute() noexcept {
                 Person() noexcept = default;
                 __CDS_MaybeUnused Person(Person const &) noexcept = default;
                 Person(String firstName, String lastName) noexcept : firstName(std::move(firstName)), lastName(std::move(lastName)) { }
+
+                auto operator = (Person const &) noexcept -> Person & = default;
 
                 __CDS_NoDiscard auto toString () const noexcept -> String __CDS_cpplang_NestedInheritedOverride {
                     return this->firstName + " " + this->lastName;
@@ -1418,6 +1421,8 @@ bool SequenceTest::execute() noexcept {
                 Person() noexcept = default;
                 __CDS_MaybeUnused Person(Person const &) noexcept = default;
                 Person(String firstName, String lastName) : firstName(std::move(firstName)), lastName(std::move(lastName)) { }
+
+                auto operator = (Person const &) noexcept -> Person & = default;
 
                 __CDS_NoDiscard auto toString () const noexcept -> String __CDS_cpplang_NestedInheritedOverride {
                     return this->firstName + " " + this->lastName;
@@ -1501,6 +1506,8 @@ bool SequenceTest::execute() noexcept {
                 __CDS_MaybeUnused Person(Person const &) noexcept = default;
                 Person(String firstName, String lastName) : firstName(std::move(firstName)), lastName(std::move(lastName)) { }
 
+                auto operator = (Person const &) noexcept -> Person & = default;
+
                 __CDS_NoDiscard auto toString () const noexcept -> String __CDS_cpplang_NestedInheritedOverride {
                     return this->firstName + " " + this->lastName;
                 }
@@ -1553,8 +1560,8 @@ bool SequenceTest::execute() noexcept {
 
             if ( withLength.toHashMap() != HashMap < String, Size > {
                     { "a", 1 },
-                    {"ab", 2},
                     {"abc", 3},
+                    {"ab", 2},
                     {"def", 3},
                     {"abcd", 4}
             } ) {
@@ -1572,6 +1579,8 @@ bool SequenceTest::execute() noexcept {
                 Person() noexcept = default;
                 __CDS_MaybeUnused Person(Person const &) noexcept = default;
                 Person(String firstName, String lastName) : firstName(std::move(firstName)), lastName(std::move(lastName)) { }
+
+                auto operator = (Person const &) noexcept -> Person & = default;
 
                 __CDS_NoDiscard auto toString () const noexcept -> String __CDS_cpplang_NestedInheritedOverride {
                     return this->firstName + " " + this->lastName;
@@ -1819,7 +1828,7 @@ bool SequenceTest::execute() noexcept {
 
     this->executeSubtest("Transformational Utilities", [&]{
         auto chunkedTest = [&] {
-            auto words = "one two three four five six seven eight nine ten"_s.split(' ').sequence();
+            auto words = "one two three four five six seven eight nine ten"_s.split<Array>(' ').sequence();
             log("words : %s", words.toArray().toString().cStr());
 
             auto chunks = words.chunked(3);
@@ -1843,7 +1852,7 @@ bool SequenceTest::execute() noexcept {
             };
 
             auto dnaFragment = "ATTCGCGGCCGCCAA"_s.sequence();
-            auto proteins = dnaFragment.chunked(3, [&](List<char> const &charList) {
+            auto proteins = dnaFragment.chunked(3, [&](List<char> const &charList) -> String {
                 String s;
                 charList.forEach([&](auto const & e){ s+= e; });
 //                for (auto e: charList) s += e;
@@ -2208,7 +2217,7 @@ bool SequenceTest::execute() noexcept {
 
         auto flatMapIndexedTest = [&] {
             auto data = Array < String > { "Abcd", "efgh", "Klmn" }.sequence();
-            auto selected = data.map( [](String const & s){ return s.any(String::isUpperChar); } ).toArray();
+            auto selected = data.map( [](String const & s){ return s.any(StringUtils < char > :: isUpper); } ).toArray();
             auto result = data.flatMapIndexed( [&](Index index, String const & s) {
                 if ( selected[index] )
                     return s.sequence().toArray();
@@ -2227,7 +2236,7 @@ bool SequenceTest::execute() noexcept {
 
         auto flatMapIndexedToTest = [&] {
             auto data = Array < String > { "Abcd", "efgh", "Klmn" }.sequence();
-            auto selected = data.map( [](String const & s){ return s.any(String::isUpperChar); } ).toArray();
+            auto selected = data.map( [](String const & s){ return s.any( StringUtils < char > :: isUpper ); } ).toArray();
             auto result = Array < char > ();
 
             data.flatMapIndexedTo( result, [&](Index index, String const & s) {

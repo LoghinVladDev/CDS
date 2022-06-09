@@ -12,11 +12,11 @@
 namespace cds {
     class Object;
 
-    namespace __hidden {
-        namespace __impl {
+    namespace __hidden { // NOLINT(bugprone-reserved-identifier,modernize-concat-nested-namespaces)
+        namespace __impl { // NOLINT(bugprone-reserved-identifier)
 
-            template < typename __CharType >
-            class __BaseString;
+            template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
+            class __BaseString; // NOLINT(bugprone-reserved-identifier)
 
         }
     }
