@@ -139,6 +139,6 @@ namespace cds {
 
 }
 
-__CDS_RegisterParseTypeTemplateT(Atomic) // NOLINT(clion-misra-cpp2008-8-0-1)
+__CDS_Meta_RegisterParseTemplateType(Atomic) // NOLINT(clion-misra-cpp2008-8-0-1)
 
 #endif //CDS_ATOMIC_HPP

@@ -679,7 +679,7 @@ namespace cds {
 
         __CDS_cpplang_VirtualConstexpr static auto iListContains ( InitializerList list __CDS_MaybeUnused, ElementCRef what __CDS_MaybeUnused ) noexcept -> bool {
             for ( auto const & element __CDS_MaybeUnused : list ) {
-                if ( Type < T > :: compare ( element, what ) ) {
+                if ( meta :: equals ( element, what ) ) {
                     return true;
                 }
             }
@@ -691,7 +691,7 @@ namespace cds {
 
     public:
 
-        template < typename V = T, EnableIf < Type < V > :: copyConstructible > = 0 >
+        template < typename V = T, meta :: EnableIf < meta :: isCopyConstructible < V > () > = 0 >
         __CDS_OptimalInline auto add (ElementCRef element) noexcept -> void {
 
             __CDS_Collection_OperationalLock
@@ -705,7 +705,7 @@ namespace cds {
 
         }
 
-        template < typename V = T, EnableIf < Type < V > :: moveConstructible > = 0 >
+        template < typename V = T, meta :: EnableIf < meta :: isMoveConstructible < V > () > = 0 >
         __CDS_OptimalInline auto add (ElementMRef element) noexcept -> void {
 
             __CDS_Collection_OperationalLock
@@ -728,7 +728,7 @@ namespace cds {
             __CDS_Collection_OperationalLock
 
             for ( auto const & element __CDS_MaybeUnused : * this ) {
-                if ( Type < ElementType > :: compare (element, object ) ) {
+                if ( meta :: equals (element, object ) ) {
 
                     __CDS_Collection_OperationalUnlock
                     return true;
@@ -740,10 +740,10 @@ namespace cds {
             return false;
         }
 
-        template < typename Action, experimental :: meta :: EnableIf < ! experimental :: meta :: isMemberFunctionPointer < Action > () > = 0 >
+        template < typename Action, meta :: EnableIf < ! meta :: isMemberFunctionPointer < Action > () > = 0 >
         __CDS_MaybeUnused auto forEach (
                 Action const & action __CDS_MaybeUnused
-        ) noexcept ( noexcept ( ( * Type < Action > :: unsafeAddress () ) ( Type < ElementType > :: unsafeReference() ) ) )
+        ) noexcept ( noexcept ( action ( meta :: referenceOf < ElementType > () ) ) )
                 -> void {
 
             __CDS_Collection_OperationalLock
@@ -756,10 +756,10 @@ namespace cds {
 
         }
 
-        template < typename Action, experimental :: meta :: EnableIf < ! experimental :: meta :: isMemberFunctionPointer < Action > () > = 0 >
+        template < typename Action, meta :: EnableIf < ! meta :: isMemberFunctionPointer < Action > () > = 0 >
         __CDS_MaybeUnused auto forEach (
                 Action const & action __CDS_MaybeUnused
-        ) const noexcept ( noexcept ( ( * Type < Action > :: unsafeAddress () ) ( Type < ElementType const > :: unsafeReference() ) ) )
+        ) const noexcept ( noexcept ( action ( meta :: referenceOf < ElementType const > () ) ) )
                 -> void {
 
             __CDS_Collection_OperationalLock
@@ -772,10 +772,10 @@ namespace cds {
 
         }
 
-        template < typename Action, experimental :: meta :: EnableIf < experimental :: meta :: isMemberFunctionPointer < Action > () && ! experimental :: meta :: isPointer < ElementType > () > = 0 >
+        template < typename Action, meta :: EnableIf < meta :: isMemberFunctionPointer < Action > () && ! meta :: isPointer < ElementType > () > = 0 >
         __CDS_MaybeUnused auto forEach (
                 Action const & action __CDS_MaybeUnused
-        ) noexcept ( noexcept ( ( experimental :: meta :: referenceOf < ElementType > ().* action ) () ) )
+        ) noexcept ( noexcept ( ( meta :: referenceOf < ElementType > ().* action ) () ) )
                 -> void {
 
             __CDS_Collection_OperationalLock
@@ -788,10 +788,10 @@ namespace cds {
 
         }
 
-        template < typename Action, experimental :: meta :: EnableIf < experimental :: meta :: isMemberFunctionPointer < Action > () && ! experimental :: meta :: isPointer < ElementType > () > = 0 >
+        template < typename Action, meta :: EnableIf < meta :: isMemberFunctionPointer < Action > () && ! meta :: isPointer < ElementType > () > = 0 >
         __CDS_MaybeUnused auto forEach (
                 Action const & action __CDS_MaybeUnused
-        ) const noexcept ( noexcept ( ( experimental :: meta :: referenceOf < ElementType > ().* action ) () ) )
+        ) const noexcept ( noexcept ( ( meta :: referenceOf < ElementType > ().* action ) () ) )
                 -> void {
 
             __CDS_Collection_OperationalLock
@@ -804,10 +804,10 @@ namespace cds {
 
         }
 
-        template < typename Action, experimental :: meta :: EnableIf < experimental :: meta :: isMemberFunctionPointer < Action > () && experimental :: meta :: isPointer < ElementType > () > = 0 >
+        template < typename Action, meta :: EnableIf < meta :: isMemberFunctionPointer < Action > () && meta :: isPointer < ElementType > () > = 0 >
         __CDS_MaybeUnused auto forEach (
                 Action const & action __CDS_MaybeUnused
-        ) noexcept ( noexcept ( ( experimental :: meta :: referenceOf < ElementType > ()->* action ) () ) )
+        ) noexcept ( noexcept ( ( meta :: referenceOf < ElementType > ()->* action ) () ) )
                 -> void {
 
             __CDS_Collection_OperationalLock
@@ -820,10 +820,10 @@ namespace cds {
 
         }
 
-        template < typename Action, experimental :: meta :: EnableIf < experimental :: meta :: isMemberFunctionPointer < Action > () && experimental :: meta :: isPointer < ElementType > () > = 0 >
+        template < typename Action, meta :: EnableIf < meta :: isMemberFunctionPointer < Action > () && meta :: isPointer < ElementType > () > = 0 >
         __CDS_MaybeUnused auto forEach (
                 Action const & action __CDS_MaybeUnused
-        ) const noexcept ( noexcept ( ( experimental :: meta :: referenceOf < ElementType > ()->* action ) () ) )
+        ) const noexcept ( noexcept ( ( meta :: referenceOf < ElementType > ()->* action ) () ) )
                 -> void {
 
             __CDS_Collection_OperationalLock
@@ -840,7 +840,7 @@ namespace cds {
         __CDS_MaybeUnused __CDS_OptimalInline auto some (
                 Size                count       __CDS_MaybeUnused,
                 Predicate   const & predicate   __CDS_MaybeUnused = []( ElementCRef ) noexcept -> bool { return true; }
-        ) noexcept ( noexcept ( ( * Type < Predicate > :: unsafeAddress () ) ( Type < ElementType > :: unsafeReference() ) ) )
+        ) noexcept ( noexcept ( predicate ( meta :: referenceOf < ElementType > () ) ) )
                 -> bool __CDS_Requires( PredicateOver < Predicate, T > ) {
 
             Size trueCount __CDS_MaybeUnused = 0u;
@@ -862,7 +862,7 @@ namespace cds {
         __CDS_MaybeUnused __CDS_OptimalInline auto some (
                 Size                count       __CDS_MaybeUnused,
                 Predicate   const & predicate   __CDS_MaybeUnused = []( ElementCRef ) noexcept -> bool { return true; }
-        ) const noexcept ( noexcept ( ( * Type < Predicate > :: unsafeAddress () ) ( Type < ElementType const > :: unsafeReference() ) ) )
+        ) const noexcept ( noexcept ( predicate ( meta :: referenceOf < ElementType const > () ) ) )
                 -> bool __CDS_Requires( PredicateOver < Predicate, T > ) {
 
             Size trueCount __CDS_MaybeUnused = 0u;
@@ -883,7 +883,7 @@ namespace cds {
         __CDS_MaybeUnused __CDS_OptimalInline auto atLeast (
                 Size                count       __CDS_MaybeUnused,
                 Predicate   const & predicate   __CDS_MaybeUnused = []( ElementCRef ) noexcept -> bool { return true; }
-        ) noexcept ( noexcept ( ( * Type < Predicate > :: unsafeAddress () ) ( Type < ElementType > :: unsafeReference() ) ) )
+        ) noexcept ( noexcept ( predicate ( meta :: referenceOf < ElementType > () ) ) )
                 -> bool __CDS_Requires( PredicateOver < Predicate, T > ) {
 
             Size trueCount __CDS_MaybeUnused = 0u;
@@ -904,7 +904,7 @@ namespace cds {
         __CDS_MaybeUnused __CDS_OptimalInline auto atLeast (
                 Size                count       __CDS_MaybeUnused,
                 Predicate   const & predicate   __CDS_MaybeUnused = []( ElementCRef ) noexcept -> bool { return true; }
-        ) const noexcept ( noexcept ( ( * Type < Predicate > :: unsafeAddress () ) ( Type < ElementType const > :: unsafeReference() ) ) )
+        ) const noexcept ( noexcept ( predicate ( meta :: referenceOf < ElementType const > () ) ) )
                 -> bool __CDS_Requires( PredicateOver < Predicate, T > ) {
 
             Size trueCount __CDS_MaybeUnused = 0u;
@@ -925,7 +925,7 @@ namespace cds {
         __CDS_MaybeUnused __CDS_OptimalInline auto atMost (
                 Size                count       __CDS_MaybeUnused,
                 Predicate   const & predicate   __CDS_MaybeUnused = []( ElementCRef ) noexcept -> bool { return true; }
-        ) noexcept ( noexcept ( ( * Type < Predicate > :: unsafeAddress () ) ( Type < ElementType > :: unsafeReference() ) ) )
+        ) noexcept ( noexcept ( predicate ( meta :: referenceOf < ElementType > () ) ) )
                 -> bool __CDS_Requires( PredicateOver < Predicate, T > ) {
 
             Size trueCount __CDS_MaybeUnused = 0u;
@@ -946,7 +946,7 @@ namespace cds {
         __CDS_MaybeUnused __CDS_OptimalInline auto atMost (
                 Size                count       __CDS_MaybeUnused,
                 Predicate const &   predicate   __CDS_MaybeUnused = []( ElementCRef ) noexcept -> bool { return true; }
-        ) const noexcept ( noexcept ( ( * Type < Predicate > :: unsafeAddress () ) ( Type < ElementType const > :: unsafeReference() ) ) )
+        ) const noexcept ( noexcept ( predicate ( meta :: referenceOf < ElementType const > () ) ) )
                 -> bool __CDS_Requires( PredicateOver < Predicate, T > ) {
 
             Size trueCount __CDS_MaybeUnused = 0u;
@@ -966,7 +966,7 @@ namespace cds {
         __CDS_MaybeUnused __CDS_OptimalInline auto moreThan (
                 Size                count,
                 Predicate   const & predicate = []( ElementCRef ) noexcept -> bool { return true; }
-        ) noexcept ( noexcept ( ( * Type < Predicate > :: unsafeAddress () ) ( Type < ElementType > :: unsafeReference() ) ) )
+        ) noexcept ( noexcept ( predicate ( meta :: referenceOf < ElementType > () ) ) )
                 -> bool __CDS_Requires( PredicateOver < Predicate, T > ) {
 
             return this->atLeast ( count, predicate );
@@ -976,7 +976,7 @@ namespace cds {
         __CDS_MaybeUnused __CDS_OptimalInline auto moreThan (
                 Size                count,
                 Predicate   const & predicate = []( ElementCRef ) noexcept -> bool { return true; }
-        ) const noexcept ( noexcept ( ( * Type < Predicate > :: unsafeAddress () ) ( Type < ElementType const > :: unsafeReference() ) ) )
+        ) const noexcept ( noexcept ( predicate ( meta :: referenceOf < ElementType const > () ) ) )
                 -> bool __CDS_Requires( PredicateOver < Predicate, T > ) {
 
             return this->atLeast ( count, predicate );
@@ -986,7 +986,7 @@ namespace cds {
         __CDS_MaybeUnused __CDS_OptimalInline auto lessThan (
                 Size                count,
                 Predicate   const & predicate = []( ElementCRef ) noexcept -> bool { return true; }
-        ) noexcept ( noexcept ( ( * Type < Predicate > :: unsafeAddress () ) ( Type < ElementType > :: unsafeReference() ) ) )
+        ) noexcept ( noexcept ( predicate ( meta :: referenceOf < ElementType > () ) ) )
                 -> bool __CDS_Requires( PredicateOver < Predicate, T > ) {
 
             return this->atMost ( count, predicate );
@@ -996,7 +996,7 @@ namespace cds {
         __CDS_MaybeUnused __CDS_OptimalInline auto lessThan (
                 Size                count,
                 Predicate   const & predicate = []( ElementCRef ) noexcept -> bool { return true; }
-        ) const noexcept ( noexcept ( ( * Type < Predicate > :: unsafeAddress () ) ( Type < ElementType const > :: unsafeReference() ) ) )
+        ) const noexcept ( noexcept ( predicate ( meta :: referenceOf < ElementType const > () ) ) )
                 -> bool __CDS_Requires( PredicateOver < Predicate, T > ) {
 
             return this->atMost ( count, predicate );
@@ -1005,7 +1005,7 @@ namespace cds {
         template < typename Predicate = Function < bool ( ElementCRef ) > >
         __CDS_MaybeUnused auto count (
                 Predicate const & predicate __CDS_MaybeUnused = []( ElementCRef ) noexcept -> bool { return true; }
-        ) noexcept ( noexcept ( ( * Type < Predicate > :: unsafeAddress () ) ( Type < ElementType > :: unsafeReference() ) ) )
+        ) noexcept ( noexcept ( predicate ( meta :: referenceOf < ElementType > () ) ) )
                 -> Size __CDS_Requires( PredicateOver < Predicate, T > )  {
 
             Size trueCount __CDS_MaybeUnused = 0u;
@@ -1026,7 +1026,7 @@ namespace cds {
         template < typename Predicate = Function < bool ( ElementCRef ) > >
         __CDS_MaybeUnused auto count (
                 Predicate const & predicate __CDS_MaybeUnused = []( ElementCRef ) noexcept -> bool { return true; }
-        ) const noexcept ( noexcept ( ( * Type < Predicate > :: unsafeAddress () ) ( Type < ElementType const > :: unsafeReference() ) ) )
+        ) const noexcept ( noexcept ( predicate ( meta :: referenceOf < ElementType const > () ) ) )
                 -> Size __CDS_Requires( PredicateOver < Predicate, T > ) {
 
             Size trueCount __CDS_MaybeUnused = 0u;
@@ -1047,7 +1047,7 @@ namespace cds {
         template < typename Predicate = Function < bool ( ElementCRef ) > >
         __CDS_MaybeUnused __CDS_OptimalInline auto any (
                 Predicate const & predicate = [](ElementCRef ) noexcept -> bool { return true; }
-        ) noexcept ( noexcept ( ( * Type < Predicate > :: unsafeAddress () ) ( Type < ElementType > :: unsafeReference() ) ) )
+        ) noexcept ( noexcept ( predicate ( meta :: referenceOf < ElementType > () ) ) )
                 -> bool __CDS_Requires( PredicateOver < Predicate, T > ) {
 
             return this->atLeast (1, predicate );
@@ -1056,7 +1056,7 @@ namespace cds {
         template < typename Predicate = Function < bool ( ElementCRef ) > >
         __CDS_MaybeUnused __CDS_OptimalInline auto any (
                 Predicate const & predicate = [](ElementCRef ) noexcept -> bool { return true; }
-        ) const noexcept ( noexcept ( ( * Type < Predicate > :: unsafeAddress () ) ( Type < ElementType const > :: unsafeReference() ) ) )
+        ) const noexcept ( noexcept ( predicate ( meta :: referenceOf < ElementType const > () ) ) )
                 -> bool __CDS_Requires( PredicateOver < Predicate, T > ) {
 
             return this->atLeast (1, predicate );
@@ -1065,7 +1065,7 @@ namespace cds {
         template < typename Predicate >
         __CDS_MaybeUnused __CDS_OptimalInline auto all (
                 Predicate const & predicate
-        ) noexcept ( noexcept ( ( * Type < Predicate > :: unsafeAddress () ) ( Type < ElementType > :: unsafeReference() ) ) )
+        ) noexcept ( noexcept ( predicate ( meta :: referenceOf < ElementType > () ) ) )
                 -> bool __CDS_Requires( PredicateOver < Predicate, T > ) {
 
             return ! this->any ( [&predicate] (T & element) noexcept -> bool { // NOLINT(clion-misra-cpp2008-5-3-1)
@@ -1076,7 +1076,7 @@ namespace cds {
         template < typename Predicate >
         __CDS_MaybeUnused __CDS_OptimalInline auto all (
                 Predicate const & predicate
-        ) const noexcept ( noexcept ( ( * Type < Predicate > :: unsafeAddress () ) ( Type < ElementType const > :: unsafeReference() ) ) )
+        ) const noexcept ( noexcept ( predicate ( meta :: referenceOf < ElementType const > () ) ) )
                 -> bool __CDS_Requires( PredicateOver < Predicate, T > ) {
 
             return ! this->any ( [&predicate] (ElementCRef element) noexcept -> bool { // NOLINT(clion-misra-cpp2008-5-3-1)
@@ -1122,7 +1122,7 @@ namespace cds {
                 aIt != aEnd && bIt != bEnd; 
                 ++ aIt, ++ bIt // NOLINT(clion-misra-cpp2008-5-18-1)
             ) {
-                if ( Type < T > :: compare ( * aIt, * bIt ) ) {
+                if ( meta :: equals ( * aIt, * bIt ) ) {
                     return false;
                 }
             }
@@ -1168,6 +1168,6 @@ namespace cds {
 
 }
 
-__CDS_RegisterParseTypeTemplateT(Collection) // NOLINT(clion-misra-cpp2008-8-0-1)
+__CDS_Meta_RegisterParseTemplateType(Collection) // NOLINT(clion-misra-cpp2008-8-0-1)
 
 #endif //CDS_COLLECTION_HPP

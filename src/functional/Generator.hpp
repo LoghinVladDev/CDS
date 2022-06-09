@@ -32,28 +32,28 @@ namespace cds {
     protected:
         virtual auto task ( Args ... ) noexcept -> T = 0;
 
-        template < typename V = T, typename std :: enable_if < Type < V > :: copyConstructible, int > :: type = 0 >
+        template < typename V = T, typename std :: enable_if < meta :: isCopyConstructible < V > (), int > :: type = 0 >
         __CDS_OptimalInline auto yield ( T const & value ) noexcept ( noexcept ( T ( value ) ) ) -> void {
             return this->yield ( value, false );
         }
 
-        template < typename V = T, typename std :: enable_if < Type < V > :: moveConstructible, int > :: type = 0 >
+        template < typename V = T, typename std :: enable_if < meta :: isMoveConstructible < V > (), int > :: type = 0 >
         __CDS_MaybeUnused __CDS_OptimalInline auto yield ( T && value ) noexcept ( noexcept ( T ( std :: forward < T > ( value ) ) ) ) -> void {
             return this->yield ( std :: forward < T > ( value ), false );
         }
 
-        template < typename V = T, typename std :: enable_if < ! Type < V > :: copyConstructible && Type < V > :: defaultConstructible && Type < V > :: copyAssignable, int > :: type = 0 > // NOLINT(clion-misra-cpp2008-5-3-1)
+        template < typename V = T, typename std :: enable_if < ! meta :: isCopyConstructible < V > () && meta :: isDefaultConstructible < V > () && meta :: isCopyAssignable < V > (), int > :: type = 0 > // NOLINT(clion-misra-cpp2008-5-3-1)
         __CDS_OptimalInline auto yield ( T const & value ) noexcept ( noexcept ( T ( value ) ) ) -> void {
             return this->yield ( value, false );
         }
 
-        template < typename V = T, typename std :: enable_if < ! Type < V > :: moveConstructible && Type < V > :: defaultConstructible && Type < V > :: moveAssignable, int > :: type = 0 > // NOLINT(clion-misra-cpp2008-5-3-1)
+        template < typename V = T, typename std :: enable_if < ! meta :: isMoveConstructible < V > () && meta :: isDefaultConstructible < V > () && meta :: isMoveAssignable < V > (), int > :: type = 0 > // NOLINT(clion-misra-cpp2008-5-3-1)
         __CDS_MaybeUnused __CDS_OptimalInline auto yield ( T && value ) noexcept ( noexcept ( T ( std :: forward < T > ( value ) ) ) ) -> void {
             return this->yield ( std :: forward < T > ( value ), false );
         }
 
     private:
-        template < typename V = T, typename std :: enable_if < Type < V > :: copyConstructible, int > :: type = 0 >
+        template < typename V = T, typename std :: enable_if < meta :: isCopyConstructible < V > (), int > :: type = 0 >
         __CDS_MaybeUnused auto yield ( T const & value, bool isFinal ) noexcept ( noexcept ( T ( value ) ) ) -> void {
             while ( this->trap ) {
 
@@ -74,7 +74,7 @@ namespace cds {
             this->promiseObjectReady.notify();
         }
 
-        template < typename V = T, typename std :: enable_if < Type < V > :: moveConstructible, int > :: type = 0 >
+        template < typename V = T, typename std :: enable_if < meta :: isMoveConstructible < V > (), int > :: type = 0 >
         __CDS_MaybeUnused auto yield ( T && value, bool isFinal ) noexcept ( noexcept ( T ( std :: forward < T > ( value ) ) ) ) -> void {
             while ( this->trap ) {
 
@@ -95,7 +95,7 @@ namespace cds {
             this->promiseObjectReady.notify();
         }
 
-        template < typename V = T, typename std :: enable_if < ! Type < V > :: copyConstructible && Type < V > :: defaultConstructible && Type < V > :: copyAssignable, int > :: type = 0 > // NOLINT(clion-misra-cpp2008-5-3-1)
+        template < typename V = T, typename std :: enable_if < ! meta :: isCopyConstructible < V > () && meta :: isDefaultConstructible < V > () && meta :: isCopyAssignable < V > (), int > :: type = 0 > // NOLINT(clion-misra-cpp2008-5-3-1)
         __CDS_MaybeUnused auto yield ( T const & value, bool isFinal ) noexcept ( noexcept ( T ( value ) ) ) -> void {
             while ( this->trap ) {
 
@@ -117,7 +117,7 @@ namespace cds {
             this->promiseObjectReady.notify();
         }
 
-        template < typename V = T, typename std :: enable_if < ! Type < V > :: moveConstructible && Type < V > :: defaultConstructible && Type < V > :: moveAssignable, int > :: type = 0 > // NOLINT(clion-misra-cpp2008-5-3-1)
+        template < typename V = T, typename std :: enable_if < ! meta :: isMoveConstructible < V > () && meta :: isDefaultConstructible < V > () && meta :: isMoveAssignable < V > (), int > :: type = 0 > // NOLINT(clion-misra-cpp2008-5-3-1)
         __CDS_MaybeUnused auto yield ( T && value, bool isFinal ) noexcept ( noexcept ( T ( std :: forward < T > ( value ) ) ) ) -> void {
             while ( this->trap ) {
 

@@ -2166,6 +2166,6 @@ namespace cds {
 
 }
 
-__CDS_RegisterParseType(Integer) // NOLINT(clion-misra-cpp2008-8-0-1)
+__CDS_Meta_RegisterParseType(Integer) // NOLINT(clion-misra-cpp2008-8-0-1)
 
 #endif //CDS_INTEGER_HPP

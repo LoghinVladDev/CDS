@@ -31,18 +31,18 @@ namespace cds {
 
     private:
 
-        using ClassName                 = RemoveReference < C >;
-        using IterableValue             = decltype ( * ( * ( Type < typename ClassName::Iterator > :: unsafeAddress () ) ) );
+        using ClassName                 = meta :: RemoveReference < C >;
+        using IterableValue             = decltype ( * ( meta :: valueOf < typename ClassName::Iterator > () ) );
 
     public:
-        using ElementType               = RemoveReference < IterableValue >;
+        using ElementType               = meta :: RemoveReference < IterableValue >;
 
     private:
         using StoredPredicate           = Function < bool (IterableValue) >;
-        using StoredMapper              = Function < RemoveReference < IterableValue > (IterableValue) >;
+        using StoredMapper              = Function < meta :: RemoveReference < IterableValue > (IterableValue) >;
 
         using StoredIndexedPredicate    = Function < bool (Index, IterableValue) >;
-        using StoredIndexedMapper       = Function < RemoveReference < IterableValue > (Index, IterableValue) >;
+        using StoredIndexedMapper       = Function < meta :: RemoveReference < IterableValue > (Index, IterableValue) >;
 
         friend class Iterator;
         friend class ConstIterator;
@@ -64,8 +64,8 @@ namespace cds {
     public:
         class Iterator : public Object {
         public:
-            using CollectionIterator = TypeIf <
-                    Type < CollectionType > :: isConst,
+            using CollectionIterator = meta :: Conditional <
+                    meta :: isConst < CollectionType > (),
                     typename CollectionType :: ConstIterator,
                     typename CollectionType :: Iterator
             >;
@@ -90,31 +90,31 @@ namespace cds {
 
     #else
 
-            template < typename U = C, EnableIf < isPrintable < decltype ( Sequence < U > :: Iterator :: it ) > :: value > = 0 >
+            template < typename U = C, meta :: EnableIf < meta :: isPrintable < decltype ( Sequence < U > :: Iterator :: it ) > () > = 0 >
             __CDS_NoDiscard auto toString () const noexcept -> String {
                 std::stringstream oss;
                 oss << "Sequence::Iterator { pSequence = " << this->pSeq.toString() << ", it = " << this->it << " }";
                 return oss.str();
             }
 
-            template < typename U = C, EnableIf < ! isPrintable < decltype ( Sequence < U > :: Iterator :: it ) > :: value > = 0 >
+            template < typename U = C, meta :: EnableIf < ! meta :: isPrintable < decltype ( Sequence < U > :: Iterator :: it ) > () > = 0 >
             __CDS_NoDiscard auto toString () const noexcept -> String {
                 std::stringstream oss;
                 oss << "Sequence::Iterator { pSequence = " << this->pSeq.toString() << ", value = " << * this->it << " }";
                 return oss.str();
             }
 
-            template < typename U = C, EnableIf < Type < decltype ( Sequence < U > :: Iterator :: it ) > :: objectDerived > = 0 >
+            template < typename U = C, meta :: EnableIf < meta :: isObjectDerived < Sequence < U > :: Iterator :: it > () > = 0 >
             __CDS_NoDiscard auto hash () const noexcept -> Index {
                 return this->it.hash();
             }
 
-            template < typename U = C, EnableIf < ! Type < decltype ( Sequence < U > :: Iterator :: it ) > :: objectDerived && Type < decltype ( Type < decltype ( Sequence < U > :: Iterator :: it ) > :: unsafeAddress () -> operator *() ) > :: objectDerived > = 0 >
+            template < typename U = C, meta :: EnableIf < ! meta :: isObjectDerived < Sequence < U > :: Iterator :: it > () && meta :: isObjectDerived < decltype ( * meta :: valueOf < decltype ( Sequence < U > :: Iterator :: it ) > () ) > () > = 0 >
             __CDS_NoDiscard auto hash () const noexcept -> Index {
                 return (* this->it).hash();
             }
 
-            template < typename U = C, EnableIf < ! Type < decltype ( Sequence < U > :: Iterator :: it ) > :: objectDerived && ! Type < decltype ( Type < decltype ( Sequence < U > :: Iterator :: it ) > :: unsafeAddress () -> operator *() ) > :: objectDerived > = 0 >
+            template < typename U = C, meta :: EnableIf < ! meta :: isObjectDerived < Sequence < U > :: Iterator :: it > () && ! meta :: isObjectDerived < decltype ( * meta :: valueOf < decltype ( Sequence < U > :: Iterator :: it ) > () ) > () > = 0 >
             __CDS_NoDiscard auto hash () const noexcept -> Index {
                 return 0;
             }
@@ -169,31 +169,31 @@ namespace cds {
 
     #else
 
-            template < typename U = C, EnableIf < isPrintable < decltype ( Sequence < U > :: ConstIterator :: it ) > :: value > = 0 >
+            template < typename U = C, meta :: EnableIf < meta :: isPrintable < decltype ( Sequence < U > :: ConstIterator :: it ) > () > = 0 >
             __CDS_NoDiscard auto toString () const noexcept -> String {
                 std::stringstream oss;
                 oss << "Sequence::Iterator { pSequence = " << this->pSeq.toString() << ", it = " << this->it << " }";
                 return oss.str();
             }
 
-            template < typename U = C, EnableIf < ! isPrintable < decltype ( Sequence < U > :: ConstIterator :: it ) > :: value > = 0 >
+            template < typename U = C, meta :: EnableIf < ! meta :: isPrintable < decltype ( Sequence < U > :: ConstIterator :: it ) > () > = 0 >
             __CDS_NoDiscard auto toString () const noexcept -> String {
                 std::stringstream oss;
                 oss << "Sequence::Iterator { pSequence = " << this->pSeq.toString() << ", value = " << * this->it << " }";
                 return oss.str();
             }
 
-            template < typename U = C, EnableIf < Type < decltype ( Sequence < U > :: ConstIterator :: it ) > :: objectDerived > = 0 >
+            template < typename U = C, meta :: EnableIf < meta :: isObjectDerived < Sequence < U > :: ConstIterator :: it > () > = 0 >
             __CDS_NoDiscard auto hash () const noexcept -> Index {
                 return this->it.hash();
             }
 
-            template < typename U = C, EnableIf < ! Type < decltype ( Sequence < U > :: ConstIterator :: it ) > :: objectDerived && Type < decltype ( Type < decltype ( Sequence < U > :: ConstIterator :: it ) > :: unsafeAddress () -> operator *() ) > :: objectDerived > = 0 >
+            template < typename U = C, meta :: EnableIf < ! meta :: isObjectDerived < Sequence < U > :: ConstIterator :: it > () && meta :: isObjectDerived < decltype ( * meta :: valueOf < decltype ( Sequence < U > :: ConstIterator :: it ) > () ) > () > = 0 >
             __CDS_NoDiscard auto hash () const noexcept -> Index {
                 return (* this->it).hash();
             }
 
-            template < typename U = C, EnableIf < ! Type < decltype ( Sequence < U > :: ConstIterator :: it ) > :: objectDerived && ! Type < decltype ( Type < decltype ( Sequence < U > :: ConstIterator :: it ) > :: unsafeAddress () -> operator *() ) > :: objectDerived > = 0 >
+            template < typename U = C, meta :: EnableIf < ! meta :: isObjectDerived < Sequence < U > :: ConstIterator :: it > () && ! meta :: isObjectDerived < decltype ( * meta :: valueOf < decltype ( Sequence < U > :: ConstIterator :: it ) > () ) > () > = 0 >
             __CDS_NoDiscard auto hash () const noexcept -> Index {
                 return 0;
             }
@@ -250,7 +250,7 @@ namespace cds {
         __CDS_Requires ( ForwardIterable < C > ) {
 
             for ( auto v : * this )
-                if ( Type < ElementType > :: compare ( element, v ) )
+                if ( meta :: equals ( element, v ) )
                     return true;
             return false;
         }
@@ -280,7 +280,7 @@ namespace cds {
             return replacement;
         }
 
-        template < typename T = ElementType, EnableIf < Type < T > :: isPointer > = 0 >
+        template < typename T = ElementType, meta :: EnableIf < meta :: isPointer < T > () > = 0 >
         __CDS_MaybeUnused auto elementAtOrNull ( Index i ) const noexcept -> ElementType
         __CDS_Requires ( ForwardIterable < C > ) {
 
@@ -300,7 +300,7 @@ namespace cds {
 
             Index i = 0;
             for ( auto v : * this )
-                if ( Type < ElementType > :: compare ( element, v ) )
+                if ( meta :: equals ( element, v ) )
                     return i;
                 else
                     i++;
@@ -313,7 +313,7 @@ namespace cds {
 
             Index i = 0, last = -1;
             for ( auto v : * this ) {
-                if ( Type < ElementType > :: compare ( element, v ) )
+                if ( meta :: equals ( element, v ) )
                     last = i;
                 i++;
             }
@@ -327,7 +327,7 @@ namespace cds {
             LinkedList < Index > result;
             Index i = 0;
             for ( auto v : * this ) {
-                if ( Type < ElementType > :: compare ( element, v ) )
+                if ( meta :: equals ( element, v ) )
                     result.append(i);
                 i++;
             }
@@ -922,13 +922,13 @@ namespace cds {
             return collection;
         }
 
-        template < typename NewType, typename OT = ElementType, typename NT = NewType, EnableIf < Type < OT > :: isBasicPointer > = 0 >
+        template < typename NewType, typename OT = ElementType, typename NT = NewType, meta :: EnableIf < meta :: isBasicPointer < OT > () > = 0 >
         __CDS_MaybeUnused auto filterIsDerived () && noexcept -> Sequence < LinkedList < NewType > >
         __CDS_Requires(
                 ForwardIterable < C > &&
                 Pointer < ElementType > &&
                 Pointer < NewType > &&
-                DerivedFrom < RemovePointer < NewType >, RemovePointer < ElementType > >
+                DerivedFrom < meta :: RemovePointer < NewType >, meta :: RemovePointer < ElementType > >
         ) {
 
             LinkedList < NewType > container;
@@ -941,13 +941,13 @@ namespace cds {
             return std::move ( Sequence < LinkedList < NewType > > ( std::move ( container ) ) );
         }
 
-        template < typename NewType, typename OT = ElementType, typename NT = NewType, EnableIf < Type < OT > :: isBasicPointer > = 0 >
+        template < typename NewType, typename OT = ElementType, typename NT = NewType, meta :: EnableIf < meta :: isBasicPointer < OT > () > = 0 >
         __CDS_MaybeUnused auto filterIsDerived () & noexcept -> Sequence < LinkedList < NewType > >
         __CDS_Requires(
                 ForwardIterable < C > &&
                 Pointer < ElementType > &&
                 Pointer < NewType > &&
-                DerivedFrom < RemovePointer < NewType >, RemovePointer < ElementType > >
+                DerivedFrom < meta :: RemovePointer < NewType >, meta :: RemovePointer < ElementType > >
         ) {
 
             LinkedList < NewType > container;
@@ -960,45 +960,52 @@ namespace cds {
             return std::move ( Sequence < LinkedList < NewType > > ( std::move ( container ) ) );
         }
 
-        template < typename NewType, typename OT = ElementType, typename NT = NewType, EnableIf < Type < OT > :: isSmartPointer > = 0 >
-        __CDS_MaybeUnused auto filterIsDerived () && noexcept -> Sequence < LinkedList < typename TypeExtensions < NT > :: AsUniquePointer > >
+        template < typename NewType, typename OT = ElementType, typename NT = NewType, typename BaseType = meta :: RemovePointer < meta :: RemoveReference < NT > >, meta :: EnableIf < meta :: isSmartPointer < OT > () > = 0 >
+        __CDS_MaybeUnused auto filterIsDerived () && noexcept -> Sequence < LinkedList < UniquePointer < BaseType > > >
         __CDS_Requires(
                 ForwardIterable < C > &&
                 Pointer < OT > &&
                 Pointer < NT > &&
-                DerivedFrom < RemovePointer < NewType >, RemovePointer < typename OT :: Pointer > >
+                DerivedFrom < meta :: RemovePointer < NewType >, meta :: RemovePointer < typename OT :: Pointer > >
         ) {
 
-            LinkedList < typename TypeExtensions < NT > :: AsUniquePointer > container;
+            LinkedList < UniquePointer < BaseType > > container;
             for ( auto e : * this ) {
                 auto p = dynamic_cast < NT > (e.release());
                 if ( p != nullptr )
-                    container.add( typename TypeExtensions < NT > :: AsUniquePointer ( p ) );
+                    container.add( UniquePointer < BaseType > ( p ) );
             }
 
-            return std::move ( Sequence < LinkedList < typename TypeExtensions < NT > :: AsForeignPointer > > ( std::move ( container ) ) );
+            return std::move ( Sequence < LinkedList < ForeignPointer < BaseType > > > ( std::move ( container ) ) );
         }
 
-        template < typename NewType, typename OT = ElementType, typename NT = NewType, EnableIf < Type < OT > :: isSmartPointer > = 0 >
-        __CDS_MaybeUnused auto filterIsDerived () & noexcept -> Sequence < LinkedList < typename TypeExtensions < NT > :: AsForeignPointer > >
+        template <
+                typename NewType,
+                typename OT = ElementType,
+                typename NT = NewType,
+                typename BaseType = meta :: RemovePointer < meta :: RemoveReference < NT > >,
+                typename AsUniquePointer = UniquePointer < BaseType >,
+                typename AsForeignPointer = ForeignPointer < BaseType >,
+                meta :: EnableIf < meta :: isSmartPointer < OT > () > = 0
+        > __CDS_MaybeUnused auto filterIsDerived () & noexcept -> Sequence < LinkedList < AsForeignPointer > >
         __CDS_Requires(
                 ForwardIterable < C > &&
                 Pointer < OT > &&
                 Pointer < NT > &&
-                DerivedFrom < RemovePointer < NewType >, RemovePointer < typename OT :: Pointer > >
+                DerivedFrom < meta :: RemovePointer < NewType >, meta :: RemovePointer < typename OT :: Pointer > >
         ) {
 
-            LinkedList < typename TypeExtensions < NT > :: AsForeignPointer > container;
+            LinkedList < AsForeignPointer > container;
             for ( auto e : * this ) {
                 auto p = dynamic_cast < NT > (e.get());
                 if ( p != nullptr )
-                    container.add( typename TypeExtensions < NT > :: AsForeignPointer ( p ) );
+                    container.add( AsForeignPointer ( p ) );
             }
 
-            return std::move ( Sequence < LinkedList < typename TypeExtensions < NT > :: AsForeignPointer > > ( std::move ( container ) ) );
+            return std::move ( Sequence < LinkedList < AsForeignPointer > > ( std::move ( container ) ) );
         }
 
-        template < typename NewType, typename CT = NewType, typename OT = ElementType, EnableIf < Type < OT > :: isBasicPointer > = 0 >
+        template < typename NewType, typename CT = NewType, typename OT = ElementType, meta :: EnableIf < meta :: isBasicPointer < OT > () > = 0 >
         __CDS_MaybeUnused auto filterIsDerivedTo (
                 Collection < CT > & collection
         ) const noexcept -> Collection < CT > &
@@ -1006,7 +1013,7 @@ namespace cds {
                 ForwardIterable < C > &&
                 Pointer < ElementType > &&
                 Pointer < NewType > &&
-                DerivedFrom < RemovePointer < NewType >, RemovePointer < ElementType > >
+                DerivedFrom < meta :: RemovePointer < NewType >, meta :: RemovePointer < ElementType > >
         ) {
 
             for ( auto e : * this ) {
@@ -1018,7 +1025,7 @@ namespace cds {
             return collection;
         }
 
-        template < typename NewType, typename CT, typename OT = ElementType, EnableIf < Type < OT > :: isSmartPointer > = 0 >
+        template < typename NewType, typename CT, typename OT = ElementType, meta :: EnableIf < meta :: isSmartPointer < OT > () > = 0 >
         __CDS_MaybeUnused auto filterIsDerivedTo (
                 Collection < CT > & collection
         ) const noexcept -> Collection < CT > &
@@ -1026,7 +1033,7 @@ namespace cds {
                 ForwardIterable < C > &&
                 Pointer < ElementType > &&
                 Pointer < NewType > &&
-                DerivedFrom < RemovePointer < NewType >, RemovePointer < typename OT :: Pointer > >
+                DerivedFrom < meta :: RemovePointer < NewType >, meta :: RemovePointer < typename OT :: Pointer > >
         ) {
 
             for ( auto e : * this ) {
@@ -1038,7 +1045,7 @@ namespace cds {
             return collection;
         }
 
-        template < typename T = ElementType, EnableIf < Type < T > :: isBasicPointer > = 0 >
+        template < typename T = ElementType, meta :: EnableIf < meta :: isBasicPointer < T > () > = 0 >
         __CDS_MaybeUnused auto filterNotNull () & noexcept -> Sequence < LinkedList < T > >
         __CDS_Requires( ForwardIterable < C > && Pointer < T > ) {
 
@@ -1050,7 +1057,7 @@ namespace cds {
             return std::move ( Sequence < LinkedList < T > > ( std::move ( container ) ) );
         }
 
-        template < typename T = ElementType, EnableIf < Type < T > :: isBasicPointer > = 0 >
+        template < typename T = ElementType, meta :: EnableIf < meta :: isBasicPointer < T > () > = 0 >
         __CDS_MaybeUnused auto filterNotNull () && noexcept -> Sequence < LinkedList < T > >
         __CDS_Requires( ForwardIterable < C > && Pointer < T > ) {
 
@@ -1062,7 +1069,7 @@ namespace cds {
             return std::move ( Sequence < LinkedList < T > > ( std::move ( container ) ) );
         }
 
-        template < typename T = ElementType, EnableIf < Type < T > :: isSmartPointer > = 0 >
+        template < typename T = ElementType, meta :: EnableIf < meta :: isSmartPointer < T > () > = 0 >
         __CDS_MaybeUnused auto filterNotNull () & noexcept -> Sequence < LinkedList < T > >
         __CDS_Requires( ForwardIterable < C > && Pointer < T > ) {
 
@@ -1074,7 +1081,7 @@ namespace cds {
             return std::move ( Sequence < LinkedList < T > > ( std::move ( container ) ) );
         }
 
-        template < typename T = ElementType, EnableIf < Type < T > :: isSmartPointer > = 0 >
+        template < typename T = ElementType, meta :: EnableIf < meta :: isSmartPointer < T > () > = 0 >
         __CDS_MaybeUnused auto filterNotNull () && noexcept -> Sequence < LinkedList < T > >
         __CDS_Requires( ForwardIterable < C > && Pointer < T > ) {
 
@@ -1086,7 +1093,7 @@ namespace cds {
             return std::move ( Sequence < LinkedList < T > > ( std::move ( container ) ) );
         }
 
-        template < typename T = ElementType, EnableIf < Type < T > :: isBasicPointer > = 0 >
+        template < typename T = ElementType, meta :: EnableIf < meta :: isBasicPointer < T > () > = 0 >
         __CDS_MaybeUnused auto filterNotNullTo (Collection < T > & collection) const noexcept -> Collection < T > &
         __CDS_Requires( ForwardIterable < C > && Pointer < T > ) {
 
@@ -1097,7 +1104,7 @@ namespace cds {
             return collection;
         }
 
-        template < typename T = ElementType, EnableIf < Type < T > :: isSmartPointer > = 0 >
+        template < typename T = ElementType, meta :: EnableIf < meta :: isSmartPointer < T > () > = 0 >
         __CDS_MaybeUnused auto filterNotNullTo (Collection < T > & collection) const noexcept -> Collection < T > &
         __CDS_Requires( ForwardIterable < C > && Pointer < T > ) {
 
@@ -1281,34 +1288,34 @@ namespace cds {
             return found;
         }
 
-        template < typename Transformer, EnableIf < isPair < ReturnOf < Transformer > > :: value > = 0 >
+        template < typename Transformer, meta :: EnableIf < meta :: isPair < meta :: ReturnOf < Transformer > > () > = 0 >
         __CDS_MaybeUnused auto associate (
                 Transformer const & transformer
-        ) && noexcept -> Sequence < LinkedList < ReturnOf < Transformer > > >
+        ) && noexcept -> Sequence < LinkedList < meta :: ReturnOf < Transformer > > >
         __CDS_Requires (
                 ForwardIterable < C > &&
-                PairType < ReturnOf < Transformer > > &&
+                PairType < meta :: ReturnOf < Transformer > > &&
                 TransformerOver < Transformer, ElementType >
         ) {
 
-            LinkedList < ReturnOf < Transformer > > container;
+            LinkedList < meta :: ReturnOf < Transformer > > container;
             for ( auto e : * this )
                 container.add ( transformer ( e ) );
 
             return std::move ( Sequence < decltype ( container ) > ( std::move ( container ) ) );
         }
 
-        template < typename Transformer, EnableIf < isPair < ReturnOf < Transformer > > :: value > = 0 >
+        template < typename Transformer, meta :: EnableIf < meta :: isPair < meta :: ReturnOf < Transformer > > () > = 0 >
         __CDS_MaybeUnused auto associate (
                 Transformer const & transformer
-        ) & noexcept -> Sequence < LinkedList < ReturnOf < Transformer > > >
+        ) & noexcept -> Sequence < LinkedList < meta :: ReturnOf < Transformer > > >
         __CDS_Requires (
                 ForwardIterable < C > &&
-                PairType < ReturnOf < Transformer > > &&
+                PairType < meta :: ReturnOf < Transformer > > &&
                 TransformerOver < Transformer, ElementType >
         ) {
 
-            LinkedList < ReturnOf < Transformer > > container;
+            LinkedList < meta :: ReturnOf < Transformer > > container;
             for ( auto e : * this )
                 container.add ( transformer ( e ) );
 
@@ -1318,13 +1325,13 @@ namespace cds {
         template < typename KeyGenerator >
         __CDS_MaybeUnused auto associateBy (
                 KeyGenerator const & keyGenerator
-        ) && noexcept -> Sequence < LinkedList < Pair < ReturnOf < KeyGenerator >, ElementType > > >
+        ) && noexcept -> Sequence < LinkedList < Pair < meta :: ReturnOf < KeyGenerator >, ElementType > > >
         __CDS_Requires (
                 ForwardIterable < C > &&
-                FunctionOver < KeyGenerator, ReturnOf < KeyGenerator >, ElementType >
+                FunctionOver < KeyGenerator, meta :: ReturnOf < KeyGenerator >, ElementType >
         ) {
 
-            LinkedList < Pair < ReturnOf < KeyGenerator >, ElementType > > container;
+            LinkedList < Pair < meta :: ReturnOf < KeyGenerator >, ElementType > > container;
             for ( auto e : * this )
                 container.add ( { keyGenerator ( e ), e } );
 
@@ -1334,13 +1341,13 @@ namespace cds {
         template < typename KeyGenerator >
         __CDS_MaybeUnused auto associateBy (
                 KeyGenerator const & keyGenerator
-        ) & noexcept -> Sequence < LinkedList < Pair < ReturnOf < KeyGenerator >, ElementType > > >
+        ) & noexcept -> Sequence < LinkedList < Pair < meta :: ReturnOf < KeyGenerator >, ElementType > > >
         __CDS_Requires (
                 ForwardIterable < C > &&
-                FunctionOver < KeyGenerator, ReturnOf < KeyGenerator >, ElementType >
+                FunctionOver < KeyGenerator, meta :: ReturnOf < KeyGenerator >, ElementType >
         ) {
 
-            LinkedList < Pair < ReturnOf < KeyGenerator >, ElementType > > container;
+            LinkedList < Pair < meta :: ReturnOf < KeyGenerator >, ElementType > > container;
             for ( auto e : * this )
                 container.add ( { keyGenerator ( e ), e } );
 
@@ -1351,14 +1358,14 @@ namespace cds {
         __CDS_MaybeUnused auto associateBy (
                 KeyGenerator    const & keyGenerator,
                 ValueMapper     const & valueMapper
-        ) && noexcept -> Sequence < LinkedList < Pair < ReturnOf < KeyGenerator >, ReturnOf < ValueMapper > > > >
+        ) && noexcept -> Sequence < LinkedList < Pair < meta :: ReturnOf < KeyGenerator >, meta :: ReturnOf < ValueMapper > > > >
         __CDS_Requires (
                 ForwardIterable < C > &&
-                FunctionOver < KeyGenerator, ReturnOf < KeyGenerator >, ElementType > &&
-                FunctionOver < ValueMapper, ReturnOf < ValueMapper >, ElementType >
+                FunctionOver < KeyGenerator, meta :: ReturnOf < KeyGenerator >, ElementType > &&
+                FunctionOver < ValueMapper, meta :: ReturnOf < ValueMapper >, ElementType >
         ) {
 
-            LinkedList < Pair < ReturnOf < KeyGenerator >, ReturnOf < ValueMapper > > > container;
+            LinkedList < Pair < meta :: ReturnOf < KeyGenerator >, meta :: ReturnOf < ValueMapper > > > container;
             for ( auto e : * this )
                 container.add( { keyGenerator ( e ), valueMapper ( e ) } );
 
@@ -1369,14 +1376,14 @@ namespace cds {
         __CDS_MaybeUnused auto associateBy (
                 KeyGenerator    const & keyGenerator,
                 ValueMapper     const & valueMapper
-        ) & noexcept -> Sequence < LinkedList < Pair < ReturnOf < KeyGenerator >, ReturnOf < ValueMapper > > > >
+        ) & noexcept -> Sequence < LinkedList < Pair < meta :: ReturnOf < KeyGenerator >, meta :: ReturnOf < ValueMapper > > > >
         __CDS_Requires (
                 ForwardIterable < C > &&
-                FunctionOver < KeyGenerator, ReturnOf < KeyGenerator >, ElementType > &&
-                FunctionOver < ValueMapper, ReturnOf < ValueMapper >, ElementType >
+                FunctionOver < KeyGenerator, meta :: ReturnOf < KeyGenerator >, ElementType > &&
+                FunctionOver < ValueMapper, meta :: ReturnOf < ValueMapper >, ElementType >
         ) {
 
-            LinkedList < Pair < ReturnOf < KeyGenerator >, ReturnOf < ValueMapper > > > container;
+            LinkedList < Pair < meta :: ReturnOf < KeyGenerator >, meta :: ReturnOf < ValueMapper > > > container;
             for ( auto e : * this )
                 container.add( { keyGenerator ( e ), valueMapper ( e ) } );
 
@@ -1385,12 +1392,12 @@ namespace cds {
 
         template < typename KeyGenerator >
         __CDS_MaybeUnused __CDS_OptimalInline auto associateByTo (
-                Map < ReturnOf < KeyGenerator >, ElementType >        & m,
+                Map < meta :: ReturnOf < KeyGenerator >, ElementType >        & m,
                 KeyGenerator                                    const & keyGenerator
-        ) const noexcept -> Map < ReturnOf < KeyGenerator >, ElementType > &
+        ) const noexcept -> Map < meta :: ReturnOf < KeyGenerator >, ElementType > &
         __CDS_Requires (
                 ForwardIterable < C > &&
-                FunctionOver < KeyGenerator, ReturnOf < KeyGenerator >, ElementType >
+                FunctionOver < KeyGenerator, meta :: ReturnOf < KeyGenerator >, ElementType >
         ) {
 
             for ( auto e : * this )
@@ -1400,14 +1407,14 @@ namespace cds {
 
         template < typename KeyGenerator, typename ValueMapper >
         __CDS_MaybeUnused __CDS_OptimalInline auto associateByTo (
-                Map < ReturnOf < KeyGenerator >, ReturnOf < ValueMapper > >       & m,
+                Map < meta :: ReturnOf < KeyGenerator >, meta :: ReturnOf < ValueMapper > >       & m,
                 KeyGenerator                                                const & keyGenerator,
                 ValueMapper                                                 const & valueMapper
-        ) const noexcept -> Map < ReturnOf < KeyGenerator >, ReturnOf < ValueMapper > > &
+        ) const noexcept -> Map < meta :: ReturnOf < KeyGenerator >, meta :: ReturnOf < ValueMapper > > &
         __CDS_Requires (
                 ForwardIterable < C > &&
-                FunctionOver < KeyGenerator, ReturnOf < KeyGenerator >, ElementType > &&
-                FunctionOver < ValueMapper, ReturnOf < ValueMapper >, ElementType >
+                FunctionOver < KeyGenerator, meta :: ReturnOf < KeyGenerator >, ElementType > &&
+                FunctionOver < ValueMapper, meta :: ReturnOf < ValueMapper >, ElementType >
         ) {
 
             for ( auto e : * this )
@@ -1422,7 +1429,7 @@ namespace cds {
         ) const noexcept -> Map < K, V > &
         __CDS_Requires (
                 ForwardIterable < C > &&
-                PairType < ReturnOf < Transformer > > &&
+                PairType < meta :: ReturnOf < Transformer > > &&
                 TransformerOver < Transformer, ElementType >
         ) {
 
@@ -1437,13 +1444,13 @@ namespace cds {
         template < typename ValueMapper >
         __CDS_MaybeUnused auto associateWith (
                 ValueMapper const & valueMapper
-        ) && noexcept -> Sequence < LinkedList < Pair < ElementType, ReturnOf < ValueMapper > > > >
+        ) && noexcept -> Sequence < LinkedList < Pair < ElementType, meta :: ReturnOf < ValueMapper > > > >
         __CDS_Requires (
                 ForwardIterable < C > &&
-                FunctionOver < ValueMapper, ReturnOf < ValueMapper >, ElementType >
+                FunctionOver < ValueMapper, meta :: ReturnOf < ValueMapper >, ElementType >
         ) {
 
-            LinkedList < Pair < ElementType, ReturnOf < ValueMapper > > > container;
+            LinkedList < Pair < ElementType, meta :: ReturnOf < ValueMapper > > > container;
             for ( auto e : * this )
                 container.add( { e, valueMapper(e) } );
 
@@ -1453,13 +1460,13 @@ namespace cds {
         template < typename ValueMapper >
         __CDS_MaybeUnused auto associateWith (
                 ValueMapper const & valueMapper
-        ) & noexcept -> Sequence < LinkedList < Pair < ElementType, ReturnOf < ValueMapper > > > >
+        ) & noexcept -> Sequence < LinkedList < Pair < ElementType, meta :: ReturnOf < ValueMapper > > > >
         __CDS_Requires (
                 ForwardIterable < C > &&
-                FunctionOver < ValueMapper, ReturnOf < ValueMapper >, ElementType >
+                FunctionOver < ValueMapper, meta :: ReturnOf < ValueMapper >, ElementType >
         ) {
 
-            LinkedList < Pair < ElementType, ReturnOf < ValueMapper > > > container;
+            LinkedList < Pair < ElementType, meta :: ReturnOf < ValueMapper > > > container;
             for ( auto e : * this )
                 container.add( { e, valueMapper(e) } );
 
@@ -1468,12 +1475,12 @@ namespace cds {
 
         template < typename ValueMapper >
         __CDS_MaybeUnused auto associateWithTo (
-                Map < ElementType, ReturnOf < ValueMapper > >         & m,
+                Map < ElementType, meta :: ReturnOf < ValueMapper > >         & m,
                 ValueMapper                                     const & mapper
-        ) const noexcept -> Map < ElementType , ReturnOf < ValueMapper > > &
+        ) const noexcept -> Map < ElementType , meta :: ReturnOf < ValueMapper > > &
         __CDS_Requires (
                 ForwardIterable < C > &&
-                FunctionOver < ValueMapper, ReturnOf < ValueMapper >, ElementType >
+                FunctionOver < ValueMapper, meta :: ReturnOf < ValueMapper >, ElementType >
         ) {
 
             for ( auto e : * this )
@@ -1559,19 +1566,19 @@ namespace cds {
 
         template <
                 typename Selector,
-                typename Comparator = Function < bool ( ReturnOf < Selector > const &, ReturnOf < Selector > const & ) >
+                typename Comparator = Function < bool ( meta :: ReturnOf < Selector > const &, meta :: ReturnOf < Selector > const & ) >
         >
         __CDS_MaybeUnused auto sortedByWith (
                 Selector    const & selector,
                 Comparator  const & comparator = [](
-                        ReturnOf < Selector > const & a,
-                        ReturnOf < Selector > const & b
+                        meta :: ReturnOf < Selector > const & a,
+                        meta :: ReturnOf < Selector > const & b
                 ) noexcept -> bool { return a < b; }
         ) && noexcept -> Sequence < Array < ElementType > >
         __CDS_Requires (
                 ForwardIterable < C > &&
                 SelectorFor < Selector, ElementType > &&
-                ComparatorFor < Comparator, ReturnOf < Selector > >
+                ComparatorFor < Comparator, meta :: ReturnOf < Selector > >
         ) {
 
             return this->sorted([& selector, & comparator](ElementType const & a, ElementType const & b){
@@ -1581,19 +1588,19 @@ namespace cds {
 
         template <
                 typename Selector,
-                typename Comparator = Function < bool ( ReturnOf < Selector > const &, ReturnOf < Selector > const & ) >
+                typename Comparator = Function < bool ( meta :: ReturnOf < Selector > const &, meta :: ReturnOf < Selector > const & ) >
         >
         __CDS_MaybeUnused auto sortedByWith (
                 Selector    const & selector,
                 Comparator  const & comparator = [](
-                        ReturnOf < Selector > const & a,
-                        ReturnOf < Selector > const & b
+                        meta :: ReturnOf < Selector > const & a,
+                        meta :: ReturnOf < Selector > const & b
                 ) noexcept -> bool { return a < b; }
         ) & noexcept -> Sequence < Array < ElementType > >
         __CDS_Requires (
                 ForwardIterable < C > &&
                 SelectorFor < Selector, ElementType > &&
-                ComparatorFor < Comparator, ReturnOf < Selector > >
+                ComparatorFor < Comparator, meta :: ReturnOf < Selector > >
         ) {
 
             return this->sorted([& selector, & comparator](ElementType const & a, ElementType const & b){
@@ -1641,7 +1648,7 @@ namespace cds {
 
         template <
                 typename U = C,
-                EnableIf < utility :: hidden :: sequenceImpl::containedTypeIsPair < U > () > = 0,
+                meta :: EnableIf < utility :: hidden :: sequenceImpl::containedTypeIsPair < U > () > = 0,
                 typename FirstType = typename utility :: hidden :: sequenceImpl::ContainedTypeAsPair < U > :: FirstType,
                 typename SecondType = typename utility :: hidden :: sequenceImpl::ContainedTypeAsPair < U > :: SecondType,
                 typename PType = typename utility :: hidden :: sequenceImpl::ContainedTypeAsPair < U > :: Type
@@ -1659,7 +1666,7 @@ namespace cds {
 
         template <
                 typename U = C,
-                EnableIf < utility :: hidden :: sequenceImpl :: containedTypeIsPair < U > () > = 0,
+                meta :: EnableIf < utility :: hidden :: sequenceImpl :: containedTypeIsPair < U > () > = 0,
                 typename FirstType = typename utility :: hidden :: sequenceImpl::ContainedTypeAsPair < U > :: FirstType,
                 typename SecondType = typename utility :: hidden :: sequenceImpl::ContainedTypeAsPair < U > :: SecondType,
                 typename PType = typename utility :: hidden :: sequenceImpl::ContainedTypeAsPair < U > :: Type
@@ -1740,7 +1747,7 @@ namespace cds {
 
         template <
                 typename U = C,
-                EnableIf < utility :: hidden :: sequenceImpl::containedTypeIsPair < U > () > = 0,
+                meta :: EnableIf < utility :: hidden :: sequenceImpl::containedTypeIsPair < U > () > = 0,
                 typename FirstType = typename utility :: hidden :: sequenceImpl::ContainedTypeAsPair < U > :: FirstType,
                 typename SecondType = typename utility :: hidden :: sequenceImpl::ContainedTypeAsPair < U > :: SecondType,
                 typename PType = typename utility :: hidden :: sequenceImpl::ContainedTypeAsPair < U > :: Type
@@ -1758,7 +1765,7 @@ namespace cds {
 
         template <
                 typename U = C,
-                EnableIf < utility :: hidden :: sequenceImpl::containedTypeIsPair < U > () > = 0,
+                meta :: EnableIf < utility :: hidden :: sequenceImpl::containedTypeIsPair < U > () > = 0,
                 typename FirstType = typename utility :: hidden :: sequenceImpl::ContainedTypeAsPair < U > :: FirstType,
                 typename SecondType = typename utility :: hidden :: sequenceImpl::ContainedTypeAsPair < U > :: SecondType,
                 typename PType = typename utility :: hidden :: sequenceImpl::ContainedTypeAsPair < U > :: Type
@@ -1780,7 +1787,7 @@ namespace cds {
         ) && noexcept -> Sequence < LinkedList < utility :: hidden :: sequenceImpl :: FlatMapDeducedType < Transformer > > >
         __CDS_Requires (
                 ForwardIterable < C > &&
-                ForwardIterable < ReturnOf < Transformer > > &&
+                ForwardIterable < meta :: ReturnOf < Transformer > > &&
                 TransformerOver < Transformer, ElementType >
         ) {
 
@@ -1798,7 +1805,7 @@ namespace cds {
         ) & noexcept -> Sequence < LinkedList < utility :: hidden :: sequenceImpl :: FlatMapDeducedType < Transformer > > >
         __CDS_Requires (
                 ForwardIterable < C > &&
-                ForwardIterable < ReturnOf < Transformer > > &&
+                ForwardIterable < meta :: ReturnOf < Transformer > > &&
                 TransformerOver < Transformer, ElementType >
         ) {
 
@@ -1815,7 +1822,7 @@ namespace cds {
                 IndexedTransformer const & transformer
         ) && noexcept -> Sequence < LinkedList < utility :: hidden :: sequenceImpl :: FlatMapDeducedType < IndexedTransformer > > > __CDS_Requires (
                 ForwardIterable < C > &&
-                ForwardIterable < ReturnOf < IndexedTransformer > > &&
+                ForwardIterable < meta :: ReturnOf < IndexedTransformer > > &&
                 TransformerOver < IndexedTransformer, Index, ElementType >
         ) {
 
@@ -1833,7 +1840,7 @@ namespace cds {
                 IndexedTransformer const & transformer
         ) & noexcept -> Sequence < LinkedList < utility :: hidden :: sequenceImpl :: FlatMapDeducedType < IndexedTransformer > > > __CDS_Requires (
                 ForwardIterable < C > &&
-                ForwardIterable < ReturnOf < IndexedTransformer > > &&
+                ForwardIterable < meta :: ReturnOf < IndexedTransformer > > &&
                 TransformerOver < IndexedTransformer, Index, ElementType >
         ) {
 
@@ -1852,7 +1859,7 @@ namespace cds {
                 Transformer                                                         const & transformer
         ) const noexcept -> Collection < utility :: hidden :: sequenceImpl :: FlatMapDeducedType < Transformer > > & __CDS_Requires (
                 ForwardIterable < C > &&
-                ForwardIterable < ReturnOf < Transformer > > &&
+                ForwardIterable < meta :: ReturnOf < Transformer > > &&
                 TransformerOver < Transformer, ElementType >
         ) {
 
@@ -1869,7 +1876,7 @@ namespace cds {
                 IndexedTransformer                                                          const & transformer
         ) const noexcept -> Collection < utility :: hidden :: sequenceImpl :: FlatMapDeducedType < IndexedTransformer > > & __CDS_Requires (
                 ForwardIterable < C > &&
-                ForwardIterable < ReturnOf < IndexedTransformer > > &&
+                ForwardIterable < meta :: ReturnOf < IndexedTransformer > > &&
                 TransformerOver < IndexedTransformer, Index, ElementType >
         ) {
 
@@ -1884,13 +1891,13 @@ namespace cds {
         template < typename KeySelector >
         __CDS_MaybeUnused auto groupBy (
                 KeySelector const & keySelector
-        ) && noexcept -> Sequence < HashMap < ReturnOf < KeySelector >, LinkedList < ElementType > > >
+        ) && noexcept -> Sequence < HashMap < meta :: ReturnOf < KeySelector >, LinkedList < ElementType > > >
         __CDS_Requires (
                 ForwardIterable < C > &&
-                FunctionOver < KeySelector, ReturnOf < KeySelector >, ElementType >
+                FunctionOver < KeySelector, meta :: ReturnOf < KeySelector >, ElementType >
         ) {
 
-            HashMap < ReturnOf < KeySelector >, LinkedList < ElementType > > container;
+            HashMap < meta :: ReturnOf < KeySelector >, LinkedList < ElementType > > container;
 
             for ( auto e : * this ) {
                 auto k = keySelector ( e );
@@ -1906,13 +1913,13 @@ namespace cds {
         template < typename KeySelector >
         __CDS_MaybeUnused auto groupBy (
                 KeySelector const & keySelector
-        ) & noexcept -> Sequence < HashMap < ReturnOf < KeySelector >, LinkedList < ElementType > > >
+        ) & noexcept -> Sequence < HashMap < meta :: ReturnOf < KeySelector >, LinkedList < ElementType > > >
         __CDS_Requires (
                 ForwardIterable < C > &&
-                FunctionOver < KeySelector, ReturnOf < KeySelector >, ElementType >
+                FunctionOver < KeySelector, meta :: ReturnOf < KeySelector >, ElementType >
         ) {
 
-            HashMap < ReturnOf < KeySelector >, LinkedList < ElementType > > container;
+            HashMap < meta :: ReturnOf < KeySelector >, LinkedList < ElementType > > container;
 
             for ( auto e : * this ) {
                 auto k = keySelector ( e );
@@ -1929,14 +1936,14 @@ namespace cds {
         __CDS_MaybeUnused auto groupBy (
                 KeySelector const & keySelector,
                 ValueMapper const & valueMapper
-        ) && noexcept -> Sequence < HashMap < ReturnOf < KeySelector >, LinkedList < ReturnOf < ValueMapper > > > >
+        ) && noexcept -> Sequence < HashMap < meta :: ReturnOf < KeySelector >, LinkedList < meta :: ReturnOf < ValueMapper > > > >
         __CDS_Requires (
                 ForwardIterable < C > &&
-                FunctionOver < KeySelector, ReturnOf < KeySelector >, ElementType > &&
-                FunctionOver < ValueMapper, ReturnOf < ValueMapper >, ElementType >
+                FunctionOver < KeySelector, meta :: ReturnOf < KeySelector >, ElementType > &&
+                FunctionOver < ValueMapper, meta :: ReturnOf < ValueMapper >, ElementType >
         ) {
 
-            HashMap < ReturnOf < KeySelector >, LinkedList < ReturnOf < ValueMapper > > > container;
+            HashMap < meta :: ReturnOf < KeySelector >, LinkedList < meta :: ReturnOf < ValueMapper > > > container;
 
             for ( auto e : * this ) {
                 auto k = keySelector ( e ); auto v = valueMapper ( e );
@@ -1953,14 +1960,14 @@ namespace cds {
         __CDS_MaybeUnused auto groupBy (
                 KeySelector const & keySelector,
                 ValueMapper const & valueMapper
-        ) & noexcept -> Sequence < HashMap < ReturnOf < KeySelector >, LinkedList < ReturnOf < ValueMapper > > > >
+        ) & noexcept -> Sequence < HashMap < meta :: ReturnOf < KeySelector >, LinkedList < meta :: ReturnOf < ValueMapper > > > >
         __CDS_Requires (
                 ForwardIterable < C > &&
-                FunctionOver < KeySelector, ReturnOf < KeySelector >, ElementType > &&
-                FunctionOver < ValueMapper, ReturnOf < ValueMapper >, ElementType >
+                FunctionOver < KeySelector, meta :: ReturnOf < KeySelector >, ElementType > &&
+                FunctionOver < ValueMapper, meta :: ReturnOf < ValueMapper >, ElementType >
         ) {
 
-            HashMap < ReturnOf < KeySelector >, LinkedList < ReturnOf < ValueMapper > > > container;
+            HashMap < meta :: ReturnOf < KeySelector >, LinkedList < meta :: ReturnOf < ValueMapper > > > container;
 
             for ( auto e : * this ) {
                 auto k = keySelector ( e ); auto v = valueMapper ( e );
@@ -1975,12 +1982,12 @@ namespace cds {
 
         template < typename KeySelector >
         __CDS_MaybeUnused auto groupByTo (
-                Map < ReturnOf < KeySelector >, LinkedList < ElementType > >          & map,
+                Map < meta :: ReturnOf < KeySelector >, LinkedList < ElementType > >          & map,
                 KeySelector                                                     const & keySelector
-        ) const noexcept -> Map < ReturnOf < KeySelector >, LinkedList < ElementType > > &
+        ) const noexcept -> Map < meta :: ReturnOf < KeySelector >, LinkedList < ElementType > > &
         __CDS_Requires (
                 ForwardIterable < C > &&
-                FunctionOver < KeySelector, ReturnOf < KeySelector >, ElementType >
+                FunctionOver < KeySelector, meta :: ReturnOf < KeySelector >, ElementType >
         ) {
 
             for ( auto e : * this ) {
@@ -1996,14 +2003,14 @@ namespace cds {
 
         template < typename KeySelector, typename ValueMapper >
         __CDS_MaybeUnused auto groupByTo (
-                Map < ReturnOf < KeySelector >, LinkedList < ReturnOf < ValueMapper > > >         & map,
+                Map < meta :: ReturnOf < KeySelector >, LinkedList < meta :: ReturnOf < ValueMapper > > >         & map,
                 KeySelector                                                                 const & keySelector,
                 ValueMapper                                                                 const & valueMapper
-        ) const noexcept -> Map < ReturnOf < KeySelector >, LinkedList < ReturnOf < ValueMapper > > > &
+        ) const noexcept -> Map < meta :: ReturnOf < KeySelector >, LinkedList < meta :: ReturnOf < ValueMapper > > > &
         __CDS_Requires (
                 ForwardIterable < C > &&
-                FunctionOver < KeySelector, ReturnOf < KeySelector >, ElementType > &&
-                FunctionOver < ValueMapper, ReturnOf < ValueMapper >, ElementType >
+                FunctionOver < KeySelector, meta :: ReturnOf < KeySelector >, ElementType > &&
+                FunctionOver < ValueMapper, meta :: ReturnOf < ValueMapper >, ElementType >
         ) {
 
             for ( auto e : * this ) {
@@ -2026,20 +2033,20 @@ namespace cds {
          * Two versions of map, one for storage of mappers when keeping same type, another for switching to another data type
          */
 
-        template < typename Mapper, EnableIf < ! utility :: hidden :: sequenceImpl :: mapToSameType < Mapper, C > () > = 0 >
+        template < typename Mapper, meta :: EnableIf < ! utility :: hidden :: sequenceImpl :: mapToSameType < Mapper, C > () > = 0 >
         __CDS_MaybeUnused auto map (
                 Mapper const & mapper
-        ) && noexcept -> Sequence < LinkedList < ReturnOf < Mapper > > >
+        ) && noexcept -> Sequence < LinkedList < meta :: ReturnOf < Mapper > > >
         __CDS_Requires ( ForwardIterable < C > && MapperFor < Mapper, ElementType > ) {
 
-            LinkedList < ReturnOf < Mapper > > container;
+            LinkedList < meta :: ReturnOf < Mapper > > container;
             for ( auto e : * this )
                 container.append(mapper(e));
 
-            return std::move(Sequence < LinkedList < ReturnOf < Mapper > > > (std::move(container)));
+            return std::move(Sequence < LinkedList < meta :: ReturnOf < Mapper > > > (std::move(container)));
         }
 
-        template < typename Mapper, EnableIf < utility :: hidden :: sequenceImpl :: mapToSameType < Mapper, C > () > = 0 >
+        template < typename Mapper, meta :: EnableIf < utility :: hidden :: sequenceImpl :: mapToSameType < Mapper, C > () > = 0 >
         __CDS_MaybeUnused __CDS_OptimalInline auto map (
                 Mapper const & mapper
         ) && noexcept -> Sequence < C >
@@ -2049,20 +2056,20 @@ namespace cds {
             return std::move ( * this );
         }
 
-        template < typename Mapper, EnableIf < ! utility :: hidden :: sequenceImpl :: mapToSameType < Mapper, C > () > = 0 >
+        template < typename Mapper, meta :: EnableIf < ! utility :: hidden :: sequenceImpl :: mapToSameType < Mapper, C > () > = 0 >
         __CDS_MaybeUnused auto map (
                 Mapper const & mapper
-        ) & noexcept -> Sequence < LinkedList < ReturnOf < Mapper > > >
+        ) & noexcept -> Sequence < LinkedList < meta :: ReturnOf < Mapper > > >
         __CDS_Requires ( ForwardIterable < C > && MapperFor < Mapper, ElementType > ) {
 
-            LinkedList < ReturnOf < Mapper > > container;
+            LinkedList < meta :: ReturnOf < Mapper > > container;
             for ( auto e : * this )
                 container.append(mapper(e));
 
-            return std::move(Sequence < LinkedList < ReturnOf < Mapper > > > (std::move(container)));
+            return std::move(Sequence < LinkedList < meta :: ReturnOf < Mapper > > > (std::move(container)));
         }
 
-        template < typename Mapper, EnableIf < utility :: hidden :: sequenceImpl :: mapToSameType < Mapper, C > () > = 0 >
+        template < typename Mapper, meta :: EnableIf < utility :: hidden :: sequenceImpl :: mapToSameType < Mapper, C > () > = 0 >
         __CDS_MaybeUnused auto map (
                 Mapper const & mapper
         ) & noexcept -> Sequence < C >
@@ -2074,35 +2081,35 @@ namespace cds {
         }
 
 
-        template < typename IndexedMapper, EnableIf < ! utility :: hidden :: sequenceImpl :: mapToSameType < IndexedMapper, C > () > = 0 >
+        template < typename IndexedMapper, meta :: EnableIf < ! utility :: hidden :: sequenceImpl :: mapToSameType < IndexedMapper, C > () > = 0 >
         __CDS_MaybeUnused auto mapIndexed (
                 IndexedMapper const & indexedMapper
-        ) && noexcept -> Sequence < LinkedList < ReturnOf < IndexedMapper > > >
+        ) && noexcept -> Sequence < LinkedList < meta :: ReturnOf < IndexedMapper > > >
         __CDS_Requires ( ForwardIterable < C > && MapperFor < IndexedMapper, Index, ElementType > ) {
 
-            LinkedList < ReturnOf < IndexedMapper > > container;
+            LinkedList < meta :: ReturnOf < IndexedMapper > > container;
             Index i = 0;
             for ( auto e : * this )
                 container.append(mapper(i++, e));
 
-            return std::move(Sequence < LinkedList < ReturnOf < IndexedMapper > > > (std::move(container)));
+            return std::move(Sequence < LinkedList < meta :: ReturnOf < IndexedMapper > > > (std::move(container)));
         }
 
-        template < typename IndexedMapper, EnableIf < ! utility :: hidden :: sequenceImpl :: mapToSameType < IndexedMapper, C > () > = 0 >
+        template < typename IndexedMapper, meta :: EnableIf < ! utility :: hidden :: sequenceImpl :: mapToSameType < IndexedMapper, C > () > = 0 >
         __CDS_MaybeUnused auto mapIndexed (
                 IndexedMapper const & mapper
-        ) & noexcept -> Sequence < LinkedList < ReturnOf < IndexedMapper > > >
+        ) & noexcept -> Sequence < LinkedList < meta :: ReturnOf < IndexedMapper > > >
         __CDS_Requires ( ForwardIterable < C > && MapperFor < IndexedMapper, Index, ElementType > ) {
 
-            LinkedList < ReturnOf < IndexedMapper > > container;
+            LinkedList < meta :: ReturnOf < IndexedMapper > > container;
             Index i = 0;
             for ( auto e : * this )
                 container.append(mapper(i++, e));
 
-            return std::move(Sequence < LinkedList < ReturnOf < IndexedMapper > > > (std::move(container)));
+            return std::move(Sequence < LinkedList < meta :: ReturnOf < IndexedMapper > > > (std::move(container)));
         }
 
-        template < typename IndexedMapper, EnableIf < utility :: hidden :: sequenceImpl :: mapToSameType < IndexedMapper, C > () > = 0 >
+        template < typename IndexedMapper, meta :: EnableIf < utility :: hidden :: sequenceImpl :: mapToSameType < IndexedMapper, C > () > = 0 >
         __CDS_MaybeUnused auto mapIndexed (
                 IndexedMapper const & mapper
         ) && noexcept -> Sequence < C >
@@ -2112,7 +2119,7 @@ namespace cds {
             return std::move ( * this );
         }
 
-        template < typename IndexedMapper, EnableIf < utility :: hidden :: sequenceImpl :: mapToSameType < IndexedMapper, C > () > = 0 >
+        template < typename IndexedMapper, meta :: EnableIf < utility :: hidden :: sequenceImpl :: mapToSameType < IndexedMapper, C > () > = 0 >
         __CDS_MaybeUnused auto mapIndexed (
                 IndexedMapper const & mapper
         ) & noexcept -> Sequence < C >
@@ -2131,7 +2138,7 @@ namespace cds {
         __CDS_Requires (
                 ForwardIterable < C > &&
                 MapperFor < Mapper, ElementType > &&
-                ConvertibleTo < ReturnOf < Mapper >, R >
+                ConvertibleTo < meta :: ReturnOf < Mapper >, R >
         ) {
 
             for ( auto e : * this )
@@ -2147,7 +2154,7 @@ namespace cds {
         __CDS_Requires (
                 ForwardIterable < C > &&
                 MapperFor < IndexedMapper, Index, ElementType > &&
-                ConvertibleTo < ReturnOf < IndexedMapper >, R >
+                ConvertibleTo < meta :: ReturnOf < IndexedMapper >, R >
         ) {
 
             Index i = 0;
@@ -2215,7 +2222,7 @@ namespace cds {
 
             UnorderedSet < ElementType > container;
             for ( auto e : * this )
-                if ( ! container.any([&](ElementType const & cE){ return Type < ElementType > :: compare ( selector(cE), selector(e) ); }) )
+                if ( ! container.any([&](ElementType const & cE){ return meta :: equals ( selector(cE), selector(e) ); }) )
                     container.add ( e );
             return std::move ( Sequence < decltype (container) > ( std::move ( container ) ) );
         }
@@ -2348,7 +2355,7 @@ namespace cds {
         }
 
         template < typename Selector >
-        __CDS_MaybeUnused auto maxOf ( Selector const & selector ) const noexcept -> Optional < ReturnOf < Selector > >
+        __CDS_MaybeUnused auto maxOf ( Selector const & selector ) const noexcept -> Optional < meta :: ReturnOf < Selector > >
         __CDS_Requires (
                 ForwardIterable < C > &&
                 AscendingSelectorFor < Selector, ElementType >
@@ -2394,9 +2401,9 @@ namespace cds {
 
         template < typename Selector >
         __CDS_MaybeUnused auto maxOfOr (
-                ReturnOf < Selector >   const & e,
+                meta :: ReturnOf < Selector >   const & e,
                 Selector                const & selector
-        ) const noexcept -> ReturnOf < Selector > __CDS_Requires (
+        ) const noexcept -> meta :: ReturnOf < Selector > __CDS_Requires (
                 ForwardIterable < C > &&
                 AscendingSelectorFor < Selector, ElementType >
         ) {
@@ -2448,7 +2455,7 @@ namespace cds {
         }
 
         template < typename Selector >
-        __CDS_MaybeUnused auto minOf ( Selector const & selector ) const noexcept -> Optional < ReturnOf < Selector > >
+        __CDS_MaybeUnused auto minOf ( Selector const & selector ) const noexcept -> Optional < meta :: ReturnOf < Selector > >
         __CDS_Requires (
                 ForwardIterable < C > &&
                 AscendingSelectorFor < Selector, ElementType >
@@ -2495,9 +2502,9 @@ namespace cds {
 
         template < typename Selector >
         __CDS_MaybeUnused auto minOfOr (
-                ReturnOf < Selector >   const & e,
+                meta :: ReturnOf < Selector >   const & e,
                 Selector                const & selector
-        ) const noexcept -> ReturnOf < Selector >
+        ) const noexcept -> meta :: ReturnOf < Selector >
         __CDS_Requires (
                 ForwardIterable < C > &&
                 AscendingSelectorFor < Selector, ElementType >
@@ -2625,18 +2632,18 @@ namespace cds {
         template < typename Accumulator >
         __CDS_MaybeUnused auto reduce (
                 Accumulator const & accumulator
-        ) const noexcept (false) -> ReturnOf < Accumulator >
+        ) const noexcept (false) -> meta :: ReturnOf < Accumulator >
         __CDS_Requires (
                 ForwardIterable < C > &&
                 AccumulatorFor < Accumulator, ElementType, ElementType > &&
-                ConvertibleTo < ElementType, ReturnOf < Accumulator > >
+                ConvertibleTo < ElementType, meta :: ReturnOf < Accumulator > >
         ) {
 
             if ( this->pCollection.valueAt().valueAt().size() == 0 )
                 throw OutOfBoundsException ("reduce used on empty Sequence");
 
             auto it = this->begin();
-            ReturnOf < Accumulator > result = it.value();
+            meta :: ReturnOf < Accumulator > result = it.value();
 
             for ( it.next(); it != this->end(); ++ it )
                 result = accumulator ( result, it.value() );
@@ -2647,18 +2654,18 @@ namespace cds {
         template < typename IndexedAccumulator >
         __CDS_MaybeUnused auto reduceIndexed (
                 IndexedAccumulator const & indexedAccumulator
-        ) const noexcept (false) -> ReturnOf < IndexedAccumulator >
+        ) const noexcept (false) -> meta :: ReturnOf < IndexedAccumulator >
         __CDS_Requires (
                 ForwardIterable < C > &&
                 IndexedAccumulatorFor < IndexedAccumulator, ElementType, ElementType > &&
-                ConvertibleTo < ElementType, ReturnOf < IndexedAccumulator > >
+                ConvertibleTo < ElementType, meta :: ReturnOf < IndexedAccumulator > >
         ) {
 
             if ( this->pCollection.valueAt().valueAt().size() == 0 )
                 throw OutOfBoundsException ("reduceIndexed used on empty Sequence");
 
             auto it = this->begin();
-            ReturnOf < IndexedAccumulator > result = it.value();
+            meta :: ReturnOf < IndexedAccumulator > result = it.value();
             Index i = 1;
 
             for ( it.next(); it != this->end(); ++ it )
@@ -2670,14 +2677,14 @@ namespace cds {
         template < typename Accumulator >
         __CDS_MaybeUnused auto runningReduce (
                 Accumulator const & accumulator
-        ) && noexcept -> Sequence < LinkedList < ReturnOf < Accumulator > > >
+        ) && noexcept -> Sequence < LinkedList < meta :: ReturnOf < Accumulator > > >
         __CDS_Requires (
                 ForwardIterable < C > &&
                 AccumulatorFor < Accumulator, ElementType, ElementType > &&
-                ConvertibleTo < ElementType, ReturnOf < Accumulator > >
+                ConvertibleTo < ElementType, meta :: ReturnOf < Accumulator > >
         ) {
 
-            LinkedList < ReturnOf < Accumulator > > results = { };
+            LinkedList < meta :: ReturnOf < Accumulator > > results = { };
 
             if ( this->pCollection.valueAt().valueAt().size() > 0 ) {
                 auto it = this->begin();
@@ -2693,14 +2700,14 @@ namespace cds {
         template < typename IndexedAccumulator >
         __CDS_MaybeUnused auto runningReduceIndexed (
                 IndexedAccumulator const & indexedAccumulator
-        ) && noexcept -> Sequence < LinkedList < ReturnOf < IndexedAccumulator > > >
+        ) && noexcept -> Sequence < LinkedList < meta :: ReturnOf < IndexedAccumulator > > >
         __CDS_Requires (
                 ForwardIterable < C > &&
                 IndexedAccumulatorFor < IndexedAccumulator, ElementType, ElementType > &&
-                ConvertibleTo < ElementType, ReturnOf < IndexedAccumulator > >
+                ConvertibleTo < ElementType, meta :: ReturnOf < IndexedAccumulator > >
         ) {
 
-            LinkedList < ReturnOf < IndexedAccumulator > > results = { };
+            LinkedList < meta :: ReturnOf < IndexedAccumulator > > results = { };
 
             if ( this->pCollection.valueAt().valueAt().size() > 0 ) {
                 auto it = this->begin();
@@ -2719,14 +2726,14 @@ namespace cds {
         template < typename Accumulator >
         __CDS_MaybeUnused auto runningReduce (
                 Accumulator const & accumulator
-        ) & noexcept -> Sequence < LinkedList < ReturnOf < Accumulator > > >
+        ) & noexcept -> Sequence < LinkedList < meta :: ReturnOf < Accumulator > > >
         __CDS_Requires (
                 ForwardIterable < C > &&
                 AccumulatorFor < Accumulator, ElementType, ElementType > &&
-                ConvertibleTo < ElementType, ReturnOf < Accumulator > >
+                ConvertibleTo < ElementType, meta :: ReturnOf < Accumulator > >
         ) {
 
-            LinkedList < ReturnOf < Accumulator > > results = { };
+            LinkedList < meta :: ReturnOf < Accumulator > > results = { };
 
             if ( this->pCollection.valueAt().valueAt().size() > 0 ) {
                 auto it = this->begin();
@@ -2742,14 +2749,14 @@ namespace cds {
         template < typename IndexedAccumulator >
         __CDS_MaybeUnused auto runningReduceIndexed (
                 IndexedAccumulator const & indexedAccumulator
-        ) & noexcept -> Sequence < LinkedList < ReturnOf < IndexedAccumulator > > >
+        ) & noexcept -> Sequence < LinkedList < meta :: ReturnOf < IndexedAccumulator > > >
         __CDS_Requires (
                 ForwardIterable < C > &&
                 IndexedAccumulatorFor < IndexedAccumulator, ElementType, ElementType > &&
-                ConvertibleTo < ElementType, ReturnOf < IndexedAccumulator > >
+                ConvertibleTo < ElementType, meta :: ReturnOf < IndexedAccumulator > >
         ) {
 
-            LinkedList < ReturnOf < IndexedAccumulator > > results = { };
+            LinkedList < meta :: ReturnOf < IndexedAccumulator > > results = { };
 
             if ( this->pCollection.valueAt().valueAt().size() > 0 ) {
                 auto it = this->begin();
@@ -2816,7 +2823,7 @@ namespace cds {
             return this->runningFoldIndexed ( initialValue, indexedAccumulator );
         }
 
-        template < typename E = ElementType, EnableIf < Type < E > :: isNumeric > = 0 >
+        template < typename E = ElementType, meta :: EnableIf < meta :: isArithmetic < E > () > = 0 >
         __CDS_NoDiscard __CDS_MaybeUnused auto sum () const noexcept -> ElementType
         __CDS_Requires ( ForwardIterable < C > && Integral < ElementType > ) {
             ElementType sum = 0;
@@ -2826,7 +2833,7 @@ namespace cds {
             return sum;
         }
 
-        template < typename E = ElementType, EnableIf < ! Type < E > :: isNumeric && Type < E > :: defaultConstructible > = 0 >
+        template < typename E = ElementType, meta :: EnableIf < ! meta :: isArithmetic < E > () && meta :: isDefaultConstructible < E > () > = 0 >
         __CDS_NoDiscard __CDS_MaybeUnused auto sum () const noexcept -> ElementType
         __CDS_Requires ( ForwardIterable < C > ) {
 
@@ -2838,11 +2845,11 @@ namespace cds {
         }
 
         template < typename Selector >
-        __CDS_MaybeUnused auto sumBy ( Selector const & selector ) const noexcept -> ReturnOf < Selector >
+        __CDS_MaybeUnused auto sumBy ( Selector const & selector ) const noexcept -> meta :: ReturnOf < Selector >
         __CDS_Requires (
                 ForwardIterable < C > &&
                 MapperFor < Selector, ElementType > &&
-                Summable < ReturnOf < Selector > >
+                Summable < meta :: ReturnOf < Selector > >
         ) {
 
             auto it = this->begin();
@@ -2854,7 +2861,7 @@ namespace cds {
             return sum;
         }
 
-        template < typename U = C, EnableIf < utility :: hidden :: sequenceImpl :: IsArithmetic < typename utility :: hidden :: sequenceImpl :: ContainedType < U > > :: Value > = 0 >
+        template < typename U = C, meta :: EnableIf < utility :: hidden :: sequenceImpl :: IsArithmetic < typename utility :: hidden :: sequenceImpl :: ContainedType < U > > :: Value > = 0 >
         __CDS_NoDiscard __CDS_MaybeUnused auto average () const noexcept -> Double
         __CDS_Requires ( ForwardIterable < C > && ConvertibleTo < double, ElementType > ) {
             double average = 0.0; int eCount = 0;
@@ -2925,10 +2932,10 @@ namespace cds {
         __CDS_MaybeUnused auto chunked (
                 Size                    chunkSize,
                 ListTransformer const & listTransformer
-        ) && noexcept -> Sequence < LinkedList < ReturnOf < ListTransformer > > >
+        ) && noexcept -> Sequence < LinkedList < meta :: ReturnOf < ListTransformer > > >
         __CDS_Requires ( ForwardIterable < C > && TransformerOver < ListTransformer, List < ElementType > > ) {
 
-            LinkedList < ReturnOf < ListTransformer > > container;
+            LinkedList < meta :: ReturnOf < ListTransformer > > container;
             Array < ElementType > subContainer;
             Index subContainerPos = 0;
             subContainer.resize(chunkSize);
@@ -2956,10 +2963,10 @@ namespace cds {
         __CDS_MaybeUnused auto chunked (
                 Size                    chunkSize,
                 ListTransformer const & listTransformer
-        ) & noexcept -> Sequence < LinkedList < ReturnOf < ListTransformer > > >
+        ) & noexcept -> Sequence < LinkedList < meta :: ReturnOf < ListTransformer > > >
         __CDS_Requires ( ForwardIterable < C > && TransformerOver < ListTransformer, List < ElementType > > ) {
 
-            LinkedList < ReturnOf < ListTransformer > > container;
+            LinkedList < meta :: ReturnOf < ListTransformer > > container;
             Array < ElementType > subContainer;
             Index subContainerPos = 0;
             subContainer.resize(chunkSize);
@@ -3306,10 +3313,10 @@ namespace cds {
                 Size                    size,
                 Size                    step            = 1,
                 Boolean         const & partialWindows  = false
-        ) && noexcept -> Sequence < LinkedList < ReturnOf < ListTransformer > > >
+        ) && noexcept -> Sequence < LinkedList < meta :: ReturnOf < ListTransformer > > >
         __CDS_Requires ( ForwardIterable < C > && TransformerOver < ListTransformer, List < ElementType > > )  {
 
-            LinkedList < ReturnOf < ListTransformer > > container;
+            LinkedList < meta :: ReturnOf < ListTransformer > > container;
             utility :: hidden :: sequenceImpl :: Windowed :: type < ListTransformer > window;
 
             auto it = this->begin();
@@ -3336,10 +3343,10 @@ namespace cds {
                 Size                    size,
                 Size                    step            = 1,
                 Boolean         const & partialWindows  = false
-        ) & noexcept -> Sequence < LinkedList < ReturnOf < ListTransformer > > >
+        ) & noexcept -> Sequence < LinkedList < meta :: ReturnOf < ListTransformer > > >
         __CDS_Requires ( ForwardIterable < C > && TransformerOver < ListTransformer, List < ElementType > > ) {
 
-            LinkedList < ReturnOf < ListTransformer > > container;
+            LinkedList < meta :: ReturnOf < ListTransformer > > container;
             utility :: hidden :: sequenceImpl :: Windowed :: type < ListTransformer > window;
 
             auto it = this->begin();
@@ -3398,7 +3405,7 @@ namespace cds {
         __CDS_MaybeUnused auto zip (
                 Sequence < OC > const & other,
                 Transformer     const & transformer
-        ) && noexcept -> Sequence < LinkedList < ReturnOf < Transformer > > >
+        ) && noexcept -> Sequence < LinkedList < meta :: ReturnOf < Transformer > > >
         __CDS_Requires (
                 ForwardIterable < C > &&
                 ForwardIterable < OC > &&
@@ -3408,7 +3415,7 @@ namespace cds {
             auto it1 = this->begin();
             auto it2 = other.begin();
 
-            LinkedList < ReturnOf < Transformer > > container;
+            LinkedList < meta :: ReturnOf < Transformer > > container;
 
             for (; it1 != this->end() && it2 != other.end(); ++ it1, ++ it2 )
                 container.add ( transformer( it1.value(), it2.value() ) );
@@ -3420,7 +3427,7 @@ namespace cds {
         __CDS_MaybeUnused auto zip (
                 Sequence < OC > const & other,
                 Transformer     const & transformer
-        ) & noexcept -> Sequence < LinkedList < ReturnOf < Transformer > > >
+        ) & noexcept -> Sequence < LinkedList < meta :: ReturnOf < Transformer > > >
         __CDS_Requires (
                 ForwardIterable < C > &&
                 ForwardIterable < OC > &&
@@ -3430,7 +3437,7 @@ namespace cds {
             auto it1 = this->begin();
             auto it2 = other.begin();
 
-            LinkedList < ReturnOf < Transformer > > container;
+            LinkedList < meta :: ReturnOf < Transformer > > container;
 
             for (; it1 != this->end() && it2 != other.end(); ++ it1, ++ it2 )
                 container.add ( transformer( it1.value(), it2.value() ) );
@@ -3458,10 +3465,10 @@ namespace cds {
         template < typename Transformer >
         __CDS_MaybeUnused auto zipWithNext (
                 Transformer const & transformer
-        ) && noexcept -> Sequence < LinkedList < ReturnOf < Transformer > > >
+        ) && noexcept -> Sequence < LinkedList < meta :: ReturnOf < Transformer > > >
         __CDS_Requires ( ForwardIterable < C > && TransformerOver < Transformer, ElementType, ElementType > ) {
 
-            LinkedList < ReturnOf < Transformer > > container;
+            LinkedList < meta :: ReturnOf < Transformer > > container;
 
             auto it = this->begin();
             auto v = it.value();
@@ -3493,10 +3500,10 @@ namespace cds {
         template < typename Transformer >
         __CDS_MaybeUnused auto zipWithNext (
                 Transformer const & transformer
-        ) & noexcept -> Sequence < LinkedList < ReturnOf < Transformer > > >
+        ) & noexcept -> Sequence < LinkedList < meta :: ReturnOf < Transformer > > >
         __CDS_Requires ( ForwardIterable < C > && TransformerOver < Transformer, ElementType, ElementType > ) {
 
-            LinkedList < ReturnOf < Transformer > > container;
+            LinkedList < meta :: ReturnOf < Transformer > > container;
 
             auto it = this->begin();
             auto v = it.value();
@@ -3531,7 +3538,7 @@ namespace cds {
 
 template < typename C >
 __CDS_OptimalInline cds :: Sequence < C > ::Sequence ( cds :: Sequence < C > const & s ) noexcept :
-        pCollection ( cds :: Memory::instance().create < ForeignPointer < cds :: RemoveReference < decltype (s.pCollection.valueAt().valueAt() ) > > > ( s.pCollection.valueAt().get() ) ),
+        pCollection ( cds :: Memory::instance().create < ForeignPointer < meta :: RemoveReference < decltype (s.pCollection.valueAt().valueAt() ) > > > ( s.pCollection.valueAt().get() ) ),
         chainCount ( s.chainCount ),
         storedMappers ( s.storedMappers ),
         storedPredicates ( s.storedPredicates ),
@@ -3570,9 +3577,9 @@ __CDS_OptionalInline cds :: Sequence < C > ::Sequence ( cds :: Sequence < C > &&
 #if !defined (_MSC_VER)
 
     if (dynamic_cast < cds :: UniquePointer < C > *> (s.pCollection.get()) != nullptr)
-        this->pCollection = cds :: Memory::instance().create < cds :: UniquePointer < cds :: RemoveReference < decltype (s.pCollection.valueAt().valueAt()) > > >(s.pCollection.valueAt().release());
+        this->pCollection = cds :: Memory::instance().create < cds :: UniquePointer < meta :: RemoveReference < decltype (s.pCollection.valueAt().valueAt()) > > >(s.pCollection.valueAt().release());
     else
-        this->pCollection = cds :: Memory::instance().create < cds :: ForeignPointer < cds :: RemoveReference < decltype (s.pCollection.valueAt().valueAt()) > > >(s.pCollection.valueAt().get());
+        this->pCollection = cds :: Memory::instance().create < cds :: ForeignPointer < meta :: RemoveReference < decltype (s.pCollection.valueAt().valueAt()) > > >(s.pCollection.valueAt().get());
 
 #else
 
@@ -3598,14 +3605,14 @@ __CDS_OptionalInline cds :: Sequence < C > ::Sequence ( cds :: Sequence < C > &&
 
 template < typename C >
 __CDS_OptimalInline cds :: Sequence < C > ::Sequence ( C & c ) noexcept :
-        pCollection ( cds :: Memory :: instance().create < cds :: ForeignPointer < cds :: RemoveReference < decltype ( c ) > > > ( & c ) ),
+        pCollection ( cds :: Memory :: instance().create < cds :: ForeignPointer < meta :: RemoveReference < decltype ( c ) > > > ( & c ) ),
         chainCount ( 0u ) {
 
 }
 
 template < typename C >
 __CDS_OptimalInline cds :: Sequence < C > ::Sequence ( C && c ) noexcept :
-        pCollection ( cds :: Memory :: instance().create < cds :: UniquePointer < cds :: RemoveReference < decltype ( c ) > > > ( cds :: Memory :: instance().create < C > (std :: forward < C > (c)) ) ),
+        pCollection ( cds :: Memory :: instance().create < cds :: UniquePointer < meta :: RemoveReference < decltype ( c ) > > > ( cds :: Memory :: instance().create < C > (std :: forward < C > (c)) ) ),
         chainCount ( 0u ) {
 
 }
@@ -3785,7 +3792,7 @@ auto cds :: Sequence < C > :: Iterator :: toString() const noexcept -> cds :: St
     std::stringstream oss;
     oss << "Sequence::Iterator { pSequence = " << this->pSeq.toString();
 
-    if __CDS_cpplang_IfConstexpr ( cds :: isPrintable < decltype ( this->it ) >::value ) {
+    if __CDS_cpplang_IfConstexpr ( meta :: isPrintable < decltype ( this->it ) > () ) {
         oss << ", it = " << this->it;
     } else {
         oss << ", value = " << * this->it;
@@ -3797,9 +3804,9 @@ auto cds :: Sequence < C > :: Iterator :: toString() const noexcept -> cds :: St
 
 template < typename C >
 __CDS_OptionalInline auto cds :: Sequence < C > ::Iterator::hash() const noexcept -> cds :: Index {
-    if __CDS_cpplang_IfConstexpr ( cds :: isObjectDerived < decltype ( this->it ) > ::value )
+    if __CDS_cpplang_IfConstexpr ( meta :: isObjectDerived < decltype ( this->it ) > () )
         return this->it.hash ();
-    else if __CDS_cpplang_IfConstexpr ( cds :: isObjectDerived < decltype ( * this->it ) > ::value )
+    else if __CDS_cpplang_IfConstexpr ( meta :: isObjectDerived < decltype ( * this->it ) > () )
         return (* this->it).hash ();
     else
         return 0;
@@ -3998,7 +4005,7 @@ auto cds :: Sequence < C > :: ConstIterator :: toString() const noexcept -> cds 
     std::stringstream oss;
     oss << "Sequence::Iterator { pSequence = " << this->pSeq.toString();
 
-    if __CDS_cpplang_IfConstexpr ( cds :: isPrintable < decltype ( this->it ) >::value ) {
+    if __CDS_cpplang_IfConstexpr ( meta :: isPrintable < decltype ( this->it ) > () ) {
         oss << ", it = " << this->it;
     } else {
         oss << ", value = " << * this->it;
@@ -4016,9 +4023,9 @@ auto cds :: Sequence < C > :: ConstIterator :: toString() const noexcept -> cds 
 
 template < typename C >
 __CDS_OptimalInline auto cds :: Sequence < C > :: ConstIterator :: hash() const noexcept -> cds :: Index {
-    if __CDS_cpplang_IfConstexpr( cds :: isObjectDerived < decltype ( this->it ) > ::value )
+    if __CDS_cpplang_IfConstexpr( meta :: isObjectDerived < decltype ( this->it ) > () )
         return this->it.hash ();
-    else if __CDS_cpplang_IfConstexpr ( cds :: isObjectDerived < decltype ( * this->it ) > ::value )
+    else if __CDS_cpplang_IfConstexpr ( meta :: isObjectDerived < decltype ( * this->it ) > () )
         return (* this->it).hash ();
     else
         return 0;
@@ -4093,7 +4100,7 @@ auto cds :: Sequence < C > ::toString() const noexcept -> cds :: String {
         << ", elements = [ ";
 
     for ( auto e : * this )
-        if __CDS_cpplang_IfConstexpr ( cds :: isPrintable < ElementType >::value )
+        if __CDS_cpplang_IfConstexpr ( meta :: isPrintable < ElementType > () )
             oss << e << ", ";
         else
             oss << "Object at 0x" << std::hex << reinterpret_cast < AddressValueType > ( & e ) << ", ";
@@ -4215,35 +4222,35 @@ namespace cds {
 /// endregion
 
 inline auto cds :: Range :: sequence() & noexcept -> cds :: Sequence < cds :: Range > {
-    return cds :: Sequence < cds :: RemoveReference < decltype (*this) > > (*this);
+    return cds :: Sequence < meta :: RemoveReference < decltype (*this) > > (*this);
 }
 
 inline auto cds :: Range :: sequence() const & noexcept -> cds :: Sequence < cds :: Range const > {
-    return cds :: Sequence < cds :: RemoveReference < decltype (*this) > > (*this);
+    return cds :: Sequence < meta :: RemoveReference < decltype (*this) > > (*this);
 }
 
 inline auto cds :: Range :: sequence() && noexcept -> cds :: Sequence < cds :: Range > {
-    return cds :: Sequence < cds :: RemoveReference < decltype (* this) > > (std::move(* this));
+    return cds :: Sequence < meta :: RemoveReference < decltype (* this) > > (std::move(* this));
 }
 
 inline auto cds :: Range :: sequence() const && noexcept -> cds :: Sequence < cds :: Range const > {
-    return cds :: Sequence < cds :: RemoveReference < decltype (* this) > > (std::move(* this));
+    return cds :: Sequence < meta :: RemoveReference < decltype (* this) > > (std::move(* this));
 }
 
 inline auto cds :: String :: sequence () const & noexcept -> cds :: Sequence < cds :: String const > {
-    return cds :: Sequence < cds :: RemoveReference < decltype (*this) > > (*this);
+    return cds :: Sequence < meta :: RemoveReference < decltype (*this) > > (*this);
 }
 
 inline auto cds :: String :: sequence () & noexcept -> cds :: Sequence < cds :: String > {
-    return cds :: Sequence < cds :: RemoveReference < decltype (*this) > > (*this);
+    return cds :: Sequence < meta :: RemoveReference < decltype (*this) > > (*this);
 }
 
 inline auto cds :: String :: sequence () const && noexcept -> cds :: Sequence < cds :: String const > {
-    return cds :: Sequence < cds :: RemoveReference < decltype (* this) > > (std::move(* this));
+    return cds :: Sequence < meta :: RemoveReference < decltype (* this) > > (std::move(* this));
 }
 
 inline auto cds :: String :: sequence () && noexcept -> cds :: Sequence < cds :: String > {
-    return cds :: Sequence < cds :: RemoveReference < decltype (* this) > > (std::move(* this));
+    return cds :: Sequence < meta :: RemoveReference < decltype (* this) > > (std::move(* this));
 }
 
 namespace cds {
@@ -4360,7 +4367,7 @@ namespace cds {
 #endif
 
 
-__CDS_RegisterParseTypeTemplateT(Sequence)
+__CDS_Meta_RegisterParseTemplateType(Sequence)
 
 #include "../experimental/shared/array/impl/ArraySequence.hpp"
 #include "../experimental/shared/string/impl/StringSequence.hpp"

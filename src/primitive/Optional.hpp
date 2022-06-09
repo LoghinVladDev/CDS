@@ -5,6 +5,7 @@
 #ifndef CDS_OPTIONAL_HPP
 #define CDS_OPTIONAL_HPP
 
+#include <CDS/meta/FunctionTraits>
 #include <CDS/smartPointers/UniquePointer>
 #include <CDS/Memory>
 
@@ -105,12 +106,12 @@ namespace cds {
         }
 
         template < typename Mapper >
-        __CDS_cpplang_ConstexprDestructor auto map ( Mapper const & mapper ) const noexcept -> Optional < ReturnOf < Mapper > > {
+        __CDS_cpplang_ConstexprDestructor auto map ( Mapper const & mapper ) const noexcept -> Optional < meta :: ReturnOf < Mapper > > {
             if ( this->isEmpty() ) {
-                return Optional < ReturnOf < Mapper> > ();
+                return Optional < meta :: ReturnOf < Mapper> > ();
             }
 
-            return Optional < ReturnOf < Mapper > > (mapper(this->pObj.valueAt()));
+            return Optional < meta :: ReturnOf < Mapper > > (mapper(this->pObj.valueAt()));
         }
 
         template < typename Supplier >
@@ -187,7 +188,7 @@ namespace cds {
         constexpr auto operator == ( Optional const & optional ) const noexcept -> bool {
             return
                 this == & optional ||
-                Type < T > :: compare (this->value(), optional.value() );
+                meta :: equals (this->value(), optional.value() );
         }
 
         __CDS_NoDiscard __CDS_OptionalInline auto toString() const noexcept -> String final {
@@ -217,6 +218,6 @@ namespace cds {
 
 #endif
 
-__CDS_RegisterParseTypeTemplateT(Optional) // NOLINT(clion-misra-cpp2008-8-0-1)
+__CDS_Meta_RegisterParseTemplateType(Optional) // NOLINT(clion-misra-cpp2008-8-0-1)
 
 #endif //CDS_OPTIONAL_HPP

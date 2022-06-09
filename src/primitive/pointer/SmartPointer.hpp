@@ -30,7 +30,7 @@ namespace cds {
         constexpr SmartPointer() noexcept = default;
         explicit constexpr SmartPointer(Pointer pointer) noexcept : pObj(pointer) {}
 
-        template < typename DerivedType, EnableIf < isDerivedFrom < DerivedType, T > :: value > = 0 >
+        template < typename DerivedType, meta :: EnableIf < meta :: isDerivedFrom < DerivedType, T > () > = 0 >
         explicit constexpr SmartPointer(DerivedType pointer) noexcept : pObj ( (T*) pointer ) { }
 
     public:
@@ -135,7 +135,7 @@ namespace cds {
 
     private:
         template < typename U = T >
-        __CDS_NoDiscard __CDS_OptionalInline auto ptrStringRep() const noexcept -> typename std::enable_if < Type < U > :: ostreamPrintable, String > :: type {
+        __CDS_NoDiscard __CDS_OptionalInline auto ptrStringRep() const noexcept -> typename std::enable_if < meta :: isPrintable < U > (), String > :: type {
             std::stringstream oss;
 
             oss << "< 0x" << std::hex << reinterpret_cast < PointerType > ( pObj ) << std::dec << " : ";
@@ -150,7 +150,7 @@ namespace cds {
         }
 
         template < typename U = T >
-        __CDS_NoDiscard __CDS_OptionalInline auto ptrStringRep() const noexcept -> typename std::enable_if < ! Type < U > :: ostreamPrintable, String > :: type { // NOLINT(clion-misra-cpp2008-5-3-1)
+        __CDS_NoDiscard __CDS_OptionalInline auto ptrStringRep() const noexcept -> typename std::enable_if < ! meta :: isPrintable < U > (), String > :: type { // NOLINT(clion-misra-cpp2008-5-3-1)
             std::stringstream oss;
 
             oss << "< 0x" << std::hex << reinterpret_cast < PointerType > ( pObj ) << std::dec << " : ";

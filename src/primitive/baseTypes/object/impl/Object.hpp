@@ -20,4 +20,6 @@ namespace cds {
     }
 }
 
+__CDS_Meta_RegisterParseType(Object) // NOLINT(clion-misra-cpp2008-8-0-1)
+
 #endif // __CDS_OBJECT_IMPL_HPP__

@@ -2048,6 +2048,6 @@ __CDS_cpplang_ConstexprPostfixLiteral auto operator "" _l (unsigned long long in
 
 #endif
 
-__CDS_RegisterParseType(Long) // NOLINT(clion-misra-cpp2008-8-0-1)
+__CDS_Meta_RegisterParseType(Long) // NOLINT(clion-misra-cpp2008-8-0-1)
 
 #endif //CDS_LONG_HPP

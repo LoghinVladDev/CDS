@@ -15,25 +15,25 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
                 __CDS_OptimalInline auto __BaseString < __CharType > :: sequence () & noexcept -> Sequence < __BaseString < __CharType > > {
 
-                    return Sequence < RemoveReference < decltype (*this) > > ( * this );
+                    return Sequence < meta :: RemoveReference < decltype (*this) > > ( * this );
                 }
 
                 template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
                 __CDS_OptimalInline auto __BaseString < __CharType > :: sequence () && noexcept -> Sequence < __BaseString < __CharType > > {
 
-                    return Sequence < RemoveReference < decltype (*this) > > ( std :: move ( * this ) );
+                    return Sequence < meta :: RemoveReference < decltype (*this) > > ( std :: move ( * this ) );
                 }
 
                 template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
                 __CDS_OptimalInline auto __BaseString < __CharType > :: sequence () const & noexcept -> Sequence < __BaseString < __CharType > const > {
 
-                    return Sequence < RemoveReference < decltype (*this) > > ( * this );
+                    return Sequence < meta :: RemoveReference < decltype (*this) > > ( * this );
                 }
 
                 template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
                 __CDS_OptimalInline auto __BaseString < __CharType > :: sequence () const && noexcept -> Sequence < __BaseString < __CharType > const > {
 
-                    return Sequence < RemoveReference < decltype (*this) > > ( std :: move ( * this ) );
+                    return Sequence < meta :: RemoveReference < decltype (*this) > > ( std :: move ( * this ) );
                 }
 
             }

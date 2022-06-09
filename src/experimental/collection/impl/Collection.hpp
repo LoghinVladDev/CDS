@@ -19,7 +19,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 ) noexcept -> bool {
 
                     for ( auto const & e : list ) {
-                        if ( Type < T > :: compare ( e, element ) ) {
+                        if ( meta :: equals ( e, element ) ) {
                             return true;
                         }
                     }

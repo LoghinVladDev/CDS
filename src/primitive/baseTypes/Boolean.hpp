@@ -634,7 +634,7 @@ namespace cds {
 #endif
 
 
-__CDS_RegisterParseType(Boolean) // NOLINT(clion-misra-cpp2008-8-0-1)
+__CDS_Meta_RegisterParseType(Boolean) // NOLINT(clion-misra-cpp2008-8-0-1)
 
 
 #endif //CDS_BOOLEAN_HPP

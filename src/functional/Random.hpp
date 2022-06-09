@@ -135,24 +135,13 @@ namespace cds {
 
 }
 
-__CDS_RegisterParseType(Random) // NOLINT(clion-misra-cpp2008-8-0-1)
+__CDS_Meta_RegisterParseType(Random) // NOLINT(clion-misra-cpp2008-8-0-1)
 
-namespace cds { // NOLINT(modernize-concat-nested-namespaces)
-    namespace utility {
-
-        template<typename T, typename D, typename TE, typename RD>
-        struct TypeParseTraits<Random::Generator<T, D, TE, RD>> {
-            constexpr static StringLiteral name = "Random::Generator";
-        };
-
-    }
-}
-
-__CDS_RegisterParseType(Random::Int) // NOLINT(clion-misra-cpp2008-8-0-1)
-__CDS_RegisterParseType(Random::Long) // NOLINT(clion-misra-cpp2008-8-0-1)
-__CDS_RegisterParseType(Random::Float) // NOLINT(clion-misra-cpp2008-8-0-1)
-__CDS_RegisterParseType(Random::Double) // NOLINT(clion-misra-cpp2008-8-0-1)
-__CDS_RegisterParseType(Random::UnsignedInt) // NOLINT(clion-misra-cpp2008-8-0-1)
-__CDS_RegisterParseType(Random::UnsignedLong) // NOLINT(clion-misra-cpp2008-8-0-1)
+__CDS_Meta_RegisterParseType(Random::Int) // NOLINT(clion-misra-cpp2008-8-0-1)
+__CDS_Meta_RegisterParseType(Random::Long) // NOLINT(clion-misra-cpp2008-8-0-1)
+__CDS_Meta_RegisterParseType(Random::Float) // NOLINT(clion-misra-cpp2008-8-0-1)
+__CDS_Meta_RegisterParseType(Random::Double) // NOLINT(clion-misra-cpp2008-8-0-1)
+__CDS_Meta_RegisterParseType(Random::UnsignedInt) // NOLINT(clion-misra-cpp2008-8-0-1)
+__CDS_Meta_RegisterParseType(Random::UnsignedLong) // NOLINT(clion-misra-cpp2008-8-0-1)
 
 #endif //CDS_RANDOM_HPP

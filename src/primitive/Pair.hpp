@@ -23,27 +23,27 @@ namespace cds {
         V _second;
 
     public:
-        template < typename K1 = K, typename V1 = V, EnableIf < Type < K1 > :: isFundamental && Type < V1 > :: isFundamental > = 0 >
+        template < typename K1 = K, typename V1 = V, meta :: EnableIf < meta :: isFundamental < K1 > () && meta :: isFundamental < V1 > () > = 0 >
         constexpr Pair () noexcept :
                 _first(), _second() {
 
         }
 
-        template < typename K1 = K, typename V1 = V, EnableIf < Type < K1 > :: defaultConstructible && Type < V1 > :: defaultConstructible && ! Type < K1 > :: isFundamental && ! Type < V1 > :: isFundamental > = 0 > // NOLINT(clion-misra-cpp2008-5-3-1)
+        template < typename K1 = K, typename V1 = V, meta :: EnableIf < meta :: isDefaultConstructible < K1 > ()  && meta :: isDefaultConstructible < V1 > ()  && ! meta :: isFundamental < K1 > ()  && ! meta :: isFundamental < V1 > ()  > = 0 > // NOLINT(clion-misra-cpp2008-5-3-1)
         constexpr Pair () noexcept(noexcept(K()) && noexcept(V())) :
                 _first(),
                 _second() {
 
         }
 
-        template < typename K1 = K, typename V1 = V, EnableIf < Type < K1 > :: isFundamental && ! Type < V1 > :: isFundamental && Type < V1 > :: defaultConstructible > = 0 > // NOLINT(clion-misra-cpp2008-5-3-1)
+        template < typename K1 = K, typename V1 = V, meta :: EnableIf < meta :: isFundamental < K1 > ()  && ! meta :: isFundamental < V1 > ()  && meta :: isDefaultConstructible < V1 > ()  > = 0 > // NOLINT(clion-misra-cpp2008-5-3-1)
         constexpr Pair () noexcept(noexcept(V())) :
                 _first(),
                 _second() {
 
         }
 
-        template < typename K1 = K, typename V1 = V, EnableIf < Type < V1 > :: isFundamental && ! Type < K1 > :: isFundamental && Type < K1 > :: defaultConstructible > = 0 > // NOLINT(clion-misra-cpp2008-5-3-1)
+        template < typename K1 = K, typename V1 = V, meta :: EnableIf < meta :: isFundamental < V1 > ()  && ! meta :: isFundamental < K1 > ()  && meta :: isDefaultConstructible < K1 > ()  > = 0 > // NOLINT(clion-misra-cpp2008-5-3-1)
         constexpr Pair () noexcept(noexcept(K())) :
                 _first(),
                 _second() {
@@ -51,14 +51,14 @@ namespace cds {
         }
 
 
-        template < typename K1 = K, typename V1 = V, EnableIf < Type < K1 > :: copyConstructible && Type < V1 > :: copyConstructible > = 0 >
+        template < typename K1 = K, typename V1 = V, meta :: EnableIf < meta :: isCopyConstructible < K1 > ()  && meta :: isCopyConstructible < V1 > ()  > = 0 >
         constexpr Pair ( Pair const & obj ) noexcept(noexcept(K(obj._first)) && noexcept(V(obj._second))) : // NOLINT(google-explicit-constructor)
                 _first(obj._first),
                 _second(obj._second) {
 
         }
 
-        template < typename K1 = K, typename V1 = V, EnableIf < Type < K1 > :: moveConstructible && Type < V1 > :: moveConstructible > = 0 >
+        template < typename K1 = K, typename V1 = V, meta :: EnableIf < meta :: isMoveConstructible < K1 > ()  && meta :: isMoveConstructible < V1 > ()  > = 0 >
         constexpr Pair ( Pair && obj ) noexcept(noexcept(K(std::move(obj._first))) && noexcept(V(std::move(obj._second)))) : // NOLINT(google-explicit-constructor)
                 _first(std::move(obj._first)),
                 _second(std::move(obj._second)) {
@@ -66,60 +66,60 @@ namespace cds {
         }
 
 
-        template < typename K1 = K, typename V1 = V, EnableIf < Type < K1 > :: isFundamental && Type < V1 > :: isFundamental > = 0 >
+        template < typename K1 = K, typename V1 = V, meta :: EnableIf < meta :: isFundamental < K1 > ()  && meta :: isFundamental < V1 > ()  > = 0 >
         constexpr Pair ( K first, V second ) noexcept :
                 _first(first),
                 _second(second) {
 
         }
 
-        template < typename K1 = K, typename V1 = V, EnableIf < Type < K1 > :: copyConstructible && Type < V1 > :: copyConstructible && ! Type < K1 > :: isFundamental && ! Type < V1 > :: isFundamental > = 0 > // NOLINT(clion-misra-cpp2008-5-3-1)
+        template < typename K1 = K, typename V1 = V, meta :: EnableIf < meta :: isCopyConstructible < K1 > ()  && meta :: isCopyConstructible < V1 > ()  && ! meta :: isFundamental < K1 > ()  && ! meta :: isFundamental < V1 > ()  > = 0 > // NOLINT(clion-misra-cpp2008-5-3-1)
         constexpr Pair ( K const & first, V const & second ) noexcept(noexcept(K(first)) && noexcept(V(second))) :
                 _first(first), _second(second) {
 
         }
 
-        template < typename K1 = K, typename V1 = V, EnableIf < Type < K1 > :: moveConstructible && Type < V1 > :: moveConstructible && ! Type < K1 > :: isFundamental && ! Type < V1 > :: isFundamental > = 0 > // NOLINT(clion-misra-cpp2008-5-3-1)
+        template < typename K1 = K, typename V1 = V, meta :: EnableIf < meta :: isMoveConstructible < K1 > ()  && meta :: isMoveConstructible < V1 > ()  && ! meta :: isFundamental < K1 > ()  && ! meta :: isFundamental < V1 > ()  > = 0 > // NOLINT(clion-misra-cpp2008-5-3-1)
         constexpr Pair ( K && first, V && second ) noexcept(noexcept(K(std::forward < K > (first))) && noexcept(V(std::forward < V > (second)))) :
                 _first(std::forward < K && > (first)), _second(std::forward < V && > (second)) {
 
         }
 
-        template < typename K1 = K, typename V1 = V, EnableIf < Type < K1 > :: isFundamental && ! Type < V1 > :: isFundamental && Type < V1 > :: copyConstructible > = 0 > // NOLINT(clion-misra-cpp2008-5-3-1)
+        template < typename K1 = K, typename V1 = V, meta :: EnableIf < meta :: isFundamental < K1 > ()  && ! meta :: isFundamental < V1 > ()  && meta :: isCopyConstructible < V1 > ()  > = 0 > // NOLINT(clion-misra-cpp2008-5-3-1)
         constexpr Pair ( K first, V const & second ) noexcept(noexcept(V(second))) :
                 _first(first), _second(second) {
 
         }
 
-        template < typename K1 = K, typename V1 = V, EnableIf < Type < K1 > :: isFundamental && ! Type < V1 > :: isFundamental && Type < V1 > :: moveConstructible > = 0 > // NOLINT(clion-misra-cpp2008-5-3-1)
+        template < typename K1 = K, typename V1 = V, meta :: EnableIf < meta :: isFundamental < K1 > ()  && ! meta :: isFundamental < V1 > ()  && meta :: isMoveConstructible < V1 > ()  > = 0 > // NOLINT(clion-misra-cpp2008-5-3-1)
         constexpr Pair ( K first, V && second ) noexcept(noexcept(V(std::forward < V && >(second)))) :
                 _first(first),
                 _second(std::forward < V && >(second)) {
 
         }
 
-        template < typename K1 = K, typename V1 = V, EnableIf < ! Type < K1 > :: isFundamental && Type < V1 > :: isFundamental && Type < K1 > :: copyConstructible > = 0 > // NOLINT(clion-misra-cpp2008-5-3-1)
+        template < typename K1 = K, typename V1 = V, meta :: EnableIf < ! meta :: isFundamental < K1 > ()  && meta :: isFundamental < V1 > ()  && meta :: isCopyConstructible < K1 > ()  > = 0 > // NOLINT(clion-misra-cpp2008-5-3-1)
         constexpr Pair ( K const & first, V second ) noexcept(noexcept(K(first))) :
                 _first(first),
                 _second(second) {
 
         }
 
-        template < typename K1 = K, typename V1 = V, EnableIf < ! Type < K1 > :: isFundamental && Type < K1 > :: copyConstructible && ! Type < V1 > :: isFundamental && Type < V1 > :: moveConstructible > = 0 > // NOLINT(clion-misra-cpp2008-5-3-1)
+        template < typename K1 = K, typename V1 = V, meta :: EnableIf < ! meta :: isFundamental < K1 > ()  && meta :: isCopyConstructible < K1 > ()  && ! meta :: isFundamental < V1 > ()  && meta :: isMoveConstructible < V1 > ()  > = 0 > // NOLINT(clion-misra-cpp2008-5-3-1)
         constexpr Pair ( K const & first, V && second ) noexcept(noexcept(K(first)) && noexcept(V(std::forward < V && > (second)))) :
                 _first(first),
                 _second(std::forward < V && >(second)) {
 
         }
 
-        template < typename K1 = K, typename V1 = V, EnableIf < ! Type < K1 > :: isFundamental && Type < K1 > :: moveConstructible && Type < V1 > :: isFundamental > = 0 > // NOLINT(clion-misra-cpp2008-5-3-1)
+        template < typename K1 = K, typename V1 = V, meta :: EnableIf < ! meta :: isFundamental < K1 > ()  && meta :: isMoveConstructible < K1 > ()  && meta :: isFundamental < V1 > ()  > = 0 > // NOLINT(clion-misra-cpp2008-5-3-1)
         constexpr Pair ( K && first, V second ) noexcept(noexcept(K(std::forward < K && >(first)))) :
                 _first(std::forward < K && >(first)),
                 _second(second) {
 
         }
 
-        template < typename K1 = K, typename V1 = V, EnableIf < ! Type < K1 > :: isFundamental && Type < K1 > :: moveConstructible && ! Type < V1 > :: isFundamental && Type < V1 > :: copyConstructible > = 0 > // NOLINT(clion-misra-cpp2008-5-3-1)
+        template < typename K1 = K, typename V1 = V, meta :: EnableIf < ! meta :: isFundamental < K1 > ()  && meta :: isMoveConstructible < K1 > ()  && ! meta :: isFundamental < V1 > ()  && meta :: isCopyConstructible < V1 > ()  > = 0 > // NOLINT(clion-misra-cpp2008-5-3-1)
         constexpr Pair ( K && first, V const & second ) noexcept(noexcept(K(std::forward < K && >(first))) && noexcept(V(second))) :
                 _first(std::forward < K && >(first)),
                 _second(second) {
@@ -174,8 +174,8 @@ namespace cds {
         constexpr auto operator == ( Pair const & pair ) const noexcept -> bool {
             return
                 this == & pair || (
-                        Type<K>::compare(this->_first, pair._first) &&
-                        Type<V>::compare(this->_second, pair._second)
+                        meta :: equals (this->_first, pair._first) &&
+                        meta :: equals (this->_second, pair._second)
                 );
         }
 
@@ -196,7 +196,7 @@ namespace cds {
             return this->operator==(*pPair);
         }
 
-        template < typename K1 = K, typename V1 = V, EnableIf < Type < K1 > :: copyAssignable && Type < V1 > :: copyAssignable > = 0 >
+        template < typename K1 = K, typename V1 = V, meta :: EnableIf < meta :: isCopyAssignable < K1 > ()  && meta :: isCopyAssignable < V1 > ()  > = 0 >
         __CDS_cpplang_NonConstConstexprMemberFunction auto operator = ( Pair const & pair ) noexcept -> Pair & {
             if ( this == & pair ) {
                 return * this;
@@ -208,7 +208,7 @@ namespace cds {
             return * this;
         }
 
-        template < typename K1 = K, typename V1 = V, EnableIf < Type < K1 > :: moveAssignable && Type < V1 > :: moveAssignable > = 0 >
+        template < typename K1 = K, typename V1 = V, meta :: EnableIf < meta :: isMoveAssignable < K1 > ()  && meta :: isMoveAssignable < V1 > ()  > = 0 >
         __CDS_cpplang_NonConstConstexprMemberFunction auto operator = ( Pair && pair ) noexcept -> Pair & {
             if ( this == & pair ) {
                 return * this;
@@ -227,12 +227,31 @@ namespace cds {
         __CDS_NoDiscard __CDS_OptionalInline auto toString() const noexcept -> String final {
             std::stringstream oss;
 
-            Type < V > :: streamPrint ( ( Type < K > :: streamPrint ( ( oss << "( k = " ), this->first() ) << ", v = " ), this->second() ) << " )";
+            meta :: print  ( ( meta :: print ( ( oss << "( k = " ), this->first() ) << ", v = " ), this->second() ) << " )";
              return {oss.str()};
         }
     };
 
+    namespace meta {
+
+        template < typename T, bool = isPair < T > () >
+        struct PairTraits {
+            using FirstType     = void;
+            using SecondType    = void;
+            using Type          = Pair < FirstType, SecondType >;
+        };
+
+        template < typename T >
+        struct PairTraits < T, true > {
+            using FirstType     = RemoveReference < decltype ( valueOf < T > ().first() ) >;
+            using SecondType    = RemoveReference < decltype ( valueOf < T > ().second() ) >;
+            using Type          = Pair < FirstType, SecondType >;
+        };
+
+    }
+
 }
+
 #if __CDS_cpplang_CTAD_available == true
 
 namespace cds {
@@ -244,15 +263,6 @@ namespace cds {
 
 #endif
 
-namespace cds { // NOLINT(modernize-concat-nested-namespaces)
-    namespace utility {
-
-        template<typename K, typename V>
-        struct TypeParseTraits<Pair<K, V>> {
-            constexpr static StringLiteral name = "Pair";
-        };
-
-    }
-}
+__CDS_Meta_RegisterParseTemplateType(Pair)
 
 #endif //CDS_PAIR_HPP

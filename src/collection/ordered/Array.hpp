@@ -65,13 +65,13 @@ namespace cds {
                 ConstIterator const &
         ) noexcept;
 
-        template < typename V = T, EnableIf < Type < V > :: copyConstructible > = 0 >
+        template < typename V = T, meta :: EnableIf < meta :: isCopyConstructible < V > () > = 0 >
         Array( InitializerList ) noexcept; // NOLINT(google-explicit-constructor)
 
-        template < typename V = T, EnableIf < Type < V > :: defaultConstructible > = 0 >
+        template < typename V = T, meta :: EnableIf < meta :: isDefaultConstructible < V > () > = 0 >
         explicit Array( Size ) noexcept;
 
-        template < typename V = T, EnableIf < Type < V > :: copyConstructible > = 0 >
+        template < typename V = T, meta :: EnableIf < meta :: isCopyConstructible < V > () > = 0 >
         explicit Array( Size, ElementCRef ) noexcept;
 
         explicit Array ( Collection < T > const & ) noexcept;
@@ -83,7 +83,7 @@ namespace cds {
 
     public:
 
-        template < typename V = T, EnableIf < Type < V > :: defaultConstructible > = 0 >
+        template < typename V = T, meta :: EnableIf < meta :: isDefaultConstructible < V > () > = 0 >
         __CDS_OptionalInline auto resize ( Size newSize ) noexcept -> void {
             this->_resize(newSize);
             for ( Size i = this->_size; i < newSize; ++ i ) {
@@ -93,7 +93,7 @@ namespace cds {
             this->_size = newSize;
         }
 
-        template < typename V = T, EnableIf < Type < V > :: copyConstructible > = 0 >
+        template < typename V = T, meta :: EnableIf < meta :: isCopyConstructible < V > () > = 0 >
         __CDS_OptionalInline auto resize ( Size newSize, ElementCRef value ) noexcept -> void {
             this->_resize(newSize);
             for ( Size i = this->_size; i < newSize; ++ i ) {
@@ -168,7 +168,7 @@ namespace cds {
                     aIt != aEnd && bIt != bEnd;
                     ++ aIt, ++ bIt // NOLINT(clion-misra-cpp2008-5-18-1)
                     ) {
-                if ( ! ( Type < T > :: compare (* aIt, * bIt ) ) ) { // NOLINT(clion-misra-cpp2008-5-3-1)
+                if ( ! ( meta :: equals (* aIt, * bIt ) ) ) { // NOLINT(clion-misra-cpp2008-5-3-1)
                     return false;
                 }
             }
@@ -440,7 +440,7 @@ namespace cds {
 namespace cds {
 
     template < typename T >
-    template < typename V, EnableIf < Type < V > :: copyConstructible > >
+    template < typename V, meta :: EnableIf < meta :: isCopyConstructible < V > () > >
     Array<T>::Array( InitializerList initializerList __CDS_MaybeUnused ) noexcept {
         for ( auto & element __CDS_MaybeUnused : initializerList ) {
             this->pushBack(element);
@@ -659,7 +659,7 @@ namespace cds {
     }
 
     template < typename T >
-    template < typename V, EnableIf < Type < V > :: defaultConstructible > >
+    template < typename V, meta :: EnableIf < meta :: isDefaultConstructible < V > () > >
     Array < T > :: Array ( Size size ) noexcept :
             _pData ( Memory :: instance ().createArray <  T * > (size) ),
             _capacity ( size ) {
@@ -671,7 +671,7 @@ namespace cds {
     }
 
     template < typename T >
-    template < typename V, EnableIf < Type < V > :: copyConstructible > >
+    template < typename V, meta :: EnableIf < meta :: isCopyConstructible < V > () > >
     Array<T>::Array ( Size size, ElementCRef defaultValue ) noexcept :
             _pData(Memory :: instance ().createArray < T * > (size)),
             _capacity(size){
@@ -693,7 +693,7 @@ namespace cds {
         Size currentCount = 0u;
 
         for (; index < this->size(); index++) {
-            if ( ! Type < T > :: compare (* this->_pData[index], element ) || currentCount >= count ) { // NOLINT(clion-misra-cpp2008-5-3-1)
+            if ( ! meta :: equals (* this->_pData[index], element ) || currentCount >= count ) { // NOLINT(clion-misra-cpp2008-5-3-1)
                 newBuf[newBufLength++] = this->_pData[index];
             } else {
                 removed = true;
@@ -721,7 +721,7 @@ namespace cds {
     auto Array<T>::removeLast(ElementCRef element) noexcept -> bool {
         Index position = -1;
         for ( Index i = this->size() - 1; i >= 0; -- i ) {
-            if ( Type < T > :: compare (* this->_pData[i], element ) ) {
+            if ( meta :: equals (* this->_pData[i], element ) ) {
                 position = i;
                 break;
             }
@@ -992,7 +992,7 @@ namespace cds {
 
         static auto newArrContains = [](T ** pArray, Size arrayLength, ElementCRef element) noexcept -> bool {
             for (Size i = 0u; i < arrayLength; ++ i ) {
-                if ( Type < T > :: compare (* pArray[i], element ) ) {
+                if ( meta :: equals (* pArray[i], element ) ) {
                     return true;
                 }
             }
@@ -1026,7 +1026,7 @@ namespace cds {
         DoubleLinkedList < Index > indices;
 
         for ( Index i = 0; i < this->_size; ++ i ) {
-            if ( Type < T > :: compare ( * this->_pData[i], value ) ) {
+            if ( meta :: equals ( * this->_pData[i], value ) ) {
                 (void) indices.pushBack(i);
             }
         }
@@ -1099,22 +1099,22 @@ namespace cds {
 
     template < typename T >
     auto Array < T > :: sequence () const & noexcept -> Sequence < Array < T > const > {
-        return Sequence < RemoveReference < decltype (*this) > > (*this);
+        return Sequence < meta :: RemoveReference < decltype (*this) > > (*this);
     }
 
     template < typename T >
     auto Array < T > :: sequence () & noexcept -> Sequence < Array < T > > {
-        return Sequence < RemoveReference < decltype (*this) > > (*this);
+        return Sequence < meta :: RemoveReference < decltype (*this) > > (*this);
     }
 
     template < typename T >
     auto Array < T > :: sequence () const && noexcept -> Sequence < Array < T > const > {
-        return Sequence < RemoveReference < decltype (*this) > > (std::move(*this));
+        return Sequence < meta :: RemoveReference < decltype (*this) > > (std::move(*this));
     }
 
     template < typename T >
     auto Array < T > :: sequence () && noexcept -> Sequence < Array < T > > {
-        return Sequence < RemoveReference < decltype (*this) > > (std::move(*this));
+        return Sequence < meta :: RemoveReference < decltype (*this) > > (std::move(*this));
     }
 
     namespace hidden {
@@ -1155,6 +1155,6 @@ namespace cds {
 
 #endif
 
-__CDS_RegisterParseTypeTemplateT(Array) // NOLINT(clion-misra-cpp2008-8-0-1)
+__CDS_Meta_RegisterParseTemplateType(Array) // NOLINT(clion-misra-cpp2008-8-0-1)
 
 #endif //CDS_ARRAY_HPP

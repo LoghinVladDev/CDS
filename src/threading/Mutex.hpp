@@ -226,6 +226,6 @@ namespace cds {
 #undef MUTEX_IMPLEMENTATION_WINAPI_CRITICAL_SECTION
 #endif
 
-__CDS_RegisterParseType(Mutex) // NOLINT(clion-misra-cpp2008-8-0-1)
+__CDS_Meta_RegisterParseType(Mutex) // NOLINT(clion-misra-cpp2008-8-0-1)
 
 #endif //CDS_MUTEX_HPP

@@ -58,7 +58,7 @@ namespace cds {
 
 }
 
-__CDS_RegisterParseType(Semaphore) // NOLINT(clion-misra-cpp2008-8-0-1)
+__CDS_Meta_RegisterParseType(Semaphore) // NOLINT(clion-misra-cpp2008-8-0-1)
 
 
 #endif //CDS_SEMAPHORE_HPP

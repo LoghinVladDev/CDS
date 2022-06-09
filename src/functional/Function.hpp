@@ -118,7 +118,7 @@ namespace cds {
         GenericFunctionAddress      pCallableObject { nullptr };
         Manager const             * pManager { nullptr };
 
-        template < typename Functor, EnableIf < Type < Functor > :: isCallableObject > = 0 >
+        template < typename Functor, meta :: EnableIf < meta :: isObjectFunction < Functor > () > = 0 >
         __CDS_OptimalInline auto initHandler ( Functor const & functor ) noexcept -> void {
 
     #if __CDS_cpplang_core_version >= __CDS_cpplang_core_version_17
@@ -150,7 +150,7 @@ namespace cds {
             this->initHandler( requestedStaticFunction );
         }
 
-        template < typename Functor, EnableIf < Type < Functor > :: isCallableObject > = 0 >
+        template < typename Functor, meta :: EnableIf < meta :: isObjectFunction < Functor > () > = 0 >
         __CDS_OptimalInline Function ( Functor const & functor ) noexcept { // NOLINT(google-explicit-constructor)
             this->initHandler ( functor );
         }
@@ -197,7 +197,7 @@ namespace cds {
             return * this;
         }
 
-        template < typename Functor, EnableIf < Type < Functor > :: isCallableObject > = 0 >
+        template < typename Functor, meta :: EnableIf < meta :: isObjectFunction < Functor > () > = 0 >
         __CDS_OptimalInline auto operator = ( Functor const & functor ) noexcept -> Function & {
             if ( this->pCallableObject == reinterpret_cast < GenericConstFunctorAddress > ( & functor ) ) {
                 return * this;
@@ -284,7 +284,7 @@ namespace cds {
 
     private:
 
-        template < typename ... Types, EnableIf < sizeof ... (Types) == 0u > = 0 >
+        template < typename ... Types, meta :: EnableIf < sizeof ... (Types) == 0u > = 0 >
         auto static accumulateTypesToString () noexcept -> String {
             return "";
         }
@@ -292,17 +292,17 @@ namespace cds {
         template < typename FirstType, typename ... Types >
         auto static accumulateTypesToString () noexcept -> String {
             if ( sizeof ... (Types) == 0u ) {
-                return utility :: TypeParseTraits < FirstType > :: name;
+                return meta :: Type < FirstType > :: name();
             }
 
-            return String(utility :: TypeParseTraits < FirstType > :: name) + ", " + accumulateTypesToString < Types ... > ();
+            return String( meta :: Type < FirstType > :: name() ) + ", " + accumulateTypesToString < Types ... > ();
         }
 
     public:
 
         __CDS_NoDiscard auto toString() const noexcept -> String override {
             std :: stringstream oss;
-            oss << "Function " << utility :: TypeParseTraits < ReturnType > :: name << " ( ";
+            oss << "Function " << meta :: Type < ReturnType > :: name () << " ( ";
 
             oss << Function :: accumulateTypesToString < ArgumentTypes ... > ();
 
@@ -399,7 +399,7 @@ namespace cds {
         GenericFunctionAddress      pCallableObject { nullptr };
         Manager const             * pManager { nullptr };
 
-        template < typename Functor, EnableIf < Type < Functor > :: isCallableObject > = 0 >
+        template < typename Functor, meta :: EnableIf < meta :: isObjectFunction < Functor > () > = 0 >
         __CDS_OptimalInline auto initHandler ( Functor const & functor ) noexcept -> void {
             this->pManager = & FunctorHandler < ReturnType ( ArgumentTypes ... ) noexcept, Functor > :: manager;
 
@@ -422,7 +422,7 @@ namespace cds {
             this->initHandler( requestedStaticFunction );
         }
 
-        template < typename Functor, EnableIf < Type < Functor > :: isCallableObject > = 0 >
+        template < typename Functor, meta :: EnableIf < meta :: isObjectFunction < Functor > () > = 0 >
         __CDS_OptimalInline Function ( Functor const & functor ) noexcept { // NOLINT(google-explicit-constructor)
             this->initHandler ( functor );
         }
@@ -435,7 +435,7 @@ namespace cds {
         __CDS_OptimalInline Function ( Function && function ) noexcept = delete;
         auto operator = ( Function && ) noexcept = delete;
 
-        template < typename Functor, EnableIf < Type < Functor > :: isCallableObject > = 0 >
+        template < typename Functor, meta :: EnableIf < meta :: isObjectFunction < Functor > () > = 0 >
         __CDS_OptimalInline auto operator = ( Functor const & functor ) noexcept -> Function & {
             if ( this->pCallableObject == reinterpret_cast < GenericConstFunctorAddress > ( & functor ) ) {
                 return * this;
