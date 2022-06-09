@@ -17,51 +17,51 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
      * @tparam __K is the type of the first pair member
      * @tparam __V is the type of the second pair member
      */
-    template < typename __K, typename __V > class Pair;
+    template < typename __K, typename __V > class Pair; // NOLINT(bugprone-reserved-identifier)
 
     /**
      * @class abstract type representing a smart pointer to a given type
      * @tparam __T is the addressed type
      */
-    template < typename __T >               class SmartPointer;
+    template < typename __T >               class SmartPointer; // NOLINT(bugprone-reserved-identifier)
 
     /**
      * @class type representing an Unique Pointer ( owned by one object only ) to a given type
      * @tparam __T is the addressed type
      */
-    template < typename __T >               class UniquePointer;
+    template < typename __T >               class UniquePointer; // NOLINT(bugprone-reserved-identifier)
 
     /**
      * @class abstract type representing a Shared Pointer ( deleted when not owned ) to a given type
      * @tparam __T is the addressed type
      */
-    template < typename __T >               class SharedPointer;
+    template < typename __T >               class SharedPointer; // NOLINT(bugprone-reserved-identifier)
 
     /**
      * @class abstract type representing a Foreign Pointer ( not owned, only addressed ) to a given type
      * @tparam __T is the addressed type
      */
-    template < typename __T >               class ForeignPointer;
+    template < typename __T >               class ForeignPointer; // NOLINT(bugprone-reserved-identifier)
 
     /**
      * @class abstract type representing a Shared Pointer ( deleted when not owned ) with atomic guarding to a given type
      * @tparam __T is the addressed type
      */
-    template < typename __T >               class AtomicSharedPointer;
+    template < typename __T >               class AtomicSharedPointer; // NOLINT(bugprone-reserved-identifier)
 
     namespace meta { // NOLINT(modernize-concat-nested-namespaces)
 
-        namespace __impl {
+        namespace __impl { // NOLINT(bugprone-reserved-identifier)
 
             /**
              * @brief Meta-type implementation used to check if two given types are the same
              * @tparam __LeftType is the first type
              * @tparam __RightType is the second type
              */
-            template < typename __LeftType, typename __RightType >
-            struct __IsSame : __FalseType {};
+            template < typename __LeftType, typename __RightType > // NOLINT(bugprone-reserved-identifier)
+            struct __IsSame : __FalseType {}; // NOLINT(bugprone-reserved-identifier)
 
-            template < typename __Type >
+            template < typename __Type > // NOLINT(bugprone-reserved-identifier)
             struct __IsSame < __Type, __Type > : __TrueType {};
 
 
@@ -70,189 +70,189 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
              * @tparam __LeftType is the first type
              * @tparam __RightType is the second type
              */
-            template < typename __LeftType, typename __RightType, typename = Void <> > struct __LessThanPossible : __FalseType {};
+            template < typename __LeftType, typename __RightType, typename = Void <> > struct __LessThanPossible : __FalseType {}; // NOLINT(bugprone-reserved-identifier)
 
             /**
              * @brief Meta-type implementation used to check if two given types can be compared by greater than operator (\>)
              * @tparam __LeftType is the first type
              * @tparam __RightType is the second type
              */
-            template < typename __LeftType, typename __RightType, typename = Void <> > struct __GreaterThanPossible : __FalseType {};
+            template < typename __LeftType, typename __RightType, typename = Void <> > struct __GreaterThanPossible : __FalseType {}; // NOLINT(bugprone-reserved-identifier)
 
             /**
              * @brief Meta-type implementation used to check if two given types can be compared by less than or equal to operator (\<=)
              * @tparam __LeftType is the first type
              * @tparam __RightType is the second type
              */
-            template < typename __LeftType, typename __RightType, typename = Void <> > struct __LessThanOrEqualToPossible : __FalseType {};
+            template < typename __LeftType, typename __RightType, typename = Void <> > struct __LessThanOrEqualToPossible : __FalseType {}; // NOLINT(bugprone-reserved-identifier)
 
             /**
              * @brief Meta-type implementation used to check if two given types can be compared by greater than or equal to operator (\>=)
              * @tparam __LeftType is the first type
              * @tparam __RightType is the second type
              */
-            template < typename __LeftType, typename __RightType, typename = Void <> > struct __GreaterThanOrEqualToPossible : __FalseType {};
+            template < typename __LeftType, typename __RightType, typename = Void <> > struct __GreaterThanOrEqualToPossible : __FalseType {}; // NOLINT(bugprone-reserved-identifier)
 
             /**
              * @brief Meta-type implementation used to check if two given types can be compared by equal to operator (==)
              * @tparam __LeftType is the first type
              * @tparam __RightType is the second type
              */
-            template < typename __LeftType, typename __RightType, typename = Void <> > struct __EqualToPossible : __FalseType {};
+            template < typename __LeftType, typename __RightType, typename = Void <> > struct __EqualToPossible : __FalseType {}; // NOLINT(bugprone-reserved-identifier)
 
             /**
              * @brief Meta-type implementation used to check if two given types can be compared by not equal to operator (!=)
              * @tparam __LeftType is the first type
              * @tparam __RightType is the second type
              */
-            template < typename __LeftType, typename __RightType, typename = Void <> > struct __NotEqualToPossible : __FalseType {};
+            template < typename __LeftType, typename __RightType, typename = Void <> > struct __NotEqualToPossible : __FalseType {}; // NOLINT(bugprone-reserved-identifier)
 
-            template < typename __Type, typename = Void <> > struct __IndirectionPossible : __FalseType {};
+            template < typename __Type, typename = Void <> > struct __IndirectionPossible : __FalseType {}; // NOLINT(bugprone-reserved-identifier)
 
-            template < typename __Type, typename = Void <> > struct __PrefixIncrementPossible : __FalseType {};
+            template < typename __Type, typename = Void <> > struct __PrefixIncrementPossible : __FalseType {}; // NOLINT(bugprone-reserved-identifier)
 
-            template < typename __LeftType, typename __RightType >
+            template < typename __LeftType, typename __RightType > // NOLINT(bugprone-reserved-identifier)
             struct __LessThanPossible < __LeftType, __RightType, Void < decltype ( valueOf < __LeftType > () < valueOf < __RightType > () ) > > : __TrueType {};
 
-            template < typename __LeftType, typename __RightType >
+            template < typename __LeftType, typename __RightType > // NOLINT(bugprone-reserved-identifier)
             struct __GreaterThanPossible < __LeftType, __RightType, Void < decltype ( valueOf < __LeftType > () > valueOf < __RightType > () ) > > : __TrueType {};
 
-            template < typename __LeftType, typename __RightType >
+            template < typename __LeftType, typename __RightType > // NOLINT(bugprone-reserved-identifier)
             struct __LessThanOrEqualToPossible < __LeftType, __RightType, Void < decltype ( valueOf < __LeftType > () <= valueOf < __RightType > () ) > > : __TrueType {};
 
-            template < typename __LeftType, typename __RightType >
+            template < typename __LeftType, typename __RightType > // NOLINT(bugprone-reserved-identifier)
             struct __GreaterThanOrEqualToPossible < __LeftType, __RightType, Void < decltype ( valueOf < __LeftType > () >= valueOf < __RightType > () ) > > : __TrueType {};
 
-            template < typename __LeftType, typename __RightType >
+            template < typename __LeftType, typename __RightType > // NOLINT(bugprone-reserved-identifier)
             struct __EqualToPossible < __LeftType, __RightType, Void < decltype ( valueOf < __LeftType > () == valueOf < __RightType > () ) > > : __TrueType {};
 
-            template < typename __LeftType, typename __RightType >
+            template < typename __LeftType, typename __RightType > // NOLINT(bugprone-reserved-identifier)
             struct __NotEqualToPossible < __LeftType, __RightType, Void < decltype ( valueOf < __LeftType > () != valueOf < __RightType > () ) > > : __TrueType {};
 
-            template < typename __Type >
+            template < typename __Type > // NOLINT(bugprone-reserved-identifier)
             struct __IndirectionPossible < __Type, Void < decltype ( * valueOf < __Type > () ) > > : __TrueType {};
 
-            template < typename __Type >
+            template < typename __Type > // NOLINT(bugprone-reserved-identifier)
             struct __PrefixIncrementPossible < __Type, Void < decltype ( ++ valueOf < __Type > () ) > > : __TrueType {};
 
             /**
              * @brief Meta-type implementation used to check if a given type is printable ( std :: ostream << type )
              * @tparam __T is the type for which printability is checked
              */
-            template < typename __T, typename = void >
-            struct __IsPrintable : __FalseType {};
+            template < typename __T, typename = void > // NOLINT(bugprone-reserved-identifier)
+            struct __IsPrintable : __FalseType {}; // NOLINT(bugprone-reserved-identifier)
 
-            template < typename __T >
+            template < typename __T > // NOLINT(bugprone-reserved-identifier)
             struct __IsPrintable < __T, Void < decltype ( std :: cout << valueOf < __T > () ) > > : __TrueType {};
 
             /**
              * @brief Meta-type implementation used to check if a given type is an enum type
              * @tparam __T is the type checked
              */
-            template < typename __T >
-            struct __IsEnum : __BoolConstant < std :: is_enum < __T > :: value > {};
+            template < typename __T > // NOLINT(bugprone-reserved-identifier)
+            struct __IsEnum : __BoolConstant < std :: is_enum < __T > :: value > {}; // NOLINT(bugprone-reserved-identifier)
 
             /**
              * @brief Meta-type implementation used to check if a given type is an union type
              * @tparam __T is the type checked
              */
-            template < typename __T >
-            struct __IsUnion : __BoolConstant < std :: is_union < __T > :: value > {};
+            template < typename __T > // NOLINT(bugprone-reserved-identifier)
+            struct __IsUnion : __BoolConstant < std :: is_union < __T > :: value > {}; // NOLINT(bugprone-reserved-identifier)
 
             /**
              * @brief Meta-type implementation used to check if a given type is a class or struct type
              * @tparam __T is the type checked
              */
-            template < typename __T >
-            struct __IsClass : __BoolConstant < std :: is_class < __T > :: value > {};
+            template < typename __T > // NOLINT(bugprone-reserved-identifier)
+            struct __IsClass : __BoolConstant < std :: is_class < __T > :: value > {}; // NOLINT(bugprone-reserved-identifier)
 
             /**
              * @brief Meta-type implementation used to check if a given type is a function type
              * @tparam __T is the type checked
              */
-            template < typename __T >
-            struct __IsFunction : __BoolConstant < std :: is_function < __T > :: value > {};
+            template < typename __T > // NOLINT(bugprone-reserved-identifier)
+            struct __IsFunction : __BoolConstant < std :: is_function < __T > :: value > {}; // NOLINT(bugprone-reserved-identifier)
 
             /**
              * @brief Meta-type implementation used to check if a given type is a fundamental type ( bool, int types, float types )
              * @tparam __T is the type checked
              */
-            template < typename __T >
-            struct __IsFundamental : __BoolConstant < std :: is_fundamental < __T > :: value > {};
+            template < typename __T > // NOLINT(bugprone-reserved-identifier)
+            struct __IsFundamental : __BoolConstant < std :: is_fundamental < __T > :: value > {}; // NOLINT(bugprone-reserved-identifier)
 
             /**
              * @brief Meta-type implementation used to check if a given type is an integral type ( bool, int types )
              * @tparam __T is the type checked
              */
-            template < typename __T >
-            struct __IsIntegral : __BoolConstant < std :: is_integral < __T > :: value > {};
+            template < typename __T > // NOLINT(bugprone-reserved-identifier)
+            struct __IsIntegral : __BoolConstant < std :: is_integral < __T > :: value > {}; // NOLINT(bugprone-reserved-identifier)
 
             /**
              * @brief Meta-type implementation used to check if a given type is a floating point type ( float types )
              * @tparam __T is the type checked
              */
-            template < typename __T >
-            struct __IsFloatingPoint : __BoolConstant < std :: is_floating_point < __T > :: value > {};
+            template < typename __T > // NOLINT(bugprone-reserved-identifier)
+            struct __IsFloatingPoint : __BoolConstant < std :: is_floating_point < __T > :: value > {}; // NOLINT(bugprone-reserved-identifier)
 
             /**
              * @brief Meta-type implementation used to check if a given type is an arithmetic type ( int, float types )
              * @tparam __T is the type checked
              */
-            template < typename __T >
-            struct __IsArithmetic : __BoolConstant < std :: is_arithmetic < __T > :: value > {};
+            template < typename __T > // NOLINT(bugprone-reserved-identifier)
+            struct __IsArithmetic : __BoolConstant < std :: is_arithmetic < __T > :: value > {}; // NOLINT(bugprone-reserved-identifier)
 
-            namespace __isSignedImpl {
-                template < typename __T, bool = __IsArithmetic < __T > :: value >
-                struct __IsSigned : __FalseType {};
+            namespace __isSignedImpl { // NOLINT(bugprone-reserved-identifier)
+                template < typename __T, bool = __IsArithmetic < __T > :: value > // NOLINT(bugprone-reserved-identifier)
+                struct __IsSigned : __FalseType {}; // NOLINT(bugprone-reserved-identifier)
 
-                template < typename __T >
+                template < typename __T > // NOLINT(bugprone-reserved-identifier)
                 struct __IsSigned < __T, true > : __impl :: __BoolConstant < __T ( -1 ) < __T ( 0 ) > {};
             }
 
-            template < typename __T >
-            struct __IsSigned : __isSignedImpl :: __IsSigned < __T > :: Type {};
+            template < typename __T > // NOLINT(bugprone-reserved-identifier)
+            struct __IsSigned : __isSignedImpl :: __IsSigned < __T > :: Type {}; // NOLINT(bugprone-reserved-identifier)
 
             /**
              * @brief Meta-type implementation used to check if a given type can be constructed without arguments ( has default constructor )
              * @tparam __T is the type checked
              */
-            template < typename __T >
-            struct __IsDefaultConstructible : __BoolConstant < std :: is_default_constructible < __T > :: value > {};
+            template < typename __T > // NOLINT(bugprone-reserved-identifier)
+            struct __IsDefaultConstructible : __BoolConstant < std :: is_default_constructible < __T > :: value > {}; // NOLINT(bugprone-reserved-identifier)
 
             /**
              * @brief Meta-type implementation used to check if a given type can be constructed by copy ( has copy constructor )
              * @tparam __T is the type checked
              */
-            template < typename __T >
-            struct __IsCopyConstructible : __BoolConstant < std :: is_copy_constructible < __T > :: value > {};
+            template < typename __T > // NOLINT(bugprone-reserved-identifier)
+            struct __IsCopyConstructible : __BoolConstant < std :: is_copy_constructible < __T > :: value > {}; // NOLINT(bugprone-reserved-identifier)
 
             /**
              * @brief Meta-type implementation used to check if a given type can be constructed by move ( has move constructor )
              * @tparam __T is the type checked
              */
-            template < typename __T >
-            struct __IsMoveConstructible : __BoolConstant < std :: is_move_constructible < __T > :: value > {};
+            template < typename __T > // NOLINT(bugprone-reserved-identifier)
+            struct __IsMoveConstructible : __BoolConstant < std :: is_move_constructible < __T > :: value > {}; // NOLINT(bugprone-reserved-identifier)
 
             /**
              * @brief Meta-type implementation used to check if a given type can be assigned a value by copy ( has copy assignment operator )
              * @tparam __T is the type checked
              */
-            template < typename __T >
-            struct __IsCopyAssignable : __BoolConstant < std :: is_copy_assignable < __T > :: value > {};
+            template < typename __T > // NOLINT(bugprone-reserved-identifier)
+            struct __IsCopyAssignable : __BoolConstant < std :: is_copy_assignable < __T > :: value > {}; // NOLINT(bugprone-reserved-identifier)
 
             /**
              * @brief Meta-type implementation used to check if a given type can be assigned a value by move ( has move assignment operator )
              * @tparam __T is the type checked
              */
-            template < typename __T >
-            struct __IsMoveAssignable : __BoolConstant < std :: is_move_assignable < __T > :: value > {};
+            template < typename __T > // NOLINT(bugprone-reserved-identifier)
+            struct __IsMoveAssignable : __BoolConstant < std :: is_move_assignable < __T > :: value > {}; // NOLINT(bugprone-reserved-identifier)
 
-            namespace __baseOfImpl {
-                template < typename __BaseType >                            auto __conversionTest ( __BaseType const volatile * ) noexcept -> __TrueType;
-                template < typename >                                       auto __conversionTest ( void     const volatile *   ) noexcept -> __FalseType;
+            namespace __baseOfImpl { // NOLINT(bugprone-reserved-identifier)
+                template < typename __BaseType >                            auto __conversionTest ( __BaseType const volatile * ) noexcept -> __TrueType; // NOLINT(bugprone-reserved-identifier)
+                template < typename >                                       auto __conversionTest ( void     const volatile *   ) noexcept -> __FalseType; // NOLINT(bugprone-reserved-identifier)
 
-                template < typename, typename >                             auto __testBaseOf ( ... ) -> __TrueType;
-                template < typename __BaseType, typename __DerivedType >    auto __testBaseOf ( int ) ->
+                template < typename, typename >                             auto __testBaseOf ( ... ) -> __TrueType; // NOLINT(bugprone-reserved-identifier)
+                template < typename __BaseType, typename __DerivedType >    auto __testBaseOf ( int ) -> // NOLINT(bugprone-reserved-identifier)
                         decltype ( __conversionTest < __BaseType > ( addressOf < __DerivedType > () ) );
             }
 
@@ -261,8 +261,8 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
              * @tparam __BaseType is the type given as a base class
              * @tparam __DerivedType is the type given as a derived class
              */
-            template < typename __BaseType, typename __DerivedType >
-            struct __IsBaseOf : __BoolConstant <
+            template < typename __BaseType, typename __DerivedType > // NOLINT(bugprone-reserved-identifier)
+            struct __IsBaseOf : __BoolConstant < // NOLINT(bugprone-reserved-identifier)
                     __IsClass < __BaseType > :: value && __IsClass < __DerivedType > :: value &&
                     decltype ( __baseOfImpl :: __testBaseOf < __BaseType, __DerivedType > (0) ) :: value
             > {};
@@ -271,8 +271,8 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
              * @brief Meta-type implementation used to check if a given type is a callable type ( function / object with operator () )
              * @tparam __T is the type checked
              */
-            template < typename __T, typename = void >
-            struct __IsCallable {
+            template < typename __T, typename = void > // NOLINT(bugprone-reserved-identifier)
+            struct __CDS_Deprecated __IsCallable { // NOLINT(bugprone-reserved-identifier)
                 /// if the given type is a class, or a class reference, use the operator() deduction implementation value. Otherwise, false,
                 /// unless it is overridden by a partial template specialization
                 constexpr static bool value = __Conditional <
@@ -282,103 +282,103 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 > :: Type :: value;
             };
 
-            template < typename __T, typename ... __A >
+            template < typename __T, typename ... __A > // NOLINT(bugprone-reserved-identifier)
             struct __IsCallable < __T ( __A ... ) > : __TrueType {};
 
-            template < typename __T, typename __U, typename ... __A >
+            template < typename __T, typename __U, typename ... __A > // NOLINT(bugprone-reserved-identifier)
             struct __IsCallable < __T (*) ( __A ... ), __U > : __TrueType {};
 
-            template < typename __T, typename __U, typename ... __A >
+            template < typename __T, typename __U, typename ... __A > // NOLINT(bugprone-reserved-identifier)
             struct __IsCallable < __T (&) ( __A ... ), __U > : __TrueType {};
 
-            template < typename __T, typename __U, typename ... __A >
+            template < typename __T, typename __U, typename ... __A > // NOLINT(bugprone-reserved-identifier)
             struct __IsCallable < __T ( __A ..., ... ), __U > : __TrueType {};
 
-            template < typename __T, typename __U, typename ... __A >
+            template < typename __T, typename __U, typename ... __A > // NOLINT(bugprone-reserved-identifier)
             struct __IsCallable < __T (*) ( __A ..., ... ), __U > : __TrueType {};
 
-            template < typename __T, typename __U, typename ... __A >
+            template < typename __T, typename __U, typename ... __A > // NOLINT(bugprone-reserved-identifier)
             struct __IsCallable < __T (&) ( __A ..., ... ), __U > : __TrueType {};
 
-            template < typename __T, typename __U, typename ... __A >
+            template < typename __T, typename __U, typename ... __A > // NOLINT(bugprone-reserved-identifier)
             struct __IsCallable < __T ( __A ... ) const, __U > : __TrueType {};
 
-            template < typename __T, typename __U, typename ... __A >
+            template < typename __T, typename __U, typename ... __A > // NOLINT(bugprone-reserved-identifier)
             struct __IsCallable < __T ( __A ... ) volatile, __U > : __TrueType {};
 
-            template < typename __T, typename __U, typename ... __A >
+            template < typename __T, typename __U, typename ... __A > // NOLINT(bugprone-reserved-identifier)
             struct __IsCallable < __T ( __A ... ) const volatile, __U > : __TrueType {};
 
-            template < typename __T, typename __U, typename ... __A >
+            template < typename __T, typename __U, typename ... __A > // NOLINT(bugprone-reserved-identifier)
             struct __IsCallable < __T ( __A ..., ... ) const, __U > : __TrueType {};
 
-            template < typename __T, typename __U, typename ... __A >
+            template < typename __T, typename __U, typename ... __A > // NOLINT(bugprone-reserved-identifier)
             struct __IsCallable < __T ( __A ..., ... ) volatile, __U > : __TrueType {};
 
-            template < typename __T, typename __U, typename ... __A >
+            template < typename __T, typename __U, typename ... __A > // NOLINT(bugprone-reserved-identifier)
             struct __IsCallable < __T ( __A ..., ... ) const volatile, __U > : __TrueType {};
 
-            template < typename __T, typename __U, typename ... __A >
+            template < typename __T, typename __U, typename ... __A > // NOLINT(bugprone-reserved-identifier)
             struct __IsCallable < __T ( __A ... ) &, __U > : __TrueType {};
 
-            template < typename __T, typename __U, typename ... __A >
+            template < typename __T, typename __U, typename ... __A > // NOLINT(bugprone-reserved-identifier)
             struct __IsCallable < __T ( __A ... ) const &, __U > : __TrueType {};
 
-            template < typename __T, typename __U, typename ... __A >
+            template < typename __T, typename __U, typename ... __A > // NOLINT(bugprone-reserved-identifier)
             struct __IsCallable < __T ( __A ... ) volatile &, __U > : __TrueType {};
 
-            template < typename __T, typename __U, typename ... __A >
+            template < typename __T, typename __U, typename ... __A > // NOLINT(bugprone-reserved-identifier)
             struct __IsCallable < __T ( __A ... ) const volatile &, __U > : __TrueType {};
 
-            template < typename __T, typename __U, typename ... __A >
+            template < typename __T, typename __U, typename ... __A > // NOLINT(bugprone-reserved-identifier)
             struct __IsCallable < __T ( __A ..., ... ) const &, __U > : __TrueType {};
 
-            template < typename __T, typename __U, typename ... __A >
+            template < typename __T, typename __U, typename ... __A > // NOLINT(bugprone-reserved-identifier)
             struct __IsCallable < __T ( __A ..., ... ) volatile &, __U > : __TrueType {};
 
-            template < typename __T, typename __U, typename ... __A >
+            template < typename __T, typename __U, typename ... __A > // NOLINT(bugprone-reserved-identifier)
             struct __IsCallable < __T ( __A ..., ... ) const volatile &, __U > : __TrueType {};
 
-            template < typename __T, typename __U, typename ... __A >
+            template < typename __T, typename __U, typename ... __A > // NOLINT(bugprone-reserved-identifier)
             struct __IsCallable < __T ( __A ... ) &&, __U > : __TrueType {};
 
-            template < typename __T, typename __U, typename ... __A >
+            template < typename __T, typename __U, typename ... __A > // NOLINT(bugprone-reserved-identifier)
             struct __IsCallable < __T ( __A ... ) const &&, __U > : __TrueType {};
 
-            template < typename __T, typename __U, typename ... __A >
+            template < typename __T, typename __U, typename ... __A > // NOLINT(bugprone-reserved-identifier)
             struct __IsCallable < __T ( __A ... ) volatile &&, __U > : __TrueType {};
 
-            template < typename __T, typename __U, typename ... __A >
+            template < typename __T, typename __U, typename ... __A > // NOLINT(bugprone-reserved-identifier)
             struct __IsCallable < __T ( __A ... ) const volatile &&, __U > : __TrueType {};
 
-            template < typename __T, typename __U, typename ... __A >
+            template < typename __T, typename __U, typename ... __A > // NOLINT(bugprone-reserved-identifier)
             struct __IsCallable < __T ( __A ..., ... ) const &&, __U > : __TrueType {};
 
-            template < typename __T, typename __U, typename ... __A >
+            template < typename __T, typename __U, typename ... __A > // NOLINT(bugprone-reserved-identifier)
             struct __IsCallable < __T ( __A ..., ... ) volatile &&, __U > : __TrueType {};
 
-            template < typename __T, typename __U, typename ... __A >
+            template < typename __T, typename __U, typename ... __A > // NOLINT(bugprone-reserved-identifier)
             struct __IsCallable < __T ( __A ..., ... ) const volatile &&, __U > : __TrueType {};
 
 
-            template < typename __T >
+            template < typename __T > // NOLINT(bugprone-reserved-identifier)
             struct __IsCallable < __T, int > {
             private:
-                using __y = char (&)[1];
-                using __n = char (&)[2];
+                using __y = char (&)[1]; // NOLINT(bugprone-reserved-identifier)
+                using __n = char (&)[2]; // NOLINT(bugprone-reserved-identifier)
 
-                struct __Fallback { auto operator ()() -> void {} };
-                struct __Derived : __T, __Fallback {};
+                struct __Fallback { auto operator ()() -> void {} }; // NOLINT(bugprone-reserved-identifier)
+                struct __Derived : __T, __Fallback {}; // NOLINT(bugprone-reserved-identifier)
 
-                template < typename __U, __U >
-                struct __Check;
+                template < typename __U, __U > // NOLINT(bugprone-reserved-identifier)
+                struct __Check; // NOLINT(bugprone-reserved-identifier)
 
                 __CDS_WarningSuppression_NoReturnStatement_SuppressEnable
                 template < typename >
-                static auto __test ( ... ) -> __y {} // NOLINT(clion-misra-cpp2008-8-4-1)
+                static auto __test ( ... ) -> __y {} // NOLINT(clion-misra-cpp2008-8-4-1, bugprone-reserved-identifier)
 
-                template < typename __C >
-                static auto __test ( __Check < auto ( __Fallback :: * ) () -> void, & __C :: operator () > * ) -> __n {}
+                template < typename __C > // NOLINT(bugprone-reserved-identifier)
+                static auto __test ( __Check < auto ( __Fallback :: * ) () -> void, & __C :: operator () > * ) -> __n {} // NOLINT(bugprone-reserved-identifier)
                 __CDS_WarningSuppression_NoReturnStatement_SuppressDisable
 
             public:
@@ -389,134 +389,134 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
              * @brief Meta-type implementation used to obtain the type name in a StringLiteral format ( char const * )
              * @tparam __T is the type for which the name is obtained
              */
-            template < typename __T > struct __TypeParseTraits { constexpr static StringLiteral name = "Undefined"; };
+            template < typename __T > struct __TypeParseTraits { constexpr static StringLiteral name = "Undefined"; }; // NOLINT(bugprone-reserved-identifier)
 
             /**
              * @brief Meta-type implementation used to check if a given type is a static-function type ( non-object callable )
              * @tparam __T is the type checked
              */
-            template < typename __T, typename = void > struct __IsStaticFunction : __FalseType {};
+            template < typename __T, typename = void > struct __IsStaticFunction : __FalseType {}; // NOLINT(bugprone-reserved-identifier)
 
             /**
              * @brief Meta-type implementation used to check if a given type is a callable object ( non-static function )
              * @tparam __T is the type checked
              */
-            template < typename __T, typename = void > struct __IsObjectFunction : __FalseType {};
+            template < typename __T, typename = void > struct __IsObjectFunction : __FalseType {}; // NOLINT(bugprone-reserved-identifier)
 
-            template < typename __T >
+            template < typename __T > // NOLINT(bugprone-reserved-identifier)
             struct __IsStaticFunction < __T > : __BoolConstant < __IsFunction < __T > :: value && ! __IsObjectFunction < __T > :: value > {};
 
-            template < typename __T >
+            template < typename __T > // NOLINT(bugprone-reserved-identifier)
             struct __IsObjectFunction < __T, Void < decltype ( & __T :: operator () ) > > : __TrueType {};
 
             /**
              * @brief Meta-type implementation used to check if a given type is an array type
              * @tparam __T is the type checked
              */
-            template < typename >                   struct __IsArray                    : __FalseType {};
-            template < typename __T, Size __size >  struct __IsArray < __T [__size] >   : __TrueType {};
-            template < typename __T >               struct __IsArray < __T [] >         : __TrueType {};
+            template < typename >                   struct __IsArray                    : __FalseType {}; // NOLINT(bugprone-reserved-identifier)
+            template < typename __T, Size __size >  struct __IsArray < __T [__size] >   : __TrueType {}; // NOLINT(bugprone-reserved-identifier)
+            template < typename __T >               struct __IsArray < __T [] >         : __TrueType {}; // NOLINT(bugprone-reserved-identifier)
 
-            namespace __isPointerImpl {
+            namespace __isPointerImpl { // NOLINT(bugprone-reserved-identifier)
                 /**
                  * @brief Meta-type helper implementation used to check if a given type is a pointer type
                  * @tparam __T is the type checked
                  */
-                template < typename >       struct __IsPointer : __FalseType {};
-                template < typename __T >   struct __IsPointer < __T * > : __TrueType {};
+                template < typename >       struct __IsPointer : __FalseType {}; // NOLINT(bugprone-reserved-identifier)
+                template < typename __T >   struct __IsPointer < __T * > : __TrueType {}; // NOLINT(bugprone-reserved-identifier)
             }
 
             /**
              * @brief Meta-type implementation used to check if a given type is a pointer type
              * @tparam __T is the type checked
              */
-            template < typename __T >       struct __IsPointer : __isPointerImpl :: __IsPointer < typename __RemoveConstVolatile < __T > :: Type > {};
+            template < typename __T >       struct __IsPointer : __isPointerImpl :: __IsPointer < typename __RemoveConstVolatile < __T > :: Type > {}; // NOLINT(bugprone-reserved-identifier)
 
             /**
              * @brief Meta-type implementation used to check if a given type is a lvalue reference (&) type
              * @tparam __T is the type checked
              */
-            template < typename >           struct __IsLValueReference              : __FalseType {};
-            template < typename __T >       struct __IsLValueReference < __T & >    : __TrueType {};
+            template < typename >           struct __IsLValueReference              : __FalseType {}; // NOLINT(bugprone-reserved-identifier)
+            template < typename __T >       struct __IsLValueReference < __T & >    : __TrueType {}; // NOLINT(bugprone-reserved-identifier)
 
             /**
              * @brief Meta-type implementation used to check if a given type is a rvalue reference (&&) type
              * @tparam __T is the type checked
              */
-            template < typename >           struct __IsRValueReference              : __FalseType {};
-            template < typename __T >       struct __IsRValueReference < __T && >   : __TrueType {};
+            template < typename >           struct __IsRValueReference              : __FalseType {}; // NOLINT(bugprone-reserved-identifier)
+            template < typename __T >       struct __IsRValueReference < __T && >   : __TrueType {}; // NOLINT(bugprone-reserved-identifier)
 
-            namespace __isMemberPointerImpl {
+            namespace __isMemberPointerImpl { // NOLINT(bugprone-reserved-identifier)
                 /**
                  * @brief Meta-type helper implementation used to check if a given type is a member of an object
                  * @tparam __T is the type checked
                  */
-                template < typename >                   struct __IsMemberObjectPointer                      : __FalseType {};
-                template < typename __T, typename __C > struct __IsMemberObjectPointer < __T __C :: * >     : __BoolConstant < ! __IsFunction < __T > :: value > {};
+                template < typename >                   struct __IsMemberObjectPointer                      : __FalseType {}; // NOLINT(bugprone-reserved-identifier)
+                template < typename __T, typename __C > struct __IsMemberObjectPointer < __T __C :: * >     : __BoolConstant < ! __IsFunction < __T > :: value > {}; // NOLINT(bugprone-reserved-identifier)
             }
 
             /**
              * @brief Meta-type implementation used to check if a given type is a member of an object
              * @tparam __T is the type checked
              */
-            template < typename __T, typename = void >
-            struct __IsMemberObjectPointer : __FalseType {};
+            template < typename __T, typename = void > // NOLINT(bugprone-reserved-identifier)
+            struct __IsMemberObjectPointer : __FalseType {}; // NOLINT(bugprone-reserved-identifier)
 
-            template < typename __T >               struct __IsMemberObjectPointer < __T >                  : __isMemberPointerImpl :: __IsMemberObjectPointer < typename __RemoveConstVolatile < __T > :: Type > {};
-            template < typename __T, typename __C > struct __IsMemberObjectPointer < __T __C :: *, __C >    : __IsMemberObjectPointer < typename __RemoveConstVolatile < __T __C :: * > :: Type > {};
+            template < typename __T >               struct __IsMemberObjectPointer < __T >                  : __isMemberPointerImpl :: __IsMemberObjectPointer < typename __RemoveConstVolatile < __T > :: Type > {}; // NOLINT(bugprone-reserved-identifier)
+            template < typename __T, typename __C > struct __IsMemberObjectPointer < __T __C :: *, __C >    : __IsMemberObjectPointer < typename __RemoveConstVolatile < __T __C :: * > :: Type > {}; // NOLINT(bugprone-reserved-identifier)
 
-            namespace __isMemberPointerImpl {
+            namespace __isMemberPointerImpl { // NOLINT(bugprone-reserved-identifier)
                 /**
                  * @brief Meta-type helper implementation used to check if a given type is a member function of an object
                  * @tparam __T is the type checked
                  */
-                template < typename >                   struct __IsMemberFunctionPointer                    : __FalseType {};
-                template < typename __T, typename __C > struct __IsMemberFunctionPointer < __T __C :: * >   : __BoolConstant < __IsFunction < __T > :: value > {};
+                template < typename >                   struct __IsMemberFunctionPointer                    : __FalseType {}; // NOLINT(bugprone-reserved-identifier)
+                template < typename __T, typename __C > struct __IsMemberFunctionPointer < __T __C :: * >   : __BoolConstant < __IsFunction < __T > :: value > {}; // NOLINT(bugprone-reserved-identifier)
             }
 
             /**
              * @brief Meta-type implementation used to check if a given type is a member function of an object
              * @tparam __T is the type checked
              */
-            template < typename __T, typename = void > struct __IsMemberFunctionPointer : __FalseType {};
+            template < typename __T, typename = void > struct __IsMemberFunctionPointer : __FalseType {}; // NOLINT(bugprone-reserved-identifier)
 
-            template < typename __T >               struct __IsMemberFunctionPointer < __T >                : __isMemberPointerImpl :: __IsMemberFunctionPointer < typename __RemoveConstVolatile < __T > :: Type > {};
-            template < typename __T, typename __C > struct __IsMemberFunctionPointer < __T __C :: *, __C >  : __isMemberPointerImpl :: __IsMemberFunctionPointer < typename __RemoveConstVolatile < __T __C :: * > :: Type > {};
+            template < typename __T >               struct __IsMemberFunctionPointer < __T >                : __isMemberPointerImpl :: __IsMemberFunctionPointer < typename __RemoveConstVolatile < __T > :: Type > {}; // NOLINT(bugprone-reserved-identifier)
+            template < typename __T, typename __C > struct __IsMemberFunctionPointer < __T __C :: *, __C >  : __isMemberPointerImpl :: __IsMemberFunctionPointer < typename __RemoveConstVolatile < __T __C :: * > :: Type > {}; // NOLINT(bugprone-reserved-identifier)
 
 
             /**
              * @brief Meta-type implementation used to check if a given type is a Pair type
              * @tparam __T is the type checked
              */
-            template < typename __T >               struct __IsPair                                           : __FalseType {};
-            template < typename __K, typename __V > struct __IsPair < cds :: Pair < __K, __V > >              : __TrueType {};
+            template < typename __T >               struct __IsPair                                           : __FalseType {}; // NOLINT(bugprone-reserved-identifier)
+            template < typename __K, typename __V > struct __IsPair < cds :: Pair < __K, __V > >              : __TrueType {}; // NOLINT(bugprone-reserved-identifier)
 
 
             /**
              * @brief Meta-type implementation used to check if a given type is a Smart Pointer derived-type
              * @tparam __T is the type checked
              */
-            template < typename __T >               struct __IsSmartPointer                                                         : __FalseType {};
-            template < typename __T >               struct __IsSmartPointer < cds :: UniquePointer < __T > >                        : __TrueType {};
-            template < typename __T >               struct __IsSmartPointer < cds :: SharedPointer < __T > >                        : __TrueType {};
-            template < typename __T >               struct __IsSmartPointer < cds :: ForeignPointer < __T > >                       : __TrueType {};
-            template < typename __T >               struct __IsSmartPointer < cds :: AtomicSharedPointer < __T > >                  : __TrueType {};
+            template < typename __T >               struct __IsSmartPointer                                                         : __FalseType {}; // NOLINT(bugprone-reserved-identifier)
+            template < typename __T >               struct __IsSmartPointer < cds :: UniquePointer < __T > >                        : __TrueType {}; // NOLINT(bugprone-reserved-identifier)
+            template < typename __T >               struct __IsSmartPointer < cds :: SharedPointer < __T > >                        : __TrueType {}; // NOLINT(bugprone-reserved-identifier)
+            template < typename __T >               struct __IsSmartPointer < cds :: ForeignPointer < __T > >                       : __TrueType {}; // NOLINT(bugprone-reserved-identifier)
+            template < typename __T >               struct __IsSmartPointer < cds :: AtomicSharedPointer < __T > >                  : __TrueType {}; // NOLINT(bugprone-reserved-identifier)
 
             /**
              * @brief Meta-type implementation used to check if a given type is a const type
              * @tparam __T is the type checked
              */
-            template < typename >           struct __IsConst                        : __FalseType {};
-            template < typename __T >       struct __IsConst < __T const >          : __TrueType {};
+            template < typename >           struct __IsConst                        : __FalseType {}; // NOLINT(bugprone-reserved-identifier)
+            template < typename __T >       struct __IsConst < __T const >          : __TrueType {}; // NOLINT(bugprone-reserved-identifier)
 
             /**
              * @brief Meta-type implementation used to check if a given type is a volatile type
              * @tparam __T is the type checked
              */
-            template < typename >           struct __IsVolatile                     : __FalseType {};
-            template < typename __T >       struct __IsVolatile < __T volatile >    : __TrueType {};
+            template < typename >           struct __IsVolatile                     : __FalseType {}; // NOLINT(bugprone-reserved-identifier)
+            template < typename __T >       struct __IsVolatile < __T volatile >    : __TrueType {}; // NOLINT(bugprone-reserved-identifier)
 
-            namespace __decayImpl {
+            namespace __decayImpl { // NOLINT(bugprone-reserved-identifier)
                 /**
                  * @brief Meta-type helper implementation used to obtain safe pass-by-value equivalent type of a given type
                  * @tparam __T is the type for which to obtain a pass by value
@@ -528,20 +528,20 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                  *  <li> If is function, go with addition of pointer </li>
                  * </ul>
                  */
-                template < typename __T, bool __isArray = __IsArray < __T > :: value, bool __isFunction = __IsFunction < __T > :: value >
-                struct __Decay {};
+                template < typename __T, bool __isArray = __IsArray < __T > :: value, bool __isFunction = __IsFunction < __T > :: value > // NOLINT(bugprone-reserved-identifier)
+                struct __Decay {}; // NOLINT(bugprone-reserved-identifier)
 
-                template < typename __T >
+                template < typename __T > // NOLINT(bugprone-reserved-identifier)
                 struct __Decay < __T, false, false > {
                     using Type = typename __RemoveConstVolatile < __T > :: Type;
                 };
 
-                template < typename __T >
+                template < typename __T > // NOLINT(bugprone-reserved-identifier)
                 struct __Decay < __T, true, false > {
                     using Type = typename __RemoveExtent < __T > :: Type *;
                 };
 
-                template < typename __T >
+                template < typename __T > // NOLINT(bugprone-reserved-identifier)
                 struct __Decay < __T, false, true > {
                     using Type = typename __AddPointer < __T > :: Type *;
                 };
@@ -560,8 +560,8 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
              * @example decay will convert any function signature type to a function pointer for that signature type <br/>
              * <pre>- Decay\<int(int)\>       = int (*)(int); </pre>
              */
-            template < typename __T >
-            struct __Decay {
+            template < typename __T > // NOLINT(bugprone-reserved-identifier)
+            struct __Decay { // NOLINT(bugprone-reserved-identifier)
 
             private:
                 using FirstParseDecayedType = typename __RemoveReference < __T > :: Type;
@@ -589,24 +589,24 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
              *      <li> If more than two types are given, the type is the common type of the first two to their common type and the remaining types. </li>
              * </ul>
              */
-            template < typename ... __TypePack >    struct __Common;
+            template < typename ... __TypePack >    struct __Common; // NOLINT(bugprone-reserved-identifier)
             template <>                             struct __Common <> {};
-            template < typename __T >               struct __Common < __T > : __Common < __T, __T > {};
+            template < typename __T >               struct __Common < __T > : __Common < __T, __T > {}; // NOLINT(bugprone-reserved-identifier)
 
-            namespace __commonImpl {
+            namespace __commonImpl { // NOLINT(bugprone-reserved-identifier)
                 /**
                  * @brief Meta-type helper implementation used to obtain the common type between two types via ternary operator, if possible
                  */
-                struct __CommonTest {
-                    template < typename __T >   struct SuccessType { using Type = __T; };
+                struct __CommonTest { // NOLINT(bugprone-reserved-identifier)
+                    template < typename __T >   struct SuccessType { using Type = __T; }; // NOLINT(bugprone-reserved-identifier)
                                                 struct FailureType { };
 
-                    template < typename __T, typename __U > using ConditionalType = decltype ( true ? valueOf < __T > () : valueOf < __U > () );
-                    template < typename __T, typename __U > static SuccessType < typename __Decay < ConditionalType < __T, __U > > :: Type >                                __test ( int );
-                    template < typename __T, typename __U > static SuccessType < typename __RemoveConstVolatile < ConditionalType < __T const &, __U const & > > :: Type >  __test2 ( int ); /// cpp-17?
+                    template < typename __T, typename __U > using ConditionalType = decltype ( true ? valueOf < __T > () : valueOf < __U > () ); // NOLINT(bugprone-reserved-identifier)
+                    template < typename __T, typename __U > static SuccessType < typename __Decay < ConditionalType < __T, __U > > :: Type >                                __test ( int ) {} // NOLINT(bugprone-reserved-identifier)
+                    template < typename __T, typename __U > static SuccessType < typename __RemoveConstVolatile < ConditionalType < __T const &, __U const & > > :: Type >  __test2 ( int ) {}  // NOLINT(bugprone-reserved-identifier)
 
-                    template < typename, typename >         static FailureType                                                                                              __test2 ( ... );
-                    template < typename __T, typename __U > static decltype ( __CommonTest :: __test2 < __T, __U > ( 0 ) )                                                  __test ( ... );
+                    template < typename, typename >         static FailureType                                                                                              __test2 ( ... ) {} // NOLINT(bugprone-reserved-identifier)
+                    template < typename __T, typename __U > static decltype ( __CommonTest :: __test2 < __T, __U > ( 0 ) )                                                  __test ( ... ) {} // NOLINT(bugprone-reserved-identifier)
                 };
 
                 /**
@@ -616,12 +616,12 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                  * @tparam __DecayedT1 is the decayed type of the first type
                  * @tparam __DecayedT2 is the decayed type of the second type
                  */
-                template < typename __T1, typename __T2, typename __DecayedT1 = typename __Decay < __T1 > :: Type, typename __DecayedT2 = typename __Decay < __T2 > :: Type >
-                struct __CommonDecayed {
+                template < typename __T1, typename __T2, typename __DecayedT1 = typename __Decay < __T1 > :: Type, typename __DecayedT2 = typename __Decay < __T2 > :: Type > // NOLINT(bugprone-reserved-identifier)
+                struct __CommonDecayed { // NOLINT(bugprone-reserved-identifier)
                     using Type = __Common < __DecayedT1, __DecayedT2 >;
                 };
 
-                template < typename __T1, typename __T2 >
+                template < typename __T1, typename __T2 > // NOLINT(bugprone-reserved-identifier)
                 struct __CommonDecayed < __T1, __T2, __T1, __T2 > : private __CommonTest {
                     using Type = decltype ( __CommonTest :: __test < __T1, __T2 > (0) );
                 };
@@ -630,7 +630,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                  * @brief Meta-type helper implementation used to preserve the remaining type pack in the case of more than two types given to common
                  */
                 template < typename ... >
-                struct __CommonPack {};
+                struct __CommonPack {}; // NOLINT(bugprone-reserved-identifier)
 
                 /**
                  * @brief Meta-type helper implementation used to apply the fold expression to reducing the two-or-more types of common by the following rule:
@@ -638,45 +638,45 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                  * Common \< T1, T2, T3, ... \> = Common \< Common \< T1, T2 \>, T3, ... \>
                  */
                 template < typename, typename, typename = void >
-                struct __CommonFold {};
+                struct __CommonFold {}; // NOLINT(bugprone-reserved-identifier)
 
-                template < typename __CurrentType, typename ... __RemainingTypes >
+                template < typename __CurrentType, typename ... __RemainingTypes > // NOLINT(bugprone-reserved-identifier)
                 struct __CommonFold < __CurrentType, __CommonPack < __RemainingTypes ... >, Void < typename __CurrentType :: Type > > :
                         public meta :: __impl :: __Common < typename __CurrentType :: Type, __RemainingTypes ... > {};
 
-                template < typename __CurrentType, typename __RemainingType >
+                template < typename __CurrentType, typename __RemainingType > // NOLINT(bugprone-reserved-identifier)
                 struct __CommonFold < __CurrentType, __RemainingType, void > {};
             }
 
-            template < typename __T1, typename __T2 >
+            template < typename __T1, typename __T2 > // NOLINT(bugprone-reserved-identifier)
             struct __Common < __T1, __T2 > : public __commonImpl :: __CommonDecayed < __T1, __T2 > :: Type {};
 
-            template < typename __T1, typename __T2, typename ... __RemainingTypes >
+            template < typename __T1, typename __T2, typename ... __RemainingTypes > // NOLINT(bugprone-reserved-identifier)
             struct __Common < __T1, __T2, __RemainingTypes ... > :
                     public __commonImpl :: __CommonFold < __Common < __T1, __T2 >, __commonImpl :: __CommonPack < __RemainingTypes ... > > {};
 
-            namespace __isConvertibleImpl {
+            namespace __isConvertibleImpl { // NOLINT(bugprone-reserved-identifier)
                 /**
                  * @brief Meta-type helper used to check if a given type is convertible to another given type
                  * @tparam __From is the type being converted
                  * @tparam __To is the type to which the conversion is done
                  */
-                template < typename __From, typename __To, bool = __IsVoid < __From > :: value || __IsFunction < __To > :: value || __IsArray < __To > :: value >
-                struct __IsConvertible {
+                template < typename __From, typename __To, bool = __IsVoid < __From > :: value || __IsFunction < __To > :: value || __IsArray < __To > :: value > // NOLINT(bugprone-reserved-identifier)
+                struct __IsConvertible { // NOLINT(bugprone-reserved-identifier)
                     using Type = typename __IsVoid < __To > :: Type;
                 };
 
-                template < typename __From, typename __To >
+                template < typename __From, typename __To > // NOLINT(bugprone-reserved-identifier)
                 struct __IsConvertible < __From, __To, false > {
                 private:
-                    template < typename __To1 >
-                    static void __metaTest ( __To1 ) noexcept;
+                    template < typename __To1 > // NOLINT(bugprone-reserved-identifier)
+                    static void __metaTest ( __To1 ) noexcept {} // NOLINT(bugprone-reserved-identifier)
 
-                    template < typename __From1, typename __To1, typename = decltype ( __metaTest < __To1 > ( valueOf < __From1 > () ) ) >
-                    static __TrueType __test (int);
+                    template < typename __From1, typename __To1, typename = decltype ( __metaTest < __To1 > ( valueOf < __From1 > () ) ) > // NOLINT(bugprone-reserved-identifier)
+                    static __TrueType __test (int) {} // NOLINT(bugprone-reserved-identifier)
 
                     template < typename, typename >
-                    static __FalseType __test (...);
+                    static __FalseType __test (...) {} // NOLINT(bugprone-reserved-identifier)
 
                 public:
                     using Type = decltype ( __test < __From, __To > (0) );
@@ -688,16 +688,16 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
              * @tparam __From is the type being converted
              * @tparam __To is the type to which the conversion is done
              */
-            template < typename __From, typename __To >
-            struct __IsConvertible : __isConvertibleImpl :: __IsConvertible < __From, __To > :: Type {};
+            template < typename __From, typename __To > // NOLINT(bugprone-reserved-identifier)
+            struct __IsConvertible : __isConvertibleImpl :: __IsConvertible < __From, __To > :: Type {}; // NOLINT(bugprone-reserved-identifier)
 
-            template < typename __T >
-            struct __MakeSigned {
+            template < typename __T > // NOLINT(bugprone-reserved-identifier)
+            struct __MakeSigned { // NOLINT(bugprone-reserved-identifier)
                 using Type = typename std :: make_signed < __T > :: type;
             };
 
-            template < typename __T >
-            struct __MakeUnsigned {
+            template < typename __T > // NOLINT(bugprone-reserved-identifier)
+            struct __MakeUnsigned { // NOLINT(bugprone-reserved-identifier)
                 using Type = typename std :: make_unsigned < __T > :: type;
             };
         }
@@ -717,7 +717,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
          *
          * <small> It's obviously used to decay radioactive Atomic types into non-radioactive ones. </small>
          */
-        template < typename __T >                   using Decay     = typename __impl :: __Decay < __T > :: Type;
+        template < typename __T >                   using Decay     = typename __impl :: __Decay < __T > :: Type; // NOLINT(bugprone-reserved-identifier)
 
         /**
          * @brief Meta-type used to obtain the common, lvalue type that the given types can be converted to, if any
@@ -729,17 +729,17 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
          * <pre>- Common \< uint16, uint64 \> = uint64;</pre>
          * <pre>- Common \< String, uint64, float \> = String;</pre>
          */
-        template < typename ... __Types >           using Common        = typename __impl :: __Common < __Types ... > :: Type;
+        template < typename ... __Types >           using Common        = typename __impl :: __Common < __Types ... > :: Type; // NOLINT(bugprone-reserved-identifier)
 
-        template < typename __T >                   using MakeSigned    = typename __impl :: __MakeSigned < __T > :: Type;
-        template < typename __T >                   using MakeUnsigned  = typename __impl :: __MakeUnsigned < __T > :: Type;
+        template < typename __T >                   using MakeSigned    = typename __impl :: __MakeSigned < __T > :: Type; // NOLINT(bugprone-reserved-identifier)
+        template < typename __T >                   using MakeUnsigned  = typename __impl :: __MakeUnsigned < __T > :: Type; // NOLINT(bugprone-reserved-identifier)
 
         /**
          * @brief Meta-function used to check if a given type is convertible to another given type
          * @tparam __From is the type being converted
          * @tparam __To is the type to which the conversion is done
          */
-        template < typename __From, typename __To >
+        template < typename __From, typename __To > // NOLINT(bugprone-reserved-identifier)
         constexpr auto isConvertible () noexcept -> bool {
             return __impl :: __IsConvertible < __From, __To > :: value;
         }
@@ -749,7 +749,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
          * @tparam __LeftType is the first type
          * @tparam __RightType is the second type
          */
-        template < typename __LeftType, typename __RightType >
+        template < typename __LeftType, typename __RightType > // NOLINT(bugprone-reserved-identifier)
         constexpr auto isSame () noexcept -> bool {
             return __impl :: __IsSame < __LeftType, __RightType > :: value;
         }
@@ -759,7 +759,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
          * @tparam __LeftType is the first type
          * @tparam __RightType is the second type
          */
-        template < typename __LeftType, typename __RightType >
+        template < typename __LeftType, typename __RightType > // NOLINT(bugprone-reserved-identifier)
         constexpr auto lessThanPossible () noexcept -> bool {
             return __impl :: __LessThanPossible < __LeftType, __RightType > :: value;
         }
@@ -769,7 +769,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
          * @tparam __LeftType is the first type
          * @tparam __RightType is the second type
          */
-        template < typename __LeftType, typename __RightType >
+        template < typename __LeftType, typename __RightType > // NOLINT(bugprone-reserved-identifier)
         constexpr auto greaterThanPossible () noexcept -> bool {
             return __impl :: __GreaterThanPossible < __LeftType, __RightType > :: value;
         }
@@ -779,7 +779,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
          * @tparam __LeftType is the first type
          * @tparam __RightType is the second type
          */
-        template < typename __LeftType, typename __RightType >
+        template < typename __LeftType, typename __RightType > // NOLINT(bugprone-reserved-identifier)
         constexpr auto lessThanOrEqualToPossible () noexcept -> bool {
             return __impl :: __LessThanOrEqualToPossible < __LeftType, __RightType > :: value;
         }
@@ -789,7 +789,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
          * @tparam __LeftType is the first type
          * @tparam __RightType is the second type
          */
-        template < typename __LeftType, typename __RightType >
+        template < typename __LeftType, typename __RightType > // NOLINT(bugprone-reserved-identifier)
         constexpr auto greaterThanOrEqualToPossible () noexcept -> bool {
             return __impl :: __GreaterThanOrEqualToPossible < __LeftType, __RightType > :: value;
         }
@@ -799,7 +799,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
          * @tparam __LeftType is the first type
          * @tparam __RightType is the second type
          */
-        template < typename __LeftType, typename __RightType >
+        template < typename __LeftType, typename __RightType > // NOLINT(bugprone-reserved-identifier)
         constexpr auto equalToPossible () noexcept -> bool {
             return __impl :: __EqualToPossible < __LeftType, __RightType > :: value;
         }
@@ -809,7 +809,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
          * @tparam __LeftType is the first type
          * @tparam __RightType is the second type
          */
-        template < typename __LeftType, typename __RightType >
+        template < typename __LeftType, typename __RightType > // NOLINT(bugprone-reserved-identifier)
         constexpr auto notEqualToPossible () noexcept -> bool {
             return __impl :: __NotEqualToPossible < __LeftType, __RightType > :: value;
         }
@@ -818,7 +818,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
          * @brief Meta-function used to check if a given type is printable ( std :: ostream << type )
          * @tparam __Type is the type for which printability is checked
          */
-        template < typename __Type >
+        template < typename __Type > // NOLINT(bugprone-reserved-identifier)
         constexpr auto isPrintable () noexcept -> bool {
             return __impl :: __IsPrintable < __Type > :: value;
         }
@@ -827,7 +827,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
          * @brief Meta-function used to check if a given type is an enum type
          * @tparam __Type is the type checked
          */
-        template < typename __Type >
+        template < typename __Type > // NOLINT(bugprone-reserved-identifier)
         constexpr auto isEnum () noexcept -> bool {
             return __impl :: __IsEnum < __Type > :: value;
         }
@@ -836,7 +836,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
          * @brief Meta-function used to check if a given type is an union type
          * @tparam __Type is the type checked
          */
-        template < typename __Type >
+        template < typename __Type > // NOLINT(bugprone-reserved-identifier)
         constexpr auto isUnion () noexcept -> bool {
             return __impl :: __IsUnion < __Type > :: value;
         }
@@ -845,7 +845,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
          * @brief Meta-function used to check if a given type is a class or struct type
          * @tparam __Type is the type checked
          */
-        template < typename __Type >
+        template < typename __Type > // NOLINT(bugprone-reserved-identifier)
         constexpr auto isClass () noexcept -> bool {
             return __impl :: __IsClass < __Type > :: value;
         }
@@ -854,7 +854,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
          * @brief Meta-function used to check if a given type is a function type
          * @tparam __Type is the type checked
          */
-        template < typename __Type >
+        template < typename __Type > // NOLINT(bugprone-reserved-identifier)
         constexpr auto isFunction () noexcept -> bool {
             return __impl :: __IsFunction < __Type > :: value;
         }
@@ -863,7 +863,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
          * @brief Meta-function used to check if a given type is a fundamental type ( bool, int types, float types )
          * @tparam __Type is the type checked
          */
-        template < typename __Type >
+        template < typename __Type > // NOLINT(bugprone-reserved-identifier)
         constexpr auto isFundamental () noexcept -> bool {
             return __impl :: __IsFundamental < __Type > :: value;
         }
@@ -872,7 +872,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
          * @brief Meta-function used to check if a given type is an integral type ( bool, int types )
          * @tparam __Type is the type checked
          */
-        template < typename __Type >
+        template < typename __Type > // NOLINT(bugprone-reserved-identifier)
         constexpr auto isIntegral () noexcept -> bool {
             return __impl :: __IsIntegral < __Type > :: value;
         }
@@ -881,7 +881,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
          * @brief Meta-function used to check if a given type is a floating point type ( float types )
          * @tparam __Type is the type checked
          */
-        template < typename __Type >
+        template < typename __Type > // NOLINT(bugprone-reserved-identifier)
         constexpr auto isFloatingPoint () noexcept -> bool {
             return __impl :: __IsFloatingPoint < __Type > :: value;
         }
@@ -890,17 +890,17 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
          * @brief Meta-function used to check if a given type is an arithmetic type ( int, float types )
          * @tparam __Type is the type checked
          */
-        template < typename __Type >
+        template < typename __Type > // NOLINT(bugprone-reserved-identifier)
         constexpr auto isArithmetic () noexcept -> bool {
             return __impl :: __IsArithmetic < __Type > :: value;
         }
 
-        template < typename __Type >
+        template < typename __Type > // NOLINT(bugprone-reserved-identifier)
         constexpr auto isSigned () noexcept -> bool {
             return __impl :: __IsSigned < __Type > :: value;
         }
 
-        template < typename __Type >
+        template < typename __Type > // NOLINT(bugprone-reserved-identifier)
         constexpr auto isUnsigned () noexcept -> bool {
             return
                     isArithmetic < __Type > () &&
@@ -912,7 +912,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
          * @tparam __BaseType is the type given as a base class
          * @tparam __DerivedType is the type given as a derived class
          */
-        template < typename __BaseType, typename __DerivedType >
+        template < typename __BaseType, typename __DerivedType > // NOLINT(bugprone-reserved-identifier)
         constexpr auto isBaseFor () noexcept -> bool {
             return __impl :: __IsBaseOf < __BaseType, __DerivedType > :: value;
         }
@@ -922,7 +922,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
          * @tparam __DerivedType is the type given as a derived class
          * @tparam __BaseType is the type given as a base class
          */
-        template < typename __DerivedType, typename __BaseType >
+        template < typename __DerivedType, typename __BaseType > // NOLINT(bugprone-reserved-identifier)
         constexpr auto isDerivedFrom () noexcept -> bool {
             return __impl :: __IsBaseOf < __BaseType, __DerivedType > :: value;
         }
@@ -931,7 +931,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
          * @brief Meta-function used to check if a given type can be constructed without arguments ( has default constructor )
          * @tparam __Type is the type checked
          */
-        template < typename __Type >
+        template < typename __Type > // NOLINT(bugprone-reserved-identifier)
         constexpr auto isDefaultConstructible () noexcept -> bool {
             return __impl :: __IsDefaultConstructible < __Type > :: value;
         }
@@ -940,7 +940,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
          * @brief Meta-function used to check if a given type can be constructed by copy ( has copy constructor )
          * @tparam __Type is the type checked
          */
-        template < typename __Type >
+        template < typename __Type > // NOLINT(bugprone-reserved-identifier)
         constexpr auto isCopyConstructible () noexcept -> bool {
             return __impl :: __IsCopyConstructible < __Type > :: value;
         }
@@ -949,7 +949,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
          * @brief Meta-function used to check if a given type can be constructed by move ( has move constructor )
          * @tparam __Type is the type checked
          */
-        template < typename __Type >
+        template < typename __Type > // NOLINT(bugprone-reserved-identifier)
         constexpr auto isMoveConstructible () noexcept -> bool {
             return __impl :: __IsMoveConstructible < __Type > :: value;
         }
@@ -958,7 +958,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
          * @brief Meta-function used to check if a given type can be assigned a value by copy ( has copy assignment operator )
          * @tparam __Type is the type checked
          */
-        template < typename __Type >
+        template < typename __Type > // NOLINT(bugprone-reserved-identifier)
         constexpr auto isCopyAssignable () noexcept -> bool {
             return __impl :: __IsCopyAssignable < __Type > :: value;
         }
@@ -967,7 +967,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
          * @brief Meta-function used to check if a given type can be assigned a value by move ( has move assignment operator )
          * @tparam __Type is the type checked
          */
-        template < typename __Type >
+        template < typename __Type > // NOLINT(bugprone-reserved-identifier)
         constexpr auto isMoveAssignable () noexcept -> bool {
             return __impl :: __IsMoveAssignable < __Type > :: value;
         }
@@ -976,7 +976,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
          * @brief Meta-function used to check if a given type is a callable type ( function / object with operator () )
          * @tparam __Type is the type checked
          */
-        template < typename __Type >
+        template < typename __Type > // NOLINT(bugprone-reserved-identifier)
         constexpr auto isCallable () noexcept -> bool {
             return __impl :: __IsFunction < __Type > :: value || __impl :: __IsObjectFunction < __Type > :: value;
         }
@@ -985,7 +985,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
          * @brief Meta-function used to check if a given type is derived from the Object base type
          * @tparam __Type is the type checked
          */
-        template < typename __Type >
+        template < typename __Type > // NOLINT(bugprone-reserved-identifier)
         constexpr auto isObjectDerived () noexcept -> bool {
             return isDerivedFrom < __Type, Object > ();
         }
@@ -994,7 +994,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
          * @brief Meta-function used to check if a given type is a static-function type ( non-object callable )
          * @tparam __Type is the type checked
          */
-        template < typename __Type >
+        template < typename __Type > // NOLINT(bugprone-reserved-identifier)
         constexpr auto isStaticFunction () noexcept -> bool {
             return __impl :: __IsStaticFunction < __Type > :: value;
         }
@@ -1003,7 +1003,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
          * @brief Meta-function used to check if a given type is a callable object ( non-static function )
          * @tparam __Type is the type checked
          */
-        template < typename __Type >
+        template < typename __Type > // NOLINT(bugprone-reserved-identifier)
         constexpr auto isObjectFunction () noexcept -> bool {
             return __impl :: __IsObjectFunction < __Type > :: value;
         }
@@ -1012,7 +1012,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
          * @brief Meta-function used to check if a given type is an array type
          * @tparam __Type is the type checked
          */
-        template < typename __Type >
+        template < typename __Type > // NOLINT(bugprone-reserved-identifier)
         constexpr auto isArray () noexcept -> bool {
             return __impl :: __IsArray < __Type > :: value;
         }
@@ -1021,7 +1021,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
          * @brief Meta-function used to check if a given type is a basic-pointer type = non-smart pointer type
          * @tparam __Type is the type checked
          */
-        template < typename __Type >
+        template < typename __Type > // NOLINT(bugprone-reserved-identifier)
         constexpr auto isBasicPointer () noexcept -> bool {
             return __impl :: __IsPointer < __Type > :: value;
         }
@@ -1030,7 +1030,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
          * @brief Meta-function used to check if a given type is a smart-pointer type = derived from SmartPointer type
          * @tparam __Type is the type checked
          */
-        template < typename __Type >
+        template < typename __Type > // NOLINT(bugprone-reserved-identifier)
         constexpr auto isSmartPointer () noexcept -> bool {
             return __impl :: __IsSmartPointer < __Type > :: value;
         }
@@ -1039,7 +1039,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
          * @brief Meta-function used to check if a given type is a basic or smart pointer type
          * @tparam __Type is the type checked
          */
-        template < typename __Type >
+        template < typename __Type > // NOLINT(bugprone-reserved-identifier)
         constexpr auto isPointer () noexcept -> bool {
             return isBasicPointer < __Type > () || isSmartPointer < __Type > ();
         }
@@ -1048,7 +1048,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
          * @brief Meta-function used to check if a given type is a lvalue reference (&) type
          * @tparam __Type is the type checked
          */
-        template < typename __Type >
+        template < typename __Type > // NOLINT(bugprone-reserved-identifier)
         constexpr auto isLValueReference () noexcept -> bool {
             return __impl :: __IsLValueReference < __Type > :: value;
         }
@@ -1057,7 +1057,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
          * @brief Meta-function used to check if a given type is a rvalue reference (&&) type
          * @tparam __Type is the type checked
          */
-        template < typename __Type >
+        template < typename __Type > // NOLINT(bugprone-reserved-identifier)
         constexpr auto isRValueReference () noexcept -> bool {
             return __impl :: __IsRValueReference < __Type > :: value;
         }
@@ -1066,7 +1066,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
          * @brief Meta-function used to check if a given type is a lvalue reference (&) type
          * @tparam __Type is the type checked
          */
-        template < typename __Type >
+        template < typename __Type > // NOLINT(bugprone-reserved-identifier)
         constexpr auto isReference () noexcept -> bool {
             return __impl :: __IsLValueReference < __Type > :: value;
         }
@@ -1075,7 +1075,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
          * @brief Meta-function used to check if a given type is a rvalue reference (&&) type
          * @tparam __Type is the type checked
          */
-        template < typename __Type >
+        template < typename __Type > // NOLINT(bugprone-reserved-identifier)
         constexpr auto isMoveReference () noexcept -> bool {
             return __impl :: __IsRValueReference < __Type > :: value;
         }
@@ -1084,7 +1084,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
          * @brief Meta-function used to check if a given type is a member of an object
          * @tparam __T is the type checked
          */
-        template < typename __T >
+        template < typename __T > // NOLINT(bugprone-reserved-identifier)
         constexpr auto isMemberObjectPointer () noexcept -> bool {
             return __impl :: __IsMemberObjectPointer < __T > :: value;
         }
@@ -1093,7 +1093,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
          * @brief Meta-function used to check if a given type is a member function of an object
          * @tparam __T is the type checked
          */
-        template < typename __T >
+        template < typename __T > // NOLINT(bugprone-reserved-identifier)
         constexpr auto isMemberFunctionPointer () noexcept -> bool {
             return __impl :: __IsMemberFunctionPointer < __T > :: value;
         }
@@ -1103,7 +1103,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
          * @tparam __T is the type checked
          * @tparam __C is the object of which T should be a member of
          */
-        template < typename __T, typename __C >
+        template < typename __T, typename __C > // NOLINT(bugprone-reserved-identifier)
         constexpr auto isMemberObjectPointer () noexcept -> bool {
             return __impl :: __IsMemberObjectPointer < __T, __C > :: value;
         }
@@ -1113,7 +1113,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
          * @tparam __T is the type checked
          * @tparam __C is the object of which T should be a member function of
          */
-        template < typename __T, typename __C >
+        template < typename __T, typename __C > // NOLINT(bugprone-reserved-identifier)
         constexpr auto isMemberFunctionPointer () noexcept -> bool {
             return __impl :: __IsMemberFunctionPointer < __T, __C > :: value;
         }
@@ -1122,7 +1122,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
          * @brief Meta-function used to check if a given type is a Pair type
          * @tparam __T is the type checked
          */
-        template < typename __T >
+        template < typename __T > // NOLINT(bugprone-reserved-identifier)
         constexpr auto isPair () noexcept -> bool {
             return __impl :: __IsPair < __T > :: value;
         }
@@ -1131,7 +1131,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
          * @brief Meta-function used to check if a given type is a const type
          * @tparam __T is the type checked
          */
-        template < typename __T >
+        template < typename __T > // NOLINT(bugprone-reserved-identifier)
         constexpr auto isConst () noexcept -> bool {
             return __impl :: __IsConst < __T > :: value;
         }
@@ -1140,22 +1140,22 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
          * @brief Meta-function used to check if a given type is a volatile type
          * @tparam __T is the type checked
          */
-        template < typename __T >
+        template < typename __T > // NOLINT(bugprone-reserved-identifier)
         constexpr auto isVolatile () noexcept -> bool {
             return __impl :: __IsVolatile < __T > :: value;
         }
 
-        template < typename __T >
+        template < typename __T > // NOLINT(bugprone-reserved-identifier)
         constexpr auto indirectionPossible () noexcept -> bool {
             return __impl :: __IndirectionPossible < __T > :: value;
         }
 
-        template < typename __T >
+        template < typename __T > // NOLINT(bugprone-reserved-identifier)
         constexpr auto prefixIncrementPossible () noexcept -> bool {
             return __impl :: __PrefixIncrementPossible < __T > :: value;
         }
 
-        template < typename __T >
+        template < typename __T > // NOLINT(bugprone-reserved-identifier)
         constexpr auto isIterator () noexcept -> bool {
             return
                     indirectionPossible < __T > () &&
@@ -1175,7 +1175,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
          *      <li>If == comparison is not possible and LeftType is not ObjectDerived and RightType is not ObjectDerived, invoke comparison by address</li>
          * </ul>
          */
-        template < typename __LeftType, typename __RightType, EnableIf < equalToPossible < __LeftType, __RightType > () > = 0 >
+        template < typename __LeftType, typename __RightType, EnableIf < equalToPossible < __LeftType, __RightType > () > = 0 > // NOLINT(bugprone-reserved-identifier)
         constexpr auto equals (
                 __LeftType  const & left,
                 __RightType const & right
@@ -1184,7 +1184,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             return left == right;
         }
 
-        template < typename __LeftType, typename __RightType, EnableIf < ! equalToPossible < __LeftType, __RightType > () && isDerivedFrom < __LeftType, Object > () && isDerivedFrom < __RightType, Object > () > = 0 >
+        template < typename __LeftType, typename __RightType, EnableIf < ! equalToPossible < __LeftType, __RightType > () && isDerivedFrom < __LeftType, Object > () && isDerivedFrom < __RightType, Object > () > = 0 > // NOLINT(bugprone-reserved-identifier)
         constexpr auto equals (
                 __LeftType  const & left,
                 __RightType const & right,
@@ -1194,7 +1194,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             return left.equals ( right );
         }
 
-        template < typename __LeftType, typename __RightType, EnableIf < ! equalToPossible < __LeftType, __RightType > () && ! ( isDerivedFrom < __LeftType, Object > () && isDerivedFrom < __RightType, Object > () ) > = 0 >
+        template < typename __LeftType, typename __RightType, EnableIf < ! equalToPossible < __LeftType, __RightType > () && ! ( isDerivedFrom < __LeftType, Object > () && isDerivedFrom < __RightType, Object > () ) > = 0 > // NOLINT(bugprone-reserved-identifier)
         constexpr auto equals (
                 __LeftType  const & left,
                 __RightType const & right,
@@ -1204,7 +1204,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             return & left == & right;
         }
 
-        template < typename __T, meta :: EnableIf < isPrintable < __T > () > = 0 >
+        template < typename __T, meta :: EnableIf < isPrintable < __T > () > = 0 > // NOLINT(bugprone-reserved-identifier)
         constexpr auto print (
                 std :: ostream        & out,
                 __T             const & object
@@ -1213,7 +1213,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             return ( out << object );
         }
 
-        template < typename __T, meta :: EnableIf < ! isPrintable < __T > () > = 0 >
+        template < typename __T, meta :: EnableIf < ! isPrintable < __T > () > = 0 > // NOLINT(bugprone-reserved-identifier)
         constexpr auto print (
                 std :: ostream            & out,
                 __T                 const & object
@@ -1226,7 +1226,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
          * @brief Meta-object helper, containing utilities for a given type. Alternative to above functions
          * @tparam __T type given for which to access meta functions
          */
-        template < typename __T >
+        template < typename __T > // NOLINT(bugprone-reserved-identifier)
         struct Type {
 
             using BaseType = __T;
@@ -1237,7 +1237,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             using RemoveConstVolatile   = meta :: RemoveConstVolatile < __T >;
             using RemovePointer         = meta :: RemovePointer < __T >;
 
-            template < typename __U >
+            template < typename __U > // NOLINT(bugprone-reserved-identifier)
             constexpr static auto isSame () noexcept -> bool {
                 return meta :: isSame < __T, __U > ();
             }
@@ -1310,12 +1310,12 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 return meta :: isFundamental < __T > ();
             }
 
-            template < typename __DerivedType >
+            template < typename __DerivedType > // NOLINT(bugprone-reserved-identifier)
             constexpr static auto isBaseFor () noexcept -> bool {
                 return meta :: isBaseFor < __T, __DerivedType > ();
             }
 
-            template < typename __BaseType >
+            template < typename __BaseType > // NOLINT(bugprone-reserved-identifier)
             constexpr static auto isDerivedFrom () noexcept -> bool {
                 return meta :: isDerivedFrom < __T, __BaseType > ();
             }
@@ -1348,7 +1348,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 return meta :: isArray < __T > ();
             }
 
-            template < Size __size >
+            template < Size __size > // NOLINT(bugprone-reserved-identifier)
             constexpr static auto isArray () noexcept -> bool {
                 return meta :: isArray < __T[__size] > ();
             }
@@ -1389,12 +1389,12 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 return meta :: isMemberFunctionPointer < __T > ();
             }
 
-            template < typename __C >
+            template < typename __C > // NOLINT(bugprone-reserved-identifier)
             constexpr static auto isMemberObjectPointer () noexcept -> bool {
                 return meta :: isMemberObjectPointer < __T, __C > ();
             }
 
-            template < typename __C >
+            template < typename __C > // NOLINT(bugprone-reserved-identifier)
             constexpr static auto isMemberFunctionPointer () noexcept -> bool {
                 return meta :: isMemberFunctionPointer < __T, __C > ();
             }
@@ -1456,4 +1456,4 @@ __CDS_Meta_RegisterParseType ( bool )
 __CDS_Meta_RegisterParseType ( float )
 __CDS_Meta_RegisterParseType ( double )
 
-#endif // __CDS_EX_META_TYPE_TRAITS_HPP__
+#endif // __CDS_META_TYPE_TRAITS_HPP__
