@@ -4237,22 +4237,6 @@ inline auto cds :: Range :: sequence() const && noexcept -> cds :: Sequence < cd
     return cds :: Sequence < meta :: RemoveReference < decltype (* this) > > (std::move(* this));
 }
 
-inline auto cds :: String :: sequence () const & noexcept -> cds :: Sequence < cds :: String const > {
-    return cds :: Sequence < meta :: RemoveReference < decltype (*this) > > (*this);
-}
-
-inline auto cds :: String :: sequence () & noexcept -> cds :: Sequence < cds :: String > {
-    return cds :: Sequence < meta :: RemoveReference < decltype (*this) > > (*this);
-}
-
-inline auto cds :: String :: sequence () const && noexcept -> cds :: Sequence < cds :: String const > {
-    return cds :: Sequence < meta :: RemoveReference < decltype (* this) > > (std::move(* this));
-}
-
-inline auto cds :: String :: sequence () && noexcept -> cds :: Sequence < cds :: String > {
-    return cds :: Sequence < meta :: RemoveReference < decltype (* this) > > (std::move(* this));
-}
-
 namespace cds {
 
     template <class T>
@@ -4370,7 +4354,7 @@ namespace cds {
 __CDS_Meta_RegisterParseTemplateType(Sequence)
 
 #include "../experimental/shared/array/impl/ArraySequence.hpp"
-#include "../experimental/shared/string/impl/StringSequence.hpp"
-#include "../experimental/shared/string/view/impl/StringViewSequence.hpp"
+#include "../shared/string/impl/StringSequence.hpp"
+#include "../shared/string/view/impl/StringViewSequence.hpp"
 
 #endif //CDS_SEQUENCE_HPP

@@ -11,7 +11,16 @@
 
 namespace cds {
     class Object;
-    class String;
+
+    namespace __hidden {
+        namespace __impl {
+
+            template < typename __CharType >
+            class __BaseString;
+
+        }
+    }
+
 }
 
 #include <CDS/meta/TypeTraits>
@@ -76,9 +85,9 @@ namespace cds {
 
     template < typename T >
     concept HasToString =
-            ObjectDerived < T >                         ||
-            std::is_same < T, String >::value           ||
-            std::is_same < T, const String >::value;
+            ObjectDerived < T >                                                             ||
+            std::is_same < T, __hidden :: __impl :: __BaseString < char > >::value          ||
+            std::is_same < T, __hidden :: __impl :: __BaseString < char > const >::value;
 
     template < typename T >
     concept Printable = requires (T object) {

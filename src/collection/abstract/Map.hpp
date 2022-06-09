@@ -21,6 +21,15 @@ namespace cds {
         HashCalculatorHasBoundaryFunction < H >
     ) class HashMap;
 
+    template < typename K, typename V > __CDS_Requires (
+            UniqueIdentifiable < K >
+    ) class Map;
+
+}
+
+#include <CDS/DoubleLinkedList>
+
+namespace cds {
 
     template < typename K, typename V> __CDS_Requires( UniqueIdentifiable <K> )
     class Map : public Collection < Pair < K, V > > { // NOLINT(cppcoreguidelines-virtual-class-destructor)

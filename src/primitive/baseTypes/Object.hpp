@@ -10,7 +10,14 @@
 
 namespace cds {
 
-    class String;
+    namespace __hidden {
+        namespace __impl {
+
+            template < typename __CharType >
+            class __BaseString;
+
+        }
+    }
 
     /**
      * @class Base class of all CDS objects
@@ -23,7 +30,7 @@ namespace cds {
          * @exceptsafe
          * @return String = string representation
          */
-        __CDS_NoDiscard virtual auto toString () const noexcept -> String;
+        __CDS_NoDiscard virtual auto toString () const noexcept -> __hidden :: __impl :: __BaseString < char >;
 
     public:
         /**
@@ -55,7 +62,7 @@ namespace cds {
          * @exceptsafe
          * @return String = string representation
          */
-        virtual explicit operator String () const noexcept;
+        virtual explicit operator __hidden :: __impl :: __BaseString < char > () const noexcept;
 
     public:
         /**

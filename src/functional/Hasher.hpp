@@ -17,7 +17,6 @@
 namespace cds {
 
     class Object;
-    class String;
 
 }
 

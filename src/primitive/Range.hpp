@@ -117,7 +117,7 @@ namespace cds {
 
         __CDS_NoDiscard __CDS_OptimalInline auto toString () const noexcept -> String final {
             return
-                "( "_s +
+                StringView ( "( " ) +
                 _s +
                 " ... " +
                 _f +

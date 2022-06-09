@@ -1218,7 +1218,7 @@ namespace cds {
                 intValue /= base;
             }
 
-            return std :: move ( (rep + (this->v < 0 ? "-" : "")).reversed() );
+            return std :: move ( (rep + (this->v < 0 ? "-" : "")).reverse() );
         }
 
         /**
@@ -1282,7 +1282,7 @@ namespace cds {
             if ( base == 16 ) {
                 auto copy = iterator;
                 if ( copy.value() == '0' && copy.next().value() == 'x' ) {
-                    iterator = copy.next();
+                    iterator = ++ copy;
                 }
             }
 

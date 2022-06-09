@@ -27,7 +27,7 @@ namespace cds {
             Object          const & object
     ) noexcept -> std::ostream & {
 
-        return (out << object.toString());
+        return (out << object.toString().cStr());
     }
 
 }

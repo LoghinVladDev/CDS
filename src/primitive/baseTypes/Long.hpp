@@ -1221,7 +1221,7 @@ namespace cds {
                 intValue /= base;
             }
 
-            return std :: move ( (rep + (this->v < 0 ? "-" : "")).reversed() );
+            return std :: move ( (rep + (this->v < 0 ? "-" : "")).reverse() );
         }
 
         /**

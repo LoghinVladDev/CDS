@@ -1139,33 +1139,6 @@ namespace cds {
         __CDS_NoDiscard __CDS_MaybeUnused __CDS_cpplang_ConstexprPureAbstract virtual auto empty () const noexcept -> bool = 0;
     };
 
-    __CDS_NoDiscard __CDS_MaybeUnused inline auto String :: join ( Collection < String > const & strings, String const & separator ) noexcept -> String {
-        String result;
-
-        if ( strings.empty() ) {
-            return "";
-        }
-
-        if ( strings.size() == 1u ) {
-            return * strings.begin();
-        }
-
-        auto current = strings.begin();
-        auto next = current;
-        ++ next;
-
-        for ( auto end = strings.end(); next != end; ++ next ) {
-            result += * current;
-            result += separator;
-
-            current = next;
-        }
-
-        result += * current;
-
-        return result;
-    }
-
 }
 
 __CDS_Meta_RegisterParseTemplateType(Collection) // NOLINT(clion-misra-cpp2008-8-0-1)
