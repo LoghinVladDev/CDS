@@ -7,7 +7,7 @@
 
 #include <CDS/std-types>
 #include <CDS/Object>
-#include <CDS/experimental/meta/TypeTraits>
+#include <CDS/meta/TypeTraits>
 #include <CDS/Concepts>
 #include <CDS/smartPointers/UniquePointer>
 #include <CDS/smartPointers/ForeignPointer>

@@ -8,7 +8,7 @@
 namespace cds { // NOLINT(modernize-concat-nested-namespaces)
     namespace experimental {
 
-        template < typename T, meta :: EnableIf < meta :: isValidSetElement < T > () > enabler >
+        template < typename T, cds :: meta :: EnableIf < meta :: isValidSetElement < T > () > enabler >
         auto Set < T, enabler > :: toString () const noexcept -> String {
 
             if ( this->empty() ) {
@@ -19,15 +19,15 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             out << "{ ";
 
             for ( auto iterator = this->begin(), end = this->end(); iterator != end; ++ iterator ) {
-                meta :: print ( out, * iterator );
+                cds :: meta :: print ( out, * iterator );
             }
 
             auto asString = out.str();
             return asString.substr ( 0, asString.length() - 2 ) + " }";
         }
 
-        template < typename T, meta :: EnableIf < meta :: isValidSetElement < T > () > enabler >
-        template < typename V, meta :: EnableIf < meta :: isCopyConstructible < V > () > >
+        template < typename T, cds :: meta :: EnableIf < meta :: isValidSetElement < T > () > enabler >
+        template < typename V, cds :: meta :: EnableIf < cds :: meta :: isCopyConstructible < V > () > >
         auto Set < T, enabler > :: insert (
                 ElementType const & element
         ) noexcept -> void {
@@ -35,8 +35,8 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             this->add ( element );
         }
 
-        template < typename T, meta :: EnableIf < meta :: isValidSetElement < T > () > enabler >
-        template < typename V, meta :: EnableIf < meta :: isMoveConstructible < V > () > >
+        template < typename T, cds :: meta :: EnableIf < meta :: isValidSetElement < T > () > enabler >
+        template < typename V, cds :: meta :: EnableIf < cds :: meta :: isMoveConstructible < V > () > >
         auto Set < T, enabler > :: insert (
                 ElementType && element
         ) noexcept -> void {

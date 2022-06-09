@@ -64,30 +64,43 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
         public:
             constexpr LinkedList () noexcept = default;
+
         public:
             LinkedList (
                     LinkedList const &
             ) noexcept;
+
         public:
             constexpr LinkedList (
                     LinkedList &&
             ) noexcept;
+
         public:
+            template < typename IteratorType, meta :: EnableIf < meta :: isIterator < IteratorType > () > = 0 >
             LinkedList (
-                    AbstractIterator const &,
-                    AbstractIterator const &
+                    IteratorType const & begin,
+                    IteratorType const & end
             ) noexcept;
+
         public:
-            LinkedList (
+            __CDS_Implicit LinkedList (
                     InitializerList const &
             ) noexcept;
+
         public:
-            ~LinkedList () noexcept;
+            template < typename R, meta :: EnableIf < meta :: isConvertible < R, T > () > = 0 >
+            __CDS_Explicit LinkedList (
+                    Collection < R > const & collection
+            ) noexcept;
+
+        public:
+            ~LinkedList () noexcept override;
 
         private:
             auto remove (
                     Node const *
             ) noexcept -> bool;
+
         private:
             auto remove (
                     Collection < Node const * > const &
@@ -112,18 +125,22 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             auto remove (
                     Iterator const &
             ) noexcept -> bool override;
+
         public:
             auto remove (
                     ConstIterator const &
             ) noexcept -> bool override;
+
         public:
             auto remove (
                     ReverseIterator const &
             ) noexcept -> bool override;
+
         public:
             auto remove (
                     ConstReverseIterator const &
             ) noexcept -> bool override;
+
 
         protected:
             auto remove (
@@ -146,10 +163,12 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                     Size
             ) noexcept -> Size override;
 
+
         private:
             auto pNewBefore (
                     Node const *
             ) noexcept -> ElementType * &;
+
         private:
             auto pNewAfter (
                     Node const *
@@ -157,36 +176,45 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
         protected:
             auto pNewFront () noexcept -> ElementType * & override;
+
         protected:
             auto pNewBack () noexcept -> ElementType * & override;
+
         protected:
             auto pNewBefore (
                     Iterator const &
             ) noexcept -> ElementType * & override;
+
         protected:
             auto pNewAfter (
                     Iterator const &
             ) noexcept -> ElementType * & override;
+
         protected:
             auto pNewBefore (
                     ConstIterator const &
             ) noexcept -> ElementType * & override;
+
         protected:
             auto pNewAfter (
                     ConstIterator const &
             ) noexcept -> ElementType * & override;
+
         protected:
             auto pNewBefore (
                     ReverseIterator const &
             ) noexcept -> ElementType * & override;
+
         protected:
             auto pNewAfter (
                     ReverseIterator const &
             ) noexcept -> ElementType * & override;
+
         protected:
             auto pNewBefore (
                     ConstReverseIterator const &
             ) noexcept -> ElementType * & override;
+
         protected:
             auto pNewAfter (
                     ConstReverseIterator const &
@@ -226,26 +254,34 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             auto popBack () noexcept -> void override;
 
         public:
+            template < typename V = T, meta :: EnableIf < meta :: isCopyConstructible < V > () > = 0 >
             auto operator = (
                     LinkedList const &
             ) noexcept -> LinkedList &;
+
         public:
             auto operator = (
                     LinkedList &&
             ) noexcept -> LinkedList &;
+
         public:
+            template < typename R, meta :: EnableIf < meta :: isConvertible < R, T > () > = 0 >
             auto operator = (
-                    Collection < T > const &
+                    Collection < R > const & collection
             ) noexcept -> LinkedList &;
 
         public:
             auto sequence () & noexcept -> Sequence < LinkedList < T > >;
+
         public:
             auto sequence () && noexcept -> Sequence < LinkedList < T > >;
+
         public:
             auto sequence () const & noexcept -> Sequence < LinkedList < T > const >;
+
         public:
             auto sequence () const && noexcept -> Sequence < LinkedList < T > const >;
+
         };
 
         template < typename T >
@@ -253,6 +289,14 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
         template < typename T >
         using DoubleLinkedList __CDS_Deprecated = LinkedList < T >;
+
+        template < typename ... ArgumentTypes >
+        inline auto listOf (
+                ArgumentTypes && ... values
+        ) noexcept -> LinkedList < meta :: Common < ArgumentTypes ... > > {
+
+            return collectionOf < LinkedList > ( std :: forward < ArgumentTypes > ( values ) ... );
+        }
 
     }
 }

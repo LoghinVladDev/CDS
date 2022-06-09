@@ -1,14 +1,14 @@
 #include <CDS/experimental/Collection>
 #include <CDS/Array>
 #include <CDS/smartPointers/UniquePointer>
-#include <CDS/experimental/meta/TypeTraits>
-#include <CDS/experimental/meta/FunctionTraits>
+#include <CDS/meta/TypeTraits>
+#include <CDS/meta/FunctionTraits>
 #include <CDS/Pair>
 #include <CDS/Tuple>
 #include <CDS/Pointer>
 #include <CDS/experimental/Array>
 #include <CDS/experimental/Set>
-#include <CDS/experimental/String>
+#include <CDS/String>
 using namespace cds;
 using namespace cds :: literals;
 
@@ -38,7 +38,7 @@ int main () {
     std :: cout << arr << '\n';
 
     std :: string trivial = "test string";
-    cds :: experimental :: String copyByView = trivial;
+    cds :: String copyByView = trivial;
 
     std :: cout << copyByView << '\n';
 
@@ -66,18 +66,18 @@ int main () {
 //    experimental :: Array a3 ( 2, 5 );
 
 //    std :: cout << experimental :: meta :: isIterator < decltype ( a2.begin() ) > () << '\n';
-    std :: cout << experimental :: meta :: isIterator < int > () << '\n';
+    std :: cout << meta :: isIterator < int > () << '\n';
 
 
-    cds :: experimental :: String str;
+    cds :: String str;
 
     for ( char c = 'z'; c >= 'A'; -- c ) {
-        str += cds :: experimental :: String :: consonants;
+        str += cds :: String :: consonants;
     }
 
     std :: wcout << str << '\n';
 
-    std :: cout << experimental :: String :: f ( "%s are %d mere", "Ana", 5 ) << '\n';
+    std :: cout << String :: f ( "%s are %d mere", "Ana", 5 ) << '\n';
 
     std :: cout << meta :: isCallable < decltype ( StringUtils < char > :: isVowel ) > () << '\n';
 

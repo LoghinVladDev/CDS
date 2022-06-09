@@ -12,7 +12,7 @@
 namespace cds { // NOLINT(modernize-concat-nested-namespaces)
     namespace experimental {
 
-        template < typename T, meta :: EnableIf < meta :: isValidSetElement < T > () > = 0 >
+        template < typename T, cds :: meta :: EnableIf < meta :: isValidSetElement < T > () > = 0 >
         class Set : public Collection < T > {
 
         public:
@@ -81,13 +81,13 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             auto pNewInsert () noexcept -> ElementType * & override = 0;
 
         public:
-            template < typename V = T, meta :: EnableIf < meta :: isCopyConstructible < V > () > = 0 >
+            template < typename V = T, cds :: meta :: EnableIf < cds :: meta :: isCopyConstructible < V > () > = 0 >
             auto insert (
                     ElementType const & element
             ) noexcept -> void;
 
         public:
-            template < typename V = T, meta :: EnableIf < meta :: isMoveConstructible < V > () > = 0 >
+            template < typename V = T, cds :: meta :: EnableIf < cds :: meta :: isMoveConstructible < V > () > = 0 >
             auto insert (
                     ElementType && element
             ) noexcept -> void;

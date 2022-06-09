@@ -9,6 +9,30 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
     namespace experimental {
 
         template < typename T >
+        LinkedList < T > :: LinkedList (
+                LinkedList const & list
+        ) noexcept :
+                List < T > ( list.size() ) {
+
+            bool firstNode = false;
+            for ( auto iterator = list.begin(), end = list.end (); iterator != end; ++ iterator ) {
+
+                auto newNode    = Memory :: instance().create < Node > ();
+                newNode->_pData = Memory :: instance().create < T > ( * iterator );
+                newNode->_pNext = nullptr;
+
+                if ( firstNode ) {
+                    this->_pFront   = newNode;
+                    this->_pBack    = newNode;
+                    continue;
+                }
+
+                this->_pBack->_pNext    = newNode;
+                this->_pBack            = newNode;
+            }
+        }
+
+        template < typename T >
         __CDS_cpplang_ConstexprOverride auto LinkedList < T > :: get ( Index index ) noexcept (false) -> ElementType & {
             if ( this->empty() ) {
                 throw OutOfBoundsException(index, 0);

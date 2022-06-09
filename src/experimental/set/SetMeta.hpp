@@ -11,7 +11,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
             template < typename T >
             constexpr auto isValidSetElement () noexcept -> bool {
-                return meta :: equalToPossible < T, T > () || meta :: isDerivedFrom < T, Object > ();
+                return cds :: meta :: equalToPossible < T, T > () || cds :: meta :: isDerivedFrom < T, Object > ();
             }
 
         }
