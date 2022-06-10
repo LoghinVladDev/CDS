@@ -10,7 +10,7 @@
 namespace cds {
 
     template <>
-    constexpr auto hash < Object > (
+    __CDS_cpplang_VirtualConstexpr auto hash < Object > (
             Object const & object
     ) noexcept -> Index {
 
