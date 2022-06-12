@@ -4395,7 +4395,10 @@ namespace cds {
 __CDS_Meta_RegisterParseTemplateType(Sequence)
 
 #include "../experimental/shared/array/impl/ArraySequence.hpp"
+#include "../experimental/shared/linkedList/impl/LinkedListSequence.hpp"
+
 #include "../shared/string/impl/StringSequence.hpp"
 #include "../shared/string/view/impl/StringViewSequence.hpp"
+
 
 #endif //CDS_SEQUENCE_HPP

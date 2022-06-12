@@ -321,6 +321,8 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 #include "linkedList/impl/LinkedListDelegateConstIterator.hpp"
 #include "linkedList/impl/LinkedList.hpp"
 
+#include "linkedList/CTAD.hpp"
+
 #include "shared/linkedList/impl/LinkedListSequence.hpp"
 
 #endif // __CDS_EX_LINKED_LIST_HPP__
