@@ -10,11 +10,11 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
         /**
          * @interface An Iterator Delegate represents the actual implementation of the iterator done by the derived classes. The Abstract Delegate Iterator is the base used by the Iterator bases
-         * @tparam T type of elements contained into the Collection class that nests the AbstractDelegateIterator
+         * @tparam __ElementType type of elements contained into the Collection class that nests the AbstractDelegateIterator
          * @test tested in nester class test
          */
-        template < typename T >
-        class Collection < T > :: AbstractDelegateIterator {
+        template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
+        class Collection < __ElementType > :: AbstractDelegateIterator {
         protected:
             /**
              * @brief Implicit Constructor

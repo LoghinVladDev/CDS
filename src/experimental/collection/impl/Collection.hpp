@@ -9,13 +9,13 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
     namespace experimental {
 
 
-        namespace hidden { // NOLINT(modernize-concat-nested-namespaces)
-            namespace impl {
+        namespace __hidden { // NOLINT(modernize-concat-nested-namespaces)
+            namespace __impl {
 
-                template < typename T >
-                __CDS_OptimalInline static auto initializerListContains (
-                        std :: initializer_list < T >   const & list,
-                        T                               const & element
+                template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
+                inline static auto __initializerListContains ( // NOLINT(bugprone-reserved-identifier)
+                        std :: initializer_list < __ElementType >   const & list,
+                        __ElementType                               const & element
                 ) noexcept -> bool {
 
                     for ( auto const & e : list ) {
@@ -28,55 +28,55 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 }
 
 
-                template < typename T, typename LastType >
-                inline auto collectionAdd (
-                        Collection < T >    & collection,
-                        LastType           && element
+                template < typename __ElementType, typename __LastType > // NOLINT(bugprone-reserved-identifier)
+                inline auto __collectionAdd ( // NOLINT(bugprone-reserved-identifier)
+                        Collection < __ElementType >    & collection,
+                        __LastType                     && element
                 ) noexcept -> void {
 
-                    collection.add ( std :: forward < LastType > ( element ) );
+                    collection.add ( std :: forward < __LastType > ( element ) );
                 }
 
 
-                template < typename T, typename FirstType, typename ... RemainingTypes >
-                inline auto collectionAdd (
-                        Collection < T >     &      collection,
-                        FirstType           &&      firstElement,
-                        RemainingTypes      && ...  remainingElements
+                template < typename __ElementType, typename __FirstType, typename ... __RemainingTypes > // NOLINT(bugprone-reserved-identifier)
+                inline auto __collectionAdd ( // NOLINT(bugprone-reserved-identifier)
+                        Collection < __ElementType >     &      collection,
+                        __FirstType                     &&      firstElement,
+                        __RemainingTypes                && ...  remainingElements
                 ) noexcept -> void {
 
-                    collection.add ( std :: forward < FirstType > ( firstElement ) );
-                    collectionAdd ( collection, std :: forward < RemainingTypes > ( remainingElements ) ... );
+                    collection.add ( std :: forward < __FirstType > ( firstElement ) );
+                    __collectionAdd ( collection, std :: forward < __RemainingTypes > ( remainingElements ) ... );
                 }
 
 
-                template < typename CollectionType, typename LastArgumentType >
-                inline auto collectionOfPush (
-                        CollectionType      & collection,
-                        LastArgumentType   && lastValue
+                template < typename __CollectionType, typename __LastArgumentType > // NOLINT(bugprone-reserved-identifier)
+                inline auto __collectionOfPush ( // NOLINT(bugprone-reserved-identifier)
+                        __CollectionType      & collection,
+                        __LastArgumentType   && lastValue
                 ) noexcept -> void {
 
-                    collection.add ( std :: forward < LastArgumentType > ( lastValue ) );
+                    collection.add ( std :: forward < __LastArgumentType > ( lastValue ) );
                 }
 
 
-                template < typename CollectionType, typename FirstArgumentType, typename ... RemainingArgumentTypes >
-                inline auto collectionOfPush (
-                        CollectionType          &       collection,
-                        FirstArgumentType      &&       firstValue,
-                        RemainingArgumentTypes && ...   remainingValues
+                template < typename __CollectionType, typename __FirstArgumentType, typename ... __RemainingArgumentTypes > // NOLINT(bugprone-reserved-identifier)
+                inline auto __collectionOfPush ( // NOLINT(bugprone-reserved-identifier)
+                        __CollectionType          &       collection,
+                        __FirstArgumentType      &&       firstValue,
+                        __RemainingArgumentTypes && ...   remainingValues
                 ) noexcept -> void {
 
-                    collection.add ( std :: forward < FirstArgumentType > ( firstValue ) );
-                    collectionOfPush ( collection, std :: forward < RemainingArgumentTypes > ( remainingValues ) ... );
+                    collection.add ( std :: forward < __FirstArgumentType > ( firstValue ) );
+                    __collectionOfPush ( collection, std :: forward < __RemainingArgumentTypes > ( remainingValues ) ... );
                 }
 
             }
         }
 
 
-        template < typename T >
-        constexpr auto Collection < T > :: acquireDelegate (
+        template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
+        constexpr auto Collection < __ElementType > :: acquireDelegate (
                 AbstractIterator const & iterator
         ) noexcept -> AbstractDelegateIterator const * {
 
@@ -84,8 +84,8 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         }
 
 
-        template < typename T >
-        constexpr auto Collection < T > :: acquireDelegate (
+        template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
+        constexpr auto Collection < __ElementType > :: acquireDelegate (
                 ConstIterator const & iterator
         ) noexcept -> DelegateConstIterator const * {
 
@@ -93,8 +93,8 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         }
 
 
-        template < typename T >
-        constexpr auto Collection < T > :: acquireDelegate (
+        template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
+        constexpr auto Collection < __ElementType > :: acquireDelegate (
                 ConstReverseIterator const & iterator
         ) noexcept -> DelegateConstIterator const * {
 
@@ -102,67 +102,67 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         }
 
 
-        template < typename T >
-        __CDS_OptimalInline auto Collection < T > :: begin () const noexcept -> ConstIterator {
+        template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
+        __CDS_OptimalInline auto Collection < __ElementType > :: begin () const noexcept -> ConstIterator {
 
             return this->cbegin();
         }
 
 
-        template < typename T >
-        __CDS_OptimalInline auto Collection < T > :: end () const noexcept -> ConstIterator {
+        template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
+        __CDS_OptimalInline auto Collection < __ElementType > :: end () const noexcept -> ConstIterator {
 
             return this->cend();
         }
 
 
-        template < typename T >
-        __CDS_OptimalInline auto Collection < T > :: cbegin () const noexcept -> ConstIterator {
+        template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
+        __CDS_OptimalInline auto Collection < __ElementType > :: cbegin () const noexcept -> ConstIterator {
 
             return ConstIterator ( this, std :: move ( this->delegateConstIterator ( DelegateIteratorRequestType :: ForwardBegin ) ) );
         }
 
 
-        template < typename T >
-        __CDS_OptimalInline auto Collection < T > :: cend () const noexcept -> ConstIterator {
+        template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
+        __CDS_OptimalInline auto Collection < __ElementType > :: cend () const noexcept -> ConstIterator {
 
             return ConstIterator ( this, std :: move ( this->delegateConstIterator ( DelegateIteratorRequestType :: ForwardEnd ) ) );
         }
 
 
-        template < typename T >
-        __CDS_OptimalInline auto Collection < T > :: rbegin () const noexcept -> ConstReverseIterator {
+        template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
+        __CDS_OptimalInline auto Collection < __ElementType > :: rbegin () const noexcept -> ConstReverseIterator {
 
             return this->crbegin();
         }
 
 
-        template < typename T >
-        __CDS_OptimalInline auto Collection < T > :: rend () const noexcept -> ConstReverseIterator {
+        template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
+        __CDS_OptimalInline auto Collection < __ElementType > :: rend () const noexcept -> ConstReverseIterator {
 
             return this->crend();
         }
 
 
-        template < typename T >
-        __CDS_OptimalInline auto Collection < T > :: crbegin () const noexcept -> ConstReverseIterator {
+        template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
+        __CDS_OptimalInline auto Collection < __ElementType > :: crbegin () const noexcept -> ConstReverseIterator {
 
             return ConstReverseIterator ( this, std :: move ( this->delegateConstIterator ( DelegateIteratorRequestType :: BackwardBegin ) ) );
         }
 
 
-        template < typename T >
-        __CDS_OptimalInline auto Collection < T > :: crend () const noexcept -> ConstReverseIterator {
+        template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
+        __CDS_OptimalInline auto Collection < __ElementType > :: crend () const noexcept -> ConstReverseIterator {
 
             return ConstReverseIterator ( this, std :: move ( this->delegateConstIterator ( DelegateIteratorRequestType :: BackwardEnd ) ) );
         }
 
 
-        template < typename T >
-        template < typename Predicate >
-        auto Collection < T > :: remove (
+        template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
+        template < typename __Predicate > // NOLINT(bugprone-reserved-identifier)
+        auto Collection < __ElementType > :: remove (
                 Size                count,
-                Predicate   const & predicate
+                __Predicate const & predicate
         ) noexcept ( noexcept ( predicate ( meta :: referenceOf < ElementType > () ) ) ) -> Size {
 
             ConstIterator * pIteratorBuffer = Memory :: instance().createArray < ConstIterator > ( count );
@@ -181,10 +181,10 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         }
 
 
-        template < typename T >
-        template < typename Predicate >
-        auto Collection < T > :: removeFirst (
-                Predicate const & predicate
+        template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
+        template < typename __Predicate > // NOLINT(bugprone-reserved-identifier)
+        auto Collection < __ElementType > :: removeFirst (
+                __Predicate const & predicate
         ) noexcept -> bool {
 
             for ( auto iterator = this->begin(), end = this->end(); iterator != end; ++ iterator ) {
@@ -197,10 +197,10 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         }
 
 
-        template < typename T >
-        template < typename Predicate >
-        auto Collection < T > :: removeLast (
-                Predicate const & predicate
+        template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
+        template < typename __Predicate > // NOLINT(bugprone-reserved-identifier)
+        auto Collection < __ElementType > :: removeLast (
+                __Predicate const & predicate
         ) noexcept -> bool {
 
             ConstIterator toRemove;
@@ -215,10 +215,10 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         }
 
 
-        template < typename T >
-        template < typename Predicate >
-        auto Collection < T > :: removeAll (
-                Predicate const & predicate
+        template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
+        template < typename __Predicate > // NOLINT(bugprone-reserved-identifier)
+        auto Collection < __ElementType > :: removeAll (
+                __Predicate const & predicate
         ) noexcept -> Size {
 
             ConstIterator * pIteratorBuffer = Memory :: instance().createArray < ConstIterator > ( this->size() );
@@ -237,8 +237,8 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         }
 
 
-        template < typename T >
-        auto Collection < T > :: remove (
+        template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
+        auto Collection < __ElementType > :: remove (
                 Size                count,
                 ElementType const & element
         ) noexcept -> Size {
@@ -259,8 +259,8 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         }
 
 
-        template < typename T >
-        auto Collection < T > :: removeFirst (
+        template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
+        auto Collection < __ElementType > :: removeFirst (
                 ElementType const & element
         ) noexcept -> bool {
 
@@ -274,8 +274,8 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         }
 
 
-        template < typename T >
-        auto Collection < T > :: removeLast (
+        template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
+        auto Collection < __ElementType > :: removeLast (
                 ElementType const & element
         ) noexcept -> bool {
 
@@ -290,8 +290,8 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         }
 
 
-        template < typename T >
-        auto Collection < T > :: removeAll (
+        template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
+        auto Collection < __ElementType > :: removeAll (
                 ElementType const & element
         ) noexcept -> Size {
 
@@ -311,8 +311,8 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         }
 
 
-        template < typename T >
-        auto Collection < T > :: removeOf (
+        template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
+        auto Collection < __ElementType > :: removeOf (
                 Size                                count,
                 Collection < ElementType >  const & collection
         ) noexcept -> Size {
@@ -356,8 +356,8 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         }
 
 
-        template < typename T >
-        auto Collection < T > :: removeFirstOf (
+        template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
+        auto Collection < __ElementType > :: removeFirstOf (
                 Collection < ElementType > const & collection
         ) noexcept -> bool {
 
@@ -375,8 +375,8 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         }
 
 
-        template < typename T >
-        auto Collection < T > :: removeLastOf (
+        template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
+        auto Collection < __ElementType > :: removeLastOf (
                 Collection < ElementType > const & collection
         ) noexcept -> bool {
 
@@ -399,8 +399,8 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         }
 
 
-        template < typename T >
-        auto Collection < T > :: removeAllOf (
+        template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
+        auto Collection < __ElementType > :: removeAllOf (
                 Collection < ElementType > const & collection
         ) noexcept -> Size {
 
@@ -426,8 +426,8 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         }
 
 
-        template < typename T >
-        auto Collection < T > :: removeNotOf (
+        template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
+        auto Collection < __ElementType > :: removeNotOf (
                 Size                                count,
                 Collection < ElementType >  const & collection
         ) noexcept -> Size {
@@ -456,8 +456,8 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         }
 
 
-        template < typename T >
-        auto Collection < T > :: removeFirstNotOf (
+        template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
+        auto Collection < __ElementType > :: removeFirstNotOf (
                 Collection < ElementType > const & collection
         ) noexcept -> bool {
 
@@ -475,8 +475,8 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         }
 
 
-        template < typename T >
-        auto Collection < T > :: removeLastNotOf (
+        template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
+        auto Collection < __ElementType > :: removeLastNotOf (
                 Collection < ElementType > const & collection
         ) noexcept -> bool {
 
@@ -496,8 +496,8 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         }
 
 
-        template < typename T >
-        auto Collection < T > :: removeAllNotOf (
+        template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
+        auto Collection < __ElementType > :: removeAllNotOf (
                 Collection < ElementType > const & collection
         ) noexcept -> Size {
 
@@ -521,8 +521,8 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         }
 
 
-        template < typename T >
-        auto Collection < T > :: removeOf (
+        template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
+        auto Collection < __ElementType > :: removeOf (
                 Size                    count,
                 InitializerList const & list
         ) noexcept -> Size {
@@ -531,7 +531,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             Size iteratorCount = 0U;
 
             for ( auto iterator = this->begin(), end = this->end(); iterator != end; ++ iterator ) {
-                if ( hidden :: impl :: initializerListContains ( list, * iterator ) ) {
+                if ( __hidden :: __impl :: __initializerListContains ( list, * iterator ) ) {
                     pIteratorBuffer [ iteratorCount ++ ] = iterator;
                 }
 
@@ -547,13 +547,13 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         }
 
 
-        template < typename T >
-        auto Collection < T > :: removeFirstOf (
+        template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
+        auto Collection < __ElementType > :: removeFirstOf (
                 InitializerList const & list
         ) noexcept -> bool {
 
             for ( auto iterator = this->begin(), end = this->end(); iterator != end; ++ iterator ) {
-                if ( hidden :: impl :: initializerListContains ( list, * iterator ) ) {
+                if ( __hidden :: __impl :: __initializerListContains ( list, * iterator ) ) {
                     return this->remove ( iterator );
                 }
             }
@@ -562,14 +562,14 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         }
 
 
-        template < typename T >
-        auto Collection < T > :: removeLastOf (
+        template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
+        auto Collection < __ElementType > :: removeLastOf (
                 InitializerList const & list
         ) noexcept -> bool {
 
             ConstIterator toRemove;
             for ( auto iterator = this->begin(), end = this->end(); iterator != end; ++ iterator ) {
-                if ( hidden :: impl :: initializerListContains ( list, * iterator ) ) {
+                if ( __hidden :: __impl :: __initializerListContains ( list, * iterator ) ) {
                     toRemove = iterator;
                 }
             }
@@ -578,8 +578,8 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         }
 
 
-        template < typename T >
-        auto Collection < T > :: removeAllOf (
+        template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
+        auto Collection < __ElementType > :: removeAllOf (
                 InitializerList const & list
         ) noexcept -> Size {
 
@@ -587,7 +587,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             Size iteratorCount = 0U;
 
             for ( auto iterator = this->begin(), end = this->end(); iterator != end; ++ iterator ) {
-                if ( hidden :: impl :: initializerListContains ( list, * iterator ) ) {
+                if ( __hidden :: __impl :: __initializerListContains ( list, * iterator ) ) {
                     pIteratorBuffer [ iteratorCount ++ ] = iterator;
                 }
             }
@@ -599,8 +599,8 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         }
 
 
-        template < typename T >
-        auto Collection < T > :: removeNotOf (
+        template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
+        auto Collection < __ElementType > :: removeNotOf (
                 Size                    count,
                 InitializerList const & list
         ) noexcept -> Size {
@@ -609,7 +609,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             Size iteratorCount = 0U;
 
             for ( auto iterator = this->begin(), end = this->end(); iterator != end; ++ iterator ) {
-                if ( ! hidden :: impl :: initializerListContains ( list, * iterator ) ) {
+                if ( ! __hidden :: __impl :: __initializerListContains ( list, * iterator ) ) {
                     pIteratorBuffer [ iteratorCount ++ ] = iterator;
                 }
 
@@ -625,13 +625,13 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         }
 
 
-        template < typename T >
-        auto Collection < T > :: removeFirstNotOf (
+        template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
+        auto Collection < __ElementType > :: removeFirstNotOf (
                 InitializerList const & list
         ) noexcept -> bool {
 
             for ( auto iterator = this->begin(), end = this->end(); iterator != end; ++ iterator ) {
-                if ( ! hidden :: impl :: initializerListContains ( list, * iterator ) ) {
+                if ( ! __hidden :: __impl :: __initializerListContains ( list, * iterator ) ) {
                     return this->remove ( iterator );
                 }
             }
@@ -640,14 +640,14 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         }
 
 
-        template < typename T >
-        auto Collection < T > :: removeLastNotOf (
+        template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
+        auto Collection < __ElementType > :: removeLastNotOf (
                 InitializerList const & list
         ) noexcept -> bool {
 
             ConstIterator toRemove;
             for ( auto iterator = this->begin(), end = this->end(); iterator != end; ++ iterator ) {
-                if ( ! hidden :: impl :: initializerListContains ( list, * iterator ) ) {
+                if ( ! __hidden :: __impl :: __initializerListContains ( list, * iterator ) ) {
                     toRemove = iterator;
                 }
             }
@@ -656,8 +656,8 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         }
 
 
-        template < typename T >
-        auto Collection < T > :: removeAllNotOf (
+        template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
+        auto Collection < __ElementType > :: removeAllNotOf (
                 InitializerList const & list
         ) noexcept -> Size {
 
@@ -665,7 +665,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             Size iteratorCount = 0U;
 
             for ( auto iterator = this->begin(), end = this->end(); iterator != end; ++ iterator ) {
-                if ( ! hidden :: impl :: initializerListContains ( list, * iterator ) ) {
+                if ( ! __hidden :: __impl :: __initializerListContains ( list, * iterator ) ) {
                     pIteratorBuffer [ iteratorCount ++ ] = iterator;
                 }
             }
@@ -677,10 +677,10 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         }
 
 
-        template < typename T >
-        template < typename Action >
-        auto Collection < T > :: forEach (
-                Action const & action
+        template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
+        template < typename __Action > // NOLINT(bugprone-reserved-identifier)
+        auto Collection < __ElementType > :: forEach (
+                __Action const & action
         ) const noexcept ( noexcept ( action ( meta :: referenceOf < ElementType const > () ) ) ) -> void {
 
             for ( auto iterator = this->begin(), end = this->end(); iterator != end; ++ iterator ) {
@@ -689,11 +689,11 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         }
 
 
-        template < typename T >
-        template < typename Predicate >
-        auto Collection < T > :: some (
+        template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
+        template < typename __Predicate > // NOLINT(bugprone-reserved-identifier)
+        auto Collection < __ElementType > :: some (
                 Size                count,
-                Predicate   const & predicate
+                __Predicate const & predicate
         ) const noexcept ( noexcept ( predicate ( meta :: referenceOf < ElementType const > () ) ) ) -> bool {
 
             Size trueCount = 0ULL;
@@ -711,11 +711,11 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         }
 
 
-        template < typename T >
-        template < typename Predicate >
-        auto Collection < T > :: atLeast (
+        template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
+        template < typename __Predicate > // NOLINT(bugprone-reserved-identifier)
+        auto Collection < __ElementType > :: atLeast (
                 Size                count,
-                Predicate   const & predicate
+                __Predicate const & predicate
         ) const noexcept ( noexcept ( predicate ( meta :: referenceOf < ElementType const > () ) ) ) -> bool {
 
             Size trueCount = 0ULL;
@@ -733,11 +733,11 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         }
 
 
-        template < typename T >
-        template < typename Predicate >
-        auto Collection < T > :: atMost (
+        template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
+        template < typename __Predicate > // NOLINT(bugprone-reserved-identifier)
+        auto Collection < __ElementType > :: atMost (
                 Size                count,
-                Predicate   const & predicate
+                __Predicate const & predicate
         ) const noexcept ( noexcept ( predicate ( meta :: referenceOf < ElementType const > () ) ) ) -> bool {
 
             Size trueCount = 0ULL;
@@ -755,32 +755,32 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         }
 
 
-        template < typename T >
-        template < typename Predicate >
-        __CDS_OptimalInline auto Collection < T > :: moreThan (
+        template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
+        template < typename __Predicate > // NOLINT(bugprone-reserved-identifier)
+        __CDS_OptimalInline auto Collection < __ElementType > :: moreThan (
                 Size                count,
-                Predicate   const & predicate
+                __Predicate const & predicate
         ) const noexcept ( noexcept ( predicate ( meta :: referenceOf < ElementType const > () ) ) ) -> bool {
 
             return this->atLeast ( count + 1, predicate );
         }
 
 
-        template < typename T >
-        template < typename Predicate >
-        __CDS_OptimalInline auto Collection < T > :: fewerThan (
+        template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
+        template < typename __Predicate > // NOLINT(bugprone-reserved-identifier)
+        __CDS_OptimalInline auto Collection < __ElementType > :: fewerThan (
                 Size                count,
-                Predicate   const & predicate
+                __Predicate const & predicate
         ) const noexcept ( noexcept ( predicate ( meta :: referenceOf < ElementType const > () ) ) ) -> bool {
 
             return this->atMost ( count - 1, predicate );
         }
 
 
-        template < typename T >
-        template < typename Predicate >
-        auto Collection < T > :: count (
-                Predicate const & predicate
+        template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
+        template < typename __Predicate > // NOLINT(bugprone-reserved-identifier)
+        auto Collection < __ElementType > :: count (
+                __Predicate const & predicate
         ) const noexcept ( noexcept ( predicate ( meta :: referenceOf < ElementType const > () ) ) ) -> Size {
 
             Size trueCount = 0U;
@@ -794,10 +794,10 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         }
 
 
-        template < typename T >
-        template < typename Predicate >
-        auto Collection < T > :: any (
-                Predicate const & predicate
+        template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
+        template < typename __Predicate > // NOLINT(bugprone-reserved-identifier)
+        auto Collection < __ElementType > :: any (
+                __Predicate const & predicate
         ) const noexcept ( noexcept ( predicate ( meta :: referenceOf < ElementType const > () ) ) ) -> bool {
 
             for ( auto iterator = this->begin(), end = this->end(); iterator != end; ++ iterator ) {
@@ -810,10 +810,10 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         }
 
 
-        template < typename T >
-        template < typename Predicate >
-        auto Collection < T > :: all (
-                Predicate const & predicate
+        template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
+        template < typename __Predicate > // NOLINT(bugprone-reserved-identifier)
+        auto Collection < __ElementType > :: all (
+                __Predicate const & predicate
         ) const noexcept ( noexcept ( predicate ( meta :: referenceOf < ElementType const > () ) ) ) -> bool {
 
             for ( auto iterator = this->begin(), end = this->end(); iterator != end; ++ iterator ) {
@@ -826,10 +826,10 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         }
 
 
-        template < typename T >
-        template < typename Predicate >
-        auto Collection < T > :: none (
-                Predicate const & predicate
+        template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
+        template < typename __Predicate > // NOLINT(bugprone-reserved-identifier)
+        auto Collection < __ElementType > :: none (
+                __Predicate const & predicate
         ) const noexcept ( noexcept ( predicate ( meta :: referenceOf < ElementType const > () ) ) ) -> bool {
 
             for ( auto iterator = this->begin(), end = this->end(); iterator != end; ++ iterator ) {
@@ -842,13 +842,13 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         }
 
 
-        template < typename T >
-        template < template < typename ... > class CollectionType >
-        auto Collection < T > :: find (
+        template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
+        template < template < typename ... > class __CollectionType > // NOLINT(bugprone-reserved-identifier)
+        auto Collection < __ElementType > :: find (
                 Size                                        maxCount,
                 ElementType                         const & element,
-                CollectionType < ConstIterator >          & storeIn
-        ) const noexcept -> CollectionType < ConstIterator > & {
+                __CollectionType < ConstIterator >        & storeIn
+        ) const noexcept -> __CollectionType < ConstIterator > & {
 
             Size found = 0ULL;
             for ( auto iterator = this->begin(), end = this->end(); iterator != end && found < maxCount; ++ iterator ) {
@@ -863,20 +863,20 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         }
 
 
-        template < typename T >
-        template < template < typename ... > class CollectionType >
-        auto Collection < T > :: find (
+        template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
+        template < template < typename ... > class __CollectionType > // NOLINT(bugprone-reserved-identifier)
+        auto Collection < __ElementType > :: find (
                 Size                                        maxCount,
                 ElementType                         const & element
-        ) const noexcept -> CollectionType < ConstIterator > {
+        ) const noexcept -> __CollectionType < ConstIterator > {
 
-            CollectionType < ConstIterator > iterators;
+            __CollectionType < ConstIterator > iterators;
             return this-> find ( maxCount, element, iterators );
         }
 
 
-        template < typename T >
-        auto Collection < T > :: findFirst (
+        template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
+        auto Collection < __ElementType > :: findFirst (
                 ElementType const & element
         ) const noexcept -> ConstIterator {
 
@@ -891,8 +891,8 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         }
 
 
-        template < typename T >
-        auto Collection < T > :: findLast (
+        template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
+        auto Collection < __ElementType > :: findLast (
                 ElementType const & element
         ) const noexcept -> ConstIterator {
 
@@ -908,12 +908,12 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         }
 
 
-        template < typename T >
-        template < template < typename ... > class CollectionType >
-        auto Collection < T > :: findAll (
+        template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
+        template < template < typename ... > class __CollectionType > // NOLINT(bugprone-reserved-identifier)
+        auto Collection < __ElementType > :: findAll (
                 ElementType                         const & element,
-                CollectionType < ConstIterator >          & storeIn
-        ) const noexcept -> CollectionType < ConstIterator > & {
+                __CollectionType < ConstIterator >        & storeIn
+        ) const noexcept -> __CollectionType < ConstIterator > & {
 
             for ( auto iterator = this->begin(), end = this->end(); iterator != end; ++ iterator ) {
                 if ( meta :: equals ( element, * iterator ) ) {
@@ -925,24 +925,24 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         }
 
 
-        template < typename T >
-        template < template < typename ... > class CollectionType >
-        auto Collection < T > :: findAll (
+        template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
+        template < template < typename ... > class __CollectionType > // NOLINT(bugprone-reserved-identifier)
+        auto Collection < __ElementType > :: findAll (
                 ElementType                         const & element
-        ) const noexcept -> CollectionType < ConstIterator > {
+        ) const noexcept -> __CollectionType < ConstIterator > {
 
-            CollectionType < ConstIterator > iterators;
+            __CollectionType < ConstIterator > iterators;
             return this-> findAll ( element, iterators );
         }
 
 
-        template < typename T >
-        template < template < typename ... > class CollectionType >
-        auto Collection < T > :: findOf (
+        template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
+        template < template < typename ... > class __CollectionType > // NOLINT(bugprone-reserved-identifier)
+        auto Collection < __ElementType > :: findOf (
                 Size                                        maxCount,
                 Collection < ElementType >          const & elements,
-                CollectionType < ConstIterator >          & storeIn
-        ) const noexcept -> CollectionType < ConstIterator > & {
+                __CollectionType < ConstIterator >        & storeIn
+        ) const noexcept -> __CollectionType < ConstIterator > & {
 
             Size found = 0ULL;
             for ( auto iterator = this->begin(), end = this->end(); iterator != end && found < maxCount; ++ iterator ) {
@@ -957,20 +957,20 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         }
 
 
-        template < typename T >
-        template < template < typename ... > class CollectionType >
-        auto Collection < T > :: findOf (
+        template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
+        template < template < typename ... > class __CollectionType > // NOLINT(bugprone-reserved-identifier)
+        auto Collection < __ElementType > :: findOf (
                 Size                                        maxCount,
                 Collection < ElementType >          const & elements
-        ) const noexcept -> CollectionType < ConstIterator > {
+        ) const noexcept -> __CollectionType < ConstIterator > {
 
-            CollectionType < ConstIterator > iterators;
+            __CollectionType < ConstIterator > iterators;
             return this-> findOf ( maxCount, elements, iterators );
         }
 
 
-        template < typename T >
-        auto Collection < T > :: findFirstOf (
+        template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
+        auto Collection < __ElementType > :: findFirstOf (
                 Collection < ElementType > const & elements
         ) const noexcept -> ConstIterator {
 
@@ -985,8 +985,8 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         }
 
 
-        template < typename T >
-        auto Collection < T > :: findLastOf (
+        template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
+        auto Collection < __ElementType > :: findLastOf (
                 Collection < ElementType > const & elements
         ) const noexcept -> ConstIterator {
 
@@ -1002,12 +1002,12 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         }
 
 
-        template < typename T >
-        template < template < typename ... > class CollectionType >
-        auto Collection < T > :: findAllOf (
+        template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
+        template < template < typename ... > class __CollectionType > // NOLINT(bugprone-reserved-identifier)
+        auto Collection < __ElementType > :: findAllOf (
                 Collection < ElementType >          const & elements,
-                CollectionType < ConstIterator >          & storeIn
-        ) const noexcept -> CollectionType < ConstIterator > & {
+                __CollectionType < ConstIterator >        & storeIn
+        ) const noexcept -> __CollectionType < ConstIterator > & {
 
             for ( auto iterator = this->begin(), end = this->end(); iterator != end; ++ iterator ) {
                 if ( elements.contains ( * iterator ) ) {
@@ -1019,24 +1019,24 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         }
 
 
-        template < typename T >
-        template < template < typename ... > class CollectionType >
-        auto Collection < T > :: findAllOf (
+        template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
+        template < template < typename ... > class __CollectionType > // NOLINT(bugprone-reserved-identifier)
+        auto Collection < __ElementType > :: findAllOf (
                 Collection < ElementType >          const & elements
-        ) const noexcept -> CollectionType < ConstIterator > {
+        ) const noexcept -> __CollectionType < ConstIterator > {
 
             Collection < ConstIterator > iterators;
             return this->findAllOf ( elements, iterators );
         }
 
 
-        template < typename T >
-        template < template < typename ... > class CollectionType >
-        auto Collection < T > :: findNotOf (
+        template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
+        template < template < typename ... > class __CollectionType > // NOLINT(bugprone-reserved-identifier)
+        auto Collection < __ElementType > :: findNotOf (
                 Size                                        maxCount,
                 Collection < ElementType >          const & elements,
-                CollectionType < ConstIterator >          & storeIn
-        ) const noexcept -> CollectionType < ConstIterator > & {
+                __CollectionType < ConstIterator >        & storeIn
+        ) const noexcept -> __CollectionType < ConstIterator > & {
 
             Size found = 0ULL;
             for ( auto iterator = this->begin(), end = this->end(); iterator != end && found < maxCount; ++ iterator ) {
@@ -1051,20 +1051,20 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         }
 
 
-        template < typename T >
-        template < template < typename ... > class CollectionType >
-        auto Collection < T > :: findNotOf (
+        template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
+        template < template < typename ... > class __CollectionType > // NOLINT(bugprone-reserved-identifier)
+        auto Collection < __ElementType > :: findNotOf (
                 Size                                        maxCount,
                 Collection < ElementType >          const & elements
-        ) const noexcept -> CollectionType < ConstIterator > {
+        ) const noexcept -> __CollectionType < ConstIterator > {
 
-            CollectionType < ConstIterator > iterators;
+            __CollectionType < ConstIterator > iterators;
             return this-> findNotOf ( maxCount, elements, iterators );
         }
 
 
-        template < typename T >
-        auto Collection < T > :: findFirstNotOf (
+        template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
+        auto Collection < __ElementType > :: findFirstNotOf (
                 Collection < ElementType > const & elements
         ) const noexcept -> ConstIterator {
 
@@ -1079,8 +1079,8 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         }
 
 
-        template < typename T >
-        auto Collection < T > :: findLastNotOf (
+        template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
+        auto Collection < __ElementType > :: findLastNotOf (
                 Collection < ElementType > const & elements
         ) const noexcept -> ConstIterator {
 
@@ -1096,12 +1096,12 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         }
 
 
-        template < typename T >
-        template < template < typename ... > class CollectionType >
-        auto Collection < T > :: findAllNotOf (
+        template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
+        template < template < typename ... > class __CollectionType > // NOLINT(bugprone-reserved-identifier)
+        auto Collection < __ElementType > :: findAllNotOf (
                 Collection < ElementType >          const & elements,
-                CollectionType < ConstIterator >          & storeIn
-        ) const noexcept -> CollectionType < ConstIterator > & {
+                __CollectionType < ConstIterator >        & storeIn
+        ) const noexcept -> __CollectionType < ConstIterator > & {
 
             for ( auto iterator = this->begin(), end = this->end(); iterator != end; ++ iterator ) {
                 if ( ! elements.contains ( * iterator ) ) {
@@ -1113,28 +1113,28 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         }
 
 
-        template < typename T >
-        template < template < typename ... > class CollectionType >
-        auto Collection < T > :: findAllNotOf (
+        template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
+        template < template < typename ... > class __CollectionType > // NOLINT(bugprone-reserved-identifier)
+        auto Collection < __ElementType > :: findAllNotOf (
                 Collection < ElementType >  const & elements
-        ) const noexcept -> CollectionType < ConstIterator > {
+        ) const noexcept -> __CollectionType < ConstIterator > {
 
-            CollectionType < ConstIterator > iterators;
+            __CollectionType < ConstIterator > iterators;
             return this-> findAllNotOf ( elements, iterators );
         }
 
 
-        template < typename T >
-        template < template < typename ... > class CollectionType >
-        auto Collection < T > :: findOf (
+        template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
+        template < template < typename ... > class __CollectionType > // NOLINT(bugprone-reserved-identifier)
+        auto Collection < __ElementType > :: findOf (
                 Size                                        maxCount,
                 InitializerList                     const & elements,
-                CollectionType < ConstIterator >          & storeIn
-        ) const noexcept -> CollectionType < ConstIterator > & {
+                __CollectionType < ConstIterator >        & storeIn
+        ) const noexcept -> __CollectionType < ConstIterator > & {
 
             Size found = 0ULL;
             for ( auto iterator = this->begin(), end = this->end(); iterator != end && found < maxCount; ++ iterator ) {
-                if ( hidden :: impl :: initializerListContains ( elements, * iterator ) ) {
+                if ( __hidden :: __impl :: __initializerListContains ( elements, * iterator ) ) {
                     ++ found;
 
                     storeIn.add ( iterator );
@@ -1145,26 +1145,26 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         }
 
 
-        template < typename T >
-        template < template < typename ... > class CollectionType >
-        auto Collection < T > :: findOf (
+        template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
+        template < template < typename ... > class __CollectionType > // NOLINT(bugprone-reserved-identifier)
+        auto Collection < __ElementType > :: findOf (
                 Size                                        maxCount,
                 InitializerList                     const & elements
-        ) const noexcept -> CollectionType < ConstIterator > {
+        ) const noexcept -> __CollectionType < ConstIterator > {
 
-            CollectionType < ConstIterator > iterators;
+            __CollectionType < ConstIterator > iterators;
             return this-> findOf ( maxCount, elements, iterators );
         }
 
 
-        template < typename T >
-        auto Collection < T > :: findFirstOf (
+        template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
+        auto Collection < __ElementType > :: findFirstOf (
                 InitializerList const & elements
         ) const noexcept -> ConstIterator {
 
             auto end = this->end();
             for ( auto iterator = this->begin(); iterator != end; ++ iterator ) {
-                if ( hidden :: impl :: initializerListContains ( elements, * iterator ) ) {
+                if ( __hidden :: __impl :: __initializerListContains ( elements, * iterator ) ) {
                     return iterator;
                 }
             }
@@ -1173,15 +1173,15 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         }
 
 
-        template < typename T >
-        auto Collection < T > :: findLastOf (
+        template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
+        auto Collection < __ElementType > :: findLastOf (
                 InitializerList const & elements
         ) const noexcept -> ConstIterator {
 
             auto end = this->end();
             auto lastFound = end;
             for ( auto iterator = this->begin(); iterator != end; ++ iterator ) {
-                if ( hidden :: impl :: initializerListContains ( elements, * iterator ) ) {
+                if ( __hidden :: __impl :: __initializerListContains ( elements, * iterator ) ) {
                     lastFound = iterator;
                 }
             }
@@ -1190,15 +1190,15 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         }
 
 
-        template < typename T >
-        template < template < typename ... > class CollectionType >
-        auto Collection < T > :: findAllOf (
+        template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
+        template < template < typename ... > class __CollectionType > // NOLINT(bugprone-reserved-identifier)
+        auto Collection < __ElementType > :: findAllOf (
                 InitializerList                     const & elements,
-                CollectionType < ConstIterator >          & storeIn
-        ) const noexcept -> CollectionType < ConstIterator > & {
+                __CollectionType < ConstIterator >        & storeIn
+        ) const noexcept -> __CollectionType < ConstIterator > & {
 
             for ( auto iterator = this->begin(), end = this->end(); iterator != end; ++ iterator ) {
-                if ( elements.contains ( * iterator ) ) {
+                if ( __hidden :: __impl :: __initializerListContains ( elements, * iterator ) ) {
                     storeIn.add ( iterator );
                 }
             }
@@ -1207,28 +1207,28 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         }
 
 
-        template < typename T >
-        template < template < typename ... > class CollectionType >
-        auto Collection < T > :: findAllOf (
+        template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
+        template < template < typename ... > class __CollectionType > // NOLINT(bugprone-reserved-identifier)
+        auto Collection < __ElementType > :: findAllOf (
                 InitializerList                     const & elements
-        ) const noexcept -> CollectionType < ConstIterator > {
+        ) const noexcept -> __CollectionType < ConstIterator > {
 
             Collection < ConstIterator > iterators;
             return this->findAllOf ( elements, iterators );
         }
 
 
-        template < typename T >
-        template < template < typename ... > class CollectionType >
-        auto Collection < T > :: findNotOf (
+        template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
+        template < template < typename ... > class __CollectionType > // NOLINT(bugprone-reserved-identifier)
+        auto Collection < __ElementType > :: findNotOf (
                 Size                                        maxCount,
                 InitializerList                     const & elements,
-                CollectionType < ConstIterator >          & storeIn
-        ) const noexcept -> CollectionType < ConstIterator > & {
+                __CollectionType < ConstIterator >        & storeIn
+        ) const noexcept -> __CollectionType < ConstIterator > & {
 
             Size found = 0ULL;
             for ( auto iterator = this->begin(), end = this->end(); iterator != end && found < maxCount; ++ iterator ) {
-                if ( ! hidden :: impl :: initializerListContains ( elements, * iterator ) ) {
+                if ( ! __hidden :: __impl :: __initializerListContains ( elements, * iterator ) ) {
                     ++ found;
 
                     storeIn.add ( iterator );
@@ -1239,26 +1239,26 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         }
 
 
-        template < typename T >
-        template < template < typename ... > class CollectionType >
-        auto Collection < T > :: findNotOf (
+        template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
+        template < template < typename ... > class __CollectionType > // NOLINT(bugprone-reserved-identifier)
+        auto Collection < __ElementType > :: findNotOf (
                 Size                                        maxCount,
                 InitializerList                     const & elements
-        ) const noexcept -> CollectionType < ConstIterator > {
+        ) const noexcept -> __CollectionType < ConstIterator > {
 
-            CollectionType < ConstIterator > iterators;
+            __CollectionType < ConstIterator > iterators;
             return this-> findNotOf ( maxCount, elements, iterators );
         }
 
 
-        template < typename T >
-        auto Collection < T > :: findFirstNotOf (
+        template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
+        auto Collection < __ElementType > :: findFirstNotOf (
                 InitializerList                     const & elements
         ) const noexcept -> ConstIterator {
 
             auto end = this->end();
             for ( auto iterator = this->begin(); iterator != end; ++ iterator ) {
-                if ( ! hidden :: impl :: initializerListContains ( elements,  * iterator ) ) {
+                if ( ! __hidden :: __impl :: __initializerListContains ( elements,  * iterator ) ) {
                     return iterator;
                 }
             }
@@ -1267,15 +1267,15 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         }
 
 
-        template < typename T >
-        auto Collection < T > :: findLastNotOf (
+        template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
+        auto Collection < __ElementType > :: findLastNotOf (
                 InitializerList                     const & elements
         ) const noexcept -> ConstIterator {
 
             auto end = this->end();
             auto lastFound = end;
             for ( auto iterator = this->begin(); iterator != end; ++ iterator ) {
-                if ( ! hidden :: impl :: initializerListContains ( elements,  * iterator ) ) {
+                if ( ! __hidden :: __impl :: __initializerListContains ( elements,  * iterator ) ) {
                     lastFound = iterator;
                 }
             }
@@ -1284,15 +1284,15 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         }
 
 
-        template < typename T >
-        template < template < typename ... > class CollectionType >
-        auto Collection < T > :: findAllNotOf (
+        template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
+        template < template < typename ... > class __CollectionType > // NOLINT(bugprone-reserved-identifier)
+        auto Collection < __ElementType > :: findAllNotOf (
                 InitializerList                     const & elements,
-                CollectionType < ConstIterator >          & storeIn
-        ) const noexcept -> CollectionType < ConstIterator > & {
+                __CollectionType < ConstIterator >        & storeIn
+        ) const noexcept -> __CollectionType < ConstIterator > & {
 
             for ( auto iterator = this->begin(), end = this->end(); iterator != end; ++ iterator ) {
-                if ( ! hidden :: impl :: initializerListContains ( elements,  * iterator ) ) {
+                if ( ! __hidden :: __impl :: __initializerListContains ( elements,  * iterator ) ) {
                     storeIn.add ( iterator );
                 }
             }
@@ -1301,24 +1301,24 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         }
 
 
-        template < typename T >
-        template < template < typename ... > class CollectionType >
-        auto Collection < T > :: findAllNotOf (
+        template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
+        template < template < typename ... > class __CollectionType > // NOLINT(bugprone-reserved-identifier)
+        auto Collection < __ElementType > :: findAllNotOf (
                 InitializerList                     const & elements
-        ) const noexcept -> CollectionType < ConstIterator > {
+        ) const noexcept -> __CollectionType < ConstIterator > {
 
-            CollectionType < ConstIterator > iterators;
+            __CollectionType < ConstIterator > iterators;
             return this-> findAllNotOf ( elements, iterators );
         }
 
 
-        template < typename T >
-        template < template < typename ... > class CollectionType, typename Predicate >
-        auto Collection < T > :: find (
+        template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
+        template < template < typename ... > class __CollectionType, typename __Predicate > // NOLINT(bugprone-reserved-identifier)
+        auto Collection < __ElementType > :: find (
                 Size                                        maxCount,
-                Predicate                           const & predicate,
-                CollectionType < ConstIterator >          & storeIn
-        ) const noexcept ( noexcept ( predicate ( meta :: referenceOf < ElementType const > () ) ) ) -> CollectionType < ConstIterator > & {
+                __Predicate                         const & predicate,
+                __CollectionType < ConstIterator >        & storeIn
+        ) const noexcept ( noexcept ( predicate ( meta :: referenceOf < ElementType const > () ) ) ) -> __CollectionType < ConstIterator > & {
 
             Size matchCount = 0U;
             for ( auto iterator = this->begin(), end = this->end(); iterator != end && matchCount < maxCount; ++ iterator ) {
@@ -1332,22 +1332,22 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         }
 
 
-        template < typename T >
-        template < template < typename ... > class CollectionType, typename Predicate >
-        auto Collection < T > :: find (
+        template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
+        template < template < typename ... > class __CollectionType, typename __Predicate > // NOLINT(bugprone-reserved-identifier)
+        auto Collection < __ElementType > :: find (
                 Size                                        maxCount,
-                Predicate                           const & predicate
-        ) const noexcept ( noexcept ( predicate ( meta :: referenceOf < ElementType const > () ) ) ) -> CollectionType < ConstIterator > {
+                __Predicate                         const & predicate
+        ) const noexcept ( noexcept ( predicate ( meta :: referenceOf < ElementType const > () ) ) ) -> __CollectionType < ConstIterator > {
 
-            CollectionType < ConstIterator > iterators;
+            __CollectionType < ConstIterator > iterators;
             return this->find ( maxCount, predicate, iterators );
         }
 
 
-        template < typename T >
-        template < typename Predicate >
-        auto Collection < T > :: findFirst (
-                Predicate const & predicate
+        template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
+        template < typename __Predicate > // NOLINT(bugprone-reserved-identifier)
+        auto Collection < __ElementType > :: findFirst (
+                __Predicate const & predicate
         ) const noexcept ( noexcept ( predicate ( meta :: referenceOf < ElementType const > () ) ) ) -> ConstIterator {
 
             auto end = this->end();
@@ -1361,10 +1361,10 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         }
 
 
-        template < typename T >
-        template < typename Predicate >
-        auto Collection < T > :: findLast (
-                Predicate const & predicate
+        template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
+        template < typename __Predicate > // NOLINT(bugprone-reserved-identifier)
+        auto Collection < __ElementType > :: findLast (
+                __Predicate const & predicate
         ) const noexcept ( noexcept ( predicate ( meta :: referenceOf < ElementType const > () ) ) ) -> ConstIterator {
 
             auto end = this->end();
@@ -1379,12 +1379,12 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         }
 
 
-        template < typename T >
-        template < template < typename ... > class CollectionType, typename Predicate >
-        auto Collection < T > :: findAll (
-                Predicate                           const & predicate,
-                CollectionType < ConstIterator >          & storeIn
-        ) const noexcept ( noexcept ( predicate ( meta :: referenceOf < ElementType const > () ) ) ) -> CollectionType < ConstIterator > & {
+        template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
+        template < template < typename ... > class __CollectionType, typename __Predicate > // NOLINT(bugprone-reserved-identifier)
+        auto Collection < __ElementType > :: findAll (
+                __Predicate                         const & predicate,
+                __CollectionType < ConstIterator >        & storeIn
+        ) const noexcept ( noexcept ( predicate ( meta :: referenceOf < ElementType const > () ) ) ) -> __CollectionType < ConstIterator > & {
 
             for ( auto iterator = this->begin(), end = this->end(); iterator != end; ++ iterator ) {
                 if ( predicate ( * iterator ) ) {
@@ -1396,26 +1396,26 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         }
 
 
-        template < typename T >
-        template < template < typename ... > class CollectionType, typename Predicate >
-        auto Collection < T > :: findAll (
-                Predicate                           const & predicate
-        ) const noexcept ( noexcept ( predicate ( meta :: referenceOf < ElementType const > () ) ) ) -> CollectionType < ConstIterator > {
+        template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
+        template < template < typename ... > class __CollectionType, typename __Predicate > // NOLINT(bugprone-reserved-identifier)
+        auto Collection < __ElementType > :: findAll (
+                __Predicate                           const & predicate
+        ) const noexcept ( noexcept ( predicate ( meta :: referenceOf < ElementType const > () ) ) ) -> __CollectionType < ConstIterator > {
 
-            CollectionType < ConstIterator > iterators;
+            __CollectionType < ConstIterator > iterators;
             return this->findAll ( predicate, iterators );
         }
 
 
-        template < typename T >
-        __CDS_cpplang_ConstexprPureAbstract Collection < T > :: operator bool () const noexcept {
+        template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
+        __CDS_cpplang_ConstexprPureAbstract Collection < __ElementType > :: operator bool () const noexcept {
 
             return ! this->empty();
         }
 
 
-        template < typename T >
-        auto Collection < T > :: hash () const noexcept -> Index {
+        template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
+        auto Collection < __ElementType > :: hash () const noexcept -> Index {
 
             Index finalHashValue __CDS_MaybeUnused = 0;
             for ( auto iterator = this->begin(), end = this->end(); iterator != end; ++ iterator ) {
@@ -1426,8 +1426,8 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         }
 
 
-        template < typename T >
-        __CDS_OptimalInline auto Collection < T > :: equals (
+        template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
+        __CDS_OptimalInline auto Collection < __ElementType > :: equals (
                 Object const & object
         ) const noexcept -> bool {
 
@@ -1442,7 +1442,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
             for (
                     auto
-                        leftIt  = this->begin(),    leftEnd     = this->end(),
+                        leftIt  = this->begin(),    leftEnd = this->end(),
                         rightIt = pObject->begin();
                     leftIt != leftEnd;
                     ++ leftIt, ++ rightIt
@@ -1456,15 +1456,15 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         }
 
 
-        template < typename T >
-        __CDS_cpplang_ConstexprPureAbstract auto Collection < T > :: empty () const noexcept -> bool {
+        template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
+        __CDS_cpplang_ConstexprPureAbstract auto Collection < __ElementType > :: empty () const noexcept -> bool {
 
             return this->size() == 0ULL;
         }
 
 
-        template < typename T >
-        __CDS_OptimalInline auto Collection < T > :: contains (
+        template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
+        __CDS_OptimalInline auto Collection < __ElementType > :: contains (
                 ElementType const & element
         ) const noexcept -> bool {
 
@@ -1478,8 +1478,8 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         }
 
 
-        template < typename T >
-        auto Collection < T > :: containsAnyOf (
+        template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
+        auto Collection < __ElementType > :: containsAnyOf (
                 Collection < ElementType > const & elements
         ) const noexcept -> bool {
 
@@ -1492,8 +1492,9 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             return false;
         }
 
-        template < typename T >
-        auto Collection < T > :: containsAnyNotOf (
+
+        template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
+        auto Collection < __ElementType > :: containsAnyNotOf (
                 Collection < ElementType > const & elements
         ) const noexcept -> bool {
 
@@ -1507,8 +1508,8 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         }
 
 
-        template < typename T >
-        auto Collection < T > :: containsAllOf (
+        template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
+        auto Collection < __ElementType > :: containsAllOf (
                 Collection < ElementType > const & elements
         ) const noexcept -> bool {
 
@@ -1521,8 +1522,9 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             return true;
         }
 
-        template < typename T >
-        auto Collection < T > :: containsAllNotOf (
+
+        template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
+        auto Collection < __ElementType > :: containsAllNotOf (
                 Collection < ElementType > const & elements
         ) const noexcept -> bool {
 
@@ -1535,8 +1537,9 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             return true;
         }
 
-        template < typename T >
-        auto Collection < T > :: containsAnyOf (
+
+        template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
+        auto Collection < __ElementType > :: containsAnyOf (
                 InitializerList const & elements
         ) const noexcept -> bool {
 
@@ -1550,8 +1553,8 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         }
 
 
-        template < typename T >
-        auto Collection < T > :: containsAnyNotOf (
+        template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
+        auto Collection < __ElementType > :: containsAnyNotOf (
                 InitializerList const & elements
         ) const noexcept -> bool {
 
@@ -1565,8 +1568,8 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         }
 
 
-        template < typename T >
-        auto Collection < T > :: containsAllOf (
+        template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
+        auto Collection < __ElementType > :: containsAllOf (
                 InitializerList const & elements
         ) const noexcept -> bool {
 
@@ -1580,8 +1583,8 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         }
 
 
-        template < typename T >
-        auto Collection < T > :: containsAllNotOf (
+        template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
+        auto Collection < __ElementType > :: containsAllNotOf (
                 InitializerList const & elements
         ) const noexcept -> bool {
 
@@ -1595,9 +1598,9 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         }
 
 
-        template < typename T >
-        template < typename V, meta :: EnableIf < meta :: isCopyConstructible < V > () > >
-        auto Collection < T > :: add (
+        template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
+        template < typename __VElementType, meta :: EnableIf < meta :: isCopyConstructible < __VElementType > () > > // NOLINT(bugprone-reserved-identifier)
+        auto Collection < __ElementType > :: add (
                 ElementType const & element
         ) noexcept ( noexcept ( ElementType ( element ) ) ) -> void {
 
@@ -1609,9 +1612,9 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         }
 
 
-        template < typename T >
-        template < typename V, meta :: EnableIf < meta :: isMoveConstructible < V > () > >
-        auto Collection < T > :: add (
+        template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
+        template < typename __VElementType, meta :: EnableIf < meta :: isMoveConstructible < __VElementType > () > > // NOLINT(bugprone-reserved-identifier)
+        auto Collection < __ElementType > :: add (
                 ElementType && element
         ) noexcept ( noexcept ( ElementType ( std :: move ( element ) ) ) ) -> void {
 
@@ -1623,20 +1626,20 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         }
 
 
-        template < typename T >
-        template < typename ... ArgumentTypes >
-        auto Collection < T > :: addAll (
-                ArgumentTypes && ... arguments
+        template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
+        template < typename ... __ArgumentTypes > // NOLINT(bugprone-reserved-identifier)
+        auto Collection < __ElementType > :: addAll (
+                __ArgumentTypes && ... arguments
         ) noexcept -> void {
 
-            hidden :: impl :: collectionAdd ( * this, std :: forward < ArgumentTypes > ( arguments ) ... );
+            __hidden :: __impl :: __collectionAdd ( * this, std :: forward < __ArgumentTypes > ( arguments ) ... );
         }
 
 
-        template < typename T >
-        template < typename R, typename V, meta :: EnableIf < meta :: isCopyConstructible < V > () || meta :: isConvertible < R, V > () > >
-        auto Collection < T > :: addAllOf (
-                Collection < R > const & otherCollection
+        template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
+        template < typename __OtherElementType, typename __ArgumentTypes, meta :: EnableIf < meta :: isCopyConstructible < __ArgumentTypes > () || meta :: isConvertible < __OtherElementType, __ArgumentTypes > () > > // NOLINT(bugprone-reserved-identifier)
+        auto Collection < __ElementType > :: addAllOf (
+                Collection < __OtherElementType > const & otherCollection
         ) noexcept -> void {
 
             for ( auto iterator = otherCollection.begin(), end = otherCollection.end(); iterator != end; ++ iterator ) {
@@ -1645,20 +1648,20 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         }
 
 
-        template < typename T >
-        __CDS_OptimalInline auto Collection < T > :: pNewInsertPost() noexcept -> void {
+        template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
+        __CDS_OptimalInline auto Collection < __ElementType > :: pNewInsertPost() noexcept -> void {
             /* left empty intentionally, derived classes can override this, but it is not mandatory.
              * Refer to Collection :: add to when this should be overridden */
         }
 
 
-        template < template < typename ... > class CollectionType, typename ... ArgumentTypes, typename Common >
+        template < template < typename ... > class __CollectionType, typename ... __ArgumentTypes, typename __Common > // NOLINT(bugprone-reserved-identifier)
         auto collectionOf (
-                ArgumentTypes && ... values
-        ) noexcept -> CollectionType < Common > {
+                __ArgumentTypes && ... values
+        ) noexcept -> __CollectionType < __Common > {
 
-            CollectionType < Common > collection;
-            hidden :: impl :: collectionOfPush ( collection, std :: forward < ArgumentTypes > ( values ) ... );
+            __CollectionType < __Common > collection;
+            __hidden :: __impl :: __collectionOfPush ( collection, std :: forward < __ArgumentTypes > ( values ) ... );
             return collection;
         }
 

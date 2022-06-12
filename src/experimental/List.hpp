@@ -12,28 +12,28 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
         /**
          * @class Abstract Object representing any Indexed Iterable Container of given elements of type
-         * @tparam T is the type of elements contained into List
+         * @tparam __ElementType is the type of elements contained into List
          */
-        template < typename T >
-        class List : public Collection < T > {
+        template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
+        class List : public Collection < __ElementType > {
 
         public:
             /**
-             * @typedef Alias for T, the type of the contained elements, publicly accessible, useful in sfinae statements - decltype ( Collection ) :: ElementType
+             * @typedef Alias for __ElementType, the type of the contained elements, publicly accessible, useful in sfinae statements - decltype ( Collection ) :: ElementType
              */
-            using typename Collection < T > :: ElementType;
+            using typename Collection < __ElementType > :: ElementType;
 
         protected:
             /**
              * @typedef Alias for std :: initializer_list < T > or std :: initializer_list < ElementType >
              */
-            using typename Collection < T > :: InitializerList;
+            using typename Collection < __ElementType > :: InitializerList;
 
         protected:
             /**
              * @interface An Iterator Delegate represents the actual implementation of the iterator done by the derived classes. The Abstract Delegate Iterator is the base used by the Iterator bases
              */
-            using typename Collection < T > :: AbstractDelegateIterator;
+            using typename Collection < __ElementType > :: AbstractDelegateIterator;
 
         protected:
             /**
@@ -45,19 +45,19 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             /**
              * @class The base class for immutable Iterator types. It is the wrapper over the AbstractDelegateIterator, acquired from derived classes implementation
              */
-            using typename Collection < T > :: DelegateConstIterator;
+            using typename Collection < __ElementType > :: DelegateConstIterator;
 
         protected:
             /**
              * @class The base class for Iterator types, mutable or immutable. It is the wrapper over the AbstractDelegateIterator, acquired from derived classes implementation
              */
-            using typename Collection < T > :: AbstractIterator;
+            using typename Collection < __ElementType > :: AbstractIterator;
 
         protected:
             /**
              * @enum The types of delegate iterator requests the Collection Base Object can make to its Derivative Objects when acquiring an Iterator Delegate Implementation
              */
-            using typename Collection < T > :: DelegateIteratorRequestType;
+            using typename Collection < __ElementType > :: DelegateIteratorRequestType;
 
         public:
             /**
@@ -69,7 +69,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             /**
              * @class The Iterator type used for Forward Iteration over immutable values
              */
-            using typename Collection < T > :: ConstIterator;
+            using typename Collection < __ElementType > :: ConstIterator;
 
         public:
             /**
@@ -81,7 +81,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             /**
              * @class The Iterator type used for Backward Iteration over immutable values
              */
-            using typename Collection < T > :: ConstReverseIterator;
+            using typename Collection < __ElementType > :: ConstReverseIterator;
 
         protected:
             /// number of elements present in the list
@@ -119,7 +119,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
              *      acquireDelegate ( ConstIterator ),
              *      acquireDelegate ( ConstReverseIterator )
              */
-            using Collection < T > :: acquireDelegate;
+            using Collection < __ElementType > :: acquireDelegate;
 
         protected:
             /**
@@ -146,7 +146,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
              * @brief Import statement for
              *      begin () const -> ConstIterator
              */
-            using Collection < T > :: begin;
+            using Collection < __ElementType > :: begin;
 
         public:
             /**
@@ -162,7 +162,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
              * @brief Import statement for
              *      end () const -> ConstIterator
              */
-            using Collection < T > :: end;
+            using Collection < __ElementType > :: end;
 
         public:
             /**
@@ -178,7 +178,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
              * @brief Import statement for
              *      rbegin () const -> ConstIterator
              */
-            using Collection < T > :: rbegin;
+            using Collection < __ElementType > :: rbegin;
 
         public:
             /**
@@ -194,7 +194,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
              * @brief Import statement for
              *      rend () const -> ConstIterator
              */
-            using Collection < T > :: rend;
+            using Collection < __ElementType > :: rend;
 
         protected:
             /**
@@ -326,52 +326,52 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         public:
             /**
              * @brief Function used to obtain a subsection of the current list, and store it into a given list
-             * @tparam ListType is the type of the list to store the sublist into
-             * @tparam V is a type alias for T used to disable the function if T is not copy constructible
-             * @param storeIn : ListType ref = Reference to the list to store the new elements into
+             * @tparam __CollectionType is the type of the list to store the sublist into
+             * @tparam __VElementType is a type alias for __ElementType used to disable the function if __ElementType is not copy constructible
+             * @param storeIn : __CollectionType ref = Reference to the list to store the new elements into
              * @param from : Index = the index from which to create the sublist, inclusive
              * @param to : Index = the index until which to create the sublist, exclusive
              * @exceptsafe
-             * @return ListType ref = Reference to the given list in 'storeIn'
+             * @return __CollectionType ref = Reference to the given list in 'storeIn'
              */
-            template < typename ListType, typename V = T, meta :: EnableIf < meta :: isCopyConstructible < V > () && meta :: isDerivedFrom < ListType, Collection < T > > () > = 0 >
+            template < typename __CollectionType, typename __VElementType = __ElementType, meta :: EnableIf < meta :: isCopyConstructible < __VElementType > () && meta :: isDerivedFrom < __CollectionType, Collection < __ElementType > > () > = 0 > // NOLINT(bugprone-reserved-identifier)
             auto sub (
-                    ListType  & storeIn,
-                    Index       from,
-                    Index       to
-            ) const noexcept -> ListType &;
+                    __CollectionType  & storeIn,
+                    Index               from,
+                    Index               to
+            ) const noexcept -> __CollectionType &;
 
         public:
             /**
              * @brief Function used to obtain a subsection of the current list
-             * @tparam ListType is the type of the list to store the sublist into
-             * @tparam V is a type alias for T used to disable the function if T is not copy constructible
+             * @tparam __CollectionType is the type of the list to store the sublist into
+             * @tparam __VElementType is a type alias for __ElementType used to disable the function if __ElementType is not copy constructible
              * @param from : Index = the index from which to create the sublist, inclusive
              * @param to : Index = the index until which to create the sublist, exclusive
              * @exceptsafe
-             * @return ListType = List containing the requested subsection
+             * @return __CollectionType = List containing the requested subsection
              */
-            template < typename ListType, typename V = T, meta :: EnableIf < meta :: isCopyConstructible < V > () && meta :: isDerivedFrom < ListType, Collection < T > > () > = 0 >
+            template < typename __CollectionType, typename __VElementType = __ElementType, meta :: EnableIf < meta :: isCopyConstructible < __VElementType > () && meta :: isDerivedFrom < __CollectionType, Collection < __ElementType > > () > = 0 > // NOLINT(bugprone-reserved-identifier)
             auto sub (
                     Index from,
                     Index to
-            ) const noexcept -> ListType;
+            ) const noexcept -> __CollectionType;
 
         public:
             /**
              * @brief Function used to obtain a subsection of the current list
-             * @tparam ListType is the type of the list to store the sublist into
-             * @tparam V is a type alias for T used to disable the function if T is not copy constructible
+             * @tparam __CollectionType is the type of the list to store the sublist into
+             * @tparam __VElementType is a type alias for __ElementType used to disable the function if __ElementType is not copy constructible
              * @param from : Index = the index from which to create the sublist, inclusive
              * @param to : Index = the index until which to create the sublist, exclusive
              * @exceptsafe
              * @return ListType = List containing the requested subsection
              */
-            template < template < typename ... > class ListType, typename V = T, meta :: EnableIf < meta :: isCopyConstructible < V > () && meta :: isDerivedFrom < ListType < T >, Collection < T > > () > = 0 >
+            template < template < typename ... > class __CollectionType, typename __VElementType = __ElementType, meta :: EnableIf < meta :: isCopyConstructible < __VElementType > () && meta :: isDerivedFrom < __CollectionType < __ElementType >, Collection < __ElementType > > () > = 0 > // NOLINT(bugprone-reserved-identifier)
              auto sub (
                      Index from,
                      Index to
-             ) const noexcept -> ListType < ElementType >;
+             ) const noexcept -> __CollectionType < ElementType >;
 
         public:
             /**
@@ -562,11 +562,11 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         public:
             /**
              * @brief Function used to add an element at the front of the list via copy ( construction of new instance ). Only used if element is copyConstructible ( has copy ctor )
-             * @tparam V alias for ElementType, used to enable the function using sfinae to avoid instantiation errors
+             * @tparam __VElementType alias for __ElementType, used to enable the function using sfinae to avoid instantiation errors
              * @param element : ElementType cref = Constant Reference to the element to copy and add into the collection
              * @exceptsafe if ElementType copy constructor is exceptsafe
              */
-            template < typename V = T, meta :: EnableIf < meta :: isCopyConstructible < V > () > = 0 >
+            template < typename __VElementType = __ElementType, meta :: EnableIf < meta :: isCopyConstructible < __VElementType > () > = 0 > // NOLINT(bugprone-reserved-identifier)
             auto pushFront (
                     ElementType const & element
             ) noexcept -> ElementType &;
@@ -574,11 +574,11 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         public:
             /**
              * @brief Function used to add an element at the front of the list via move ( moving of the received instance ). Only used if element is moveConstructible ( has move ctor )
-             * @tparam V alias for ElementType, used to enable the function using sfinae to avoid instantiation errors
+             * @tparam __VElementType alias for __ElementType, used to enable the function using sfinae to avoid instantiation errors
              * @param element : ElementType mref = Move Reference to the element to move into the collection
              * @exceptsafe if ElementType move constructor is exceptsafe
              */
-            template < typename V = T, meta :: EnableIf < meta :: isMoveConstructible < V > () > = 0 >
+            template < typename __VElementType = __ElementType, meta :: EnableIf < meta :: isMoveConstructible < __VElementType > () > = 0 > // NOLINT(bugprone-reserved-identifier)
             auto pushFront (
                     ElementType && element
             ) noexcept -> ElementType &;
@@ -586,11 +586,11 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         public:
             /**
              * @brief Function used to add an element at the back of the list via copy ( construction of new instance ). Only used if element is copyConstructible ( has copy ctor )
-             * @tparam V alias for ElementType, used to enable the function using sfinae to avoid instantiation errors
+             * @tparam __VElementType alias for __ElementType, used to enable the function using sfinae to avoid instantiation errors
              * @param element : ElementType cref = Constant Reference to the element to copy and add into the collection
              * @exceptsafe if ElementType copy constructor is exceptsafe
              */
-            template < typename V = T, meta :: EnableIf < meta :: isCopyConstructible < V > () > = 0 >
+            template < typename __VElementType = __ElementType, meta :: EnableIf < meta :: isCopyConstructible < __VElementType > () > = 0 > // NOLINT(bugprone-reserved-identifier)
             auto pushBack (
                     ElementType const & element
             ) noexcept -> ElementType &;
@@ -598,11 +598,11 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         public:
             /**
              * @brief Function used to add an element at the back of the list via move ( moving of the received instance ). Only used if element is moveConstructible ( has move ctor )
-             * @tparam V alias for ElementType, used to enable the function using sfinae to avoid instantiation errors
+             * @tparam V alias for __ElementType, used to enable the function using sfinae to avoid instantiation errors
              * @param element : ElementType mref = Move Reference to the element to move into the collection
              * @exceptsafe if ElementType move constructor is exceptsafe
              */
-            template < typename V = T, meta :: EnableIf < meta :: isMoveConstructible < V > () > = 0 >
+            template < typename __VElementType = __ElementType, meta :: EnableIf < meta :: isMoveConstructible < __VElementType > () > = 0 > // NOLINT(bugprone-reserved-identifier)
             auto pushBack (
                     ElementType && element
             ) noexcept -> ElementType &;
@@ -610,14 +610,14 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         public:
             /**
              * @brief Function used to add an element before a given iterator's referenced element via copy ( creating a new instance ). Only used if element is copyConstructible ( has copy ctor )
-             * @tparam V is an alias for ElementType, used to enable the function using sfinae to avoid instantiation errors
+             * @tparam __VElementType is an alias for __VElementType, used to enable the function using sfinae to avoid instantiation errors
              * @param iterator : Iterator cref = Constant Reference to an iterator to place the element before
              * @param element : ElementType cref = Constant Reference to the element to copy and place
              * @throws IllegalArgumentException if the given iterator is not obtained from this collection
              * @throws OutOfBoundsException if the given iterator is out of bounds
              * @return ElementType ref = Reference to the newly inserted value
              */
-            template < typename V = T, meta :: EnableIf < meta :: isCopyConstructible < V > () > = 0 >
+            template < typename __VElementType = __ElementType, meta :: EnableIf < meta :: isCopyConstructible < __VElementType > () > = 0 > // NOLINT(bugprone-reserved-identifier)
             auto insertBefore (
                     Iterator    const & iterator,
                     ElementType const & element
@@ -626,14 +626,14 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         public:
             /**
              * @brief Function used to add an element before a given iterator's referenced element via move ( move of the given instance ) Only used if element is moveConstructible ( has move ctor )
-             * @tparam V is an alias for ElementType, used to enable the function using sfinae to avoid instantiation errors
+             * @tparam __VElementType is an alias for __VElementType, used to enable the function using sfinae to avoid instantiation errors
              * @param iterator : Iterator cref = Constant Reference to an iterator to place the element before
              * @param element : ElementType mref = Move Reference to the element to copy and place
              * @throws IllegalArgumentException if the given iterator is not obtained from this collection
              * @throws OutOfBoundsException if the given iterator is out of bounds
              * @return ElementType ref = Reference to the newly inserted value
              */
-            template < typename V = T, meta :: EnableIf < meta :: isMoveConstructible < V > () > = 0 >
+            template < typename __VElementType = __ElementType, meta :: EnableIf < meta :: isMoveConstructible < __VElementType > () > = 0 > // NOLINT(bugprone-reserved-identifier)
             auto insertBefore (
                     Iterator    const & iterator,
                     ElementType      && element
@@ -642,14 +642,14 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         public:
             /**
              * @brief Function used to add an element after a given iterator's referenced element via copy ( creating a new instance ). Only used if element is copyConstructible ( has copy ctor )
-             * @tparam V is an alias for ElementType, used to enable the function using sfinae to avoid instantiation errors
+             * @tparam __VElementType is an alias for __ElementType, used to enable the function using sfinae to avoid instantiation errors
              * @param iterator : Iterator cref = Constant Reference to an iterator to place the element after
              * @param element : ElementType cref = Constant Reference to the element to copy and place
              * @throws IllegalArgumentException if the given iterator is not obtained from this collection
              * @throws OutOfBoundsException if the given iterator is out of bounds
              * @return ElementType ref = Reference to the newly inserted value
              */
-            template < typename V = T, meta :: EnableIf < meta :: isCopyConstructible < V > () > = 0 >
+            template < typename __VElementType = __ElementType, meta :: EnableIf < meta :: isCopyConstructible < __VElementType > () > = 0 > // NOLINT(bugprone-reserved-identifier)
             auto insertAfter (
                     Iterator    const & iterator,
                     ElementType const & element
@@ -658,14 +658,14 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         public:
             /**
              * @brief Function used to add an element after a given iterator's referenced element via move ( move of the given instance ) Only used if element is moveConstructible ( has move ctor )
-             * @tparam V is an alias for ElementType, used to enable the function using sfinae to avoid instantiation errors
+             * @tparam __VElementType is an alias for __ElementType, used to enable the function using sfinae to avoid instantiation errors
              * @param iterator : Iterator cref = Constant Reference to an iterator to place the element after
              * @param element : ElementType mref = Move Reference to the element to copy and place
              * @throws IllegalArgumentException if the given iterator is not obtained from this collection
              * @throws OutOfBoundsException if the given iterator is out of bounds
              * @return ElementType ref = Reference to the newly inserted value
              */
-            template < typename V = T, meta :: EnableIf < meta :: isMoveConstructible < V > () > = 0 >
+            template < typename __VElementType = __ElementType, meta :: EnableIf < meta :: isMoveConstructible < __VElementType > () > = 0 > // NOLINT(bugprone-reserved-identifier)
             auto insertAfter (
                     Iterator   const & iterator,
                     ElementType     && element
@@ -674,14 +674,14 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         public:
             /**
              * @brief Function used to add an element before a given iterator's referenced element via copy ( creating a new instance ). Only used if element is copyConstructible ( has copy ctor )
-             * @tparam V is an alias for ElementType, used to enable the function using sfinae to avoid instantiation errors
+             * @tparam __VElementType is an alias for __ElementType, used to enable the function using sfinae to avoid instantiation errors
              * @param iterator : ConstIterator cref = Constant Reference to an iterator to place the element before
              * @param element : ElementType cref = Constant Reference to the element to copy and place
              * @throws IllegalArgumentException if the given iterator is not obtained from this collection
              * @throws OutOfBoundsException if the given iterator is out of bounds
              * @return ElementType ref = Reference to the newly inserted value
              */
-            template < typename V = T, meta :: EnableIf < meta :: isCopyConstructible < V > () > = 0 >
+            template < typename __VElementType = __ElementType, meta :: EnableIf < meta :: isCopyConstructible < __VElementType > () > = 0 > // NOLINT(bugprone-reserved-identifier)
             auto insertBefore (
                     ConstIterator   const & iterator,
                     ElementType     const & element
@@ -690,14 +690,14 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         public:
             /**
              * @brief Function used to add an element before a given iterator's referenced element via move ( move of the given instance ) Only used if element is moveConstructible ( has move ctor )
-             * @tparam V is an alias for ElementType, used to enable the function using sfinae to avoid instantiation errors
+             * @tparam __VElementType is an alias for __ElementType, used to enable the function using sfinae to avoid instantiation errors
              * @param iterator : ConstIterator cref = Constant Reference to an iterator to place the element before
              * @param element : ElementType mref = Move Reference to the element to copy and place
              * @throws IllegalArgumentException if the given iterator is not obtained from this collection
              * @throws OutOfBoundsException if the given iterator is out of bounds
              * @return ElementType ref = Reference to the newly inserted value
              */
-            template < typename V = T, meta :: EnableIf < meta :: isMoveConstructible < V > () > = 0 >
+            template < typename __VElementType = __ElementType, meta :: EnableIf < meta :: isMoveConstructible < __VElementType > () > = 0 > // NOLINT(bugprone-reserved-identifier)
             auto insertBefore (
                     ConstIterator  const & iterator,
                     ElementType         && element
@@ -706,14 +706,14 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         public:
             /**
              * @brief Function used to add an element after a given iterator's referenced element via copy ( creating a new instance ). Only used if element is copyConstructible ( has copy ctor )
-             * @tparam V is an alias for ElementType, used to enable the function using sfinae to avoid instantiation errors
+             * @tparam __VElementType is an alias for __ElementType, used to enable the function using sfinae to avoid instantiation errors
              * @param iterator : ConstIterator cref = Constant Reference to an iterator to place the element after
              * @param element : ElementType cref = Constant Reference to the element to copy and place
              * @throws IllegalArgumentException if the given iterator is not obtained from this collection
              * @throws OutOfBoundsException if the given iterator is out of bounds
              * @return ElementType ref = Reference to the newly inserted value
              */
-            template < typename V = T, meta :: EnableIf < meta :: isCopyConstructible < V > () > = 0 >
+            template < typename __VElementType = __ElementType, meta :: EnableIf < meta :: isCopyConstructible < __VElementType > () > = 0 > // NOLINT(bugprone-reserved-identifier)
             auto insertAfter (
                     ConstIterator   const & iterator,
                     ElementType     const & element
@@ -722,14 +722,14 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         public:
             /**
              * @brief Function used to add an element after a given iterator's referenced element via move ( move of the given instance ) Only used if element is moveConstructible ( has move ctor )
-             * @tparam V is an alias for ElementType, used to enable the function using sfinae to avoid instantiation errors
+             * @tparam __VElementType is an alias for __ElementType, used to enable the function using sfinae to avoid instantiation errors
              * @param iterator : ConstIterator cref = Constant Reference to an iterator to place the element after
              * @param element : ElementType mref = Move Reference to the element to copy and place
              * @throws IllegalArgumentException if the given iterator is not obtained from this collection
              * @throws OutOfBoundsException if the given iterator is out of bounds
              * @return ElementType ref = Reference to the newly inserted value
              */
-            template < typename V = T, meta :: EnableIf < meta :: isMoveConstructible < V > () > = 0 >
+            template < typename __VElementType = __ElementType, meta :: EnableIf < meta :: isMoveConstructible < __VElementType > () > = 0 > // NOLINT(bugprone-reserved-identifier)
             auto insertAfter (
                     ConstIterator  const & iterator,
                     ElementType         && element
@@ -738,14 +738,14 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         public:
             /**
              * @brief Function used to add an element before a given iterator's referenced element via copy ( creating a new instance ). Only used if element is copyConstructible ( has copy ctor )
-             * @tparam V is an alias for ElementType, used to enable the function using sfinae to avoid instantiation errors
+             * @tparam __VElementType is an alias for __ElementType, used to enable the function using sfinae to avoid instantiation errors
              * @param iterator : ReverseIterator cref = Constant Reference to an iterator to place the element before
              * @param element : ElementType cref = Constant Reference to the element to copy and place
              * @throws IllegalArgumentException if the given iterator is not obtained from this collection
              * @throws OutOfBoundsException if the given iterator is out of bounds
              * @return ElementType ref = Reference to the newly inserted value
              */
-            template < typename V = T, meta :: EnableIf < meta :: isCopyConstructible < V > () > = 0 >
+            template < typename __VElementType = __ElementType, meta :: EnableIf < meta :: isCopyConstructible < __VElementType > () > = 0 > // NOLINT(bugprone-reserved-identifier)
             auto insertBefore (
                     ReverseIterator const & iterator,
                     ElementType     const & element
@@ -754,14 +754,14 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         public:
             /**
              * @brief Function used to add an element before a given iterator's referenced element via move ( move of the given instance ) Only used if element is moveConstructible ( has move ctor )
-             * @tparam V is an alias for ElementType, used to enable the function using sfinae to avoid instantiation errors
+             * @tparam __VElementType is an alias for __ElementType, used to enable the function using sfinae to avoid instantiation errors
              * @param iterator : ReverseIterator cref = Constant Reference to an iterator to place the element before
              * @param element : ElementType mref = Move Reference to the element to copy and place
              * @throws IllegalArgumentException if the given iterator is not obtained from this collection
              * @throws OutOfBoundsException if the given iterator is out of bounds
              * @return ElementType ref = Reference to the newly inserted value
              */
-            template < typename V = T, meta :: EnableIf < meta :: isMoveConstructible < V > () > = 0 >
+            template < typename __VElementType = __ElementType, meta :: EnableIf < meta :: isMoveConstructible < __VElementType > () > = 0 > // NOLINT(bugprone-reserved-identifier)
             auto insertBefore (
                     ReverseIterator const & iterator,
                     ElementType          && element
@@ -770,14 +770,14 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         public:
             /**
              * @brief Function used to add an element after a given iterator's referenced element via copy ( creating a new instance ). Only used if element is copyConstructible ( has copy ctor )
-             * @tparam V is an alias for ElementType, used to enable the function using sfinae to avoid instantiation errors
+             * @tparam __VElementType is an alias for __ElementType, used to enable the function using sfinae to avoid instantiation errors
              * @param iterator : ReverseIterator cref = Constant Reference to an iterator to place the element after
              * @param element : ElementType cref = Constant Reference to the element to copy and place
              * @throws IllegalArgumentException if the given iterator is not obtained from this collection
              * @throws OutOfBoundsException if the given iterator is out of bounds
              * @return ElementType ref = Reference to the newly inserted value
              */
-            template < typename V = T, meta :: EnableIf < meta :: isCopyConstructible < V > () > = 0 >
+            template < typename __VElementType = __ElementType, meta :: EnableIf < meta :: isCopyConstructible < __VElementType > () > = 0 > // NOLINT(bugprone-reserved-identifier)
             auto insertAfter (
                     ReverseIterator const & iterator,
                     ElementType     const & element
@@ -786,14 +786,14 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         public:
             /**
              * @brief Function used to add an element after a given iterator's referenced element via move ( move of the given instance ) Only used if element is moveConstructible ( has move ctor )
-             * @tparam V is an alias for ElementType, used to enable the function using sfinae to avoid instantiation errors
+             * @tparam __VElementType is an alias for __ElementType, used to enable the function using sfinae to avoid instantiation errors
              * @param iterator : ReverseIterator cref = Constant Reference to an iterator to place the element after
              * @param element : ElementType mref = Move Reference to the element to copy and place
              * @throws IllegalArgumentException if the given iterator is not obtained from this collection
              * @throws OutOfBoundsException if the given iterator is out of bounds
              * @return ElementType ref = Reference to the newly inserted value
              */
-            template < typename V = T, meta :: EnableIf < meta :: isMoveConstructible < V > () > = 0 >
+            template < typename __VElementType = __ElementType, meta :: EnableIf < meta :: isMoveConstructible < __VElementType > () > = 0 > // NOLINT(bugprone-reserved-identifier)
             auto insertAfter (
                     ReverseIterator const & iterator,
                     ElementType          && element
@@ -802,14 +802,14 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         public:
             /**
              * @brief Function used to add an element before a given iterator's referenced element via copy ( creating a new instance ). Only used if element is copyConstructible ( has copy ctor )
-             * @tparam V is an alias for ElementType, used to enable the function using sfinae to avoid instantiation errors
+             * @tparam __VElementType is an alias for __ElementType, used to enable the function using sfinae to avoid instantiation errors
              * @param iterator : ConstReverseIterator cref = Constant Reference to an iterator to place the element before
              * @param element : ElementType cref = Constant Reference to the element to copy and place
              * @throws IllegalArgumentException if the given iterator is not obtained from this collection
              * @throws OutOfBoundsException if the given iterator is out of bounds
              * @return ElementType ref = Reference to the newly inserted value
              */
-            template < typename V = T, meta :: EnableIf < meta :: isCopyConstructible < V > () > = 0 >
+            template < typename __VElementType = __ElementType, meta :: EnableIf < meta :: isCopyConstructible < __VElementType > () > = 0 > // NOLINT(bugprone-reserved-identifier)
             auto insertBefore (
                     ConstReverseIterator    const & iterator,
                     ElementType             const & element
@@ -818,14 +818,14 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         public:
             /**
              * @brief Function used to add an element before a given iterator's referenced element via move ( move of the given instance ) Only used if element is moveConstructible ( has move ctor )
-             * @tparam V is an alias for ElementType, used to enable the function using sfinae to avoid instantiation errors
+             * @tparam __VElementType is an alias for __ElementType, used to enable the function using sfinae to avoid instantiation errors
              * @param iterator : ConstReverseIterator cref = Constant Reference to an iterator to place the element before
              * @param element : ElementType mref = Move Reference to the element to copy and place
              * @throws IllegalArgumentException if the given iterator is not obtained from this collection
              * @throws OutOfBoundsException if the given iterator is out of bounds
              * @return ElementType ref = Reference to the newly inserted value
              */
-            template < typename V = T, meta :: EnableIf < meta :: isMoveConstructible < V > () > = 0 >
+            template < typename __VElementType = __ElementType, meta :: EnableIf < meta :: isMoveConstructible < __VElementType > () > = 0 > // NOLINT(bugprone-reserved-identifier)
             auto insertBefore (
                     ConstReverseIterator const & iterator,
                     ElementType               && element
@@ -834,14 +834,14 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         public:
             /**
              * @brief Function used to add an element after a given iterator's referenced element via copy ( creating a new instance ). Only used if element is copyConstructible ( has copy ctor )
-             * @tparam V is an alias for ElementType, used to enable the function using sfinae to avoid instantiation errors
+             * @tparam __VElementType is an alias for __ElementType, used to enable the function using sfinae to avoid instantiation errors
              * @param iterator : ConstReverseIterator cref = Constant Reference to an iterator to place the element after
              * @param element : ElementType cref = Constant Reference to the element to copy and place
              * @throws IllegalArgumentException if the given iterator is not obtained from this collection
              * @throws OutOfBoundsException if the given iterator is out of bounds
              * @return ElementType ref = Reference to the newly inserted value
              */
-            template < typename V = T, meta :: EnableIf < meta :: isCopyConstructible < V > () > = 0 >
+            template < typename __VElementType = __ElementType, meta :: EnableIf < meta :: isCopyConstructible < __VElementType > () > = 0 > // NOLINT(bugprone-reserved-identifier)
             auto insertAfter (
                     ConstReverseIterator    const & iterator,
                     ElementType             const & element
@@ -850,14 +850,14 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         public:
             /**
              * @brief Function used to add an element after a given iterator's referenced element via move ( move of the given instance ) Only used if element is moveConstructible ( has move ctor )
-             * @tparam V is an alias for ElementType, used to enable the function using sfinae to avoid instantiation errors
+             * @tparam __VElementType is an alias for __ElementType, used to enable the function using sfinae to avoid instantiation errors
              * @param iterator : ConstReverseIterator cref = Constant Reference to an iterator to place the element after
              * @param element : ElementType mref = Move Reference to the element to copy and place
              * @throws IllegalArgumentException if the given iterator is not obtained from this collection
              * @throws OutOfBoundsException if the given iterator is out of bounds
              * @return ElementType ref = Reference to the newly inserted value
              */
-            template < typename V = T, meta :: EnableIf < meta :: isMoveConstructible < V > () > = 0 >
+            template < typename __VElementType = __ElementType, meta :: EnableIf < meta :: isMoveConstructible < __VElementType > () > = 0 > // NOLINT(bugprone-reserved-identifier)
             auto insertAfter (
                     ConstReverseIterator const & iterator,
                     ElementType               && element
@@ -866,11 +866,11 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         public:
             /**
              * @brief Alias for pushBack, function used to add an element at the back of the list via copy ( construction of new instance ). Only used if element is copyConstructible ( has copy ctor )
-             * @tparam V alias for ElementType, used to enable the function using sfinae to avoid instantiation errors
+             * @tparam __VElementType alias for __ElementType, used to enable the function using sfinae to avoid instantiation errors
              * @param element : ElementType cref = Constant Reference to the element to copy and add into the collection
              * @exceptsafe if ElementType copy constructor is exceptsafe
              */
-            template < typename V = T, meta :: EnableIf < meta :: isCopyConstructible < V > () > = 0 >
+            template < typename __VElementType = __ElementType, meta :: EnableIf < meta :: isCopyConstructible < __VElementType > () > = 0 > // NOLINT(bugprone-reserved-identifier)
             auto append (
                     ElementType const & element
             ) noexcept -> ElementType &;
@@ -878,11 +878,11 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         public:
             /**
              * @brief Alias for pushBack, function used to add an element at the back of the list via move ( moving of the received instance ). Only used if element is moveConstructible ( has move ctor )
-             * @tparam V alias for ElementType, used to enable the function using sfinae to avoid instantiation errors
+             * @tparam __VElementType alias for __ElementType, used to enable the function using sfinae to avoid instantiation errors
              * @param element : ElementType mref = Move Reference to the element to move into the collection
              * @exceptsafe if ElementType move constructor is exceptsafe
              */
-            template < typename V = T, meta :: EnableIf < meta :: isMoveConstructible < V > () > = 0 >
+            template < typename __VElementType = __ElementType, meta :: EnableIf < meta :: isMoveConstructible < __VElementType > () > = 0 > // NOLINT(bugprone-reserved-identifier)
             auto append (
                     ElementType && element
             ) noexcept -> ElementType &;
@@ -890,11 +890,11 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         public:
             /**
              * @brief Alias for pushFront, function used to add an element at the front of the list via copy ( construction of new instance ). Only used if element is copyConstructible ( has copy ctor )
-             * @tparam V alias for ElementType, used to enable the function using sfinae to avoid instantiation errors
+             * @tparam __VElementType alias for __ElementType, used to enable the function using sfinae to avoid instantiation errors
              * @param element : ElementType cref = Constant Reference to the element to copy and add into the collection
              * @exceptsafe if ElementType copy constructor is exceptsafe
              */
-            template < typename V = T, meta :: EnableIf < meta :: isCopyConstructible < V > () > = 0 >
+            template < typename __VElementType = __ElementType, meta :: EnableIf < meta :: isCopyConstructible < __VElementType > () > = 0 > // NOLINT(bugprone-reserved-identifier)
             auto prepend (
                     ElementType const & element
             ) noexcept -> ElementType &;
@@ -902,11 +902,11 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         public:
             /**
              * @brief Alias for pushFront, function used to add an element at the front of the list via move ( moving of the received instance ). Only used if element is moveConstructible ( has move ctor )
-             * @tparam V alias for ElementType, used to enable the function using sfinae to avoid instantiation errors
+             * @tparam __VElementType alias for __ElementType, used to enable the function using sfinae to avoid instantiation errors
              * @param element : ElementType mref = Move Reference to the element to move into the collection
              * @exceptsafe if ElementType move constructor is exceptsafe
              */
-            template < typename V = T, meta :: EnableIf < meta :: isMoveConstructible < V > () > = 0 >
+            template < typename __VElementType = __ElementType, meta :: EnableIf < meta :: isMoveConstructible < __VElementType > () > = 0 > // NOLINT(bugprone-reserved-identifier)
             auto prepend (
                     ElementType && element
             ) noexcept -> ElementType &;
@@ -1048,277 +1048,315 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         public:
             /**
              * @brief Function used to sort the current List based on a given comparator function
-             * @tparam ComparatorFunction is the type of the comparator function, its signature must be compatible with bool ( Decay < ElementType >, Decay < ElementType > )
+             * @tparam __ComparatorFunction is the type of the comparator function, its signature must be compatible with bool ( Decay < ElementType >, Decay < ElementType > )
              * @param comparatorFunction : ComparatorFunction const & = Constant Reference to the comparator callable object / function
              * @exceptsafe if ComparatorFunction is exceptsafe
              */
-            template < typename ComparatorFunction = decltype ( & predicates :: lessThan < ElementType > ) >
+            template < typename __ComparatorFunction = decltype ( & predicates :: lessThan < ElementType > ) > // NOLINT(bugprone-reserved-identifier)
             auto sort (
-                    ComparatorFunction const & comparatorFunction = & predicates :: lessThan < ElementType >
+                    __ComparatorFunction const & comparatorFunction = & predicates :: lessThan < ElementType >
             ) noexcept ( noexcept ( comparatorFunction ( meta :: valueOf < ElementType > (), meta :: valueOf < ElementType > () ) ) ) -> void;
 
         public:
             __CDS_NoDiscard constexpr auto size () const noexcept -> Size override;
 
         public:
-            template < typename V = T, meta :: EnableIf < meta :: isCopyAssignable < V > () > = 0 >
+            template < typename __VElementType = __ElementType, meta :: EnableIf < meta :: isCopyAssignable < __VElementType > () > = 0 > // NOLINT(bugprone-reserved-identifier)
             auto replace (
                     Size                count,
                     ElementType const & what,
                     ElementType const & with
             ) noexcept -> Size;
+
         public:
-            template < typename V = T, meta :: EnableIf < meta :: isCopyAssignable < V > () > = 0 >
+            template < typename __VElementType = __ElementType, meta :: EnableIf < meta :: isCopyAssignable < __VElementType > () > = 0 > // NOLINT(bugprone-reserved-identifier)
             auto replaceAll (
                     ElementType const & what,
                     ElementType const & with
             ) noexcept -> Size;
+
         public:
-            template < typename V = T, meta :: EnableIf < meta :: isCopyAssignable < V > () > = 0 >
+            template < typename __VElementType = __ElementType, meta :: EnableIf < meta :: isCopyAssignable < __VElementType > () > = 0 > // NOLINT(bugprone-reserved-identifier)
             auto replaceFirst (
                     ElementType const & what,
                     ElementType const & with
             ) noexcept -> bool;
+
         public:
-            template < typename V = T, meta :: EnableIf < meta :: isMoveAssignable < V > () > = 0 >
+            template < typename __VElementType = __ElementType, meta :: EnableIf < meta :: isMoveAssignable < __VElementType > () > = 0 > // NOLINT(bugprone-reserved-identifier)
             auto replaceFirst (
-                    ElementType const & what,
-                    ElementType      && with
-            ) noexcept -> bool;
-        public:
-            template < typename V = T, meta :: EnableIf < meta :: isCopyAssignable < V > () > = 0 >
-            auto replaceLast (
-                    ElementType const & what,
-                    ElementType const & with
-            ) noexcept -> bool;
-        public:
-            template < typename V = T, meta :: EnableIf < meta :: isMoveAssignable < V > () > = 0 >
-            auto replaceLast (
                     ElementType const & what,
                     ElementType      && with
             ) noexcept -> bool;
 
         public:
-            template < typename V = T, meta :: EnableIf < meta :: isCopyAssignable < V > () > = 0 >
+            template < typename __VElementType = __ElementType, meta :: EnableIf < meta :: isCopyAssignable < __VElementType > () > = 0 > // NOLINT(bugprone-reserved-identifier)
+            auto replaceLast (
+                    ElementType const & what,
+                    ElementType const & with
+            ) noexcept -> bool;
+
+        public:
+            template < typename __VElementType = __ElementType, meta :: EnableIf < meta :: isMoveAssignable < __VElementType > () > = 0 > // NOLINT(bugprone-reserved-identifier)
+            auto replaceLast (
+                    ElementType const & what,
+                    ElementType      && with
+            ) noexcept -> bool;
+
+
+        public:
+            template < typename __VElementType = __ElementType, meta :: EnableIf < meta :: isCopyAssignable < __VElementType > () > = 0 > // NOLINT(bugprone-reserved-identifier)
             auto replaceOf (
                     Size                                count,
                     Collection < ElementType >  const & of,
                     ElementType                 const & with
             ) noexcept -> Size;
+
         public:
-            template < typename V = T, meta :: EnableIf < meta :: isCopyAssignable < V > () > = 0 >
+            template < typename __VElementType = __ElementType, meta :: EnableIf < meta :: isCopyAssignable < __VElementType > () > = 0 > // NOLINT(bugprone-reserved-identifier)
             auto replaceAllOf (
                     Collection < ElementType >  const & of,
                     ElementType                 const & with
             ) noexcept -> Size;
+
         public:
-            template < typename V = T, meta :: EnableIf < meta :: isCopyAssignable < V > () > = 0 >
+            template < typename __VElementType = __ElementType, meta :: EnableIf < meta :: isCopyAssignable < __VElementType > () > = 0 > // NOLINT(bugprone-reserved-identifier)
             auto replaceFirstOf (
                     Collection < ElementType >  const & of,
                     ElementType                 const & with
             ) noexcept -> bool;
+
         public:
-            template < typename V = T, meta :: EnableIf < meta :: isMoveAssignable < V > () > = 0 >
+            template < typename __VElementType = __ElementType, meta :: EnableIf < meta :: isMoveAssignable < __VElementType > () > = 0 > // NOLINT(bugprone-reserved-identifier)
             auto replaceFirstOf (
                     Collection < ElementType >  const & of,
                     ElementType                      && with
             ) noexcept -> bool;
+
         public:
-            template < typename V = T, meta :: EnableIf < meta :: isCopyAssignable < V > () > = 0 >
+            template < typename __VElementType = __ElementType, meta :: EnableIf < meta :: isCopyAssignable < __VElementType > () > = 0 > // NOLINT(bugprone-reserved-identifier)
             auto replaceLastOf (
                     Collection < ElementType >  const & of,
                     ElementType                 const & with
             ) noexcept -> bool;
+
         public:
-            template < typename V = T, meta :: EnableIf < meta :: isMoveAssignable < V > () > = 0 >
+            template < typename __VElementType = __ElementType, meta :: EnableIf < meta :: isMoveAssignable < __VElementType > () > = 0 > // NOLINT(bugprone-reserved-identifier)
             auto replaceLastOf (
                     Collection < ElementType >  const & of,
                     ElementType                      && with
             ) noexcept -> bool;
 
         public:
-            template < typename V = T, meta :: EnableIf < meta :: isCopyAssignable < V > () > = 0 >
+            template < typename __VElementType = __ElementType, meta :: EnableIf < meta :: isCopyAssignable < __VElementType > () > = 0 > // NOLINT(bugprone-reserved-identifier)
             auto replaceNotOf (
                     Size                                count,
                     Collection < ElementType >  const & of,
                     ElementType                 const & with
             ) noexcept -> Size;
+
         public:
-            template < typename V = T, meta :: EnableIf < meta :: isCopyAssignable < V > () > = 0 >
+            template < typename __VElementType = __ElementType, meta :: EnableIf < meta :: isCopyAssignable < __VElementType > () > = 0 > // NOLINT(bugprone-reserved-identifier)
             auto replaceAllNotOf (
                     Collection < ElementType >  const & of,
                     ElementType                 const & with
             ) noexcept -> Size;
+
         public:
-            template < typename V = T, meta :: EnableIf < meta :: isCopyAssignable < V > () > = 0 >
+            template < typename __VElementType = __ElementType, meta :: EnableIf < meta :: isCopyAssignable < __VElementType > () > = 0 > // NOLINT(bugprone-reserved-identifier)
             auto replaceFirstNotOf (
                     Collection < ElementType >  const & of,
                     ElementType                 const & with
             ) noexcept -> bool;
+
         public:
-            template < typename V = T, meta :: EnableIf < meta :: isMoveAssignable < V > () > = 0 >
+            template < typename __VElementType = __ElementType, meta :: EnableIf < meta :: isMoveAssignable < __VElementType > () > = 0 > // NOLINT(bugprone-reserved-identifier)
             auto replaceFirstNotOf (
                     Collection < ElementType >  const & of,
                     ElementType                      && with
             ) noexcept -> bool;
+
         public:
-            template < typename V = T, meta :: EnableIf < meta :: isCopyAssignable < V > () > = 0 >
+            template < typename __VElementType = __ElementType, meta :: EnableIf < meta :: isCopyAssignable < __VElementType > () > = 0 > // NOLINT(bugprone-reserved-identifier)
             auto replaceLastNotOf (
                     Collection < ElementType >  const & of,
                     ElementType                 const & with
             ) noexcept -> bool;
+
         public:
-            template < typename V = T, meta :: EnableIf < meta :: isMoveAssignable < V > () > = 0 >
+            template < typename __VElementType = __ElementType, meta :: EnableIf < meta :: isMoveAssignable < __VElementType > () > = 0 > // NOLINT(bugprone-reserved-identifier)
             auto replaceLastNotOf (
                     Collection < ElementType >  const & of,
                     ElementType                      && with
             ) noexcept -> bool;
 
         public:
-            template < typename V = T, meta :: EnableIf < meta :: isCopyAssignable < V > () > = 0 >
+            template < typename __VElementType = __ElementType, meta :: EnableIf < meta :: isCopyAssignable < __VElementType > () > = 0 > // NOLINT(bugprone-reserved-identifier)
             auto replaceOf (
                     Size                        count,
                     InitializerList     const & of,
                     ElementType         const & with
             ) noexcept -> Size;
+
         public:
-            template < typename V = T, meta :: EnableIf < meta :: isCopyAssignable < V > () > = 0 >
+            template < typename __VElementType = __ElementType, meta :: EnableIf < meta :: isCopyAssignable < __VElementType > () > = 0 > // NOLINT(bugprone-reserved-identifier)
             auto replaceAllOf (
                     InitializerList     const & of,
                     ElementType         const & with
             ) noexcept -> Size;
+
         public:
-            template < typename V = T, meta :: EnableIf < meta :: isCopyAssignable < V > () > = 0 >
+            template < typename __VElementType = __ElementType, meta :: EnableIf < meta :: isCopyAssignable < __VElementType > () > = 0 > // NOLINT(bugprone-reserved-identifier)
             auto replaceFirstOf (
                     InitializerList     const & of,
                     ElementType         const & with
             ) noexcept -> bool;
+
         public:
-            template < typename V = T, meta :: EnableIf < meta :: isMoveAssignable < V > () > = 0 >
+            template < typename __VElementType = __ElementType, meta :: EnableIf < meta :: isMoveAssignable < __VElementType > () > = 0 > // NOLINT(bugprone-reserved-identifier)
             auto replaceFirstOf (
                     InitializerList     const & of,
                     ElementType              && with
             ) noexcept -> bool;
+
         public:
-            template < typename V = T, meta :: EnableIf < meta :: isCopyAssignable < V > () > = 0 >
+            template < typename __VElementType = __ElementType, meta :: EnableIf < meta :: isCopyAssignable < __VElementType > () > = 0 > // NOLINT(bugprone-reserved-identifier)
             auto replaceLastOf (
                     InitializerList     const & of,
                     ElementType         const & with
             ) noexcept -> bool;
+
         public:
-            template < typename V = T, meta :: EnableIf < meta :: isMoveAssignable < V > () > = 0 >
+            template < typename __VElementType = __ElementType, meta :: EnableIf < meta :: isMoveAssignable < __VElementType > () > = 0 > // NOLINT(bugprone-reserved-identifier)
             auto replaceLastOf (
                     InitializerList     const & of,
                     ElementType              && with
             ) noexcept -> bool;
 
         public:
-            template < typename V = T, meta :: EnableIf < meta :: isCopyAssignable < V > () > = 0 >
+            template < typename __VElementType = __ElementType, meta :: EnableIf < meta :: isCopyAssignable < __VElementType > () > = 0 > // NOLINT(bugprone-reserved-identifier)
             auto replaceNotOf (
                     Size                        count,
                     InitializerList     const & of,
                     ElementType         const & with
             ) noexcept -> Size;
+
         public:
-            template < typename V = T, meta :: EnableIf < meta :: isCopyAssignable < V > () > = 0 >
+            template < typename __VElementType = __ElementType, meta :: EnableIf < meta :: isCopyAssignable < __VElementType > () > = 0 > // NOLINT(bugprone-reserved-identifier)
             auto replaceAllNotOf (
                     InitializerList     const & of,
                     ElementType         const & with
             ) noexcept -> Size;
+
         public:
-            template < typename V = T, meta :: EnableIf < meta :: isCopyAssignable < V > () > = 0 >
+            template < typename __VElementType = __ElementType, meta :: EnableIf < meta :: isCopyAssignable < __VElementType > () > = 0 > // NOLINT(bugprone-reserved-identifier)
             auto replaceFirstNotOf (
                     InitializerList     const & of,
                     ElementType         const & with
             ) noexcept -> bool;
+
         public:
-            template < typename V = T, meta :: EnableIf < meta :: isMoveAssignable < V > () > = 0 >
+            template < typename __VElementType = __ElementType, meta :: EnableIf < meta :: isMoveAssignable < __VElementType > () > = 0 > // NOLINT(bugprone-reserved-identifier)
             auto replaceFirstNotOf (
                     InitializerList     const & of,
                     ElementType              && with
             ) noexcept -> bool;
+
         public:
-            template < typename V = T, meta :: EnableIf < meta :: isCopyAssignable < V > () > = 0 >
+            template < typename __VElementType = __ElementType, meta :: EnableIf < meta :: isCopyAssignable < __VElementType > () > = 0 > // NOLINT(bugprone-reserved-identifier)
             auto replaceLastNotOf (
                     InitializerList     const & of,
                     ElementType         const & with
             ) noexcept -> bool;
+
         public:
-            template < typename V = T, meta :: EnableIf < meta :: isMoveAssignable < V > () > = 0 >
+            template < typename __VElementType = __ElementType, meta :: EnableIf < meta :: isMoveAssignable < __VElementType > () > = 0 > // NOLINT(bugprone-reserved-identifier)
             auto replaceLastNotOf (
                     InitializerList     const & of,
                     ElementType              && with
             ) noexcept -> bool;
 
         public:
-            template < typename Predicate, typename V = T, meta :: EnableIf < meta :: isCopyAssignable < V > () > = 0 >
+            template < typename __Predicate, typename __VElementType = __ElementType, meta :: EnableIf < meta :: isCopyAssignable < __VElementType > () > = 0 > // NOLINT(bugprone-reserved-identifier)
             auto replace (
                     Size                count,
-                    Predicate   const & predicate,
+                    __Predicate const & predicate,
                     ElementType const & with
             ) noexcept ( noexcept ( predicate ( meta :: referenceOf < ElementType > () ) ) ) -> Size;
+
         public:
-            template < typename Predicate, typename V = T, meta :: EnableIf < meta :: isCopyAssignable < V > () > = 0 >
+            template < typename __Predicate, typename __VElementType = __ElementType, meta :: EnableIf < meta :: isCopyAssignable < __VElementType > () > = 0 > // NOLINT(bugprone-reserved-identifier)
             auto replaceAll (
-                    Predicate   const & predicate,
+                    __Predicate const & predicate,
                     ElementType const & with
             ) noexcept ( noexcept ( predicate ( meta :: referenceOf < ElementType > () ) ) ) -> Size;
+
         public:
-            template < typename Predicate, typename V = T, meta :: EnableIf < meta :: isCopyAssignable < V > () > = 0 >
+            template < typename __Predicate, typename __VElementType = __ElementType, meta :: EnableIf < meta :: isCopyAssignable < __VElementType > () > = 0 > // NOLINT(bugprone-reserved-identifier)
             auto replaceFirst (
-                    Predicate   const & predicate,
+                    __Predicate const & predicate,
                     ElementType const & with
             ) noexcept ( noexcept ( predicate ( meta :: referenceOf < ElementType > () ) ) ) -> bool;
+
         public:
-            template < typename Predicate, typename V = T, meta :: EnableIf < meta :: isMoveAssignable < V > () > = 0 >
+            template < typename __Predicate, typename __VElementType = __ElementType, meta :: EnableIf < meta :: isMoveAssignable < __VElementType > () > = 0 > // NOLINT(bugprone-reserved-identifier)
             auto replaceFirst (
-                    Predicate   const & predicate,
-                    ElementType      && with
-            ) noexcept ( noexcept ( predicate ( meta :: referenceOf < ElementType > () ) ) ) -> bool;
-        public:
-            template < typename Predicate, typename V = T, meta :: EnableIf < meta :: isCopyAssignable < V > () > = 0 >
-            auto replaceLast (
-                    Predicate   const & predicate,
-                    ElementType const & with
-            ) noexcept ( noexcept ( predicate ( meta :: referenceOf < ElementType > () ) ) ) -> bool;
-        public:
-            template < typename Predicate, typename V = T, meta :: EnableIf < meta :: isMoveAssignable < V > () > = 0 >
-            auto replaceLast (
-                    Predicate   const & predicate,
+                    __Predicate const & predicate,
                     ElementType      && with
             ) noexcept ( noexcept ( predicate ( meta :: referenceOf < ElementType > () ) ) ) -> bool;
 
         public:
-            template < typename Predicate, typename Supplier >
+            template < typename __Predicate, typename __VElementType = __ElementType, meta :: EnableIf < meta :: isCopyAssignable < __VElementType > () > = 0 > // NOLINT(bugprone-reserved-identifier)
+            auto replaceLast (
+                    __Predicate const & predicate,
+                    ElementType const & with
+            ) noexcept ( noexcept ( predicate ( meta :: referenceOf < ElementType > () ) ) ) -> bool;
+
+        public:
+            template < typename __Predicate, typename __VElementType = __ElementType, meta :: EnableIf < meta :: isMoveAssignable < __VElementType > () > = 0 > // NOLINT(bugprone-reserved-identifier)
+            auto replaceLast (
+                    __Predicate const & predicate,
+                    ElementType      && with
+            ) noexcept ( noexcept ( predicate ( meta :: referenceOf < ElementType > () ) ) ) -> bool;
+
+        public:
+            template < typename __Predicate, typename __Supplier > // NOLINT(bugprone-reserved-identifier)
             auto replace (
                     Size                count,
-                    Predicate   const & predicate,
-                    Supplier    const & supplier
+                    __Predicate const & predicate,
+                    __Supplier  const & supplier
             ) noexcept ( noexcept ( predicate ( meta :: referenceOf < ElementType > () ) ) && noexcept ( supplier ( meta :: referenceOf < ElementType > () ) ) ) -> Size;
+
         public:
-            template < typename Predicate, typename Supplier >
+            template < typename __Predicate, typename __Supplier > // NOLINT(bugprone-reserved-identifier)
             auto replaceAll (
-                    Predicate   const & predicate,
-                    Supplier    const & supplier
+                    __Predicate const & predicate,
+                    __Supplier  const & supplier
             ) noexcept ( noexcept ( predicate ( meta :: referenceOf < ElementType > () ) ) && noexcept ( supplier ( meta :: referenceOf < ElementType > () ) ) ) -> Size;
+
         public:
-            template < typename Predicate, typename Supplier >
+            template < typename __Predicate, typename __Supplier > // NOLINT(bugprone-reserved-identifier)
             auto replaceFirst (
-                    Predicate   const & predicate,
-                    Supplier    const & supplier
+                    __Predicate const & predicate,
+                    __Supplier  const & supplier
             ) noexcept ( noexcept ( predicate ( meta :: referenceOf < ElementType > () ) ) && noexcept ( supplier ( meta :: referenceOf < ElementType > () ) ) ) -> bool;
-            template < typename Predicate, typename Supplier >
+
+        public:
+            template < typename __Predicate, typename __Supplier > // NOLINT(bugprone-reserved-identifier)
             auto replaceLast (
-                    Predicate   const & predicate,
-                    Supplier    const & supplier
+                    __Predicate const & predicate,
+                    __Supplier  const & supplier
             ) noexcept ( noexcept ( predicate ( meta :: referenceOf < ElementType > () ) ) && noexcept ( supplier ( meta :: referenceOf < ElementType > () ) ) ) -> bool;
 
         public:
             virtual auto front () noexcept (false) -> ElementType & = 0;
+
         public:
             virtual auto front () const noexcept (false) -> ElementType const & = 0;
+
         public:
             virtual auto back () noexcept (false) -> ElementType & = 0;
+
         public:
             virtual auto back () const noexcept (false) -> ElementType const & = 0;
 
@@ -1327,6 +1365,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
         public:
             __CDS_NoDiscard constexpr auto empty () const noexcept -> bool override;
+
         public:
             __CDS_NoDiscard auto toString () const noexcept -> String override;
 
@@ -1334,49 +1373,49 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         public:
             /**
              * @brief Function used to obtain a maximum number of indices of a given element and store them into a given list
-             * @tparam ListType is the type of the list to store the indices into
+             * @tparam __CollectionType is the type of the list to store the indices into
              * @param count : Size = maximum number of indices to obtain
-             * @param storeIn : ListType ref = Reference to the List to store the indices into
+             * @param storeIn : __CollectionType ref = Reference to the List to store the indices into
              * @param element : ElementType cref = Constant Reference to the Element to acquire the indices for
              * @exceptsafe
-             * @return ListType ref = Reference to the list passed in the 'storeIn' parameter
+             * @return __CollectionType ref = Reference to the list passed in the 'storeIn' parameter
              */
-            template < typename ListType, meta :: EnableIf < meta :: isDerivedFrom < ListType, Collection < Index > > () > = 0 >
+            template < typename __CollectionType, meta :: EnableIf < meta :: isDerivedFrom < __CollectionType, Collection < Index > > () > = 0 > // NOLINT(bugprone-reserved-identifier)
             auto indices (
                     Size                  count,
-                    ListType            & storeIn,
+                    __CollectionType    & storeIn,
                     ElementType   const & element
-            ) const noexcept -> ListType &;
+            ) const noexcept -> __CollectionType &;
 
         public:
             /**
              * @brief Function used to obtain the indices of a given element
-             * @tparam ListType is the type of the list to store the indices into
+             * @tparam __CollectionType is the type of the list to store the indices into
              * @param count : Size = maximum number of indices to obtain
              * @param element : ElementType cref = Constant Reference to the Element to acquire the indices for
              * @exceptsafe
-             * @return ListType = List containing the requested indices
+             * @return __CollectionType = List containing the requested indices
              */
-            template < typename ListType, meta :: EnableIf < meta :: isDerivedFrom < ListType, Collection < Index > > () > = 0 >
+            template < typename __CollectionType, meta :: EnableIf < meta :: isDerivedFrom < __CollectionType, Collection < Index > > () > = 0 > // NOLINT(bugprone-reserved-identifier)
             auto indices (
                     Size                count,
                     ElementType const & element
-            ) const noexcept -> ListType;
+            ) const noexcept -> __CollectionType;
 
         public:
             /**
              * @brief Function used to obtain the indices of a given element
-             * @tparam ListType is the type of the list to store the indices into
+             * @tparam __CollectionType is the type of the list to store the indices into
              * @param count : Size = maximum number of indices to obtain
              * @param element : ElementType cref = Constant Reference to the Element to acquire the indices for
              * @exceptsafe
-             * @return ListType = List containing the requested indices
+             * @return __CollectionType = List containing the requested indices
              */
-            template < template < typename ... > class ListType, meta :: EnableIf < meta :: isDerivedFrom < ListType < Index >, Collection < Index > > () > = 0 >
+            template < template < typename ... > class __CollectionType, meta :: EnableIf < meta :: isDerivedFrom < __CollectionType < Index >, Collection < Index > > () > = 0 > // NOLINT(bugprone-reserved-identifier)
             auto indices (
                     Size                count,
                     ElementType const & element
-            ) const noexcept -> ListType < Index >;
+            ) const noexcept -> __CollectionType < Index >;
 
         public:
             auto firstIndex (
@@ -1391,189 +1430,189 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         public:
             /**
              * @brief Function used to obtain the indices of a given element and store them into a given list
-             * @tparam ListType is the type of the list to store the indices into
-             * @param storeIn : ListType ref = Reference to the List to store the indices into
+             * @tparam __CollectionType is the type of the list to store the indices into
+             * @param storeIn : __CollectionType ref = Reference to the List to store the indices into
              * @param element : ElementType cref = Constant Reference to the Element to acquire the indices for
              * @exceptsafe
-             * @return ListType ref = Reference to the list passed in the 'storeIn' parameter
+             * @return __CollectionType ref = Reference to the list passed in the 'storeIn' parameter
              */
-            template < typename ListType, meta :: EnableIf < meta :: isDerivedFrom < ListType, Collection < Index > > () > = 0 >
+            template < typename __CollectionType, meta :: EnableIf < meta :: isDerivedFrom < __CollectionType, Collection < Index > > () > = 0 > // NOLINT(bugprone-reserved-identifier)
             auto allIndices (
-                    ListType            & storeIn,
+                    __CollectionType    & storeIn,
                     ElementType   const & element
-            ) const noexcept -> ListType &;
+            ) const noexcept -> __CollectionType &;
 
         public:
             /**
              * @brief Function used to obtain the indices of a given element
-             * @tparam ListType is the type of the list to store the indices into
+             * @tparam __CollectionType is the type of the list to store the indices into
              * @param element : ElementType cref = Constant Reference to the Element to acquire the indices for
              * @exceptsafe
-             * @return ListType = List containing the requested indices
+             * @return __CollectionType = List containing the requested indices
              */
-            template < typename ListType, meta :: EnableIf < meta :: isDerivedFrom < ListType, Collection < Index > > () > = 0 >
+            template < typename __CollectionType, meta :: EnableIf < meta :: isDerivedFrom < __CollectionType, Collection < Index > > () > = 0 > // NOLINT(bugprone-reserved-identifier)
             auto allIndices (
                     ElementType const & element
-            ) const noexcept -> ListType;
+            ) const noexcept -> __CollectionType;
 
         public:
             /**
              * @brief Function used to obtain the indices of a given element
-             * @tparam ListType is the type of the list to store the indices into
+             * @tparam __CollectionType is the type of the list to store the indices into
              * @param element : ElementType cref = Constant Reference to the Element to acquire the indices for
              * @exceptsafe
-             * @return ListType = List containing the requested indices
+             * @return __CollectionType = List containing the requested indices
              */
-            template < template < typename ... > class ListType, meta :: EnableIf < meta :: isDerivedFrom < ListType < Index >, Collection < Index > > () > = 0 >
+            template < template < typename ... > class __CollectionType, meta :: EnableIf < meta :: isDerivedFrom < __CollectionType < Index >, Collection < Index > > () > = 0 > // NOLINT(bugprone-reserved-identifier)
             auto allIndices (
                     ElementType const & element
-            ) const noexcept -> ListType < Index >;
+            ) const noexcept -> __CollectionType < Index >;
 
         public:
             /**
              * @brief Function used to obtain the indices of the elements that validate a given predicate
-             * @tparam Predicate is the type of the predicate object, it must be a valid callable type object, with a signature compatible with
+             * @tparam __Predicate is the type of the predicate object, it must be a valid callable type object, with a signature compatible with
              *      bool ( Decay < ElementType > )
-             * @tparam ListType is the type of the list to store the indices into
+             * @tparam __CollectionType is the type of the list to store the indices into
              * @param count : Size = maximum number of indices to obtain
-             * @param storeIn : ListType ref = Reference to the List to store the indices into
+             * @param storeIn : __CollectionType ref = Reference to the List to store the indices into
              * @param predicate : Predicate cref = Constant Reference to the predicate callable object
              * @exceptsafe
-             * @return ListType ref = Reference to the list passed in the 'storeIn' parameter
+             * @return __CollectionType ref = Reference to the list passed in the 'storeIn' parameter
              */
-            template < typename Predicate, typename ListType, meta :: EnableIf < meta :: isDerivedFrom < ListType, Collection < Index > > () > = 0 >
+            template < typename __Predicate, typename __CollectionType, meta :: EnableIf < meta :: isDerivedFrom < __CollectionType, Collection < Index > > () > = 0 > // NOLINT(bugprone-reserved-identifier)
             auto indices (
                     Size                count,
-                    ListType          & storeIn,
-                    Predicate   const & predicate
-            ) const noexcept ( noexcept ( predicate ( meta :: referenceOf < ElementType const > () ) ) ) -> ListType &;
+                    __CollectionType  & storeIn,
+                    __Predicate const & predicate
+            ) const noexcept ( noexcept ( predicate ( meta :: referenceOf < ElementType const > () ) ) ) -> __CollectionType &;
 
         public:
             /**
              * @brief Function used to obtain the indices of the elements that validate a given predicate
-             * @tparam Predicate is the type of the predicate object, it must be a valid callable type object, with a signature compatible with
+             * @tparam __Predicate is the type of the predicate object, it must be a valid callable type object, with a signature compatible with
              *      bool ( Decay < ElementType > )
-             * @tparam ListType is the type of the list to store the indices into
+             * @tparam __CollectionType is the type of the list to store the indices into
              * @param count : Size = maximum number of indices to obtain
              * @param predicate : Predicate cref = Constant Reference to the predicate callable object
              * @exceptsafe
-             * @return ListType = List containing the requested indices
+             * @return __CollectionType = List containing the requested indices
              */
-            template < typename Predicate, typename ListType, meta :: EnableIf < meta :: isDerivedFrom < ListType, Collection < Index > > () > = 0 >
+            template < typename __Predicate, typename __CollectionType, meta :: EnableIf < meta :: isDerivedFrom < __CollectionType, Collection < Index > > () > = 0 > // NOLINT(bugprone-reserved-identifier)
             auto indices (
-                    Size              count,
-                    Predicate const & predicate
-            ) const noexcept ( noexcept ( predicate ( meta :: referenceOf < ElementType const > () ) ) ) -> ListType;
+                    Size                count,
+                    __Predicate const & predicate
+            ) const noexcept ( noexcept ( predicate ( meta :: referenceOf < ElementType const > () ) ) ) -> __CollectionType;
 
         public:
             /**
              * @brief Function used to obtain the indices of the elements that validate a given predicate
-             * @tparam Predicate is the type of the predicate object, it must be a valid callable type object, with a signature compatible with
+             * @tparam __Predicate is the type of the predicate object, it must be a valid callable type object, with a signature compatible with
              *      bool ( Decay < ElementType > )
-             * @tparam ListType is the type of the list to store the indices into
+             * @tparam __CollectionType is the type of the list to store the indices into
              * @param count : Size = maximum number of indices to obtain
              * @param predicate : Predicate cref = Constant Reference to the predicate callable object
              * @exceptsafe
-             * @return ListType = List containing the requested indices
+             * @return __CollectionType = List containing the requested indices
              */
-            template < typename Predicate, template < typename ... > class ListType, meta :: EnableIf < meta :: isDerivedFrom < ListType < Index >, Collection < Index > > () > = 0 >
+            template < typename __Predicate, template < typename ... > class __CollectionType, meta :: EnableIf < meta :: isDerivedFrom < __CollectionType < Index >, Collection < Index > > () > = 0 > // NOLINT(bugprone-reserved-identifier)
             auto indices (
-                    Size              count,
-                    Predicate const & predicate
-            ) const noexcept ( noexcept ( predicate ( meta :: referenceOf < ElementType const > () ) ) ) -> ListType < Index >;
+                    Size                count,
+                    __Predicate const & predicate
+            ) const noexcept ( noexcept ( predicate ( meta :: referenceOf < ElementType const > () ) ) ) -> __CollectionType < Index >;
 
         public:
-            template < typename Predicate >
+            template < typename __Predicate > // NOLINT(bugprone-reserved-identifier)
             auto firstIndex (
-                    Predicate const & predicate
+                    __Predicate const & predicate
             ) const noexcept ( noexcept ( predicate ( meta :: referenceOf < ElementType const > () ) ) ) -> Index;
 
         public:
-            template < typename Predicate >
+            template < typename __Predicate > // NOLINT(bugprone-reserved-identifier)
             auto lastIndex (
-                    Predicate const & predicate
+                    __Predicate const & predicate
             ) const noexcept ( noexcept ( predicate ( meta :: referenceOf < ElementType const > () ) ) ) -> Index;
 
         public:
             /**
              * @brief Function used to obtain the indices of the elements that validate a given predicate
-             * @tparam Predicate is the type of the predicate object, it must be a valid callable type object, with a signature compatible with
+             * @tparam __Predicate is the type of the predicate object, it must be a valid callable type object, with a signature compatible with
              *      bool ( Decay < ElementType > )
-             * @tparam ListType is the type of the list to store the indices into
-             * @param storeIn : ListType ref = Reference to the List to store the indices into
+             * @tparam __CollectionType is the type of the list to store the indices into
+             * @param storeIn : __CollectionType ref = Reference to the List to store the indices into
              * @param predicate : Predicate cref = Constant Reference to the predicate callable object
              * @exceptsafe
-             * @return ListType ref = Reference to the list passed in the 'storeIn' parameter
+             * @return __CollectionType ref = Reference to the list passed in the 'storeIn' parameter
              */
-            template < typename Predicate, typename ListType, meta :: EnableIf < meta :: isDerivedFrom < ListType, Collection < Index > > () > = 0 >
+            template < typename __Predicate, typename __CollectionType, meta :: EnableIf < meta :: isDerivedFrom < __CollectionType, Collection < Index > > () > = 0 > // NOLINT(bugprone-reserved-identifier)
             auto allIndices (
-                    ListType          & storeIn,
-                    Predicate   const & predicate
-            ) const noexcept ( noexcept ( predicate ( meta :: referenceOf < ElementType const > () ) ) ) -> ListType &;
+                    __CollectionType          & storeIn,
+                    __Predicate const & predicate
+            ) const noexcept ( noexcept ( predicate ( meta :: referenceOf < ElementType const > () ) ) ) -> __CollectionType &;
 
         public:
             /**
              * @brief Function used to obtain the indices of the elements that validate a given predicate
-             * @tparam Predicate is the type of the predicate object, it must be a valid callable type object, with a signature compatible with
+             * @tparam __Predicate is the type of the predicate object, it must be a valid callable type object, with a signature compatible with
              *      bool ( Decay < ElementType > )
-             * @tparam ListType is the type of the list to store the indices into
+             * @tparam __CollectionType is the type of the list to store the indices into
              * @param predicate : Predicate cref = Constant Reference to the predicate callable object
              * @exceptsafe
-             * @return ListType = List containing the requested indices
+             * @return __CollectionType = List containing the requested indices
              */
-            template < typename Predicate, template < typename ... > class ListType, meta :: EnableIf < meta :: isDerivedFrom < ListType < Index >, Collection < Index > > () > = 0 >
+            template < typename __Predicate, template < typename ... > class __CollectionType, meta :: EnableIf < meta :: isDerivedFrom < __CollectionType < Index >, Collection < Index > > () > = 0 > // NOLINT(bugprone-reserved-identifier)
             auto allIndices (
-                    Predicate const & predicate
-            ) const noexcept ( noexcept ( predicate ( meta :: referenceOf < ElementType const > () ) ) ) -> ListType < Index >;
+                    __Predicate const & predicate
+            ) const noexcept ( noexcept ( predicate ( meta :: referenceOf < ElementType const > () ) ) ) -> __CollectionType < Index >;
 
         public:
             /**
              * @brief Function used to obtain the indices of the elements that validate a given predicate
-             * @tparam Predicate is the type of the predicate object, it must be a valid callable type object, with a signature compatible with
+             * @tparam __Predicate is the type of the predicate object, it must be a valid callable type object, with a signature compatible with
              *      bool ( Decay < ElementType > )
-             * @tparam ListType is the type of the list to store the indices into
+             * @tparam __CollectionType is the type of the list to store the indices into
              * @param predicate : Predicate cref = Constant Reference to the predicate callable object
              * @exceptsafe
-             * @return ListType = List containing the requested indices
+             * @return __CollectionType = List containing the requested indices
              */
-            template < typename Predicate, typename ListType, meta :: EnableIf < meta :: isDerivedFrom < ListType, Collection < Index > > () > = 0 >
+            template < typename __Predicate, typename __CollectionType, meta :: EnableIf < meta :: isDerivedFrom < __CollectionType, Collection < Index > > () > = 0 > // NOLINT(bugprone-reserved-identifier)
             auto allIndices (
-                    Predicate const & predicate
-            ) const noexcept ( noexcept ( predicate ( meta :: referenceOf < ElementType const > () ) ) ) -> ListType;
+                    __Predicate const & predicate
+            ) const noexcept ( noexcept ( predicate ( meta :: referenceOf < ElementType const > () ) ) ) -> __CollectionType;
 
         public:
             /**
              * @brief Function used to populate a given Collection of Iterators, 'storeIn', with maximum 'maxCount' elements, pointing to the values matching the comparison to the given 'element' value
-             * @tparam CollectionType the type of the Collection passed in the 'storeIn' parameter. Constraint : CollectionType must be derived from Collection / compatible to Collection derived types, with one template parameter
+             * @tparam __CollectionType the type of the Collection passed in the 'storeIn' parameter. Constraint : __CollectionType must be derived from Collection / compatible to Collection derived types, with one template parameter
              * @param maxCount : Size = maximum number of iterators to add to the storeIn object
              * @param element : ElementType cref = Constant Reference to the element to compare the collection's elements to
-             * @param storeIn : CollectionType < Collection < ElementType > :: Iterator > ref = Reference to the collection of iterators to add the found iterators to
+             * @param storeIn : __CollectionType < Collection < ElementType > :: Iterator > ref = Reference to the collection of iterators to add the found iterators to
              * @exceptsafe
              * @return Collection < Collection < ElementType > :: Iterator > ref = Reference to the given collection inside the 'storeIn' parameter
              * @test tested in base class test
              */
-            template < template < typename ... > class CollectionType >
+            template < template < typename ... > class __CollectionType > // NOLINT(bugprone-reserved-identifier)
             auto find (
                     Size                                        maxCount,
                     ElementType                         const & element,
-                    CollectionType < Iterator >               & storeIn
-            ) noexcept -> CollectionType < Iterator > &;
+                    __CollectionType < Iterator >               & storeIn
+            ) noexcept -> __CollectionType < Iterator > &;
 
         public:
             /**
              * @brief Function used to return a Collection non-abstract derived type of Iterators with maximum 'maxCount' elements, pointing to the values matching the comparison to the given 'element' value
-             * @tparam CollectionType the type of the Collection to be returned. Constraint : CollectionType must be a non-abstract type derived from Collection / compatible to Collection derived types, with one template parameter. non-abstract derived from Collection types are Array, LinkedList, HashSet, ...
+             * @tparam __CollectionType the type of the Collection to be returned. Constraint : CollectionType must be a non-abstract type derived from Collection / compatible to Collection derived types, with one template parameter. non-abstract derived from Collection types are Array, LinkedList, HashSet, ...
              * @param maxCount : Size = maximum number of iterators to add to the returned object
              * @param element : ElementType cref = Constant Reference to the element to compare the collection's elements to
              * @exceptsafe
              * @return Collection < Collection < ElementType > :: Iterator > = Newly created object containing the requested Iterators
              * @test tested in base class test
              */
-            template < template < typename ... > class CollectionType >
+            template < template < typename ... > class __CollectionType > // NOLINT(bugprone-reserved-identifier)
             auto find (
                     Size                maxCount,
                     ElementType const & element
-            ) noexcept -> CollectionType < Iterator >;
+            ) noexcept -> __CollectionType < Iterator >;
 
         public:
             /**
@@ -1602,66 +1641,66 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         public:
             /**
              * @brief Function used to populate a given Collection of Iterators, 'storeIn', with all the iterators pointing to the values matching the comparison to the given 'element' value
-             * @tparam CollectionType the type of the Collection passed in the 'storeIn' parameter. Constraint : CollectionType must be derived from Collection / compatible to Collection derived types, with one template parameter
+             * @tparam __CollectionType the type of the Collection passed in the 'storeIn' parameter. Constraint : __CollectionType must be derived from Collection / compatible to Collection derived types, with one template parameter
              * @param element : ElementType cref = Constant Reference to the element to compare the collection's elements to
-             * @param storeIn : CollectionType < Collection < ElementType > :: Iterator > ref = Reference to the collection of iterators to add the found iterators to
+             * @param storeIn : __CollectionType < Collection < ElementType > :: Iterator > ref = Reference to the collection of iterators to add the found iterators to
              * @exceptsafe
              * @return Collection < Collection < ElementType > :: Iterator > ref = Reference to the given collection inside the 'storeIn' parameter
              * @test tested in base class test
              */
-            template < template < typename ... > class CollectionType >
+            template < template < typename ... > class __CollectionType > // NOLINT(bugprone-reserved-identifier)
             auto findAll (
                     ElementType                         const & element,
-                    CollectionType < Iterator >               & storeIn
-            ) noexcept -> CollectionType < Iterator > &;
+                    __CollectionType < Iterator >               & storeIn
+            ) noexcept -> __CollectionType < Iterator > &;
 
         public:
             /**
              * @brief Function used to return a Collection non-abstract derived type of Iterators with all the iterators pointing to the values matching the comparison to the given 'element' value
-             * @tparam CollectionType the type of the Collection to be returned. Constraint : CollectionType must be a non-abstract type derived from Collection / compatible to Collection derived types, with one template parameter. non-abstract derived from Collection types are Array, LinkedList, HashSet, ...
+             * @tparam __CollectionType the type of the Collection to be returned. Constraint : __CollectionType must be a non-abstract type derived from Collection / compatible to Collection derived types, with one template parameter. non-abstract derived from Collection types are Array, LinkedList, HashSet, ...
              * @param element : ElementType cref = Constant Reference to the element to compare the collection's elements to
              * @exceptsafe
              * @return Collection < Collection < ElementType > :: Iterator > = Newly created object containing the requested Iterators
              * @test tested in base class test
              */
-            template < template < typename ... > class CollectionType >
+            template < template < typename ... > class __CollectionType > // NOLINT(bugprone-reserved-identifier)
             auto findAll (
                     ElementType const & element
-            ) noexcept -> CollectionType < Iterator >;
+            ) noexcept -> __CollectionType < Iterator >;
 
         public:
             /**
              * @brief Function used to populate a given Collection of Iterators, 'storeIn', with maximum 'maxCount' elements, pointing to the values that are also found in the 'elements' collection
-             * @tparam CollectionType the type of the Collection passed in the 'storeIn' parameter. Constraint : CollectionType must be derived from Collection / compatible to Collection derived types, with one template parameter
+             * @tparam __CollectionType the type of the Collection passed in the 'storeIn' parameter. Constraint : __CollectionType must be derived from Collection / compatible to Collection derived types, with one template parameter
              * @param maxCount : Size = maximum number of iterators to add to the storeIn object
              * @param elements : Collection < ElementType > cref = Constant Reference to the collection to check the contains condition for
-             * @param storeIn : CollectionType < Collection < ElementType > :: Iterator > ref = Reference to the collection of iterators to add the found iterators to
+             * @param storeIn : __CollectionType < Collection < ElementType > :: Iterator > ref = Reference to the collection of iterators to add the found iterators to
              * @exceptsafe
              * @return Collection < Collection < ElementType > :: Iterator > ref = Reference to the given collection inside the 'storeIn' parameter
              * @test tested in base class test
              */
-            template < template < typename ... > class CollectionType >
+            template < template < typename ... > class __CollectionType > // NOLINT(bugprone-reserved-identifier)
             auto findOf (
                     Size                                        maxCount,
                     Collection < ElementType >          const & elements,
-                    CollectionType < Iterator >          & storeIn
-            ) noexcept -> CollectionType < Iterator > &;
+                    __CollectionType < Iterator >            & storeIn
+            ) noexcept -> __CollectionType < Iterator > &;
 
         public:
             /**
              * @brief Function used to return a Collection non-abstract derived type of Iterators with maximum 'maxCount' elements, pointing to the values that are also found in the 'elements' collection
-             * @tparam CollectionType the type of the Collection to be returned. Constraint : CollectionType must be a non-abstract type derived from Collection / compatible to Collection derived types, with one template parameter. non-abstract derived from Collection types are Array, LinkedList, HashSet, ...
+             * @tparam __CollectionType the type of the Collection to be returned. Constraint : __CollectionType must be a non-abstract type derived from Collection / compatible to Collection derived types, with one template parameter. non-abstract derived from Collection types are Array, LinkedList, HashSet, ...
              * @param maxCount : Size = maximum number of iterators to add to the returned object
              * @param elements : Collection < ElementType > cref = Constant Reference to the collection to check the contains condition for
              * @exceptsafe
              * @return Collection < Collection < ElementType > :: Iterator > = Newly created object containing the requested Iterators
              * @test tested in base class test
              */
-            template < template < typename ... > class CollectionType >
+            template < template < typename ... > class __CollectionType > // NOLINT(bugprone-reserved-identifier)
             auto findOf (
                     Size                                maxCount,
                     Collection < ElementType >  const & elements
-            ) noexcept -> CollectionType < Iterator >;
+            ) noexcept -> __CollectionType < Iterator >;
 
         public:
             /**
@@ -1690,66 +1729,66 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         public:
             /**
              * @brief Function used to populate a given Collection of Iterators, 'storeIn', with all the iterators pointing to the values that are also found in the 'elements' collection
-             * @tparam CollectionType the type of the Collection passed in the 'storeIn' parameter. Constraint : CollectionType must be derived from Collection / compatible to Collection derived types, with one template parameter
+             * @tparam __CollectionType the type of the Collection passed in the 'storeIn' parameter. Constraint : __CollectionType must be derived from Collection / compatible to Collection derived types, with one template parameter
              * @param elements : Collection < ElementType > cref = Constant Reference to the collection to check the contains condition for
-             * @param storeIn : CollectionType < Collection < ElementType > :: Iterator > ref = Reference to the collection of iterators to add the found iterators to
+             * @param storeIn : __CollectionType < Collection < ElementType > :: Iterator > ref = Reference to the collection of iterators to add the found iterators to
              * @exceptsafe
              * @return Collection < Collection < ElementType > :: Iterator > ref = Reference to the given collection inside the 'storeIn' parameter
              * @test tested in base class test
              */
-            template < template < typename ... > class CollectionType >
+            template < template < typename ... > class __CollectionType > // NOLINT(bugprone-reserved-identifier)
             auto findAllOf (
                     Collection < ElementType >          const & elements,
-                    CollectionType < Iterator >               & storeIn
-            ) noexcept -> CollectionType < Iterator > &;
+                    __CollectionType < Iterator >             & storeIn
+            ) noexcept -> __CollectionType < Iterator > &;
 
         public:
             /**
              * @brief Function used to return a Collection non-abstract derived type of Iterators with all the iterators pointing to the values that are also found in the 'elements' collection
-             * @tparam CollectionType the type of the Collection to be returned. Constraint : CollectionType must be a non-abstract type derived from Collection / compatible to Collection derived types, with one template parameter. non-abstract derived from Collection types are Array, LinkedList, HashSet, ...
+             * @tparam __CollectionType the type of the Collection to be returned. Constraint : __CollectionType must be a non-abstract type derived from Collection / compatible to Collection derived types, with one template parameter. non-abstract derived from Collection types are Array, LinkedList, HashSet, ...
              * @param elements : Collection < ElementType > cref = Constant Reference to the collection to check the contains condition for
              * @exceptsafe
              * @return Collection < Collection < ElementType > :: Iterator > = Newly created object containing the requested Iterators
              * @test tested in base class test
              */
-            template < template < typename ... > class CollectionType >
+            template < template < typename ... > class __CollectionType > // NOLINT(bugprone-reserved-identifier)
             auto findAllOf (
                     Collection < ElementType > const & elements
-            ) noexcept -> CollectionType < Iterator >;
+            ) noexcept -> __CollectionType < Iterator >;
 
         public:
             /**
              * @brief Function used to populate a given Collection of Iterators, 'storeIn', with maximum 'maxCount' elements, pointing to the values that are not found in the 'elements' collection
-             * @tparam CollectionType the type of the Collection passed in the 'storeIn' parameter. Constraint : CollectionType must be derived from Collection / compatible to Collection derived types, with one template parameter
+             * @tparam __CollectionType the type of the Collection passed in the 'storeIn' parameter. Constraint : __CollectionType must be derived from Collection / compatible to Collection derived types, with one template parameter
              * @param maxCount : Size = maximum number of iterators to add to the storeIn object
              * @param elements : Collection < ElementType > cref = Constant Reference to the collection to check the not contains condition for
-             * @param storeIn : CollectionType < Collection < ElementType > :: Iterator > ref = Reference to the collection of iterators to add the found iterators to
+             * @param storeIn : __CollectionType < Collection < ElementType > :: Iterator > ref = Reference to the collection of iterators to add the found iterators to
              * @exceptsafe
              * @return Collection < Collection < ElementType > :: Iterator > ref = Reference to the given collection inside the 'storeIn' parameter
              * @test tested in base class test
              */
-            template < template < typename ... > class CollectionType >
+            template < template < typename ... > class __CollectionType > // NOLINT(bugprone-reserved-identifier)
             auto findNotOf (
                     Size                                        maxCount,
                     Collection < ElementType >          const & elements,
-                    CollectionType < Iterator >               & storeIn
-            ) noexcept -> CollectionType < Iterator > &;
+                    __CollectionType < Iterator >             & storeIn
+            ) noexcept -> __CollectionType < Iterator > &;
 
         public:
             /**
              * @brief Function used to return a Collection non-abstract derived type of Iterators with maximum 'maxCount' elements, pointing to the values that are not found in the 'elements' collection
-             * @tparam CollectionType the type of the Collection to be returned. Constraint : CollectionType must be a non-abstract type derived from Collection / compatible to Collection derived types, with one template parameter. non-abstract derived from Collection types are Array, LinkedList, HashSet, ...
+             * @tparam __CollectionType the type of the Collection to be returned. Constraint : __CollectionType must be a non-abstract type derived from Collection / compatible to Collection derived types, with one template parameter. non-abstract derived from Collection types are Array, LinkedList, HashSet, ...
              * @param maxCount : Size = maximum number of iterators to add to the returned object
              * @param elements : Collection < ElementType > cref = Constant Reference to the collection to check the not contains condition for
              * @exceptsafe
              * @return Collection < Collection < ElementType > :: Iterator > = Newly created object containing the requested Iterators
              * @test tested in base class test
              */
-            template < template < typename ... > class CollectionType >
+            template < template < typename ... > class __CollectionType > // NOLINT(bugprone-reserved-identifier)
             auto findNotOf (
                     Size                                maxCount,
                     Collection < ElementType >  const & elements
-            ) noexcept -> CollectionType < Iterator >;
+            ) noexcept -> __CollectionType < Iterator >;
 
         public:
             /**
@@ -1778,66 +1817,66 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         public:
             /**
              * @brief Function used to populate a given Collection of Iterators, 'storeIn', with all the iterators pointing to the values that are not found in the 'elements' collection
-             * @tparam CollectionType the type of the Collection passed in the 'storeIn' parameter. Constraint : CollectionType must be derived from Collection / compatible to Collection derived types, with one template parameter
+             * @tparam __CollectionType the type of the Collection passed in the 'storeIn' parameter. Constraint : __CollectionType must be derived from Collection / compatible to Collection derived types, with one template parameter
              * @param elements : Collection < ElementType > cref = Constant Reference to the collection to check the not contains condition for
-             * @param storeIn : CollectionType < Collection < ElementType > :: Iterator > ref = Reference to the collection of iterators to add the found iterators to
+             * @param storeIn : __CollectionType < Collection < ElementType > :: Iterator > ref = Reference to the collection of iterators to add the found iterators to
              * @exceptsafe
              * @return Collection < Collection < ElementType > :: Iterator > ref = Reference to the given collection inside the 'storeIn' parameter
              * @test tested in base class test
              */
-            template < template < typename ... > class CollectionType >
+            template < template < typename ... > class __CollectionType > // NOLINT(bugprone-reserved-identifier)
             auto findAllNotOf (
                     Collection < ElementType >          const & elements,
-                    CollectionType < Iterator >               & storeIn
-            ) noexcept -> CollectionType < Iterator > &;
+                    __CollectionType < Iterator >             & storeIn
+            ) noexcept -> __CollectionType < Iterator > &;
 
         public:
             /**
              * @brief Function used to return a Collection non-abstract derived type of Iterators with all the iterators pointing to the values that are not found in the 'elements' collection
-             * @tparam CollectionType the type of the Collection to be returned. Constraint : CollectionType must be a non-abstract type derived from Collection / compatible to Collection derived types, with one template parameter. non-abstract derived from Collection types are Array, LinkedList, HashSet, ...
+             * @tparam __CollectionType the type of the Collection to be returned. Constraint : __CollectionType must be a non-abstract type derived from Collection / compatible to Collection derived types, with one template parameter. non-abstract derived from Collection types are Array, LinkedList, HashSet, ...
              * @param elements : Collection < ElementType > cref = Constant Reference to the collection to check the not contains condition for
              * @exceptsafe
              * @return Collection < Collection < ElementType > :: Iterator > = Newly created object containing the requested Iterators
              * @test tested in base class test
              */
-            template < template < typename ... > class CollectionType >
+            template < template < typename ... > class __CollectionType > // NOLINT(bugprone-reserved-identifier)
             auto findAllNotOf (
                     Collection < ElementType > const & elements
-            ) noexcept -> CollectionType < Iterator >;
+            ) noexcept -> __CollectionType < Iterator >;
 
         public:
             /**
              * @brief Function used to populate a given Collection of Iterators, 'storeIn', with maximum 'maxCount' elements, pointing to the values that are also found in the 'elements' InitializerList
-             * @tparam CollectionType the type of the Collection passed in the 'storeIn' parameter. Constraint : CollectionType must be derived from Collection / compatible to Collection derived types, with one template parameter
+             * @tparam __CollectionType the type of the Collection passed in the 'storeIn' parameter. Constraint : __CollectionType must be derived from Collection / compatible to Collection derived types, with one template parameter
              * @param maxCount : Size = maximum number of iterators to add to the storeIn object
              * @param elements : Collection < ElementType > :: InitializerList cref = Constant Reference to the initializer list to check the contains condition for
-             * @param storeIn : CollectionType < Collection < ElementType > :: Iterator > ref = Reference to the collection of iterators to add the found iterators to
+             * @param storeIn : __CollectionType < Collection < ElementType > :: Iterator > ref = Reference to the collection of iterators to add the found iterators to
              * @exceptsafe
              * @return Collection < Collection < ElementType > :: Iterator > ref = Reference to the given collection inside the 'storeIn' parameter
              * @test tested in base class test
              */
-            template < template < typename ... > class CollectionType >
+            template < template < typename ... > class __CollectionType > // NOLINT(bugprone-reserved-identifier)
             auto findOf (
                     Size                                        maxCount,
                     InitializerList                     const & elements,
-                    CollectionType < Iterator >               & storeIn
-            ) noexcept -> CollectionType < Iterator > &;
+                    __CollectionType < Iterator >             & storeIn
+            ) noexcept -> __CollectionType < Iterator > &;
 
         public:
             /**
              * @brief Function used to return a Collection non-abstract derived type of Iterators with maximum 'maxCount' elements, pointing to the values that are also found in the 'elements' InitializerList
-             * @tparam CollectionType the type of the Collection to be returned. Constraint : CollectionType must be a non-abstract type derived from Collection / compatible to Collection derived types, with one template parameter. non-abstract derived from Collection types are Array, LinkedList, HashSet, ...
+             * @tparam __CollectionType the type of the Collection to be returned. Constraint : __CollectionType must be a non-abstract type derived from Collection / compatible to Collection derived types, with one template parameter. non-abstract derived from Collection types are Array, LinkedList, HashSet, ...
              * @param maxCount : Size = maximum number of iterators to add to the returned object
              * @param elements : Collection < ElementType > :: InitializerList cref = Constant Reference to the initializer list to check the contains condition for
              * @exceptsafe
              * @return Collection < Collection < ElementType > :: Iterator > = Newly created object containing the requested Iterators
              * @test tested in base class test
              */
-            template < template < typename ... > class CollectionType >
+            template < template < typename ... > class __CollectionType > // NOLINT(bugprone-reserved-identifier)
             auto findOf (
                     Size                    maxCount,
                     InitializerList const & elements
-            ) noexcept -> CollectionType < Iterator >;
+            ) noexcept -> __CollectionType < Iterator >;
 
         public:
             /**
@@ -1866,66 +1905,66 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         public:
             /**
              * @brief Function used to populate a given Collection of Iterators, 'storeIn', with all the iterators pointing to the values that are also found in the 'elements' InitializerList
-             * @tparam CollectionType the type of the Collection passed in the 'storeIn' parameter. Constraint : CollectionType must be derived from Collection / compatible to Collection derived types, with one template parameter
+             * @tparam __CollectionType the type of the Collection passed in the 'storeIn' parameter. Constraint : __CollectionType must be derived from Collection / compatible to Collection derived types, with one template parameter
              * @param elements : Collection < ElementType > :: InitializerList cref = Constant Reference to the initializer list to check the contains condition for
-             * @param storeIn : CollectionType < Collection < ElementType > :: Iterator > ref = Reference to the collection of iterators to add the found iterators to
+             * @param storeIn : __CollectionType < Collection < ElementType > :: Iterator > ref = Reference to the collection of iterators to add the found iterators to
              * @exceptsafe
              * @return Collection < Collection < ElementType > :: Iterator > ref = Reference to the given collection inside the 'storeIn' parameter
              * @test tested in base class test
              */
-            template < template < typename ... > class CollectionType >
+            template < template < typename ... > class __CollectionType > // NOLINT(bugprone-reserved-identifier)
             auto findAllOf (
                     InitializerList                     const & elements,
-                    CollectionType < Iterator >               & storeIn
-            ) noexcept -> CollectionType < Iterator > &;
+                    __CollectionType < Iterator >             & storeIn
+            ) noexcept -> __CollectionType < Iterator > &;
 
         public:
             /**
              * @brief Function used to return a Collection non-abstract derived type of Iterators with all the iterators pointing to the values that are also found in the 'elements' InitializerList
-             * @tparam CollectionType the type of the Collection to be returned. Constraint : CollectionType must be a non-abstract type derived from Collection / compatible to Collection derived types, with one template parameter. non-abstract derived from Collection types are Array, LinkedList, HashSet, ...
+             * @tparam __CollectionType the type of the Collection to be returned. Constraint : __CollectionType must be a non-abstract type derived from Collection / compatible to Collection derived types, with one template parameter. non-abstract derived from Collection types are Array, LinkedList, HashSet, ...
              * @param elements : Collection < ElementType > :: InitializerList cref = Constant Reference to the initializer list to check the contains condition for
              * @exceptsafe
              * @return Collection < Collection < ElementType > :: Iterator > = Newly created object containing the requested Iterators
              * @test tested in base class test
              */
-            template < template < typename ... > class CollectionType >
+            template < template < typename ... > class __CollectionType > // NOLINT(bugprone-reserved-identifier)
             auto findAllOf (
                     InitializerList const & elements
-            ) noexcept -> CollectionType < Iterator >;
+            ) noexcept -> __CollectionType < Iterator >;
 
         public:
             /**
              * @brief Function used to populate a given Collection of Iterators, 'storeIn', with maximum 'maxCount' elements, pointing to the values that are not found in the 'elements' InitializerList
-             * @tparam CollectionType the type of the Collection passed in the 'storeIn' parameter. Constraint : CollectionType must be derived from Collection / compatible to Collection derived types, with one template parameter
+             * @tparam __CollectionType the type of the Collection passed in the 'storeIn' parameter. Constraint : __CollectionType must be derived from Collection / compatible to Collection derived types, with one template parameter
              * @param maxCount : Size = maximum number of iterators to add to the storeIn object
              * @param elements : Collection < ElementType > :: InitializerList cref = Constant Reference to the initializer list to check the contains condition for
-             * @param storeIn : CollectionType < Collection < ElementType > :: Iterator > ref = Reference to the collection of iterators to add the found iterators to
+             * @param storeIn : __CollectionType < Collection < ElementType > :: Iterator > ref = Reference to the collection of iterators to add the found iterators to
              * @exceptsafe
              * @return Collection < Collection < ElementType > :: Iterator > ref = Reference to the given collection inside the 'storeIn' parameter
              * @test tested in base class test
              */
-            template < template < typename ... > class CollectionType >
+            template < template < typename ... > class __CollectionType > // NOLINT(bugprone-reserved-identifier)
             auto findNotOf (
                     Size                                        maxCount,
                     InitializerList                     const & elements,
-                    CollectionType < Iterator >               & storeIn
-            ) noexcept -> CollectionType < Iterator > &;
+                    __CollectionType < Iterator >             & storeIn
+            ) noexcept -> __CollectionType < Iterator > &;
 
         public:
             /**
              * @brief Function used to return a Collection non-abstract derived type of Iterators with maximum 'maxCount' elements, pointing to the values that are not found in the 'elements' InitializerList
-             * @tparam CollectionType the type of the Collection to be returned. Constraint : CollectionType must be a non-abstract type derived from Collection / compatible to Collection derived types, with one template parameter. non-abstract derived from Collection types are Array, LinkedList, HashSet, ...
+             * @tparam __CollectionType the type of the Collection to be returned. Constraint : __CollectionType must be a non-abstract type derived from Collection / compatible to Collection derived types, with one template parameter. non-abstract derived from Collection types are Array, LinkedList, HashSet, ...
              * @param maxCount : Size = maximum number of iterators to add to the returned object
              * @param elements : Collection < ElementType > :: InitializerList cref = Constant Reference to the initializer list to check the contains condition for
              * @exceptsafe
              * @return Collection < Collection < ElementType > :: Iterator > = Newly created object containing the requested Iterators
              * @test tested in base class test
              */
-            template < template < typename ... > class CollectionType >
+            template < template < typename ... > class __CollectionType > // NOLINT(bugprone-reserved-identifier)
             auto findNotOf (
                     Size                    maxCount,
                     InitializerList const & elements
-            ) noexcept -> CollectionType < Iterator >;
+            ) noexcept -> __CollectionType < Iterator >;
 
         public:
             /**
@@ -1954,239 +1993,239 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         public:
             /**
              * @brief Function used to populate a given Collection of Iterators, 'storeIn', with all the iterators pointing to the values that are not found in the 'elements' InitializerList
-             * @tparam CollectionType the type of the Collection passed in the 'storeIn' parameter. Constraint : CollectionType must be derived from Collection / compatible to Collection derived types, with one template parameter
+             * @tparam __CollectionType the type of the Collection passed in the 'storeIn' parameter. Constraint : __CollectionType must be derived from Collection / compatible to Collection derived types, with one template parameter
              * @param elements : Collection < ElementType > :: InitializerList cref = Constant Reference to the initializer list to check the contains condition for
-             * @param storeIn : CollectionType < Collection < ElementType > :: Iterator > ref = Reference to the collection of iterators to add the found iterators to
+             * @param storeIn : __CollectionType < Collection < ElementType > :: Iterator > ref = Reference to the collection of iterators to add the found iterators to
              * @exceptsafe
              * @return Collection < Collection < ElementType > :: Iterator > ref = Reference to the given collection inside the 'storeIn' parameter
              * @test tested in base class test
              */
-            template < template < typename ... > class CollectionType >
+            template < template < typename ... > class __CollectionType > // NOLINT(bugprone-reserved-identifier)
             auto findAllNotOf (
                     InitializerList                     const & elements,
-                    CollectionType < Iterator >               & storeIn
-            ) noexcept -> CollectionType < Iterator > &;
+                    __CollectionType < Iterator >             & storeIn
+            ) noexcept -> __CollectionType < Iterator > &;
 
         public:
             /**
              * @brief Function used to return a Collection non-abstract derived type of Iterators with all the iterators pointing to the values that are not found in the 'elements' InitializerList
-             * @tparam CollectionType the type of the Collection to be returned. Constraint : CollectionType must be a non-abstract type derived from Collection / compatible to Collection derived types, with one template parameter. non-abstract derived from Collection types are Array, LinkedList, HashSet, ...
+             * @tparam __CollectionType the type of the Collection to be returned. Constraint : __CollectionType must be a non-abstract type derived from Collection / compatible to Collection derived types, with one template parameter. non-abstract derived from Collection types are Array, LinkedList, HashSet, ...
              * @param elements : Collection < ElementType > :: InitializerList cref = Constant Reference to the initializer list to check the contains condition for
              * @exceptsafe
              * @return Collection < Collection < ElementType > :: Iterator > = Newly created object containing the requested Iterators
              * @test tested in base class test
              */
-            template < template < typename ... > class CollectionType >
+            template < template < typename ... > class __CollectionType > // NOLINT(bugprone-reserved-identifier)
             auto findAllNotOf (
                     InitializerList const & elements
-            ) noexcept -> CollectionType < Iterator >;
+            ) noexcept -> __CollectionType < Iterator >;
 
         public:
             /**
              * @brief Function used to populate a given Collection derived type of Iterators, with a maximum number of 'maxCount' iterators, pointing to the first or all the elements in the collection that are validated by a given predicate
-             * @tparam CollectionType the type of the Collection passed in the 'storeIn' parameter. Constraint : CollectionType must be derived from Collection / compatible to Collection derived types, with one template parameter
-             * @tparam Predicate the type of the predicate given as a parameter, the type must be callable and compatible with the bool ( Decay < ElementType > ) function signature
+             * @tparam __CollectionType the type of the Collection passed in the 'storeIn' parameter. Constraint : __CollectionType must be derived from Collection / compatible to Collection derived types, with one template parameter
+             * @tparam __Predicate the type of the predicate given as a parameter, the type must be callable and compatible with the bool ( Decay < ElementType > ) function signature
              * @param maxCount : Size = maximum number of iterators to add to the storeIn object
-             * @param predicate : Predicate cref = Constant Reference to the callable predicate object to pass each element to
-             * @param storeIn : CollectionType < Collection < ElementType > :: Iterator > ref = Reference to the collection of iterators to add the found iterators to
-             * @exceptsafe if Predicate is exceptsafe
+             * @param predicate : __Predicate cref = Constant Reference to the callable predicate object to pass each element to
+             * @param storeIn : __CollectionType < Collection < ElementType > :: Iterator > ref = Reference to the collection of iterators to add the found iterators to
+             * @exceptsafe if __Predicate is exceptsafe
              * @return Collection < Collection < ElementType > :: Iterator > ref = Reference to the given collection inside the 'storeIn' parameter
              * @test tested in base class test
              */
-            template < template < typename ... > class CollectionType, typename Predicate >
+            template < template < typename ... > class __CollectionType, typename __Predicate > // NOLINT(bugprone-reserved-identifier)
             auto find (
                     Size                                        maxCount,
-                    Predicate                           const & predicate,
-                    CollectionType < Iterator >               & storeIn
-            ) noexcept ( noexcept ( predicate ( meta :: referenceOf < ElementType > () ) ) ) -> CollectionType < Iterator > &;
+                    __Predicate                         const & predicate,
+                    __CollectionType < Iterator >             & storeIn
+            ) noexcept ( noexcept ( predicate ( meta :: referenceOf < ElementType > () ) ) ) -> __CollectionType < Iterator > &;
 
         public:
             /**
              * @brief Function used to return a Collection non-abstract derived type of Iterators, with a maximum number of 'maxCount' iterators, pointing to the first or all the elements in the collection that are validated by a given predicate
-             * @tparam CollectionType the type of the Collection to be returned. Constraint : CollectionType must be a non-abstract type derived from Collection / compatible to Collection derived types, with one template parameter. non-abstract derived from Collection types are Array, LinkedList, HashSet, ...
-             * @tparam Predicate the type of the predicate given as a parameter, the type must be callable and compatible with the bool ( Decay < ElementType > ) function signature
+             * @tparam __CollectionType the type of the Collection to be returned. Constraint : __CollectionType must be a non-abstract type derived from Collection / compatible to Collection derived types, with one template parameter. non-abstract derived from Collection types are Array, LinkedList, HashSet, ...
+             * @tparam __Predicate the type of the predicate given as a parameter, the type must be callable and compatible with the bool ( Decay < ElementType > ) function signature
              * @param maxCount : Size = maximum number of iterators to add to the returned object
-             * @param predicate : Predicate cref = Constant Reference to the callable predicate object to pass each element to
-             * @exceptsafe if Predicate is exceptsafe
+             * @param predicate : __Predicate cref = Constant Reference to the callable predicate object to pass each element to
+             * @exceptsafe if __Predicate is exceptsafe
              * @return Collection < Collection < ElementType > :: Iterator > = Newly created object containing the requested Iterators
              * @test tested in base class test
              */
-            template < template < typename ... > class CollectionType, typename Predicate >
+            template < template < typename ... > class __CollectionType, typename __Predicate > // NOLINT(bugprone-reserved-identifier)
             auto find (
                     Size                maxCount,
-                    Predicate   const & predicate
-            ) noexcept ( noexcept ( predicate ( meta :: referenceOf < ElementType > () ) ) ) -> CollectionType < Iterator >;
+                    __Predicate const & predicate
+            ) noexcept ( noexcept ( predicate ( meta :: referenceOf < ElementType > () ) ) ) -> __CollectionType < Iterator >;
 
         public:
             /**
              * @brief Function used to return an iterator to the first element validated by the given predicate
-             * @tparam Predicate the type of the predicate given as a parameter, the type must be callable and compatible with the bool ( Decay < ElementType > ) function signature
-             * @param predicate : Predicate cref = Constant Reference to the callable predicate object to pass each element to
-             * @exceptsafe if Predicate is exceptsafe
+             * @tparam __Predicate the type of the predicate given as a parameter, the type must be callable and compatible with the bool ( Decay < ElementType > ) function signature
+             * @param predicate : __Predicate cref = Constant Reference to the callable predicate object to pass each element to
+             * @exceptsafe if __Predicate is exceptsafe
              * @return Collection < ElementType > :: Iterator = Iterator to the first element validated by the given predicate, caller.end() if none exist
              * @test tested in base class test
              */
-            template < typename Predicate >
+            template < typename __Predicate > // NOLINT(bugprone-reserved-identifier)
             auto findFirst (
-                    Predicate const & predicate
+                    __Predicate const & predicate
             ) noexcept ( noexcept ( predicate ( meta :: referenceOf < ElementType > () ) ) ) -> Iterator;
 
         public:
             /**
              * @brief Function used to return an iterator to the last element validated by the given predicate
-             * @tparam Predicate the type of the predicate given as a parameter, the type must be callable and compatible with the bool ( Decay < ElementType > ) function signature
-             * @param predicate : Predicate cref = Constant Reference to the callable predicate object to pass each element to
-             * @exceptsafe if Predicate is exceptsafe
+             * @tparam __Predicate the type of the predicate given as a parameter, the type must be callable and compatible with the bool ( Decay < ElementType > ) function signature
+             * @param predicate : __Predicate cref = Constant Reference to the callable predicate object to pass each element to
+             * @exceptsafe if __Predicate is exceptsafe
              * @return Collection < ElementType > :: Iterator = Iterator to the last element validated by the given predicate, caller.end() if none exist
              * @test tested in base class test
              */
-            template < typename Predicate >
+            template < typename __Predicate > // NOLINT(bugprone-reserved-identifier)
             auto findLast (
-                    Predicate const & predicate
+                    __Predicate const & predicate
             ) noexcept ( noexcept ( predicate ( meta :: referenceOf < ElementType > () ) ) ) -> Iterator;
 
         public:
             /**
              * @brief Function used to populate a given Collection derived type of Iterators with all iterators pointing to the first or all the elements in the collection that are validated by a given predicate
-             * @tparam CollectionType the type of the Collection passed in the 'storeIn' parameter. Constraint : CollectionType must be derived from Collection / compatible to Collection derived types, with one template parameter
-             * @tparam Predicate the type of the predicate given as a parameter, the type must be callable and compatible with the bool ( Decay < ElementType > ) function signature
-             * @param predicate : Predicate cref = Constant Reference to the callable predicate object to pass each element to
-             * @param storeIn : CollectionType < Collection < ElementType > :: Iterator > ref = Reference to the collection of iterators to add the found iterators to
-             * @exceptsafe if Predicate is exceptsafe
+             * @tparam __CollectionType the type of the Collection passed in the 'storeIn' parameter. Constraint : __CollectionType must be derived from Collection / compatible to Collection derived types, with one template parameter
+             * @tparam __Predicate the type of the predicate given as a parameter, the type must be callable and compatible with the bool ( Decay < ElementType > ) function signature
+             * @param predicate : __Predicate cref = Constant Reference to the callable predicate object to pass each element to
+             * @param storeIn : __CollectionType < Collection < ElementType > :: Iterator > ref = Reference to the collection of iterators to add the found iterators to
+             * @exceptsafe if __Predicate is exceptsafe
              * @return Collection < Collection < ElementType > :: Iterator > ref = Reference to the given collection inside the 'storeIn' parameter
              * @test tested in base class test
              */
-            template < template < typename ... > class CollectionType, typename Predicate >
+            template < template < typename ... > class __CollectionType, typename __Predicate > // NOLINT(bugprone-reserved-identifier)
             auto findAll (
-                    Predicate                           const & predicate,
-                    CollectionType < Iterator >               & storeIn
-            ) noexcept ( noexcept ( predicate ( meta :: referenceOf < ElementType > () ) ) ) -> CollectionType < Iterator > &;
+                    __Predicate                           const & predicate,
+                    __CollectionType < Iterator >               & storeIn
+            ) noexcept ( noexcept ( predicate ( meta :: referenceOf < ElementType > () ) ) ) -> __CollectionType < Iterator > &;
 
         public:
             /**
              * @brief Function used to return a Collection non-abstract derived type of Iterators with all the iterators pointing to the first or all the elements in the collection that are validated by a given predicate
-             * @tparam CollectionType the type of the Collection to be returned. Constraint : CollectionType must be a non-abstract type derived from Collection / compatible to Collection derived types, with one template parameter. non-abstract derived from Collection types are Array, LinkedList, HashSet, ...
-             * @tparam Predicate the type of the predicate given as a parameter, the type must be callable and compatible with the bool ( Decay < ElementType > ) function signature
-             * @param predicate : Predicate cref = Constant Reference to the callable predicate object to pass each element to
-             * @exceptsafe if Predicate is exceptsafe
+             * @tparam __CollectionType the type of the Collection to be returned. Constraint : __CollectionType must be a non-abstract type derived from Collection / compatible to Collection derived types, with one template parameter. non-abstract derived from Collection types are Array, LinkedList, HashSet, ...
+             * @tparam __Predicate the type of the predicate given as a parameter, the type must be callable and compatible with the bool ( Decay < ElementType > ) function signature
+             * @param predicate : __Predicate cref = Constant Reference to the callable predicate object to pass each element to
+             * @exceptsafe if __Predicate is exceptsafe
              * @return Collection < Collection < ElementType > :: Iterator > = Newly created object containing the requested Iterators
              * @test tested in base class test
              */
-            template < template < typename ... > class CollectionType, typename Predicate >
+            template < template < typename ... > class __CollectionType, typename __Predicate > // NOLINT(bugprone-reserved-identifier)
             auto findAll (
-                    Predicate const & predicate
-            ) noexcept ( noexcept ( predicate ( meta :: referenceOf < ElementType > () ) ) ) -> CollectionType < Iterator >;
+                    __Predicate const & predicate
+            ) noexcept ( noexcept ( predicate ( meta :: referenceOf < ElementType > () ) ) ) -> __CollectionType < Iterator >;
 
         public:
-            using Collection < T > :: find;
+            using Collection < __ElementType > :: find;
         public:
-            using Collection < T > :: findFirst;
+            using Collection < __ElementType > :: findFirst;
         public:
-            using Collection < T > :: findLast;
+            using Collection < __ElementType > :: findLast;
         public:
-            using Collection < T > :: findAll;
+            using Collection < __ElementType > :: findAll;
         public:
-            using Collection < T > :: findOf;
+            using Collection < __ElementType > :: findOf;
         public:
-            using Collection < T > :: findFirstOf;
+            using Collection < __ElementType > :: findFirstOf;
         public:
-            using Collection < T > :: findLastOf;
+            using Collection < __ElementType > :: findLastOf;
         public:
-            using Collection < T > :: findAllOf;
+            using Collection < __ElementType > :: findAllOf;
         public:
-            using Collection < T > :: findNotOf;
+            using Collection < __ElementType > :: findNotOf;
         public:
-            using Collection < T > :: findFirstNotOf;
+            using Collection < __ElementType > :: findFirstNotOf;
         public:
-            using Collection < T > :: findLastNotOf;
+            using Collection < __ElementType > :: findLastNotOf;
         public:
-            using Collection < T > :: findAllNotOf;
+            using Collection < __ElementType > :: findAllNotOf;
 
         public:
-            template < typename Action >
+            template < typename __Action > // NOLINT(bugprone-reserved-identifier)
             auto forEach (
-                    Action const & action
+                    __Action const & action
             ) noexcept ( noexcept ( action ( meta :: referenceOf < ElementType > () ) ) ) -> void;
 
         public:
-            template < typename Predicate = decltype ( & predicates :: alwaysTrue < ElementType > ) >
+            template < typename __Predicate = decltype ( & predicates :: alwaysTrue < ElementType > ) > // NOLINT(bugprone-reserved-identifier)
             auto some (
                     Size                count,
-                    Predicate   const & predicate = & predicates :: alwaysTrue < ElementType >
+                    __Predicate const & predicate = & predicates :: alwaysTrue < ElementType >
             ) noexcept ( noexcept ( predicate ( meta :: referenceOf < ElementType > () ) ) ) -> bool;
 
         public:
-            template < typename Predicate = decltype ( & predicates :: alwaysTrue < ElementType > ) >
+            template < typename __Predicate = decltype ( & predicates :: alwaysTrue < ElementType > ) > // NOLINT(bugprone-reserved-identifier)
             auto atLeast (
                     Size                count,
-                    Predicate   const & predicate = & predicates :: alwaysTrue < ElementType >
+                    __Predicate const & predicate = & predicates :: alwaysTrue < ElementType >
             ) noexcept ( noexcept ( predicate ( meta :: referenceOf < ElementType > () ) ) ) -> bool;
 
         public:
-            template < typename Predicate = decltype ( & predicates :: alwaysTrue < ElementType > ) >
+            template < typename __Predicate = decltype ( & predicates :: alwaysTrue < ElementType > ) > // NOLINT(bugprone-reserved-identifier)
             auto atMost (
                     Size                count,
-                    Predicate   const & predicate = & predicates :: alwaysTrue < ElementType >
+                    __Predicate const & predicate = & predicates :: alwaysTrue < ElementType >
             ) noexcept ( noexcept ( predicate ( meta :: referenceOf < ElementType > () ) ) ) -> bool;
 
         public:
-            template < typename Predicate = decltype ( & predicates :: alwaysTrue < ElementType > ) >
+            template < typename __Predicate = decltype ( & predicates :: alwaysTrue < ElementType > ) > // NOLINT(bugprone-reserved-identifier)
             auto moreThan (
                     Size                count,
-                    Predicate   const & predicate = & predicates :: alwaysTrue < ElementType >
+                    __Predicate const & predicate = & predicates :: alwaysTrue < ElementType >
             ) noexcept ( noexcept ( predicate ( meta :: referenceOf < ElementType > () ) ) ) -> bool;
 
         public:
-            template < typename Predicate = decltype ( & predicates :: alwaysTrue < ElementType > ) >
+            template < typename __Predicate = decltype ( & predicates :: alwaysTrue < ElementType > ) > // NOLINT(bugprone-reserved-identifier)
             auto fewerThan (
                     Size                count,
-                    Predicate   const & predicate = & predicates :: alwaysTrue < ElementType >
+                    __Predicate const & predicate = & predicates :: alwaysTrue < ElementType >
             ) noexcept ( noexcept ( predicate ( meta :: referenceOf < ElementType > () ) ) ) -> bool;
 
         public:
-            template < typename Predicate = decltype ( & predicates :: alwaysTrue < ElementType > ) >
+            template < typename __Predicate = decltype ( & predicates :: alwaysTrue < ElementType > ) > // NOLINT(bugprone-reserved-identifier)
             auto count (
-                    Predicate   const & predicate = & predicates :: alwaysTrue < ElementType >
+                    __Predicate const & predicate = & predicates :: alwaysTrue < ElementType >
             ) noexcept ( noexcept ( predicate ( meta :: referenceOf < ElementType > () ) ) ) -> Size;
 
         public:
-            template < typename Predicate = decltype ( & predicates :: alwaysTrue < ElementType > ) >
+            template < typename __Predicate = decltype ( & predicates :: alwaysTrue < ElementType > ) > // NOLINT(bugprone-reserved-identifier)
             auto any (
-                    Predicate   const & predicate = & predicates :: alwaysTrue < ElementType >
+                    __Predicate const & predicate = & predicates :: alwaysTrue < ElementType >
             ) noexcept ( noexcept ( predicate ( meta :: referenceOf < ElementType > () ) ) ) -> bool;
 
         public:
-            template < typename Predicate = decltype ( & predicates :: alwaysTrue < ElementType > ) >
+            template < typename __Predicate = decltype ( & predicates :: alwaysTrue < ElementType > ) > // NOLINT(bugprone-reserved-identifier)
             auto all (
-                    Predicate   const & predicate = & predicates :: alwaysTrue < ElementType >
+                    __Predicate const & predicate = & predicates :: alwaysTrue < ElementType >
             ) noexcept ( noexcept ( predicate ( meta :: referenceOf < ElementType > () ) ) ) -> bool;
 
         public:
-            template < typename Predicate = decltype ( & predicates :: alwaysTrue < ElementType > ) >
+            template < typename __Predicate = decltype ( & predicates :: alwaysTrue < ElementType > ) > // NOLINT(bugprone-reserved-identifier)
             auto none (
-                    Predicate   const & predicate = & predicates :: alwaysTrue < ElementType >
+                    __Predicate const & predicate = & predicates :: alwaysTrue < ElementType >
             ) noexcept ( noexcept ( predicate ( meta :: referenceOf < ElementType > () ) ) ) -> bool;
 
         public:
-            using Collection < T > :: forEach;
+            using Collection < __ElementType > :: forEach;
         public:
-            using Collection < T > :: some;
+            using Collection < __ElementType > :: some;
         public:
-            using Collection < T > :: atLeast;
+            using Collection < __ElementType > :: atLeast;
         public:
-            using Collection < T > :: atMost;
+            using Collection < __ElementType > :: atMost;
         public:
-            using Collection < T > :: moreThan;
+            using Collection < __ElementType > :: moreThan;
         public:
-            using Collection < T > :: fewerThan;
+            using Collection < __ElementType > :: fewerThan;
         public:
-            using Collection < T > :: count;
+            using Collection < __ElementType > :: count;
         public:
-            using Collection < T > :: any;
+            using Collection < __ElementType > :: any;
         public:
-            using Collection < T > :: all;
+            using Collection < __ElementType > :: all;
         public:
-            using Collection < T > :: none;
+            using Collection < __ElementType > :: none;
         };
 
     }

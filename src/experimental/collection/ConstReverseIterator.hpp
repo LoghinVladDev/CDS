@@ -5,16 +5,16 @@
 #ifndef __CDS_COLLECTION_CONST_REVERSE_ITERATOR_HPP__
 #define __CDS_COLLECTION_CONST_REVERSE_ITERATOR_HPP__
 
-namespace cds {
+namespace cds { // NOLINT(modernize-concat-nested-namespaces)
     namespace experimental {
 
         /**
          * @class The Iterator type used for Backward Iteration over immutable values
-         * @tparam T type of elements contained into the Collection class that nests the ConstIterator
+         * @tparam __ElementType type of elements contained into the Collection class that nests the ConstIterator
          * @test tested in nester class test
          */
-        template < typename T >
-        class Collection < T > :: ConstReverseIterator : public Collection < T > :: AbstractIterator {
+        template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
+        class Collection < __ElementType > :: ConstReverseIterator : public Collection < __ElementType > :: AbstractIterator {
         public:
             /**
              * @brief Implicit Constructor
@@ -54,7 +54,7 @@ namespace cds {
              * @test tested in nester class test
              */
             constexpr ConstReverseIterator (
-                    Collection < T >                                const * pCollection,
+                    Collection < __ElementType >                    const * pCollection,
                     cds :: UniquePointer < DelegateConstIterator >       && pIterator
             ) noexcept;
 
@@ -130,19 +130,19 @@ namespace cds {
             /**
              * @brief Dereference Operator, used to acquire the value the iterator is indicating to
              * @exceptsafe Even though iterator can be invalid, the behavior should be IllegalAccess / SegmentationFault for invalid case
-             * @return ElementType cref = Constant Reference to a Collection Element
+             * @return __ElementType cref = Constant Reference to a Collection Element
              * @test tested in nester class test
              */
-            __CDS_cpplang_ConstexprPureAbstract auto operator * () const noexcept -> ElementType const &;
+            __CDS_cpplang_ConstexprPureAbstract auto operator * () const noexcept -> __ElementType const &;
 
         public:
             /**
              * @brief Member of Pointer Operator, used to acquire the address of the element the iterator is indicating to for member access
              * @exceptsafe Even though iterator can be invalid, the behavior should be IllegalAccess / SegmentationFault for invalid case
-             * @return ElementType cptr = Pointer to a Constant element contained by the Collection, indicated by the Iterator
+             * @return __ElementType cptr = Pointer to a Constant element contained by the Collection, indicated by the Iterator
              * @test tested in nester class test
              */
-            __CDS_cpplang_ConstexprOverride auto operator -> () const noexcept -> ElementType const *;
+            __CDS_cpplang_ConstexprOverride auto operator -> () const noexcept -> __ElementType const *;
         };
 
     }

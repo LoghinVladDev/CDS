@@ -349,7 +349,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             auto newLen = 0U;
 
             for ( Index index = 0, len = static_cast < Index > ( this->size() ); index < len; ++ index ) {
-                if ( ! hidden :: impl :: initializerListContains ( indices, index ) ) {
+                if ( ! __hidden :: __impl :: __initializerListContains ( indices, index ) ) {
                     newBuf [ newLen ++ ] = this->_pData [ index ];
                 } else {
                     Memory :: instance ().destroy ( this->_pData [ index ] );

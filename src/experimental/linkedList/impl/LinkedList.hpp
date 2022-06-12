@@ -623,7 +623,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
             Index currentIndex = 0;
             for ( Node * pHead = this->_pFront; pHead != nullptr; pHead = pHead->_pNext, ++ currentIndex ) {
-                if ( hidden :: impl :: initializerListContains ( indices, currentIndex ) ) {
+                if ( __hidden :: __impl :: __initializerListContains ( indices, currentIndex ) ) {
                     pToRemove [ toRemoveLength ++ ] = pHead;
                 } else {
                     pToKeep [ toKeepLength ++ ] = pHead;

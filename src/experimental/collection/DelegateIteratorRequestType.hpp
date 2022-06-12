@@ -6,10 +6,10 @@
 #define __CDS_COLLECTION_DELEGATE_ITERATOR_REQUEST_TYPE_HPP__
 
 namespace cds { // NOLINT(modernize-concat-nested-namespaces)
-    namespace experimental {
+    namespace experimental { // NOLINT(modernize-concat-nested-namespaces)
 
-        namespace hidden {
-            namespace impl {
+        namespace __hidden { // NOLINT(modernize-concat-nested-namespaces, bugprone-reserved-identifier)
+            namespace __impl { // NOLINT(bugprone-reserved-identifier)
 
                 /**
                  * @enum The types of delegate iterator requests the Collection Base Object can make to its Derived Objects when acquiring an Iterator Delegate Implementation

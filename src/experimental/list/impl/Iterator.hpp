@@ -8,36 +8,42 @@
 namespace cds { // NOLINT(modernize-concat-nested-namespaces)
     namespace experimental {
 
-        template < typename T >
-        constexpr List < T > :: Iterator :: Iterator (
-                List < T >                         const * pList,
-                cds :: UniquePointer < DelegateIterator >      && pIterator
+        template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
+        constexpr List < __ElementType > :: Iterator :: Iterator (
+                List < __ElementType >                      const * pList,
+                cds :: UniquePointer < DelegateIterator >        && pIterator
         ) noexcept :
-                List < T > :: AbstractIterator (
+                List < __ElementType > :: AbstractIterator (
                         pList,
                         cds :: UniquePointer < AbstractDelegateIterator > ( cds :: forward < cds :: UniquePointer < DelegateIterator > > ( pIterator ) )
                 ) {
 
         }
 
-        template < typename T >
-        __CDS_OptimalInline List < T > :: Iterator :: Iterator (
+
+        template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
+        __CDS_OptimalInline List < __ElementType > :: Iterator :: Iterator (
                 Iterator const & iterator
         ) noexcept :
                 AbstractIterator ( iterator ) {
 
         }
 
-        template < typename T >
-        constexpr List < T > :: Iterator :: Iterator (
+
+        template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
+        constexpr List < __ElementType > :: Iterator :: Iterator (
                 Iterator && iterator
         ) noexcept :
                 AbstractIterator ( cds :: forward < AbstractIterator > ( iterator ) ) {
 
         }
 
-        template < typename T >
-        __CDS_OptimalInline auto List < T > :: Iterator :: operator = ( Iterator const & iterator ) noexcept -> Iterator & {
+
+        template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
+        __CDS_OptimalInline auto List < __ElementType > :: Iterator :: operator = (
+                Iterator const & iterator
+        ) noexcept -> Iterator & {
+
             if ( this == & iterator ) {
                 return * this;
             }
@@ -47,8 +53,12 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             return * this;
         }
 
-        template < typename T >
-        __CDS_cpplang_NonConstConstexprMemberFunction auto List < T > :: Iterator :: operator = ( Iterator && iterator ) noexcept -> Iterator & {
+
+        template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
+        __CDS_cpplang_NonConstConstexprMemberFunction auto List < __ElementType > :: Iterator :: operator = (
+                Iterator && iterator
+        ) noexcept -> Iterator & {
+
             if ( this == & iterator ) {
                 return * this;
             }
@@ -58,39 +68,51 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             return * this;
         }
 
-        template < typename T >
-        __CDS_cpplang_ConstexprOverride auto List < T > :: Iterator :: operator -> () const noexcept -> ElementType * {
+
+        template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
+        __CDS_cpplang_ConstexprOverride auto List < __ElementType > :: Iterator :: operator -> () const noexcept -> __ElementType * {
+
             return & ( * ( * this ) );
         }
 
-        template < typename T >
-        __CDS_cpplang_ConstexprPureAbstract auto List < T > :: Iterator :: operator ++ () noexcept -> Iterator & {
+
+        template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
+        __CDS_cpplang_ConstexprPureAbstract auto List < __ElementType > :: Iterator :: operator ++ () noexcept -> Iterator & {
+
             (void) this->next();
             return * this;
         }
 
-        template < typename T >
-        __CDS_cpplang_ConstexprPureAbstract auto List < T > :: Iterator :: operator ++ (int) noexcept -> Iterator {
+
+        template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
+        __CDS_cpplang_ConstexprPureAbstract auto List < __ElementType > :: Iterator :: operator ++ (int) noexcept -> Iterator {
+
             auto copy = * this;
             (void) this->next();
             return copy;
         }
 
-        template < typename T >
-        __CDS_cpplang_ConstexprPureAbstract auto List < T > :: Iterator :: operator -- () noexcept -> Iterator & {
+
+        template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
+        __CDS_cpplang_ConstexprPureAbstract auto List < __ElementType > :: Iterator :: operator -- () noexcept -> Iterator & {
+
             (void) this->previous();
             return * this;
         }
 
-        template < typename T >
-        __CDS_cpplang_ConstexprPureAbstract auto List < T > :: Iterator :: operator -- (int) noexcept -> Iterator {
+
+        template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
+        __CDS_cpplang_ConstexprPureAbstract auto List < __ElementType > :: Iterator :: operator -- (int) noexcept -> Iterator {
+
             auto copy = * this;
             (void) this->previous();
             return copy;
         }
 
-        template < typename T >
-        __CDS_cpplang_ConstexprPureAbstract auto List < T > :: Iterator :: operator * () const noexcept -> ElementType & {
+
+        template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
+        __CDS_cpplang_ConstexprPureAbstract auto List < __ElementType > :: Iterator :: operator * () const noexcept -> __ElementType & {
+
             return reinterpret_cast < DelegateIterator const * > ( this->_pDelegate.get() )->value();
         }
 

@@ -10,11 +10,11 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
         /**
          * @interface A more specific Abstract Delegate Iterator, used in implementing Delegate Iterators over immutable elements
-         * @tparam T type of elements contained into the Collection class that nests the DelegateConstIterator
+         * @tparam __ElementType type of elements contained into the Collection class that nests the DelegateConstIterator
          * @test tested in nester class test
          */
-        template < typename T >
-        class Collection < T > :: DelegateConstIterator : public Collection < T > :: AbstractDelegateIterator {
+        template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
+        class Collection < __ElementType > :: DelegateConstIterator : public Collection < __ElementType > :: AbstractDelegateIterator {
         protected:
             /**
              * @brief Implicit Constructor
@@ -56,7 +56,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
              * @return ElementType cref = Constant Reference to a Collection Element
              * @test tested in nester class test
              */
-            __CDS_cpplang_ConstexprPureAbstract virtual auto value () const noexcept -> ElementType const & = 0;
+            __CDS_cpplang_ConstexprPureAbstract virtual auto value () const noexcept -> __ElementType const & = 0;
 
         public:
             /**
