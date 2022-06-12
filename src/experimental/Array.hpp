@@ -9,42 +9,52 @@
 
 namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
-    template < typename C >
+    template < typename __CollectionType > // NOLINT(bugprone-reserved-identifier)
     class Sequence;
 
     namespace experimental {
 
-        template < typename T >
-        class Array : public List < T > {
+        template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
+        class Array : public List < __ElementType > {
+            
         public:
-            using typename List < T > :: ElementType;
+            using typename List < __ElementType > :: ElementType;
 
         public:
-            using typename List < T > :: Iterator;
+            using typename List < __ElementType > :: Iterator;
+            
         public:
-            using typename List < T > :: ConstIterator;
+            using typename List < __ElementType > :: ConstIterator;
+            
         public:
-            using typename List < T > :: ReverseIterator;
+            using typename List < __ElementType > :: ReverseIterator;
+            
         public:
-            using typename List < T > :: ConstReverseIterator;
+            using typename List < __ElementType > :: ConstReverseIterator;
 
         protected:
-            using typename List < T > :: InitializerList;
+            using typename List < __ElementType > :: InitializerList;
+            
         protected:
-            using typename List < T > :: DelegateIterator;
+            using typename List < __ElementType > :: DelegateIterator;
+            
         protected:
-            using typename List < T > :: DelegateConstIterator;
+            using typename List < __ElementType > :: DelegateConstIterator;
+            
         protected:
-            using typename List < T > :: AbstractIterator;
+            using typename List < __ElementType > :: AbstractIterator;
+            
         protected:
-            using typename List < T > :: AbstractDelegateIterator;
+            using typename List < __ElementType > :: AbstractDelegateIterator;
 
         private:
             class ArrayDelegateIterator;
+            
         private:
             class ArrayDelegateConstIterator;
+            
         private:
-            using typename Collection < T > :: DelegateIteratorRequestType;
+            using typename Collection < __ElementType > :: DelegateIteratorRequestType;
 
         private:
             auto delegateIterator (
@@ -84,10 +94,10 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             ) noexcept;
 
         public:
-            template < typename IteratorType, meta :: EnableIf < meta :: isIterator < IteratorType > () > = 0 >
+            template < typename __IteratorType, meta :: EnableIf < meta :: isIterator < __IteratorType > () > = 0 > // NOLINT(bugprone-reserved-identifier)
             Array (
-                    IteratorType const & begin,
-                    IteratorType const & end
+                    __IteratorType const & begin,
+                    __IteratorType const & end
             ) noexcept;
 
         public:
@@ -96,22 +106,22 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             ) noexcept;
 
         public:
-            template < typename V = T, meta :: EnableIf < meta :: isDefaultConstructible < V > () > >
+            template < typename __VElementType = __ElementType, meta :: EnableIf < meta :: isDefaultConstructible < __VElementType > () > > // NOLINT(bugprone-reserved-identifier)
             __CDS_Explicit Array (
                     Size size
             ) noexcept;
 
         public:
-            template < typename V = T, meta :: EnableIf < meta :: isCopyConstructible < V > () > >
+            template < typename __VElementType = __ElementType, meta :: EnableIf < meta :: isCopyConstructible < __VElementType > () > > // NOLINT(bugprone-reserved-identifier)
             Array (
                     Size                size,
                     ElementType const & defaultValue
             ) noexcept;
 
         public:
-            template < typename R, meta :: EnableIf < meta :: isConvertible < R, T > () > = 0 >
+            template < typename __OtherElementType, meta :: EnableIf < meta :: isConvertible < __OtherElementType, __ElementType > () > = 0 > // NOLINT(bugprone-reserved-identifier)
             __CDS_Explicit Array (
-                    Collection < R > const & collection
+                    Collection < __OtherElementType > const & collection
             ) noexcept;
 
         public:
@@ -119,12 +129,13 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
 
         public:
-            template < typename V = T, meta :: EnableIf < meta :: isDefaultConstructible < V > () > >
+            template < typename __VElementType = __ElementType, meta :: EnableIf < meta :: isDefaultConstructible < __VElementType > () > > // NOLINT(bugprone-reserved-identifier)
             auto resize (
                     Size
             ) noexcept -> void;
+
         public:
-            template < typename V = T, meta :: EnableIf < meta :: isCopyConstructible < V > () > >
+            template < typename __VElementType = __ElementType, meta :: EnableIf < meta :: isCopyConstructible < __VElementType > () > > // NOLINT(bugprone-reserved-identifier)
             auto resize (
                     Size,
                     ElementType const &
@@ -274,16 +285,18 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
         public:
             auto clear () noexcept -> void override;
+
         public:
             auto makeUnique () noexcept -> void override;
 
         public:
             auto popFront () noexcept -> void override;
+
         public:
             auto popBack () noexcept -> void override;
 
         public:
-            template < typename V = T, meta :: EnableIf < meta :: isCopyConstructible < V > () > = 0 >
+            template < typename __VElementType = __ElementType, meta :: EnableIf < meta :: isCopyConstructible < __VElementType > () > = 0 > // NOLINT(bugprone-reserved-identifier)
             auto operator = (
                     Array const & array
             ) noexcept -> Array &;
@@ -294,27 +307,31 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             ) noexcept -> Array &;
 
         public:
-            template < typename R, meta :: EnableIf < meta :: isConvertible < R, T > () > = 0 >
+            template < typename __OtherElementType, meta :: EnableIf < meta :: isConvertible < __OtherElementType, __ElementType > () > = 0 > // NOLINT(bugprone-reserved-identifier)
             auto operator = (
-                    Collection < R > const & collection
+                    Collection < __OtherElementType > const & collection
             ) noexcept -> Array &;
 
         public:
-            auto sequence () & noexcept -> Sequence < Array < T > >;
+            auto sequence () & noexcept -> Sequence < Array < __ElementType > >;
+
         public:
-            auto sequence () && noexcept -> Sequence < Array < T > >;
+            auto sequence () && noexcept -> Sequence < Array < __ElementType > >;
+
         public:
-            auto sequence () const & noexcept -> Sequence < Array < T > const >;
+            auto sequence () const & noexcept -> Sequence < Array < __ElementType > const >;
+
         public:
-            auto sequence () const && noexcept -> Sequence < Array < T > const >;
+            auto sequence () const && noexcept -> Sequence < Array < __ElementType > const >;
+
         };
 
-        template < typename ... ArgumentTypes >
+        template < typename ... __ArgumentTypes > // NOLINT(bugprone-reserved-identifier)
         inline auto arrayOf (
-                ArgumentTypes && ... values
-        ) noexcept -> Array < meta :: Common < ArgumentTypes ... > > {
+                __ArgumentTypes && ... values
+        ) noexcept -> Array < meta :: Common < __ArgumentTypes ... > > {
 
-            return collectionOf < Array > ( std :: forward < ArgumentTypes > ( values ) ... );
+            return collectionOf < Array > ( std :: forward < __ArgumentTypes > ( values ) ... );
         }
 
     }

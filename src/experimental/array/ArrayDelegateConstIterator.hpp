@@ -8,22 +8,35 @@
 namespace cds { // NOLINT(modernize-concat-nested-namespaces)
     namespace experimental {
 
-        template < typename T >
-        class Array < T > :: ArrayDelegateConstIterator : public Array < T > :: DelegateConstIterator {
+        template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
+        class Array < __ElementType > :: ArrayDelegateConstIterator : public Array < __ElementType > :: DelegateConstIterator {
 
         private:
-            Array < T > const *                     _pArray     { nullptr };
+            Array < __ElementType >         const * _pArray     { nullptr };
+
         private:
             Index                                   _index      { 0 };
+
         private:
             bool                                    _forward    { false };
 
         public:
-            constexpr ArrayDelegateConstIterator ( Array const *, Index, bool ) noexcept;
+            constexpr ArrayDelegateConstIterator (
+                    Array < __ElementType > const * pArray,
+                    Index                           index,
+                    bool                            forward
+            ) noexcept;
+
         public:
-            constexpr ArrayDelegateConstIterator ( ArrayDelegateConstIterator const & ) noexcept;
+            constexpr ArrayDelegateConstIterator (
+                    ArrayDelegateConstIterator const & iterator
+            ) noexcept;
+
         public:
-            constexpr ArrayDelegateConstIterator ( ArrayDelegateConstIterator && ) noexcept;
+            constexpr ArrayDelegateConstIterator (
+                    ArrayDelegateConstIterator && iterator
+            ) noexcept;
+
         public:
             __CDS_cpplang_ConstexprDestructor ~ArrayDelegateConstIterator() noexcept = default;
 
@@ -32,17 +45,24 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
         public:
             __CDS_NoDiscard __CDS_cpplang_ConstexprOverride auto valid () const noexcept -> bool override;
+
         public:
             __CDS_cpplang_ConstexprOverride auto next () noexcept -> ArrayDelegateConstIterator & override;
+
         public:
             __CDS_cpplang_ConstexprOverride auto previous () noexcept -> ArrayDelegateConstIterator & override;
+
         public:
-            __CDS_NoDiscard __CDS_cpplang_ConstexprOverride auto value () const noexcept -> ElementType const & override;
+            __CDS_NoDiscard __CDS_cpplang_ConstexprOverride auto value () const noexcept -> __ElementType const & override;
+
         public:
-            __CDS_NoDiscard __CDS_cpplang_ConstexprOverride auto equals ( AbstractDelegateIterator const & ) const noexcept -> bool override;
+            __CDS_NoDiscard __CDS_cpplang_ConstexprOverride auto equals (
+                    AbstractDelegateIterator const & iterator
+            ) const noexcept -> bool override;
 
         public:
             __CDS_NoDiscard __CDS_OptimalInline auto copy () const noexcept -> ArrayDelegateConstIterator * override;
+
         };
 
     }

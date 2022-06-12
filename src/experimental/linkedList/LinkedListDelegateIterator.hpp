@@ -8,35 +8,53 @@
 namespace cds { // NOLINT(modernize-concat-nested-namespaces)
     namespace experimental {
 
-        template < typename T >
-        class LinkedList < T > :: LinkedListDelegateIterator : public LinkedList < T > :: DelegateIterator {
+        template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
+        class LinkedList < __ElementType > :: LinkedListDelegateIterator : public LinkedList < __ElementType > :: DelegateIterator {
+
         private:
-            LinkedList < T > :: Node                  * _pNode;
+            LinkedList < __ElementType > :: Node      * _pNode;
+
         private:
             bool                                        _forward;
 
         public:
-            constexpr LinkedListDelegateIterator ( LinkedList < T > :: Node *, bool ) noexcept;
+            constexpr LinkedListDelegateIterator (
+                    LinkedList < __ElementType > :: Node  * pNode,
+                    bool                                    forward
+            ) noexcept;
+
         public:
-            constexpr LinkedListDelegateIterator ( LinkedListDelegateIterator const & ) noexcept;
+            constexpr LinkedListDelegateIterator (
+                    LinkedListDelegateIterator const & iterator
+            ) noexcept;
+
         public:
-            constexpr LinkedListDelegateIterator ( LinkedListDelegateIterator && ) noexcept;
+            constexpr LinkedListDelegateIterator (
+                    LinkedListDelegateIterator && iterator
+            ) noexcept;
+
         public:
             __CDS_cpplang_ConstexprDestructor ~LinkedListDelegateIterator () noexcept = default;
 
         public:
-            __CDS_NoDiscard constexpr auto node () const noexcept -> LinkedList < T > :: Node *;
+            __CDS_NoDiscard constexpr auto node () const noexcept -> LinkedList < __ElementType > :: Node *;
 
         public:
             __CDS_NoDiscard __CDS_cpplang_ConstexprOverride auto valid () const noexcept -> bool override;
+
         public:
             __CDS_cpplang_ConstexprOverride auto next () noexcept -> LinkedListDelegateIterator & override;
+
         public:
             __CDS_cpplang_ConstexprOverride auto previous () noexcept -> LinkedListDelegateIterator & override;
+
         public:
-            __CDS_NoDiscard __CDS_cpplang_ConstexprOverride auto value () const noexcept -> ElementType & override;
+            __CDS_NoDiscard __CDS_cpplang_ConstexprOverride auto value () const noexcept -> __ElementType & override;
+
         public:
-            __CDS_NoDiscard __CDS_cpplang_ConstexprOverride auto equals ( AbstractDelegateIterator const & ) const noexcept -> bool override;
+            __CDS_NoDiscard __CDS_cpplang_ConstexprOverride auto equals (
+                    AbstractDelegateIterator const & iterator
+            ) const noexcept -> bool override;
 
         public:
             __CDS_NoDiscard __CDS_OptimalInline auto copy () const noexcept -> LinkedListDelegateIterator * override;

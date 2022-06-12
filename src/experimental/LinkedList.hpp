@@ -7,55 +7,65 @@
 
 #include <CDS/experimental/List>
 
+#include "shared/Node.hpp"
+
 namespace cds { // NOLINT(modernize-concat-nested-namespaces)
     namespace experimental {
 
-        template < typename T >
-        class List;
-
-        template < typename T >
-        class LinkedList : public List < T > {
-        public:
-            using typename List < T > :: ElementType;
+        template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
+        class LinkedList : public List < __ElementType > {
 
         public:
-            using typename List < T > :: Iterator;
+            using typename List < __ElementType > :: ElementType;
+
         public:
-            using typename List < T > :: ConstIterator;
+            using typename List < __ElementType > :: Iterator;
+
         public:
-            using typename List < T > :: ReverseIterator;
+            using typename List < __ElementType > :: ConstIterator;
+
         public:
-            using typename List < T > :: ConstReverseIterator;
+            using typename List < __ElementType > :: ReverseIterator;
+
+        public:
+            using typename List < __ElementType > :: ConstReverseIterator;
 
         protected:
-            using typename List < T > :: InitializerList;
+            using typename List < __ElementType > :: InitializerList;
+
         protected:
-            using typename List < T > :: DelegateIterator;
+            using typename List < __ElementType > :: DelegateIterator;
+
         protected:
-            using typename List < T > :: DelegateConstIterator;
+            using typename List < __ElementType > :: DelegateConstIterator;
+
         protected:
-            using typename List < T > :: AbstractIterator;
+            using typename List < __ElementType > :: AbstractIterator;
+
         protected:
-            using typename List < T > :: AbstractDelegateIterator;
+            using typename List < __ElementType > :: AbstractDelegateIterator;
 
         private:
             class LinkedListDelegateIterator;
-        private:
-            class LinkedListDelegateConstIterator;
-        private:
-            using typename Collection < T > :: DelegateIteratorRequestType;
 
         private:
-            auto delegateIterator (
+            class LinkedListDelegateConstIterator;
+
+        private:
+            using typename Collection < __ElementType > :: DelegateIteratorRequestType;
+
+        private:
+            __CDS_NoDiscard auto delegateIterator (
                     DelegateIteratorRequestType
             ) noexcept -> cds :: UniquePointer < DelegateIterator > override;
+
         private:
-            auto delegateConstIterator (
+            __CDS_NoDiscard auto delegateConstIterator (
                     DelegateIteratorRequestType
             ) const noexcept -> cds :: UniquePointer < DelegateConstIterator > override;
 
         private:
-            struct Node;
+            using Node = __hidden :: __impl :: __BiDirNode < __ElementType >;
 
         private:
             Node * _pFront  { nullptr };
@@ -67,7 +77,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
         public:
             LinkedList (
-                    LinkedList const &
+                    LinkedList const & list
             ) noexcept;
 
         public:
@@ -76,21 +86,21 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             ) noexcept;
 
         public:
-            template < typename IteratorType, meta :: EnableIf < meta :: isIterator < IteratorType > () > = 0 >
+            template < typename __IteratorType, meta :: EnableIf < meta :: isIterator < __IteratorType > () > = 0 > // NOLINT(bugprone-reserved-identifier)
             LinkedList (
-                    IteratorType const & begin,
-                    IteratorType const & end
+                    __IteratorType const & begin,
+                    __IteratorType const & end
             ) noexcept;
 
         public:
-            __CDS_Implicit LinkedList (
+            __CDS_Implicit LinkedList ( // NOLINT(google-explicit-constructor)
                     InitializerList const &
             ) noexcept;
 
         public:
-            template < typename R, meta :: EnableIf < meta :: isConvertible < R, T > () > = 0 >
+            template < typename __OtherElementType, meta :: EnableIf < meta :: isConvertible < __OtherElementType, __ElementType > () > = 0 > // NOLINT(bugprone-reserved-identifier)
             __CDS_Explicit LinkedList (
-                    Collection < R > const & collection
+                    Collection < __OtherElementType > const & collection
             ) noexcept;
 
         public:
@@ -98,80 +108,80 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
         private:
             auto remove (
-                    Node const *
+                    Node const * pNode
             ) noexcept -> bool;
 
         private:
             auto remove (
-                    Collection < Node const * > const &
+                    Collection < Node const * > const & nodes
             ) noexcept -> Size;
 
         public:
             auto removeAt (
-                    Index
+                    Index index
             ) noexcept -> bool override;
 
         public:
             auto removeAt (
-                    Collection < Index > const &
+                    Collection < Index > const & indices
             ) noexcept -> Size override;
 
         public:
             auto removeAt (
-                    std :: initializer_list < Index > const &
+                    std :: initializer_list < Index > const & indices
             ) noexcept -> Size override;
 
         public:
             auto remove (
-                    Iterator const &
+                    Iterator const & iterator
             ) noexcept -> bool override;
 
         public:
             auto remove (
-                    ConstIterator const &
+                    ConstIterator const & iterator
             ) noexcept -> bool override;
 
         public:
             auto remove (
-                    ReverseIterator const &
+                    ReverseIterator const & iterator
             ) noexcept -> bool override;
 
         public:
             auto remove (
-                    ConstReverseIterator const &
+                    ConstReverseIterator const & iterator
             ) noexcept -> bool override;
 
 
         protected:
             auto remove (
-                    Iterator const *,
-                    Size
+                    Iterator    const * pIterator,
+                    Size                iteratorCount
             ) noexcept -> Size override;
         protected:
             auto remove (
-                    ConstIterator const *,
-                    Size
+                    ConstIterator   const * pIterator,
+                    Size                    iteratorCount
             ) noexcept -> Size override;
         protected:
             auto remove (
-                    ReverseIterator const *,
-                    Size
+                    ReverseIterator const * pIterator,
+                    Size                    iteratorCount
             ) noexcept -> Size override;
         protected:
             auto remove (
-                    ConstReverseIterator const *,
-                    Size
+                    ConstReverseIterator    const * pIterator,
+                    Size                            iteratorCount
             ) noexcept -> Size override;
 
 
         private:
             auto pNewBefore (
-                    Node const *
+                    Node const * pNode
             ) noexcept -> ElementType * &;
 
         private:
             auto pNewAfter (
-                    Node const *
+                    Node const * pNode
             ) noexcept -> ElementType * &;
 
         protected:
@@ -182,60 +192,63 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
         protected:
             auto pNewBefore (
-                    Iterator const &
+                    Iterator const & iterator
             ) noexcept -> ElementType * & override;
 
         protected:
             auto pNewAfter (
-                    Iterator const &
+                    Iterator const & iterator
             ) noexcept -> ElementType * & override;
 
         protected:
             auto pNewBefore (
-                    ConstIterator const &
+                    ConstIterator const & iterator
             ) noexcept -> ElementType * & override;
 
         protected:
             auto pNewAfter (
-                    ConstIterator const &
+                    ConstIterator const & iterator
             ) noexcept -> ElementType * & override;
 
         protected:
             auto pNewBefore (
-                    ReverseIterator const &
+                    ReverseIterator const & iterator
             ) noexcept -> ElementType * & override;
 
         protected:
             auto pNewAfter (
-                    ReverseIterator const &
+                    ReverseIterator const & iterator
             ) noexcept -> ElementType * & override;
 
         protected:
             auto pNewBefore (
-                    ConstReverseIterator const &
+                    ConstReverseIterator const & iterator
             ) noexcept -> ElementType * & override;
 
         protected:
             auto pNewAfter (
-                    ConstReverseIterator const &
+                    ConstReverseIterator const & iterator
             ) noexcept -> ElementType * & override;
 
         public:
             __CDS_NoDiscard __CDS_cpplang_ConstexprOverride auto front () noexcept (false) -> ElementType & override;
+
         public:
             __CDS_NoDiscard __CDS_cpplang_ConstexprOverride auto front () const noexcept (false) -> ElementType const & override;
+
         public:
             __CDS_NoDiscard __CDS_cpplang_ConstexprOverride auto back () noexcept (false) -> ElementType & override;
+
         public:
             __CDS_NoDiscard __CDS_cpplang_ConstexprOverride auto back () const noexcept (false) -> ElementType const & override;
 
         public:
             __CDS_NoDiscard __CDS_cpplang_ConstexprOverride auto get (
-                    Index
+                    Index index
             ) noexcept (false) -> ElementType & override;
         public:
             __CDS_NoDiscard __CDS_cpplang_ConstexprOverride auto get (
-                    Index
+                    Index index
             ) const noexcept (false) -> ElementType const & override;
 
         public:
@@ -254,7 +267,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             auto popBack () noexcept -> void override;
 
         public:
-            template < typename V = T, meta :: EnableIf < meta :: isCopyConstructible < V > () > = 0 >
+            template < typename __VElementType = __ElementType, meta :: EnableIf < meta :: isCopyConstructible < __VElementType > () > = 0 > // NOLINT(bugprone-reserved-identifier)
             auto operator = (
                     LinkedList const &
             ) noexcept -> LinkedList &;
@@ -265,30 +278,30 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             ) noexcept -> LinkedList &;
 
         public:
-            template < typename R, meta :: EnableIf < meta :: isConvertible < R, T > () > = 0 >
+            template < typename __OtherElementType, meta :: EnableIf < meta :: isConvertible < __OtherElementType, __ElementType > () > = 0 > // NOLINT(bugprone-reserved-identifier)
             auto operator = (
-                    Collection < R > const & collection
+                    Collection < __OtherElementType > const & collection
             ) noexcept -> LinkedList &;
 
         public:
-            auto sequence () & noexcept -> Sequence < LinkedList < T > >;
+            auto sequence () & noexcept -> Sequence < LinkedList < __ElementType > >;
 
         public:
-            auto sequence () && noexcept -> Sequence < LinkedList < T > >;
+            auto sequence () && noexcept -> Sequence < LinkedList < __ElementType > >;
 
         public:
-            auto sequence () const & noexcept -> Sequence < LinkedList < T > const >;
+            __CDS_NoDiscard auto sequence () const & noexcept -> Sequence < LinkedList < __ElementType > const >;
 
         public:
-            auto sequence () const && noexcept -> Sequence < LinkedList < T > const >;
+            __CDS_NoDiscard auto sequence () const && noexcept -> Sequence < LinkedList < __ElementType > const >;
 
         };
 
-        template < typename T >
-        using SingleLinkedList __CDS_Deprecated = LinkedList < T >;
+        template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
+        using SingleLinkedList __CDS_Deprecated = LinkedList < __ElementType >;
 
-        template < typename T >
-        using DoubleLinkedList __CDS_Deprecated = LinkedList < T >;
+        template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
+        using DoubleLinkedList __CDS_Deprecated = LinkedList < __ElementType >;
 
         template < typename ... ArgumentTypes >
         inline auto listOf (
@@ -301,12 +314,13 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
     }
 }
 
-#include "linkedList/Node.hpp"
 #include "linkedList/LinkedListDelegateIterator.hpp"
 #include "linkedList/LinkedListDelegateConstIterator.hpp"
 
 #include "linkedList/impl/LinkedListDelegateIterator.hpp"
 #include "linkedList/impl/LinkedListDelegateConstIterator.hpp"
 #include "linkedList/impl/LinkedList.hpp"
+
+#include "shared/linkedList/impl/LinkedListSequence.hpp"
 
 #endif // __CDS_EX_LINKED_LIST_HPP__

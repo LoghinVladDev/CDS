@@ -10,10 +10,10 @@
 namespace cds { // NOLINT(modernize-concat-nested-namespaces)
     namespace experimental {
 
-        template < typename T >
+        template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
         Array (
-                std :: initializer_list < T >
-        ) -> Array < T >;
+                std :: initializer_list < __ElementType >
+        ) -> Array < __ElementType >;
 
     }
 }
