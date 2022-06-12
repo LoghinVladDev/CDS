@@ -12,26 +12,26 @@
 namespace cds { // NOLINT(modernize-concat-nested-namespaces)
     namespace experimental {
 
-        template < typename T, cds :: meta :: EnableIf < meta :: isValidSetElement < T > () > = 0 >
-        class Set : public Collection < T > {
+        template < typename __ElementType, cds :: meta :: EnableIf < meta :: isValidSetElement < __ElementType > () > = 0 > // NOLINT(bugprone-reserved-identifier)
+        class Set : public Collection < __ElementType > {
 
         public:
-            using typename Collection < T > :: ElementType;
+            using typename Collection < __ElementType > :: ElementType;
 
         protected:
-            using typename Collection < T > :: InitializerList;
+            using typename Collection < __ElementType > :: InitializerList;
 
         protected:
-            using typename Collection < T > :: DelegateConstIterator;
+            using typename Collection < __ElementType > :: DelegateConstIterator;
 
         protected:
-            using typename Collection < T > :: DelegateIteratorRequestType;
+            using typename Collection < __ElementType > :: DelegateIteratorRequestType;
 
         public:
-            using typename Collection < T > :: ConstIterator;
+            using typename Collection < __ElementType > :: ConstIterator;
 
         public:
-            using typename Collection < T > :: ConstReverseIterator;
+            using typename Collection < __ElementType > :: ConstReverseIterator;
 
         protected:
             auto delegateConstIterator (
@@ -81,13 +81,13 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             auto pNewInsert () noexcept -> ElementType * & override = 0;
 
         public:
-            template < typename V = T, cds :: meta :: EnableIf < cds :: meta :: isCopyConstructible < V > () > = 0 >
+            template < typename __VElementType = __ElementType, cds :: meta :: EnableIf < cds :: meta :: isCopyConstructible < __VElementType > () > = 0 > // NOLINT(bugprone-reserved-identifier)
             auto insert (
                     ElementType const & element
             ) noexcept -> void;
 
         public:
-            template < typename V = T, cds :: meta :: EnableIf < cds :: meta :: isMoveConstructible < V > () > = 0 >
+            template < typename __VElementType = __ElementType, cds :: meta :: EnableIf < cds :: meta :: isMoveConstructible < __VElementType > () > = 0 > // NOLINT(bugprone-reserved-identifier)
             auto insert (
                     ElementType && element
             ) noexcept -> void;

@@ -9,9 +9,10 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
     namespace experimental { // NOLINT(modernize-concat-nested-namespaces)
         namespace meta {
 
-            template < typename T >
+            template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
             constexpr auto isValidSetElement () noexcept -> bool {
-                return cds :: meta :: equalToPossible < T, T > () || cds :: meta :: isDerivedFrom < T, Object > ();
+
+                return cds :: meta :: equalToPossible < __ElementType, __ElementType > () || cds :: meta :: isDerivedFrom < __ElementType, Object > ();
             }
 
         }

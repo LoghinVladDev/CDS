@@ -8,8 +8,9 @@
 namespace cds { // NOLINT(modernize-concat-nested-namespaces)
     namespace experimental {
 
-        template < typename T, cds :: meta :: EnableIf < meta :: isValidSetElement < T > () > enabler >
-        auto Set < T, enabler > :: toString () const noexcept -> String {
+
+        template < typename __ElementType, cds :: meta :: EnableIf < meta :: isValidSetElement < __ElementType > () > __enabler > // NOLINT(bugprone-reserved-identifier)
+        auto Set < __ElementType, __enabler > :: toString () const noexcept -> String {
 
             if ( this->empty() ) {
                 return "{}";
@@ -26,23 +27,26 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             return asString.substr ( 0, asString.length() - 2 ) + " }";
         }
 
-        template < typename T, cds :: meta :: EnableIf < meta :: isValidSetElement < T > () > enabler >
-        template < typename V, cds :: meta :: EnableIf < cds :: meta :: isCopyConstructible < V > () > >
-        auto Set < T, enabler > :: insert (
+
+        template < typename __ElementType, cds :: meta :: EnableIf < meta :: isValidSetElement < __ElementType > () > __enabler > // NOLINT(bugprone-reserved-identifier)
+        template < typename __VElementType, cds :: meta :: EnableIf < cds :: meta :: isCopyConstructible < __VElementType > () > > // NOLINT(bugprone-reserved-identifier)
+        auto Set < __ElementType, __enabler > :: insert (
                 ElementType const & element
         ) noexcept -> void {
 
             this->add ( element );
         }
 
-        template < typename T, cds :: meta :: EnableIf < meta :: isValidSetElement < T > () > enabler >
-        template < typename V, cds :: meta :: EnableIf < cds :: meta :: isMoveConstructible < V > () > >
-        auto Set < T, enabler > :: insert (
+
+        template < typename __ElementType, cds :: meta :: EnableIf < meta :: isValidSetElement < __ElementType > () > __enabler > // NOLINT(bugprone-reserved-identifier)
+        template < typename __VElementType, cds :: meta :: EnableIf < cds :: meta :: isMoveConstructible < __VElementType > () > > // NOLINT(bugprone-reserved-identifier)
+        auto Set < __ElementType, __enabler > :: insert (
                 ElementType && element
         ) noexcept -> void {
 
             this->add ( std :: move ( element ) );
         }
+
 
     }
 }

@@ -60,10 +60,6 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                     )
             > {};
 
-
-            template < typename, typename, typename = void >
-            struct __IsNonAmbiguousConvertibleToBaseStringView : FalseType {}; // NOLINT(bugprone-reserved-identifier)
-
             template < typename >
             struct __StringData {}; // NOLINT(bugprone-reserved-identifier)
 
@@ -92,21 +88,25 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
         template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
         constexpr auto isStringCharType () noexcept -> bool { // NOLINT(bugprone-reserved-identifier)
+
             return __impl :: __IsStringCharType < __CharType > :: value;
         }
 
         template < typename __CharType, typename __NumericType > // NOLINT(bugprone-reserved-identifier)
         constexpr auto isIntegralToString () noexcept -> bool { // NOLINT(bugprone-reserved-identifier)
+
             return __impl :: __IsIntegralToString < __CharType, __NumericType > :: value;
         }
 
         template < typename __ConvertibleType, typename __CharType > // NOLINT(bugprone-reserved-identifier)
         constexpr auto isConvertibleToBaseStringView () noexcept -> bool { // NOLINT(bugprone-reserved-identifier)
+
             return __impl :: __IsConvertibleToBaseStringView < __ConvertibleType, __CharType > :: value;
         }
 
         template < typename __ConvertibleType, typename __CharType > // NOLINT(bugprone-reserved-identifier)
         constexpr auto isNonAmbiguousConvertibleToBaseStringView () noexcept -> bool { // NOLINT(bugprone-reserved-identifier)
+
             return
                     isConvertibleToBaseStringView < __ConvertibleType, __CharType > () &&
                     ! isSame < Decay < __ConvertibleType >, __hidden :: __impl :: __BaseString < __CharType > > ();

@@ -9,14 +9,14 @@
 
 namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
-    namespace __hidden {
+    namespace __hidden { // NOLINT(modernize-concat-nested-namespaces)
         namespace __impl {
 
-            template < typename __CharType >
-            class __BaseString;
+            template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
+            class __BaseString; // NOLINT(bugprone-reserved-identifier)
 
-            template < typename __CharType >
-            class __BaseStringView;
+            template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
+            class __BaseStringView; // NOLINT(bugprone-reserved-identifier)
 
         }
     }
