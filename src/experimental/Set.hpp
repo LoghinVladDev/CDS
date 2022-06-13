@@ -42,13 +42,25 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             constexpr Set () noexcept = default;
 
         public:
+            constexpr Set (
+                    Set const & set
+            ) noexcept;
+
+        public:
+            constexpr Set (
+                    Set && set
+            ) noexcept;
+
+        public:
+            constexpr Set (
+                    Size size
+            ) noexcept;
+
+        public:
             __CDS_NoDiscard auto toString () const noexcept -> String override;
 
         public:
             auto clear () noexcept -> void override = 0;
-
-        public:
-            __CDS_NoDiscard auto size () const noexcept -> Size override = 0;
 
         public:
             auto remove (
@@ -60,24 +72,19 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                     ConstReverseIterator const & iterator
             ) noexcept -> bool override = 0;
 
-            public:
+        protected:
             auto remove (
                     ConstIterator   const * pIterators,
                     Size                    iteratorCount
             ) noexcept -> Size override = 0;
 
-        public:
+        protected:
             auto remove (
                     ConstReverseIterator    const * pIterators,
                     Size                            iteratorCount
             ) noexcept -> Size override = 0;
 
-        public:
-            virtual auto remove (
-                    ElementType const & element
-            ) noexcept -> void = 0;
-
-        public:
+        protected:
             auto pNewInsert () noexcept -> ElementType * & override = 0;
 
         public:

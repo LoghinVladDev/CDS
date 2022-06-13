@@ -80,7 +80,9 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
 
         template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
-        __CDS_cpplang_ConstexprOverride auto LinkedList < __ElementType > :: LinkedListDelegateConstIterator :: equals ( AbstractDelegateIterator const & iterator ) const noexcept -> bool {
+        __CDS_cpplang_ConstexprOverride auto LinkedList < __ElementType > :: LinkedListDelegateConstIterator :: equals (
+                AbstractDelegateIterator const & iterator
+        ) const noexcept -> bool {
 
             if ( this == & iterator ) {
                 return true;

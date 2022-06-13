@@ -454,7 +454,7 @@ auto CollectionTest :: execute() noexcept -> bool {
             removeAt = 3;
             valueExpectedAt = 6;
             at = 0;
-            experimental :: meta :: RemoveReference < decltype (collection) > :: ConstIterator iter;
+            meta :: RemoveReference < decltype (collection) > :: ConstIterator iter;
 
             for ( auto it = collection.begin(); it != collection.end(); ++ it ) {
                 if ( at != removeAt ) {
@@ -569,7 +569,7 @@ auto CollectionTest :: execute() noexcept -> bool {
             removeAt = 1;
             valueExpectedAt = 8;
             at = 0;
-            experimental :: meta :: RemoveReference < decltype (collection) > :: ConstReverseIterator iter2;
+            meta :: RemoveReference < decltype (collection) > :: ConstReverseIterator iter2;
 
             for ( auto it = collection.rbegin(); it != collection.rend(); ++ it ) {
                 if ( at != removeAt ) {
@@ -1211,7 +1211,7 @@ auto CollectionTest :: execute() noexcept -> bool {
 
             collection.addAll ( 1, 2, 3, 4, 5, 6, 5, 4, 3, 2, 1 );
 
-            Array < experimental :: meta :: RemoveReference < decltype ( collection ) > :: ConstIterator > iterators;
+            Array < meta :: RemoveReference < decltype ( collection ) > :: ConstIterator > iterators;
             collection.find ( 2, 5, iterators );
 
             if ( iterators.size () != 2 ) {

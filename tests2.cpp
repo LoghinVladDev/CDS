@@ -7,13 +7,14 @@
 #include <CDS/Tuple>
 #include <CDS/Pointer>
 #include <CDS/experimental/Array>
-#include <CDS/experimental/Set>
+#include <CDS/experimental/HashSet>
 #include <CDS/String>
 using namespace cds;
 using namespace cds :: literals;
 
 
 int main () {
+    auto set = cds :: experimental :: setOf ( 1, 2,3 , 4 );
 
     cds :: Tuple < int, String, float > t = { 3, "some String", 4.5f };
 

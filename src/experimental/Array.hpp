@@ -102,7 +102,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
         public:
             __CDS_Implicit Array ( // NOLINT(google-explicit-constructor)
-                    InitializerList const &
+                    InitializerList const & initializerList
             ) noexcept;
 
         public:
@@ -284,6 +284,16 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             ) const noexcept (false) -> ElementType const & override;
 
         public:
+            __CDS_NoDiscard auto operator == (
+                    Array const & array
+            ) const noexcept -> bool;
+
+        public:
+            __CDS_NoDiscard auto operator != (
+                    Array const & array
+            ) const noexcept -> bool;
+
+        public:
             auto clear () noexcept -> void override;
 
         public:
@@ -326,14 +336,6 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
         };
 
-        template < typename ... __ArgumentTypes > // NOLINT(bugprone-reserved-identifier)
-        inline auto arrayOf (
-                __ArgumentTypes && ... values
-        ) noexcept -> Array < meta :: Common < __ArgumentTypes ... > > {
-
-            return collectionOf < Array > ( std :: forward < __ArgumentTypes > ( values ) ... );
-        }
-
     }
 }
 
@@ -346,5 +348,8 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 #include "array/CTAD.hpp"
 
 #include "shared/array/impl/ArraySequence.hpp"
+
+#include "shared/collection/FunctionalConstructors.hpp"
+#include "shared/collection/impl/FunctionalConstructors.hpp"
 
 #endif // __CDS_EX_ARRAY_HPP__

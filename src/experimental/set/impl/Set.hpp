@@ -8,6 +8,32 @@
 namespace cds { // NOLINT(modernize-concat-nested-namespaces)
     namespace experimental {
 
+        template < typename __ElementType, cds :: meta :: EnableIf < meta :: isValidSetElement < __ElementType > () > __enabler > // NOLINT(bugprone-reserved-identifier)
+        constexpr Set < __ElementType, __enabler > :: Set (
+                Set const & set
+        ) noexcept :
+                Collection < __ElementType > ( set ) {
+
+        }
+
+
+        template < typename __ElementType, cds :: meta :: EnableIf < meta :: isValidSetElement < __ElementType > () > __enabler > // NOLINT(bugprone-reserved-identifier)
+        constexpr Set < __ElementType, __enabler > :: Set (
+                Set && set
+        ) noexcept :
+                Collection < __ElementType > ( std :: move ( set ) ) {
+
+        }
+
+
+        template < typename __ElementType, cds :: meta :: EnableIf < meta :: isValidSetElement < __ElementType > () > __enabler > // NOLINT(bugprone-reserved-identifier)
+        constexpr Set < __ElementType, __enabler > :: Set (
+                Size size
+        ) noexcept :
+                Collection < __ElementType > ( size ) {
+
+        }
+
 
         template < typename __ElementType, cds :: meta :: EnableIf < meta :: isValidSetElement < __ElementType > () > __enabler > // NOLINT(bugprone-reserved-identifier)
         auto Set < __ElementType, __enabler > :: toString () const noexcept -> String {

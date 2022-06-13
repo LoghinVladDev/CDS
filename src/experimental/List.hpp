@@ -83,10 +83,6 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
              */
             using typename Collection < __ElementType > :: ConstReverseIterator;
 
-        protected:
-            /// number of elements present in the list
-            Size _size { 0U };
-
         public:
             static Index const invalidIndex = -1;
 
@@ -302,17 +298,6 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             virtual auto get (
                     Index index
             ) const noexcept (false) -> ElementType const & = 0;
-
-        public:
-            /**
-             * @brief Explicit Comparison Function with generic CDS/Object
-             * @param object : Object cref = Constant Reference to an Object-derived instance
-             * @exceptsafe
-             * @return bool = true if objects are equal, false otherwise
-             */
-            __CDS_NoDiscard auto equals (
-                    Object const & object
-            ) const noexcept -> bool override;
 
         protected:
             /**
@@ -1058,9 +1043,6 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             ) noexcept ( noexcept ( comparatorFunction ( meta :: valueOf < ElementType > (), meta :: valueOf < ElementType > () ) ) ) -> void;
 
         public:
-            __CDS_NoDiscard constexpr auto size () const noexcept -> Size override;
-
-        public:
             template < typename __VElementType = __ElementType, meta :: EnableIf < meta :: isCopyAssignable < __VElementType > () > = 0 > // NOLINT(bugprone-reserved-identifier)
             auto replace (
                     Size                count,
@@ -1362,9 +1344,6 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
         public:
             virtual auto makeUnique () noexcept -> void = 0;
-
-        public:
-            __CDS_NoDiscard constexpr auto empty () const noexcept -> bool override;
 
         public:
             __CDS_NoDiscard auto toString () const noexcept -> String override;

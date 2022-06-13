@@ -49,28 +49,6 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                     __collectionAdd ( collection, std :: forward < __RemainingTypes > ( remainingElements ) ... );
                 }
 
-
-                template < typename __CollectionType, typename __LastArgumentType > // NOLINT(bugprone-reserved-identifier)
-                inline auto __collectionOfPush ( // NOLINT(bugprone-reserved-identifier)
-                        __CollectionType      & collection,
-                        __LastArgumentType   && lastValue
-                ) noexcept -> void {
-
-                    collection.add ( std :: forward < __LastArgumentType > ( lastValue ) );
-                }
-
-
-                template < typename __CollectionType, typename __FirstArgumentType, typename ... __RemainingArgumentTypes > // NOLINT(bugprone-reserved-identifier)
-                inline auto __collectionOfPush ( // NOLINT(bugprone-reserved-identifier)
-                        __CollectionType          &       collection,
-                        __FirstArgumentType      &&       firstValue,
-                        __RemainingArgumentTypes && ...   remainingValues
-                ) noexcept -> void {
-
-                    collection.add ( std :: forward < __FirstArgumentType > ( firstValue ) );
-                    __collectionOfPush ( collection, std :: forward < __RemainingArgumentTypes > ( remainingValues ) ... );
-                }
-
             }
         }
 
@@ -1457,7 +1435,41 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
 
         template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
-        __CDS_cpplang_ConstexprPureAbstract auto Collection < __ElementType > :: empty () const noexcept -> bool {
+        constexpr Collection < __ElementType > :: Collection (
+                Collection const & collection
+        ) noexcept :
+                _size ( collection._size ) {
+
+        }
+
+
+        template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
+        constexpr Collection < __ElementType > :: Collection (
+                Collection && collection
+        ) noexcept :
+                _size ( cds :: exchange ( collection._size, 0ULL ) ) {
+
+        }
+
+
+        template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
+        constexpr Collection < __ElementType > :: Collection (
+                Size size
+        ) noexcept :
+                _size ( size ) {
+
+        }
+
+
+        template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
+        constexpr auto Collection < __ElementType > :: size () const noexcept -> Size {
+
+            return this->_size;
+        }
+
+
+        template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
+        constexpr auto Collection < __ElementType > :: empty () const noexcept -> bool {
 
             return this->size() == 0ULL;
         }
@@ -1652,17 +1664,6 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         __CDS_OptimalInline auto Collection < __ElementType > :: pNewInsertPost() noexcept -> void {
             /* left empty intentionally, derived classes can override this, but it is not mandatory.
              * Refer to Collection :: add to when this should be overridden */
-        }
-
-
-        template < template < typename ... > class __CollectionType, typename ... __ArgumentTypes, typename __Common > // NOLINT(bugprone-reserved-identifier)
-        auto collectionOf (
-                __ArgumentTypes && ... values
-        ) noexcept -> __CollectionType < __Common > {
-
-            __CollectionType < __Common > collection;
-            __hidden :: __impl :: __collectionOfPush ( collection, std :: forward < __ArgumentTypes > ( values ) ... );
-            return collection;
         }
 
     }

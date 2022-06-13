@@ -756,11 +756,41 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
 
         template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
-        __CDS_OptimalInline auto LinkedList < __ElementType > :: equals (
-                Object const & object
+        auto LinkedList < __ElementType > :: operator == (
+                LinkedList const & list
         ) const noexcept -> bool {
 
-            return this->List < __ElementType > :: equals ( object );
+            if ( this == & list ) {
+                return true;
+            }
+
+            if ( this->size() != list.size() ) {
+                return false;
+            }
+
+            auto pThisHead  = this->_pFront;
+            auto pOtherHead = list._pFront;
+
+            while ( pThisHead != nullptr ) {
+
+                if ( ! meta :: equals ( * pThisHead->_pData, * pOtherHead->_pData ) ) {
+                    return false;
+                }
+
+                pThisHead   = pThisHead->_pNext;
+                pOtherHead  = pOtherHead->_pNext;
+            }
+
+            return true;
+        }
+
+
+        template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
+        __CDS_OptimalInline auto LinkedList < __ElementType > :: operator != (
+                LinkedList const & list
+        ) const noexcept -> bool {
+
+            return ! this->operator == ( list );
         }
 
 

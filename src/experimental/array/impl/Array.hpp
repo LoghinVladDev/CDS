@@ -756,6 +756,38 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
 
         template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
+        auto Array < __ElementType > :: operator == (
+                Array const & array
+        ) const noexcept -> bool {
+
+            if ( this == & array ) {
+                return true;
+            }
+
+            if ( this->size() != array.size() ) {
+                return false;
+            }
+
+            for ( Index parseIndex = 0; parseIndex < this->size(); ++ parseIndex ) {
+                if ( ! meta :: equals ( * this->_pData [ parseIndex ], * array._pData [ parseIndex ] ) ) {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
+
+        template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
+        __CDS_OptimalInline auto Array < __ElementType > :: operator != (
+                Array const & array
+        ) const noexcept -> bool {
+
+            return ! this->operator == ( array );
+        }
+
+
+        template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
         auto Array < __ElementType > :: clear () noexcept -> void {
 
             for ( Index i = 0; i < this->_size; ++ i ) {

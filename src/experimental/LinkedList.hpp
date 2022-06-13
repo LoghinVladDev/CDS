@@ -65,7 +65,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             ) const noexcept -> cds :: UniquePointer < DelegateConstIterator > override;
 
         private:
-            using Node = __hidden :: __impl :: __BiDirNode < __ElementType >;
+            using Node = __hidden :: __impl :: __BidirectionalNode < __ElementType >;
 
         private:
             Node * _pFront  { nullptr };
@@ -252,9 +252,14 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             ) const noexcept (false) -> ElementType const & override;
 
         public:
-            __CDS_NoDiscard auto equals (
-                    Object const &
-            ) const noexcept -> bool override;
+            __CDS_NoDiscard auto operator == (
+                    LinkedList const & list
+            ) const noexcept -> bool;
+
+        public:
+            __CDS_NoDiscard auto operator != (
+                    LinkedList const & list
+            ) const noexcept -> bool;
 
         public:
             auto clear () noexcept -> void override;
@@ -303,14 +308,6 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
         using DoubleLinkedList __CDS_Deprecated = LinkedList < __ElementType >;
 
-        template < typename ... ArgumentTypes >
-        inline auto listOf (
-                ArgumentTypes && ... values
-        ) noexcept -> LinkedList < meta :: Common < ArgumentTypes ... > > {
-
-            return collectionOf < LinkedList > ( std :: forward < ArgumentTypes > ( values ) ... );
-        }
-
     }
 }
 
@@ -324,5 +321,8 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 #include "linkedList/CTAD.hpp"
 
 #include "shared/linkedList/impl/LinkedListSequence.hpp"
+
+#include "shared/collection/FunctionalConstructors.hpp"
+#include "shared/collection/impl/FunctionalConstructors.hpp"
 
 #endif // __CDS_EX_LINKED_LIST_HPP__

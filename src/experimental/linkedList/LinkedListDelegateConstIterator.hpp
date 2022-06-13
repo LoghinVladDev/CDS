@@ -34,7 +34,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             ) noexcept;
 
         public:
-            __CDS_cpplang_ConstexprDestructor ~LinkedListDelegateConstIterator () noexcept = default;
+            __CDS_cpplang_ConstexprDestructor ~LinkedListDelegateConstIterator () noexcept override = default;
 
         public:
             __CDS_NoDiscard constexpr auto node () const noexcept -> LinkedList < __ElementType > :: Node const *;
@@ -57,7 +57,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             ) const noexcept -> bool override;
 
         public:
-            __CDS_NoDiscard __CDS_OptimalInline auto copy () const noexcept -> LinkedListDelegateConstIterator * override;
+            __CDS_NoDiscard auto copy () const noexcept -> LinkedListDelegateConstIterator * override;
         };
 
     }

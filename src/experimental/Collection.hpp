@@ -122,6 +122,11 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                     DelegateIteratorRequestType requestType
             ) const noexcept -> cds :: UniquePointer < DelegateConstIterator > = 0;
 
+
+        protected:
+            Size _size { 0ULL };
+
+
         public:
             /**
              * @brief Function used to acquire a Forward-ConstIterator, indicating to the first element of the collection
@@ -1293,6 +1298,21 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
              */
             constexpr Collection () noexcept = default;
 
+        protected:
+            constexpr Collection (
+                    Collection const & collection
+            ) noexcept;
+
+        protected:
+            constexpr Collection (
+                    Collection && collection
+            ) noexcept;
+
+        protected:
+            constexpr explicit Collection (
+                    Size size
+            ) noexcept;
+
         public:
             /**
              * @brief Default Destructor
@@ -1316,7 +1336,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
              * @return Size = number of elements inside the collection
              * @test tested in base class test
              */
-            __CDS_NoDiscard __CDS_cpplang_ConstexprPureAbstract virtual auto size () const noexcept -> Size = 0;
+            __CDS_NoDiscard constexpr auto size () const noexcept -> Size;
 
         public:
             /**
@@ -1325,7 +1345,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
              * @return bool = true if the collection is empty ( does not contain any elements ), false otherwise
              * @test tested in base class test
              */
-            __CDS_NoDiscard __CDS_cpplang_ConstexprPureAbstract virtual auto empty () const noexcept -> bool;
+            __CDS_NoDiscard constexpr auto empty () const noexcept -> bool;
 
         public:
             /**
@@ -1496,17 +1516,6 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
              */
             virtual auto pNewInsertPost () noexcept -> void;
         };
-
-        /**
-         * @brief Function used to obtain a new collection non-abstract derived type object from the given values, with the most suitable ElementType for the given values
-         * @tparam __CollectionType non-abstract Collection derived type ( i.e. Array, LinkedList, HashSet, ... )
-         * @tparam __ArgumentTypes pack of types, representing the types of each of the given parameters, must be convertible to a common type
-         * @tparam __Common alias for the best common type the types in the __ArgumentTypes pack are convertible to
-         * @param values : ArgumentTypes fref = Pack of Forwarding References to the values to be added to the newly created collection
-         * @exceptsafe
-         * @return __CollectionType < Common > = newly created collection-derived non-abstract object instance, containing the given elements
-         * @test tested in base class test
-         */
         template < template < typename ... > class __CollectionType, typename ... __ArgumentTypes, typename __Common = meta :: Common < __ArgumentTypes ... > > // NOLINT(bugprone-reserved-identifier)
         auto collectionOf (
                 __ArgumentTypes && ... values
@@ -1552,5 +1561,6 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
 /// implementation of Collection < T > functions
 #include "collection/impl/Collection.hpp"
+
 
 #endif // __CDS_EX_COLLECTION_HPP__

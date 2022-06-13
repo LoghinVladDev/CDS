@@ -9,10 +9,16 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             namespace __impl {
 
                 template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
-                struct __BiDirNode { // NOLINT(bugprone-reserved-identifier)
-                    __ElementType * _pData;
-                    __BiDirNode   * _pNext;
-                    __BiDirNode   * _pPrevious;
+                struct __UnidirectionalNode { // NOLINT(bugprone-reserved-identifier)
+                    __ElementType        * _pData;
+                    __UnidirectionalNode * _pNext;
+                };
+
+                template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
+                struct __BidirectionalNode { // NOLINT(bugprone-reserved-identifier)
+                    __ElementType         * _pData;
+                    __BidirectionalNode   * _pNext;
+                    __BidirectionalNode   * _pPrevious;
                 };
 
             }

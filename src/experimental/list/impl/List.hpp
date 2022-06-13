@@ -68,13 +68,13 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
                     for (auto it = from; it != to; ++ it ) {
                         if ( function ( * it, pivot ) ) {
-                            swap ( * partitionIterator, * it );
+                            __swap ( * partitionIterator, * it );
                             previous = partitionIterator;
                             ++ partitionIterator;
                         }
                     }
 
-                    swap ( * partitionIterator, * to );
+                    __swap ( * partitionIterator, * to );
                     if ( ! previous.valid() ) { // NOLINT(clion-misra-cpp2008-5-3-1)
                         return partitionIterator;
                     }
@@ -98,16 +98,16 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                     }
 
                     if ( from != to && from.valid() && to.valid() ) {
-                        auto partitionIterator = quickSortPartition (from, to, function );
+                        auto partitionIterator = __quickSortPartition (from, to, function );
 
-                        quickSort ( from, partitionIterator, function );
+                        __quickSort ( from, partitionIterator, function );
                         if ( ! partitionIterator.valid() ) { // NOLINT(clion-misra-cpp2008-5-3-1)
                             return;
                         }
 
                         if ( partitionIterator == from ) {
                             if ( ( ++ partitionIterator ).valid() ) {
-                                quickSort ( partitionIterator, to, function );
+                                __quickSort ( partitionIterator, to, function );
                             }
 
                             return;
@@ -117,7 +117,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                             return;
                         }
 
-                        quickSort ( ++ partitionIterator, to, function );
+                        __quickSort ( ++ partitionIterator, to, function );
                     }
                 }
 
@@ -179,7 +179,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         constexpr List < __ElementType > :: List (
                 List const & list
         ) noexcept :
-                _size ( list._size ) {
+                Collection < __ElementType > ( list ) {
 
         }
 
@@ -188,7 +188,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         constexpr List < __ElementType > :: List (
                 List && list
         ) noexcept :
-                _size ( cds :: exchange ( list._size, 0ULL ) ) {
+                Collection < __ElementType > ( std :: move ( list ) ) {
 
         }
 
@@ -197,28 +197,8 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         constexpr List < __ElementType > :: List (
                 Size size
         ) noexcept :
-                _size ( size ) {
+                Collection < __ElementType > ( size ) {
 
-        }
-
-
-        template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
-        __CDS_OptimalInline auto List < __ElementType > :: equals (
-                Object const & object
-        ) const noexcept -> bool {
-
-            if ( this == & object ) {
-                return true;
-            }
-
-            auto pObject = dynamic_cast < decltype ( this ) > ( & object );
-            if ( pObject != nullptr ) {
-                if ( this->_size != pObject->_size ) {
-                    return false;
-                }
-            }
-
-            return Collection < __ElementType > :: equals ( object );
         }
 
 
@@ -906,13 +886,6 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             }
 
             __hidden :: __impl :: __quickSort ( this->begin(), last, comparatorFunction );
-        }
-
-
-        template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
-        constexpr auto List < __ElementType > :: size () const noexcept -> Size {
-            
-            return this->_size;
         }
 
 
@@ -1689,13 +1662,6 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             }
 
             return false;
-        }
-
-
-        template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
-        constexpr auto List < __ElementType > :: empty () const noexcept -> bool {
-            
-            return this->_size == 0ULL;
         }
 
 
