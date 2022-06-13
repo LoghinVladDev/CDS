@@ -1616,7 +1616,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 ElementType const & element
         ) noexcept ( noexcept ( ElementType ( element ) ) ) -> void {
 
-            auto & pElementLocation = this->pNewInsert();
+            auto & pElementLocation = this->pNewInsert ( element );
             if ( pElementLocation == nullptr ) {
                 pElementLocation = Memory :: instance().create < ElementType > ( element );
                 this->pNewInsertPost();
@@ -1630,7 +1630,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 ElementType && element
         ) noexcept ( noexcept ( ElementType ( std :: move ( element ) ) ) ) -> void {
 
-            auto & pElementLocation = this->pNewInsert();
+            auto & pElementLocation = this->pNewInsert ( element );
             if ( pElementLocation == nullptr ) {
                 pElementLocation = Memory :: instance().create < ElementType > ( std :: move ( element ) );
                 this->pNewInsertPost();

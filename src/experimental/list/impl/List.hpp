@@ -203,8 +203,11 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
 
         template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
-        __CDS_OptimalInline auto List < __ElementType > :: pNewInsert () noexcept -> ElementType * & {
+        __CDS_OptimalInline auto List < __ElementType > :: pNewInsert (
+                ElementType const & referenceElement
+        ) noexcept -> ElementType * & {
 
+            (void) referenceElement;
             return this->pNewBack();
         }
 

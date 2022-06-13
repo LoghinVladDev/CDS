@@ -12,14 +12,23 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         class HashSet < __ElementType, __HashCalculator > :: HashSetDelegateIterator : public DelegateConstIterator {
 
         private:
-            using typename HashSet < __ElementType, __HashCalculator > :: Node;
+            using Node = typename HashSet < __ElementType, __HashCalculator > :: Node;
 
         private:
-            Node const * _pNode { nullptr };
+            Node                                        const * _pCurrentNode { nullptr };
+
+        private:
+            Index                                               _currentListIndex { 0 };
+
+        private:
+            HashSet < __ElementType, __HashCalculator > const * _pHashSet { nullptr };
+
+        private:
+            __CDS_cpplang_ConstexprConditioned auto skipEmpty () noexcept -> void;
 
         public:
-            constexpr HashSetDelegateIterator (
-                    Node const * pNode
+            __CDS_Explicit __CDS_cpplang_ConstexprConstructorNonEmptyBody HashSetDelegateIterator (
+                    HashSet < __ElementType, __HashCalculator > const * pHashSet
             ) noexcept;
 
         public:
@@ -36,10 +45,13 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             __CDS_cpplang_ConstexprDestructor ~HashSetDelegateIterator() noexcept override = default;
 
         public:
-            __CDS_NoDiscard constexpr auto node () const noexcept -> Node const *;
+            __CDS_NoDiscard constexpr auto valid () const noexcept -> bool override;
 
         public:
-            __CDS_NoDiscard constexpr auto valid () const noexcept -> bool;
+            __CDS_NoDiscard constexpr auto currentListIndex () const noexcept -> Index;
+
+        public:
+            __CDS_NoDiscard constexpr auto currentNode () const noexcept -> Node const *;
 
         public:
             __CDS_cpplang_ConstexprOverride auto next () noexcept -> HashSetDelegateIterator & override;

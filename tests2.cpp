@@ -16,6 +16,8 @@ using namespace cds :: literals;
 int main () {
     auto set = cds :: experimental :: setOf ( 1, 2,3 , 4 );
 
+    std :: cout << set << '\n';
+
     cds :: Tuple < int, String, float > t = { 3, "some String", 4.5f };
 
     std :: cout << t.get<0>() << '\n';

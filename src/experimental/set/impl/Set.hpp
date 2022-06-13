@@ -46,7 +46,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             out << "{ ";
 
             for ( auto iterator = this->begin(), end = this->end(); iterator != end; ++ iterator ) {
-                cds :: meta :: print ( out, * iterator );
+                cds :: meta :: print ( out, * iterator ) << ", ";
             }
 
             auto asString = out.str();

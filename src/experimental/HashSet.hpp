@@ -11,7 +11,7 @@
 
 namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
-    template < typename __CollectionType >
+    template < typename __CollectionType > // NOLINT(bugprone-reserved-identifier)
     class Sequence;
 
     namespace experimental {
@@ -79,19 +79,19 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             ) noexcept;
 
         public:
-            HashSet (
+            __CDS_Explicit HashSet (
                     __HashCalculator const & hashCalculator
             ) noexcept;
 
         public:
-            template < typename __IteratorType, cds :: meta :: EnableIf < cds :: meta :: isIterator < __IteratorType > () > = 0 >
+            template < typename __IteratorType, cds :: meta :: EnableIf < cds :: meta :: isIterator < __IteratorType > () > = 0 > // NOLINT(bugprone-reserved-identifier)
             HashSet (
                     __IteratorType const & begin,
                     __IteratorType const & end
             ) noexcept;
 
         public:
-            template < typename __IteratorType, cds :: meta :: EnableIf < cds :: meta :: isIterator < __IteratorType > () > = 0 >
+            template < typename __IteratorType, cds :: meta :: EnableIf < cds :: meta :: isIterator < __IteratorType > () > = 0 > // NOLINT(bugprone-reserved-identifier)
             HashSet (
                     __IteratorType      const & begin,
                     __IteratorType      const & end,
@@ -99,7 +99,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             ) noexcept;
 
         public:
-            __CDS_Implicit HashSet (
+            __CDS_Implicit HashSet ( // NOLINT(google-explicit-constructor)
                     InitializerList const & initializerList
             ) noexcept;
 
@@ -110,13 +110,13 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             ) noexcept;
 
         public:
-            template < typename __OtherElementType, cds :: meta :: EnableIf < cds :: meta :: isConvertible < __OtherElementType, __ElementType > () > = 0 >
+            template < typename __OtherElementType, cds :: meta :: EnableIf < cds :: meta :: isConvertible < __OtherElementType, __ElementType > () > = 0 > // NOLINT(bugprone-reserved-identifier)
             __CDS_Explicit HashSet (
                     Collection < __OtherElementType >   const & collection
             ) noexcept;
 
         public:
-            template < typename __OtherElementType, cds :: meta :: EnableIf < cds :: meta :: isConvertible < __OtherElementType, __ElementType > () > = 0 >
+            template < typename __OtherElementType, cds :: meta :: EnableIf < cds :: meta :: isConvertible < __OtherElementType, __ElementType > () > = 0 > // NOLINT(bugprone-reserved-identifier)
             HashSet (
                     Collection < __OtherElementType >   const & collection,
                     __HashCalculator                    const & hashCalculator
@@ -135,6 +135,11 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                     ConstReverseIterator const & iterator
             ) noexcept -> bool override;
 
+        private:
+            auto remove (
+                    HashSetDelegateIterator const * pIterator
+            ) noexcept -> bool;
+
         protected:
             auto remove (
                     ConstIterator   const * pIterators,
@@ -148,7 +153,9 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             ) noexcept -> Size override;
 
         protected:
-            auto pNewInsert () noexcept -> ElementType * & override;
+            auto pNewInsert (
+                    ElementType const & referenceElement
+            ) noexcept -> ElementType * & override;
 
         public:
             auto contains (
@@ -169,7 +176,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             ) const noexcept -> bool;
 
         public:
-            template < typename __VElementType = __ElementType, cds :: meta :: EnableIf < cds :: meta :: isCopyConstructible < __VElementType > () > = 0 >
+            template < typename __VElementType = __ElementType, cds :: meta :: EnableIf < cds :: meta :: isCopyConstructible < __VElementType > () > = 0 > // NOLINT(bugprone-reserved-identifier)
             auto operator = (
                     HashSet const & hashSet
             ) noexcept -> HashSet &;
@@ -186,16 +193,16 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             ) noexcept -> HashSet &;
 
         public:
-            auto sequence () & noexcept -> Sequence < HashSet < __ElementType > >;
+            auto sequence () & noexcept -> Sequence < HashSet < __ElementType, __HashCalculator > >;
 
         public:
-            auto sequence () && noexcept -> Sequence < HashSet < __ElementType > >;
+            auto sequence () && noexcept -> Sequence < HashSet < __ElementType, __HashCalculator > >;
 
         public:
-            auto sequence () const & noexcept -> Sequence < HashSet < __ElementType > const >;
+            auto sequence () const & noexcept -> Sequence < HashSet < __ElementType, __HashCalculator > const >;
 
         public:
-            auto sequence () const && noexcept -> Sequence < HashSet < __ElementType > const >;
+            auto sequence () const && noexcept -> Sequence < HashSet < __ElementType, __HashCalculator > const >;
         };
 
     }

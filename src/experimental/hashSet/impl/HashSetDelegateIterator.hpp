@@ -9,12 +9,34 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
     namespace experimental {
 
         template < typename __ElementType, typename __HashCalculator > // NOLINT(bugprone-reserved-identifier)
-        constexpr HashSet < __ElementType, __HashCalculator > :: HashSetDelegateIterator :: HashSetDelegateIterator (
-                Node const * pNode
+        __CDS_cpplang_ConstexprConditioned auto HashSet < __ElementType, __HashCalculator > :: HashSetDelegateIterator :: skipEmpty () noexcept -> void {
+
+            do {
+                ++ this->_currentListIndex;
+            } while (
+                    this->_currentListIndex < this->_pHashSet->_hashCalculator.getBoundary() &&
+                    this->_pHashSet->_listArray [ this->_currentListIndex ] == nullptr
+            );
+
+            if ( this->_currentListIndex < this->_pHashSet->_hashCalculator.getBoundary() ) {
+                this->_pCurrentNode = this->_pHashSet->_listArray [ this->_currentListIndex ];
+            } else {
+                this->_pCurrentNode = nullptr;
+            }
+        }
+
+
+        template < typename __ElementType, typename __HashCalculator > // NOLINT(bugprone-reserved-identifier)
+        __CDS_cpplang_ConstexprConstructorNonEmptyBody HashSet < __ElementType, __HashCalculator > :: HashSetDelegateIterator :: HashSetDelegateIterator (
+                HashSet < __ElementType, __HashCalculator > const * pHashSet
         ) noexcept :
                 DelegateConstIterator (),
-                _pNode ( pNode ) {
+                _pHashSet ( pHashSet ),
+                _currentListIndex ( -1 ) {
 
+            if ( this->_pHashSet != nullptr && this->_pHashSet->_listArray != nullptr ) {
+                this->skipEmpty();
+            }
         }
 
 
@@ -23,7 +45,9 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 HashSetDelegateIterator const & iterator
         ) noexcept :
                 DelegateConstIterator (),
-                _pNode ( iterator._pNode ) {
+                _pHashSet ( iterator._pHashSet ),
+                _currentListIndex ( iterator._currentListIndex ),
+                _pCurrentNode ( iterator._pCurrentNode ) {
 
         }
 
@@ -33,29 +57,46 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 HashSetDelegateIterator && iterator
         ) noexcept :
                 DelegateConstIterator (),
-                _pNode ( cds :: exchange ( iterator._pNode, nullptr ) ) {
+                _pHashSet ( cds :: exchange ( iterator._pHashSet, nullptr ) ),
+                _currentListIndex ( cds :: exchange ( iterator._currentListIndex, 0ULL ) ),
+                _pCurrentNode ( cds :: exchange ( iterator._pCurrentNode, nullptr ) )  {
 
-        }
-
-
-        template < typename __ElementType, typename __HashCalculator > // NOLINT(bugprone-reserved-identifier)
-        constexpr auto HashSet < __ElementType, __HashCalculator > :: HashSetDelegateIterator :: node () const noexcept -> Node const * {
-
-            return this->_pNode;
         }
 
 
         template < typename __ElementType, typename __HashCalculator > // NOLINT(bugprone-reserved-identifier)
         __CDS_cpplang_ConstexprOverride auto HashSet < __ElementType, __HashCalculator > :: HashSetDelegateIterator :: valid () const noexcept -> bool {
 
-            return this->_pNode != nullptr;
+            return this->_pCurrentNode != nullptr;
+        }
+
+
+        template < typename __ElementType, typename __HashCalculator > // NOLINT(bugprone-reserved-identifier)
+        constexpr auto HashSet < __ElementType, __HashCalculator > :: HashSetDelegateIterator :: currentListIndex () const noexcept -> Index {
+
+            return this->_currentListIndex;
+        }
+
+
+        template < typename __ElementType, typename __HashCalculator > // NOLINT(bugprone-reserved-identifier)
+        constexpr auto HashSet < __ElementType, __HashCalculator > :: HashSetDelegateIterator :: currentNode () const noexcept -> const Node * {
+
+            return this->_pCurrentNode;
         }
 
 
         template < typename __ElementType, typename __HashCalculator > // NOLINT(bugprone-reserved-identifier)
         __CDS_cpplang_ConstexprOverride auto HashSet < __ElementType, __HashCalculator > :: HashSetDelegateIterator :: next () noexcept -> HashSetDelegateIterator & {
 
-            this->_pNode = this->_pNode->_pNext;
+            if ( this->_currentListIndex >= this->_pHashSet->_hashCalculator.getBoundary() ) {
+                return * this;
+            }
+
+            this->_pCurrentNode = this->_pCurrentNode->_pNext;
+            if ( this->_pCurrentNode == nullptr ) {
+                this->skipEmpty();
+            }
+
             return * this;
         }
 
@@ -63,15 +104,14 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         template < typename __ElementType, typename __HashCalculator > // NOLINT(bugprone-reserved-identifier)
         __CDS_cpplang_ConstexprOverride auto HashSet < __ElementType, __HashCalculator > :: HashSetDelegateIterator :: previous() noexcept -> HashSetDelegateIterator & {
 
-            this->_pNode = this->_pNode->_pNext;
-            return * this;
+            return this->next();
         }
 
 
         template < typename __ElementType, typename __HashCalculator > // NOLINT(bugprone-reserved-identifier)
         __CDS_cpplang_ConstexprOverride auto HashSet < __ElementType, __HashCalculator > :: HashSetDelegateIterator :: value () const noexcept -> __ElementType const & {
 
-            return * this->_pNode->_pData;
+            return * this->_pCurrentNode->_pData;
         }
 
 
@@ -84,7 +124,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 return true;
             }
 
-            return reinterpret_cast < decltype ( this ) > ( & iterator )->_pNode == this->_pNode;
+            return reinterpret_cast < decltype ( this ) > ( & iterator )->_pCurrentNode == this->_pCurrentNode;
         }
 
 

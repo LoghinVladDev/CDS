@@ -85,7 +85,9 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             ) noexcept -> Size override = 0;
 
         protected:
-            auto pNewInsert () noexcept -> ElementType * & override = 0;
+            auto pNewInsert (
+                    ElementType const & referenceElement
+            ) noexcept -> ElementType * & override = 0;
 
         public:
             template < typename __VElementType = __ElementType, cds :: meta :: EnableIf < cds :: meta :: isCopyConstructible < __VElementType > () > = 0 > // NOLINT(bugprone-reserved-identifier)

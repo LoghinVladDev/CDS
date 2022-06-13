@@ -1502,11 +1502,14 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         protected:
             /**
              * @brief Function used in Collection :: add implementation, called to acquire a pointer reference to allocate the new element to
+             * @param referenceElement : ElementType cref = Constant Reference to the element to be added, as a reference, if implementation requires specific placement
              * @exceptsafe
              * @return ElementType ptr ref = Reference to an ElementType pointer.
              * @test tested in base class test
              */
-            virtual auto pNewInsert () noexcept -> ElementType * & = 0;
+            virtual auto pNewInsert (
+                    ElementType const & referenceElement
+            ) noexcept -> ElementType * & = 0;
 
         protected:
             /**
