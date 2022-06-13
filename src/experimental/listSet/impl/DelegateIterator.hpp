@@ -1,0 +1,8 @@
+//
+// Created by loghin on 6/13/22.
+//
+
+#ifndef __CDS_LIST_SET_DELEGATE_ITERATOR_HPP_IMPL__
+#define __CDS_LIST_SET_DELEGATE_ITERATOR_HPP_IMPL__
+
+#endif // __CDS_LIST_SET_DELEGATE_ITERATOR_HPP_IMPL__

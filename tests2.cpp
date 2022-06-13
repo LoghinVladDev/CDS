@@ -9,12 +9,14 @@
 #include <CDS/experimental/Array>
 #include <CDS/experimental/HashSet>
 #include <CDS/String>
+#include <CDS/experimental/OrderedSet>
+
 using namespace cds;
 using namespace cds :: literals;
 
 
 int main () {
-    auto set = cds :: experimental :: setOf ( 1, 2,3 , 4 );
+    auto set = cds :: experimental :: setOf ( 1, 2, 3, 4 );
 
     std :: cout << set << '\n';
 

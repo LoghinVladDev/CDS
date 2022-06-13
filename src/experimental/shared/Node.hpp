@@ -2,6 +2,9 @@
 // Created by loghin on 6/13/22.
 //
 
+#ifndef __CDS_SHARED_NODE_HPP__
+#define __CDS_SHARED_NODE_HPP__
+
 namespace cds { // NOLINT(modernize-concat-nested-namespaces)
     namespace experimental {
 
@@ -26,3 +29,5 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
     }
 }
+
+#endif

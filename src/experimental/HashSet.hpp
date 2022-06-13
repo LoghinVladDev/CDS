@@ -208,9 +208,9 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
     }
 }
 
-#include "hashSet/HashSetDelegateIterator.hpp"
+#include "hashSet/DelegateIterator.hpp"
 
-#include "hashSet/impl/HashSetDelegateIterator.hpp"
+#include "hashSet/impl/DelegateIterator.hpp"
 #include "hashSet/impl/HashSet.hpp"
 
 #include "hashSet/CTAD.hpp"
