@@ -211,10 +211,10 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
             Size removedCount = 0ULL;
             for ( Size index = 0ULL; index < iteratorCount; ++ index ) {
-                iteratorCount += static_cast < Size > ( this->remove ( pIterators [ iteratorCount ] ) );
+                removedCount += static_cast < Size > ( this->remove ( pIterators [ iteratorCount ] ) );
             }
 
-            return iteratorCount;
+            return removedCount;
         }
 
 
@@ -226,10 +226,10 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
             Size removedCount = 0ULL;
             for ( Size index = 0ULL; index < iteratorCount; ++ index ) {
-                iteratorCount += static_cast < Size > ( this->remove ( pIterators [ iteratorCount ] ) );
+                removedCount += static_cast < Size > ( this->remove ( pIterators [ iteratorCount ] ) );
             }
 
-            return iteratorCount;
+            return removedCount;
         }
 
 
