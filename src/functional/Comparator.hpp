@@ -12,7 +12,7 @@ namespace cds {
     template < typename T >
     class Comparator {
     public:
-        virtual auto operator () (T const &, T const &) const noexcept -> bool = 0;
+        virtual auto operator () (T const &, T const &) const noexcept (false) -> bool = 0;
     };
 
 }
@@ -41,5 +41,32 @@ namespace cds {
 }
 
 #endif
+
+#include "../shared/impl/generalPredicates.hpp"
+
+namespace cds { // NOLINT(modernize-concat-nested-namespaces)
+    namespace experimental {
+
+        namespace utility {
+
+            template < typename __Type > // NOLINT(bugprone-reserved-identifier)
+            using ComparisonFunction = decltype ( & predicates :: lessThan < __Type > );
+
+        }
+
+        template < typename __Type, utility :: ComparisonFunction < __Type > __comparisonFunction > // NOLINT(bugprone-reserved-identifier)
+        class FunctionComparator : public Comparator < __Type > {
+        public:
+            __CDS_NoDiscard constexpr auto operator () (
+                    __Type const & left,
+                    __Type const & right
+            ) const noexcept ( noexcept ( __comparisonFunction ( left, right ) ) ) -> bool {
+
+                return __comparisonFunction ( left, right );
+            }
+        };
+
+    }
+}
 
 #endif //CDS_COMPARATOR_HPP

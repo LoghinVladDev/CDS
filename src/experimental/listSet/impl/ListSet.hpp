@@ -16,7 +16,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             switch ( requestType ) {
                 case DelegateIteratorRequestType :: ForwardBegin:
                 case DelegateIteratorRequestType :: BackwardBegin:
-                    return Memory :: instance().create < ListSetDelegateIterator > ( nullptr, this->_pFront );
+                    return Memory :: instance().create < ListSetDelegateIterator > ( this->_pFront, nullptr );
                 case DelegateIteratorRequestType :: ForwardEnd:
                 case DelegateIteratorRequestType :: BackwardEnd:
                     return Memory :: instance().create < ListSetDelegateIterator > ( nullptr, nullptr );

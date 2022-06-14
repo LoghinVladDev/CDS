@@ -18,6 +18,14 @@ using namespace cds :: literals;
 int main () {
     auto set = cds :: experimental :: setOf ( 1, 2, 3, 4 );
 
+    cds :: experimental::FunctionComparator <int, predicates::lessThan<int>> comp;
+    std :: cout << noexcept ( comp ( 2, 3 ) ) << '\n';
+
+    meta :: RemoveConstVolatile < int > var2 = 3;
+    auto set2 = cds :: experimental :: orderedSetOf ( 2, 4, 3, 1 );
+
+    std :: cout << set2 << '\n';
+
     std :: cout << set << '\n';
 
     cds :: Tuple < int, String, float > t = { 3, "some String", 4.5f };

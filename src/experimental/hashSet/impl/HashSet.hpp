@@ -68,7 +68,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         ) noexcept {
 
             for ( auto iterator = begin; iterator != end; ++ iterator ) {
-                this->HashSet :: insert ( * iterator );
+                this->insert ( * iterator );
             }
         }
 
@@ -83,7 +83,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 _hashCalculator ( calculator ) {
 
             for ( auto iterator = begin; iterator != end; ++ iterator ) {
-                this->HashSet :: insert ( * iterator );
+                this->insert ( * iterator );
             }
         }
 

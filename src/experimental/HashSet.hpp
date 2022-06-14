@@ -18,32 +18,32 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
         template <
                 typename __ElementType, // NOLINT(bugprone-reserved-identifier)
-                typename __HashCalculator = utility :: LowCollisionDefaultHashFunction < __ElementType > // NOLINT(bugprone-reserved-identifier)
+                typename __HashCalculator = cds :: utility :: LowCollisionDefaultHashFunction < __ElementType > // NOLINT(bugprone-reserved-identifier)
         > class HashSet : public Set < __ElementType > {
 
         public:
-            using typename Collection < __ElementType > :: ElementType;
+            using typename Set < __ElementType > :: ElementType;
 
         public:
-            using typename Collection < __ElementType > :: ConstIterator;
+            using typename Set < __ElementType > :: ConstIterator;
 
         public:
-            using typename Collection < __ElementType > :: ConstReverseIterator;
+            using typename Set < __ElementType > :: ConstReverseIterator;
 
         protected:
-            using typename Collection < __ElementType > :: InitializerList;
+            using typename Set < __ElementType > :: InitializerList;
 
         protected:
-            using typename Collection < __ElementType > :: DelegateConstIterator;
+            using typename Set < __ElementType > :: DelegateConstIterator;
 
         protected:
-            using typename Collection < __ElementType > :: AbstractIterator;
+            using typename Set < __ElementType > :: AbstractIterator;
 
         protected:
-            using typename Collection < __ElementType > :: AbstractDelegateIterator;
+            using typename Set < __ElementType > :: AbstractDelegateIterator;
 
         protected:
-            using typename Collection < __ElementType > :: DelegateIteratorRequestType;
+            using typename Set < __ElementType > :: DelegateIteratorRequestType;
 
         private:
             class HashSetDelegateIterator;

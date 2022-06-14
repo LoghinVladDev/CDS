@@ -214,7 +214,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
              * @tparam __T type to check if is void
              */
             template < typename __T > // NOLINT(bugprone-reserved-identifier)
-            struct __IsVoid : __isVoidImpl :: __IsVoid < __RemoveConstVolatile < __T > > :: __Type {}; // NOLINT(bugprone-reserved-identifier)
+            struct __IsVoid : __isVoidImpl :: __IsVoid < __RemoveConstVolatile < __T > > :: Type {}; // NOLINT(bugprone-reserved-identifier)
 
             namespace __addPtrImpl { // NOLINT(bugprone-reserved-identifier)
                 /**
