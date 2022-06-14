@@ -106,6 +106,21 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
 
 
+#if defined (__CDS_EX_UNORDERED_SET_HPP__) && ! defined ( __CDS_EX_UNORDERED_SET_FUNCTIONAL_CONSTRUCTOR_IMPL__ )
+#define __CDS_EX_UNORDERED_SET_FUNCTIONAL_CONSTRUCTOR_IMPL__ // NOLINT(bugprone-reserved-identifier)
+
+        template < typename ... __ArgumentTypes > // NOLINT(bugprone-reserved-identifier)
+        inline auto unorderedSetOf (
+                __ArgumentTypes && ... values
+        ) noexcept -> experimental :: UnorderedSet < cds :: meta :: Common < __ArgumentTypes ... > > {
+
+            return __hidden :: __impl :: __instantiateCollectionOf < UnorderedSet > ( std :: forward < __ArgumentTypes > ( values ) ... );
+        }
+
+#endif // __CDS_EX_UNORDERED_SET_FUNCTIONAL_CONSTRUCTOR_IMPL__
+
+
+
 #if defined (__CDS_EX_HASH_SET_HPP__) && ! defined ( __CDS_EX_HASH_SET_FUNCTIONAL_CONSTRUCTOR_IMPL__ )
 #define __CDS_EX_HASH_SET_FUNCTIONAL_CONSTRUCTOR_IMPL__ // NOLINT(bugprone-reserved-identifier)
 

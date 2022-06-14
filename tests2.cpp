@@ -10,6 +10,7 @@
 #include <CDS/experimental/HashSet>
 #include <CDS/String>
 #include <CDS/experimental/OrderedSet>
+#include <CDS/experimental/UnorderedSet>
 
 using namespace cds;
 using namespace cds :: literals;
@@ -24,7 +25,10 @@ int main () {
     meta :: RemoveConstVolatile < int > var2 = 3;
     auto set2 = cds :: experimental :: orderedSetOf ( 2, 4, 3, 1 );
 
+    auto set3 = cds :: experimental :: unorderedSetOf ( 3, 5, 1, 6, 7, 4 ,5, 3 );
+
     std :: cout << set2 << '\n';
+    std :: cout << set3 << '\n';
 
     std :: cout << set << '\n';
 
