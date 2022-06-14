@@ -72,12 +72,17 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             ) noexcept;
 
         public:
-            constexpr ListSet (
+            __CDS_Explicit constexpr ListSet (
                     Size size
             ) noexcept;
 
         public:
             ~ListSet() noexcept override;
+
+        private:
+            auto remove (
+                    ListSetDelegateIterator const * pIterator
+            ) noexcept -> bool;
 
         public:
             auto remove (
@@ -88,11 +93,6 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             auto remove (
                     ConstReverseIterator const & iterator
             ) noexcept -> bool override;
-
-        private:
-            auto remove (
-                    ListSetDelegateIterator const * pIterator
-            ) noexcept -> bool;
 
         protected:
             auto remove (
@@ -110,11 +110,6 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             auto pNewInsert (
                     ElementType const & referenceElement
             ) noexcept -> ElementType * & override = 0;
-
-        public:
-            auto contains (
-                    ElementType const & element
-            ) const noexcept -> bool override;
 
         public:
             auto clear () noexcept -> void override;

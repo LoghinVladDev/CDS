@@ -20,12 +20,8 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         private:
             Node                                        const * _pPreviousNode { nullptr };
 
-        private:
-            ListSet < __ElementType >                   const * _pListSet { nullptr };
-
         public:
-            __CDS_Explicit __CDS_cpplang_ConstexprConstructorNonEmptyBody ListSetDelegateIterator (
-                    ListSet < __ElementType >   const * pListSet,
+            __CDS_Explicit constexpr ListSetDelegateIterator (
                     Node                        const * pCurrentNode,
                     Node                        const * pPreviousNode
             ) noexcept;

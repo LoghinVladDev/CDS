@@ -155,9 +155,11 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 ConstIterator const & iterator
         ) noexcept -> bool {
 
-            return this->remove ( reinterpret_cast < HashSetDelegateIterator const * > (
-                    Collection < __ElementType > :: acquireDelegate ( iterator )
-            ) );
+            return this->remove (
+                    reinterpret_cast < HashSetDelegateIterator const * > (
+                            Collection < __ElementType > :: acquireDelegate ( iterator )
+                    )
+            );
         }
 
 
@@ -166,9 +168,11 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 ConstReverseIterator const & iterator
         ) noexcept -> bool {
 
-            return this->remove ( reinterpret_cast < HashSetDelegateIterator const * > (
-                    Collection < __ElementType > :: acquireDelegate ( iterator )
-            ) );
+            return this->remove (
+                    reinterpret_cast < HashSetDelegateIterator const * > (
+                            Collection < __ElementType > :: acquireDelegate ( iterator )
+                    )
+            );
         }
 
 
