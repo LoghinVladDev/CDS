@@ -60,7 +60,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             __CDS_NoDiscard constexpr auto operator () (
                     __Type const & left,
                     __Type const & right
-            ) const noexcept ( noexcept ( __comparisonFunction ( left, right ) ) ) -> bool {
+            ) const noexcept ( noexcept ( __comparisonFunction ( left, right ) ) ) -> bool override {
 
                 return __comparisonFunction ( left, right );
             }
