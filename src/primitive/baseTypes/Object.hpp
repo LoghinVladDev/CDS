@@ -77,7 +77,7 @@ namespace cds {
          * @brief implicit destructor
          * @exceptsafe
          */
-        virtual ~Object () noexcept = default;
+        __CDS_cpplang_ConstexprDestructor virtual ~Object () noexcept = default;
     };
 
 }

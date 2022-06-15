@@ -52,9 +52,12 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             ) noexcept;
 
         public:
-            constexpr Set (
+            __CDS_Explicit constexpr Set (
                     Size size
             ) noexcept;
+
+        public:
+            __CDS_cpplang_ConstexprDestructor ~Set () noexcept override = default;
 
         public:
             __CDS_NoDiscard auto toString () const noexcept -> String override;

@@ -11,12 +11,25 @@
 #include <CDS/String>
 #include <CDS/experimental/OrderedSet>
 #include <CDS/experimental/UnorderedSet>
+#include <CDS/experimental/HashMap>
 
 using namespace cds;
 using namespace cds :: literals;
 
 
 int main () {
+//    cds :: experimental :: HashMap < int, int > m;
+
+
+    std :: cout << cds :: meta :: isDerivedFrom < cds :: experimental :: HashSet < int, cds :: utility :: MediumCollisionDefaultHashFunction < int > >, cds :: experimental :: Set < int > > () << '\n';
+    std :: cout << cds :: meta :: isDerivedFrom < cds :: experimental :: Array < int >, cds :: experimental :: Collection < int > > () << '\n';
+    std :: cout << cds :: meta :: isDerivedFrom < cds :: experimental :: Array < cds :: experimental :: __hidden :: __impl :: __MapEntry < int, int > >, cds :: experimental :: Collection < cds :: experimental :: __hidden :: __impl :: __MapEntry < int, int > > > () << '\n';
+//    cds :: meta :: isDerivedFrom < __KeySetType, Set < __KeySetType > > () &&
+//    cds :: meta :: isDerivedFrom < __ValueCollectionType, Collection < __ValueType > > () &&
+//    cds :: meta :: isDerivedFrom < __EntryCollectionType, Collection < __MapEntry < __KeyType, __ValueType > > > ()
+
+    std :: cout << meta :: isDerivedFrom < cds :: experimental :: HashSet < int >, cds :: experimental :: Set < int > > () << '\n';
+
     auto set = cds :: experimental :: setOf ( 1, 2, 3, 4 );
 
     cds :: experimental::FunctionComparator <int, predicates::lessThan<int>> comp;
@@ -58,6 +71,7 @@ int main () {
     cds :: String copyByView = trivial;
 
     std :: cout << copyByView << '\n';
+
 
 //    experimental :: String s23;
 

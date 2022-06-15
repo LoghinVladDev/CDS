@@ -54,7 +54,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             class ArrayDelegateConstIterator;
             
         private:
-            using typename Collection < __ElementType > :: DelegateIteratorRequestType;
+            using typename List < __ElementType > :: DelegateIteratorRequestType;
 
         private:
             auto delegateIterator (
@@ -66,13 +66,13 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                     DelegateIteratorRequestType requestType
             ) const noexcept -> cds :: UniquePointer < DelegateConstIterator > override;
 
-        private:
+        protected:
             ElementType ** _pData       { nullptr };
 
-        private:
+        protected:
             Size           _capacity    { 0ULL };
 
-        private:
+        protected:
             static Size const minCapacity = 32ULL;
 
         private:

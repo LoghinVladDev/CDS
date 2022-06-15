@@ -239,7 +239,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
              * @exceptsafe
              * @test tested in collection/Collection test
              */
-            ~List () noexcept override = default;
+            __CDS_cpplang_ConstexprDestructor ~List () noexcept override = default;
 
         public:
             /**
@@ -307,7 +307,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
              * @return ElementType ptr ref = Reference to an ElementType pointer.
              * @test tested in collection/Collection test
              */
-            __CDS_OptimalInline auto pNewInsert (
+            auto pNewInsert (
                     ElementType const & referenceElement
             ) noexcept -> ElementType * & override;
 

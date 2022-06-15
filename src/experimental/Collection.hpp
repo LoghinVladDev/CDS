@@ -1319,7 +1319,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
              * @exceptsafe
              * @test tested in base class test
              */
-            ~Collection() noexcept override = default;
+            __CDS_cpplang_ConstexprDestructor ~Collection() noexcept override = default;
 
         public:
             /**
