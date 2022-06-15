@@ -51,7 +51,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         }
 
         template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
-        __CDS_cpplang_NonConstConstexprMemberFunction auto Collection < __ElementType > :: ConstIterator :: operator = (
+        __CDS_OptimalInline auto Collection < __ElementType > :: ConstIterator :: operator = (
                 ConstIterator && iterator
         ) noexcept -> ConstIterator & {
 
@@ -71,14 +71,14 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         }
 
         template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
-        __CDS_cpplang_ConstexprPureAbstract auto Collection < __ElementType > :: ConstIterator :: operator ++ () noexcept -> ConstIterator & {
+        __CDS_cpplang_ConstexprOverride auto Collection < __ElementType > :: ConstIterator :: operator ++ () noexcept -> ConstIterator & {
 
             (void) this->next();
             return * this;
         }
 
         template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
-        __CDS_cpplang_ConstexprPureAbstract auto Collection < __ElementType > :: ConstIterator :: operator ++ (int) noexcept -> ConstIterator {
+        __CDS_OptimalInline auto Collection < __ElementType > :: ConstIterator :: operator ++ (int) noexcept -> ConstIterator {
 
             auto copy = * this;
             (void) this->next();
@@ -86,14 +86,14 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         }
 
         template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
-        __CDS_cpplang_ConstexprPureAbstract auto Collection < __ElementType > :: ConstIterator :: operator -- () noexcept -> ConstIterator & {
+        __CDS_cpplang_ConstexprOverride auto Collection < __ElementType > :: ConstIterator :: operator -- () noexcept -> ConstIterator & {
 
             (void) this->previous();
             return * this;
         }
 
         template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
-        __CDS_cpplang_ConstexprPureAbstract auto Collection < __ElementType > :: ConstIterator :: operator -- (int) noexcept -> ConstIterator {
+        __CDS_OptimalInline auto Collection < __ElementType > :: ConstIterator :: operator -- (int) noexcept -> ConstIterator {
 
             auto copy = * this;
             (void) this->previous();
@@ -101,7 +101,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         }
 
         template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
-        __CDS_cpplang_ConstexprPureAbstract auto Collection < __ElementType > :: ConstIterator :: operator * () const noexcept -> __ElementType const & {
+        __CDS_cpplang_ConstexprOverride auto Collection < __ElementType > :: ConstIterator :: operator * () const noexcept -> __ElementType const & {
 
             return reinterpret_cast < DelegateConstIterator const * > ( this->_pDelegate.get() )->value();
         }

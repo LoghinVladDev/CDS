@@ -86,7 +86,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
              * @return ConstIterator ref = Reference to the modified caller Iterator ( left operand )
              * @test tested in nester class test
              */
-            __CDS_cpplang_NonConstConstexprMemberFunction auto operator = (
+            auto operator = (
                     ConstIterator && iterator
             ) noexcept -> ConstIterator &;
 
@@ -97,7 +97,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
              * @return ConstIterator ref = Reference to caller iterator object
              * @test tested in nester class test
              */
-            __CDS_cpplang_ConstexprPureAbstract auto operator ++ () noexcept -> ConstIterator &;
+            __CDS_cpplang_ConstexprOverride auto operator ++ () noexcept -> ConstIterator &;
 
         public:
             /**
@@ -106,7 +106,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
              * @return ConstIterator = Copy of the original caller
              * @test tested in nester class test
              */
-            __CDS_cpplang_ConstexprPureAbstract auto operator ++ (int) noexcept -> ConstIterator;
+            auto operator ++ (int) noexcept -> ConstIterator;
 
         public:
             /**
@@ -115,7 +115,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
              * @return ConstIterator ref = Reference to caller iterator object
              * @test tested in nester class test
              */
-            __CDS_cpplang_ConstexprPureAbstract auto operator -- () noexcept -> ConstIterator &;
+            __CDS_cpplang_ConstexprOverride auto operator -- () noexcept -> ConstIterator &;
 
         public:
             /**
@@ -124,7 +124,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
              * @return ConstIterator = Copy of the original caller
              * @test tested in nester class test
              */
-            __CDS_cpplang_ConstexprPureAbstract auto operator -- (int) noexcept -> ConstIterator;
+            auto operator -- (int) noexcept -> ConstIterator;
 
         public:
             /**
@@ -133,7 +133,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
              * @return __ElementType cref = Constant Reference to a Collection Element
              * @test tested in nester class test
              */
-            __CDS_cpplang_ConstexprPureAbstract auto operator * () const noexcept -> __ElementType const &;
+            __CDS_cpplang_ConstexprOverride auto operator * () const noexcept -> __ElementType const &;
 
         public:
             /**

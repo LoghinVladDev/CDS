@@ -1,18 +1,18 @@
 //
-// Created by loghin on 4/26/22.
+// Created by loghin on 6/16/22.
 //
 
-#ifndef __CDS_LIST_ITERATOR_HPP__
-#define __CDS_LIST_ITERATOR_HPP__
+#ifndef __CDS_EX_MAP_ITERATOR_HPP__
+#define __CDS_EX_MAP_ITERATOR_HPP__
 
 namespace cds { // NOLINT(modernize-concat-nested-namespaces)
     namespace experimental {
 
-        template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
-        class List < __ElementType > :: Iterator : public List < __ElementType > :: AbstractIterator {
+        template < typename __KeyType, typename __ValueType >
+        class Map < __KeyType, __ValueType > :: Iterator : public Map < __KeyType, __ValueType > :: AbstractIterator {
 
         public:
-            constexpr Iterator () noexcept = default;
+            constexpr Iterator () noexcept;
 
         public:
             Iterator (
@@ -21,17 +21,12 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
         public:
             constexpr Iterator (
-                    Iterator && iterator
-            ) noexcept;
-
-        public:
-            constexpr Iterator (
-                    List < __ElementType >                      const * pList,
+                    Map < __KeyType, __ValueType >              const * pMap,
                     cds :: UniquePointer < DelegateIterator >        && pIterator
             ) noexcept;
 
         public:
-            ~Iterator () noexcept override = default;
+            ~Iterator () noexcept override;
 
         public:
             auto operator = (
@@ -56,14 +51,13 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             auto operator -- (int) noexcept -> Iterator;
 
         public:
-            __CDS_cpplang_ConstexprOverride auto operator * () const noexcept -> __ElementType &;
+            __CDS_cpplang_ConstexprOverride auto operator * () const noexcept -> Map < __KeyType, __ValueType > :: EntryType &;
 
         public:
-            __CDS_cpplang_ConstexprOverride auto operator -> () const noexcept -> __ElementType *;
-
+            __CDS_cpplang_ConstexprOverride auto operator -> () const noexcept -> Map < __KeyType, __ValueType > :: EntryType *;
         };
 
     }
 }
 
-#endif // __CDS_LIST_ITERATOR_HPP__
+#endif // __CDS_EX_MAP_ITERATOR_HPP__

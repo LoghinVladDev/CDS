@@ -18,7 +18,7 @@ using namespace cds :: literals;
 
 
 int main () {
-//    cds :: experimental :: HashMap < int, int > m;
+    cds :: experimental :: HashMap < int, int > m;
 
 
     std :: cout << cds :: meta :: isDerivedFrom < cds :: experimental :: HashSet < int, cds :: utility :: MediumCollisionDefaultHashFunction < int > >, cds :: experimental :: Set < int > > () << '\n';

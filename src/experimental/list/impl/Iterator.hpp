@@ -55,7 +55,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
 
         template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
-        __CDS_cpplang_NonConstConstexprMemberFunction auto List < __ElementType > :: Iterator :: operator = (
+        __CDS_OptimalInline auto List < __ElementType > :: Iterator :: operator = (
                 Iterator && iterator
         ) noexcept -> Iterator & {
 
@@ -77,7 +77,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
 
         template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
-        __CDS_cpplang_ConstexprPureAbstract auto List < __ElementType > :: Iterator :: operator ++ () noexcept -> Iterator & {
+        __CDS_cpplang_ConstexprOverride auto List < __ElementType > :: Iterator :: operator ++ () noexcept -> Iterator & {
 
             (void) this->next();
             return * this;
@@ -85,7 +85,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
 
         template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
-        __CDS_cpplang_ConstexprPureAbstract auto List < __ElementType > :: Iterator :: operator ++ (int) noexcept -> Iterator {
+        __CDS_OptimalInline auto List < __ElementType > :: Iterator :: operator ++ (int) noexcept -> Iterator {
 
             auto copy = * this;
             (void) this->next();
@@ -94,7 +94,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
 
         template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
-        __CDS_cpplang_ConstexprPureAbstract auto List < __ElementType > :: Iterator :: operator -- () noexcept -> Iterator & {
+        __CDS_cpplang_ConstexprOverride auto List < __ElementType > :: Iterator :: operator -- () noexcept -> Iterator & {
 
             (void) this->previous();
             return * this;
@@ -102,7 +102,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
 
         template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
-        __CDS_cpplang_ConstexprPureAbstract auto List < __ElementType > :: Iterator :: operator -- (int) noexcept -> Iterator {
+        __CDS_OptimalInline auto List < __ElementType > :: Iterator :: operator -- (int) noexcept -> Iterator {
 
             auto copy = * this;
             (void) this->previous();
@@ -111,7 +111,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
 
         template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
-        __CDS_cpplang_ConstexprPureAbstract auto List < __ElementType > :: Iterator :: operator * () const noexcept -> __ElementType & {
+        __CDS_cpplang_ConstexprOverride auto List < __ElementType > :: Iterator :: operator * () const noexcept -> __ElementType & {
 
             return reinterpret_cast < DelegateIterator const * > ( this->_pDelegate.get() )->value();
         }

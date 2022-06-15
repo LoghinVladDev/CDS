@@ -233,4 +233,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
     }
 }
 
+#include "map/Iterator.hpp"
+#include "map/ReverseIterator.hpp"
+
 #endif // __CDS_EX_MAP_HPP__
