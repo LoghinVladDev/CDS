@@ -62,6 +62,18 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 protected:
                     using typename Map < __KeyType, __ValueType > :: DelegateIteratorRequestType;
 
+                protected:
+                    class HashMapDelegateIterator;
+
+                protected:
+                    class HashMapDelegateConstIterator;
+
+                protected:
+                    class HashMapDelegateReverseIterator;
+
+                protected:
+                    class HashMapDelegateConstReverseIterator;
+
                 public:
                     auto delegateIterator (
                             DelegateIteratorRequestType requestType

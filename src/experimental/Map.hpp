@@ -7,7 +7,7 @@
 
 #include <CDS/experimental/Collection>
 
-#include "map/Entry.hpp"
+#include "map/entry/Entry.hpp"
 
 namespace cds { // NOLINT(modernize-concat-nested-namespaces)
     namespace experimental {
@@ -228,11 +228,13 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
 #include "map/Iterator.hpp"
 #include "map/ReverseIterator.hpp"
+#include "map/DelegateIterator.hpp"
 
 #include "map/impl/Iterator.hpp"
 #include "map/impl/ReverseIterator.hpp"
+#include "map/impl/DelegateIterator.hpp"
 
-#include "map/impl/Entry.hpp"
+#include "map/entry/impl/Entry.hpp"
 
 #include "map/impl/Map.hpp"
 

@@ -2,8 +2,8 @@
 // Created by loghin on 6/15/22.
 //
 
-#ifndef __CDS_EX_HASH_MAP_ENTRY_ARRAY_HPP__
-#define __CDS_EX_HASH_MAP_ENTRY_ARRAY_HPP__
+#ifndef __CDS_EX_MAP_ENTRY_ARRAY_HPP__
+#define __CDS_EX_MAP_ENTRY_ARRAY_HPP__
 
 namespace cds { // NOLINT(modernize-concat-nested-namespaces)
     namespace experimental { // NOLINT(modernize-concat-nested-namespaces)
@@ -23,4 +23,4 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
     }
 }
 
-#endif // __CDS_EX_HASH_MAP_ENTRY_ARRAY_HPP__
+#endif // __CDS_EX_MAP_ENTRY_ARRAY_HPP__

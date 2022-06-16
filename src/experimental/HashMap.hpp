@@ -6,12 +6,12 @@
 #define __CDS_EX_HASH_MAP_HPP__
 
 #include <CDS/experimental/Map>
-#include "map/BaseMap.hpp"
+#include "map/baseMap/BaseMap.hpp"
 #include <CDS/HashSet>
 #include <CDS/Array>
 
-#include "shared/map/EntryArray.hpp"
-#include "shared/map/entryArray/Associator.hpp"
+#include "map/entryArray/EntryArray.hpp"
+#include "map/entryArray/Associator.hpp"
 #include "hashMap/Associator.hpp"
 
 namespace cds { // NOLINT(modernize-concat-nested-namespaces)
@@ -32,6 +32,10 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         };
     }
 }
+
+#include "map/baseMap/impl/BaseMap.hpp"
+#include "map/entryArray/impl/Associator.hpp"
+#include "hashMap/impl/Associator.hpp"
 
 
 #endif // __CDS_EX_HASH_MAP_HPP__

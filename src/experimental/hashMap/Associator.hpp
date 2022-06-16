@@ -10,9 +10,13 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         namespace __hidden { // NOLINT(modernize-concat-nested-namespaces, bugprone-reserved-identifier)
             namespace __impl { // NOLINT(bugprone-reserved-identifier)
 
-                template < typename __KeyType, typename __ValueType, typename __HashCalculator >
-                class __HashEntryArrayAssociator : public __EntryArray < __ValueType > :: template __EntryAssociator < __KeyType > {
+                template < typename __KeyType, typename __ValueType, typename __HashCalculator > // NOLINT(bugprone-reserved-identifier)
+                class __HashEntryArrayAssociator : public __EntryArray < __ValueType > :: template __EntryAssociator < __KeyType > { // NOLINT(bugprone-reserved-identifier)
 
+                public:
+                    __CDS_Explicit constexpr __HashEntryArrayAssociator (
+                            __EntryArray < __ValueType > & entryArray
+                    ) noexcept;
                 };
 
             }
