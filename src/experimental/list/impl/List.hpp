@@ -11,7 +11,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         namespace __hidden { // NOLINT(modernize-concat-nested-namespaces, bugprone-reserved-identifier)
             namespace __impl { // NOLINT(bugprone-reserved-identifier)
 
-                template < typename __ElementType, meta :: EnableIf < meta :: isMoveAssignable < __ElementType > () > = 0 > // NOLINT(bugprone-reserved-identifier)
+                template < typename __ElementType, cds :: meta :: EnableIf < cds :: meta :: isMoveAssignable < __ElementType > () > = 0 > // NOLINT(bugprone-reserved-identifier)
                 __CDS_cpplang_NonConstConstexprMemberFunction auto __assign ( // NOLINT(bugprone-reserved-identifier)
                         __ElementType & left,
                         __ElementType & right
@@ -1684,7 +1684,11 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             }
 
             auto asString = out.str();
-            return asString.substr(0u, asString.length() - 2u).append(" ]");
+
+            asString [ asString.length() - 2U ] = ' ';
+            asString [ asString.length() - 1U ] = ']';
+
+            return asString;
         }
 
 

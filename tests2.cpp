@@ -32,7 +32,7 @@ int main () {
 
     auto set = cds :: experimental :: setOf ( 1, 2, 3, 4 );
 
-    cds :: experimental::FunctionComparator <int, predicates::lessThan<int>> comp;
+    cds :: experimental::FunctionComparator <int, & predicates::lessThan<int>> comp;
     std :: cout << noexcept ( comp ( 2, 3 ) ) << '\n';
 
     meta :: RemoveConstVolatile < int > var2 = 3;

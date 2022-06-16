@@ -50,7 +50,11 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             }
 
             auto asString = out.str();
-            return asString.substr ( 0, asString.length() - 2 ) + " }";
+
+            asString [ asString.length() - 2U ] = ' ';
+            asString [ asString.length() - 1U ] = '}';
+
+            return asString;
         }
 
 

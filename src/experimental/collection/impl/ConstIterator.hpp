@@ -15,7 +15,11 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         ) noexcept :
                 Collection < __ElementType > :: AbstractIterator (
                         pCollection,
-                        cds :: UniquePointer < AbstractDelegateIterator > ( cds :: forward < cds :: UniquePointer < DelegateConstIterator > > ( pIterator ) )
+                        cds :: UniquePointer < AbstractDelegateIterator > (
+                                cds :: forward < cds :: UniquePointer < DelegateConstIterator > > (
+                                        pIterator
+                                )
+                        )
                 ) {
 
         }
@@ -24,7 +28,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         __CDS_OptimalInline Collection < __ElementType > :: ConstIterator :: ConstIterator (
                 ConstIterator const & iterator
         ) noexcept :
-                AbstractIterator ( iterator ) {
+                Collection < __ElementType > :: AbstractIterator ( iterator ) {
 
         }
 
@@ -32,7 +36,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         constexpr Collection < __ElementType > :: ConstIterator :: ConstIterator (
                 ConstIterator && iterator
         ) noexcept :
-                AbstractIterator ( cds :: forward < AbstractIterator > ( iterator ) ) {
+                Collection < __ElementType > :: AbstractIterator ( std :: move ( iterator ) ) {
 
         }
 
@@ -60,7 +64,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             }
 
             this->_pDelegate    = std :: move ( iterator._pDelegate );
-            this->_pCollection  = std :: move ( iterator._pCollection );
+            this->_pCollection  = std :: exchange ( iterator._pCollection, nullptr );
             return * this;
         }
 

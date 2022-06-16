@@ -210,22 +210,15 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             auto clear () noexcept -> void override = 0;
 
         public:
-            template < typename __TKeyType, typename __TValueType >
+            template < typename __TKeyType, typename __TValueType > // NOLINT(bugprone-reserved-identifier)
             auto emplace (
                     __TKeyType      && key,
                     __TValueType    && value
             ) noexcept -> void;
 
         public:
-            template < typename __EntryType = EntryType, cds :: meta :: EnableIf < cds :: meta :: isCopyConstructible < __EntryType > () > = 0 >
             auto insert (
                     EntryType const & entry
-            ) noexcept -> void;
-
-        public:
-            template < typename __EntryType = EntryType, cds :: meta :: EnableIf < cds :: meta :: isMoveConstructible < __EntryType > () > = 0 >
-            auto insert (
-                    EntryType && entry
             ) noexcept -> void;
 
         };
@@ -235,5 +228,12 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
 #include "map/Iterator.hpp"
 #include "map/ReverseIterator.hpp"
+
+#include "map/impl/Iterator.hpp"
+#include "map/impl/ReverseIterator.hpp"
+
+#include "map/impl/Entry.hpp"
+
+#include "map/impl/Map.hpp"
 
 #endif // __CDS_EX_MAP_HPP__

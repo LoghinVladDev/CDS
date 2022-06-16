@@ -8,7 +8,7 @@
 namespace cds { // NOLINT(modernize-concat-nested-namespaces)
     namespace experimental {
 
-        template < typename __KeyType, typename __ValueType >
+        template < typename __KeyType, typename __ValueType > // NOLINT(bugprone-reserved-identifier)
         class Map < __KeyType, __ValueType > :: Iterator : public Map < __KeyType, __ValueType > :: AbstractIterator {
 
         public:
@@ -17,6 +17,11 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         public:
             Iterator (
                     Iterator const & iterator
+            ) noexcept;
+
+        public:
+            constexpr Iterator (
+                    Iterator && iterator
             ) noexcept;
 
         public:
