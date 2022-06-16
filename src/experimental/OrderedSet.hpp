@@ -6,6 +6,7 @@
 #define __CDS_EX_ORDERED_SET_HPP__
 
 #include "ListSet.hpp"
+#include <CDS/Comparator>
 
 #include "../shared/impl/generalPredicates.hpp"
 

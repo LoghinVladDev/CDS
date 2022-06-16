@@ -1457,7 +1457,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             template < typename __VElementType = __ElementType, meta :: EnableIf < meta :: isCopyConstructible < __VElementType > () > = 0 > // NOLINT(bugprone-reserved-identifier)
             auto add (
                     ElementType const & element
-            ) noexcept ( noexcept ( ElementType ( element ) ) ) -> void;
+            ) noexcept ( noexcept ( ElementType ( element ) ) ) -> ElementType const &;
 
         public:
             /**
@@ -1470,7 +1470,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             template < typename __VElementType = __ElementType, meta :: EnableIf < meta :: isMoveConstructible < __VElementType > () > = 0 > // NOLINT(bugprone-reserved-identifier)
             auto add (
                     ElementType && element
-            ) noexcept ( noexcept ( ElementType ( std :: move ( element ) ) ) ) -> void;
+            ) noexcept ( noexcept ( ElementType ( std :: move ( element ) ) ) ) -> ElementType const &;
 
         public:
             /**

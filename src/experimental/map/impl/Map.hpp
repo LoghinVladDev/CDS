@@ -103,7 +103,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 __TValueType    && value
         ) noexcept -> void {
 
-            return this->add (
+            (void) this->add (
                     __hidden :: __impl :: __MapEntry (
                             std :: forward < __TKeyType > ( key ),
                             std :: forward < __TValueType > ( value )
@@ -117,7 +117,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 EntryType const & entry
         ) noexcept -> void {
 
-            return this->add ( entry );
+            (void) this->add ( entry );
         }
 
     }

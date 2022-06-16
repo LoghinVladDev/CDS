@@ -233,7 +233,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                         ElementType const & referenceElement
                 ) noexcept -> ElementType * & {
 
-                    return persistentAddress < ElementType >;
+                    return this->_pInsertTemporary;
                 }
 
 
@@ -256,6 +256,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                         __enabler
                 > :: pNewInsertPost () noexcept -> void {
 
+                    auto const & mappedKeyReference = this->_pInsertTemporary->moveOrCopyKeyTo ( this->_keySet );
                 }
 
 

@@ -7,8 +7,8 @@
 
 #include <CDS/experimental/Map>
 #include "map/baseMap/BaseMap.hpp"
-#include <CDS/HashSet>
-#include <CDS/Array>
+#include <CDS/experimental/HashSet>
+#include <CDS/experimental/Array>
 
 #include "map/entryArray/EntryArray.hpp"
 #include "map/entryArray/Associator.hpp"

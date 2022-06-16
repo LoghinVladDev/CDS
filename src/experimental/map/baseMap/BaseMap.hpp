@@ -19,8 +19,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                         cds :: meta :: EnableIf <
                                 cds :: meta :: isDerivedFrom < __KeySetType, cds :: experimental :: Set < __KeyType > > () &&
                                 cds :: meta :: isDerivedFrom < __ValueCollectionType, cds :: experimental :: Collection < __ValueType > > ()
-//                                cds :: meta :: isDerivedFrom < __EntryAssociatorType, cds :: experimental :: Collection < __MapEntry < __KeyType, __ValueType > > > ()
-                        > = 0
+                        >
                 > class __BaseMap : public cds :: experimental :: Map < __KeyType, __ValueType > { // NOLINT(bugprone-reserved-identifier)
 
                 public:
@@ -92,6 +91,9 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
                 private:
                     __EntryAssociatorType   _associator; /// associator < Key, ValueCollection >. Manages ValueCollection
+
+                private:
+                    ElementType           * _pInsertTemporary;
 
                 public:
                     constexpr __BaseMap () noexcept;

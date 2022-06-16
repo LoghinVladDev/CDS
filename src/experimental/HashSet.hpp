@@ -6,6 +6,7 @@
 #define __CDS_EX_HASH_SET_HPP__
 
 #include <CDS/experimental/Set>
+#include <CDS/Hasher>
 
 #include "shared/Node.hpp"
 

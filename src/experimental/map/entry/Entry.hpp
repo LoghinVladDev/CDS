@@ -14,6 +14,18 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         namespace __hidden { // NOLINT(modernize-concat-nested-namespaces, bugprone-reserved-identifier)
             namespace __impl { // NOLINT(bugprone-reserved-identifier)
 
+                template <
+                        typename __KeyType, // NOLINT(bugprone-reserved-identifier)
+                        typename __ValueType, // NOLINT(bugprone-reserved-identifier)
+                        typename __KeySetType, // NOLINT(bugprone-reserved-identifier)
+                        typename __ValueCollectionType, // NOLINT(bugprone-reserved-identifier)
+                        typename __EntryAssociatorType, // NOLINT(bugprone-reserved-identifier)
+                        cds :: meta :: EnableIf <
+                                cds :: meta :: isDerivedFrom < __KeySetType, cds :: experimental :: Set < __KeyType > > () &&
+                                cds :: meta :: isDerivedFrom < __ValueCollectionType, cds :: experimental :: Collection < __ValueType > > ()
+                        > = 0
+                > class __BaseMap; // NOLINT(bugprone-reserved-identifier)
+
                 template < typename __Type > // NOLINT(bugprone-reserved-identifier)
                 class __ForwardContainer { // NOLINT(bugprone-reserved-identifier)
 
@@ -48,7 +60,58 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 class __MapEntry { // NOLINT(bugprone-reserved-identifier)
 
                 private:
-                    friend class cds :: experimental :: Map < __KeyType, __ValueType >;
+                    template <
+                            typename __TKeyType, // NOLINT(bugprone-reserved-identifier)
+                            typename __TValueType, // NOLINT(bugprone-reserved-identifier)
+                            typename __KeySetType, // NOLINT(bugprone-reserved-identifier)
+                            typename __ValueCollectionType, // NOLINT(bugprone-reserved-identifier)
+                            typename __EntryAssociatorType, // NOLINT(bugprone-reserved-identifier)
+                            cds :: meta :: EnableIf <
+                                    cds :: meta :: isDerivedFrom < __KeySetType, cds :: experimental :: Set < __TKeyType > > () &&
+                                    cds :: meta :: isDerivedFrom < __ValueCollectionType, cds :: experimental :: Collection < __TValueType > > ()
+                            >
+                    > friend class __BaseMap; // NOLINT(bugprone-reserved-identifier)
+
+                private:
+                    template < typename __TKeyType = __KeyType, typename __KeySetType, cds :: meta :: EnableIf < cds :: meta :: isCopyConstructible < __TKeyType > () && cds :: meta :: isMoveConstructible < __TKeyType > () > = 0 >
+                    __CDS_OptimalInline auto moveOrCopyKeyTo (
+                            __KeySetType & set
+                    ) noexcept -> __TKeyType const & {
+
+                        if ( this->_key._forward ) {
+                            return set.add ( std :: move ( * this->_key._pObject ) );
+                        }
+
+                        return set.add ( * this->_key._pConstObject );
+                    }
+
+                private:
+                    template < typename __TKeyType = __KeyType, typename __KeySetType, cds :: meta :: EnableIf < cds :: meta :: isCopyConstructible < __TKeyType > () && ! cds :: meta :: isMoveConstructible < __TKeyType > () > = 0 >
+                    __CDS_OptimalInline auto moveOrCopyKeyTo (
+                            __KeySetType & set
+                    ) noexcept -> __TKeyType const & {
+
+                        return set.add ( * this->_key._pConstObject );
+                    }
+
+                private:
+                    template < typename __TKeyType = __KeyType, typename __KeySetType, cds :: meta :: EnableIf < cds :: meta :: isMoveConstructible < __TKeyType > () && ! cds :: meta :: isCopyConstructible < __TKeyType > () > = 0 >
+                    __CDS_OptimalInline auto moveOrCopyKeyTo (
+                            __KeySetType & set
+                    ) noexcept -> __TKeyType const & {
+
+                        return set.add ( std :: move ( * this->_key._pObject ) );
+                    }
+
+                private:
+                    template < typename __TKeyType = __KeyType, typename __KeySetType, cds :: meta :: EnableIf < ! cds :: meta :: isMoveConstructible < __TKeyType > () && ! cds :: meta :: isCopyConstructible < __TKeyType > () > = 0 >
+                    __CDS_OptimalInline auto moveOrCopyKeyTo (
+                            __KeySetType & set
+                    ) noexcept -> __TKeyType const & {
+
+                        static_assert( ! cds :: meta :: isMoveConstructible < __TKeyType > () && ! cds :: meta :: isCopyConstructible < __TKeyType > (), "Cannot insert a MapEntry of a Key that is not copyable or moveable");
+                        return * set.begin();
+                    }
 
                 public:
                     using KeyType   = __KeyType;
@@ -60,7 +123,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                     __ForwardContainer < KeyType > _key;
 
                 private:
-                    __ForwardContainer < KeyType > _value;
+                    __ForwardContainer < ValueType > _value;
 
                 public:
                     constexpr __MapEntry (
