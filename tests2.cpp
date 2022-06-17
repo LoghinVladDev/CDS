@@ -19,7 +19,7 @@ using namespace cds :: literals;
 
 int main () {
     cds :: experimental :: HashMap < int, int > m;
-    m.emplace (2,2 );
+//    m.emplace (2,2 );
 
 
     std :: cout << cds :: meta :: isDerivedFrom < cds :: experimental :: HashSet < int, cds :: utility :: MediumCollisionDefaultHashFunction < int > >, cds :: experimental :: Set < int > > () << '\n';

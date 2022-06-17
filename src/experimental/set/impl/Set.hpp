@@ -62,9 +62,15 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         template < typename __VElementType, cds :: meta :: EnableIf < cds :: meta :: isCopyConstructible < __VElementType > () > > // NOLINT(bugprone-reserved-identifier)
         auto Set < __ElementType, __enabler > :: insert (
                 ElementType const & element
-        ) noexcept -> void {
+        ) noexcept -> ElementType const & {
 
-            this->add ( element );
+            auto & pElementLocation = this->pNewInsert ( element );
+            if ( pElementLocation == nullptr ) {
+                pElementLocation = Memory :: instance().create < ElementType > ( element );
+                this->pNewInsertPost();
+            }
+
+            return * pElementLocation;
         }
 
 
@@ -72,9 +78,15 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         template < typename __VElementType, cds :: meta :: EnableIf < cds :: meta :: isMoveConstructible < __VElementType > () > > // NOLINT(bugprone-reserved-identifier)
         auto Set < __ElementType, __enabler > :: insert (
                 ElementType && element
-        ) noexcept -> void {
+        ) noexcept -> ElementType const & {
 
-            this->add ( std :: move ( element ) );
+            auto & pElementLocation = this->pNewInsert ( element );
+            if ( pElementLocation == nullptr ) {
+                pElementLocation = Memory :: instance().create < ElementType > ( std :: move ( element ) );
+                this->pNewInsertPost();
+            }
+
+            return * pElementLocation;
         }
 
 

@@ -96,13 +96,13 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             template < typename __VElementType = __ElementType, cds :: meta :: EnableIf < cds :: meta :: isCopyConstructible < __VElementType > () > = 0 > // NOLINT(bugprone-reserved-identifier)
             auto insert (
                     ElementType const & element
-            ) noexcept -> void;
+            ) noexcept -> ElementType const &;
 
         public:
             template < typename __VElementType = __ElementType, cds :: meta :: EnableIf < cds :: meta :: isMoveConstructible < __VElementType > () > = 0 > // NOLINT(bugprone-reserved-identifier)
             auto insert (
                     ElementType && element
-            ) noexcept -> void;
+            ) noexcept -> ElementType const &;
         };
 
     }

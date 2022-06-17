@@ -79,10 +79,10 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                     ) noexcept -> __TKeyType const & {
 
                         if ( this->_key._forward ) {
-                            return set.add ( std :: move ( * this->_key._pObject ) );
+                            return set.insert ( std :: move ( * this->_key._pObject ) );
                         }
 
-                        return set.add ( * this->_key._pConstObject );
+                        return set.insert ( * this->_key._pConstObject );
                     }
 
                 private:
@@ -91,7 +91,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                             __KeySetType & set
                     ) noexcept -> __TKeyType const & {
 
-                        return set.add ( * this->_key._pConstObject );
+                        return set.insert ( * this->_key._pConstObject );
                     }
 
                 private:
@@ -100,7 +100,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                             __KeySetType & set
                     ) noexcept -> __TKeyType const & {
 
-                        return set.add ( std :: move ( * this->_key._pObject ) );
+                        return set.insertinsert ( std :: move ( * this->_key._pObject ) );
                     }
 
                 private:

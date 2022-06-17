@@ -257,6 +257,8 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 > :: pNewInsertPost () noexcept -> void {
 
                     auto const & mappedKeyReference = this->_pInsertTemporary->moveOrCopyKeyTo ( this->_keySet );
+
+                    Memory :: instance().destroy ( this->_pInsertTemporary );
                 }
 
 
