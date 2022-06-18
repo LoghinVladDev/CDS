@@ -24,6 +24,7 @@ int main () {
     cds :: experimental :: HashMap < int, int > m;
     cds :: experimental :: HashSet < int > setset;
     cds :: experimental :: Array < int > testArr;
+    auto m2 = m;
 
 //    std :: ofstream out ("testData.out");
 //    std :: ifstream in ("errData.in");

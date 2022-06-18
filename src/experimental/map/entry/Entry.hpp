@@ -41,6 +41,11 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                     bool      _forward;
 
                 public:
+                    constexpr __ForwardContainer () noexcept :
+                            _forward ( false ),
+                            _pAny ( nullptr ) {
+
+                    }
 //                    constexpr __ForwardContainer (
 //                            __ForwardContainer const & container
 //                    ) noexcept;
@@ -164,6 +169,9 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                     __ForwardContainer < ValueType > _value;
 
                 public:
+                    constexpr __MapEntry () noexcept = default;
+
+                public:
                     constexpr __MapEntry (
                             KeyType     const & key,
                             ValueType   const & value
@@ -208,6 +216,18 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
                 public:
                     __CDS_cpplang_NonConstConstexprMemberFunction auto value () noexcept -> ValueType &;
+
+                public:
+                    __CDS_OptimalInline auto copyInto (
+                            __MapEntry & entry
+                    ) const noexcept -> void {
+
+                        entry._key._forward     = false;
+                        entry._key._pObject     = Memory :: instance().create < __KeyType > ( * this->_key._pConstObject );
+
+                        entry._value._forward   = false;
+                        entry._value._pObject   = Memory :: instance().create < __ValueType > ( * this->_value._pConstObject );
+                    }
                 };
 
             }

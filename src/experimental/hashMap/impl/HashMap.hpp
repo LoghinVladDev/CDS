@@ -51,10 +51,85 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
 
         template < typename __KeyType, typename __ValueType, typename __HashCalculator > // NOLINT(bugprone-reserved-identifier)
+        __CDS_OptimalInline auto HashMap < __KeyType, __ValueType, __HashCalculator > :: delegateIterator (
+                DelegateIteratorRequestType requestType
+        ) noexcept -> cds :: UniquePointer < DelegateIterator > {
+
+            return nullptr;
+        }
+
+
+        template < typename __KeyType, typename __ValueType, typename __HashCalculator > // NOLINT(bugprone-reserved-identifier)
+        __CDS_OptimalInline auto HashMap < __KeyType, __ValueType, __HashCalculator > :: delegateConstIterator (
+                DelegateIteratorRequestType requestType
+        ) const noexcept -> cds :: UniquePointer < DelegateConstIterator > {
+
+            return nullptr;
+        }
+
+
+        template < typename __KeyType, typename __ValueType, typename __HashCalculator > // NOLINT(bugprone-reserved-identifier)
         constexpr HashMap < __KeyType, __ValueType, __HashCalculator > :: HashMap () noexcept :
                 _keySetProxy ( this ),
                 _valueCollectionProxy ( this ),
                 _entrySetProxy ( this ) {
+
+        }
+
+
+        template < typename __KeyType, typename __ValueType, typename __HashCalculator > // NOLINT(bugprone-reserved-identifier)
+        HashMap < __KeyType, __ValueType, __HashCalculator > :: HashMap (
+                HashMap const & map
+        ) noexcept :
+                Map < __KeyType, __ValueType > ( map ),
+                _keySetProxy ( this ),
+                _valueCollectionProxy ( this ),
+                _entrySetProxy ( this ) {
+
+            this->_pBucketList =
+                    map.empty() ?
+                    nullptr     :
+                    cds :: __hidden :: __impl :: __allocation :: __allocPrimitiveArray < BucketType > ( this->_hashCalculator.getBoundary() );
+
+            if ( ! map.empty() ) {
+                for ( Size bucketIndex = 0ULL; bucketIndex < this->_hashCalculator.getBoundary(); ++ bucketIndex ) {
+
+                    DataNode * & pCurrentBucket = this->_pBucketList [ bucketIndex ];
+                    DataNode   * pOtherBucket   = map._pBucketList [ bucketIndex ];
+
+                    DataNode   * pBack          = nullptr;
+
+                    while ( pOtherBucket != nullptr ) {
+
+                        DataNode * pNewNode = Memory :: instance().create < DataNode > ();
+                        pNewNode->_pNext     = nullptr;
+                        pNewNode->_pPrevious = nullptr;
+
+                        pOtherBucket->_entry.copyInto ( pNewNode->_entry );
+
+                        if ( pBack == nullptr ) {
+                            pCurrentBucket  = pNewNode;
+                        } else {
+                            pBack->_pNext   = pNewNode;
+                        }
+
+                        pBack           = pNewNode;
+                        pOtherBucket    = pOtherBucket->_pNext;
+                    }
+                }
+            }
+        }
+
+
+        template < typename __KeyType, typename __ValueType, typename __HashCalculator > // NOLINT(bugprone-reserved-identifier)
+        constexpr HashMap < __KeyType, __ValueType, __HashCalculator > :: HashMap (
+                HashMap && map
+        ) noexcept :
+                Map < __KeyType, __ValueType > ( map ),
+                _keySetProxy ( this ),
+                _valueCollectionProxy ( this ),
+                _entrySetProxy ( this ),
+                _pBucketList ( cds :: exchange ( map._pBucketList, nullptr ) ) {
 
         }
 
