@@ -18,7 +18,7 @@
 
 using namespace cds;
 using namespace cds :: literals;
-
+#include <CDS/HashMap>
 
 int main () {
     cds :: experimental :: HashMap < int, int > m;
@@ -27,12 +27,12 @@ int main () {
 
 //    std :: ofstream out ("testData.out");
 //    std :: ifstream in ("errData.in");
-    for ( int i = 0; i < 100000; ++ i ) {
+    for ( int i = 0; i < 1000000; ++ i ) {
         int k = rand();
         int v = rand();
 
-        testArr.pushFront(k);
-        testArr.pushBack(v);
+//        testArr.pushFront(k);
+//        testArr.pushBack(v);
 
 //        out << k << ' ' << v << '\n';
 ////        setset.insert ( k );
@@ -41,18 +41,18 @@ int main () {
 //        int k, v;
 //        in >> k >> v;
 
-//        m.emplace ( k, v );
+        m.emplace ( k, v );
     }
 
-    auto it1 = testArr.begin();
-    for ( int i = 0; i < 500; ++ i ) {
-        ++ it1;
-    }
-
-    for ( int i = 0; i < 1000; ++ i ) {
-        testArr.insertBefore ( it1, i );
-        testArr.insertAfter ( it1, - i );
-    }
+//    auto it1 = testArr.begin();
+//    for ( int i = 0; i < 500; ++ i ) {
+//        ++ it1;
+//    }
+//
+//    for ( int i = 0; i < 1000; ++ i ) {
+//        testArr.insertBefore ( it1, i );
+//        testArr.insertAfter ( it1, - i );
+//    }
 
 //    int k1 = 572660336, v1 = 1159126505;
 //    m.emplace ( k1, v1 );

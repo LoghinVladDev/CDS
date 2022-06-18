@@ -9,6 +9,48 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
     namespace experimental {
 
         template < typename __KeyType, typename __ValueType > // NOLINT(bugprone-reserved-identifier)
+        __CDS_cpplang_ConstexprPureAbstract auto Map < __KeyType, __ValueType > :: keys () const noexcept -> Set < KeyType const > const & {
+
+            return this->keySetProxy();
+        }
+
+
+        template < typename __KeyType, typename __ValueType > // NOLINT(bugprone-reserved-identifier)
+        __CDS_cpplang_ConstexprPureAbstract auto Map < __KeyType, __ValueType > :: keys () noexcept -> Set < KeyType const > & {
+
+            return this->keySetProxy();
+        }
+
+
+        template < typename __KeyType, typename __ValueType > // NOLINT(bugprone-reserved-identifier)
+        __CDS_cpplang_ConstexprPureAbstract auto Map < __KeyType, __ValueType > :: values () const noexcept -> Collection < ValueType > const & {
+
+            return this->valueCollectionProxy();
+        }
+
+
+        template < typename __KeyType, typename __ValueType > // NOLINT(bugprone-reserved-identifier)
+        __CDS_cpplang_ConstexprPureAbstract auto Map < __KeyType, __ValueType > :: values () noexcept -> Collection < ValueType > & {
+
+            return this->valueCollectionProxy();
+        }
+
+
+        template < typename __KeyType, typename __ValueType > // NOLINT(bugprone-reserved-identifier)
+        __CDS_cpplang_ConstexprPureAbstract auto Map < __KeyType, __ValueType > :: entries () const noexcept -> Set < EntryType > const & {
+
+            return this->entrySetProxy();
+        }
+
+
+        template < typename __KeyType, typename __ValueType > // NOLINT(bugprone-reserved-identifier)
+        __CDS_cpplang_ConstexprPureAbstract auto Map < __KeyType, __ValueType > :: entries () noexcept -> Set < EntryType > & {
+
+            return this->entrySetProxy();
+        }
+
+
+        template < typename __KeyType, typename __ValueType > // NOLINT(bugprone-reserved-identifier)
         __CDS_OptimalInline auto Map < __KeyType, __ValueType > :: begin () noexcept -> Iterator {
 
             return Iterator ( this, std :: move ( this->delegateIterator ( DelegateIteratorRequestType :: ForwardBegin ) ) );

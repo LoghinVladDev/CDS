@@ -6,6 +6,7 @@
 #define __CDS_EX_MAP_HPP__
 
 #include <CDS/experimental/Collection>
+#include <CDS/experimental/Set>
 
 #include "map/entry/Entry.hpp"
 
@@ -58,6 +59,51 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
         protected:
             using typename Collection < ElementType > :: DelegateIteratorRequestType;
+
+        protected:
+            class AbstractKeySetProxy;
+
+        protected:
+            class AbstractValueCollectionProxy;
+
+        protected:
+            class AbstractEntrySetProxy;
+
+        public:
+            __CDS_NoDiscard __CDS_cpplang_ConstexprPureAbstract auto keys () const noexcept -> Set < KeyType const > const &;
+
+        public:
+            __CDS_cpplang_ConstexprPureAbstract auto keys () noexcept -> Set < KeyType const > &;
+
+        public:
+            __CDS_NoDiscard __CDS_cpplang_ConstexprPureAbstract auto values () const noexcept -> Collection < ValueType > const &;
+
+        public:
+            __CDS_cpplang_ConstexprPureAbstract auto values () noexcept -> Collection < ValueType > &;
+
+        public:
+            __CDS_NoDiscard __CDS_cpplang_ConstexprPureAbstract auto entries () const noexcept -> Set < EntryType > const &;
+
+        public:
+            __CDS_cpplang_ConstexprPureAbstract auto entries () noexcept -> Set < EntryType > &;
+
+        protected:
+            __CDS_NoDiscard __CDS_cpplang_ConstexprPureAbstract virtual auto keySetProxy () const noexcept -> AbstractKeySetProxy const & = 0;
+
+        public:
+            __CDS_cpplang_ConstexprPureAbstract virtual auto keySetProxy () noexcept -> AbstractKeySetProxy & = 0;
+
+        public:
+            __CDS_NoDiscard __CDS_cpplang_ConstexprPureAbstract virtual auto valueCollectionProxy () const noexcept -> AbstractValueCollectionProxy const & = 0;
+
+        public:
+            __CDS_cpplang_ConstexprPureAbstract virtual auto valueCollectionProxy () noexcept -> AbstractValueCollectionProxy & = 0;
+
+        public:
+            __CDS_NoDiscard __CDS_cpplang_ConstexprPureAbstract virtual auto entrySetProxy () const noexcept -> AbstractEntrySetProxy const & = 0;
+
+        public:
+            __CDS_cpplang_ConstexprPureAbstract virtual auto entrySetProxy () noexcept -> AbstractEntrySetProxy & = 0;
 
         protected:
             virtual auto delegateIterator (
@@ -129,12 +175,27 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         public:
             virtual auto get (
                     KeyType const & key
+            ) noexcept -> ValueType & = 0;
+
+        public:
+            virtual auto at (
+                    KeyType const & key
             ) noexcept (false) -> ValueType & = 0;
 
         public:
-            virtual auto get (
+            virtual auto at (
                     KeyType const & key
             ) const noexcept (false) -> ValueType const & = 0;
+
+        public:
+            auto operator [] (
+                    KeyType const & key
+            ) noexcept -> ValueType &;
+
+        public:
+            auto operator [] (
+                    KeyType const & key
+            ) const noexcept (false) -> ValueType &;
 
         protected:
             auto pNewInsert (
@@ -179,25 +240,25 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                     ConstReverseIterator const & iterator
             ) noexcept -> bool override = 0;
 
-        public:
+        protected:
             virtual auto remove (
                     Iterator    const * pIterators,
                     Size                iteratorCount
             ) noexcept -> Size = 0;
 
-        public:
+        protected:
             auto remove (
                     ConstIterator   const * pIterators,
                     Size                    iteratorCount
             ) noexcept -> Size override = 0;
 
-        public:
+        protected:
             virtual auto remove (
                     ReverseIterator const * pIterators,
                     Size                    iteratorCount
             ) noexcept -> Size = 0;
 
-        public:
+        protected:
             auto remove (
                     ConstReverseIterator    const * pIterators,
                     Size                            iteratorCount
@@ -229,10 +290,16 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 #include "map/Iterator.hpp"
 #include "map/ReverseIterator.hpp"
 #include "map/DelegateIterator.hpp"
+#include "map/AbstractKeySetProxy.hpp"
+#include "map/AbstractValueCollectionProxy.hpp"
+#include "map/AbstractEntrySetProxy.hpp"
 
 #include "map/impl/Iterator.hpp"
 #include "map/impl/ReverseIterator.hpp"
 #include "map/impl/DelegateIterator.hpp"
+#include "map/impl/AbstractKeySetProxy.hpp"
+#include "map/impl/AbstractValueCollectionProxy.hpp"
+#include "map/impl/AbstractEntrySetProxy.hpp"
 
 #include "map/entry/impl/Entry.hpp"
 

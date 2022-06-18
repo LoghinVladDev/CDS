@@ -195,6 +195,19 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                     ) noexcept;
 
                 public:
+                    __CDS_NoDiscard constexpr auto operator == (
+                            __MapEntry const & entry
+                    ) const noexcept -> bool {
+
+                        if ( this == & entry ) {
+                            return true;
+                        }
+
+                        return
+                                this->_key._pConstObject == entry._key._pConstObject;
+                    }
+
+                public:
                     constexpr auto key () const noexcept -> KeyType const &;
 
                 public:
