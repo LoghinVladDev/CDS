@@ -41,9 +41,9 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                     bool      _forward;
 
                 public:
-                    constexpr __ForwardContainer (
-                            __ForwardContainer const & container
-                    ) noexcept;
+//                    constexpr __ForwardContainer (
+//                            __ForwardContainer const & container
+//                    ) noexcept;
 
                 public:
                     __CDS_Explicit constexpr __ForwardContainer (
@@ -111,6 +111,51 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
                         static_assert( ! cds :: meta :: isMoveConstructible < __TKeyType > () && ! cds :: meta :: isCopyConstructible < __TKeyType > (), "Cannot insert a MapEntry of a Key that is not copyable or moveable");
                         return * set.begin();
+                    }
+
+                private:
+                    template < typename __TValueType = __ValueType, typename __EntryAssociatorType, cds :: meta :: EnableIf < cds :: meta :: isCopyConstructible < __TValueType > () && cds :: meta :: isMoveConstructible < __TValueType > () > = 0 >
+                    __CDS_OptimalInline auto moveOrCopyValueTo (
+                            __KeyType               const & key,
+                            __EntryAssociatorType         & entryAssociator
+                    ) noexcept -> void {
+
+                        if ( this->_value._forward ) {
+                            entryAssociator.put ( key, std :: move ( * this->_value._pObject ) );
+                            return;
+                        }
+
+                        entryAssociator.put ( key, * this->_value._pConstObject );
+                    }
+
+                private:
+                    template < typename __TValueType = __ValueType, typename __EntryAssociatorType, cds :: meta :: EnableIf < ! cds :: meta :: isCopyConstructible < __TValueType > () && cds :: meta :: isMoveConstructible < __TValueType > () > = 0 >
+                    __CDS_OptimalInline auto moveOrCopyValueTo (
+                            __KeyType               const & key,
+                            __EntryAssociatorType         & entryAssociator
+                    ) noexcept -> void {
+
+                        entryAssociator.put ( key, std :: move ( * this->_value._pObject ) );
+                    }
+
+                private:
+                    template < typename __TValueType = __ValueType, typename __EntryAssociatorType, cds :: meta :: EnableIf < cds :: meta :: isCopyConstructible < __TValueType > () && ! cds :: meta :: isMoveConstructible < __TValueType > () > = 0 >
+                    __CDS_OptimalInline auto moveOrCopyValueTo (
+                            __KeyType               const & key,
+                            __EntryAssociatorType         & entryAssociator
+                    ) noexcept -> void {
+
+                        entryAssociator.put ( key, * this->_value._pConstObject );
+                    }
+
+                private:
+                    template < typename __TValueType = __ValueType, typename __EntryAssociatorType, cds :: meta :: EnableIf < ! cds :: meta :: isCopyConstructible < __TValueType > () && ! cds :: meta :: isMoveConstructible < __TValueType > () > = 0 >
+                    __CDS_OptimalInline auto moveOrCopyValueTo (
+                            __KeyType               const & key,
+                            __EntryAssociatorType         & entryAssociator
+                    ) noexcept -> void {
+
+                        static_assert( ! cds :: meta :: isMoveConstructible < __TValueType > () && ! cds :: meta :: isCopyConstructible < __TValueType > (), "Cannot insert a MapEntry of a Key that is not copyable or moveable");
                     }
 
                 public:

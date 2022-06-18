@@ -507,14 +507,18 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             auto newCap = maxOf ( this->_capacity * 2, this->_size + 1, Array :: minCapacity );
             auto newBuf = Memory :: instance ().createArray < __ElementType * > ( newCap );
 
-            (void) std :: memcpy ( newBuf - index, this->_pData, sizeof ( __ElementType * ) * ( index - 1 ) );
-            (void) std :: memcpy ( newBuf + index + 1, this->_pData + index, sizeof ( __ElementType * ) * ( static_cast < Index > ( this->_size ) - index + 1 ) );
+            if ( index > 0 ) {
+                (void) std :: memcpy ( newBuf, this->_pData, sizeof ( __ElementType * ) * ( index ) );
+            }
+
+            (void) std :: memcpy ( newBuf + index + 1, this->_pData + index, sizeof ( __ElementType * ) * ( static_cast < Index > ( this->_size ) - index ) );
 
             this->_capacity = newCap;
             ++ this->_size;
             Memory :: instance().destroyArray ( cds :: exchange ( this->_pData, newBuf ) );
 
-            return this->_pData [ index ] = nullptr;
+            this->_pData [ index ] = nullptr;
+            return this->_pData [ index ];
         }
 
 
@@ -535,8 +539,11 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             auto newCap = maxOf ( this->_capacity * 2, this->_size + 1, Array :: minCapacity );
             auto newBuf = Memory :: instance ().createArray < __ElementType * > ( newCap );
 
-            (void) std :: memcpy ( newBuf, this->_pData, sizeof ( __ElementType * ) * index );
-            (void) std :: memcpy ( newBuf + index + 2, this->_pData + index + 1, sizeof ( __ElementType * ) * ( static_cast < Index > ( this->_size ) - index ) );
+            (void) std :: memcpy ( newBuf, this->_pData, sizeof ( __ElementType * ) * ( index + 1 ) );
+
+            if ( static_cast < Size > ( index ) < this->_size - 1ULL ) {
+                (void) std :: memcpy ( newBuf + index + 2, this->_pData + index + 1, sizeof ( __ElementType * ) * ( static_cast < Index > ( this->_size ) - index - 1 ) );
+            }
 
             this->_capacity = newCap;
             ++ this->_size;

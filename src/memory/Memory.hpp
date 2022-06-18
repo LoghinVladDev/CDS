@@ -154,7 +154,7 @@ namespace cds {
         }
 
         template < typename T, typename ... ArgumentTypes >
-        inline auto create ( ArgumentTypes && ... arguments ) noexcept ( noexcept ( T ( std :: forward < ArgumentTypes && > ( arguments ) ... ) ) ) -> T * {
+        inline auto create ( ArgumentTypes && ... arguments ) noexcept ( noexcept ( T ( std :: forward < ArgumentTypes > ( arguments ) ... ) ) ) -> T * {
 
     #if defined(__CDS_Memory_ForceDisable)
             return new T ( std :: forward < ArgumentTypes > ( arguments ) ... );

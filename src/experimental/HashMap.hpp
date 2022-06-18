@@ -10,6 +10,7 @@
 #include <CDS/experimental/HashSet>
 #include <CDS/experimental/Array>
 
+#include "shared/Node.hpp"
 #include "map/entryArray/EntryArray.hpp"
 #include "map/entryArray/Associator.hpp"
 #include "hashMap/Associator.hpp"

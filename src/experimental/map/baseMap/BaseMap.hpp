@@ -93,7 +93,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                     __EntryAssociatorType   _associator; /// associator < Key, ValueCollection >. Manages ValueCollection
 
                 private:
-                    ElementType           * _pInsertTemporary;
+                    ElementType           * _pInsertTemporary { nullptr };
 
                 public:
                     constexpr __BaseMap () noexcept;

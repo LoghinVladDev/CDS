@@ -21,6 +21,59 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                     constexpr __EntryAssociator (
                             __EntryArray < __ValueType > & array
                     ) noexcept;
+
+                protected:
+                    __CDS_OptimalInline auto rightShiftFrom (
+                            Index index
+                    ) noexcept -> void {
+
+                        (void) this->_array.pNewBefore ( index );
+                    }
+
+                public:
+                    virtual ~__EntryAssociator() noexcept = default;
+
+                public:
+                    virtual auto clear () noexcept -> void {
+                        this->_array.clear();
+                    }
+
+                protected:
+                    virtual auto getAssociation (
+                            __KeyType const & key
+                    ) noexcept -> Index = 0;
+
+                public:
+                    template < typename __TValueType = __ValueType, cds :: meta :: EnableIf < cds :: meta :: isCopyConstructible < __TValueType > () > = 0 >
+                    __CDS_OptimalInline auto put (
+                            __KeyType   const & key,
+                            __ValueType const & value
+                    ) noexcept -> void {
+
+                        auto associatedIndex = this->getAssociation ( key );
+                        Memory :: instance().destroy (
+                                cds :: exchange (
+                                        this->_array._pData [ associatedIndex ],
+                                        Memory :: instance().create < __ValueType > ( value )
+                                )
+                        );
+                    }
+
+                public:
+                    template < typename __TValueType = __ValueType, cds :: meta :: EnableIf < cds :: meta :: isMoveConstructible < __TValueType > () > = 0 >
+                    __CDS_OptimalInline auto put (
+                            __KeyType   const & key,
+                            __ValueType      && value
+                    ) noexcept -> void {
+
+                        auto associatedIndex = this->getAssociation ( key );
+                        Memory :: instance().destroy (
+                                cds :: exchange (
+                                        this->_array._pData [ associatedIndex ],
+                                        Memory :: instance().create < __ValueType > ( std :: move ( value ) )
+                                )
+                        );
+                    }
                 };
 
             }

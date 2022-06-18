@@ -13,13 +13,49 @@
 #include <CDS/experimental/UnorderedSet>
 #include <CDS/experimental/HashMap>
 
+#include <time.h>
+#include <fstream>
+
 using namespace cds;
 using namespace cds :: literals;
 
 
 int main () {
     cds :: experimental :: HashMap < int, int > m;
-//    m.emplace (2,2 );
+    cds :: experimental :: HashSet < int > setset;
+    cds :: experimental :: Array < int > testArr;
+
+//    std :: ofstream out ("testData.out");
+//    std :: ifstream in ("errData.in");
+    for ( int i = 0; i < 1000; ++ i ) {
+        int k = rand();
+        int v = rand();
+
+        testArr.pushFront(k);
+        testArr.pushBack(v);
+
+//        out << k << ' ' << v << '\n';
+////        setset.insert ( k );
+////        setset.insert ( v );
+
+//        int k, v;
+//        in >> k >> v;
+
+//        m.emplace ( k, v );
+    }
+
+    auto it1 = testArr.begin();
+    for ( int i = 0; i < 500; ++ i ) {
+        ++ it1;
+    }
+
+    for ( int i = 0; i < 1000; ++ i ) {
+        testArr.insertBefore ( it1, i );
+        testArr.insertAfter ( it1, - i );
+    }
+
+//    int k1 = 572660336, v1 = 1159126505;
+//    m.emplace ( k1, v1 );
 
 
     std :: cout << cds :: meta :: isDerivedFrom < cds :: experimental :: HashSet < int, cds :: utility :: MediumCollisionDefaultHashFunction < int > >, cds :: experimental :: Set < int > > () << '\n';

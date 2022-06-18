@@ -205,12 +205,12 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                     Size                            iteratorCount
             ) noexcept -> Size override;
 
-        private:
+        protected:
             auto pNewBefore (
                     Index index
             ) noexcept -> ElementType * &;
 
-        private:
+        protected:
             auto pNewAfter (
                     Index index
             ) noexcept -> ElementType * &;
