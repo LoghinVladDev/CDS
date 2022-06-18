@@ -162,6 +162,16 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             (void) this->add ( entry );
         }
 
+
+        template < typename __KeyType, typename __ValueType > // NOLINT(bugprone-reserved-identifier)
+        auto Map < __KeyType, __ValueType > :: freeEntryData (
+                EntryType & entry
+        ) noexcept -> void {
+
+            Memory :: instance().destroy ( entry._key._pObject );
+            Memory :: instance().destroy ( entry._value._pObject );
+        }
+
     }
 }
 

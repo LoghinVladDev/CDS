@@ -6,14 +6,6 @@
 #define __CDS_EX_HASH_MAP_HPP__
 
 #include <CDS/experimental/Map>
-//#include "map/baseMap/BaseMap.hpp"
-#include <CDS/experimental/HashSet>
-#include <CDS/experimental/Array>
-
-//#include "shared/Node.hpp"
-//#include "map/entryArray/EntryArray.hpp"
-//#include "map/entryArray/Associator.hpp"
-//#include "hashMap/Associator.hpp"
 
 namespace cds { // NOLINT(modernize-concat-nested-namespaces)
     namespace experimental {
@@ -80,6 +72,19 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
         protected:
             class HashMapEntrySetProxy;
+
+        private:
+            struct DataNode {
+                EntryType   _entry;
+                DataNode  * _pNext;
+                DataNode  * _pPrevious;
+            };
+
+        private:
+            using BucketType = DataNode *;
+
+        private:
+            BucketType                * _pBucketList { nullptr };
 
         private:
             __HashCalculator            _hashCalculator;
@@ -228,6 +233,8 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 #include "hashMap/KeySetProxy.hpp"
 #include "hashMap/ValueCollectionProxy.hpp"
 #include "hashMap/EntrySetProxy.hpp"
+
+#include "../shared/memory/PrimitiveAllocation.hpp"
 
 #include "hashMap/impl/HashMap.hpp"
 #include "hashMap/impl/KeySetProxy.hpp"

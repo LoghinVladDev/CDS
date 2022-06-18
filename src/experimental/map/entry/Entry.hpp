@@ -62,15 +62,8 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 private:
                     template <
                             typename __TKeyType, // NOLINT(bugprone-reserved-identifier)
-                            typename __TValueType, // NOLINT(bugprone-reserved-identifier)
-                            typename __KeySetType, // NOLINT(bugprone-reserved-identifier)
-                            typename __ValueCollectionType, // NOLINT(bugprone-reserved-identifier)
-                            typename __EntryAssociatorType, // NOLINT(bugprone-reserved-identifier)
-                            cds :: meta :: EnableIf <
-                                    cds :: meta :: isDerivedFrom < __KeySetType, cds :: experimental :: Set < __TKeyType > > () &&
-                                    cds :: meta :: isDerivedFrom < __ValueCollectionType, cds :: experimental :: Collection < __TValueType > > ()
-                            >
-                    > friend class __BaseMap; // NOLINT(bugprone-reserved-identifier)
+                            typename __TValueType // NOLINT(bugprone-reserved-identifier)
+                    > friend class cds :: experimental :: Map; // NOLINT(bugprone-reserved-identifier)
 
                 private:
                     template < typename __TKeyType = __KeyType, typename __KeySetType, cds :: meta :: EnableIf < cds :: meta :: isCopyConstructible < __TKeyType > () && cds :: meta :: isMoveConstructible < __TKeyType > () > = 0 >

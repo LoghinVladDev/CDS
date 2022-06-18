@@ -282,6 +282,11 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                     EntryType const & entry
             ) noexcept -> void;
 
+        protected:
+            static auto freeEntryData (
+                    EntryType & entry
+            ) noexcept -> void;
+
         };
 
     }

@@ -58,6 +58,23 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
         }
 
+
+        template < typename __KeyType, typename __ValueType, typename __HashCalculator > // NOLINT(bugprone-reserved-identifier)
+        HashMap < __KeyType, __ValueType, __HashCalculator > :: ~HashMap () noexcept {
+
+            for ( Size bucketIndex = 0ULL; bucketIndex < this->_hashCalculator.getBoundary(); ++ bucketIndex ) {
+                while ( this->_pBucketList [ bucketIndex ] != nullptr ) {
+                    auto pCopy                          = this->_pBucketList [ bucketIndex ];
+                    this->_pBucketList [ bucketIndex ]  = this->_pBucketList [ bucketIndex ]->_pNext;
+
+                    Map < __KeyType, __ValueType > :: freeEntryData ( pCopy->_entry );
+                    Memory :: instance().destroy ( pCopy );
+                }
+            }
+
+            cds :: __hidden :: __impl :: __allocation :: __freePrimitiveArray ( this->_pBucketList );
+        }
+
     }
 }
 
