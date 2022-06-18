@@ -9,6 +9,7 @@
 
 #include "../../../shared/impl/generalPredicates.hpp"
 #include "../../../shared/impl/arithmetic.hpp"
+#include "../../../shared/memory/PrimitiveAllocation.hpp"
 
 #include <CDS/Limits>
 #include "StringUtils.hpp"

@@ -159,6 +159,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                         __enabler
                 > :: ~__BaseMap () noexcept {
 
+                    (void) this->__BaseMap :: clear();
                 }
 
 
@@ -561,6 +562,8 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                         __enabler
                 > :: clear () noexcept -> void {
 
+                    this->_keySet.clear();
+                    this->_associator.clear();
                 }
 
             }

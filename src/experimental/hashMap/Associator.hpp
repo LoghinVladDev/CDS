@@ -58,7 +58,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                                 }
                             }
 
-                            Memory :: instance().destroyArray ( this->_pNodeList );
+                            Memory :: instance().destroyArray ( cds :: exchange ( this->_pNodeList, nullptr ) );
                         }
 
                         this->_globalIndexAdjustment = 0;

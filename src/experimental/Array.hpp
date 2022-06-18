@@ -342,6 +342,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 #include "array/ArrayDelegateIterator.hpp"
 #include "array/ArrayDelegateConstIterator.hpp"
 
+#include "../shared/memory/PrimitiveAllocation.hpp"
 #include "array/impl/Array.hpp"
 #include "array/impl/ArrayDelegateIterator.hpp"
 #include "array/impl/ArrayDelegateConstIterator.hpp"

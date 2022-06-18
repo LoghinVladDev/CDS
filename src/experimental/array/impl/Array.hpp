@@ -71,7 +71,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         ) noexcept :
                 List < __ElementType > ( array ),
                 _capacity ( maxOf ( array.List < __ElementType > :: size(), Array :: minCapacity ) ),
-                _pData ( array.List < __ElementType > :: empty() ? nullptr : Memory :: instance().createArray < __ElementType * > ( maxOf ( array.List < __ElementType > :: size(), Array :: minCapacity ) ) ){
+                _pData ( array.List < __ElementType > :: empty() ? nullptr : cds :: __hidden :: __impl :: __allocation :: __allocPrimitiveArray < __ElementType * > ( maxOf ( array.List < __ElementType > :: size(), Array :: minCapacity ) ) ){
 
             this->initializeByCopy ( array );
         }
@@ -107,7 +107,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         ) noexcept :
                 List < __ElementType > ( static_cast < Size > ( initializerList.size() ) ),
                 _capacity ( maxOf ( initializerList.size(), Array :: minCapacity ) ),
-                _pData ( Memory :: instance().createArray < __ElementType * > ( maxOf ( initializerList.size(), Array :: minCapacity ) ) ) {
+                _pData ( initializerList.size() == 0ULL ? nullptr : cds :: __hidden :: __impl :: __allocation :: __allocPrimitiveArray < __ElementType * > ( maxOf ( initializerList.size(), Array :: minCapacity ) ) ) {
 
             Index i = 0;
             for ( auto const & element : initializerList ) {
@@ -123,7 +123,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         ) noexcept :
                 List < __ElementType > ( size ),
                 _capacity ( maxOf ( size, Array :: minCapacity ) ),
-                _pData ( Memory :: instance().createArray < __ElementType * > ( maxOf ( size, Array :: minCapacity ) ) ) {
+                _pData ( size == 0ULL ? nullptr : cds :: __hidden :: __impl :: __allocation :: __allocPrimitiveArray < __ElementType * > ( maxOf ( size, Array :: minCapacity ) ) ) {
 
             for ( Index index = 0; index < this->size(); ++ index ) {
                 this->_pData [ index ] = Memory :: instance().create < __ElementType > ();
@@ -139,7 +139,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         ) noexcept :
                 List < __ElementType > ( size ),
                 _capacity ( maxOf ( size, Array :: minCapacity ) ),
-                _pData ( Memory :: instance().createArray < __ElementType * > ( maxOf ( size, Array :: minCapacity ) ) ) {
+                _pData ( size == 0ULL ? nullptr : cds :: __hidden :: __impl :: __allocation :: __allocPrimitiveArray < __ElementType * > ( maxOf ( size, Array :: minCapacity ) ) ) {
 
             for ( Index index = 0; index < this->size(); ++ index ) {
                 this->_pData [ index ] = Memory :: instance().create < __ElementType > ( defaultValue );
@@ -154,7 +154,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         ) noexcept :
                 List < __ElementType > ( collection.size() ),
                 _capacity ( maxOf ( collection.size(), Array :: minCapacity ) ),
-                _pData ( Memory :: instance().createArray < __ElementType * > ( maxOf ( collection.size(), Array :: minCapacity ) ) ) {
+                _pData ( collection.size() == 0ULL ? nullptr : cds :: __hidden :: __impl :: __allocation :: __allocPrimitiveArray < __ElementType * > ( maxOf ( collection.size(), Array :: minCapacity ) ) ) {
 
             Index index = 0;
             for ( auto iterator = collection.begin(), end = collection.end(); iterator != end; ++ iterator, ++ index ) {
@@ -169,7 +169,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 Memory :: instance().destroy ( this->_pData[i] );
             }
 
-            Memory :: instance().destroyArray ( this->_pData );
+            cds :: __hidden :: __impl :: __allocation :: __freePrimitiveArray ( this->_pData );
         }
 
 
@@ -194,17 +194,20 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 return;
             }
 
-            auto newBuffer = Memory :: instance().createArray < __ElementType * > ( newCapacity );
-            for ( Size index = 0; index < minOf ( size, this->_capacity ); ++ index ) {
-                newBuffer [ index ] = this->_pData [ index ];
-            }
+            auto newBuffer = cds :: __hidden :: __impl :: __allocation :: __allocPrimitiveArray < __ElementType * > ( newCapacity );
+
+            (void) std :: memcpy (
+                    newBuffer,
+                    this->_pData,
+                    sizeof ( __ElementType ) * minOf ( size, this->_capacity )
+            );
 
             for ( Size index = minOf ( size, this->_capacity ); index < size; ++ index ) {
                 newBuffer [ index ] = Memory :: instance().create < __ElementType > ();
             }
 
             this->_capacity = newCapacity;
-            Memory :: instance().destroyArray ( exchange ( this->_pData, newBuffer ) );
+            cds :: __hidden :: __impl :: __allocation :: __freePrimitiveArray ( exchange ( this->_pData, newBuffer ) );
         }
 
 
@@ -230,17 +233,20 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 return;
             }
 
-            auto newBuffer = Memory :: instance().createArray < __ElementType * > ( newCapacity );
-            for ( Size index = 0; index < minOf ( size, this->_capacity ); ++ index ) {
-                newBuffer [ index ] = this->_pData [ index ];
-            }
+            auto newBuffer = cds :: __hidden :: __impl :: __allocation :: __allocPrimitiveArray < __ElementType * > ( newCapacity );
+
+            (void) std :: memcpy (
+                    newBuffer,
+                    this->_pData,
+                    sizeof ( __ElementType ) * minOf ( size, this->_capacity )
+            );
 
             for ( Size index = minOf ( size, this->_capacity ); index < size; ++ index ) {
                 newBuffer [ index ] = Memory :: instance().create < __ElementType > ( defaultValue );
             }
 
             this->_capacity = newCapacity;
-            Memory :: instance().destroyArray ( exchange ( this->_pData, newBuffer ) );
+            cds :: __hidden :: __impl :: __allocation :: __freePrimitiveArray ( exchange ( this->_pData, newBuffer ) );
         }
 
 
@@ -260,13 +266,15 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             }
 
             auto newCapacity = maxOf ( minOf ( this->_capacity, size ), Array :: minCapacity );
-            auto newBuffer = Memory :: instance().createArray < __ElementType * > ( newCapacity );
+            auto newBuffer = cds :: __hidden :: __impl :: __allocation :: __allocPrimitiveArray < __ElementType * > ( newCapacity );
 
-            for ( Size index = 0; index < this->size(); ++ index ) {
-                newBuffer [ index ] = this->_pData [ index ];
-            }
+            (void) std :: memcpy (
+                    newBuffer,
+                    this->_pData,
+                    sizeof ( __ElementType ) * size
+            );
 
-            Memory :: instance().destroyArray ( exchange ( this->_pData, newBuffer ) );
+            cds :: __hidden :: __impl :: __allocation :: __freePrimitiveArray ( exchange ( this->_pData, newBuffer ) );
             this->_capacity = newCapacity;
         }
 
@@ -284,18 +292,20 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
             if ( this->size() * 2 > this->_capacity || this->_capacity <= Array :: minCapacity ) {
 
-                for ( auto copyIndex = index, len = static_cast < Index > ( this->size() ) - 1; copyIndex < len; ++ copyIndex ) {
-                    this->_pData [ copyIndex ] = this->_pData [ copyIndex + 1 ];
-                }
+                std :: memcpy (
+                        this->_pData + index,
+                        this->_pData + index + 1,
+                        sizeof ( ElementType * ) * ( this->_size - index - 1 )
+                );
 
                 -- this->_size;
                 return true;
             }
 
-            auto newBuf = Memory :: instance().createArray < __ElementType * > ( this->size() - 1 );
+            auto newBuf = cds :: __hidden :: __impl :: __allocation :: __allocPrimitiveArray < __ElementType * > ( this->size() - 1 );
             (void) std::memcpy ( newBuf, this->_pData, index * sizeof ( __ElementType * ) );
             (void) std::memcpy ( newBuf + index, this->_pData + index + 1, (this->size() - index - 1) * sizeof(__ElementType *) );
-            Memory :: instance().destroyArray( exchange ( this->_pData, newBuf ) );
+            cds :: __hidden :: __impl :: __allocation :: __freePrimitiveArray ( exchange ( this->_pData, newBuf ) );
 
             this->_capacity = -- this->_size;
             return true;
@@ -311,7 +321,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 return 0U;
             }
 
-            auto newBuf = Memory :: instance().createArray < __ElementType * > ( this->size() );
+            auto newBuf = cds :: __hidden :: __impl :: __allocation :: __allocPrimitiveArray < __ElementType * > ( this->size() );
             auto newLen = 0U;
 
             for ( Index index = 0, len = static_cast < Index > ( this->size() ); index < len; ++ index ) {
@@ -322,12 +332,13 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 }
             }
 
-            auto adjustedBuf    = Memory :: instance().createArray < __ElementType * > ( newLen );
+            newLen = maxOf ( newLen, Array :: minCapacity );
+            auto adjustedBuf    = cds :: __hidden :: __impl :: __allocation :: __allocPrimitiveArray < __ElementType * > ( newLen );
             auto removedCount   = this->size() - newLen;
             (void) std :: memcpy ( adjustedBuf, newBuf, newLen * sizeof ( __ElementType * ) );
 
-            Memory :: instance ().destroyArray ( cds :: exchange ( this->_pData, adjustedBuf ) );
-            Memory :: instance ().destroyArray ( newBuf );
+            cds :: __hidden :: __impl :: __allocation :: __freePrimitiveArray ( cds :: exchange ( this->_pData, adjustedBuf ) );
+            cds :: __hidden :: __impl :: __allocation :: __freePrimitiveArray ( newBuf );
 
             this->_size     = newLen;
             this->_capacity = newLen;
@@ -345,7 +356,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 return 0U;
             }
 
-            auto newBuf = Memory :: instance().createArray < __ElementType * > ( this->size() );
+            auto newBuf = cds :: __hidden :: __impl :: __allocation :: __allocPrimitiveArray < __ElementType * > ( this->size() );
             auto newLen = 0U;
 
             for ( Index index = 0, len = static_cast < Index > ( this->size() ); index < len; ++ index ) {
@@ -356,12 +367,13 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 }
             }
 
-            auto adjustedBuf    = Memory :: instance().createArray < __ElementType * > ( newLen );
+            newLen = maxOf ( newLen, Array :: minCapacity );
+            auto adjustedBuf    = cds :: __hidden :: __impl :: __allocation :: __allocPrimitiveArray < __ElementType * > ( newLen );
             auto removedCount   = this->size() - newLen;
             (void) std :: memcpy ( adjustedBuf, newBuf, newLen * sizeof ( __ElementType * ) );
 
-            Memory :: instance ().destroyArray ( cds :: exchange ( this->_pData, adjustedBuf ) );
-            Memory :: instance ().destroyArray ( newBuf );
+            cds :: __hidden :: __impl :: __allocation :: __freePrimitiveArray ( cds :: exchange ( this->_pData, adjustedBuf ) );
+            cds :: __hidden :: __impl :: __allocation :: __freePrimitiveArray ( newBuf );
 
             this->_size     = newLen;
             this->_capacity = newLen;
@@ -496,26 +508,25 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         ) noexcept -> ElementType * & {
 
             if ( this->_size < this->_capacity ) {
-                for ( auto moveIndex = static_cast < Index > ( this->_size ), until = index; moveIndex > until; -- moveIndex ) {
-                    this->_pData [ moveIndex ] = this->_pData [ moveIndex - 1 ];
-                }
+                (void) std :: memmove (
+                        this->_pData + index + 1,
+                        this->_pData + index,
+                        sizeof ( __ElementType * ) * ( this->_size - index )
+                );
 
                 ++ this->_size;
                 return this->_pData [ index ] = nullptr;
             }
 
             auto newCap = maxOf ( this->_capacity * 2, this->_size + 1, Array :: minCapacity );
-            auto newBuf = Memory :: instance ().createArray < __ElementType * > ( newCap );
+            auto newBuf = cds :: __hidden :: __impl :: __allocation :: __allocPrimitiveArray < __ElementType * > ( newCap );
 
-            if ( index > 0 ) {
-                (void) std :: memcpy ( newBuf, this->_pData, sizeof ( __ElementType * ) * ( index ) );
-            }
-
+            (void) std :: memcpy ( newBuf, this->_pData, sizeof ( __ElementType * ) * ( index ) );
             (void) std :: memcpy ( newBuf + index + 1, this->_pData + index, sizeof ( __ElementType * ) * ( static_cast < Index > ( this->_size ) - index ) );
 
             this->_capacity = newCap;
             ++ this->_size;
-            Memory :: instance().destroyArray ( cds :: exchange ( this->_pData, newBuf ) );
+            cds :: __hidden :: __impl :: __allocation :: __freePrimitiveArray ( cds :: exchange ( this->_pData, newBuf ) );
 
             this->_pData [ index ] = nullptr;
             return this->_pData [ index ];
@@ -528,26 +539,25 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         ) noexcept -> ElementType * & {
 
             if ( this->_size < this->_capacity ) {
-                for ( auto moveIndex = static_cast < Index > ( this->_size ), until = index + 1; moveIndex > until; -- moveIndex ) {
-                    this->_pData [ moveIndex ] = this->_pData [ moveIndex - 1 ];
-                }
+                (void) std :: memmove (
+                        this->_pData + index + 2,
+                        this->_pData + index + 1,
+                        sizeof ( __ElementType * ) * ( this->_size - index - 1 )
+                );
 
                 ++ this->_size;
                 return this->_pData [ index + 1 ] = nullptr;
             }
 
             auto newCap = maxOf ( this->_capacity * 2, this->_size + 1, Array :: minCapacity );
-            auto newBuf = Memory :: instance ().createArray < __ElementType * > ( newCap );
+            auto newBuf = cds :: __hidden :: __impl :: __allocation :: __allocPrimitiveArray < __ElementType * > ( newCap );
 
             (void) std :: memcpy ( newBuf, this->_pData, sizeof ( __ElementType * ) * ( index + 1 ) );
-
-            if ( static_cast < Size > ( index ) < this->_size - 1ULL ) {
-                (void) std :: memcpy ( newBuf + index + 2, this->_pData + index + 1, sizeof ( __ElementType * ) * ( static_cast < Index > ( this->_size ) - index - 1 ) );
-            }
+            (void) std :: memcpy ( newBuf + index + 2, this->_pData + index + 1, sizeof ( __ElementType * ) * ( static_cast < Index > ( this->_size ) - index - 1 ) );
 
             this->_capacity = newCap;
             ++ this->_size;
-            Memory :: instance().destroyArray ( cds :: exchange ( this->_pData, newBuf ) );
+            cds :: __hidden :: __impl :: __allocation :: __freePrimitiveArray ( cds :: exchange ( this->_pData, newBuf ) );
 
             return this->_pData [ index + 1 ] = nullptr;
         }
@@ -561,16 +571,11 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 return this->_pData [ this->_size ++ ];
             }
 
-            auto newSize = maxOf ( this->_capacity * 2, this->_size + 1, Array :: minCapacity );
-            __ElementType ** newBuf = Memory :: instance ().createArray < __ElementType * > (newSize);
+            this->_capacity = maxOf ( this->_capacity * 2, this->_size + 1, Array :: minCapacity );
 
-            (void) std :: memcpy ( newBuf, this->_pData, this->_size * sizeof(__ElementType *) );
-            (void) std :: memset ( newBuf + this->_size, 0, ( newSize - this->_size ) * sizeof ( __ElementType * ) );
-
-            this->_capacity = newSize;
-            Memory :: instance ().destroyArray ( exchange ( this->_pData, newBuf ) );
-
+            this->_pData = cds :: __hidden :: __impl :: __allocation :: __realloc < __ElementType * > ( this->_pData, this->_capacity );
             this->_pData [ this->_size ] = nullptr;
+
             return this->_pData [ this->_size ++ ];
         }
 
@@ -579,10 +584,8 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         __CDS_OptimalInline auto Array < __ElementType > :: pNewFront () noexcept -> ElementType * & {
 
             if ( this->_size < this->_capacity ) {
-                for ( Index i = this->_size; i > 0; -- i ) {
-                    this->_pData[i] = this->_pData[i - 1];
-                }
 
+                (void) std :: memmove ( this->_pData + 1, this->_pData, sizeof ( ElementType * ) * this->_size );
                 ++ this->_size;
 
                 this->_pData[0] = nullptr;
@@ -590,14 +593,14 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             }
 
             auto newSize = maxOf ( this->_capacity * 2, this->_size + 1, Array :: minCapacity );
-            auto newBuf = Memory :: instance().createArray < __ElementType * > ( newSize );
+            auto newBuf = cds :: __hidden :: __impl :: __allocation :: __allocPrimitiveArray < __ElementType * > ( newSize );
             (void) std::memcpy ( newBuf + 1, this->_pData, this->_size * sizeof ( __ElementType * ) );
             (void) std::memset ( newBuf + 1 + this->_size, 0, (newSize - this->_size - 1) * sizeof(__ElementType *) );
 
             this->_capacity = newSize;
             this->_size ++;
 
-            Memory :: instance().destroyArray ( exchange ( this->_pData, newBuf ) );
+            cds :: __hidden :: __impl :: __allocation :: __freePrimitiveArray ( exchange ( this->_pData, newBuf ) );
 
             this->_pData[0] = nullptr;
             return this->_pData[0];
@@ -808,7 +811,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
         auto Array < __ElementType > :: makeUnique () noexcept -> void {
 
-            __ElementType ** pNewData = Memory :: instance().createArray < __ElementType * > (this->size());
+            __ElementType ** pNewData = cds :: __hidden :: __impl :: __allocation :: __allocPrimitiveArray < __ElementType * > (this->size());
             Size newLength = 0u;
 
             static auto newArrContains = [](
@@ -838,18 +841,24 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             this->_capacity = this->size();
             this->_size = newLength;
 
-            Memory :: instance().destroyArray( exchange ( this->_pData, pNewData ) );
+            cds :: __hidden :: __impl :: __allocation :: __freePrimitiveArray ( exchange ( this->_pData, pNewData ) );
         }
 
 
         template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
         auto Array < __ElementType > :: popFront () noexcept -> void {
 
+            if ( this->empty() ) {
+                return;
+            }
+
             Memory :: instance().destroy ( exchange(this->_pData[0], nullptr) );
 
-            for ( Index i = 0; i < this->size() - 1; i ++ ) {
-                this->_pData[i] = this->_pData[i + 1];
-            }
+            (void) std :: memcpy (
+                    this->_pData,
+                    this->_pData + 1,
+                    sizeof ( __ElementType ) * ( this->_size - 1 )
+            );
 
             this->_pData[-- this->_size] = nullptr;
         }
@@ -858,8 +867,13 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
         auto Array < __ElementType > :: popBack () noexcept -> void {
 
+            if ( this->empty() ) {
+                return;
+            }
+
             Memory :: instance().destroy ( exchange(this->_pData[--this->_size], nullptr) );
         }
+
 
         template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
         template < typename __VElementType, meta :: EnableIf < meta :: isCopyConstructible < __VElementType > () > > // NOLINT(bugprone-reserved-identifier)
@@ -875,7 +889,14 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
             this->_capacity = maxOf ( array.size(), Array :: minCapacity );
             this->_size     = array.size();
-            Memory :: instance().destroyArray ( exchange ( this->_pData, Memory :: instance().createArray < __ElementType * > ( this->_capacity ) ) );
+            cds :: __hidden :: __impl :: __allocation :: __freePrimitiveArray (
+                    exchange (
+                            this->_pData,
+                            cds :: __hidden :: __impl :: __allocation :: __allocPrimitiveArray < __ElementType * > (
+                                    this->_capacity
+                            )
+                    )
+            );
 
             for ( Size index = 0; index < array.size(); ++ index ) {
                 this->_pData [ index ] = Memory :: instance().create ( * array._pData [ index ] );
@@ -883,6 +904,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
             return * this;
         }
+
 
         template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
         auto Array < __ElementType > :: operator = (
@@ -897,10 +919,19 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
             this->_capacity = exchange ( array._capacity, 0ULL );
             this->_size     = exchange ( array._size, 0ULL );
-            Memory :: instance().destroyArray ( exchange ( this->_pData, exchange ( array._pData, nullptr ) ) );
+            cds :: __hidden :: __impl :: __allocation :: __freePrimitiveArray (
+                    cds :: exchange (
+                            this->_pData,
+                            cds :: exchange (
+                                    array._pData,
+                                    nullptr
+                            )
+                    )
+            );
 
             return * this;
         }
+
 
         template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
         template < typename __OtherElementType, meta :: EnableIf < meta :: isConvertible < __OtherElementType, __ElementType > () > > // NOLINT(bugprone-reserved-identifier)
@@ -916,7 +947,14 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
             this->_capacity = maxOf ( collection.size(), Array :: minCapacity );
             this->_size     = collection.size();
-            Memory :: instance().destroyArray ( exchange ( this->_pData, Memory :: instance().createArray < __ElementType * > ( this->_capacity ) ) );
+            cds :: __hidden :: __impl :: __allocation :: __freePrimitiveArray (
+                    cds :: exchange (
+                            this->_pData,
+                            cds :: __hidden :: __impl :: __allocation :: __allocPrimitiveArray < __ElementType * > (
+                                    this->_capacity
+                            )
+                    )
+            );
 
             Size index = 0ULL;
             for ( auto iterator = collection.begin(), end = collection.end(); iterator != end; ++ iterator, ++ index ) {

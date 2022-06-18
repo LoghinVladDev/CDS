@@ -27,7 +27,7 @@ int main () {
 
 //    std :: ofstream out ("testData.out");
 //    std :: ifstream in ("errData.in");
-    for ( int i = 0; i < 1000; ++ i ) {
+    for ( int i = 0; i < 100000; ++ i ) {
         int k = rand();
         int v = rand();
 
