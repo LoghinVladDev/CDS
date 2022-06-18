@@ -154,7 +154,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         ) noexcept :
                 List < __ElementType > ( collection.size() ),
                 _capacity ( maxOf ( collection.size(), Array :: minCapacity ) ),
-                _pData ( collection.size() == 0ULL ? nullptr : cds :: __hidden :: __impl :: __allocation :: __allocPrimitiveArray < __ElementType * > ( maxOf ( collection.size(), Array :: minCapacity ) ) ) {
+                _pData ( collection.empty() ? nullptr : cds :: __hidden :: __impl :: __allocation :: __allocPrimitiveArray < __ElementType * > ( maxOf ( collection.size(), Array :: minCapacity ) ) ) {
 
             Index index = 0;
             for ( auto iterator = collection.begin(), end = collection.end(); iterator != end; ++ iterator, ++ index ) {
@@ -322,7 +322,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             }
 
             auto newBuf = cds :: __hidden :: __impl :: __allocation :: __allocPrimitiveArray < __ElementType * > ( this->size() );
-            auto newLen = 0U;
+            Size newLen = 0U;
 
             for ( Index index = 0, len = static_cast < Index > ( this->size() ); index < len; ++ index ) {
                 if ( ! indices.contains ( index ) ) {
@@ -332,8 +332,8 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 }
             }
 
-            newLen = maxOf ( newLen, Array :: minCapacity );
-            auto adjustedBuf    = cds :: __hidden :: __impl :: __allocation :: __allocPrimitiveArray < __ElementType * > ( newLen );
+            this->_capacity = maxOf ( newLen, Array :: minCapacity );
+            auto adjustedBuf    = cds :: __hidden :: __impl :: __allocation :: __allocPrimitiveArray < __ElementType * > ( this->_capacity );
             auto removedCount   = this->size() - newLen;
             (void) std :: memcpy ( adjustedBuf, newBuf, newLen * sizeof ( __ElementType * ) );
 
@@ -341,7 +341,6 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             cds :: __hidden :: __impl :: __allocation :: __freePrimitiveArray ( newBuf );
 
             this->_size     = newLen;
-            this->_capacity = newLen;
 
             return removedCount;
         }
@@ -367,8 +366,8 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 }
             }
 
-            newLen = maxOf ( newLen, Array :: minCapacity );
-            auto adjustedBuf    = cds :: __hidden :: __impl :: __allocation :: __allocPrimitiveArray < __ElementType * > ( newLen );
+            this->_capacity = maxOf ( newLen, Array :: minCapacity );
+            auto adjustedBuf    = cds :: __hidden :: __impl :: __allocation :: __allocPrimitiveArray < __ElementType * > ( this->_capacity );
             auto removedCount   = this->size() - newLen;
             (void) std :: memcpy ( adjustedBuf, newBuf, newLen * sizeof ( __ElementType * ) );
 
@@ -376,7 +375,6 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             cds :: __hidden :: __impl :: __allocation :: __freePrimitiveArray ( newBuf );
 
             this->_size     = newLen;
-            this->_capacity = newLen;
 
             return removedCount;
         }
