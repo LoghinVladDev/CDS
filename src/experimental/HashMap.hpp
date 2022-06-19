@@ -81,7 +81,10 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             };
 
         private:
-            using BucketType = DataNode *;
+            struct BucketType {
+                DataNode * _pFront;
+                DataNode * _pBack;
+            };
 
         private:
             BucketType                * _pBucketList { nullptr };
@@ -140,30 +143,38 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             ) noexcept;
 
         public:
+            __CDS_Explicit HashMap (
+                    __HashCalculator const & hashCalculator
+            ) noexcept;
+
+        public:
+            __CDS_Implicit HashMap ( // NOLINT(google-explicit-constructor)
+                    InitializerList const & initializerList
+            ) noexcept;
+
+        public:
+            HashMap (
+                    InitializerList     const & initializerList,
+                    __HashCalculator    const & hashCalculator
+            ) noexcept;
+
+        public:
             ~HashMap () noexcept override;
 
-        public:
-            __CDS_NoDiscard auto get (
+        private:
+            auto pEntryAt (
                     KeyType const & key
-            ) noexcept -> ValueType & override;
+            ) noexcept -> EntryType * override;
 
-        public:
-            __CDS_NoDiscard auto at (
+        private:
+            auto pEntryAt (
                     KeyType const & key
-            ) noexcept (false) -> ValueType & override;
+            ) const noexcept -> EntryType const * override;
 
-        public:
-            __CDS_NoDiscard auto at (
-                    KeyType const & key
-            ) const noexcept (false) -> ValueType const & override;
-
-        public:
-            auto pNewInsert (
-                    ElementType const & referenceElement
-            ) noexcept -> ElementType * & override;
-
-        public:
-            auto pNewInsertPost () noexcept -> void override;
+        protected:
+            auto completeInsertion (
+                    EntryType * pEntry
+            ) noexcept -> void override;
 
         public:
             auto contains (
@@ -240,10 +251,6 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 #include "hashMap/impl/KeySetProxy.hpp"
 #include "hashMap/impl/ValueCollectionProxy.hpp"
 #include "hashMap/impl/EntrySetProxy.hpp"
-
-//#include "map/baseMap/impl/BaseMap.hpp"
-//#include "map/entryArray/impl/Associator.hpp"
-//#include "hashMap/impl/Associator.hpp"
 
 
 #endif // __CDS_EX_HASH_MAP_HPP__

@@ -69,6 +69,9 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         protected:
             class AbstractEntrySetProxy;
 
+        private:
+            EntryType * _pInsertionEntry { nullptr };
+
         public:
             __CDS_NoDiscard __CDS_cpplang_ConstexprPureAbstract auto keys () const noexcept -> Set < KeyType const > const &;
 
@@ -172,22 +175,33 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         public:
             __CDS_cpplang_ConstexprDestructor ~Map () noexcept override;
 
-        public:
-            virtual auto get (
+        protected:
+            virtual auto pEntryAt (
                     KeyType const & key
-            ) noexcept -> ValueType & = 0;
+            ) noexcept -> EntryType * = 0;
+
+        protected:
+            virtual auto pEntryAt (
+                    KeyType const & key
+            ) const noexcept -> EntryType const * = 0;
 
         public:
-            virtual auto at (
+            auto get (
                     KeyType const & key
-            ) noexcept (false) -> ValueType & = 0;
+            ) noexcept -> ValueType &;
 
         public:
-            virtual auto at (
+            auto at (
                     KeyType const & key
-            ) const noexcept (false) -> ValueType const & = 0;
+            ) noexcept (false) -> ValueType &;
 
         public:
+            auto at (
+                    KeyType const & key
+            ) const noexcept (false) -> ValueType const &;
+
+        public:
+            template < typename __TValueType = ValueType, cds :: meta :: EnableIf < cds :: meta :: isDefaultConstructible < __TValueType > () > = 0 >
             auto operator [] (
                     KeyType const & key
             ) noexcept -> ValueType &;
@@ -197,13 +211,41 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                     KeyType const & key
             ) const noexcept (false) -> ValueType &;
 
-        protected:
+        private:
             auto pNewInsert (
                     ElementType const & referenceElement
-            ) noexcept -> ElementType * & override = 0;
+            ) noexcept -> ElementType * & override;
 
         protected:
-            auto pNewInsertPost () noexcept -> void override = 0;
+            virtual auto completeInsertion (
+                    EntryType * pEntry
+            ) noexcept -> void = 0;
+
+        private:
+            auto pNewInsertPost () noexcept -> void override;
+
+        protected:
+            static auto entryMoveOrCopyKeyTo (
+                    EntryType       * pDestination,
+                    EntryType       * pSource
+            ) noexcept -> void;
+
+        protected:
+            static auto entryMoveOrCopyValueTo (
+                    EntryType       * pDestination,
+                    EntryType       * pSource
+            ) noexcept -> void;
+
+        protected:
+            static auto entryCopyTo (
+                    EntryType       * pDestination,
+                    EntryType const * pSource
+            ) noexcept -> void;
+
+        protected:
+            constexpr static auto entryEmpty (
+                    EntryType const * pEntry
+            ) noexcept -> bool;
 
         public:
             auto contains (

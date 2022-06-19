@@ -114,6 +114,62 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
 
         template < typename __KeyType, typename __ValueType > // NOLINT(bugprone-reserved-identifier)
+        __CDS_OptimalInline auto Map < __KeyType, __ValueType > :: pNewInsert (
+                ElementType const & referenceElement
+        ) noexcept -> ElementType * & {
+
+            return this->_pInsertionEntry;
+        }
+
+
+        template < typename __KeyType, typename __ValueType > // NOLINT(bugprone-reserved-identifier)
+        __CDS_OptimalInline auto Map < __KeyType, __ValueType > :: pNewInsertPost () noexcept -> void {
+
+            this->completeInsertion ( this->_pInsertionEntry );
+            Memory :: instance().destroy ( cds :: exchange ( this->_pInsertionEntry, nullptr ) );
+        }
+
+
+        template < typename __KeyType, typename __ValueType > // NOLINT(bugprone-reserved-identifier)
+        __CDS_OptimalInline auto Map < __KeyType, __ValueType > :: entryMoveOrCopyKeyTo (
+                EntryType       * pDestination,
+                EntryType       * pSource
+        ) noexcept -> void {
+
+            pSource->moveOrCopyKeyTo ( pDestination );
+        }
+
+
+        template < typename __KeyType, typename __ValueType > // NOLINT(bugprone-reserved-identifier)
+        __CDS_OptimalInline auto Map < __KeyType, __ValueType > :: entryMoveOrCopyValueTo (
+                EntryType       * pDestination,
+                EntryType       * pSource
+        ) noexcept -> void {
+
+            pSource->moveOrCopyValueTo ( pDestination );
+        }
+
+
+        template < typename __KeyType, typename __ValueType > // NOLINT(bugprone-reserved-identifier)
+        __CDS_OptimalInline auto Map < __KeyType, __ValueType > :: entryCopyTo (
+                EntryType       * pDestination,
+                EntryType const * pSource
+        ) noexcept -> void {
+
+            pSource->copyTo ( pDestination );
+        }
+
+
+        template < typename __KeyType, typename __ValueType > // NOLINT(bugprone-reserved-identifier)
+        constexpr auto Map < __KeyType, __ValueType > :: entryEmpty (
+                EntryType const * pEntry
+        ) noexcept -> bool {
+
+            return pEntry->empty();
+        }
+
+
+        template < typename __KeyType, typename __ValueType > // NOLINT(bugprone-reserved-identifier)
         auto Map < __KeyType, __ValueType > :: toString () const noexcept -> String {
 
             if ( this->empty() ) {

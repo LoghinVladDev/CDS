@@ -71,89 +71,103 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                     > friend class cds :: experimental :: Map; // NOLINT(bugprone-reserved-identifier)
 
                 private:
-                    template < typename __TKeyType = __KeyType, typename __KeySetType, cds :: meta :: EnableIf < cds :: meta :: isCopyConstructible < __TKeyType > () && cds :: meta :: isMoveConstructible < __TKeyType > () > = 0 >
+                    template < typename __TKeyType = __KeyType, cds :: meta :: EnableIf < cds :: meta :: isCopyConstructible < __TKeyType > () && cds :: meta :: isMoveConstructible < __TKeyType > () > = 0 >
                     __CDS_OptimalInline auto moveOrCopyKeyTo (
-                            __KeySetType & set
-                    ) noexcept -> __TKeyType const & {
-
-                        if ( this->_key._forward ) {
-                            return set.insert ( std :: move ( * this->_key._pObject ) );
-                        }
-
-                        return set.insert ( * this->_key._pConstObject );
-                    }
-
-                private:
-                    template < typename __TKeyType = __KeyType, typename __KeySetType, cds :: meta :: EnableIf < cds :: meta :: isCopyConstructible < __TKeyType > () && ! cds :: meta :: isMoveConstructible < __TKeyType > () > = 0 >
-                    __CDS_OptimalInline auto moveOrCopyKeyTo (
-                            __KeySetType & set
-                    ) noexcept -> __TKeyType const & {
-
-                        return set.insert ( * this->_key._pConstObject );
-                    }
-
-                private:
-                    template < typename __TKeyType = __KeyType, typename __KeySetType, cds :: meta :: EnableIf < cds :: meta :: isMoveConstructible < __TKeyType > () && ! cds :: meta :: isCopyConstructible < __TKeyType > () > = 0 >
-                    __CDS_OptimalInline auto moveOrCopyKeyTo (
-                            __KeySetType & set
-                    ) noexcept -> __TKeyType const & {
-
-                        return set.insertinsert ( std :: move ( * this->_key._pObject ) );
-                    }
-
-                private:
-                    template < typename __TKeyType = __KeyType, typename __KeySetType, cds :: meta :: EnableIf < ! cds :: meta :: isMoveConstructible < __TKeyType > () && ! cds :: meta :: isCopyConstructible < __TKeyType > () > = 0 >
-                    __CDS_OptimalInline auto moveOrCopyKeyTo (
-                            __KeySetType & set
-                    ) noexcept -> __TKeyType const & {
-
-                        static_assert( ! cds :: meta :: isMoveConstructible < __TKeyType > () && ! cds :: meta :: isCopyConstructible < __TKeyType > (), "Cannot insert a MapEntry of a Key that is not copyable or moveable");
-                        return * set.begin();
-                    }
-
-                private:
-                    template < typename __TValueType = __ValueType, typename __EntryAssociatorType, cds :: meta :: EnableIf < cds :: meta :: isCopyConstructible < __TValueType > () && cds :: meta :: isMoveConstructible < __TValueType > () > = 0 >
-                    __CDS_OptimalInline auto moveOrCopyValueTo (
-                            __KeyType               const & key,
-                            __EntryAssociatorType         & entryAssociator
+                            __MapEntry * entry
                     ) noexcept -> void {
 
-                        if ( this->_value._forward ) {
-                            entryAssociator.put ( key, std :: move ( * this->_value._pObject ) );
+                        if ( entry->_key._pObject != nullptr ) {
                             return;
                         }
 
-                        entryAssociator.put ( key, * this->_value._pConstObject );
+                        if ( this->_key._forward ) {
+                            entry->_key._pObject = Memory :: instance().create < KeyType > ( std :: move ( * this->_key._pObject ) );
+                            return;
+                        }
+
+                        entry->_key._pObject = Memory :: instance().create < KeyType > ( * this->_key._pConstObject );
                     }
 
                 private:
-                    template < typename __TValueType = __ValueType, typename __EntryAssociatorType, cds :: meta :: EnableIf < ! cds :: meta :: isCopyConstructible < __TValueType > () && cds :: meta :: isMoveConstructible < __TValueType > () > = 0 >
-                    __CDS_OptimalInline auto moveOrCopyValueTo (
-                            __KeyType               const & key,
-                            __EntryAssociatorType         & entryAssociator
+                    template < typename __TKeyType = __KeyType, cds :: meta :: EnableIf < cds :: meta :: isCopyConstructible < __TKeyType > () && ! cds :: meta :: isMoveConstructible < __TKeyType > () > = 0 >
+                    __CDS_OptimalInline auto moveOrCopyKeyTo (
+                            __MapEntry * entry
                     ) noexcept -> void {
 
-                        entryAssociator.put ( key, std :: move ( * this->_value._pObject ) );
+                        if ( entry->_key._pObject != nullptr ) {
+                            return;
+                        }
+
+                        entry->_key._pObject = Memory :: instance().create < KeyType > ( * this->_key._pConstObject );
                     }
 
                 private:
-                    template < typename __TValueType = __ValueType, typename __EntryAssociatorType, cds :: meta :: EnableIf < cds :: meta :: isCopyConstructible < __TValueType > () && ! cds :: meta :: isMoveConstructible < __TValueType > () > = 0 >
-                    __CDS_OptimalInline auto moveOrCopyValueTo (
-                            __KeyType               const & key,
-                            __EntryAssociatorType         & entryAssociator
+                    template < typename __TKeyType = __KeyType, cds :: meta :: EnableIf < ! cds :: meta :: isCopyConstructible < __TKeyType > () && cds :: meta :: isMoveConstructible < __TKeyType > () > = 0 >
+                    __CDS_OptimalInline auto moveOrCopyKeyTo (
+                            __MapEntry * entry
                     ) noexcept -> void {
 
-                        entryAssociator.put ( key, * this->_value._pConstObject );
+                        if ( entry->_key._pObject != nullptr ) {
+                            return;
+                        }
+
+                        entry->_key._pObject = Memory :: instance().create < KeyType > ( std :: move ( * this->_key._pObject ) );
                     }
 
                 private:
-                    template < typename __TValueType = __ValueType, typename __EntryAssociatorType, cds :: meta :: EnableIf < ! cds :: meta :: isCopyConstructible < __TValueType > () && ! cds :: meta :: isMoveConstructible < __TValueType > () > = 0 >
-                    __CDS_OptimalInline auto moveOrCopyValueTo (
-                            __KeyType               const & key,
-                            __EntryAssociatorType         & entryAssociator
+                    template < typename __TKeyType = __KeyType, cds :: meta :: EnableIf < ! cds :: meta :: isCopyConstructible < __TKeyType > () && ! cds :: meta :: isMoveConstructible < __TKeyType > () > = 0 >
+                    __CDS_OptimalInline auto moveOrCopyKeyTo (
+                            __MapEntry * entry
                     ) noexcept -> void {
 
-                        static_assert( ! cds :: meta :: isMoveConstructible < __TValueType > () && ! cds :: meta :: isCopyConstructible < __TValueType > (), "Cannot insert a MapEntry of a Key that is not copyable or moveable");
+                        /// do nothing, as this is an unreachable point
+                    }
+
+                private:
+                    template < typename __TValueType = __ValueType, cds :: meta :: EnableIf < cds :: meta :: isCopyConstructible < __TValueType > () && cds :: meta :: isMoveConstructible < __TValueType > () > = 0 >
+                    __CDS_OptimalInline auto moveOrCopyValueTo (
+                            __MapEntry * entry
+                    ) noexcept -> void {
+
+                        if ( this->_value._forward ) {
+                            entry->_value._pObject  = Memory :: instance().create < ValueType > ( std :: move ( * this->_value._pObject ) );
+                            return;
+                        }
+
+                        entry->_value._pObject = Memory :: instance().create < ValueType > ( * this->_value._pConstObject );
+                    }
+
+                private:
+                    template < typename __TValueType = __ValueType, cds :: meta :: EnableIf < cds :: meta :: isCopyConstructible < __TValueType > () && ! cds :: meta :: isMoveConstructible < __TValueType > () > = 0 >
+                    __CDS_OptimalInline auto moveOrCopyValueTo (
+                            __MapEntry * entry
+                    ) noexcept -> void {
+
+                        entry->_value._pObject = Memory :: instance().create < ValueType > ( * this->_value._pConstObject );
+                    }
+
+                private:
+                    template < typename __TValueType = __ValueType, cds :: meta :: EnableIf < ! cds :: meta :: isCopyConstructible < __TValueType > () && cds :: meta :: isMoveConstructible < __TValueType > () > = 0 >
+                    __CDS_OptimalInline auto moveOrCopyValueTo (
+                            __MapEntry * entry
+                    ) noexcept -> void {
+
+                        entry->_value._pObject  = Memory :: instance().create < ValueType > ( std :: move ( * this->_value._pObject ) );
+                    }
+
+                private:
+                    template < typename __TValueType = __ValueType, cds :: meta :: EnableIf < ! cds :: meta :: isCopyConstructible < __TValueType > () && ! cds :: meta :: isMoveConstructible < __TValueType > () > = 0 >
+                    __CDS_OptimalInline auto moveOrCopyValueTo (
+                            __MapEntry * entry
+                    ) noexcept -> void {
+
+                        /// do nothing, as this is an unreachable point
+                    }
+
+                private:
+                    __CDS_NoDiscard constexpr auto empty () const noexcept -> bool {
+
+                        return this->_key._pAny == nullptr;
                     }
 
                 public:
@@ -217,16 +231,16 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 public:
                     __CDS_cpplang_NonConstConstexprMemberFunction auto value () noexcept -> ValueType &;
 
-                public:
-                    __CDS_OptimalInline auto copyInto (
-                            __MapEntry & entry
+                private:
+                    __CDS_OptimalInline auto copyTo (
+                            __MapEntry * entry
                     ) const noexcept -> void {
 
-                        entry._key._forward     = false;
-                        entry._key._pObject     = Memory :: instance().create < __KeyType > ( * this->_key._pConstObject );
+                        entry->_key._forward     = false;
+                        entry->_key._pObject     = Memory :: instance().create < __KeyType > ( * this->_key._pConstObject );
 
-                        entry._value._forward   = false;
-                        entry._value._pObject   = Memory :: instance().create < __ValueType > ( * this->_value._pConstObject );
+                        entry->_value._forward   = false;
+                        entry->_value._pObject   = Memory :: instance().create < __ValueType > ( * this->_value._pConstObject );
                     }
                 };
 
