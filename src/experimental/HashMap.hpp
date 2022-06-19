@@ -59,19 +59,19 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             using typename Map < __KeyType, __ValueType > :: AbstractKeySetProxy;
 
         protected:
-            using typename Map < __KeyType, __ValueType > :: AbstractValueCollectionProxy;
+            using typename Map < __KeyType, __ValueType > :: AbstractValueMutableCollectionProxy;
 
         protected:
-            using typename Map < __KeyType, __ValueType > :: AbstractEntrySetProxy;
+            using typename Map < __KeyType, __ValueType > :: AbstractEntryMutableCollectionProxy;
 
         protected:
             class HashMapKeySetProxy;
 
         protected:
-            class HashMapValueCollectionProxy;
+            class HashMapValueMutableCollectionProxy;
 
         protected:
-            class HashMapEntrySetProxy;
+            class HashMapEntryMutableCollectionProxy;
 
         private:
             struct DataNode {
@@ -87,37 +87,37 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             };
 
         private:
-            BucketType                * _pBucketList { nullptr };
+            BucketType                        * _pBucketList { nullptr };
 
         private:
-            __HashCalculator            _hashCalculator;
+            __HashCalculator                    _hashCalculator;
 
         private:
-            HashMapKeySetProxy          _keySetProxy;
+            HashMapKeySetProxy                  _keySetProxy;
 
         private:
-            HashMapValueCollectionProxy _valueCollectionProxy;
+            HashMapValueMutableCollectionProxy  _valueMutableCollectionProxy;
 
         private:
-            HashMapEntrySetProxy        _entrySetProxy;
+            HashMapEntryMutableCollectionProxy  _entryMutableCollectionProxy;
 
-        public:
+        protected:
             __CDS_NoDiscard __CDS_cpplang_ConstexprOverride auto keySetProxy () const noexcept -> AbstractKeySetProxy const & override;
 
-        public:
+        protected:
             __CDS_cpplang_ConstexprOverride auto keySetProxy () noexcept -> AbstractKeySetProxy & override;
 
-        public:
-            __CDS_NoDiscard __CDS_cpplang_ConstexprOverride auto valueCollectionProxy () const noexcept -> AbstractValueCollectionProxy const & override;
+        protected:
+            __CDS_NoDiscard __CDS_cpplang_ConstexprOverride auto valueCollectionProxy () const noexcept -> AbstractValueMutableCollectionProxy const & override;
 
-        public:
-            __CDS_cpplang_ConstexprOverride auto valueCollectionProxy () noexcept -> AbstractValueCollectionProxy & override;
+        protected:
+            __CDS_cpplang_ConstexprOverride auto valueCollectionProxy () noexcept -> AbstractValueMutableCollectionProxy & override;
 
-        public:
-            __CDS_NoDiscard __CDS_cpplang_ConstexprOverride auto entrySetProxy () const noexcept -> AbstractEntrySetProxy const & override;
+        protected:
+            __CDS_NoDiscard __CDS_cpplang_ConstexprOverride auto entrySetProxy () const noexcept -> AbstractEntryMutableCollectionProxy const & override;
 
-        public:
-            __CDS_cpplang_ConstexprOverride auto entrySetProxy () noexcept -> AbstractEntrySetProxy & override;
+        protected:
+            __CDS_cpplang_ConstexprOverride auto entrySetProxy () noexcept -> AbstractEntryMutableCollectionProxy & override;
 
         protected:
             auto delegateIterator (
@@ -242,15 +242,15 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 }
 
 #include "hashMap/KeySetProxy.hpp"
-#include "hashMap/ValueCollectionProxy.hpp"
-#include "hashMap/EntrySetProxy.hpp"
+#include "hashMap/ValueMutableCollectionProxy.hpp"
+#include "hashMap/EntryMutableCollectionProxy.hpp"
 
 #include "../shared/memory/PrimitiveAllocation.hpp"
 
 #include "hashMap/impl/HashMap.hpp"
 #include "hashMap/impl/KeySetProxy.hpp"
-#include "hashMap/impl/ValueCollectionProxy.hpp"
-#include "hashMap/impl/EntrySetProxy.hpp"
+#include "hashMap/impl/ValueMutableCollectionProxy.hpp"
+#include "hashMap/impl/EntryMutableCollectionProxy.hpp"
 
 
 #endif // __CDS_EX_HASH_MAP_HPP__

@@ -2,14 +2,14 @@
 // Created by loghin on 4/26/22.
 //
 
-#ifndef __CDS_LIST_ITERATOR_HPP__
-#define __CDS_LIST_ITERATOR_HPP__
+#ifndef __CDS_MUTABLE_COLLECTION_ITERATOR_HPP__
+#define __CDS_MUTABLE_COLLECTION_ITERATOR_HPP__
 
 namespace cds { // NOLINT(modernize-concat-nested-namespaces)
     namespace experimental {
 
         template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
-        class List < __ElementType > :: Iterator : public List < __ElementType > :: AbstractIterator {
+        class MutableCollection < __ElementType > :: Iterator : public MutableCollection < __ElementType > :: AbstractIterator {
 
         public:
             constexpr Iterator () noexcept = default;
@@ -26,7 +26,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
         public:
             constexpr Iterator (
-                    List < __ElementType >                      const * pList,
+                    MutableCollection < __ElementType >         const * pCollection,
                     cds :: UniquePointer < DelegateIterator >        && pIterator
             ) noexcept;
 
@@ -66,4 +66,4 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
     }
 }
 
-#endif // __CDS_LIST_ITERATOR_HPP__
+#endif // __CDS_MUTABLE_COLLECTION_ITERATOR_HPP__

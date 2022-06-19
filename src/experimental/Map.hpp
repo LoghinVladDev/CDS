@@ -5,7 +5,7 @@
 #ifndef __CDS_EX_MAP_HPP__
 #define __CDS_EX_MAP_HPP__
 
-#include <CDS/experimental/Collection>
+#include <CDS/experimental/MutableCollection>
 #include <CDS/experimental/Set>
 
 #include "map/entry/Entry.hpp"
@@ -16,10 +16,10 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         template <
                 typename __KeyType, // NOLINT(bugprone-reserved-identifier)
                 typename __ValueType // NOLINT(bugprone-reserved-identifier)
-        > class Map : public Collection < __hidden :: __impl :: __MapEntry < __KeyType, __ValueType > > {
+        > class Map : public MutableCollection < __hidden :: __impl :: __MapEntry < __KeyType, __ValueType > > {
 
         public:
-            using typename Collection < __hidden :: __impl :: __MapEntry < __KeyType, __ValueType > > :: ElementType;
+            using typename MutableCollection < __hidden :: __impl :: __MapEntry < __KeyType, __ValueType > > :: ElementType;
 
         public:
             using EntryType = ElementType;
@@ -31,43 +31,43 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             using ValueType = __ValueType;
 
         public:
-            using typename Collection < ElementType > :: InitializerList; /// might require replacing?
+            using typename MutableCollection < ElementType > :: InitializerList; /// might require replacing?
 
         protected:
-            using typename Collection < ElementType > :: AbstractIterator;
+            using typename MutableCollection < ElementType > :: AbstractIterator;
+
+        protected:
+            using typename MutableCollection < ElementType > :: Iterator;
 
         public:
-            class Iterator;
+            using typename MutableCollection < ElementType > :: ConstIterator;
 
         public:
-            using typename Collection < ElementType > :: ConstIterator;
+            using typename MutableCollection < ElementType > :: ReverseIterator;
 
         public:
-            class ReverseIterator;
-
-        public:
-            using typename Collection < ElementType > :: ConstReverseIterator;
+            using typename MutableCollection < ElementType > :: ConstReverseIterator;
 
         protected:
-            using typename Collection < ElementType > :: AbstractDelegateIterator;
+            using typename MutableCollection < ElementType > :: AbstractDelegateIterator;
 
         protected:
-            class DelegateIterator;
+            using typename MutableCollection < ElementType > :: DelegateIterator;
 
         protected:
-            using typename Collection < ElementType > :: DelegateConstIterator;
+            using typename MutableCollection < ElementType > :: DelegateConstIterator;
 
         protected:
-            using typename Collection < ElementType > :: DelegateIteratorRequestType;
+            using typename MutableCollection < ElementType > :: DelegateIteratorRequestType;
 
         protected:
             class AbstractKeySetProxy;
 
         protected:
-            class AbstractValueCollectionProxy;
+            class AbstractValueMutableCollectionProxy;
 
         protected:
-            class AbstractEntrySetProxy;
+            class AbstractEntryMutableCollectionProxy;
 
         private:
             EntryType * _pInsertionEntry { nullptr };
@@ -79,80 +79,44 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             __CDS_cpplang_ConstexprPureAbstract auto keys () noexcept -> Set < KeyType const > &;
 
         public:
-            __CDS_NoDiscard __CDS_cpplang_ConstexprPureAbstract auto values () const noexcept -> Collection < ValueType > const &;
+            __CDS_NoDiscard __CDS_cpplang_ConstexprPureAbstract auto values () const noexcept -> MutableCollection < ValueType > const &;
 
         public:
-            __CDS_cpplang_ConstexprPureAbstract auto values () noexcept -> Collection < ValueType > &;
+            __CDS_cpplang_ConstexprPureAbstract auto values () noexcept -> MutableCollection < ValueType > &;
 
         public:
-            __CDS_NoDiscard __CDS_cpplang_ConstexprPureAbstract auto entries () const noexcept -> Set < EntryType > const &;
+            __CDS_NoDiscard __CDS_cpplang_ConstexprPureAbstract auto entries () const noexcept -> MutableCollection < EntryType > const &;
 
         public:
-            __CDS_cpplang_ConstexprPureAbstract auto entries () noexcept -> Set < EntryType > &;
+            __CDS_cpplang_ConstexprPureAbstract auto entries () noexcept -> MutableCollection < EntryType > &;
 
         protected:
             __CDS_NoDiscard __CDS_cpplang_ConstexprPureAbstract virtual auto keySetProxy () const noexcept -> AbstractKeySetProxy const & = 0;
 
-        public:
+        protected:
             __CDS_cpplang_ConstexprPureAbstract virtual auto keySetProxy () noexcept -> AbstractKeySetProxy & = 0;
 
-        public:
-            __CDS_NoDiscard __CDS_cpplang_ConstexprPureAbstract virtual auto valueCollectionProxy () const noexcept -> AbstractValueCollectionProxy const & = 0;
-
-        public:
-            __CDS_cpplang_ConstexprPureAbstract virtual auto valueCollectionProxy () noexcept -> AbstractValueCollectionProxy & = 0;
-
-        public:
-            __CDS_NoDiscard __CDS_cpplang_ConstexprPureAbstract virtual auto entrySetProxy () const noexcept -> AbstractEntrySetProxy const & = 0;
-
-        public:
-            __CDS_cpplang_ConstexprPureAbstract virtual auto entrySetProxy () noexcept -> AbstractEntrySetProxy & = 0;
+        protected:
+            __CDS_NoDiscard __CDS_cpplang_ConstexprPureAbstract virtual auto valueCollectionProxy () const noexcept -> AbstractValueMutableCollectionProxy const & = 0;
 
         protected:
-            virtual auto delegateIterator (
+            __CDS_cpplang_ConstexprPureAbstract virtual auto valueCollectionProxy () noexcept -> AbstractValueMutableCollectionProxy & = 0;
+
+        protected:
+            __CDS_NoDiscard __CDS_cpplang_ConstexprPureAbstract virtual auto entrySetProxy () const noexcept -> AbstractEntryMutableCollectionProxy const & = 0;
+
+        protected:
+            __CDS_cpplang_ConstexprPureAbstract virtual auto entrySetProxy () noexcept -> AbstractEntryMutableCollectionProxy & = 0;
+
+        protected:
+            auto delegateIterator (
                     DelegateIteratorRequestType requestType
-            ) noexcept -> cds :: UniquePointer < DelegateIterator > = 0;
+            ) noexcept -> cds :: UniquePointer < DelegateIterator > override = 0;
 
         protected:
             auto delegateConstIterator (
                     DelegateIteratorRequestType requestType
             ) const noexcept -> cds :: UniquePointer < DelegateConstIterator > override = 0;
-
-        public:
-            auto begin () noexcept -> Iterator;
-
-        public:
-            using Collection < ElementType > :: begin;
-
-        public:
-            auto end () noexcept -> Iterator;
-
-        public:
-            using Collection < ElementType > :: end;
-
-        public:
-            auto rbegin () noexcept -> ReverseIterator;
-
-        public:
-            using Collection < ElementType > :: rbegin;
-
-        public:
-            auto rend () noexcept -> ReverseIterator;
-
-        public:
-            using Collection < ElementType > :: rend;
-
-        public:
-            using Collection < ElementType > :: cbegin;
-
-        public:
-            using Collection < ElementType > :: cend;
-
-        public:
-            using Collection < ElementType > :: crbegin;
-
-        public:
-            using Collection < ElementType > :: crend;
 
         public:
             constexpr Map () noexcept;
@@ -263,9 +227,9 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             ) const noexcept -> bool = 0;
 
         public:
-            virtual auto remove (
+            auto remove (
                     Iterator const & iterator
-            ) noexcept -> bool = 0;
+            ) noexcept -> bool override = 0;
 
         public:
             auto remove (
@@ -273,9 +237,9 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             ) noexcept -> bool override = 0;
 
         public:
-            virtual auto remove (
+            auto remove (
                     ReverseIterator const & iterator
-            ) noexcept -> bool = 0;
+            ) noexcept -> bool override = 0;
 
         public:
             auto remove (
@@ -283,10 +247,10 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             ) noexcept -> bool override = 0;
 
         protected:
-            virtual auto remove (
+            auto remove (
                     Iterator    const * pIterators,
                     Size                iteratorCount
-            ) noexcept -> Size = 0;
+            ) noexcept -> Size override = 0;
 
         protected:
             auto remove (
@@ -295,10 +259,10 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             ) noexcept -> Size override = 0;
 
         protected:
-            virtual auto remove (
+            auto remove (
                     ReverseIterator const * pIterators,
                     Size                    iteratorCount
-            ) noexcept -> Size = 0;
+            ) noexcept -> Size override = 0;
 
         protected:
             auto remove (
@@ -334,19 +298,13 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
     }
 }
 
-#include "map/Iterator.hpp"
-#include "map/ReverseIterator.hpp"
-#include "map/DelegateIterator.hpp"
 #include "map/AbstractKeySetProxy.hpp"
-#include "map/AbstractValueCollectionProxy.hpp"
-#include "map/AbstractEntrySetProxy.hpp"
+#include "map/AbstractValueMutableCollectionProxy.hpp"
+#include "map/AbstractEntryMutableCollectionProxy.hpp"
 
-#include "map/impl/Iterator.hpp"
-#include "map/impl/ReverseIterator.hpp"
-#include "map/impl/DelegateIterator.hpp"
 #include "map/impl/AbstractKeySetProxy.hpp"
-#include "map/impl/AbstractValueCollectionProxy.hpp"
-#include "map/impl/AbstractEntrySetProxy.hpp"
+#include "map/impl/AbstractValueMutableCollectionProxy.hpp"
+#include "map/impl/AbstractEntryMutableCollectionProxy.hpp"
 
 #include "map/entry/impl/Entry.hpp"
 

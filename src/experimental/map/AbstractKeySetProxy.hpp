@@ -47,7 +47,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             Map < __KeyType, __ValueType > * _pMap;
 
         protected:
-            constexpr AbstractKeySetProxy (
+            __CDS_Explicit constexpr AbstractKeySetProxy (
                     Map < __KeyType, __ValueType > * pMap
             ) noexcept;
 

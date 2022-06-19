@@ -50,7 +50,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             ) const noexcept -> cds :: UniquePointer < DelegateConstIterator > override;
 
         public:
-            constexpr HashMapKeySetProxy (
+            __CDS_Explicit constexpr HashMapKeySetProxy (
                     HashMap < __KeyType, __ValueType, __HashCalculator > * pMap
             ) noexcept;
 
@@ -78,16 +78,16 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             ) const noexcept -> bool;
 
         public:
-            auto sequence () & noexcept -> Sequence < HashMapEntrySetProxy >;
+            auto sequence () & noexcept -> Sequence < HashMapKeySetProxy >;
 
         public:
-            auto sequence () && noexcept -> Sequence < HashMapEntrySetProxy >;
+            auto sequence () && noexcept -> Sequence < HashMapKeySetProxy >;
 
         public:
-            auto sequence () const & noexcept -> Sequence < HashMapEntrySetProxy const >;
+            auto sequence () const & noexcept -> Sequence < HashMapKeySetProxy const >;
 
         public:
-            auto sequence () const && noexcept -> Sequence < HashMapEntrySetProxy const >;
+            auto sequence () const && noexcept -> Sequence < HashMapKeySetProxy const >;
         };
 
     }

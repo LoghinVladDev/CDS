@@ -166,7 +166,6 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             }
 
 
-            /// TODO : replace after replacing experimental :: Object :: toString () -> BaseString
             template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
             __CDS_OptimalInline __BaseString < __CharType > :: __BaseString (
                     Object const & object

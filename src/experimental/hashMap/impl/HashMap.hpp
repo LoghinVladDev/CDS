@@ -23,30 +23,30 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
 
         template < typename __KeyType, typename __ValueType, typename __HashCalculator > // NOLINT(bugprone-reserved-identifier)
-        __CDS_cpplang_ConstexprOverride auto HashMap < __KeyType, __ValueType, __HashCalculator > :: valueCollectionProxy () const noexcept -> AbstractValueCollectionProxy const & {
+        __CDS_cpplang_ConstexprOverride auto HashMap < __KeyType, __ValueType, __HashCalculator > :: valueCollectionProxy () const noexcept -> AbstractValueMutableCollectionProxy const & {
 
-            return this->_valueCollectionProxy;
+            return this->_valueMutableCollectionProxy;
         }
 
 
         template < typename __KeyType, typename __ValueType, typename __HashCalculator > // NOLINT(bugprone-reserved-identifier)
-        __CDS_cpplang_ConstexprOverride auto HashMap < __KeyType, __ValueType, __HashCalculator > :: valueCollectionProxy () noexcept -> AbstractValueCollectionProxy & {
+        __CDS_cpplang_ConstexprOverride auto HashMap < __KeyType, __ValueType, __HashCalculator > :: valueCollectionProxy () noexcept -> AbstractValueMutableCollectionProxy & {
 
-            return this->_valueCollectionProxy;
+            return this->_valueMutableCollectionProxy;
         }
 
 
         template < typename __KeyType, typename __ValueType, typename __HashCalculator > // NOLINT(bugprone-reserved-identifier)
-        __CDS_cpplang_ConstexprOverride auto HashMap < __KeyType, __ValueType, __HashCalculator > :: entrySetProxy () const noexcept -> AbstractEntrySetProxy const & {
+        __CDS_cpplang_ConstexprOverride auto HashMap < __KeyType, __ValueType, __HashCalculator > :: entrySetProxy () const noexcept -> AbstractEntryMutableCollectionProxy const & {
 
-            return this->_entrySetProxy;
+            return this->_entryMutableCollectionProxy;
         }
 
 
         template < typename __KeyType, typename __ValueType, typename __HashCalculator > // NOLINT(bugprone-reserved-identifier)
-        __CDS_cpplang_ConstexprOverride auto HashMap < __KeyType, __ValueType, __HashCalculator > :: entrySetProxy () noexcept -> AbstractEntrySetProxy & {
+        __CDS_cpplang_ConstexprOverride auto HashMap < __KeyType, __ValueType, __HashCalculator > :: entrySetProxy () noexcept -> AbstractEntryMutableCollectionProxy & {
 
-            return this->_entrySetProxy;
+            return this->_entryMutableCollectionProxy;
         }
 
 
@@ -71,8 +71,8 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         template < typename __KeyType, typename __ValueType, typename __HashCalculator > // NOLINT(bugprone-reserved-identifier)
         constexpr HashMap < __KeyType, __ValueType, __HashCalculator > :: HashMap () noexcept :
                 _keySetProxy ( this ),
-                _valueCollectionProxy ( this ),
-                _entrySetProxy ( this ) {
+                _valueMutableCollectionProxy ( this ),
+                _entryMutableCollectionProxy ( this ) {
 
         }
 
@@ -83,8 +83,8 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         ) noexcept :
                 Map < __KeyType, __ValueType > ( map ),
                 _keySetProxy ( this ),
-                _valueCollectionProxy ( this ),
-                _entrySetProxy ( this ) {
+                _valueMutableCollectionProxy ( this ),
+                _entryMutableCollectionProxy ( this ) {
 
             this->_pBucketList =
                     map.empty() ?
@@ -128,8 +128,8 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         ) noexcept :
                 Map < __KeyType, __ValueType > ( map ),
                 _keySetProxy ( this ),
-                _valueCollectionProxy ( this ),
-                _entrySetProxy ( this ),
+                _valueMutableCollectionProxy ( this ),
+                _entryMutableCollectionProxy ( this ),
                 _pBucketList ( cds :: exchange ( map._pBucketList, nullptr ) ) {
 
         }
@@ -140,8 +140,8 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 __HashCalculator const & hashCalculator
         ) noexcept :
                 _keySetProxy ( this ),
-                _valueCollectionProxy ( this ),
-                _entrySetProxy ( this ),
+                _valueMutableCollectionProxy ( this ),
+                _entryMutableCollectionProxy ( this ),
                 _hashCalculator ( hashCalculator ) {
 
         }
@@ -152,8 +152,8 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 InitializerList     const & initializerList
         ) noexcept :
                 _keySetProxy ( this ),
-                _valueCollectionProxy ( this ),
-                _entrySetProxy ( this ) {
+                _valueMutableCollectionProxy ( this ),
+                _entryMutableCollectionProxy ( this ) {
 
             for ( auto & entry : initializerList ) {
                 this->add ( entry );
@@ -167,8 +167,8 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 __HashCalculator    const & hashCalculator
         ) noexcept :
                 _keySetProxy ( this ),
-                _valueCollectionProxy ( this ),
-                _entrySetProxy ( this ),
+                _valueMutableCollectionProxy ( this ),
+                _entryMutableCollectionProxy ( this ),
                 _hashCalculator ( hashCalculator ) {
 
             for ( auto & entry : initializerList ) {

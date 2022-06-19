@@ -23,58 +23,30 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
 
         template < typename __KeyType, typename __ValueType > // NOLINT(bugprone-reserved-identifier)
-        __CDS_cpplang_ConstexprPureAbstract auto Map < __KeyType, __ValueType > :: values () const noexcept -> Collection < ValueType > const & {
+        __CDS_cpplang_ConstexprPureAbstract auto Map < __KeyType, __ValueType > :: values () const noexcept -> MutableCollection < ValueType > const & {
 
             return this->valueCollectionProxy();
         }
 
 
         template < typename __KeyType, typename __ValueType > // NOLINT(bugprone-reserved-identifier)
-        __CDS_cpplang_ConstexprPureAbstract auto Map < __KeyType, __ValueType > :: values () noexcept -> Collection < ValueType > & {
+        __CDS_cpplang_ConstexprPureAbstract auto Map < __KeyType, __ValueType > :: values () noexcept -> MutableCollection < ValueType > & {
 
             return this->valueCollectionProxy();
         }
 
 
         template < typename __KeyType, typename __ValueType > // NOLINT(bugprone-reserved-identifier)
-        __CDS_cpplang_ConstexprPureAbstract auto Map < __KeyType, __ValueType > :: entries () const noexcept -> Set < EntryType > const & {
+        __CDS_cpplang_ConstexprPureAbstract auto Map < __KeyType, __ValueType > :: entries () const noexcept -> MutableCollection < EntryType > const & {
 
             return this->entrySetProxy();
         }
 
 
         template < typename __KeyType, typename __ValueType > // NOLINT(bugprone-reserved-identifier)
-        __CDS_cpplang_ConstexprPureAbstract auto Map < __KeyType, __ValueType > :: entries () noexcept -> Set < EntryType > & {
+        __CDS_cpplang_ConstexprPureAbstract auto Map < __KeyType, __ValueType > :: entries () noexcept -> MutableCollection < EntryType > & {
 
             return this->entrySetProxy();
-        }
-
-
-        template < typename __KeyType, typename __ValueType > // NOLINT(bugprone-reserved-identifier)
-        __CDS_OptimalInline auto Map < __KeyType, __ValueType > :: begin () noexcept -> Iterator {
-
-            return Iterator ( this, std :: move ( this->delegateIterator ( DelegateIteratorRequestType :: ForwardBegin ) ) );
-        }
-
-
-        template < typename __KeyType, typename __ValueType > // NOLINT(bugprone-reserved-identifier)
-        __CDS_OptimalInline auto Map < __KeyType, __ValueType > :: end () noexcept -> Iterator {
-
-            return Iterator ( this, std :: move ( this->delegateIterator ( DelegateIteratorRequestType :: ForwardEnd ) ) );
-        }
-
-
-        template < typename __KeyType, typename __ValueType > // NOLINT(bugprone-reserved-identifier)
-        __CDS_OptimalInline auto Map < __KeyType, __ValueType > :: rbegin () noexcept -> ReverseIterator {
-
-            return Iterator ( this, std :: move ( this->delegateIterator ( DelegateIteratorRequestType :: BackwardBegin ) ) );
-        }
-
-
-        template < typename __KeyType, typename __ValueType > // NOLINT(bugprone-reserved-identifier)
-        __CDS_OptimalInline auto Map < __KeyType, __ValueType > :: rend () noexcept -> ReverseIterator {
-
-            return Iterator ( this, std :: move ( this->delegateIterator ( DelegateIteratorRequestType :: BackwardEnd ) ) );
         }
 
 
@@ -86,7 +58,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         constexpr Map < __KeyType, __ValueType > :: Map (
                 Map const & map
         ) noexcept :
-                Collection < EntryType > ( map ) {
+                MutableCollection < EntryType > ( map ) {
 
         }
 
@@ -95,7 +67,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         constexpr Map < __KeyType, __ValueType > :: Map (
                 Map && map
         ) noexcept :
-                Collection < EntryType > ( std :: move ( map ) ) {
+                MutableCollection < EntryType > ( std :: move ( map ) ) {
 
         }
 
@@ -104,7 +76,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         constexpr Map < __KeyType, __ValueType > :: Map (
                 Size size
         ) noexcept :
-                Collection < EntryType > ( size ) {
+                MutableCollection < EntryType > ( size ) {
 
         }
 

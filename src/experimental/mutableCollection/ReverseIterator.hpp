@@ -1,21 +1,21 @@
 //
-// Created by loghin on 6/16/22.
+// Created by loghin on 4/26/22.
 //
 
-#ifndef __CDS_EX_MAP_REVERSE_ITERATOR_HPP__
-#define __CDS_EX_MAP_REVERSE_ITERATOR_HPP__
+#ifndef __CDS_MUTABLE_COLLECTION_REVERSE_ITERATOR_HPP__
+#define __CDS_MUTABLE_COLLECTION_REVERSE_ITERATOR_HPP__
 
 namespace cds { // NOLINT(modernize-concat-nested-namespaces)
     namespace experimental {
 
-        template < typename __KeyType, typename __ValueType > // NOLINT(bugprone-reserved-identifier)
-        class Map < __KeyType, __ValueType > :: ReverseIterator : public Map < __KeyType, __ValueType > :: AbstractIterator {
+        template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
+        class MutableCollection < __ElementType > :: ReverseIterator : public MutableCollection < __ElementType > :: AbstractIterator {
 
         public:
-            constexpr ReverseIterator () noexcept;
+            constexpr ReverseIterator () noexcept = default;
 
         public:
-            ReverseIterator (
+            __CDS_OptimalInline ReverseIterator (
                     ReverseIterator const & iterator
             ) noexcept;
 
@@ -26,12 +26,12 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
         public:
             constexpr ReverseIterator (
-                    Map < __KeyType, __ValueType >              const * pMap,
-                    cds :: UniquePointer < DelegateIterator >        && pIterator
+                    MutableCollection < __ElementType >         const * pCollection,
+                    cds :: UniquePointer < DelegateIterator >        && iterator
             ) noexcept;
 
         public:
-            ~ReverseIterator () noexcept override;
+            ~ReverseIterator () noexcept override = default;
 
         public:
             auto operator = (
@@ -42,6 +42,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             auto operator = (
                     ReverseIterator && iterator
             ) noexcept -> ReverseIterator &;
+
 
         public:
             __CDS_cpplang_ConstexprOverride auto operator ++ () noexcept -> ReverseIterator &;
@@ -56,13 +57,14 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             auto operator -- (int) noexcept -> ReverseIterator;
 
         public:
-            __CDS_cpplang_ConstexprOverride auto operator * () const noexcept -> Map < __KeyType, __ValueType > :: EntryType &;
+            __CDS_cpplang_ConstexprOverride auto operator * () const noexcept -> __ElementType &;
 
         public:
-            __CDS_cpplang_ConstexprOverride auto operator -> () const noexcept -> Map < __KeyType, __ValueType > :: EntryType *;
+            __CDS_cpplang_ConstexprOverride auto operator -> () const noexcept -> __ElementType *;
+
         };
 
     }
 }
 
-#endif // __CDS_EX_MAP_REVERSE_ITERATOR_HPP__
+#endif // __CDS_MUTABLE_COLLECTION_REVERSE_ITERATOR_HPP__
