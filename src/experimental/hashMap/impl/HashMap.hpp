@@ -194,13 +194,15 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         template < typename __KeyType, typename __ValueType, typename __HashCalculator > // NOLINT(bugprone-reserved-identifier)
         HashMap < __KeyType, __ValueType, __HashCalculator > :: ~HashMap () noexcept {
 
-            for ( Size bucketIndex = 0ULL; bucketIndex < this->_hashCalculator.getBoundary(); ++ bucketIndex ) {
-                while ( this->_pBucketList [ bucketIndex ]._pFront != nullptr ) {
-                    auto pCopy                                  = this->_pBucketList [ bucketIndex ]._pFront;
-                    this->_pBucketList [ bucketIndex ]._pFront  = this->_pBucketList [ bucketIndex ]._pFront->_pNext;
+            if ( this->_pBucketList != nullptr ) {
+                for ( Size bucketIndex = 0ULL; bucketIndex < this->_hashCalculator.getBoundary(); ++ bucketIndex ) {
+                    while ( this->_pBucketList [ bucketIndex ]._pFront != nullptr ) {
+                        auto pCopy                                  = this->_pBucketList [ bucketIndex ]._pFront;
+                        this->_pBucketList [ bucketIndex ]._pFront  = this->_pBucketList [ bucketIndex ]._pFront->_pNext;
 
-                    Map < __KeyType, __ValueType > :: freeEntryData ( pCopy->_entry );
-                    Memory :: instance().destroy ( pCopy );
+                        Map < __KeyType, __ValueType > :: freeEntryData ( pCopy->_entry );
+                        Memory :: instance().destroy ( pCopy );
+                    }
                 }
             }
 
@@ -499,13 +501,15 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         template < typename __KeyType, typename __ValueType, typename __HashCalculator > // NOLINT(bugprone-reserved-identifier)
         __CDS_OptimalInline auto HashMap < __KeyType, __ValueType, __HashCalculator > :: clear () noexcept -> void {
 
-            for ( Size bucketIndex = 0ULL; bucketIndex < this->_hashCalculator.getBoundary(); ++ bucketIndex ) {
-                while ( this->_pBucketList [ bucketIndex ]._pFront != nullptr ) {
-                    auto pCopy                                  = this->_pBucketList [ bucketIndex ]._pFront;
-                    this->_pBucketList [ bucketIndex ]._pFront  = this->_pBucketList [ bucketIndex ]._pFront->_pNext;
+            if ( this->_pBucketList != nullptr ) {
+                for ( Size bucketIndex = 0ULL; bucketIndex < this->_hashCalculator.getBoundary(); ++ bucketIndex ) {
+                    while ( this->_pBucketList [ bucketIndex ]._pFront != nullptr ) {
+                        auto pCopy                                  = this->_pBucketList [ bucketIndex ]._pFront;
+                        this->_pBucketList [ bucketIndex ]._pFront  = this->_pBucketList [ bucketIndex ]._pFront->_pNext;
 
-                    Map < __KeyType, __ValueType > :: freeEntryData ( pCopy->_entry );
-                    Memory :: instance().destroy ( pCopy );
+                        Map < __KeyType, __ValueType > :: freeEntryData ( pCopy->_entry );
+                        Memory :: instance().destroy ( pCopy );
+                    }
                 }
             }
 

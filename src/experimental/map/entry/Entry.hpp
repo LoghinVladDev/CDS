@@ -124,44 +124,85 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                     }
 
                 private:
-                    template < typename __TValueType = __ValueType, cds :: meta :: EnableIf < cds :: meta :: isCopyConstructible < __TValueType > () && cds :: meta :: isMoveConstructible < __TValueType > () > = 0 >
-                    __CDS_OptimalInline auto moveOrCopyValueTo (
+                    template <
+                            typename __TValueType = __ValueType,
+                            cds :: meta :: EnableIf <
+                                    cds :: meta :: isCopyConstructible < __TValueType > () &&
+                                    cds :: meta :: isMoveConstructible < __TValueType > ()
+                            > = 0
+                    > __CDS_OptimalInline auto moveOrCopyValueTo (
                             __MapEntry * entry
                     ) noexcept -> void {
 
                         if ( this->_value._forward ) {
-                            entry->_value._pObject  = Memory :: instance().create < ValueType > ( std :: move ( * this->_value._pObject ) );
+                            if ( entry->_value._pAny == nullptr ) {
+                                entry->_value._pObject      = Memory :: instance().create < ValueType > ( std :: move ( * this->_value._pObject ) );
+                            } else {
+                                entry->_value._pObject->~__ValueType();
+                                entry->_value._pObject      = new ( entry->_value._pObject ) __ValueType ( std :: move ( * this->_value._pObject ) );
+                            }
+
                             return;
                         }
 
-                        entry->_value._pObject = Memory :: instance().create < ValueType > ( * this->_value._pConstObject );
+                        if ( entry->_value._pAny == nullptr ) {
+                            entry->_value._pObject      = Memory :: instance().create < ValueType > ( * this->_value._pConstObject );
+                        } else {
+                            entry->_value._pObject->~__ValueType();
+                            entry->_value._pObject      = new ( entry->_value._pObject ) __ValueType ( * this->_value._pConstObject );
+                        }
                     }
 
                 private:
-                    template < typename __TValueType = __ValueType, cds :: meta :: EnableIf < cds :: meta :: isCopyConstructible < __TValueType > () && ! cds :: meta :: isMoveConstructible < __TValueType > () > = 0 >
-                    __CDS_OptimalInline auto moveOrCopyValueTo (
+                    template <
+                            typename __TValueType = __ValueType,
+                            cds :: meta :: EnableIf <
+                                    cds :: meta :: isCopyConstructible < __TValueType > () &&
+                                    ! cds :: meta :: isMoveConstructible < __TValueType > ()
+                            > = 0
+                    > __CDS_OptimalInline auto moveOrCopyValueTo (
                             __MapEntry * entry
                     ) noexcept -> void {
 
-                        entry->_value._pObject = Memory :: instance().create < ValueType > ( * this->_value._pConstObject );
+                        if ( entry->_value._pAny == nullptr ) {
+                            entry->_value._pObject      = Memory :: instance().create < ValueType > ( * this->_value._pConstObject );
+                        } else {
+                            entry->_value._pObject->~__ValueType();
+                            entry->_value._pObject      = new ( entry->_value._pObject ) __ValueType ( * this->_value._pConstObject );
+                        }
                     }
 
                 private:
-                    template < typename __TValueType = __ValueType, cds :: meta :: EnableIf < ! cds :: meta :: isCopyConstructible < __TValueType > () && cds :: meta :: isMoveConstructible < __TValueType > () > = 0 >
-                    __CDS_OptimalInline auto moveOrCopyValueTo (
+                    template <
+                            typename __TValueType = __ValueType,
+                            cds :: meta :: EnableIf <
+                                    ! cds :: meta :: isCopyConstructible < __TValueType > () &&
+                                    cds :: meta :: isMoveConstructible < __TValueType > ()
+                            > = 0
+                    > __CDS_OptimalInline auto moveOrCopyValueTo (
                             __MapEntry * entry
                     ) noexcept -> void {
 
-                        entry->_value._pObject  = Memory :: instance().create < ValueType > ( std :: move ( * this->_value._pObject ) );
+                        if ( entry->_value._pAny == nullptr ) {
+                            entry->_value._pObject      = Memory :: instance().create < ValueType > ( std :: move ( * this->_value._pObject ) );
+                        } else {
+                            entry->_value._pObject->~__ValueType();
+                            entry->_value._pObject      = new ( entry->_value._pObject ) __ValueType ( std :: move ( * this->_value._pObject ) );
+                        }
                     }
 
                 private:
-                    template < typename __TValueType = __ValueType, cds :: meta :: EnableIf < ! cds :: meta :: isCopyConstructible < __TValueType > () && ! cds :: meta :: isMoveConstructible < __TValueType > () > = 0 >
-                    __CDS_OptimalInline auto moveOrCopyValueTo (
+                    template <
+                            typename __TValueType = __ValueType,
+                            cds :: meta :: EnableIf <
+                                    ! cds :: meta :: isCopyConstructible < __TValueType > () &&
+                                    ! cds :: meta :: isMoveConstructible < __TValueType > ()
+                            > = 0
+                    > __CDS_OptimalInline auto moveOrCopyValueTo (
                             __MapEntry * entry
                     ) noexcept -> void {
 
-                        /// do nothing, as this is an unreachable point
+                        /// do nothing, unreachable point
                     }
 
                 private:
