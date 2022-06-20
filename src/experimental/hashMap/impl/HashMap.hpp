@@ -117,27 +117,26 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
                     BucketType & currentBucket  = this->_buckets._pBuckets [ bucketIndex ];
                     DataNode   * pOtherBucket   = map._buckets._pBuckets [ bucketIndex ]._pFront;
+                    DataNode   * pBack          = nullptr;
 
                     while ( pOtherBucket != nullptr ) {
 
                         DataNode * pNewNode     = Memory :: instance().create < DataNode > ();
                         pNewNode->_pNext        = nullptr;
-                        pNewNode->_pPrevious    = currentBucket._pBack;
 
                         Map < __KeyType, __ValueType > :: entryCopyTo (
                                 & pNewNode->_entry,
                                 & pOtherBucket->_entry
                         );
 
-                        if ( currentBucket._pBack == nullptr ) {
-                            currentBucket._pFront           = pNewNode;
+                        if ( pBack == nullptr ) {
+                            currentBucket._pFront   = pNewNode;
                         } else {
-                            currentBucket._pBack->_pNext    = pNewNode;
+                            pBack->_pNext           = pNewNode;
                         }
 
-                        currentBucket._pBack    = pNewNode;
-                        pOtherBucket            = pOtherBucket->_pNext;
-                        ++ currentBucket._bucketSize;
+                        pBack           = pNewNode;
+                        pOtherBucket    = pOtherBucket->_pNext;
                     }
                 }
             }
@@ -252,31 +251,28 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
             auto pListHead  = list._pFront;
 
+            Size        bucketSize  = 0ULL;
+            DataNode  * pBack       = nullptr;
+
             while ( pListHead != nullptr ) {
                 if ( cds :: meta :: equals ( pListHead->_entry.key(), key ) ) {
                     return & pListHead->_entry;
                 }
 
-                pListHead = pListHead->_pNext;
+                pBack       = pListHead;
+                pListHead   = pListHead->_pNext;
+                ++ bucketSize;
             }
 
             auto pNewNode                       = Memory :: instance().create < DataNode > ();
             pNewNode->_pNext                    = list._pFront;
-            pNewNode->_pPrevious                = nullptr;
-
-            if ( list._pFront != nullptr ) {
-                list._pFront->_pPrevious    = pNewNode;
-            } else {
-                list._pBack                 = pNewNode;
-            }
-
             list._pFront                        = pNewNode;
-            ++ list._bucketSize;
+
             this->updateSize ( this->size() + 1ULL );
 
             auto pRet = & list._pFront->_entry;
 
-            if ( list._bucketSize > this->_rehashPolicy.loadFactor() ) {
+            if ( bucketSize >= this->_rehashPolicy.loadFactor() ) {
                 auto rehashData = this->_rehashPolicy.rehashRequired (
                         this->_buckets._bucketCount,
                         this->_size,
@@ -311,43 +307,47 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             for ( Size bucketIndex = 0ULL; bucketIndex < this->_buckets._bucketCount; ++ bucketIndex ) {
 
                 auto & bucket   = this->_buckets._pBuckets [ bucketIndex ];
-                auto pHead      = bucket._pFront;
 
-                while ( pHead != nullptr ) {
+                while ( bucket._pFront != nullptr ) {
 
                     Size hash;
-
-                    if ( Map < __KeyType, __ValueType > :: entryEmpty ( & pHead->_entry ) ) {
+                    if ( Map < __KeyType, __ValueType > :: entryEmpty ( & bucket._pFront->_entry ) ) {
                         hash = hashValueOfNewNode;
                     } else {
-                        hash = this->_hasher ( pHead->_entry.key() ) % bucketCount;
+                        hash = this->_hasher ( bucket._pFront->_entry.key() ) % bucketCount;
                     }
 
                     if ( hash != bucketIndex ) {
-                        if ( pHead->_pNext != nullptr ) {
-                            pHead->_pNext->_pPrevious = nullptr;
-                        }
-
-                        if ( pHead == bucket._pFront ) {
-                            bucket._pFront = bucket._pFront->_pNext;
-                        } else {
-                            pHead->_pPrevious->_pNext = pHead->_pNext;
-                        }
-
-                        auto pToMove = pHead;
-                        pHead = pHead->_pNext;
+                        auto pToRemove = bucket._pFront;
+                        bucket._pFront = bucket._pFront->_pNext;
 
                         HashMap < __KeyType, __ValueType, __Hasher > :: rehashEmplace (
                                 & this->_buckets._pBuckets [ hash ],
-                                pToMove
+                                pToRemove
                         );
+                    } else {
+                        break;
+                    }
+                }
 
-                        -- bucket._bucketSize;
+                auto pHead = bucket._pFront;
+                while ( pHead != nullptr && pHead->_pNext != nullptr ) {
 
-                        if ( bucket._bucketSize == 0ULL ) {
-                            bucket._pFront  = nullptr;
-                            bucket._pBack   = nullptr;
-                        }
+                    Size hash;
+                    if ( Map < __KeyType, __ValueType > :: entryEmpty ( & pHead->_pNext->_entry ) ) {
+                        hash = hashValueOfNewNode;
+                    } else {
+                        hash = this->_hasher ( pHead->_pNext->_entry.key() ) % bucketCount;
+                    }
+
+                    if ( hash != bucketIndex ) {
+                        auto pToRemove  = pHead->_pNext;
+                        pHead->_pNext   = pHead->_pNext->_pNext;
+
+                        HashMap < __KeyType, __ValueType, __Hasher > :: rehashEmplace (
+                                & this->_buckets._pBuckets [ hash ],
+                                pToRemove
+                        );
                     } else {
                         pHead = pHead->_pNext;
                     }
@@ -364,19 +364,8 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 DataNode    * pNode
         ) noexcept -> void {
 
-            pNode->_pNext       = nullptr;
-            pNode->_pPrevious   = pBucket->_pBack;
-
-            if ( pBucket->_bucketSize == 0ULL ) {
-                pBucket->_pFront        = pNode;
-                pBucket->_pBack         = pNode;
-                pBucket->_bucketSize    = 1ULL;
-                return;
-            }
-
-            pBucket->_pBack->_pNext = pNode;
-            pBucket->_pBack         = pNode;
-            ++ pBucket->_bucketSize;
+            pNode->_pNext       = pBucket->_pFront;
+            pBucket->_pFront    = pNode;
         }
 
 
@@ -470,63 +459,27 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
             if ( cds :: meta :: equals ( list._pFront->_entry.key(), key ) ) {
 
-                auto pNode = list._pFront;
-
-                if ( list._pFront->_pNext == nullptr ) {
-                    list._pFront                = nullptr;
-                    list._pBack                 = nullptr;
-                } else {
-                    list._pFront                = list._pFront->_pNext;
-                    list._pFront->_pPrevious    = nullptr;
-                }
+                auto pNode      = list._pFront;
+                list._pFront    = list._pFront->_pNext;
 
                 Map < __KeyType, __ValueType > :: freeEntryData ( pNode->_entry );
                 Memory :: instance().destroy ( pNode );
 
                 this->updateSize ( this->size() - 1ULL );
-                -- list._bucketSize;
                 return true;
             }
 
-            if ( cds :: meta :: equals ( list._pBack->_entry.key(), key ) ) {
+            auto pHead = list._pFront;
+            while ( pHead->_pNext != nullptr ) {
+                if ( cds :: meta :: equals ( pHead->_pNext->_entry.key(), key ) ) {
 
-                auto pNode = list._pBack;
+                    auto pToRemove = pHead->_pNext;
+                    pHead->_pNext = pHead->_pNext->_pNext;
 
-                if ( list._pBack->_pPrevious == nullptr ) {
-                    list._pFront                = nullptr;
-                    list._pBack                 = nullptr;
-                } else {
-                    list._pBack                 = list._pBack->_pPrevious;
-                    list._pBack->_pNext         = nullptr;
-                }
-
-                Map < __KeyType, __ValueType > :: freeEntryData ( pNode->_entry );
-                Memory :: instance().destroy ( pNode );
-
-                this->updateSize ( this->size() - 1ULL );
-                -- list._bucketSize;
-                return true;
-            }
-
-            if ( list._pFront->_pNext != nullptr && list._pFront->_pNext->_pNext != nullptr ) {
-                return false;
-            }
-
-            auto pHead = list._pFront->_pNext;
-            while ( pHead != nullptr ) {
-                if ( cds :: meta :: equals ( pHead->_entry.key(), key ) ) {
-                    auto pPrevious      = pHead->_pPrevious;
-                    auto pNext          = pHead->_pNext;
-
-                    pPrevious->_pNext   = pNext;
-                    pNext->_pPrevious   = pPrevious;
-
-                    Map < __KeyType, __ValueType > :: freeEntryData ( pHead->_entry );
-                    Memory :: instance().destroy ( pHead );
+                    Map < __KeyType, __ValueType > :: freeEntryData ( pToRemove->_entry );
+                    Memory :: instance().destroy ( pToRemove );
 
                     this->updateSize ( this->size() - 1ULL );
-
-                    -- list._bucketSize;
                     return true;
                 }
 
@@ -633,8 +586,6 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                         Map < __KeyType, __ValueType > :: freeEntryData ( pCopy->_entry );
                         Memory :: instance().destroy ( pCopy );
                     }
-
-                    this->_buckets._pBuckets [ bucketIndex ]._bucketSize = 0ULL;
                 }
             }
 

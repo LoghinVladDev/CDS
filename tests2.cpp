@@ -34,6 +34,8 @@ std :: hash < std :: string > h;
     auto start = std :: chrono :: system_clock :: now();
     for ( int i = 0; i < 10000000; ++ i ) {
 
+        int k = rand();
+        int v = rand();
 //        testArr.pushFront(k);
 //        testArr.pushBack(v);
 
@@ -44,7 +46,8 @@ std :: hash < std :: string > h;
 //        int k, v;
 //        in >> k >> v;
 
-        m.emplace ( i, i );
+//        m.emplace ( i, i );
+        m.emplace ( k, v );
     }
 
 //    std :: cout << m.bucket_count() << '\n';

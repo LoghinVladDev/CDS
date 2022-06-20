@@ -64,13 +64,16 @@ namespace cds {
                         return { __PrimeRehashPolicy :: _table [ this->_factorIndex ], false };
                     }
 
-                    Size const requiredPostBias = requiredCount * this->_loadFactor;
-                    Size total                  = requiredPostBias + elementCount;
+                    Size const totalRequired        = requiredCount + elementCount;
+                    Size const loadAdjusted         = bucketCount * this->_loadFactor;
+                    Size const minimumGrowthFactor  = 2ULL;
 
-                    if ( requiredPostBias <= bucketCount ) {
+                    if ( loadAdjusted > totalRequired ) {
+                        return { this->currentFactor(), false };
+                    } if ( totalRequired <= loadAdjusted * minimumGrowthFactor ) {
                         return { __PrimeRehashPolicy :: _table [ ++ this->_factorIndex ], true };
                     } else {
-                        while ( total < _table [ this->_factorIndex ] && this->_factorIndex < 28U ) {
+                        while ( totalRequired < _table [ this->_factorIndex ] * this->_loadFactor && this->_factorIndex < 28U ) {
                             ++ this->_factorIndex;
                         }
 

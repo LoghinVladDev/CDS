@@ -87,14 +87,11 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             struct DataNode {
                 EntryType   _entry;
                 DataNode  * _pNext;
-                DataNode  * _pPrevious;
             };
 
         private:
             struct BucketType {
                 DataNode * _pFront;
-                DataNode * _pBack;
-                Size       _bucketSize;
             };
 
         private:
