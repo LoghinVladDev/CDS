@@ -7,7 +7,7 @@
 
 namespace cds {
 
-    __CDS_cpplang_VirtualConstexpr auto Object :: hash () const noexcept -> Index {
+    __CDS_cpplang_VirtualConstexpr auto Object :: hash () const noexcept -> Size {
 
         return 0;
     }

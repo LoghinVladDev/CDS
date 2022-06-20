@@ -1278,7 +1278,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
              * @return Index = hash code value of the instance
              * @test tested in base class test
              */
-            __CDS_NoDiscard auto hash () const noexcept -> Index override;
+            __CDS_NoDiscard auto hash () const noexcept -> Size override;
 
         public:
             /**

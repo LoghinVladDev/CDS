@@ -8,8 +8,8 @@
 namespace cds { // NOLINT(modernize-concat-nested-namespaces)
     namespace experimental {
 
-        template < typename __KeyType, typename __ValueType, typename __HashCalculator > // NOLINT(bugprone-reserved-identifier)
-        class HashMap < __KeyType, __ValueType, __HashCalculator > :: HashMapKeySetProxy : public AbstractKeySetProxy {
+        template < typename __KeyType, typename __ValueType, typename __Hasher > // NOLINT(bugprone-reserved-identifier)
+        class HashMap < __KeyType, __ValueType, __Hasher > :: HashMapKeySetProxy : public AbstractKeySetProxy {
 
         public:
             using typename AbstractKeySetProxy :: KeyType;
@@ -54,7 +54,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
         public:
             __CDS_Explicit constexpr HashMapKeySetProxy (
-                    HashMap < __KeyType, __ValueType, __HashCalculator > * pMap
+                    HashMap < __KeyType, __ValueType, __Hasher > * pMap
             ) noexcept;
 
         public:

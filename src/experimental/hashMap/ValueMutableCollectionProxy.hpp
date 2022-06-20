@@ -8,8 +8,8 @@
 namespace cds { // NOLINT(modernize-concat-nested-namespaces)
     namespace experimental {
 
-        template < typename __KeyType, typename __ValueType, typename __HashCalculator > // NOLINT(bugprone-reserved-identifier)
-        class HashMap < __KeyType, __ValueType, __HashCalculator > :: HashMapValueMutableCollectionProxy : public AbstractValueMutableCollectionProxy {
+        template < typename __KeyType, typename __ValueType, typename __Hasher > // NOLINT(bugprone-reserved-identifier)
+        class HashMap < __KeyType, __ValueType, __Hasher > :: HashMapValueMutableCollectionProxy : public AbstractValueMutableCollectionProxy {
 
         public:
             using typename AbstractValueMutableCollectionProxy :: ValueType;
@@ -74,7 +74,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
         public:
             constexpr HashMapValueMutableCollectionProxy (
-                    HashMap < __KeyType, __ValueType, __HashCalculator > * pMap
+                    HashMap < __KeyType, __ValueType, __Hasher > * pMap
             ) noexcept;
 
         public:

@@ -10,7 +10,7 @@ namespace cds {
     template < typename T >
     constexpr static auto hash (
             T const & object
-    ) noexcept -> Index {
+    ) noexcept -> Size {
 
         return 0ULL;
     }

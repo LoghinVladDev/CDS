@@ -1407,9 +1407,8 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
 
             public:
-                __CDS_NoDiscard __CDS_cpplang_ConstexprOverride auto hash () const noexcept -> Index override;
+                __CDS_NoDiscard __CDS_cpplang_ConstexprOverride auto hash () const noexcept -> Size override;
 
-            /// change this later blyat
             public:
                 __CDS_NoDiscard auto toString () const noexcept -> cds :: String override;
 

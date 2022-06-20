@@ -111,7 +111,7 @@ namespace cds {
             return this->end();
         }
 
-        __CDS_NoDiscard __CDS_cpplang_VirtualConstexpr auto hash() const noexcept -> Index final {
+        __CDS_NoDiscard __CDS_cpplang_VirtualConstexpr auto hash() const noexcept -> Size final {
             return _s + _f;
         }
 

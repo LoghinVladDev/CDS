@@ -28,13 +28,11 @@ int main () {
     cds :: experimental :: HashSet < int > setset;
     cds :: experimental :: Array < int > testArr;
     auto m2 = m;
-
+std :: hash < std :: string > h;
 //    std :: ofstream out ("testData.out");
 //    std :: ifstream in ("errData.in");
     auto start = std :: chrono :: system_clock :: now();
     for ( int i = 0; i < 10000000; ++ i ) {
-        int k = rand();
-        int v = rand();
 
 //        testArr.pushFront(k);
 //        testArr.pushBack(v);
@@ -46,8 +44,10 @@ int main () {
 //        int k, v;
 //        in >> k >> v;
 
-        m.emplace ( k, v );
+        m.emplace ( i, i );
     }
+
+//    std :: cout << m.bucket_count() << '\n';
     auto end = std :: chrono :: system_clock :: now();
     std :: cout
             << "Duration : "

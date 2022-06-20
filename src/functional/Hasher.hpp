@@ -69,6 +69,31 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
     }
 }
 
+namespace cds { // NOLINT(modernize-concat-nested-namespaces)
+    namespace experimental {
+
+        namespace utility {
+
+            template < typename __Type > // NOLINT(bugprone-reserved-identifier)
+            using HashFunction = decltype ( & cds :: hash < __Type > );
+
+        }
+
+        template < typename __Type, utility :: HashFunction < __Type > __hashFunction > // NOLINT(bugprone-reserved-identifier)
+        class FunctionHasher {
+
+        public:
+            __CDS_NoDiscard constexpr auto operator () (
+                    __Type const & value
+            ) const noexcept ( noexcept ( __hashFunction ( value ) ) ) -> Size {
+
+                return __hashFunction ( value );
+            }
+        };
+
+    }
+}
+
 #if __CDS_cpplang_Concepts_available == true
 
     template < typename H >

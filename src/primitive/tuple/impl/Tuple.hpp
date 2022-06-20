@@ -47,7 +47,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
     }
 
     template < typename ... __TypePack > // NOLINT(bugprone-reserved-identifier)
-    inline auto Tuple < __TypePack ... > :: hash () const noexcept -> Index {
+    inline auto Tuple < __TypePack ... > :: hash () const noexcept -> Size {
 
         return this->node.hash();
     }

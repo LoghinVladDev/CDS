@@ -15,18 +15,15 @@ if (WIN32)
     if (CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
         set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /bigobj /Zc:__cplusplus")
     endif()
+elseif (linux)
+    set(GCC_COMPILE_OPTIONS "-Wa")
+    set(GCC_COMPILE_DEBUG_OPTIONS "${GCC_COMPILE_OPTIONS}")
+    set(GCC_COMPILE_RELEASE_OPTIONS "${GCC_COMPILE_OPTIONS};-O3")
+    add_compile_options("$<$<CONFIG:Debug>:${GCC_COMPILE_DEBUG_OPTIONS}>")
+    add_compile_options("$<$<CONFIG:Release>:${GCC_COMPILE_RELEASE_OPTIONS}>")
 endif()
 
 set(CDS_INCLUDE_DIRECTORIES
-        src
-        src/collection
-        src/collection/unordered
-        src/collection/ordered
-        src/exception
-        src/primitive
-        src/cdsIntern
-        src/stream
-
         include
 )
 

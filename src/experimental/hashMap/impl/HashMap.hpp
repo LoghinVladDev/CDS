@@ -8,8 +8,8 @@
 namespace cds { // NOLINT(modernize-concat-nested-namespaces)
     namespace experimental {
 
-        template < typename __KeyType, typename __ValueType, typename __HashCalculator > // NOLINT(bugprone-reserved-identifier)
-        __CDS_cpplang_NonConstConstexprMemberFunction auto HashMap < __KeyType, __ValueType, __HashCalculator > :: updateSize (
+        template < typename __KeyType, typename __ValueType, typename __Hasher > // NOLINT(bugprone-reserved-identifier)
+        __CDS_cpplang_NonConstConstexprMemberFunction auto HashMap < __KeyType, __ValueType, __Hasher > :: updateSize (
                 Size size
         ) noexcept -> void {
 
@@ -20,50 +20,50 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         }
 
 
-        template < typename __KeyType, typename __ValueType, typename __HashCalculator > // NOLINT(bugprone-reserved-identifier)
-        __CDS_cpplang_ConstexprOverride auto HashMap < __KeyType, __ValueType, __HashCalculator > :: keySetProxy () const noexcept -> AbstractKeySetProxy const & {
+        template < typename __KeyType, typename __ValueType, typename __Hasher > // NOLINT(bugprone-reserved-identifier)
+        __CDS_cpplang_ConstexprOverride auto HashMap < __KeyType, __ValueType, __Hasher > :: keySetProxy () const noexcept -> AbstractKeySetProxy const & {
 
             return this->_keySetProxy;
         }
 
 
-        template < typename __KeyType, typename __ValueType, typename __HashCalculator > // NOLINT(bugprone-reserved-identifier)
-        __CDS_cpplang_ConstexprOverride auto HashMap < __KeyType, __ValueType, __HashCalculator > :: keySetProxy () noexcept -> AbstractKeySetProxy & {
+        template < typename __KeyType, typename __ValueType, typename __Hasher > // NOLINT(bugprone-reserved-identifier)
+        __CDS_cpplang_ConstexprOverride auto HashMap < __KeyType, __ValueType, __Hasher > :: keySetProxy () noexcept -> AbstractKeySetProxy & {
 
             return this->_keySetProxy;
         }
 
 
-        template < typename __KeyType, typename __ValueType, typename __HashCalculator > // NOLINT(bugprone-reserved-identifier)
-        __CDS_cpplang_ConstexprOverride auto HashMap < __KeyType, __ValueType, __HashCalculator > :: valueCollectionProxy () const noexcept -> AbstractValueMutableCollectionProxy const & {
+        template < typename __KeyType, typename __ValueType, typename __Hasher > // NOLINT(bugprone-reserved-identifier)
+        __CDS_cpplang_ConstexprOverride auto HashMap < __KeyType, __ValueType, __Hasher > :: valueCollectionProxy () const noexcept -> AbstractValueMutableCollectionProxy const & {
 
             return this->_valueMutableCollectionProxy;
         }
 
 
-        template < typename __KeyType, typename __ValueType, typename __HashCalculator > // NOLINT(bugprone-reserved-identifier)
-        __CDS_cpplang_ConstexprOverride auto HashMap < __KeyType, __ValueType, __HashCalculator > :: valueCollectionProxy () noexcept -> AbstractValueMutableCollectionProxy & {
+        template < typename __KeyType, typename __ValueType, typename __Hasher > // NOLINT(bugprone-reserved-identifier)
+        __CDS_cpplang_ConstexprOverride auto HashMap < __KeyType, __ValueType, __Hasher > :: valueCollectionProxy () noexcept -> AbstractValueMutableCollectionProxy & {
 
             return this->_valueMutableCollectionProxy;
         }
 
 
-        template < typename __KeyType, typename __ValueType, typename __HashCalculator > // NOLINT(bugprone-reserved-identifier)
-        __CDS_cpplang_ConstexprOverride auto HashMap < __KeyType, __ValueType, __HashCalculator > :: entrySetProxy () const noexcept -> AbstractEntryMutableCollectionProxy const & {
+        template < typename __KeyType, typename __ValueType, typename __Hasher > // NOLINT(bugprone-reserved-identifier)
+        __CDS_cpplang_ConstexprOverride auto HashMap < __KeyType, __ValueType, __Hasher > :: entrySetProxy () const noexcept -> AbstractEntryMutableCollectionProxy const & {
 
             return this->_entryMutableCollectionProxy;
         }
 
 
-        template < typename __KeyType, typename __ValueType, typename __HashCalculator > // NOLINT(bugprone-reserved-identifier)
-        __CDS_cpplang_ConstexprOverride auto HashMap < __KeyType, __ValueType, __HashCalculator > :: entrySetProxy () noexcept -> AbstractEntryMutableCollectionProxy & {
+        template < typename __KeyType, typename __ValueType, typename __Hasher > // NOLINT(bugprone-reserved-identifier)
+        __CDS_cpplang_ConstexprOverride auto HashMap < __KeyType, __ValueType, __Hasher > :: entrySetProxy () noexcept -> AbstractEntryMutableCollectionProxy & {
 
             return this->_entryMutableCollectionProxy;
         }
 
 
-        template < typename __KeyType, typename __ValueType, typename __HashCalculator > // NOLINT(bugprone-reserved-identifier)
-        __CDS_OptimalInline auto HashMap < __KeyType, __ValueType, __HashCalculator > :: delegateIterator (
+        template < typename __KeyType, typename __ValueType, typename __Hasher > // NOLINT(bugprone-reserved-identifier)
+        __CDS_OptimalInline auto HashMap < __KeyType, __ValueType, __Hasher > :: delegateIterator (
                 DelegateIteratorRequestType requestType
         ) noexcept -> cds :: UniquePointer < DelegateIterator > {
 
@@ -72,8 +72,8 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         }
 
 
-        template < typename __KeyType, typename __ValueType, typename __HashCalculator > // NOLINT(bugprone-reserved-identifier)
-        __CDS_OptimalInline auto HashMap < __KeyType, __ValueType, __HashCalculator > :: delegateConstIterator (
+        template < typename __KeyType, typename __ValueType, typename __Hasher > // NOLINT(bugprone-reserved-identifier)
+        __CDS_OptimalInline auto HashMap < __KeyType, __ValueType, __Hasher > :: delegateConstIterator (
                 DelegateIteratorRequestType requestType
         ) const noexcept -> cds :: UniquePointer < DelegateConstIterator > {
 
@@ -82,8 +82,8 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         }
 
 
-        template < typename __KeyType, typename __ValueType, typename __HashCalculator > // NOLINT(bugprone-reserved-identifier)
-        constexpr HashMap < __KeyType, __ValueType, __HashCalculator > :: HashMap () noexcept :
+        template < typename __KeyType, typename __ValueType, typename __Hasher > // NOLINT(bugprone-reserved-identifier)
+        constexpr HashMap < __KeyType, __ValueType, __Hasher > :: HashMap () noexcept :
                 _keySetProxy ( this ),
                 _valueMutableCollectionProxy ( this ),
                 _entryMutableCollectionProxy ( this ) {
@@ -91,25 +91,32 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         }
 
 
-        template < typename __KeyType, typename __ValueType, typename __HashCalculator > // NOLINT(bugprone-reserved-identifier)
-        HashMap < __KeyType, __ValueType, __HashCalculator > :: HashMap (
+        template < typename __KeyType, typename __ValueType, typename __Hasher > // NOLINT(bugprone-reserved-identifier)
+        HashMap < __KeyType, __ValueType, __Hasher > :: HashMap (
                 HashMap const & map
         ) noexcept :
                 Map < __KeyType, __ValueType > ( map ),
+                __hidden :: __impl :: __HashTableUtils <
+                        __Hasher,
+                        cds :: __hidden :: __impl :: __PrimeRehashPolicy
+                > ( map ),
                 _keySetProxy ( this ),
                 _valueMutableCollectionProxy ( this ),
-                _entryMutableCollectionProxy ( this ) {
+                _entryMutableCollectionProxy ( this ),
+                _buckets ( { nullptr, map._buckets._bucketCount } ) {
 
-            this->_pBucketList =
+            this->_buckets._pBuckets =
                     map.empty() ?
                     nullptr     :
-                    cds :: __hidden :: __impl :: __allocation :: __allocPrimitiveArray < BucketType > ( this->_hashCalculator.getBoundary() );
+                    cds :: __hidden :: __impl :: __allocation :: __allocPrimitiveArray < BucketType > ( this->_buckets._bucketCount );
+
+            std :: memset ( this->_buckets._pBuckets, 0, sizeof ( BucketType ) * this->_buckets._bucketCount );
 
             if ( ! map.empty() ) {
-                for ( Size bucketIndex = 0ULL; bucketIndex < this->_hashCalculator.getBoundary(); ++ bucketIndex ) {
+                for ( Size bucketIndex = 0ULL; bucketIndex < this->_buckets._bucketCount; ++ bucketIndex ) {
 
-                    BucketType & currentBucket  = this->_pBucketList [ bucketIndex ];
-                    DataNode   * pOtherBucket   = map._pBucketList [ bucketIndex ]._pFront;
+                    BucketType & currentBucket  = this->_buckets._pBuckets [ bucketIndex ];
+                    DataNode   * pOtherBucket   = map._buckets._pBuckets [ bucketIndex ]._pFront;
 
                     while ( pOtherBucket != nullptr ) {
 
@@ -130,39 +137,47 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
                         currentBucket._pBack    = pNewNode;
                         pOtherBucket            = pOtherBucket->_pNext;
+                        ++ currentBucket._bucketSize;
                     }
                 }
             }
         }
 
 
-        template < typename __KeyType, typename __ValueType, typename __HashCalculator > // NOLINT(bugprone-reserved-identifier)
-        constexpr HashMap < __KeyType, __ValueType, __HashCalculator > :: HashMap (
+        template < typename __KeyType, typename __ValueType, typename __Hasher > // NOLINT(bugprone-reserved-identifier)
+        constexpr HashMap < __KeyType, __ValueType, __Hasher > :: HashMap (
                 HashMap && map
         ) noexcept :
                 Map < __KeyType, __ValueType > ( std :: move ( map ) ),
+                __hidden :: __impl :: __HashTableUtils <
+                        __Hasher,
+                        cds :: __hidden :: __impl :: __PrimeRehashPolicy
+                > ( map ),
                 _keySetProxy ( this ),
                 _valueMutableCollectionProxy ( this ),
                 _entryMutableCollectionProxy ( this ),
-                _pBucketList ( cds :: exchange ( map._pBucketList, nullptr ) ) {
+                _buckets ( { cds :: exchange ( map._buckets._pBuckets, nullptr ), cds :: exchange ( map._buckets._bucketCount, 0ULL ) } ) {
 
         }
 
 
-        template < typename __KeyType, typename __ValueType, typename __HashCalculator > // NOLINT(bugprone-reserved-identifier)
-        __CDS_OptimalInline HashMap < __KeyType, __ValueType, __HashCalculator > :: HashMap (
-                __HashCalculator const & hashCalculator
+        template < typename __KeyType, typename __ValueType, typename __Hasher > // NOLINT(bugprone-reserved-identifier)
+        __CDS_OptimalInline HashMap < __KeyType, __ValueType, __Hasher > :: HashMap (
+                __Hasher const & hasher
         ) noexcept :
+                __hidden :: __impl :: __HashTableUtils <
+                        __Hasher,
+                        cds :: __hidden :: __impl :: __PrimeRehashPolicy
+                > ( hasher ),
                 _keySetProxy ( this ),
                 _valueMutableCollectionProxy ( this ),
-                _entryMutableCollectionProxy ( this ),
-                _hashCalculator ( hashCalculator ) {
+                _entryMutableCollectionProxy ( this ) {
 
         }
 
 
-        template < typename __KeyType, typename __ValueType, typename __HashCalculator > // NOLINT(bugprone-reserved-identifier)
-        __CDS_OptimalInline HashMap < __KeyType, __ValueType, __HashCalculator > :: HashMap (
+        template < typename __KeyType, typename __ValueType, typename __Hasher > // NOLINT(bugprone-reserved-identifier)
+        __CDS_OptimalInline HashMap < __KeyType, __ValueType, __Hasher > :: HashMap (
                 InitializerList     const & initializerList
         ) noexcept :
                 _keySetProxy ( this ),
@@ -175,15 +190,18 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         }
 
 
-        template < typename __KeyType, typename __ValueType, typename __HashCalculator > // NOLINT(bugprone-reserved-identifier)
-        __CDS_OptimalInline HashMap < __KeyType, __ValueType, __HashCalculator > :: HashMap (
-                InitializerList     const & initializerList,
-                __HashCalculator    const & hashCalculator
+        template < typename __KeyType, typename __ValueType, typename __Hasher > // NOLINT(bugprone-reserved-identifier)
+        __CDS_OptimalInline HashMap < __KeyType, __ValueType, __Hasher > :: HashMap (
+                InitializerList const & initializerList,
+                __Hasher        const & hasher
         ) noexcept :
+                __hidden :: __impl :: __HashTableUtils <
+                        __Hasher,
+                        cds :: __hidden :: __impl :: __PrimeRehashPolicy
+                > ( hasher ),
                 _keySetProxy ( this ),
                 _valueMutableCollectionProxy ( this ),
-                _entryMutableCollectionProxy ( this ),
-                _hashCalculator ( hashCalculator ) {
+                _entryMutableCollectionProxy ( this ) {
 
             for ( auto & entry : initializerList ) {
                 this->add ( entry );
@@ -191,14 +209,14 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         }
 
 
-        template < typename __KeyType, typename __ValueType, typename __HashCalculator > // NOLINT(bugprone-reserved-identifier)
-        HashMap < __KeyType, __ValueType, __HashCalculator > :: ~HashMap () noexcept {
+        template < typename __KeyType, typename __ValueType, typename __Hasher > // NOLINT(bugprone-reserved-identifier)
+        HashMap < __KeyType, __ValueType, __Hasher > :: ~HashMap () noexcept {
 
-            if ( this->_pBucketList != nullptr ) {
-                for ( Size bucketIndex = 0ULL; bucketIndex < this->_hashCalculator.getBoundary(); ++ bucketIndex ) {
-                    while ( this->_pBucketList [ bucketIndex ]._pFront != nullptr ) {
-                        auto pCopy                                  = this->_pBucketList [ bucketIndex ]._pFront;
-                        this->_pBucketList [ bucketIndex ]._pFront  = this->_pBucketList [ bucketIndex ]._pFront->_pNext;
+            if ( this->_buckets._pBuckets != nullptr ) {
+                for ( Size bucketIndex = 0ULL; bucketIndex < this->_buckets._bucketCount; ++ bucketIndex ) {
+                    while ( this->_buckets._pBuckets [ bucketIndex ]._pFront != nullptr ) {
+                        auto pCopy                                          = this->_buckets._pBuckets [ bucketIndex ]._pFront;
+                        this->_buckets._pBuckets [ bucketIndex ]._pFront    = this->_buckets._pBuckets [ bucketIndex ]._pFront->_pNext;
 
                         Map < __KeyType, __ValueType > :: freeEntryData ( pCopy->_entry );
                         Memory :: instance().destroy ( pCopy );
@@ -206,30 +224,33 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 }
             }
 
-            cds :: __hidden :: __impl :: __allocation :: __freePrimitiveArray ( this->_pBucketList );
+            cds :: __hidden :: __impl :: __allocation :: __freePrimitiveArray ( this->_buckets._pBuckets );
         }
 
 
-        template < typename __KeyType, typename __ValueType, typename __HashCalculator > // NOLINT(bugprone-reserved-identifier)
-        auto HashMap < __KeyType, __ValueType, __HashCalculator > :: pEntryAt (
+        template < typename __KeyType, typename __ValueType, typename __Hasher > // NOLINT(bugprone-reserved-identifier)
+        auto HashMap < __KeyType, __ValueType, __Hasher > :: pEntryAt (
                 KeyType const & key
         ) noexcept -> EntryType * {
 
-            if ( this->_pBucketList == nullptr ) {
+            if ( this->_buckets._pBuckets == nullptr ) {
 
-                this->_pBucketList = cds :: __hidden :: __impl :: __allocation :: __allocPrimitiveArray < BucketType > (
-                        this->_hashCalculator.getBoundary()
+                this->_buckets._bucketCount = this->_rehashPolicy.currentFactor();
+                this->_buckets._pBuckets = cds :: __hidden :: __impl :: __allocation :: __allocPrimitiveArray < BucketType > (
+                        this->_buckets._bucketCount
                 );
 
                 (void) std :: memset (
-                        this->_pBucketList,
+                        this->_buckets._pBuckets,
                         0,
-                        sizeof ( BucketType ) * this->_hashCalculator.getBoundary() // NOLINT(bugprone-sizeof-expression)
+                        sizeof ( BucketType ) * this->_buckets._bucketCount // NOLINT(bugprone-sizeof-expression)
                 );
             }
 
-            auto hashValue  = this->_hashCalculator ( key );
-            auto pListHead  = this->_pBucketList [ hashValue ]._pFront;
+            auto hashValue  = this->_hasher ( key );
+            auto & list     = this->_buckets._pBuckets [ hashValue % this->_buckets._bucketCount ];
+
+            auto pListHead  = list._pFront;
 
             while ( pListHead != nullptr ) {
                 if ( cds :: meta :: equals ( pListHead->_entry.key(), key ) ) {
@@ -240,33 +261,136 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             }
 
             auto pNewNode                       = Memory :: instance().create < DataNode > ();
-            pNewNode->_pNext                    = this->_pBucketList [ hashValue ]._pFront;
+            pNewNode->_pNext                    = list._pFront;
             pNewNode->_pPrevious                = nullptr;
 
-            if ( this->_pBucketList [ hashValue ]._pFront != nullptr ) {
-                this->_pBucketList [ hashValue ]._pFront->_pPrevious    = pNewNode;
+            if ( list._pFront != nullptr ) {
+                list._pFront->_pPrevious    = pNewNode;
             } else {
-                this->_pBucketList [ hashValue ]._pBack                 = pNewNode;
+                list._pBack                 = pNewNode;
             }
 
-            this->_pBucketList [ hashValue ]._pFront    = pNewNode;
+            list._pFront                        = pNewNode;
+            ++ list._bucketSize;
             this->updateSize ( this->size() + 1ULL );
 
-            return & this->_pBucketList [ hashValue ]._pFront->_entry;
+            auto pRet = & list._pFront->_entry;
+
+            if ( list._bucketSize > this->_rehashPolicy.loadFactor() ) {
+                auto rehashData = this->_rehashPolicy.rehashRequired (
+                        this->_buckets._bucketCount,
+                        this->_size,
+                        1ULL
+                );
+
+                if ( rehashData._required ) {
+                    this->rehash (
+                            rehashData._size,
+                            hashValue % rehashData._size
+                    );
+                }
+            }
+
+            return pRet;
         }
 
 
-        template < typename __KeyType, typename __ValueType, typename __HashCalculator > // NOLINT(bugprone-reserved-identifier)
-        auto HashMap < __KeyType, __ValueType, __HashCalculator > :: pEntryAt (
+        template < typename __KeyType, typename __ValueType, typename __Hasher > // NOLINT(bugprone-reserved-identifier)
+        auto HashMap < __KeyType, __ValueType, __Hasher > :: rehash (
+                Size bucketCount,
+                Size hashValueOfNewNode
+        ) noexcept -> void {
+
+            this->_buckets._pBuckets = cds :: __hidden :: __impl :: __allocation :: __reallocPrimitiveArray < BucketType > ( this->_buckets._pBuckets, bucketCount );
+            std :: memset (
+                    this->_buckets._pBuckets + this->_buckets._bucketCount,
+                    0,
+                    sizeof ( BucketType ) * ( bucketCount - this->_buckets._bucketCount )
+            );
+
+            for ( Size bucketIndex = 0ULL; bucketIndex < this->_buckets._bucketCount; ++ bucketIndex ) {
+
+                auto & bucket   = this->_buckets._pBuckets [ bucketIndex ];
+                auto pHead      = bucket._pFront;
+
+                while ( pHead != nullptr ) {
+
+                    Size hash;
+
+                    if ( Map < __KeyType, __ValueType > :: entryEmpty ( & pHead->_entry ) ) {
+                        hash = hashValueOfNewNode;
+                    } else {
+                        hash = this->_hasher ( pHead->_entry.key() ) % bucketCount;
+                    }
+
+                    if ( hash != bucketIndex ) {
+                        if ( pHead->_pNext != nullptr ) {
+                            pHead->_pNext->_pPrevious = nullptr;
+                        }
+
+                        if ( pHead == bucket._pFront ) {
+                            bucket._pFront = bucket._pFront->_pNext;
+                        } else {
+                            pHead->_pPrevious->_pNext = pHead->_pNext;
+                        }
+
+                        auto pToMove = pHead;
+                        pHead = pHead->_pNext;
+
+                        HashMap < __KeyType, __ValueType, __Hasher > :: rehashEmplace (
+                                & this->_buckets._pBuckets [ hash ],
+                                pToMove
+                        );
+
+                        -- bucket._bucketSize;
+
+                        if ( bucket._bucketSize == 0ULL ) {
+                            bucket._pFront  = nullptr;
+                            bucket._pBack   = nullptr;
+                        }
+                    } else {
+                        pHead = pHead->_pNext;
+                    }
+                }
+            }
+
+            this->_buckets._bucketCount = bucketCount;
+        }
+
+
+        template < typename __KeyType, typename __ValueType, typename __Hasher > // NOLINT(bugprone-reserved-identifier)
+        auto HashMap < __KeyType, __ValueType, __Hasher > :: rehashEmplace (
+                BucketType  * pBucket,
+                DataNode    * pNode
+        ) noexcept -> void {
+
+            pNode->_pNext       = nullptr;
+            pNode->_pPrevious   = pBucket->_pBack;
+
+            if ( pBucket->_bucketSize == 0ULL ) {
+                pBucket->_pFront        = pNode;
+                pBucket->_pBack         = pNode;
+                pBucket->_bucketSize    = 1ULL;
+                return;
+            }
+
+            pBucket->_pBack->_pNext = pNode;
+            pBucket->_pBack         = pNode;
+            ++ pBucket->_bucketSize;
+        }
+
+
+        template < typename __KeyType, typename __ValueType, typename __Hasher > // NOLINT(bugprone-reserved-identifier)
+        auto HashMap < __KeyType, __ValueType, __Hasher > :: pEntryAt (
                 KeyType const & key
         ) const noexcept -> EntryType const * {
 
-            if ( this->_pBucketList == nullptr ) {
+            if ( this->_buckets._pBuckets == nullptr ) {
                 return nullptr;
             }
 
-            auto hashValue  = this->_hashCalculator ( key );
-            auto pListHead  = this->_pBucketList [ hashValue ]._pFront;
+            auto hashValue  = this->_hasher ( key ) % this->_buckets._bucketCount;
+            auto pListHead  = this->_buckets._pBuckets [ hashValue ]._pFront;
 
             while ( pListHead != nullptr ) {
                 if ( cds :: meta :: equals ( pListHead->_entry.key(), key ) ) {
@@ -280,24 +404,20 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         }
 
 
-        template < typename __KeyType, typename __ValueType, typename __HashCalculator > // NOLINT(bugprone-reserved-identifier)
-        auto HashMap < __KeyType, __ValueType, __HashCalculator > :: completeInsertion (
+        template < typename __KeyType, typename __ValueType, typename __Hasher > // NOLINT(bugprone-reserved-identifier)
+        auto HashMap < __KeyType, __ValueType, __Hasher > :: completeInsertion (
                 EntryType * pEntry
         ) noexcept -> void {
 
             auto pNewEntry = this->pEntryAt ( pEntry->key() );
-
-            if ( Map < __KeyType, __ValueType > :: entryEmpty ( pNewEntry ) ) {
-                this->updateSize ( this->size() + 1ULL );
-            }
 
             Map < __KeyType, __ValueType > :: entryMoveOrCopyKeyTo ( pNewEntry, pEntry );
             Map < __KeyType, __ValueType > :: entryMoveOrCopyValueTo ( pNewEntry, pEntry );
         }
 
 
-        template < typename __KeyType, typename __ValueType, typename __HashCalculator > // NOLINT(bugprone-reserved-identifier)
-        __CDS_OptimalInline auto HashMap < __KeyType, __ValueType, __HashCalculator > :: contains (
+        template < typename __KeyType, typename __ValueType, typename __Hasher > // NOLINT(bugprone-reserved-identifier)
+        __CDS_OptimalInline auto HashMap < __KeyType, __ValueType, __Hasher > :: contains (
                 ElementType const & entry
         ) const noexcept -> bool {
 
@@ -305,8 +425,8 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         }
 
 
-        template < typename __KeyType, typename __ValueType, typename __HashCalculator > // NOLINT(bugprone-reserved-identifier)
-        __CDS_OptimalInline auto HashMap < __KeyType, __ValueType, __HashCalculator > :: containsKey (
+        template < typename __KeyType, typename __ValueType, typename __Hasher > // NOLINT(bugprone-reserved-identifier)
+        __CDS_OptimalInline auto HashMap < __KeyType, __ValueType, __Hasher > :: containsKey (
                 KeyType const & key
         ) const noexcept -> bool {
 
@@ -314,14 +434,14 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         }
 
 
-        template < typename __KeyType, typename __ValueType, typename __HashCalculator > // NOLINT(bugprone-reserved-identifier)
-        __CDS_OptimalInline auto HashMap < __KeyType, __ValueType, __HashCalculator > :: containsValue (
+        template < typename __KeyType, typename __ValueType, typename __Hasher > // NOLINT(bugprone-reserved-identifier)
+        __CDS_OptimalInline auto HashMap < __KeyType, __ValueType, __Hasher > :: containsValue (
                 ValueType const & value
         ) const noexcept -> bool {
 
-            for ( Size bucketIndex = 0ULL; bucketIndex < this->_hashCalculator.getBoundary(); ++ bucketIndex ) {
+            for ( Size bucketIndex = 0ULL; bucketIndex < this->_buckets._bucketCount; ++ bucketIndex ) {
 
-                DataNode * pHead = this->_pBucketList [ bucketIndex ]._pFront;
+                DataNode * pHead = this->_buckets._pBuckets [ bucketIndex ]._pFront;
                 while ( pHead != nullptr ) {
 
                     if ( cds :: meta :: equals ( pHead->_entry.value(), value ) ) {
@@ -336,13 +456,13 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         }
 
 
-        template < typename __KeyType, typename __ValueType, typename __HashCalculator > // NOLINT(bugprone-reserved-identifier)
-        __CDS_OptimalInline auto HashMap < __KeyType, __ValueType, __HashCalculator > :: remove (
+        template < typename __KeyType, typename __ValueType, typename __Hasher > // NOLINT(bugprone-reserved-identifier)
+        __CDS_OptimalInline auto HashMap < __KeyType, __ValueType, __Hasher > :: remove (
                 KeyType const & key
         ) noexcept -> bool {
 
-            auto   hash = this->_hashCalculator ( key );
-            auto & list = this->_pBucketList [ hash ];
+            auto   hash = this->_hasher ( key ) % this->_buckets._bucketCount;
+            auto & list = this->_buckets._pBuckets [ hash ];
 
             if ( this->empty() ) {
                 return false;
@@ -364,6 +484,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 Memory :: instance().destroy ( pNode );
 
                 this->updateSize ( this->size() - 1ULL );
+                -- list._bucketSize;
                 return true;
             }
 
@@ -383,6 +504,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 Memory :: instance().destroy ( pNode );
 
                 this->updateSize ( this->size() - 1ULL );
+                -- list._bucketSize;
                 return true;
             }
 
@@ -404,6 +526,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
                     this->updateSize ( this->size() - 1ULL );
 
+                    -- list._bucketSize;
                     return true;
                 }
 
@@ -414,8 +537,8 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         }
 
 
-        template < typename __KeyType, typename __ValueType, typename __HashCalculator > // NOLINT(bugprone-reserved-identifier)
-        __CDS_OptimalInline auto HashMap < __KeyType, __ValueType, __HashCalculator > :: remove (
+        template < typename __KeyType, typename __ValueType, typename __Hasher > // NOLINT(bugprone-reserved-identifier)
+        __CDS_OptimalInline auto HashMap < __KeyType, __ValueType, __Hasher > :: remove (
                 Iterator const & iterator
         ) noexcept -> bool {
 
@@ -424,8 +547,8 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         }
 
 
-        template < typename __KeyType, typename __ValueType, typename __HashCalculator > // NOLINT(bugprone-reserved-identifier)
-        __CDS_OptimalInline auto HashMap < __KeyType, __ValueType, __HashCalculator > :: remove (
+        template < typename __KeyType, typename __ValueType, typename __Hasher > // NOLINT(bugprone-reserved-identifier)
+        __CDS_OptimalInline auto HashMap < __KeyType, __ValueType, __Hasher > :: remove (
                 ConstIterator const & iterator
         ) noexcept -> bool {
 
@@ -434,8 +557,8 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         }
 
 
-        template < typename __KeyType, typename __ValueType, typename __HashCalculator > // NOLINT(bugprone-reserved-identifier)
-        __CDS_OptimalInline auto HashMap < __KeyType, __ValueType, __HashCalculator > :: remove (
+        template < typename __KeyType, typename __ValueType, typename __Hasher > // NOLINT(bugprone-reserved-identifier)
+        __CDS_OptimalInline auto HashMap < __KeyType, __ValueType, __Hasher > :: remove (
                 ReverseIterator const & iterator
         ) noexcept -> bool {
 
@@ -444,8 +567,8 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         }
 
 
-        template < typename __KeyType, typename __ValueType, typename __HashCalculator > // NOLINT(bugprone-reserved-identifier)
-        __CDS_OptimalInline auto HashMap < __KeyType, __ValueType, __HashCalculator > :: remove (
+        template < typename __KeyType, typename __ValueType, typename __Hasher > // NOLINT(bugprone-reserved-identifier)
+        __CDS_OptimalInline auto HashMap < __KeyType, __ValueType, __Hasher > :: remove (
                 ConstReverseIterator const & iterator
         ) noexcept -> bool {
 
@@ -454,8 +577,8 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         }
 
 
-        template < typename __KeyType, typename __ValueType, typename __HashCalculator > // NOLINT(bugprone-reserved-identifier)
-        __CDS_OptimalInline auto HashMap < __KeyType, __ValueType, __HashCalculator > :: remove (
+        template < typename __KeyType, typename __ValueType, typename __Hasher > // NOLINT(bugprone-reserved-identifier)
+        __CDS_OptimalInline auto HashMap < __KeyType, __ValueType, __Hasher > :: remove (
                 Iterator    const * pIterators,
                 Size                iteratorCount
         ) noexcept -> Size {
@@ -465,8 +588,8 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         }
 
 
-        template < typename __KeyType, typename __ValueType, typename __HashCalculator > // NOLINT(bugprone-reserved-identifier)
-        __CDS_OptimalInline auto HashMap < __KeyType, __ValueType, __HashCalculator > :: remove (
+        template < typename __KeyType, typename __ValueType, typename __Hasher > // NOLINT(bugprone-reserved-identifier)
+        __CDS_OptimalInline auto HashMap < __KeyType, __ValueType, __Hasher > :: remove (
                 ConstIterator   const * pIterators,
                 Size                    iteratorCount
         ) noexcept -> Size {
@@ -476,8 +599,8 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         }
 
 
-        template < typename __KeyType, typename __ValueType, typename __HashCalculator > // NOLINT(bugprone-reserved-identifier)
-        __CDS_OptimalInline auto HashMap < __KeyType, __ValueType, __HashCalculator > :: remove (
+        template < typename __KeyType, typename __ValueType, typename __Hasher > // NOLINT(bugprone-reserved-identifier)
+        __CDS_OptimalInline auto HashMap < __KeyType, __ValueType, __Hasher > :: remove (
                 ReverseIterator const * pIterators,
                 Size                    iteratorCount
         ) noexcept -> Size {
@@ -487,8 +610,8 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         }
 
 
-        template < typename __KeyType, typename __ValueType, typename __HashCalculator > // NOLINT(bugprone-reserved-identifier)
-        __CDS_OptimalInline auto HashMap < __KeyType, __ValueType, __HashCalculator > :: remove (
+        template < typename __KeyType, typename __ValueType, typename __Hasher > // NOLINT(bugprone-reserved-identifier)
+        __CDS_OptimalInline auto HashMap < __KeyType, __ValueType, __Hasher > :: remove (
                 ConstReverseIterator    const * pIterators,
                 Size                            iteratorCount
         ) noexcept -> Size {
@@ -498,18 +621,20 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         }
 
 
-        template < typename __KeyType, typename __ValueType, typename __HashCalculator > // NOLINT(bugprone-reserved-identifier)
-        __CDS_OptimalInline auto HashMap < __KeyType, __ValueType, __HashCalculator > :: clear () noexcept -> void {
+        template < typename __KeyType, typename __ValueType, typename __Hasher > // NOLINT(bugprone-reserved-identifier)
+        __CDS_OptimalInline auto HashMap < __KeyType, __ValueType, __Hasher > :: clear () noexcept -> void {
 
-            if ( this->_pBucketList != nullptr ) {
-                for ( Size bucketIndex = 0ULL; bucketIndex < this->_hashCalculator.getBoundary(); ++ bucketIndex ) {
-                    while ( this->_pBucketList [ bucketIndex ]._pFront != nullptr ) {
-                        auto pCopy                                  = this->_pBucketList [ bucketIndex ]._pFront;
-                        this->_pBucketList [ bucketIndex ]._pFront  = this->_pBucketList [ bucketIndex ]._pFront->_pNext;
+            if ( this->_buckets._pBuckets != nullptr ) {
+                for ( Size bucketIndex = 0ULL; bucketIndex < this->_buckets._bucketCount; ++ bucketIndex ) {
+                    while ( this->_buckets._pBuckets [ bucketIndex ]._pFront != nullptr ) {
+                        auto pCopy                                          = this->_buckets._pBuckets [ bucketIndex ]._pFront;
+                        this->_buckets._pBuckets [ bucketIndex ]._pFront    = this->_buckets._pBuckets [ bucketIndex ]._pFront->_pNext;
 
                         Map < __KeyType, __ValueType > :: freeEntryData ( pCopy->_entry );
                         Memory :: instance().destroy ( pCopy );
                     }
+
+                    this->_buckets._pBuckets [ bucketIndex ]._bucketSize = 0ULL;
                 }
             }
 

@@ -1393,9 +1393,9 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
 
         template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
-        auto Collection < __ElementType > :: hash () const noexcept -> Index {
+        auto Collection < __ElementType > :: hash () const noexcept -> Size {
 
-            Index finalHashValue __CDS_MaybeUnused = 0;
+            Size finalHashValue __CDS_MaybeUnused = 0;
             for ( auto iterator = this->begin(), end = this->end(); iterator != end; ++ iterator ) {
                 finalHashValue += cds :: hash ( * iterator );
             }

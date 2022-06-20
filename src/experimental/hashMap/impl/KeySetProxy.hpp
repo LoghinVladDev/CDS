@@ -8,8 +8,8 @@
 namespace cds { // NOLINT(modernize-concat-nested-namespaces)
     namespace experimental {
 
-        template < typename __KeyType, typename __ValueType, typename __HashCalculator > // NOLINT(bugprone-reserved-identifier)
-        auto HashMap < __KeyType, __ValueType, __HashCalculator > :: HashMapKeySetProxy :: delegateConstIterator (
+        template < typename __KeyType, typename __ValueType, typename __Hasher > // NOLINT(bugprone-reserved-identifier)
+        auto HashMap < __KeyType, __ValueType, __Hasher > :: HashMapKeySetProxy :: delegateConstIterator (
                 DelegateIteratorRequestType requestType
         ) const noexcept -> cds :: UniquePointer < DelegateConstIterator > {
 
@@ -18,17 +18,17 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         }
 
 
-        template < typename __KeyType, typename __ValueType, typename __HashCalculator > // NOLINT(bugprone-reserved-identifier)
-        constexpr HashMap < __KeyType, __ValueType, __HashCalculator > :: HashMapKeySetProxy :: HashMapKeySetProxy (
-                HashMap < __KeyType, __ValueType, __HashCalculator > * pMap
+        template < typename __KeyType, typename __ValueType, typename __Hasher > // NOLINT(bugprone-reserved-identifier)
+        constexpr HashMap < __KeyType, __ValueType, __Hasher > :: HashMapKeySetProxy :: HashMapKeySetProxy (
+                HashMap < __KeyType, __ValueType, __Hasher > * pMap
         ) noexcept :
                 Map < __KeyType, __ValueType > :: AbstractKeySetProxy ( pMap ) {
 
         }
 
 
-        template < typename __KeyType, typename __ValueType, typename __HashCalculator > // NOLINT(bugprone-reserved-identifier)
-        constexpr HashMap < __KeyType, __ValueType, __HashCalculator > :: HashMapKeySetProxy :: HashMapKeySetProxy (
+        template < typename __KeyType, typename __ValueType, typename __Hasher > // NOLINT(bugprone-reserved-identifier)
+        constexpr HashMap < __KeyType, __ValueType, __Hasher > :: HashMapKeySetProxy :: HashMapKeySetProxy (
                 HashMapKeySetProxy const & keySetProxy
         ) noexcept :
                 Map < __KeyType, __ValueType > :: AbstractKeySetProxy ( keySetProxy ) {
@@ -36,8 +36,8 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         }
 
 
-        template < typename __KeyType, typename __ValueType, typename __HashCalculator > // NOLINT(bugprone-reserved-identifier)
-        constexpr HashMap < __KeyType, __ValueType, __HashCalculator > :: HashMapKeySetProxy :: HashMapKeySetProxy (
+        template < typename __KeyType, typename __ValueType, typename __Hasher > // NOLINT(bugprone-reserved-identifier)
+        constexpr HashMap < __KeyType, __ValueType, __Hasher > :: HashMapKeySetProxy :: HashMapKeySetProxy (
                 HashMapKeySetProxy && keySetProxy
         ) noexcept :
                 Map < __KeyType, __ValueType > :: AbstractKeySetProxy ( std :: move ( keySetProxy ) ) {
@@ -45,8 +45,8 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         }
 
 
-        template < typename __KeyType, typename __ValueType, typename __HashCalculator > // NOLINT(bugprone-reserved-identifier)
-        __CDS_cpplang_ConstexprDestructor HashMap < __KeyType, __ValueType, __HashCalculator > :: HashMapKeySetProxy :: ~HashMapKeySetProxy() noexcept = default;
+        template < typename __KeyType, typename __ValueType, typename __Hasher > // NOLINT(bugprone-reserved-identifier)
+        __CDS_cpplang_ConstexprDestructor HashMap < __KeyType, __ValueType, __Hasher > :: HashMapKeySetProxy :: ~HashMapKeySetProxy() noexcept = default;
 
     }
 }

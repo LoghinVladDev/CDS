@@ -6,15 +6,25 @@
 #define __CDS_EX_HASH_MAP_HPP__
 
 #include <CDS/experimental/Map>
+#include "../shared/rehashPolicy/rehashPolicy.hpp"
+#include "shared/HashTableUtils.hpp"
 
 namespace cds { // NOLINT(modernize-concat-nested-namespaces)
     namespace experimental {
 
         template <
                 typename __KeyType, // NOLINT(bugprone-reserved-identifier)
-                typename __ValueType, // NOLINT(bugprone-reserved-identifier)
-                typename __HashCalculator = cds :: utility :: MediumCollisionDefaultHashFunction < __KeyType > // NOLINT(bugprone-reserved-identifier)
-        > class HashMap : public Map < __KeyType, __ValueType > {
+                typename __ValueType, // NOLINT(bugprone-reserved-identifier),
+                typename __Hasher = FunctionHasher < __KeyType, & cds :: hash < __KeyType > > // NOLINT(bugprone-reserved-identifier),
+        > class HashMap :
+                public Map <
+                        __KeyType,
+                        __ValueType
+                >,
+                public __hidden :: __impl :: __HashTableUtils <
+                        __Hasher,
+                        cds :: __hidden :: __impl :: __PrimeRehashPolicy
+                > {
 
         public:
             using typename Map < __KeyType, __ValueType > :: ElementType;
@@ -84,13 +94,17 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             struct BucketType {
                 DataNode * _pFront;
                 DataNode * _pBack;
+                Size       _bucketSize;
             };
 
         private:
-            BucketType                        * _pBucketList { nullptr };
+            struct Buckets {
+                BucketType    * _pBuckets;
+                Size            _bucketCount;
+            };
 
         private:
-            __HashCalculator                    _hashCalculator;
+            Buckets                             _buckets { nullptr, 0ULL };
 
         private:
             HashMapKeySetProxy                  _keySetProxy;
@@ -149,7 +163,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
         public:
             __CDS_Explicit HashMap (
-                    __HashCalculator const & hashCalculator
+                    __Hasher const & hasher
             ) noexcept;
 
         public:
@@ -159,8 +173,8 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
         public:
             HashMap (
-                    InitializerList     const & initializerList,
-                    __HashCalculator    const & hashCalculator
+                    InitializerList const & initializerList,
+                    __Hasher        const & hasher
             ) noexcept;
 
         public:
@@ -175,6 +189,18 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             auto pEntryAt (
                     KeyType const & key
             ) const noexcept -> EntryType const * override;
+
+        private:
+            auto rehash (
+                    Size bucketCount,
+                    Size hashValueOfNewNode
+            ) noexcept -> void;
+
+        private:
+            static auto rehashEmplace (
+                    BucketType  * pBucket,
+                    DataNode    * pNode
+            ) noexcept -> void;
 
         protected:
             auto completeInsertion (

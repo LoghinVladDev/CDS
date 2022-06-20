@@ -210,7 +210,7 @@ namespace cds {
         __CDS_NoDiscard constexpr auto get() const noexcept -> double { return this->v; }
 
     public:
-        __CDS_NoDiscard auto hash() const noexcept -> Index override {
+        __CDS_NoDiscard auto hash() const noexcept -> Size override {
             return :: cds :: hash(this->v);
         }
 
@@ -347,7 +347,7 @@ namespace cds {
             return this->get().toString();
         }
 
-        auto hash () const noexcept -> Index override {
+        auto hash () const noexcept -> Size override {
             return this->get().hash();
         }
 

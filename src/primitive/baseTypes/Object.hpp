@@ -5,16 +5,16 @@
 #ifndef __CDS_OBJECT_HPP__
 #define __CDS_OBJECT_HPP__
 
-#include "../prepro.h"
+#include "../../prepro.h"
 #include <ostream>
 
 namespace cds {
 
-    namespace __hidden {
-        namespace __impl {
+    namespace __hidden { // NOLINT(bugprone-reserved-identifier,modernize-concat-nested-namespaces)
+        namespace __impl { // NOLINT(bugprone-reserved-identifier)
 
-            template < typename __CharType >
-            class __BaseString;
+            template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
+            class __BaseString; // NOLINT(bugprone-reserved-identifier)
 
         }
     }
@@ -70,7 +70,7 @@ namespace cds {
          * @exceptsafe
          * @return Index = hash code value of the instance
          */
-        __CDS_NoDiscard __CDS_cpplang_VirtualConstexpr virtual auto hash () const noexcept -> Index;
+        __CDS_NoDiscard __CDS_cpplang_VirtualConstexpr virtual auto hash () const noexcept -> Size;
 
     public:
         /**
@@ -82,8 +82,8 @@ namespace cds {
 
 }
 
-#include "object/impl/HashBase.hpp"
 #include <CDS/String>
+#include "object/impl/HashBase.hpp"
 #include "object/impl/Object.hpp"
 #include "../../shared/object/impl/ObjectToString.hpp"
 
