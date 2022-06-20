@@ -173,12 +173,17 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 __TValueType    && value
         ) noexcept -> void {
 
-            (void) this->add (
-                    __hidden :: __impl :: __MapEntry (
-                            std :: forward < __TKeyType > ( key ),
-                            std :: forward < __TValueType > ( value )
-                    )
-            );
+            auto pEntry = this->pEntryAt ( key );
+            if ( pEntry->_key._pAny == nullptr ) {
+                pEntry->_key._pObject = Memory :: instance().create < __KeyType > ( std :: forward < __TKeyType > ( key ) );
+            }
+
+            if ( pEntry->_value._pAny == nullptr ) {
+                pEntry->_value._pObject = Memory :: instance().create < __ValueType > ( std :: forward < __TValueType > ( value ) );
+            } else {
+                pEntry->_value._pObject->~__ValueType();
+                pEntry->_value._pObject = new ( pEntry->_value._pObject ) __ValueType ( std :: forward < __TValueType > ( value ) );
+            }
         }
 
 

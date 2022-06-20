@@ -12,6 +12,7 @@
 #include <CDS/experimental/OrderedSet>
 #include <CDS/experimental/UnorderedSet>
 #include <CDS/experimental/HashMap>
+#include <chrono>
 
 #include <time.h>
 #include <fstream>
@@ -19,8 +20,10 @@
 using namespace cds;
 using namespace cds :: literals;
 #include <CDS/HashMap>
+#include <unordered_map>
 
 int main () {
+//    std :: unordered_map < int, int > m;
     cds :: experimental :: HashMap < int, int > m;
     cds :: experimental :: HashSet < int > setset;
     cds :: experimental :: Array < int > testArr;
@@ -28,7 +31,8 @@ int main () {
 
 //    std :: ofstream out ("testData.out");
 //    std :: ifstream in ("errData.in");
-    for ( int i = 0; i < 100000; ++ i ) {
+    auto start = std :: chrono :: system_clock :: now();
+    for ( int i = 0; i < 10000000; ++ i ) {
         int k = rand();
         int v = rand();
 
@@ -44,6 +48,10 @@ int main () {
 
         m.emplace ( k, v );
     }
+    auto end = std :: chrono :: system_clock :: now();
+    std :: cout
+            << "Duration : "
+            << std :: chrono :: duration_cast < std :: chrono :: milliseconds > ( end - start ).count() << '\n';
 
 //    auto it1 = testArr.begin();
 //    for ( int i = 0; i < 500; ++ i ) {
