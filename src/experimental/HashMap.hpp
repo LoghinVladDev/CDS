@@ -85,8 +85,9 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
         private:
             struct DataNode {
-                EntryType   _entry;
-                DataNode  * _pNext;
+                cds :: __hidden :: __impl :: __allocation :: __RawContainer < __KeyType >     _key;
+                cds :: __hidden :: __impl :: __allocation :: __RawContainer < __ValueType >   _value;
+                DataNode                                                                    * _pNext;
             };
 
         private:
@@ -178,19 +179,22 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             ~HashMap () noexcept override;
 
         private:
-            auto pEntryAt (
-                    KeyType const & key
-            ) noexcept -> EntryType * override;
+            auto entryAt (
+                    KeyType const & key,
+                    bool          & isNew
+            ) noexcept -> EntryType override;
 
         private:
-            auto pEntryAt (
-                    KeyType const & key
-            ) const noexcept -> EntryType const * override;
+            auto entryAt (
+                    KeyType const & key,
+                    bool          & found
+            ) const noexcept -> EntryType const override;
 
         private:
             auto rehash (
-                    Size bucketCount,
-                    Size hashValueOfNewNode
+                    Size                bucketCount,
+                    Size                hashValueOfNewNode,
+                    DataNode    const * pEmptyNode
             ) noexcept -> void;
 
         private:

@@ -124,10 +124,8 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                         DataNode * pNewNode     = Memory :: instance().create < DataNode > ();
                         pNewNode->_pNext        = nullptr;
 
-                        Map < __KeyType, __ValueType > :: entryCopyTo (
-                                & pNewNode->_entry,
-                                & pOtherBucket->_entry
-                        );
+                        pNewNode->_key.construct ( pOtherBucket->_key.data() );
+                        pNewNode->_value.construct ( pOtherBucket->_value.data() );
 
                         if ( pBack == nullptr ) {
                             currentBucket._pFront   = pNewNode;
@@ -217,7 +215,8 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                         auto pCopy                                          = this->_buckets._pBuckets [ bucketIndex ]._pFront;
                         this->_buckets._pBuckets [ bucketIndex ]._pFront    = this->_buckets._pBuckets [ bucketIndex ]._pFront->_pNext;
 
-                        Map < __KeyType, __ValueType > :: freeEntryData ( pCopy->_entry );
+                        pCopy->_key.destruct();
+                        pCopy->_value.destruct();
                         Memory :: instance().destroy ( pCopy );
                     }
                 }
@@ -228,10 +227,12 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
 
         template < typename __KeyType, typename __ValueType, typename __Hasher > // NOLINT(bugprone-reserved-identifier)
-        auto HashMap < __KeyType, __ValueType, __Hasher > :: pEntryAt (
-                KeyType const & key
-        ) noexcept -> EntryType * {
+        auto HashMap < __KeyType, __ValueType, __Hasher > :: entryAt (
+                KeyType const & key,
+                bool          & isNew
+        ) noexcept -> EntryType {
 
+            isNew = false;
             if ( this->_buckets._pBuckets == nullptr ) {
 
                 this->_buckets._bucketCount = this->_rehashPolicy.currentFactor();
@@ -255,8 +256,8 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             DataNode  * pBack       = nullptr;
 
             while ( pListHead != nullptr ) {
-                if ( cds :: meta :: equals ( pListHead->_entry.key(), key ) ) {
-                    return & pListHead->_entry;
+                if ( cds :: meta :: equals ( pListHead->_key.data(), key ) ) {
+                    return EntryType ( pListHead->_key.data(), pListHead->_value.data() );
                 }
 
                 pBack       = pListHead;
@@ -270,7 +271,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
             this->updateSize ( this->size() + 1ULL );
 
-            auto pRet = & list._pFront->_entry;
+            auto entry = EntryType ( list._pFront->_key.data(), list._pFront->_value.data() );
 
             if ( bucketSize >= this->_rehashPolicy.loadFactor() ) {
                 auto rehashData = this->_rehashPolicy.rehashRequired (
@@ -282,19 +283,23 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 if ( rehashData._required ) {
                     this->rehash (
                             rehashData._size,
-                            hashValue % rehashData._size
+                            hashValue % rehashData._size,
+                            list._pFront
                     );
                 }
             }
 
-            return pRet;
+            isNew = true;
+
+            return entry;
         }
 
 
         template < typename __KeyType, typename __ValueType, typename __Hasher > // NOLINT(bugprone-reserved-identifier)
         auto HashMap < __KeyType, __ValueType, __Hasher > :: rehash (
-                Size bucketCount,
-                Size hashValueOfNewNode
+                Size                bucketCount,
+                Size                hashValueOfNewNode,
+                DataNode    const * pEmptyNode
         ) noexcept -> void {
 
             this->_buckets._pBuckets = cds :: __hidden :: __impl :: __allocation :: __reallocPrimitiveArray < BucketType > ( this->_buckets._pBuckets, bucketCount );
@@ -311,10 +316,10 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 while ( bucket._pFront != nullptr ) {
 
                     Size hash;
-                    if ( Map < __KeyType, __ValueType > :: entryEmpty ( & bucket._pFront->_entry ) ) {
+                    if ( pEmptyNode == bucket._pFront ) {
                         hash = hashValueOfNewNode;
                     } else {
-                        hash = this->_hasher ( bucket._pFront->_entry.key() ) % bucketCount;
+                        hash = this->_hasher ( bucket._pFront->_key.data() ) % bucketCount;
                     }
 
                     if ( hash != bucketIndex ) {
@@ -334,10 +339,10 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 while ( pHead != nullptr && pHead->_pNext != nullptr ) {
 
                     Size hash;
-                    if ( Map < __KeyType, __ValueType > :: entryEmpty ( & pHead->_pNext->_entry ) ) {
+                    if ( pEmptyNode == pHead->_pNext ) {
                         hash = hashValueOfNewNode;
                     } else {
-                        hash = this->_hasher ( pHead->_pNext->_entry.key() ) % bucketCount;
+                        hash = this->_hasher ( pHead->_pNext->_key.data() ) % bucketCount;
                     }
 
                     if ( hash != bucketIndex ) {
@@ -370,26 +375,30 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
 
         template < typename __KeyType, typename __ValueType, typename __Hasher > // NOLINT(bugprone-reserved-identifier)
-        auto HashMap < __KeyType, __ValueType, __Hasher > :: pEntryAt (
-                KeyType const & key
-        ) const noexcept -> EntryType const * {
+        auto HashMap < __KeyType, __ValueType, __Hasher > :: entryAt (
+                KeyType const & key,
+                bool          & found
+        ) const noexcept -> EntryType const {
+
+            found = false;
 
             if ( this->_buckets._pBuckets == nullptr ) {
-                return nullptr;
+                return EntryType();
             }
 
             auto hashValue  = this->_hasher ( key ) % this->_buckets._bucketCount;
             auto pListHead  = this->_buckets._pBuckets [ hashValue ]._pFront;
 
             while ( pListHead != nullptr ) {
-                if ( cds :: meta :: equals ( pListHead->_entry.key(), key ) ) {
-                    return & pListHead->_entry;
+                if ( cds :: meta :: equals ( pListHead->_key.data(), key ) ) {
+                    found = true;
+                    return EntryType ( pListHead->_key.data(), pListHead->_value.data() );
                 }
 
                 pListHead = pListHead->_pNext;
             }
 
-            return nullptr;
+            return EntryType();
         }
 
 
@@ -398,10 +407,14 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 EntryType * pEntry
         ) noexcept -> void {
 
-            auto pNewEntry = this->pEntryAt ( pEntry->key() );
+            bool isNew;
+            auto entry = this->entryAt ( pEntry->key(), isNew );
 
-            Map < __KeyType, __ValueType > :: entryMoveOrCopyKeyTo ( pNewEntry, pEntry );
-            Map < __KeyType, __ValueType > :: entryMoveOrCopyValueTo ( pNewEntry, pEntry );
+            if ( isNew ) {
+                Map < __KeyType, __ValueType > :: entryMoveOrCopyKeyTo ( & entry, pEntry );
+            }
+
+            Map < __KeyType, __ValueType > :: entryMoveOrCopyValueTo ( & entry, pEntry );
         }
 
 
@@ -410,7 +423,9 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 ElementType const & entry
         ) const noexcept -> bool {
 
-            return this->pEntryAt ( entry.key() ) != nullptr;
+            bool found;
+            (void) this->entryAt ( entry.key(), found );
+            return found;
         }
 
 
@@ -419,7 +434,9 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 KeyType const & key
         ) const noexcept -> bool {
 
-            return this->pEntryAt ( key ) != nullptr;
+            bool found;
+            (void) this->entryAt ( key, found );
+            return found;
         }
 
 
@@ -433,7 +450,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 DataNode * pHead = this->_buckets._pBuckets [ bucketIndex ]._pFront;
                 while ( pHead != nullptr ) {
 
-                    if ( cds :: meta :: equals ( pHead->_entry.value(), value ) ) {
+                    if ( cds :: meta :: equals ( pHead->_value.data(), value ) ) {
                         return true;
                     }
 
@@ -457,12 +474,13 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 return false;
             }
 
-            if ( cds :: meta :: equals ( list._pFront->_entry.key(), key ) ) {
+            if ( cds :: meta :: equals ( list._pFront->_key.data(), key ) ) {
 
                 auto pNode      = list._pFront;
                 list._pFront    = list._pFront->_pNext;
 
-                Map < __KeyType, __ValueType > :: freeEntryData ( pNode->_entry );
+                pNode->_key.destruct();
+                pNode->_value.destruct();
                 Memory :: instance().destroy ( pNode );
 
                 this->updateSize ( this->size() - 1ULL );
@@ -471,12 +489,13 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
             auto pHead = list._pFront;
             while ( pHead->_pNext != nullptr ) {
-                if ( cds :: meta :: equals ( pHead->_pNext->_entry.key(), key ) ) {
+                if ( cds :: meta :: equals ( pHead->_pNext->_key.data(), key ) ) {
 
                     auto pToRemove = pHead->_pNext;
                     pHead->_pNext = pHead->_pNext->_pNext;
 
-                    Map < __KeyType, __ValueType > :: freeEntryData ( pToRemove->_entry );
+                    pToRemove->_key.destruct();
+                    pToRemove->_value.destruct();
                     Memory :: instance().destroy ( pToRemove );
 
                     this->updateSize ( this->size() - 1ULL );
@@ -583,7 +602,8 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                         auto pCopy                                          = this->_buckets._pBuckets [ bucketIndex ]._pFront;
                         this->_buckets._pBuckets [ bucketIndex ]._pFront    = this->_buckets._pBuckets [ bucketIndex ]._pFront->_pNext;
 
-                        Map < __KeyType, __ValueType > :: freeEntryData ( pCopy->_entry );
+                        pCopy->_key.destruct();
+                        pCopy->_value.destruct();
                         Memory :: instance().destroy ( pCopy );
                     }
                 }

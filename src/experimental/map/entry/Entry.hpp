@@ -81,11 +81,11 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                         }
 
                         if ( this->_key._forward ) {
-                            entry->_key._pObject = Memory :: instance().create < KeyType > ( std :: move ( * this->_key._pObject ) );
+                            entry->_key._pObject = new ( entry->_key._pObject ) __KeyType ( std :: move ( * this->_key._pObject ) );
                             return;
                         }
 
-                        entry->_key._pObject = Memory :: instance().create < KeyType > ( * this->_key._pConstObject );
+                        entry->_key._pObject = new  ( entry->_key._pObject ) __KeyType ( * this->_key._pConstObject );
                     }
 
                 private:
@@ -98,7 +98,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                             return;
                         }
 
-                        entry->_key._pObject = Memory :: instance().create < KeyType > ( * this->_key._pConstObject );
+                        entry->_key._pObject = new  ( entry->_key._pObject ) __KeyType ( * this->_key._pConstObject );
                     }
 
                 private:
@@ -111,7 +111,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                             return;
                         }
 
-                        entry->_key._pObject = Memory :: instance().create < KeyType > ( std :: move ( * this->_key._pObject ) );
+                        entry->_key._pObject = new ( entry->_key._pObject ) __KeyType ( std :: move ( * this->_key._pObject ) );
                     }
 
                 private:
@@ -135,22 +135,14 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                     ) noexcept -> void {
 
                         if ( this->_value._forward ) {
-                            if ( entry->_value._pAny == nullptr ) {
-                                entry->_value._pObject      = Memory :: instance().create < ValueType > ( std :: move ( * this->_value._pObject ) );
-                            } else {
-                                entry->_value._pObject->~__ValueType();
-                                entry->_value._pObject      = new ( entry->_value._pObject ) __ValueType ( std :: move ( * this->_value._pObject ) );
-                            }
+                            entry->_value._pObject->~__ValueType();
+                            entry->_value._pObject      = new ( entry->_value._pObject ) __ValueType ( std :: move ( * this->_value._pObject ) );
 
                             return;
                         }
 
-                        if ( entry->_value._pAny == nullptr ) {
-                            entry->_value._pObject      = Memory :: instance().create < ValueType > ( * this->_value._pConstObject );
-                        } else {
-                            entry->_value._pObject->~__ValueType();
-                            entry->_value._pObject      = new ( entry->_value._pObject ) __ValueType ( * this->_value._pConstObject );
-                        }
+                        entry->_value._pObject->~__ValueType();
+                        entry->_value._pObject      = new ( entry->_value._pObject ) __ValueType ( * this->_value._pConstObject );
                     }
 
                 private:
@@ -164,12 +156,8 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                             __MapEntry * entry
                     ) noexcept -> void {
 
-                        if ( entry->_value._pAny == nullptr ) {
-                            entry->_value._pObject      = Memory :: instance().create < ValueType > ( * this->_value._pConstObject );
-                        } else {
-                            entry->_value._pObject->~__ValueType();
-                            entry->_value._pObject      = new ( entry->_value._pObject ) __ValueType ( * this->_value._pConstObject );
-                        }
+                        entry->_value._pObject->~__ValueType();
+                        entry->_value._pObject      = new ( entry->_value._pObject ) __ValueType ( * this->_value._pConstObject );
                     }
 
                 private:
@@ -183,12 +171,8 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                             __MapEntry * entry
                     ) noexcept -> void {
 
-                        if ( entry->_value._pAny == nullptr ) {
-                            entry->_value._pObject      = Memory :: instance().create < ValueType > ( std :: move ( * this->_value._pObject ) );
-                        } else {
-                            entry->_value._pObject->~__ValueType();
-                            entry->_value._pObject      = new ( entry->_value._pObject ) __ValueType ( std :: move ( * this->_value._pObject ) );
-                        }
+                        entry->_value._pObject->~__ValueType();
+                        entry->_value._pObject      = new ( entry->_value._pObject ) __ValueType ( std :: move ( * this->_value._pObject ) );
                     }
 
                 private:

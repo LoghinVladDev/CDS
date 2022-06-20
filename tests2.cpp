@@ -24,7 +24,7 @@ using namespace cds :: literals;
 
 int main () {
 //    std :: unordered_map < int, int > m;
-    cds :: experimental :: HashMap < int, int > m;
+    cds :: experimental :: HashMap < int, String > m;
     cds :: experimental :: HashSet < int > setset;
     cds :: experimental :: Array < int > testArr;
     auto m2 = m;
@@ -32,7 +32,7 @@ std :: hash < std :: string > h;
 //    std :: ofstream out ("testData.out");
 //    std :: ifstream in ("errData.in");
     auto start = std :: chrono :: system_clock :: now();
-    for ( int i = 0; i < 10000000; ++ i ) {
+    for ( int i = 0; i < 100000; ++ i ) {
 
         int k = rand();
         int v = rand();

@@ -140,14 +140,16 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             __CDS_cpplang_ConstexprDestructor ~Map () noexcept override;
 
         protected:
-            virtual auto pEntryAt (
-                    KeyType const & key
-            ) noexcept -> EntryType * = 0;
+            virtual auto entryAt (
+                    KeyType const & key,
+                    bool          & isNew
+            ) noexcept -> EntryType = 0;
 
         protected:
-            virtual auto pEntryAt (
-                    KeyType const & key
-            ) const noexcept -> EntryType const * = 0;
+            virtual auto entryAt (
+                    KeyType const & key,
+                    bool          & found
+            ) const noexcept -> EntryType const = 0;
 
         public:
             template < typename __TValueType = ValueType, cds :: meta :: EnableIf < cds :: meta :: isDefaultConstructible < __TValueType > () > = 0 > // NOLINT(bugprone-reserved-identifier)

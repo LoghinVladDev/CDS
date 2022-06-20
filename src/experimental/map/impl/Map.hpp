@@ -238,17 +238,16 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 __TValueType    && value
         ) noexcept -> void {
 
-            auto pEntry = this->pEntryAt ( key );
-            if ( pEntry->_key._pAny == nullptr ) {
-                pEntry->_key._pObject = Memory :: instance().create < __KeyType > ( std :: forward < __TKeyType > ( key ) );
+            bool isNew = false;
+            auto entry = this->entryAt ( key, isNew );
+
+            if ( isNew ) {
+                entry._key._pObject     = new ( entry._key._pObject )   __KeyType   ( std :: forward < __TKeyType > ( key ) );
+            } else {
+                entry._value._pObject->~__ValueType();
             }
 
-            if ( pEntry->_value._pAny == nullptr ) {
-                pEntry->_value._pObject = Memory :: instance().create < __ValueType > ( std :: forward < __TValueType > ( value ) );
-            } else {
-                pEntry->_value._pObject->~__ValueType();
-                pEntry->_value._pObject = new ( pEntry->_value._pObject ) __ValueType ( std :: forward < __TValueType > ( value ) );
-            }
+            entry._value._pObject   = new ( entry._value._pObject ) __ValueType ( std :: forward < __TValueType > ( value ) );
         }
 
 
@@ -257,9 +256,9 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 EntryType const & entry
         ) noexcept -> void {
 
-            auto pEntry = this->pEntryAt ( entry.key() );
-            entry.moveOrCopyKeyTo ( pEntry );
-            entry.moveOrCopyValueTo ( pEntry );
+            auto newEntry = this->entryAt ( entry.key() );
+            entry.moveOrCopyKeyTo ( & newEntry );
+            entry.moveOrCopyValueTo ( & newEntry );
         }
 
 
