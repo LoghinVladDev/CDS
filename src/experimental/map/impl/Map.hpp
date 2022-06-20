@@ -192,7 +192,9 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 EntryType const & entry
         ) noexcept -> void {
 
-            (void) this->add ( entry );
+            auto pEntry = this->pEntryAt ( entry.key() );
+            pEntry->moveOrCopyKeyTo ( & entry );
+            pEntry->moveOrCopyValueTo ( & entry );
         }
 
 
