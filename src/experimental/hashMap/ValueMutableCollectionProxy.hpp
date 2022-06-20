@@ -59,6 +59,9 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         private:
             class HashMapValueMutableCollectionProxyDelegateConstReverseIterator;
 
+        private:
+            friend class HashMap;
+
         public:
             auto delegateIterator (
                     DelegateIteratorRequestType requestType
@@ -76,12 +79,12 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
         public:
             constexpr HashMapValueMutableCollectionProxy (
-                    HashMapValueMutableCollectionProxy const & set
+                    HashMapValueMutableCollectionProxy const & collection
             ) noexcept;
 
         public:
             constexpr HashMapValueMutableCollectionProxy (
-                    HashMapValueMutableCollectionProxy && set
+                    HashMapValueMutableCollectionProxy && collection
             ) noexcept;
 
         public:
@@ -89,12 +92,12 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
         public:
             auto operator == (
-                    HashMapValueMutableCollectionProxy const & set
+                    HashMapValueMutableCollectionProxy const & collection
             ) const noexcept -> bool;
 
         public:
             auto operator != (
-                    HashMapValueMutableCollectionProxy const & set
+                    HashMapValueMutableCollectionProxy const & collection
             ) const noexcept -> bool;
 
         public:

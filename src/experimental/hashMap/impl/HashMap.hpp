@@ -9,6 +9,18 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
     namespace experimental {
 
         template < typename __KeyType, typename __ValueType, typename __HashCalculator > // NOLINT(bugprone-reserved-identifier)
+        __CDS_cpplang_NonConstConstexprMemberFunction auto HashMap < __KeyType, __ValueType, __HashCalculator > :: updateSize (
+                Size size
+        ) noexcept -> void {
+
+            this->_size                                 = size;
+            this->_keySetProxy._size                    = size;
+            this->_valueMutableCollectionProxy._size    = size;
+            this->_entryMutableCollectionProxy._size    = size;
+        }
+
+
+        template < typename __KeyType, typename __ValueType, typename __HashCalculator > // NOLINT(bugprone-reserved-identifier)
         __CDS_cpplang_ConstexprOverride auto HashMap < __KeyType, __ValueType, __HashCalculator > :: keySetProxy () const noexcept -> AbstractKeySetProxy const & {
 
             return this->_keySetProxy;
@@ -55,6 +67,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 DelegateIteratorRequestType requestType
         ) noexcept -> cds :: UniquePointer < DelegateIterator > {
 
+            /// TODO : implement iterators
             return nullptr;
         }
 
@@ -64,6 +77,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 DelegateIteratorRequestType requestType
         ) const noexcept -> cds :: UniquePointer < DelegateConstIterator > {
 
+            /// TODO : implement iterators
             return nullptr;
         }
 
@@ -126,7 +140,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         constexpr HashMap < __KeyType, __ValueType, __HashCalculator > :: HashMap (
                 HashMap && map
         ) noexcept :
-                Map < __KeyType, __ValueType > ( map ),
+                Map < __KeyType, __ValueType > ( std :: move ( map ) ),
                 _keySetProxy ( this ),
                 _valueMutableCollectionProxy ( this ),
                 _entryMutableCollectionProxy ( this ),
@@ -234,7 +248,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             }
 
             this->_pBucketList [ hashValue ]._pFront    = pNewNode;
-            ++ this->_size;
+            this->updateSize ( this->size() + 1ULL );
 
             return & this->_pBucketList [ hashValue ]._pFront->_entry;
         }
@@ -272,7 +286,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             auto pNewEntry = this->pEntryAt ( pEntry->key() );
 
             if ( Map < __KeyType, __ValueType > :: entryEmpty ( pNewEntry ) ) {
-                ++ this->_size;
+                this->updateSize ( this->size() + 1ULL );
             }
 
             Map < __KeyType, __ValueType > :: entryMoveOrCopyKeyTo ( pNewEntry, pEntry );
@@ -314,6 +328,84 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
                     pHead = pHead->_pNext;
                 }
+            }
+
+            return false;
+        }
+
+
+        template < typename __KeyType, typename __ValueType, typename __HashCalculator > // NOLINT(bugprone-reserved-identifier)
+        __CDS_OptimalInline auto HashMap < __KeyType, __ValueType, __HashCalculator > :: remove (
+                KeyType const & key
+        ) noexcept -> bool {
+
+            auto   hash = this->_hashCalculator ( key );
+            auto & list = this->_pBucketList [ hash ];
+
+            if ( this->empty() ) {
+                return false;
+            }
+
+            if ( cds :: meta :: equals ( list._pFront->_entry.key(), key ) ) {
+
+                auto pNode = list._pFront;
+
+                if ( list._pFront->_pNext == nullptr ) {
+                    list._pFront                = nullptr;
+                    list._pBack                 = nullptr;
+                } else {
+                    list._pFront                = list._pFront->_pNext;
+                    list._pFront->_pPrevious    = nullptr;
+                }
+
+                Map < __KeyType, __ValueType > :: freeEntryData ( pNode->_entry );
+                Memory :: instance().destroy ( pNode );
+
+                this->updateSize ( this->size() - 1ULL );
+                return true;
+            }
+
+            if ( cds :: meta :: equals ( list._pBack->_entry.key(), key ) ) {
+
+                auto pNode = list._pBack;
+
+                if ( list._pBack->_pPrevious == nullptr ) {
+                    list._pFront                = nullptr;
+                    list._pBack                 = nullptr;
+                } else {
+                    list._pBack                 = list._pBack->_pPrevious;
+                    list._pBack->_pNext         = nullptr;
+                }
+
+                Map < __KeyType, __ValueType > :: freeEntryData ( pNode->_entry );
+                Memory :: instance().destroy ( pNode );
+
+                this->updateSize ( this->size() - 1ULL );
+                return true;
+            }
+
+            if ( list._pFront->_pNext != nullptr && list._pFront->_pNext->_pNext != nullptr ) {
+                return false;
+            }
+
+            auto pHead = list._pFront->_pNext;
+            while ( pHead != nullptr ) {
+                if ( cds :: meta :: equals ( pHead->_entry.key(), key ) ) {
+                    auto pPrevious      = pHead->_pPrevious;
+                    auto pNext          = pHead->_pNext;
+
+                    pPrevious->_pNext   = pNext;
+                    pNext->_pPrevious   = pPrevious;
+
+                    Map < __KeyType, __ValueType > :: freeEntryData ( pHead->_entry );
+                    Memory :: instance().destroy ( pHead );
+
+                    this->updateSize ( this->size() - 1ULL );
+
+                    return true;
+                }
+
+                pHead = pHead->_pNext;
             }
 
             return false;

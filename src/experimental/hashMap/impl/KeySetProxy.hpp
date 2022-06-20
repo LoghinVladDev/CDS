@@ -37,6 +37,15 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
 
         template < typename __KeyType, typename __ValueType, typename __HashCalculator > // NOLINT(bugprone-reserved-identifier)
+        constexpr HashMap < __KeyType, __ValueType, __HashCalculator > :: HashMapKeySetProxy :: HashMapKeySetProxy (
+                HashMapKeySetProxy && keySetProxy
+        ) noexcept :
+                Map < __KeyType, __ValueType > :: AbstractKeySetProxy ( std :: move ( keySetProxy ) ) {
+
+        }
+
+
+        template < typename __KeyType, typename __ValueType, typename __HashCalculator > // NOLINT(bugprone-reserved-identifier)
         __CDS_cpplang_ConstexprDestructor HashMap < __KeyType, __ValueType, __HashCalculator > :: HashMapKeySetProxy :: ~HashMapKeySetProxy() noexcept = default;
 
     }

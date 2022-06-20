@@ -102,6 +102,11 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             HashMapEntryMutableCollectionProxy  _entryMutableCollectionProxy;
 
         protected:
+            __CDS_cpplang_NonConstConstexprMemberFunction auto updateSize (
+                    Size size
+            ) noexcept -> void;
+
+        protected:
             __CDS_NoDiscard __CDS_cpplang_ConstexprOverride auto keySetProxy () const noexcept -> AbstractKeySetProxy const & override;
 
         protected:
@@ -190,6 +195,11 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             auto containsValue (
                     ValueType const & value
             ) const noexcept -> bool override;
+
+        public:
+            auto remove (
+                    KeyType const & key
+            ) noexcept -> bool override;
 
         public:
             auto remove (

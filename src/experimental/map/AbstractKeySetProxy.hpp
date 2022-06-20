@@ -67,7 +67,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         public:
             auto remove (
                     KeyType const & value
-            ) noexcept -> void;
+            ) noexcept -> bool;
 
         public:
             auto remove (

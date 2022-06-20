@@ -67,21 +67,16 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
         protected:
             constexpr AbstractValueMutableCollectionProxy (
-                    AbstractValueMutableCollectionProxy const & set
+                    AbstractValueMutableCollectionProxy const & collection
             ) noexcept;
 
         protected:
             constexpr AbstractValueMutableCollectionProxy (
-                    AbstractValueMutableCollectionProxy && set
+                    AbstractValueMutableCollectionProxy && collection
             ) noexcept;
 
         public:
             __CDS_cpplang_ConstexprDestructor ~AbstractValueMutableCollectionProxy() noexcept override;
-
-        public:
-            auto remove (
-                    ValueType const & value
-            ) noexcept -> void;
 
         public:
             auto remove (
@@ -136,7 +131,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             auto clear () noexcept -> void override;
 
         public:
-            auto toString () const noexcept -> String override;
+            __CDS_NoDiscard auto toString () const noexcept -> String override;
         };
     }
 }

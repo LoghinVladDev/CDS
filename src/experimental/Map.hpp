@@ -227,6 +227,11 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             ) const noexcept -> bool = 0;
 
         public:
+            virtual auto remove (
+                    KeyType const & key
+            ) noexcept -> bool = 0;
+
+        public:
             auto remove (
                     Iterator const & iterator
             ) noexcept -> bool override = 0;

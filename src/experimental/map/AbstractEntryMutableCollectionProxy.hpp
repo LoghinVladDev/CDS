@@ -67,12 +67,12 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
         protected:
             constexpr AbstractEntryMutableCollectionProxy (
-                    AbstractEntryMutableCollectionProxy const & set
+                    AbstractEntryMutableCollectionProxy const & collection
             ) noexcept;
 
         protected:
             constexpr AbstractEntryMutableCollectionProxy (
-                    AbstractEntryMutableCollectionProxy && set
+                    AbstractEntryMutableCollectionProxy && collection
             ) noexcept;
 
         public:
@@ -132,6 +132,9 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                     ElementType const & referenceElement
             ) noexcept -> ElementType * & override;
 
+        protected:
+            auto pNewInsertPost () noexcept -> void override;
+
         public:
             auto contains (
                     EntryType const & element
@@ -141,7 +144,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             auto clear () noexcept -> void override;
 
         public:
-            auto toString () const noexcept -> String override;
+            __CDS_NoDiscard auto toString () const noexcept -> String override;
         };
 
     }

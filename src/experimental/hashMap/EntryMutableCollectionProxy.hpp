@@ -59,6 +59,9 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         private:
             class HashMapEntryMutableCollectionProxyDelegateConstReverseIterator;
 
+        private:
+            friend class HashMap;
+
         public:
             auto delegateIterator (
                     DelegateIteratorRequestType requestType

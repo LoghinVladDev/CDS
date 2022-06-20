@@ -9,6 +9,26 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
     namespace experimental {
 
         template < typename __KeyType, typename __ValueType, typename __HashCalculator > // NOLINT(bugprone-reserved-identifier)
+        auto HashMap < __KeyType, __ValueType, __HashCalculator > :: HashMapValueMutableCollectionProxy :: delegateIterator (
+                DelegateIteratorRequestType requestType
+        ) noexcept -> cds :: UniquePointer < DelegateIterator > {
+
+            /// TODO : return here after HashMap iterators done
+            return nullptr;
+        }
+
+
+        template < typename __KeyType, typename __ValueType, typename __HashCalculator > // NOLINT(bugprone-reserved-identifier)
+        auto HashMap < __KeyType, __ValueType, __HashCalculator > :: HashMapValueMutableCollectionProxy :: delegateConstIterator (
+                DelegateIteratorRequestType requestType
+        ) const noexcept -> cds :: UniquePointer < DelegateConstIterator > {
+
+            /// TODO : return here after HashMap iterators done
+            return nullptr;
+        }
+
+
+        template < typename __KeyType, typename __ValueType, typename __HashCalculator > // NOLINT(bugprone-reserved-identifier)
         constexpr HashMap < __KeyType, __ValueType, __HashCalculator > :: HashMapValueMutableCollectionProxy :: HashMapValueMutableCollectionProxy (
                 HashMap < __KeyType, __ValueType, __HashCalculator > * pMap
         ) noexcept :
