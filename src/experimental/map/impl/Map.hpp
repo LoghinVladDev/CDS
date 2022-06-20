@@ -86,6 +86,71 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
 
         template < typename __KeyType, typename __ValueType > // NOLINT(bugprone-reserved-identifier)
+        template < typename __TValueType, cds :: meta :: EnableIf < cds :: meta :: isDefaultConstructible < __TValueType > () > > // NOLINT(bugprone-reserved-identifier)
+        auto Map < __KeyType, __ValueType > :: get (
+                KeyType const & key
+        ) noexcept -> ValueType & {
+
+            auto pEntry = this->pEntryAt ( key );
+
+            if ( pEntry->empty() ) {
+                auto newEntry = EntryType ( key, __ValueType () );
+                newEntry.moveOrCopyKeyTo ( pEntry );
+                newEntry.moveOrCopyValueTo ( pEntry );
+            }
+
+            return pEntry->value();
+        }
+
+
+        template < typename __KeyType, typename __ValueType > // NOLINT(bugprone-reserved-identifier)
+        auto Map < __KeyType, __ValueType > :: at (
+                KeyType const & key
+        ) noexcept (false) -> ValueType & {
+
+            auto pEntry = const_cast < EntryType * > ( reinterpret_cast < decltype ( this ) const > ( this )->pEntryAt ( key ) );
+            if ( pEntry == nullptr ) {
+                throw KeyException ( key );
+            }
+
+            return pEntry->value;
+        }
+
+
+        template < typename __KeyType, typename __ValueType > // NOLINT(bugprone-reserved-identifier)
+        auto Map < __KeyType, __ValueType > :: at (
+                KeyType const & key
+        ) const noexcept (false) -> ValueType const & {
+
+            auto pEntry = this->pEntryAt ( key );
+            if ( pEntry == nullptr ) {
+                throw KeyException ( key );
+            }
+
+            return pEntry->value;
+        }
+
+
+        template < typename __KeyType, typename __ValueType > // NOLINT(bugprone-reserved-identifier)
+        template < typename __TValueType, cds :: meta :: EnableIf < cds :: meta :: isDefaultConstructible < __TValueType > () > > // NOLINT(bugprone-reserved-identifier)
+        auto Map < __KeyType, __ValueType > :: operator [] (
+                KeyType const & key
+        ) noexcept -> ValueType & {
+
+            return this->get ( key );
+        }
+
+
+        template < typename __KeyType, typename __ValueType > // NOLINT(bugprone-reserved-identifier)
+        auto Map < __KeyType, __ValueType > :: operator [] (
+                KeyType const & key
+        ) const noexcept (false) -> ValueType const & {
+
+            return this->at ( key );
+        }
+
+
+        template < typename __KeyType, typename __ValueType > // NOLINT(bugprone-reserved-identifier)
         __CDS_OptimalInline auto Map < __KeyType, __ValueType > :: pNewInsert (
                 ElementType const & referenceElement
         ) noexcept -> ElementType * & {
@@ -193,8 +258,8 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         ) noexcept -> void {
 
             auto pEntry = this->pEntryAt ( entry.key() );
-            pEntry->moveOrCopyKeyTo ( & entry );
-            pEntry->moveOrCopyValueTo ( & entry );
+            entry.moveOrCopyKeyTo ( pEntry );
+            entry.moveOrCopyValueTo ( pEntry );
         }
 
 

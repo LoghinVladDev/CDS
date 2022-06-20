@@ -150,6 +150,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             ) const noexcept -> EntryType const * = 0;
 
         public:
+            template < typename __TValueType = ValueType, cds :: meta :: EnableIf < cds :: meta :: isDefaultConstructible < __TValueType > () > = 0 > // NOLINT(bugprone-reserved-identifier)
             auto get (
                     KeyType const & key
             ) noexcept -> ValueType &;
@@ -165,7 +166,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             ) const noexcept (false) -> ValueType const &;
 
         public:
-            template < typename __TValueType = ValueType, cds :: meta :: EnableIf < cds :: meta :: isDefaultConstructible < __TValueType > () > = 0 >
+            template < typename __TValueType = ValueType, cds :: meta :: EnableIf < cds :: meta :: isDefaultConstructible < __TValueType > () > = 0 > // NOLINT(bugprone-reserved-identifier)
             auto operator [] (
                     KeyType const & key
             ) noexcept -> ValueType &;
@@ -173,7 +174,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         public:
             auto operator [] (
                     KeyType const & key
-            ) const noexcept (false) -> ValueType &;
+            ) const noexcept (false) -> ValueType const &;
 
         private:
             auto pNewInsert (
