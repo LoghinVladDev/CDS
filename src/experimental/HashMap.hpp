@@ -91,9 +91,10 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             };
 
         private:
-            struct BucketType {
-                DataNode * _pFront;
-            };
+            using BucketType = DataNode *;
+//            struct BucketType {
+//                DataNode * _pFront;
+//            };
 
         private:
             struct Buckets {
@@ -199,8 +200,8 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
         private:
             static auto rehashEmplace (
-                    BucketType  * pBucket,
-                    DataNode    * pNode
+                    BucketType   & pBucket,
+                    DataNode     * pNode
             ) noexcept -> void;
 
         protected:

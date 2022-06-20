@@ -128,7 +128,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                         pNewNode->_value.construct ( pOtherBucket->_value.data() );
 
                         if ( pBack == nullptr ) {
-                            currentBucket._pFront   = pNewNode;
+                            currentBucket           = pNewNode;
                         } else {
                             pBack->_pNext           = pNewNode;
                         }
@@ -211,9 +211,9 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
             if ( this->_buckets._pBuckets != nullptr ) {
                 for ( Size bucketIndex = 0ULL; bucketIndex < this->_buckets._bucketCount; ++ bucketIndex ) {
-                    while ( this->_buckets._pBuckets [ bucketIndex ]._pFront != nullptr ) {
-                        auto pCopy                                          = this->_buckets._pBuckets [ bucketIndex ]._pFront;
-                        this->_buckets._pBuckets [ bucketIndex ]._pFront    = this->_buckets._pBuckets [ bucketIndex ]._pFront->_pNext;
+                    while ( this->_buckets._pBuckets [ bucketIndex ] != nullptr ) {
+                        auto pCopy                                  = this->_buckets._pBuckets [ bucketIndex ];
+                        this->_buckets._pBuckets [ bucketIndex ]    = this->_buckets._pBuckets [ bucketIndex ]->_pNext;
 
                         pCopy->_key.destruct();
                         pCopy->_value.destruct();
@@ -250,7 +250,8 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             auto hashValue  = this->_hasher ( key );
             auto & list     = this->_buckets._pBuckets [ hashValue % this->_buckets._bucketCount ];
 
-            auto pListHead  = list._pFront;
+            auto pListHead  = list;
+
 
             Size        bucketSize  = 0ULL;
             DataNode  * pBack       = nullptr;
@@ -266,12 +267,12 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             }
 
             auto pNewNode                       = Memory :: instance().create < DataNode > ();
-            pNewNode->_pNext                    = list._pFront;
-            list._pFront                        = pNewNode;
+            pNewNode->_pNext                    = list;
+            list                                = pNewNode;
 
             this->updateSize ( this->size() + 1ULL );
 
-            auto entry = EntryType ( list._pFront->_key.data(), list._pFront->_value.data() );
+            auto entry = EntryType ( list->_key.data(), list->_value.data() );
 
             if ( bucketSize >= this->_rehashPolicy.loadFactor() ) {
                 auto rehashData = this->_rehashPolicy.rehashRequired (
@@ -284,7 +285,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                     this->rehash (
                             rehashData._size,
                             hashValue % rehashData._size,
-                            list._pFront
+                            list
                     );
                 }
             }
@@ -313,21 +314,21 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
                 auto & bucket   = this->_buckets._pBuckets [ bucketIndex ];
 
-                while ( bucket._pFront != nullptr ) {
+                while ( bucket != nullptr ) {
 
                     Size hash;
-                    if ( pEmptyNode == bucket._pFront ) {
+                    if ( pEmptyNode == bucket ) {
                         hash = hashValueOfNewNode;
                     } else {
-                        hash = this->_hasher ( bucket._pFront->_key.data() ) % bucketCount;
+                        hash = this->_hasher ( bucket->_key.data() ) % bucketCount;
                     }
 
                     if ( hash != bucketIndex ) {
-                        auto pToRemove = bucket._pFront;
-                        bucket._pFront = bucket._pFront->_pNext;
+                        auto pToRemove  = bucket;
+                        bucket          = bucket->_pNext;
 
                         HashMap < __KeyType, __ValueType, __Hasher > :: rehashEmplace (
-                                & this->_buckets._pBuckets [ hash ],
+                                this->_buckets._pBuckets [ hash ],
                                 pToRemove
                         );
                     } else {
@@ -335,7 +336,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                     }
                 }
 
-                auto pHead = bucket._pFront;
+                auto pHead = bucket;
                 while ( pHead != nullptr && pHead->_pNext != nullptr ) {
 
                     Size hash;
@@ -350,7 +351,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                         pHead->_pNext   = pHead->_pNext->_pNext;
 
                         HashMap < __KeyType, __ValueType, __Hasher > :: rehashEmplace (
-                                & this->_buckets._pBuckets [ hash ],
+                                this->_buckets._pBuckets [ hash ],
                                 pToRemove
                         );
                     } else {
@@ -365,12 +366,12 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
         template < typename __KeyType, typename __ValueType, typename __Hasher > // NOLINT(bugprone-reserved-identifier)
         auto HashMap < __KeyType, __ValueType, __Hasher > :: rehashEmplace (
-                BucketType  * pBucket,
-                DataNode    * pNode
+                BucketType   & pBucket,
+                DataNode     * pNode
         ) noexcept -> void {
 
-            pNode->_pNext       = pBucket->_pFront;
-            pBucket->_pFront    = pNode;
+            pNode->_pNext   = pBucket;
+            pBucket         = pNode;
         }
 
 
@@ -387,7 +388,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             }
 
             auto hashValue  = this->_hasher ( key ) % this->_buckets._bucketCount;
-            auto pListHead  = this->_buckets._pBuckets [ hashValue ]._pFront;
+            auto pListHead  = this->_buckets._pBuckets [ hashValue ];
 
             while ( pListHead != nullptr ) {
                 if ( cds :: meta :: equals ( pListHead->_key.data(), key ) ) {
@@ -447,7 +448,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
             for ( Size bucketIndex = 0ULL; bucketIndex < this->_buckets._bucketCount; ++ bucketIndex ) {
 
-                DataNode * pHead = this->_buckets._pBuckets [ bucketIndex ]._pFront;
+                DataNode * pHead = this->_buckets._pBuckets [ bucketIndex ];
                 while ( pHead != nullptr ) {
 
                     if ( cds :: meta :: equals ( pHead->_value.data(), value ) ) {
@@ -474,10 +475,10 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 return false;
             }
 
-            if ( cds :: meta :: equals ( list._pFront->_key.data(), key ) ) {
+            if ( cds :: meta :: equals ( list->_key.data(), key ) ) {
 
-                auto pNode      = list._pFront;
-                list._pFront    = list._pFront->_pNext;
+                auto pNode  = list;
+                list        = list->_pNext;
 
                 pNode->_key.destruct();
                 pNode->_value.destruct();
@@ -487,7 +488,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 return true;
             }
 
-            auto pHead = list._pFront;
+            auto pHead = list;
             while ( pHead->_pNext != nullptr ) {
                 if ( cds :: meta :: equals ( pHead->_pNext->_key.data(), key ) ) {
 
@@ -598,9 +599,9 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
             if ( this->_buckets._pBuckets != nullptr ) {
                 for ( Size bucketIndex = 0ULL; bucketIndex < this->_buckets._bucketCount; ++ bucketIndex ) {
-                    while ( this->_buckets._pBuckets [ bucketIndex ]._pFront != nullptr ) {
-                        auto pCopy                                          = this->_buckets._pBuckets [ bucketIndex ]._pFront;
-                        this->_buckets._pBuckets [ bucketIndex ]._pFront    = this->_buckets._pBuckets [ bucketIndex ]._pFront->_pNext;
+                    while ( this->_buckets._pBuckets [ bucketIndex ] != nullptr ) {
+                        auto pCopy                                  = this->_buckets._pBuckets [ bucketIndex ];
+                        this->_buckets._pBuckets [ bucketIndex ]    = this->_buckets._pBuckets [ bucketIndex ]->_pNext;
 
                         pCopy->_key.destruct();
                         pCopy->_value.destruct();
