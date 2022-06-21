@@ -14,7 +14,7 @@
 #include <CDS/experimental/HashMap>
 #include <chrono>
 
-#include <time.h>
+#include <random>
 #include <fstream>
 
 using namespace cds;
@@ -25,15 +25,19 @@ using namespace cds :: literals;
 int main () {
 //    std :: unordered_map < int, int > m;
     cds :: experimental :: HashMap < int, int > m;
+    std :: random_device rd;
+    std :: mt19937 mt(rd());
+    std :: uniform_int_distribution < uint32 > dist (0U, cds :: limits :: U32_MAX);
 
     auto start = std :: chrono :: system_clock :: now();
-    for ( int i = 0; i < 1000000; ++ i ) {
+    for ( int i = 0; i < 10000000; ++ i ) {
 
-        int k = rand();
-        int v = rand();
+        int k = dist(mt);
+        int v = dist(mt);
         m.emplace ( k, v );
     }
 
+//    std :: cout << m.bucket_count() << '\n';
     auto end = std :: chrono :: system_clock :: now();
     std :: cout
             << "Duration : "

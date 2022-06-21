@@ -110,7 +110,11 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                     nullptr     :
                     cds :: __hidden :: __impl :: __allocation :: __allocPrimitiveArray < BucketType > ( this->_buckets._bucketCount );
 
-            std :: memset ( this->_buckets._pBuckets, 0, sizeof ( BucketType ) * this->_buckets._bucketCount );
+            std :: memset (
+                    this->_buckets._pBuckets,
+                    0U,
+                    sizeof ( BucketType ) * this->_buckets._bucketCount // NOLINT(bugprone-sizeof-expression)
+            );
 
             if ( ! map.empty() ) {
                 for ( Size bucketIndex = 0ULL; bucketIndex < this->_buckets._bucketCount; ++ bucketIndex ) {
@@ -254,14 +258,12 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
 
             Size        bucketSize  = 0ULL;
-            DataNode  * pBack       = nullptr;
 
             while ( pListHead != nullptr ) {
                 if ( cds :: meta :: equals ( pListHead->_key.data(), key ) ) {
                     return EntryType ( pListHead->_key.data(), pListHead->_value.data() );
                 }
 
-                pBack       = pListHead;
                 pListHead   = pListHead->_pNext;
                 ++ bucketSize;
             }
@@ -307,7 +309,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             std :: memset (
                     this->_buckets._pBuckets + this->_buckets._bucketCount,
                     0,
-                    sizeof ( BucketType ) * ( bucketCount - this->_buckets._bucketCount )
+                    sizeof ( BucketType ) * ( bucketCount - this->_buckets._bucketCount ) // NOLINT(bugprone-sizeof-expression)
             );
 
             for ( Size bucketIndex = 0ULL; bucketIndex < this->_buckets._bucketCount; ++ bucketIndex ) {
