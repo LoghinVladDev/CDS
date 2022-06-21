@@ -77,15 +77,6 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
 
         template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
-        constexpr MutableCollection < __ElementType > :: MutableCollection (
-                Size size
-        ) noexcept :
-                Collection < __ElementType > ( size ) {
-
-        }
-
-
-        template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
         __CDS_cpplang_ConstexprDestructor MutableCollection < __ElementType > :: ~MutableCollection () noexcept = default;
 
 

@@ -132,11 +132,6 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             ) noexcept;
 
         public:
-            __CDS_Explicit constexpr Map (
-                    Size size
-            ) noexcept;
-
-        public:
             __CDS_cpplang_ConstexprDestructor ~Map () noexcept override;
 
         protected:

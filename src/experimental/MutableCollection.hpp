@@ -190,11 +190,6 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             ) noexcept;
 
         protected:
-            __CDS_Explicit constexpr MutableCollection (
-                    Size size
-            ) noexcept;
-
-        protected:
             __CDS_cpplang_ConstexprDestructor ~MutableCollection () noexcept override;
 
         public:

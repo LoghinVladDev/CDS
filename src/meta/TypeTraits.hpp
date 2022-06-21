@@ -1057,8 +1057,13 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
          *      <li>If == comparison is not possible and LeftType is not ObjectDerived and RightType is not ObjectDerived, invoke comparison by address</li>
          * </ul>
          */
-        template < typename __LeftType, typename __RightType, EnableIf < equalToPossible < __LeftType, __RightType > () > = 0 > // NOLINT(bugprone-reserved-identifier)
-        constexpr auto equals (
+        template <
+                typename __LeftType,                // NOLINT(bugprone-reserved-identifier)
+                typename __RightType = __LeftType,  // NOLINT(bugprone-reserved-identifier)
+                EnableIf <
+                        equalToPossible < __LeftType, __RightType > ()
+                > = 0
+        > constexpr auto equals (
                 __LeftType  const & left,
                 __RightType const & right
         ) noexcept -> bool {
@@ -1066,25 +1071,41 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             return left == right;
         }
 
-        template < typename __LeftType, typename __RightType, EnableIf < ! equalToPossible < __LeftType, __RightType > () && isDerivedFrom < __LeftType, Object > () && isDerivedFrom < __RightType, Object > () > = 0 > // NOLINT(bugprone-reserved-identifier)
-        constexpr auto equals (
+
+        template <
+                typename __LeftType,                // NOLINT(bugprone-reserved-identifier)
+                typename __RightType = __LeftType,  // NOLINT(bugprone-reserved-identifier)
+                EnableIf <
+                        ! equalToPossible < __LeftType, __RightType > ()    &&
+                        isDerivedFrom < __LeftType, Object > ()             &&
+                        isDerivedFrom < __RightType, Object > ()
+                > = 0
+        > constexpr auto equals (
                 __LeftType  const & left,
-                __RightType const & right,
-                int                         = 0
+                __RightType const & right
         ) noexcept -> bool {
 
             return left.equals ( right );
         }
 
-        template < typename __LeftType, typename __RightType, EnableIf < ! equalToPossible < __LeftType, __RightType > () && ! ( isDerivedFrom < __LeftType, Object > () && isDerivedFrom < __RightType, Object > () ) > = 0 > // NOLINT(bugprone-reserved-identifier)
-        constexpr auto equals (
+
+        template <
+                typename __LeftType,                // NOLINT(bugprone-reserved-identifier)
+                typename __RightType = __LeftType,  // NOLINT(bugprone-reserved-identifier)
+                EnableIf <
+                        ! equalToPossible < __LeftType, __RightType > () && ! (
+                                isDerivedFrom < __LeftType, Object > ()     &&
+                                isDerivedFrom < __RightType, Object > ()
+                        )
+                > = 0
+        > constexpr auto equals (
                 __LeftType  const & left,
-                __RightType const & right,
-                float                       = 0.0f
+                __RightType const & right
         ) noexcept -> bool {
 
             return & left == & right;
         }
+
 
         template < typename __T, meta :: EnableIf < isPrintable < __T > () > = 0 > // NOLINT(bugprone-reserved-identifier)
         constexpr auto print (
@@ -1095,6 +1116,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             return ( out << object );
         }
 
+
         template < typename __T, meta :: EnableIf < ! isPrintable < __T > () > = 0 > // NOLINT(bugprone-reserved-identifier)
         constexpr auto print (
                 std :: ostream            & out,
@@ -1103,6 +1125,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
             return ( out << "Unknown@0x" << std :: hex << ( & object ) );
         }
+
 
         /**
          * @brief Meta-object helper, containing utilities for a given type. Alternative to above functions

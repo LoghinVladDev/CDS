@@ -73,15 +73,6 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
 
         template < typename __KeyType, typename __ValueType > // NOLINT(bugprone-reserved-identifier)
-        constexpr Map < __KeyType, __ValueType > :: Map (
-                Size size
-        ) noexcept :
-                MutableCollection < EntryType > ( size ) {
-
-        }
-
-
-        template < typename __KeyType, typename __ValueType > // NOLINT(bugprone-reserved-identifier)
         constexpr Map < __KeyType, __ValueType > :: ~Map () noexcept = default;
 
 

@@ -5,18 +5,18 @@
 #ifndef __CDS_REHASH_POLICY_HPP__
 #define __CDS_REHASH_POLICY_HPP__
 
-namespace cds {
-    namespace __hidden {
-        namespace __impl {
+namespace cds {             // NOLINT(modernize-concat-nested-namespaces)
+    namespace __hidden {    // NOLINT(modernize-concat-nested-namespaces, bugprone-reserved-identifier)
+        namespace __impl {  // NOLINT(bugprone-reserved-identifier)
 
-            template < typename __SizeType >
-            struct __RehashResult {
+            template < typename __SizeType > // NOLINT(bugprone-reserved-identifier)
+            struct __RehashResult { // NOLINT(bugprone-reserved-identifier)
                 __SizeType  _size;
                 bool        _required;
             };
 
-            template < typename __SizeType, bool __hasLoadFactor >
-            class __RehashPolicy {
+            template < typename __SizeType, bool __hasLoadFactor > // NOLINT(bugprone-reserved-identifier)
+            class __RehashPolicy { // NOLINT(bugprone-reserved-identifier)
 
             public:
                 using SizeType = __SizeType;
@@ -25,7 +25,7 @@ namespace cds {
                 constexpr static bool hasLoadFactor = false;
             };
 
-            class __PrimeRehashPolicy : __RehashPolicy < uint32, true > {
+            class __PrimeRehashPolicy : __RehashPolicy < uint32, true > { // NOLINT(bugprone-reserved-identifier)
 
             private:
                 uint32 _loadFactor;
@@ -39,6 +39,16 @@ namespace cds {
                 ) noexcept :
                         _loadFactor ( loadFactor ) {
 
+                }
+
+            public:
+                constexpr __PrimeRehashPolicy (
+                        __PrimeRehashPolicy const & policy
+                ) noexcept = default;
+
+            public:
+                __CDS_cpplang_NonConstConstexprMemberFunction auto reset () noexcept -> void {
+                    this->_factorIndex = 0U;
                 }
 
             public:

@@ -44,6 +44,13 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
 
                 template < typename __Type, Size __primitiveSize = sizeof ( __Type ) > // NOLINT(bugprone-reserved-identifier)
+                inline auto __allocPrimitiveObject () noexcept -> __Type * { // NOLINT(bugprone-reserved-identifier)
+
+                    return reinterpret_cast < __Type * > ( malloc ( __primitiveSize ) );
+                }
+
+
+                template < typename __Type, Size __primitiveSize = sizeof ( __Type ) > // NOLINT(bugprone-reserved-identifier)
                 inline auto __allocPrimitiveArray ( // NOLINT(bugprone-reserved-identifier)
                         Size capacity
                 ) noexcept -> __Type * {
@@ -61,6 +68,15 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                     return reinterpret_cast < __Type * > (
                             realloc ( pBuffer, newCapacity * __primitiveSize )
                     );
+                }
+
+
+                template < typename __Type > // NOLINT(bugprone-reserved-identifier)
+                inline auto __freePrimitiveObject ( // NOLINT(bugprone-reserved-identifier)
+                        __Type * pObject
+                ) noexcept -> void {
+
+                    free ( pObject );
                 }
 
 

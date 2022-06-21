@@ -6,25 +6,98 @@
 #define __CDS_EX_HASH_MAP_HPP__
 
 #include <CDS/experimental/Map>
+#include <CDS/Destructor>
+#include <CDS/Extractor>
+#include <CDS/CopyConstructor>
 #include "../shared/rehashPolicy/rehashPolicy.hpp"
-#include "shared/HashTableUtils.hpp"
+#include "shared/hash/HashTable.hpp"
+#include "hashMap/HashTableConstructs.hpp"
 
 namespace cds { // NOLINT(modernize-concat-nested-namespaces)
     namespace experimental {
 
         template <
-                typename __KeyType, // NOLINT(bugprone-reserved-identifier)
-                typename __ValueType, // NOLINT(bugprone-reserved-identifier),
-                typename __Hasher = FunctionHasher < __KeyType, & cds :: hash < __KeyType > > // NOLINT(bugprone-reserved-identifier),
+                typename __KeyType,                                                             // NOLINT(bugprone-reserved-identifier)
+                typename __ValueType,                                                           // NOLINT(bugprone-reserved-identifier)
+                typename __Hasher = FunctionHasher < __KeyType, & cds :: hash < __KeyType > >   // NOLINT(bugprone-reserved-identifier)
         > class HashMap :
-                public Map <
+                public Map < __KeyType, __ValueType >,
+                public __hidden :: __impl :: __HashTable <
+                        __hidden :: __impl :: __HashMapDataNode < __KeyType, __ValueType >,
                         __KeyType,
-                        __ValueType
-                >,
-                public __hidden :: __impl :: __HashTableUtils <
+                        FunctionExtractor <
+                                cds :: experimental :: __hidden :: __impl :: __HashMapDataNode < __KeyType, __ValueType >,
+                                __ValueType,
+                                & cds :: experimental :: __hidden :: __impl :: __hashMapDataNodeKeyExtractor <
+                                        __KeyType,
+                                        __ValueType
+                                >
+                        >,
+                        FunctionComparator < __KeyType, & cds :: meta :: equals < __KeyType > >,
                         __Hasher,
-                        cds :: __hidden :: __impl :: __PrimeRehashPolicy
+                        cds :: __hidden :: __impl :: __PrimeRehashPolicy,
+                        FunctionDestructor <
+                                cds :: experimental :: __hidden :: __impl :: __HashMapDataNode < __KeyType, __ValueType >,
+                                & cds :: experimental :: __hidden :: __impl :: __hashMapDataNodeDestructor < __KeyType, __ValueType >
+                        >
                 > {
+
+        protected:
+            using __HashTableElementType =  // NOLINT(bugprone-reserved-identifier)
+                    __hidden :: __impl :: __HashMapDataNode <
+                            __KeyType,
+                            __ValueType
+                    >;
+
+        protected:
+            using __HashTableKeyType =  // NOLINT(bugprone-reserved-identifier)
+                    __KeyType;
+
+        protected:
+            using __HashTableFunctionExtractor =    // NOLINT(bugprone-reserved-identifier)
+                    FunctionExtractor <
+                            __HashTableElementType,
+                            __ValueType,
+                            & __hidden :: __impl :: __hashMapDataNodeKeyExtractor <
+                                    __KeyType,
+                                    __ValueType
+                            >
+                    >;
+
+        protected:
+            using __HashTableFunctionComparator =   // NOLINT(bugprone-reserved-identifier)
+                    FunctionComparator <
+                            __KeyType,
+                            & cds :: meta :: equals < __KeyType >
+                    >;
+
+        protected:
+            using __HashTableHasher =   // NOLINT(bugprone-reserved-identifier)
+                    __Hasher;
+
+        protected:
+            using __HashTableRehashPolicy =  // NOLINT(bugprone-reserved-identifier)
+                    cds :: __hidden :: __impl :: __PrimeRehashPolicy;
+
+        protected:
+            using __HashTableFunctionDestructor = // NOLINT(bugprone-reserved-identifier)
+                    FunctionDestructor <
+                            __HashTableElementType,
+                            & __hidden :: __impl :: __hashMapDataNodeDestructor <
+                                    __KeyType,
+                                    __ValueType
+                            >
+                    >;
+
+        protected:
+            using __HashTableFunctionCopyConstructor =  // NOLINT(bugprone-reserved-identifier)
+                    FunctionCopyConstructor <
+                            __HashTableElementType,
+                            & __hidden :: __impl :: __hashMapDataNodeCopyConstructor <
+                                    __KeyType,
+                                    __ValueType
+                            >
+                    >;
 
         public:
             using typename Map < __KeyType, __ValueType > :: ElementType;
@@ -84,28 +157,6 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             class HashMapEntryMutableCollectionProxy;
 
         private:
-            struct DataNode {
-                cds :: __hidden :: __impl :: __allocation :: __RawContainer < __KeyType >     _key;
-                cds :: __hidden :: __impl :: __allocation :: __RawContainer < __ValueType >   _value;
-                DataNode                                                                    * _pNext;
-            };
-
-        private:
-            using BucketType = DataNode *;
-//            struct BucketType {
-//                DataNode * _pFront;
-//            };
-
-        private:
-            struct Buckets {
-                BucketType    * _pBuckets;
-                Size            _bucketCount;
-            };
-
-        private:
-            Buckets                             _buckets { nullptr, 0ULL };
-
-        private:
             HashMapKeySetProxy                  _keySetProxy;
 
         private:
@@ -151,7 +202,14 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             constexpr HashMap () noexcept;
 
         public:
-            HashMap (
+            template <
+                    typename __TKeyType     = KeyType,      // NOLINT(bugprone-reserved-identifier)
+                    typename __TValueType   = ValueType,    // NOLINT(bugprone-reserved-identifier)
+                    cds :: meta :: EnableIf <
+                            cds :: meta :: isCopyConstructible < __TKeyType > () &&
+                            cds :: meta :: isCopyConstructible < __TValueType > ()
+                    > = 0
+            > __CDS_Implicit HashMap ( // NOLINT(google-explicit-constructor)
                     HashMap const & map
             ) noexcept;
 
@@ -179,6 +237,9 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         public:
             ~HashMap () noexcept override;
 
+        public:
+            __CDS_NoDiscard __CDS_cpplang_ConstexprOverride auto size () const noexcept -> Size override;
+
         private:
             auto entryAt (
                     KeyType const & key,
@@ -190,19 +251,6 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                     KeyType const & key,
                     bool          & found
             ) const noexcept -> EntryType const override;
-
-        private:
-            auto rehash (
-                    Size                bucketCount,
-                    Size                hashValueOfNewNode,
-                    DataNode    const * pEmptyNode
-            ) noexcept -> void;
-
-        private:
-            static auto rehashEmplace (
-                    BucketType   & pBucket,
-                    DataNode     * pNode
-            ) noexcept -> void;
 
         protected:
             auto completeInsertion (
@@ -284,6 +332,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 #include "hashMap/EntryMutableCollectionProxy.hpp"
 
 #include "../shared/memory/PrimitiveAllocation.hpp"
+#include "shared/hash/impl/HashTable.hpp"
 
 #include "hashMap/impl/HashMap.hpp"
 #include "hashMap/impl/KeySetProxy.hpp"

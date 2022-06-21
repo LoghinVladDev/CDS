@@ -133,7 +133,8 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         constexpr List < __ElementType > :: List (
                 List const & list
         ) noexcept :
-                MutableCollection < __ElementType > ( list ) {
+                MutableCollection < __ElementType > ( list ),
+                _size ( list._size ) {
 
         }
 
@@ -142,7 +143,8 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         constexpr List < __ElementType > :: List (
                 List && list
         ) noexcept :
-                MutableCollection < __ElementType > ( std :: move ( list ) ) {
+                MutableCollection < __ElementType > ( std :: move ( list ) ),
+                _size ( cds :: exchange ( list._size, 0ULL ) ) {
 
         }
 
@@ -151,8 +153,15 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         constexpr List < __ElementType > :: List (
                 Size size
         ) noexcept :
-                MutableCollection < __ElementType > ( size ) {
+                _size ( size ) {
 
+        }
+
+
+        template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
+        __CDS_cpplang_ConstexprOverride auto List < __ElementType > :: size () const noexcept -> Size {
+
+            return this->_size;
         }
 
 

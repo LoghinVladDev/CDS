@@ -1437,39 +1437,24 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
         constexpr Collection < __ElementType > :: Collection (
                 Collection const & collection
-        ) noexcept :
-                _size ( collection._size ) {
-
-        }
+        ) noexcept = default;
 
 
         template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
         constexpr Collection < __ElementType > :: Collection (
                 Collection && collection
-        ) noexcept :
-                _size ( cds :: exchange ( collection._size, 0ULL ) ) {
-
-        }
-
-
-        template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
-        constexpr Collection < __ElementType > :: Collection (
-                Size size
-        ) noexcept :
-                _size ( size ) {
-
-        }
+        ) noexcept = default;
 
 
         template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
         constexpr auto Collection < __ElementType > :: size () const noexcept -> Size {
 
-            return this->_size;
+            return 0ULL;
         }
 
 
         template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
-        constexpr auto Collection < __ElementType > :: empty () const noexcept -> bool {
+        __CDS_cpplang_VirtualConstexpr auto Collection < __ElementType > :: empty () const noexcept -> bool {
 
             return this->size() == 0ULL;
         }

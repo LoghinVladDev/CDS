@@ -138,15 +138,12 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             ) noexcept;
 
         protected:
-            /**
-             * @brief Constructor with size given as parameter
-             * @param size : Size = the element count of the created list
-             * @exceptsafe
-             * @test tested in collection/Collection test
-             */
             __CDS_Explicit constexpr List (
                     Size size
             ) noexcept;
+
+        protected:
+            Size _size { 0ULL };
 
         public:
             /**
@@ -163,6 +160,9 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
              * @test tested in base class test
              */
             auto clear () noexcept -> void override = 0;
+
+        public:
+            __CDS_NoDiscard __CDS_cpplang_ConstexprOverride auto size () const noexcept -> Size override;
 
         public:
             /**

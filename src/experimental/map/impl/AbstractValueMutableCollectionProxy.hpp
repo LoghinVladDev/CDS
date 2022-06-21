@@ -12,7 +12,6 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         constexpr Map < __KeyType, __ValueType > :: AbstractValueMutableCollectionProxy :: AbstractValueMutableCollectionProxy (
                 Map < __KeyType, __ValueType > * pMap
         ) noexcept :
-                MutableCollection < ValueType > ( pMap->size() ),
                 _pMap ( pMap ) {
 
         }
