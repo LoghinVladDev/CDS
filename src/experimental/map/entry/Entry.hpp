@@ -76,10 +76,6 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                             __MapEntry * entry
                     ) noexcept -> void {
 
-                        if ( entry->_key._pObject != nullptr ) {
-                            return;
-                        }
-
                         if ( this->_key._forward ) {
                             entry->_key._pObject = new ( entry->_key._pObject ) __KeyType ( std :: move ( * this->_key._pObject ) );
                             return;
@@ -94,10 +90,6 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                             __MapEntry * entry
                     ) noexcept -> void {
 
-                        if ( entry->_key._pObject != nullptr ) {
-                            return;
-                        }
-
                         entry->_key._pObject = new  ( entry->_key._pObject ) __KeyType ( * this->_key._pConstObject );
                     }
 
@@ -106,10 +98,6 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                     __CDS_OptimalInline auto moveOrCopyKeyTo (
                             __MapEntry * entry
                     ) noexcept -> void {
-
-                        if ( entry->_key._pObject != nullptr ) {
-                            return;
-                        }
 
                         entry->_key._pObject = new ( entry->_key._pObject ) __KeyType ( std :: move ( * this->_key._pObject ) );
                     }

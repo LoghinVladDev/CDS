@@ -82,15 +82,16 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 KeyType const & key
         ) noexcept -> ValueType & {
 
-            auto pEntry = this->pEntryAt ( key );
+            bool isNew;
+            auto entry = this->entryAt ( key, isNew );
 
-            if ( pEntry->empty() ) {
+            if ( isNew ) {
                 auto newEntry = EntryType ( key, __ValueType () );
-                newEntry.moveOrCopyKeyTo ( pEntry );
-                newEntry.moveOrCopyValueTo ( pEntry );
+                newEntry.moveOrCopyKeyTo ( & entry );
+                newEntry.moveOrCopyValueTo ( & entry );
             }
 
-            return pEntry->value();
+            return entry.value();
         }
 
 

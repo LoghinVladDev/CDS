@@ -30,12 +30,17 @@ int main () {
     std :: uniform_int_distribution < uint32 > dist (0U, cds :: limits :: U32_MAX);
 
     auto start = std :: chrono :: system_clock :: now();
-    for ( int i = 0; i < 10000000; ++ i ) {
+    for ( int i = 0; i < 10000; ++ i ) {
 
         int k = dist(mt);
         int v = dist(mt);
         m.emplace ( k, v );
     }
+
+    m.clear();
+
+    m[1] = 3;
+    std :: cout << m[1] << '\n';
 
 //    std :: cout << m.bucket_count() << '\n';
     auto end = std :: chrono :: system_clock :: now();
