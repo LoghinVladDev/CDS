@@ -833,7 +833,6 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                         0ULL,
                         value,
                         valueLength,
-                        nullptr,
                         & this->_length
                  ) = meta :: __impl :: __StringData < ElementType > :: nullCharacter;
 

@@ -37,8 +37,8 @@ int main () {
     auto start = std :: chrono :: system_clock :: now();
     for ( int i = 0; i < 100000; ++ i ) {
 
-        int k = dist(mt);
-        int v = dist(mt);
+        auto k = dist(mt);
+        auto v = dist(mt);
         m.emplace ( k, v );
 
         if ( m[k] != String(v) ) {
@@ -48,6 +48,12 @@ int main () {
 
     for ( auto & e : m ) {
         std :: cout << e.key() << ':' << e.value() << '\n';
+        e.value() = 3;
+    }
+
+    for ( auto const & e : m ) {
+        std :: cout << e.key() << ':' << e.value() << '\n';
+//        e.value() = 3;
     }
 
 //    m.clear();
