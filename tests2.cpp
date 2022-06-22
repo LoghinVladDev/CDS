@@ -33,7 +33,7 @@ int main () {
     std :: uniform_int_distribution < uint32 > dist (0U, cds :: limits :: U32_MAX);
 
     auto start = std :: chrono :: system_clock :: now();
-    for ( int i = 0; i < 1000; ++ i ) {
+    for ( int i = 0; i < 100000; ++ i ) {
 
         int k = dist(mt);
         int v = dist(mt);

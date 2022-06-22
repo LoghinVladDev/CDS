@@ -2248,24 +2248,21 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
 
             template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
-            __CDS_cpplang_ConstexprOverride auto __BaseStringView < __CharType > :: hash () const noexcept -> Index {
+            __CDS_cpplang_ConstexprOverride auto __BaseStringView < __CharType > :: hash () const noexcept -> Size {
 
-                Size finalHash = 0;
+                Size currentExponent = 1U;
+                Size finalHash       = 0ULL;
 
-                if ( ! this->empty() ) {
-                    finalHash += ( this->_length & 0xFF00U ) + ( this->_pData [ 0 ] & 0xFFU );
+                if ( this->empty() ) {
+                    return 0ULL;
                 }
 
-                Size shlOffset  = 4ULL;
-                Size shlMask    = 0xFFULL;
-
-                while ( ( shlOffset < 56ULL ) && ( shlOffset >> 2ULL ) < this->length() ) {
-
-                    finalHash |= ( ( static_cast < Size > ( this->_pData [ shlOffset >> 2ULL ] ) & shlMask ) << shlOffset );
-                    shlOffset += 2ULL;
+                for ( Size index = this->_length - 1ULL; index > 0ULL; -- index ) {
+                    finalHash += static_cast < Size > ( this->_pData [ index ] ) * currentExponent;
+                    currentExponent *= 31ULL;
                 }
 
-                return static_cast < Index > ( finalHash );
+                return finalHash + this->_pData [ 0 ] * currentExponent;
             }
 
 
