@@ -21,7 +21,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                         typename __RehashPolicy,            // NOLINT(bugprone-reserved-identifier)
                         typename __ElementTypeDestruct      // NOLINT(bugprone-reserved-identifier)
                 > class __HashTable :                       // NOLINT(bugprone-reserved-identifier)
-                        public __HashTableUtils <
+                        protected __HashTableUtils <
                                 __KeyHasher,
                                 __RehashPolicy
                         > {
@@ -47,25 +47,25 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                 protected:
                     using ElementTypeDestruct   = __ElementTypeDestruct;    // NOLINT(bugprone-reserved-identifier)
 
-                public:
+                protected:
                     class HashTableIterator;
 
-                public:
+                protected:
                     class HashTableConstIterator;
 
-                public:
+                protected:
                     __CDS_cpplang_NonConstConstexprMemberFunction auto __begin () noexcept -> HashTableIterator;
 
-                public:
+                protected:
                     __CDS_cpplang_NonConstConstexprMemberFunction auto __end () noexcept -> HashTableIterator;
 
-                public:
+                protected:
                     constexpr auto __cbegin () const noexcept -> HashTableConstIterator;
 
-                public:
+                protected:
                     constexpr auto __cend () const noexcept -> HashTableConstIterator;
 
-                public:
+                protected:
                     using __DataType        = cds :: __hidden :: __impl :: __allocation :: __RawContainer < __ElementType >; // NOLINT(bugprone-reserved-identifier)
 
                 private:

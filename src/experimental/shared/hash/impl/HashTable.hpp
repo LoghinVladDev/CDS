@@ -18,6 +18,94 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                         typename __KeyHasher,           // NOLINT(bugprone-reserved-identifier)
                         typename __RehashPolicy,        // NOLINT(bugprone-reserved-identifier)
                         typename __ElementTypeDestruct  // NOLINT(bugprone-reserved-identifier)
+                > __CDS_cpplang_NonConstConstexprMemberFunction auto __HashTable <
+                        __ElementType,
+                        __KeyType,
+                        __KeyExtractor,
+                        __KeyEqualsComparator,
+                        __KeyHasher,
+                        __RehashPolicy,
+                        __ElementTypeDestruct
+                > :: __begin () noexcept -> HashTableIterator {
+
+                    return HashTableIterator ( this );
+                }
+
+
+                template <
+                        typename __ElementType,         // NOLINT(bugprone-reserved-identifier)
+                        typename __KeyType,             // NOLINT(bugprone-reserved-identifier)
+                        typename __KeyExtractor,        // NOLINT(bugprone-reserved-identifier)
+                        typename __KeyEqualsComparator, // NOLINT(bugprone-reserved-identifier)
+                        typename __KeyHasher,           // NOLINT(bugprone-reserved-identifier)
+                        typename __RehashPolicy,        // NOLINT(bugprone-reserved-identifier)
+                        typename __ElementTypeDestruct  // NOLINT(bugprone-reserved-identifier)
+                > __CDS_cpplang_NonConstConstexprMemberFunction auto __HashTable <
+                        __ElementType,
+                        __KeyType,
+                        __KeyExtractor,
+                        __KeyEqualsComparator,
+                        __KeyHasher,
+                        __RehashPolicy,
+                        __ElementTypeDestruct
+                > :: __end () noexcept -> HashTableIterator {
+
+                    return HashTableIterator ();
+                }
+
+
+                template <
+                        typename __ElementType,         // NOLINT(bugprone-reserved-identifier)
+                        typename __KeyType,             // NOLINT(bugprone-reserved-identifier)
+                        typename __KeyExtractor,        // NOLINT(bugprone-reserved-identifier)
+                        typename __KeyEqualsComparator, // NOLINT(bugprone-reserved-identifier)
+                        typename __KeyHasher,           // NOLINT(bugprone-reserved-identifier)
+                        typename __RehashPolicy,        // NOLINT(bugprone-reserved-identifier)
+                        typename __ElementTypeDestruct  // NOLINT(bugprone-reserved-identifier)
+                > constexpr auto __HashTable <
+                        __ElementType,
+                        __KeyType,
+                        __KeyExtractor,
+                        __KeyEqualsComparator,
+                        __KeyHasher,
+                        __RehashPolicy,
+                        __ElementTypeDestruct
+                > :: __cbegin () const noexcept -> HashTableConstIterator {
+
+                    return HashTableConstIterator ( this );
+                }
+
+
+                template <
+                        typename __ElementType,         // NOLINT(bugprone-reserved-identifier)
+                        typename __KeyType,             // NOLINT(bugprone-reserved-identifier)
+                        typename __KeyExtractor,        // NOLINT(bugprone-reserved-identifier)
+                        typename __KeyEqualsComparator, // NOLINT(bugprone-reserved-identifier)
+                        typename __KeyHasher,           // NOLINT(bugprone-reserved-identifier)
+                        typename __RehashPolicy,        // NOLINT(bugprone-reserved-identifier)
+                        typename __ElementTypeDestruct  // NOLINT(bugprone-reserved-identifier)
+                > constexpr auto __HashTable <
+                        __ElementType,
+                        __KeyType,
+                        __KeyExtractor,
+                        __KeyEqualsComparator,
+                        __KeyHasher,
+                        __RehashPolicy,
+                        __ElementTypeDestruct
+                > :: __cend () const noexcept -> HashTableConstIterator {
+
+                    return HashTableConstIterator ();
+                }
+
+
+                template <
+                        typename __ElementType,         // NOLINT(bugprone-reserved-identifier)
+                        typename __KeyType,             // NOLINT(bugprone-reserved-identifier)
+                        typename __KeyExtractor,        // NOLINT(bugprone-reserved-identifier)
+                        typename __KeyEqualsComparator, // NOLINT(bugprone-reserved-identifier)
+                        typename __KeyHasher,           // NOLINT(bugprone-reserved-identifier)
+                        typename __RehashPolicy,        // NOLINT(bugprone-reserved-identifier)
+                        typename __ElementTypeDestruct  // NOLINT(bugprone-reserved-identifier)
                 > constexpr __HashTable <
                         __ElementType,
                         __KeyType,

@@ -40,24 +40,27 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                     >;
 
                 private:
+                    __CDS_cpplang_ConstexprConditioned auto advanceBucket () noexcept -> void;
+
+                private:
                     HashTable   const * _pTable { nullptr };
 
                 private:
-                    __DataNode        * _pCurrentNode { nullptr };
+                    __DataNode  const * _pCurrentNode { nullptr };
 
                 private:
                     Size                _bucketIndex { 0ULL };
 
                 public:
-                    constexpr HashTableConstIterator () noexcept;
+                    __CDS_cpplang_ConstexprConditioned HashTableConstIterator () noexcept;
 
                 public:
-                    constexpr HashTableConstIterator (
+                    __CDS_Explicit constexpr HashTableConstIterator (
                             HashTable const * pTable
                     ) noexcept;
 
                 public:
-                    constexpr HashTableConstIterator (
+                    __CDS_cpplang_ConstexprConditioned HashTableConstIterator (
                             HashTableConstIterator const & iterator
                     ) noexcept;
 
@@ -80,7 +83,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                     __CDS_cpplang_NonConstConstexprMemberFunction auto operator ++ () noexcept -> HashTableConstIterator &;
 
                 public:
-                    constexpr auto operator * () const noexcept -> __DataType &;
+                    constexpr auto operator * () const noexcept -> __DataType const &;
 
                 public:
                     constexpr auto operator != (

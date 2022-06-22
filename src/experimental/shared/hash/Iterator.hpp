@@ -40,6 +40,9 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                     >;
 
                 private:
+                    __CDS_cpplang_ConstexprConditioned auto advanceBucket () noexcept -> void;
+
+                private:
                     HashTable     * _pTable { nullptr };
 
                 private:
