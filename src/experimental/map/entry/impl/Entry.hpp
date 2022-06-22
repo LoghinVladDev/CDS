@@ -280,6 +280,48 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                     return * this->_value._pObject;
                 }
 
+
+                template < typename __KeyType, typename __ValueType > // NOLINT(bugprone-reserved-identifier)
+                constexpr auto __MapEntry < __KeyType, __ValueType > :: first () const noexcept -> KeyType const & {
+
+                    return this->key();
+                }
+
+
+                template < typename __KeyType, typename __ValueType > // NOLINT(bugprone-reserved-identifier)
+                constexpr auto __MapEntry < __KeyType, __ValueType > :: second () const noexcept -> ValueType const & {
+
+                    return this->value();
+                }
+
+
+                template < typename __KeyType, typename __ValueType > // NOLINT(bugprone-reserved-identifier)
+                __CDS_cpplang_NonConstConstexprMemberFunction auto __MapEntry < __KeyType, __ValueType > :: second () noexcept -> ValueType & {
+
+                    return this->value();
+                }
+
+
+                template < typename __KeyType, typename __ValueType > // NOLINT(bugprone-reserved-identifier)
+                constexpr auto __MapEntry < __KeyType, __ValueType > :: getFirst () const noexcept -> KeyType const & {
+
+                    return this->key();
+                }
+
+
+                template < typename __KeyType, typename __ValueType > // NOLINT(bugprone-reserved-identifier)
+                constexpr auto __MapEntry < __KeyType, __ValueType > :: getSecond () const noexcept -> ValueType const & {
+
+                    return this->value();
+                }
+
+
+                template < typename __KeyType, typename __ValueType > // NOLINT(bugprone-reserved-identifier)
+                __CDS_cpplang_NonConstConstexprMemberFunction auto __MapEntry < __KeyType, __ValueType > :: getSecond () noexcept -> ValueType & {
+
+                    return this->value();
+                }
+
             }
         }
     }

@@ -199,19 +199,25 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                     __CDS_cpplang_NonConstConstexprMemberFunction auto value () noexcept -> ValueType &;
 
                 public:
+                    __CDS_Deprecated constexpr auto first () const noexcept -> KeyType const &;
+
+                public:
+                    __CDS_Deprecated constexpr auto second () const noexcept -> ValueType const &;
+
+                public:
+                    __CDS_Deprecated __CDS_cpplang_NonConstConstexprMemberFunction auto second () noexcept -> ValueType &;
+
+                public:
+                    __CDS_Deprecated constexpr auto getFirst () const noexcept -> KeyType const &;
+
+                public:
+                    __CDS_Deprecated constexpr auto getSecond () const noexcept -> ValueType const &;
+
+                public:
+                    __CDS_Deprecated __CDS_cpplang_NonConstConstexprMemberFunction auto getSecond () noexcept -> ValueType &;
+
+                public:
                     __CDS_NoDiscard auto toString () const noexcept -> String;
-
-                private:
-                    __CDS_OptimalInline auto copyTo (
-                            __MapEntry * entry
-                    ) const noexcept -> void {
-
-                        entry->_key._forward     = false;
-                        entry->_key._pObject     = Memory :: instance().create < __KeyType > ( * this->_key._pConstObject );
-
-                        entry->_value._forward   = false;
-                        entry->_value._pObject   = Memory :: instance().create < __ValueType > ( * this->_value._pConstObject );
-                    }
                 };
 
             }
