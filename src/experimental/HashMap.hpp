@@ -156,6 +156,12 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         protected:
             class HashMapEntryMutableCollectionProxy;
 
+        protected:
+            class HashMapDelegateIterator;
+
+        protected:
+            class HashMapDelegateConstIterator;
+
         private:
             HashMapKeySetProxy                  _keySetProxy;
 
@@ -164,11 +170,6 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
         private:
             HashMapEntryMutableCollectionProxy  _entryMutableCollectionProxy;
-
-        protected:
-            __CDS_cpplang_NonConstConstexprMemberFunction auto updateSize (
-                    Size size
-            ) noexcept -> void;
 
         protected:
             __CDS_NoDiscard __CDS_cpplang_ConstexprOverride auto keySetProxy () const noexcept -> AbstractKeySetProxy const & override;
@@ -330,6 +331,8 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 #include "hashMap/KeySetProxy.hpp"
 #include "hashMap/ValueMutableCollectionProxy.hpp"
 #include "hashMap/EntryMutableCollectionProxy.hpp"
+#include "hashMap/DelegateIterator.hpp"
+#include "hashMap/DelegateConstIterator.hpp"
 
 #include "../shared/memory/PrimitiveAllocation.hpp"
 #include "shared/hash/impl/HashTable.hpp"
@@ -338,6 +341,8 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 #include "hashMap/impl/KeySetProxy.hpp"
 #include "hashMap/impl/ValueMutableCollectionProxy.hpp"
 #include "hashMap/impl/EntryMutableCollectionProxy.hpp"
+#include "hashMap/impl/DelegateIterator.hpp"
+#include "hashMap/impl/DelegateConstIterator.hpp"
 
 
 #endif // __CDS_EX_HASH_MAP_HPP__

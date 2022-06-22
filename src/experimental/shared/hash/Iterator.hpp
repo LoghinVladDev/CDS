@@ -83,12 +83,15 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                     __CDS_cpplang_NonConstConstexprMemberFunction auto operator ++ () noexcept -> HashTableIterator &;
 
                 public:
-                    constexpr auto operator * () const noexcept -> __DataType &;
+                    constexpr auto operator * () const noexcept -> HashTable :: ElementType &;
 
                 public:
-                    constexpr auto operator != (
+                    constexpr auto operator == (
                             HashTableIterator const & iterator
                     ) const noexcept -> bool;
+
+                public:
+                    __CDS_NoDiscard __CDS_Explicit constexpr operator bool () const noexcept;
                 };
 
             }

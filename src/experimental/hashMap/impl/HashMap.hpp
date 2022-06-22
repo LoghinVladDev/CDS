@@ -55,7 +55,15 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 DelegateIteratorRequestType requestType
         ) noexcept -> cds :: UniquePointer < DelegateIterator > {
 
-            /// TODO : implement iterators
+            switch ( requestType ) {
+                case DelegateIteratorRequestType :: ForwardBegin:
+                case DelegateIteratorRequestType :: BackwardBegin:
+                    return Memory :: instance().create < HashMapDelegateIterator > ( this->__begin() );
+                case DelegateIteratorRequestType :: ForwardEnd:
+                case DelegateIteratorRequestType :: BackwardEnd:
+                    return Memory :: instance().create < HashMapDelegateIterator > ( this->__end() );
+            }
+
             return nullptr;
         }
 
@@ -65,7 +73,15 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 DelegateIteratorRequestType requestType
         ) const noexcept -> cds :: UniquePointer < DelegateConstIterator > {
 
-            /// TODO : implement iterators
+            switch ( requestType ) {
+                case DelegateIteratorRequestType :: ForwardBegin:
+                case DelegateIteratorRequestType :: BackwardBegin:
+                    return Memory :: instance().create < HashMapDelegateConstIterator > ( this->__cbegin() );
+                case DelegateIteratorRequestType :: ForwardEnd:
+                case DelegateIteratorRequestType :: BackwardEnd:
+                    return Memory :: instance().create < HashMapDelegateConstIterator > ( this->__cend() );
+            }
+
             return nullptr;
         }
 

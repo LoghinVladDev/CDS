@@ -12,6 +12,7 @@
 #include <CDS/experimental/OrderedSet>
 #include <CDS/experimental/UnorderedSet>
 #include <CDS/experimental/HashMap>
+#include <CDS/HashMap>
 #include <chrono>
 
 #include <random>
@@ -23,6 +24,7 @@ using namespace cds :: literals;
 
 int main () {
     cds :: experimental :: HashMap < String, String > m;
+//    cds :: HashMap < int, int > m;
 
 //    struct _h {
 //        auto operator () (String const & s)const{ return s.hash(); }
@@ -38,6 +40,14 @@ int main () {
         int k = dist(mt);
         int v = dist(mt);
         m.emplace ( k, v );
+
+        if ( m[k] != String(v) ) {
+            std :: cout << "ohoh\n";
+        }
+    }
+
+    for ( auto & e : m ) {
+        std :: cout << e.key() << ':' << e.value() << '\n';
     }
 
 //    m.clear();

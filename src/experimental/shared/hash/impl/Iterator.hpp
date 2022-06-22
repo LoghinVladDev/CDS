@@ -245,7 +245,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                         __KeyHasher,
                         __RehashPolicy,
                         __ElementTypeDestruct
-                > :: HashTableIterator :: operator * () const noexcept -> __DataType & {
+                > :: HashTableIterator :: operator * () const noexcept -> HashTable :: ElementType & {
 
                     return this->_pCurrentNode->_data.data();
                 }
@@ -267,11 +267,33 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                         __KeyHasher,
                         __RehashPolicy,
                         __ElementTypeDestruct
-                > :: HashTableIterator :: operator != (
+                > :: HashTableIterator :: operator == (
                         HashTableIterator const & iterator
                 ) const noexcept -> bool {
 
-                    return this->_pCurrentNode != iterator._pCurrentNode;
+                    return this->_pCurrentNode == iterator._pCurrentNode;
+                }
+
+
+                template <
+                        typename __ElementType,         // NOLINT(bugprone-reserved-identifier)
+                        typename __KeyType,             // NOLINT(bugprone-reserved-identifier)
+                        typename __KeyExtractor,        // NOLINT(bugprone-reserved-identifier)
+                        typename __KeyEqualsComparator, // NOLINT(bugprone-reserved-identifier)
+                        typename __KeyHasher,           // NOLINT(bugprone-reserved-identifier)
+                        typename __RehashPolicy,        // NOLINT(bugprone-reserved-identifier)
+                        typename __ElementTypeDestruct  // NOLINT(bugprone-reserved-identifier)
+                > constexpr __HashTable <
+                        __ElementType,
+                        __KeyType,
+                        __KeyExtractor,
+                        __KeyEqualsComparator,
+                        __KeyHasher,
+                        __RehashPolicy,
+                        __ElementTypeDestruct
+                > :: HashTableIterator :: operator bool () const noexcept {
+
+                    return this->_pCurrentNode != nullptr;
                 }
 
             }
