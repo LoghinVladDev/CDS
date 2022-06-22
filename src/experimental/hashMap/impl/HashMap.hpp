@@ -81,13 +81,13 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
         template < typename __KeyType, typename __ValueType, typename __Hasher > // NOLINT(bugprone-reserved-identifier)
         template <
-                typename __TKeyType,
-                typename __TValueType,
+                typename __TKeyType,    // NOLINT(bugprone-reserved-identifier)
+                typename __TValueType,  // NOLINT(bugprone-reserved-identifier)
                 cds :: meta :: EnableIf <
                         cds :: meta :: isCopyConstructible < __TKeyType > () &&
                         cds :: meta :: isCopyConstructible < __TValueType > ()
                 >
-        > HashMap < __KeyType, __ValueType, __Hasher > :: HashMap (
+        > __CDS_OptimalInline HashMap < __KeyType, __ValueType, __Hasher > :: HashMap (
                 HashMap const & map
         ) noexcept :
                 Map < __KeyType, __ValueType > ( map ),
@@ -187,7 +187,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
 
         template < typename __KeyType, typename __ValueType, typename __Hasher > // NOLINT(bugprone-reserved-identifier)
-        HashMap < __KeyType, __ValueType, __Hasher > :: ~HashMap () noexcept {
+        __CDS_OptimalInline HashMap < __KeyType, __ValueType, __Hasher > :: ~HashMap () noexcept {
 
             this->__clear();
         }
@@ -201,7 +201,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
 
         template < typename __KeyType, typename __ValueType, typename __Hasher > // NOLINT(bugprone-reserved-identifier)
-        auto HashMap < __KeyType, __ValueType, __Hasher > :: entryAt (
+        __CDS_OptimalInline auto HashMap < __KeyType, __ValueType, __Hasher > :: entryAt (
                 KeyType const & key,
                 bool          & isNew
         ) noexcept -> EntryType {
@@ -212,7 +212,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
 
         template < typename __KeyType, typename __ValueType, typename __Hasher > // NOLINT(bugprone-reserved-identifier)
-        auto HashMap < __KeyType, __ValueType, __Hasher > :: entryAt (
+        __CDS_OptimalInline auto HashMap < __KeyType, __ValueType, __Hasher > :: entryAt (
                 KeyType const & key,
                 bool          & found
         ) const noexcept -> EntryType const {
@@ -228,7 +228,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
 
         template < typename __KeyType, typename __ValueType, typename __Hasher > // NOLINT(bugprone-reserved-identifier)
-        auto HashMap < __KeyType, __ValueType, __Hasher > :: completeInsertion (
+        __CDS_OptimalInline auto HashMap < __KeyType, __ValueType, __Hasher > :: completeInsertion (
                 EntryType * pEntry
         ) noexcept -> void {
 

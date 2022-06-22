@@ -622,7 +622,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                         typename __KeyHasher,           // NOLINT(bugprone-reserved-identifier)
                         typename __RehashPolicy,        // NOLINT(bugprone-reserved-identifier)
                         typename __ElementTypeDestruct  // NOLINT(bugprone-reserved-identifier)
-                > auto __HashTable <
+                > __CDS_OptimalInline auto __HashTable <
                         __ElementType,
                         __KeyType,
                         __KeyExtractor,
@@ -646,7 +646,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                         typename __KeyHasher,           // NOLINT(bugprone-reserved-identifier)
                         typename __RehashPolicy,        // NOLINT(bugprone-reserved-identifier)
                         typename __ElementTypeDestruct  // NOLINT(bugprone-reserved-identifier)
-                > auto __HashTable <
+                > __CDS_OptimalInline auto __HashTable <
                         __ElementType,
                         __KeyType,
                         __KeyExtractor,
@@ -690,13 +690,12 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                     __DataNode * pBucketHead;
 
                     auto & bucket = this->__bucket ( this->_hasher ( key ) );
-
                     if ( this->_equals ( this->_key ( bucket->_data.data() ), key ) ) {
 
                         pToRemove   = bucket;
                         bucket      = bucket->_pNext;
 
-                        this->__freeNode ( pBucketHead );
+                        this->__freeNode ( pToRemove );
 
                         -- this->_totalSize;
                         return true;
@@ -710,7 +709,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                             pToRemove           = pBucketHead->_pNext;
                             pBucketHead->_pNext = pBucketHead->_pNext->_pNext;
 
-                            this->__freeNode ( pBucketHead );
+                            this->__freeNode ( pToRemove );
 
                             -- this->_totalSize;
                             return true;

@@ -48,6 +48,24 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                     using ElementTypeDestruct   = __ElementTypeDestruct;    // NOLINT(bugprone-reserved-identifier)
 
                 public:
+                    class HashTableIterator;
+
+                public:
+                    class HashTableConstIterator;
+
+                public:
+                    __CDS_cpplang_NonConstConstexprMemberFunction auto __begin () noexcept -> HashTableIterator;
+
+                public:
+                    __CDS_cpplang_NonConstConstexprMemberFunction auto __end () noexcept -> HashTableIterator;
+
+                public:
+                    constexpr auto __cbegin () const noexcept -> HashTableConstIterator;
+
+                public:
+                    constexpr auto __cend () const noexcept -> HashTableConstIterator;
+
+                public:
                     using __DataType        = cds :: __hidden :: __impl :: __allocation :: __RawContainer < __ElementType >; // NOLINT(bugprone-reserved-identifier)
 
                 private:
@@ -185,5 +203,11 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
         }
     }
 }
+
+#include "Iterator.hpp"
+#include "ConstIterator.hpp"
+
+#include "impl/Iterator.hpp"
+#include "impl/ConstIterator.hpp"
 
 #endif // __CDS_EX_HASH_TABLE_HPP__
