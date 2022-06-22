@@ -5,17 +5,24 @@
 #ifndef __CDS_HASH_BASE_HPP__
 #define __CDS_HASH_BASE_HPP__
 
-#include "../../../../shared/HashBaseFunction.hpp"
 #include "../../string/StringUtils.hpp"
 
 namespace cds {
 
-    template <>
-    __CDS_cpplang_VirtualConstexpr auto hash < Object > (
-            Object const & object
+    template < typename T, cds :: meta :: EnableIf < cds :: meta :: isObjectDerived < T > () > = 0 >
+    __CDS_cpplang_VirtualConstexpr auto hash (
+            T const & object
     ) noexcept -> Size {
 
         return object.hash();
+    }
+
+    template < typename T, cds :: meta :: EnableIf < ! cds :: meta :: isObjectDerived < T > () > = 0 >
+    constexpr auto hash (
+            T const & object
+    ) noexcept -> Size {
+
+        return 0ULL;
     }
 
 }

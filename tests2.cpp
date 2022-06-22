@@ -19,18 +19,21 @@
 
 using namespace cds;
 using namespace cds :: literals;
-#include <CDS/HashMap>
-#include <unordered_map>
+
 
 int main () {
-//    std :: unordered_map < int, int > m;
-    cds :: experimental :: HashMap < int, int > m;
+    cds :: experimental :: HashMap < String, String > m;
+
+//    struct _h {
+//        auto operator () (String const & s)const{ return s.hash(); }
+//    };
+//    std :: unordered_map < String, String, _h > m;
     std :: random_device rd;
     std :: mt19937 mt(rd());
     std :: uniform_int_distribution < uint32 > dist (0U, cds :: limits :: U32_MAX);
 
     auto start = std :: chrono :: system_clock :: now();
-    for ( int i = 0; i < 10000000; ++ i ) {
+    for ( int i = 0; i < 1000; ++ i ) {
 
         int k = dist(mt);
         int v = dist(mt);

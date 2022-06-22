@@ -3252,12 +3252,14 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
             template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
             __CDS_cpplang_ConstexprOverride auto __BaseString < __CharType > :: hash () const noexcept -> Size {
+
                 return __BaseStringView < __CharType > ( * this ).hash();
             }
 
 
             template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
             __CDS_OptimalInline auto __BaseString < __CharType > :: toString () const noexcept -> cds :: String {
+
                 return cds :: String ( this->cStr() );
             }
 

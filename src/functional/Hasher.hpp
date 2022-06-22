@@ -12,8 +12,6 @@
 #include <CDS/Compiler>
 #include <CDS/Options>
 
-#include "../shared/HashBaseFunction.hpp"
-
 namespace cds {
 
     class Object;
