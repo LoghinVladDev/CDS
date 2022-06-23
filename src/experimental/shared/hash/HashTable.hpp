@@ -197,6 +197,22 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                     auto __remove (                                             // NOLINT(bugprone-reserved-identifier)
                             __KeyType const & key
                     ) noexcept -> bool;
+
+                private:
+                    auto __remove (
+                            __DataNode  const * pNode,
+                            Size                bucketIndex
+                    ) noexcept -> bool;
+
+                protected:
+                    auto __remove (                                             // NOLINT(bugprone-reserved-identifier)
+                            HashTableIterator const & iterator
+                    ) noexcept -> bool;
+
+                protected:
+                    auto __remove (                                             // NOLINT(bugprone-reserved-identifier)
+                            HashTableConstIterator const & iterator
+                    ) noexcept -> bool;
                 };
 
             }

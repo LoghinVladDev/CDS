@@ -80,6 +80,12 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                     ) noexcept -> HashTableIterator &;
 
                 public:
+                    __CDS_NoDiscard constexpr auto bucketIndex () const noexcept -> Size;
+
+                public:
+                    __CDS_NoDiscard constexpr auto currentNode () const noexcept -> __DataNode *;
+
+                public:
                     __CDS_cpplang_NonConstConstexprMemberFunction auto operator ++ () noexcept -> HashTableIterator &;
 
                 public:
@@ -87,6 +93,11 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
 
                 public:
                     constexpr auto operator == (
+                            HashTableIterator const & iterator
+                    ) const noexcept -> bool;
+
+                public:
+                    constexpr auto operator != (
                             HashTableIterator const & iterator
                     ) const noexcept -> bool;
 

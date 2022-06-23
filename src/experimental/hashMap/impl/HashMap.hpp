@@ -228,7 +228,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
 
         template < typename __KeyType, typename __ValueType, typename __Hasher > // NOLINT(bugprone-reserved-identifier)
-        __CDS_OptimalInline auto HashMap < __KeyType, __ValueType, __Hasher > :: entryAt (
+        __CDS_OptimalInline auto HashMap < __KeyType, __ValueType, __Hasher > :: entryAt ( // NOLINT(readability-const-return-type)
                 KeyType const & key,
                 bool          & found
         ) const noexcept -> EntryType const {
@@ -286,7 +286,12 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 ValueType const & value
         ) const noexcept -> bool {
 
-            /// TODO : after HashTable iteration impl.
+            for ( auto iterator = this->__cbegin(); iterator != this->__cend() ; ++ iterator ) {
+                if ( cds :: meta :: equals ( ( * iterator )._value.data(), value ) ) {
+                    return true;
+                }
+            }
+
             return false;
         }
 
@@ -305,8 +310,11 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 Iterator const & iterator
         ) noexcept -> bool {
 
-            /// TODO : come back to this after iterators.
-            return false;
+            return this->__remove (
+                    reinterpret_cast < HashMapDelegateIterator const * > (
+                            HashMap :: acquireDelegate ( iterator )
+                    )->iterator()
+            );
         }
 
 
@@ -315,8 +323,11 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 ConstIterator const & iterator
         ) noexcept -> bool {
 
-            /// TODO : come back to this after iterators.
-            return false;
+            return this->__remove (
+                    reinterpret_cast < HashMapDelegateConstIterator const * > (
+                            HashMap :: acquireDelegate ( iterator )
+                    )->iterator()
+            );
         }
 
 
@@ -325,8 +336,11 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 ReverseIterator const & iterator
         ) noexcept -> bool {
 
-            /// TODO : come back to this after iterators.
-            return false;
+            return this->__remove (
+                    reinterpret_cast < HashMapDelegateIterator const * > (
+                            HashMap :: acquireDelegate ( iterator )
+                    )->iterator()
+            );
         }
 
 
@@ -335,8 +349,11 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 ConstReverseIterator const & iterator
         ) noexcept -> bool {
 
-            /// TODO : come back to this after iterators.
-            return false;
+            return this->__remove (
+                    reinterpret_cast < HashMapDelegateConstIterator const * > (
+                            HashMap :: acquireDelegate ( iterator )
+                    )->iterator()
+            );
         }
 
 
@@ -346,8 +363,14 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 Size                iteratorCount
         ) noexcept -> Size {
 
-            /// TODO : come back to this after iterators.
-            return 0ULL;
+            Size removedCount = 0ULL;
+            for ( Size index = 0ULL; index < iteratorCount; ++ index ) {
+                if ( this->remove ( pIterators [ index ] ) ) {
+                    ++ removedCount;
+                }
+            }
+
+            return removedCount;
         }
 
 
@@ -357,8 +380,14 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 Size                    iteratorCount
         ) noexcept -> Size {
 
-            /// TODO : come back to this after iterators.
-            return 0ULL;
+            Size removedCount = 0ULL;
+            for ( Size index = 0ULL; index < iteratorCount; ++ index ) {
+                if ( this->remove ( pIterators [ index ] ) ) {
+                    ++ removedCount;
+                }
+            }
+
+            return removedCount;
         }
 
 
@@ -368,8 +397,14 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 Size                    iteratorCount
         ) noexcept -> Size {
 
-            /// TODO : come back to this after iterators.
-            return 0ULL;
+            Size removedCount = 0ULL;
+            for ( Size index = 0ULL; index < iteratorCount; ++ index ) {
+                if ( this->remove ( pIterators [ index ] ) ) {
+                    ++ removedCount;
+                }
+            }
+
+            return removedCount;
         }
 
 
@@ -379,8 +414,14 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 Size                            iteratorCount
         ) noexcept -> Size {
 
-            /// TODO : come back to this after iterators.
-            return 0ULL;
+            Size removedCount = 0ULL;
+            for ( Size index = 0ULL; index < iteratorCount; ++ index ) {
+                if ( this->remove ( pIterators [ index ] ) ) {
+                    ++ removedCount;
+                }
+            }
+
+            return removedCount;
         }
 
 

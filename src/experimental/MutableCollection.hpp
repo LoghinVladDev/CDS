@@ -102,6 +102,9 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             ) noexcept -> DelegateIterator const *;
 
         protected:
+            using Collection < __ElementType > :: acquireDelegate;
+
+        protected:
             /**
              * @brief Function used to request a DelegateIterator from the Iterator constructing functions ( begin/end/rbegin/rend ) to acquire a DelegateIterator containing
              *      the implementation from the derived class, of requested iterator type

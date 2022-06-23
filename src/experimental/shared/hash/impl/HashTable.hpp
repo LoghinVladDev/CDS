@@ -809,6 +809,118 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                     return false;
                 }
 
+
+                template <
+                        typename __ElementType,         // NOLINT(bugprone-reserved-identifier)
+                        typename __KeyType,             // NOLINT(bugprone-reserved-identifier)
+                        typename __KeyExtractor,        // NOLINT(bugprone-reserved-identifier)
+                        typename __KeyEqualsComparator, // NOLINT(bugprone-reserved-identifier)
+                        typename __KeyHasher,           // NOLINT(bugprone-reserved-identifier)
+                        typename __RehashPolicy,        // NOLINT(bugprone-reserved-identifier)
+                        typename __ElementTypeDestruct  // NOLINT(bugprone-reserved-identifier)
+                > auto __HashTable <
+                        __ElementType,
+                        __KeyType,
+                        __KeyExtractor,
+                        __KeyEqualsComparator,
+                        __KeyHasher,
+                        __RehashPolicy,
+                        __ElementTypeDestruct
+                > :: __remove (
+                        __DataNode  const * pNode,
+                        Size                bucketIndex
+                ) noexcept -> bool {
+
+                    if ( bucketIndex >= this->_bucketArray._size || pNode == nullptr ) {
+                        return false;
+                    }
+
+                    auto & bucket = this->_bucketArray._pArray [ bucketIndex ];
+                    if ( bucket == nullptr ) {
+                        return false;
+                    }
+
+                    if ( bucket == pNode ) {
+                        __DataNode * pCopy  = bucket;
+                        bucket              = bucket->_pNext;
+
+                        this->__freeNode ( pCopy );
+                        -- this->_totalSize;
+                        return true;
+                    }
+
+                    __DataNode * pHead = bucket;
+                    while ( pHead->_pNext != nullptr ) {
+                        if ( pNode == pHead->_pNext ) {
+
+                            auto pToRemove  = pHead->_pNext;
+                            pHead->_pNext   = pHead->_pNext->_pNext;
+
+                            this->__freeNode ( pToRemove );
+                            -- this->_totalSize;
+                            return true;
+                        }
+
+                        pHead = pHead->_pNext;
+                    }
+
+                    return false;
+                }
+
+
+                template <
+                        typename __ElementType,         // NOLINT(bugprone-reserved-identifier)
+                        typename __KeyType,             // NOLINT(bugprone-reserved-identifier)
+                        typename __KeyExtractor,        // NOLINT(bugprone-reserved-identifier)
+                        typename __KeyEqualsComparator, // NOLINT(bugprone-reserved-identifier)
+                        typename __KeyHasher,           // NOLINT(bugprone-reserved-identifier)
+                        typename __RehashPolicy,        // NOLINT(bugprone-reserved-identifier)
+                        typename __ElementTypeDestruct  // NOLINT(bugprone-reserved-identifier)
+                > __CDS_OptimalInline auto __HashTable <
+                        __ElementType,
+                        __KeyType,
+                        __KeyExtractor,
+                        __KeyEqualsComparator,
+                        __KeyHasher,
+                        __RehashPolicy,
+                        __ElementTypeDestruct
+                > :: __remove (
+                        HashTableIterator const & iterator
+                ) noexcept -> bool {
+
+                    return this->__remove (
+                            iterator.currentNode(),
+                            iterator.bucketIndex()
+                    );
+                }
+
+
+                template <
+                        typename __ElementType,         // NOLINT(bugprone-reserved-identifier)
+                        typename __KeyType,             // NOLINT(bugprone-reserved-identifier)
+                        typename __KeyExtractor,        // NOLINT(bugprone-reserved-identifier)
+                        typename __KeyEqualsComparator, // NOLINT(bugprone-reserved-identifier)
+                        typename __KeyHasher,           // NOLINT(bugprone-reserved-identifier)
+                        typename __RehashPolicy,        // NOLINT(bugprone-reserved-identifier)
+                        typename __ElementTypeDestruct  // NOLINT(bugprone-reserved-identifier)
+                > __CDS_OptimalInline auto __HashTable <
+                        __ElementType,
+                        __KeyType,
+                        __KeyExtractor,
+                        __KeyEqualsComparator,
+                        __KeyHasher,
+                        __RehashPolicy,
+                        __ElementTypeDestruct
+                > :: __remove (
+                        HashTableConstIterator const & iterator
+                ) noexcept -> bool {
+
+                    return this->__remove (
+                            iterator.currentNode(),
+                            iterator.bucketIndex()
+                    );
+                }
+
             }
         }
     }
