@@ -90,19 +90,19 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         protected:
             auto pNewInsert (
                     ElementType const & referenceElement
-            ) noexcept -> ElementType * & override = 0;
+            ) noexcept -> ElementType * override = 0;
 
         public:
             template < typename __VElementType = __ElementType, cds :: meta :: EnableIf < cds :: meta :: isCopyConstructible < __VElementType > () > = 0 > // NOLINT(bugprone-reserved-identifier)
             auto insert (
                     ElementType const & element
-            ) noexcept -> ElementType const &;
+            ) noexcept -> void;
 
         public:
             template < typename __VElementType = __ElementType, cds :: meta :: EnableIf < cds :: meta :: isMoveConstructible < __VElementType > () > = 0 > // NOLINT(bugprone-reserved-identifier)
             auto insert (
                     ElementType && element
-            ) noexcept -> ElementType const &;
+            ) noexcept -> void;
         };
 
     }

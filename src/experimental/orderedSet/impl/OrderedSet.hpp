@@ -128,60 +128,56 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         template < typename __ElementType, typename __ComparatorFunction > // NOLINT(bugprone-reserved-identifier)
         auto OrderedSet < __ElementType, __ComparatorFunction > :: pNewInsert (
                 ElementType const & referenceElement
-        ) noexcept -> ElementType * & {
+        ) noexcept -> ElementType * {
 
             if ( this->empty() ) {
 
-                this->_pFront           = Memory :: instance().create < Node > ();
-                this->_pFront->_pData   = nullptr;
+                this->_pFront           = ListSet < __ElementType > :: __allocateNode ();
                 this->_pFront->_pNext   = nullptr;
                 this->_size             = 1ULL;
 
-                return this->_pFront->_pData;
+                return & this->_pFront->_data.data();
             }
 
-            if ( cds :: meta :: equals ( * this->_pFront->_pData, referenceElement ) ) {
-                return this->_pFront->_pData;
+            if ( cds :: meta :: equals ( this->_pFront->_data.data(), referenceElement ) ) {
+                return nullptr;
             }
 
-            if ( this->_comparatorFunction ( referenceElement, * this->_pFront->_pData ) ) {
+            if ( this->_comparatorFunction ( referenceElement, this->_pFront->_data.data() ) ) {
 
-                auto pNode      = Memory :: instance().create < Node > ();
+                auto pNode      = ListSet < __ElementType > :: __allocateNode ();
                 pNode->_pNext   = this->_pFront;
-                pNode->_pData   = nullptr;
                 this->_pFront   = pNode;
                 ++ this->_size;
 
-                return this->_pFront->_pData;
+                return & this->_pFront->_data.data();
             }
 
             auto pHead = this->_pFront;
             while ( pHead->_pNext != nullptr ) {
 
-                if ( cds :: meta :: equals ( * pHead->_pNext->_pData, referenceElement ) ) {
-                    return pHead->_pNext->_pData;
+                if ( cds :: meta :: equals ( pHead->_pNext->_data.data(), referenceElement ) ) {
+                    return nullptr;
                 }
 
-                if ( this->_comparatorFunction ( referenceElement, * pHead->_pNext->_pData ) ) {
-                    auto pNode      = Memory :: instance().create < Node > ();
-                    pNode->_pData   = nullptr;
+                if ( this->_comparatorFunction ( referenceElement, pHead->_pNext->_data.data() ) ) {
+                    auto pNode      = ListSet < __ElementType > :: __allocateNode ();
                     pNode->_pNext   = pHead->_pNext;
                     pHead->_pNext   = pNode;
                     ++ this->_size;
 
-                    return pHead->_pNext->_pData;
+                    return & pHead->_pNext->_data.data();
                 }
 
                 pHead = pHead->_pNext;
             }
 
-            auto pNode      = Memory :: instance().create < Node > ();
+            auto pNode      = ListSet < __ElementType > :: __allocateNode ();
             pNode->_pNext   = nullptr;
-            pNode->_pData   = nullptr;
             pHead->_pNext   = pNode;
             ++ this->_size;
 
-            return pHead->_pNext->_pData;
+            return & pHead->_pNext->_data.data();
         }
 
 
@@ -203,7 +199,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
             while ( pThisHead != nullptr ) {
 
-                if ( ! cds :: meta :: equals ( * pThisHead->_pData, * pOtherHead->_pData ) ) {
+                if ( ! cds :: meta :: equals ( pThisHead->_data.data(), pOtherHead->_data.data() ) ) {
                     return false;
                 }
 
@@ -239,9 +235,9 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             Node * pLocalBack = nullptr;
             for ( auto pOtherHead = set._pFront; pOtherHead != nullptr; pOtherHead = pOtherHead->_pNext ) {
 
-                auto pNewNode = Memory :: instance().create < Node > ();
+                auto pNewNode = ListSet < __ElementType > :: __allocateNode ();
                 pNewNode->_pNext = nullptr;
-                pNewNode->_pData = Memory :: instance().create < __ElementType > ( * pOtherHead._pData );
+                pNewNode->_pData.construct ( pOtherHead->_data.data() );
 
                 if ( this->_pFront == nullptr ) {
                     this->_pFront       = pNewNode;

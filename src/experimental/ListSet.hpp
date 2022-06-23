@@ -8,6 +8,7 @@
 #include <CDS/experimental/Set>
 
 #include "shared/Node.hpp"
+#include "../shared/memory/PrimitiveAllocation.hpp"
 
 namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
@@ -52,14 +53,25 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                     DelegateIteratorRequestType requestType
             ) const noexcept -> cds :: UniquePointer < DelegateConstIterator > override;
 
+        private:
+            using NodeData = cds :: __hidden :: __impl :: __allocation :: __RawContainer < __ElementType >;
+
         protected:
-            using Node = __hidden :: __impl :: __UnidirectionalNode < __ElementType >;
+            using Node = __hidden :: __impl :: __UnidirectionalNode < NodeData >;
 
         protected:
             Node    * _pFront   { nullptr };
 
         protected:
             Size      _size     { 0ULL };
+
+        protected:
+            static auto __allocateNode () noexcept -> Node *; // NOLINT(bugprone-reserved-identifier)
+
+        protected:
+            static auto __freeNode ( // NOLINT(bugprone-reserved-identifier)
+                    Node * pNode
+            ) noexcept -> void;
 
         protected:
             constexpr ListSet () noexcept;
@@ -115,7 +127,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         protected:
             auto pNewInsert (
                     ElementType const & referenceElement
-            ) noexcept -> ElementType * & override = 0;
+            ) noexcept -> ElementType * override = 0;
 
         public:
             auto clear () noexcept -> void override;

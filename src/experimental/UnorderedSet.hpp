@@ -71,7 +71,7 @@ namespace cds {
         private:
             auto pNewInsert (
                     ElementType const & referenceElement
-            ) noexcept -> ElementType * & override;
+            ) noexcept -> ElementType * override;
 
         public:
             auto operator == (

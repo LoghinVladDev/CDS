@@ -77,10 +77,10 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             Node * _pBack   { nullptr };
 
         private:
-            static auto __allocateNode () noexcept -> Node *;
+            static auto __allocateNode () noexcept -> Node *; // NOLINT(bugprone-reserved-identifier)
 
         private:
-            static auto __freeNode (
+            static auto __freeNode ( // NOLINT(bugprone-reserved-identifier)
                     Node * pNode
             ) noexcept -> void;
 

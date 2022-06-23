@@ -254,9 +254,9 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         template < typename __VElementType, meta :: EnableIf < meta :: isCopyConstructible < __VElementType > () > > // NOLINT(bugprone-reserved-identifier)
         __CDS_OptimalInline auto List < __ElementType > :: pushBack (
                 ElementType const & element
-        ) noexcept -> ElementType & {
+        ) noexcept -> void {
 
-            return * new ( this->pNewBack() ) ElementType ( element );
+            new ( this->pNewBack() ) ElementType ( element );
         }
 
 
@@ -264,9 +264,9 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         template < typename __VElementType, meta :: EnableIf < meta :: isMoveConstructible < __VElementType > () > > // NOLINT(bugprone-reserved-identifier)
         __CDS_OptimalInline auto List < __ElementType > :: pushBack (
                 ElementType && element
-        ) noexcept -> ElementType & {
+        ) noexcept -> void {
 
-            return * new ( this->pNewBack() ) ElementType ( std :: move ( element ) );
+            new ( this->pNewBack() ) ElementType ( std :: move ( element ) );
         }
 
 
@@ -274,9 +274,9 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         template < typename __VElementType, meta :: EnableIf < meta :: isCopyConstructible < __VElementType > () > > // NOLINT(bugprone-reserved-identifier)
         __CDS_OptimalInline auto List < __ElementType > :: pushFront (
                 ElementType const & element
-        ) noexcept -> ElementType & {
+        ) noexcept -> void {
 
-            return * new ( this->pNewFront() ) ElementType ( element );
+            new ( this->pNewFront() ) ElementType ( element );
         }
 
 
@@ -284,9 +284,9 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         template < typename __VElementType, meta :: EnableIf < meta :: isMoveConstructible < __VElementType > () > > // NOLINT(bugprone-reserved-identifier)
         __CDS_OptimalInline auto List < __ElementType > :: pushFront (
                 ElementType && element
-        ) noexcept -> ElementType & {
+        ) noexcept -> void {
 
-            return * new ( this->pNewFront() ) ElementType ( std :: move ( element ) );
+            new ( this->pNewFront() ) ElementType ( std :: move ( element ) );
         }
 
 

@@ -1,6 +1,8 @@
 #include <CDS/experimental/Collection>
 #include <CDS/experimental/Array>
 #include <CDS/experimental/LinkedList>
+#include <CDS/experimental/OrderedSet>
+#include <CDS/experimental/UnorderedSet>
 //#include <CDS/smartPointers/UniquePointer>
 //#include <CDS/meta/TypeTraits>
 //#include <CDS/meta/FunctionTraits>
@@ -53,6 +55,28 @@ int main () {
     }
 
     std :: cout << llstr << '\n';
+
+    cds::experimental::OrderedSet<int> os;
+    os.insert(3);
+    os.insert(2);
+    os.insert(4);
+
+    for ( int i = 0; i < 100; ++ i ) {
+        os.insert(i);
+    }
+
+    std :: cout << os << '\n';
+
+    cds::experimental::UnorderedSet<int> us;
+    us.insert(3);
+    us.insert(2);
+    us.insert(4);
+
+    for ( int i = 0; i < 100; ++ i ) {
+        us.insert(i);
+    }
+
+    std :: cout << us << '\n';
 
 //    cds :: experimental :: HashMap < String, String > m;
 ////    cds :: HashMap < int, int > m;

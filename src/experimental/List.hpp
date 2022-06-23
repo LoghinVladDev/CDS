@@ -480,7 +480,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             template < typename __VElementType = __ElementType, meta :: EnableIf < meta :: isCopyConstructible < __VElementType > () > = 0 > // NOLINT(bugprone-reserved-identifier)
             auto pushFront (
                     ElementType const & element
-            ) noexcept -> ElementType &;
+            ) noexcept -> void;
 
         public:
             /**
@@ -492,7 +492,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             template < typename __VElementType = __ElementType, meta :: EnableIf < meta :: isMoveConstructible < __VElementType > () > = 0 > // NOLINT(bugprone-reserved-identifier)
             auto pushFront (
                     ElementType && element
-            ) noexcept -> ElementType &;
+            ) noexcept -> void;
 
         public:
             /**
@@ -504,7 +504,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             template < typename __VElementType = __ElementType, meta :: EnableIf < meta :: isCopyConstructible < __VElementType > () > = 0 > // NOLINT(bugprone-reserved-identifier)
             auto pushBack (
                     ElementType const & element
-            ) noexcept -> ElementType &;
+            ) noexcept -> void;
 
         public:
             /**
@@ -516,7 +516,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             template < typename __VElementType = __ElementType, meta :: EnableIf < meta :: isMoveConstructible < __VElementType > () > = 0 > // NOLINT(bugprone-reserved-identifier)
             auto pushBack (
                     ElementType && element
-            ) noexcept -> ElementType &;
+            ) noexcept -> void;
 
         public:
             /**

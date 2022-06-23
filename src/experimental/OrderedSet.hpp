@@ -38,7 +38,7 @@ namespace cds {
             using typename ListSet < __ElementType > :: Node;
 
         private:
-            __ComparatorFunction _comparatorFunction;
+            __CDS_NoUniqueAddress __ComparatorFunction _comparatorFunction;
 
         public:
             constexpr OrderedSet () noexcept;
@@ -103,7 +103,7 @@ namespace cds {
         private:
             auto pNewInsert (
                     ElementType const & referenceElement
-            ) noexcept -> ElementType * & override;
+            ) noexcept -> ElementType * override;
 
         public:
             auto operator == (
