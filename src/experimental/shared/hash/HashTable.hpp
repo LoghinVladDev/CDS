@@ -54,16 +54,16 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                     class HashTableConstIterator;
 
                 protected:
-                    __CDS_cpplang_NonConstConstexprMemberFunction auto __begin () noexcept -> HashTableIterator;
+                    __CDS_cpplang_NonConstConstexprMemberFunction auto __begin () noexcept -> HashTableIterator;    // NOLINT(bugprone-reserved-identifier)
 
                 protected:
-                    __CDS_cpplang_NonConstConstexprMemberFunction auto __end () noexcept -> HashTableIterator;
+                    __CDS_cpplang_NonConstConstexprMemberFunction auto __end () noexcept -> HashTableIterator;      // NOLINT(bugprone-reserved-identifier)
 
                 protected:
-                    constexpr auto __cbegin () const noexcept -> HashTableConstIterator;
+                    constexpr auto __cbegin () const noexcept -> HashTableConstIterator;                            // NOLINT(bugprone-reserved-identifier)
 
                 protected:
-                    constexpr auto __cend () const noexcept -> HashTableConstIterator;
+                    constexpr auto __cend () const noexcept -> HashTableConstIterator;                              // NOLINT(bugprone-reserved-identifier)
 
                 protected:
                     using __DataType        = cds :: __hidden :: __impl :: __allocation :: __RawContainer < __ElementType >; // NOLINT(bugprone-reserved-identifier)
@@ -107,9 +107,8 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                     ) noexcept;
 
                 protected:
-                    template <
-                            typename __EntryCopyFunction // NOLINT(bugprone-reserved-identifier)
-                    > __HashTable (
+                    template < typename __EntryCopyFunction > // NOLINT(bugprone-reserved-identifier)
+                    __HashTable (
                             __HashTable         const & hashTable,
                             __EntryCopyFunction const & copyFunction
                     ) noexcept;
@@ -199,7 +198,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                     ) noexcept -> bool;
 
                 private:
-                    auto __remove (
+                    auto __remove (                                             // NOLINT(bugprone-reserved-identifier)
                             __DataNode  const * pNode,
                             Size                bucketIndex
                     ) noexcept -> bool;
@@ -213,6 +212,37 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                     auto __remove (                                             // NOLINT(bugprone-reserved-identifier)
                             HashTableConstIterator const & iterator
                     ) noexcept -> bool;
+
+                protected:
+                    template < typename __EntryCompareFunction >                // NOLINT(bugprone-reserved-identifier)
+                    auto __equals (                                             // NOLINT(bugprone-reserved-identifier)
+                            __HashTable             const & table,
+                            __EntryCompareFunction  const & entryCompareFunction
+                    ) const noexcept -> bool;
+
+                private:
+                    template < typename __EntryCopyFunction >                   // NOLINT(bugprone-reserved-identifier)
+                    auto __copyFrom (                                           // NOLINT(bugprone-reserved-identifier)
+                            __HashTable         const & table,
+                            __EntryCopyFunction const & entryCopyFunction
+                    ) noexcept -> void;
+
+                private:
+                    constexpr auto __moveFrom (                                 // NOLINT(bugprone-reserved-identifier)
+                            __HashTable && table
+                    ) noexcept -> void;
+
+                protected:
+                    template < typename __EntryCopyFunction >                   // NOLINT(bugprone-reserved-identifier)
+                    auto __assign (                                             // NOLINT(bugprone-reserved-identifier)
+                            __HashTable         const & table,
+                            __EntryCopyFunction const & entryCopyFunction
+                    ) noexcept -> void;
+
+                protected:
+                    auto __assign (                                             // NOLINT(bugprone-reserved-identifier)
+                            __HashTable && table
+                    ) noexcept -> void;
                 };
 
             }

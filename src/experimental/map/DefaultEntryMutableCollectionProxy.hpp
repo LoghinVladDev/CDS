@@ -8,8 +8,8 @@
 namespace cds { // NOLINT(modernize-concat-nested-namespaces)
     namespace experimental {
 
-        template < typename __KeyType, typename __ValueType, typename __Hasher > // NOLINT(bugprone-reserved-identifier)
-        class HashMap < __KeyType, __ValueType, __Hasher > :: HashMapEntryMutableCollectionProxy : public AbstractEntryMutableCollectionProxy {
+        template < typename __KeyType, typename __ValueType > // NOLINT(bugprone-reserved-identifier)
+        class Map < __KeyType, __ValueType > :: DefaultEntryMutableCollectionProxy : public AbstractEntryMutableCollectionProxy {
 
         public:
             using typename AbstractEntryMutableCollectionProxy :: EntryType;
@@ -47,21 +47,6 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         protected:
             using typename AbstractEntryMutableCollectionProxy :: DelegateIteratorRequestType;
 
-        private:
-            class HashMapEntryMutableCollectionProxyDelegateIterator;
-
-        private:
-            class HashMapEntryMutableCollectionProxyDelegateConstIterator;
-
-        private:
-            class HashMapEntryMutableCollectionProxyDelegateReverseIterator;
-
-        private:
-            class HashMapEntryMutableCollectionProxyDelegateConstReverseIterator;
-
-        private:
-            friend class HashMap;
-
         public:
             auto delegateIterator (
                     DelegateIteratorRequestType requestType
@@ -73,22 +58,22 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             ) const noexcept -> cds :: UniquePointer < DelegateConstIterator > override;
 
         public:
-            __CDS_Explicit constexpr HashMapEntryMutableCollectionProxy (
-                    HashMap < __KeyType, __ValueType, __Hasher > * pMap
+            __CDS_Explicit constexpr DefaultEntryMutableCollectionProxy (
+                    Map < __KeyType, __ValueType > * pMap
             ) noexcept;
 
         public:
-            constexpr HashMapEntryMutableCollectionProxy (
-                    HashMapEntryMutableCollectionProxy const & collection
+            constexpr DefaultEntryMutableCollectionProxy (
+                    DefaultEntryMutableCollectionProxy const & collection
             ) noexcept;
 
         public:
-            constexpr HashMapEntryMutableCollectionProxy (
-                    HashMapEntryMutableCollectionProxy && collection
+            constexpr DefaultEntryMutableCollectionProxy (
+                    DefaultEntryMutableCollectionProxy && collection
             ) noexcept;
 
         public:
-            __CDS_cpplang_ConstexprDestructor ~HashMapEntryMutableCollectionProxy() noexcept override;
+            __CDS_cpplang_ConstexprDestructor ~DefaultEntryMutableCollectionProxy () noexcept override;
 
         public:
             auto remove (
@@ -112,38 +97,16 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
         public:
             auto operator == (
-                    HashMapEntryMutableCollectionProxy const & collection
+                    DefaultEntryMutableCollectionProxy const & collection
             ) const noexcept -> bool;
 
         public:
             auto operator != (
-                    HashMapEntryMutableCollectionProxy const & collection
+                    DefaultEntryMutableCollectionProxy const & collection
             ) const noexcept -> bool;
 
         public:
             __CDS_NoDiscard auto size () const noexcept -> Size override;
-
-        public:
-            auto operator = (
-                    HashMapEntryMutableCollectionProxy const & collection
-            ) noexcept -> HashMapEntryMutableCollectionProxy;
-
-        public:
-            auto operator = (
-                    HashMapEntryMutableCollectionProxy && collection
-            ) noexcept -> HashMapEntryMutableCollectionProxy;
-
-        public:
-            auto sequence () & noexcept -> Sequence < HashMapEntryMutableCollectionProxy >;
-
-        public:
-            auto sequence () && noexcept -> Sequence < HashMapEntryMutableCollectionProxy >;
-
-        public:
-            auto sequence () const & noexcept -> Sequence < HashMapEntryMutableCollectionProxy const >;
-
-        public:
-            auto sequence () const && noexcept -> Sequence < HashMapEntryMutableCollectionProxy const >;
         };
 
     }

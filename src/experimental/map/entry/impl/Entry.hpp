@@ -111,17 +111,20 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                                 cds :: meta :: isMoveConstructible < __TValueType > ()
                         >
                 > __CDS_cpplang_ConstexprPlacementNew auto __MapEntry < __KeyType, __ValueType > :: moveOrCopyValueTo (
-                        __MapEntry * pEntry
+                        __MapEntry * pEntry,
+                        bool         isNew
                 ) noexcept -> void {
 
-                    if ( this->_value._forward ) {
+                    if ( ! isNew ) {
                         pEntry->_value._pObject->~__ValueType();
+                    }
+
+                    if ( this->_value._forward ) {
                         pEntry->_value._pObject      = new ( pEntry->_value._pObject ) __ValueType ( std :: move ( * this->_value._pObject ) );
 
                         return;
                     }
 
-                    pEntry->_value._pObject->~__ValueType();
                     pEntry->_value._pObject      = new ( pEntry->_value._pObject ) __ValueType ( * this->_value._pConstObject );
                 }
 
@@ -134,10 +137,14 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                                 ! cds :: meta :: isMoveConstructible < __TValueType > ()
                         >
                 > __CDS_cpplang_ConstexprPlacementNew auto __MapEntry < __KeyType, __ValueType > :: moveOrCopyValueTo (
-                        __MapEntry * pEntry
+                        __MapEntry * pEntry,
+                        bool         isNew
                 ) noexcept -> void {
 
-                    pEntry->_value._pObject->~__ValueType();
+                    if ( ! isNew ) {
+                        pEntry->_value._pObject->~__ValueType();
+                    }
+
                     pEntry->_value._pObject      = new ( pEntry->_value._pObject ) __ValueType ( * this->_value._pConstObject );
                 }
 
@@ -150,10 +157,14 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                                 cds :: meta :: isMoveConstructible < __TValueType > ()
                         >
                 > __CDS_cpplang_ConstexprPlacementNew auto __MapEntry < __KeyType, __ValueType > :: moveOrCopyValueTo (
-                        __MapEntry * pEntry
+                        __MapEntry * pEntry,
+                        bool         isNew
                 ) noexcept -> void {
 
-                    pEntry->_value._pObject->~__ValueType();
+                    if ( ! isNew ) {
+                        pEntry->_value._pObject->~__ValueType();
+                    }
+
                     pEntry->_value._pObject      = new ( pEntry->_value._pObject ) __ValueType ( std :: move ( * this->_value._pObject ) );
                 }
 
@@ -166,7 +177,8 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                                 ! cds :: meta :: isMoveConstructible < __TValueType > ()
                         >
                 > constexpr auto __MapEntry < __KeyType, __ValueType > :: moveOrCopyValueTo (
-                        __MapEntry * pEntry
+                        __MapEntry * pEntry,
+                        bool         isNew
                 ) noexcept -> void {
 
                     /// do nothing, unreachable point

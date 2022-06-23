@@ -35,7 +35,7 @@ int main () {
     std :: uniform_int_distribution < uint32 > dist (0U, cds :: limits :: U32_MAX);
 
     auto start = std :: chrono :: system_clock :: now();
-    for ( int i = 0; i < 100000; ++ i ) {
+    for ( int i = 0; i < 1000; ++ i ) {
 
         auto k = dist(mt);
         auto v = dist(mt);
@@ -70,20 +70,51 @@ int main () {
     m.clear();
 
     auto & keys = m.keys();
+    auto & entries = m.entries();
+    auto & values = m.values();
 
     m.emplace ( 2, 4 );
     std :: cout << keys << '\n';
+    std :: cout << entries << '\n';
+    std :: cout << values << '\n';
+    std :: cout << '\n';
 
     m.emplace ( 1, 4 );
     std :: cout << keys << '\n';
+    std :: cout << entries << '\n';
+    std :: cout << values << '\n';
+    std :: cout << '\n';
 
     m.emplace ( 2, 4 );
     std :: cout << keys << '\n';
+    std :: cout << entries << '\n';
+    std :: cout << values << '\n';
+    std :: cout << '\n';
 
     m.emplace ( 3, 4 );
     std :: cout << keys << '\n';
+    std :: cout << entries << '\n';
+    std :: cout << values << '\n';
+    std :: cout << '\n';
 
     m.emplace ( 1, 4 );
+    std :: cout << keys << '\n';
+    std :: cout << entries << '\n';
+    std :: cout << values << '\n';
+    std :: cout << '\n';
+
+    keys.removeFirst ( String(3) );
+    std :: cout << keys << '\n';
+    std :: cout << entries << '\n';
+    std :: cout << values << '\n';
+    std :: cout << '\n';
+
+    auto valueIt = values.begin() ++;
+    values.remove ( valueIt );
+
+    std :: cout << keys << '\n';
+
+    entries.add ( decltype (m)::EntryType ( 1, 2 ) );
     std :: cout << keys << '\n';
 
 ////    auto it1 = testArr.begin();

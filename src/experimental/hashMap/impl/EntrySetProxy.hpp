@@ -80,6 +80,24 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
 
         template < typename __KeyType, typename __ValueType, typename __Hasher > // NOLINT(bugprone-reserved-identifier)
+        __CDS_OptimalInline auto HashMap < __KeyType, __ValueType, __Hasher > :: HashMapKeySetProxy :: operator == (
+                HashMapKeySetProxy const & set
+        ) const noexcept -> bool {
+
+            return this->equals ( set );
+        }
+
+
+        template < typename __KeyType, typename __ValueType, typename __Hasher > // NOLINT(bugprone-reserved-identifier)
+        __CDS_OptimalInline auto HashMap < __KeyType, __ValueType, __Hasher > :: HashMapKeySetProxy :: operator != (
+                HashMapKeySetProxy const & set
+        ) const noexcept -> bool {
+
+            return ! this->equals ( set );
+        }
+
+
+        template < typename __KeyType, typename __ValueType, typename __Hasher > // NOLINT(bugprone-reserved-identifier)
         __CDS_OptimalInline auto HashMap < __KeyType, __ValueType, __Hasher > :: HashMapKeySetProxy :: size () const noexcept -> Size {
 
             return this-> template map < HashMap < __KeyType, __ValueType, __Hasher > > ()->__size ();

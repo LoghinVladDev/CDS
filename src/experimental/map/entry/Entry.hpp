@@ -103,7 +103,8 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                                     cds :: meta :: isMoveConstructible < __TValueType > ()
                             > = 0
                     > __CDS_cpplang_ConstexprPlacementNew auto moveOrCopyValueTo (
-                            __MapEntry * entry
+                            __MapEntry * entry,
+                            bool         isNew
                     ) noexcept -> void;
 
                 private:
@@ -114,7 +115,8 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                                     ! cds :: meta :: isMoveConstructible < __TValueType > ()
                             > = 0
                     > __CDS_cpplang_ConstexprPlacementNew auto moveOrCopyValueTo (
-                            __MapEntry * entry
+                            __MapEntry * entry,
+                            bool         isNew
                     ) noexcept -> void;
 
                 private:
@@ -125,7 +127,8 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                                     cds :: meta :: isMoveConstructible < __TValueType > ()
                             > = 0
                     > __CDS_cpplang_ConstexprPlacementNew auto moveOrCopyValueTo (
-                            __MapEntry * entry
+                            __MapEntry * entry,
+                            bool         isNew
                     ) noexcept -> void;
 
                 private:
@@ -136,7 +139,8 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                                     ! cds :: meta :: isMoveConstructible < __TValueType > ()
                             > = 0
                     > constexpr auto moveOrCopyValueTo (
-                            __MapEntry * entry
+                            __MapEntry * entry,
+                            bool         isNew
                     ) noexcept -> void;
 
                 private:

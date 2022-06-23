@@ -173,7 +173,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 _entryMutableCollectionProxy ( this ) {
 
             for ( auto & entry : initializerList ) {
-                this->add ( entry );
+                this->insert ( entry );
             }
         }
 
@@ -197,7 +197,47 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 _entryMutableCollectionProxy ( this ) {
 
             for ( auto & entry : initializerList ) {
-                this->add ( entry );
+                this->insert ( entry );
+            }
+        }
+
+
+        template < typename __KeyType, typename __ValueType, typename __Hasher > // NOLINT(bugprone-reserved-identifier)
+        template < typename __OtherElementType, typename __TElementType, cds :: meta :: EnableIf < cds :: meta :: isConvertible < __OtherElementType, __TElementType > () > > // NOLINT(bugprone-reserved-identifier)
+        __CDS_OptimalInline HashMap < __KeyType, __ValueType, __Hasher > :: HashMap (
+                Collection < __OtherElementType >   const & collection
+        ) noexcept :
+                _keySetProxy ( this ),
+                _valueMutableCollectionProxy ( this ),
+                _entryMutableCollectionProxy ( this ) {
+
+            for ( auto & entry : collection ) {
+                this->insert ( entry );
+            }
+        }
+
+
+        template < typename __KeyType, typename __ValueType, typename __Hasher > // NOLINT(bugprone-reserved-identifier)
+        template < typename __OtherElementType, typename __TElementType, cds :: meta :: EnableIf < cds :: meta :: isConvertible < __OtherElementType, __TElementType > () > > // NOLINT(bugprone-reserved-identifier)
+        __CDS_OptimalInline HashMap < __KeyType, __ValueType, __Hasher > :: HashMap (
+                Collection < __OtherElementType >   const & collection,
+                __Hasher                            const & hasher
+        ) noexcept :
+                __hidden :: __impl :: __HashTable <
+                        __HashTableElementType,
+                        __HashTableKeyType,
+                        __HashTableFunctionExtractor,
+                        __HashTableFunctionComparator,
+                        __HashTableHasher,
+                        __HashTableRehashPolicy,
+                        __HashTableFunctionDestructor
+                > ( hasher ),
+                _keySetProxy ( this ),
+                _valueMutableCollectionProxy ( this ),
+                _entryMutableCollectionProxy ( this ) {
+
+            for ( auto & entry : collection ) {
+                this->insert ( entry );
             }
         }
 
@@ -240,26 +280,6 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             }
 
             return EntryType ( pEntry->_key.data(), pEntry->_value.data() );
-        }
-
-
-        template < typename __KeyType, typename __ValueType, typename __Hasher > // NOLINT(bugprone-reserved-identifier)
-        __CDS_OptimalInline auto HashMap < __KeyType, __ValueType, __Hasher > :: completeInsertion (
-                EntryType * pEntry
-        ) noexcept -> void {
-
-            bool isNew;
-            auto pNewEntry = this->__get ( pEntry->key(), & isNew );
-            auto entry = EntryType (
-                    pNewEntry->_key.data(),
-                    pNewEntry->_value.data()
-            );
-
-            if ( isNew ) {
-                Map < __KeyType, __ValueType > :: entryMoveOrCopyKeyTo ( & entry, pEntry );
-            }
-
-            Map < __KeyType, __ValueType > :: entryMoveOrCopyValueTo ( & entry, pEntry );
         }
 
 
@@ -429,6 +449,72 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         __CDS_OptimalInline auto HashMap < __KeyType, __ValueType, __Hasher > :: clear () noexcept -> void {
 
             return this->__clear();
+        }
+
+
+        template < typename __KeyType, typename __ValueType, typename __Hasher > // NOLINT(bugprone-reserved-identifier)
+        __CDS_OptimalInline auto HashMap < __KeyType, __ValueType, __Hasher > :: operator == (
+                HashMap const & map
+        ) const noexcept -> bool {
+
+            return this->__equals ( map, __HashTableFunctionEntryEquals () );
+        }
+
+
+        template < typename __KeyType, typename __ValueType, typename __Hasher > // NOLINT(bugprone-reserved-identifier)
+        __CDS_OptimalInline auto HashMap < __KeyType, __ValueType, __Hasher > :: operator != (
+                HashMap const & map
+        ) const noexcept -> bool {
+
+            return ! this->__equals ( map, __HashTableFunctionEntryEquals () );
+        }
+
+
+        template < typename __KeyType, typename __ValueType, typename __Hasher > // NOLINT(bugprone-reserved-identifier)
+        template < typename __VElementType, cds :: meta :: EnableIf < cds :: meta :: isCopyConstructible < __VElementType > () > > // NOLINT(bugprone-reserved-identifier)
+        __CDS_OptimalInline auto HashMap < __KeyType, __ValueType, __Hasher > :: operator = (
+                HashMap const & map
+        ) noexcept -> HashMap & {
+
+            if ( this == & map ) {
+                return * this;
+            }
+
+            this->__assign ( map, __HashTableFunctionCopyConstructor () );
+            return * this;
+        }
+
+
+        template < typename __KeyType, typename __ValueType, typename __Hasher > // NOLINT(bugprone-reserved-identifier)
+        __CDS_OptimalInline auto HashMap < __KeyType, __ValueType, __Hasher > :: operator = (
+                HashMap && map
+        ) noexcept -> HashMap & {
+
+            if ( this == & map ) {
+                return * this;
+            }
+
+            this->__assign ( map );
+            return * this;
+        }
+
+
+        template < typename __KeyType, typename __ValueType, typename __Hasher > // NOLINT(bugprone-reserved-identifier)
+        template < typename __OtherElementType, typename __TElementType, cds :: meta :: EnableIf < cds :: meta :: isConvertible < __OtherElementType, __TElementType > () > > // NOLINT(bugprone-reserved-identifier)
+        __CDS_OptimalInline auto HashMap < __KeyType, __ValueType, __Hasher > :: operator = (
+                Collection < __OtherElementType > const & collection
+        ) noexcept -> HashMap & {
+
+            if ( this == & collection ) {
+                return * this;
+            }
+
+            this->clear();
+            for ( auto const & entry : collection ) {
+                this->insert ( entry );
+            }
+
+            return * this;
         }
 
     }

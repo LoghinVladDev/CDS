@@ -88,7 +88,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             if ( isNew ) {
                 auto newEntry = EntryType ( key, __ValueType () );
                 newEntry.moveOrCopyKeyTo ( & entry );
-                newEntry.moveOrCopyValueTo ( & entry );
+                newEntry.moveOrCopyValueTo ( & entry, isNew );
             }
 
             return entry.value();
@@ -154,47 +154,15 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         template < typename __KeyType, typename __ValueType > // NOLINT(bugprone-reserved-identifier)
         __CDS_OptimalInline auto Map < __KeyType, __ValueType > :: pNewInsertPost () noexcept -> void {
 
-            this->completeInsertion ( this->_pInsertionEntry );
+            bool isNew;
+            auto newEntry = this->entryAt ( this->_pInsertionEntry->key(), isNew );
+
+            if ( isNew ) {
+                this->_pInsertionEntry->moveOrCopyKeyTo ( & newEntry );
+            }
+
+            this->_pInsertionEntry->moveOrCopyValueTo ( & newEntry, isNew );
             Memory :: instance().destroy ( cds :: exchange ( this->_pInsertionEntry, nullptr ) );
-        }
-
-
-        template < typename __KeyType, typename __ValueType > // NOLINT(bugprone-reserved-identifier)
-        __CDS_OptimalInline auto Map < __KeyType, __ValueType > :: entryMoveOrCopyKeyTo (
-                EntryType       * pDestination,
-                EntryType       * pSource
-        ) noexcept -> void {
-
-            pSource->moveOrCopyKeyTo ( pDestination );
-        }
-
-
-        template < typename __KeyType, typename __ValueType > // NOLINT(bugprone-reserved-identifier)
-        __CDS_OptimalInline auto Map < __KeyType, __ValueType > :: entryMoveOrCopyValueTo (
-                EntryType       * pDestination,
-                EntryType       * pSource
-        ) noexcept -> void {
-
-            pSource->moveOrCopyValueTo ( pDestination );
-        }
-
-
-        template < typename __KeyType, typename __ValueType > // NOLINT(bugprone-reserved-identifier)
-        __CDS_OptimalInline auto Map < __KeyType, __ValueType > :: entryCopyTo (
-                EntryType       * pDestination,
-                EntryType const * pSource
-        ) noexcept -> void {
-
-            pSource->copyTo ( pDestination );
-        }
-
-
-        template < typename __KeyType, typename __ValueType > // NOLINT(bugprone-reserved-identifier)
-        constexpr auto Map < __KeyType, __ValueType > :: entryEmpty (
-                EntryType const * pEntry
-        ) noexcept -> bool {
-
-            return pEntry->empty();
         }
 
 
@@ -248,9 +216,14 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 EntryType const & entry
         ) noexcept -> void {
 
-            auto newEntry = this->entryAt ( entry.key() );
-            entry.moveOrCopyKeyTo ( & newEntry );
-            entry.moveOrCopyValueTo ( & newEntry );
+            bool isNew;
+            auto newEntry = this->entryAt ( entry.key(), isNew );
+
+            if ( isNew ) {
+                entry.moveOrCopyKeyTo ( & newEntry );
+            }
+
+            entry.moveOrCopyValueTo ( & newEntry, isNew );
         }
 
 

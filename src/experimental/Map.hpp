@@ -72,6 +72,9 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         protected:
             class AbstractEntryMutableCollectionProxy;
 
+        protected:
+            class DefaultEntryMutableCollectionProxy;
+
         private:
             EntryType * _pInsertionEntry { nullptr };
 
@@ -181,36 +184,8 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                     ElementType const & referenceElement
             ) noexcept -> ElementType * & override;
 
-        protected:
-            virtual auto completeInsertion (
-                    EntryType * pEntry
-            ) noexcept -> void = 0;
-
         private:
             auto pNewInsertPost () noexcept -> void override;
-
-        protected:
-            static auto entryMoveOrCopyKeyTo (
-                    EntryType       * pDestination,
-                    EntryType       * pSource
-            ) noexcept -> void;
-
-        protected:
-            static auto entryMoveOrCopyValueTo (
-                    EntryType       * pDestination,
-                    EntryType       * pSource
-            ) noexcept -> void;
-
-        protected:
-            static auto entryCopyTo (
-                    EntryType       * pDestination,
-                    EntryType const * pSource
-            ) noexcept -> void;
-
-        protected:
-            constexpr static auto entryEmpty (
-                    EntryType const * pEntry
-            ) noexcept -> bool;
 
         public:
             auto contains (
@@ -308,11 +283,13 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 #include "map/AbstractKeySetProxy.hpp"
 #include "map/AbstractValueMutableCollectionProxy.hpp"
 #include "map/AbstractEntryMutableCollectionProxy.hpp"
+#include "map/DefaultEntryMutableCollectionProxy.hpp"
 
 #include "map/impl/AbstractProxy.hpp"
 #include "map/impl/AbstractKeySetProxy.hpp"
 #include "map/impl/AbstractValueMutableCollectionProxy.hpp"
 #include "map/impl/AbstractEntryMutableCollectionProxy.hpp"
+#include "map/impl/DefaultEntryMutableCollectionProxy.hpp"
 
 #include "map/entry/impl/Entry.hpp"
 

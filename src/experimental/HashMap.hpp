@@ -99,6 +99,16 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                             >
                     >;
 
+        protected:
+            using __HashTableFunctionEntryEquals =  // NOLINT(bugprone-reserved-identifier)
+                    FunctionComparator <
+                            __HashTableElementType,
+                            & __hidden :: __impl :: __hashMapDataNodeEquals <
+                                    __KeyType,
+                                    __ValueType
+                            >
+                    >;
+
         public:
             using typename Map < __KeyType, __ValueType > :: ElementType;
 
@@ -148,22 +158,19 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             using typename Map < __KeyType, __ValueType > :: AbstractEntryMutableCollectionProxy;
 
         protected:
+            using typename Map < __KeyType, __ValueType > :: DefaultEntryMutableCollectionProxy;
+
+        protected:
             class HashMapKeySetProxy;
 
         protected:
             class HashMapValueMutableCollectionProxy;
-
-        protected:
-            class HashMapEntryMutableCollectionProxy;
 
         private:
             friend class HashMapKeySetProxy;
 
         private:
             friend class HashMapValueMutableCollectionProxy;
-
-        private:
-            friend class HashMapEntryMutableCollectionProxy;
 
         protected:
             class HashMapDelegateIterator;
@@ -178,7 +185,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             HashMapValueMutableCollectionProxy  _valueMutableCollectionProxy;
 
         private:
-            HashMapEntryMutableCollectionProxy  _entryMutableCollectionProxy;
+            DefaultEntryMutableCollectionProxy  _entryMutableCollectionProxy;
 
         protected:
             __CDS_NoDiscard __CDS_cpplang_ConstexprOverride auto keySetProxy () const noexcept -> AbstractKeySetProxy const & override;
@@ -245,6 +252,19 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             ) noexcept;
 
         public:
+            template < typename __OtherElementType, typename __TElementType = ElementType, cds :: meta :: EnableIf < cds :: meta :: isConvertible < __OtherElementType, __TElementType > () > = 0 > // NOLINT(bugprone-reserved-identifier)
+            __CDS_Explicit HashMap (
+                    Collection < __OtherElementType >   const & collection
+            ) noexcept;
+
+        public:
+            template < typename __OtherElementType, typename __TElementType = ElementType, cds :: meta :: EnableIf < cds :: meta :: isConvertible < __OtherElementType, __TElementType > () > = 0 > // NOLINT(bugprone-reserved-identifier)
+            HashMap (
+                    Collection < __OtherElementType >   const & collection,
+                    __Hasher                            const & hasher
+            ) noexcept;
+
+        public:
             ~HashMap () noexcept override;
 
         public:
@@ -261,11 +281,6 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                     KeyType const & key,
                     bool          & found
             ) const noexcept -> EntryType const override;
-
-        protected:
-            auto completeInsertion (
-                    EntryType * pEntry
-            ) noexcept -> void override;
 
         public:
             auto contains (
@@ -333,6 +348,45 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
         public:
             auto clear () noexcept -> void override;
+
+        public:
+            __CDS_NoDiscard auto operator == (
+                    HashMap const & map
+            ) const noexcept -> bool;
+
+        public:
+            __CDS_NoDiscard auto operator != (
+                    HashMap const & map
+            ) const noexcept -> bool;
+
+        public:
+            template < typename __VElementType = ElementType, cds :: meta :: EnableIf < cds :: meta :: isCopyConstructible < __VElementType > () > = 0 > // NOLINT(bugprone-reserved-identifier)
+            auto operator = (
+                    HashMap const & map
+            ) noexcept -> HashMap &;
+
+        public:
+            auto operator = (
+                    HashMap && map
+            ) noexcept -> HashMap &;
+
+        public:
+            template < typename __OtherElementType, typename __TElementType = ElementType, cds :: meta :: EnableIf < cds :: meta :: isConvertible < __OtherElementType, __TElementType > () > = 0 > // NOLINT(bugprone-reserved-identifier)
+            auto operator = (
+                    Collection < __OtherElementType > const & collection
+            ) noexcept -> HashMap &;
+
+        public:
+            auto sequence () & noexcept -> Sequence < HashMap < __KeyType, __ValueType, __Hasher > >;
+
+        public:
+            auto sequence () && noexcept -> Sequence < HashMap < __KeyType, __ValueType, __Hasher > >;
+
+        public:
+            auto sequence () const & noexcept -> Sequence < HashMap < __KeyType, __ValueType, __Hasher > const >;
+
+        public:
+            auto sequence () const && noexcept -> Sequence < HashMap < __KeyType, __ValueType, __Hasher > const >;
         };
     }
 }
@@ -341,17 +395,13 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
 #include "hashMap/DelegateIterator.hpp"
 #include "hashMap/DelegateConstIterator.hpp"
+#include "hashMap/EntrySetProxy.hpp"
+#include "hashMap/ValueMutableCollectionProxy.hpp"
 
-#include "hashMap/keySet/Proxy.hpp"
 #include "hashMap/keySet/DelegateConstIterator.hpp"
 
-#include "hashMap/valueMutableCollection/Proxy.hpp"
 #include "hashMap/valueMutableCollection/DelegateIterator.hpp"
 #include "hashMap/valueMutableCollection/DelegateConstIterator.hpp"
-
-#include "hashMap/entryMutableCollection/Proxy.hpp"
-#include "hashMap/entryMutableCollection/DelegateIterator.hpp"
-#include "hashMap/entryMutableCollection/DelegateConstIterator.hpp"
 
 #include "../shared/memory/PrimitiveAllocation.hpp"
 #include "shared/hash/impl/HashTable.hpp"
@@ -361,17 +411,15 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 #include "hashMap/impl/HashMap.hpp"
 #include "hashMap/impl/DelegateIterator.hpp"
 #include "hashMap/impl/DelegateConstIterator.hpp"
+#include "hashMap/impl/EntrySetProxy.hpp"
+#include "hashMap/impl/ValueMutableCollectionProxy.hpp"
 
-#include "hashMap/keySet/impl/Proxy.hpp"
 #include "hashMap/keySet/impl/DelegateConstIterator.hpp"
 
-#include "hashMap/valueMutableCollection/impl/Proxy.hpp"
 #include "hashMap/valueMutableCollection/impl/DelegateIterator.hpp"
 #include "hashMap/valueMutableCollection/impl/DelegateConstIterator.hpp"
 
-#include "hashMap/entryMutableCollection/impl/Proxy.hpp"
-#include "hashMap/entryMutableCollection/impl/DelegateIterator.hpp"
-#include "hashMap/entryMutableCollection/impl/DelegateConstIterator.hpp"
+#include "shared/hashMap/impl/HashMapSequence.hpp"
 
 
 #endif // __CDS_EX_HASH_MAP_HPP__

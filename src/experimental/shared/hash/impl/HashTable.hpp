@@ -127,7 +127,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                         typename __ElementTypeDestruct  // NOLINT(bugprone-reserved-identifier)
                 >
                 template < typename __EntryCopyFunction > // NOLINT(bugprone-reserved-identifier)
-                __HashTable <
+                __CDS_OptimalInline __HashTable <
                         __ElementType,
                         __KeyType,
                         __KeyExtractor,
@@ -139,39 +139,12 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                         __HashTable         const & hashTable,
                         __EntryCopyFunction const & copyFunction
                 ) noexcept :
-                        _totalSize ( hashTable._totalSize ),
                         __HashTableUtils < KeyHasher, RehashPolicy > ( hashTable ) {
 
-                    if ( hashTable.__empty() ) {
-                        return;
-                    }
-
-                    this->__allocateBuckets ( hashTable.__bucketCount() );
-                    for ( Size bucketIndex = 0ULL; bucketIndex < hashTable.__bucketCount(); ++ bucketIndex ) {
-
-                        auto & thisBucket   = this->__bucket ( bucketIndex );
-                        auto & tableBucket  = hashTable.__bucket ( bucketIndex );
-
-                        __DataNode * pTableHead     = tableBucket;
-                        __DataNode * pThisBack      = nullptr;
-
-                        while ( pTableHead != nullptr ) {
-
-                            auto pNewNode       = this->__allocateNode ();
-                            pNewNode->_pNext    = nullptr;
-                            copyFunction ( pNewNode->_data.data(), pTableHead->_data.data() );
-
-                            pTableHead = pTableHead->_pNext;
-
-                            if ( pThisBack == nullptr ) {
-                                thisBucket          = pNewNode;
-                            } else {
-                                pThisBack->_pNext   = pNewNode;
-                            }
-
-                            pThisBack = pNewNode;
-                        }
-                    }
+                    this->__copyFrom (
+                            hashTable,
+                            copyFunction
+                    );
                 }
 
 
@@ -194,13 +167,9 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                 > :: __HashTable (
                         __HashTable && hashTable
                 ) noexcept :
-                        __HashTableUtils < KeyHasher, RehashPolicy > ( hashTable ),
-                        _totalSize ( cds :: exchange ( hashTable._totalSize, 0ULL ) ),
-                        _bucketArray ( {
-                            cds :: exchange ( hashTable._bucketArray._pArray, nullptr ),
-                            cds :: exchange ( hashTable._bucketArray._size, 0ULL )
-                        } ) {
+                        __HashTableUtils < KeyHasher, RehashPolicy > ( hashTable ) {
 
+                    this->__moveFrom ( std :: move ( hashTable ) );
                 }
 
 
@@ -919,6 +888,207 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                             iterator.currentNode(),
                             iterator.bucketIndex()
                     );
+                }
+
+
+                template <
+                        typename __ElementType,         // NOLINT(bugprone-reserved-identifier)
+                        typename __KeyType,             // NOLINT(bugprone-reserved-identifier)
+                        typename __KeyExtractor,        // NOLINT(bugprone-reserved-identifier)
+                        typename __KeyEqualsComparator, // NOLINT(bugprone-reserved-identifier)
+                        typename __KeyHasher,           // NOLINT(bugprone-reserved-identifier)
+                        typename __RehashPolicy,        // NOLINT(bugprone-reserved-identifier)
+                        typename __ElementTypeDestruct  // NOLINT(bugprone-reserved-identifier)
+                > template < typename __EntryCompareFunction > // NOLINT(bugprone-reserved-identifier)
+                auto __HashTable <
+                        __ElementType,
+                        __KeyType,
+                        __KeyExtractor,
+                        __KeyEqualsComparator,
+                        __KeyHasher,
+                        __RehashPolicy,
+                        __ElementTypeDestruct
+                > :: __equals (
+                        __HashTable             const & table,
+                        __EntryCompareFunction  const & entryCompareFunction
+                ) const noexcept -> bool {
+
+                    if ( this == & table ) {
+                        return true;
+                    }
+
+                    if ( this->__empty() ) {
+                        return table.__empty();
+                    }
+
+                    if ( table.__empty() || this->__bucketCount () != table.__bucketCount () ) {
+                        return false;
+                    }
+
+                    for ( Size bucketIndex = 0ULL; bucketIndex < this->__bucketCount(); ++ bucketIndex ) {
+
+                        auto pThisBucketHead    = this->_bucketArray._pArray [ bucketIndex ];
+                        auto pOtherBucketHead   = table._bucketArray._pArray [ bucketIndex ];
+
+                        while ( pThisBucketHead != nullptr && pOtherBucketHead != nullptr ) {
+                            if ( ! entryCompareFunction ( pThisBucketHead->_data.data(), pOtherBucketHead->_data.data() ) ) {
+                                return false;
+                            }
+                        }
+
+                        if ( pThisBucketHead != nullptr || pOtherBucketHead != nullptr ) {
+                            return false;
+                        }
+                    }
+
+                    return true;
+                }
+
+
+                template <
+                        typename __ElementType,         // NOLINT(bugprone-reserved-identifier)
+                        typename __KeyType,             // NOLINT(bugprone-reserved-identifier)
+                        typename __KeyExtractor,        // NOLINT(bugprone-reserved-identifier)
+                        typename __KeyEqualsComparator, // NOLINT(bugprone-reserved-identifier)
+                        typename __KeyHasher,           // NOLINT(bugprone-reserved-identifier)
+                        typename __RehashPolicy,        // NOLINT(bugprone-reserved-identifier)
+                        typename __ElementTypeDestruct  // NOLINT(bugprone-reserved-identifier)
+                > template < typename __EntryCopyFunction > // NOLINT(bugprone-reserved-identifier)
+                auto __HashTable <
+                        __ElementType,
+                        __KeyType,
+                        __KeyExtractor,
+                        __KeyEqualsComparator,
+                        __KeyHasher,
+                        __RehashPolicy,
+                        __ElementTypeDestruct
+                > :: __copyFrom (
+                        __HashTable         const & table,
+                        __EntryCopyFunction const & entryCopyFunction
+                ) noexcept -> void {
+
+                    if ( table.__empty() ) {
+                        return;
+                    }
+
+                    this->_totalSize = table._totalSize;
+                    this->__allocateBuckets ( table.__bucketCount() );
+                    for ( Size bucketIndex = 0ULL; bucketIndex < table.__bucketCount(); ++ bucketIndex ) {
+
+                        auto & thisBucket   = this->__bucket ( bucketIndex );
+                        auto & tableBucket  = table.__bucket ( bucketIndex );
+
+                        __DataNode * pTableHead     = tableBucket;
+                        __DataNode * pThisBack      = nullptr;
+
+                        while ( pTableHead != nullptr ) {
+
+                            auto pNewNode       = this->__allocateNode ();
+                            pNewNode->_pNext    = nullptr;
+                            entryCopyFunction ( pNewNode->_data.data(), pTableHead->_data.data() );
+
+                            pTableHead = pTableHead->_pNext;
+
+                            if ( pThisBack == nullptr ) {
+                                thisBucket          = pNewNode;
+                            } else {
+                                pThisBack->_pNext   = pNewNode;
+                            }
+
+                            pThisBack = pNewNode;
+                        }
+                    }
+                }
+
+
+                template <
+                        typename __ElementType,         // NOLINT(bugprone-reserved-identifier)
+                        typename __KeyType,             // NOLINT(bugprone-reserved-identifier)
+                        typename __KeyExtractor,        // NOLINT(bugprone-reserved-identifier)
+                        typename __KeyEqualsComparator, // NOLINT(bugprone-reserved-identifier)
+                        typename __KeyHasher,           // NOLINT(bugprone-reserved-identifier)
+                        typename __RehashPolicy,        // NOLINT(bugprone-reserved-identifier)
+                        typename __ElementTypeDestruct  // NOLINT(bugprone-reserved-identifier)
+                > constexpr auto __HashTable <
+                        __ElementType,
+                        __KeyType,
+                        __KeyExtractor,
+                        __KeyEqualsComparator,
+                        __KeyHasher,
+                        __RehashPolicy,
+                        __ElementTypeDestruct
+                > :: __moveFrom (
+                        __HashTable && table
+                ) noexcept -> void {
+
+                    this->_totalSize    = cds :: exchange ( table._totalSize, 0ULL );
+                    this->_bucketArray  = {
+                            cds :: exchange ( table._bucketArray._pArray, nullptr ),
+                            cds :: exchange ( table._bucketArray._size, 0ULL )
+                    };
+                }
+
+
+                template <
+                        typename __ElementType,         // NOLINT(bugprone-reserved-identifier)
+                        typename __KeyType,             // NOLINT(bugprone-reserved-identifier)
+                        typename __KeyExtractor,        // NOLINT(bugprone-reserved-identifier)
+                        typename __KeyEqualsComparator, // NOLINT(bugprone-reserved-identifier)
+                        typename __KeyHasher,           // NOLINT(bugprone-reserved-identifier)
+                        typename __RehashPolicy,        // NOLINT(bugprone-reserved-identifier)
+                        typename __ElementTypeDestruct  // NOLINT(bugprone-reserved-identifier)
+                > template < typename __EntryCopyFunction > // NOLINT(bugprone-reserved-identifier)
+                __CDS_OptimalInline auto __HashTable <
+                        __ElementType,
+                        __KeyType,
+                        __KeyExtractor,
+                        __KeyEqualsComparator,
+                        __KeyHasher,
+                        __RehashPolicy,
+                        __ElementTypeDestruct
+                > :: __assign (
+                        __HashTable         const & table,
+                        __EntryCopyFunction const & entryCopyFunction
+                ) noexcept -> void {
+
+                    if ( this == & table ) {
+                        return * this;
+                    }
+
+                    this->__clear();
+                    this->__copyFrom (
+                            table,
+                            entryCopyFunction
+                    );
+                }
+
+
+                template <
+                        typename __ElementType,         // NOLINT(bugprone-reserved-identifier)
+                        typename __KeyType,             // NOLINT(bugprone-reserved-identifier)
+                        typename __KeyExtractor,        // NOLINT(bugprone-reserved-identifier)
+                        typename __KeyEqualsComparator, // NOLINT(bugprone-reserved-identifier)
+                        typename __KeyHasher,           // NOLINT(bugprone-reserved-identifier)
+                        typename __RehashPolicy,        // NOLINT(bugprone-reserved-identifier)
+                        typename __ElementTypeDestruct  // NOLINT(bugprone-reserved-identifier)
+                > __CDS_OptimalInline auto __HashTable <
+                        __ElementType,
+                        __KeyType,
+                        __KeyExtractor,
+                        __KeyEqualsComparator,
+                        __KeyHasher,
+                        __RehashPolicy,
+                        __ElementTypeDestruct
+                > :: __assign (
+                        __HashTable && table
+                ) noexcept -> void {
+
+                    if ( this == & table ) {
+                        return * this;
+                    }
+
+                    this->__clear();
+                    this->__moveFrom ( std :: move ( table ) );
                 }
 
             }

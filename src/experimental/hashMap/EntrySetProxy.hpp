@@ -89,18 +89,6 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
         public:
             __CDS_NoDiscard auto size () const noexcept -> Size override;
-
-        public:
-            auto sequence () & noexcept -> Sequence < HashMapKeySetProxy >;
-
-        public:
-            auto sequence () && noexcept -> Sequence < HashMapKeySetProxy >;
-
-        public:
-            auto sequence () const & noexcept -> Sequence < HashMapKeySetProxy const >;
-
-        public:
-            auto sequence () const && noexcept -> Sequence < HashMapKeySetProxy const >;
         };
 
     }

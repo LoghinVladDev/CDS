@@ -54,12 +54,6 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             class HashMapValueMutableCollectionProxyDelegateConstIterator;
 
         private:
-            class HashMapValueMutableCollectionProxyDelegateReverseIterator;
-
-        private:
-            class HashMapValueMutableCollectionProxyDelegateConstReverseIterator;
-
-        private:
             friend class HashMap;
 
         public:
@@ -122,18 +116,6 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
         public:
             __CDS_NoDiscard auto size () const noexcept -> Size override;
-
-        public:
-            auto sequence () & noexcept -> Sequence < HashMapValueMutableCollectionProxy >;
-
-        public:
-            auto sequence () && noexcept -> Sequence < HashMapValueMutableCollectionProxy >;
-
-        public:
-            auto sequence () const & noexcept -> Sequence < HashMapValueMutableCollectionProxy const >;
-
-        public:
-            auto sequence () const && noexcept -> Sequence < HashMapValueMutableCollectionProxy const >;
         };
 
     }

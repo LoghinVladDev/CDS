@@ -54,6 +54,20 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                     destinationDataNode._value.construct ( sourceDataNode._value.data() );
                 }
 
+
+                template <
+                        typename __KeyType,                         // NOLINT(bugprone-reserved-identifier)
+                        typename __ValueType                        // NOLINT(bugprone-reserved-identifier)
+                > constexpr auto __hashMapDataNodeEquals (          // NOLINT(bugprone-reserved-identifier)
+                        __HashMapDataNode < __KeyType, __ValueType >  const & leftNode,
+                        __HashMapDataNode < __KeyType, __ValueType >  const & rightNode
+                ) noexcept -> bool {
+
+                    return
+                            cds :: meta :: equals ( leftNode._key.data(), rightNode._key.data() ) &&
+                            cds :: meta :: equals ( leftNode._value.data(), rightNode._value.data() );
+                }
+
             }
         }
     }
