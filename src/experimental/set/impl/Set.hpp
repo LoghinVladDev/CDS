@@ -50,6 +50,15 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
 
         template < typename __ElementType, cds :: meta :: EnableIf < meta :: isValidSetElement < __ElementType > () > __enabler > // NOLINT(bugprone-reserved-identifier)
+        __CDS_OptimalInline auto Set < __ElementType, __enabler > :: remove (
+                ElementType const & element
+        ) noexcept -> bool {
+
+            return this->removeFirst ( element );
+        }
+
+
+        template < typename __ElementType, cds :: meta :: EnableIf < meta :: isValidSetElement < __ElementType > () > __enabler > // NOLINT(bugprone-reserved-identifier)
         template < typename __VElementType, cds :: meta :: EnableIf < cds :: meta :: isCopyConstructible < __VElementType > () > > // NOLINT(bugprone-reserved-identifier)
         auto Set < __ElementType, __enabler > :: insert (
                 ElementType const & element

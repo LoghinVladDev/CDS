@@ -224,15 +224,15 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
         protected:
             /**
-             * @brief Function used in Collection :: add implementation, called to acquire a pointer reference to allocate the new element to
+             * @brief Function used in Collection :: add implementation, called to acquire a pointer to emplace the element to
              * @param referenceElement : ElementType cref = Constant Reference to the element to be added, as a reference, if implementation requires specific placement
              * @exceptsafe
-             * @return ElementType ptr ref = Reference to an ElementType pointer.
+             * @return ElementType ptr = Pointer to an ElementType.
              * @test tested in collection/Collection test
              */
             auto pNewInsert (
                     ElementType const & referenceElement
-            ) noexcept -> ElementType * & override;
+            ) noexcept -> ElementType * override;
 
         public:
             /**
@@ -361,18 +361,18 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
              * @brief Function used to create and return the storage space for a new element, at the front of the list.
              *      Used in pushFront
              * @exceptsafe
-             * @return ElementType ptr ref = Reference to the address value to allocate the new element at
+             * @return ElementType ptr = address value to emplace the new element at
              */
-            virtual auto pNewFront () noexcept -> ElementType * & = 0;
+            virtual auto pNewFront () noexcept -> ElementType * = 0;
 
         protected:
             /**
              * @brief Function used to create and return the storage space for a new element, at the back of the list.
              *      Used in pushBack
              * @exceptsafe
-             * @return ElementType ptr ref = Reference to the address value to allocate the new element at
+             * @return ElementType ptr = address value to emplace the new element at
              */
-            virtual auto pNewBack () noexcept -> ElementType * & = 0;
+            virtual auto pNewBack () noexcept -> ElementType * = 0;
 
         protected:
             /**
@@ -380,11 +380,11 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
              *      Used in insertBefore
              * @param iterator : Iterator cref = the iterator indicating the position to insert before
              * @exceptsafe
-             * @return ElementType ptr ref = Reference to the address value to allocate the new element at
+             * @return ElementType ptr = address value to emplace the new element at
              */
             virtual auto pNewBefore (
                     Iterator const & iterator
-            ) noexcept -> ElementType * & = 0;
+            ) noexcept -> ElementType * = 0;
 
         protected:
             /**
@@ -392,11 +392,11 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
              *      Used in insertAfter
              * @param iterator : Iterator cref = the iterator indicating the position to insert after
              * @exceptsafe
-             * @return ElementType ptr ref = Reference to the address value to allocate the new element at
+             * @return ElementType ptr = address value to emplace the new element at
              */
             virtual auto pNewAfter (
                     Iterator const & iterator
-            ) noexcept -> ElementType * & = 0;
+            ) noexcept -> ElementType * = 0;
 
         protected:
             /**
@@ -404,11 +404,11 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
              *      Used in insertBefore
              * @param iterator : ConstIterator cref = the iterator indicating the position to insert before
              * @exceptsafe
-             * @return ElementType ptr ref = Reference to the address value to allocate the new element at
+             * @return ElementType ptr = address value to emplace the new element at
              */
             virtual auto pNewBefore (
                     ConstIterator const & iterator
-            ) noexcept -> ElementType * & = 0;
+            ) noexcept -> ElementType * = 0;
 
         protected:
             /**
@@ -416,11 +416,11 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
              *      Used in insertAfter
              * @param iterator : ConstIterator cref = the iterator indicating the position to insert after
              * @exceptsafe
-             * @return ElementType ptr ref = Reference to the address value to allocate the new element at
+             * @return ElementType ptr = address value to emplace the new element at
              */
             virtual auto pNewAfter (
                     ConstIterator const & iterator
-            ) noexcept -> ElementType * & = 0;
+            ) noexcept -> ElementType * = 0;
 
         protected:
             /**
@@ -428,11 +428,11 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
              *      Used in insertBefore
              * @param iterator : ReverseIterator cref = the iterator indicating the position to insert before
              * @exceptsafe
-             * @return ElementType ptr ref = Reference to the address value to allocate the new element at
+             * @return ElementType ptr = address value to emplace the new element at
              */
             virtual auto pNewBefore (
                     ReverseIterator const & iterator
-            ) noexcept -> ElementType * & = 0;
+            ) noexcept -> ElementType * = 0;
 
         protected:
             /**
@@ -440,11 +440,11 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
              *      Used in insertAfter
              * @param iterator : ReverseIterator cref = the iterator indicating the position to insert after
              * @exceptsafe
-             * @return ElementType ptr ref = Reference to the address value to allocate the new element at
+             * @return ElementType ptr = address value to emplace the new element at
              */
             virtual auto pNewAfter (
                     ReverseIterator const & iterator
-            ) noexcept -> ElementType * & = 0;
+            ) noexcept -> ElementType * = 0;
 
         protected:
             /**
@@ -452,11 +452,11 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
              *      Used in insertBefore
              * @param iterator : ConstReverseIterator cref = the iterator indicating the position to insert before
              * @exceptsafe
-             * @return ElementType ptr ref = Reference to the address value to allocate the new element at
+             * @return ElementType ptr = address value to emplace the new element at
              */
             virtual auto pNewBefore (
                     ConstReverseIterator const & iterator
-            ) noexcept -> ElementType * & = 0;
+            ) noexcept -> ElementType * = 0;
 
         protected:
             /**
@@ -464,11 +464,11 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
              *      Used in insertAfter
              * @param iterator : ConstReverseIterator cref = the iterator indicating the position to insert after
              * @exceptsafe
-             * @return ElementType ptr ref = Reference to the address value to allocate the new element at
+             * @return ElementType ptr = address value to emplace the new element at
              */
             virtual auto pNewAfter (
                     ConstReverseIterator const & iterator
-            ) noexcept -> ElementType * & = 0;
+            ) noexcept -> ElementType * = 0;
 
         public:
             /**

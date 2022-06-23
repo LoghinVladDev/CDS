@@ -168,7 +168,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
         __CDS_OptimalInline auto List < __ElementType > :: pNewInsert (
                 ElementType const & referenceElement
-        ) noexcept -> ElementType * & {
+        ) noexcept -> ElementType * {
 
             (void) referenceElement;
             return this->pNewBack();
@@ -256,13 +256,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 ElementType const & element
         ) noexcept -> ElementType & {
 
-            auto & pNew = this->pNewBack();
-            if ( pNew != nullptr ) {
-                return * pNew;
-            }
-
-            pNew = Memory :: instance().create < ElementType > ( element );
-            return * pNew;
+            return * new ( this->pNewBack() ) ElementType ( element );
         }
 
 
@@ -272,13 +266,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 ElementType && element
         ) noexcept -> ElementType & {
 
-            auto & pNew = this->pNewBack();
-            if ( pNew != nullptr ) {
-                return * pNew;
-            }
-
-            pNew = Memory :: instance().create < ElementType > ( std :: move ( element ) );
-            return * pNew;
+            return * new ( this->pNewBack() ) ElementType ( std :: move ( element ) );
         }
 
 
@@ -288,13 +276,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 ElementType const & element
         ) noexcept -> ElementType & {
 
-            auto & pNew = this->pNewFront();
-            if ( pNew != nullptr ) {
-                return * pNew;
-            }
-
-            pNew = Memory :: instance().create < ElementType > ( element );
-            return * pNew;
+            return * new ( this->pNewFront() ) ElementType ( element );
         }
 
 
@@ -304,13 +286,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 ElementType && element
         ) noexcept -> ElementType & {
 
-            auto & pNew = this->pNewFront();
-            if ( pNew != nullptr ) {
-                return * pNew;
-            }
-
-            pNew = Memory :: instance().create < ElementType > ( std :: move ( element ) );
-            return * pNew;
+            return * new ( this->pNewFront() ) ElementType ( std :: move ( element ) );
         }
 
 

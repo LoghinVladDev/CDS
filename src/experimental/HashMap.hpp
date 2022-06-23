@@ -14,6 +14,10 @@
 #include "hashMap/HashTableConstructs.hpp"
 
 namespace cds { // NOLINT(modernize-concat-nested-namespaces)
+
+    template < typename __CollectionType > // NOLINT(bugprone-reserved-identifier)
+    class Sequence;
+
     namespace experimental {
 
         template <
@@ -26,9 +30,9 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                         __hidden :: __impl :: __HashMapDataNode < __KeyType, __ValueType >,
                         __KeyType,
                         FunctionExtractor <
-                                cds :: experimental :: __hidden :: __impl :: __HashMapDataNode < __KeyType, __ValueType >,
-                                __ValueType,
-                                & cds :: experimental :: __hidden :: __impl :: __hashMapDataNodeKeyExtractor <
+                                __hidden :: __impl :: __HashMapDataNode < __KeyType, __ValueType >,
+                                __KeyType,
+                                & __hidden :: __impl :: __hashMapDataNodeKeyExtractor <
                                         __KeyType,
                                         __ValueType
                                 >
@@ -37,8 +41,8 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                         __Hasher,
                         cds :: __hidden :: __impl :: __PrimeRehashPolicy,
                         FunctionDestructor <
-                                cds :: experimental :: __hidden :: __impl :: __HashMapDataNode < __KeyType, __ValueType >,
-                                & cds :: experimental :: __hidden :: __impl :: __hashMapDataNodeDestructor < __KeyType, __ValueType >
+                                __hidden :: __impl :: __HashMapDataNode < __KeyType, __ValueType >,
+                                & __hidden :: __impl :: __hashMapDataNodeDestructor < __KeyType, __ValueType >
                         >
                 > {
 
@@ -57,7 +61,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             using __HashTableFunctionExtractor =    // NOLINT(bugprone-reserved-identifier)
                     FunctionExtractor <
                             __HashTableElementType,
-                            __ValueType,
+                            __HashTableKeyType,
                             & __hidden :: __impl :: __hashMapDataNodeKeyExtractor <
                                     __KeyType,
                                     __ValueType
@@ -418,6 +422,8 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
 #include "hashMap/valueMutableCollection/impl/DelegateIterator.hpp"
 #include "hashMap/valueMutableCollection/impl/DelegateConstIterator.hpp"
+
+#include "hashMap/CTAD.hpp"
 
 #include "shared/hashMap/impl/HashMapSequence.hpp"
 

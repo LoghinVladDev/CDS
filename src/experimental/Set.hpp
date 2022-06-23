@@ -61,6 +61,11 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             auto clear () noexcept -> void override = 0;
 
         public:
+            virtual auto remove (
+                    ElementType const & element
+            ) noexcept -> bool;
+
+        public:
             auto remove (
                     ConstIterator const & iterator
             ) noexcept -> bool override = 0;

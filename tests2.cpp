@@ -1,18 +1,18 @@
 #include <CDS/experimental/Collection>
-#include <CDS/Array>
-#include <CDS/smartPointers/UniquePointer>
-#include <CDS/meta/TypeTraits>
-#include <CDS/meta/FunctionTraits>
-#include <CDS/Pair>
-#include <CDS/Tuple>
-#include <CDS/Pointer>
 #include <CDS/experimental/Array>
-#include <CDS/experimental/HashSet>
-#include <CDS/String>
-#include <CDS/experimental/OrderedSet>
-#include <CDS/experimental/UnorderedSet>
-#include <CDS/experimental/HashMap>
-#include <CDS/HashMap>
+//#include <CDS/smartPointers/UniquePointer>
+//#include <CDS/meta/TypeTraits>
+//#include <CDS/meta/FunctionTraits>
+//#include <CDS/Pair>
+//#include <CDS/Tuple>
+//#include <CDS/Pointer>
+//#include <CDS/experimental/Array>
+//#include <CDS/experimental/HashSet>
+//#include <CDS/String>
+//#include <CDS/experimental/OrderedSet>
+//#include <CDS/experimental/UnorderedSet>
+//#include <CDS/experimental/HashMap>
+//#include <CDS/HashMap>
 #include <chrono>
 
 #include <random>
@@ -23,38 +23,51 @@ using namespace cds :: literals;
 
 
 int main () {
-    cds :: experimental :: HashMap < String, String > m;
-//    cds :: HashMap < int, int > m;
 
-//    struct _h {
-//        auto operator () (String const & s)const{ return s.hash(); }
-//    };
-//    std :: unordered_map < String, String, _h > m;
-    std :: random_device rd;
-    std :: mt19937 mt(rd());
-    std :: uniform_int_distribution < uint32 > dist (0U, cds :: limits :: U32_MAX);
+    cds :: experimental :: Array < String > arr;
 
-    auto start = std :: chrono :: system_clock :: now();
-    for ( int i = 0; i < 1000; ++ i ) {
-
-        auto k = dist(mt);
-        auto v = dist(mt);
-        m.emplace ( k, v );
-
-        if ( m[k] != String(v) ) {
-            std :: cout << "ohoh\n";
-        }
+    for ( int i = 0; i < 10000; ++ i ) {
+        arr.pushBack(i);
     }
 
-    for ( auto & e : m ) {
-        std :: cout << e.key() << ':' << e.value() << '\n';
-        e.value() = 3;
+    std :: cout << arr << '\n';
+
+    for ( int i = 0; i < arr.size(); ++ i ) {
+        std :: cout << arr.data()[i] << '\n';
     }
 
-    for ( auto const & e : m ) {
-        std :: cout << e.key() << ':' << e.value() << '\n';
+//    cds :: experimental :: HashMap < String, String > m;
+////    cds :: HashMap < int, int > m;
+//
+////    struct _h {
+////        auto operator () (String const & s)const{ return s.hash(); }
+////    };
+////    std :: unordered_map < String, String, _h > m;
+//    std :: random_device rd;
+//    std :: mt19937 mt(rd());
+//    std :: uniform_int_distribution < uint32 > dist (0U, cds :: limits :: U32_MAX);
+//
+//    auto start = std :: chrono :: system_clock :: now();
+//    for ( int i = 0; i < 1000; ++ i ) {
+//
+//        auto k = dist(mt);
+//        auto v = dist(mt);
+//        m.emplace ( k, v );
+//
+//        if ( m[k] != String(v) ) {
+//            std :: cout << "ohoh\n";
+//        }
+//    }
+//
+//    for ( auto & e : m ) {
+//        std :: cout << e.key() << ':' << e.value() << '\n';
 //        e.value() = 3;
-    }
+//    }
+//
+//    for ( auto const & e : m ) {
+//        std :: cout << e.key() << ':' << e.value() << '\n';
+////        e.value() = 3;
+//    }
 
 //    m.clear();
 //
@@ -62,60 +75,60 @@ int main () {
 //    std :: cout << m[1] << '\n';
 
 //    std :: cout << m.bucket_count() << '\n';
-    auto end = std :: chrono :: system_clock :: now();
-    std :: cout
-            << "Duration : "
-            << std :: chrono :: duration_cast < std :: chrono :: milliseconds > ( end - start ).count() << '\n';
-
-    m.clear();
-
-    auto & keys = m.keys();
-    auto & entries = m.entries();
-    auto & values = m.values();
-
-    m.emplace ( 2, 4 );
-    std :: cout << keys << '\n';
-    std :: cout << entries << '\n';
-    std :: cout << values << '\n';
-    std :: cout << '\n';
-
-    m.emplace ( 1, 4 );
-    std :: cout << keys << '\n';
-    std :: cout << entries << '\n';
-    std :: cout << values << '\n';
-    std :: cout << '\n';
-
-    m.emplace ( 2, 4 );
-    std :: cout << keys << '\n';
-    std :: cout << entries << '\n';
-    std :: cout << values << '\n';
-    std :: cout << '\n';
-
-    m.emplace ( 3, 4 );
-    std :: cout << keys << '\n';
-    std :: cout << entries << '\n';
-    std :: cout << values << '\n';
-    std :: cout << '\n';
-
-    m.emplace ( 1, 4 );
-    std :: cout << keys << '\n';
-    std :: cout << entries << '\n';
-    std :: cout << values << '\n';
-    std :: cout << '\n';
-
-    keys.removeFirst ( String(3) );
-    std :: cout << keys << '\n';
-    std :: cout << entries << '\n';
-    std :: cout << values << '\n';
-    std :: cout << '\n';
-
-    auto valueIt = values.begin() ++;
-    values.remove ( valueIt );
-
-    std :: cout << keys << '\n';
-
-    entries.add ( decltype (m)::EntryType ( 1, 2 ) );
-    std :: cout << keys << '\n';
+//    auto end = std :: chrono :: system_clock :: now();
+//    std :: cout
+//            << "Duration : "
+//            << std :: chrono :: duration_cast < std :: chrono :: milliseconds > ( end - start ).count() << '\n';
+//
+//    m.clear();
+//
+//    auto & keys = m.keys();
+//    auto & entries = m.entries();
+//    auto & values = m.values();
+//
+//    m.emplace ( 2, 4 );
+//    std :: cout << keys << '\n';
+//    std :: cout << entries << '\n';
+//    std :: cout << values << '\n';
+//    std :: cout << '\n';
+//
+//    m.emplace ( 1, 4 );
+//    std :: cout << keys << '\n';
+//    std :: cout << entries << '\n';
+//    std :: cout << values << '\n';
+//    std :: cout << '\n';
+//
+//    m.emplace ( 2, 4 );
+//    std :: cout << keys << '\n';
+//    std :: cout << entries << '\n';
+//    std :: cout << values << '\n';
+//    std :: cout << '\n';
+//
+//    m.emplace ( 3, 4 );
+//    std :: cout << keys << '\n';
+//    std :: cout << entries << '\n';
+//    std :: cout << values << '\n';
+//    std :: cout << '\n';
+//
+//    m.emplace ( 1, 4 );
+//    std :: cout << keys << '\n';
+//    std :: cout << entries << '\n';
+//    std :: cout << values << '\n';
+//    std :: cout << '\n';
+//
+//    keys.removeFirst ( String(3) );
+//    std :: cout << keys << '\n';
+//    std :: cout << entries << '\n';
+//    std :: cout << values << '\n';
+//    std :: cout << '\n';
+//
+//    auto valueIt = values.begin() ++;
+//    values.remove ( valueIt );
+//
+//    std :: cout << keys << '\n';
+//
+//    entries.add ( decltype (m)::EntryType ( 1, 2 ) );
+//    std :: cout << keys << '\n';
 
 ////    auto it1 = testArr.begin();
 ////    for ( int i = 0; i < 500; ++ i ) {
