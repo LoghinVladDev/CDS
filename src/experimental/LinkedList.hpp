@@ -8,6 +8,7 @@
 #include <CDS/experimental/List>
 
 #include "shared/Node.hpp"
+#include "../shared/memory/PrimitiveAllocation.hpp"
 
 namespace cds { // NOLINT(modernize-concat-nested-namespaces)
     namespace experimental {
@@ -65,12 +66,23 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             ) const noexcept -> cds :: UniquePointer < DelegateConstIterator > override;
 
         private:
-            using Node = __hidden :: __impl :: __BidirectionalNode < __ElementType >;
+            using NodeData = cds :: __hidden :: __impl :: __allocation :: __RawContainer < __ElementType >;
+
+        private:
+            using Node = __hidden :: __impl :: __BidirectionalNode < NodeData >;
 
         private:
             Node * _pFront  { nullptr };
         private:
             Node * _pBack   { nullptr };
+
+        private:
+            static auto __allocateNode () noexcept -> Node *;
+
+        private:
+            static auto __freeNode (
+                    Node * pNode
+            ) noexcept -> void;
 
         public:
             constexpr LinkedList () noexcept = default;
@@ -177,58 +189,58 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         private:
             auto pNewBefore (
                     Node const * pNode
-            ) noexcept -> ElementType * &;
+            ) noexcept -> ElementType *;
 
         private:
             auto pNewAfter (
                     Node const * pNode
-            ) noexcept -> ElementType * &;
+            ) noexcept -> ElementType *;
 
         protected:
-            auto pNewFront () noexcept -> ElementType * & override;
+            auto pNewFront () noexcept -> ElementType * override;
 
         protected:
-            auto pNewBack () noexcept -> ElementType * & override;
+            auto pNewBack () noexcept -> ElementType * override;
 
         protected:
             auto pNewBefore (
                     Iterator const & iterator
-            ) noexcept -> ElementType * & override;
+            ) noexcept -> ElementType * override;
 
         protected:
             auto pNewAfter (
                     Iterator const & iterator
-            ) noexcept -> ElementType * & override;
+            ) noexcept -> ElementType * override;
 
         protected:
             auto pNewBefore (
                     ConstIterator const & iterator
-            ) noexcept -> ElementType * & override;
+            ) noexcept -> ElementType * override;
 
         protected:
             auto pNewAfter (
                     ConstIterator const & iterator
-            ) noexcept -> ElementType * & override;
+            ) noexcept -> ElementType * override;
 
         protected:
             auto pNewBefore (
                     ReverseIterator const & iterator
-            ) noexcept -> ElementType * & override;
+            ) noexcept -> ElementType * override;
 
         protected:
             auto pNewAfter (
                     ReverseIterator const & iterator
-            ) noexcept -> ElementType * & override;
+            ) noexcept -> ElementType * override;
 
         protected:
             auto pNewBefore (
                     ConstReverseIterator const & iterator
-            ) noexcept -> ElementType * & override;
+            ) noexcept -> ElementType * override;
 
         protected:
             auto pNewAfter (
                     ConstReverseIterator const & iterator
-            ) noexcept -> ElementType * & override;
+            ) noexcept -> ElementType * override;
 
         public:
             __CDS_NoDiscard __CDS_cpplang_ConstexprOverride auto front () noexcept (false) -> ElementType & override;

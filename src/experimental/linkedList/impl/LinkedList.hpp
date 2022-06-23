@@ -45,6 +45,23 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
 
         template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
+        __CDS_OptimalInline auto LinkedList < __ElementType > :: __allocateNode () noexcept -> Node * {
+
+            return cds :: __hidden :: __impl :: __allocation :: __allocPrimitiveObject < Node > ();
+        }
+
+
+        template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
+        __CDS_OptimalInline auto LinkedList < __ElementType > :: __freeNode (
+                Node * pNode
+        ) noexcept -> void {
+
+            pNode->_data.destruct();
+            return cds :: __hidden :: __impl :: __allocation :: __freePrimitiveObject ( pNode );
+        }
+
+
+        template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
         LinkedList < __ElementType > :: LinkedList (
                 LinkedList const & list
         ) noexcept :
@@ -53,8 +70,8 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             bool firstNode = false;
             for ( auto iterator = list.begin(), end = list.end (); iterator != end; ++ iterator ) {
 
-                auto newNode    = Memory :: instance().create < Node > ();
-                newNode->_pData = Memory :: instance().create < __ElementType > ( * iterator );
+                auto newNode    = LinkedList :: __allocateNode();
+                newNode->_data.construct ( * iterator );
                 newNode->_pNext = nullptr;
 
                 if ( firstNode ) {
@@ -88,7 +105,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         ) noexcept {
 
             for ( auto iterator = begin; iterator != end; ++ iterator ) {
-                this->LinkedList < __ElementType > :: pushBack ( * iterator );
+                (void) this->pushBack ( * iterator );
             }
         }
 
@@ -112,7 +129,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         ) noexcept {
 
             for ( auto iterator = collection.begin(), end = collection.end(); iterator != end; ++ iterator ) {
-                this-> LinkedList < __ElementType > :: pushBack ( * iterator );
+                (void) this->pushBack ( * iterator );
             }
         }
 
@@ -145,8 +162,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
             pNode->_pPrevious->_pNext = pNode->_pNext;
             pNode->_pNext->_pPrevious = pNode->_pPrevious;
-            Memory :: instance ().destroy ( pNode->_pData );
-            Memory :: instance ().destroy ( pNode );
+            LinkedList :: __freeNode ( const_cast < Node * > ( pNode ) );
             -- this->_size;
 
             return true;
@@ -170,8 +186,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                     this->_pBack = nullptr;
                 }
 
-                Memory :: instance ().destroy ( pNode->_pData );
-                Memory :: instance ().destroy ( pNode );
+                LinkedList :: __freeNode ( pNode );
 
                 -- this->_size;
                 ++ removedCount;
@@ -187,8 +202,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                     this->_pFront = nullptr;
                 }
 
-                Memory :: instance ().destroy ( pNode->_pData );
-                Memory :: instance ().destroy ( pNode );
+                LinkedList :: __freeNode ( pNode );
 
                 -- this->_size;
                 ++ removedCount;
@@ -207,8 +221,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                     pNode->_pNext->_pPrevious = pPrevious;
                     pNode->_pPrevious->_pNext = pNext;
 
-                    Memory :: instance().destroy ( pNode->_pData );
-                    Memory :: instance().destroy ( pNode );
+                    LinkedList :: __freeNode ( pNode );
 
                     pNode = pNext;
 
@@ -259,8 +272,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             current->_pNext->_pNext->_pPrevious = current;
             current->_pNext = current->_pNext->_pNext;
 
-            Memory :: instance().destroy ( toRemove->_pData );
-            Memory :: instance().destroy ( toRemove );
+            LinkedList :: __freeNode ( toRemove );
             -- this->_size;
 
             return true;
@@ -272,8 +284,8 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 Collection < Index > const & indices
         ) noexcept -> Size {
 
-            Node ** pToKeep         = Memory :: instance().createArray < Node * > ( this->size() );
-            Node ** pToRemove       = Memory :: instance().createArray < Node * > ( indices.size() );
+            Node ** pToKeep         = cds :: __hidden :: __impl :: __allocation :: __allocPrimitiveArray < Node * > ( this->size() );
+            Node ** pToRemove       = cds :: __hidden :: __impl :: __allocation :: __allocPrimitiveArray < Node * > ( indices.size() );
             Size    toKeepLength    = 0ULL;
             Size    toRemoveLength  = 0ULL;
 
@@ -303,12 +315,11 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             }
 
             for ( Index nodeIndex = 0; nodeIndex < toRemoveLength; ++ nodeIndex ) {
-                Memory :: instance().destroy ( pToRemove [ nodeIndex ]->_pData );
-                Memory :: instance().destroy ( pToRemove [ nodeIndex ] );
+                LinkedList :: __freeNode ( pToRemove [ nodeIndex ] );
             }
 
-            Memory :: instance().destroyArray( pToKeep );
-            Memory :: instance().destroyArray( pToRemove );
+            cds :: __hidden :: __impl :: __allocation :: __freePrimitiveArray ( pToKeep );
+            cds :: __hidden :: __impl :: __allocation :: __freePrimitiveArray ( pToRemove );
 
             return toRemoveLength;
         }
@@ -319,8 +330,8 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 std :: initializer_list < Index > const & indices
         ) noexcept -> Size {
 
-            Node ** pToKeep         = Memory :: instance().createArray < Node * > ( this->size() );
-            Node ** pToRemove       = Memory :: instance().createArray < Node * > ( indices.size() );
+            Node ** pToKeep         = cds :: __hidden :: __impl :: __allocation :: __allocPrimitiveArray < Node * > ( this->size() );
+            Node ** pToRemove       = cds :: __hidden :: __impl :: __allocation :: __allocPrimitiveArray < Node * > ( indices.size() );
             Size    toKeepLength    = 0ULL;
             Size    toRemoveLength  = 0ULL;
 
@@ -350,12 +361,11 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             }
 
             for ( Index nodeIndex = 0; nodeIndex < toRemoveLength; ++ nodeIndex ) {
-                Memory :: instance().destroy ( pToRemove [ nodeIndex ]->_pData );
-                Memory :: instance().destroy ( pToRemove [ nodeIndex ] );
+                LinkedList :: __freeNode ( pToRemove [ nodeIndex ] );
             }
 
-            Memory :: instance().destroyArray( pToKeep );
-            Memory :: instance().destroyArray( pToRemove );
+            cds :: __hidden :: __impl :: __allocation :: __freePrimitiveArray ( pToKeep );
+            cds :: __hidden :: __impl :: __allocation :: __freePrimitiveArray ( pToRemove );
 
             return toRemoveLength;
         }
@@ -500,9 +510,9 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
         auto LinkedList < __ElementType > :: pNewBefore (
                 Node const * pNode
-        ) noexcept -> ElementType * & {
+        ) noexcept -> ElementType * {
 
-            auto pNewNode       = Memory :: instance().create < Node > ();
+            auto pNewNode       = LinkedList :: __allocateNode();
             auto pMutableNode   = const_cast < Node * > ( pNode );
 
             pNewNode->_pPrevious                = pMutableNode->_pPrevious;
@@ -511,16 +521,16 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             pMutableNode->_pPrevious            = pNewNode;
 
             ++ this->_size;
-            return pNewNode->_pData = nullptr;
+            return & pNewNode->_data.data();
         }
 
 
         template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
         auto LinkedList < __ElementType > :: pNewAfter (
                 Node const * pNode
-        ) noexcept -> ElementType * & {
+        ) noexcept -> ElementType * {
 
-            auto pNewNode = Memory :: instance().create < Node > ();
+            auto pNewNode       = LinkedList :: __allocateNode();
             auto pMutableNode   = const_cast < Node * > ( pNode );
 
             pNewNode->_pPrevious                = pMutableNode;
@@ -529,58 +539,58 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             pMutableNode->_pNext                = pNewNode;
 
             ++ this->_size;
-            return pNewNode->_pData = nullptr;
+            return & pNewNode->_data.data();
         }
 
 
         template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
-        __CDS_OptimalInline auto LinkedList < __ElementType > :: pNewFront () noexcept -> ElementType * & {
+        __CDS_OptimalInline auto LinkedList < __ElementType > :: pNewFront () noexcept -> ElementType * {
 
-            auto newNode = Memory :: instance().create < Node > ();
-            newNode->_pNext     = this->_pFront;
-            newNode->_pPrevious = nullptr;
+            auto pNewNode       = LinkedList :: __allocateNode();
+            pNewNode->_pNext     = this->_pFront;
+            pNewNode->_pPrevious = nullptr;
 
             if ( this->_pFront != nullptr ) {
-                this->_pFront->_pPrevious = newNode;
+                this->_pFront->_pPrevious = pNewNode;
             }
 
-            this->_pFront = newNode;
+            this->_pFront = pNewNode;
 
             if ( this->_pBack == nullptr ) {
-                this->_pBack = newNode;
+                this->_pBack = pNewNode;
             }
 
             ++ this->_size;
-            return newNode->_pData = nullptr;
+            return & pNewNode->_data.data();
         }
 
 
         template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
-        __CDS_OptimalInline auto LinkedList < __ElementType > :: pNewBack () noexcept -> ElementType * & {
+        __CDS_OptimalInline auto LinkedList < __ElementType > :: pNewBack () noexcept -> ElementType * {
 
-            auto newNode = Memory::instance().create < Node > ();
-            newNode->_pNext     = nullptr;
-            newNode->_pPrevious = this->_pBack;
+            auto pNewNode = LinkedList :: __allocateNode();
+            pNewNode->_pNext     = nullptr;
+            pNewNode->_pPrevious = this->_pBack;
 
             if ( this->_pBack != nullptr ) {
-                this->_pBack->_pNext = newNode;
+                this->_pBack->_pNext = pNewNode;
             }
 
-            this->_pBack = newNode;
+            this->_pBack = pNewNode;
 
             if ( this->_pFront == nullptr ) {
-                this->_pFront = newNode;
+                this->_pFront = pNewNode;
             }
 
             ++ this->_size;
-            return newNode->_pData = nullptr;
+            return & pNewNode->_data.data();
         }
 
 
         template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
         __CDS_OptimalInline auto LinkedList < __ElementType > :: pNewBefore (
                 Iterator const & iterator
-        ) noexcept -> ElementType * & {
+        ) noexcept -> ElementType * {
 
             return this->pNewBefore ( reinterpret_cast < LinkedListDelegateIterator const * > ( Collection < __ElementType > :: acquireDelegate ( iterator ) )->node() );
         }
@@ -589,7 +599,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
         __CDS_OptimalInline auto LinkedList < __ElementType > :: pNewAfter (
                 Iterator const & iterator
-        ) noexcept -> ElementType * & {
+        ) noexcept -> ElementType * {
 
             return this->pNewAfter ( reinterpret_cast < LinkedListDelegateIterator const * > ( Collection < __ElementType > :: acquireDelegate ( iterator ) )->node() );
         }
@@ -598,7 +608,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
         __CDS_OptimalInline auto LinkedList < __ElementType > :: pNewBefore (
                 ConstIterator const & iterator
-        ) noexcept -> ElementType * & {
+        ) noexcept -> ElementType * {
 
             return this->pNewBefore ( reinterpret_cast < LinkedListDelegateConstIterator const * > ( Collection < __ElementType > :: acquireDelegate ( iterator ) )->node() );
         }
@@ -607,7 +617,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
         __CDS_OptimalInline auto LinkedList < __ElementType > :: pNewAfter (
                 ConstIterator const & iterator
-        ) noexcept -> ElementType * & {
+        ) noexcept -> ElementType * {
 
             return this->pNewAfter ( reinterpret_cast < LinkedListDelegateConstIterator const * > ( Collection < __ElementType > :: acquireDelegate ( iterator ) )->node() );
         }
@@ -616,7 +626,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
         __CDS_OptimalInline auto LinkedList < __ElementType > :: pNewBefore (
                 ReverseIterator const & iterator
-        ) noexcept -> ElementType * & {
+        ) noexcept -> ElementType * {
 
             return this->pNewAfter ( reinterpret_cast < LinkedListDelegateIterator const * > ( Collection < __ElementType > :: acquireDelegate ( iterator ) )->node() );
         }
@@ -625,7 +635,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
         __CDS_OptimalInline auto LinkedList < __ElementType > :: pNewAfter (
                 ReverseIterator const & iterator
-        ) noexcept -> ElementType * & {
+        ) noexcept -> ElementType * {
 
             return this->pNewBefore ( reinterpret_cast < LinkedListDelegateIterator const * > ( Collection < __ElementType > :: acquireDelegate ( iterator ) )->node() );
         }
@@ -634,7 +644,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
         __CDS_OptimalInline auto LinkedList < __ElementType > :: pNewBefore (
                 ConstReverseIterator const & iterator
-        ) noexcept -> ElementType * & {
+        ) noexcept -> ElementType * {
 
             return this->pNewAfter ( reinterpret_cast < LinkedListDelegateConstIterator const * > ( Collection < __ElementType > :: acquireDelegate ( iterator ) )->node() );
         }
@@ -643,7 +653,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
         __CDS_OptimalInline auto LinkedList < __ElementType > :: pNewAfter (
                 ConstReverseIterator const & iterator
-        ) noexcept -> ElementType * & {
+        ) noexcept -> ElementType * {
 
             return this->pNewBefore ( reinterpret_cast < LinkedListDelegateConstIterator const * > ( Collection < __ElementType > :: acquireDelegate ( iterator ) )->node() );
         }
@@ -656,7 +666,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 throw OutOfBoundsException("List is Empty");
             }
 
-            return * this->_pFront->_pData;
+            return this->_pFront->_data.data();
         }
 
 
@@ -667,7 +677,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 throw OutOfBoundsException("List is Empty");
             }
 
-            return * this->_pFront->_pData;
+            return this->_pFront->_data.data();
         }
 
 
@@ -678,7 +688,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 throw OutOfBoundsException("List is Empty");
             }
 
-            return * this->_pBack->_pData;
+            return this->_pBack->_data.data();
         }
 
 
@@ -689,7 +699,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 throw OutOfBoundsException("List is Empty");
             }
 
-            return * this->_pBack->_pData;
+            return this->_pBack->_data.data();
         }
 
 
@@ -715,7 +725,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
             while ( pHead != nullptr ) {
                 if ( current == index ) {
-                    return * pHead->_pData;
+                    return pHead->_data.data();
                 }
 
                 pHead = pHead->_pNext;
@@ -748,7 +758,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
             while ( pHead != nullptr ) {
                 if ( current == index ) {
-                    return * pHead->_pData;
+                    return pHead->_data.data();
                 }
 
                 pHead = pHead->_pNext;
@@ -777,7 +787,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
             while ( pThisHead != nullptr ) {
 
-                if ( ! meta :: equals ( * pThisHead->_pData, * pOtherHead->_pData ) ) {
+                if ( ! meta :: equals ( pThisHead->_data.data(), pOtherHead->_data.data() ) ) {
                     return false;
                 }
 
@@ -805,8 +815,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 auto current = this->_pFront;
                 this->_pFront = this->_pFront->_pNext;
 
-                Memory :: instance().destroy (current->_pData);
-                Memory :: instance().destroy (current);
+                LinkedList :: __freeNode ( current );
             }
 
             this->_pBack = nullptr;
@@ -817,18 +826,24 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
         auto LinkedList < __ElementType > :: makeUnique () noexcept -> void {
 
-            Node * pNewHead = nullptr;
-            Node * pNewLast = nullptr;
-            Size newSize    = 0ULL;
+            if ( this->size() < 2ULL ) {
+                return;
+            }
 
-            Node * pHead    = this->_pFront;
+            Node * pNewHead = nullptr;
+            Node * pHead    = this->_pFront->_pNext;
+            pNewHead        = this->_pFront;
+
+            this->_pBack    = pNewHead;
+            this->_pFront   = pNewHead;
+            this->_size     = 1ULL;
 
             static auto listContains = [](
                     Node              * pList,
                     ElementType const & element
             ) noexcept -> bool {
                 while ( pList != nullptr ) {
-                    if ( meta :: equals ( element, * pList->_pData ) ) {
+                    if ( meta :: equals ( element, pList->_data.data() ) ) {
                         return true;
                     }
 
@@ -839,36 +854,21 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             };
 
             while ( pHead != nullptr ) {
-                if ( ! listContains ( pNewHead, * pHead->_pData ) ) {
-                    if ( pNewHead == nullptr ) {
+                Node * pNext = pHead->_pNext;
 
-                        pNewHead                        = Memory :: instance().create < Node > ();
+                if ( ! listContains ( pNewHead, pHead->_data.data() ) ) {
 
-                        pNewHead->_pData                = cds :: exchange ( pHead->_pData, nullptr );
-                        pNewHead->_pNext                = nullptr;
-                        pNewHead->_pPrevious            = nullptr;
+                    pNewHead->_pNext    = pHead;
+                    pHead->_pPrevious   = pNewHead;
 
-                        pNewLast                        = pNewHead;
-                        newSize                         = 1ULL;
-                    } else {
+                    ++ this->_size;
+                } else {
 
-                        pNewLast->_pNext                = Memory :: instance().create < Node > ();
-
-                        pNewLast->_pNext->_pData        = cds :: exchange ( pHead->_pData, nullptr );
-                        pNewLast->_pNext->_pNext        = nullptr;
-                        pNewLast->_pNext->_pPrevious    = pNewLast;
-                        ++ newSize;
-                    }
+                    LinkedList :: __freeNode ( pHead );
                 }
 
-                pHead = pHead->_pNext;
+                pHead = pNext;
             }
-
-            this->clear();
-
-            this->_pFront = pNewHead;
-            this->_pBack  = pNewLast;
-            this->_size   = newSize;
         }
 
 
@@ -890,8 +890,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 this->_pFront->_pPrevious = nullptr;
             }
 
-            Memory :: instance().destroy ( node->_pData );
-            Memory :: instance().destroy ( node );
+            LinkedList :: __freeNode ( node );
         }
 
 
@@ -913,8 +912,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 this->_pBack->_pNext = nullptr;
             }
 
-            Memory :: instance().destroy ( node->_pData );
-            Memory :: instance().destroy ( node );
+            LinkedList :: __freeNode ( node );
         }
 
 
