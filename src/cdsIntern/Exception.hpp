@@ -83,7 +83,7 @@ namespace cds {
             return this->_message;
         }
 
-        __CDS_NoDiscard __CDS_cpplang_VirtualConstexpr auto hash () const noexcept -> Index override {
+        __CDS_NoDiscard __CDS_cpplang_VirtualConstexpr auto hash () const noexcept -> Size override {
             return this->_message.hash();
         }
 

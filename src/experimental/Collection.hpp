@@ -123,10 +123,6 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             ) const noexcept -> cds :: UniquePointer < DelegateConstIterator > = 0;
 
 
-        protected:
-            Size _size { 0ULL };
-
-
         public:
             /**
              * @brief Function used to acquire a Forward-ConstIterator, indicating to the first element of the collection
@@ -1278,7 +1274,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
              * @return Index = hash code value of the instance
              * @test tested in base class test
              */
-            __CDS_NoDiscard auto hash () const noexcept -> Index override;
+            __CDS_NoDiscard auto hash () const noexcept -> Size override;
 
         public:
             /**
@@ -1308,11 +1304,6 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                     Collection && collection
             ) noexcept;
 
-        protected:
-            constexpr explicit Collection (
-                    Size size
-            ) noexcept;
-
         public:
             /**
              * @brief Default Destructor
@@ -1336,7 +1327,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
              * @return Size = number of elements inside the collection
              * @test tested in base class test
              */
-            __CDS_NoDiscard constexpr auto size () const noexcept -> Size;
+            __CDS_NoDiscard __CDS_cpplang_VirtualConstexpr virtual auto size () const noexcept -> Size;
 
         public:
             /**
@@ -1345,7 +1336,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
              * @return bool = true if the collection is empty ( does not contain any elements ), false otherwise
              * @test tested in base class test
              */
-            __CDS_NoDiscard constexpr auto empty () const noexcept -> bool;
+            __CDS_NoDiscard __CDS_cpplang_VirtualConstexpr auto empty () const noexcept -> bool;
 
         public:
             /**

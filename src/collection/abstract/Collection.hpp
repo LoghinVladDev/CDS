@@ -1090,8 +1090,8 @@ namespace cds {
 
         __CDS_NoDiscard auto toString () const noexcept -> String override = 0;
         
-        __CDS_NoDiscard auto hash () const noexcept -> Index override {
-            Index finalHashValue = 0;
+        __CDS_NoDiscard auto hash () const noexcept -> Size override {
+            Size finalHashValue = 0;
 
             for ( auto & e : * this ) {
                 finalHashValue += cds :: hash ( e ); 

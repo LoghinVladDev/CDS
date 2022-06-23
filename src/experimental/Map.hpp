@@ -5,7 +5,8 @@
 #ifndef __CDS_EX_MAP_HPP__
 #define __CDS_EX_MAP_HPP__
 
-#include <CDS/experimental/Collection>
+#include <CDS/experimental/MutableCollection>
+#include <CDS/experimental/Set>
 
 #include "map/entry/Entry.hpp"
 
@@ -15,10 +16,10 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         template <
                 typename __KeyType, // NOLINT(bugprone-reserved-identifier)
                 typename __ValueType // NOLINT(bugprone-reserved-identifier)
-        > class Map : public Collection < __hidden :: __impl :: __MapEntry < __KeyType, __ValueType > > {
+        > class Map : public MutableCollection < __hidden :: __impl :: __MapEntry < __KeyType, __ValueType > > {
 
         public:
-            using typename Collection < __hidden :: __impl :: __MapEntry < __KeyType, __ValueType > > :: ElementType;
+            using typename MutableCollection < __hidden :: __impl :: __MapEntry < __KeyType, __ValueType > > :: ElementType;
 
         public:
             using EntryType = ElementType;
@@ -30,80 +31,98 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             using ValueType = __ValueType;
 
         public:
-            using typename Collection < ElementType > :: InitializerList; /// might require replacing?
+            using typename MutableCollection < ElementType > :: InitializerList; /// might require replacing?
 
         protected:
-            using typename Collection < ElementType > :: AbstractIterator;
+            using typename MutableCollection < ElementType > :: AbstractIterator;
+
+        protected:
+            using typename MutableCollection < ElementType > :: Iterator;
 
         public:
-            class Iterator;
+            using typename MutableCollection < ElementType > :: ConstIterator;
 
         public:
-            using typename Collection < ElementType > :: ConstIterator;
+            using typename MutableCollection < ElementType > :: ReverseIterator;
 
         public:
-            class ReverseIterator;
+            using typename MutableCollection < ElementType > :: ConstReverseIterator;
+
+        protected:
+            using typename MutableCollection < ElementType > :: AbstractDelegateIterator;
+
+        protected:
+            using typename MutableCollection < ElementType > :: DelegateIterator;
+
+        protected:
+            using typename MutableCollection < ElementType > :: DelegateConstIterator;
+
+        protected:
+            using typename MutableCollection < ElementType > :: DelegateIteratorRequestType;
+
+        protected:
+            class AbstractProxy;
+
+        protected:
+            class AbstractKeySetProxy;
+
+        protected:
+            class AbstractValueMutableCollectionProxy;
+
+        protected:
+            class AbstractEntryMutableCollectionProxy;
+
+        protected:
+            class DefaultEntryMutableCollectionProxy;
+
+        private:
+            EntryType * _pInsertionEntry { nullptr };
 
         public:
-            using typename Collection < ElementType > :: ConstReverseIterator;
+            __CDS_NoDiscard __CDS_cpplang_ConstexprPureAbstract auto keys () const noexcept -> Set < KeyType const > const &;
+
+        public:
+            __CDS_cpplang_ConstexprPureAbstract auto keys () noexcept -> Set < KeyType const > &;
+
+        public:
+            __CDS_NoDiscard __CDS_cpplang_ConstexprPureAbstract auto values () const noexcept -> MutableCollection < ValueType > const &;
+
+        public:
+            __CDS_cpplang_ConstexprPureAbstract auto values () noexcept -> MutableCollection < ValueType > &;
+
+        public:
+            __CDS_NoDiscard __CDS_cpplang_ConstexprPureAbstract auto entries () const noexcept -> MutableCollection < EntryType > const &;
+
+        public:
+            __CDS_cpplang_ConstexprPureAbstract auto entries () noexcept -> MutableCollection < EntryType > &;
 
         protected:
-            using typename Collection < ElementType > :: AbstractDelegateIterator;
+            __CDS_NoDiscard __CDS_cpplang_ConstexprPureAbstract virtual auto keySetProxy () const noexcept -> AbstractKeySetProxy const & = 0;
 
         protected:
-            class DelegateIterator;
+            __CDS_cpplang_ConstexprPureAbstract virtual auto keySetProxy () noexcept -> AbstractKeySetProxy & = 0;
 
         protected:
-            using typename Collection < ElementType > :: DelegateConstIterator;
+            __CDS_NoDiscard __CDS_cpplang_ConstexprPureAbstract virtual auto valueCollectionProxy () const noexcept -> AbstractValueMutableCollectionProxy const & = 0;
 
         protected:
-            using typename Collection < ElementType > :: DelegateIteratorRequestType;
+            __CDS_cpplang_ConstexprPureAbstract virtual auto valueCollectionProxy () noexcept -> AbstractValueMutableCollectionProxy & = 0;
 
         protected:
-            virtual auto delegateIterator (
+            __CDS_NoDiscard __CDS_cpplang_ConstexprPureAbstract virtual auto entrySetProxy () const noexcept -> AbstractEntryMutableCollectionProxy const & = 0;
+
+        protected:
+            __CDS_cpplang_ConstexprPureAbstract virtual auto entrySetProxy () noexcept -> AbstractEntryMutableCollectionProxy & = 0;
+
+        protected:
+            auto delegateIterator (
                     DelegateIteratorRequestType requestType
-            ) noexcept -> cds :: UniquePointer < DelegateIterator > = 0;
+            ) noexcept -> cds :: UniquePointer < DelegateIterator > override = 0;
 
         protected:
             auto delegateConstIterator (
                     DelegateIteratorRequestType requestType
             ) const noexcept -> cds :: UniquePointer < DelegateConstIterator > override = 0;
-
-        public:
-            auto begin () noexcept -> Iterator;
-
-        public:
-            using Collection < ElementType > :: begin;
-
-        public:
-            auto end () noexcept -> Iterator;
-
-        public:
-            using Collection < ElementType > :: end;
-
-        public:
-            auto rbegin () noexcept -> ReverseIterator;
-
-        public:
-            using Collection < ElementType > :: rbegin;
-
-        public:
-            auto rend () noexcept -> ReverseIterator;
-
-        public:
-            using Collection < ElementType > :: rend;
-
-        public:
-            using Collection < ElementType > :: cbegin;
-
-        public:
-            using Collection < ElementType > :: cend;
-
-        public:
-            using Collection < ElementType > :: crbegin;
-
-        public:
-            using Collection < ElementType > :: crend;
 
         public:
             constexpr Map () noexcept;
@@ -119,30 +138,54 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             ) noexcept;
 
         public:
-            __CDS_Explicit constexpr Map (
-                    Size size
-            ) noexcept;
-
-        public:
             __CDS_cpplang_ConstexprDestructor ~Map () noexcept override;
 
-        public:
-            virtual auto get (
-                    KeyType const & key
-            ) noexcept (false) -> ValueType & = 0;
-
-        public:
-            virtual auto get (
-                    KeyType const & key
-            ) const noexcept (false) -> ValueType const & = 0;
+        protected:
+            virtual auto entryAt (
+                    KeyType const & key,
+                    bool          & isNew
+            ) noexcept -> EntryType = 0;
 
         protected:
+            virtual auto entryAt (
+                    KeyType const & key,
+                    bool          & found
+            ) const noexcept -> EntryType const = 0;
+
+        public:
+            template < typename __TValueType = ValueType, cds :: meta :: EnableIf < cds :: meta :: isDefaultConstructible < __TValueType > () > = 0 > // NOLINT(bugprone-reserved-identifier)
+            auto get (
+                    KeyType const & key
+            ) noexcept -> ValueType &;
+
+        public:
+            auto at (
+                    KeyType const & key
+            ) noexcept (false) -> ValueType &;
+
+        public:
+            auto at (
+                    KeyType const & key
+            ) const noexcept (false) -> ValueType const &;
+
+        public:
+            template < typename __TValueType = ValueType, cds :: meta :: EnableIf < cds :: meta :: isDefaultConstructible < __TValueType > () > = 0 > // NOLINT(bugprone-reserved-identifier)
+            auto operator [] (
+                    KeyType const & key
+            ) noexcept -> ValueType &;
+
+        public:
+            auto operator [] (
+                    KeyType const & key
+            ) const noexcept (false) -> ValueType const &;
+
+        private:
             auto pNewInsert (
                     ElementType const & referenceElement
-            ) noexcept -> ElementType * & override = 0;
+            ) noexcept -> ElementType * & override;
 
-        protected:
-            auto pNewInsertPost () noexcept -> void override = 0;
+        private:
+            auto pNewInsertPost () noexcept -> void override;
 
         public:
             auto contains (
@@ -161,8 +204,13 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
         public:
             virtual auto remove (
-                    Iterator const & iterator
+                    KeyType const & key
             ) noexcept -> bool = 0;
+
+        public:
+            auto remove (
+                    Iterator const & iterator
+            ) noexcept -> bool override = 0;
 
         public:
             auto remove (
@@ -170,34 +218,34 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             ) noexcept -> bool override = 0;
 
         public:
-            virtual auto remove (
+            auto remove (
                     ReverseIterator const & iterator
-            ) noexcept -> bool = 0;
+            ) noexcept -> bool override = 0;
 
         public:
             auto remove (
                     ConstReverseIterator const & iterator
             ) noexcept -> bool override = 0;
 
-        public:
-            virtual auto remove (
+        protected:
+            auto remove (
                     Iterator    const * pIterators,
                     Size                iteratorCount
-            ) noexcept -> Size = 0;
+            ) noexcept -> Size override = 0;
 
-        public:
+        protected:
             auto remove (
                     ConstIterator   const * pIterators,
                     Size                    iteratorCount
             ) noexcept -> Size override = 0;
 
-        public:
-            virtual auto remove (
+        protected:
+            auto remove (
                     ReverseIterator const * pIterators,
                     Size                    iteratorCount
-            ) noexcept -> Size = 0;
+            ) noexcept -> Size override = 0;
 
-        public:
+        protected:
             auto remove (
                     ConstReverseIterator    const * pIterators,
                     Size                            iteratorCount
@@ -221,18 +269,27 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                     EntryType const & entry
             ) noexcept -> void;
 
+        protected:
+            static auto freeEntryData (
+                    EntryType & entry
+            ) noexcept -> void;
+
         };
 
     }
 }
 
-#include "map/Iterator.hpp"
-#include "map/ReverseIterator.hpp"
-#include "map/DelegateIterator.hpp"
+#include "map/AbstractProxy.hpp"
+#include "map/AbstractKeySetProxy.hpp"
+#include "map/AbstractValueMutableCollectionProxy.hpp"
+#include "map/AbstractEntryMutableCollectionProxy.hpp"
+#include "map/DefaultEntryMutableCollectionProxy.hpp"
 
-#include "map/impl/Iterator.hpp"
-#include "map/impl/ReverseIterator.hpp"
-#include "map/impl/DelegateIterator.hpp"
+#include "map/impl/AbstractProxy.hpp"
+#include "map/impl/AbstractKeySetProxy.hpp"
+#include "map/impl/AbstractValueMutableCollectionProxy.hpp"
+#include "map/impl/AbstractEntryMutableCollectionProxy.hpp"
+#include "map/impl/DefaultEntryMutableCollectionProxy.hpp"
 
 #include "map/entry/impl/Entry.hpp"
 

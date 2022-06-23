@@ -881,7 +881,7 @@ namespace cds {
 
 
             public:
-                __CDS_NoDiscard __CDS_cpplang_ConstexprOverride auto hash () const noexcept -> Index;
+                __CDS_NoDiscard __CDS_cpplang_ConstexprOverride auto hash () const noexcept -> Size;
 
             public:
                 __CDS_NoDiscard auto toString () const noexcept -> __BaseString < __CharType >;

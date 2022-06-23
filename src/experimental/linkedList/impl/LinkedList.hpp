@@ -242,6 +242,10 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 return true;
             }
 
+            if ( this->size() < 3U ) {
+                return false;
+            }
+
             auto current = this->_pFront;
             Index currentIndex = 1;
 
@@ -881,16 +885,13 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             if ( this->_size == 0ULL ) {
                 this->_pFront   = nullptr;
                 this->_pBack    = nullptr;
-
-                Memory :: instance().destroy ( node->_pData );
-                Memory :: instance().destroy ( node );
-                return;
+            } else {
+                this->_pFront = this->_pFront->_pNext;
+                this->_pFront->_pPrevious = nullptr;
             }
 
-            this->_pFront = this->_pFront->_pNext;
             Memory :: instance().destroy ( node->_pData );
             Memory :: instance().destroy ( node );
-            this->_pFront->_pPrevious = nullptr;
         }
 
 
@@ -907,16 +908,13 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             if ( this->_size == 0ULL ) {
                 this->_pBack = nullptr;
                 this->_pFront = nullptr;
-
-                Memory :: instance().destroy ( node->_pData );
-                Memory :: instance().destroy ( node );
-                return;
+            } else {
+                this->_pBack = this->_pBack->_pPrevious;
+                this->_pBack->_pNext = nullptr;
             }
 
-            this->_pBack = this->_pBack->_pPrevious;
             Memory :: instance().destroy ( node->_pData );
             Memory :: instance().destroy ( node );
-            this->_pBack->_pNext = nullptr;
         }
 
 

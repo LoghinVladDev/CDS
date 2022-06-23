@@ -93,7 +93,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         auto toString () const noexcept -> String override;
 
     public:
-        auto hash () const noexcept -> Index override;
+        auto hash () const noexcept -> Size override;
     };
 
 }

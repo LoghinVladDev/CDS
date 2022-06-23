@@ -34,7 +34,8 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         ListSet < __ElementType > :: ListSet (
                 ListSet const & set
         ) noexcept :
-                Set < __ElementType > ( set ) {
+                Set < __ElementType > ( set ),
+                _size ( set._size ) {
 
             Node * pLocalBack = nullptr;
             for ( auto pOtherHead = set._pFront; pOtherHead != nullptr; pOtherHead = pOtherHead->_pNext ) {
@@ -59,7 +60,8 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 ListSet && set
         ) noexcept :
                 Set < __ElementType > ( std :: move ( set ) ),
-                _pFront ( cds :: exchange ( set._pFront, nullptr ) ) {
+                _pFront ( cds :: exchange ( set._pFront, nullptr ) ),
+                _size ( cds :: exchange ( set._size, 0ULL ) ) {
 
         }
 
@@ -68,8 +70,15 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         constexpr ListSet < __ElementType > :: ListSet (
                 Size size
         ) noexcept :
-                Set < __ElementType > ( size ) {
+                _size ( size ) {
 
+        }
+
+
+        template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
+        __CDS_cpplang_ConstexprOverride auto ListSet < __ElementType > :: size () const noexcept -> Size {
+
+            return this->_size;
         }
 
 

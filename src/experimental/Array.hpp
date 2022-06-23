@@ -66,10 +66,10 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                     DelegateIteratorRequestType requestType
             ) const noexcept -> cds :: UniquePointer < DelegateConstIterator > override;
 
-        protected:
+        private:
             ElementType ** _pData       { nullptr };
 
-        protected:
+        private:
             Size           _capacity    { 0ULL };
 
         protected:

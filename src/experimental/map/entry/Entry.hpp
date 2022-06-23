@@ -5,29 +5,17 @@
 #ifndef __CDS_EX_MAP_ENTRY_HPP__
 #define __CDS_EX_MAP_ENTRY_HPP__
 
-namespace cds { // NOLINT(modernize-concat-nested-namespaces)
-    namespace experimental { // NOLINT(modernize-concat-nested-namespaces)
+namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
+    namespace experimental {    // NOLINT(modernize-concat-nested-namespaces)
 
         template < typename __KeyType, typename __ValueType > // NOLINT(bugprone-reserved-identifier)
         class Map;
 
-        namespace __hidden { // NOLINT(modernize-concat-nested-namespaces, bugprone-reserved-identifier)
-            namespace __impl { // NOLINT(bugprone-reserved-identifier)
+        namespace __hidden {    // NOLINT(modernize-concat-nested-namespaces, bugprone-reserved-identifier)
+            namespace __impl {  // NOLINT(bugprone-reserved-identifier)
 
-                template <
-                        typename __KeyType, // NOLINT(bugprone-reserved-identifier)
-                        typename __ValueType, // NOLINT(bugprone-reserved-identifier)
-                        typename __KeySetType, // NOLINT(bugprone-reserved-identifier)
-                        typename __ValueCollectionType, // NOLINT(bugprone-reserved-identifier)
-                        typename __EntryAssociatorType, // NOLINT(bugprone-reserved-identifier)
-                        cds :: meta :: EnableIf <
-                                cds :: meta :: isDerivedFrom < __KeySetType, cds :: experimental :: Set < __KeyType > > () &&
-                                cds :: meta :: isDerivedFrom < __ValueCollectionType, cds :: experimental :: Collection < __ValueType > > ()
-                        > = 0
-                > class __BaseMap; // NOLINT(bugprone-reserved-identifier)
-
-                template < typename __Type > // NOLINT(bugprone-reserved-identifier)
-                class __ForwardContainer { // NOLINT(bugprone-reserved-identifier)
+                template < typename __Type >    // NOLINT(bugprone-reserved-identifier)
+                class __ForwardContainer {      // NOLINT(bugprone-reserved-identifier)
 
                 public:
                     union {
@@ -38,12 +26,10 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                     };
 
                 public:
-                    bool      _forward;
+                    bool      _forward { false };
 
                 public:
-//                    constexpr __ForwardContainer (
-//                            __ForwardContainer const & container
-//                    ) noexcept;
+                    constexpr __ForwardContainer () noexcept;
 
                 public:
                     __CDS_Explicit constexpr __ForwardContainer (
@@ -62,101 +48,103 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 private:
                     template <
                             typename __TKeyType, // NOLINT(bugprone-reserved-identifier)
-                            typename __TValueType, // NOLINT(bugprone-reserved-identifier)
-                            typename __KeySetType, // NOLINT(bugprone-reserved-identifier)
-                            typename __ValueCollectionType, // NOLINT(bugprone-reserved-identifier)
-                            typename __EntryAssociatorType, // NOLINT(bugprone-reserved-identifier)
+                            typename __TValueType // NOLINT(bugprone-reserved-identifier)
+                    > friend class cds :: experimental :: Map; // NOLINT(bugprone-reserved-identifier)
+
+                private:
+                    template <
+                            typename __TKeyType = __KeyType, // NOLINT(bugprone-reserved-identifier)
                             cds :: meta :: EnableIf <
-                                    cds :: meta :: isDerivedFrom < __KeySetType, cds :: experimental :: Set < __TKeyType > > () &&
-                                    cds :: meta :: isDerivedFrom < __ValueCollectionType, cds :: experimental :: Collection < __TValueType > > ()
-                            >
-                    > friend class __BaseMap; // NOLINT(bugprone-reserved-identifier)
+                                    cds :: meta :: isCopyConstructible < __TKeyType > () &&
+                                    cds :: meta :: isMoveConstructible < __TKeyType > ()
+                            > = 0
+                    > __CDS_cpplang_ConstexprPlacementNew auto moveOrCopyKeyTo (
+                            __MapEntry * entry
+                    ) noexcept -> void;
 
                 private:
-                    template < typename __TKeyType = __KeyType, typename __KeySetType, cds :: meta :: EnableIf < cds :: meta :: isCopyConstructible < __TKeyType > () && cds :: meta :: isMoveConstructible < __TKeyType > () > = 0 >
-                    __CDS_OptimalInline auto moveOrCopyKeyTo (
-                            __KeySetType & set
-                    ) noexcept -> __TKeyType const & {
-
-                        if ( this->_key._forward ) {
-                            return set.insert ( std :: move ( * this->_key._pObject ) );
-                        }
-
-                        return set.insert ( * this->_key._pConstObject );
-                    }
+                    template <
+                            typename __TKeyType = __KeyType, // NOLINT(bugprone-reserved-identifier)
+                            cds :: meta :: EnableIf <
+                                    cds :: meta :: isCopyConstructible < __TKeyType > () &&
+                                    ! cds :: meta :: isMoveConstructible < __TKeyType > ()
+                            > = 0
+                    > __CDS_cpplang_ConstexprPlacementNew auto moveOrCopyKeyTo (
+                            __MapEntry * entry
+                    ) noexcept -> void;
 
                 private:
-                    template < typename __TKeyType = __KeyType, typename __KeySetType, cds :: meta :: EnableIf < cds :: meta :: isCopyConstructible < __TKeyType > () && ! cds :: meta :: isMoveConstructible < __TKeyType > () > = 0 >
-                    __CDS_OptimalInline auto moveOrCopyKeyTo (
-                            __KeySetType & set
-                    ) noexcept -> __TKeyType const & {
-
-                        return set.insert ( * this->_key._pConstObject );
-                    }
-
-                private:
-                    template < typename __TKeyType = __KeyType, typename __KeySetType, cds :: meta :: EnableIf < cds :: meta :: isMoveConstructible < __TKeyType > () && ! cds :: meta :: isCopyConstructible < __TKeyType > () > = 0 >
-                    __CDS_OptimalInline auto moveOrCopyKeyTo (
-                            __KeySetType & set
-                    ) noexcept -> __TKeyType const & {
-
-                        return set.insertinsert ( std :: move ( * this->_key._pObject ) );
-                    }
+                    template <
+                            typename __TKeyType = __KeyType, // NOLINT(bugprone-reserved-identifier)
+                            cds :: meta :: EnableIf <
+                                    ! cds :: meta :: isCopyConstructible < __TKeyType > () &&
+                                    cds :: meta :: isMoveConstructible < __TKeyType > ()
+                            > = 0
+                    > __CDS_cpplang_ConstexprPlacementNew auto moveOrCopyKeyTo (
+                            __MapEntry * entry
+                    ) noexcept -> void;
 
                 private:
-                    template < typename __TKeyType = __KeyType, typename __KeySetType, cds :: meta :: EnableIf < ! cds :: meta :: isMoveConstructible < __TKeyType > () && ! cds :: meta :: isCopyConstructible < __TKeyType > () > = 0 >
-                    __CDS_OptimalInline auto moveOrCopyKeyTo (
-                            __KeySetType & set
-                    ) noexcept -> __TKeyType const & {
-
-                        static_assert( ! cds :: meta :: isMoveConstructible < __TKeyType > () && ! cds :: meta :: isCopyConstructible < __TKeyType > (), "Cannot insert a MapEntry of a Key that is not copyable or moveable");
-                        return * set.begin();
-                    }
-
-                private:
-                    template < typename __TValueType = __ValueType, typename __EntryAssociatorType, cds :: meta :: EnableIf < cds :: meta :: isCopyConstructible < __TValueType > () && cds :: meta :: isMoveConstructible < __TValueType > () > = 0 >
-                    __CDS_OptimalInline auto moveOrCopyValueTo (
-                            __KeyType               const & key,
-                            __EntryAssociatorType         & entryAssociator
-                    ) noexcept -> void {
-
-                        if ( this->_value._forward ) {
-                            entryAssociator.put ( key, std :: move ( * this->_value._pObject ) );
-                            return;
-                        }
-
-                        entryAssociator.put ( key, * this->_value._pConstObject );
-                    }
+                    template <
+                            typename __TKeyType = __KeyType, // NOLINT(bugprone-reserved-identifier)
+                            cds :: meta :: EnableIf <
+                                    ! cds :: meta :: isCopyConstructible < __TKeyType > () &&
+                                    ! cds :: meta :: isMoveConstructible < __TKeyType > ()
+                            > = 0
+                    > constexpr auto moveOrCopyKeyTo (
+                            __MapEntry * entry
+                    ) noexcept -> void;
 
                 private:
-                    template < typename __TValueType = __ValueType, typename __EntryAssociatorType, cds :: meta :: EnableIf < ! cds :: meta :: isCopyConstructible < __TValueType > () && cds :: meta :: isMoveConstructible < __TValueType > () > = 0 >
-                    __CDS_OptimalInline auto moveOrCopyValueTo (
-                            __KeyType               const & key,
-                            __EntryAssociatorType         & entryAssociator
-                    ) noexcept -> void {
-
-                        entryAssociator.put ( key, std :: move ( * this->_value._pObject ) );
-                    }
-
-                private:
-                    template < typename __TValueType = __ValueType, typename __EntryAssociatorType, cds :: meta :: EnableIf < cds :: meta :: isCopyConstructible < __TValueType > () && ! cds :: meta :: isMoveConstructible < __TValueType > () > = 0 >
-                    __CDS_OptimalInline auto moveOrCopyValueTo (
-                            __KeyType               const & key,
-                            __EntryAssociatorType         & entryAssociator
-                    ) noexcept -> void {
-
-                        entryAssociator.put ( key, * this->_value._pConstObject );
-                    }
+                    template <
+                            typename __TValueType = __ValueType, // NOLINT(bugprone-reserved-identifier)
+                            cds :: meta :: EnableIf <
+                                    cds :: meta :: isCopyConstructible < __TValueType > () &&
+                                    cds :: meta :: isMoveConstructible < __TValueType > ()
+                            > = 0
+                    > __CDS_cpplang_ConstexprPlacementNew auto moveOrCopyValueTo (
+                            __MapEntry * entry,
+                            bool         isNew
+                    ) noexcept -> void;
 
                 private:
-                    template < typename __TValueType = __ValueType, typename __EntryAssociatorType, cds :: meta :: EnableIf < ! cds :: meta :: isCopyConstructible < __TValueType > () && ! cds :: meta :: isMoveConstructible < __TValueType > () > = 0 >
-                    __CDS_OptimalInline auto moveOrCopyValueTo (
-                            __KeyType               const & key,
-                            __EntryAssociatorType         & entryAssociator
-                    ) noexcept -> void {
+                    template <
+                            typename __TValueType = __ValueType, // NOLINT(bugprone-reserved-identifier)
+                            cds :: meta :: EnableIf <
+                                    cds :: meta :: isCopyConstructible < __TValueType > () &&
+                                    ! cds :: meta :: isMoveConstructible < __TValueType > ()
+                            > = 0
+                    > __CDS_cpplang_ConstexprPlacementNew auto moveOrCopyValueTo (
+                            __MapEntry * entry,
+                            bool         isNew
+                    ) noexcept -> void;
 
-                        static_assert( ! cds :: meta :: isMoveConstructible < __TValueType > () && ! cds :: meta :: isCopyConstructible < __TValueType > (), "Cannot insert a MapEntry of a Key that is not copyable or moveable");
-                    }
+                private:
+                    template <
+                            typename __TValueType = __ValueType, // NOLINT(bugprone-reserved-identifier)
+                            cds :: meta :: EnableIf <
+                                    ! cds :: meta :: isCopyConstructible < __TValueType > () &&
+                                    cds :: meta :: isMoveConstructible < __TValueType > ()
+                            > = 0
+                    > __CDS_cpplang_ConstexprPlacementNew auto moveOrCopyValueTo (
+                            __MapEntry * entry,
+                            bool         isNew
+                    ) noexcept -> void;
+
+                private:
+                    template <
+                            typename __TValueType = __ValueType, // NOLINT(bugprone-reserved-identifier)
+                            cds :: meta :: EnableIf <
+                                    ! cds :: meta :: isCopyConstructible < __TValueType > () &&
+                                    ! cds :: meta :: isMoveConstructible < __TValueType > ()
+                            > = 0
+                    > constexpr auto moveOrCopyValueTo (
+                            __MapEntry * entry,
+                            bool         isNew
+                    ) noexcept -> void;
+
+                private:
+                    __CDS_NoDiscard constexpr auto empty () const noexcept -> bool;
 
                 public:
                     using KeyType   = __KeyType;
@@ -171,6 +159,9 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                     __ForwardContainer < ValueType > _value;
 
                 public:
+                    constexpr __MapEntry () noexcept = default;
+
+                public:
                     constexpr __MapEntry (
                             KeyType     const & key,
                             ValueType   const & value
@@ -193,6 +184,14 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                             KeyType          && key,
                             ValueType        && value
                     ) noexcept;
+
+                public:
+                    __CDS_NoDiscard constexpr auto operator == (
+                            __MapEntry const & entry
+                    ) const noexcept -> bool;
+
+                public:
+                    __CDS_NoDiscard constexpr auto hash () const noexcept -> Size;
 
                 public:
                     constexpr auto key () const noexcept -> KeyType const &;
@@ -202,6 +201,27 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
                 public:
                     __CDS_cpplang_NonConstConstexprMemberFunction auto value () noexcept -> ValueType &;
+
+                public:
+                    __CDS_Deprecated constexpr auto first () const noexcept -> KeyType const &;
+
+                public:
+                    __CDS_Deprecated constexpr auto second () const noexcept -> ValueType const &;
+
+                public:
+                    __CDS_Deprecated __CDS_cpplang_NonConstConstexprMemberFunction auto second () noexcept -> ValueType &;
+
+                public:
+                    __CDS_Deprecated constexpr auto getFirst () const noexcept -> KeyType const &;
+
+                public:
+                    __CDS_Deprecated constexpr auto getSecond () const noexcept -> ValueType const &;
+
+                public:
+                    __CDS_Deprecated __CDS_cpplang_NonConstConstexprMemberFunction auto getSecond () noexcept -> ValueType &;
+
+                public:
+                    __CDS_NoDiscard auto toString () const noexcept -> String;
                 };
 
             }

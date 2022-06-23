@@ -56,28 +56,34 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             using Node = __hidden :: __impl :: __UnidirectionalNode < __ElementType >;
 
         protected:
-            Node    * _pFront  { nullptr };
+            Node    * _pFront   { nullptr };
 
-        public:
+        protected:
+            Size      _size     { 0ULL };
+
+        protected:
             constexpr ListSet () noexcept;
 
-        public:
+        protected:
             ListSet (
                     ListSet const & set
             ) noexcept;
 
-        public:
+        protected:
             constexpr ListSet (
                     ListSet && set
             ) noexcept;
 
-        public:
+        protected:
             __CDS_Explicit constexpr ListSet (
                     Size size
             ) noexcept;
 
         public:
             ~ListSet() noexcept override;
+
+        public:
+            __CDS_NoDiscard __CDS_cpplang_ConstexprOverride auto size () const noexcept -> Size override;
 
         private:
             auto remove (
