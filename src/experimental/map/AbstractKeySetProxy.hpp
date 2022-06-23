@@ -9,7 +9,9 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
     namespace experimental {
 
         template < typename __KeyType, typename __ValueType > // NOLINT(bugprone-reserved-identifier)
-        class Map < __KeyType, __ValueType > :: AbstractKeySetProxy : public cds :: experimental :: Set < KeyType const > {
+        class Map < __KeyType, __ValueType > :: AbstractKeySetProxy :
+                public cds :: experimental :: Set < KeyType const >,
+                protected Map < __KeyType, __ValueType > :: AbstractProxy {
 
         public:
             using KeyType = typename Map < __KeyType, __ValueType > :: KeyType const;
@@ -43,9 +45,6 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                     DelegateIteratorRequestType requestType
             ) const noexcept -> cds :: UniquePointer < DelegateConstIterator > override = 0;
 
-        private:
-            Map < __KeyType, __ValueType > * _pMap;
-
         protected:
             __CDS_Explicit constexpr AbstractKeySetProxy (
                     Map < __KeyType, __ValueType > * pMap
@@ -72,12 +71,12 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         public:
             auto remove (
                     ConstIterator const & iterator
-            ) noexcept -> bool override;
+            ) noexcept -> bool override = 0;
 
         public:
             auto remove (
                     ConstReverseIterator const & iterator
-            ) noexcept -> bool override;
+            ) noexcept -> bool override = 0;
 
         public:
             auto remove (
@@ -103,6 +102,10 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
         public:
             auto clear () noexcept -> void override;
+
+        public:
+            __CDS_NoDiscard __CDS_cpplang_VirtualConstexpr auto size () const noexcept -> Size override = 0;
+
         };
 
     }

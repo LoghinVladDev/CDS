@@ -42,9 +42,6 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             class HashMapKeySetProxyDelegateConstIterator;
 
         private:
-            class HashMapKeySetProxyDelegateConstReverseIterator;
-
-        private:
             friend class HashMap;
 
         public:
@@ -71,6 +68,16 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             __CDS_cpplang_ConstexprDestructor ~HashMapKeySetProxy() noexcept override;
 
         public:
+            auto remove (
+                    ConstIterator const & iterator
+            ) noexcept -> bool override;
+
+        public:
+            auto remove (
+                    ConstReverseIterator const & iterator
+            ) noexcept -> bool override;
+
+        public:
             auto operator == (
                     HashMapKeySetProxy const & set
             ) const noexcept -> bool;
@@ -79,6 +86,9 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             auto operator != (
                     HashMapKeySetProxy const & set
             ) const noexcept -> bool;
+
+        public:
+            __CDS_NoDiscard auto size () const noexcept -> Size override;
 
         public:
             auto sequence () & noexcept -> Sequence < HashMapKeySetProxy >;

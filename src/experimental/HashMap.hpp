@@ -22,7 +22,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 typename __Hasher = FunctionHasher < __KeyType, & cds :: hash < __KeyType > >   // NOLINT(bugprone-reserved-identifier)
         > class HashMap :
                 public Map < __KeyType, __ValueType >,
-                public __hidden :: __impl :: __HashTable <
+                protected __hidden :: __impl :: __HashTable <
                         __hidden :: __impl :: __HashMapDataNode < __KeyType, __ValueType >,
                         __KeyType,
                         FunctionExtractor <
@@ -155,6 +155,15 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
         protected:
             class HashMapEntryMutableCollectionProxy;
+
+        private:
+            friend class HashMapKeySetProxy;
+
+        private:
+            friend class HashMapValueMutableCollectionProxy;
+
+        private:
+            friend class HashMapEntryMutableCollectionProxy;
 
         protected:
             class HashMapDelegateIterator;
@@ -328,21 +337,41 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
     }
 }
 
-#include "hashMap/KeySetProxy.hpp"
-#include "hashMap/ValueMutableCollectionProxy.hpp"
-#include "hashMap/EntryMutableCollectionProxy.hpp"
+#include "map/AbstractProxy.hpp"
+
 #include "hashMap/DelegateIterator.hpp"
 #include "hashMap/DelegateConstIterator.hpp"
+
+#include "hashMap/keySet/Proxy.hpp"
+#include "hashMap/keySet/DelegateConstIterator.hpp"
+
+#include "hashMap/valueMutableCollection/Proxy.hpp"
+#include "hashMap/valueMutableCollection/DelegateIterator.hpp"
+#include "hashMap/valueMutableCollection/DelegateConstIterator.hpp"
+
+#include "hashMap/entryMutableCollection/Proxy.hpp"
+#include "hashMap/entryMutableCollection/DelegateIterator.hpp"
+#include "hashMap/entryMutableCollection/DelegateConstIterator.hpp"
 
 #include "../shared/memory/PrimitiveAllocation.hpp"
 #include "shared/hash/impl/HashTable.hpp"
 
+#include "map/impl/AbstractProxy.hpp"
+
 #include "hashMap/impl/HashMap.hpp"
-#include "hashMap/impl/KeySetProxy.hpp"
-#include "hashMap/impl/ValueMutableCollectionProxy.hpp"
-#include "hashMap/impl/EntryMutableCollectionProxy.hpp"
 #include "hashMap/impl/DelegateIterator.hpp"
 #include "hashMap/impl/DelegateConstIterator.hpp"
+
+#include "hashMap/keySet/impl/Proxy.hpp"
+#include "hashMap/keySet/impl/DelegateConstIterator.hpp"
+
+#include "hashMap/valueMutableCollection/impl/Proxy.hpp"
+#include "hashMap/valueMutableCollection/impl/DelegateIterator.hpp"
+#include "hashMap/valueMutableCollection/impl/DelegateConstIterator.hpp"
+
+#include "hashMap/entryMutableCollection/impl/Proxy.hpp"
+#include "hashMap/entryMutableCollection/impl/DelegateIterator.hpp"
+#include "hashMap/entryMutableCollection/impl/DelegateConstIterator.hpp"
 
 
 #endif // __CDS_EX_HASH_MAP_HPP__

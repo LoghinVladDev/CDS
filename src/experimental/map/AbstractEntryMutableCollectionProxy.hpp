@@ -9,7 +9,9 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
     namespace experimental {
 
         template < typename __KeyType, typename __ValueType > // NOLINT(bugprone-reserved-identifier)
-        class Map < __KeyType, __ValueType > :: AbstractEntryMutableCollectionProxy : public cds :: experimental :: MutableCollection < EntryType > {
+        class Map < __KeyType, __ValueType > :: AbstractEntryMutableCollectionProxy :
+                public cds :: experimental :: MutableCollection < EntryType >,
+                protected Map < __KeyType, __ValueType > :: AbstractProxy {
 
         public:
             using EntryType = typename Map < __KeyType, __ValueType > :: EntryType;
@@ -57,11 +59,8 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                     DelegateIteratorRequestType requestType
             ) const noexcept -> cds :: UniquePointer < DelegateConstIterator > override = 0;
 
-        private:
-            Map < __KeyType, __ValueType > * _pMap;
-
         protected:
-            constexpr AbstractEntryMutableCollectionProxy (
+            __CDS_Explicit constexpr AbstractEntryMutableCollectionProxy (
                     Map < __KeyType, __ValueType > * pMap
             ) noexcept;
 
@@ -81,27 +80,27 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         public:
             auto remove (
                     EntryType const & entry
-            ) noexcept -> void;
+            ) noexcept -> bool;
 
         public:
             auto remove (
                     Iterator const & iterator
-            ) noexcept -> bool override;
+            ) noexcept -> bool override = 0;
 
         public:
             auto remove (
                     ConstIterator const & iterator
-            ) noexcept -> bool override;
+            ) noexcept -> bool override = 0;
 
         public:
             auto remove (
                     ReverseIterator const & iterator
-            ) noexcept -> bool override;
+            ) noexcept -> bool override = 0;
 
         public:
             auto remove (
                     ConstReverseIterator const & iterator
-            ) noexcept -> bool override;
+            ) noexcept -> bool override = 0;
 
         public:
             auto remove (
@@ -145,6 +144,9 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
         public:
             __CDS_NoDiscard auto toString () const noexcept -> String override;
+
+        public:
+            __CDS_NoDiscard __CDS_cpplang_VirtualConstexpr auto size () const noexcept -> Size override = 0;
         };
 
     }

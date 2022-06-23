@@ -12,7 +12,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         constexpr Map < __KeyType, __ValueType > :: AbstractEntryMutableCollectionProxy :: AbstractEntryMutableCollectionProxy (
                 Map < __KeyType, __ValueType > * pMap
         ) noexcept :
-                _pMap ( pMap ) {
+                AbstractProxy ( pMap ) {
 
         }
 
@@ -21,8 +21,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         constexpr Map < __KeyType, __ValueType > :: AbstractEntryMutableCollectionProxy :: AbstractEntryMutableCollectionProxy (
                 AbstractEntryMutableCollectionProxy const & collection
         ) noexcept :
-                MutableCollection < EntryType > ( collection ),
-                _pMap ( collection._pMap ) {
+                AbstractProxy ( collection ) {
 
         }
 
@@ -31,8 +30,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         constexpr Map < __KeyType, __ValueType > :: AbstractEntryMutableCollectionProxy :: AbstractEntryMutableCollectionProxy (
                 AbstractEntryMutableCollectionProxy && collection
         ) noexcept :
-                MutableCollection < EntryType > ( std :: move ( collection ) ),
-                _pMap ( collection._pMap ) {
+                AbstractProxy ( std :: move ( collection ) ) {
 
         }
 
@@ -43,41 +41,10 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
         template < typename __KeyType, typename __ValueType > // NOLINT(bugprone-reserved-identifier)
         __CDS_OptimalInline auto Map < __KeyType, __ValueType > :: AbstractEntryMutableCollectionProxy :: remove (
-                Iterator const & iterator
+                EntryType const & entry
         ) noexcept -> bool {
 
-            /// TODO : after implementing HashMap iterator
-            return false;
-        }
-
-
-        template < typename __KeyType, typename __ValueType > // NOLINT(bugprone-reserved-identifier)
-        __CDS_OptimalInline auto Map < __KeyType, __ValueType > :: AbstractEntryMutableCollectionProxy :: remove (
-                ConstIterator const & iterator
-        ) noexcept -> bool {
-
-            /// TODO : after implementing HashMap iterator
-            return false;
-        }
-
-
-        template < typename __KeyType, typename __ValueType > // NOLINT(bugprone-reserved-identifier)
-        __CDS_OptimalInline auto Map < __KeyType, __ValueType > :: AbstractEntryMutableCollectionProxy :: remove (
-                ReverseIterator const & iterator
-        ) noexcept -> bool {
-
-            /// TODO : after implementing HashMap iterator
-            return false;
-        }
-
-
-        template < typename __KeyType, typename __ValueType > // NOLINT(bugprone-reserved-identifier)
-        __CDS_OptimalInline auto Map < __KeyType, __ValueType > :: AbstractEntryMutableCollectionProxy :: remove (
-                ConstReverseIterator const & iterator
-        ) noexcept -> bool {
-
-            /// TODO : after implementing HashMap iterator
-            return false;
+            return this->map().remove ( entry.key() );
         }
 
 
@@ -87,8 +54,14 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 Size                iteratorCount
         ) noexcept -> Size {
 
-            /// TODO : after implementing HashMap iterator
-            return 0ULL;
+            Size removedCount = 0ULL;
+            for ( Size index = 0ULL; index < iteratorCount; ++ index ) {
+                if ( this->remove ( pIterators [ index ] ) ) {
+                    ++ removedCount;
+                }
+            }
+
+            return removedCount;
         }
 
 
@@ -98,8 +71,14 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 Size                    iteratorCount
         ) noexcept -> Size {
 
-            /// TODO : after implementing HashMap iterator
-            return 0ULL;
+            Size removedCount = 0ULL;
+            for ( Size index = 0ULL; index < iteratorCount; ++ index ) {
+                if ( this->remove ( pIterators [ index ] ) ) {
+                    ++ removedCount;
+                }
+            }
+
+            return removedCount;
         }
 
 
@@ -109,8 +88,14 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 Size                    iteratorCount
         ) noexcept -> Size {
 
-            /// TODO : after implementing HashMap iterator
-            return 0ULL;
+            Size removedCount = 0ULL;
+            for ( Size index = 0ULL; index < iteratorCount; ++ index ) {
+                if ( this->remove ( pIterators [ index ] ) ) {
+                    ++ removedCount;
+                }
+            }
+
+            return removedCount;
         }
 
 
@@ -120,8 +105,14 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 Size                            iteratorCount
         ) noexcept -> Size {
 
-            /// TODO : after implementing HashMap iterator
-            return 0ULL;
+            Size removedCount = 0ULL;
+            for ( Size index = 0ULL; index < iteratorCount; ++ index ) {
+                if ( this->remove ( pIterators [ index ] ) ) {
+                    ++ removedCount;
+                }
+            }
+
+            return removedCount;
         }
 
 
@@ -130,14 +121,14 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 ElementType const & elementType
         ) noexcept -> ElementType * & {
 
-            return this->_pMap->pNewInsert ( elementType );
+            return this->map()->pNewInsert ( elementType );
         }
 
 
         template < typename __KeyType, typename __ValueType > // NOLINT(bugprone-reserved-identifier)
         __CDS_OptimalInline auto Map < __KeyType, __ValueType > :: AbstractEntryMutableCollectionProxy :: pNewInsertPost () noexcept -> void {
 
-            return this->_pMap->pNewInsertPost();
+            return this->map()->pNewInsertPost();
         }
 
 
@@ -146,14 +137,14 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 EntryType const & entry
         ) const noexcept -> bool {
 
-            return this->_pMap->containsKey ( entry.key() );
+            return this->map()->containsKey ( entry.key() );
         }
 
 
         template < typename __KeyType, typename __ValueType > // NOLINT(bugprone-reserved-identifier)
         __CDS_OptimalInline auto Map < __KeyType, __ValueType > :: AbstractEntryMutableCollectionProxy :: clear () noexcept -> void {
 
-            this->_pMap->clear();
+            this->map()->clear();
         }
 
 

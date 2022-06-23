@@ -12,7 +12,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         constexpr Map < __KeyType, __ValueType > :: AbstractKeySetProxy :: AbstractKeySetProxy (
                 Map < __KeyType, __ValueType > * pMap
         ) noexcept :
-                _pMap ( pMap ) {
+                AbstractProxy ( pMap ) {
 
         }
 
@@ -21,6 +21,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         constexpr Map < __KeyType, __ValueType > :: AbstractKeySetProxy :: AbstractKeySetProxy (
                 AbstractKeySetProxy const & set
         ) noexcept :
+                AbstractProxy ( set ),
                 Set < KeyType > ( set ) {
 
         }
@@ -30,6 +31,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         constexpr Map < __KeyType, __ValueType > :: AbstractKeySetProxy :: AbstractKeySetProxy (
                 AbstractKeySetProxy && set
         ) noexcept :
+                AbstractProxy ( std :: move ( set ) ),
                 Set < KeyType > ( std :: move ( set ) ) {
 
         }
@@ -44,27 +46,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 KeyType const & key
         ) noexcept -> bool {
 
-            return this->_pMap->remove ( key );
-        }
-
-
-        template < typename __KeyType, typename __ValueType > // NOLINT(bugprone-reserved-identifier)
-        __CDS_OptimalInline auto Map < __KeyType, __ValueType > :: AbstractKeySetProxy :: remove (
-                ConstIterator const & iterator
-        ) noexcept -> bool {
-
-            /// TODO : after implementing HashMap iterator
-            return false;
-        }
-
-
-        template < typename __KeyType, typename __ValueType > // NOLINT(bugprone-reserved-identifier)
-        __CDS_OptimalInline auto Map < __KeyType, __ValueType > :: AbstractKeySetProxy :: remove (
-                ConstReverseIterator const & iterator
-        ) noexcept -> bool {
-
-            /// TODO : after implementing HashMap iterator
-            return false;
+            return this->map()->remove ( key );
         }
 
 
@@ -74,8 +56,14 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 Size                    iteratorCount
         ) noexcept -> Size {
 
-            /// TODO : after implementing HashMap iterator
-            return 0ULL;
+            Size removedCount = 0ULL;
+            for ( Size index = 0ULL; index < iteratorCount; ++ index ) {
+                if ( this->remove ( pIterators [ index ] ) ) {
+                    ++ removedCount;
+                }
+            }
+
+            return removedCount;
         }
 
 
@@ -85,8 +73,14 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 Size                            iteratorCount
         ) noexcept -> Size {
 
-            /// TODO : after implementing HashMap iterator
-            return 0ULL;
+            Size removedCount = 0ULL;
+            for ( Size index = 0ULL; index < iteratorCount; ++ index ) {
+                if ( this->remove ( pIterators [ index ] ) ) {
+                    ++ removedCount;
+                }
+            }
+
+            return removedCount;
         }
 
 
@@ -105,14 +99,14 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 KeyType const & key
         ) const noexcept -> bool {
 
-            return this->_pMap->containsKey ( key );
+            return this->map()->containsKey ( key );
         }
 
 
         template < typename __KeyType, typename __ValueType > // NOLINT(bugprone-reserved-identifier)
         __CDS_OptimalInline auto Map < __KeyType, __ValueType > :: AbstractKeySetProxy :: clear () noexcept -> void {
 
-            this->_pMap->clear();
+            this->map()->clear();
         }
 
     }

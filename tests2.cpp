@@ -67,6 +67,25 @@ int main () {
             << "Duration : "
             << std :: chrono :: duration_cast < std :: chrono :: milliseconds > ( end - start ).count() << '\n';
 
+    m.clear();
+
+    auto & keys = m.keys();
+
+    m.emplace ( 2, 4 );
+    std :: cout << keys << '\n';
+
+    m.emplace ( 1, 4 );
+    std :: cout << keys << '\n';
+
+    m.emplace ( 2, 4 );
+    std :: cout << keys << '\n';
+
+    m.emplace ( 3, 4 );
+    std :: cout << keys << '\n';
+
+    m.emplace ( 1, 4 );
+    std :: cout << keys << '\n';
+
 ////    auto it1 = testArr.begin();
 ////    for ( int i = 0; i < 500; ++ i ) {
 ////        ++ it1;

@@ -61,6 +61,9 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             using typename MutableCollection < ElementType > :: DelegateIteratorRequestType;
 
         protected:
+            class AbstractProxy;
+
+        protected:
             class AbstractKeySetProxy;
 
         protected:
@@ -301,10 +304,12 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
     }
 }
 
+#include "map/AbstractProxy.hpp"
 #include "map/AbstractKeySetProxy.hpp"
 #include "map/AbstractValueMutableCollectionProxy.hpp"
 #include "map/AbstractEntryMutableCollectionProxy.hpp"
 
+#include "map/impl/AbstractProxy.hpp"
 #include "map/impl/AbstractKeySetProxy.hpp"
 #include "map/impl/AbstractValueMutableCollectionProxy.hpp"
 #include "map/impl/AbstractEntryMutableCollectionProxy.hpp"

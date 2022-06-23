@@ -73,7 +73,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             ) const noexcept -> cds :: UniquePointer < DelegateConstIterator > override;
 
         public:
-            constexpr HashMapEntryMutableCollectionProxy (
+            __CDS_Explicit constexpr HashMapEntryMutableCollectionProxy (
                     HashMap < __KeyType, __ValueType, __Hasher > * pMap
             ) noexcept;
 
@@ -91,6 +91,26 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             __CDS_cpplang_ConstexprDestructor ~HashMapEntryMutableCollectionProxy() noexcept override;
 
         public:
+            auto remove (
+                    Iterator const & iterator
+            ) noexcept -> bool override;
+
+        public:
+            auto remove (
+                    ConstIterator const & iterator
+            ) noexcept -> bool override;
+
+        public:
+            auto remove (
+                    ReverseIterator const & iterator
+            ) noexcept -> bool override;
+
+        public:
+            auto remove (
+                    ConstReverseIterator const & iterator
+            ) noexcept -> bool override;
+
+        public:
             auto operator == (
                     HashMapEntryMutableCollectionProxy const & collection
             ) const noexcept -> bool;
@@ -99,6 +119,9 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             auto operator != (
                     HashMapEntryMutableCollectionProxy const & collection
             ) const noexcept -> bool;
+
+        public:
+            __CDS_NoDiscard auto size () const noexcept -> Size override;
 
         public:
             auto operator = (
