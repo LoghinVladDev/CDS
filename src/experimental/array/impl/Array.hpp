@@ -311,23 +311,38 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 }
             }
 
-            this->_capacity = maxOf ( newLen, Array :: minCapacity );
-            auto adjustedBuf    = cds :: __hidden :: __impl :: __allocation :: __allocPrimitiveArray < NodeType > ( this->_capacity );
             auto removedCount   = this->size() - newLen;
+            auto minRequiredCap = maxOf ( newLen, Array :: minCapacity );
 
-            this->_size = 0ULL;
-            for ( Size index = 0ULL; index < newLen; ++ index ) {
+            if ( this->_capacity > 2 * minRequiredCap ) {
+                this->_capacity = minRequiredCap;
+                auto adjustedBuf    = cds :: __hidden :: __impl :: __allocation :: __allocPrimitiveArray < NodeType > ( this->_capacity );
 
-                (void) std :: memcpy (
-                        & this->_pData [ this->_size ++ ]._data,
-                        pUsedValues [ index ]->_data,
-                        sizeof ( NodeType )
-                );
+                this->_size = 0ULL;
+                for ( Size index = 0ULL; index < newLen; ++ index ) {
+
+                    (void) std :: memcpy (
+                            adjustedBuf [ this->_size ++ ]._data,
+                            pUsedValues [ index ]->_data,
+                            sizeof ( NodeType )
+                    );
+                }
+
+                cds :: __hidden :: __impl :: __allocation :: __freePrimitiveArray ( cds :: exchange ( this->_pData, adjustedBuf ) );
+            } else {
+
+                this->_size = 0ULL;
+                for ( Size index = 0ULL; index < newLen; ++ index ) {
+
+                    (void) std :: memcpy (
+                            this->_pData [ this->_size ++ ]._data,
+                            pUsedValues [ index ]->_data,
+                            sizeof ( NodeType )
+                    );
+                }
             }
 
-            cds :: __hidden :: __impl :: __allocation :: __freePrimitiveArray ( cds :: exchange ( this->_pData, adjustedBuf ) );
             cds :: __hidden :: __impl :: __allocation :: __freePrimitiveArray ( pUsedValues );
-
             return removedCount;
         }
 
@@ -352,23 +367,38 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 }
             }
 
-            this->_capacity = maxOf ( newLen, Array :: minCapacity );
-            auto adjustedBuf    = cds :: __hidden :: __impl :: __allocation :: __allocPrimitiveArray < NodeType > ( this->_capacity );
             auto removedCount   = this->size() - newLen;
+            auto minRequiredCap = maxOf ( newLen, Array :: minCapacity );
 
-            this->_size = 0ULL;
-            for ( Size index = 0ULL; index < newLen; ++ index ) {
+            if ( this->_capacity > 2 * minRequiredCap ) {
+                this->_capacity = maxOf ( newLen, Array :: minCapacity );
+                auto adjustedBuf    = cds :: __hidden :: __impl :: __allocation :: __allocPrimitiveArray < NodeType > ( this->_capacity );
 
-                (void) std :: memcpy (
-                        & this->_pData [ this->_size ++ ]._data,
-                        pUsedValues [ index ]->_data,
-                        sizeof ( NodeType )
-                );
+                this->_size = 0ULL;
+                for ( Size index = 0ULL; index < newLen; ++ index ) {
+
+                    (void) std :: memcpy (
+                            adjustedBuf [ this->_size ++ ]._data,
+                            pUsedValues [ index ]->_data,
+                            sizeof ( NodeType )
+                    );
+                }
+
+                cds :: __hidden :: __impl :: __allocation :: __freePrimitiveArray ( cds :: exchange ( this->_pData, adjustedBuf ) );
+            } else {
+
+                this->_size = 0ULL;
+                for ( Size index = 0ULL; index < newLen; ++ index ) {
+
+                    (void) std :: memcpy (
+                            this->_pData [ this->_size ++ ]._data,
+                            pUsedValues [ index ]->_data,
+                            sizeof ( NodeType )
+                    );
+                }
             }
 
-            cds :: __hidden :: __impl :: __allocation :: __freePrimitiveArray ( cds :: exchange ( this->_pData, adjustedBuf ) );
             cds :: __hidden :: __impl :: __allocation :: __freePrimitiveArray ( pUsedValues );
-
             return removedCount;
         }
 

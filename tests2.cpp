@@ -25,7 +25,7 @@ using namespace cds :: literals;
 
 int main () {
 
-    cds :: experimental :: Array < String > arr;
+    cds :: experimental :: Array < int > arr;
 
     for ( int i = 0; i < 10000; ++ i ) {
         arr.pushBack(i);
@@ -36,6 +36,15 @@ int main () {
     for ( int i = 0; i < arr.size(); ++ i ) {
         std :: cout << arr.data()[i] << '\n';
     }
+
+
+    arr.clear();
+    arr.add(3);
+    arr.add(3);
+    arr.add(3);
+
+    arr.remove ( 2, 3 );
+    std :: cout << arr << '\n';
 
     cds :: experimental :: LinkedList < String > llstr;
 

@@ -7,7 +7,7 @@
 
 #define CDS_TEST_EXPERIMENTAL
 
-#include <cdsIntern/tests/cpp11/Test.h>
+#include "../../../../cdsIntern/tests/cpp11/Test.h"
 
 class CollectionTest : public Test {
 public:

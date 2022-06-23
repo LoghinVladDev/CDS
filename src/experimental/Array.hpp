@@ -185,6 +185,11 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                     ConstReverseIterator const & iterator
             ) noexcept -> bool override;
 
+        public:
+            using Collection < __ElementType > :: remove;
+            using MutableCollection < __ElementType > :: remove;
+            using List < __ElementType > :: remove;
+
         protected:
             auto remove (
                     Iterator    const * pIterators,
