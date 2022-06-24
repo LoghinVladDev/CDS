@@ -15,10 +15,10 @@ namespace cds {
         switch ( requestType ) {
             case DelegateIteratorRequestType :: ForwardBegin:
             case DelegateIteratorRequestType :: BackwardBegin:
-                return Memory :: instance().create < HashSetDelegateIterator > ( this->__cbegin() );
+                return Memory :: instance().create < HashSetDelegateIterator > ( this->__ht_cbegin() );
             case DelegateIteratorRequestType :: ForwardEnd:
             case DelegateIteratorRequestType :: BackwardEnd:
-                return Memory :: instance().create < HashSetDelegateIterator > ( this->__cend() );
+                return Memory :: instance().create < HashSetDelegateIterator > ( this->__ht_cend() );
         }
 
         return nullptr;
@@ -180,14 +180,14 @@ namespace cds {
     template < typename __ElementType, typename __Hasher > // NOLINT(bugprone-reserved-identifier)
     HashSet < __ElementType, __Hasher > :: ~HashSet () noexcept {
 
-        this->__clear();
+        this->__ht_clear();
     }
 
 
     template < typename __ElementType, typename __Hasher > // NOLINT(bugprone-reserved-identifier)
     __CDS_cpplang_ConstexprOverride auto HashSet < __ElementType, __Hasher > :: size () const noexcept -> Size {
 
-        return this->__size();
+        return this->__ht_size();
     }
 
 
@@ -196,7 +196,7 @@ namespace cds {
             ElementType const & element
     ) noexcept -> bool {
 
-        return this->__remove ( element );
+        return this->__ht_remove ( element );
     }
 
 
@@ -205,7 +205,7 @@ namespace cds {
             ConstIterator const & iterator
     ) noexcept -> bool {
 
-        return this->__remove (
+        return this->__ht_remove (
                 reinterpret_cast < HashSetDelegateIterator const * > (
                         HashSet :: acquireDelegate ( iterator )
                 )->iterator()
@@ -218,7 +218,7 @@ namespace cds {
             ConstReverseIterator const & iterator
     ) noexcept -> bool {
 
-        return this->__remove (
+        return this->__ht_remove (
                 reinterpret_cast < HashSetDelegateIterator const * > (
                         HashSet :: acquireDelegate ( iterator )
                 )->iterator()
@@ -262,7 +262,7 @@ namespace cds {
     ) noexcept -> ElementType * {
 
         bool isNew;
-        auto pEntry = this->__get ( referenceElement, & isNew );
+        auto pEntry = this->__ht_get ( referenceElement, & isNew );
         return isNew ? & pEntry->data() : nullptr;
     }
 
@@ -272,14 +272,14 @@ namespace cds {
             ElementType const & element
     ) const noexcept -> bool {
 
-        return this->__get ( element ) != nullptr;
+        return this->__ht_get ( element ) != nullptr;
     }
 
 
     template < typename __ElementType, typename __Hasher > // NOLINT(bugprone-reserved-identifier)
     auto HashSet < __ElementType, __Hasher > :: clear () noexcept -> void {
 
-        this->__clear();
+        this->__ht_clear();
     }
 
 
@@ -288,7 +288,7 @@ namespace cds {
             HashSet const & set
     ) const noexcept -> bool {
 
-        return this->__equals ( set );
+        return this->__ht_equals ( set );
     }
 
 
@@ -297,7 +297,7 @@ namespace cds {
             HashSet const & set
     ) const noexcept -> bool {
 
-        return ! this->__equals ( set );
+        return ! this->__ht_equals ( set );
     }
 
 
@@ -311,7 +311,7 @@ namespace cds {
             return * this;
         }
 
-        this->__assign ( set, __HashTableFunctionCopyConstructor () );
+        this->__ht_assign ( set, __HashTableFunctionCopyConstructor () );
         return * this;
     }
 
@@ -325,7 +325,7 @@ namespace cds {
             return * this;
         }
 
-        this->__assign ( std :: move ( set ) );
+        this->__ht_assign ( std :: move ( set ) );
         return * this;
     }
 
@@ -340,7 +340,7 @@ namespace cds {
             return * this;
         }
 
-        this->__clear();
+        this->__ht_clear();
         for ( auto iterator = collection.begin(), end = collection.end(); iterator != end; ++ iterator ) {
             this->insert ( * iterator );
         }

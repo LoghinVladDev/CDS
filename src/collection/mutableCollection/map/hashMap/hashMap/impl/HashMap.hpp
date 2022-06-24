@@ -57,10 +57,10 @@ namespace cds {
         switch ( requestType ) {
             case DelegateIteratorRequestType :: ForwardBegin:
             case DelegateIteratorRequestType :: BackwardBegin:
-                return Memory :: instance().create < HashMapDelegateIterator > ( this->__begin() );
+                return Memory :: instance().create < HashMapDelegateIterator > ( this->__ht_begin() );
             case DelegateIteratorRequestType :: ForwardEnd:
             case DelegateIteratorRequestType :: BackwardEnd:
-                return Memory :: instance().create < HashMapDelegateIterator > ( this->__end() );
+                return Memory :: instance().create < HashMapDelegateIterator > ( this->__ht_end() );
         }
 
         return nullptr;
@@ -75,10 +75,10 @@ namespace cds {
         switch ( requestType ) {
             case DelegateIteratorRequestType :: ForwardBegin:
             case DelegateIteratorRequestType :: BackwardBegin:
-                return Memory :: instance().create < HashMapDelegateConstIterator > ( this->__cbegin() );
+                return Memory :: instance().create < HashMapDelegateConstIterator > ( this->__ht_cbegin() );
             case DelegateIteratorRequestType :: ForwardEnd:
             case DelegateIteratorRequestType :: BackwardEnd:
-                return Memory :: instance().create < HashMapDelegateConstIterator > ( this->__cend() );
+                return Memory :: instance().create < HashMapDelegateConstIterator > ( this->__ht_cend() );
         }
 
         return nullptr;
@@ -244,14 +244,14 @@ namespace cds {
     template < typename __KeyType, typename __ValueType, typename __Hasher > // NOLINT(bugprone-reserved-identifier)
     __CDS_OptimalInline HashMap < __KeyType, __ValueType, __Hasher > :: ~HashMap () noexcept {
 
-        this->__clear();
+        this->__ht_clear();
     }
 
 
     template < typename __KeyType, typename __ValueType, typename __Hasher > // NOLINT(bugprone-reserved-identifier)
     __CDS_cpplang_ConstexprOverride auto HashMap < __KeyType, __ValueType, __Hasher > :: size () const noexcept -> Size {
 
-        return this->__size();
+        return this->__ht_size();
     }
 
 
@@ -261,7 +261,7 @@ namespace cds {
             bool          & isNew
     ) noexcept -> EntryType * {
 
-        return this->__get ( key, & isNew );
+        return this->__ht_get ( key, & isNew );
     }
 
 
@@ -270,7 +270,7 @@ namespace cds {
             KeyType const & key
     ) const noexcept -> EntryType const * {
 
-        return this->__get ( key );
+        return this->__ht_get ( key );
     }
 
 
@@ -279,7 +279,7 @@ namespace cds {
             ElementType const & entry
     ) const noexcept -> bool {
 
-        return this->__at ( entry.key() ) != nullptr;
+        return this->__ht_at ( entry.key() ) != nullptr;
     }
 
 
@@ -288,7 +288,7 @@ namespace cds {
             KeyType const & key
     ) const noexcept -> bool {
 
-        return this->__at ( key ) != nullptr;
+        return this->__ht_at ( key ) != nullptr;
     }
 
 
@@ -297,7 +297,7 @@ namespace cds {
             ValueType const & value
     ) const noexcept -> bool {
 
-        for ( auto iterator = this->__cbegin(); iterator != this->__cend() ; ++ iterator ) {
+        for ( auto iterator = this->__ht_cbegin(), end = this->__ht_cend(); iterator != end ; ++ iterator ) {
             if ( cds :: meta :: equals ( ( * iterator ).value(), value ) ) {
                 return true;
             }
@@ -312,7 +312,7 @@ namespace cds {
             KeyType const & key
     ) noexcept -> bool {
 
-        return this->__remove ( key );
+        return this->__ht_remove ( key );
     }
 
 
@@ -321,7 +321,7 @@ namespace cds {
             Iterator const & iterator
     ) noexcept -> bool {
 
-        return this->__remove (
+        return this->__ht_remove (
                 reinterpret_cast < HashMapDelegateIterator const * > (
                         HashMap :: acquireDelegate ( iterator )
                 )->iterator()
@@ -334,7 +334,7 @@ namespace cds {
             ConstIterator const & iterator
     ) noexcept -> bool {
 
-        return this->__remove (
+        return this->__ht_remove (
                 reinterpret_cast < HashMapDelegateConstIterator const * > (
                         HashMap :: acquireDelegate ( iterator )
                 )->iterator()
@@ -347,7 +347,7 @@ namespace cds {
             ReverseIterator const & iterator
     ) noexcept -> bool {
 
-        return this->__remove (
+        return this->__ht_remove (
                 reinterpret_cast < HashMapDelegateIterator const * > (
                         HashMap :: acquireDelegate ( iterator )
                 )->iterator()
@@ -360,7 +360,7 @@ namespace cds {
             ConstReverseIterator const & iterator
     ) noexcept -> bool {
 
-        return this->__remove (
+        return this->__ht_remove (
                 reinterpret_cast < HashMapDelegateConstIterator const * > (
                         HashMap :: acquireDelegate ( iterator )
                 )->iterator()
@@ -439,7 +439,7 @@ namespace cds {
     template < typename __KeyType, typename __ValueType, typename __Hasher > // NOLINT(bugprone-reserved-identifier)
     __CDS_OptimalInline auto HashMap < __KeyType, __ValueType, __Hasher > :: clear () noexcept -> void {
 
-        return this->__clear();
+        return this->__ht_clear();
     }
 
 
@@ -448,7 +448,7 @@ namespace cds {
             HashMap const & map
     ) const noexcept -> bool {
 
-        return this->__equals ( map, __HashTableFunctionEntryEquals () );
+        return this->__ht_equals ( map, __HashTableFunctionEntryEquals () );
     }
 
 
@@ -457,7 +457,7 @@ namespace cds {
             HashMap const & map
     ) const noexcept -> bool {
 
-        return ! this->__equals ( map, __HashTableFunctionEntryEquals () );
+        return ! this->__ht_equals ( map, __HashTableFunctionEntryEquals () );
     }
 
 
@@ -471,7 +471,7 @@ namespace cds {
             return * this;
         }
 
-        this->__assign ( map, __HashTableFunctionCopyConstructor () );
+        this->__ht_assign ( map, __HashTableFunctionCopyConstructor () );
         return * this;
     }
 
@@ -485,7 +485,7 @@ namespace cds {
             return * this;
         }
 
-        this->__assign ( map );
+        this->__ht_assign ( map );
         return * this;
     }
 
