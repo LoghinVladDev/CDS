@@ -6,6 +6,7 @@
 #define __CDS_EX_ARRAY_HPP__
 
 #include <CDS/experimental/List>
+#include "../shared/memory/PrimitiveAllocation.hpp"
 
 namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
@@ -67,10 +68,13 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             ) const noexcept -> cds :: UniquePointer < DelegateConstIterator > override;
 
         private:
-            ElementType ** _pData       { nullptr };
+            using NodeType = cds :: __hidden :: __impl :: __allocation :: __RawContainer < ElementType >;
 
         private:
-            Size           _capacity    { 0ULL };
+            NodeType  * _pData       { nullptr };
+
+        private:
+            Size        _capacity    { 0ULL };
 
         protected:
             static Size const minCapacity = 32ULL;
@@ -181,6 +185,11 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                     ConstReverseIterator const & iterator
             ) noexcept -> bool override;
 
+        public:
+            using Collection < __ElementType > :: remove;
+            using MutableCollection < __ElementType > :: remove;
+            using List < __ElementType > :: remove;
+
         protected:
             auto remove (
                     Iterator    const * pIterators,
@@ -205,61 +214,71 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                     Size                            iteratorCount
             ) noexcept -> Size override;
 
+        public:
+            __CDS_NoDiscard constexpr auto data () const noexcept -> ElementType const * {
+                return reinterpret_cast < ElementType const * > ( this->_pData );
+            }
+
+        public:
+            __CDS_NoDiscard __CDS_cpplang_NonConstConstexprMemberFunction auto data () noexcept -> ElementType * {
+                return reinterpret_cast < ElementType * > ( this->_pData );
+            }
+
         protected:
             auto pNewBefore (
                     Index index
-            ) noexcept -> ElementType * &;
+            ) noexcept -> ElementType *;
 
         protected:
             auto pNewAfter (
                     Index index
-            ) noexcept -> ElementType * &;
+            ) noexcept -> ElementType *;
 
         protected:
-            auto pNewFront () noexcept -> ElementType * & override;
+            auto pNewFront () noexcept -> ElementType * override;
 
         protected:
-            auto pNewBack () noexcept -> ElementType * & override;
+            auto pNewBack () noexcept -> ElementType * override;
 
         protected:
             auto pNewBefore (
                     Iterator const & iterator
-            ) noexcept -> ElementType * & override;
+            ) noexcept -> ElementType * override;
 
         protected:
             auto pNewAfter (
                     Iterator const & iterator
-            ) noexcept -> ElementType * & override;
+            ) noexcept -> ElementType * override;
 
         protected:
             auto pNewBefore (
                     ConstIterator const & iterator
-            ) noexcept -> ElementType * & override;
+            ) noexcept -> ElementType * override;
 
         protected:
             auto pNewAfter (
                     ConstIterator const & iterator
-            ) noexcept -> ElementType * & override;
+            ) noexcept -> ElementType * override;
 
         protected:
             auto pNewBefore (
                     ReverseIterator const & iterator
-            ) noexcept -> ElementType * & override;
+            ) noexcept -> ElementType * override;
 
         protected:
             auto pNewAfter (
                     ReverseIterator const & iterator
-            ) noexcept -> ElementType * & override;
+            ) noexcept -> ElementType * override;
 
         protected:
             auto pNewBefore (
                     ConstReverseIterator const & iterator
-            ) noexcept -> ElementType * & override;
+            ) noexcept -> ElementType * override;
 
         protected:
             auto pNewAfter (
                     ConstReverseIterator const & iterator
-            ) noexcept -> ElementType * & override;
+            ) noexcept -> ElementType * override;
 
         public:
             __CDS_NoDiscard __CDS_cpplang_ConstexprOverride auto front () noexcept (false) -> ElementType & override;

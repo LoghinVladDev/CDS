@@ -119,16 +119,9 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         template < typename __KeyType, typename __ValueType > // NOLINT(bugprone-reserved-identifier)
         __CDS_OptimalInline auto Map < __KeyType, __ValueType > :: AbstractEntryMutableCollectionProxy :: pNewInsert (
                 ElementType const & elementType
-        ) noexcept -> ElementType * & {
+        ) noexcept -> ElementType * {
 
             return this->map()->pNewInsert ( elementType );
-        }
-
-
-        template < typename __KeyType, typename __ValueType > // NOLINT(bugprone-reserved-identifier)
-        __CDS_OptimalInline auto Map < __KeyType, __ValueType > :: AbstractEntryMutableCollectionProxy :: pNewInsertPost () noexcept -> void {
-
-            return this->map()->pNewInsertPost();
         }
 
 

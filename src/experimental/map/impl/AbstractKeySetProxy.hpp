@@ -87,10 +87,9 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         template < typename __KeyType, typename __ValueType > // NOLINT(bugprone-reserved-identifier)
         __CDS_OptimalInline auto Map < __KeyType, __ValueType > :: AbstractKeySetProxy :: pNewInsert (
                 ElementType const & referenceElement
-        ) noexcept -> ElementType * & {
+        ) noexcept -> ElementType * {
 
-            static auto dummyAddress = reinterpret_cast < ElementType * > ( 0x10 );
-            return dummyAddress;
+            return nullptr;
         }
 
 

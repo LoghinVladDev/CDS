@@ -12,6 +12,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
                 template < typename __Type, Size __size = sizeof ( __Type ) > // NOLINT(bugprone-reserved-identifier)
                 struct __RawContainer { // NOLINT(bugprone-reserved-identifier)
+
                     Byte _data [ __size ];
 
                     constexpr static auto size = __size;

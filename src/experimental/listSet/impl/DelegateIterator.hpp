@@ -79,7 +79,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
         __CDS_cpplang_ConstexprOverride auto ListSet < __ElementType > :: ListSetDelegateIterator :: value() const noexcept -> __ElementType const & {
 
-            return * this->_pCurrentNode->_pData;
+            return this->_pCurrentNode->_data.data();
         }
 
 

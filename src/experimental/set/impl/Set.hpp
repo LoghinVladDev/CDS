@@ -50,18 +50,24 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
 
         template < typename __ElementType, cds :: meta :: EnableIf < meta :: isValidSetElement < __ElementType > () > __enabler > // NOLINT(bugprone-reserved-identifier)
+        __CDS_OptimalInline auto Set < __ElementType, __enabler > :: remove (
+                ElementType const & element
+        ) noexcept -> bool {
+
+            return this->removeFirst ( element );
+        }
+
+
+        template < typename __ElementType, cds :: meta :: EnableIf < meta :: isValidSetElement < __ElementType > () > __enabler > // NOLINT(bugprone-reserved-identifier)
         template < typename __VElementType, cds :: meta :: EnableIf < cds :: meta :: isCopyConstructible < __VElementType > () > > // NOLINT(bugprone-reserved-identifier)
         auto Set < __ElementType, __enabler > :: insert (
                 ElementType const & element
-        ) noexcept -> ElementType const & {
+        ) noexcept -> void {
 
-            auto & pElementLocation = this->pNewInsert ( element );
-            if ( pElementLocation == nullptr ) {
-                pElementLocation = Memory :: instance().create < ElementType > ( element );
-                this->pNewInsertPost();
+            auto pElementLocation = this->pNewInsert ( element );
+            if ( pElementLocation != nullptr ) {
+                new ( pElementLocation ) ElementType ( element );
             }
-
-            return * pElementLocation;
         }
 
 
@@ -69,15 +75,12 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         template < typename __VElementType, cds :: meta :: EnableIf < cds :: meta :: isMoveConstructible < __VElementType > () > > // NOLINT(bugprone-reserved-identifier)
         auto Set < __ElementType, __enabler > :: insert (
                 ElementType && element
-        ) noexcept -> ElementType const & {
+        ) noexcept -> void {
 
-            auto & pElementLocation = this->pNewInsert ( element );
-            if ( pElementLocation == nullptr ) {
-                pElementLocation = Memory :: instance().create < ElementType > ( std :: move ( element ) );
-                this->pNewInsertPost();
+            auto pElementLocation = this->pNewInsert ( element );
+            if ( pElementLocation != nullptr ) {
+                new ( pElementLocation ) ElementType ( std :: move ( element ) );
             }
-
-            return * pElementLocation;
         }
 
 

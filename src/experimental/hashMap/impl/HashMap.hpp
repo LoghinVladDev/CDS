@@ -260,26 +260,18 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         __CDS_OptimalInline auto HashMap < __KeyType, __ValueType, __Hasher > :: entryAt (
                 KeyType const & key,
                 bool          & isNew
-        ) noexcept -> EntryType {
+        ) noexcept -> EntryType * {
 
-            auto pEntry = this->__get ( key, & isNew );
-            return EntryType ( pEntry->_key.data(), pEntry->_value.data() );
+            return this->__get ( key, & isNew );
         }
 
 
         template < typename __KeyType, typename __ValueType, typename __Hasher > // NOLINT(bugprone-reserved-identifier)
         __CDS_OptimalInline auto HashMap < __KeyType, __ValueType, __Hasher > :: entryAt ( // NOLINT(readability-const-return-type)
-                KeyType const & key,
-                bool          & found
-        ) const noexcept -> EntryType const {
+                KeyType const & key
+        ) const noexcept -> EntryType const * {
 
-            auto pEntry = this->__get ( key );
-            if ( pEntry == nullptr ) {
-                found = false;
-                return EntryType ();
-            }
-
-            return EntryType ( pEntry->_key.data(), pEntry->_value.data() );
+            return this->__get ( key );
         }
 
 
@@ -307,7 +299,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         ) const noexcept -> bool {
 
             for ( auto iterator = this->__cbegin(); iterator != this->__cend() ; ++ iterator ) {
-                if ( cds :: meta :: equals ( ( * iterator )._value.data(), value ) ) {
+                if ( cds :: meta :: equals ( ( * iterator ).value(), value ) ) {
                     return true;
                 }
             }

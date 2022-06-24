@@ -8,27 +8,18 @@
 namespace cds { // NOLINT(modernize-concat-nested-namespaces)
     namespace experimental {
 
-        template < typename __ElementType, typename __HashCalculator > // NOLINT(bugprone-reserved-identifier)
-        class HashSet < __ElementType, __HashCalculator > :: HashSetDelegateIterator : public DelegateConstIterator {
+        template < typename __ElementType, typename __Hasher > // NOLINT(bugprone-reserved-identifier)
+        class HashSet < __ElementType, __Hasher > :: HashSetDelegateIterator : public DelegateConstIterator {
 
         private:
-            using Node = typename HashSet < __ElementType, __HashCalculator > :: Node;
+            using HashTableConstIterator = typename HashSet < __ElementType, __Hasher > :: HashTableConstIterator;
 
         private:
-            Node                                        const * _pCurrentNode { nullptr };
-
-        private:
-            Index                                               _currentListIndex { 0 };
-
-        private:
-            HashSet < __ElementType, __HashCalculator > const * _pHashSet { nullptr };
-
-        private:
-            __CDS_cpplang_ConstexprConditioned auto skipEmpty () noexcept -> void;
+            HashTableConstIterator _iterator;
 
         public:
-            __CDS_Explicit __CDS_cpplang_ConstexprConstructorNonEmptyBody HashSetDelegateIterator (
-                    HashSet < __ElementType, __HashCalculator > const * pHashSet
+            __CDS_Explicit constexpr HashSetDelegateIterator (
+                    HashTableConstIterator const & iterator
             ) noexcept;
 
         public:
@@ -48,10 +39,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             __CDS_NoDiscard constexpr auto valid () const noexcept -> bool override;
 
         public:
-            __CDS_NoDiscard constexpr auto currentListIndex () const noexcept -> Index;
-
-        public:
-            __CDS_NoDiscard constexpr auto currentNode () const noexcept -> Node const *;
+            __CDS_NoDiscard constexpr auto iterator () const noexcept -> HashTableConstIterator const &;
 
         public:
             __CDS_cpplang_ConstexprOverride auto next () noexcept -> HashSetDelegateIterator & override;

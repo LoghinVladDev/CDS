@@ -168,7 +168,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
         __CDS_OptimalInline auto List < __ElementType > :: pNewInsert (
                 ElementType const & referenceElement
-        ) noexcept -> ElementType * & {
+        ) noexcept -> ElementType * {
 
             (void) referenceElement;
             return this->pNewBack();
@@ -254,15 +254,9 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         template < typename __VElementType, meta :: EnableIf < meta :: isCopyConstructible < __VElementType > () > > // NOLINT(bugprone-reserved-identifier)
         __CDS_OptimalInline auto List < __ElementType > :: pushBack (
                 ElementType const & element
-        ) noexcept -> ElementType & {
+        ) noexcept -> void {
 
-            auto & pNew = this->pNewBack();
-            if ( pNew != nullptr ) {
-                return * pNew;
-            }
-
-            pNew = Memory :: instance().create < ElementType > ( element );
-            return * pNew;
+            new ( this->pNewBack() ) ElementType ( element );
         }
 
 
@@ -270,15 +264,9 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         template < typename __VElementType, meta :: EnableIf < meta :: isMoveConstructible < __VElementType > () > > // NOLINT(bugprone-reserved-identifier)
         __CDS_OptimalInline auto List < __ElementType > :: pushBack (
                 ElementType && element
-        ) noexcept -> ElementType & {
+        ) noexcept -> void {
 
-            auto & pNew = this->pNewBack();
-            if ( pNew != nullptr ) {
-                return * pNew;
-            }
-
-            pNew = Memory :: instance().create < ElementType > ( std :: move ( element ) );
-            return * pNew;
+            new ( this->pNewBack() ) ElementType ( std :: move ( element ) );
         }
 
 
@@ -286,15 +274,9 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         template < typename __VElementType, meta :: EnableIf < meta :: isCopyConstructible < __VElementType > () > > // NOLINT(bugprone-reserved-identifier)
         __CDS_OptimalInline auto List < __ElementType > :: pushFront (
                 ElementType const & element
-        ) noexcept -> ElementType & {
+        ) noexcept -> void {
 
-            auto & pNew = this->pNewFront();
-            if ( pNew != nullptr ) {
-                return * pNew;
-            }
-
-            pNew = Memory :: instance().create < ElementType > ( element );
-            return * pNew;
+            new ( this->pNewFront() ) ElementType ( element );
         }
 
 
@@ -302,15 +284,9 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         template < typename __VElementType, meta :: EnableIf < meta :: isMoveConstructible < __VElementType > () > > // NOLINT(bugprone-reserved-identifier)
         __CDS_OptimalInline auto List < __ElementType > :: pushFront (
                 ElementType && element
-        ) noexcept -> ElementType & {
+        ) noexcept -> void {
 
-            auto & pNew = this->pNewFront();
-            if ( pNew != nullptr ) {
-                return * pNew;
-            }
-
-            pNew = Memory :: instance().create < ElementType > ( std :: move ( element ) );
-            return * pNew;
+            new ( this->pNewFront() ) ElementType ( std :: move ( element ) );
         }
 
 

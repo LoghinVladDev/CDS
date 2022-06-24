@@ -75,7 +75,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
         __CDS_cpplang_ConstexprOverride auto LinkedList < __ElementType > :: LinkedListDelegateConstIterator :: value () const noexcept -> __ElementType const & {
 
-            return * this->_pNode->_pData;
+            return this->_pNode->_data.data();
         }
 
 

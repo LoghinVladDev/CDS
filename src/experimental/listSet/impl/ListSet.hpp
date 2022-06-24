@@ -27,6 +27,23 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
 
         template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
+        __CDS_OptimalInline auto ListSet < __ElementType > :: __allocateNode () noexcept -> Node * {
+
+            return cds :: __hidden :: __impl :: __allocation :: __allocPrimitiveObject < Node > ();
+        }
+
+
+        template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
+        __CDS_OptimalInline auto ListSet < __ElementType > :: __freeNode (
+                Node * pNode
+        ) noexcept -> void {
+
+            pNode->_data.destruct();
+            return cds :: __hidden :: __impl :: __allocation :: __freePrimitiveObject ( pNode );
+        }
+
+
+        template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
         constexpr ListSet < __ElementType > :: ListSet () noexcept = default;
 
 
@@ -40,9 +57,9 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             Node * pLocalBack = nullptr;
             for ( auto pOtherHead = set._pFront; pOtherHead != nullptr; pOtherHead = pOtherHead->_pNext ) {
 
-                auto pNewNode = Memory :: instance().create < Node > ();
+                auto pNewNode = ListSet :: __allocateNode();
                 pNewNode->_pNext = nullptr;
-                pNewNode->_pData = Memory :: instance().create < __ElementType > ( * pOtherHead._pData );
+                pNewNode->_data.construct ( pOtherHead->_data.data() );
 
                 if ( this->_pFront == nullptr ) {
                     this->_pFront       = pNewNode;
@@ -85,7 +102,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
         ListSet < __ElementType > :: ~ListSet () noexcept {
 
-            this-> ListSet < __ElementType > :: clear ();
+            this-> ListSet :: clear ();
         }
 
 
@@ -98,8 +115,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 auto pCopy      = this->_pFront;
                 this->_pFront   = this->_pFront->_pNext;
 
-                Memory :: instance().destroy ( pCopy->_pData );
-                Memory :: instance().destroy ( pCopy );
+                ListSet :: __freeNode ( pCopy );
                 return true;
             }
 
@@ -107,9 +123,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             auto pToRemove      = pPrevious->_pNext;
             pPrevious->_pNext = pPrevious->_pNext->_pNext;
 
-            Memory :: instance().destroy ( pToRemove->_pData );
-            Memory :: instance().destroy ( pToRemove );
-
+            ListSet :: __freeNode ( pToRemove );
             return true;
         }
 
@@ -177,8 +191,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 auto pCopy      = this->_pFront;
                 this->_pFront   = this->_pFront->_pNext;
 
-                Memory :: instance().destroy ( pCopy->_pData );
-                Memory :: instance().destroy ( pCopy );
+                ListSet :: __freeNode ( pCopy );
             }
 
             this->_size = 0ULL;

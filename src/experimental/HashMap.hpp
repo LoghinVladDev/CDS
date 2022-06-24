@@ -9,11 +9,17 @@
 #include <CDS/Destructor>
 #include <CDS/Extractor>
 #include <CDS/CopyConstructor>
+#include <CDS/Comparator>
+#include <CDS/Hasher>
 #include "../shared/rehashPolicy/rehashPolicy.hpp"
 #include "shared/hash/HashTable.hpp"
 #include "hashMap/HashTableConstructs.hpp"
 
 namespace cds { // NOLINT(modernize-concat-nested-namespaces)
+
+    template < typename __CollectionType > // NOLINT(bugprone-reserved-identifier)
+    class Sequence;
+
     namespace experimental {
 
         template <
@@ -23,12 +29,12 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         > class HashMap :
                 public Map < __KeyType, __ValueType >,
                 protected __hidden :: __impl :: __HashTable <
-                        __hidden :: __impl :: __HashMapDataNode < __KeyType, __ValueType >,
+                        typename Map < __KeyType, __ValueType > :: EntryType,
                         __KeyType,
                         FunctionExtractor <
-                                cds :: experimental :: __hidden :: __impl :: __HashMapDataNode < __KeyType, __ValueType >,
-                                __ValueType,
-                                & cds :: experimental :: __hidden :: __impl :: __hashMapDataNodeKeyExtractor <
+                                typename Map < __KeyType, __ValueType > :: EntryType,
+                                __KeyType,
+                                & __hidden :: __impl :: __hashMapDataNodeKeyExtractor <
                                         __KeyType,
                                         __ValueType
                                 >
@@ -37,17 +43,14 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                         __Hasher,
                         cds :: __hidden :: __impl :: __PrimeRehashPolicy,
                         FunctionDestructor <
-                                cds :: experimental :: __hidden :: __impl :: __HashMapDataNode < __KeyType, __ValueType >,
-                                & cds :: experimental :: __hidden :: __impl :: __hashMapDataNodeDestructor < __KeyType, __ValueType >
+                                typename Map < __KeyType, __ValueType > :: EntryType,
+                                & __hidden :: __impl :: __hashMapDataNodeDestructor < __KeyType, __ValueType >
                         >
                 > {
 
         protected:
             using __HashTableElementType =  // NOLINT(bugprone-reserved-identifier)
-                    __hidden :: __impl :: __HashMapDataNode <
-                            __KeyType,
-                            __ValueType
-                    >;
+                    typename Map < __KeyType, __ValueType > :: EntryType;
 
         protected:
             using __HashTableKeyType =  // NOLINT(bugprone-reserved-identifier)
@@ -57,7 +60,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             using __HashTableFunctionExtractor =    // NOLINT(bugprone-reserved-identifier)
                     FunctionExtractor <
                             __HashTableElementType,
-                            __ValueType,
+                            __HashTableKeyType,
                             & __hidden :: __impl :: __hashMapDataNodeKeyExtractor <
                                     __KeyType,
                                     __ValueType
@@ -274,13 +277,12 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             auto entryAt (
                     KeyType const & key,
                     bool          & isNew
-            ) noexcept -> EntryType override;
+            ) noexcept -> EntryType * override;
 
         private:
             auto entryAt (
-                    KeyType const & key,
-                    bool          & found
-            ) const noexcept -> EntryType const override;
+                    KeyType const & key
+            ) const noexcept -> EntryType const * override;
 
         public:
             auto contains (
@@ -418,6 +420,8 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
 #include "hashMap/valueMutableCollection/impl/DelegateIterator.hpp"
 #include "hashMap/valueMutableCollection/impl/DelegateConstIterator.hpp"
+
+#include "hashMap/CTAD.hpp"
 
 #include "shared/hashMap/impl/HashMapSequence.hpp"
 

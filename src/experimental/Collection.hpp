@@ -1492,23 +1492,16 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
         protected:
             /**
-             * @brief Function used in Collection :: add implementation, called to acquire a pointer reference to allocate the new element to
+             * @brief Function used in Collection :: add implementation, called to acquire a pointer to place the new object at
              * @param referenceElement : ElementType cref = Constant Reference to the element to be added, as a reference, if implementation requires specific placement
              * @exceptsafe
-             * @return ElementType ptr ref = Reference to an ElementType pointer.
+             * @return ElementType ptr = a pointer to an ElementType.
              * @test tested in base class test
              */
             virtual auto pNewInsert (
                     ElementType const & referenceElement
-            ) noexcept -> ElementType * & = 0;
+            ) noexcept -> ElementType * = 0;
 
-        protected:
-            /**
-             * @brief Function used in Collection :: add implementation, called after storage of new value
-             * @exceptsafe
-             * @test tested in base class test
-             */
-            virtual auto pNewInsertPost () noexcept -> void;
         };
         template < template < typename ... > class __CollectionType, typename ... __ArgumentTypes, typename __Common = meta :: Common < __ArgumentTypes ... > > // NOLINT(bugprone-reserved-identifier)
         auto collectionOf (

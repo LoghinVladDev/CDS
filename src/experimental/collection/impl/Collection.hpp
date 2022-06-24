@@ -1597,28 +1597,26 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
         template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
         template < typename __VElementType, meta :: EnableIf < meta :: isCopyConstructible < __VElementType > () > > // NOLINT(bugprone-reserved-identifier)
-        auto Collection < __ElementType > :: add (
+        __CDS_OptimalInline auto Collection < __ElementType > :: add (
                 ElementType const & element
         ) noexcept ( noexcept ( ElementType ( element ) ) ) -> void {
 
-            auto & pElementLocation = this->pNewInsert ( element );
-            if ( pElementLocation == nullptr ) {
-                pElementLocation = Memory :: instance().create < ElementType > ( element );
-                this->pNewInsertPost();
+            auto pElementLocation = this->pNewInsert ( element );
+            if ( pElementLocation != nullptr ) {
+                new ( pElementLocation ) __ElementType ( element );
             }
         }
 
 
         template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
         template < typename __VElementType, meta :: EnableIf < meta :: isMoveConstructible < __VElementType > () > > // NOLINT(bugprone-reserved-identifier)
-        auto Collection < __ElementType > :: add (
+        __CDS_OptimalInline auto Collection < __ElementType > :: add (
                 ElementType && element
         ) noexcept ( noexcept ( ElementType ( std :: move ( element ) ) ) ) -> void {
 
-            auto & pElementLocation = this->pNewInsert ( element );
-            if ( pElementLocation == nullptr ) {
-                pElementLocation = Memory :: instance().create < ElementType > ( std :: move ( element ) );
-                this->pNewInsertPost();
+            auto pElementLocation = this->pNewInsert ( element );
+            if ( pElementLocation != nullptr ) {
+                new ( pElementLocation ) __ElementType ( element );
             }
         }
 
@@ -1635,20 +1633,13 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
         template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
         template < typename __OtherElementType, typename __ArgumentTypes, meta :: EnableIf < meta :: isCopyConstructible < __ArgumentTypes > () || meta :: isConvertible < __OtherElementType, __ArgumentTypes > () > > // NOLINT(bugprone-reserved-identifier)
-        auto Collection < __ElementType > :: addAllOf (
+        __CDS_OptimalInline auto Collection < __ElementType > :: addAllOf (
                 Collection < __OtherElementType > const & otherCollection
         ) noexcept -> void {
 
             for ( auto iterator = otherCollection.begin(), end = otherCollection.end(); iterator != end; ++ iterator ) {
                 this->add ( * iterator );
             }
-        }
-
-
-        template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
-        __CDS_OptimalInline auto Collection < __ElementType > :: pNewInsertPost() noexcept -> void {
-            /* left empty intentionally, derived classes can override this, but it is not mandatory.
-             * Refer to Collection :: add to when this should be overridden */
         }
 
     }

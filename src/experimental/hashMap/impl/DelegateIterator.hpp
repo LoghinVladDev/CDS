@@ -71,9 +71,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         template < typename __KeyType, typename __ValueType, typename __Hasher > // NOLINT(bugprone-reserved-identifier)
         __CDS_cpplang_ConstexprOverride auto HashMap < __KeyType, __ValueType, __Hasher > :: HashMapDelegateIterator :: value () const noexcept -> HashMap < __KeyType, __ValueType, __Hasher > :: ElementType & {
 
-            auto & entry = * this->_iterator;
-            this->_wrapper = EntryType ( entry._key.data(), entry._value.data() );
-            return this->_wrapper;
+            return * this->_iterator;
         }
 
 
