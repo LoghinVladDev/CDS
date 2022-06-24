@@ -1,36 +1,38 @@
-#include <CDS/experimental/Collection>
-#include <CDS/experimental/Array>
-#include <CDS/experimental/LinkedList>
-#include <CDS/experimental/OrderedSet>
-#include <CDS/experimental/UnorderedSet>
-#include <CDS/experimental/HashSet>
-#include <CDS/experimental/HashMap>
-#include <CDS/smartPointers/UniquePointer>
-#include <chrono>
-
-#include <random>
-#include <fstream>
+#include <CDS/LinkedList>
+#include <CDS/Array>
+#include <CDS/Set>
+#include <CDS/OrderedSet>
+#include <CDS/UnorderedSet>
+#include <CDS/HashSet>
+#include <CDS/Map>
+#include <CDS/HashMap>
 
 using namespace cds;
-using namespace cds :: literals;
-#include <unordered_set>
-#include <unordered_map>
 
 int main () {
 
-    auto a = cds :: experimental :: arrayOf (
-            cds :: makeUnique < int > ( 3 ),
-            cds :: makeUnique < int > ( 2 ),
-            cds :: makeUnique < int > ( 3 ),
-            cds :: makeUnique < int > ( 4 )
-    );
-
+    Array < int > a = { 1, 2, 3, 4 };
     std :: cout << a << '\n';
 
-    auto a2 = std :: move ( a );
+    LinkedList < int > l = { 1, 2, 3, 4 };
+    std :: cout << l << '\n';
 
-    std :: cout << a << '\n';
-    std :: cout << a2 << '\n';
+
+    DoubleLinkedList< int> dll = { 1, 2, 3 ,4 };
+    std :: cout << l << '\n';
+
+    OrderedSet < int > os = { 2, 1, 4, 3 };
+    std :: cout << os << '\n';
+
+    UnorderedSet < int > us = { 2, 1, 4, 3 };
+    std :: cout << us << '\n';
+
+    HashSet < int > hs = { 2, 1, 4, 3 };
+    std :: cout << hs << '\n';
+
+    HashMap < int, int > hm = { { 1, 2 }, { 3, 4 }, { 5, 6 }, { 7, 8 } };
+    std :: cout << hm << '\n';
+
 
     return 0;
 }

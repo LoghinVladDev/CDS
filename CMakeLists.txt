@@ -58,32 +58,18 @@ set(
         CDS_COLLECTION_INTERFACE
 
         ${CDS_PRIMITIVE}
-
-        src/collection/abstract/Collection.hpp
-        src/collection/abstract/List.hpp
-        src/collection/abstract/Set.hpp
-        src/collection/abstract/ListSet.hpp
-        src/collection/unordered/HashMap.hpp
 )
 
 set(
         CDS_COLLECTION_ORDERED
 
-        src/collection/ordered/LinkedList.hpp
-        src/collection/ordered/DoubleLinkedList.hpp
-
-        src/collection/ordered/OrderedSet.hpp
         src/collection/ordered/Queue.hpp
-        src/collection/ordered/SingleLinkedList.hpp
-        src/collection/ordered/Array.hpp
         src/collection/ordered/StaticArray.hpp
 )
 
 set(
         CDS_COLLECTION_UNORDERED
 
-        src/collection/unordered/UnorderedSet.hpp
-        src/collection/unordered/HashMap.hpp
         src/collection/format/JSON.hpp
 )
 
@@ -161,7 +147,7 @@ add_executable(
         CDS-dummy
         main.cpp
         ${CDS_HEADERS}
-        src/threading/LockGuard.hpp include/CDS/LockGuard src/experimental/JSON.hpp src/experimental/Map.hpp)
+        src/threading/LockGuard.hpp include/CDS/LockGuard src/experimental/JSON.hpp)
 
 target_link_libraries(
         CDS-dummy

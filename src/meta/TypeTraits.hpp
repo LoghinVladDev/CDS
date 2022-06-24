@@ -133,7 +133,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             struct __IndirectionPossible < __Type, Void < decltype ( * valueOf < __Type > () ) > > : __TrueType {};
 
             template < typename __Type > // NOLINT(bugprone-reserved-identifier)
-            struct __PrefixIncrementPossible < __Type, Void < decltype ( ++ valueOf < __Type > () ) > > : __TrueType {};
+            struct __PrefixIncrementPossible < __Type, Void < decltype ( ++ referenceOf < __Type > () ) > > : __TrueType {};
 
             /**
              * @brief Meta-type implementation used to check if a given type is printable ( std :: ostream << type )

@@ -21,7 +21,7 @@ namespace cds {
 namespace cds {
 
     template <typename K, Size hashBoundary>
-    class HashCalculator {
+    class __CDS_DeprecatedHint("Bounded Hash Functions are not to be used anymore. Use FunctionHasher construct") HashCalculator {
     public:
         using Value                 = K;
         using ValueConstReference   = Value const &;
@@ -40,56 +40,44 @@ namespace cds {
 namespace cds { // NOLINT(modernize-concat-nested-namespaces)
     namespace utility {
 
-        template <class K, Size hashBoundary>
-        class DefaultHashFunction : public HashCalculator<K, hashBoundary> {
-        public:
-            using AddressValue __CDS_MaybeUnused = std::size_t;
-
-            auto operator ()(typename HashCalculator<K, hashBoundary>::ValueConstReference value) const noexcept -> typename HashCalculator<K, hashBoundary>::HashValue {
-                return hash(value) % hashBoundary;
-            }
-        };
-
 #if defined(CDS_EASY_HASH_DEBUG)
 
-        template <class K> using HighCollisionDefaultHashFunction = DefaultHashFunction<K, 1>;
-        template <class K> using MediumCollisionDefaultHashFunction = DefaultHashFunction<K, 1>;
-        template <class K> using LowCollisionDefaultHashFunction = DefaultHashFunction<K, 1>;
+        template <class K> using HighCollisionDefaultHashFunction __CDS_DeprecatedHint("Bounded Hash Functions are not to be used anymore. Use FunctionHasher construct") = void;
+        template <class K> using MediumCollisionDefaultHashFunction __CDS_DeprecatedHint("Bounded Hash Functions are not to be used anymore. Use FunctionHasher construct") = void;
+        template <class K> using LowCollisionDefaultHashFunction __CDS_DeprecatedHint("Bounded Hash Functions are not to be used anymore. Use FunctionHasher construct") = void;
 
 #else
 
-        template < typename K > using HighCollisionDefaultHashFunction = DefaultHashFunction < K, 256u >;
-        template < typename K > using MediumCollisionDefaultHashFunction = DefaultHashFunction < K, 4096u >;
-        template < typename K > using LowCollisionDefaultHashFunction = DefaultHashFunction < K, 32768u >;
+        template < typename K > using HighCollisionDefaultHashFunction __CDS_DeprecatedHint("Bounded Hash Functions are not to be used anymore. Use FunctionHasher construct") = void;
+        template < typename K > using MediumCollisionDefaultHashFunction __CDS_DeprecatedHint("Bounded Hash Functions are not to be used anymore. Use FunctionHasher construct") = void;
+        template < typename K > using LowCollisionDefaultHashFunction __CDS_DeprecatedHint("Bounded Hash Functions are not to be used anymore. Use FunctionHasher construct") = void;
 
 #endif
 
     }
 }
 
-namespace cds { // NOLINT(modernize-concat-nested-namespaces)
-    namespace experimental {
+namespace cds {
 
-        namespace utility {
+    namespace utility {
 
-            template < typename __Type > // NOLINT(bugprone-reserved-identifier)
-            using HashFunction = decltype ( & cds :: hash < __Type > );
-
-        }
-
-        template < typename __Type, utility :: HashFunction < __Type > __hashFunction > // NOLINT(bugprone-reserved-identifier)
-        class FunctionHasher {
-
-        public:
-            __CDS_NoDiscard constexpr auto operator () (
-                    __Type const & value
-            ) const noexcept ( noexcept ( __hashFunction ( value ) ) ) -> Size {
-
-                return __hashFunction ( value );
-            }
-        };
+        template < typename __Type > // NOLINT(bugprone-reserved-identifier)
+        using HashFunction = decltype ( & cds :: hash < __Type > );
 
     }
+
+    template < typename __Type, utility :: HashFunction < __Type > __hashFunction > // NOLINT(bugprone-reserved-identifier)
+    class FunctionHasher {
+
+    public:
+        __CDS_NoDiscard constexpr auto operator () (
+                __Type const & value
+        ) const noexcept ( noexcept ( __hashFunction ( value ) ) ) -> Size {
+
+            return __hashFunction ( value );
+        }
+    };
+
 }
 
 #if __CDS_cpplang_Concepts_available == true
