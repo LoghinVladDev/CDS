@@ -33,6 +33,8 @@ int main () {
     HashMap < int, int > hm = { { 1, 2 }, { 3, 4 }, { 5, 6 }, { 7, 8 } };
     std :: cout << hm << '\n';
 
+    std :: cout << __CDS_cpplang_core_version << '\n';
+
 
     return 0;
 }

@@ -277,6 +277,9 @@ namespace cds {
 
     };
 
+    template < typename __KeyType, typename __ValueType > // NOLINT(bugprone-reserved-identifier)
+    using MapEntry = __hidden :: __impl :: __MapEntry < __KeyType, __ValueType >;
+
 }
 
 #include "map/AbstractProxy.hpp"
