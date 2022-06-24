@@ -8,8 +8,26 @@
 namespace cds { // NOLINT(modernize-concat-nested-namespaces)
     namespace experimental {
 
-        template < typename T, meta :: EnableIf < meta :: isValidSetElement < T > () > enabler >
-        auto Set < T, enabler > :: toString () const noexcept -> String {
+        template < typename __ElementType, cds :: meta :: EnableIf < meta :: isValidSetElement < __ElementType > () > __enabler > // NOLINT(bugprone-reserved-identifier)
+        constexpr Set < __ElementType, __enabler > :: Set (
+                Set const & set
+        ) noexcept :
+                Collection < __ElementType > ( set ) {
+
+        }
+
+
+        template < typename __ElementType, cds :: meta :: EnableIf < meta :: isValidSetElement < __ElementType > () > __enabler > // NOLINT(bugprone-reserved-identifier)
+        constexpr Set < __ElementType, __enabler > :: Set (
+                Set && set
+        ) noexcept :
+                Collection < __ElementType > ( std :: move ( set ) ) {
+
+        }
+
+
+        template < typename __ElementType, cds :: meta :: EnableIf < meta :: isValidSetElement < __ElementType > () > __enabler > // NOLINT(bugprone-reserved-identifier)
+        auto Set < __ElementType, __enabler > :: toString () const noexcept -> String {
 
             if ( this->empty() ) {
                 return "{}";
@@ -19,30 +37,52 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             out << "{ ";
 
             for ( auto iterator = this->begin(), end = this->end(); iterator != end; ++ iterator ) {
-                meta :: print ( out, * iterator );
+                cds :: meta :: print ( out, * iterator ) << ", ";
             }
 
             auto asString = out.str();
-            return asString.substr ( 0, asString.length() - 2 ) + " }";
+
+            asString [ asString.length() - 2U ] = ' ';
+            asString [ asString.length() - 1U ] = '}';
+
+            return asString;
         }
 
-        template < typename T, meta :: EnableIf < meta :: isValidSetElement < T > () > enabler >
-        template < typename V, meta :: EnableIf < meta :: isCopyConstructible < V > () > >
-        auto Set < T, enabler > :: insert (
+
+        template < typename __ElementType, cds :: meta :: EnableIf < meta :: isValidSetElement < __ElementType > () > __enabler > // NOLINT(bugprone-reserved-identifier)
+        __CDS_OptimalInline auto Set < __ElementType, __enabler > :: remove (
+                ElementType const & element
+        ) noexcept -> bool {
+
+            return this->removeFirst ( element );
+        }
+
+
+        template < typename __ElementType, cds :: meta :: EnableIf < meta :: isValidSetElement < __ElementType > () > __enabler > // NOLINT(bugprone-reserved-identifier)
+        template < typename __VElementType, cds :: meta :: EnableIf < cds :: meta :: isCopyConstructible < __VElementType > () > > // NOLINT(bugprone-reserved-identifier)
+        auto Set < __ElementType, __enabler > :: insert (
                 ElementType const & element
         ) noexcept -> void {
 
-            this->add ( element );
+            auto pElementLocation = this->pNewInsert ( element );
+            if ( pElementLocation != nullptr ) {
+                new ( pElementLocation ) ElementType ( element );
+            }
         }
 
-        template < typename T, meta :: EnableIf < meta :: isValidSetElement < T > () > enabler >
-        template < typename V, meta :: EnableIf < meta :: isMoveConstructible < V > () > >
-        auto Set < T, enabler > :: insert (
+
+        template < typename __ElementType, cds :: meta :: EnableIf < meta :: isValidSetElement < __ElementType > () > __enabler > // NOLINT(bugprone-reserved-identifier)
+        template < typename __VElementType, cds :: meta :: EnableIf < cds :: meta :: isMoveConstructible < __VElementType > () > > // NOLINT(bugprone-reserved-identifier)
+        auto Set < __ElementType, __enabler > :: insert (
                 ElementType && element
         ) noexcept -> void {
 
-            this->add ( std :: move ( element ) );
+            auto pElementLocation = this->pNewInsert ( element );
+            if ( pElementLocation != nullptr ) {
+                new ( pElementLocation ) ElementType ( std :: move ( element ) );
+            }
         }
+
 
     }
 }

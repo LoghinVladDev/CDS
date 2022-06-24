@@ -19,9 +19,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                         Size capacity
                 ) noexcept -> __CharType * {
 
-                    return reinterpret_cast < __CharType * > (
-                            malloc ( capacity * sizeof ( __CharType ) )
-                    );
+                    return __allocPrimitiveArray < __CharType > ( capacity );
                 }
 
 
@@ -31,9 +29,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                         Size          newCapacity
                 ) noexcept -> __CharType * {
 
-                    return reinterpret_cast < __CharType * > (
-                            realloc ( pBuffer, newCapacity * sizeof ( __CharType ) )
-                    );
+                    return __reallocPrimitiveArray ( pBuffer, newCapacity );
                 }
 
 
@@ -54,7 +50,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                     }
 
                     * pStoreNewCapacity = newCapacity;
-                    return __realloc ( pBuffer, newCapacity );
+                    return __reallocPrimitiveArray ( pBuffer, newCapacity );
                 }
 
 
@@ -63,7 +59,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                         __CharType * pBuffer
                 ) noexcept -> void {
 
-                    free ( pBuffer );
+                    __freePrimitiveArray ( pBuffer );
                 }
 
             }

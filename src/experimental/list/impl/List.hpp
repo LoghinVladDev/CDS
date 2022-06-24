@@ -8,42 +8,45 @@
 namespace cds { // NOLINT(modernize-concat-nested-namespaces)
     namespace experimental {
 
-        namespace hidden { // NOLINT(modernize-concat-nested-namespaces)
-            namespace impl {
+        namespace __hidden { // NOLINT(modernize-concat-nested-namespaces, bugprone-reserved-identifier)
+            namespace __impl { // NOLINT(bugprone-reserved-identifier)
 
-                template < typename T, meta :: EnableIf < meta :: isMoveAssignable < T > () > = 0 >
-                __CDS_cpplang_NonConstConstexprMemberFunction auto assign (
-                        T & left,
-                        T & right
-                ) noexcept -> T & {
+                template < typename __ElementType, cds :: meta :: EnableIf < cds :: meta :: isMoveAssignable < __ElementType > () > = 0 > // NOLINT(bugprone-reserved-identifier)
+                __CDS_cpplang_NonConstConstexprMemberFunction auto __assign ( // NOLINT(bugprone-reserved-identifier)
+                        __ElementType & left,
+                        __ElementType & right
+                ) noexcept -> __ElementType & {
                     left = std :: move ( right );
                     return * left;
                 }
+                
 
-                template < typename T, meta :: EnableIf < ! meta :: isMoveAssignable < T > () > = 0 >
-                __CDS_cpplang_NonConstConstexprMemberFunction auto assign (
-                        T & left,
-                        T & right
-                ) noexcept -> T & {
+                template < typename __ElementType, meta :: EnableIf < ! meta :: isMoveAssignable < __ElementType > () > = 0 > // NOLINT(bugprone-reserved-identifier)
+                __CDS_cpplang_NonConstConstexprMemberFunction auto __assign ( // NOLINT(bugprone-reserved-identifier)
+                        __ElementType & left,
+                        __ElementType & right
+                ) noexcept -> __ElementType & {
                     left = right;
                     return * left;
                 }
+                
 
-                template < typename T, meta :: EnableIf < meta :: isMoveConstructible < T > () && meta :: isMoveAssignable < T > () > = 0 >
-                __CDS_cpplang_ConstexprNonLiteralReturn auto swap (
-                        T & left,
-                        T & right
+                template < typename __ElementType, meta :: EnableIf < meta :: isMoveConstructible < __ElementType > () && meta :: isMoveAssignable < __ElementType > () > = 0 > // NOLINT(bugprone-reserved-identifier)
+                __CDS_cpplang_ConstexprNonLiteralReturn auto __swap ( // NOLINT(bugprone-reserved-identifier)
+                        __ElementType & left,
+                        __ElementType & right
                 ) noexcept -> void {
 
                     auto aux    = std :: move ( left );
                     left        = std :: move ( right );
                     right       = std :: move ( aux );
                 }
+                
 
-                template < typename T, meta :: EnableIf < ! meta :: isMoveConstructible < T > () && ! meta :: isMoveAssignable < T > () > = 0 >
-                __CDS_cpplang_ConstexprNonLiteralReturn auto swap (
-                        T & left,
-                        T & right
+                template < typename __ElementType, meta :: EnableIf < ! meta :: isMoveConstructible < __ElementType > () && ! meta :: isMoveAssignable < __ElementType > () > = 0 > // NOLINT(bugprone-reserved-identifier)
+                __CDS_cpplang_ConstexprNonLiteralReturn auto __swap ( // NOLINT(bugprone-reserved-identifier)
+                        __ElementType & left,
+                        __ElementType & right
                 ) noexcept -> void {
 
                     auto aux    = left;
@@ -51,26 +54,27 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                     right       = aux;
                 }
 
-                template < typename IteratorType, typename ComparatorFunction >
-                auto quickSortPartition (
-                        IteratorType        const & from,
-                        IteratorType        const & to,
-                        ComparatorFunction  const & function
-                ) noexcept -> IteratorType {
+                
+                template < typename __IteratorType, typename __ComparatorFunction > // NOLINT(bugprone-reserved-identifier)
+                auto __quickSortPartition ( // NOLINT(bugprone-reserved-identifier)
+                        __IteratorType        const & from,
+                        __IteratorType        const & to,
+                        __ComparatorFunction  const & function
+                ) noexcept -> __IteratorType {
 
                     auto pivot = * to;
                     auto partitionIterator = from;
-                    IteratorType previous;
+                    __IteratorType previous;
 
                     for (auto it = from; it != to; ++ it ) {
                         if ( function ( * it, pivot ) ) {
-                            swap ( * partitionIterator, * it );
+                            __swap ( * partitionIterator, * it );
                             previous = partitionIterator;
                             ++ partitionIterator;
                         }
                     }
 
-                    swap ( * partitionIterator, * to );
+                    __swap ( * partitionIterator, * to );
                     if ( ! previous.valid() ) { // NOLINT(clion-misra-cpp2008-5-3-1)
                         return partitionIterator;
                     }
@@ -78,11 +82,12 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                     return previous;
                 }
 
-                template < typename IteratorType, typename ComparatorFunction >
-                auto quickSort (
-                        IteratorType        const & from,
-                        IteratorType        const & to,
-                        ComparatorFunction  const & function
+                
+                template < typename __IteratorType, typename __ComparatorFunction > // NOLINT(bugprone-reserved-identifier)
+                auto __quickSort ( // NOLINT(bugprone-reserved-identifier)
+                        __IteratorType        const & from,
+                        __IteratorType        const & to,
+                        __ComparatorFunction  const & function
                 ) noexcept -> void {
 
                     if ( to.valid() ) {
@@ -93,16 +98,16 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                     }
 
                     if ( from != to && from.valid() && to.valid() ) {
-                        auto partitionIterator = quickSortPartition (from, to, function );
+                        auto partitionIterator = __quickSortPartition (from, to, function );
 
-                        quickSort ( from, partitionIterator, function );
+                        __quickSort ( from, partitionIterator, function );
                         if ( ! partitionIterator.valid() ) { // NOLINT(clion-misra-cpp2008-5-3-1)
                             return;
                         }
 
                         if ( partitionIterator == from ) {
                             if ( ( ++ partitionIterator ).valid() ) {
-                                quickSort ( partitionIterator, to, function );
+                                __quickSort ( partitionIterator, to, function );
                             }
 
                             return;
@@ -112,7 +117,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                             return;
                         }
 
-                        quickSort ( ++ partitionIterator, to, function );
+                        __quickSort ( ++ partitionIterator, to, function );
                     }
                 }
 
@@ -120,76 +125,32 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         }
 
 
-        template < typename T >
-        Index const List < T > :: invalidIndex;
+        template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
+        Index const List < __ElementType > :: invalidIndex;
 
 
-        template < typename T >
-        constexpr auto List < T > :: acquireDelegate (
-                Iterator const & iterator
-        ) noexcept -> DelegateIterator const * {
-
-            return reinterpret_cast < DelegateIterator const * > ( Collection < T > :: acquireDelegate ( iterator ) );
-        }
-
-
-        template < typename T >
-        constexpr auto List < T > :: acquireDelegate (
-                ReverseIterator const & iterator
-        ) noexcept -> DelegateIterator const * {
-
-            return reinterpret_cast < DelegateIterator const * > ( Collection < T > :: acquireDelegate ( iterator ) );
-        }
-
-
-        template < typename T >
-        __CDS_OptimalInline auto List < T > :: begin () noexcept -> Iterator {
-
-            return Iterator ( this, std :: move ( this->delegateIterator ( DelegateIteratorRequestType :: ForwardBegin ) ) );
-        }
-
-
-        template < typename T >
-        __CDS_OptimalInline auto List < T > :: end () noexcept -> Iterator {
-
-            return Iterator ( this, std :: move ( this->delegateIterator ( DelegateIteratorRequestType :: ForwardEnd ) ) );
-        }
-
-
-        template < typename T >
-        __CDS_OptimalInline auto List < T > :: rbegin () noexcept -> ReverseIterator {
-
-            return Iterator ( this, std :: move ( this->delegateIterator ( DelegateIteratorRequestType :: BackwardBegin ) ) );
-        }
-
-
-        template < typename T >
-        __CDS_OptimalInline auto List < T > :: rend () noexcept -> ReverseIterator {
-
-            return Iterator ( this, std :: move ( this->delegateIterator ( DelegateIteratorRequestType :: BackwardEnd ) ) );
-        }
-
-
-        template < typename T >
-        constexpr List < T > :: List (
+        template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
+        constexpr List < __ElementType > :: List (
                 List const & list
         ) noexcept :
+                MutableCollection < __ElementType > ( list ),
                 _size ( list._size ) {
 
         }
 
 
-        template < typename T >
-        constexpr List < T > :: List (
+        template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
+        constexpr List < __ElementType > :: List (
                 List && list
         ) noexcept :
+                MutableCollection < __ElementType > ( std :: move ( list ) ),
                 _size ( cds :: exchange ( list._size, 0ULL ) ) {
 
         }
 
 
-        template < typename T >
-        constexpr List < T > :: List (
+        template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
+        constexpr List < __ElementType > :: List (
                 Size size
         ) noexcept :
                 _size ( size ) {
@@ -197,40 +158,30 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         }
 
 
-        template < typename T >
-        __CDS_OptimalInline auto List < T > :: equals (
-                Object const & object
-        ) const noexcept -> bool {
+        template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
+        __CDS_cpplang_ConstexprOverride auto List < __ElementType > :: size () const noexcept -> Size {
 
-            if ( this == & object ) {
-                return true;
-            }
-
-            auto pObject = dynamic_cast < decltype ( this ) > ( & object );
-            if ( pObject != nullptr ) {
-                if ( this->_size != pObject->_size ) {
-                    return false;
-                }
-            }
-
-            return Collection < T > :: equals ( object );
+            return this->_size;
         }
 
 
-        template < typename T >
-        __CDS_OptimalInline auto List < T > :: pNewInsert () noexcept -> ElementType * & {
+        template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
+        __CDS_OptimalInline auto List < __ElementType > :: pNewInsert (
+                ElementType const & referenceElement
+        ) noexcept -> ElementType * {
 
+            (void) referenceElement;
             return this->pNewBack();
         }
 
 
-        template < typename T >
-        template < typename ListType, typename V, meta :: EnableIf < meta :: isCopyConstructible < V > () && meta :: isDerivedFrom < ListType, Collection < T > > () > >
-        auto List < T > :: sub (
-                ListType  & storeIn,
-                Index       from,
-                Index       to
-        ) const noexcept -> ListType & {
+        template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
+        template < typename __CollectionType, typename __VElementType, meta :: EnableIf < meta :: isCopyConstructible < __VElementType > () && meta :: isDerivedFrom < __CollectionType, Collection < __ElementType > > () > > // NOLINT(bugprone-reserved-identifier)
+        auto List < __ElementType > :: sub (
+                __CollectionType  & storeIn,
+                Index               from,
+                Index               to
+        ) const noexcept -> __CollectionType & {
 
             if ( from > to ) {
                 std :: swap ( from, to );
@@ -258,31 +209,31 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         }
 
 
-        template < typename T >
-        template < typename ListType, typename V, meta :: EnableIf < meta :: isCopyConstructible < V > () && meta :: isDerivedFrom < ListType, Collection < T > > () > >
-        __CDS_OptimalInline auto List < T > :: sub (
+        template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
+        template < typename __CollectionType, typename __VElementType, meta :: EnableIf < meta :: isCopyConstructible < __VElementType > () && meta :: isDerivedFrom < __CollectionType, Collection < __ElementType > > () > > // NOLINT(bugprone-reserved-identifier)
+        __CDS_OptimalInline auto List < __ElementType > :: sub (
                 Index from,
                 Index to
-        ) const noexcept -> ListType {
+        ) const noexcept -> __CollectionType {
 
-            ListType list;
+            __CollectionType list;
             return this->sub ( list, from, to );
         }
 
 
-        template < typename T >
-        template < template < typename ... > class ListType, typename V, meta :: EnableIf < meta :: isCopyConstructible < V > () && meta :: isDerivedFrom < ListType < T >, Collection < T > > () > >
-        __CDS_OptimalInline auto List < T > :: sub (
+        template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
+        template < template < typename ... > class __CollectionType, typename __VElementType, meta :: EnableIf < meta :: isCopyConstructible < __VElementType > () && meta :: isDerivedFrom < __CollectionType < __ElementType >, Collection < __ElementType > > () > > // NOLINT(bugprone-reserved-identifier)
+        __CDS_OptimalInline auto List < __ElementType > :: sub (
                 Index from,
                 Index to
-        ) const noexcept -> ListType < ElementType > {
+        ) const noexcept -> __CollectionType < ElementType > {
 
-            return this->sub < ListType < T > > ( from, to );
+            return this->sub < __CollectionType < __ElementType > > ( from, to );
         }
 
 
-        template < typename T >
-        __CDS_OptimalInline auto List < T > :: operator [] (
+        template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
+        __CDS_OptimalInline auto List < __ElementType > :: operator [] (
                 Index index
         ) noexcept (false) -> ElementType & {
 
@@ -290,8 +241,8 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         }
 
 
-        template < typename T >
-        __CDS_OptimalInline auto List < T > :: operator [] (
+        template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
+        __CDS_OptimalInline auto List < __ElementType > :: operator [] (
                 Index index
         ) const noexcept (false) -> ElementType const & {
 
@@ -299,73 +250,49 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         }
 
 
-        template < typename T >
-        template < typename V, meta :: EnableIf < meta :: isCopyConstructible < V > () > >
-        __CDS_OptimalInline auto List < T > :: pushBack (
+        template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
+        template < typename __VElementType, meta :: EnableIf < meta :: isCopyConstructible < __VElementType > () > > // NOLINT(bugprone-reserved-identifier)
+        __CDS_OptimalInline auto List < __ElementType > :: pushBack (
                 ElementType const & element
-        ) noexcept -> ElementType & {
+        ) noexcept -> void {
 
-            auto & pNew = this->pNewBack();
-            if ( pNew != nullptr ) {
-                return * pNew;
-            }
-
-            pNew = Memory :: instance().create < ElementType > ( element );
-            return * pNew;
+            new ( this->pNewBack() ) ElementType ( element );
         }
 
 
-        template < typename T >
-        template < typename V, meta :: EnableIf < meta :: isMoveConstructible < V > () > >
-        __CDS_OptimalInline auto List < T > :: pushBack (
+        template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
+        template < typename __VElementType, meta :: EnableIf < meta :: isMoveConstructible < __VElementType > () > > // NOLINT(bugprone-reserved-identifier)
+        __CDS_OptimalInline auto List < __ElementType > :: pushBack (
                 ElementType && element
-        ) noexcept -> ElementType & {
+        ) noexcept -> void {
 
-            auto & pNew = this->pNewBack();
-            if ( pNew != nullptr ) {
-                return * pNew;
-            }
-
-            pNew = Memory :: instance().create < ElementType > ( std :: move ( element ) );
-            return * pNew;
+            new ( this->pNewBack() ) ElementType ( std :: move ( element ) );
         }
 
 
-        template < typename T >
-        template < typename V, meta :: EnableIf < meta :: isCopyConstructible < V > () > >
-        __CDS_OptimalInline auto List < T > :: pushFront (
+        template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
+        template < typename __VElementType, meta :: EnableIf < meta :: isCopyConstructible < __VElementType > () > > // NOLINT(bugprone-reserved-identifier)
+        __CDS_OptimalInline auto List < __ElementType > :: pushFront (
                 ElementType const & element
-        ) noexcept -> ElementType & {
+        ) noexcept -> void {
 
-            auto & pNew = this->pNewFront();
-            if ( pNew != nullptr ) {
-                return * pNew;
-            }
-
-            pNew = Memory :: instance().create < ElementType > ( element );
-            return * pNew;
+            new ( this->pNewFront() ) ElementType ( element );
         }
 
 
-        template < typename T >
-        template < typename V, meta :: EnableIf < meta :: isMoveConstructible < V > () > >
-        __CDS_OptimalInline auto List < T > :: pushFront (
+        template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
+        template < typename __VElementType, meta :: EnableIf < meta :: isMoveConstructible < __VElementType > () > > // NOLINT(bugprone-reserved-identifier)
+        __CDS_OptimalInline auto List < __ElementType > :: pushFront (
                 ElementType && element
-        ) noexcept -> ElementType & {
+        ) noexcept -> void {
 
-            auto & pNew = this->pNewFront();
-            if ( pNew != nullptr ) {
-                return * pNew;
-            }
-
-            pNew = Memory :: instance().create < ElementType > ( std :: move ( element ) );
-            return * pNew;
+            new ( this->pNewFront() ) ElementType ( std :: move ( element ) );
         }
 
 
-        template < typename T >
-        template < typename V, meta :: EnableIf < meta :: isCopyConstructible < V > () > >
-        __CDS_OptimalInline auto List < T > :: insertBefore (
+        template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
+        template < typename __VElementType, meta :: EnableIf < meta :: isCopyConstructible < __VElementType > () > > // NOLINT(bugprone-reserved-identifier)
+        __CDS_OptimalInline auto List < __ElementType > :: insertBefore (
                 Iterator    const & iterator,
                 ElementType const & element
         ) noexcept (false) -> ElementType & {
@@ -397,9 +324,9 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         }
 
 
-        template < typename T >
-        template < typename V, meta :: EnableIf < meta :: isMoveConstructible < V > () > >
-        __CDS_OptimalInline auto List < T > :: insertBefore (
+        template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
+        template < typename __VElementType, meta :: EnableIf < meta :: isMoveConstructible < __VElementType > () > > // NOLINT(bugprone-reserved-identifier)
+        __CDS_OptimalInline auto List < __ElementType > :: insertBefore (
                 Iterator    const & iterator,
                 ElementType      && element
         ) noexcept (false) -> ElementType & {
@@ -431,9 +358,9 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         }
 
 
-        template < typename T >
-        template < typename V, meta :: EnableIf < meta :: isCopyConstructible < V > () > >
-        __CDS_OptimalInline auto List < T > :: insertAfter (
+        template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
+        template < typename __VElementType, meta :: EnableIf < meta :: isCopyConstructible < __VElementType > () > > // NOLINT(bugprone-reserved-identifier)
+        __CDS_OptimalInline auto List < __ElementType > :: insertAfter (
                 Iterator    const & iterator,
                 ElementType const & element
         ) noexcept (false) -> ElementType & {
@@ -457,9 +384,9 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         }
 
 
-        template < typename T >
-        template < typename V, meta :: EnableIf < meta :: isMoveConstructible < V > () > >
-        __CDS_OptimalInline auto List < T > :: insertAfter (
+        template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
+        template < typename __VElementType, meta :: EnableIf < meta :: isMoveConstructible < __VElementType > () > > // NOLINT(bugprone-reserved-identifier)
+        __CDS_OptimalInline auto List < __ElementType > :: insertAfter (
                 Iterator    const & iterator,
                 ElementType      && element
         ) noexcept (false) -> ElementType & {
@@ -483,9 +410,9 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         }
 
 
-        template < typename T >
-        template < typename V, meta :: EnableIf < meta :: isCopyConstructible < V > () > >
-        __CDS_OptimalInline auto List < T > :: insertBefore (
+        template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
+        template < typename __VElementType, meta :: EnableIf < meta :: isCopyConstructible < __VElementType > () > > // NOLINT(bugprone-reserved-identifier)
+        __CDS_OptimalInline auto List < __ElementType > :: insertBefore (
                 ConstIterator   const & iterator,
                 ElementType     const & element
         ) noexcept (false) -> ElementType & {
@@ -517,9 +444,9 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         }
 
 
-        template < typename T >
-        template < typename V, meta :: EnableIf < meta :: isMoveConstructible < V > () > >
-        __CDS_OptimalInline auto List < T > :: insertBefore (
+        template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
+        template < typename __VElementType, meta :: EnableIf < meta :: isMoveConstructible < __VElementType > () > > // NOLINT(bugprone-reserved-identifier)
+        __CDS_OptimalInline auto List < __ElementType > :: insertBefore (
                 ConstIterator  const & iterator,
                 ElementType         && element
         ) noexcept (false) -> ElementType & {
@@ -551,9 +478,9 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         }
 
 
-        template < typename T >
-        template < typename V, meta :: EnableIf < meta :: isCopyConstructible < V > () > >
-        __CDS_OptimalInline auto List < T > :: insertAfter (
+        template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
+        template < typename __VElementType, meta :: EnableIf < meta :: isCopyConstructible < __VElementType > () > > // NOLINT(bugprone-reserved-identifier)
+        __CDS_OptimalInline auto List < __ElementType > :: insertAfter (
                 ConstIterator   const & iterator,
                 ElementType     const & element
         ) noexcept (false) -> ElementType & {
@@ -577,9 +504,9 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         }
 
 
-        template < typename T >
-        template < typename V, meta :: EnableIf < meta :: isMoveConstructible < V > () > >
-        __CDS_OptimalInline auto List < T > :: insertAfter (
+        template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
+        template < typename __VElementType, meta :: EnableIf < meta :: isMoveConstructible < __VElementType > () > > // NOLINT(bugprone-reserved-identifier)
+        __CDS_OptimalInline auto List < __ElementType > :: insertAfter (
                 ConstIterator  const & iterator,
                 ElementType         && element
         ) noexcept (false) -> ElementType & {
@@ -603,9 +530,9 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         }
 
 
-        template < typename T >
-        template < typename V, meta :: EnableIf < meta :: isCopyConstructible < V > () > >
-        __CDS_OptimalInline auto List < T > :: insertBefore (
+        template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
+        template < typename __VElementType, meta :: EnableIf < meta :: isCopyConstructible < __VElementType > () > > // NOLINT(bugprone-reserved-identifier)
+        __CDS_OptimalInline auto List < __ElementType > :: insertBefore (
                 ReverseIterator const & iterator,
                 ElementType     const & element
         ) noexcept (false) -> ElementType & {
@@ -637,9 +564,9 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         }
 
 
-        template < typename T >
-        template < typename V, meta :: EnableIf < meta :: isMoveConstructible < V > () > >
-        __CDS_OptimalInline auto List < T > :: insertBefore (
+        template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
+        template < typename __VElementType, meta :: EnableIf < meta :: isMoveConstructible < __VElementType > () > > // NOLINT(bugprone-reserved-identifier)
+        __CDS_OptimalInline auto List < __ElementType > :: insertBefore (
                 ReverseIterator const & iterator,
                 ElementType          && element
         ) noexcept (false) -> ElementType & {
@@ -671,9 +598,9 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         }
 
 
-        template < typename T >
-        template < typename V, meta :: EnableIf < meta :: isCopyConstructible < V > () > >
-        __CDS_OptimalInline auto List < T > :: insertAfter (
+        template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
+        template < typename __VElementType, meta :: EnableIf < meta :: isCopyConstructible < __VElementType > () > > // NOLINT(bugprone-reserved-identifier)
+        __CDS_OptimalInline auto List < __ElementType > :: insertAfter (
                 ReverseIterator const & iterator,
                 ElementType     const & element
         ) noexcept (false) -> ElementType & {
@@ -697,9 +624,9 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         }
 
 
-        template < typename T >
-        template < typename V, meta :: EnableIf < meta :: isMoveConstructible < V > () > >
-        __CDS_OptimalInline auto List < T > :: insertAfter (
+        template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
+        template < typename __VElementType, meta :: EnableIf < meta :: isMoveConstructible < __VElementType > () > > // NOLINT(bugprone-reserved-identifier)
+        __CDS_OptimalInline auto List < __ElementType > :: insertAfter (
                 ReverseIterator const & iterator,
                 ElementType          && element
         ) noexcept (false) -> ElementType & {
@@ -723,9 +650,9 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         }
 
 
-        template < typename T >
-        template < typename V, meta :: EnableIf < meta :: isCopyConstructible < V > () > >
-        __CDS_OptimalInline auto List < T > :: insertBefore (
+        template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
+        template < typename __VElementType, meta :: EnableIf < meta :: isCopyConstructible < __VElementType > () > > // NOLINT(bugprone-reserved-identifier)
+        __CDS_OptimalInline auto List < __ElementType > :: insertBefore (
                 ConstReverseIterator    const & iterator,
                 ElementType             const & element
         ) noexcept (false) -> ElementType & {
@@ -757,9 +684,9 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         }
 
 
-        template < typename T >
-        template < typename V, meta :: EnableIf < meta :: isMoveConstructible < V > () > >
-        __CDS_OptimalInline auto List < T > :: insertBefore (
+        template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
+        template < typename __VElementType, meta :: EnableIf < meta :: isMoveConstructible < __VElementType > () > > // NOLINT(bugprone-reserved-identifier)
+        __CDS_OptimalInline auto List < __ElementType > :: insertBefore (
                 ConstReverseIterator const & iterator,
                 ElementType               && element
         ) noexcept (false) -> ElementType & {
@@ -791,9 +718,9 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         }
 
 
-        template < typename T >
-        template < typename V, meta :: EnableIf < meta :: isCopyConstructible < V > () > >
-        __CDS_OptimalInline auto List < T > :: insertAfter (
+        template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
+        template < typename __VElementType, meta :: EnableIf < meta :: isCopyConstructible < __VElementType > () > > // NOLINT(bugprone-reserved-identifier)
+        __CDS_OptimalInline auto List < __ElementType > :: insertAfter (
                 ConstReverseIterator    const & iterator,
                 ElementType             const & element
         ) noexcept (false) -> ElementType & {
@@ -817,9 +744,9 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         }
 
 
-        template < typename T >
-        template < typename V, meta :: EnableIf < meta :: isMoveConstructible < V > () > >
-        __CDS_OptimalInline auto List < T > :: insertAfter (
+        template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
+        template < typename __VElementType, meta :: EnableIf < meta :: isMoveConstructible < __VElementType > () > > // NOLINT(bugprone-reserved-identifier)
+        __CDS_OptimalInline auto List < __ElementType > :: insertAfter (
                 ConstReverseIterator const & iterator,
                 ElementType               && element
         ) noexcept (false) -> ElementType & {
@@ -843,9 +770,9 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         }
 
 
-        template < typename T >
-        template < typename V, meta :: EnableIf < meta :: isCopyConstructible < V > () > >
-        __CDS_OptimalInline auto List < T > :: append (
+        template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
+        template < typename __VElementType, meta :: EnableIf < meta :: isCopyConstructible < __VElementType > () > > // NOLINT(bugprone-reserved-identifier)
+        __CDS_OptimalInline auto List < __ElementType > :: append (
                 ElementType const & element
         ) noexcept -> ElementType & {
 
@@ -853,9 +780,9 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         }
 
 
-        template < typename T >
-        template < typename V, meta :: EnableIf < meta :: isMoveConstructible < V > () > >
-        __CDS_OptimalInline auto List < T > :: append (
+        template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
+        template < typename __VElementType, meta :: EnableIf < meta :: isMoveConstructible < __VElementType > () > > // NOLINT(bugprone-reserved-identifier)
+        __CDS_OptimalInline auto List < __ElementType > :: append (
                 ElementType && element
         ) noexcept -> ElementType & {
 
@@ -863,9 +790,9 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         }
 
 
-        template < typename T >
-        template < typename V, meta :: EnableIf < meta :: isCopyConstructible < V > () > >
-        __CDS_OptimalInline auto List < T > :: prepend (
+        template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
+        template < typename __VElementType, meta :: EnableIf < meta :: isCopyConstructible < __VElementType > () > > // NOLINT(bugprone-reserved-identifier)
+        __CDS_OptimalInline auto List < __ElementType > :: prepend (
                 ElementType const & element
         ) noexcept -> ElementType & {
 
@@ -873,9 +800,9 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         }
 
 
-        template < typename T >
-        template < typename V, meta :: EnableIf < meta :: isMoveConstructible < V > () > >
-        __CDS_OptimalInline auto List < T > :: prepend (
+        template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
+        template < typename __VElementType, meta :: EnableIf < meta :: isMoveConstructible < __VElementType > () > > // NOLINT(bugprone-reserved-identifier)
+        __CDS_OptimalInline auto List < __ElementType > :: prepend (
                 ElementType && element
         ) noexcept -> ElementType & {
 
@@ -883,10 +810,10 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         }
 
 
-        template < typename T >
-        template < typename ComparatorFunction >
-        __CDS_OptimalInline auto List < T > :: sort (
-                ComparatorFunction const & comparatorFunction
+        template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
+        template < typename __ComparatorFunction > // NOLINT(bugprone-reserved-identifier)
+        __CDS_OptimalInline auto List < __ElementType > :: sort (
+                __ComparatorFunction const & comparatorFunction
         ) noexcept ( noexcept ( comparatorFunction ( meta :: valueOf < ElementType > (), meta :: valueOf < ElementType > () ) ) ) -> void {
 
             if ( this->size() < 2 ) {
@@ -900,19 +827,13 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 }
             }
 
-            hidden :: impl :: quickSort ( this->begin(), last, comparatorFunction );
+            __hidden :: __impl :: __quickSort ( this->begin(), last, comparatorFunction );
         }
 
 
-        template < typename T >
-        constexpr auto List < T > :: size () const noexcept -> Size {
-            return this->_size;
-        }
-
-
-        template < typename T >
-        template < typename V, meta :: EnableIf < meta :: isCopyAssignable < V > () > >
-        auto List < T > :: replace (
+        template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
+        template < typename __VElementType, meta :: EnableIf < meta :: isCopyAssignable < __VElementType > () > > // NOLINT(bugprone-reserved-identifier)
+        auto List < __ElementType > :: replace (
                 Size                count,
                 ElementType const & what,
                 ElementType const & with
@@ -935,9 +856,9 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         }
 
 
-        template < typename T >
-        template < typename V, meta :: EnableIf < meta :: isCopyAssignable < V > () > >
-        auto List < T > :: replaceAll (
+        template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
+        template < typename __VElementType, meta :: EnableIf < meta :: isCopyAssignable < __VElementType > () > > // NOLINT(bugprone-reserved-identifier)
+        auto List < __ElementType > :: replaceAll (
                 ElementType const & what,
                 ElementType const & with
         ) noexcept -> Size {
@@ -954,9 +875,9 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         }
 
 
-        template < typename T >
-        template < typename V, meta :: EnableIf < meta :: isCopyAssignable < V > () > >
-        auto List < T > :: replaceFirst (
+        template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
+        template < typename __VElementType, meta :: EnableIf < meta :: isCopyAssignable < __VElementType > () > > // NOLINT(bugprone-reserved-identifier)
+        auto List < __ElementType > :: replaceFirst (
                 ElementType const & what,
                 ElementType const & with
         ) noexcept -> bool {
@@ -972,9 +893,9 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         }
 
 
-        template < typename T >
-        template < typename V, meta :: EnableIf < meta :: isMoveAssignable < V > () > >
-        auto List < T > :: replaceFirst (
+        template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
+        template < typename __VElementType, meta :: EnableIf < meta :: isMoveAssignable < __VElementType > () > > // NOLINT(bugprone-reserved-identifier)
+        auto List < __ElementType > :: replaceFirst (
                 ElementType const & what,
                 ElementType      && with
         ) noexcept -> bool {
@@ -990,9 +911,9 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         }
 
 
-        template < typename T >
-        template < typename V, meta :: EnableIf < meta :: isCopyAssignable < V > () > >
-        auto List < T > :: replaceLast (
+        template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
+        template < typename __VElementType, meta :: EnableIf < meta :: isCopyAssignable < __VElementType > () > > // NOLINT(bugprone-reserved-identifier)
+        auto List < __ElementType > :: replaceLast (
                 ElementType const & what,
                 ElementType const & with
         ) noexcept -> bool {
@@ -1008,9 +929,9 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         }
 
 
-        template < typename T >
-        template < typename V, meta :: EnableIf < meta :: isMoveAssignable < V > () > >
-        auto List < T > :: replaceLast (
+        template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
+        template < typename __VElementType, meta :: EnableIf < meta :: isMoveAssignable < __VElementType > () > > // NOLINT(bugprone-reserved-identifier)
+        auto List < __ElementType > :: replaceLast (
                 ElementType const & what,
                 ElementType      && with
         ) noexcept -> bool {
@@ -1026,9 +947,9 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         }
 
 
-        template < typename T >
-        template < typename V, meta :: EnableIf < meta :: isCopyAssignable < V > () > >
-        auto List < T > :: replaceOf (
+        template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
+        template < typename __VElementType, meta :: EnableIf < meta :: isCopyAssignable < __VElementType > () > > // NOLINT(bugprone-reserved-identifier)
+        auto List < __ElementType > :: replaceOf (
                 Size                                count,
                 Collection < ElementType >  const & of,
                 ElementType                 const & with
@@ -1051,9 +972,9 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         }
 
 
-        template < typename T >
-        template < typename V, meta :: EnableIf < meta :: isCopyAssignable < V > () > >
-        auto List < T > :: replaceAllOf (
+        template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
+        template < typename __VElementType, meta :: EnableIf < meta :: isCopyAssignable < __VElementType > () > > // NOLINT(bugprone-reserved-identifier)
+        auto List < __ElementType > :: replaceAllOf (
                 Collection < ElementType >  const & of,
                 ElementType                 const & with
         ) noexcept -> Size {
@@ -1070,9 +991,9 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         }
 
 
-        template < typename T >
-        template < typename V, meta :: EnableIf < meta :: isCopyAssignable < V > () > >
-        auto List < T > :: replaceFirstOf (
+        template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
+        template < typename __VElementType, meta :: EnableIf < meta :: isCopyAssignable < __VElementType > () > > // NOLINT(bugprone-reserved-identifier)
+        auto List < __ElementType > :: replaceFirstOf (
                 Collection < ElementType >  const & of,
                 ElementType                 const & with
         ) noexcept -> bool {
@@ -1088,9 +1009,9 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         }
 
 
-        template < typename T >
-        template < typename V, meta :: EnableIf < meta :: isMoveAssignable < V > () > >
-        auto List < T > :: replaceFirstOf (
+        template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
+        template < typename __VElementType, meta :: EnableIf < meta :: isMoveAssignable < __VElementType > () > > // NOLINT(bugprone-reserved-identifier)
+        auto List < __ElementType > :: replaceFirstOf (
                 Collection < ElementType >  const & of,
                 ElementType                      && with
         ) noexcept -> bool {
@@ -1106,9 +1027,9 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         }
 
 
-        template < typename T >
-        template < typename V, meta :: EnableIf < meta :: isCopyAssignable < V > () > >
-        auto List < T > :: replaceLastOf (
+        template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
+        template < typename __VElementType, meta :: EnableIf < meta :: isCopyAssignable < __VElementType > () > > // NOLINT(bugprone-reserved-identifier)
+        auto List < __ElementType > :: replaceLastOf (
                 Collection < ElementType >  const & of,
                 ElementType                 const & with
         ) noexcept -> bool {
@@ -1124,9 +1045,9 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         }
 
 
-        template < typename T >
-        template < typename V, meta :: EnableIf < meta :: isMoveAssignable < V > () > >
-        auto List < T > :: replaceLastOf (
+        template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
+        template < typename __VElementType, meta :: EnableIf < meta :: isMoveAssignable < __VElementType > () > > // NOLINT(bugprone-reserved-identifier)
+        auto List < __ElementType > :: replaceLastOf (
                 Collection < ElementType >  const & of,
                 ElementType                      && with
         ) noexcept -> bool {
@@ -1142,9 +1063,9 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         }
 
 
-        template < typename T >
-        template < typename V, meta :: EnableIf < meta :: isCopyAssignable < V > () > >
-        auto List < T > :: replaceNotOf (
+        template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
+        template < typename __VElementType, meta :: EnableIf < meta :: isCopyAssignable < __VElementType > () > > // NOLINT(bugprone-reserved-identifier)
+        auto List < __ElementType > :: replaceNotOf (
                 Size                                count,
                 Collection < ElementType >  const & of,
                 ElementType                 const & with
@@ -1167,9 +1088,9 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         }
 
 
-        template < typename T >
-        template < typename V, meta :: EnableIf < meta :: isCopyAssignable < V > () > >
-        auto List < T > :: replaceAllNotOf (
+        template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
+        template < typename __VElementType, meta :: EnableIf < meta :: isCopyAssignable < __VElementType > () > > // NOLINT(bugprone-reserved-identifier)
+        auto List < __ElementType > :: replaceAllNotOf (
                 Collection < ElementType >  const & of,
                 ElementType                 const & with
         ) noexcept -> Size {
@@ -1186,9 +1107,9 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         }
 
 
-        template < typename T >
-        template < typename V, meta :: EnableIf < meta :: isCopyAssignable < V > () > >
-        auto List < T > :: replaceFirstNotOf (
+        template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
+        template < typename __VElementType, meta :: EnableIf < meta :: isCopyAssignable < __VElementType > () > > // NOLINT(bugprone-reserved-identifier)
+        auto List < __ElementType > :: replaceFirstNotOf (
                 Collection < ElementType >  const & of,
                 ElementType                 const & with
         ) noexcept -> bool {
@@ -1204,9 +1125,9 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         }
 
 
-        template < typename T >
-        template < typename V, meta :: EnableIf < meta :: isMoveAssignable < V > () > >
-        auto List < T > :: replaceFirstNotOf (
+        template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
+        template < typename __VElementType, meta :: EnableIf < meta :: isMoveAssignable < __VElementType > () > > // NOLINT(bugprone-reserved-identifier)
+        auto List < __ElementType > :: replaceFirstNotOf (
                 Collection < ElementType >  const & of,
                 ElementType                      && with
         ) noexcept -> bool {
@@ -1222,9 +1143,9 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         }
 
 
-        template < typename T >
-        template < typename V, meta :: EnableIf < meta :: isCopyAssignable < V > () > >
-        auto List < T > :: replaceLastNotOf (
+        template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
+        template < typename __VElementType, meta :: EnableIf < meta :: isCopyAssignable < __VElementType > () > > // NOLINT(bugprone-reserved-identifier)
+        auto List < __ElementType > :: replaceLastNotOf (
                 Collection < ElementType >  const & of,
                 ElementType                 const & with
         ) noexcept -> bool {
@@ -1240,9 +1161,9 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         }
 
 
-        template < typename T >
-        template < typename V, meta :: EnableIf < meta :: isMoveAssignable < V > () > >
-        auto List < T > :: replaceLastNotOf (
+        template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
+        template < typename __VElementType, meta :: EnableIf < meta :: isMoveAssignable < __VElementType > () > > // NOLINT(bugprone-reserved-identifier)
+        auto List < __ElementType > :: replaceLastNotOf (
                 Collection < ElementType >  const & of,
                 ElementType                      && with
         ) noexcept -> bool {
@@ -1258,9 +1179,9 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         }
 
 
-        template < typename T >
-        template < typename V, meta :: EnableIf < meta :: isCopyAssignable < V > () > >
-        auto List < T > :: replaceOf (
+        template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
+        template < typename __VElementType, meta :: EnableIf < meta :: isCopyAssignable < __VElementType > () > > // NOLINT(bugprone-reserved-identifier)
+        auto List < __ElementType > :: replaceOf (
                 Size                                count,
                 InitializerList             const & of,
                 ElementType                 const & with
@@ -1269,7 +1190,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             Size replacedCount = 0U;
             for ( auto iterator = this->begin(), end = this->end(); iterator != end; ++ iterator ) {
                 if ( replacedCount < count ) {
-                    if ( hidden :: impl :: initializerListContains ( of, * iterator ) ) {
+                    if ( __hidden :: __impl :: __initializerListContains ( of, * iterator ) ) {
                         * iterator = with;
                         ++ replacedCount;
                     }
@@ -1283,16 +1204,16 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         }
 
 
-        template < typename T >
-        template < typename V, meta :: EnableIf < meta :: isCopyAssignable < V > () > >
-        auto List < T > :: replaceAllOf (
+        template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
+        template < typename __VElementType, meta :: EnableIf < meta :: isCopyAssignable < __VElementType > () > > // NOLINT(bugprone-reserved-identifier)
+        auto List < __ElementType > :: replaceAllOf (
                 InitializerList             const & of,
                 ElementType                 const & with
         ) noexcept -> Size {
 
             Size replacedCount = 0U;
             for ( auto iterator = this->begin(), end = this->end(); iterator != end; ++ iterator ) {
-                if ( hidden :: impl :: initializerListContains ( of, * iterator ) ) {
+                if ( __hidden :: __impl :: __initializerListContains ( of, * iterator ) ) {
                     * iterator = with;
                     ++ replacedCount;
                 }
@@ -1302,15 +1223,15 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         }
 
 
-        template < typename T >
-        template < typename V, meta :: EnableIf < meta :: isCopyAssignable < V > () > >
-        auto List < T > :: replaceFirstOf (
+        template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
+        template < typename __VElementType, meta :: EnableIf < meta :: isCopyAssignable < __VElementType > () > > // NOLINT(bugprone-reserved-identifier)
+        auto List < __ElementType > :: replaceFirstOf (
                 InitializerList             const & of,
                 ElementType                 const & with
         ) noexcept -> bool {
 
             for ( auto iterator = this->begin(), end = this->end(); iterator != end; ++ iterator ) {
-                if ( hidden :: impl :: initializerListContains ( of, * iterator ) ) {
+                if ( __hidden :: __impl :: __initializerListContains ( of, * iterator ) ) {
                     * iterator = with;
                     return true;
                 }
@@ -1320,15 +1241,15 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         }
 
 
-        template < typename T >
-        template < typename V, meta :: EnableIf < meta :: isMoveAssignable < V > () > >
-        auto List < T > :: replaceFirstOf (
+        template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
+        template < typename __VElementType, meta :: EnableIf < meta :: isMoveAssignable < __VElementType > () > > // NOLINT(bugprone-reserved-identifier)
+        auto List < __ElementType > :: replaceFirstOf (
                 InitializerList             const & of,
                 ElementType                      && with
         ) noexcept -> bool {
 
             for ( auto iterator = this->begin(), end = this->end(); iterator != end; ++ iterator ) {
-                if ( hidden :: impl :: initializerListContains ( of, * iterator ) ) {
+                if ( __hidden :: __impl :: __initializerListContains ( of, * iterator ) ) {
                     * iterator = std :: move ( with );
                     return true;
                 }
@@ -1338,15 +1259,15 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         }
 
 
-        template < typename T >
-        template < typename V, meta :: EnableIf < meta :: isCopyAssignable < V > () > >
-        auto List < T > :: replaceLastOf (
+        template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
+        template < typename __VElementType, meta :: EnableIf < meta :: isCopyAssignable < __VElementType > () > > // NOLINT(bugprone-reserved-identifier)
+        auto List < __ElementType > :: replaceLastOf (
                 InitializerList             const & of,
                 ElementType                 const & with
         ) noexcept -> bool {
 
             for ( auto iterator = this->rbegin(), end = this->rend(); iterator != end; ++ iterator ) {
-                if ( hidden :: impl :: initializerListContains ( of, * iterator ) ) {
+                if ( __hidden :: __impl :: __initializerListContains ( of, * iterator ) ) {
                     * iterator = with;
                     return true;
                 }
@@ -1356,15 +1277,15 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         }
 
 
-        template < typename T >
-        template < typename V, meta :: EnableIf < meta :: isMoveAssignable < V > () > >
-        auto List < T > :: replaceLastOf (
+        template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
+        template < typename __VElementType, meta :: EnableIf < meta :: isMoveAssignable < __VElementType > () > > // NOLINT(bugprone-reserved-identifier)
+        auto List < __ElementType > :: replaceLastOf (
                 InitializerList             const & of,
                 ElementType                      && with
         ) noexcept -> bool {
 
             for ( auto iterator = this->rbegin(), end = this->rend(); iterator != end; ++ iterator ) {
-                if ( hidden :: impl :: initializerListContains ( of, * iterator ) ) {
+                if ( __hidden :: __impl :: __initializerListContains ( of, * iterator ) ) {
                     * iterator = std :: move ( with );
                     return true;
                 }
@@ -1374,9 +1295,9 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         }
 
 
-        template < typename T >
-        template < typename V, meta :: EnableIf < meta :: isCopyAssignable < V > () > >
-        auto List < T > :: replaceNotOf (
+        template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
+        template < typename __VElementType, meta :: EnableIf < meta :: isCopyAssignable < __VElementType > () > > // NOLINT(bugprone-reserved-identifier)
+        auto List < __ElementType > :: replaceNotOf (
                 Size                                count,
                 InitializerList             const & of,
                 ElementType                 const & with
@@ -1385,7 +1306,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             Size replacedCount = 0U;
             for ( auto iterator = this->begin(), end = this->end(); iterator != end; ++ iterator ) {
                 if ( replacedCount < count ) {
-                    if ( ! hidden :: impl :: initializerListContains ( of, * iterator ) ) {
+                    if ( ! __hidden :: __impl :: __initializerListContains ( of, * iterator ) ) {
                         * iterator = with;
                         ++ replacedCount;
                     }
@@ -1399,16 +1320,16 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         }
 
 
-        template < typename T >
-        template < typename V, meta :: EnableIf < meta :: isCopyAssignable < V > () > >
-        auto List < T > :: replaceAllNotOf (
+        template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
+        template < typename __VElementType, meta :: EnableIf < meta :: isCopyAssignable < __VElementType > () > > // NOLINT(bugprone-reserved-identifier)
+        auto List < __ElementType > :: replaceAllNotOf (
                 InitializerList             const & of,
                 ElementType                 const & with
         ) noexcept -> Size {
 
             Size replacedCount = 0U;
             for ( auto iterator = this->begin(), end = this->end(); iterator != end; ++ iterator ) {
-                if ( ! hidden :: impl :: initializerListContains ( of, * iterator ) ) {
+                if ( ! __hidden :: __impl :: __initializerListContains ( of, * iterator ) ) {
                     * iterator = with;
                     ++ replacedCount;
                 }
@@ -1418,15 +1339,15 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         }
 
 
-        template < typename T >
-        template < typename V, meta :: EnableIf < meta :: isCopyAssignable < V > () > >
-        auto List < T > :: replaceFirstNotOf (
+        template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
+        template < typename __VElementType, meta :: EnableIf < meta :: isCopyAssignable < __VElementType > () > > // NOLINT(bugprone-reserved-identifier)
+        auto List < __ElementType > :: replaceFirstNotOf (
                 InitializerList             const & of,
                 ElementType                 const & with
         ) noexcept -> bool {
 
             for ( auto iterator = this->begin(), end = this->end(); iterator != end; ++ iterator ) {
-                if ( ! hidden :: impl :: initializerListContains ( of, * iterator ) ) {
+                if ( ! __hidden :: __impl :: __initializerListContains ( of, * iterator ) ) {
                     * iterator = with;
                     return true;
                 }
@@ -1436,15 +1357,15 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         }
 
 
-        template < typename T >
-        template < typename V, meta :: EnableIf < meta :: isMoveAssignable < V > () > >
-        auto List < T > :: replaceFirstNotOf (
+        template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
+        template < typename __VElementType, meta :: EnableIf < meta :: isMoveAssignable < __VElementType > () > > // NOLINT(bugprone-reserved-identifier)
+        auto List < __ElementType > :: replaceFirstNotOf (
                 InitializerList             const & of,
                 ElementType                      && with
         ) noexcept -> bool {
 
             for ( auto iterator = this->begin(), end = this->end(); iterator != end; ++ iterator ) {
-                if ( ! hidden :: impl :: initializerListContains ( of, * iterator ) ) {
+                if ( ! __hidden :: __impl :: __initializerListContains ( of, * iterator ) ) {
                     * iterator = std :: move ( with );
                     return true;
                 }
@@ -1454,15 +1375,15 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         }
 
 
-        template < typename T >
-        template < typename V, meta :: EnableIf < meta :: isCopyAssignable < V > () > >
-        auto List < T > :: replaceLastNotOf (
+        template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
+        template < typename __VElementType, meta :: EnableIf < meta :: isCopyAssignable < __VElementType > () > > // NOLINT(bugprone-reserved-identifier)
+        auto List < __ElementType > :: replaceLastNotOf (
                 InitializerList             const & of,
                 ElementType                 const & with
         ) noexcept -> bool {
 
             for ( auto iterator = this->rbegin(), end = this->rend(); iterator != end; ++ iterator ) {
-                if ( ! hidden :: impl :: initializerListContains ( of, * iterator ) ) {
+                if ( ! __hidden :: __impl :: __initializerListContains ( of, * iterator ) ) {
                     * iterator = with;
                     return true;
                 }
@@ -1472,15 +1393,15 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         }
 
 
-        template < typename T >
-        template < typename V, meta :: EnableIf < meta :: isMoveAssignable < V > () > >
-        auto List < T > :: replaceLastNotOf (
+        template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
+        template < typename __VElementType, meta :: EnableIf < meta :: isMoveAssignable < __VElementType > () > > // NOLINT(bugprone-reserved-identifier)
+        auto List < __ElementType > :: replaceLastNotOf (
                 InitializerList             const & of,
                 ElementType                      && with
         ) noexcept -> bool {
 
             for ( auto iterator = this->rbegin(), end = this->rend(); iterator != end; ++ iterator ) {
-                if ( ! hidden :: impl :: initializerListContains ( of, * iterator ) ) {
+                if ( ! __hidden :: __impl :: __initializerListContains ( of, * iterator ) ) {
                     * iterator = std :: move ( with );
                     return true;
                 }
@@ -1490,11 +1411,11 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         }
 
 
-        template < typename T >
-        template < typename Predicate, typename V, meta :: EnableIf < meta :: isCopyAssignable < V > () > >
-        auto List < T > :: replace (
+        template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
+        template < typename __Predicate, typename __VElementType, meta :: EnableIf < meta :: isCopyAssignable < __VElementType > () > > // NOLINT(bugprone-reserved-identifier)
+        auto List < __ElementType > :: replace (
                 Size                count,
-                Predicate   const & predicate,
+                __Predicate const & predicate,
                 ElementType const & with
         ) noexcept ( noexcept ( predicate ( meta :: referenceOf < ElementType > () ) ) ) -> Size {
 
@@ -1515,10 +1436,10 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         }
 
 
-        template < typename T >
-        template < typename Predicate, typename V, meta :: EnableIf < meta :: isCopyAssignable < V > () > >
-        auto List < T > :: replaceAll (
-                Predicate   const & predicate,
+        template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
+        template < typename __Predicate, typename __VElementType, meta :: EnableIf < meta :: isCopyAssignable < __VElementType > () > > // NOLINT(bugprone-reserved-identifier)
+        auto List < __ElementType > :: replaceAll (
+                __Predicate const & predicate,
                 ElementType const & with
         ) noexcept ( noexcept ( predicate ( meta :: referenceOf < ElementType > () ) ) ) -> Size {
 
@@ -1534,10 +1455,10 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         }
 
 
-        template < typename T >
-        template < typename Predicate, typename V, meta :: EnableIf < meta :: isCopyAssignable < V > () > >
-        auto List < T > :: replaceFirst (
-                Predicate   const & predicate,
+        template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
+        template < typename __Predicate, typename __VElementType, meta :: EnableIf < meta :: isCopyAssignable < __VElementType > () > > // NOLINT(bugprone-reserved-identifier)
+        auto List < __ElementType > :: replaceFirst (
+                __Predicate const & predicate,
                 ElementType const & with
         ) noexcept ( noexcept ( predicate ( meta :: referenceOf < ElementType > () ) ) ) -> bool {
 
@@ -1552,10 +1473,10 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         }
 
 
-        template < typename T >
-        template < typename Predicate, typename V, meta :: EnableIf < meta :: isMoveAssignable < V > () > >
-        auto List < T > :: replaceFirst (
-                Predicate   const & predicate,
+        template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
+        template < typename __Predicate, typename __VElementType, meta :: EnableIf < meta :: isMoveAssignable < __VElementType > () > > // NOLINT(bugprone-reserved-identifier)
+        auto List < __ElementType > :: replaceFirst (
+                __Predicate const & predicate,
                 ElementType      && with
         ) noexcept ( noexcept ( predicate ( meta :: referenceOf < ElementType > () ) ) ) -> bool {
 
@@ -1570,10 +1491,10 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         }
 
 
-        template < typename T >
-        template < typename Predicate, typename V, meta :: EnableIf < meta :: isCopyAssignable < V > () > >
-        auto List < T > :: replaceLast (
-                Predicate   const & predicate,
+        template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
+        template < typename __Predicate, typename __VElementType, meta :: EnableIf < meta :: isCopyAssignable < __VElementType > () > > // NOLINT(bugprone-reserved-identifier)
+        auto List < __ElementType > :: replaceLast (
+                __Predicate const & predicate,
                 ElementType const & with
         ) noexcept ( noexcept ( predicate ( meta :: referenceOf < ElementType > () ) ) ) -> bool {
 
@@ -1588,10 +1509,10 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         }
 
 
-        template < typename T >
-        template < typename Predicate, typename V, meta :: EnableIf < meta :: isMoveAssignable < V > () > >
-        auto List < T > :: replaceLast (
-                Predicate   const & predicate,
+        template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
+        template < typename __Predicate, typename __VElementType, meta :: EnableIf < meta :: isMoveAssignable < __VElementType > () > > // NOLINT(bugprone-reserved-identifier)
+        auto List < __ElementType > :: replaceLast (
+                __Predicate const & predicate,
                 ElementType      && with
         ) noexcept ( noexcept ( predicate ( meta :: referenceOf < ElementType > () ) ) ) -> bool {
 
@@ -1606,19 +1527,19 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         }
 
 
-        template < typename T >
-        template < typename Predicate, typename Supplier >
-        auto List < T > :: replace (
+        template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
+        template < typename __Predicate, typename __Supplier > // NOLINT(bugprone-reserved-identifier)
+        auto List < __ElementType > :: replace (
                 Size                count,
-                Predicate   const & predicate,
-                Supplier    const & supplier
+                __Predicate const & predicate,
+                __Supplier  const & supplier
         ) noexcept ( noexcept ( predicate ( meta :: referenceOf < ElementType > () ) ) && noexcept ( supplier ( meta :: referenceOf < ElementType > () ) ) ) -> Size {
 
             Size replacedCount = 0U;
             for ( auto iterator = this->begin(), end = this->end(); iterator != end; ++ iterator ) {
                 if ( replacedCount < count ) {
                     if ( predicate ( * iterator ) ) {
-                        (void) hidden :: impl :: assign ( * iterator, supplier ( std :: move ( * iterator ) ) );
+                        (void) __hidden :: __impl :: __assign ( * iterator, supplier ( std :: move ( * iterator ) ) );
                         ++ replacedCount;
                     }
 
@@ -1631,17 +1552,17 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         }
 
 
-        template < typename T >
-        template < typename Predicate, typename Supplier >
-        auto List < T > :: replaceAll (
-                Predicate   const & predicate,
-                Supplier    const & supplier
+        template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
+        template < typename __Predicate, typename __Supplier > // NOLINT(bugprone-reserved-identifier)
+        auto List < __ElementType > :: replaceAll (
+                __Predicate const & predicate,
+                __Supplier  const & supplier
         ) noexcept ( noexcept ( predicate ( meta :: referenceOf < ElementType > () ) ) && noexcept ( supplier ( meta :: referenceOf < ElementType > () ) ) ) -> Size {
 
             Size replacedCount = 0U;
             for ( auto iterator = this->begin(), end = this->end(); iterator != end; ++ iterator ) {
                 if ( predicate ( * iterator ) ) {
-                    (void) hidden :: impl :: assign ( * iterator, supplier ( std :: move ( * iterator ) ) );
+                    (void) __hidden :: __impl :: __assign ( * iterator, supplier ( std :: move ( * iterator ) ) );
                     ++ replacedCount;
                 }
             }
@@ -1650,16 +1571,16 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         }
 
 
-        template < typename T >
-        template < typename Predicate, typename Supplier >
-        auto List < T > :: replaceFirst (
-                Predicate   const & predicate,
-                Supplier    const & supplier
+        template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
+        template < typename __Predicate, typename __Supplier > // NOLINT(bugprone-reserved-identifier)
+        auto List < __ElementType > :: replaceFirst (
+                __Predicate const & predicate,
+                __Supplier  const & supplier
         ) noexcept ( noexcept ( predicate ( meta :: referenceOf < ElementType > () ) ) && noexcept ( supplier ( meta :: referenceOf < ElementType > () ) ) ) -> bool {
 
             for ( auto iterator = this->begin(), end = this->end(); iterator != end; ++ iterator ) {
                 if ( predicate ( * iterator ) ) {
-                    (void) hidden :: impl :: assign ( * iterator, supplier ( std :: move ( * iterator ) ) );
+                    (void) __hidden :: __impl :: __assign ( * iterator, supplier ( std :: move ( * iterator ) ) );
                     return true;
                 }
             }
@@ -1668,16 +1589,16 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         }
 
 
-        template < typename T >
-        template < typename Predicate, typename Supplier >
-        auto List < T > :: replaceLast (
-                Predicate   const & predicate,
-                Supplier    const & supplier
+        template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
+        template < typename __Predicate, typename __Supplier > // NOLINT(bugprone-reserved-identifier)
+        auto List < __ElementType > :: replaceLast (
+                __Predicate const & predicate,
+                __Supplier  const & supplier
         ) noexcept ( noexcept ( predicate ( meta :: referenceOf < ElementType > () ) ) && noexcept ( supplier ( meta :: referenceOf < ElementType > () ) ) ) -> bool {
 
             for ( auto iterator = this->rbegin(), end = this->rend(); iterator != end; ++ iterator ) {
                 if ( predicate ( * iterator ) ) {
-                    (void) hidden :: impl :: assign ( * iterator, supplier ( std :: move ( * iterator ) ) );
+                    (void) __hidden :: __impl :: __assign ( * iterator, supplier ( std :: move ( * iterator ) ) );
                     return true;
                 }
             }
@@ -1686,14 +1607,9 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         }
 
 
-        template < typename T >
-        constexpr auto List < T > :: empty () const noexcept -> bool {
-            return this->_size == 0ULL;
-        }
-
-
-        template < typename T >
-        auto List < T > :: toString () const noexcept -> String {
+        template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
+        auto List < __ElementType > :: toString () const noexcept -> String {
+            
             if ( this->empty() ) {
                 return {"[]"};
             }
@@ -1703,21 +1619,25 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
             for ( auto iterator = this->begin(), end = this->end(); iterator != end; ++ iterator ) {
 
-                meta :: print ( out, * iterator ) << ", ";
+                cds :: meta :: print ( out, * iterator ) << ", ";
             }
 
             auto asString = out.str();
-            return asString.substr(0u, asString.length() - 2u).append(" ]");
+
+            asString [ asString.length() - 2U ] = ' ';
+            asString [ asString.length() - 1U ] = ']';
+
+            return asString;
         }
 
 
-        template < typename T >
-        template < typename ListType, meta :: EnableIf < meta :: isDerivedFrom < ListType, Collection < Index > > () > >
-        auto List < T > :: indices (
+        template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
+        template < typename __CollectionType, meta :: EnableIf < meta :: isDerivedFrom < __CollectionType, Collection < Index > > () > > // NOLINT(bugprone-reserved-identifier)
+        auto List < __ElementType > :: indices (
                 Size                  count,
-                ListType            & storeIn,
+                __CollectionType    & storeIn,
                 ElementType   const & element
-        ) const noexcept -> ListType & {
+        ) const noexcept -> __CollectionType & {
 
             Index index = 0;
             Size foundCount = 0U;
@@ -1732,31 +1652,31 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         }
 
 
-        template < typename T >
-        template < typename ListType, meta :: EnableIf < meta :: isDerivedFrom < ListType, Collection < Index > > () > >
-        __CDS_OptimalInline auto List < T > :: indices (
+        template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
+        template < typename __CollectionType, meta :: EnableIf < meta :: isDerivedFrom < __CollectionType, Collection < Index > > () > > // NOLINT(bugprone-reserved-identifier)
+        __CDS_OptimalInline auto List < __ElementType > :: indices (
                 Size                count,
                 ElementType const & element
-        ) const noexcept -> ListType {
+        ) const noexcept -> __CollectionType {
 
-            ListType list;
+            __CollectionType list;
             return this->indices ( count, list, element );
         }
 
 
-        template < typename T >
-        template < template < typename ... > class ListType, meta :: EnableIf < meta :: isDerivedFrom < ListType < Index >, Collection < Index > > () > >
-        __CDS_OptimalInline auto List < T > :: indices (
+        template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
+        template < template < typename ... > class __CollectionType, meta :: EnableIf < meta :: isDerivedFrom < __CollectionType < Index >, Collection < Index > > () > > // NOLINT(bugprone-reserved-identifier)
+        __CDS_OptimalInline auto List < __ElementType > :: indices (
                 Size                count,
                 ElementType const & element
-        ) const noexcept -> ListType < Index > {
+        ) const noexcept -> __CollectionType < Index > {
 
-            return this->indices < ListType < T > > ( count, element );
+            return this->indices < __CollectionType < __ElementType > > ( count, element );
         }
 
 
-        template < typename T >
-        auto List < T > :: firstIndex (
+        template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
+        auto List < __ElementType > :: firstIndex (
                 ElementType const & element
         ) const noexcept -> Index {
 
@@ -1771,8 +1691,8 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         }
 
 
-        template < typename T >
-        auto List < T > :: lastIndex (
+        template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
+        auto List < __ElementType > :: lastIndex (
                 ElementType const & element
         ) const noexcept -> Index {
 
@@ -1787,12 +1707,12 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         }
 
 
-        template < typename T >
-        template < typename ListType, meta :: EnableIf < meta :: isDerivedFrom < ListType, Collection < Index > > () > >
-        auto List < T > :: allIndices (
-                ListType            & storeIn,
+        template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
+        template < typename __CollectionType, meta :: EnableIf < meta :: isDerivedFrom < __CollectionType, Collection < Index > > () > > // NOLINT(bugprone-reserved-identifier)
+        auto List < __ElementType > :: allIndices (
+                __CollectionType    & storeIn,
                 ElementType   const & element
-        ) const noexcept -> ListType & {
+        ) const noexcept -> __CollectionType & {
 
             Index index = 0;
             for ( auto iterator = this->begin(), end = this->end(); iterator != end; ++ iterator, ++ index ) {
@@ -1805,34 +1725,34 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         }
 
 
-        template < typename T >
-        template < typename ListType, meta :: EnableIf < meta :: isDerivedFrom < ListType, Collection < Index > > () > >
-        __CDS_OptimalInline auto List < T > :: allIndices (
+        template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
+        template < typename __CollectionType, meta :: EnableIf < meta :: isDerivedFrom < __CollectionType, Collection < Index > > () > > // NOLINT(bugprone-reserved-identifier)
+        __CDS_OptimalInline auto List < __ElementType > :: allIndices (
                 ElementType const & element
-        ) const noexcept -> ListType {
+        ) const noexcept -> __CollectionType {
 
-            ListType list;
+            __CollectionType list;
             return this->allIndices ( list, element );
         }
 
 
-        template < typename T >
-        template < template < typename ... > class ListType, meta :: EnableIf < meta :: isDerivedFrom < ListType < Index >, Collection < Index > > () > >
-        __CDS_OptimalInline auto List < T > :: allIndices (
+        template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
+        template < template < typename ... > class __CollectionType, meta :: EnableIf < meta :: isDerivedFrom < __CollectionType < Index >, Collection < Index > > () > > // NOLINT(bugprone-reserved-identifier)
+        __CDS_OptimalInline auto List < __ElementType > :: allIndices (
                 ElementType const & element
-        ) const noexcept -> ListType < Index > {
+        ) const noexcept -> __CollectionType < Index > {
 
-            return this->allIndices < ListType < T > > ( element );
+            return this->allIndices < __CollectionType < __ElementType > > ( element );
         }
 
 
-        template < typename T >
-        template < typename Predicate, typename ListType, meta :: EnableIf < meta :: isDerivedFrom < ListType, Collection < Index > > () > >
-        auto List < T > :: indices (
+        template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
+        template < typename __Predicate, typename __CollectionType, meta :: EnableIf < meta :: isDerivedFrom < __CollectionType, Collection < Index > > () > > // NOLINT(bugprone-reserved-identifier)
+        auto List < __ElementType > :: indices (
                 Size                  count,
-                ListType            & storeIn,
-                Predicate     const & predicate
-        ) const noexcept ( noexcept ( predicate ( meta :: referenceOf < ElementType const > () ) ) ) -> ListType & {
+                __CollectionType    & storeIn,
+                __Predicate   const & predicate
+        ) const noexcept ( noexcept ( predicate ( meta :: referenceOf < ElementType const > () ) ) ) -> __CollectionType & {
 
             Index index = 0;
             Size foundCount = 0U;
@@ -1847,33 +1767,33 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         }
 
 
-        template < typename T >
-        template < typename Predicate, typename ListType, meta :: EnableIf < meta :: isDerivedFrom < ListType, Collection < Index > > () > >
-        __CDS_OptimalInline auto List < T > :: indices (
+        template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
+        template < typename __Predicate, typename __CollectionType, meta :: EnableIf < meta :: isDerivedFrom < __CollectionType, Collection < Index > > () > > // NOLINT(bugprone-reserved-identifier)
+        __CDS_OptimalInline auto List < __ElementType > :: indices (
                 Size                count,
-                Predicate   const & predicate
-        ) const noexcept ( noexcept ( predicate ( meta :: referenceOf < ElementType const > () ) ) ) -> ListType {
+                __Predicate const & predicate
+        ) const noexcept ( noexcept ( predicate ( meta :: referenceOf < ElementType const > () ) ) ) -> __CollectionType {
 
-            ListType list;
+            __CollectionType list;
             return this->indices ( count, list, predicate );
         }
 
 
-        template < typename T >
-        template < typename Predicate, template < typename ... > class ListType, meta :: EnableIf < meta :: isDerivedFrom < ListType < Index >, Collection < Index > > () > >
-        __CDS_OptimalInline auto List < T > :: indices (
+        template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
+        template < typename __Predicate, template < typename ... > class __CollectionType, meta :: EnableIf < meta :: isDerivedFrom < __CollectionType < Index >, Collection < Index > > () > > // NOLINT(bugprone-reserved-identifier)
+        __CDS_OptimalInline auto List < __ElementType > :: indices (
                 Size                count,
-                Predicate   const & predicate
-        ) const noexcept ( noexcept ( predicate ( meta :: referenceOf < ElementType const > () ) ) ) -> ListType < Index > {
+                __Predicate const & predicate
+        ) const noexcept ( noexcept ( predicate ( meta :: referenceOf < ElementType const > () ) ) ) -> __CollectionType < Index > {
 
-            return this->indices < ListType < T > > ( count, predicate );
+            return this->indices < __CollectionType < __ElementType > > ( count, predicate );
         }
 
 
-        template < typename T >
-        template < typename Predicate >
-        auto List < T > :: firstIndex (
-                Predicate const & predicate
+        template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
+        template < typename __Predicate > // NOLINT(bugprone-reserved-identifier)
+        auto List < __ElementType > :: firstIndex (
+                __Predicate const & predicate
         ) const noexcept ( noexcept ( predicate ( meta :: referenceOf < ElementType const > () ) ) ) -> Index {
 
             Index index = 0;
@@ -1887,10 +1807,10 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         }
 
 
-        template < typename T >
-        template < typename Predicate >
-        auto List < T > :: lastIndex (
-                Predicate const & predicate
+        template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
+        template < typename __Predicate > // NOLINT(bugprone-reserved-identifier)
+        auto List < __ElementType > :: lastIndex (
+                __Predicate const & predicate
         ) const noexcept ( noexcept ( predicate ( meta :: referenceOf < ElementType const > () ) ) ) -> Index {
 
             Index index = static_cast < Index > ( this->size() ) - 1;
@@ -1904,12 +1824,12 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         }
 
 
-        template < typename T >
-        template < typename Predicate, typename ListType, meta :: EnableIf < meta :: isDerivedFrom < ListType, Collection < Index > > () > >
-        auto List < T > :: allIndices (
-                ListType            & storeIn,
-                Predicate     const & predicate
-        ) const noexcept ( noexcept ( predicate ( meta :: referenceOf < ElementType const > () ) ) ) -> ListType & {
+        template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
+        template < typename __Predicate, typename __CollectionType, meta :: EnableIf < meta :: isDerivedFrom < __CollectionType, Collection < Index > > () > > // NOLINT(bugprone-reserved-identifier)
+        auto List < __ElementType > :: allIndices (
+                __CollectionType    & storeIn,
+                __Predicate   const & predicate
+        ) const noexcept ( noexcept ( predicate ( meta :: referenceOf < ElementType const > () ) ) ) -> __CollectionType & {
 
             Index index = 0;
             for ( auto iterator = this->begin(), end = this->end(); iterator != end; ++ iterator, ++ index ) {
@@ -1922,753 +1842,24 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         }
 
 
-        template < typename T >
-        template < typename Predicate, typename ListType, meta :: EnableIf < meta :: isDerivedFrom < ListType, Collection < Index > > () > >
-        __CDS_OptimalInline auto List < T > :: allIndices (
-                Predicate const & predicate
-        ) const noexcept ( noexcept ( predicate ( meta :: referenceOf < ElementType const > () ) ) ) -> ListType {
+        template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
+        template < typename __Predicate, typename __CollectionType, meta :: EnableIf < meta :: isDerivedFrom < __CollectionType, Collection < Index > > () > > // NOLINT(bugprone-reserved-identifier)
+        __CDS_OptimalInline auto List < __ElementType > :: allIndices (
+                __Predicate const & predicate
+        ) const noexcept ( noexcept ( predicate ( meta :: referenceOf < ElementType const > () ) ) ) -> __CollectionType {
 
-            ListType list;
+            __CollectionType list;
             return this->allIndices ( list, predicate );
         }
 
 
-        template < typename T >
-        template < typename Predicate, template < typename ... > class ListType, meta :: EnableIf < meta :: isDerivedFrom < ListType < Index >, Collection < Index > > () > >
-        __CDS_OptimalInline auto List < T > :: allIndices (
-                Predicate const & predicate
-        ) const noexcept ( noexcept ( predicate ( meta :: referenceOf < ElementType const > () ) ) ) -> ListType < Index > {
-
-            return this->allIndices < ListType < Index > > ( predicate );
-        }
-
-
-        template < typename T >
-        template < template < typename ... > class CollectionType >
-        auto List < T > :: find (
-                Size                                        maxCount,
-                ElementType                         const & element,
-                CollectionType < Iterator >               & storeIn
-        ) noexcept -> CollectionType < Iterator > & {
-
-            Size found = 0ULL;
-            for ( auto iterator = this->begin(), end = this->end(); iterator != end && found < maxCount; ++ iterator ) {
-                if ( meta :: equals ( element, * iterator ) ) {
-                    ++ found;
-
-                    storeIn.add ( iterator );
-                }
-            }
-
-            return storeIn;
-        }
-
-
-        template < typename T >
-        template < template < typename ... > class CollectionType >
-        auto List < T > :: find (
-                Size                                        maxCount,
-                ElementType                         const & element
-        ) noexcept -> CollectionType < Iterator > {
-
-            CollectionType < Iterator > iterators;
-            return this-> find ( maxCount, element, iterators );
-        }
-
-
-        template < typename T >
-        auto List < T > :: findFirst (
-                ElementType const & element
-        ) noexcept -> Iterator {
-
-            auto end = this->end();
-            for ( auto iterator = this->begin(); iterator != end; ++ iterator ) {
-                if ( meta :: equals ( element, * iterator ) ) {
-                    return iterator;
-                }
-            }
-
-            return end;
-        }
-
-
-        template < typename T >
-        auto List < T > :: findLast (
-                ElementType const & element
-        ) noexcept -> Iterator {
-
-            auto end = this->end();
-            auto lastFound = end;
-            for ( auto iterator = this->begin(); iterator != end; ++ iterator ) {
-                if ( meta :: equals ( element, * iterator ) ) {
-                    lastFound = iterator;
-                }
-            }
-
-            return lastFound;
-        }
-
-
-        template < typename T >
-        template < template < typename ... > class CollectionType >
-        auto List < T > :: findAll (
-                ElementType                         const & element,
-                CollectionType < Iterator >               & storeIn
-        ) noexcept -> CollectionType < Iterator > & {
-
-            for ( auto iterator = this->begin(), end = this->end(); iterator != end; ++ iterator ) {
-                if ( meta :: equals ( element, * iterator ) ) {
-                    storeIn.add ( iterator );
-                }
-            }
-
-            return storeIn;
-        }
-
-
-        template < typename T >
-        template < template < typename ... > class CollectionType >
-        auto List < T > :: findAll (
-                ElementType                         const & element
-        ) noexcept -> CollectionType < Iterator > {
-
-            CollectionType < Iterator > iterators;
-            return this-> findAll ( element, iterators );
-        }
-
-
-        template < typename T >
-        template < template < typename ... > class CollectionType >
-        auto List < T > :: findOf (
-                Size                                        maxCount,
-                Collection < ElementType >          const & elements,
-                CollectionType < Iterator >               & storeIn
-        ) noexcept -> CollectionType < Iterator > & {
-
-            Size found = 0ULL;
-            for ( auto iterator = this->begin(), end = this->end(); iterator != end && found < maxCount; ++ iterator ) {
-                if ( elements.contains ( * iterator ) ) {
-                    ++ found;
-
-                    storeIn.add ( iterator );
-                }
-            }
-
-            return storeIn;
-        }
-
-
-        template < typename T >
-        template < template < typename ... > class CollectionType >
-        auto List < T > :: findOf (
-                Size                                        maxCount,
-                Collection < ElementType >          const & elements
-        ) noexcept -> CollectionType < Iterator > {
-
-            CollectionType < Iterator > iterators;
-            return this-> findOf ( maxCount, elements, iterators );
-        }
-
-
-        template < typename T >
-        auto List < T > :: findFirstOf (
-                Collection < ElementType > const & elements
-        ) noexcept -> Iterator {
-
-            auto end = this->end();
-            for ( auto iterator = this->begin(); iterator != end; ++ iterator ) {
-                if ( elements.contains ( * iterator ) ) {
-                    return iterator;
-                }
-            }
-
-            return end;
-        }
-
-
-        template < typename T >
-        auto List < T > :: findLastOf (
-                Collection < ElementType > const & elements
-        ) noexcept -> Iterator {
-
-            auto end = this->end();
-            auto lastFound = end;
-            for ( auto iterator = this->begin(); iterator != end; ++ iterator ) {
-                if ( elements.contains ( * iterator ) ) {
-                    lastFound = end;
-                }
-            }
-
-            return lastFound;
-        }
-
-
-        template < typename T >
-        template < template < typename ... > class CollectionType >
-        auto List < T > :: findAllOf (
-                Collection < ElementType >          const & elements,
-                CollectionType < Iterator >               & storeIn
-        ) noexcept -> CollectionType < Iterator > & {
-
-            for ( auto iterator = this->begin(), end = this->end(); iterator != end; ++ iterator ) {
-                if ( elements.contains ( * iterator ) ) {
-                    storeIn.add ( iterator );
-                }
-            }
-
-            return storeIn;
-        }
-
-
-        template < typename T >
-        template < template < typename ... > class CollectionType >
-        auto List < T > :: findAllOf (
-                Collection < ElementType >          const & elements
-        ) noexcept -> CollectionType < Iterator > {
-
-            Collection < Iterator > iterators;
-            return this->findAllOf ( elements, iterators );
-        }
-
-
-        template < typename T >
-        template < template < typename ... > class CollectionType >
-        auto List < T > :: findNotOf (
-                Size                                        maxCount,
-                Collection < ElementType >          const & elements,
-                CollectionType < Iterator >               & storeIn
-        ) noexcept -> CollectionType < Iterator > & {
-
-            Size found = 0ULL;
-            for ( auto iterator = this->begin(), end = this->end(); iterator != end && found < maxCount; ++ iterator ) {
-                if ( ! elements.contains ( * iterator ) ) {
-                    ++ found;
-
-                    storeIn.add ( iterator );
-                }
-            }
-
-            return storeIn;
-        }
-
-
-        template < typename T >
-        template < template < typename ... > class CollectionType >
-        auto List < T > :: findNotOf (
-                Size                                        maxCount,
-                Collection < ElementType >          const & elements
-        ) noexcept -> CollectionType < Iterator > {
-
-            CollectionType < Iterator > iterators;
-            return this-> findNotOf ( maxCount, elements, iterators );
-        }
-
-
-        template < typename T >
-        auto List < T > :: findFirstNotOf (
-                Collection < ElementType > const & elements
-        ) noexcept -> Iterator {
-
-            auto end = this->end();
-            for ( auto iterator = this->begin(); iterator != end; ++ iterator ) {
-                if ( ! elements.contains ( * iterator ) ) {
-                    return iterator;
-                }
-            }
-
-            return end;
-        }
-
-
-        template < typename T >
-        auto List < T > :: findLastNotOf (
-                Collection < ElementType > const & elements
-        ) noexcept -> Iterator {
-
-            auto end = this->end();
-            auto lastFound = end;
-            for ( auto iterator = this->begin(); iterator != end; ++ iterator ) {
-                if ( ! elements.contains ( * iterator ) ) {
-                    lastFound = iterator;
-                }
-            }
-
-            return lastFound;
-        }
-
-
-        template < typename T >
-        template < template < typename ... > class CollectionType >
-        auto List < T > :: findAllNotOf (
-                Collection < ElementType >          const & elements,
-                CollectionType < Iterator >               & storeIn
-        ) noexcept -> CollectionType < Iterator > & {
-
-            for ( auto iterator = this->begin(), end = this->end(); iterator != end; ++ iterator ) {
-                if ( ! elements.contains ( * iterator ) ) {
-                    storeIn.add ( iterator );
-                }
-            }
-
-            return storeIn;
-        }
-
-
-        template < typename T >
-        template < template < typename ... > class CollectionType >
-        auto List < T > :: findAllNotOf (
-                Collection < ElementType >  const & elements
-        ) noexcept -> CollectionType < Iterator > {
-
-            CollectionType < Iterator > iterators;
-            return this-> findAllNotOf ( elements, iterators );
-        }
-
-
-        template < typename T >
-        template < template < typename ... > class CollectionType >
-        auto List < T > :: findOf (
-                Size                                        maxCount,
-                InitializerList                     const & elements,
-                CollectionType < Iterator >               & storeIn
-        ) noexcept -> CollectionType < Iterator > & {
-
-            Size found = 0ULL;
-            for ( auto iterator = this->begin(), end = this->end(); iterator != end && found < maxCount; ++ iterator ) {
-                if ( hidden :: impl :: initializerListContains ( elements, * iterator ) ) {
-                    ++ found;
-
-                    storeIn.add ( iterator );
-                }
-            }
-
-            return storeIn;
-        }
-
-
-        template < typename T >
-        template < template < typename ... > class CollectionType >
-        auto List < T > :: findOf (
-                Size                                        maxCount,
-                InitializerList                     const & elements
-        ) noexcept -> CollectionType < Iterator > {
-
-            CollectionType < Iterator > iterators;
-            return this-> findOf ( maxCount, elements, iterators );
-        }
-
-
-        template < typename T >
-        auto List < T > :: findFirstOf (
-                InitializerList const & elements
-        ) noexcept -> Iterator {
-
-            auto end = this->end();
-            for ( auto iterator = this->begin(); iterator != end; ++ iterator ) {
-                if ( hidden :: impl :: initializerListContains ( elements, * iterator ) ) {
-                    return iterator;
-                }
-            }
-
-            return end;
-        }
-
-
-        template < typename T >
-        auto List < T > :: findLastOf (
-                InitializerList const & elements
-        ) noexcept -> Iterator {
-
-            auto end = this->end();
-            auto lastFound = end;
-            for ( auto iterator = this->begin(); iterator != end; ++ iterator ) {
-                if ( hidden :: impl :: initializerListContains ( elements, * iterator ) ) {
-                    lastFound = iterator;
-                }
-            }
-
-            return lastFound;
-        }
-
-
-        template < typename T >
-        template < template < typename ... > class CollectionType >
-        auto List < T > :: findAllOf (
-                InitializerList                     const & elements,
-                CollectionType < Iterator >               & storeIn
-        ) noexcept -> CollectionType < Iterator > & {
-
-            for ( auto iterator = this->begin(), end = this->end(); iterator != end; ++ iterator ) {
-                if ( elements.contains ( * iterator ) ) {
-                    storeIn.add ( iterator );
-                }
-            }
-
-            return storeIn;
-        }
-
-
-        template < typename T >
-        template < template < typename ... > class CollectionType >
-        auto List < T > :: findAllOf (
-                InitializerList                     const & elements
-        ) noexcept -> CollectionType < Iterator > {
-
-            Collection < Iterator > iterators;
-            return this->findAllOf ( elements, iterators );
-        }
-
-
-        template < typename T >
-        template < template < typename ... > class CollectionType >
-        auto List < T > :: findNotOf (
-                Size                                        maxCount,
-                InitializerList                     const & elements,
-                CollectionType < Iterator >               & storeIn
-        ) noexcept -> CollectionType < Iterator > & {
-
-            Size found = 0ULL;
-            for ( auto iterator = this->begin(), end = this->end(); iterator != end && found < maxCount; ++ iterator ) {
-                if ( ! hidden :: impl :: initializerListContains ( elements, * iterator ) ) {
-                    ++ found;
-
-                    storeIn.add ( iterator );
-                }
-            }
-
-            return storeIn;
-        }
-
-
-        template < typename T >
-        template < template < typename ... > class CollectionType >
-        auto List < T > :: findNotOf (
-                Size                                        maxCount,
-                InitializerList                     const & elements
-        ) noexcept -> CollectionType < Iterator > {
-
-            CollectionType < Iterator > iterators;
-            return this-> findNotOf ( maxCount, elements, iterators );
-        }
-
-
-        template < typename T >
-        auto List < T > :: findFirstNotOf (
-                InitializerList                     const & elements
-        ) noexcept -> Iterator {
-
-            auto end = this->end();
-            for ( auto iterator = this->begin(); iterator != end; ++ iterator ) {
-                if ( ! hidden :: impl :: initializerListContains ( elements,  * iterator ) ) {
-                    return iterator;
-                }
-            }
-
-            return end;
-        }
-
-
-        template < typename T >
-        auto List < T > :: findLastNotOf (
-                InitializerList                     const & elements
-        ) noexcept -> Iterator {
-
-            auto end = this->end();
-            auto lastFound = end;
-            for ( auto iterator = this->begin(); iterator != end; ++ iterator ) {
-                if ( ! hidden :: impl :: initializerListContains ( elements,  * iterator ) ) {
-                    lastFound = iterator;
-                }
-            }
-
-            return lastFound;
-        }
-
-
-        template < typename T >
-        template < template < typename ... > class CollectionType >
-        auto List < T > :: findAllNotOf (
-                InitializerList                     const & elements,
-                CollectionType < Iterator >               & storeIn
-        ) noexcept -> CollectionType < Iterator > & {
-
-            for ( auto iterator = this->begin(), end = this->end(); iterator != end; ++ iterator ) {
-                if ( ! hidden :: impl :: initializerListContains ( elements,  * iterator ) ) {
-                    storeIn.add ( iterator );
-                }
-            }
-
-            return storeIn;
-        }
-
-
-        template < typename T >
-        template < template < typename ... > class CollectionType >
-        auto List < T > :: findAllNotOf (
-                InitializerList                     const & elements
-        ) noexcept -> CollectionType < Iterator > {
-
-            CollectionType < Iterator > iterators;
-            return this-> findAllNotOf ( elements, iterators );
-        }
-
-
-        template < typename T >
-        template < template < typename ... > class CollectionType, typename Predicate >
-        auto List < T > :: find (
-                Size                                        maxCount,
-                Predicate                           const & predicate,
-                CollectionType < Iterator >               & storeIn
-        ) noexcept ( noexcept ( predicate ( meta :: referenceOf < ElementType > () ) ) ) -> CollectionType < Iterator > & {
-
-            Size matchCount = 0U;
-            for ( auto iterator = this->begin(), end = this->end(); iterator != end && matchCount < maxCount; ++ iterator ) {
-                if ( predicate ( * iterator ) ) {
-                    ++ matchCount;
-                    storeIn.add ( iterator );
-                }
-            }
-
-            return storeIn;
-        }
-
-
-        template < typename T >
-        template < template < typename ... > class CollectionType, typename Predicate >
-        auto List < T > :: find (
-                Size                                        maxCount,
-                Predicate                           const & predicate
-        ) noexcept ( noexcept ( predicate ( meta :: referenceOf < ElementType > () ) ) ) -> CollectionType < Iterator > {
-
-            CollectionType < Iterator > iterators;
-            return this->find ( maxCount, predicate, iterators );
-        }
-
-
-        template < typename T >
-        template < typename Predicate >
-        auto List < T > :: findFirst (
-                Predicate const & predicate
-        ) noexcept ( noexcept ( predicate ( meta :: referenceOf < ElementType > () ) ) ) -> Iterator {
-
-            auto end = this->end();
-            for ( auto iterator = this->begin(); iterator != end; ++ iterator ) {
-                if ( predicate ( * iterator ) ) {
-                    return iterator;
-                }
-            }
-
-            return end;
-        }
-
-
-        template < typename T >
-        template < typename Predicate >
-        auto List < T > :: findLast (
-                Predicate const & predicate
-        ) noexcept ( noexcept ( predicate ( meta :: referenceOf < ElementType > () ) ) ) -> Iterator {
-
-            auto end = this->end();
-            auto lastFound = end;
-            for ( auto iterator = this->begin(); iterator != end; ++ iterator ) {
-                if ( predicate ( * iterator ) ) {
-                    lastFound = iterator;
-                }
-            }
-
-            return lastFound;
-        }
-
-
-        template < typename T >
-        template < template < typename ... > class CollectionType, typename Predicate >
-        auto List < T > :: findAll (
-                Predicate                           const & predicate,
-                CollectionType < Iterator >               & storeIn
-        ) noexcept ( noexcept ( predicate ( meta :: referenceOf < ElementType > () ) ) ) -> CollectionType < Iterator > & {
-
-            for ( auto iterator = this->begin(), end = this->end(); iterator != end; ++ iterator ) {
-                if ( predicate ( * iterator ) ) {
-                    storeIn.add ( iterator );
-                }
-            }
-
-            return storeIn;
-        }
-
-
-        template < typename T >
-        template < template < typename ... > class CollectionType, typename Predicate >
-        auto List < T > :: findAll (
-                Predicate                           const & predicate
-        ) noexcept ( noexcept ( predicate ( meta :: referenceOf < ElementType > () ) ) ) -> CollectionType < Iterator > {
-
-            CollectionType < Iterator > iterators;
-            return this->findAll ( predicate, iterators );
-        }
-
-
-        template < typename T >
-        template < typename Action >
-        auto List < T > :: forEach (
-                Action const & action
-        ) noexcept ( noexcept ( action ( meta :: referenceOf < ElementType > () ) ) ) -> void {
-
-            for ( auto iterator = this->begin(), end = this->end(); iterator != end; ++ iterator ) {
-                action ( * iterator );
-            }
-        }
-
-        template < typename T >
-        template < typename Predicate >
-        auto List < T > :: some (
-                Size                count,
-                Predicate   const & predicate
-        ) noexcept ( noexcept ( predicate ( meta :: referenceOf < ElementType > () ) ) ) -> bool {
-
-            Size trueCount = 0ULL;
-            for ( auto iterator = this->begin(), end = this->end(); iterator != end; ++ iterator ) {
-                if ( predicate ( * iterator ) ) {
-                    ++ trueCount;
-                }
-
-                if ( trueCount > count ) {
-                    return false;
-                }
-            }
-
-            return trueCount == count;
-        }
-
-
-        template < typename T >
-        template < typename Predicate >
-        auto List < T > :: atLeast (
-                Size                count,
-                Predicate   const & predicate
-        ) noexcept ( noexcept ( predicate ( meta :: referenceOf < ElementType > () ) ) ) -> bool {
-
-            Size trueCount = 0ULL;
-            for ( auto iterator = this->begin(), end = this->end(); iterator != end; ++ iterator ) {
-                if ( predicate ( * iterator ) ) {
-                    ++ trueCount;
-                }
-
-                if ( trueCount >= count ) {
-                    return true;
-                }
-            }
-
-            return false;
-        }
-
-
-        template < typename T >
-        template < typename Predicate >
-        auto List < T > :: atMost (
-                Size                count,
-                Predicate   const & predicate
-        ) noexcept ( noexcept ( predicate ( meta :: referenceOf < ElementType > () ) ) ) -> bool {
-
-            Size trueCount = 0ULL;
-            for ( auto iterator = this->begin(), end = this->end(); iterator != end; ++ iterator ) {
-                if ( predicate ( * iterator ) ) {
-                    ++ trueCount;
-                }
-
-                if ( trueCount > count ) {
-                    return false;
-                }
-            }
-
-            return true;
-        }
-
-
-        template < typename T >
-        template < typename Predicate >
-        __CDS_OptimalInline auto List < T > :: moreThan (
-                Size                count,
-                Predicate   const & predicate
-        ) noexcept ( noexcept ( predicate ( meta :: referenceOf < ElementType > () ) ) ) -> bool {
-
-            return this->atLeast ( count + 1, predicate );
-        }
-
-
-        template < typename T >
-        template < typename Predicate >
-        __CDS_OptimalInline auto List < T > :: fewerThan (
-                Size                count,
-                Predicate   const & predicate
-        ) noexcept ( noexcept ( predicate ( meta :: referenceOf < ElementType > () ) ) ) -> bool {
-
-            return this->atMost ( count - 1, predicate );
-        }
-
-
-        template < typename T >
-        template < typename Predicate >
-        auto List < T > :: count (
-                Predicate const & predicate
-        ) noexcept ( noexcept ( predicate ( meta :: referenceOf < ElementType > () ) ) ) -> Size {
-
-            Size trueCount = 0U;
-            for ( auto iterator = this->begin(), end = this->end(); iterator != end; ++ iterator ) {
-                if ( predicate ( * iterator ) ) {
-                    ++ trueCount;
-                }
-            }
-
-            return trueCount;
-        }
-
-
-        template < typename T >
-        template < typename Predicate >
-        auto List < T > :: any (
-                Predicate const & predicate
-        ) noexcept ( noexcept ( predicate ( meta :: referenceOf < ElementType > () ) ) ) -> bool {
-
-            for ( auto iterator = this->begin(), end = this->end(); iterator != end; ++ iterator ) {
-                if ( predicate ( * iterator ) ) {
-                    return true;
-                }
-            }
-
-            return false;
-        }
-
-
-        template < typename T >
-        template < typename Predicate >
-        auto List < T > :: all (
-                Predicate const & predicate
-        ) noexcept ( noexcept ( predicate ( meta :: referenceOf < ElementType > () ) ) ) -> bool {
-
-            for ( auto iterator = this->begin(), end = this->end(); iterator != end; ++ iterator ) {
-                if ( ! predicate ( * iterator ) ) {
-                    return false;
-                }
-            }
-
-            return true;
-        }
-
-
-        template < typename T >
-        template < typename Predicate >
-        auto List < T > :: none (
-                Predicate const & predicate
-        ) noexcept ( noexcept ( predicate ( meta :: referenceOf < ElementType > () ) ) ) -> bool {
-
-            for ( auto iterator = this->begin(), end = this->end(); iterator != end; ++ iterator ) {
-                if ( predicate ( * iterator ) ) {
-                    return false;
-                }
-            }
-
-            return true;
+        template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
+        template < typename __Predicate, template < typename ... > class __CollectionType, meta :: EnableIf < meta :: isDerivedFrom < __CollectionType < Index >, Collection < Index > > () > > // NOLINT(bugprone-reserved-identifier)
+        __CDS_OptimalInline auto List < __ElementType > :: allIndices (
+                __Predicate const & predicate
+        ) const noexcept ( noexcept ( predicate ( meta :: referenceOf < ElementType const > () ) ) ) -> __CollectionType < Index > {
+
+            return this->allIndices < __CollectionType < Index > > ( predicate );
         }
 
     }

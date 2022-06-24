@@ -8,9 +8,9 @@
 namespace cds { // NOLINT(modernize-concat-nested-namespaces)
     namespace experimental {
 
-        template < typename T >
-        constexpr Collection < T > :: AbstractIterator :: AbstractIterator (
-                Collection < T >                                    const * pCollection,
+        template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
+        constexpr Collection < __ElementType > :: AbstractIterator :: AbstractIterator (
+                Collection < __ElementType >                        const * pCollection,
                 cds :: UniquePointer < AbstractDelegateIterator >        && pIterator
         ) noexcept :
                 _pCollection ( pCollection ),
@@ -18,8 +18,8 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
         }
 
-        template < typename T >
-        __CDS_OptimalInline Collection < T > :: AbstractIterator :: AbstractIterator (
+        template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
+        __CDS_OptimalInline Collection < __ElementType > :: AbstractIterator :: AbstractIterator (
                 AbstractIterator const & iterator
         ) noexcept :
                 _pCollection ( iterator._pCollection ),
@@ -27,8 +27,8 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
         }
 
-        template < typename T >
-        constexpr Collection < T > :: AbstractIterator :: AbstractIterator (
+        template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
+        constexpr Collection < __ElementType > :: AbstractIterator :: AbstractIterator (
                 AbstractIterator && iterator
         ) noexcept :
                 _pCollection ( cds :: exchange ( iterator._pCollection, nullptr ) ),
@@ -36,42 +36,45 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
         }
 
-        template < typename T >
-        __CDS_cpplang_ConstexprOverride auto Collection < T > :: AbstractIterator :: equals ( AbstractIterator const & iterator ) const noexcept -> bool {
+        template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
+        __CDS_cpplang_ConstexprOverride auto Collection < __ElementType > :: AbstractIterator :: equals ( AbstractIterator const & iterator ) const noexcept -> bool {
             return
                     this->_pCollection == iterator._pCollection &&
                     this->_pDelegate->equals ( * iterator._pDelegate );
         }
 
-        template < typename T >
-        __CDS_cpplang_ConstexprOverride auto Collection < T > :: AbstractIterator :: operator == ( AbstractIterator const & iterator ) const noexcept -> bool {
+        template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
+        __CDS_cpplang_ConstexprOverride auto Collection < __ElementType > :: AbstractIterator :: operator == ( AbstractIterator const & iterator ) const noexcept -> bool {
             return this->equals ( iterator );
         }
 
-        template < typename T >
-        __CDS_cpplang_ConstexprOverride auto Collection < T > :: AbstractIterator :: operator != ( AbstractIterator const & iterator ) const noexcept -> bool {
+        template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
+        __CDS_cpplang_ConstexprOverride auto Collection < __ElementType > :: AbstractIterator :: operator != ( AbstractIterator const & iterator ) const noexcept -> bool {
             return ! this->equals ( iterator );
         }
 
-        template < typename T >
-        __CDS_cpplang_ConstexprPureAbstract auto Collection < T > :: AbstractIterator :: next () noexcept -> AbstractIterator & {
+        template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
+        __CDS_cpplang_ConstexprPureAbstract auto Collection < __ElementType > :: AbstractIterator :: next () noexcept -> AbstractIterator & {
             (void) this->_pDelegate->next();
             return * this;
         }
 
-        template < typename T >
-        __CDS_cpplang_ConstexprPureAbstract auto Collection < T > :: AbstractIterator :: previous () noexcept -> AbstractIterator & {
+        template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
+        __CDS_cpplang_ConstexprPureAbstract auto Collection < __ElementType > :: AbstractIterator :: previous () noexcept -> AbstractIterator & {
             (void) this->_pDelegate->previous();
             return * this;
         }
 
-        template < typename T >
-        constexpr auto Collection < T > :: AbstractIterator :: of ( Collection < T > const * pCollection ) const noexcept -> bool {
+        template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
+        constexpr auto Collection < __ElementType > :: AbstractIterator :: of (
+                Collection < __ElementType > const * pCollection
+        ) const noexcept -> bool {
+
             return this->_pCollection == pCollection;
         }
 
-        template < typename T >
-        __CDS_OptimalInline auto Collection < T > :: AbstractIterator :: valid () const noexcept -> bool {
+        template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
+        __CDS_OptimalInline auto Collection < __ElementType > :: AbstractIterator :: valid () const noexcept -> bool {
             return
                     this->_pDelegate != nullptr &&
                     this->_pDelegate->valid();

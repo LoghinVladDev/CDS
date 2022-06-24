@@ -166,7 +166,6 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             }
 
 
-            /// TODO : replace after replacing experimental :: Object :: toString () -> BaseString
             template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
             __CDS_OptimalInline __BaseString < __CharType > :: __BaseString (
                     Object const & object
@@ -834,7 +833,6 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                         0ULL,
                         value,
                         valueLength,
-                        nullptr,
                         & this->_length
                  ) = meta :: __impl :: __StringData < ElementType > :: nullCharacter;
 
@@ -3252,13 +3250,15 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
 
             template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
-            __CDS_cpplang_ConstexprOverride auto __BaseString < __CharType > :: hash () const noexcept -> Index {
+            __CDS_cpplang_ConstexprOverride auto __BaseString < __CharType > :: hash () const noexcept -> Size {
+
                 return __BaseStringView < __CharType > ( * this ).hash();
             }
 
 
             template < typename __CharType > // NOLINT(bugprone-reserved-identifier)
             __CDS_OptimalInline auto __BaseString < __CharType > :: toString () const noexcept -> cds :: String {
+
                 return cds :: String ( this->cStr() );
             }
 
@@ -4059,6 +4059,17 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                     std :: wostream                    & out,
                     __BaseString < __FCharType > const & obj
             ) noexcept -> std :: wostream & {
+
+                return ( out << obj.cStr() );
+            }
+
+
+            template < typename __FCharType > // NOLINT(bugprone-reserved-identifier)
+            auto operator << (
+                    std :: ostream                     & out,
+                    __BaseString < __FCharType > const & obj
+            ) noexcept -> std :: ostream & {
+
                 return ( out << obj.cStr() );
             }
 

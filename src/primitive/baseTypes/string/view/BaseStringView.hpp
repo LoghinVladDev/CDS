@@ -233,38 +233,6 @@ namespace cds {
                         ElementType character
                 ) const noexcept -> bool;
 
-            public:
-                template < typename __FCharType > // NOLINT(bugprone-reserved-identifier)
-                __CDS_cpplang_ConstexprConditioned friend auto operator == (
-                        std :: basic_string < __FCharType >     const & leftString,
-                        __BaseStringView < __FCharType >        const & rightString
-                ) noexcept -> bool;
-
-#if defined(CDS_QT)
-
-            public:
-                template < typename __FCharType > // NOLINT(bugprone-reserved-identifier)
-                __CDS_cpplang_ConstexprConditioned friend auto operator == (
-                        QString                             const & leftString,
-                        __BaseStringView < __FCharType >    const & rightString
-                ) noexcept -> bool;
-
-#endif
-
-            public:
-                template < typename __FCharType > // NOLINT(bugprone-reserved-identifier)
-                __CDS_cpplang_ConstexprConditioned friend auto operator == (
-                        __FCharType                         const * pLeftString,
-                        __BaseStringView < __FCharType >    const & rightString
-                ) noexcept -> bool;
-
-            public:
-                template < typename __FCharType > // NOLINT(bugprone-reserved-identifier)
-                __CDS_cpplang_ConstexprConditioned friend auto operator == (
-                        __FCharType                               character,
-                        __BaseStringView < __FCharType >    const & string
-                ) noexcept -> bool;
-
 
             public:
                 __CDS_NoDiscard __CDS_cpplang_ConstexprConditioned auto operator != (
@@ -297,39 +265,6 @@ namespace cds {
 
 
             public:
-                template < typename __FCharType > // NOLINT(bugprone-reserved-identifier)
-                __CDS_cpplang_ConstexprConditioned friend auto operator != (
-                        std :: basic_string < __FCharType >     const & leftString,
-                        __BaseStringView < __FCharType >        const & rightString
-                ) noexcept -> bool;
-
-#if defined(CDS_QT)
-
-            public:
-                template < typename __FCharType > // NOLINT(bugprone-reserved-identifier)
-                __CDS_cpplang_ConstexprConditioned friend auto operator != (
-                        QString                             const & leftString,
-                        __BaseStringView < __FCharType >    const & rightString
-                ) noexcept -> bool;
-
-#endif
-
-            public:
-                template < typename __FCharType > // NOLINT(bugprone-reserved-identifier)
-                __CDS_cpplang_ConstexprConditioned friend auto operator != (
-                        __FCharType                         const * pLeftString,
-                        __BaseStringView < __FCharType >    const & rightString
-                ) noexcept -> bool;
-
-            public:
-                template < typename __FCharType > // NOLINT(bugprone-reserved-identifier)
-                __CDS_cpplang_ConstexprConditioned friend auto operator != (
-                        __FCharType                                 character,
-                        __BaseStringView < __FCharType >    const & string
-                ) noexcept -> bool;
-
-
-            public:
                 __CDS_NoDiscard __CDS_cpplang_ConstexprConditioned auto operator < (
                         __BaseStringView < __CharType > const & string
                 ) const noexcept -> bool;
@@ -357,39 +292,6 @@ namespace cds {
                 __CDS_NoDiscard __CDS_cpplang_ConstexprConditioned auto operator < (
                         ElementType character
                 ) const noexcept -> bool;
-
-
-            public:
-                template < typename __FCharType > // NOLINT(bugprone-reserved-identifier)
-                __CDS_cpplang_ConstexprConditioned friend auto operator < (
-                        std :: basic_string < __FCharType >     const & leftString,
-                        __BaseStringView < __FCharType >        const & rightString
-                ) noexcept -> bool;
-
-#if defined(CDS_QT)
-
-            public:
-                template < typename __FCharType > // NOLINT(bugprone-reserved-identifier)
-                __CDS_cpplang_ConstexprConditioned friend auto operator < (
-                        QString                             const & leftString,
-                        __BaseStringView < __FCharType >    const & rightString
-                ) noexcept -> bool;
-
-#endif
-
-            public:
-                template < typename __FCharType > // NOLINT(bugprone-reserved-identifier)
-                __CDS_cpplang_ConstexprConditioned friend auto operator < (
-                        __FCharType                       const * pLeftString,
-                        __BaseStringView < __FCharType >  const & rightString
-                ) noexcept -> bool;
-
-            public:
-                template < typename __FCharType > // NOLINT(bugprone-reserved-identifier)
-                __CDS_cpplang_ConstexprConditioned friend auto operator < (
-                        __FCharType                                 character,
-                        __BaseStringView < __FCharType >    const & string
-                ) noexcept -> bool;
 
 
             public:
@@ -423,39 +325,6 @@ namespace cds {
 
 
             public:
-                template < typename __FCharType > // NOLINT(bugprone-reserved-identifier)
-                __CDS_cpplang_ConstexprConditioned friend auto operator > (
-                        std :: basic_string < __FCharType >     const & leftString,
-                        __BaseStringView < __FCharType >        const & rightString
-                ) noexcept -> bool;
-
-#if defined(CDS_QT)
-
-            public:
-                template < typename __FCharType > // NOLINT(bugprone-reserved-identifier)
-                __CDS_cpplang_ConstexprConditioned friend auto operator > (
-                        QString                             const & leftString,
-                        __BaseStringView < __FCharType >    const & rightString
-                ) noexcept -> bool;
-
-#endif
-
-            public:
-                template < typename __FCharType > // NOLINT(bugprone-reserved-identifier)
-                __CDS_cpplang_ConstexprConditioned friend auto operator > (
-                        __FCharType                         const * pLeftString,
-                        __BaseStringView < __FCharType >    const & rightString
-                ) noexcept -> bool;
-
-            public:
-                template < typename __FCharType > // NOLINT(bugprone-reserved-identifier)
-                __CDS_cpplang_ConstexprConditioned friend auto operator > (
-                        __FCharType                                 character,
-                        __BaseStringView < __FCharType >    const & string
-                ) noexcept -> bool;
-
-
-            public:
                 __CDS_NoDiscard __CDS_cpplang_ConstexprConditioned auto operator <= (
                         __BaseStringView < __CharType > const & string
                 ) const noexcept -> bool;
@@ -483,38 +352,6 @@ namespace cds {
                 __CDS_NoDiscard __CDS_cpplang_ConstexprConditioned auto operator <= (
                         ElementType character
                 ) const noexcept -> bool;
-
-            public:
-                template < typename __FCharType > // NOLINT(bugprone-reserved-identifier)
-                __CDS_cpplang_ConstexprConditioned friend auto operator <= (
-                        std :: basic_string < __FCharType >     const & leftString,
-                        __BaseStringView < __FCharType >        const & rightString
-                ) noexcept -> bool;
-
-#if defined(CDS_QT)
-
-            public:
-                template < typename __FCharType > // NOLINT(bugprone-reserved-identifier)
-                __CDS_cpplang_ConstexprConditioned friend auto operator <= (
-                        QString                             const & leftString,
-                        __BaseStringView < __FCharType >    const & rightString
-                ) noexcept -> bool;
-
-#endif
-
-            public:
-                template < typename __FCharType > // NOLINT(bugprone-reserved-identifier)
-                __CDS_cpplang_ConstexprConditioned friend auto operator <= (
-                        __FCharType                         const * pLeftString,
-                        __BaseStringView < __FCharType >    const & rightString
-                ) noexcept -> bool;
-
-            public:
-                template < typename __FCharType > // NOLINT(bugprone-reserved-identifier)
-                __CDS_cpplang_ConstexprConditioned friend auto operator <= (
-                        __FCharType                                 character,
-                        __BaseStringView < __FCharType >    const & string
-                ) noexcept -> bool;
 
 
             public:
@@ -545,39 +382,6 @@ namespace cds {
                 __CDS_NoDiscard __CDS_cpplang_ConstexprConditioned auto operator >= (
                         ElementType character
                 ) const noexcept -> bool;
-
-
-            public:
-                template < typename __FCharType > // NOLINT(bugprone-reserved-identifier)
-                __CDS_cpplang_ConstexprConditioned friend auto operator >= (
-                        std :: basic_string < __FCharType >     const & leftString,
-                        __BaseStringView < __FCharType >        const & rightString
-                ) noexcept -> bool;
-
-#if defined(CDS_QT)
-
-            public:
-                template < typename __FCharType > // NOLINT(bugprone-reserved-identifier)
-                __CDS_cpplang_ConstexprConditioned friend auto operator >= (
-                        QString                             const & leftString,
-                        __BaseStringView < __FCharType >    const & rightString
-                ) noexcept -> bool;
-
-#endif
-
-            public:
-                template < typename __FCharType > // NOLINT(bugprone-reserved-identifier)
-                __CDS_cpplang_ConstexprConditioned friend auto operator >= (
-                        __FCharType                         const * pLeftString,
-                        __BaseStringView < __FCharType >    const & rightString
-                ) noexcept -> bool;
-
-            public:
-                template < typename __FCharType > // NOLINT(bugprone-reserved-identifier)
-                __CDS_cpplang_ConstexprConditioned friend auto operator >= (
-                        __FCharType                                 character,
-                        __BaseStringView < __FCharType >    const & string
-                ) noexcept -> bool;
 
 
             public:
@@ -629,70 +433,9 @@ namespace cds {
 
 
             public:
-                template < typename __FCharType > // NOLINT(bugprone-reserved-identifier)
-                friend auto operator + (
-                        std :: basic_string < __FCharType >     const & leftString,
-                        __BaseStringView < __FCharType >        const & rightString
-                ) noexcept -> __BaseString < __FCharType >;
-
-            public:
-                template < typename __FCharType > // NOLINT(bugprone-reserved-identifier)
-                friend auto operator + (
-                        __FCharType                         const * leftString,
-                        __BaseStringView < __FCharType >    const & rightString
-                ) noexcept -> __BaseString < __FCharType >;
-
-#if defined(CDS_QT)
-
-            public:
-                template < typename __FCharType > // NOLINT(bugprone-reserved-identifier)
-                friend auto operator + (
-                        QString                             const & leftString,
-                        __BaseStringView < __FCharType >    const & rightString
-                ) noexcept -> __BaseString < __FCharType >;
-
-#endif
-
-            public:
-                template < typename __FCharType, meta :: EnableIf < meta :: isStringCharType < __FCharType > () > > // NOLINT(bugprone-reserved-identifier)
-                friend auto operator + (
-                        __FCharType               character,
-                        __BaseStringView  const & string
-                ) noexcept -> __BaseString < __FCharType >;
-
-            public:
-                template < typename __FCharType, typename __NumericType, meta :: EnableIf < meta :: isIntegralToString < __FCharType, __NumericType > () > > // NOLINT(bugprone-reserved-identifier)
-                friend auto operator + (
-                        __NumericType             value,
-                        __BaseStringView  const & string
-                ) noexcept -> __BaseString < __FCharType >;
-
-            public:
-                template < typename __FCharType > // NOLINT(bugprone-reserved-identifier)
-                friend auto operator + (
-                        bool                                        value,
-                        __BaseStringView < __FCharType >    const & string
-                ) noexcept -> __BaseString < __FCharType >;
-
-            public:
-                template < typename __FCharType, typename __FloatingPointType, meta :: EnableIf < meta :: isFloatingPoint < __FloatingPointType > () > > // NOLINT(bugprone-reserved-identifier)
-                friend auto operator + (
-                        __FloatingPointType                         value,
-                        __BaseStringView < __FCharType >    const & string
-                ) noexcept -> __BaseString < __FCharType >;
-
-
-            public:
                 auto operator * (
                         int repeatCount
                 ) const & noexcept -> __BaseString < __CharType >;
-
-            public:
-                template < typename __FCharType > // NOLINT(bugprone-reserved-identifier)
-                friend auto operator * (
-                        int                                         repeatCount,
-                        __BaseStringView < __FCharType >    const & string
-                ) noexcept -> __BaseString < __FCharType >;
 
 
 
@@ -1138,7 +881,7 @@ namespace cds {
 
 
             public:
-                __CDS_NoDiscard __CDS_cpplang_ConstexprOverride auto hash () const noexcept -> Index;
+                __CDS_NoDiscard __CDS_cpplang_ConstexprOverride auto hash () const noexcept -> Size;
 
             public:
                 __CDS_NoDiscard auto toString () const noexcept -> __BaseString < __CharType >;
@@ -1250,15 +993,240 @@ namespace cds {
             public:
                 auto sequence () const && noexcept -> Sequence < __BaseStringView < __CharType > const >;
 
-
-            public:
-                template < typename __FCharType > // NOLINT(bugprone-reserved-identifier)
-                friend auto operator << (
-                        std :: wostream                        & out,
-                        __BaseStringView < __FCharType > const & obj
-                ) noexcept -> std :: wostream &;
-
             };
+
+
+            template < typename __FCharType > // NOLINT(bugprone-reserved-identifier)
+            __CDS_cpplang_ConstexprConditioned auto operator == (
+                    std :: basic_string < __FCharType >     const & leftString,
+                    __BaseStringView < __FCharType >        const & rightString
+            ) noexcept -> bool;
+
+#if defined(CDS_QT)
+
+            template < typename __FCharType > // NOLINT(bugprone-reserved-identifier)
+            __CDS_cpplang_ConstexprConditioned auto operator == (
+                    QString                             const & leftString,
+                    __BaseStringView < __FCharType >    const & rightString
+            ) noexcept -> bool;
+
+#endif
+
+            template < typename __FCharType > // NOLINT(bugprone-reserved-identifier)
+            __CDS_cpplang_ConstexprConditioned auto operator == (
+                    __FCharType                         const * pLeftString,
+                    __BaseStringView < __FCharType >    const & rightString
+            ) noexcept -> bool;
+
+            template < typename __FCharType > // NOLINT(bugprone-reserved-identifier)
+            __CDS_cpplang_ConstexprConditioned auto operator == (
+                    __FCharType                               character,
+                    __BaseStringView < __FCharType >    const & string
+            ) noexcept -> bool;
+
+            template < typename __FCharType > // NOLINT(bugprone-reserved-identifier)
+            __CDS_cpplang_ConstexprConditioned auto operator != (
+                    std :: basic_string < __FCharType >     const & leftString,
+                    __BaseStringView < __FCharType >        const & rightString
+            ) noexcept -> bool;
+
+#if defined(CDS_QT)
+
+            template < typename __FCharType > // NOLINT(bugprone-reserved-identifier)
+            __CDS_cpplang_ConstexprConditioned auto operator != (
+                    QString                             const & leftString,
+                    __BaseStringView < __FCharType >    const & rightString
+            ) noexcept -> bool;
+
+#endif
+
+            template < typename __FCharType > // NOLINT(bugprone-reserved-identifier)
+            __CDS_cpplang_ConstexprConditioned auto operator != (
+                    __FCharType                         const * pLeftString,
+                    __BaseStringView < __FCharType >    const & rightString
+            ) noexcept -> bool;
+
+            template < typename __FCharType > // NOLINT(bugprone-reserved-identifier)
+            __CDS_cpplang_ConstexprConditioned auto operator != (
+                    __FCharType                                 character,
+                    __BaseStringView < __FCharType >    const & string
+            ) noexcept -> bool;
+
+            template < typename __FCharType > // NOLINT(bugprone-reserved-identifier)
+            __CDS_cpplang_ConstexprConditioned auto operator < (
+                    std :: basic_string < __FCharType >     const & leftString,
+                    __BaseStringView < __FCharType >        const & rightString
+            ) noexcept -> bool;
+
+#if defined(CDS_QT)
+
+            template < typename __FCharType > // NOLINT(bugprone-reserved-identifier)
+            __CDS_cpplang_ConstexprConditioned auto operator < (
+                    QString                             const & leftString,
+                    __BaseStringView < __FCharType >    const & rightString
+            ) noexcept -> bool;
+
+#endif
+
+            template < typename __FCharType > // NOLINT(bugprone-reserved-identifier)
+            __CDS_cpplang_ConstexprConditioned auto operator < (
+                    __FCharType                       const * pLeftString,
+                    __BaseStringView < __FCharType >  const & rightString
+            ) noexcept -> bool;
+
+            template < typename __FCharType > // NOLINT(bugprone-reserved-identifier)
+            __CDS_cpplang_ConstexprConditioned auto operator < (
+                    __FCharType                                 character,
+                    __BaseStringView < __FCharType >    const & string
+            ) noexcept -> bool;
+
+            template < typename __FCharType > // NOLINT(bugprone-reserved-identifier)
+            __CDS_cpplang_ConstexprConditioned auto operator > (
+                    std :: basic_string < __FCharType >     const & leftString,
+                    __BaseStringView < __FCharType >        const & rightString
+            ) noexcept -> bool;
+
+#if defined(CDS_QT)
+
+            template < typename __FCharType > // NOLINT(bugprone-reserved-identifier)
+            __CDS_cpplang_ConstexprConditioned auto operator > (
+                    QString                             const & leftString,
+                    __BaseStringView < __FCharType >    const & rightString
+            ) noexcept -> bool;
+
+#endif
+
+            template < typename __FCharType > // NOLINT(bugprone-reserved-identifier)
+            __CDS_cpplang_ConstexprConditioned auto operator > (
+                    __FCharType                         const * pLeftString,
+                    __BaseStringView < __FCharType >    const & rightString
+            ) noexcept -> bool;
+
+            template < typename __FCharType > // NOLINT(bugprone-reserved-identifier)
+            __CDS_cpplang_ConstexprConditioned auto operator > (
+                    __FCharType                                 character,
+                    __BaseStringView < __FCharType >    const & string
+            ) noexcept -> bool;
+
+            template < typename __FCharType > // NOLINT(bugprone-reserved-identifier)
+            __CDS_cpplang_ConstexprConditioned auto operator <= (
+                    std :: basic_string < __FCharType >     const & leftString,
+                    __BaseStringView < __FCharType >        const & rightString
+            ) noexcept -> bool;
+
+#if defined(CDS_QT)
+
+            template < typename __FCharType > // NOLINT(bugprone-reserved-identifier)
+            __CDS_cpplang_ConstexprConditioned auto operator <= (
+                    QString                             const & leftString,
+                    __BaseStringView < __FCharType >    const & rightString
+            ) noexcept -> bool;
+
+#endif
+
+            template < typename __FCharType > // NOLINT(bugprone-reserved-identifier)
+            __CDS_cpplang_ConstexprConditioned auto operator <= (
+                    __FCharType                         const * pLeftString,
+                    __BaseStringView < __FCharType >    const & rightString
+            ) noexcept -> bool;
+
+            template < typename __FCharType > // NOLINT(bugprone-reserved-identifier)
+            __CDS_cpplang_ConstexprConditioned auto operator <= (
+                    __FCharType                                 character,
+                    __BaseStringView < __FCharType >    const & string
+            ) noexcept -> bool;
+
+            template < typename __FCharType > // NOLINT(bugprone-reserved-identifier)
+            __CDS_cpplang_ConstexprConditioned auto operator >= (
+                    std :: basic_string < __FCharType >     const & leftString,
+                    __BaseStringView < __FCharType >        const & rightString
+            ) noexcept -> bool;
+
+#if defined(CDS_QT)
+
+            template < typename __FCharType > // NOLINT(bugprone-reserved-identifier)
+            __CDS_cpplang_ConstexprConditioned auto operator >= (
+                    QString                             const & leftString,
+                    __BaseStringView < __FCharType >    const & rightString
+            ) noexcept -> bool;
+
+#endif
+
+            template < typename __FCharType > // NOLINT(bugprone-reserved-identifier)
+            __CDS_cpplang_ConstexprConditioned auto operator >= (
+                    __FCharType                         const * pLeftString,
+                    __BaseStringView < __FCharType >    const & rightString
+            ) noexcept -> bool;
+
+            template < typename __FCharType > // NOLINT(bugprone-reserved-identifier)
+            __CDS_cpplang_ConstexprConditioned auto operator >= (
+                    __FCharType                                 character,
+                    __BaseStringView < __FCharType >    const & string
+            ) noexcept -> bool;
+
+            template < typename __FCharType > // NOLINT(bugprone-reserved-identifier)
+            auto operator + (
+                    std :: basic_string < __FCharType >     const & leftString,
+                    __BaseStringView < __FCharType >        const & rightString
+            ) noexcept -> __BaseString < __FCharType >;
+
+            template < typename __FCharType > // NOLINT(bugprone-reserved-identifier)
+            auto operator + (
+                    __FCharType                         const * leftString,
+                    __BaseStringView < __FCharType >    const & rightString
+            ) noexcept -> __BaseString < __FCharType >;
+
+#if defined(CDS_QT)
+
+            template < typename __FCharType > // NOLINT(bugprone-reserved-identifier)
+            auto operator + (
+                    QString                             const & leftString,
+                    __BaseStringView < __FCharType >    const & rightString
+            ) noexcept -> __BaseString < __FCharType >;
+
+#endif
+
+            template < typename __FCharType, meta :: EnableIf < meta :: isStringCharType < __FCharType > () > = 0 > // NOLINT(bugprone-reserved-identifier)
+            auto operator + (
+                    __FCharType                                 character,
+                    __BaseStringView < __FCharType >    const & string
+            ) noexcept -> __BaseString < __FCharType >;
+
+            template < typename __FCharType, typename __NumericType, meta :: EnableIf < meta :: isIntegralToString < __FCharType, __NumericType > () > = 0 > // NOLINT(bugprone-reserved-identifier)
+            auto operator + (
+                    __NumericType                               value,
+                    __BaseStringView < __FCharType >    const & string
+            ) noexcept -> __BaseString < __FCharType >;
+
+            template < typename __FCharType > // NOLINT(bugprone-reserved-identifier)
+            auto operator + (
+                    bool                                        value,
+                    __BaseStringView < __FCharType >    const & string
+            ) noexcept -> __BaseString < __FCharType >;
+
+            template < typename __FCharType, typename __FloatingPointType, meta :: EnableIf < meta :: isFloatingPoint < __FloatingPointType > () > = 0 > // NOLINT(bugprone-reserved-identifier)
+            auto operator + (
+                    __FloatingPointType                         value,
+                    __BaseStringView < __FCharType >    const & string
+            ) noexcept -> __BaseString < __FCharType >;
+
+            template < typename __FCharType > // NOLINT(bugprone-reserved-identifier)
+            auto operator * (
+                    int                                         repeatCount,
+                    __BaseStringView < __FCharType >    const & string
+            ) noexcept -> __BaseString < __FCharType >;
+
+            template < typename __FCharType > // NOLINT(bugprone-reserved-identifier)
+            auto operator << (
+                    std :: wostream                        & out,
+                    __BaseStringView < __FCharType > const & obj
+            ) noexcept -> std :: wostream &;
+
+            template < typename __FCharType > // NOLINT(bugprone-reserved-identifier)
+            auto operator << (
+                    std :: ostream                         & out,
+                    __BaseStringView < __FCharType > const & obj
+            ) noexcept -> std :: ostream &;
 
         }
     }

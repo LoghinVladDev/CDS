@@ -1187,8 +1187,8 @@ namespace cds {
          *
          * @test Not Applicable
          */
-        __CDS_NoDiscard __CDS_cpplang_VirtualConstexpr auto hash() const noexcept -> Index override {
-            return static_cast<Index>(this->v);
+        __CDS_NoDiscard __CDS_cpplang_VirtualConstexpr auto hash() const noexcept -> Size override {
+            return static_cast<Size>(this->v);
         }
 
         /**
@@ -1713,7 +1713,7 @@ namespace cds {
         __CDS_NoDiscard friend __CDS_OptimalInline auto operator >> ( Long const & value, Atomic const & atomic ) noexcept -> Long { return value >> atomic.get(); }
         __CDS_NoDiscard friend __CDS_OptimalInline auto operator >> ( CType value, Atomic const & atomic ) noexcept -> Long { return value >> atomic.get(); }
 
-        __CDS_NoDiscard __CDS_OptimalInline auto hash () const noexcept -> Index override {
+        __CDS_NoDiscard __CDS_OptimalInline auto hash () const noexcept -> Size override {
             return this->get().hash();
         }
 

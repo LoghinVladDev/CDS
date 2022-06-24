@@ -7,10 +7,9 @@
 
 #include <CDS/std-types>
 #include <CDS/Object>
-#include <CDS/experimental/meta/TypeTraits>
+#include <CDS/meta/TypeTraits>
 #include <CDS/Concepts>
 #include <CDS/smartPointers/UniquePointer>
-#include <CDS/smartPointers/ForeignPointer>
 
 #include "collection/DelegateIteratorRequestType.hpp"
 
@@ -19,23 +18,23 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
         /**
          * @class Abstract Object representing any Iterable Container of given elements of type
-         * @tparam T is the type of elements contained into Collection
+         * @tparam __ElementType is the type of elements contained into Collection
          * @test tested in collection/CollectionTest
          */
-        template < typename T >
+        template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
         class Collection : public cds :: Object {
 
         public:
             /**
-             * @typedef Alias for T, the type of the contained elements, publicly accessible, useful in sfinae statements - decltype ( Collection ) :: ElementType
+             * @typedef public alias for __ElementType, the type of the contained elements, publicly accessible, useful in sfinae statements - decltype ( Collection ) :: ElementType
              */
-            using ElementType = T;
+            using ElementType = __ElementType;
 
         protected:
             /**
-             * @typedef Alias for std :: initializer_list < T > or std :: initializer_list < ElementType >
+             * @typedef Alias for std :: initializer_list < __ElementType > or std :: initializer_list < ElementType >
              */
-            using InitializerList = std :: initializer_list < T >;
+            using InitializerList = std :: initializer_list < __ElementType >;
 
         protected:
             /**
@@ -72,7 +71,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
              * @enum The types of delegate iterator requests the Collection Base Object can make to its Derived Objects when acquiring an Iterator Delegate Implementation
              * @test tested in nester class test
              */
-            using DelegateIteratorRequestType = hidden :: impl :: DelegateIteratorRequestType;
+            using DelegateIteratorRequestType = __hidden :: __impl :: DelegateIteratorRequestType;
 
         protected:
             /**
@@ -122,6 +121,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             virtual auto delegateConstIterator (
                     DelegateIteratorRequestType requestType
             ) const noexcept -> cds :: UniquePointer < DelegateConstIterator > = 0;
+
 
         public:
             /**
@@ -250,59 +250,59 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         public:
             /**
              * @brief Function used to remove a given number of elements based on the validation by a given predicate ( bool ( ElementType ) function )
-             * @tparam Predicate the type of the given predicate. Must refer to a callable object, whose call is compatible with bool ( Decay < ElementType > )
+             * @tparam __Predicate the type of the given predicate. Must refer to a callable object, whose call is compatible with bool ( Decay < ElementType > )
              * @param count : Size = maximum number of elements to remove
-             * @param predicate : Predicate cref = Constant Reference to a callable function, lambda or object, compatible with the bool ( Decay < ElementType > ) signature
+             * @param predicate : __Predicate cref = Constant Reference to a callable function, lambda or object, compatible with the bool ( Decay < ElementType > ) signature
              * @exceptsafe if predicate is exceptsafe
              * @return Size = number of removed elements
              * @test tested in the class test
              */
-            template < typename Predicate >
+            template < typename __Predicate > // NOLINT(bugprone-reserved-identifier)
             auto remove (
                     Size                count,
-                    Predicate   const & predicate
+                    __Predicate const & predicate
             ) noexcept ( noexcept ( predicate ( meta :: referenceOf < ElementType > () ) ) ) -> Size;
 
         public:
             /**
              * @brief Function used to remove the first element that matches the validation of a given predicate ( bool ( ElementType ) function )
-             * @tparam Predicate the type of the given predicate. Must refer to a callable object, whose call is compatible with bool ( Decay < ElementType > )
-             * @param predicate : Predicate cref = Constant Reference to a callable function, lambda or object, compatible with the bool ( Decay < ElementType > ) signature
+             * @tparam __Predicate the type of the given predicate. Must refer to a callable object, whose call is compatible with bool ( Decay < ElementType > )
+             * @param predicate : __Predicate cref = Constant Reference to a callable function, lambda or object, compatible with the bool ( Decay < ElementType > ) signature
              * @exceptsafe if predicate is exceptsafe
              * @return bool = true if one element was removed, false otherwise
              * @test tested in the class test
              */
-            template < typename Predicate >
+            template < typename __Predicate > // NOLINT(bugprone-reserved-identifier)
             auto removeFirst (
-                    Predicate const & predicate
+                    __Predicate const & predicate
             ) noexcept -> bool;
 
         public:
             /**
              * @brief Function used to remove the last element that matches the validation of a given predicate ( bool ( ElementType ) function )
-             * @tparam Predicate the type of the given predicate. Must refer to a callable object, whose call is compatible with bool ( Decay < ElementType > )
-             * @param predicate : Predicate cref = Constant Reference to a callable function, lambda or object, compatible with the bool ( Decay < ElementType > ) signature
+             * @tparam __Predicate the type of the given predicate. Must refer to a callable object, whose call is compatible with bool ( Decay < ElementType > )
+             * @param predicate : __Predicate cref = Constant Reference to a callable function, lambda or object, compatible with the bool ( Decay < ElementType > ) signature
              * @exceptsafe if predicate is exceptsafe
              * @return bool = true if one element was removed, false otherwise
              * @test tested in the class test
              */
-            template < typename Predicate >
+            template < typename __Predicate > // NOLINT(bugprone-reserved-identifier)
             auto removeLast (
-                    Predicate const & predicate
+                    __Predicate const & predicate
             ) noexcept -> bool;
 
         public:
             /**
              * @brief Function used to remove all the elements that match the validation of a given predicate ( bool ( ElementType ) function )
-             * @tparam Predicate the type of the given predicate. Must refer to a callable object, whose call is compatible with bool ( Decay < ElementType > )
-             * @param predicate : Predicate cref = Constant Reference to a callable function, lambda or object, compatible with the bool ( Decay < ElementType > ) signature
+             * @tparam __Predicate the type of the given predicate. Must refer to a callable object, whose call is compatible with bool ( Decay < ElementType > )
+             * @param predicate : __Predicate cref = Constant Reference to a callable function, lambda or object, compatible with the bool ( Decay < ElementType > ) signature
              * @exceptsafe if predicate is exceptsafe
              * @return Size = number of elements that were removed as a result of this call
              * @test tested in the class test
              */
-            template < typename Predicate >
+            template < typename __Predicate > // NOLINT(bugprone-reserved-identifier)
             auto removeAll (
-                    Predicate const & predicate
+                    __Predicate const & predicate
             ) noexcept -> Size;
 
         public:
@@ -558,159 +558,159 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         public:
             /**
              * @brief Function used to apply an action over each element of the collection
-             * @tparam Action the type of the action given as a parameter, the type must be callable and compatible with the void ( Decay < ElementType > ) function signature
-             * @param action : Action cref = Constant Reference to callable object, to be called with each element of the collection as a parameter
-             * @exceptsafe if Action is exceptsafe
+             * @tparam __Action the type of the action given as a parameter, the type must be callable and compatible with the void ( Decay < ElementType > ) function signature
+             * @param action : __Action cref = Constant Reference to callable object, to be called with each element of the collection as a parameter
+             * @exceptsafe if __Action is exceptsafe
              * @test tested in base class test
              */
-            template < typename Action >
+            template < typename __Action > // NOLINT(bugprone-reserved-identifier)
             auto forEach (
-                    Action const & action
+                    __Action const & action
             ) const noexcept ( noexcept ( action ( meta :: referenceOf < ElementType const > () ) ) ) -> void;
 
         public:
             /**
              * @brief Function used to check if the collection contains exactly 'count' elements that are validated by a given predicate
-             * @tparam Predicate the type of the predicate given as a parameter, the type must be callable and compatible with the bool ( Decay < ElementType > ) function signature
+             * @tparam __Predicate the type of the predicate given as a parameter, the type must be callable and compatible with the bool ( Decay < ElementType > ) function signature
              * @param count : Size = number of elements required to match
-             * @param predicate : Predicate cref = Constant Reference to callable object, to be called with each element of the collection as a parameter. If no predicate is given, it will default to a predicate that will validate every value.
+             * @param predicate : __Predicate cref = Constant Reference to callable object, to be called with each element of the collection as a parameter. If no predicate is given, it will default to a predicate that will validate every value.
              *      If no predicate is given, 'some' must yield the same value as 'caller.size() == count'
              * @exceptsafe if Predicate is exceptsafe
              * @return bool = true if number of elements validated == count, false otherwise
              * @test tested in base class test
              */
-            template < typename Predicate = decltype ( & predicates :: alwaysTrue < ElementType > ) >
+            template < typename __Predicate = decltype ( & predicates :: alwaysTrue < ElementType > ) > // NOLINT(bugprone-reserved-identifier)
             auto some (
                     Size                count,
-                    Predicate   const & predicate = & predicates :: alwaysTrue < ElementType >
+                    __Predicate const & predicate = & predicates :: alwaysTrue < ElementType >
             ) const noexcept ( noexcept ( predicate ( meta :: referenceOf < ElementType const > () ) ) ) -> bool;
 
         public:
             /**
              * @brief Function used to check if the collection contains at least 'count' elements that are validated by a given predicate
-             * @tparam Predicate the type of the predicate given as a parameter, the type must be callable and compatible with the bool ( Decay < ElementType > ) function signature
+             * @tparam __Predicate the type of the predicate given as a parameter, the type must be callable and compatible with the bool ( Decay < ElementType > ) function signature
              * @param count : Size = minimum number of elements required to match
-             * @param predicate : Predicate cref = Constant Reference to callable object, to be called with each element of the collection as a parameter. If no predicate is given, it will default to a predicate that will validate every value
+             * @param predicate : __Predicate cref = Constant Reference to callable object, to be called with each element of the collection as a parameter. If no predicate is given, it will default to a predicate that will validate every value
              *      If no predicate is given, 'atLeast' must yield the same value as 'caller.size() >= count'
              * @exceptsafe if Predicate is exceptsafe
              * @return bool = true if number of elements validated >= count, false otherwise
              * @test tested in base class test
              */
-            template < typename Predicate = decltype ( & predicates :: alwaysTrue < ElementType > ) >
+            template < typename __Predicate = decltype ( & predicates :: alwaysTrue < ElementType > ) > // NOLINT(bugprone-reserved-identifier)
             auto atLeast (
                     Size                count,
-                    Predicate   const & predicate = & predicates :: alwaysTrue < ElementType >
+                    __Predicate const & predicate = & predicates :: alwaysTrue < ElementType >
             ) const noexcept ( noexcept ( predicate ( meta :: referenceOf < ElementType const > () ) ) ) -> bool;
 
         public:
             /**
              * @brief Function used to check if the collection contains at most 'count' elements that are validated by a given predicate
-             * @tparam Predicate the type of the predicate given as a parameter, the type must be callable and compatible with the bool ( Decay < ElementType > ) function signature
+             * @tparam __Predicate the type of the predicate given as a parameter, the type must be callable and compatible with the bool ( Decay < ElementType > ) function signature
              * @param count : Size = maximum number of elements required to match
-             * @param predicate : Predicate cref = Constant Reference to callable object, to be called with each element of the collection as a parameter. If no predicate is given, it will default to a predicate that will validate every value
+             * @param predicate : __Predicate cref = Constant Reference to callable object, to be called with each element of the collection as a parameter. If no predicate is given, it will default to a predicate that will validate every value
              *      If no predicate is given, 'atMost' must yield the same value as 'caller.size() <= count'
              * @exceptsafe if Predicate is exceptsafe
              * @return bool = true if number of elements validated <= count, false otherwise
              * @test tested in base class test
              */
-            template < typename Predicate = decltype ( & predicates :: alwaysTrue < ElementType > ) >
+            template < typename __Predicate = decltype ( & predicates :: alwaysTrue < ElementType > ) > // NOLINT(bugprone-reserved-identifier)
             auto atMost (
                     Size                count,
-                    Predicate   const & predicate = & predicates :: alwaysTrue < ElementType >
+                    __Predicate const & predicate = & predicates :: alwaysTrue < ElementType >
             ) const noexcept ( noexcept ( predicate ( meta :: referenceOf < ElementType const > () ) ) ) -> bool;
 
         public:
             /**
              * @brief Function used to check if the collection contains more than 'count' elements that are validated by a given predicate
-             * @tparam Predicate the type of the predicate given as a parameter, the type must be callable and compatible with the bool ( Decay < ElementType > ) function signature
+             * @tparam __Predicate the type of the predicate given as a parameter, the type must be callable and compatible with the bool ( Decay < ElementType > ) function signature
              * @param count : Size = minimum number of elements required to match
-             * @param predicate : Predicate cref = Constant Reference to callable object, to be called with each element of the collection as a parameter. If no predicate is given, it will default to a predicate that will validate every value
+             * @param predicate : __Predicate cref = Constant Reference to callable object, to be called with each element of the collection as a parameter. If no predicate is given, it will default to a predicate that will validate every value
              *      If no predicate is given, 'moreThan' must yield the same value as 'caller.size() > count'
              * @exceptsafe if Predicate is exceptsafe
              * @return bool = true if number of elements validated > count, false otherwise
              * @test tested in base class test
              */
-            template < typename Predicate = decltype ( & predicates :: alwaysTrue < ElementType > ) >
+            template < typename __Predicate = decltype ( & predicates :: alwaysTrue < ElementType > ) > // NOLINT(bugprone-reserved-identifier)
             auto moreThan (
                     Size                count,
-                    Predicate   const & predicate = & predicates :: alwaysTrue < ElementType >
+                    __Predicate const & predicate = & predicates :: alwaysTrue < ElementType >
             ) const noexcept ( noexcept ( predicate ( meta :: referenceOf < ElementType const > () ) ) ) -> bool;
 
         public:
             /**
              * @brief Function used to check if the collection contains less than 'count' elements that are validated by a given predicate
-             * @tparam Predicate the type of the predicate given as a parameter, the type must be callable and compatible with the bool ( Decay < ElementType > ) function signature
+             * @tparam __Predicate the type of the predicate given as a parameter, the type must be callable and compatible with the bool ( Decay < ElementType > ) function signature
              * @param count : Size = maximum number of elements required to match
-             * @param predicate : Predicate cref = Constant Reference to callable object, to be called with each element of the collection as a parameter. If no predicate is given, it will default to a predicate that will validate every value
+             * @param predicate : __Predicate cref = Constant Reference to callable object, to be called with each element of the collection as a parameter. If no predicate is given, it will default to a predicate that will validate every value
              *      If no predicate is given, 'fewerThan' must yield the same value as 'caller.size() < count'
              * @exceptsafe if Predicate is exceptsafe
              * @return bool = true if number of elements validated < count, false otherwise
              * @test tested in base class test
              */
-            template < typename Predicate = decltype ( & predicates :: alwaysTrue < ElementType > ) >
+            template < typename __Predicate = decltype ( & predicates :: alwaysTrue < ElementType > ) > // NOLINT(bugprone-reserved-identifier)
             auto fewerThan (
                     Size                count,
-                    Predicate   const & predicate = & predicates :: alwaysTrue < ElementType >
+                    __Predicate const & predicate = & predicates :: alwaysTrue < ElementType >
             ) const noexcept ( noexcept ( predicate ( meta :: referenceOf < ElementType const > () ) ) ) -> bool;
 
         public:
             /**
              * @brief Function used to acquire the number of elements that are validated by a given predicate
-             * @tparam Predicate the type of the predicate given as a parameter, the type must be callable and compatible with the bool ( Decay < ElementType > ) function signature
-             * @param predicate : Predicate cref = Constant Reference to callable object, to be called with each element of the collection as a parameter. If no predicate is given, it will default to a predicate that will validate every value
+             * @tparam __Predicate the type of the predicate given as a parameter, the type must be callable and compatible with the bool ( Decay < ElementType > ) function signature
+             * @param predicate : __Predicate cref = Constant Reference to callable object, to be called with each element of the collection as a parameter. If no predicate is given, it will default to a predicate that will validate every value
              *      If no predicate is given, 'count' must yield the same value as 'caller.size()'
              * @exceptsafe if Predicate is exceptsafe
              * @return Size = number of elements that are validated by the given predicate
              * @test tested in base class test
              */
-            template < typename Predicate = decltype ( & predicates :: alwaysTrue < ElementType > ) >
+            template < typename __Predicate = decltype ( & predicates :: alwaysTrue < ElementType > ) > // NOLINT(bugprone-reserved-identifier)
             auto count (
-                    Predicate   const & predicate = & predicates :: alwaysTrue < ElementType >
+                    __Predicate const & predicate = & predicates :: alwaysTrue < ElementType >
             ) const noexcept ( noexcept ( predicate ( meta :: referenceOf < ElementType const > () ) ) ) -> Size;
 
         public:
             /**
              * @brief Function used to check if any of the collection's elements are validated by a given predicate
-             * @tparam Predicate the type of the predicate given as a parameter, the type must be callable and compatible with the bool ( Decay < ElementType > ) function signature
-             * @param predicate : Predicate cref = Constant Reference to callable object, to be called with each element of the collection as a parameter. If no predicate is given, it will default to a predicate that will validate every value
+             * @tparam __Predicate the type of the predicate given as a parameter, the type must be callable and compatible with the bool ( Decay < ElementType > ) function signature
+             * @param predicate : __Predicate cref = Constant Reference to callable object, to be called with each element of the collection as a parameter. If no predicate is given, it will default to a predicate that will validate every value
              *      If no predicate is given, 'any' must yield the same value as 'caller.size() > 0'
              * @exceptsafe if Predicate is exceptsafe
              * @return bool = true if at least one element is validated by the given predicate, false otherwise
              * @test tested in base class test
              */
-            template < typename Predicate = decltype ( & predicates :: alwaysTrue < ElementType > ) >
+            template < typename __Predicate = decltype ( & predicates :: alwaysTrue < ElementType > ) > // NOLINT(bugprone-reserved-identifier)
             auto any (
-                    Predicate   const & predicate = & predicates :: alwaysTrue < ElementType >
+                    __Predicate const & predicate = & predicates :: alwaysTrue < ElementType >
             ) const noexcept ( noexcept ( predicate ( meta :: referenceOf < ElementType const > () ) ) ) -> bool;
 
         public:
             /**
              * @brief Function used to check if all of the collection's elements are validated by a given predicate
-             * @tparam Predicate the type of the predicate given as a parameter, the type must be callable and compatible with the bool ( Decay < ElementType > ) function signature
-             * @param predicate : Predicate cref = Constant Reference to callable object, to be called with each element of the collection as a parameter. If no predicate is given, it will default to a predicate that will validate every value
+             * @tparam __Predicate the type of the predicate given as a parameter, the type must be callable and compatible with the bool ( Decay < ElementType > ) function signature
+             * @param predicate : __Predicate cref = Constant Reference to callable object, to be called with each element of the collection as a parameter. If no predicate is given, it will default to a predicate that will validate every value
              *      If no predicate is given, 'all' must return 'true'
              * @exceptsafe if Predicate is exceptsafe
              * @return bool = true if all of the collection's elements are validated by the given predicate, false otherwise
              * @test tested in base class test
              */
-            template < typename Predicate = decltype ( & predicates :: alwaysTrue < ElementType > ) >
+            template < typename __Predicate = decltype ( & predicates :: alwaysTrue < ElementType > ) > // NOLINT(bugprone-reserved-identifier)
             auto all (
-                    Predicate   const & predicate = & predicates :: alwaysTrue < ElementType >
+                    __Predicate const & predicate = & predicates :: alwaysTrue < ElementType >
             ) const noexcept ( noexcept ( predicate ( meta :: referenceOf < ElementType const > () ) ) ) -> bool;
 
         public:
             /**
              * @brief Function used to check if none of the collection's elements are validated by a given predicate
-             * @tparam Predicate the type of the predicate given as a parameter, the type must be callable and compatible with the bool ( Decay < ElementType > ) function signature
-             * @param predicate : Predicate cref = Constant Reference to callable object, to be called with each element of the collection as a parameter. If no predicate is given, it will default to a predicate that will validate every value
+             * @tparam __Predicate the type of the predicate given as a parameter, the type must be callable and compatible with the bool ( Decay < ElementType > ) function signature
+             * @param predicate : __Predicate cref = Constant Reference to callable object, to be called with each element of the collection as a parameter. If no predicate is given, it will default to a predicate that will validate every value
              *      If no predicate is given, 'none' must yield the same value as 'caller.empty()'
              * @exceptsafe if Predicate is exceptsafe
              * @return bool = true if none of the collection's elements are validated by the given predicate, false otherwise
              * @test tested in base class test
              */
-            template < typename Predicate = decltype ( & predicates :: alwaysTrue < ElementType > ) >
+            template < typename __Predicate = decltype ( & predicates :: alwaysTrue < ElementType > ) > // NOLINT(bugprone-reserved-identifier)
             auto none (
-                    Predicate   const & predicate = & predicates :: alwaysTrue < ElementType >
+                    __Predicate const & predicate = & predicates :: alwaysTrue < ElementType >
             ) const noexcept ( noexcept ( predicate ( meta :: referenceOf < ElementType const > () ) ) ) -> bool;
 
         public:
@@ -719,33 +719,33 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
              * @tparam CollectionType the type of the Collection passed in the 'storeIn' parameter. Constraint : CollectionType must be derived from Collection / compatible to Collection derived types, with one template parameter
              * @param maxCount : Size = maximum number of iterators to add to the storeIn object
              * @param element : ElementType cref = Constant Reference to the element to compare the collection's elements to
-             * @param storeIn : CollectionType < Collection < ElementType > :: ConstIterator > ref = Reference to the collection of iterators to add the found iterators to
+             * @param storeIn : __CollectionType < Collection < ElementType > :: ConstIterator > ref = Reference to the collection of iterators to add the found iterators to
              * @exceptsafe
              * @return Collection < Collection < ElementType > :: ConstIterator > ref = Reference to the given collection inside the 'storeIn' parameter
              * @test tested in base class test
              */
-            template < template < typename ... > class CollectionType >
+            template < template < typename ... > class __CollectionType > // NOLINT(bugprone-reserved-identifier)
             auto find (
                     Size                                        maxCount,
                     ElementType                         const & element,
-                    CollectionType < ConstIterator >          & storeIn
-            ) const noexcept -> CollectionType < ConstIterator > &;
+                    __CollectionType < ConstIterator >        & storeIn
+            ) const noexcept -> __CollectionType < ConstIterator > &;
 
         public:
             /**
              * @brief Function used to return a Collection non-abstract derived type of Iterators with maximum 'maxCount' elements, pointing to the values matching the comparison to the given 'element' value
-             * @tparam CollectionType the type of the Collection to be returned. Constraint : CollectionType must be a non-abstract type derived from Collection / compatible to Collection derived types, with one template parameter. non-abstract derived from Collection types are Array, LinkedList, HashSet, ...
+             * @tparam __CollectionType the type of the Collection to be returned. Constraint : CollectionType must be a non-abstract type derived from Collection / compatible to Collection derived types, with one template parameter. non-abstract derived from Collection types are Array, LinkedList, HashSet, ...
              * @param maxCount : Size = maximum number of iterators to add to the returned object
              * @param element : ElementType cref = Constant Reference to the element to compare the collection's elements to
              * @exceptsafe
              * @return Collection < Collection < ElementType > :: ConstIterator > = Newly created object containing the requested Iterators
              * @test tested in base class test
              */
-            template < template < typename ... > class CollectionType >
+            template < template < typename ... > class __CollectionType > // NOLINT(bugprone-reserved-identifier)
             auto find (
                     Size                maxCount,
                     ElementType const & element
-            ) const noexcept -> CollectionType < ConstIterator >;
+            ) const noexcept -> __CollectionType < ConstIterator >;
 
         public:
             /**
@@ -774,66 +774,66 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         public:
             /**
              * @brief Function used to populate a given Collection of Iterators, 'storeIn', with all the iterators pointing to the values matching the comparison to the given 'element' value
-             * @tparam CollectionType the type of the Collection passed in the 'storeIn' parameter. Constraint : CollectionType must be derived from Collection / compatible to Collection derived types, with one template parameter
+             * @tparam __CollectionType the type of the Collection passed in the 'storeIn' parameter. Constraint : CollectionType must be derived from Collection / compatible to Collection derived types, with one template parameter
              * @param element : ElementType cref = Constant Reference to the element to compare the collection's elements to
-             * @param storeIn : CollectionType < Collection < ElementType > :: ConstIterator > ref = Reference to the collection of iterators to add the found iterators to
+             * @param storeIn : __CollectionType < Collection < ElementType > :: ConstIterator > ref = Reference to the collection of iterators to add the found iterators to
              * @exceptsafe
              * @return Collection < Collection < ElementType > :: ConstIterator > ref = Reference to the given collection inside the 'storeIn' parameter
              * @test tested in base class test
              */
-            template < template < typename ... > class CollectionType >
+            template < template < typename ... > class __CollectionType > // NOLINT(bugprone-reserved-identifier)
             auto findAll (
                     ElementType                         const & element,
-                    CollectionType < ConstIterator >          & storeIn
-            ) const noexcept -> CollectionType < ConstIterator > &;
+                    __CollectionType < ConstIterator >        & storeIn
+            ) const noexcept -> __CollectionType < ConstIterator > &;
 
         public:
             /**
              * @brief Function used to return a Collection non-abstract derived type of Iterators with all the iterators pointing to the values matching the comparison to the given 'element' value
-             * @tparam CollectionType the type of the Collection to be returned. Constraint : CollectionType must be a non-abstract type derived from Collection / compatible to Collection derived types, with one template parameter. non-abstract derived from Collection types are Array, LinkedList, HashSet, ...
+             * @tparam __CollectionType the type of the Collection to be returned. Constraint : CollectionType must be a non-abstract type derived from Collection / compatible to Collection derived types, with one template parameter. non-abstract derived from Collection types are Array, LinkedList, HashSet, ...
              * @param element : ElementType cref = Constant Reference to the element to compare the collection's elements to
              * @exceptsafe
-             * @return Collection < Collection < ElementType > :: ConstIterator > = Newly created object containing the requested Iterators
+             * @return __CollectionType < Collection < ElementType > :: ConstIterator > = Newly created object containing the requested Iterators
              * @test tested in base class test
              */
-            template < template < typename ... > class CollectionType >
+            template < template < typename ... > class __CollectionType > // NOLINT(bugprone-reserved-identifier)
             auto findAll (
                     ElementType const & element
-            ) const noexcept -> CollectionType < ConstIterator >;
+            ) const noexcept -> __CollectionType < ConstIterator >;
 
         public:
             /**
              * @brief Function used to populate a given Collection of Iterators, 'storeIn', with maximum 'maxCount' elements, pointing to the values that are also found in the 'elements' collection
-             * @tparam CollectionType the type of the Collection passed in the 'storeIn' parameter. Constraint : CollectionType must be derived from Collection / compatible to Collection derived types, with one template parameter
+             * @tparam __CollectionType the type of the Collection passed in the 'storeIn' parameter. Constraint : __CollectionType must be derived from Collection / compatible to Collection derived types, with one template parameter
              * @param maxCount : Size = maximum number of iterators to add to the storeIn object
              * @param elements : Collection < ElementType > cref = Constant Reference to the collection to check the contains condition for
-             * @param storeIn : CollectionType < Collection < ElementType > :: ConstIterator > ref = Reference to the collection of iterators to add the found iterators to
+             * @param storeIn : __CollectionType < Collection < ElementType > :: ConstIterator > ref = Reference to the collection of iterators to add the found iterators to
              * @exceptsafe
              * @return Collection < Collection < ElementType > :: ConstIterator > ref = Reference to the given collection inside the 'storeIn' parameter
              * @test tested in base class test
              */
-            template < template < typename ... > class CollectionType >
+            template < template < typename ... > class __CollectionType > // NOLINT(bugprone-reserved-identifier)
             auto findOf (
                     Size                                        maxCount,
                     Collection < ElementType >          const & elements,
-                    CollectionType < ConstIterator >          & storeIn
-            ) const noexcept -> CollectionType < ConstIterator > &;
+                    __CollectionType < ConstIterator >        & storeIn
+            ) const noexcept -> __CollectionType < ConstIterator > &;
 
         public:
             /**
              * @brief Function used to return a Collection non-abstract derived type of Iterators with maximum 'maxCount' elements, pointing to the values that are also found in the 'elements' collection
-             * @tparam CollectionType the type of the Collection to be returned. Constraint : CollectionType must be a non-abstract type derived from Collection / compatible to Collection derived types, with one template parameter. non-abstract derived from Collection types are Array, LinkedList, HashSet, ...
+             * @tparam __CollectionType the type of the Collection to be returned. Constraint : __CollectionType must be a non-abstract type derived from Collection / compatible to Collection derived types, with one template parameter. non-abstract derived from Collection types are Array, LinkedList, HashSet, ...
              * @param maxCount : Size = maximum number of iterators to add to the returned object
              * @param elements : Collection < ElementType > cref = Constant Reference to the collection to check the contains condition for
              * @exceptsafe
              * @return Collection < Collection < ElementType > :: ConstIterator > = Newly created object containing the requested Iterators
              * @test tested in base class test
              */
-            template < template < typename ... > class CollectionType >
+            template < template < typename ... > class __CollectionType > // NOLINT(bugprone-reserved-identifier)
             auto findOf (
                     Size                                maxCount,
                     Collection < ElementType >  const & elements
-            ) const noexcept -> CollectionType < ConstIterator >;
+            ) const noexcept -> __CollectionType < ConstIterator >;
 
         public:
             /**
@@ -862,66 +862,66 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         public:
             /**
              * @brief Function used to populate a given Collection of Iterators, 'storeIn', with all the iterators pointing to the values that are also found in the 'elements' collection
-             * @tparam CollectionType the type of the Collection passed in the 'storeIn' parameter. Constraint : CollectionType must be derived from Collection / compatible to Collection derived types, with one template parameter
+             * @tparam __CollectionType the type of the Collection passed in the 'storeIn' parameter. Constraint : __CollectionType must be derived from Collection / compatible to Collection derived types, with one template parameter
              * @param elements : Collection < ElementType > cref = Constant Reference to the collection to check the contains condition for
-             * @param storeIn : CollectionType < Collection < ElementType > :: ConstIterator > ref = Reference to the collection of iterators to add the found iterators to
+             * @param storeIn : __CollectionType < Collection < ElementType > :: ConstIterator > ref = Reference to the collection of iterators to add the found iterators to
              * @exceptsafe
              * @return Collection < Collection < ElementType > :: ConstIterator > ref = Reference to the given collection inside the 'storeIn' parameter
              * @test tested in base class test
              */
-            template < template < typename ... > class CollectionType >
+            template < template < typename ... > class __CollectionType > // NOLINT(bugprone-reserved-identifier)
             auto findAllOf (
                     Collection < ElementType >          const & elements,
-                    CollectionType < ConstIterator >          & storeIn
-            ) const noexcept -> CollectionType < ConstIterator > &;
+                    __CollectionType < ConstIterator >        & storeIn
+            ) const noexcept -> __CollectionType < ConstIterator > &;
 
         public:
             /**
              * @brief Function used to return a Collection non-abstract derived type of Iterators with all the iterators pointing to the values that are also found in the 'elements' collection
-             * @tparam CollectionType the type of the Collection to be returned. Constraint : CollectionType must be a non-abstract type derived from Collection / compatible to Collection derived types, with one template parameter. non-abstract derived from Collection types are Array, LinkedList, HashSet, ...
+             * @tparam __CollectionType the type of the Collection to be returned. Constraint : __CollectionType must be a non-abstract type derived from Collection / compatible to Collection derived types, with one template parameter. non-abstract derived from Collection types are Array, LinkedList, HashSet, ...
              * @param elements : Collection < ElementType > cref = Constant Reference to the collection to check the contains condition for
              * @exceptsafe
              * @return Collection < Collection < ElementType > :: ConstIterator > = Newly created object containing the requested Iterators
              * @test tested in base class test
              */
-            template < template < typename ... > class CollectionType >
+            template < template < typename ... > class __CollectionType > // NOLINT(bugprone-reserved-identifier)
             auto findAllOf (
                     Collection < ElementType > const & elements
-            ) const noexcept -> CollectionType < ConstIterator >;
+            ) const noexcept -> __CollectionType < ConstIterator >;
 
         public:
             /**
              * @brief Function used to populate a given Collection of Iterators, 'storeIn', with maximum 'maxCount' elements, pointing to the values that are not found in the 'elements' collection
-             * @tparam CollectionType the type of the Collection passed in the 'storeIn' parameter. Constraint : CollectionType must be derived from Collection / compatible to Collection derived types, with one template parameter
+             * @tparam __CollectionType the type of the Collection passed in the 'storeIn' parameter. Constraint : __CollectionType must be derived from Collection / compatible to Collection derived types, with one template parameter
              * @param maxCount : Size = maximum number of iterators to add to the storeIn object
              * @param elements : Collection < ElementType > cref = Constant Reference to the collection to check the not contains condition for
-             * @param storeIn : CollectionType < Collection < ElementType > :: ConstIterator > ref = Reference to the collection of iterators to add the found iterators to
+             * @param storeIn : __CollectionType < Collection < ElementType > :: ConstIterator > ref = Reference to the collection of iterators to add the found iterators to
              * @exceptsafe
              * @return Collection < Collection < ElementType > :: ConstIterator > ref = Reference to the given collection inside the 'storeIn' parameter
              * @test tested in base class test
              */
-            template < template < typename ... > class CollectionType >
+            template < template < typename ... > class __CollectionType > // NOLINT(bugprone-reserved-identifier)
             auto findNotOf (
                     Size                                        maxCount,
                     Collection < ElementType >          const & elements,
-                    CollectionType < ConstIterator >          & storeIn
-            ) const noexcept -> CollectionType < ConstIterator > &;
+                    __CollectionType < ConstIterator >        & storeIn
+            ) const noexcept -> __CollectionType < ConstIterator > &;
 
         public:
             /**
              * @brief Function used to return a Collection non-abstract derived type of Iterators with maximum 'maxCount' elements, pointing to the values that are not found in the 'elements' collection
-             * @tparam CollectionType the type of the Collection to be returned. Constraint : CollectionType must be a non-abstract type derived from Collection / compatible to Collection derived types, with one template parameter. non-abstract derived from Collection types are Array, LinkedList, HashSet, ...
+             * @tparam __CollectionType the type of the Collection to be returned. Constraint : __CollectionType must be a non-abstract type derived from Collection / compatible to Collection derived types, with one template parameter. non-abstract derived from Collection types are Array, LinkedList, HashSet, ...
              * @param maxCount : Size = maximum number of iterators to add to the returned object
              * @param elements : Collection < ElementType > cref = Constant Reference to the collection to check the not contains condition for
              * @exceptsafe
              * @return Collection < Collection < ElementType > :: ConstIterator > = Newly created object containing the requested Iterators
              * @test tested in base class test
              */
-            template < template < typename ... > class CollectionType >
+            template < template < typename ... > class __CollectionType > // NOLINT(bugprone-reserved-identifier)
             auto findNotOf (
                     Size                                maxCount,
                     Collection < ElementType >  const & elements
-            ) const noexcept -> CollectionType < ConstIterator >;
+            ) const noexcept -> __CollectionType < ConstIterator >;
 
         public:
             /**
@@ -950,66 +950,66 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         public:
             /**
              * @brief Function used to populate a given Collection of Iterators, 'storeIn', with all the iterators pointing to the values that are not found in the 'elements' collection
-             * @tparam CollectionType the type of the Collection passed in the 'storeIn' parameter. Constraint : CollectionType must be derived from Collection / compatible to Collection derived types, with one template parameter
+             * @tparam __CollectionType the type of the Collection passed in the 'storeIn' parameter. Constraint : __CollectionType must be derived from Collection / compatible to Collection derived types, with one template parameter
              * @param elements : Collection < ElementType > cref = Constant Reference to the collection to check the not contains condition for
-             * @param storeIn : CollectionType < Collection < ElementType > :: ConstIterator > ref = Reference to the collection of iterators to add the found iterators to
+             * @param storeIn : __CollectionType < Collection < ElementType > :: ConstIterator > ref = Reference to the collection of iterators to add the found iterators to
              * @exceptsafe
              * @return Collection < Collection < ElementType > :: ConstIterator > ref = Reference to the given collection inside the 'storeIn' parameter
              * @test tested in base class test
              */
-            template < template < typename ... > class CollectionType >
+            template < template < typename ... > class __CollectionType > // NOLINT(bugprone-reserved-identifier)
             auto findAllNotOf (
                     Collection < ElementType >          const & elements,
-                    CollectionType < ConstIterator >          & storeIn
-            ) const noexcept -> CollectionType < ConstIterator > &;
+                    __CollectionType < ConstIterator >        & storeIn
+            ) const noexcept -> __CollectionType < ConstIterator > &;
 
         public:
             /**
              * @brief Function used to return a Collection non-abstract derived type of Iterators with all the iterators pointing to the values that are not found in the 'elements' collection
-             * @tparam CollectionType the type of the Collection to be returned. Constraint : CollectionType must be a non-abstract type derived from Collection / compatible to Collection derived types, with one template parameter. non-abstract derived from Collection types are Array, LinkedList, HashSet, ...
+             * @tparam __CollectionType the type of the Collection to be returned. Constraint : __CollectionType must be a non-abstract type derived from Collection / compatible to Collection derived types, with one template parameter. non-abstract derived from Collection types are Array, LinkedList, HashSet, ...
              * @param elements : Collection < ElementType > cref = Constant Reference to the collection to check the not contains condition for
              * @exceptsafe
              * @return Collection < Collection < ElementType > :: ConstIterator > = Newly created object containing the requested Iterators
              * @test tested in base class test
              */
-            template < template < typename ... > class CollectionType >
+            template < template < typename ... > class __CollectionType > // NOLINT(bugprone-reserved-identifier)
             auto findAllNotOf (
                     Collection < ElementType > const & elements
-            ) const noexcept -> CollectionType < ConstIterator >;
+            ) const noexcept -> __CollectionType < ConstIterator >;
 
         public:
             /**
              * @brief Function used to populate a given Collection of Iterators, 'storeIn', with maximum 'maxCount' elements, pointing to the values that are also found in the 'elements' InitializerList
-             * @tparam CollectionType the type of the Collection passed in the 'storeIn' parameter. Constraint : CollectionType must be derived from Collection / compatible to Collection derived types, with one template parameter
+             * @tparam __CollectionType the type of the Collection passed in the 'storeIn' parameter. Constraint : __CollectionType must be derived from Collection / compatible to Collection derived types, with one template parameter
              * @param maxCount : Size = maximum number of iterators to add to the storeIn object
              * @param elements : Collection < ElementType > :: InitializerList cref = Constant Reference to the initializer list to check the contains condition for
-             * @param storeIn : CollectionType < Collection < ElementType > :: ConstIterator > ref = Reference to the collection of iterators to add the found iterators to
+             * @param storeIn : __CollectionType < Collection < ElementType > :: ConstIterator > ref = Reference to the collection of iterators to add the found iterators to
              * @exceptsafe
              * @return Collection < Collection < ElementType > :: ConstIterator > ref = Reference to the given collection inside the 'storeIn' parameter
              * @test tested in base class test
              */
-            template < template < typename ... > class CollectionType >
+            template < template < typename ... > class __CollectionType > // NOLINT(bugprone-reserved-identifier)
             auto findOf (
                     Size                                        maxCount,
                     InitializerList                     const & elements,
-                    CollectionType < ConstIterator >          & storeIn
-            ) const noexcept -> CollectionType < ConstIterator > &;
+                    __CollectionType < ConstIterator >        & storeIn
+            ) const noexcept -> __CollectionType < ConstIterator > &;
 
         public:
             /**
              * @brief Function used to return a Collection non-abstract derived type of Iterators with maximum 'maxCount' elements, pointing to the values that are also found in the 'elements' InitializerList
-             * @tparam CollectionType the type of the Collection to be returned. Constraint : CollectionType must be a non-abstract type derived from Collection / compatible to Collection derived types, with one template parameter. non-abstract derived from Collection types are Array, LinkedList, HashSet, ...
+             * @tparam __CollectionType the type of the Collection to be returned. Constraint : __CollectionType must be a non-abstract type derived from Collection / compatible to Collection derived types, with one template parameter. non-abstract derived from Collection types are Array, LinkedList, HashSet, ...
              * @param maxCount : Size = maximum number of iterators to add to the returned object
              * @param elements : Collection < ElementType > :: InitializerList cref = Constant Reference to the initializer list to check the contains condition for
              * @exceptsafe
              * @return Collection < Collection < ElementType > :: ConstIterator > = Newly created object containing the requested Iterators
              * @test tested in base class test
              */
-            template < template < typename ... > class CollectionType >
+            template < template < typename ... > class __CollectionType > // NOLINT(bugprone-reserved-identifier)
             auto findOf (
                     Size                    maxCount,
                     InitializerList const & elements
-            ) const noexcept -> CollectionType < ConstIterator >;
+            ) const noexcept -> __CollectionType < ConstIterator >;
 
         public:
             /**
@@ -1038,66 +1038,66 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         public:
             /**
              * @brief Function used to populate a given Collection of Iterators, 'storeIn', with all the iterators pointing to the values that are also found in the 'elements' InitializerList
-             * @tparam CollectionType the type of the Collection passed in the 'storeIn' parameter. Constraint : CollectionType must be derived from Collection / compatible to Collection derived types, with one template parameter
+             * @tparam __CollectionType the type of the Collection passed in the 'storeIn' parameter. Constraint : __CollectionType must be derived from Collection / compatible to Collection derived types, with one template parameter
              * @param elements : Collection < ElementType > :: InitializerList cref = Constant Reference to the initializer list to check the contains condition for
-             * @param storeIn : CollectionType < Collection < ElementType > :: ConstIterator > ref = Reference to the collection of iterators to add the found iterators to
+             * @param storeIn : __CollectionType < Collection < ElementType > :: ConstIterator > ref = Reference to the collection of iterators to add the found iterators to
              * @exceptsafe
              * @return Collection < Collection < ElementType > :: ConstIterator > ref = Reference to the given collection inside the 'storeIn' parameter
              * @test tested in base class test
              */
-            template < template < typename ... > class CollectionType >
+            template < template < typename ... > class __CollectionType > // NOLINT(bugprone-reserved-identifier)
             auto findAllOf (
                     InitializerList                     const & elements,
-                    CollectionType < ConstIterator >          & storeIn
-            ) const noexcept -> CollectionType < ConstIterator > &;
+                    __CollectionType < ConstIterator >        & storeIn
+            ) const noexcept -> __CollectionType < ConstIterator > &;
 
         public:
             /**
              * @brief Function used to return a Collection non-abstract derived type of Iterators with all the iterators pointing to the values that are also found in the 'elements' InitializerList
-             * @tparam CollectionType the type of the Collection to be returned. Constraint : CollectionType must be a non-abstract type derived from Collection / compatible to Collection derived types, with one template parameter. non-abstract derived from Collection types are Array, LinkedList, HashSet, ...
+             * @tparam __CollectionType the type of the Collection to be returned. Constraint : __CollectionType must be a non-abstract type derived from Collection / compatible to Collection derived types, with one template parameter. non-abstract derived from Collection types are Array, LinkedList, HashSet, ...
              * @param elements : Collection < ElementType > :: InitializerList cref = Constant Reference to the initializer list to check the contains condition for
              * @exceptsafe
              * @return Collection < Collection < ElementType > :: ConstIterator > = Newly created object containing the requested Iterators
              * @test tested in base class test
              */
-            template < template < typename ... > class CollectionType >
+            template < template < typename ... > class __CollectionType > // NOLINT(bugprone-reserved-identifier)
             auto findAllOf (
                     InitializerList const & elements
-            ) const noexcept -> CollectionType < ConstIterator >;
+            ) const noexcept -> __CollectionType < ConstIterator >;
 
         public:
             /**
              * @brief Function used to populate a given Collection of Iterators, 'storeIn', with maximum 'maxCount' elements, pointing to the values that are not found in the 'elements' InitializerList
-             * @tparam CollectionType the type of the Collection passed in the 'storeIn' parameter. Constraint : CollectionType must be derived from Collection / compatible to Collection derived types, with one template parameter
+             * @tparam __CollectionType the type of the Collection passed in the 'storeIn' parameter. Constraint : __CollectionType must be derived from Collection / compatible to Collection derived types, with one template parameter
              * @param maxCount : Size = maximum number of iterators to add to the storeIn object
              * @param elements : Collection < ElementType > :: InitializerList cref = Constant Reference to the initializer list to check the contains condition for
-             * @param storeIn : CollectionType < Collection < ElementType > :: ConstIterator > ref = Reference to the collection of iterators to add the found iterators to
+             * @param storeIn : __CollectionType < Collection < ElementType > :: ConstIterator > ref = Reference to the collection of iterators to add the found iterators to
              * @exceptsafe
              * @return Collection < Collection < ElementType > :: ConstIterator > ref = Reference to the given collection inside the 'storeIn' parameter
              * @test tested in base class test
              */
-            template < template < typename ... > class CollectionType >
+            template < template < typename ... > class __CollectionType > // NOLINT(bugprone-reserved-identifier)
             auto findNotOf (
                     Size                                        maxCount,
                     InitializerList                     const & elements,
-                    CollectionType < ConstIterator >          & storeIn
-            ) const noexcept -> CollectionType < ConstIterator > &;
+                    __CollectionType < ConstIterator >        & storeIn
+            ) const noexcept -> __CollectionType < ConstIterator > &;
 
         public:
             /**
              * @brief Function used to return a Collection non-abstract derived type of Iterators with maximum 'maxCount' elements, pointing to the values that are not found in the 'elements' InitializerList
-             * @tparam CollectionType the type of the Collection to be returned. Constraint : CollectionType must be a non-abstract type derived from Collection / compatible to Collection derived types, with one template parameter. non-abstract derived from Collection types are Array, LinkedList, HashSet, ...
+             * @tparam __CollectionType the type of the Collection to be returned. Constraint : __CollectionType must be a non-abstract type derived from Collection / compatible to Collection derived types, with one template parameter. non-abstract derived from Collection types are Array, LinkedList, HashSet, ...
              * @param maxCount : Size = maximum number of iterators to add to the returned object
              * @param elements : Collection < ElementType > :: InitializerList cref = Constant Reference to the initializer list to check the contains condition for
              * @exceptsafe
              * @return Collection < Collection < ElementType > :: ConstIterator > = Newly created object containing the requested Iterators
              * @test tested in base class test
              */
-            template < template < typename ... > class CollectionType >
+            template < template < typename ... > class __CollectionType > // NOLINT(bugprone-reserved-identifier)
             auto findNotOf (
                     Size                    maxCount,
                     InitializerList const & elements
-            ) const noexcept -> CollectionType < ConstIterator >;
+            ) const noexcept -> __CollectionType < ConstIterator >;
 
         public:
             /**
@@ -1126,128 +1126,128 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         public:
             /**
              * @brief Function used to populate a given Collection of Iterators, 'storeIn', with all the iterators pointing to the values that are not found in the 'elements' InitializerList
-             * @tparam CollectionType the type of the Collection passed in the 'storeIn' parameter. Constraint : CollectionType must be derived from Collection / compatible to Collection derived types, with one template parameter
+             * @tparam __CollectionType the type of the Collection passed in the 'storeIn' parameter. Constraint : __CollectionType must be derived from Collection / compatible to Collection derived types, with one template parameter
              * @param elements : Collection < ElementType > :: InitializerList cref = Constant Reference to the initializer list to check the contains condition for
-             * @param storeIn : CollectionType < Collection < ElementType > :: ConstIterator > ref = Reference to the collection of iterators to add the found iterators to
+             * @param storeIn : __CollectionType < Collection < ElementType > :: ConstIterator > ref = Reference to the collection of iterators to add the found iterators to
              * @exceptsafe
              * @return Collection < Collection < ElementType > :: ConstIterator > ref = Reference to the given collection inside the 'storeIn' parameter
              * @test tested in base class test
              */
-            template < template < typename ... > class CollectionType >
+            template < template < typename ... > class __CollectionType > // NOLINT(bugprone-reserved-identifier)
             auto findAllNotOf (
                     InitializerList                     const & elements,
-                    CollectionType < ConstIterator >          & storeIn
-            ) const noexcept -> CollectionType < ConstIterator > &;
+                    __CollectionType < ConstIterator >        & storeIn
+            ) const noexcept -> __CollectionType < ConstIterator > &;
 
         public:
             /**
              * @brief Function used to return a Collection non-abstract derived type of Iterators with all the iterators pointing to the values that are not found in the 'elements' InitializerList
-             * @tparam CollectionType the type of the Collection to be returned. Constraint : CollectionType must be a non-abstract type derived from Collection / compatible to Collection derived types, with one template parameter. non-abstract derived from Collection types are Array, LinkedList, HashSet, ...
+             * @tparam __CollectionType the type of the Collection to be returned. Constraint : __CollectionType must be a non-abstract type derived from Collection / compatible to Collection derived types, with one template parameter. non-abstract derived from Collection types are Array, LinkedList, HashSet, ...
              * @param elements : Collection < ElementType > :: InitializerList cref = Constant Reference to the initializer list to check the contains condition for
              * @exceptsafe
              * @return Collection < Collection < ElementType > :: ConstIterator > = Newly created object containing the requested Iterators
              * @test tested in base class test
              */
-            template < template < typename ... > class CollectionType >
+            template < template < typename ... > class __CollectionType > // NOLINT(bugprone-reserved-identifier)
             auto findAllNotOf (
                     InitializerList const & elements
-            ) const noexcept -> CollectionType < ConstIterator >;
+            ) const noexcept -> __CollectionType < ConstIterator >;
 
         public:
             /**
              * @brief Function used to populate a given Collection derived type of Iterators, with a maximum number of 'maxCount' iterators, pointing to the first or all the elements in the collection that are validated by a given predicate
-             * @tparam CollectionType the type of the Collection passed in the 'storeIn' parameter. Constraint : CollectionType must be derived from Collection / compatible to Collection derived types, with one template parameter
-             * @tparam Predicate the type of the predicate given as a parameter, the type must be callable and compatible with the bool ( Decay < ElementType > ) function signature
+             * @tparam __CollectionType the type of the Collection passed in the 'storeIn' parameter. Constraint : __CollectionType must be derived from Collection / compatible to Collection derived types, with one template parameter
+             * @tparam __Predicate the type of the predicate given as a parameter, the type must be callable and compatible with the bool ( Decay < ElementType > ) function signature
              * @param maxCount : Size = maximum number of iterators to add to the storeIn object
-             * @param predicate : Predicate cref = Constant Reference to the callable predicate object to pass each element to
-             * @param storeIn : CollectionType < Collection < ElementType > :: ConstIterator > ref = Reference to the collection of iterators to add the found iterators to
+             * @param predicate : __Predicate cref = Constant Reference to the callable predicate object to pass each element to
+             * @param storeIn : __CollectionType < Collection < ElementType > :: ConstIterator > ref = Reference to the collection of iterators to add the found iterators to
              * @exceptsafe if Predicate is exceptsafe
              * @return Collection < Collection < ElementType > :: ConstIterator > ref = Reference to the given collection inside the 'storeIn' parameter
              * @test tested in base class test
              */
-            template < template < typename ... > class CollectionType, typename Predicate >
+            template < template < typename ... > class __CollectionType, typename __Predicate > // NOLINT(bugprone-reserved-identifier)
             auto find (
                     Size                                        maxCount,
-                    Predicate                           const & predicate,
-                    CollectionType < ConstIterator >          & storeIn
-            ) const noexcept ( noexcept ( predicate ( meta :: referenceOf < ElementType const > () ) ) ) -> CollectionType < ConstIterator > &;
+                    __Predicate                         const & predicate,
+                    __CollectionType < ConstIterator >        & storeIn
+            ) const noexcept ( noexcept ( predicate ( meta :: referenceOf < ElementType const > () ) ) ) -> __CollectionType < ConstIterator > &;
 
         public:
             /**
              * @brief Function used to return a Collection non-abstract derived type of Iterators, with a maximum number of 'maxCount' iterators, pointing to the first or all the elements in the collection that are validated by a given predicate
-             * @tparam CollectionType the type of the Collection to be returned. Constraint : CollectionType must be a non-abstract type derived from Collection / compatible to Collection derived types, with one template parameter. non-abstract derived from Collection types are Array, LinkedList, HashSet, ...
-             * @tparam Predicate the type of the predicate given as a parameter, the type must be callable and compatible with the bool ( Decay < ElementType > ) function signature
+             * @tparam __CollectionType the type of the Collection to be returned. Constraint : __CollectionType must be a non-abstract type derived from Collection / compatible to Collection derived types, with one template parameter. non-abstract derived from Collection types are Array, LinkedList, HashSet, ...
+             * @tparam __Predicate the type of the predicate given as a parameter, the type must be callable and compatible with the bool ( Decay < ElementType > ) function signature
              * @param maxCount : Size = maximum number of iterators to add to the returned object
-             * @param predicate : Predicate cref = Constant Reference to the callable predicate object to pass each element to
+             * @param predicate : __Predicate cref = Constant Reference to the callable predicate object to pass each element to
              * @exceptsafe if Predicate is exceptsafe
              * @return Collection < Collection < ElementType > :: ConstIterator > = Newly created object containing the requested Iterators
              * @test tested in base class test
              */
-            template < template < typename ... > class CollectionType, typename Predicate >
+            template < template < typename ... > class __CollectionType, typename __Predicate > // NOLINT(bugprone-reserved-identifier)
             auto find (
                     Size                maxCount,
-                    Predicate   const & predicate
-            ) const noexcept ( noexcept ( predicate ( meta :: referenceOf < ElementType const > () ) ) ) -> CollectionType < ConstIterator >;
+                    __Predicate const & predicate
+            ) const noexcept ( noexcept ( predicate ( meta :: referenceOf < ElementType const > () ) ) ) -> __CollectionType < ConstIterator >;
 
         public:
             /**
              * @brief Function used to return an iterator to the first element validated by the given predicate
-             * @tparam Predicate the type of the predicate given as a parameter, the type must be callable and compatible with the bool ( Decay < ElementType > ) function signature
-             * @param predicate : Predicate cref = Constant Reference to the callable predicate object to pass each element to
+             * @tparam __Predicate the type of the predicate given as a parameter, the type must be callable and compatible with the bool ( Decay < ElementType > ) function signature
+             * @param predicate : __Predicate cref = Constant Reference to the callable predicate object to pass each element to
              * @exceptsafe if Predicate is exceptsafe
              * @return Collection < ElementType > :: ConstIterator = Iterator to the first element validated by the given predicate, caller.end() if none exist
              * @test tested in base class test
              */
-            template < typename Predicate >
+            template < typename __Predicate > // NOLINT(bugprone-reserved-identifier)
             auto findFirst (
-                    Predicate const & predicate
+                    __Predicate const & predicate
             ) const noexcept ( noexcept ( predicate ( meta :: referenceOf < ElementType const > () ) ) ) -> ConstIterator;
 
         public:
             /**
              * @brief Function used to return an iterator to the last element validated by the given predicate
-             * @tparam Predicate the type of the predicate given as a parameter, the type must be callable and compatible with the bool ( Decay < ElementType > ) function signature
-             * @param predicate : Predicate cref = Constant Reference to the callable predicate object to pass each element to
+             * @tparam __Predicate the type of the predicate given as a parameter, the type must be callable and compatible with the bool ( Decay < ElementType > ) function signature
+             * @param predicate : __Predicate cref = Constant Reference to the callable predicate object to pass each element to
              * @exceptsafe if Predicate is exceptsafe
              * @return Collection < ElementType > :: ConstIterator = Iterator to the last element validated by the given predicate, caller.end() if none exist
              * @test tested in base class test
              */
-            template < typename Predicate >
+            template < typename __Predicate > // NOLINT(bugprone-reserved-identifier)
             auto findLast (
-                    Predicate const & predicate
+                    __Predicate const & predicate
             ) const noexcept ( noexcept ( predicate ( meta :: referenceOf < ElementType const > () ) ) ) -> ConstIterator;
 
         public:
             /**
              * @brief Function used to populate a given Collection derived type of Iterators with all iterators pointing to the first or all the elements in the collection that are validated by a given predicate
-             * @tparam CollectionType the type of the Collection passed in the 'storeIn' parameter. Constraint : CollectionType must be derived from Collection / compatible to Collection derived types, with one template parameter
-             * @tparam Predicate the type of the predicate given as a parameter, the type must be callable and compatible with the bool ( Decay < ElementType > ) function signature
-             * @param predicate : Predicate cref = Constant Reference to the callable predicate object to pass each element to
-             * @param storeIn : CollectionType < Collection < ElementType > :: ConstIterator > ref = Reference to the collection of iterators to add the found iterators to
+             * @tparam __CollectionType the type of the Collection passed in the 'storeIn' parameter. Constraint : __CollectionType must be derived from Collection / compatible to Collection derived types, with one template parameter
+             * @tparam __Predicate the type of the predicate given as a parameter, the type must be callable and compatible with the bool ( Decay < ElementType > ) function signature
+             * @param predicate : __Predicate cref = Constant Reference to the callable predicate object to pass each element to
+             * @param storeIn : __CollectionType < Collection < ElementType > :: ConstIterator > ref = Reference to the collection of iterators to add the found iterators to
              * @exceptsafe if Predicate is exceptsafe
              * @return Collection < Collection < ElementType > :: ConstIterator > ref = Reference to the given collection inside the 'storeIn' parameter
              * @test tested in base class test
              */
-            template < template < typename ... > class CollectionType, typename Predicate >
+            template < template < typename ... > class __CollectionType, typename __Predicate > // NOLINT(bugprone-reserved-identifier)
             auto findAll (
-                    Predicate                           const & predicate,
-                    CollectionType < ConstIterator >          & storeIn
-            ) const noexcept ( noexcept ( predicate ( meta :: referenceOf < ElementType const > () ) ) ) -> CollectionType < ConstIterator > &;
+                    __Predicate                         const & predicate,
+                    __CollectionType < ConstIterator >        & storeIn
+            ) const noexcept ( noexcept ( predicate ( meta :: referenceOf < ElementType const > () ) ) ) -> __CollectionType < ConstIterator > &;
 
         public:
             /**
              * @brief Function used to return a Collection non-abstract derived type of Iterators with all the iterators pointing to the first or all the elements in the collection that are validated by a given predicate
-             * @tparam CollectionType the type of the Collection to be returned. Constraint : CollectionType must be a non-abstract type derived from Collection / compatible to Collection derived types, with one template parameter. non-abstract derived from Collection types are Array, LinkedList, HashSet, ...
-             * @tparam Predicate the type of the predicate given as a parameter, the type must be callable and compatible with the bool ( Decay < ElementType > ) function signature
-             * @param predicate : Predicate cref = Constant Reference to the callable predicate object to pass each element to
+             * @tparam __CollectionType the type of the Collection to be returned. Constraint : __CollectionType must be a non-abstract type derived from Collection / compatible to Collection derived types, with one template parameter. non-abstract derived from Collection types are Array, LinkedList, HashSet, ...
+             * @tparam __Predicate the type of the predicate given as a parameter, the type must be callable and compatible with the bool ( Decay < ElementType > ) function signature
+             * @param predicate : __Predicate cref = Constant Reference to the callable predicate object to pass each element to
              * @exceptsafe if Predicate is exceptsafe
              * @return Collection < Collection < ElementType > :: ConstIterator > = Newly created object containing the requested Iterators
              * @test tested in base class test
              */
-            template < template < typename ... > class CollectionType, typename Predicate >
+            template < template < typename ... > class __CollectionType, typename __Predicate > // NOLINT(bugprone-reserved-identifier)
             auto findAll (
-                    Predicate const & predicate
-            ) const noexcept ( noexcept ( predicate ( meta :: referenceOf < ElementType const > () ) ) ) -> CollectionType < ConstIterator >;
+                    __Predicate const & predicate
+            ) const noexcept ( noexcept ( predicate ( meta :: referenceOf < ElementType const > () ) ) ) -> __CollectionType < ConstIterator >;
 
         public:
             /**
@@ -1274,7 +1274,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
              * @return Index = hash code value of the instance
              * @test tested in base class test
              */
-            __CDS_NoDiscard auto hash () const noexcept -> Index override;
+            __CDS_NoDiscard auto hash () const noexcept -> Size override;
 
         public:
             /**
@@ -1294,13 +1294,23 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
              */
             constexpr Collection () noexcept = default;
 
+        protected:
+            constexpr Collection (
+                    Collection const & collection
+            ) noexcept;
+
+        protected:
+            constexpr Collection (
+                    Collection && collection
+            ) noexcept;
+
         public:
             /**
              * @brief Default Destructor
              * @exceptsafe
              * @test tested in base class test
              */
-            ~Collection() noexcept override = default;
+            __CDS_cpplang_ConstexprDestructor ~Collection() noexcept override = default;
 
         public:
             /**
@@ -1317,7 +1327,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
              * @return Size = number of elements inside the collection
              * @test tested in base class test
              */
-            __CDS_NoDiscard __CDS_cpplang_ConstexprPureAbstract virtual auto size () const noexcept -> Size = 0;
+            __CDS_NoDiscard __CDS_cpplang_VirtualConstexpr virtual auto size () const noexcept -> Size;
 
         public:
             /**
@@ -1326,7 +1336,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
              * @return bool = true if the collection is empty ( does not contain any elements ), false otherwise
              * @test tested in base class test
              */
-            __CDS_NoDiscard __CDS_cpplang_ConstexprPureAbstract virtual auto empty () const noexcept -> bool;
+            __CDS_NoDiscard __CDS_cpplang_VirtualConstexpr auto empty () const noexcept -> bool;
 
         public:
             /**
@@ -1430,12 +1440,12 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         public:
             /**
              * @brief Function used to add an element to the collection via copy ( construction of new instance ). Only used if element is copyConstructible ( has copy ctor )
-             * @tparam V alias for ElementType, used to enable the function using sfinae to avoid instantiation errors
+             * @tparam __VElementType alias for __ElementType, used to enable the function using sfinae to avoid instantiation errors
              * @param element : ElementType cref = Constant Reference to the element to copy and add into the collection
              * @exceptsafe if ElementType copy constructor is exceptsafe
              * @test tested in base class test
              */
-            template < typename V = T, meta :: EnableIf < meta :: isCopyConstructible < V > () > = 0 >
+            template < typename __VElementType = __ElementType, meta :: EnableIf < meta :: isCopyConstructible < __VElementType > () > = 0 > // NOLINT(bugprone-reserved-identifier)
             auto add (
                     ElementType const & element
             ) noexcept ( noexcept ( ElementType ( element ) ) ) -> void;
@@ -1443,12 +1453,12 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         public:
             /**
              * @brief Function used to add an element to the collection via move ( moving of the received instance ). Only used if element is moveConstructible ( has move ctor )
-             * @tparam V alias for ElementType, used to enable the function using sfinae to avoid instantiation errors
+             * @tparam __VElementType alias for __ElementType, used to enable the function using sfinae to avoid instantiation errors
              * @param element : ElementType mref = Move Reference to the element to move into the collection
              * @exceptsafe if ElementType move constructor is exceptsafe
              * @test tested in base class test
              */
-            template < typename V = T, meta :: EnableIf < meta :: isMoveConstructible < V > () > = 0 >
+            template < typename __VElementType = __ElementType, meta :: EnableIf < meta :: isMoveConstructible < __VElementType > () > = 0 > // NOLINT(bugprone-reserved-identifier)
             auto add (
                     ElementType && element
             ) noexcept ( noexcept ( ElementType ( std :: move ( element ) ) ) ) -> void;
@@ -1456,62 +1466,47 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         public:
             /**
              * @brief Function used to add a pack of elements to the collection via available means ( conversion -> copy / move ). Given values are required to be convertible to ElementType
-             * @tparam ArgumentTypes pack of types, representing the types of each of the given parameters, each must be convertible to ElementType
+             * @tparam __ArgumentTypes pack of types, representing the types of each of the given parameters, each must be convertible to ElementType
              * @param arguments : ArgumentTypes fref = Pack of Forwarding References to the given elements / values
              * @exceptsafe
              * @test tested in base class test
              */
-            template < typename ... ArgumentTypes >
+            template < typename ... __ArgumentTypes > // NOLINT(bugprone-reserved-identifier)
             auto addAll (
-                    ArgumentTypes && ... arguments
+                    __ArgumentTypes && ... arguments
             ) noexcept -> void;
 
         public:
             /**
              * @brief Function used to add all the elements from a given collection to this collection, provided the type of the current collection is copy constructible and the given collection's element types are convertible to this collection's element types
-             * @tparam R the other collection's element type
-             * @tparam V alias for ElementType used for sfinae enable
+             * @tparam __OtherElementType the other collection's element type
+             * @tparam __VElementType alias for __ElementType used for sfinae enable
              * @param otherCollection : Collection < R > cref = Constant Reference to the collection to acquire the values from
              * @exceptsafe
              * @test tested in base class test
              */
-            template < typename R, typename V = T, meta :: EnableIf < meta :: isCopyConstructible < V > () || meta :: isConvertible < R, V > () > = 0 >
+            template < typename __OtherElementType, typename __VElementType = __ElementType, meta :: EnableIf < meta :: isCopyConstructible < __VElementType > () || meta :: isConvertible < __OtherElementType, __VElementType > () > = 0 > // NOLINT(bugprone-reserved-identifier)
             auto addAllOf (
-                    Collection < R > const & otherCollection
+                    Collection < __OtherElementType > const & otherCollection
             ) noexcept -> void;
 
         protected:
             /**
-             * @brief Function used in Collection :: add implementation, called to acquire a pointer reference to allocate the new element to
+             * @brief Function used in Collection :: add implementation, called to acquire a pointer to place the new object at
+             * @param referenceElement : ElementType cref = Constant Reference to the element to be added, as a reference, if implementation requires specific placement
              * @exceptsafe
-             * @return ElementType ptr ref = Reference to an ElementType pointer.
+             * @return ElementType ptr = a pointer to an ElementType.
              * @test tested in base class test
              */
-            virtual auto pNewInsert () noexcept -> ElementType * & = 0;
+            virtual auto pNewInsert (
+                    ElementType const & referenceElement
+            ) noexcept -> ElementType * = 0;
 
-        protected:
-            /**
-             * @brief Function used in Collection :: add implementation, called after storage of new value
-             * @exceptsafe
-             * @test tested in base class test
-             */
-            virtual auto pNewInsertPost () noexcept -> void;
         };
-
-        /**
-         * @brief Function used to obtain a new collection non-abstract derived type object from the given values, with the most suitable ElementType for the given values
-         * @tparam CollectionType non-abstract Collection derived type ( i.e. Array, LinkedList, HashSet, ... )
-         * @tparam ArgumentTypes pack of types, representing the types of each of the given parameters, must be convertible to a common type
-         * @tparam Common alias for the best common type the types in the ArgumentTypes pack are convertible to
-         * @param values : ArgumentTypes fref = Pack of Forwarding References to the values to be added to the newly created collection
-         * @exceptsafe
-         * @return CollectionType < Common > = newly created collection-derived non-abstract object instance, containing the given elements
-         * @test tested in base class test
-         */
-        template < template < typename ... > class CollectionType, typename ... ArgumentTypes, typename Common = meta :: Common < ArgumentTypes ... > >
+        template < template < typename ... > class __CollectionType, typename ... __ArgumentTypes, typename __Common = meta :: Common < __ArgumentTypes ... > > // NOLINT(bugprone-reserved-identifier)
         auto collectionOf (
-                ArgumentTypes && ... values
-        ) noexcept -> CollectionType < Common >;
+                __ArgumentTypes && ... values
+        ) noexcept -> __CollectionType < __Common >;
 
     }
 }
@@ -1553,5 +1548,6 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
 /// implementation of Collection < T > functions
 #include "collection/impl/Collection.hpp"
+
 
 #endif // __CDS_EX_COLLECTION_HPP__

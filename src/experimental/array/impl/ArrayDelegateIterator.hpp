@@ -8,11 +8,11 @@
 namespace cds { // NOLINT(modernize-concat-nested-namespaces)
     namespace experimental {
 
-        template < typename T >
-        constexpr Array < T > :: ArrayDelegateIterator :: ArrayDelegateIterator (
-                Array * pArray,
-                Index   index,
-                bool    forward
+        template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
+        constexpr Array < __ElementType > :: ArrayDelegateIterator :: ArrayDelegateIterator (
+                Array < __ElementType >   * pArray,
+                Index                       index,
+                bool                        forward
         ) noexcept :
                 DelegateIterator (),
                 _pArray ( pArray ),
@@ -21,8 +21,9 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
         }
 
-        template < typename T >
-        constexpr Array < T > :: ArrayDelegateIterator :: ArrayDelegateIterator (
+
+        template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
+        constexpr Array < __ElementType > :: ArrayDelegateIterator :: ArrayDelegateIterator (
                 ArrayDelegateIterator const & iterator
         ) noexcept :
                 DelegateIterator (),
@@ -32,8 +33,9 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
         }
 
-        template < typename T >
-        constexpr Array < T > :: ArrayDelegateIterator :: ArrayDelegateIterator (
+
+        template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
+        constexpr Array < __ElementType > :: ArrayDelegateIterator :: ArrayDelegateIterator (
                 ArrayDelegateIterator && iterator
         ) noexcept :
                 DelegateIterator (),
@@ -43,37 +45,51 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
         }
 
-        template < typename T >
-        constexpr auto Array < T > :: ArrayDelegateIterator :: index () const noexcept -> Index {
+
+        template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
+        constexpr auto Array < __ElementType > :: ArrayDelegateIterator :: index () const noexcept -> Index {
+
             return this->_index;
         }
 
-        template < typename T >
-        __CDS_cpplang_ConstexprOverride auto Array < T > :: ArrayDelegateIterator :: valid () const noexcept -> bool {
+
+        template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
+        __CDS_cpplang_ConstexprOverride auto Array < __ElementType > :: ArrayDelegateIterator :: valid () const noexcept -> bool {
+
             return
                     this->_pArray != nullptr &&
                     this->_index >= 0 && this->_index < this->_pArray->size();
         }
 
-        template < typename T >
-        __CDS_cpplang_ConstexprOverride auto Array < T > :: ArrayDelegateIterator :: next () noexcept -> ArrayDelegateIterator & {
+
+        template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
+        __CDS_cpplang_ConstexprOverride auto Array < __ElementType > :: ArrayDelegateIterator :: next () noexcept -> ArrayDelegateIterator & {
+
             (void) ( this->_forward ? ( ++ this->_index ) : ( -- this->_index ) );
             return * this;
         }
 
-        template < typename T >
-        __CDS_cpplang_ConstexprOverride auto Array < T > :: ArrayDelegateIterator :: previous () noexcept -> ArrayDelegateIterator & {
+
+        template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
+        __CDS_cpplang_ConstexprOverride auto Array < __ElementType > :: ArrayDelegateIterator :: previous () noexcept -> ArrayDelegateIterator & {
+
             (void) ( this->_forward ? ( -- this->_index ) : ( ++ this->_index ) );
             return * this;
         }
 
-        template < typename T >
-        __CDS_cpplang_ConstexprOverride auto Array < T > :: ArrayDelegateIterator :: value () const noexcept -> ElementType & {
-            return * this->_pArray->_pData [ this->_index ];
+
+        template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
+        __CDS_cpplang_ConstexprOverride auto Array < __ElementType > :: ArrayDelegateIterator :: value () const noexcept -> __ElementType & {
+
+            return this->_pArray->_pData [ this->_index ].data();
         }
 
-        template < typename T >
-        __CDS_cpplang_ConstexprOverride auto Array < T > :: ArrayDelegateIterator :: equals ( AbstractDelegateIterator const & iterator ) const noexcept -> bool {
+
+        template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
+        __CDS_cpplang_ConstexprOverride auto Array < __ElementType > :: ArrayDelegateIterator :: equals (
+                AbstractDelegateIterator const & iterator
+        ) const noexcept -> bool {
+
             if ( this == & iterator ) {
                 return true;
             }
@@ -82,8 +98,10 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             return this->_pArray == pObject->_pArray && this->_index == pObject->_index;
         }
 
-        template < typename T >
-        __CDS_OptimalInline auto Array < T > :: ArrayDelegateIterator :: copy () const noexcept -> ArrayDelegateIterator * {
+
+        template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
+        __CDS_OptimalInline auto Array < __ElementType > :: ArrayDelegateIterator :: copy () const noexcept -> ArrayDelegateIterator * {
+
             return cds :: copy ( * this );
         }
 

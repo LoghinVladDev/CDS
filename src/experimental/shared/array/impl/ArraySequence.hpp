@@ -11,23 +11,30 @@
 namespace cds { // NOLINT(modernize-concat-nested-namespaces)
     namespace experimental {
 
-        template < typename T >
-        __CDS_OptimalInline auto Array < T > :: sequence () & noexcept -> Sequence < Array < T > > {
+        template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
+        __CDS_OptimalInline auto Array < __ElementType > :: sequence () & noexcept -> Sequence < Array < __ElementType > > {
+
             return Sequence < meta :: RemoveReference < decltype (*this) > > ( * this );
         }
 
-        template < typename T >
-        __CDS_OptimalInline auto Array < T > :: sequence () const & noexcept -> Sequence < Array < T > const > {
+
+        template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
+        __CDS_OptimalInline auto Array < __ElementType > :: sequence () const & noexcept -> Sequence < Array < __ElementType > const > {
+
             return Sequence < meta :: RemoveReference < decltype (*this) > > (*this);
         }
 
-        template < typename T >
-        __CDS_OptimalInline auto Array < T > :: sequence () && noexcept -> Sequence < Array < T > > {
+
+        template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
+        __CDS_OptimalInline auto Array < __ElementType > :: sequence () && noexcept -> Sequence < Array < __ElementType > > {
+
             return Sequence < meta :: RemoveReference < decltype (*this) > > (std::move(*this));
         }
 
-        template < typename T >
-        __CDS_OptimalInline auto Array < T > :: sequence () const && noexcept -> Sequence < Array < T > const > {
+
+        template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
+        __CDS_OptimalInline auto Array < __ElementType > :: sequence () const && noexcept -> Sequence < Array < __ElementType > const > {
+
             return Sequence < meta :: RemoveReference < decltype (*this) > > (std::move(*this));
         }
 

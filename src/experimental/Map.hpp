@@ -5,202 +5,296 @@
 #ifndef __CDS_EX_MAP_HPP__
 #define __CDS_EX_MAP_HPP__
 
-#include <CDS/Concepts>
-#include <CDS/Collection>
-#include <CDS/DoubleLinkedList>
-#include <CDS/experimental/View>
+#include <CDS/experimental/MutableCollection>
+#include <CDS/experimental/Set>
 
-namespace cds {
+#include "map/entry/Entry.hpp"
 
-    namespace hidden { // NOLINT(modernize-concat-nested-namespaces)
-        namespace impl {
-            template < typename K, typename V >
-            class MapEntry {
-            private:
-                Reference < K const >   _keyReference;
-                Reference < V >         _valueReference;
-
-            public:
-                MapEntry ( K const & key, V & value ) noexcept :
-                        _keyReference ( key ),
-                        _valueReference ( value ) {
-
-                }
-
-                __CDS_NoDiscard constexpr auto key () const noexcept -> K const & {
-                    return this->_keyReference.get();
-                }
-
-                __CDS_NoDiscard constexpr auto value () noexcept -> V & {
-                    return this->_valueReference.get();
-                }
-
-                __CDS_NoDiscard constexpr auto value () const noexcept -> V const & {
-                    return this->_valueReference.get();
-                }
-            };
-        }
-    }
-
-    template < typename K, typename V >
-    class Pair;
-
-    template < typename T >
-    class List;
-
+namespace cds { // NOLINT(modernize-concat-nested-namespaces)
     namespace experimental {
-        template < typename K, typename V > __CDS_Requires (
-                UniqueIdentifiable < K >
-        ) class Map : public Collection < hidden :: impl :: MapEntry < K const, V > > {
-        protected:
-            DoubleLinkedList < K > _keys;
-            DoubleLinkedList < V > _values;
+
+        template <
+                typename __KeyType, // NOLINT(bugprone-reserved-identifier)
+                typename __ValueType // NOLINT(bugprone-reserved-identifier)
+        > class Map : public MutableCollection < __hidden :: __impl :: __MapEntry < __KeyType, __ValueType > > {
 
         public:
-            using KeyType               = K;
-            using ValueType             = V;
-
-            using EntryType             = hidden :: impl :: MapEntry < KeyType const, ValueType >;
-
-        protected:
-            using InitializerListEntry  = Pair < KeyType, ValueType >;
-            using InitializerList       = std :: initializer_list < InitializerListEntry >;
+            using typename MutableCollection < __hidden :: __impl :: __MapEntry < __KeyType, __ValueType > > :: ElementType;
 
         public:
-            using Iterator              = typename Collection < EntryType > :: Iterator;
-            using ConstIterator         = typename Collection < EntryType > :: ConstIterator;
-            using ReverseIterator       = typename Collection < EntryType > :: ReverseIterator;
-            using ConstReverseIterator  = typename Collection < EntryType > :: ConstReverseIterator;
-
-        protected:
-            using DelegateIterator      = typename Collection < EntryType > :: DelegateIterator;
-            using DelegateConstIterator = typename Collection < EntryType > :: DelegateConstIterator;
-
-            Map () noexcept = default;
-            Map ( Map const & map ) noexcept :
-                    _keys ( map._keys ),
-                    _values ( map._values ) {
-
-            }
-
-            Map ( Map && map ) noexcept :
-                    _keys ( std :: move ( map._keys ) ),
-                    _values ( std :: move ( map._values ) ) {
-
-            }
+            using EntryType = ElementType;
 
         public:
-            ~Map () noexcept override = default;
-
-            __CDS_NoDiscard constexpr auto keys () const noexcept -> List < KeyType > const & {
-                return this->_keys;
-            }
-
-            __CDS_NoDiscard constexpr auto empty () const noexcept -> bool override {
-                return this->keys().empty();
-            }
-
-            __CDS_NoDiscard constexpr auto size () const noexcept -> Size override {
-                return this->keys().size();
-            }
-
-            auto clear () noexcept -> void override {
-                this->_keys.clear();
-                this->_values.clear();
-            }
-
-            auto copy () const noexcept -> Map * override = 0;
-
-            constexpr auto values () noexcept -> View < List < ValueType > > {
-                return View < List < ValueType > > ( this->_values );
-            }
-
-            constexpr auto values () const noexcept -> View < List < ValueType > const > {
-                return View < List < ValueType > const > ( this->_values );
-            }
-
-            __CDS_OptimalInline auto entries () noexcept -> DoubleLinkedList < EntryType > {
-                DoubleLinkedList < EntryType > entries;
-
-                auto keyIt = this->_keys.begin();
-                auto valueIt = this->_values.begin();
-
-                while ( keyIt != this->keys().end() ) {
-                    entries.add ( EntryType ( * keyIt, * valueIt ) );
-                    ++ keyIt, ++ valueIt;
-                }
-
-                return entries;
-            }
-
-            __CDS_NoDiscard __CDS_OptimalInline virtual auto containsKey ( KeyType const & key ) const noexcept -> bool {
-                return this->keys().contains ( key );
-            }
-
-            __CDS_NoDiscard __CDS_OptimalInline auto containsValue ( ValueType const & value ) const noexcept -> bool {
-                return this->values().contains ( value );
-            }
-
-            __CDS_NoDiscard __CDS_OptimalInline virtual auto find ( KeyType const & key ) noexcept -> Optional < Reference < ValueType > > = 0;
-            __CDS_NoDiscard __CDS_OptimalInline virtual auto find ( KeyType const & key ) const noexcept -> Optional < Reference < ValueType > const > = 0;
-
-            __CDS_NoDiscard __CDS_OptionalInline auto toString () const noexcept -> String override {
-                if ( this->empty() ) {
-                    return "{ }";
-                }
-
-                std :: stringstream out;
-                out << "{ ";
-
-                auto keyIt      = this->_keys.begin();
-                auto valueIt    = this->_values.begin();
-
-                while ( keyIt != this->_keys.end() ) {
-                    Type < V > :: streamPrint ( Type < K > :: streamPrint ( out, * keyIt ) << " : ", * valueIt ) << ", ";
-                    ++ keyIt, ++ valueIt;
-                }
-
-                return String ( out.str() ).removeSuffix(", ").append(" }");
-            }
-
-        protected:
-            auto allocInsertGetPtr ( EntryType const & entry ) noexcept -> EntryType * & override {
-                static auto dummyInsertAddress = Type < EntryType > :: unsafeAddress();
-
-                (void) this->_keys.pushBack ( entry.key() );
-                (void) this->_values.pushBack ( entry.value() );
-
-                return dummyInsertAddress;
-            }
+            using KeyType   = __KeyType;
 
         public:
-            virtual auto insert ( Pair < KeyType, ValueType > const & entry ) noexcept -> ValueType & {
-                (void) this->_keys.pushBack ( entry.first() );
-                (void) this->_values.pushBack ( entry.second() );
-                return this->_values.back();
-            }
+            using ValueType = __ValueType;
 
-            virtual auto insert ( Pair < KeyType, ValueType > && entry ) noexcept -> ValueType & {
-                (void) this->_keys.pushBack ( std :: move ( entry.first() ) );
-                (void) this->_values.pushBack ( std :: move ( entry.second() ) );
-                return this->_values.back();
-            }
+        public:
+            using typename MutableCollection < ElementType > :: InitializerList; /// might require replacing?
+
+        protected:
+            using typename MutableCollection < ElementType > :: AbstractIterator;
+
+        protected:
+            using typename MutableCollection < ElementType > :: Iterator;
+
+        public:
+            using typename MutableCollection < ElementType > :: ConstIterator;
+
+        public:
+            using typename MutableCollection < ElementType > :: ReverseIterator;
+
+        public:
+            using typename MutableCollection < ElementType > :: ConstReverseIterator;
+
+        protected:
+            using typename MutableCollection < ElementType > :: AbstractDelegateIterator;
+
+        protected:
+            using typename MutableCollection < ElementType > :: DelegateIterator;
+
+        protected:
+            using typename MutableCollection < ElementType > :: DelegateConstIterator;
+
+        protected:
+            using typename MutableCollection < ElementType > :: DelegateIteratorRequestType;
+
+        protected:
+            class AbstractProxy;
+
+        protected:
+            class AbstractKeySetProxy;
+
+        protected:
+            class AbstractValueMutableCollectionProxy;
+
+        protected:
+            class AbstractEntryMutableCollectionProxy;
+
+        protected:
+            class DefaultEntryMutableCollectionProxy;
+
+        public:
+            __CDS_NoDiscard __CDS_cpplang_ConstexprPureAbstract auto keys () const noexcept -> Set < KeyType const > const &;
+
+        public:
+            __CDS_cpplang_ConstexprPureAbstract auto keys () noexcept -> Set < KeyType const > &;
+
+        public:
+            __CDS_NoDiscard __CDS_cpplang_ConstexprPureAbstract auto values () const noexcept -> MutableCollection < ValueType > const &;
+
+        public:
+            __CDS_cpplang_ConstexprPureAbstract auto values () noexcept -> MutableCollection < ValueType > &;
+
+        public:
+            __CDS_NoDiscard __CDS_cpplang_ConstexprPureAbstract auto entries () const noexcept -> MutableCollection < EntryType > const &;
+
+        public:
+            __CDS_cpplang_ConstexprPureAbstract auto entries () noexcept -> MutableCollection < EntryType > &;
+
+        protected:
+            __CDS_NoDiscard __CDS_cpplang_ConstexprPureAbstract virtual auto keySetProxy () const noexcept -> AbstractKeySetProxy const & = 0;
+
+        protected:
+            __CDS_cpplang_ConstexprPureAbstract virtual auto keySetProxy () noexcept -> AbstractKeySetProxy & = 0;
+
+        protected:
+            __CDS_NoDiscard __CDS_cpplang_ConstexprPureAbstract virtual auto valueCollectionProxy () const noexcept -> AbstractValueMutableCollectionProxy const & = 0;
+
+        protected:
+            __CDS_cpplang_ConstexprPureAbstract virtual auto valueCollectionProxy () noexcept -> AbstractValueMutableCollectionProxy & = 0;
+
+        protected:
+            __CDS_NoDiscard __CDS_cpplang_ConstexprPureAbstract virtual auto entrySetProxy () const noexcept -> AbstractEntryMutableCollectionProxy const & = 0;
+
+        protected:
+            __CDS_cpplang_ConstexprPureAbstract virtual auto entrySetProxy () noexcept -> AbstractEntryMutableCollectionProxy & = 0;
+
+        protected:
+            auto delegateIterator (
+                    DelegateIteratorRequestType requestType
+            ) noexcept -> cds :: UniquePointer < DelegateIterator > override = 0;
+
+        protected:
+            auto delegateConstIterator (
+                    DelegateIteratorRequestType requestType
+            ) const noexcept -> cds :: UniquePointer < DelegateConstIterator > override = 0;
+
+        public:
+            constexpr Map () noexcept;
+
+        public:
+            constexpr Map (
+                    Map const & map
+            ) noexcept;
+
+        public:
+            constexpr Map (
+                    Map && map
+            ) noexcept;
+
+        public:
+            __CDS_cpplang_ConstexprDestructor ~Map () noexcept override;
+
+        protected:
+            virtual auto entryAt (
+                    KeyType const & key,
+                    bool          & isNew
+            ) noexcept -> EntryType * = 0;
+
+        protected:
+            virtual auto entryAt (
+                    KeyType const & key
+            ) const noexcept -> EntryType const * = 0;
+
+        public:
+            template <
+                    typename __TKeyType,                // NOLINT(bugprone-reserved-identifier)
+                    typename __TValueType = ValueType,  // NOLINT(bugprone-reserved-identifier)
+                    cds :: meta :: EnableIf <
+                            cds :: meta :: isDefaultConstructible < __TValueType > ()
+                    > = 0
+            > auto get (
+                    __TKeyType && key
+            ) noexcept -> ValueType &;
+
+        public:
+            auto at (
+                    KeyType const & key
+            ) noexcept (false) -> ValueType &;
+
+        public:
+            auto at (
+                    KeyType const & key
+            ) const noexcept (false) -> ValueType const &;
+
+        public:
+            template < typename __TValueType = ValueType, cds :: meta :: EnableIf < cds :: meta :: isDefaultConstructible < __TValueType > () > = 0 > // NOLINT(bugprone-reserved-identifier)
+            auto operator [] (
+                    KeyType const & key
+            ) noexcept -> ValueType &;
+
+        public:
+            auto operator [] (
+                    KeyType const & key
+            ) const noexcept (false) -> ValueType const &;
 
         private:
+            auto pNewInsert (
+                    ElementType const & referenceElement
+            ) noexcept -> ElementType * override;
 
-            auto remove ( EntryType const &, Size ) noexcept -> bool override { return false; }
-            auto removeLast ( EntryType const & entry ) noexcept -> bool override { return false; }
-            auto removeOf ( Collection < EntryType > const &, Size ) noexcept -> bool override { return false; }
-            auto removeLastOf ( Collection < EntryType > const & ) noexcept -> bool override { return false; }
-            auto removeNotOf ( Collection < EntryType > const &, Size ) noexcept -> bool override { return false; }
-            auto removeLastNotOf ( Collection < EntryType > const & ) noexcept -> bool override { return false; }
-            auto removeOf ( std :: initializer_list < EntryType > const &, Size ) noexcept -> bool override { return false; }
-            auto removeLastOf ( std :: initializer_list < EntryType > const & ) noexcept -> bool override { return false; }
-            auto removeNotOf ( std :: initializer_list < EntryType > const &, Size ) noexcept -> bool override { return false; }
-            auto removeLastNotOf ( std :: initializer_list < EntryType > const & ) noexcept -> bool override { return false; }
+        public:
+            auto contains (
+                    ElementType const & entry
+            ) const noexcept -> bool override = 0;
+
+        public:
+            virtual auto containsKey (
+                    KeyType const & key
+            ) const noexcept -> bool = 0;
+
+        public:
+            virtual auto containsValue (
+                    ValueType const & value
+            ) const noexcept -> bool = 0;
+
+        public:
+            virtual auto remove (
+                    KeyType const & key
+            ) noexcept -> bool = 0;
+
+        public:
+            auto remove (
+                    Iterator const & iterator
+            ) noexcept -> bool override = 0;
+
+        public:
+            auto remove (
+                    ConstIterator const & iterator
+            ) noexcept -> bool override = 0;
+
+        public:
+            auto remove (
+                    ReverseIterator const & iterator
+            ) noexcept -> bool override = 0;
+
+        public:
+            auto remove (
+                    ConstReverseIterator const & iterator
+            ) noexcept -> bool override = 0;
+
+        protected:
+            auto remove (
+                    Iterator    const * pIterators,
+                    Size                iteratorCount
+            ) noexcept -> Size override = 0;
+
+        protected:
+            auto remove (
+                    ConstIterator   const * pIterators,
+                    Size                    iteratorCount
+            ) noexcept -> Size override = 0;
+
+        protected:
+            auto remove (
+                    ReverseIterator const * pIterators,
+                    Size                    iteratorCount
+            ) noexcept -> Size override = 0;
+
+        protected:
+            auto remove (
+                    ConstReverseIterator    const * pIterators,
+                    Size                            iteratorCount
+            ) noexcept -> Size override = 0;
+
+        public:
+            __CDS_NoDiscard auto toString () const noexcept -> String override;
+
+        public:
+            auto clear () noexcept -> void override = 0;
+
+        public:
+            template <
+                    typename __TKeyType,    // NOLINT(bugprone-reserved-identifier)
+                    typename __TValueType  // NOLINT(bugprone-reserved-identifier)
+            > auto emplace (
+                    __TKeyType      && key,
+                    __TValueType    && value
+            ) noexcept -> void;
+
+        public:
+            template < typename __TEntryType = EntryType, cds :: meta :: EnableIf < cds :: meta :: isCopyConstructible < __TEntryType > () > = 0 > // NOLINT(bugprone-reserved-identifier)
+            auto insert (
+                    __TEntryType const & entry
+            ) noexcept -> void;
+
+        public:
+            template < typename __TEntryType = EntryType, cds :: meta :: EnableIf < cds :: meta :: isMoveConstructible < __TEntryType > () > = 0 > // NOLINT(bugprone-reserved-identifier)
+            auto insert (
+                    __TEntryType && entry
+            ) noexcept -> void;
+
         };
-    }
 
+    }
 }
+
+#include "map/AbstractProxy.hpp"
+#include "map/AbstractKeySetProxy.hpp"
+#include "map/AbstractValueMutableCollectionProxy.hpp"
+#include "map/AbstractEntryMutableCollectionProxy.hpp"
+#include "map/DefaultEntryMutableCollectionProxy.hpp"
+
+#include "map/impl/AbstractProxy.hpp"
+#include "map/impl/AbstractKeySetProxy.hpp"
+#include "map/impl/AbstractValueMutableCollectionProxy.hpp"
+#include "map/impl/AbstractEntryMutableCollectionProxy.hpp"
+#include "map/impl/DefaultEntryMutableCollectionProxy.hpp"
+
+#include "map/entry/impl/Entry.hpp"
+
+#include "map/impl/Map.hpp"
 
 #endif // __CDS_EX_MAP_HPP__

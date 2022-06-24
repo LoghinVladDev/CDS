@@ -211,6 +211,7 @@ namespace cds {
 #define __CDS_cpplang_ThreeWayComparison_available true /* NOLINT(bugprone-reserved-identifier) */
 
 #define __CDS_cpplang_ConstexprPostfixLiteral constexpr /* NOLINT(bugprone-reserved-identifier) */
+#define __CDS_cpplang_ConstexprPlacementNew constexpr /* NOLINT(bugprone-reserved-identifier) */
 
 #define __CDS_Explicit explicit(true) /* NOLINT(bugprone-reserved-identifier) */
 #define __CDS_Implicit explicit(false) /* NOLINT(bugprone-reserved-identifier) */
@@ -228,6 +229,7 @@ namespace cds {
 #define __CDS_cpplang_ThreeWayComparison_available false /* NOLINT(bugprone-reserved-identifier) */
 
 #define __CDS_cpplang_ConstexprPostfixLiteral inline /* NOLINT(bugprone-reserved-identifier) */
+#define __CDS_cpplang_ConstexprPlacementNew inline /* NOLINT(bugprone-reserved-identifier) */
 
 #define __CDS_Explicit explicit /* NOLINT(bugprone-reserved-identifier) */
 #define __CDS_Implicit /* NOLINT(bugprone-reserved-identifier) */

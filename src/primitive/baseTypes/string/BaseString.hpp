@@ -9,6 +9,7 @@
 
 #include "../../../shared/impl/generalPredicates.hpp"
 #include "../../../shared/impl/arithmetic.hpp"
+#include "../../../shared/memory/PrimitiveAllocation.hpp"
 
 #include <CDS/Limits>
 #include "StringUtils.hpp"
@@ -1406,9 +1407,8 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
 
             public:
-                __CDS_NoDiscard __CDS_cpplang_ConstexprOverride auto hash () const noexcept -> Index override;
+                __CDS_NoDiscard __CDS_cpplang_ConstexprOverride auto hash () const noexcept -> Size override;
 
-            /// change this later blyat
             public:
                 __CDS_NoDiscard auto toString () const noexcept -> cds :: String override;
 
@@ -1960,6 +1960,12 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                     int                             repeatCount,
                     __BaseString < __FCharType > && string
             ) noexcept -> __BaseString < __FCharType >;
+
+            template < typename __FCharType > // NOLINT(bugprone-reserved-identifier)
+            auto operator << (
+                    std :: ostream                     & out,
+                    __BaseString < __FCharType > const & obj
+            ) noexcept -> std :: ostream &;
 
             template < typename __FCharType > // NOLINT(bugprone-reserved-identifier)
             auto operator << (

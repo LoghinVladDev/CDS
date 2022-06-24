@@ -8,36 +8,43 @@
 namespace cds { // NOLINT(modernize-concat-nested-namespaces)
     namespace experimental {
 
-        template < typename T >
-        constexpr Collection < T > :: ConstReverseIterator :: ConstReverseIterator (
-                Collection < T >                        const * pCollection,
+        template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
+        constexpr Collection < __ElementType > :: ConstReverseIterator :: ConstReverseIterator (
+                Collection < __ElementType >                   const * pCollection,
                 cds :: UniquePointer < DelegateConstIterator >      && pIterator
         ) noexcept :
-                Collection < T > :: AbstractIterator (
+                Collection < __ElementType > :: AbstractIterator (
                         pCollection,
-                        cds :: UniquePointer < AbstractDelegateIterator > ( cds :: forward < cds :: UniquePointer < DelegateConstIterator > > ( pIterator ) )
+                        cds :: UniquePointer < AbstractDelegateIterator > (
+                                cds :: forward < cds :: UniquePointer < DelegateConstIterator > > (
+                                        pIterator
+                                )
+                        )
                 ) {
 
         }
 
-        template < typename T >
-        __CDS_OptimalInline Collection < T > :: ConstReverseIterator :: ConstReverseIterator (
+        template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
+        __CDS_OptimalInline Collection < __ElementType > :: ConstReverseIterator :: ConstReverseIterator (
                 ConstReverseIterator const & iterator
         ) noexcept :
-                AbstractIterator ( iterator ) {
+                Collection < __ElementType > :: AbstractIterator ( iterator ) {
 
         }
 
-        template < typename T >
-        constexpr Collection < T > :: ConstReverseIterator :: ConstReverseIterator (
+        template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
+        constexpr Collection < __ElementType > :: ConstReverseIterator :: ConstReverseIterator (
                 ConstReverseIterator && iterator
         ) noexcept :
-                AbstractIterator ( cds :: forward < AbstractIterator > ( iterator ) ) {
+                Collection < __ElementType > :: AbstractIterator ( std :: move ( iterator ) ) {
 
         }
 
-        template < typename T >
-        __CDS_OptimalInline auto Collection < T > :: ConstReverseIterator :: operator = ( ConstReverseIterator const & iterator ) noexcept -> ConstReverseIterator & {
+        template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
+        __CDS_OptimalInline auto Collection < __ElementType > :: ConstReverseIterator :: operator = (
+                ConstReverseIterator const & iterator
+        ) noexcept -> ConstReverseIterator & {
+
             if ( this == & iterator ) {
                 return * this;
             }
@@ -47,50 +54,59 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             return * this;
         }
 
-        template < typename T >
-        __CDS_cpplang_NonConstConstexprMemberFunction auto Collection < T > :: ConstReverseIterator :: operator = ( ConstReverseIterator && iterator ) noexcept -> ConstReverseIterator & {
+        template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
+        __CDS_OptimalInline auto Collection < __ElementType > :: ConstReverseIterator :: operator = (
+                ConstReverseIterator && iterator
+        ) noexcept -> ConstReverseIterator & {
+
             if ( this == & iterator ) {
                 return * this;
             }
 
             this->_pDelegate    = std :: move ( iterator._pDelegate );
-            this->_pCollection  = std :: move ( iterator._pCollection );
+            this->_pCollection  = std :: exchange ( iterator._pCollection, nullptr );
             return * this;
         }
 
-        template < typename T >
-        __CDS_cpplang_ConstexprOverride auto Collection < T > :: ConstReverseIterator :: operator -> () const noexcept -> ElementType const * {
+        template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
+        __CDS_cpplang_ConstexprOverride auto Collection < __ElementType > :: ConstReverseIterator :: operator -> () const noexcept -> __ElementType const * {
+
             return & ( * ( * this ) );
         }
 
-        template < typename T >
-        __CDS_cpplang_ConstexprPureAbstract auto Collection < T > :: ConstReverseIterator :: operator ++ () noexcept -> ConstReverseIterator & {
+        template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
+        __CDS_cpplang_ConstexprOverride auto Collection < __ElementType > :: ConstReverseIterator :: operator ++ () noexcept -> ConstReverseIterator & {
+
             (void) this->next();
             return * this;
         }
 
-        template < typename T >
-        __CDS_cpplang_ConstexprPureAbstract auto Collection < T > :: ConstReverseIterator :: operator ++ (int) noexcept -> ConstReverseIterator {
+        template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
+        __CDS_OptimalInline auto Collection < __ElementType > :: ConstReverseIterator :: operator ++ (int) noexcept -> ConstReverseIterator {
+
             auto copy = * this;
             (void) this->next();
             return copy;
         }
 
-        template < typename T >
-        __CDS_cpplang_ConstexprPureAbstract auto Collection < T > :: ConstReverseIterator :: operator -- () noexcept -> ConstReverseIterator & {
+        template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
+        __CDS_cpplang_ConstexprOverride auto Collection < __ElementType > :: ConstReverseIterator :: operator -- () noexcept -> ConstReverseIterator & {
+
             (void) this->previous();
             return * this;
         }
 
-        template < typename T >
-        __CDS_cpplang_ConstexprPureAbstract auto Collection < T > :: ConstReverseIterator :: operator -- (int) noexcept -> ConstReverseIterator {
+        template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
+        __CDS_OptimalInline auto Collection < __ElementType > :: ConstReverseIterator :: operator -- (int) noexcept -> ConstReverseIterator {
+
             auto copy = * this;
             (void) this->previous();
             return copy;
         }
 
-        template < typename T >
-        __CDS_cpplang_ConstexprPureAbstract auto Collection < T > :: ConstReverseIterator :: operator * () const noexcept -> ElementType const & {
+        template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
+        __CDS_cpplang_ConstexprOverride auto Collection < __ElementType > :: ConstReverseIterator :: operator * () const noexcept -> ElementType const & {
+
             return reinterpret_cast < DelegateConstIterator const * > ( this->_pDelegate.get() )->value();
         }
 

@@ -1,5 +1,9 @@
 #include <CDS/experimental/Array>
 #include <CDS/experimental/LinkedList>
+#include <CDS/experimental/HashSet>
+#include <CDS/experimental/OrderedSet>
+#include <CDS/experimental/UnorderedSet>
+#include <CDS/experimental/HashMap>
 
 using namespace cds;
 
@@ -91,7 +95,7 @@ public:
     }
 };
 
-#include <CDS/experimental/Tuple>
+#include <CDS/Tuple>
 
 int main () {
 
@@ -130,6 +134,74 @@ int main () {
     cds :: experimental :: LinkedList < Copy > const lfc;
     cds :: experimental :: LinkedList < Default > const lgc;
     cds :: experimental :: LinkedList < None > const lhc;
+
+    cds :: experimental :: HashSet < DefaultCopyMove > hsla;
+    cds :: experimental :: HashSet < DefaultCopy > hslb;
+    cds :: experimental :: HashSet < DefaultMove > hslc;
+    cds :: experimental :: HashSet < CopyMove > hsld;
+    cds :: experimental :: HashSet < Move > hsle;
+    cds :: experimental :: HashSet < Copy > hslf;
+    cds :: experimental :: HashSet < Default > hslg;
+    cds :: experimental :: HashSet < None > hslh;
+    cds :: experimental :: HashSet < DefaultCopyMove > const hslac;
+    cds :: experimental :: HashSet < DefaultCopy > const hslbc;
+    cds :: experimental :: HashSet < DefaultMove > const hslcc;
+    cds :: experimental :: HashSet < CopyMove > const hsldc;
+    cds :: experimental :: HashSet < Move > const hslec;
+    cds :: experimental :: HashSet < Copy > const hslfc;
+    cds :: experimental :: HashSet < Default > const hslgc;
+    cds :: experimental :: HashSet < None > const hslhc;
+
+    cds :: experimental :: UnorderedSet < DefaultCopyMove > usla;
+    cds :: experimental :: UnorderedSet < DefaultCopy > uslb;
+    cds :: experimental :: UnorderedSet < DefaultMove > uslc;
+    cds :: experimental :: UnorderedSet < CopyMove > usld;
+    cds :: experimental :: UnorderedSet < Move > usle;
+    cds :: experimental :: UnorderedSet < Copy > uslf;
+    cds :: experimental :: UnorderedSet < Default > uslg;
+    cds :: experimental :: UnorderedSet < None > uslh;
+    cds :: experimental :: UnorderedSet < DefaultCopyMove > const uslac;
+    cds :: experimental :: UnorderedSet < DefaultCopy > const uslbc;
+    cds :: experimental :: UnorderedSet < DefaultMove > const uslcc;
+    cds :: experimental :: UnorderedSet < CopyMove > const usldc;
+    cds :: experimental :: UnorderedSet < Move > const uslec;
+    cds :: experimental :: UnorderedSet < Copy > const uslfc;
+    cds :: experimental :: UnorderedSet < Default > const uslgc;
+    cds :: experimental :: UnorderedSet < None > const uslhc;
+
+    cds :: experimental :: HashMap < DefaultCopyMove, DefaultCopyMove > hmla;
+    cds :: experimental :: HashMap < DefaultCopy, DefaultCopy > hmlb;
+    cds :: experimental :: HashMap < DefaultMove, DefaultMove > hmlc;
+//    cds :: experimental :: HashMap < CopyMove, CopyMove > hmld;
+//    cds :: experimental :: HashMap < Move, Move > hmle;
+//    cds :: experimental :: HashMap < Copy, Copy > hmlf;
+    cds :: experimental :: HashMap < Default, Default > hmlg;
+//    cds :: experimental :: HashMap < None, None > hmlh;
+    cds :: experimental :: HashMap < DefaultCopyMove, DefaultCopyMove > const hmlac;
+    cds :: experimental :: HashMap < DefaultCopy, DefaultCopy > const hmlbc;
+    cds :: experimental :: HashMap < DefaultMove, DefaultMove > const hmlcc;
+//    cds :: experimental :: HashMap < CopyMove, CopyMove > const hmldc;
+//    cds :: experimental :: HashMap < Move, Move > const hmlec;
+//    cds :: experimental :: HashMap < Copy, Copy > const hmlfc;
+    cds :: experimental :: HashMap < Default, Default > const hmlgc;
+//    cds :: experimental :: HashMap < None, None > const hmlhc;
+
+//    cds :: experimental :: OrderedSet < DefaultCopyMove > osla;
+//    cds :: experimental :: OrderedSet < DefaultCopy > oslb;
+//    cds :: experimental :: OrderedSet < DefaultMove > oslc;
+//    cds :: experimental :: OrderedSet < CopyMove > osld;
+//    cds :: experimental :: OrderedSet < Move > osle;
+//    cds :: experimental :: OrderedSet < Copy > oslf;
+//    cds :: experimental :: OrderedSet < Default > oslg;
+//    cds :: experimental :: OrderedSet < None > oslh;
+//    cds :: experimental :: OrderedSet < DefaultCopyMove > const oslac;
+//    cds :: experimental :: OrderedSet < DefaultCopy > const oslbc;
+//    cds :: experimental :: OrderedSet < DefaultMove > const oslcc;
+//    cds :: experimental :: OrderedSet < CopyMove > const osldc;
+//    cds :: experimental :: OrderedSet < Move > const oslec;
+//    cds :: experimental :: OrderedSet < Copy > const oslfc;
+//    cds :: experimental :: OrderedSet < Default > const oslgc;
+//    cds :: experimental :: OrderedSet < None > const oslhc;
 
     cds :: experimental :: Array < int > arr = { 5, 4, 3, 2, 1 };
     cds :: experimental :: Array < int > const arrc = { 1, 2, 3, 4, 5 };

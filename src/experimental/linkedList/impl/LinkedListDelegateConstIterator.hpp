@@ -8,10 +8,10 @@
 namespace cds { // NOLINT(modernize-concat-nested-namespaces)
     namespace experimental {
 
-        template < typename T >
-        constexpr LinkedList < T > :: LinkedListDelegateConstIterator :: LinkedListDelegateConstIterator (
-                LinkedList < T > :: Node    const * pNode,
-                bool                                forward
+        template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
+        constexpr LinkedList < __ElementType > :: LinkedListDelegateConstIterator :: LinkedListDelegateConstIterator (
+                LinkedList < __ElementType > :: Node    const * pNode,
+                bool                                            forward
         ) noexcept :
                 DelegateConstIterator (),
                 _pNode ( pNode ),
@@ -19,8 +19,9 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
         }
 
-        template < typename T >
-        constexpr LinkedList < T > :: LinkedListDelegateConstIterator :: LinkedListDelegateConstIterator (
+
+        template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
+        constexpr LinkedList < __ElementType > :: LinkedListDelegateConstIterator :: LinkedListDelegateConstIterator (
                 LinkedListDelegateConstIterator const & iterator
         ) noexcept :
                 DelegateConstIterator (),
@@ -29,8 +30,9 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
         }
 
-        template < typename T >
-        constexpr LinkedList < T > :: LinkedListDelegateConstIterator :: LinkedListDelegateConstIterator (
+
+        template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
+        constexpr LinkedList < __ElementType > :: LinkedListDelegateConstIterator :: LinkedListDelegateConstIterator (
                 LinkedListDelegateConstIterator && iterator
         ) noexcept :
                 DelegateConstIterator (),
@@ -39,35 +41,49 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
         }
 
-        template < typename T >
-        constexpr auto LinkedList < T > :: LinkedListDelegateConstIterator :: node () const noexcept -> LinkedList < T > :: Node const * {
+
+        template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
+        constexpr auto LinkedList < __ElementType > :: LinkedListDelegateConstIterator :: node () const noexcept -> LinkedList < __ElementType > :: Node const * {
+
             return this->_pNode;
         }
 
-        template < typename T >
-        __CDS_cpplang_ConstexprOverride auto LinkedList < T > :: LinkedListDelegateConstIterator :: valid () const noexcept -> bool {
+
+        template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
+        __CDS_cpplang_ConstexprOverride auto LinkedList < __ElementType > :: LinkedListDelegateConstIterator :: valid () const noexcept -> bool {
+
             return this->_pNode != nullptr;
         }
 
-        template < typename T >
-        __CDS_cpplang_ConstexprOverride auto LinkedList < T > :: LinkedListDelegateConstIterator :: next () noexcept -> LinkedListDelegateConstIterator & {
+
+        template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
+        __CDS_cpplang_ConstexprOverride auto LinkedList < __ElementType > :: LinkedListDelegateConstIterator :: next () noexcept -> LinkedListDelegateConstIterator & {
+
             (void) ( this->_forward ? ( this->_pNode = this->_pNode->_pNext ) : ( this->_pNode = this->_pNode->_pPrevious ) );
             return * this;
         }
 
-        template < typename T >
-        __CDS_cpplang_ConstexprOverride auto LinkedList < T > :: LinkedListDelegateConstIterator :: previous () noexcept -> LinkedListDelegateConstIterator & {
+
+        template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
+        __CDS_cpplang_ConstexprOverride auto LinkedList < __ElementType > :: LinkedListDelegateConstIterator :: previous () noexcept -> LinkedListDelegateConstIterator & {
+
             (void) ( this->_forward ? ( this->_pNode = this->_pNode->_pPrevious ) : ( this->_pNode = this->_pNode->_pNext ) );
             return * this;
         }
 
-        template < typename T >
-        __CDS_cpplang_ConstexprOverride auto LinkedList < T > :: LinkedListDelegateConstIterator :: value () const noexcept -> ElementType const & {
-            return * this->_pNode->_pData;
+
+        template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
+        __CDS_cpplang_ConstexprOverride auto LinkedList < __ElementType > :: LinkedListDelegateConstIterator :: value () const noexcept -> __ElementType const & {
+
+            return this->_pNode->_data.data();
         }
 
-        template < typename T >
-        __CDS_cpplang_ConstexprOverride auto LinkedList < T > :: LinkedListDelegateConstIterator :: equals ( AbstractDelegateIterator const & iterator ) const noexcept -> bool {
+
+        template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
+        __CDS_cpplang_ConstexprOverride auto LinkedList < __ElementType > :: LinkedListDelegateConstIterator :: equals (
+                AbstractDelegateIterator const & iterator
+        ) const noexcept -> bool {
+
             if ( this == & iterator ) {
                 return true;
             }
@@ -75,8 +91,10 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             return reinterpret_cast < decltype ( this ) > ( & iterator )->_pNode == this->_pNode;
         }
 
-        template < typename T >
-        __CDS_OptimalInline auto LinkedList < T > :: LinkedListDelegateConstIterator :: copy () const noexcept -> LinkedListDelegateConstIterator * {
+
+        template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
+        __CDS_OptimalInline auto LinkedList < __ElementType > :: LinkedListDelegateConstIterator :: copy () const noexcept -> LinkedListDelegateConstIterator * {
+
             return cds :: copy ( * this );
         }
 

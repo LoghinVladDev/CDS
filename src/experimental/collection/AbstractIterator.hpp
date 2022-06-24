@@ -10,18 +10,18 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
         /**
          * @class The base class for Iterator types, mutable or immutable. It is the wrapper over the AbstractDelegateIterator, acquired from derived classes implementation
-         * @tparam T type of elements contained into the Collection class that nests the AbstractIterator
+         * @tparam __ElementType type of elements contained into the Collection class that nests the AbstractIterator
          * @test tested in nester class test
          */
-        template < typename T >
-        class Collection < T > :: AbstractIterator {
+        template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
+        class Collection < __ElementType > :: AbstractIterator {
         private:
             /// The base class is required to access the _pDelegate field
-            friend class Collection < T >;
+            friend class Collection < __ElementType >;
 
         protected:
             /// represents the collection this Iterator was created from. Not created or deleted by the Iterator
-            Collection < T > const *                            _pCollection { nullptr };
+            Collection < __ElementType > const *                _pCollection { nullptr };
 
             /// represents the owned delegate that the Iterator is a wrapper for. Created by the collection, owned by the iterator, destroyed by the iterator.
             cds :: UniquePointer < AbstractDelegateIterator >   _pDelegate { nullptr };
@@ -73,7 +73,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
              * @test tested in nester class test
              */
             constexpr AbstractIterator (
-                    Collection < T >                                    const * pCollection,
+                    Collection < __ElementType >                        const * pCollection,
                     cds :: UniquePointer < AbstractDelegateIterator >        && pIterator
             ) noexcept;
 
@@ -86,7 +86,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
              * @test tested in nester class test
              */
             __CDS_NoDiscard constexpr auto of (
-                    Collection < T > const * pCollection
+                    Collection < __ElementType > const * pCollection
             ) const noexcept -> bool;
 
         public:

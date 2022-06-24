@@ -311,7 +311,7 @@ namespace cds {
          *
          * @test Does not Apply
          */
-        __CDS_NoDiscard __CDS_cpplang_VirtualConstexpr auto hash () const noexcept -> Index override {
+        __CDS_NoDiscard __CDS_cpplang_VirtualConstexpr auto hash () const noexcept -> Size override {
             return static_cast < Index > (this->v);
         }
 
@@ -579,7 +579,7 @@ namespace cds {
          *
          * @test Tested in primitive/BooleanTest/Boolean::Atomic Tests
          */
-        __CDS_OptimalInline auto hash () const noexcept -> Index override {
+        __CDS_OptimalInline auto hash () const noexcept -> Size override {
             return this->get().hash();
         }
     };

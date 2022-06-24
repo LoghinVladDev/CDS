@@ -12,26 +12,26 @@
 namespace cds { // NOLINT(modernize-concat-nested-namespaces)
     namespace experimental {
 
-        template < typename T, meta :: EnableIf < meta :: isValidSetElement < T > () > = 0 >
-        class Set : public Collection < T > {
+        template < typename __ElementType, cds :: meta :: EnableIf < meta :: isValidSetElement < __ElementType > () > = 0 > // NOLINT(bugprone-reserved-identifier)
+        class Set : public Collection < __ElementType > {
 
         public:
-            using typename Collection < T > :: ElementType;
+            using typename Collection < __ElementType > :: ElementType;
 
         protected:
-            using typename Collection < T > :: InitializerList;
+            using typename Collection < __ElementType > :: InitializerList;
 
         protected:
-            using typename Collection < T > :: DelegateConstIterator;
+            using typename Collection < __ElementType > :: DelegateConstIterator;
 
         protected:
-            using typename Collection < T > :: DelegateIteratorRequestType;
+            using typename Collection < __ElementType > :: DelegateIteratorRequestType;
 
         public:
-            using typename Collection < T > :: ConstIterator;
+            using typename Collection < __ElementType > :: ConstIterator;
 
         public:
-            using typename Collection < T > :: ConstReverseIterator;
+            using typename Collection < __ElementType > :: ConstReverseIterator;
 
         protected:
             auto delegateConstIterator (
@@ -42,13 +42,28 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             constexpr Set () noexcept = default;
 
         public:
+            constexpr Set (
+                    Set const & set
+            ) noexcept;
+
+        public:
+            constexpr Set (
+                    Set && set
+            ) noexcept;
+
+        public:
+            __CDS_cpplang_ConstexprDestructor ~Set () noexcept override = default;
+
+        public:
             __CDS_NoDiscard auto toString () const noexcept -> String override;
 
         public:
             auto clear () noexcept -> void override = 0;
 
         public:
-            __CDS_NoDiscard auto size () const noexcept -> Size override = 0;
+            virtual auto remove (
+                    ElementType const & element
+            ) noexcept -> bool;
 
         public:
             auto remove (
@@ -60,34 +75,31 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                     ConstReverseIterator const & iterator
             ) noexcept -> bool override = 0;
 
-            public:
+        protected:
             auto remove (
                     ConstIterator   const * pIterators,
                     Size                    iteratorCount
             ) noexcept -> Size override = 0;
 
-        public:
+        protected:
             auto remove (
                     ConstReverseIterator    const * pIterators,
                     Size                            iteratorCount
             ) noexcept -> Size override = 0;
 
-        public:
-            virtual auto remove (
-                    ElementType const & element
-            ) noexcept -> void = 0;
+        protected:
+            auto pNewInsert (
+                    ElementType const & referenceElement
+            ) noexcept -> ElementType * override = 0;
 
         public:
-            auto pNewInsert () noexcept -> ElementType * & override = 0;
-
-        public:
-            template < typename V = T, meta :: EnableIf < meta :: isCopyConstructible < V > () > = 0 >
+            template < typename __VElementType = __ElementType, cds :: meta :: EnableIf < cds :: meta :: isCopyConstructible < __VElementType > () > = 0 > // NOLINT(bugprone-reserved-identifier)
             auto insert (
                     ElementType const & element
             ) noexcept -> void;
 
         public:
-            template < typename V = T, meta :: EnableIf < meta :: isMoveConstructible < V > () > = 0 >
+            template < typename __VElementType = __ElementType, cds :: meta :: EnableIf < cds :: meta :: isMoveConstructible < __VElementType > () > = 0 > // NOLINT(bugprone-reserved-identifier)
             auto insert (
                     ElementType && element
             ) noexcept -> void;

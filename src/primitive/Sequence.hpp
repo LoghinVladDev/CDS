@@ -127,7 +127,7 @@ namespace cds {
     #if __CDS_cpplang_core_version >= __CDS_cpplang_core_version_17
 
             __CDS_NoDiscard auto toString () const noexcept -> String override;
-            __CDS_NoDiscard auto hash () const noexcept -> Index override;
+            __CDS_NoDiscard auto hash () const noexcept -> Size override;
 
     #else
 
@@ -206,7 +206,7 @@ namespace cds {
     #if __CDS_cpplang_core_version >= __CDS_cpplang_core_version_17
 
             __CDS_NoDiscard auto toString () const noexcept -> String override;
-            __CDS_NoDiscard auto hash () const noexcept -> Index override;
+            __CDS_NoDiscard auto hash () const noexcept -> Size override;
 
     #else
 
@@ -284,7 +284,7 @@ namespace cds {
         __CDS_MaybeUnused auto cend () const noexcept -> ConstIterator;
 
         __CDS_NoDiscard __CDS_MaybeUnused auto toString () const noexcept -> String override;
-        __CDS_NoDiscard __CDS_MaybeUnused auto hash () const noexcept -> Index override;
+        __CDS_NoDiscard __CDS_MaybeUnused auto hash () const noexcept -> Size override;
         __CDS_NoDiscard __CDS_MaybeUnused auto equals (Object const &) const noexcept -> bool override;
 
         __CDS_MaybeUnused auto contains ( ElementType const & element ) const noexcept -> Boolean
@@ -3844,7 +3844,7 @@ auto cds :: Sequence < C > :: Iterator :: toString() const noexcept -> cds :: St
 }
 
 template < typename C >
-__CDS_OptionalInline auto cds :: Sequence < C > ::Iterator::hash() const noexcept -> cds :: Index {
+__CDS_OptionalInline auto cds :: Sequence < C > ::Iterator::hash() const noexcept -> cds :: Size {
     if __CDS_cpplang_IfConstexpr ( meta :: isObjectDerived < decltype ( this->it ) > () )
         return this->it.hash ();
     else if __CDS_cpplang_IfConstexpr ( meta :: isObjectDerived < decltype ( * this->it ) > () )
@@ -4063,7 +4063,7 @@ auto cds :: Sequence < C > :: ConstIterator :: toString() const noexcept -> cds 
 #if __CDS_cpplang_core_version >= __CDS_cpplang_core_version_17
 
 template < typename C >
-__CDS_OptimalInline auto cds :: Sequence < C > :: ConstIterator :: hash() const noexcept -> cds :: Index {
+__CDS_OptimalInline auto cds :: Sequence < C > :: ConstIterator :: hash() const noexcept -> cds :: Size {
     if __CDS_cpplang_IfConstexpr( meta :: isObjectDerived < decltype ( this->it ) > () )
         return this->it.hash ();
     else if __CDS_cpplang_IfConstexpr ( meta :: isObjectDerived < decltype ( * this->it ) > () )
@@ -4151,7 +4151,7 @@ auto cds :: Sequence < C > ::toString() const noexcept -> cds :: String {
 }
 
 template < typename C >
-__CDS_OptimalInline auto cds :: Sequence < C > ::hash() const noexcept -> cds :: Index {
+__CDS_OptimalInline auto cds :: Sequence < C > ::hash() const noexcept -> cds :: Size {
     return this->pCollection.valueAt().hash();
 }
 
@@ -4395,7 +4395,16 @@ namespace cds {
 __CDS_Meta_RegisterParseTemplateType(Sequence)
 
 #include "../experimental/shared/array/impl/ArraySequence.hpp"
+#include "../experimental/shared/linkedList/impl/LinkedListSequence.hpp"
+
+#include "../experimental/shared/hashSet/impl/HashSetSequence.hpp"
+#include "../experimental/shared/orderedSet/impl/OrderedSetSequence.hpp"
+#include "../experimental/shared/unorderedSet/impl/UnorderedSetSequence.hpp"
+
+#include "../experimental/shared/hashMap/impl/HashMapSequence.hpp"
+
 #include "../shared/string/impl/StringSequence.hpp"
 #include "../shared/string/view/impl/StringViewSequence.hpp"
+
 
 #endif //CDS_SEQUENCE_HPP

@@ -170,8 +170,8 @@ namespace cds {
             return this->ptrStringRep();
         }
 
-        __CDS_NoDiscard __CDS_OptimalInline auto hash () const noexcept -> Index override {
-            return reinterpret_cast < Index > ( this->pObj );
+        __CDS_NoDiscard __CDS_OptimalInline auto hash () const noexcept -> Size override {
+            return reinterpret_cast < Size > ( this->pObj );
         }
     };
 

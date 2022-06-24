@@ -6,45 +6,56 @@
 #define __CDS_EX_ARRAY_HPP__
 
 #include <CDS/experimental/List>
+#include "../shared/memory/PrimitiveAllocation.hpp"
 
 namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
-    template < typename C >
+    template < typename __CollectionType > // NOLINT(bugprone-reserved-identifier)
     class Sequence;
 
     namespace experimental {
 
-        template < typename T >
-        class Array : public List < T > {
+        template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
+        class Array : public List < __ElementType > {
+            
         public:
-            using typename List < T > :: ElementType;
+            using typename List < __ElementType > :: ElementType;
 
         public:
-            using typename List < T > :: Iterator;
+            using typename List < __ElementType > :: Iterator;
+            
         public:
-            using typename List < T > :: ConstIterator;
+            using typename List < __ElementType > :: ConstIterator;
+            
         public:
-            using typename List < T > :: ReverseIterator;
+            using typename List < __ElementType > :: ReverseIterator;
+            
         public:
-            using typename List < T > :: ConstReverseIterator;
+            using typename List < __ElementType > :: ConstReverseIterator;
 
         protected:
-            using typename List < T > :: InitializerList;
+            using typename List < __ElementType > :: InitializerList;
+            
         protected:
-            using typename List < T > :: DelegateIterator;
+            using typename List < __ElementType > :: DelegateIterator;
+            
         protected:
-            using typename List < T > :: DelegateConstIterator;
+            using typename List < __ElementType > :: DelegateConstIterator;
+            
         protected:
-            using typename List < T > :: AbstractIterator;
+            using typename List < __ElementType > :: AbstractIterator;
+            
         protected:
-            using typename List < T > :: AbstractDelegateIterator;
+            using typename List < __ElementType > :: AbstractDelegateIterator;
 
         private:
             class ArrayDelegateIterator;
+            
         private:
             class ArrayDelegateConstIterator;
+            
         private:
-            using typename Collection < T > :: DelegateIteratorRequestType;
+            using typename List < __ElementType > :: DelegateIteratorRequestType;
 
         private:
             auto delegateIterator (
@@ -57,12 +68,15 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             ) const noexcept -> cds :: UniquePointer < DelegateConstIterator > override;
 
         private:
-            ElementType ** _pData       { nullptr };
+            using NodeType = cds :: __hidden :: __impl :: __allocation :: __RawContainer < ElementType >;
 
         private:
-            Size           _capacity    { 0ULL };
+            NodeType  * _pData       { nullptr };
 
         private:
+            Size        _capacity    { 0ULL };
+
+        protected:
             static Size const minCapacity = 32ULL;
 
         private:
@@ -84,34 +98,34 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             ) noexcept;
 
         public:
-            template < typename IteratorType, meta :: EnableIf < meta :: isIterator < IteratorType > () > = 0 >
+            template < typename __IteratorType, meta :: EnableIf < meta :: isIterator < __IteratorType > () > = 0 > // NOLINT(bugprone-reserved-identifier)
             Array (
-                    IteratorType const & begin,
-                    IteratorType const & end
+                    __IteratorType const & begin,
+                    __IteratorType const & end
             ) noexcept;
 
         public:
             __CDS_Implicit Array ( // NOLINT(google-explicit-constructor)
-                    InitializerList const &
+                    InitializerList const & initializerList
             ) noexcept;
 
         public:
-            template < typename V = T, meta :: EnableIf < meta :: isDefaultConstructible < V > () > >
+            template < typename __VElementType = __ElementType, meta :: EnableIf < meta :: isDefaultConstructible < __VElementType > () > > // NOLINT(bugprone-reserved-identifier)
             __CDS_Explicit Array (
                     Size size
             ) noexcept;
 
         public:
-            template < typename V = T, meta :: EnableIf < meta :: isCopyConstructible < V > () > >
+            template < typename __VElementType = __ElementType, meta :: EnableIf < meta :: isCopyConstructible < __VElementType > () > > // NOLINT(bugprone-reserved-identifier)
             Array (
                     Size                size,
                     ElementType const & defaultValue
             ) noexcept;
 
         public:
-            template < typename R, meta :: EnableIf < meta :: isConvertible < R, T > () > = 0 >
+            template < typename __OtherElementType, meta :: EnableIf < meta :: isConvertible < __OtherElementType, __ElementType > () > = 0 > // NOLINT(bugprone-reserved-identifier)
             __CDS_Explicit Array (
-                    Collection < R > const & collection
+                    Collection < __OtherElementType > const & collection
             ) noexcept;
 
         public:
@@ -119,12 +133,13 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
 
         public:
-            template < typename V = T, meta :: EnableIf < meta :: isDefaultConstructible < V > () > >
+            template < typename __VElementType = __ElementType, meta :: EnableIf < meta :: isDefaultConstructible < __VElementType > () > > // NOLINT(bugprone-reserved-identifier)
             auto resize (
                     Size
             ) noexcept -> void;
+
         public:
-            template < typename V = T, meta :: EnableIf < meta :: isCopyConstructible < V > () > >
+            template < typename __VElementType = __ElementType, meta :: EnableIf < meta :: isCopyConstructible < __VElementType > () > > // NOLINT(bugprone-reserved-identifier)
             auto resize (
                     Size,
                     ElementType const &
@@ -170,6 +185,11 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                     ConstReverseIterator const & iterator
             ) noexcept -> bool override;
 
+        public:
+            using Collection < __ElementType > :: remove;
+            using MutableCollection < __ElementType > :: remove;
+            using List < __ElementType > :: remove;
+
         protected:
             auto remove (
                     Iterator    const * pIterators,
@@ -194,61 +214,71 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                     Size                            iteratorCount
             ) noexcept -> Size override;
 
-        private:
+        public:
+            __CDS_NoDiscard constexpr auto data () const noexcept -> ElementType const * {
+                return reinterpret_cast < ElementType const * > ( this->_pData );
+            }
+
+        public:
+            __CDS_NoDiscard __CDS_cpplang_NonConstConstexprMemberFunction auto data () noexcept -> ElementType * {
+                return reinterpret_cast < ElementType * > ( this->_pData );
+            }
+
+        protected:
             auto pNewBefore (
                     Index index
-            ) noexcept -> ElementType * &;
+            ) noexcept -> ElementType *;
 
-        private:
+        protected:
             auto pNewAfter (
                     Index index
-            ) noexcept -> ElementType * &;
+            ) noexcept -> ElementType *;
 
         protected:
-            auto pNewFront () noexcept -> ElementType * & override;
+            auto pNewFront () noexcept -> ElementType * override;
 
         protected:
-            auto pNewBack () noexcept -> ElementType * & override;
+            auto pNewBack () noexcept -> ElementType * override;
 
         protected:
             auto pNewBefore (
                     Iterator const & iterator
-            ) noexcept -> ElementType * & override;
+            ) noexcept -> ElementType * override;
 
         protected:
             auto pNewAfter (
                     Iterator const & iterator
-            ) noexcept -> ElementType * & override;
+            ) noexcept -> ElementType * override;
 
         protected:
             auto pNewBefore (
                     ConstIterator const & iterator
-            ) noexcept -> ElementType * & override;
+            ) noexcept -> ElementType * override;
 
         protected:
             auto pNewAfter (
                     ConstIterator const & iterator
-            ) noexcept -> ElementType * & override;
+            ) noexcept -> ElementType * override;
 
         protected:
             auto pNewBefore (
                     ReverseIterator const & iterator
-            ) noexcept -> ElementType * & override;
+            ) noexcept -> ElementType * override;
 
         protected:
             auto pNewAfter (
                     ReverseIterator const & iterator
-            ) noexcept -> ElementType * & override;
+            ) noexcept -> ElementType * override;
 
         protected:
             auto pNewBefore (
                     ConstReverseIterator const & iterator
-            ) noexcept -> ElementType * & override;
+            ) noexcept -> ElementType * override;
 
         protected:
             auto pNewAfter (
                     ConstReverseIterator const & iterator
-            ) noexcept -> ElementType * & override;
+            ) noexcept -> ElementType * override;
 
         public:
             __CDS_NoDiscard __CDS_cpplang_ConstexprOverride auto front () noexcept (false) -> ElementType & override;
@@ -273,17 +303,29 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             ) const noexcept (false) -> ElementType const & override;
 
         public:
+            __CDS_NoDiscard auto operator == (
+                    Array const & array
+            ) const noexcept -> bool;
+
+        public:
+            __CDS_NoDiscard auto operator != (
+                    Array const & array
+            ) const noexcept -> bool;
+
+        public:
             auto clear () noexcept -> void override;
+
         public:
             auto makeUnique () noexcept -> void override;
 
         public:
             auto popFront () noexcept -> void override;
+
         public:
             auto popBack () noexcept -> void override;
 
         public:
-            template < typename V = T, meta :: EnableIf < meta :: isCopyConstructible < V > () > = 0 >
+            template < typename __VElementType = __ElementType, meta :: EnableIf < meta :: isCopyConstructible < __VElementType > () > = 0 > // NOLINT(bugprone-reserved-identifier)
             auto operator = (
                     Array const & array
             ) noexcept -> Array &;
@@ -294,28 +336,24 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             ) noexcept -> Array &;
 
         public:
-            template < typename R, meta :: EnableIf < meta :: isConvertible < R, T > () > = 0 >
+            template < typename __OtherElementType, meta :: EnableIf < meta :: isConvertible < __OtherElementType, __ElementType > () > = 0 > // NOLINT(bugprone-reserved-identifier)
             auto operator = (
-                    Collection < R > const & collection
+                    Collection < __OtherElementType > const & collection
             ) noexcept -> Array &;
 
         public:
-            auto sequence () & noexcept -> Sequence < Array < T > >;
+            auto sequence () & noexcept -> Sequence < Array < __ElementType > >;
+
         public:
-            auto sequence () && noexcept -> Sequence < Array < T > >;
+            auto sequence () && noexcept -> Sequence < Array < __ElementType > >;
+
         public:
-            auto sequence () const & noexcept -> Sequence < Array < T > const >;
+            auto sequence () const & noexcept -> Sequence < Array < __ElementType > const >;
+
         public:
-            auto sequence () const && noexcept -> Sequence < Array < T > const >;
+            auto sequence () const && noexcept -> Sequence < Array < __ElementType > const >;
+
         };
-
-        template < typename ... ArgumentTypes >
-        inline auto arrayOf (
-                ArgumentTypes && ... values
-        ) noexcept -> Array < meta :: Common < ArgumentTypes ... > > {
-
-            return collectionOf < Array > ( std :: forward < ArgumentTypes > ( values ) ... );
-        }
 
     }
 }
@@ -323,11 +361,15 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 #include "array/ArrayDelegateIterator.hpp"
 #include "array/ArrayDelegateConstIterator.hpp"
 
+#include "../shared/memory/PrimitiveAllocation.hpp"
 #include "array/impl/Array.hpp"
 #include "array/impl/ArrayDelegateIterator.hpp"
 #include "array/impl/ArrayDelegateConstIterator.hpp"
 #include "array/CTAD.hpp"
 
 #include "shared/array/impl/ArraySequence.hpp"
+
+#include "shared/collection/FunctionalConstructors.hpp"
+#include "shared/collection/impl/FunctionalConstructors.hpp"
 
 #endif // __CDS_EX_ARRAY_HPP__
