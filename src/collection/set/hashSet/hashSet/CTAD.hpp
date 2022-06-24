@@ -16,6 +16,14 @@ namespace cds {
             std :: initializer_list < __ElementType >
     ) -> HashSet < __ElementType, __Hasher >;
 
+    template <
+            typename __ElementType, // NOLINT(bugprone-reserved-identifier)
+            typename __Hasher = cds :: FunctionHasher < __ElementType, & cds :: hash < __ElementType > > // NOLINT(bugprone-reserved-identifier)
+    > HashSet (
+            std :: initializer_list < __ElementType >,
+            __Hasher
+    ) -> HashSet < __ElementType, __Hasher >;
+
 }
 
 #endif

@@ -4,6 +4,8 @@
 #include <CDS/OrderedSet>
 #include <CDS/UnorderedSet>
 #include <CDS/HashSet>
+#include <CDS/Map>
+#include <CDS/HashMap>
 
 using namespace cds;
 
@@ -27,6 +29,9 @@ int main () {
 
     HashSet < int > hs = { 2, 1, 4, 3 };
     std :: cout << hs << '\n';
+
+    HashMap < int, int > hm = { { 1, 2 }, { 3, 4 }, { 5, 6 }, { 7, 8 } };
+    std :: cout << hm << '\n';
 
 
     return 0;
