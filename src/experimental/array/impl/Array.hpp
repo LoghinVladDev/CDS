@@ -60,7 +60,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
             static_assert ( meta :: isCopyConstructible < __ElementType > (), "Cannot copy an array of given Type, Type has no Copy Constructor" );
             for ( Index i = 0; i < static_cast < Index > ( array.size() ); ++ i ) {
-                this->_pData[i].construct ( array._pData[i]->data() );
+                this->_pData[i].construct ( array._pData[i].data() );
             }
         }
 

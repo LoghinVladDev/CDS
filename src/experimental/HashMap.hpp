@@ -94,12 +94,16 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
         protected:
             using __HashTableFunctionCopyConstructor =  // NOLINT(bugprone-reserved-identifier)
-                    FunctionCopyConstructor <
-                            __HashTableElementType,
-                            & __hidden :: __impl :: __hashMapDataNodeCopyConstructor <
-                                    __KeyType,
-                                    __ValueType
-                            >
+                    cds :: meta :: Conditional <
+                            cds :: meta :: isCopyConstructible < __HashTableElementType > (),
+                            FunctionCopyConstructor <
+                                    __HashTableElementType,
+                                    & __hidden :: __impl :: __hashMapDataNodeCopyConstructor <
+                                            __KeyType,
+                                            __ValueType
+                                    >
+                            >,
+                            void
                     >;
 
         protected:

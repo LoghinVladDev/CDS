@@ -32,13 +32,37 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                 }
 
 
-                template < typename __ElementType >             // NOLINT(bugprone-reserved-identifier)
-                constexpr auto __hashSetDataNodeCopyConstructor ( // NOLINT(bugprone-reserved-identifier)
+                template <
+                        typename __ElementType, // NOLINT(bugprone-reserved-identifier)
+                        cds :: meta :: EnableIf < cds :: meta :: isCopyConstructible < __ElementType > () > = 0
+                > constexpr auto __hashSetDataNodeDelayedCopyConstructor ( // NOLINT(bugprone-reserved-identifier)
                         __HashSetDataNode < __ElementType >       & destinationDataNode,
                         __HashSetDataNode < __ElementType > const & sourceDataNode
                 ) noexcept -> void {
 
                     destinationDataNode.construct ( sourceDataNode.data() );
+                }
+
+
+                template <
+                        typename __ElementType, // NOLINT(bugprone-reserved-identifier)
+                        cds :: meta :: EnableIf < ! cds :: meta :: isCopyConstructible < __ElementType > () > = 0
+                > constexpr auto __hashSetDataNodeDelayedCopyConstructor ( // NOLINT(bugprone-reserved-identifier)
+                        __HashSetDataNode < __ElementType >       & destinationDataNode,
+                        __HashSetDataNode < __ElementType > const & sourceDataNode
+                ) noexcept -> void {
+
+                }
+
+
+                template <
+                        typename __ElementType // NOLINT(bugprone-reserved-identifier)
+                > constexpr auto __hashSetDataNodeCopyConstructor ( // NOLINT(bugprone-reserved-identifier)
+                        __HashSetDataNode < __ElementType >       & destinationDataNode,
+                        __HashSetDataNode < __ElementType > const & sourceDataNode
+                ) noexcept -> void {
+
+                    __hashSetDataNodeDelayedCopyConstructor ( destinationDataNode, sourceDataNode );
                 }
 
 
