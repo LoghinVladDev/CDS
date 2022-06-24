@@ -1,10 +1,10 @@
-#include <CDS/Array>
+#include <CDS/LinkedList>
 
 using namespace cds;
 
 int main () {
 
-    Array < int > a = { 1, 2, 3, 4 };
+    LinkedList < int > a = { 1, 2, 3, 4 };
 
     std :: cout << a << '\n';
 
