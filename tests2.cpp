@@ -3,6 +3,7 @@
 #include <CDS/Set>
 #include <CDS/OrderedSet>
 #include <CDS/UnorderedSet>
+#include <CDS/HashSet>
 
 using namespace cds;
 
