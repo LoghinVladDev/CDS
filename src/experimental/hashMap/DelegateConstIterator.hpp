@@ -17,9 +17,6 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         private:
             HashTableConstIterator _iterator;
 
-        private:
-            EntryType      mutable _wrapper;
-
         public:
             __CDS_Explicit constexpr HashMapDelegateConstIterator (
                     HashTableConstIterator const & iterator

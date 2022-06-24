@@ -11,22 +11,13 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
             namespace __impl {  // NOLINT(bugprone-reserved-identifier)
 
                 template <
-                        typename __KeyType,     // NOLINT(bugprone-reserved-identifier)
-                        typename __ValueType    // NOLINT(bugprone-reserved-identifier)
-                > struct __HashMapDataNode {    // NOLINT(bugprone-reserved-identifier)
-                    cds :: __hidden :: __impl :: __allocation :: __RawContainer < __KeyType >   _key;
-                    cds :: __hidden :: __impl :: __allocation :: __RawContainer < __ValueType > _value;
-                };
-
-
-                template <
                         typename __KeyType,                         // NOLINT(bugprone-reserved-identifier)
                         typename __ValueType                        // NOLINT(bugprone-reserved-identifier)
                 > constexpr auto __hashMapDataNodeKeyExtractor (    // NOLINT(bugprone-reserved-identifier)
-                        __HashMapDataNode < __KeyType, __ValueType > const & dataNode
+                        typename Map < __KeyType, __ValueType > :: EntryType const & dataNode
                 ) noexcept -> __KeyType const & {
 
-                    return dataNode._key.data();
+                    return dataNode.key();
                 }
 
 
@@ -34,11 +25,10 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                         typename __KeyType,                         // NOLINT(bugprone-reserved-identifier)
                         typename __ValueType                        // NOLINT(bugprone-reserved-identifier)
                 > constexpr auto __hashMapDataNodeDestructor (      // NOLINT(bugprone-reserved-identifier)
-                        __HashMapDataNode < __KeyType, __ValueType > & dataNode
+                        typename Map < __KeyType, __ValueType > :: EntryType & dataNode
                 ) noexcept -> void {
 
-                    dataNode._key.destruct();
-                    dataNode._value.destruct();
+                    dataNode.~__MapEntry < __KeyType, __ValueType > ();
                 }
 
 
@@ -46,12 +36,11 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                         typename __KeyType,                         // NOLINT(bugprone-reserved-identifier)
                         typename __ValueType                        // NOLINT(bugprone-reserved-identifier)
                 > constexpr auto __hashMapDataNodeCopyConstructor ( // NOLINT(bugprone-reserved-identifier)
-                        __HashMapDataNode < __KeyType, __ValueType >        & destinationDataNode,
-                        __HashMapDataNode < __KeyType, __ValueType >  const & sourceDataNode
+                        typename Map < __KeyType, __ValueType > :: EntryType        & destinationDataNode,
+                        typename Map < __KeyType, __ValueType > :: EntryType  const & sourceDataNode
                 ) noexcept -> void {
 
-                    destinationDataNode._key.construct ( sourceDataNode._key.data() );
-                    destinationDataNode._value.construct ( sourceDataNode._value.data() );
+                    new ( & destinationDataNode ) typename Map < __KeyType, __ValueType > :: EntryType ( sourceDataNode );
                 }
 
 
@@ -59,13 +48,13 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                         typename __KeyType,                         // NOLINT(bugprone-reserved-identifier)
                         typename __ValueType                        // NOLINT(bugprone-reserved-identifier)
                 > constexpr auto __hashMapDataNodeEquals (          // NOLINT(bugprone-reserved-identifier)
-                        __HashMapDataNode < __KeyType, __ValueType >  const & leftNode,
-                        __HashMapDataNode < __KeyType, __ValueType >  const & rightNode
+                        typename Map < __KeyType, __ValueType > :: EntryType const & leftNode,
+                        typename Map < __KeyType, __ValueType > :: EntryType const & rightNode
                 ) noexcept -> bool {
 
                     return
-                            cds :: meta :: equals ( leftNode._key.data(), rightNode._key.data() ) &&
-                            cds :: meta :: equals ( leftNode._value.data(), rightNode._value.data() );
+                            cds :: meta :: equals ( leftNode.key(), rightNode.key() ) &&
+                            cds :: meta :: equals ( leftNode.value(), rightNode.value() );
                 }
 
             }

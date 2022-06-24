@@ -1604,7 +1604,6 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             auto pElementLocation = this->pNewInsert ( element );
             if ( pElementLocation != nullptr ) {
                 new ( pElementLocation ) __ElementType ( element );
-                this->pNewInsertPost();
             }
         }
 
@@ -1618,7 +1617,6 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             auto pElementLocation = this->pNewInsert ( element );
             if ( pElementLocation != nullptr ) {
                 new ( pElementLocation ) __ElementType ( element );
-                this->pNewInsertPost();
             }
         }
 
@@ -1642,13 +1640,6 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             for ( auto iterator = otherCollection.begin(), end = otherCollection.end(); iterator != end; ++ iterator ) {
                 this->add ( * iterator );
             }
-        }
-
-
-        template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
-        __CDS_OptimalInline auto Collection < __ElementType > :: pNewInsertPost() noexcept -> void {
-            /* left empty intentionally, derived classes can override this, but it is not mandatory.
-             * Refer to Collection :: add to when this should be overridden */
         }
 
     }

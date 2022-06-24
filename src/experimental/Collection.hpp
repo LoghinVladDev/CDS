@@ -1502,13 +1502,6 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                     ElementType const & referenceElement
             ) noexcept -> ElementType * = 0;
 
-        protected:
-            /**
-             * @brief Function used in Collection :: add implementation, called after storage of new value
-             * @exceptsafe
-             * @test tested in base class test
-             */
-            virtual auto pNewInsertPost () noexcept -> void;
         };
         template < template < typename ... > class __CollectionType, typename ... __ArgumentTypes, typename __Common = meta :: Common < __ArgumentTypes ... > > // NOLINT(bugprone-reserved-identifier)
         auto collectionOf (

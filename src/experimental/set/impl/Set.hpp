@@ -67,7 +67,6 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             auto pElementLocation = this->pNewInsert ( element );
             if ( pElementLocation != nullptr ) {
                 new ( pElementLocation ) ElementType ( element );
-                this->pNewInsertPost();
             }
         }
 
@@ -81,7 +80,6 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             auto pElementLocation = this->pNewInsert ( element );
             if ( pElementLocation != nullptr ) {
                 new ( pElementLocation ) ElementType ( std :: move ( element ) );
-                this->pNewInsertPost();
             }
         }
 

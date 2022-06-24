@@ -75,9 +75,6 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         protected:
             class DefaultEntryMutableCollectionProxy;
 
-        private:
-            EntryType * _pInsertionEntry { nullptr };
-
         public:
             __CDS_NoDiscard __CDS_cpplang_ConstexprPureAbstract auto keys () const noexcept -> Set < KeyType const > const &;
 
@@ -144,18 +141,22 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             virtual auto entryAt (
                     KeyType const & key,
                     bool          & isNew
-            ) noexcept -> EntryType = 0;
+            ) noexcept -> EntryType * = 0;
 
         protected:
             virtual auto entryAt (
-                    KeyType const & key,
-                    bool          & found
-            ) const noexcept -> EntryType const = 0;
+                    KeyType const & key
+            ) const noexcept -> EntryType const * = 0;
 
         public:
-            template < typename __TValueType = ValueType, cds :: meta :: EnableIf < cds :: meta :: isDefaultConstructible < __TValueType > () > = 0 > // NOLINT(bugprone-reserved-identifier)
-            auto get (
-                    KeyType const & key
+            template <
+                    typename __TKeyType,                // NOLINT(bugprone-reserved-identifier)
+                    typename __TValueType = ValueType,  // NOLINT(bugprone-reserved-identifier)
+                    cds :: meta :: EnableIf <
+                            cds :: meta :: isDefaultConstructible < __TValueType > ()
+                    > = 0
+            > auto get (
+                    __TKeyType && key
             ) noexcept -> ValueType &;
 
         public:
@@ -182,10 +183,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         private:
             auto pNewInsert (
                     ElementType const & referenceElement
-            ) noexcept -> ElementType * & override;
-
-        private:
-            auto pNewInsertPost () noexcept -> void override;
+            ) noexcept -> ElementType * override;
 
         public:
             auto contains (
@@ -258,20 +256,24 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             auto clear () noexcept -> void override = 0;
 
         public:
-            template < typename __TKeyType, typename __TValueType > // NOLINT(bugprone-reserved-identifier)
-            auto emplace (
+            template <
+                    typename __TKeyType,    // NOLINT(bugprone-reserved-identifier)
+                    typename __TValueType  // NOLINT(bugprone-reserved-identifier)
+            > auto emplace (
                     __TKeyType      && key,
                     __TValueType    && value
             ) noexcept -> void;
 
         public:
+            template < typename __TEntryType = EntryType, cds :: meta :: EnableIf < cds :: meta :: isCopyConstructible < __TEntryType > () > = 0 > // NOLINT(bugprone-reserved-identifier)
             auto insert (
-                    EntryType const & entry
+                    __TEntryType const & entry
             ) noexcept -> void;
 
-        protected:
-            static auto freeEntryData (
-                    EntryType & entry
+        public:
+            template < typename __TEntryType = EntryType, cds :: meta :: EnableIf < cds :: meta :: isMoveConstructible < __TEntryType > () > = 0 > // NOLINT(bugprone-reserved-identifier)
+            auto insert (
+                    __TEntryType && entry
             ) noexcept -> void;
 
         };

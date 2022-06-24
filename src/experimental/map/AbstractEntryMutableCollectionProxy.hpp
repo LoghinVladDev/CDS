@@ -129,10 +129,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         protected:
             auto pNewInsert (
                     ElementType const & referenceElement
-            ) noexcept -> ElementType * & override;
-
-        protected:
-            auto pNewInsertPost () noexcept -> void override;
+            ) noexcept -> ElementType * override;
 
         public:
             auto contains (

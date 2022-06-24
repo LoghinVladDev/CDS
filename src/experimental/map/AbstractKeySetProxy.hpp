@@ -66,7 +66,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         public:
             auto remove (
                     KeyType const & value
-            ) noexcept -> bool;
+            ) noexcept -> bool override;
 
         public:
             auto remove (
@@ -93,7 +93,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         protected:
             auto pNewInsert (
                     ElementType const & referenceElement
-            ) noexcept -> ElementType * & override;
+            ) noexcept -> ElementType * override;
 
         public:
             auto contains (

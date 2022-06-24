@@ -4,6 +4,7 @@
 #include <CDS/experimental/OrderedSet>
 #include <CDS/experimental/UnorderedSet>
 #include <CDS/experimental/HashSet>
+#include <CDS/experimental/HashMap>
 //#include <CDS/smartPointers/UniquePointer>
 //#include <CDS/meta/TypeTraits>
 //#include <CDS/meta/FunctionTraits>
@@ -25,50 +26,58 @@
 using namespace cds;
 using namespace cds :: literals;
 #include <unordered_set>
+#include <unordered_map>
 
 int main () {
 
-
-
-    auto start = std :: chrono :: system_clock :: now();
-//    std :: unordered_set <int> hs;
-    cds::experimental::HashSet <int> hs;
-    hs.insert(3);
-    hs.insert(2);
-    hs.insert(4);
-
-    for ( int i = 0; i < 10000000; ++ i ) {
-        hs.insert(i);
-    }
-    auto end = std :: chrono :: system_clock :: now();
-    std :: cout
-            << "Duration : "
-            << std :: chrono :: duration_cast < std :: chrono :: milliseconds > ( end - start ).count() << '\n';
-
-//    std :: cout << hs << '\n';
-
-//    cds :: experimental :: HashMap < String, String > m;
-////    cds :: HashMap < int, int > m;
 //
-////    struct _h {
-////        auto operator () (String const & s)const{ return s.hash(); }
-////    };
-////    std :: unordered_map < String, String, _h > m;
-//    std :: random_device rd;
-//    std :: mt19937 mt(rd());
-//    std :: uniform_int_distribution < uint32 > dist (0U, cds :: limits :: U32_MAX);
 //
 //    auto start = std :: chrono :: system_clock :: now();
-//    for ( int i = 0; i < 1000; ++ i ) {
+////    std :: unordered_set <int> hs;
+//    cds::experimental::HashSet <int> hs;
+//    hs.insert(3);
+//    hs.insert(2);
+//    hs.insert(4);
 //
-//        auto k = dist(mt);
-//        auto v = dist(mt);
-//        m.emplace ( k, v );
-//
-//        if ( m[k] != String(v) ) {
-//            std :: cout << "ohoh\n";
-//        }
+//    for ( int i = 0; i < 100000; ++ i ) {
+//        hs.insert(i);
 //    }
+//    auto end = std :: chrono :: system_clock :: now();
+//    std :: cout
+//            << "Duration : "
+//            << std :: chrono :: duration_cast < std :: chrono :: milliseconds > ( end - start ).count() << '\n';
+//
+//    cds :: experimental::HashMap < int, int > hm;
+//    hm.emplace ( 3, 3 );
+//    hm.emplace ( 2, 3 );
+//    hm.emplace ( 1, 3 );
+//
+//    std :: cout << hm << '\n';
+
+//    std :: cout << hs << '\n';
+;
+//    cds :: ex HashMap < int, int > m;
+//
+    struct _h {
+        auto operator () (String const & s)const{ return s.hash(); }
+    };
+//    std :: unordered_map < String, String, _h > m;
+    cds :: experimental :: HashMap < int, int > m;
+    std :: random_device rd;
+    std :: mt19937 mt(rd());
+    std :: uniform_int_distribution < uint32 > dist (0U, cds :: limits :: U32_MAX);
+//
+    auto start = std :: chrono :: system_clock :: now();
+    for ( int i = 0; i < 10000000; ++ i ) {
+
+        auto k = dist(mt);
+        auto v = dist(mt);
+        m.emplace ( k, v );
+
+//        if ( m[k] != v ) {
+//            std :: cout << "ohoh : " << m[k] << "!=" << v << '\n';
+//        }
+    }
 //
 //    for ( auto & e : m ) {
 //        std :: cout << e.key() << ':' << e.value() << '\n';
@@ -86,10 +95,10 @@ int main () {
 //    std :: cout << m[1] << '\n';
 
 //    std :: cout << m.bucket_count() << '\n';
-//    auto end = std :: chrono :: system_clock :: now();
-//    std :: cout
-//            << "Duration : "
-//            << std :: chrono :: duration_cast < std :: chrono :: milliseconds > ( end - start ).count() << '\n';
+    auto end = std :: chrono :: system_clock :: now();
+    std :: cout
+            << "Duration : "
+            << std :: chrono :: duration_cast < std :: chrono :: milliseconds > ( end - start ).count() << '\n';
 //
 //    m.clear();
 //

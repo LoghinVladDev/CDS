@@ -77,55 +77,61 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
 
         template < typename __KeyType, typename __ValueType > // NOLINT(bugprone-reserved-identifier)
-        template < typename __TValueType, cds :: meta :: EnableIf < cds :: meta :: isDefaultConstructible < __TValueType > () > > // NOLINT(bugprone-reserved-identifier)
-        auto Map < __KeyType, __ValueType > :: get (
-                KeyType const & key
+        template <
+                typename __TKeyType,    // NOLINT(bugprone-reserved-identifier)
+                typename __TValueType,  // NOLINT(bugprone-reserved-identifier)
+                cds :: meta :: EnableIf <
+                        cds :: meta :: isDefaultConstructible < __TValueType > ()
+                >
+        > __CDS_OptimalInline auto Map < __KeyType, __ValueType > :: get (
+                __TKeyType && key
         ) noexcept -> ValueType & {
 
             bool isNew;
-            auto entry = this->entryAt ( key, isNew );
+            auto pEntry = this->entryAt ( key, isNew );
 
             if ( isNew ) {
-                auto newEntry = EntryType ( key, __ValueType () );
-                newEntry.moveOrCopyKeyTo ( & entry );
-                newEntry.moveOrCopyValueTo ( & entry, isNew );
+                new ( pEntry ) EntryType (
+                        cds :: forward < __TKeyType > ( key ),
+                        ValueType ()
+                );
             }
 
-            return entry.value();
+            return pEntry->value();
         }
 
 
         template < typename __KeyType, typename __ValueType > // NOLINT(bugprone-reserved-identifier)
-        auto Map < __KeyType, __ValueType > :: at (
+        __CDS_OptimalInline auto Map < __KeyType, __ValueType > :: at (
                 KeyType const & key
         ) noexcept (false) -> ValueType & {
 
-            auto pEntry = const_cast < EntryType * > ( reinterpret_cast < decltype ( this ) const > ( this )->pEntryAt ( key ) );
+            auto pEntry = const_cast < EntryType * > ( this->entryAt ( key ) );
             if ( pEntry == nullptr ) {
                 throw KeyException ( key );
             }
 
-            return pEntry->value;
+            return pEntry->value();
         }
 
 
         template < typename __KeyType, typename __ValueType > // NOLINT(bugprone-reserved-identifier)
-        auto Map < __KeyType, __ValueType > :: at (
+        __CDS_OptimalInline auto Map < __KeyType, __ValueType > :: at (
                 KeyType const & key
         ) const noexcept (false) -> ValueType const & {
 
-            auto pEntry = this->pEntryAt ( key );
+            auto pEntry = this->entryAt ( key );
             if ( pEntry == nullptr ) {
                 throw KeyException ( key );
             }
 
-            return pEntry->value;
+            return pEntry->value();
         }
 
 
         template < typename __KeyType, typename __ValueType > // NOLINT(bugprone-reserved-identifier)
         template < typename __TValueType, cds :: meta :: EnableIf < cds :: meta :: isDefaultConstructible < __TValueType > () > > // NOLINT(bugprone-reserved-identifier)
-        auto Map < __KeyType, __ValueType > :: operator [] (
+        __CDS_OptimalInline auto Map < __KeyType, __ValueType > :: operator [] (
                 KeyType const & key
         ) noexcept -> ValueType & {
 
@@ -134,7 +140,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
 
         template < typename __KeyType, typename __ValueType > // NOLINT(bugprone-reserved-identifier)
-        auto Map < __KeyType, __ValueType > :: operator [] (
+        __CDS_OptimalInline auto Map < __KeyType, __ValueType > :: operator [] (
                 KeyType const & key
         ) const noexcept (false) -> ValueType const & {
 
@@ -145,24 +151,16 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         template < typename __KeyType, typename __ValueType > // NOLINT(bugprone-reserved-identifier)
         __CDS_OptimalInline auto Map < __KeyType, __ValueType > :: pNewInsert (
                 ElementType const & referenceElement
-        ) noexcept -> ElementType * & {
-
-            return this->_pInsertionEntry;
-        }
-
-
-        template < typename __KeyType, typename __ValueType > // NOLINT(bugprone-reserved-identifier)
-        __CDS_OptimalInline auto Map < __KeyType, __ValueType > :: pNewInsertPost () noexcept -> void {
+        ) noexcept -> ElementType * {
 
             bool isNew;
-            auto newEntry = this->entryAt ( this->_pInsertionEntry->key(), isNew );
+            auto pNew = this->entryAt ( referenceElement.key(), isNew );
 
-            if ( isNew ) {
-                this->_pInsertionEntry->moveOrCopyKeyTo ( & newEntry );
+            if ( ! isNew ) {
+                return nullptr;
             }
 
-            this->_pInsertionEntry->moveOrCopyValueTo ( & newEntry, isNew );
-            Memory :: instance().destroy ( cds :: exchange ( this->_pInsertionEntry, nullptr ) );
+            return pNew;
         }
 
 
@@ -192,48 +190,65 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
 
         template < typename __KeyType, typename __ValueType > // NOLINT(bugprone-reserved-identifier)
-        template < typename __TKeyType, typename __TValueType > // NOLINT(bugprone-reserved-identifier)
-        auto Map < __KeyType, __ValueType > :: emplace (
+        template <
+                typename __TKeyType,    // NOLINT(bugprone-reserved-identifier)
+                typename __TValueType   // NOLINT(bugprone-reserved-identifier)
+        > auto Map < __KeyType, __ValueType > :: emplace (
                 __TKeyType      && key,
                 __TValueType    && value
         ) noexcept -> void {
 
             bool isNew = false;
-            auto entry = this->entryAt ( key, isNew );
+            auto pEntry = this->entryAt ( key, isNew );
 
             if ( isNew ) {
-                entry._key._pObject     = new ( entry._key._pObject )   __KeyType   ( std :: forward < __TKeyType > ( key ) );
-            } else {
-                entry._value._pObject->~__ValueType();
+                new ( pEntry ) ElementType (
+                        std :: forward < __TKeyType > ( key ),
+                        std :: forward < __TValueType > ( value )
+                );
+                return;
             }
 
-            entry._value._pObject   = new ( entry._value._pObject ) __ValueType ( std :: forward < __TValueType > ( value ) );
+            pEntry->value().~__ValueType();
+            new ( & pEntry->value() ) __ValueType ( std :: forward < __TValueType > ( value ) );
         }
 
 
-        template < typename __KeyType, typename __ValueType > // NOLINT(bugprone-reserved-identifier)
+        template < typename __KeyType, typename __ValueType >                                                                   // NOLINT(bugprone-reserved-identifier)
+        template < typename __TEntryType, cds :: meta :: EnableIf < cds :: meta :: isCopyConstructible < __TEntryType > () > >  // NOLINT(bugprone-reserved-identifier)
         auto Map < __KeyType, __ValueType > :: insert (
-                EntryType const & entry
+                __TEntryType const & entry
         ) noexcept -> void {
 
             bool isNew;
-            auto newEntry = this->entryAt ( entry.key(), isNew );
+            auto pEntry = this->entryAt ( entry.key(), isNew );
 
             if ( isNew ) {
-                entry.moveOrCopyKeyTo ( & newEntry );
+                new ( pEntry ) ElementType ( entry );
+                return;
             }
 
-            entry.moveOrCopyValueTo ( & newEntry, isNew );
+            pEntry->value().~__ValueType();
+            new ( & pEntry->value() ) __ValueType ( entry.value() );
         }
 
 
-        template < typename __KeyType, typename __ValueType > // NOLINT(bugprone-reserved-identifier)
-        auto Map < __KeyType, __ValueType > :: freeEntryData (
-                EntryType & entry
+        template < typename __KeyType, typename __ValueType >                                                                   // NOLINT(bugprone-reserved-identifier)
+        template < typename __TEntryType, cds :: meta :: EnableIf < cds :: meta :: isMoveConstructible < __TEntryType > () > >  // NOLINT(bugprone-reserved-identifier)
+        auto Map < __KeyType, __ValueType > :: insert (
+                __TEntryType && entry
         ) noexcept -> void {
 
-            Memory :: instance().destroy ( entry._key._pObject );
-            Memory :: instance().destroy ( entry._value._pObject );
+            bool isNew;
+            auto pEntry = this->entryAt ( entry.key(), isNew );
+
+            if ( isNew ) {
+                new ( pEntry ) ElementType ( std :: move ( entry ) ); // NOLINT(bugprone-move-forwarding-reference)
+                return;
+            }
+
+            pEntry->value().~__ValueType();
+            new ( & pEntry->value() ) __ValueType ( std :: move ( entry.value() ) );
         }
 
     }

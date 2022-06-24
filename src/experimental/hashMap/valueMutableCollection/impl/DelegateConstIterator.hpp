@@ -71,7 +71,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         template < typename __KeyType, typename __ValueType, typename __Hasher > // NOLINT(bugprone-reserved-identifier)
         __CDS_cpplang_ConstexprOverride auto HashMap < __KeyType, __ValueType, __Hasher > :: HashMapValueMutableCollectionProxy :: HashMapValueMutableCollectionProxyDelegateConstIterator :: value () const noexcept -> __ValueType const & {
 
-            return ( * this->_iterator )._value.data();
+            return ( * this->_iterator ).value();
         }
 
 
