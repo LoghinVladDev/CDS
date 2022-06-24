@@ -25,6 +25,9 @@ int main () {
     UnorderedSet < int > us = { 2, 1, 4, 3 };
     std :: cout << us << '\n';
 
+    HashSet < int > hs = { 2, 1, 4, 3 };
+    std :: cout << hs << '\n';
+
 
     return 0;
 }

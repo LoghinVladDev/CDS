@@ -1051,7 +1051,7 @@ namespace cds {             // NOLINT(modernize-concat-nested-namespaces)
             ) noexcept -> void {
 
                 if ( this == & table ) {
-                    return * this;
+                    return;
                 }
 
                 this->__clear();
@@ -1083,7 +1083,7 @@ namespace cds {             // NOLINT(modernize-concat-nested-namespaces)
             ) noexcept -> void {
 
                 if ( this == & table ) {
-                    return * this;
+                    return;
                 }
 
                 this->__clear();
