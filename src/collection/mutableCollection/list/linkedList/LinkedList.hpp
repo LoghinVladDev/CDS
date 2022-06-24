@@ -314,10 +314,10 @@ namespace cds {
     };
 
     template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
-    using SingleLinkedList __CDS_Deprecated = LinkedList < __ElementType >;
+    using SingleLinkedList __CDS_DeprecatedHint("Type 'SingleLinkedList' has been deprecated. Use 'LinkedList' instead") = LinkedList < __ElementType >;
 
     template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
-    using DoubleLinkedList __CDS_Deprecated = LinkedList < __ElementType >;
+    using DoubleLinkedList __CDS_DeprecatedHint("Type 'DoubleLinkedList' has been deprecated. Use 'LinkedList' instead") = LinkedList < __ElementType >;
 
 }
 

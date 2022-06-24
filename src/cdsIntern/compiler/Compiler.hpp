@@ -29,6 +29,7 @@
 
 #define __CDS_CarriesDependency /* NOLINT(bugprone-reserved-identifier) */
 #define __CDS_Deprecated /* NOLINT(bugprone-reserved-identifier) */
+#define __CDS_DeprecatedHint(...) /* NOLINT(bugprone-reserved-identifier) */
 #define __CDS_Fallthrough /* NOLINT(bugprone-reserved-identifier) */
 #define __CDS_Likely /* NOLINT(bugprone-reserved-identifier) */
 #define __CDS_MaybeUnused /* NOLINT(bugprone-reserved-identifier) */
@@ -76,8 +77,10 @@
 #if __CDS_cpplang_core_version >= __CDS_cpplang_core_version_14 /* NOLINT(bugprone-reserved-identifier) */
 
 #undef __CDS_Deprecated
+#undef __CDS_DeprecatedHint
 
-#define __CDS_Deprecated __CDS_OldAttribute(deprecated) /* NOLINT(bugprone-reserved-identifier) */
+#define __CDS_Deprecated __CDS_Attribute(deprecated) /* NOLINT(bugprone-reserved-identifier) */
+#define __CDS_DeprecatedHint(_message) __CDS_Attribute(deprecated(_message)) /* NOLINT(bugprone-reserved-identifier) */
 
 #define __CDS_cpplang_ConstexprNonLiteralReturn constexpr /* NOLINT(bugprone-reserved-identifier) */
 #define __CDS_cpplang_NonConstConstexprMemberFunction constexpr /* NOLINT(bugprone-reserved-identifier) */
@@ -151,9 +154,7 @@ namespace cds {
 #undef __CDS_Fallthrough
 #undef __CDS_MaybeUnused
 #undef __CDS_NoDiscard
-#undef __CDS_Deprecated
 
-#define __CDS_Deprecated __CDS_Attribute(deprecated) /* NOLINT(bugprone-reserved-identifier) */
 #define __CDS_Fallthrough __CDS_Attribute(fallthrough) /* NOLINT(bugprone-reserved-identifier) */
 #define __CDS_MaybeUnused __CDS_Attribute(maybe_unused) /* NOLINT(bugprone-reserved-identifier) */
 #define __CDS_NoDiscard __CDS_Attribute(nodiscard) /* NOLINT(bugprone-reserved-identifier) */
