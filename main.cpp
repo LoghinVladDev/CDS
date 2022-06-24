@@ -1,9 +1,9 @@
-#include <CDS/experimental/Array>
-#include <CDS/experimental/LinkedList>
-#include <CDS/experimental/HashSet>
-#include <CDS/experimental/OrderedSet>
-#include <CDS/experimental/UnorderedSet>
-#include <CDS/experimental/HashMap>
+#include <CDS/Array>
+#include <CDS/LinkedList>
+#include <CDS/HashSet>
+#include <CDS/OrderedSet>
+#include <CDS/UnorderedSet>
+#include <CDS/HashMap>
 
 using namespace cds;
 
@@ -99,115 +99,115 @@ public:
 
 int main () {
 
-    cds :: experimental :: Array < DefaultCopyMove > a;
-    cds :: experimental :: Array < DefaultCopy > b;
-    cds :: experimental :: Array < DefaultMove > c;
-    cds :: experimental :: Array < CopyMove > d;
-    cds :: experimental :: Array < Move > e;
-    cds :: experimental :: Array < Copy > f;
-    cds :: experimental :: Array < Default > g;
-    cds :: experimental :: Array < None > h;
+    cds :: Array < DefaultCopyMove > a;
+    cds :: Array < DefaultCopy > b;
+    cds :: Array < DefaultMove > c;
+    cds :: Array < CopyMove > d;
+    cds :: Array < Move > e;
+    cds :: Array < Copy > f;
+    cds :: Array < Default > g;
+    cds :: Array < None > h;
 
-    cds :: experimental :: Array < DefaultCopyMove > const ac;
-    cds :: experimental :: Array < DefaultCopy > const bc;
-    cds :: experimental :: Array < DefaultMove > const cc;
-    cds :: experimental :: Array < CopyMove > const dc;
-    cds :: experimental :: Array < Move > const ec;
-    cds :: experimental :: Array < Copy > const fc;
-    cds :: experimental :: Array < Default > const gc;
-    cds :: experimental :: Array < None > const hc;
+    cds :: Array < DefaultCopyMove > const ac;
+    cds :: Array < DefaultCopy > const bc;
+    cds :: Array < DefaultMove > const cc;
+    cds :: Array < CopyMove > const dc;
+    cds :: Array < Move > const ec;
+    cds :: Array < Copy > const fc;
+    cds :: Array < Default > const gc;
+    cds :: Array < None > const hc;
 
-    cds :: experimental :: LinkedList < DefaultCopyMove > la;
-    cds :: experimental :: LinkedList < DefaultCopy > lb;
-    cds :: experimental :: LinkedList < DefaultMove > lc;
-    cds :: experimental :: LinkedList < CopyMove > ld;
-    cds :: experimental :: LinkedList < Move > le;
-    cds :: experimental :: LinkedList < Copy > lf;
-    cds :: experimental :: LinkedList < Default > lg;
-    cds :: experimental :: LinkedList < None > lh;
+    cds :: LinkedList < DefaultCopyMove > la;
+    cds :: LinkedList < DefaultCopy > lb;
+    cds :: LinkedList < DefaultMove > lc;
+    cds :: LinkedList < CopyMove > ld;
+    cds :: LinkedList < Move > le;
+    cds :: LinkedList < Copy > lf;
+    cds :: LinkedList < Default > lg;
+    cds :: LinkedList < None > lh;
 
-    cds :: experimental :: LinkedList < DefaultCopyMove > const lac;
-    cds :: experimental :: LinkedList < DefaultCopy > const lbc;
-    cds :: experimental :: LinkedList < DefaultMove > const lcc;
-    cds :: experimental :: LinkedList < CopyMove > const ldc;
-    cds :: experimental :: LinkedList < Move > const lec;
-    cds :: experimental :: LinkedList < Copy > const lfc;
-    cds :: experimental :: LinkedList < Default > const lgc;
-    cds :: experimental :: LinkedList < None > const lhc;
+    cds :: LinkedList < DefaultCopyMove > const lac;
+    cds :: LinkedList < DefaultCopy > const lbc;
+    cds :: LinkedList < DefaultMove > const lcc;
+    cds :: LinkedList < CopyMove > const ldc;
+    cds :: LinkedList < Move > const lec;
+    cds :: LinkedList < Copy > const lfc;
+    cds :: LinkedList < Default > const lgc;
+    cds :: LinkedList < None > const lhc;
 
-    cds :: experimental :: HashSet < DefaultCopyMove > hsla;
-    cds :: experimental :: HashSet < DefaultCopy > hslb;
-    cds :: experimental :: HashSet < DefaultMove > hslc;
-    cds :: experimental :: HashSet < CopyMove > hsld;
-    cds :: experimental :: HashSet < Move > hsle;
-    cds :: experimental :: HashSet < Copy > hslf;
-    cds :: experimental :: HashSet < Default > hslg;
-    cds :: experimental :: HashSet < None > hslh;
-    cds :: experimental :: HashSet < DefaultCopyMove > const hslac;
-    cds :: experimental :: HashSet < DefaultCopy > const hslbc;
-    cds :: experimental :: HashSet < DefaultMove > const hslcc;
-    cds :: experimental :: HashSet < CopyMove > const hsldc;
-    cds :: experimental :: HashSet < Move > const hslec;
-    cds :: experimental :: HashSet < Copy > const hslfc;
-    cds :: experimental :: HashSet < Default > const hslgc;
-    cds :: experimental :: HashSet < None > const hslhc;
+    cds :: HashSet < DefaultCopyMove > hsla;
+    cds :: HashSet < DefaultCopy > hslb;
+    cds :: HashSet < DefaultMove > hslc;
+    cds :: HashSet < CopyMove > hsld;
+    cds :: HashSet < Move > hsle;
+    cds :: HashSet < Copy > hslf;
+    cds :: HashSet < Default > hslg;
+    cds :: HashSet < None > hslh;
+    cds :: HashSet < DefaultCopyMove > const hslac;
+    cds :: HashSet < DefaultCopy > const hslbc;
+    cds :: HashSet < DefaultMove > const hslcc;
+    cds :: HashSet < CopyMove > const hsldc;
+    cds :: HashSet < Move > const hslec;
+    cds :: HashSet < Copy > const hslfc;
+    cds :: HashSet < Default > const hslgc;
+    cds :: HashSet < None > const hslhc;
 
-    cds :: experimental :: UnorderedSet < DefaultCopyMove > usla;
-    cds :: experimental :: UnorderedSet < DefaultCopy > uslb;
-    cds :: experimental :: UnorderedSet < DefaultMove > uslc;
-    cds :: experimental :: UnorderedSet < CopyMove > usld;
-    cds :: experimental :: UnorderedSet < Move > usle;
-    cds :: experimental :: UnorderedSet < Copy > uslf;
-    cds :: experimental :: UnorderedSet < Default > uslg;
-    cds :: experimental :: UnorderedSet < None > uslh;
-    cds :: experimental :: UnorderedSet < DefaultCopyMove > const uslac;
-    cds :: experimental :: UnorderedSet < DefaultCopy > const uslbc;
-    cds :: experimental :: UnorderedSet < DefaultMove > const uslcc;
-    cds :: experimental :: UnorderedSet < CopyMove > const usldc;
-    cds :: experimental :: UnorderedSet < Move > const uslec;
-    cds :: experimental :: UnorderedSet < Copy > const uslfc;
-    cds :: experimental :: UnorderedSet < Default > const uslgc;
-    cds :: experimental :: UnorderedSet < None > const uslhc;
+    cds :: UnorderedSet < DefaultCopyMove > usla;
+    cds :: UnorderedSet < DefaultCopy > uslb;
+    cds :: UnorderedSet < DefaultMove > uslc;
+    cds :: UnorderedSet < CopyMove > usld;
+    cds :: UnorderedSet < Move > usle;
+    cds :: UnorderedSet < Copy > uslf;
+    cds :: UnorderedSet < Default > uslg;
+    cds :: UnorderedSet < None > uslh;
+    cds :: UnorderedSet < DefaultCopyMove > const uslac;
+    cds :: UnorderedSet < DefaultCopy > const uslbc;
+    cds :: UnorderedSet < DefaultMove > const uslcc;
+    cds :: UnorderedSet < CopyMove > const usldc;
+    cds :: UnorderedSet < Move > const uslec;
+    cds :: UnorderedSet < Copy > const uslfc;
+    cds :: UnorderedSet < Default > const uslgc;
+    cds :: UnorderedSet < None > const uslhc;
 
-    cds :: experimental :: HashMap < DefaultCopyMove, DefaultCopyMove > hmla;
-    cds :: experimental :: HashMap < DefaultCopy, DefaultCopy > hmlb;
-    cds :: experimental :: HashMap < DefaultMove, DefaultMove > hmlc;
-    cds :: experimental :: HashMap < CopyMove, CopyMove > hmld;
-    cds :: experimental :: HashMap < Move, Move > hmle;
-    cds :: experimental :: HashMap < Copy, Copy > hmlf;
-    cds :: experimental :: HashMap < Default, Default > hmlg;
-    cds :: experimental :: HashMap < None, None > hmlh;
-    cds :: experimental :: HashMap < DefaultCopyMove, DefaultCopyMove > const hmlac;
-    cds :: experimental :: HashMap < DefaultCopy, DefaultCopy > const hmlbc;
-    cds :: experimental :: HashMap < DefaultMove, DefaultMove > const hmlcc;
-    cds :: experimental :: HashMap < CopyMove, CopyMove > const hmldc;
-    cds :: experimental :: HashMap < Move, Move > const hmlec;
-    cds :: experimental :: HashMap < Copy, Copy > const hmlfc;
-    cds :: experimental :: HashMap < Default, Default > const hmlgc;
-    cds :: experimental :: HashMap < None, None > const hmlhc;
+    cds :: HashMap < DefaultCopyMove, DefaultCopyMove > hmla;
+    cds :: HashMap < DefaultCopy, DefaultCopy > hmlb;
+    cds :: HashMap < DefaultMove, DefaultMove > hmlc;
+    cds :: HashMap < CopyMove, CopyMove > hmld;
+    cds :: HashMap < Move, Move > hmle;
+    cds :: HashMap < Copy, Copy > hmlf;
+    cds :: HashMap < Default, Default > hmlg;
+    cds :: HashMap < None, None > hmlh;
+    cds :: HashMap < DefaultCopyMove, DefaultCopyMove > const hmlac;
+    cds :: HashMap < DefaultCopy, DefaultCopy > const hmlbc;
+    cds :: HashMap < DefaultMove, DefaultMove > const hmlcc;
+    cds :: HashMap < CopyMove, CopyMove > const hmldc;
+    cds :: HashMap < Move, Move > const hmlec;
+    cds :: HashMap < Copy, Copy > const hmlfc;
+    cds :: HashMap < Default, Default > const hmlgc;
+    cds :: HashMap < None, None > const hmlhc;
 
 
-    cds :: experimental :: OrderedSet < DefaultCopyMove, experimental :: FunctionComparator < DefaultCopyMove, & cds :: meta :: equals < DefaultCopyMove > > > osla;
-    cds :: experimental :: OrderedSet < DefaultCopy, experimental :: FunctionComparator < DefaultCopy, & cds :: meta :: equals < DefaultCopy > > > oslb;
-    cds :: experimental :: OrderedSet < DefaultMove, experimental :: FunctionComparator < DefaultMove, & cds :: meta :: equals < DefaultMove > > > oslc;
-    cds :: experimental :: OrderedSet < CopyMove, experimental :: FunctionComparator < CopyMove, & cds :: meta :: equals < CopyMove > > > osld;
-    cds :: experimental :: OrderedSet < Move, experimental :: FunctionComparator < Move, & cds :: meta :: equals < Move > > > osle;
-    cds :: experimental :: OrderedSet < Copy, experimental :: FunctionComparator < Copy, & cds :: meta :: equals < Copy > > > oslf;
-    cds :: experimental :: OrderedSet < Default, experimental :: FunctionComparator < Default, & cds :: meta :: equals < Default > > > oslg;
-    cds :: experimental :: OrderedSet < None, experimental :: FunctionComparator < None, & cds :: meta :: equals < None > > > oslh;
-    cds :: experimental :: OrderedSet < DefaultCopyMove, experimental :: FunctionComparator < DefaultCopyMove, & cds :: meta :: equals < DefaultCopyMove > > > const oslac;
-    cds :: experimental :: OrderedSet < DefaultCopy, experimental :: FunctionComparator < DefaultCopy, & cds :: meta :: equals < DefaultCopy > > > const oslbc;
-    cds :: experimental :: OrderedSet < DefaultMove, experimental :: FunctionComparator < DefaultMove, & cds :: meta :: equals < DefaultMove > > > const oslcc;
-    cds :: experimental :: OrderedSet < CopyMove, experimental :: FunctionComparator < CopyMove, & cds :: meta :: equals < CopyMove > > > const osldc;
-    cds :: experimental :: OrderedSet < Move, experimental :: FunctionComparator < Move, & cds :: meta :: equals < Move > > > const oslec;
-    cds :: experimental :: OrderedSet < Copy, experimental :: FunctionComparator < Copy, & cds :: meta :: equals < Copy > > > const oslfc;
-    cds :: experimental :: OrderedSet < Default, experimental :: FunctionComparator < Default, & cds :: meta :: equals < Default > > > const oslgc;
-    cds :: experimental :: OrderedSet < None, experimental :: FunctionComparator < None, & cds :: meta :: equals < None > > > const oslhc;
+    cds :: OrderedSet < DefaultCopyMove, FunctionComparator < DefaultCopyMove, & cds :: meta :: equals < DefaultCopyMove > > > osla;
+    cds :: OrderedSet < DefaultCopy, FunctionComparator < DefaultCopy, & cds :: meta :: equals < DefaultCopy > > > oslb;
+    cds :: OrderedSet < DefaultMove, FunctionComparator < DefaultMove, & cds :: meta :: equals < DefaultMove > > > oslc;
+    cds :: OrderedSet < CopyMove, FunctionComparator < CopyMove, & cds :: meta :: equals < CopyMove > > > osld;
+    cds :: OrderedSet < Move, FunctionComparator < Move, & cds :: meta :: equals < Move > > > osle;
+    cds :: OrderedSet < Copy, FunctionComparator < Copy, & cds :: meta :: equals < Copy > > > oslf;
+    cds :: OrderedSet < Default, FunctionComparator < Default, & cds :: meta :: equals < Default > > > oslg;
+    cds :: OrderedSet < None, FunctionComparator < None, & cds :: meta :: equals < None > > > oslh;
+    cds :: OrderedSet < DefaultCopyMove, FunctionComparator < DefaultCopyMove, & cds :: meta :: equals < DefaultCopyMove > > > const oslac;
+    cds :: OrderedSet < DefaultCopy, FunctionComparator < DefaultCopy, & cds :: meta :: equals < DefaultCopy > > > const oslbc;
+    cds :: OrderedSet < DefaultMove, FunctionComparator < DefaultMove, & cds :: meta :: equals < DefaultMove > > > const oslcc;
+    cds :: OrderedSet < CopyMove, FunctionComparator < CopyMove, & cds :: meta :: equals < CopyMove > > > const osldc;
+    cds :: OrderedSet < Move, FunctionComparator < Move, & cds :: meta :: equals < Move > > > const oslec;
+    cds :: OrderedSet < Copy, FunctionComparator < Copy, & cds :: meta :: equals < Copy > > > const oslfc;
+    cds :: OrderedSet < Default, FunctionComparator < Default, & cds :: meta :: equals < Default > > > const oslgc;
+    cds :: OrderedSet < None, FunctionComparator < None, & cds :: meta :: equals < None > > > const oslhc;
 
-    cds :: experimental :: Array < int > arr = { 5, 4, 3, 2, 1 };
-    cds :: experimental :: Array < int > const arrc = { 1, 2, 3, 4, 5 };
+    cds :: Array < int > arr = { 5, 4, 3, 2, 1 };
+    cds :: Array < int > const arrc = { 1, 2, 3, 4, 5 };
 
-    experimental :: Collection < int > & c2 = arr;
+    Collection < int > & c2 = arr;
 
 //    arr.forEach ( [] ( int v ) { v = 3; } );
 //    arr.forEach ( [] ( int & v ) { v = 3; } );
@@ -227,8 +227,8 @@ arrc.findLast ( [](int v){return true;} );
     std :: for_each ( arrc.begin(), arrc.end(), [] ( auto const & v ) { std :: cout << v << '\n'; } );
 * arr.begin() = 3;
 //    arr.insertBefore ( arr.begin(), 3 );
-    std :: cout << arrc.sub < cds :: experimental :: Array > ( 1, 3 );
-    std :: cout << arrc.sub < cds :: experimental :: Array < int > > ( 1, 3 ) << '\n';
+    std :: cout << arrc.sub < cds :: Array > ( 1, 3 );
+    std :: cout << arrc.sub < cds :: Array < int > > ( 1, 3 ) << '\n';
 
     arr.sort();
     std :: cout << arr << '\n';
