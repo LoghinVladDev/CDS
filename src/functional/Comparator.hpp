@@ -44,29 +44,27 @@ namespace cds {
 
 #include "../shared/impl/generalPredicates.hpp"
 
-namespace cds { // NOLINT(modernize-concat-nested-namespaces)
-    namespace experimental {
+namespace cds {
 
-        namespace utility {
+    namespace utility {
 
-            template < typename __Type > // NOLINT(bugprone-reserved-identifier)
-            using ComparisonFunction = decltype ( & predicates :: lessThan < __Type > );
-
-        }
-
-        template < typename __Type, utility :: ComparisonFunction < __Type > __comparisonFunction > // NOLINT(bugprone-reserved-identifier)
-        class FunctionComparator : public Comparator < __Type > {
-        public:
-            __CDS_NoDiscard constexpr auto operator () (
-                    __Type const & left,
-                    __Type const & right
-            ) const noexcept ( noexcept ( __comparisonFunction ( left, right ) ) ) -> bool override {
-
-                return __comparisonFunction ( left, right );
-            }
-        };
+        template < typename __Type > // NOLINT(bugprone-reserved-identifier)
+        using ComparisonFunction = decltype ( & predicates :: lessThan < __Type > );
 
     }
+
+    template < typename __Type, utility :: ComparisonFunction < __Type > __comparisonFunction > // NOLINT(bugprone-reserved-identifier)
+    class FunctionComparator : public Comparator < __Type > {
+    public:
+        __CDS_NoDiscard constexpr auto operator () (
+                __Type const & left,
+                __Type const & right
+        ) const noexcept ( noexcept ( __comparisonFunction ( left, right ) ) ) -> bool override {
+
+            return __comparisonFunction ( left, right );
+        }
+    };
+
 }
 
 #endif //CDS_COMPARATOR_HPP
