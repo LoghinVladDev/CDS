@@ -3,6 +3,7 @@
 #include <CDS/experimental/LinkedList>
 #include <CDS/experimental/OrderedSet>
 #include <CDS/experimental/UnorderedSet>
+#include <CDS/experimental/HashSet>
 //#include <CDS/smartPointers/UniquePointer>
 //#include <CDS/meta/TypeTraits>
 //#include <CDS/meta/FunctionTraits>
@@ -23,60 +24,28 @@
 
 using namespace cds;
 using namespace cds :: literals;
-
+#include <unordered_set>
 
 int main () {
 
-    cds :: experimental :: Array < int > arr;
 
-    for ( int i = 0; i < 10000; ++ i ) {
-        arr.pushBack(i);
+
+    auto start = std :: chrono :: system_clock :: now();
+//    std :: unordered_set <int> hs;
+    cds::experimental::HashSet <int> hs;
+    hs.insert(3);
+    hs.insert(2);
+    hs.insert(4);
+
+    for ( int i = 0; i < 10000000; ++ i ) {
+        hs.insert(i);
     }
+    auto end = std :: chrono :: system_clock :: now();
+    std :: cout
+            << "Duration : "
+            << std :: chrono :: duration_cast < std :: chrono :: milliseconds > ( end - start ).count() << '\n';
 
-    std :: cout << arr << '\n';
-
-    for ( int i = 0; i < arr.size(); ++ i ) {
-        std :: cout << arr.data()[i] << '\n';
-    }
-
-
-    arr.clear();
-    arr.add(3);
-    arr.add(3);
-    arr.add(3);
-
-    arr.remove ( 2, 3 );
-    std :: cout << arr << '\n';
-
-    cds :: experimental :: LinkedList < String > llstr;
-
-    for ( int i = 0; i < 10000; ++ i ) {
-        llstr.pushBack(i);
-    }
-
-    std :: cout << llstr << '\n';
-
-    cds::experimental::OrderedSet<int> os;
-    os.insert(3);
-    os.insert(2);
-    os.insert(4);
-
-    for ( int i = 0; i < 100; ++ i ) {
-        os.insert(i);
-    }
-
-    std :: cout << os << '\n';
-
-    cds::experimental::UnorderedSet<int> us;
-    us.insert(3);
-    us.insert(2);
-    us.insert(4);
-
-    for ( int i = 0; i < 100; ++ i ) {
-        us.insert(i);
-    }
-
-    std :: cout << us << '\n';
+//    std :: cout << hs << '\n';
 
 //    cds :: experimental :: HashMap < String, String > m;
 ////    cds :: HashMap < int, int > m;

@@ -9,6 +9,8 @@
 #include <CDS/Destructor>
 #include <CDS/Extractor>
 #include <CDS/CopyConstructor>
+#include <CDS/Comparator>
+#include <CDS/Hasher>
 #include "../shared/rehashPolicy/rehashPolicy.hpp"
 #include "shared/hash/HashTable.hpp"
 #include "hashSet/HashTableConstructs.hpp"
@@ -63,7 +65,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         protected:
             using __HashTableFunctionComparator =   // NOLINT(bugprone-reserved-identifier)
                     FunctionComparator <
-                            __HashTableElementType,
+                            __ElementType,
                             & cds :: meta :: equals < __ElementType >
                     >;
             
@@ -227,10 +229,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         protected:
             auto pNewInsert (
                     ElementType const & referenceElement
-            ) noexcept -> ElementType * & override;
-
-        protected:
-            auto pNewInsertPost () noexcept -> void;
+            ) noexcept -> ElementType * override;
 
         public:
             auto contains (
@@ -291,6 +290,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 #include "hashSet/CTAD.hpp"
 
 #include "shared/hashSet/impl/HashSetSequence.hpp"
+#include "shared/hash/impl/HashTable.hpp"
 
 #include "shared/collection/FunctionalConstructors.hpp"
 #include "shared/collection/impl/FunctionalConstructors.hpp"

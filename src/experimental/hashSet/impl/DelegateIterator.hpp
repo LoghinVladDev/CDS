@@ -11,7 +11,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
         template < typename __ElementType, typename __HashCalculator > // NOLINT(bugprone-reserved-identifier)
         constexpr HashSet < __ElementType, __HashCalculator > :: HashSetDelegateIterator :: HashSetDelegateIterator (
-                HashTableIterator const & iterator
+                HashTableConstIterator const & iterator
         ) noexcept :
                 _iterator ( iterator ) {
 
@@ -44,7 +44,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
 
         template < typename __ElementType, typename __HashCalculator > // NOLINT(bugprone-reserved-identifier)
-        constexpr auto HashSet < __ElementType, __HashCalculator > :: HashSetDelegateIterator :: iterator () const noexcept -> HashTableIterator const & {
+        constexpr auto HashSet < __ElementType, __HashCalculator > :: HashSetDelegateIterator :: iterator () const noexcept -> HashTableConstIterator const & {
 
             return this->_iterator;
         }

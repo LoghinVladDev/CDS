@@ -9,6 +9,8 @@
 #include <CDS/Destructor>
 #include <CDS/Extractor>
 #include <CDS/CopyConstructor>
+#include <CDS/Comparator>
+#include <CDS/Hasher>
 #include "../shared/rehashPolicy/rehashPolicy.hpp"
 #include "shared/hash/HashTable.hpp"
 #include "hashMap/HashTableConstructs.hpp"

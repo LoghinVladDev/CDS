@@ -12,14 +12,14 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         class HashSet < __ElementType, __Hasher > :: HashSetDelegateIterator : public DelegateConstIterator {
 
         private:
-            using HashTableIterator = typename HashSet < __ElementType, __Hasher > :: HashTableIterator;
+            using HashTableConstIterator = typename HashSet < __ElementType, __Hasher > :: HashTableConstIterator;
 
         private:
-            HashTableIterator _iterator;
+            HashTableConstIterator _iterator;
 
         public:
             __CDS_Explicit constexpr HashSetDelegateIterator (
-                    HashTableIterator const & iterator
+                    HashTableConstIterator const & iterator
             ) noexcept;
 
         public:
@@ -39,7 +39,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             __CDS_NoDiscard constexpr auto valid () const noexcept -> bool override;
 
         public:
-            __CDS_NoDiscard constexpr auto iterator () const noexcept -> HashTableIterator const &;
+            __CDS_NoDiscard constexpr auto iterator () const noexcept -> HashTableConstIterator const &;
 
         public:
             __CDS_cpplang_ConstexprOverride auto next () noexcept -> HashSetDelegateIterator & override;

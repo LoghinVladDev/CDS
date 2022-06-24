@@ -25,7 +25,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
 
                 template < typename __ElementType >             // NOLINT(bugprone-reserved-identifier)
                 constexpr auto __hashSetDataNodeDestructor (      // NOLINT(bugprone-reserved-identifier)
-                        __HashSetDataNode < __ElementType > const & dataNode
+                        __HashSetDataNode < __ElementType > & dataNode
                 ) noexcept -> void {
 
                     dataNode.destruct();

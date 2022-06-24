@@ -260,29 +260,11 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         template < typename __ElementType, typename __Hasher > // NOLINT(bugprone-reserved-identifier)
         auto HashSet < __ElementType, __Hasher > :: pNewInsert (
                 ElementType const & referenceElement
-        ) noexcept -> ElementType * & {
+        ) noexcept -> ElementType * {
 
-            if ( this->_listArray == nullptr ) {
-                this->_listArray = Memory :: instance().createArray < Node * > ( this->_hashCalculator.getBoundary() );
-                (void) std :: memset ( this->_listArray, 0, sizeof ( Node * ) * this->_hashCalculator.getBoundary() );
-            }
-
-            auto   hashValue    = this->_hashCalculator ( referenceElement );
-            auto & listToAddTo  = this->_listArray [ hashValue ];
-
-            for ( Node * pHead = listToAddTo; pHead != nullptr; pHead = pHead->_pNext ) {
-                if ( cds :: meta :: equals ( * pHead->_pData, referenceElement ) ) {
-                    return pHead->_pData;
-                }
-            }
-
-            auto pNode = Memory :: instance().create < Node > ();
-            pNode->_pData = nullptr;
-            pNode->_pNext = listToAddTo;
-            listToAddTo   = pNode;
-
-            ++ this->_size;
-            return listToAddTo->_pData;
+            bool isNew;
+            auto pEntry = this->__get ( referenceElement, & isNew );
+            return isNew ? & pEntry->data() : nullptr;
         }
 
 
@@ -291,36 +273,14 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 ElementType const & element
         ) const noexcept -> bool {
 
-            if ( this->empty() ) {
-                return false;
-            }
-
-            auto hashValue    = this->_hashCalculator ( element );
-            for ( auto head = this->_listArray [ hashValue ]; head != nullptr; head = head->_pNext ) {
-                if ( cds :: meta :: equals ( * head->_pData, element ) ) {
-                    return true;
-                }
-            }
-
-            return false;
+            return this->__get ( element ) != nullptr;
         }
 
 
         template < typename __ElementType, typename __Hasher > // NOLINT(bugprone-reserved-identifier)
         auto HashSet < __ElementType, __Hasher > :: clear () noexcept -> void {
 
-            if ( this->_listArray == nullptr ) {
-                return;
-            }
-
-            for ( Size index = 0ULL; index < this->_hashCalculator.getBoundary(); ++ index ) {
-                while ( this->_listArray [ index ] != nullptr ) {
-                    auto * pHead = this->_listArray [ index ];
-                    this->_listArray [ index ] = this->_listArray [ index ]->_pNext;
-                    Memory :: instance().destroy ( pHead->_pData );
-                    Memory :: instance().destroy (pHead );
-                }
-            }
+            this->__clear();
         }
 
 
@@ -329,33 +289,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 HashSet const & set
         ) const noexcept -> bool {
 
-            if ( this == & set ) {
-                return true;
-            }
-
-            if ( this->size() != set.size() ) {
-                return false;
-            }
-
-            for ( Size index = 0ULL; index < this->_hashCalculator.getBoundary(); ++ index ) {
-                auto pThisHead  = this->_listArray [ index ];
-                auto pOtherHead = set._listArray [ index ];
-
-                while ( pThisHead != nullptr && pOtherHead != nullptr ) {
-                    if ( ! cds :: meta :: equals ( * pThisHead->_pData, * pOtherHead->_pData ) ) {
-                        return false;
-                    }
-                }
-
-                if ( pThisHead != nullptr || pOtherHead != nullptr ) {
-                    return false;
-                }
-
-                pThisHead   = pThisHead->_pNext;
-                pOtherHead  = pOtherHead->_pNext;
-            }
-
-            return true;
+            return this->__equals ( set );
         }
 
 
@@ -364,7 +298,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 HashSet const & set
         ) const noexcept -> bool {
 
-            return ! this->operator == ( set );
+            return ! this->__equals ( set );
         }
 
 
@@ -378,11 +312,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 return * this;
             }
 
-            this->clear();
-            for ( auto iterator = set.begin(), end = set.end(); iterator != end; ++ iterator ) {
-                this->HashSet :: insert ( * iterator );
-            }
-
+            this->__assign ( set, __HashTableFunctionCopyConstructor () );
             return * this;
         }
 
@@ -396,11 +326,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 return * this;
             }
 
-            this->clear();
-
-            this->_listArray    = cds :: exchange ( set._listArray, nullptr );
-            this->_size         = cds :: exchange ( set._size, 0ULL );
-
+            this->__assign ( std :: move ( set ) );
             return * this;
         }
 
@@ -415,9 +341,9 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 return * this;
             }
 
-            this->clear();
+            this->__clear();
             for ( auto iterator = collection.begin(), end = collection.end(); iterator != end; ++ iterator ) {
-                this->HashSet :: insert ( * iterator );
+                this->insert ( * iterator );
             }
 
             return * this;
