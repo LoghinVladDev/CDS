@@ -63,7 +63,7 @@ namespace cds {
          */
         virtual ~AbstractIterator () noexcept = default;
 
-    public:
+    protected:
         /**
          * @brief Constructor Specialization
          * @param pCollection : Collection < T > cptr = Pointer to a Constant Collection this Iterator was created from
