@@ -4,6 +4,7 @@
 #include <CDS/OrderedSet>
 #include <CDS/UnorderedSet>
 #include <CDS/HashSet>
+#include <CDS/LinkedHashSet>
 #include <CDS/Map>
 #include <CDS/HashMap>
 
@@ -34,6 +35,9 @@ int main () {
     std :: cout << hm << '\n';
 
     std :: cout << __CDS_cpplang_core_version << '\n';
+
+    LinkedHashSet < int > lhs = { 3, 2, 1, 4 };
+    std :: cout << lhs << '\n';
 
 
     return 0;

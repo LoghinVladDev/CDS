@@ -291,7 +291,6 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 #include "hashSet/CTAD.hpp"
 
 #include "../../../shared/hashSet/impl/HashSetSequence.hpp"
-#include "../../../shared/hashTable/impl/HashTable.hpp"
 
 #include "../../../shared/collection/FunctionalConstructors.hpp"
 #include "../../../shared/collection/impl/FunctionalConstructors.hpp"

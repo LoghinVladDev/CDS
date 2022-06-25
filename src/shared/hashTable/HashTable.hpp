@@ -5,7 +5,7 @@
 #ifndef __CDS_SHARED_HASH_TABLE_HPP__
 #define __CDS_SHARED_HASH_TABLE_HPP__
 
-#include "HashTableUtils.hpp"
+#include "hashTable/HashTableUtils.hpp"
 #include "../Node.hpp"
 
 namespace cds {             // NOLINT(modernize-concat-nested-namespaces)
@@ -246,10 +246,11 @@ namespace cds {             // NOLINT(modernize-concat-nested-namespaces)
     }
 }
 
-#include "Iterator.hpp"
-#include "ConstIterator.hpp"
+#include "hashTable/Iterator.hpp"
+#include "hashTable/ConstIterator.hpp"
 
-#include "impl/Iterator.hpp"
-#include "impl/ConstIterator.hpp"
+#include "hashTable/impl/Iterator.hpp"
+#include "hashTable/impl/ConstIterator.hpp"
+#include "hashTable/impl/HashTable.hpp"
 
 #endif // __CDS_SHARED_HASH_TABLE_HPP__
