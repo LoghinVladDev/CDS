@@ -8,32 +8,10 @@ enum class E1 {
     f2 = 0x02
 };
 
-template < typename D >
-class B1 {
-public:
-    int g() {
-        return static_cast < D * > ( this )->f();
-    }
-};
-
-template < typename D >
-class B2 : public B1 < D > {
-
-};
-
-class Lowest : public B2 < Lowest > {
-public:
-    int f() {
-        return 2;
-    }
-};
 
 using namespace cds :: experimental;
 
 int main () {
-    Lowest l;
-    std :: cout << l.g();
-
     Array < int > a;
 
     a.pushBack (3);
@@ -43,7 +21,11 @@ int main () {
     a.pushBack (3);
 
     for ( auto & e : a ) {
-        std :: cout << e;
+        std :: cout << e << ' ';
+    }
+    std :: cout << '\n';
+    for ( auto & e : ( Collection < int > const & ) a ) {
+        std :: cout << e << ' ';
     }
 
     return 0;

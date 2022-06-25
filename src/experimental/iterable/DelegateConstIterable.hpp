@@ -34,7 +34,7 @@ namespace cds {
             protected: __AbstractIterator ( __AbstractIterator const & it ) noexcept : _pOwner ( it._pOwner ), _pDelegate ( it._pDelegate->copy() ) {}
             protected: __AbstractIterator ( __AbstractIterator && it ) noexcept : _pOwner ( it._pOwner ), _pDelegate ( cds :: exchange ( it._pDelegate, nullptr ) ) {}
             public: virtual ~__AbstractIterator () noexcept {
-                delete this->_pOwner;
+                delete this->_pDelegate;
             }
 
             protected:
@@ -154,7 +154,7 @@ namespace cds {
             protected: auto cbegin () const noexcept -> __dfci_Iterator {
                     return __dfci_Iterator (
                             static_cast < __DerivedType const * > ( this ),
-                            static_cast < __DerivedType const * > ( this )->__dci_delegate ( DelegateIteratorRequestType::ForwardEnd )
+                            static_cast < __DerivedType const * > ( this )->__dci_delegate ( DelegateIteratorRequestType::ForwardBegin )
                     );
                 }
             protected: auto cend () const noexcept -> __dfci_Iterator {
@@ -220,7 +220,86 @@ namespace cds {
             class __DelegateIterable {
             protected: using DelegateIteratorRequestType = __hidden :: __impl :: DelegateIteratorRequestType;
             protected: auto __di_delegate ( DelegateIteratorRequestType )
-                       const noexcept -> __AbstractDelegateIterator < __ElementType > *;
+                       noexcept -> __AbstractDelegateIterator < __ElementType > *;
+            };
+
+            template <
+                    typename __ElementType, // NOLINT(bugprone-reserved-identifier)
+                    typename __IteratorType // NOLINT(bugprone-reserved-identifier)
+            > class __DelegateIterableIterator : public __AbstractDelegateIterator < __ElementType > {
+            private: __IteratorType it;
+            public: __DelegateIterableIterator () noexcept = default;
+            public: __DelegateIterableIterator (__DelegateIterableIterator const&) noexcept = default;
+            public: ~__DelegateIterableIterator () noexcept override = default;
+            public: __DelegateIterableIterator ( __IteratorType it ) noexcept : it (it) {}
+            public: auto advance ( __IteratorAdvanceDirection direction ) noexcept -> __DelegateIterableIterator & override {
+                ++ it;
+                return * this;
+            }
+            public: auto equals ( __AbstractDelegateIterator < __ElementType > const & it ) const noexcept -> bool override {
+                return this->it == reinterpret_cast < decltype ( this ) > ( & it )->it;
+            }
+            public: auto valid () const noexcept -> bool override {
+                return it.valid();
+            }
+            public: auto copy () const noexcept -> __DelegateIterableIterator * override {
+                return new __DelegateIterableIterator(* this);
+            }
+            public: auto value () const noexcept -> __ElementType & override {
+                return * it;
+            }
+            };
+
+            template <
+                    typename __DerivedType,
+                    typename __ElementType,
+                    typename __IteratorType
+            > class __DelegateConstIterableImplForward {
+            protected:
+                using __dci_DelegateIterator = __DelegateIterableIterator < __ElementType const, __IteratorType >;
+            protected:
+                auto __dci_begin () const noexcept -> __AbstractDelegateIterator < __ElementType const > * {
+                    return new __dci_DelegateIterator ( static_cast < __DerivedType const * > ( this )->begin() );
+                }
+                auto __dci_end () const noexcept -> __AbstractDelegateIterator < __ElementType const > * {
+                    return new __dci_DelegateIterator ( static_cast < __DerivedType const * > ( this )->end() );
+                }
+            };
+
+            template <
+                    typename __ElementType
+            > class __DelegateConstIterableImplNoForward {
+                auto __dci_begin () const noexcept -> __AbstractDelegateIterator < __ElementType const > * {
+                    return nullptr;
+                }
+                auto __dci_end () const noexcept -> __AbstractDelegateIterator < __ElementType const > * {
+                    return nullptr;
+                }
+            };
+
+            template <
+                    typename __DerivedType, // NOLINT(bugprone-reserved-identifier)
+                    typename __ElementType, // NOLINT(bugprone-reserved-identifier)
+                    typename __IteratorType, // NOLINT(bugprone-reserved-identifier)
+                    bool __forward, // NOLINT(bugprone-reserved-identifier)
+                    bool __backward // NOLINT(bugprone-reserved-identifier)
+            > class __DelegateConstIterableImpl:
+                    public cds :: meta :: Conditional <
+                            __forward,
+                            __DelegateConstIterableImplForward < __DerivedType, __ElementType, __IteratorType >,
+                            __DelegateConstIterableImplNoForward < __ElementType >
+                    > {
+
+            protected:
+                auto __dci_delegateAcquisition ( DelegateIteratorRequestType requestType ) const noexcept ->
+                        __AbstractDelegateIterator < __ElementType const > * {
+
+                    switch ( requestType ) {
+                        case DelegateIteratorRequestType::ForwardBegin : return this->__dci_begin();
+                        case DelegateIteratorRequestType::ForwardEnd : return this->__dci_end();
+                        default: return nullptr;
+                    }
+                }
             };
 
         }
