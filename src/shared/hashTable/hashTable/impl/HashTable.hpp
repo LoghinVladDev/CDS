@@ -1090,6 +1090,49 @@ namespace cds {             // NOLINT(modernize-concat-nested-namespaces)
                 this->__ht_moveFrom ( std :: move ( table ) );
             }
 
+
+            template <
+                    typename __ElementType,         // NOLINT(bugprone-reserved-identifier)
+                    typename __KeyType,             // NOLINT(bugprone-reserved-identifier)
+                    typename __KeyExtractor,        // NOLINT(bugprone-reserved-identifier)
+                    typename __KeyEqualsComparator, // NOLINT(bugprone-reserved-identifier)
+                    typename __KeyHasher,           // NOLINT(bugprone-reserved-identifier)
+                    typename __RehashPolicy,        // NOLINT(bugprone-reserved-identifier)
+                    typename __ElementTypeDestruct  // NOLINT(bugprone-reserved-identifier)
+            > auto __HashTable <
+                    __ElementType,
+                    __KeyType,
+                    __KeyExtractor,
+                    __KeyEqualsComparator,
+                    __KeyHasher,
+                    __RehashPolicy,
+                    __ElementTypeDestruct
+            > :: __ht_find (
+                    __KeyType const & key
+            ) noexcept -> HashTableIterator {
+
+                if ( this->__ht_empty() ) {
+                    return this->__ht_end();
+                }
+
+                auto bucketIndex = this->_hasher ( key ) % this->_bucketArray._size;
+                auto pSeekNode   = this->_bucketArray._pArray [ bucketIndex ];
+
+                while ( pSeekNode != nullptr ) {
+                    if ( this->_equals ( this->_key ( pSeekNode->_data.data() ), key ) ) {
+                        return HashTableIterator (
+                                this,
+                                pSeekNode,
+                                bucketIndex
+                        );
+                    }
+
+                    pSeekNode = pSeekNode->_pNext;
+                }
+
+                return this->__ht_end();
+            }
+
         }
     }
 }

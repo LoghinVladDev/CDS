@@ -178,6 +178,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             return true;
         }
 
+
         template < typename __T > // NOLINT(bugprone-reserved-identifier)
         constexpr auto alwaysFalse (
                 __T const &
@@ -185,6 +186,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
             return false;
         }
+
     }
 }
 

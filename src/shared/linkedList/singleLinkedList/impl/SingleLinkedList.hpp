@@ -227,7 +227,9 @@ namespace cds {             // NOLINT(modernize-concat-nested-namespaces)
                 pNewNode->_pNext    = nullptr;
 
                 if ( this->_pBack != nullptr ) {
-                    this->_pBack->_pNext = pNewNode;
+                    this->_pBack->_pNext    = pNewNode;
+                } else {
+                    this->_pFront           = pNewNode;
                 }
 
                 this->_pBack = pNewNode;
@@ -476,6 +478,34 @@ namespace cds {             // NOLINT(modernize-concat-nested-namespaces)
 
                 this->__sll_clear();
                 this->__sll_moveFrom ( std :: move ( list ) );
+            }
+
+
+            template <
+                    typename __ElementType,     // NOLINT(bugprone-reserved-identifier)
+                    typename __ElementEquals,   // NOLINT(bugprone-reserved-identifier)
+                    typename __ElementDestruct  // NOLINT(bugprone-reserved-identifier)
+            > auto __SingleLinkedList <
+                    __ElementType,
+                    __ElementEquals,
+                    __ElementDestruct
+            > :: __sll_find (
+                    ElementType const & element
+            ) noexcept -> SingleLinkedListIterator {
+
+                auto pCurrent   = this->_pFront;
+                auto pPrevious  = nullptr;
+
+                while ( pCurrent != nullptr ) {
+                    if ( this->_equals ( pCurrent->_data.data() ) ) {
+                        return SingleLinkedListIterator ( pPrevious, pCurrent );
+                    }
+
+                    pPrevious   = pCurrent;
+                    pCurrent    = pCurrent->_pNext;
+                }
+
+                return SingleLinkedListIterator ( nullptr, nullptr );
             }
 
         }

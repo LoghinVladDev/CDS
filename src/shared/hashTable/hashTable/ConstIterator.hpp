@@ -54,12 +54,19 @@ namespace cds {             // NOLINT(modernize-concat-nested-namespaces)
                 __CDS_cpplang_ConstexprConditioned HashTableConstIterator () noexcept;
 
             public:
-                __CDS_Explicit constexpr HashTableConstIterator (
+                __CDS_Explicit __CDS_cpplang_ConstexprConditioned HashTableConstIterator (
                         HashTable const * pTable
                 ) noexcept;
 
             public:
-                __CDS_cpplang_ConstexprConditioned HashTableConstIterator (
+                __CDS_Explicit constexpr HashTableConstIterator (
+                        HashTable   const * pTable,
+                        __DataNode  const * pCurrentNode,
+                        Size                bucketIndex
+                ) noexcept;
+
+            public:
+                constexpr HashTableConstIterator (
                         HashTableConstIterator const & iterator
                 ) noexcept;
 

@@ -26,25 +26,25 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
     > class HashSet :
             public Set < __ElementType >,
             protected __hidden :: __impl :: __HashTable <
-                    __hidden :: __impl :: __HashSetDataNode < __ElementType >,
+                    __ElementType,
                     __ElementType,
                     FunctionExtractor <
-                            __hidden :: __impl :: __HashSetDataNode < __ElementType >,
                             __ElementType,
-                            & __hidden :: __impl :: __hashSetDataNodeKeyExtractor < __ElementType >
+                            __ElementType,
+                            & __hidden :: __impl :: __hashSetKeyExtractor < __ElementType >
                     >,
                     FunctionComparator < __ElementType, & cds :: meta :: equals < __ElementType > >,
                     __Hasher,
                     cds :: __hidden :: __impl :: __PrimeRehashPolicy,
                     FunctionDestructor <
-                            __hidden :: __impl :: __HashSetDataNode < __ElementType >,
-                            & __hidden :: __impl :: __hashSetDataNodeDestructor < __ElementType >
+                            __ElementType,
+                            & __hidden :: __impl :: __hashSetDestructor < __ElementType >
                     >
             > {
 
     protected:
         using __HashTableElementType =  // NOLINT(bugprone-reserved-identifier)
-                __hidden :: __impl :: __HashSetDataNode < __ElementType >;
+                __ElementType;
 
     protected:
         using __HashTableKeyType =  // NOLINT(bugprone-reserved-identifier)
@@ -55,7 +55,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 FunctionExtractor <
                         __HashTableElementType,
                         __HashTableKeyType,
-                        & __hidden :: __impl :: __hashSetDataNodeKeyExtractor <
+                        & __hidden :: __impl :: __hashSetKeyExtractor <
                                 __ElementType
                         >
                 >;
@@ -79,7 +79,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         using __HashTableFunctionDestructor =   // NOLINT(bugprone-reserved-identifier)
                 FunctionDestructor <
                         __HashTableElementType,
-                        & __hidden :: __impl :: __hashSetDataNodeDestructor < __ElementType >
+                        & __hidden :: __impl :: __hashSetDestructor < __ElementType >
                 >;
 
     protected:
@@ -88,7 +88,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                         cds :: meta :: isCopyConstructible < __ElementType > (),
                         FunctionCopyConstructor <
                                 __HashTableElementType,
-                                & __hidden :: __impl :: __hashSetDataNodeCopyConstructor < __ElementType >
+                                & __hidden :: __impl :: __hashSetCopyConstructor < __ElementType >
                         >,
                         void
                 >;
@@ -259,6 +259,11 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
     public:
         auto operator = (
+                HashSet && hashSet
+        ) noexcept -> HashSet &;
+
+    protected:
+        __CDS_cpplang_VirtualConstexpr virtual auto move (
                 HashSet && hashSet
         ) noexcept -> HashSet &;
 

@@ -98,6 +98,34 @@ namespace cds {             // NOLINT(modernize-concat-nested-namespaces)
                     __RehashPolicy,
                     __ElementTypeDestruct
             > :: HashTableIterator :: HashTableIterator (
+                    HashTable         * pTable,
+                    __DataNode        * pCurrentNode,
+                    Size                bucketIndex
+            ) noexcept :
+                    _pTable ( pTable ),
+                    _pCurrentNode ( pCurrentNode ),
+                    _bucketIndex ( bucketIndex ) {
+
+            }
+
+
+            template <
+                    typename __ElementType,         // NOLINT(bugprone-reserved-identifier)
+                    typename __KeyType,             // NOLINT(bugprone-reserved-identifier)
+                    typename __KeyExtractor,        // NOLINT(bugprone-reserved-identifier)
+                    typename __KeyEqualsComparator, // NOLINT(bugprone-reserved-identifier)
+                    typename __KeyHasher,           // NOLINT(bugprone-reserved-identifier)
+                    typename __RehashPolicy,        // NOLINT(bugprone-reserved-identifier)
+                    typename __ElementTypeDestruct  // NOLINT(bugprone-reserved-identifier)
+            > constexpr __HashTable <
+                    __ElementType,
+                    __KeyType,
+                    __KeyExtractor,
+                    __KeyEqualsComparator,
+                    __KeyHasher,
+                    __RehashPolicy,
+                    __ElementTypeDestruct
+            > :: HashTableIterator :: HashTableIterator (
                     HashTableIterator const & iterator
             ) noexcept :
                     _pTable ( iterator._pTable ),

@@ -71,7 +71,7 @@ namespace cds {             // NOLINT(modernize-concat-nested-namespaces)
                 __CDS_NoDiscard constexpr auto previousNode () const noexcept -> NodeType const *;
 
             public:
-                __CDS_NoDiscard __CDS_cpplang_NonConstConstexprMemberFunction auto operator ++ () noexcept -> SingleLinkedListConstIterator &;
+                __CDS_cpplang_NonConstConstexprMemberFunction auto operator ++ () noexcept -> SingleLinkedListConstIterator &;
 
             public:
                 __CDS_NoDiscard constexpr auto operator * () const noexcept -> SingleLinkedList :: ElementType const &;
@@ -85,6 +85,9 @@ namespace cds {             // NOLINT(modernize-concat-nested-namespaces)
                 __CDS_NoDiscard constexpr auto operator != (
                         SingleLinkedListConstIterator const & iterator
                 ) const noexcept -> bool;
+
+            public:
+                __CDS_NoDiscard __CDS_Explicit constexpr operator bool () const noexcept;
             };
 
         }

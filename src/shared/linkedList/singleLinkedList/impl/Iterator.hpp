@@ -207,6 +207,20 @@ namespace cds {             // NOLINT(modernize-concat-nested-namespaces)
                 return this->_pCurrent != iterator._pCurrent;
             }
 
+
+            template <
+                    typename __ElementType,     // NOLINT(bugprone-reserved-identifier)
+                    typename __ElementEquals,   // NOLINT(bugprone-reserved-identifier)
+                    typename __ElementDestruct  // NOLINT(bugprone-reserved-identifier)
+            > constexpr __SingleLinkedList <
+                    __ElementType,
+                    __ElementEquals,
+                    __ElementDestruct
+            > :: SingleLinkedListIterator :: operator bool () const noexcept {
+
+                return this->_pCurrent != nullptr;
+            }
+
         }
     }
 }

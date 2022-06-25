@@ -140,6 +140,11 @@ namespace cds {             // NOLINT(modernize-concat-nested-namespaces)
                 auto __sll_assign ( // NOLINT(bugprone-reserved-identifier)
                         __SingleLinkedList && list
                 ) noexcept -> void;
+
+            protected:
+                __CDS_NoDiscard auto __sll_find ( // NOLINT(bugprone-reserved-identifier)
+                        ElementType const & element
+                ) noexcept -> SingleLinkedListIterator;
             };
 
         }

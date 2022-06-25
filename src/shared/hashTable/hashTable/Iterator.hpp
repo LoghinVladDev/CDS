@@ -59,6 +59,13 @@ namespace cds {             // NOLINT(modernize-concat-nested-namespaces)
                 ) noexcept;
 
             public:
+                __CDS_Explicit constexpr HashTableIterator (
+                        HashTable     * pTable,
+                        __DataNode    * pCurrentNode,
+                        Size            bucketIndex
+                ) noexcept;
+
+            public:
                 constexpr HashTableIterator (
                         HashTableIterator const & iterator
                 ) noexcept;

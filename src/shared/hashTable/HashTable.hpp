@@ -240,6 +240,11 @@ namespace cds {             // NOLINT(modernize-concat-nested-namespaces)
                 auto __ht_assign (                                             // NOLINT(bugprone-reserved-identifier)
                         __HashTable && table
                 ) noexcept -> void;
+
+            protected:
+                auto __ht_find ( // NOLINT(bugprone-reserved-identifier)
+                        __KeyType const & key
+                ) noexcept -> HashTableIterator;
             };
 
         }
