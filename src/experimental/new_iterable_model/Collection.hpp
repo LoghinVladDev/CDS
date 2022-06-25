@@ -6,7 +6,7 @@
 #define __CDS_EX_COLLECTION_HPP__
 
 #include <CDS/Object>
-#include "../collection/collection/DelegateIteratorRequestType.hpp"
+#include "../../collection/collection/DelegateIteratorRequestType.hpp"
 #include "iterable/DelegateConstIterable.hpp"
 
 namespace cds {
