@@ -2,8 +2,8 @@
 // Created by loghin on 6/22/2022.
 //
 
-#ifndef __CDS_HASH_TABLE_ITERATOR_IMPL_HPP__
-#define __CDS_HASH_TABLE_ITERATOR_IMPL_HPP__
+#ifndef __CDS_SHARED_HASH_TABLE_CONST_ITERATOR_IMPL_HPP__
+#define __CDS_SHARED_HASH_TABLE_CONST_ITERATOR_IMPL_HPP__
 
 namespace cds {             // NOLINT(modernize-concat-nested-namespaces)
     namespace __hidden {    // NOLINT(modernize-concat-nested-namespaces, bugprone-reserved-identifier)
@@ -25,7 +25,7 @@ namespace cds {             // NOLINT(modernize-concat-nested-namespaces)
                     __KeyHasher,
                     __RehashPolicy,
                     __ElementTypeDestruct
-            > :: HashTableIterator :: advanceBucket () noexcept -> void {
+            > :: HashTableConstIterator :: advanceBucket () noexcept -> void {
 
                 while ( this->_pCurrentNode == nullptr && this->_bucketIndex + 1ULL < this->_pTable->_bucketArray._size ) {
                     this->_pCurrentNode = this->_pTable->_bucketArray._pArray [ ++ this->_bucketIndex ];
@@ -53,7 +53,7 @@ namespace cds {             // NOLINT(modernize-concat-nested-namespaces)
                     __KeyHasher,
                     __RehashPolicy,
                     __ElementTypeDestruct
-            > :: HashTableIterator :: HashTableIterator () noexcept = default;
+            > :: HashTableConstIterator :: HashTableConstIterator () noexcept = default;
 
 
             template <
@@ -72,8 +72,8 @@ namespace cds {             // NOLINT(modernize-concat-nested-namespaces)
                     __KeyHasher,
                     __RehashPolicy,
                     __ElementTypeDestruct
-            > :: HashTableIterator :: HashTableIterator (
-                    HashTable * pTable
+            > :: HashTableConstIterator :: HashTableConstIterator (
+                    HashTable const * pTable
             ) noexcept :
                     _pTable ( pTable ) {
 
@@ -97,8 +97,36 @@ namespace cds {             // NOLINT(modernize-concat-nested-namespaces)
                     __KeyHasher,
                     __RehashPolicy,
                     __ElementTypeDestruct
-            > :: HashTableIterator :: HashTableIterator (
-                    HashTableIterator const & iterator
+            > :: HashTableConstIterator :: HashTableConstIterator (
+                    HashTable   const * pTable,
+                    __DataNode  const * pCurrentNode,
+                    Size                bucketIndex
+            ) noexcept :
+                    _pTable ( pTable ),
+                    _pCurrentNode ( pCurrentNode ),
+                    _bucketIndex ( bucketIndex ) {
+
+            }
+
+
+            template <
+                    typename __ElementType,         // NOLINT(bugprone-reserved-identifier)
+                    typename __KeyType,             // NOLINT(bugprone-reserved-identifier)
+                    typename __KeyExtractor,        // NOLINT(bugprone-reserved-identifier)
+                    typename __KeyEqualsComparator, // NOLINT(bugprone-reserved-identifier)
+                    typename __KeyHasher,           // NOLINT(bugprone-reserved-identifier)
+                    typename __RehashPolicy,        // NOLINT(bugprone-reserved-identifier)
+                    typename __ElementTypeDestruct  // NOLINT(bugprone-reserved-identifier)
+            > constexpr __HashTable <
+                    __ElementType,
+                    __KeyType,
+                    __KeyExtractor,
+                    __KeyEqualsComparator,
+                    __KeyHasher,
+                    __RehashPolicy,
+                    __ElementTypeDestruct
+            > :: HashTableConstIterator :: HashTableConstIterator (
+                    HashTableConstIterator const & iterator
             ) noexcept :
                     _pTable ( iterator._pTable ),
                     _pCurrentNode ( iterator._pCurrentNode ),
@@ -123,8 +151,8 @@ namespace cds {             // NOLINT(modernize-concat-nested-namespaces)
                     __KeyHasher,
                     __RehashPolicy,
                     __ElementTypeDestruct
-            > :: HashTableIterator :: HashTableIterator (
-                    HashTableIterator && iterator
+            > :: HashTableConstIterator :: HashTableConstIterator (
+                    HashTableConstIterator && iterator
             ) noexcept :
                     _pTable ( cds :: exchange ( iterator._pTable, nullptr ) ),
                     _pCurrentNode ( cds :: exchange ( iterator._pCurrentNode, nullptr ) ),
@@ -149,9 +177,9 @@ namespace cds {             // NOLINT(modernize-concat-nested-namespaces)
                     __KeyHasher,
                     __RehashPolicy,
                     __ElementTypeDestruct
-            > :: HashTableIterator :: operator = (
-                    HashTableIterator const & iterator
-            ) noexcept -> HashTableIterator & {
+            > :: HashTableConstIterator :: operator = (
+                    HashTableConstIterator const & iterator
+            ) noexcept -> HashTableConstIterator & {
 
                 if ( this == & iterator ) {
                     return * this;
@@ -181,9 +209,9 @@ namespace cds {             // NOLINT(modernize-concat-nested-namespaces)
                     __KeyHasher,
                     __RehashPolicy,
                     __ElementTypeDestruct
-            > :: HashTableIterator :: operator = (
-                    HashTableIterator && iterator
-            ) noexcept -> HashTableIterator & {
+            > :: HashTableConstIterator :: operator = (
+                    HashTableConstIterator && iterator
+            ) noexcept -> HashTableConstIterator & {
 
                 if ( this == & iterator ) {
                     return * this;
@@ -213,7 +241,7 @@ namespace cds {             // NOLINT(modernize-concat-nested-namespaces)
                     __KeyHasher,
                     __RehashPolicy,
                     __ElementTypeDestruct
-            > :: HashTableIterator :: bucketIndex () const noexcept -> Size {
+            > :: HashTableConstIterator :: bucketIndex () const noexcept -> Size {
 
                 return this->_bucketIndex;
             }
@@ -235,7 +263,7 @@ namespace cds {             // NOLINT(modernize-concat-nested-namespaces)
                     __KeyHasher,
                     __RehashPolicy,
                     __ElementTypeDestruct
-            > :: HashTableIterator :: currentNode () const noexcept -> __DataNode * {
+            > :: HashTableConstIterator :: currentNode () const noexcept -> __DataNode const * {
 
                 return this->_pCurrentNode;
             }
@@ -257,7 +285,7 @@ namespace cds {             // NOLINT(modernize-concat-nested-namespaces)
                     __KeyHasher,
                     __RehashPolicy,
                     __ElementTypeDestruct
-            > :: HashTableIterator :: operator ++ () noexcept -> HashTableIterator & {
+            > :: HashTableConstIterator :: operator ++ () noexcept -> HashTableConstIterator & {
 
                 if ( this->_bucketIndex >= this->_pTable->_bucketArray._size ) {
                     return * this;
@@ -288,7 +316,7 @@ namespace cds {             // NOLINT(modernize-concat-nested-namespaces)
                     __KeyHasher,
                     __RehashPolicy,
                     __ElementTypeDestruct
-            > :: HashTableIterator :: operator * () const noexcept -> HashTable :: ElementType & {
+            > :: HashTableConstIterator :: operator * () const noexcept -> HashTable :: ElementType const & {
 
                 return this->_pCurrentNode->_data.data();
             }
@@ -310,8 +338,8 @@ namespace cds {             // NOLINT(modernize-concat-nested-namespaces)
                     __KeyHasher,
                     __RehashPolicy,
                     __ElementTypeDestruct
-            > :: HashTableIterator :: operator == (
-                    HashTableIterator const & iterator
+            > :: HashTableConstIterator :: operator == (
+                    HashTableConstIterator const & iterator
             ) const noexcept -> bool {
 
                 return this->_pCurrentNode == iterator._pCurrentNode;
@@ -334,8 +362,8 @@ namespace cds {             // NOLINT(modernize-concat-nested-namespaces)
                     __KeyHasher,
                     __RehashPolicy,
                     __ElementTypeDestruct
-            > :: HashTableIterator :: operator != (
-                    HashTableIterator const & iterator
+            > :: HashTableConstIterator :: operator != (
+                    HashTableConstIterator const & iterator
             ) const noexcept -> bool {
 
                 return this->_pCurrentNode != iterator._pCurrentNode;
@@ -358,7 +386,7 @@ namespace cds {             // NOLINT(modernize-concat-nested-namespaces)
                     __KeyHasher,
                     __RehashPolicy,
                     __ElementTypeDestruct
-            > :: HashTableIterator :: operator bool () const noexcept {
+            > :: HashTableConstIterator :: operator bool () const noexcept {
 
                 return this->_pCurrentNode != nullptr;
             }
@@ -367,4 +395,4 @@ namespace cds {             // NOLINT(modernize-concat-nested-namespaces)
     }
 }
 
-#endif // __CDS_HASH_TABLE_ITERATOR_IMPL_HPP__
+#endif // __CDS_SHARED_HASH_TABLE_CONST_ITERATOR_IMPL_HPP__

@@ -66,7 +66,7 @@ namespace cds {
     template < typename __ElementType, typename __HashCalculator > // NOLINT(bugprone-reserved-identifier)
     __CDS_cpplang_ConstexprOverride auto HashSet < __ElementType, __HashCalculator > :: HashSetDelegateIterator :: value () const noexcept -> __ElementType const & {
 
-        return ( * this->_iterator ).data();
+        return * this->_iterator;
     }
 
 

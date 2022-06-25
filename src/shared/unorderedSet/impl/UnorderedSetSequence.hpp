@@ -4,8 +4,8 @@
 
 #if defined ( __CDS_UNORDERED_SET_HPP__ ) && defined ( CDS_SEQUENCE_HPP )
 
-#ifndef __CDS_UNORDERED_SET_SEQUENCE_IMPL_HPP__
-#define __CDS_UNORDERED_SET_SEQUENCE_IMPL_HPP__
+#ifndef __CDS_SHARED_UNORDERED_SET_SEQUENCE_IMPL_HPP__
+#define __CDS_SHARED_UNORDERED_SET_SEQUENCE_IMPL_HPP__
 
 
 namespace cds {
@@ -39,6 +39,6 @@ namespace cds {
 
 }
 
-#endif //__CDS_UNORDERED_SET_SEQUENCE_IMPL_HPP__
+#endif //__CDS_SHARED_UNORDERED_SET_SEQUENCE_IMPL_HPP__
 
 #endif

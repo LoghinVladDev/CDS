@@ -15,10 +15,10 @@ namespace cds {
         switch ( requestType ) {
             case DelegateIteratorRequestType :: ForwardBegin:
             case DelegateIteratorRequestType :: BackwardBegin:
-                return Memory :: instance().create < HashMapValueMutableCollectionProxyDelegateIterator > ( this->template map < HashMap < __KeyType, __ValueType, __Hasher > > ()->__begin() );
+                return Memory :: instance().create < HashMapValueMutableCollectionProxyDelegateIterator > ( this->template map < HashMap < __KeyType, __ValueType, __Hasher > > ()->__ht_begin() );
             case DelegateIteratorRequestType :: ForwardEnd:
             case DelegateIteratorRequestType :: BackwardEnd:
-                return Memory :: instance().create < HashMapValueMutableCollectionProxyDelegateIterator > ( this->template map < HashMap < __KeyType, __ValueType, __Hasher > > ()->__end() );
+                return Memory :: instance().create < HashMapValueMutableCollectionProxyDelegateIterator > ( this->template map < HashMap < __KeyType, __ValueType, __Hasher > > ()->__ht_end() );
         }
 
         return nullptr;
@@ -33,10 +33,10 @@ namespace cds {
         switch ( requestType ) {
             case DelegateIteratorRequestType :: ForwardBegin:
             case DelegateIteratorRequestType :: BackwardBegin:
-                return Memory :: instance().create < HashMapValueMutableCollectionProxyDelegateConstIterator > ( this->template map < HashMap < __KeyType, __ValueType, __Hasher > > ()->__cbegin() );
+                return Memory :: instance().create < HashMapValueMutableCollectionProxyDelegateConstIterator > ( this->template map < HashMap < __KeyType, __ValueType, __Hasher > > ()->__ht_cbegin() );
             case DelegateIteratorRequestType :: ForwardEnd:
             case DelegateIteratorRequestType :: BackwardEnd:
-                return Memory :: instance().create < HashMapValueMutableCollectionProxyDelegateConstIterator > ( this->template map < HashMap < __KeyType, __ValueType, __Hasher > > ()->__cend() );
+                return Memory :: instance().create < HashMapValueMutableCollectionProxyDelegateConstIterator > ( this->template map < HashMap < __KeyType, __ValueType, __Hasher > > ()->__ht_cend() );
         }
 
         return nullptr;
@@ -79,7 +79,7 @@ namespace cds {
             Iterator const & iterator
     ) noexcept -> bool {
 
-        return this-> template map < HashMap < __KeyType, __ValueType, __Hasher > > ()->__remove (
+        return this-> template map < HashMap < __KeyType, __ValueType, __Hasher > > ()->__ht_remove (
                 reinterpret_cast < HashMapValueMutableCollectionProxyDelegateIterator const * > (
                         HashMapValueMutableCollectionProxy :: acquireDelegate ( iterator )
                 )->iterator()
@@ -92,7 +92,7 @@ namespace cds {
             ConstIterator const & iterator
     ) noexcept -> bool {
 
-        return this-> template map < HashMap < __KeyType, __ValueType, __Hasher > > ()->__remove (
+        return this-> template map < HashMap < __KeyType, __ValueType, __Hasher > > ()->__ht_remove (
                 reinterpret_cast < HashMapValueMutableCollectionProxyDelegateConstIterator const * > (
                         HashMapValueMutableCollectionProxy :: acquireDelegate ( iterator )
                 )->iterator()
@@ -105,7 +105,7 @@ namespace cds {
             ReverseIterator const & iterator
     ) noexcept -> bool {
 
-        return this-> template map < HashMap < __KeyType, __ValueType, __Hasher > > ()->__remove (
+        return this-> template map < HashMap < __KeyType, __ValueType, __Hasher > > ()->__ht_remove (
                 reinterpret_cast < HashMapValueMutableCollectionProxyDelegateIterator const * > (
                         HashMapValueMutableCollectionProxy :: acquireDelegate ( iterator )
                 )->iterator()
@@ -118,7 +118,7 @@ namespace cds {
             ConstReverseIterator const & iterator
     ) noexcept -> bool {
 
-        return this-> template map < HashMap < __KeyType, __ValueType, __Hasher > > ()->__remove (
+        return this-> template map < HashMap < __KeyType, __ValueType, __Hasher > > ()->__ht_remove (
                 reinterpret_cast < HashMapValueMutableCollectionProxyDelegateConstIterator const * > (
                         HashMapValueMutableCollectionProxy :: acquireDelegate ( iterator )
                 )->iterator()
@@ -147,7 +147,7 @@ namespace cds {
     template < typename __KeyType, typename __ValueType, typename __Hasher > // NOLINT(bugprone-reserved-identifier)
     __CDS_OptimalInline auto HashMap < __KeyType, __ValueType, __Hasher > :: HashMapValueMutableCollectionProxy :: size () const noexcept -> Size {
 
-        return this-> template map < HashMap < __KeyType, __ValueType, __Hasher > > ()->__size ();
+        return this-> template map < HashMap < __KeyType, __ValueType, __Hasher > > ()->__ht_size ();
     }
 
 }

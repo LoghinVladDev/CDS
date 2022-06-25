@@ -2,8 +2,8 @@
 // Created by loghin on 6/9/22.
 //
 
-#ifndef __CDS_GENERAL_PREDICATES_HPP__
-#define __CDS_GENERAL_PREDICATES_HPP__
+#ifndef __CDS_SHARED_GENERAL_PREDICATES_HPP__
+#define __CDS_SHARED_GENERAL_PREDICATES_HPP__
 
 namespace cds { // NOLINT(modernize-concat-nested-namespaces)
     namespace predicates {
@@ -178,6 +178,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             return true;
         }
 
+
         template < typename __T > // NOLINT(bugprone-reserved-identifier)
         constexpr auto alwaysFalse (
                 __T const &
@@ -185,7 +186,8 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
             return false;
         }
+
     }
 }
 
-#endif // __CDS_GENERAL_PREDICATES_HPP__
+#endif // __CDS_SHARED_GENERAL_PREDICATES_HPP__

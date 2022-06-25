@@ -4,8 +4,8 @@
 
 #if defined ( __CDS_HASH_MAP_HPP__ ) && defined ( CDS_SEQUENCE_HPP )
 
-#ifndef __CDS_HASH_MAP_SEQUENCE_IMPL_HPP__
-#define __CDS_HASH_MAP_SEQUENCE_IMPL_HPP__
+#ifndef __CDS_SHARED_HASH_MAP_SEQUENCE_IMPL_HPP__
+#define __CDS_SHARED_HASH_MAP_SEQUENCE_IMPL_HPP__
 
 namespace cds {
 
@@ -38,6 +38,6 @@ namespace cds {
 }
 
 
-#endif // __CDS_HASH_MAP_SEQUENCE_IMPL_HPP__
+#endif // __CDS_SHARED_HASH_MAP_SEQUENCE_IMPL_HPP__
 
 #endif // defined ( __CDS_HASH_MAP_HPP__ ) && defined ( CDS_SEQUENCE_HPP )

@@ -28,4 +28,4 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
 }
 
-#endif
+#endif // __CDS_SHARED_NODE_HPP__

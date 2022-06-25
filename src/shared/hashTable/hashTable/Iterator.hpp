@@ -2,8 +2,8 @@
 // Created by loghin on 6/22/2022.
 //
 
-#ifndef __CDS_HASH_TABLE_ITERATOR_HPP__
-#define __CDS_HASH_TABLE_ITERATOR_HPP__
+#ifndef __CDS_SHARED_HASH_TABLE_ITERATOR_HPP__
+#define __CDS_SHARED_HASH_TABLE_ITERATOR_HPP__
 
 namespace cds {             // NOLINT(modernize-concat-nested-namespaces)
     namespace __hidden {    // NOLINT(modernize-concat-nested-namespaces, bugprone-reserved-identifier)
@@ -59,6 +59,13 @@ namespace cds {             // NOLINT(modernize-concat-nested-namespaces)
                 ) noexcept;
 
             public:
+                __CDS_Explicit constexpr HashTableIterator (
+                        HashTable     * pTable,
+                        __DataNode    * pCurrentNode,
+                        Size            bucketIndex
+                ) noexcept;
+
+            public:
                 constexpr HashTableIterator (
                         HashTableIterator const & iterator
                 ) noexcept;
@@ -108,4 +115,4 @@ namespace cds {             // NOLINT(modernize-concat-nested-namespaces)
     }
 }
 
-#endif // __CDS_HASH_TABLE_ITERATOR_HPP__
+#endif // __CDS_SHARED_HASH_TABLE_ITERATOR_HPP__

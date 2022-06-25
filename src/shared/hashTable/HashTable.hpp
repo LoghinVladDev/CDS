@@ -2,10 +2,11 @@
 // Created by loghin on 6/21/22.
 //
 
-#ifndef __CDS_HASH_TABLE_HPP__
-#define __CDS_HASH_TABLE_HPP__
+#ifndef __CDS_SHARED_HASH_TABLE_HPP__
+#define __CDS_SHARED_HASH_TABLE_HPP__
 
-#include "HashTableUtils.hpp"
+#include "hashTable/HashTableUtils.hpp"
+#include "../Node.hpp"
 
 namespace cds {             // NOLINT(modernize-concat-nested-namespaces)
     namespace __hidden {    // NOLINT(modernize-concat-nested-namespaces, bugprone-reserved-identifier)
@@ -53,16 +54,16 @@ namespace cds {             // NOLINT(modernize-concat-nested-namespaces)
                 class HashTableConstIterator;
 
             protected:
-                __CDS_cpplang_NonConstConstexprMemberFunction auto __begin () noexcept -> HashTableIterator;    // NOLINT(bugprone-reserved-identifier)
+                __CDS_cpplang_NonConstConstexprMemberFunction auto __ht_begin () noexcept -> HashTableIterator;    // NOLINT(bugprone-reserved-identifier)
 
             protected:
-                __CDS_cpplang_NonConstConstexprMemberFunction auto __end () noexcept -> HashTableIterator;      // NOLINT(bugprone-reserved-identifier)
+                __CDS_cpplang_NonConstConstexprMemberFunction auto __ht_end () noexcept -> HashTableIterator;      // NOLINT(bugprone-reserved-identifier)
 
             protected:
-                constexpr auto __cbegin () const noexcept -> HashTableConstIterator;                            // NOLINT(bugprone-reserved-identifier)
+                constexpr auto __ht_cbegin () const noexcept -> HashTableConstIterator;                            // NOLINT(bugprone-reserved-identifier)
 
             protected:
-                constexpr auto __cend () const noexcept -> HashTableConstIterator;                              // NOLINT(bugprone-reserved-identifier)
+                constexpr auto __ht_cend () const noexcept -> HashTableConstIterator;                              // NOLINT(bugprone-reserved-identifier)
 
             protected:
                 using __DataType        = cds :: __hidden :: __impl :: __allocation :: __RawContainer < __ElementType >; // NOLINT(bugprone-reserved-identifier)
@@ -77,10 +78,7 @@ namespace cds {             // NOLINT(modernize-concat-nested-namespaces)
                 __CDS_NoUniqueAddress __ElementTypeDestruct   _destruct;
 
             private:
-                struct __DataNode {                 // NOLINT(bugprone-reserved-identifier)
-                    __DataType   _data;
-                    __DataNode * _pNext;
-                };
+                using __DataNode = __UnidirectionalNode < __DataType >; // NOLINT(bugprone-reserved-identifier)
 
             private:
                 using __BucketType = __DataNode *;  // NOLINT(bugprone-reserved-identifier)
@@ -120,138 +118,144 @@ namespace cds {             // NOLINT(modernize-concat-nested-namespaces)
             protected:
 
             protected:
-                auto __clear () noexcept -> void;   // NOLINT(bugprone-reserved-identifier)
+                auto __ht_clear () noexcept -> void;   // NOLINT(bugprone-reserved-identifier)
 
             protected:
-                __CDS_NoDiscard constexpr auto __empty () const noexcept -> bool;       // NOLINT(bugprone-reserved-identifier)
+                __CDS_NoDiscard constexpr auto __ht_empty () const noexcept -> bool;       // NOLINT(bugprone-reserved-identifier)
 
             protected:
-                __CDS_NoDiscard constexpr auto __size () const noexcept -> Size;        // NOLINT(bugprone-reserved-identifier)
+                __CDS_NoDiscard constexpr auto __ht_size () const noexcept -> Size;        // NOLINT(bugprone-reserved-identifier)
 
             protected:
-                __CDS_NoDiscard constexpr auto __bucketCount () const noexcept -> Size; // NOLINT(bugprone-reserved-identifier)
+                __CDS_NoDiscard constexpr auto __ht_bucketCount () const noexcept -> Size; // NOLINT(bugprone-reserved-identifier)
 
             protected:
-                auto __get (                        // NOLINT(bugprone-reserved-identifier)
+                auto __ht_get (                        // NOLINT(bugprone-reserved-identifier)
                         __KeyType const & key,
                         bool            * pIsNew
                 ) noexcept -> __ElementType *;
 
             protected:
-                auto __get (                        // NOLINT(bugprone-reserved-identifier)
+                auto __ht_get (                        // NOLINT(bugprone-reserved-identifier)
                         __KeyType const & key
                 ) const noexcept -> __ElementType const *;
 
             protected:
-                auto __at (                         // NOLINT(bugprone-reserved-identifier)
+                auto __ht_at (                         // NOLINT(bugprone-reserved-identifier)
                         __KeyType const & key
                 ) noexcept -> __ElementType *;
 
             protected:
-                auto __at (                         // NOLINT(bugprone-reserved-identifier)
+                auto __ht_at (                         // NOLINT(bugprone-reserved-identifier)
                         __KeyType const & key
                 ) const noexcept -> __ElementType const *;
 
             private:
-                auto __rehash (                     // NOLINT(bugprone-reserved-identifier)
+                auto __ht_rehash (                     // NOLINT(bugprone-reserved-identifier)
                         Size                bucketCount,
                         Size                hashValueOfNewNode,
                         __DataNode  const * pNewEmptyNode
                 ) noexcept -> void;
 
             private:
-                static auto __rehashEmplace (       // NOLINT(bugprone-reserved-identifier)
+                static auto __ht_rehashEmplace (       // NOLINT(bugprone-reserved-identifier)
                         __BucketType * pBucket,
                         __DataNode   * pNode
                 ) noexcept -> void;
 
             private:
-                auto __bucket (                                             // NOLINT(bugprone-reserved-identifier)
+                auto __ht_bucket (                                             // NOLINT(bugprone-reserved-identifier)
                         Size hash
                 ) noexcept -> __BucketType &;
 
             private:
-                auto __bucket (                                             // NOLINT(bugprone-reserved-identifier)
+                auto __ht_bucket (                                             // NOLINT(bugprone-reserved-identifier)
                         Size hash
                 ) const noexcept -> __BucketType const &;
 
             private:
-                auto __allocateBuckets (                                    // NOLINT(bugprone-reserved-identifier)
+                auto __ht_allocateBuckets (                                    // NOLINT(bugprone-reserved-identifier)
                         Size bucketCount
                 ) noexcept -> void;
 
             private:
-                auto __freeBuckets () noexcept -> void;                     // NOLINT(bugprone-reserved-identifier)
+                auto __ht_freeBuckets () noexcept -> void;                     // NOLINT(bugprone-reserved-identifier)
 
             private:
-                auto __allocateNode () const noexcept -> __DataNode *;      // NOLINT(bugprone-reserved-identifier)
+                auto __ht_allocateNode () const noexcept -> __DataNode *;      // NOLINT(bugprone-reserved-identifier)
 
             private:
-                auto __freeNode (                                           // NOLINT(bugprone-reserved-identifier)
+                auto __ht_freeNode (                                           // NOLINT(bugprone-reserved-identifier)
                         __DataNode * pNode
                 ) const noexcept -> void;
 
             protected:
-                auto __remove (                                             // NOLINT(bugprone-reserved-identifier)
+                auto __ht_remove (                                             // NOLINT(bugprone-reserved-identifier)
                         __KeyType const & key
                 ) noexcept -> bool;
 
             private:
-                auto __remove (                                             // NOLINT(bugprone-reserved-identifier)
+                auto __ht_remove (                                             // NOLINT(bugprone-reserved-identifier)
                         __DataNode  const * pNode,
                         Size                bucketIndex
                 ) noexcept -> bool;
 
             protected:
-                auto __remove (                                             // NOLINT(bugprone-reserved-identifier)
+                auto __ht_remove (                                             // NOLINT(bugprone-reserved-identifier)
                         HashTableIterator const & iterator
                 ) noexcept -> bool;
 
             protected:
-                auto __remove (                                             // NOLINT(bugprone-reserved-identifier)
+                auto __ht_remove (                                             // NOLINT(bugprone-reserved-identifier)
                         HashTableConstIterator const & iterator
                 ) noexcept -> bool;
 
             protected:
                 template < typename __EntryCompareFunction >                // NOLINT(bugprone-reserved-identifier)
-                auto __equals (                                             // NOLINT(bugprone-reserved-identifier)
+                auto __ht_equals (                                             // NOLINT(bugprone-reserved-identifier)
                         __HashTable             const & table,
                         __EntryCompareFunction  const & entryCompareFunction
                 ) const noexcept -> bool;
 
             private:
                 template < typename __EntryCopyFunction >                   // NOLINT(bugprone-reserved-identifier)
-                auto __copyFrom (                                           // NOLINT(bugprone-reserved-identifier)
+                auto __ht_copyFrom (                                           // NOLINT(bugprone-reserved-identifier)
                         __HashTable         const & table,
                         __EntryCopyFunction const & entryCopyFunction
                 ) noexcept -> void;
 
             private:
-                constexpr auto __moveFrom (                                 // NOLINT(bugprone-reserved-identifier)
+                constexpr auto __ht_moveFrom (                                 // NOLINT(bugprone-reserved-identifier)
                         __HashTable && table
                 ) noexcept -> void;
 
             protected:
                 template < typename __EntryCopyFunction >                   // NOLINT(bugprone-reserved-identifier)
-                auto __assign (                                             // NOLINT(bugprone-reserved-identifier)
+                auto __ht_assign (                                             // NOLINT(bugprone-reserved-identifier)
                         __HashTable         const & table,
                         __EntryCopyFunction const & entryCopyFunction
                 ) noexcept -> void;
 
             protected:
-                auto __assign (                                             // NOLINT(bugprone-reserved-identifier)
+                auto __ht_assign (                                             // NOLINT(bugprone-reserved-identifier)
                         __HashTable && table
                 ) noexcept -> void;
+
+            protected:
+                auto __ht_find ( // NOLINT(bugprone-reserved-identifier)
+                        __KeyType const & key
+                ) noexcept -> HashTableIterator;
             };
 
         }
     }
 }
 
-#include "Iterator.hpp"
-#include "ConstIterator.hpp"
+#include "hashTable/Iterator.hpp"
+#include "hashTable/ConstIterator.hpp"
 
-#include "impl/Iterator.hpp"
-#include "impl/ConstIterator.hpp"
+#include "hashTable/impl/Iterator.hpp"
+#include "hashTable/impl/ConstIterator.hpp"
+#include "hashTable/impl/HashTable.hpp"
 
-#endif // __CDS_HASH_TABLE_HPP__
+#endif // __CDS_SHARED_HASH_TABLE_HPP__

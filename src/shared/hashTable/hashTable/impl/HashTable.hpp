@@ -2,8 +2,8 @@
 // Created by loghin on 6/21/22.
 //
 
-#ifndef __CDS_HASH_TABLE_IMPL_HPP__
-#define __CDS_HASH_TABLE_IMPL_HPP__
+#ifndef __CDS_SHARED_HASH_TABLE_IMPL_HPP__
+#define __CDS_SHARED_HASH_TABLE_IMPL_HPP__
 
 namespace cds {             // NOLINT(modernize-concat-nested-namespaces)
     namespace __hidden {    // NOLINT(modernize-concat-nested-namespaces, bugprone-reserved-identifier)
@@ -25,7 +25,7 @@ namespace cds {             // NOLINT(modernize-concat-nested-namespaces)
                     __KeyHasher,
                     __RehashPolicy,
                     __ElementTypeDestruct
-            > :: __begin () noexcept -> HashTableIterator {
+            > :: __ht_begin () noexcept -> HashTableIterator {
 
                 return HashTableIterator ( this );
             }
@@ -47,7 +47,7 @@ namespace cds {             // NOLINT(modernize-concat-nested-namespaces)
                     __KeyHasher,
                     __RehashPolicy,
                     __ElementTypeDestruct
-            > :: __end () noexcept -> HashTableIterator {
+            > :: __ht_end () noexcept -> HashTableIterator {
 
                 return HashTableIterator ();
             }
@@ -69,7 +69,7 @@ namespace cds {             // NOLINT(modernize-concat-nested-namespaces)
                     __KeyHasher,
                     __RehashPolicy,
                     __ElementTypeDestruct
-            > :: __cbegin () const noexcept -> HashTableConstIterator {
+            > :: __ht_cbegin () const noexcept -> HashTableConstIterator {
 
                 return HashTableConstIterator ( this );
             }
@@ -91,7 +91,7 @@ namespace cds {             // NOLINT(modernize-concat-nested-namespaces)
                     __KeyHasher,
                     __RehashPolicy,
                     __ElementTypeDestruct
-            > :: __cend () const noexcept -> HashTableConstIterator {
+            > :: __ht_cend () const noexcept -> HashTableConstIterator {
 
                 return HashTableConstIterator ();
             }
@@ -140,7 +140,7 @@ namespace cds {             // NOLINT(modernize-concat-nested-namespaces)
             ) noexcept :
                     __HashTableUtils < KeyHasher, RehashPolicy > ( hashTable ) {
 
-                this->__copyFrom (
+                this->__ht_copyFrom (
                         hashTable,
                         copyFunction
                 );
@@ -168,7 +168,7 @@ namespace cds {             // NOLINT(modernize-concat-nested-namespaces)
             ) noexcept :
                     __HashTableUtils < KeyHasher, RehashPolicy > ( hashTable ) {
 
-                this->__moveFrom ( std :: move ( hashTable ) );
+                this->__ht_moveFrom ( std :: move ( hashTable ) );
             }
 
 
@@ -212,7 +212,7 @@ namespace cds {             // NOLINT(modernize-concat-nested-namespaces)
                     __KeyHasher,
                     __RehashPolicy,
                     __ElementTypeDestruct
-            > :: __allocateBuckets (
+            > :: __ht_allocateBuckets (
                     Size bucketCount
             ) noexcept -> void {
 
@@ -247,7 +247,7 @@ namespace cds {             // NOLINT(modernize-concat-nested-namespaces)
                     __KeyHasher,
                     __RehashPolicy,
                     __ElementTypeDestruct
-            > :: __freeBuckets () noexcept -> void {
+            > :: __ht_freeBuckets () noexcept -> void {
 
                 cds :: __hidden :: __impl :: __allocation :: __freePrimitiveArray (
                         cds :: exchange (
@@ -276,7 +276,7 @@ namespace cds {             // NOLINT(modernize-concat-nested-namespaces)
                     __KeyHasher,
                     __RehashPolicy,
                     __ElementTypeDestruct
-            > :: __allocateNode () const noexcept -> __DataNode * {
+            > :: __ht_allocateNode () const noexcept -> __DataNode * {
 
                 return cds :: __hidden :: __impl :: __allocation :: __allocPrimitiveObject < __DataNode > ();
             }
@@ -298,7 +298,7 @@ namespace cds {             // NOLINT(modernize-concat-nested-namespaces)
                     __KeyHasher,
                     __RehashPolicy,
                     __ElementTypeDestruct
-            > :: __freeNode (
+            > :: __ht_freeNode (
                     __DataNode * pNode
             ) const noexcept -> void {
 
@@ -323,7 +323,7 @@ namespace cds {             // NOLINT(modernize-concat-nested-namespaces)
                     __KeyHasher,
                     __RehashPolicy,
                     __ElementTypeDestruct
-            > :: __bucket (
+            > :: __ht_bucket (
                     Size hash
             ) noexcept -> __BucketType & {
 
@@ -347,7 +347,7 @@ namespace cds {             // NOLINT(modernize-concat-nested-namespaces)
                     __KeyHasher,
                     __RehashPolicy,
                     __ElementTypeDestruct
-            > :: __bucket (
+            > :: __ht_bucket (
                     Size hash
             ) const noexcept -> __BucketType const & {
 
@@ -371,9 +371,9 @@ namespace cds {             // NOLINT(modernize-concat-nested-namespaces)
                     __KeyHasher,
                     __RehashPolicy,
                     __ElementTypeDestruct
-            > :: __clear () noexcept -> void {
+            > :: __ht_clear () noexcept -> void {
 
-                if ( ! this->__empty() ) {
+                if ( ! this->__ht_empty() ) {
 
                     for ( Size bucketIndex = 0ULL; bucketIndex < this->_bucketArray._size; ++ bucketIndex ) {
 
@@ -383,12 +383,12 @@ namespace cds {             // NOLINT(modernize-concat-nested-namespaces)
                             auto pCopy  = bucket;
                             bucket = bucket->_pNext;
 
-                            this->__freeNode ( pCopy );
+                            this->__ht_freeNode ( pCopy );
                         }
                     }
 
                     this->_rehashPolicy.reset();
-                    this->__freeBuckets ();
+                    this->__ht_freeBuckets ();
                     this->_totalSize = 0ULL;
                 }
             }
@@ -410,17 +410,17 @@ namespace cds {             // NOLINT(modernize-concat-nested-namespaces)
                     __KeyHasher,
                     __RehashPolicy,
                     __ElementTypeDestruct
-            > :: __get (
+            > :: __ht_get (
                     __KeyType    const & key,
                     bool               * pIsNew
             ) noexcept -> __ElementType * {
 
-                if ( this->__empty() ) {
-                    this->__allocateBuckets ( this->_rehashPolicy.currentFactor() );
+                if ( this->__ht_empty() ) {
+                    this->__ht_allocateBuckets ( this->_rehashPolicy.currentFactor() );
                 }
 
                 auto hashValue                  = this->_hasher ( key );
-                __BucketType & bucket           = this->__bucket ( hashValue );
+                __BucketType & bucket           = this->__ht_bucket ( hashValue );
                 __DataNode * pSeekAndNewNode    = bucket;
                 Size bucketSize                 = 0ULL;
 
@@ -434,7 +434,7 @@ namespace cds {             // NOLINT(modernize-concat-nested-namespaces)
                     ++ bucketSize;
                 }
 
-                pSeekAndNewNode         = this->__allocateNode ();
+                pSeekAndNewNode         = this->__ht_allocateNode ();
                 pSeekAndNewNode->_pNext = bucket;
                 bucket                  = pSeekAndNewNode;
 
@@ -448,7 +448,7 @@ namespace cds {             // NOLINT(modernize-concat-nested-namespaces)
                     );
 
                     if ( rehashRequiredData._required ) {
-                        this->__rehash (
+                        this->__ht_rehash (
                                 rehashRequiredData._size,
                                 hashValue,
                                 pSeekAndNewNode
@@ -477,7 +477,7 @@ namespace cds {             // NOLINT(modernize-concat-nested-namespaces)
                     __KeyHasher,
                     __RehashPolicy,
                     __ElementTypeDestruct
-            > :: __rehash (
+            > :: __ht_rehash (
                     Size                bucketCount,
                     Size                hashValueOfNewNode,
                     __DataNode  const * pNewEmptyNode
@@ -487,13 +487,13 @@ namespace cds {             // NOLINT(modernize-concat-nested-namespaces)
                 Size            newHash;
                 __DataNode    * pToMove;
 
-                this->__allocateBuckets ( bucketCount );
+                this->__ht_allocateBuckets ( bucketCount );
 
                 for ( Size bucketIndex = 0ULL; bucketIndex < oldBucketSize; ++ bucketIndex ) {
 
                     /// guaranteed to be lower than newer size, so using the method
                     /// with the new greater modulus will not impact the result
-                    auto & oldBucket = this->__bucket ( bucketIndex );
+                    auto & oldBucket = this->__ht_bucket ( bucketIndex );
 
                     while ( oldBucket != nullptr ) {
 
@@ -503,7 +503,7 @@ namespace cds {             // NOLINT(modernize-concat-nested-namespaces)
                             newHash = this->_hasher ( this->_key ( oldBucket->_data.data() ) );
                         }
 
-                        auto & newBucket = this->__bucket ( newHash );
+                        auto & newBucket = this->__ht_bucket ( newHash );
                         if ( newBucket == oldBucket ) {
                             break;
                         }
@@ -511,7 +511,7 @@ namespace cds {             // NOLINT(modernize-concat-nested-namespaces)
                         pToMove     = oldBucket;
                         oldBucket   = oldBucket->_pNext;
 
-                        __HashTable :: __rehashEmplace ( & newBucket, pToMove );
+                        __HashTable :: __ht_rehashEmplace ( & newBucket, pToMove );
                     }
 
                     __DataNode * pOldBucketHead = oldBucket;
@@ -524,7 +524,7 @@ namespace cds {             // NOLINT(modernize-concat-nested-namespaces)
                             newHash = this->_hasher ( this->_key ( pOldBucketHead->_pNext->_data.data() ) );
                         }
 
-                        auto & newBucket = this->__bucket ( newHash );
+                        auto & newBucket = this->__ht_bucket ( newHash );
 
                         if ( newBucket == oldBucket ) {
                             pOldBucketHead = pOldBucketHead->_pNext;
@@ -534,7 +534,7 @@ namespace cds {             // NOLINT(modernize-concat-nested-namespaces)
                         pToMove                 = pOldBucketHead->_pNext;
                         pOldBucketHead->_pNext  = pOldBucketHead->_pNext->_pNext;
 
-                        __HashTable :: __rehashEmplace ( & newBucket, pToMove );
+                        __HashTable :: __ht_rehashEmplace ( & newBucket, pToMove );
                     }
                 }
             }
@@ -556,7 +556,7 @@ namespace cds {             // NOLINT(modernize-concat-nested-namespaces)
                     __KeyHasher,
                     __RehashPolicy,
                     __ElementTypeDestruct
-            > :: __rehashEmplace (
+            > :: __ht_rehashEmplace (
                     __BucketType * pBucket,
                     __DataNode   * pNode
             ) noexcept -> void {
@@ -582,7 +582,7 @@ namespace cds {             // NOLINT(modernize-concat-nested-namespaces)
                     __KeyHasher,
                     __RehashPolicy,
                     __ElementTypeDestruct
-            > :: __empty () const noexcept -> bool {
+            > :: __ht_empty () const noexcept -> bool {
 
                 return this->_bucketArray._pArray == nullptr;
             }
@@ -604,7 +604,7 @@ namespace cds {             // NOLINT(modernize-concat-nested-namespaces)
                     __KeyHasher,
                     __RehashPolicy,
                     __ElementTypeDestruct
-            > :: __size () const noexcept -> Size {
+            > :: __ht_size () const noexcept -> Size {
 
                 return this->_totalSize;
             }
@@ -626,7 +626,7 @@ namespace cds {             // NOLINT(modernize-concat-nested-namespaces)
                     __KeyHasher,
                     __RehashPolicy,
                     __ElementTypeDestruct
-            > :: __bucketCount () const noexcept -> Size {
+            > :: __ht_bucketCount () const noexcept -> Size {
 
                 return this->_bucketArray._size;
             }
@@ -648,15 +648,15 @@ namespace cds {             // NOLINT(modernize-concat-nested-namespaces)
                     __KeyHasher,
                     __RehashPolicy,
                     __ElementTypeDestruct
-            > :: __get (
+            > :: __ht_get (
                     __KeyType const & key
             ) const noexcept -> __ElementType const * {
 
-                if ( this->__empty() ) {
+                if ( this->__ht_empty() ) {
                     return nullptr;
                 }
 
-                auto pBucketHead = this->__bucket ( this->_hasher ( key ) );
+                auto pBucketHead = this->__ht_bucket ( this->_hasher ( key ) );
                 while ( pBucketHead != nullptr ) {
 
                     if ( this->_equals ( this->_key ( pBucketHead->_data.data() ), key ) ) {
@@ -686,11 +686,11 @@ namespace cds {             // NOLINT(modernize-concat-nested-namespaces)
                     __KeyHasher,
                     __RehashPolicy,
                     __ElementTypeDestruct
-            > :: __at (
+            > :: __ht_at (
                     __KeyType const & key
             ) const noexcept -> __ElementType const * {
 
-                return this->__get ( key );
+                return this->__ht_get ( key );
             }
 
 
@@ -710,11 +710,11 @@ namespace cds {             // NOLINT(modernize-concat-nested-namespaces)
                     __KeyHasher,
                     __RehashPolicy,
                     __ElementTypeDestruct
-            > :: __at (
+            > :: __ht_at (
                     __KeyType const & key
             ) noexcept -> __ElementType * {
 
-                return const_cast < __ElementType * > ( const_cast < __HashTable const * > ( this )->__get ( key ) );
+                return const_cast < __ElementType * > ( const_cast < __HashTable const * > ( this )->__ht_get ( key ) );
             }
 
 
@@ -734,24 +734,24 @@ namespace cds {             // NOLINT(modernize-concat-nested-namespaces)
                     __KeyHasher,
                     __RehashPolicy,
                     __ElementTypeDestruct
-            > :: __remove (
+            > :: __ht_remove (
                     __KeyType const & key
             ) noexcept -> bool {
 
-                if ( this->__empty() ) {
+                if ( this->__ht_empty() ) {
                     return false;
                 }
 
                 __DataNode * pToRemove;
                 __DataNode * pBucketHead;
 
-                auto & bucket = this->__bucket ( this->_hasher ( key ) );
+                auto & bucket = this->__ht_bucket ( this->_hasher ( key ) );
                 if ( this->_equals ( this->_key ( bucket->_data.data() ), key ) ) {
 
                     pToRemove   = bucket;
                     bucket      = bucket->_pNext;
 
-                    this->__freeNode ( pToRemove );
+                    this->__ht_freeNode ( pToRemove );
 
                     -- this->_totalSize;
                     return true;
@@ -765,7 +765,7 @@ namespace cds {             // NOLINT(modernize-concat-nested-namespaces)
                         pToRemove           = pBucketHead->_pNext;
                         pBucketHead->_pNext = pBucketHead->_pNext->_pNext;
 
-                        this->__freeNode ( pToRemove );
+                        this->__ht_freeNode ( pToRemove );
 
                         -- this->_totalSize;
                         return true;
@@ -794,7 +794,7 @@ namespace cds {             // NOLINT(modernize-concat-nested-namespaces)
                     __KeyHasher,
                     __RehashPolicy,
                     __ElementTypeDestruct
-            > :: __remove (
+            > :: __ht_remove (
                     __DataNode  const * pNode,
                     Size                bucketIndex
             ) noexcept -> bool {
@@ -812,7 +812,7 @@ namespace cds {             // NOLINT(modernize-concat-nested-namespaces)
                     __DataNode * pCopy  = bucket;
                     bucket              = bucket->_pNext;
 
-                    this->__freeNode ( pCopy );
+                    this->__ht_freeNode ( pCopy );
                     -- this->_totalSize;
                     return true;
                 }
@@ -824,7 +824,7 @@ namespace cds {             // NOLINT(modernize-concat-nested-namespaces)
                         auto pToRemove  = pHead->_pNext;
                         pHead->_pNext   = pHead->_pNext->_pNext;
 
-                        this->__freeNode ( pToRemove );
+                        this->__ht_freeNode ( pToRemove );
                         -- this->_totalSize;
                         return true;
                     }
@@ -852,11 +852,11 @@ namespace cds {             // NOLINT(modernize-concat-nested-namespaces)
                     __KeyHasher,
                     __RehashPolicy,
                     __ElementTypeDestruct
-            > :: __remove (
+            > :: __ht_remove (
                     HashTableIterator const & iterator
             ) noexcept -> bool {
 
-                return this->__remove (
+                return this->__ht_remove (
                         iterator.currentNode(),
                         iterator.bucketIndex()
                 );
@@ -879,11 +879,11 @@ namespace cds {             // NOLINT(modernize-concat-nested-namespaces)
                     __KeyHasher,
                     __RehashPolicy,
                     __ElementTypeDestruct
-            > :: __remove (
+            > :: __ht_remove (
                     HashTableConstIterator const & iterator
             ) noexcept -> bool {
 
-                return this->__remove (
+                return this->__ht_remove (
                         iterator.currentNode(),
                         iterator.bucketIndex()
                 );
@@ -907,7 +907,7 @@ namespace cds {             // NOLINT(modernize-concat-nested-namespaces)
                     __KeyHasher,
                     __RehashPolicy,
                     __ElementTypeDestruct
-            > :: __equals (
+            > :: __ht_equals (
                     __HashTable             const & table,
                     __EntryCompareFunction  const & entryCompareFunction
             ) const noexcept -> bool {
@@ -916,15 +916,15 @@ namespace cds {             // NOLINT(modernize-concat-nested-namespaces)
                     return true;
                 }
 
-                if ( this->__empty() ) {
-                    return table.__empty();
+                if ( this->__ht_empty() ) {
+                    return table.__ht_empty();
                 }
 
-                if ( table.__empty() || this->__bucketCount () != table.__bucketCount () ) {
+                if ( table.__ht_empty() || this->__ht_bucketCount () != table.__ht_bucketCount () ) {
                     return false;
                 }
 
-                for ( Size bucketIndex = 0ULL; bucketIndex < this->__bucketCount(); ++ bucketIndex ) {
+                for ( Size bucketIndex = 0ULL; bucketIndex < this->__ht_bucketCount(); ++ bucketIndex ) {
 
                     auto pThisBucketHead    = this->_bucketArray._pArray [ bucketIndex ];
                     auto pOtherBucketHead   = table._bucketArray._pArray [ bucketIndex ];
@@ -961,28 +961,28 @@ namespace cds {             // NOLINT(modernize-concat-nested-namespaces)
                     __KeyHasher,
                     __RehashPolicy,
                     __ElementTypeDestruct
-            > :: __copyFrom (
+            > :: __ht_copyFrom (
                     __HashTable         const & table,
                     __EntryCopyFunction const & entryCopyFunction
             ) noexcept -> void {
 
-                if ( table.__empty() ) {
+                if ( table.__ht_empty() ) {
                     return;
                 }
 
                 this->_totalSize = table._totalSize;
-                this->__allocateBuckets ( table.__bucketCount() );
-                for ( Size bucketIndex = 0ULL; bucketIndex < table.__bucketCount(); ++ bucketIndex ) {
+                this->__ht_allocateBuckets ( table.__ht_bucketCount() );
+                for ( Size bucketIndex = 0ULL; bucketIndex < table.__ht_bucketCount(); ++ bucketIndex ) {
 
-                    auto & thisBucket   = this->__bucket ( bucketIndex );
-                    auto & tableBucket  = table.__bucket ( bucketIndex );
+                    auto & thisBucket   = this->__ht_bucket ( bucketIndex );
+                    auto & tableBucket  = table.__ht_bucket ( bucketIndex );
 
                     __DataNode * pTableHead     = tableBucket;
                     __DataNode * pThisBack      = nullptr;
 
                     while ( pTableHead != nullptr ) {
 
-                        auto pNewNode       = this->__allocateNode ();
+                        auto pNewNode       = this->__ht_allocateNode ();
                         pNewNode->_pNext    = nullptr;
                         entryCopyFunction ( pNewNode->_data.data(), pTableHead->_data.data() );
 
@@ -1016,7 +1016,7 @@ namespace cds {             // NOLINT(modernize-concat-nested-namespaces)
                     __KeyHasher,
                     __RehashPolicy,
                     __ElementTypeDestruct
-            > :: __moveFrom (
+            > :: __ht_moveFrom (
                     __HashTable && table
             ) noexcept -> void {
 
@@ -1045,7 +1045,7 @@ namespace cds {             // NOLINT(modernize-concat-nested-namespaces)
                     __KeyHasher,
                     __RehashPolicy,
                     __ElementTypeDestruct
-            > :: __assign (
+            > :: __ht_assign (
                     __HashTable         const & table,
                     __EntryCopyFunction const & entryCopyFunction
             ) noexcept -> void {
@@ -1054,8 +1054,8 @@ namespace cds {             // NOLINT(modernize-concat-nested-namespaces)
                     return;
                 }
 
-                this->__clear();
-                this->__copyFrom (
+                this->__ht_clear();
+                this->__ht_copyFrom (
                         table,
                         entryCopyFunction
                 );
@@ -1078,7 +1078,7 @@ namespace cds {             // NOLINT(modernize-concat-nested-namespaces)
                     __KeyHasher,
                     __RehashPolicy,
                     __ElementTypeDestruct
-            > :: __assign (
+            > :: __ht_assign (
                     __HashTable && table
             ) noexcept -> void {
 
@@ -1086,12 +1086,55 @@ namespace cds {             // NOLINT(modernize-concat-nested-namespaces)
                     return;
                 }
 
-                this->__clear();
-                this->__moveFrom ( std :: move ( table ) );
+                this->__ht_clear();
+                this->__ht_moveFrom ( std :: move ( table ) );
+            }
+
+
+            template <
+                    typename __ElementType,         // NOLINT(bugprone-reserved-identifier)
+                    typename __KeyType,             // NOLINT(bugprone-reserved-identifier)
+                    typename __KeyExtractor,        // NOLINT(bugprone-reserved-identifier)
+                    typename __KeyEqualsComparator, // NOLINT(bugprone-reserved-identifier)
+                    typename __KeyHasher,           // NOLINT(bugprone-reserved-identifier)
+                    typename __RehashPolicy,        // NOLINT(bugprone-reserved-identifier)
+                    typename __ElementTypeDestruct  // NOLINT(bugprone-reserved-identifier)
+            > auto __HashTable <
+                    __ElementType,
+                    __KeyType,
+                    __KeyExtractor,
+                    __KeyEqualsComparator,
+                    __KeyHasher,
+                    __RehashPolicy,
+                    __ElementTypeDestruct
+            > :: __ht_find (
+                    __KeyType const & key
+            ) noexcept -> HashTableIterator {
+
+                if ( this->__ht_empty() ) {
+                    return this->__ht_end();
+                }
+
+                auto bucketIndex = this->_hasher ( key ) % this->_bucketArray._size;
+                auto pSeekNode   = this->_bucketArray._pArray [ bucketIndex ];
+
+                while ( pSeekNode != nullptr ) {
+                    if ( this->_equals ( this->_key ( pSeekNode->_data.data() ), key ) ) {
+                        return HashTableIterator (
+                                this,
+                                pSeekNode,
+                                bucketIndex
+                        );
+                    }
+
+                    pSeekNode = pSeekNode->_pNext;
+                }
+
+                return this->__ht_end();
             }
 
         }
     }
 }
 
-#endif // __CDS_HASH_TABLE_IMPL_HPP__
+#endif // __CDS_SHARED_HASH_TABLE_IMPL_HPP__

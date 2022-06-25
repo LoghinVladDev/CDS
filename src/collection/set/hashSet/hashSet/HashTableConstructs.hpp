@@ -9,46 +9,43 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
     namespace __hidden {    // NOLINT(modernize-concat-nested-namespaces, bugprone-reserved-identifier)
         namespace __impl {  // NOLINT(bugprone-reserved-identifier)
 
-            template < typename __ElementType >                                                                  // NOLINT(bugprone-reserved-identifier)
-            using __HashSetDataNode = __hidden :: __impl :: __allocation :: __RawContainer < __ElementType >;    // NOLINT(bugprone-reserved-identifier)
-
 
             template < typename __ElementType >             // NOLINT(bugprone-reserved-identifier)
-            constexpr auto __hashSetDataNodeKeyExtractor (  // NOLINT(bugprone-reserved-identifier)
-                    __HashSetDataNode < __ElementType > const & dataNode
+            constexpr auto __hashSetKeyExtractor (  // NOLINT(bugprone-reserved-identifier)
+                    __ElementType const & element
             ) noexcept -> __ElementType const & {
 
-                return dataNode.data();
+                return element;
             }
 
 
             template < typename __ElementType >             // NOLINT(bugprone-reserved-identifier)
-            constexpr auto __hashSetDataNodeDestructor (      // NOLINT(bugprone-reserved-identifier)
-                    __HashSetDataNode < __ElementType > & dataNode
+            constexpr auto __hashSetDestructor (      // NOLINT(bugprone-reserved-identifier)
+                    __ElementType & element
             ) noexcept -> void {
 
-                dataNode.destruct();
+                element.~__ElementType();
             }
 
 
             template <
                     typename __ElementType, // NOLINT(bugprone-reserved-identifier)
                     cds :: meta :: EnableIf < cds :: meta :: isCopyConstructible < __ElementType > () > = 0
-            > constexpr auto __hashSetDataNodeDelayedCopyConstructor ( // NOLINT(bugprone-reserved-identifier)
-                    __HashSetDataNode < __ElementType >       & destinationDataNode,
-                    __HashSetDataNode < __ElementType > const & sourceDataNode
+            > constexpr auto __hashSetDelayedCopyConstructor ( // NOLINT(bugprone-reserved-identifier)
+                    __ElementType       & destinationDataNode,
+                    __ElementType const & sourceDataNode
             ) noexcept -> void {
 
-                destinationDataNode.construct ( sourceDataNode.data() );
+                new ( & destinationDataNode ) __ElementType ( sourceDataNode );
             }
 
 
             template <
                     typename __ElementType, // NOLINT(bugprone-reserved-identifier)
                     cds :: meta :: EnableIf < ! cds :: meta :: isCopyConstructible < __ElementType > () > = 0
-            > constexpr auto __hashSetDataNodeDelayedCopyConstructor ( // NOLINT(bugprone-reserved-identifier)
-                    __HashSetDataNode < __ElementType >       & destinationDataNode,
-                    __HashSetDataNode < __ElementType > const & sourceDataNode
+            > constexpr auto __hashSetDelayedCopyConstructor ( // NOLINT(bugprone-reserved-identifier)
+                    __ElementType       & destinationDataNode,
+                    __ElementType const & sourceDataNode
             ) noexcept -> void {
 
             }
@@ -56,23 +53,12 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
 
             template <
                     typename __ElementType // NOLINT(bugprone-reserved-identifier)
-            > constexpr auto __hashSetDataNodeCopyConstructor ( // NOLINT(bugprone-reserved-identifier)
-                    __HashSetDataNode < __ElementType >       & destinationDataNode,
-                    __HashSetDataNode < __ElementType > const & sourceDataNode
+            > constexpr auto __hashSetCopyConstructor ( // NOLINT(bugprone-reserved-identifier)
+                    __ElementType       & destinationDataNode,
+                    __ElementType const & sourceDataNode
             ) noexcept -> void {
 
-                __hashSetDataNodeDelayedCopyConstructor ( destinationDataNode, sourceDataNode );
-            }
-
-
-            template < typename __ElementType >             // NOLINT(bugprone-reserved-identifier)
-            constexpr auto __hashSetDataNodeEquals (          // NOLINT(bugprone-reserved-identifier)
-                    __HashSetDataNode < __ElementType > const & leftNode,
-                    __HashSetDataNode < __ElementType > const & rightNode
-            ) noexcept -> bool {
-
-                return
-                        cds :: meta :: equals ( leftNode.data(), rightNode.data() );
+                __hashSetDelayedCopyConstructor ( destinationDataNode, sourceDataNode );
             }
 
         }

@@ -2,8 +2,8 @@
 // Created by loghin on 6/22/2022.
 //
 
-#ifndef __CDS_HASH_TABLE_CONST_ITERATOR_HPP__
-#define __CDS_HASH_TABLE_CONST_ITERATOR_HPP__
+#ifndef __CDS_SHARED_HASH_TABLE_CONST_ITERATOR_HPP__
+#define __CDS_SHARED_HASH_TABLE_CONST_ITERATOR_HPP__
 
 namespace cds {             // NOLINT(modernize-concat-nested-namespaces)
     namespace __hidden {    // NOLINT(modernize-concat-nested-namespaces, bugprone-reserved-identifier)
@@ -54,12 +54,19 @@ namespace cds {             // NOLINT(modernize-concat-nested-namespaces)
                 __CDS_cpplang_ConstexprConditioned HashTableConstIterator () noexcept;
 
             public:
-                __CDS_Explicit constexpr HashTableConstIterator (
+                __CDS_Explicit __CDS_cpplang_ConstexprConditioned HashTableConstIterator (
                         HashTable const * pTable
                 ) noexcept;
 
             public:
-                __CDS_cpplang_ConstexprConditioned HashTableConstIterator (
+                __CDS_Explicit constexpr HashTableConstIterator (
+                        HashTable   const * pTable,
+                        __DataNode  const * pCurrentNode,
+                        Size                bucketIndex
+                ) noexcept;
+
+            public:
+                constexpr HashTableConstIterator (
                         HashTableConstIterator const & iterator
                 ) noexcept;
 
@@ -108,4 +115,4 @@ namespace cds {             // NOLINT(modernize-concat-nested-namespaces)
     }
 }
 
-#endif // __CDS_HASH_TABLE_CONST_ITERATOR_HPP__
+#endif // __CDS_SHARED_HASH_TABLE_CONST_ITERATOR_HPP__

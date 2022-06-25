@@ -405,9 +405,6 @@ namespace cds {
 #include "hashMap/valueMutableCollection/DelegateIterator.hpp"
 #include "hashMap/valueMutableCollection/DelegateConstIterator.hpp"
 
-#include "../../../../shared/memory/PrimitiveAllocation.hpp"
-#include "../../../../shared/hashTable//impl/HashTable.hpp"
-
 #include "hashMap/impl/HashMap.hpp"
 #include "hashMap/impl/DelegateIterator.hpp"
 #include "hashMap/impl/DelegateConstIterator.hpp"
