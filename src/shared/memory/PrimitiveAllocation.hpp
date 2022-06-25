@@ -2,8 +2,8 @@
 // Created by loghin on 6/18/22.
 //
 
-#ifndef __CDS_PRIMITIVE_ALLOCATION_HPP__
-#define __CDS_PRIMITIVE_ALLOCATION_HPP__
+#ifndef __CDS_SHARED_PRIMITIVE_ALLOCATION_HPP__
+#define __CDS_SHARED_PRIMITIVE_ALLOCATION_HPP__
 
 namespace cds { // NOLINT(modernize-concat-nested-namespaces)
     namespace __hidden { // NOLINT(modernize-concat-nested-namespaces, bugprone-reserved-identifier)
@@ -94,4 +94,4 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
     }
 }
 
-#endif // __CDS_PRIMITIVE_ALLOCATION_HPP__
+#endif // __CDS_SHARED_PRIMITIVE_ALLOCATION_HPP__

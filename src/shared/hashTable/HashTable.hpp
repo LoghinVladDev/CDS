@@ -2,8 +2,8 @@
 // Created by loghin on 6/21/22.
 //
 
-#ifndef __CDS_HASH_TABLE_HPP__
-#define __CDS_HASH_TABLE_HPP__
+#ifndef __CDS_SHARED_HASH_TABLE_HPP__
+#define __CDS_SHARED_HASH_TABLE_HPP__
 
 #include "HashTableUtils.hpp"
 #include "../Node.hpp"
@@ -252,4 +252,4 @@ namespace cds {             // NOLINT(modernize-concat-nested-namespaces)
 #include "impl/Iterator.hpp"
 #include "impl/ConstIterator.hpp"
 
-#endif // __CDS_HASH_TABLE_HPP__
+#endif // __CDS_SHARED_HASH_TABLE_HPP__

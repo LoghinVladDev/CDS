@@ -3,8 +3,8 @@
 //
 
 #if defined ( __CDS_OBJECT_HPP__ ) && defined ( __CDS_STRING_HPP__ )
-#ifndef __CDS_OBJECT_TO_STRING_IMPL_HPP__
-#define __CDS_OBJECT_TO_STRING_IMPL_HPP__
+#ifndef __CDS_SHARED_OBJECT_TO_STRING_IMPL_HPP__
+#define __CDS_SHARED_OBJECT_TO_STRING_IMPL_HPP__
 
 namespace cds {
 
@@ -32,5 +32,5 @@ namespace cds {
 
 }
 
-#endif // __CDS_OBJECT_TO_STRING_IMPL_HPP__
+#endif // __CDS_SHARED_OBJECT_TO_STRING_IMPL_HPP__
 #endif

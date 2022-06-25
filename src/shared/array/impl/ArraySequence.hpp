@@ -4,8 +4,8 @@
 
 #if defined ( __CDS_ARRAY_HPP__ ) && defined ( CDS_SEQUENCE_HPP )
 
-#ifndef __CDS_ARRAY_SEQUENCE_IMPL_HPP__
-#define __CDS_ARRAY_SEQUENCE_IMPL_HPP__
+#ifndef __CDS_SHARED_ARRAY_SEQUENCE_IMPL_HPP__
+#define __CDS_SHARED_ARRAY_SEQUENCE_IMPL_HPP__
 
 namespace cds {
 
@@ -38,6 +38,6 @@ namespace cds {
 
 }
 
-#endif // __CDS_ARRAY_SEQUENCE_IMPL_HPP__
+#endif // __CDS_SHARED_ARRAY_SEQUENCE_IMPL_HPP__
 
 #endif

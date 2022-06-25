@@ -2,8 +2,8 @@
 // Created by loghin on 6/9/22.
 //
 
-#ifndef __CDS_ARITHMETIC_HPP__
-#define __CDS_ARITHMETIC_HPP__
+#ifndef __CDS_SHARED_ARITHMETIC_HPP__
+#define __CDS_SHARED_ARITHMETIC_HPP__
 
 namespace cds {
 
@@ -118,4 +118,4 @@ namespace cds {
 
 }
 
-#endif // __CDS_ARITHMETIC_HPP__
+#endif // __CDS_SHARED_ARITHMETIC_HPP__

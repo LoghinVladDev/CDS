@@ -4,8 +4,8 @@
 
 #if defined ( __CDS_STRING_BASE_HPP__ ) && defined ( CDS_SEQUENCE_HPP )
 
-#ifndef __CDS_BASE_STRING_SEQEUENCE_IMPL_HPP__
-#define __CDS_BASE_STRING_SEQEUENCE_IMPL_HPP__
+#ifndef __CDS_SHARED_BASE_STRING_SEQEUENCE_IMPL_HPP__
+#define __CDS_SHARED_BASE_STRING_SEQEUENCE_IMPL_HPP__
 
 namespace cds { // NOLINT(modernize-concat-nested-namespaces)
     namespace __hidden { // NOLINT(modernize-concat-nested-namespaces, bugprone-reserved-identifier)
@@ -39,6 +39,6 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
     }
 }
 
-#endif // __CDS_BASE_STRING_SEQEUENCE_IMPL_HPP__
+#endif // __CDS_SHARED_BASE_STRING_SEQEUENCE_IMPL_HPP__
 
 #endif

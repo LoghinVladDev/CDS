@@ -4,8 +4,8 @@
 
 #if defined ( __CDS_LINKED_LIST_HPP__ ) && defined ( CDS_SEQUENCE_HPP )
 
-#ifndef __CDS_LINKED_LIST_SEQUENCE_IMPL_HPP__
-#define __CDS_LINKED_LIST_SEQUENCE_IMPL_HPP__
+#ifndef __CDS_SHARED_LINKED_LIST_SEQUENCE_IMPL_HPP__
+#define __CDS_SHARED_LINKED_LIST_SEQUENCE_IMPL_HPP__
 
 
 namespace cds {
@@ -40,6 +40,6 @@ namespace cds {
 }
 
 
-#endif // __CDS_LINKED_LIST_SEQUENCE_IMPL_HPP__
+#endif // __CDS_SHARED_LINKED_LIST_SEQUENCE_IMPL_HPP__
 
 #endif

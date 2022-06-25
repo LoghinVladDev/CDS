@@ -2,8 +2,8 @@
 // Created by loghin on 6/13/22.
 //
 
-#ifndef __CDS_COLLECTION_FUNCTIONAL_CONSTRUCTORS_IMPL_HPP__
-#define __CDS_COLLECTION_FUNCTIONAL_CONSTRUCTORS_IMPL_HPP__
+#ifndef __CDS_SHARED_COLLECTION_FUNCTIONAL_CONSTRUCTORS_IMPL_HPP__
+#define __CDS_SHARED_COLLECTION_FUNCTIONAL_CONSTRUCTORS_IMPL_HPP__
 
 namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
@@ -55,12 +55,12 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
 }
 
-#endif // __CDS_COLLECTION_FUNCTIONAL_CONSTRUCTORS_IMPL_HPP__
+#endif // __CDS_SHARED_COLLECTION_FUNCTIONAL_CONSTRUCTORS_IMPL_HPP__
 
 namespace cds {
 
-#if defined (__CDS_LINKED_LIST_HPP__) && ! defined ( __CDS_LINKED_LIST_FUNCTIONAL_CONSTRUCTOR_IMPL__ )
-#define __CDS_LINKED_LIST_FUNCTIONAL_CONSTRUCTOR_IMPL__ // NOLINT(bugprone-reserved-identifier)
+#if defined (__CDS_LINKED_LIST_HPP__) && ! defined ( __CDS_SHARED_LINKED_LIST_FUNCTIONAL_CONSTRUCTOR_IMPL__ )
+#define __CDS_SHARED_LINKED_LIST_FUNCTIONAL_CONSTRUCTOR_IMPL__ // NOLINT(bugprone-reserved-identifier)
 
     template < typename ... __ArgumentTypes > // NOLINT(bugprone-reserved-identifier)
     inline auto linkedListOf (
@@ -70,11 +70,11 @@ namespace cds {
         return __hidden :: __impl :: __instantiateCollectionOf < LinkedList > ( std :: forward < __ArgumentTypes > ( values ) ... );
     }
 
-#endif // __CDS_LINKED_LIST_FUNCTIONAL_CONSTRUCTOR_IMPL__
+#endif // __CDS_SHARED_LINKED_LIST_FUNCTIONAL_CONSTRUCTOR_IMPL__
 
 
-#if defined (__CDS_ARRAY_HPP__) && ! defined ( __CDS_ARRAY_FUNCTIONAL_CONSTRUCTOR_IMPL__ )
-#define __CDS_ARRAY_FUNCTIONAL_CONSTRUCTOR_IMPL__ // NOLINT(bugprone-reserved-identifier)
+#if defined (__CDS_ARRAY_HPP__) && ! defined ( __CDS_SHARED_ARRAY_FUNCTIONAL_CONSTRUCTOR_IMPL__ )
+#define __CDS_SHARED_ARRAY_FUNCTIONAL_CONSTRUCTOR_IMPL__ // NOLINT(bugprone-reserved-identifier)
 
         template < typename ... __ArgumentTypes > // NOLINT(bugprone-reserved-identifier)
         inline auto arrayOf (
@@ -84,12 +84,12 @@ namespace cds {
             return __hidden :: __impl :: __instantiateCollectionOf < Array > ( std :: forward < __ArgumentTypes > ( values ) ... );
         }
 
-#endif // __CDS_ARRAY_FUNCTIONAL_CONSTRUCTOR_IMPL__
+#endif // __CDS_SHARED_ARRAY_FUNCTIONAL_CONSTRUCTOR_IMPL__
 
 
 
-#if defined (__CDS_ORDERED_SET_HPP__) && ! defined ( __CDS_ORDERED_SET_FUNCTIONAL_CONSTRUCTOR_IMPL__ )
-#define __CDS_ORDERED_SET_FUNCTIONAL_CONSTRUCTOR_IMPL__ // NOLINT(bugprone-reserved-identifier)
+#if defined (__CDS_ORDERED_SET_HPP__) && ! defined ( __CDS_SHARED_ORDERED_SET_FUNCTIONAL_CONSTRUCTOR_IMPL__ )
+#define __CDS_SHARED_ORDERED_SET_FUNCTIONAL_CONSTRUCTOR_IMPL__ // NOLINT(bugprone-reserved-identifier)
 
         template < typename ... __ArgumentTypes > // NOLINT(bugprone-reserved-identifier)
         inline auto orderedSetOf (
@@ -99,7 +99,7 @@ namespace cds {
             return __hidden :: __impl :: __instantiateCollectionOf < OrderedSet > ( std :: forward < __ArgumentTypes > ( values ) ... );
         }
 
-#endif // __CDS_ORDERED_SET_FUNCTIONAL_CONSTRUCTOR_IMPL__
+#endif // __CDS_SHARED_ORDERED_SET_FUNCTIONAL_CONSTRUCTOR_IMPL__
 
 
 
@@ -118,8 +118,8 @@ namespace cds {
 
 
 
-#if defined (__CDS_HASH_SET_HPP__) && ! defined ( __CDS_HASH_SET_FUNCTIONAL_CONSTRUCTOR_IMPL__ )
-#define __CDS_HASH_SET_FUNCTIONAL_CONSTRUCTOR_IMPL__ // NOLINT(bugprone-reserved-identifier)
+#if defined (__CDS_HASH_SET_HPP__) && ! defined ( __CDS_SHARED_HASH_SET_FUNCTIONAL_CONSTRUCTOR_IMPL__ )
+#define __CDS_SHARED_HASH_SET_FUNCTIONAL_CONSTRUCTOR_IMPL__ // NOLINT(bugprone-reserved-identifier)
 
         template < typename ... __ArgumentTypes > // NOLINT(bugprone-reserved-identifier)
         inline auto hashSetOf (
@@ -129,12 +129,12 @@ namespace cds {
             return __hidden :: __impl :: __instantiateCollectionOf < HashSet > ( std :: forward < __ArgumentTypes > ( values ) ... );
         }
 
-#endif // __CDS_HASH_SET_FUNCTIONAL_CONSTRUCTOR_IMPL__
+#endif // __CDS_SHARED_HASH_SET_FUNCTIONAL_CONSTRUCTOR_IMPL__
 
 
 
-#if defined (__CDS_HASH_MAP_HPP__) && ! defined ( __CDS_HASH_MAP_FUNCTIONAL_CONSTRUCTOR_IMPL__ )
-#define __CDS_HASH_MAP_FUNCTIONAL_CONSTRUCTOR_IMPL__ // NOLINT(bugprone-reserved-identifier)
+#if defined (__CDS_HASH_MAP_HPP__) && ! defined ( __CDS_SHARED_HASH_MAP_FUNCTIONAL_CONSTRUCTOR_IMPL__ )
+#define __CDS_SHARED_HASH_MAP_FUNCTIONAL_CONSTRUCTOR_IMPL__ // NOLINT(bugprone-reserved-identifier)
 
         template < typename ... __ArgumentTypes > // NOLINT(bugprone-reserved-identifier)
         inline auto hashMapOf (
@@ -144,13 +144,13 @@ namespace cds {
             return __hidden :: __impl :: __instantiateCollectionOf < HashMap > ( std :: forward < __ArgumentTypes > ( values ) ... );
         }
 
-#endif // __CDS_HASH_MAP_FUNCTIONAL_CONSTRUCTOR_IMPL__
+#endif // __CDS_SHARED_HASH_MAP_FUNCTIONAL_CONSTRUCTOR_IMPL__
 
 
 
 
-#if defined (__CDS_LIST_FUNCTIONAL_CONSTRUCTOR_TYPE) && ! defined ( __CDS_LIST_FUNCTIONAL_CONSTRUCTOR_IMPL__ )
-#define __CDS_LIST_FUNCTIONAL_CONSTRUCTOR_IMPL__ // NOLINT(bugprone-reserved-identifier)
+#if defined (__CDS_LIST_FUNCTIONAL_CONSTRUCTOR_TYPE) && ! defined ( __CDS_SHARED_LIST_FUNCTIONAL_CONSTRUCTOR_IMPL__ )
+#define __CDS_SHARED_LIST_FUNCTIONAL_CONSTRUCTOR_IMPL__ // NOLINT(bugprone-reserved-identifier)
 
         template < typename ... __ArgumentTypes > // NOLINT(bugprone-reserved-identifier)
         inline auto listOf (
@@ -162,11 +162,11 @@ namespace cds {
             );
         }
 
-#endif // __CDS_LIST_FUNCTIONAL_CONSTRUCTOR_IMPL__
+#endif // __CDS_SHARED_LIST_FUNCTIONAL_CONSTRUCTOR_IMPL__
 
 
-#if defined (__CDS_SET_FUNCTIONAL_CONSTRUCTOR_TYPE) && ! defined ( __CDS_SET_FUNCTIONAL_CONSTRUCTOR_IMPL__ )
-#define __CDS_SET_FUNCTIONAL_CONSTRUCTOR_IMPL__ // NOLINT(bugprone-reserved-identifier)
+#if defined (__CDS_SET_FUNCTIONAL_CONSTRUCTOR_TYPE) && ! defined ( __CDS_SHARED_SET_FUNCTIONAL_CONSTRUCTOR_IMPL__ )
+#define __CDS_SHARED_SET_FUNCTIONAL_CONSTRUCTOR_IMPL__ // NOLINT(bugprone-reserved-identifier)
 
         template < typename ... __ArgumentTypes > // NOLINT(bugprone-reserved-identifier)
         inline auto setOf (
@@ -178,11 +178,11 @@ namespace cds {
             );
         }
 
-#endif // __CDS_SET_FUNCTIONAL_CONSTRUCTOR_IMPL__
+#endif // __CDS_SHARED_SET_FUNCTIONAL_CONSTRUCTOR_IMPL__
 
 
-#if defined (__CDS_MAP_FUNCTIONAL_CONSTRUCTOR_TYPE) && ! defined ( __CDS_MAP_FUNCTIONAL_CONSTRUCTOR_IMPL__ )
-#define __CDS_MAP_FUNCTIONAL_CONSTRUCTOR_IMPL__ // NOLINT(bugprone-reserved-identifier)
+#if defined (__CDS_MAP_FUNCTIONAL_CONSTRUCTOR_TYPE) && ! defined ( __CDS_SHARED_MAP_FUNCTIONAL_CONSTRUCTOR_IMPL__ )
+#define __CDS_SHARED_MAP_FUNCTIONAL_CONSTRUCTOR_IMPL__ // NOLINT(bugprone-reserved-identifier)
 
         template < typename ... __ArgumentTypes > // NOLINT(bugprone-reserved-identifier)
         inline auto mapOf (
@@ -194,6 +194,6 @@ namespace cds {
             );
         }
 
-#endif // __CDS_MAP_FUNCTIONAL_CONSTRUCTOR_IMPL__
+#endif // __CDS_SHARED_MAP_FUNCTIONAL_CONSTRUCTOR_IMPL__
 
 }
