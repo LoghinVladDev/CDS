@@ -1,43 +1,32 @@
-#include <CDS/LinkedList>
-#include <CDS/Array>
-#include <CDS/Set>
-#include <CDS/OrderedSet>
-#include <CDS/UnorderedSet>
-#include <CDS/HashSet>
-#include <CDS/LinkedHashSet>
-#include <CDS/Map>
-#include <CDS/HashMap>
+#include <iostream>
 
-using namespace cds;
+#include "src/experimental/new_iterable_model/Array.hpp"
+
+
+enum class E1 {
+    f1 = 0x01,
+    f2 = 0x02
+};
+
+
+using namespace cds :: experimental;
 
 int main () {
+    Array < int > a;
 
-    Array < int > a = { 1, 2, 3, 4 };
-    std :: cout << a << '\n';
+    a.pushBack (3);
+    a.pushBack (2);
+    a.pushBack (1);
+    a.pushBack (2);
+    a.pushBack (3);
 
-    LinkedList < int > l = { 1, 2, 3, 4 };
-    std :: cout << l << '\n';
-
-
-    DoubleLinkedList< int> dll = { 1, 2, 3 ,4 };
-    std :: cout << l << '\n';
-
-    OrderedSet < int > os = { 2, 1, 4, 3 };
-    std :: cout << os << '\n';
-
-    UnorderedSet < int > us = { 2, 1, 4, 3 };
-    std :: cout << us << '\n';
-
-    HashSet < int > hs = { 2, 1, 4, 3 };
-    std :: cout << hs << '\n';
-
-    HashMap < int, int > hm = { { 1, 2 }, { 3, 4 }, { 5, 6 }, { 7, 8 } };
-    std :: cout << hm << '\n';
-
-    std :: cout << __CDS_cpplang_core_version << '\n';
-
-    LinkedHashSet < int > lhs = { 3, 2, 1, 4 };
-    std :: cout << lhs << '\n';
+    for ( auto & e : a ) {
+        std :: cout << e << ' ';
+    }
+    std :: cout << '\n';
+    for ( auto & e : ( Collection < int > const & ) a ) {
+        std :: cout << e << ' ';
+    }
 
     return 0;
 }
