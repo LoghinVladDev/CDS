@@ -125,10 +125,6 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         class HashSetDelegateIterator;
 
     private:
-        ElementType * _pInsertionElement { nullptr };
-        bool          _forward;
-
-    private:
         auto delegateConstIterator (
                 DelegateIteratorRequestType requestType
         ) const noexcept -> cds :: UniquePointer < DelegateConstIterator > override;

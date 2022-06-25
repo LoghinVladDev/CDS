@@ -1,0 +1,62 @@
+@startuml
+
+!includesub Object.puml!public_declaration
+
+!startsub private_declaration
+
+namespace cds {
+    namespace __hidden.impl {
+
+        class __BaseStringView < __CharType > {
+            ..fields..
+            - {field} _pData : __CharType const *
+            - {field} _length : Size
+            ..static fields..
+            + {field} {static} invalidIndex : Index const
+            ..constructors..
+            + {method} constexpr __BaseStringView () noexcept
+            + {method} constexpr __BaseStringView (__BaseStringView const &) noexcept
+            + {method} constexpr __BaseStringView (__BaseStringView &&) noexcept
+            + {method} constexpr __BaseStringView (__BaseString <__CharType> const &) noexcept
+            + {method} constexpr __BaseStringView (std::basic_string <__CharType> const &) noexcept
+            + {method} constexpr __BaseStringView () noexcept
+        }
+
+        class __BaseString < __CharType > {
+
+        }
+
+        cds.Object <|--- __BaseString
+
+        class "__BaseStringView::AbstractConstIterator" {
+
+        }
+
+        class "__BaseStringView::ConstIterator" {
+
+        }
+
+        class "__BaseStringView::ConstReverseIterator" {
+
+        }
+
+        __BaseString <|--- "text" cds.String
+
+    }
+}
+
+!endsub
+
+!startsub public_declaration
+
+namespace cds {
+
+    class String {
+
+    }
+
+}
+
+!endsub
+
+@enduml

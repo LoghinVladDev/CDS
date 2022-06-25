@@ -39,6 +39,5 @@ int main () {
     LinkedHashSet < int > lhs = { 3, 2, 1, 4 };
     std :: cout << lhs << '\n';
 
-
     return 0;
 }

@@ -1,0 +1,5 @@
+@startuml
+
+!includesub ../subsets/primitives/baseTypes/Object.puml!public_declaration
+
+@enduml

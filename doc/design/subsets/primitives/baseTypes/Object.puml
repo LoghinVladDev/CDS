@@ -1,0 +1,22 @@
+@startuml
+
+!startsub public_declaration
+
+namespace cds {
+
+    abstract class Object {
+        ..methods with default implementation..
+        + {method} {abstract} String toString () const noexcept
+        + {method} {abstract} bool equals (Object const &) const noexcept
+        + {method} {abstract} Size hash () const noexcept
+        + {method} {abstract} ~Object () noexcept
+        ..overloaded operators..
+        + {method} {static} std::ostream & operator << (std::ostream &, Object const &) noexcept
+        + {method} operator String () const noexcept
+    }
+
+}
+
+!endsub
+
+@enduml
