@@ -120,6 +120,32 @@ int main () {
     (void)pColl->containsAnyNotOf ( { 1, 2, 3 } );
     (void)pColl->containsAllNotOf ( { 1, 2, 3 } );
 
+    Collection < Collection < int > :: ConstIterator > * pItColl;
+    (void) pColl->findThat(3, *pItColl, [](int){return true;});
+    (void) pColl->findFirstThat([](int){return true;});
+    (void) pColl->findLastThat([](int){return true;});
+    (void) pColl->findAllThat(*pItColl, [](int){return true;});
+
+    (void) pColl->findOf ( 3, * pItColl, * pColl );
+    (void) pColl->findFirstOf ( * pColl );
+    (void) pColl->findLastOf ( * pColl );
+    (void) pColl->findAllOf ( * pItColl, * pColl );
+
+    (void) pColl->findNotOf ( 3, * pItColl, * pColl );
+    (void) pColl->findFirstNotOf ( * pColl );
+    (void) pColl->findLastNotOf ( * pColl );
+    (void) pColl->findAllNotOf ( * pItColl, * pColl );
+
+    (void) pColl->findOf ( 3, * pItColl, { 1, 2, 3 } );
+    (void) pColl->findFirstOf ( { 1, 2, 3 } );
+    (void) pColl->findLastOf ( { 1, 2, 3 } );
+    (void) pColl->findAllOf ( * pItColl, { 1, 2, 3 } );
+
+    (void) pColl->findNotOf ( 3, * pItColl, { 1, 2, 3 } );
+    (void) pColl->findFirstNotOf ( { 1, 2, 3 } );
+    (void) pColl->findLastNotOf ( { 1, 2, 3 } );
+    (void) pColl->findAllNotOf ( * pItColl, { 1, 2, 3 } );
+
 //    Array < int > a;
 //
 //    a.pushBack (3);

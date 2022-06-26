@@ -17,8 +17,9 @@
 #include "shared/delegateIterableCommunication/client/DelegateForwardConstIterableClient.hpp"
 #include "shared/delegateIterableCommunication/client/AbstractConstIteratorRemoveClient.hpp"
 
-#include "shared/iterable/IterableFindOf.hpp"
 #include "shared/iterable/IterableContainsOf.hpp"
+#include "shared/iterable/IterableImmutableFindOf.hpp"
+#include "shared/iterable/IterableImmutableFindByPredicate.hpp"
 #include "shared/iterable/IterableRemoveOf.hpp"
 #include "shared/iterable/IterableRemoveByPredicate.hpp"
 #include "shared/iterable/IterableImmutableStatements.hpp"
@@ -51,17 +52,24 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                         __ElementType,
                         std :: initializer_list < __ElementType >
                 >,
-                public __hidden :: __impl :: __IterableFindOf <
+                public __hidden :: __impl :: __IterableImmutableFindOf <
                         Collection < __ElementType >,
                         __ElementType,
+                        typename __hidden :: __impl :: __DelegateForwardConstIterableClient < Collection < __ElementType >, __ElementType, false > :: ConstIterator,
                         Collection < __ElementType >,
                         __hidden :: __impl :: __collectionContains < __ElementType >
                 >,
-                public __hidden :: __impl :: __IterableFindOf <
+                public __hidden :: __impl :: __IterableImmutableFindOf <
                         Collection < __ElementType >,
                         __ElementType,
+                        typename __hidden :: __impl :: __DelegateForwardConstIterableClient < Collection < __ElementType >, __ElementType, false > :: ConstIterator,
                         std :: initializer_list < __ElementType >,
                         __hidden :: __impl :: __initializerListContains < __ElementType, & cds :: meta :: equals < __ElementType > >
+                >,
+                public __hidden :: __impl :: __IterableImmutableFindByPredicate <
+                        Collection < __ElementType >,
+                        __ElementType,
+                        typename __hidden :: __impl :: __DelegateForwardConstIterableClient < Collection < __ElementType >, __ElementType, false > :: ConstIterator
                 >,
                 public __hidden :: __impl :: __IterableRemoveOf <
                         Collection < __ElementType >,
@@ -141,21 +149,31 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                     >;
 
         protected:
-            using IterableFindOfColleciton =
-                    __hidden :: __impl :: __IterableFindOf <
+            using IterableImmutableFindOfColleciton =
+                    __hidden :: __impl :: __IterableImmutableFindOf <
                             Collection < __ElementType >,
                             __ElementType,
+                            typename __hidden :: __impl :: __DelegateForwardConstIterableClient < Collection < __ElementType >, __ElementType, false > :: ConstIterator,
                             Collection < __ElementType >,
                             __hidden :: __impl :: __collectionContains < __ElementType >
                     >;
 
         protected:
-            using IterableFindOfInitializerList =
-                    __hidden :: __impl :: __IterableFindOf <
+            using IterableImmutableFindOfInitializerList =
+                    __hidden :: __impl :: __IterableImmutableFindOf <
                             Collection < __ElementType >,
                             __ElementType,
+                            typename __hidden :: __impl :: __DelegateForwardConstIterableClient < Collection < __ElementType >, __ElementType, false > :: ConstIterator,
                             std :: initializer_list < __ElementType >,
                             __hidden :: __impl :: __initializerListContains < __ElementType, & cds :: meta :: equals < __ElementType > >
+                    >;
+
+        protected:
+            using IterableImmutableFindByPredicate =
+                    __hidden :: __impl :: __IterableImmutableFindByPredicate <
+                            Collection < __ElementType >,
+                            __ElementType,
+                            typename __hidden :: __impl :: __DelegateForwardConstIterableClient < Collection < __ElementType >, __ElementType, false > :: ConstIterator
                     >;
 
         protected:
@@ -248,6 +266,30 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         public: using IterableContainsOfInitializerList :: containsAnyNotOf;
         public: using IterableContainsOfInitializerList :: containsAllNotOf;
 
+        public: using IterableImmutableFindByPredicate :: findThat;
+        public: using IterableImmutableFindByPredicate :: findFirstThat;
+        public: using IterableImmutableFindByPredicate :: findLastThat;
+        public: using IterableImmutableFindByPredicate :: findAllThat;
+
+        public: using IterableImmutableFindOfColleciton :: findOf;
+        public: using IterableImmutableFindOfColleciton :: findFirstOf;
+        public: using IterableImmutableFindOfColleciton :: findLastOf;
+        public: using IterableImmutableFindOfColleciton :: findAllOf;
+        public: using IterableImmutableFindOfColleciton :: findNotOf;
+        public: using IterableImmutableFindOfColleciton :: findFirstNotOf;
+        public: using IterableImmutableFindOfColleciton :: findLastNotOf;
+        public: using IterableImmutableFindOfColleciton :: findAllNotOf;
+
+        public: using IterableImmutableFindOfInitializerList :: findOf;
+        public: using IterableImmutableFindOfInitializerList :: findFirstOf;
+        public: using IterableImmutableFindOfInitializerList :: findLastOf;
+        public: using IterableImmutableFindOfInitializerList :: findAllOf;
+        public: using IterableImmutableFindOfInitializerList :: findNotOf;
+        public: using IterableImmutableFindOfInitializerList :: findFirstNotOf;
+        public: using IterableImmutableFindOfInitializerList :: findLastNotOf;
+        public: using IterableImmutableFindOfInitializerList :: findAllNotOf;
+
+
         public:
             __CDS_NoDiscard __CDS_cpplang_VirtualConstexpr virtual auto size () const noexcept -> Size;
 
@@ -323,8 +365,9 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 #include "shared/delegateIterableCommunication/client/impl/DelegateForwardConstIterableClient.hpp"
 #include "shared/delegateIterableCommunication/client/impl/AbstractConstIteratorRemoveClient.hpp"
 
-#include "shared/iterable/impl/IterableFindOf.hpp"
 #include "shared/iterable/impl/IterableContainsOf.hpp"
+#include "shared/iterable/impl/IterableImmutableFindOf.hpp"
+#include "shared/iterable/impl/IterableImmutableFindByPredicate.hpp"
 #include "shared/iterable/impl/IterableRemoveOf.hpp"
 #include "shared/iterable/impl/IterableRemoveByPredicate.hpp"
 #include "shared/iterable/impl/IterableImmutableStatements.hpp"

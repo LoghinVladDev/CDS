@@ -26,7 +26,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                     using __dfic_ElementType    = // NOLINT(bugprone-reserved-identifier)
                             __ElementType;
 
-                protected:
+                public:
                     using Iterator              = // NOLINT(bugprone-reserved-identifier)
                             cds :: meta :: Conditional <
                                     __bidirectional,

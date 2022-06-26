@@ -31,6 +31,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                     return false;
                 }
 
+
                 template <
                         typename __IterableType,    // NOLINT(bugprone-reserved-identifier)
                         typename __ElementType,     // NOLINT(bugprone-reserved-identifier)
@@ -52,6 +53,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                     return false;
                 }
 
+
                 template <
                         typename __IterableType,    // NOLINT(bugprone-reserved-identifier)
                         typename __ElementType,     // NOLINT(bugprone-reserved-identifier)
@@ -72,6 +74,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
 
                     return true;
                 }
+
 
                 template <
                         typename __IterableType,    // NOLINT(bugprone-reserved-identifier)
