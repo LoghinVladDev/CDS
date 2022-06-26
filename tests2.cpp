@@ -10,6 +10,10 @@
 #include "src/experimental/collection_new_iterable_model/shared/delegateIterator/impl/AbstractDelegateIterator.hpp"
 #include "src/experimental/collection_new_iterable_model/shared/delegateIterator/AbstractDelegateWrapperIterator.hpp"
 #include "src/experimental/collection_new_iterable_model/shared/delegateIterator/impl/AbstractDelegateWrapperIterator.hpp"
+#include "src/experimental/collection_new_iterable_model/shared/delegateIterator/ForwardDelegateWrapperIterator.hpp"
+#include "src/experimental/collection_new_iterable_model/shared/delegateIterator/BidirectionalDelegateWrapperIterator.hpp"
+#include "src/experimental/collection_new_iterable_model/shared/delegateIterator/impl/ForwardDelegateWrapperIterator.hpp"
+#include "src/experimental/collection_new_iterable_model/shared/delegateIterator/impl/BidirectionalDelegateWrapperIterator.hpp"
 
 
 enum class E1 {

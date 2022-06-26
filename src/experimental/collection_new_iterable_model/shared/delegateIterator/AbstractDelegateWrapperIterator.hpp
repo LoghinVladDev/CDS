@@ -39,27 +39,27 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                     ) noexcept;
 
                 public:
-                    __CDS_cpplang_ConstexprDestructor virtual ~__AbstractDelegateWrapperIterator() noexcept;
+                    virtual ~__AbstractDelegateWrapperIterator() noexcept;
 
                 public:
                     __CDS_NoDiscard constexpr auto of (
                             Object const * pObject
                     ) const noexcept -> bool;
 
-                public:
+                protected:
                     __CDS_cpplang_ConstexprPureAbstract auto advance (
                             __IteratorAdvanceDirection direction
                     ) noexcept -> __AbstractDelegateWrapperIterator &;
 
-                public:
+                protected:
                     __CDS_NoDiscard __CDS_cpplang_ConstexprPureAbstract virtual auto equals (
                             __AbstractDelegateWrapperIterator const & iterator
                     ) const noexcept -> bool;
 
-                public:
+                protected:
                     __CDS_NoDiscard __CDS_cpplang_ConstexprPureAbstract virtual auto valid () const noexcept -> bool;
 
-                public:
+                protected:
                     __CDS_NoDiscard __CDS_cpplang_ConstexprPureAbstract virtual auto value () const noexcept -> __ElementType &;
 
                 protected:

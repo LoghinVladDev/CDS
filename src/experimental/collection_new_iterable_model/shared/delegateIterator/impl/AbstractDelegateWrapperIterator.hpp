@@ -46,7 +46,10 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
 
 
                 template < typename __ElementType >         // NOLINT(bugprone-reserved-identifier)
-                __CDS_cpplang_ConstexprDestructor __AbstractDelegateWrapperIterator < __ElementType > :: ~__AbstractDelegateWrapperIterator () noexcept = default;
+                __AbstractDelegateWrapperIterator < __ElementType > :: ~__AbstractDelegateWrapperIterator () noexcept {
+
+                    delete this->_pDelegate;
+                }
 
 
                 template < typename __ElementType >         // NOLINT(bugprone-reserved-identifier)

@@ -93,6 +93,13 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
 
         template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
+        constexpr auto AddressIterator < __ElementType > :: operator -> () const noexcept -> __ElementType {
+
+            return this->_currentAddress;
+        }
+
+
+        template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
         __CDS_cpplang_NonConstConstexprMemberFunction auto AddressIterator < __ElementType > :: operator ++ () noexcept -> AddressIterator & {
 
             ++ this->_currentAddress;

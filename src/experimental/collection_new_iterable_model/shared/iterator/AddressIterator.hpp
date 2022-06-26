@@ -64,6 +64,9 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             __CDS_NoDiscard constexpr auto operator * () const noexcept -> __ElementType &;
 
         public:
+            __CDS_NoDiscard constexpr auto operator -> () const noexcept -> __ElementType *;
+
+        public:
             __CDS_cpplang_NonConstConstexprMemberFunction auto operator ++ () noexcept -> AddressIterator &;
 
         public:
