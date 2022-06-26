@@ -35,10 +35,10 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                             >;
 
                 protected:
-                    auto begin () noexcept -> Iterator;
+                    __CDS_NoDiscard auto begin () noexcept -> Iterator;
 
                 protected:
-                    auto end () noexcept -> Iterator;
+                    __CDS_NoDiscard auto end () noexcept -> Iterator;
                 };
 
             }

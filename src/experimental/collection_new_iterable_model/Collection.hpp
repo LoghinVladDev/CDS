@@ -6,12 +6,17 @@
 #define __CDS_EX_COLLECTION_HPP__
 
 #include <CDS/Object>
+
+#include <CDS/Comparator>
 #include "../../shared/memory/PrimitiveAllocation.hpp"
+#include "collection/CollectionFunctions.hpp"
+
 #include "shared/delegateIterator/ForwardDelegateWrapperIterator.hpp"
 #include "shared/delegateIterableCommunication/channel/DelegateIterableChannel.hpp"
 #include "shared/delegateIterableCommunication/client/DelegateForwardConstIterableClient.hpp"
 #include "shared/delegateIterableCommunication/client/AbstractConstIteratorRemoveClient.hpp"
 #include "shared/iterable/IterableRemoveByPredicate.hpp"
+#include "shared/iterable/IterableImmutableStatements.hpp"
 
 namespace cds { // NOLINT(modernize-concat-nested-namespaces)
     namespace experimental {
@@ -34,6 +39,14 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 public __hidden :: __impl :: __IterableRemoveByPredicate <
                         Collection < __ElementType >,
                         __ElementType
+                >,
+                public __hidden :: __impl :: __IterableImmutableStatements <
+                        Collection < __ElementType >,
+                        __ElementType
+                >,
+                protected __hidden :: __impl :: __CollectionFunctions <
+                        __ElementType,
+                        FunctionComparator < __ElementType, & cds :: meta :: equals < __ElementType > >
                 > {
 
         protected:
@@ -65,48 +78,133 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                             __ElementType
                     >;
 
+        protected:
+            using IterableImmutableStatements =
+                    __hidden :: __impl :: __IterableImmutableStatements <
+                            Collection < __ElementType >,
+                            __ElementType
+                    >;
+
         public:
             using ElementType   = __ElementType;
 
         public:
-            using typename DelegateForwardConstIterableClient :: ConstIterator;
+            constexpr Collection () noexcept;
 
         public:
-            using DelegateForwardConstIterableClient :: begin;
+            constexpr Collection (
+                    Collection const & collection
+            ) noexcept;
 
         public:
-            using DelegateForwardConstIterableClient :: end;
+            constexpr Collection (
+                    Collection && collection
+            ) noexcept;
 
         public:
-            using DelegateForwardConstIterableClient :: cbegin;
+            __CDS_cpplang_VirtualConstexpr ~Collection() noexcept;
+
+        public: using typename DelegateForwardConstIterableClient :: ConstIterator;
+
+        public: using DelegateForwardConstIterableClient :: begin;
+        public: using DelegateForwardConstIterableClient :: end;
+        public: using DelegateForwardConstIterableClient :: cbegin;
+        public: using DelegateForwardConstIterableClient :: cend;
+
+        public: using AbstractConstIteratorRemoveClient :: remove;
+
+        public: using IterableRemoveByPredicate :: removeIf;
+        public: using IterableRemoveByPredicate :: removeFirstIf;
+        public: using IterableRemoveByPredicate :: removeLastIf;
+        public: using IterableRemoveByPredicate :: removeAllIf;
+
+        public: using IterableImmutableStatements :: forEach;
+        public: using IterableImmutableStatements :: some;
+        public: using IterableImmutableStatements :: atLeast;
+        public: using IterableImmutableStatements :: atMost;
+        public: using IterableImmutableStatements :: moreThan;
+        public: using IterableImmutableStatements :: fewerThan;
+        public: using IterableImmutableStatements :: count;
+        public: using IterableImmutableStatements :: any;
+        public: using IterableImmutableStatements :: all;
+        public: using IterableImmutableStatements :: none;
 
         public:
-            using DelegateForwardConstIterableClient :: cend;
+            __CDS_NoDiscard __CDS_cpplang_VirtualConstexpr virtual auto size () const noexcept -> Size;
 
         public:
-            using AbstractConstIteratorRemoveClient :: remove;
+            __CDS_NoDiscard __CDS_cpplang_VirtualConstexpr auto empty () const noexcept -> bool;
 
         public:
-            using IterableRemoveByPredicate :: removeIf;
+            __CDS_cpplang_VirtualConstexpr __CDS_Implicit operator bool () const noexcept; // NOLINT(google-explicit-constructor)
 
         public:
-            using IterableRemoveByPredicate :: removeFirstIf;
+            __CDS_NoDiscard auto toString () const noexcept -> String override;
 
         public:
-            using IterableRemoveByPredicate :: removeLastIf;
+            __CDS_NoDiscard auto hash () const noexcept -> Size override;
 
         public:
-            using IterableRemoveByPredicate :: removeAllIf;
+            __CDS_NoDiscard auto equals (
+                    Object const & object
+            ) const noexcept -> bool override;
+
+        public:
+            virtual auto clear () noexcept -> void = 0;
+
+        public:
+            virtual auto remove (
+                    ElementType const & element
+            ) noexcept -> bool;
+
+        public:
+            __CDS_NoDiscard virtual auto find (
+                    ElementType const & element
+            ) const noexcept -> ConstIterator;
+
+        public:
+            __CDS_NoDiscard virtual auto contains (
+                    ElementType const & element
+            ) const noexcept -> bool;
+
+        public:
+            template < typename __ForwardElementType > // NOLINT(bugprone-reserved-identifier)
+            auto add (
+                    __ForwardElementType && element
+            ) noexcept ( noexcept ( ElementType ( std :: forward < __ForwardElementType > ( element ) ) ) ) -> ElementType const &;
+
+        public:
+            template < typename ... __ArgumentTypes > // NOLINT(bugprone-reserved-identifier)
+            auto addAll (
+                    __ArgumentTypes && ... values
+            ) noexcept -> void;
+
+        public:
+            template < typename __IterableType > // NOLINT(bugprone-reserved-identifier)
+            auto addAllOf (
+                    __IterableType const & iterableType
+            ) noexcept -> void;
+
+        protected:
+            virtual auto __c_new ( // NOLINT(bugprone-reserved-identifier)
+                    ElementType const & referenceElement,
+                    ElementType      ** ppNewLocation
+            ) noexcept -> bool = 0;
         };
 
 
     }
 }
 
+#include "collection/impl/CollectionFunctions.hpp"
 #include "shared/delegateIterator/impl/ForwardDelegateWrapperIterator.hpp"
 #include "shared/delegateIterableCommunication/channel/impl/DelegateIterableChannel.hpp"
 #include "shared/delegateIterableCommunication/client/impl/DelegateForwardConstIterableClient.hpp"
 #include "shared/delegateIterableCommunication/client/impl/AbstractConstIteratorRemoveClient.hpp"
+
 #include "shared/iterable/impl/IterableRemoveByPredicate.hpp"
+#include "shared/iterable/impl/IterableImmutableStatements.hpp"
+
+#include "collection/impl/Collection.hpp"
 
 #endif // __CDS_EX_COLLECTION_HPP__

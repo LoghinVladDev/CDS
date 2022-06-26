@@ -35,16 +35,16 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                             >;
 
                 protected:
-                    auto begin () const noexcept -> ConstIterator;
+                    __CDS_NoDiscard auto begin () const noexcept -> ConstIterator;
 
                 protected:
-                    auto end () const noexcept -> ConstIterator;
+                    __CDS_NoDiscard auto end () const noexcept -> ConstIterator;
 
                 protected:
-                    auto cbegin () const noexcept -> ConstIterator;
+                    __CDS_NoDiscard auto cbegin () const noexcept -> ConstIterator;
 
                 protected:
-                    auto cend () const noexcept -> ConstIterator;
+                    __CDS_NoDiscard auto cend () const noexcept -> ConstIterator;
                 };
 
             }

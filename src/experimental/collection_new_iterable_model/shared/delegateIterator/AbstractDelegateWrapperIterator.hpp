@@ -56,7 +56,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                             __AbstractDelegateWrapperIterator const & iterator
                     ) const noexcept -> bool;
 
-                protected:
+                public:
                     __CDS_NoDiscard __CDS_cpplang_ConstexprPureAbstract virtual auto valid () const noexcept -> bool;
 
                 protected:

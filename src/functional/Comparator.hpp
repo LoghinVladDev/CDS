@@ -17,31 +17,6 @@ namespace cds {
 
 }
 
-namespace cds { // NOLINT(modernize-concat-nested-namespaces)
-    namespace utility {
-
-        template <class T> __CDS_Requires( Comparable <T> )
-        class __CDS_MaybeUnused DefaultSetComparator : public Comparator<T> {
-        public:
-            __CDS_OptimalInline auto operator () (T const & left, T const & right) const noexcept -> bool { return left < right; }
-        };
-
-    }
-}
-
-#if __CDS_cpplang_Concepts_available == true
-
-namespace cds {
-
-    template <class T, class C>
-    concept ValidSetComparator =
-        std :: is_base_of < Comparator<T>, C > :: value ||
-        std :: is_invocable < C, T, T > :: type :: value;
-
-}
-
-#endif
-
 #include "../shared/impl/generalPredicates.hpp"
 
 namespace cds {
@@ -54,12 +29,12 @@ namespace cds {
     }
 
     template < typename __Type, utility :: ComparisonFunction < __Type > __comparisonFunction > // NOLINT(bugprone-reserved-identifier)
-    class FunctionComparator : public Comparator < __Type > {
+    class FunctionComparator {
     public:
         __CDS_NoDiscard constexpr auto operator () (
                 __Type const & left,
                 __Type const & right
-        ) const noexcept ( noexcept ( __comparisonFunction ( left, right ) ) ) -> bool override {
+        ) const noexcept ( noexcept ( __comparisonFunction ( left, right ) ) ) -> bool {
 
             return __comparisonFunction ( left, right );
         }
