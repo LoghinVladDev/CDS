@@ -44,14 +44,12 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 public __hidden :: __impl :: __IterableContainsOf <
                         Collection < __ElementType >,
                         __ElementType,
-                        Collection < __ElementType >,
-                        __hidden :: __impl :: __collectionContains < __ElementType >
+                        Collection < __ElementType >
                 >,
                 public __hidden :: __impl :: __IterableContainsOf <
                         Collection < __ElementType >,
                         __ElementType,
-                        std :: initializer_list < __ElementType >,
-                        __hidden :: __impl :: __initializerListContains < __ElementType, & cds :: meta :: equals < __ElementType > >
+                        std :: initializer_list < __ElementType >
                 >,
                 public __hidden :: __impl :: __IterableFindOf <
                         Collection < __ElementType >,
@@ -131,8 +129,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                     __hidden :: __impl :: __IterableContainsOf <
                             Collection < __ElementType >,
                             __ElementType,
-                            Collection < __ElementType >,
-                            __hidden :: __impl :: __collectionContains < __ElementType >
+                            Collection < __ElementType >
                     >;
 
         protected:
@@ -140,8 +137,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                     __hidden :: __impl :: __IterableContainsOf <
                             Collection < __ElementType >,
                             __ElementType,
-                            std :: initializer_list < __ElementType >,
-                            __hidden :: __impl :: __initializerListContains < __ElementType, & cds :: meta :: equals < __ElementType > >
+                            std :: initializer_list < __ElementType >
                     >;
 
         protected:
@@ -241,6 +237,16 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         public: using IterableRemoveOfInitializerList :: removeFirstNotOf;
         public: using IterableRemoveOfInitializerList :: removeLastNotOf;
         public: using IterableRemoveOfInitializerList :: removeAllNotOf;
+
+        public: using IterableContainsOfColleciton :: containsAnyOf;
+        public: using IterableContainsOfColleciton :: containsAllOf;
+        public: using IterableContainsOfColleciton :: containsAnyNotOf;
+        public: using IterableContainsOfColleciton :: containsAllNotOf;
+
+        public: using IterableContainsOfInitializerList :: containsAnyOf;
+        public: using IterableContainsOfInitializerList :: containsAllOf;
+        public: using IterableContainsOfInitializerList :: containsAnyNotOf;
+        public: using IterableContainsOfInitializerList :: containsAllNotOf;
 
         public:
             __CDS_NoDiscard __CDS_cpplang_VirtualConstexpr virtual auto size () const noexcept -> Size;

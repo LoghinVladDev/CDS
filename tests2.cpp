@@ -110,6 +110,15 @@ int main () {
     pColl->removeLastNotOf ( { 1, 3, 4 } );
     pColl->removeAllNotOf ( { 1, 3, 4 } );
 
+    (void)pColl->containsAnyOf ( * pColl );
+    (void)pColl->containsAllOf ( * pColl );
+    (void)pColl->containsAnyNotOf ( * pColl );
+    (void)pColl->containsAllNotOf ( * pColl );
+
+    (void)pColl->containsAnyOf ( { 1, 2, 3 } );
+    (void)pColl->containsAllOf ( { 1, 2, 3 } );
+    (void)pColl->containsAnyNotOf ( { 1, 2, 3 } );
+    (void)pColl->containsAllNotOf ( { 1, 2, 3 } );
 
 //    Array < int > a;
 //

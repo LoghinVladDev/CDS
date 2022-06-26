@@ -11,12 +11,30 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
             namespace __impl {  // NOLINT(bugprone-reserved-identifier)
 
                 template <
-                        typename                                                    __IterableType,     // NOLINT(bugprone-reserved-identifier)
-                        typename                                                    __ElementType,      // NOLINT(bugprone-reserved-identifier)
-                        typename                                                    __FromIterableType, // NOLINT(bugprone-reserved-identifier)
-                        __ContainsFunction < __FromIterableType, __ElementType >    __containsFunction  // NOLINT(bugprone-reserved-identifier)
-                > class __IterableContainsOf {                                                          // NOLINT(bugprone-reserved-identifier)
+                        typename __IterableType,    // NOLINT(bugprone-reserved-identifier)
+                        typename __ElementType,     // NOLINT(bugprone-reserved-identifier)
+                        typename __FromIterableType // NOLINT(bugprone-reserved-identifier)
+                > class __IterableContainsOf {      // NOLINT(bugprone-reserved-identifier)
 
+                protected:
+                    __CDS_NoDiscard auto containsAnyOf (
+                            __FromIterableType const & from
+                    ) const noexcept -> bool;
+
+                protected:
+                    __CDS_NoDiscard auto containsAnyNotOf (
+                            __FromIterableType const & from
+                    ) const noexcept -> bool;
+
+                protected:
+                    __CDS_NoDiscard auto containsAllOf (
+                            __FromIterableType const & from
+                    ) const noexcept -> bool;
+
+                protected:
+                    __CDS_NoDiscard auto containsAllNotOf (
+                            __FromIterableType const & from
+                    ) const noexcept -> bool;
                 };
 
             }
