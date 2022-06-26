@@ -10,10 +10,10 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
         namespace __hidden {    // NOLINT(modernize-concat-nested-namespaces, bugprone-reserved-identifier)
             namespace __impl {  // NOLINT(bugprone-reserved-identifier)
 
-                template < typename >                           // NOLINT(bugprone-reserved-identifier)
+                template < typename >
                 class __BidirectionalDelegateWrapperIterator;   // NOLINT(bugprone-reserved-identifier)
 
-                template < typename >                   // NOLINT(bugprone-reserved-identifier)
+                template < typename >
                 class __ForwardDelegateWrapperIterator; // NOLINT(bugprone-reserved-identifier)
 
                 template <
