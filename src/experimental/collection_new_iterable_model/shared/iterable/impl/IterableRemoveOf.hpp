@@ -21,7 +21,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                         cds :: meta :: EnableIf <
                                 cds :: meta :: isSame < __TIterableType, __TFromIterableType > ()
                         >
-                > auto __IterableRemoveOf <
+                > __CDS_OptimalInline auto __IterableRemoveOf <
                         __IterableType,
                         __ElementType,
                         __FromIterableType,
@@ -59,7 +59,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                         cds :: meta :: EnableIf <
                                 ! cds :: meta :: isSame < __TIterableType, __TFromIterableType > ()
                         >
-                > auto __IterableRemoveOf <
+                > __CDS_OptimalInline auto __IterableRemoveOf <
                         __IterableType,
                         __ElementType,
                         __FromIterableType,
@@ -84,7 +84,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                         cds :: meta :: EnableIf <
                                 cds :: meta :: isSame < __TIterableType, __TFromIterableType > ()
                         >
-                > auto __IterableRemoveOf <
+                > __CDS_OptimalInline auto __IterableRemoveOf <
                         __IterableType,
                         __ElementType,
                         __FromIterableType,
@@ -108,7 +108,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                         cds :: meta :: EnableIf <
                                 ! cds :: meta :: isSame < __TIterableType, __TFromIterableType > ()
                         >
-                > auto __IterableRemoveOf <
+                > __CDS_OptimalInline auto __IterableRemoveOf <
                         __IterableType,
                         __ElementType,
                         __FromIterableType,
@@ -132,7 +132,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                         cds :: meta :: EnableIf <
                                 cds :: meta :: isSame < __TIterableType, __TFromIterableType > ()
                         >
-                > auto __IterableRemoveOf <
+                > __CDS_OptimalInline auto __IterableRemoveOf <
                         __IterableType,
                         __ElementType,
                         __FromIterableType,
@@ -166,7 +166,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                         cds :: meta :: EnableIf <
                                 ! cds :: meta :: isSame < __TIterableType, __TFromIterableType > ()
                         >
-                > auto __IterableRemoveOf <
+                > __CDS_OptimalInline auto __IterableRemoveOf <
                         __IterableType,
                         __ElementType,
                         __FromIterableType,
@@ -190,7 +190,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                         cds :: meta :: EnableIf <
                                 cds :: meta :: isSame < __TIterableType, __TFromIterableType > ()
                         >
-                > auto __IterableRemoveOf <
+                > __CDS_OptimalInline auto __IterableRemoveOf <
                         __IterableType,
                         __ElementType,
                         __FromIterableType,
@@ -216,7 +216,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                         cds :: meta :: EnableIf <
                                 ! cds :: meta :: isSame < __TIterableType, __TFromIterableType > ()
                         >
-                > auto __IterableRemoveOf <
+                > __CDS_OptimalInline auto __IterableRemoveOf <
                         __IterableType,
                         __ElementType,
                         __FromIterableType,
@@ -233,7 +233,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                         typename                                                    __ElementType,      // NOLINT(bugprone-reserved-identifier)
                         typename                                                    __FromIterableType, // NOLINT(bugprone-reserved-identifier)
                         __ContainsFunction < __FromIterableType, __ElementType >    __containsFunction  // NOLINT(bugprone-reserved-identifier)
-                > auto __IterableRemoveOf <
+                > __CDS_OptimalInline auto __IterableRemoveOf <
                         __IterableType,
                         __ElementType,
                         __FromIterableType,
@@ -252,7 +252,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                         typename                                                    __ElementType,      // NOLINT(bugprone-reserved-identifier)
                         typename                                                    __FromIterableType, // NOLINT(bugprone-reserved-identifier)
                         __ContainsFunction < __FromIterableType, __ElementType >    __containsFunction  // NOLINT(bugprone-reserved-identifier)
-                > auto __IterableRemoveOf <
+                > __CDS_OptimalInline auto __IterableRemoveOf <
                         __IterableType,
                         __ElementType,
                         __FromIterableType,
@@ -270,7 +270,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                         typename                                                    __ElementType,      // NOLINT(bugprone-reserved-identifier)
                         typename                                                    __FromIterableType, // NOLINT(bugprone-reserved-identifier)
                         __ContainsFunction < __FromIterableType, __ElementType >    __containsFunction  // NOLINT(bugprone-reserved-identifier)
-                > auto __IterableRemoveOf <
+                > __CDS_OptimalInline auto __IterableRemoveOf <
                         __IterableType,
                         __ElementType,
                         __FromIterableType,
@@ -288,7 +288,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                         typename                                                    __ElementType,      // NOLINT(bugprone-reserved-identifier)
                         typename                                                    __FromIterableType, // NOLINT(bugprone-reserved-identifier)
                         __ContainsFunction < __FromIterableType, __ElementType >    __containsFunction  // NOLINT(bugprone-reserved-identifier)
-                > auto __IterableRemoveOf <
+                > __CDS_OptimalInline auto __IterableRemoveOf <
                         __IterableType,
                         __ElementType,
                         __FromIterableType,

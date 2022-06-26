@@ -20,9 +20,9 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                 ) noexcept ( noexcept ( action ( * begin ) ) ) -> void;
 
                 template <
-                        typename __IteratorType,    // NOLINT(bugprone-reserved-identifier)
-                        typename __Predicate        // NOLINT(bugprone-reserved-identifier)
-                > constexpr auto __some (           // NOLINT(bugprone-reserved-identifier)
+                        typename __IteratorType,            // NOLINT(bugprone-reserved-identifier)
+                        typename __Predicate                // NOLINT(bugprone-reserved-identifier)
+                > __CDS_NoDiscard constexpr auto __some (   // NOLINT(bugprone-reserved-identifier)
                         __IteratorType const & begin,
                         __IteratorType const & end,
                         Size                   count,
@@ -30,9 +30,9 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                 ) noexcept ( noexcept ( predicate ( * begin ) ) ) -> bool;
 
                 template <
-                        typename __IteratorType,    // NOLINT(bugprone-reserved-identifier)
-                        typename __Predicate        // NOLINT(bugprone-reserved-identifier)
-                > constexpr auto __atLeast (        // NOLINT(bugprone-reserved-identifier)
+                        typename __IteratorType,                // NOLINT(bugprone-reserved-identifier)
+                        typename __Predicate                    // NOLINT(bugprone-reserved-identifier)
+                > __CDS_NoDiscard constexpr auto __atLeast (    // NOLINT(bugprone-reserved-identifier)
                         __IteratorType const & begin,
                         __IteratorType const & end,
                         Size                   count,
@@ -40,9 +40,9 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                 ) noexcept ( noexcept ( predicate ( * begin ) ) ) -> bool;
 
                 template <
-                        typename __IteratorType,    // NOLINT(bugprone-reserved-identifier)
-                        typename __Predicate        // NOLINT(bugprone-reserved-identifier)
-                > constexpr auto __atMost (         // NOLINT(bugprone-reserved-identifier)
+                        typename __IteratorType,            // NOLINT(bugprone-reserved-identifier)
+                        typename __Predicate                // NOLINT(bugprone-reserved-identifier)
+                > __CDS_NoDiscard constexpr auto __atMost ( // NOLINT(bugprone-reserved-identifier)
                         __IteratorType const & begin,
                         __IteratorType const & end,
                         Size                   count,
@@ -50,9 +50,9 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                 ) noexcept ( noexcept ( predicate ( * begin ) ) ) -> bool;
 
                 template <
-                        typename __IteratorType,    // NOLINT(bugprone-reserved-identifier)
-                        typename __Predicate        // NOLINT(bugprone-reserved-identifier)
-                > constexpr auto __moreThan (       // NOLINT(bugprone-reserved-identifier)
+                        typename __IteratorType,                // NOLINT(bugprone-reserved-identifier)
+                        typename __Predicate                    // NOLINT(bugprone-reserved-identifier)
+                > __CDS_NoDiscard constexpr auto __moreThan (   // NOLINT(bugprone-reserved-identifier)
                         __IteratorType const & begin,
                         __IteratorType const & end,
                         Size                   count,
@@ -60,9 +60,9 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                 ) noexcept ( noexcept ( predicate ( * begin ) ) ) -> bool;
 
                 template <
-                        typename __IteratorType,    // NOLINT(bugprone-reserved-identifier)
-                        typename __Predicate        // NOLINT(bugprone-reserved-identifier)
-                > constexpr auto __fewerThan (      // NOLINT(bugprone-reserved-identifier)
+                        typename __IteratorType,                // NOLINT(bugprone-reserved-identifier)
+                        typename __Predicate                    // NOLINT(bugprone-reserved-identifier)
+                > __CDS_NoDiscard constexpr auto __fewerThan (  // NOLINT(bugprone-reserved-identifier)
                         __IteratorType const & begin,
                         __IteratorType const & end,
                         Size                   count,
@@ -70,36 +70,36 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                 ) noexcept ( noexcept ( predicate ( * begin ) ) ) -> bool;
 
                 template <
-                        typename __IteratorType,    // NOLINT(bugprone-reserved-identifier)
-                        typename __Predicate        // NOLINT(bugprone-reserved-identifier)
-                > constexpr auto __count (          // NOLINT(bugprone-reserved-identifier)
+                        typename __IteratorType,            // NOLINT(bugprone-reserved-identifier)
+                        typename __Predicate                // NOLINT(bugprone-reserved-identifier)
+                > __CDS_NoDiscard constexpr auto __count (  // NOLINT(bugprone-reserved-identifier)
                         __IteratorType const & begin,
                         __IteratorType const & end,
                         __Predicate    const & predicate
                 ) noexcept ( noexcept ( predicate ( * begin ) ) ) -> Size;
 
                 template <
-                        typename __IteratorType,    // NOLINT(bugprone-reserved-identifier)
-                        typename __Predicate        // NOLINT(bugprone-reserved-identifier)
-                > constexpr auto __any (            // NOLINT(bugprone-reserved-identifier)
+                        typename __IteratorType,            // NOLINT(bugprone-reserved-identifier)
+                        typename __Predicate                // NOLINT(bugprone-reserved-identifier)
+                > __CDS_NoDiscard constexpr auto __any (    // NOLINT(bugprone-reserved-identifier)
                         __IteratorType const & begin,
                         __IteratorType const & end,
                         __Predicate    const & predicate
                 ) noexcept ( noexcept ( predicate ( * begin ) ) ) -> bool;
 
                 template <
-                        typename __IteratorType,    // NOLINT(bugprone-reserved-identifier)
-                        typename __Predicate        // NOLINT(bugprone-reserved-identifier)
-                > constexpr auto __all (            // NOLINT(bugprone-reserved-identifier)
+                        typename __IteratorType,            // NOLINT(bugprone-reserved-identifier)
+                        typename __Predicate                // NOLINT(bugprone-reserved-identifier)
+                > __CDS_NoDiscard constexpr auto __all (    // NOLINT(bugprone-reserved-identifier)
                         __IteratorType const & begin,
                         __IteratorType const & end,
                         __Predicate    const & predicate
                 ) noexcept ( noexcept ( predicate ( * begin ) ) ) -> bool;
 
                 template <
-                        typename __IteratorType,    // NOLINT(bugprone-reserved-identifier)
-                        typename __Predicate        // NOLINT(bugprone-reserved-identifier)
-                > constexpr auto __none (           // NOLINT(bugprone-reserved-identifier)
+                        typename __IteratorType,            // NOLINT(bugprone-reserved-identifier)
+                        typename __Predicate                // NOLINT(bugprone-reserved-identifier)
+                > __CDS_NoDiscard constexpr auto __none (   // NOLINT(bugprone-reserved-identifier)
                         __IteratorType const & begin,
                         __IteratorType const & end,
                         __Predicate    const & predicate

@@ -80,15 +80,15 @@ int main () {
     );
 
     pColl->forEach([](int){});
-    pColl->some(2, [](int){return true;});
-    pColl->atLeast(2, [](int){return true;});
-    pColl->atMost(2, [](int){return true;});
-    pColl->moreThan(2, [](int){return true;});
-    pColl->fewerThan(2, [](int){return true;});
-    pColl->count([](int){return true;});
-    pColl->all([](int){return true;});
-    pColl->any([](int){return true;});
-    pColl->none([](int){return true;});
+    (void)pColl->some(2, [](int){return true;});
+    (void)pColl->atLeast(2, [](int){return true;});
+    (void)pColl->atMost(2, [](int){return true;});
+    (void)pColl->moreThan(2, [](int){return true;});
+    (void)pColl->fewerThan(2, [](int){return true;});
+    (void)pColl->count([](int){return true;});
+    (void)pColl->all([](int){return true;});
+    (void)pColl->any([](int){return true;});
+    (void)pColl->none([](int){return true;});
 
     pColl->removeOf ( 5, * pColl );
     pColl->removeFirstOf ( * pColl );

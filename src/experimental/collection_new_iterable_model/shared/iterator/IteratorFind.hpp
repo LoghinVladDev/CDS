@@ -30,7 +30,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                         typename                                                __IterableType,     // NOLINT(bugprone-reserved-identifier)
                         template < typename ... > class                         __CollectionType,   // NOLINT(bugprone-reserved-identifier)
                         __ContainsFunction < __IterableType, __ElementType >    __containsFunction  // NOLINT(bugprone-reserved-identifier)
-                > constexpr auto __findOf (                                                         // NOLINT(bugprone-reserved-identifier)
+                > __CDS_NoDiscard constexpr auto __findOf (                                         // NOLINT(bugprone-reserved-identifier)
                         __IteratorType                      const & begin,
                         __IteratorType                      const & end,
                         Size                                        count,
@@ -42,7 +42,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                         typename                                                __IteratorType,     // NOLINT(bugprone-reserved-identifier)
                         typename                                                __IterableType,     // NOLINT(bugprone-reserved-identifier)
                         __ContainsFunction < __IterableType, __ElementType >    __containsFunction  // NOLINT(bugprone-reserved-identifier)
-                > constexpr auto __findFirstOf (                                                    // NOLINT(bugprone-reserved-identifier)
+                > __CDS_NoDiscard constexpr auto __findFirstOf (                                    // NOLINT(bugprone-reserved-identifier)
                         __IteratorType                      const & begin,
                         __IteratorType                      const & end,
                         __IterableType                      const & from
@@ -53,7 +53,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                         typename                                                __IteratorType,     // NOLINT(bugprone-reserved-identifier)
                         typename                                                __IterableType,     // NOLINT(bugprone-reserved-identifier)
                         __ContainsFunction < __IterableType, __ElementType >    __containsFunction  // NOLINT(bugprone-reserved-identifier)
-                > constexpr auto __findLastOf (                                                     // NOLINT(bugprone-reserved-identifier)
+                > __CDS_NoDiscard constexpr auto __findLastOf (                                     // NOLINT(bugprone-reserved-identifier)
                         __IteratorType                      const & begin,
                         __IteratorType                      const & end,
                         __IterableType                      const & from
@@ -78,7 +78,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                         typename                                                __IterableType,     // NOLINT(bugprone-reserved-identifier)
                         template < typename ... > class                         __CollectionType,   // NOLINT(bugprone-reserved-identifier)
                         __ContainsFunction < __IterableType, __ElementType >    __containsFunction  // NOLINT(bugprone-reserved-identifier)
-                > constexpr auto __findAllOf (                                                      // NOLINT(bugprone-reserved-identifier)
+                > __CDS_NoDiscard constexpr auto __findAllOf (                                      // NOLINT(bugprone-reserved-identifier)
                         __IteratorType                      const & begin,
                         __IteratorType                      const & end,
                         __IterableType                      const & from
@@ -104,7 +104,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                         typename                                                __IterableType,     // NOLINT(bugprone-reserved-identifier)
                         template < typename ... > class                         __CollectionType,   // NOLINT(bugprone-reserved-identifier)
                         __ContainsFunction < __IterableType, __ElementType >    __containsFunction  // NOLINT(bugprone-reserved-identifier)
-                > constexpr auto __findNotOf (                                                      // NOLINT(bugprone-reserved-identifier)
+                > __CDS_NoDiscard constexpr auto __findNotOf (                                      // NOLINT(bugprone-reserved-identifier)
                         __IteratorType                      const & begin,
                         __IteratorType                      const & end,
                         Size                                        count,
@@ -116,7 +116,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                         typename                                                __IteratorType,     // NOLINT(bugprone-reserved-identifier)
                         typename                                                __IterableType,     // NOLINT(bugprone-reserved-identifier)
                         __ContainsFunction < __IterableType, __ElementType >    __containsFunction  // NOLINT(bugprone-reserved-identifier)
-                > constexpr auto __findFirstNotOf (                                                 // NOLINT(bugprone-reserved-identifier)
+                > __CDS_NoDiscard constexpr auto __findFirstNotOf (                                 // NOLINT(bugprone-reserved-identifier)
                         __IteratorType                      const & begin,
                         __IteratorType                      const & end,
                         __IterableType                      const & from
@@ -127,7 +127,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                         typename                                                __IteratorType,     // NOLINT(bugprone-reserved-identifier)
                         typename                                                __IterableType,     // NOLINT(bugprone-reserved-identifier)
                         __ContainsFunction < __IterableType, __ElementType >    __containsFunction  // NOLINT(bugprone-reserved-identifier)
-                > constexpr auto __findLastNotOf (                                                  // NOLINT(bugprone-reserved-identifier)
+                > __CDS_NoDiscard constexpr auto __findLastNotOf (                                  // NOLINT(bugprone-reserved-identifier)
                         __IteratorType                      const & begin,
                         __IteratorType                      const & end,
                         __IterableType                      const & from
@@ -152,7 +152,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                         typename                                                __IterableType,     // NOLINT(bugprone-reserved-identifier)
                         template < typename ... > class                         __CollectionType,   // NOLINT(bugprone-reserved-identifier)
                         __ContainsFunction < __IterableType, __ElementType >    __containsFunction  // NOLINT(bugprone-reserved-identifier)
-                > constexpr auto __findAllNotOf (                                                   // NOLINT(bugprone-reserved-identifier)
+                > __CDS_NoDiscard constexpr auto __findAllNotOf (                                   // NOLINT(bugprone-reserved-identifier)
                         __IteratorType                      const & begin,
                         __IteratorType                      const & end,
                         __IterableType                      const & from

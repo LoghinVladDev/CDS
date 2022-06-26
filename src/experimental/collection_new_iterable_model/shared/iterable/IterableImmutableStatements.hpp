@@ -29,7 +29,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                 protected:
                     template <
                             typename __Predicate = decltype ( & predicates :: alwaysTrue < ElementType > ) // NOLINT(bugprone-reserved-identifier)
-                    > auto some (
+                    > __CDS_NoDiscard auto some (
                             Size                count,
                             __Predicate const & predicate
                     ) const noexcept ( noexcept ( predicate ( cds :: meta :: referenceOf < ElementType const > () ) ) ) -> bool;
@@ -37,7 +37,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                 protected:
                     template <
                             typename __Predicate = decltype ( & predicates :: alwaysTrue < ElementType > ) // NOLINT(bugprone-reserved-identifier)
-                    > auto atLeast (
+                    > __CDS_NoDiscard auto atLeast (
                             Size                count,
                             __Predicate const & predicate
                     ) const noexcept ( noexcept ( predicate ( cds :: meta :: referenceOf < ElementType const > () ) ) ) -> bool;
@@ -45,7 +45,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                 protected:
                     template <
                             typename __Predicate = decltype ( & predicates :: alwaysTrue < ElementType > ) // NOLINT(bugprone-reserved-identifier)
-                    > auto atMost (
+                    > __CDS_NoDiscard auto atMost (
                             Size                count,
                             __Predicate const & predicate
                     ) const noexcept ( noexcept ( predicate ( cds :: meta :: referenceOf < ElementType const > () ) ) ) -> bool;
@@ -53,7 +53,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                 protected:
                     template <
                             typename __Predicate = decltype ( & predicates :: alwaysTrue < ElementType > ) // NOLINT(bugprone-reserved-identifier)
-                    > auto moreThan (
+                    > __CDS_NoDiscard auto moreThan (
                             Size                count,
                             __Predicate const & predicate
                     ) const noexcept ( noexcept ( predicate ( cds :: meta :: referenceOf < ElementType const > () ) ) ) -> bool;
@@ -61,7 +61,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                 protected:
                     template <
                             typename __Predicate = decltype ( & predicates :: alwaysTrue < ElementType > ) // NOLINT(bugprone-reserved-identifier)
-                    > auto fewerThan (
+                    > __CDS_NoDiscard auto fewerThan (
                             Size                count,
                             __Predicate const & predicate
                     ) const noexcept ( noexcept ( predicate ( cds :: meta :: referenceOf < ElementType const > () ) ) ) -> bool;
@@ -69,28 +69,28 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                 protected:
                     template <
                             typename __Predicate = decltype ( & predicates :: alwaysTrue < ElementType > ) // NOLINT(bugprone-reserved-identifier)
-                    > auto count (
+                    > __CDS_NoDiscard auto count (
                             __Predicate const & predicate
                     ) const noexcept ( noexcept ( predicate ( cds :: meta :: referenceOf < ElementType const > () ) ) ) -> Size;
 
                 protected:
                     template <
                             typename __Predicate = decltype ( & predicates :: alwaysTrue < ElementType > ) // NOLINT(bugprone-reserved-identifier)
-                    > auto any (
+                    > __CDS_NoDiscard auto any (
                             __Predicate const & predicate
                     ) const noexcept ( noexcept ( predicate ( cds :: meta :: referenceOf < ElementType const > () ) ) ) -> bool;
 
                 protected:
                     template <
                             typename __Predicate = decltype ( & predicates :: alwaysTrue < ElementType > ) // NOLINT(bugprone-reserved-identifier)
-                    > auto all (
+                    > __CDS_NoDiscard auto all (
                             __Predicate const & predicate
                     ) const noexcept ( noexcept ( predicate ( cds :: meta :: referenceOf < ElementType const > () ) ) ) -> bool;
 
                 protected:
                     template <
                             typename __Predicate = decltype ( & predicates :: alwaysTrue < ElementType > ) // NOLINT(bugprone-reserved-identifier)
-                    > auto none (
+                    > __CDS_NoDiscard auto none (
                             __Predicate const & predicate
                     ) const noexcept ( noexcept ( predicate ( cds :: meta :: referenceOf < ElementType const > () ) ) ) -> bool;
                 };

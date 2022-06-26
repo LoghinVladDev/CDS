@@ -17,7 +17,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                 > template <
                         template < typename ... > class __CollectionType,   // NOLINT(bugprone-reserved-identifier)
                         typename                        __Predicate         // NOLINT(bugprone-reserved-identifier)
-                > auto __IterableImmutableFindByPredicate <
+                > __CDS_OptimalInline auto __IterableImmutableFindByPredicate <
                         __IterableType,
                         __ElementType,
                         __IteratorType
@@ -44,7 +44,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                 > template <
                         template < typename ... > class __CollectionType,   // NOLINT(bugprone-reserved-identifier)
                         typename                        __Predicate         // NOLINT(bugprone-reserved-identifier)
-                > auto __IterableImmutableFindByPredicate <
+                > __CDS_OptimalInline auto __IterableImmutableFindByPredicate <
                         __IterableType,
                         __ElementType,
                         __IteratorType
@@ -68,7 +68,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                         typename                        __IteratorType      // NOLINT(bugprone-reserved-identifier)
                 > template <
                         typename                        __Predicate         // NOLINT(bugprone-reserved-identifier)
-                > auto __IterableImmutableFindByPredicate <
+                > __CDS_OptimalInline auto __IterableImmutableFindByPredicate <
                         __IterableType,
                         __ElementType,
                         __IteratorType
@@ -90,7 +90,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                         typename                        __IteratorType      // NOLINT(bugprone-reserved-identifier)
                 > template <
                         typename                        __Predicate         // NOLINT(bugprone-reserved-identifier)
-                > auto __IterableImmutableFindByPredicate <
+                > __CDS_OptimalInline auto __IterableImmutableFindByPredicate <
                         __IterableType,
                         __ElementType,
                         __IteratorType
@@ -113,7 +113,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                 > template <
                         template < typename ... > class __CollectionType,   // NOLINT(bugprone-reserved-identifier)
                         typename                        __Predicate         // NOLINT(bugprone-reserved-identifier)
-                > auto __IterableImmutableFindByPredicate <
+                > __CDS_OptimalInline auto __IterableImmutableFindByPredicate <
                         __IterableType,
                         __ElementType,
                         __IteratorType
@@ -138,7 +138,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                 > template <
                         template < typename ... > class __CollectionType,   // NOLINT(bugprone-reserved-identifier)
                         typename                        __Predicate         // NOLINT(bugprone-reserved-identifier)
-                > auto __IterableImmutableFindByPredicate <
+                > __CDS_OptimalInline auto __IterableImmutableFindByPredicate <
                         __IterableType,
                         __ElementType,
                         __IteratorType

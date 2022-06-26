@@ -26,7 +26,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                         typename __IteratorType,                            // NOLINT(bugprone-reserved-identifier)
                         template < typename ... > class __CollectionType,   // NOLINT(bugprone-reserved-identifier)
                         typename __Predicate                                // NOLINT(bugprone-reserved-identifier)
-                > constexpr auto __findThat (                               // NOLINT(bugprone-reserved-identifier)
+                > __CDS_NoDiscard constexpr auto __findThat (               // NOLINT(bugprone-reserved-identifier)
                         __IteratorType                      const & begin,
                         __IteratorType                      const & end,
                         Size                                        count,
@@ -34,18 +34,18 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                 ) noexcept ( noexcept ( predicate ( * begin ) ) ) -> __CollectionType < __IteratorType >;
 
                 template <
-                        typename __IteratorType,    // NOLINT(bugprone-reserved-identifier)
-                        typename __Predicate        // NOLINT(bugprone-reserved-identifier)
-                > constexpr auto __findFirstThat (  // NOLINT(bugprone-reserved-identifier)
+                        typename __IteratorType,                    // NOLINT(bugprone-reserved-identifier)
+                        typename __Predicate                        // NOLINT(bugprone-reserved-identifier)
+                > __CDS_NoDiscard constexpr auto __findFirstThat (  // NOLINT(bugprone-reserved-identifier)
                         __IteratorType                      const & begin,
                         __IteratorType                      const & end,
                         __Predicate                         const & predicate
                 ) noexcept ( noexcept ( predicate ( * begin ) ) ) -> __IteratorType;
 
                 template <
-                        typename __IteratorType,    // NOLINT(bugprone-reserved-identifier)
-                        typename __Predicate        // NOLINT(bugprone-reserved-identifier)
-                > constexpr auto __findLastThat (   // NOLINT(bugprone-reserved-identifier)
+                        typename __IteratorType,                    // NOLINT(bugprone-reserved-identifier)
+                        typename __Predicate                        // NOLINT(bugprone-reserved-identifier)
+                > __CDS_NoDiscard constexpr auto __findLastThat (   // NOLINT(bugprone-reserved-identifier)
                         __IteratorType                      const & begin,
                         __IteratorType                      const & end,
                         __Predicate                         const & predicate
@@ -66,7 +66,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                         typename __IteratorType,                            // NOLINT(bugprone-reserved-identifier)
                         template < typename ... > class __CollectionType,   // NOLINT(bugprone-reserved-identifier)
                         typename __Predicate                                // NOLINT(bugprone-reserved-identifier)
-                > constexpr auto __findAllThat (                            // NOLINT(bugprone-reserved-identifier)
+                > __CDS_NoDiscard constexpr auto __findAllThat (            // NOLINT(bugprone-reserved-identifier)
                         __IteratorType                      const & begin,
                         __IteratorType                      const & end,
                         __Predicate                         const & predicate

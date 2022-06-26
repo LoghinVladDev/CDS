@@ -35,7 +35,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                     template <
                             template < typename ... > class __CollectionType,   // NOLINT(bugprone-reserved-identifier)
                             typename                        __Predicate         // NOLINT(bugprone-reserved-identifier)
-                    > auto findThat (
+                    > __CDS_NoDiscard auto findThat (
                             Size count,
                             __Predicate const & predicate
                     ) const noexcept ( noexcept ( predicate ( cds :: meta :: referenceOf < __ElementType const > () ) ) ) -> __CollectionType < ConstIterator >;
@@ -43,14 +43,14 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                 protected:
                     template <
                             typename                        __Predicate         // NOLINT(bugprone-reserved-identifier)
-                    > auto findFirstThat (
+                    > __CDS_NoDiscard auto findFirstThat (
                             __Predicate const & predicate
                     ) const noexcept ( noexcept ( predicate ( cds :: meta :: referenceOf < __ElementType const > () ) ) ) -> ConstIterator;
 
                 protected:
                     template <
                             typename                        __Predicate         // NOLINT(bugprone-reserved-identifier)
-                    > auto findLastThat (
+                    > __CDS_NoDiscard auto findLastThat (
                             __Predicate const & predicate
                     ) const noexcept ( noexcept ( predicate ( cds :: meta :: referenceOf < __ElementType const > () ) ) ) -> ConstIterator;
 
@@ -67,7 +67,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                     template <
                             template < typename ... > class __CollectionType,   // NOLINT(bugprone-reserved-identifier)
                             typename                        __Predicate         // NOLINT(bugprone-reserved-identifier)
-                    > auto findAllThat (
+                    > __CDS_NoDiscard auto findAllThat (
                             __Predicate const & predicate
                     ) const noexcept ( noexcept ( predicate ( cds :: meta :: referenceOf < __ElementType const > () ) ) ) -> __CollectionType < ConstIterator >;
 

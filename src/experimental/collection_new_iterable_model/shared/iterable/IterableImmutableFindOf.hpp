@@ -33,18 +33,18 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
 
                 protected:
                     template < template < typename ... > class __CollectionType > // NOLINT(bugprone-reserved-identifier)
-                    auto findOf (
+                    __CDS_NoDiscard auto findOf (
                             Size                        count,
                             __FromIterableType  const & from
                     ) const noexcept -> __CollectionType < ConstIterator >;
 
                 protected:
-                    auto findFirstOf (
+                    __CDS_NoDiscard auto findFirstOf (
                             __FromIterableType const & from
                     ) const noexcept -> ConstIterator;
 
                 protected:
-                    auto findLastOf (
+                    __CDS_NoDiscard auto findLastOf (
                             __FromIterableType const & from
                     ) const noexcept -> ConstIterator;
 
@@ -57,7 +57,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
 
                 protected:
                     template < template < typename ... > class __CollectionType > // NOLINT(bugprone-reserved-identifier)
-                    auto findAllOf (
+                    __CDS_NoDiscard auto findAllOf (
                             __FromIterableType const & from
                     ) const noexcept -> __CollectionType < ConstIterator >;
 
@@ -71,18 +71,18 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
 
                 protected:
                     template < template < typename ... > class __CollectionType > // NOLINT(bugprone-reserved-identifier)
-                    auto findNotOf (
+                    __CDS_NoDiscard auto findNotOf (
                             Size                        count,
                             __FromIterableType  const & from
                     ) const noexcept -> __CollectionType < ConstIterator >;
 
                 protected:
-                    auto findFirstNotOf (
+                    __CDS_NoDiscard auto findFirstNotOf (
                             __FromIterableType const & from
                     ) const noexcept -> ConstIterator;
 
                 protected:
-                    auto findLastNotOf (
+                    __CDS_NoDiscard auto findLastNotOf (
                             __FromIterableType const & from
                     ) const noexcept -> ConstIterator;
 
@@ -95,7 +95,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
 
                 protected:
                     template < template < typename ... > class __CollectionType > // NOLINT(bugprone-reserved-identifier)
-                    auto findAllNotOf (
+                    __CDS_NoDiscard auto findAllNotOf (
                             __FromIterableType const & from
                     ) const noexcept -> __CollectionType < ConstIterator >;
                 };
