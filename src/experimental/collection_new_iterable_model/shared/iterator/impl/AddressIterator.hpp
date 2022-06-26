@@ -93,7 +93,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
 
         template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
-        constexpr auto AddressIterator < __ElementType > :: operator -> () const noexcept -> __ElementType {
+        constexpr auto AddressIterator < __ElementType > :: operator -> () const noexcept -> __ElementType * {
 
             return this->_currentAddress;
         }
