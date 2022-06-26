@@ -5,7 +5,7 @@
 #ifndef __CDS_SHARED_ADDRESS_ITERATOR_HPP__
 #define __CDS_SHARED_ADDRESS_ITERATOR_HPP__
 
-#include "../iterator/IteratorModel.hpp"
+#include "IteratorModel.hpp"
 
 namespace cds { // NOLINT(modernize-concat-nested-namespaces)
     namespace experimental {

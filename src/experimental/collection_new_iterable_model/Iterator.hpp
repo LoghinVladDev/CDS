@@ -7,7 +7,7 @@
 
 #include <CDS/meta/TypeTraits>
 
-#include "shared/addresIterator/AddressIterator.hpp"
-#include "shared/addresIterator/impl/AddressIterator.hpp"
+#include "shared/iterator/AddressIterator.hpp"
+#include "shared/iterator/impl/AddressIterator.hpp"
 
 #endif // __CDS_ITERATOR_HPP__

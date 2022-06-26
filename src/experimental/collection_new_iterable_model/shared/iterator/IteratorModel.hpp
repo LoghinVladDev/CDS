@@ -5,8 +5,8 @@
 #ifndef __CDS_ITERATOR_MODEL_HPP__
 #define __CDS_ITERATOR_MODEL_HPP__
 
-namespace cds {
-    namespace experimental {
+namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
+    namespace experimental {    // NOLINT(modernize-concat-nested-namespaces)
 
         namespace meta {
 

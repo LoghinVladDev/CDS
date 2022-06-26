@@ -2,7 +2,14 @@
 
 //#include "src/experimental/new_iterable_model/Array.hpp"
 
+#include <CDS/Object>
+
 #include <CDS/experimental/Iterator>
+#include "src/experimental/collection_new_iterable_model/shared/delegateIterator/DelegateIteratorRequestType.hpp"
+#include "src/experimental/collection_new_iterable_model/shared/delegateIterator/AbstractDelegateIterator.hpp"
+#include "src/experimental/collection_new_iterable_model/shared/delegateIterator/impl/AbstractDelegateIterator.hpp"
+#include "src/experimental/collection_new_iterable_model/shared/delegateIterator/AbstractDelegateWrapperIterator.hpp"
+#include "src/experimental/collection_new_iterable_model/shared/delegateIterator/impl/AbstractDelegateWrapperIterator.hpp"
 
 
 enum class E1 {
