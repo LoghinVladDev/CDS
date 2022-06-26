@@ -14,27 +14,24 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
         namespace __hidden {    // NOLINT(modernize-concat-nested-namespaces, bugprone-reserved-identifier)
             namespace __impl {  // NOLINT(bugprone-reserved-identifier)
 
-                template < typename __ElementType >     // NOLINT(bugprone-reserved-identifier)
-                class __CollectionContainsFunction {    // NOLINT(bugprone-reserved-identifier)
+                template < typename __IterableType, typename __ElementType >                                // NOLINT(bugprone-reserved-identifier)
+                using __ContainsFunction = auto ( __IterableType const &, __ElementType const & ) -> bool;  // NOLINT(bugprone-reserved-identifier)
 
-                public:
-                    __CDS_NoDiscard auto operator () (
+
+                template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
+                inline auto __collectionContains (  // NOLINT(bugprone-reserved-identifier)
                             cds :: experimental :: Collection < __ElementType > const & collection,
                             __ElementType                                       const & element
-                    ) const noexcept -> bool;
-                };
+                ) noexcept -> bool;
+
 
                 template <
                         typename __ElementType,                                     // NOLINT(bugprone-reserved-identifier)
                         utility :: ComparisonFunction < __ElementType > __function  // NOLINT(bugprone-reserved-identifier)
-                > class __InitializerListContainsFunction {                         // NOLINT(bugprone-reserved-identifier)
-
-                public:
-                    __CDS_NoDiscard auto operator () (
+                > inline auto __initializerListContains (                           // NOLINT(bugprone-reserved-identifier)
                             std :: initializer_list < __ElementType >   const & list,
                             __ElementType                               const & element
-                    ) const noexcept -> bool;
-                };
+                ) noexcept -> bool;
 
             }
         }

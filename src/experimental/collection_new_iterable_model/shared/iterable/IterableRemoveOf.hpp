@@ -11,14 +11,11 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
             namespace __impl {  // NOLINT(bugprone-reserved-identifier)
 
                 template <
-                        typename __IterableType,                // NOLINT(bugprone-reserved-identifier)
-                        typename __ElementType,                 // NOLINT(bugprone-reserved-identifier)
-                        typename __FromIterableType,            // NOLINT(bugprone-reserved-identifier)
-                        typename __FromIterableContainsFunction // NOLINT(bugprone-reserved-identifier)
+                        typename                                                    __IterableType,     // NOLINT(bugprone-reserved-identifier)
+                        typename                                                    __ElementType,      // NOLINT(bugprone-reserved-identifier)
+                        typename                                                    __FromIterableType, // NOLINT(bugprone-reserved-identifier)
+                        __ContainsFunction < __FromIterableType, __ElementType >    __containsFunction  // NOLINT(bugprone-reserved-identifier)
                 > class __IterableRemoveOf {                    // NOLINT(bugprone-reserved-identifier)
-
-                private:
-                    __CDS_NoUniqueAddress __FromIterableContainsFunction _contains;
 
                 private:
                     template <

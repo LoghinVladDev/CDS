@@ -16,6 +16,9 @@
 #include "shared/delegateIterableCommunication/channel/DelegateIterableChannel.hpp"
 #include "shared/delegateIterableCommunication/client/DelegateForwardConstIterableClient.hpp"
 #include "shared/delegateIterableCommunication/client/AbstractConstIteratorRemoveClient.hpp"
+
+#include "shared/iterable/IterableFindOf.hpp"
+#include "shared/iterable/IterableContainsOf.hpp"
 #include "shared/iterable/IterableRemoveOf.hpp"
 #include "shared/iterable/IterableRemoveByPredicate.hpp"
 #include "shared/iterable/IterableImmutableStatements.hpp"
@@ -38,17 +41,41 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                         Collection < __ElementType >,
                         __ElementType
                 >,
+                public __hidden :: __impl :: __IterableContainsOf <
+                        Collection < __ElementType >,
+                        __ElementType,
+                        Collection < __ElementType >,
+                        __hidden :: __impl :: __collectionContains < __ElementType >
+                >,
+                public __hidden :: __impl :: __IterableContainsOf <
+                        Collection < __ElementType >,
+                        __ElementType,
+                        std :: initializer_list < __ElementType >,
+                        __hidden :: __impl :: __initializerListContains < __ElementType, & cds :: meta :: equals < __ElementType > >
+                >,
+                public __hidden :: __impl :: __IterableFindOf <
+                        Collection < __ElementType >,
+                        __ElementType,
+                        Collection < __ElementType >,
+                        __hidden :: __impl :: __collectionContains < __ElementType >
+                >,
+                public __hidden :: __impl :: __IterableFindOf <
+                        Collection < __ElementType >,
+                        __ElementType,
+                        std :: initializer_list < __ElementType >,
+                        __hidden :: __impl :: __initializerListContains < __ElementType, & cds :: meta :: equals < __ElementType > >
+                >,
                 public __hidden :: __impl :: __IterableRemoveOf <
                         Collection < __ElementType >,
                         __ElementType,
                         Collection < __ElementType >,
-                        __hidden :: __impl :: __CollectionContainsFunction < __ElementType >
+                        __hidden :: __impl :: __collectionContains < __ElementType >
                 >,
                 public __hidden :: __impl :: __IterableRemoveOf <
                         Collection < __ElementType >,
                         __ElementType,
                         std :: initializer_list < __ElementType >,
-                        __hidden :: __impl :: __InitializerListContainsFunction < __ElementType, & cds :: meta :: equals < __ElementType > >
+                        __hidden :: __impl :: __initializerListContains < __ElementType, & cds :: meta :: equals < __ElementType > >
                 >,
                 public __hidden :: __impl :: __IterableRemoveByPredicate <
                         Collection < __ElementType >,
@@ -100,12 +127,48 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                     >;
 
         protected:
+            using IterableContainsOfColleciton =
+                    __hidden :: __impl :: __IterableContainsOf <
+                            Collection < __ElementType >,
+                            __ElementType,
+                            Collection < __ElementType >,
+                            __hidden :: __impl :: __collectionContains < __ElementType >
+                    >;
+
+        protected:
+            using IterableContainsOfInitializerList =
+                    __hidden :: __impl :: __IterableContainsOf <
+                            Collection < __ElementType >,
+                            __ElementType,
+                            std :: initializer_list < __ElementType >,
+                            __hidden :: __impl :: __initializerListContains < __ElementType, & cds :: meta :: equals < __ElementType > >
+                    >;
+
+        protected:
+            using IterableFindOfColleciton =
+                    __hidden :: __impl :: __IterableFindOf <
+                            Collection < __ElementType >,
+                            __ElementType,
+                            Collection < __ElementType >,
+                            __hidden :: __impl :: __collectionContains < __ElementType >
+                    >;
+
+        protected:
+            using IterableFindOfInitializerList =
+                    __hidden :: __impl :: __IterableFindOf <
+                            Collection < __ElementType >,
+                            __ElementType,
+                            std :: initializer_list < __ElementType >,
+                            __hidden :: __impl :: __initializerListContains < __ElementType, & cds :: meta :: equals < __ElementType > >
+                    >;
+
+        protected:
             using IterableRemoveOfColleciton =
                     __hidden :: __impl :: __IterableRemoveOf <
                             Collection < __ElementType >,
                             __ElementType,
                             Collection < __ElementType >,
-                            __hidden :: __impl :: __CollectionContainsFunction < __ElementType >
+                            __hidden :: __impl :: __collectionContains < __ElementType >
                     >;
 
         protected:
@@ -114,7 +177,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                             Collection < __ElementType >,
                             __ElementType,
                             std :: initializer_list < __ElementType >,
-                            __hidden :: __impl :: __InitializerListContainsFunction < __ElementType, & cds :: meta :: equals < __ElementType > >
+                            __hidden :: __impl :: __initializerListContains < __ElementType, & cds :: meta :: equals < __ElementType > >
                     >;
 
         public:
@@ -254,6 +317,8 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 #include "shared/delegateIterableCommunication/client/impl/DelegateForwardConstIterableClient.hpp"
 #include "shared/delegateIterableCommunication/client/impl/AbstractConstIteratorRemoveClient.hpp"
 
+#include "shared/iterable/impl/IterableFindOf.hpp"
+#include "shared/iterable/impl/IterableContainsOf.hpp"
 #include "shared/iterable/impl/IterableRemoveOf.hpp"
 #include "shared/iterable/impl/IterableRemoveByPredicate.hpp"
 #include "shared/iterable/impl/IterableImmutableStatements.hpp"

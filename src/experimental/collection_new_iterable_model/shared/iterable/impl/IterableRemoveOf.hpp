@@ -11,10 +11,10 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
             namespace __impl {  // NOLINT(bugprone-reserved-identifier)
 
                 template <
-                        typename __IterableType,                // NOLINT(bugprone-reserved-identifier)
-                        typename __ElementType,                 // NOLINT(bugprone-reserved-identifier)
-                        typename __FromIterableType,            // NOLINT(bugprone-reserved-identifier)
-                        typename __FromIterableContainsFunction // NOLINT(bugprone-reserved-identifier)
+                        typename                                                    __IterableType,     // NOLINT(bugprone-reserved-identifier)
+                        typename                                                    __ElementType,      // NOLINT(bugprone-reserved-identifier)
+                        typename                                                    __FromIterableType, // NOLINT(bugprone-reserved-identifier)
+                        __ContainsFunction < __FromIterableType, __ElementType >    __containsFunction  // NOLINT(bugprone-reserved-identifier)
                 > template <
                         typename __TIterableType,               // NOLINT(bugprone-reserved-identifier)
                         typename __TFromIterableType,           // NOLINT(bugprone-reserved-identifier)
@@ -25,7 +25,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                         __IterableType,
                         __ElementType,
                         __FromIterableType,
-                        __FromIterableContainsFunction
+                        __containsFunction
                 > :: __iro_selfReferentialCase_removeOf (
                         Size                        count,
                         __FromIterableType  const & from
@@ -49,10 +49,10 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
 
 
                 template <
-                        typename __IterableType,                // NOLINT(bugprone-reserved-identifier)
-                        typename __ElementType,                 // NOLINT(bugprone-reserved-identifier)
-                        typename __FromIterableType,            // NOLINT(bugprone-reserved-identifier)
-                        typename __FromIterableContainsFunction // NOLINT(bugprone-reserved-identifier)
+                        typename                                                    __IterableType,     // NOLINT(bugprone-reserved-identifier)
+                        typename                                                    __ElementType,      // NOLINT(bugprone-reserved-identifier)
+                        typename                                                    __FromIterableType, // NOLINT(bugprone-reserved-identifier)
+                        __ContainsFunction < __FromIterableType, __ElementType >    __containsFunction  // NOLINT(bugprone-reserved-identifier)
                 > template <
                         typename __TIterableType,               // NOLINT(bugprone-reserved-identifier)
                         typename __TFromIterableType,           // NOLINT(bugprone-reserved-identifier)
@@ -63,7 +63,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                         __IterableType,
                         __ElementType,
                         __FromIterableType,
-                        __FromIterableContainsFunction
+                        __containsFunction
                 > :: __iro_selfReferentialCase_removeOf (
                         Size                        count,
                         __FromIterableType  const & from
@@ -74,10 +74,10 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
 
 
                 template <
-                        typename __IterableType,                // NOLINT(bugprone-reserved-identifier)
-                        typename __ElementType,                 // NOLINT(bugprone-reserved-identifier)
-                        typename __FromIterableType,            // NOLINT(bugprone-reserved-identifier)
-                        typename __FromIterableContainsFunction // NOLINT(bugprone-reserved-identifier)
+                        typename                                                    __IterableType,     // NOLINT(bugprone-reserved-identifier)
+                        typename                                                    __ElementType,      // NOLINT(bugprone-reserved-identifier)
+                        typename                                                    __FromIterableType, // NOLINT(bugprone-reserved-identifier)
+                        __ContainsFunction < __FromIterableType, __ElementType >    __containsFunction  // NOLINT(bugprone-reserved-identifier)
                 > template <
                         typename __TIterableType,               // NOLINT(bugprone-reserved-identifier)
                         typename __TFromIterableType,           // NOLINT(bugprone-reserved-identifier)
@@ -88,7 +88,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                         __IterableType,
                         __ElementType,
                         __FromIterableType,
-                        __FromIterableContainsFunction
+                        __containsFunction
                 > :: __iro_selfReferentialCase_removeFirstOf (
                         __FromIterableType  const & from
                 ) noexcept -> bool {
@@ -98,10 +98,10 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
 
 
                 template <
-                        typename __IterableType,                // NOLINT(bugprone-reserved-identifier)
-                        typename __ElementType,                 // NOLINT(bugprone-reserved-identifier)
-                        typename __FromIterableType,            // NOLINT(bugprone-reserved-identifier)
-                        typename __FromIterableContainsFunction // NOLINT(bugprone-reserved-identifier)
+                        typename                                                    __IterableType,     // NOLINT(bugprone-reserved-identifier)
+                        typename                                                    __ElementType,      // NOLINT(bugprone-reserved-identifier)
+                        typename                                                    __FromIterableType, // NOLINT(bugprone-reserved-identifier)
+                        __ContainsFunction < __FromIterableType, __ElementType >    __containsFunction  // NOLINT(bugprone-reserved-identifier)
                 > template <
                         typename __TIterableType,               // NOLINT(bugprone-reserved-identifier)
                         typename __TFromIterableType,           // NOLINT(bugprone-reserved-identifier)
@@ -112,7 +112,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                         __IterableType,
                         __ElementType,
                         __FromIterableType,
-                        __FromIterableContainsFunction
+                        __containsFunction
                 > :: __iro_selfReferentialCase_removeFirstOf (
                         __FromIterableType  const & from
                 ) noexcept -> bool {
@@ -122,10 +122,10 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
 
 
                 template <
-                        typename __IterableType,                // NOLINT(bugprone-reserved-identifier)
-                        typename __ElementType,                 // NOLINT(bugprone-reserved-identifier)
-                        typename __FromIterableType,            // NOLINT(bugprone-reserved-identifier)
-                        typename __FromIterableContainsFunction // NOLINT(bugprone-reserved-identifier)
+                        typename                                                    __IterableType,     // NOLINT(bugprone-reserved-identifier)
+                        typename                                                    __ElementType,      // NOLINT(bugprone-reserved-identifier)
+                        typename                                                    __FromIterableType, // NOLINT(bugprone-reserved-identifier)
+                        __ContainsFunction < __FromIterableType, __ElementType >    __containsFunction  // NOLINT(bugprone-reserved-identifier)
                 > template <
                         typename __TIterableType,               // NOLINT(bugprone-reserved-identifier)
                         typename __TFromIterableType,           // NOLINT(bugprone-reserved-identifier)
@@ -136,7 +136,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                         __IterableType,
                         __ElementType,
                         __FromIterableType,
-                        __FromIterableContainsFunction
+                        __containsFunction
                 > :: __iro_selfReferentialCase_removeLastOf (
                         __FromIterableType  const & from
                 ) noexcept -> bool {
@@ -156,10 +156,10 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
 
 
                 template <
-                        typename __IterableType,                // NOLINT(bugprone-reserved-identifier)
-                        typename __ElementType,                 // NOLINT(bugprone-reserved-identifier)
-                        typename __FromIterableType,            // NOLINT(bugprone-reserved-identifier)
-                        typename __FromIterableContainsFunction // NOLINT(bugprone-reserved-identifier)
+                        typename                                                    __IterableType,     // NOLINT(bugprone-reserved-identifier)
+                        typename                                                    __ElementType,      // NOLINT(bugprone-reserved-identifier)
+                        typename                                                    __FromIterableType, // NOLINT(bugprone-reserved-identifier)
+                        __ContainsFunction < __FromIterableType, __ElementType >    __containsFunction  // NOLINT(bugprone-reserved-identifier)
                 > template <
                         typename __TIterableType,               // NOLINT(bugprone-reserved-identifier)
                         typename __TFromIterableType,           // NOLINT(bugprone-reserved-identifier)
@@ -170,7 +170,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                         __IterableType,
                         __ElementType,
                         __FromIterableType,
-                        __FromIterableContainsFunction
+                        __containsFunction
                 > :: __iro_selfReferentialCase_removeLastOf (
                         __FromIterableType  const & from
                 ) noexcept -> bool {
@@ -180,10 +180,10 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
 
 
                 template <
-                        typename __IterableType,                // NOLINT(bugprone-reserved-identifier)
-                        typename __ElementType,                 // NOLINT(bugprone-reserved-identifier)
-                        typename __FromIterableType,            // NOLINT(bugprone-reserved-identifier)
-                        typename __FromIterableContainsFunction // NOLINT(bugprone-reserved-identifier)
+                        typename                                                    __IterableType,     // NOLINT(bugprone-reserved-identifier)
+                        typename                                                    __ElementType,      // NOLINT(bugprone-reserved-identifier)
+                        typename                                                    __FromIterableType, // NOLINT(bugprone-reserved-identifier)
+                        __ContainsFunction < __FromIterableType, __ElementType >    __containsFunction  // NOLINT(bugprone-reserved-identifier)
                 > template <
                         typename __TIterableType,               // NOLINT(bugprone-reserved-identifier)
                         typename __TFromIterableType,           // NOLINT(bugprone-reserved-identifier)
@@ -194,7 +194,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                         __IterableType,
                         __ElementType,
                         __FromIterableType,
-                        __FromIterableContainsFunction
+                        __containsFunction
                 > :: __iro_selfReferentialCase_removeAllOf (
                         __FromIterableType  const & from
                 ) noexcept -> Size {
@@ -206,10 +206,10 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
 
 
                 template <
-                        typename __IterableType,                // NOLINT(bugprone-reserved-identifier)
-                        typename __ElementType,                 // NOLINT(bugprone-reserved-identifier)
-                        typename __FromIterableType,            // NOLINT(bugprone-reserved-identifier)
-                        typename __FromIterableContainsFunction // NOLINT(bugprone-reserved-identifier)
+                        typename                                                    __IterableType,     // NOLINT(bugprone-reserved-identifier)
+                        typename                                                    __ElementType,      // NOLINT(bugprone-reserved-identifier)
+                        typename                                                    __FromIterableType, // NOLINT(bugprone-reserved-identifier)
+                        __ContainsFunction < __FromIterableType, __ElementType >    __containsFunction  // NOLINT(bugprone-reserved-identifier)
                 > template <
                         typename __TIterableType,               // NOLINT(bugprone-reserved-identifier)
                         typename __TFromIterableType,           // NOLINT(bugprone-reserved-identifier)
@@ -220,7 +220,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                         __IterableType,
                         __ElementType,
                         __FromIterableType,
-                        __FromIterableContainsFunction
+                        __containsFunction
                 > :: __iro_selfReferentialCase_removeAllOf (
                         __FromIterableType  const & from
                 ) noexcept -> Size {
@@ -229,15 +229,15 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                 }
 
                 template <
-                        typename __IterableType,                // NOLINT(bugprone-reserved-identifier)
-                        typename __ElementType,                 // NOLINT(bugprone-reserved-identifier)
-                        typename __FromIterableType,            // NOLINT(bugprone-reserved-identifier)
-                        typename __FromIterableContainsFunction // NOLINT(bugprone-reserved-identifier)
+                        typename                                                    __IterableType,     // NOLINT(bugprone-reserved-identifier)
+                        typename                                                    __ElementType,      // NOLINT(bugprone-reserved-identifier)
+                        typename                                                    __FromIterableType, // NOLINT(bugprone-reserved-identifier)
+                        __ContainsFunction < __FromIterableType, __ElementType >    __containsFunction  // NOLINT(bugprone-reserved-identifier)
                 > auto __IterableRemoveOf <
                         __IterableType,
                         __ElementType,
                         __FromIterableType,
-                        __FromIterableContainsFunction
+                        __containsFunction
                 > :: __iro_selfReferentialCase_removeNotOf (
                         Size                        count,
                         __FromIterableType  const & from
@@ -248,15 +248,15 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
 
 
                 template <
-                        typename __IterableType,                // NOLINT(bugprone-reserved-identifier)
-                        typename __ElementType,                 // NOLINT(bugprone-reserved-identifier)
-                        typename __FromIterableType,            // NOLINT(bugprone-reserved-identifier)
-                        typename __FromIterableContainsFunction // NOLINT(bugprone-reserved-identifier)
+                        typename                                                    __IterableType,     // NOLINT(bugprone-reserved-identifier)
+                        typename                                                    __ElementType,      // NOLINT(bugprone-reserved-identifier)
+                        typename                                                    __FromIterableType, // NOLINT(bugprone-reserved-identifier)
+                        __ContainsFunction < __FromIterableType, __ElementType >    __containsFunction  // NOLINT(bugprone-reserved-identifier)
                 > auto __IterableRemoveOf <
                         __IterableType,
                         __ElementType,
                         __FromIterableType,
-                        __FromIterableContainsFunction
+                        __containsFunction
                 > :: __iro_selfReferentialCase_removeFirstNotOf (
                         __FromIterableType  const & from
                 ) noexcept -> bool {
@@ -266,15 +266,15 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
 
 
                 template <
-                        typename __IterableType,                // NOLINT(bugprone-reserved-identifier)
-                        typename __ElementType,                 // NOLINT(bugprone-reserved-identifier)
-                        typename __FromIterableType,            // NOLINT(bugprone-reserved-identifier)
-                        typename __FromIterableContainsFunction // NOLINT(bugprone-reserved-identifier)
+                        typename                                                    __IterableType,     // NOLINT(bugprone-reserved-identifier)
+                        typename                                                    __ElementType,      // NOLINT(bugprone-reserved-identifier)
+                        typename                                                    __FromIterableType, // NOLINT(bugprone-reserved-identifier)
+                        __ContainsFunction < __FromIterableType, __ElementType >    __containsFunction  // NOLINT(bugprone-reserved-identifier)
                 > auto __IterableRemoveOf <
                         __IterableType,
                         __ElementType,
                         __FromIterableType,
-                        __FromIterableContainsFunction
+                        __containsFunction
                 > :: __iro_selfReferentialCase_removeLastNotOf (
                         __FromIterableType  const & from
                 ) noexcept -> bool {
@@ -284,15 +284,15 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
 
 
                 template <
-                        typename __IterableType,                // NOLINT(bugprone-reserved-identifier)
-                        typename __ElementType,                 // NOLINT(bugprone-reserved-identifier)
-                        typename __FromIterableType,            // NOLINT(bugprone-reserved-identifier)
-                        typename __FromIterableContainsFunction // NOLINT(bugprone-reserved-identifier)
+                        typename                                                    __IterableType,     // NOLINT(bugprone-reserved-identifier)
+                        typename                                                    __ElementType,      // NOLINT(bugprone-reserved-identifier)
+                        typename                                                    __FromIterableType, // NOLINT(bugprone-reserved-identifier)
+                        __ContainsFunction < __FromIterableType, __ElementType >    __containsFunction  // NOLINT(bugprone-reserved-identifier)
                 > auto __IterableRemoveOf <
                         __IterableType,
                         __ElementType,
                         __FromIterableType,
-                        __FromIterableContainsFunction
+                        __containsFunction
                 > :: __iro_selfReferentialCase_removeAllNotOf (
                         __FromIterableType  const & from
                 ) noexcept -> Size {
@@ -302,15 +302,15 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
 
 
                 template <
-                        typename __IterableType,                // NOLINT(bugprone-reserved-identifier)
-                        typename __ElementType,                 // NOLINT(bugprone-reserved-identifier)
-                        typename __FromIterableType,            // NOLINT(bugprone-reserved-identifier)
-                        typename __FromIterableContainsFunction // NOLINT(bugprone-reserved-identifier)
+                        typename                                                    __IterableType,     // NOLINT(bugprone-reserved-identifier)
+                        typename                                                    __ElementType,      // NOLINT(bugprone-reserved-identifier)
+                        typename                                                    __FromIterableType, // NOLINT(bugprone-reserved-identifier)
+                        __ContainsFunction < __FromIterableType, __ElementType >    __containsFunction  // NOLINT(bugprone-reserved-identifier)
                 > auto __IterableRemoveOf <
                         __IterableType,
                         __ElementType,
                         __FromIterableType,
-                        __FromIterableContainsFunction
+                        __containsFunction
                 > :: removeOf (
                         Size                        count,
                         __FromIterableType  const & from
@@ -336,7 +336,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                             ++ iterator
                     ) {
 
-                        if ( this->_contains ( from, * iterator ) ) {
+                        if ( __containsFunction ( from, * iterator ) ) {
                             new ( & pIteratorBuffer [ iteratorCount ++ ] ) ConstIterator ( iterator );
                         }
                     }
@@ -356,15 +356,15 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
 
 
                 template <
-                        typename __IterableType,                // NOLINT(bugprone-reserved-identifier)
-                        typename __ElementType,                 // NOLINT(bugprone-reserved-identifier)
-                        typename __FromIterableType,            // NOLINT(bugprone-reserved-identifier)
-                        typename __FromIterableContainsFunction // NOLINT(bugprone-reserved-identifier)
+                        typename                                                    __IterableType,     // NOLINT(bugprone-reserved-identifier)
+                        typename                                                    __ElementType,      // NOLINT(bugprone-reserved-identifier)
+                        typename                                                    __FromIterableType, // NOLINT(bugprone-reserved-identifier)
+                        __ContainsFunction < __FromIterableType, __ElementType >    __containsFunction  // NOLINT(bugprone-reserved-identifier)
                 > auto __IterableRemoveOf <
                         __IterableType,
                         __ElementType,
                         __FromIterableType,
-                        __FromIterableContainsFunction
+                        __containsFunction
                 > :: removeFirstOf (
                         __FromIterableType  const & from
                 ) noexcept -> bool {
@@ -382,7 +382,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                             ++ iterator
                     ) {
 
-                        if ( this->_contains ( from, * iterator ) ) {
+                        if ( __containsFunction ( from, * iterator ) ) {
                             return static_cast < __IterableType * > ( this )->remove ( iterator );
                         }
                     }
@@ -392,15 +392,15 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
 
 
                 template <
-                        typename __IterableType,                // NOLINT(bugprone-reserved-identifier)
-                        typename __ElementType,                 // NOLINT(bugprone-reserved-identifier)
-                        typename __FromIterableType,            // NOLINT(bugprone-reserved-identifier)
-                        typename __FromIterableContainsFunction // NOLINT(bugprone-reserved-identifier)
+                        typename                                                    __IterableType,     // NOLINT(bugprone-reserved-identifier)
+                        typename                                                    __ElementType,      // NOLINT(bugprone-reserved-identifier)
+                        typename                                                    __FromIterableType, // NOLINT(bugprone-reserved-identifier)
+                        __ContainsFunction < __FromIterableType, __ElementType >    __containsFunction  // NOLINT(bugprone-reserved-identifier)
                 > auto __IterableRemoveOf <
                         __IterableType,
                         __ElementType,
                         __FromIterableType,
-                        __FromIterableContainsFunction
+                        __containsFunction
                 > :: removeLastOf (
                         __FromIterableType  const & from
                 ) noexcept -> bool {
@@ -421,7 +421,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                             ++ iterator
                     ) {
 
-                        if ( this->_contains ( from, * iterator ) ) {
+                        if ( __containsFunction ( from, * iterator ) ) {
                             toRemove = iterator;
                         }
                     }
@@ -431,15 +431,15 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
 
 
                 template <
-                        typename __IterableType,                // NOLINT(bugprone-reserved-identifier)
-                        typename __ElementType,                 // NOLINT(bugprone-reserved-identifier)
-                        typename __FromIterableType,            // NOLINT(bugprone-reserved-identifier)
-                        typename __FromIterableContainsFunction // NOLINT(bugprone-reserved-identifier)
+                        typename                                                    __IterableType,     // NOLINT(bugprone-reserved-identifier)
+                        typename                                                    __ElementType,      // NOLINT(bugprone-reserved-identifier)
+                        typename                                                    __FromIterableType, // NOLINT(bugprone-reserved-identifier)
+                        __ContainsFunction < __FromIterableType, __ElementType >    __containsFunction  // NOLINT(bugprone-reserved-identifier)
                 > auto __IterableRemoveOf <
                         __IterableType,
                         __ElementType,
                         __FromIterableType,
-                        __FromIterableContainsFunction
+                        __containsFunction
                 > :: removeAllOf (
                         __FromIterableType  const & from
                 ) noexcept -> Size {
@@ -461,7 +461,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                             ++ iterator
                     ) {
 
-                        if ( this->_contains ( from, * iterator ) ) {
+                        if ( __containsFunction ( from, * iterator ) ) {
                             new ( & pIteratorBuffer [ iteratorCount ++ ] ) ConstIterator ( iterator );
                         }
                     }
@@ -481,15 +481,15 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
 
 
                 template <
-                        typename __IterableType,                // NOLINT(bugprone-reserved-identifier)
-                        typename __ElementType,                 // NOLINT(bugprone-reserved-identifier)
-                        typename __FromIterableType,            // NOLINT(bugprone-reserved-identifier)
-                        typename __FromIterableContainsFunction // NOLINT(bugprone-reserved-identifier)
+                        typename                                                    __IterableType,     // NOLINT(bugprone-reserved-identifier)
+                        typename                                                    __ElementType,      // NOLINT(bugprone-reserved-identifier)
+                        typename                                                    __FromIterableType, // NOLINT(bugprone-reserved-identifier)
+                        __ContainsFunction < __FromIterableType, __ElementType >    __containsFunction  // NOLINT(bugprone-reserved-identifier)
                 > auto __IterableRemoveOf <
                         __IterableType,
                         __ElementType,
                         __FromIterableType,
-                        __FromIterableContainsFunction
+                        __containsFunction
                 > :: removeNotOf (
                         Size                        count,
                         __FromIterableType  const & from
@@ -515,7 +515,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                             ++ iterator
                     ) {
 
-                        if ( ! this->_contains ( from, * iterator ) ) {
+                        if ( ! __containsFunction ( from, * iterator ) ) {
                             new ( & pIteratorBuffer [ iteratorCount ++ ] ) ConstIterator ( iterator );
                         }
                     }
@@ -535,15 +535,15 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
 
 
                 template <
-                        typename __IterableType,                // NOLINT(bugprone-reserved-identifier)
-                        typename __ElementType,                 // NOLINT(bugprone-reserved-identifier)
-                        typename __FromIterableType,            // NOLINT(bugprone-reserved-identifier)
-                        typename __FromIterableContainsFunction // NOLINT(bugprone-reserved-identifier)
+                        typename                                                    __IterableType,     // NOLINT(bugprone-reserved-identifier)
+                        typename                                                    __ElementType,      // NOLINT(bugprone-reserved-identifier)
+                        typename                                                    __FromIterableType, // NOLINT(bugprone-reserved-identifier)
+                        __ContainsFunction < __FromIterableType, __ElementType >    __containsFunction  // NOLINT(bugprone-reserved-identifier)
                 > auto __IterableRemoveOf <
                         __IterableType,
                         __ElementType,
                         __FromIterableType,
-                        __FromIterableContainsFunction
+                        __containsFunction
                 > :: removeFirstNotOf (
                         __FromIterableType  const & from
                 ) noexcept -> bool {
@@ -561,7 +561,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                             ++ iterator
                             ) {
 
-                        if ( ! this->_contains ( from, * iterator ) ) {
+                        if ( ! __containsFunction ( from, * iterator ) ) {
                             return static_cast < __IterableType * > ( this )->remove ( iterator );
                         }
                     }
@@ -571,15 +571,15 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
 
 
                 template <
-                        typename __IterableType,                // NOLINT(bugprone-reserved-identifier)
-                        typename __ElementType,                 // NOLINT(bugprone-reserved-identifier)
-                        typename __FromIterableType,            // NOLINT(bugprone-reserved-identifier)
-                        typename __FromIterableContainsFunction // NOLINT(bugprone-reserved-identifier)
+                        typename                                                    __IterableType,     // NOLINT(bugprone-reserved-identifier)
+                        typename                                                    __ElementType,      // NOLINT(bugprone-reserved-identifier)
+                        typename                                                    __FromIterableType, // NOLINT(bugprone-reserved-identifier)
+                        __ContainsFunction < __FromIterableType, __ElementType >    __containsFunction  // NOLINT(bugprone-reserved-identifier)
                 > auto __IterableRemoveOf <
                         __IterableType,
                         __ElementType,
                         __FromIterableType,
-                        __FromIterableContainsFunction
+                        __containsFunction
                 > :: removeLastNotOf (
                         __FromIterableType  const & from
                 ) noexcept -> bool {
@@ -600,7 +600,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                             ++ iterator
                             ) {
 
-                        if ( ! this->_contains ( from, * iterator ) ) {
+                        if ( ! __containsFunction ( from, * iterator ) ) {
                             toRemove = iterator;
                         }
                     }
@@ -610,15 +610,15 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
 
 
                 template <
-                        typename __IterableType,                // NOLINT(bugprone-reserved-identifier)
-                        typename __ElementType,                 // NOLINT(bugprone-reserved-identifier)
-                        typename __FromIterableType,            // NOLINT(bugprone-reserved-identifier)
-                        typename __FromIterableContainsFunction // NOLINT(bugprone-reserved-identifier)
+                        typename                                                    __IterableType,     // NOLINT(bugprone-reserved-identifier)
+                        typename                                                    __ElementType,      // NOLINT(bugprone-reserved-identifier)
+                        typename                                                    __FromIterableType, // NOLINT(bugprone-reserved-identifier)
+                        __ContainsFunction < __FromIterableType, __ElementType >    __containsFunction  // NOLINT(bugprone-reserved-identifier)
                 > auto __IterableRemoveOf <
                         __IterableType,
                         __ElementType,
                         __FromIterableType,
-                        __FromIterableContainsFunction
+                        __containsFunction
                 > :: removeAllNotOf (
                         __FromIterableType  const & from
                 ) noexcept -> Size {
@@ -640,7 +640,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                             ++ iterator
                     ) {
 
-                        if ( ! this->_contains ( from, * iterator ) ) {
+                        if ( ! __containsFunction ( from, * iterator ) ) {
                             new ( & pIteratorBuffer [ iteratorCount ++ ] ) ConstIterator ( iterator );
                         }
                     }

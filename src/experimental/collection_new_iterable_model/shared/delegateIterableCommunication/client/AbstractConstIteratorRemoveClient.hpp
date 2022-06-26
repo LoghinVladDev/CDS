@@ -16,8 +16,12 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                 template < typename, typename >
                 class __IterableRemoveByPredicate;          // NOLINT(bugprone-reserved-identifier)
 
-                template < typename, typename, typename, typename >
-                class __IterableRemoveOf;                   // NOLINT(bugprone-reserved-identifier)
+                template <
+                        typename,
+                        typename                                                    __ElementType,      // NOLINT(bugprone-reserved-identifier)
+                        typename                                                    __FromIterableType, // NOLINT(bugprone-reserved-identifier)
+                        __ContainsFunction < __FromIterableType, __ElementType >
+                > class __IterableRemoveOf;                                                             // NOLINT(bugprone-reserved-identifier)
 
                 template <
                         typename __ReceiverType,                // NOLINT(bugprone-reserved-identifier)
@@ -29,11 +33,11 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
 
                 private:
                     template <
-                            typename __IterableType,                // NOLINT(bugprone-reserved-identifier)
-                            typename __TElementType,                // NOLINT(bugprone-reserved-identifier)
-                            typename __FromIterableType,            // NOLINT(bugprone-reserved-identifier)
-                            typename __FromIterableContainsFunction // NOLINT(bugprone-reserved-identifier)
-                    > friend class __IterableRemoveOf;              // NOLINT(bugprone-reserved-identifier)
+                            typename,                                                   // NOLINT(bugprone-reserved-identifier)
+                            typename __TElementType,                                    // NOLINT(bugprone-reserved-identifier)
+                            typename __FromIterableType,                                // NOLINT(bugprone-reserved-identifier)
+                            __ContainsFunction < __FromIterableType, __TElementType >   // NOLINT(bugprone-reserved-identifier)
+                    > friend class __IterableRemoveOf;                                  // NOLINT(bugprone-reserved-identifier)
 
                 protected:
                     using __acirc_ElementType       = // NOLINT(bugprone-reserved-identifier)
