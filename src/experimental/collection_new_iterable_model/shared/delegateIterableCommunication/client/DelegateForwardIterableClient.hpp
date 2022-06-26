@@ -10,6 +10,12 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
         namespace __hidden {    // NOLINT(modernize-concat-nested-namespaces, bugprone-reserved-identifier)
             namespace __impl {  // NOLINT(bugprone-reserved-identifier)
 
+                template < typename __ElementType >             // NOLINT(bugprone-reserved-identifier)
+                class __BidirectionalDelegateWrapperIterator;   // NOLINT(bugprone-reserved-identifier)
+
+                template < typename __ElementType >     // NOLINT(bugprone-reserved-identifier)
+                class __ForwardDelegateWrapperIterator; // NOLINT(bugprone-reserved-identifier)
+
                 template <
                         typename __ReceiverType,            // NOLINT(bugprone-reserved-identifier)
                         typename __ElementType,             // NOLINT(bugprone-reserved-identifier)
@@ -17,11 +23,11 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                 > class __DelegateForwardIterableClient {   // NOLINT(bugprone-reserved-identifier)
 
                 protected:
-                    using __dfic_ElementType   = // NOLINT(bugprone-reserved-identifier)
+                    using __dfic_ElementType    = // NOLINT(bugprone-reserved-identifier)
                             __ElementType;
 
                 protected:
-                    using __dfic_Iterator      = // NOLINT(bugprone-reserved-identifier)
+                    using Iterator              = // NOLINT(bugprone-reserved-identifier)
                             cds :: meta :: Conditional <
                                     __bidirectional,
                                     __BidirectionalDelegateWrapperIterator < __dfic_ElementType >,
@@ -29,10 +35,10 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                             >;
 
                 protected:
-                    auto begin () noexcept -> __dfic_Iterator;
+                    auto begin () noexcept -> Iterator;
 
                 protected:
-                    auto end () noexcept -> __dfic_Iterator;
+                    auto end () noexcept -> Iterator;
                 };
 
             }

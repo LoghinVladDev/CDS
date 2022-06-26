@@ -14,17 +14,31 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                         typename __ReceiverType,            // NOLINT(bugprone-reserved-identifier)
                         typename __ElementType,             // NOLINT(bugprone-reserved-identifier)
                         bool     __bidirectional            // NOLINT(bugprone-reserved-identifier)
-                > __CDS_OptimalInline auto __DelegateForwardIterableClient <
+                > auto __DelegateForwardIterableClient <
                         __ReceiverType,
                         __ElementType,
                         __bidirectional
-                > :: begin () noexcept -> __dfic_Iterator {
+                > :: begin () noexcept -> Iterator {
 
-                    return __dfic_Iterator (
+                    __DelegateIterableRequest const request {
+                        __DelegateIterableRequestType :: __dirt_begin,
+                        nullptr
+                    };
+
+                    __DelegateIterableResponse response; // NOLINT(cppcoreguidelines-pro-type-member-init)
+
+                    auto const requestAvailabilityStatus = static_cast < __ReceiverType * > ( this )->__dich_transmitRequest (
+                            & request,
+                            & response
+                    );
+
+                    if ( ! requestAvailabilityStatus || ! response._status ) {
+                        return Iterator ();
+                    }
+
+                    return Iterator (
                             static_cast < __ReceiverType * > ( this ),
-                            static_cast < __ReceiverType * > ( this )->__dich_transmitRequest (
-                                    __DelegateIteratorRequestType :: __dirt_begin
-                            )
+                            reinterpret_cast < __AbstractDelegateIterator < __ElementType > * > ( response._pData )
                     );
                 }
 
@@ -33,17 +47,31 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                         typename __ReceiverType,            // NOLINT(bugprone-reserved-identifier)
                         typename __ElementType,             // NOLINT(bugprone-reserved-identifier)
                         bool     __bidirectional            // NOLINT(bugprone-reserved-identifier)
-                > __CDS_OptimalInline auto __DelegateForwardIterableClient <
+                > auto __DelegateForwardIterableClient <
                         __ReceiverType,
                         __ElementType,
                         __bidirectional
-                > :: end () noexcept -> __dfic_Iterator {
+                > :: end () noexcept -> Iterator {
 
-                    return __dfic_Iterator (
+                    __DelegateIterableRequest const request {
+                            __DelegateIterableRequestType :: __dirt_end,
+                            nullptr
+                    };
+
+                    __DelegateIterableResponse response; // NOLINT(cppcoreguidelines-pro-type-member-init)
+
+                    auto const requestAvailabilityStatus = static_cast < __ReceiverType * > ( this )->__dich_transmitRequest (
+                            & request,
+                            & response
+                    );
+
+                    if ( ! requestAvailabilityStatus || ! response._status ) {
+                        return Iterator ();
+                    }
+
+                    return Iterator (
                             static_cast < __ReceiverType * > ( this ),
-                            static_cast < __ReceiverType * > ( this )->__dich_transmitRequest (
-                                    __DelegateIteratorRequestType :: __dirt_end
-                            )
+                            reinterpret_cast < __AbstractDelegateIterator < __ElementType > * > ( response._pData )
                     );
                 }
 

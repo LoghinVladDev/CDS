@@ -18,13 +18,27 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                         __ReceiverType,
                         __ElementType,
                         __bidirectional
-                > :: rbegin () noexcept -> __dbic_Iterator {
+                > :: rbegin () noexcept -> ReverseIterator {
 
-                    return __dbic_Iterator (
+                    __DelegateIterableRequest const request {
+                            __DelegateIterableRequestType :: __dirt_rbegin,
+                            nullptr
+                    };
+
+                    __DelegateIterableResponse response; // NOLINT(cppcoreguidelines-pro-type-member-init)
+
+                    auto const requestAvailabilityStatus = static_cast < __ReceiverType * > ( this )->__dich_transmitRequest (
+                            & request,
+                            & response
+                    );
+
+                    if ( ! requestAvailabilityStatus || ! response._status ) {
+                        return ReverseIterator ();
+                    }
+
+                    return ReverseIterator (
                             static_cast < __ReceiverType * > ( this ),
-                            static_cast < __ReceiverType * > ( this )->__dich_transmitRequest (
-                                    __DelegateIteratorRequestType :: __dirt_rbegin
-                            )
+                            reinterpret_cast < __AbstractDelegateIterator < __ElementType > * > ( response._pData )
                     );
                 }
 
@@ -37,13 +51,27 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                         __ReceiverType,
                         __ElementType,
                         __bidirectional
-                > :: rend () noexcept -> __dbic_Iterator {
+                > :: rend () noexcept -> ReverseIterator {
 
-                    return __dbic_Iterator (
+                    __DelegateIterableRequest const request {
+                            __DelegateIterableRequestType :: __dirt_rend,
+                            nullptr
+                    };
+
+                    __DelegateIterableResponse response; // NOLINT(cppcoreguidelines-pro-type-member-init)
+
+                    auto const requestAvailabilityStatus = static_cast < __ReceiverType * > ( this )->__dich_transmitRequest (
+                            & request,
+                            & response
+                    );
+
+                    if ( ! requestAvailabilityStatus || ! response._status ) {
+                        return ReverseIterator ();
+                    }
+
+                    return ReverseIterator (
                             static_cast < __ReceiverType * > ( this ),
-                            static_cast < __ReceiverType * > ( this )->__dich_transmitRequest (
-                                    __DelegateIteratorRequestType :: __dirt_rend
-                            )
+                            reinterpret_cast < __AbstractDelegateIterator < __ElementType > * > ( response._pData )
                     );
                 }
 

@@ -18,7 +18,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                         __ReceiverType,
                         __ElementType,
                         __bidirectional
-                > :: begin () const noexcept -> __dfcic_Iterator {
+                > :: begin () const noexcept -> ConstIterator {
 
                     return this->cbegin();
                 }
@@ -32,7 +32,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                         __ReceiverType,
                         __ElementType,
                         __bidirectional
-                > :: end () const noexcept -> __dfcic_Iterator {
+                > :: end () const noexcept -> ConstIterator {
 
                     return this->cend();
                 }
@@ -46,13 +46,27 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                         __ReceiverType,
                         __ElementType,
                         __bidirectional
-                > :: cbegin () const noexcept -> __dfcic_Iterator {
+                > :: cbegin () const noexcept -> ConstIterator {
 
-                    return __dfcic_Iterator (
+                    __DelegateIterableRequest const request {
+                            __DelegateIterableRequestType :: __dirt_begin,
+                            nullptr
+                    };
+
+                    __DelegateIterableResponse response; // NOLINT(cppcoreguidelines-pro-type-member-init)
+
+                    auto const requestAvailabilityStatus = static_cast < __ReceiverType const * > ( this )->__dich_transmitConstRequest (
+                            & request,
+                            & response
+                    );
+
+                    if ( ! requestAvailabilityStatus || ! response._status ) {
+                        return ConstIterator ();
+                    }
+
+                    return ConstIterator (
                             static_cast < __ReceiverType const * > ( this ),
-                            static_cast < __ReceiverType const * > ( this )->__dicch_transmitRequest (
-                                    __DelegateIteratorRequestType :: __dirt_begin
-                            )
+                            reinterpret_cast < __AbstractDelegateIterator < __ElementType const > * > ( response._pData )
                     );
                 }
 
@@ -65,13 +79,27 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                         __ReceiverType,
                         __ElementType,
                         __bidirectional
-                > :: cend () const noexcept -> __dfcic_Iterator {
+                > :: cend () const noexcept -> ConstIterator {
 
-                    return __dfcic_Iterator (
+                    __DelegateIterableRequest const request {
+                            __DelegateIterableRequestType :: __dirt_end,
+                            nullptr
+                    };
+
+                    __DelegateIterableResponse response; // NOLINT(cppcoreguidelines-pro-type-member-init)
+
+                    auto const requestAvailabilityStatus = static_cast < __ReceiverType const * > ( this )->__dich_transmitConstRequest (
+                            & request,
+                            & response
+                    );
+
+                    if ( ! requestAvailabilityStatus || ! response._status ) {
+                        return ConstIterator ();
+                    }
+
+                    return ConstIterator (
                             static_cast < __ReceiverType const * > ( this ),
-                            static_cast < __ReceiverType const * > ( this )->__dicch_transmitRequest (
-                                    __DelegateIteratorRequestType :: __dirt_end
-                            )
+                            reinterpret_cast < __AbstractDelegateIterator < __ElementType const > * > ( response._pData )
                     );
                 }
 

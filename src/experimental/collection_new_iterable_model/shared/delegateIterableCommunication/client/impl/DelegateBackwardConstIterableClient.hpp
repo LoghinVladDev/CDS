@@ -18,7 +18,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                         __ReceiverType,
                         __ElementType,
                         __bidirectional
-                > :: rbegin () const noexcept -> __dbcic_Iterator {
+                > :: rbegin () const noexcept -> ConstReverseIterator {
 
                     return this->crbegin();
                 }
@@ -32,7 +32,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                         __ReceiverType,
                         __ElementType,
                         __bidirectional
-                > :: rend () const noexcept -> __dbcic_Iterator {
+                > :: rend () const noexcept -> ConstReverseIterator {
 
                     return this->crend();
                 }
@@ -46,13 +46,27 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                         __ReceiverType,
                         __ElementType,
                         __bidirectional
-                > :: crbegin () const noexcept -> __dbcic_Iterator {
+                > :: crbegin () const noexcept -> ConstReverseIterator {
 
-                    return __dbcic_Iterator (
+                    __DelegateIterableRequest const request {
+                            __DelegateIterableRequestType :: __dirt_rbegin,
+                            nullptr
+                    };
+
+                    __DelegateIterableResponse response; // NOLINT(cppcoreguidelines-pro-type-member-init)
+
+                    auto const requestAvailabilityStatus = static_cast < __ReceiverType const * > ( this )->__dich_transmitConstRequest (
+                            & request,
+                            & response
+                    );
+
+                    if ( ! requestAvailabilityStatus || ! response._status ) {
+                        return ConstReverseIterator ();
+                    }
+
+                    return ConstReverseIterator (
                             static_cast < __ReceiverType const * > ( this ),
-                            static_cast < __ReceiverType const * > ( this )->__dicch_transmitRequest (
-                                    __DelegateIteratorRequestType :: __dirt_rbegin
-                            )
+                            reinterpret_cast < __AbstractDelegateIterator < __ElementType const > * > ( response._pData )
                     );
                 }
 
@@ -65,13 +79,27 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                         __ReceiverType,
                         __ElementType,
                         __bidirectional
-                > :: crend () const noexcept -> __dbcic_Iterator {
+                > :: crend () const noexcept -> ConstReverseIterator {
 
-                    return __dbcic_Iterator (
+                    __DelegateIterableRequest const request {
+                            __DelegateIterableRequestType :: __dirt_rend,
+                            nullptr
+                    };
+
+                    __DelegateIterableResponse response; // NOLINT(cppcoreguidelines-pro-type-member-init)
+
+                    auto const requestAvailabilityStatus = static_cast < __ReceiverType const * > ( this )->__dich_transmitConstRequest (
+                            & request,
+                            & response
+                    );
+
+                    if ( ! requestAvailabilityStatus || ! response._status ) {
+                        return ConstReverseIterator ();
+                    }
+
+                    return ConstReverseIterator (
                             static_cast < __ReceiverType const * > ( this ),
-                            static_cast < __ReceiverType const * > ( this )->__dicch_transmitRequest (
-                                    __DelegateIteratorRequestType :: __dirt_rend
-                            )
+                            reinterpret_cast < __AbstractDelegateIterator < __ElementType const > * > ( response._pData )
                     );
                 }
 

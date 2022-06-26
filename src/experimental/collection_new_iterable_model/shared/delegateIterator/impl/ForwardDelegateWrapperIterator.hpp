@@ -5,6 +5,9 @@
 #ifndef __CDS_SHARED_FORWARD_DELEGATE_WRAPPER_ITERATOR_IMPL_HPP__
 #define __CDS_SHARED_FORWARD_DELEGATE_WRAPPER_ITERATOR_IMPL_HPP__
 
+#include "AbstractDelegateIterator.hpp"
+#include "AbstractDelegateWrapperIterator.hpp"
+
 namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
     namespace experimental {    // NOLINT(modernize-concat-nested-namespaces)
         namespace __hidden {    // NOLINT(modernize-concat-nested-namespaces, bugprone-reserved-identifier)

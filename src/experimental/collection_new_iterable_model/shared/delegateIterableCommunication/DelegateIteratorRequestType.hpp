@@ -14,7 +14,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                  * @enum The types of delegate iterator requests the Collection Base Object can make to its Derived Objects when acquiring an Iterator Delegate Implementation
                  * @test tested in nester class test
                  */
-                enum class __DelegateIteratorRequestType {      // NOLINT(bugprone-reserved-identifier)
+                enum class __DelegateIterableRequestType {      // NOLINT(bugprone-reserved-identifier)
 
                     /// Represents a Request for a Beginning Iterator, Advancing Forward
                     __dirt_begin,                               // NOLINT(bugprone-reserved-identifier)
@@ -27,6 +27,12 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
 
                     /// Represents a Request for a End Iterator, Advancing Backwards ( reverse iteration )
                     __dirt_rend,                                // NOLINT(bugprone-reserved-identifier)
+
+                    /// Represents a Request for a removal of an element pointed to at by an iterator
+                    __dirt_remove,                              // NOLINT(bugprone-reserved-identifier)
+
+                    /// Represents a Request for a removal of an element pointed to at by a const iterator
+                    __dirt_removeConst,                         // NOLINT(bugprone-reserved-identifier)
                 };
 
             }

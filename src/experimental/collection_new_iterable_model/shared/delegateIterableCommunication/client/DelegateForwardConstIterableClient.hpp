@@ -10,6 +10,12 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
         namespace __hidden {    // NOLINT(modernize-concat-nested-namespaces, bugprone-reserved-identifier)
             namespace __impl {  // NOLINT(bugprone-reserved-identifier)
 
+                template < typename >                           // NOLINT(bugprone-reserved-identifier)
+                class __BidirectionalDelegateWrapperIterator;   // NOLINT(bugprone-reserved-identifier)
+
+                template < typename >                   // NOLINT(bugprone-reserved-identifier)
+                class __ForwardDelegateWrapperIterator; // NOLINT(bugprone-reserved-identifier)
+
                 template <
                         typename __ReceiverType,                // NOLINT(bugprone-reserved-identifier)
                         typename __ElementType,                 // NOLINT(bugprone-reserved-identifier)
@@ -21,7 +27,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                             __ElementType const;
 
                 protected:
-                    using __dfcic_Iterator      = // NOLINT(bugprone-reserved-identifier)
+                    using ConstIterator         = // NOLINT(bugprone-reserved-identifier)
                             cds :: meta :: Conditional <
                                     __bidirectional,
                                     __BidirectionalDelegateWrapperIterator < __dfcic_ElementType >,
@@ -29,16 +35,16 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                             >;
 
                 protected:
-                    auto begin () const noexcept -> __dfcic_Iterator;
+                    auto begin () const noexcept -> ConstIterator;
 
                 protected:
-                    auto end () const noexcept -> __dfcic_Iterator;
+                    auto end () const noexcept -> ConstIterator;
 
                 protected:
-                    auto cbegin () const noexcept -> __dfcic_Iterator;
+                    auto cbegin () const noexcept -> ConstIterator;
 
                 protected:
-                    auto cend () const noexcept -> __dfcic_Iterator;
+                    auto cend () const noexcept -> ConstIterator;
                 };
 
             }
