@@ -10,11 +10,13 @@
 #include <CDS/Comparator>
 #include "../../shared/memory/PrimitiveAllocation.hpp"
 #include "collection/CollectionFunctions.hpp"
+#include "collection/CollectionConstructs.hpp"
 
 #include "shared/delegateIterator/ForwardDelegateWrapperIterator.hpp"
 #include "shared/delegateIterableCommunication/channel/DelegateIterableChannel.hpp"
 #include "shared/delegateIterableCommunication/client/DelegateForwardConstIterableClient.hpp"
 #include "shared/delegateIterableCommunication/client/AbstractConstIteratorRemoveClient.hpp"
+#include "shared/iterable/IterableRemoveOf.hpp"
 #include "shared/iterable/IterableRemoveByPredicate.hpp"
 #include "shared/iterable/IterableImmutableStatements.hpp"
 
@@ -35,6 +37,18 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 public __hidden :: __impl :: __AbstractConstIteratorRemoveClient <
                         Collection < __ElementType >,
                         __ElementType
+                >,
+                public __hidden :: __impl :: __IterableRemoveOf <
+                        Collection < __ElementType >,
+                        __ElementType,
+                        Collection < __ElementType >,
+                        __hidden :: __impl :: __CollectionContainsFunction < __ElementType >
+                >,
+                public __hidden :: __impl :: __IterableRemoveOf <
+                        Collection < __ElementType >,
+                        __ElementType,
+                        std :: initializer_list < __ElementType >,
+                        __hidden :: __impl :: __InitializerListContainsFunction < __ElementType, & cds :: meta :: equals < __ElementType > >
                 >,
                 public __hidden :: __impl :: __IterableRemoveByPredicate <
                         Collection < __ElementType >,
@@ -85,6 +99,24 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                             __ElementType
                     >;
 
+        protected:
+            using IterableRemoveOfColleciton =
+                    __hidden :: __impl :: __IterableRemoveOf <
+                            Collection < __ElementType >,
+                            __ElementType,
+                            Collection < __ElementType >,
+                            __hidden :: __impl :: __CollectionContainsFunction < __ElementType >
+                    >;
+
+        protected:
+            using IterableRemoveOfInitializerList =
+                    __hidden :: __impl :: __IterableRemoveOf <
+                            Collection < __ElementType >,
+                            __ElementType,
+                            std :: initializer_list < __ElementType >,
+                            __hidden :: __impl :: __InitializerListContainsFunction < __ElementType, & cds :: meta :: equals < __ElementType > >
+                    >;
+
         public:
             using ElementType   = __ElementType;
 
@@ -128,6 +160,24 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         public: using IterableImmutableStatements :: any;
         public: using IterableImmutableStatements :: all;
         public: using IterableImmutableStatements :: none;
+
+        public: using IterableRemoveOfColleciton :: removeOf;
+        public: using IterableRemoveOfColleciton :: removeFirstOf;
+        public: using IterableRemoveOfColleciton :: removeLastOf;
+        public: using IterableRemoveOfColleciton :: removeAllOf;
+        public: using IterableRemoveOfColleciton :: removeNotOf;
+        public: using IterableRemoveOfColleciton :: removeFirstNotOf;
+        public: using IterableRemoveOfColleciton :: removeLastNotOf;
+        public: using IterableRemoveOfColleciton :: removeAllNotOf;
+
+        public: using IterableRemoveOfInitializerList :: removeOf;
+        public: using IterableRemoveOfInitializerList :: removeFirstOf;
+        public: using IterableRemoveOfInitializerList :: removeLastOf;
+        public: using IterableRemoveOfInitializerList :: removeAllOf;
+        public: using IterableRemoveOfInitializerList :: removeNotOf;
+        public: using IterableRemoveOfInitializerList :: removeFirstNotOf;
+        public: using IterableRemoveOfInitializerList :: removeLastNotOf;
+        public: using IterableRemoveOfInitializerList :: removeAllNotOf;
 
         public:
             __CDS_NoDiscard __CDS_cpplang_VirtualConstexpr virtual auto size () const noexcept -> Size;
@@ -196,12 +246,15 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
     }
 }
 
+#include "collection/impl/CollectionConstructs.hpp"
 #include "collection/impl/CollectionFunctions.hpp"
+
 #include "shared/delegateIterator/impl/ForwardDelegateWrapperIterator.hpp"
 #include "shared/delegateIterableCommunication/channel/impl/DelegateIterableChannel.hpp"
 #include "shared/delegateIterableCommunication/client/impl/DelegateForwardConstIterableClient.hpp"
 #include "shared/delegateIterableCommunication/client/impl/AbstractConstIteratorRemoveClient.hpp"
 
+#include "shared/iterable/impl/IterableRemoveOf.hpp"
 #include "shared/iterable/impl/IterableRemoveByPredicate.hpp"
 #include "shared/iterable/impl/IterableImmutableStatements.hpp"
 

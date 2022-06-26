@@ -13,9 +13,6 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                 template < typename >
                 class __AbstractDelegateWrapperIterator;    // NOLINT(bugprone-reserved-identifier)
 
-                template < typename, typename >
-                class __IterableTakeByPredicate;            // NOLINT(bugprone-reserved-identifier)
-
                 template <
                         typename __ReceiverType,            // NOLINT(bugprone-reserved-identifier)
                         typename __ElementType              // NOLINT(bugprone-reserved-identifier)
