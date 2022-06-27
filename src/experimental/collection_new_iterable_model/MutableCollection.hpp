@@ -128,7 +128,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             ) noexcept;
 
         public:
-            __CDS_cpplang_VirtualConstexpr ~MutableCollection () noexcept override;
+            __CDS_cpplang_ConstexprDestructor ~MutableCollection () noexcept override;
 
         public: using Collection :: begin;
         public: using Collection :: end;

@@ -4,6 +4,9 @@
 
 #include <CDS/experimental/Collection>
 #include <CDS/experimental/MutableCollection>
+#include <CDS/experimental/Set>
+#include <CDS/experimental/Map>
+#include <CDS/experimental/List>
 
 
 enum class E1 {
@@ -36,7 +39,18 @@ int main () {
     d.f();
     std :: cout << sizeof ( Collection < int > ) << '\n';
     std :: cout << sizeof ( MutableCollection < int > ) << '\n';
+    std :: cout << sizeof ( List < int > ) << '\n';
     std :: cout.flush();
+
+    List < int > * pList = nullptr;
+    (void) pList->begin();
+    (void) pList->end();
+    (void) pList->cbegin();
+    (void) pList->cend();
+    (void) pList->rbegin();
+    (void) pList->rend();
+    (void) pList->crbegin();
+    (void) pList->crend();
 
     Collection < int > * pColl = nullptr;
 

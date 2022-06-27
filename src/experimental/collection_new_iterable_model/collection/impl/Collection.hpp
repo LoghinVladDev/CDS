@@ -52,7 +52,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
 
         template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
-        __CDS_cpplang_VirtualConstexpr Collection < __ElementType > :: ~Collection () noexcept = default;
+        __CDS_cpplang_ConstexprDestructor Collection < __ElementType > :: ~Collection () noexcept = default;
 
 
         template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)

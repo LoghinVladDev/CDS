@@ -214,7 +214,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             ) noexcept;
 
         public:
-            __CDS_cpplang_VirtualConstexpr ~Collection() noexcept;
+            __CDS_cpplang_ConstexprDestructor ~Collection() noexcept;
 
         public: using DelegateForwardConstIterableClient :: begin;
         public: using DelegateForwardConstIterableClient :: end;
