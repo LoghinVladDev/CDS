@@ -156,6 +156,155 @@ int main () {
     pMutColl->remove(pMutColl->begin());
     pMutColl->remove(e);
 
+    Collection < MutableCollection < int > :: Iterator > * pItMutColl;
+
+    (void) pMutColl->findThat(3, * pItMutColl, [](int &){return true;});
+    (void) pMutColl->findFirstThat([](int &){return true;});
+    (void) pMutColl->findLastThat([](int &){return true;});
+    (void) pMutColl->findAllThat( *pItMutColl, [](int &){return true;});
+
+    (void)pMutColl->begin();
+    (void)pMutColl->end();
+    (void)pMutColl->cbegin();
+    (void)pMutColl->cend();
+    pMutColl->remove(pMutColl->begin());
+    pMutColl->remove(pMutColl->cbegin());
+    pMutColl->remove(pMutColl->end());
+    pMutColl->remove(pMutColl->cend());
+    pMutColl->remove(5);
+
+    (void)pMutColl->size();
+    (void)pMutColl->empty();
+    (void)(bool)*pMutColl;
+    (void)pMutColl->toString();
+    (void)pMutColl->hash();
+    (void)pMutColl->equals(* pMutColl);
+    pMutColl->clear();
+    (void)pMutColl->find(5);
+    (void)pMutColl->contains(5);
+    pMutColl->add(5);
+    pMutColl->addAll(5, 3, 1);
+    pMutColl->addAllOf(std :: initializer_list<int>{1, 4, 5});
+    pMutColl->addAllOf(* pMutColl);
+
+    pMutColl->removeIf (
+            3,
+            [](int){return true;}
+    );
+
+    pMutColl->removeFirstIf (
+            [](int){return true;}
+    );
+
+    pMutColl->removeLastIf (
+            [](int){return true;}
+    );
+
+    pMutColl->removeAllIf (
+            [](int){return true;}
+    );
+
+    pMutColl->forEach([](int){});
+    (void)pMutColl->some(2, [](int){return true;});
+    (void)pMutColl->atLeast(2, [](int){return true;});
+    (void)pMutColl->atMost(2, [](int){return true;});
+    (void)pMutColl->moreThan(2, [](int){return true;});
+    (void)pMutColl->fewerThan(2, [](int){return true;});
+    (void)pMutColl->count([](int){return true;});
+    (void)pMutColl->all([](int){return true;});
+    (void)pMutColl->any([](int){return true;});
+    (void)pMutColl->none([](int){return true;});
+
+    pMutColl->removeOf ( 5, * pMutColl );
+    pMutColl->removeFirstOf ( * pMutColl );
+    pMutColl->removeLastOf ( * pMutColl );
+    pMutColl->removeAllOf ( * pMutColl );
+
+    pMutColl->removeNotOf ( 5, * pMutColl );
+    pMutColl->removeFirstNotOf ( * pMutColl );
+    pMutColl->removeLastNotOf ( * pMutColl );
+    pMutColl->removeAllNotOf ( * pMutColl );
+
+    pMutColl->removeOf ( 5, { 1, 3, 4 } );
+    pMutColl->removeFirstOf ( { 1, 3, 4 } );
+    pMutColl->removeLastOf ( { 1, 3, 4 } );
+    pMutColl->removeAllOf ( { 1, 3, 4 } );
+
+    pMutColl->removeNotOf ( 5, { 1, 3, 4 } );
+    pMutColl->removeFirstNotOf ( { 1, 3, 4 } );
+    pMutColl->removeLastNotOf ( { 1, 3, 4 } );
+    pMutColl->removeAllNotOf ( { 1, 3, 4 } );
+
+    (void)pMutColl->containsAnyOf ( * pMutColl );
+    (void)pMutColl->containsAllOf ( * pMutColl );
+    (void)pMutColl->containsAnyNotOf ( * pMutColl );
+    (void)pMutColl->containsAllNotOf ( * pMutColl );
+
+    (void)pMutColl->containsAnyOf ( { 1, 2, 3 } );
+    (void)pMutColl->containsAllOf ( { 1, 2, 3 } );
+    (void)pMutColl->containsAnyNotOf ( { 1, 2, 3 } );
+    (void)pMutColl->containsAllNotOf ( { 1, 2, 3 } );
+
+    (void) pMutColl->findThat(3, *pItColl, [](int){return true;});
+    (void) pMutColl->findFirstThat([](int){return true;});
+    (void) pMutColl->findLastThat([](int){return true;});
+    (void) pMutColl->findAllThat(*pItColl, [](int){return true;});
+
+    (void) pMutColl->findOf ( 3, * pItColl, * pMutColl );
+    (void) pMutColl->findFirstOf ( * pMutColl );
+    (void) pMutColl->findLastOf ( * pMutColl );
+    (void) pMutColl->findAllOf ( * pItColl, * pMutColl );
+
+    (void) pMutColl->findNotOf ( 3, * pItColl, * pMutColl );
+    (void) pMutColl->findFirstNotOf ( * pMutColl );
+    (void) pMutColl->findLastNotOf ( * pMutColl );
+    (void) pMutColl->findAllNotOf ( * pItColl, * pMutColl );
+
+    (void) pMutColl->findOf ( 3, * pItColl, { 1, 2, 3 } );
+    (void) pMutColl->findFirstOf ( { 1, 2, 3 } );
+    (void) pMutColl->findLastOf ( { 1, 2, 3 } );
+    (void) pMutColl->findAllOf ( * pItColl, { 1, 2, 3 } );
+
+    (void) pMutColl->findNotOf ( 3, * pItColl, { 1, 2, 3 } );
+    (void) pMutColl->findFirstNotOf ( { 1, 2, 3 } );
+    (void) pMutColl->findLastNotOf ( { 1, 2, 3 } );
+    (void) pMutColl->findAllNotOf ( * pItColl, { 1, 2, 3 } );
+
+    (void) pMutColl->findThat(3, *pItMutColl, [](int){return true;});
+    (void) pMutColl->findFirstThat([](int){return true;});
+    (void) pMutColl->findLastThat([](int){return true;});
+    (void) pMutColl->findAllThat(*pItMutColl, [](int){return true;});
+
+    (void) pMutColl->findOf ( 3, * pItMutColl, * pMutColl );
+    (void) pMutColl->findFirstOf ( * pMutColl );
+    (void) pMutColl->findLastOf ( * pMutColl );
+    (void) pMutColl->findAllOf ( * pItMutColl, * pMutColl );
+
+    (void) pMutColl->findNotOf ( 3, * pItMutColl, * pMutColl );
+    (void) pMutColl->findFirstNotOf ( * pMutColl );
+    (void) pMutColl->findLastNotOf ( * pMutColl );
+    (void) pMutColl->findAllNotOf ( * pItMutColl, * pMutColl );
+
+    (void) pMutColl->findOf ( 3, * pItMutColl, { 1, 2, 3 } );
+    (void) pMutColl->findFirstOf ( { 1, 2, 3 } );
+    (void) pMutColl->findLastOf ( { 1, 2, 3 } );
+    (void) pMutColl->findAllOf ( * pItMutColl, { 1, 2, 3 } );
+
+    (void) pMutColl->findNotOf ( 3, * pItMutColl, { 1, 2, 3 } );
+    (void) pMutColl->findFirstNotOf ( { 1, 2, 3 } );
+    (void) pMutColl->findLastNotOf ( { 1, 2, 3 } );
+    (void) pMutColl->findAllNotOf ( * pItMutColl, { 1, 2, 3 } );
+
+    (void)pMutColl->some(2, [](int &){return true;});
+    (void)pMutColl->atLeast(2, [](int &){return true;});
+    (void)pMutColl->atMost(2, [](int &){return true;});
+    (void)pMutColl->moreThan(2, [](int &){return true;});
+    (void)pMutColl->fewerThan(2, [](int &){return true;});
+    (void)pMutColl->count([](int &){return true;});
+    (void)pMutColl->all([](int &){return true;});
+    (void)pMutColl->any([](int &){return true;});
+    (void)pMutColl->none([](int &){return true;});
+
 //    Array < int > a;
 //
 //    a.pushBack (3);

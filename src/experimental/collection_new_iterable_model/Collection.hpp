@@ -136,7 +136,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                     >;
 
         protected:
-            using IterableContainsOfColleciton =
+            using IterableContainsOfCollection =
                     __hidden :: __impl :: __IterableContainsOf <
                             Collection < __ElementType >,
                             __ElementType,
@@ -152,7 +152,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                     >;
 
         protected:
-            using IterableImmutableFindOfColleciton =
+            using IterableImmutableFindOfCollection =
                     __hidden :: __impl :: __IterableImmutableFindOf <
                             Collection < __ElementType >,
                             __ElementType,
@@ -180,7 +180,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                     >;
 
         protected:
-            using IterableRemoveOfColleciton =
+            using IterableRemoveOfCollection =
                     __hidden :: __impl :: __IterableRemoveOf <
                             Collection < __ElementType >,
                             __ElementType,
@@ -239,14 +239,14 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         public: using IterableImmutableStatements :: all;
         public: using IterableImmutableStatements :: none;
 
-        public: using IterableRemoveOfColleciton :: removeOf;
-        public: using IterableRemoveOfColleciton :: removeFirstOf;
-        public: using IterableRemoveOfColleciton :: removeLastOf;
-        public: using IterableRemoveOfColleciton :: removeAllOf;
-        public: using IterableRemoveOfColleciton :: removeNotOf;
-        public: using IterableRemoveOfColleciton :: removeFirstNotOf;
-        public: using IterableRemoveOfColleciton :: removeLastNotOf;
-        public: using IterableRemoveOfColleciton :: removeAllNotOf;
+        public: using IterableRemoveOfCollection :: removeOf;
+        public: using IterableRemoveOfCollection :: removeFirstOf;
+        public: using IterableRemoveOfCollection :: removeLastOf;
+        public: using IterableRemoveOfCollection :: removeAllOf;
+        public: using IterableRemoveOfCollection :: removeNotOf;
+        public: using IterableRemoveOfCollection :: removeFirstNotOf;
+        public: using IterableRemoveOfCollection :: removeLastNotOf;
+        public: using IterableRemoveOfCollection :: removeAllNotOf;
 
         public: using IterableRemoveOfInitializerList :: removeOf;
         public: using IterableRemoveOfInitializerList :: removeFirstOf;
@@ -257,10 +257,10 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         public: using IterableRemoveOfInitializerList :: removeLastNotOf;
         public: using IterableRemoveOfInitializerList :: removeAllNotOf;
 
-        public: using IterableContainsOfColleciton :: containsAnyOf;
-        public: using IterableContainsOfColleciton :: containsAllOf;
-        public: using IterableContainsOfColleciton :: containsAnyNotOf;
-        public: using IterableContainsOfColleciton :: containsAllNotOf;
+        public: using IterableContainsOfCollection :: containsAnyOf;
+        public: using IterableContainsOfCollection :: containsAllOf;
+        public: using IterableContainsOfCollection :: containsAnyNotOf;
+        public: using IterableContainsOfCollection :: containsAllNotOf;
 
         public: using IterableContainsOfInitializerList :: containsAnyOf;
         public: using IterableContainsOfInitializerList :: containsAllOf;
@@ -272,14 +272,14 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         public: using IterableImmutableFindByPredicate :: findLastThat;
         public: using IterableImmutableFindByPredicate :: findAllThat;
 
-        public: using IterableImmutableFindOfColleciton :: findOf;
-        public: using IterableImmutableFindOfColleciton :: findFirstOf;
-        public: using IterableImmutableFindOfColleciton :: findLastOf;
-        public: using IterableImmutableFindOfColleciton :: findAllOf;
-        public: using IterableImmutableFindOfColleciton :: findNotOf;
-        public: using IterableImmutableFindOfColleciton :: findFirstNotOf;
-        public: using IterableImmutableFindOfColleciton :: findLastNotOf;
-        public: using IterableImmutableFindOfColleciton :: findAllNotOf;
+        public: using IterableImmutableFindOfCollection :: findOf;
+        public: using IterableImmutableFindOfCollection :: findFirstOf;
+        public: using IterableImmutableFindOfCollection :: findLastOf;
+        public: using IterableImmutableFindOfCollection :: findAllOf;
+        public: using IterableImmutableFindOfCollection :: findNotOf;
+        public: using IterableImmutableFindOfCollection :: findFirstNotOf;
+        public: using IterableImmutableFindOfCollection :: findLastNotOf;
+        public: using IterableImmutableFindOfCollection :: findAllNotOf;
 
         public: using IterableImmutableFindOfInitializerList :: findOf;
         public: using IterableImmutableFindOfInitializerList :: findFirstOf;
