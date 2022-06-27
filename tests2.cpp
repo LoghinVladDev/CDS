@@ -3,6 +3,7 @@
 #include <CDS/Object>
 
 #include <CDS/experimental/Collection>
+#include <CDS/experimental/MutableCollection>
 
 
 enum class E1 {
@@ -33,7 +34,8 @@ using namespace cds :: experimental;
 int main () {
     D d;
     d.f();
-    std :: cout << sizeof ( Collection < int > );
+    std :: cout << sizeof ( Collection < int > ) << '\n';
+    std :: cout << sizeof ( MutableCollection < int > ) << '\n';
     std :: cout.flush();
 
     Collection < int > * pColl = nullptr;
@@ -145,6 +147,14 @@ int main () {
     (void) pColl->findFirstNotOf ( { 1, 2, 3 } );
     (void) pColl->findLastNotOf ( { 1, 2, 3 } );
     (void) pColl->findAllNotOf ( * pItColl, { 1, 2, 3 } );
+
+    MutableCollection < int > * pMutColl;
+
+    MutableCollection < int > :: Iterator e = pMutColl->begin();
+    MutableCollection < int > :: Iterator e2 = pMutColl->end();
+
+    pMutColl->remove(pMutColl->begin());
+    pMutColl->remove(e);
 
 //    Array < int > a;
 //

@@ -2,8 +2,8 @@
 // Created by loghin on 6/26/22.
 //
 
-#ifndef __CDS_COLLECTION_IMPL_HPP__
-#define __CDS_COLLECTION_IMPL_HPP__
+#ifndef __CDS_EX_COLLECTION_IMPL_HPP__
+#define __CDS_EX_COLLECTION_IMPL_HPP__
 
 namespace cds { // NOLINT(modernize-concat-nested-namespaces)
     namespace experimental {
@@ -226,4 +226,4 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 }
 
 
-#endif // __CDS_COLLECTION_IMPL_HPP__
+#endif // __CDS_EX_COLLECTION_IMPL_HPP__

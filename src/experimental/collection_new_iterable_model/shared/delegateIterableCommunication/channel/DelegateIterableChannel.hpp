@@ -14,24 +14,6 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
         namespace __hidden {    // NOLINT(modernize-concat-nested-namespaces, bugprone-reserved-identifier)
             namespace __impl {  // NOLINT(bugprone-reserved-identifier)
 
-                template < typename, typename, bool >
-                class __DelegateForwardIterableClient;          // NOLINT(bugprone-reserved-identifier)
-
-                template < typename, typename, bool >
-                class __DelegateBackwardIterableClient;         // NOLINT(bugprone-reserved-identifier)
-
-                template < typename, typename, bool >
-                class __DelegateForwardConstIterableClient;     // NOLINT(bugprone-reserved-identifier)
-
-                template < typename, typename, bool >
-                class __DelegateBackwardConstIterableClient;    // NOLINT(bugprone-reserved-identifier)
-
-                template < typename, typename >
-                class __AbstractIteratorRemoveClient;           // NOLINT(bugprone-reserved-identifier)
-
-                template < typename, typename >
-                class __AbstractConstIteratorRemoveClient;      // NOLINT(bugprone-reserved-identifier)
-
                 template <
                         typename __ReceiverType,            // NOLINT(bugprone-reserved-identifier)
                         typename __ElementType              // NOLINT(bugprone-reserved-identifier)
@@ -39,34 +21,28 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                         public cds :: Object {              // NOLINT(bugprone-reserved-identifier)
 
                 private:
-                    friend class __DelegateForwardIterableClient < __ReceiverType, __ElementType, false >;
+                    template < typename, typename, bool >
+                    friend class __DelegateForwardIterableClient;       // NOLINT(bugprone-reserved-identifier)
 
                 private:
-                    friend class __DelegateForwardIterableClient < __ReceiverType, __ElementType, true >;
+                    template < typename, typename, bool >
+                    friend class __DelegateBackwardIterableClient;      // NOLINT(bugprone-reserved-identifier)
 
                 private:
-                    friend class __DelegateBackwardIterableClient < __ReceiverType, __ElementType, false >;
+                    template < typename, typename, bool >
+                    friend class __DelegateForwardConstIterableClient;  // NOLINT(bugprone-reserved-identifier)
 
                 private:
-                    friend class __DelegateBackwardIterableClient < __ReceiverType, __ElementType, true >;
+                    template < typename, typename, bool >
+                    friend class __DelegateBackwardConstIterableClient; // NOLINT(bugprone-reserved-identifier)
 
                 private:
-                    friend class __DelegateForwardConstIterableClient < __ReceiverType, __ElementType, false >;
+                    template < typename, typename >
+                    friend class __AbstractIteratorRemoveClient;        // NOLINT(bugprone-reserved-identifier)
 
                 private:
-                    friend class __DelegateForwardConstIterableClient < __ReceiverType, __ElementType, true >;
-
-                private:
-                    friend class __DelegateBackwardConstIterableClient < __ReceiverType, __ElementType, false >;
-
-                private:
-                    friend class __DelegateBackwardConstIterableClient < __ReceiverType, __ElementType, true >;
-
-                private:
-                    friend class __AbstractIteratorRemoveClient < __ReceiverType, __ElementType >;
-
-                private:
-                    friend class __AbstractConstIteratorRemoveClient < __ReceiverType, __ElementType >;
+                    template < typename, typename >
+                    friend class __AbstractConstIteratorRemoveClient;   // NOLINT(bugprone-reserved-identifier)
 
                 protected:
                     __CDS_NoDiscard virtual auto __dich_transmitRequest ( // NOLINT(bugprone-reserved-identifier)

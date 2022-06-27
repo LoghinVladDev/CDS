@@ -13,23 +13,14 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                 template < typename >
                 class __AbstractDelegateWrapperIterator;    // NOLINT(bugprone-reserved-identifier)
 
-                template < typename, typename >
-                class __IterableRemoveByPredicate;          // NOLINT(bugprone-reserved-identifier)
-
-                template <
-                        typename,
-                        typename                                                    __ElementType,      // NOLINT(bugprone-reserved-identifier)
-                        typename                                                    __FromIterableType, // NOLINT(bugprone-reserved-identifier)
-                        __ContainsFunction < __FromIterableType, __ElementType >
-                > class __IterableRemoveOf;                                                             // NOLINT(bugprone-reserved-identifier)
-
                 template <
                         typename __ReceiverType,                // NOLINT(bugprone-reserved-identifier)
                         typename __ElementType                  // NOLINT(bugprone-reserved-identifier)
                 > class __AbstractConstIteratorRemoveClient {   // NOLINT(bugprone-reserved-identifier)
 
                 private:
-                    friend class __IterableRemoveByPredicate < __ReceiverType, __ElementType >;
+                    template < typename, typename >
+                    friend class __IterableRemoveByPredicate; // NOLINT(bugprone-reserved-identifier)
 
                 private:
                     template <

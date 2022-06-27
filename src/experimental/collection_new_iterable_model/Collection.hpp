@@ -96,6 +96,9 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                         FunctionComparator < __ElementType, & cds :: meta :: equals < __ElementType > >
                 > {
 
+        public:
+            using ElementType   = __ElementType;
+
         protected:
             using DelegateIterableChannel =
                     __hidden :: __impl :: __DelegateIterableChannel <
@@ -195,25 +198,23 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                     >;
 
         public:
-            using ElementType   = __ElementType;
+            using typename DelegateForwardConstIterableClient :: ConstIterator;
 
-        public:
+        protected:
             constexpr Collection () noexcept;
 
-        public:
+        protected:
             constexpr Collection (
                     Collection const & collection
             ) noexcept;
 
-        public:
+        protected:
             constexpr Collection (
                     Collection && collection
             ) noexcept;
 
         public:
             __CDS_cpplang_VirtualConstexpr ~Collection() noexcept;
-
-        public: using typename DelegateForwardConstIterableClient :: ConstIterator;
 
         public: using DelegateForwardConstIterableClient :: begin;
         public: using DelegateForwardConstIterableClient :: end;

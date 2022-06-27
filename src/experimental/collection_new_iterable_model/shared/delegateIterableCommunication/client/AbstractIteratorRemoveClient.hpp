@@ -18,9 +18,6 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                         typename __ElementType              // NOLINT(bugprone-reserved-identifier)
                 > class __AbstractIteratorRemoveClient {    // NOLINT(bugprone-reserved-identifier)
 
-                private:
-                    friend class __IterableTakeByPredicate < __ReceiverType, __ElementType >;
-
                 protected:
                     using __acirc_ElementType       = // NOLINT(bugprone-reserved-identifier)
                             __ElementType;
