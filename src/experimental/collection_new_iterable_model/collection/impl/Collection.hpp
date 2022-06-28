@@ -177,51 +177,6 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             return false;
         }
 
-
-        template < typename __ElementType >         // NOLINT(bugprone-reserved-identifier)
-        template < typename __ForwardElementType >  // NOLINT(bugprone-reserved-identifier)
-        __CDS_OptimalInline auto Collection < __ElementType > :: add (
-                __ForwardElementType && element
-        ) noexcept ( noexcept ( ElementType ( std :: forward < __ForwardElementType > ( element ) ) ) ) -> ElementType const & {
-
-            ElementType * pElementAddress;
-            auto newElementCreated = this->__c_new (
-                    element,
-                    & pElementAddress
-            );
-
-            if ( newElementCreated ) {
-                new ( pElementAddress ) __ElementType ( std :: forward < __ForwardElementType > ( element ) );
-            }
-
-            return * pElementAddress;
-        }
-
-
-        template < typename __ElementType >         // NOLINT(bugprone-reserved-identifier)
-        template < typename ... __ArgumentTypes >   // NOLINT(bugprone-reserved-identifier)
-        __CDS_OptimalInline auto Collection < __ElementType > :: addAll (
-                __ArgumentTypes && ... values
-        ) noexcept -> void {
-
-            __hidden :: __impl :: __collectionAdd (
-                    * this,
-                    std :: forward < __ArgumentTypes > ( values ) ...
-            );
-        }
-
-
-        template < typename __ElementType >     // NOLINT(bugprone-reserved-identifier)
-        template < typename __IterableType >    // NOLINT(bugprone-reserved-identifier)
-        __CDS_OptimalInline auto Collection < __ElementType > :: addAllOf (
-                __IterableType const & iterable
-        ) noexcept -> void {
-
-            for ( auto iterator = iterable.begin(), end = iterable.end(); iterator != end; ++ iterator ) {
-                this->add ( * iterator );
-            }
-        }
-
     }
 }
 

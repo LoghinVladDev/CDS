@@ -48,14 +48,14 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                         __bidirectional
                 > :: crbegin () const noexcept -> ConstReverseIterator {
 
-                    __DelegateIterableRequest const request {
-                            __DelegateIterableRequestType :: __dirt_rbegin,
+                    __CollectionInternalRequest const request {
+                            __CollectionInternalRequestType :: __cirt_rbegin,
                             nullptr
                     };
 
-                    __DelegateIterableResponse response; // NOLINT(cppcoreguidelines-pro-type-member-init)
+                    __CollectionInternalRequestResponse response; // NOLINT(cppcoreguidelines-pro-type-member-init)
 
-                    auto const requestAvailabilityStatus = static_cast < __ReceiverType const * > ( this )->__dich_transmitConstRequest (
+                    auto const requestAvailabilityStatus = static_cast < __ReceiverType const * > ( this )->__cicch_transmitConstRequest (
                             & request,
                             & response
                     );
@@ -81,14 +81,14 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                         __bidirectional
                 > :: crend () const noexcept -> ConstReverseIterator {
 
-                    __DelegateIterableRequest const request {
-                            __DelegateIterableRequestType :: __dirt_rend,
+                    __CollectionInternalRequest const request {
+                            __CollectionInternalRequestType :: __cirt_rend,
                             nullptr
                     };
 
-                    __DelegateIterableResponse response; // NOLINT(cppcoreguidelines-pro-type-member-init)
+                    __CollectionInternalRequestResponse response; // NOLINT(cppcoreguidelines-pro-type-member-init)
 
-                    auto const requestAvailabilityStatus = static_cast < __ReceiverType const * > ( this )->__dich_transmitConstRequest (
+                    auto const requestAvailabilityStatus = static_cast < __ReceiverType const * > ( this )->__cicch_transmitConstRequest (
                             & request,
                             & response
                     );

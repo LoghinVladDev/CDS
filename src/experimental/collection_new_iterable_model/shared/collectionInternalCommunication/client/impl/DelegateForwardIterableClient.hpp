@@ -20,14 +20,14 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                         __bidirectional
                 > :: begin () noexcept -> Iterator {
 
-                    __DelegateIterableRequest const request {
-                        __DelegateIterableRequestType :: __dirt_begin,
+                    __CollectionInternalRequest const request {
+                        __CollectionInternalRequestType :: __cirt_begin,
                         nullptr
                     };
 
-                    __DelegateIterableResponse response; // NOLINT(cppcoreguidelines-pro-type-member-init)
+                    __CollectionInternalRequestResponse response; // NOLINT(cppcoreguidelines-pro-type-member-init)
 
-                    auto const requestAvailabilityStatus = static_cast < __ReceiverType * > ( this )->__dich_transmitRequest (
+                    auto const requestAvailabilityStatus = static_cast < __ReceiverType * > ( this )->__cicch_transmitRequest (
                             & request,
                             & response
                     );
@@ -53,14 +53,14 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                         __bidirectional
                 > :: end () noexcept -> Iterator {
 
-                    __DelegateIterableRequest const request {
-                            __DelegateIterableRequestType :: __dirt_end,
+                    __CollectionInternalRequest const request {
+                            __CollectionInternalRequestType :: __cirt_end,
                             nullptr
                     };
 
-                    __DelegateIterableResponse response; // NOLINT(cppcoreguidelines-pro-type-member-init)
+                    __CollectionInternalRequestResponse response; // NOLINT(cppcoreguidelines-pro-type-member-init)
 
-                    auto const requestAvailabilityStatus = static_cast < __ReceiverType * > ( this )->__dich_transmitRequest (
+                    auto const requestAvailabilityStatus = static_cast < __ReceiverType * > ( this )->__cicch_transmitRequest (
                             & request,
                             & response
                     );

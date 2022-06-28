@@ -13,9 +13,10 @@
 #include "collection/CollectionConstructs.hpp"
 
 #include "shared/delegateIterator/ForwardDelegateWrapperIterator.hpp"
-#include "shared/delegateIterableCommunication/channel/DelegateIterableChannel.hpp"
-#include "shared/delegateIterableCommunication/client/DelegateForwardConstIterableClient.hpp"
-#include "shared/delegateIterableCommunication/client/AbstractConstIteratorRemoveClient.hpp"
+#include "shared/collectionInternalCommunication/channel/CollectionInternalCommunicationChannel.hpp"
+#include "shared/collectionInternalCommunication/client/DelegateForwardConstIterableClient.hpp"
+#include "shared/collectionInternalCommunication/client/AbstractConstIteratorRemoveClient.hpp"
+#include "shared/collectionInternalCommunication/client/RandomInsertionClient.hpp"
 
 #include "shared/iterable/IterableContainsOf.hpp"
 #include "shared/iterable/IterableImmutableFindOf.hpp"
@@ -29,7 +30,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
         template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
         class Collection :
-                public __hidden :: __impl :: __DelegateIterableChannel <
+                public __hidden :: __impl :: __CollectionInternalCommunicationChannel <
                         Collection < __ElementType >,
                         __ElementType
                 >,
@@ -91,6 +92,11 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                         Collection < __ElementType >,
                         __ElementType
                 >,
+                public __hidden :: __impl :: __RandomInsertionClient <
+                        Collection < __ElementType >,
+                        __ElementType,
+                        __ElementType const
+                >,
                 protected __hidden :: __impl :: __CollectionFunctions <
                         __ElementType,
                         FunctionComparator < __ElementType, & cds :: meta :: equals < __ElementType > >
@@ -100,8 +106,8 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             using ElementType   = __ElementType;
 
         protected:
-            using DelegateIterableChannel =
-                    __hidden :: __impl :: __DelegateIterableChannel <
+            using CollectionInternalCommunicationChannel =
+                    __hidden :: __impl :: __CollectionInternalCommunicationChannel <
                             Collection < __ElementType >,
                             __ElementType
                     >;
@@ -197,6 +203,13 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                             __hidden :: __impl :: __initializerListContains < __ElementType, & cds :: meta :: equals < __ElementType > >
                     >;
 
+        protected:
+            using RandomInsertionClient = __hidden :: __impl :: __RandomInsertionClient <
+                            Collection < __ElementType >,
+                            __ElementType,
+                            __ElementType const
+                    >;
+
         public:
             using typename DelegateForwardConstIterableClient :: ConstIterator;
 
@@ -290,6 +303,13 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         public: using IterableImmutableFindOfInitializerList :: findLastNotOf;
         public: using IterableImmutableFindOfInitializerList :: findAllNotOf;
 
+        public: using RandomInsertionClient :: add;
+        public: using RandomInsertionClient :: addAll;
+        public: using RandomInsertionClient :: addAllOf;
+        public: using RandomInsertionClient :: insert;
+        public: using RandomInsertionClient :: insertAll;
+        public: using RandomInsertionClient :: insertAllOf;
+
 
         public:
             __CDS_NoDiscard __CDS_cpplang_VirtualConstexpr virtual auto size () const noexcept -> Size;
@@ -329,29 +349,6 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                     ElementType const & element
             ) const noexcept -> bool;
 
-        public:
-            template < typename __ForwardElementType > // NOLINT(bugprone-reserved-identifier)
-            auto add (
-                    __ForwardElementType && element
-            ) noexcept ( noexcept ( ElementType ( std :: forward < __ForwardElementType > ( element ) ) ) ) -> ElementType const &;
-
-        public:
-            template < typename ... __ArgumentTypes > // NOLINT(bugprone-reserved-identifier)
-            auto addAll (
-                    __ArgumentTypes && ... values
-            ) noexcept -> void;
-
-        public:
-            template < typename __IterableType > // NOLINT(bugprone-reserved-identifier)
-            auto addAllOf (
-                    __IterableType const & iterableType
-            ) noexcept -> void;
-
-        protected:
-            virtual auto __c_new ( // NOLINT(bugprone-reserved-identifier)
-                    ElementType const & referenceElement,
-                    ElementType      ** ppNewLocation
-            ) noexcept -> bool = 0;
         };
 
 
@@ -362,9 +359,10 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 #include "collection/impl/CollectionFunctions.hpp"
 
 #include "shared/delegateIterator/impl/ForwardDelegateWrapperIterator.hpp"
-#include "shared/delegateIterableCommunication/channel/impl/DelegateIterableChannel.hpp"
-#include "shared/delegateIterableCommunication/client/impl/DelegateForwardConstIterableClient.hpp"
-#include "shared/delegateIterableCommunication/client/impl/AbstractConstIteratorRemoveClient.hpp"
+#include "shared/collectionInternalCommunication/channel/impl/CollectionInternalCommunicationChannel.hpp"
+#include "shared/collectionInternalCommunication/client/impl/DelegateForwardConstIterableClient.hpp"
+#include "shared/collectionInternalCommunication/client/impl/AbstractConstIteratorRemoveClient.hpp"
+#include "shared/collectionInternalCommunication/client/impl/RandomInsertionClient.hpp"
 
 #include "shared/iterable/impl/IterableContainsOf.hpp"
 #include "shared/iterable/impl/IterableImmutableFindOf.hpp"

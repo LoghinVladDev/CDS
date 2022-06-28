@@ -2,11 +2,11 @@
 // Created by loghin on 6/26/22.
 //
 
-#ifndef __CDS_SHARED_DELEGATE_ITERABLE_CHANNEL_HPP__
-#define __CDS_SHARED_DELEGATE_ITERABLE_CHANNEL_HPP__
+#ifndef __CDS_SHARED_COLLECTION_INTERNAL_COMMUNICATION_HPP__
+#define __CDS_SHARED_COLLECTION_INTERNAL_COMMUNICATION_HPP__
 
-#include "../DelegateIterableRequest.hpp"
-#include "../DelegateIterableResponse.hpp"
+#include "../CollectionInternalRequest.hpp"
+#include "../CollectionInternalRequestResponse.hpp"
 #include "../../delegateIterator/AbstractDelegateIterator.hpp"
 
 namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
@@ -15,10 +15,10 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
             namespace __impl {  // NOLINT(bugprone-reserved-identifier)
 
                 template <
-                        typename __ReceiverType,            // NOLINT(bugprone-reserved-identifier)
-                        typename __ElementType              // NOLINT(bugprone-reserved-identifier)
-                > class __DelegateIterableChannel :         // NOLINT(bugprone-reserved-identifier)
-                        public cds :: Object {              // NOLINT(bugprone-reserved-identifier)
+                        typename __ReceiverType,                    // NOLINT(bugprone-reserved-identifier)
+                        typename __ElementType                      // NOLINT(bugprone-reserved-identifier)
+                > class __CollectionInternalCommunicationChannel :  // NOLINT(bugprone-reserved-identifier)
+                        public cds :: Object {                      // NOLINT(bugprone-reserved-identifier)
 
                 private:
                     template < typename, typename, bool >
@@ -44,20 +44,28 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                     template < typename, typename >
                     friend class __AbstractConstIteratorRemoveClient;   // NOLINT(bugprone-reserved-identifier)
 
+                private:
+                    template < typename, typename, typename >
+                    friend class __RandomInsertionClient;               // NOLINT(bugprone-reserved-identifier)
+
+                private:
+                    template < typename, typename, typename >
+                    friend class __BoundaryInsertionClient;             // NOLINT(bugprone-reserved-identifier)
+
                 protected:
-                    __CDS_NoDiscard virtual auto __dich_transmitRequest ( // NOLINT(bugprone-reserved-identifier)
-                            __DelegateIterableRequest   const * pRequest,
-                            __DelegateIterableResponse        * pResponse
+                    __CDS_NoDiscard virtual auto __cicch_transmitRequest ( // NOLINT(bugprone-reserved-identifier)
+                            __CollectionInternalRequest         const * pRequest,
+                            __CollectionInternalRequestResponse       * pResponse
                     ) noexcept -> bool = 0;
 
                 protected:
-                    __CDS_NoDiscard virtual auto __dich_transmitConstRequest ( // NOLINT(bugprone-reserved-identifier)
-                            __DelegateIterableRequest   const * pRequest,
-                            __DelegateIterableResponse        * pResponse
+                    __CDS_NoDiscard virtual auto __cicch_transmitConstRequest ( // NOLINT(bugprone-reserved-identifier)
+                            __CollectionInternalRequest         const * pRequest,
+                            __CollectionInternalRequestResponse       * pResponse
                     ) const noexcept -> bool = 0;
 
                 public:
-                    __CDS_cpplang_ConstexprDestructor ~__DelegateIterableChannel () noexcept override;
+                    __CDS_cpplang_ConstexprDestructor ~__CollectionInternalCommunicationChannel () noexcept override;
                 };
 
             }
@@ -67,4 +75,4 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
 
 #include "../../delegateIterator/impl/AbstractDelegateIterator.hpp"
 
-#endif // __CDS_SHARED_DELEGATE_ITERABLE_CHANNEL_HPP__
+#endif // __CDS_SHARED_COLLECTION_INTERNAL_COMMUNICATION_HPP__

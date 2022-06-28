@@ -28,7 +28,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                     for ( auto iterator = begin; iterator != end && found < count; ++ iterator ) {
                         if ( __containsFunction ( from, * iterator ) ) {
                             ++ found;
-                            (void) storeIn.add ( iterator );
+                            (void) storeIn.insert ( iterator );
                         }
                     }
 
@@ -124,7 +124,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
 
                     for ( auto iterator = begin; iterator != end; ++ iterator ) {
                         if ( __containsFunction ( from, * iterator ) ) {
-                            (void) storeIn.add ( iterator );
+                            (void) storeIn.insert ( iterator );
                         }
                     }
 
@@ -178,7 +178,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                     for ( auto iterator = begin; iterator != end && found < count; ++ iterator ) {
                         if ( ! __containsFunction ( from, * iterator ) ) {
                             ++ found;
-                            (void) storeIn.add ( iterator );
+                            (void) storeIn.insert ( iterator );
                         }
                     }
 
@@ -274,7 +274,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
 
                     for ( auto iterator = begin; iterator != end; ++ iterator ) {
                         if ( ! __containsFunction ( from, * iterator ) ) {
-                            (void) storeIn.add ( iterator );
+                            (void) storeIn.insert ( iterator );
                         }
                     }
 

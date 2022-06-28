@@ -26,7 +26,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                     for ( auto iterator = begin; iterator != end && found < count; ++ iterator ) {
                         if ( predicate ( * iterator ) ) {
                             ++ found;
-                            (void) storeIn.add ( iterator );
+                            (void) storeIn.insert ( iterator );
                         }
                     }
 
@@ -108,7 +108,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
 
                     for ( auto iterator = begin; iterator != end; ++ iterator ) {
                         if ( predicate ( * iterator ) ) {
-                            (void) storeIn.add ( iterator );
+                            (void) storeIn.insert ( iterator );
                         }
                     }
 

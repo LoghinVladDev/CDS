@@ -9,8 +9,10 @@
 
 #include "shared/delegateIterator/BidirectionalDelegateWrapperIterator.hpp"
 
-#include "shared/delegateIterableCommunication/client/DelegateBackwardIterableClient.hpp"
-#include "shared/delegateIterableCommunication/client/DelegateBackwardConstIterableClient.hpp"
+#include "shared/collectionInternalCommunication/client/DelegateBackwardIterableClient.hpp"
+#include "shared/collectionInternalCommunication/client/DelegateBackwardConstIterableClient.hpp"
+#include "shared/collectionInternalCommunication/client/AbstractIteratorRelativeInsertionClient.hpp"
+#include "shared/collectionInternalCommunication/client/AbstractConstIteratorRelativeInsertionClient.hpp"
 
 namespace cds { // NOLINT(modernize-concat-nested-namespaces)
     namespace experimental {
@@ -40,7 +42,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 > {
 
         public:
-            using ElemenetType = __ElementType;
+            using ElementType = __ElementType;
 
         protected:
             using DelegateForwardIterableClient =
@@ -115,6 +117,86 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         public:
             auto clear () noexcept -> void override = 0;
 
+        public:
+            virtual auto get (
+                    Index index
+            ) noexcept ( false ) -> ElementType &;
+
+        public:
+            virtual auto get (
+                    Index index
+            ) const noexcept ( false ) -> ElementType const &;
+
+        public:
+            template <
+                    typename __CollectionType,
+                    typename __TElementType = __ElementType,
+                    cds :: meta :: EnableIf <
+                            cds :: meta :: isCopyConstructible < __TElementType > ()
+                    > = 0
+            > auto sub (
+                    __CollectionType  & storeIn,
+                    Index               from,
+                    Index               in
+            ) const noexcept -> __CollectionType &;
+
+        public:
+            template <
+                    typename __CollectionType,
+                    typename __TElementType = __ElementType,
+                    cds :: meta :: EnableIf <
+                            cds :: meta :: isCopyConstructible < __TElementType > ()
+                    > = 0
+            > auto sub (
+                    Index               from,
+                    Index               in
+            ) const noexcept -> __CollectionType;
+
+        public:
+            template <
+                    template < typename ... > class __CollectionType,
+                    typename __TElementType = __ElementType,
+                    cds :: meta :: EnableIf <
+                            cds :: meta :: isCopyConstructible < __TElementType > ()
+                    > = 0
+            > auto sub (
+                    Index               from,
+                    Index               in
+            ) const noexcept -> __CollectionType < __ElementType >;
+
+        public:
+            auto operator [] (
+                    Index index
+            ) noexcept (false) -> ElementType &;
+
+        public:
+            auto operator [] (
+                    Index index
+            ) const noexcept (false) -> ElementType const &;
+
+        public:
+            virtual auto popFront () noexcept -> void = 0;
+
+        public:
+            virtual auto popBack () noexcept -> void = 0;
+
+        protected:
+            virtual auto __l_newFront () noexcept -> __ElementType * = 0; // NOLINT(bugprone-reserved-identifier)
+
+        protected:
+            virtual auto __l_newBack () noexcept -> __ElementType * = 0; // NOLINT(bugprone-reserved-identifier)
+
+        public:
+            template < typename __ForwardElementType >
+            auto pushFront (
+                    __ForwardElementType && element
+            ) noexcept -> __ElementType &;
+
+        public:
+            template < typename __ForwardElementType >
+            auto pushBack (
+                    __ForwardElementType && element
+            ) noexcept -> __ElementType &;
         };
 
     }
@@ -122,8 +204,10 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
 #include "shared/delegateIterator/impl/BidirectionalDelegateWrapperIterator.hpp"
 
-#include "shared/delegateIterableCommunication/client/impl/DelegateBackwardIterableClient.hpp"
-#include "shared/delegateIterableCommunication/client/impl/DelegateBackwardConstIterableClient.hpp"
+#include "shared/collectionInternalCommunication/client/impl/DelegateBackwardIterableClient.hpp"
+#include "shared/collectionInternalCommunication/client/impl/DelegateBackwardConstIterableClient.hpp"
+#include "shared/collectionInternalCommunication/client/impl/AbstractIteratorRelativeInsertionClient.hpp"
+#include "shared/collectionInternalCommunication/client/impl/AbstractConstIteratorRelativeInsertionClient.hpp"
 
 #include "list/impl/List.hpp"
 

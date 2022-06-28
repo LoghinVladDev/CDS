@@ -33,7 +33,6 @@ void B < D1 > :: f () {
 
 
 using namespace cds :: experimental;
-
 int main () {
     D d;
     d.f();
@@ -73,10 +72,14 @@ int main () {
     pColl->clear();
     (void)pColl->find(5);
     (void)pColl->contains(5);
-    pColl->add(5);
-    pColl->addAll(5, 3, 1);
-    pColl->addAllOf(std :: initializer_list<int>{1, 4, 5});
-    pColl->addAllOf(* pColl);
+//    pColl->add(5);
+//    pColl->addAll(5, 3, 1);
+//    pColl->addAllOf(std :: initializer_list<int>{1, 4, 5});
+//    pColl->addAllOf(* pColl);
+    pColl->insert(5);
+    pColl->insertAll(5, 3, 1);
+    pColl->insertAllOf(std :: initializer_list<int>{1, 4, 5});
+    pColl->insertAllOf(* pColl);
 
     pColl->removeIf (
             3,
@@ -196,10 +199,10 @@ int main () {
     pMutColl->clear();
     (void)pMutColl->find(5);
     (void)pMutColl->contains(5);
-    pMutColl->add(5);
-    pMutColl->addAll(5, 3, 1);
-    pMutColl->addAllOf(std :: initializer_list<int>{1, 4, 5});
-    pMutColl->addAllOf(* pMutColl);
+//    pMutColl->add(5);
+//    pMutColl->addAll(5, 3, 1);
+//    pMutColl->addAllOf(std :: initializer_list<int>{1, 4, 5});
+//    pMutColl->addAllOf(* pMutColl);
 
     pMutColl->removeIf (
             3,
@@ -318,6 +321,9 @@ int main () {
     (void)pMutColl->all([](int &){return true;});
     (void)pMutColl->any([](int &){return true;});
     (void)pMutColl->none([](int &){return true;});
+
+//    pColl->insert (5) = 3;
+    pMutColl->insert (5) = 3;
 
 //    Array < int > a;
 //

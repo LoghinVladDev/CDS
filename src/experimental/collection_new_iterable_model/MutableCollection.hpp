@@ -7,8 +7,8 @@
 
 #include <CDS/experimental/Collection>
 
-#include "shared/delegateIterableCommunication/client/DelegateForwardIterableClient.hpp"
-#include "shared/delegateIterableCommunication/client/AbstractIteratorRemoveClient.hpp"
+#include "shared/collectionInternalCommunication/client/DelegateForwardIterableClient.hpp"
+#include "shared/collectionInternalCommunication/client/AbstractIteratorRemoveClient.hpp"
 
 #include "shared/iterable/IterableMutableStatements.hpp"
 #include "shared/iterable/IterableMutableFindOf.hpp"
@@ -47,6 +47,11 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                         MutableCollection < __ElementType >,
                         __ElementType,
                         typename __hidden :: __impl :: __DelegateForwardIterableClient < MutableCollection < __ElementType >, __ElementType, false > :: Iterator
+                >,
+                public __hidden :: __impl :: __RandomInsertionClient <
+                        MutableCollection < __ElementType >,
+                        __ElementType,
+                        __ElementType
                 >,
                 public __hidden :: __impl :: __IterableMutableStatements <
                 MutableCollection < __ElementType >,
@@ -104,6 +109,14 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                             MutableCollection < __ElementType >,
                             __ElementType,
                             typename __hidden :: __impl :: __DelegateForwardIterableClient < MutableCollection < __ElementType >, __ElementType, false > :: Iterator
+                    >;
+
+        protected:
+            using RandomInsertionClient =
+                    __hidden :: __impl :: __RandomInsertionClient <
+                            MutableCollection < __ElementType >,
+                            __ElementType,
+                            __ElementType
                     >;
 
         protected:
@@ -200,6 +213,13 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         public: using IterableMutableFindByPredicate :: findLastThat;
         public: using IterableMutableFindByPredicate :: findAllThat;
 
+        public: using RandomInsertionClient :: insert;
+        public: using RandomInsertionClient :: insertAll;
+        public: using RandomInsertionClient :: insertAllOf;
+        public: using RandomInsertionClient :: add;
+        public: using RandomInsertionClient :: addAll;
+        public: using RandomInsertionClient :: addAllOf;
+
         public:
             __CDS_NoDiscard auto toString () const noexcept -> String override;
 
@@ -216,8 +236,8 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
     }
 }
 
-#include "shared/delegateIterableCommunication/client/impl/DelegateForwardIterableClient.hpp"
-#include "shared/delegateIterableCommunication/client/impl/AbstractIteratorRemoveClient.hpp"
+#include "shared/collectionInternalCommunication/client/impl/DelegateForwardIterableClient.hpp"
+#include "shared/collectionInternalCommunication/client/impl/AbstractIteratorRemoveClient.hpp"
 
 #include "mutableCollection/impl/MutableCollection.hpp"
 
