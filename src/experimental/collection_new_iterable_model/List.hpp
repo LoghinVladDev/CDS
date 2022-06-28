@@ -13,6 +13,7 @@
 #include "shared/collectionInternalCommunication/client/DelegateBackwardConstIterableClient.hpp"
 #include "shared/collectionInternalCommunication/client/AbstractIteratorRelativeInsertionClient.hpp"
 #include "shared/collectionInternalCommunication/client/AbstractConstIteratorRelativeInsertionClient.hpp"
+#include "shared/collectionInternalCommunication/client/BoundaryInsertionClient.hpp"
 
 namespace cds { // NOLINT(modernize-concat-nested-namespaces)
     namespace experimental {
@@ -39,6 +40,21 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                         List < __ElementType >,
                         __ElementType,
                         true
+                >,
+                public __hidden :: __impl :: __BoundaryInsertionClient <
+                        List < __ElementType >,
+                        __ElementType,
+                        __ElementType
+                >,
+                public __hidden :: __impl :: __AbstractIteratorRelativeInsertionClient <
+                        List < __ElementType >,
+                        __ElementType,
+                        __ElementType
+                >,
+                public __hidden :: __impl :: __AbstractConstIteratorRelativeInsertionClient <
+                        List < __ElementType >,
+                        __ElementType,
+                        __ElementType
                 > {
 
         public:
@@ -77,6 +93,30 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                     >;
 
         protected:
+            using BoundaryInsertionClient =
+                    __hidden :: __impl :: __BoundaryInsertionClient <
+                            List < __ElementType >,
+                            __ElementType,
+                            __ElementType
+                    >;
+
+        protected:
+            using AbstractIteratorRelativeInsertionClient =
+                    __hidden :: __impl :: __AbstractIteratorRelativeInsertionClient <
+                            List < __ElementType >,
+                            __ElementType,
+                            __ElementType
+                    >;
+
+        protected:
+            using AbstractConstIteratorRelativeInsertionClient =
+                    __hidden :: __impl :: __AbstractConstIteratorRelativeInsertionClient <
+                            List < __ElementType >,
+                            __ElementType,
+                            __ElementType
+                    >;
+
+        protected:
             using MutableCollection = MutableCollection < __ElementType >;
 
         protected:
@@ -110,6 +150,33 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         public: using DelegateBackwardConstIterableClient :: rend;
         public: using DelegateBackwardConstIterableClient :: crbegin;
         public: using DelegateBackwardConstIterableClient :: crend;
+
+        public: using BoundaryInsertionClient :: pushBack;
+        public: using BoundaryInsertionClient :: pushBackAll;
+        public: using BoundaryInsertionClient :: pushBackAllOf;
+        public: using BoundaryInsertionClient :: pushFront;
+        public: using BoundaryInsertionClient :: pushFrontAll;
+        public: using BoundaryInsertionClient :: pushFrontAllOf;
+        public: using BoundaryInsertionClient :: emplaceBack;
+        public: using BoundaryInsertionClient :: emplaceFront;
+
+        public: using AbstractIteratorRelativeInsertionClient :: insertBefore;
+        public: using AbstractIteratorRelativeInsertionClient :: insertAllBefore;
+        public: using AbstractIteratorRelativeInsertionClient :: insertAllOfBefore;
+        public: using AbstractIteratorRelativeInsertionClient :: insertAfter;
+        public: using AbstractIteratorRelativeInsertionClient :: insertAllAfter;
+        public: using AbstractIteratorRelativeInsertionClient :: insertAllOfAfter;
+        public: using AbstractIteratorRelativeInsertionClient :: emplaceBefore;
+        public: using AbstractIteratorRelativeInsertionClient :: emplaceAfter;
+
+        public: using AbstractConstIteratorRelativeInsertionClient :: insertBefore;
+        public: using AbstractConstIteratorRelativeInsertionClient :: insertAllBefore;
+        public: using AbstractConstIteratorRelativeInsertionClient :: insertAllOfBefore;
+        public: using AbstractConstIteratorRelativeInsertionClient :: insertAfter;
+        public: using AbstractConstIteratorRelativeInsertionClient :: insertAllAfter;
+        public: using AbstractConstIteratorRelativeInsertionClient :: insertAllOfAfter;
+        public: using AbstractConstIteratorRelativeInsertionClient :: emplaceBefore;
+        public: using AbstractConstIteratorRelativeInsertionClient :: emplaceAfter;
 
         public:
             __CDS_NoDiscard auto toString () const noexcept -> String override;
@@ -180,23 +247,6 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         public:
             virtual auto popBack () noexcept -> void = 0;
 
-        protected:
-            virtual auto __l_newFront () noexcept -> __ElementType * = 0; // NOLINT(bugprone-reserved-identifier)
-
-        protected:
-            virtual auto __l_newBack () noexcept -> __ElementType * = 0; // NOLINT(bugprone-reserved-identifier)
-
-        public:
-            template < typename __ForwardElementType >
-            auto pushFront (
-                    __ForwardElementType && element
-            ) noexcept -> __ElementType &;
-
-        public:
-            template < typename __ForwardElementType >
-            auto pushBack (
-                    __ForwardElementType && element
-            ) noexcept -> __ElementType &;
         };
 
     }
@@ -208,6 +258,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 #include "shared/collectionInternalCommunication/client/impl/DelegateBackwardConstIterableClient.hpp"
 #include "shared/collectionInternalCommunication/client/impl/AbstractIteratorRelativeInsertionClient.hpp"
 #include "shared/collectionInternalCommunication/client/impl/AbstractConstIteratorRelativeInsertionClient.hpp"
+#include "shared/collectionInternalCommunication/client/impl/BoundaryInsertionClient.hpp"
 
 #include "list/impl/List.hpp"
 

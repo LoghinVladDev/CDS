@@ -51,6 +51,39 @@ int main () {
     (void) pList->crbegin();
     (void) pList->crend();
 
+
+//    pList->pushBack(3);
+//    pList->pushFront(3);
+//    pList->pushBackAll(1, 2, 3);
+//    pList->pushFrontAll (1, 2, 3);
+//    pList->pushBackAllOf({1, 2, 3});
+//    pList->pushBackAllOf(* pList);
+//    pList->pushBackAllOf(pList->begin(), pList->end());
+//    pList->pushFrontAllOf({1, 2, 3});
+//    pList->pushFrontAllOf(* pList);
+//    pList->pushFrontAllOf(pList->begin(), pList->end());
+//
+//    pList->insertBefore( pList->begin(), 3);
+//    pList->insertBefore ( pList->cbegin(), 3);
+//    pList->insertAfter( pList->begin(), 3);
+//    pList->insertAfter ( pList->cbegin(), 3);
+//    pList->insertAllBefore ( pList->begin(), 1, 2, 3);
+//    pList->insertAllBefore ( pList->cbegin(), 1, 2, 3);
+//    pList->insertAllAfter ( pList->begin(), 1, 2, 3);
+//    pList->insertAllAfter ( pList->cbegin(), 1, 2, 3);
+//    pList->insertAllOfBefore ( pList->begin(), { 1, 2, 3 } );
+//    pList->insertAllOfBefore ( pList->cbegin(), { 1, 2, 3 } );
+//    pList->insertAllOfAfter ( pList->begin(), { 1, 2, 3 } );
+//    pList->insertAllOfAfter ( pList->cbegin(), { 1, 2, 3 } );
+//    pList->insertAllOfBefore ( pList->begin(), * pList );
+//    pList->insertAllOfBefore ( pList->cbegin(), * pList );
+//    pList->insertAllOfAfter ( pList->begin(), * pList );
+//    pList->insertAllOfAfter ( pList->cbegin(), * pList );
+//    pList->insertAllOfBefore ( pList->begin(), pList->begin(), pList->end() );
+//    pList->insertAllOfBefore ( pList->cbegin(), pList->begin(), pList->end() );
+//    pList->insertAllOfAfter ( pList->begin(), pList->begin(), pList->end() );
+//    pList->insertAllOfAfter ( pList->cbegin(), pList->begin(), pList->end() );
+
     Collection < int > * pColl = nullptr;
 
     (void)pColl->begin();
@@ -199,10 +232,11 @@ int main () {
     pMutColl->clear();
     (void)pMutColl->find(5);
     (void)pMutColl->contains(5);
-//    pMutColl->add(5);
-//    pMutColl->addAll(5, 3, 1);
-//    pMutColl->addAllOf(std :: initializer_list<int>{1, 4, 5});
-//    pMutColl->addAllOf(* pMutColl);
+    pMutColl->insert(5);
+    pMutColl->insertAll(5, 3, 1);
+    pMutColl->insertAllOf({1, 4, 5});
+    pMutColl->insertAllOf(* pMutColl);
+    pMutColl->insertAllOf(pMutColl->begin(), pMutColl->end());
 
     pMutColl->removeIf (
             3,

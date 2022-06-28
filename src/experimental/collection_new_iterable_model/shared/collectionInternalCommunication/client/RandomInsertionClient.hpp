@@ -107,16 +107,37 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                     ) noexcept (false) -> void;
 
                 protected:
-                    template < typename __IteratorType > // NOLINT(bugprone-reserved-identifier)
-                    auto insertAllOf (
-                            __IteratorType const & begin,
-                            __IteratorType const & end
+                    template <
+                            typename __TElementType = __ElementType, // NOLINT(bugprone-reserved-identifier)
+                            cds :: meta :: EnableIf <
+                                    cds :: meta :: isCopyConstructible < __TElementType > ()
+                            > = 0
+                    > auto insertAllOf (
+                            std :: initializer_list < __ElementType > const & list
                     ) noexcept (false) -> void;
+
 
                 protected:
                     template < typename __IterableType > // NOLINT(bugprone-reserved-identifier)
                     __CDS_DeprecatedHint ("'Collection :: addAllOf' has been deprecated. Use 'Collection :: insertAllOf' instead") auto addAllOf (
                             __IterableType const & iterableType
+                    ) noexcept (false) -> void;
+
+                protected:
+                    template <
+                            typename __TElementType = __ElementType, // NOLINT(bugprone-reserved-identifier)
+                            cds :: meta :: EnableIf <
+                                    cds :: meta :: isCopyConstructible < __TElementType > ()
+                            > = 0
+                    > __CDS_DeprecatedHint ("'Collection :: addAllOf' has been deprecated. Use 'Collection :: insertAllOf' instead") auto addAllOf (
+                            std :: initializer_list < __ElementType > const & list
+                    ) noexcept (false) -> void;
+
+                protected:
+                    template < typename __IteratorType > // NOLINT(bugprone-reserved-identifier)
+                    auto insertAllOf (
+                            __IteratorType const & begin,
+                            __IteratorType const & end
                     ) noexcept (false) -> void;
 
                 protected:

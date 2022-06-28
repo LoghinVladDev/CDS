@@ -305,6 +305,30 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                         typename __ElementType,             // NOLINT(bugprone-reserved-identifier)
                         typename __ReturnType               // NOLINT(bugprone-reserved-identifier)
                 > template <
+                        typename __TElementType,            // NOLINT(bugprone-reserved-identifier)
+                        cds :: meta :: EnableIf <
+                                cds :: meta :: isCopyConstructible < __TElementType > ()
+                        >
+                > __CDS_OptimalInline auto __RandomInsertionClient <
+                        __ReceiverType,
+                        __ElementType,
+                        __ReturnType
+                > :: insertAllOf (
+                        std :: initializer_list < __ElementType > const & list
+                ) noexcept (false) -> void {
+
+                    this->insertAllOf (
+                            list.begin(),
+                            list.end()
+                    );
+                }
+
+
+                template <
+                        typename __ReceiverType,            // NOLINT(bugprone-reserved-identifier)
+                        typename __ElementType,             // NOLINT(bugprone-reserved-identifier)
+                        typename __ReturnType               // NOLINT(bugprone-reserved-identifier)
+                > template <
                         typename __IterableType             // NOLINT(bugprone-reserved-identifier)
                 > __CDS_OptimalInline auto __RandomInsertionClient <
                         __ReceiverType,
@@ -317,6 +341,30 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                     this->insertAllOf (
                             iterableType.begin(),
                             iterableType.end()
+                    );
+                }
+
+
+                template <
+                        typename __ReceiverType,            // NOLINT(bugprone-reserved-identifier)
+                        typename __ElementType,             // NOLINT(bugprone-reserved-identifier)
+                        typename __ReturnType               // NOLINT(bugprone-reserved-identifier)
+                > template <
+                        typename __TElementType,            // NOLINT(bugprone-reserved-identifier)
+                        cds :: meta :: EnableIf <
+                                cds :: meta :: isCopyConstructible < __TElementType > ()
+                        >
+                > __CDS_OptimalInline auto __RandomInsertionClient <
+                        __ReceiverType,
+                        __ElementType,
+                        __ReturnType
+                > :: addAllOf (
+                        std :: initializer_list < __ElementType > const & list
+                ) noexcept (false) -> void {
+
+                    this->insertAllOf (
+                            list.begin(),
+                            list.end()
                     );
                 }
 
