@@ -52,16 +52,16 @@ int main () {
     (void) pList->crend();
 
 
-//    pList->pushBack(3);
-//    pList->pushFront(3);
-//    pList->pushBackAll(1, 2, 3);
-//    pList->pushFrontAll (1, 2, 3);
-//    pList->pushBackAllOf({1, 2, 3});
-//    pList->pushBackAllOf(* pList);
-//    pList->pushBackAllOf(pList->begin(), pList->end());
-//    pList->pushFrontAllOf({1, 2, 3});
-//    pList->pushFrontAllOf(* pList);
-//    pList->pushFrontAllOf(pList->begin(), pList->end());
+    pList->pushBack(3);
+    pList->pushFront(3);
+    pList->pushBackAll(1, 2, 3);
+    pList->pushFrontAll (1, 2, 3);
+    pList->pushBackAllOf({1, 2, 3});
+    pList->pushBackAllOf(* pList);
+    pList->pushBackAllOf(pList->begin(), pList->end());
+    pList->pushFrontAllOf({1, 2, 3});
+    pList->pushFrontAllOf(* pList);
+    pList->pushFrontAllOf(pList->begin(), pList->end());
 //
 //    pList->insertBefore( pList->begin(), 3);
 //    pList->insertBefore ( pList->cbegin(), 3);

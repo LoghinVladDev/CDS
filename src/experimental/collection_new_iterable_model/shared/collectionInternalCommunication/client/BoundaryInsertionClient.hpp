@@ -22,46 +22,6 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                 private:
                     using ElementReference  = __ReturnType &;
 
-                private:
-                    template <
-                            typename __AccumulatorType,     // NOLINT(bugprone-reserved-identifier)
-                            typename __LastType             // NOLINT(bugprone-reserved-identifier)
-                    > friend auto __expansivePushFront (    // NOLINT(bugprone-reserved-identifier)
-                            __AccumulatorType   * pAccumulator,
-                            __LastType         && lastValue
-                    ) noexcept (false) -> void;
-
-                private:
-                    template <
-                            typename     __AccumulatorType, // NOLINT(bugprone-reserved-identifier)
-                            typename     __FirstType,       // NOLINT(bugprone-reserved-identifier)
-                            typename ... __RemainingTypes   // NOLINT(bugprone-reserved-identifier)
-                    > friend auto __expansivePushFront (    // NOLINT(bugprone-reserved-identifier)
-                            __AccumulatorType      *     pAccumulator,
-                            __FirstType           &&     firstValue,
-                            __RemainingTypes      && ... remainingValues
-                    ) noexcept (false) -> void;
-
-                private:
-                    template <
-                            typename __AccumulatorType, // NOLINT(bugprone-reserved-identifier)
-                            typename __LastType         // NOLINT(bugprone-reserved-identifier)
-                    > friend auto __expansivePushBack ( // NOLINT(bugprone-reserved-identifier)
-                            __AccumulatorType   * pAccumulator,
-                            __LastType         && lastValue
-                    ) noexcept (false) -> void;
-
-                private:
-                    template <
-                            typename     __AccumulatorType, // NOLINT(bugprone-reserved-identifier)
-                            typename     __FirstType,       // NOLINT(bugprone-reserved-identifier)
-                            typename ... __RemainingTypes   // NOLINT(bugprone-reserved-identifier)
-                    > friend auto __expansivePushBack (     // NOLINT(bugprone-reserved-identifier)
-                            __AccumulatorType      *     pAccumulator,
-                            __FirstType           &&     firstValue,
-                            __RemainingTypes      && ... remainingValues
-                    ) noexcept (false) -> void;
-
                 protected:
                     template <
                             typename __TElementType = ElementType,    // NOLINT(bugprone-reserved-identifier)
@@ -129,7 +89,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                 protected:
                     template < typename __IterableType > // NOLINT(bugprone-reserved-identifier)
                     auto pushFrontAllOf (
-                            __IterableType const & iterableType
+                            __IterableType const & iterable
                     ) noexcept (false) -> void;
 
                 protected:
@@ -145,7 +105,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                 protected:
                     template < typename __IterableType > // NOLINT(bugprone-reserved-identifier)
                     auto pushBackAllOf (
-                            __IterableType const & iterableType
+                            __IterableType const & iterable
                     ) noexcept (false) -> void;
 
                 protected:

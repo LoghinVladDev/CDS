@@ -16,7 +16,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                 };
 
                 struct __CollectionInternalRequestResponseInsert { // NOLINT(bugprone-reserved-identifier)
-                    bool    _successful;
+                    bool    _newElementCreated;
                     void  * _pElement;
                 };
 

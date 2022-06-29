@@ -18,7 +18,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                         __LastType         && lastValue
                 ) noexcept (false) -> void {
 
-                    pAccumulator->insert ( std :: forward < __LastType > ( lastValue ) );
+                    (void) pAccumulator->insert ( std :: forward < __LastType > ( lastValue ) );
                 }
 
 
@@ -32,7 +32,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                         __RemainingTypes      && ... remainingValues
                 ) noexcept (false) -> void {
 
-                    pAccumulator->insert ( std :: forward < __FirstType > ( firstValue ) );
+                    (void) pAccumulator->insert ( std :: forward < __FirstType > ( firstValue ) );
                     __expansiveInsert (
                             pAccumulator,
                             std :: forward < __RemainingTypes > ( remainingValues ) ...
@@ -63,13 +63,13 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                     };
 
                     __CollectionInternalRequestResponseInsert insertionData {
-                        ._successful    = false,
-                        ._pElement      = nullptr
+                        false,
+                        nullptr
                     };
 
                     __CollectionInternalRequestResponse response {
-                        ._status        = false,
-                        ._pData         = reinterpret_cast < void * > ( & insertionData )
+                        false,
+                        reinterpret_cast < void * > ( & insertionData )
                     };
 
                     auto const requestAvailabilityStatus = static_cast < __ReceiverType * > ( this )->__cicch_transmitRequest (
@@ -78,10 +78,10 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                     );
 
                     if ( ! requestAvailabilityStatus || ! response._status ) {
-                        throw RuntimeException ( "Unexpected error in Collection :: insert" );
+                        throw RuntimeException ( "Unexpected error in RandomInsertionClient :: insert" );
                     }
 
-                    if ( ! insertionData._successful ) {
+                    if ( ! insertionData._newElementCreated ) {
                         return * reinterpret_cast < __ReturnType * > ( insertionData._pElement );
                     }
 
@@ -112,13 +112,13 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                     };
 
                     __CollectionInternalRequestResponseInsert insertionData {
-                        ._successful    = false,
-                        ._pElement      = nullptr
+                        false,
+                        nullptr
                     };
 
                     __CollectionInternalRequestResponse response {
-                        ._status        = false,
-                        ._pData         = reinterpret_cast < void * > ( & insertionData )
+                        false,
+                        reinterpret_cast < void * > ( & insertionData )
                     };
 
                     auto const requestAvailabilityStatus = static_cast < __ReceiverType * > ( this )->__cicch_transmitRequest (
@@ -127,10 +127,10 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                     );
 
                     if ( ! requestAvailabilityStatus || ! response._status ) {
-                        throw RuntimeException ( "Unexpected error in Collection :: insert" );
+                        throw RuntimeException ( "Unexpected error in RandomInsertionClient :: insert" );
                     }
 
-                    if ( ! insertionData._successful ) {
+                    if ( ! insertionData._newElementCreated ) {
                         return * reinterpret_cast < __ReturnType * > ( insertionData._pElement );
                     }
 
@@ -205,13 +205,13 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                     };
 
                     __CollectionInternalRequestResponseInsert insertionData {
-                            ._successful    = false,
-                            ._pElement      = nullptr
+                            false,
+                            nullptr
                     };
 
                     __CollectionInternalRequestResponse response {
-                            ._status        = false,
-                            ._pData         = reinterpret_cast < void * > ( & insertionData )
+                            false,
+                            reinterpret_cast < void * > ( & insertionData )
                     };
 
                     auto const requestAvailabilityStatus = static_cast < __ReceiverType const * > ( this )->__cicch_transmitRequest (
@@ -220,10 +220,10 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                     );
 
                     if ( ! requestAvailabilityStatus || ! response._status ) {
-                        throw RuntimeException ( "Unexpected error in Collection :: insert" );
+                        throw RuntimeException ( "Unexpected error in RandomInsertionClient :: emplace" );
                     }
 
-                    if ( ! insertionData._successful ) {
+                    if ( ! insertionData._newElementCreated ) {
                         referenceElementContainer.destruct();
                     } else {
                         std::memcpy(
@@ -233,7 +233,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                         );
                     }
 
-                    return * reinterpret_cast < __ReturnType * > ( insertionData._pElement );
+                    return * reinterpret_cast < __ElementType * > ( insertionData._pElement );
                 }
 
 
