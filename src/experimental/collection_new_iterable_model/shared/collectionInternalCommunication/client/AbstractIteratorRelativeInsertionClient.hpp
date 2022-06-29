@@ -102,7 +102,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                     template < typename __IterableType > // NOLINT(bugprone-reserved-identifier)
                     auto insertAllOfBefore (
                             AbstractIterator    const & iterator,
-                            __IterableType      const & iterableType
+                            __IterableType      const & iterable
                     ) noexcept (false) -> void;
 
                 protected:
@@ -120,7 +120,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                     template < typename __IterableType > // NOLINT(bugprone-reserved-identifier)
                     auto insertAllOfAfter (
                             AbstractIterator    const & iterator,
-                            __IterableType      const & iterableType
+                            __IterableType      const & iterable
                     ) noexcept (false) -> void;
 
                 protected:

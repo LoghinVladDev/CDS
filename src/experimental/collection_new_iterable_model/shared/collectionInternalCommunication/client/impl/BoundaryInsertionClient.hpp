@@ -5,76 +5,12 @@
 #ifndef __CDS_SHARED_BOUNDARY_INSERTION_CLIENT_IMPL_HPP__
 #define __CDS_SHARED_BOUNDARY_INSERTION_CLIENT_IMPL_HPP__
 
+#include "../../../iterator/IteratorDistance.hpp"
+
 namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
     namespace experimental {    // NOLINT(modernize-concat-nested-namespaces)
         namespace __hidden {    // NOLINT(modernize-concat-nested-namespaces, bugprone-reserved-identifier)
             namespace __impl {  // NOLINT(bugprone-reserved-identifier)
-
-                template <
-                        typename __ElementType,         // NOLINT(bugprone-reserved-identifier)
-                        typename __LastType             // NOLINT(bugprone-reserved-identifier)
-                > inline auto __forwardIntoArray (      // NOLINT(bugprone-reserved-identifier)
-                        __ElementType       ** ppElement,
-                        __LastType          && lastValue
-                ) noexcept (false) -> void {
-
-                    (void) new ( * ppElement ) __ElementType ( std :: forward < __LastType > ( lastValue ) );
-                }
-
-
-                template <
-                        typename     __ElementType,      // NOLINT(bugprone-reserved-identifier)
-                        typename     __FirstType,        // NOLINT(bugprone-reserved-identifier)
-                        typename ... __RemainingTypes    // NOLINT(bugprone-reserved-identifier)
-                > inline auto __forwardIntoArray (       // NOLINT(bugprone-reserved-identifier)
-                        __ElementType       **      ppElements,
-                        __FirstType         &&      firstValue,
-                        __RemainingTypes    && ...  remainingValues
-                ) noexcept (false) -> void {
-
-                    (void) new ( * ppElements ) __ElementType ( std :: forward < __FirstType > ( firstValue ) );
-                    __forwardIntoArray (
-                            ppElements + 1,
-                            std :: forward < __RemainingTypes > ( remainingValues ) ...
-                    );
-                }
-
-
-                template < typename __IteratorType, typename = void >       // NOLINT(bugprone-reserved-identifier)
-                struct __IteratorDistance {                                 // NOLINT(bugprone-reserved-identifier)
-
-                    static inline auto __compute (                          // NOLINT(bugprone-reserved-identifier)
-                            __IteratorType const & begin,
-                            __IteratorType const & end
-                    ) noexcept -> Size {
-
-                        Size distance = 0ULL;
-                        for ( auto iterator = begin; iterator != end; ++ iterator ) {
-                            ++ distance;
-                        }
-
-                        return distance;
-                    }
-                };
-
-
-                template < typename __IteratorType >    // NOLINT(bugprone-reserved-identifier)
-                struct __IteratorDistance <             // NOLINT(bugprone-reserved-identifier)
-                        __IteratorType,
-                        cds :: meta :: Void <
-                                decltype ( cds :: meta :: valueOf < __IteratorType > () - cds :: meta :: valueOf < __IteratorType > () )
-                        >
-                > {
-
-                    static inline auto __compute (                          // NOLINT(bugprone-reserved-identifier)
-                            __IteratorType const & begin,
-                            __IteratorType const & end
-                    ) noexcept -> Size {
-
-                        return end - begin;
-                    }
-                };
-
 
                 template <
                         typename __ReceiverType,    // NOLINT(bugprone-reserved-identifier)
@@ -274,7 +210,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                         throw RuntimeException ( "Unexpected error in BoundaryInsertionClient :: pushFront" );
                     }
 
-                    __forwardIntoArray (
+                    cds :: __hidden :: __impl :: __allocation :: __forwardIntoArray (
                             pElements,
                             std :: forward < __ArgumentTypes > ( values ) ...
                     );
@@ -319,7 +255,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                         throw RuntimeException ( "Unexpected error in BoundaryInsertionClient :: pushFront" );
                     }
 
-                    __forwardIntoArray (
+                    cds :: __hidden :: __impl :: __allocation :: __forwardIntoArray (
                             pElements,
                             std :: forward < __ArgumentTypes > ( values ) ...
                     );

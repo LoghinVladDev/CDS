@@ -89,6 +89,36 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                     free ( pBuffer );
                 }
 
+
+                template <
+                        typename __ElementType,         // NOLINT(bugprone-reserved-identifier)
+                        typename __LastType             // NOLINT(bugprone-reserved-identifier)
+                > inline auto __forwardIntoArray (      // NOLINT(bugprone-reserved-identifier)
+                        __ElementType       ** ppElement,
+                        __LastType          && lastValue
+                ) noexcept (false) -> void {
+
+                    (void) new ( * ppElement ) __ElementType ( std :: forward < __LastType > ( lastValue ) );
+                }
+
+
+                template <
+                        typename     __ElementType,      // NOLINT(bugprone-reserved-identifier)
+                        typename     __FirstType,        // NOLINT(bugprone-reserved-identifier)
+                        typename ... __RemainingTypes    // NOLINT(bugprone-reserved-identifier)
+                > inline auto __forwardIntoArray (       // NOLINT(bugprone-reserved-identifier)
+                        __ElementType       **      ppElements,
+                        __FirstType         &&      firstValue,
+                        __RemainingTypes    && ...  remainingValues
+                ) noexcept (false) -> void {
+
+                    (void) new ( * ppElements ) __ElementType ( std :: forward < __FirstType > ( firstValue ) );
+                    __forwardIntoArray (
+                            ppElements + 1,
+                            std :: forward < __RemainingTypes > ( remainingValues ) ...
+                    );
+                }
+
             }
         }
     }

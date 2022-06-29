@@ -17,6 +17,11 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                     void                            const * _pData;
                 };
 
+                struct __CollectionInternalRequestMultipleIteratorRelative { // NOLINT(bugprone-reserved-identifier)
+                    Size            _count;
+                    void    const * _pIterator;
+                };
+
             }
         }
     }
