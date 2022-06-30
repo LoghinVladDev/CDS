@@ -14,6 +14,10 @@
 #include "shared/collectionInternalCommunication/client/AbstractIteratorRelativeInsertionClient.hpp"
 #include "shared/collectionInternalCommunication/client/AbstractConstIteratorRelativeInsertionClient.hpp"
 #include "shared/collectionInternalCommunication/client/BoundaryInsertionClient.hpp"
+#include "shared/collectionInternalCommunication/client/IndexedOperationsClient.hpp"
+#include "shared/collectionInternalCommunication/client/SortingClient.hpp"
+#include "shared/collectionInternalCommunication/client/ReplacingClient.hpp"
+#include "shared/collectionInternalCommunication/client/ReplacingOfClient.hpp"
 
 namespace cds { // NOLINT(modernize-concat-nested-namespaces)
     namespace experimental {
@@ -55,6 +59,28 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                         List < __ElementType >,
                         __ElementType,
                         __ElementType
+                >,
+                public __hidden :: __impl :: __IndexedOperationsClient <
+                        List < __ElementType >,
+                        __ElementType
+                >,
+                public __hidden :: __impl :: __SortingClient <
+                        List < __ElementType >,
+                        __ElementType
+                >,
+                public __hidden :: __impl :: __ReplacingClient <
+                        List < __ElementType >,
+                        __ElementType
+                >,
+                public __hidden :: __impl :: __ReplacingOfClient <
+                        List < __ElementType >,
+                        __ElementType,
+                        Collection < __ElementType >
+                >,
+                public __hidden :: __impl :: __ReplacingOfClient <
+                        List < __ElementType >,
+                        __ElementType,
+                        std :: initializer_list < __ElementType >
                 > {
 
         public:
@@ -114,6 +140,43 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                             List < __ElementType >,
                             __ElementType,
                             __ElementType
+                    >;
+
+        protected:
+            using IndexedOperationsClient =
+                    __hidden :: __impl :: __IndexedOperationsClient <
+                            List < __ElementType >,
+                            __ElementType
+                    >;
+
+        protected:
+            using SortingClient =
+                    __hidden :: __impl :: __SortingClient <
+                            List < __ElementType >,
+                            __ElementType
+                    >;
+
+        protected:
+            using ReplacingClient =
+                    __hidden :: __impl :: __ReplacingClient <
+                            List < __ElementType >,
+                            __ElementType
+                    >;
+
+        protected:
+            using ReplacingOfClientCollection =
+                    __hidden :: __impl :: __ReplacingOfClient <
+                            List < __ElementType >,
+                            __ElementType,
+                            Collection < __ElementType >
+                    >;
+
+        protected:
+            using ReplacingOfClientInitializerList =
+                    __hidden :: __impl :: __ReplacingOfClient <
+                            List < __ElementType >,
+                            __ElementType,
+                            std :: initializer_list < __ElementType >
                     >;
 
         protected:
@@ -178,68 +241,41 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         public: using AbstractConstIteratorRelativeInsertionClient :: emplaceBefore;
         public: using AbstractConstIteratorRelativeInsertionClient :: emplaceAfter;
 
+        public: using IndexedOperationsClient :: sub;
+        public: using IndexedOperationsClient :: operator[];
+        public: using IndexedOperationsClient :: get;
+        public: using IndexedOperationsClient :: removeAt;
+
+        public: using SortingClient :: sort;
+
+        public: using ReplacingClient :: replace;
+        public: using ReplacingClient :: replaceFirst;
+        public: using ReplacingClient :: replaceLast;
+        public: using ReplacingClient :: replaceAll;
+
+        public: using ReplacingOfClientCollection :: replaceOf;
+        public: using ReplacingOfClientCollection :: replaceFirstOf;
+        public: using ReplacingOfClientCollection :: replaceLastOf;
+        public: using ReplacingOfClientCollection :: replaceAllOf;
+        public: using ReplacingOfClientCollection :: replaceNotOf;
+        public: using ReplacingOfClientCollection :: replaceFirstNotOf;
+        public: using ReplacingOfClientCollection :: replaceLastNotOf;
+        public: using ReplacingOfClientCollection :: replaceAllNotOf;
+
+        public: using ReplacingOfClientInitializerList :: replaceOf;
+        public: using ReplacingOfClientInitializerList :: replaceFirstOf;
+        public: using ReplacingOfClientInitializerList :: replaceLastOf;
+        public: using ReplacingOfClientInitializerList :: replaceAllOf;
+        public: using ReplacingOfClientInitializerList :: replaceNotOf;
+        public: using ReplacingOfClientInitializerList :: replaceFirstNotOf;
+        public: using ReplacingOfClientInitializerList :: replaceLastNotOf;
+        public: using ReplacingOfClientInitializerList :: replaceAllNotOf;
+
         public:
             __CDS_NoDiscard auto toString () const noexcept -> String override;
 
         public:
             auto clear () noexcept -> void override = 0;
-
-        public:
-            virtual auto get (
-                    Index index
-            ) noexcept ( false ) -> ElementType &;
-
-        public:
-            virtual auto get (
-                    Index index
-            ) const noexcept ( false ) -> ElementType const &;
-
-        public:
-            template <
-                    typename __CollectionType,
-                    typename __TElementType = __ElementType,
-                    cds :: meta :: EnableIf <
-                            cds :: meta :: isCopyConstructible < __TElementType > ()
-                    > = 0
-            > auto sub (
-                    __CollectionType  & storeIn,
-                    Index               from,
-                    Index               in
-            ) const noexcept -> __CollectionType &;
-
-        public:
-            template <
-                    typename __CollectionType,
-                    typename __TElementType = __ElementType,
-                    cds :: meta :: EnableIf <
-                            cds :: meta :: isCopyConstructible < __TElementType > ()
-                    > = 0
-            > auto sub (
-                    Index               from,
-                    Index               in
-            ) const noexcept -> __CollectionType;
-
-        public:
-            template <
-                    template < typename ... > class __CollectionType,
-                    typename __TElementType = __ElementType,
-                    cds :: meta :: EnableIf <
-                            cds :: meta :: isCopyConstructible < __TElementType > ()
-                    > = 0
-            > auto sub (
-                    Index               from,
-                    Index               in
-            ) const noexcept -> __CollectionType < __ElementType >;
-
-        public:
-            auto operator [] (
-                    Index index
-            ) noexcept (false) -> ElementType &;
-
-        public:
-            auto operator [] (
-                    Index index
-            ) const noexcept (false) -> ElementType const &;
 
         public:
             virtual auto popFront () noexcept -> void = 0;
@@ -259,6 +295,10 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 #include "shared/collectionInternalCommunication/client/impl/AbstractIteratorRelativeInsertionClient.hpp"
 #include "shared/collectionInternalCommunication/client/impl/AbstractConstIteratorRelativeInsertionClient.hpp"
 #include "shared/collectionInternalCommunication/client/impl/BoundaryInsertionClient.hpp"
+#include "shared/collectionInternalCommunication/client/impl/IndexedOperationsClient.hpp"
+#include "shared/collectionInternalCommunication/client/impl/SortingClient.hpp"
+#include "shared/collectionInternalCommunication/client/impl/ReplacingClient.hpp"
+#include "shared/collectionInternalCommunication/client/impl/ReplacingOfClient.hpp"
 
 #include "list/impl/List.hpp"
 

@@ -97,6 +97,90 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
 
 
                 template <
+                        typename __ReceiverType,    // NOLINT(bugprone-reserved-identifier)
+                        typename __ElementType,     // NOLINT(bugprone-reserved-identifier)
+                        typename __ReturnType       // NOLINT(bugprone-reserved-identifier)
+                > template <
+                        typename __TElementType,    // NOLINT(bugprone-reserved-identifier)
+                        cds :: meta :: EnableIf <
+                                cds :: meta :: isCopyConstructible < __TElementType > ()
+                        >
+                > __CDS_OptimalInline auto __BoundaryInsertionClient <
+                        __ReceiverType,
+                        __ElementType,
+                        __ReturnType
+                > :: prepend (
+                        ElementType const & element
+                ) noexcept (false) -> ElementReference {
+
+                    return this->emplaceFront ( element );
+                }
+
+
+                template <
+                        typename __ReceiverType,    // NOLINT(bugprone-reserved-identifier)
+                        typename __ElementType,     // NOLINT(bugprone-reserved-identifier)
+                        typename __ReturnType       // NOLINT(bugprone-reserved-identifier)
+                > template <
+                        typename __TElementType,    // NOLINT(bugprone-reserved-identifier)
+                        cds :: meta :: EnableIf <
+                                cds :: meta :: isMoveConstructible < __TElementType > ()
+                        >
+                > __CDS_OptimalInline auto __BoundaryInsertionClient <
+                        __ReceiverType,
+                        __ElementType,
+                        __ReturnType
+                > :: prepend (
+                        ElementType && element
+                ) noexcept (false) -> ElementReference {
+
+                    return this->emplaceFront ( std :: move ( element ) );
+                }
+
+
+                template <
+                        typename __ReceiverType,    // NOLINT(bugprone-reserved-identifier)
+                        typename __ElementType,     // NOLINT(bugprone-reserved-identifier)
+                        typename __ReturnType       // NOLINT(bugprone-reserved-identifier)
+                > template <
+                        typename __TElementType,    // NOLINT(bugprone-reserved-identifier)
+                        cds :: meta :: EnableIf <
+                                cds :: meta :: isCopyConstructible < __TElementType > ()
+                        >
+                > auto __BoundaryInsertionClient <
+                        __ReceiverType,
+                        __ElementType,
+                        __ReturnType
+                > :: append (
+                        ElementType const & element
+                ) noexcept (false) -> ElementReference {
+
+                    return this->emplaceBack ( element );
+                }
+
+
+                template <
+                        typename __ReceiverType,    // NOLINT(bugprone-reserved-identifier)
+                        typename __ElementType,     // NOLINT(bugprone-reserved-identifier)
+                        typename __ReturnType       // NOLINT(bugprone-reserved-identifier)
+                > template <
+                        typename __TElementType,    // NOLINT(bugprone-reserved-identifier)
+                        cds :: meta :: EnableIf <
+                                cds :: meta :: isMoveConstructible < __TElementType > ()
+                        >
+                > auto __BoundaryInsertionClient <
+                        __ReceiverType,
+                        __ElementType,
+                        __ReturnType
+                > :: append (
+                        ElementType && element
+                ) noexcept (false) -> ElementReference {
+
+                    return this->emplaceBack ( std :: move ( element ) );
+                }
+
+
+                template <
                         typename __ReceiverType,            // NOLINT(bugprone-reserved-identifier)
                         typename __ElementType,             // NOLINT(bugprone-reserved-identifier)
                         typename __ReturnType               // NOLINT(bugprone-reserved-identifier)

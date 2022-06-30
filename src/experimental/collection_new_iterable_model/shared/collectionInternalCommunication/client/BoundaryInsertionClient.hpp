@@ -63,6 +63,46 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                     ) noexcept (false) -> ElementReference;
 
                 protected:
+                    template <
+                            typename __TElementType = ElementType,    // NOLINT(bugprone-reserved-identifier)
+                            cds :: meta :: EnableIf <
+                                    cds :: meta :: isCopyConstructible < __TElementType > ()
+                            > = 0
+                    > auto prepend (
+                            ElementType const & element
+                    ) noexcept (false) -> ElementReference;
+
+                protected:
+                    template <
+                            typename __TElementType = ElementType,    // NOLINT(bugprone-reserved-identifier)
+                            cds :: meta :: EnableIf <
+                                    cds :: meta :: isMoveConstructible < __TElementType > ()
+                            > = 0
+                    > auto prepend (
+                            ElementType && element
+                    ) noexcept (false) -> ElementReference;
+
+                protected:
+                    template <
+                            typename __TElementType = ElementType,    // NOLINT(bugprone-reserved-identifier)
+                            cds :: meta :: EnableIf <
+                                    cds :: meta :: isCopyConstructible < __TElementType > ()
+                            > = 0
+                    > auto append (
+                            ElementType const & element
+                    ) noexcept (false) -> ElementReference;
+
+                protected:
+                    template <
+                            typename __TElementType = ElementType,    // NOLINT(bugprone-reserved-identifier)
+                            cds :: meta :: EnableIf <
+                                    cds :: meta :: isMoveConstructible < __TElementType > ()
+                            > = 0
+                    > auto append (
+                            ElementType && element
+                    ) noexcept (false) -> ElementReference;
+
+                protected:
                     template < typename ... __EmplaceArgumentTypes > // NOLINT(bugprone-reserved-identifier)
                     auto emplaceFront (
                             __EmplaceArgumentTypes && ... parameters
