@@ -11,10 +11,11 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             namespace __impl {
 
                 template <
-                        typename __ReceiverType,                // NOLINT(bugprone-reserved-identifier)
-                        typename __ElementType,                 // NOLINT(bugprone-reserved-identifier)
-                        typename __OfCollectionType             // NOLINT(bugprone-reserved-identifier)
-                > class __ReplacingOfClient {                   // NOLINT(bugprone-reserved-identifier)
+                        typename                                                    __ReceiverType,     // NOLINT(bugprone-reserved-identifier)
+                        typename                                                    __ElementType,      // NOLINT(bugprone-reserved-identifier)
+                        typename                                                    __OfCollectionType, // NOLINT(bugprone-reserved-identifier)
+                        __ContainsFunction < __OfCollectionType, __ElementType >    __contains          // NOLINT(bugprone-reserved-identifier)
+                > class __ReplacingOfClient {                                                           // NOLINT(bugprone-reserved-identifier)
 
                 private:
                     using ElementType = __ElementType;

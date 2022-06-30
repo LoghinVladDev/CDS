@@ -19,16 +19,6 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                     using ElementType = __ElementType;
 
                 protected:
-                    auto get (
-                            Index index
-                    ) noexcept ( false ) -> ElementType &;
-
-                protected:
-                    auto get (
-                            Index index
-                    ) const noexcept ( false ) -> ElementType const &;
-
-                protected:
                     template <
                             typename __CollectionType,
                             typename __TElementType = __ElementType,
@@ -74,11 +64,6 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                     auto operator [] (
                             Index index
                     ) noexcept (false) -> ElementType &;
-
-                protected:
-                    auto removeAt (
-                            Index index
-                    ) noexcept -> bool;
 
                 protected:
                     auto removeAt (

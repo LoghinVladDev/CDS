@@ -14,28 +14,10 @@ enum class E1 {
     f2 = 0x02
 };
 
-template < typename D >
-class B {
-public:
-    void f ();
-};
-
-class D : public B < D > {
-public:
-    using t = int;
-};
-
-template < typename D1 >
-void B < D1 > :: f () {
-    typename D1 :: t x = 3;
-    std :: cout << x << '\n';
-}
 
 
 using namespace cds :: experimental;
 int main () {
-    D d;
-    d.f();
     std :: cout << sizeof ( Collection < int > ) << '\n';
     std :: cout << sizeof ( MutableCollection < int > ) << '\n';
     std :: cout << sizeof ( List < int > ) << '\n';

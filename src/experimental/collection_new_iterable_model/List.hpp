@@ -19,6 +19,9 @@
 #include "shared/collectionInternalCommunication/client/ReplacingClient.hpp"
 #include "shared/collectionInternalCommunication/client/ReplacingOfClient.hpp"
 #include "shared/collectionInternalCommunication/client/FunctionalReplacingClient.hpp"
+#include "shared/collectionInternalCommunication/client/IndicesClient.hpp"
+#include "shared/collectionInternalCommunication/client/IndicesOfClient.hpp"
+#include "shared/collectionInternalCommunication/client/FunctionalIndicesClient.hpp"
 
 namespace cds { // NOLINT(modernize-concat-nested-namespaces)
     namespace experimental {
@@ -76,14 +79,36 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 public __hidden :: __impl :: __ReplacingOfClient <
                         List < __ElementType >,
                         __ElementType,
-                        Collection < __ElementType >
+                        Collection < __ElementType >,
+                        & __hidden :: __impl :: __collectionContains < __ElementType >
                 >,
                 public __hidden :: __impl :: __ReplacingOfClient <
                         List < __ElementType >,
                         __ElementType,
-                        std :: initializer_list < __ElementType >
+                        std :: initializer_list < __ElementType >,
+                        & __hidden :: __impl :: __initializerListContains < __ElementType, & cds :: meta :: equals >
                 >,
                 public __hidden :: __impl :: __FunctionalReplacingClient <
+                        List < __ElementType >,
+                        __ElementType
+                >,
+                public __hidden :: __impl :: __IndicesClient <
+                        List < __ElementType >,
+                        __ElementType
+                >,
+                public __hidden :: __impl :: __IndicesOfClient <
+                        List < __ElementType >,
+                        __ElementType,
+                        Collection < __ElementType >,
+                        & __hidden :: __impl :: __collectionContains < __ElementType >
+                >,
+                public __hidden :: __impl :: __IndicesOfClient <
+                        List < __ElementType >,
+                        __ElementType,
+                        std :: initializer_list < __ElementType >,
+                        & __hidden :: __impl :: __initializerListContains < __ElementType, & cds :: meta :: equals >
+                >,
+                public __hidden :: __impl :: __FunctionalIndicesClient <
                         List < __ElementType >,
                         __ElementType
                 > {
@@ -169,24 +194,58 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                     >;
 
         protected:
-            using ReplacingOfClientCollection =
+            using ReplacingOfCollectionClient =
                     __hidden :: __impl :: __ReplacingOfClient <
                             List < __ElementType >,
                             __ElementType,
-                            Collection < __ElementType >
+                            Collection < __ElementType >,
+                            & __hidden :: __impl :: __collectionContains < __ElementType >
                     >;
 
         protected:
-            using ReplacingOfClientInitializerList =
+            using ReplacingOfInitializerListClient =
                     __hidden :: __impl :: __ReplacingOfClient <
                             List < __ElementType >,
                             __ElementType,
-                            std :: initializer_list < __ElementType >
+                            std :: initializer_list < __ElementType >,
+                            & __hidden :: __impl :: __initializerListContains < __ElementType, & cds :: meta :: equals >
                     >;
 
         protected:
             using FunctionalReplacingClient =
                     __hidden :: __impl :: __FunctionalReplacingClient <
+                            List < __ElementType >,
+                            __ElementType
+                    >;
+
+        protected:
+            using IndicesClient =
+                    __hidden :: __impl :: __IndicesClient <
+                            List < __ElementType >,
+                            __ElementType
+                    >;
+
+        protected:
+            using IndicesOfCollectionClient =
+                    __hidden :: __impl :: __IndicesOfClient <
+                            List < __ElementType >,
+                            __ElementType,
+                            Collection < __ElementType >,
+                            & __hidden :: __impl :: __collectionContains < __ElementType >
+                    >;
+
+        protected:
+            using IndicesOfInitializerListClient =
+                    __hidden :: __impl :: __IndicesOfClient <
+                            List < __ElementType >,
+                            __ElementType,
+                            std :: initializer_list < __ElementType >,
+                            & __hidden :: __impl :: __initializerListContains < __ElementType, & cds :: meta :: equals >
+                    >;
+
+        protected:
+            using FunctionalIndcesClient =
+                    __hidden :: __impl :: __FunctionalIndicesClient <
                             List < __ElementType >,
                             __ElementType
                     >;
@@ -255,7 +314,6 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
         public: using IndexedOperationsClient :: sub;
         public: using IndexedOperationsClient :: operator[];
-        public: using IndexedOperationsClient :: get;
         public: using IndexedOperationsClient :: removeAt;
 
         public: using SortingClient :: sort;
@@ -265,23 +323,23 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         public: using ReplacingClient :: replaceLast;
         public: using ReplacingClient :: replaceAll;
 
-        public: using ReplacingOfClientCollection :: replaceOf;
-        public: using ReplacingOfClientCollection :: replaceFirstOf;
-        public: using ReplacingOfClientCollection :: replaceLastOf;
-        public: using ReplacingOfClientCollection :: replaceAllOf;
-        public: using ReplacingOfClientCollection :: replaceNotOf;
-        public: using ReplacingOfClientCollection :: replaceFirstNotOf;
-        public: using ReplacingOfClientCollection :: replaceLastNotOf;
-        public: using ReplacingOfClientCollection :: replaceAllNotOf;
+        public: using ReplacingOfCollectionClient :: replaceOf;
+        public: using ReplacingOfCollectionClient :: replaceFirstOf;
+        public: using ReplacingOfCollectionClient :: replaceLastOf;
+        public: using ReplacingOfCollectionClient :: replaceAllOf;
+        public: using ReplacingOfCollectionClient :: replaceNotOf;
+        public: using ReplacingOfCollectionClient :: replaceFirstNotOf;
+        public: using ReplacingOfCollectionClient :: replaceLastNotOf;
+        public: using ReplacingOfCollectionClient :: replaceAllNotOf;
 
-        public: using ReplacingOfClientInitializerList :: replaceOf;
-        public: using ReplacingOfClientInitializerList :: replaceFirstOf;
-        public: using ReplacingOfClientInitializerList :: replaceLastOf;
-        public: using ReplacingOfClientInitializerList :: replaceAllOf;
-        public: using ReplacingOfClientInitializerList :: replaceNotOf;
-        public: using ReplacingOfClientInitializerList :: replaceFirstNotOf;
-        public: using ReplacingOfClientInitializerList :: replaceLastNotOf;
-        public: using ReplacingOfClientInitializerList :: replaceAllNotOf;
+        public: using ReplacingOfInitializerListClient :: replaceOf;
+        public: using ReplacingOfInitializerListClient :: replaceFirstOf;
+        public: using ReplacingOfInitializerListClient :: replaceLastOf;
+        public: using ReplacingOfInitializerListClient :: replaceAllOf;
+        public: using ReplacingOfInitializerListClient :: replaceNotOf;
+        public: using ReplacingOfInitializerListClient :: replaceFirstNotOf;
+        public: using ReplacingOfInitializerListClient :: replaceLastNotOf;
+        public: using ReplacingOfInitializerListClient :: replaceAllNotOf;
 
         public: using FunctionalReplacingClient :: replaceThat;
         public: using FunctionalReplacingClient :: replaceFirstThat;
@@ -291,6 +349,34 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         public: using FunctionalReplacingClient :: replaceFirstThatBy;
         public: using FunctionalReplacingClient :: replaceLastThatBy;
         public: using FunctionalReplacingClient :: replaceAllThatBy;
+
+        public: using IndicesClient :: indicesOf;
+        public: using IndicesClient :: firstIndexOf;
+        public: using IndicesClient :: lastIndexOf;
+        public: using IndicesClient :: allIndicesOf;
+
+        public: using IndicesOfCollectionClient :: indicesOfFrom;
+        public: using IndicesOfCollectionClient :: firstIndexOfFrom;
+        public: using IndicesOfCollectionClient :: lastIndexOfFrom;
+        public: using IndicesOfCollectionClient :: allIndicesOfFrom;
+        public: using IndicesOfCollectionClient :: indicesOfNotFrom;
+        public: using IndicesOfCollectionClient :: firstIndexOfNotFrom;
+        public: using IndicesOfCollectionClient :: lastIndexOfNotFrom;
+        public: using IndicesOfCollectionClient :: allIndicesOfNotFrom;
+
+        public: using IndicesOfInitializerListClient :: indicesOfFrom;
+        public: using IndicesOfInitializerListClient :: firstIndexOfFrom;
+        public: using IndicesOfInitializerListClient :: lastIndexOfFrom;
+        public: using IndicesOfInitializerListClient :: allIndicesOfFrom;
+        public: using IndicesOfInitializerListClient :: indicesOfNotFrom;
+        public: using IndicesOfInitializerListClient :: firstIndexOfNotFrom;
+        public: using IndicesOfInitializerListClient :: lastIndexOfNotFrom;
+        public: using IndicesOfInitializerListClient :: allIndicesOfNotFrom;
+
+        public: using FunctionalIndcesClient :: indicesOfThat;
+        public: using FunctionalIndcesClient :: firstIndexOfThat;
+        public: using FunctionalIndcesClient :: lastIndexOfThat;
+        public: using FunctionalIndcesClient :: allIndicesOfThat;
 
         public:
             __CDS_NoDiscard auto toString () const noexcept -> String override;
@@ -304,6 +390,35 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         public:
             virtual auto popBack () noexcept -> void = 0;
 
+        public:
+            virtual auto front () noexcept (false) -> ElementType & = 0;
+
+        public:
+            virtual auto front () const noexcept (false) -> ElementType const & = 0;
+
+        public:
+            virtual auto back () noexcept (false) -> ElementType & = 0;
+
+        public:
+            virtual auto back () const noexcept (false) -> ElementType const & = 0;
+
+        public:
+            virtual auto makeUnique () noexcept -> void = 0;
+
+        protected:
+            virtual auto get (
+                    Index index
+            ) noexcept ( false ) -> ElementType & = 0;
+
+        protected:
+            virtual auto get (
+                    Index index
+            ) const noexcept ( false ) -> ElementType const & = 0;
+
+        public:
+            virtual auto removeAt (
+                    Index index
+            ) noexcept -> bool = 0;
         };
 
     }
@@ -321,6 +436,9 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 #include "shared/collectionInternalCommunication/client/impl/ReplacingClient.hpp"
 #include "shared/collectionInternalCommunication/client/impl/ReplacingOfClient.hpp"
 #include "shared/collectionInternalCommunication/client/impl/FunctionalReplacingClient.hpp"
+#include "shared/collectionInternalCommunication/client/impl/IndicesClient.hpp"
+#include "shared/collectionInternalCommunication/client/impl/IndicesOfClient.hpp"
+#include "shared/collectionInternalCommunication/client/impl/FunctionalIndicesClient.hpp"
 
 #include "list/impl/List.hpp"
 
