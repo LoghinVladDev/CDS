@@ -194,26 +194,16 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                         __EmplaceArgumentTypes && ... parameters
                 ) noexcept (false) -> ElementReference {
 
-                    __CollectionInternalRequest const request {
-                            __CollectionInternalRequestType :: __cirt_newFrontAddress,
-                            nullptr
-                    };
-
-                    __CollectionInternalRequestResponse response {
-                            false,
-                            nullptr
-                    };
-
-                    auto const requestAvailabilityStatus = static_cast < __ReceiverType * > ( this )->__cicch_transmitRequest (
-                            & request,
-                            & response
-                    );
-
-                    if ( ! requestAvailabilityStatus || ! response._status ) {
-                        throw RuntimeException ( "Unexpected error in BoundaryInsertionClient :: pushFront" );
-                    }
-
-                    return * new ( response._pData ) __ElementType (
+                    return * new (
+                            (
+                                    static_cast < __ReceiverType * > ( this )->*
+                                    reinterpret_cast < __ElementType * ( __ReceiverType :: * ) () > (
+                                            static_cast < __ReceiverType * > ( this )->__cicch_obtainGenericHandler (
+                                                    __CollectionInternalRequestType :: __cirt_newFrontAddress
+                                            )
+                                    )
+                            ) ()
+                    ) __ElementType (
                             std :: forward < __EmplaceArgumentTypes > ( parameters ) ...
                     );
                 }
@@ -233,26 +223,16 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                         __EmplaceArgumentTypes && ... parameters
                 ) noexcept (false) -> ElementReference {
 
-                    __CollectionInternalRequest const request {
-                            __CollectionInternalRequestType :: __cirt_newBackAddress,
-                            nullptr
-                    };
-
-                    __CollectionInternalRequestResponse response {
-                            false,
-                            nullptr
-                    };
-
-                    auto const requestAvailabilityStatus = static_cast < __ReceiverType * > ( this )->__cicch_transmitRequest (
-                            & request,
-                            & response
-                    );
-
-                    if ( ! requestAvailabilityStatus || ! response._status ) {
-                        throw RuntimeException ( "Unexpected error in BoundaryInsertionClient :: pushFront" );
-                    }
-
-                    return * new ( response._pData ) __ElementType (
+                    return * new (
+                            (
+                                    static_cast < __ReceiverType * > ( this )->*
+                                    reinterpret_cast < __ElementType * ( __ReceiverType :: * ) () > (
+                                            static_cast < __ReceiverType * > ( this )->__cicch_obtainGenericHandler (
+                                                    __CollectionInternalRequestType :: __cirt_newBackAddress
+                                            )
+                                    )
+                            ) ()
+                    ) __ElementType (
                             std :: forward < __EmplaceArgumentTypes > ( parameters ) ...
                     );
                 }
@@ -272,34 +252,32 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                         __ArgumentTypes && ... values
                 ) noexcept (false) -> void {
 
-                    Size                        const parameterCount = sizeof ... ( __ArgumentTypes );
-                    __CollectionInternalRequest const request {
-                            __CollectionInternalRequestType :: __cirt_newFrontAddressArray,
-                            & parameterCount
-                    };
+                    Size    const parameterCount = sizeof ... ( __ArgumentTypes );
+                    auto          ppElements = cds :: __hidden :: __impl :: __allocation :: __allocPrimitiveArray < __ElementType * > ( parameterCount );
 
-                    auto pElements = cds :: __hidden :: __impl :: __allocation :: __allocPrimitiveArray < __ElementType * > ( parameterCount );
-                    __CollectionInternalRequestResponse response {
-                            false,
-                            reinterpret_cast < void * > ( pElements )
-                    };
-
-                    auto const requestAvailabilityStatus = static_cast < __ReceiverType * > ( this )->__cicch_transmitRequest (
-                            & request,
-                            & response
+                    (
+                            static_cast < __ReceiverType * > ( this ) ->*
+                            reinterpret_cast <
+                                    void ( __ReceiverType :: * ) (
+                                            Size,
+                                            __ElementType **
+                                    )
+                            > (
+                                    static_cast < __ReceiverType * > ( this )->__cicch_obtainGenericHandler (
+                                            __CollectionInternalRequestType :: __cirt_newFrontAddressArray
+                                    )
+                            )
+                    ) (
+                            parameterCount,
+                            ppElements
                     );
 
-                    if ( ! requestAvailabilityStatus || ! response._status ) {
-                        cds :: __hidden :: __impl :: __allocation :: __freePrimitiveArray ( pElements );
-                        throw RuntimeException ( "Unexpected error in BoundaryInsertionClient :: pushFront" );
-                    }
-
                     cds :: __hidden :: __impl :: __allocation :: __forwardIntoArray (
-                            pElements,
+                            ppElements,
                             std :: forward < __ArgumentTypes > ( values ) ...
                     );
 
-                    cds :: __hidden :: __impl :: __allocation :: __freePrimitiveArray ( pElements );
+                    cds :: __hidden :: __impl :: __allocation :: __freePrimitiveArray ( ppElements );
                 }
 
 
@@ -317,34 +295,32 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                         __ArgumentTypes && ... values
                 ) noexcept (false) -> void {
 
-                    Size                        const parameterCount = sizeof ... ( __ArgumentTypes );
-                    __CollectionInternalRequest const request {
-                            __CollectionInternalRequestType :: __cirt_newBackAddressArray,
-                            & parameterCount
-                    };
+                    Size    const parameterCount = sizeof ... ( __ArgumentTypes );
+                    auto          ppElements = cds :: __hidden :: __impl :: __allocation :: __allocPrimitiveArray < __ElementType * > ( parameterCount );
 
-                    auto pElements = cds :: __hidden :: __impl :: __allocation :: __allocPrimitiveArray < __ElementType * > ( parameterCount );
-                    __CollectionInternalRequestResponse response {
-                            false,
-                            reinterpret_cast < void * > ( pElements )
-                    };
-
-                    auto const requestAvailabilityStatus = static_cast < __ReceiverType * > ( this )->__cicch_transmitRequest (
-                            & request,
-                            & response
+                    (
+                            static_cast < __ReceiverType * > ( this ) ->*
+                            reinterpret_cast <
+                                    void ( __ReceiverType :: * ) (
+                                            Size,
+                                            __ElementType **
+                                    )
+                            > (
+                                    static_cast < __ReceiverType * > ( this )->__cicch_obtainGenericHandler (
+                                            __CollectionInternalRequestType :: __cirt_newBackAddressArray
+                                    )
+                            )
+                    ) (
+                            parameterCount,
+                            ppElements
                     );
 
-                    if ( ! requestAvailabilityStatus || ! response._status ) {
-                        cds :: __hidden :: __impl :: __allocation :: __freePrimitiveArray ( pElements );
-                        throw RuntimeException ( "Unexpected error in BoundaryInsertionClient :: pushFront" );
-                    }
-
                     cds :: __hidden :: __impl :: __allocation :: __forwardIntoArray (
-                            pElements,
+                            ppElements,
                             std :: forward < __ArgumentTypes > ( values ) ...
                     );
 
-                    cds :: __hidden :: __impl :: __allocation :: __freePrimitiveArray ( pElements );
+                    cds :: __hidden :: __impl :: __allocation :: __freePrimitiveArray ( ppElements );
                 }
 
 
@@ -453,38 +429,33 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                         __IteratorType const & end
                 ) noexcept (false) -> void {
 
-                    Size const parameterCount = __IteratorDistance < __IteratorType > :: __compute (
-                            begin,
-                            end
+
+                    Size    const parameterCount = __IteratorDistance < __IteratorType > :: __compute ( begin, end );
+                    auto          ppElements = cds :: __hidden :: __impl :: __allocation :: __allocPrimitiveArray < __ElementType * > ( parameterCount );
+
+                    (
+                            static_cast < __ReceiverType * > ( this ) ->*
+                            reinterpret_cast <
+                                    void ( __ReceiverType :: * ) (
+                                            Size,
+                                            __ElementType **
+                                    )
+                            > (
+                                    static_cast < __ReceiverType * > ( this )->__cicch_obtainGenericHandler (
+                                            __CollectionInternalRequestType :: __cirt_newFrontAddressArray
+                                    )
+                            )
+                    ) (
+                            parameterCount,
+                            ppElements
                     );
-
-                    __CollectionInternalRequest const request {
-                            __CollectionInternalRequestType :: __cirt_newFrontAddressArray,
-                            & parameterCount
-                    };
-
-                    auto pElements = cds :: __hidden :: __impl :: __allocation :: __allocPrimitiveArray < __ElementType * > ( parameterCount );
-                    __CollectionInternalRequestResponse response {
-                            false,
-                            reinterpret_cast < void * > ( pElements )
-                    };
-
-                    auto const requestAvailabilityStatus = static_cast < __ReceiverType * > ( this )->__cicch_transmitRequest (
-                            & request,
-                            & response
-                    );
-
-                    if ( ! requestAvailabilityStatus || ! response._status ) {
-                        cds :: __hidden :: __impl :: __allocation :: __freePrimitiveArray ( pElements );
-                        throw RuntimeException ( "Unexpected error in BoundaryInsertionClient :: pushFront" );
-                    }
 
                     Size index = 0ULL;
                     for ( auto iterator = begin; iterator != end; ++ iterator ) {
-                        (void) new ( pElements [ index ++ ] ) __ElementType ( * iterator );
+                        (void) new ( ppElements [ index ++ ] ) __ElementType ( * iterator );
                     }
 
-                    cds :: __hidden :: __impl :: __allocation :: __freePrimitiveArray ( pElements );
+                    cds :: __hidden :: __impl :: __allocation :: __freePrimitiveArray ( ppElements );
                 }
 
 
@@ -503,38 +474,33 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                         __IteratorType const & end
                 ) noexcept (false) -> void {
 
-                    Size const parameterCount = __IteratorDistance < __IteratorType > :: __compute (
-                            begin,
-                            end
+
+                    Size    const parameterCount = __IteratorDistance < __IteratorType > :: __compute ( begin, end );
+                    auto          ppElements = cds :: __hidden :: __impl :: __allocation :: __allocPrimitiveArray < __ElementType * > ( parameterCount );
+
+                    (
+                            static_cast < __ReceiverType * > ( this ) ->*
+                            reinterpret_cast <
+                                    void ( __ReceiverType :: * ) (
+                                            Size,
+                                            __ElementType **
+                                    )
+                            > (
+                                    static_cast < __ReceiverType * > ( this )->__cicch_obtainGenericHandler (
+                                            __CollectionInternalRequestType :: __cirt_newBackAddressArray
+                                    )
+                            )
+                    ) (
+                            parameterCount,
+                            ppElements
                     );
-
-                    __CollectionInternalRequest const request {
-                            __CollectionInternalRequestType :: __cirt_newBackAddressArray,
-                            & parameterCount
-                    };
-
-                    auto pElements = cds :: __hidden :: __impl :: __allocation :: __allocPrimitiveArray < __ElementType * > ( parameterCount );
-                    __CollectionInternalRequestResponse response {
-                            false,
-                            reinterpret_cast < void * > ( pElements )
-                    };
-
-                    auto const requestAvailabilityStatus = static_cast < __ReceiverType * > ( this )->__cicch_transmitRequest (
-                            & request,
-                            & response
-                    );
-
-                    if ( ! requestAvailabilityStatus || ! response._status ) {
-                        cds :: __hidden :: __impl :: __allocation :: __freePrimitiveArray ( pElements );
-                        throw RuntimeException ( "Unexpected error in BoundaryInsertionClient :: pushFront" );
-                    }
 
                     Size index = 0ULL;
                     for ( auto iterator = begin; iterator != end; ++ iterator ) {
-                        (void) new ( pElements [ index ++ ] ) __ElementType ( * iterator );
+                        (void) new ( ppElements [ index ++ ] ) __ElementType ( * iterator );
                     }
 
-                    cds :: __hidden :: __impl :: __allocation :: __freePrimitiveArray ( pElements );
+                    cds :: __hidden :: __impl :: __allocation :: __freePrimitiveArray ( ppElements );
                 }
 
             }

@@ -14,10 +14,49 @@ enum class E1 {
     f2 = 0x02
 };
 
+class A {
+public:
+    virtual void f () = 0;
+};
 
+class B : public A {
+public:
+    void f () override {
+        std :: cout << "test\n";
+    }
+};
+
+void f ( auto (*g) () -> void ) noexcept {
+    g();
+}
+
+
+template < typename Last >
+void printAll ( Last && value ) {
+    std :: cout << value << '\n';
+}
+
+template < typename First, typename ... TheRest >
+void printAll ( First && first, TheRest && ... theRest ) {
+    std :: cout << first << ", ";
+    printAll ( std :: forward < TheRest > ( theRest ) ... );
+}
+
+void f2();
 
 using namespace cds :: experimental;
 int main () {
+
+    printAll ( 1, 2, 3, "Ana are mere", 4.5f, "droguri" );
+
+    B b;
+    A * a = & b;
+
+    auto pfn = & B :: f;
+    auto castedPfn = ( void ( A :: * ) () ) pfn;
+
+    (a->*castedPfn)();
+
     std :: cout << sizeof ( Collection < int > ) << '\n';
     std :: cout << sizeof ( MutableCollection < int > ) << '\n';
     std :: cout << sizeof ( List < int > ) << '\n';

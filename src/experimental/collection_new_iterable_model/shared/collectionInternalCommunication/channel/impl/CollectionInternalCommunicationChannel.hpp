@@ -18,6 +18,34 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                         __ElementType
                 > :: ~__CollectionInternalCommunicationChannel () noexcept = default;
 
+
+                template <
+                        typename __ReceiverType,    // NOLINT(bugprone-reserved-identifier)
+                        typename __ElementType      // NOLINT(bugprone-reserved-identifier)
+                > auto __CDS_cpplang_VirtualConstexpr __CollectionInternalCommunicationChannel <
+                        __ReceiverType,
+                        __ElementType
+                > :: __cicch_obtainGenericHandler (
+                        __CollectionInternalRequestType requestType
+                ) noexcept -> __GenericHandler {
+
+                    return nullptr;
+                }
+
+
+                template <
+                        typename __ReceiverType,    // NOLINT(bugprone-reserved-identifier)
+                        typename __ElementType      // NOLINT(bugprone-reserved-identifier)
+                > auto __CDS_cpplang_VirtualConstexpr __CollectionInternalCommunicationChannel <
+                        __ReceiverType,
+                        __ElementType
+                > :: __cicch_obtainGenericConstHandler (
+                        __CollectionInternalRequestType requestType
+                ) const noexcept -> __GenericConstHandler {
+
+                    return nullptr;
+                }
+
             }
         }
     }

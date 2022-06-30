@@ -60,17 +60,21 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                     template < typename, typename, typename >
                     friend class __AbstractConstIteratorRelativeInsertionClient;    // NOLINT(bugprone-reserved-identifier)
 
-                protected:
-                    __CDS_NoDiscard virtual auto __cicch_transmitRequest ( // NOLINT(bugprone-reserved-identifier)
-                            __CollectionInternalRequest         const * pRequest,
-                            __CollectionInternalRequestResponse       * pResponse
-                    ) noexcept -> bool = 0;
+                private:
+                    using __GenericHandler  = void ( __ReceiverType :: * ) ();               // NOLINT(bugprone-reserved-identifier)
+
+                private:
+                    using __GenericConstHandler  = void ( __ReceiverType :: * ) () const;    // NOLINT(bugprone-reserved-identifier)
 
                 protected:
-                    __CDS_NoDiscard virtual auto __cicch_transmitConstRequest ( // NOLINT(bugprone-reserved-identifier)
-                            __CollectionInternalRequest         const * pRequest,
-                            __CollectionInternalRequestResponse       * pResponse
-                    ) const noexcept -> bool = 0;
+                    __CDS_NoDiscard __CDS_cpplang_VirtualConstexpr virtual auto __cicch_obtainGenericHandler ( // NOLINT(bugprone-reserved-identifier)
+                            __CollectionInternalRequestType requestType
+                    ) noexcept -> __GenericHandler;
+
+                protected:
+                    __CDS_NoDiscard __CDS_cpplang_VirtualConstexpr virtual auto __cicch_obtainGenericConstHandler ( // NOLINT(bugprone-reserved-identifier)
+                            __CollectionInternalRequestType requestType
+                    ) const noexcept -> __GenericConstHandler;
 
                 public:
                     __CDS_cpplang_ConstexprDestructor ~__CollectionInternalCommunicationChannel () noexcept override;

@@ -48,25 +48,17 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                         __bidirectional
                 > :: crbegin () const noexcept -> ConstReverseIterator {
 
-                    __CollectionInternalRequest const request {
-                            __CollectionInternalRequestType :: __cirt_rbegin,
-                            nullptr
-                    };
-
-                    __CollectionInternalRequestResponse response; // NOLINT(cppcoreguidelines-pro-type-member-init)
-
-                    auto const requestAvailabilityStatus = static_cast < __ReceiverType const * > ( this )->__cicch_transmitConstRequest (
-                            & request,
-                            & response
-                    );
-
-                    if ( ! requestAvailabilityStatus || ! response._status ) {
-                        return ConstReverseIterator ();
-                    }
-
                     return ConstReverseIterator (
-                            static_cast < __ReceiverType const * > ( this ),
-                            reinterpret_cast < __AbstractDelegateIterator < __ElementType const > * > ( response._pData )
+                            static_cast < __ReceiverType const * > ( this ), (
+                                    static_cast < __ReceiverType const * > ( this )->*
+                                    reinterpret_cast <
+                                            __AbstractDelegateIterator < __ElementType const > * ( __ReceiverType :: * ) () const
+                                    > (
+                                            static_cast < __ReceiverType const * > ( this )->__cicch_obtainGenericConstHandler (
+                                                    __CollectionInternalRequestType :: __cirt_rbegin
+                                            )
+                                    )
+                            ) ()
                     );
                 }
 
@@ -81,25 +73,17 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                         __bidirectional
                 > :: crend () const noexcept -> ConstReverseIterator {
 
-                    __CollectionInternalRequest const request {
-                            __CollectionInternalRequestType :: __cirt_rend,
-                            nullptr
-                    };
-
-                    __CollectionInternalRequestResponse response; // NOLINT(cppcoreguidelines-pro-type-member-init)
-
-                    auto const requestAvailabilityStatus = static_cast < __ReceiverType const * > ( this )->__cicch_transmitConstRequest (
-                            & request,
-                            & response
-                    );
-
-                    if ( ! requestAvailabilityStatus || ! response._status ) {
-                        return ConstReverseIterator ();
-                    }
-
                     return ConstReverseIterator (
-                            static_cast < __ReceiverType const * > ( this ),
-                            reinterpret_cast < __AbstractDelegateIterator < __ElementType const > * > ( response._pData )
+                            static_cast < __ReceiverType const * > ( this ), (
+                                    static_cast < __ReceiverType const * > ( this )->*
+                                    reinterpret_cast <
+                                            __AbstractDelegateIterator < __ElementType const > * ( __ReceiverType :: * ) () const
+                                    > (
+                                            static_cast < __ReceiverType const * > ( this )->__cicch_obtainGenericConstHandler (
+                                                    __CollectionInternalRequestType :: __cirt_rend
+                                            )
+                                    )
+                            ) ()
                     );
                 }
 

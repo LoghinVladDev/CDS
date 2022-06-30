@@ -14,6 +14,22 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                 class __AbstractDelegateWrapperIterator {   // NOLINT(bugprone-reserved-identifier)
 
                 private:
+                    template < typename, typename, typename >
+                    friend class __AbstractIteratorRelativeInsertionClient;         // NOLINT(bugprone-reserved-identifier)
+
+                private:
+                    template < typename, typename, typename >
+                    friend class __AbstractConstIteratorRelativeInsertionClient;    // NOLINT(bugprone-reserved-identifier)
+
+                private:
+                    template < typename, typename >
+                    friend class __AbstractIteratorRemoveClient;                    // NOLINT(bugprone-reserved-identifier)
+
+                private:
+                    template < typename, typename >
+                    friend class __AbstractConstIteratorRemoveClient;               // NOLINT(bugprone-reserved-identifier)
+
+                private:
                     Object                                          const * _pOwner     { nullptr };
 
                 private:

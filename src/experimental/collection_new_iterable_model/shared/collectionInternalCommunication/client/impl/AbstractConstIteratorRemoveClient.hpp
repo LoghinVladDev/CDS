@@ -23,19 +23,20 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                         AbstractConstIterator const & iterator
                 ) noexcept -> bool {
 
-                    __CollectionInternalRequest const request {
-                        __CollectionInternalRequestType :: __cirt_removeConst,
-                        reinterpret_cast < void const * > ( & iterator )
-                    };
-
-                    __CollectionInternalRequestResponse response; // NOLINT(cppcoreguidelines-pro-type-member-init)
-
-                    auto const requestAvailabilityStatus = static_cast < __ReceiverType * > ( this )->__cicch_transmitRequest (
-                            & request,
-                            & response
+                    return (
+                            static_cast < __ReceiverType * > ( this )->*
+                            reinterpret_cast <
+                                    bool ( __ReceiverType :: * ) (
+                                            __AbstractDelegateIterator < __ElementType const > const *
+                                    )
+                            > (
+                                    static_cast < __ReceiverType * > ( this )->__cicch_obtainGenericHandler (
+                                            __CollectionInternalRequestType :: __cirt_removeConst
+                                    )
+                            )
+                    ) (
+                            iterator._pDelegate
                     );
-
-                    return requestAvailabilityStatus && response._status;
                 }
 
 
@@ -50,23 +51,20 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                         Size                          iteratorCount
                 ) noexcept -> Size {
 
-                    __CollectionInternalRequest request {
-                            __CollectionInternalRequestType :: __cirt_removeConst,
-                            nullptr
-                    };
-
-                    __CollectionInternalRequestResponse response; // NOLINT(cppcoreguidelines-pro-type-member-init)
-                    Size                                removedCount = 0ULL;
+                    Size removedCount   = 0ULL;
+                    auto pfnRemove      =
+                            reinterpret_cast <
+                                    bool ( __ReceiverType :: * ) (
+                                            __AbstractDelegateIterator < __ElementType const > const *
+                                    )
+                            > (
+                                    static_cast < __ReceiverType * > ( this )->__cicch_obtainGenericHandler (
+                                            __CollectionInternalRequestType :: __cirt_removeConst
+                                    )
+                            );
 
                     for ( Size index = 0ULL; index < iteratorCount; ++ index ) {
-
-                        request._pData = reinterpret_cast < void const * > ( & pIterators [ index ] );
-                        auto const requestAvailabilityStatus = static_cast < __ReceiverType * > ( this )->__cicch_transmitRequest (
-                                & request,
-                                & response
-                        );
-
-                        if ( requestAvailabilityStatus && response._status ) {
+                        if ( ( static_cast < __ReceiverType * > ( this ) ->* pfnRemove ) ( pIterators [ index ]._pDelegate ) ) {
                             removedCount ++;
                         }
                     }

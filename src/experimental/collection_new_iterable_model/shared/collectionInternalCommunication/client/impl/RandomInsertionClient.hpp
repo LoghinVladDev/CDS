@@ -57,35 +57,31 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                         ElementType const & element
                 ) noexcept (false) -> ElementReference {
 
-                    __CollectionInternalRequest const request {
-                        __CollectionInternalRequestType :: __cirt_newAddress,
-                        & element
-                    };
-
-                    __CollectionInternalRequestResponseInsert insertionData {
-                        false,
-                        nullptr
-                    };
-
-                    __CollectionInternalRequestResponse response {
-                        false,
-                        reinterpret_cast < void * > ( & insertionData )
-                    };
-
-                    auto const requestAvailabilityStatus = static_cast < __ReceiverType * > ( this )->__cicch_transmitRequest (
-                            & request,
-                            & response
+                    bool newElementCreated;
+                    auto pElementLocation = (
+                                 static_cast < __ReceiverType * > ( this )->*
+                                 reinterpret_cast <
+                                         __ElementType * ( __ReceiverType :: * ) (
+                                                 __ElementType const *,
+                                                 bool                *
+                                         )
+                                 > (
+                                         static_cast < __ReceiverType * > ( this )->__cicch_obtainGenericHandler (
+                                                 __CollectionInternalRequestType :: __cirt_newAddress
+                                         )
+                                 )
+                    ) (
+                            & element,
+                            & newElementCreated
                     );
 
-                    if ( ! requestAvailabilityStatus || ! response._status ) {
-                        throw RuntimeException ( "Unexpected error in RandomInsertionClient :: insert" );
+                    if ( ! newElementCreated ) {
+                        return * pElementLocation;
                     }
 
-                    if ( ! insertionData._newElementCreated ) {
-                        return * reinterpret_cast < __ReturnType * > ( insertionData._pElement );
-                    }
-
-                    return * new ( insertionData._pElement ) __ElementType ( element );
+                    return * new (
+                            pElementLocation
+                    ) __ElementType ( element );
                 }
 
 
@@ -106,35 +102,31 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                         ElementType && element
                 ) noexcept (false) -> ElementReference {
 
-                    __CollectionInternalRequest const request {
-                        __CollectionInternalRequestType :: __cirt_newAddress,
-                        & element
-                    };
-
-                    __CollectionInternalRequestResponseInsert insertionData {
-                        false,
-                        nullptr
-                    };
-
-                    __CollectionInternalRequestResponse response {
-                        false,
-                        reinterpret_cast < void * > ( & insertionData )
-                    };
-
-                    auto const requestAvailabilityStatus = static_cast < __ReceiverType * > ( this )->__cicch_transmitRequest (
-                            & request,
-                            & response
+                    bool newElementCreated;
+                    auto pElementLocation = (
+                            static_cast < __ReceiverType * > ( this )->*
+                            reinterpret_cast <
+                                    __ElementType * ( __ReceiverType :: * ) (
+                                            __ElementType const *,
+                                            bool                *
+                                    )
+                            > (
+                                    static_cast < __ReceiverType * > ( this )->__cicch_obtainGenericHandler (
+                                            __CollectionInternalRequestType :: __cirt_newAddress
+                                    )
+                            )
+                    ) (
+                            & element,
+                            & newElementCreated
                     );
 
-                    if ( ! requestAvailabilityStatus || ! response._status ) {
-                        throw RuntimeException ( "Unexpected error in RandomInsertionClient :: insert" );
+                    if ( ! newElementCreated ) {
+                        return * pElementLocation;
                     }
 
-                    if ( ! insertionData._newElementCreated ) {
-                        return * reinterpret_cast < __ReturnType * > ( insertionData._pElement );
-                    }
-
-                    return * new ( insertionData._pElement ) __ElementType ( std :: move ( element ) );
+                    return * new (
+                            pElementLocation
+                    ) __ElementType ( std :: move ( element ) );
                 }
 
 
@@ -199,41 +191,35 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                             std :: forward < __EmplaceArgumentTypes > ( parameters ) ...
                     );
 
-                    __CollectionInternalRequest const request {
-                            __CollectionInternalRequestType :: __cirt_newAddress,
-                            & referenceElementContainer.data()
-                    };
-
-                    __CollectionInternalRequestResponseInsert insertionData {
-                            false,
-                            nullptr
-                    };
-
-                    __CollectionInternalRequestResponse response {
-                            false,
-                            reinterpret_cast < void * > ( & insertionData )
-                    };
-
-                    auto const requestAvailabilityStatus = static_cast < __ReceiverType const * > ( this )->__cicch_transmitRequest (
-                            & request,
-                            & response
+                    bool newElementCreated;
+                    auto pElementLocation = (
+                            static_cast < __ReceiverType * > ( this )->*
+                            reinterpret_cast <
+                                    __ElementType * ( __ReceiverType :: * ) (
+                                            __ElementType const *,
+                                            bool                *
+                                    )
+                            > (
+                                    static_cast < __ReceiverType * > ( this )->__cicch_obtainGenericHandler (
+                                            __CollectionInternalRequestType :: __cirt_newAddress
+                                    )
+                            )
+                    ) (
+                            & referenceElementContainer.data(),
+                            & newElementCreated
                     );
 
-                    if ( ! requestAvailabilityStatus || ! response._status ) {
-                        throw RuntimeException ( "Unexpected error in RandomInsertionClient :: emplace" );
-                    }
-
-                    if ( ! insertionData._newElementCreated ) {
+                    if ( ! newElementCreated ) {
                         referenceElementContainer.destruct();
                     } else {
-                        std::memcpy(
-                                insertionData._pElement,
+                        std::memcpy (
+                                pElementLocation,
                                 & referenceElementContainer._data[0],
                                 sizeof ( __ElementType )
                         );
                     }
 
-                    return * reinterpret_cast < __ElementType * > ( insertionData._pElement );
+                    return * pElementLocation;
                 }
 
 
