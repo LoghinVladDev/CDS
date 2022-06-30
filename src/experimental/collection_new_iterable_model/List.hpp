@@ -18,6 +18,7 @@
 #include "shared/collectionInternalCommunication/client/SortingClient.hpp"
 #include "shared/collectionInternalCommunication/client/ReplacingClient.hpp"
 #include "shared/collectionInternalCommunication/client/ReplacingOfClient.hpp"
+#include "shared/collectionInternalCommunication/client/FunctionalReplacingClient.hpp"
 
 namespace cds { // NOLINT(modernize-concat-nested-namespaces)
     namespace experimental {
@@ -81,6 +82,10 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                         List < __ElementType >,
                         __ElementType,
                         std :: initializer_list < __ElementType >
+                >,
+                public __hidden :: __impl :: __FunctionalReplacingClient <
+                        List < __ElementType >,
+                        __ElementType
                 > {
 
         public:
@@ -180,6 +185,13 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                     >;
 
         protected:
+            using FunctionalReplacingClient =
+                    __hidden :: __impl :: __FunctionalReplacingClient <
+                            List < __ElementType >,
+                            __ElementType
+                    >;
+
+        protected:
             using MutableCollection = MutableCollection < __ElementType >;
 
         protected:
@@ -271,6 +283,15 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         public: using ReplacingOfClientInitializerList :: replaceLastNotOf;
         public: using ReplacingOfClientInitializerList :: replaceAllNotOf;
 
+        public: using FunctionalReplacingClient :: replaceThat;
+        public: using FunctionalReplacingClient :: replaceFirstThat;
+        public: using FunctionalReplacingClient :: replaceLastThat;
+        public: using FunctionalReplacingClient :: replaceAllThat;
+        public: using FunctionalReplacingClient :: replaceThatBy;
+        public: using FunctionalReplacingClient :: replaceFirstThatBy;
+        public: using FunctionalReplacingClient :: replaceLastThatBy;
+        public: using FunctionalReplacingClient :: replaceAllThatBy;
+
         public:
             __CDS_NoDiscard auto toString () const noexcept -> String override;
 
@@ -299,6 +320,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 #include "shared/collectionInternalCommunication/client/impl/SortingClient.hpp"
 #include "shared/collectionInternalCommunication/client/impl/ReplacingClient.hpp"
 #include "shared/collectionInternalCommunication/client/impl/ReplacingOfClient.hpp"
+#include "shared/collectionInternalCommunication/client/impl/FunctionalReplacingClient.hpp"
 
 #include "list/impl/List.hpp"
 
