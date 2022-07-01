@@ -5,10 +5,10 @@
 #ifndef __CDS_SHARED_INDICES_OF_CLIENT_HPP__
 #define __CDS_SHARED_INDICES_OF_CLIENT_HPP__
 
-namespace cds { // NOLINT(modernize-concat-nested-namespaces)
-    namespace experimental {
-        namespace __hidden {
-            namespace __impl {
+namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
+    namespace experimental {    // NOLINT(modernize-concat-nested-namespaces)
+        namespace __hidden {    // NOLINT(modernize-concat-nested-namespaces, bugprone-reserved-identifier)
+            namespace __impl {  // NOLINT(bugprone-reserved-identifier)
 
                 template <
                         typename                                                    __ReceiverType,         // NOLINT(bugprone-reserved-identifier)
@@ -21,7 +21,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                     using ElementType = __ElementType;
 
                 protected:
-                    template < typename __CollectionType >
+                    template < typename __CollectionType >  // NOLINT(bugprone-reserved-identifier)
                     auto indicesOfFrom (
                             Size                            count,
                             __CollectionType              & storeIn,
@@ -29,7 +29,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                     ) const noexcept -> __CollectionType &;
 
                 protected:
-                    template < template < typename ... > class __CollectionType >
+                    template < template < typename ... > class __CollectionType >   // NOLINT(bugprone-reserved-identifier)
                     auto indicesOfFrom (
                             Size                            count,
                             __FromCollectionType    const & from
@@ -46,20 +46,20 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                     ) const noexcept -> Index;
 
                 protected:
-                    template < typename __CollectionType >
+                    template < typename __CollectionType >  // NOLINT(bugprone-reserved-identifier)
                     auto allIndicesOfFrom (
                             __CollectionType              & storeIn,
                             __FromCollectionType    const & from
                     ) const noexcept -> __CollectionType &;
 
                 protected:
-                    template < template < typename ... > class __CollectionType >
+                    template < template < typename ... > class __CollectionType >   // NOLINT(bugprone-reserved-identifier)
                     auto allIndicesOfFrom (
                             __FromCollectionType const & from
                     ) const noexcept -> __CollectionType < Index >;
 
                 protected:
-                    template < typename __CollectionType >
+                    template < typename __CollectionType >  // NOLINT(bugprone-reserved-identifier)
                     auto indicesOfNotFrom (
                             Size                            count,
                             __CollectionType              & storeIn,
@@ -67,7 +67,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                     ) const noexcept -> __CollectionType &;
 
                 protected:
-                    template < template < typename ... > class __CollectionType >
+                    template < template < typename ... > class __CollectionType >   // NOLINT(bugprone-reserved-identifier)
                     auto indicesOfNotFrom (
                             Size                            count,
                             __FromCollectionType    const & from
@@ -84,14 +84,14 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                     ) const noexcept -> Index;
 
                 protected:
-                    template < typename __CollectionType >
+                    template < typename __CollectionType >  // NOLINT(bugprone-reserved-identifier)
                     auto allIndicesOfNotFrom (
                             __CollectionType              & storeIn,
                             __FromCollectionType    const & from
                     ) const noexcept -> __CollectionType &;
 
                 protected:
-                    template < template < typename ... > class __CollectionType >
+                    template < template < typename ... > class __CollectionType >   // NOLINT(bugprone-reserved-identifier)
                     auto allIndicesOfNotFrom (
                             __FromCollectionType const & from
                     ) const noexcept -> __CollectionType < Index >;

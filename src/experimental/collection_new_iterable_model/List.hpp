@@ -253,6 +253,9 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         protected:
             using MutableCollection = MutableCollection < __ElementType >;
 
+        public:
+            static Index const invalidIndex = -1;
+
         protected:
             constexpr List () noexcept;
 

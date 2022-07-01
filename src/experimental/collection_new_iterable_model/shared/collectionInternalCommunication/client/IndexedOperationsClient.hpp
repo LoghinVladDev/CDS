@@ -5,10 +5,10 @@
 #ifndef __CDS_SHARED_INDEXED_OPERATIONS_CLIENT_HPP__
 #define __CDS_SHARED_INDEXED_OPERATIONS_CLIENT_HPP__
 
-namespace cds { // NOLINT(modernize-concat-nested-namespaces)
-    namespace experimental {
-        namespace __hidden {
-            namespace __impl {
+namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
+    namespace experimental {    // NOLINT(modernize-concat-nested-namespaces)
+        namespace __hidden {    // NOLINT(modernize-concat-nested-namespaces, bugprone-reserved-identifier)
+            namespace __impl {  // NOLINT(bugprone-reserved-identifier)
 
                 template <
                         typename __ReceiverType,    // NOLINT(bugprone-reserved-identifier)
@@ -20,39 +20,39 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
                 protected:
                     template <
-                            typename __CollectionType,
-                            typename __TElementType = __ElementType,
+                            typename __CollectionType,                  // NOLINT(bugprone-reserved-identifier)
+                            typename __TElementType = __ElementType,    // NOLINT(bugprone-reserved-identifier)
                             cds :: meta :: EnableIf <
                                     cds :: meta :: isCopyConstructible < __TElementType > ()
                             > = 0
                     > auto sub (
                             __CollectionType  & storeIn,
                             Index               from,
-                            Index               in
+                            Index               to
                     ) const noexcept -> __CollectionType &;
 
                 protected:
                     template <
-                            typename __CollectionType,
-                            typename __TElementType = __ElementType,
+                            typename __CollectionType,                  // NOLINT(bugprone-reserved-identifier)
+                            typename __TElementType = __ElementType,    // NOLINT(bugprone-reserved-identifier)
                             cds :: meta :: EnableIf <
                                     cds :: meta :: isCopyConstructible < __TElementType > ()
                             > = 0
                     > auto sub (
                             Index               from,
-                            Index               in
+                            Index               to
                     ) const noexcept -> __CollectionType;
 
                 protected:
                     template <
-                            template < typename ... > class __CollectionType,
-                            typename __TElementType = __ElementType,
+                            template < typename ... > class __CollectionType,   // NOLINT(bugprone-reserved-identifier)
+                            typename __TElementType = __ElementType,            // NOLINT(bugprone-reserved-identifier)
                             cds :: meta :: EnableIf <
                                     cds :: meta :: isCopyConstructible < __TElementType > ()
                             > = 0
                     > auto sub (
                             Index               from,
-                            Index               in
+                            Index               to
                     ) const noexcept -> __CollectionType < __ElementType >;
 
                 protected:
@@ -68,12 +68,12 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 protected:
                     auto removeAt (
                             Collection < Index > const & indices
-                    ) noexcept -> bool;
+                    ) noexcept -> Size;
 
                 protected:
                     auto removeAt (
                             std :: initializer_list < Index > const & indices
-                    ) noexcept -> bool;
+                    ) noexcept -> Size;
                 };
 
             }

@@ -5,10 +5,10 @@
 #ifndef __CDS_SHARED_SORTING_CLIENT_HPP__
 #define __CDS_SHARED_SORTING_CLIENT_HPP__
 
-namespace cds { // NOLINT(modernize-concat-nested-namespaces)
-    namespace experimental {
-        namespace __hidden {
-            namespace __impl {
+namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
+    namespace experimental {    // NOLINT(modernize-concat-nested-namespaces)
+        namespace __hidden {    // NOLINT(modernize-concat-nested-namespaces, bugprone-reserved-identifier)
+            namespace __impl {  // NOLINT(bugprone-reserved-identifier)
 
                 template <
                         typename __ReceiverType,    // NOLINT(bugprone-reserved-identifier)

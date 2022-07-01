@@ -19,7 +19,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                     using ElementType = __ElementType;
 
                 protected:
-                    template < typename __CollectionType >
+                    template < typename __CollectionType >  // NOLINT(bugprone-reserved-identifier)
                     auto indicesOf (
                             Size                        count,
                             __CollectionType          & storeIn,
@@ -27,7 +27,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                     ) const noexcept -> __CollectionType &;
 
                 protected:
-                    template < template < typename ... > class __CollectionType >
+                    template < template < typename ... > class __CollectionType >   // NOLINT(bugprone-reserved-identifier)
                     auto indicesOf (
                             Size                count,
                             ElementType const & element
@@ -44,14 +44,14 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                     ) const noexcept -> Index;
 
                 protected:
-                    template < typename __CollectionType >
+                    template < typename __CollectionType >  // NOLINT(bugprone-reserved-identifier)
                     auto allIndicesOf (
                             __CollectionType          & storeIn,
                             ElementType         const & element
                     ) const noexcept -> __CollectionType &;
 
                 protected:
-                    template < template < typename ... > class __CollectionType >
+                    template < template < typename ... > class __CollectionType >   // NOLINT(bugprone-reserved-identifier)
                     auto allIndicesOf (
                             ElementType const & element
                     ) const noexcept -> __CollectionType < Index >;

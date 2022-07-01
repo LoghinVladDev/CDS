@@ -20,8 +20,8 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
 
                 protected:
                     template <
-                            typename __CollectionType,
-                            typename __Predicate
+                            typename __CollectionType,  // NOLINT(bugprone-reserved-identifier)
+                            typename __Predicate        // NOLINT(bugprone-reserved-identifier)
                     > auto indicesOfThat (
                             Size                        count,
                             __CollectionType          & storeIn,
@@ -30,30 +30,29 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
 
                 protected:
                     template <
-                            template < typename ... > class __CollectionType,
-                            typename __Predicate
+                            template < typename ... > class __CollectionType,   // NOLINT(bugprone-reserved-identifier)
+                            typename __Predicate                                // NOLINT(bugprone-reserved-identifier)
                     > auto indicesOfThat (
                             Size                count,
                             __Predicate const & predicate
                     ) const noexcept ( noexcept ( predicate ( cds :: meta :: referenceOf < ElementType const > () ) ) ) -> __CollectionType < Index >;
 
                 protected:
-                    template < typename __Predicate >
+                    template < typename __Predicate >   // NOLINT(bugprone-reserved-identifier)
                     auto firstIndexOfThat (
                             __Predicate const & predicate
                     ) const noexcept ( noexcept ( predicate ( cds :: meta :: referenceOf < ElementType const > () ) ) ) -> Index;
 
                 protected:
-                    template < typename __Predicate >
+                    template < typename __Predicate >   // NOLINT(bugprone-reserved-identifier)
                     auto lastIndexOfThat (
-                            ElementType const & element,
                             __Predicate const & predicate
                     ) const noexcept ( noexcept ( predicate ( cds :: meta :: referenceOf < ElementType const > () ) ) ) -> Index;
 
                 protected:
                     template <
-                            typename __CollectionType,
-                            typename __Predicate
+                            typename __CollectionType,  // NOLINT(bugprone-reserved-identifier)
+                            typename __Predicate        // NOLINT(bugprone-reserved-identifier)
                     > auto allIndicesOfThat (
                             __CollectionType          & storeIn,
                             __Predicate         const & predicate
@@ -61,8 +60,8 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
 
                 protected:
                     template <
-                            template < typename ... > class __CollectionType,
-                            typename                        __Predicate
+                            template < typename ... > class __CollectionType,   // NOLINT(bugprone-reserved-identifier)
+                            typename                        __Predicate         // NOLINT(bugprone-reserved-identifier)
                     > auto allIndicesOfThat (
                             __Predicate const & predicate
                     ) const noexcept ( noexcept ( predicate ( cds :: meta :: referenceOf < ElementType const > () ) ) ) -> __CollectionType < Index >;

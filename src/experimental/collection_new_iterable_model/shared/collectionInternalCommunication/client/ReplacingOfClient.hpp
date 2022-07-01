@@ -25,10 +25,10 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
                 public:
                     template <
-                            typename __VElementType = __ElementType, // NOLINT(bugprone-reserved-identifier)
+                            typename __TElementType = __ElementType, // NOLINT(bugprone-reserved-identifier)
                             cds :: meta :: EnableIf <
-                                    cds :: meta :: isCopyAssignable < __VElementType > ()
-                            >
+                                    cds :: meta :: isCopyAssignable < __TElementType > ()
+                            > = 0
                     > auto replaceOf (
                             Size                        count,
                             __OfCollectionType  const & of,
@@ -37,10 +37,10 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
                 public:
                     template <
-                            typename __VElementType = __ElementType, // NOLINT(bugprone-reserved-identifier)
+                            typename __TElementType = __ElementType, // NOLINT(bugprone-reserved-identifier)
                             cds :: meta :: EnableIf <
-                                    cds :: meta :: isCopyAssignable < __VElementType > ()
-                            >
+                                    cds :: meta :: isCopyAssignable < __TElementType > ()
+                            > = 0
                     > auto replaceFirstOf (
                             __OfCollectionType  const & of,
                             ElementType         const & with
@@ -48,10 +48,10 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
                 public:
                     template <
-                            typename __VElementType = __ElementType, // NOLINT(bugprone-reserved-identifier)
+                            typename __TElementType = __ElementType, // NOLINT(bugprone-reserved-identifier)
                             cds :: meta :: EnableIf <
-                                    cds :: meta :: isMoveAssignable < __VElementType > ()
-                            >
+                                    cds :: meta :: isMoveAssignable < __TElementType > ()
+                            > = 0
                     > auto replaceFirstOf (
                             __OfCollectionType  const & of,
                             ElementType              && with
@@ -59,10 +59,10 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
                 public:
                     template <
-                            typename __VElementType = __ElementType, // NOLINT(bugprone-reserved-identifier)
+                            typename __TElementType = __ElementType, // NOLINT(bugprone-reserved-identifier)
                             cds :: meta :: EnableIf <
-                                    cds :: meta :: isCopyAssignable < __VElementType > ()
-                            >
+                                    cds :: meta :: isCopyAssignable < __TElementType > ()
+                            > = 0
                     > auto replaceLastOf (
                             __OfCollectionType  const & of,
                             ElementType         const & with
@@ -70,10 +70,10 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
                 public:
                     template <
-                            typename __VElementType = __ElementType, // NOLINT(bugprone-reserved-identifier)
+                            typename __TElementType = __ElementType, // NOLINT(bugprone-reserved-identifier)
                             cds :: meta :: EnableIf <
-                                    cds :: meta :: isMoveAssignable < __VElementType > ()
-                            >
+                                    cds :: meta :: isMoveAssignable < __TElementType > ()
+                            > = 0
                     > auto replaceLastOf (
                             __OfCollectionType  const & of,
                             ElementType              && with
@@ -81,10 +81,10 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
                 public:
                     template <
-                            typename __VElementType = __ElementType, // NOLINT(bugprone-reserved-identifier)
+                            typename __TElementType = __ElementType, // NOLINT(bugprone-reserved-identifier)
                             cds :: meta :: EnableIf <
-                                    cds :: meta :: isCopyAssignable < __VElementType > ()
-                            >
+                                    cds :: meta :: isCopyAssignable < __TElementType > ()
+                            > = 0
                     > auto replaceAllOf (
                             __OfCollectionType  const & of,
                             ElementType         const & with
@@ -92,10 +92,10 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
                 public:
                     template <
-                            typename __VElementType = __ElementType, // NOLINT(bugprone-reserved-identifier)
+                            typename __TElementType = __ElementType, // NOLINT(bugprone-reserved-identifier)
                             cds :: meta :: EnableIf <
-                                    cds :: meta :: isCopyAssignable < __VElementType > ()
-                            >
+                                    cds :: meta :: isCopyAssignable < __TElementType > ()
+                            > = 0
                     > auto replaceNotOf (
                             Size                        count,
                             __OfCollectionType  const & of,
@@ -104,10 +104,10 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
                 public:
                     template <
-                            typename __VElementType = __ElementType, // NOLINT(bugprone-reserved-identifier)
+                            typename __TElementType = __ElementType, // NOLINT(bugprone-reserved-identifier)
                             cds :: meta :: EnableIf <
-                                    cds :: meta :: isCopyAssignable < __VElementType > ()
-                            >
+                                    cds :: meta :: isCopyAssignable < __TElementType > ()
+                            > = 0
                     > auto replaceFirstNotOf (
                             __OfCollectionType  const & of,
                             ElementType         const & with
@@ -115,10 +115,10 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
                 public:
                     template <
-                            typename __VElementType = __ElementType, // NOLINT(bugprone-reserved-identifier)
+                            typename __TElementType = __ElementType, // NOLINT(bugprone-reserved-identifier)
                             cds :: meta :: EnableIf <
-                                    cds :: meta :: isMoveAssignable < __VElementType > ()
-                            >
+                                    cds :: meta :: isMoveAssignable < __TElementType > ()
+                            > = 0
                     > auto replaceFirstNotOf (
                             __OfCollectionType  const & of,
                             ElementType              && with
@@ -126,10 +126,10 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
                 public:
                     template <
-                            typename __VElementType = __ElementType, // NOLINT(bugprone-reserved-identifier)
+                            typename __TElementType = __ElementType, // NOLINT(bugprone-reserved-identifier)
                             cds :: meta :: EnableIf <
-                                    cds :: meta :: isCopyAssignable < __VElementType > ()
-                            >
+                                    cds :: meta :: isCopyAssignable < __TElementType > ()
+                            > = 0
                     > auto replaceLastNotOf (
                             __OfCollectionType  const & of,
                             ElementType         const & with
@@ -137,10 +137,10 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
                 public:
                     template <
-                            typename __VElementType = __ElementType, // NOLINT(bugprone-reserved-identifier)
+                            typename __TElementType = __ElementType, // NOLINT(bugprone-reserved-identifier)
                             cds :: meta :: EnableIf <
-                                    cds :: meta :: isMoveAssignable < __VElementType > ()
-                            >
+                                    cds :: meta :: isMoveAssignable < __TElementType > ()
+                            > = 0
                     > auto replaceLastNotOf (
                             __OfCollectionType  const & of,
                             ElementType              && with
@@ -148,10 +148,10 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
                 public:
                     template <
-                            typename __VElementType = __ElementType, // NOLINT(bugprone-reserved-identifier)
+                            typename __TElementType = __ElementType, // NOLINT(bugprone-reserved-identifier)
                             cds :: meta :: EnableIf <
-                                    cds :: meta :: isCopyAssignable < __VElementType > ()
-                            >
+                                    cds :: meta :: isCopyAssignable < __TElementType > ()
+                            > = 0
                     > auto replaceAllNotOf (
                             __OfCollectionType  const & of,
                             ElementType         const & with
