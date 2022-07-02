@@ -107,7 +107,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                         ElementType const & element
                 ) const noexcept -> Index {
 
-                    Index index = static_cast < Index > ( static_cast < __ReceiverType const * > ( this ) ) - 1;
+                    Index index = static_cast < Index > ( static_cast < __ReceiverType const * > ( this )->size() ) - 1;
                     for (
                             auto
                                     iterator    = static_cast < __ReceiverType const * > ( this )->crbegin (),

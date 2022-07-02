@@ -408,12 +408,12 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         public:
             virtual auto makeUnique () noexcept -> void = 0;
 
-        protected:
+        public:
             virtual auto get (
                     Index index
             ) noexcept ( false ) -> ElementType & = 0;
 
-        protected:
+        public:
             virtual auto get (
                     Index index
             ) const noexcept ( false ) -> ElementType const & = 0;

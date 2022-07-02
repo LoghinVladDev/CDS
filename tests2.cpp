@@ -105,6 +105,74 @@ int main () {
     pList->insertAllOfAfter ( pList->begin(), pList->begin(), pList->end() );
     pList->insertAllOfAfter ( pList->cbegin(), pList->begin(), pList->end() );
 
+    pList->sub(* pList, 2, 3);
+    (*pList)[2] = 3;
+    pList->removeAt ( { 1, 3 } );
+    pList->removeAt ( * pList );
+
+    pList->sort();
+    pList->sort(& cds :: predicates :: greaterThan);
+    pList->sort([](int a, int b){ return a < b; });
+
+    pList->replace ( 3, 1, 2 );
+    pList->replaceFirst ( 1, 2 );
+    pList->replaceLast ( 1, 2 );
+    pList->replaceAll ( 2, 1 );
+    pList->replaceOf ( 2, * pList, 1 );
+    pList->replaceFirstOf ( * pList, 1 );
+    pList->replaceLastOf ( * pList, 1 );
+    pList->replaceAllOf ( * pList, 1 );
+    pList->replaceNotOf ( 2, * pList, 1 );
+    pList->replaceFirstNotOf ( * pList, 1 );
+    pList->replaceLastNotOf ( * pList, 1 );
+    pList->replaceAllNotOf ( * pList, 1 );
+    pList->replaceOf ( 2, { 1, 2, 3 }, 1 );
+    pList->replaceFirstOf ( { 1, 2, 3 }, 1 );
+    pList->replaceLastOf ( { 1, 2, 3 }, 1 );
+    pList->replaceAllOf ( { 1, 2, 3 }, 1 );
+    pList->replaceNotOf ( 2, { 1, 2, 3 }, 1 );
+    pList->replaceFirstNotOf ( { 1, 2, 3 }, 1 );
+    pList->replaceLastNotOf ( { 1, 2, 3 }, 1 );
+    pList->replaceAllNotOf ( { 1, 2, 3 }, 1 );
+
+    pList->replaceThat ( 3, [](int x){ return x > 2; }, 1 );
+    pList->replaceFirstThat ( [](int x){ return x > 2; }, 1 );
+    pList->replaceLastThat ( [](int x){ return x > 2; }, 1 );
+    pList->replaceAllThat ( [](int x){ return x > 2; }, 1 );
+
+    pList->replaceThatBy ( 4, [](int x){ return x == 1; }, [](int & x) { return x + 3; } );
+    pList->replaceFirstThatBy ( [](int x){ return x == 1; }, [](int & x) { return x + 3; } );
+    pList->replaceLastThatBy ( [](int x){ return x == 1; }, [](int & x) { return x + 3; } );
+    pList->replaceAllThatBy ( [](int x){ return x == 1; }, [](int & x) { return x + 3; } );
+
+    pList->indicesOf ( 3, * pList, 2 );
+    (void) pList->firstIndexOf ( 2 );
+    (void) pList->lastIndexOf ( 2 );
+    pList->allIndicesOf ( * pList, 2 );
+
+    pList->indicesOfFrom ( 3, * pList, * pList );
+    (void) pList->firstIndexOfFrom ( * pList );
+    (void) pList->lastIndexOfFrom ( * pList );
+    pList->allIndicesOfFrom ( * pList, * pList );
+    pList->indicesOfNotFrom ( 3, * pList, * pList );
+    (void) pList->firstIndexOfNotFrom ( * pList );
+    (void) pList->lastIndexOfNotFrom ( * pList );
+    pList->allIndicesOfNotFrom ( * pList, * pList );
+
+    pList->indicesOfFrom ( 3, * pList, { 1, 2, 3 } );
+    (void) pList->firstIndexOfFrom ( { 1, 2, 3 } );
+    (void) pList->lastIndexOfFrom ( { 1, 2, 3 } );
+    pList->allIndicesOfFrom ( * pList, { 1, 2, 3 } );
+    pList->indicesOfNotFrom ( 3, * pList, { 1, 2, 3 } );
+    (void) pList->firstIndexOfNotFrom ( { 1, 2, 3 } );
+    (void) pList->lastIndexOfNotFrom ( { 1, 2, 3 } );
+    pList->allIndicesOfNotFrom ( * pList, { 1, 2, 3 } );
+
+    pList->indicesOfThat ( 3, * pList, [](int x) { return x % 2 == 0; } );
+    (void) pList->firstIndexOfThat ( [](int x) { return x % 2 == 0; } );
+    (void) pList->lastIndexOfThat ( [](int x) { return x % 2 == 0; } );
+    pList->allIndicesOfThat ( * pList, [](int x) { return x % 2 == 0; } );
+
     Collection < int > * pColl = nullptr;
 
     (void)pColl->begin();

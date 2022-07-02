@@ -28,18 +28,18 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
 
                 protected:
                     template < template < typename ... > class __CollectionType >   // NOLINT(bugprone-reserved-identifier)
-                    auto indicesOf (
+                    __CDS_NoDiscard auto indicesOf (
                             Size                count,
                             ElementType const & element
                     ) const noexcept -> __CollectionType < Index >;
 
                 protected:
-                    auto firstIndexOf (
+                    __CDS_NoDiscard auto firstIndexOf (
                             ElementType const & element
                     ) const noexcept -> Index;
 
                 protected:
-                    auto lastIndexOf (
+                    __CDS_NoDiscard auto lastIndexOf (
                             ElementType const & element
                     ) const noexcept -> Index;
 
@@ -52,7 +52,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
 
                 protected:
                     template < template < typename ... > class __CollectionType >   // NOLINT(bugprone-reserved-identifier)
-                    auto allIndicesOf (
+                    __CDS_NoDiscard auto allIndicesOf (
                             ElementType const & element
                     ) const noexcept -> __CollectionType < Index >;
                 };

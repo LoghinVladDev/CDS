@@ -30,18 +30,18 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
 
                 protected:
                     template < template < typename ... > class __CollectionType >   // NOLINT(bugprone-reserved-identifier)
-                    auto indicesOfFrom (
+                    __CDS_NoDiscard auto indicesOfFrom (
                             Size                            count,
                             __FromCollectionType    const & from
                     ) const noexcept -> __CollectionType < Index >;
 
                 protected:
-                    auto firstIndexOfFrom (
+                    __CDS_NoDiscard auto firstIndexOfFrom (
                             __FromCollectionType const & from
                     ) const noexcept -> Index;
 
                 protected:
-                    auto lastIndexOfFrom (
+                    __CDS_NoDiscard auto lastIndexOfFrom (
                             __FromCollectionType const & from
                     ) const noexcept -> Index;
 
@@ -54,7 +54,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
 
                 protected:
                     template < template < typename ... > class __CollectionType >   // NOLINT(bugprone-reserved-identifier)
-                    auto allIndicesOfFrom (
+                    __CDS_NoDiscard auto allIndicesOfFrom (
                             __FromCollectionType const & from
                     ) const noexcept -> __CollectionType < Index >;
 
@@ -68,18 +68,18 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
 
                 protected:
                     template < template < typename ... > class __CollectionType >   // NOLINT(bugprone-reserved-identifier)
-                    auto indicesOfNotFrom (
+                    __CDS_NoDiscard auto indicesOfNotFrom (
                             Size                            count,
                             __FromCollectionType    const & from
                     ) const noexcept -> __CollectionType < Index >;
 
                 protected:
-                    auto firstIndexOfNotFrom (
+                    __CDS_NoDiscard auto firstIndexOfNotFrom (
                             __FromCollectionType const & from
                     ) const noexcept -> Index;
 
                 protected:
-                    auto lastIndexOfNotFrom (
+                    __CDS_NoDiscard auto lastIndexOfNotFrom (
                             __FromCollectionType const & from
                     ) const noexcept -> Index;
 
@@ -92,7 +92,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
 
                 protected:
                     template < template < typename ... > class __CollectionType >   // NOLINT(bugprone-reserved-identifier)
-                    auto allIndicesOfNotFrom (
+                    __CDS_NoDiscard auto allIndicesOfNotFrom (
                             __FromCollectionType const & from
                     ) const noexcept -> __CollectionType < Index >;
                 };

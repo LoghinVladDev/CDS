@@ -36,8 +36,8 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                         from = 0;
                     }
 
-                    if ( to >= this->size() ) {
-                        to = this->size();
+                    if ( to >= static_cast < __ReceiverType const * > ( this )->size() ) {
+                        to = static_cast < __ReceiverType const * > ( this )->size();
                     }
 
                     Index index __CDS_MaybeUnused = 0;
@@ -50,7 +50,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                             ++ iterator
                     ) {
                         if ( index >= from && index < to ) {
-                            storeIn.add ( * iterator );
+                            (void) storeIn.insert ( * iterator );
                         }
 
                         ++ index;

@@ -11,32 +11,32 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
             namespace __impl {  // NOLINT(bugprone-reserved-identifier)
 
                 template <
-                        typename __ElementType,                                 // NOLINT(bugprone-reserved-identifier)
+                        typename __ElementType,     // NOLINT(bugprone-reserved-identifier)
+                        typename __Supplier,        // NOLINT(bugprone-reserved-identifier)
                         cds :: meta :: EnableIf <
                                 cds :: meta :: isMoveAssignable < __ElementType > ()
                         > = 0
-                > __CDS_cpplang_NonConstConstexprMemberFunction auto __assign ( // NOLINT(bugprone-reserved-identifier)
-                        __ElementType & left,
-                        __ElementType & right
-                ) noexcept ( noexcept ( cds :: meta :: referenceOf < __ElementType > () = std :: move ( cds :: meta :: referenceOf < __ElementType > () ) ) ) -> __ElementType & {
+                > __CDS_cpplang_NonConstConstexprMemberFunction auto __assignBySupplier ( // NOLINT(bugprone-reserved-identifier)
+                        __ElementType         & element,
+                        __Supplier      const & supplier
+                ) noexcept ( noexcept ( cds :: meta :: referenceOf < __ElementType > () = std :: move ( cds :: meta :: referenceOf < __ElementType > () ) ) && noexcept ( supplier ( cds :: meta :: referenceOf < __ElementType > () ) ) ) -> void {
 
-                    left = std :: move ( right );
-                    return * left;
+                    element = std :: move ( supplier ( element ) );
                 }
 
 
                 template <
-                        typename __ElementType,                                 // NOLINT(bugprone-reserved-identifier)
+                        typename __ElementType,     // NOLINT(bugprone-reserved-identifier)
+                        typename __Supplier,        // NOLINT(bugprone-reserved-identifier)
                         cds :: meta :: EnableIf <
                                 ! cds :: meta :: isMoveAssignable < __ElementType > ()
                         > = 0
-                > __CDS_cpplang_NonConstConstexprMemberFunction auto __assign ( // NOLINT(bugprone-reserved-identifier)
-                        __ElementType & left,
-                        __ElementType & right
-                ) noexcept ( noexcept ( cds :: meta :: referenceOf < __ElementType > () = cds :: meta :: referenceOf < __ElementType > () ) ) -> __ElementType & {
+                > __CDS_cpplang_NonConstConstexprMemberFunction auto __assignBySupplier ( // NOLINT(bugprone-reserved-identifier)
+                        __ElementType         & element,
+                        __Supplier      const & supplier
+                ) noexcept ( noexcept ( cds :: meta :: referenceOf < __ElementType > () = cds :: meta :: referenceOf < __ElementType > () ) && noexcept ( supplier ( cds :: meta :: referenceOf < __ElementType > () ) ) ) -> void {
 
-                    left = right;
-                    return * left;
+                    element = supplier ( element );
                 }
 
 
@@ -278,9 +278,9 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                             ++ iterator
                     ) {
                         if ( predicate ( * iterator ) ) {
-                            (void) __assign (
+                            __assignBySupplier (
                                     * iterator,
-                                    supplier ( std :: move ( * iterator ) )
+                                    supplier
                             );
 
                             ++ replacedCount;
@@ -314,9 +314,9 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                             ++ iterator
                     ) {
                         if ( predicate ( * iterator ) ) {
-                            (void) __assign (
+                            __assignBySupplier (
                                     * iterator,
-                                    supplier ( std :: move ( * iterator ) )
+                                    supplier
                             );
 
                             return true;
@@ -350,9 +350,9 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                             ++ iterator
                     ) {
                         if ( predicate ( * iterator ) ) {
-                            (void) __assign (
+                            __assignBySupplier (
                                     * iterator,
-                                    supplier ( std :: move ( * iterator ) )
+                                    supplier
                             );
 
                             return true;
@@ -387,9 +387,9 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                             ++ iterator
                     ) {
                         if ( predicate ( * iterator ) ) {
-                            (void) __assign (
+                            __assignBySupplier (
                                     * iterator,
-                                    supplier ( std :: move ( * iterator ) )
+                                    supplier
                             );
 
                             ++ replacedCount;

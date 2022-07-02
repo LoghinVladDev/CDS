@@ -38,7 +38,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                             cds :: meta :: EnableIf <
                                     cds :: meta :: isCopyConstructible < __TElementType > ()
                             > = 0
-                    > auto sub (
+                    > __CDS_NoDiscard auto sub (
                             Index               from,
                             Index               to
                     ) const noexcept -> __CollectionType;
@@ -50,18 +50,18 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                             cds :: meta :: EnableIf <
                                     cds :: meta :: isCopyConstructible < __TElementType > ()
                             > = 0
-                    > auto sub (
+                    > __CDS_NoDiscard auto sub (
                             Index               from,
                             Index               to
                     ) const noexcept -> __CollectionType < __ElementType >;
 
                 protected:
-                    auto operator [] (
+                    __CDS_NoDiscard auto operator [] (
                             Index index
                     ) const noexcept (false) -> ElementType const &;
 
                 protected:
-                    auto operator [] (
+                    __CDS_NoDiscard auto operator [] (
                             Index index
                     ) noexcept (false) -> ElementType &;
 

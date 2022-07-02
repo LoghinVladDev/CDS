@@ -32,20 +32,20 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                     template <
                             template < typename ... > class __CollectionType,   // NOLINT(bugprone-reserved-identifier)
                             typename __Predicate                                // NOLINT(bugprone-reserved-identifier)
-                    > auto indicesOfThat (
+                    > __CDS_NoDiscard auto indicesOfThat (
                             Size                count,
                             __Predicate const & predicate
                     ) const noexcept ( noexcept ( predicate ( cds :: meta :: referenceOf < ElementType const > () ) ) ) -> __CollectionType < Index >;
 
                 protected:
                     template < typename __Predicate >   // NOLINT(bugprone-reserved-identifier)
-                    auto firstIndexOfThat (
+                    __CDS_NoDiscard auto firstIndexOfThat (
                             __Predicate const & predicate
                     ) const noexcept ( noexcept ( predicate ( cds :: meta :: referenceOf < ElementType const > () ) ) ) -> Index;
 
                 protected:
                     template < typename __Predicate >   // NOLINT(bugprone-reserved-identifier)
-                    auto lastIndexOfThat (
+                    __CDS_NoDiscard auto lastIndexOfThat (
                             __Predicate const & predicate
                     ) const noexcept ( noexcept ( predicate ( cds :: meta :: referenceOf < ElementType const > () ) ) ) -> Index;
 
@@ -62,7 +62,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                     template <
                             template < typename ... > class __CollectionType,   // NOLINT(bugprone-reserved-identifier)
                             typename                        __Predicate         // NOLINT(bugprone-reserved-identifier)
-                    > auto allIndicesOfThat (
+                    > __CDS_NoDiscard auto allIndicesOfThat (
                             __Predicate const & predicate
                     ) const noexcept ( noexcept ( predicate ( cds :: meta :: referenceOf < ElementType const > () ) ) ) -> __CollectionType < Index >;
                 };
