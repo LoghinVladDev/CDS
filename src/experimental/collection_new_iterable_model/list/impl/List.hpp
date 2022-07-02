@@ -55,6 +55,23 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             return asString;
         }
 
+
+        template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
+        __CDS_NoDiscard __CDS_cpplang_ConstexprConditioned auto List < __ElementType > :: circularAdjustedIndex (
+                Index index
+        ) const noexcept -> Index {
+
+            if ( index < 0 ) {
+                index += ( this->size() / (-index) ) * this->size();
+            }
+
+            if ( index >= static_cast < Index > ( this->size() ) ) {
+                index = index % this->size();
+            }
+
+            return index;
+        }
+
     }
 }
 

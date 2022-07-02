@@ -394,27 +394,24 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             virtual auto popBack () noexcept -> void = 0;
 
         public:
-            virtual auto front () noexcept (false) -> ElementType & = 0;
+            __CDS_NoDiscard __CDS_cpplang_VirtualConstexpr virtual auto front () noexcept (false) -> ElementType & = 0;
 
         public:
-            virtual auto front () const noexcept (false) -> ElementType const & = 0;
+            __CDS_NoDiscard __CDS_cpplang_VirtualConstexpr virtual auto front () const noexcept (false) -> ElementType const & = 0;
 
         public:
-            virtual auto back () noexcept (false) -> ElementType & = 0;
+            __CDS_NoDiscard __CDS_cpplang_VirtualConstexpr virtual auto back () noexcept (false) -> ElementType & = 0;
 
         public:
-            virtual auto back () const noexcept (false) -> ElementType const & = 0;
+            __CDS_NoDiscard __CDS_cpplang_VirtualConstexpr virtual auto back () const noexcept (false) -> ElementType const & = 0;
 
         public:
-            virtual auto makeUnique () noexcept -> void = 0;
-
-        public:
-            virtual auto get (
+            __CDS_NoDiscard __CDS_cpplang_VirtualConstexpr virtual auto get (
                     Index index
             ) noexcept ( false ) -> ElementType & = 0;
 
         public:
-            virtual auto get (
+            __CDS_NoDiscard __CDS_cpplang_VirtualConstexpr virtual auto get (
                     Index index
             ) const noexcept ( false ) -> ElementType const & = 0;
 
@@ -422,6 +419,11 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             virtual auto removeAt (
                     Index index
             ) noexcept -> bool = 0;
+
+        protected:
+            __CDS_NoDiscard __CDS_cpplang_ConstexprConditioned auto circularAdjustedIndex (
+                    Index index
+            ) const noexcept -> Index;
         };
 
     }
