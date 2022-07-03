@@ -6,13 +6,18 @@
 #define __CDS_EX_ARRAY_HPP__
 
 #include <CDS/experimental/List>
+#include "shared/collectionInternalCommunication/server/ListServer.hpp"
 
 namespace cds { // NOLINT(modernize-concat-nested-namespaces)
     namespace experimental {
 
         template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
         class Array :
-                public List < __ElementType > {
+                public List < __ElementType >,
+                protected __hidden :: __impl :: __ListServer <
+                        Array < __ElementType >,
+                        __ElementType
+                > {
 
         public:
             using ElementType = __ElementType;
@@ -94,5 +99,6 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 }
 
 #include "array/impl/Array.hpp"
+#include "shared/collectionInternalCommunication/server/impl/ListServer.hpp"
 
 #endif // __CDS_EX_ARRAY_HPP__

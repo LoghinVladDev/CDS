@@ -17,7 +17,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 __hidden :: __impl :: __CollectionInternalRequestType requestType
         ) noexcept -> void ( Collection < __ElementType > :: * ) () {
 
-            return nullptr;
+            return this->__ls_handlers() [ static_cast < uint32 > ( requestType ) ];
         }
 
 
@@ -26,7 +26,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 __hidden :: __impl :: __CollectionInternalRequestType requestType
         ) const noexcept -> void ( Collection < __ElementType > :: * ) () const {
 
-            return nullptr;
+            return this->__ls_constHandlers() [ static_cast < uint32 > ( requestType ) ];
         }
 
 
