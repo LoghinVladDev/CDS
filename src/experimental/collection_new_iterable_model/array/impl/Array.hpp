@@ -9,10 +9,6 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
     namespace experimental {
 
         template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
-        Size const Array < __ElementType > :: minCapacity;
-
-
-        template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
         __CDS_cpplang_ConstexprOverride auto Array < __ElementType > :: __cicch_obtainGenericHandler (
                 __hidden :: __impl :: __CollectionInternalRequestType requestType
         ) noexcept -> void ( Collection < __ElementType > :: * ) () {
@@ -37,76 +33,35 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
         Array < __ElementType > :: ~Array () noexcept {
 
-            if ( this->_pData == nullptr ) {
-                return;
-            }
-
-            for (
-                    Size
-                        index   = this->_pData->_bufferOffset,
-                        length  = this->_pData->_elementCount + this->_pData->_bufferOffset;
-
-                    index < length;
-                    ++ index
-            ) {
-                this->_pData->_pBuffer [ index ].~__ElementType ();
-            }
-
-            cds :: __hidden :: __impl :: __allocation :: __freePrimitiveArray ( this->_pData->_pBuffer );
-            cds :: __hidden :: __impl :: __allocation :: __freePrimitiveObject ( this->_pData );
+            this->__a_clear ( true );
         }
 
 
         template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
         auto Array < __ElementType > :: clear () noexcept -> void {
 
-            if ( this->_pData == nullptr ) {
-                return;
-            }
-
-            for (
-                    Size
-                        index   = this->_pData->_bufferOffset,
-                        length  = this->_pData->_elementCount + this->_pData->_bufferOffset;
-
-                    index < length;
-                    ++ index
-            ) {
-                this->_pData->_pBuffer [ index ].~__ElementType ();
-            }
-
-            this->_pData->_bufferOffset = this->_pData->_frontCapacity;
-            this->_pData->_elementCount = 0ULL;
+            this->__a_clear ( false );
         }
 
 
         template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
         __CDS_cpplang_ConstexprOverride auto Array < __ElementType > :: size () const noexcept -> Size {
 
-            return this->_pData == nullptr ? 0ULL : this->_pData->_elementCount;
+            return this->__a_size ();
         }
 
 
         template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
         auto Array < __ElementType > :: popFront () noexcept -> void {
 
-            if ( this->empty() ) {
-                return;
-            }
-
-            this->_pData->_pBuffer [ this->_pData->_bufferOffset ++ ].~__ElementType ();
-            -- this->_pData->_elementCount;
+            this->__a_remove (0);
         }
 
 
         template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
         auto Array < __ElementType > :: popBack () noexcept -> void {
 
-            if ( this->empty() ) {
-                return;
-            }
-
-            this->_pData->_pBuffer [ this->_pData->_bufferOffset + -- this->_pData->_elementCount ].~__ElementType ();
+            this->__a_remove ( this->__a_size () - 1ULL );
         }
 
 
@@ -117,7 +72,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 throw OutOfBoundsException ( "Array is Empty" );
             }
 
-            return this->_pData->_pBuffer [ this->_pData->_bufferOffset ];
+            return * this->__a_get ( 0 );
         }
 
 
@@ -128,7 +83,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 throw OutOfBoundsException ( "Array is Empty" );
             }
 
-            return this->_pData->_pBuffer [ this->_pData->_bufferOffset ];
+            return * this->__a_get ( 0 );
         }
 
 
@@ -139,7 +94,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 throw OutOfBoundsException ( "Array is Empty" );
             }
 
-            return this->_pData->_pBuffer [ this->_pData->_bufferOffset + this->_pData->_elementCount - 1ULL ];
+            return * this->__a_get ( this->__a_size () - 1ULL );
         }
 
 
@@ -150,7 +105,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 throw OutOfBoundsException ( "Array is Empty" );
             }
 
-            return this->_pData->_pBuffer [ this->_pData->_bufferOffset + this->_pData->_elementCount - 1ULL ];
+            return * this->__a_get ( this->__a_size () - 1ULL );
         }
 
 
@@ -163,15 +118,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 throw OutOfBoundsException ( index, 0 );
             }
 
-            if ( index < 0 ) {
-                index += ( this->size() / (-index) ) * this->size();
-            }
-
-            if ( index >= static_cast < Index > ( this->size() ) ) {
-                index = index % this->size();
-            }
-
-            return this->_pData->_pBuffer [ this->_pData->_bufferOffset + index ];
+            return * this->__a_get ( this->circularAdjustedIndex ( index ) );
         }
 
 
@@ -184,7 +131,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 throw OutOfBoundsException ( index, 0 );
             }
 
-            return this->_pData->_pBuffer [ this->_pData->_bufferOffset + this->circularAdjustedIndex ( index ) ];
+            return * this->__a_get ( this->circularAdjustedIndex ( index ) );
         }
 
 
@@ -197,43 +144,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 return false;
             }
 
-            index = this->circularAdjustedIndex ( index );
-            this->_pData->_pBuffer [ index ].~__ElementType ();
-
-            auto const totalCapacity = this->_pData->_backCapacity + this->_pData->_frontCapacity;
-            if ( this->_pData->_elementCount * 2ULL > totalCapacity ) {
-                (void) std :: memcpy (
-                        this->_pData->_pBuffer + this->_pData->_bufferOffset + index,
-                        this->_pData->_pBuffer + this->_pData->_bufferOffset + index + 1,
-                        sizeof ( ElementType ) * ( this->_pData->_elementCount - index - 1 )
-                );
-
-                -- this->_pData->_elementCount;
-                return true;
-            }
-
-            auto newBackCapacity = cds :: minOf ( this->_pData->_elementCount - 1ULL, Array :: minCapacity );
-            auto newBuffer = cds :: __hidden :: __impl :: __allocation :: __allocPrimitiveArray < __ElementType > ( newBackCapacity );
-            (void) std :: memcpy (
-                    newBuffer,
-                    this->_pData->_pBuffer + this->_pData->_bufferOffset,
-                    sizeof ( __ElementType ) * index
-            );
-
-            (void) std :: memcpy (
-                    newBuffer + index,
-                    this->_pData->_pBuffer + this->_pData->_bufferOffset + index + 1,
-                    sizeof ( ElementType ) * ( this->_pData->_elementCount - index - 1 )
-            );
-
-            cds :: __hidden :: __impl :: __allocation :: __freePrimitiveArray ( cds :: exchange ( this->_pData->_pBuffer, newBuffer ) );
-
-            --this->_pData->_elementCount;
-            this->_pData->_backCapacity         = newBackCapacity;
-            this->_pData->_backNextCapacity     = this->_pData->_backCapacity * 2ULL;
-            this->_pData->_frontCapacity        = 0ULL;
-            this->_pData->_frontNextCapacity    = Array :: minCapacity;
-            this->_pData->_bufferOffset         = 0ULL;
+            this->__a_remove ( this->circularAdjustedIndex ( index ) );
             return true;
         }
 

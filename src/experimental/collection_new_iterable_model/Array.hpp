@@ -7,6 +7,7 @@
 
 #include <CDS/experimental/List>
 #include "shared/collectionInternalCommunication/server/ListServer.hpp"
+#include "shared/array/Array.hpp"
 
 namespace cds { // NOLINT(modernize-concat-nested-namespaces)
     namespace experimental {
@@ -14,6 +15,10 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
         class Array :
                 public List < __ElementType >,
+                protected __hidden :: __impl :: __Array <
+                        __ElementType,
+                        & cds :: meta :: equals < __ElementType >
+                >,
                 protected __hidden :: __impl :: __ListServer <
                         Array < __ElementType >,
                         __ElementType
@@ -21,23 +26,6 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
         public:
             using ElementType = __ElementType;
-
-        private:
-            static Size const minCapacity = 32ULL;
-
-        private:
-            struct __ArrayImplDataContainer { // NOLINT(bugprone-reserved-identifier)
-                __ElementType * _pBuffer;
-                Size            _bufferOffset;
-                Size            _elementCount;
-                Size            _frontCapacity;
-                Size            _backCapacity;
-                Size            _frontNextCapacity;
-                Size            _backNextCapacity;
-            };
-
-        private:
-            __ArrayImplDataContainer * _pData { nullptr };
 
         private:
             __CDS_NoDiscard __CDS_cpplang_ConstexprOverride auto __cicch_obtainGenericHandler ( // NOLINT(bugprone-reserved-identifier)
@@ -93,6 +81,9 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             auto removeAt (
                     Index index
             ) noexcept -> bool override;
+
+        private:
+
         };
 
     }
@@ -100,5 +91,6 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
 #include "array/impl/Array.hpp"
 #include "shared/collectionInternalCommunication/server/impl/ListServer.hpp"
+#include "shared/array/impl/Array.hpp"
 
 #endif // __CDS_EX_ARRAY_HPP__

@@ -45,8 +45,11 @@ void printAll ( First && first, TheRest && ... theRest ) {
 
 void f2();
 
+
 using namespace cds :: experimental;
 int main () {
+
+    std :: cout << sizeof ( Array < int > ) << '\n';
 
     Array < int > arr;
 
