@@ -16,50 +16,10 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                 > class __ListServer {              // NOLINT(bugprone-reserved-identifier)
 
                 private:
-                    constexpr static void ( Collection < __ElementType > :: * const __routingTable [0x13U] ) () = { // NOLINT(bugprone-reserved-identifier)
-                            nullptr, /* __cirt_begin */
-                            nullptr, /* __cirt_end */
-                            nullptr, /* __cirt_rbegin */
-                            nullptr, /* __cirt_rend */
-                            nullptr, /* __cirt_remove */
-                            nullptr, /* __cirt_removeConst */
-                            nullptr, /* __cirt_newAddress */
-                            nullptr, /* __cirt_newFrontAddress */
-                            nullptr, /* __cirt_newBackAddress */
-                            nullptr, /* __cirt_newFrontAddressArray */
-                            nullptr, /* __cirt_newBackAddressArray */
-                            nullptr, /* __cirt_newBeforeAddress */
-                            nullptr, /* __cirt_newBeforeAddressConst */
-                            nullptr, /* __cirt_newAfterAddress */
-                            nullptr, /* __cirt_newAfterAddressConst */
-                            nullptr, /* __cirt_newBeforeAddressArray */
-                            nullptr, /* __cirt_newBeforeAddressArrayConst */
-                            nullptr, /* __cirt_newAfterAddressArray */
-                            nullptr  /* __cirt_newAfterAddressArrayConst */
-                    };
+                    static void ( Collection < __ElementType > :: * const __routingTable [0x13U] ) (); // NOLINT(bugprone-reserved-identifier)
 
                 private:
-                    constexpr static void ( Collection < __ElementType > :: * const __constRoutingTable [0x13U] ) () const = { // NOLINT(bugprone-reserved-identifier)
-                            nullptr, /* __cirt_begin */
-                            nullptr, /* __cirt_end */
-                            nullptr, /* __cirt_rbegin */
-                            nullptr, /* __cirt_rend */
-                            nullptr, /* __cirt_remove */
-                            nullptr, /* __cirt_removeConst */
-                            nullptr, /* __cirt_newAddress */
-                            nullptr, /* __cirt_newFrontAddress */
-                            nullptr, /* __cirt_newBackAddress */
-                            nullptr, /* __cirt_newFrontAddressArray */
-                            nullptr, /* __cirt_newBackAddressArray */
-                            nullptr, /* __cirt_newBeforeAddress */
-                            nullptr, /* __cirt_newBeforeAddressConst */
-                            nullptr, /* __cirt_newAfterAddress */
-                            nullptr, /* __cirt_newAfterAddressConst */
-                            nullptr, /* __cirt_newBeforeAddressArray */
-                            nullptr, /* __cirt_newBeforeAddressArrayConst */
-                            nullptr, /* __cirt_newAfterAddressArray */
-                            nullptr  /* __cirt_newAfterAddressArrayConst */
-                    };
+                    static void ( Collection < __ElementType > :: * const __constRoutingTable [0x13U] ) () const; // NOLINT(bugprone-reserved-identifier)
 
                 protected:
                     constexpr auto __ls_handlers () const noexcept -> void ( Collection < __ElementType > :: * const * ) ();               // NOLINT(bugprone-reserved-identifier)

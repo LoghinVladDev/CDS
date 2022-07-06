@@ -53,11 +53,11 @@ int main () {
 
     Array < int > arr;
 
-    for ( int i = 0; i < 100; ++ i ) {
+    for ( int i = 50; i < 100; ++ i ) {
         arr.pushBack ( i );
-        arr.pushBackAll ( i + 200, i + 201, i + 202 );
+//        arr.pushBackAll ( i + 200, i + 201, i + 202 );
         arr.pushFront ( - i );
-        arr.pushFrontAll ( i - 200, i - 201, i - 202 );
+//        arr.pushFrontAll ( i - 200, i - 201, i - 202 );
     }
 
 //    List < int > * pList = nullptr;

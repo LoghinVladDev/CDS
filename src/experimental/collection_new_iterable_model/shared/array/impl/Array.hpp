@@ -157,6 +157,105 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                     return & this->_pData->_pBuffer [ this->_pData->_bufferOffset + static_cast < Size > ( index ) ];
                 }
 
+
+                template <
+                        typename                                        __ElementType,  // NOLINT(bugprone-reserved-identifier)
+                        utility :: ComparisonFunction < __ElementType > __equals        // NOLINT(bugprone-reserved-identifier)
+                > auto __Array <
+                        __ElementType,
+                        __equals
+                > :: __a_newFront () noexcept -> ElementType * {
+
+                    if ( this->_pData == nullptr ) {
+                        this->_pData = cds :: __hidden :: __impl :: __allocation :: __allocPrimitiveObject < __ArrayImplDataContainer > ();
+                        (void) std :: memset ( this->_pData, 0, sizeof ( __ArrayImplDataContainer ) );
+
+                        this->_pData->_frontNextCapacity = __Array :: __a_minCapacity;
+                    }
+
+                    if ( this->_pData->_bufferOffset == 0ULL ) {
+
+                        this->_pData->_frontCapacity        = cds :: maxOf ( this->_pData->_frontNextCapacity, __Array :: __a_minCapacity );
+                        this->_pData->_frontNextCapacity    = 2ULL * this->_pData->_frontNextCapacity;
+
+                        auto pNewBuffer = cds :: __hidden :: __impl :: __allocation :: __allocPrimitiveArray < __ElementType > (
+                                this->_pData->_frontCapacity + this->_pData->_backCapacity
+                        );
+
+                        this->_pData->_bufferOffset          = this->_pData->_frontCapacity;
+
+                        (void) std :: memcpy (
+                                pNewBuffer + this->_pData->_bufferOffset,
+                                this->_pData->_pBuffer,
+                                sizeof ( __ElementType ) * this->_pData->_elementCount
+                        );
+
+                        cds :: __hidden :: __impl :: __allocation :: __freePrimitiveArray (
+                                cds :: exchange ( this->_pData->_pBuffer, pNewBuffer )
+                        );
+                    }
+
+                    ++ this->_pData->_elementCount;
+                    return & this->_pData->_pBuffer [ -- this->_pData->_bufferOffset ];
+                }
+
+
+                template <
+                        typename                                        __ElementType,  // NOLINT(bugprone-reserved-identifier)
+                        utility :: ComparisonFunction < __ElementType > __equals        // NOLINT(bugprone-reserved-identifier)
+                > auto __Array <
+                        __ElementType,
+                        __equals
+                > :: __a_newBack () noexcept -> ElementType * {
+
+                    if ( this->_pData == nullptr ) {
+                        this->_pData = cds :: __hidden :: __impl :: __allocation :: __allocPrimitiveObject < __ArrayImplDataContainer > ();
+                        (void) std :: memset ( this->_pData, 0, sizeof ( __ArrayImplDataContainer ) );
+
+                        this->_pData->_backNextCapacity = __Array :: __a_minCapacity;
+                    }
+
+                    if ( this->_pData->_elementCount >= this->_pData->_backCapacity ) {
+                        this->_pData->_backCapacity     = cds :: maxOf ( this->_pData->_backNextCapacity, __Array :: __a_minCapacity );
+                        this->_pData->_backNextCapacity = 2ULL * this->_pData->_backNextCapacity;
+
+                        this->_pData->_pBuffer = cds :: __hidden :: __impl :: __allocation :: __reallocPrimitiveArray (
+                                this->_pData->_pBuffer,
+                                this->_pData->_frontCapacity + this->_pData->_backCapacity
+                        );
+                    }
+
+                    return & this->_pData->_pBuffer [ this->_pData->_bufferOffset + this->_pData->_elementCount ++ ];
+                }
+
+
+                template <
+                        typename                                        __ElementType,  // NOLINT(bugprone-reserved-identifier)
+                        utility :: ComparisonFunction < __ElementType > __equals        // NOLINT(bugprone-reserved-identifier)
+                > auto __Array <
+                        __ElementType,
+                        __equals
+                > :: __a_newFrontArray (
+                        Size                count,
+                        __ElementType    ** ppElements
+                ) noexcept -> void {
+
+                }
+
+
+                template <
+                        typename                                        __ElementType,  // NOLINT(bugprone-reserved-identifier)
+                        utility :: ComparisonFunction < __ElementType > __equals        // NOLINT(bugprone-reserved-identifier)
+                > auto __Array <
+                        __ElementType,
+                        __equals
+                > :: __a_newBackArray (
+                        Size                count,
+                        __ElementType    ** ppElements
+                ) noexcept -> void {
+
+                }
+
             }
         }
     }

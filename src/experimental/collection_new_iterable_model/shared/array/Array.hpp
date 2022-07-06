@@ -15,10 +15,6 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                         utility :: ComparisonFunction < __ElementType > __equals        // NOLINT(bugprone-reserved-identifier)
                 > class __Array {                                                       // NOLINT(bugprone-reserved-identifier)
 
-                private:
-                    template < typename, typename >
-                    friend class __ListServer; // NOLINT(bugprone-reserved-identifier)
-
                 protected:
                     using ElementType = __ElementType;
 
@@ -61,6 +57,24 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                     __CDS_NoDiscard constexpr auto __a_get ( // NOLINT(bugprone-reserved-identifier)
                             Index index
                     ) const noexcept -> ElementType const *;
+
+                protected:
+                    __CDS_NoDiscard auto __a_newFront () noexcept -> ElementType *; // NOLINT(bugprone-reserved-identifier)
+
+                protected:
+                    __CDS_NoDiscard auto __a_newBack () noexcept -> ElementType *; // NOLINT(bugprone-reserved-identifier)
+
+                protected:
+                    auto __a_newFrontArray ( // NOLINT(bugprone-reserved-identifier)
+                            Size                count,
+                            __ElementType    ** ppElements
+                    ) noexcept -> void;
+
+                protected:
+                    auto __a_newBackArray ( // NOLINT(bugprone-reserved-identifier)
+                            Size                count,
+                            __ElementType    ** ppElements
+                    ) noexcept -> void;
                 };
 
             }

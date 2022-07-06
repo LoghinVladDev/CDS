@@ -24,6 +24,10 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                         __ElementType
                 > {
 
+        private:
+            template < typename, typename >
+            friend class cds :: experimental :: __hidden :: __impl :: __ListServer; // NOLINT(bugprone-reserved-identifier)
+
         public:
             using ElementType = __ElementType;
 
@@ -83,7 +87,22 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             ) noexcept -> bool override;
 
         private:
+            auto __newFront () noexcept -> ElementType *; // NOLINT(bugprone-reserved-identifier)
 
+        private:
+            auto __newBack () noexcept -> ElementType *; // NOLINT(bugprone-reserved-identifier)
+
+        private:
+            auto __newFrontArray ( // NOLINT(bugprone-reserved-identifier)
+                    Size              count,
+                    ElementType    ** ppElements
+            ) noexcept -> void;
+
+        private:
+            auto __newBackArray ( // NOLINT(bugprone-reserved-identifier)
+                    Size              count,
+                    ElementType    ** ppElements
+            ) noexcept -> void;
         };
 
     }

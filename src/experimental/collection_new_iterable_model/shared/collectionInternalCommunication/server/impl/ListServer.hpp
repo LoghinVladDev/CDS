@@ -13,13 +13,53 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                 template <
                         typename __ReceiverType,    // NOLINT(bugprone-reserved-identifier)
                         typename __ElementType      // NOLINT(bugprone-reserved-identifier)
-                > constexpr void ( Collection < __ElementType > :: * const __ListServer < __ReceiverType, __ElementType > :: __routingTable [0x13U] ) ();
+                > void ( Collection < __ElementType > :: * const __ListServer < __ReceiverType, __ElementType > :: __routingTable [0x13U] ) () = { // NOLINT(bugprone-reserved-identifier)
+                        nullptr, /* __cirt_begin */
+                        nullptr, /* __cirt_end */
+                        nullptr, /* __cirt_rbegin */
+                        nullptr, /* __cirt_rend */
+                        nullptr, /* __cirt_remove */
+                        nullptr, /* __cirt_removeConst */
+                        nullptr, /* __cirt_newAddress */
+                        reinterpret_cast < void ( Collection < __ElementType > :: * ) () > ( & __ReceiverType :: __newFront ),       /* __cirt_newFrontAddress */
+                        reinterpret_cast < void ( Collection < __ElementType > :: * ) () > ( & __ReceiverType :: __newBack ),        /* __cirt_newBackAddress */
+                        reinterpret_cast < void ( Collection < __ElementType > :: * ) () > ( & __ReceiverType :: __newFrontArray ),  /* __cirt_newFrontAddressArray */
+                        reinterpret_cast < void ( Collection < __ElementType > :: * ) () > ( & __ReceiverType :: __newBackArray ),   /* __cirt_newBackAddressArray */
+                        nullptr, /* __cirt_newBeforeAddress */
+                        nullptr, /* __cirt_newBeforeAddressConst */
+                        nullptr, /* __cirt_newAfterAddress */
+                        nullptr, /* __cirt_newAfterAddressConst */
+                        nullptr, /* __cirt_newBeforeAddressArray */
+                        nullptr, /* __cirt_newBeforeAddressArrayConst */
+                        nullptr, /* __cirt_newAfterAddressArray */
+                        nullptr  /* __cirt_newAfterAddressArrayConst */
+                };
 
 
                 template <
                         typename __ReceiverType,    // NOLINT(bugprone-reserved-identifier)
                         typename __ElementType      // NOLINT(bugprone-reserved-identifier)
-                > constexpr void ( Collection < __ElementType > :: * const __ListServer < __ReceiverType, __ElementType > :: __constRoutingTable [0x13U] ) () const;
+                > void ( Collection < __ElementType > :: * const __ListServer < __ReceiverType, __ElementType > :: __constRoutingTable [0x13U] ) () const = { // NOLINT(bugprone-reserved-identifier)
+                        nullptr, /* __cirt_begin */
+                        nullptr, /* __cirt_end */
+                        nullptr, /* __cirt_rbegin */
+                        nullptr, /* __cirt_rend */
+                        nullptr, /* __cirt_remove */
+                        nullptr, /* __cirt_removeConst */
+                        nullptr, /* __cirt_newAddress */
+                        nullptr, /* __cirt_newFrontAddress */
+                        nullptr, /* __cirt_newBackAddress */
+                        nullptr, /* __cirt_newFrontAddressArray */
+                        nullptr, /* __cirt_newBackAddressArray */
+                        nullptr, /* __cirt_newBeforeAddress */
+                        nullptr, /* __cirt_newBeforeAddressConst */
+                        nullptr, /* __cirt_newAfterAddress */
+                        nullptr, /* __cirt_newAfterAddressConst */
+                        nullptr, /* __cirt_newBeforeAddressArray */
+                        nullptr, /* __cirt_newBeforeAddressArrayConst */
+                        nullptr, /* __cirt_newAfterAddressArray */
+                        nullptr  /* __cirt_newAfterAddressArrayConst */
+                };
 
 
                 template <

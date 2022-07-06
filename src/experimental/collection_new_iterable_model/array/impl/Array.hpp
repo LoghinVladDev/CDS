@@ -148,6 +148,46 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             return true;
         }
 
+
+        template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
+        __CDS_OptimalInline auto Array < __ElementType > :: __newFront () noexcept -> ElementType * {
+
+            return this->__a_newFront ();
+        }
+
+
+        template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
+        __CDS_OptimalInline auto Array < __ElementType > :: __newBack () noexcept -> ElementType * {
+
+            return this->__a_newBack ();
+        }
+
+
+        template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
+        __CDS_OptimalInline auto Array < __ElementType > :: __newFrontArray (
+                Size            count,
+                ElementType  ** ppElements
+        ) noexcept -> void {
+
+            return this->__a_newFrontArray (
+                    count,
+                    ppElements
+            );
+        }
+
+
+        template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
+        __CDS_OptimalInline auto Array < __ElementType > :: __newBackArray (
+                Size            count,
+                ElementType  ** ppElements
+        ) noexcept -> void {
+
+            return this->__a_newBackArray (
+                    count,
+                    ppElements
+            );
+        }
+
     }
 }
 
