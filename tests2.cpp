@@ -45,20 +45,32 @@ void printAll ( First && first, TheRest && ... theRest ) {
 
 void f2();
 
+#include <chrono>
+#include <vector>
 
 using namespace cds :: experimental;
 int main () {
 
     std :: cout << sizeof ( Array < int > ) << '\n';
-
     Array < int > arr;
+    std :: vector < int > arrstl;
 
-    for ( int i = 50; i < 100; ++ i ) {
+    auto start = std :: chrono :: system_clock::now();
+    for ( int i = 0; i < 100000000; ++ i ) {
         arr.pushBack ( i );
-//        arr.pushBackAll ( i + 200, i + 201, i + 202 );
-        arr.pushFront ( - i );
-//        arr.pushFrontAll ( i - 200, i - 201, i - 202 );
     }
+    auto end = std :: chrono :: system_clock::now();
+    auto duration = std :: chrono :: duration_cast < std :: chrono :: milliseconds > ( end - start ).count();
+    std :: cout << "cds test ms : " << duration << '\n';
+
+    start = std :: chrono :: system_clock::now();
+    for ( int i = 0; i < 100000000; ++ i ) {
+        arrstl.push_back ( i );
+    }
+
+    end = std :: chrono :: system_clock::now();
+    duration = std :: chrono :: duration_cast < std :: chrono :: milliseconds > ( end - start ).count();
+    std :: cout << "stl test ms : " << duration << '\n';
 
 //    List < int > * pList = nullptr;
 //    (void) pList->begin();

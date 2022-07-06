@@ -176,7 +176,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                     if ( this->_pData->_bufferOffset == 0ULL ) {
 
                         this->_pData->_frontCapacity        = cds :: maxOf ( this->_pData->_frontNextCapacity, __Array :: __a_minCapacity );
-                        this->_pData->_frontNextCapacity    = 2ULL * this->_pData->_frontNextCapacity;
+                        this->_pData->_frontNextCapacity    = 2ULL * this->_pData->_frontCapacity;
 
                         auto pNewBuffer = cds :: __hidden :: __impl :: __allocation :: __allocPrimitiveArray < __ElementType > (
                                 this->_pData->_frontCapacity + this->_pData->_backCapacity
@@ -215,7 +215,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                         this->_pData->_backNextCapacity = __Array :: __a_minCapacity;
                     }
 
-                    if ( this->_pData->_elementCount >= this->_pData->_backCapacity ) {
+                    if ( this->_pData->_elementCount - ( this->_pData->_frontCapacity - this->_pData->_bufferOffset ) >= this->_pData->_backCapacity ) {
                         this->_pData->_backCapacity     = cds :: maxOf ( this->_pData->_backNextCapacity, __Array :: __a_minCapacity );
                         this->_pData->_backNextCapacity = 2ULL * this->_pData->_backNextCapacity;
 
@@ -240,6 +240,42 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                         __ElementType    ** ppElements
                 ) noexcept -> void {
 
+                    if ( this->_pData == nullptr ) {
+                        this->_pData = cds :: __hidden :: __impl :: __allocation :: __allocPrimitiveObject < __ArrayImplDataContainer > ();
+                        (void) std :: memset ( this->_pData, 0, sizeof ( __ArrayImplDataContainer ) );
+
+                        this->_pData->_frontNextCapacity = __Array :: __a_minCapacity;
+                    }
+
+                    if ( this->_pData->_bufferOffset < count ) {
+
+                        auto oldFrontCapacity               = this->_pData->_frontCapacity;
+                        this->_pData->_frontCapacity        = cds :: maxOf ( this->_pData->_frontNextCapacity, count + this->_pData->_frontCapacity, __Array :: __a_minCapacity );
+                        this->_pData->_frontNextCapacity    = 2ULL * this->_pData->_frontCapacity;
+
+                        auto pNewBuffer = cds :: __hidden :: __impl :: __allocation :: __allocPrimitiveArray < __ElementType > (
+                                this->_pData->_frontCapacity + this->_pData->_backCapacity
+                        );
+
+                        auto oldOffset                      = this->_pData->_bufferOffset;
+                        this->_pData->_bufferOffset        += this->_pData->_frontCapacity - oldFrontCapacity;
+
+                        (void) std :: memcpy (
+                                pNewBuffer + this->_pData->_bufferOffset,
+                                this->_pData->_pBuffer + oldOffset,
+                                sizeof ( __ElementType ) * this->_pData->_elementCount
+                        );
+
+                        cds :: __hidden :: __impl :: __allocation :: __freePrimitiveArray (
+                                cds :: exchange ( this->_pData->_pBuffer, pNewBuffer )
+                        );
+                    }
+
+                    for ( Size index = 0ULL; index < count; ++ index ) {
+                        ppElements [ count - index - 1ULL ] = & this->_pData->_pBuffer [ -- this->_pData->_bufferOffset ];
+                    }
+
+                    this->_pData->_elementCount += count;
                 }
 
 
@@ -254,6 +290,27 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                         __ElementType    ** ppElements
                 ) noexcept -> void {
 
+                    if ( this->_pData == nullptr ) {
+                        this->_pData = cds :: __hidden :: __impl :: __allocation :: __allocPrimitiveObject < __ArrayImplDataContainer > ();
+                        (void) std :: memset ( this->_pData, 0, sizeof ( __ArrayImplDataContainer ) );
+
+                        this->_pData->_backNextCapacity = __Array :: __a_minCapacity;
+                    }
+
+                    if ( this->_pData->_elementCount + count - ( this->_pData->_frontCapacity - this->_pData->_bufferOffset ) > this->_pData->_backCapacity ) {
+
+                        this->_pData->_backCapacity     = cds :: maxOf ( this->_pData->_backNextCapacity, count + this->_pData->_backCapacity, __Array :: __a_minCapacity );
+                        this->_pData->_backNextCapacity = 2ULL * this->_pData->_backNextCapacity;
+
+                        this->_pData->_pBuffer = cds :: __hidden :: __impl :: __allocation :: __reallocPrimitiveArray (
+                                this->_pData->_pBuffer,
+                                this->_pData->_frontCapacity + this->_pData->_backCapacity
+                        );
+                    }
+
+                    for ( Size index = 0ULL; index < count; ++ index ) {
+                        ppElements [ index ] = & this->_pData->_pBuffer [ this->_pData->_bufferOffset + this->_pData->_elementCount ++ ];
+                    }
                 }
 
             }

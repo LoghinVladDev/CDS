@@ -41,6 +41,9 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                     __hidden :: __impl :: __CollectionInternalRequestType requestType
             ) const noexcept -> void ( Collection < __ElementType > :: * ) () const override;
 
+        protected:
+            using List < __ElementType > :: pushBack;
+
         public:
             constexpr Array () noexcept;
 
