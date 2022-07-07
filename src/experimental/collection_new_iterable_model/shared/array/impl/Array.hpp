@@ -33,15 +33,8 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                         return;
                     }
 
-                    for (
-                            Size
-                                    index   = this->_pData->_bufferOffset,
-                                    length  = this->_pData->_elementCount + this->_pData->_bufferOffset;
-
-                            index < length;
-                            ++ index
-                    ) {
-                        this->_pData->_pBuffer [ index ].~__ElementType ();
+                    while ( this->_pData->_pFront != this->_pData->_pBack ) {
+                        ( this->_pData->_pFront ++ )->~__ElementType ();
                     }
 
                     if ( destroyBuffer ) {
@@ -50,8 +43,8 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                         cds :: __hidden :: __impl :: __allocation :: __freePrimitiveObject ( this->_pData );
                     } else {
 
-                        this->_pData->_bufferOffset = this->_pData->_frontCapacity;
-                        this->_pData->_elementCount = 0ULL;
+                        this->_pData->_pFront           = this->_pData->_pBuffer + this->_pData->_frontCapacity;
+                        this->_pData->_pBack            = this->_pData->_pFront;
                     }
                 }
 
@@ -64,7 +57,10 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                         __equals
                 > :: __a_size () const noexcept -> Size {
 
-                    return this->_pData == nullptr ? 0ULL : this->_pData->_elementCount;
+                    return
+                            this->_pData == nullptr ?
+                            0ULL                    :
+                            this->_pData->_pBack - this->_pData->_pFront;
                 }
 
 
@@ -78,38 +74,39 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                         Index index
                 ) noexcept -> void {
 
-                    if ( this->__a_size() == 0ULL ) {
+                    auto const size = this->__a_size();
+
+                    if ( size == 0ULL ) {
                         return;
                     }
 
                     if ( index == 0ULL ) {
 
-                        this->_pData->_pBuffer [ this->_pData->_bufferOffset ++ ].~__ElementType ();
-                        -- this->_pData->_elementCount;
+                        ( this->_pData->_pFront ++ )->~__ElementType ();
                         return;
-                    } else if ( index == this->_pData->_elementCount - 1ULL ) {
+                    } else if ( index == size - 1ULL ) {
 
-                        this->_pData->_pBuffer [ this->_pData->_bufferOffset + -- this->_pData->_elementCount ].~__ElementType ();
+                        ( -- this->_pData->_pBack )->~__ElementType ();
                         return;
                     }
 
-                    this->_pData->_pBuffer [ index ].~__ElementType ();
-                    auto shiftLeftSide = static_cast < Size > ( index ) < ( this->_pData->_elementCount + this->_pData->_bufferOffset  ) / 2;
+                    this->_pData->_pFront [ index ].~__ElementType ();
+                    auto shiftLeftSide =
+                            static_cast < Size > ( index ) <
+                            this->__a_size() / 2ULL;
 
                     ElementType * pDestination  = nullptr;
                     ElementType * pSource       = nullptr;
                     Size          count         = 0ULL;
 
                     if ( shiftLeftSide ) {
-                        pDestination = this->_pData->_pBuffer + this->_pData->_bufferOffset + 1ULL;
+                        pDestination = ++ this->_pData->_pFront;
                         pSource      = pDestination - 1ULL;
                         count        = static_cast < Size > ( index );
-
-                        ++ this->_pData->_bufferOffset;
                     } else {
-                        pDestination = this->_pData->_pBuffer + this->_pData->_bufferOffset + static_cast < Size > ( index );
+                        pDestination = this->_pData->_pFront + static_cast < Size > ( index );
                         pSource      = pDestination + 1ULL;
-                        count        = this->_pData->_elementCount - static_cast < Size > ( index );
+                        count        = size - static_cast < Size > ( index );
                     }
 
                     (void) std :: memcpy (
@@ -117,8 +114,6 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                             pSource,
                             count * sizeof ( __ElementType )
                     );
-
-                    -- this->_pData->_elementCount;
                 }
 
 
@@ -136,7 +131,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                         return nullptr;
                     }
 
-                    return & this->_pData->_pBuffer [ this->_pData->_bufferOffset + static_cast < Size > ( index ) ];
+                    return this->_pData->_pFront + index;
                 }
 
 
@@ -154,7 +149,23 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                         return nullptr;
                     }
 
-                    return & this->_pData->_pBuffer [ this->_pData->_bufferOffset + static_cast < Size > ( index ) ];
+                    return this->_pData->_pFront + index;
+                }
+
+
+                template <
+                        typename                                        __ElementType,  // NOLINT(bugprone-reserved-identifier)
+                        utility :: ComparisonFunction < __ElementType > __equals        // NOLINT(bugprone-reserved-identifier)
+                > auto __Array <
+                        __ElementType,
+                        __equals
+                > :: __a_init () noexcept -> void {
+
+                    this->_pData = cds :: __hidden :: __impl :: __allocation :: __allocPrimitiveObject < __ArrayImplDataContainer > ();
+                    (void) std :: memset ( this->_pData, 0, sizeof ( __ArrayImplDataContainer ) );
+
+                    this->_pData->_frontNextCapacity    = __Array :: __a_minCapacity;
+                    this->_pData->_backNextCapacity     = __Array :: __a_minCapacity;
                 }
 
 
@@ -167,36 +178,37 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                 > :: __a_newFront () noexcept -> ElementType * {
 
                     if ( this->_pData == nullptr ) {
-                        this->_pData = cds :: __hidden :: __impl :: __allocation :: __allocPrimitiveObject < __ArrayImplDataContainer > ();
-                        (void) std :: memset ( this->_pData, 0, sizeof ( __ArrayImplDataContainer ) );
-
-                        this->_pData->_frontNextCapacity = __Array :: __a_minCapacity;
+                        this->__a_init();
                     }
 
-                    if ( this->_pData->_bufferOffset == 0ULL ) {
+                    if ( this->_pData->_pFront == this->_pData->_pBuffer ) {
 
-                        this->_pData->_frontCapacity        = cds :: maxOf ( this->_pData->_frontNextCapacity, __Array :: __a_minCapacity );
-                        this->_pData->_frontNextCapacity    = 2ULL * this->_pData->_frontCapacity;
+                        this->_pData->_frontNextCapacity    = cds :: maxOf ( this->_pData->_frontNextCapacity, __Array :: __a_minCapacity );
 
-                        auto pNewBuffer = cds :: __hidden :: __impl :: __allocation :: __allocPrimitiveArray < __ElementType > (
-                                this->_pData->_frontCapacity + this->_pData->_backCapacity
+                        auto pNewBuffer                     = cds :: __hidden :: __impl :: __allocation :: __allocPrimitiveArray < __ElementType > (
+                                this->_pData->_frontNextCapacity + this->_pData->_backCapacity
                         );
 
-                        this->_pData->_bufferOffset          = this->_pData->_frontCapacity;
+                        auto const size                     = this->__a_size();
+                        auto const pNewFront                = pNewBuffer + this->_pData->_frontNextCapacity - this->_pData->_frontCapacity;
 
                         (void) std :: memcpy (
-                                pNewBuffer + this->_pData->_bufferOffset,
-                                this->_pData->_pBuffer,
-                                sizeof ( __ElementType ) * this->_pData->_elementCount
+                                pNewFront,
+                                this->_pData->_pFront,
+                                sizeof ( __ElementType ) * size
                         );
+
+                        this->_pData->_pBack                = pNewFront + size;
+                        this->_pData->_pFront               = pNewFront;
+                        this->_pData->_frontCapacity        = this->_pData->_frontNextCapacity;
+                        this->_pData->_frontNextCapacity    = this->_pData->_frontNextCapacity * 2ULL;
 
                         cds :: __hidden :: __impl :: __allocation :: __freePrimitiveArray (
                                 cds :: exchange ( this->_pData->_pBuffer, pNewBuffer )
                         );
                     }
-
-                    ++ this->_pData->_elementCount;
-                    return & this->_pData->_pBuffer [ -- this->_pData->_bufferOffset ];
+\
+                    return -- this->_pData->_pFront;
                 }
 
 
@@ -209,23 +221,25 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                 > :: __a_newBack () noexcept -> ElementType * {
 
                     if ( this->_pData == nullptr ) {
-                        this->_pData = cds :: __hidden :: __impl :: __allocation :: __allocPrimitiveObject < __ArrayImplDataContainer > ();
-                        (void) std :: memset ( this->_pData, 0, sizeof ( __ArrayImplDataContainer ) );
-
-                        this->_pData->_backNextCapacity = __Array :: __a_minCapacity;
+                        this->__a_init ();
                     }
 
-                    if ( this->_pData->_elementCount - ( this->_pData->_frontCapacity - this->_pData->_bufferOffset ) >= this->_pData->_backCapacity ) {
-                        this->_pData->_backCapacity     = cds :: maxOf ( this->_pData->_backNextCapacity, __Array :: __a_minCapacity );
-                        this->_pData->_backNextCapacity = 2ULL * this->_pData->_backNextCapacity;
+                    if ( this->_pData->_pBack == this->_pData->_pBuffer + this->_pData->_frontCapacity + this->_pData->_backCapacity ) {
+                        this->_pData->_backNextCapacity = cds :: maxOf ( this->_pData->_backNextCapacity, __Array :: __a_minCapacity );
 
-                        this->_pData->_pBuffer = cds :: __hidden :: __impl :: __allocation :: __reallocPrimitiveArray (
+                        auto const pNewBuffer           = cds :: __hidden :: __impl :: __allocation :: __reallocPrimitiveArray (
                                 this->_pData->_pBuffer,
-                                this->_pData->_frontCapacity + this->_pData->_backCapacity
+                                this->_pData->_frontCapacity + this->_pData->_backNextCapacity
                         );
+
+                        this->_pData->_pFront           = pNewBuffer + ( this->_pData->_pFront - this->_pData->_pBuffer );
+                        this->_pData->_pBack            = pNewBuffer + ( this->_pData->_pBack - this->_pData->_pBuffer );
+                        this->_pData->_backCapacity     = this->_pData->_backNextCapacity;
+                        this->_pData->_backNextCapacity = this->_pData->_backNextCapacity * 2ULL;
+                        this->_pData->_pBuffer          = pNewBuffer;
                     }
 
-                    return & this->_pData->_pBuffer [ this->_pData->_bufferOffset + this->_pData->_elementCount ++ ];
+                    return this->_pData->_pBack ++;
                 }
 
 
@@ -241,30 +255,29 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                 ) noexcept -> void {
 
                     if ( this->_pData == nullptr ) {
-                        this->_pData = cds :: __hidden :: __impl :: __allocation :: __allocPrimitiveObject < __ArrayImplDataContainer > ();
-                        (void) std :: memset ( this->_pData, 0, sizeof ( __ArrayImplDataContainer ) );
-
-                        this->_pData->_frontNextCapacity = __Array :: __a_minCapacity;
+                        this->__a_init();
                     }
 
-                    if ( this->_pData->_bufferOffset < count ) {
+                    if ( this->_pData->_pBuffer + count > this->_pData->_pFront ) {
+                        this->_pData->_frontNextCapacity    = cds :: maxOf ( this->_pData->_frontNextCapacity, count + this->_pData->_frontCapacity );
 
-                        auto oldFrontCapacity               = this->_pData->_frontCapacity;
-                        this->_pData->_frontCapacity        = cds :: maxOf ( this->_pData->_frontNextCapacity, count + this->_pData->_frontCapacity, __Array :: __a_minCapacity );
-                        this->_pData->_frontNextCapacity    = 2ULL * this->_pData->_frontCapacity;
-
-                        auto pNewBuffer = cds :: __hidden :: __impl :: __allocation :: __allocPrimitiveArray < __ElementType > (
-                                this->_pData->_frontCapacity + this->_pData->_backCapacity
+                        auto pNewBuffer                     = cds :: __hidden :: __impl :: __allocation :: __allocPrimitiveArray < __ElementType > (
+                                this->_pData->_frontNextCapacity + this->_pData->_backCapacity
                         );
 
-                        auto oldOffset                      = this->_pData->_bufferOffset;
-                        this->_pData->_bufferOffset        += this->_pData->_frontCapacity - oldFrontCapacity;
+                        auto const size                     = this->__a_size();
+                        auto const pNewFront                = pNewBuffer + ( this->_pData->_frontNextCapacity - this->_pData->_frontCapacity ) + ( this->_pData->_pFront - this->_pData->_pBuffer );
 
                         (void) std :: memcpy (
-                                pNewBuffer + this->_pData->_bufferOffset,
-                                this->_pData->_pBuffer + oldOffset,
-                                sizeof ( __ElementType ) * this->_pData->_elementCount
+                                pNewFront,
+                                this->_pData->_pFront,
+                                sizeof ( __ElementType ) * size
                         );
+
+                        this->_pData->_pFront               = pNewFront;
+                        this->_pData->_pBack                = pNewFront + size;
+                        this->_pData->_frontCapacity        = this->_pData->_frontNextCapacity;
+                        this->_pData->_frontNextCapacity    = this->_pData->_frontNextCapacity * 2ULL;
 
                         cds :: __hidden :: __impl :: __allocation :: __freePrimitiveArray (
                                 cds :: exchange ( this->_pData->_pBuffer, pNewBuffer )
@@ -272,10 +285,8 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                     }
 
                     for ( Size index = 0ULL; index < count; ++ index ) {
-                        ppElements [ count - index - 1ULL ] = & this->_pData->_pBuffer [ -- this->_pData->_bufferOffset ];
+                        ppElements [ count - index - 1ULL ] = -- this->_pData->_pFront;
                     }
-
-                    this->_pData->_elementCount += count;
                 }
 
 
@@ -291,25 +302,26 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                 ) noexcept -> void {
 
                     if ( this->_pData == nullptr ) {
-                        this->_pData = cds :: __hidden :: __impl :: __allocation :: __allocPrimitiveObject < __ArrayImplDataContainer > ();
-                        (void) std :: memset ( this->_pData, 0, sizeof ( __ArrayImplDataContainer ) );
-
-                        this->_pData->_backNextCapacity = __Array :: __a_minCapacity;
+                        this->__a_init();
                     }
 
-                    if ( this->_pData->_elementCount + count - ( this->_pData->_frontCapacity - this->_pData->_bufferOffset ) > this->_pData->_backCapacity ) {
+                    if ( this->_pData->_pBack + count > this->_pData->_pBuffer + this->_pData->_frontCapacity + this->_pData->_backCapacity ) {
+                        this->_pData->_backNextCapacity = cds :: maxOf ( this->_pData->_backNextCapacity, this->_pData->_backCapacity + count );
 
-                        this->_pData->_backCapacity     = cds :: maxOf ( this->_pData->_backNextCapacity, count + this->_pData->_backCapacity, __Array :: __a_minCapacity );
-                        this->_pData->_backNextCapacity = 2ULL * this->_pData->_backNextCapacity;
-
-                        this->_pData->_pBuffer = cds :: __hidden :: __impl :: __allocation :: __reallocPrimitiveArray (
+                        auto pNewBuffer                 = cds :: __hidden :: __impl :: __allocation :: __reallocPrimitiveArray (
                                 this->_pData->_pBuffer,
-                                this->_pData->_frontCapacity + this->_pData->_backCapacity
+                                this->_pData->_frontCapacity + this->_pData->_backNextCapacity
                         );
+
+                        this->_pData->_pFront           = pNewBuffer + ( this->_pData->_pFront - this->_pData->_pBuffer );
+                        this->_pData->_pBack            = pNewBuffer + ( this->_pData->_pBack - this->_pData->_pBuffer );
+                        this->_pData->_backCapacity     = this->_pData->_backNextCapacity;
+                        this->_pData->_backNextCapacity = this->_pData->_backNextCapacity * 2ULL;
+                        this->_pData->_pBuffer          = pNewBuffer;
                     }
 
                     for ( Size index = 0ULL; index < count; ++ index ) {
-                        ppElements [ index ] = & this->_pData->_pBuffer [ this->_pData->_bufferOffset + this->_pData->_elementCount ++ ];
+                        ppElements [ index ] = this->_pData->_pBack ++;
                     }
                 }
 
@@ -325,7 +337,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                     return __a_Iterator (
                             this->_pData == nullptr ?
                             nullptr                 :
-                            & this->_pData->_pBuffer [0ULL] + this->_pData->_bufferOffset
+                            this->_pData->_pFront
                     );
                 }
 
@@ -341,7 +353,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                     return __a_Iterator (
                             this->_pData == nullptr ?
                             nullptr                 :
-                            & this->_pData->_pBuffer [0ULL] + this->_pData->_bufferOffset + this->_pData->_elementCount
+                            this->_pData->_pBack
                     );
                 }
 
@@ -357,7 +369,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                     return __a_ConstIterator (
                             this->_pData == nullptr ?
                             nullptr                 :
-                            & this->_pData->_pBuffer [0ULL] + this->_pData->_bufferOffset
+                            this->_pData->_pFront
                     );
                 }
 
@@ -373,7 +385,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                     return __a_ConstIterator (
                             this->_pData == nullptr ?
                             nullptr                 :
-                            & this->_pData->_pBuffer [0ULL] + this->_pData->_bufferOffset + this->_pData->_elementCount
+                            this->_pData->_pBack
                     );
                 }
 
@@ -389,7 +401,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                     return __a_ReverseIterator (
                             this->_pData == nullptr ?
                             nullptr                 :
-                            & this->_pData->_pBuffer [0ULL] + this->_pData->_bufferOffset + this->_pData->_elementCount - 1ULL
+                            this->_pData->_pBack - 1ULL
                     );
                 }
 
@@ -405,7 +417,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                     return __a_ReverseIterator (
                             this->_pData == nullptr ?
                             nullptr                 :
-                            & this->_pData->_pBuffer [0ULL] + this->_pData->_bufferOffset - 1ULL
+                            this->_pData->_pFront - 1ULL
                     );
                 }
 
@@ -421,7 +433,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                     return __a_ConstReverseIterator (
                             this->_pData == nullptr ?
                             nullptr                 :
-                            & this->_pData->_pBuffer [0ULL] + this->_pData->_bufferOffset + this->_pData->_elementCount - 1ULL
+                            this->_pData->_pBack - 1ULL
                     );
                 }
 
@@ -437,7 +449,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                     return __a_ConstReverseIterator (
                             this->_pData == nullptr ?
                             nullptr                 :
-                            & this->_pData->_pBuffer [0ULL] + this->_pData->_bufferOffset - 1ULL
+                            this->_pData->_pFront - 1ULL
                     );
                 }
 

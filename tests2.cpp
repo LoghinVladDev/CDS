@@ -56,7 +56,7 @@ int main () {
     std :: vector < int > arrstl;
 
     auto start = std :: chrono :: system_clock::now();
-    for ( int i = 0; i < 100000000; ++ i ) {
+    for ( int i = 0; i < 1000000; ++ i ) {
         arr.pushBack ( i );
     }
     auto end = std :: chrono :: system_clock::now();
@@ -65,7 +65,7 @@ int main () {
     std :: cout << "cds test ms : " << duration << '\n';
 
     start = std :: chrono :: system_clock::now();
-    for ( int i = 0; i < 100000000; ++ i ) {
+    for ( int i = 0; i < 1000000; ++ i ) {
         arrstl.push_back ( i );
     }
 
@@ -179,6 +179,13 @@ int main () {
     arr.insertAllOf ( { 10, 9, 8 ,7 } );
     std :: cout << arr << '\n';
     std :: cout.flush();
+
+    for ( int i = 0; i < 100; ++ i ) {
+        arr.pushBackAll ( i + 1, i + 2, i + 3 );
+        arr.pushFrontAll ( i + 1, i + 2, i + 3 );
+    }
+
+    std :: cout << arr << '\n';
 
 
 

@@ -87,10 +87,10 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                     __CDS_NoDiscard __CDS_cpplang_ConstexprPureAbstract auto valid () const noexcept -> bool override;
 
                 public:
-                    __CDS_NoDiscard auto copy () const noexcept -> __AbstractDelegateIterator < __ElementType > *;
+                    __CDS_NoDiscard auto copy () const noexcept -> __AbstractDelegateIterator < __ElementType > * override;
 
                 public:
-                    __CDS_NoDiscard __CDS_cpplang_ConstexprPureAbstract auto value () const noexcept -> ElementType &;
+                    __CDS_NoDiscard __CDS_cpplang_ConstexprPureAbstract auto value () const noexcept -> ElementType & override;
                 };
 
             }

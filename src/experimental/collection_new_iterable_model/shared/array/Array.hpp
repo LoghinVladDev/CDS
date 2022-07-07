@@ -36,8 +36,8 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                 private:
                     struct __ArrayImplDataContainer { // NOLINT(bugprone-reserved-identifier)
                         __ElementType * _pBuffer;
-                        Size            _bufferOffset;
-                        Size            _elementCount;
+                        __ElementType * _pFront;
+                        __ElementType * _pBack;
                         Size            _frontCapacity;
                         Size            _backCapacity;
                         Size            _frontNextCapacity;
@@ -87,6 +87,9 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                             Size                count,
                             __ElementType    ** ppElements
                     ) noexcept -> void;
+
+                private:
+                    auto __a_init () noexcept -> void;
 
                 protected:
                     __CDS_NoDiscard constexpr auto __a_begin () noexcept -> __a_Iterator; // NOLINT(bugprone-reserved-identifier)
