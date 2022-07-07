@@ -21,23 +21,17 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                 private:
                     static Size const __a_minCapacity = 32ULL; // NOLINT(bugprone-reserved-identifier)
 
-                protected:
-                    using __a_BidirectionalIterator         = AddressIterator < __ElementType >; // NOLINT(bugprone-reserved-identifier)
-
-                protected:
-                    using __a_BidirectionalConstIterator    = AddressIterator < __ElementType const >; // NOLINT(bugprone-reserved-identifier)
+                public:
+                    using __a_Iterator                      = AddressIterator < __ElementType, false >; // NOLINT(bugprone-reserved-identifier)
 
                 public:
-                    using __a_Iterator                      = __a_BidirectionalIterator; // NOLINT(bugprone-reserved-identifier)
+                    using __a_ConstIterator                 = AddressIterator < __ElementType const, false >; // NOLINT(bugprone-reserved-identifier)
 
                 public:
-                    using __a_ConstIterator                 = __a_BidirectionalConstIterator; // NOLINT(bugprone-reserved-identifier)
+                    using __a_ReverseIterator               = AddressIterator < __ElementType, true >; // NOLINT(bugprone-reserved-identifier)
 
                 public:
-                    using __a_ReverseIterator               = __a_BidirectionalIterator; // NOLINT(bugprone-reserved-identifier)
-
-                public:
-                    using __a_ConstReverseIterator          = __a_BidirectionalConstIterator; // NOLINT(bugprone-reserved-identifier)
+                    using __a_ConstReverseIterator          = AddressIterator < __ElementType const, true >; // NOLINT(bugprone-reserved-identifier)
 
                 private:
                     struct __ArrayImplDataContainer { // NOLINT(bugprone-reserved-identifier)

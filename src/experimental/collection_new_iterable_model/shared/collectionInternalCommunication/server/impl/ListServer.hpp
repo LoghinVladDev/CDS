@@ -14,17 +14,17 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                         typename __ReceiverType,    // NOLINT(bugprone-reserved-identifier)
                         typename __ElementType      // NOLINT(bugprone-reserved-identifier)
                 > void ( Collection < __ElementType > :: * const __ListServer < __ReceiverType, __ElementType > :: __routingTable [0x13U] ) () = { // NOLINT(bugprone-reserved-identifier)
-                        nullptr, /* __cirt_begin */
-                        nullptr, /* __cirt_end */
-                        nullptr, /* __cirt_rbegin */
-                        nullptr, /* __cirt_rend */
+                        reinterpret_cast < void ( Collection < __ElementType > :: * ) () > ( & __ReceiverType :: __begin ),         /* __cirt_begin */
+                        reinterpret_cast < void ( Collection < __ElementType > :: * ) () > ( & __ReceiverType :: __end ),           /* __cirt_end */
+                        reinterpret_cast < void ( Collection < __ElementType > :: * ) () > ( & __ReceiverType :: __rbegin ),        /* __cirt_rbegin */
+                        reinterpret_cast < void ( Collection < __ElementType > :: * ) () > ( & __ReceiverType :: __rend ),          /* __cirt_rend */
                         nullptr, /* __cirt_remove */
                         nullptr, /* __cirt_removeConst */
                         nullptr, /* __cirt_newAddress */
-                        reinterpret_cast < void ( Collection < __ElementType > :: * ) () > ( & __ReceiverType :: __newFront ),       /* __cirt_newFrontAddress */
-                        reinterpret_cast < void ( Collection < __ElementType > :: * ) () > ( & __ReceiverType :: __newBack ),        /* __cirt_newBackAddress */
-                        reinterpret_cast < void ( Collection < __ElementType > :: * ) () > ( & __ReceiverType :: __newFrontArray ),  /* __cirt_newFrontAddressArray */
-                        reinterpret_cast < void ( Collection < __ElementType > :: * ) () > ( & __ReceiverType :: __newBackArray ),   /* __cirt_newBackAddressArray */
+                        reinterpret_cast < void ( Collection < __ElementType > :: * ) () > ( & __ReceiverType :: __newFront ),      /* __cirt_newFrontAddress */
+                        reinterpret_cast < void ( Collection < __ElementType > :: * ) () > ( & __ReceiverType :: __newBack ),       /* __cirt_newBackAddress */
+                        reinterpret_cast < void ( Collection < __ElementType > :: * ) () > ( & __ReceiverType :: __newFrontArray ), /* __cirt_newFrontAddressArray */
+                        reinterpret_cast < void ( Collection < __ElementType > :: * ) () > ( & __ReceiverType :: __newBackArray ),  /* __cirt_newBackAddressArray */
                         nullptr, /* __cirt_newBeforeAddress */
                         nullptr, /* __cirt_newBeforeAddressConst */
                         nullptr, /* __cirt_newAfterAddress */
@@ -40,10 +40,10 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                         typename __ReceiverType,    // NOLINT(bugprone-reserved-identifier)
                         typename __ElementType      // NOLINT(bugprone-reserved-identifier)
                 > void ( Collection < __ElementType > :: * const __ListServer < __ReceiverType, __ElementType > :: __constRoutingTable [0x13U] ) () const = { // NOLINT(bugprone-reserved-identifier)
-                        nullptr, /* __cirt_begin */
-                        nullptr, /* __cirt_end */
-                        nullptr, /* __cirt_rbegin */
-                        nullptr, /* __cirt_rend */
+                        reinterpret_cast < void ( Collection < __ElementType > :: * ) () const > ( & __ReceiverType :: __cbegin ),          /* __cirt_begin */
+                        reinterpret_cast < void ( Collection < __ElementType > :: * ) () const > ( & __ReceiverType :: __cend ),            /* __cirt_end */
+                        reinterpret_cast < void ( Collection < __ElementType > :: * ) () const > ( & __ReceiverType :: __crbegin ),         /* __cirt_rbegin */
+                        reinterpret_cast < void ( Collection < __ElementType > :: * ) () const > ( & __ReceiverType :: __crend ),           /* __cirt_rend */
                         nullptr, /* __cirt_remove */
                         nullptr, /* __cirt_removeConst */
                         nullptr, /* __cirt_newAddress */

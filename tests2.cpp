@@ -86,6 +86,8 @@ int main () {
 
     std :: cout << "cds test ms : " << duration << '\n';
 
+    start = std :: chrono :: system_clock::now();
+
     for ( auto & e : arrstl ) {
         e = 5;
     }
@@ -94,6 +96,73 @@ int main () {
     end = std :: chrono :: system_clock::now();
     duration = std :: chrono :: duration_cast < std :: chrono :: milliseconds > ( end - start ).count();
     std :: cout << "stl test ms : " << duration << '\n';
+
+    start = std :: chrono :: system_clock::now();
+
+    for ( auto & e : ( static_cast < List < int > & > ( arr ) ) ) {
+        e = 6;
+    }
+
+//    std :: cout << '\n';
+
+    end = std :: chrono :: system_clock::now();
+    duration = std :: chrono :: duration_cast < std :: chrono :: milliseconds > ( end - start ).count();
+    std :: cout << "cds abs test ms : " << duration << '\n';
+
+    arr.clear();
+
+    for (int i = 0; i < 15; ++i) {
+        arr.pushBack (i);
+    }
+
+    for (auto begin = arr.begin(); begin != arr.end(); ++begin) {
+        std :: cout << * begin << ' ';
+    }
+    std :: cout << '\n';
+    std :: cout.flush();
+
+    for (auto begin = arr.cbegin(); begin != arr.cend(); ++begin) {
+        std :: cout << * begin << ' ';
+    }
+    std :: cout << '\n';
+    std :: cout.flush();
+
+    for (auto begin = arr.rbegin(); begin != arr.rend(); ++begin) {
+        std :: cout << * begin << ' ';
+    }
+    std :: cout << '\n';
+    std :: cout.flush();
+
+    for (auto begin = arr.crbegin(); begin != arr.crend(); ++begin) {
+        std :: cout << * begin << ' ';
+    }
+    std :: cout << '\n';
+    std :: cout.flush();
+
+    for (auto begin = static_cast < List < int > & > ( arr ).begin(); begin != static_cast < List < int > & > ( arr ).end(); ++begin) {
+        std :: cout << * begin << ' ';
+    }
+    std :: cout << '\n';
+    std :: cout.flush();
+
+    for (auto begin = static_cast < List < int > & > ( arr ).cbegin(); begin != static_cast < List < int > & > ( arr ).cend(); ++begin) {
+        std :: cout << * begin << ' ';
+    }
+    std :: cout << '\n';
+    std :: cout.flush();
+
+    for (auto begin = static_cast < List < int > & > ( arr ).rbegin(); begin != static_cast < List < int > & > ( arr ).rend(); ++begin) {
+        std :: cout << * begin << ' ';
+    }
+    std :: cout << '\n';
+    std :: cout.flush();
+
+    for (auto begin = static_cast < List < int > & > ( arr ).crbegin(); begin != static_cast < List < int > & > ( arr ).crend(); ++begin) {
+        std :: cout << * begin << ' ';
+    }
+    std :: cout << '\n';
+    std :: cout.flush();
+
 
 //    List < int > * pList = nullptr;
 //    (void) pList->begin();

@@ -354,7 +354,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                         __equals
                 > :: __a_cbegin () const noexcept -> __a_ConstIterator {
 
-                    return __a_Iterator (
+                    return __a_ConstIterator (
                             this->_pData == nullptr ?
                             nullptr                 :
                             & this->_pData->_pBuffer [0ULL] + this->_pData->_bufferOffset
@@ -370,7 +370,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                         __equals
                 > :: __a_cend () const noexcept -> __a_ConstIterator {
 
-                    return __a_Iterator (
+                    return __a_ConstIterator (
                             this->_pData == nullptr ?
                             nullptr                 :
                             & this->_pData->_pBuffer [0ULL] + this->_pData->_bufferOffset + this->_pData->_elementCount
@@ -384,9 +384,9 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                 > constexpr auto __Array <
                         __ElementType,
                         __equals
-                > :: __a_rbegin () noexcept -> __a_Iterator {
+                > :: __a_rbegin () noexcept -> __a_ReverseIterator {
 
-                    return __a_Iterator (
+                    return __a_ReverseIterator (
                             this->_pData == nullptr ?
                             nullptr                 :
                             & this->_pData->_pBuffer [0ULL] + this->_pData->_bufferOffset + this->_pData->_elementCount - 1ULL
@@ -400,9 +400,9 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                 > constexpr auto __Array <
                         __ElementType,
                         __equals
-                > :: __a_rend () noexcept -> __a_Iterator {
+                > :: __a_rend () noexcept -> __a_ReverseIterator {
 
-                    return __a_Iterator (
+                    return __a_ReverseIterator (
                             this->_pData == nullptr ?
                             nullptr                 :
                             & this->_pData->_pBuffer [0ULL] + this->_pData->_bufferOffset - 1ULL
@@ -416,9 +416,9 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                 > constexpr auto __Array <
                         __ElementType,
                         __equals
-                > :: __a_crbegin () const noexcept -> __a_ConstIterator {
+                > :: __a_crbegin () const noexcept -> __a_ConstReverseIterator {
 
-                    return __a_Iterator (
+                    return __a_ConstReverseIterator (
                             this->_pData == nullptr ?
                             nullptr                 :
                             & this->_pData->_pBuffer [0ULL] + this->_pData->_bufferOffset + this->_pData->_elementCount - 1ULL
@@ -432,9 +432,9 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                 > constexpr auto __Array <
                         __ElementType,
                         __equals
-                > :: __a_crend () const noexcept -> __a_ConstIterator {
+                > :: __a_crend () const noexcept -> __a_ConstReverseIterator {
 
-                    return __a_Iterator (
+                    return __a_ConstReverseIterator (
                             this->_pData == nullptr ?
                             nullptr                 :
                             & this->_pData->_pBuffer [0ULL] + this->_pData->_bufferOffset - 1ULL

@@ -9,6 +9,9 @@
 #include "shared/collectionInternalCommunication/server/ListServer.hpp"
 #include "shared/iterator/AddressIterator.hpp"
 #include "shared/array/Array.hpp"
+#include "shared/delegateIterator/AbstractDelegateIterator.hpp"
+#include "shared/delegateIterator/DelegateIterator.hpp"
+#include "shared/collectionInternalCommunication/server/DelegateIterableServer.hpp"
 
 namespace cds { // NOLINT(modernize-concat-nested-namespaces)
     namespace experimental {
@@ -23,6 +26,16 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 protected __hidden :: __impl :: __ListServer <
                         Array < __ElementType >,
                         __ElementType
+                >,
+                public __hidden :: __impl :: __DelegateIterableServer <
+                        Array < __ElementType >,
+                        __ElementType,
+                        true,
+                        true,
+                        AddressIterator < __ElementType, false >,
+                        AddressIterator < __ElementType const, false >,
+                        AddressIterator < __ElementType, true >,
+                        AddressIterator < __ElementType const, true >
                 > {
 
         private:
@@ -199,5 +212,8 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 #include "shared/collectionInternalCommunication/server/impl/ListServer.hpp"
 #include "shared/iterator/impl/AddressIterator.hpp"
 #include "shared/array/impl/Array.hpp"
+#include "shared/delegateIterator/impl/AbstractDelegateIterator.hpp"
+#include "shared/delegateIterator/impl/DelegateIterator.hpp"
+#include "shared/collectionInternalCommunication/server/impl/DelegateIterableServer.hpp"
 
 #endif // __CDS_EX_ARRAY_HPP__
