@@ -27,6 +27,16 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                         Array < __ElementType >,
                         __ElementType
                 >,
+                public __hidden :: __impl :: __LocalRandomInsertionClient <
+                        Array < __ElementType >,
+                        __ElementType,
+                        __ElementType
+                >,
+                public __hidden :: __impl :: __LocalBoundaryInsertionClient <
+                        Array < __ElementType >,
+                        __ElementType,
+                        __ElementType
+                >,
                 public __hidden :: __impl :: __DelegateIterableServer <
                         Array < __ElementType >,
                         __ElementType,
@@ -56,20 +66,30 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                             & cds :: meta :: equals < __ElementType >
                     >;
 
-        public:
-            using ElementType = __ElementType;
+        protected:
+            using LocalRandomInsertionClient =
+                    __hidden :: __impl :: __LocalRandomInsertionClient <
+                            Array < __ElementType >,
+                            __ElementType,
+                            __ElementType
+                    >;
 
-        public:
-            using Iterator              = typename ArrayBase :: __a_Iterator;
+        protected:
+            using LocalBoundaryInsertionClient =
+                    __hidden :: __impl :: __LocalBoundaryInsertionClient <
+                            Array < __ElementType >,
+                            __ElementType,
+                            __ElementType
+                    >;
 
-        public:
-            using ConstIterator         = typename ArrayBase :: __a_ConstIterator;
+        private:
+            friend LocalBoundaryInsertionClient;
 
-        public:
-            using ReverseIterator       = typename ArrayBase :: __a_ReverseIterator;
-
-        public:
-            using ConstReverseIterator  = typename ArrayBase :: __a_ConstReverseIterator;
+        public: using ElementType           = __ElementType;
+        public: using Iterator              = typename ArrayBase :: __a_Iterator;
+        public: using ConstIterator         = typename ArrayBase :: __a_ConstIterator;
+        public: using ReverseIterator       = typename ArrayBase :: __a_ReverseIterator;
+        public: using ConstReverseIterator  = typename ArrayBase :: __a_ConstReverseIterator;
 
         private:
             __CDS_NoDiscard __CDS_cpplang_ConstexprOverride auto __cicch_obtainGenericHandler ( // NOLINT(bugprone-reserved-identifier)
@@ -87,29 +107,33 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         public:
             ~Array () noexcept override;
 
-        protected:
-            using List < __ElementType > :: begin;
+        protected: using List < __ElementType > :: begin;
+        protected: using List < __ElementType > :: end;
+        protected: using List < __ElementType > :: cbegin;
+        protected: using List < __ElementType > :: cend;
+        protected: using List < __ElementType > :: rbegin;
+        protected: using List < __ElementType > :: rend;
+        protected: using List < __ElementType > :: crbegin;
+        protected: using List < __ElementType > :: crend;
 
-        protected:
-            using List < __ElementType > :: end;
+        public: using LocalRandomInsertionClient :: insert;
+        public: using LocalRandomInsertionClient :: insertAll;
+        public: using LocalRandomInsertionClient :: insertAllOf;
+        public: using LocalRandomInsertionClient :: add;
+        public: using LocalRandomInsertionClient :: addAll;
+        public: using LocalRandomInsertionClient :: addAllOf;
+        public: using LocalRandomInsertionClient :: emplace;
 
-        protected:
-            using List < __ElementType > :: cbegin;
-
-        protected:
-            using List < __ElementType > :: cend;
-
-        protected:
-            using List < __ElementType > :: rbegin;
-
-        protected:
-            using List < __ElementType > :: rend;
-
-        protected:
-            using List < __ElementType > :: crbegin;
-
-        protected:
-            using List < __ElementType > :: crend;
+        public: using LocalBoundaryInsertionClient :: pushBack;
+        public: using LocalBoundaryInsertionClient :: pushBackAll;
+        public: using LocalBoundaryInsertionClient :: pushBackAllOf;
+        public: using LocalBoundaryInsertionClient :: pushFront;
+        public: using LocalBoundaryInsertionClient :: pushFrontAll;
+        public: using LocalBoundaryInsertionClient :: pushFrontAllOf;
+        public: using LocalBoundaryInsertionClient :: append;
+        public: using LocalBoundaryInsertionClient :: prepend;
+        public: using LocalBoundaryInsertionClient :: emplaceBack;
+        public: using LocalBoundaryInsertionClient :: emplaceFront;
 
         public:
             __CDS_NoDiscard constexpr auto begin () noexcept -> Iterator;
