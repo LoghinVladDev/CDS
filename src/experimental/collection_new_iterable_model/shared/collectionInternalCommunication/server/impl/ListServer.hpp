@@ -20,7 +20,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                         reinterpret_cast < void ( Collection < __ElementType > :: * ) () > ( & __ReceiverType :: __rend ),          /* __cirt_rend */
                         nullptr, /* __cirt_remove */
                         nullptr, /* __cirt_removeConst */
-                        nullptr, /* __cirt_newAddress */
+                        reinterpret_cast < void ( Collection < __ElementType > :: * ) () > ( & __ReceiverType :: __new ),           /* __cirt_newAddress */
                         reinterpret_cast < void ( Collection < __ElementType > :: * ) () > ( & __ReceiverType :: __newFront ),      /* __cirt_newFrontAddress */
                         reinterpret_cast < void ( Collection < __ElementType > :: * ) () > ( & __ReceiverType :: __newBack ),       /* __cirt_newBackAddress */
                         reinterpret_cast < void ( Collection < __ElementType > :: * ) () > ( & __ReceiverType :: __newFrontArray ), /* __cirt_newFrontAddressArray */

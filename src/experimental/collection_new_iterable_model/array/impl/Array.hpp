@@ -234,6 +234,18 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
 
         template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
+        __CDS_OptimalInline auto Array < __ElementType > :: __new (
+                __ElementType const * pReferenceElement,
+                bool                * pNewElementCreated
+        ) noexcept -> ElementType * {
+            (void) pReferenceElement;
+
+            * pNewElementCreated = true;
+            return this->__a_newBack ();
+        }
+
+
+        template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
         __CDS_OptimalInline auto Array < __ElementType > :: __newFront () noexcept -> ElementType * {
 
             return this->__a_newFront ();

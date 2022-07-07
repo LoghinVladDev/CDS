@@ -164,6 +164,24 @@ int main () {
     std :: cout.flush();
 
 
+    arr.insert ( 5 );
+    std :: cout << arr << '\n';
+    std :: cout.flush();
+
+    arr.insertAll ( 5, 6, 7, 8, 9, 10 );
+    std :: cout << arr << '\n';
+    std :: cout.flush();
+
+    arr.insertAllOf ( arr );
+    std :: cout << arr << '\n';
+    std :: cout.flush();
+
+    arr.insertAllOf ( { 10, 9, 8 ,7 } );
+    std :: cout << arr << '\n';
+    std :: cout.flush();
+
+
+
 //    List < int > * pList = nullptr;
 //    (void) pList->begin();
 //    (void) pList->end();

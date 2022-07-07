@@ -187,6 +187,12 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             ) noexcept -> bool override;
 
         private:
+            auto __new ( // NOLINT(bugprone-reserved-identifier)
+                    __ElementType const * pReferenceElement,
+                    bool                * pNewElementCreated
+            ) noexcept -> ElementType *;
+
+        private:
             auto __newFront () noexcept -> ElementType *; // NOLINT(bugprone-reserved-identifier)
 
         private:
