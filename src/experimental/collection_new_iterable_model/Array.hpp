@@ -82,8 +82,8 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                             __ElementType
                     >;
 
-        private:
-            friend LocalBoundaryInsertionClient;
+        private: friend LocalBoundaryInsertionClient;
+        private: friend LocalRandomInsertionClient;
 
         public: using ElementType           = __ElementType;
         public: using Iterator              = typename ArrayBase :: __a_Iterator;
