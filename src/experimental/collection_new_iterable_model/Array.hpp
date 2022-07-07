@@ -211,7 +211,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             ) noexcept -> bool override;
 
         private:
-            auto __new ( // NOLINT(bugprone-reserved-identifier)
+            auto __newAddress ( // NOLINT(bugprone-reserved-identifier)
                     __ElementType const * pReferenceElement,
                     bool                * pNewElementCreated
             ) noexcept -> ElementType *;
@@ -233,6 +233,16 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                     Size              count,
                     ElementType    ** ppElements
             ) noexcept -> void;
+
+        private:
+            auto __remove ( // NOLINT(bugprone-reserved-identifier)
+                    __hidden :: __impl :: __DelegateIterator < __ElementType, AddressIterator < __ElementType > > const * pDelegate
+            ) noexcept -> bool;
+
+        private:
+            auto __removeConst ( // NOLINT(bugprone-reserved-identifier)
+                    __hidden :: __impl :: __DelegateIterator < __ElementType const, AddressIterator < __ElementType const > > const * pDelegate
+            ) noexcept -> bool;
         };
 
     }

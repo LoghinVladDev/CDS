@@ -47,147 +47,18 @@ void f2();
 
 #include <chrono>
 #include <vector>
+#include <CDS/Range>
 
 using namespace cds :: experimental;
 int main () {
 
-    std :: cout << sizeof ( Array < int > ) << '\n';
-    Array < int > arr;
-    std :: vector < int > arrstl;
-    
+    Array < int > a;
+    a.pushBackAllOf ( cds :: Range (20) );
 
-    auto start = std :: chrono :: system_clock::now();
-    for ( int i = 0; i < 100000000; ++ i ) {
-        arr.pushBack ( i );
-    }
-    auto end = std :: chrono :: system_clock::now();
-    auto duration = std :: chrono :: duration_cast < std :: chrono :: milliseconds > ( end - start ).count();
-
-    std :: cout << "cds test ms : " << duration << '\n';
-
-    start = std :: chrono :: system_clock::now();
-    for ( int i = 0; i < 100000000; ++ i ) {
-        arrstl.push_back ( i );
-    }
-
-    end = std :: chrono :: system_clock::now();
-    duration = std :: chrono :: duration_cast < std :: chrono :: milliseconds > ( end - start ).count();
-    std :: cout << "stl test ms : " << duration << '\n';
-
-    start = std :: chrono :: system_clock::now();
-
-    for ( auto & e : arr ) {
-        e = 5;
-//        std :: cout << e << ' ';
-    }
-//    std :: cout << '\n';
-
-    end = std :: chrono :: system_clock::now();
-    duration = std :: chrono :: duration_cast < std :: chrono :: milliseconds > ( end - start ).count();
-
-    std :: cout << "cds test ms : " << duration << '\n';
-
-    start = std :: chrono :: system_clock::now();
-
-    for ( auto & e : arrstl ) {
-        e = 5;
-    }
-//    std :: cout << '\n';
-
-    end = std :: chrono :: system_clock::now();
-    duration = std :: chrono :: duration_cast < std :: chrono :: milliseconds > ( end - start ).count();
-    std :: cout << "stl test ms : " << duration << '\n';
-
-    start = std :: chrono :: system_clock::now();
-
-    for ( auto & e : ( static_cast < List < int > & > ( arr ) ) ) {
-        e = 6;
-    }
-
-//    std :: cout << '\n';
-
-    end = std :: chrono :: system_clock::now();
-    duration = std :: chrono :: duration_cast < std :: chrono :: milliseconds > ( end - start ).count();
-    std :: cout << "cds abs test ms : " << duration << '\n';
-
-    arr.clear();
-
-    for (int i = 0; i < 15; ++i) {
-        arr.pushBack (i);
-    }
-
-    for (auto begin = arr.begin(); begin != arr.end(); ++begin) {
-        std :: cout << * begin << ' ';
-    }
-    std :: cout << '\n';
-    std :: cout.flush();
-
-    for (auto begin = arr.cbegin(); begin != arr.cend(); ++begin) {
-        std :: cout << * begin << ' ';
-    }
-    std :: cout << '\n';
-    std :: cout.flush();
-
-    for (auto begin = arr.rbegin(); begin != arr.rend(); ++begin) {
-        std :: cout << * begin << ' ';
-    }
-    std :: cout << '\n';
-    std :: cout.flush();
-
-    for (auto begin = arr.crbegin(); begin != arr.crend(); ++begin) {
-        std :: cout << * begin << ' ';
-    }
-    std :: cout << '\n';
-    std :: cout.flush();
-
-    for (auto begin = static_cast < List < int > & > ( arr ).begin(); begin != static_cast < List < int > & > ( arr ).end(); ++begin) {
-        std :: cout << * begin << ' ';
-    }
-    std :: cout << '\n';
-    std :: cout.flush();
-
-    for (auto begin = static_cast < List < int > & > ( arr ).cbegin(); begin != static_cast < List < int > & > ( arr ).cend(); ++begin) {
-        std :: cout << * begin << ' ';
-    }
-    std :: cout << '\n';
-    std :: cout.flush();
-
-    for (auto begin = static_cast < List < int > & > ( arr ).rbegin(); begin != static_cast < List < int > & > ( arr ).rend(); ++begin) {
-        std :: cout << * begin << ' ';
-    }
-    std :: cout << '\n';
-    std :: cout.flush();
-
-    for (auto begin = static_cast < List < int > & > ( arr ).crbegin(); begin != static_cast < List < int > & > ( arr ).crend(); ++begin) {
-        std :: cout << * begin << ' ';
-    }
-    std :: cout << '\n';
-    std :: cout.flush();
-
-
-    arr.insert ( 5 );
-    std :: cout << arr << '\n';
-    std :: cout.flush();
-
-    arr.insertAll ( 5, 6, 7, 8, 9, 10 );
-    std :: cout << arr << '\n';
-    std :: cout.flush();
-
-    arr.insertAllOf ( arr );
-    std :: cout << arr << '\n';
-    std :: cout.flush();
-
-    arr.insertAllOf ( { 10, 9, 8 ,7 } );
-    std :: cout << arr << '\n';
-    std :: cout.flush();
-
-    for ( int i = 0; i < 100; ++ i ) {
-        arr.pushBackAll ( i + 1, i + 2, i + 3 );
-        arr.pushFrontAll ( i + 1, i + 2, i + 3 );
-    }
-
-    std :: cout << arr << '\n';
-
+    std :: cout << a << '\n';
+    a.remove ( ( ( List < int > & ) a ) .begin() );
+    a.remove ( ( ( List < int > & ) a ) .rbegin() );
+    std :: cout << a << '\n';
 
 
 //    List < int > * pList = nullptr;

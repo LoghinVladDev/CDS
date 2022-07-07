@@ -11,7 +11,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
     namespace experimental {
 
         template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
-        class ForwardAddressIterator : public meta :: RandomAccessIterator {
+        class AbstractAddressIterator : public meta :: RandomAccessIterator {
 
         public:
             using ElementType = __ElementType;
@@ -21,6 +21,74 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
         private:
             Address _currentAddress { nullptr };
+
+        protected:
+            constexpr AbstractAddressIterator () noexcept;
+
+        protected:
+            __CDS_Explicit constexpr AbstractAddressIterator (
+                    Address pAddress
+            ) noexcept;
+
+        protected:
+            constexpr AbstractAddressIterator (
+                    AbstractAddressIterator const & iterator
+            ) noexcept;
+
+        protected:
+            constexpr AbstractAddressIterator (
+                    AbstractAddressIterator && iterator
+            ) noexcept;
+
+        protected:
+            __CDS_NoDiscard constexpr auto current () const noexcept -> Address;
+
+        protected:
+            __CDS_cpplang_NonConstConstexprMemberFunction auto copy (
+                    AbstractAddressIterator const & iterator
+            ) noexcept -> void;
+
+        protected:
+            __CDS_cpplang_NonConstConstexprMemberFunction auto move (
+                    AbstractAddressIterator && iterator
+            ) noexcept -> void;
+
+        protected:
+            __CDS_cpplang_NonConstConstexprMemberFunction auto increment () noexcept -> void;
+
+        protected:
+            __CDS_cpplang_NonConstConstexprMemberFunction auto decrement () noexcept -> void;
+
+        public:
+            __CDS_NoDiscard constexpr auto operator * () const noexcept -> __ElementType &;
+
+        public:
+            __CDS_NoDiscard constexpr auto operator -> () const noexcept -> __ElementType *;
+
+        public:
+            __CDS_NoDiscard constexpr auto operator - (
+                    AbstractAddressIterator const & iterator
+            ) const noexcept -> Size;
+
+        public:
+            template < typename __NumericType > // NOLINT(bugprone-reserved-identifier)
+            __CDS_NoDiscard constexpr auto operator [] (
+                    __NumericType index
+            ) const noexcept -> ElementType &;
+
+        public:
+            __CDS_Explicit constexpr operator bool () const noexcept;
+        };
+
+
+        template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
+        class ForwardAddressIterator : public AbstractAddressIterator < __ElementType > {
+
+        public:
+            using ElementType = __ElementType;
+
+        public:
+            using Address = ElementType *;
 
         public:
             constexpr ForwardAddressIterator () noexcept;
@@ -61,12 +129,6 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             ) const noexcept -> bool;
 
         public:
-            __CDS_NoDiscard constexpr auto operator * () const noexcept -> __ElementType &;
-
-        public:
-            __CDS_NoDiscard constexpr auto operator -> () const noexcept -> __ElementType *;
-
-        public:
             __CDS_cpplang_NonConstConstexprMemberFunction auto operator ++ () noexcept -> ForwardAddressIterator &;
 
         public:
@@ -98,11 +160,6 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             ) const noexcept -> ForwardAddressIterator;
 
         public:
-            __CDS_NoDiscard constexpr auto operator - (
-                    ForwardAddressIterator const & iterator
-            ) const noexcept -> Size;
-
-        public:
             __CDS_NoDiscard constexpr auto operator > (
                     ForwardAddressIterator const & iterator
             ) const noexcept -> bool;
@@ -121,15 +178,6 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             __CDS_NoDiscard constexpr auto operator <= (
                     ForwardAddressIterator const & iterator
             ) const noexcept -> bool;
-
-        public:
-            template < typename __NumericType > // NOLINT(bugprone-reserved-identifier)
-            __CDS_NoDiscard constexpr auto operator [] (
-                    __NumericType index
-            ) const noexcept -> ElementType &;
-
-        public:
-            __CDS_Explicit constexpr operator bool () const noexcept;
         };
 
         template < typename __FElementType, typename __NumericType > // NOLINT(bugprone-reserved-identifier)
@@ -139,16 +187,13 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         ) noexcept -> ForwardAddressIterator < __FElementType >;
 
         template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
-        class BackwardAddressIterator : public meta :: RandomAccessIterator {
+        class BackwardAddressIterator : public AbstractAddressIterator < __ElementType > {
 
         public:
             using ElementType = __ElementType;
 
         public:
             using Address = ElementType *;
-
-        private:
-            Address _currentAddress { nullptr };
 
         public:
             constexpr BackwardAddressIterator () noexcept;
@@ -189,12 +234,6 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             ) const noexcept -> bool;
 
         public:
-            __CDS_NoDiscard constexpr auto operator * () const noexcept -> __ElementType &;
-
-        public:
-            __CDS_NoDiscard constexpr auto operator -> () const noexcept -> __ElementType *;
-
-        public:
             __CDS_cpplang_NonConstConstexprMemberFunction auto operator ++ () noexcept -> BackwardAddressIterator &;
 
         public:
@@ -226,11 +265,6 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             ) const noexcept -> BackwardAddressIterator;
 
         public:
-            __CDS_NoDiscard constexpr auto operator - (
-                    BackwardAddressIterator const & iterator
-            ) const noexcept -> Size;
-
-        public:
             __CDS_NoDiscard constexpr auto operator > (
                     BackwardAddressIterator const & iterator
             ) const noexcept -> bool;
@@ -249,15 +283,6 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             __CDS_NoDiscard constexpr auto operator <= (
                     BackwardAddressIterator const & iterator
             ) const noexcept -> bool;
-
-        public:
-            template < typename __NumericType > // NOLINT(bugprone-reserved-identifier)
-            __CDS_NoDiscard constexpr auto operator [] (
-                    __NumericType index
-            ) const noexcept -> ElementType &;
-
-        public:
-            __CDS_Explicit constexpr operator bool () const noexcept;
         };
 
         template < typename __FElementType, typename __NumericType > // NOLINT(bugprone-reserved-identifier)

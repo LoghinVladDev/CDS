@@ -61,6 +61,9 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                 public:
                     __CDS_cpplang_ConstexprDestructor ~__DelegateIterator () noexcept override;
 
+                public:
+                    __CDS_NoDiscard constexpr auto iterator () const noexcept -> __WrappedIteratorType const &;
+
                 private:
                     template <
                             typename __TWrappedIteratorType = __WrappedIteratorType,  // NOLINT(bugprone-reserved-identifier)

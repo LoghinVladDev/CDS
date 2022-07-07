@@ -234,7 +234,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
 
         template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
-        __CDS_OptimalInline auto Array < __ElementType > :: __new (
+        __CDS_OptimalInline auto Array < __ElementType > :: __newAddress (
                 __ElementType const * pReferenceElement,
                 bool                * pNewElementCreated
         ) noexcept -> ElementType * {
@@ -282,6 +282,24 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                     count,
                     ppElements
             );
+        }
+
+
+        template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
+        __CDS_OptimalInline auto Array < __ElementType > :: __remove (
+                __hidden :: __impl :: __DelegateIterator < __ElementType, AddressIterator < __ElementType > > const * pDelegate
+        ) noexcept -> bool {
+
+            return this->__a_remove ( pDelegate->iterator() );
+        }
+
+
+        template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
+        __CDS_OptimalInline auto Array < __ElementType > :: __removeConst (
+                __hidden :: __impl :: __DelegateIterator < __ElementType const, AddressIterator < __ElementType const > > const * pDelegate
+        ) noexcept -> bool {
+
+            return this->__a_remove ( pDelegate->iterator() );
         }
 
     }
