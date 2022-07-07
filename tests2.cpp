@@ -61,12 +61,35 @@ int main () {
     }
     auto end = std :: chrono :: system_clock::now();
     auto duration = std :: chrono :: duration_cast < std :: chrono :: milliseconds > ( end - start ).count();
+
     std :: cout << "cds test ms : " << duration << '\n';
 
     start = std :: chrono :: system_clock::now();
     for ( int i = 0; i < 100000000; ++ i ) {
         arrstl.push_back ( i );
     }
+
+    end = std :: chrono :: system_clock::now();
+    duration = std :: chrono :: duration_cast < std :: chrono :: milliseconds > ( end - start ).count();
+    std :: cout << "stl test ms : " << duration << '\n';
+
+    start = std :: chrono :: system_clock::now();
+
+    for ( auto & e : arr ) {
+        e = 5;
+//        std :: cout << e << ' ';
+    }
+//    std :: cout << '\n';
+
+    end = std :: chrono :: system_clock::now();
+    duration = std :: chrono :: duration_cast < std :: chrono :: milliseconds > ( end - start ).count();
+
+    std :: cout << "cds test ms : " << duration << '\n';
+
+    for ( auto & e : arrstl ) {
+        e = 5;
+    }
+//    std :: cout << '\n';
 
     end = std :: chrono :: system_clock::now();
     duration = std :: chrono :: duration_cast < std :: chrono :: milliseconds > ( end - start ).count();

@@ -313,6 +313,134 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                     }
                 }
 
+
+                template <
+                        typename                                        __ElementType,  // NOLINT(bugprone-reserved-identifier)
+                        utility :: ComparisonFunction < __ElementType > __equals        // NOLINT(bugprone-reserved-identifier)
+                > constexpr auto __Array <
+                        __ElementType,
+                        __equals
+                > :: __a_begin () noexcept -> __a_Iterator {
+
+                    return __a_Iterator (
+                            this->_pData == nullptr ?
+                            nullptr                 :
+                            & this->_pData->_pBuffer [0ULL] + this->_pData->_bufferOffset
+                    );
+                }
+
+
+                template <
+                        typename                                        __ElementType,  // NOLINT(bugprone-reserved-identifier)
+                        utility :: ComparisonFunction < __ElementType > __equals        // NOLINT(bugprone-reserved-identifier)
+                > constexpr auto __Array <
+                        __ElementType,
+                        __equals
+                > :: __a_end () noexcept -> __a_Iterator {
+
+                    return __a_Iterator (
+                            this->_pData == nullptr ?
+                            nullptr                 :
+                            & this->_pData->_pBuffer [0ULL] + this->_pData->_bufferOffset + this->_pData->_elementCount
+                    );
+                }
+
+
+                template <
+                        typename                                        __ElementType,  // NOLINT(bugprone-reserved-identifier)
+                        utility :: ComparisonFunction < __ElementType > __equals        // NOLINT(bugprone-reserved-identifier)
+                > constexpr auto __Array <
+                        __ElementType,
+                        __equals
+                > :: __a_cbegin () const noexcept -> __a_ConstIterator {
+
+                    return __a_Iterator (
+                            this->_pData == nullptr ?
+                            nullptr                 :
+                            & this->_pData->_pBuffer [0ULL] + this->_pData->_bufferOffset
+                    );
+                }
+
+
+                template <
+                        typename                                        __ElementType,  // NOLINT(bugprone-reserved-identifier)
+                        utility :: ComparisonFunction < __ElementType > __equals        // NOLINT(bugprone-reserved-identifier)
+                > constexpr auto __Array <
+                        __ElementType,
+                        __equals
+                > :: __a_cend () const noexcept -> __a_ConstIterator {
+
+                    return __a_Iterator (
+                            this->_pData == nullptr ?
+                            nullptr                 :
+                            & this->_pData->_pBuffer [0ULL] + this->_pData->_bufferOffset + this->_pData->_elementCount
+                    );
+                }
+
+
+                template <
+                        typename                                        __ElementType,  // NOLINT(bugprone-reserved-identifier)
+                        utility :: ComparisonFunction < __ElementType > __equals        // NOLINT(bugprone-reserved-identifier)
+                > constexpr auto __Array <
+                        __ElementType,
+                        __equals
+                > :: __a_rbegin () noexcept -> __a_Iterator {
+
+                    return __a_Iterator (
+                            this->_pData == nullptr ?
+                            nullptr                 :
+                            & this->_pData->_pBuffer [0ULL] + this->_pData->_bufferOffset + this->_pData->_elementCount - 1ULL
+                    );
+                }
+
+
+                template <
+                        typename                                        __ElementType,  // NOLINT(bugprone-reserved-identifier)
+                        utility :: ComparisonFunction < __ElementType > __equals        // NOLINT(bugprone-reserved-identifier)
+                > constexpr auto __Array <
+                        __ElementType,
+                        __equals
+                > :: __a_rend () noexcept -> __a_Iterator {
+
+                    return __a_Iterator (
+                            this->_pData == nullptr ?
+                            nullptr                 :
+                            & this->_pData->_pBuffer [0ULL] + this->_pData->_bufferOffset - 1ULL
+                    );
+                }
+
+
+                template <
+                        typename                                        __ElementType,  // NOLINT(bugprone-reserved-identifier)
+                        utility :: ComparisonFunction < __ElementType > __equals        // NOLINT(bugprone-reserved-identifier)
+                > constexpr auto __Array <
+                        __ElementType,
+                        __equals
+                > :: __a_crbegin () const noexcept -> __a_ConstIterator {
+
+                    return __a_Iterator (
+                            this->_pData == nullptr ?
+                            nullptr                 :
+                            & this->_pData->_pBuffer [0ULL] + this->_pData->_bufferOffset + this->_pData->_elementCount - 1ULL
+                    );
+                }
+
+
+                template <
+                        typename                                        __ElementType,  // NOLINT(bugprone-reserved-identifier)
+                        utility :: ComparisonFunction < __ElementType > __equals        // NOLINT(bugprone-reserved-identifier)
+                > constexpr auto __Array <
+                        __ElementType,
+                        __equals
+                > :: __a_crend () const noexcept -> __a_ConstIterator {
+
+                    return __a_Iterator (
+                            this->_pData == nullptr ?
+                            nullptr                 :
+                            & this->_pData->_pBuffer [0ULL] + this->_pData->_bufferOffset - 1ULL
+                    );
+                }
+
             }
         }
     }

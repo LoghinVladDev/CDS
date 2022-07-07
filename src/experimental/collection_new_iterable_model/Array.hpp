@@ -7,6 +7,7 @@
 
 #include <CDS/experimental/List>
 #include "shared/collectionInternalCommunication/server/ListServer.hpp"
+#include "shared/iterator/AddressIterator.hpp"
 #include "shared/array/Array.hpp"
 
 namespace cds { // NOLINT(modernize-concat-nested-namespaces)
@@ -28,8 +29,34 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             template < typename, typename >
             friend class cds :: experimental :: __hidden :: __impl :: __ListServer; // NOLINT(bugprone-reserved-identifier)
 
+        protected:
+            using ListServer =
+                    __hidden :: __impl :: __ListServer <
+                            Array < __ElementType >,
+                            __ElementType
+                    >;
+
+        protected:
+            using ArrayBase =
+                    __hidden :: __impl :: __Array <
+                            __ElementType,
+                            & cds :: meta :: equals < __ElementType >
+                    >;
+
         public:
             using ElementType = __ElementType;
+
+        public:
+            using Iterator              = typename ArrayBase :: __a_Iterator;
+
+        public:
+            using ConstIterator         = typename ArrayBase :: __a_ConstIterator;
+
+        public:
+            using ReverseIterator       = typename ArrayBase :: __a_ReverseIterator;
+
+        public:
+            using ConstReverseIterator  = typename ArrayBase :: __a_ConstReverseIterator;
 
         private:
             __CDS_NoDiscard __CDS_cpplang_ConstexprOverride auto __cicch_obtainGenericHandler ( // NOLINT(bugprone-reserved-identifier)
@@ -41,14 +68,71 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                     __hidden :: __impl :: __CollectionInternalRequestType requestType
             ) const noexcept -> void ( Collection < __ElementType > :: * ) () const override;
 
-        protected:
-            using List < __ElementType > :: pushBack;
-
         public:
             constexpr Array () noexcept;
 
         public:
             ~Array () noexcept override;
+
+        protected:
+            using List < __ElementType > :: begin;
+
+        protected:
+            using List < __ElementType > :: end;
+
+        protected:
+            using List < __ElementType > :: cbegin;
+
+        protected:
+            using List < __ElementType > :: cend;
+
+        protected:
+            using List < __ElementType > :: rbegin;
+
+        protected:
+            using List < __ElementType > :: rend;
+
+        protected:
+            using List < __ElementType > :: crbegin;
+
+        protected:
+            using List < __ElementType > :: crend;
+
+        public:
+            __CDS_NoDiscard constexpr auto begin () noexcept -> Iterator;
+
+        public:
+            __CDS_NoDiscard constexpr auto end () noexcept -> Iterator;
+
+        public:
+            __CDS_NoDiscard constexpr auto begin () const noexcept -> ConstIterator;
+
+        public:
+            __CDS_NoDiscard constexpr auto end () const noexcept -> ConstIterator;
+
+        public:
+            __CDS_NoDiscard constexpr auto cbegin () const noexcept -> ConstIterator;
+
+        public:
+            __CDS_NoDiscard constexpr auto cend () const noexcept -> ConstIterator;
+
+        public:
+            __CDS_NoDiscard constexpr auto rbegin () noexcept -> ReverseIterator;
+
+        public:
+            __CDS_NoDiscard constexpr auto rend () noexcept -> ReverseIterator;
+
+        public:
+            __CDS_NoDiscard constexpr auto rbegin () const noexcept -> ConstReverseIterator;
+
+        public:
+            __CDS_NoDiscard constexpr auto rend () const noexcept -> ConstReverseIterator;
+
+        public:
+            __CDS_NoDiscard constexpr auto crbegin () const noexcept -> ConstReverseIterator;
+
+        public:
+            __CDS_NoDiscard constexpr auto crend () const noexcept -> ConstReverseIterator;
 
         public:
             auto clear () noexcept -> void override;
@@ -113,6 +197,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
 #include "array/impl/Array.hpp"
 #include "shared/collectionInternalCommunication/server/impl/ListServer.hpp"
+#include "shared/iterator/impl/AddressIterator.hpp"
 #include "shared/array/impl/Array.hpp"
 
 #endif // __CDS_EX_ARRAY_HPP__

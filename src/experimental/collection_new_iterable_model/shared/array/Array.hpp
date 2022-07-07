@@ -21,6 +21,24 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                 private:
                     static Size const __a_minCapacity = 32ULL; // NOLINT(bugprone-reserved-identifier)
 
+                protected:
+                    using __a_BidirectionalIterator         = AddressIterator < __ElementType >; // NOLINT(bugprone-reserved-identifier)
+
+                protected:
+                    using __a_BidirectionalConstIterator    = AddressIterator < __ElementType const >; // NOLINT(bugprone-reserved-identifier)
+
+                public:
+                    using __a_Iterator                      = __a_BidirectionalIterator; // NOLINT(bugprone-reserved-identifier)
+
+                public:
+                    using __a_ConstIterator                 = __a_BidirectionalConstIterator; // NOLINT(bugprone-reserved-identifier)
+
+                public:
+                    using __a_ReverseIterator               = __a_BidirectionalIterator; // NOLINT(bugprone-reserved-identifier)
+
+                public:
+                    using __a_ConstReverseIterator          = __a_BidirectionalConstIterator; // NOLINT(bugprone-reserved-identifier)
+
                 private:
                     struct __ArrayImplDataContainer { // NOLINT(bugprone-reserved-identifier)
                         __ElementType * _pBuffer;
@@ -75,6 +93,30 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                             Size                count,
                             __ElementType    ** ppElements
                     ) noexcept -> void;
+
+                protected:
+                    __CDS_NoDiscard constexpr auto __a_begin () noexcept -> __a_Iterator; // NOLINT(bugprone-reserved-identifier)
+
+                protected:
+                    __CDS_NoDiscard constexpr auto __a_end () noexcept -> __a_Iterator; // NOLINT(bugprone-reserved-identifier)
+
+                protected:
+                    __CDS_NoDiscard constexpr auto __a_cbegin () const noexcept -> __a_ConstIterator; // NOLINT(bugprone-reserved-identifier)
+
+                protected:
+                    __CDS_NoDiscard constexpr auto __a_cend () const noexcept -> __a_ConstIterator; // NOLINT(bugprone-reserved-identifier)
+
+                protected:
+                    __CDS_NoDiscard constexpr auto __a_rbegin () noexcept -> __a_ReverseIterator; // NOLINT(bugprone-reserved-identifier)
+
+                protected:
+                    __CDS_NoDiscard constexpr auto __a_rend () noexcept -> __a_ReverseIterator; // NOLINT(bugprone-reserved-identifier)
+
+                protected:
+                    __CDS_NoDiscard constexpr auto __a_crbegin () const noexcept -> __a_ConstReverseIterator; // NOLINT(bugprone-reserved-identifier)
+
+                protected:
+                    __CDS_NoDiscard constexpr auto __a_crend () const noexcept -> __a_ConstReverseIterator; // NOLINT(bugprone-reserved-identifier)
                 };
 
             }

@@ -38,6 +38,90 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
 
         template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
+        constexpr auto Array < __ElementType > :: begin () noexcept -> Iterator {
+
+            return this->__a_begin();
+        }
+
+
+        template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
+        constexpr auto Array < __ElementType > :: end () noexcept -> Iterator {
+
+            return this->__a_end();
+        }
+
+
+        template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
+        constexpr auto Array < __ElementType > :: begin () const noexcept -> ConstIterator {
+
+            return this->__a_cbegin();
+        }
+
+
+        template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
+        constexpr auto Array < __ElementType > :: end () const noexcept -> ConstIterator {
+
+            return this->__a_cend();
+        }
+
+
+        template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
+        constexpr auto Array < __ElementType > :: cbegin () const noexcept -> ConstIterator {
+
+            return this->__a_cbegin();
+        }
+
+
+        template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
+        constexpr auto Array < __ElementType > :: cend () const noexcept -> ConstIterator {
+
+            return this->__a_cend();
+        }
+
+
+        template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
+        constexpr auto Array < __ElementType > :: rbegin () noexcept -> ReverseIterator {
+
+            return this->__a_rbegin();
+        }
+
+
+        template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
+        constexpr auto Array < __ElementType > :: rend () noexcept -> ReverseIterator {
+
+            return this->__a_rend();
+        }
+
+
+        template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
+        constexpr auto Array < __ElementType > :: rbegin () const noexcept -> ConstReverseIterator {
+
+            return this->__a_crbegin();
+        }
+
+
+        template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
+        constexpr auto Array < __ElementType > :: rend () const noexcept -> ConstReverseIterator {
+
+            return this->__a_crend();
+        }
+
+
+        template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
+        constexpr auto Array < __ElementType > :: crbegin () const noexcept -> ConstReverseIterator {
+
+            return this->__a_crbegin();
+        }
+
+
+        template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
+        constexpr auto Array < __ElementType > :: crend () const noexcept -> ConstReverseIterator {
+
+            return this->__a_crend();
+        }
+
+
+        template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
         auto Array < __ElementType > :: clear () noexcept -> void {
 
             this->__a_clear ( false );
