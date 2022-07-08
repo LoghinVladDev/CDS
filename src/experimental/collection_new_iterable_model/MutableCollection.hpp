@@ -20,40 +20,52 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
         class MutableCollection :
                 public Collection < __ElementType >,
-                public __hidden :: __impl :: __DelegateForwardIterableClient <
+                public __hidden :: __impl :: __DelegateForwardIterablePrimitiveClient <
                         MutableCollection < __ElementType >,
                         __ElementType,
                         false
                 >,
-                public __hidden :: __impl :: __AbstractIteratorRemoveClient <
+                public __hidden :: __impl :: __AbstractIteratorRemovePrimitiveClient <
                         MutableCollection < __ElementType >,
                         __ElementType
                 >,
-                public __hidden :: __impl :: __IterableMutableFindOf <
+                public __hidden :: __impl :: __RandomInsertionPrimitiveClient <
                         MutableCollection < __ElementType >,
                         __ElementType,
-                        typename __hidden :: __impl :: __DelegateForwardIterableClient < MutableCollection < __ElementType >, __ElementType, false > :: Iterator,
+                        __ElementType
+                >,
+                public __hidden :: __impl :: __FindOfMutableCompositeClient <
+                        MutableCollection < __ElementType >,
+                        __ElementType,
+                        typename __hidden :: __impl :: __DelegateForwardIterablePrimitiveClient <
+                                MutableCollection < __ElementType >,
+                                __ElementType,
+                                false
+                        > :: Iterator,
                         Collection < __ElementType >,
                         __hidden :: __impl :: __collectionContains < __ElementType >
                 >,
-                public __hidden :: __impl :: __IterableMutableFindOf <
+                public __hidden :: __impl :: __FindOfMutableCompositeClient <
                         MutableCollection < __ElementType >,
                         __ElementType,
-                        typename __hidden :: __impl :: __DelegateForwardIterableClient < MutableCollection < __ElementType >, __ElementType, false > :: Iterator,
+                        typename __hidden :: __impl :: __DelegateForwardIterablePrimitiveClient <
+                                MutableCollection < __ElementType >,
+                                __ElementType,
+                                false
+                        > :: Iterator,
                         std :: initializer_list < __ElementType >,
                         __hidden :: __impl :: __initializerListContains < __ElementType, & cds :: meta :: equals < __ElementType > >
                 >,
-                public __hidden :: __impl :: __IterableMutableFindByPredicate <
+                public __hidden :: __impl :: __FindByMutableCompositeClient <
                         MutableCollection < __ElementType >,
                         __ElementType,
-                        typename __hidden :: __impl :: __DelegateForwardIterableClient < MutableCollection < __ElementType >, __ElementType, false > :: Iterator
+                        typename __hidden :: __impl :: __DelegateForwardIterablePrimitiveClient <
+                                MutableCollection < __ElementType >,
+                                __ElementType,
+                                false
+                        > :: Iterator
                 >,
-                public __hidden :: __impl :: __RandomInsertionClient <
-                        MutableCollection < __ElementType >,
-                        __ElementType,
-                        __ElementType
-                >,
-                public __hidden :: __impl :: __IterableMutableStatements <
+                public __hidden :: __impl :: __GenericMutableStatementsCompositeClient <
                 MutableCollection < __ElementType >,
                         __ElementType
                 > {
@@ -63,7 +75,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
         protected:
             using DelegateForwardIterableClient =
-                    __hidden :: __impl :: __DelegateForwardIterableClient <
+                    __hidden :: __impl :: __DelegateForwardIterablePrimitiveClient <
                             MutableCollection < __ElementType >,
                             __ElementType,
                             false
@@ -71,49 +83,61 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
         protected:
             using AbstractIteratorRemoveClient =
-                    __hidden :: __impl :: __AbstractIteratorRemoveClient <
+                    __hidden :: __impl :: __AbstractIteratorRemovePrimitiveClient <
                             MutableCollection < __ElementType >,
                             __ElementType
                     >;
 
         protected:
-            using IterableMutableFindOfCollection =
-                    __hidden :: __impl :: __IterableMutableFindOf <
+            using FindOfCollectionClient =
+                    __hidden :: __impl :: __FindOfMutableCompositeClient <
                             MutableCollection < __ElementType >,
                             __ElementType,
-                            typename __hidden :: __impl :: __DelegateForwardIterableClient < MutableCollection < __ElementType >, __ElementType, false > :: Iterator,
+                            typename __hidden :: __impl :: __DelegateForwardIterablePrimitiveClient <
+                                    MutableCollection < __ElementType >,
+                                    __ElementType,
+                                    false
+                            > :: Iterator,
                             Collection < __ElementType >,
                             __hidden :: __impl :: __collectionContains < __ElementType >
                     >;
 
         protected:
-            using IterableMutableFindOfInitializerList =
-                    __hidden :: __impl :: __IterableMutableFindOf <
+            using FindOfInitializerListClient =
+                    __hidden :: __impl :: __FindOfMutableCompositeClient <
                             MutableCollection < __ElementType >,
                             __ElementType,
-                            typename __hidden :: __impl :: __DelegateForwardIterableClient < MutableCollection < __ElementType >, __ElementType, false > :: Iterator,
+                            typename __hidden :: __impl :: __DelegateForwardIterablePrimitiveClient <
+                                    MutableCollection < __ElementType >,
+                                    __ElementType,
+                                    false
+                            > :: Iterator,
                             std :: initializer_list < __ElementType >,
                             __hidden :: __impl :: __initializerListContains < __ElementType, & cds :: meta :: equals < __ElementType > >
                     >;
 
         protected:
-            using IterableMutableStatements =
-                    __hidden :: __impl :: __IterableMutableStatements <
+            using FindByClient =
+                    __hidden :: __impl :: __FindByMutableCompositeClient <
+                            MutableCollection < __ElementType >,
+                            __ElementType,
+                            typename __hidden :: __impl :: __DelegateForwardIterablePrimitiveClient <
+                                    MutableCollection < __ElementType >,
+                                    __ElementType,
+                                    false
+                            > :: Iterator
+                    >;
+
+        protected:
+            using GenericMutableStatementsClient =
+                    __hidden :: __impl :: __GenericMutableStatementsCompositeClient <
                             MutableCollection < __ElementType >,
                             __ElementType
                     >;
 
         protected:
-            using IterableMutableFindByPredicate =
-                    __hidden :: __impl :: __IterableMutableFindByPredicate <
-                            MutableCollection < __ElementType >,
-                            __ElementType,
-                            typename __hidden :: __impl :: __DelegateForwardIterableClient < MutableCollection < __ElementType >, __ElementType, false > :: Iterator
-                    >;
-
-        protected:
             using RandomInsertionClient =
-                    __hidden :: __impl :: __RandomInsertionClient <
+                    __hidden :: __impl :: __RandomInsertionPrimitiveClient <
                             MutableCollection < __ElementType >,
                             __ElementType,
                             __ElementType
@@ -165,16 +189,16 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         public: using Collection :: all;
         public: using Collection :: none;
 
-        public: using IterableMutableStatements :: forEach;
-        public: using IterableMutableStatements :: some;
-        public: using IterableMutableStatements :: atLeast;
-        public: using IterableMutableStatements :: atMost;
-        public: using IterableMutableStatements :: moreThan;
-        public: using IterableMutableStatements :: fewerThan;
-        public: using IterableMutableStatements :: count;
-        public: using IterableMutableStatements :: any;
-        public: using IterableMutableStatements :: all;
-        public: using IterableMutableStatements :: none;
+        public: using GenericMutableStatementsClient :: forEach;
+        public: using GenericMutableStatementsClient :: some;
+        public: using GenericMutableStatementsClient :: atLeast;
+        public: using GenericMutableStatementsClient :: atMost;
+        public: using GenericMutableStatementsClient :: moreThan;
+        public: using GenericMutableStatementsClient :: fewerThan;
+        public: using GenericMutableStatementsClient :: count;
+        public: using GenericMutableStatementsClient :: any;
+        public: using GenericMutableStatementsClient :: all;
+        public: using GenericMutableStatementsClient :: none;
 
         public: using Collection :: findOf;
         public: using Collection :: findFirstOf;
@@ -185,33 +209,33 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         public: using Collection :: findLastNotOf;
         public: using Collection :: findAllNotOf;
 
-        public: using IterableMutableFindOfCollection :: findOf;
-        public: using IterableMutableFindOfCollection :: findFirstOf;
-        public: using IterableMutableFindOfCollection :: findLastOf;
-        public: using IterableMutableFindOfCollection :: findAllOf;
-        public: using IterableMutableFindOfCollection :: findNotOf;
-        public: using IterableMutableFindOfCollection :: findFirstNotOf;
-        public: using IterableMutableFindOfCollection :: findLastNotOf;
-        public: using IterableMutableFindOfCollection :: findAllNotOf;
+        public: using FindOfCollectionClient :: findOf;
+        public: using FindOfCollectionClient :: findFirstOf;
+        public: using FindOfCollectionClient :: findLastOf;
+        public: using FindOfCollectionClient :: findAllOf;
+        public: using FindOfCollectionClient :: findNotOf;
+        public: using FindOfCollectionClient :: findFirstNotOf;
+        public: using FindOfCollectionClient :: findLastNotOf;
+        public: using FindOfCollectionClient :: findAllNotOf;
 
-        public: using IterableMutableFindOfInitializerList :: findOf;
-        public: using IterableMutableFindOfInitializerList :: findFirstOf;
-        public: using IterableMutableFindOfInitializerList :: findLastOf;
-        public: using IterableMutableFindOfInitializerList :: findAllOf;
-        public: using IterableMutableFindOfInitializerList :: findNotOf;
-        public: using IterableMutableFindOfInitializerList :: findFirstNotOf;
-        public: using IterableMutableFindOfInitializerList :: findLastNotOf;
-        public: using IterableMutableFindOfInitializerList :: findAllNotOf;
+        public: using FindOfInitializerListClient :: findOf;
+        public: using FindOfInitializerListClient :: findFirstOf;
+        public: using FindOfInitializerListClient :: findLastOf;
+        public: using FindOfInitializerListClient :: findAllOf;
+        public: using FindOfInitializerListClient :: findNotOf;
+        public: using FindOfInitializerListClient :: findFirstNotOf;
+        public: using FindOfInitializerListClient :: findLastNotOf;
+        public: using FindOfInitializerListClient :: findAllNotOf;
 
         public: using Collection :: findThat;
         public: using Collection :: findFirstThat;
         public: using Collection :: findLastThat;
         public: using Collection :: findAllThat;
 
-        public: using IterableMutableFindByPredicate :: findThat;
-        public: using IterableMutableFindByPredicate :: findFirstThat;
-        public: using IterableMutableFindByPredicate :: findLastThat;
-        public: using IterableMutableFindByPredicate :: findAllThat;
+        public: using FindByClient :: findThat;
+        public: using FindByClient :: findFirstThat;
+        public: using FindByClient :: findLastThat;
+        public: using FindByClient :: findAllThat;
 
         public: using RandomInsertionClient :: insert;
         public: using RandomInsertionClient :: insertAll;
@@ -236,10 +260,10 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
     }
 }
 
+#include "mutableCollection/impl/MutableCollection.hpp"
+
 #include "shared/collectionInternalCommunication/client/primitive/impl/DelegateForwardIterablePrimitiveClient.hpp"
 #include "shared/collectionInternalCommunication/client/primitive/impl/IteratorRemovePrimitiveClient.hpp"
-
-#include "mutableCollection/impl/MutableCollection.hpp"
 
 #include "shared/collectionInternalCommunication/client/composite/impl/GenericMutableStatementsCompositeClient.hpp"
 #include "shared/collectionInternalCommunication/client/composite/impl/FindOfMutableCompositeClient.hpp"

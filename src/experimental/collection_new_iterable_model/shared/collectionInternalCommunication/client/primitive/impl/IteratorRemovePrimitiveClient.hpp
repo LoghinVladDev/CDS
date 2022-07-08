@@ -13,7 +13,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                 template <
                         typename __ReceiverType,                // NOLINT(bugprone-reserved-identifier)
                         typename __ElementType                  // NOLINT(bugprone-reserved-identifier)
-                > auto __AbstractIteratorPrimitiveRemoveClient <
+                > auto __AbstractIteratorRemovePrimitiveClient <
                         __ReceiverType,
                         __ElementType
                 > :: remove (
@@ -40,7 +40,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                 template <
                         typename __ReceiverType,                // NOLINT(bugprone-reserved-identifier)
                         typename __ElementType                  // NOLINT(bugprone-reserved-identifier)
-                > auto __AbstractIteratorPrimitiveRemoveClient <
+                > auto __AbstractIteratorRemovePrimitiveClient <
                         __ReceiverType,
                         __ElementType
                 > :: removeAll (
@@ -74,7 +74,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                         typename __ReceiverType,                // NOLINT(bugprone-reserved-identifier)
                         typename __ElementType,                 // NOLINT(bugprone-reserved-identifier)
                         typename __IteratorType                 // NOLINT(bugprone-reserved-identifier)
-                > auto __LocalIteratorPrimitiveRemoveClient <
+                > auto __LocalIteratorRemovePrimitiveClient <
                         __ReceiverType,
                         __ElementType,
                         __IteratorType
@@ -90,7 +90,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                         typename __ReceiverType,                // NOLINT(bugprone-reserved-identifier)
                         typename __ElementType,                 // NOLINT(bugprone-reserved-identifier)
                         typename __IteratorType                 // NOLINT(bugprone-reserved-identifier)
-                > auto __LocalIteratorPrimitiveRemoveClient <
+                > auto __LocalIteratorRemovePrimitiveClient <
                         __ReceiverType,
                         __ElementType,
                         __IteratorType

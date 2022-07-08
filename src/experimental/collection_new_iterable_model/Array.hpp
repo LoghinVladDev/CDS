@@ -14,8 +14,6 @@
 #include "shared/delegateIterator/AbstractDelegateIterator.hpp"
 #include "shared/delegateIterator/DelegateIterator.hpp"
 
-#include "shared/collectionInternalCommunication/client/LocalIteratorRemoveClient.hpp"
-
 #include "shared/collectionInternalCommunication/server/ListServer.hpp"
 #include "shared/collectionInternalCommunication/server/DelegateIterableServer.hpp"
 
@@ -33,26 +31,26 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                         Array < __ElementType >,
                         __ElementType
                 >,
-                public __hidden :: __impl :: __LocalRandomInsertionClient <
+                public __hidden :: __impl :: __LocalRandomInsertionPrimitiveClient <
                         Array < __ElementType >,
                         __ElementType,
                         __ElementType
                 >,
-                public __hidden :: __impl :: __LocalBoundaryInsertionClient <
+                public __hidden :: __impl :: __LocalBoundaryInsertionPrimitiveClient <
                         Array < __ElementType >,
                         __ElementType,
                         __ElementType
                 >,
-                public __hidden :: __impl :: __LocalIteratorRemoveClient <
-                        Array < __ElementType >,
-                        __ElementType,
-                        AbstractAddressIterator < __ElementType >
-                >,
-                public __hidden :: __impl :: __LocalIteratorRemoveClient <
-                        Array < __ElementType >,
-                        __ElementType,
-                        AbstractAddressIterator < __ElementType const >
-                >,
+//                public __hidden :: __impl :: __LocalIteratorRemovePrimitiveClient <
+//                        Array < __ElementType >,
+//                        __ElementType,
+//                        AbstractAddressIterator < __ElementType >
+//                >,
+//                public __hidden :: __impl :: __LocalConstIteratorRemovePrimitiveClient <
+//                        Array < __ElementType >,
+//                        __ElementType,
+//                        AbstractAddressIterator < __ElementType const >
+//                >,
                 public __hidden :: __impl :: __DelegateIterableServer <
                         Array < __ElementType >,
                         __ElementType,
@@ -84,7 +82,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
         protected:
             using LocalRandomInsertionClient =
-                    __hidden :: __impl :: __LocalRandomInsertionClient <
+                    __hidden :: __impl :: __LocalRandomInsertionPrimitiveClient <
                             Array < __ElementType >,
                             __ElementType,
                             __ElementType
@@ -92,30 +90,32 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
         protected:
             using LocalBoundaryInsertionClient =
-                    __hidden :: __impl :: __LocalBoundaryInsertionClient <
+                    __hidden :: __impl :: __LocalBoundaryInsertionPrimitiveClient <
                             Array < __ElementType >,
                             __ElementType,
                             __ElementType
                     >;
 
-        protected:
-            using LocalIteratorRemoveClient =
-                    __hidden :: __impl :: __LocalIteratorRemoveClient <
-                            Array < __ElementType >,
-                            __ElementType,
-                            AbstractAddressIterator < __ElementType >
-                    >;
-
-        protected:
-            using LocalConstIteratorRemoveClient =
-                    __hidden :: __impl :: __LocalIteratorRemoveClient <
-                            Array < __ElementType >,
-                            __ElementType,
-                            AbstractAddressIterator < __ElementType const >
-                    >;
+//        protected:
+//            using LocalIteratorRemoveClient =
+//                    __hidden :: __impl :: __LocalIteratorRemovePrimitiveClient <
+//                            Array < __ElementType >,
+//                            __ElementType,
+//                            AbstractAddressIterator < __ElementType >
+//                    >;
+//
+//        protected:
+//            using LocalConstIteratorRemoveClient =
+//                    __hidden :: __impl :: __LocalConstIteratorRemovePrimitiveClient <
+//                            Array < __ElementType >,
+//                            __ElementType,
+//                            AbstractAddressIterator < __ElementType const >
+//                    >;
 
         private: friend LocalBoundaryInsertionClient;
         private: friend LocalRandomInsertionClient;
+//        private: friend LocalIteratorRemoveClient;
+//        private: friend LocalConstIteratorRemoveClient;
 
         public: using ElementType           = __ElementType;
         public: using Iterator              = typename ArrayBase :: __a_Iterator;
@@ -167,7 +167,9 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         public: using LocalBoundaryInsertionClient :: emplaceBack;
         public: using LocalBoundaryInsertionClient :: emplaceFront;
 
-        public: using LocalIteratorRemoveClient :: remove;
+//        public: using LocalIteratorRemoveClient :: remove;
+//
+//        public: using LocalConstIteratorRemoveClient :: remove;
 
         public:
             __CDS_NoDiscard constexpr auto begin () noexcept -> Iterator;
@@ -283,11 +285,15 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 }
 
 #include "array/impl/Array.hpp"
-#include "shared/collectionInternalCommunication/server/impl/ListServer.hpp"
-#include "shared/iterator/impl/AddressIterator.hpp"
+
 #include "shared/array/impl/Array.hpp"
+
+#include "shared/iterator/impl/AddressIterator.hpp"
+
 #include "shared/delegateIterator/impl/AbstractDelegateIterator.hpp"
 #include "shared/delegateIterator/impl/DelegateIterator.hpp"
+
+#include "shared/collectionInternalCommunication/server/impl/ListServer.hpp"
 #include "shared/collectionInternalCommunication/server/impl/DelegateIterableServer.hpp"
 
 #endif // __CDS_EX_ARRAY_HPP__

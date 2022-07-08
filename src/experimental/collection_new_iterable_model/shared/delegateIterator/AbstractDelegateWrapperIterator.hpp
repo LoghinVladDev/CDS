@@ -15,19 +15,19 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
 
                 private:
                     template < typename, typename, typename >
-                    friend class __AbstractIteratorRelativeInsertionClient;         // NOLINT(bugprone-reserved-identifier)
+                    friend class __AbstractIteratorRelativeInsertionPrimitiveClient;         // NOLINT(bugprone-reserved-identifier)
 
                 private:
                     template < typename, typename, typename >
-                    friend class __AbstractConstIteratorRelativeInsertionClient;    // NOLINT(bugprone-reserved-identifier)
+                    friend class __AbstractConstIteratorRelativeInsertionPrimitiveClient;    // NOLINT(bugprone-reserved-identifier)
 
                 private:
                     template < typename, typename >
-                    friend class __AbstractIteratorRemoveClient;                    // NOLINT(bugprone-reserved-identifier)
+                    friend class __AbstractIteratorRemovePrimitiveClient;                    // NOLINT(bugprone-reserved-identifier)
 
                 private:
                     template < typename, typename >
-                    friend class __AbstractConstIteratorRemoveClient;               // NOLINT(bugprone-reserved-identifier)
+                    friend class __AbstractConstIteratorRemovePrimitiveClient;               // NOLINT(bugprone-reserved-identifier)
 
                 private:
                     Object                                          const * _pOwner     { nullptr };

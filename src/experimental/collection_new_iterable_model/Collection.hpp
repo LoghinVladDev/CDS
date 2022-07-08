@@ -38,68 +38,80 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                         Collection < __ElementType >,
                         __ElementType
                 >,
-                public __hidden :: __impl :: __DelegateForwardConstIterableClient <
+                public __hidden :: __impl :: __DelegateForwardConstIterablePrimitiveClient <
                         Collection < __ElementType >,
                         __ElementType,
                         false
                 >,
-                public __hidden :: __impl :: __AbstractConstIteratorRemoveClient <
+                public __hidden :: __impl :: __AbstractConstIteratorRemovePrimitiveClient <
                         Collection < __ElementType >,
                         __ElementType
                 >,
-                public __hidden :: __impl :: __IterableContainsOf <
+                public __hidden :: __impl :: __RandomInsertionPrimitiveClient <
+                        Collection < __ElementType >,
+                        __ElementType,
+                        __ElementType const
+                >,
+                public __hidden :: __impl :: __ContainsOfCompositeClient <
                         Collection < __ElementType >,
                         __ElementType,
                         Collection < __ElementType >
                 >,
-                public __hidden :: __impl :: __IterableContainsOf <
+                public __hidden :: __impl :: __ContainsOfCompositeClient <
                         Collection < __ElementType >,
                         __ElementType,
                         std :: initializer_list < __ElementType >
                 >,
-                public __hidden :: __impl :: __IterableImmutableFindOf <
+                public __hidden :: __impl :: __FindOfImmutableCompositeClient <
                         Collection < __ElementType >,
                         __ElementType,
-                        typename __hidden :: __impl :: __DelegateForwardConstIterableClient < Collection < __ElementType >, __ElementType, false > :: ConstIterator,
+                        typename __hidden :: __impl :: __DelegateForwardConstIterablePrimitiveClient <
+                                Collection < __ElementType >,
+                                __ElementType,
+                                false
+                        > :: ConstIterator,
                         Collection < __ElementType >,
                         __hidden :: __impl :: __collectionContains < __ElementType >
                 >,
-                public __hidden :: __impl :: __IterableImmutableFindOf <
+                public __hidden :: __impl :: __FindOfImmutableCompositeClient <
                         Collection < __ElementType >,
                         __ElementType,
-                        typename __hidden :: __impl :: __DelegateForwardConstIterableClient < Collection < __ElementType >, __ElementType, false > :: ConstIterator,
+                        typename __hidden :: __impl :: __DelegateForwardConstIterablePrimitiveClient <
+                                Collection < __ElementType >,
+                                __ElementType,
+                                false
+                        > :: ConstIterator,
                         std :: initializer_list < __ElementType >,
                         __hidden :: __impl :: __initializerListContains < __ElementType, & cds :: meta :: equals < __ElementType > >
                 >,
-                public __hidden :: __impl :: __IterableImmutableFindByPredicate <
+                public __hidden :: __impl :: __FindByImmutableCompositeClient <
                         Collection < __ElementType >,
                         __ElementType,
-                        typename __hidden :: __impl :: __DelegateForwardConstIterableClient < Collection < __ElementType >, __ElementType, false > :: ConstIterator
+                        typename __hidden :: __impl :: __DelegateForwardConstIterablePrimitiveClient <
+                                Collection < __ElementType >,
+                                __ElementType,
+                                false
+                        > :: ConstIterator
                 >,
-                public __hidden :: __impl :: __IterableRemoveOf <
+                public __hidden :: __impl :: __RemoveOfCompositeClient <
                         Collection < __ElementType >,
                         __ElementType,
                         Collection < __ElementType >,
                         __hidden :: __impl :: __collectionContains < __ElementType >
                 >,
-                public __hidden :: __impl :: __IterableRemoveOf <
+                public __hidden :: __impl :: __RemoveOfCompositeClient <
                         Collection < __ElementType >,
                         __ElementType,
                         std :: initializer_list < __ElementType >,
                         __hidden :: __impl :: __initializerListContains < __ElementType, & cds :: meta :: equals < __ElementType > >
                 >,
-                public __hidden :: __impl :: __IterableRemoveByPredicate <
+                public __hidden :: __impl :: __RemoveByCompositeClient <
                         Collection < __ElementType >,
                         __ElementType
                 >,
-                public __hidden :: __impl :: __IterableImmutableStatements <
+                public __hidden :: __impl :: __GenericImmutableStatementsCompositeClient <
                         Collection < __ElementType >,
                         __ElementType
-                >,
-                public __hidden :: __impl :: __RandomInsertionClient <
-                        Collection < __ElementType >,
-                        __ElementType,
-                        __ElementType const
                 >,
                 protected __hidden :: __impl :: __CollectionFunctions <
                         __ElementType,
@@ -118,7 +130,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
         protected:
             using DelegateForwardConstIterableClient =
-                    __hidden :: __impl :: __DelegateForwardConstIterableClient <
+                    __hidden :: __impl :: __DelegateForwardConstIterablePrimitiveClient <
                             Collection < __ElementType >,
                             __ElementType,
                             false
@@ -126,72 +138,84 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
         protected:
             using AbstractConstIteratorRemoveClient =
-                    __hidden :: __impl :: __AbstractConstIteratorRemoveClient <
+                    __hidden :: __impl :: __AbstractConstIteratorRemovePrimitiveClient <
                             Collection < __ElementType >,
                             __ElementType
                     >;
 
         protected:
-            using IterableRemoveByPredicate =
-                    __hidden :: __impl :: __IterableRemoveByPredicate <
+            using RemoveByClient =
+                    __hidden :: __impl :: __RemoveByCompositeClient <
                             Collection < __ElementType >,
                             __ElementType
                     >;
 
         protected:
-            using IterableImmutableStatements =
-                    __hidden :: __impl :: __IterableImmutableStatements <
+            using GenericImmutableStatementsClient =
+                    __hidden :: __impl :: __GenericImmutableStatementsCompositeClient <
                             Collection < __ElementType >,
                             __ElementType
                     >;
 
         protected:
-            using IterableContainsOfCollection =
-                    __hidden :: __impl :: __IterableContainsOf <
+            using ContainsOfCollectionClient =
+                    __hidden :: __impl :: __ContainsOfCompositeClient <
                             Collection < __ElementType >,
                             __ElementType,
                             Collection < __ElementType >
                     >;
 
         protected:
-            using IterableContainsOfInitializerList =
-                    __hidden :: __impl :: __IterableContainsOf <
+            using ContainsOfInitializerListClient =
+                    __hidden :: __impl :: __ContainsOfCompositeClient <
                             Collection < __ElementType >,
                             __ElementType,
                             std :: initializer_list < __ElementType >
                     >;
 
         protected:
-            using IterableImmutableFindOfCollection =
-                    __hidden :: __impl :: __IterableImmutableFindOf <
+            using FindOfCollectionClient =
+                    __hidden :: __impl :: __FindOfImmutableCompositeClient <
                             Collection < __ElementType >,
                             __ElementType,
-                            typename __hidden :: __impl :: __DelegateForwardConstIterableClient < Collection < __ElementType >, __ElementType, false > :: ConstIterator,
+                            typename __hidden :: __impl :: __DelegateForwardConstIterablePrimitiveClient <
+                                    Collection < __ElementType >,
+                                    __ElementType,
+                                    false
+                            > :: ConstIterator,
                             Collection < __ElementType >,
                             __hidden :: __impl :: __collectionContains < __ElementType >
                     >;
 
         protected:
-            using IterableImmutableFindOfInitializerList =
-                    __hidden :: __impl :: __IterableImmutableFindOf <
+            using FindOfInitializerListClient =
+                    __hidden :: __impl :: __FindOfImmutableCompositeClient <
                             Collection < __ElementType >,
                             __ElementType,
-                            typename __hidden :: __impl :: __DelegateForwardConstIterableClient < Collection < __ElementType >, __ElementType, false > :: ConstIterator,
+                            typename __hidden :: __impl :: __DelegateForwardConstIterablePrimitiveClient <
+                                    Collection < __ElementType >,
+                                    __ElementType,
+                                    false
+                            > :: ConstIterator,
                             std :: initializer_list < __ElementType >,
                             __hidden :: __impl :: __initializerListContains < __ElementType, & cds :: meta :: equals < __ElementType > >
                     >;
 
         protected:
-            using IterableImmutableFindByPredicate =
-                    __hidden :: __impl :: __IterableImmutableFindByPredicate <
+            using FindByImmutableClient =
+                    __hidden :: __impl :: __FindByImmutableCompositeClient <
                             Collection < __ElementType >,
                             __ElementType,
-                            typename __hidden :: __impl :: __DelegateForwardConstIterableClient < Collection < __ElementType >, __ElementType, false > :: ConstIterator
+                            typename __hidden :: __impl :: __DelegateForwardConstIterablePrimitiveClient <
+                                    Collection < __ElementType >,
+                                    __ElementType,
+                                    false
+                            > :: ConstIterator
                     >;
 
         protected:
-            using IterableRemoveOfCollection =
-                    __hidden :: __impl :: __IterableRemoveOf <
+            using RemoveOfCollectionClient =
+                    __hidden :: __impl :: __RemoveOfCompositeClient <
                             Collection < __ElementType >,
                             __ElementType,
                             Collection < __ElementType >,
@@ -199,8 +223,8 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                     >;
 
         protected:
-            using IterableRemoveOfInitializerList =
-                    __hidden :: __impl :: __IterableRemoveOf <
+            using RemoveOfInitializerListClient =
+                    __hidden :: __impl :: __RemoveOfCompositeClient <
                             Collection < __ElementType >,
                             __ElementType,
                             std :: initializer_list < __ElementType >,
@@ -208,7 +232,8 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                     >;
 
         protected:
-            using RandomInsertionClient = __hidden :: __impl :: __RandomInsertionClient <
+            using RandomInsertionClient
+                    = __hidden :: __impl :: __RandomInsertionPrimitiveClient <
                             Collection < __ElementType >,
                             __ElementType,
                             __ElementType const
@@ -240,72 +265,72 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
         public: using AbstractConstIteratorRemoveClient :: remove;
 
-        public: using IterableRemoveByPredicate :: removeIf;
-        public: using IterableRemoveByPredicate :: removeFirstIf;
-        public: using IterableRemoveByPredicate :: removeLastIf;
-        public: using IterableRemoveByPredicate :: removeAllIf;
+        public: using RemoveByClient :: removeIf;
+        public: using RemoveByClient :: removeFirstIf;
+        public: using RemoveByClient :: removeLastIf;
+        public: using RemoveByClient :: removeAllIf;
 
-        public: using IterableImmutableStatements :: forEach;
-        public: using IterableImmutableStatements :: some;
-        public: using IterableImmutableStatements :: atLeast;
-        public: using IterableImmutableStatements :: atMost;
-        public: using IterableImmutableStatements :: moreThan;
-        public: using IterableImmutableStatements :: fewerThan;
-        public: using IterableImmutableStatements :: count;
-        public: using IterableImmutableStatements :: any;
-        public: using IterableImmutableStatements :: all;
-        public: using IterableImmutableStatements :: none;
+        public: using GenericImmutableStatementsClient :: forEach;
+        public: using GenericImmutableStatementsClient :: some;
+        public: using GenericImmutableStatementsClient :: atLeast;
+        public: using GenericImmutableStatementsClient :: atMost;
+        public: using GenericImmutableStatementsClient :: moreThan;
+        public: using GenericImmutableStatementsClient :: fewerThan;
+        public: using GenericImmutableStatementsClient :: count;
+        public: using GenericImmutableStatementsClient :: any;
+        public: using GenericImmutableStatementsClient :: all;
+        public: using GenericImmutableStatementsClient :: none;
 
-        public: using IterableRemoveOfCollection :: removeOf;
-        public: using IterableRemoveOfCollection :: removeFirstOf;
-        public: using IterableRemoveOfCollection :: removeLastOf;
-        public: using IterableRemoveOfCollection :: removeAllOf;
-        public: using IterableRemoveOfCollection :: removeNotOf;
-        public: using IterableRemoveOfCollection :: removeFirstNotOf;
-        public: using IterableRemoveOfCollection :: removeLastNotOf;
-        public: using IterableRemoveOfCollection :: removeAllNotOf;
+        public: using RemoveOfCollectionClient :: removeOf;
+        public: using RemoveOfCollectionClient :: removeFirstOf;
+        public: using RemoveOfCollectionClient :: removeLastOf;
+        public: using RemoveOfCollectionClient :: removeAllOf;
+        public: using RemoveOfCollectionClient :: removeNotOf;
+        public: using RemoveOfCollectionClient :: removeFirstNotOf;
+        public: using RemoveOfCollectionClient :: removeLastNotOf;
+        public: using RemoveOfCollectionClient :: removeAllNotOf;
 
-        public: using IterableRemoveOfInitializerList :: removeOf;
-        public: using IterableRemoveOfInitializerList :: removeFirstOf;
-        public: using IterableRemoveOfInitializerList :: removeLastOf;
-        public: using IterableRemoveOfInitializerList :: removeAllOf;
-        public: using IterableRemoveOfInitializerList :: removeNotOf;
-        public: using IterableRemoveOfInitializerList :: removeFirstNotOf;
-        public: using IterableRemoveOfInitializerList :: removeLastNotOf;
-        public: using IterableRemoveOfInitializerList :: removeAllNotOf;
+        public: using RemoveOfInitializerListClient :: removeOf;
+        public: using RemoveOfInitializerListClient :: removeFirstOf;
+        public: using RemoveOfInitializerListClient :: removeLastOf;
+        public: using RemoveOfInitializerListClient :: removeAllOf;
+        public: using RemoveOfInitializerListClient :: removeNotOf;
+        public: using RemoveOfInitializerListClient :: removeFirstNotOf;
+        public: using RemoveOfInitializerListClient :: removeLastNotOf;
+        public: using RemoveOfInitializerListClient :: removeAllNotOf;
 
-        public: using IterableContainsOfCollection :: containsAnyOf;
-        public: using IterableContainsOfCollection :: containsAllOf;
-        public: using IterableContainsOfCollection :: containsAnyNotOf;
-        public: using IterableContainsOfCollection :: containsAllNotOf;
+        public: using ContainsOfCollectionClient :: containsAnyOf;
+        public: using ContainsOfCollectionClient :: containsAllOf;
+        public: using ContainsOfCollectionClient :: containsAnyNotOf;
+        public: using ContainsOfCollectionClient :: containsAllNotOf;
 
-        public: using IterableContainsOfInitializerList :: containsAnyOf;
-        public: using IterableContainsOfInitializerList :: containsAllOf;
-        public: using IterableContainsOfInitializerList :: containsAnyNotOf;
-        public: using IterableContainsOfInitializerList :: containsAllNotOf;
+        public: using ContainsOfInitializerListClient :: containsAnyOf;
+        public: using ContainsOfInitializerListClient :: containsAllOf;
+        public: using ContainsOfInitializerListClient :: containsAnyNotOf;
+        public: using ContainsOfInitializerListClient :: containsAllNotOf;
 
-        public: using IterableImmutableFindByPredicate :: findThat;
-        public: using IterableImmutableFindByPredicate :: findFirstThat;
-        public: using IterableImmutableFindByPredicate :: findLastThat;
-        public: using IterableImmutableFindByPredicate :: findAllThat;
+        public: using FindByImmutableClient :: findThat;
+        public: using FindByImmutableClient :: findFirstThat;
+        public: using FindByImmutableClient :: findLastThat;
+        public: using FindByImmutableClient :: findAllThat;
 
-        public: using IterableImmutableFindOfCollection :: findOf;
-        public: using IterableImmutableFindOfCollection :: findFirstOf;
-        public: using IterableImmutableFindOfCollection :: findLastOf;
-        public: using IterableImmutableFindOfCollection :: findAllOf;
-        public: using IterableImmutableFindOfCollection :: findNotOf;
-        public: using IterableImmutableFindOfCollection :: findFirstNotOf;
-        public: using IterableImmutableFindOfCollection :: findLastNotOf;
-        public: using IterableImmutableFindOfCollection :: findAllNotOf;
+        public: using FindOfCollectionClient :: findOf;
+        public: using FindOfCollectionClient :: findFirstOf;
+        public: using FindOfCollectionClient :: findLastOf;
+        public: using FindOfCollectionClient :: findAllOf;
+        public: using FindOfCollectionClient :: findNotOf;
+        public: using FindOfCollectionClient :: findFirstNotOf;
+        public: using FindOfCollectionClient :: findLastNotOf;
+        public: using FindOfCollectionClient :: findAllNotOf;
 
-        public: using IterableImmutableFindOfInitializerList :: findOf;
-        public: using IterableImmutableFindOfInitializerList :: findFirstOf;
-        public: using IterableImmutableFindOfInitializerList :: findLastOf;
-        public: using IterableImmutableFindOfInitializerList :: findAllOf;
-        public: using IterableImmutableFindOfInitializerList :: findNotOf;
-        public: using IterableImmutableFindOfInitializerList :: findFirstNotOf;
-        public: using IterableImmutableFindOfInitializerList :: findLastNotOf;
-        public: using IterableImmutableFindOfInitializerList :: findAllNotOf;
+        public: using FindOfInitializerListClient :: findOf;
+        public: using FindOfInitializerListClient :: findFirstOf;
+        public: using FindOfInitializerListClient :: findLastOf;
+        public: using FindOfInitializerListClient :: findAllOf;
+        public: using FindOfInitializerListClient :: findNotOf;
+        public: using FindOfInitializerListClient :: findFirstNotOf;
+        public: using FindOfInitializerListClient :: findLastNotOf;
+        public: using FindOfInitializerListClient :: findAllNotOf;
 
         public: using RandomInsertionClient :: add;
         public: using RandomInsertionClient :: addAll;

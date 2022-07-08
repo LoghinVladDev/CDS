@@ -15,6 +15,7 @@
 #include "shared/collectionInternalCommunication/client/primitive/ConstIteratorRelativeInsertionPrimitiveClient.hpp"
 #include "shared/collectionInternalCommunication/client/primitive/BoundaryInsertionPrimitiveClient.hpp"
 #include "shared/collectionInternalCommunication/client/primitive/IndexedOperationsPrimitiveClient.hpp"
+
 #include "shared/collectionInternalCommunication/client/composite/SortCompositeClient.hpp"
 #include "shared/collectionInternalCommunication/client/composite/ReplaceCompositeClient.hpp"
 #include "shared/collectionInternalCommunication/client/composite/ReplaceOfCompositeClient.hpp"
@@ -29,86 +30,86 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
         class List :
                 public MutableCollection < __ElementType >,
-                public __hidden :: __impl :: __DelegateForwardIterableClient <
+                public __hidden :: __impl :: __DelegateForwardIterablePrimitiveClient <
                         List < __ElementType >,
                         __ElementType,
                         true
                 >,
-                public __hidden :: __impl :: __DelegateBackwardIterableClient <
+                public __hidden :: __impl :: __DelegateBackwardIterablePrimitiveClient <
                         List < __ElementType >,
                         __ElementType,
                         true
                 >,
-                public __hidden :: __impl :: __DelegateForwardConstIterableClient <
+                public __hidden :: __impl :: __DelegateForwardConstIterablePrimitiveClient <
                         List < __ElementType >,
                         __ElementType,
                         true
                 >,
-                public __hidden :: __impl :: __DelegateBackwardConstIterableClient <
+                public __hidden :: __impl :: __DelegateBackwardConstIterablePrimitiveClient <
                         List < __ElementType >,
                         __ElementType,
                         true
                 >,
-                public __hidden :: __impl :: __BoundaryInsertionClient <
+                public __hidden :: __impl :: __BoundaryInsertionPrimitiveClient <
                         List < __ElementType >,
                         __ElementType,
                         __ElementType
                 >,
-                public __hidden :: __impl :: __AbstractIteratorRelativeInsertionClient <
+                public __hidden :: __impl :: __AbstractIteratorRelativeInsertionPrimitiveClient <
                         List < __ElementType >,
                         __ElementType,
                         __ElementType
                 >,
-                public __hidden :: __impl :: __AbstractConstIteratorRelativeInsertionClient <
+                public __hidden :: __impl :: __AbstractConstIteratorRelativeInsertionPrimitiveClient <
                         List < __ElementType >,
                         __ElementType,
                         __ElementType
                 >,
-                public __hidden :: __impl :: __IndexedOperationsClient <
+                public __hidden :: __impl :: __IndexedOperationsPrimitiveClient <
                         List < __ElementType >,
                         __ElementType
                 >,
-                public __hidden :: __impl :: __SortingClient <
+                public __hidden :: __impl :: __SortCompositeClient <
                         List < __ElementType >,
                         __ElementType
                 >,
-                public __hidden :: __impl :: __ReplacingClient <
+                public __hidden :: __impl :: __ReplaceCompositeClient <
                         List < __ElementType >,
                         __ElementType
                 >,
-                public __hidden :: __impl :: __ReplacingOfClient <
+                public __hidden :: __impl :: __ReplaceOfCompositeClient <
                         List < __ElementType >,
                         __ElementType,
                         Collection < __ElementType >,
                         & __hidden :: __impl :: __collectionContains < __ElementType >
                 >,
-                public __hidden :: __impl :: __ReplacingOfClient <
+                public __hidden :: __impl :: __ReplaceOfCompositeClient <
                         List < __ElementType >,
                         __ElementType,
                         std :: initializer_list < __ElementType >,
                         & __hidden :: __impl :: __initializerListContains < __ElementType, & cds :: meta :: equals >
                 >,
-                public __hidden :: __impl :: __FunctionalReplacingClient <
+                public __hidden :: __impl :: __ReplaceByCompositeClient <
                         List < __ElementType >,
                         __ElementType
                 >,
-                public __hidden :: __impl :: __IndicesClient <
+                public __hidden :: __impl :: __IndicesCompositeClient <
                         List < __ElementType >,
                         __ElementType
                 >,
-                public __hidden :: __impl :: __IndicesOfClient <
+                public __hidden :: __impl :: __IndicesOfCompositeClient <
                         List < __ElementType >,
                         __ElementType,
                         Collection < __ElementType >,
                         & __hidden :: __impl :: __collectionContains < __ElementType >
                 >,
-                public __hidden :: __impl :: __IndicesOfClient <
+                public __hidden :: __impl :: __IndicesOfCompositeClient <
                         List < __ElementType >,
                         __ElementType,
                         std :: initializer_list < __ElementType >,
                         & __hidden :: __impl :: __initializerListContains < __ElementType, & cds :: meta :: equals >
                 >,
-                public __hidden :: __impl :: __FunctionalIndicesClient <
+                public __hidden :: __impl :: __IndicesByCompositeClient <
                         List < __ElementType >,
                         __ElementType
                 > {
@@ -118,7 +119,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
         protected:
             using DelegateForwardIterableClient =
-                    __hidden :: __impl :: __DelegateForwardIterableClient <
+                    __hidden :: __impl :: __DelegateForwardIterablePrimitiveClient <
                             List < __ElementType >,
                             __ElementType,
                             true
@@ -126,7 +127,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
         protected:
             using DelegateBackwardIterableClient =
-                    __hidden :: __impl :: __DelegateBackwardIterableClient <
+                    __hidden :: __impl :: __DelegateBackwardIterablePrimitiveClient <
                             List < __ElementType >,
                             __ElementType,
                             true
@@ -134,7 +135,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
         protected:
             using DelegateForwardConstIterableClient =
-                    __hidden :: __impl :: __DelegateForwardConstIterableClient <
+                    __hidden :: __impl :: __DelegateForwardConstIterablePrimitiveClient <
                             List < __ElementType >,
                             __ElementType,
                             true
@@ -142,7 +143,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
         protected:
             using DelegateBackwardConstIterableClient =
-                    __hidden :: __impl :: __DelegateBackwardConstIterableClient <
+                    __hidden :: __impl :: __DelegateBackwardConstIterablePrimitiveClient <
                             List < __ElementType >,
                             __ElementType,
                             true
@@ -150,23 +151,23 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
         protected:
             using BoundaryInsertionClient =
-                    __hidden :: __impl :: __BoundaryInsertionClient <
+                    __hidden :: __impl :: __BoundaryInsertionPrimitiveClient <
                             List < __ElementType >,
                             __ElementType,
                             __ElementType
                     >;
 
         protected:
-            using AbstractIteratorRelativeInsertionClient =
-                    __hidden :: __impl :: __AbstractIteratorRelativeInsertionClient <
+            using IteratorRelativeInsertionClient =
+                    __hidden :: __impl :: __AbstractIteratorRelativeInsertionPrimitiveClient <
                             List < __ElementType >,
                             __ElementType,
                             __ElementType
                     >;
 
         protected:
-            using AbstractConstIteratorRelativeInsertionClient =
-                    __hidden :: __impl :: __AbstractConstIteratorRelativeInsertionClient <
+            using ConstIteratorRelativeInsertionClient =
+                    __hidden :: __impl :: __AbstractConstIteratorRelativeInsertionPrimitiveClient <
                             List < __ElementType >,
                             __ElementType,
                             __ElementType
@@ -174,28 +175,28 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
         protected:
             using IndexedOperationsClient =
-                    __hidden :: __impl :: __IndexedOperationsClient <
+                    __hidden :: __impl :: __IndexedOperationsPrimitiveClient <
                             List < __ElementType >,
                             __ElementType
                     >;
 
         protected:
-            using SortingClient =
-                    __hidden :: __impl :: __SortingClient <
+            using SortClient =
+                    __hidden :: __impl :: __SortCompositeClient <
                             List < __ElementType >,
                             __ElementType
                     >;
 
         protected:
-            using ReplacingClient =
-                    __hidden :: __impl :: __ReplacingClient <
+            using ReplaceClient =
+                    __hidden :: __impl :: __ReplaceCompositeClient <
                             List < __ElementType >,
                             __ElementType
                     >;
 
         protected:
-            using ReplacingOfCollectionClient =
-                    __hidden :: __impl :: __ReplacingOfClient <
+            using ReplaceOfCollectionClient =
+                    __hidden :: __impl :: __ReplaceOfCompositeClient <
                             List < __ElementType >,
                             __ElementType,
                             Collection < __ElementType >,
@@ -203,8 +204,8 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                     >;
 
         protected:
-            using ReplacingOfInitializerListClient =
-                    __hidden :: __impl :: __ReplacingOfClient <
+            using ReplaceOfInitializerList =
+                    __hidden :: __impl :: __ReplaceOfCompositeClient <
                             List < __ElementType >,
                             __ElementType,
                             std :: initializer_list < __ElementType >,
@@ -212,22 +213,22 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                     >;
 
         protected:
-            using FunctionalReplacingClient =
-                    __hidden :: __impl :: __FunctionalReplacingClient <
+            using ReplaceByClient =
+                    __hidden :: __impl :: __ReplaceByCompositeClient <
                             List < __ElementType >,
                             __ElementType
                     >;
 
         protected:
             using IndicesClient =
-                    __hidden :: __impl :: __IndicesClient <
+                    __hidden :: __impl :: __IndicesCompositeClient <
                             List < __ElementType >,
                             __ElementType
                     >;
 
         protected:
             using IndicesOfCollectionClient =
-                    __hidden :: __impl :: __IndicesOfClient <
+                    __hidden :: __impl :: __IndicesOfCompositeClient <
                             List < __ElementType >,
                             __ElementType,
                             Collection < __ElementType >,
@@ -236,7 +237,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
         protected:
             using IndicesOfInitializerListClient =
-                    __hidden :: __impl :: __IndicesOfClient <
+                    __hidden :: __impl :: __IndicesOfCompositeClient <
                             List < __ElementType >,
                             __ElementType,
                             std :: initializer_list < __ElementType >,
@@ -244,8 +245,8 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                     >;
 
         protected:
-            using FunctionalIndcesClient =
-                    __hidden :: __impl :: __FunctionalIndicesClient <
+            using IndicesByClient =
+                    __hidden :: __impl :: __IndicesByCompositeClient <
                             List < __ElementType >,
                             __ElementType
                     >;
@@ -297,61 +298,61 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         public: using BoundaryInsertionClient :: emplaceBack;
         public: using BoundaryInsertionClient :: emplaceFront;
 
-        public: using AbstractIteratorRelativeInsertionClient :: insertBefore;
-        public: using AbstractIteratorRelativeInsertionClient :: insertAllBefore;
-        public: using AbstractIteratorRelativeInsertionClient :: insertAllOfBefore;
-        public: using AbstractIteratorRelativeInsertionClient :: insertAfter;
-        public: using AbstractIteratorRelativeInsertionClient :: insertAllAfter;
-        public: using AbstractIteratorRelativeInsertionClient :: insertAllOfAfter;
-        public: using AbstractIteratorRelativeInsertionClient :: emplaceBefore;
-        public: using AbstractIteratorRelativeInsertionClient :: emplaceAfter;
+        public: using IteratorRelativeInsertionClient :: insertBefore;
+        public: using IteratorRelativeInsertionClient :: insertAllBefore;
+        public: using IteratorRelativeInsertionClient :: insertAllOfBefore;
+        public: using IteratorRelativeInsertionClient :: insertAfter;
+        public: using IteratorRelativeInsertionClient :: insertAllAfter;
+        public: using IteratorRelativeInsertionClient :: insertAllOfAfter;
+        public: using IteratorRelativeInsertionClient :: emplaceBefore;
+        public: using IteratorRelativeInsertionClient :: emplaceAfter;
 
-        public: using AbstractConstIteratorRelativeInsertionClient :: insertBefore;
-        public: using AbstractConstIteratorRelativeInsertionClient :: insertAllBefore;
-        public: using AbstractConstIteratorRelativeInsertionClient :: insertAllOfBefore;
-        public: using AbstractConstIteratorRelativeInsertionClient :: insertAfter;
-        public: using AbstractConstIteratorRelativeInsertionClient :: insertAllAfter;
-        public: using AbstractConstIteratorRelativeInsertionClient :: insertAllOfAfter;
-        public: using AbstractConstIteratorRelativeInsertionClient :: emplaceBefore;
-        public: using AbstractConstIteratorRelativeInsertionClient :: emplaceAfter;
+        public: using ConstIteratorRelativeInsertionClient :: insertBefore;
+        public: using ConstIteratorRelativeInsertionClient :: insertAllBefore;
+        public: using ConstIteratorRelativeInsertionClient :: insertAllOfBefore;
+        public: using ConstIteratorRelativeInsertionClient :: insertAfter;
+        public: using ConstIteratorRelativeInsertionClient :: insertAllAfter;
+        public: using ConstIteratorRelativeInsertionClient :: insertAllOfAfter;
+        public: using ConstIteratorRelativeInsertionClient :: emplaceBefore;
+        public: using ConstIteratorRelativeInsertionClient :: emplaceAfter;
 
         public: using IndexedOperationsClient :: sub;
         public: using IndexedOperationsClient :: operator[];
         public: using IndexedOperationsClient :: removeAt;
 
-        public: using SortingClient :: sort;
+        public: using SortClient :: sort;
 
-        public: using ReplacingClient :: replace;
-        public: using ReplacingClient :: replaceFirst;
-        public: using ReplacingClient :: replaceLast;
-        public: using ReplacingClient :: replaceAll;
+        public: using ReplaceClient :: replace;
+        public: using ReplaceClient :: replaceFirst;
+        public: using ReplaceClient :: replaceLast;
+        public: using ReplaceClient :: replaceAll;
 
-        public: using ReplacingOfCollectionClient :: replaceOf;
-        public: using ReplacingOfCollectionClient :: replaceFirstOf;
-        public: using ReplacingOfCollectionClient :: replaceLastOf;
-        public: using ReplacingOfCollectionClient :: replaceAllOf;
-        public: using ReplacingOfCollectionClient :: replaceNotOf;
-        public: using ReplacingOfCollectionClient :: replaceFirstNotOf;
-        public: using ReplacingOfCollectionClient :: replaceLastNotOf;
-        public: using ReplacingOfCollectionClient :: replaceAllNotOf;
+        public: using ReplaceOfCollectionClient :: replaceOf;
+        public: using ReplaceOfCollectionClient :: replaceFirstOf;
+        public: using ReplaceOfCollectionClient :: replaceLastOf;
+        public: using ReplaceOfCollectionClient :: replaceAllOf;
+        public: using ReplaceOfCollectionClient :: replaceNotOf;
+        public: using ReplaceOfCollectionClient :: replaceFirstNotOf;
+        public: using ReplaceOfCollectionClient :: replaceLastNotOf;
+        public: using ReplaceOfCollectionClient :: replaceAllNotOf;
 
-        public: using ReplacingOfInitializerListClient :: replaceOf;
-        public: using ReplacingOfInitializerListClient :: replaceFirstOf;
-        public: using ReplacingOfInitializerListClient :: replaceLastOf;
-        public: using ReplacingOfInitializerListClient :: replaceAllOf;
-        public: using ReplacingOfInitializerListClient :: replaceNotOf;
-        public: using ReplacingOfInitializerListClient :: replaceFirstNotOf;
-        public: using ReplacingOfInitializerListClient :: replaceLastNotOf;
-        public: using ReplacingOfInitializerListClient :: replaceAllNotOf;
+        public: using ReplaceOfInitializerList :: replaceOf;
+        public: using ReplaceOfInitializerList :: replaceFirstOf;
+        public: using ReplaceOfInitializerList :: replaceLastOf;
+        public: using ReplaceOfInitializerList :: replaceAllOf;
+        public: using ReplaceOfInitializerList :: replaceNotOf;
+        public: using ReplaceOfInitializerList :: replaceFirstNotOf;
+        public: using ReplaceOfInitializerList :: replaceLastNotOf;
+        public: using ReplaceOfInitializerList :: replaceAllNotOf;
 
-        public: using FunctionalReplacingClient :: replaceThat;
-        public: using FunctionalReplacingClient :: replaceFirstThat;
-        public: using FunctionalReplacingClient :: replaceLastThat;
-        public: using FunctionalReplacingClient :: replaceAllThat;
-        public: using FunctionalReplacingClient :: replaceThatBy;
-        public: using FunctionalReplacingClient :: replaceFirstThatBy;
-        public: using FunctionalReplacingClient :: replaceLastThatBy;
-        public: using FunctionalReplacingClient :: replaceAllThatBy;
+        public: using ReplaceByClient :: replaceThat;
+        public: using ReplaceByClient :: replaceFirstThat;
+        public: using ReplaceByClient :: replaceLastThat;
+        public: using ReplaceByClient :: replaceAllThat;
+        public: using ReplaceByClient :: replaceThatBy;
+        public: using ReplaceByClient :: replaceFirstThatBy;
+        public: using ReplaceByClient :: replaceLastThatBy;
+        public: using ReplaceByClient :: replaceAllThatBy;
 
         public: using IndicesClient :: indicesOf;
         public: using IndicesClient :: firstIndexOf;
@@ -376,10 +377,10 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         public: using IndicesOfInitializerListClient :: lastIndexOfNotFrom;
         public: using IndicesOfInitializerListClient :: allIndicesOfNotFrom;
 
-        public: using FunctionalIndcesClient :: indicesOfThat;
-        public: using FunctionalIndcesClient :: firstIndexOfThat;
-        public: using FunctionalIndcesClient :: lastIndexOfThat;
-        public: using FunctionalIndcesClient :: allIndicesOfThat;
+        public: using IndicesByClient :: indicesOfThat;
+        public: using IndicesByClient :: firstIndexOfThat;
+        public: using IndicesByClient :: lastIndexOfThat;
+        public: using IndicesByClient :: allIndicesOfThat;
 
         public:
             __CDS_NoDiscard auto toString () const noexcept -> String override;
@@ -437,6 +438,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 #include "shared/collectionInternalCommunication/client/primitive/impl/ConstIteratorRelativeInsertionPrimitiveClient.hpp"
 #include "shared/collectionInternalCommunication/client/primitive/impl/BoundaryInsertionPrimitiveClient.hpp"
 #include "shared/collectionInternalCommunication/client/primitive/impl/IndexedOperationsPrimitiveClient.hpp"
+
 #include "shared/collectionInternalCommunication/client/composite/impl/SortCompositeClient.hpp"
 #include "shared/collectionInternalCommunication/client/composite/impl/ReplaceCompositeClient.hpp"
 #include "shared/collectionInternalCommunication/client/composite/impl/ReplaceOfCompositeClient.hpp"

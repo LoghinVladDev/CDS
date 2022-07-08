@@ -22,43 +22,43 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
 
                 private:
                     template < typename, typename, bool >
-                    friend class __DelegateForwardIterableClient;                   // NOLINT(bugprone-reserved-identifier)
+                    friend class __DelegateForwardIterablePrimitiveClient;                  // NOLINT(bugprone-reserved-identifier)
 
                 private:
                     template < typename, typename, bool >
-                    friend class __DelegateBackwardIterableClient;                  // NOLINT(bugprone-reserved-identifier)
+                    friend class __DelegateBackwardIterablePrimitiveClient;                 // NOLINT(bugprone-reserved-identifier)
 
                 private:
                     template < typename, typename, bool >
-                    friend class __DelegateForwardConstIterableClient;              // NOLINT(bugprone-reserved-identifier)
+                    friend class __DelegateForwardConstIterablePrimitiveClient;             // NOLINT(bugprone-reserved-identifier)
 
                 private:
                     template < typename, typename, bool >
-                    friend class __DelegateBackwardConstIterableClient;             // NOLINT(bugprone-reserved-identifier)
+                    friend class __DelegateBackwardConstIterablePrimitiveClient;            // NOLINT(bugprone-reserved-identifier)
 
                 private:
                     template < typename, typename >
-                    friend class __AbstractIteratorRemoveClient;                    // NOLINT(bugprone-reserved-identifier)
+                    friend class __AbstractIteratorRemovePrimitiveClient;                   // NOLINT(bugprone-reserved-identifier)
 
                 private:
                     template < typename, typename >
-                    friend class __AbstractConstIteratorRemoveClient;               // NOLINT(bugprone-reserved-identifier)
+                    friend class __AbstractConstIteratorRemovePrimitiveClient;              // NOLINT(bugprone-reserved-identifier)
 
                 private:
                     template < typename, typename, typename >
-                    friend class __RandomInsertionClient;                           // NOLINT(bugprone-reserved-identifier)
+                    friend class __RandomInsertionPrimitiveClient;                          // NOLINT(bugprone-reserved-identifier)
 
                 private:
                     template < typename, typename, typename >
-                    friend class __BoundaryInsertionClient;                         // NOLINT(bugprone-reserved-identifier)
+                    friend class __BoundaryInsertionPrimitiveClient;                        // NOLINT(bugprone-reserved-identifier)
 
                 private:
                     template < typename, typename, typename >
-                    friend class __AbstractIteratorRelativeInsertionClient;         // NOLINT(bugprone-reserved-identifier)
+                    friend class __AbstractIteratorRelativeInsertionPrimitiveClient;        // NOLINT(bugprone-reserved-identifier)
 
                 private:
                     template < typename, typename, typename >
-                    friend class __AbstractConstIteratorRelativeInsertionClient;    // NOLINT(bugprone-reserved-identifier)
+                    friend class __AbstractConstIteratorRelativeInsertionPrimitiveClient;   // NOLINT(bugprone-reserved-identifier)
 
                 private:
                     using __GenericHandler  = void ( __ReceiverType :: * ) ();               // NOLINT(bugprone-reserved-identifier)

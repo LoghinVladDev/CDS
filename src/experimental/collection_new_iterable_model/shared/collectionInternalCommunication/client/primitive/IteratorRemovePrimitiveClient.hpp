@@ -16,7 +16,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                 template <
                         typename __ReceiverType,                    // NOLINT(bugprone-reserved-identifier)
                         typename __ElementType                      // NOLINT(bugprone-reserved-identifier)
-                > class __AbstractIteratorPrimitiveRemoveClient {   // NOLINT(bugprone-reserved-identifier)
+                > class __AbstractIteratorRemovePrimitiveClient {   // NOLINT(bugprone-reserved-identifier)
 
                 protected:
                     using __acirc_ElementType       = // NOLINT(bugprone-reserved-identifier)
@@ -43,7 +43,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                         typename __ReceiverType,                 // NOLINT(bugprone-reserved-identifier)
                         typename __ElementType,                  // NOLINT(bugprone-reserved-identifier)
                         typename __IteratorType                  // NOLINT(bugprone-reserved-identifier)
-                > class __LocalIteratorPrimitiveRemoveClient {   // NOLINT(bugprone-reserved-identifier)
+                > class __LocalIteratorRemovePrimitiveClient {   // NOLINT(bugprone-reserved-identifier)
 
                 protected:
                     using __acirc_ElementType   = // NOLINT(bugprone-reserved-identifier)
