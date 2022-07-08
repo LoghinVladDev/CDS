@@ -1,0 +1,119 @@
+//
+// Created by loghin on 6/30/22.
+//
+
+#ifndef __CDS_SHARED_INDICES_OF_CLIENT_HPP__
+#define __CDS_SHARED_INDICES_OF_CLIENT_HPP__
+
+namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
+    namespace experimental {    // NOLINT(modernize-concat-nested-namespaces)
+        namespace __hidden {    // NOLINT(modernize-concat-nested-namespaces, bugprone-reserved-identifier)
+            namespace __impl {  // NOLINT(bugprone-reserved-identifier)
+
+                template <
+                        typename                                                    __ReceiverType,         // NOLINT(bugprone-reserved-identifier)
+                        typename                                                    __ElementType,          // NOLINT(bugprone-reserved-identifier)
+                        typename                                                    __FromCollectionType,   // NOLINT(bugprone-reserved-identifier)
+                        __ContainsFunction < __FromCollectionType, __ElementType >  __contains              // NOLINT(bugprone-reserved-identifier)
+                > class __IndicesOfClient {                                                                 // NOLINT(bugprone-reserved-identifier)
+
+                private:
+                    using ElementType = __ElementType;
+
+                protected:
+                    template < typename __CollectionType >  // NOLINT(bugprone-reserved-identifier)
+                    auto indicesOfFrom (
+                            Size                            count,
+                            __CollectionType              & storeIn,
+                            __FromCollectionType    const & from
+                    ) const noexcept -> __CollectionType &;
+
+                protected:
+                    template < template < typename ... > class __CollectionType >   // NOLINT(bugprone-reserved-identifier)
+                    __CDS_NoDiscard auto indicesOfFrom (
+                            Size                            count,
+                            __FromCollectionType    const & from
+                    ) const noexcept -> __CollectionType < Index >;
+
+                protected:
+                    __CDS_NoDiscard auto firstIndexOfFrom (
+                            __FromCollectionType const & from
+                    ) const noexcept -> Index;
+
+                protected:
+                    __CDS_NoDiscard auto lastIndexOfFrom (
+                            __FromCollectionType const & from
+                    ) const noexcept -> Index;
+
+                protected:
+                    template < typename __CollectionType >  // NOLINT(bugprone-reserved-identifier)
+                    auto allIndicesOfFrom (
+                            __CollectionType              & storeIn,
+                            __FromCollectionType    const & from
+                    ) const noexcept -> __CollectionType &;
+
+                protected:
+                    template < template < typename ... > class __CollectionType >   // NOLINT(bugprone-reserved-identifier)
+                    __CDS_NoDiscard auto allIndicesOfFrom (
+                            __FromCollectionType const & from
+                    ) const noexcept -> __CollectionType < Index >;
+
+                protected:
+                    template < typename __CollectionType >  // NOLINT(bugprone-reserved-identifier)
+                    auto indicesOfNotFrom (
+                            Size                            count,
+                            __CollectionType              & storeIn,
+                            __FromCollectionType    const & from
+                    ) const noexcept -> __CollectionType &;
+
+                protected:
+                    template < template < typename ... > class __CollectionType >   // NOLINT(bugprone-reserved-identifier)
+                    __CDS_NoDiscard auto indicesOfNotFrom (
+                            Size                            count,
+                            __FromCollectionType    const & from
+                    ) const noexcept -> __CollectionType < Index >;
+
+                protected:
+                    __CDS_NoDiscard auto firstIndexOfNotFrom (
+                            __FromCollectionType const & from
+                    ) const noexcept -> Index;
+
+                protected:
+                    __CDS_NoDiscard auto lastIndexOfNotFrom (
+                            __FromCollectionType const & from
+                    ) const noexcept -> Index;
+
+                protected:
+                    template < typename __CollectionType >  // NOLINT(bugprone-reserved-identifier)
+                    auto allIndicesOfNotFrom (
+                            __CollectionType              & storeIn,
+                            __FromCollectionType    const & from
+                    ) const noexcept -> __CollectionType &;
+
+                protected:
+                    template < template < typename ... > class __CollectionType >   // NOLINT(bugprone-reserved-identifier)
+                    __CDS_NoDiscard auto allIndicesOfNotFrom (
+                            __FromCollectionType const & from
+                    ) const noexcept -> __CollectionType < Index >;
+                };
+
+
+                template <
+                        typename                                                    __ReceiverType,         // NOLINT(bugprone-reserved-identifier)
+                        typename                                                    __ElementType,          // NOLINT(bugprone-reserved-identifier)
+                        typename                                                    __FromCollectionType,   // NOLINT(bugprone-reserved-identifier)
+                        __ContainsFunction < __FromCollectionType, __ElementType >  __contains              // NOLINT(bugprone-reserved-identifier)
+                > using __LocalIndicesOfClient =                                                            // NOLINT(bugprone-reserved-identifier)
+                        __IndicesOfClient <
+                                __ReceiverType,
+                                __ElementType,
+                                __FromCollectionType,
+                                __contains
+                        >;
+
+            }
+        }
+    }
+}
+
+#endif // __CDS_SHARED_INDICES_OF_CLIENT_HPP__

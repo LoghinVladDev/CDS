@@ -14,16 +14,16 @@
 
 #include "shared/delegateIterator/ForwardDelegateWrapperIterator.hpp"
 #include "shared/collectionInternalCommunication/channel/CollectionInternalCommunicationChannel.hpp"
-#include "shared/collectionInternalCommunication/client/DelegateForwardConstIterableClient.hpp"
-#include "shared/collectionInternalCommunication/client/AbstractConstIteratorRemoveClient.hpp"
-#include "shared/collectionInternalCommunication/client/RandomInsertionClient.hpp"
+#include "shared/collectionInternalCommunication/client/primitive/DelegateForwardConstIterableClient.hpp"
+#include "shared/collectionInternalCommunication/client/primitive/ConstIteratorRemoveClient.hpp"
+#include "shared/collectionInternalCommunication/client/primitive/RandomInsertionClient.hpp"
 
-#include "shared/iterable/IterableContainsOf.hpp"
-#include "shared/iterable/IterableImmutableFindOf.hpp"
-#include "shared/iterable/IterableImmutableFindByPredicate.hpp"
-#include "shared/iterable/IterableRemoveOf.hpp"
-#include "shared/iterable/IterableRemoveByPredicate.hpp"
-#include "shared/iterable/IterableImmutableStatements.hpp"
+#include "shared/collectionInternalCommunication/client/composite/ContainsOfClient.hpp"
+#include "shared/collectionInternalCommunication/client/composite/FindOfImmutableClient.hpp"
+#include "shared/collectionInternalCommunication/client/composite/FindByImmutableClient.hpp"
+#include "shared/collectionInternalCommunication/client/composite/RemoveOfClient.hpp"
+#include "shared/collectionInternalCommunication/client/composite/RemoveByClient.hpp"
+#include "shared/collectionInternalCommunication/client/composite/GenericImmutableStatementsClient.hpp"
 
 namespace cds { // NOLINT(modernize-concat-nested-namespaces)
     namespace experimental {
@@ -360,16 +360,16 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
 #include "shared/delegateIterator/impl/ForwardDelegateWrapperIterator.hpp"
 #include "shared/collectionInternalCommunication/channel/impl/CollectionInternalCommunicationChannel.hpp"
-#include "shared/collectionInternalCommunication/client/impl/DelegateForwardConstIterableClient.hpp"
-#include "shared/collectionInternalCommunication/client/impl/AbstractConstIteratorRemoveClient.hpp"
-#include "shared/collectionInternalCommunication/client/impl/RandomInsertionClient.hpp"
+#include "shared/collectionInternalCommunication/client/primitive/impl/DelegateForwardConstIterableClient.hpp"
+#include "shared/collectionInternalCommunication/client/primitive/impl/AbstractConstIteratorRemoveClient.hpp"
+#include "shared/collectionInternalCommunication/client/primitive/impl/RandomInsertionClient.hpp"
 
-#include "shared/iterable/impl/IterableContainsOf.hpp"
-#include "shared/iterable/impl/IterableImmutableFindOf.hpp"
-#include "shared/iterable/impl/IterableImmutableFindByPredicate.hpp"
-#include "shared/iterable/impl/IterableRemoveOf.hpp"
-#include "shared/iterable/impl/IterableRemoveByPredicate.hpp"
-#include "shared/iterable/impl/IterableImmutableStatements.hpp"
+#include "shared/collectionInternalCommunication/client/composite/impl/ContainsOfClient.hpp"
+#include "shared/collectionInternalCommunication/client/composite/impl/FindOfImmutableClient.hpp"
+#include "shared/collectionInternalCommunication/client/composite/impl/FindByImmutableClient.hpp"
+#include "shared/collectionInternalCommunication/client/composite/impl/RemoveOfClient.hpp"
+#include "shared/collectionInternalCommunication/client/composite/impl/RemoveByClient.hpp"
+#include "shared/collectionInternalCommunication/client/composite/impl/GenericImmutableStatementsClient.hpp"
 
 #include "collection/impl/Collection.hpp"
 

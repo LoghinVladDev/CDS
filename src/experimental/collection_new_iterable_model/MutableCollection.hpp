@@ -7,12 +7,12 @@
 
 #include <CDS/experimental/Collection>
 
-#include "shared/collectionInternalCommunication/client/DelegateForwardIterableClient.hpp"
-#include "shared/collectionInternalCommunication/client/AbstractIteratorRemoveClient.hpp"
+#include "shared/collectionInternalCommunication/client/primitive/DelegateForwardIterableClient.hpp"
+#include "shared/collectionInternalCommunication/client/primitive/IteratorRemoveClient.hpp"
 
-#include "shared/iterable/IterableMutableStatements.hpp"
-#include "shared/iterable/IterableMutableFindOf.hpp"
-#include "shared/iterable/IterableMutableFindByPredicate.hpp"
+#include "shared/collectionInternalCommunication/client/composite/GenericMutableStatementsClient.hpp"
+#include "shared/collectionInternalCommunication/client/composite/FindOfMutableClient.hpp"
+#include "shared/collectionInternalCommunication/client/composite/FindByMutableClient.hpp"
 
 namespace cds { // NOLINT(modernize-concat-nested-namespaces)
     namespace experimental {
@@ -236,13 +236,13 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
     }
 }
 
-#include "shared/collectionInternalCommunication/client/impl/DelegateForwardIterableClient.hpp"
-#include "shared/collectionInternalCommunication/client/impl/AbstractIteratorRemoveClient.hpp"
+#include "shared/collectionInternalCommunication/client/primitive/impl/DelegateForwardIterableClient.hpp"
+#include "shared/collectionInternalCommunication/client/primitive/impl/AbstractIteratorRemoveClient.hpp"
 
 #include "mutableCollection/impl/MutableCollection.hpp"
 
-#include "shared/iterable/impl/IterableMutableStatements.hpp"
-#include "shared/iterable/impl/IterableMutableFindOf.hpp"
-#include "shared/iterable/impl/IterableMutableFindByPredicate.hpp"
+#include "shared/collectionInternalCommunication/client/composite/impl/GenericMutableStatementsClient.hpp"
+#include "shared/collectionInternalCommunication/client/composite/impl/FindOfMutableClient.hpp"
+#include "shared/collectionInternalCommunication/client/composite/impl/FindByMutableClient.hpp"
 
 #endif // __CDS_EX_MUTABLE_COLLECTION_HPP__

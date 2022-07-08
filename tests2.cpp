@@ -53,12 +53,24 @@ using namespace cds :: experimental;
 int main () {
 
     Array < int > a;
-    a.pushBackAllOf ( cds :: Range (20) );
+    a.pushBackAllOf ( cds :: Range ( 20 ) );
+
+    a.remove ( a.begin () );
 
     std :: cout << a << '\n';
-    a.remove ( ( ( List < int > & ) a ) .begin() );
-    a.remove ( ( ( List < int > & ) a ) .rbegin() );
-    std :: cout << a << '\n';
+
+//    a.removeAt ( a.size () - 2 );
+//    std :: cout << a << '\n';
+//    a.removeAt ( a.size () - 1 );
+//    std :: cout << a << '\n';
+
+//    Array < int > a;
+//    a.pushBackAllOf ( cds :: Range (20) );
+//
+//    std :: cout << a << '\n';
+//    a.remove ( ( ( List < int > & ) a ) .begin() );
+//    a.remove ( ( ( List < int > & ) a ) .rbegin() );
+//    std :: cout << a << '\n';
 
 
 //    List < int > * pList = nullptr;

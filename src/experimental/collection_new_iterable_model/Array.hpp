@@ -6,11 +6,17 @@
 #define __CDS_EX_ARRAY_HPP__
 
 #include <CDS/experimental/List>
-#include "shared/collectionInternalCommunication/server/ListServer.hpp"
+
 #include "shared/iterator/AddressIterator.hpp"
+
 #include "shared/array/Array.hpp"
+
 #include "shared/delegateIterator/AbstractDelegateIterator.hpp"
 #include "shared/delegateIterator/DelegateIterator.hpp"
+
+#include "shared/collectionInternalCommunication/client/LocalIteratorRemoveClient.hpp"
+
+#include "shared/collectionInternalCommunication/server/ListServer.hpp"
 #include "shared/collectionInternalCommunication/server/DelegateIterableServer.hpp"
 
 namespace cds { // NOLINT(modernize-concat-nested-namespaces)
@@ -36,6 +42,16 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                         Array < __ElementType >,
                         __ElementType,
                         __ElementType
+                >,
+                public __hidden :: __impl :: __LocalIteratorRemoveClient <
+                        Array < __ElementType >,
+                        __ElementType,
+                        AbstractAddressIterator < __ElementType >
+                >,
+                public __hidden :: __impl :: __LocalIteratorRemoveClient <
+                        Array < __ElementType >,
+                        __ElementType,
+                        AbstractAddressIterator < __ElementType const >
                 >,
                 public __hidden :: __impl :: __DelegateIterableServer <
                         Array < __ElementType >,
@@ -80,6 +96,22 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                             Array < __ElementType >,
                             __ElementType,
                             __ElementType
+                    >;
+
+        protected:
+            using LocalIteratorRemoveClient =
+                    __hidden :: __impl :: __LocalIteratorRemoveClient <
+                            Array < __ElementType >,
+                            __ElementType,
+                            AbstractAddressIterator < __ElementType >
+                    >;
+
+        protected:
+            using LocalConstIteratorRemoveClient =
+                    __hidden :: __impl :: __LocalIteratorRemoveClient <
+                            Array < __ElementType >,
+                            __ElementType,
+                            AbstractAddressIterator < __ElementType const >
                     >;
 
         private: friend LocalBoundaryInsertionClient;
@@ -134,6 +166,8 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         public: using LocalBoundaryInsertionClient :: prepend;
         public: using LocalBoundaryInsertionClient :: emplaceBack;
         public: using LocalBoundaryInsertionClient :: emplaceFront;
+
+        public: using LocalIteratorRemoveClient :: remove;
 
         public:
             __CDS_NoDiscard constexpr auto begin () noexcept -> Iterator;

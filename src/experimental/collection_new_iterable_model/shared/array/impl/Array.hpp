@@ -107,6 +107,8 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                         pDestination = this->_pData->_pFront + static_cast < Size > ( index );
                         pSource      = pDestination + 1ULL;
                         count        = size - static_cast < Size > ( index );
+
+                        -- this->_pData->_pBack;
                     }
 
                     (void) std :: memcpy (
