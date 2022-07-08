@@ -8,22 +8,26 @@
 #include <CDS/Object>
 
 #include <CDS/Comparator>
+
 #include "../../shared/memory/PrimitiveAllocation.hpp"
+
 #include "collection/CollectionFunctions.hpp"
 #include "collection/CollectionConstructs.hpp"
 
 #include "shared/delegateIterator/ForwardDelegateWrapperIterator.hpp"
-#include "shared/collectionInternalCommunication/channel/CollectionInternalCommunicationChannel.hpp"
-#include "shared/collectionInternalCommunication/client/primitive/DelegateForwardConstIterableClient.hpp"
-#include "shared/collectionInternalCommunication/client/primitive/ConstIteratorRemoveClient.hpp"
-#include "shared/collectionInternalCommunication/client/primitive/RandomInsertionClient.hpp"
 
-#include "shared/collectionInternalCommunication/client/composite/ContainsOfClient.hpp"
-#include "shared/collectionInternalCommunication/client/composite/FindOfImmutableClient.hpp"
-#include "shared/collectionInternalCommunication/client/composite/FindByImmutableClient.hpp"
-#include "shared/collectionInternalCommunication/client/composite/RemoveOfClient.hpp"
-#include "shared/collectionInternalCommunication/client/composite/RemoveByClient.hpp"
-#include "shared/collectionInternalCommunication/client/composite/GenericImmutableStatementsClient.hpp"
+#include "shared/collectionInternalCommunication/channel/CollectionInternalCommunicationChannel.hpp"
+
+#include "shared/collectionInternalCommunication/client/primitive/DelegateForwardConstIterablePrimitiveClient.hpp"
+#include "shared/collectionInternalCommunication/client/primitive/ConstIteratorRemovePrimitiveClient.hpp"
+#include "shared/collectionInternalCommunication/client/primitive/RandomInsertionPrimitiveClient.hpp"
+
+#include "shared/collectionInternalCommunication/client/composite/ContainsOfCompositeClient.hpp"
+#include "shared/collectionInternalCommunication/client/composite/FindOfImmutableCompositeClient.hpp"
+#include "shared/collectionInternalCommunication/client/composite/FindByImmutableCompositeClient.hpp"
+#include "shared/collectionInternalCommunication/client/composite/RemoveOfCompositeClient.hpp"
+#include "shared/collectionInternalCommunication/client/composite/RemoveByCompositeClient.hpp"
+#include "shared/collectionInternalCommunication/client/composite/GenericImmutableStatementsCompositeClient.hpp"
 
 namespace cds { // NOLINT(modernize-concat-nested-namespaces)
     namespace experimental {
@@ -360,16 +364,16 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
 #include "shared/delegateIterator/impl/ForwardDelegateWrapperIterator.hpp"
 #include "shared/collectionInternalCommunication/channel/impl/CollectionInternalCommunicationChannel.hpp"
-#include "shared/collectionInternalCommunication/client/primitive/impl/DelegateForwardConstIterableClient.hpp"
-#include "shared/collectionInternalCommunication/client/primitive/impl/AbstractConstIteratorRemoveClient.hpp"
-#include "shared/collectionInternalCommunication/client/primitive/impl/RandomInsertionClient.hpp"
+#include "shared/collectionInternalCommunication/client/primitive/impl/DelegateForwardConstIterablePrimitiveClient.hpp"
+#include "shared/collectionInternalCommunication/client/primitive/impl/ConstIteratorRemovePrimitiveClient.hpp"
+#include "shared/collectionInternalCommunication/client/primitive/impl/RandomInsertionPrimitiveClient.hpp"
 
-#include "shared/collectionInternalCommunication/client/composite/impl/ContainsOfClient.hpp"
-#include "shared/collectionInternalCommunication/client/composite/impl/FindOfImmutableClient.hpp"
-#include "shared/collectionInternalCommunication/client/composite/impl/FindByImmutableClient.hpp"
-#include "shared/collectionInternalCommunication/client/composite/impl/RemoveOfClient.hpp"
-#include "shared/collectionInternalCommunication/client/composite/impl/RemoveByClient.hpp"
-#include "shared/collectionInternalCommunication/client/composite/impl/GenericImmutableStatementsClient.hpp"
+#include "shared/collectionInternalCommunication/client/composite/impl/ContainsOfCompositeClient.hpp"
+#include "shared/collectionInternalCommunication/client/composite/impl/FindOfImmutableCompositeClient.hpp"
+#include "shared/collectionInternalCommunication/client/composite/impl/FindByImmutableCompositeClient.hpp"
+#include "shared/collectionInternalCommunication/client/composite/impl/RemoveOfCompositeClient.hpp"
+#include "shared/collectionInternalCommunication/client/composite/impl/RemoveByCompositeClient.hpp"
+#include "shared/collectionInternalCommunication/client/composite/impl/GenericImmutableStatementsCompositeClient.hpp"
 
 #include "collection/impl/Collection.hpp"
 

@@ -7,12 +7,12 @@
 
 #include <CDS/experimental/Collection>
 
-#include "shared/collectionInternalCommunication/client/primitive/DelegateForwardIterableClient.hpp"
-#include "shared/collectionInternalCommunication/client/primitive/IteratorRemoveClient.hpp"
+#include "shared/collectionInternalCommunication/client/primitive/DelegateForwardIterablePrimitiveClient.hpp"
+#include "shared/collectionInternalCommunication/client/primitive/IteratorRemovePrimitiveClient.hpp"
 
-#include "shared/collectionInternalCommunication/client/composite/GenericMutableStatementsClient.hpp"
-#include "shared/collectionInternalCommunication/client/composite/FindOfMutableClient.hpp"
-#include "shared/collectionInternalCommunication/client/composite/FindByMutableClient.hpp"
+#include "shared/collectionInternalCommunication/client/composite/GenericMutableStatementsCompositeClient.hpp"
+#include "shared/collectionInternalCommunication/client/composite/FindOfMutableCompositeClient.hpp"
+#include "shared/collectionInternalCommunication/client/composite/FindByMutableCompositeClient.hpp"
 
 namespace cds { // NOLINT(modernize-concat-nested-namespaces)
     namespace experimental {
@@ -236,13 +236,13 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
     }
 }
 
-#include "shared/collectionInternalCommunication/client/primitive/impl/DelegateForwardIterableClient.hpp"
-#include "shared/collectionInternalCommunication/client/primitive/impl/AbstractIteratorRemoveClient.hpp"
+#include "shared/collectionInternalCommunication/client/primitive/impl/DelegateForwardIterablePrimitiveClient.hpp"
+#include "shared/collectionInternalCommunication/client/primitive/impl/IteratorRemovePrimitiveClient.hpp"
 
 #include "mutableCollection/impl/MutableCollection.hpp"
 
-#include "shared/collectionInternalCommunication/client/composite/impl/GenericMutableStatementsClient.hpp"
-#include "shared/collectionInternalCommunication/client/composite/impl/FindOfMutableClient.hpp"
-#include "shared/collectionInternalCommunication/client/composite/impl/FindByMutableClient.hpp"
+#include "shared/collectionInternalCommunication/client/composite/impl/GenericMutableStatementsCompositeClient.hpp"
+#include "shared/collectionInternalCommunication/client/composite/impl/FindOfMutableCompositeClient.hpp"
+#include "shared/collectionInternalCommunication/client/composite/impl/FindByMutableCompositeClient.hpp"
 
 #endif // __CDS_EX_MUTABLE_COLLECTION_HPP__
