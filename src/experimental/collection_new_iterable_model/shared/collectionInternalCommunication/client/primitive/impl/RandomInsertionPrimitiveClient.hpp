@@ -16,7 +16,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                 > inline auto __expansiveInsert (   // NOLINT(bugprone-reserved-identifier)
                         __AccumulatorType   * pAccumulator,
                         __LastType         && lastValue
-                ) noexcept (false) -> void {
+                ) noexcept ( false ) -> void {
 
                     (void) pAccumulator->insert ( std :: forward < __LastType > ( lastValue ) );
                 }
@@ -30,7 +30,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                         __AccumulatorType      *     pAccumulator,
                         __FirstType           &&     firstValue,
                         __RemainingTypes      && ... remainingValues
-                ) noexcept (false) -> void {
+                ) noexcept ( false ) -> void {
 
                     (void) pAccumulator->insert ( std :: forward < __FirstType > ( firstValue ) );
                     __expansiveInsert (
@@ -55,7 +55,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                         __ReturnType
                 > :: insert (
                         ElementType const & element
-                ) noexcept (false) -> ElementReference {
+                ) noexcept ( noexcept ( ElementType ( element ) ) ) -> ElementReference {
 
                     bool newElementCreated;
                     auto pElementLocation = (
@@ -100,7 +100,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                         __ReturnType
                 > :: insert (
                         ElementType && element
-                ) noexcept (false) -> ElementReference {
+                ) noexcept ( noexcept ( ElementType ( std :: move ( element ) ) ) ) -> ElementReference {
 
                     bool newElementCreated;
                     auto pElementLocation = (
@@ -145,7 +145,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                         __ReturnType
                 > :: add (
                         ElementType const & element
-                ) noexcept (false) -> ElementReference {
+                ) noexcept ( noexcept ( ElementType ( element ) ) ) -> ElementReference {
 
                     return this->insert ( element );
                 }
@@ -166,7 +166,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                         __ReturnType
                 > :: add (
                         ElementType && element
-                ) noexcept (false) -> ElementReference {
+                ) noexcept ( noexcept ( ElementType ( std :: move ( element ) ) ) ) -> ElementReference {
 
                     return this->insert ( std :: move ( element ) );
                 }
@@ -184,7 +184,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                         __ReturnType
                 > :: emplace (
                         __EmplaceArgumentTypes && ... parameters
-                ) noexcept (false) -> ElementReference {
+                ) noexcept ( noexcept ( ElementType ( std :: forward < __EmplaceArgumentTypes > ( parameters ) ... ) ) ) -> ElementReference {
 
                     cds :: __hidden :: __impl :: __allocation :: __RawContainer < __ElementType > referenceElementContainer;
                     referenceElementContainer.construct (
@@ -235,7 +235,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                         __ReturnType
                 > :: insertAll (
                         __ArgumentTypes && ... values
-                ) noexcept (false) -> void {
+                ) noexcept ( __ConstructExceptSpecMultiple < __ElementType, __ArgumentTypes ... > :: value ) -> void {
 
                     __expansiveInsert (
                             this,
@@ -256,7 +256,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                         __ReturnType
                 > :: addAll (
                         __ArgumentTypes && ... values
-                ) noexcept (false) -> void {
+                ) noexcept ( __ConstructExceptSpecMultiple < __ElementType, __ArgumentTypes ... > :: value ) -> void {
 
                     __expansiveInsert (
                             this,
@@ -276,12 +276,12 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                         __ElementType,
                         __ReturnType
                 > :: insertAllOf (
-                        __IterableType const & iterableType
-                ) noexcept (false) -> void {
+                        __IterableType const & iterable
+                ) noexcept ( noexcept ( __ElementType ( * iterable.begin() ) ) ) -> void {
 
                     this->insertAllOf (
-                            iterableType.begin(),
-                            iterableType.end()
+                            iterable.begin(),
+                            iterable.end()
                     );
                 }
 
@@ -301,7 +301,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                         __ReturnType
                 > :: insertAllOf (
                         std :: initializer_list < __ElementType > const & list
-                ) noexcept (false) -> void {
+                ) noexcept ( noexcept ( __ElementType ( * list.begin() ) ) ) -> void {
 
                     this->insertAllOf (
                             list.begin(),
@@ -321,12 +321,12 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                         __ElementType,
                         __ReturnType
                 > :: addAllOf (
-                        __IterableType const & iterableType
-                ) noexcept (false) -> void {
+                        __IterableType const & iterable
+                ) noexcept ( noexcept ( __ElementType ( * iterable.begin() ) ) ) -> void {
 
                     this->insertAllOf (
-                            iterableType.begin(),
-                            iterableType.end()
+                            iterable.begin(),
+                            iterable.end()
                     );
                 }
 
@@ -346,7 +346,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                         __ReturnType
                 > :: addAllOf (
                         std :: initializer_list < __ElementType > const & list
-                ) noexcept (false) -> void {
+                ) noexcept ( noexcept ( __ElementType ( * list.begin() ) ) ) -> void {
 
                     this->insertAllOf (
                             list.begin(),
@@ -368,7 +368,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                 > :: insertAllOf (
                         __IteratorType const & begin,
                         __IteratorType const & end
-                ) noexcept (false) -> void {
+                ) noexcept ( noexcept ( __ElementType ( * begin ) ) ) -> void {
 
                     for ( auto iterator = begin; iterator != end; ++ iterator ) {
                         this->insert ( * iterator );
@@ -389,7 +389,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                 > :: addAllOf (
                         __IteratorType const & begin,
                         __IteratorType const & end
-                ) noexcept (false) -> void {
+                ) noexcept ( noexcept ( __ElementType ( * begin ) ) ) -> void {
 
                     return this->insertAllOf (
                             begin,
@@ -413,7 +413,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                         __ReturnType
                 > :: insert (
                         ElementType const & element
-                ) noexcept (false) -> ElementReference {
+                ) noexcept ( noexcept ( ElementType ( element ) ) ) -> ElementReference {
 
                     bool newElementCreated;
                     auto pElementLocation = static_cast < __ReceiverType * > ( this )->__new (
@@ -446,7 +446,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                         __ReturnType
                 > :: insert (
                         ElementType && element
-                ) noexcept (false) -> ElementReference {
+                ) noexcept ( noexcept ( ElementType ( std :: move ( element ) ) ) ) -> ElementReference {
 
                     bool newElementCreated;
                     auto pElementLocation = static_cast < __ReceiverType * > ( this )->__new (
@@ -479,7 +479,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                         __ReturnType
                 > :: add (
                         ElementType const & element
-                ) noexcept (false) -> ElementReference {
+                ) noexcept ( noexcept ( ElementType ( element ) ) ) -> ElementReference {
 
                     return this->insert ( element );
                 }
@@ -500,7 +500,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                         __ReturnType
                 > :: add (
                         ElementType && element
-                ) noexcept (false) -> ElementReference {
+                ) noexcept ( noexcept ( ElementType ( std :: move ( element ) ) ) ) -> ElementReference {
 
                     return this->insert ( std :: move ( element ) );
                 }
@@ -518,7 +518,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                         __ReturnType
                 > :: emplace (
                         __EmplaceArgumentTypes && ... parameters
-                ) noexcept (false) -> ElementReference {
+                ) noexcept ( noexcept ( ElementType ( std :: forward < __EmplaceArgumentTypes > ( parameters ) ... ) ) ) -> ElementReference {
 
                     cds :: __hidden :: __impl :: __allocation :: __RawContainer < __ElementType > referenceElementContainer;
                     referenceElementContainer.construct (
@@ -557,7 +557,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                         __ReturnType
                 > :: insertAll (
                         __ArgumentTypes && ... values
-                ) noexcept (false) -> void {
+                ) noexcept ( __ConstructExceptSpecMultiple < __ElementType, __ArgumentTypes ... > :: value ) -> void {
 
                     __expansiveInsert (
                             this,
@@ -578,7 +578,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                         __ReturnType
                 > :: addAll (
                         __ArgumentTypes && ... values
-                ) noexcept (false) -> void {
+                ) noexcept ( __ConstructExceptSpecMultiple < __ElementType, __ArgumentTypes ... > :: value ) -> void {
 
                     __expansiveInsert (
                             this,
@@ -598,12 +598,12 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                         __ElementType,
                         __ReturnType
                 > :: insertAllOf (
-                        __IterableType const & iterableType
-                ) noexcept (false) -> void {
+                        __IterableType const & iterable
+                ) noexcept ( noexcept ( __ElementType ( * iterable.begin() ) ) ) -> void {
 
                     this->insertAllOf (
-                            iterableType.begin(),
-                            iterableType.end()
+                            iterable.begin(),
+                            iterable.end()
                     );
                 }
 
@@ -623,7 +623,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                         __ReturnType
                 > :: insertAllOf (
                         std :: initializer_list < __ElementType > const & list
-                ) noexcept (false) -> void {
+                ) noexcept ( noexcept ( __ElementType ( * list.begin() ) ) ) -> void {
 
                     this->insertAllOf (
                             list.begin(),
@@ -643,12 +643,12 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                         __ElementType,
                         __ReturnType
                 > :: addAllOf (
-                        __IterableType const & iterableType
-                ) noexcept (false) -> void {
+                        __IterableType const & iterable
+                ) noexcept ( noexcept ( __ElementType ( * iterable.begin() ) ) ) -> void {
 
                     this->insertAllOf (
-                            iterableType.begin(),
-                            iterableType.end()
+                            iterable.begin(),
+                            iterable.end()
                     );
                 }
 
@@ -668,7 +668,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                         __ReturnType
                 > :: addAllOf (
                         std :: initializer_list < __ElementType > const & list
-                ) noexcept (false) -> void {
+                ) noexcept ( noexcept ( __ElementType ( * list.begin() ) ) ) -> void {
 
                     this->insertAllOf (
                             list.begin(),
@@ -690,7 +690,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                 > :: insertAllOf (
                         __IteratorType const & begin,
                         __IteratorType const & end
-                ) noexcept (false) -> void {
+                ) noexcept ( noexcept ( __ElementType ( * begin ) ) ) -> void {
 
                     for ( auto iterator = begin; iterator != end; ++ iterator ) {
                         this->insert ( * iterator );
@@ -711,7 +711,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                 > :: addAllOf (
                         __IteratorType const & begin,
                         __IteratorType const & end
-                ) noexcept (false) -> void {
+                ) noexcept ( noexcept ( __ElementType ( * begin ) ) ) -> void {
 
                     return this->insertAllOf (
                             begin,

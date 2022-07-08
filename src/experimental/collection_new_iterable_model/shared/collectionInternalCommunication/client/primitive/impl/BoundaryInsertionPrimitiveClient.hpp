@@ -27,7 +27,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                         __ReturnType
                 > :: pushFront (
                         ElementType const & element
-                ) noexcept (false) -> ElementReference {
+                ) noexcept ( noexcept ( ElementType ( element ) ) ) -> ElementReference {
 
                     return this->emplaceFront ( element );
                 }
@@ -48,7 +48,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                         __ReturnType
                 > :: pushFront (
                         ElementType && element
-                ) noexcept (false) -> ElementReference {
+                ) noexcept ( noexcept ( ElementType ( std :: move ( element ) ) ) ) -> ElementReference {
 
                     return this->emplaceFront ( std :: move ( element ) );
                 }
@@ -69,7 +69,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                         __ReturnType
                 > :: pushBack (
                         ElementType const & element
-                ) noexcept (false) -> ElementReference {
+                ) noexcept ( noexcept ( ElementType ( element ) ) ) -> ElementReference {
 
                     return this->emplaceBack ( element );
                 }
@@ -90,7 +90,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                         __ReturnType
                 > :: pushBack (
                         ElementType && element
-                ) noexcept (false) -> ElementReference {
+                ) noexcept ( noexcept ( ElementType ( std :: move ( element ) ) ) ) -> ElementReference {
 
                     return this->emplaceBack ( std :: move ( element ) );
                 }
@@ -111,7 +111,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                         __ReturnType
                 > :: prepend (
                         ElementType const & element
-                ) noexcept (false) -> ElementReference {
+                ) noexcept ( noexcept ( ElementType ( element ) ) ) -> ElementReference {
 
                     return this->emplaceFront ( element );
                 }
@@ -132,7 +132,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                         __ReturnType
                 > :: prepend (
                         ElementType && element
-                ) noexcept (false) -> ElementReference {
+                ) noexcept ( noexcept ( ElementType ( std :: move ( element ) ) ) ) -> ElementReference {
 
                     return this->emplaceFront ( std :: move ( element ) );
                 }
@@ -153,7 +153,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                         __ReturnType
                 > :: append (
                         ElementType const & element
-                ) noexcept (false) -> ElementReference {
+                ) noexcept ( noexcept ( ElementType ( element ) ) ) -> ElementReference {
 
                     return this->emplaceBack ( element );
                 }
@@ -174,7 +174,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                         __ReturnType
                 > :: append (
                         ElementType && element
-                ) noexcept (false) -> ElementReference {
+                ) noexcept ( noexcept ( ElementType ( std :: move ( element ) ) ) ) -> ElementReference {
 
                     return this->emplaceBack ( std :: move ( element ) );
                 }
@@ -192,7 +192,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                         __ReturnType
                 > :: emplaceFront (
                         __EmplaceArgumentTypes && ... parameters
-                ) noexcept (false) -> ElementReference {
+                ) noexcept ( noexcept ( ElementType ( std :: forward < __EmplaceArgumentTypes > ( parameters ) ... ) ) ) -> ElementReference {
 
                     return * new (
                             (
@@ -221,7 +221,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                         __ReturnType
                 > :: emplaceBack (
                         __EmplaceArgumentTypes && ... parameters
-                ) noexcept (false) -> ElementReference {
+                ) noexcept ( noexcept ( ElementType ( std :: forward < __EmplaceArgumentTypes > ( parameters ) ... ) ) ) -> ElementReference {
 
                     return * new (
                             (
@@ -250,7 +250,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                         __ReturnType
                 > :: pushFrontAll (
                         __ArgumentTypes && ... values
-                ) noexcept (false) -> void {
+                ) noexcept ( __ConstructExceptSpecMultiple < __ElementType, __ArgumentTypes ... > :: value ) -> void {
 
                     Size    const parameterCount = sizeof ... ( __ArgumentTypes );
                     auto          ppElements = cds :: __hidden :: __impl :: __allocation :: __allocPrimitiveArray < __ElementType * > ( parameterCount );
@@ -293,7 +293,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                         __ReturnType
                 > :: pushBackAll (
                         __ArgumentTypes && ... values
-                ) noexcept (false) -> void {
+                ) noexcept ( __ConstructExceptSpecMultiple < __ElementType, __ArgumentTypes ... > :: value ) -> void {
 
                     Size    const parameterCount = sizeof ... ( __ArgumentTypes );
                     auto          ppElements = cds :: __hidden :: __impl :: __allocation :: __allocPrimitiveArray < __ElementType * > ( parameterCount );
@@ -336,7 +336,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                         __ReturnType
                 > :: pushFrontAllOf (
                         __IterableType const & iterable
-                ) noexcept (false) -> void {
+                ) noexcept ( noexcept ( __ElementType ( * iterable.begin() ) ) ) -> void {
 
                     this->pushFrontAllOf (
                             iterable.begin(),
@@ -360,7 +360,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                         __ReturnType
                 > :: pushFrontAllOf (
                         std :: initializer_list < __ElementType > const & list
-                ) noexcept (false) -> void {
+                ) noexcept ( noexcept ( __ElementType ( * list.begin() ) ) ) -> void {
 
                     this->pushFrontAllOf (
                             list.begin(),
@@ -381,7 +381,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                         __ReturnType
                 > :: pushBackAllOf (
                         __IterableType const & iterable
-                ) noexcept (false) -> void {
+                ) noexcept ( noexcept ( __ElementType ( * iterable.begin() ) ) ) -> void {
 
                     this->pushBackAllOf (
                             iterable.begin(),
@@ -405,7 +405,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                         __ReturnType
                 > :: pushBackAllOf (
                         std :: initializer_list < __ElementType > const & list
-                ) noexcept (false) -> void {
+                ) noexcept ( noexcept ( __ElementType ( * list.begin() ) ) ) -> void {
 
                     this->pushBackAllOf (
                             list.begin(),
@@ -427,7 +427,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                 > :: pushFrontAllOf (
                         __IteratorType const & begin,
                         __IteratorType const & end
-                ) noexcept (false) -> void {
+                ) noexcept ( noexcept ( __ElementType ( * begin ) ) ) -> void {
 
 
                     Size    const parameterCount = __IteratorDistance < __IteratorType > :: __compute ( begin, end );
@@ -472,7 +472,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                 > :: pushBackAllOf (
                         __IteratorType const & begin,
                         __IteratorType const & end
-                ) noexcept (false) -> void {
+                ) noexcept ( noexcept ( __ElementType ( * begin ) ) ) -> void {
 
 
                     Size    const parameterCount = __IteratorDistance < __IteratorType > :: __compute ( begin, end );
@@ -519,7 +519,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                         __ReturnType
                 > :: pushFront (
                         ElementType const & element
-                ) noexcept (false) -> ElementReference {
+                ) noexcept ( noexcept ( ElementType ( element ) ) ) -> ElementReference {
 
                     return this->emplaceFront ( element );
                 }
@@ -540,7 +540,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                         __ReturnType
                 > :: pushFront (
                         ElementType && element
-                ) noexcept (false) -> ElementReference {
+                ) noexcept ( noexcept ( ElementType ( std :: move ( element ) ) ) ) -> ElementReference {
 
                     return this->emplaceFront ( std :: move ( element ) );
                 }
@@ -561,7 +561,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                         __ReturnType
                 > :: pushBack (
                         ElementType const & element
-                ) noexcept (false) -> ElementReference {
+                ) noexcept ( noexcept ( ElementType ( element ) ) ) -> ElementReference {
 
                     return this->emplaceBack ( element );
                 }
@@ -582,7 +582,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                         __ReturnType
                 > :: pushBack (
                         ElementType && element
-                ) noexcept (false) -> ElementReference {
+                ) noexcept ( noexcept ( ElementType ( std :: move ( element ) ) ) ) -> ElementReference {
 
                     return this->emplaceBack ( std :: move ( element ) );
                 }
@@ -603,7 +603,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                         __ReturnType
                 > :: prepend (
                         ElementType const & element
-                ) noexcept (false) -> ElementReference {
+                ) noexcept ( noexcept ( ElementType ( element ) ) ) -> ElementReference {
 
                     return this->emplaceFront ( element );
                 }
@@ -624,7 +624,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                         __ReturnType
                 > :: prepend (
                         ElementType && element
-                ) noexcept (false) -> ElementReference {
+                ) noexcept ( noexcept ( ElementType ( std :: move ( element ) ) ) ) -> ElementReference {
 
                     return this->emplaceFront ( std :: move ( element ) );
                 }
@@ -645,7 +645,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                         __ReturnType
                 > :: append (
                         ElementType const & element
-                ) noexcept (false) -> ElementReference {
+                ) noexcept ( noexcept ( ElementType ( element ) ) ) -> ElementReference {
 
                     return this->emplaceBack ( element );
                 }
@@ -666,7 +666,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                         __ReturnType
                 > :: append (
                         ElementType && element
-                ) noexcept (false) -> ElementReference {
+                ) noexcept ( noexcept ( ElementType ( std :: move ( element ) ) ) ) -> ElementReference {
 
                     return this->emplaceBack ( std :: move ( element ) );
                 }
@@ -684,7 +684,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                         __ReturnType
                 > :: emplaceFront (
                         __EmplaceArgumentTypes && ... parameters
-                ) noexcept (false) -> ElementReference {
+                ) noexcept ( noexcept ( ElementType ( std :: forward < __EmplaceArgumentTypes > ( parameters ) ... ) ) ) -> ElementReference {
 
                     return * new ( static_cast < __ReceiverType * > ( this )->__newFront () ) __ElementType (
                             std :: forward < __EmplaceArgumentTypes > ( parameters ) ...
@@ -704,7 +704,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                         __ReturnType
                 > :: emplaceBack (
                         __EmplaceArgumentTypes && ... parameters
-                ) noexcept (false) -> ElementReference {
+                ) noexcept ( noexcept ( ElementType ( std :: forward < __EmplaceArgumentTypes > ( parameters ) ... ) ) ) -> ElementReference {
 
                     return * new ( static_cast < __ReceiverType * > ( this )->__newBack () ) __ElementType (
                             std :: forward < __EmplaceArgumentTypes > ( parameters ) ...
@@ -724,7 +724,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                         __ReturnType
                 > :: pushFrontAll (
                         __ArgumentTypes && ... values
-                ) noexcept (false) -> void {
+                ) noexcept ( __ConstructExceptSpecMultiple < __ElementType, __ArgumentTypes ... > :: value ) -> void {
 
                     Size    const parameterCount = sizeof ... ( __ArgumentTypes );
                     auto          ppElements = cds :: __hidden :: __impl :: __allocation :: __allocPrimitiveArray < __ElementType * > ( parameterCount );
@@ -755,7 +755,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                         __ReturnType
                 > :: pushBackAll (
                         __ArgumentTypes && ... values
-                ) noexcept (false) -> void {
+                ) noexcept ( __ConstructExceptSpecMultiple < __ElementType, __ArgumentTypes ... > :: value ) -> void {
 
                     Size    const parameterCount = sizeof ... ( __ArgumentTypes );
                     auto          ppElements = cds :: __hidden :: __impl :: __allocation :: __allocPrimitiveArray < __ElementType * > ( parameterCount );
@@ -786,7 +786,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                         __ReturnType
                 > :: pushFrontAllOf (
                         __IterableType const & iterable
-                ) noexcept (false) -> void {
+                ) noexcept ( noexcept ( ElementType ( * iterable.begin() ) ) ) -> void {
 
                     this->pushFrontAllOf (
                             iterable.begin(),
@@ -810,7 +810,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                         __ReturnType
                 > :: pushFrontAllOf (
                         std :: initializer_list < __ElementType > const & list
-                ) noexcept (false) -> void {
+                ) noexcept ( noexcept ( ElementType ( * list.begin() ) ) ) -> void {
 
                     this->pushFrontAllOf (
                             list.begin(),
@@ -831,7 +831,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                         __ReturnType
                 > :: pushBackAllOf (
                         __IterableType const & iterable
-                ) noexcept (false) -> void {
+                ) noexcept ( noexcept ( ElementType ( * iterable.begin() ) ) ) -> void {
 
                     this->pushBackAllOf (
                             iterable.begin(),
@@ -855,7 +855,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                         __ReturnType
                 > :: pushBackAllOf (
                         std :: initializer_list < __ElementType > const & list
-                ) noexcept (false) -> void {
+                ) noexcept ( noexcept ( ElementType ( * list.begin() ) ) ) -> void {
 
                     this->pushBackAllOf (
                             list.begin(),
@@ -877,7 +877,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                 > :: pushFrontAllOf (
                         __IteratorType const & begin,
                         __IteratorType const & end
-                ) noexcept (false) -> void {
+                ) noexcept ( noexcept ( ElementType ( * begin ) ) ) -> void {
 
 
                     Size    const parameterCount = __IteratorDistance < __IteratorType > :: __compute ( begin, end );
@@ -910,7 +910,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                 > :: pushBackAllOf (
                         __IteratorType const & begin,
                         __IteratorType const & end
-                ) noexcept (false) -> void {
+                ) noexcept ( noexcept ( ElementType ( * begin ) ) ) -> void {
 
 
                     Size    const parameterCount = __IteratorDistance < __IteratorType > :: __compute ( begin, end );

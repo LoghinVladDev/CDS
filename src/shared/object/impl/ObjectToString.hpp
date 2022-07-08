@@ -11,7 +11,7 @@ namespace cds {
     inline auto Object :: toString () const noexcept -> String {
 
         std :: stringstream oss;
-        oss << "Object at 0x" << std :: hex << reinterpret_cast < AddressValueType const > ( this );
+        oss << "Object at " << std :: hex << reinterpret_cast < AddressValueType const > ( this );
         return oss.str();
     }
 

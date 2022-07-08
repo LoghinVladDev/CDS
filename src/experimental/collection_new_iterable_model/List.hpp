@@ -57,12 +57,10 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 >,
                 public __hidden :: __impl :: __AbstractIteratorRelativeInsertionPrimitiveClient <
                         List < __ElementType >,
-                        __ElementType,
                         __ElementType
                 >,
                 public __hidden :: __impl :: __AbstractConstIteratorRelativeInsertionPrimitiveClient <
                         List < __ElementType >,
-                        __ElementType,
                         __ElementType
                 >,
                 public __hidden :: __impl :: __IndexedOperationsPrimitiveClient <
@@ -161,7 +159,6 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             using IteratorRelativeInsertionClient =
                     __hidden :: __impl :: __AbstractIteratorRelativeInsertionPrimitiveClient <
                             List < __ElementType >,
-                            __ElementType,
                             __ElementType
                     >;
 
@@ -169,7 +166,6 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             using ConstIteratorRelativeInsertionClient =
                     __hidden :: __impl :: __AbstractConstIteratorRelativeInsertionPrimitiveClient <
                             List < __ElementType >,
-                            __ElementType,
                             __ElementType
                     >;
 

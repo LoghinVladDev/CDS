@@ -1123,7 +1123,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 __T                 const & object
         ) noexcept -> std :: ostream & {
 
-            return ( out << "Unknown@0x" << std :: hex << ( & object ) );
+            return ( out << "Unknown@" << std :: hex << ( & object ) );
         }
 
 

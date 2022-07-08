@@ -30,7 +30,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                             > = 0
                     > auto pushFront (
                             ElementType const & element
-                    ) noexcept (false) -> ElementReference;
+                    ) noexcept ( noexcept ( ElementType ( element ) ) ) -> ElementReference;
 
                 protected:
                     template <
@@ -40,7 +40,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                             > = 0
                     > auto pushFront (
                             ElementType && element
-                    ) noexcept (false) -> ElementReference;
+                    ) noexcept ( noexcept ( ElementType ( std :: move ( element ) ) ) ) -> ElementReference;
 
                 protected:
                     template <
@@ -50,7 +50,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                             > = 0
                     > auto pushBack (
                             ElementType const & element
-                    ) noexcept (false) -> ElementReference;
+                    ) noexcept ( noexcept ( ElementType ( element ) ) ) -> ElementReference;
 
                 protected:
                     template <
@@ -60,7 +60,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                             > = 0
                     > auto pushBack (
                             ElementType && element
-                    ) noexcept (false) -> ElementReference;
+                    ) noexcept ( noexcept ( ElementType ( std :: move ( element ) ) ) ) -> ElementReference;
 
                 protected:
                     template <
@@ -70,7 +70,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                             > = 0
                     > auto prepend (
                             ElementType const & element
-                    ) noexcept (false) -> ElementReference;
+                    ) noexcept ( noexcept ( ElementType ( element ) ) ) -> ElementReference;
 
                 protected:
                     template <
@@ -80,7 +80,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                             > = 0
                     > auto prepend (
                             ElementType && element
-                    ) noexcept (false) -> ElementReference;
+                    ) noexcept ( noexcept ( ElementType ( std :: move ( element ) ) ) ) -> ElementReference;
 
                 protected:
                     template <
@@ -90,7 +90,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                             > = 0
                     > auto append (
                             ElementType const & element
-                    ) noexcept (false) -> ElementReference;
+                    ) noexcept ( noexcept ( ElementType ( element ) ) ) -> ElementReference;
 
                 protected:
                     template <
@@ -100,37 +100,37 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                             > = 0
                     > auto append (
                             ElementType && element
-                    ) noexcept (false) -> ElementReference;
+                    ) noexcept ( noexcept ( ElementType ( std :: move ( element ) ) ) ) -> ElementReference;
 
                 protected:
                     template < typename ... __EmplaceArgumentTypes > // NOLINT(bugprone-reserved-identifier)
                     auto emplaceFront (
                             __EmplaceArgumentTypes && ... parameters
-                    ) noexcept (false) -> ElementReference;
+                    ) noexcept ( noexcept ( ElementType ( std :: forward < __EmplaceArgumentTypes > ( parameters ) ... ) ) ) -> ElementReference;
 
                 protected:
                     template < typename ... __EmplaceArgumentTypes > // NOLINT(bugprone-reserved-identifier)
                     auto emplaceBack (
                             __EmplaceArgumentTypes && ... parameters
-                    ) noexcept (false) -> ElementReference;
+                    ) noexcept ( noexcept ( ElementType ( std :: forward < __EmplaceArgumentTypes > ( parameters ) ... ) ) ) -> ElementReference;
 
                 protected:
                     template < typename ... __ArgumentTypes > // NOLINT(bugprone-reserved-identifier)
                     auto pushFrontAll (
                             __ArgumentTypes && ... values
-                    ) noexcept (false) -> void;
+                    ) noexcept ( __ConstructExceptSpecMultiple < __ElementType, __ArgumentTypes ... > :: value ) -> void;
 
                 protected:
                     template < typename ... __ArgumentTypes > // NOLINT(bugprone-reserved-identifier)
                     auto pushBackAll (
                             __ArgumentTypes && ... values
-                    ) noexcept (false) -> void;
+                    ) noexcept ( __ConstructExceptSpecMultiple < __ElementType, __ArgumentTypes ... > :: value ) -> void;
 
                 protected:
                     template < typename __IterableType > // NOLINT(bugprone-reserved-identifier)
                     auto pushFrontAllOf (
                             __IterableType const & iterable
-                    ) noexcept (false) -> void;
+                    ) noexcept ( noexcept ( __ElementType ( * iterable.begin() ) ) ) -> void;
 
                 protected:
                     template <
@@ -140,13 +140,13 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                             > = 0
                     > auto pushFrontAllOf (
                             std :: initializer_list < __ElementType > const & list
-                    ) noexcept (false) -> void;
+                    ) noexcept ( noexcept ( __ElementType ( * list.begin() ) ) ) -> void;
 
                 protected:
                     template < typename __IterableType > // NOLINT(bugprone-reserved-identifier)
                     auto pushBackAllOf (
                             __IterableType const & iterable
-                    ) noexcept (false) -> void;
+                    ) noexcept ( noexcept ( __ElementType ( * iterable.begin() ) ) ) -> void;
 
                 protected:
                     template <
@@ -156,21 +156,21 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                             > = 0
                     > auto pushBackAllOf (
                             std :: initializer_list < __ElementType > const & list
-                    ) noexcept (false) -> void;
+                    ) noexcept ( noexcept ( __ElementType ( * list.begin() ) ) ) -> void;
 
                 protected:
                     template < typename __IteratorType > // NOLINT(bugprone-reserved-identifier)
                     auto pushFrontAllOf (
                             __IteratorType const & begin,
                             __IteratorType const & end
-                    ) noexcept (false) -> void;
+                    ) noexcept ( noexcept ( __ElementType ( * begin ) ) ) -> void;
 
                 protected:
                     template < typename __IteratorType > // NOLINT(bugprone-reserved-identifier)
                     auto pushBackAllOf (
                             __IteratorType const & begin,
                             __IteratorType const & end
-                    ) noexcept (false) -> void;
+                    ) noexcept ( noexcept ( __ElementType ( * begin ) ) ) -> void;
                 };
 
 
@@ -194,7 +194,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                             > = 0
                     > auto pushFront (
                             ElementType const & element
-                    ) noexcept (false) -> ElementReference;
+                    ) noexcept ( noexcept ( ElementType ( element ) ) ) -> ElementReference;
 
                 protected:
                     template <
@@ -204,7 +204,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                             > = 0
                     > auto pushFront (
                             ElementType && element
-                    ) noexcept (false) -> ElementReference;
+                    ) noexcept ( noexcept ( ElementType ( std :: move ( element ) ) ) ) -> ElementReference;
 
                 protected:
                     template <
@@ -214,7 +214,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                             > = 0
                     > auto pushBack (
                             ElementType const & element
-                    ) noexcept (false) -> ElementReference;
+                    ) noexcept ( noexcept ( ElementType ( element ) ) ) -> ElementReference;
 
                 protected:
                     template <
@@ -224,7 +224,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                             > = 0
                     > auto pushBack (
                             ElementType && element
-                    ) noexcept (false) -> ElementReference;
+                    ) noexcept ( noexcept ( ElementType ( std :: move ( element ) ) ) ) -> ElementReference;
 
                 protected:
                     template <
@@ -234,7 +234,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                             > = 0
                     > auto prepend (
                             ElementType const & element
-                    ) noexcept (false) -> ElementReference;
+                    ) noexcept ( noexcept ( ElementType ( element ) ) ) -> ElementReference;
 
                 protected:
                     template <
@@ -244,7 +244,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                             > = 0
                     > auto prepend (
                             ElementType && element
-                    ) noexcept (false) -> ElementReference;
+                    ) noexcept ( noexcept ( ElementType ( std :: move ( element ) ) ) ) -> ElementReference;
 
                 protected:
                     template <
@@ -254,7 +254,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                             > = 0
                     > auto append (
                             ElementType const & element
-                    ) noexcept (false) -> ElementReference;
+                    ) noexcept ( noexcept ( ElementType ( element ) ) ) -> ElementReference;
 
                 protected:
                     template <
@@ -264,37 +264,37 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                             > = 0
                     > auto append (
                             ElementType && element
-                    ) noexcept (false) -> ElementReference;
+                    ) noexcept ( noexcept ( ElementType ( std :: move ( element ) ) ) ) -> ElementReference;
 
                 protected:
                     template < typename ... __EmplaceArgumentTypes > // NOLINT(bugprone-reserved-identifier)
                     auto emplaceFront (
                             __EmplaceArgumentTypes && ... parameters
-                    ) noexcept (false) -> ElementReference;
+                    ) noexcept ( noexcept ( ElementType ( std :: forward < __EmplaceArgumentTypes > ( parameters ) ... ) ) ) -> ElementReference;
 
                 protected:
                     template < typename ... __EmplaceArgumentTypes > // NOLINT(bugprone-reserved-identifier)
                     auto emplaceBack (
                             __EmplaceArgumentTypes && ... parameters
-                    ) noexcept (false) -> ElementReference;
+                    ) noexcept ( noexcept ( ElementType ( std :: forward < __EmplaceArgumentTypes > ( parameters ) ... ) ) ) -> ElementReference;
 
                 protected:
                     template < typename ... __ArgumentTypes > // NOLINT(bugprone-reserved-identifier)
                     auto pushFrontAll (
                             __ArgumentTypes && ... values
-                    ) noexcept (false) -> void;
+                    ) noexcept ( __ConstructExceptSpecMultiple < __ElementType, __ArgumentTypes ... > :: value ) -> void;
 
                 protected:
                     template < typename ... __ArgumentTypes > // NOLINT(bugprone-reserved-identifier)
                     auto pushBackAll (
                             __ArgumentTypes && ... values
-                    ) noexcept (false) -> void;
+                    ) noexcept ( __ConstructExceptSpecMultiple < __ElementType, __ArgumentTypes ... > :: value ) -> void;
 
                 protected:
                     template < typename __IterableType > // NOLINT(bugprone-reserved-identifier)
                     auto pushFrontAllOf (
                             __IterableType const & iterable
-                    ) noexcept (false) -> void;
+                    ) noexcept ( noexcept ( __ElementType ( * iterable.begin() ) ) ) -> void;
 
                 protected:
                     template <
@@ -304,13 +304,13 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                             > = 0
                     > auto pushFrontAllOf (
                             std :: initializer_list < __ElementType > const & list
-                    ) noexcept (false) -> void;
+                    ) noexcept ( noexcept ( __ElementType ( * list.begin() ) ) ) -> void;
 
                 protected:
                     template < typename __IterableType > // NOLINT(bugprone-reserved-identifier)
                     auto pushBackAllOf (
                             __IterableType const & iterable
-                    ) noexcept (false) -> void;
+                    ) noexcept ( noexcept ( __ElementType ( * iterable.begin() ) ) ) -> void;
 
                 protected:
                     template <
@@ -320,21 +320,21 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                             > = 0
                     > auto pushBackAllOf (
                             std :: initializer_list < __ElementType > const & list
-                    ) noexcept (false) -> void;
+                    ) noexcept ( noexcept ( __ElementType ( * list.begin() ) ) ) -> void;
 
                 protected:
                     template < typename __IteratorType > // NOLINT(bugprone-reserved-identifier)
                     auto pushFrontAllOf (
                             __IteratorType const & begin,
                             __IteratorType const & end
-                    ) noexcept (false) -> void;
+                    ) noexcept ( noexcept ( __ElementType ( * begin ) ) ) -> void;
 
                 protected:
                     template < typename __IteratorType > // NOLINT(bugprone-reserved-identifier)
                     auto pushBackAllOf (
                             __IteratorType const & begin,
                             __IteratorType const & end
-                    ) noexcept (false) -> void;
+                    ) noexcept ( noexcept ( __ElementType ( * begin ) ) ) -> void;
                 };
 
             }

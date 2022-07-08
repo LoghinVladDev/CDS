@@ -32,7 +32,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         __CDS_OptimalInline auto MutableCollection < __ElementType > :: toString () const noexcept -> String {
 
             std :: stringstream oss;
-            oss << "MutableCollection at 0x" << std :: hex << reinterpret_cast < AddressValueType const > ( this );
+            oss << "MutableCollection at " << std :: hex << reinterpret_cast < AddressValueType const > ( this );
             return oss.str();
         }
 

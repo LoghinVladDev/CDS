@@ -12,15 +12,11 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
 
                 template <
                         typename __ReceiverType,                                    // NOLINT(bugprone-reserved-identifier)
-                        typename __ElementType,                                     // NOLINT(bugprone-reserved-identifier)
-                        typename __ReturnType                                       // NOLINT(bugprone-reserved-identifier)
+                        typename __ElementType                                      // NOLINT(bugprone-reserved-identifier)
                 > class __AbstractConstIteratorRelativeInsertionPrimitiveClient {   // NOLINT(bugprone-reserved-identifier)
 
                 private:
                     using ElementType       = __ElementType;
-
-                private:
-                    using ElementReference  = __ReturnType &;
 
                 private:
                     using AbstractConstIterator  =
@@ -35,7 +31,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                     > auto insertBefore (
                             AbstractConstIterator   const & iterator,
                             ElementType             const & element
-                    ) noexcept (false) -> ElementReference;
+                    ) noexcept ( noexcept ( ElementType ( element ) ) ) -> bool;
 
                 protected:
                     template <
@@ -46,7 +42,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                     > auto insertBefore (
                             AbstractConstIterator    const & iterator,
                             ElementType                   && element
-                    ) noexcept (false) -> ElementReference;
+                    ) noexcept ( noexcept ( ElementType ( std :: move ( element ) ) ) ) -> bool;
 
                 protected:
                     template <
@@ -57,7 +53,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                     > auto insertAfter (
                             AbstractConstIterator   const & iterator,
                             ElementType             const & element
-                    ) noexcept (false) -> ElementReference;
+                    ) noexcept ( noexcept ( ElementType ( element ) ) ) -> bool;
 
                 protected:
                     template <
@@ -68,42 +64,42 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                     > auto insertAfter (
                             AbstractConstIterator    const & iterator,
                             ElementType                   && element
-                    ) noexcept (false) -> ElementReference;
+                    ) noexcept ( noexcept ( ElementType ( std :: move ( element ) ) ) ) -> bool;
 
                 protected:
                     template < typename ... __EmplaceArgumentTypes > // NOLINT(bugprone-reserved-identifier)
                     auto emplaceBefore (
                             AbstractConstIterator        const &     iterator,
                             __EmplaceArgumentTypes            && ... parameters
-                    ) noexcept (false) -> ElementReference;
+                    ) noexcept ( noexcept ( ElementType ( std :: forward < __EmplaceArgumentTypes > ( parameters ) ... ) ) ) -> bool;
 
                 protected:
                     template < typename ... __EmplaceArgumentTypes > // NOLINT(bugprone-reserved-identifier)
                     auto emplaceAfter (
                             AbstractConstIterator        const &     iterator,
                             __EmplaceArgumentTypes            && ... parameters
-                    ) noexcept (false) -> ElementReference;
+                    ) noexcept ( noexcept ( ElementType ( std :: forward < __EmplaceArgumentTypes > ( parameters ) ... ) ) ) -> bool;
 
                 protected:
                     template < typename ... __ArgumentTypes > // NOLINT(bugprone-reserved-identifier)
                     auto insertAllBefore (
                             AbstractConstIterator    const &     iterator,
                             __ArgumentTypes               && ... values
-                    ) noexcept (false) -> void;
+                    ) noexcept ( __ConstructExceptSpecMultiple < __ElementType, __ArgumentTypes ... > :: value ) -> bool;
 
                 protected:
                     template < typename ... __ArgumentTypes > // NOLINT(bugprone-reserved-identifier)
                     auto insertAllAfter (
                             AbstractConstIterator    const &     iterator,
                             __ArgumentTypes               && ... values
-                    ) noexcept (false) -> void;
+                    ) noexcept ( __ConstructExceptSpecMultiple < __ElementType, __ArgumentTypes ... > :: value ) -> bool;
 
                 protected:
                     template < typename __IterableType > // NOLINT(bugprone-reserved-identifier)
                     auto insertAllOfBefore (
                             AbstractConstIterator   const & iterator,
-                            __IterableType          const & iterableType
-                    ) noexcept (false) -> void;
+                            __IterableType          const & iterable
+                    ) noexcept ( noexcept ( ElementType ( * iterable.begin() ) ) ) -> bool;
 
                 protected:
                     template <
@@ -114,14 +110,14 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                     > auto insertAllOfBefore (
                             AbstractConstIterator                       const & iterator,
                             std :: initializer_list < __ElementType >   const & list
-                    ) noexcept (false) -> void;
+                    ) noexcept ( noexcept ( ElementType ( * list.begin() ) ) ) -> bool;
 
                 protected:
                     template < typename __IterableType > // NOLINT(bugprone-reserved-identifier)
                     auto insertAllOfAfter (
                             AbstractConstIterator   const & iterator,
-                            __IterableType          const & iterableType
-                    ) noexcept (false) -> void;
+                            __IterableType          const & iterable
+                    ) noexcept ( noexcept ( ElementType ( * iterable.begin() ) ) ) -> bool;
 
                 protected:
                     template <
@@ -132,7 +128,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                     > auto insertAllOfAfter (
                             AbstractConstIterator                       const & iterator,
                             std :: initializer_list < __ElementType >   const & list
-                    ) noexcept (false) -> void;
+                    ) noexcept ( noexcept ( ElementType ( * list.begin() ) ) ) -> bool;
 
                 protected:
                     template < typename __OtherIteratorType > // NOLINT(bugprone-reserved-identifier)
@@ -140,30 +136,26 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                             AbstractConstIterator   const & iterator,
                             __OtherIteratorType     const & begin,
                             __OtherIteratorType     const & end
-                    ) noexcept (false) -> void;
+                    ) noexcept ( noexcept ( ElementType ( * begin ) ) ) -> bool;
 
                 protected:
                     template < typename __OtherIteratorType > // NOLINT(bugprone-reserved-identifier)
                     auto insertAllOfAfter (
                             AbstractConstIterator   const & iterator,
-                            __OtherIteratorType     const & iterableType,
+                            __OtherIteratorType     const & begin,
                             __OtherIteratorType     const & end
-                    ) noexcept (false) -> void;
+                    ) noexcept ( noexcept ( ElementType ( * begin ) ) ) -> bool;
                 };
 
 
                 template <
                         typename __ReceiverType,                                // NOLINT(bugprone-reserved-identifier)
                         typename __ElementType,                                 // NOLINT(bugprone-reserved-identifier)
-                        typename __ReturnType,                                  // NOLINT(bugprone-reserved-identifier)
                         typename __IteratorType                                 // NOLINT(bugprone-reserved-identifier)
                 > class __LocalConstIteratorRelativeInsertionPrimitiveClient {  // NOLINT(bugprone-reserved-identifier)
 
                 private:
                     using ElementType       = __ElementType;
-
-                private:
-                    using ElementReference  = __ReturnType &;
 
                 private:
                     using ConstIterator = __IteratorType;
@@ -177,7 +169,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                     > auto insertBefore (
                             ConstIterator   const & iterator,
                             ElementType     const & element
-                    ) noexcept (false) -> ElementReference;
+                    ) noexcept ( noexcept ( ElementType ( element ) ) ) -> bool;
 
                 protected:
                     template <
@@ -188,7 +180,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                     > auto insertBefore (
                             ConstIterator    const & iterator,
                             ElementType           && element
-                    ) noexcept (false) -> ElementReference;
+                    ) noexcept ( noexcept ( ElementType ( std :: move ( element ) ) ) ) -> bool;
 
                 protected:
                     template <
@@ -199,7 +191,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                     > auto insertAfter (
                             ConstIterator   const & iterator,
                             ElementType     const & element
-                    ) noexcept (false) -> ElementReference;
+                    ) noexcept ( noexcept ( ElementType ( element ) ) ) -> bool;
 
                 protected:
                     template <
@@ -210,42 +202,42 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                     > auto insertAfter (
                             ConstIterator    const & iterator,
                             ElementType           && element
-                    ) noexcept (false) -> ElementReference;
+                    ) noexcept ( noexcept ( ElementType ( std :: move ( element ) ) ) ) -> bool;
 
                 protected:
                     template < typename ... __EmplaceArgumentTypes > // NOLINT(bugprone-reserved-identifier)
                     auto emplaceBefore (
                             ConstIterator                const &     iterator,
                             __EmplaceArgumentTypes            && ... parameters
-                    ) noexcept (false) -> ElementReference;
+                    ) noexcept ( noexcept ( ElementType ( std :: forward < __EmplaceArgumentTypes > ( parameters ) ... ) ) ) -> bool;
 
                 protected:
                     template < typename ... __EmplaceArgumentTypes > // NOLINT(bugprone-reserved-identifier)
                     auto emplaceAfter (
                             ConstIterator                const &     iterator,
                             __EmplaceArgumentTypes            && ... parameters
-                    ) noexcept (false) -> ElementReference;
+                    ) noexcept ( noexcept ( ElementType ( std :: forward < __EmplaceArgumentTypes > ( parameters ) ... ) ) ) -> bool;
 
                 protected:
                     template < typename ... __ArgumentTypes > // NOLINT(bugprone-reserved-identifier)
                     auto insertAllBefore (
                             ConstIterator            const &     iterator,
                             __ArgumentTypes               && ... values
-                    ) noexcept (false) -> void;
+                    ) noexcept ( __ConstructExceptSpecMultiple < __ElementType, __ArgumentTypes ... > :: value ) -> bool;
 
                 protected:
                     template < typename ... __ArgumentTypes > // NOLINT(bugprone-reserved-identifier)
                     auto insertAllAfter (
                             ConstIterator            const &     iterator,
                             __ArgumentTypes               && ... values
-                    ) noexcept (false) -> void;
+                    ) noexcept ( __ConstructExceptSpecMultiple < __ElementType, __ArgumentTypes ... > :: value ) -> bool;
 
                 protected:
                     template < typename __IterableType > // NOLINT(bugprone-reserved-identifier)
                     auto insertAllOfBefore (
                             ConstIterator   const & iterator,
-                            __IterableType  const & iterableType
-                    ) noexcept (false) -> void;
+                            __IterableType  const & iterable
+                    ) noexcept ( noexcept ( ElementType ( * iterable.begin() ) ) ) -> bool;
 
                 protected:
                     template <
@@ -256,14 +248,14 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                     > auto insertAllOfBefore (
                             ConstIterator                               const & iterator,
                             std :: initializer_list < __ElementType >   const & list
-                    ) noexcept (false) -> void;
+                    ) noexcept ( noexcept ( ElementType ( * list.begin() ) ) ) -> bool;
 
                 protected:
                     template < typename __IterableType > // NOLINT(bugprone-reserved-identifier)
                     auto insertAllOfAfter (
                             ConstIterator           const & iterator,
-                            __IterableType          const & iterableType
-                    ) noexcept (false) -> void;
+                            __IterableType          const & iterable
+                    ) noexcept ( noexcept ( ElementType ( * iterable.begin() ) ) ) -> bool;
 
                 protected:
                     template <
@@ -274,7 +266,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                     > auto insertAllOfAfter (
                             ConstIterator                               const & iterator,
                             std :: initializer_list < __ElementType >   const & list
-                    ) noexcept (false) -> void;
+                    ) noexcept ( noexcept ( ElementType ( * list.begin() ) ) ) -> bool;
 
                 protected:
                     template < typename __OtherIteratorType > // NOLINT(bugprone-reserved-identifier)
@@ -282,15 +274,15 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                             ConstIterator           const & iterator,
                             __OtherIteratorType     const & begin,
                             __OtherIteratorType     const & end
-                    ) noexcept (false) -> void;
+                    ) noexcept ( noexcept ( ElementType ( * begin ) ) ) -> bool;
 
                 protected:
                     template < typename __OtherIteratorType > // NOLINT(bugprone-reserved-identifier)
                     auto insertAllOfAfter (
                             ConstIterator           const & iterator,
-                            __OtherIteratorType     const & iterableType,
+                            __OtherIteratorType     const & begin,
                             __OtherIteratorType     const & end
-                    ) noexcept (false) -> void;
+                    ) noexcept ( noexcept ( ElementType ( * begin ) ) ) -> bool;
                 };
 
             }

@@ -49,6 +49,12 @@ void f2();
 #include <vector>
 #include <CDS/Range>
 
+class C {
+public:
+    C ( int ) noexcept {}
+    C ( double ) noexcept (false) {}
+};
+
 using namespace cds :: experimental;
 int main () {
 
@@ -61,6 +67,15 @@ int main () {
     a.remove ( ((List < int > &)a).begin() );
 
     std :: cout << a << '\n';
+
+    Array < C > sa;
+
+    std :: cout << cds :: experimental :: __hidden :: __impl :: __ConstructExceptSpecMultiple < C, int, double, int > :: value << '\n';
+
+    sa.pushFrontAll ( 1, 2.3, 3 );
+
+    std :: cout << noexcept ( sa.pushFrontAll ( 1, 2, 3 ) ) << '\n';
+    std :: cout << sa << '\n';
 
 //    a.removeAt ( a.size () - 2 );
 //    std :: cout << a << '\n';

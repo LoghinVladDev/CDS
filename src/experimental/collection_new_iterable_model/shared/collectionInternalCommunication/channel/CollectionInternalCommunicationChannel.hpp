@@ -53,11 +53,11 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                     friend class __BoundaryInsertionPrimitiveClient;                        // NOLINT(bugprone-reserved-identifier)
 
                 private:
-                    template < typename, typename, typename >
+                    template < typename, typename >
                     friend class __AbstractIteratorRelativeInsertionPrimitiveClient;        // NOLINT(bugprone-reserved-identifier)
 
                 private:
-                    template < typename, typename, typename >
+                    template < typename, typename >
                     friend class __AbstractConstIteratorRelativeInsertionPrimitiveClient;   // NOLINT(bugprone-reserved-identifier)
 
                 private:

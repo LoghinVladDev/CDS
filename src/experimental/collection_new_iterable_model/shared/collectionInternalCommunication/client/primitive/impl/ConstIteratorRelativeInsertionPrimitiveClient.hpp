@@ -14,8 +14,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
 
                 template <
                         typename __ReceiverType,    // NOLINT(bugprone-reserved-identifier)
-                        typename __ElementType,     // NOLINT(bugprone-reserved-identifier)
-                        typename __ReturnType       // NOLINT(bugprone-reserved-identifier)
+                        typename __ElementType      // NOLINT(bugprone-reserved-identifier)
                 > template <
                         typename __TElementType,    // NOLINT(bugprone-reserved-identifier)
                         cds :: meta :: EnableIf <
@@ -23,12 +22,11 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                         >
                 > __CDS_OptimalInline auto __AbstractConstIteratorRelativeInsertionPrimitiveClient <
                         __ReceiverType,
-                        __ElementType,
-                        __ReturnType
+                        __ElementType
                 > :: insertBefore (
                         AbstractConstIterator   const & iterator,
                         ElementType             const & element
-                ) noexcept (false) -> ElementReference {
+                ) noexcept ( noexcept ( ElementType ( element ) ) ) -> bool {
 
                     return this->emplaceBefore (
                             iterator,
@@ -39,8 +37,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
 
                 template <
                         typename __ReceiverType,    // NOLINT(bugprone-reserved-identifier)
-                        typename __ElementType,     // NOLINT(bugprone-reserved-identifier)
-                        typename __ReturnType       // NOLINT(bugprone-reserved-identifier)
+                        typename __ElementType      // NOLINT(bugprone-reserved-identifier)
                 > template <
                         typename __TElementType,    // NOLINT(bugprone-reserved-identifier)
                         cds :: meta :: EnableIf <
@@ -48,12 +45,11 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                         >
                 > __CDS_OptimalInline auto __AbstractConstIteratorRelativeInsertionPrimitiveClient <
                         __ReceiverType,
-                        __ElementType,
-                        __ReturnType
+                        __ElementType
                 > :: insertBefore (
                         AbstractConstIterator const & iterator,
                         ElementType                && element
-                ) noexcept (false) -> ElementReference {
+                ) noexcept ( noexcept ( ElementType ( std :: move ( element ) ) ) ) -> bool {
 
                     return this->emplaceBefore (
                             iterator,
@@ -64,8 +60,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
 
                 template <
                         typename __ReceiverType,    // NOLINT(bugprone-reserved-identifier)
-                        typename __ElementType,     // NOLINT(bugprone-reserved-identifier)
-                        typename __ReturnType       // NOLINT(bugprone-reserved-identifier)
+                        typename __ElementType      // NOLINT(bugprone-reserved-identifier)
                 > template <
                         typename __TElementType,    // NOLINT(bugprone-reserved-identifier)
                         cds :: meta :: EnableIf <
@@ -73,12 +68,11 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                         >
                 > __CDS_OptimalInline auto __AbstractConstIteratorRelativeInsertionPrimitiveClient <
                         __ReceiverType,
-                        __ElementType,
-                        __ReturnType
+                        __ElementType
                 > :: insertAfter (
                         AbstractConstIterator   const & iterator,
                         ElementType             const & element
-                ) noexcept (false) -> ElementReference {
+                ) noexcept ( noexcept ( ElementType ( element ) ) ) -> bool {
 
                     return this->emplaceAfter (
                             iterator,
@@ -89,8 +83,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
 
                 template <
                         typename __ReceiverType,    // NOLINT(bugprone-reserved-identifier)
-                        typename __ElementType,     // NOLINT(bugprone-reserved-identifier)
-                        typename __ReturnType       // NOLINT(bugprone-reserved-identifier)
+                        typename __ElementType      // NOLINT(bugprone-reserved-identifier)
                 > template <
                         typename __TElementType,    // NOLINT(bugprone-reserved-identifier)
                         cds :: meta :: EnableIf <
@@ -98,12 +91,11 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                         >
                 > __CDS_OptimalInline auto __AbstractConstIteratorRelativeInsertionPrimitiveClient <
                         __ReceiverType,
-                        __ElementType,
-                        __ReturnType
+                        __ElementType
                 > :: insertAfter (
                         AbstractConstIterator const & iterator,
                         ElementType                && element
-                ) noexcept (false) -> ElementReference {
+                ) noexcept ( noexcept ( ElementType ( std :: move ( element ) ) ) ) -> bool {
 
                     return this->emplaceAfter (
                             iterator,
@@ -114,20 +106,22 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
 
                 template <
                         typename __ReceiverType,            // NOLINT(bugprone-reserved-identifier)
-                        typename __ElementType,             // NOLINT(bugprone-reserved-identifier)
-                        typename __ReturnType               // NOLINT(bugprone-reserved-identifier)
+                        typename __ElementType              // NOLINT(bugprone-reserved-identifier)
                 > template <
                         typename ... __EmplaceArgumentTypes // NOLINT(bugprone-reserved-identifier)
                 > auto __AbstractConstIteratorRelativeInsertionPrimitiveClient <
                         __ReceiverType,
-                        __ElementType,
-                        __ReturnType
+                        __ElementType
                 > :: emplaceBefore (
                         AbstractConstIterator        const &     iterator,
                         __EmplaceArgumentTypes            && ... parameters
-                ) noexcept (false) -> ElementReference {
+                ) noexcept ( noexcept ( ElementType ( std :: forward < __EmplaceArgumentTypes > ( parameters ) ... ) ) ) -> bool {
 
-                    return * new (
+                    if ( ! iterator.of ( static_cast < __ReceiverType const * > ( this ) ) || ! iterator.valid() ) {
+                        return false;
+                    }
+
+                    (void) new (
                             (
                                     static_cast < __ReceiverType * > ( this )->*
                                     reinterpret_cast <
@@ -145,25 +139,29 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                     ) __ElementType (
                             std :: forward < __EmplaceArgumentTypes > ( parameters ) ...
                     );
+
+                    return true;
                 }
 
 
                 template <
                         typename __ReceiverType,            // NOLINT(bugprone-reserved-identifier)
-                        typename __ElementType,             // NOLINT(bugprone-reserved-identifier)
-                        typename __ReturnType               // NOLINT(bugprone-reserved-identifier)
+                        typename __ElementType              // NOLINT(bugprone-reserved-identifier)
                 > template <
                         typename ... __EmplaceArgumentTypes // NOLINT(bugprone-reserved-identifier)
                 > auto __AbstractConstIteratorRelativeInsertionPrimitiveClient <
                         __ReceiverType,
-                        __ElementType,
-                        __ReturnType
+                        __ElementType
                 > :: emplaceAfter (
                         AbstractConstIterator        const &     iterator,
                         __EmplaceArgumentTypes            && ... parameters
-                ) noexcept (false) -> ElementReference {
+                ) noexcept ( noexcept ( ElementType ( std :: forward < __EmplaceArgumentTypes > ( parameters ) ... ) ) ) -> bool {
 
-                    return * new (
+                    if ( ! iterator.of ( static_cast < __ReceiverType const * > ( this ) ) || ! iterator.valid() ) {
+                        return false;
+                    }
+
+                    (void) new (
                             (
                                     static_cast < __ReceiverType * > ( this )->*
                                     reinterpret_cast <
@@ -181,23 +179,27 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                     ) __ElementType (
                             std :: forward < __EmplaceArgumentTypes > ( parameters ) ...
                     );
+
+                    return true;
                 }
 
 
                 template <
                         typename __ReceiverType,            // NOLINT(bugprone-reserved-identifier)
-                        typename __ElementType,             // NOLINT(bugprone-reserved-identifier)
-                        typename __ReturnType               // NOLINT(bugprone-reserved-identifier)
+                        typename __ElementType              // NOLINT(bugprone-reserved-identifier)
                 > template <
                         typename ... __ArgumentTypes        // NOLINT(bugprone-reserved-identifier)
                 > auto __AbstractConstIteratorRelativeInsertionPrimitiveClient <
                         __ReceiverType,
-                        __ElementType,
-                        __ReturnType
+                        __ElementType
                 > :: insertAllBefore (
                         AbstractConstIterator    const &     iterator,
                         __ArgumentTypes               && ... values
-                ) noexcept (false) -> void {
+                ) noexcept ( __ConstructExceptSpecMultiple < __ElementType, __ArgumentTypes ... > :: value ) -> bool {
+
+                    if ( ! iterator.of ( static_cast < __ReceiverType const * > ( this ) ) || ! iterator.valid() ) {
+                        return false;
+                    }
 
                     Size  const parameterCount = sizeof ... ( __ArgumentTypes );
                     auto        ppElements = cds :: __hidden :: __impl :: __allocation :: __allocPrimitiveArray < __ElementType * > ( parameterCount );
@@ -227,23 +229,26 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                     );
 
                     cds :: __hidden :: __impl :: __allocation :: __freePrimitiveArray ( ppElements );
+                    return true;
                 }
 
 
                 template <
                         typename __ReceiverType,            // NOLINT(bugprone-reserved-identifier)
-                        typename __ElementType,             // NOLINT(bugprone-reserved-identifier)
-                        typename __ReturnType               // NOLINT(bugprone-reserved-identifier)
+                        typename __ElementType              // NOLINT(bugprone-reserved-identifier)
                 > template <
                         typename ... __ArgumentTypes        // NOLINT(bugprone-reserved-identifier)
                 > auto __AbstractConstIteratorRelativeInsertionPrimitiveClient <
                         __ReceiverType,
-                        __ElementType,
-                        __ReturnType
+                        __ElementType
                 > :: insertAllAfter (
                         AbstractConstIterator    const &     iterator,
                         __ArgumentTypes               && ... values
-                ) noexcept (false) -> void {
+                ) noexcept ( __ConstructExceptSpecMultiple < __ElementType, __ArgumentTypes ... > :: value ) -> bool {
+
+                    if ( ! iterator.of ( static_cast < __ReceiverType const * > ( this ) ) || ! iterator.valid() ) {
+                        return false;
+                    }
 
                     Size  const parameterCount = sizeof ... ( __ArgumentTypes );
                     auto        ppElements = cds :: __hidden :: __impl :: __allocation :: __allocPrimitiveArray < __ElementType * > ( parameterCount );
@@ -273,23 +278,22 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                     );
 
                     cds :: __hidden :: __impl :: __allocation :: __freePrimitiveArray ( ppElements );
+                    return true;
                 }
 
 
                 template <
                         typename __ReceiverType,            // NOLINT(bugprone-reserved-identifier)
-                        typename __ElementType,             // NOLINT(bugprone-reserved-identifier)
-                        typename __ReturnType               // NOLINT(bugprone-reserved-identifier)
+                        typename __ElementType              // NOLINT(bugprone-reserved-identifier)
                 > template <
                         typename __IterableType             // NOLINT(bugprone-reserved-identifier)
                 > __CDS_OptimalInline auto __AbstractConstIteratorRelativeInsertionPrimitiveClient <
                         __ReceiverType,
-                        __ElementType,
-                        __ReturnType
+                        __ElementType
                 > :: insertAllOfBefore (
                         AbstractConstIterator   const & iterator,
                         __IterableType          const & iterable
-                ) noexcept (false) -> void {
+                ) noexcept ( noexcept ( ElementType ( * iterable.begin() ) ) ) -> bool {
 
                     this->insertAllOfBefore (
                             iterator,
@@ -301,8 +305,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
 
                 template <
                         typename __ReceiverType,            // NOLINT(bugprone-reserved-identifier)
-                        typename __ElementType,             // NOLINT(bugprone-reserved-identifier)
-                        typename __ReturnType               // NOLINT(bugprone-reserved-identifier)
+                        typename __ElementType              // NOLINT(bugprone-reserved-identifier)
                 > template <
                         typename __TElementType,            // NOLINT(bugprone-reserved-identifier)
                         cds :: meta :: EnableIf <
@@ -310,12 +313,11 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                         >
                 > __CDS_OptimalInline auto __AbstractConstIteratorRelativeInsertionPrimitiveClient <
                         __ReceiverType,
-                        __ElementType,
-                        __ReturnType
+                        __ElementType
                 > :: insertAllOfBefore (
                         AbstractConstIterator                           const & iterator,
                         std :: initializer_list < __ElementType >       const & list
-                ) noexcept (false) -> void {
+                ) noexcept ( noexcept ( ElementType ( * list.begin() ) ) ) -> bool {
 
                     this->insertAllOfBefore (
                             iterator,
@@ -327,18 +329,16 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
 
                 template <
                         typename __ReceiverType,            // NOLINT(bugprone-reserved-identifier)
-                        typename __ElementType,             // NOLINT(bugprone-reserved-identifier)
-                        typename __ReturnType               // NOLINT(bugprone-reserved-identifier)
+                        typename __ElementType              // NOLINT(bugprone-reserved-identifier)
                 > template <
                         typename __IterableType             // NOLINT(bugprone-reserved-identifier)
                 > __CDS_OptimalInline auto __AbstractConstIteratorRelativeInsertionPrimitiveClient <
                         __ReceiverType,
-                        __ElementType,
-                        __ReturnType
+                        __ElementType
                 > :: insertAllOfAfter (
                         AbstractConstIterator   const & iterator,
                         __IterableType          const & iterable
-                ) noexcept (false) -> void {
+                ) noexcept ( noexcept ( ElementType ( * iterable.begin() ) ) ) -> bool {
 
                     this->insertAllOfAfter (
                             iterator,
@@ -350,8 +350,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
 
                 template <
                         typename __ReceiverType,            // NOLINT(bugprone-reserved-identifier)
-                        typename __ElementType,             // NOLINT(bugprone-reserved-identifier)
-                        typename __ReturnType               // NOLINT(bugprone-reserved-identifier)
+                        typename __ElementType              // NOLINT(bugprone-reserved-identifier)
                 > template <
                         typename __TElementType,            // NOLINT(bugprone-reserved-identifier)
                         cds :: meta :: EnableIf <
@@ -359,12 +358,11 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                         >
                 > __CDS_OptimalInline auto __AbstractConstIteratorRelativeInsertionPrimitiveClient <
                         __ReceiverType,
-                        __ElementType,
-                        __ReturnType
+                        __ElementType
                 > :: insertAllOfAfter (
                         AbstractConstIterator                           const & iterator,
                         std :: initializer_list < __ElementType >       const & list
-                ) noexcept (false) -> void {
+                ) noexcept ( noexcept ( ElementType ( * list.begin() ) ) ) -> bool {
 
                     this->insertAllOfAfter (
                             iterator,
@@ -376,19 +374,21 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
 
                 template <
                         typename __ReceiverType,            // NOLINT(bugprone-reserved-identifier)
-                        typename __ElementType,             // NOLINT(bugprone-reserved-identifier)
-                        typename __ReturnType               // NOLINT(bugprone-reserved-identifier)
+                        typename __ElementType              // NOLINT(bugprone-reserved-identifier)
                 > template <
                         typename __IteratorType             // NOLINT(bugprone-reserved-identifier)
                 > auto __AbstractConstIteratorRelativeInsertionPrimitiveClient <
                         __ReceiverType,
-                        __ElementType,
-                        __ReturnType
+                        __ElementType
                 > :: insertAllOfBefore (
                         AbstractConstIterator   const & iterator,
                         __IteratorType          const & begin,
                         __IteratorType          const & end
-                ) noexcept (false) -> void {
+                ) noexcept ( noexcept ( ElementType ( * begin ) ) ) -> bool {
+
+                    if ( ! iterator.of ( static_cast < __ReceiverType const * > ( this ) ) || ! iterator.valid() ) {
+                        return false;
+                    }
 
                     Size  const parameterCount = __IteratorDistance < __IteratorType > :: __compute ( begin, end );
                     auto        ppElements = cds :: __hidden :: __impl :: __allocation :: __allocPrimitiveArray < __ElementType * > ( parameterCount );
@@ -418,24 +418,27 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                     }
 
                     cds :: __hidden :: __impl :: __allocation :: __freePrimitiveArray ( ppElements );
+                    return true;
                 }
 
 
                 template <
                         typename __ReceiverType,            // NOLINT(bugprone-reserved-identifier)
-                        typename __ElementType,             // NOLINT(bugprone-reserved-identifier)
-                        typename __ReturnType               // NOLINT(bugprone-reserved-identifier)
+                        typename __ElementType              // NOLINT(bugprone-reserved-identifier)
                 > template <
                         typename __IteratorType             // NOLINT(bugprone-reserved-identifier)
                 > auto __AbstractConstIteratorRelativeInsertionPrimitiveClient <
                         __ReceiverType,
-                        __ElementType,
-                        __ReturnType
+                        __ElementType
                 > :: insertAllOfAfter (
                         AbstractConstIterator   const & iterator,
                         __IteratorType          const & begin,
                         __IteratorType          const & end
-                ) noexcept (false) -> void {
+                ) noexcept ( noexcept ( ElementType ( * begin ) ) ) -> bool {
+
+                    if ( ! iterator.of ( static_cast < __ReceiverType const * > ( this ) ) || ! iterator.valid() ) {
+                        return false;
+                    }
 
                     Size  const parameterCount = __IteratorDistance < __IteratorType > :: __compute ( begin, end );
                     auto        ppElements = cds :: __hidden :: __impl :: __allocation :: __allocPrimitiveArray < __ElementType * > ( parameterCount );
@@ -465,13 +468,13 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                     }
 
                     cds :: __hidden :: __impl :: __allocation :: __freePrimitiveArray ( ppElements );
+                    return true;
                 }
 
 
                 template <
                         typename __ReceiverType,    // NOLINT(bugprone-reserved-identifier)
                         typename __ElementType,     // NOLINT(bugprone-reserved-identifier)
-                        typename __ReturnType,      // NOLINT(bugprone-reserved-identifier)
                         typename __IteratorType     // NOLINT(bugprone-reserved-identifier)
                 > template <
                         typename __TElementType,    // NOLINT(bugprone-reserved-identifier)
@@ -481,12 +484,11 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                 > __CDS_OptimalInline auto __LocalConstIteratorRelativeInsertionPrimitiveClient <
                         __ReceiverType,
                         __ElementType,
-                        __ReturnType,
                         __IteratorType
                 > :: insertBefore (
                         ConstIterator   const & iterator,
                         ElementType     const & element
-                ) noexcept (false) -> ElementReference {
+                ) noexcept ( noexcept ( ElementType ( element ) ) ) -> bool {
 
                     return this->emplaceBefore (
                             iterator,
@@ -498,7 +500,6 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                 template <
                         typename __ReceiverType,    // NOLINT(bugprone-reserved-identifier)
                         typename __ElementType,     // NOLINT(bugprone-reserved-identifier)
-                        typename __ReturnType,      // NOLINT(bugprone-reserved-identifier)
                         typename __IteratorType     // NOLINT(bugprone-reserved-identifier)
                 > template <
                         typename __TElementType,    // NOLINT(bugprone-reserved-identifier)
@@ -508,12 +509,11 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                 > __CDS_OptimalInline auto __LocalConstIteratorRelativeInsertionPrimitiveClient <
                         __ReceiverType,
                         __ElementType,
-                        __ReturnType,
                         __IteratorType
                 > :: insertBefore (
                         ConstIterator const & iterator,
                         ElementType        && element
-                ) noexcept (false) -> ElementReference {
+                ) noexcept ( noexcept ( ElementType ( std :: move ( element ) ) ) ) -> bool {
 
                     return this->emplaceBefore (
                             iterator,
@@ -525,7 +525,6 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                 template <
                         typename __ReceiverType,    // NOLINT(bugprone-reserved-identifier)
                         typename __ElementType,     // NOLINT(bugprone-reserved-identifier)
-                        typename __ReturnType,      // NOLINT(bugprone-reserved-identifier)
                         typename __IteratorType     // NOLINT(bugprone-reserved-identifier)
                 > template <
                         typename __TElementType,    // NOLINT(bugprone-reserved-identifier)
@@ -535,12 +534,11 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                 > __CDS_OptimalInline auto __LocalConstIteratorRelativeInsertionPrimitiveClient <
                         __ReceiverType,
                         __ElementType,
-                        __ReturnType,
                         __IteratorType
                 > :: insertAfter (
                         ConstIterator   const & iterator,
                         ElementType     const & element
-                ) noexcept (false) -> ElementReference {
+                ) noexcept ( noexcept ( ElementType ( element ) ) ) -> bool {
 
                     return this->emplaceAfter (
                             iterator,
@@ -552,7 +550,6 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                 template <
                         typename __ReceiverType,    // NOLINT(bugprone-reserved-identifier)
                         typename __ElementType,     // NOLINT(bugprone-reserved-identifier)
-                        typename __ReturnType,      // NOLINT(bugprone-reserved-identifier)
                         typename __IteratorType     // NOLINT(bugprone-reserved-identifier)
                 > template <
                         typename __TElementType,    // NOLINT(bugprone-reserved-identifier)
@@ -562,12 +559,11 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                 > __CDS_OptimalInline auto __LocalConstIteratorRelativeInsertionPrimitiveClient <
                         __ReceiverType,
                         __ElementType,
-                        __ReturnType,
                         __IteratorType
                 > :: insertAfter (
                         ConstIterator   const & iterator,
                         ElementType          && element
-                ) noexcept (false) -> ElementReference {
+                ) noexcept ( noexcept ( ElementType ( std :: move ( element ) ) ) ) -> bool {
 
                     return this->emplaceAfter (
                             iterator,
@@ -579,69 +575,79 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                 template <
                         typename __ReceiverType,    // NOLINT(bugprone-reserved-identifier)
                         typename __ElementType,     // NOLINT(bugprone-reserved-identifier)
-                        typename __ReturnType,      // NOLINT(bugprone-reserved-identifier)
                         typename __IteratorType     // NOLINT(bugprone-reserved-identifier)
                 > template <
                         typename ... __EmplaceArgumentTypes // NOLINT(bugprone-reserved-identifier)
                 > auto __LocalConstIteratorRelativeInsertionPrimitiveClient <
                         __ReceiverType,
                         __ElementType,
-                        __ReturnType,
                         __IteratorType
                 > :: emplaceBefore (
                         ConstIterator           const &     iterator,
                         __EmplaceArgumentTypes       && ... parameters
-                ) noexcept (false) -> ElementReference {
+                ) noexcept ( noexcept ( ElementType ( std :: forward < __EmplaceArgumentTypes > ( parameters ) ... ) ) ) -> bool {
 
-                    return * new (
+                    if ( iterator == static_cast < __ReceiverType const * > ( this )->cend () ) {
+                        return false;
+                    }
+
+                    (void) new (
                             static_cast < __ReceiverType * > ( this )->__newBeforeConst ( & iterator )
                     ) __ElementType (
                             std :: forward < __EmplaceArgumentTypes > ( parameters ) ...
                     );
+
+                    return true;
                 }
 
 
                 template <
                         typename __ReceiverType,    // NOLINT(bugprone-reserved-identifier)
                         typename __ElementType,     // NOLINT(bugprone-reserved-identifier)
-                        typename __ReturnType,      // NOLINT(bugprone-reserved-identifier)
                         typename __IteratorType     // NOLINT(bugprone-reserved-identifier)
                 > template <
                         typename ... __EmplaceArgumentTypes // NOLINT(bugprone-reserved-identifier)
                 > auto __LocalConstIteratorRelativeInsertionPrimitiveClient <
                         __ReceiverType,
                         __ElementType,
-                        __ReturnType,
                         __IteratorType
                 > :: emplaceAfter (
                         ConstIterator           const &     iterator,
                         __EmplaceArgumentTypes       && ... parameters
-                ) noexcept (false) -> ElementReference {
+                ) noexcept ( noexcept ( ElementType ( std :: forward < __EmplaceArgumentTypes > ( parameters ) ... ) ) ) -> bool {
 
-                    return * new (
+                    if ( iterator == static_cast < __ReceiverType const * > ( this )->cend () ) {
+                        return false;
+                    }
+
+                    (void) new (
                             static_cast < __ReceiverType * > ( this )->__newAfterConst ( & iterator )
                     ) __ElementType (
                             std :: forward < __EmplaceArgumentTypes > ( parameters ) ...
                     );
+
+                    return true;
                 }
 
 
                 template <
                         typename __ReceiverType,        // NOLINT(bugprone-reserved-identifier)
                         typename __ElementType,         // NOLINT(bugprone-reserved-identifier)
-                        typename __ReturnType,          // NOLINT(bugprone-reserved-identifier)
                         typename __IteratorType         // NOLINT(bugprone-reserved-identifier)
                 > template <
                         typename ... __ArgumentTypes        // NOLINT(bugprone-reserved-identifier)
                 > auto __LocalConstIteratorRelativeInsertionPrimitiveClient <
                         __ReceiverType,
                         __ElementType,
-                        __ReturnType,
                         __IteratorType
                 > :: insertAllBefore (
                         ConstIterator    const &     iterator,
                         __ArgumentTypes       && ... values
-                ) noexcept (false) -> void {
+                ) noexcept ( __ConstructExceptSpecMultiple < __ElementType, __ArgumentTypes ... > :: value ) -> bool {
+
+                    if ( iterator == static_cast < __ReceiverType const * > ( this )->cend () ) {
+                        return false;
+                    }
 
                     Size  const parameterCount = sizeof ... ( __ArgumentTypes );
                     auto        ppElements = cds :: __hidden :: __impl :: __allocation :: __allocPrimitiveArray < __ElementType * > ( parameterCount );
@@ -658,25 +664,28 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                     );
 
                     cds :: __hidden :: __impl :: __allocation :: __freePrimitiveArray ( ppElements );
+                    return true;
                 }
 
 
                 template <
                         typename __ReceiverType,        // NOLINT(bugprone-reserved-identifier)
                         typename __ElementType,         // NOLINT(bugprone-reserved-identifier)
-                        typename __ReturnType,          // NOLINT(bugprone-reserved-identifier)
                         typename __IteratorType         // NOLINT(bugprone-reserved-identifier)
                 > template <
                         typename ... __ArgumentTypes        // NOLINT(bugprone-reserved-identifier)
                 > auto __LocalConstIteratorRelativeInsertionPrimitiveClient <
                         __ReceiverType,
                         __ElementType,
-                        __ReturnType,
                         __IteratorType
                 > :: insertAllAfter (
                         ConstIterator    const &     iterator,
                         __ArgumentTypes       && ... values
-                ) noexcept (false) -> void {
+                ) noexcept ( __ConstructExceptSpecMultiple < __ElementType, __ArgumentTypes ... > :: value ) -> bool {
+
+                    if ( iterator == static_cast < __ReceiverType const * > ( this )->cend () ) {
+                        return false;
+                    }
 
                     Size  const parameterCount = sizeof ... ( __ArgumentTypes );
                     auto        ppElements = cds :: __hidden :: __impl :: __allocation :: __allocPrimitiveArray < __ElementType * > ( parameterCount );
@@ -693,25 +702,24 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                     );
 
                     cds :: __hidden :: __impl :: __allocation :: __freePrimitiveArray ( ppElements );
+                    return true;
                 }
 
 
                 template <
                         typename __ReceiverType,        // NOLINT(bugprone-reserved-identifier)
                         typename __ElementType,         // NOLINT(bugprone-reserved-identifier)
-                        typename __ReturnType,          // NOLINT(bugprone-reserved-identifier)
                         typename __IteratorType         // NOLINT(bugprone-reserved-identifier)
                 > template <
                         typename __IterableType             // NOLINT(bugprone-reserved-identifier)
                 > __CDS_OptimalInline auto __LocalConstIteratorRelativeInsertionPrimitiveClient <
                         __ReceiverType,
                         __ElementType,
-                        __ReturnType,
                         __IteratorType
                 > :: insertAllOfBefore (
                         ConstIterator   const & iterator,
                         __IterableType  const & iterable
-                ) noexcept (false) -> void {
+                ) noexcept ( noexcept ( ElementType ( * iterable.begin() ) ) ) -> bool {
 
                     this->insertAllOfBefore (
                             iterator,
@@ -724,7 +732,6 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                 template <
                         typename __ReceiverType,        // NOLINT(bugprone-reserved-identifier)
                         typename __ElementType,         // NOLINT(bugprone-reserved-identifier)
-                        typename __ReturnType,          // NOLINT(bugprone-reserved-identifier)
                         typename __IteratorType         // NOLINT(bugprone-reserved-identifier)
                 > template <
                         typename __TElementType,            // NOLINT(bugprone-reserved-identifier)
@@ -734,12 +741,11 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                 > __CDS_OptimalInline auto __LocalConstIteratorRelativeInsertionPrimitiveClient <
                         __ReceiverType,
                         __ElementType,
-                        __ReturnType,
                         __IteratorType
                 > :: insertAllOfBefore (
                         ConstIterator                               const & iterator,
                         std :: initializer_list < __ElementType >   const & list
-                ) noexcept (false) -> void {
+                ) noexcept ( noexcept ( ElementType ( * list.begin() ) ) ) -> bool {
 
                     this->insertAllOfBefore (
                             iterator,
@@ -752,19 +758,17 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                 template <
                         typename __ReceiverType,        // NOLINT(bugprone-reserved-identifier)
                         typename __ElementType,         // NOLINT(bugprone-reserved-identifier)
-                        typename __ReturnType,          // NOLINT(bugprone-reserved-identifier)
                         typename __IteratorType         // NOLINT(bugprone-reserved-identifier)
                 > template <
                         typename __IterableType             // NOLINT(bugprone-reserved-identifier)
                 > __CDS_OptimalInline auto __LocalConstIteratorRelativeInsertionPrimitiveClient <
                         __ReceiverType,
                         __ElementType,
-                        __ReturnType,
                         __IteratorType
                 > :: insertAllOfAfter (
                         ConstIterator   const & iterator,
                         __IterableType  const & iterable
-                ) noexcept (false) -> void {
+                ) noexcept ( noexcept ( ElementType ( * iterable.begin() ) ) ) -> bool {
 
                     this->insertAllOfAfter (
                             iterator,
@@ -777,7 +781,6 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                 template <
                         typename __ReceiverType,        // NOLINT(bugprone-reserved-identifier)
                         typename __ElementType,         // NOLINT(bugprone-reserved-identifier)
-                        typename __ReturnType,          // NOLINT(bugprone-reserved-identifier)
                         typename __IteratorType         // NOLINT(bugprone-reserved-identifier)
                 > template <
                         typename __TElementType,            // NOLINT(bugprone-reserved-identifier)
@@ -787,12 +790,11 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                 > __CDS_OptimalInline auto __LocalConstIteratorRelativeInsertionPrimitiveClient <
                         __ReceiverType,
                         __ElementType,
-                        __ReturnType,
                         __IteratorType
                 > :: insertAllOfAfter (
                         ConstIterator                               const & iterator,
                         std :: initializer_list < __ElementType >   const & list
-                ) noexcept (false) -> void {
+                ) noexcept ( noexcept ( ElementType ( * list.begin() ) ) ) -> bool {
 
                     this->insertAllOfAfter (
                             iterator,
@@ -805,20 +807,22 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                 template <
                         typename __ReceiverType,            // NOLINT(bugprone-reserved-identifier)
                         typename __ElementType,             // NOLINT(bugprone-reserved-identifier)
-                        typename __ReturnType,              // NOLINT(bugprone-reserved-identifier)
                         typename __LocalClientIteratorType  // NOLINT(bugprone-reserved-identifier)
                 > template <
                         typename __IteratorType             // NOLINT(bugprone-reserved-identifier)
                 > auto __LocalConstIteratorRelativeInsertionPrimitiveClient <
                         __ReceiverType,
                         __ElementType,
-                        __ReturnType,
                         __LocalClientIteratorType
                 > :: insertAllOfBefore (
                         ConstIterator   const & iterator,
                         __IteratorType  const & begin,
                         __IteratorType  const & end
-                ) noexcept (false) -> void {
+                ) noexcept ( noexcept ( ElementType ( * begin ) ) ) -> bool {
+
+                    if ( iterator == static_cast < __ReceiverType const * > ( this )->cend () ) {
+                        return false;
+                    }
 
                     Size  const parameterCount = __IteratorDistance < __IteratorType > :: __compute ( begin, end );
                     auto        ppElements = cds :: __hidden :: __impl :: __allocation :: __allocPrimitiveArray < __ElementType * > ( parameterCount );
@@ -835,26 +839,29 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                     }
 
                     cds :: __hidden :: __impl :: __allocation :: __freePrimitiveArray ( ppElements );
+                    return false;
                 }
 
 
                 template <
                         typename __ReceiverType,            // NOLINT(bugprone-reserved-identifier)
                         typename __ElementType,             // NOLINT(bugprone-reserved-identifier)
-                        typename __ReturnType,              // NOLINT(bugprone-reserved-identifier)
                         typename __LocalClientIteratorType  // NOLINT(bugprone-reserved-identifier)
                 > template <
                         typename __IteratorType             // NOLINT(bugprone-reserved-identifier)
                 > auto __LocalConstIteratorRelativeInsertionPrimitiveClient <
                         __ReceiverType,
                         __ElementType,
-                        __ReturnType,
                         __LocalClientIteratorType
                 > :: insertAllOfAfter (
                         ConstIterator   const & iterator,
                         __IteratorType  const & begin,
                         __IteratorType  const & end
-                ) noexcept (false) -> void {
+                ) noexcept ( noexcept ( ElementType ( * begin ) ) ) -> bool {
+
+                    if ( iterator == static_cast < __ReceiverType const * > ( this )->cend () ) {
+                        return false;
+                    }
 
                     Size  const parameterCount = __IteratorDistance < __IteratorType > :: __compute ( begin, end );
                     auto        ppElements = cds :: __hidden :: __impl :: __allocation :: __allocPrimitiveArray < __ElementType * > ( parameterCount );
@@ -871,6 +878,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                     }
 
                     cds :: __hidden :: __impl :: __allocation :: __freePrimitiveArray ( ppElements );
+                    return true;
                 }
 
             }

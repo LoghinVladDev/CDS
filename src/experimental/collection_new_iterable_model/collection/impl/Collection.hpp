@@ -80,7 +80,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         __CDS_OptimalInline auto Collection < __ElementType > :: toString () const noexcept -> String {
 
             std :: stringstream oss;
-            oss << "Collection at 0x" << std :: hex << reinterpret_cast < AddressValueType const > ( this );
+            oss << "Collection at " << std :: hex << reinterpret_cast < AddressValueType const > ( this );
             return oss.str();
         }
 
