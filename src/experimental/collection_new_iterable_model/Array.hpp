@@ -17,111 +17,48 @@
 #include "shared/collectionInternalCommunication/server/ListServer.hpp"
 #include "shared/collectionInternalCommunication/server/DelegateIterableServer.hpp"
 
+#include "array/ArrayConstructs.hpp"
+
 namespace cds { // NOLINT(modernize-concat-nested-namespaces)
     namespace experimental {
 
         template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
         class Array :
                 public List < __ElementType >,
-                protected __hidden :: __impl :: __Array <
-                        __ElementType,
-                        & cds :: meta :: equals < __ElementType >
-                >,
-                protected __hidden :: __impl :: __ListServer <
-                        Array < __ElementType >,
-                        __ElementType
-                >,
-                public __hidden :: __impl :: __LocalRandomInsertionPrimitiveClient <
-                        Array < __ElementType >,
-                        __ElementType,
-                        __ElementType
-                >,
-                public __hidden :: __impl :: __LocalBoundaryInsertionPrimitiveClient <
-                        Array < __ElementType >,
-                        __ElementType,
-                        __ElementType
-                >,
-                public __hidden :: __impl :: __LocalIteratorRemovePrimitiveClient <
-                        Array < __ElementType >,
-                        __ElementType,
-                        AbstractAddressIterator < __ElementType >
-                >,
-                public __hidden :: __impl :: __LocalConstIteratorRemovePrimitiveClient <
-                        Array < __ElementType >,
-                        __ElementType,
-                        AbstractAddressIterator < __ElementType const >
-                >,
-                public __hidden :: __impl :: __DelegateIterableServer <
-                        Array < __ElementType >,
-                        __ElementType,
-                        true,
-                        true,
-                        AddressIterator < __ElementType, false >,
-                        AddressIterator < __ElementType const, false >,
-                        AddressIterator < __ElementType, true >,
-                        AddressIterator < __ElementType const, true >
-                > {
+                protected __hidden :: __impl :: __ArrayImplementation < __ElementType >,
+                protected __hidden :: __impl :: __ArrayServer < __ElementType >,
+                public __hidden :: __impl :: __ArrayRandomInsertionClient < __ElementType >,
+                public __hidden :: __impl :: __ArrayBoundaryInsertionClient < __ElementType >,
+                public __hidden :: __impl :: __ArrayIteratorRelativeInsertionClient < __ElementType >,
+                public __hidden :: __impl :: __ArrayConstIteratorRelativeInsertionClient < __ElementType >,
+                public __hidden :: __impl :: __ArrayIteratorRemoveClient < __ElementType >,
+                public __hidden :: __impl :: __ArrayConstIteratorRemoveClient < __ElementType >,
+                public __hidden :: __impl :: __ArrayDelegateIterableServer < __ElementType > {
 
         private:
             template < typename, typename >
             friend class cds :: experimental :: __hidden :: __impl :: __ListServer; // NOLINT(bugprone-reserved-identifier)
 
-        protected:
-            using ListServer =
-                    __hidden :: __impl :: __ListServer <
-                            Array < __ElementType >,
-                            __ElementType
-                    >;
+        protected:  using Implementation                        = __hidden :: __impl :: __ArrayImplementation < __ElementType >;
+        protected:  using Server                                = __hidden :: __impl :: __ArrayServer < __ElementType >;
+        protected:  using RandomInsertionClient                 = __hidden :: __impl :: __ArrayRandomInsertionClient < __ElementType >;
+        protected:  using BoundaryInsertionClient               = __hidden :: __impl :: __ArrayBoundaryInsertionClient < __ElementType >;
+        protected:  using IteratorRelativeInsertionClient       = __hidden :: __impl :: __ArrayIteratorRelativeInsertionClient < __ElementType >;
+        protected:  using ConstIteratorRelativeInsertionClient  = __hidden :: __impl :: __ArrayConstIteratorRelativeInsertionClient < __ElementType >;
+        protected:  using IteratorRemoveClient                  = __hidden :: __impl :: __ArrayIteratorRemoveClient < __ElementType >;
+        protected:  using ConstIteratorRemoveClient             = __hidden :: __impl :: __ArrayConstIteratorRemoveClient < __ElementType >;
+        protected:  using DelegateIterableServer                = __hidden :: __impl :: __ArrayDelegateIterableServer < __ElementType >;
 
-        protected:
-            using ArrayBase =
-                    __hidden :: __impl :: __Array <
-                            __ElementType,
-                            & cds :: meta :: equals < __ElementType >
-                    >;
+        private: friend BoundaryInsertionClient;
+        private: friend RandomInsertionClient;
+        private: friend IteratorRemoveClient;
+        private: friend ConstIteratorRemoveClient;
 
-        protected:
-            using LocalRandomInsertionClient =
-                    __hidden :: __impl :: __LocalRandomInsertionPrimitiveClient <
-                            Array < __ElementType >,
-                            __ElementType,
-                            __ElementType
-                    >;
-
-        protected:
-            using LocalBoundaryInsertionClient =
-                    __hidden :: __impl :: __LocalBoundaryInsertionPrimitiveClient <
-                            Array < __ElementType >,
-                            __ElementType,
-                            __ElementType
-                    >;
-
-        protected:
-            using LocalIteratorRemoveClient =
-                    __hidden :: __impl :: __LocalIteratorRemovePrimitiveClient <
-                            Array < __ElementType >,
-                            __ElementType,
-                            AbstractAddressIterator < __ElementType >
-                    >;
-
-        protected:
-            using LocalConstIteratorRemoveClient =
-                    __hidden :: __impl :: __LocalConstIteratorRemovePrimitiveClient <
-                            Array < __ElementType >,
-                            __ElementType,
-                            AbstractAddressIterator < __ElementType const >
-                    >;
-
-        private: friend LocalBoundaryInsertionClient;
-        private: friend LocalRandomInsertionClient;
-        private: friend LocalIteratorRemoveClient;
-        private: friend LocalConstIteratorRemoveClient;
-
-        public: using ElementType           = __ElementType;
-        public: using Iterator              = typename ArrayBase :: __a_Iterator;
-        public: using ConstIterator         = typename ArrayBase :: __a_ConstIterator;
-        public: using ReverseIterator       = typename ArrayBase :: __a_ReverseIterator;
-        public: using ConstReverseIterator  = typename ArrayBase :: __a_ConstReverseIterator;
+        public: using ElementType                   = __ElementType;
+        public: using Iterator                      = typename Implementation :: __a_Iterator;
+        public: using ConstIterator                 = typename Implementation :: __a_ConstIterator;
+        public: using ReverseIterator               = typename Implementation :: __a_ReverseIterator;
+        public: using ConstReverseIterator          = typename Implementation :: __a_ConstReverseIterator;
 
         private:
             __CDS_NoDiscard __CDS_cpplang_ConstexprOverride auto __cicch_obtainGenericHandler ( // NOLINT(bugprone-reserved-identifier)
@@ -148,27 +85,45 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         protected: using List < __ElementType > :: crbegin;
         protected: using List < __ElementType > :: crend;
 
-        public: using LocalRandomInsertionClient :: insert;
-        public: using LocalRandomInsertionClient :: insertAll;
-        public: using LocalRandomInsertionClient :: insertAllOf;
-        public: using LocalRandomInsertionClient :: add;
-        public: using LocalRandomInsertionClient :: addAll;
-        public: using LocalRandomInsertionClient :: addAllOf;
-        public: using LocalRandomInsertionClient :: emplace;
+        public: using RandomInsertionClient :: insert;
+        public: using RandomInsertionClient :: insertAll;
+        public: using RandomInsertionClient :: insertAllOf;
+        public: using RandomInsertionClient :: add;
+        public: using RandomInsertionClient :: addAll;
+        public: using RandomInsertionClient :: addAllOf;
+        public: using RandomInsertionClient :: emplace;
 
-        public: using LocalBoundaryInsertionClient :: pushBack;
-        public: using LocalBoundaryInsertionClient :: pushBackAll;
-        public: using LocalBoundaryInsertionClient :: pushBackAllOf;
-        public: using LocalBoundaryInsertionClient :: pushFront;
-        public: using LocalBoundaryInsertionClient :: pushFrontAll;
-        public: using LocalBoundaryInsertionClient :: pushFrontAllOf;
-        public: using LocalBoundaryInsertionClient :: append;
-        public: using LocalBoundaryInsertionClient :: prepend;
-        public: using LocalBoundaryInsertionClient :: emplaceBack;
-        public: using LocalBoundaryInsertionClient :: emplaceFront;
+        public: using BoundaryInsertionClient :: pushBack;
+        public: using BoundaryInsertionClient :: pushBackAll;
+        public: using BoundaryInsertionClient :: pushBackAllOf;
+        public: using BoundaryInsertionClient :: pushFront;
+        public: using BoundaryInsertionClient :: pushFrontAll;
+        public: using BoundaryInsertionClient :: pushFrontAllOf;
+        public: using BoundaryInsertionClient :: append;
+        public: using BoundaryInsertionClient :: prepend;
+        public: using BoundaryInsertionClient :: emplaceBack;
+        public: using BoundaryInsertionClient :: emplaceFront;
 
-        public: using LocalIteratorRemoveClient :: remove;
-        public: using LocalConstIteratorRemoveClient :: remove;
+        public: using IteratorRelativeInsertionClient :: insertBefore;
+        public: using IteratorRelativeInsertionClient :: insertAllBefore;
+        public: using IteratorRelativeInsertionClient :: insertAllOfBefore;
+        public: using IteratorRelativeInsertionClient :: emplaceBefore;
+        public: using IteratorRelativeInsertionClient :: insertAfter;
+        public: using IteratorRelativeInsertionClient :: insertAllAfter;
+        public: using IteratorRelativeInsertionClient :: insertAllOfAfter;
+        public: using IteratorRelativeInsertionClient :: emplaceAfter;
+
+        public: using ConstIteratorRelativeInsertionClient :: insertBefore;
+        public: using ConstIteratorRelativeInsertionClient :: insertAllBefore;
+        public: using ConstIteratorRelativeInsertionClient :: insertAllOfBefore;
+        public: using ConstIteratorRelativeInsertionClient :: emplaceBefore;
+        public: using ConstIteratorRelativeInsertionClient :: insertAfter;
+        public: using ConstIteratorRelativeInsertionClient :: insertAllAfter;
+        public: using ConstIteratorRelativeInsertionClient :: insertAllOfAfter;
+        public: using ConstIteratorRelativeInsertionClient :: emplaceAfter;
+
+        public: using IteratorRemoveClient :: remove;
+        public: using ConstIteratorRemoveClient :: remove;
         public: using List < __ElementType > :: remove;
 
         public:

@@ -11,17 +11,17 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
             namespace __impl {  // NOLINT(bugprone-reserved-identifier)
 
                 template <
-                        typename __ElementType,                 // NOLINT(bugprone-reserved-identifier)
-                        typename __ElementTypeEqualsFunction    // NOLINT(bugprone-reserved-identifier)
+                        typename                                                __ElementType,  // NOLINT(bugprone-reserved-identifier)
+                        cds :: utility :: ComparisonFunction < __ElementType >  __compare       // NOLINT(bugprone-reserved-identifier)
                 > constexpr auto __CollectionFunctions <
                         __ElementType,
-                        __ElementTypeEqualsFunction
+                        __compare
                 > :: __cf_equals (
                         __ElementType const & left,
                         __ElementType const & right
                 ) const noexcept -> bool {
 
-                    return this->_equals ( left, right );
+                    return __compare ( left, right );
                 }
 
             }

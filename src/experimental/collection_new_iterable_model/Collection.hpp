@@ -12,7 +12,6 @@
 #include "../../shared/memory/PrimitiveAllocation.hpp"
 
 #include "collection/CollectionFunctions.hpp"
-#include "collection/CollectionConstructs.hpp"
 
 #include "shared/delegateIterator/ForwardDelegateWrapperIterator.hpp"
 
@@ -29,215 +28,41 @@
 #include "shared/collectionInternalCommunication/client/composite/RemoveByCompositeClient.hpp"
 #include "shared/collectionInternalCommunication/client/composite/GenericImmutableStatementsCompositeClient.hpp"
 
+#include "collection/CollectionConstructs.hpp"
+
 namespace cds { // NOLINT(modernize-concat-nested-namespaces)
     namespace experimental {
 
         template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
         class Collection :
-                public __hidden :: __impl :: __CollectionInternalCommunicationChannel <
-                        Collection < __ElementType >,
-                        __ElementType
-                >,
-                public __hidden :: __impl :: __DelegateForwardConstIterablePrimitiveClient <
-                        Collection < __ElementType >,
-                        __ElementType,
-                        false
-                >,
-                public __hidden :: __impl :: __AbstractConstIteratorRemovePrimitiveClient <
-                        Collection < __ElementType >,
-                        __ElementType
-                >,
-                public __hidden :: __impl :: __RandomInsertionPrimitiveClient <
-                        Collection < __ElementType >,
-                        __ElementType,
-                        __ElementType const
-                >,
-                public __hidden :: __impl :: __ContainsOfCompositeClient <
-                        Collection < __ElementType >,
-                        __ElementType,
-                        Collection < __ElementType >
-                >,
-                public __hidden :: __impl :: __ContainsOfCompositeClient <
-                        Collection < __ElementType >,
-                        __ElementType,
-                        std :: initializer_list < __ElementType >
-                >,
-                public __hidden :: __impl :: __FindOfImmutableCompositeClient <
-                        Collection < __ElementType >,
-                        __ElementType,
-                        typename __hidden :: __impl :: __DelegateForwardConstIterablePrimitiveClient <
-                                Collection < __ElementType >,
-                                __ElementType,
-                                false
-                        > :: ConstIterator,
-                        Collection < __ElementType >,
-                        __hidden :: __impl :: __collectionContains < __ElementType >
-                >,
-                public __hidden :: __impl :: __FindOfImmutableCompositeClient <
-                        Collection < __ElementType >,
-                        __ElementType,
-                        typename __hidden :: __impl :: __DelegateForwardConstIterablePrimitiveClient <
-                                Collection < __ElementType >,
-                                __ElementType,
-                                false
-                        > :: ConstIterator,
-                        std :: initializer_list < __ElementType >,
-                        __hidden :: __impl :: __initializerListContains < __ElementType, & cds :: meta :: equals < __ElementType > >
-                >,
-                public __hidden :: __impl :: __FindByImmutableCompositeClient <
-                        Collection < __ElementType >,
-                        __ElementType,
-                        typename __hidden :: __impl :: __DelegateForwardConstIterablePrimitiveClient <
-                                Collection < __ElementType >,
-                                __ElementType,
-                                false
-                        > :: ConstIterator
-                >,
-                public __hidden :: __impl :: __RemoveOfCompositeClient <
-                        Collection < __ElementType >,
-                        __ElementType,
-                        Collection < __ElementType >,
-                        __hidden :: __impl :: __collectionContains < __ElementType >
-                >,
-                public __hidden :: __impl :: __RemoveOfCompositeClient <
-                        Collection < __ElementType >,
-                        __ElementType,
-                        std :: initializer_list < __ElementType >,
-                        __hidden :: __impl :: __initializerListContains < __ElementType, & cds :: meta :: equals < __ElementType > >
-                >,
-                public __hidden :: __impl :: __RemoveByCompositeClient <
-                        Collection < __ElementType >,
-                        __ElementType
-                >,
-                public __hidden :: __impl :: __GenericImmutableStatementsCompositeClient <
-                        Collection < __ElementType >,
-                        __ElementType
-                >,
-                protected __hidden :: __impl :: __CollectionFunctions <
-                        __ElementType,
-                        FunctionComparator < __ElementType, & cds :: meta :: equals < __ElementType > >
-                > {
+                public __hidden :: __impl :: __CollectionCommunicationChannel < __ElementType >,
+                public __hidden :: __impl :: __CollectionDelegateForwardConstIterableClient < __ElementType >,
+                public __hidden :: __impl :: __CollectionConstIteratorRemoveClient < __ElementType >,
+                public __hidden :: __impl :: __CollectionRandomInsertionClient < __ElementType >,
+                public __hidden :: __impl :: __CollectionContainsOfCollectionClient < __ElementType >,
+                public __hidden :: __impl :: __CollectionContainsOfInitializerListClient < __ElementType >,
+                public __hidden :: __impl :: __CollectionFindOfCollectionClient < __ElementType >,
+                public __hidden :: __impl :: __CollectionFindOfInitializerListClient < __ElementType >,
+                public __hidden :: __impl :: __CollectionFindByClient < __ElementType >,
+                public __hidden :: __impl :: __CollectionRemoveOfCollectionClient < __ElementType >,
+                public __hidden :: __impl :: __CollectionRemoveOfInitializerListClient < __ElementType >,
+                public __hidden :: __impl :: __CollectionRemoveByClient < __ElementType >,
+                public __hidden :: __impl :: __CollectionGenericStatementsClient < __ElementType >,
+                protected __hidden :: __impl :: __CollectionFunctions < __ElementType > {
 
-        public:
-            using ElementType   = __ElementType;
-
-        protected:
-            using CollectionInternalCommunicationChannel =
-                    __hidden :: __impl :: __CollectionInternalCommunicationChannel <
-                            Collection < __ElementType >,
-                            __ElementType
-                    >;
-
-        protected:
-            using DelegateForwardConstIterableClient =
-                    __hidden :: __impl :: __DelegateForwardConstIterablePrimitiveClient <
-                            Collection < __ElementType >,
-                            __ElementType,
-                            false
-                    >;
-
-        protected:
-            using AbstractConstIteratorRemoveClient =
-                    __hidden :: __impl :: __AbstractConstIteratorRemovePrimitiveClient <
-                            Collection < __ElementType >,
-                            __ElementType
-                    >;
-
-        protected:
-            using RemoveByClient =
-                    __hidden :: __impl :: __RemoveByCompositeClient <
-                            Collection < __ElementType >,
-                            __ElementType
-                    >;
-
-        protected:
-            using GenericImmutableStatementsClient =
-                    __hidden :: __impl :: __GenericImmutableStatementsCompositeClient <
-                            Collection < __ElementType >,
-                            __ElementType
-                    >;
-
-        protected:
-            using ContainsOfCollectionClient =
-                    __hidden :: __impl :: __ContainsOfCompositeClient <
-                            Collection < __ElementType >,
-                            __ElementType,
-                            Collection < __ElementType >
-                    >;
-
-        protected:
-            using ContainsOfInitializerListClient =
-                    __hidden :: __impl :: __ContainsOfCompositeClient <
-                            Collection < __ElementType >,
-                            __ElementType,
-                            std :: initializer_list < __ElementType >
-                    >;
-
-        protected:
-            using FindOfCollectionClient =
-                    __hidden :: __impl :: __FindOfImmutableCompositeClient <
-                            Collection < __ElementType >,
-                            __ElementType,
-                            typename __hidden :: __impl :: __DelegateForwardConstIterablePrimitiveClient <
-                                    Collection < __ElementType >,
-                                    __ElementType,
-                                    false
-                            > :: ConstIterator,
-                            Collection < __ElementType >,
-                            __hidden :: __impl :: __collectionContains < __ElementType >
-                    >;
-
-        protected:
-            using FindOfInitializerListClient =
-                    __hidden :: __impl :: __FindOfImmutableCompositeClient <
-                            Collection < __ElementType >,
-                            __ElementType,
-                            typename __hidden :: __impl :: __DelegateForwardConstIterablePrimitiveClient <
-                                    Collection < __ElementType >,
-                                    __ElementType,
-                                    false
-                            > :: ConstIterator,
-                            std :: initializer_list < __ElementType >,
-                            __hidden :: __impl :: __initializerListContains < __ElementType, & cds :: meta :: equals < __ElementType > >
-                    >;
-
-        protected:
-            using FindByImmutableClient =
-                    __hidden :: __impl :: __FindByImmutableCompositeClient <
-                            Collection < __ElementType >,
-                            __ElementType,
-                            typename __hidden :: __impl :: __DelegateForwardConstIterablePrimitiveClient <
-                                    Collection < __ElementType >,
-                                    __ElementType,
-                                    false
-                            > :: ConstIterator
-                    >;
-
-        protected:
-            using RemoveOfCollectionClient =
-                    __hidden :: __impl :: __RemoveOfCompositeClient <
-                            Collection < __ElementType >,
-                            __ElementType,
-                            Collection < __ElementType >,
-                            __hidden :: __impl :: __collectionContains < __ElementType >
-                    >;
-
-        protected:
-            using RemoveOfInitializerListClient =
-                    __hidden :: __impl :: __RemoveOfCompositeClient <
-                            Collection < __ElementType >,
-                            __ElementType,
-                            std :: initializer_list < __ElementType >,
-                            __hidden :: __impl :: __initializerListContains < __ElementType, & cds :: meta :: equals < __ElementType > >
-                    >;
-
-        protected:
-            using RandomInsertionClient
-                    = __hidden :: __impl :: __RandomInsertionPrimitiveClient <
-                            Collection < __ElementType >,
-                            __ElementType,
-                            __ElementType const
-                    >;
+        public:     using ElementType                           = __ElementType;
+        protected:  using DelegateForwardConstIterableClient    = __hidden :: __impl :: __CollectionDelegateForwardConstIterableClient < __ElementType >;
+        protected:  using ConstIteratorRemoveClient             = __hidden :: __impl :: __CollectionConstIteratorRemoveClient < __ElementType >;
+        protected:  using RandomInsertionClient                 = __hidden :: __impl :: __CollectionRandomInsertionClient < __ElementType >;
+        protected:  using ContainsOfCollectionClient            = __hidden :: __impl :: __CollectionContainsOfCollectionClient < __ElementType >;
+        protected:  using ContainsOfInitializerListClient       = __hidden :: __impl :: __CollectionContainsOfInitializerListClient < __ElementType >;
+        protected:  using FindOfCollectionClient                = __hidden :: __impl :: __CollectionFindOfCollectionClient < __ElementType >;
+        protected:  using FindOfInitializerListClient           = __hidden :: __impl :: __CollectionFindOfInitializerListClient < __ElementType >;
+        protected:  using FindByClient                          = __hidden :: __impl :: __CollectionFindByClient < __ElementType >;
+        protected:  using RemoveOfCollectionClient              = __hidden :: __impl :: __CollectionRemoveOfCollectionClient < __ElementType >;
+        protected:  using RemoveOfInitializerListClient         = __hidden :: __impl :: __CollectionRemoveOfInitializerListClient < __ElementType >;
+        protected:  using RemoveByClient                        = __hidden :: __impl :: __CollectionRemoveByClient < __ElementType >;
+        protected:  using GenericStatementsClient               = __hidden :: __impl :: __CollectionGenericStatementsClient < __ElementType >;
 
         public:
             using typename DelegateForwardConstIterableClient :: ConstIterator;
@@ -263,23 +88,23 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         public: using DelegateForwardConstIterableClient :: cbegin;
         public: using DelegateForwardConstIterableClient :: cend;
 
-        public: using AbstractConstIteratorRemoveClient :: remove;
+        public: using ConstIteratorRemoveClient :: remove;
 
         public: using RemoveByClient :: removeIf;
         public: using RemoveByClient :: removeFirstIf;
         public: using RemoveByClient :: removeLastIf;
         public: using RemoveByClient :: removeAllIf;
 
-        public: using GenericImmutableStatementsClient :: forEach;
-        public: using GenericImmutableStatementsClient :: some;
-        public: using GenericImmutableStatementsClient :: atLeast;
-        public: using GenericImmutableStatementsClient :: atMost;
-        public: using GenericImmutableStatementsClient :: moreThan;
-        public: using GenericImmutableStatementsClient :: fewerThan;
-        public: using GenericImmutableStatementsClient :: count;
-        public: using GenericImmutableStatementsClient :: any;
-        public: using GenericImmutableStatementsClient :: all;
-        public: using GenericImmutableStatementsClient :: none;
+        public: using GenericStatementsClient :: forEach;
+        public: using GenericStatementsClient :: some;
+        public: using GenericStatementsClient :: atLeast;
+        public: using GenericStatementsClient :: atMost;
+        public: using GenericStatementsClient :: moreThan;
+        public: using GenericStatementsClient :: fewerThan;
+        public: using GenericStatementsClient :: count;
+        public: using GenericStatementsClient :: any;
+        public: using GenericStatementsClient :: all;
+        public: using GenericStatementsClient :: none;
 
         public: using RemoveOfCollectionClient :: removeOf;
         public: using RemoveOfCollectionClient :: removeFirstOf;
@@ -309,10 +134,10 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         public: using ContainsOfInitializerListClient :: containsAnyNotOf;
         public: using ContainsOfInitializerListClient :: containsAllNotOf;
 
-        public: using FindByImmutableClient :: findThat;
-        public: using FindByImmutableClient :: findFirstThat;
-        public: using FindByImmutableClient :: findLastThat;
-        public: using FindByImmutableClient :: findAllThat;
+        public: using FindByClient :: findThat;
+        public: using FindByClient :: findFirstThat;
+        public: using FindByClient :: findLastThat;
+        public: using FindByClient :: findAllThat;
 
         public: using FindOfCollectionClient :: findOf;
         public: using FindOfCollectionClient :: findFirstOf;

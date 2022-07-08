@@ -10,13 +10,14 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
         namespace __hidden {    // NOLINT(modernize-concat-nested-namespaces, bugprone-reserved-identifier)
             namespace __impl {  // NOLINT(bugprone-reserved-identifier)
 
-                template <
-                        typename __ElementType,                 // NOLINT(bugprone-reserved-identifier)
-                        typename __ElementTypeEqualsFunction    // NOLINT(bugprone-reserved-identifier)
-                > class __CollectionFunctions {                 // NOLINT(bugprone-reserved-identifier)
+                template < typename __IterableType, typename __ElementType >                                // NOLINT(bugprone-reserved-identifier)
+                using __ContainsFunction = auto ( __IterableType const &, __ElementType const & ) -> bool;  // NOLINT(bugprone-reserved-identifier)
 
-                private:
-                    __CDS_NoUniqueAddress __ElementTypeEqualsFunction _equals;
+
+                template <
+                        typename                                                __ElementType,                                          // NOLINT(bugprone-reserved-identifier)
+                        cds :: utility :: ComparisonFunction < __ElementType >  __compare = & cds :: meta :: equals < __ElementType >   // NOLINT(bugprone-reserved-identifier)
+                > class __CollectionFunctions {                                                                                         // NOLINT(bugprone-reserved-identifier)
 
                 protected:
                     __CDS_NoDiscard constexpr auto __cf_equals ( // NOLINT(bugprone-reserved-identifier)
