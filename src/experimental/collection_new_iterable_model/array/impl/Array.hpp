@@ -287,19 +287,19 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
         template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
         __CDS_OptimalInline auto Array < __ElementType > :: __remove (
-                __hidden :: __impl :: __DelegateIterator < __ElementType, AddressIterator < __ElementType > > const * pDelegate
+                AbstractAddressIterator < __ElementType > const * pIterator
         ) noexcept -> bool {
 
-            return this->__a_remove ( pDelegate->iterator() );
+            return this->__a_remove ( * pIterator );
         }
 
 
         template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
         __CDS_OptimalInline auto Array < __ElementType > :: __removeConst (
-                __hidden :: __impl :: __DelegateIterator < __ElementType const, AddressIterator < __ElementType const > > const * pDelegate
+                AbstractAddressIterator < __ElementType const > const * pIterator
         ) noexcept -> bool {
 
-            return this->__a_remove ( pDelegate->iterator() );
+            return this->__a_remove ( * pIterator );
         }
 
     }

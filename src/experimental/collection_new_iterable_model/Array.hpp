@@ -41,16 +41,16 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                         __ElementType,
                         __ElementType
                 >,
-//                public __hidden :: __impl :: __LocalIteratorRemovePrimitiveClient <
-//                        Array < __ElementType >,
-//                        __ElementType,
-//                        AbstractAddressIterator < __ElementType >
-//                >,
-//                public __hidden :: __impl :: __LocalConstIteratorRemovePrimitiveClient <
-//                        Array < __ElementType >,
-//                        __ElementType,
-//                        AbstractAddressIterator < __ElementType const >
-//                >,
+                public __hidden :: __impl :: __LocalIteratorRemovePrimitiveClient <
+                        Array < __ElementType >,
+                        __ElementType,
+                        AbstractAddressIterator < __ElementType >
+                >,
+                public __hidden :: __impl :: __LocalConstIteratorRemovePrimitiveClient <
+                        Array < __ElementType >,
+                        __ElementType,
+                        AbstractAddressIterator < __ElementType const >
+                >,
                 public __hidden :: __impl :: __DelegateIterableServer <
                         Array < __ElementType >,
                         __ElementType,
@@ -96,26 +96,26 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                             __ElementType
                     >;
 
-//        protected:
-//            using LocalIteratorRemoveClient =
-//                    __hidden :: __impl :: __LocalIteratorRemovePrimitiveClient <
-//                            Array < __ElementType >,
-//                            __ElementType,
-//                            AbstractAddressIterator < __ElementType >
-//                    >;
-//
-//        protected:
-//            using LocalConstIteratorRemoveClient =
-//                    __hidden :: __impl :: __LocalConstIteratorRemovePrimitiveClient <
-//                            Array < __ElementType >,
-//                            __ElementType,
-//                            AbstractAddressIterator < __ElementType const >
-//                    >;
+        protected:
+            using LocalIteratorRemoveClient =
+                    __hidden :: __impl :: __LocalIteratorRemovePrimitiveClient <
+                            Array < __ElementType >,
+                            __ElementType,
+                            AbstractAddressIterator < __ElementType >
+                    >;
+
+        protected:
+            using LocalConstIteratorRemoveClient =
+                    __hidden :: __impl :: __LocalConstIteratorRemovePrimitiveClient <
+                            Array < __ElementType >,
+                            __ElementType,
+                            AbstractAddressIterator < __ElementType const >
+                    >;
 
         private: friend LocalBoundaryInsertionClient;
         private: friend LocalRandomInsertionClient;
-//        private: friend LocalIteratorRemoveClient;
-//        private: friend LocalConstIteratorRemoveClient;
+        private: friend LocalIteratorRemoveClient;
+        private: friend LocalConstIteratorRemoveClient;
 
         public: using ElementType           = __ElementType;
         public: using Iterator              = typename ArrayBase :: __a_Iterator;
@@ -167,9 +167,9 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         public: using LocalBoundaryInsertionClient :: emplaceBack;
         public: using LocalBoundaryInsertionClient :: emplaceFront;
 
-//        public: using LocalIteratorRemoveClient :: remove;
-//
-//        public: using LocalConstIteratorRemoveClient :: remove;
+        public: using LocalIteratorRemoveClient :: remove;
+        public: using LocalConstIteratorRemoveClient :: remove;
+        public: using List < __ElementType > :: remove;
 
         public:
             __CDS_NoDiscard constexpr auto begin () noexcept -> Iterator;
@@ -272,12 +272,12 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
         private:
             auto __remove ( // NOLINT(bugprone-reserved-identifier)
-                    __hidden :: __impl :: __DelegateIterator < __ElementType, AddressIterator < __ElementType > > const * pDelegate
+                    AbstractAddressIterator < __ElementType > const * pIterator
             ) noexcept -> bool;
 
         private:
             auto __removeConst ( // NOLINT(bugprone-reserved-identifier)
-                    __hidden :: __impl :: __DelegateIterator < __ElementType const, AddressIterator < __ElementType const > > const * pDelegate
+                    AbstractAddressIterator < __ElementType const > const * pIterator
             ) noexcept -> bool;
         };
 

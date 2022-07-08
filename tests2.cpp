@@ -55,7 +55,10 @@ int main () {
     Array < int > a;
     a.pushBackAllOf ( cds :: Range ( 20 ) );
 
-//    a.remove ( a.begin () );
+    a.remove ( a.begin () );
+    a.remove ( ++ a.begin() );
+
+    a.remove ( ((List < int > &)a).begin() );
 
     std :: cout << a << '\n';
 

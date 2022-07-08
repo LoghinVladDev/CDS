@@ -132,7 +132,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                                     static_cast < __ReceiverType * > ( this )->*
                                     reinterpret_cast <
                                             __ElementType * ( __ReceiverType :: * ) (
-                                                    __AbstractDelegateIterator < __ElementType const > const *
+                                                    __GenericIterator
                                             )
                                     > (
                                             static_cast < __ReceiverType * > ( this )->__cicch_obtainGenericHandler (
@@ -140,7 +140,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                                             )
                                     )
                             ) (
-                                    iterator._pDelegate
+                                    iterator._pDelegate->iterator()
                             )
                     ) __ElementType (
                             std :: forward < __EmplaceArgumentTypes > ( parameters ) ...
@@ -168,7 +168,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                                     static_cast < __ReceiverType * > ( this )->*
                                     reinterpret_cast <
                                             __ElementType * ( __ReceiverType :: * ) (
-                                                    __AbstractDelegateIterator < __ElementType const > const *
+                                                    __GenericIterator
                                             )
                                     > (
                                             static_cast < __ReceiverType * > ( this )->__cicch_obtainGenericHandler (
@@ -176,7 +176,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                                             )
                                     )
                             ) (
-                                    iterator._pDelegate
+                                    iterator._pDelegate->iterator()
                             )
                     ) __ElementType (
                             std :: forward < __EmplaceArgumentTypes > ( parameters ) ...
@@ -206,7 +206,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                             static_cast < __ReceiverType * > ( this ) ->*
                             reinterpret_cast <
                                     void ( __ReceiverType :: * ) (
-                                            __AbstractDelegateIterator < __ElementType const > const *,
+                                            __GenericIterator,
                                             Size,
                                             __ElementType **
                                     )
@@ -216,7 +216,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                                     )
                             )
                     ) (
-                            iterator._pDelegate,
+                            iterator._pDelegate->iterator(),
                             parameterCount,
                             ppElements
                     );
@@ -252,7 +252,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                             static_cast < __ReceiverType * > ( this ) ->*
                             reinterpret_cast <
                                     void ( __ReceiverType :: * ) (
-                                            __AbstractDelegateIterator < __ElementType const > const *,
+                                            __GenericIterator,
                                             Size,
                                             __ElementType **
                                     )
@@ -262,7 +262,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                                     )
                             )
                     ) (
-                            iterator._pDelegate,
+                            iterator._pDelegate->iterator(),
                             parameterCount,
                             ppElements
                     );
@@ -397,7 +397,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                             static_cast < __ReceiverType * > ( this ) ->*
                             reinterpret_cast <
                                     void ( __ReceiverType :: * ) (
-                                            __AbstractDelegateIterator < __ElementType const > const *,
+                                            __GenericIterator,
                                             Size,
                                             __ElementType **
                                     )
@@ -407,7 +407,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                                     )
                             )
                     ) (
-                            iterator._pDelegate,
+                            iterator._pDelegate->iterator(),
                             parameterCount,
                             ppElements
                     );
@@ -444,7 +444,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                             static_cast < __ReceiverType * > ( this ) ->*
                             reinterpret_cast <
                                     void ( __ReceiverType :: * ) (
-                                            __AbstractDelegateIterator < __ElementType const > const *,
+                                            __GenericIterator,
                                             Size,
                                             __ElementType **
                                     )
@@ -454,7 +454,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                                     )
                             )
                     ) (
-                            iterator._pDelegate,
+                            iterator._pDelegate->iterator(),
                             parameterCount,
                             ppElements
                     );

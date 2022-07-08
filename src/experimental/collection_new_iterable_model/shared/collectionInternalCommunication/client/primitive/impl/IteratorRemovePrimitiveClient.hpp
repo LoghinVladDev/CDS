@@ -24,7 +24,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                             static_cast < __ReceiverType * > ( this )->*
                             reinterpret_cast <
                                     bool ( __ReceiverType :: * ) (
-                                            __AbstractDelegateIterator < __ElementType > const *
+                                            __GenericIterator
                                     )
                             > (
                                     static_cast < __ReceiverType * > ( this )->__cicch_obtainGenericHandler (
@@ -32,7 +32,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                                     )
                             )
                     ) (
-                            iterator._pDelegate
+                            iterator._pDelegate->iterator()
                     );
                 }
 
@@ -52,7 +52,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                     auto pfnRemove      =
                             reinterpret_cast <
                                     bool ( __ReceiverType :: * ) (
-                                            __AbstractDelegateIterator < __ElementType > const *
+                                            __GenericIterator
                                     )
                             > (
                                     static_cast < __ReceiverType * > ( this )->__cicch_obtainGenericHandler (
@@ -61,7 +61,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                             );
 
                     for ( Size index = 0ULL; index < iteratorCount; ++ index ) {
-                        if ( ( static_cast < __ReceiverType * > ( this ) ->* pfnRemove ) ( pIterators [ index ]._pDelegate ) ) {
+                        if ( ( static_cast < __ReceiverType * > ( this ) ->* pfnRemove ) ( pIterators [ index ]._pDelegate->iterator() ) ) {
                             removedCount ++;
                         }
                     }
@@ -103,7 +103,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                     auto pfnRemove      = & __ReceiverType :: __remove;
 
                     for ( Size index = 0ULL; index < iteratorCount; ++ index ) {
-                        if ( ( static_cast < __ReceiverType * > ( this ) ->* pfnRemove ) ( pIterators [ index ]._pDelegate ) ) {
+                        if ( ( static_cast < __ReceiverType * > ( this ) ->* pfnRemove ) ( & pIterators [ index ] ) ) {
                             removedCount ++;
                         }
                     }

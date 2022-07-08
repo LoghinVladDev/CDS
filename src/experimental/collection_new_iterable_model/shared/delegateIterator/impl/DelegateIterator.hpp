@@ -69,18 +69,6 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                 template <
                         typename __ElementType,                                                     // NOLINT(bugprone-reserved-identifier)
                         typename __WrappedIteratorType                                              // NOLINT(bugprone-reserved-identifier)
-                > constexpr auto __DelegateIterator <
-                        __ElementType,
-                        __WrappedIteratorType
-                > :: iterator () const noexcept -> __WrappedIteratorType const & {
-
-                    return this->_wrappedIterator;
-                }
-
-
-                template <
-                        typename __ElementType,                                                     // NOLINT(bugprone-reserved-identifier)
-                        typename __WrappedIteratorType                                              // NOLINT(bugprone-reserved-identifier)
                 > template <
                         typename __TWrappedIteratorType,                                            // NOLINT(bugprone-reserved-identifier)
                         cds :: meta :: EnableIf <
@@ -89,6 +77,18 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                 > constexpr auto __DelegateIterator < __ElementType, __WrappedIteratorType > :: __advanceBackwards () noexcept -> void {
 
                     -- this->_wrappedIterator;
+                }
+
+
+                template <
+                        typename __ElementType,                                                     // NOLINT(bugprone-reserved-identifier)
+                        typename __WrappedIteratorType                                              // NOLINT(bugprone-reserved-identifier)
+                > constexpr auto __DelegateIterator <
+                        __ElementType,
+                        __WrappedIteratorType
+                > :: iterator () const noexcept -> __GenericIterator {
+
+                    return & this->_wrappedIterator;
                 }
 
 

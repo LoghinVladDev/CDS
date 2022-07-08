@@ -12,8 +12,11 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
         namespace __hidden {    // NOLINT(modernize-concat-nested-namespaces, bugprone-reserved-identifier)
             namespace __impl {  // NOLINT(bugprone-reserved-identifier)
 
-                template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
-                class __AbstractDelegateIterator {  // NOLINT(bugprone-reserved-identifier)
+                using __GenericIterator = void const *; // NOLINT(bugprone-reserved-identifier)
+
+
+                template < typename __ElementType >     // NOLINT(bugprone-reserved-identifier)
+                class __AbstractDelegateIterator {      // NOLINT(bugprone-reserved-identifier)
 
                 protected:
                     constexpr __AbstractDelegateIterator() noexcept;
@@ -33,6 +36,9 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
 
                 public:
                     __CDS_NoDiscard __CDS_cpplang_ConstexprPureAbstract virtual auto valid () const noexcept -> bool = 0;
+
+                public:
+                    __CDS_NoDiscard __CDS_cpplang_VirtualConstexpr virtual auto iterator () const noexcept -> __GenericIterator;
 
                 public:
                     __CDS_NoDiscard virtual auto copy () const noexcept -> __AbstractDelegateIterator * = 0;

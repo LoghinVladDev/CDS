@@ -17,6 +17,13 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                 template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
                 __CDS_cpplang_ConstexprDestructor __AbstractDelegateIterator < __ElementType > :: ~__AbstractDelegateIterator () noexcept = default;
 
+
+                template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
+                __CDS_cpplang_VirtualConstexpr auto __AbstractDelegateIterator < __ElementType > :: iterator () const noexcept -> __GenericIterator {
+
+                    return nullptr;
+                }
+
             }
         }
     }
