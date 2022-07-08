@@ -66,6 +66,68 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                         >;
 
 
+                template < typename __ElementType >     // NOLINT(bugprone-reserved-identifier)
+                using __ArrayFindOfCollectionClient =   // NOLINT(bugprone-reserved-identifier)
+                        __LocalFindOfMutableCompositeClient <
+                                cds :: experimental :: Array < __ElementType >,
+                                __ElementType,
+                                AddressIterator < __ElementType >,
+                                cds :: experimental :: Collection < __ElementType >,
+                                & __collectionContains < __ElementType >
+                        >;
+
+
+                template < typename __ElementType >         // NOLINT(bugprone-reserved-identifier)
+                using __ArrayFindOfInitializerListClient =  // NOLINT(bugprone-reserved-identifier)
+                        __LocalFindOfMutableCompositeClient <
+                                cds :: experimental :: Array < __ElementType >,
+                                __ElementType,
+                                AddressIterator < __ElementType >,
+                                std :: initializer_list < __ElementType >,
+                                & __initializerListContains < __ElementType, & cds :: meta :: equals < __ElementType > >
+                        >;
+
+
+                template < typename __ElementType >         // NOLINT(bugprone-reserved-identifier)
+                using __ArrayFindConstOfCollectionClient =  // NOLINT(bugprone-reserved-identifier)
+                        __LocalFindOfImmutableCompositeClient <
+                                cds :: experimental :: Array < __ElementType >,
+                                __ElementType,
+                                AddressIterator < __ElementType const >,
+                                cds :: experimental :: Collection < __ElementType >,
+                                & __collectionContains < __ElementType >
+                        >;
+
+
+                template < typename __ElementType >             // NOLINT(bugprone-reserved-identifier)
+                using __ArrayFindConstOfInitializerListClient = // NOLINT(bugprone-reserved-identifier)
+                        __LocalFindOfImmutableCompositeClient <
+                                cds :: experimental :: Array < __ElementType >,
+                                __ElementType,
+                                AddressIterator < __ElementType const >,
+                                std :: initializer_list < __ElementType >,
+                                & __initializerListContains < __ElementType, & cds :: meta :: equals < __ElementType > >
+                        >;
+
+
+                template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
+                using __ArrayFindByClient =         // NOLINT(bugprone-reserved-identifier)
+                        __LocalFindByMutableCompositeClient <
+                                cds :: experimental :: Array < __ElementType >,
+                                __ElementType,
+                                AddressIterator < __ElementType >
+                        >;
+
+
+                template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
+                using __ArrayFindConstByClient =    // NOLINT(bugprone-reserved-identifier)
+                        __LocalFindByImmutableCompositeClient <
+                                cds :: experimental :: Array < __ElementType >,
+                                __ElementType,
+                                AddressIterator < __ElementType const >
+                        >;
+
+
                 template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
                 using __ArrayIteratorRemoveClient = // NOLINT(bugprone-reserved-identifier)
                         __LocalIteratorRemovePrimitiveClient <
@@ -81,6 +143,138 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                                 cds :: experimental :: Array < __ElementType >,
                                 __ElementType,
                                 AbstractAddressIterator < __ElementType const >
+                        >;
+
+
+                template < typename __ElementType >     // NOLINT(bugprone-reserved-identifier)
+                using __ArrayRemoveOfCollectionClient = // NOLINT(bugprone-reserved-identifier)
+                        __LocalRemoveOfCompositeClient <
+                                cds :: experimental :: Array < __ElementType >,
+                                __ElementType,
+                                cds :: experimental :: Collection < __ElementType >,
+                                & __collectionContains < __ElementType >
+                        >;
+
+
+                template < typename __ElementType >             // NOLINT(bugprone-reserved-identifier)
+                using __ArrayRemoveOfInitializerListClient =    // NOLINT(bugprone-reserved-identifier)
+                        __LocalRemoveOfCompositeClient <
+                                cds :: experimental :: Array < __ElementType >,
+                                __ElementType,
+                                std :: initializer_list < __ElementType >,
+                                & __initializerListContains < __ElementType, & cds :: meta :: equals < __ElementType > >
+                        >;
+
+
+                template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
+                using __ArrayRemoveByClient =       // NOLINT(bugprone-reserved-identifier)
+                        __LocalRemoveByCompositeClient <
+                                cds :: experimental :: Array < __ElementType >,
+                                __ElementType
+                        >;
+
+
+                template < typename __ElementType >     // NOLINT(bugprone-reserved-identifier)
+                using __ArrayGenericStatementsClient =  // NOLINT(bugprone-reserved-identifier)
+                        __LocalGenericMutableStatementsCompositeClient <
+                                cds :: experimental :: Array < __ElementType >,
+                                __ElementType
+                        >;
+
+
+                template < typename __ElementType >         // NOLINT(bugprone-reserved-identifier)
+                using __ArrayGenericConstStatementsClient = // NOLINT(bugprone-reserved-identifier)
+                        __LocalGenericImmutableStatementsCompositeClient <
+                                cds :: experimental :: Array < __ElementType >,
+                                __ElementType
+                        >;
+
+
+                template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
+                using __ArraySortClient =           // NOLINT(bugprone-reserved-identifier)
+                        __LocalSortCompositeClient <
+                                cds :: experimental :: Array < __ElementType >,
+                                __ElementType
+                        >;
+
+
+                template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
+                using __ArrayReplaceClient =           // NOLINT(bugprone-reserved-identifier)
+                        __LocalReplaceCompositeClient <
+                                cds :: experimental :: Array < __ElementType >,
+                                __ElementType
+                        >;
+
+
+                template < typename __ElementType >         // NOLINT(bugprone-reserved-identifier)
+                using __ArrayReplaceOfCollectionClient =    // NOLINT(bugprone-reserved-identifier)
+                        __LocalReplaceOfCompositeClient <
+                                cds :: experimental :: Array < __ElementType >,
+                                __ElementType,
+                                cds :: experimental :: Collection < __ElementType >,
+                                & __collectionContains < __ElementType >
+                        >;
+
+
+                template < typename __ElementType >         // NOLINT(bugprone-reserved-identifier)
+                using __ArrayReplaceOfInitializerListClient =    // NOLINT(bugprone-reserved-identifier)
+                        __LocalReplaceOfCompositeClient <
+                                cds :: experimental :: Array < __ElementType >,
+                                __ElementType,
+                                std :: initializer_list < __ElementType >,
+                                & __initializerListContains < __ElementType, & cds :: meta :: equals < __ElementType > >
+                        >;
+
+
+                template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
+                using __ArrayReplaceByClient =      // NOLINT(bugprone-reserved-identifier)
+                        __LocalReplaceByCompositeClient <
+                                cds :: experimental :: Array < __ElementType >,
+                                __ElementType
+                        >;
+
+
+                template < typename __ElementType >     // NOLINT(bugprone-reserved-identifier)
+                using __ArrayIndexedOperationsClient =  // NOLINT(bugprone-reserved-identifier)
+                        __LocalIndexedOperationsPrimitiveClient <
+                                cds :: experimental :: Array < __ElementType >,
+                                __ElementType
+                        >;
+
+
+                template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
+                using __ArrayIndicesClient =        // NOLINT(bugprone-reserved-identifier)
+                        __LocalIndicesCompositeClient <
+                                cds :: experimental :: Array < __ElementType >,
+                                __ElementType
+                        >;
+
+
+                template < typename __ElementType >         // NOLINT(bugprone-reserved-identifier)
+                using __ArrayIndicesOfCollectionClient =    // NOLINT(bugprone-reserved-identifier)
+                        __LocalIndicesOfCompositeClient <
+                                cds :: experimental :: Array < __ElementType >,
+                                __ElementType,
+                                cds :: experimental :: Collection < __ElementType >,
+                                & __collectionContains < __ElementType >
+                        >;
+
+
+                template < typename __ElementType >             // NOLINT(bugprone-reserved-identifier)
+                using __ArrayIndicesOfInitializerListClient =   // NOLINT(bugprone-reserved-identifier)
+                        __LocalIndicesOfCompositeClient <
+                                cds :: experimental :: Array < __ElementType >,
+                                __ElementType,
+                                std :: initializer_list < __ElementType >,
+                                & __initializerListContains < __ElementType, & cds :: meta :: equals < __ElementType > >
+                        >;
+
+
+                template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
+                using __ArrayIndicesByClient =      // NOLINT(bugprone-reserved-identifier)
+                        __LocalIndicesByCompositeClient <
+                                cds :: experimental :: Array < __ElementType >,
+                                __ElementType
                         >;
 
 
