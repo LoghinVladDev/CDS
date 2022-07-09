@@ -120,12 +120,6 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                     __hidden :: __impl :: __CollectionInternalRequestType requestType
             ) const noexcept -> void ( Collection < __ElementType > :: * ) () const override;
 
-        public:
-            constexpr Array () noexcept;
-
-        public:
-            ~Array () noexcept override;
-
         protected: using List < __ElementType > :: begin;
         protected: using List < __ElementType > :: end;
         protected: using List < __ElementType > :: cbegin;
@@ -332,6 +326,138 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         public: using List < __ElementType > :: remove;
 
         public:
+            constexpr Array () noexcept;
+
+        public:
+            template <
+                    typename __TElementType = __ElementType,
+                    cds :: meta :: EnableIf <
+                            cds :: meta :: isCopyConstructible < __TElementType > ()
+                    > = 0
+            > Array (
+                    Array const & array
+            ) noexcept;
+
+        public:
+            constexpr Array (
+                    Array && array
+            ) noexcept;
+
+        public:
+            template <
+                    typename __IteratorType,
+                    typename __TElementType = __ElementType,
+                    cds :: meta :: EnableIf <
+                            cds :: meta :: isCopyConstructible < __TElementType > ()
+                    > = 0
+            > Array (
+                    __IteratorType const & begin,
+                    __IteratorType const & end
+            ) noexcept;
+
+        public:
+            template <
+                    typename __TElementType = __ElementType,
+                    cds :: meta :: EnableIf <
+                            cds :: meta :: isCopyConstructible < __TElementType > ()
+                    > = 0
+            > Array (
+                    std :: initializer_list < __ElementType > const & initializerList
+            ) noexcept;
+
+        public:
+            template <
+                    typename __TElementType = __ElementType,
+                    cds :: meta :: EnableIf <
+                            cds :: meta :: isDefaultConstructible < __TElementType > ()
+                    > = 0
+            > Array (
+                    Size                    size
+            ) noexcept;
+
+        public:
+            template <
+                    typename __TElementType = __ElementType,
+                    cds :: meta :: EnableIf <
+                            cds :: meta :: isCopyConstructible < __TElementType > ()
+                    > = 0
+            > Array (
+                    Size                    size,
+                    __ElementType   const & defaultValue
+            ) noexcept;
+
+        public:
+            template <
+                    typename __OtherElementType,
+                    cds :: meta :: EnableIf <
+                            cds :: meta :: isConvertible < __OtherElementType, __ElementType > ()
+                    > = 0
+            > Array (
+                    Collection < __OtherElementType > const & collection
+            ) noexcept;
+
+        public:
+            ~Array () noexcept override;
+
+        public:
+            template <
+                    typename __TElementType = __ElementType,
+                    cds :: meta :: EnableIf <
+                            cds :: meta :: isCopyConstructible < __TElementType > ()
+                    > = 0
+            > auto operator = (
+                    Array const & array
+            ) noexcept -> Array &;
+
+        public:
+            auto operator = (
+                    Array && array
+            ) noexcept -> Array &;
+
+        public:
+            template <
+                    typename __OtherElementType,
+                    cds :: meta :: EnableIf <
+                            cds :: meta :: isConvertible < __OtherElementType, __ElementType > ()
+                    > = 0
+            > auto operator = (
+                    Collection < __OtherElementType > const & collection
+            ) noexcept -> Array &;
+
+        public:
+            auto reserve (
+                    Size size
+            ) noexcept -> void;
+
+        public:
+            auto shrink (
+                    Size size
+            ) noexcept -> void;
+
+
+        public:
+            template <
+                    typename __TElementType = __ElementType,
+                    cds :: meta :: EnableIf <
+                            cds :: meta :: isDefaultConstructible < __TElementType > ()
+                    > = 0
+            > auto resize (
+                    Size size
+            ) noexcept -> void;
+
+
+        public:
+            template <
+                    typename __TElementType = __ElementType,
+                    cds :: meta :: EnableIf <
+                            cds :: meta :: isCopyConstructible < __TElementType > ()
+                    > = 0
+            > auto resize (
+                    Size                    size,
+                    __ElementType   const & defaultValue
+            ) noexcept -> void;
+
+        public:
             __CDS_NoDiscard constexpr auto begin () noexcept -> Iterator;
 
         public:
@@ -411,6 +537,18 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
         public:
             __CDS_NoDiscard __CDS_cpplang_NonConstConstexprMemberFunction auto data() noexcept -> __ElementType *;
+
+        public:
+            __CDS_NoDiscard auto sequence () & noexcept -> Sequence < Array < __ElementType > >;
+
+        public:
+            __CDS_NoDiscard auto sequence () && noexcept -> Sequence < Array < __ElementType > >;
+
+        public:
+            __CDS_NoDiscard auto sequence () const & noexcept -> Sequence < Array < __ElementType > const >;
+
+        public:
+            __CDS_NoDiscard auto sequence () const && noexcept -> Sequence < Array < __ElementType > const >;
         };
 
     }
