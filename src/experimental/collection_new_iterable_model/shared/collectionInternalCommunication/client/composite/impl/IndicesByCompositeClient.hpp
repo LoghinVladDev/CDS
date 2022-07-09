@@ -153,7 +153,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
 
                             iterator != end;
                             ++ iterator, ++ index
-                            ) {
+                    ) {
                         if ( predicate ( * iterator ) ) {
                             (void) storeIn.insert ( index );
                         }

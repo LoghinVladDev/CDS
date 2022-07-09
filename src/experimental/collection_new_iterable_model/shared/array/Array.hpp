@@ -109,12 +109,12 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                     ) noexcept -> ElementType *;
 
                 protected:
-                    auto __a_newAt (
+                    auto __a_newAt ( // NOLINT(bugprone-reserved-identifier)
                             Index index
                     ) noexcept -> ElementType *;
 
                 protected:
-                    auto __a_newArrayAt (
+                    auto __a_newArrayAt ( // NOLINT(bugprone-reserved-identifier)
                             Index               index,
                             Size                count,
                             __ElementType    ** ppElements

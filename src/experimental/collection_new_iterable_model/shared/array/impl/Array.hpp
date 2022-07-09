@@ -607,9 +607,9 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
 
                     auto const fullCapacity     = this->_pData->_frontCapacity + this->_pData->_backCapacity;
                     auto const size             = this->__a_size();
-                    auto       shouldShiftLeft  = static_cast < Size > ( index ) < size;
+                    auto const shouldShiftLeft  = static_cast < Size > ( index ) < size;
                     auto const canShiftLeft     = this->_pData->_pBuffer < this->_pData->_pFront;
-                    auto const canShiftRight    = this->_pData->_pBack < this->_pData->_pBuffer + fullCapacity;
+                    auto       canShiftRight    = this->_pData->_pBack < this->_pData->_pBuffer + fullCapacity;
 
                     if ( ! canShiftLeft && ! canShiftRight ) {
 
@@ -627,7 +627,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                         this->_pData->_backCapacity         = this->_pData->_backNextCapacity;
                         this->_pData->_backNextCapacity     = this->_pData->_backNextCapacity * 2ULL;
                         this->_pData->_pBuffer              = pNewBuffer;
-                        shouldShiftLeft                     = true;
+                        canShiftRight                       = true;
                     }
 
                     auto const shiftLeft =
@@ -672,6 +672,96 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                         __ElementType ** ppElements
                 ) noexcept -> void {
 
+                    if ( this->_pData == nullptr && index != 0 ) {
+                        return;
+                    }
+
+                    auto const fullCapacity     = this->_pData->_frontCapacity + this->_pData->_backCapacity;
+                    auto const size             = this->__a_size();
+                    auto const shouldShiftLeft  = static_cast < Size > ( index ) < size;
+                    auto const canShiftLeft     = this->_pData->_pBuffer + count <= this->_pData->_pFront;
+                    auto       canShiftRight    = this->_pData->_pBack + count <= this->_pData->_pBuffer + fullCapacity;
+                    auto const canShiftBoth     = count + size <= fullCapacity;
+
+                    if ( ! canShiftLeft && ! canShiftRight && ! canShiftBoth ) {
+
+                        /// choose to shift right always due to realloc being potentially faster. Reallocation in
+                        /// front requires a full memcpy of the array data
+                        /// investigation required as to what could be potentially faster
+
+                        this->_pData->_backNextCapacity     = cds :: maxOf ( this->_pData->_backNextCapacity, count + this->_pData->_pBuffer + fullCapacity - this->_pData->_pBack );
+
+                        auto const pNewBuffer               = cds :: __hidden :: __impl :: __allocation :: __reallocPrimitiveArray (
+                                this->_pData->_pBuffer,
+                                this->_pData->_frontCapacity + this->_pData->_backNextCapacity
+                        );
+
+                        this->_pData->_pFront               = pNewBuffer + ( this->_pData->_pFront - this->_pData->_pBuffer );
+                        this->_pData->_pBack                = this->_pData->_pFront + size;
+                        this->_pData->_backCapacity         = this->_pData->_backNextCapacity;
+                        this->_pData->_backNextCapacity     = this->_pData->_backNextCapacity * 2ULL;
+                        this->_pData->_pBuffer              = pNewBuffer;
+                        canShiftRight                       = true;
+                    }
+
+                    __ElementType * pCreationSpace;
+
+                    if ( canShiftLeft || canShiftRight ) {
+
+                        auto const shiftLeft =
+                                canShiftLeft &&
+                                shouldShiftLeft;
+
+                        __ElementType * pDestination;
+                        __ElementType * pSource;
+                        Size            shiftCount;
+
+                        if ( shiftLeft ) {
+                            pDestination            = this->_pData->_pFront - count,
+                            pSource                 = this->_pData->_pFront;
+                            shiftCount              = index;
+
+                            pCreationSpace          = pSource;
+                            this->_pData->_pFront  -= count;
+                        } else {
+                            pDestination            = this->_pData->_pFront + index + count;
+                            pSource                 = this->_pData->_pFront + index;
+                            shiftCount              = size - static_cast < Size > ( index );
+
+                            pCreationSpace          = this->_pData->_pFront + index;
+                            this->_pData->_pBack   += count;
+                        }
+
+                        (void) std :: memmove (
+                                reinterpret_cast < void * > ( pDestination ),
+                                reinterpret_cast < void const * > ( pSource ),
+                                sizeof ( __ElementType ) * shiftCount
+                        );
+                    } else {
+
+                        auto const rightShiftCount = count - ( this->_pData->_pBuffer + fullCapacity - this->_pData->_pBack );
+                        auto const leftShiftCount  = count - rightShiftCount;
+
+                        (void) std :: memmove (
+                                this->_pData->_pFront + index + rightShiftCount,
+                                this->_pData->_pFront + index,
+                                sizeof ( __ElementType ) * rightShiftCount
+                        );
+
+                        (void) std :: memmove (
+                                this->_pData->_pFront - leftShiftCount,
+                                this->_pData->_pFront,
+                                sizeof ( __ElementType ) * leftShiftCount
+                        );
+
+                        pCreationSpace          = this->_pData->_pFront + index;
+                        this->_pData->_pFront  -= leftShiftCount;
+                        this->_pData->_pBack   += rightShiftCount;
+                    }
+
+                    for ( Size spaceIndex = 0ULL; spaceIndex < count; ++ spaceIndex ) {
+                        ppElements [ spaceIndex ] = pCreationSpace ++;
+                    }
                 }
 
 
