@@ -33,8 +33,8 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
 
                     for (
                             auto
-                                iterator    = static_cast < __ReceiverType const * > ( this )->cbegin(),
-                                end         = static_cast < __ReceiverType const * > ( this )->cend();
+                                iterator    = reinterpret_cast < __ReceiverType const * > ( this )->cbegin(),
+                                end         = reinterpret_cast < __ReceiverType const * > ( this )->cend();
 
                             iterator != end && foundCount < count;
                             ++ iterator, ++ index
@@ -94,8 +94,8 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                     Index index = 0;
                     for (
                             auto
-                                    iterator    = static_cast < __ReceiverType const * > ( this )->cbegin(),
-                                    end         = static_cast < __ReceiverType const * > ( this )->cend();
+                                    iterator    = reinterpret_cast < __ReceiverType const * > ( this )->cbegin(),
+                                    end         = reinterpret_cast < __ReceiverType const * > ( this )->cend();
 
                             iterator != end;
                             ++ iterator, ++ index
@@ -123,11 +123,11 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                         __FromCollectionType const & from
                 ) const noexcept -> Index {
 
-                    Index index = static_cast < Index > ( static_cast < __ReceiverType const * > ( this )->size() ) - 1;
+                    Index index = static_cast < Index > ( reinterpret_cast < __ReceiverType const * > ( this )->size() ) - 1;
                     for (
                             auto
-                                    iterator    = static_cast < __ReceiverType const * > ( this )->crbegin(),
-                                    end         = static_cast < __ReceiverType const * > ( this )->crend();
+                                    iterator    = reinterpret_cast < __ReceiverType const * > ( this )->crbegin(),
+                                    end         = reinterpret_cast < __ReceiverType const * > ( this )->crend();
 
                             iterator != end;
                             ++ iterator, -- index
@@ -163,8 +163,8 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
 
                     for (
                             auto
-                                    iterator    = static_cast < __ReceiverType const * > ( this )->cbegin(),
-                                    end         = static_cast < __ReceiverType const * > ( this )->cend();
+                                    iterator    = reinterpret_cast < __ReceiverType const * > ( this )->cbegin(),
+                                    end         = reinterpret_cast < __ReceiverType const * > ( this )->cend();
 
                             iterator != end;
                             ++ iterator, ++ index
@@ -228,8 +228,8 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
 
                     for (
                             auto
-                                iterator    = static_cast < __ReceiverType const * > ( this )->cbegin(),
-                                end         = static_cast < __ReceiverType const * > ( this )->cend();
+                                iterator    = reinterpret_cast < __ReceiverType const * > ( this )->cbegin(),
+                                end         = reinterpret_cast < __ReceiverType const * > ( this )->cend();
 
                             iterator != end && foundCount < count;
                             ++ iterator, ++ index
@@ -289,8 +289,8 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                     Index index = 0;
                     for (
                             auto
-                                    iterator    = static_cast < __ReceiverType const * > ( this )->cbegin(),
-                                    end         = static_cast < __ReceiverType const * > ( this )->cend();
+                                    iterator    = reinterpret_cast < __ReceiverType const * > ( this )->cbegin(),
+                                    end         = reinterpret_cast < __ReceiverType const * > ( this )->cend();
 
                             iterator != end;
                             ++ iterator, ++ index
@@ -318,11 +318,11 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                         __FromCollectionType const & from
                 ) const noexcept -> Index {
 
-                    Index index = static_cast < Index > ( static_cast < __ReceiverType const * > ( this )->size() ) - 1;
+                    Index index = static_cast < Index > ( reinterpret_cast < __ReceiverType const * > ( this )->size() ) - 1;
                     for (
                             auto
-                                    iterator    = static_cast < __ReceiverType const * > ( this )->crbegin(),
-                                    end         = static_cast < __ReceiverType const * > ( this )->crend();
+                                    iterator    = reinterpret_cast < __ReceiverType const * > ( this )->crbegin(),
+                                    end         = reinterpret_cast < __ReceiverType const * > ( this )->crend();
 
                             iterator != end;
                             ++ iterator, -- index
@@ -357,8 +357,8 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
 
                     for (
                             auto
-                                    iterator    = static_cast < __ReceiverType const * > ( this )->cbegin(),
-                                    end         = static_cast < __ReceiverType const * > ( this )->cend();
+                                    iterator    = reinterpret_cast < __ReceiverType const * > ( this )->cbegin(),
+                                    end         = reinterpret_cast < __ReceiverType const * > ( this )->cend();
 
                             iterator != end;
                             ++ iterator, ++ index

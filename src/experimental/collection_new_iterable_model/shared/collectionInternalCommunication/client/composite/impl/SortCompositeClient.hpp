@@ -164,15 +164,15 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                         __ComparatorFunction const & comparatorFunction
                 ) noexcept ( noexcept ( comparatorFunction ( cds :: meta :: valueOf < ElementType > (), cds :: meta :: valueOf < ElementType > () ) ) ) -> void {
 
-                    if ( static_cast < __ReceiverType * > ( this )->size() < 2 ) {
+                    if ( reinterpret_cast < __ReceiverType * > ( this )->size() < 2 ) {
                         return;
                     }
 
                     return __quickSort (
-                            static_cast < __ReceiverType * > ( this )->begin(),
+                            reinterpret_cast < __ReceiverType * > ( this )->begin(),
                             0,
-                            -- static_cast < __ReceiverType * > ( this )->end(),
-                            static_cast < Index > ( static_cast < __ReceiverType * > ( this )->size() - 1ULL ),
+                            -- reinterpret_cast < __ReceiverType * > ( this )->end(),
+                            static_cast < Index > ( reinterpret_cast < __ReceiverType * > ( this )->size() - 1ULL ),
                             comparatorFunction
                     );
                 }

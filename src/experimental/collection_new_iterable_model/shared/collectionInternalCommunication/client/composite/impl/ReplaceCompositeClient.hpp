@@ -30,8 +30,8 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                     Size replacedCount = 0ULL;
                     for (
                             auto
-                                iterator    = static_cast < __ReceiverType * > ( this )->begin(),
-                                end         = static_cast < __ReceiverType * > ( this )->end();
+                                iterator    = reinterpret_cast < __ReceiverType * > ( this )->begin(),
+                                end         = reinterpret_cast < __ReceiverType * > ( this )->end();
 
                             iterator != end && replacedCount < count;
                             ++ iterator
@@ -64,8 +64,8 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
 
                     for (
                             auto
-                                iterator    = static_cast < __ReceiverType * > ( this )->begin(),
-                                end         = static_cast < __ReceiverType * > ( this )->end();
+                                iterator    = reinterpret_cast < __ReceiverType * > ( this )->begin(),
+                                end         = reinterpret_cast < __ReceiverType * > ( this )->end();
 
                             iterator != end;
                             ++ iterator
@@ -98,8 +98,8 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
 
                     for (
                             auto
-                                iterator    = static_cast < __ReceiverType * > ( this )->begin(),
-                                end         = static_cast < __ReceiverType * > ( this )->end();
+                                iterator    = reinterpret_cast < __ReceiverType * > ( this )->begin(),
+                                end         = reinterpret_cast < __ReceiverType * > ( this )->end();
 
                             iterator != end;
                             ++ iterator
@@ -132,8 +132,8 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
 
                     for (
                             auto
-                                iterator    = static_cast < __ReceiverType * > ( this )->rbegin(),
-                                end         = static_cast < __ReceiverType * > ( this )->rend();
+                                iterator    = reinterpret_cast < __ReceiverType * > ( this )->rbegin(),
+                                end         = reinterpret_cast < __ReceiverType * > ( this )->rend();
 
                             iterator != end;
                             ++ iterator
@@ -166,8 +166,8 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
 
                     for (
                             auto
-                                iterator    = static_cast < __ReceiverType * > ( this )->rbegin(),
-                                end         = static_cast < __ReceiverType * > ( this )->rend();
+                                iterator    = reinterpret_cast < __ReceiverType * > ( this )->rbegin(),
+                                end         = reinterpret_cast < __ReceiverType * > ( this )->rend();
 
                             iterator != end;
                             ++ iterator
@@ -201,8 +201,8 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                     Size replacedCount = 0ULL;
                     for (
                             auto
-                                iterator    = static_cast < __ReceiverType * > ( this )->rbegin(),
-                                end         = static_cast < __ReceiverType * > ( this )->rend();
+                                iterator    = reinterpret_cast < __ReceiverType * > ( this )->rbegin(),
+                                end         = reinterpret_cast < __ReceiverType * > ( this )->rend();
 
                             iterator != end;
                             ++ iterator

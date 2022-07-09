@@ -196,9 +196,9 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
 
                     return * new (
                             (
-                                    static_cast < __ReceiverType * > ( this )->*
+                                    reinterpret_cast < __ReceiverType * > ( this )->*
                                     reinterpret_cast < __ElementType * ( __ReceiverType :: * ) () > (
-                                            static_cast < __ReceiverType * > ( this )->__cicch_obtainGenericHandler (
+                                            reinterpret_cast < __ReceiverType * > ( this )->__cicch_obtainGenericHandler (
                                                     __CollectionInternalRequestType :: __cirt_newFrontAddress
                                             )
                                     )
@@ -256,14 +256,14 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                     auto          ppElements = cds :: __hidden :: __impl :: __allocation :: __allocPrimitiveArray < __ElementType * > ( parameterCount );
 
                     (
-                            static_cast < __ReceiverType * > ( this ) ->*
+                            reinterpret_cast < __ReceiverType * > ( this ) ->*
                             reinterpret_cast <
                                     void ( __ReceiverType :: * ) (
                                             Size,
                                             __ElementType **
                                     )
                             > (
-                                    static_cast < __ReceiverType * > ( this )->__cicch_obtainGenericHandler (
+                                    reinterpret_cast < __ReceiverType * > ( this )->__cicch_obtainGenericHandler (
                                             __CollectionInternalRequestType :: __cirt_newFrontAddressArray
                                     )
                             )
@@ -299,14 +299,14 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                     auto          ppElements = cds :: __hidden :: __impl :: __allocation :: __allocPrimitiveArray < __ElementType * > ( parameterCount );
 
                     (
-                            static_cast < __ReceiverType * > ( this ) ->*
+                            reinterpret_cast < __ReceiverType * > ( this ) ->*
                             reinterpret_cast <
                                     void ( __ReceiverType :: * ) (
                                             Size,
                                             __ElementType **
                                     )
                             > (
-                                    static_cast < __ReceiverType * > ( this )->__cicch_obtainGenericHandler (
+                                    reinterpret_cast < __ReceiverType * > ( this )->__cicch_obtainGenericHandler (
                                             __CollectionInternalRequestType :: __cirt_newBackAddressArray
                                     )
                             )
@@ -434,14 +434,14 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                     auto          ppElements = cds :: __hidden :: __impl :: __allocation :: __allocPrimitiveArray < __ElementType * > ( parameterCount );
 
                     (
-                            static_cast < __ReceiverType * > ( this ) ->*
+                            reinterpret_cast < __ReceiverType * > ( this ) ->*
                             reinterpret_cast <
                                     void ( __ReceiverType :: * ) (
                                             Size,
                                             __ElementType **
                                     )
                             > (
-                                    static_cast < __ReceiverType * > ( this )->__cicch_obtainGenericHandler (
+                                    reinterpret_cast < __ReceiverType * > ( this )->__cicch_obtainGenericHandler (
                                             __CollectionInternalRequestType :: __cirt_newFrontAddressArray
                                     )
                             )
@@ -479,14 +479,14 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                     auto          ppElements = cds :: __hidden :: __impl :: __allocation :: __allocPrimitiveArray < __ElementType * > ( parameterCount );
 
                     (
-                            static_cast < __ReceiverType * > ( this ) ->*
+                            reinterpret_cast < __ReceiverType * > ( this ) ->*
                             reinterpret_cast <
                                     void ( __ReceiverType :: * ) (
                                             Size,
                                             __ElementType **
                                     )
                             > (
-                                    static_cast < __ReceiverType * > ( this )->__cicch_obtainGenericHandler (
+                                    reinterpret_cast < __ReceiverType * > ( this )->__cicch_obtainGenericHandler (
                                             __CollectionInternalRequestType :: __cirt_newBackAddressArray
                                     )
                             )
@@ -686,7 +686,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                         __EmplaceArgumentTypes && ... parameters
                 ) noexcept ( noexcept ( ElementType ( std :: forward < __EmplaceArgumentTypes > ( parameters ) ... ) ) ) -> ElementReference {
 
-                    return * new ( static_cast < __ReceiverType * > ( this )->__newFront () ) __ElementType (
+                    return * new ( reinterpret_cast < __ReceiverType * > ( this )->__newFront () ) __ElementType (
                             std :: forward < __EmplaceArgumentTypes > ( parameters ) ...
                     );
                 }
@@ -706,7 +706,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                         __EmplaceArgumentTypes && ... parameters
                 ) noexcept ( noexcept ( ElementType ( std :: forward < __EmplaceArgumentTypes > ( parameters ) ... ) ) ) -> ElementReference {
 
-                    return * new ( static_cast < __ReceiverType * > ( this )->__newBack () ) __ElementType (
+                    return * new ( reinterpret_cast < __ReceiverType * > ( this )->__newBack () ) __ElementType (
                             std :: forward < __EmplaceArgumentTypes > ( parameters ) ...
                     );
                 }
@@ -729,7 +729,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                     Size    const parameterCount = sizeof ... ( __ArgumentTypes );
                     auto          ppElements = cds :: __hidden :: __impl :: __allocation :: __allocPrimitiveArray < __ElementType * > ( parameterCount );
 
-                    static_cast < __ReceiverType * > ( this )->__newFrontArray (
+                    reinterpret_cast < __ReceiverType * > ( this )->__newFrontArray (
                             parameterCount,
                             ppElements
                     );
@@ -760,7 +760,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                     Size    const parameterCount = sizeof ... ( __ArgumentTypes );
                     auto          ppElements = cds :: __hidden :: __impl :: __allocation :: __allocPrimitiveArray < __ElementType * > ( parameterCount );
 
-                    static_cast < __ReceiverType * > ( this )->__newBackArray (
+                    reinterpret_cast < __ReceiverType * > ( this )->__newBackArray (
                             parameterCount,
                             ppElements
                     );
@@ -883,7 +883,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                     Size    const parameterCount = __IteratorDistance < __IteratorType > :: __compute ( begin, end );
                     auto          ppElements = cds :: __hidden :: __impl :: __allocation :: __allocPrimitiveArray < __ElementType * > ( parameterCount );
 
-                    static_cast < __ReceiverType * > ( this )->__newFrontArray (
+                    reinterpret_cast < __ReceiverType * > ( this )->__newFrontArray (
                             parameterCount,
                             ppElements
                     );
@@ -916,7 +916,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                     Size    const parameterCount = __IteratorDistance < __IteratorType > :: __compute ( begin, end );
                     auto          ppElements = cds :: __hidden :: __impl :: __allocation :: __allocPrimitiveArray < __ElementType * > ( parameterCount );
 
-                    static_cast < __ReceiverType * > ( this )->__newBackArray (
+                    reinterpret_cast < __ReceiverType * > ( this )->__newBackArray (
                             parameterCount,
                             ppElements
                     );

@@ -59,17 +59,17 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
 
                     bool newElementCreated;
                     auto pElementLocation = (
-                                 static_cast < __ReceiverType * > ( this )->*
-                                 reinterpret_cast <
-                                         __ElementType * ( __ReceiverType :: * ) (
-                                                 __ElementType const *,
-                                                 bool                *
-                                         )
-                                 > (
-                                         static_cast < __ReceiverType * > ( this )->__cicch_obtainGenericHandler (
-                                                 __CollectionInternalRequestType :: __cirt_newAddress
-                                         )
-                                 )
+                                reinterpret_cast < __ReceiverType * > ( this )->*
+                                reinterpret_cast <
+                                        __ElementType * ( __ReceiverType :: * ) (
+                                                __ElementType const *,
+                                                bool                *
+                                        )
+                                > (
+                                        reinterpret_cast < __ReceiverType * > ( this )->__cicch_obtainGenericHandler (
+                                                __CollectionInternalRequestType :: __cirt_newAddress
+                                        )
+                                )
                     ) (
                             & element,
                             & newElementCreated
@@ -104,14 +104,14 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
 
                     bool newElementCreated;
                     auto pElementLocation = (
-                            static_cast < __ReceiverType * > ( this )->*
+                            reinterpret_cast < __ReceiverType * > ( this )->*
                             reinterpret_cast <
                                     __ElementType * ( __ReceiverType :: * ) (
                                             __ElementType const *,
                                             bool                *
                                     )
                             > (
-                                    static_cast < __ReceiverType * > ( this )->__cicch_obtainGenericHandler (
+                                    reinterpret_cast < __ReceiverType * > ( this )->__cicch_obtainGenericHandler (
                                             __CollectionInternalRequestType :: __cirt_newAddress
                                     )
                             )
@@ -193,14 +193,14 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
 
                     bool newElementCreated;
                     auto pElementLocation = (
-                            static_cast < __ReceiverType * > ( this )->*
+                            reinterpret_cast < __ReceiverType * > ( this )->*
                             reinterpret_cast <
                                     __ElementType * ( __ReceiverType :: * ) (
                                             __ElementType const *,
                                             bool                *
                                     )
                             > (
-                                    static_cast < __ReceiverType * > ( this )->__cicch_obtainGenericHandler (
+                                    reinterpret_cast < __ReceiverType * > ( this )->__cicch_obtainGenericHandler (
                                             __CollectionInternalRequestType :: __cirt_newAddress
                                     )
                             )
@@ -416,7 +416,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                 ) noexcept ( noexcept ( ElementType ( element ) ) ) -> ElementReference {
 
                     bool newElementCreated;
-                    auto pElementLocation = static_cast < __ReceiverType * > ( this )->__newAddress (
+                    auto pElementLocation = reinterpret_cast < __ReceiverType * > ( this )->__newAddress (
                             & element,
                             & newElementCreated
                     );
@@ -449,7 +449,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                 ) noexcept ( noexcept ( ElementType ( std :: move ( element ) ) ) ) -> ElementReference {
 
                     bool newElementCreated;
-                    auto pElementLocation = static_cast < __ReceiverType * > ( this )->__newAddress (
+                    auto pElementLocation = reinterpret_cast < __ReceiverType * > ( this )->__newAddress (
                             & element,
                             & newElementCreated
                     );
@@ -526,7 +526,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                     );
 
                     bool newElementCreated;
-                    auto pElementLocation = static_cast < __ReceiverType * > ( this )->__newAddress (
+                    auto pElementLocation = reinterpret_cast < __ReceiverType * > ( this )->__newAddress (
                             & referenceElementContainer.data(),
                             & newElementCreated
                     );

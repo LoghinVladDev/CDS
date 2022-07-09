@@ -28,8 +28,8 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                 ) noexcept ( noexcept ( predicate ( cds :: meta :: referenceOf < __ElementType > () ) ) ) -> __CollectionType < Iterator > & {
 
                     return __findThat (
-                            static_cast < __IterableType * > ( this )->begin(),
-                            static_cast < __IterableType * > ( this )->end(),
+                            reinterpret_cast < __IterableType * > ( this )->begin(),
+                            reinterpret_cast < __IterableType * > ( this )->end(),
                             count,
                             storeIn,
                             predicate
@@ -54,8 +54,8 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                 ) noexcept ( noexcept ( predicate ( cds :: meta :: referenceOf < __ElementType > () ) ) ) -> __CollectionType < Iterator > {
 
                     return __findThat (
-                            static_cast < __IterableType * > ( this )->begin(),
-                            static_cast < __IterableType * > ( this )->end(),
+                            reinterpret_cast < __IterableType * > ( this )->begin(),
+                            reinterpret_cast < __IterableType * > ( this )->end(),
                             count,
                             predicate
                     );
@@ -77,8 +77,8 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                 ) noexcept ( noexcept ( predicate ( cds :: meta :: referenceOf < __ElementType > () ) ) ) -> Iterator {
 
                     return __findFirstThat (
-                            static_cast < __IterableType * > ( this )->begin(),
-                            static_cast < __IterableType * > ( this )->end(),
+                            reinterpret_cast < __IterableType * > ( this )->begin(),
+                            reinterpret_cast < __IterableType * > ( this )->end(),
                             predicate
                     );
                 }
@@ -99,8 +99,8 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                 ) noexcept ( noexcept ( predicate ( cds :: meta :: referenceOf < __ElementType > () ) ) ) -> Iterator {
 
                     return __findLastThat (
-                            static_cast < __IterableType * > ( this )->begin(),
-                            static_cast < __IterableType * > ( this )->end(),
+                            reinterpret_cast < __IterableType * > ( this )->begin(),
+                            reinterpret_cast < __IterableType * > ( this )->end(),
                             predicate
                     );
                 }
@@ -123,8 +123,8 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                 ) noexcept ( noexcept ( predicate ( cds :: meta :: referenceOf < __ElementType > () ) ) ) -> __CollectionType < Iterator > & {
 
                     return __findAllThat (
-                            static_cast < __IterableType * > ( this )->begin(),
-                            static_cast < __IterableType * > ( this )->end(),
+                            reinterpret_cast < __IterableType * > ( this )->begin(),
+                            reinterpret_cast < __IterableType * > ( this )->end(),
                             storeIn,
                             predicate
                     );
@@ -147,8 +147,8 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                 ) noexcept ( noexcept ( predicate ( cds :: meta :: referenceOf < __ElementType > () ) ) ) -> __CollectionType < Iterator > {
 
                     return __findAllThat (
-                            static_cast < __IterableType * > ( this )->begin(),
-                            static_cast < __IterableType * > ( this )->end(),
+                            reinterpret_cast < __IterableType * > ( this )->begin(),
+                            reinterpret_cast < __IterableType * > ( this )->end(),
                             predicate
                     );
                 }

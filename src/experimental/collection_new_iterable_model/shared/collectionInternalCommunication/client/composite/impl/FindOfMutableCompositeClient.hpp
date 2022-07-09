@@ -37,8 +37,8 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                             __CollectionType,
                             __containsFunction
                     > (
-                            static_cast < __IterableType * > ( this )->begin(),
-                            static_cast < __IterableType * > ( this )->end(),
+                            reinterpret_cast < __IterableType * > ( this )->begin(),
+                            reinterpret_cast < __IterableType * > ( this )->end(),
                             count,
                             storeIn,
                             from
@@ -72,8 +72,8 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                             __CollectionType,
                             __containsFunction
                     > (
-                            static_cast < __IterableType * > ( this )->begin(),
-                            static_cast < __IterableType * > ( this )->end(),
+                            reinterpret_cast < __IterableType * > ( this )->begin(),
+                            reinterpret_cast < __IterableType * > ( this )->end(),
                             count,
                             from
                     );
@@ -102,8 +102,8 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                             __FromIterableType,
                             __containsFunction
                     > (
-                            static_cast < __IterableType * > ( this )->begin(),
-                            static_cast < __IterableType * > ( this )->end(),
+                            reinterpret_cast < __IterableType * > ( this )->begin(),
+                            reinterpret_cast < __IterableType * > ( this )->end(),
                             from
                     );
                 }
@@ -131,8 +131,8 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                             __FromIterableType,
                             __containsFunction
                     > (
-                            static_cast < __IterableType * > ( this )->begin(),
-                            static_cast < __IterableType * > ( this )->end(),
+                            reinterpret_cast < __IterableType * > ( this )->begin(),
+                            reinterpret_cast < __IterableType * > ( this )->end(),
                             from
                     );
                 }
@@ -164,8 +164,8 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                             __CollectionType,
                             __containsFunction
                     > (
-                            static_cast < __IterableType * > ( this )->begin(),
-                            static_cast < __IterableType * > ( this )->end(),
+                            reinterpret_cast < __IterableType * > ( this )->begin(),
+                            reinterpret_cast < __IterableType * > ( this )->end(),
                             storeIn,
                             from
                     );
@@ -197,8 +197,8 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                             __CollectionType,
                             __containsFunction
                     > (
-                            static_cast < __IterableType * > ( this )->begin(),
-                            static_cast < __IterableType * > ( this )->end(),
+                            reinterpret_cast < __IterableType * > ( this )->begin(),
+                            reinterpret_cast < __IterableType * > ( this )->end(),
                             from
                     );
                 }
@@ -230,8 +230,8 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                             __CollectionType,
                             __containsFunction
                     > (
-                            static_cast < __IterableType * > ( this )->begin(),
-                            static_cast < __IterableType * > ( this )->end(),
+                            reinterpret_cast < __IterableType * > ( this )->begin(),
+                            reinterpret_cast < __IterableType * > ( this )->end(),
                             count,
                             storeIn,
                             from
@@ -265,8 +265,8 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                             __CollectionType,
                             __containsFunction
                     > (
-                            static_cast < __IterableType * > ( this )->begin(),
-                            static_cast < __IterableType * > ( this )->end(),
+                            reinterpret_cast < __IterableType * > ( this )->begin(),
+                            reinterpret_cast < __IterableType * > ( this )->end(),
                             count,
                             from
                     );
@@ -295,8 +295,8 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                             __FromIterableType,
                             __containsFunction
                     > (
-                            static_cast < __IterableType * > ( this )->begin(),
-                            static_cast < __IterableType * > ( this )->end(),
+                            reinterpret_cast < __IterableType * > ( this )->begin(),
+                            reinterpret_cast < __IterableType * > ( this )->end(),
                             from
                     );
                 }
@@ -324,8 +324,8 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                             __FromIterableType,
                             __containsFunction
                     > (
-                            static_cast < __IterableType * > ( this )->begin(),
-                            static_cast < __IterableType * > ( this )->end(),
+                            reinterpret_cast < __IterableType * > ( this )->begin(),
+                            reinterpret_cast < __IterableType * > ( this )->end(),
                             from
                     );
                 }
@@ -357,8 +357,8 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                             __CollectionType,
                             __containsFunction
                     > (
-                            static_cast < __IterableType * > ( this )->begin(),
-                            static_cast < __IterableType * > ( this )->end(),
+                            reinterpret_cast < __IterableType * > ( this )->begin(),
+                            reinterpret_cast < __IterableType * > ( this )->end(),
                             storeIn,
                             from
                     );
@@ -390,8 +390,8 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                             __CollectionType,
                             __containsFunction
                     > (
-                            static_cast < __IterableType * > ( this )->begin(),
-                            static_cast < __IterableType * > ( this )->end(),
+                            reinterpret_cast < __IterableType * > ( this )->begin(),
+                            reinterpret_cast < __IterableType * > ( this )->end(),
                             from
                     );
                 }

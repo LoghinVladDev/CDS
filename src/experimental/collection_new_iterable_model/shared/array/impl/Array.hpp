@@ -111,7 +111,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                         -- this->_pData->_pBack;
                     }
 
-                    (void) std :: memcpy (
+                    (void) std :: memmove (
                             reinterpret_cast < void * > ( pDestination ),
                             reinterpret_cast < void const * > ( pSource ),
                             sizeof ( __ElementType ) * count
@@ -129,10 +129,6 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                         Index index
                 ) noexcept -> ElementType * {
 
-                    if ( this->__a_size () == 0ULL ) {
-                        return nullptr;
-                    }
-
                     return this->_pData->_pFront + index;
                 }
 
@@ -146,10 +142,6 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                 > :: __a_get (
                         Index index
                 ) const noexcept -> ElementType const * {
-
-                    if ( this->__a_size () == 0ULL ) {
-                        return nullptr;
-                    }
 
                     return this->_pData->_pFront + index;
                 }
@@ -356,7 +348,20 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                         AbstractAddressIterator < __ElementType > const & iterator
                 ) noexcept -> ElementType * {
 
-                    return nullptr;
+                    auto pElement = & iterator [0ULL];
+                    if ( this->_pData == nullptr || pElement < this->_pData->_pFront || pElement > this->_pData->_pBack ) {
+                        return nullptr;
+                    }
+
+                    if ( pElement == this->_pData->_pFront ) {
+                        return this->__a_newFront ();
+                    }
+
+                    if ( pElement == this->_pData->_pBack ) {
+                        return this->__a_newBack ();
+                    }
+
+                    return this->__a_newAt ( pElement - this->_pData->_pFront );
                 }
 
 
@@ -370,7 +375,20 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                         AbstractAddressIterator < __ElementType const > const & iterator
                 ) noexcept -> ElementType * {
 
-                    return nullptr;
+                    auto pElement = & iterator [0ULL];
+                    if ( this->_pData == nullptr || pElement < this->_pData->_pFront || pElement > this->_pData->_pBack ) {
+                        return nullptr;
+                    }
+
+                    if ( pElement == this->_pData->_pFront ) {
+                        return this->__a_newFront ();
+                    }
+
+                    if ( pElement == this->_pData->_pBack ) {
+                        return this->__a_newBack ();
+                    }
+
+                    return this->__a_newAt ( pElement - this->_pData->_pFront );
                 }
 
 
@@ -384,7 +402,16 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                         AbstractAddressIterator < __ElementType > const & iterator
                 ) noexcept -> ElementType * {
 
-                    return nullptr;
+                    auto pElement = & iterator [0ULL];
+                    if ( this->_pData == nullptr || pElement < this->_pData->_pFront || pElement >= this->_pData->_pBack ) {
+                        return nullptr;
+                    }
+
+                    if ( pElement + 1ULL == this->_pData->_pBack ) {
+                        return this->__a_newBack ();
+                    }
+
+                    return this->__a_newAt ( pElement - this->_pData->_pFront + 1ULL );
                 }
 
 
@@ -398,7 +425,16 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                         AbstractAddressIterator < __ElementType const > const & iterator
                 ) noexcept -> ElementType * {
 
-                    return nullptr;
+                    auto pElement = & iterator [0ULL];
+                    if ( this->_pData == nullptr || pElement < this->_pData->_pFront || pElement >= this->_pData->_pBack ) {
+                        return nullptr;
+                    }
+
+                    if ( pElement + 1ULL == this->_pData->_pBack ) {
+                        return this->__a_newBack ();
+                    }
+
+                    return this->__a_newAt ( pElement - this->_pData->_pFront + 1ULL );
                 }
 
 
@@ -414,7 +450,33 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                         __ElementType                                    ** ppElements
                 ) noexcept -> bool {
 
-                    return false;
+                    auto pElement = & iterator [0ULL];
+                    if ( this->_pData == nullptr || pElement < this->_pData->_pFront || pElement > this->_pData->_pBack ) {
+                        return false;
+                    }
+
+                    if ( pElement == this->_pData->_pFront ) {
+                        this->__a_newFrontArray (
+                                count,
+                                ppElements
+                        );
+
+                    } else if ( pElement == this->_pData->_pBack ) {
+                        this->__a_newBackArray (
+                                count,
+                                ppElements
+                        );
+
+                    } else {
+                        this->__a_newArrayAt (
+                                pElement - this->_pData->_pFront,
+                                count,
+                                ppElements
+                        );
+
+                    }
+
+                    return true;
                 }
 
 
@@ -430,7 +492,32 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                         __ElementType                                        ** ppElements
                 ) noexcept -> bool {
 
-                    return false;
+                    auto pElement = & iterator [0ULL];
+                    if ( this->_pData == nullptr || pElement < this->_pData->_pFront || pElement > this->_pData->_pBack ) {
+                        return false;
+                    }
+
+                    if ( pElement == this->_pData->_pFront ) {
+                        this->__a_newFrontArray (
+                                count,
+                                ppElements
+                        );
+
+                    } else if ( pElement == this->_pData->_pBack ) {
+                        this->__a_newBackArray (
+                                count,
+                                ppElements
+                        );
+
+                    } else {
+                        this->__a_newArrayAt (
+                                pElement - this->_pData->_pFront,
+                                count,
+                                ppElements
+                        );
+                    }
+
+                    return true;
                 }
 
 
@@ -446,7 +533,26 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                         __ElementType                                    ** ppElements
                 ) noexcept -> bool {
 
-                    return false;
+                    auto pElement = & iterator [0ULL];
+                    if ( this->_pData == nullptr || pElement < this->_pData->_pFront || pElement >= this->_pData->_pBack ) {
+                        return false;
+                    }
+
+                    if ( pElement + 1ULL == this->_pData->_pBack ) {
+                        this->__a_newBackArray (
+                                count,
+                                ppElements
+                        );
+
+                    } else {
+                        this->__a_newArrayAt (
+                                pElement - this->_pData->_pFront + 1ULL,
+                                count,
+                                ppElements
+                        );
+                    }
+
+                    return true;
                 }
 
 
@@ -462,7 +568,108 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                         __ElementType                                        ** ppElements
                 ) noexcept -> bool {
 
-                    return false;
+                    auto pElement = & iterator [0ULL];
+                    if ( this->_pData == nullptr || pElement < this->_pData->_pFront || pElement >= this->_pData->_pBack ) {
+                        return false;
+                    }
+
+                    if ( pElement + 1ULL == this->_pData->_pBack ) {
+                        this->__a_newBackArray (
+                                count,
+                                ppElements
+                        );
+
+                    } else {
+                        this->__a_newArrayAt (
+                                pElement - this->_pData->_pFront + 1ULL,
+                                count,
+                                ppElements
+                        );
+                    }
+
+                    return true;
+                }
+
+
+                template <
+                        typename                                        __ElementType,  // NOLINT(bugprone-reserved-identifier)
+                        utility :: ComparisonFunction < __ElementType > __equals        // NOLINT(bugprone-reserved-identifier)
+                > auto __Array <
+                        __ElementType,
+                        __equals
+                > :: __a_newAt (
+                        Index index
+                ) noexcept -> __ElementType * {
+
+                    if ( this->_pData == nullptr && index != 0 ) {
+                        return nullptr;
+                    }
+
+                    auto const fullCapacity     = this->_pData->_frontCapacity + this->_pData->_backCapacity;
+                    auto const size             = this->__a_size();
+                    auto       shouldShiftLeft  = static_cast < Size > ( index ) < size;
+                    auto const canShiftLeft     = this->_pData->_pBuffer < this->_pData->_pFront;
+                    auto const canShiftRight    = this->_pData->_pBack < this->_pData->_pBuffer + fullCapacity;
+
+                    if ( ! canShiftLeft && ! canShiftRight ) {
+
+                        /// choose to shift right always due to realloc being potentially faster. Reallocation in
+                        /// front requires a full memcpy of the array data
+                        /// investigation required as to what could be potentially faster
+
+                        auto const pNewBuffer               = cds :: __hidden :: __impl :: __allocation :: __reallocPrimitiveArray (
+                                this->_pData->_pBuffer,
+                                this->_pData->_frontCapacity + this->_pData->_backNextCapacity
+                        );
+
+                        this->_pData->_pFront               = pNewBuffer + ( this->_pData->_pFront - this->_pData->_pBuffer );
+                        this->_pData->_pBack                = this->_pData->_pFront + size;
+                        this->_pData->_backCapacity         = this->_pData->_backNextCapacity;
+                        this->_pData->_backNextCapacity     = this->_pData->_backNextCapacity * 2ULL;
+                        this->_pData->_pBuffer              = pNewBuffer;
+                        shouldShiftLeft                     = true;
+                    }
+
+                    auto const shiftLeft =
+                            canShiftLeft &&
+                            shouldShiftLeft;
+
+                    __ElementType * pDestination;
+                    __ElementType * pSource;
+                    Size            count;
+
+                    if ( shiftLeft ) {
+                        pDestination = -- this->_pData->_pFront;
+                        pSource      = pDestination + 1ULL;
+                        count        = index - 1;                /// negative overflow impossible with correct usage. If index == 0, newFront should be called
+                    } else {
+                        pDestination = this->_pData->_pFront + index + 1;
+                        pSource      = pDestination - 1ULL;
+                        count        = size - static_cast < Size > ( index );
+                    }
+
+                    (void) std :: memmove (
+                            reinterpret_cast < void * > ( pDestination ),
+                            reinterpret_cast < void const * > ( pSource ),
+                            sizeof ( __ElementType ) * count
+                    );
+
+                    return this->_pData->_pFront + index;
+                }
+
+
+                template <
+                        typename                                        __ElementType,  // NOLINT(bugprone-reserved-identifier)
+                        utility :: ComparisonFunction < __ElementType > __equals        // NOLINT(bugprone-reserved-identifier)
+                > auto __Array <
+                        __ElementType,
+                        __equals
+                > :: __a_newArrayAt (
+                        Index index,
+                        Size count,
+                        __ElementType ** ppElements
+                ) noexcept -> void {
+
                 }
 
 
@@ -631,6 +838,36 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
 
                     this->__a_remove ( static_cast < Index > ( pElement - this->_pData->_pFront ) );
                     return true;
+                }
+
+
+                template <
+                        typename                                        __ElementType,  // NOLINT(bugprone-reserved-identifier)
+                        utility :: ComparisonFunction < __ElementType > __equals        // NOLINT(bugprone-reserved-identifier)
+                > constexpr auto __Array <
+                        __ElementType,
+                        __equals
+                > :: __a_data () const noexcept -> __ElementType const * {
+
+                    return
+                            this->_pData == nullptr ?
+                            nullptr                 :
+                            this->_pData->_pFront;
+                }
+
+
+                template <
+                        typename                                        __ElementType,  // NOLINT(bugprone-reserved-identifier)
+                        utility :: ComparisonFunction < __ElementType > __equals        // NOLINT(bugprone-reserved-identifier)
+                > __CDS_cpplang_NonConstConstexprMemberFunction auto __Array <
+                        __ElementType,
+                        __equals
+                > :: __a_data () noexcept -> __ElementType * {
+
+                    return
+                            this->_pData == nullptr ?
+                            nullptr                 :
+                            this->_pData->_pFront;
                 }
 
             }

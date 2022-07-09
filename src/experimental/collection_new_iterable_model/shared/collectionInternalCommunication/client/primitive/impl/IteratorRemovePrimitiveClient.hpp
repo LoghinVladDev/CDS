@@ -21,13 +21,13 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                 ) noexcept -> bool {
 
                     return (
-                            static_cast < __ReceiverType * > ( this )->*
+                            reinterpret_cast < __ReceiverType * > ( this )->*
                             reinterpret_cast <
                                     bool ( __ReceiverType :: * ) (
                                             __GenericIterator
                                     )
                             > (
-                                    static_cast < __ReceiverType * > ( this )->__cicch_obtainGenericHandler (
+                                    reinterpret_cast < __ReceiverType * > ( this )->__cicch_obtainGenericHandler (
                                             __CollectionInternalRequestType :: __cirt_remove
                                     )
                             )
@@ -55,13 +55,13 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                                             __GenericIterator
                                     )
                             > (
-                                    static_cast < __ReceiverType * > ( this )->__cicch_obtainGenericHandler (
+                                    reinterpret_cast < __ReceiverType * > ( this )->__cicch_obtainGenericHandler (
                                             __CollectionInternalRequestType :: __cirt_remove
                                     )
                             );
 
                     for ( Size index = 0ULL; index < iteratorCount; ++ index ) {
-                        if ( ( static_cast < __ReceiverType * > ( this ) ->* pfnRemove ) ( pIterators [ index ]._pDelegate->iterator() ) ) {
+                        if ( ( reinterpret_cast < __ReceiverType * > ( this ) ->* pfnRemove ) ( pIterators [ index ]._pDelegate->iterator() ) ) {
                             removedCount ++;
                         }
                     }
@@ -82,7 +82,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                         Iterator const & iterator
                 ) noexcept -> bool {
 
-                    return static_cast < __ReceiverType * > ( this )->__remove ( & iterator );
+                    return reinterpret_cast < __ReceiverType * > ( this )->__remove ( & iterator );
                 }
 
 
@@ -103,7 +103,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                     auto pfnRemove      = & __ReceiverType :: __remove;
 
                     for ( Size index = 0ULL; index < iteratorCount; ++ index ) {
-                        if ( ( static_cast < __ReceiverType * > ( this ) ->* pfnRemove ) ( & pIterators [ index ] ) ) {
+                        if ( ( reinterpret_cast < __ReceiverType * > ( this ) ->* pfnRemove ) ( & pIterators [ index ] ) ) {
                             removedCount ++;
                         }
                     }

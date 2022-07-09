@@ -232,6 +232,20 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             return true;
         }
 
+
+        template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
+        constexpr auto Array < __ElementType > :: data () const noexcept -> __ElementType const * {
+
+            return this->__a_data();
+        }
+
+
+        template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
+        __CDS_cpplang_NonConstConstexprMemberFunction auto Array < __ElementType > :: data () noexcept -> __ElementType * {
+
+            return this->__a_data();
+        }
+
     }
 }
 

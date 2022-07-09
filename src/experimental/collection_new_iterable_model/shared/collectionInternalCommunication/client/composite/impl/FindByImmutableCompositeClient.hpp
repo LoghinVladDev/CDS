@@ -28,8 +28,8 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                 ) const noexcept ( noexcept ( predicate ( cds :: meta :: referenceOf < __ElementType const > () ) ) ) -> __CollectionType < ConstIterator > & {
 
                     return __findThat (
-                            static_cast < __IterableType const * > ( this )->cbegin(),
-                            static_cast < __IterableType const * > ( this )->cend(),
+                            reinterpret_cast < __IterableType const * > ( this )->cbegin(),
+                            reinterpret_cast < __IterableType const * > ( this )->cend(),
                             count,
                             storeIn,
                             predicate
@@ -54,8 +54,8 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                 ) const noexcept ( noexcept ( predicate ( cds :: meta :: referenceOf < __ElementType const > () ) ) ) -> __CollectionType < ConstIterator > {
 
                     return __findThat (
-                            static_cast < __IterableType const * > ( this )->cbegin(),
-                            static_cast < __IterableType const * > ( this )->cend(),
+                            reinterpret_cast < __IterableType const * > ( this )->cbegin(),
+                            reinterpret_cast < __IterableType const * > ( this )->cend(),
                             count,
                             predicate
                     );
@@ -77,8 +77,8 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                 ) const noexcept ( noexcept ( predicate ( cds :: meta :: referenceOf < __ElementType const > () ) ) ) -> ConstIterator {
 
                     return __findFirstThat (
-                            static_cast < __IterableType const * > ( this )->cbegin(),
-                            static_cast < __IterableType const * > ( this )->cend(),
+                            reinterpret_cast < __IterableType const * > ( this )->cbegin(),
+                            reinterpret_cast < __IterableType const * > ( this )->cend(),
                             predicate
                     );
                 }
@@ -99,8 +99,8 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                 ) const noexcept ( noexcept ( predicate ( cds :: meta :: referenceOf < __ElementType const > () ) ) ) -> ConstIterator {
 
                     return __findLastThat (
-                            static_cast < __IterableType const * > ( this )->cbegin(),
-                            static_cast < __IterableType const * > ( this )->cend(),
+                            reinterpret_cast < __IterableType const * > ( this )->cbegin(),
+                            reinterpret_cast < __IterableType const * > ( this )->cend(),
                             predicate
                     );
                 }
@@ -123,8 +123,8 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                 ) const noexcept ( noexcept ( predicate ( cds :: meta :: referenceOf < __ElementType const > () ) ) ) -> __CollectionType < ConstIterator > & {
 
                     return __findAllThat (
-                            static_cast < __IterableType const * > ( this )->cbegin(),
-                            static_cast < __IterableType const * > ( this )->cend(),
+                            reinterpret_cast < __IterableType const * > ( this )->cbegin(),
+                            reinterpret_cast < __IterableType const * > ( this )->cend(),
                             storeIn,
                             predicate
                     );
@@ -147,8 +147,8 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                 ) const noexcept ( noexcept ( predicate ( cds :: meta :: referenceOf < __ElementType const > () ) ) ) -> __CollectionType < ConstIterator > {
 
                     return __findAllThat (
-                            static_cast < __IterableType const * > ( this )->cbegin(),
-                            static_cast < __IterableType const * > ( this )->cend(),
+                            reinterpret_cast < __IterableType const * > ( this )->cbegin(),
+                            reinterpret_cast < __IterableType const * > ( this )->cend(),
                             predicate
                     );
                 }

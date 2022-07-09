@@ -117,19 +117,19 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                         __EmplaceArgumentTypes       && ... parameters
                 ) noexcept ( noexcept ( ElementType ( std :: forward < __EmplaceArgumentTypes > ( parameters ) ... ) ) ) -> bool {
 
-                    if ( ! iterator.of ( static_cast < __ReceiverType const * > ( this ) ) || ! iterator.valid() ) {
+                    if ( ! iterator.of ( reinterpret_cast < __ReceiverType const * > ( this ) ) || ! iterator.valid() ) {
                         return false;
                     }
 
                     auto pNewLocation =
                             (
-                                    static_cast < __ReceiverType * > ( this )->*
+                                    reinterpret_cast < __ReceiverType * > ( this )->*
                                     reinterpret_cast <
                                             __ElementType * ( __ReceiverType :: * ) (
                                                     __GenericIterator
                                             )
                                     > (
-                                            static_cast < __ReceiverType * > ( this )->__cicch_obtainGenericHandler (
+                                            reinterpret_cast < __ReceiverType * > ( this )->__cicch_obtainGenericHandler (
                                                     __CollectionInternalRequestType :: __cirt_newBeforeAddress
                                             )
                                     )
@@ -162,19 +162,19 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                         __EmplaceArgumentTypes       && ... parameters
                 ) noexcept ( noexcept ( ElementType ( std :: forward < __EmplaceArgumentTypes > ( parameters ) ... ) ) ) -> bool {
 
-                    if ( ! iterator.of ( static_cast < __ReceiverType const * > ( this ) ) || ! iterator.valid() ) {
+                    if ( ! iterator.of ( reinterpret_cast < __ReceiverType const * > ( this ) ) || ! iterator.valid() ) {
                         return false;
                     }
 
                     auto const pNewLocation =
                             (
-                                    static_cast < __ReceiverType * > ( this )->*
+                                    reinterpret_cast < __ReceiverType * > ( this )->*
                                     reinterpret_cast <
                                             __ElementType * ( __ReceiverType :: * ) (
                                                     __GenericIterator
                                             )
                                     > (
-                                            static_cast < __ReceiverType * > ( this )->__cicch_obtainGenericHandler (
+                                            reinterpret_cast < __ReceiverType * > ( this )->__cicch_obtainGenericHandler (
                                                     __CollectionInternalRequestType :: __cirt_newAfterAddress
                                             )
                                     )
@@ -207,7 +207,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                         __ArgumentTypes          && ... values
                 ) noexcept ( __ConstructExceptSpecMultiple < __ElementType, __ArgumentTypes ... > :: value ) -> bool {
 
-                    if ( ! iterator.of ( static_cast < __ReceiverType const * > ( this ) ) || ! iterator.valid() ) {
+                    if ( ! iterator.of ( reinterpret_cast < __ReceiverType const * > ( this ) ) || ! iterator.valid() ) {
                         return false;
                     }
 
@@ -216,7 +216,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
 
                     auto const allocationStatus =
                             (
-                                    static_cast < __ReceiverType * > ( this ) ->*
+                                    reinterpret_cast < __ReceiverType * > ( this ) ->*
                                     reinterpret_cast <
                                             void ( __ReceiverType :: * ) (
                                                     __GenericIterator,
@@ -224,7 +224,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                                                     __ElementType **
                                             )
                                     > (
-                                            static_cast < __ReceiverType * > ( this )->__cicch_obtainGenericHandler (
+                                            reinterpret_cast < __ReceiverType * > ( this )->__cicch_obtainGenericHandler (
                                                     __CollectionInternalRequestType :: __cirt_newBeforeAddressArray
                                             )
                                     )
@@ -259,7 +259,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                         __ArgumentTypes          && ... values
                 ) noexcept ( __ConstructExceptSpecMultiple < __ElementType, __ArgumentTypes ... > :: value ) -> bool {
 
-                    if ( ! iterator.of ( static_cast < __ReceiverType const * > ( this ) ) || ! iterator.valid() ) {
+                    if ( ! iterator.of ( reinterpret_cast < __ReceiverType const * > ( this ) ) || ! iterator.valid() ) {
                         return false;
                     }
 
@@ -268,7 +268,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
 
                     auto const allocationStatus =
                             (
-                                    static_cast < __ReceiverType * > ( this ) ->*
+                                    reinterpret_cast < __ReceiverType * > ( this ) ->*
                                     reinterpret_cast <
                                             void ( __ReceiverType :: * ) (
                                                     __GenericIterator,
@@ -276,7 +276,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                                                     __ElementType **
                                             )
                                     > (
-                                            static_cast < __ReceiverType * > ( this )->__cicch_obtainGenericHandler (
+                                            reinterpret_cast < __ReceiverType * > ( this )->__cicch_obtainGenericHandler (
                                                     __CollectionInternalRequestType :: __cirt_newAfterAddressArray
                                             )
                                     )
@@ -402,7 +402,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                         __IteratorType      const & end
                 ) noexcept ( noexcept ( ElementType ( * begin ) ) ) -> bool {
 
-                    if ( ! iterator.of ( static_cast < __ReceiverType const * > ( this ) ) || ! iterator.valid() ) {
+                    if ( ! iterator.of ( reinterpret_cast < __ReceiverType const * > ( this ) ) || ! iterator.valid() ) {
                         return false;
                     }
 
@@ -411,7 +411,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
 
                     auto const allocationStatus =
                             (
-                                    static_cast < __ReceiverType * > ( this ) ->*
+                                    reinterpret_cast < __ReceiverType * > ( this ) ->*
                                     reinterpret_cast <
                                             void ( __ReceiverType :: * ) (
                                                     __GenericIterator,
@@ -419,7 +419,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                                                     __ElementType **
                                             )
                                     > (
-                                            static_cast < __ReceiverType * > ( this )->__cicch_obtainGenericHandler (
+                                            reinterpret_cast < __ReceiverType * > ( this )->__cicch_obtainGenericHandler (
                                                     __CollectionInternalRequestType :: __cirt_newBeforeAddressArray
                                             )
                                     )
@@ -455,7 +455,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                         __IteratorType      const & end
                 ) noexcept ( noexcept ( ElementType ( * begin ) ) ) -> bool {
 
-                    if ( ! iterator.of ( static_cast < __ReceiverType const * > ( this ) ) || ! iterator.valid() ) {
+                    if ( ! iterator.of ( reinterpret_cast < __ReceiverType const * > ( this ) ) || ! iterator.valid() ) {
                         return false;
                     }
 
@@ -464,7 +464,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
 
                     auto const allocationStatus =
                             (
-                                    static_cast < __ReceiverType * > ( this ) ->*
+                                    reinterpret_cast < __ReceiverType * > ( this ) ->*
                                     reinterpret_cast <
                                             void ( __ReceiverType :: * ) (
                                                     __GenericIterator,
@@ -472,7 +472,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                                                     __ElementType **
                                             )
                                     > (
-                                            static_cast < __ReceiverType * > ( this )->__cicch_obtainGenericHandler (
+                                            reinterpret_cast < __ReceiverType * > ( this )->__cicch_obtainGenericHandler (
                                                     __CollectionInternalRequestType :: __cirt_newAfterAddressArray
                                             )
                                     )
@@ -609,11 +609,11 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                         __EmplaceArgumentTypes       && ... parameters
                 ) noexcept ( noexcept ( ElementType ( std :: forward < __EmplaceArgumentTypes > ( parameters ) ... ) ) ) -> bool {
 
-                    if ( iterator == static_cast < __ReceiverType * > ( this )->end () ) {
+                    if ( iterator == reinterpret_cast < __ReceiverType * > ( this )->end () ) {
                         return false;
                     }
 
-                    auto const pNewLocation = static_cast < __ReceiverType * > ( this )->__newBefore ( & iterator );
+                    auto const pNewLocation = reinterpret_cast < __ReceiverType * > ( this )->__newBefore ( & iterator );
                     if ( pNewLocation == nullptr ) {
                         return false;
                     }
@@ -641,11 +641,11 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                         __EmplaceArgumentTypes       && ... parameters
                 ) noexcept ( noexcept ( ElementType ( std :: forward < __EmplaceArgumentTypes > ( parameters ) ... ) ) ) -> bool {
 
-                    if ( iterator == static_cast < __ReceiverType * > ( this )->end () ) {
+                    if ( iterator == reinterpret_cast < __ReceiverType * > ( this )->end () ) {
                         return false;
                     }
 
-                    auto const pNewLocation = static_cast < __ReceiverType * > ( this )->__newAfter ( & iterator );
+                    auto const pNewLocation = reinterpret_cast < __ReceiverType * > ( this )->__newAfter ( & iterator );
                     if ( pNewLocation == nullptr ) {
                         return false;
                     }
@@ -673,7 +673,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                         __ArgumentTypes      && ... values
                 ) noexcept ( __ConstructExceptSpecMultiple < __ElementType, __ArgumentTypes ... > :: value ) -> bool {
 
-                    if ( iterator == static_cast < __ReceiverType * > ( this )->end () ) {
+                    if ( iterator == reinterpret_cast < __ReceiverType * > ( this )->end () ) {
                         return false;
                     }
 
@@ -681,7 +681,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                     auto        ppElements = cds :: __hidden :: __impl :: __allocation :: __allocPrimitiveArray < __ElementType * > ( parameterCount );
 
                     auto const allocationStatus =
-                            static_cast < __ReceiverType * > ( this )->__newBeforeArray (
+                            reinterpret_cast < __ReceiverType * > ( this )->__newBeforeArray (
                                     & iterator,
                                     parameterCount,
                                     ppElements
@@ -714,7 +714,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                         __ArgumentTypes       && ... values
                 ) noexcept ( __ConstructExceptSpecMultiple < __ElementType, __ArgumentTypes ... > :: value ) -> bool {
 
-                    if ( iterator == static_cast < __ReceiverType * > ( this )->end () ) {
+                    if ( iterator == reinterpret_cast < __ReceiverType * > ( this )->end () ) {
                         return false;
                     }
 
@@ -722,7 +722,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                     auto        ppElements = cds :: __hidden :: __impl :: __allocation :: __allocPrimitiveArray < __ElementType * > ( parameterCount );
 
                     auto const allocationStatus =
-                            static_cast < __ReceiverType * > ( this )->__newAfterArray (
+                            reinterpret_cast < __ReceiverType * > ( this )->__newAfterArray (
                                     & iterator,
                                     parameterCount,
                                     ppElements
@@ -854,7 +854,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                         __IteratorType  const & end
                 ) noexcept ( noexcept ( ElementType ( * begin ) ) ) -> bool {
 
-                    if ( iterator == static_cast < __ReceiverType * > ( this )->end () ) {
+                    if ( iterator == reinterpret_cast < __ReceiverType * > ( this )->end () ) {
                         return false;
                     }
 
@@ -862,7 +862,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                     auto        ppElements = cds :: __hidden :: __impl :: __allocation :: __allocPrimitiveArray < __ElementType * > ( parameterCount );
 
                     auto const allocationStatus =
-                            static_cast < __ReceiverType * > ( this )->__newBeforeArray (
+                            reinterpret_cast < __ReceiverType * > ( this )->__newBeforeArray (
                                     & iterator,
                                     parameterCount,
                                     ppElements
@@ -896,7 +896,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                         __IteratorType  const & end
                 ) noexcept ( noexcept ( ElementType ( * begin ) ) ) -> bool {
 
-                    if ( iterator == static_cast < __ReceiverType * > ( this )->end () ) {
+                    if ( iterator == reinterpret_cast < __ReceiverType * > ( this )->end () ) {
                         return false;
                     }
 
@@ -904,7 +904,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                     auto        ppElements = cds :: __hidden :: __impl :: __allocation :: __allocPrimitiveArray < __ElementType * > ( parameterCount );
 
                     auto const allocationStatus =
-                            static_cast < __ReceiverType * > ( this )->__newAfterArray (
+                            reinterpret_cast < __ReceiverType * > ( this )->__newAfterArray (
                                     & iterator,
                                     parameterCount,
                                     ppElements

@@ -55,11 +55,132 @@ public:
     C ( double ) noexcept (false) {}
 };
 
-using namespace cds :: experimental;
-int main () {
+template < typename F >
+auto timed ( cds :: String const & message, F const & block ) {
 
+    auto start = std :: chrono :: high_resolution_clock :: now ();
+    block ();
+    auto end = std :: chrono :: high_resolution_clock :: now ();
+    auto duration = std :: chrono :: duration_cast < std :: chrono :: milliseconds > ( end - start ).count();
+
+    std :: cout << "Operation '" << message << "' lasted " << duration << "ms\n";
+}
+
+using namespace cds :: experimental;
+
+void timingTest (int n) {
 
     Array < int > a;
+    std :: vector < int > v;
+    auto pClassic = new int [n];
+
+    timed (
+            "Classic 100m insertion",
+            [pClassic, n] {
+                for (int i = 0; i < n; ++i) {
+                    pClassic [i] = i;
+                }
+            }
+    );
+
+    timed (
+            "CDS 100m insertion",
+            [& a, n] {
+                for (int i = 0; i < n; ++i) {
+                    a.emplaceBack(i);
+                }
+            }
+    );
+
+    timed (
+            "STL 100m insertion",
+            [& v, n] {
+                for (int i = 0; i < n; ++i) {
+                    v.emplace_back(i);
+                }
+            }
+    );
+
+    timed (
+            "CDS 100m iter",
+            [& a] {
+                for ( auto & e : a ) {
+                    e = 5;
+                }
+            }
+    );
+
+    timed (
+            "STL 100m iter",
+            [& v] {
+                for ( auto & e : v ) {
+                    e = 5;
+                }
+            }
+    );
+
+    timed (
+            "CDS 100m manual iter",
+            [& a] {
+                for ( cds :: Size i = 0, l = a.size(); i < l; ++ i ) {
+                    a[i] = 5;
+                }
+            }
+    );
+
+    timed (
+            "CDS 100m manual by addr iter",
+            [& a, n] {
+                auto p = a.data();
+                for ( cds :: Size i = 0, l = a.size(); i < l; ++ i ) {
+                    p[i] = 5;
+                }
+            }
+    );
+
+    timed (
+            "STL 100m manual iter",
+            [& v] {
+                for ( cds :: Size i = 0, l = v.size(); i < l; ++ i ) {
+                    v[i] = 5;
+                }
+            }
+    );
+
+    timed (
+            "STL 100m manual by addr iter",
+            [& v] {
+                auto p = v.data();
+                for ( cds :: Size i = 0, l = v.size(); i < l; ++ i ) {
+                    p[i] = 5;
+                }
+            }
+    );
+
+    timed (
+            "Classic 100m manual iter",
+            [pClassic, n] {
+                for ( cds :: Size i = 0, l = n; i < l; ++ i ) {
+                    pClassic [i] = 5;
+                }
+            }
+    );
+
+    delete [] pClassic;
+}
+
+int main () {
+
+    Array < int > a;
+    std :: vector < int > v;
+
+    a.pushBackAll ( 1, 2, 3 );
+    std :: cout << a << '\n';
+
+//    a.insertBefore ( ++ a.begin(), 1 );
+//    std :: cout << a << '\n';
+
+
     Array < int > otherArray;
     List < int > & otherAsList = otherArray;
 
@@ -203,11 +324,6 @@ int main () {
     pColl->clear();
     (void)pColl->find(5);
     (void)pColl->contains(5);
-    pColl->add(5);
-    pColl->addAll(5, 3, 1);
-    pColl->addAllOf(std :: initializer_list<int>{1, 4, 5});
-    pColl->addAllOf(otherAsList);
-    pColl->addAllOf(otherArray);
     pColl->insert(5);
     pColl->insertAll(5, 3, 1);
     pColl->insertAllOf(std :: initializer_list<int>{1, 4, 5});
@@ -458,6 +574,7 @@ int main () {
 
     pMutColl->insert (5) = 3;
 
+    timingTest ( 1000000 );
 
     return 0;
 }

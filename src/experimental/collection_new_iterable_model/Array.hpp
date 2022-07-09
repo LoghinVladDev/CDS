@@ -402,6 +402,12 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             auto removeAt (
                     Index index
             ) noexcept -> bool override;
+
+        public:
+            __CDS_NoDiscard constexpr auto data() const noexcept -> __ElementType const *;
+
+        public:
+            __CDS_NoDiscard __CDS_cpplang_NonConstConstexprMemberFunction auto data() noexcept -> __ElementType *;
         };
 
     }

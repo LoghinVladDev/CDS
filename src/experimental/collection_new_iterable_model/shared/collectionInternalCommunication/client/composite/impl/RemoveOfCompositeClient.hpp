@@ -31,16 +31,16 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                         __FromIterableType  const & from
                 ) noexcept -> Size {
 
-                    auto size = static_cast < __IterableType * > ( this )->size();
+                    auto size = reinterpret_cast < __IterableType * > ( this )->size();
                     if ( count >= size ) {
-                        static_cast < __IterableType * > ( this )->clear();
+                        reinterpret_cast < __IterableType * > ( this )->clear();
                         return size;
                     }
 
                     auto countCopy = count;
 
                     while ( countCopy > 0ULL ) {
-                        (void) static_cast < __IterableType * > ( this )->remove ( static_cast < __IterableType * > ( this )->cbegin() );
+                        (void) reinterpret_cast < __IterableType * > ( this )->remove ( reinterpret_cast < __IterableType * > ( this )->cbegin() );
                         -- countCopy;
                     }
 
@@ -93,7 +93,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                         __FromIterableType  const & from
                 ) noexcept -> bool {
 
-                    return static_cast < __IterableType * > ( this )->remove ( static_cast < __IterableType * > ( this )->cbegin() );
+                    return reinterpret_cast < __IterableType * > ( this )->remove ( reinterpret_cast < __IterableType * > ( this )->cbegin() );
                 }
 
 
@@ -141,8 +141,8 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                         __FromIterableType  const & from
                 ) noexcept -> bool {
 
-                    auto iterator   = static_cast < __IterableType * > ( this )->cbegin();
-                    auto end        = static_cast < __IterableType * > ( this )->end();
+                    auto iterator   = reinterpret_cast < __IterableType * > ( this )->cbegin();
+                    auto end        = reinterpret_cast < __IterableType * > ( this )->end();
 
                     decltype ( iterator ) toRemove;
 
@@ -151,7 +151,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                         ++ iterator;
                     }
 
-                    return toRemove.valid() && static_cast < __IterableType * > ( this )->remove ( toRemove );
+                    return toRemove.valid() && reinterpret_cast < __IterableType * > ( this )->remove ( toRemove );
                 }
 
 
@@ -199,8 +199,8 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                         __FromIterableType  const & from
                 ) noexcept -> Size {
 
-                    auto size = static_cast < __IterableType * > ( this )->size();
-                    static_cast < __IterableType * > ( this )->clear();
+                    auto size = reinterpret_cast < __IterableType * > ( this )->size();
+                    reinterpret_cast < __IterableType * > ( this )->clear();
                     return size;
                 }
 
@@ -329,8 +329,8 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
 
                     for (
                             auto
-                                iterator = static_cast < __IterableType * > ( this )->cbegin(),
-                                end      = static_cast < __IterableType * > ( this )->cend();
+                                iterator = reinterpret_cast < __IterableType * > ( this )->cbegin(),
+                                end      = reinterpret_cast < __IterableType * > ( this )->cend();
 
                             iterator != end && iteratorCount < count;
                             ++ iterator
@@ -341,7 +341,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                         }
                     }
 
-                    auto removedCount = static_cast < __IterableType * > ( this )->removeAll (
+                    auto removedCount = reinterpret_cast < __IterableType * > ( this )->removeAll (
                             & pIteratorBuffer [0],
                             iteratorCount
                     );
@@ -375,15 +375,15 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
 
                     for (
                             auto
-                                iterator = static_cast < __IterableType * > ( this )->cbegin(),
-                                end      = static_cast < __IterableType * > ( this )->cend();
+                                iterator = reinterpret_cast < __IterableType * > ( this )->cbegin(),
+                                end      = reinterpret_cast < __IterableType * > ( this )->cend();
 
                             iterator != end;
                             ++ iterator
                     ) {
 
                         if ( __containsFunction ( from, * iterator ) ) {
-                            return static_cast < __IterableType * > ( this )->remove ( iterator );
+                            return reinterpret_cast < __IterableType * > ( this )->remove ( iterator );
                         }
                     }
 
@@ -414,8 +414,8 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
 
                     for (
                             auto
-                                iterator = static_cast < __IterableType * > ( this )->cbegin(),
-                                end      = static_cast < __IterableType * > ( this )->cend();
+                                iterator = reinterpret_cast < __IterableType * > ( this )->cbegin(),
+                                end      = reinterpret_cast < __IterableType * > ( this )->cend();
 
                             iterator != end;
                             ++ iterator
@@ -426,7 +426,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                         }
                     }
 
-                    return toRemove.valid() && static_cast < __IterableType * > ( this )->remove ( toRemove );
+                    return toRemove.valid() && reinterpret_cast < __IterableType * > ( this )->remove ( toRemove );
                 }
 
 
@@ -449,13 +449,13 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                     }
 
                     using ConstIterator     = typename __IterableType :: ConstIterator;
-                    auto pIteratorBuffer    = cds :: __hidden :: __impl :: __allocation :: __allocPrimitiveArray < ConstIterator > ( static_cast < __IterableType * > ( this )->size() );
+                    auto pIteratorBuffer    = cds :: __hidden :: __impl :: __allocation :: __allocPrimitiveArray < ConstIterator > ( reinterpret_cast < __IterableType * > ( this )->size() );
                     Size iteratorCount      = 0ULL;
 
                     for (
                             auto
-                                iterator = static_cast < __IterableType * > ( this )->cbegin(),
-                                end      = static_cast < __IterableType * > ( this )->cend();
+                                iterator = reinterpret_cast < __IterableType * > ( this )->cbegin(),
+                                end      = reinterpret_cast < __IterableType * > ( this )->cend();
 
                             iterator != end;
                             ++ iterator
@@ -466,7 +466,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                         }
                     }
 
-                    auto removedCount = static_cast < __IterableType * > ( this )->removeAll (
+                    auto removedCount = reinterpret_cast < __IterableType * > ( this )->removeAll (
                             & pIteratorBuffer [0],
                             iteratorCount
                     );
@@ -508,8 +508,8 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
 
                     for (
                             auto
-                                iterator = static_cast < __IterableType * > ( this )->cbegin(),
-                                end      = static_cast < __IterableType * > ( this )->cend();
+                                iterator = reinterpret_cast < __IterableType * > ( this )->cbegin(),
+                                end      = reinterpret_cast < __IterableType * > ( this )->cend();
 
                             iterator != end && iteratorCount < count;
                             ++ iterator
@@ -520,7 +520,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                         }
                     }
 
-                    auto removedCount = static_cast < __IterableType * > ( this )->removeAll (
+                    auto removedCount = reinterpret_cast < __IterableType * > ( this )->removeAll (
                             & pIteratorBuffer [0],
                             iteratorCount
                     );
@@ -554,15 +554,15 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
 
                     for (
                             auto
-                                    iterator = static_cast < __IterableType * > ( this )->cbegin(),
-                                    end      = static_cast < __IterableType * > ( this )->cend();
+                                    iterator = reinterpret_cast < __IterableType * > ( this )->cbegin(),
+                                    end      = reinterpret_cast < __IterableType * > ( this )->cend();
 
                             iterator != end;
                             ++ iterator
                     ) {
 
                         if ( ! __containsFunction ( from, * iterator ) ) {
-                            return static_cast < __IterableType * > ( this )->remove ( iterator );
+                            return reinterpret_cast < __IterableType * > ( this )->remove ( iterator );
                         }
                     }
 
@@ -593,8 +593,8 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
 
                     for (
                             auto
-                                    iterator = static_cast < __IterableType * > ( this )->cbegin(),
-                                    end      = static_cast < __IterableType * > ( this )->cend();
+                                    iterator = reinterpret_cast < __IterableType * > ( this )->cbegin(),
+                                    end      = reinterpret_cast < __IterableType * > ( this )->cend();
 
                             iterator != end;
                             ++ iterator
@@ -605,7 +605,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                         }
                     }
 
-                    return toRemove.valid() && static_cast < __IterableType * > ( this )->remove ( toRemove );
+                    return toRemove.valid() && reinterpret_cast < __IterableType * > ( this )->remove ( toRemove );
                 }
 
 
@@ -628,13 +628,13 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                     }
 
                     using ConstIterator     = typename __IterableType :: ConstIterator;
-                    auto pIteratorBuffer    = cds :: __hidden :: __impl :: __allocation :: __allocPrimitiveArray < ConstIterator > ( static_cast < __IterableType * > ( this )->size() );
+                    auto pIteratorBuffer    = cds :: __hidden :: __impl :: __allocation :: __allocPrimitiveArray < ConstIterator > ( reinterpret_cast < __IterableType * > ( this )->size() );
                     Size iteratorCount      = 0ULL;
 
                     for (
                             auto
-                                iterator = static_cast < __IterableType * > ( this )->cbegin(),
-                                end      = static_cast < __IterableType * > ( this )->cend();
+                                iterator = reinterpret_cast < __IterableType * > ( this )->cbegin(),
+                                end      = reinterpret_cast < __IterableType * > ( this )->cend();
 
                             iterator != end;
                             ++ iterator
@@ -645,7 +645,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                         }
                     }
 
-                    auto removedCount = static_cast < __IterableType * > ( this )->removeAll (
+                    auto removedCount = reinterpret_cast < __IterableType * > ( this )->removeAll (
                             & pIteratorBuffer [0],
                             iteratorCount
                     );

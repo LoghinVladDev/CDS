@@ -49,12 +49,12 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                 > :: crbegin () const noexcept -> ConstReverseIterator {
 
                     return ConstReverseIterator (
-                            static_cast < __ReceiverType const * > ( this ), (
-                                    static_cast < __ReceiverType const * > ( this )->*
+                            reinterpret_cast < __ReceiverType const * > ( this ), (
+                                    reinterpret_cast < __ReceiverType const * > ( this )->*
                                     reinterpret_cast <
                                             __AbstractDelegateIterator < __ElementType const > * ( __ReceiverType :: * ) () const
                                     > (
-                                            static_cast < __ReceiverType const * > ( this )->__cicch_obtainGenericConstHandler (
+                                            reinterpret_cast < __ReceiverType const * > ( this )->__cicch_obtainGenericConstHandler (
                                                     __CollectionInternalRequestType :: __cirt_rbegin
                                             )
                                     )
@@ -74,12 +74,12 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                 > :: crend () const noexcept -> ConstReverseIterator {
 
                     return ConstReverseIterator (
-                            static_cast < __ReceiverType const * > ( this ), (
-                                    static_cast < __ReceiverType const * > ( this )->*
+                            reinterpret_cast < __ReceiverType const * > ( this ), (
+                                    reinterpret_cast < __ReceiverType const * > ( this )->*
                                     reinterpret_cast <
                                             __AbstractDelegateIterator < __ElementType const > * ( __ReceiverType :: * ) () const
                                     > (
-                                            static_cast < __ReceiverType const * > ( this )->__cicch_obtainGenericConstHandler (
+                                            reinterpret_cast < __ReceiverType const * > ( this )->__cicch_obtainGenericConstHandler (
                                                     __CollectionInternalRequestType :: __cirt_rend
                                             )
                                     )

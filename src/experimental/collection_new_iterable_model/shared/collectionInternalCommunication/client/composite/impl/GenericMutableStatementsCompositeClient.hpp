@@ -23,8 +23,8 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                 ) noexcept ( noexcept ( action ( cds :: meta :: referenceOf < ElementType > () ) ) ) -> void {
 
                     return __forEach (
-                            static_cast < __IterableType * > ( this )->begin(),
-                            static_cast < __IterableType * > ( this )->end(),
+                            reinterpret_cast < __IterableType * > ( this )->begin(),
+                            reinterpret_cast < __IterableType * > ( this )->end(),
                             action
                     );
                 }
@@ -44,8 +44,8 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                 ) noexcept ( noexcept ( predicate ( cds :: meta :: referenceOf < ElementType > () ) ) ) -> bool {
 
                     return __some (
-                            static_cast < __IterableType * > ( this )->begin(),
-                            static_cast < __IterableType * > ( this )->end(),
+                            reinterpret_cast < __IterableType * > ( this )->begin(),
+                            reinterpret_cast < __IterableType * > ( this )->end(),
                             count,
                             predicate
                     );
@@ -66,8 +66,8 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                 ) noexcept ( noexcept ( predicate ( cds :: meta :: referenceOf < ElementType > () ) ) ) -> bool {
 
                     return __atLeast (
-                            static_cast < __IterableType * > ( this )->begin(),
-                            static_cast < __IterableType * > ( this )->end(),
+                            reinterpret_cast < __IterableType * > ( this )->begin(),
+                            reinterpret_cast < __IterableType * > ( this )->end(),
                             count,
                             predicate
                     );
@@ -88,8 +88,8 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                 ) noexcept ( noexcept ( predicate ( cds :: meta :: referenceOf < ElementType > () ) ) ) -> bool {
 
                     return __atMost (
-                            static_cast < __IterableType * > ( this )->begin(),
-                            static_cast < __IterableType * > ( this )->end(),
+                            reinterpret_cast < __IterableType * > ( this )->begin(),
+                            reinterpret_cast < __IterableType * > ( this )->end(),
                             count,
                             predicate
                     );
@@ -110,8 +110,8 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                 ) noexcept ( noexcept ( predicate ( cds :: meta :: referenceOf < ElementType > () ) ) ) -> bool {
 
                     return __moreThan (
-                            static_cast < __IterableType * > ( this )->begin(),
-                            static_cast < __IterableType * > ( this )->end(),
+                            reinterpret_cast < __IterableType * > ( this )->begin(),
+                            reinterpret_cast < __IterableType * > ( this )->end(),
                             count,
                             predicate
                     );
@@ -132,8 +132,8 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                 ) noexcept ( noexcept ( predicate ( cds :: meta :: referenceOf < ElementType > () ) ) ) -> bool {
 
                     return __fewerThan (
-                            static_cast < __IterableType * > ( this )->begin(),
-                            static_cast < __IterableType * > ( this )->end(),
+                            reinterpret_cast < __IterableType * > ( this )->begin(),
+                            reinterpret_cast < __IterableType * > ( this )->end(),
                             count,
                             predicate
                     );
@@ -153,8 +153,8 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                 ) noexcept ( noexcept ( predicate ( cds :: meta :: referenceOf < ElementType > () ) ) ) -> Size {
 
                     return __count (
-                            static_cast < __IterableType * > ( this )->begin(),
-                            static_cast < __IterableType * > ( this )->end(),
+                            reinterpret_cast < __IterableType * > ( this )->begin(),
+                            reinterpret_cast < __IterableType * > ( this )->end(),
                             predicate
                     );
                 }
@@ -173,8 +173,8 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                 ) noexcept ( noexcept ( predicate ( cds :: meta :: referenceOf < ElementType > () ) ) ) -> bool {
 
                     return __any (
-                            static_cast < __IterableType * > ( this )->begin(),
-                            static_cast < __IterableType * > ( this )->end(),
+                            reinterpret_cast < __IterableType * > ( this )->begin(),
+                            reinterpret_cast < __IterableType * > ( this )->end(),
                             predicate
                     );
                 }
@@ -193,8 +193,8 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                 ) noexcept ( noexcept ( predicate ( cds :: meta :: referenceOf < ElementType > () ) ) ) -> bool {
 
                     return __all (
-                            static_cast < __IterableType * > ( this )->begin(),
-                            static_cast < __IterableType * > ( this )->end(),
+                            reinterpret_cast < __IterableType * > ( this )->begin(),
+                            reinterpret_cast < __IterableType * > ( this )->end(),
                             predicate
                     );
                 }
@@ -213,8 +213,8 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                 ) noexcept ( noexcept ( predicate ( cds :: meta :: referenceOf < ElementType > () ) ) ) -> bool {
 
                     return __none (
-                            static_cast < __IterableType * > ( this )->begin(),
-                            static_cast < __IterableType * > ( this )->end(),
+                            reinterpret_cast < __IterableType * > ( this )->begin(),
+                            reinterpret_cast < __IterableType * > ( this )->end(),
                             predicate
                     );
                 }

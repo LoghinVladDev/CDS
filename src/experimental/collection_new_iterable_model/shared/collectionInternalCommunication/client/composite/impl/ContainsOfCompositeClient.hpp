@@ -23,7 +23,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                 ) const noexcept -> bool {
 
                     for ( auto iterator = from.begin(), end = from.end(); iterator != end; ++ iterator ) {
-                        if ( static_cast < __IterableType const * > ( this )->contains ( * iterator ) ) {
+                        if ( reinterpret_cast < __IterableType const * > ( this )->contains ( * iterator ) ) {
                             return true;
                         }
                     }
@@ -45,7 +45,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                 ) const noexcept -> bool {
 
                     for ( auto iterator = from.begin(), end = from.end(); iterator != end; ++ iterator ) {
-                        if ( ! static_cast < __IterableType const * > ( this )->contains ( * iterator ) ) {
+                        if ( ! reinterpret_cast < __IterableType const * > ( this )->contains ( * iterator ) ) {
                             return true;
                         }
                     }
@@ -67,7 +67,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                 ) const noexcept -> bool {
 
                     for ( auto iterator = from.begin(), end = from.end(); iterator != end; ++ iterator ) {
-                        if ( ! static_cast < __IterableType const * > ( this )->contains ( * iterator ) ) {
+                        if ( ! reinterpret_cast < __IterableType const * > ( this )->contains ( * iterator ) ) {
                             return false;
                         }
                     }
@@ -89,7 +89,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                 ) const noexcept -> bool {
 
                     for ( auto iterator = from.begin(), end = from.end(); iterator != end; ++ iterator ) {
-                        if ( static_cast < __IterableType const * > ( this )->contains ( * iterator ) ) {
+                        if ( reinterpret_cast < __IterableType const * > ( this )->contains ( * iterator ) ) {
                             return true;
                         }
                     }

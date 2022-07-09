@@ -109,6 +109,18 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                     ) noexcept -> ElementType *;
 
                 protected:
+                    auto __a_newAt (
+                            Index index
+                    ) noexcept -> ElementType *;
+
+                protected:
+                    auto __a_newArrayAt (
+                            Index               index,
+                            Size                count,
+                            __ElementType    ** ppElements
+                    ) noexcept -> void;
+
+                protected:
                     auto __a_newBefore ( // NOLINT(bugprone-reserved-identifier)
                             AbstractAddressIterator < __ElementType > const & iterator
                     ) noexcept -> __ElementType *;
@@ -182,6 +194,12 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
 
                 protected:
                     __CDS_NoDiscard constexpr auto __a_crend () const noexcept -> __a_ConstReverseIterator; // NOLINT(bugprone-reserved-identifier)
+
+                protected:
+                    __CDS_NoDiscard constexpr auto __a_data () const noexcept -> __ElementType const *; // NOLINT(bugprone-reserved-identifier)
+
+                protected:
+                    __CDS_NoDiscard __CDS_cpplang_NonConstConstexprMemberFunction auto __a_data () noexcept -> __ElementType *; // NOLINT(bugprone-reserved-identifier)
                 };
 
 
