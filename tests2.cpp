@@ -60,74 +60,39 @@ int main () {
 
 
     Array < int > a;
+    Array < int > otherArray;
+    List < int > & otherAsList = otherArray;
 
-    auto b = std :: chrono :: high_resolution_clock::now();
-    for (int i = 0; i < 100000000; ++i) {
-        a.emplaceBack(i);
-    }
-    auto e = std :: chrono :: high_resolution_clock::now();
-    auto d = std ::chrono::duration_cast<std::chrono::milliseconds >(e-b).count();
+    otherArray.pushBackAllOf ( cds :: Range (20, 30) );
 
-    std :: cout << d << '\n';
-    a.clear();
-
-    b = std :: chrono :: high_resolution_clock::now();
-    for (int i = 0; i < 100000000; ++i) {
-        ((List<int>&)a).emplaceBack(i);
-    }
-    e = std :: chrono :: high_resolution_clock::now();
-    d = std ::chrono::duration_cast<std::chrono::milliseconds >(e-b).count();
-
-    std :: cout << d << '\n';
-
-    std :: vector < int > v;
-    b = std :: chrono :: high_resolution_clock::now();
-    for (int i = 0; i < 100000000; ++i) {
-        v.push_back(i);
-    }
-    e = std :: chrono :: high_resolution_clock::now();
-    d = std ::chrono::duration_cast<std::chrono::milliseconds >(e-b).count();
-
-    std :: cout << d << '\n';
-
-//    sa.insertBefore ( sa.begin(), 3 );
-
-//    a.removeAt ( a.size () - 2 );
-//    std :: cout << a << '\n';
-//    a.removeAt ( a.size () - 1 );
-//    std :: cout << a << '\n';
-
-//    Array < int > a;
-//    a.pushBackAllOf ( cds :: Range (20) );
-//
-//    std :: cout << a << '\n';
-//    a.remove ( ( ( List < int > & ) a ) .begin() );
-//    a.remove ( ( ( List < int > & ) a ) .rbegin() );
-//    std :: cout << a << '\n';
+    List < int > * pList = & a;
+    (void) pList->begin();
+    (void) pList->end();
+    (void) pList->cbegin();
+    (void) pList->cend();
+    (void) pList->rbegin();
+    (void) pList->rend();
+    (void) pList->crbegin();
+    (void) pList->crend();
 
 
-//    List < int > * pList = nullptr;
-//    (void) pList->begin();
-//    (void) pList->end();
-//    (void) pList->cbegin();
-//    (void) pList->cend();
-//    (void) pList->rbegin();
-//    (void) pList->rend();
-//    (void) pList->crbegin();
-//    (void) pList->crend();
-//
-//
-//    pList->pushBack(3);
-//    pList->pushFront(3);
-//    pList->pushBackAll(1, 2, 3);
-//    pList->pushFrontAll (1, 2, 3);
-//    pList->pushBackAllOf({1, 2, 3});
-//    pList->pushBackAllOf(* pList);
-//    pList->pushBackAllOf(pList->begin(), pList->end());
-//    pList->pushFrontAllOf({1, 2, 3});
-//    pList->pushFrontAllOf(* pList);
-//    pList->pushFrontAllOf(pList->begin(), pList->end());
-//
+    pList->pushBack(3);
+    pList->pushFront(3);
+    pList->pushBackAll(1, 2, 3);
+    pList->pushFrontAll (1, 2, 3);
+    pList->pushBackAllOf({1, 2, 3});
+    pList->pushBackAllOf(otherArray);
+    pList->pushBackAllOf(otherArray.begin(), otherArray.end());
+    pList->pushFrontAllOf({1, 2, 3});
+    pList->pushFrontAllOf(otherArray);
+    pList->pushFrontAllOf(otherArray.begin(), otherArray.end());
+    pList->pushBackAllOf(otherAsList);
+    pList->pushBackAllOf(otherAsList.begin(), otherAsList.end());
+    pList->pushFrontAllOf(otherAsList);
+    pList->pushFrontAllOf(otherAsList.begin(), otherAsList.end());
+
+    std :: cout << a << '\n';
+
 //    pList->insertBefore( pList->begin(), 3);
 //    pList->insertBefore ( pList->cbegin(), 3);
 //    pList->insertAfter( pList->begin(), 3);

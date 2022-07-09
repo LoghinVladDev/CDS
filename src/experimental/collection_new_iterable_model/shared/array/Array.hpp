@@ -132,28 +132,28 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                     auto __a_newBeforeArray ( // NOLINT(bugprone-reserved-identifier)
                             AbstractAddressIterator < __ElementType >   const & iterator,
                             Size                                                count,
-                            __ElementType                                    ** ppElement
+                            __ElementType                                    ** ppElements
                     ) noexcept -> bool;
 
                 protected:
                     auto __a_newBeforeArrayConst ( // NOLINT(bugprone-reserved-identifier)
                             AbstractAddressIterator < __ElementType const > const & iterator,
                             Size                                                    count,
-                            __ElementType                                        ** ppElement
+                            __ElementType                                        ** ppElements
                     ) noexcept -> bool;
 
                 protected:
                     auto __a_newAfterArray ( // NOLINT(bugprone-reserved-identifier)
                             AbstractAddressIterator < __ElementType >   const & iterator,
                             Size                                                count,
-                            __ElementType                                    ** ppElement
+                            __ElementType                                    ** ppElements
                     ) noexcept -> bool;
 
                 protected:
                     auto __a_newAfterArrayConst ( // NOLINT(bugprone-reserved-identifier)
                             AbstractAddressIterator < __ElementType const > const & iterator,
                             Size                                                    count,
-                            __ElementType                                        ** ppElement
+                            __ElementType                                        ** ppElements
                     ) noexcept -> bool;
 
                 private:

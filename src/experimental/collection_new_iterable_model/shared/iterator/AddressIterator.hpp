@@ -164,6 +164,11 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             ) const noexcept -> ForwardAddressIterator;
 
         public:
+            __CDS_NoDiscard constexpr auto operator - (
+                    ForwardAddressIterator const & iterator
+            ) const noexcept -> Size;
+
+        public:
             __CDS_NoDiscard constexpr auto operator > (
                     ForwardAddressIterator const & iterator
             ) const noexcept -> bool;
@@ -267,6 +272,11 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             __CDS_NoDiscard constexpr auto operator - (
                     __NumericType value
             ) const noexcept -> BackwardAddressIterator;
+
+        public:
+            __CDS_NoDiscard constexpr auto operator - (
+                    BackwardAddressIterator const & iterator
+            ) const noexcept -> Size;
 
         public:
             __CDS_NoDiscard constexpr auto operator > (

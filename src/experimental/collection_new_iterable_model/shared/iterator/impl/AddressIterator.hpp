@@ -267,6 +267,18 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
 
         template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
+        constexpr auto ForwardAddressIterator < __ElementType > :: operator - (
+                ForwardAddressIterator const & iterator
+        ) const noexcept -> Size {
+
+            return
+                    this->_currentAddress > iterator._currentAddress ?
+                    this->_currentAddress - iterator._currentAddress :
+                    iterator._currentAddress - this->_currentAddress;
+        }
+
+
+        template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
         constexpr auto ForwardAddressIterator < __ElementType > :: operator > (
                 ForwardAddressIterator const & iterator
         ) const noexcept -> bool {
@@ -440,6 +452,18 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         ) const noexcept -> BackwardAddressIterator {
 
             return BackwardAddressIterator ( this->_currentAddress + value );
+        }
+
+
+        template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
+        constexpr auto BackwardAddressIterator < __ElementType > :: operator - (
+                BackwardAddressIterator const & iterator
+        ) const noexcept -> Size {
+
+            return
+                    this->_currentAddress > iterator._currentAddress ?
+                    this->_currentAddress - iterator._currentAddress :
+                    iterator._currentAddress - this->_currentAddress;
         }
 
 

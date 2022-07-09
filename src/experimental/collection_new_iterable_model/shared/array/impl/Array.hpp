@@ -349,6 +349,126 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                 template <
                         typename                                        __ElementType,  // NOLINT(bugprone-reserved-identifier)
                         utility :: ComparisonFunction < __ElementType > __equals        // NOLINT(bugprone-reserved-identifier)
+                > __CDS_OptimalInline auto __Array <
+                        __ElementType,
+                        __equals
+                > :: __a_newBefore (
+                        AbstractAddressIterator < __ElementType > const & iterator
+                ) noexcept -> ElementType * {
+
+                    return nullptr;
+                }
+
+
+                template <
+                        typename                                        __ElementType,  // NOLINT(bugprone-reserved-identifier)
+                        utility :: ComparisonFunction < __ElementType > __equals        // NOLINT(bugprone-reserved-identifier)
+                > __CDS_OptimalInline auto __Array <
+                        __ElementType,
+                        __equals
+                > :: __a_newBeforeConst (
+                        AbstractAddressIterator < __ElementType const > const & iterator
+                ) noexcept -> ElementType * {
+
+                    return nullptr;
+                }
+
+
+                template <
+                        typename                                        __ElementType,  // NOLINT(bugprone-reserved-identifier)
+                        utility :: ComparisonFunction < __ElementType > __equals        // NOLINT(bugprone-reserved-identifier)
+                > __CDS_OptimalInline auto __Array <
+                        __ElementType,
+                        __equals
+                > :: __a_newAfter (
+                        AbstractAddressIterator < __ElementType > const & iterator
+                ) noexcept -> ElementType * {
+
+                    return nullptr;
+                }
+
+
+                template <
+                        typename                                        __ElementType,  // NOLINT(bugprone-reserved-identifier)
+                        utility :: ComparisonFunction < __ElementType > __equals        // NOLINT(bugprone-reserved-identifier)
+                > __CDS_OptimalInline auto __Array <
+                        __ElementType,
+                        __equals
+                > :: __a_newAfterConst (
+                        AbstractAddressIterator < __ElementType const > const & iterator
+                ) noexcept -> ElementType * {
+
+                    return nullptr;
+                }
+
+
+                template <
+                        typename                                        __ElementType,  // NOLINT(bugprone-reserved-identifier)
+                        utility :: ComparisonFunction < __ElementType > __equals        // NOLINT(bugprone-reserved-identifier)
+                > __CDS_OptimalInline auto __Array <
+                        __ElementType,
+                        __equals
+                > :: __a_newBeforeArray (
+                        AbstractAddressIterator < __ElementType >   const & iterator,
+                        Size                                                count,
+                        __ElementType                                    ** ppElements
+                ) noexcept -> bool {
+
+                    return false;
+                }
+
+
+                template <
+                        typename                                        __ElementType,  // NOLINT(bugprone-reserved-identifier)
+                        utility :: ComparisonFunction < __ElementType > __equals        // NOLINT(bugprone-reserved-identifier)
+                > __CDS_OptimalInline auto __Array <
+                        __ElementType,
+                        __equals
+                > :: __a_newBeforeArrayConst (
+                        AbstractAddressIterator < __ElementType const > const & iterator,
+                        Size                                                    count,
+                        __ElementType                                        ** ppElements
+                ) noexcept -> bool {
+
+                    return false;
+                }
+
+
+                template <
+                        typename                                        __ElementType,  // NOLINT(bugprone-reserved-identifier)
+                        utility :: ComparisonFunction < __ElementType > __equals        // NOLINT(bugprone-reserved-identifier)
+                > __CDS_OptimalInline auto __Array <
+                        __ElementType,
+                        __equals
+                > :: __a_newAfterArray (
+                        AbstractAddressIterator < __ElementType >   const & iterator,
+                        Size                                                count,
+                        __ElementType                                    ** ppElements
+                ) noexcept -> bool {
+
+                    return false;
+                }
+
+
+                template <
+                        typename                                        __ElementType,  // NOLINT(bugprone-reserved-identifier)
+                        utility :: ComparisonFunction < __ElementType > __equals        // NOLINT(bugprone-reserved-identifier)
+                > __CDS_OptimalInline auto __Array <
+                        __ElementType,
+                        __equals
+                > :: __a_newAfterArrayConst (
+                        AbstractAddressIterator < __ElementType const > const & iterator,
+                        Size                                                    count,
+                        __ElementType                                        ** ppElements
+                ) noexcept -> bool {
+
+                    return false;
+                }
+
+
+                template <
+                        typename                                        __ElementType,  // NOLINT(bugprone-reserved-identifier)
+                        utility :: ComparisonFunction < __ElementType > __equals        // NOLINT(bugprone-reserved-identifier)
                 > constexpr auto __Array <
                         __ElementType,
                         __equals
