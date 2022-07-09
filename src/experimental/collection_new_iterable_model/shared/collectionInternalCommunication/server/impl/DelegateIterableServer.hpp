@@ -21,7 +21,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                 > :: __begin () noexcept -> __AbstractDelegateIterator < __ElementType > * {
 
                     return Memory :: instance().create < __disis_Delegate > (
-                            static_cast < __ReceiverType * > ( this )->begin()
+                            reinterpret_cast < __ReceiverType * > ( this )->begin()
                     );
                 }
 
@@ -37,7 +37,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                 > :: __end () noexcept -> __AbstractDelegateIterator < __ElementType > * {
 
                     return Memory :: instance().create < __disis_Delegate > (
-                            static_cast < __ReceiverType * > ( this )->end()
+                            reinterpret_cast < __ReceiverType * > ( this )->end()
                     );
                 }
 
@@ -53,7 +53,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                 > :: __cbegin () const noexcept -> __AbstractDelegateIterator < __ElementType const > * {
 
                     return Memory :: instance().create < __discis_Delegate > (
-                            static_cast < __ReceiverType const * > ( this )->cbegin()
+                            reinterpret_cast < __ReceiverType const * > ( this )->cbegin()
                     );
                 }
 
@@ -69,7 +69,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                 > :: __cend () const noexcept -> __AbstractDelegateIterator < __ElementType const > * {
 
                     return Memory :: instance().create < __discis_Delegate > (
-                            static_cast < __ReceiverType const * > ( this )->cend()
+                            reinterpret_cast < __ReceiverType const * > ( this )->cend()
                     );
                 }
 
@@ -85,7 +85,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                 > :: __rbegin () noexcept -> __AbstractDelegateIterator < __ElementType > * {
 
                     return Memory :: instance().create < __disris_Delegate > (
-                            static_cast < __ReceiverType * > ( this )->rbegin()
+                            reinterpret_cast < __ReceiverType * > ( this )->rbegin()
                     );
                 }
 
@@ -101,7 +101,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                 > :: __rend () noexcept -> __AbstractDelegateIterator < __ElementType > * {
 
                     return Memory :: instance().create < __disris_Delegate > (
-                            static_cast < __ReceiverType * > ( this )->rend()
+                            reinterpret_cast < __ReceiverType * > ( this )->rend()
                     );
                 }
 
@@ -117,7 +117,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                 > :: __crbegin () const noexcept -> __AbstractDelegateIterator < __ElementType const > * {
 
                     return Memory :: instance().create < __discris_Delegate > (
-                            static_cast < __ReceiverType const * > ( this )->crbegin()
+                            reinterpret_cast < __ReceiverType const * > ( this )->crbegin()
                     );
                 }
 
@@ -133,7 +133,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                 > :: __crend () const noexcept -> __AbstractDelegateIterator < __ElementType const > * {
 
                     return Memory :: instance().create < __discris_Delegate > (
-                            static_cast < __ReceiverType const * > ( this )->crend()
+                            reinterpret_cast < __ReceiverType const * > ( this )->crend()
                     );
                 }
 
