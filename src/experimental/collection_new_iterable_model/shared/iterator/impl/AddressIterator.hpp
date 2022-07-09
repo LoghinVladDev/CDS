@@ -65,20 +65,6 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
 
         template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
-        __CDS_cpplang_NonConstConstexprMemberFunction auto AbstractAddressIterator < __ElementType > :: increment () noexcept -> void {
-
-            ++ this->_currentAddress;
-        }
-
-
-        template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
-        __CDS_cpplang_NonConstConstexprMemberFunction auto AbstractAddressIterator < __ElementType > :: decrement () noexcept -> void{
-
-            -- this->_currentAddress;
-        }
-
-
-        template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
         constexpr auto AbstractAddressIterator < __ElementType > :: operator * () const noexcept -> __ElementType & {
 
             return * this->_currentAddress;
@@ -89,6 +75,24 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         constexpr auto AbstractAddressIterator < __ElementType > :: operator -> () const noexcept -> __ElementType * {
 
             return this->_currentAddress;
+        }
+
+
+        template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
+        constexpr auto AbstractAddressIterator < __ElementType > :: operator == (
+                AbstractAddressIterator < __ElementType > const & iterator
+        ) const noexcept -> bool {
+
+            return this->current() == iterator.current();
+        }
+
+
+        template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
+        constexpr auto AbstractAddressIterator < __ElementType > :: operator != (
+                AbstractAddressIterator < __ElementType > const & iterator
+        ) const noexcept -> bool {
+
+            return this->current() != iterator.current();
         }
 
 
@@ -185,7 +189,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 ForwardAddressIterator const & iterator
         ) const noexcept -> bool {
 
-            return this->current() == iterator.current();
+            return this->_currentAddress == iterator._currentAddress;
         }
 
 
@@ -194,14 +198,14 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 ForwardAddressIterator const & iterator
         ) const noexcept -> bool {
 
-            return this->current() != iterator.current();
+            return this->_currentAddress != iterator._currentAddress;
         }
 
 
         template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
         __CDS_cpplang_NonConstConstexprMemberFunction auto ForwardAddressIterator < __ElementType > :: operator ++ () noexcept -> ForwardAddressIterator & {
 
-            this->increment();
+            ++ this->_currentAddress;
             return * this;
         }
 
@@ -210,7 +214,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         __CDS_cpplang_NonConstConstexprMemberFunction auto ForwardAddressIterator < __ElementType > :: operator ++ (int) noexcept -> ForwardAddressIterator {
 
             auto copy = * this;
-            this->increment();
+            ++ this->_currentAddress;
             return copy;
         }
 
@@ -218,7 +222,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
         __CDS_cpplang_NonConstConstexprMemberFunction auto ForwardAddressIterator < __ElementType > :: operator -- () noexcept -> ForwardAddressIterator & {
 
-            this->decrement();
+            -- this->_currentAddress;
             return * this;
         }
 
@@ -227,7 +231,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         __CDS_cpplang_NonConstConstexprMemberFunction auto ForwardAddressIterator < __ElementType > :: operator -- (int) noexcept -> ForwardAddressIterator {
 
             auto copy = * this;
-            this->decrement();
+            -- this->_currentAddress;
             return copy;
         }
 
@@ -238,7 +242,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 __NumericType value
         ) const noexcept -> ForwardAddressIterator {
 
-            return ForwardAddressIterator ( this->current() + value );
+            return ForwardAddressIterator ( this->_currentAddress + value );
         }
 
 
@@ -248,7 +252,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 ForwardAddressIterator < __FElementType >  const & iterator
         ) noexcept -> ForwardAddressIterator < __FElementType > {
 
-            return ForwardAddressIterator ( iterator.current() + value );
+            return ForwardAddressIterator ( iterator._currentAddress + value );
         }
 
 
@@ -258,7 +262,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 __NumericType value
         ) const noexcept -> ForwardAddressIterator {
 
-            return ForwardAddressIterator ( this->current() - value );
+            return ForwardAddressIterator ( this->_currentAddress - value );
         }
 
 
@@ -267,7 +271,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 ForwardAddressIterator const & iterator
         ) const noexcept -> bool {
 
-            return this->current() > iterator.current();
+            return this->_currentAddress > iterator._currentAddress;
         }
 
 
@@ -276,7 +280,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 ForwardAddressIterator const & iterator
         ) const noexcept -> bool {
 
-            return this->current() < iterator.current();
+            return this->_currentAddress < iterator._currentAddress;
         }
 
 
@@ -285,7 +289,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 ForwardAddressIterator const & iterator
         ) const noexcept -> bool {
 
-            return this->current() >= iterator.current();
+            return this->_currentAddress >= iterator._currentAddress;
         }
 
 
@@ -294,7 +298,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 ForwardAddressIterator const & iterator
         ) const noexcept -> bool {
 
-            return this->current() <= iterator.current();
+            return this->_currentAddress <= iterator._currentAddress;
         }
 
 
@@ -362,7 +366,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 BackwardAddressIterator const & iterator
         ) const noexcept -> bool {
 
-            return this->current() == iterator.current();
+            return this->_currentAddress == iterator._currentAddress;
         }
 
 
@@ -371,14 +375,14 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 BackwardAddressIterator const & iterator
         ) const noexcept -> bool {
 
-            return this->current() != iterator.current();
+            return this->_currentAddress != iterator._currentAddress;
         }
 
 
         template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
         __CDS_cpplang_NonConstConstexprMemberFunction auto BackwardAddressIterator < __ElementType > :: operator ++ () noexcept -> BackwardAddressIterator & {
 
-            this->decrement();
+            -- this->_currentAddress;
             return * this;
         }
 
@@ -387,7 +391,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         __CDS_cpplang_NonConstConstexprMemberFunction auto BackwardAddressIterator < __ElementType > :: operator ++ (int) noexcept -> BackwardAddressIterator {
 
             auto copy = * this;
-            this->decrement();
+            -- this->_currentAddress;
             return copy;
         }
 
@@ -395,7 +399,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
         __CDS_cpplang_NonConstConstexprMemberFunction auto BackwardAddressIterator < __ElementType > :: operator -- () noexcept -> BackwardAddressIterator & {
 
-            this->increment();
+            ++ this->_currentAddress;
             return * this;
         }
 
@@ -404,7 +408,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         __CDS_cpplang_NonConstConstexprMemberFunction auto BackwardAddressIterator < __ElementType > :: operator -- (int) noexcept -> BackwardAddressIterator {
 
             auto copy = * this;
-            this->increment();
+            ++ this->_currentAddress;
             return copy;
         }
 
@@ -415,7 +419,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 __NumericType value
         ) const noexcept -> BackwardAddressIterator {
 
-            return BackwardAddressIterator ( this->current() - value );
+            return BackwardAddressIterator ( this->_currentAddress - value );
         }
 
 
@@ -425,7 +429,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 BackwardAddressIterator < __FElementType >  const & iterator
         ) noexcept -> BackwardAddressIterator < __FElementType > {
 
-            return BackwardAddressIterator ( iterator.current() - value );
+            return BackwardAddressIterator ( iterator._currentAddress - value );
         }
 
 
@@ -435,7 +439,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 __NumericType value
         ) const noexcept -> BackwardAddressIterator {
 
-            return BackwardAddressIterator ( this->current() + value );
+            return BackwardAddressIterator ( this->_currentAddress + value );
         }
 
 
@@ -444,7 +448,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 BackwardAddressIterator const & iterator
         ) const noexcept -> bool {
 
-            return this->current() <= iterator.current();
+            return this->_currentAddress <= iterator._currentAddress;
         }
 
 
@@ -453,7 +457,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 BackwardAddressIterator const & iterator
         ) const noexcept -> bool {
 
-            return this->current() >= iterator.current();
+            return this->_currentAddress >= iterator._currentAddress;
         }
 
 
@@ -462,7 +466,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 BackwardAddressIterator const & iterator
         ) const noexcept -> bool {
 
-            return this->current() < iterator.current();
+            return this->_currentAddress < iterator._currentAddress;
         }
 
 
@@ -471,7 +475,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 BackwardAddressIterator const & iterator
         ) const noexcept -> bool {
 
-            return this->current() > iterator.current();
+            return this->_currentAddress > iterator._currentAddress;
         }
 
     }

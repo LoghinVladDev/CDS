@@ -291,6 +291,16 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                                 AddressIterator < __ElementType const, true >
                         >;
 
+
+//                template < typename __ElementType >     // NOLINT(bugprone-reserved-identifier)
+//                using __ArrayServerDispatcher =         // NOLINT(bugprone-reserved-identifier)
+//                        __ListServerDispatcher <
+//                                cds :: experimental :: Array < __ElementType >,
+//                                __ArrayImplementation < __ElementType >,
+//                                __ElementType,
+//                                & __ArrayImplementation < __ElementType > :: __a_newAddress
+//                        >;
+
             }
         }
     }

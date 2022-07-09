@@ -63,7 +63,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                         cds :: meta :: EnableIf <
                                 cds :: meta :: isCopyConstructible < __TElementType > ()
                         >
-                > auto __BoundaryInsertionPrimitiveClient <
+                > __CDS_OptimalInline auto __BoundaryInsertionPrimitiveClient <
                         __ReceiverType,
                         __ElementType,
                         __ReturnType
@@ -84,7 +84,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                         cds :: meta :: EnableIf <
                                 cds :: meta :: isMoveConstructible < __TElementType > ()
                         >
-                > auto __BoundaryInsertionPrimitiveClient <
+                > __CDS_OptimalInline auto __BoundaryInsertionPrimitiveClient <
                         __ReceiverType,
                         __ElementType,
                         __ReturnType
@@ -147,7 +147,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                         cds :: meta :: EnableIf <
                                 cds :: meta :: isCopyConstructible < __TElementType > ()
                         >
-                > auto __BoundaryInsertionPrimitiveClient <
+                > __CDS_OptimalInline auto __BoundaryInsertionPrimitiveClient <
                         __ReceiverType,
                         __ElementType,
                         __ReturnType
@@ -168,7 +168,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                         cds :: meta :: EnableIf <
                                 cds :: meta :: isMoveConstructible < __TElementType > ()
                         >
-                > auto __BoundaryInsertionPrimitiveClient <
+                > __CDS_OptimalInline auto __BoundaryInsertionPrimitiveClient <
                         __ReceiverType,
                         __ElementType,
                         __ReturnType
@@ -186,7 +186,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                         typename __ReturnType               // NOLINT(bugprone-reserved-identifier)
                 > template <
                         typename ... __EmplaceArgumentTypes // NOLINT(bugprone-reserved-identifier)
-                > auto __BoundaryInsertionPrimitiveClient <
+                > __CDS_OptimalInline auto __BoundaryInsertionPrimitiveClient <
                         __ReceiverType,
                         __ElementType,
                         __ReturnType
@@ -215,7 +215,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                         typename __ReturnType               // NOLINT(bugprone-reserved-identifier)
                 > template <
                         typename ... __EmplaceArgumentTypes // NOLINT(bugprone-reserved-identifier)
-                > auto __BoundaryInsertionPrimitiveClient <
+                > __CDS_OptimalInline auto __BoundaryInsertionPrimitiveClient <
                         __ReceiverType,
                         __ElementType,
                         __ReturnType
@@ -555,7 +555,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                         cds :: meta :: EnableIf <
                                 cds :: meta :: isCopyConstructible < __TElementType > ()
                         >
-                > auto __LocalBoundaryInsertionPrimitiveClient <
+                > __CDS_OptimalInline auto __LocalBoundaryInsertionPrimitiveClient <
                         __ReceiverType,
                         __ElementType,
                         __ReturnType
@@ -576,7 +576,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                         cds :: meta :: EnableIf <
                                 cds :: meta :: isMoveConstructible < __TElementType > ()
                         >
-                > auto __LocalBoundaryInsertionPrimitiveClient <
+                > __CDS_OptimalInline auto __LocalBoundaryInsertionPrimitiveClient <
                         __ReceiverType,
                         __ElementType,
                         __ReturnType
@@ -639,7 +639,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                         cds :: meta :: EnableIf <
                                 cds :: meta :: isCopyConstructible < __TElementType > ()
                         >
-                > auto __LocalBoundaryInsertionPrimitiveClient <
+                > __CDS_OptimalInline auto __LocalBoundaryInsertionPrimitiveClient <
                         __ReceiverType,
                         __ElementType,
                         __ReturnType
@@ -660,7 +660,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                         cds :: meta :: EnableIf <
                                 cds :: meta :: isMoveConstructible < __TElementType > ()
                         >
-                > auto __LocalBoundaryInsertionPrimitiveClient <
+                > __CDS_OptimalInline auto __LocalBoundaryInsertionPrimitiveClient <
                         __ReceiverType,
                         __ElementType,
                         __ReturnType
@@ -678,7 +678,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                         typename __ReturnType               // NOLINT(bugprone-reserved-identifier)
                 > template <
                         typename ... __EmplaceArgumentTypes // NOLINT(bugprone-reserved-identifier)
-                > auto __LocalBoundaryInsertionPrimitiveClient <
+                > __CDS_OptimalInline auto __LocalBoundaryInsertionPrimitiveClient <
                         __ReceiverType,
                         __ElementType,
                         __ReturnType
@@ -698,7 +698,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                         typename __ReturnType               // NOLINT(bugprone-reserved-identifier)
                 > template <
                         typename ... __EmplaceArgumentTypes // NOLINT(bugprone-reserved-identifier)
-                > auto __LocalBoundaryInsertionPrimitiveClient <
+                > __CDS_OptimalInline auto __LocalBoundaryInsertionPrimitiveClient <
                         __ReceiverType,
                         __ElementType,
                         __ReturnType

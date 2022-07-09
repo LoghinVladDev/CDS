@@ -7,7 +7,11 @@
 
 #include <CDS/experimental/List>
 
+#include "array/Predeclaration.hpp"
+
 #include "shared/iterator/AddressIterator.hpp"
+
+#include "shared/collectionInternalCommunication/server/ListServerDispatcher.hpp"
 
 #include "shared/array/Array.hpp"
 
@@ -25,8 +29,9 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
         class Array :
                 public List < __ElementType >,
-                protected __hidden :: __impl :: __ArrayImplementation < __ElementType >,
                 protected __hidden :: __impl :: __ArrayServer < __ElementType >,
+                public __hidden :: __impl :: __ArrayImplementation < __ElementType >,
+                public __hidden :: __impl :: __ArrayImplementation < __ElementType > :: __Dispatcher,
                 public __hidden :: __impl :: __ArrayDelegateIterableServer < __ElementType >,
                 public __hidden :: __impl :: __ArrayRandomInsertionClient < __ElementType >,
                 public __hidden :: __impl :: __ArrayBoundaryInsertionClient < __ElementType >,
@@ -397,40 +402,6 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             auto removeAt (
                     Index index
             ) noexcept -> bool override;
-
-        private:
-            auto __newAddress ( // NOLINT(bugprone-reserved-identifier)
-                    __ElementType const * pReferenceElement,
-                    bool                * pNewElementCreated
-            ) noexcept -> ElementType *;
-
-        private:
-            auto __newFront () noexcept -> ElementType *; // NOLINT(bugprone-reserved-identifier)
-
-        private:
-            auto __newBack () noexcept -> ElementType *; // NOLINT(bugprone-reserved-identifier)
-
-        private:
-            auto __newFrontArray ( // NOLINT(bugprone-reserved-identifier)
-                    Size              count,
-                    ElementType    ** ppElements
-            ) noexcept -> void;
-
-        private:
-            auto __newBackArray ( // NOLINT(bugprone-reserved-identifier)
-                    Size              count,
-                    ElementType    ** ppElements
-            ) noexcept -> void;
-
-        private:
-            auto __remove ( // NOLINT(bugprone-reserved-identifier)
-                    AbstractAddressIterator < __ElementType > const * pIterator
-            ) noexcept -> bool;
-
-        private:
-            auto __removeConst ( // NOLINT(bugprone-reserved-identifier)
-                    AbstractAddressIterator < __ElementType const > const * pIterator
-            ) noexcept -> bool;
         };
 
     }
@@ -446,6 +417,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 #include "shared/delegateIterator/impl/DelegateIterator.hpp"
 
 #include "shared/collectionInternalCommunication/server/impl/ListServer.hpp"
+#include "shared/collectionInternalCommunication/server/impl/ListServerDispatcher.hpp"
 #include "shared/collectionInternalCommunication/server/impl/DelegateIterableServer.hpp"
 
 #endif // __CDS_EX_ARRAY_HPP__

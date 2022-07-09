@@ -217,6 +217,24 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                 template <
                         typename                                        __ElementType,  // NOLINT(bugprone-reserved-identifier)
                         utility :: ComparisonFunction < __ElementType > __equals        // NOLINT(bugprone-reserved-identifier)
+                > __CDS_OptimalInline auto __Array <
+                        __ElementType,
+                        __equals
+                > :: __a_newAddress (
+                        __ElementType const * pReferenceElement,
+                        bool                * pNewElementCreated
+                ) noexcept -> ElementType * {
+
+                    (void) pReferenceElement;
+
+                    * pNewElementCreated = true;
+                    return this->__a_newBack();
+                }
+
+
+                template <
+                        typename                                        __ElementType,  // NOLINT(bugprone-reserved-identifier)
+                        utility :: ComparisonFunction < __ElementType > __equals        // NOLINT(bugprone-reserved-identifier)
                 > auto __Array <
                         __ElementType,
                         __equals
@@ -466,7 +484,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                         AbstractAddressIterator < __ElementType > const & iterator
                 ) noexcept -> bool {
 
-                    auto const pElement = & iterator [0ULL];
+                    auto const pElement = & iterator [ 0ULL ];
                     if ( this->_pData == nullptr || ! ( this->_pData->_pFront <= pElement && pElement < this->_pData->_pBack ) ) {
                         return false;
                     }
@@ -486,7 +504,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                         AbstractAddressIterator < __ElementType const > const & iterator
                 ) noexcept -> bool {
 
-                    auto const pElement = & iterator [0ULL];
+                    auto const pElement = & iterator [ 0ULL ];
                     if ( this->_pData == nullptr || ! ( this->_pData->_pFront <= pElement && pElement < this->_pData->_pBack ) ) {
                         return false;
                     }

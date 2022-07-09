@@ -7,6 +7,7 @@
 
 namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
     namespace experimental {    // NOLINT(modernize-concat-nested-namespaces)
+
         namespace __hidden {    // NOLINT(modernize-concat-nested-namespaces, bugprone-reserved-identifier)
             namespace __impl {  // NOLINT(bugprone-reserved-identifier)
 
@@ -32,6 +33,9 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
 
                 public:
                     using __a_ConstReverseIterator          = AddressIterator < __ElementType const, true >; // NOLINT(bugprone-reserved-identifier)
+
+                public:
+                    class __Dispatcher; // NOLINT(bugprone-reserved-identifier)
 
                 private:
                     struct __ArrayImplDataContainer { // NOLINT(bugprone-reserved-identifier)
@@ -98,6 +102,60 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                             __ElementType    ** ppElements
                     ) noexcept -> void;
 
+                protected:
+                    auto __a_newAddress ( // NOLINT(bugprone-reserved-identifier)
+                            __ElementType const * pReferenceElement,
+                            bool                * pNewElementCreated
+                    ) noexcept -> ElementType *;
+
+                protected:
+                    auto __a_newBefore ( // NOLINT(bugprone-reserved-identifier)
+                            AbstractAddressIterator < __ElementType > const & iterator
+                    ) noexcept -> __ElementType *;
+
+                protected:
+                    auto __a_newBeforeConst ( // NOLINT(bugprone-reserved-identifier)
+                            AbstractAddressIterator < __ElementType const > const & iterator
+                    ) noexcept -> __ElementType *;
+
+                protected:
+                    auto __a_newAfter ( // NOLINT(bugprone-reserved-identifier)
+                            AbstractAddressIterator < __ElementType > const & iterator
+                    ) noexcept -> __ElementType *;
+
+                protected:
+                    auto __a_newAfterConst ( // NOLINT(bugprone-reserved-identifier)
+                            AbstractAddressIterator < __ElementType const > const & iterator
+                    ) noexcept -> __ElementType *;
+
+                protected:
+                    auto __a_newBeforeArray ( // NOLINT(bugprone-reserved-identifier)
+                            AbstractAddressIterator < __ElementType >   const & iterator,
+                            Size                                                count,
+                            __ElementType                                    ** ppElement
+                    ) noexcept -> bool;
+
+                protected:
+                    auto __a_newBeforeArrayConst ( // NOLINT(bugprone-reserved-identifier)
+                            AbstractAddressIterator < __ElementType const > const & iterator,
+                            Size                                                    count,
+                            __ElementType                                        ** ppElement
+                    ) noexcept -> bool;
+
+                protected:
+                    auto __a_newAfterArray ( // NOLINT(bugprone-reserved-identifier)
+                            AbstractAddressIterator < __ElementType >   const & iterator,
+                            Size                                                count,
+                            __ElementType                                    ** ppElement
+                    ) noexcept -> bool;
+
+                protected:
+                    auto __a_newAfterArrayConst ( // NOLINT(bugprone-reserved-identifier)
+                            AbstractAddressIterator < __ElementType const > const & iterator,
+                            Size                                                    count,
+                            __ElementType                                        ** ppElement
+                    ) noexcept -> bool;
+
                 private:
                     auto __a_init () noexcept -> void; // NOLINT(bugprone-reserved-identifier)
 
@@ -125,6 +183,36 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                 protected:
                     __CDS_NoDiscard constexpr auto __a_crend () const noexcept -> __a_ConstReverseIterator; // NOLINT(bugprone-reserved-identifier)
                 };
+
+
+                template <
+                        typename __ElementType,                                         // NOLINT(bugprone-reserved-identifier)
+                        cds :: utility :: ComparisonFunction < __ElementType > __equals // NOLINT(bugprone-reserved-identifier)
+                > class __Array <
+                        __ElementType,
+                        __equals
+                > :: __Dispatcher : public __ListServerDispatcher <
+                        cds :: experimental :: Array < __ElementType >,
+                        __Array < __ElementType, __equals >,
+                        __ElementType,
+                        AbstractAddressIterator < __ElementType >,
+                        AbstractAddressIterator < __ElementType const >,
+                        & __Array < __ElementType, __equals > :: __a_newAddress,
+                        & __Array < __ElementType, __equals > :: __a_newFront,
+                        & __Array < __ElementType, __equals > :: __a_newBack,
+                        & __Array < __ElementType, __equals > :: __a_newFrontArray,
+                        & __Array < __ElementType, __equals > :: __a_newBackArray,
+                        & __Array < __ElementType, __equals > :: __a_newBefore,
+                        & __Array < __ElementType, __equals > :: __a_newBeforeConst,
+                        & __Array < __ElementType, __equals > :: __a_newAfter,
+                        & __Array < __ElementType, __equals > :: __a_newAfterConst,
+                        & __Array < __ElementType, __equals > :: __a_newBeforeArray,
+                        & __Array < __ElementType, __equals > :: __a_newBeforeArrayConst,
+                        & __Array < __ElementType, __equals > :: __a_newAfterArray,
+                        & __Array < __ElementType, __equals > :: __a_newAfterArrayConst,
+                        & __Array < __ElementType, __equals > :: __a_remove,
+                        & __Array < __ElementType, __equals > :: __a_remove
+                > {};
 
             }
         }

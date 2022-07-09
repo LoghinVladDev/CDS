@@ -19,7 +19,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         public:
             using Address = ElementType *;
 
-        private:
+        protected:
             Address _currentAddress { nullptr };
 
         protected:
@@ -53,17 +53,21 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                     AbstractAddressIterator && iterator
             ) noexcept -> void;
 
-        protected:
-            __CDS_cpplang_NonConstConstexprMemberFunction auto increment () noexcept -> void;
-
-        protected:
-            __CDS_cpplang_NonConstConstexprMemberFunction auto decrement () noexcept -> void;
-
         public:
             __CDS_NoDiscard constexpr auto operator * () const noexcept -> __ElementType &;
 
         public:
             __CDS_NoDiscard constexpr auto operator -> () const noexcept -> __ElementType *;
+
+        public:
+            __CDS_NoDiscard constexpr auto operator == (
+                    AbstractAddressIterator < __ElementType > const & iterator
+            ) const noexcept -> bool;
+
+        public:
+            __CDS_NoDiscard constexpr auto operator != (
+                    AbstractAddressIterator < __ElementType > const & iterator
+            ) const noexcept -> bool;
 
         public:
             __CDS_NoDiscard constexpr auto operator - (
