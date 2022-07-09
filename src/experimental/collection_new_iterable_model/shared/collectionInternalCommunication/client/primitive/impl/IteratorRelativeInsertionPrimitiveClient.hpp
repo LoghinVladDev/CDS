@@ -117,7 +117,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                         __EmplaceArgumentTypes       && ... parameters
                 ) noexcept ( noexcept ( ElementType ( std :: forward < __EmplaceArgumentTypes > ( parameters ) ... ) ) ) -> bool {
 
-                    if ( ! iterator.of ( reinterpret_cast < __ReceiverType const * > ( this ) ) || ! iterator.valid() ) {
+                    if ( ! iterator.of ( reinterpret_cast < __ReceiverType const * > ( this ) ) ) {
                         return false;
                     }
 
@@ -608,10 +608,6 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                         Iterator                const &     iterator,
                         __EmplaceArgumentTypes       && ... parameters
                 ) noexcept ( noexcept ( ElementType ( std :: forward < __EmplaceArgumentTypes > ( parameters ) ... ) ) ) -> bool {
-
-                    if ( iterator == reinterpret_cast < __ReceiverType * > ( this )->end () ) {
-                        return false;
-                    }
 
                     auto const pNewLocation = reinterpret_cast < __ReceiverType * > ( this )->__newBefore ( & iterator );
                     if ( pNewLocation == nullptr ) {

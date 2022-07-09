@@ -100,6 +100,9 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         private: friend RandomInsertionClient;
         private: friend IteratorRemoveClient;
         private: friend ConstIteratorRemoveClient;
+        private: friend IteratorRelativeInsertionClient;
+        private: friend ConstIteratorRelativeInsertionClient;
+        private: friend IndexedOperationsClient;
 
         public: using ElementType                   = __ElementType;
         public: using Iterator                      = typename Implementation :: __a_Iterator;

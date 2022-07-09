@@ -177,8 +177,15 @@ int main () {
     a.pushBackAll ( 1, 2, 3 );
     std :: cout << a << '\n';
 
-//    a.insertBefore ( ++ a.begin(), 1 );
-//    std :: cout << a << '\n';
+    a.insertBefore ( a.begin(), -1 );
+    a.insertAfter ( a.begin(), -2 );
+    a.insertBefore ( ++ a.begin(), 4 );
+    a.insertAfter ( ++ a.begin(), 5 );
+    a.insertBefore ( a.end(), 7 );
+    a.insertAfter ( a.end(), 8 );
+    a.insertBefore ( -- a.end(), 9 );
+    a.insertAfter ( -- a.end(), 10 );
+    std :: cout << a << '\n';
 
 
     Array < int > otherArray;

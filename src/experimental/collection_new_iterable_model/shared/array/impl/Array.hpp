@@ -641,11 +641,13 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                     if ( shiftLeft ) {
                         pDestination = -- this->_pData->_pFront;
                         pSource      = pDestination + 1ULL;
-                        count        = index - 1;                /// negative overflow impossible with correct usage. If index == 0, newFront should be called
+                        count        = index;
                     } else {
                         pDestination = this->_pData->_pFront + index + 1;
                         pSource      = pDestination - 1ULL;
                         count        = size - static_cast < Size > ( index );
+
+                        ++ this->_pData->_pBack;
                     }
 
                     (void) std :: memmove (
