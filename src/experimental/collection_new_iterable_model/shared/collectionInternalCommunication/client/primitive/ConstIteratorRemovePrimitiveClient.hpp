@@ -18,6 +18,18 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                         typename __ElementType                          // NOLINT(bugprone-reserved-identifier)
                 > class __AbstractConstIteratorRemovePrimitiveClient {  // NOLINT(bugprone-reserved-identifier)
 
+                private:
+                    template < typename, typename >
+                    friend class __RemoveByCompositeClient; // NOLINT(bugprone-reserved-identifier)
+
+                private:
+                    template <
+                            typename,
+                            typename __FElementType,    // NOLINT(bugprone-reserved-identifier)
+                            typename __FIterableType,   // NOLINT(bugprone-reserved-identifier)
+                            __ContainsFunction < __FIterableType, __FElementType >
+                    > friend class __RemoveOfCompositeClient;   // NOLINT(bugprone-reserved-identifier)
+
                 protected:
                     using __acirc_ElementType       = // NOLINT(bugprone-reserved-identifier)
                             __ElementType const;
