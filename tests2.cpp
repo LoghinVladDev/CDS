@@ -113,7 +113,7 @@ int main () {
 //    pList->insertAllOfBefore ( pList->cbegin(), pList->begin(), pList->end() );
 //    pList->insertAllOfAfter ( pList->begin(), pList->begin(), pList->end() );
 //    pList->insertAllOfAfter ( pList->cbegin(), pList->begin(), pList->end() );
-//
+
     pList->sub(* pList, 2, 3);
     (*pList)[2] = 3;
     pList->removeAt ( { 1, 3 } );
@@ -455,27 +455,9 @@ int main () {
     (void)pMutColl->all([](int &){return true;});
     (void)pMutColl->any([](int &){return true;});
     (void)pMutColl->none([](int &){return true;});
-//
-//    pColl->insert (5) = 3;
+
     pMutColl->insert (5) = 3;
 
-//    Array < int > a;
-//
-//    a.pushBack (3);
-//    a.pushBack (2);
-//    a.pushBack (1);
-//    a.pushBack (2);
-//    a.pushBack (3);
-//
-//    for ( auto & e : a ) {
-//        std :: cout << e << ' ';
-//    }
-//    std :: cout << '\n';
-//    for ( auto & e : ( Collection < int > const & ) a ) {
-//        std :: cout << e << ' ';
-//    }
-//
-//    std :: cout << sizeof ( Array < int >  ) - 64 * 4;
 
     return 0;
 }

@@ -121,7 +121,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                         return false;
                     }
 
-                    (void) new (
+                    auto pNewLocation =
                             (
                                     static_cast < __ReceiverType * > ( this )->*
                                     reinterpret_cast <
@@ -135,8 +135,13 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                                     )
                             ) (
                                     iterator._pDelegate->iterator()
-                            )
-                    ) __ElementType (
+                            );
+
+                    if ( pNewLocation == nullptr ) {
+                        return false;
+                    }
+
+                    (void) new ( pNewLocation ) __ElementType (
                             std :: forward < __EmplaceArgumentTypes > ( parameters ) ...
                     );
 
@@ -161,7 +166,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                         return false;
                     }
 
-                    (void) new (
+                    auto const pNewLocation =
                             (
                                     static_cast < __ReceiverType * > ( this )->*
                                     reinterpret_cast <
@@ -175,8 +180,13 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                                     )
                             ) (
                                     iterator._pDelegate->iterator()
-                            )
-                    ) __ElementType (
+                            );
+
+                    if ( pNewLocation == nullptr ) {
+                        return false;
+                    }
+
+                    (void) new ( pNewLocation ) __ElementType (
                             std :: forward < __EmplaceArgumentTypes > ( parameters ) ...
                     );
 
@@ -204,32 +214,35 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                     Size  const parameterCount = sizeof ... ( __ArgumentTypes );
                     auto        ppElements = cds :: __hidden :: __impl :: __allocation :: __allocPrimitiveArray < __ElementType * > ( parameterCount );
 
-                    (
-                            static_cast < __ReceiverType * > ( this ) ->*
-                            reinterpret_cast <
-                                    void ( __ReceiverType :: * ) (
-                                            __GenericIterator,
-                                            Size,
-                                            __ElementType **
+                    auto const allocationStatus =
+                            (
+                                    static_cast < __ReceiverType * > ( this ) ->*
+                                    reinterpret_cast <
+                                            void ( __ReceiverType :: * ) (
+                                                    __GenericIterator,
+                                                    Size,
+                                                    __ElementType **
+                                            )
+                                    > (
+                                            static_cast < __ReceiverType * > ( this )->__cicch_obtainGenericHandler (
+                                                    __CollectionInternalRequestType :: __cirt_newBeforeAddressArrayConst
+                                            )
                                     )
-                            > (
-                                    static_cast < __ReceiverType * > ( this )->__cicch_obtainGenericHandler (
-                                            __CollectionInternalRequestType :: __cirt_newBeforeAddressArrayConst
-                                    )
-                            )
-                    ) (
-                            iterator._pDelegate->iterator(),
-                            parameterCount,
-                            ppElements
-                    );
+                            ) (
+                                    iterator._pDelegate->iterator(),
+                                    parameterCount,
+                                    ppElements
+                            );
 
-                    cds :: __hidden :: __impl :: __allocation :: __forwardIntoArray (
-                            ppElements,
-                            std :: forward < __ArgumentTypes > ( values ) ...
-                    );
+                    if ( allocationStatus ) {
+                        cds :: __hidden :: __impl :: __allocation :: __forwardIntoArray (
+                                ppElements,
+                                std :: forward < __ArgumentTypes > ( values ) ...
+                        );
+                    }
 
                     cds :: __hidden :: __impl :: __allocation :: __freePrimitiveArray ( ppElements );
-                    return true;
+                    return allocationStatus;
                 }
 
 
@@ -253,32 +266,35 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                     Size  const parameterCount = sizeof ... ( __ArgumentTypes );
                     auto        ppElements = cds :: __hidden :: __impl :: __allocation :: __allocPrimitiveArray < __ElementType * > ( parameterCount );
 
-                    (
-                            static_cast < __ReceiverType * > ( this ) ->*
-                            reinterpret_cast <
-                                    void ( __ReceiverType :: * ) (
-                                            __GenericIterator,
-                                            Size,
-                                            __ElementType **
+                    auto const allocationStatus =
+                            (
+                                    static_cast < __ReceiverType * > ( this ) ->*
+                                    reinterpret_cast <
+                                            void ( __ReceiverType :: * ) (
+                                                    __GenericIterator,
+                                                    Size,
+                                                    __ElementType **
+                                            )
+                                    > (
+                                            static_cast < __ReceiverType * > ( this )->__cicch_obtainGenericHandler (
+                                                    __CollectionInternalRequestType :: __cirt_newAfterAddressArrayConst
+                                            )
                                     )
-                            > (
-                                    static_cast < __ReceiverType * > ( this )->__cicch_obtainGenericHandler (
-                                            __CollectionInternalRequestType :: __cirt_newAfterAddressArrayConst
-                                    )
-                            )
-                    ) (
-                            iterator._pDelegate->iterator(),
-                            parameterCount,
-                            ppElements
-                    );
+                            ) (
+                                    iterator._pDelegate->iterator(),
+                                    parameterCount,
+                                    ppElements
+                            );
 
-                    cds :: __hidden :: __impl :: __allocation :: __forwardIntoArray (
-                            ppElements,
-                            std :: forward < __ArgumentTypes > ( values ) ...
-                    );
+                    if ( allocationStatus ) {
+                        cds :: __hidden :: __impl :: __allocation :: __forwardIntoArray (
+                                ppElements,
+                                std :: forward < __ArgumentTypes > ( values ) ...
+                        );
+                    }
 
                     cds :: __hidden :: __impl :: __allocation :: __freePrimitiveArray ( ppElements );
-                    return true;
+                    return allocationStatus;
                 }
 
 
@@ -393,32 +409,35 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                     Size  const parameterCount = __IteratorDistance < __IteratorType > :: __compute ( begin, end );
                     auto        ppElements = cds :: __hidden :: __impl :: __allocation :: __allocPrimitiveArray < __ElementType * > ( parameterCount );
 
-                    (
-                            static_cast < __ReceiverType * > ( this ) ->*
-                            reinterpret_cast <
-                                    void ( __ReceiverType :: * ) (
-                                            __GenericIterator,
-                                            Size,
-                                            __ElementType **
+                    auto const allocationStatus =
+                            (
+                                    static_cast < __ReceiverType * > ( this ) ->*
+                                    reinterpret_cast <
+                                            void ( __ReceiverType :: * ) (
+                                                    __GenericIterator,
+                                                    Size,
+                                                    __ElementType **
+                                            )
+                                    > (
+                                            static_cast < __ReceiverType * > ( this )->__cicch_obtainGenericHandler (
+                                                    __CollectionInternalRequestType :: __cirt_newBeforeAddressArrayConst
+                                            )
                                     )
-                            > (
-                                    static_cast < __ReceiverType * > ( this )->__cicch_obtainGenericHandler (
-                                            __CollectionInternalRequestType :: __cirt_newBeforeAddressArrayConst
-                                    )
-                            )
-                    ) (
-                            iterator._pDelegate->iterator(),
-                            parameterCount,
-                            ppElements
-                    );
+                            ) (
+                                    iterator._pDelegate->iterator(),
+                                    parameterCount,
+                                    ppElements
+                            );
 
-                    Size index = 0ULL;
-                    for ( auto lIterator = begin; lIterator != end; ++ lIterator ) {
-                        (void) new ( ppElements [ index ++ ] ) __ElementType ( * lIterator );
+                    if ( allocationStatus ) {
+                        Size index = 0ULL;
+                        for ( auto lIterator = begin; lIterator != end; ++ lIterator ) {
+                            (void) new ( ppElements [ index ++ ] ) __ElementType ( * lIterator );
+                        }
                     }
 
                     cds :: __hidden :: __impl :: __allocation :: __freePrimitiveArray ( ppElements );
-                    return true;
+                    return allocationStatus;
                 }
 
 
@@ -443,32 +462,35 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                     Size  const parameterCount = __IteratorDistance < __IteratorType > :: __compute ( begin, end );
                     auto        ppElements = cds :: __hidden :: __impl :: __allocation :: __allocPrimitiveArray < __ElementType * > ( parameterCount );
 
-                    (
-                            static_cast < __ReceiverType * > ( this ) ->*
-                            reinterpret_cast <
-                                    void ( __ReceiverType :: * ) (
-                                            __GenericIterator,
-                                            Size,
-                                            __ElementType **
+                    auto const allocationStatus =
+                            (
+                                    static_cast < __ReceiverType * > ( this ) ->*
+                                    reinterpret_cast <
+                                            void ( __ReceiverType :: * ) (
+                                                    __GenericIterator,
+                                                    Size,
+                                                    __ElementType **
+                                            )
+                                    > (
+                                            static_cast < __ReceiverType * > ( this )->__cicch_obtainGenericHandler (
+                                                    __CollectionInternalRequestType :: __cirt_newAfterAddressArrayConst
+                                            )
                                     )
-                            > (
-                                    static_cast < __ReceiverType * > ( this )->__cicch_obtainGenericHandler (
-                                            __CollectionInternalRequestType :: __cirt_newAfterAddressArrayConst
-                                    )
-                            )
-                    ) (
-                            iterator._pDelegate->iterator(),
-                            parameterCount,
-                            ppElements
-                    );
+                            ) (
+                                    iterator._pDelegate->iterator(),
+                                    parameterCount,
+                                    ppElements
+                            );
 
-                    Size index = 0ULL;
-                    for ( auto lIterator = begin; lIterator != end; ++ lIterator ) {
-                        (void) new ( ppElements [ index ++ ] ) __ElementType ( * lIterator );
+                    if ( allocationStatus ) {
+                        Size index = 0ULL;
+                        for ( auto lIterator = begin; lIterator != end; ++ lIterator ) {
+                            (void) new ( ppElements [ index ++ ] ) __ElementType ( * lIterator );
+                        }
                     }
 
                     cds :: __hidden :: __impl :: __allocation :: __freePrimitiveArray ( ppElements );
-                    return true;
+                    return allocationStatus;
                 }
 
 
@@ -591,9 +613,12 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                         return false;
                     }
 
-                    (void) new (
-                            static_cast < __ReceiverType * > ( this )->__newBeforeConst ( & iterator )
-                    ) __ElementType (
+                    auto const pNewLocation = static_cast < __ReceiverType * > ( this )->__newBeforeConst ( & iterator );
+                    if ( pNewLocation == nullptr ) {
+                        return false;
+                    }
+
+                    (void) new ( pNewLocation ) __ElementType (
                             std :: forward < __EmplaceArgumentTypes > ( parameters ) ...
                     );
 
@@ -620,9 +645,12 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                         return false;
                     }
 
-                    (void) new (
-                            static_cast < __ReceiverType * > ( this )->__newAfterConst ( & iterator )
-                    ) __ElementType (
+                    auto const pNewLocation = static_cast < __ReceiverType * > ( this )->__newAfterConst ( & iterator );
+                    if ( pNewLocation == nullptr ) {
+                        return false;
+                    }
+
+                    (void) new ( pNewLocation ) __ElementType (
                             std :: forward < __EmplaceArgumentTypes > ( parameters ) ...
                     );
 
@@ -652,19 +680,22 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                     Size  const parameterCount = sizeof ... ( __ArgumentTypes );
                     auto        ppElements = cds :: __hidden :: __impl :: __allocation :: __allocPrimitiveArray < __ElementType * > ( parameterCount );
 
-                    static_cast < __ReceiverType * > ( this )->__newBeforeArrayConst (
-                            & iterator,
-                            parameterCount,
-                            ppElements
-                    );
+                    auto const allocationStatus =
+                            static_cast < __ReceiverType * > ( this )->__newBeforeArrayConst (
+                                    & iterator,
+                                    parameterCount,
+                                    ppElements
+                            );
 
-                    cds :: __hidden :: __impl :: __allocation :: __forwardIntoArray (
-                            ppElements,
-                            std :: forward < __ArgumentTypes > ( values ) ...
-                    );
+                    if ( allocationStatus ) {
+                        cds :: __hidden :: __impl :: __allocation :: __forwardIntoArray (
+                                ppElements,
+                                std :: forward < __ArgumentTypes > ( values ) ...
+                        );
+                    }
 
                     cds :: __hidden :: __impl :: __allocation :: __freePrimitiveArray ( ppElements );
-                    return true;
+                    return allocationStatus;
                 }
 
 
@@ -690,19 +721,22 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                     Size  const parameterCount = sizeof ... ( __ArgumentTypes );
                     auto        ppElements = cds :: __hidden :: __impl :: __allocation :: __allocPrimitiveArray < __ElementType * > ( parameterCount );
 
-                    static_cast < __ReceiverType * > ( this )->__newAfterArrayConst (
-                            & iterator,
-                            parameterCount,
-                            ppElements
-                    );
+                    auto const allocationStatus =
+                            static_cast < __ReceiverType * > ( this )->__newAfterArrayConst (
+                                    & iterator,
+                                    parameterCount,
+                                    ppElements
+                            );
 
-                    cds :: __hidden :: __impl :: __allocation :: __forwardIntoArray (
-                            ppElements,
-                            std :: forward < __ArgumentTypes > ( values ) ...
-                    );
+                    if ( allocationStatus ) {
+                        cds :: __hidden :: __impl :: __allocation :: __forwardIntoArray (
+                                ppElements,
+                                std :: forward < __ArgumentTypes > ( values ) ...
+                        );
+                    }
 
                     cds :: __hidden :: __impl :: __allocation :: __freePrimitiveArray ( ppElements );
-                    return true;
+                    return allocationStatus;
                 }
 
 
@@ -827,19 +861,22 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                     Size  const parameterCount = __IteratorDistance < __IteratorType > :: __compute ( begin, end );
                     auto        ppElements = cds :: __hidden :: __impl :: __allocation :: __allocPrimitiveArray < __ElementType * > ( parameterCount );
 
-                    static_cast < __ReceiverType * > ( this )->__newBeforeArrayConst (
-                            & iterator,
-                            parameterCount,
-                            ppElements
-                    );
+                    auto const allocationStatus =
+                            static_cast < __ReceiverType * > ( this )->__newBeforeArrayConst (
+                                    & iterator,
+                                    parameterCount,
+                                    ppElements
+                            );
 
-                    Size index = 0ULL;
-                    for ( auto lIterator = begin; lIterator != end; ++ lIterator ) {
-                        (void) new ( ppElements [ index ++ ] ) __ElementType ( * lIterator );
+                    if ( allocationStatus ) {
+                        Size index = 0ULL;
+                        for ( auto lIterator = begin; lIterator != end; ++ lIterator ) {
+                            (void) new ( ppElements [ index ++ ] ) __ElementType ( * lIterator );
+                        }
                     }
 
                     cds :: __hidden :: __impl :: __allocation :: __freePrimitiveArray ( ppElements );
-                    return false;
+                    return allocationStatus;
                 }
 
 
@@ -866,19 +903,22 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                     Size  const parameterCount = __IteratorDistance < __IteratorType > :: __compute ( begin, end );
                     auto        ppElements = cds :: __hidden :: __impl :: __allocation :: __allocPrimitiveArray < __ElementType * > ( parameterCount );
 
-                    static_cast < __ReceiverType * > ( this )->__newAfterArrayConst (
-                            & iterator,
-                            parameterCount,
-                            ppElements
-                    );
+                    auto const allocationStatus =
+                            static_cast < __ReceiverType * > ( this )->__newAfterArrayConst (
+                                    & iterator,
+                                    parameterCount,
+                                    ppElements
+                            );
 
-                    Size index = 0ULL;
-                    for ( auto lIterator = begin; lIterator != end; ++ lIterator ) {
-                        (void) new ( ppElements [ index ++ ] ) __ElementType ( * lIterator );
+                    if ( allocationStatus ) {
+                        Size index = 0ULL;
+                        for ( auto lIterator = begin; lIterator != end; ++ lIterator ) {
+                            (void) new ( ppElements [ index ++ ] ) __ElementType ( * lIterator );
+                        }
                     }
 
                     cds :: __hidden :: __impl :: __allocation :: __freePrimitiveArray ( ppElements );
-                    return true;
+                    return allocationStatus;
                 }
 
             }
