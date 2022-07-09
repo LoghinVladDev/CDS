@@ -295,7 +295,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                         __IterableType          const & iterable
                 ) noexcept ( noexcept ( ElementType ( * iterable.begin() ) ) ) -> bool {
 
-                    this->insertAllOfBefore (
+                    return this->insertAllOfBefore (
                             iterator,
                             iterable.begin(),
                             iterable.end()
@@ -319,7 +319,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                         std :: initializer_list < __ElementType >       const & list
                 ) noexcept ( noexcept ( ElementType ( * list.begin() ) ) ) -> bool {
 
-                    this->insertAllOfBefore (
+                    return this->insertAllOfBefore (
                             iterator,
                             list.begin(),
                             list.end()
@@ -340,7 +340,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                         __IterableType          const & iterable
                 ) noexcept ( noexcept ( ElementType ( * iterable.begin() ) ) ) -> bool {
 
-                    this->insertAllOfAfter (
+                    return this->insertAllOfAfter (
                             iterator,
                             iterable.begin(),
                             iterable.end()
@@ -364,7 +364,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                         std :: initializer_list < __ElementType >       const & list
                 ) noexcept ( noexcept ( ElementType ( * list.begin() ) ) ) -> bool {
 
-                    this->insertAllOfAfter (
+                    return this->insertAllOfAfter (
                             iterator,
                             list.begin(),
                             list.end()
@@ -721,7 +721,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                         __IterableType  const & iterable
                 ) noexcept ( noexcept ( ElementType ( * iterable.begin() ) ) ) -> bool {
 
-                    this->insertAllOfBefore (
+                    return this->insertAllOfBefore (
                             iterator,
                             iterable.begin(),
                             iterable.end()
@@ -747,7 +747,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                         std :: initializer_list < __ElementType >   const & list
                 ) noexcept ( noexcept ( ElementType ( * list.begin() ) ) ) -> bool {
 
-                    this->insertAllOfBefore (
+                    return this->insertAllOfBefore (
                             iterator,
                             list.begin(),
                             list.end()
@@ -770,7 +770,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                         __IterableType  const & iterable
                 ) noexcept ( noexcept ( ElementType ( * iterable.begin() ) ) ) -> bool {
 
-                    this->insertAllOfAfter (
+                    return this->insertAllOfAfter (
                             iterator,
                             iterable.begin(),
                             iterable.end()
@@ -796,7 +796,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                         std :: initializer_list < __ElementType >   const & list
                 ) noexcept ( noexcept ( ElementType ( * list.begin() ) ) ) -> bool {
 
-                    this->insertAllOfAfter (
+                    return this->insertAllOfAfter (
                             iterator,
                             list.begin(),
                             list.end()

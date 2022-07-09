@@ -31,7 +31,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
                 public __hidden :: __impl :: __MutableCollectionGenericStatementsClient < __ElementType > {
 
         public:     using ElementType                       = __ElementType;
-        protected:  using Collection                        = Collection < __ElementType >;
+        protected:  using CollectionBase                    = Collection < __ElementType >;
         protected:  using DelegateForwardIterableClient     = __hidden :: __impl :: __MutableCollectionDelegateForwardIterableClient < __ElementType >;
         protected:  using IteratorRemoveClient              = __hidden :: __impl :: __MutableCollectionIteratorRemoveClient < __ElementType >;
         protected:  using RandomInsertionClient             = __hidden :: __impl :: __MutableCollectionRandomInsertionClient < __ElementType >;
@@ -60,27 +60,27 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         public:
             __CDS_cpplang_ConstexprDestructor ~MutableCollection () noexcept override;
 
-        public: using Collection :: begin;
-        public: using Collection :: end;
-        public: using Collection :: cbegin;
-        public: using Collection :: cend;
+        public: using CollectionBase :: begin;
+        public: using CollectionBase :: end;
+        public: using CollectionBase :: cbegin;
+        public: using CollectionBase :: cend;
 
         public: using DelegateForwardIterableClient :: begin;
         public: using DelegateForwardIterableClient :: end;
 
-        public: using Collection :: remove;
+        public: using CollectionBase :: remove;
         public: using IteratorRemoveClient :: remove;
 
-        public: using Collection :: forEach;
-        public: using Collection :: some;
-        public: using Collection :: atLeast;
-        public: using Collection :: atMost;
-        public: using Collection :: moreThan;
-        public: using Collection :: fewerThan;
-        public: using Collection :: count;
-        public: using Collection :: any;
-        public: using Collection :: all;
-        public: using Collection :: none;
+        public: using CollectionBase :: forEach;
+        public: using CollectionBase :: some;
+        public: using CollectionBase :: atLeast;
+        public: using CollectionBase :: atMost;
+        public: using CollectionBase :: moreThan;
+        public: using CollectionBase :: fewerThan;
+        public: using CollectionBase :: count;
+        public: using CollectionBase :: any;
+        public: using CollectionBase :: all;
+        public: using CollectionBase :: none;
 
         public: using GenericStatementsClient :: forEach;
         public: using GenericStatementsClient :: some;
@@ -93,14 +93,14 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         public: using GenericStatementsClient :: all;
         public: using GenericStatementsClient :: none;
 
-        public: using Collection :: findOf;
-        public: using Collection :: findFirstOf;
-        public: using Collection :: findLastOf;
-        public: using Collection :: findAllOf;
-        public: using Collection :: findNotOf;
-        public: using Collection :: findFirstNotOf;
-        public: using Collection :: findLastNotOf;
-        public: using Collection :: findAllNotOf;
+        public: using CollectionBase :: findOf;
+        public: using CollectionBase :: findFirstOf;
+        public: using CollectionBase :: findLastOf;
+        public: using CollectionBase :: findAllOf;
+        public: using CollectionBase :: findNotOf;
+        public: using CollectionBase :: findFirstNotOf;
+        public: using CollectionBase :: findLastNotOf;
+        public: using CollectionBase :: findAllNotOf;
 
         public: using FindOfCollectionClient :: findOf;
         public: using FindOfCollectionClient :: findFirstOf;
@@ -120,10 +120,10 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         public: using FindOfInitializerListClient :: findLastNotOf;
         public: using FindOfInitializerListClient :: findAllNotOf;
 
-        public: using Collection :: findThat;
-        public: using Collection :: findFirstThat;
-        public: using Collection :: findLastThat;
-        public: using Collection :: findAllThat;
+        public: using CollectionBase :: findThat;
+        public: using CollectionBase :: findFirstThat;
+        public: using CollectionBase :: findLastThat;
+        public: using CollectionBase :: findAllThat;
 
         public: using FindByClient :: findThat;
         public: using FindByClient :: findFirstThat;

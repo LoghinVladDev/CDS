@@ -60,11 +60,35 @@ int main () {
 
 
     Array < int > a;
-    a.pushBackAllOf ( cds :: Range(20) );
 
-    a.remove ( ++ a.begin() );
+    auto b = std :: chrono :: high_resolution_clock::now();
+    for (int i = 0; i < 100000000; ++i) {
+        a.emplaceBack(i);
+    }
+    auto e = std :: chrono :: high_resolution_clock::now();
+    auto d = std ::chrono::duration_cast<std::chrono::milliseconds >(e-b).count();
 
-    std :: cout << a << '\n';
+    std :: cout << d << '\n';
+    a.clear();
+
+    b = std :: chrono :: high_resolution_clock::now();
+    for (int i = 0; i < 100000000; ++i) {
+        ((List<int>&)a).emplaceBack(i);
+    }
+    e = std :: chrono :: high_resolution_clock::now();
+    d = std ::chrono::duration_cast<std::chrono::milliseconds >(e-b).count();
+
+    std :: cout << d << '\n';
+
+    std :: vector < int > v;
+    b = std :: chrono :: high_resolution_clock::now();
+    for (int i = 0; i < 100000000; ++i) {
+        v.push_back(i);
+    }
+    e = std :: chrono :: high_resolution_clock::now();
+    d = std ::chrono::duration_cast<std::chrono::milliseconds >(e-b).count();
+
+    std :: cout << d << '\n';
 
 //    sa.insertBefore ( sa.begin(), 3 );
 

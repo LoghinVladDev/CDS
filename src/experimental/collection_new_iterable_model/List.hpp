@@ -70,7 +70,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         protected:  using IndicesByClient                       = __hidden :: __impl :: __ListIndicesByClient < __ElementType >;
 
         protected:
-            using MutableCollection = MutableCollection < __ElementType >;
+            using MutableCollectionBase = MutableCollection < __ElementType >;
 
         public:
             static Index const invalidIndex = -1;

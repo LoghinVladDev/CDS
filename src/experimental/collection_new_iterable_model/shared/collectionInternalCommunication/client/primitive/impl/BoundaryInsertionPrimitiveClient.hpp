@@ -225,9 +225,9 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
 
                     return * new (
                             (
-                                    static_cast < __ReceiverType * > ( this )->*
+                                    reinterpret_cast < __ReceiverType * > ( this )->*
                                     reinterpret_cast < __ElementType * ( __ReceiverType :: * ) () > (
-                                            static_cast < __ReceiverType * > ( this )->__cicch_obtainGenericHandler (
+                                            reinterpret_cast < __ReceiverType * > ( this )->__cicch_obtainGenericHandler (
                                                     __CollectionInternalRequestType :: __cirt_newBackAddress
                                             )
                                     )
