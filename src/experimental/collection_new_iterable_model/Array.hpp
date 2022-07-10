@@ -330,11 +330,11 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
         public:
             template <
-                    typename __TElementType = __ElementType,
+                    typename __TElementType = __ElementType, // NOLINT(bugprone-reserved-identifier)
                     cds :: meta :: EnableIf <
                             cds :: meta :: isCopyConstructible < __TElementType > ()
                     > = 0
-            > Array (
+            > Array ( // NOLINT(google-explicit-constructor)
                     Array const & array
             ) noexcept;
 
@@ -345,8 +345,8 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
         public:
             template <
-                    typename __IteratorType,
-                    typename __TElementType = __ElementType,
+                    typename __IteratorType,                    // NOLINT(bugprone-reserved-identifier)
+                    typename __TElementType = __ElementType,    // NOLINT(bugprone-reserved-identifier)
                     cds :: meta :: EnableIf <
                             cds :: meta :: isCopyConstructible < __TElementType > ()
                     > = 0
@@ -357,7 +357,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
         public:
             template <
-                    typename __TElementType = __ElementType,
+                    typename __TElementType = __ElementType, // NOLINT(bugprone-reserved-identifier)
                     cds :: meta :: EnableIf <
                             cds :: meta :: isCopyConstructible < __TElementType > ()
                     > = 0
@@ -367,17 +367,17 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
         public:
             template <
-                    typename __TElementType = __ElementType,
+                    typename __TElementType = __ElementType, // NOLINT(bugprone-reserved-identifier)
                     cds :: meta :: EnableIf <
                             cds :: meta :: isDefaultConstructible < __TElementType > ()
                     > = 0
-            > Array (
-                    Size                    size
+            > __CDS_Explicit Array (
+                    Size size
             ) noexcept;
 
         public:
             template <
-                    typename __TElementType = __ElementType,
+                    typename __TElementType = __ElementType, // NOLINT(bugprone-reserved-identifier)
                     cds :: meta :: EnableIf <
                             cds :: meta :: isCopyConstructible < __TElementType > ()
                     > = 0
@@ -388,11 +388,11 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
         public:
             template <
-                    typename __OtherElementType,
+                    typename __OtherElementType, // NOLINT(bugprone-reserved-identifier)
                     cds :: meta :: EnableIf <
                             cds :: meta :: isConvertible < __OtherElementType, __ElementType > ()
                     > = 0
-            > Array (
+            > __CDS_Explicit Array (
                     Collection < __OtherElementType > const & collection
             ) noexcept;
 
@@ -401,7 +401,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
         public:
             template <
-                    typename __TElementType = __ElementType,
+                    typename __TElementType = __ElementType, // NOLINT(bugprone-reserved-identifier)
                     cds :: meta :: EnableIf <
                             cds :: meta :: isCopyConstructible < __TElementType > ()
                     > = 0
@@ -416,7 +416,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
         public:
             template <
-                    typename __OtherElementType,
+                    typename __OtherElementType, // NOLINT(bugprone-reserved-identifier)
                     cds :: meta :: EnableIf <
                             cds :: meta :: isConvertible < __OtherElementType, __ElementType > ()
                     > = 0
@@ -437,7 +437,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
         public:
             template <
-                    typename __TElementType = __ElementType,
+                    typename __TElementType = __ElementType, // NOLINT(bugprone-reserved-identifier)
                     cds :: meta :: EnableIf <
                             cds :: meta :: isDefaultConstructible < __TElementType > ()
                     > = 0
@@ -448,7 +448,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
         public:
             template <
-                    typename __TElementType = __ElementType,
+                    typename __TElementType = __ElementType, // NOLINT(bugprone-reserved-identifier)
                     cds :: meta :: EnableIf <
                             cds :: meta :: isCopyConstructible < __TElementType > ()
                     > = 0
@@ -566,5 +566,8 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 #include "shared/collectionInternalCommunication/server/impl/ListServer.hpp"
 #include "shared/collectionInternalCommunication/server/impl/ListServerDispatcher.hpp"
 #include "shared/collectionInternalCommunication/server/impl/DelegateIterableServer.hpp"
+
+#include "shared/array/impl/Sequence.hpp"
+#include "array/impl/CTAD.hpp"
 
 #endif // __CDS_EX_ARRAY_HPP__

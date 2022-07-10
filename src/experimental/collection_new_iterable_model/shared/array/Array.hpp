@@ -52,6 +52,24 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                     __ArrayImplDataContainer * _pData { nullptr };
 
                 protected:
+                    constexpr __Array () noexcept;
+
+                protected:
+                    template <
+                            typename __TElementType = __ElementType, // NOLINT(bugprone-reserved-identifier)
+                            cds :: meta :: EnableIf <
+                                    cds :: meta :: isCopyConstructible < __TElementType > ()
+                            > = 0
+                    > __Array (
+                            __Array const & array
+                    ) noexcept;
+
+                protected:
+                    constexpr __Array (
+                            __Array && array
+                    ) noexcept;
+
+                protected:
                     auto __a_clear ( // NOLINT(bugprone-reserved-identifier)
                             bool destroyBuffer
                     ) noexcept -> void;
@@ -200,6 +218,67 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
 
                 protected:
                     __CDS_NoDiscard __CDS_cpplang_NonConstConstexprMemberFunction auto __a_data () noexcept -> __ElementType *; // NOLINT(bugprone-reserved-identifier)
+
+                protected:
+                    template <
+                            typename __TElementType = __ElementType,    // NOLINT(bugprone-reserved-identifier)
+                            cds :: meta :: EnableIf <
+                                    cds :: meta :: isDefaultConstructible < __TElementType > ()
+                            > = 0
+                    > auto __a_resize (                                 // NOLINT(bugprone-reserved-identifier)
+                            Size size
+                    ) noexcept -> void;
+
+                protected:
+                    template <
+                            typename __TElementType = __ElementType,    // NOLINT(bugprone-reserved-identifier)
+                            cds :: meta :: EnableIf <
+                                    cds :: meta :: isCopyConstructible < __TElementType > ()
+                            > = 0
+                    > auto __a_resize (                                 // NOLINT(bugprone-reserved-identifier)
+                            Size                    size,
+                            __ElementType   const & defaultValue
+                    ) noexcept -> void;
+
+                protected:
+                    auto __a_shrink (                                 // NOLINT(bugprone-reserved-identifier)
+                            Size size
+                    ) noexcept -> void;
+
+                protected:
+                    auto __a_reserve (                                // NOLINT(bugprone-reserved-identifier)
+                            Size size
+                    ) noexcept -> void;
+
+                protected:
+                    template <
+                            typename __TElementType = __ElementType,    // NOLINT(bugprone-reserved-identifier)
+                            cds :: meta :: EnableIf <
+                                    cds :: meta :: isCopyConstructible < __TElementType > ()
+                            > = 0
+                    > auto __a_copy (                                   // NOLINT(bugprone-reserved-identifier)
+                            __Array const & array
+                    ) noexcept -> void;
+
+                protected:
+                    auto __a_move ( // NOLINT(bugprone-reserved-identifier)
+                            __Array && array
+                    ) noexcept -> void;
+
+                private:
+                    template <
+                            typename __TElementType = __ElementType,    // NOLINT(bugprone-reserved-identifier)
+                            cds :: meta :: EnableIf <
+                                    cds :: meta :: isCopyConstructible < __TElementType > ()
+                            > = 0
+                    > auto __a_copyCleared (                            // NOLINT(bugprone-reserved-identifier)
+                            __Array const & array
+                    ) noexcept -> void;
+
+                private:
+                    __CDS_cpplang_NonConstConstexprMemberFunction auto __a_moveCleared (  // NOLINT(bugprone-reserved-identifier)
+                            __Array && array
+                    ) noexcept -> void;
                 };
 
 

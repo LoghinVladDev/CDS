@@ -100,7 +100,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
 
                 protected:
                     template <
-                            typename __CollectionType,                  // NOLINT(bugprone-reserved-identifier)
+                            typename __CollectionType = __ReceiverType, // NOLINT(bugprone-reserved-identifier)
                             typename __TElementType = __ElementType,    // NOLINT(bugprone-reserved-identifier)
                             cds :: meta :: EnableIf <
                                     cds :: meta :: isCopyConstructible < __TElementType > ()

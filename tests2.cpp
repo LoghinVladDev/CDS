@@ -189,6 +189,8 @@ int main () {
     a.insertAfter ( -- a.end(), 10 );
     std :: cout << a << '\n';
 
+    std :: cout << a.sub ( 2, 5 ) << '\n';
+
 
     Array < int > otherArray;
     List < int > & otherAsList = otherArray;

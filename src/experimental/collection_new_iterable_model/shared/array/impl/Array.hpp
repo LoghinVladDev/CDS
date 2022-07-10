@@ -22,6 +22,49 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                 template <
                         typename                                        __ElementType,  // NOLINT(bugprone-reserved-identifier)
                         utility :: ComparisonFunction < __ElementType > __equals        // NOLINT(bugprone-reserved-identifier)
+                > constexpr __Array <
+                        __ElementType,
+                        __equals
+                > :: __Array () noexcept = default;
+
+
+                template <
+                        typename                                        __ElementType,  // NOLINT(bugprone-reserved-identifier)
+                        utility :: ComparisonFunction < __ElementType > __equals        // NOLINT(bugprone-reserved-identifier)
+                > template <
+                        typename                                        __TElementType, // NOLINT(bugprone-reserved-identifier)
+                        cds :: meta :: EnableIf <
+                                cds :: meta :: isCopyConstructible < __TElementType > ()
+                        >
+                > __CDS_OptimalInline __Array <
+                        __ElementType,
+                        __equals
+                > :: __Array (
+                        __Array const & array
+                ) noexcept {
+
+                    this->__a_copy ( array );
+                }
+
+
+                template <
+                        typename                                        __ElementType,  // NOLINT(bugprone-reserved-identifier)
+                        utility :: ComparisonFunction < __ElementType > __equals        // NOLINT(bugprone-reserved-identifier)
+                > constexpr __Array <
+                        __ElementType,
+                        __equals
+                > :: __Array (
+                        __Array && array
+                ) noexcept :
+                        _pData ( cds :: exchange ( array._pData, nullptr ) ) {
+
+
+                }
+
+
+                template <
+                        typename                                        __ElementType,  // NOLINT(bugprone-reserved-identifier)
+                        utility :: ComparisonFunction < __ElementType > __equals        // NOLINT(bugprone-reserved-identifier)
                 > auto __Array <
                         __ElementType,
                         __equals
@@ -960,6 +1003,239 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                             this->_pData == nullptr ?
                             nullptr                 :
                             this->_pData->_pFront;
+                }
+
+
+                template <
+                        typename                                        __ElementType,  // NOLINT(bugprone-reserved-identifier)
+                        utility :: ComparisonFunction < __ElementType > __equals        // NOLINT(bugprone-reserved-identifier)
+                > template <
+                        typename __TElementType,                                        // NOLINT(bugprone-reserved-identifier)
+                        cds :: meta :: EnableIf <
+                                cds :: meta :: isDefaultConstructible < __TElementType > ()
+                        >
+                > __CDS_OptimalInline auto __Array <
+                        __ElementType,
+                        __equals
+                > :: __a_resize (
+                        Size size
+                ) noexcept -> void {
+
+                    if ( this->_pData == nullptr ) {
+                        this->__a_init();
+                    }
+
+                    auto const currentSize = this->__a_size();
+                    for ( Size index = size; index < currentSize; ++ index ) {
+                        ( -- this->_pData->_pBack )->~__ElementType ();
+                    }
+
+                    auto const pEnd = this->_pData->_pBuffer + this->_pData->_backCapacity + this->_pData->_frontCapacity;
+                    if ( size > pEnd - this->_pData->_pFront ) {
+
+                        this->_pData->_backCapacity     = cds :: maxOf ( this->_pData->_backNextCapacity, this->_pData->_backCapacity + ( size - currentSize ) );
+                        auto const pNewBuffer           = cds :: __hidden :: __impl :: __allocation :: __reallocPrimitiveArray (
+                                this->_pData->_pBuffer,
+                                this->_pData->_backCapacity + this->_pData->_backCapacity
+                        );
+
+                        this->_pData->_backNextCapacity = this->_pData->_backCapacity * 2ULL;
+                        this->_pData->_pFront           = pNewBuffer + this->_pData->_pFront - this->_pData->_pBuffer;
+                        this->_pData->_pBack            = pNewBuffer + this->_pData->_pBack - this->_pData->_pBuffer;
+                        this->_pData->_pBuffer          = pNewBuffer;
+                    }
+
+                    for ( Size index = currentSize; index < size; ++ index ) {
+                        new ( this->_pData->_pBack ++ ) __ElementType ();
+                    }
+                }
+
+
+                template <
+                        typename                                        __ElementType,  // NOLINT(bugprone-reserved-identifier)
+                        utility :: ComparisonFunction < __ElementType > __equals        // NOLINT(bugprone-reserved-identifier)
+                > template <
+                        typename __TElementType,                                        // NOLINT(bugprone-reserved-identifier)
+                        cds :: meta :: EnableIf <
+                                cds :: meta :: isCopyConstructible < __TElementType > ()
+                        >
+                > __CDS_OptimalInline auto __Array <
+                        __ElementType,
+                        __equals
+                > :: __a_resize (
+                        Size                    size,
+                        __ElementType   const & defaultValue
+                ) noexcept -> void {
+
+                    if ( this->_pData == nullptr ) {
+                        this->__a_init();
+                    }
+
+                    auto const currentSize = this->__a_size();
+                    for ( Size index = size; index < currentSize; ++ index ) {
+                        ( -- this->_pData->_pBack )->~__ElementType ();
+                    }
+
+                    auto const pEnd = this->_pData->_pBuffer + this->_pData->_backCapacity + this->_pData->_frontCapacity;
+                    if ( size > pEnd - this->_pData->_pFront ) {
+
+                        this->_pData->_backCapacity     = cds :: maxOf ( this->_pData->_backNextCapacity, this->_pData->_backCapacity + ( size - currentSize ) );
+                        auto const pNewBuffer           = cds :: __hidden :: __impl :: __allocation :: __reallocPrimitiveArray (
+                                this->_pData->_pBuffer,
+                                this->_pData->_backCapacity + this->_pData->_backCapacity
+                        );
+
+                        this->_pData->_backNextCapacity = this->_pData->_backCapacity * 2ULL;
+                        this->_pData->_pFront           = pNewBuffer + this->_pData->_pFront - this->_pData->_pBuffer;
+                        this->_pData->_pBack            = pNewBuffer + this->_pData->_pBack - this->_pData->_pBuffer;
+                        this->_pData->_pBuffer          = pNewBuffer;
+                    }
+
+                    for ( Size index = currentSize; index < size; ++ index ) {
+                        new ( this->_pData->_pBack ++ ) __ElementType ( defaultValue );
+                    }
+                }
+
+
+                template <
+                        typename                                        __ElementType,  // NOLINT(bugprone-reserved-identifier)
+                        utility :: ComparisonFunction < __ElementType > __equals        // NOLINT(bugprone-reserved-identifier)
+                > __CDS_OptimalInline auto __Array <
+                        __ElementType,
+                        __equals
+                > :: __a_shrink (
+                        Size size
+                ) noexcept -> void {
+
+                    if ( this->_pData == nullptr ) {
+                        return;
+                    }
+
+                    auto pEnd = this->_pData->_pFront + size;
+                    while ( this->_pData->_pBack > pEnd ) {
+                        ( -- this->_pData->_pBack )->~__ElementType ();
+                    }
+                }
+
+
+                template <
+                        typename                                        __ElementType,  // NOLINT(bugprone-reserved-identifier)
+                        utility :: ComparisonFunction < __ElementType > __equals        // NOLINT(bugprone-reserved-identifier)
+                > __CDS_OptimalInline auto __Array <
+                        __ElementType,
+                        __equals
+                > :: __a_reserve (
+                        Size size
+                ) noexcept -> void {
+
+                    if ( this->_pData == nullptr || this->_pData->_backCapacity > size ) {
+                        return;
+                    }
+
+                    this->_pData->_backCapacity = cds :: maxOf ( this->_pData->_backNextCapacity, size );
+                    auto const pNewBuffer       = cds :: __hidden :: __impl :: __allocation :: __reallocPrimitiveArray (
+                            this->_pData->_pBuffer,
+                            this->_pData->_backCapacity + this->_pData->_frontCapacity
+                    );
+
+                    this->_pData->_pFront           = pNewBuffer + this->_pData->_pFront - this->_pData->_pBuffer;
+                    this->_pData->_pBack            = pNewBuffer + this->_pData->_pBack - this->_pData->_pBuffer;
+                    this->_pData->_backNextCapacity = this->_pData->_backCapacity * 2ULL;
+                    this->_pData->_pBuffer          = pNewBuffer;
+                }
+
+
+                template <
+                        typename                                        __ElementType,  // NOLINT(bugprone-reserved-identifier)
+                        utility :: ComparisonFunction < __ElementType > __equals        // NOLINT(bugprone-reserved-identifier)
+                > template <
+                        typename __TElementType,                                        // NOLINT(bugprone-reserved-identifier)
+                        cds :: meta :: EnableIf <
+                                cds :: meta :: isCopyConstructible < __TElementType > ()
+                        >
+                > __CDS_OptimalInline auto __Array <
+                        __ElementType,
+                        __equals
+                > :: __a_copy (
+                        __Array const & array
+                ) noexcept -> void {
+
+                    if ( this->_pData == nullptr ) {
+                        this->__a_init();
+                    } else {
+                        this->__a_clear();
+                    }
+
+                    this->__a_copyCleared ( array );
+                }
+
+
+                template <
+                        typename                                        __ElementType,  // NOLINT(bugprone-reserved-identifier)
+                        utility :: ComparisonFunction < __ElementType > __equals        // NOLINT(bugprone-reserved-identifier)
+                > template <
+                        typename __TElementType,                                        // NOLINT(bugprone-reserved-identifier)
+                        cds :: meta :: EnableIf <
+                                cds :: meta :: isCopyConstructible < __TElementType > ()
+                        >
+                > auto __Array <
+                        __ElementType,
+                        __equals
+                > :: __a_copyCleared (
+                        __Array const & array
+                ) noexcept -> void {
+
+                    auto const requiredSize = array.__a_size();
+                    if ( this->_pData->_frontCapacity + this->_pData->_backCapacity < requiredSize ) {
+
+                        this->_pData->_backCapacity = requiredSize;
+                        this->_pData->_pBuffer      = cds :: __hidden :: __impl :: __allocation :: __reallocPrimitiveArray (
+                                this->_pData->_pBuffer,
+                                requiredSize
+                        );
+                    } else {
+
+                        this->_pData->_backCapacity += this->_pData->_frontCapacity;
+                    }
+
+                    this->_pData->_backNextCapacity     = this->_pData->_backCapacity * 2ULL;
+                    this->_pData->_frontCapacity        = 0ULL;
+                    this->_pData->_frontNextCapacity    = __Array :: __a_minCapacity;
+                    this->_pData->_pFront               = this->_pData->_pBuffer;
+                    this->_pData->_pBack                = this->_pData->_pBuffer + requiredSize;
+
+                    for ( Size index = 0ULL; index < requiredSize; ++ index ) {
+                        new ( this->_pData->_pFront + index ) __ElementType ( array._pData->_pFront + index );
+                    }
+                }
+
+
+                template <
+                        typename                                        __ElementType,  // NOLINT(bugprone-reserved-identifier)
+                        utility :: ComparisonFunction < __ElementType > __equals        // NOLINT(bugprone-reserved-identifier)
+                > __CDS_OptimalInline auto __Array <
+                        __ElementType,
+                        __equals
+                > :: __a_move (
+                        __Array && array
+                ) noexcept -> void {
+
+                    this->__a_clear ( true );
+                    this->__a_moveCleared ( std :: move ( array ) );
+                }
+
+
+                template <
+                        typename                                        __ElementType,  // NOLINT(bugprone-reserved-identifier)
+                        utility :: ComparisonFunction < __ElementType > __equals        // NOLINT(bugprone-reserved-identifier)
+                > __CDS_cpplang_NonConstConstexprMemberFunction auto __Array <
+                        __ElementType,
+                        __equals
+                > :: __a_moveCleared (
+                        __Array && array
+                ) noexcept -> void {
+
+                    this->_pData = cds :: exchange ( array._pData, nullptr );
                 }
 
             }
