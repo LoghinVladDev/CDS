@@ -1,32 +1,15 @@
 #include <iostream>
 
-#include "src/experimental/new_iterable_model/Array.hpp"
+#include "src/experimental/RBTree/RBTree.hpp"
 
-
-enum class E1 {
-    f1 = 0x01,
-    f2 = 0x02
-};
-
-
-using namespace cds :: experimental;
+using namespace cds;
 
 int main () {
-    Array < int > a;
-
-    a.pushBack (3);
-    a.pushBack (2);
-    a.pushBack (1);
-    a.pushBack (2);
-    a.pushBack (3);
-
-    for ( auto & e : a ) {
-        std :: cout << e << ' ';
-    }
-    std :: cout << '\n';
-    for ( auto & e : ( Collection < int > const & ) a ) {
-        std :: cout << e << ' ';
-    }
-
+    RBTree < int > t;
+    t.Insert ( 5 );
+    t.Insert ( 7 );
+    t.Insert ( 50 );
+    t.Delete ( 5 );
+    t.Insert ( 4 ) ;
     return 0;
 }
