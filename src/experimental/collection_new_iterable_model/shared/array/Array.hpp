@@ -60,7 +60,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                             cds :: meta :: EnableIf <
                                     cds :: meta :: isCopyConstructible < __TElementType > ()
                             > = 0
-                    > __Array (
+                    > __Array ( // NOLINT(bugprone-reserved-identifier)
                             __Array const & array
                     ) noexcept;
 
