@@ -46,6 +46,33 @@ namespace cds {
         auto insertFixup ( RBTreeNode * ) -> void;
         auto transplant ( RBTreeNode *, RBTreeNode * ) -> void;
         auto deleteFixup ( RBTreeNode* ) -> void;
+
+        static RBTreeNode * __getLeftNode ( RBTreeNode * pNode ) { // NOLINT(bugprone-reserved-identifier)
+            return pNode->getLeft();
+        }
+
+        static RBTreeNode * __getRightNode ( RBTreeNode * pNode ) { // NOLINT(bugprone-reserved-identifier)
+            return pNode->getRight();
+        }
+
+        static bool __isLeftChild ( RBTreeNode * pNode ) { // NOLINT(bugprone-reserved-identifier)
+            return pNode->getParent()->getLeft() == pNode;
+        }
+
+        static bool __isRightChild ( RBTreeNode * pNode ) { // NOLINT(bugprone-reserved-identifier)
+            return pNode->getParent()->getRight() == pNode;
+        }
+
+        template <
+                bool rotationDecision,
+                RBTreeNode * ( * __locateAuxiliary ) ( RBTreeNode * ) = rotationDecision ? & __getRightNode : & __getLeftNode,
+                bool ( * __ifS1 ) ( RBTreeNode * ) = rotationDecision ? & __isRightChild : & __isLeftChild,
+                void ( RBTree :: *  __rotateS1 ) ( RBTreeNode * ) = rotationDecision ? & RBTree :: leftRotate : & RBTree :: rightRotate,
+                void ( RBTree :: *  __rotateS2 ) ( RBTreeNode * ) = rotationDecision ? & RBTree :: rightRotate : & RBTree :: leftRotate
+        > auto __identifyAndApplyRotation (
+                RBTreeNode * pNewNode
+        ) noexcept -> void;
+
     public:
         RBTree () = default;
         auto Insert ( DataType const & ) -> void;
@@ -138,44 +165,81 @@ namespace cds {
         pivot->getParent() = aux;
     }
 
+    template <
+            typename __ElementType
+    > template <
+            bool rotationDecision,
+            typename RBTree < __ElementType > :: RBTreeNode * ( * __locateAuxiliary ) ( typename RBTree < __ElementType > :: RBTreeNode * ),
+            bool ( * __ifS1 ) ( typename RBTree < __ElementType > :: RBTreeNode * ),
+            void ( RBTree < __ElementType > :: *  __rotateS1 ) ( typename RBTree < __ElementType > :: RBTreeNode * ),
+            void ( RBTree < __ElementType > :: *  __rotateS2 ) ( typename RBTree < __ElementType > :: RBTreeNode * )
+    > auto RBTree < __ElementType > :: __identifyAndApplyRotation (
+            RBTreeNode * newNode
+    ) noexcept -> void {
+
+        RBTreeNode * aux = __locateAuxiliary ( newNode->getParent()->getParent() );
+//        RBTreeNode * aux = newNode->getParent()->getParent()->getRight(); // locateAuxiliary, ifS1, rotateS1, rotateS2
+        if ( aux != nullptr && aux->isRed() ) {
+            newNode->getParent()->setColour ( RBTreeNode :: RED );
+            aux->setColour ( RBTreeNode :: BLACK );
+            newNode->getParent()->getParent()->setColour ( RBTreeNode :: RED );
+            newNode = newNode->getParent()->getParent();
+        }
+        else {
+//            if ( !newNode->isLeftChild () ) {
+            if ( __ifS1 ( newNode ) ) {
+                newNode = newNode->getParent();
+                ( this->*__rotateS1 ) ( newNode );
+//                this->leftRotate ( newNode );
+            }
+
+            newNode->getParent()->setColour ( RBTreeNode::BLACK );
+            newNode->getParent()->getParent()->setColour ( RBTreeNode::RED );
+            ( this->*__rotateS2 ) ( newNode->getParent()->getParent() );
+//            this->rightRotate ( newNode->getParent()->getParent() );
+        }
+    }
+
     template < typename DataType >
     auto RBTree < DataType > :: insertFixup ( RBTreeNode * newNode ) -> void {
         while ( newNode->getParent()->isRed() ) {
             if ( newNode->getParent()->isLeftChild() ) {
-                RBTreeNode * aux = newNode->getParent()->getParent()->getRight();
-                if ( aux != nullptr && aux->isRed() ) {
-                    newNode->getParent()->setColour ( RBTreeNode :: RED );
-                    aux->setColour ( RBTreeNode :: BLACK );
-                    newNode->getParent()->getParent()->setColour ( RBTreeNode :: RED );
-                    newNode = newNode->getParent()->getParent();
-                }
-                else {
-                    if ( !newNode->isLeftChild () ) {
-                        newNode = newNode->getParent();
-                        this->leftRotate ( newNode );
-                    }
-                    newNode->getParent()->setColour ( RBTreeNode::BLACK );
-                    newNode->getParent()->getParent()->setColour ( RBTreeNode::RED );
-                    this->rightRotate ( newNode->getParent()->getParent() );
-                }
+                this->__identifyAndApplyRotation < true > ( newNode );
+//                RBTreeNode * aux = newNode->getParent()->getParent()->getRight(); // locateAuxiliary, ifS1, rotateS1, rotateS2
+//                if ( aux != nullptr && aux->isRed() ) {
+//                    newNode->getParent()->setColour ( RBTreeNode :: RED );
+//                    aux->setColour ( RBTreeNode :: BLACK );
+//                    newNode->getParent()->getParent()->setColour ( RBTreeNode :: RED );
+//                    newNode = newNode->getParent()->getParent();
+//                }
+//                else {
+//                    if ( !newNode->isLeftChild () ) {
+//                        newNode = newNode->getParent();
+//                        this->leftRotate ( newNode );
+//                    }
+//                    newNode->getParent()->setColour ( RBTreeNode::BLACK );
+//                    newNode->getParent()->getParent()->setColour ( RBTreeNode::RED );
+//                    this->rightRotate ( newNode->getParent()->getParent() );
+//                }
             }
             else {
-                RBTreeNode * aux = newNode->getParent()->getParent()->getLeft();
-                if ( aux != nullptr && aux->isRed() ) {
-                    newNode->getParent()->setColour ( RBTreeNode :: RED );
-                    aux->setColour ( RBTreeNode :: BLACK );
-                    newNode->getParent()->getParent()->setColour ( RBTreeNode :: RED );
-                    newNode = newNode->getParent()->getParent();
-                }
-                else {
-                    if ( newNode->isLeftChild () ) {
-                        newNode = newNode->getParent();
-                        this->rightRotate ( newNode );
-                    }
-                    newNode->getParent()->setColour ( RBTreeNode::BLACK );
-                    newNode->getParent()->getParent()->setColour ( RBTreeNode::RED );
-                    this->leftRotate ( newNode->getParent()->getParent() );
-                }
+                this->__identifyAndApplyRotation < false > ( newNode );
+//                RBTreeNode * aux = newNode->getParent()->getParent()->getLeft();
+//                if ( aux != nullptr && aux->isRed() ) {
+//                    newNode->getParent()->setColour ( RBTreeNode :: RED );
+//                    aux->setColour ( RBTreeNode :: BLACK );
+//                    newNode->getParent()->getParent()->setColour ( RBTreeNode :: RED );
+//                    newNode = newNode->getParent()->getParent();
+//                }
+//                else {
+//                    if ( newNode->isLeftChild () ) {
+//                        newNode = newNode->getParent();
+//                        this->rightRotate ( newNode );
+//                    }
+//                    newNode->getParent()->setColour ( RBTreeNode::BLACK );
+//                    newNode->getParent()->getParent()->setColour ( RBTreeNode::RED );
+//                    this->leftRotate ( newNode->getParent()->getParent() );
+//                }
             }
         }
         this->root->setColour ( RBTreeNode :: BLACK );
