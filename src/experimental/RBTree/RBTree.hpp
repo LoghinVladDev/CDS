@@ -50,7 +50,7 @@ namespace cds {
         RBTree () = default;
         auto Insert ( DataType const & ) -> void;
         auto Delete ( DataType const & ) -> void;
-        auto Find ( DataType const & ) -> RBTreeNode * &;
+        auto Find ( DataType const & ) -> RBTreeNode *;
     };
     template < typename DataType >
     RBTree < DataType > :: RBTreeNode :: RBTreeNode ( DataType const & data ) : key ( data ) { } ;
@@ -324,6 +324,20 @@ namespace cds {
             }
         if ( isBlack )
             deleteFixup ( x );
+    }
+
+    template < typename DataType >
+    auto RBTree < DataType > :: Find ( DataType const & data ) -> RBTreeNode * {
+        RBTreeNode * x = this->root;
+        while ( x != nullptr ) {
+            if ( data == x->getKey() )
+                return x;
+            if ( data < x->getKey() )
+                x = x->getLeft();
+            else
+                x = x->getRight();
+        }
+        return nullptr;
     }
 }
 
