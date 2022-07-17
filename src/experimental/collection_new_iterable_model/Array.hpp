@@ -21,7 +21,7 @@
 #include "shared/collectionInternalCommunication/server/ListServer.hpp"
 #include "shared/collectionInternalCommunication/server/DelegateIterableServer.hpp"
 
-#include "array/ArrayConstructs.hpp"
+#include "array/Constructs.hpp"
 
 namespace cds { // NOLINT(modernize-concat-nested-namespaces)
     namespace experimental {

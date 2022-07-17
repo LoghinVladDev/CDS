@@ -7,7 +7,6 @@
 
 namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
     namespace experimental {    // NOLINT(modernize-concat-nested-namespaces)
-
         namespace __hidden {    // NOLINT(modernize-concat-nested-namespaces, bugprone-reserved-identifier)
             namespace __impl {  // NOLINT(bugprone-reserved-identifier)
 
@@ -60,7 +59,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                             cds :: meta :: EnableIf <
                                     cds :: meta :: isCopyConstructible < __TElementType > ()
                             > = 0
-                    > __Array ( // NOLINT(bugprone-reserved-identifier)
+                    > __Array ( // NOLINT(bugprone-reserved-identifier,google-explicit-constructor)
                             __Array const & array
                     ) noexcept;
 
@@ -127,7 +126,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                     ) noexcept -> ElementType *;
 
                 protected:
-                    auto __a_newAt ( // NOLINT(bugprone-reserved-identifier)
+                    __CDS_NoDiscard auto __a_newAt ( // NOLINT(bugprone-reserved-identifier)
                             Index index
                     ) noexcept -> ElementType *;
 
