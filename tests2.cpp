@@ -175,7 +175,7 @@ int main () {
 
     std :: cout << sizeof ( Array < int > ) << '\n';
 
-    Array < int > a;
+    LinkedList < int > a;
     std :: vector < int > v;
 
     a.pushBackAll ( 1, 2, 3 );

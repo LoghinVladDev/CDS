@@ -74,8 +74,9 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                 > :: __DoubleLinkedList (
                         __DoubleLinkedList && list
                 ) noexcept :
-                        _pFront ( cds :: exchange ( list._pFront ) ),
-                        _pBack  ( cds :: exchange ( list._pBack  ) ) {
+                        _pFront ( cds :: exchange ( list._pFront, nullptr ) ),
+                        _pBack  ( cds :: exchange ( list._pBack, nullptr ) ),
+                        _size ( cds :: exchange ( list._size, 0ULL ) ){
 
                 }
 
@@ -95,6 +96,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                     }
 
                     this->_pBack = nullptr;
+                    this->_size = 0ULL;
                 }
 
 
@@ -107,6 +109,66 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                 > :: __dll_empty () const noexcept -> bool {
 
                     return this->_pFront == nullptr;
+                }
+
+
+                template <
+                        typename __ElementType,                                     // NOLINT(bugprone-reserved-identifier)
+                        utility :: ComparisonFunction < __ElementType > __equals    // NOLINT(bugprone-reserved-identifier)
+                > constexpr auto __DoubleLinkedList <
+                        __ElementType,
+                        __equals
+                > :: __dll_size () const noexcept -> Size {
+
+                    return this->_size;
+                }
+
+
+                template <
+                        typename __ElementType,                                     // NOLINT(bugprone-reserved-identifier)
+                        utility :: ComparisonFunction < __ElementType > __equals    // NOLINT(bugprone-reserved-identifier)
+                > constexpr auto __DoubleLinkedList <
+                        __ElementType,
+                        __equals
+                > :: __dll_front () const noexcept -> __ElementType const * {
+
+                    return this->_pFront == nullptr ? nullptr : & this->_pFront->_data;
+                }
+
+
+                template <
+                        typename __ElementType,                                     // NOLINT(bugprone-reserved-identifier)
+                        utility :: ComparisonFunction < __ElementType > __equals    // NOLINT(bugprone-reserved-identifier)
+                > constexpr auto __DoubleLinkedList <
+                        __ElementType,
+                        __equals
+                > :: __dll_back () const noexcept -> __ElementType const * {
+
+                    return this->_pBack == nullptr ? nullptr : & this->_pBack->_data;
+                }
+
+
+                template <
+                        typename __ElementType,                                     // NOLINT(bugprone-reserved-identifier)
+                        utility :: ComparisonFunction < __ElementType > __equals    // NOLINT(bugprone-reserved-identifier)
+                > __CDS_cpplang_NonConstConstexprMemberFunction auto __DoubleLinkedList <
+                        __ElementType,
+                        __equals
+                > :: __dll_front () noexcept -> __ElementType * {
+
+                    return this->_pFront == nullptr ? nullptr : & this->_pFront->_data;
+                }
+
+
+                template <
+                        typename __ElementType,                                     // NOLINT(bugprone-reserved-identifier)
+                        utility :: ComparisonFunction < __ElementType > __equals    // NOLINT(bugprone-reserved-identifier)
+                > __CDS_cpplang_NonConstConstexprMemberFunction auto __DoubleLinkedList <
+                        __ElementType,
+                        __equals
+                > :: __dll_back () noexcept -> __ElementType * {
+
+                    return this->_pBack == nullptr ? nullptr : & this->_pBack->_data;
                 }
 
 
@@ -129,6 +191,8 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                     if ( this->_pFront == nullptr ) {
                         this->_pBack = nullptr;
                     }
+
+                    -- this->_size;
                 }
 
 
@@ -151,6 +215,8 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                     if ( this->_pBack == nullptr ) {
                         this->_pFront = nullptr;
                     }
+
+                    -- this->_size;
                 }
 
 
@@ -182,6 +248,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                     pNode->_pPrevious->_pNext = pNode->_pNext;
                     pNode->_pNext->_pPrevious = pNode->_pPrevious;
                     __DoubleLinkedList :: __dll_freeNode ( pNode );
+                    -- this->_size;
 
                     return true;
                 }
@@ -215,8 +282,44 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                     pNode->_pPrevious->_pNext = pNode->_pNext;
                     pNode->_pNext->_pPrevious = pNode->_pPrevious;
                     __DoubleLinkedList :: __dll_freeNode ( pNode );
+                    -- this->_size;
 
                     return true;
+                }
+
+
+                template <
+                        typename __ElementType,                                     // NOLINT(bugprone-reserved-identifier)
+                        utility :: ComparisonFunction < __ElementType > __equals    // NOLINT(bugprone-reserved-identifier)
+                > auto __DoubleLinkedList <
+                        __ElementType,
+                        __equals
+                > :: __dll_removeAt (
+                        Index index
+                ) noexcept -> void {
+
+                    if ( this->__dll_empty() ) {
+                        return;
+                    }
+
+                    Index current = 0;
+                    auto pHead = this->_pFront;
+                    __NodeType * pToRemove = nullptr;
+
+                    while ( pHead != nullptr ) {
+                        if ( current == index ) {
+                            pToRemove = pHead;
+                            break;
+                        }
+
+                        pHead = pHead->_pNext;
+                        ++ current;
+                    }
+
+                    pToRemove->_pPrevious->_pNext = pToRemove->_pNext;
+                    pToRemove->_pNext->_pPrevious = pToRemove->_pPrevious;
+
+                    __DoubleLinkedList :: __dll_freeNode ( pToRemove );
                 }
 
 
@@ -302,6 +405,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                         this->_pBack = pNewNode;
                     }
 
+                    ++ this->_size;
                     return & pNewNode->_data;
                 }
 
@@ -328,6 +432,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                         this->_pFront = pNewNode;
                     }
 
+                    ++ this->_size;
                     return & pNewNode->_data;
                 }
 
@@ -376,6 +481,8 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                     if ( this->_pBack == nullptr ) {
                         this->_pBack = pChainCurrent;
                     }
+
+                    this->_size += count;
                 }
 
 
@@ -421,6 +528,8 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                     if ( this->_pFront == nullptr ) {
                         this->_pFront = pChainFront;
                     }
+
+                    this->_size += count;
                 }
 
 
@@ -448,16 +557,17 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                 > auto __DoubleLinkedList <
                         __ElementType,
                         __equals
-                > :: __dll_newBefore (
+                > :: __dll_newBetweenNodes (
                         __NodeType  const * pPrevious,
                         __NodeType  const * pCurrent
                 ) noexcept -> __ElementType * {
 
                     __NodeType * pNewNode           = __DoubleLinkedList :: __dll_allocateNode();
-                    pNewNode->_pNext                = pCurrent;
-                    pNewNode->_pPrevious            = pPrevious;
+                    pNewNode->_pNext                = const_cast < __NodeType * > ( pCurrent );
+                    pNewNode->_pPrevious            = const_cast < __NodeType * > ( pPrevious );
                     pNewNode->_pNext->_pPrevious    = pNewNode;
                     pNewNode->_pPrevious->_pNext    = pNewNode;
+                    ++ this->_size;
 
                     return & pNewNode->_data;
                 }
@@ -469,7 +579,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                 > auto __DoubleLinkedList <
                         __ElementType,
                         __equals
-                > :: __dll_newArrayBefore (
+                > :: __dll_newBetweenNodesArray (
                         __NodeType  const * pPrevious,
                         __NodeType  const * pCurrent,
                         Size                count,
@@ -492,10 +602,12 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
 
                     ppElements [ count - 1U ] = & pChainCurrent->_data;
 
-                    pChainCurrent->_pNext               = pCurrent;
-                    pChainFront->_pPrevious             = pPrevious;
+                    pChainCurrent->_pNext               = const_cast < __NodeType * > ( pCurrent );
+                    pChainFront->_pPrevious             = const_cast < __NodeType * > ( pPrevious );
                     pChainCurrent->_pNext->_pPrevious   = pChainCurrent;
                     pChainFront->_pPrevious->_pNext     = pChainFront;
+
+                    this->_size += count;
                 }
 
 
@@ -521,7 +633,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                         return this->__dll_newBack ();
                     }
 
-                    return this->__dll_newBefore (
+                    return this->__dll_newBetweenNodes (
                             iterator._pPreviousNode,
                             iterator._pCurrentNode
                     );
@@ -550,7 +662,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                         return this->__dll_newBack ();
                     }
 
-                    return this->__dll_newBefore (
+                    return this->__dll_newBetweenNodes (
                             iterator._pPreviousNode,
                             iterator._pCurrentNode
                     );
@@ -571,7 +683,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                         return nullptr;
                     }
 
-                    return this->__dll_newBefore (
+                    return this->__dll_newBetweenNodes (
                             iterator._pPreviousNode->_pPrevious,
                             iterator._pCurrentNode->_pPrevious
                     );
@@ -592,7 +704,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                         return nullptr;
                     }
 
-                    return this->__dll_newBefore (
+                    return this->__dll_newBetweenNodes (
                             iterator._pPreviousNode->_pPrevious,
                             iterator._pCurrentNode->_pPrevious
                     );
@@ -628,7 +740,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                         );
 
                     } else {
-                        this->__dll_newBeforeArray (
+                        this->__dll_newBetweenNodesArray (
                                 iterator._pPreviousNode,
                                 iterator._pCurrentNode,
                                 count,
@@ -657,19 +769,19 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                     }
 
                     if ( iterator._pCurrentNode == this->_pFront && iterator._pPreviousNode == nullptr ) {
-                        this->__dll_newFrontArrayConst (
+                        this->__dll_newFrontArray (
                                 count,
                                 ppElements
                         );
 
                     } else if ( iterator._pCurrentNode == nullptr && iterator._pPreviousNode == this->_pBack ) {
-                        this->__dll_newBackArrayConst (
+                        this->__dll_newBackArray (
                                 count,
                                 ppElements
                         );
 
                     } else {
-                        this->__dll_newBeforeArray (
+                        this->__dll_newBetweenNodesArray (
                                 iterator._pPreviousNode,
                                 iterator._pCurrentNode,
                                 count,
@@ -697,9 +809,11 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                         return false;
                     }
 
-                    this->__dll_newBefore (
+                    this->__dll_newBetweenNodesArray (
                             iterator._pPreviousNode->_pPrevious,
-                            iterator._pCurrentNode->_pPrevious
+                            iterator._pCurrentNode->_pPrevious,
+                            count,
+                            ppElements
                     );
 
                     return true;
@@ -722,9 +836,11 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                         return false;
                     }
 
-                    this->__dll_newBefore (
+                    this->__dll_newBetweenNodesArray (
                             iterator._pPreviousNode->_pPrevious,
-                            iterator._pCurrentNode->_pPrevious
+                            iterator._pCurrentNode->_pPrevious,
+                            count,
+                            ppElements
                     );
 
                     return true;
@@ -977,6 +1093,8 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
 
                         this->_pBack = pNewNode;
                     }
+
+                    this->_size = list._size;
                 }
 
 
@@ -992,6 +1110,7 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
 
                     this->_pFront   = cds :: exchange ( list._pFront, nullptr );
                     this->_pBack    = cds :: exchange ( list._pBack, nullptr );
+                    this->_size     = cds :: exchange ( list._size, 0ULL );
                 }
 
             }

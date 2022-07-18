@@ -1,8 +1,295 @@
 //
-// Created by loghin on 17/07/22.
+// Created by loghin on 08/07/22.
 //
 
-#ifndef __CDS_EX_LINKED_LIST_CONSTRUCTS_HPP__
-#define __CDS_EX_LINKED_LIST_CONSTRUCTS_HPP__
+#ifndef __CDS_LINKED_LIST_CONSTRUCTS_HPP__
+#define __CDS_LINKED_LIST_CONSTRUCTS_HPP__
 
-#endif // __CDS_EX_LINKED_LIST_CONSTRUCTS_HPP__
+namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
+    namespace experimental {    // NOLINT(modernize-concat-nested-namespaces)
+        namespace __hidden {    // NOLINT(modernize-concat-nested-namespaces, bugprone-reserved-identifier)
+            namespace __impl {  // NOLINT(bugprone-reserved-identifier)
+
+                template < typename __ElementType >         // NOLINT(bugprone-reserved-identifier)
+                using __LinkedListImplementation =          // NOLINT(bugprone-reserved-identifier)
+                        __DoubleLinkedList <
+                                __ElementType,
+                                & cds :: meta :: equals < __ElementType >
+                        >;
+
+
+                template < typename __ElementType >         // NOLINT(bugprone-reserved-identifier)
+                using __LinkedListServer =                       // NOLINT(bugprone-reserved-identifier)
+                        __ListServer <
+                                cds :: experimental :: LinkedList < __ElementType >,
+                                __ElementType
+                        >;
+
+
+                template < typename __ElementType >     // NOLINT(bugprone-reserved-identifier)
+                using __LinkedListRandomInsertionClient =    // NOLINT(bugprone-reserved-identifier)
+                        __LocalRandomInsertionPrimitiveClient <
+                                cds :: experimental :: LinkedList < __ElementType >,
+                                __ElementType,
+                                __ElementType
+                        >;
+
+
+                template < typename __ElementType >     // NOLINT(bugprone-reserved-identifier)
+                using __LinkedListBoundaryInsertionClient =  // NOLINT(bugprone-reserved-identifier)
+                        __LocalBoundaryInsertionPrimitiveClient <
+                                cds :: experimental :: LinkedList < __ElementType >,
+                                __ElementType,
+                                __ElementType
+                        >;
+
+
+                template < typename __ElementType >             // NOLINT(bugprone-reserved-identifier)
+                using __LinkedListIteratorRelativeInsertionClient =  // NOLINT(bugprone-reserved-identifier)
+                        __LocalIteratorRelativeInsertionPrimitiveClient <
+                                cds :: experimental :: LinkedList < __ElementType >,
+                                __ElementType,
+                                AbstractBidirectionalNodeIterator < __ElementType >
+                        >;
+
+
+                template < typename __ElementType >                 // NOLINT(bugprone-reserved-identifier)
+                using __LinkedListConstIteratorRelativeInsertionClient = // NOLINT(bugprone-reserved-identifier)
+                        __LocalConstIteratorRelativeInsertionPrimitiveClient <
+                                cds :: experimental :: LinkedList < __ElementType >,
+                                __ElementType,
+                                AbstractBidirectionalNodeConstIterator < __ElementType >
+                        >;
+
+
+                template < typename __ElementType >     // NOLINT(bugprone-reserved-identifier)
+                using __LinkedListFindOfCollectionClient =   // NOLINT(bugprone-reserved-identifier)
+                        __LocalFindOfMutableCompositeClient <
+                                cds :: experimental :: LinkedList < __ElementType >,
+                                __ElementType,
+                                ForwardBidirectionalNodeIterator < __ElementType >,
+                                cds :: experimental :: Collection < __ElementType >,
+                                & __collectionContains < __ElementType >
+                        >;
+
+
+                template < typename __ElementType >         // NOLINT(bugprone-reserved-identifier)
+                using __LinkedListFindOfInitializerListClient =  // NOLINT(bugprone-reserved-identifier)
+                        __LocalFindOfMutableCompositeClient <
+                                cds :: experimental :: LinkedList < __ElementType >,
+                                __ElementType,
+                                ForwardBidirectionalNodeIterator < __ElementType >,
+                                std :: initializer_list < __ElementType >,
+                                & __initializerListContains < __ElementType, & cds :: meta :: equals < __ElementType > >
+                        >;
+
+
+                template < typename __ElementType >         // NOLINT(bugprone-reserved-identifier)
+                using __LinkedListFindConstOfCollectionClient =  // NOLINT(bugprone-reserved-identifier)
+                        __LocalFindOfImmutableCompositeClient <
+                                cds :: experimental :: LinkedList < __ElementType >,
+                                __ElementType,
+                                ForwardBidirectionalNodeConstIterator < __ElementType >,
+                                cds :: experimental :: Collection < __ElementType >,
+                                & __collectionContains < __ElementType >
+                        >;
+
+
+                template < typename __ElementType >             // NOLINT(bugprone-reserved-identifier)
+                using __LinkedListFindConstOfInitializerListClient = // NOLINT(bugprone-reserved-identifier)
+                        __LocalFindOfImmutableCompositeClient <
+                                cds :: experimental :: LinkedList < __ElementType >,
+                                __ElementType,
+                                ForwardBidirectionalNodeConstIterator < __ElementType >,
+                                std :: initializer_list < __ElementType >,
+                                & __initializerListContains < __ElementType, & cds :: meta :: equals < __ElementType > >
+                        >;
+
+
+                template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
+                using __LinkedListFindByClient =         // NOLINT(bugprone-reserved-identifier)
+                                __LocalFindByMutableCompositeClient <
+                                cds :: experimental :: LinkedList < __ElementType >,
+                                __ElementType,
+                                ForwardBidirectionalNodeIterator < __ElementType >
+                        >;
+
+
+                template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
+                using __LinkedListFindConstByClient =    // NOLINT(bugprone-reserved-identifier)
+                        __LocalFindByImmutableCompositeClient <
+                                cds :: experimental :: LinkedList < __ElementType >,
+                                __ElementType,
+                                ForwardBidirectionalNodeConstIterator < __ElementType >
+                        >;
+
+
+                template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
+                using __LinkedListIteratorRemoveClient = // NOLINT(bugprone-reserved-identifier)
+                        __LocalIteratorRemovePrimitiveClient <
+                                cds :: experimental :: LinkedList < __ElementType >,
+                                __ElementType,
+                                AbstractBidirectionalNodeIterator < __ElementType >
+                        >;
+
+
+                template < typename __ElementType >         // NOLINT(bugprone-reserved-identifier)
+                using __LinkedListConstIteratorRemoveClient =    // NOLINT(bugprone-reserved-identifier)
+                        __LocalConstIteratorRemovePrimitiveClient <
+                                cds :: experimental :: LinkedList < __ElementType >,
+                                __ElementType,
+                                AbstractBidirectionalNodeConstIterator < __ElementType >
+                        >;
+
+
+                template < typename __ElementType >     // NOLINT(bugprone-reserved-identifier)
+                using __LinkedListRemoveOfCollectionClient = // NOLINT(bugprone-reserved-identifier)
+                        __LocalRemoveOfCompositeClient <
+                                cds :: experimental :: LinkedList < __ElementType >,
+                                __ElementType,
+                                cds :: experimental :: Collection < __ElementType >,
+                                & __collectionContains < __ElementType >
+                        >;
+
+
+                template < typename __ElementType >             // NOLINT(bugprone-reserved-identifier)
+                using __LinkedListRemoveOfInitializerListClient =    // NOLINT(bugprone-reserved-identifier)
+                        __LocalRemoveOfCompositeClient <
+                                cds :: experimental :: LinkedList < __ElementType >,
+                                __ElementType,
+                                std :: initializer_list < __ElementType >,
+                                & __initializerListContains < __ElementType, & cds :: meta :: equals < __ElementType > >
+                        >;
+
+
+                template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
+                using __LinkedListRemoveByClient =       // NOLINT(bugprone-reserved-identifier)
+                        __LocalRemoveByCompositeClient <
+                                cds :: experimental :: LinkedList < __ElementType >,
+                                __ElementType
+                        >;
+
+
+                template < typename __ElementType >     // NOLINT(bugprone-reserved-identifier)
+                using __LinkedListGenericStatementsClient =  // NOLINT(bugprone-reserved-identifier)
+                        __LocalGenericMutableStatementsCompositeClient <
+                                cds :: experimental :: LinkedList < __ElementType >,
+                                __ElementType
+                        >;
+
+
+                template < typename __ElementType >         // NOLINT(bugprone-reserved-identifier)
+                using __LinkedListGenericConstStatementsClient = // NOLINT(bugprone-reserved-identifier)
+                        __LocalGenericImmutableStatementsCompositeClient <
+                                cds :: experimental :: LinkedList < __ElementType >,
+                                __ElementType
+                        >;
+
+
+                template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
+                using __LinkedListSortClient =           // NOLINT(bugprone-reserved-identifier)
+                        __LocalSortCompositeClient <
+                                cds :: experimental :: LinkedList < __ElementType >,
+                                __ElementType
+                        >;
+
+
+                template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
+                using __LinkedListReplaceClient =           // NOLINT(bugprone-reserved-identifier)
+                        __LocalReplaceCompositeClient <
+                                cds :: experimental :: LinkedList < __ElementType >,
+                                __ElementType
+                        >;
+
+
+                template < typename __ElementType >         // NOLINT(bugprone-reserved-identifier)
+                using __LinkedListReplaceOfCollectionClient =    // NOLINT(bugprone-reserved-identifier)
+                        __LocalReplaceOfCompositeClient <
+                                cds :: experimental :: LinkedList < __ElementType >,
+                                __ElementType,
+                                cds :: experimental :: Collection < __ElementType >,
+                                & __collectionContains < __ElementType >
+                        >;
+
+
+                template < typename __ElementType >         // NOLINT(bugprone-reserved-identifier)
+                using __LinkedListReplaceOfInitializerListClient =    // NOLINT(bugprone-reserved-identifier)
+                        __LocalReplaceOfCompositeClient <
+                                cds :: experimental :: LinkedList < __ElementType >,
+                                __ElementType,
+                                std :: initializer_list < __ElementType >,
+                                & __initializerListContains < __ElementType, & cds :: meta :: equals < __ElementType > >
+                        >;
+
+
+                template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
+                using __LinkedListReplaceByClient =      // NOLINT(bugprone-reserved-identifier)
+                        __LocalReplaceByCompositeClient <
+                                cds :: experimental :: LinkedList < __ElementType >,
+                                __ElementType
+                        >;
+
+
+                template < typename __ElementType >     // NOLINT(bugprone-reserved-identifier)
+                using __LinkedListIndexedOperationsClient =  // NOLINT(bugprone-reserved-identifier)
+                        __LocalIndexedOperationsPrimitiveClient <
+                                cds :: experimental :: LinkedList < __ElementType >,
+                                __ElementType
+                        >;
+
+
+                template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
+                using __LinkedListIndicesClient =        // NOLINT(bugprone-reserved-identifier)
+                        __LocalIndicesCompositeClient <
+                                cds :: experimental :: LinkedList < __ElementType >,
+                                __ElementType
+                        >;
+
+
+                template < typename __ElementType >         // NOLINT(bugprone-reserved-identifier)
+                using __LinkedListIndicesOfCollectionClient =    // NOLINT(bugprone-reserved-identifier)
+                        __LocalIndicesOfCompositeClient <
+                                cds :: experimental :: LinkedList < __ElementType >,
+                                __ElementType,
+                                cds :: experimental :: Collection < __ElementType >,
+                                & __collectionContains < __ElementType >
+                        >;
+
+
+                template < typename __ElementType >             // NOLINT(bugprone-reserved-identifier)
+                using __LinkedListIndicesOfInitializerListClient =   // NOLINT(bugprone-reserved-identifier)
+                        __LocalIndicesOfCompositeClient <
+                                cds :: experimental :: LinkedList < __ElementType >,
+                                __ElementType,
+                                std :: initializer_list < __ElementType >,
+                                & __initializerListContains < __ElementType, & cds :: meta :: equals < __ElementType > >
+                        >;
+
+
+                template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
+                using __LinkedListIndicesByClient =      // NOLINT(bugprone-reserved-identifier)
+                        __LocalIndicesByCompositeClient <
+                                cds :: experimental :: LinkedList < __ElementType >,
+                                __ElementType
+                        >;
+
+
+                template < typename __ElementType >     // NOLINT(bugprone-reserved-identifier)
+                using __LinkedListDelegateIterableServer =   // NOLINT(bugprone-reserved-identifier)
+                        __DelegateIterableServer <
+                                cds :: experimental :: LinkedList < __ElementType >,
+                                __ElementType,
+                                true,
+                                true,
+                                ForwardBidirectionalNodeIterator < __ElementType >,
+                                ForwardBidirectionalNodeConstIterator < __ElementType >,
+                                BackwardBidirectionalNodeIterator < __ElementType >,
+                                BackwardBidirectionalNodeConstIterator < __ElementType >
+                        >;
+
+            }
+        }
+    }
+}
+
+#endif // __CDS_LINKED_LIST_CONSTRUCTS_HPP__

@@ -7,10 +7,6 @@
 
 namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
     namespace experimental {    // NOLINT(modernize-concat-nested-namespaces)
-
-        template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
-        class Array;
-
         namespace __hidden {    // NOLINT(modernize-concat-nested-namespaces, bugprone-reserved-identifier)
             namespace __impl {  // NOLINT(bugprone-reserved-identifier)
 
@@ -290,16 +286,6 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                                 AddressIterator < __ElementType, true >,
                                 AddressIterator < __ElementType const, true >
                         >;
-
-
-//                template < typename __ElementType >     // NOLINT(bugprone-reserved-identifier)
-//                using __ArrayServerDispatcher =         // NOLINT(bugprone-reserved-identifier)
-//                        __ListServerDispatcher <
-//                                cds :: experimental :: Array < __ElementType >,
-//                                __ArrayImplementation < __ElementType >,
-//                                __ElementType,
-//                                & __ArrayImplementation < __ElementType > :: __a_newAddress
-//                        >;
 
             }
         }

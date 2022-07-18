@@ -88,6 +88,9 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
         public:
             __CDS_cpplang_NonConstConstexprMemberFunction auto operator ++ (int) noexcept -> UnidirectionalNodeIterator;
+
+        public:
+            __CDS_NoDiscard __CDS_Explicit constexpr operator bool () const noexcept;
         };
 
 
@@ -152,6 +155,9 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
         public:
             __CDS_cpplang_NonConstConstexprMemberFunction auto operator ++ (int) noexcept -> UnidirectionalNodeConstIterator;
+
+        public:
+            __CDS_NoDiscard __CDS_Explicit constexpr operator bool () const noexcept;
         };
 
 
@@ -210,6 +216,9 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             __CDS_NoDiscard constexpr auto operator != (
                     AbstractBidirectionalNodeIterator < __ElementType > const & iterator
             ) const noexcept -> bool;
+
+        public:
+            __CDS_NoDiscard __CDS_Explicit constexpr operator bool () const noexcept;
         };
 
 
@@ -268,6 +277,9 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             __CDS_NoDiscard constexpr auto operator != (
                     AbstractBidirectionalNodeConstIterator < __ElementType > const & iterator
             ) const noexcept -> bool;
+
+        public:
+            __CDS_NoDiscard __CDS_Explicit constexpr operator bool () const noexcept;
         };
 
 

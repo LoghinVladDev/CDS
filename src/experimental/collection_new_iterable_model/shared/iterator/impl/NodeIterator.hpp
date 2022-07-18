@@ -99,6 +99,13 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
 
         template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
+        constexpr UnidirectionalNodeIterator < __ElementType > :: operator bool () const noexcept {
+
+            return this->_pCurrentNode != nullptr;
+        }
+
+
+        template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
         constexpr UnidirectionalNodeConstIterator < __ElementType > :: UnidirectionalNodeConstIterator () noexcept = default;
 
 
@@ -189,6 +196,13 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
 
         template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
+        constexpr UnidirectionalNodeConstIterator < __ElementType > :: operator bool () const noexcept {
+
+            return this->_pCurrentNode != nullptr;
+        }
+
+
+        template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
         constexpr AbstractBidirectionalNodeIterator < __ElementType > :: AbstractBidirectionalNodeIterator () noexcept = default;
 
 
@@ -256,6 +270,13 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
             return
                     this->_pCurrentNode     != iterator._pCurrentNode ||
                     this->_pPreviousNode    != iterator._pPreviousNode;
+        }
+
+
+        template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
+        constexpr AbstractBidirectionalNodeIterator < __ElementType > :: operator bool () const noexcept {
+
+            return this->_pCurrentNode != nullptr;
         }
 
 
@@ -331,6 +352,13 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
 
 
         template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
+        constexpr AbstractBidirectionalNodeConstIterator < __ElementType > :: operator bool () const noexcept {
+
+            return this->_pCurrentNode != nullptr;
+        }
+
+
+        template < typename __ElementType > // NOLINT(bugprone-reserved-identifier)
         constexpr ForwardBidirectionalNodeIterator < __ElementType > :: ForwardBidirectionalNodeIterator () noexcept = default;
 
 
@@ -351,7 +379,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         constexpr ForwardBidirectionalNodeIterator < __ElementType > :: ForwardBidirectionalNodeIterator (
                 ForwardBidirectionalNodeIterator const & iterator
         ) noexcept :
-                AbstractBidirectionalNodeIterator < __ElementType > ( iterator._pCurrentNode ) {
+                AbstractBidirectionalNodeIterator < __ElementType > ( iterator ) {
 
         }
 
@@ -446,7 +474,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         constexpr ForwardBidirectionalNodeConstIterator < __ElementType > :: ForwardBidirectionalNodeConstIterator (
                 ForwardBidirectionalNodeConstIterator const & iterator
         ) noexcept :
-                AbstractBidirectionalNodeConstIterator < __ElementType > ( iterator._pCurrentNode ) {
+                AbstractBidirectionalNodeConstIterator < __ElementType > ( iterator ) {
 
         }
 
@@ -541,7 +569,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         constexpr BackwardBidirectionalNodeIterator < __ElementType > :: BackwardBidirectionalNodeIterator (
                 BackwardBidirectionalNodeIterator const & iterator
         ) noexcept :
-                AbstractBidirectionalNodeIterator < __ElementType > ( iterator._pCurrentNode ) {
+                AbstractBidirectionalNodeIterator < __ElementType > ( iterator ) {
 
         }
 
@@ -636,7 +664,7 @@ namespace cds { // NOLINT(modernize-concat-nested-namespaces)
         constexpr BackwardBidirectionalNodeConstIterator < __ElementType > :: BackwardBidirectionalNodeConstIterator (
                 BackwardBidirectionalNodeConstIterator const & iterator
         ) noexcept :
-                AbstractBidirectionalNodeConstIterator < __ElementType > ( iterator._pCurrentNode ) {
+                AbstractBidirectionalNodeConstIterator < __ElementType > ( iterator ) {
 
         }
 

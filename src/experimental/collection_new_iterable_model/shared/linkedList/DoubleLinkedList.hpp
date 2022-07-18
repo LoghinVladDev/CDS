@@ -37,6 +37,9 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                     using __NodeType = cds :: __hidden :: __impl :: __BidirectionalNode < __ElementType >;  // NOLINT(bugprone-reserved-identifier)
 
                 private:
+                    Size         _size      { 0ULL };
+
+                private:
                     __NodeType * _pFront    { nullptr };
 
                 private:
@@ -75,6 +78,21 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                     __CDS_NoDiscard constexpr auto __dll_empty () const noexcept -> bool;   // NOLINT(bugprone-reserved-identifier)
 
                 protected:
+                    __CDS_NoDiscard constexpr auto __dll_size () const noexcept -> Size;
+
+                protected:
+                    __CDS_NoDiscard constexpr auto __dll_front () const noexcept -> __ElementType const *;
+
+                protected:
+                    __CDS_NoDiscard constexpr auto __dll_back () const noexcept -> __ElementType const *;
+
+                protected:
+                    __CDS_NoDiscard __CDS_cpplang_NonConstConstexprMemberFunction auto __dll_front () noexcept -> __ElementType *;
+
+                protected:
+                    __CDS_NoDiscard __CDS_cpplang_NonConstConstexprMemberFunction auto __dll_back () noexcept -> __ElementType *;
+
+                protected:
                     auto __dll_removeFront () noexcept -> void; // NOLINT(bugprone-reserved-identifier)
 
                 protected:
@@ -84,6 +102,11 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                     auto __dll_remove (                     // NOLINT(bugprone-reserved-identifier)
                             AbstractBidirectionalNodeIterator < __ElementType > const & iterator
                     ) noexcept -> bool;
+
+                protected:
+                    auto __dll_removeAt (
+                            Index index
+                    ) noexcept -> void;
 
                 protected:
                     auto __dll_remove (                     // NOLINT(bugprone-reserved-identifier)
@@ -125,13 +148,13 @@ namespace cds {                 // NOLINT(modernize-concat-nested-namespaces)
                     ) noexcept -> __ElementType *;
 
                 private:
-                    __CDS_NoDiscard auto __dll_newBefore (    // NOLINT(bugprone-reserved-identifier)
+                    __CDS_NoDiscard auto __dll_newBetweenNodes (    // NOLINT(bugprone-reserved-identifier)
                             __NodeType  const * pPrevious,
                             __NodeType  const * pCurrent
                     ) noexcept -> __ElementType *;
 
                 private:
-                    auto __dll_newArrayBefore ( // NOLINT(bugprone-reserved-identifier)
+                    auto __dll_newBetweenNodesArray ( // NOLINT(bugprone-reserved-identifier)
                             __NodeType  const * pPrevious,
                             __NodeType  const * pCurrent,
                             Size                count,
